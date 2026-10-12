@@ -1180,7 +1180,10 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | `trainer-ingredients.js` | 원료 배합 챌린지 |
 | `trainer-drills.js` | O/X·복수정답형 드릴 UI |
 | `pomodoro.js` | 뽀모도로 타이머 |
-| `exam-simulator.js` | 모의고사 시뮬레이터 |
+| `exam-simulator.js` | 모의고사 시뮬레이터 파사드 — 분리 모듈 재수출 + 성적 이력 저장 |
+| `exam-sim-session.js` | 모의고사 세션 수명주기 — 시험 구성(과목별/ㄱㄴㄷ/통합)·시작·드래프트 복구·나가기 |
+| `exam-sim-arena.js` | 모의고사 아레나 — 절대 시각 타이머·OMR·문항 렌더·응답·채점 제출 |
+| `exam-sim-draft.js` | 모의고사 임시 세션(드래프트) 저장·복구 배너 |
 | `exam-sim-state.js` | 시뮬레이터 상태 |
 | `exam-sim-review.js` | 시뮬레이터 결과 리뷰 |
 | `exam-select.js` | 시험 선택/전환 뷰 |
