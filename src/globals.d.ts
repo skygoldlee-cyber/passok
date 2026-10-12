@@ -71,6 +71,8 @@ declare global {
     /** 문항→단원 매핑 인덱스 (data/question_chapters.js) */
     QUESTION_CHAPTERS?: Record<string, string>;
     CHAPTER_RANGES?: Record<string, any>;
+    CID_SECTION?: Record<string, Record<string, string>>;
+    CHAPTER_TITLES?: Record<string, Record<string, string>>;
     /** 문제집 file:// 폴백 번들 (build_exam_bundles.js) */
     __EXAM_MD__?: Record<string, string>;
     /** 안정 ID 마이그레이션 맵 (data/id_migration.js) */

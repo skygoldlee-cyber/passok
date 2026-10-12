@@ -176,6 +176,66 @@ test('computeWeakConceptClusters: 같은 cid 반복 오판 묶음', async () => 
     assert.equal(out[0].chapter, '1. 정의');
 });
 
+test('normalizeCidAnchor: 신형 §·레거시 L####·q: 폴백 정규화 (AN-10)', async () => {
+    const { normalizeCidAnchor } = await import(ENGINE);
+    const cidSection = { subjA: { '150': '1.2', '250': '2.1' } };
+    assert.equal(normalizeCidAnchor('§1.2', 'subjA', cidSection), '§1.2');       // 신형 그대로
+    assert.equal(normalizeCidAnchor('L150', 'subjA', cidSection), '§1.2');        // 레거시 → 환산
+    assert.equal(normalizeCidAnchor('L999', 'subjA', cidSection), 'L999');        // 미등록 라인 → 원형 유지
+    assert.equal(normalizeCidAnchor('L150', 'subjA', null), 'L150');              // 맵 부재 → 원형 유지
+    assert.equal(normalizeCidAnchor('L150', 'subjB', cidSection), 'L150');        // 다른 과목 맵 → 원형
+    assert.equal(normalizeCidAnchor('q:subjA_q5', 'subjA', cidSection), null);    // 폴백 제외
+    assert.equal(normalizeCidAnchor(null, 'subjA', cidSection), null);
+    assert.equal(normalizeCidAnchor('법령:제3조', 'subjA', cidSection), '법령:제3조'); // 비-라인 키 유지
+});
+
+test('chapterFromCid: §앵커·레거시 환산 경로 (AN-10)', async () => {
+    const { chapterFromCid } = await import(ENGINE);
+    const ranges = { subjA: [[100, 'Chapter 01. 개요'], [200, '1. 정의']] };
+    const maps = {
+        chapterTitles: { subjA: { '1': 'Chapter 01. 개요', '2': 'Chapter 02. 분류' } },
+        cidSection: { subjA: { '150': '1.2', '999': '2.3' } },
+    };
+    assert.equal(chapterFromCid('§1.2', 'subjA', ranges, maps), 'Chapter 01. 개요');
+    assert.equal(chapterFromCid('§2.3', 'subjA', ranges, maps), 'Chapter 02. 분류');
+    // 레거시 L#### — 라인이 이동해도 환산 앵커로 같은 챕터 (150→§1.2)
+    assert.equal(chapterFromCid('L150', 'subjA', ranges, maps), 'Chapter 01. 개요');
+    // 환산 없는 라인 → 기존 ranges 폴백
+    assert.equal(chapterFromCid('L210', 'subjA', ranges, maps), '1. 정의');
+    // maps 없으면 §앵커 표시명 해석 불가
+    assert.equal(chapterFromCid('§1.2', 'subjA', ranges), null);
+});
+
+test('computeWeakConceptClusters: 레거시 L####·신형 §가 같은 절이면 병합 (AN-10)', async () => {
+    const { computeWeakConceptClusters } = await import(ENGINE);
+    const stats = {
+        'subjA_st_1': { j: 3, w: 2, cid: 'L150', t: '진술A', streak: 0 },  // 과거 저장분
+        'subjA_st_2': { j: 3, w: 1, cid: '§1.2', t: '진술B', streak: 0 },  // 신형 번들
+        'subjA_st_3': { j: 2, w: 1, cid: '§2.1', t: '다른 절', streak: 0 }, // 단독
+    };
+    const ranges = { subjA: [[100, 'Chapter 01. 개요']] };
+    const maps = {
+        chapterTitles: { subjA: { '1': 'Chapter 01. 개요', '2': 'Chapter 02. 분류' } },
+        cidSection: { subjA: { '150': '1.2' } },
+    };
+    const out = computeWeakConceptClusters(stats, ranges, 2, maps);
+    assert.equal(out.length, 1);
+    assert.equal(out[0].cid, '§1.2');           // 클러스터 키는 정규화 앵커
+    assert.equal(out[0].count, 2);              // L150 + §1.2 병합
+    assert.equal(out[0].wrongs, 3);
+    assert.equal(out[0].chapter, 'Chapter 01. 개요');
+});
+
+test('computeWeakConceptClusters: 과목이 다른 같은 앵커는 분리 (AN-10)', async () => {
+    const { computeWeakConceptClusters } = await import(ENGINE);
+    const stats = {
+        'subjA_st_1': { j: 3, w: 2, cid: '§1.2', t: 'A', streak: 0 },
+        'subjB_st_2': { j: 3, w: 1, cid: '§1.2', t: 'B', streak: 0 },
+    };
+    const out = computeWeakConceptClusters(stats, {}, 2, {});
+    assert.equal(out.length, 0); // 각 과목 1개씩 — 클러스터 임계 미달, 교차 병합 없음
+});
+
 test('computePaceProjection: 페이스 부족 → behind + 필요량', async () => {
     const { computePaceProjection } = await import(ENGINE);
     const calendar = {}; // 최근 14일 학습 없음 → pace 0

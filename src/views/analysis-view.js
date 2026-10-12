@@ -53,7 +53,7 @@ onAnalysisRefresh(_renderChapterWeakness);
 
 /** 과목별 취약 단원 그룹 공용 계산 — 단원 카드·스마트학습 배분·리포트가 공유 (SC-11·SC-12) */
 function _weakChapterGroups(chaptersPerSubject = 2) {
-    const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {} };
+    const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {} };
     const subjectsMeta = (typeof DataLoader !== 'undefined' && DataLoader.registry)
         ? DataLoader.getSubjectList() : [];
     const nameOf = (key) => { const s = subjectsMeta.find(x => x.key === key); return s ? s.name : key; };
@@ -61,6 +61,7 @@ function _weakChapterGroups(chaptersPerSubject = 2) {
         quizResults: state.quizResults, weakCards: state.weakCards,
         statementStats: getAllStatementStats(),
         questionChapters: qc.questions, chapterRanges: qc.ranges,
+        chapterTitles: qc.chapterTitles, cidSection: qc.cidSection,
         resolveQuiz: resolveWrongQuiz, subjectName: nameOf, chaptersPerSubject
     });
 }
@@ -213,14 +214,15 @@ function _renderWeakStatementInsight() {
             <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="trainer-view"><i class="fa-solid fa-dumbbell" aria-hidden="true"></i> 훈련소로</button>`;
         return;
     }
-    const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {} };
+    const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {} };
     const rows = weak.slice(0, 3).map(w => {
         const label = w.t ? w.t : w.sid;
         const truthTag = w.truth === true ? ' <span class="analysis-truth">참</span>'
             : w.truth === false ? ' <span class="analysis-truth">거짓</span>' : '';
         return `<div class="wc-row"><span class="analysis-sid">${esc(label)}${truthTag}</span><strong>${w.w}회 오판</strong></div>`;
     }).join('');
-    const clusters = computeWeakConceptClusters(getAllStatementStats(), qc.ranges);
+    const clusters = computeWeakConceptClusters(getAllStatementStats(), qc.ranges, 2,
+        { chapterTitles: qc.chapterTitles, cidSection: qc.cidSection });
     const clusterNote = clusters.length > 0
         ? `<p class="analysis-advice">🔗 같은 개념 구간에서 반복 오판: ${esc(clusters[0].chapter || clusters[0].cid)} (${clusters[0].count}개 진술)</p>` : '';
     const anomalousNote = anomalous.length > 0
@@ -433,7 +435,7 @@ export function exportAnalysisReport() {
         ? DataLoader.getSubjectList() : [];
     const nameOf = (k) => { const s = subjects.find(x => x.key === k); return s ? s.name : k; };
     const dday = getDDay();
-    const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {} };
+    const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {} };
     const est = compositeEstimate();
     // 스마트학습 과목별 준수 (SC-11) — 배분이 없으면(시험일 미설정·완료) null
     const totalCards = subjects.reduce((s, m) => s + displayCounts(m).cards, 0);
@@ -461,6 +463,7 @@ export function exportAnalysisReport() {
             quizResults: state.quizResults, weakCards: state.weakCards,
             statementStats: getAllStatementStats(),
             questionChapters: qc.questions, chapterRanges: qc.ranges,
+            chapterTitles: qc.chapterTitles, cidSection: qc.cidSection,
             resolveQuiz: resolveWrongQuiz, subjectName: nameOf, chaptersPerSubject: 1
         }),
         pattern: computeStudyPattern(getStudyCalendar()),

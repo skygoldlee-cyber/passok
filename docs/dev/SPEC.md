@@ -84,7 +84,7 @@
 | § | 기능 영역 | 주요 지원 기능 | ID 범위 (요구 수) |
 |---|----------|---------------|------------------|
 | 3.1 | **대시보드** | 학습 통계·과목 진행률·정답률 히트맵·약점 추천·합격 전략·D-day·계획 등급·예상 점수·마스터리 레벨·일일 챌린지 | D-01~D-17 (17) |
-| 3.1.5 | **맞춤학습** | 오답 패턴·취약 진술·학습 리듬 진단·복합 예상 점수·추천 효과 추적·학습 패턴·주간 리포트 | AN-01~AN-09 (9) |
+| 3.1.5 | **맞춤학습** | 오답 패턴·취약 진술·학습 리듬 진단·복합 예상 점수·추천 효과 추적·학습 패턴·주간 리포트·개념 앵커 | AN-01~AN-10 (10) |
 | 3.2 | **플래시카드** | 3D 플립·외움/헷갈림 분류·FSRS 간격 반복·셔플·난이도·과목 필터 | F-01~F-10 (10) |
 | 3.3 | **퀴즈** | 객관식 풀이·즉시 채점·오답 노트·과목·난이도 필터·해설 표시 | Q-01~Q-11 (11) |
 | 3.4 | **모의고사** | 실전 타이머 시뮬레이션·성적표·과목별 분석·성적 추이 | E-01~E-07 (7) |
@@ -144,6 +144,7 @@
 | AN-07 | 오답 원인 분류 확장 — 기본 3종(암기/개념/계산)에 manifest `analysis.wrongCauses`(key·label·advice)가 레지스트리 경유로 병합되는 시험별 분류표 (`getWrongCauseTaxonomy`). 자동 추정(`estimateUntaggedCauses`)은 선언된 키만 사용 — 확장 원인의 자동 분류 규칙은 manifest `wrongCauses[].autoPattern`(정규식 문자열)으로 선언하고 엔진은 선언된 패턴을 순회만 함(도메인 정규식이 플랫폼 코드에 하드코딩되지 않음), 비산술 수치→수치 착각 등 내장 추정은 기본 키에 적용. 미선언 시험은 기본 3종만 노출 | ✅ |
 | AN-08 | 학습 패턴 분석 — `recordStudyActivity`가 활동별 시간대 버킷(캘린더 엔트리 `h`)을 기록하고 `computeStudyPattern`이 최다 시간대·요일·주말 비중을 집계해 학습 리듬 카드에 표시 (활동 4일·8회 미만이면 미표시) | ✅ |
 | AN-09 | 주간 리포트보내기 — 진단 요약 섹션의 "주간 리포트" 버튼이 `buildWeeklyReportText`로 평문 리포트(학습량·정답률 추이·예상 점수·합격 갭·취약 단원·패턴·주간 계획 대비 실적·추천 효과·실제 시험 결과)를 생성, Web Share API 또는 클립보드로 출력 (`exportAnalysisReport`, `analysis_report` 액션 카운터). 계획 대비 실적은 SC-06 `computePlanAdherence` 요약을 `p.plan`으로, 과목별 실적/배정 행은 SC-09 배분 결과를 `p.planBySubject`로, 추천 효과는 AN-06 `evaluateRecommendationEffect`를 `p.recEffect`로, 실제 결과·보정은 AN-05 `getActualResult`+`computeCalibrationBias`를 `p.actual`/`p.bias`로 전달 (보정치 0이면 보정 문구 생략) | ✅ |
+| AN-10 | 교재-비의존 개념 식별자 — 진술 `conceptId`를 라인 좌표(L####)에서 구조 앵커(`§챕터.절`, 교재 `## 📚 Chapter N.`>`## M.` 번호체계 해석, `tools/build/textbook_anchors.js`)로 전환해 교재 편집·라인 시프트 시 개념 클러스터 분열을 방지한다. `build_combo_drills`가 문항 첫 교재 인용을 앵커로 해석해 부여하고, `question_chapters.js`에 `CID_SECTION`(레거시 L→앵커 환산)·`CHAPTER_TITLES`(앵커 챕터 표시명)를 함께 방출한다. 런타임은 `normalizeCidAnchor`로 저장 cid를 정규화(레거시 L####→앵커, `q:` 폴백 제외, 비-라인 키 유지)해 `computeWeakConceptClusters`·`chapterFromCid`·취약 진술 그룹핑(`trainer-drills`)에서 신구 형식을 동일 버킷으로 병합한다 — 저장 데이터 이관 없이 읽기 시점 정규화. 교재 인용 없는 문항은 `q:<문항id>` 폴백 유지 | ✅ |
 
 ### 3.2 플래시카드 (Flashcard)
 
