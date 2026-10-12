@@ -69,11 +69,12 @@ const STEP_DEFS = () => ({
   docs:     npmGate('docs', 'check:docs', '문서 정합'),
   html:     npmGate('html', 'html', 'index.html 조립 신선도'),
   lint:     npmGate('lint', 'lint', 'ESLint'),
+  posind:   npmGate('posind', 'posind', '교재 좌표 비의존 (ID-05)'),
   impact:   { id: 'impact', bin: 'node', args: ['tools/check/impact_tests.js', '--ref', REF, '--run'], shell: false, desc: '영향 테스트 (@spec 역산)' },
   docsync:  nodeGate('docsync', 'tools/check/check_doc_sync.js', '문서 동기화'),
   testfirst: nodeGate('testfirst', 'tools/check/check_test_first.js', '테스트 선행'),
 });
-const FULL_IDS = ['types', 'trace', 'specrefs', 'docs', 'html', 'lint', 'impact', 'docsync', 'testfirst'];
+const FULL_IDS = ['types', 'trace', 'specrefs', 'docs', 'html', 'lint', 'posind', 'impact', 'docsync', 'testfirst'];
 
 function changedFiles(ref) {
   const r = spawnSync('git', ['diff', '--name-only', `${ref}..HEAD`], { cwd: ROOT, encoding: 'utf8' });
