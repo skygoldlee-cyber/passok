@@ -25,9 +25,6 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Generate Linux snapshots
-        env:
-          # visual.spec.js의 CI 스킵(test.skip) 우회 — 이 워크플로의 목적은 기준선 생성
-          CI: ''
         run: npx playwright test tests/e2e/visual.spec.js --update-snapshots
 
       - name: Upload snapshots

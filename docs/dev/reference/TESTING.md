@@ -691,13 +691,14 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함).
 - **실결함 회귀 가드**: 성분사전 '성분 추가' 버튼 nowrap 잘림과 자가 등록 모달
   등록 버튼 잘림이라는 두 실사례에서 비롯 — 수정을 되돌리는 변이로 실패 확인.
 
-**visual.spec.js — 스크린샷 시각 회귀 (로컬 전용)**
+**visual.spec.js — 스크린샷 시각 회귀 (로컬 + CI)**
 
 - 대시보드 전체 화면 `toHaveScreenshot` — chromium·mobile·tablet × dark/light
   6기준선으로 배경화(산수화)·테마 팔레트·반투명 카드 비침의 픽셀 변경 탐지.
 - 버전 토스트 등 동적 요소는 `mask`로 제외, `maxDiffPixelRatio` 1% 허용.
-- 픽셀 기준선은 OS 바인딩 — Windows 생성본 커밋, CI(Linux)는 `test.skip`.
-  의도적 시각 변경 후 `--update-snapshots`로 기준선 재생성·diff 리뷰.
+- 픽셀 기준선은 OS 바인딩 — win32(로컬)·linux(CI ubuntu-latest) 양쪽 커밋.
+  의도적 시각 변경 후 로컬은 `--update-snapshots`, CI용은
+  `visual-baseline.yml` 워크플로 수동 트리거 → 아티팩트 커밋으로 갱신.
 
 실행: `npm run test:e2e` (최초 1회 `npx playwright install chromium` 필요).
 확장 시 시나리오 단위로 `tests/e2e/**/*.spec.js`에 추가 — 인증 경로는 별도 spec 권장.
