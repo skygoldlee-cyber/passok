@@ -104,6 +104,18 @@ export const DataLoader = {
      * window 전역이 호출부에서 반드시 보이는 것을 보장한다 (호출부의 개별
      * setTimeout(0) 대기를 이곳에 일원화).
      */
+    /**
+     * script 글로벌 주입 번들의 공개 로더 — _loadScript의 외부용 래퍼.
+     * semantic-index 등 DataLoader 외부 모듈이 지연 로드 데이터 자산을
+     * 불러올 때 사용한다 (file:// 호환·캐싱·재시도는 _loadScript 규약 그대로).
+     * @param {string} url
+     * @param {number} [retries]
+     * @returns {Promise<void>}
+     */
+    loadBundleScript(url, retries = 2) {
+        return this._loadScript(url, retries);
+    },
+
     _loadScript(url, retries = 2) {
         return new Promise((resolve, reject) => {
             const done = () => setTimeout(() => resolve(undefined), 0);

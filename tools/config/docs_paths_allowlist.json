@@ -245,18 +245,8 @@
   },
   {
     "file": "docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md",
-    "ref": "src/semantic-index.js",
-    "reason": "설계안 제안 경로 — 임베딩 런타임 조회 모듈 (미구현)"
-  },
-  {
-    "file": "docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md",
     "ref": "ref-pipeline/embeddings/**",
     "reason": "도메인맵 규칙 등록 대상 언급 (ref-pipeline/embeddings/ 접두사는 PoC로 생성됨)"
-  },
-  {
-    "file": "docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md",
-    "ref": "src/semantic-index.js",
-    "reason": "설계안 제안 경로 — DOC-DSN-18 선행 의존 모듈 (미구현)"
   },
   {
     "file": "docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md",

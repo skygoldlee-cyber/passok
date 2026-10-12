@@ -536,6 +536,21 @@
 | SQ-03 | 시나리오 스위트 — 콜드스타트(중립 가중)·균등(비례 배분)·약점 편중(배정 증가)·과락 우선(추천 선두)·잔여0(재배분)·임박(triage)·통독 차감(SC-15)·복습 밀림(dueBoost) + 진단·추천·추정·FSRS 불변식 + 시계열 시뮬(계획 준수 D-day 잔여 0·추천 추종 개선 격차·FSRS 30일 분포, 가상 시계 결정론) | ✅ |
 | SQ-04 | 기준선 회귀 게이트 — `--update`로 `study_quality_baseline.json` 갱신, `--check`로 통과→실패 회귀 차단. 산출물 `study_quality_report.json`은 gitignore | ✅ |
 
+### 3.25 의미 유사도 (Semantic Similarity)
+
+> 상세 설계: `docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md` (DOC-DSN-18). 빌드타임 문장 임베딩을 사전 계산해 정적 번들로 배포하고, 런타임은 코사인 유사도만 계산하는 오프라인 우선 아키텍처. 앱에는 모델이 배포되지 않는다.
+
+| ID | 요구사양 | 구현 상태 |
+|----|---------|-----------|
+| SEM-01 | 임베딩 자산 스키마 — `{dataRoot}/embeddings/` 하에 `manifest.js`(EMB_MANIFEST: 모델·차원·files·inputs)·`neighbors.js`(EMB_NEIGHBORS: adj·texts·sameText)·과목별 `vectors_stmt_subjectN.js`·`vectors_question.js` (int8 대칭 양자화, `var` 전역 JS 번들 — file:// 호환). 생성은 `ref-pipeline/embeddings/build_embeddings.py` (`npm run build:embeddings`) | ✅ |
+| SEM-02 | 런타임 조회 모듈 `src/semantic-index.js` — 이웃 인덱스 지연 로드(최초 사용 시), sid→유사 진술 조회, 동일 정규화 텍스트 중복 제거, 자산 부재 시 기능 비활성화(에러 무전파) | ✅ |
+| SEM-03 | 취약 진술 유사 항목 표시 — 취약 진술 리뷰 행의 "유사" 토글이 같은 진술·단문을 제외한 의미 유사 진술을 유사도와 함께 나열, 진술별 재시도 드릴 연결 | ✅ |
+| SEM-04 | 피처 게이트 — `features.semantic` 시험별 선언, 미선언/자산 부재 시 UI 미노출 | ✅ |
+| SEM-05 | 신선도 게이트 — manifest.inputs(소비 번들 sha1)↔현재 파일 비교 `check:embfresh`, sourceHash는 텍스트 집합 결정 해시 (check:fresh·check:content 포함) | ✅ |
+| SEM-06 | 혼동쌍 제안 — cid 상이 의미 근접 쌍 + 사용자 교차 오판률 재순위화 (빌드 산출 후보 1만+쌍 중 실사용 필터링은 별도 설계 필요) | 미구현 (로드맵) |
+| SEM-07 | 유사 문항 추천 — 오답 문항의 의미 유사 문항 제시 (neighbors.js의 q: 키 adj는 이미 산출, UI 소비만 남음) | 미구현 (로드맵) |
+| SEM-08 | 자유 의미 검색 — 교재·진술 대상 시맨틱 쿼리 확장. 쿼리 임베딩 경로(앵커 프록시/온디바이스 ONNX/BYOK/서버) 미결정 — 설계 §8 v2 보류 | 미구현 (로드맵) |
+
 ---
 
 ## 4. 비기능 요구사양
