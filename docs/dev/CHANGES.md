@@ -7,6 +7,15 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 임베딩 번들 실배포 연동 + 유사 진술 UI — SEM-01~05 구현
+
+- **파이프라인 → `{dataRoot}/embeddings/` 산출** (`build_embeddings.py`): `npm run build:embeddings`로 manifest.js(EMB_MANIFEST: 모델·files·inputs sha1)·neighbors.js(EMB_NEIGHBORS: adj+texts+sameText)·과목별 `vectors_stmt_subjectN.js`·`vectors_question.js` 생성 — cosmetic 기준 벡터 3.1MB+이웃 2.2MB. 이웃 인덱스에 PoC 보완점 반영: 동일 정규화 텍스트 중복 제거(`sameText` 맵으로 별도 보존)·정규화 12자 미만 단문 후보 제외
+- **신선도 게이트 `check:embfresh`** (`tools/check/check_emb_freshness.js`, SEM-05): manifest.inputs(소비 번들 sha1)↔현재 파일 비교 + 입력 파일 집합 재현 비교 — stale 시 `build:embeddings` 안내. `check:content`·`check:fresh`·`check:all`에 편입, CI는 노드 단계라 파이썬 불요
+- **런타임 `src/semantic-index.js`** (SEM-02/04): `features.semantic` 게이트 + neighbors.js 최초 사용 시 지연 로드(`DataLoader.loadBundleScript` 공개 래퍼 추가) + sid→유사 진술·qid→유사 문항·동일 텍스트 교차 참조 조회 + 자산 부재 시 조용한 비활성화. `decodeVectorBundle`/`cosineSimilarity` export (D19 센트로이드 선행 자산)
+- **취약 진술 리뷰 유사 진술 토글** (`trainer-drills.js` weakRow, SEM-03): 행별 "유사" 버튼 → 유사도% + 과목 배지 + 진술 텍스트 + 재시도 드릴 버튼 나열, 동일 진술 교차 과목 등재 힌트. semantic 미선언 시험에는 버튼 미노출
+- **SPEC §3.25 신설**: SEM-01~05 구현 등록, SEM-06(혼동쌍)·SEM-07(유사 문항 UI)·SEM-08(자유 의미 검색) 로드맵 마킹. `exams.json` cosmetic에 `semantic: true` 플래그 추가
+- 테스트: unit 11건(semantic-index) + 4건(manifest 정합), dom 3건(토글·비활성·게이트), 파이썬 10건(중복제거·단문필터·sameText 포함)
+
 ## 2026-10-12 임베딩 파이프라인 PoC — DOC-DSN-18 타당성 검증
 
 - **신규 `ref-pipeline/embeddings/build_embeddings.py` + `requirements.txt`**: 드릴(ox·combo)·시험 번들에서 진술(sid)·문항(qid) 수집 → `intfloat/multilingual-e5-small`(384d) 임베딩 → int8 대칭 양자화 → 설계 §5 형식 벡터 번들·이웃 인덱스·품질 리포트 산출 (출력 `out/` — gitignore 로컬 전용). 수작업 번들(combo_pilot)은 node eval 폴백, 정답 마커 ①~⑳→선지 텍스트 해석

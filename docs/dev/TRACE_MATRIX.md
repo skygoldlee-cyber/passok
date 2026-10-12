@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 80ea34857bab759e
-> 생성: 2026-10-12 · 원천: SPEC.md(472개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 6f977a1823cab034
+> 생성: 2026-10-12 · 원천: SPEC.md(480개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 472개 — 문서 연결 307 · 소스 연결 434 · 테스트 연결 461 · 보고서 연결 109
+**커버리지 요약**: 요구사항 480개 — 문서 연결 307 · 소스 연결 437 · 테스트 연결 466 · 보고서 연결 109
 
 ---
 
@@ -445,6 +445,19 @@
 | SQ-02 | ✅ | 테스트 | — | tools/check/audit_study_quality.js | tests/unit/study-quality-audit.test.js | — | — |
 | SQ-03 | ✅ | 테스트 | DOC-DSN-17 | tools/check/audit_study_quality.js | tests/unit/study-quality-audit.test.js | — | — |
 | SQ-04 | ✅ | 테스트 | — | tools/check/audit_study_quality.js | tests/unit/study-quality-audit.test.js | — | — |
+
+## 3.25 의미 유사도
+
+| ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
+|----|------|-----------|------|------|--------|--------|------|
+| SEM-01 | ✅ | 테스트 | — | — | tests/unit/emb-manifest.test.js | — | — |
+| SEM-02 | ✅ | 테스트 | — | src/semantic-index.js | tests/unit/semantic-index.test.js | — | — |
+| SEM-03 | ✅ | 테스트 | — | — | tests/unit/semantic-index.test.js | — | — |
+| SEM-04 | ✅ | 테스트 | — | src/semantic-index.js | tests/unit/semantic-index.test.js | — | — |
+| SEM-05 | ✅ | 테스트 | — | tools/check/check_emb_freshness.js | tests/unit/emb-manifest.test.js | — | — |
+| SEM-06 | 미구현 (로드맵) | — | — | — | — | — | — |
+| SEM-07 | 미구현 (로드맵) | — | — | — | — | — | — |
+| SEM-08 | 미구현 (로드맵) | — | — | — | — | — | — |
 
 ## 4.1 PWA & 오프라인
 
