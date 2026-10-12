@@ -1061,6 +1061,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | ROAD-L3 | **오답 체인 잔여**: `핵심 문장(ref_md 조문 원문 인라인)` → 관련 카드 → 유사문제 → 재시험 추적 | A3 출처 근거의 후속 체인 | 미구현 |
 | ROAD-L4 | **Phase 2 차별화**: 출제 패턴 분석·코칭 리포트·지식 맵·요약 노트 | FEATURE_PROPOSALS Phase 2 (`docs/exams/cosmetic/report_archive/`) | 미구현 |
 | ROAD-L5 | **기능 검증 측정**: 개발 완료 기능(오답 루프·합격 전략·진단 평가)의 사용률·만족도 로컬 측정 → 유료가치 판정 데이터 확보 | `usage-stats.js` 뷰·액션 카운터 + 설정 '내 사용 통계' (로컬 전용, 백업·동기화 제외). **유저 단위 = 기기별 익명 `owner`(device_id) — 로그인 없는 프로모션 기간 대응, GLOBAL 키라 시험 전환해도 누적 유지**. **판정 기준: Pro 후보 액션(`VALUE_ACTIONS` — 오답 루프·진단 평가·이야기형·맞춤 리포트·실제 결과 보고) 합계 20회** (`PRO_VALUE_THRESHOLD`) — 편의/UI 액션(검색·플랜 비교)은 제외. 도달 시 유료가치 인정, ROAD-P1 착수 근거 | ✅ 카운터 구현 (판정 데이터 수집 중) |
+| ROAD-L6 | **ML 기술 로드맵 — 스마트·맞춤학습 고도화 기법 검토**: ① FSRS-4.5 간격 반복 ✅ 적용 완료(F-07/F-08, `src/fsrs.js` — T3 시뮬 복습량 −17% 계측, FSRS_DESIGN.md) ② 빌드타임 콘텐츠 임베딩(중복·개념 클러스터링) — transformers.js 빌드 의존성, 중기 후보 ③ 컨텍스추얼 밴딧(LinUCB — 추천 순위 학습, `REC_SNAPSHOT`·`evaluateRecommendationEffect` 보상 신호 기존) — Supabase 집단 데이터 수집 선행 조건 ④ 지식 추적(DKT 계열·LoReKT급 저자원) — 집단 데이터+추론 최적화 전제, 장기 ⑤ **강화학습(복습 시점·추천 순서 정책) — 검토 완료·보류 판정**: 사용자당 데이터 규모·희소 지연 보상(합격 = 사용자당 1회)·결정론 감사(SQ)와의 충돌로 비현실적 — 재검토 조건: Supabase 집단 수집 + 밴딧 수익 검증 후. FSRS가 스케줄링 문제를 수식으로 해결해 RL 이점 소멸 | FSRS_DESIGN.md · 검토 산출 본 행 | ①완료 ⑤보류, 나머지 미구현 |
 
 ### 7.4 멀티시험·도메인 확장
 
@@ -1254,3 +1255,4 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | FB-01~08 | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
 | ROAD-P1~P4 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-L1~L5 | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
+| ROAD-L6 | ML 기법 검토 산출 — FSRS_DESIGN.md (FSRS 적용·RL 보류 판정 근거) |
