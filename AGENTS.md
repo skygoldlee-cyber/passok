@@ -258,7 +258,7 @@ src/                    # ES Modules
         formula-audit.js    # 종합 규정 점검 보고서 수집기 (FO-56, 유형별 게이트)
         formula-print.js    # 인쇄 빌더 (조제 기록지·라벨·안내문·종합 보고서)
         trainer-ingredients.js # 원료 배합 챌린지 (features.ingredients)
-  views/                # 뷰 컨트롤러 (36개)
+  views/                # 뷰 컨트롤러 (39개)
     navigation.js       # 뷰 전환 유틸 (switchView)
     textbook-reader.js  # 교재 리더 오케스트레이터 (과목·챕터 선택·진입점)
     reader-render.js    # 챕터 본문 렌더 — TOC·섹션 카드·바인딩 (textbook-reader.js에서 분리)
