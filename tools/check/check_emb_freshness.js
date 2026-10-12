@@ -27,7 +27,8 @@ const VAR_RE = /var\s+EMB_MANIFEST\s*=\s*/;
 const errors = [];
 
 function sha1(p) {
-  return crypto.createHash('sha1').update(fs.readFileSync(p)).digest('hex');
+  // 개행 정규화 — 작업트리 CRLF/LF 차이로 해시가 갈리면 Windows↔CI 간 오탐 발생
+  return crypto.createHash('sha1').update(fs.readFileSync(p, 'utf8').replace(/\r\n/g, '\n')).digest('hex');
 }
 
 function loadManifest(p) {

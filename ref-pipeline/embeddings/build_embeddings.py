@@ -122,8 +122,11 @@ def source_hash(items):
 
 
 def file_sha1(path):
-    """입력 번들의 바이트 해시 — manifest.inputs 기록용 (check_emb_freshness.js 비교 대상)."""
-    return hashlib.sha1(Path(path).read_bytes()).hexdigest()
+    """입력 번들의 개행 정규화 해시 — manifest.inputs 기록용 (check_emb_freshness.js 비교 대상).
+    작업트리 개행(CRLF/LF)에 해시가 종속되면 Windows↔Linux 간 오탐이 발생하므로 \r\n을 통일한다."""
+    return hashlib.sha1(
+        Path(path).read_bytes().decode("utf-8").replace("\r\n", "\n").encode("utf-8")
+    ).hexdigest()
 
 
 def collect_items(data_root, exam_id="cosmetic"):
