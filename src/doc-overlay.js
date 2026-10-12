@@ -167,6 +167,42 @@ export function mountToc(scroll, article, tocHtml, { tocClass, jumpAttr }) {
 }
 
 /**
+ * 본문 헤딩 텍스트 → GitHub 스타일 slug (소문자·공백→-·문장부호/이모지 제거).
+ * '[목차](#-전체-지도)' 같은 문서 내 앵커 링크의 대상 헤딩을 역해석하는 데 쓴다.
+ * @param {string} text
+ */
+export function slugifyHeading(text) {
+    return String(text || '')
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}_\-\s]/gu, '')
+        .replace(/\s/g, '-');
+}
+
+/**
+ * '#-전체-지도' 형태의 문서 내 앵커 링크를 본문 헤딩으로 스크롤.
+ * 파서가 부여한 id와 무관하게 헤딩 텍스트의 slug 매칭으로 찾는다.
+ * @param {HTMLElement} article
+ * @param {string} href - '#slug' 형태
+ * @returns {boolean} 매칭 헤딩 발견 여부
+ */
+export function scrollToHeadingSlug(article, href) {
+    const want = String(href || '').replace(/^#/, '');
+    if (!want) return false;
+    if (typeof CSS !== 'undefined' && typeof CSS.escape === 'function') {
+        const direct = article.querySelector('#' + CSS.escape(want));
+        if (direct) { direct.scrollIntoView({ behavior: 'smooth', block: 'start' }); return true; }
+    }
+    const headings = article.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    for (const h of headings) {
+        if (slugifyHeading(h.textContent) === want) {
+            h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
  * 전체화면 문서 오버레이 셸 수명주기 팩토리.
  * open: 스타일 주입·DOM 생성·body 잠금 클래스·Escape/popstate·히스토리 마커 push.
  * close: 역순 해제 + history.back() 복원. onClose 훅은 클래스 해제 전에 호출된다

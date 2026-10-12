@@ -12,6 +12,7 @@ import { join } from 'node:path';
 import { ExamViewer } from '../../src/exam-viewer.js';
 import { refDocDisplayName } from '../../src/pdf-registry.js';
 import { formatSectionContentForReader } from '../../src/reader-format.js';
+import { slugifyHeading, scrollToHeadingSlug } from '../../src/doc-overlay.js';
 
 const require = createRequire(import.meta.url);
 const examsPlugin = require('../../tools/build/plugins/exams.plugin.js');
@@ -127,4 +128,46 @@ test('exams.plugin: 해설의 "(교재: L237)" 좌표 라벨이 번들 explain�
     assert.ok(q1.explanation.includes('교재 근거'), '근거 표기는 보존');
     assert.ok(!/L495/.test(q2.explanation), '참조자료 좌표 제거');
     assert.ok(q2.explanation.includes('화장품법 시행규칙'), '문서명은 보존');
+});
+
+// ==================== ExamViewer._titleFromPath ====================
+
+test('_titleFromPath: 참조자료 문서 파일명 → 등록 표시명 (파일명 노출 방지)', () => {
+    assert.equal(
+        ExamViewer._titleFromPath('exams/cosmetic/참조자료/과목1/1.cosmetic-law.md'),
+        '화장품법 통합 정리'
+    );
+});
+
+test('_titleFromPath: 미등록 파일 → 파일명 정리 (확장자·밑줄 제거)', () => {
+    assert.equal(
+        ExamViewer._titleFromPath('exams/cosmetic/참조자료/과목9/신규_정리_문서.md'),
+        '신규 정리 문서'
+    );
+});
+
+// ==================== doc-overlay: slugifyHeading / 앵커 스크롤 ====================
+
+test('slugifyHeading: 이모지+공백 헤딩 → GitHub 스타일 slug', () => {
+    // 콘텐츠 TOC 링크 '#-전체-지도'의 대상 헤딩 '🗺️ 전체 지도'
+    assert.equal(slugifyHeading('🗺️ 전체 지도'), '-전체-지도');
+});
+
+test('slugifyHeading: 절 번호+괄호 헤딩 → slug', () => {
+    // user_manual 링크 '#85--통합-검색-팔레트-ctrlk'의 대상 '8.5. 🔍 통합 검색 팔레트 (Ctrl+K)'
+    assert.equal(slugifyHeading('8.5. 🔍 통합 검색 팔레트 (Ctrl+K)'), '85--통합-검색-팔레트-ctrlk');
+});
+
+test('scrollToHeadingSlug: 헤딩 텍스트 slug 매칭으로 스크롤', () => {
+    const article = {
+        calls: [],
+        querySelector() { return null; },
+        querySelectorAll() {
+            const h = { textContent: '🗺️ 전체 지도', scrollIntoView: () => { article.calls.push('scroll'); } };
+            return [h];
+        }
+    };
+    assert.equal(scrollToHeadingSlug(article, '#-전체-지도'), true);
+    assert.equal(article.calls.length, 1);
+    assert.equal(scrollToHeadingSlug(article, '#없는-헤딩'), false);
 });
