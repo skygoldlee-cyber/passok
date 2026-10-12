@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1720 818" width="1720" height="818" font-family="Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans CJK KR', 'Noto Serif CJK KR', sans-serif">
+<defs><radialGradient id="rg" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#E07B12" stop-opacity=".75"/><stop offset="1" stop-color="#E07B12"/></radialGradient>
+<filter id="sh" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1f2937" flood-opacity=".12"/></filter>
+<pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.3" fill="#E07B12" opacity=".13"/></pattern></defs>
+<rect width="1720" height="818" fill="#FBFAF7"/><rect width="1720" height="818" fill="url(#dots)"/>
+<text x="860.0" y="62" text-anchor="middle" font-size="34" font-weight="800" fill="#1F2937">3과목 과목 개요 마인드맵</text>
+<text x="860.0" y="96" text-anchor="middle" font-size="18" fill="#6B7280">맞춤형화장품 조제관리사 · 유통화장품의 안전관리</text>
+<rect x="800.0" y="106" width="120" height="4" rx="2" fill="#E07B12"/>
+<path d="M732.0 429.0 C666.0 429.0, 666.0 236.0, 600 236.0" fill="none" stroke="#E8505B" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="600" cy="236.0" r="6" fill="#E8505B"/>
+<path d="M732.0 429.0 C666.0 429.0, 666.0 494.0, 600 494.0" fill="none" stroke="#3B82F6" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="600" cy="494.0" r="6" fill="#3B82F6"/>
+<path d="M988.0 429.0 C1054.0 429.0, 1054.0 157.0, 1120 157.0" fill="none" stroke="#10B981" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="1120" cy="157.0" r="6" fill="#10B981"/>
+<path d="M988.0 429.0 C1054.0 429.0, 1054.0 365.0, 1120 365.0" fill="none" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="1120" cy="365.0" r="6" fill="#F59E0B"/>
+<path d="M988.0 429.0 C1054.0 429.0, 1054.0 573.0, 1120 573.0" fill="none" stroke="#8B5CF6" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="1120" cy="573.0" r="6" fill="#8B5CF6"/>
+<g filter="url(#sh)"><rect x="40" y="209.0" width="560" height="232" rx="18" fill="#fff" stroke="#E8505B" stroke-opacity=".35"/></g>
+<path d="M40 227.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#E8505B"/>
+<rect x="56" y="222.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="85" y="242.0" text-anchor="middle" font-size="15" font-weight="800" fill="#E8505B">Ch01</text>
+<text x="128" y="244.0" font-size="20" font-weight="800" fill="#fff">작업장 위생관리</text>
+<circle cx="70" cy="292.0" r="5" fill="#E8505B"/>
+<text x="86" y="297.0" font-size="16.5" font-weight="700" fill="#1F2937">위생 기준 및 상태</text>
+<text x="86" y="317.0" font-size="14" fill="#6B7280">청정도 등급 · 공기 · 필터</text>
+<line x1="64" y1="324.0" x2="576" y2="324.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="342.0" r="5" fill="#E8505B"/>
+<text x="86" y="347.0" font-size="16.5" font-weight="700" fill="#1F2937">위생 유지관리</text>
+<text x="86" y="367.0" font-size="14" fill="#6B7280">세척 · 소독 절차</text>
+<line x1="64" y1="374.0" x2="576" y2="374.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="392.0" r="5" fill="#E8505B"/>
+<text x="86" y="397.0" font-size="16.5" font-weight="700" fill="#1F2937">소독 및 중화</text>
+<text x="86" y="417.0" font-size="14" fill="#6B7280">소독제 6종 · 중화제 매칭</text>
+<g filter="url(#sh)"><rect x="40" y="467.0" width="560" height="182" rx="18" fill="#fff" stroke="#3B82F6" stroke-opacity=".35"/></g>
+<path d="M40 485.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#3B82F6"/>
+<rect x="56" y="480.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="85" y="500.0" text-anchor="middle" font-size="15" font-weight="800" fill="#3B82F6">Ch02</text>
+<text x="128" y="502.0" font-size="20" font-weight="800" fill="#fff">작업자 위생관리</text>
+<circle cx="70" cy="550.0" r="5" fill="#3B82F6"/>
+<text x="86" y="555.0" font-size="16.5" font-weight="700" fill="#1F2937">위생 관리 절차</text>
+<text x="86" y="575.0" font-size="14" fill="#6B7280">손 세정 15초 · 소독제 4종</text>
+<line x1="64" y1="582.0" x2="576" y2="582.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="600.0" r="5" fill="#3B82F6"/>
+<text x="86" y="605.0" font-size="16.5" font-weight="700" fill="#1F2937">소독 · 세정 · 복장</text>
+<text x="86" y="625.0" font-size="14" fill="#6B7280">구역별 복장 · 건강관리</text>
+<g filter="url(#sh)"><rect x="1120" y="130.0" width="560" height="182" rx="18" fill="#fff" stroke="#10B981" stroke-opacity=".35"/></g>
+<path d="M1120 148.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#10B981"/>
+<rect x="1136" y="143.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="1165" y="163.0" text-anchor="middle" font-size="15" font-weight="800" fill="#10B981">Ch03</text>
+<text x="1208" y="165.0" font-size="20" font-weight="800" fill="#fff">설비 및 기구관리</text>
+<circle cx="1150" cy="213.0" r="5" fill="#10B981"/>
+<text x="1166" y="218.0" font-size="16.5" font-weight="700" fill="#1F2937">위생 기준 및 판정</text>
+<text x="1166" y="238.0" font-size="14" fill="#6B7280">저울 영점 · 수평 매일 · 정기점검 1개월</text>
+<line x1="1144" y1="245.0" x2="1656" y2="245.0" stroke="#E5E7EB"/>
+<circle cx="1150" cy="263.0" r="5" fill="#10B981"/>
+<text x="1166" y="268.0" font-size="16.5" font-weight="700" fill="#1F2937">관리 및 폐기</text>
+<text x="1166" y="288.0" font-size="14" fill="#6B7280">세척 · 세척제 · 재질 · 표면 균</text>
+<g filter="url(#sh)"><rect x="1120" y="338.0" width="560" height="182" rx="18" fill="#fff" stroke="#F59E0B" stroke-opacity=".35"/></g>
+<path d="M1120 356.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#F59E0B"/>
+<rect x="1136" y="351.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="1165" y="371.0" text-anchor="middle" font-size="15" font-weight="800" fill="#F59E0B">Ch04</text>
+<text x="1208" y="373.0" font-size="20" font-weight="800" fill="#fff">내용물 및 원료관리</text>
+<circle cx="1150" cy="421.0" r="5" fill="#F59E0B"/>
+<text x="1166" y="426.0" font-size="16.5" font-weight="700" fill="#1F2937">원료 관리</text>
+<text x="1166" y="446.0" font-size="14" fill="#6B7280">입고 · 보관 · 중금속 · 미생물 한도</text>
+<line x1="1144" y1="453.0" x2="1656" y2="453.0" stroke="#E5E7EB"/>
+<circle cx="1150" cy="471.0" r="5" fill="#F59E0B"/>
+<text x="1166" y="476.0" font-size="16.5" font-weight="700" fill="#1F2937">폐기 및 품질 관리</text>
+<text x="1166" y="496.0" font-size="14" fill="#6B7280">내용량 · pH · 퍼머 · 안전용기</text>
+<g filter="url(#sh)"><rect x="1120" y="546.0" width="560" height="182" rx="18" fill="#fff" stroke="#8B5CF6" stroke-opacity=".35"/></g>
+<path d="M1120 564.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#8B5CF6"/>
+<rect x="1136" y="559.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="1165" y="579.0" text-anchor="middle" font-size="15" font-weight="800" fill="#8B5CF6">Ch05</text>
+<text x="1208" y="581.0" font-size="20" font-weight="800" fill="#fff">포장재의 관리</text>
+<circle cx="1150" cy="629.0" r="5" fill="#8B5CF6"/>
+<text x="1166" y="634.0" font-size="16.5" font-weight="700" fill="#1F2937">포장재 관리</text>
+<text x="1166" y="654.0" font-size="14" fill="#6B7280">1차 · 2차 포장 · 용기 종류</text>
+<line x1="1144" y1="661.0" x2="1656" y2="661.0" stroke="#E5E7EB"/>
+<circle cx="1150" cy="679.0" r="5" fill="#8B5CF6"/>
+<text x="1166" y="684.0" font-size="16.5" font-weight="700" fill="#1F2937">사용기한 및 폐기</text>
+<text x="1166" y="704.0" font-size="14" fill="#6B7280">안전용기 · 포장 시험 방법</text>
+<circle cx="860.0" cy="429.0" r="146" fill="#E07B12" opacity=".12"/>
+<circle cx="860.0" cy="429.0" r="128" fill="url(#rg)" filter="url(#sh)"/>
+<circle cx="860.0" cy="429.0" r="116" fill="none" stroke="#fff" stroke-opacity=".5" stroke-dasharray="4 6"/>
+<g transform="translate(860.0,379.0)" stroke="#fff" stroke-width="3" fill="none" stroke-linejoin="round">
+<path d="M0 -32 L28 -22 V2 C28 18 14 28 0 34 C-14 28 -28 18 -28 2 V-22 Z"/>
+<path d="M-12 0 L-3 10 L14 -10" stroke-width="4" stroke-linecap="round"/></g>
+<text x="860.0" y="451.0" text-anchor="middle" font-size="30" font-weight="900" fill="#fff">3과목</text>
+<text x="860.0" y="479.0" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">유통화장품의</text>
+<text x="860.0" y="502.0" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">안전관리</text>
+<text x="860.0" y="788" text-anchor="middle" font-size="13" fill="#9CA3AF">5개 챕터 · 중분류 11개</text>
+</svg>
