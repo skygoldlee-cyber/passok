@@ -66,7 +66,7 @@ const ALLOWED = [
         reason: '세션 전용 LRU 캐시 키 — 영속 저장소 아님, 챕터 인덱스는 세션 내 고유하면 충분'
     },
     {
-        file: 'src/views/exam-simulator.js', contains: 'integrated_q${index + 1}',
+        file: 'src/views/exam-sim-session.js', contains: 'integrated_q${index + 1}',
         reason: '통합 모의고사 문항 순번 id — 빌드 산출물 QUESTION_CHAPTERS도 동일 순번 규칙이라 일관. 개선 후보: 콘텐츠 기반 id (weak_sim_* 영속 키로 흘러 문제은행 재정렬 시 귀속 오류 가능)'
     },
 ];

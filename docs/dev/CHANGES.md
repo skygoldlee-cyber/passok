@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 exam-simulator 뷰 분해 (대형 뷰 분할 후속)
+
+- **exam-simulator.js 분해**: 799라인을 수명주기 단위 4모듈로 분해 — `exam-sim-session.js`(시험 구성: 과목별/ㄱㄴㄷ/통합 모의고사 + startSimSession + 드래프트 복구·나가기, 362라인), `exam-sim-arena.js`(시험 중 기계 장치: 절대 시각 타이머·OMR·문항 렌더·응답·채점 제출 + deriveComboJudgments, 390라인), `exam-sim-draft.js`(드래프트 저장소·복구 배너 — 뷰 무의존 순수 모듈, 55라인). 의존 방향은 session → arena → draft 단방향 — 드래프트 IO를 순수 모듈로 분리해 arena⇄draft 순환 회피
+- **exam-simulator.js는 파사드+이력 저장(46라인)**: app.js·listeners-simulator·exam-sim-weak·DOM 테스트의 기존 import를 재수출로 무파손 유지. 원래 내부였던 `startSimTimer`·`renderOMRSheet`·`saveSimDraft`는 과도한 재수출(unused-export 경고)이라 파사드에서는 제외 — 분리 모듈 간 내부 import로만 사용
+- **exam-simulator-facade.test.js** (신규): app.js·listeners-simulator·exam-sim-weak가 파사드에서 import하는 이름이 재수출 체인 포함 전부 resolve되는지 정적 검증 — 파사드 분해의 재수출 누락 회귀 차단 (practice-registry 핸들러 정합 테스트와 동일 패턴)
+
 ## 2026-10-13 평가 후속 — products·batch 뷰 분해 + 게이트 성능·래칫 강화
 
 - **formula-products.js 분해**: 827라인을 역할별 4모듈로 분해 — `formula-prod-state.js`(prodForm 공유 상태·전성분 칩 렌더), `formula-prod-vision.js`(사진 인식 LLM 초안→칩 검토, FO-41~43·46·54·55), `formula-prod-detail.js`(상세·고객 알레르기 교차·포뮬러/기성품 비교). products.js는 목록+폼 액션+JSON IO(375라인)로 축소하고 분리 모듈 핸들러를 재수출 — registry·DOM 테스트 경로 무파손. 공유 상태를 state 모듈로 올려 products→vision/detail 단방향 유지

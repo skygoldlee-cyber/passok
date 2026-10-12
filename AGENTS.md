@@ -276,7 +276,7 @@ src/                    # ES Modules
         formula-audit.js    # 종합 규정 점검 보고서 수집기 (FO-56, 유형별 게이트)
         formula-print.js    # 인쇄 빌더 (조제 기록지·라벨·안내문·종합 보고서)
         trainer-ingredients.js # 원료 배합 챌린지 (features.ingredients)
-  views/                # 뷰 컨트롤러 (39개)
+  views/                # 뷰 컨트롤러 (42개)
     navigation.js       # 뷰 전환 유틸 (switchView)
     textbook-reader.js  # 교재 리더 오케스트레이터 (과목·챕터 선택·진입점)
     reader-render.js    # 챕터 본문 렌더 — TOC·섹션 카드·바인딩 (textbook-reader.js에서 분리)
@@ -299,7 +299,10 @@ src/                    # ES Modules
     trainer-drills.js   # O/X 드릴 + 드릴 공통 오케스트레이션
     trainer-drill-combo.js # 복수정답형(combo) 드릴 (trainer-drills.js에서 분리)
     pomodoro.js         # 뽀모도로 타이머
-    exam-simulator.js   # 실전 모의고사 시뮬레이터
+    exam-simulator.js   # 실전 모의고사 파사드 — 분리 모듈 재수출 + 성적 이력 저장
+    exam-sim-session.js # 모의고사 세션 수명주기 (시험 구성·시작·드래프트 복구·나가기)
+    exam-sim-arena.js   # 모의고사 아레나 (타이머·OMR·문항 렌더·응답·채점 제출)
+    exam-sim-draft.js   # 모의고사 임시 세션(드래프트) 저장·복구 배너
     exam-sim-state.js   # 시뮬레이터 상태
     exam-sim-review.js  # 시뮬레이터 결과 리뷰
     exam-sim-weak.js    # 오답 모의고사 (exam-simulator.js에서 분리)
