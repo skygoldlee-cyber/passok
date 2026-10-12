@@ -126,9 +126,11 @@ const parseExamFile = (filePath, examId, examTitle) => {
       }
 
       if (currentQuestion) {
-        // 신형식: > 교재 근거 블록 인용 → 해설로 수집 (마커·링크 정리)
+        // 신형식: > 교재 근거 블록 인용 → 해설로 수집 (마커·링크·좌표 라벨 정리)
+        // '교재: L237' 같은 내부 좌표는 사용자 정보가 아니므로 '(교재: L237)' → '(교재)'
         if (line.startsWith('>')) {
-          const cleaned = line.replace(/^>\s*/, '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\*\*/g, '').trim();
+          const cleaned = line.replace(/^>\s*/, '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\*\*/g, '')
+            .replace(/:\s*L\d+(?:\s*[,~\-]\s*L?\d+)*/g, '').replace(/\s*\(교재\)/g, '').trim();
           if (cleaned) {
             currentQuestion.explanation = currentQuestion.explanation ? currentQuestion.explanation + '\n' + cleaned : cleaned;
           }

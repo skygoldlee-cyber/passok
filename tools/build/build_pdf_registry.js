@@ -405,6 +405,27 @@ export function resolveRefPath(fileName) {
     return (t.REF_FILE_TO_PATH || {})[fileName] || '';
 }
 
+/**
+ * 참조 문서 파일명 → 사용자 표시명.
+ * REFERENCE_FILES(과목별)·REFERENCE_COMMON·REFERENCE_INGREDIENTS·REFERENCE_LAW의
+ * name 필드를 탐색한다 (확장자 무시 — '화장품법(법률)(제N호).md' ↔ '...pdf' 매칭).
+ * 등록되지 않은 파일명이면 '' 반환.
+ */
+export function refDocDisplayName(fileName) {
+    const base = (String(fileName || '').split('/').pop() || '').replace(/\\.(md|pdf|html?)$/i, '');
+    if (!base) return '';
+    const t = getRefTables();
+    const entries = [
+        ...Object.values(t.REFERENCE_FILES || {}).flat(),
+        ...(t.REFERENCE_COMMON || []),
+        ...(t.REFERENCE_INGREDIENTS || []),
+        ...(t.REFERENCE_LAW || [])
+    ];
+    const hit = entries.find(e =>
+        String(e.file || '').replace(/\\.(md|pdf|html?)$/i, '') === base);
+    return hit ? String(hit.name || '') : '';
+}
+
 export function mapSourceToRef(sourceText) {
     if (!sourceText) return '';
     const s = sourceText.trim();

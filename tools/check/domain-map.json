@@ -253,7 +253,8 @@
       "note": "참조자료 링크/레지스트리 테스트",
       "patterns": [
         "tests/unit/pdf-registry.test.js",
-        "tests/unit/law-links.test.js"
+        "tests/unit/law-links.test.js",
+        "tests/unit/ref-link-labels.test.js"
       ]
     },
     {
