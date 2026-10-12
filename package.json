@@ -44,6 +44,7 @@
     "check:datafresh": "node tools/check/check_data_freshness.js",
     "check:hooks": "node tools/check/check_hooks.js",
     "check:lawurls": "node tools/check/check_law_urls.js",
+    "check:linklint": "node tools/check/check_link_lint.js",
     "check": "node tools/check/run.js",
     "check:docs": "node tools/check/run.js --preset docs",
     "check:textbookdocs": "node tools/check/check_textbook_docs.js",

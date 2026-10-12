@@ -92,6 +92,14 @@ test('참조자료 과목별 md 링크: ref_md·원료 링크는 본 패턴에 �
     assert.ok(html.includes('data-ref-html="'), 'ref_md 링크는 기존 HTML 뷰어 경로 유지');
 });
 
+test('원료 DB md 링크: .md 접미 라벨 → 등록 표시명/접미 제거 (파일명 노출 방지)', () => {
+    const md = '• [사용가능원료.md](../참조자료/원료/approved_ingredients.md)';
+    const html = formatSectionContentForReader(md, 'content/exams/cosmetic/교재/manufacturing/x.md');
+    assert.ok(html.includes('data-ref-html="'), '앱 내 HTML 뷰어 링크로 변환');
+    assert.ok(!/사용가능원료\.md/.test(html), '.md 접미 라벨 노출 금지');
+    assert.ok(html.includes('승인 원료 목록'), '등록 표시명 사용');
+});
+
 // ==================== exams.plugin: 해설 좌표 라벨 정리 ====================
 
 test('exams.plugin: 해설의 "(교재: L237)" 좌표 라벨이 번들 explain에서 제거된다', () => {
