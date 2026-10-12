@@ -170,9 +170,10 @@ const SHELL_ASSETS = [
   //   font-display: swap + CSS가 필요 시점에만 요청하므로 설치 페이로드를 절반으로 줄인다.
   //   최초 요청 시 fetch 규칙 6(SWR)이 SHELL_CACHE에 저장 → 이후 오프라인에서도 사용 가능.
   //   캐시 전 첫 방문·오프라인 시 신기기는 시스템 이모지로 폴백 (기능 영향 없음).
-  // Mermaid(3.3MB) — 매뉴얼/교재 리더의 다이어그램 렌더링에 필요.
-  //   온디맨드 로드이지만 PWA 오프라인 환경에서도 다이어그램이 표시되도록 프리캐시에 포함.
-  './vendor/mermaid/mermaid.min.js'
+  // Mermaid(3.2MB) — 설치 프리캐시에서 제외 (설치 페이로드 절감, 사용 빈도 낮음).
+  //   mermaid-render.js가 노드 존재 시에만 지연 로드하고, 규칙 5-4(networkFirst +
+  //   SHELL_CACHE 폴백)가 최초 fetch를 캐시 → 이후 오프라인 사용 가능.
+  //   오프라인 설치 직후 첫 다이어그램 조회만 네트워크 필요 (script.onerror → 폴백 메시지).
 ];
 
 /**

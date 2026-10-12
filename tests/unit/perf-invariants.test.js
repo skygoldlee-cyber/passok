@@ -145,6 +145,12 @@ test('PF-13: Mermaid.js가 노드 존재 시에만 지연 로드된다', () => {
   assert.ok(fn && /nodes\.length === 0\) return/.test(fn[0]), '노드 없음 조기 반환');
 });
 
+test('PF-13: mermaid.min.js는 설치 프리캐시에서 제외된다 (지연 로딩 + 런타임 캐시)', () => {
+  const shellBlock = read('sw.js').match(/const SHELL_ASSETS = \[([\s\S]*?)\];/);
+  assert.ok(shellBlock, 'SHELL_ASSETS 선언');
+  assert.ok(!shellBlock[1].includes('mermaid.min.js'), '설치 페이로드 3.2MB 절감 — networkFirst 캐시로 온디맨드 커버');
+});
+
 // ---------- PF-14: 전역 테이블 가로 스크롤 ----------
 
 test('PF-14: 테이블 래퍼에 전역 가로 스크롤 규칙이 있다', () => {
