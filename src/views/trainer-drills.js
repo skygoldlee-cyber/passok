@@ -17,6 +17,7 @@ import { vibrate, showToast, HAPTIC, wrongReviewHtml, trainerResultHtml } from '
 import { DataLoader } from '../data-loader.js';
 import { gradeAnswer } from '../questions.js';
 import { recordStatementJudgments, getWeakStatements, getDueStatementSids, getAllStatementStats, getAnomalousStatements, WEAK_GRADUATE_STREAK } from '../statement-tracker.js';
+import { normalizeCidAnchor, subjectFromSid } from '../analysis-engine.js';
 import { recordStudyActivity } from '../study-tracker.js';
 import { switchView, resetMainScroll } from './navigation.js';
 
@@ -112,10 +113,13 @@ const DRILL_TYPES = {
                 return items.filter(i => (i.tags || []).some(t => NUM_FOCUS_TAGS.has(t)));
             }
             if (conceptMatch) {
-                // 해당 conceptId의 취약(졸업 포함) 진술 sids로 O/X 문항 필터
+                // 해당 개념 앵커의 취약(졸업 포함) 진술 sids로 O/X 문항 필터 —
+                // 레거시 L#### cid는 §앵커로 환산해 비교한다 (AN-10)
                 const cid = conceptMatch[1];
+                const cidSection = (DataLoader._questionChapters && DataLoader._questionChapters.cidSection) || {};
                 const sids = new Set(getWeakStatements(undefined, true)
-                    .filter(w => w.cid === cid).map(w => w.sid));
+                    .filter(w => (normalizeCidAnchor(w.cid, subjectFromSid(w.sid), cidSection) || w.cid) === cid)
+                    .map(w => w.sid));
                 return items.filter(i => i.sid && sids.has(i.sid));
             }
             if (sidMatch) {
@@ -497,11 +501,14 @@ function renderWeakReview() {
         return;
     }
 
-    // conceptId 클러스터링 — 같은 교재 구간(L####)의 진술을 개념 그룹으로 묶음
+    // 개념 클러스터링 — 같은 개념 앵커(§챕터.절)의 진술을 그룹으로 묶음.
+    // 레거시 L#### cid는 CID_SECTION으로 환산해 신형과 같은 그룹에 병합한다 (AN-10)
+    const cidSection = (DataLoader._questionChapters && DataLoader._questionChapters.cidSection) || {};
     const groups = new Map();
     for (const w of shown) {
-        const key = w.cid || `solo:${w.sid}`;
-        if (!groups.has(key)) groups.set(key, { cid: w.cid, items: [] });
+        const anchor = normalizeCidAnchor(w.cid, subjectFromSid(w.sid), cidSection);
+        const key = anchor || w.cid || `solo:${w.sid}`;
+        if (!groups.has(key)) groups.set(key, { cid: key, items: [] });
         groups.get(key).items.push(w);
     }
     // 그룹 정렬: 최대 오판 횟수 내림차순

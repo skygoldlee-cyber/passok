@@ -256,7 +256,7 @@ function _subjectAllocHtml(plan) {
     }
     // 배분 입력은 공용 집계(computeSubjectAllocInputs) — SC-12 진단 신호 포함,
     // 맞춤학습 카드·주간 리포트와 동일 입력을 공유한다 (SC-11)
-    const qc = (typeof DataLoader !== 'undefined' && DataLoader._questionChapters) || { questions: {}, ranges: {} };
+    const qc = (typeof DataLoader !== 'undefined' && DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {} };
     const inputs = computeSubjectAllocInputs({
         memorizedCards: state.memorizedCards,
         quizResults: state.quizResults || {},
@@ -268,6 +268,7 @@ function _subjectAllocHtml(plan) {
             quizResults: state.quizResults, weakCards: state.weakCards,
             statementStats: getAllStatementStats(),
             questionChapters: qc.questions, chapterRanges: qc.ranges,
+            chapterTitles: qc.chapterTitles, cidSection: qc.cidSection,
             resolveQuiz: resolveWrongQuiz, chaptersPerSubject: 2
         })
     });
