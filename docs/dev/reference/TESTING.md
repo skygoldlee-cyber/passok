@@ -27,10 +27,10 @@
 
 | 구분 | 프레임워크 | 환경 | 파일 위치 | 테스트 수 |
 |------|-----------|------|-----------|-----------|
-| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1192 |
+| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1197 |
 | **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 665 |
 | **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 101 |
-| **합계** | | | | **1958** |
+| **합계** | | | | **1967** |
 
 ### 설계 원칙
 
@@ -198,79 +198,80 @@ npm run hooks:install
 | 17 | `markdown-parser-general.test.js` | 49 | 헤더, 표, 리스트, 인용문, 특수 토큰, 빈 입력 + `joinWraps`(ref_md 시각적 줄 병합, 러닝헤더 스킵) | 합성 데이터, 교재 무관 |
 | 18 | `reader-format-general.test.js` | 23 | 페이지 참조 제거, 기출문제/참조자료/출처 링크 변환, 용어집 자동 링크, Mermaid 보호 | 합성 데이터, 교재 무관 |
 | 19 | `combo-transform.test.js` | 7 | 복수정답형(ⓐⓑⓒ) 문항 변환 — 진술 추출, 정답 조합, 변형 ID | `src/questions.js` (`generateComboOptions`, `deriveComboAnswer`) |
-| 20 | `statement-tracker.test.js` | 9 | 복수정답형 진술별 정답 추적·통계 | `src/questions.js` (`gradeAnswer`) + `src/statement-tracker.js` |
-| 21 | `questions.test.js` | 17 | `src/questions.js` — 문제 필터·출제 로직 | 합성 데이터 |
-| 22 | `data-loader.test.js` | 7 | `src/data-loader.js` — 데이터 번들 로딩, 캐시 동작 | `window` 글로벌 모킹 |
-| 23 | `exam-context.test.js` | 16 | `src/exam-context.js` — 시험 해석, `scopedKey` 네임스페이스, 기능 플래그 | 합성 데이터 |
-| 24 | `exam-simulator-facade.test.js` | 1 | exam-simulator 파사드 재수출 정합 — 소비자 import 이름 ↔ export 체인 | 파사드 분해 회귀 가드 |
-| 25 | `storage-key-sync.test.js` | 2 | `src/storage-keys.js` 선언 키 ↔ 실제 사용 키 동기화 | 키 누락 회귀 가드 |
-| 26 | `formula-store.test.js` | 31 | `src/exams/cosmetic/formula-store.js` — 포뮬러 CRUD·저장 한도(5), 고객·원료·안정성 스키마 정제, 전성분 표시 순서 | Formula OS, localStorage 모킹 |
-| 27 | `formula-rules.test.js` | 23 | `src/exams/cosmetic/formula-rules.js` — 추천 규칙, 안전 필터(금지·알레르기·임신수유), 맞춤 규칙 병합·직렬화 | Formula OS, 합성 데이터 |
-| 28 | `formula-check.test.js` | 22 | `src/exams/cosmetic/formula-check.js` — 원료 인덱스, 배합 검증(한도이내/초과/금지/확인필요), 고시 출처 | Formula OS, 합성 데이터 |
-| 29 | `formula-stability.test.js` | 22 | `src/exams/cosmetic/formula-stability.js` — 상 비율·상호작용·투입 단계·pH 규칙, 미판정 불변식 | Formula OS, 합성 데이터 |
-| 30 | `batch-store.test.js` | 14 | `src/exams/cosmetic/batch-store.js` — 배치 채번(YYYYMMDD-NN), identity 불변, QC·위생 병합, `checkSnapshot` 보존, 50건 한도, LOT 추적·인도일·재고 경고·QC 조치 | Formula OS Phase A |
-| 31 | `usage-guide.test.js` | 7 | `src/exams/cosmetic/usage-guide.js` — 제형 템플릿, 원료 주의 규칙(레티노이드·AHA·향료 등), 임신/알레르기 병기 | Formula OS Phase A |
-| 32 | `customer-store.test.js` | 9 | `src/exams/cosmetic/customer-store.js` — 고객 CRUD, 상담 이력 append-only, `unlinkCustomerFromFormulas`, 20명 한도 | Formula OS Phase B |
-| 33 | `material-ledger.test.js` | 9 | `src/exams/cosmetic/material-ledger.js` — 원료 CRUD, 기한 상태 파생(expired/soon/ok/none), `daysUntilExpiry` 자정 기준 | Formula OS Phase C |
-| 34 | `formula-compliance.test.js` | 4 | `src/exams/cosmetic/views/formula-compliance.js` — 항목 id 고유성, refs 유효성, 법령 파일 실존, 필수 섹션 커버리지 | Formula OS Phase D |
-| 35 | `csv-import.test.js` | 17 | `src/csv-utils.js` 파서·EUC-KR 디코딩 + `importCustomers`/`importMaterials` 중복·한도·sanitize | Formula OS CSV |
-| 36 | `supabase-client.test.js` | 6 | `src/supabase-client.js` — lazy init, UMD 동적 로드, 미설정 폴백 | window 스텁 |
-| 37 | `sw-prune.test.js` | 5 | `sw.js` 캐시 프루닝 — 한글 경로 인코딩 오삭제 회귀 가드 | 서비스워커 로직 |
-| 38 | `mermaid/mermaid-utils.test.js` | 8 | `src/mermaid-utils.js` — 다이어그램 타입 감지, CSS 클래스, init 옵션(테마 분기) | 순수 함수 |
-| 39 | `command-palette.test.js` | 11 | `src/command-palette.js` — `searchAll()` 통합 검색 순수 로직 | 2026-09-26 추가 |
-| 40 | `learning-pro.test.js` | 20 | `src/recommendations.js` — 추천·오답 원인·예상 점수 순수 로직 | 2026-09-26 추가 |
-| 41 | `storage.test.js` | 12 | `src/storage.js` — 스코프·JSON 헬퍼·쓰기 훅·백엔드 교체·`setMany` 롤백 | 저장소 추상화 |
-| 42 | `whats-new.test.js` | 7 | `src/whats-new.js` — `collectNewEntries` 버전 비교·집계·상한·폴백 | 순수 함수 |
-| 43 | `feedback.test.js` | 13 | `src/feedback.js` — `?src=` 캡처·sanitize, 페이로드 빌드/검증, 쿨다운, 큐·플러시 | window/localStorage 스텁 |
-| 44 | `study-tracker.test.js` | 41 | `src/study-tracker.js` — SC-03 활동 기록·월별 학습일·목표 진행 | localStorage 모킹, 2026-10-14 추가 |
-| 45 | `build-pipeline.test.js` | 17 | BP-01~08 — manifest 스키마·안정 ID·빌드 검증·파서 정합·용어집 인덱스·SW 스탬프·카드 감사 | tools/build 모듈 + subprocess, 2026-10-14 추가 |
-| 46 | `content-structure.test.js` | 13 | CS-01~10 — manifest↔파일·교재 8종·문제은행·ref_md 레이아웃·원료 메타·오디오북·슬러그·참조 이미지 | 파일시스템 정적 검증, 2026-10-14 추가 |
-| 47 | `audit-quality.test.js` | 6 | CQ-01~05 — 카드 감사·참조 링크·심각도·콤보 감사·베이스라인 카운트 | subprocess 실행, 2026-10-14 추가 |
-| 48 | `formula-os.test.js` | 11 | FO-03/04/07/09 — 제조 단계·역할→상 매핑·고객 필드·pH·단계 상한·import/export·무료 한도 | 합성 데이터, 2026-10-14 추가 |
-| 49 | `data-architecture.test.js` | 11 | DA-01/02/04/06/08 — 멀티시험 레지스트리·경로·기능 플래그·폴백 번들·스코프 키 | 생성 번들 검증, 2026-10-14 추가 |
-| 50 | `story-textbook.test.js` | 14 | ST-01~08 — 이야기형 교재 구조·마커 쌍·이미지 참조·섹션 | 콘텐츠 정적 검증, 2026-10-14 추가 |
-| 51 | `pwa-sw.test.js` | 17 | P-01~12 — SW 캐시 분기·프리캐시·스큐 방지·업데이트·CACHE_VERSION·설치 캡처·manifest Content-Type·app-fallback·verify:assets | 정적 검증 + subprocess, 2026-10-14 추가 |
-| 52 | `security.test.js` | 6 | S-01/07/08 — CSP·인라인 핸들러 부재·보안 헤더·Permissions-Policy·위임 브리지 | vercel.json·index.html 정적 검증, 2026-10-14 추가 |
-| 53 | `perf-invariants.test.js` | 18 | PF-01~16 — 런타임 MD 파싱·과목별 로딩·캐시 TTL·지연 하이라이트·normalize·디바운스·console.log 금지·ref_md·Mermaid 지연·법령 정본 | 소스 패턴 정적 검증, 2026-10-14 추가 |
-| 54 | `ux-invariants.test.js` | 20 | UX-FB/FORM/PWA/SCR/SET — 스크롤바·CSS 변수·설정 패널·44px·버전·토스트·모달·펄스·standalone·app-height·폼 16px·터치 피드백 | CSS·HTML·JS 정적 검증, 2026-10-14 추가 |
-| 55 | `content-engineering.test.js` | 6 | CE-01~05 + TR-16a — 학습 가이드·한 줄 요약·비교표·확인문제·용어 표·툴바 자동 숨김 | 콘텐츠·소스 정적 검증, 2026-10-14 추가 |
-| 56 | `doc-sync.test.js` | 7 | `tools/check/check_doc_sync.js` — 트리거/면제/문서 경로 분류, analyze 위반 판정, porcelain 파서 | 정적 패턴 검증, 2026-10-14 추가 |
-| 57 | `test-first.test.js` | 7 | `tools/check/check_test_first.js` — 로직 트리거/테스트 경로 분류, analyze 위반 판정 | 정적 패턴 검증, 2026-11-02 추가 |
-| 58 | `property-based.test.js` | 8 | `deriveComboAnswer`·`generateComboOptions`·`weak-items` ID 문법·SM-2 불변식 | fast-check 속성 기반 테스트 (PBT), 2026-10-04 추가 |
-| 59 | `error-telemetry.test.js` | 6 | `src/error-telemetry.js` — 페이로드·중복 억제·세션 상한·disabled/failed 경로·리스너 | insert 주입식, 2026-10-04 추가 |
-| 60 | `exams/cosmetic/formula-audit.test.js` | 37 | `src/exams/cosmetic/views/formula-audit.js` — 유형별 섹션 게이트·수집기·빌더 마크업·출력 이력·문서 식별자·고시 스탬프·점검자 성명 + print.css fp-doc 여백 규약 | 2026-10-06 추가 |
-| 61 | `analysis-deepening.test.js` | 19 | 맞춤학습 심화 — 결함 클러스터·심화 추천 경로 | |
-| 62 | `analysis-engine.test.js` | 22 | 맞춤학습 분석 엔진 순수 로직 | |
-| 63 | `answer-overlap.test.js` | 13 | `check_answer_overlap.js` — 정답↔근거 지지 판정 | |
-| 64 | `audio-manifest.test.js` | 4 | 오디오 매니페스트 커버리지 | |
-| 65 | `check-runner.test.js` | 6 | 통합 실행기 `run.js`·`steps.js` 레지스트리 무결성 | |
-| 66 | `emb-manifest.test.js` | 4 | 임베딩 manifest 신선도 (SEM-05) | |
-| 67 | `exams/cosmetic/custom-ingredient-store.test.js` | 12 | 자가 등록 성분 CRUD·공식 동명 차단·superseded (DI-06~09) | |
-| 68 | `exams/cosmetic/formula-practical.test.js` | 11 | 실무 도구 확장 순수 로직 (FO-57~63) | |
-| 69 | `exams/cosmetic/formula-sales.test.js` | 12 | 표시사항·광고 문구 점검 로직 (FO-34~36) | |
-| 70 | `exams/cosmetic/product-store.test.js` | 45 | 기성품 DB 스토어 — 스키마·전성분 비교 | |
-| 71 | `exams/cosmetic/product-vision.test.js` | 23 | 기성품 OCR·전성분 추출 | |
-| 72 | `fsrs.test.js` | 9 | FSRS-4.5 순수 함수 + 어댑터 | |
-| 73 | `law-links.test.js` | 8 | `lawUrlFor` — 참조자료 → law.go.kr 링크 매핑 | |
-| 74 | `link-lint.test.js` | 16 | `check_link_lint` 자체 회귀 (LL-01~09) | |
-| 75 | `markdown-links.test.js` | 11 | MD 링크 파서 엣지 — `](<url>`·한글 파일명 | |
-| 76 | `multi-exam-gates.test.js` | 5 | `check:domainmap` 등 멀티시험 게이트 스크립트 | |
-| 77 | `notice-check.test.js` | 24 | `isNewerNotice` — 식약처 고시 감지 배너 판정 | |
-| 78 | `notice-diff.test.js` | 14 | `splitArticles` — 참조 문서 개정 조문 diff | |
-| 79 | `posindep.test.js` | 9 | `check_position_independence` — 위치 좌표 식별자 탐지 (ID-05) | |
-| 80 | `practice-registry.test.js` | 10 | practice-registry 지연 로드 매니페스트 + 핸들러 재수출 정합 | |
-| 81 | `push-gate.test.js` | 10 | pre-push 적응형 게이트 분류기 | |
-| 82 | `reader-analysis-gates.test.js` | 6 | 리더 위치 보존·맞춤학습 온보딩·서사 커버리지 게이트 | |
-| 83 | `reader-toc.test.js` | 7 | 리더 목차 추출 헬퍼 | |
-| 84 | `ref-link-labels.test.js` | 22 | 참조자료 링크 라벨 정규화 | |
-| 85 | `semantic-index.test.js` | 11 | 의미 인덱스 — 임베딩 유사 진술·이웃 | |
-| 86 | `step-runner.test.js` | 6 | `step_runner` 병렬 실행기 | |
-| 87 | `story-merge.test.js` | 14 | 이야기형 병합 엔진 | |
-| 88 | `study-quality-audit.test.js` | 8 | 학습 품질 감사 지표 헬퍼 + 실행 | |
-| 89 | `textbook-anchors.test.js` | 5 | 교재 라인 → §앵커 해석 헬퍼 | |
-| 90 | `textbook-edition.test.js` | 3 | 교재 판본 메타 (P-14) | |
-| 91 | `textbook-search-ref.test.js` | 10 | `_listRefDocs` — 참조자료 검색 헬퍼 (TS-11) | |
-| | **합계** | **1186** | | |
+| 20 | `combo-doc.test.js` | 4 | `buildComboSubjectMd()` — combo 문항 → 문제집 MD 직렬화 (문제부·정답 도출·해설 필터·파일럿) | EV-01 |
+| 21 | `statement-tracker.test.js` | 9 | 복수정답형 진술별 정답 추적·통계 | `src/questions.js` (`gradeAnswer`) + `src/statement-tracker.js` |
+| 22 | `questions.test.js` | 17 | `src/questions.js` — 문제 필터·출제 로직 | 합성 데이터 |
+| 23 | `data-loader.test.js` | 7 | `src/data-loader.js` — 데이터 번들 로딩, 캐시 동작 | `window` 글로벌 모킹 |
+| 24 | `exam-context.test.js` | 16 | `src/exam-context.js` — 시험 해석, `scopedKey` 네임스페이스, 기능 플래그 | 합성 데이터 |
+| 25 | `exam-simulator-facade.test.js` | 1 | exam-simulator 파사드 재수출 정합 — 소비자 import 이름 ↔ export 체인 | 파사드 분해 회귀 가드 |
+| 26 | `storage-key-sync.test.js` | 2 | `src/storage-keys.js` 선언 키 ↔ 실제 사용 키 동기화 | 키 누락 회귀 가드 |
+| 27 | `formula-store.test.js` | 31 | `src/exams/cosmetic/formula-store.js` — 포뮬러 CRUD·저장 한도(5), 고객·원료·안정성 스키마 정제, 전성분 표시 순서 | Formula OS, localStorage 모킹 |
+| 28 | `formula-rules.test.js` | 23 | `src/exams/cosmetic/formula-rules.js` — 추천 규칙, 안전 필터(금지·알레르기·임신수유), 맞춤 규칙 병합·직렬화 | Formula OS, 합성 데이터 |
+| 29 | `formula-check.test.js` | 22 | `src/exams/cosmetic/formula-check.js` — 원료 인덱스, 배합 검증(한도이내/초과/금지/확인필요), 고시 출처 | Formula OS, 합성 데이터 |
+| 30 | `formula-stability.test.js` | 22 | `src/exams/cosmetic/formula-stability.js` — 상 비율·상호작용·투입 단계·pH 규칙, 미판정 불변식 | Formula OS, 합성 데이터 |
+| 31 | `batch-store.test.js` | 14 | `src/exams/cosmetic/batch-store.js` — 배치 채번(YYYYMMDD-NN), identity 불변, QC·위생 병합, `checkSnapshot` 보존, 50건 한도, LOT 추적·인도일·재고 경고·QC 조치 | Formula OS Phase A |
+| 32 | `usage-guide.test.js` | 7 | `src/exams/cosmetic/usage-guide.js` — 제형 템플릿, 원료 주의 규칙(레티노이드·AHA·향료 등), 임신/알레르기 병기 | Formula OS Phase A |
+| 33 | `customer-store.test.js` | 9 | `src/exams/cosmetic/customer-store.js` — 고객 CRUD, 상담 이력 append-only, `unlinkCustomerFromFormulas`, 20명 한도 | Formula OS Phase B |
+| 34 | `material-ledger.test.js` | 9 | `src/exams/cosmetic/material-ledger.js` — 원료 CRUD, 기한 상태 파생(expired/soon/ok/none), `daysUntilExpiry` 자정 기준 | Formula OS Phase C |
+| 35 | `formula-compliance.test.js` | 4 | `src/exams/cosmetic/views/formula-compliance.js` — 항목 id 고유성, refs 유효성, 법령 파일 실존, 필수 섹션 커버리지 | Formula OS Phase D |
+| 36 | `csv-import.test.js` | 17 | `src/csv-utils.js` 파서·EUC-KR 디코딩 + `importCustomers`/`importMaterials` 중복·한도·sanitize | Formula OS CSV |
+| 37 | `supabase-client.test.js` | 6 | `src/supabase-client.js` — lazy init, UMD 동적 로드, 미설정 폴백 | window 스텁 |
+| 38 | `sw-prune.test.js` | 5 | `sw.js` 캐시 프루닝 — 한글 경로 인코딩 오삭제 회귀 가드 | 서비스워커 로직 |
+| 39 | `mermaid/mermaid-utils.test.js` | 8 | `src/mermaid-utils.js` — 다이어그램 타입 감지, CSS 클래스, init 옵션(테마 분기) | 순수 함수 |
+| 40 | `command-palette.test.js` | 11 | `src/command-palette.js` — `searchAll()` 통합 검색 순수 로직 | 2026-09-26 추가 |
+| 41 | `learning-pro.test.js` | 20 | `src/recommendations.js` — 추천·오답 원인·예상 점수 순수 로직 | 2026-09-26 추가 |
+| 42 | `storage.test.js` | 12 | `src/storage.js` — 스코프·JSON 헬퍼·쓰기 훅·백엔드 교체·`setMany` 롤백 | 저장소 추상화 |
+| 43 | `whats-new.test.js` | 7 | `src/whats-new.js` — `collectNewEntries` 버전 비교·집계·상한·폴백 | 순수 함수 |
+| 44 | `feedback.test.js` | 13 | `src/feedback.js` — `?src=` 캡처·sanitize, 페이로드 빌드/검증, 쿨다운, 큐·플러시 | window/localStorage 스텁 |
+| 45 | `study-tracker.test.js` | 41 | `src/study-tracker.js` — SC-03 활동 기록·월별 학습일·목표 진행 | localStorage 모킹, 2026-10-14 추가 |
+| 46 | `build-pipeline.test.js` | 17 | BP-01~08 — manifest 스키마·안정 ID·빌드 검증·파서 정합·용어집 인덱스·SW 스탬프·카드 감사 | tools/build 모듈 + subprocess, 2026-10-14 추가 |
+| 47 | `content-structure.test.js` | 13 | CS-01~10 — manifest↔파일·교재 8종·문제은행·ref_md 레이아웃·원료 메타·오디오북·슬러그·참조 이미지 | 파일시스템 정적 검증, 2026-10-14 추가 |
+| 48 | `audit-quality.test.js` | 6 | CQ-01~05 — 카드 감사·참조 링크·심각도·콤보 감사·베이스라인 카운트 | subprocess 실행, 2026-10-14 추가 |
+| 49 | `formula-os.test.js` | 11 | FO-03/04/07/09 — 제조 단계·역할→상 매핑·고객 필드·pH·단계 상한·import/export·무료 한도 | 합성 데이터, 2026-10-14 추가 |
+| 50 | `data-architecture.test.js` | 11 | DA-01/02/04/06/08 — 멀티시험 레지스트리·경로·기능 플래그·폴백 번들·스코프 키 | 생성 번들 검증, 2026-10-14 추가 |
+| 51 | `story-textbook.test.js` | 14 | ST-01~08 — 이야기형 교재 구조·마커 쌍·이미지 참조·섹션 | 콘텐츠 정적 검증, 2026-10-14 추가 |
+| 52 | `pwa-sw.test.js` | 17 | P-01~12 — SW 캐시 분기·프리캐시·스큐 방지·업데이트·CACHE_VERSION·설치 캡처·manifest Content-Type·app-fallback·verify:assets | 정적 검증 + subprocess, 2026-10-14 추가 |
+| 53 | `security.test.js` | 6 | S-01/07/08 — CSP·인라인 핸들러 부재·보안 헤더·Permissions-Policy·위임 브리지 | vercel.json·index.html 정적 검증, 2026-10-14 추가 |
+| 54 | `perf-invariants.test.js` | 18 | PF-01~16 — 런타임 MD 파싱·과목별 로딩·캐시 TTL·지연 하이라이트·normalize·디바운스·console.log 금지·ref_md·Mermaid 지연·법령 정본 | 소스 패턴 정적 검증, 2026-10-14 추가 |
+| 55 | `ux-invariants.test.js` | 20 | UX-FB/FORM/PWA/SCR/SET — 스크롤바·CSS 변수·설정 패널·44px·버전·토스트·모달·펄스·standalone·app-height·폼 16px·터치 피드백 | CSS·HTML·JS 정적 검증, 2026-10-14 추가 |
+| 56 | `content-engineering.test.js` | 6 | CE-01~05 + TR-16a — 학습 가이드·한 줄 요약·비교표·확인문제·용어 표·툴바 자동 숨김 | 콘텐츠·소스 정적 검증, 2026-10-14 추가 |
+| 57 | `doc-sync.test.js` | 7 | `tools/check/check_doc_sync.js` — 트리거/면제/문서 경로 분류, analyze 위반 판정, porcelain 파서 | 정적 패턴 검증, 2026-10-14 추가 |
+| 58 | `test-first.test.js` | 7 | `tools/check/check_test_first.js` — 로직 트리거/테스트 경로 분류, analyze 위반 판정 | 정적 패턴 검증, 2026-11-02 추가 |
+| 59 | `property-based.test.js` | 8 | `deriveComboAnswer`·`generateComboOptions`·`weak-items` ID 문법·SM-2 불변식 | fast-check 속성 기반 테스트 (PBT), 2026-10-04 추가 |
+| 60 | `error-telemetry.test.js` | 6 | `src/error-telemetry.js` — 페이로드·중복 억제·세션 상한·disabled/failed 경로·리스너 | insert 주입식, 2026-10-04 추가 |
+| 61 | `exams/cosmetic/formula-audit.test.js` | 37 | `src/exams/cosmetic/views/formula-audit.js` — 유형별 섹션 게이트·수집기·빌더 마크업·출력 이력·문서 식별자·고시 스탬프·점검자 성명 + print.css fp-doc 여백 규약 | 2026-10-06 추가 |
+| 62 | `analysis-deepening.test.js` | 19 | 맞춤학습 심화 — 결함 클러스터·심화 추천 경로 | |
+| 63 | `analysis-engine.test.js` | 22 | 맞춤학습 분석 엔진 순수 로직 | |
+| 64 | `answer-overlap.test.js` | 13 | `check_answer_overlap.js` — 정답↔근거 지지 판정 | |
+| 65 | `audio-manifest.test.js` | 4 | 오디오 매니페스트 커버리지 | |
+| 66 | `check-runner.test.js` | 7 | 통합 실행기 `run.js`·`steps.js` 레지스트리 무결성 | |
+| 67 | `emb-manifest.test.js` | 4 | 임베딩 manifest 신선도 (SEM-05) | |
+| 68 | `exams/cosmetic/custom-ingredient-store.test.js` | 12 | 자가 등록 성분 CRUD·공식 동명 차단·superseded (DI-06~09) | |
+| 69 | `exams/cosmetic/formula-practical.test.js` | 11 | 실무 도구 확장 순수 로직 (FO-57~63) | |
+| 70 | `exams/cosmetic/formula-sales.test.js` | 12 | 표시사항·광고 문구 점검 로직 (FO-34~36) | |
+| 71 | `exams/cosmetic/product-store.test.js` | 45 | 기성품 DB 스토어 — 스키마·전성분 비교 | |
+| 72 | `exams/cosmetic/product-vision.test.js` | 23 | 기성품 OCR·전성분 추출 | |
+| 73 | `fsrs.test.js` | 9 | FSRS-4.5 순수 함수 + 어댑터 | |
+| 74 | `law-links.test.js` | 8 | `lawUrlFor` — 참조자료 → law.go.kr 링크 매핑 | |
+| 75 | `link-lint.test.js` | 16 | `check_link_lint` 자체 회귀 (LL-01~09) | |
+| 76 | `markdown-links.test.js` | 11 | MD 링크 파서 엣지 — `](<url>`·한글 파일명 | |
+| 77 | `multi-exam-gates.test.js` | 5 | `check:domainmap` 등 멀티시험 게이트 스크립트 | |
+| 78 | `notice-check.test.js` | 24 | `isNewerNotice` — 식약처 고시 감지 배너 판정 | |
+| 79 | `notice-diff.test.js` | 14 | `splitArticles` — 참조 문서 개정 조문 diff | |
+| 80 | `posindep.test.js` | 9 | `check_position_independence` — 위치 좌표 식별자 탐지 (ID-05) | |
+| 81 | `practice-registry.test.js` | 10 | practice-registry 지연 로드 매니페스트 + 핸들러 재수출 정합 | |
+| 82 | `push-gate.test.js` | 10 | pre-push 적응형 게이트 분류기 | |
+| 83 | `reader-analysis-gates.test.js` | 6 | 리더 위치 보존·맞춤학습 온보딩·서사 커버리지 게이트 | |
+| 84 | `reader-toc.test.js` | 7 | 리더 목차 추출 헬퍼 | |
+| 85 | `ref-link-labels.test.js` | 22 | 참조자료 링크 라벨 정규화 | |
+| 86 | `semantic-index.test.js` | 11 | 의미 인덱스 — 임베딩 유사 진술·이웃 | |
+| 87 | `step-runner.test.js` | 6 | `step_runner` 병렬 실행기 | |
+| 88 | `story-merge.test.js` | 14 | 이야기형 병합 엔진 | |
+| 89 | `study-quality-audit.test.js` | 8 | 학습 품질 감사 지표 헬퍼 + 실행 | |
+| 90 | `textbook-anchors.test.js` | 5 | 교재 라인 → §앵커 해석 헬퍼 | |
+| 91 | `textbook-edition.test.js` | 3 | 교재 판본 메타 (P-14) | |
+| 92 | `textbook-search-ref.test.js` | 10 | `_listRefDocs` — 참조자료 검색 헬퍼 (TS-11) | |
+| | **합계** | **1197** | | |
 
 ### DOM 테스트 (`tests/dom/`)
 
@@ -335,7 +336,8 @@ npm run hooks:install
 | 56 | `story-search.dom.test.js` | 2 | 이야기형 서사 검색 (TS-10) | | |
 | 57 | `ui-structure.dom.test.js` | 19 | UI 구조 불변식 — index.html 실마크업 | | |
 | 58 | `zoom-gestures.dom.test.js` | 8 | 줌 제스처 (TR-26) | | |
-| | **합계** | **665** | | |
+| 59 | `textbook-edition.dom.test.js` | 5 | 교재 개정 배너 (P-14) | 표시·판본 문구·확인 시 기록/재억제·동일 판본·미선언·중복 처리 억제 | 2026-10-13 추가 |
+| | **합계** | **670** | | |
 
 ---
 
