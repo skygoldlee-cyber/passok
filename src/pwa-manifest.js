@@ -1,5 +1,5 @@
 // src/pwa-manifest.js — 시험별 동적 PWA 매니페스트 (클래식 스크립트, 모듈 아님)
-// @spec P-10,DA-06
+// @spec P-10,DA-06,DA-14
 // 정적 manifest.webmanifest는 부팅 전 플레이스홀더 겸 최후 폴백이고,
 // 활성 시험이 확인되면 빌드가 생성한 실제 파일 manifest.<id>.webmanifest로 링크를 교체한다
 // (기본 시험 포함 — 시험별 pwaShortcuts가 실제 설치 매니페스트에 반영되어야 한다).
@@ -44,5 +44,18 @@
             || exam.name;
         const appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
         if (appleTitle && appName) appleTitle.setAttribute('content', appName);
+
+        // 시험별 스킨 (DA-14) — 부팅 최초 프레임부터 활성 시험 팔레트를 적용한다.
+        // html[data-exam]은 CSS 측 규약 오버라이드(cascade)용 속성,
+        // theme 필드 토큰은 인라인 변수라 라이트/다크 양쪽 테마 위에서 유효.
+        // ⚠️ 화이트리스트 정규식은 exam-context.js THEME_TOKEN_RE와 동일 — 함께 갱신.
+        document.documentElement.dataset.exam = exam.id;
+        const theme = (exam && typeof exam.theme === 'object' && exam.theme) || {};
+        for (const token of Object.keys(theme)) {
+            const value = theme[token];
+            if (!/^--(?:color|bg|border|stroke)-[a-z][a-z0-9-]*$/i.test(token)
+                || typeof value !== 'string' || !value.trim()) continue;
+            document.documentElement.style.setProperty(token, value);
+        }
     } catch (e) { /* 정적 매니페스트 폴백 유지 */ }
 })();

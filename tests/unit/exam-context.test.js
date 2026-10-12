@@ -1,5 +1,5 @@
 // tests/unit/exam-context.test.js
-// @spec ES-01~05
+// @spec ES-01~05,DA-14
 // 멀티시험 컨텍스트 — 활성 시험 해석, 진도 키 네임스페이스, 경로 해석을 검증.
 
 import { test, beforeEach, afterEach } from 'node:test';
@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import {
     getExamList, getActiveExam, getActiveExamId,
     contentPath, dataPath, hasFeature, scopedKey, unscopedKey,
-    purgeLegacyStorage,
+    purgeLegacyStorage, resolveExamThemeTokens, applyExamTheme,
 } from '../../src/exam-context.js';
 
 const EXAMS = {
@@ -143,4 +143,70 @@ test('purgeLegacyStorage: 플래그가 있으면 재실행 안 함', () => {
     mockStorage.setItem('fc_memorized', '[1]');
     purgeLegacyStorage(['fc_memorized'], []);
     assert.equal(mockStorage.getItem('fc_memorized'), '[1]');
+});
+
+// ==================== 시험별 스킨 토큰 (DA-14) ====================
+
+test('resolveExamThemeTokens: 화이트리스트 토큰만 통과', () => {
+    const tokens = resolveExamThemeTokens({
+        theme: {
+            '--color-primary': '#f97316',
+            '--bg-app': '#101010',
+            '--border-color': 'rgba(0,0,0,.1)',
+            '--stroke-strong': '#fff',
+            // 비허용 계열·형식 — 전부 버려져야 함
+            '--font-size-base': '99px',
+            'position': 'fixed',
+            'color-primary': '#000',
+            '--color-': '#000',
+            '--COLOR-PRIMARY': '#111',   // 대문자 허용 (i 플래그)
+            '--color-danger': 42,        // 비문자열 값
+            '--color-warning': '  ',     // 공백 값
+        }
+    });
+    assert.deepEqual(tokens, {
+        '--color-primary': '#f97316',
+        '--bg-app': '#101010',
+        '--border-color': 'rgba(0,0,0,.1)',
+        '--stroke-strong': '#fff',
+        '--COLOR-PRIMARY': '#111',
+    });
+});
+
+test('resolveExamThemeTokens: theme 부재·비객체·null 입력은 빈 객체', () => {
+    assert.deepEqual(resolveExamThemeTokens({}), {});
+    assert.deepEqual(resolveExamThemeTokens(null), {});
+    assert.deepEqual(resolveExamThemeTokens({ theme: null }), {});
+    assert.deepEqual(resolveExamThemeTokens({ theme: 'dark' }), {});
+    assert.deepEqual(resolveExamThemeTokens({ theme: [] }), {});
+});
+
+test('applyExamTheme: data-exam 속성 + 토큰 인라인 주입', () => {
+    const applied = {};
+    const el = { dataset: {}, style: { setProperty: (k, v) => { applied[k] = v; } } };
+    const originalDoc = global.document;
+    Object.defineProperty(global, 'document', { value: { documentElement: el }, writable: true, configurable: true });
+    try {
+        applyExamTheme({ id: 'food', theme: { '--color-primary': '#f97316', '--evil-x': 'x' } });
+        assert.equal(el.dataset.exam, 'food');
+        assert.deepEqual(applied, { '--color-primary': '#f97316' });
+    } finally {
+        if (originalDoc !== undefined) {
+            Object.defineProperty(global, 'document', { value: originalDoc, writable: true, configurable: true });
+        } else {
+            delete global.document;
+        }
+    }
+});
+
+test('applyExamTheme: document 부재(Node 환경)에서 무해', () => {
+    const originalDoc = global.document;
+    try {
+        delete global.document;
+        applyExamTheme({ id: 'food', theme: { '--color-primary': '#000' } });
+    } finally {
+        if (originalDoc !== undefined) {
+            Object.defineProperty(global, 'document', { value: originalDoc, writable: true, configurable: true });
+        }
+    }
 });
