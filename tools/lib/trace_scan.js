@@ -16,7 +16,8 @@ const SPEC_FILE = path.join(ROOT, 'docs', 'dev', 'SPEC.md');
 const SCAN_DIRS = ['src', 'tests', 'tools', 'css', 'html', 'ref-pipeline'];
 const SCAN_FILES = ['sw.js', 'index.html', 'serve.js'];
 const SCAN_EXTS = new Set(['.js', '.css', '.html', '.ts', '.py']);
-const EXCLUDE_DIRS = [path.join('tools', '_archive'), path.join('tools', '__pycache__'), 'node_modules'];
+const EXCLUDE_DIRS = [path.join('tools', '_archive'), path.join('tools', '__pycache__'), 'node_modules',
+  path.join('ref-pipeline', 'embeddings', 'out')];
 const EXCLUDE_FILES = [
   path.join('tools', 'check', 'check_spec_refs.js'),
   path.join('tools', 'build', 'build_trace_matrix.js'),
