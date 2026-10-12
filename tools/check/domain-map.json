@@ -86,6 +86,7 @@
         "src/recommendations.js",
         "src/router.js",
         "src/sanitize.js",
+        "src/semantic-index.js",
         "src/sha256.js",
         "src/fsrs.js",
         "src/spaced-repetition.js",

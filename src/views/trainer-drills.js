@@ -18,6 +18,7 @@ import { DataLoader } from '../data-loader.js';
 import { gradeAnswer } from '../questions.js';
 import { recordStatementJudgments, getWeakStatements, getDueStatementSids, getAllStatementStats, getAnomalousStatements, WEAK_GRADUATE_STREAK } from '../statement-tracker.js';
 import { normalizeCidAnchor, subjectFromSid } from '../analysis-engine.js';
+import { SemanticIndex } from '../semantic-index.js';
 import { recordStudyActivity } from '../study-tracker.js';
 import { switchView, resetMainScroll } from './navigation.js';
 
@@ -438,6 +439,10 @@ function weakRow(w, due, anomalies) {
         ? '<span class="weak-anomaly" title="오판율이 극단적으로 높아 문항 자체 검수가 필요할 수 있습니다">이상 의심</span>' : '';
     const lastBadge = w.last === true ? '<span class="weak-last is-ok">최근 정답</span>'
         : w.last === false ? '<span class="weak-last is-bad">최근 오판</span>' : '';
+    // 의미 유사 진술 토글 — semantic 피처 선언 시험에서만 노출 (SEM-03, 자산 부재 시 조용히 비활성)
+    const simBtn = SemanticIndex.isEnabled()
+        ? `<button class="btn btn-secondary weak-sim-btn" data-click="toggleSimilarStmts" data-arg="${esc(w.sid)}" aria-label="의미상 유사한 진술 보기" aria-expanded="false"><i class="fa-solid fa-wand-magic-sparkles"></i> 유사</button>`
+        : '';
     return `<div class="weak-row">
         <div class="weak-row-head">
             <span class="weak-truth ${w.truth ? 'is-o' : 'is-x'}">${w.truth === true ? 'O' : w.truth === false ? 'X' : '?'}</span>
@@ -445,9 +450,62 @@ function weakRow(w, due, anomalies) {
             ${dueBadge}${lastBadge}${anomalyBadge}
             <span class="weak-stat">오판 ${w.w}회 / 판정 ${w.j}회${w.lw ? ` · 최근 ${w.lw}` : ''}</span>
             <button class="btn btn-secondary weak-retry-btn" data-click="startOxDrill" data-arg="sid:${esc(w.sid)}" aria-label="이 진술 O/X로 재시도"><i class="fa-solid fa-rotate"></i> 재시도</button>
+            ${simBtn}
         </div>
         <p class="weak-text">${safeTextWithBreaks(w.t || `(${w.sid})`)}</p>
+        ${simBtn ? `<div class="weak-similar is-hidden" id="weak-sim-${esc(w.sid)}"></div>` : ''}
     </div>`;
+}
+
+/**
+ * 취약 진술의 의미 유사 진술 토글 — 첫 클릭에 neighbors 번들을 지연 로드한다 (SEM-03).
+ * 자산 부재·피처 미선언이면 안내 문구만 표시하고 학습 흐름에는 영향 없음.
+ */
+export async function toggleSimilarStmts(sid) {
+    const box = document.getElementById(`weak-sim-${sid}`);
+    if (!box) return;
+    if (!box.classList.contains('is-hidden')) {
+        box.classList.add('is-hidden');
+        updateSimBtn(sid, false);
+        return;
+    }
+    box.classList.remove('is-hidden');
+    updateSimBtn(sid, true);
+    if (box.dataset.loaded === 'true') return;
+    box.innerHTML = '<p class="weak-sim-hint">유사 진술을 불러오는 중…</p>';
+
+    const ok = await SemanticIndex.ensureLoaded();
+    if (!ok) {
+        box.innerHTML = '<p class="weak-sim-hint">유사 진술 데이터를 불러올 수 없습니다.</p>';
+        return;
+    }
+    const sims = SemanticIndex.similarStatements(sid, 5);
+    const dupes = SemanticIndex.sameTextItems(`stmt:${sid}`)
+        .filter(d => d.key.startsWith('stmt:'));
+    const rows = sims.map(h => {
+        const sub = subjectFromSid(h.sid);
+        return `<div class="weak-sim-row">
+            <span class="weak-sim-score">${Math.round(h.score * 100)}%</span>
+            ${sub ? `<span class="weak-subject">과목${sub}</span>` : ''}
+            <span class="weak-sim-text">${safeTextWithBreaks(h.text)}</span>
+            <button class="btn btn-secondary weak-retry-btn" data-click="startOxDrill" data-arg="sid:${esc(h.sid)}" aria-label="이 진술 O/X로 재시도"><i class="fa-solid fa-rotate"></i></button>
+        </div>`;
+    }).join('');
+    const dupeHint = dupes.length
+        ? `<p class="weak-sim-hint">동일 진술이 ${dupes.map(d => {
+            const s2 = subjectFromSid(d.key.slice(5));
+            return s2 ? `과목${s2}` : '다른 위치';
+        }).filter((v, i, a) => a.indexOf(v) === i).join('·')}에도 등재되어 있습니다.</p>`
+        : '';
+    box.innerHTML = sims.length
+        ? `<div class="weak-sim-head">의미상 유사한 진술 (유사도 순)</div>${rows}${dupeHint}`
+        : `<p class="weak-sim-hint">유사한 진술이 없습니다.</p>${dupeHint}`;
+    box.dataset.loaded = 'true';
+}
+
+function updateSimBtn(sid, expanded) {
+    const btn = document.querySelector(`[data-click="toggleSimilarStmts"][data-arg="${sid}"]`);
+    if (btn) btn.setAttribute('aria-expanded', String(expanded));
 }
 
 function renderWeakReview() {

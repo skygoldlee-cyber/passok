@@ -6,14 +6,16 @@
 앱에는 모델이 배포되지 않는다 — 산출물(벡터)만 정적 자산이 된다.
 
 사용법:
-    python ref-pipeline/embeddings/build_embeddings.py [--exam cosmetic] [--out out/]
-        [--model intfloat/multilingual-e5-small] [--limit N] [--no-write]
+    python ref-pipeline/embeddings/build_embeddings.py [--exam cosmetic]
+        [--out {dataRoot}/embeddings] [--model intfloat/multilingual-e5-small]
+        [--limit N] [--no-write]
 
-출력(out/ 기본):
-    manifest.json            모델·차원·양자화·항목 수·sourceHash
-    vectors_*.js             window.EMB_VEC_* 번들 (설계 §5.1 형식)
-    neighbors.json           항목별 top-K 이웃 (설계 §5.2)
-    eval_report.txt          품질 리포트 (유사 진술 샘플·혼동 후보·유사 문항·중복)
+출력(--out 미지정 시 {dataRoot}/embeddings/, 커밋 대상 정적 자산):
+    manifest.js              var EMB_MANIFEST — 모델·차원·files·inputs(원본 sha1)
+    neighbors.js             var EMB_NEIGHBORS — adj(이웃)·texts·sameText (설계 §5.2)
+    vectors_stmt_subjectN.js var EMB_VEC_stmt_subjectN — 진술 int8 벡터 (과목별 분할)
+    vectors_question.js      var EMB_VEC_question — 문항 int8 벡터
+    eval_report.txt          품질 리포트 — 항상 ref-pipeline/embeddings/out/ (gitignore)
                              ※ .md 미사용 — 문서 ID 게이트(check:docids) 스캔 제외용
 """
 import argparse
@@ -35,6 +37,8 @@ CONFUSION_SIM = 0.85          # 혼동 후보 임계 (cid 상이 + 의미 근접
 NEARDUP_SIM = 0.95            # 사실상 동일 진술(중복 감사 신호)
 SAMPLE_SEEDS = 16             # 리포트용 시드 표본 수
 SAMPLE_QUESTIONS = 12         # 유사 문항 표본 수
+MIN_NEIGHBOR_LEN = 12         # 이웃 후보 최소 정규화 길이 — "표시 방법" 류 단문 노이즈 억제
+NEIGHBOR_POOL = 64            # 이웃 후보 풀 (중복·단문 필터 후 topK 충족 여유분)
 
 JS_VAR_RE = re.compile(r"(?:var|window\.)\s*([A-Za-z_][\w]*)\s*=\s*")
 CIRCLED_DIGITS = {chr(0x245F + i): i for i in range(1, 21)}  # ①=1 … ⑳=20
@@ -117,11 +121,22 @@ def source_hash(items):
     return h.hexdigest()[:16]
 
 
+def file_sha1(path):
+    """입력 번들의 바이트 해시 — manifest.inputs 기록용 (check_emb_freshness.js 비교 대상)."""
+    return hashlib.sha1(Path(path).read_bytes()).hexdigest()
+
+
 def collect_items(data_root, exam_id="cosmetic"):
-    """드릴·시험 번들에서 임베딩 대상 항목 수집 — key: stmt:<sid> / q:<qid>."""
+    """드릴·시험 번들에서 임베딩 대상 항목 수집 — key: stmt:<sid> / q:<qid>.
+    반환: (items, inputs) — inputs는 소비한 번들의 {repo상대경로: sha1}."""
     root = Path(data_root)
     items = []
+    inputs = {}
     by_key = {}
+
+    def consume(path):
+        inputs[str(Path(path).resolve().relative_to(REPO_ROOT)).replace("\\", "/")] = \
+            file_sha1(path)
 
     def add(key, text, kind, subject, cid=None, extra=None):
         text = clean_text(text)
@@ -139,6 +154,7 @@ def collect_items(data_root, exam_id="cosmetic"):
 
     drills = root / "drills"
     for ox in sorted(drills.glob("ox_*.js")):
+        consume(ox)
         subject = int(re.search(r"subject(\d+)", ox.name).group(1))
         _, arr = load_js_bundle(ox)
         for q in arr:
@@ -148,6 +164,7 @@ def collect_items(data_root, exam_id="cosmetic"):
     for cb in sorted(drills.glob("combo_*.js")):
         if "index" in cb.name:
             continue
+        consume(cb)
         _, arr = load_js_bundle(cb)
         if isinstance(arr, dict):               # combo_pilot: {"questions": [...]}
             arr = arr.get("questions", [])
@@ -159,6 +176,7 @@ def collect_items(data_root, exam_id="cosmetic"):
                         cid=st.get("conceptId"), extra={"truth": st.get("truth")})
 
     for f in sorted((root / "exams").glob("*.js")):
+        consume(f)
         _, data = load_js_bundle(f)
         subj_m = re.search(r"subject(\d+)", str(data.get("id") or f.name))
         subject = int(subj_m.group(1)) if subj_m else 0
@@ -166,20 +184,51 @@ def collect_items(data_root, exam_id="cosmetic"):
             ans_text = answer_text(q.get("answer", ""), q.get("options") or [])
             add(f"q:{q['id']}", f"{q.get('question', '')} {ans_text}",
                 "question", subject)
-    return items
+    return items, inputs
 
 
-def topk_neighbors(sim, keys, k):
-    """N×N 유사도 행렬에서 자기 자신을 제외한 top-K 이웃."""
+def text_norm_key(t):
+    """동일 텍스트 판별용 정규화 키 — 공백 제거·소문자."""
+    return re.sub(r"\s+", "", str(t)).lower()
+
+
+def same_text_map(items):
+    """정규화 텍스트가 동일한 항목끼리 묶은 교차 맵 — key → [동일 텍스트 다른 key].
+    같은 진술이 과목·유형별로 다른 sid를 갖는 경우 UI가 "동일 진술"로 별도 표시한다."""
+    groups = {}
+    for it in items:
+        groups.setdefault(text_norm_key(it["text"]), []).append(it["key"])
+    out = {}
+    for g in groups.values():
+        if len(g) > 1:
+            for k in g:
+                out[k] = [x for x in g if x != k]
+    return out
+
+
+def topk_neighbors(sim, keys, k, texts=None, min_len=0):
+    """N×N 유사도 행렬에서 자기 자신을 제외한 top-K 이웃.
+    texts/min_len 지정 시: 동일 정규화 텍스트 중복 제외(첫 등장만),
+    정규화 길이 min_len 미만의 짧은 일반구 후보 제외."""
     n = sim.shape[0]
     sim = sim.copy()
     np.fill_diagonal(sim, -2.0)
     k = min(k, n - 1)
-    idx = np.argpartition(-sim, k - 1, axis=1)[:, :k]
+    norms = [text_norm_key(t) for t in texts] if texts else None
+    pool = min(n - 1, max(k * 4, NEIGHBOR_POOL)) if texts else k
+    idx = np.argpartition(-sim, pool - 1, axis=1)[:, :pool]
     adj = {}
     for i in range(n):
         order = idx[i][np.argsort(-sim[i, idx[i]])]
-        adj[keys[i]] = [[keys[j], round(float(sim[i, j]), 4)] for j in order]
+        picked = []
+        for j in order:
+            if norms is not None:
+                if norms[j] == norms[i] or len(norms[j]) < min_len:
+                    continue
+            picked.append([keys[j], round(float(sim[i, j]), 4)])
+            if len(picked) >= k:
+                break
+        adj[keys[i]] = picked
     return adj
 
 
@@ -205,14 +254,14 @@ def run(argv=None):
     ap = argparse.ArgumentParser(description="콘텐츠 임베딩 사전 계산 (DOC-DSN-18)")
     ap.add_argument("--exam", default="cosmetic")
     ap.add_argument("--data-root", default=None, help="기본 data/exams/<exam>")
-    ap.add_argument("--out", default=str(Path(__file__).parent / "out"))
+    ap.add_argument("--out", default=None, help="기본 {dataRoot}/embeddings")
     ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--limit", type=int, default=0, help="항목 수 제한 (스모크용)")
     ap.add_argument("--no-write", action="store_true", help="계산만 수행, 산출물 미작성")
     a = ap.parse_args(argv)
 
     data_root = Path(a.data_root) if a.data_root else REPO_ROOT / "data" / "exams" / a.exam
-    items = collect_items(data_root, a.exam)
+    items, inputs = collect_items(data_root, a.exam)
     if a.limit:
         items = items[:a.limit]
     print(f"[1/4] 항목 수집: {len(items)} (stmt {sum(i['kind']=='stmt' for i in items)}, "
@@ -235,11 +284,15 @@ def run(argv=None):
     qerr = float(np.abs(sim_q - sim_o).mean())
 
     keys = [it["key"] for it in items]
-    adj = topk_neighbors(sim_q, keys, TOP_K)
+    texts = [it["text"] for it in items]
+    adj = topk_neighbors(sim_q, keys, TOP_K,
+                         texts=texts, min_len=MIN_NEIGHBOR_LEN)
 
     meta = {"model": a.model, "revision": revision, "dim": dim, "quant": "int8",
-            "topK": TOP_K, "sourceHash": source_hash(items), "items": len(items),
-            "quantMeanCosErr": round(qerr, 6)}
+            "topK": TOP_K, "minNeighborLen": MIN_NEIGHBOR_LEN,
+            "sourceHash": source_hash(items), "items": len(items),
+            "exam": a.exam, "quantMeanCosErr": round(qerr, 6),
+            "inputs": inputs}
 
     # ---- 품질 리포트 ----
     rng = np.random.default_rng(20261012)
@@ -293,27 +346,53 @@ def run(argv=None):
     print(f"[4/4] 리포트: 혼동 후보 {len(conf)}쌍 · 중복 {len(dup)}쌍 · 양자화 오차 {qerr:.5f}")
 
     if not a.no_write:
-        out = Path(a.out)
+        out = Path(a.out) if a.out else data_root / "embeddings"
         out.mkdir(parents=True, exist_ok=True)
         meta_out = dict(meta)
         meta_out["files"] = []
         total_bytes = 0
-        for kind in ("stmt", "question"):
-            sub = [i for i, it in enumerate(items) if it["kind"] == kind]
-            if not sub:
-                continue
-            name = f"vectors_{kind}.js"
-            emit_vector_bundle(out / name, f"EMB_VEC_{kind}", meta,
+
+        # 진술 벡터는 과목별 분할 (SEM-01 — 드릴 과목 로딩 패턴과 동일하게 지연 로드)
+        for subject in sorted({it["subject"] for it in items if it["kind"] == "stmt"}):
+            sub = [i for i, it in enumerate(items)
+                   if it["kind"] == "stmt" and it["subject"] == subject]
+            name = f"vectors_stmt_subject{subject}.js"
+            emit_vector_bundle(out / name, f"EMB_VEC_stmt_subject{subject}", meta,
                                [keys[i] for i in sub], q[sub], scales[sub])
             sz = (out / name).stat().st_size
             total_bytes += sz
-            meta_out["files"].append({"file": name, "items": len(sub), "bytes": sz})
-        (out / "manifest.json").write_text(json.dumps(meta_out, ensure_ascii=False, indent=1), "utf-8")
-        (out / "neighbors.json").write_text(json.dumps(
-            {"dim": dim, "k": TOP_K, "adj": adj}, ensure_ascii=False), "utf-8")
-        write_report(out / "eval_report.txt", report)
-        nb = (out / "neighbors.json").stat().st_size
-        print(f"      산출: {out} - 벡터 {total_bytes/1024:.0f}KB + 이웃 {nb/1024:.0f}KB + manifest/report")
+            meta_out["files"].append({"file": name, "kind": "stmt",
+                                      "subject": subject, "items": len(sub), "bytes": sz})
+        sub = [i for i, it in enumerate(items) if it["kind"] == "question"]
+        if sub:
+            name = "vectors_question.js"
+            emit_vector_bundle(out / name, "EMB_VEC_question", meta,
+                               [keys[i] for i in sub], q[sub], scales[sub])
+            sz = (out / name).stat().st_size
+            total_bytes += sz
+            meta_out["files"].append({"file": name, "kind": "question",
+                                      "items": len(sub), "bytes": sz})
+
+        neighbors = {"dim": dim, "k": TOP_K, "adj": adj,
+                     "texts": {it["key"]: it["text"] for it in items},
+                     "sameText": same_text_map(items)}
+        (out / "neighbors.js").write_text(
+            "// 자동 생성된 임베딩 이웃 인덱스입니다. 수정하지 마십시오. (ref-pipeline/embeddings/build_embeddings.py)\n"
+            f"var EMB_NEIGHBORS = {json.dumps(neighbors, ensure_ascii=False)};\n",
+            encoding="utf-8")
+        nb = (out / "neighbors.js").stat().st_size
+        meta_out["files"].append({"file": "neighbors.js", "kind": "neighbors", "bytes": nb})
+        (out / "manifest.js").write_text(
+            "// 자동 생성된 임베딩 매니페스트입니다. 수정하지 마십시오. (ref-pipeline/embeddings/build_embeddings.py)\n"
+            f"var EMB_MANIFEST = {json.dumps(meta_out, ensure_ascii=False)};\n",
+            encoding="utf-8")
+
+        # 품질 리포트는 배포 자산이 아니라 로컬 스크래치에만 남긴다
+        report_dir = Path(__file__).parent / "out"
+        report_dir.mkdir(parents=True, exist_ok=True)
+        write_report(report_dir / "eval_report.txt", report)
+        print(f"      산출: {out} - 벡터 {total_bytes/1024:.0f}KB + 이웃 {nb/1024:.0f}KB + manifest "
+              f"(리포트: {report_dir / 'eval_report.txt'})")
     return meta
 
 

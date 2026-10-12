@@ -76,6 +76,7 @@ import {
     openWeakReview,
     gotoWeakReview,
     setWeakFilter,
+    toggleSimilarStmts,
     setDrillCount
 } from './views/trainer-drills.js';
 import {
@@ -544,7 +545,7 @@ const DELEGATED_HANDLERS = {
     // 훈련소 드릴 (O/X·복수정답형·약점)
     openOxDrillSetup, startOxDrill, nextOxDrill,
     openComboDrillSetup, startComboDrill, nextComboDrill, submitComboJudgments,
-    openWeakReview, setWeakFilter, setDrillCount,
+    openWeakReview, setWeakFilter, setDrillCount, toggleSimilarStmts,
     // 뷰 전환 (data-click="switchView" data-arg="<view-id>") — 딥링크 공용
     switchView, gotoWeakReview, gotoSubjectAnalysis,
     // 훈련소 (제한값·계산·원료·뽀모도로)
