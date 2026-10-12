@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 746275f2caf07483
-> 생성: 2026-10-12 · 원천: SPEC.md(461개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 0a779125acf7000a
+> 생성: 2026-10-12 · 원천: SPEC.md(465개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 461개 — 문서 연결 294 · 소스 연결 426 · 테스트 연결 450 · 보고서 연결 109
+**커버리지 요약**: 요구사항 465개 — 문서 연결 294 · 소스 연결 430 · 테스트 연결 454 · 보고서 연결 109
 
 ---
 
@@ -431,6 +431,15 @@
 | FB-06 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
 | FB-07 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
 | FB-08 | ✅ (코드) / ⚙️ (대시보드 설정 필요) | 테스트 | DOC-DSN-05<br>DOC-DSN-09 | src/feedback.js<br>tools/supabase/functions/feedback-notify/index.ts | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
+
+## 3.24 학습 품질 감사
+
+| ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
+|----|------|-----------|------|------|--------|--------|------|
+| SQ-01 | ✅ | 테스트 | — | tools/check/audit_study_quality.js | tests/unit/study-quality-audit.test.js | — | — |
+| SQ-02 | ✅ | 테스트 | — | tools/check/audit_study_quality.js | tests/unit/study-quality-audit.test.js | — | — |
+| SQ-03 | ✅ | 테스트 | — | tools/check/audit_study_quality.js | tests/unit/study-quality-audit.test.js | — | — |
+| SQ-04 | ✅ | 테스트 | — | tools/check/audit_study_quality.js | tests/unit/study-quality-audit.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
