@@ -99,6 +99,48 @@ export function hasFeature(name) {
     return !!(exam && exam.features && exam.features[name]);
 }
 
+/* =======================================================
+   시험별 스킨 토큰 (exams.json theme — DA-14)
+   ======================================================= */
+
+// 주입 허용 토큰 화이트리스트 — 색·배경·테두리 계열만. 레이아웃/치수 변수를
+// 열어두면 콘텐츠 팩이 플랫폼 골격을 깰 수 있어 제한한다.
+// ⚠️ pwa-manifest.js(클래식 스크립트, import 불가)에 동일 정규식이 복제돼 있다 — 함께 갱신.
+const THEME_TOKEN_RE = /^--(?:color|bg|border|stroke)-[a-z][a-z0-9-]*$/i;
+
+/**
+ * exams.json `theme` 객체 → {CSS 토큰: 값} 정제 (순수 함수 — DOM 없이 테스트 가능).
+ * 화이트리스트 밖 토큰·비문자열 값은 버린다.
+ * @param {object|null} exam
+ * @returns {Object<string,string>}
+ */
+export function resolveExamThemeTokens(exam) {
+    const theme = (exam && typeof exam.theme === 'object' && exam.theme) || {};
+    /** @type {Object<string,string>} */
+    const out = {};
+    for (const [token, value] of Object.entries(theme)) {
+        if (!THEME_TOKEN_RE.test(token) || typeof value !== 'string' || !value.trim()) continue;
+        out[token] = value;
+    }
+    return out;
+}
+
+/**
+ * 활성 시험 스킨 적용 — `<html data-exam>` 속성 부여 + theme 토큰을
+ * documentElement 인라인 변수로 주입 (라이트/다크 양쪽 테마 위에 적용).
+ * 부팅 초기에는 pwa-manifest.js가 먼저 같은 일을 하므로 여기서는
+ * 브랜딩 재적용 경로의 일관성만 보장한다.
+ * @param {object|null} [exam]
+ */
+export function applyExamTheme(exam) {
+    if (typeof document === 'undefined' || !document.documentElement) return;
+    const target = exam !== undefined ? exam : getActiveExam();
+    if (target && target.id) document.documentElement.dataset.exam = target.id;
+    for (const [token, value] of Object.entries(resolveExamThemeTokens(target))) {
+        document.documentElement.style.setProperty(token, value);
+    }
+}
+
 /** 시험 콘텐츠 루트 기준 상대 경로 (예: contentPath('교재/law/a.md')) */
 export function contentPath(rel) {
     const exam = getActiveExam();

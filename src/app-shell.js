@@ -1,10 +1,10 @@
 // src/app-shell.js — 앱 셸 크롬: 뷰포트 높이·가로세로 토글·data-click 접근성·
 // 시험 브랜딩·기능 플래그·지식DB 버전 알림 (app.js에서 분리)
-// @spec R-08,P-08,O-04,ES-02,ES-03,ES-05
+// @spec R-08,P-08,O-04,ES-02,ES-03,ES-05,DA-14
 import { safeGetItem, safeSetItem, safeRemoveItem } from "./state.js";
 import { STORAGE_KEYS } from "./storage-keys.js";
 import { DataLoader } from "./data-loader.js";
-import { getActiveExam, getExamAppName, getExamList, hasFeature } from "./exam-context.js";
+import { getActiveExam, getExamAppName, getExamList, hasFeature, applyExamTheme } from "./exam-context.js";
 import { isPracticeCapable } from "./practice-registry.js";
 import { showToast, showAlert } from "./ui-utils.js";
 
@@ -104,6 +104,7 @@ if (document.body) {
 export function applyExamBranding() {
     const exam = getActiveExam();
     if (!exam) return;
+    applyExamTheme(exam); // 시험별 스킨 토큰 — 브랜딩 재적용 경로에서도 일관 (DA-14)
     if (exam.title) document.title = exam.title;
     const logoMain = document.querySelector('.logo-text h1');
     const logoSub = document.querySelector('.logo-text span');
