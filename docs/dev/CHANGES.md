@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 데스크탑 배경화 — 수묵 산수화 정적 번들 배경
+
+- **icons/bg-landscape.webp** (신규, 279KB): 정선「인왕제색도」(1751, 퍼블릭 도메인 — Wikimedia Commons `File:Inwangjesaekdo.jpg`) 1920px webp 변환. 채도 0.8·명도 1.08·미세 블러 후처리로 배경용 톤다운
+- **css/base.css**: `--bg-wallpaper-dim` 토큰 신설(다크 `rgba(11,15,25,0.72)` / 라이트 `rgba(233,228,212,0.72)` — 각 `--bg-app` 계열 색) + `@media (min-width: 901px)` 게이트로 `body`에 딤+이미지 2레이어 `background-image` 적용. `background-color`는 `var(--bg-app)` 그대로라 computed `backgroundColor` 기반 검증(theme.spec)에 무영향. `background-attachment: fixed` + `cover`/`center`
+- **게이트 선택 근거**: 모바일(≤900px) 제외 — 카드·본문이 뷰포트를 가득 채워 시각 효과 없이 프리캐시 대역만 소모. 인쇄는 print.css의 `background: !important` 리셋이 자동 커버. 다크 카드 반투명(`--bg-card` rgba 0.65) 특성상 이미지가 카드 뒤로 비치므로 딤으로 대비 확보
+- **sw.js**: `SHELL_ASSETS`에 등록 — 오프라인 프리캐시 + `check:perf` 예산 계측 대상 편입 (icons/는 domain-map·inventory 감시 외)
+
 ## 2026-10-12 시험별 스킨 토큰 (DA-14) — 교재/시험 교체 시 UI 팔레트 분리
 
 - **배경**: 스킨 이식성 감사에서 브랜딩 텍스트·도메인 CSS(`css/exams/<id>/`)는 격리돼 있으나 전역 팔레트(`--color-primary` 등)가 base.css 단일 고정으로 시험별 차별화 불가였음

@@ -149,6 +149,7 @@ const SHELL_ASSETS = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-maskable-512.png',
+  './icons/bg-landscape.webp',
   // FontAwesome 자체 호스팅 (오프라인/모바일에서도 아이콘 확실히 표시)
   './vendor/supabase/supabase.js',
   './vendor/fontawesome/css/all.min.css',
