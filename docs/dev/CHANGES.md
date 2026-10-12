@@ -7,6 +7,16 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 평가 후속 — products·batch 뷰 분해 + 게이트 성능·래칫 강화
+
+- **formula-products.js 분해**: 827라인을 역할별 4모듈로 분해 — `formula-prod-state.js`(prodForm 공유 상태·전성분 칩 렌더), `formula-prod-vision.js`(사진 인식 LLM 초안→칩 검토, FO-41~43·46·54·55), `formula-prod-detail.js`(상세·고객 알레르기 교차·포뮬러/기성품 비교). products.js는 목록+폼 액션+JSON IO(375라인)로 축소하고 분리 모듈 핸들러를 재수출 — registry·DOM 테스트 경로 무파손. 공유 상태를 state 모듈로 올려 products→vision/detail 단방향 유지
+- **formula-batch.js 분해**: 810라인을 2모듈로 분해 — `formula-batch-form.js`(신규·보정 폼 전체: 처방/고객 바인딩·QC·위생·LOT·재고 경고·기한 제안·스냅샷, 443라인). `batchSave`만 batch.js 잔류 — 상세 패널(batchOpen) 호출이 필요해 form에 두면 순환 발생, batch → form 단방향 유지. batch.js는 목록·필터·CSV·상세·인쇄(398라인) + 폼 핸들러 재수출
+- **practice-registry.test.js 신규 테스트**: 지연 핸들러 등록명이 대상 뷰 모듈(재수출 체인 추적)에서 실제 export되는지 정적 검증 — 파사드 분해 시 재수출 누락(data-click → undefined 브리지) 회귀 차단. 분해 과정에서 `productOpen` 재수출 누락을 실제로 발견·수정
+- **check_imports.js 최적화**: 미사용 export 탐지가 export마다 전 테스트 파일을 재판독(O(exports×tests))하던 것을 1회 전수 집계(usedInTests Set)로 교체 — 실행 10.0s→0.32s, 경고 출력 동일성 비교 확인 (IDENTICAL)
+- **병합 커버리지 래칫 상향**: 실측(66.21/52.73/65.75/71.74) 대비 ~0.2%p 여유로 임계값 조임 (stmts 65→66 · branches 52→52.5 · funcs 64→65.5 · lines 70→71.5) — 측정 가능한 하락 즉시 실패
+- **check_ref_subjects 불일치 2건 해소**: `다과목_성분및첨가물별표2`, `다과목_관리기준및지정서류`가 과목4(제조·판매관리) 문제은행에서도 실제 인용되는 다과목 문서 — `multiSubjectDocs` 명단에 등록해 규칙 귀속 오류 해소
+- **AGENTS.md·ARCHITECTURE.md·SPEC.md·FEATURE_MAP.md·TESTING.md**: 신규 4모듈 트리·표 반영, 유닛 카운트 1190→1191 갱신
+
 ## 2026-10-12 시각 회귀 Linux 기준선 파이프라인 + 문서 스테일 정리
 
 - **E2E 기존 회귀 4건 수정** (CI 복구 과정에서 노출 — 6주간 audit 단계 차단으로 미실행 상태에서 누적):

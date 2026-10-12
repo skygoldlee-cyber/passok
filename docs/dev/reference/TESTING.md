@@ -27,10 +27,10 @@
 
 | 구분 | 프레임워크 | 환경 | 파일 위치 | 테스트 수 |
 |------|-----------|------|-----------|-----------|
-| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1190 |
+| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1191 |
 | **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 665 |
 | **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 101 |
-| **합계** | | | | **1956** |
+| **합계** | | | | **1957** |
 
 ### 설계 원칙
 
@@ -257,7 +257,7 @@ npm run hooks:install
 | 76 | `notice-check.test.js` | 24 | `isNewerNotice` — 식약처 고시 감지 배너 판정 | |
 | 77 | `notice-diff.test.js` | 14 | `splitArticles` — 참조 문서 개정 조문 diff | |
 | 78 | `posindep.test.js` | 9 | `check_position_independence` — 위치 좌표 식별자 탐지 (ID-05) | |
-| 79 | `practice-registry.test.js` | 9 | practice-registry 지연 로드 매니페스트 | |
+| 79 | `practice-registry.test.js` | 10 | practice-registry 지연 로드 매니페스트 + 핸들러 재수출 정합 | |
 | 80 | `push-gate.test.js` | 10 | pre-push 적응형 게이트 분류기 | |
 | 81 | `reader-analysis-gates.test.js` | 6 | 리더 위치 보존·맞춤학습 온보딩·서사 커버리지 게이트 | |
 | 82 | `reader-toc.test.js` | 7 | 리더 목차 추출 헬퍼 | |
@@ -269,7 +269,7 @@ npm run hooks:install
 | 88 | `textbook-anchors.test.js` | 5 | 교재 라인 → §앵커 해석 헬퍼 | |
 | 89 | `textbook-edition.test.js` | 3 | 교재 판본 메타 (P-14) | |
 | 90 | `textbook-search-ref.test.js` | 10 | `_listRefDocs` — 참조자료 검색 헬퍼 (TS-11) | |
-| | **합계** | **1184** | | |
+| | **합계** | **1185** | | |
 
 ### DOM 테스트 (`tests/dom/`)
 

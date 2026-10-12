@@ -85,6 +85,38 @@ test('지연 핸들러 — 로더 함수 + 이름 배열 쌍, 이름은 전체 �
     }
 });
 
+test('지연 핸들러 — 등록 이름 전부가 대상 뷰 모듈에서 export된다 (재수출 체인 추적)', () => {
+    // 뷰 모듈 파사드 분해 시 재수출 누락으로 data-click 핸들러가
+    // undefined로 브리지되는 회귀 차단 — 선언 이름 ↔ 소스 export 정합 검증.
+    const collectExports = (absPath, seen = new Set()) => {
+        if (seen.has(absPath)) return new Set();
+        seen.add(absPath);
+        const names = new Set();
+        if (!fs.existsSync(absPath)) return names;
+        const src = fs.readFileSync(absPath, 'utf8');
+        for (const m of src.matchAll(/export\s+(?:async\s+)?(?:function|const|let|class)\s+([A-Za-z_$][\w$]*)/g)) {
+            names.add(m[1]);
+        }
+        for (const m of src.matchAll(/export\s*\{([^}]+)\}\s*from\s*['"]([^'"]+)['"]/g)) {
+            for (const part of m[1].split(',')) {
+                const name = part.trim().split(/\s+as\s+/).pop().trim();
+                if (name) names.add(name);
+            }
+            const dep = path.resolve(path.dirname(absPath), m[2]);
+            for (const n of collectExports(dep, seen)) names.add(n);
+        }
+        return names;
+    };
+    for (const [load, names] of getPracticeLazyHandlers()) {
+        const rel = /** @type {any} */ (load).rel;
+        if (!rel) continue; // 도메인 무관 플랫폼 모듈(notice)은 규약 경로 없음
+        const exported = collectExports(path.join(ROOT, 'src', 'exams', 'cosmetic', rel));
+        for (const name of names) {
+            assert.ok(exported.has(name), `${rel}: 핸들러 '${name}' 미export — 파사드 재수출 누락 추정`);
+        }
+    }
+});
+
 test('뷰 렌더러 맵 — 등록된 실무 뷰 id 키의 함수', () => {
     setExams([]);
     const renderers = getPracticeViewRenderers();

@@ -1193,7 +1193,10 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | `event-listeners.js` | 이벤트 리스너 일괄 바인딩 |
 | `formula.js` | Formula OS 공용 진입점 파사드 — named export 재수출 (data-click 디스패치·테스트 호환) |
 | `formula-core.js` · `formula-hub.js` · `formula-list.js` · `formula-calc.js` · `formula-weigh.js` · `formula-ing-modal.js` · `formula-io.js` | Formula OS 뷰 구현 모듈 — 공용 상태·패널·서브내비(core), 허브·리마인더·고대비(hub), My 포뮬러(list), 배합 계산기·드래프트·저장(calc), 계량 모드(weigh), 자가 성분 등록(ing-modal), 인쇄·JSON 공유(io) |
-| `formula-batch.js` | 조제 기록(배치) 목록·폼·상세 패널 |
+| `formula-batch.js` | 조제 기록(배치) 목록·상세·저장·인쇄 + 폼 핸들러 재수출 (폼 구현은 batch-form) |
+| `formula-batch-form.js` | 배치 신규·보정 폼 — 처방/고객 바인딩, QC·위생 필드, LOT 선택·재고 경고, 사용기한 제안, 스냅샷 |
+| `formula-products.js` | 기성품 DB 목록·폼 액션·JSON IO + 분리 모듈 재수출 (파사드) |
+| `formula-prod-state.js` · `formula-prod-vision.js` · `formula-prod-detail.js` | 기성품 분리 모듈 — 폼 공유 상태·칩 렌더(state), 사진 인식 LLM 초안(vision), 상세·알레르기 교차·비교(detail) |
 | `formula-customer.js` | 고객 관리 패널 (카드·상담 이력·역참조) |
 | `formula-material.js` | 원료 장부 패널 (기한 배지·경고) |
 | `formula-compliance.js` | 법규 준수 체크리스트 + 법령 MD 링크 |
