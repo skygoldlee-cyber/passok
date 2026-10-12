@@ -62,7 +62,7 @@
     "check:perf": "node tools/check/check_perf_budget.js",
     "build:trace": "node tools/build/build_trace_matrix.js",
     "check:trace": "node tools/build/build_trace_matrix.js --check",
-    "lint": "eslint src/ tools/ tests/ sw.js serve.js --max-warnings 0",
+    "lint": "eslint src/ tools/ tests/ sw.js serve.js --max-warnings 0 --cache --cache-location node_modules/.cache/eslint",
     "check:types": "tsc -p jsconfig.json --noEmit",
     "hooks:install": "git config core.hooksPath .githooks && echo 'pre-commit/pre-push 훅 활성화됨 (.githooks)'",
     "convert:refs": "python ref-pipeline/convert.py",
