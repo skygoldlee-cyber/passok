@@ -25,13 +25,13 @@ export default defineConfig({
                 'src/web-vitals.js',          // PerformanceObserver
                 'src/views/reader-audio.js',  // Audio API
             ],
-            // 커버리지 하한선 — 실측 베이스라인(2026-10): stmts 65.9 / branches 52.4 / funcs 66.8 / lines 70.3
-            // 대비 1~2pt 여유분으로 상향. 테스트 추가 시 점진 상향 (하향 수정은 CHANGES.md에 사유 기록 필수).
+            // 커버리지 하한선 — 실측 베이스라인(2026-10-13): stmts 65.54 / branches 51.85 / funcs 66.27 / lines 69.95
+            // 대비 ~0.5pt 여유분. 테스트 추가 시 점진 상향 (하향 수정은 CHANGES.md에 사유 기록 필수).
             thresholds: {
-                lines: 68,
-                statements: 64,
-                functions: 64,
-                branches: 51,
+                lines: 69.5,
+                statements: 65,
+                functions: 65.5,
+                branches: 51.5,
             },
         },
     },

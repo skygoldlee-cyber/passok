@@ -58,10 +58,11 @@ console.log('\n📊 병합 HTML 리포트: coverage-merged/index.html');
 // 기준선(2026-10-12 재설정): stmts 66.21 / branches 52.73 / funcs 65.75 / lines 71.74
 //   — 2026-08-31 이후 CI 중단(npm audit 차단) 동안 임계 미달이 누적됐고, Node 24 전환으로
 //     V8 브랜치 계측 방식이 달라져 기존 기준선과 비교 불가. 실측 대비 소폭 여유로 재설정.
-// 2026-10-13 래칫 1차 상향 — 기준선 대비 ~0.2%p 여유로 조여 측정 가능한 하락을 즉시 차단.
-//   커버리지 개선 커밋 시 실측이 오르면 같은 방식(실측−0.2)으로 계속 조인다.
+// 2026-10-13 래칫 2차 상향 — CI glob 버그(유닛 55/1192 실행) 수정으로 실측 복원:
+//   실측 stmts 69.34 / branches 65.42 / funcs 70.05 / lines 80.34, 대비 ~0.8%p 여유.
+//   커버리지 개선 커밋 시 실측이 오르면 같은 방식(실측−0.5~0.8)으로 계속 조인다.
 // 임계값은 기준선 대비 여유분으로 설정 — 상향은 언제든 가능, 하향 시 CHANGES.md에 사유 기록
-const MERGED_THRESHOLDS = { statements: 66, branches: 52.5, functions: 65.5, lines: 71.5 };
+const MERGED_THRESHOLDS = { statements: 68.5, branches: 64.5, functions: 69, lines: 79.5 };
 if (process.argv.includes('--check')) {
     const summary = map.getCoverageSummary();
     const actual = summary.toJSON();
