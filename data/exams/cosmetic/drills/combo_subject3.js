@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject3.b4849b23.js — mode: fact(명제 조합) 23문 / answer(정답 조합) 226문
+// 원본: data/exams/cosmetic/exams/subject3.dd2c6676.js — mode: fact(명제 조합) 23문 / answer(정답 조합) 226문
 var COMBO_DRILLS_subject3 = [
  {
   "id": "safety_combo_86b500",
@@ -12,35 +12,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_86036c",
-    "conceptId": "L1872",
+    "conceptId": "§2.2",
     "text": "작업장 내부에서는 원료의 분진 제거를 위해 일반 비로 쓸어 내는 건식 청소를 상시 권장한다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_2cecf7",
-    "conceptId": "L1872",
+    "conceptId": "§2.2",
     "text": "보관실 및 작업장 내에는 해충과 쥐를 예방하기 위한 방충/방서 대책을 마련해야 한다.",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_6e629a",
-    "conceptId": "L1872",
+    "conceptId": "§2.2",
     "text": "작업원은 청정 등급에 맞는 규정된 위생복, 모자, 위생화를 착용해야 한다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_1379ce",
-    "conceptId": "L1872",
+    "conceptId": "§2.2",
     "text": "소독에 사용되는 소독액은 내성이 생기지 않도록 주기적으로 교체하여 사용한다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ae0826",
-    "conceptId": "L1872",
+    "conceptId": "§2.2",
     "text": "화장품 내용물이 노출되는 구역에서는 음식물 섭취 및 흡연을 금지한다.",
     "truth": true
    }
@@ -106,41 +106,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L500 (출처: 과목3 문제은행 Q2)",
+  "citation": "📖 교재: L470 (출처: 과목3 문제은행 Q2)",
   "stem": "다음 중 화장품 제조 구역의 '청정도 등급' 구분에 따른 관리 항목으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_3f4aa2",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "1등급(특수 청정구역)은 원료 창고와 완제품 창고가 포함된다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_3b7c91",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "2등급(일반 청정구역)은 포장재 보관소 및 화장품 겉포장(2차 포장) 구역이 포함된다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_645251",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "3등급(준 청정구역)은 내용물 배합실, 원료 계량실 등이 포함된다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_96b792",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "내용물이 외부 공기와 직접 노출되는 충진 및 조제 구역은 2등급 구역으로 관리한다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_5671ba",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "1등급 구역은 인접한 구역보다 음압(-)으로 유지하여 외부 공기를 빨아들여야 한다.",
     "truth": false
    }
@@ -192,7 +192,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q2",
-  "explain": "📖 교재 근거 (교재: L500):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |",
+  "explain": "📖 교재 근거 (교재: L470):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -207,35 +207,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_b8f7e3",
-    "conceptId": "L171",
+    "conceptId": "q:subject3_q3",
     "text": "화장품 제조 작업원은 2년에 1회 건강검진을 받아야 한다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_110f45",
-    "conceptId": "L171",
+    "conceptId": "q:subject3_q3",
     "text": "가벼운 감기 환자도 제조 업무 참여가 평생 제한된다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_41b2d9",
-    "conceptId": "L171",
+    "conceptId": "q:subject3_q3",
     "text": "감염병 예방 및 관리에 관한 법률에 따른 감염병 환자(전염성 피부 질환자 포함)는 화장품 제조 업무에 종사할 수 없다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_c8e369",
-    "conceptId": "L171",
+    "conceptId": "q:subject3_q3",
     "text": "건강 검진 기록은 작성일로부터 1년만 보존하면 된다.",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ffda21",
-    "conceptId": "L171",
+    "conceptId": "q:subject3_q3",
     "text": "외과적 상처가 있는 작업원도 소독 없이 위생장갑만 착용하면 조제 업무에 상시 참여할 수 있다.",
     "truth": false
    }
@@ -295,41 +295,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2602 (출처: 과목3 문제은행 Q4)",
+  "citation": "📖 교재: L2603 (출처: 과목3 문제은행 Q4)",
   "stem": "다음 중 제조 설비 및 기구의 '세척 및 소독' 절차으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_70e8c5",
-    "conceptId": "L2602",
+    "conceptId": "§4.2",
     "text": "세척제는 잔류물이 남지 않고 물에 잘 씻겨 나가는 제품을 선택한다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_b2fbef",
-    "conceptId": "L2602",
+    "conceptId": "§4.2",
     "text": "세척이 완료된 기구는 물기가 남아있는 상태로 겹쳐서 보관하여 건조 속도를 늦춘다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_5c42f9",
-    "conceptId": "L2602",
+    "conceptId": "§4.2",
     "text": "세척 및 소독이 완료된 설비에는 '세척 완료' 및 유효기한을 기재한 라벨을 부착한다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_4bd47b",
-    "conceptId": "L2602",
+    "conceptId": "§4.2",
     "text": "소독제는 일반적으로 70% 에탄올(Ethanol)이 잔류하지 않고 살균력이 우수하여 범용으로 쓰인다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_b0216f",
-    "conceptId": "L2602",
+    "conceptId": "§4.2",
     "text": "이전 배치와 제조 원료가 변경될 때는 평소보다 더 강력하고 철저한 세척(교차 오염 방지)을 실시한다.",
     "truth": true
    }
@@ -384,7 +384,7 @@ var COMBO_DRILLS_subject3 = [
    "한도"
   ],
   "derivedFrom": "subject3_q4",
-  "explain": "📖 법령 근거 (교재: L2602):\n> 해설: 판정 대기소 보관 시 백색 라벨, 시험 중 황색 라벨, 적합 판정 시 청색 라벨, 부적합 판정 시 적색 라벨을 부착한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 법령 근거 (교재: L2603):\n> 해설: 판정 대기소 보관 시 백색 라벨, 시험 중 황색 라벨, 적합 판정 시 청색 라벨, 부적합 판정 시 적색 라벨을 부착한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -393,41 +393,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L476 (출처: 과목3 문제은행 Q5)",
+  "citation": "📖 교재: L446 (출처: 과목3 문제은행 Q5)",
   "stem": "다음 중 화장품 원료 및 내용물의 '입고 및 보관 관리' 방법으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_43b116",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "입고된 모든 원료는 검사 결과와 무관하게 입고 즉시 생산 라인에 투입한다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_b9a0bd",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "보관실의 온도와 습도는 제품 품질에 영향을 미치므로 측정하지 않고 임의 방치한다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_8dfe1c",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "원료 및 내용물은 벽과 바닥에 닿지 않도록 적재(파레트 사용 등)하여 보관한다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_ea7f5b",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "선입선출(FIFO) 원칙은 포장재에만 적용하며, 원료와 내용물에는 적용하지 않는다.",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_5f6d97",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "시험 결과 부적합 판정이 난 원료는 적합 원료와 혼합하여 희석해 사용한다.",
     "truth": false
    }
@@ -477,7 +477,7 @@ var COMBO_DRILLS_subject3 = [
    "명제판정"
   ],
   "derivedFrom": "subject3_q5",
-  "explain": "📖 교재 근거 (교재: L476):\n| 제조 구역 | • 모든 도구와 기구는 청소 및 위생 처리 후 정해진 지역에 정돈 방법에 따라 보관하고, 호스는 사용 후 완전히 건조시켜 바닥에 닿지 않도록 정리하여 보관해야 함<br>• 제조 구역에서 흘린 것은 신속히 청소하고, 폐기물(여과지, 개스킷, 폐지, 플라스틱 봉지)은 주기적으로 버려 장기간 모아놓거나 쌓아두지 않아야 함<br>• 표면은 청소하기 용이한 재질로 설계되어야 하며, 탱크의 바깥 면들은 정기적으로 청소하고, 모든 배관이 사용될 수 있도록 우수한 정비 상태로 유지해야 함<br>• 페인트를 칠한 지역은 우수한 정비 상태로 유지되어야 하며, 벗겨진 칠은 보수되어야 함 |",
+  "explain": "📖 교재 근거 (교재: L446):\n| 제조 구역 | • 모든 도구와 기구는 청소 및 위생 처리 후 정해진 지역에 정돈 방법에 따라 보관하고, 호스는 사용 후 완전히 건조시켜 바닥에 닿지 않도록 정리하여 보관해야 함<br>• 제조 구역에서 흘린 것은 신속히 청소하고, 폐기물(여과지, 개스킷, 폐지, 플라스틱 봉지)은 주기적으로 버려 장기간 모아놓거나 쌓아두지 않아야 함<br>• 표면은 청소하기 용이한 재질로 설계되어야 하며, 탱크의 바깥 면들은 정기적으로 청소하고, 모든 배관이 사용될 수 있도록 우수한 정비 상태로 유지해야 함<br>• 페인트를 칠한 지역은 우수한 정비 상태로 유지되어야 하며, 벗겨진 칠은 보수되어야 함 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -486,41 +486,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1985 (출처: 과목3 문제은행 Q6)",
+  "citation": "📖 교재: L1953 (출처: 과목3 문제은행 Q6)",
   "stem": "다음 중 화장품 보관 시 '선입선출(First-In, First-Out)'에 대한 설명으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_0fdd29",
-    "conceptId": "L1985",
+    "conceptId": "§2.2",
     "text": "입고 일자가 가장 늦은 원자재를 가장 먼저 출고하여 사용하는 방법",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ee5d06",
-    "conceptId": "L1985",
+    "conceptId": "§2.2",
     "text": "유통기한이 가장 길게 남은 완제품을 먼저 출고하는 방법",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_2222ee",
-    "conceptId": "L1985",
+    "conceptId": "§2.2",
     "text": "원자재의 가격이 가장 비싼 것을 가장 나중에 출고하는 방법",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_32496b",
-    "conceptId": "L1985",
+    "conceptId": "§2.2",
     "text": "원자재의 무게가 가장 무거운 순서대로 출고하는 방법",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_f5dc2e",
-    "conceptId": "L1985",
+    "conceptId": "§2.2",
     "text": "입고 일자가 가장 빠른 원자재를 먼저 출고하여 사용하는 방법",
     "truth": true
    }
@@ -570,7 +570,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q6",
-  "explain": "📖 교재 근거 (교재: L1985):\n| DIY 키트형 | 소비자가 화장품 베이스와 부스터를 선택하여 세트 형태로 구매한 뒤, 직접 혼합하여 사용하는 방식의 화장품 |",
+  "explain": "📖 교재 근거 (교재: L1953):\n| DIY 키트형 | 소비자가 화장품 베이스와 부스터를 선택하여 세트 형태로 구매한 뒤, 직접 혼합하여 사용하는 방식의 화장품 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -585,35 +585,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_f49759",
-    "conceptId": "L1172",
+    "conceptId": "§2.1",
     "text": "신규 교육과 정기 교육을 실시해야 한다",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_a05882",
-    "conceptId": "L1172",
+    "conceptId": "§2.1",
     "text": "작업복 착용 시 구역별로 차등을 둔다",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_b9c2b0",
-    "conceptId": "L1172",
+    "conceptId": "§2.1",
     "text": "음식물 반입을 금지해야 한다",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_ebe969",
-    "conceptId": "L1172",
+    "conceptId": "§2.1",
     "text": "질병자는 격리해야 한다",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_4265db",
-    "conceptId": "L1172",
+    "conceptId": "§2.1",
     "text": "모든 외부인에게 출입을 개방한다",
     "truth": false
    }
@@ -665,7 +665,7 @@ var COMBO_DRILLS_subject3 = [
    "금지원료"
   ],
   "derivedFrom": "subject3_q7",
-  "explain": "📖 교재 근거 (L1172):\n| (1) 작업장 내 직원의 위생 기준 설정 🎯 기출 | 위생교육(신규·정기) + 작업복 착용·음식물 반입 금지 + 질병자 격리 + 접근 권한 없는 자 출입 제한 |\n> 해설: 접근 권한 없는 자의 출입은 제한해야 한다.",
+  "explain": "📖 교재 근거 (L1142):\n| (1) 작업장 내 직원의 위생 기준 설정 🎯 기출 | 위생교육(신규·정기) + 작업복 착용·음식물 반입 금지 + 질병자 격리 + 접근 권한 없는 자 출입 제한 |\n> 해설: 접근 권한 없는 자의 출입은 제한해야 한다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -674,41 +674,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1261 (출처: 과목3 문제은행 Q8)",
+  "citation": "📖 교재: L1231 (출처: 과목3 문제은행 Q8)",
   "stem": "다음 중 작업장 내 직원의 손 소독에 사용되는 「손 소독제」에 대한 설명으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_e908ec",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "1차 에탄올이 함유되어 세정 효과가 있다",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_d6c271",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "물 없이도 손 소독이 가능하다",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_260407",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "의약외품으로 분류된다",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_598534",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등이 사용된다",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_fb4e02",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "일반 비누와 동일하게 흐르는 물에 사용해야 한다",
     "truth": false
    }
@@ -762,7 +762,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q8",
-  "explain": "📖 교재 근거 (교재: L1261):\n| 손 소독제 🎯 기출 | 1차 에탄올이 함유되어 세정 효과가 있음 · 물 없이도 손 소독이 가능하며, 의약외품으로 분류됨 · 알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등 | 손 소독제로 소독 |\n해설: 손 소독제는 물 없이도 사용이 가능하며, 일반 비누(손 세정제)와는 다르다. 손 세정제는 흐르는 물에 비누를 사용하여 세척하는 것이고, 손 소독제는 별도의 물 없이도 소독이 가능하다.",
+  "explain": "📖 교재 근거 (교재: L1231):\n| 손 소독제 🎯 기출 | 1차 에탄올이 함유되어 세정 효과가 있음 · 물 없이도 손 소독이 가능하며, 의약외품으로 분류됨 · 알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등 | 손 소독제로 소독 |\n해설: 손 소독제는 물 없이도 사용이 가능하며, 일반 비누(손 세정제)와는 다르다. 손 세정제는 흐르는 물에 비누를 사용하여 세척하는 것이고, 손 소독제는 별도의 물 없이도 소독이 가능하다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -777,35 +777,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_9fb241",
-    "conceptId": "L2136",
+    "conceptId": "§4.1",
     "text": "1 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_2af71f",
-    "conceptId": "L2136",
+    "conceptId": "§4.1",
     "text": "10 ㎍/g 이하",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_1bbed9",
-    "conceptId": "L2136",
+    "conceptId": "§4.1",
     "text": "5 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_a0e7bf",
-    "conceptId": "L2136",
+    "conceptId": "§4.1",
     "text": "20 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_cc325a",
-    "conceptId": "L2136",
+    "conceptId": "§4.1",
     "text": "50 ㎍/g 이하",
     "truth": false
    }
@@ -855,7 +855,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q9",
-  "explain": "📖 교재 근거 (L2136):\n| 안티몬 (허용한도) | 10μg/g 이하 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (L2106):\n| 안티몬 (허용한도) | 10μg/g 이하 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -870,35 +870,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_ca1750",
-    "conceptId": "L2137",
+    "conceptId": "§4.1",
     "text": "5 ㎍/g 이하",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_b1c705",
-    "conceptId": "L2137",
+    "conceptId": "§4.1",
     "text": "1 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_c13ba9",
-    "conceptId": "L2137",
+    "conceptId": "§4.1",
     "text": "10 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_fbce40",
-    "conceptId": "L2137",
+    "conceptId": "§4.1",
     "text": "20 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_cb31cc",
-    "conceptId": "L2137",
+    "conceptId": "§4.1",
     "text": "100 ㎍/g 이하",
     "truth": false
    }
@@ -946,7 +946,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q10",
-  "explain": "📖 교재 근거 (L2137):\n| 카드뮴 (허용한도) | 5μg/g 이하 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (L2107):\n| 카드뮴 (허용한도) | 5μg/g 이하 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -961,35 +961,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_95cf87",
-    "conceptId": "L2139",
+    "conceptId": "§4.1",
     "text": "100 ㎍/g 이하",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_166073",
-    "conceptId": "L2139",
+    "conceptId": "§4.1",
     "text": "20 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_b2cf01",
-    "conceptId": "L2139",
+    "conceptId": "§4.1",
     "text": "50 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_510bc9",
-    "conceptId": "L2139",
+    "conceptId": "§4.1",
     "text": "10 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_3c1615",
-    "conceptId": "L2139",
+    "conceptId": "§4.1",
     "text": "200 ㎍/g 이하",
     "truth": false
    }
@@ -1040,7 +1040,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q11",
-  "explain": "📖 교재 근거 (L2139):\n| 디옥산 (허용한도) | 100μg/g 이하 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (L2109):\n| 디옥산 (허용한도) | 100μg/g 이하 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -1049,41 +1049,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2534 (출처: 과목3 문제은행 Q12)",
+  "citation": "📖 교재: L2504 (출처: 과목3 문제은행 Q12)",
   "stem": "다음 중 유통화장품 안전관리 기준상 일반 화장품의 '메탄올' 허용 한도로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_d9c9ab",
-    "conceptId": "L2534",
+    "conceptId": "§4.2",
     "text": "0.002% (v/v) 이하",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ce2e6c",
-    "conceptId": "L2534",
+    "conceptId": "§4.2",
     "text": "0.02% (v/v) 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_3dd7b2",
-    "conceptId": "L2534",
+    "conceptId": "§4.2",
     "text": "1.0% (v/v) 이하",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_7c47f3",
-    "conceptId": "L2534",
+    "conceptId": "§4.2",
     "text": "0.2% (v/v) 이하",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_78bf9f",
-    "conceptId": "L2534",
+    "conceptId": "§4.2",
     "text": "2.0% (v/v) 이하",
     "truth": false
    }
@@ -1133,7 +1133,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q12",
-  "explain": "📖 교재 근거 (교재: L2534):\n| 메탄올 | 0.2%(v/v) 이하, 물휴지 0.002% 이하 | 에탄올 함량 높은 제품 |",
+  "explain": "📖 교재 근거 (교재: L2504):\n| 메탄올 | 0.2%(v/v) 이하, 물휴지 0.002% 이하 | 에탄올 함량 높은 제품 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -1148,35 +1148,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_bfc6f9",
-    "conceptId": "L529",
+    "conceptId": "q:subject3_q13",
     "text": "0.2% (v/v) 이하",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_903131",
-    "conceptId": "L529",
+    "conceptId": "q:subject3_q13",
     "text": "0.02% (v/v) 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_913d84",
-    "conceptId": "L529",
+    "conceptId": "q:subject3_q13",
     "text": "0.002% (v/v) 이하",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_b8481a",
-    "conceptId": "L529",
+    "conceptId": "q:subject3_q13",
     "text": "0.5% (v/v) 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ca1f73",
-    "conceptId": "L529",
+    "conceptId": "q:subject3_q13",
     "text": "사용 금지 (검출 한도 음성)",
     "truth": false
    }
@@ -1231,41 +1231,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L3252 (출처: 과목3 문제은행 Q14)",
+  "citation": "📖 교재: L3222 (출처: 과목3 문제은행 Q14)",
   "stem": "다음 중 유통화장품 안전관리 기준상 '프탈레이트류(디부틸프탈레이트 등)'의 총 합계 허용 한도로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_ab46ae",
-    "conceptId": "L3252",
+    "conceptId": "§5.2",
     "text": "10 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_45a65e",
-    "conceptId": "L3252",
+    "conceptId": "§5.2",
     "text": "50 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_5ceb1f",
-    "conceptId": "L3252",
+    "conceptId": "§5.2",
     "text": "100 ㎍/g 이하",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_329417",
-    "conceptId": "L3252",
+    "conceptId": "§5.2",
     "text": "200 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_551e55",
-    "conceptId": "L3252",
+    "conceptId": "§5.2",
     "text": "500 ㎍/g 이하",
     "truth": false
    }
@@ -1317,7 +1317,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q14",
-  "explain": "📖 교재 근거 (교재: L3252):\n• 프탈레이트류 합계 100㎍/g 이하",
+  "explain": "📖 교재 근거 (교재: L3222):\n• 프탈레이트류 합계 100㎍/g 이하",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -1332,35 +1332,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_e52f25",
-    "conceptId": "L531",
+    "conceptId": "q:subject3_q15",
     "text": "1,000개/g(mL) 이하",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_4e576d",
-    "conceptId": "L531",
+    "conceptId": "q:subject3_q15",
     "text": "500개/g(mL) 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e3a98d",
-    "conceptId": "L531",
+    "conceptId": "q:subject3_q15",
     "text": "100개/g(mL) 이하",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e9ea7c",
-    "conceptId": "L531",
+    "conceptId": "q:subject3_q15",
     "text": "5,000개/g(mL) 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_e3e250",
-    "conceptId": "L531",
+    "conceptId": "q:subject3_q15",
     "text": "10,000개/g(mL) 이하",
     "truth": false
    }
@@ -1421,41 +1421,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2150 (출처: 과목3 문제은행 Q16)",
+  "citation": "📖 교재: L2120 (출처: 과목3 문제은행 Q16)",
   "stem": "다음 중 영유아용 제품류 및 눈화장용 제품류의 미생물 총호기성생균수 허용 한도로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_93b6fd",
-    "conceptId": "L2150",
+    "conceptId": "§4.1",
     "text": "500개/g(mL) 이하",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_2cb394",
-    "conceptId": "L2150",
+    "conceptId": "§4.1",
     "text": "100개/g(mL) 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_0ccebc",
-    "conceptId": "L2150",
+    "conceptId": "§4.1",
     "text": "1,000개/g(mL) 이하",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_4829e9",
-    "conceptId": "L2150",
+    "conceptId": "§4.1",
     "text": "2,000개/g(mL) 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_f3ea54",
-    "conceptId": "L2150",
+    "conceptId": "§4.1",
     "text": "5,000개/g(mL) 이하",
     "truth": false
    }
@@ -1504,7 +1504,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q16",
-  "explain": "📖 교재 근거 (교재: L2150):\n| 영유아용 제품류 및 눈화장용 제품류 | 총호기성생균수 500개/g(mL) 이하 |",
+  "explain": "📖 교재 근거 (교재: L2120):\n| 영유아용 제품류 및 눈화장용 제품류 | 총호기성생균수 500개/g(mL) 이하 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -1519,35 +1519,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_cea182",
-    "conceptId": "L1213",
+    "conceptId": "§2.1",
     "text": "사용되는 내용물 또는 원료에 대한 품질성적서를 확인한다",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ae5b84",
-    "conceptId": "L1213",
+    "conceptId": "§2.1",
     "text": "혼합·소분 전 손을 소독하거나 세정한다",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ca3d7a",
-    "conceptId": "L1213",
+    "conceptId": "§2.1",
     "text": "혼합·소분 전 손 소독은 일회용 장갑 착용 시 예외이다",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_667dd9",
-    "conceptId": "L1213",
+    "conceptId": "§2.1",
     "text": "제품 포장용기의 오염 여부를 확인한다",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_99290e",
-    "conceptId": "L1213",
+    "conceptId": "§2.1",
     "text": "사용 전 위생 상태 점검은 생략해도 된다",
     "truth": false
    }
@@ -1602,7 +1602,7 @@ var COMBO_DRILLS_subject3 = [
    "명제판정"
   ],
   "derivedFrom": "subject3_q17",
-  "explain": "📖 교재 근거 (L1213):\n### 3. 혼합·소분 시 위생관리 규정 🎯 기출\n> 해설: 사용 전 위생 상태 점검은 필수이며 생략할 수 없다.",
+  "explain": "📖 교재 근거 (L1183):\n### 3. 혼합·소분 시 위생관리 규정 🎯 기출\n> 해설: 사용 전 위생 상태 점검은 필수이며 생략할 수 없다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -1611,41 +1611,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2342 (출처: 과목3 문제은행 Q18)",
+  "citation": "📖 교재: L2312 (출처: 과목3 문제은행 Q18)",
   "stem": "다음 중 화장품 포장재(부자재)의 위생 및 보관 관리 방법으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_d9b94e",
-    "conceptId": "L2342",
+    "conceptId": "§4.1",
     "text": "포장재는 외부 오염(먼지 등)이 유입되지 않도록 상자 포장 또는 비닐 포장 상태로 보관한다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_805ee2",
-    "conceptId": "L2342",
+    "conceptId": "§4.1",
     "text": "1차 포장재(내용물과 직접 닿는 용기)는 입고 시 미생물 오염 여부를 철저히 검사해야 한다.",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_13e5b4",
-    "conceptId": "L2342",
+    "conceptId": "§4.1",
     "text": "사용하다 남은 자재는 잔량을 명확히 기재하여 재입고 처리한다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_d3e054",
-    "conceptId": "L2342",
+    "conceptId": "§4.1",
     "text": "불합격 판정이 난 포장재는 식별 라벨을 붙여 즉시 적합 포장재와 격리 보관한다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_2230dc",
-    "conceptId": "L2342",
+    "conceptId": "§4.1",
     "text": "포장재 보관소는 습도가 매우 높아도 종이 박스 등이 젖지 않는 한 습도 제어가 필요 없다.",
     "truth": false
    }
@@ -1699,7 +1699,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q18",
-  "explain": "📖 교재 근거 (교재: L2342):\n> - 원료 및 포장재 보관소의 출입 제한",
+  "explain": "📖 교재 근거 (교재: L2312):\n> - 원료 및 포장재 보관소의 출입 제한",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -1708,41 +1708,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2460 (출처: 과목3 문제은행 Q19)",
+  "citation": "📖 교재: L2430 (출처: 과목3 문제은행 Q19)",
   "stem": "다음 중 화장품의 '재작업(Reprocessing)'을 실시할 때 준수해야 하는 기준에 대한 설명으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_52f860",
-    "conceptId": "L2460",
+    "conceptId": "§4.2",
     "text": "품질 검사 부적합이 발생하면 생산 작업자가 임의로 재작업을 시작할 수 있다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_d7ca69",
-    "conceptId": "L2460",
+    "conceptId": "§4.2",
     "text": "재작업은 미리 정해진 규정(재작업 승인 절차 및 방법)에 따라 수행되어야 하며, 최종 품질보증 책임자의 승인을 받아야 한다.",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_a44250",
-    "conceptId": "L2460",
+    "conceptId": "§4.2",
     "text": "재작업을 거친 완제품은 별도의 품질 검사 없이 즉시 출고할 수 있다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_8c906f",
-    "conceptId": "L2460",
+    "conceptId": "§4.2",
     "text": "재작업 대상은 유통 기한이 이미 만료되어 폐기해야 하는 완제품 전체이다.",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_0c39b1",
-    "conceptId": "L2460",
+    "conceptId": "§4.2",
     "text": "재작업 기록서는 별도로 작성할 필요가 없다.",
     "truth": false
    }
@@ -1788,7 +1788,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q19",
-  "explain": "📖 교재 근거 (교재: L2460):\n| 6 | 품질이 확인되고 품질 책임자의 승인을 얻을 수 있을 때까지 재작업품은 다음 공정에 사용할 수 없고 출하할 수 없음 |",
+  "explain": "📖 교재 근거 (교재: L2430):\n| 6 | 품질이 확인되고 품질 책임자의 승인을 얻을 수 있을 때까지 재작업품은 다음 공정에 사용할 수 없고 출하할 수 없음 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -1797,41 +1797,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L3250 (출처: 과목3 문제은행 Q20)",
+  "citation": "📖 교재: L3220 (출처: 과목3 문제은행 Q20)",
   "stem": "다음 중 유통 화장품 안전성 기준에서 '포름알데히드(Formaldehyde)'가 의도적으로 첨가되지 않았으나 제조 과정 중 비의도적으로 검출될 수 있는 최대 허용 한도로 옳은 것을 모두 고른 것은? (단, 물휴지 제외)",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_619ecf",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "100 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_6855ec",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "500 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_087f6f",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "2,000 ㎍/g 이하",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_c4a68a",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "1,000 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_a0ae18",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "5,000 ㎍/g 이하",
     "truth": false
    }
@@ -1882,7 +1882,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q20",
-  "explain": "📖 교재 근거 (교재: L3250):\n• 유해물질: 디옥산 100㎍/g, 메탄올 0.2%(물휴지 0.002%), 포름알데히드 2000㎍/g",
+  "explain": "📖 교재 근거 (교재: L3220):\n• 유해물질: 디옥산 100㎍/g, 메탄올 0.2%(물휴지 0.002%), 포름알데히드 2000㎍/g",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -1891,41 +1891,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1261 (출처: 과목3 문제은행 Q21)",
+  "citation": "📖 교재: L1231 (출처: 과목3 문제은행 Q21)",
   "stem": "다음 중 손 소독제에 대한 설명으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_39b4e9",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "일반 비누로 분류된다",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_541062",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "물이 있어야만 사용할 수 있다",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_b56ada",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "1차 에탄올이 함유되어 세정 효과가 있으며, 의약외품으로 분류된다",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_6954f7",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "화장품으로 분류된다",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_b2a1e9",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등은 손 세정제 성분이다",
     "truth": false
    }
@@ -1974,7 +1974,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q21",
-  "explain": "📖 교재 근거 (교재: L1261):\n| 손 소독제 🎯 기출 | 1차 에탄올이 함유되어 세정 효과가 있음 · 물 없이도 손 소독이 가능하며, 의약외품으로 분류됨 · 알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등 |",
+  "explain": "📖 교재 근거 (교재: L1231):\n| 손 소독제 🎯 기출 | 1차 에탄올이 함유되어 세정 효과가 있음 · 물 없이도 손 소독이 가능하며, 의약외품으로 분류됨 · 알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -1983,41 +1983,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1787 (출처: 과목3 문제은행 Q22)",
+  "citation": "📖 교재: L1757 (출처: 과목3 문제은행 Q22)",
   "stem": "다음 중 화장품 제조소의 '원료 보관실' 위생 관리 및 보관 환경의 기본 원칙으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_24b84d",
-    "conceptId": "L1787",
+    "conceptId": "§3.2",
     "text": "교차 오염 방지를 위해 원료별로 보관 장소를 지정하고 라벨링한다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_9a9d87",
-    "conceptId": "L1787",
+    "conceptId": "§3.2",
     "text": "가연성 액체 원료(에탄올 등)는 일반 원료와 혼합하여 구별 없이 보관한다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_97b039",
-    "conceptId": "L1787",
+    "conceptId": "§3.2",
     "text": "원료의 변질을 방지하기 위해 온도와 습도를 주기적으로 측정하고 기록한다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_1516b8",
-    "conceptId": "L1787",
+    "conceptId": "§3.2",
     "text": "햇빛에 의해 변질되기 쉬운 원료는 차광 용기에 담아 직사광선이 닿지 않는 곳에 보관한다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_bf20dc",
-    "conceptId": "L1787",
+    "conceptId": "§3.2",
     "text": "보관 용기는 사용 후 내용물이 공기 중에 노출되지 않도록 항상 뚜껑을 밀폐한다.",
     "truth": true
    }
@@ -2067,7 +2067,7 @@ var COMBO_DRILLS_subject3 = [
    "기한"
   ],
   "derivedFrom": "subject3_q22",
-  "explain": "📖 교재 근거 (교재: L1787):\n| 탱크 | - 공정 단계 및 완성된 포뮬레이션 과정에서 공정 중 또는 보관용 원료를 저장하기 위해 사용함<br>- 주로 316스테인리스 스틸을 사용하며, 주형 물질 또는 거친 표면은 제품이 뭉치게 되어 화장품에는 추천하지 않음<br>- 미생물학적으로 민감하지 않은 물질이나 제품에는 유리로 안을 댄 강화유리섬유 폴리에스터와 플라스틱으로 안을 댄 탱크를 사용함<br>- 모든 용접, 결합은 가능한 한 매끄럽고 평면이어야 함<br>- 외부 표면의 코팅은 제품에 대해 저항력이 있어야 함 |",
+  "explain": "📖 교재 근거 (교재: L1757):\n| 탱크 | - 공정 단계 및 완성된 포뮬레이션 과정에서 공정 중 또는 보관용 원료를 저장하기 위해 사용함<br>- 주로 316스테인리스 스틸을 사용하며, 주형 물질 또는 거친 표면은 제품이 뭉치게 되어 화장품에는 추천하지 않음<br>- 미생물학적으로 민감하지 않은 물질이나 제품에는 유리로 안을 댄 강화유리섬유 폴리에스터와 플라스틱으로 안을 댄 탱크를 사용함<br>- 모든 용접, 결합은 가능한 한 매끄럽고 평면이어야 함<br>- 외부 표면의 코팅은 제품에 대해 저항력이 있어야 함 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -2082,35 +2082,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_ec78c3",
-    "conceptId": "L475",
+    "conceptId": "§1.1",
     "text": "기계 장비의 작동 속도를 향상시키기 위해",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_3fda2c",
-    "conceptId": "L475",
+    "conceptId": "§1.1",
     "text": "이전 배치 제조 원료나 세척제의 잔류물이 다음 제조 배치에 교차 오염되는 것을 방지하기 위해",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_67b3f2",
-    "conceptId": "L475",
+    "conceptId": "§1.1",
     "text": "기계의 소음을 줄이기 위해",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_3a057e",
-    "conceptId": "L475",
+    "conceptId": "§1.1",
     "text": "세척제의 가격을 절감하기 위해",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_da6426",
-    "conceptId": "L475",
+    "conceptId": "§1.1",
     "text": "작업자의 노동 강도를 줄이기 위해",
     "truth": false
    }
@@ -2162,7 +2162,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q23",
-  "explain": "📖 교재 근거 (L475):\n| 원료 취급 구역 | • 원료보관소와 칭량실은 구획되어야 함<br>• 엎지르거나 흘리는 것을 방지하고, 즉각적으로 치우는 시스템과 절차들이 시행되어 바닥은 깨끗하고 부스러기가 없는 상태를 유지해야 함<br>• 모든 드럼의 윗부분은 이송 전 또는 칭량 구역에서 개봉 전에 검사하고 깨끗하게 해야 하며, 실제 칭량한 원료인 경우를 제외하고 적합하게 뚜껑을 덮어 놓아야 함<br>• 원료의 포장이 훼손된 경우에는 봉인하거나 즉시 별도의 저장조에 보관한 후 품질상의 처분 결정을 위해 격리해야 함 |",
+  "explain": "📖 교재 근거 (L445):\n| 원료 취급 구역 | • 원료보관소와 칭량실은 구획되어야 함<br>• 엎지르거나 흘리는 것을 방지하고, 즉각적으로 치우는 시스템과 절차들이 시행되어 바닥은 깨끗하고 부스러기가 없는 상태를 유지해야 함<br>• 모든 드럼의 윗부분은 이송 전 또는 칭량 구역에서 개봉 전에 검사하고 깨끗하게 해야 하며, 실제 칭량한 원료인 경우를 제외하고 적합하게 뚜껑을 덮어 놓아야 함<br>• 원료의 포장이 훼손된 경우에는 봉인하거나 즉시 별도의 저장조에 보관한 후 품질상의 처분 결정을 위해 격리해야 함 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -2171,41 +2171,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2581 (출처: 과목3 문제은행 Q24)",
+  "citation": "📖 교재: L2548 (출처: 과목3 문제은행 Q24)",
   "stem": "다음 중 화장품 제조에 사용되는 '정제수'의 미생물 관리 기준 및 제조 방법으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_492c6c",
-    "conceptId": "L2581",
+    "conceptId": "§3.2",
     "text": "여과, 이온교환, 증류 등의 물리화학적 방법을 거쳐 미생물과 이온을 제거한다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_433c30",
-    "conceptId": "L2581",
+    "conceptId": "§3.2",
     "text": "정제수 보관 탱크는 내부 결로가 발생하지 않도록 상시 개방하여 공기가 통하게 둔다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ee08b8",
-    "conceptId": "L2581",
+    "conceptId": "§3.2",
     "text": "정제수 내 미생물 번식을 방지하기 위해 정기적으로 자외선(UV) 조사 또는 열소독을 실시한다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_633ccc",
-    "conceptId": "L2581",
+    "conceptId": "§3.2",
     "text": "정제수 제조 시스템은 정체 구역이 없도록 순환식 배관 구조로 설계하는 것이 바람직하다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_9ccbf3",
-    "conceptId": "L2581",
+    "conceptId": "§3.2",
     "text": "제조에 투입되는 정제수는 수시로 미생물 시험을 실시하여 기준 적합 여부를 확인한다.",
     "truth": true
    }
@@ -2258,7 +2258,7 @@ var COMBO_DRILLS_subject3 = [
    "명제판정"
   ],
   "derivedFrom": "subject3_q24",
-  "explain": "📖 교재 근거 (교재: L2581):\n#### 1.6 작업장 및 제조설비\n천연화장품 또는 유기농화장품을 제조하는 작업장 및 제조설비는 교차오염이 발생하지 않도록 충분히 청소 및 세척되어야 한다.",
+  "explain": "📖 교재 근거 (교재: L2548):\n#### 1.6 작업장 및 제조설비\n천연화장품 또는 유기농화장품을 제조하는 작업장 및 제조설비는 교차오염이 발생하지 않도록 충분히 청소 및 세척되어야 한다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -2267,41 +2267,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L439 (출처: 과목3 문제은행 Q25)",
+  "citation": "📖 교재: L409 (출처: 과목3 문제은행 Q25)",
   "stem": "다음 중 화장품 포장 공정 중 '1차 포장' 단계에서 발생하기 가장 쉬운 위해 요인에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_fa20e2",
-    "conceptId": "L439",
+    "conceptId": "§1.1",
     "text": "외부 박스의 찌그러짐",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_dd0a17",
-    "conceptId": "L439",
+    "conceptId": "§1.1",
     "text": "바코드 인쇄 불량",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_b22fd7",
-    "conceptId": "L439",
+    "conceptId": "§1.1",
     "text": "미생물 오염 및 용기 내 이물 혼입",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_12abf5",
-    "conceptId": "L439",
+    "conceptId": "§1.1",
     "text": "유통 박스 라벨의 오기 기재",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_62c773",
-    "conceptId": "L439",
+    "conceptId": "§1.1",
     "text": "가격 스티커의 부착 누락",
     "truth": false
    }
@@ -2353,7 +2353,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q25",
-  "explain": "📖 교재 근거 (교재: L439):\n| CGMP 3대 요소 | • 인위적인 과오의 최소화<br>• 미생물오염 및 교차오염으로 인한 품질저하 방지<br>• 고도의 품질관리체계 확립 |",
+  "explain": "📖 교재 근거 (교재: L409):\n| CGMP 3대 요소 | • 인위적인 과오의 최소화<br>• 미생물오염 및 교차오염으로 인한 품질저하 방지<br>• 고도의 품질관리체계 확립 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -2362,41 +2362,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2144 (출처: 과목3 문제은행 Q26)",
+  "citation": "📖 교재: L2114 (출처: 과목3 문제은행 Q26)",
   "stem": "다음 중 화장품 제조업소의 '화장품 원료 보관 기한'이 경과한 원료에 대한 조치 방법으로 가장 적합한 것은?으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_6543a2",
-    "conceptId": "L2144",
+    "conceptId": "§4.1",
     "text": "보관 기한 경과 원료는 품질 재평가(재시험) 시스템을 통해 적합 여부를 확인한 후 사용 연장 여부를 결정한다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_61a8b4",
-    "conceptId": "L2144",
+    "conceptId": "§4.1",
     "text": "경과 즉시 품질 검사 없이 전량 폐기한다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_a2a436",
-    "conceptId": "L2144",
+    "conceptId": "§4.1",
     "text": "보관 기한이 지나도 외관상 이상이 없으면 그대로 생산에 사용한다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_6d6fb1",
-    "conceptId": "L2144",
+    "conceptId": "§4.1",
     "text": "사용 기한이 지난 원료는 2배의 보존제를 첨가하여 사용한다.",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ab03bd",
-    "conceptId": "L2144",
+    "conceptId": "§4.1",
     "text": "무조건 반품 처리한다.",
     "truth": false
    }
@@ -2444,7 +2444,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q26",
-  "explain": "📖 교재 근거 (교재: L2144):\n② 사용할 수 없는 원료로 고시된 원료가 ①의 내용과 같이 비의도적으로 검출되었으나 검출 허용한도가 명시되지 않은 경우, 위해 평가를 진행하여 위해 여부를 확인한다.",
+  "explain": "📖 교재 근거 (교재: L2114):\n② 사용할 수 없는 원료로 고시된 원료가 ①의 내용과 같이 비의도적으로 검출되었으나 검출 허용한도가 명시되지 않은 경우, 위해 평가를 진행하여 위해 여부를 확인한다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -2453,41 +2453,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1791 (출처: 과목3 문제은행 Q27)",
+  "citation": "📖 교재: L1761 (출처: 과목3 문제은행 Q27)",
   "stem": "다음 중 화장품 완제품의 '출하 검사' 항목에 해당하지 않는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_c94b4d",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "원료의 구매 원가 확인",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_42596e",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "중금속 한도 시험",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_1f2d6b",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "미생물 한도 시험",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_586477",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "성상, 색상, 향취 등의 관능 검사",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_05ba7e",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "pH 및 내용량 측정",
     "truth": false
    }
@@ -2535,7 +2535,7 @@ var COMBO_DRILLS_subject3 = [
    "한도"
   ],
   "derivedFrom": "subject3_q27",
-  "explain": "📖 교재 근거 (교재: L1791):\n| 필터, 여과기, 체 | - 화장품 원료와 완제품의 입자 크기를 작게 하고, 덩어리 모양을 깨고, 불순물을 제거하기 위해 사용<br>- 스테인리스 스틸과 비반응성 섬유이며, 316스테인리스는 제품 제조 시 선호 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1761):\n| 필터, 여과기, 체 | - 화장품 원료와 완제품의 입자 크기를 작게 하고, 덩어리 모양을 깨고, 불순물을 제거하기 위해 사용<br>- 스테인리스 스틸과 비반응성 섬유이며, 316스테인리스는 제품 제조 시 선호 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -2544,41 +2544,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L476 (출처: 과목3 문제은행 Q28)",
+  "citation": "📖 교재: L446 (출처: 과목3 문제은행 Q28)",
   "stem": "다음 중 완제품 보관 창고의 위생 및 정돈 상태으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_c10f41",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "제품 박스는 규격별로 정렬하여 통로를 확보한다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_def43c",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "외부 먼지와 해충의 유입을 막기 위해 창고 문은 항상 열어둔다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_1ed971",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "선입선출이 용이하도록 제조번호별로 적재한다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_899558",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "출하 대기 중인 완제품과 부적합 완제품은 물리적으로 격리 보관한다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_1ede3b",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "바닥 청소를 주기적으로 실시하고 방충 장비(포충등 등)의 작동 여부를 점검한다.",
     "truth": true
    }
@@ -2626,7 +2626,7 @@ var COMBO_DRILLS_subject3 = [
    "기한"
   ],
   "derivedFrom": "subject3_q28",
-  "explain": "📖 교재 근거 (교재: L476):\n| 제조 구역 | • 모든 도구와 기구는 청소 및 위생 처리 후 정해진 지역에 정돈 방법에 따라 보관하고, 호스는 사용 후 완전히 건조시켜 바닥에 닿지 않도록 정리하여 보관해야 함<br>• 제조 구역에서 흘린 것은 신속히 청소하고, 폐기물(여과지, 개스킷, 폐지, 플라스틱 봉지)은 주기적으로 버려 장기간 모아놓거나 쌓아두지 않아야 함<br>• 표면은 청소하기 용이한 재질로 설계되어야 하며, 탱크의 바깥 면들은 정기적으로 청소하고, 모든 배관이 사용될 수 있도록 우수한 정비 상태로 유지해야 함<br>• 페인트를 칠한 지역은 우수한 정비 상태로 유지되어야 하며, 벗겨진 칠은 보수되어야 함 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L446):\n| 제조 구역 | • 모든 도구와 기구는 청소 및 위생 처리 후 정해진 지역에 정돈 방법에 따라 보관하고, 호스는 사용 후 완전히 건조시켜 바닥에 닿지 않도록 정리하여 보관해야 함<br>• 제조 구역에서 흘린 것은 신속히 청소하고, 폐기물(여과지, 개스킷, 폐지, 플라스틱 봉지)은 주기적으로 버려 장기간 모아놓거나 쌓아두지 않아야 함<br>• 표면은 청소하기 용이한 재질로 설계되어야 하며, 탱크의 바깥 면들은 정기적으로 청소하고, 모든 배관이 사용될 수 있도록 우수한 정비 상태로 유지해야 함<br>• 페인트를 칠한 지역은 우수한 정비 상태로 유지되어야 하며, 벗겨진 칠은 보수되어야 함 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -2635,41 +2635,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2910 (출처: 과목3 문제은행 Q29)",
+  "citation": "📖 교재: L2880 (출처: 과목3 문제은행 Q29)",
   "stem": "다음 중 화장품 제조 설비 중 '비이커, 호모믹서' 등의 금속 표면 소독에 가장 많이 쓰이는 살균제에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_f1f865",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "식초산",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_408bf9",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "염산",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_0d1db7",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "수산화나트륨용액",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_d6c796",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "메탄올",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_38364a",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "70% 에탄올",
     "truth": true
    }
@@ -2719,7 +2719,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q29",
-  "explain": "📖 교재 근거 (교재: L2910):\n| 크로스컷트시험 🎯 기출 | 화장품 용기의 포장재료인 유리, 금속, 플라스틱의 유·무기 코팅막 및 도금의 밀착력 측정 / 규정된 점착테이프와 압착 장치를 이용하여 코팅막, 도금의 박리 여부를 확인 내어 압착 및 방치한 후 떼어냄 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L2880):\n| 크로스컷트시험 🎯 기출 | 화장품 용기의 포장재료인 유리, 금속, 플라스틱의 유·무기 코팅막 및 도금의 밀착력 측정 / 규정된 점착테이프와 압착 장치를 이용하여 코팅막, 도금의 박리 여부를 확인 내어 압착 및 방치한 후 떼어냄 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -2728,41 +2728,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2533 (출처: 과목3 문제은행 Q30)",
+  "citation": "📖 교재: L2503 (출처: 과목3 문제은행 Q30)",
   "stem": "다음 중 유통화장품의 비의도적 유해 물질인 '디옥산(Dioxane)'이 발생하는 주요 원인으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_9e77b8",
-    "conceptId": "L2533",
+    "conceptId": "§4.2",
     "text": "중금속 오염된 용기를 사용해서",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_3f6156",
-    "conceptId": "L2533",
+    "conceptId": "§4.2",
     "text": "계면활성제 등 원료 합성 과정(에틸렌옥사이드 부가 반응)에서 비의도적으로 생성되어 잔류해서",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_75cfd9",
-    "conceptId": "L2533",
+    "conceptId": "§4.2",
     "text": "정제수 필터의 성능이 저하되어서",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_4227b4",
-    "conceptId": "L2533",
+    "conceptId": "§4.2",
     "text": "작업자의 개인위생 불량 때문에",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_a99b6b",
-    "conceptId": "L2533",
+    "conceptId": "§4.2",
     "text": "보존제를 과량 사용하여 합성되어서",
     "truth": false
    }
@@ -2814,7 +2814,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q30",
-  "explain": "📖 교재 근거 (교재: L2533):\n| 디옥산 | 100μg/g 이하 | 계면활성제 사용 제품 |",
+  "explain": "📖 교재 근거 (교재: L2503):\n| 디옥산 | 100μg/g 이하 | 계면활성제 사용 제품 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -2823,41 +2823,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2297 (출처: 과목3 문제은행 Q31)",
+  "citation": "📖 교재: L2267 (출처: 과목3 문제은행 Q31)",
   "stem": "다음 중 화장품 완제품의 '품질 관리 성적서'에 반드시 기재해야 하는 사항이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_cb89e8",
-    "conceptId": "L2297",
+    "conceptId": "§4.1",
     "text": "제조에 투입된 설비의 감가상각비",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_3dcc7d",
-    "conceptId": "L2297",
+    "conceptId": "§4.1",
     "text": "제조번호 및 제조일자",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_2ab8f2",
-    "conceptId": "L2297",
+    "conceptId": "§4.1",
     "text": "판정 결과 및 판정 일자",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_7b6f65",
-    "conceptId": "L2297",
+    "conceptId": "§4.1",
     "text": "시험 항목별 기준치 및 실측값",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_a029b0",
-    "conceptId": "L2297",
+    "conceptId": "§4.1",
     "text": "제품명",
     "truth": false
    }
@@ -2907,7 +2907,7 @@ var COMBO_DRILLS_subject3 = [
    "기한"
   ],
   "derivedFrom": "subject3_q31",
-  "explain": "📖 교재 근거 (교재: L2297):\n- 화장품책임판매업자는 이 안전 기준과 관련한 모든 기준, 기록 및 성적서에 관한 서류를 받아 완제품의 제조연월일로부터 3년이 경과한 날까지 보존하여야 한다.",
+  "explain": "📖 교재 근거 (교재: L2267):\n- 화장품책임판매업자는 이 안전 기준과 관련한 모든 기준, 기록 및 성적서에 관한 서류를 받아 완제품의 제조연월일로부터 3년이 경과한 날까지 보존하여야 한다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -2922,35 +2922,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_12c3cd",
-    "conceptId": "L422",
+    "conceptId": "q:subject3_q32",
     "text": "부작용 정보 수집 및 보고 절차",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_6b8ebf",
-    "conceptId": "L422",
+    "conceptId": "q:subject3_q32",
     "text": "안전성 정보 분석 및 평가 방법",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_1c4ee5",
-    "conceptId": "L422",
+    "conceptId": "q:subject3_q32",
     "text": "제품의 신속한 회수 및 폐기 절차",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_52fe58",
-    "conceptId": "L422",
+    "conceptId": "q:subject3_q32",
     "text": "대리점별 판매 수수료율 결정",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_335e07",
-    "conceptId": "L422",
+    "conceptId": "q:subject3_q32",
     "text": "안전성 정보 관련 기록의 보존 기간",
     "truth": false
    }
@@ -3018,35 +3018,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_e80662",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q33",
     "text": "작업장 내부의 적절한 온도 및 습도 유지",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_93fd55",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q33",
     "text": "헤파필터(HEPA Filter) 등을 통한 미세 먼지 및 미생물 여과",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_bdbcc7",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q33",
     "text": "실내 기압 조절을 통한 차압 형성(교차 오염 방지)",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_fbd724",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q33",
     "text": "외부 공기의 정화 유입 및 실내 공기의 순환 배기",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ca098e",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q33",
     "text": "작업소 내 가스 누출 시 자동 소화 기능 수행",
     "truth": true
    }
@@ -3109,41 +3109,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L474 (출처: 과목3 문제은행 Q34)",
+  "citation": "📖 교재: L444 (출처: 과목3 문제은행 Q34)",
   "stem": "다음 중 화장품 제조소의 '폐기물 관리' 방법으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_3329e6",
-    "conceptId": "L474",
+    "conceptId": "§1.1",
     "text": "부적합 판정이 난 원료 및 완제품은 격리하여 폐기 대기 표식을 부착한다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_06fde7",
-    "conceptId": "L474",
+    "conceptId": "§1.1",
     "text": "폐기물은 지정된 폐기물 용기에 담아 정기적으로 배출한다.",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_8a59c7",
-    "conceptId": "L474",
+    "conceptId": "§1.1",
     "text": "생분해되지 않는 플라스틱 및 중금속 폐기물은 일반 생활 쓰레기와 함께 합쳐서 버린다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_7bf18d",
-    "conceptId": "L474",
+    "conceptId": "§1.1",
     "text": "폐기 처리는 관련 환경 법령에 따라 등록된 전문 업체를 통해 적법하게 처리한다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_8f1572",
-    "conceptId": "L474",
+    "conceptId": "§1.1",
     "text": "폐기 처리 결과는 기록(폐기 보고서 등)을 작성하여 보존한다.",
     "truth": true
    }
@@ -3194,7 +3194,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q34",
-  "explain": "📖 교재 근거 (교재: L474):\n| 보관 구역 | • 통로는 사람과 물건이 이동하는 구역으로 사람과 물건의 이동에 불편함을 초래하거나 교차오염의 위험이 없어야 함<br>• 손상된 팔레트는 수거하여 수리 또는 폐기함<br>• 매일 바닥의 폐기물을 치워야 함<br>• 동물이나 해충이 침입하기 쉬운 환경은 개선되어야 함<br>• 용기(저장조 등)들은 닫아서 깨끗하고 정돈된 방법으로 보관해야 함 |",
+  "explain": "📖 교재 근거 (교재: L444):\n| 보관 구역 | • 통로는 사람과 물건이 이동하는 구역으로 사람과 물건의 이동에 불편함을 초래하거나 교차오염의 위험이 없어야 함<br>• 손상된 팔레트는 수거하여 수리 또는 폐기함<br>• 매일 바닥의 폐기물을 치워야 함<br>• 동물이나 해충이 침입하기 쉬운 환경은 개선되어야 함<br>• 용기(저장조 등)들은 닫아서 깨끗하고 정돈된 방법으로 보관해야 함 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -3304,35 +3304,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_1f7eaa",
-    "conceptId": "L276",
+    "conceptId": "q:subject3_q36",
     "text": "작업원의 건강검진 및 위생 수칙",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_fd6588",
-    "conceptId": "L276",
+    "conceptId": "q:subject3_q36",
     "text": "작업장 청소 및 소독 방법",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_f8eca8",
-    "conceptId": "L276",
+    "conceptId": "q:subject3_q36",
     "text": "설비 및 기구의 세척 및 보존 방법",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_5dd605",
-    "conceptId": "L276",
+    "conceptId": "q:subject3_q36",
     "text": "제조 공정 중 반제품의 물리적 이송 파이프 라인 설계 도면 (설비 사양서 항목)",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_39fcac",
-    "conceptId": "L276",
+    "conceptId": "q:subject3_q36",
     "text": "방충 및 방서 대책",
     "truth": false
    }
@@ -3394,41 +3394,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1779 (출처: 과목3 문제은행 Q37)",
+  "citation": "📖 교재: L1780 (출처: 과목3 문제은행 Q37)",
   "stem": "다음 중 작업자의 머리카락이나 비듬이 화장품 내용물에 탈락하는 것을 방지하기 위해 착용하는 위생 보호구에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_928825",
-    "conceptId": "L1779",
+    "conceptId": "§2.2",
     "text": "방진 장갑",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_e983fb",
-    "conceptId": "L1779",
+    "conceptId": "§2.2",
     "text": "마스크",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_68a5bc",
-    "conceptId": "L1779",
+    "conceptId": "§2.2",
     "text": "방진 안경",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e723c9",
-    "conceptId": "L1779",
+    "conceptId": "§2.2",
     "text": "위생화",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_11ae94",
-    "conceptId": "L1779",
+    "conceptId": "§2.2",
     "text": "위생모 (머리덮개)",
     "truth": true
    }
@@ -3472,7 +3472,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q37",
-  "explain": "📖 교재 근거 (교재: L1779):\n> 해설: 실험실 복장 예시는 실험복과 슬리퍼이다. 제조실·칭량실·충전실·포장실은 작업모, 보호안경(필요 시), 마스크(필요 시), 작업복(상하의), 작업화(안전화)를 착용한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1780):\n> 해설: 실험실 복장 예시는 실험복과 슬리퍼이다. 제조실·칭량실·충전실·포장실은 작업모, 보호안경(필요 시), 마스크(필요 시), 작업복(상하의), 작업화(안전화)를 착용한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -3487,35 +3487,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_f58c42",
-    "conceptId": "L757",
+    "conceptId": "q:subject3_q38",
     "text": "사용하는 세척제의 종류 및 농도",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_8e2e57",
-    "conceptId": "L757",
+    "conceptId": "q:subject3_q38",
     "text": "세척 시 물의 온도 및 세척 시간",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_bda46e",
-    "conceptId": "L757",
+    "conceptId": "q:subject3_q38",
     "text": "세척 기구(솔, 고압분사기 등)의 사용법",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_b1b0b1",
-    "conceptId": "L757",
+    "conceptId": "q:subject3_q38",
     "text": "기계를 세척하는 작업자의 월급 기준",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_71a5da",
-    "conceptId": "L757",
+    "conceptId": "q:subject3_q38",
     "text": "세척 후 헹굼 수질 기준",
     "truth": false
    }
@@ -3574,41 +3574,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1787 (출처: 과목3 문제은행 Q39)",
+  "citation": "📖 교재: L1757 (출처: 과목3 문제은행 Q39)",
   "stem": "다음 중 화장품 보관 창고에 설치되어 외부 해충이나 나방 등이 빛을 보고 유인되어 포획되도록 돕는 위생 설비에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_a67bf5",
-    "conceptId": "L1787",
+    "conceptId": "§3.2",
     "text": "포충등 (흡입식 또는 점착식 해충 포획기)",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_3802bc",
-    "conceptId": "L1787",
+    "conceptId": "§3.2",
     "text": "에어샤워",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_a14d31",
-    "conceptId": "L1787",
+    "conceptId": "§3.2",
     "text": "온습도 조절기",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_74107f",
-    "conceptId": "L1787",
+    "conceptId": "§3.2",
     "text": "에어커튼",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_44a07d",
-    "conceptId": "L1787",
+    "conceptId": "§3.2",
     "text": "피뢰침",
     "truth": false
    }
@@ -3659,7 +3659,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q39",
-  "explain": "📖 교재 근거 (교재: L1787):\n| 탱크 | - 공정 단계 및 완성된 포뮬레이션 과정에서 공정 중 또는 보관용 원료를 저장하기 위해 사용함<br>- 주로 316스테인리스 스틸을 사용하며, 주형 물질 또는 거친 표면은 제품이 뭉치게 되어 화장품에는 추천하지 않음<br>- 미생물학적으로 민감하지 않은 물질이나 제품에는 유리로 안을 댄 강화유리섬유 폴리에스터와 플라스틱으로 안을 댄 탱크를 사용함<br>- 모든 용접, 결합은 가능한 한 매끄럽고 평면이어야 함<br>- 외부 표면의 코팅은 제품에 대해 저항력이 있어야 함 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1757):\n| 탱크 | - 공정 단계 및 완성된 포뮬레이션 과정에서 공정 중 또는 보관용 원료를 저장하기 위해 사용함<br>- 주로 316스테인리스 스틸을 사용하며, 주형 물질 또는 거친 표면은 제품이 뭉치게 되어 화장품에는 추천하지 않음<br>- 미생물학적으로 민감하지 않은 물질이나 제품에는 유리로 안을 댄 강화유리섬유 폴리에스터와 플라스틱으로 안을 댄 탱크를 사용함<br>- 모든 용접, 결합은 가능한 한 매끄럽고 평면이어야 함<br>- 외부 표면의 코팅은 제품에 대해 저항력이 있어야 함 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -3668,41 +3668,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2788 (출처: 과목3 문제은행 Q40)",
+  "citation": "📖 교재: L2758 (출처: 과목3 문제은행 Q40)",
   "stem": "다음 중 유통화장품의 미생물 오염 방지를 위해 완제품 용기 실링(Sealing) 검사 시 확인하는 주요 항목에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_16fdbe",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "용기의 인쇄 디자인 오차",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ce6a42",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "제품 단상자의 종이 규격",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_06be63",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "용기의 플라스틱 두께",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_c34d10",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "바코드의 색상 선명도",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_e2cea3",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "캡의 체결 상태 및 실링지의 완전 밀착 여부",
     "truth": true
    }
@@ -3749,7 +3749,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q40",
-  "explain": "📖 교재 근거 (교재: L2788):\n① 화장품의 제조와 포장에 사용되는 모든 원료 및 포장재의 부적절하고 위험한 사용, 혼합 또는 오염을 방지하기 위해 해당 물질의 검증·확인·취급 및 사용을 보장할 수 있도록 절차가 수립되어 외부로부터 공급된 원료 및 포장재는 규정된 완제품 품질합격 판정 기준을 충족시켜야 한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L2758):\n① 화장품의 제조와 포장에 사용되는 모든 원료 및 포장재의 부적절하고 위험한 사용, 혼합 또는 오염을 방지하기 위해 해당 물질의 검증·확인·취급 및 사용을 보장할 수 있도록 절차가 수립되어 외부로부터 공급된 원료 및 포장재는 규정된 완제품 품질합격 판정 기준을 충족시켜야 한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -3758,41 +3758,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L525 (출처: 과목3 문제은행 Q41)",
+  "citation": "📖 교재: L495 (출처: 과목3 문제은행 Q41)",
   "stem": "다음 중 CGMP 기준상 공기조화 장치(HVAC)에 설치되는 필터 중 0.3㎛ 크기의 미세 먼지를 99.97% 이상 여과할 수 있어 최고 청정구역(1등급)에 의무 사용되는 필터의 종류에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_8bc7c6",
-    "conceptId": "L525",
+    "conceptId": "§1.1",
     "text": "프리필터 (Pre-Filter)",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_1a5cb3",
-    "conceptId": "L525",
+    "conceptId": "§1.1",
     "text": "미디움필터 (Medium-Filter)",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_7ab7ba",
-    "conceptId": "L525",
+    "conceptId": "§1.1",
     "text": "활성탄필터",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e699f8",
-    "conceptId": "L525",
+    "conceptId": "§1.1",
     "text": "헤파필터 (HEPA-Filter)",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_03eae3",
-    "conceptId": "L525",
+    "conceptId": "§1.1",
     "text": "울파필터 (ULPA-Filter, 다만 과도한 성능으로 일반 CGMP에는 HEPA가 표준임)",
     "truth": false
    }
@@ -3845,7 +3845,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q41",
-  "explain": "📖 교재 근거 (교재: L525):\n| H/F (HEPA Filter) | • High Efficiency Particulate Air Filter<br>• 0.3㎛의 분진 99.97% 제거<br>• Media: Glass Fiber<br>• 반도체 공장, 병원, 의약품, 식품 공장 등 사용<br>• 압력 손실: 24mmAq 이하<br>• 필터 입자: 0.3㎛ |",
+  "explain": "📖 교재 근거 (교재: L495):\n| H/F (HEPA Filter) | • High Efficiency Particulate Air Filter<br>• 0.3㎛의 분진 99.97% 제거<br>• Media: Glass Fiber<br>• 반도체 공장, 병원, 의약품, 식품 공장 등 사용<br>• 압력 손실: 24mmAq 이하<br>• 필터 입자: 0.3㎛ |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -3854,41 +3854,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L831 (출처: 과목3 문제은행 Q42)",
+  "citation": "📖 교재: L801 (출처: 과목3 문제은행 Q42)",
   "stem": "다음 중 작업장 소독에 널리 사용되는 '차아염소산나트륨(소듐하이포클로라이트)'에 대한 설명으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_be83e1",
-    "conceptId": "L831",
+    "conceptId": "§1.3",
     "text": "빛과 열에 안정적이므로 투명한 무색 투명 플라스틱 용기에 보관해야 한다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_c622f5",
-    "conceptId": "L831",
+    "conceptId": "§1.3",
     "text": "금속 표면에 직접 다량 살포하면 금속을 부식시킬 위험이 매우 높다.",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_9d1798",
-    "conceptId": "L831",
+    "conceptId": "§1.3",
     "text": "산성 소독제 및 식초 등과 혼합하면 유독한 염소가스가 발생하므로 절대 혼합 금지이다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_a71c77",
-    "conceptId": "L831",
+    "conceptId": "§1.3",
     "text": "강한 산화력을 가져 유기물 분해 및 살균력이 매우 뛰어나다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_f4c2de",
-    "conceptId": "L831",
+    "conceptId": "§1.3",
     "text": "희석하여 사용할 때 눈과 피부에 닿지 않도록 방호장구를 착용해야 한다.",
     "truth": true
    }
@@ -3941,7 +3941,7 @@ var COMBO_DRILLS_subject3 = [
    "금지원료"
   ],
   "derivedFrom": "subject3_q42",
-  "explain": "📖 교재 근거 (교재: L831):\n| 차아염소산나트륨액 | • 50ppm 락스<br>• 당일 조제하여 사용 후 전량 폐기<br>• 장점: 강한 살균력, 경제적<br>• 단점: 냄새가 강하고, 잔류성 및 부식성이 있음 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L801):\n| 차아염소산나트륨액 | • 50ppm 락스<br>• 당일 조제하여 사용 후 전량 폐기<br>• 장점: 강한 살균력, 경제적<br>• 단점: 냄새가 강하고, 잔류성 및 부식성이 있음 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -3956,35 +3956,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_db770f",
-    "conceptId": "L141",
+    "conceptId": "q:subject3_q43",
     "text": "결핵 (전염성이 있는 경우)",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_1d5e4f",
-    "conceptId": "L141",
+    "conceptId": "q:subject3_q43",
     "text": "전염성 피부 질환 (습진, 짓무름 등)",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_9f8280",
-    "conceptId": "L141",
+    "conceptId": "q:subject3_q43",
     "text": "콜레라 등 제1급 법정 감염병",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_da6dc8",
-    "conceptId": "L141",
+    "conceptId": "q:subject3_q43",
     "text": "화농성 상처가 손에 있는 경우",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_bc9fb7",
-    "conceptId": "L141",
+    "conceptId": "q:subject3_q43",
     "text": "가벼운 근시 또는 노안",
     "truth": true
    }
@@ -4043,41 +4043,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1684 (출처: 과목3 문제은행 Q44)",
+  "citation": "📖 교재: L1654 (출처: 과목3 문제은행 Q44)",
   "stem": "다음 중 제조 설비 세척 후 잔류물을 검출하기 위한 '헹굼액법(Rinsing Method)'의 특징으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_94b95f",
-    "conceptId": "L1684",
+    "conceptId": "§3.1",
     "text": "복잡하고 좁은 파이프라인이나 노즐 내부의 잔류물 채취에 적합하다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_c81fe5",
-    "conceptId": "L1684",
+    "conceptId": "§3.1",
     "text": "기계 표면을 면봉으로 물리적으로 직접 문질러 수집하는 방법이다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_b24ba9",
-    "conceptId": "L1684",
+    "conceptId": "§3.1",
     "text": "세척제가 전혀 닿지 않은 깨끗한 건조 면봉으로만 닦아내야 한다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_0ad010",
-    "conceptId": "L1684",
+    "conceptId": "§3.1",
     "text": "분석 감도가 스왑법에 비해 언제나 10배 이상 높다.",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_abd2f1",
-    "conceptId": "L1684",
+    "conceptId": "§3.1",
     "text": "설비 표면의 기하학적 굴곡과 상관없이 표면 오염을 직접 닦아낼 수 있다.",
     "truth": false
    }
@@ -4127,7 +4127,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q44",
-  "explain": "📖 교재 근거 (교재: L1684):\n| 닦아내기 판정 | 흰 천이나 검은 천으로 설비 내부의 표면을 닦아내고, 천 표면의 잔류물 유무로 세척 결과 판정 (천은 무진포가 선호됨) |",
+  "explain": "📖 교재 근거 (교재: L1654):\n| 닦아내기 판정 | 흰 천이나 검은 천으로 설비 내부의 표면을 닦아내고, 천 표면의 잔류물 유무로 세척 결과 판정 (천은 무진포가 선호됨) |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -4142,35 +4142,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_39746d",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q45",
     "text": "1 ㎍/g 이하, pH 미터",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_b7e6b8",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q45",
     "text": "20 ㎍/g 이하, 가스크로마토그래피(GC)",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_12f283",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q45",
     "text": "50 ㎍/g 이하, 점도계",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_80689c",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q45",
     "text": "10 ㎍/g 이하, 원자흡광광도계(AAS) 또는 ICP-MS",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_96b265",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q45",
     "text": "5 ㎍/g 이하, 굴절계",
     "truth": false
    }
@@ -4230,41 +4230,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L891 (출처: 과목3 문제은행 Q46)",
+  "citation": "📖 교재: L861 (출처: 과목3 문제은행 Q46)",
   "stem": "다음 중 화장품 원자재 및 완제품 보관 시 '선입선출(FIFO)' 관리가 물리적으로 불가능하거나 제한되는 특이 상황으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_392186",
-    "conceptId": "L891",
+    "conceptId": "§1.3",
     "text": "원료의 수입 국가가 변경된 경우",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_441d00",
-    "conceptId": "L891",
+    "conceptId": "§1.3",
     "text": "제품 포장 케이스의 디자인이 약간 바뀐 경우",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_0d2354",
-    "conceptId": "L891",
+    "conceptId": "§1.3",
     "text": "창고 담당자가 교체된 경우",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_87beca",
-    "conceptId": "L891",
+    "conceptId": "§1.3",
     "text": "제품의 가격이 인상된 경우",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_7b5480",
-    "conceptId": "L891",
+    "conceptId": "§1.3",
     "text": "동일 원료이나 먼저 입고된 배치의 품질 시험 결과 부적합 판정이 나서 재시험 중인 경우 (이 경우 부적합/보류이므로 선출고 불가)",
     "truth": true
    }
@@ -4315,7 +4315,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q46",
-  "explain": "📖 교재 근거 (교재: L891):\n| 작업장별 소독 방법 - 칭량실 | • 관련 직원 이외의 출입을 통제하고 소독을 실시<br>• 칭량실, 제조실, 반제품 보관소, 세척실, 충전, 포장실, 원료 보관소, 원자재 보관소, 완제품 보관소 등으로 구분하여 소독방법 및 주기를 달리 함 |",
+  "explain": "📖 교재 근거 (교재: L861):\n| 작업장별 소독 방법 - 칭량실 | • 관련 직원 이외의 출입을 통제하고 소독을 실시<br>• 칭량실, 제조실, 반제품 보관소, 세척실, 충전, 포장실, 원료 보관소, 원자재 보관소, 완제품 보관소 등으로 구분하여 소독방법 및 주기를 달리 함 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -4421,35 +4421,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_31ac7c",
-    "conceptId": "L123",
+    "conceptId": "q:subject3_q48",
     "text": "화장품의 사용으로 인하여 사망 등 매우 심각한 부작용을 유발하는 경우",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_0d8d75",
-    "conceptId": "L123",
+    "conceptId": "q:subject3_q48",
     "text": "비의도적으로 검출 한도를 미세하게 초과한 포름알데히드가 검출된 경우",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ddafb1",
-    "conceptId": "L123",
+    "conceptId": "q:subject3_q48",
     "text": "전성분 표시 중 오탈자나 주소 표기 누락이 있는 경우",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_03800f",
-    "conceptId": "L123",
+    "conceptId": "q:subject3_q48",
     "text": "기능성화장품 보고서가 1일 늦게 제출된 경우",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_39d1f8",
-    "conceptId": "L123",
+    "conceptId": "q:subject3_q48",
     "text": "화장품에 유해 물질인 '납'이 100 ㎍/g 이상 대량 검출되어 장기 사용 시 심각한 축적 독성이 우려되는 경우 (이는 가등급에 준함)",
     "truth": false
    }
@@ -4511,41 +4511,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1803 (출처: 과목3 문제은행 Q49)",
+  "citation": "📖 교재: L1779 (출처: 과목3 문제은행 Q49)",
   "stem": "다음 중 완제품 보관실 내 '부적합품 보관 구역'의 관리 기준으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_6c2f19",
-    "conceptId": "L1803",
+    "conceptId": "§2.1",
     "text": "적합품 적재대 구석에 라벨링 없이 같이 섞어 보관한다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_dee1a3",
-    "conceptId": "L1803",
+    "conceptId": "§2.1",
     "text": "출하 승인 라벨(녹색)을 덮어씌워 출하대기실로 옮긴다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_300813",
-    "conceptId": "L1803",
+    "conceptId": "§2.1",
     "text": "임의로 다른 멀쩡한 완제품 박스 사이에 끼워 숨겨 보관한다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_73c2f0",
-    "conceptId": "L1803",
+    "conceptId": "§2.1",
     "text": "식별이 용이한 적색 라벨을 붙이고 다른 제품과 오출고되지 않도록 물리적으로 명확히 구획 및 격리하여 보관한다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_debc20",
-    "conceptId": "L1803",
+    "conceptId": "§2.1",
     "text": "폐기 대기 상태라도 품질 책임자 승인 없이 생산라인에 재투입한다.",
     "truth": false
    }
@@ -4591,7 +4591,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q49",
-  "explain": "📖 교재 근거 (교재: L1803):\n#### 3.2 고객 데이터가 손상되지 않도록 물리적 보호 및 해킹 방어 프로그램, 백신 프로그램을 주기적으로 백업하고 점검해야 한다.",
+  "explain": "📖 교재 근거 (교재: L1779):\n#### 3.2 고객 데이터가 손상되지 않도록 물리적 보호 및 해킹 방어 프로그램, 백신 프로그램을 주기적으로 백업하고 점검해야 한다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -4600,41 +4600,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L3428 (출처: 과목3 문제은행 Q50)",
+  "citation": "📖 교재: L3396 (출처: 과목3 문제은행 Q50)",
   "stem": "위해성 등급이 '가등급'인 위해화장품의 회수 실시기간은 회수를 시작한 날부터 며칠 이내인가? — 해당하는 것을 모두 고르시오.",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_1ab046",
-    "conceptId": "L3428",
+    "conceptId": "§5.1",
     "text": "3일 이내",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_374ad2",
-    "conceptId": "L3428",
+    "conceptId": "§5.1",
     "text": "15일 이내",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_83d20e",
-    "conceptId": "L3428",
+    "conceptId": "§5.1",
     "text": "7일 이내",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_425d03",
-    "conceptId": "L3428",
+    "conceptId": "§5.1",
     "text": "30일 이내",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_7295f5",
-    "conceptId": "L3428",
+    "conceptId": "§5.1",
     "text": "90일 이내",
     "truth": false
    }
@@ -4683,7 +4683,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q50",
-  "explain": "📖 교재 근거 (교재: L3428):\n| 가등급 (회수 기한) | 회수를 시작한 날부터 15일 이내 회수되어야 함 |",
+  "explain": "📖 교재 근거 (교재: L3396):\n| 가등급 (회수 기한) | 회수를 시작한 날부터 15일 이내 회수되어야 함 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -4692,41 +4692,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2129 (출처: 과목3 문제은행 Q51)",
+  "citation": "📖 교재: L2099 (출처: 과목3 문제은행 Q51)",
   "stem": "다음 중 화장품의 비의도적 유해 물질인 디옥산(Dioxane)의 검출 한도 수치와 주 발생 원인에 대한 설명으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_2fce35",
-    "conceptId": "L2129",
+    "conceptId": "§4.1",
     "text": "20 ㎍/g 이하, 물에 포함된 이온 반응에 의해 발생",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_2739f4",
-    "conceptId": "L2129",
+    "conceptId": "§4.1",
     "text": "100 ㎍/g 이하, 원료 합성 과정 중 에틸렌옥사이드 반응 부산물로 발생",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_2ea899",
-    "conceptId": "L2129",
+    "conceptId": "§4.1",
     "text": "50 ㎍/g 이하, 용기의 플라스틱 분해에 의해 발생",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_a9de75",
-    "conceptId": "L2129",
+    "conceptId": "§4.1",
     "text": "10 ㎍/g 이하, 보존제의 열분해로 발생",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_59d520",
-    "conceptId": "L2129",
+    "conceptId": "§4.1",
     "text": "2,000 ㎍/g 이하, 작업자 개인위생 불량으로 발생",
     "truth": false
    }
@@ -4774,7 +4774,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q51",
-  "explain": "📖 교재 근거 (교재: L2129):\n① 완전 제거가 불가능한 성분의 검출 허용한도: 화장품 제조 시 아래 물질을 인위적으로 첨가하지 않았으나, 제조 또는 보관 과정 중 비의도적으로 유래된 사실이 객관적인 자료로 확인되고 기술적으로 해당 물질을 완전히 제거할 수 없는 경우 각 물질의 검출 허용한도는 다음과 같다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L2099):\n① 완전 제거가 불가능한 성분의 검출 허용한도: 화장품 제조 시 아래 물질을 인위적으로 첨가하지 않았으나, 제조 또는 보관 과정 중 비의도적으로 유래된 사실이 객관적인 자료로 확인되고 기술적으로 해당 물질을 완전히 제거할 수 없는 경우 각 물질의 검출 허용한도는 다음과 같다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -4789,35 +4789,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_22ab8e",
-    "conceptId": "L529",
+    "conceptId": "q:subject3_q52",
     "text": "검출되지 않아야 함 (음성)",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_b04c1a",
-    "conceptId": "L529",
+    "conceptId": "q:subject3_q52",
     "text": "0.02% (v/v) 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_0a6c4e",
-    "conceptId": "L529",
+    "conceptId": "q:subject3_q52",
     "text": "0.2% (v/v) 이하",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_f81d48",
-    "conceptId": "L529",
+    "conceptId": "q:subject3_q52",
     "text": "1.0% (v/v) 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_cf44f3",
-    "conceptId": "L529",
+    "conceptId": "q:subject3_q52",
     "text": "0.002% (v/v) 이하",
     "truth": true
    }
@@ -4875,41 +4875,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2621 (출처: 과목3 문제은행 Q53)",
+  "citation": "📖 교재: L2559 (출처: 과목3 문제은행 Q53)",
   "stem": "다음 중 화장품의 생산 위생 관리 지침 중 제조 작업원의 '두발 위생 모자' 착용 수칙으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_ab4724",
-    "conceptId": "L2621",
+    "conceptId": "§5.1",
     "text": "앞머리 일부가 이마 밖으로 나오도록 멋을 내어 쓴다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_899382",
-    "conceptId": "L2621",
+    "conceptId": "§5.1",
     "text": "위생모 밖으로 구두점이나 옆머리가 삐져나와도 상관없다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_4c7eeb",
-    "conceptId": "L2621",
+    "conceptId": "§5.1",
     "text": "귀 뒷부분은 땀 배출을 위해 일부러 뚫어둔다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_778d21",
-    "conceptId": "L2621",
+    "conceptId": "§5.1",
     "text": "머리카락 전체와 귀가 위생모 안으로 완전히 들어가 보이지 않도록 깊숙이 쓴다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_392b21",
-    "conceptId": "L2621",
+    "conceptId": "§5.1",
     "text": "위생모 대신 야구 모자를 써도 무방하다.",
     "truth": false
    }
@@ -4954,7 +4954,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q53",
-  "explain": "📖 교재 근거 (교재: L2621):\n| 표시 방법 | • 판매가격의 표시는 유통단계에서 쉽게 훼손되거나 지워지지 않으며 분리되지 않도록 스티커 또는 꼬리표를 표시해야 함<br>• 판매가격이 변경되었을 경우에는 기존의 가격표시가 보이지 않도록 변경 표시해야 함. 다만, 판매자가 기간을 특정하여 판매가격을 변경하기 위해 그 기간을 소비자에게 알리고, 소비자가 판매가격을 기존가격과 오인·혼동할 우려가 없도록 명확히 구분하여 표시하는 경우는 제외함<br>• 판매가격은 개별 제품에 스티커 등을 부착하여야 함. 다만, 개별 제품으로 구성된 종합제품으로서 분리하여 판매하지 않는 경우에는 그 종합제품에 일괄하여 표시할 수 있음<br>• 판매자는 업태, 취급제품의 종류 및 내부 진열상태 등에 따라 개별 제품에 가격을 표시하는 것이 곤란한 경우에는 소비자가 가장 쉽게 알아볼 수 있도록 제품명, 가격이 포함된 정보를 제시하는 방법으로 판매가격을 별도로 표시할 수 있음. 이 경우 화장품 개별 제품에는 판매가격을 표시하지 아니할 수 있음<br>• 판매가격의 표시는 「판매가 ○○원」 등으로 소비자가 알아보기 쉽도록 선명하게 표시하여야 함 |",
+  "explain": "📖 교재 근거 (교재: L2559):\n| 표시 방법 | • 판매가격의 표시는 유통단계에서 쉽게 훼손되거나 지워지지 않으며 분리되지 않도록 스티커 또는 꼬리표를 표시해야 함<br>• 판매가격이 변경되었을 경우에는 기존의 가격표시가 보이지 않도록 변경 표시해야 함. 다만, 판매자가 기간을 특정하여 판매가격을 변경하기 위해 그 기간을 소비자에게 알리고, 소비자가 판매가격을 기존가격과 오인·혼동할 우려가 없도록 명확히 구분하여 표시하는 경우는 제외함<br>• 판매가격은 개별 제품에 스티커 등을 부착하여야 함. 다만, 개별 제품으로 구성된 종합제품으로서 분리하여 판매하지 않는 경우에는 그 종합제품에 일괄하여 표시할 수 있음<br>• 판매자는 업태, 취급제품의 종류 및 내부 진열상태 등에 따라 개별 제품에 가격을 표시하는 것이 곤란한 경우에는 소비자가 가장 쉽게 알아볼 수 있도록 제품명, 가격이 포함된 정보를 제시하는 방법으로 판매가격을 별도로 표시할 수 있음. 이 경우 화장품 개별 제품에는 판매가격을 표시하지 아니할 수 있음<br>• 판매가격의 표시는 「판매가 ○○원」 등으로 소비자가 알아보기 쉽도록 선명하게 표시하여야 함 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -4963,41 +4963,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L500 (출처: 과목3 문제은행 Q54)",
+  "citation": "📖 교재: L470 (출처: 과목3 문제은행 Q54)",
   "stem": "다음 중 화장품 내용물이 노출되는 2등급 청정 구역인 '충진실'의 작업자가 착용해야 하는 장비로 가장 필수적인 것이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_69db54",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "살균된 전용 위생복",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_be514f",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "헤어커버 위생모",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_59c2d5",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "위생마스크 및 위생장갑",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_7f1aab",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "가스 마스크 및 인공호흡기",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_6a2b1b",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "외부 먼지를 차단하는 멸균 안전화",
     "truth": false
    }
@@ -5046,7 +5046,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q54",
-  "explain": "📖 교재 근거 (교재: L500):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L470):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -5061,35 +5061,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_c9945f",
-    "conceptId": "L3608",
+    "conceptId": "§5.2",
     "text": "24시간 이내",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_47d313",
-    "conceptId": "L3608",
+    "conceptId": "§5.2",
     "text": "3일 이내",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ccd6ce",
-    "conceptId": "L3608",
+    "conceptId": "§5.2",
     "text": "7일 이내",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_86de42",
-    "conceptId": "L3608",
+    "conceptId": "§5.2",
     "text": "5일 이내",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_19c970",
-    "conceptId": "L3608",
+    "conceptId": "§5.2",
     "text": "14일 이내",
     "truth": false
    }
@@ -5141,7 +5141,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q55",
-  "explain": "📖 교재 근거 (L3608):\n- 회수계획서 제출 🔖기출: 회수 대상 화장품이라는 사실을 안 날부터 5일 이내 지방식약청장에게 제출",
+  "explain": "📖 교재 근거 (L3576):\n- 회수계획서 제출 🔖기출: 회수 대상 화장품이라는 사실을 안 날부터 5일 이내 지방식약청장에게 제출",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -5156,35 +5156,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_916ca9",
-    "conceptId": "L689",
+    "conceptId": "q:subject3_q56",
     "text": "자진 회수를 하더라도 감경 처분은 법적으로 불가능하다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_d3db70",
-    "conceptId": "L689",
+    "conceptId": "q:subject3_q56",
     "text": "벌금만 감면될 뿐 행정 업무정지 기간은 그대로 적용된다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_78adb1",
-    "conceptId": "L689",
+    "conceptId": "q:subject3_q56",
     "text": "영업소 폐쇄 처분은 절대 감경되지 않는다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_0720c8",
-    "conceptId": "L689",
+    "conceptId": "q:subject3_q56",
     "text": "위해를 적극 종결한 경우 행정처분을 감경하거나 면제할 수 있다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_6cf919",
-    "conceptId": "L689",
+    "conceptId": "q:subject3_q56",
     "text": "자진 회수 비용을 국가가 전액 환급해 준다.",
     "truth": false
    }
@@ -5428,41 +5428,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2228 (출처: 과목3 문제은행 Q59)",
+  "citation": "📖 교재: L861 (출처: 과목3 문제은행 Q59)",
   "stem": "다음 중 화장품의 사용 제한 보존제 성분 중 '페녹시에탄올'의 최대 사용 한도는 최종 제품 중 몇 % 이하인가? — 해당하는 것을 모두 고르시오.",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_7d99a2",
-    "conceptId": "L2228",
+    "conceptId": "§1.1",
     "text": "0.1% 이하",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_58dd9b",
-    "conceptId": "L2228",
+    "conceptId": "§1.1",
     "text": "0.3% 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ff535c",
-    "conceptId": "L2228",
+    "conceptId": "§1.1",
     "text": "1.0% 이하",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_a5d7f1",
-    "conceptId": "L2228",
+    "conceptId": "§1.1",
     "text": "0.5% 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_d8065f",
-    "conceptId": "L2228",
+    "conceptId": "§1.1",
     "text": "2.0% 이하",
     "truth": false
    }
@@ -5513,7 +5513,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q59",
-  "explain": "📖 교재 근거 (교재: L2228):\n```mermaid\nflowchart LR\nP[\"페녹시에탄올<br/>보존제\"] -->|\"1.0% 이하\"| L1[\"최종 제품\"]\nB[\"벤조익애씨드<br/>보존제\"] -->|\"0.5% 이하\"| L2[\"씻어내지 않는 제품\"]\nS[\"살리실산\"] -->|\"0.5% 이하\"| L3[\"영유아용 사용금지<br/>(씻어내는 제품 제외)\"]\nT[\"티타늄디옥사이드<br/>자외선차단제\"] -->|\"25.0% 이하\"| L4[\"최종 제품\"]\n```",
+  "explain": "📖 교재 근거 (교재: L861):\n```mermaid\nflowchart LR\nP[\"페녹시에탄올<br/>보존제\"] -->|\"1.0% 이하\"| L1[\"최종 제품\"]\nB[\"벤조익애씨드<br/>보존제\"] -->|\"0.5% 이하\"| L2[\"씻어내지 않는 제품\"]\nS[\"살리실산\"] -->|\"0.5% 이하\"| L3[\"영유아용 사용금지<br/>(씻어내는 제품 제외)\"]\nT[\"티타늄디옥사이드<br/>자외선차단제\"] -->|\"25.0% 이하\"| L4[\"최종 제품\"]\n```",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -5522,41 +5522,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L544 (출처: 과목3 문제은행 Q60)",
+  "citation": "📖 교재: L514 (출처: 과목3 문제은행 Q60)",
   "stem": "다음 중 완제품 보관실 창고에 설치되어 외부 나방이나 날파리 등의 유입을 가두는 포집용 조명 설비에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_2e0706",
-    "conceptId": "L544",
+    "conceptId": "§1.1",
     "text": "에어커튼",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_74bc96",
-    "conceptId": "L544",
+    "conceptId": "§1.1",
     "text": "에어샤워",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ccb441",
-    "conceptId": "L544",
+    "conceptId": "§1.1",
     "text": "포충등",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_1e58b3",
-    "conceptId": "L544",
+    "conceptId": "§1.1",
     "text": "온습도조절기",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_f8fce2",
-    "conceptId": "L544",
+    "conceptId": "§1.1",
     "text": "비상조명등",
     "truth": false
    }
@@ -5605,7 +5605,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q60",
-  "explain": "📖 교재 근거 (교재: L544):\n| 노출 시간 | • 공중 부유 미생물 수의 많고 적음에 따라 결정되며, 노출 시간이 1시간 이상이 되면 배지의 성능이 떨어지므로 예비 시험으로 적당한 노출 시간을 결정하는 것이 좋음<br>• 청정도가 높은 시설(예: 무균실 또는 준무균실): 30분 이상 노출<br>• 청정도가 낮고, 오염도가 높은 시설(예: 원료 보관실, 복도, 포장실, 창고): 측정 시간 단축 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L514):\n| 노출 시간 | • 공중 부유 미생물 수의 많고 적음에 따라 결정되며, 노출 시간이 1시간 이상이 되면 배지의 성능이 떨어지므로 예비 시험으로 적당한 노출 시간을 결정하는 것이 좋음<br>• 청정도가 높은 시설(예: 무균실 또는 준무균실): 30분 이상 노출<br>• 청정도가 낮고, 오염도가 높은 시설(예: 원료 보관실, 복도, 포장실, 창고): 측정 시간 단축 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -5614,41 +5614,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1061 (출처: 과목3 문제은행 Q61)",
+  "citation": "📖 교재: L1031 (출처: 과목3 문제은행 Q61)",
   "stem": "다음 중 CGMP 기준상 제조 장비 세척 후 잔류물을 검출하기 위해 설비 표면을 멸균 면봉으로 직접 문지르는 닦기 채취법의 영문 명칭에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_450fb7",
-    "conceptId": "L1061",
+    "conceptId": "§1.3",
     "text": "여과법",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_fecd21",
-    "conceptId": "L1061",
+    "conceptId": "§1.3",
     "text": "린스법 (Rinsing Method)",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_a4887c",
-    "conceptId": "L1061",
+    "conceptId": "§1.3",
     "text": "분사법",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_96bc8d",
-    "conceptId": "L1061",
+    "conceptId": "§1.3",
     "text": "스왑법 (Swabbing Method)",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_bb9ad8",
-    "conceptId": "L1061",
+    "conceptId": "§1.3",
     "text": "초음파법",
     "truth": false
    }
@@ -5701,7 +5701,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q61",
-  "explain": "📖 교재 근거 (교재: L1061):\n| 낙하균 측정 (Koch법) | 부유 미생물 평판배지 자연 낙하(Koch's sedimentation method). 세균 30~35℃ 48시간, 진균 20~25℃ 5일. |",
+  "explain": "📖 교재 근거 (교재: L1031):\n| 낙하균 측정 (Koch법) | 부유 미생물 평판배지 자연 낙하(Koch's sedimentation method). 세균 30~35℃ 48시간, 진균 20~25℃ 5일. |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -5710,41 +5710,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2219 (출처: 과목3 문제은행 Q62)",
+  "citation": "📖 교재: L2189 (출처: 과목3 문제은행 Q62)",
   "stem": "다음 중 화장품의 사용 제한 보존제 성분 중 '이미다졸리디닐우레아'의 배합 한도로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_26eb52",
-    "conceptId": "L2219",
+    "conceptId": "§4.1",
     "text": "0.1% 이하",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ef3c9a",
-    "conceptId": "L2219",
+    "conceptId": "§4.1",
     "text": "0.3% 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_1f74ea",
-    "conceptId": "L2219",
+    "conceptId": "§4.1",
     "text": "0.5% 이하",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_7c46e3",
-    "conceptId": "L2219",
+    "conceptId": "§4.1",
     "text": "1.0% 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_b6dd87",
-    "conceptId": "L2219",
+    "conceptId": "§4.1",
     "text": "0.6% 이하",
     "truth": true
    }
@@ -5794,7 +5794,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q62",
-  "explain": "📖 교재 근거 (교재: L2219):\n| 포름알데하이드 (시험법) | 액체크로마토그래프법-절대검량선법 *보존제(디아졸리디닐우레아, 디엠디엠하이단토인, 2-브로모-2-나이트로프로판-1,3-디올, 벤질헤미포름알, 소듐하이드록시메칠아미노아세테이트, 이미다졸리디닐우레아, 쿼터늄-15, 메텐아민 등)를 사용하는 화장품에서 검출될 수 있음 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L2189):\n| 포름알데하이드 (시험법) | 액체크로마토그래프법-절대검량선법 *보존제(디아졸리디닐우레아, 디엠디엠하이단토인, 2-브로모-2-나이트로프로판-1,3-디올, 벤질헤미포름알, 소듐하이드록시메칠아미노아세테이트, 이미다졸리디닐우레아, 쿼터늄-15, 메텐아민 등)를 사용하는 화장품에서 검출될 수 있음 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -5900,35 +5900,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_0b1ceb",
-    "conceptId": "L664",
+    "conceptId": "q:subject3_q64",
     "text": "3일 이내",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_e69274",
-    "conceptId": "L664",
+    "conceptId": "q:subject3_q64",
     "text": "15일 이내",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ddfe40",
-    "conceptId": "L664",
+    "conceptId": "q:subject3_q64",
     "text": "7일 이내",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_c5d4be",
-    "conceptId": "L664",
+    "conceptId": "q:subject3_q64",
     "text": "30일 이내",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_1949f0",
-    "conceptId": "L664",
+    "conceptId": "q:subject3_q64",
     "text": "60일 이내",
     "truth": false
    }
@@ -5991,41 +5991,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2671 (출처: 과목3 문제은행 Q65)",
+  "citation": "📖 교재: L2641 (출처: 과목3 문제은행 Q65)",
   "stem": "다음 중 CGMP 기준상 완제품 창고의 상온 보관 온도의 법적 표준 범위로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_c7fcc5",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "0 ~ 10℃",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_6502dc",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "15 ~ 25℃",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_6f7e14",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "35 ~ 45℃",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_1e8856",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "영하 10℃ 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_cfa05a",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "제한 없음",
     "truth": false
    }
@@ -6074,7 +6074,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q65",
-  "explain": "📖 교재 근거 (교재: L2671):\n| 재작업 | 적합판정 기준 벗어난 완제품·벌크를 재처리하여 적합 범위로 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L2641):\n| 재작업 | 적합판정 기준 벗어난 완제품·벌크를 재처리하여 적합 범위로 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -6089,35 +6089,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_8340d6",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "100 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_07240f",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "500 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_4ecca9",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "1,000 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_316223",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "2,000 ㎍/g 이하",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_b22e61",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "5,000 ㎍/g 이하",
     "truth": false
    }
@@ -6167,7 +6167,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q66",
-  "explain": "📖 법령 근거 (L3250):\n• 유해물질: 디옥산 100㎍/g, 메탄올 0.2%(물휴지 0.002%), 포름알데히드 2000㎍/g",
+  "explain": "📖 법령 근거 (L3220):\n• 유해물질: 디옥산 100㎍/g, 메탄올 0.2%(물휴지 0.002%), 포름알데히드 2000㎍/g",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -6176,41 +6176,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L3264 (출처: 과목3 문제은행 Q67)",
+  "citation": "📖 교재: L3234 (출처: 과목3 문제은행 Q67)",
   "stem": "다음 중 위해화장품의 위해성 등급 분류 중 '나등급'에 해당하는 위해화장품의 회수 기한은 회수 시작일로부터 며칠 이내인가? — 해당하는 것을 모두 고르시오.",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_00ff2c",
-    "conceptId": "L3264",
+    "conceptId": "§5.2",
     "text": "30일 이내",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_04af4e",
-    "conceptId": "L3264",
+    "conceptId": "§5.2",
     "text": "7일 이내",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_fcaa06",
-    "conceptId": "L3264",
+    "conceptId": "§5.2",
     "text": "15일 이내",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_181b6d",
-    "conceptId": "L3264",
+    "conceptId": "§5.2",
     "text": "3일 이내",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_d31942",
-    "conceptId": "L3264",
+    "conceptId": "§5.2",
     "text": "60일 이내",
     "truth": false
    }
@@ -6259,7 +6259,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q67",
-  "explain": "📖 교재 근거 (교재: L3264):\n• 위해성 등급: 가등급(중대)→15일 이내 회수, 나등급→30일 이내, 다등급→30일 이내",
+  "explain": "📖 교재 근거 (교재: L3234):\n• 위해성 등급: 가등급(중대)→15일 이내 회수, 나등급→30일 이내, 다등급→30일 이내",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -6268,41 +6268,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1261 (출처: 과목3 문제은행 Q68)",
+  "citation": "📖 교재: L1231 (출처: 과목3 문제은행 Q68)",
   "stem": "다음 중 작업장 내 직원의 손 소독에 사용되는 손 소독제의 성분이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_d811ba",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "알코올",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_f0d41d",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "클로르헥시딘",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_f761c0",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "헥사클로로펜",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_929a9c",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "아이오도퍼",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_896bae",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "과망간산칼륨",
     "truth": true
    }
@@ -6350,7 +6350,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q68",
-  "explain": "📖 교재 근거 (교재: L1261):\n| 손 소독제 🎯 기출 | 1차 에탄올이 함유되어 세정 효과가 있음 · 물 없이도 손 소독이 가능하며, 의약외품으로 분류됨 · 알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등 | 손 소독제로 소독 |\n해설: 손 소독제의 성분은 알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등이다. 과망간산칼륨은 손 소독제 성분이 아니다.",
+  "explain": "📖 교재 근거 (교재: L1231):\n| 손 소독제 🎯 기출 | 1차 에탄올이 함유되어 세정 효과가 있음 · 물 없이도 손 소독이 가능하며, 의약외품으로 분류됨 · 알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등 | 손 소독제로 소독 |\n해설: 손 소독제의 성분은 알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등이다. 과망간산칼륨은 손 소독제 성분이 아니다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -6359,41 +6359,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2602 (출처: 과목3 문제은행 Q69)",
+  "citation": "📖 교재: L2603 (출처: 과목3 문제은행 Q69)",
   "stem": "다음 중 화장품 원자재 관리 라벨 표시 규정상 '시험 대기 중' 상태인 원자재에 부착하는 라벨의 표준 색상에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_b1bfaf",
-    "conceptId": "L2602",
+    "conceptId": "§4.2",
     "text": "적색",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_1ca620",
-    "conceptId": "L2602",
+    "conceptId": "§4.2",
     "text": "청색",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ac22d1",
-    "conceptId": "L2602",
+    "conceptId": "§4.2",
     "text": "녹색",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_1373b3",
-    "conceptId": "L2602",
+    "conceptId": "§4.2",
     "text": "황색 (또는 주황색)",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_5fc1f8",
-    "conceptId": "L2602",
+    "conceptId": "§4.2",
     "text": "백색",
     "truth": false
    }
@@ -6444,7 +6444,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q69",
-  "explain": "📖 교재 근거 (교재: L2602):\n> 해설: 판정 대기소 보관 시 백색 라벨, 시험 중 황색 라벨, 적합 판정 시 청색 라벨, 부적합 판정 시 적색 라벨을 부착한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L2603):\n> 해설: 판정 대기소 보관 시 백색 라벨, 시험 중 황색 라벨, 적합 판정 시 청색 라벨, 부적합 판정 시 적색 라벨을 부착한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -6453,41 +6453,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L500 (출처: 과목3 문제은행 Q70)",
+  "citation": "📖 교재: L470 (출처: 과목3 문제은행 Q70)",
   "stem": "다음 중 CGMP 제조소의 청정 구역 중 내용물이 노출되는 칭량실이나 충진실의 공기 순환 및 유도 기압으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_fd7cb9",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "인접 구역보다 기압이 낮은 음압(-) 상태로 유지한다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_02ff27",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "인접 구역보다 기압이 높은 양압(+) 상태로 유지한다.",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e1289f",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "외부 공기가 필터 없이 자유롭게 통하도록 상시 열어둔다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_3dcd9a",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "무기압 상태로 방치한다.",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_6d7189",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "음압과 양압을 1시간마다 교대로 전환한다.",
     "truth": false
    }
@@ -6533,7 +6533,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q70",
-  "explain": "📖 교재 근거 (교재: L500):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L470):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -6542,41 +6542,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L3252 (출처: 과목3 문제은행 Q71)",
+  "citation": "📖 교재: L3222 (출처: 과목3 문제은행 Q71)",
   "stem": "다음 중 유통화장품 안전성 기준상 프탈레이트류 3종(DBP, DEHP, BBP)의 비의도적 유래 검출 허용 한도의 합계에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_233973",
-    "conceptId": "L3252",
+    "conceptId": "§5.2",
     "text": "10 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_8f97b5",
-    "conceptId": "L3252",
+    "conceptId": "§5.2",
     "text": "50 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_5569d7",
-    "conceptId": "L3252",
+    "conceptId": "§5.2",
     "text": "500 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_b27da2",
-    "conceptId": "L3252",
+    "conceptId": "§5.2",
     "text": "200 ㎍/g 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_074d7e",
-    "conceptId": "L3252",
+    "conceptId": "§5.2",
     "text": "100 ㎍/g 이하",
     "truth": true
    }
@@ -6627,7 +6627,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q71",
-  "explain": "📖 교재 근거 (교재: L3252):\n• 프탈레이트류 합계 100㎍/g 이하",
+  "explain": "📖 교재 근거 (교재: L3222):\n• 프탈레이트류 합계 100㎍/g 이하",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -6642,35 +6642,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_d329a9",
-    "conceptId": "L952",
+    "conceptId": "q:subject3_q72",
     "text": "3일 이내",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_0a7088",
-    "conceptId": "L952",
+    "conceptId": "q:subject3_q72",
     "text": "24시간 이내",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_071337",
-    "conceptId": "L952",
+    "conceptId": "q:subject3_q72",
     "text": "5일 이내",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_32ad4c",
-    "conceptId": "L952",
+    "conceptId": "q:subject3_q72",
     "text": "7일 이내",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_2406db",
-    "conceptId": "L952",
+    "conceptId": "q:subject3_q72",
     "text": "14일 이내",
     "truth": false
    }
@@ -6734,35 +6734,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_c9deb6",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "비커",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_35aa26",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "호스",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_51072b",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "파레트 (Pallet)",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_b42627",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "스파출러",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_7b2ef3",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "필터",
     "truth": false
    }
@@ -6828,35 +6828,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_0f59d4",
-    "conceptId": "L890",
+    "conceptId": "q:subject3_q74",
     "text": "공표가 면제된다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_9f32d3",
-    "conceptId": "L890",
+    "conceptId": "q:subject3_q74",
     "text": "자진 회수율이 90% 이상이면 생략할 수 있다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_230fda",
-    "conceptId": "L890",
+    "conceptId": "q:subject3_q74",
     "text": "영업자 누리집만 공표하면 신문은 하지 않아도 된다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_cc9518",
-    "conceptId": "L890",
+    "conceptId": "q:subject3_q74",
     "text": "임의 선택 사항이다.",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_c5719b",
-    "conceptId": "L890",
+    "conceptId": "q:subject3_q74",
     "text": "일간신문 및 방송을 통한 공표가 필수적이다.",
     "truth": true
    }
@@ -6920,35 +6920,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_14093f",
-    "conceptId": "L485",
+    "conceptId": "q:subject3_q75",
     "text": "소프트웨어",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_70cea7",
-    "conceptId": "L485",
+    "conceptId": "q:subject3_q75",
     "text": "하드웨어",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_48252c",
-    "conceptId": "L485",
+    "conceptId": "q:subject3_q75",
     "text": "휴먼웨어",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_5ee73b",
-    "conceptId": "L485",
+    "conceptId": "q:subject3_q75",
     "text": "메인웨어",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_dfc3e5",
-    "conceptId": "L485",
+    "conceptId": "q:subject3_q75",
     "text": "기계웨어",
     "truth": false
    }
@@ -7012,35 +7012,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_dc5a60",
-    "conceptId": "L251",
+    "conceptId": "q:subject3_q76",
     "text": "화장품법",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_c302fa",
-    "conceptId": "L251",
+    "conceptId": "q:subject3_q76",
     "text": "식품위생법",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e44dfa",
-    "conceptId": "L251",
+    "conceptId": "q:subject3_q76",
     "text": "근로기준법",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_fbaf40",
-    "conceptId": "L251",
+    "conceptId": "q:subject3_q76",
     "text": "민법",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_92e1b6",
-    "conceptId": "L251",
+    "conceptId": "q:subject3_q76",
     "text": "감염병의 예방 및 관리에 관한 법률 (및 CGMP 위생 관리 기준)",
     "truth": true
    }
@@ -7099,41 +7099,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2899 (출처: 과목3 문제은행 Q77)",
+  "citation": "📖 교재: L2869 (출처: 과목3 문제은행 Q77)",
   "stem": "다음 중 완제품 출하 검사 항목 중 화장품 내용물의 산도를 기기 분석하는 시험 항목에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_468e37",
-    "conceptId": "L2899",
+    "conceptId": "§5.1",
     "text": "미생물 한도 시험",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_00b8e4",
-    "conceptId": "L2899",
+    "conceptId": "§5.1",
     "text": "중금속 한도 시험",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_f6f969",
-    "conceptId": "L2899",
+    "conceptId": "§5.1",
     "text": "경도 측정 시험",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_83324a",
-    "conceptId": "L2899",
+    "conceptId": "§5.1",
     "text": "용량 측정 시험",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_448a12",
-    "conceptId": "L2899",
+    "conceptId": "§5.1",
     "text": "pH 측정 시험",
     "truth": true
    }
@@ -7183,7 +7183,7 @@ var COMBO_DRILLS_subject3 = [
    "한도"
   ],
   "derivedFrom": "subject3_q77",
-  "explain": "📖 교재 근거 (교재: L2899):\n| 내용물 감량시험 | 화장품 용기에 충전된 내용물의 건조 감량을 측정 / 마스카라, 아이라이너 또는 내용물 일부가 쉽게 취발되는 제품에 적용 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L2869):\n| 내용물 감량시험 | 화장품 용기에 충전된 내용물의 건조 감량을 측정 / 마스카라, 아이라이너 또는 내용물 일부가 쉽게 취발되는 제품에 적용 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -7198,35 +7198,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_792ae5",
-    "conceptId": "L312",
+    "conceptId": "q:subject3_q78",
     "text": "에어샤워",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_54f2c1",
-    "conceptId": "L312",
+    "conceptId": "q:subject3_q78",
     "text": "에어커튼",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_6b48a2",
-    "conceptId": "L312",
+    "conceptId": "q:subject3_q78",
     "text": "방충망",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_381660",
-    "conceptId": "L312",
+    "conceptId": "q:subject3_q78",
     "text": "비닐커튼",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_35e402",
-    "conceptId": "L312",
+    "conceptId": "q:subject3_q78",
     "text": "철망",
     "truth": false
    }
@@ -7291,35 +7291,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_1dd527",
-    "conceptId": "L2799",
+    "conceptId": "§5.1",
     "text": "1차 포장은 1차 포장을 수용하는 보호재를 말한다",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_682569",
-    "conceptId": "L2799",
+    "conceptId": "§5.1",
     "text": "1차 포장은 화장품 제조 시 내용물과 직접 접촉하는 포장이다",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_821528",
-    "conceptId": "L2799",
+    "conceptId": "§5.1",
     "text": "1차 포장은 운송을 위해 사용되는 외부 포장재이다",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_65b305",
-    "conceptId": "L2799",
+    "conceptId": "§5.1",
     "text": "1차 포장은 표시의 목적으로 한 포장이다",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_f121ff",
-    "conceptId": "L2799",
+    "conceptId": "§5.1",
     "text": "1차 포장은 첨부문서를 포함한다",
     "truth": false
    }
@@ -7367,7 +7367,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q79",
-  "explain": "📖 교재 근거 (L2799):\n| 1차 포장과 2차 포장 🎯 기출 | 1차 포장: 화장품 제조 시 내용물과 직접 접촉하는 포장 / 2차 포장: 1차 포장을 수용하는 1개 또는 그 이상의 포장과 보호재 및 표시의 목적으로 한 포장(첨부문서 등을 포함) |",
+  "explain": "📖 교재 근거 (L2769):\n| 1차 포장과 2차 포장 🎯 기출 | 1차 포장: 화장품 제조 시 내용물과 직접 접촉하는 포장 / 2차 포장: 1차 포장을 수용하는 1개 또는 그 이상의 포장과 보호재 및 표시의 목적으로 한 포장(첨부문서 등을 포함) |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -7382,35 +7382,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_cff52b",
-    "conceptId": "L485",
+    "conceptId": "q:subject3_q80",
     "text": "하드웨어",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_8c1f5d",
-    "conceptId": "L485",
+    "conceptId": "q:subject3_q80",
     "text": "문서웨어",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_79a805",
-    "conceptId": "L485",
+    "conceptId": "q:subject3_q80",
     "text": "휴먼웨어",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_eaa1f0",
-    "conceptId": "L485",
+    "conceptId": "q:subject3_q80",
     "text": "페이퍼웨어",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_e5361a",
-    "conceptId": "L485",
+    "conceptId": "q:subject3_q80",
     "text": "소프트웨어",
     "truth": true
    }
@@ -7472,35 +7472,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_167ea2",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q81",
     "text": "작업소는 항상 청결을 유지해야 한다",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_dc0f78",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q81",
     "text": "작업소 내의 온도와 습도는 제품의 품질에 영향을 주지 않도록 관리해야 한다",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e339b3",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q81",
     "text": "작업소 내에서는 음식물의 섭취가 가능하다",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_0d4ad2",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q81",
     "text": "작업소 내의 환기 시설은 적절히 가동되어야 한다",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_f16302",
-    "conceptId": "L124",
+    "conceptId": "q:subject3_q81",
     "text": "작업소 내의 배수 설비는 역류를 방지하도록 설계되어야 한다",
     "truth": true
    }
@@ -7566,35 +7566,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_fdfc1d",
-    "conceptId": "L2785",
+    "conceptId": "§5.1",
     "text": "아세톤을 함유하는 네일 에나멜 리무버 및 네일 폴리시 리무버",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_a2e3ca",
-    "conceptId": "L2785",
+    "conceptId": "§5.1",
     "text": "어린이용 오일 등 개별 포장당 탄화수소류를 10% 이상 함유하고 운동점도가 21cst 이하인 비에멀전 타입의 액체 상태의 제품",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_f5fba8",
-    "conceptId": "L2785",
+    "conceptId": "§5.1",
     "text": "개별 포장당 메틸살리실레이트를 5.0% 이상 함유하는 액체 상태의 제품",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_8e71e5",
-    "conceptId": "L2785",
+    "conceptId": "§5.1",
     "text": "일반 스킨 로션",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_dbe2a8",
-    "conceptId": "L2785",
+    "conceptId": "§5.1",
     "text": "안전용기·포장은 성인이 개봉하기는 어렵지 않고, 5세 미만의 어린이는 개봉하기 어렵게 설계되어야 함",
     "truth": false
    }
@@ -7643,7 +7643,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q82",
-  "explain": "📖 교재 근거 (L2785):\n> 한 줄 요약: 포장재(1차·2차·라벨·봉함) 입고 절차 + 안전용기 대상(아세톤·탄화수소 10%·메틸살리실레이트 5%) + 5세 미만 개봉 어려움.",
+  "explain": "📖 교재 근거 (L2755):\n> 한 줄 요약: 포장재(1차·2차·라벨·봉함) 입고 절차 + 안전용기 대상(아세톤·탄화수소 10%·메틸살리실레이트 5%) + 5세 미만 개봉 어려움.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -7658,35 +7658,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_0c49f5",
-    "conceptId": "L1878",
+    "conceptId": "§2.2",
     "text": "작업자 위생 관리 기준",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_970ef7",
-    "conceptId": "L1878",
+    "conceptId": "§2.2",
     "text": "작업장 청소 및 소독 기준",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_bc313f",
-    "conceptId": "L1878",
+    "conceptId": "§2.2",
     "text": "설비 및 기구의 세정·소독 기준",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_b5dcea",
-    "conceptId": "L1878",
+    "conceptId": "§2.2",
     "text": "제품의 판매 가격 설정 기준",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_f20da9",
-    "conceptId": "L1878",
+    "conceptId": "§2.2",
     "text": "폐기물 처리 기준",
     "truth": false
    }
@@ -7733,7 +7733,7 @@ var COMBO_DRILLS_subject3 = [
    "구성비"
   ],
   "derivedFrom": "subject3_q83",
-  "explain": "📖 법령 근거 (L1878):\n> 해설: CGMP 4대 기준서는 제품표준서, 제조관리기준서, 품질관리기준서, 제조위생관리기준서이다. 원료관리기준서는 존재하지 않는다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 법령 근거 (L1879):\n> 해설: CGMP 4대 기준서는 제품표준서, 제조관리기준서, 품질관리기준서, 제조위생관리기준서이다. 원료관리기준서는 존재하지 않는다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -7935,35 +7935,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_b54394",
-    "conceptId": "L2726",
+    "conceptId": "§3.2",
     "text": "디옥산 시험",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_7c92fe",
-    "conceptId": "L2726",
+    "conceptId": "§3.2",
     "text": "포름알데하이드 시험",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_01bd64",
-    "conceptId": "L2726",
+    "conceptId": "§3.2",
     "text": "유효성분의 효능 확인 시험",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_b6e16e",
-    "conceptId": "L2726",
+    "conceptId": "§3.2",
     "text": "중금속(납, 비소, 수은, 카드뮴) 시험",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_9e707c",
-    "conceptId": "L2726",
+    "conceptId": "§3.2",
     "text": "유리알칼리 시험",
     "truth": false
    }
@@ -8022,41 +8022,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2247 (출처: 과목3 문제은행 Q87)",
+  "citation": "📖 교재: L2217 (출처: 과목3 문제은행 Q87)",
   "stem": "화장품의 위해사례 보고 의무자에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_075f1a",
-    "conceptId": "L2247",
+    "conceptId": "§4.1",
     "text": "화장품제조업자 및 화장품책임판매업자",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_8fed92",
-    "conceptId": "L2247",
+    "conceptId": "§4.1",
     "text": "화장품제조업자만",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_1bb407",
-    "conceptId": "L2247",
+    "conceptId": "§4.1",
     "text": "화장품책임판매업자만",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e1540a",
-    "conceptId": "L2247",
+    "conceptId": "§4.1",
     "text": "소비자만",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ad139a",
-    "conceptId": "L2247",
+    "conceptId": "§4.1",
     "text": "모든 영업자",
     "truth": false
    }
@@ -8108,7 +8108,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q87",
-  "explain": "📖 교재 근거 (교재: L2247):\n• 화장품책임판매업자는 세포·조직의 채취, 검사, 배양액 제조 등을 실시한 기관에 대해 안전하고 품질이 균일한 인체 세포·조직 배양액이 제조될 수 있도록 관리·감독을 철저히 하여야 한다.",
+  "explain": "📖 교재 근거 (교재: L2217):\n• 화장품책임판매업자는 세포·조직의 채취, 검사, 배양액 제조 등을 실시한 기관에 대해 안전하고 품질이 균일한 인체 세포·조직 배양액이 제조될 수 있도록 관리·감독을 철저히 하여야 한다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -8123,35 +8123,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_5fa129",
-    "conceptId": "L834",
+    "conceptId": "§1.3",
     "text": "경미한 피부 자극",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_4bdb28",
-    "conceptId": "L834",
+    "conceptId": "§1.3",
     "text": "일시적인 홍반",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_29f11d",
-    "conceptId": "L834",
+    "conceptId": "§1.3",
     "text": "중증 알레르기 반응",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e9f0c0",
-    "conceptId": "L834",
+    "conceptId": "§1.3",
     "text": "사용감 불량",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_305a6d",
-    "conceptId": "L834",
+    "conceptId": "§1.3",
     "text": "향기 변질",
     "truth": false
    }
@@ -8197,7 +8197,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q88",
-  "explain": "📖 교재 근거 (L834):\n| 글루콘산클로르헥시딘 | • 5%를 10배 희석하여 사용<br>• 장점: 살균 효과와 항진균 효과, 피부에 대한 소독 효과<br>• 단점: 심각한 알레르기 반응 |",
+  "explain": "📖 교재 근거 (L804):\n| 글루콘산클로르헥시딘 | • 5%를 10배 희석하여 사용<br>• 장점: 살균 효과와 항진균 효과, 피부에 대한 소독 효과<br>• 단점: 심각한 알레르기 반응 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -8206,41 +8206,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1023 (출처: 과목3 문제은행 Q89)",
+  "citation": "📖 교재: L999 (출처: 과목3 문제은행 Q89)",
   "stem": "다음 중 화장품 유통 안전관리에서 「식약처장」의 권한이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_61f256",
-    "conceptId": "L1023",
+    "conceptId": "§1.4",
     "text": "위해화장품의 회수 명령",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_d6906e",
-    "conceptId": "L1023",
+    "conceptId": "§1.4",
     "text": "영업자에 대한 행정처분",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_3766f7",
-    "conceptId": "L1023",
+    "conceptId": "§1.4",
     "text": "화장품의 수거 및 검사",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_5de186",
-    "conceptId": "L1023",
+    "conceptId": "§1.4",
     "text": "위해화장품의 공표",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_2b50d2",
-    "conceptId": "L1023",
+    "conceptId": "§1.4",
     "text": "화장품 제조업의 등록",
     "truth": true
    }
@@ -8293,7 +8293,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q89",
-  "explain": "📖 교재 근거 (교재: L1023):\n| 200만 원 이하 벌금 | • 영업자의 의무사항을 위반한 자<br>• 위해화장품의 회수 및 회수 계획 보고를 위반한 자<br>• 1, 2차 포장에 기재해야 되는 사항을 위반한 자(가격표시는 제외)<br>• 식품의약품안전처장이 인정한 보고와 검사, 시정명령, 검사명령, 개수명령, 회수·폐기명령을 위반하거나 관계 공무원의 검사·수거 또는 처분을 거부·방해하거나 기피한 자 |",
+  "explain": "📖 교재 근거 (교재: L999):\n| 200만 원 이하 벌금 | • 영업자의 의무사항을 위반한 자<br>• 위해화장품의 회수 및 회수 계획 보고를 위반한 자<br>• 1, 2차 포장에 기재해야 되는 사항을 위반한 자(가격표시는 제외)<br>• 식품의약품안전처장이 인정한 보고와 검사, 시정명령, 검사명령, 개수명령, 회수·폐기명령을 위반하거나 관계 공무원의 검사·수거 또는 처분을 거부·방해하거나 기피한 자 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -8302,41 +8302,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L524 (출처: 과목3 문제은행 Q90)",
+  "citation": "📖 교재: L494 (출처: 과목3 문제은행 Q90)",
   "stem": "화장품 제조 시 공기조화장치(HVAC)의 HEPA 필터 성능 기준에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_0e971b",
-    "conceptId": "L524",
+    "conceptId": "§1.1",
     "text": "0.3㎛ 미립자를 95% 이상 여과",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_9bc118",
-    "conceptId": "L524",
+    "conceptId": "§1.1",
     "text": "0.3㎛ 미립자를 99.97% 이상 여과",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_943e2c",
-    "conceptId": "L524",
+    "conceptId": "§1.1",
     "text": "0.5㎛ 미립자를 99% 이상 여과",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_0c260b",
-    "conceptId": "L524",
+    "conceptId": "§1.1",
     "text": "1.0㎛ 미립자를 99.9% 이상 여과",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_98478d",
-    "conceptId": "L524",
+    "conceptId": "§1.1",
     "text": "5.0㎛ 미립자를 100% 여과",
     "truth": false
    }
@@ -8389,7 +8389,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q90",
-  "explain": "📖 교재 근거 (교재: L524):\n| M/F (Medium Filter) | • Media: Glass Fiber<br>• HEPA Filter 전처리용<br>• B/D 공기 정화, 산업 공장 등에 사용<br>• 압력 손실: 16mmAq 이하<br>• 필터 입자: 0.5㎛ |\n| H/F (HEPA Filter) | • High Efficiency Particulate Air Filter<br>• 0.3㎛의 분진 99.97% 제거<br>• Media: Glass Fiber<br>• 반도체 공장, 병원, 의약품, 식품 공장 등 사용<br>• 압력 손실: 24mmAq 이하<br>• 필터 입자: 0.3㎛ |",
+  "explain": "📖 교재 근거 (교재: L494):\n| M/F (Medium Filter) | • Media: Glass Fiber<br>• HEPA Filter 전처리용<br>• B/D 공기 정화, 산업 공장 등에 사용<br>• 압력 손실: 16mmAq 이하<br>• 필터 입자: 0.5㎛ |\n| H/F (HEPA Filter) | • High Efficiency Particulate Air Filter<br>• 0.3㎛의 분진 99.97% 제거<br>• Media: Glass Fiber<br>• 반도체 공장, 병원, 의약품, 식품 공장 등 사용<br>• 압력 손실: 24mmAq 이하<br>• 필터 입자: 0.3㎛ |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -8404,35 +8404,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_54aca7",
-    "conceptId": "L3030",
+    "conceptId": "§4.2",
     "text": "사용 후 약간의 당김",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_a7bfd2",
-    "conceptId": "L3030",
+    "conceptId": "§4.2",
     "text": "사용 후 경미한 홍반",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_1c93e2",
-    "conceptId": "L3030",
+    "conceptId": "§4.2",
     "text": "사용 후 중증 알레르기 반응으로 입원",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_75a9c3",
-    "conceptId": "L3030",
+    "conceptId": "§4.2",
     "text": "사용 후 향기 변화",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_c8ba3c",
-    "conceptId": "L3030",
+    "conceptId": "§4.2",
     "text": "사용 후 발림성 저하",
     "truth": false
    }
@@ -8479,7 +8479,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q91",
-  "explain": "📖 법령 근거 (L3030):\n| 9 | 프로필렌글리콜에 과민하거나 알레르기 반응 경험이 있는 분 | 프로필렌글리콜 함유 제제에만 표시, 사용 전 의사·약사 상의 |",
+  "explain": "📖 법령 근거 (L2998):\n| 9 | 프로필렌글리콜에 과민하거나 알레르기 반응 경험이 있는 분 | 프로필렌글리콜 함유 제제에만 표시, 사용 전 의사·약사 상의 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -8494,35 +8494,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_d6f3f8",
-    "conceptId": "L1878",
+    "conceptId": "§2.2",
     "text": "위해화장품으로 의심되는 경우",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_bda474",
-    "conceptId": "L1878",
+    "conceptId": "§2.2",
     "text": "품질관리기준에 부적합한 경우",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_21a7f5",
-    "conceptId": "L1878",
+    "conceptId": "§2.2",
     "text": "소비자 불만이 접수된 경우",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_a345f1",
-    "conceptId": "L1878",
+    "conceptId": "§2.2",
     "text": "신제품 출시 직전 사전 검사",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_0d4072",
-    "conceptId": "L1878",
+    "conceptId": "§2.2",
     "text": "시험 결과 위해 성분이 검출된 경우",
     "truth": false
    }
@@ -8569,7 +8569,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q92",
-  "explain": "📖 법령 근거 (L1878):\n> 해설: CGMP 4대 기준서는 제품표준서, 제조관리기준서, 품질관리기준서, 제조위생관리기준서이다. 원료관리기준서는 존재하지 않는다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 법령 근거 (L1879):\n> 해설: CGMP 4대 기준서는 제품표준서, 제조관리기준서, 품질관리기준서, 제조위생관리기준서이다. 원료관리기준서는 존재하지 않는다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -8578,41 +8578,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2414 (출처: 과목3 문제은행 Q93)",
+  "citation": "📖 교재: L2384 (출처: 과목3 문제은행 Q93)",
   "stem": "CGMP 기준상 「부적합 판정」된 제품의 처리 방법에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_89ebd3",
-    "conceptId": "L2414",
+    "conceptId": "§4.2",
     "text": "조건부 출고",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_50931b",
-    "conceptId": "L2414",
+    "conceptId": "§4.2",
     "text": "폐기 또는 재작업(품질책임자 승인 필요)",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_7d8e06",
-    "conceptId": "L2414",
+    "conceptId": "§4.2",
     "text": "보류 후 재시험",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_305f12",
-    "conceptId": "L2414",
+    "conceptId": "§4.2",
     "text": "즉시 출고",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_4826d1",
-    "conceptId": "L2414",
+    "conceptId": "§4.2",
     "text": "별도 포장 후 출고",
     "truth": false
    }
@@ -8660,7 +8660,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q93",
-  "explain": "📖 법령 근거 (교재: L2414):\n| 5. 재작업 | 품질 책임자가 재작업품 합격 결정 |",
+  "explain": "📖 법령 근거 (교재: L2384):\n| 5. 재작업 | 품질 책임자가 재작업품 합격 결정 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -8675,35 +8675,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_279db0",
-    "conceptId": "L153",
+    "conceptId": "q:subject3_q94",
     "text": "작업복",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ffaf91",
-    "conceptId": "L153",
+    "conceptId": "q:subject3_q94",
     "text": "넥타이",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_b5921f",
-    "conceptId": "L153",
+    "conceptId": "q:subject3_q94",
     "text": "위생장갑",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_6cbc54",
-    "conceptId": "L153",
+    "conceptId": "q:subject3_q94",
     "text": "위생모(헤어캡)",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_588532",
-    "conceptId": "L153",
+    "conceptId": "q:subject3_q94",
     "text": "마스크",
     "truth": false
    }
@@ -8764,28 +8764,28 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_5a7451",
-    "conceptId": "L2726",
+    "conceptId": "§3.2",
     "text": "포름알데하이드 전처리 및 분석조건 개정",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_f10a3f",
-    "conceptId": "L2726",
+    "conceptId": "§3.2",
     "text": "유리알칼리 전처리 및 분석조건 개정",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_034101",
-    "conceptId": "L2726",
+    "conceptId": "§3.2",
     "text": "디옥산 전처리 및 분석조건 개정",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_b4247f",
-    "conceptId": "L2726",
+    "conceptId": "§3.2",
     "text": "시험방법의 개정은 없었다",
     "truth": false
    }
@@ -8849,35 +8849,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_d2df9a",
-    "conceptId": "L127",
+    "conceptId": "q:subject3_q96",
     "text": "부유 미립자 수",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_7bb049",
-    "conceptId": "L127",
+    "conceptId": "q:subject3_q96",
     "text": "부유 미생물 수",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_6012f0",
-    "conceptId": "L127",
+    "conceptId": "q:subject3_q96",
     "text": "온도 및 습도",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_f67f50",
-    "conceptId": "L127",
+    "conceptId": "q:subject3_q96",
     "text": "작업자의 혈압",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_858d1e",
-    "conceptId": "L127",
+    "conceptId": "q:subject3_q96",
     "text": "차압(차압 관리)",
     "truth": false
    }
@@ -8938,41 +8938,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2788 (출처: 과목3 문제은행 Q97)",
+  "citation": "📖 교재: L2758 (출처: 과목3 문제은행 Q97)",
   "stem": "화장품 제조 시 「교차 오염」을 방지하기 위한 조치로 가장 적절하지 않은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_823c0c",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "원료의 분리 보관",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_411511",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "설비의 세정·소독 철저",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_f3e696",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "동일 설비에서 동시에 여러 제품을 제조",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_52b3ac",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "작업 구역의 분리",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_5b95e5",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "작업자의 위생 관리",
     "truth": false
    }
@@ -9020,7 +9020,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q97",
-  "explain": "📖 교재 근거 (교재: L2788):\n① 화장품의 제조와 포장에 사용되는 모든 원료 및 포장재의 부적절하고 위험한 사용, 혼합 또는 오염을 방지하기 위해 해당 물질의 검증·확인·취급 및 사용을 보장할 수 있도록 절차가 수립되어 외부로부터 공급된 원료 및 포장재는 규정된 완제품 품질합격 판정 기준을 충족시켜야 한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L2758):\n① 화장품의 제조와 포장에 사용되는 모든 원료 및 포장재의 부적절하고 위험한 사용, 혼합 또는 오염을 방지하기 위해 해당 물질의 검증·확인·취급 및 사용을 보장할 수 있도록 절차가 수립되어 외부로부터 공급된 원료 및 포장재는 규정된 완제품 품질합격 판정 기준을 충족시켜야 한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -9035,35 +9035,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_1f6978",
-    "conceptId": "L118",
+    "conceptId": "q:subject3_q98",
     "text": "화장품의 품질관리",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_189a29",
-    "conceptId": "L118",
+    "conceptId": "q:subject3_q98",
     "text": "화장품의 안전관리",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ef36be",
-    "conceptId": "L118",
+    "conceptId": "q:subject3_q98",
     "text": "위해성 정보의 수집 및 보고",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_171735",
-    "conceptId": "L118",
+    "conceptId": "q:subject3_q98",
     "text": "화장품의 제조 공정 관리",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_78ba13",
-    "conceptId": "L118",
+    "conceptId": "q:subject3_q98",
     "text": "책임판매후 안전관리기준의 수립",
     "truth": false
    }
@@ -9127,35 +9127,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_c2c838",
-    "conceptId": "q:subject3_q99",
+    "conceptId": "§0.2",
     "text": "그대로 출고한다",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_0aeeb1",
-    "conceptId": "q:subject3_q99",
+    "conceptId": "§0.2",
     "text": "여과 후 출고한다",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_0e1e3b",
-    "conceptId": "q:subject3_q99",
+    "conceptId": "§0.2",
     "text": "소비자에게 할인 판매한다",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_09c377",
-    "conceptId": "q:subject3_q99",
+    "conceptId": "§0.2",
     "text": "온도를 높여 용해시킨 후 출고한다",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_77c642",
-    "conceptId": "q:subject3_q99",
+    "conceptId": "§0.2",
     "text": "원인을 조사하고 시정조치 후 품질관리책임자의 판정을 받는다",
     "truth": true
    }
@@ -9220,35 +9220,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_4595fb",
-    "conceptId": "L2890",
+    "conceptId": "§5.1",
     "text": "밀폐용기 - 기체 또는 미생물이 침입을 방지하는 용기",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_18af4a",
-    "conceptId": "L2890",
+    "conceptId": "§5.1",
     "text": "기밀용기 - 외부로부터 고형의 이물이 들어가는 것을 방지하는 용기",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_9cae22",
-    "conceptId": "L2890",
+    "conceptId": "§5.1",
     "text": "밀봉용기 - 액상 또는 고형의 이물 또는 수분이 침입하지 않는 용기",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_d69217",
-    "conceptId": "L2890",
+    "conceptId": "§5.1",
     "text": "차광용기 - 광선의 투과를 방지하는 용기 또는 투과를 방지하는 포장을 한 용기",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_aeeade",
-    "conceptId": "L2890",
+    "conceptId": "§5.1",
     "text": "밀폐용기 - 광선의 투과를 방지하는 용기",
     "truth": false
    }
@@ -9295,7 +9295,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q100",
-  "explain": "📖 교재 근거 (L2890):\n| 밀폐용기 | 외부로부터 고형의 이물이 들어가는 것을 방지하고 고형의 내용물이 손실되지 않도록 보호할 수 있는 용기 |\n| 기밀용기 | 액상 또는 고형의 이물 또는 수분이 침입하지 않고, 내용물을 손실, 풍화, 조해 또는 증발로부터 보호할 수 있는 용기 |\n| 밀봉용기 | 기체 또는 미생물이 침입을 방지하는 용기 |\n| 차광용기 | 광선의 투과를 방지하는 용기 또는 투과를 방지하는 포장을 한 용기 |",
+  "explain": "📖 교재 근거 (L2860):\n| 밀폐용기 | 외부로부터 고형의 이물이 들어가는 것을 방지하고 고형의 내용물이 손실되지 않도록 보호할 수 있는 용기 |\n| 기밀용기 | 액상 또는 고형의 이물 또는 수분이 침입하지 않고, 내용물을 손실, 풍화, 조해 또는 증발로부터 보호할 수 있는 용기 |\n| 밀봉용기 | 기체 또는 미생물이 침입을 방지하는 용기 |\n| 차광용기 | 광선의 투과를 방지하는 용기 또는 투과를 방지하는 포장을 한 용기 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -9304,41 +9304,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2798 (출처: 과목3 문제은행 Q101)",
+  "citation": "📖 교재: L2748 (출처: 과목3 문제은행 Q101)",
   "stem": "다음 중 화장품 제조 시 「물」의 관리 기준으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_a8c3c9",
-    "conceptId": "L2798",
+    "conceptId": "§5.1",
     "text": "정제수 제조 설비를 통해 생산된 물을 사용",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ed77d2",
-    "conceptId": "L2798",
+    "conceptId": "§5.1",
     "text": "수돗물을 그대로 사용 가능",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_22ee7e",
-    "conceptId": "L2798",
+    "conceptId": "§5.1",
     "text": "지하수를 여과 후 사용",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_d1f323",
-    "conceptId": "L2798",
+    "conceptId": "§5.1",
     "text": "증류수만 사용 가능",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_099da6",
-    "conceptId": "L2798",
+    "conceptId": "§5.1",
     "text": "물의 관리 기준은 별도로 없다",
     "truth": false
    }
@@ -9385,7 +9385,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q101",
-  "explain": "📖 법령 근거 (교재: L2798):\n1. 화장품의1차 포장에 사용기한을 표시하는 경우: 영유아 또는 어린이가 사용할 수 있는 화장품임을 표시ㆍ광고한 날부터 마지막으로 제조ㆍ수입된 제품의 사용기한 만료일 이후 1년까지의 기간. 이 경우 제조는 화장품의 제조번호에 따른 제조일자를 기준으로 하며, 수입은 통관일자를 기준으로 한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 법령 근거 (교재: L2748):\n1. 화장품의1차 포장에 사용기한을 표시하는 경우: 영유아 또는 어린이가 사용할 수 있는 화장품임을 표시ㆍ광고한 날부터 마지막으로 제조ㆍ수입된 제품의 사용기한 만료일 이후 1년까지의 기간. 이 경우 제조는 화장품의 제조번호에 따른 제조일자를 기준으로 하며, 수입은 통관일자를 기준으로 한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -9394,41 +9394,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2902 (출처: 과목3 문제은행 Q102)",
+  "citation": "📖 교재: L2872 (출처: 과목3 문제은행 Q102)",
   "stem": "스킨, 로션, 오일 등의 액상 내용물을 담는 용기의 마개, 패킹 등의 밀폐성을 측정하는 시험에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_4fc9e7",
-    "conceptId": "L2902",
+    "conceptId": "§5.1",
     "text": "내용물 감량시험",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_26b806",
-    "conceptId": "L2902",
+    "conceptId": "§5.1",
     "text": "내용물에 의한 용기 변형시험",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_b1095c",
-    "conceptId": "L2902",
+    "conceptId": "§5.1",
     "text": "감압 누설시험",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_4ff01e",
-    "conceptId": "L2902",
+    "conceptId": "§5.1",
     "text": "낙하시험",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_6104e9",
-    "conceptId": "L2902",
+    "conceptId": "§5.1",
     "text": "크로스컷 시험",
     "truth": false
    }
@@ -9478,7 +9478,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q102",
-  "explain": "📖 교재 근거 (교재: L2902):\n| 감압 누설시험 🎯 기출 | 스킨, 로션, 오일 등의 액상 내용물을 담는 용기의 마개, 패킹 등의 밀폐성 측정 |",
+  "explain": "📖 교재 근거 (교재: L2872):\n| 감압 누설시험 🎯 기출 | 스킨, 로션, 오일 등의 액상 내용물을 담는 용기의 마개, 패킹 등의 밀폐성 측정 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -9493,35 +9493,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_63b18e",
-    "conceptId": "L1370",
+    "conceptId": "q:subject3_q103",
     "text": "영업자의 명예를 높이기 위해",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ad3fa2",
-    "conceptId": "L1370",
+    "conceptId": "q:subject3_q103",
     "text": "수출을 촉진하기 위해",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_1ddd72",
-    "conceptId": "L1370",
+    "conceptId": "q:subject3_q103",
     "text": "화장품 산업의 발전을 도모하기 위해",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_37a8d0",
-    "conceptId": "L1370",
+    "conceptId": "q:subject3_q103",
     "text": "소비자에게 위해 정보를 신속히 알려 추가 위해를 방지",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_54a9fc",
-    "conceptId": "L1370",
+    "conceptId": "q:subject3_q103",
     "text": "가격을 안정화하기 위해",
     "truth": false
    }
@@ -9582,35 +9582,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_df9aef",
-    "conceptId": "L576",
+    "conceptId": "q:subject3_q104",
     "text": "원료의 품명 및 규격 확인",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_96d894",
-    "conceptId": "L576",
+    "conceptId": "q:subject3_q104",
     "text": "원료의 수량 확인",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_91caf2",
-    "conceptId": "L576",
+    "conceptId": "q:subject3_q104",
     "text": "원료의 외관 및 포장 상태 확인",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_fef1dd",
-    "conceptId": "L576",
+    "conceptId": "q:subject3_q104",
     "text": "원료의 시장 가격 조사",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_d2882e",
-    "conceptId": "L576",
+    "conceptId": "q:subject3_q104",
     "text": "원료의 시험(필요 시) 실시",
     "truth": false
    }
@@ -9668,41 +9668,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2910 (출처: 과목3 문제은행 Q105)",
+  "citation": "📖 교재: L2880 (출처: 과목3 문제은행 Q105)",
   "stem": "화장품 제조 시 「포장재」의 관리 기준으로 가장 적절하지 않은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_38e0a7",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "포장재의 품질 기준 설정",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_dc9501",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "포장재의 검수 실시",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_38d691",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "포장재의 재활용 여부 확인",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_d7a786",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "포장재의 보관 관리",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_7987e9",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "포장재의 이물질 혼입 방지",
     "truth": false
    }
@@ -9751,7 +9751,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q105",
-  "explain": "📖 교재 근거 (교재: L2910):\n| 크로스컷트시험 🎯 기출 | 화장품 용기의 포장재료인 유리, 금속, 플라스틱의 유·무기 코팅막 및 도금의 밀착력 측정 / 규정된 점착테이프와 압착 장치를 이용하여 코팅막, 도금의 박리 여부를 확인 내어 압착 및 방치한 후 떼어냄 |",
+  "explain": "📖 교재 근거 (교재: L2880):\n| 크로스컷트시험 🎯 기출 | 화장품 용기의 포장재료인 유리, 금속, 플라스틱의 유·무기 코팅막 및 도금의 밀착력 측정 / 규정된 점착테이프와 압착 장치를 이용하여 코팅막, 도금의 박리 여부를 확인 내어 압착 및 방치한 후 떼어냄 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -9766,35 +9766,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_66d679",
-    "conceptId": "L421",
+    "conceptId": "q:subject3_q106",
     "text": "소비자 기호도 조사",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_f73d7b",
-    "conceptId": "L421",
+    "conceptId": "q:subject3_q106",
     "text": "피부 감작(알레르기) 시험",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_43bc00",
-    "conceptId": "L421",
+    "conceptId": "q:subject3_q106",
     "text": "안점막 자극 시험",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_edbe5b",
-    "conceptId": "L421",
+    "conceptId": "q:subject3_q106",
     "text": "경구 독성 시험",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_acfab6",
-    "conceptId": "L421",
+    "conceptId": "q:subject3_q106",
     "text": "피부 1차 자극 시험",
     "truth": false
    }
@@ -9854,41 +9854,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L500 (출처: 과목3 문제은행 Q107)",
+  "citation": "📖 교재: L470 (출처: 과목3 문제은행 Q107)",
   "stem": "다음 중 화장품 제조 시 「작업 지시서(SOP)」의 역할이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_14d63e",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "작업의 표준화",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_5bc5f4",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "품질의 균일성 확보",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_13b8c3",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "제품의 판매 전략 수립",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_101c07",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "작업 오류 방지",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_682544",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "작업자의 안전 확보",
     "truth": false
    }
@@ -9937,7 +9937,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q107",
-  "explain": "📖 교재 근거 (교재: L500):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L470):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -9952,35 +9952,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_d3170d",
-    "conceptId": "L3273",
+    "conceptId": "§6.1",
     "text": "유화 공정",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_94ea27",
-    "conceptId": "L3273",
+    "conceptId": "§6.1",
     "text": "혼합·교반 공정",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_043fb1",
-    "conceptId": "L3273",
+    "conceptId": "§6.1",
     "text": "충전 공정",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e71898",
-    "conceptId": "L3273",
+    "conceptId": "§6.1",
     "text": "포장 공정",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_cde4ba",
-    "conceptId": "L3273",
+    "conceptId": "§6.1",
     "text": "라벨링 공정",
     "truth": false
    }
@@ -10029,7 +10029,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q108",
-  "explain": "📖 교재 근거 (L3273):\n② 가용화 공정 또는 유화 공정 시 제조 온도와 설정 온도의 차이가 생기는 경우",
+  "explain": "📖 교재 근거 (L3211):\n② 가용화 공정 또는 유화 공정 시 제조 온도와 설정 온도의 차이가 생기는 경우",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -10038,41 +10038,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2343 (출처: 과목3 문제은행 Q109)",
+  "citation": "📖 교재: L2313 (출처: 과목3 문제은행 Q109)",
   "stem": "화장품 제조 시 「유효기간(사용기한)」 설정의 근거에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_8869fa",
-    "conceptId": "L2343",
+    "conceptId": "§4.1",
     "text": "마케팅 부서의 결정",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_323c9c",
-    "conceptId": "L2343",
+    "conceptId": "§4.1",
     "text": "원료 공급자의 권장",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_60700c",
-    "conceptId": "L2343",
+    "conceptId": "§4.1",
     "text": "소비자 설문 조사",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_522c27",
-    "conceptId": "L2343",
+    "conceptId": "§4.1",
     "text": "경쟁사 제품과의 비교",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_e89468",
-    "conceptId": "L2343",
+    "conceptId": "§4.1",
     "text": "안정성 시험 결과",
     "truth": true
    }
@@ -10120,7 +10120,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q109",
-  "explain": "📖 법령 근거 (교재: L2343):\n> - 온도·습도·차광: 필요한 항목 설정 / 안정성시험 결과, 제품표준서 등을 토대로 제품마다 설정",
+  "explain": "📖 법령 근거 (교재: L2313):\n> - 온도·습도·차광: 필요한 항목 설정 / 안정성시험 결과, 제품표준서 등을 토대로 제품마다 설정",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -10135,35 +10135,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_39f868",
-    "conceptId": "L1033",
+    "conceptId": "§1.3",
     "text": "충전량의 정확성",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_051fcf",
-    "conceptId": "L1033",
+    "conceptId": "§1.3",
     "text": "충전 온도",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_2911c2",
-    "conceptId": "L1033",
+    "conceptId": "§1.3",
     "text": "충전 작업자의 영업 실적",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_da0379",
-    "conceptId": "L1033",
+    "conceptId": "§1.3",
     "text": "충전 설비의 세정 상태",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_b62929",
-    "conceptId": "L1033",
+    "conceptId": "§1.3",
     "text": "충전 시 이물질 혼입 방지",
     "truth": false
    }
@@ -10212,7 +10212,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q110",
-  "explain": "📖 교재 근거 (L1033):\nroot((CGMP<br/>우수화장품 제조 및<br/>품질관리 기준<br/>제2024-46호))\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (L1003):\nroot((CGMP<br/>우수화장품 제조 및<br/>품질관리 기준<br/>제2024-46호))\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -10227,35 +10227,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_c36e63",
-    "conceptId": "L446",
+    "conceptId": "q:subject3_q111",
     "text": "위해사례가 접수된 경우",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_e81d07",
-    "conceptId": "L446",
+    "conceptId": "q:subject3_q111",
     "text": "정기 점검의 경우",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_5ac358",
-    "conceptId": "L446",
+    "conceptId": "q:subject3_q111",
     "text": "소비자 불만이 접수된 경우",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_7b8452",
-    "conceptId": "L446",
+    "conceptId": "q:subject3_q111",
     "text": "위 모든 경우",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_3188f6",
-    "conceptId": "L446",
+    "conceptId": "q:subject3_q111",
     "text": "품질 불량이 발견된 경우",
     "truth": false
    }
@@ -10320,35 +10320,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_0b9810",
-    "conceptId": "L1714",
+    "conceptId": "q:subject3_q112",
     "text": "폐기는 품질책임자의 승인을 받아 실시",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_682cc8",
-    "conceptId": "L1714",
+    "conceptId": "q:subject3_q112",
     "text": "폐기 사유를 기록으로 보존",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ab6adf",
-    "conceptId": "L1714",
+    "conceptId": "q:subject3_q112",
     "text": "부적합 제품은 무조건 폐기해야 한다",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_75d905",
-    "conceptId": "L1714",
+    "conceptId": "q:subject3_q112",
     "text": "폐기 방법은 문서화되어야 한다",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_bbe5c7",
-    "conceptId": "L1714",
+    "conceptId": "q:subject3_q112",
     "text": "폐기 현황을 기록으로 보존",
     "truth": false
    }
@@ -10408,41 +10408,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2417 (출처: 과목3 문제은행 Q113)",
+  "citation": "📖 교재: L2387 (출처: 과목3 문제은행 Q113)",
   "stem": "다음 중 화장품 제조 시 「재작업」의 조건으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_b8ba49",
-    "conceptId": "L2417",
+    "conceptId": "§4.2",
     "text": "재작업은 별도의 기준 없이 가능",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_3a2d5c",
-    "conceptId": "L2417",
+    "conceptId": "§4.2",
     "text": "재작업은 품질책임자의 승인 필요",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_4386ca",
-    "conceptId": "L2417",
+    "conceptId": "§4.2",
     "text": "재작업은 불가능하다",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_a55b2c",
-    "conceptId": "L2417",
+    "conceptId": "§4.2",
     "text": "재작업은 제조책임자의 독자적 결정으로 가능",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_9ef9d2",
-    "conceptId": "L2417",
+    "conceptId": "§4.2",
     "text": "재작업은 소비자의 동의가 필요",
     "truth": false
    }
@@ -10491,7 +10491,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q113",
-  "explain": "📖 교재 근거 (교재: L2417):\n> 참고 - 품질 책임자의 이행 업무",
+  "explain": "📖 교재 근거 (교재: L2387):\n> 참고 - 품질 책임자의 이행 업무",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -10500,41 +10500,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2087 (출처: 과목3 문제은행 Q114)",
+  "citation": "📖 교재: L2057 (출처: 과목3 문제은행 Q114)",
   "stem": "화장품 제조 시 「공정 검사」의 목적에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_39a21c",
-    "conceptId": "L2087",
+    "conceptId": "§4.1",
     "text": "완제품의 품질만 확인",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_cd25df",
-    "conceptId": "L2087",
+    "conceptId": "§4.1",
     "text": "원료의 시장 가격을 조사",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_99b863",
-    "conceptId": "L2087",
+    "conceptId": "§4.1",
     "text": "제품의 판매 가격을 결정",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_54953e",
-    "conceptId": "L2087",
+    "conceptId": "§4.1",
     "text": "제조 공정 중의 품질 이상을 조기에 발견",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_fd0e21",
-    "conceptId": "L2087",
+    "conceptId": "§4.1",
     "text": "소비자의 기호를 파악",
     "truth": false
    }
@@ -10584,7 +10584,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q114",
-  "explain": "📖 교재 근거 (교재: L2087):\n| 제조단위 또는 뱃치 | 하나의 공정이나 일련의 공정으로 제조되어 균질성을 갖는 화장품의 일정한 분량 |",
+  "explain": "📖 교재 근거 (교재: L2057):\n| 제조단위 또는 뱃치 | 하나의 공정이나 일련의 공정으로 제조되어 균질성을 갖는 화장품의 일정한 분량 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -10779,41 +10779,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1916 (출처: 과목3 문제은행 Q117)",
+  "citation": "📖 교재: L1886 (출처: 과목3 문제은행 Q117)",
   "stem": "화장품 제조 시 「기구의 소독」에 사용되는 방법이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_a5a550",
-    "conceptId": "L1916",
+    "conceptId": "§3.2",
     "text": "토클레이브(고압증기멸균)",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_f4fff0",
-    "conceptId": "L1916",
+    "conceptId": "§3.2",
     "text": "건열 멸균",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_30cb32",
-    "conceptId": "L1916",
+    "conceptId": "§3.2",
     "text": "물 세척만",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_3401f2",
-    "conceptId": "L1916",
+    "conceptId": "§3.2",
     "text": "자외선 소독",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_4fae06",
-    "conceptId": "L1916",
+    "conceptId": "§3.2",
     "text": "에탄올 소독",
     "truth": false
    }
@@ -10862,7 +10862,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q117",
-  "explain": "📖 교재 근거 (교재: L1916):\n> 문제 3. 화장품 제조 설비에서 가장 널리 사용되는 스테인리스 스틸은?\n> ① 304 ② 316 ③ 430 ④ 201\n>\n> 정답: ② 316 (단, 304도 널리 사용됨)\n> 해설: 탱크, 필터, 이송파이프, 충전기 등에서 316 스테인리스가 선호되며, 304도 함께 사용된다. 316은 304보다 부식에 강하다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1886):\n> 문제 3. 화장품 제조 설비에서 가장 널리 사용되는 스테인리스 스틸은?\n> ① 304 ② 316 ③ 430 ④ 201\n>\n> 정답: ② 316 (단, 304도 널리 사용됨)\n> 해설: 탱크, 필터, 이송파이프, 충전기 등에서 316 스테인리스가 선호되며, 304도 함께 사용된다. 316은 304보다 부식에 강하다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -10877,35 +10877,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_de669d",
-    "conceptId": "L402",
+    "conceptId": "q:subject3_q118",
     "text": "제품의 명칭 및 제조번호",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_33f3d8",
-    "conceptId": "L402",
+    "conceptId": "q:subject3_q118",
     "text": "위해 증상",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_76e96d",
-    "conceptId": "L402",
+    "conceptId": "q:subject3_q118",
     "text": "위해 발생 일자",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_0f1ee1",
-    "conceptId": "L402",
+    "conceptId": "q:subject3_q118",
     "text": "소비자의 신상 정보",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_52d294",
-    "conceptId": "L402",
+    "conceptId": "q:subject3_q118",
     "text": "위해 발생 경위",
     "truth": false
    }
@@ -10965,41 +10965,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L500 (출처: 과목3 문제은행 Q119)",
+  "citation": "📖 교재: L470 (출처: 과목3 문제은행 Q119)",
   "stem": "다음 중 화장품 제조 시 「원료 보관」의 기준으로 가장 적절하지 않은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_0457c3",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "원료는 품목별로 분리 보관",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_0d48fd",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "원료는 야외에 보관 가능",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_a701d7",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "원료의 보관 온습도 관리",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_33e812",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "원료의 유효기간 관리",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_cf9ba6",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "원료는 선입선출 원칙 적용",
     "truth": false
    }
@@ -11050,7 +11050,7 @@ var COMBO_DRILLS_subject3 = [
    "기한"
   ],
   "derivedFrom": "subject3_q119",
-  "explain": "📖 교재 근거 (교재: L500):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L470):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -11153,41 +11153,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1794 (출처: 과목3 문제은행 Q121)",
+  "citation": "📖 교재: L1764 (출처: 과목3 문제은행 Q121)",
   "stem": "화장품 제조 시 「설비의 세정」에 대한 기록으로 옳지 않은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_189f82",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "세정 방법",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_e61709",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "세정 담당자",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_83094c",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "세정 후 확인 결과",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_157a1d",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "세정 일자",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_603d8f",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "세정 비용 청구액",
     "truth": true
    }
@@ -11235,7 +11235,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q121",
-  "explain": "📖 교재 근거 (교재: L1794):\n| 게이지와 미터기 | - 온도, 압력, 흐름, 점도, pH, 속도, 부피 등 화장품의 특성을 측정 및 기록하기 위해 사용함<br>- 제품과 직접 접하는 게이지와 미터의 적절한 기능에 영향을 주지 않아야 하며, 대부분 원료와 직접 접하지 않도록 분리 장치를 제공함 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1764):\n| 게이지와 미터기 | - 온도, 압력, 흐름, 점도, pH, 속도, 부피 등 화장품의 특성을 측정 및 기록하기 위해 사용함<br>- 제품과 직접 접하는 게이지와 미터의 적절한 기능에 영향을 주지 않아야 하며, 대부분 원료와 직접 접하지 않도록 분리 장치를 제공함 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -11334,41 +11334,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1309 (출처: 과목3 문제은행 Q123)",
+  "citation": "📖 교재: L1279 (출처: 과목3 문제은행 Q123)",
   "stem": "화장품 제조 시 「포장 작업」의 관리 항목으로 가장 적절하지 않은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_c7ef5a",
-    "conceptId": "L1309",
+    "conceptId": "§2.2",
     "text": "포장 재료의 확인",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_443ba4",
-    "conceptId": "L1309",
+    "conceptId": "§2.2",
     "text": "포장량의 정확성",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_97c844",
-    "conceptId": "L1309",
+    "conceptId": "§2.2",
     "text": "포장 외관의 확인",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_62ba46",
-    "conceptId": "L1309",
+    "conceptId": "§2.2",
     "text": "포장 작업자의 식사 메뉴",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_1b075c",
-    "conceptId": "L1309",
+    "conceptId": "§2.2",
     "text": "라벨 표시 내용의 확인",
     "truth": false
    }
@@ -11415,7 +11415,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q123",
-  "explain": "📖 교재 근거 (교재: L1309):\n> 한 줄 요약: 방진복(특수화장품)·작업복(제조)·실험복(실험실) + 구역별 착용 기준(작업복·모·화: 제조·칭량·충전·포장).\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1279):\n> 한 줄 요약: 방진복(특수화장품)·작업복(제조)·실험복(실험실) + 구역별 착용 기준(작업복·모·화: 제조·칭량·충전·포장).\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -11424,41 +11424,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L3409 (출처: 과목3 문제은행 Q124)",
+  "citation": "📖 교재: L3377 (출처: 과목3 문제은행 Q124)",
   "stem": "화장품 제조 시 「기록의 보존」 기준으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_7b1bf8",
-    "conceptId": "L3409",
+    "conceptId": "§5.1",
     "text": "제품의 사용기한이 경과한 후 1년",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_425a9b",
-    "conceptId": "L3409",
+    "conceptId": "§5.1",
     "text": "3년",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_5da051",
-    "conceptId": "L3409",
+    "conceptId": "§5.1",
     "text": "1년",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_ed6b55",
-    "conceptId": "L3409",
+    "conceptId": "§5.1",
     "text": "5년",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_2e045b",
-    "conceptId": "L3409",
+    "conceptId": "§5.1",
     "text": "10년",
     "truth": false
    }
@@ -11510,7 +11510,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q124",
-  "explain": "📖 법령 근거 (교재: L3409):\n| 다등급 (위해 기준) | • 전부 또는 일부가 변패된 경우<br>• 병원미생물에 오염된 경우<br>• 이물이 혼입되었거나 부착되어 보건위생상 위해를 발생할 우려가 있는 경우<br>• 화장품에 사용할 수 없는 원료를 사용하였거나 유통화장품 안전관리 기준에 적합하지 않은 경우(기능성화장품의 주원료 함량이 부적합한 경우)<br>• 화장품의 사용기한 또는 개봉 후 사용기간(병행표시된 경우 제조연월일을 포함함)을 위조, 변조한 경우<br>• 그 밖에 화장품제조업자 및 책임판매업자 스스로 국민보건에 위해를 끼칠 우려가 있어 회수가 필요하다고 판단되는 경우<br>• 화장품제조업 또는 화장품책임판매업 등록을 하지 아니한 자가 제조한 화장품 또는 제조·수입하여 유통·판매한 화장품<br>• 화장품제조업 또는 화장품책임판매업 신고를 하지 아니한 자가 판매한 맞춤형화장품<br>• 맞춤형화장품조제관리사를 두지 아니하고 판매한 맞춤형화장품<br>• 화장품의 기재사항, 가격표시, 기재·표시상의 주의에 위반되는 화장품 또는 의약품으로 잘못 인식할 우려가 있게 기재·표시된 화장품<br>• 판매의 목적이 아닌 제품의 홍보·판매촉진 등을 위해 미리 소비자가 시험·사용하도록 제조 또는 수입된 화장품(소비자에게 판매하는 화장품에 한함)<br>• 화장품의 포장 및 기재·표시사항을 훼손(맞춤형화장품 판매를 위해 필요한 경우는 제외함) 또는 위조·변조한 것 |",
+  "explain": "📖 법령 근거 (교재: L3377):\n| 다등급 (위해 기준) | • 전부 또는 일부가 변패된 경우<br>• 병원미생물에 오염된 경우<br>• 이물이 혼입되었거나 부착되어 보건위생상 위해를 발생할 우려가 있는 경우<br>• 화장품에 사용할 수 없는 원료를 사용하였거나 유통화장품 안전관리 기준에 적합하지 않은 경우(기능성화장품의 주원료 함량이 부적합한 경우)<br>• 화장품의 사용기한 또는 개봉 후 사용기간(병행표시된 경우 제조연월일을 포함함)을 위조, 변조한 경우<br>• 그 밖에 화장품제조업자 및 책임판매업자 스스로 국민보건에 위해를 끼칠 우려가 있어 회수가 필요하다고 판단되는 경우<br>• 화장품제조업 또는 화장품책임판매업 등록을 하지 아니한 자가 제조한 화장품 또는 제조·수입하여 유통·판매한 화장품<br>• 화장품제조업 또는 화장품책임판매업 신고를 하지 아니한 자가 판매한 맞춤형화장품<br>• 맞춤형화장품조제관리사를 두지 아니하고 판매한 맞춤형화장품<br>• 화장품의 기재사항, 가격표시, 기재·표시상의 주의에 위반되는 화장품 또는 의약품으로 잘못 인식할 우려가 있게 기재·표시된 화장품<br>• 판매의 목적이 아닌 제품의 홍보·판매촉진 등을 위해 미리 소비자가 시험·사용하도록 제조 또는 수입된 화장품(소비자에게 판매하는 화장품에 한함)<br>• 화장품의 포장 및 기재·표시사항을 훼손(맞춤형화장품 판매를 위해 필요한 경우는 제외함) 또는 위조·변조한 것 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -11525,35 +11525,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_6cdbaa",
-    "conceptId": "L159",
+    "conceptId": "q:subject3_q125",
     "text": "작업복의 착용",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_fbee97",
-    "conceptId": "L159",
+    "conceptId": "q:subject3_q125",
     "text": "손 세척 및 소독",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e7d284",
-    "conceptId": "L159",
+    "conceptId": "q:subject3_q125",
     "text": "개인 휴대전화 사용 시간",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_cb12d5",
-    "conceptId": "L159",
+    "conceptId": "q:subject3_q125",
     "text": "작업장 출입 시 위생 관리 절차 준수",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_e89089",
-    "conceptId": "L159",
+    "conceptId": "q:subject3_q125",
     "text": "건강 검진",
     "truth": false
    }
@@ -11616,35 +11616,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_bc9125",
-    "conceptId": "L564",
+    "conceptId": "q:subject3_q126",
     "text": "공급자의 평가 및 선정",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_16c16e",
-    "conceptId": "L564",
+    "conceptId": "q:subject3_q126",
     "text": "공급자의 마케팅 전략 검토",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_52bef0",
-    "conceptId": "L564",
+    "conceptId": "q:subject3_q126",
     "text": "원료의 품질 기준 합의",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_fa218a",
-    "conceptId": "L564",
+    "conceptId": "q:subject3_q126",
     "text": "공급자의 품질 보증 능력 확인",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ed92ed",
-    "conceptId": "L564",
+    "conceptId": "q:subject3_q126",
     "text": "공급자의 정기 평가",
     "truth": false
    }
@@ -11704,41 +11704,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1794 (출처: 과목3 문제은행 Q127)",
+  "citation": "📖 교재: L1764 (출처: 과목3 문제은행 Q127)",
   "stem": "화장품 제조 시 「온도·습도」의 기록 주기에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_1617b9",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "1년마다",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_42df23",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "6개월마다",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_0d8116",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "작업 시마다(또는 일일)",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_6ecf77",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "필요시에만",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_5d8705",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "기록 불필요",
     "truth": false
    }
@@ -11790,7 +11790,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q127",
-  "explain": "📖 교재 근거 (교재: L1794):\n| 게이지와 미터기 | - 온도, 압력, 흐름, 점도, pH, 속도, 부피 등 화장품의 특성을 측정 및 기록하기 위해 사용함<br>- 제품과 직접 접하는 게이지와 미터의 적절한 기능에 영향을 주지 않아야 하며, 대부분 원료와 직접 접하지 않도록 분리 장치를 제공함 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1764):\n| 게이지와 미터기 | - 온도, 압력, 흐름, 점도, pH, 속도, 부피 등 화장품의 특성을 측정 및 기록하기 위해 사용함<br>- 제품과 직접 접하는 게이지와 미터의 적절한 기능에 영향을 주지 않아야 하며, 대부분 원료와 직접 접하지 않도록 분리 장치를 제공함 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -11891,41 +11891,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2247 (출처: 과목3 문제은행 Q129)",
+  "citation": "📖 교재: L2217 (출처: 과목3 문제은행 Q129)",
   "stem": "화장품 제조 시 「시료 채취」의 원칙이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_902c97",
-    "conceptId": "L2247",
+    "conceptId": "§4.1",
     "text": "대표성이 있는 시료 채취",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_7590cb",
-    "conceptId": "L2247",
+    "conceptId": "§4.1",
     "text": "시료 채취 시 무작위로 아무 곳에서나 채취",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ae45e4",
-    "conceptId": "L2247",
+    "conceptId": "§4.1",
     "text": "시료 채취량의 적정성",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_f69fac",
-    "conceptId": "L2247",
+    "conceptId": "§4.1",
     "text": "시료 채취 위치의 지정",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_a2bed1",
-    "conceptId": "L2247",
+    "conceptId": "§4.1",
     "text": "시료 채취 도구의 세정·소독",
     "truth": false
    }
@@ -11971,7 +11971,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q129",
-  "explain": "📖 교재 근거 (교재: L2247):\n- 화장품책임판매업자는 세포·조직의 채취, 검사, 배양액 제조 등을 실시한 기관에 대해 안전하고 품질이 균일한 인체 세포·조직 배양액이 제조될 수 있도록 관리·감독을 철저히 하여야 한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L2217):\n- 화장품책임판매업자는 세포·조직의 채취, 검사, 배양액 제조 등을 실시한 기관에 대해 안전하고 품질이 균일한 인체 세포·조직 배양액이 제조될 수 있도록 관리·감독을 철저히 하여야 한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -11980,41 +11980,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L438 (출처: 과목3 문제은행 Q130)",
+  "citation": "📖 교재: L408 (출처: 과목3 문제은행 Q130)",
   "stem": "화장품 제조 시 「라벨링」의 관리 항목이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_55526e",
-    "conceptId": "L438",
+    "conceptId": "§1.1",
     "text": "라벨의 내용 확인",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_3c384b",
-    "conceptId": "L438",
+    "conceptId": "§1.1",
     "text": "라벨의 부착 위치 확인",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ce9367",
-    "conceptId": "L438",
+    "conceptId": "§1.1",
     "text": "라벨 디자인의 소비자 선호도 조사",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_5bde95",
-    "conceptId": "L438",
+    "conceptId": "§1.1",
     "text": "라벨 부착 설비의 관리",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_1b9b78",
-    "conceptId": "L438",
+    "conceptId": "§1.1",
     "text": "라벨의 품질(인쇄 상태) 확인",
     "truth": false
    }
@@ -12059,7 +12059,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q130",
-  "explain": "📖 법령 근거 (교재: L438):\n| 목적 | 우수화장품 제조 및 품질관리 기준에 관한 세부사항을 정하고, 이를 이행하도록 권장함으로써 우수한 화장품을 제조·공급하여 소비자보호 및 국민 보건 향상에 기여함 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 법령 근거 (교재: L408):\n| 목적 | 우수화장품 제조 및 품질관리 기준에 관한 세부사항을 정하고, 이를 이행하도록 권장함으로써 우수한 화장품을 제조·공급하여 소비자보호 및 국민 보건 향상에 기여함 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -12068,41 +12068,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1794 (출처: 과목3 문제은행 Q131)",
+  "citation": "📖 교재: L1764 (출처: 과목3 문제은행 Q131)",
   "stem": "다음 중 화장품 제조 시 「공정 검사」의 항목으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_5c0dbf",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "제품의 시장 점유율",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_4746b3",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "제품의 광고 효과",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_d05270",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "반제품의 pH 및 점도 확인",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_501db3",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "원료의 시장 가격",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_d41179",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "소비자의 구매 패턴",
     "truth": false
    }
@@ -12149,7 +12149,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q131",
-  "explain": "📖 교재 근거 (교재: L1794):\n| 게이지와 미터기 | - 온도, 압력, 흐름, 점도, pH, 속도, 부피 등 화장품의 특성을 측정 및 기록하기 위해 사용함<br>- 제품과 직접 접하는 게이지와 미터의 적절한 기능에 영향을 주지 않아야 하며, 대부분 원료와 직접 접하지 않도록 분리 장치를 제공함 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1764):\n| 게이지와 미터기 | - 온도, 압력, 흐름, 점도, pH, 속도, 부피 등 화장품의 특성을 측정 및 기록하기 위해 사용함<br>- 제품과 직접 접하는 게이지와 미터의 적절한 기능에 영향을 주지 않아야 하며, 대부분 원료와 직접 접하지 않도록 분리 장치를 제공함 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -12158,41 +12158,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2222 (출처: 과목3 문제은행 Q132)",
+  "citation": "📖 교재: L2192 (출처: 과목3 문제은행 Q132)",
   "stem": "화장품 제조 시 「작업 구역」의 분리 기준이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_bbe110",
-    "conceptId": "L2222",
+    "conceptId": "§4.1",
     "text": "작업자의 계급에 따른 분리",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_beb1ba",
-    "conceptId": "L2222",
+    "conceptId": "§4.1",
     "text": "제품의 종류에 따른 분리",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_1d853d",
-    "conceptId": "L2222",
+    "conceptId": "§4.1",
     "text": "작업의 종류에 따른 분리",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_47a39b",
-    "conceptId": "L2222",
+    "conceptId": "§4.1",
     "text": "교차 오염 방지를 위한 분리",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_592b98",
-    "conceptId": "L2222",
+    "conceptId": "§4.1",
     "text": "청정도 등급에 따른 분리",
     "truth": false
    }
@@ -12241,7 +12241,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q132",
-  "explain": "📖 법령 근거 (교재: L2222):\n| pH 시험법 | 검체 약 2g 또는 2mL를 취하여 100mL 비커에 넣고 물 30mL를 넣어 수욕상에서 가온하여 지방분을 녹이고 흔들어 섞은 다음 냉장고에서 지방분을 응결시켜 여과함(이때 지방층과 물층이 분리되지 않을 때는 그대로 사용) → 여액을 가지고 「기능성화장품 기준 및 시험방법」(식품의약품안전처 고시) 일반시험법 1. 원료의 \"47. pH측정법\"에 따라 시험(다만, 성상에 따라 투명한 액상인 경우에는 그대로 측정) |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 법령 근거 (교재: L2192):\n| pH 시험법 | 검체 약 2g 또는 2mL를 취하여 100mL 비커에 넣고 물 30mL를 넣어 수욕상에서 가온하여 지방분을 녹이고 흔들어 섞은 다음 냉장고에서 지방분을 응결시켜 여과함(이때 지방층과 물층이 분리되지 않을 때는 그대로 사용) → 여액을 가지고 「기능성화장품 기준 및 시험방법」(식품의약품안전처 고시) 일반시험법 1. 원료의 \"47. pH측정법\"에 따라 시험(다만, 성상에 따라 투명한 액상인 경우에는 그대로 측정) |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -12250,41 +12250,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1791 (출처: 과목3 문제은행 Q133)",
+  "citation": "📖 교재: L1761 (출처: 과목3 문제은행 Q133)",
   "stem": "화장품 제조 시 「완제품 검사」 항목이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_79218e",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "관능 시험",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_36b850",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "미생물 시험",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_7ea054",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "마케팅 효과 분석",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_64d9a8",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "pH 시험",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_e88a00",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "중금속 시험",
     "truth": false
    }
@@ -12332,7 +12332,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q133",
-  "explain": "📖 교재 근거 (교재: L1791):\n| 필터, 여과기, 체 | - 화장품 원료와 완제품의 입자 크기를 작게 하고, 덩어리 모양을 깨고, 불순물을 제거하기 위해 사용<br>- 스테인리스 스틸과 비반응성 섬유이며, 316스테인리스는 제품 제조 시 선호 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1761):\n| 필터, 여과기, 체 | - 화장품 원료와 완제품의 입자 크기를 작게 하고, 덩어리 모양을 깨고, 불순물을 제거하기 위해 사용<br>- 스테인리스 스틸과 비반응성 섬유이며, 316스테인리스는 제품 제조 시 선호 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -12341,41 +12341,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L500 (출처: 과목3 문제은행 Q134)",
+  "citation": "📖 교재: L470 (출처: 과목3 문제은행 Q134)",
   "stem": "다음 중 화장품 제조 시 「작업 지시서(SOP)」에 포함되어야 할 내용이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_0f352c",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "작업 절차",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_13c746",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "사용 설비 및 기구",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_3bd626",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "작업 상의 주의 사항",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_986a3c",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "작업 후의 기록 사항",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_9fd3e0",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "작업자의 퇴직금 계산 방법",
     "truth": true
    }
@@ -12422,7 +12422,7 @@ var COMBO_DRILLS_subject3 = [
    "구성비"
   ],
   "derivedFrom": "subject3_q134",
-  "explain": "📖 교재 근거 (교재: L500):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L470):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -12431,34 +12431,34 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2081 (출처: 과목3 문제은행 Q135)",
+  "citation": "📖 교재: L2051 (출처: 과목3 문제은행 Q135)",
   "stem": "화장품 제조 시 「공정 변경」 시 취해야 할 조치에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_d3a54a",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "변경 전 품질관리책임자의 승인",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_046392",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "변경 후 문서의 개정",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ffdbb2",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "변경의 영향 평가",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_94ce60",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "별도 조치 불필요",
     "truth": false
    }
@@ -12505,7 +12505,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q135",
-  "explain": "📖 법령 근거 (교재: L2081):\n| 변경관리 | 모든 제조, 관리 및 보관된 제품이 규정된 적합 판정 기준에 일치하도록 보장하기 위해 우수화장품 제조 및 품질관리기준(CGMP)이 적용되는 모든 활동을 내부 조직의 책임하에 계획하여 변경하는 것 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 법령 근거 (교재: L2051):\n| 변경관리 | 모든 제조, 관리 및 보관된 제품이 규정된 적합 판정 기준에 일치하도록 보장하기 위해 우수화장품 제조 및 품질관리기준(CGMP)이 적용되는 모든 활동을 내부 조직의 책임하에 계획하여 변경하는 것 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -12520,35 +12520,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_8d345f",
-    "conceptId": "L1033",
+    "conceptId": "§1.3",
     "text": "작업자 개인",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_472e0e",
-    "conceptId": "L1033",
+    "conceptId": "§1.3",
     "text": "제조 담당자",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_87275c",
-    "conceptId": "L1033",
+    "conceptId": "§1.3",
     "text": "전 직원 공동 (최고경영자의 책임)",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_ff47fe",
-    "conceptId": "L1033",
+    "conceptId": "§1.3",
     "text": "대표이사",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ac3f32",
-    "conceptId": "L1033",
+    "conceptId": "§1.3",
     "text": "품질관리책임자",
     "truth": false
    }
@@ -12596,7 +12596,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q136",
-  "explain": "📖 교재 근거 (L1033):\nroot((CGMP<br/>우수화장품 제조 및<br/>품질관리 기준<br/>제2024-46호))\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (L1003):\nroot((CGMP<br/>우수화장품 제조 및<br/>품질관리 기준<br/>제2024-46호))\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -12605,41 +12605,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L3486 (출처: 과목3 문제은행 Q137)",
+  "citation": "📖 교재: L3424 (출처: 과목3 문제은행 Q137)",
   "stem": "다음 중 화장품 제조 시 「설비의 교정」 대상이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_34669c",
-    "conceptId": "L3486",
+    "conceptId": "§6.3",
     "text": "온도계",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_1996c2",
-    "conceptId": "L3486",
+    "conceptId": "§6.3",
     "text": "압력계",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_a6f130",
-    "conceptId": "L3486",
+    "conceptId": "§6.3",
     "text": "저울",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_4e3504",
-    "conceptId": "L3486",
+    "conceptId": "§6.3",
     "text": "pH 미터",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_8b8b04",
-    "conceptId": "L3486",
+    "conceptId": "§6.3",
     "text": "작업용 의자",
     "truth": true
    }
@@ -12689,7 +12689,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q137",
-  "explain": "📖 교재 근거 (교재: L3486):\n> 한 줄 요약: 칭량(전자저울·메스실린더) + 혼합(호모게나이저·디스퍼·오버헤드스터러) + 소분(스패츌러·디스펜서·피펫) + 측정(pH미터·점도계·경도계) + 살균(자외선 살균기).",
+  "explain": "📖 교재 근거 (교재: L3424):\n> 한 줄 요약: 칭량(전자저울·메스실린더) + 혼합(호모게나이저·디스퍼·오버헤드스터러) + 소분(스패츌러·디스펜서·피펫) + 측정(pH미터·점도계·경도계) + 살균(자외선 살균기).",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -12698,41 +12698,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2788 (출처: 과목3 문제은행 Q138)",
+  "citation": "📖 교재: L2758 (출처: 과목3 문제은행 Q138)",
   "stem": "화장품 제조 시 「공정의 검증(밸리데이션)」의 목적에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_1cedc9",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "제품의 판매 가격 결정",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_a45ebb",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "공정이 일관된 품질을 보장할 수 있음을 입증",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_a75c43",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "소비자의 기호 파악",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_10e056",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "원료의 시장 조사",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_78ac47",
-    "conceptId": "L2788",
+    "conceptId": "§5.1",
     "text": "경쟁사 제품 분석",
     "truth": false
    }
@@ -12783,7 +12783,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q138",
-  "explain": "📖 교재 근거 (교재: L2788):\n① 화장품의 제조와 포장에 사용되는 모든 원료 및 포장재의 부적절하고 위험한 사용, 혼합 또는 오염을 방지하기 위해 해당 물질의 검증·확인·취급 및 사용을 보장할 수 있도록 절차가 수립되어 외부로부터 공급된 원료 및 포장재는 규정된 완제품 품질합격 판정 기준을 충족시켜야 한다.",
+  "explain": "📖 교재 근거 (교재: L2758):\n① 화장품의 제조와 포장에 사용되는 모든 원료 및 포장재의 부적절하고 위험한 사용, 혼합 또는 오염을 방지하기 위해 해당 물질의 검증·확인·취급 및 사용을 보장할 수 있도록 절차가 수립되어 외부로부터 공급된 원료 및 포장재는 규정된 완제품 품질합격 판정 기준을 충족시켜야 한다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -12798,35 +12798,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_fe03e3",
-    "conceptId": "L436",
+    "conceptId": "q:subject3_q139",
     "text": "불만의 접수 및 기록",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_4ac13f",
-    "conceptId": "L436",
+    "conceptId": "q:subject3_q139",
     "text": "불만 원인의 조사",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_52a4ef",
-    "conceptId": "L436",
+    "conceptId": "q:subject3_q139",
     "text": "시정조치의 실시",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_15c4d7",
-    "conceptId": "L436",
+    "conceptId": "q:subject3_q139",
     "text": "조치 결과의 기록 및 보존",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_e55900",
-    "conceptId": "L436",
+    "conceptId": "q:subject3_q139",
     "text": "불만 접수자의 인사 평가",
     "truth": true
    }
@@ -12885,41 +12885,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L500 (출처: 과목3 문제은행 Q140)",
+  "citation": "📖 교재: L470 (출처: 과목3 문제은행 Q140)",
   "stem": "화장품 제조 시 「청정도 측정」의 주기에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_51a591",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "1년마다",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_8f908a",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "6개월마다",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_238b43",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "정기적으로(분기 또는 반기)",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e39f3e",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "필요시에만",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_1c59da",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "측정 불필요",
     "truth": false
    }
@@ -12971,7 +12971,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q140",
-  "explain": "📖 교재 근거 (교재: L500):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L470):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -12980,41 +12980,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2222 (출처: 과목3 문제은행 Q141)",
+  "citation": "📖 교재: L2192 (출처: 과목3 문제은행 Q141)",
   "stem": "다음 중 화장품 제조 시 「원료의 시험」 항목이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_8dbac6",
-    "conceptId": "L2222",
+    "conceptId": "§4.1",
     "text": "관능 시험",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_b5e2cc",
-    "conceptId": "L2222",
+    "conceptId": "§4.1",
     "text": "수분 함량 시험",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_24c71f",
-    "conceptId": "L2222",
+    "conceptId": "§4.1",
     "text": "순도 시험",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_607c77",
-    "conceptId": "L2222",
+    "conceptId": "§4.1",
     "text": "미생물 시험(필요 시)",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_1904ad",
-    "conceptId": "L2222",
+    "conceptId": "§4.1",
     "text": "원료의 시장 가격 조사",
     "truth": true
    }
@@ -13059,7 +13059,7 @@ var COMBO_DRILLS_subject3 = [
    "한도"
   ],
   "derivedFrom": "subject3_q141",
-  "explain": "📖 법령 근거 (교재: L2222):\n| pH 시험법 | 검체 약 2g 또는 2mL를 취하여 100mL 비커에 넣고 물 30mL를 넣어 수욕상에서 가온하여 지방분을 녹이고 흔들어 섞은 다음 냉장고에서 지방분을 응결시켜 여과함(이때 지방층과 물층이 분리되지 않을 때는 그대로 사용) → 여액을 가지고 「기능성화장품 기준 및 시험방법」(식품의약품안전처 고시) 일반시험법 1. 원료의 \"47. pH측정법\"에 따라 시험(다만, 성상에 따라 투명한 액상인 경우에는 그대로 측정) |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 법령 근거 (교재: L2192):\n| pH 시험법 | 검체 약 2g 또는 2mL를 취하여 100mL 비커에 넣고 물 30mL를 넣어 수욕상에서 가온하여 지방분을 녹이고 흔들어 섞은 다음 냉장고에서 지방분을 응결시켜 여과함(이때 지방층과 물층이 분리되지 않을 때는 그대로 사용) → 여액을 가지고 「기능성화장품 기준 및 시험방법」(식품의약품안전처 고시) 일반시험법 1. 원료의 \"47. pH측정법\"에 따라 시험(다만, 성상에 따라 투명한 액상인 경우에는 그대로 측정) |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -13074,35 +13074,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_cb82df",
-    "conceptId": "L320",
+    "conceptId": "§1.0",
     "text": "온도",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_52dd33",
-    "conceptId": "L320",
+    "conceptId": "§1.0",
     "text": "작업자의 심박수",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_9515ad",
-    "conceptId": "L320",
+    "conceptId": "§1.0",
     "text": "압력",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_ae7be9",
-    "conceptId": "L320",
+    "conceptId": "§1.0",
     "text": "교반 속도",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_359461",
-    "conceptId": "L320",
+    "conceptId": "§1.0",
     "text": "습도",
     "truth": false
    }
@@ -13162,41 +13162,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2910 (출처: 과목3 문제은행 Q143)",
+  "citation": "📖 교재: L2880 (출처: 과목3 문제은행 Q143)",
   "stem": "다음 중 화장품 제조 시 「포장재 검수」 항목이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_a07af3",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "포장재 제조업체의 주가 확인",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_200794",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "포장재의 수량 확인",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_1b9168",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "포장재의 외관 확인",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_88769e",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "포장재의 규격 적합성 확인",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_459b99",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "포장재의 품명 확인",
     "truth": false
    }
@@ -13244,7 +13244,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q143",
-  "explain": "📖 교재 근거 (교재: L2910):\n| 크로스컷트시험 🎯 기출 | 화장품 용기의 포장재료인 유리, 금속, 플라스틱의 유·무기 코팅막 및 도금의 밀착력 측정 / 규정된 점착테이프와 압착 장치를 이용하여 코팅막, 도금의 박리 여부를 확인 내어 압착 및 방치한 후 떼어냄 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L2880):\n| 크로스컷트시험 🎯 기출 | 화장품 용기의 포장재료인 유리, 금속, 플라스틱의 유·무기 코팅막 및 도금의 밀착력 측정 / 규정된 점착테이프와 압착 장치를 이용하여 코팅막, 도금의 박리 여부를 확인 내어 압착 및 방치한 후 떼어냄 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -13259,35 +13259,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_491208",
-    "conceptId": "L655",
+    "conceptId": "q:subject3_q144",
     "text": "적정 온도 유지",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_b8d4f7",
-    "conceptId": "L655",
+    "conceptId": "q:subject3_q144",
     "text": "적정 습도 유지",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_0286cf",
-    "conceptId": "L655",
+    "conceptId": "q:subject3_q144",
     "text": "작업 환경의 관리 기준은 불필요",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_0655f7",
-    "conceptId": "L655",
+    "conceptId": "q:subject3_q144",
     "text": "조명의 적정성 유지",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_08e34c",
-    "conceptId": "L655",
+    "conceptId": "q:subject3_q144",
     "text": "환기 시설 가동",
     "truth": false
    }
@@ -13352,35 +13352,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_bc45b7",
-    "conceptId": "L175",
+    "conceptId": "q:subject3_q145",
     "text": "설비의 설치 위치 적정성",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_e76c5d",
-    "conceptId": "L175",
+    "conceptId": "q:subject3_q145",
     "text": "설비의 구조 및 재질의 적합성",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_897cc4",
-    "conceptId": "L175",
+    "conceptId": "q:subject3_q145",
     "text": "설비의 세정·소독의 용이성",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_0bff73",
-    "conceptId": "L175",
+    "conceptId": "q:subject3_q145",
     "text": "설비의 미적 디자인",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ef00b2",
-    "conceptId": "L175",
+    "conceptId": "q:subject3_q145",
     "text": "설비의 성능 유지 관리",
     "truth": false
    }
@@ -13445,35 +13445,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_95c753",
-    "conceptId": "L183",
+    "conceptId": "q:subject3_q146",
     "text": "작업 완료 후 일괄 작성",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_0cb7c0",
-    "conceptId": "L183",
+    "conceptId": "q:subject3_q146",
     "text": "작업과 동시에 실시간 기록",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_712ad2",
-    "conceptId": "L183",
+    "conceptId": "q:subject3_q146",
     "text": "작업 전 사전 작성",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_051646",
-    "conceptId": "L183",
+    "conceptId": "q:subject3_q146",
     "text": "주 1회 작성",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_cee08d",
-    "conceptId": "L183",
+    "conceptId": "q:subject3_q146",
     "text": "월 1회 작성",
     "truth": false
    }
@@ -13539,35 +13539,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_f16716",
-    "conceptId": "L982",
+    "conceptId": "§1.3",
     "text": "조직 및 책임",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_d8ea39",
-    "conceptId": "L982",
+    "conceptId": "§1.3",
     "text": "품질 기준 및 절차",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_476975",
-    "conceptId": "L982",
+    "conceptId": "§1.3",
     "text": "문서 관리",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e83165",
-    "conceptId": "L982",
+    "conceptId": "§1.3",
     "text": "마케팅 전략",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_471109",
-    "conceptId": "L982",
+    "conceptId": "§1.3",
     "text": "내부 감사",
     "truth": false
    }
@@ -13632,35 +13632,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_28b900",
-    "conceptId": "L744",
+    "conceptId": "q:subject3_q148",
     "text": "계량 설비의 정밀도",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_3786f9",
-    "conceptId": "L744",
+    "conceptId": "q:subject3_q148",
     "text": "계량의 정확성",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_b709f7",
-    "conceptId": "L744",
+    "conceptId": "q:subject3_q148",
     "text": "계량 담당자의 확인",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_f6364e",
-    "conceptId": "L744",
+    "conceptId": "q:subject3_q148",
     "text": "계량 후 기록의 작성",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_abf74d",
-    "conceptId": "L744",
+    "conceptId": "q:subject3_q148",
     "text": "원료의 브랜드 인지도",
     "truth": true
    }
@@ -13721,41 +13721,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L466 (출처: 과목3 문제은행 Q149)",
+  "citation": "📖 교재: L436 (출처: 과목3 문제은행 Q149)",
   "stem": "다음 중 화장품 제조 시 「충전 설비」의 관리 기준으로 옳지 않은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_596147",
-    "conceptId": "L466",
+    "conceptId": "§1.1",
     "text": "충전 설비의 세정·소독",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_5a8f32",
-    "conceptId": "L466",
+    "conceptId": "§1.1",
     "text": "충전 설비의 교정",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_f3acfb",
-    "conceptId": "L466",
+    "conceptId": "§1.1",
     "text": "충전 시 이물질 혼입 방지",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_c7629e",
-    "conceptId": "L466",
+    "conceptId": "§1.1",
     "text": "충전량의 정확성 확인",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_7ecf38",
-    "conceptId": "L466",
+    "conceptId": "§1.1",
     "text": "충전 설비의 외관 도장 색상",
     "truth": true
    }
@@ -13805,7 +13805,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q149",
-  "explain": "📖 법령 근거 (교재: L466):\n4. 제조시설이나 설비는 적절한 방법으로 청소하여야 하며, 필요한 경우 위생관리 프로그램을 운영해야 한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 법령 근거 (교재: L436):\n4. 제조시설이나 설비는 적절한 방법으로 청소하여야 하며, 필요한 경우 위생관리 프로그램을 운영해야 한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -13814,41 +13814,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2076 (출처: 과목3 문제은행 Q150)",
+  "citation": "📖 교재: L2046 (출처: 과목3 문제은행 Q150)",
   "stem": "CGMP 기준상 '기준일탈(OOS)'의 정의로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_4c3d7f",
-    "conceptId": "L2076",
+    "conceptId": "§4.1",
     "text": "제조 과정에서 미생물이 검출된 상태",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_5eb89f",
-    "conceptId": "L2076",
+    "conceptId": "§4.1",
     "text": "소비자로부터 접수된 제품 불만",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_bef27c",
-    "conceptId": "L2076",
+    "conceptId": "§4.1",
     "text": "원자재 공급자가 변경된 상황",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_60db12",
-    "conceptId": "L2076",
+    "conceptId": "§4.1",
     "text": "제조 설비의 고장으로 인한 생산 중단",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_f24b32",
-    "conceptId": "L2076",
+    "conceptId": "§4.1",
     "text": "규정된 합격 판정 기준에 일치하지 않는 검사, 측정 또는 시험 결과",
     "truth": true
    }
@@ -13896,7 +13896,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q150",
-  "explain": "📖 교재 근거 (교재: L2076):\n| 기준일탈 | 규정된 합격 판정 기준에 일치하지 않는 검사, 측정 또는 시험 결과 |",
+  "explain": "📖 교재 근거 (교재: L2046):\n| 기준일탈 | 규정된 합격 판정 기준에 일치하지 않는 검사, 측정 또는 시험 결과 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -13905,41 +13905,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2082 (출처: 과목3 문제은행 Q151)",
+  "citation": "📖 교재: L2052 (출처: 과목3 문제은행 Q151)",
   "stem": "CGMP 기준상 '적합 판정 기준'의 정의로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_18c77a",
-    "conceptId": "L2082",
+    "conceptId": "§4.1",
     "text": "제조 설비의 적합성을 평가하는 기준",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_02ee1c",
-    "conceptId": "L2082",
+    "conceptId": "§4.1",
     "text": "제품 출하 후 소비자 만족도를 평가하는 기준",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_7dde10",
-    "conceptId": "L2082",
+    "conceptId": "§4.1",
     "text": "작업자 위생 상태를 평가하는 기준",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e49165",
-    "conceptId": "L2082",
+    "conceptId": "§4.1",
     "text": "원자재 입고 시 포장 상태를 확인하는 기준",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_e48561",
-    "conceptId": "L2082",
+    "conceptId": "§4.1",
     "text": "시험 결과의 적합 판정을 위한 수적인 제한, 범위 또는 기타 적절한 측정법",
     "truth": true
    }
@@ -13990,7 +13990,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q151",
-  "explain": "📖 교재 근거 (교재: L2082):\n| 적합 판정 기준 | 시험 결과의 적합 판정을 위한 수적인 제한, 범위 또는 기타 적절한 측정법 |",
+  "explain": "📖 교재 근거 (교재: L2052):\n| 적합 판정 기준 | 시험 결과의 적합 판정을 위한 수적인 제한, 범위 또는 기타 적절한 측정법 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -14005,35 +14005,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_04c1f1",
-    "conceptId": "L2075",
+    "conceptId": "§4.1",
     "text": "제품 출하 후 발생하는 소비자 불만",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_d4fadb",
-    "conceptId": "L2075",
+    "conceptId": "§4.1",
     "text": "제조 설비의 정기 교체 주기 경과",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_b95dbb",
-    "conceptId": "L2075",
+    "conceptId": "§4.1",
     "text": "원자재의 품질 시험 결과 불합격 판정",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_880f28",
-    "conceptId": "L2075",
+    "conceptId": "§4.1",
     "text": "미리 정해진 우수화장품 제조 및 품질관리기준(CGMP)을 벗어나 이루어진 행위",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_405e13",
-    "conceptId": "L2075",
+    "conceptId": "§4.1",
     "text": "작업자의 건강검진 결과 이상 소견",
     "truth": false
    }
@@ -14087,7 +14087,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q152",
-  "explain": "📖 교재 근거 (L2075):\n| 일탈 | 제조 또는 품질관리 활동 등의 미리 정해진 우수화장품 제조 및 품질관리기준(CGMP)을 벗어나 이루어진 행위 |",
+  "explain": "📖 교재 근거 (L2045):\n| 일탈 | 제조 또는 품질관리 활동 등의 미리 정해진 우수화장품 제조 및 품질관리기준(CGMP)을 벗어나 이루어진 행위 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -14096,41 +14096,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2087 (출처: 과목3 문제은행 Q153)",
+  "citation": "📖 교재: L2057 (출처: 과목3 문제은행 Q153)",
   "stem": "CGMP 기준상 '뱃치(Batch)'의 정의로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_4c86ab",
-    "conceptId": "L2087",
+    "conceptId": "§4.1",
     "text": "하루 동안 생산된 모든 제품의 합",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_f555c3",
-    "conceptId": "L2087",
+    "conceptId": "§4.1",
     "text": "하나의 공정이나 일련의 공정으로 제조되어 균질성을 갖는 화장품의 일정한 분량",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_631fca",
-    "conceptId": "L2087",
+    "conceptId": "§4.1",
     "text": "소비자에게 출하된 제품의 회수 단위",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_0d9993",
-    "conceptId": "L2087",
+    "conceptId": "§4.1",
     "text": "원자재를 입고할 때 부여하는 관리 번호",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_974c24",
-    "conceptId": "L2087",
+    "conceptId": "§4.1",
     "text": "품질 시험에서 불합격된 제품의 모음",
     "truth": false
    }
@@ -14175,7 +14175,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q153",
-  "explain": "📖 교재 근거 (교재: L2087):\n| 제조단위 또는 뱃치 | 하나의 공정이나 일련의 공정으로 제조되어 균질성을 갖는 화장품의 일정한 분량 |",
+  "explain": "📖 교재 근거 (교재: L2057):\n| 제조단위 또는 뱃치 | 하나의 공정이나 일련의 공정으로 제조되어 균질성을 갖는 화장품의 일정한 분량 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -14184,41 +14184,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2081 (출처: 과목3 문제은행 Q154)",
+  "citation": "📖 교재: L2051 (출처: 과목3 문제은행 Q154)",
   "stem": "CGMP 기준상 '변경관리'의 정의로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_957628",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "소비자 불만에 따른 제품 회수 절차",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_aaba3f",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "모든 제조, 관리 및 보관된 제품이 규정된 적합 판정 기준에 일치하도록 보장하기 위해 변경하는 것",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_bbea4f",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "원자재 공급자를 변경하는 절차",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_d2a609",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "제조 설비의 노후화에 따른 교체 작업",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_28352a",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "작업자 교체에 따른 인수인계 절차",
     "truth": false
    }
@@ -14266,7 +14266,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q154",
-  "explain": "📖 법령 근거 (교재: L2081):\n| 변경관리 | 모든 제조, 관리 및 보관된 제품이 규정된 적합 판정 기준에 일치하도록 보장하기 위해 우수화장품 제조 및 품질관리기준(CGMP)이 적용되는 모든 활동을 내부 조직의 책임하에 계획하여 변경하는 것 |",
+  "explain": "📖 법령 근거 (교재: L2051):\n| 변경관리 | 모든 제조, 관리 및 보관된 제품이 규정된 적합 판정 기준에 일치하도록 보장하기 위해 우수화장품 제조 및 품질관리기준(CGMP)이 적용되는 모든 활동을 내부 조직의 책임하에 계획하여 변경하는 것 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -14275,41 +14275,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2079 (출처: 과목3 문제은행 Q155)",
+  "citation": "📖 교재: L2049 (출처: 과목3 문제은행 Q155)",
   "stem": "CGMP 기준상 '감사(Audit)'의 정의로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_6475d9",
-    "conceptId": "L2079",
+    "conceptId": "§4.1",
     "text": "제조 및 품질과 관련한 결과가 계획된 사항과 일치하는지 여부와 적합성을 결정하기 위한 체계적이고 독립적인 조사",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_f181b7",
-    "conceptId": "L2079",
+    "conceptId": "§4.1",
     "text": "세무 당국의 조사",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_0b0a8c",
-    "conceptId": "L2079",
+    "conceptId": "§4.1",
     "text": "원자재 입고 시 수량을 확인하는 작업",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_7a04ce",
-    "conceptId": "L2079",
+    "conceptId": "§4.1",
     "text": "제품 출하 전 포장 상태를 확인하는 작업",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_2c3ea5",
-    "conceptId": "L2079",
+    "conceptId": "§4.1",
     "text": "작업자의 위생 상태를 점검하는 일일 검사",
     "truth": false
    }
@@ -14361,7 +14361,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q155",
-  "explain": "📖 교재 근거 (교재: L2079):\n| 감사 | 제조 및 품질과 관련한 결과가 계획된 사항과 일치하는지의 여부와 제조 및 품질관리가 효과적으로 실행되고 목적 달성에 적합한지 여부를 결정하기 위한 체계적이고 독립적인 조사 |",
+  "explain": "📖 교재 근거 (교재: L2049):\n| 감사 | 제조 및 품질과 관련한 결과가 계획된 사항과 일치하는지의 여부와 제조 및 품질관리가 효과적으로 실행되고 목적 달성에 적합한지 여부를 결정하기 위한 체계적이고 독립적인 조사 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -14376,35 +14376,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_dbd61e",
-    "conceptId": "L325",
+    "conceptId": "q:subject3_q156",
     "text": "기준일탈 발생 → 조사 → 격리 보관 → 폐기/재작업/반품",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_84e2fe",
-    "conceptId": "L325",
+    "conceptId": "q:subject3_q156",
     "text": "기준일탈 발생 → 즉시 폐기 → 조사 → 기록",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e1cee5",
-    "conceptId": "L325",
+    "conceptId": "q:subject3_q156",
     "text": "기준일탈 발생 → 출하 중단 → 소비자 회수 → 폐기",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e0a481",
-    "conceptId": "L325",
+    "conceptId": "q:subject3_q156",
     "text": "기준일탈 발생 → 재작업 → 조사 → 출하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_08599d",
-    "conceptId": "L325",
+    "conceptId": "q:subject3_q156",
     "text": "기준일탈 발생 → 반품 → 조사 → 재작업",
     "truth": false
    }
@@ -14462,41 +14462,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2449 (출처: 과목3 문제은행 Q157)",
+  "citation": "📖 교재: L2419 (출처: 과목3 문제은행 Q157)",
   "stem": "CGMP 기준상 재작업(Reprocessing)의 정의로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_b6ae62",
-    "conceptId": "L2449",
+    "conceptId": "§4.2",
     "text": "적합판정 기준을 벗어난 완제품 또는 벌크제품을 재처리하여 품질이 적합한 범위에 들어오도록 하는 작업",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_31f8cf",
-    "conceptId": "L2449",
+    "conceptId": "§4.2",
     "text": "새로운 원료로 제품을 다시 제조하는 것",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_5be6da",
-    "conceptId": "L2449",
+    "conceptId": "§4.2",
     "text": "불량 포장을 교체하는 작업",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_c548bc",
-    "conceptId": "L2449",
+    "conceptId": "§4.2",
     "text": "제조 설비를 세척하는 작업",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ef42ce",
-    "conceptId": "L2449",
+    "conceptId": "§4.2",
     "text": "소비자 회수 제품을 수리하는 작업",
     "truth": false
    }
@@ -14549,7 +14549,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q157",
-  "explain": "📖 교재 근거 (교재: L2449):\n① 재작업의 정의: 적합판정 기준을 벗어난 완제품 또는 벌크제품을 재처리하여 품질이 적합한 범위에 들어오도록 하는 작업이다.",
+  "explain": "📖 교재 근거 (교재: L2419):\n① 재작업의 정의: 적합판정 기준을 벗어난 완제품 또는 벌크제품을 재처리하여 품질이 적합한 범위에 들어오도록 하는 작업이다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -14558,41 +14558,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2457 (출처: 과목3 문제은행 Q158)",
+  "citation": "📖 교재: L2427 (출처: 과목3 문제은행 Q158)",
   "stem": "CGMP 기준상 재작업 실시 결정권자에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_02e56c",
-    "conceptId": "L2457",
+    "conceptId": "§4.2",
     "text": "제조 책임자",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_7131a3",
-    "conceptId": "L2457",
+    "conceptId": "§4.2",
     "text": "소비자",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_16c9f5",
-    "conceptId": "L2457",
+    "conceptId": "§4.2",
     "text": "생산 관리자",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_daed1c",
-    "conceptId": "L2457",
+    "conceptId": "§4.2",
     "text": "품질 책임자",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_6613a8",
-    "conceptId": "L2457",
+    "conceptId": "§4.2",
     "text": "식약처장",
     "truth": false
    }
@@ -14642,7 +14642,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q158",
-  "explain": "📖 교재 근거 (교재: L2457):\n| 3 | 재작업 처리 실시의 결정은 품질 책임자가 실시 |",
+  "explain": "📖 교재 근거 (교재: L2427):\n| 3 | 재작업 처리 실시의 결정은 품질 책임자가 실시 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -14651,41 +14651,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2460 (출처: 과목3 문제은행 Q159)",
+  "citation": "📖 교재: L2430 (출처: 과목3 문제은행 Q159)",
   "stem": "CGMP 기준상 재작업품의 출하 조건으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_f72b38",
-    "conceptId": "L2460",
+    "conceptId": "§4.2",
     "text": "재작업 즉시 출하 가능하다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_286dd8",
-    "conceptId": "L2460",
+    "conceptId": "§4.2",
     "text": "재작업 후 24시간이 경과하면 출하 가능하다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_d62ca4",
-    "conceptId": "L2460",
+    "conceptId": "§4.2",
     "text": "제조 책임자 승인만으로 출하 가능하다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_d87fc7",
-    "conceptId": "L2460",
+    "conceptId": "§4.2",
     "text": "소비자 동의가 있으면 출하 가능하다.",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ae6f54",
-    "conceptId": "L2460",
+    "conceptId": "§4.2",
     "text": "품질이 확인되고 품질 책임자의 승인을 얻을 수 있을 때까지 출하할 수 없다.",
     "truth": true
    }
@@ -14738,7 +14738,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q159",
-  "explain": "📖 교재 근거 (교재: L2460):\n| 6 | 품질이 확인되고 품질 책임자의 승인을 얻을 수 있을 때까지 재작업품은 다음 공정에 사용할 수 없고 출하할 수 없음 |",
+  "explain": "📖 교재 근거 (교재: L2430):\n| 6 | 품질이 확인되고 품질 책임자의 승인을 얻을 수 있을 때까지 재작업품은 다음 공정에 사용할 수 없고 출하할 수 없음 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -14753,35 +14753,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_dbada7",
-    "conceptId": "L436",
+    "conceptId": "q:subject3_q160",
     "text": "소비자의 신상 정보",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_3dbac0",
-    "conceptId": "L436",
+    "conceptId": "q:subject3_q160",
     "text": "제품명, 제조번호 및 제조일자",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_403d33",
-    "conceptId": "L436",
+    "conceptId": "q:subject3_q160",
     "text": "폐기 사유, 폐기 일자, 폐기 장소, 폐기 방법",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_f6c6fe",
-    "conceptId": "L436",
+    "conceptId": "q:subject3_q160",
     "text": "폐기량 및 포장단위",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_d948a7",
-    "conceptId": "L436",
+    "conceptId": "q:subject3_q160",
     "text": "폐기 의뢰자의 상호 및 대표자",
     "truth": false
    }
@@ -14838,41 +14838,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2077 (출처: 과목3 문제은행 Q161)",
+  "citation": "📖 교재: L2047 (출처: 과목3 문제은행 Q161)",
   "stem": "CGMP 기준상 '불만'의 정의로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_c1c5b0",
-    "conceptId": "L2077",
+    "conceptId": "§4.1",
     "text": "내부 직원의 근무 환경 불만",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_a8e820",
-    "conceptId": "L2077",
+    "conceptId": "§4.1",
     "text": "작업자의 교육 불만",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_9cd2fe",
-    "conceptId": "L2077",
+    "conceptId": "§4.1",
     "text": "원자재 공급자의 납기 지연",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_3aab67",
-    "conceptId": "L2077",
+    "conceptId": "§4.1",
     "text": "제조 설비의 유지보수 불만",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_1ed174",
-    "conceptId": "L2077",
+    "conceptId": "§4.1",
     "text": "제품이 규정된 적합 판정 기준을 충족시키지 못한다고 주장하는 외부 정보",
     "truth": true
    }
@@ -14924,7 +14924,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q161",
-  "explain": "📖 교재 근거 (교재: L2077):\n| 불만 | 제품이 규정된 적합 판정 기준을 충족시키지 못한다고 주장하는 외부 정보 |",
+  "explain": "📖 교재 근거 (교재: L2047):\n| 불만 | 제품이 규정된 적합 판정 기준을 충족시키지 못한다고 주장하는 외부 정보 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -14933,41 +14933,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2080 (출처: 과목3 문제은행 Q162)",
+  "citation": "📖 교재: L2050 (출처: 과목3 문제은행 Q162)",
   "stem": "CGMP 기준상 '내부감사'의 정의로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_96f71a",
-    "conceptId": "L2080",
+    "conceptId": "§4.1",
     "text": "회사 내 자격이 있는 직원에 의해 행해지는 체계적이고 독립적인 조사",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_bbdd19",
-    "conceptId": "L2080",
+    "conceptId": "§4.1",
     "text": "외부 기관에 의한 감사",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_da3bc1",
-    "conceptId": "L2080",
+    "conceptId": "§4.1",
     "text": "식약처에 의한 관할 감사",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_3799a0",
-    "conceptId": "L2080",
+    "conceptId": "§4.1",
     "text": "소비자 단체에 의한 품질 조사",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_fee6ca",
-    "conceptId": "L2080",
+    "conceptId": "§4.1",
     "text": "공급업체에 의한 원자재 감사",
     "truth": false
    }
@@ -15018,7 +15018,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q162",
-  "explain": "📖 교재 근거 (교재: L2080):\n| 내부감사 | 제조 및 품질과 관련한 결과가 계획된 사항과 일치하는지의 여부와 제조 및 품질관리가 효과적으로 실행되고 목적 달성에 적합한지 여부를 결정하기 위한 회사 내 자격이 있는 직원에 의해 행해지는 체계적이고 독립적인 조사 |",
+  "explain": "📖 교재 근거 (교재: L2050):\n| 내부감사 | 제조 및 품질과 관련한 결과가 계획된 사항과 일치하는지의 여부와 제조 및 품질관리가 효과적으로 실행되고 목적 달성에 적합한지 여부를 결정하기 위한 회사 내 자격이 있는 직원에 의해 행해지는 체계적이고 독립적인 조사 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -15027,41 +15027,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2086 (출처: 과목3 문제은행 Q163)",
+  "citation": "📖 교재: L2056 (출처: 과목3 문제은행 Q163)",
   "stem": "CGMP 기준상 '공정관리'의 정의로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_fd33cb",
-    "conceptId": "L2086",
+    "conceptId": "§4.1",
     "text": "완제품의 출하 과정을 관리하는 것",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_0687c6",
-    "conceptId": "L2086",
+    "conceptId": "§4.1",
     "text": "제조공정 중 적합 판정 기준의 충족을 보증하기 위해 공정을 모니터링하거나 조정하는 모든 작업",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_46e44d",
-    "conceptId": "L2086",
+    "conceptId": "§4.1",
     "text": "원자재의 입고 과정을 관리하는 것",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_c540a2",
-    "conceptId": "L2086",
+    "conceptId": "§4.1",
     "text": "작업자의 근태를 관리하는 것",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_1776f1",
-    "conceptId": "L2086",
+    "conceptId": "§4.1",
     "text": "설비의 유지보수 일정을 관리하는 것",
     "truth": false
    }
@@ -15112,7 +15112,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q163",
-  "explain": "📖 교재 근거 (교재: L2086):\n| 공정관리 | 제조공정 중 적합 판정 기준의 충족을 보증하기 위해 공정을 모니터링하거나 조정하는 모든 작업 |",
+  "explain": "📖 교재 근거 (교재: L2056):\n| 공정관리 | 제조공정 중 적합 판정 기준의 충족을 보증하기 위해 공정을 모니터링하거나 조정하는 모든 작업 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -15127,35 +15127,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_6bbee2",
-    "conceptId": "L2084",
+    "conceptId": "§4.1",
     "text": "작업자의 건강검진을 실시하는 것",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_9f4dda",
-    "conceptId": "L2084",
+    "conceptId": "§4.1",
     "text": "대상물의 표면에 있는 바람직하지 못한 미생물 등 오염물을 감소시키기 위해 시행되는 작업",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e1d342",
-    "conceptId": "L2084",
+    "conceptId": "§4.1",
     "text": "작업장의 온습도를 조절하는 것",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_323922",
-    "conceptId": "L2084",
+    "conceptId": "§4.1",
     "text": "폐기물을 처리하는 것",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_f510b4",
-    "conceptId": "L2084",
+    "conceptId": "§4.1",
     "text": "설비를 세척하는 것",
     "truth": false
    }
@@ -15205,7 +15205,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q164",
-  "explain": "📖 교재 근거 (L2084):\n| 위생관리 | 대상물의 표면에 있는 바람직하지 못한 미생물 등 오염물을 감소시키기 위해 시행되는 작업 |",
+  "explain": "📖 교재 근거 (L2054):\n| 위생관리 | 대상물의 표면에 있는 바람직하지 못한 미생물 등 오염물을 감소시키기 위해 시행되는 작업 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -15214,41 +15214,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2083 (출처: 과목3 문제은행 Q165)",
+  "citation": "📖 교재: L2053 (출처: 과목3 문제은행 Q165)",
   "stem": "CGMP 기준상 '출하'의 정의로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_4b3324",
-    "conceptId": "L2083",
+    "conceptId": "§4.1",
     "text": "원자재를 입고하는 과정",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_bfa4f2",
-    "conceptId": "L2083",
+    "conceptId": "§4.1",
     "text": "주문 준비와 관련된 일련의 작업과 운송 수단에 적재하는 활동으로 제조소 외로 제품을 운반하는 것",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_36b231",
-    "conceptId": "L2083",
+    "conceptId": "§4.1",
     "text": "제품을 보관실에 이동하는 것",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_fb8e74",
-    "conceptId": "L2083",
+    "conceptId": "§4.1",
     "text": "불량품을 폐기하는 것",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_892656",
-    "conceptId": "L2083",
+    "conceptId": "§4.1",
     "text": "재작업품을 다시 포장하는 것",
     "truth": false
    }
@@ -15301,7 +15301,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q165",
-  "explain": "📖 교재 근거 (교재: L2083):\n| 출하 | 주문 준비와 관련된 일련의 작업과 운송 수단에 적재하는 활동으로 제조소 외로 제품을 운반하는 것 |",
+  "explain": "📖 교재 근거 (교재: L2053):\n| 출하 | 주문 준비와 관련된 일련의 작업과 운송 수단에 적재하는 활동으로 제조소 외로 제품을 운반하는 것 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -15405,41 +15405,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2078 (출처: 과목3 문제은행 Q167)",
+  "citation": "📖 교재: L2048 (출처: 과목3 문제은행 Q167)",
   "stem": "CGMP 기준상 '주요설비'의 정의로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_5bea51",
-    "conceptId": "L2078",
+    "conceptId": "§4.1",
     "text": "제조 및 품질 관련 문서에 명기된 설비로 제품의 품질에 영향을 미치는 필수적인 설비",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_341a76",
-    "conceptId": "L2078",
+    "conceptId": "§4.1",
     "text": "제조소의 모든 설비",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_d44286",
-    "conceptId": "L2078",
+    "conceptId": "§4.1",
     "text": "원자재 보관용 설비",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_356739",
-    "conceptId": "L2078",
+    "conceptId": "§4.1",
     "text": "사무용 설비",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_3b5cde",
-    "conceptId": "L2078",
+    "conceptId": "§4.1",
     "text": "소방 설비",
     "truth": false
    }
@@ -15490,7 +15490,7 @@ var COMBO_DRILLS_subject3 = [
    "정의"
   ],
   "derivedFrom": "subject3_q167",
-  "explain": "📖 교재 근거 (교재: L2078):\n| 주요설비 | 제조 및 품질 관련 문서에 명기된 설비로 제품의 품질에 영향을 미치는 필수적인 설비 |",
+  "explain": "📖 교재 근거 (교재: L2048):\n| 주요설비 | 제조 및 품질 관련 문서에 명기된 설비로 제품의 품질에 영향을 미치는 필수적인 설비 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -15499,41 +15499,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2435 (출처: 과목3 문제은행 Q168)",
+  "citation": "📖 교재: L2405 (출처: 과목3 문제은행 Q168)",
   "stem": "CGMP 기준상 불만 처리 시 기록·유지해야 할 사항이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_18fe33",
-    "conceptId": "L2435",
+    "conceptId": "§4.2",
     "text": "불만 제기자의 주민등록번호",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_60f8e2",
-    "conceptId": "L2435",
+    "conceptId": "§4.2",
     "text": "불만 제기자의 이름과 연락처",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ef1c07",
-    "conceptId": "L2435",
+    "conceptId": "§4.2",
     "text": "제품명, 제조번호 등을 포함한 불만 내용",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_161608",
-    "conceptId": "L2435",
+    "conceptId": "§4.2",
     "text": "불만조사 및 추적조사 내용, 처리 결과 및 향후 대책",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_23861a",
-    "conceptId": "L2435",
+    "conceptId": "§4.2",
     "text": "불만 접수연월일",
     "truth": false
    }
@@ -15582,7 +15582,7 @@ var COMBO_DRILLS_subject3 = [
    "구성비"
   ],
   "derivedFrom": "subject3_q168",
-  "explain": "📖 교재 근거 (교재: L2435):\n소비자로부터 문서화되거나 구두로 표현된 불만에 대한 접수부터 조치까지의 일련의 절차가 확립되어야 하며, 불만처리담당자는 제품에 대한 모든 불만을 취합한다. 제기된 불만에 대해 신속하게 조사하고 그에 대한 적절한 조치를 취해야 하며, 다음 사항을 기록·유지하여야 한다.",
+  "explain": "📖 교재 근거 (교재: L2405):\n소비자로부터 문서화되거나 구두로 표현된 불만에 대한 접수부터 조치까지의 일련의 절차가 확립되어야 하며, 불만처리담당자는 제품에 대한 모든 불만을 취합한다. 제기된 불만에 대해 신속하게 조사하고 그에 대한 적절한 조치를 취해야 하며, 다음 사항을 기록·유지하여야 한다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -15597,35 +15597,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_148375",
-    "conceptId": "L2417",
+    "conceptId": "§4.2",
     "text": "품질에 관련된 모든 문서와 절차의 검토 및 승인",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_907927",
-    "conceptId": "L2417",
+    "conceptId": "§4.2",
     "text": "품질검사가 규정된 절차에 따라 진행되는지 확인",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_0955e6",
-    "conceptId": "L2417",
+    "conceptId": "§4.2",
     "text": "일탈이 있는 경우 이의 조사 및 기록",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_963222",
-    "conceptId": "L2417",
+    "conceptId": "§4.2",
     "text": "적합 판정한 원자재 및 제품의 출고 여부 결정",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_b46cd1",
-    "conceptId": "L2417",
+    "conceptId": "§4.2",
     "text": "제조 설비의 직접 조작 및 생산 관리",
     "truth": true
    }
@@ -15676,7 +15676,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q169",
-  "explain": "📖 교재 근거 (L2417):\n> 참고 - 품질 책임자의 이행 업무\n> - 품질에 관련된 모든 문서와 절차의 검토 및 승인\n> - 품질검사가 규정된 절차에 따라 진행되는지 확인",
+  "explain": "📖 교재 근거 (L2387):\n> 참고 - 품질 책임자의 이행 업무\n> - 품질에 관련된 모든 문서와 절차의 검토 및 승인\n> - 품질검사가 규정된 절차에 따라 진행되는지 확인",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -15691,35 +15691,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_c64b5c",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "1000",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_736daf",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "100",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_2452c4",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "500",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_c5dbd2",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "2000",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_b2b2ff",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "5000",
     "truth": false
    }
@@ -15785,35 +15785,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_e5e110",
-    "conceptId": "L2869",
+    "conceptId": "§5.1",
     "text": "검사 중, 적합, 부적합에 따라 각각 구분된 공간에 별도 보관한다",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_e22cd7",
-    "conceptId": "L2869",
+    "conceptId": "§5.1",
     "text": "부적합 판정을 받은 원료와 포장재를 보관하는 공간에 잠금 장치를 추가할 수 있다",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_002946",
-    "conceptId": "L2869",
+    "conceptId": "§5.1",
     "text": "적합 판정 시 원료와 포장재는 생산 장소로 이동된다",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_77a106",
-    "conceptId": "L2869",
+    "conceptId": "§5.1",
     "text": "검사 승인 전에도 물질을 사용할 수 있다",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_25e3e5",
-    "conceptId": "L2869",
+    "conceptId": "§5.1",
     "text": "구매요구서와 인도 문서, 인도물이 서로 일치해야 한다",
     "truth": true
    }
@@ -15866,7 +15866,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q171",
-  "explain": "📖 교재 근거 (L2869):\n④ 확인·검체 채취규정 기준에 대한 검사 및 시험과 그에 따라 승인된 자에 의한 불출 전까지는 어떠한 물질도 사용되어서는 안 된다는 것을 명시하는 원료 수령에 대한 절차서를 수립하여야 한다\n> 해설: 승인된 자에 의한 불출 전까지 어떠한 물질도 사용되어서는 안 된다.",
+  "explain": "📖 교재 근거 (L2839):\n④ 확인·검체 채취규정 기준에 대한 검사 및 시험과 그에 따라 승인된 자에 의한 불출 전까지는 어떠한 물질도 사용되어서는 안 된다는 것을 명시하는 원료 수령에 대한 절차서를 수립하여야 한다\n> 해설: 승인된 자에 의한 불출 전까지 어떠한 물질도 사용되어서는 안 된다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -15881,35 +15881,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_7c25bb",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "HEPA",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_260749",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "LAF",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_b8a6e2",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "HVAC",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e4450d",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "AHU",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_1189aa",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "BSC",
     "truth": false
    }
@@ -15970,41 +15970,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L543 (출처: 과목3 문제은행 Q173)",
+  "citation": "📖 교재: L513 (출처: 과목3 문제은행 Q173)",
   "stem": "화장품 유통 안전기준상 '납' 성분의 일반 유통 화장품 허용 한도는 ________㎍/g 이하이다. (다만, 점토 원료 분말 제품은 제외) 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_1a6729",
-    "conceptId": "L543",
+    "conceptId": "§1.1",
     "text": "5",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_3fe7f5",
-    "conceptId": "L543",
+    "conceptId": "§1.1",
     "text": "10",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_b6651b",
-    "conceptId": "L543",
+    "conceptId": "§1.1",
     "text": "30",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_56aaaa",
-    "conceptId": "L543",
+    "conceptId": "§1.1",
     "text": "20",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_bcc788",
-    "conceptId": "L543",
+    "conceptId": "§1.1",
     "text": "50",
     "truth": false
    }
@@ -16053,7 +16053,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q173",
-  "explain": "📖 교재 근거 (교재: L543):\n| 측정 위치 | • 일반적으로 작은 방을 측정하는 경우에는 약 5개소, 비교적 큰 방일 경우에는 측정소를 증가시킴<br>• 방 이외의 격벽구획이 명확하지 않은 장소(복도, 통로 등)에서는 공기의 진입, 유통, 정체 등의 상태를 고려하여 전체 환경을 대표한다고 생각되는 장소를 선택<br>• 측정하려는 방의 크기와 구조에 더 유의하여야 하나, 5개소 이하로 측정하면 올바른 평가를 얻기가 어려우며 측정 위치도 벽에서 30cm 떨어진 곳이 좋음<br>• 측정 높이는 바닥에서 측정하는 것이 원칙이지만 부득이한 경우 바닥으로부터 20~30cm 높은 위치에서 측정하기도 함 |",
+  "explain": "📖 교재 근거 (교재: L513):\n| 측정 위치 | • 일반적으로 작은 방을 측정하는 경우에는 약 5개소, 비교적 큰 방일 경우에는 측정소를 증가시킴<br>• 방 이외의 격벽구획이 명확하지 않은 장소(복도, 통로 등)에서는 공기의 진입, 유통, 정체 등의 상태를 고려하여 전체 환경을 대표한다고 생각되는 장소를 선택<br>• 측정하려는 방의 크기와 구조에 더 유의하여야 하나, 5개소 이하로 측정하면 올바른 평가를 얻기가 어려우며 측정 위치도 벽에서 30cm 떨어진 곳이 좋음<br>• 측정 높이는 바닥에서 측정하는 것이 원칙이지만 부득이한 경우 바닥으로부터 20~30cm 높은 위치에서 측정하기도 함 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -16062,41 +16062,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L476 (출처: 과목3 문제은행 Q174)",
+  "citation": "📖 교재: L446 (출처: 과목3 문제은행 Q174)",
   "stem": "CGMP 기준상 세척이 완료된 설비 및 기구는 물기가 남아있지 않도록 완전히 ________ 시켜 건조한 상태로 보관해야 미생물 번식을 방지할 수 있다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_c3d320",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "세척",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_f81d25",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "소독",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_c4daa9",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "냉각",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_14c5b3",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "밀봉",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_d178f9",
-    "conceptId": "L476",
+    "conceptId": "§1.1",
     "text": "건조",
     "truth": true
    }
@@ -16146,7 +16146,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q174",
-  "explain": "📖 교재 근거 (교재: L476):\n| 제조 구역 | • 모든 도구와 기구는 청소 및 위생 처리 후 정해진 지역에 정돈 방법에 따라 보관하고, 호스는 사용 후 완전히 건조시켜 바닥에 닿지 않도록 정리하여 보관해야 함<br>• 제조 구역에서 흘린 것은 신속히 청소하고, 폐기물(여과지, 개스킷, 폐지, 플라스틱 봉지)은 주기적으로 버려 장기간 모아놓거나 쌓아두지 않아야 함<br>• 표면은 청소하기 용이한 재질로 설계되어야 하며, 탱크의 바깥 면들은 정기적으로 청소하고, 모든 배관이 사용될 수 있도록 우수한 정비 상태로 유지해야 함<br>• 페인트를 칠한 지역은 우수한 정비 상태로 유지되어야 하며, 벗겨진 칠은 보수되어야 함 |",
+  "explain": "📖 교재 근거 (교재: L446):\n| 제조 구역 | • 모든 도구와 기구는 청소 및 위생 처리 후 정해진 지역에 정돈 방법에 따라 보관하고, 호스는 사용 후 완전히 건조시켜 바닥에 닿지 않도록 정리하여 보관해야 함<br>• 제조 구역에서 흘린 것은 신속히 청소하고, 폐기물(여과지, 개스킷, 폐지, 플라스틱 봉지)은 주기적으로 버려 장기간 모아놓거나 쌓아두지 않아야 함<br>• 표면은 청소하기 용이한 재질로 설계되어야 하며, 탱크의 바깥 면들은 정기적으로 청소하고, 모든 배관이 사용될 수 있도록 우수한 정비 상태로 유지해야 함<br>• 페인트를 칠한 지역은 우수한 정비 상태로 유지되어야 하며, 벗겨진 칠은 보수되어야 함 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -16161,35 +16161,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_87c177",
-    "conceptId": "L2136",
+    "conceptId": "§4.1",
     "text": "10",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_670b17",
-    "conceptId": "L2136",
+    "conceptId": "§4.1",
     "text": "5",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_3c5f8c",
-    "conceptId": "L2136",
+    "conceptId": "§4.1",
     "text": "20",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_95d336",
-    "conceptId": "L2136",
+    "conceptId": "§4.1",
     "text": "30",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_df785c",
-    "conceptId": "L2136",
+    "conceptId": "§4.1",
     "text": "50",
     "truth": false
    }
@@ -16239,7 +16239,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q175",
-  "explain": "📖 교재 근거 (L2136):\n| 안티몬 (허용한도) | 10μg/g 이하 |",
+  "explain": "📖 교재 근거 (L2106):\n| 안티몬 (허용한도) | 10μg/g 이하 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -16254,35 +16254,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_eabe69",
-    "conceptId": "L534",
+    "conceptId": "q:subject3_q176",
     "text": "살모넬라균",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_4a5964",
-    "conceptId": "L534",
+    "conceptId": "q:subject3_q176",
     "text": "황색포도상구균",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_eda7bd",
-    "conceptId": "L534",
+    "conceptId": "q:subject3_q176",
     "text": "리스테리아균",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_fbfd26",
-    "conceptId": "L534",
+    "conceptId": "q:subject3_q176",
     "text": "크로노박터균",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_69f0f5",
-    "conceptId": "L534",
+    "conceptId": "q:subject3_q176",
     "text": "아스페르길루스균",
     "truth": false
    }
@@ -16344,35 +16344,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_2b7160",
-    "conceptId": "L1016",
+    "conceptId": "§1.3",
     "text": "적합",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_c3fa53",
-    "conceptId": "L1016",
+    "conceptId": "§1.3",
     "text": "격리",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_78cde2",
-    "conceptId": "L1016",
+    "conceptId": "§1.3",
     "text": "대기(보류)",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_258f14",
-    "conceptId": "L1016",
+    "conceptId": "§1.3",
     "text": "폐기",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_a738af",
-    "conceptId": "L1016",
+    "conceptId": "§1.3",
     "text": "승인",
     "truth": false
    }
@@ -16431,41 +16431,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1791 (출처: 과목3 문제은행 Q178)",
+  "citation": "📖 교재: L1761 (출처: 과목3 문제은행 Q178)",
   "stem": "화장품 원자재 및 완제품의 유통 시 입고된 순서대로 먼저 출고하여 사용하는 재고 관리 원칙을 ________ 원칙이라고 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_32f21c",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "LIFO(후입선출)",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_d55d34",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "JIT(적시생산)",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_1227ed",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "ABC(ABC분석)",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_ebfacb",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "FIFO(선입선출)",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_84f78b",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "EOQ(경제주문량)",
     "truth": false
    }
@@ -16515,7 +16515,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q178",
-  "explain": "📖 교재 근거 (교재: L1791):\n| 필터, 여과기, 체 | - 화장품 원료와 완제품의 입자 크기를 작게 하고, 덩어리 모양을 깨고, 불순물을 제거하기 위해 사용<br>- 스테인리스 스틸과 비반응성 섬유이며, 316스테인리스는 제품 제조 시 선호 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1761):\n| 필터, 여과기, 체 | - 화장품 원료와 완제품의 입자 크기를 작게 하고, 덩어리 모양을 깨고, 불순물을 제거하기 위해 사용<br>- 스테인리스 스틸과 비반응성 섬유이며, 316스테인리스는 제품 제조 시 선호 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -16530,35 +16530,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_bbdf31",
-    "conceptId": "L3010",
+    "conceptId": "§5.2",
     "text": "개봉 후 사용기간은 표시할 필요가 없다",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_9895b5",
-    "conceptId": "L3010",
+    "conceptId": "§5.2",
     "text": "'개봉 후 사용기간'이라는 문자와 '○○월' 또는 '○○개월'을 조합하여 기재·표시할 수 있다",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_3f8aab",
-    "conceptId": "L3010",
+    "conceptId": "§5.2",
     "text": "개봉 후 사용기간을 표시하는 경우 제조연월일은 표시하지 않아도 된다",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_1f44fb",
-    "conceptId": "L3010",
+    "conceptId": "§5.2",
     "text": "개봉 후 사용기간은 심벌 없이 문자로만 표시해야 한다",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_5ec975",
-    "conceptId": "L3010",
+    "conceptId": "§5.2",
     "text": "개봉 후 사용기간은 제조사 자율로 표시 여부를 결정한다",
     "truth": false
    }
@@ -16607,7 +16607,7 @@ var COMBO_DRILLS_subject3 = [
    "명제판정"
   ],
   "derivedFrom": "subject3_q179",
-  "explain": "📖 교재 근거 (L3010):\n| (2) 포장재의 개봉 후 사용기간 확인·판정 🎯 기출 | '개봉 후 사용기간'이라는 문자와 '○○월' 또는 '○○개월'을 조합하여 기재·표시하거나, 개봉 후 사용기간을 나타내는 심벌과 기간을 기재·표시할 수 있다(개봉 후 사용기간을 표시하는 경우에는 제조연월일, 사용기한을 병기하여 표기함). |",
+  "explain": "📖 교재 근거 (L2980):\n| (2) 포장재의 개봉 후 사용기간 확인·판정 🎯 기출 | '개봉 후 사용기간'이라는 문자와 '○○월' 또는 '○○개월'을 조합하여 기재·표시하거나, 개봉 후 사용기간을 나타내는 심벌과 기간을 기재·표시할 수 있다(개봉 후 사용기간을 표시하는 경우에는 제조연월일, 사용기한을 병기하여 표기함). |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -16622,35 +16622,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_359fef",
-    "conceptId": "L123",
+    "conceptId": "q:subject3_q180",
     "text": "가",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_222509",
-    "conceptId": "L123",
+    "conceptId": "q:subject3_q180",
     "text": "나",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_617402",
-    "conceptId": "L123",
+    "conceptId": "q:subject3_q180",
     "text": "다",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_7046b8",
-    "conceptId": "L123",
+    "conceptId": "q:subject3_q180",
     "text": "라",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_20d17d",
-    "conceptId": "L123",
+    "conceptId": "q:subject3_q180",
     "text": "마",
     "truth": false
    }
@@ -16706,41 +16706,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2671 (출처: 과목3 문제은행 Q181)",
+  "citation": "📖 교재: L2641 (출처: 과목3 문제은행 Q181)",
   "stem": "화장품 제조소에서 적합 판정 기준을 벗어난 제품을 다시 물리/화학적 처리를 거쳐 규격에 적합하도록 수정하는 가공 행위를 ________(이)라고 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_91e771",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "재포장",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_e9cdc9",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "재작업",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_8e27b5",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "재사용",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_b0dc33",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "폐기",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_5eb610",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "재고관리",
     "truth": false
    }
@@ -16787,7 +16787,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q181",
-  "explain": "📖 교재 근거 (교재: L2671):\n| 재작업 | 적합판정 기준 벗어난 완제품·벌크를 재처리하여 적합 범위로 |",
+  "explain": "📖 교재 근거 (교재: L2641):\n| 재작업 | 적합판정 기준 벗어난 완제품·벌크를 재처리하여 적합 범위로 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -16802,35 +16802,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_259916",
-    "conceptId": "L507",
+    "conceptId": "q:subject3_q182",
     "text": "에어커튼",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_629070",
-    "conceptId": "L507",
+    "conceptId": "q:subject3_q182",
     "text": "클린벤치",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_1c283e",
-    "conceptId": "L507",
+    "conceptId": "q:subject3_q182",
     "text": "에어샤워",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_17c644",
-    "conceptId": "L507",
+    "conceptId": "q:subject3_q182",
     "text": "패스박스",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_e16d7b",
-    "conceptId": "L507",
+    "conceptId": "q:subject3_q182",
     "text": "에어필터",
     "truth": false
    }
@@ -16894,35 +16894,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_775b5b",
-    "conceptId": "L526",
+    "conceptId": "q:subject3_q183",
     "text": "10",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_1f107d",
-    "conceptId": "L526",
+    "conceptId": "q:subject3_q183",
     "text": "20",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_4bfa4b",
-    "conceptId": "L526",
+    "conceptId": "q:subject3_q183",
     "text": "30",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_2a4229",
-    "conceptId": "L526",
+    "conceptId": "q:subject3_q183",
     "text": "5",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_cbd800",
-    "conceptId": "L526",
+    "conceptId": "q:subject3_q183",
     "text": "50",
     "truth": false
    }
@@ -16984,41 +16984,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2995 (출처: 과목3 문제은행 Q184)",
+  "citation": "📖 교재: L2963 (출처: 과목3 문제은행 Q184)",
   "stem": "가연성 가스를 사용하는 에어로졸 화장품의 주의사항 표시 중 보관 온도는 섭씨 ________도 미만의 서늘한 곳에 보관해야 한다는 수치 기준이 있다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_453f6c",
-    "conceptId": "L2995",
+    "conceptId": "§4.2",
     "text": "20",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_9fcb05",
-    "conceptId": "L2995",
+    "conceptId": "§4.2",
     "text": "30",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_a39a23",
-    "conceptId": "L2995",
+    "conceptId": "§4.2",
     "text": "50",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_0f74e1",
-    "conceptId": "L2995",
+    "conceptId": "§4.2",
     "text": "60",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_69b8f4",
-    "conceptId": "L2995",
+    "conceptId": "§4.2",
     "text": "40",
     "truth": true
    }
@@ -17066,7 +17066,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q184",
-  "explain": "📖 교재 근거 (교재: L2995):\n| 고압가스를 사용하는 에어로졸 제품 | 가연성 가스를 사용하지 않는 제품<br>- 온도가 40℃ 이상 되는 장소에 보관하지 말고, 불 속에 버리지 말 것<br>- 사용 후 잔 가스가 없도록 하여 버리며, 밀폐된 장소에 보관하지 말 것<br><br>가연성 가스를 사용하는 제품<br>- 불꽃을 향해 사용하지 말고, 난로, 풍로 등 화기부근에서 사용하지 말 것<br>- 화기를 사용하고 있는 실내에서 사용하지 말 것<br>- 온도 40℃ 이상의 장소에서 보관하지 말 것<br>- 밀폐된 실내에서 사용 후 반드시 환기를 실시하고, 밀폐된 장소에서 보관하지 말 것<br>- 사용 후 잔 가스가 없도록 하고 불 속에 버리지 말 것 |",
+  "explain": "📖 교재 근거 (교재: L2963):\n| 고압가스를 사용하는 에어로졸 제품 | 가연성 가스를 사용하지 않는 제품<br>- 온도가 40℃ 이상 되는 장소에 보관하지 말고, 불 속에 버리지 말 것<br>- 사용 후 잔 가스가 없도록 하여 버리며, 밀폐된 장소에 보관하지 말 것<br><br>가연성 가스를 사용하는 제품<br>- 불꽃을 향해 사용하지 말고, 난로, 풍로 등 화기부근에서 사용하지 말 것<br>- 화기를 사용하고 있는 실내에서 사용하지 말 것<br>- 온도 40℃ 이상의 장소에서 보관하지 말 것<br>- 밀폐된 실내에서 사용 후 반드시 환기를 실시하고, 밀폐된 장소에서 보관하지 말 것<br>- 사용 후 잔 가스가 없도록 하고 불 속에 버리지 말 것 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -17075,41 +17075,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L900 (출처: 과목3 문제은행 Q185)",
+  "citation": "📖 교재: L870 (출처: 과목3 문제은행 Q185)",
   "stem": "화장품 원료 중 코코넛 유래 성분 등의 합성 과정에서 부반응으로 생성될 수 있는 디옥산의 주 원료 합성 화학물질은 ________옥사이드이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_d4bce0",
-    "conceptId": "L900",
+    "conceptId": "§1.3",
     "text": "에틸렌",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_60059f",
-    "conceptId": "L900",
+    "conceptId": "§1.3",
     "text": "프로필렌",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_486d96",
-    "conceptId": "L900",
+    "conceptId": "§1.3",
     "text": "부틸렌",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_d546af",
-    "conceptId": "L900",
+    "conceptId": "§1.3",
     "text": "스티렌",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_9a2932",
-    "conceptId": "L900",
+    "conceptId": "§1.3",
     "text": "아세틸렌",
     "truth": false
    }
@@ -17159,7 +17159,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q185",
-  "explain": "📖 교재 근거 (교재: L900):\n| 페놀 화합물: 파라벤, 페녹시에탄올, 페닐에탄올 등 아닐리드 | 레시틴, 폴리솔베이트80, 지방알코올의 에틸렌 옥사이드 축합물(condensate), 비이온성 계면활성제 |",
+  "explain": "📖 교재 근거 (교재: L870):\n| 페놀 화합물: 파라벤, 페녹시에탄올, 페닐에탄올 등 아닐리드 | 레시틴, 폴리솔베이트80, 지방알코올의 에틸렌 옥사이드 축합물(condensate), 비이온성 계면활성제 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -17168,41 +17168,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1261 (출처: 과목3 문제은행 Q186)",
+  "citation": "📖 교재: L1231 (출처: 과목3 문제은행 Q186)",
   "stem": "화장품 설비 소독용으로 가장 대중적으로 사용되며 잔류 독성이 없고 즉시 휘발되는 알코올의 명칭은 ________이다. (농도 약 70% 권장) 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_9b7450",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "메탄올",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_799fab",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "에탄올",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_a2c05b",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "이소프로판올",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_5e518a",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "포름알데히드",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_bec703",
-    "conceptId": "L1261",
+    "conceptId": "§2.2",
     "text": "과산화수소",
     "truth": false
    }
@@ -17251,7 +17251,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q186",
-  "explain": "📖 교재 근거 (교재: L1261):\n| 손 소독제 🎯 기출 | 1차 에탄올이 함유되어 세정 효과가 있음 · 물 없이도 손 소독이 가능하며, 의약외품으로 분류됨 · 알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등 | 손 소독제로 소독 |",
+  "explain": "📖 교재 근거 (교재: L1231):\n| 손 소독제 🎯 기출 | 1차 에탄올이 함유되어 세정 효과가 있음 · 물 없이도 손 소독이 가능하며, 의약외품으로 분류됨 · 알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등 | 손 소독제로 소독 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -17266,35 +17266,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_ebcdfa",
-    "conceptId": "L665",
+    "conceptId": "q:subject3_q187",
     "text": "7",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_6e23ee",
-    "conceptId": "L665",
+    "conceptId": "q:subject3_q187",
     "text": "15",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_71e853",
-    "conceptId": "L665",
+    "conceptId": "q:subject3_q187",
     "text": "30",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_2b373b",
-    "conceptId": "L665",
+    "conceptId": "q:subject3_q187",
     "text": "60",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ad6cb6",
-    "conceptId": "L665",
+    "conceptId": "q:subject3_q187",
     "text": "90",
     "truth": false
    }
@@ -17358,35 +17358,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_f56ef9",
-    "conceptId": "L202",
+    "conceptId": "q:subject3_q188",
     "text": "화학적",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_96f28d",
-    "conceptId": "L202",
+    "conceptId": "q:subject3_q188",
     "text": "생물학적",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e3dd7c",
-    "conceptId": "L202",
+    "conceptId": "q:subject3_q188",
     "text": "미생물학적",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_f332fc",
-    "conceptId": "L202",
+    "conceptId": "q:subject3_q188",
     "text": "물리적",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_4e58ea",
-    "conceptId": "L202",
+    "conceptId": "q:subject3_q188",
     "text": "기계적",
     "truth": false
    }
@@ -17446,41 +17446,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2010 (출처: 과목3 문제은행 Q189)",
+  "citation": "📖 교재: L1980 (출처: 과목3 문제은행 Q189)",
   "stem": "중금속 한도 기준 중 '수은'의 허용 한도는 ________㎍/g 이하이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_a57ab7",
-    "conceptId": "L2010",
+    "conceptId": "§4.0",
     "text": "0.5",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_bdeeae",
-    "conceptId": "L2010",
+    "conceptId": "§4.0",
     "text": "5",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_843c13",
-    "conceptId": "L2010",
+    "conceptId": "§4.0",
     "text": "10",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_c813f9",
-    "conceptId": "L2010",
+    "conceptId": "§4.0",
     "text": "20",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_a5925e",
-    "conceptId": "L2010",
+    "conceptId": "§4.0",
     "text": "1",
     "truth": true
    }
@@ -17532,7 +17532,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q189",
-  "explain": "📖 교재 근거 (교재: L2010):\n> - 핵심 키워드: 입고 라벨(백색→황색→청색/적색), 중금속 허용한도(납 20·비소 10·카드뮴 5·수은 1 μg/g), 미생물 한도(영유아·눈화장 500, 기타 1,000 CFU/g), 내용량 97%, 퍼머넌트웨이브 제1제·제2제 기준, 인체 세포·조직 배양액 안전기준",
+  "explain": "📖 교재 근거 (교재: L1980):\n> - 핵심 키워드: 입고 라벨(백색→황색→청색/적색), 중금속 허용한도(납 20·비소 10·카드뮴 5·수은 1 μg/g), 미생물 한도(영유아·눈화장 500, 기타 1,000 CFU/g), 내용량 97%, 퍼머넌트웨이브 제1제·제2제 기준, 인체 세포·조직 배양액 안전기준",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -17541,41 +17541,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2134 (출처: 과목3 문제은행 Q190)",
+  "citation": "📖 교재: L2104 (출처: 과목3 문제은행 Q190)",
   "stem": "화장품 제조 및 유통 중 미생물 억제를 위해 처방되는 배합 제한 성분 중 페녹시에탄올의 보존 한도는 ________% 이하이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_dd2119",
-    "conceptId": "L2134",
+    "conceptId": "§4.1",
     "text": "1.0",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_8355b9",
-    "conceptId": "L2134",
+    "conceptId": "§4.1",
     "text": "0.1",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_f4a1f4",
-    "conceptId": "L2134",
+    "conceptId": "§4.1",
     "text": "0.5",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_010c07",
-    "conceptId": "L2134",
+    "conceptId": "§4.1",
     "text": "2.0",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_0afb93",
-    "conceptId": "L2134",
+    "conceptId": "§4.1",
     "text": "5.0",
     "truth": false
    }
@@ -17627,7 +17627,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q190",
-  "explain": "📖 교재 근거 (교재: L2134):\n| 니켈 (허용한도) | 눈화장용 제품 35μg/g 이하, 색조화장용 제품 30μg/g 이하, 그 밖의 제품은 10μg/g 이하 |",
+  "explain": "📖 교재 근거 (교재: L2104):\n| 니켈 (허용한도) | 눈화장용 제품 35μg/g 이하, 색조화장용 제품 30μg/g 이하, 그 밖의 제품은 10μg/g 이하 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -17636,41 +17636,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2907 (출처: 과목3 문제은행 Q191)",
+  "citation": "📖 교재: L2875 (출처: 과목3 문제은행 Q191)",
   "stem": "화장품 완제품 박스 적재 시 벽과 바닥에 직접 닿지 않도록 받쳐두는 나무 또는 플라스틱 판 형태의 자재를 ________(이)라고 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_485c44",
-    "conceptId": "L2907",
+    "conceptId": "§4.1",
     "text": "선반",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ed8965",
-    "conceptId": "L2907",
+    "conceptId": "§4.1",
     "text": "파레트",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_00f13c",
-    "conceptId": "L2907",
+    "conceptId": "§4.1",
     "text": "컨테이너",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_6783fb",
-    "conceptId": "L2907",
+    "conceptId": "§4.1",
     "text": "랙",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_19f872",
-    "conceptId": "L2907",
+    "conceptId": "§4.1",
     "text": "크레이트",
     "truth": false
    }
@@ -17719,7 +17719,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q191",
-  "explain": "📖 교재 근거 (교재: L2907):\n> 한 줄 요약: 적정 조건(조명·온습도) + 상태별 구분 보관 + 선입선출 + 파레트 표시 4요소.",
+  "explain": "📖 교재 근거 (교재: L2875):\n> 한 줄 요약: 적정 조건(조명·온습도) + 상태별 구분 보관 + 선입선출 + 파레트 표시 4요소.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -17728,41 +17728,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L676 (출처: 과목3 문제은행 Q192)",
+  "citation": "📖 교재: L646 (출처: 과목3 문제은행 Q192)",
   "stem": "화장품 원료 중 미량 금속의 활성을 억제하여 변색을 막는 EDTA-2Na 등은 ________제(킬레이트제)에 속한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_d07121",
-    "conceptId": "L676",
+    "conceptId": "§1.2",
     "text": "항산화제",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_4b7421",
-    "conceptId": "L676",
+    "conceptId": "§1.2",
     "text": "보존제",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_08cae5",
-    "conceptId": "L676",
+    "conceptId": "§1.2",
     "text": "킬레이트(금속이온봉쇄)",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_1b25bd",
-    "conceptId": "L676",
+    "conceptId": "§1.2",
     "text": "계면활성제",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_5bc6ed",
-    "conceptId": "L676",
+    "conceptId": "§1.2",
     "text": "증점제",
     "truth": false
    }
@@ -17813,7 +17813,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q192",
-  "explain": "📖 교재 근거 (교재: L676):\n> 한 줄 요약: 세제 7대 성분(계면활성제·살균제·금속이온봉쇄제·유기폴리머·용제·연마제·표백) + 요구조건 5가지 + 작업장별 청소 주기.",
+  "explain": "📖 교재 근거 (교재: L646):\n> 한 줄 요약: 세제 7대 성분(계면활성제·살균제·금속이온봉쇄제·유기폴리머·용제·연마제·표백) + 요구조건 5가지 + 작업장별 청소 주기.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -17828,35 +17828,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_5a037d",
-    "conceptId": "L2088",
+    "conceptId": "§2.3",
     "text": "필수",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_aa1582",
-    "conceptId": "L2088",
+    "conceptId": "§2.3",
     "text": "강화",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_62ccfa",
-    "conceptId": "L2088",
+    "conceptId": "§2.3",
     "text": "연기",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_68b16e",
-    "conceptId": "L2088",
+    "conceptId": "§2.3",
     "text": "면제(생략)",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_9b6498",
-    "conceptId": "L2088",
+    "conceptId": "§2.3",
     "text": "축소",
     "truth": false
    }
@@ -18004,41 +18004,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L354 (출처: 과목3 문제은행 Q195)",
+  "citation": "📖 교재: L324 (출처: 과목3 문제은행 Q195)",
   "stem": "감염병 환자나 피부 전염성 질환이 있는 사람은 화장품 ________ 업무에 종사할 수 없다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_846d6f",
-    "conceptId": "L354",
+    "conceptId": "§1.0",
     "text": "제조",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_cf2e97",
-    "conceptId": "L354",
+    "conceptId": "§1.0",
     "text": "판매",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_21f4d8",
-    "conceptId": "L354",
+    "conceptId": "§1.0",
     "text": "포장",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_c3f213",
-    "conceptId": "L354",
+    "conceptId": "§1.0",
     "text": "유통",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_124842",
-    "conceptId": "L354",
+    "conceptId": "§1.0",
     "text": "보관",
     "truth": false
    }
@@ -18085,7 +18085,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q195",
-  "explain": "📖 교재 근거 (교재: L354):\n> 출처: 우수화장품 제조 및 품질관리기준(식품의약품안전처고시)(제2024-46호)(20240822).md",
+  "explain": "📖 교재 근거 (교재: L324):\n> 출처: 우수화장품 제조 및 품질관리기준(식품의약품안전처고시)(제2024-46호)(20240822).md",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -18094,41 +18094,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1794 (출처: 과목3 문제은행 Q196)",
+  "citation": "📖 교재: L1764 (출처: 과목3 문제은행 Q196)",
   "stem": "화장품 완제품의 출하 결정을 위한 시험 항목 중 내용물의 수소이온농도를 측정하는 시험 항목명은 ________ 시험이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_6cec94",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "비중",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ac3625",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "pH",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_4d91d8",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "점도",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_1553b1",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "굴절륡",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_5347ea",
-    "conceptId": "L1794",
+    "conceptId": "§3.2",
     "text": "수분함량",
     "truth": false
    }
@@ -18177,7 +18177,7 @@ var COMBO_DRILLS_subject3 = [
    "구성비"
   ],
   "derivedFrom": "subject3_q196",
-  "explain": "📖 교재 근거 (교재: L1794):\n| 게이지와 미터기 | - 온도, 압력, 흐름, 점도, pH, 속도, 부피 등 화장품의 특성을 측정 및 기록하기 위해 사용함<br>- 제품과 직접 접하는 게이지와 미터의 적절한 기능에 영향을 주지 않아야 하며, 대부분 원료와 직접 접하지 않도록 분리 장치를 제공함 |",
+  "explain": "📖 교재 근거 (교재: L1764):\n| 게이지와 미터기 | - 온도, 압력, 흐름, 점도, pH, 속도, 부피 등 화장품의 특성을 측정 및 기록하기 위해 사용함<br>- 제품과 직접 접하는 게이지와 미터의 적절한 기능에 영향을 주지 않아야 하며, 대부분 원료와 직접 접하지 않도록 분리 장치를 제공함 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -18192,35 +18192,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_91dd3a",
-    "conceptId": "L276",
+    "conceptId": "q:subject3_q197",
     "text": "방서",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_8820e1",
-    "conceptId": "L276",
+    "conceptId": "q:subject3_q197",
     "text": "방진",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_3e5de0",
-    "conceptId": "L276",
+    "conceptId": "q:subject3_q197",
     "text": "방충",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_88a981",
-    "conceptId": "L276",
+    "conceptId": "q:subject3_q197",
     "text": "방습",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_3b3048",
-    "conceptId": "L276",
+    "conceptId": "q:subject3_q197",
     "text": "방화",
     "truth": false
    }
@@ -18283,35 +18283,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_2c6046",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "100",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_b96085",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "500",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_bfa553",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "1000",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_f4e091",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "2000",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_05599b",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "5000",
     "truth": false
    }
@@ -18369,41 +18369,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2910 (출처: 과목3 문제은행 Q199)",
+  "citation": "📖 교재: L2880 (출처: 과목3 문제은행 Q199)",
   "stem": "화장품 용기의 포장재료인 유리, 금속, 플라스틱의 유·무기 코팅막 및 도금의 밀착력을 측정하는 시험에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_6ce6e7",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "감압 누설시험",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_5eadbb",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "내용물 감량시험",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_61a6c4",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "크로스컷 시험",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_a00ec4",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "낙하시험",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_90c2b2",
-    "conceptId": "L2910",
+    "conceptId": "§5.1",
     "text": "접착력시험",
     "truth": false
    }
@@ -18451,7 +18451,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q199",
-  "explain": "📖 교재 근거 (교재: L2910):\n| 크로스컷 시험 🎯 기출 | 화장품 용기의 포장재료인 유리, 금속, 플라스틱의 유·무기 코팅막 및 도금의 밀착력 측정 / 규정된 점착테이프와 압착 장치를 이용하여 코팅막, 도금의 박리 여부를 확인 |",
+  "explain": "📖 교재 근거 (교재: L2880):\n| 크로스컷 시험 🎯 기출 | 화장품 용기의 포장재료인 유리, 금속, 플라스틱의 유·무기 코팅막 및 도금의 밀착력 측정 / 규정된 점착테이프와 압착 장치를 이용하여 코팅막, 도금의 박리 여부를 확인 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -18460,41 +18460,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L525 (출처: 과목3 문제은행 Q200)",
+  "citation": "📖 교재: L495 (출처: 과목3 문제은행 Q200)",
   "stem": "CGMP 1등급 특수 청정구역의 환기 장치에 설치되는 필터 중 0.3㎛ 크기의 미세 먼지를 99.97% 이상 여과하는 필터의 명칭은 ________필터이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_f702e5",
-    "conceptId": "L525",
+    "conceptId": "§1.1",
     "text": "HEPA",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_961cf2",
-    "conceptId": "L525",
+    "conceptId": "§1.1",
     "text": "ULPA",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_c41b77",
-    "conceptId": "L525",
+    "conceptId": "§1.1",
     "text": "HVAC",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_fca115",
-    "conceptId": "L525",
+    "conceptId": "§1.1",
     "text": "LAF",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_d1deac",
-    "conceptId": "L525",
+    "conceptId": "§1.1",
     "text": "EPA",
     "truth": false
    }
@@ -18546,7 +18546,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q200",
-  "explain": "📖 교재 근거 (교재: L525):\n| H/F (HEPA Filter) | • High Efficiency Particulate Air Filter<br>• 0.3㎛의 분진 99.97% 제거<br>• Media: Glass Fiber<br>• 반도체 공장, 병원, 의약품, 식품 공장 등 사용<br>• 압력 손실: 24mmAq 이하<br>• 필터 입자: 0.3㎛ |",
+  "explain": "📖 교재 근거 (교재: L495):\n| H/F (HEPA Filter) | • High Efficiency Particulate Air Filter<br>• 0.3㎛의 분진 99.97% 제거<br>• Media: Glass Fiber<br>• 반도체 공장, 병원, 의약품, 식품 공장 등 사용<br>• 압력 손실: 24mmAq 이하<br>• 필터 입자: 0.3㎛ |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -18561,35 +18561,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_34823b",
-    "conceptId": "L331",
+    "conceptId": "§1.0",
     "text": "밀봉",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_4f7cf8",
-    "conceptId": "L331",
+    "conceptId": "§1.0",
     "text": "차광",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_32e86e",
-    "conceptId": "L331",
+    "conceptId": "§1.0",
     "text": "냉장",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_7de83a",
-    "conceptId": "L331",
+    "conceptId": "§1.0",
     "text": "건조",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_bc67fe",
-    "conceptId": "L331",
+    "conceptId": "§1.0",
     "text": "방습",
     "truth": false
    }
@@ -18647,41 +18647,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L354 (출처: 과목3 문제은행 Q202)",
+  "citation": "📖 교재: L324 (출처: 과목3 문제은행 Q202)",
   "stem": "전염성 감염병 환자나 피부 질환이 있는 사람은 화장품 ________ 업무에 종사할 수 없다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_ae647e",
-    "conceptId": "L354",
+    "conceptId": "§1.0",
     "text": "판매",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_46a3e0",
-    "conceptId": "L354",
+    "conceptId": "§1.0",
     "text": "포장",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_d8baae",
-    "conceptId": "L354",
+    "conceptId": "§1.0",
     "text": "제조",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_45236c",
-    "conceptId": "L354",
+    "conceptId": "§1.0",
     "text": "운반",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_106ec2",
-    "conceptId": "L354",
+    "conceptId": "§1.0",
     "text": "보관",
     "truth": false
    }
@@ -18728,7 +18728,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q202",
-  "explain": "📖 교재 근거 (교재: L354):\n> 출처: 우수화장품 제조 및 품질관리기준(식품의약품안전처고시)(제2024-46호)(20240822).md",
+  "explain": "📖 교재 근거 (교재: L324):\n> 출처: 우수화장품 제조 및 품질관리기준(식품의약품안전처고시)(제2024-46호)(20240822).md",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -18737,41 +18737,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1860 (출처: 과목3 문제은행 Q203)",
+  "citation": "📖 교재: L1830 (출처: 과목3 문제은행 Q203)",
   "stem": "설비 세척 검증 시 좁은 배관 내부의 잔류물 채취를 위해 최종 헹굼액을 채취하는 분석법을 한글로 ________법이라고 부른다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_2628a5",
-    "conceptId": "L1860",
+    "conceptId": "§3.2",
     "text": "세척액",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_771ff8",
-    "conceptId": "L1860",
+    "conceptId": "§3.2",
     "text": "소독액",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e95b68",
-    "conceptId": "L1860",
+    "conceptId": "§3.2",
     "text": "배양액",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_d5df0d",
-    "conceptId": "L1860",
+    "conceptId": "§3.2",
     "text": "헹굼액(최종세척액)",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ff289d",
-    "conceptId": "L1860",
+    "conceptId": "§3.2",
     "text": "추출액",
     "truth": false
    }
@@ -18819,7 +18819,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q203",
-  "explain": "📖 교재 근거 (교재: L1860):\n| 닦아내기 판정 | 흰/검은 천으로 표면 닦아 잔류물 확인 | 설비 내부 표면 | 무진포 선호 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1830):\n| 닦아내기 판정 | 흰/검은 천으로 표면 닦아 잔류물 확인 | 설비 내부 표면 | 무진포 선호 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -18920,41 +18920,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L367 (출처: 과목3 문제은행 Q205)",
+  "citation": "📖 교재: L337 (출처: 과목3 문제은행 Q205)",
   "stem": "품질 보증을 위해 입고 대기 중인 원료와 적합 판정을 받은 원료를 물리적으로 분리하는 창고 관리 원칙을 ________ 보관이라고 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_6b06b9",
-    "conceptId": "L367",
+    "conceptId": "§1.0",
     "text": "분리",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_249e51",
-    "conceptId": "L367",
+    "conceptId": "§1.0",
     "text": "혼합",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_8459ca",
-    "conceptId": "L367",
+    "conceptId": "§1.0",
     "text": "통합",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_3078e4",
-    "conceptId": "L367",
+    "conceptId": "§1.0",
     "text": "밀집",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_72df83",
-    "conceptId": "L367",
+    "conceptId": "§1.0",
     "text": "인접",
     "truth": false
    }
@@ -19005,7 +19005,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q205",
-  "explain": "📖 교재 근거 (교재: L367):\n> - 4과목 1챕터 맞춤형화장품 개요 — 시설기준(분리·구획)의 법적 근거",
+  "explain": "📖 교재 근거 (교재: L337):\n> - 4과목 1챕터 맞춤형화장품 개요 — 시설기준(분리·구획)의 법적 근거",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -19020,35 +19020,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_54d684",
-    "conceptId": "L2142",
+    "conceptId": "§4.1",
     "text": "10",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_01b248",
-    "conceptId": "L2142",
+    "conceptId": "§4.1",
     "text": "100",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_738750",
-    "conceptId": "L2142",
+    "conceptId": "§4.1",
     "text": "50",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_c79e8e",
-    "conceptId": "L2142",
+    "conceptId": "§4.1",
     "text": "500",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_6ac576",
-    "conceptId": "L2142",
+    "conceptId": "§4.1",
     "text": "1000",
     "truth": false
    }
@@ -19098,7 +19098,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q206",
-  "explain": "📖 교재 근거 (L2142):\n| 프탈레이트류 | 디부틸프탈레이트, 부틸벤질프탈레이트 및 디에칠헥실프탈레이트에 한하여 총합으로 100μg/g 이하 |",
+  "explain": "📖 교재 근거 (L2112):\n| 프탈레이트류 | 디부틸프탈레이트, 부틸벤질프탈레이트 및 디에칠헥실프탈레이트에 한하여 총합으로 100μg/g 이하 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -19113,35 +19113,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_ab1d64",
-    "conceptId": "L644",
+    "conceptId": "q:subject3_q207",
     "text": "나",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ea6525",
-    "conceptId": "L644",
+    "conceptId": "q:subject3_q207",
     "text": "다",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_9e7cc8",
-    "conceptId": "L644",
+    "conceptId": "q:subject3_q207",
     "text": "가",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_7d1721",
-    "conceptId": "L644",
+    "conceptId": "q:subject3_q207",
     "text": "라",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_e12ca6",
-    "conceptId": "L644",
+    "conceptId": "q:subject3_q207",
     "text": "마",
     "truth": false
    }
@@ -19199,41 +19199,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2671 (출처: 과목3 문제은행 Q208)",
+  "citation": "📖 교재: L2641 (출처: 과목3 문제은행 Q208)",
   "stem": "부적합 판정을 받은 원료 및 반제품을 승인된 SOP 절차에 따라 재처리하여 적합하도록 수정하는 가공 작업을 ________(이)라고 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_7c52ba",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "재포장",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_a93298",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "폐기",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_125a86",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "재사용",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_91d5ec",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "재작업",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_d521b3",
-    "conceptId": "L2671",
+    "conceptId": "§4.2",
     "text": "출하",
     "truth": false
    }
@@ -19280,7 +19280,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q208",
-  "explain": "📖 교재 근거 (교재: L2671):\n| 재작업 | 적합판정 기준 벗어난 완제품·벌크를 재처리하여 적합 범위로 |",
+  "explain": "📖 교재 근거 (교재: L2641):\n| 재작업 | 적합판정 기준 벗어난 완제품·벌크를 재처리하여 적합 범위로 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -19295,35 +19295,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_8cba37",
-    "conceptId": "L2839",
+    "conceptId": "§5.1",
     "text": "아세톤을 함유하는 네일 에나멜 리무버",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_a53f5c",
-    "conceptId": "L2839",
+    "conceptId": "§5.1",
     "text": "어린이용 오일 (탄화수소류 10% 이상, 운동점도 21cst 이하)",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_cb1461",
-    "conceptId": "L2839",
+    "conceptId": "§5.1",
     "text": "메틸살리실레이트 5.0% 이상 함유 액체 제품",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_1c4299",
-    "conceptId": "L2839",
+    "conceptId": "§5.1",
     "text": "일회용 제품 및 에어로졸 제품",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_a52daf",
-    "conceptId": "L2839",
+    "conceptId": "§5.1",
     "text": "네일 폴리시 리무버",
     "truth": false
    }
@@ -19373,7 +19373,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q209",
-  "explain": "📖 교재 근거 (L2839):\n• 일회용 제품, 용기 입구 부분이 펌프 또는 방아쇠로 작동되는 분무용기 제품, 압축 분무용기 제품(에어로졸 제품 등)은 대상에서 제외함\n해설: 일회용 제품, 펌프/방아쇠 분무용기, 에어로졸 제품은 안전용기·포장 대상에서 제외된다. 아세톤 함유 리무버, 탄화수소 10% 이상 어린이용 오일, 메틸살리실레이트 5% 이상 제품은 안전용기 대상이다.",
+  "explain": "📖 교재 근거 (L2809):\n• 일회용 제품, 용기 입구 부분이 펌프 또는 방아쇠로 작동되는 분무용기 제품, 압축 분무용기 제품(에어로졸 제품 등)은 대상에서 제외함\n해설: 일회용 제품, 펌프/방아쇠 분무용기, 에어로졸 제품은 안전용기·포장 대상에서 제외된다. 아세톤 함유 리무버, 탄화수소 10% 이상 어린이용 오일, 메틸살리실레이트 5% 이상 제품은 안전용기 대상이다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -19388,35 +19388,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_78b7e9",
-    "conceptId": "L528",
+    "conceptId": "q:subject3_q210",
     "text": "100",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_c38e26",
-    "conceptId": "L528",
+    "conceptId": "q:subject3_q210",
     "text": "10",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e3949a",
-    "conceptId": "L528",
+    "conceptId": "q:subject3_q210",
     "text": "50",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_9c2ee0",
-    "conceptId": "L528",
+    "conceptId": "q:subject3_q210",
     "text": "200",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_3852de",
-    "conceptId": "L528",
+    "conceptId": "q:subject3_q210",
     "text": "500",
     "truth": false
    }
@@ -19471,41 +19471,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2534 (출처: 과목3 문제은행 Q211)",
+  "citation": "📖 교재: L2504 (출처: 과목3 문제은행 Q211)",
   "stem": "물휴지 제품의 유통안전 기준상 메탄올의 한도는 부피 대비 ________% 이하이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_97c7cb",
-    "conceptId": "L2534",
+    "conceptId": "§4.2",
     "text": "0.001",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_9ecec5",
-    "conceptId": "L2534",
+    "conceptId": "§4.2",
     "text": "0.002",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ff4511",
-    "conceptId": "L2534",
+    "conceptId": "§4.2",
     "text": "0.01",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_502d1d",
-    "conceptId": "L2534",
+    "conceptId": "§4.2",
     "text": "0.05",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_444860",
-    "conceptId": "L2534",
+    "conceptId": "§4.2",
     "text": "0.1",
     "truth": false
    }
@@ -19555,7 +19555,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q211",
-  "explain": "📖 교재 근거 (교재: L2534):\n| 메탄올 | 0.2%(v/v) 이하, 물휴지 0.002% 이하 | 에탄올 함량 높은 제품 |",
+  "explain": "📖 교재 근거 (교재: L2504):\n| 메탄올 | 0.2%(v/v) 이하, 물휴지 0.002% 이하 | 에탄올 함량 높은 제품 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -19570,35 +19570,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_3983f5",
-    "conceptId": "L1242",
+    "conceptId": "§2.2",
     "text": "위생복",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_25728b",
-    "conceptId": "L1242",
+    "conceptId": "§2.2",
     "text": "위생화",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_df7e2a",
-    "conceptId": "L1242",
+    "conceptId": "§2.2",
     "text": "위생모(헤어캡)",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_955c7c",
-    "conceptId": "L1242",
+    "conceptId": "§2.2",
     "text": "마스크",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_9bc1ae",
-    "conceptId": "L1242",
+    "conceptId": "§2.2",
     "text": "장갑",
     "truth": false
    }
@@ -19754,35 +19754,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_c1c500",
-    "conceptId": "L314",
+    "conceptId": "q:subject3_q214",
     "text": "강화",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_d4a9ad",
-    "conceptId": "L314",
+    "conceptId": "q:subject3_q214",
     "text": "연기",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_8e0da4",
-    "conceptId": "L314",
+    "conceptId": "q:subject3_q214",
     "text": "축소",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_256a02",
-    "conceptId": "L314",
+    "conceptId": "q:subject3_q214",
     "text": "취소",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_598a17",
-    "conceptId": "L314",
+    "conceptId": "q:subject3_q214",
     "text": "면제",
     "truth": true
    }
@@ -19850,35 +19850,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_ee1ab5",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "500",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_4eae89",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "100",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_baae8f",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "1000",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_ec0657",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "2000",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_222a66",
-    "conceptId": "L2498",
+    "conceptId": "§4.2",
     "text": "5000",
     "truth": false
    }
@@ -20121,41 +20121,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2393 (출처: 과목3 문제은행 Q218)",
+  "citation": "📖 교재: L2363 (출처: 과목3 문제은행 Q218)",
   "stem": "완제품 보관 창고에 유인 포획용으로 설치하는 조명 기구는 ________이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_b865ba",
-    "conceptId": "L2393",
+    "conceptId": "§4.1",
     "text": "유도등",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_46f0a5",
-    "conceptId": "L2393",
+    "conceptId": "§4.1",
     "text": "살균등",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_4741ca",
-    "conceptId": "L2393",
+    "conceptId": "§4.1",
     "text": "자외선등",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_9be19f",
-    "conceptId": "L2393",
+    "conceptId": "§4.1",
     "text": "포충등",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_19c071",
-    "conceptId": "L2393",
+    "conceptId": "§4.1",
     "text": "형광등",
     "truth": false
    }
@@ -20204,7 +20204,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q218",
-  "explain": "📖 교재 근거 (교재: L2393):\n> 참고 - 완제품의 관리 항목: 보관, 검체 채취, 보관용 검체, 제품 시험, 합격·출하 판정, 출하, 재고 관리, 반품\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L2363):\n> 참고 - 완제품의 관리 항목: 보관, 검체 채취, 보관용 검체, 제품 시험, 합격·출하 판정, 출하, 재고 관리, 반품\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -20213,41 +20213,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1859 (출처: 과목3 문제은행 Q219)",
+  "citation": "📖 교재: L1829 (출처: 과목3 문제은행 Q219)",
   "stem": "CGMP 설비 세척 확인 시 표면을 문질러 수집하는 채취 방식을 ________법이라고 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_d17d4b",
-    "conceptId": "L1859",
+    "conceptId": "§3.2",
     "text": "린스(Rinse)",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_fcb707",
-    "conceptId": "L1859",
+    "conceptId": "§3.2",
     "text": "플러시(Flush)",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_248eac",
-    "conceptId": "L1859",
+    "conceptId": "§3.2",
     "text": "와이프(Wipe)",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_27d0d7",
-    "conceptId": "L1859",
+    "conceptId": "§3.2",
     "text": "딥(Dip)",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_373893",
-    "conceptId": "L1859",
+    "conceptId": "§3.2",
     "text": "스와브(Swab)",
     "truth": true
    }
@@ -20293,7 +20293,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q219",
-  "explain": "📖 교재 근거 (교재: L1859):\n| 육안 판정 | 정해진 장소에서 육안 확인 | 일반 설비 표면 | 결과를 기록서에 기재 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1829):\n| 육안 판정 | 정해진 장소에서 육안 확인 | 일반 설비 표면 | 결과를 기록서에 기재 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -20404,35 +20404,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_0be941",
-    "conceptId": "L664",
+    "conceptId": "q:subject3_q221",
     "text": "7",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_b58fc5",
-    "conceptId": "L664",
+    "conceptId": "q:subject3_q221",
     "text": "15",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_0fdbb2",
-    "conceptId": "L664",
+    "conceptId": "q:subject3_q221",
     "text": "30",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_07f115",
-    "conceptId": "L664",
+    "conceptId": "q:subject3_q221",
     "text": "60",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_99ad18",
-    "conceptId": "L664",
+    "conceptId": "q:subject3_q221",
     "text": "90",
     "truth": false
    }
@@ -20491,41 +20491,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1791 (출처: 과목3 문제은행 Q222)",
+  "citation": "📖 교재: L1761 (출처: 과목3 문제은행 Q222)",
   "stem": "화장품 완제품 보관실의 상온 표준 보관 온도는 섭씨 ________도 범위이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_185df4",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "10, 20",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_d99a75",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "20, 30",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_64bf0d",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "15, 25",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_7cb479",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "25, 35",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_0b1cc9",
-    "conceptId": "L1791",
+    "conceptId": "§3.2",
     "text": "5, 15",
     "truth": false
    }
@@ -20574,7 +20574,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q222",
-  "explain": "📖 교재 근거 (교재: L1791):\n| 필터, 여과기, 체 | - 화장품 원료와 완제품의 입자 크기를 작게 하고, 덩어리 모양을 깨고, 불순물을 제거하기 위해 사용<br>- 스테인리스 스틸과 비반응성 섬유이며, 316스테인리스는 제품 제조 시 선호 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1761):\n| 필터, 여과기, 체 | - 화장품 원료와 완제품의 입자 크기를 작게 하고, 덩어리 모양을 깨고, 불순물을 제거하기 위해 사용<br>- 스테인리스 스틸과 비반응성 섬유이며, 316스테인리스는 제품 제조 시 선호 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -20583,41 +20583,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L3250 (출처: 과목3 문제은행 Q223)",
+  "citation": "📖 교재: L3220 (출처: 과목3 문제은행 Q223)",
   "stem": "유통화장품 안전성 기준상 일반 화장품의 포름알데히드 한도는 ________㎍/g 이하이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_cc78a4",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "100",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_fe8cfa",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "500",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_da110b",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "1000",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_4070ad",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "2000",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_c6b2a6",
-    "conceptId": "L3250",
+    "conceptId": "§5.2",
     "text": "5000",
     "truth": false
    }
@@ -20667,7 +20667,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q223",
-  "explain": "📖 교재 근거 (교재: L3250):\n2. 유해물질: 디옥산 100㎍/g, 메탄올 0.2%(물휴지 0.002%), 포름알데히드 2000㎍/g",
+  "explain": "📖 교재 근거 (교재: L3220):\n2. 유해물질: 디옥산 100㎍/g, 메탄올 0.2%(물휴지 0.002%), 포름알데히드 2000㎍/g",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -20682,35 +20682,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_d9be48",
-    "conceptId": "L665",
+    "conceptId": "q:subject3_q224",
     "text": "7",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_38c1d8",
-    "conceptId": "L665",
+    "conceptId": "q:subject3_q224",
     "text": "15",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_3bb85c",
-    "conceptId": "L665",
+    "conceptId": "q:subject3_q224",
     "text": "60",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_9d06c7",
-    "conceptId": "L665",
+    "conceptId": "q:subject3_q224",
     "text": "90",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_da8618",
-    "conceptId": "L665",
+    "conceptId": "q:subject3_q224",
     "text": "30",
     "truth": true
    }
@@ -20776,35 +20776,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_55c447",
-    "conceptId": "L3058",
+    "conceptId": "§5.2",
     "text": "폐기물 대장 기록 → 부적합 라벨 부착 → 격리 보관 → 인계",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_9cce1a",
-    "conceptId": "L3058",
+    "conceptId": "§5.2",
     "text": "부적합 라벨 부착 → 격리 보관 → 폐기물 보관소 분리수거 → 폐기물 대장 기록 → 인계",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_3f41de",
-    "conceptId": "L3058",
+    "conceptId": "§5.2",
     "text": "격리 보관 → 부적합 라벨 부착 → 인계 → 폐기물 대장 기록",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_1b7337",
-    "conceptId": "L3058",
+    "conceptId": "§5.2",
     "text": "인계 → 폐기물 대장 기록 → 부적합 라벨 부착 → 격리 보관",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_edbc7e",
-    "conceptId": "L3058",
+    "conceptId": "§5.2",
     "text": "부적합 라벨 부착 → 인계 → 격리 보관 → 폐기물 대장 기록",
     "truth": false
    }
@@ -20856,7 +20856,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q225",
-  "explain": "📖 교재 근거 (L3058):\n| (4) 포장재의 폐기 절차 🎯 기출 | 기준일탈 포장재에 부적합 라벨 부착 → 격리 보관 → 폐기물 보관소로 운반하여 분리수거 확인(폐기물 수거함에 분리수거 카드 부착) → 폐기물 대장 기록 → 인계 |",
+  "explain": "📖 교재 근거 (L3028):\n| (4) 포장재의 폐기 절차 🎯 기출 | 기준일탈 포장재에 부적합 라벨 부착 → 격리 보관 → 폐기물 보관소로 운반하여 분리수거 확인(폐기물 수거함에 분리수거 카드 부착) → 폐기물 대장 기록 → 인계 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -20865,41 +20865,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2629 (출처: 과목3 문제은행 Q226)",
+  "citation": "📖 교재: L2599 (출처: 과목3 문제은행 Q226)",
   "stem": "수입 검사 중인 대기 원자재에 부착하는 라벨의 색상은 ________색이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_c6aebf",
-    "conceptId": "L2629",
+    "conceptId": "§4.2",
     "text": "적색",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_48039e",
-    "conceptId": "L2629",
+    "conceptId": "§4.2",
     "text": "황색",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_486179",
-    "conceptId": "L2629",
+    "conceptId": "§4.2",
     "text": "녹색",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_c96d4b",
-    "conceptId": "L2629",
+    "conceptId": "§4.2",
     "text": "청색",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_f7c503",
-    "conceptId": "L2629",
+    "conceptId": "§4.2",
     "text": "백색",
     "truth": false
    }
@@ -20946,7 +20946,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q226",
-  "explain": "📖 교재 근거 (교재: L2629):\n| 입고 라벨 | 백색(판정대기)→황색(시험중)→청색(적합)/적색(부적합) |",
+  "explain": "📖 교재 근거 (교재: L2599):\n| 입고 라벨 | 백색(판정대기)→황색(시험중)→청색(적합)/적색(부적합) |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -20955,41 +20955,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L540 (출처: 과목3 문제은행 Q227)",
+  "citation": "📖 교재: L510 (출처: 과목3 문제은행 Q227)",
   "stem": "내용물이 노출되는 작업장의 차압은 외부 공기 역류 유입을 막기 위해 인접 구역보다 기압이 높은 ________압이어야 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_8c9db7",
-    "conceptId": "L540",
+    "conceptId": "§1.1",
     "text": "부",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_3336c3",
-    "conceptId": "L540",
+    "conceptId": "§1.1",
     "text": "영",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_bd2a4b",
-    "conceptId": "L540",
+    "conceptId": "§1.1",
     "text": "정",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_cb2c79",
-    "conceptId": "L540",
+    "conceptId": "§1.1",
     "text": "음",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_a5de0c",
-    "conceptId": "L540",
+    "conceptId": "§1.1",
     "text": "기준",
     "truth": false
    }
@@ -21035,7 +21035,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q227",
-  "explain": "📖 교재 근거 (교재: L540):\n| 원리 | • Koch법: 실내외를 불문하고, 대상 작업장에서 오염된 부유 미생물을 직접 평판배지 위에 일정 시간 자연 낙하시켜 측정하는 방법<br>• 배양접시에 낙하된 미생물을 배양하여 증식된 집락수를 측정하고 단위시간당의 생균수로 산출하는 방법<br>• 사용이 간단하고 편리한 방법이지만 공기 중의 전체 미생물을 측정할 수 없다는 단점이 있음 |",
+  "explain": "📖 교재 근거 (교재: L510):\n| 원리 | • Koch법: 실내외를 불문하고, 대상 작업장에서 오염된 부유 미생물을 직접 평판배지 위에 일정 시간 자연 낙하시켜 측정하는 방법<br>• 배양접시에 낙하된 미생물을 배양하여 증식된 집락수를 측정하고 단위시간당의 생균수로 산출하는 방법<br>• 사용이 간단하고 편리한 방법이지만 공기 중의 전체 미생물을 측정할 수 없다는 단점이 있음 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -21044,41 +21044,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1825 (출처: 과목3 문제은행 Q228)",
+  "citation": "📖 교재: L1795 (출처: 과목3 문제은행 Q228)",
   "stem": "CGMP의 3대 요소 중 규정, SOP, 기준서를 총칭하는 소프트웨어와 대비되는 설비 및 하드웨어 시설의 명칭은 ________이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_5cd303",
-    "conceptId": "L1825",
+    "conceptId": "§3.2",
     "text": "소프트웨어",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_a847ea",
-    "conceptId": "L1825",
+    "conceptId": "§3.2",
     "text": "미들웨어",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e628c9",
-    "conceptId": "L1825",
+    "conceptId": "§3.2",
     "text": "펌웨어",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e4cd5f",
-    "conceptId": "L1825",
+    "conceptId": "§3.2",
     "text": "하드웨어",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_bee32d",
-    "conceptId": "L1825",
+    "conceptId": "§3.2",
     "text": "네트워크",
     "truth": false
    }
@@ -21128,7 +21128,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q228",
-  "explain": "📖 교재 근거 (교재: L1825):\n| 정비 계획에 따른 점검·정비 | - 설비 대장의 점검·정비 주기와 연간 정비 계획표 수립<br>- 정비 업무 계획표에 따라 점검과 정비 실시<br>- 설비 점검은 설비별 점검 기준서를 기초로 함<br>- 점검 기준서 포함 사항: 설비 구조도면, 명칭, 기능, 취급 방법, 기계요소 및 내구 수명, 작업 내용, 설비 기본 정보(설비 번호, 설비명, 설치 연월, 설치 장소), 설비 사진 또는 도면(일련번호와 함께 점검과 정비 대상인 기계요소의 번호, 명칭, 기능 기재), 점검 부위명, 점검 기준, 점검 방법, 점검 주기, 조치 방법, 담당자명<br>- 설비의 일상 점검: 일간 또는 주간 주기로 실시, 결과를 설비 점검표에 기록<br>- 설비의 정기 점검: 연간 정비 계획서에 따라 정기 정비와 같이 실시...\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1795):\n| 정비 계획에 따른 점검·정비 | - 설비 대장의 점검·정비 주기와 연간 정비 계획표 수립<br>- 정비 업무 계획표에 따라 점검과 정비 실시<br>- 설비 점검은 설비별 점검 기준서를 기초로 함<br>- 점검 기준서 포함 사항: 설비 구조도면, 명칭, 기능, 취급 방법, 기계요소 및 내구 수명, 작업 내용, 설비 기본 정보(설비 번호, 설비명, 설치 연월, 설치 장소), 설비 사진 또는 도면(일련번호와 함께 점검과 정비 대상인 기계요소의 번호, 명칭, 기능 기재), 점검 부위명, 점검 기준, 점검 방법, 점검 주기, 조치 방법, 담당자명<br>- 설비의 일상 점검: 일간 또는 주간 주기로 실시, 결과를 설비 점검표에 기록<br>- 설비의 정기 점검: 연간 정비 계획서에 따라 정기 정비와 같이 실시...\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -21143,35 +21143,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_992c22",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "HEPA",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_1e8633",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "LAF",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_13bc94",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "AHU",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_5cd88d",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "BSC",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_e696ab",
-    "conceptId": "L1006",
+    "conceptId": "§1.3",
     "text": "HVAC",
     "truth": true
    }
@@ -21317,41 +21317,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L961 (출처: 과목3 문제은행 Q231)",
+  "citation": "📖 교재: L962 (출처: 과목3 문제은행 Q231)",
   "stem": "CGMP 기준상 품질관리시스템에서 문제를 발견하고 원인을 제거하여 재발을 방지하는 활동의 영문 약자는 ________이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_dc1640",
-    "conceptId": "L961",
+    "conceptId": "§1.3",
     "text": "GMP",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_935ac7",
-    "conceptId": "L961",
+    "conceptId": "§1.3",
     "text": "CAPA",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e1e187",
-    "conceptId": "L961",
+    "conceptId": "§1.3",
     "text": "SOP",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e30b66",
-    "conceptId": "L961",
+    "conceptId": "§1.3",
     "text": "OOS",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_26dd13",
-    "conceptId": "L961",
+    "conceptId": "§1.3",
     "text": "QC",
     "truth": false
    }
@@ -21402,7 +21402,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q231",
-  "explain": "📖 교재 근거 (교재: L961):\n> 해설: CGMP 3대 요소는 인위적 과오 최소화, 미생물오염 및 교차오염으로 인한 품질저하 방지, 고도의 품질관리체계 확립이다. 원가 절감은 CGMP 요소가 아니다.",
+  "explain": "📖 교재 근거 (교재: L962):\n> 해설: CGMP 3대 요소는 인위적 과오 최소화, 미생물오염 및 교차오염으로 인한 품질저하 방지, 고도의 품질관리체계 확립이다. 원가 절감은 CGMP 요소가 아니다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -21500,41 +21500,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2620 (출처: 과목3 문제은행 Q234)",
+  "citation": "📖 교재: L2590 (출처: 과목3 문제은행 Q234)",
   "stem": "CGMP 기준상 기준일탈이 발생한 경우 작성해야 하는 보고서의 명칭은 ________ 보고서이다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_e3ad10",
-    "conceptId": "L2620",
+    "conceptId": "§4.2",
     "text": "기준초과(OOE)",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_1410a0",
-    "conceptId": "L2620",
+    "conceptId": "§4.2",
     "text": "부적합(OQ)",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_125af4",
-    "conceptId": "L2620",
+    "conceptId": "§4.2",
     "text": "이탈보고(Deviation)",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_825e6f",
-    "conceptId": "L2620",
+    "conceptId": "§4.2",
     "text": "변경관리(Change Control)",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_7dbb78",
-    "conceptId": "L2620",
+    "conceptId": "§4.2",
     "text": "기준일탈(OOS)",
     "truth": true
    }
@@ -21586,7 +21586,7 @@ var COMBO_DRILLS_subject3 = [
    "절차"
   ],
   "derivedFrom": "subject3_q234",
-  "explain": "📖 교재 근거 (교재: L2620):\n| 기준일탈 | 규정된 합격 판정 기준에 일치하지 않는 검사·측정·시험 결과 |",
+  "explain": "📖 교재 근거 (교재: L2590):\n| 기준일탈 | 규정된 합격 판정 기준에 일치하지 않는 검사·측정·시험 결과 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "5"
  },
@@ -21595,41 +21595,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L3687 (출처: 과목3 문제은행 Q235)",
+  "citation": "📖 교재: L3657 (출처: 과목3 문제은행 Q235)",
   "stem": "화장품 위해사례 중 사망, 중증 질환 등 중대한 위해가 발생한 경우 이를 ________ 유해사례라고 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_68e561",
-    "conceptId": "L3687",
+    "conceptId": "§5.1",
     "text": "중대한",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_7501c4",
-    "conceptId": "L3687",
+    "conceptId": "§5.1",
     "text": "경미한",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_234ac5",
-    "conceptId": "L3687",
+    "conceptId": "§5.1",
     "text": "일반적인",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_69b25d",
-    "conceptId": "L3687",
+    "conceptId": "§5.1",
     "text": "특수한",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_62764e",
-    "conceptId": "L3687",
+    "conceptId": "§5.1",
     "text": "가벼운",
     "truth": false
    }
@@ -21677,7 +21677,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q235",
-  "explain": "📖 교재 근거 (교재: L3687):\n① 포장재는 정기적으로 재고조사를 실시하여야 하며, 중대한 위반품이 발견되었을 경우에는 일탈처리를 한다.",
+  "explain": "📖 교재 근거 (교재: L3657):\n① 포장재는 정기적으로 재고조사를 실시하여야 하며, 중대한 위반품이 발견되었을 경우에는 일탈처리를 한다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -21782,35 +21782,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_3bb13a",
-    "conceptId": "q:subject3_q237",
+    "conceptId": "§0.2",
     "text": "제조책임자",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_5eef78",
-    "conceptId": "q:subject3_q237",
+    "conceptId": "§0.2",
     "text": "위생관리책임자",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_976488",
-    "conceptId": "q:subject3_q237",
+    "conceptId": "§0.2",
     "text": "품질관리책임자",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_77de58",
-    "conceptId": "q:subject3_q237",
+    "conceptId": "§0.2",
     "text": "출하관리자",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_d9bba4",
-    "conceptId": "q:subject3_q237",
+    "conceptId": "§0.2",
     "text": "연구개발책임자",
     "truth": false
    }
@@ -21878,35 +21878,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_1496a2",
-    "conceptId": "L990",
+    "conceptId": "§1.3",
     "text": "QA",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_0c68f0",
-    "conceptId": "L990",
+    "conceptId": "§1.3",
     "text": "R&D",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_c98460",
-    "conceptId": "L990",
+    "conceptId": "§1.3",
     "text": "GMP",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_9e86c6",
-    "conceptId": "L990",
+    "conceptId": "§1.3",
     "text": "QC",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_fa6e59",
-    "conceptId": "L990",
+    "conceptId": "§1.3",
     "text": "SOP",
     "truth": false
    }
@@ -21962,41 +21962,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L500 (출처: 과목3 문제은행 Q239)",
+  "citation": "📖 교재: L470 (출처: 과목3 문제은행 Q239)",
   "stem": "화장품 제조 시 작업 구역의 청정도 등급에 따라 구분된 구역을 ________ 구역이라고 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_cc5740",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "일반작업",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_bdc204",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "무균작업",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_61dc5b",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "폐쇄작업",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_35c87c",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "개방작업",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_3c46f6",
-    "conceptId": "L500",
+    "conceptId": "§1.1",
     "text": "청정작업",
     "truth": true
    }
@@ -22046,7 +22046,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q239",
-  "explain": "📖 교재 근거 (교재: L500):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L470):\n| 2등급 (청정도 분류) | 화장품 내용물이 노출되는 작업실 | 제조실, 성형실, 충전실, 내용물 보관소, 원료 칭량실, 미생물 실험실 |\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -22055,41 +22055,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2081 (출처: 과목3 문제은행 Q240)",
+  "citation": "📖 교재: L2051 (출처: 과목3 문제은행 Q240)",
   "stem": "CGMP 기준상 제품이 제품표준서에 규정된 기준에 적합하다고 판정된 경우 이를 ________ 판정이라고 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_036bab",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "적합",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_2e1ae5",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "부적합",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e63bea",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "보류",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_3873db",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "조건부",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_bcd708",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "특례",
     "truth": false
    }
@@ -22139,7 +22139,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q240",
-  "explain": "📖 법령 근거 (교재: L2081):\n| 변경관리 | 모든 제조, 관리 및 보관된 제품이 규정된 적합 판정 기준에 일치하도록 보장하기 위해 우수화장품 제조 및 품질관리기준(CGMP)이 적용되는 모든 활동을 내부 조직의 책임하에 계획하여 변경하는 것 |",
+  "explain": "📖 법령 근거 (교재: L2051):\n| 변경관리 | 모든 제조, 관리 및 보관된 제품이 규정된 적합 판정 기준에 일치하도록 보장하기 위해 우수화장품 제조 및 품질관리기준(CGMP)이 적용되는 모든 활동을 내부 조직의 책임하에 계획하여 변경하는 것 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -22148,41 +22148,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L453 (출처: 과목3 문제은행 Q241)",
+  "citation": "📖 교재: L423 (출처: 과목3 문제은행 Q241)",
   "stem": "화장품 제조 시 교차 오염을 방지하기 위해 작업 구역을 ________해야 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_678610",
-    "conceptId": "L453",
+    "conceptId": "§1.0",
     "text": "통합",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_b8bf05",
-    "conceptId": "L453",
+    "conceptId": "§1.0",
     "text": "분리",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_5e279c",
-    "conceptId": "L453",
+    "conceptId": "§1.0",
     "text": "혼합",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_f823a7",
-    "conceptId": "L453",
+    "conceptId": "§1.0",
     "text": "인접",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_106817",
-    "conceptId": "L453",
+    "conceptId": "§1.0",
     "text": "공유",
     "truth": false
    }
@@ -22230,7 +22230,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q241",
-  "explain": "📖 교재 근거 (교재: L453):\n> - 4과목 1챕터 맞춤형화장품 개요 — 시설기준(분리·구획)의 법적 근거",
+  "explain": "📖 교재 근거 (교재: L423):\n> - 4과목 1챕터 맞춤형화장품 개요 — 시설기준(분리·구획)의 법적 근거",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -22245,35 +22245,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_9ab565",
-    "conceptId": "L173",
+    "conceptId": "q:subject3_q242",
     "text": "품질관리책임자",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ebc79f",
-    "conceptId": "L173",
+    "conceptId": "q:subject3_q242",
     "text": "제조책임자",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_27a48c",
-    "conceptId": "L173",
+    "conceptId": "q:subject3_q242",
     "text": "경영자",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_d3c276",
-    "conceptId": "L173",
+    "conceptId": "q:subject3_q242",
     "text": "외부감사자",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_28bae7",
-    "conceptId": "L173",
+    "conceptId": "q:subject3_q242",
     "text": "정부관계자",
     "truth": false
    }
@@ -22422,41 +22422,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1810 (출처: 과목3 문제은행 Q244)",
+  "citation": "📖 교재: L1811 (출처: 과목3 문제은행 Q244)",
   "stem": "화장품 제조 시 원료의 품질을 확인하기 위해 실시하는 검사를 ________ 검사라고 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_d19299",
-    "conceptId": "L1810",
+    "conceptId": "§3.2",
     "text": "완제품",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_c233c7",
-    "conceptId": "L1810",
+    "conceptId": "§3.2",
     "text": "중간체",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_f39793",
-    "conceptId": "L1810",
+    "conceptId": "§3.2",
     "text": "포장재",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_5773a4",
-    "conceptId": "L1810",
+    "conceptId": "§3.2",
     "text": "설비",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_c6cfa0",
-    "conceptId": "L1810",
+    "conceptId": "§3.2",
     "text": "원료 검수(투입)",
     "truth": true
    }
@@ -22504,7 +22504,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q244",
-  "explain": "📖 교재 근거 (교재: L1810):\n> 해설: 호모게나이저(혼합과 교반 장치)는 제품의 균일성 또는 물리적 성상을 얻기 위해 사용하는 설비이다. 기계적 회전 날부터 정교한 제분기·균질화기까지 포함된다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 교재 근거 (교재: L1811):\n> 해설: 호모게나이저(혼합과 교반 장치)는 제품의 균일성 또는 물리적 성상을 얻기 위해 사용하는 설비이다. 기계적 회전 날부터 정교한 제분기·균질화기까지 포함된다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -22519,35 +22519,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_a50e2e",
-    "conceptId": "L3039",
+    "conceptId": "§5.2",
     "text": "문서",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_a90972",
-    "conceptId": "L3039",
+    "conceptId": "§5.2",
     "text": "품질",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_7889d9",
-    "conceptId": "L3039",
+    "conceptId": "§5.2",
     "text": "위생",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_cd9601",
-    "conceptId": "L3039",
+    "conceptId": "§5.2",
     "text": "설비",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_785833",
-    "conceptId": "L3039",
+    "conceptId": "§5.2",
     "text": "원료",
     "truth": false
    }
@@ -22610,35 +22610,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_409c1e",
-    "conceptId": "L2872",
+    "conceptId": "§4.1",
     "text": "원료",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_3f2c4d",
-    "conceptId": "L2872",
+    "conceptId": "§4.1",
     "text": "완제품(출하)",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_3b6811",
-    "conceptId": "L2872",
+    "conceptId": "§4.1",
     "text": "중간체",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_cb998b",
-    "conceptId": "L2872",
+    "conceptId": "§4.1",
     "text": "포장재",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_eccd2b",
-    "conceptId": "L2872",
+    "conceptId": "§4.1",
     "text": "설비",
     "truth": false
    }
@@ -22686,7 +22686,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q246",
-  "explain": "📖 법령 근거 (L2872):\n| 완제품 | 출하를 위해 제품의 포장 및 첨부문서에 표시하는 공정 등을 포함한 모든 제조 공정이 완료된 화장품 |",
+  "explain": "📖 법령 근거 (L2840):\n| 완제품 | 출하를 위해 제품의 포장 및 첨부문서에 표시하는 공정 등을 포함한 모든 제조 공정이 완료된 화장품 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "4"
  },
@@ -22790,41 +22790,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L2081 (출처: 과목3 문제은행 Q248)",
+  "citation": "📖 교재: L2051 (출처: 과목3 문제은행 Q248)",
   "stem": "CGMP 기준상 품질관리시스템의 문제를 발견하고 개선하기 위해 정기적으로 실시하는 내부 평가를 ________ 감사라고 한다. 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_681edb",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "외부",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_1f3f81",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "정부",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_5ffb7e",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "제3자",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_504b6e",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "내부",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_d0c191",
-    "conceptId": "L2081",
+    "conceptId": "§4.1",
     "text": "자발적",
     "truth": false
    }
@@ -22872,7 +22872,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q248",
-  "explain": "📖 법령 근거 (교재: L2081):\n| 변경관리 | 모든 제조, 관리 및 보관된 제품이 규정된 적합 판정 기준에 일치하도록 보장하기 위해 우수화장품 제조 및 품질관리기준(CGMP)이 적용되는 모든 활동을 내부 조직의 책임하에 계획하여 변경하는 것 |",
+  "explain": "📖 법령 근거 (교재: L2051):\n| 변경관리 | 모든 제조, 관리 및 보관된 제품이 규정된 적합 판정 기준에 일치하도록 보장하기 위해 우수화장품 제조 및 품질관리기준(CGMP)이 적용되는 모든 활동을 내부 조직의 책임하에 계획하여 변경하는 것 |",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "3"
  },
@@ -22887,35 +22887,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_752d97",
-    "conceptId": "L170",
+    "conceptId": "q:subject3_q249",
     "text": "출하",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_254258",
-    "conceptId": "L170",
+    "conceptId": "q:subject3_q249",
     "text": "포장",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_7ad924",
-    "conceptId": "L170",
+    "conceptId": "q:subject3_q249",
     "text": "제조",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_96c059",
-    "conceptId": "L170",
+    "conceptId": "q:subject3_q249",
     "text": "보관",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_2c90e7",
-    "conceptId": "L170",
+    "conceptId": "q:subject3_q249",
     "text": "검수",
     "truth": true
    }
@@ -23065,52 +23065,242 @@ var COMBO_DRILLS_subject3 = [
   "answer": "5"
  },
  {
-  "id": "safety_combo-cluster_639d04",
+  "id": "safety_combo-cluster_1b2b68",
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L476 (출처: 과목3 문제은행 진술 재조합)",
+  "citation": "📖 교재: §2.2 (출처: 과목3 문제은행 진술 재조합)",
   "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "safety_st_def43c",
-    "conceptId": "L476",
-    "text": "외부 먼지와 해충의 유입을 막기 위해 창고 문은 항상 열어둔다.",
+    "sid": "safety_st_fb4e02",
+    "conceptId": "§2.2",
+    "text": "일반 비누와 동일하게 흐르는 물에 사용해야 한다",
     "truth": false,
-    "explain": "원본: 과목3 문제은행 Q28 · 교재 L476"
+    "explain": "원본: 과목3 문제은행 Q8 · 교재 §2.2"
    },
    {
     "id": "ㄴ",
-    "sid": "safety_st_899558",
-    "conceptId": "L476",
-    "text": "출하 대기 중인 완제품과 부적합 완제품은 물리적으로 격리 보관한다.",
+    "sid": "safety_st_6e629a",
+    "conceptId": "§2.2",
+    "text": "작업원은 청정 등급에 맞는 규정된 위생복, 모자, 위생화를 착용해야 한다.",
     "truth": true,
-    "explain": "원본: 과목3 문제은행 Q28 · 교재 L476"
+    "explain": "원본: 과목3 문제은행 Q1 · 교재 §2.2"
    },
    {
     "id": "ㄷ",
-    "sid": "safety_st_43b116",
-    "conceptId": "L476",
-    "text": "입고된 모든 원료는 검사 결과와 무관하게 입고 즉시 생산 라인에 투입한다.",
-    "truth": false,
-    "explain": "원본: 과목3 문제은행 Q5 · 교재 L476"
+    "sid": "safety_st_260407",
+    "conceptId": "§2.2",
+    "text": "의약외품으로 분류된다",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q8 · 교재 §2.2"
    },
    {
     "id": "ㄹ",
-    "sid": "safety_st_8dfe1c",
-    "conceptId": "L476",
-    "text": "원료 및 내용물은 벽과 바닥에 닿지 않도록 적재(파레트 사용 등)하여 보관한다.",
-    "truth": true,
-    "explain": "원본: 과목3 문제은행 Q5 · 교재 L476"
+    "sid": "safety_st_541062",
+    "conceptId": "§2.2",
+    "text": "물이 있어야만 사용할 수 있다",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q21 · 교재 §2.2"
    },
    {
     "id": "ㅁ",
-    "sid": "safety_st_c10f41",
-    "conceptId": "L476",
-    "text": "제품 박스는 규격별로 정렬하여 통로를 확보한다.",
+    "sid": "safety_st_b2a1e9",
+    "conceptId": "§2.2",
+    "text": "알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등은 손 세정제 성분이다",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q21 · 교재 §2.2"
+   }
+  ],
+  "options": [
+   {
+    "id": "1",
+    "members": [
+     "ㄴ",
+     "ㄷ"
+    ]
+   },
+   {
+    "id": "2",
+    "members": [
+     "ㄹ"
+    ]
+   },
+   {
+    "id": "3",
+    "members": [
+     "ㄱ"
+    ]
+   },
+   {
+    "id": "4",
+    "members": [
+     "ㄴ"
+    ]
+   },
+   {
+    "id": "5",
+    "members": [
+     "ㄱ",
+     "ㄴ",
+     "ㄹ"
+    ]
+   }
+  ],
+  "tags": [
+   "자동변환",
+   "명제판정",
+   "개념재조합"
+  ],
+  "derivedFrom": "cluster:3|§2.2",
+  "explain": "ㄱ. 원본: 과목3 문제은행 Q8 · 교재 §2.2\nㄴ. 원본: 과목3 문제은행 Q1 · 교재 §2.2\nㄷ. 원본: 과목3 문제은행 Q8 · 교재 §2.2\nㄹ. 원본: 과목3 문제은행 Q21 · 교재 §2.2\nㅁ. 원본: 과목3 문제은행 Q21 · 교재 §2.2",
+  "source": "과목3 개념 재조합",
+  "answer": "1"
+ },
+ {
+  "id": "safety_combo-cluster_a7d7a5",
+  "subject": 3,
+  "type": "combo",
+  "points": 4,
+  "citation": "📖 교재: §4.2 (출처: 과목3 문제은행 진술 재조합)",
+  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
+  "statements": [
+   {
+    "id": "ㄱ",
+    "sid": "safety_st_0c39b1",
+    "conceptId": "§4.2",
+    "text": "재작업 기록서는 별도로 작성할 필요가 없다.",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q19 · 교재 §4.2"
+   },
+   {
+    "id": "ㄴ",
+    "sid": "safety_st_52f860",
+    "conceptId": "§4.2",
+    "text": "품질 검사 부적합이 발생하면 생산 작업자가 임의로 재작업을 시작할 수 있다.",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q19 · 교재 §4.2"
+   },
+   {
+    "id": "ㄷ",
+    "sid": "safety_st_b2fbef",
+    "conceptId": "§4.2",
+    "text": "세척이 완료된 기구는 물기가 남아있는 상태로 겹쳐서 보관하여 건조 속도를 늦춘다.",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q4 · 교재 §4.2"
+   },
+   {
+    "id": "ㄹ",
+    "sid": "safety_st_70e8c5",
+    "conceptId": "§4.2",
+    "text": "세척제는 잔류물이 남지 않고 물에 잘 씻겨 나가는 제품을 선택한다.",
     "truth": true,
-    "explain": "원본: 과목3 문제은행 Q28 · 교재 L476"
+    "explain": "원본: 과목3 문제은행 Q4 · 교재 §4.2"
+   },
+   {
+    "id": "ㅁ",
+    "sid": "safety_st_b0216f",
+    "conceptId": "§4.2",
+    "text": "이전 배치와 제조 원료가 변경될 때는 평소보다 더 강력하고 철저한 세척(교차 오염 방지)을 실시한다.",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q4 · 교재 §4.2"
+   }
+  ],
+  "options": [
+   {
+    "id": "1",
+    "members": [
+     "ㄱ",
+     "ㄴ"
+    ]
+   },
+   {
+    "id": "2",
+    "members": [
+     "ㄴ",
+     "ㅁ"
+    ]
+   },
+   {
+    "id": "3",
+    "members": [
+     "ㄷ"
+    ]
+   },
+   {
+    "id": "4",
+    "members": [
+     "ㄹ",
+     "ㅁ"
+    ]
+   },
+   {
+    "id": "5",
+    "members": [
+     "ㄷ",
+     "ㄹ",
+     "ㅁ"
+    ]
+   }
+  ],
+  "tags": [
+   "자동변환",
+   "명제판정",
+   "개념재조합"
+  ],
+  "derivedFrom": "cluster:3|§4.2",
+  "explain": "ㄱ. 원본: 과목3 문제은행 Q19 · 교재 §4.2\nㄴ. 원본: 과목3 문제은행 Q19 · 교재 §4.2\nㄷ. 원본: 과목3 문제은행 Q4 · 교재 §4.2\nㄹ. 원본: 과목3 문제은행 Q4 · 교재 §4.2\nㅁ. 원본: 과목3 문제은행 Q4 · 교재 §4.2",
+  "source": "과목3 개념 재조합",
+  "answer": "4"
+ },
+ {
+  "id": "safety_combo-cluster_1f2357",
+  "subject": 3,
+  "type": "combo",
+  "points": 4,
+  "citation": "📖 교재: §1.1 (출처: 과목3 문제은행 진술 재조합)",
+  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
+  "statements": [
+   {
+    "id": "ㄱ",
+    "sid": "safety_st_ea7f5b",
+    "conceptId": "§1.1",
+    "text": "선입선출(FIFO) 원칙은 포장재에만 적용하며, 원료와 내용물에는 적용하지 않는다.",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q5 · 교재 §1.1"
+   },
+   {
+    "id": "ㄴ",
+    "sid": "safety_st_7bf18d",
+    "conceptId": "§1.1",
+    "text": "폐기 처리는 관련 환경 법령에 따라 등록된 전문 업체를 통해 적법하게 처리한다.",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q34 · 교재 §1.1"
+   },
+   {
+    "id": "ㄷ",
+    "sid": "safety_st_1ed971",
+    "conceptId": "§1.1",
+    "text": "선입선출이 용이하도록 제조번호별로 적재한다.",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q28 · 교재 §1.1"
+   },
+   {
+    "id": "ㄹ",
+    "sid": "safety_st_def43c",
+    "conceptId": "§1.1",
+    "text": "외부 먼지와 해충의 유입을 막기 위해 창고 문은 항상 열어둔다.",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q28 · 교재 §1.1"
+   },
+   {
+    "id": "ㅁ",
+    "sid": "safety_st_02ff27",
+    "conceptId": "§1.1",
+    "text": "인접 구역보다 기압이 높은 양압(+) 상태로 유지한다.",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q70 · 교재 §1.1"
    }
   ],
   "options": [
@@ -23119,7 +23309,7 @@ var COMBO_DRILLS_subject3 = [
     "members": [
      "ㄴ",
      "ㄷ",
-     "ㅁ"
+     "ㄹ"
     ]
    },
    {
@@ -23132,6 +23322,389 @@ var COMBO_DRILLS_subject3 = [
     "id": "3",
     "members": [
      "ㄷ",
+     "ㄹ",
+     "ㅁ"
+    ]
+   },
+   {
+    "id": "4",
+    "members": [
+     "ㄱ"
+    ]
+   },
+   {
+    "id": "5",
+    "members": [
+     "ㄴ",
+     "ㄷ",
+     "ㅁ"
+    ]
+   }
+  ],
+  "tags": [
+   "자동변환",
+   "명제판정",
+   "개념재조합",
+   "절차"
+  ],
+  "derivedFrom": "cluster:3|§1.1",
+  "explain": "ㄱ. 원본: 과목3 문제은행 Q5 · 교재 §1.1\nㄴ. 원본: 과목3 문제은행 Q34 · 교재 §1.1\nㄷ. 원본: 과목3 문제은행 Q28 · 교재 §1.1\nㄹ. 원본: 과목3 문제은행 Q28 · 교재 §1.1\nㅁ. 원본: 과목3 문제은행 Q70 · 교재 §1.1",
+  "source": "과목3 개념 재조합",
+  "answer": "5"
+ },
+ {
+  "id": "safety_combo-cluster_e155f2",
+  "subject": 3,
+  "type": "combo",
+  "points": 4,
+  "citation": "📖 교재: §2.1 (출처: 과목3 문제은행 진술 재조합)",
+  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
+  "statements": [
+   {
+    "id": "ㄱ",
+    "sid": "safety_st_b9c2b0",
+    "conceptId": "§2.1",
+    "text": "음식물 반입을 금지해야 한다",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q7 · 교재 §2.1"
+   },
+   {
+    "id": "ㄴ",
+    "sid": "safety_st_99290e",
+    "conceptId": "§2.1",
+    "text": "사용 전 위생 상태 점검은 생략해도 된다",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q17 · 교재 §2.1"
+   },
+   {
+    "id": "ㄷ",
+    "sid": "safety_st_ae5b84",
+    "conceptId": "§2.1",
+    "text": "혼합·소분 전 손을 소독하거나 세정한다",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q17 · 교재 §2.1"
+   },
+   {
+    "id": "ㄹ",
+    "sid": "safety_st_4265db",
+    "conceptId": "§2.1",
+    "text": "모든 외부인에게 출입을 개방한다",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q7 · 교재 §2.1"
+   }
+  ],
+  "options": [
+   {
+    "id": "1",
+    "members": [
+     "ㄱ",
+     "ㄷ",
+     "ㄹ"
+    ]
+   },
+   {
+    "id": "2",
+    "members": [
+     "ㄱ"
+    ]
+   },
+   {
+    "id": "3",
+    "members": [
+     "ㄱ",
+     "ㄴ"
+    ]
+   },
+   {
+    "id": "4",
+    "members": [
+     "ㄷ"
+    ]
+   },
+   {
+    "id": "5",
+    "members": [
+     "ㄱ",
+     "ㄷ"
+    ]
+   }
+  ],
+  "tags": [
+   "자동변환",
+   "명제판정",
+   "개념재조합",
+   "금지원료"
+  ],
+  "derivedFrom": "cluster:3|§2.1",
+  "explain": "ㄱ. 원본: 과목3 문제은행 Q7 · 교재 §2.1\nㄴ. 원본: 과목3 문제은행 Q17 · 교재 §2.1\nㄷ. 원본: 과목3 문제은행 Q17 · 교재 §2.1\nㄹ. 원본: 과목3 문제은행 Q7 · 교재 §2.1",
+  "source": "과목3 개념 재조합",
+  "answer": "5"
+ },
+ {
+  "id": "safety_combo-cluster_33cfe0",
+  "subject": 3,
+  "type": "combo",
+  "points": 4,
+  "citation": "📖 교재: §4.1 (출처: 과목3 문제은행 진술 재조합)",
+  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
+  "statements": [
+   {
+    "id": "ㄱ",
+    "sid": "safety_st_d3e054",
+    "conceptId": "§4.1",
+    "text": "불합격 판정이 난 포장재는 식별 라벨을 붙여 즉시 적합 포장재와 격리 보관한다.",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q18 · 교재 §4.1"
+   },
+   {
+    "id": "ㄴ",
+    "sid": "safety_st_61a8b4",
+    "conceptId": "§4.1",
+    "text": "경과 즉시 품질 검사 없이 전량 폐기한다.",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q26 · 교재 §4.1"
+   },
+   {
+    "id": "ㄷ",
+    "sid": "safety_st_13e5b4",
+    "conceptId": "§4.1",
+    "text": "사용하다 남은 자재는 잔량을 명확히 기재하여 재입고 처리한다.",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q18 · 교재 §4.1"
+   },
+   {
+    "id": "ㄹ",
+    "sid": "safety_st_6d6fb1",
+    "conceptId": "§4.1",
+    "text": "사용 기한이 지난 원료는 2배의 보존제를 첨가하여 사용한다.",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q26 · 교재 §4.1"
+   },
+   {
+    "id": "ㅁ",
+    "sid": "safety_st_ab03bd",
+    "conceptId": "§4.1",
+    "text": "무조건 반품 처리한다.",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q26 · 교재 §4.1"
+   }
+  ],
+  "options": [
+   {
+    "id": "1",
+    "members": [
+     "ㄱ",
+     "ㄴ",
+     "ㄷ",
+     "ㅁ"
+    ]
+   },
+   {
+    "id": "2",
+    "members": [
+     "ㄱ"
+    ]
+   },
+   {
+    "id": "3",
+    "members": [
+     "ㄹ"
+    ]
+   },
+   {
+    "id": "4",
+    "members": [
+     "ㄱ",
+     "ㄷ"
+    ]
+   },
+   {
+    "id": "5",
+    "members": [
+     "ㄱ",
+     "ㄴ",
+     "ㄷ",
+     "ㄹ"
+    ]
+   }
+  ],
+  "tags": [
+   "자동변환",
+   "명제판정",
+   "개념재조합",
+   "기한",
+   "수치"
+  ],
+  "derivedFrom": "cluster:3|§4.1",
+  "explain": "ㄱ. 원본: 과목3 문제은행 Q18 · 교재 §4.1\nㄴ. 원본: 과목3 문제은행 Q26 · 교재 §4.1\nㄷ. 원본: 과목3 문제은행 Q18 · 교재 §4.1\nㄹ. 원본: 과목3 문제은행 Q26 · 교재 §4.1\nㅁ. 원본: 과목3 문제은행 Q26 · 교재 §4.1",
+  "source": "과목3 개념 재조합",
+  "answer": "4"
+ },
+ {
+  "id": "safety_combo-cluster_4b09a4",
+  "subject": 3,
+  "type": "combo",
+  "points": 4,
+  "citation": "📖 교재: §3.2 (출처: 과목3 문제은행 진술 재조합)",
+  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
+  "statements": [
+   {
+    "id": "ㄱ",
+    "sid": "safety_st_433c30",
+    "conceptId": "§3.2",
+    "text": "정제수 보관 탱크는 내부 결로가 발생하지 않도록 상시 개방하여 공기가 통하게 둔다.",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q24 · 교재 §3.2"
+   },
+   {
+    "id": "ㄴ",
+    "sid": "safety_st_1516b8",
+    "conceptId": "§3.2",
+    "text": "햇빛에 의해 변질되기 쉬운 원료는 차광 용기에 담아 직사광선이 닿지 않는 곳에 보관한다.",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q22 · 교재 §3.2"
+   },
+   {
+    "id": "ㄷ",
+    "sid": "safety_st_9a9d87",
+    "conceptId": "§3.2",
+    "text": "가연성 액체 원료(에탄올 등)는 일반 원료와 혼합하여 구별 없이 보관한다.",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q22 · 교재 §3.2"
+   },
+   {
+    "id": "ㄹ",
+    "sid": "safety_st_9ccbf3",
+    "conceptId": "§3.2",
+    "text": "제조에 투입되는 정제수는 수시로 미생물 시험을 실시하여 기준 적합 여부를 확인한다.",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q24 · 교재 §3.2"
+   },
+   {
+    "id": "ㅁ",
+    "sid": "safety_st_ee08b8",
+    "conceptId": "§3.2",
+    "text": "정제수 내 미생물 번식을 방지하기 위해 정기적으로 자외선(UV) 조사 또는 열소독을 실시한다.",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q24 · 교재 §3.2"
+   }
+  ],
+  "options": [
+   {
+    "id": "1",
+    "members": [
+     "ㄴ",
+     "ㄹ",
+     "ㅁ"
+    ]
+   },
+   {
+    "id": "2",
+    "members": [
+     "ㄱ",
+     "ㄹ"
+    ]
+   },
+   {
+    "id": "3",
+    "members": [
+     "ㄷ",
+     "ㄹ"
+    ]
+   },
+   {
+    "id": "4",
+    "members": [
+     "ㄱ"
+    ]
+   },
+   {
+    "id": "5",
+    "members": [
+     "ㄱ",
+     "ㄴ",
+     "ㄹ"
+    ]
+   }
+  ],
+  "tags": [
+   "자동변환",
+   "명제판정",
+   "개념재조합"
+  ],
+  "derivedFrom": "cluster:3|§3.2",
+  "explain": "ㄱ. 원본: 과목3 문제은행 Q24 · 교재 §3.2\nㄴ. 원본: 과목3 문제은행 Q22 · 교재 §3.2\nㄷ. 원본: 과목3 문제은행 Q22 · 교재 §3.2\nㄹ. 원본: 과목3 문제은행 Q24 · 교재 §3.2\nㅁ. 원본: 과목3 문제은행 Q24 · 교재 §3.2",
+  "source": "과목3 개념 재조합",
+  "answer": "1"
+ },
+ {
+  "id": "safety_combo-cluster_a09680",
+  "subject": 3,
+  "type": "combo",
+  "points": 4,
+  "citation": "📖 교재: §5.1 (출처: 과목3 문제은행 진술 재조합)",
+  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
+  "statements": [
+   {
+    "id": "ㄱ",
+    "sid": "safety_st_e5e110",
+    "conceptId": "§5.1",
+    "text": "검사 중, 적합, 부적합에 따라 각각 구분된 공간에 별도 보관한다",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q171 · 교재 §5.1"
+   },
+   {
+    "id": "ㄴ",
+    "sid": "safety_st_682569",
+    "conceptId": "§5.1",
+    "text": "1차 포장은 화장품 제조 시 내용물과 직접 접촉하는 포장이다",
+    "truth": true,
+    "explain": "원본: 과목3 문제은행 Q79 · 교재 §5.1"
+   },
+   {
+    "id": "ㄷ",
+    "sid": "safety_st_f121ff",
+    "conceptId": "§5.1",
+    "text": "1차 포장은 첨부문서를 포함한다",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q79 · 교재 §5.1"
+   },
+   {
+    "id": "ㄹ",
+    "sid": "safety_st_77a106",
+    "conceptId": "§5.1",
+    "text": "검사 승인 전에도 물질을 사용할 수 있다",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q171 · 교재 §5.1"
+   },
+   {
+    "id": "ㅁ",
+    "sid": "safety_st_821528",
+    "conceptId": "§5.1",
+    "text": "1차 포장은 운송을 위해 사용되는 외부 포장재이다",
+    "truth": false,
+    "explain": "원본: 과목3 문제은행 Q79 · 교재 §5.1"
+   }
+  ],
+  "options": [
+   {
+    "id": "1",
+    "members": [
+     "ㄱ",
+     "ㄴ"
+    ]
+   },
+   {
+    "id": "2",
+    "members": [
+     "ㄴ",
+     "ㄷ",
+     "ㄹ"
+    ]
+   },
+   {
+    "id": "3",
+    "members": [
      "ㄹ"
     ]
    },
@@ -23145,6 +23718,7 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "5",
     "members": [
+     "ㄱ",
      "ㄴ",
      "ㄹ",
      "ㅁ"
@@ -23154,113 +23728,15 @@ var COMBO_DRILLS_subject3 = [
   "tags": [
    "자동변환",
    "명제판정",
-   "개념재조합"
+   "개념재조합",
+   "절차",
+   "구성비",
+   "수치"
   ],
-  "derivedFrom": "cluster:3|L476",
-  "explain": "ㄱ. 원본: 과목3 문제은행 Q28 · 교재 L476\nㄴ. 원본: 과목3 문제은행 Q28 · 교재 L476\nㄷ. 원본: 과목3 문제은행 Q5 · 교재 L476\nㄹ. 원본: 과목3 문제은행 Q5 · 교재 L476\nㅁ. 원본: 과목3 문제은행 Q28 · 교재 L476",
+  "derivedFrom": "cluster:3|§5.1",
+  "explain": "ㄱ. 원본: 과목3 문제은행 Q171 · 교재 §5.1\nㄴ. 원본: 과목3 문제은행 Q79 · 교재 §5.1\nㄷ. 원본: 과목3 문제은행 Q79 · 교재 §5.1\nㄹ. 원본: 과목3 문제은행 Q171 · 교재 §5.1\nㅁ. 원본: 과목3 문제은행 Q79 · 교재 §5.1",
   "source": "과목3 개념 재조합",
-  "answer": "5"
- },
- {
-  "id": "safety_combo-cluster_692464",
-  "subject": 3,
-  "type": "combo",
-  "points": 4,
-  "citation": "📖 교재: L1261 (출처: 과목3 문제은행 진술 재조합)",
-  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
-  "statements": [
-   {
-    "id": "ㄱ",
-    "sid": "safety_st_fb4e02",
-    "conceptId": "L1261",
-    "text": "일반 비누와 동일하게 흐르는 물에 사용해야 한다",
-    "truth": false,
-    "explain": "원본: 과목3 문제은행 Q8 · 교재 L1261"
-   },
-   {
-    "id": "ㄴ",
-    "sid": "safety_st_598534",
-    "conceptId": "L1261",
-    "text": "알코올, 클로르헥시딘, 헥사클로로펜, 아이오도퍼 등이 사용된다",
-    "truth": true,
-    "explain": "원본: 과목3 문제은행 Q8 · 교재 L1261"
-   },
-   {
-    "id": "ㄷ",
-    "sid": "safety_st_39b4e9",
-    "conceptId": "L1261",
-    "text": "일반 비누로 분류된다",
-    "truth": false,
-    "explain": "원본: 과목3 문제은행 Q21 · 교재 L1261"
-   },
-   {
-    "id": "ㄹ",
-    "sid": "safety_st_260407",
-    "conceptId": "L1261",
-    "text": "의약외품으로 분류된다",
-    "truth": true,
-    "explain": "원본: 과목3 문제은행 Q8 · 교재 L1261"
-   },
-   {
-    "id": "ㅁ",
-    "sid": "safety_st_d6c271",
-    "conceptId": "L1261",
-    "text": "물 없이도 손 소독이 가능하다",
-    "truth": true,
-    "explain": "원본: 과목3 문제은행 Q8 · 교재 L1261"
-   }
-  ],
-  "options": [
-   {
-    "id": "1",
-    "members": [
-     "ㄱ",
-     "ㄴ",
-     "ㄹ",
-     "ㅁ"
-    ]
-   },
-   {
-    "id": "2",
-    "members": [
-     "ㄱ",
-     "ㄷ",
-     "ㄹ",
-     "ㅁ"
-    ]
-   },
-   {
-    "id": "3",
-    "members": [
-     "ㄴ",
-     "ㄹ",
-     "ㅁ"
-    ]
-   },
-   {
-    "id": "4",
-    "members": [
-     "ㄹ"
-    ]
-   },
-   {
-    "id": "5",
-    "members": [
-     "ㄱ",
-     "ㄷ",
-     "ㅁ"
-    ]
-   }
-  ],
-  "tags": [
-   "자동변환",
-   "명제판정",
-   "개념재조합"
-  ],
-  "derivedFrom": "cluster:3|L1261",
-  "explain": "ㄱ. 원본: 과목3 문제은행 Q8 · 교재 L1261\nㄴ. 원본: 과목3 문제은행 Q8 · 교재 L1261\nㄷ. 원본: 과목3 문제은행 Q21 · 교재 L1261\nㄹ. 원본: 과목3 문제은행 Q8 · 교재 L1261\nㅁ. 원본: 과목3 문제은행 Q8 · 교재 L1261",
-  "source": "과목3 개념 재조합",
-  "answer": "3"
+  "answer": "1"
  },
  {
   "id": "safety_combo-ref_b6af93",

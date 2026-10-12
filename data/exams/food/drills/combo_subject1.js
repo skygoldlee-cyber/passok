@@ -12,35 +12,35 @@ var COMBO_DRILLS_subject1 = [
    {
     "id": "ㄱ",
     "sid": "sanitation_st_5d038d",
-    "conceptId": "q:subject1_q1",
+    "conceptId": "§1.0",
     "text": "식품산업의 발전과 수출 증진",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "sanitation_st_ea0947",
-    "conceptId": "q:subject1_q1",
+    "conceptId": "§1.0",
     "text": "식품으로 인한 위생상의 위해 방지, 식품의 영양 및 품질 향상, 올바른 정보 제공을 통한 국민보건 증진",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "sanitation_st_2cf1f0",
-    "conceptId": "q:subject1_q1",
+    "conceptId": "§1.0",
     "text": "식품 가격의 안정과 유통질서 확립",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "sanitation_st_cbceed",
-    "conceptId": "q:subject1_q1",
+    "conceptId": "§1.0",
     "text": "식품 생산자의 이익 보호 및 규제 완화",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "sanitation_st_351bec",
-    "conceptId": "q:subject1_q1",
+    "conceptId": "§1.0",
     "text": "식품 관련 산업의 고용 창출",
     "truth": false
    }
@@ -102,35 +102,35 @@ var COMBO_DRILLS_subject1 = [
    {
     "id": "ㄱ",
     "sid": "sanitation_st_fa8ce6",
-    "conceptId": "q:subject1_q2",
+    "conceptId": "§2.0",
     "text": "가공하여 판매하는 모든 음식물",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "sanitation_st_149c8d",
-    "conceptId": "q:subject1_q2",
+    "conceptId": "§2.0",
     "text": "의약으로 섭취하는 것",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "sanitation_st_d5e65e",
-    "conceptId": "q:subject1_q2",
+    "conceptId": "§2.0",
     "text": "자연 상태로 섭취하는 음식물",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "sanitation_st_4e4541",
-    "conceptId": "q:subject1_q2",
+    "conceptId": "§2.0",
     "text": "포장 상태의 음료",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "sanitation_st_ccc6e7",
-    "conceptId": "q:subject1_q2",
+    "conceptId": "§2.0",
     "text": "식사 대용으로 섭취하는 조제식",
     "truth": false
    }
@@ -193,35 +193,35 @@ var COMBO_DRILLS_subject1 = [
    {
     "id": "ㄱ",
     "sid": "sanitation_st_fa0db2",
-    "conceptId": "q:subject1_q3",
+    "conceptId": "§2.0",
     "text": "영리를 목적으로 하는 대규모 음식점",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "sanitation_st_abaf1f",
-    "conceptId": "q:subject1_q3",
+    "conceptId": "§2.0",
     "text": "학교, 병원, 상사, 기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "sanitation_st_9bf605",
-    "conceptId": "q:subject1_q3",
+    "conceptId": "§2.0",
     "text": "식품을 대량으로 제조·판매하는 즉석판매제조가공업소",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "sanitation_st_0b9b21",
-    "conceptId": "q:subject1_q3",
+    "conceptId": "§2.0",
     "text": "자동판매기를 통해 식품을 판매하는 영업소",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "sanitation_st_92571c",
-    "conceptId": "q:subject1_q3",
+    "conceptId": "§2.0",
     "text": "영리와 비영리를 불문한 모든 단체급식시설",
     "truth": false
    }
@@ -285,35 +285,35 @@ var COMBO_DRILLS_subject1 = [
    {
     "id": "ㄱ",
     "sid": "sanitation_st_7222e8",
-    "conceptId": "q:subject1_q4",
+    "conceptId": "§3.0",
     "text": "부패·변질 또는 미숙한 식품으로서 인체의 건강을 해칠 우려가 있는 것",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "sanitation_st_f129e0",
-    "conceptId": "q:subject1_q4",
+    "conceptId": "§3.0",
     "text": "유독한 물질이 들어 있거나 닿은 것으로서 인체의 건강을 해칠 우려가 있는 것",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "sanitation_st_c12a6e",
-    "conceptId": "q:subject1_q4",
+    "conceptId": "§3.0",
     "text": "병을 일으키는 미생물에 오염되었거나 오염된 우려가 있어 인체의 건강을 해칠 우려가 있는 것",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "sanitation_st_f89002",
-    "conceptId": "q:subject1_q4",
+    "conceptId": "§3.0",
     "text": "식품공전의 기준·규격에는 맞으나 소비자가 선호하지 않는 것",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "sanitation_st_3bfe1a",
-    "conceptId": "q:subject1_q4",
+    "conceptId": "§3.0",
     "text": "불결하거나 다른 물질이 섞이거나 첨가되거나 그 밖의 사유로 인체의 건강을 해칠 우려가 있는 것",
     "truth": false
    }
@@ -375,35 +375,35 @@ var COMBO_DRILLS_subject1 = [
    {
     "id": "ㄱ",
     "sid": "sanitation_st_9a9fb2",
-    "conceptId": "q:subject1_q5",
+    "conceptId": "§1.0",
     "text": "식품위생법 제2조",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "sanitation_st_2fe1fe",
-    "conceptId": "q:subject1_q5",
+    "conceptId": "§1.0",
     "text": "식품위생법 제4조",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "sanitation_st_052141",
-    "conceptId": "q:subject1_q5",
+    "conceptId": "§1.0",
     "text": "식품위생법 제7조제1항",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "sanitation_st_1b5293",
-    "conceptId": "q:subject1_q5",
+    "conceptId": "§1.0",
     "text": "식품위생법 제37조",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "sanitation_st_271e70",
-    "conceptId": "q:subject1_q5",
+    "conceptId": "§1.0",
     "text": "식품위생법 제44조",
     "truth": false
    }

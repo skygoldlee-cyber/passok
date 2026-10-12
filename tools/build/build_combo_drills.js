@@ -15,13 +15,13 @@
  *                   → 발문 꼬리를 "…모두 고른 것은?"으로 변환 (극성 보존)
  *   '위 ①②③ 모두'류 메타 선지가 정답이면 원형 숫자 개수만큼 실질 선지를 참으로 처리
  *
- *   개념 재조합 — fact 모드 진술을 같은 교재 구간(conceptId = 첫 L####)끼리 모아
+ *   개념 재조합 — fact 모드 진술을 같은 교재 구간(conceptId = §챕터.절 앵커)끼리 모아
  *                 참 2~3개 + 거짓 진술로 진짜 복수정답 복수정답형을 추가 생성한다.
  *                 (단일정답 문항이 대부분인 구조적 한계 보완.
- *                  챕터 단위는 입자가 커서 이질 진술이 섞이므로 L#### 단위로 한정)
+ *                  챕터 단위는 입자가 커서 이질 진술이 섞이므로 절 단위로 한정)
  *
  *   진술 explain은 중복 저장하지 않음(문항 explain으로 폴백) — 번들 크기 절감
- *   conceptId = explanation의 첫 교재 L#### (같은 구간 진술 = 개념 클러스터)
+ *   conceptId = 첫 교재 인용의 섹션 앵커 §N.M — 라인 좌표와 달리 교재 편집에 안정 (AN-10)
  *   id = stableId(문항 id) — 재생성 순서와 무관하게 안정
  *
  * 제외: ㄱㄴㄷ 조합형 발문, 참 진술 0개 그룹, 진술 2개 미만, 단답형(blank)
@@ -44,6 +44,7 @@ const { stableId } = require('./id_factory.js');
 const { inferTags } = require('./drill-utils.js');
 const { getExamTargets, getSubjectMaps, getDefaultExamRoots } = require('./exam_targets.js');
 const { extractRefAtoms } = require('./ref_statements.js');
+const { makeAnchorResolver, parseCitationTarget } = require('./textbook_anchors.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const DRY_RUN = process.argv.includes('--dry-run');
@@ -187,14 +188,47 @@ function sanitizeExplain(explanation) {
     .trim();
 }
 
+const QUESTION_BLOCK_RE = /\*\*Q(\d+)\.\*\*/g;
+const CIT_LINK_RE = /\((<[^>]+>)\)/g;
+
 /**
- * conceptId 도출: explanation의 첫 교재 라인(L####) — 같은 교재 구간의 진술을
- * "개념 클러스터"로 묶어 혼동쌍 대조 학습(전략 §2-⑤)과 취약 진술 그룹핑에 사용.
+ * 문항 id → 섹션 앵커("N.M") 맵 — 문제은행 각 문항의 첫 교재 인용(file#L라인)을
+ * 현재 교재 구조로 해석한다. conceptId가 L#### 라인 좌표에 의존하면 교재 편집 시
+ * 저장 통계의 개념 클러스터가 분열되므로 구조 앵커로 대체한다 (AN-10).
+ * @param {object} target exam_targets 엔트리 (manifest·contentRoot 보유)
+ * @returns {Object<string, Object<string,string>>} examKey → { qid: "N.M" }
+ */
+function buildQidAnchorMap(target) {
+  const out = {};
+  const resolve = makeAnchorResolver();
+  for (const exam of (target.manifest && target.manifest.exams) || []) {
+    const mdPath = path.join(ROOT, target.contentRoot, '문제은행', exam.file);
+    if (!fs.existsSync(mdPath)) continue;
+    const md = fs.readFileSync(mdPath, 'utf-8').replace(/\r\n/g, '\n');
+    const map = {};
+    const marks = [...md.matchAll(QUESTION_BLOCK_RE)];
+    for (let i = 0; i < marks.length; i++) {
+      const qNum = parseInt(marks[i][1], 10);
+      const block = md.slice(marks[i].index, i + 1 < marks.length ? marks[i + 1].index : md.length);
+      for (const lm of block.matchAll(CIT_LINK_RE)) {
+        const cit = parseCitationTarget(lm[1].slice(1, -1));
+        if (!cit) continue;
+        const anchor = resolve(path.resolve(path.dirname(mdPath), cit.file), cit.line);
+        if (anchor) { map[`${exam.key}_q${qNum}`] = anchor; break; }
+      }
+    }
+    out[exam.key] = map;
+  }
+  return out;
+}
+
+/**
+ * conceptId 도출: 문항의 첫 교재 인용이 가리키는 섹션 앵커(§N.M) — 같은 교재 구간의
+ * 진술을 "개념 클러스터"로 묶어 혼동쌍 대조 학습(전략 §2-⑤)과 취약 진술 그룹핑에 사용.
  * 교재 근거가 없으면 원문 id로 폴백 (같은 문항의 진술끼리라도 묶임).
  */
-function extractConceptId(explanation, qid) {
-  const m = String(explanation || '').match(/L\d{3,5}/);
-  return m ? m[0] : `q:${qid}`;
+function extractConceptId(qid, anchor) {
+  return anchor ? `§${anchor}` : `q:${qid}`;
 }
 
 /** explanation에서 '교재: Lxxxx'·법령 근거를 추출해 citation 생성 */
@@ -220,7 +254,7 @@ function nearDup(a, b) {
   return i >= Math.max(8, Math.floor(min * 0.6));
 }
 
-function buildComboItems(examKey, exam, genOpts, refAtoms) {
+function buildComboItems(examKey, exam, genOpts, refAtoms, qidAnchorMap) {
   const items = [];
   const stats = {
     choice: 0, fact: 0, answer: 0, cluster: 0, ref: 0,
@@ -229,8 +263,8 @@ function buildComboItems(examKey, exam, genOpts, refAtoms) {
   };
   const subject = SUBJECT_NUM[examKey];
   const subjKey = SUBJECT_KEY[examKey] || examKey;
-  // conceptId(교재 L####)별 fact 진술 풀 — 같은 교재 구간의 참/거짓 명제를 재조합.
-  // 챕터 단위는 입자가 너무 커서 이질 진술이 섞여 발문과 내용이 어긋나므로 L#### 단위로 한정한다.
+  // conceptId(§챕터.절)별 fact 진술 풀 — 같은 교재 구간의 참/거짓 명제를 재조합.
+  // 챕터 단위는 입자가 너무 커서 이질 진술이 섞여 발문과 내용이 어긋나므로 절 단위로 한정한다.
   const conceptPool = {};
 
   for (const q of exam.questions) {
@@ -259,7 +293,7 @@ function buildComboItems(examKey, exam, genOpts, refAtoms) {
     }
 
     // 진술 구성: 자기참조 선지 제외, 라벨 ㄱㄴㄷㄹㅁ 부여
-    const conceptId = extractConceptId(q.explanation, q.id);
+    const conceptId = extractConceptId(q.id, qidAnchorMap && qidAnchorMap[q.id]);
     const statements = [];
     q.options.forEach((optText, idx) => {
       if (SELF_REF_RE.test(optText)) return;
@@ -344,7 +378,7 @@ function buildComboItems(examKey, exam, genOpts, refAtoms) {
 }
 
 /**
- * 같은 교재 구간(conceptId = 첫 L####)의 fact 진술을 재조합한 복수정답 복수정답형 생성.
+ * 같은 교재 구간(conceptId = §챕터.절)의 fact 진술을 재조합한 복수정답 복수정답형 생성.
  * 단일 MCQ 변환은 구조상 정답이 1개 — 같은 구간의 참 명제 여러 개를 모아야
  * "옳은 것을 모두 고르시오"가 실제로 복수정답이 된다.
  *
@@ -390,7 +424,7 @@ function buildClusterCombos(conceptPool, examKey, subject, subjKey, genOpts, sta
     const allIds = statements.map(s => s.id);
     const truthIds = statements.filter(s => s.truth).map(s => s.id);
 
-    // 발문은 제네릭 고정 — 챕터 라벨은 L#### 클러스터보다 입자가 커서
+    // 발문은 제네릭 고정 — 챕터 라벨은 § 절 클러스터보다 입자가 커서
     // "정의 및 규정" 발문에 저울 사용법 진술이 붙는 식의 부조화를 낳는다.
     const stem = '다음 설명 중 옳은 것을 모두 고른 것은?';
     out.push({
@@ -705,9 +739,12 @@ async function buildForExam(target) {
     path.join(ROOT, target.contentRoot, '참조자료', 'ref_md'));
   const refAllEnums = Object.values(refAtomsBySubject).flatMap(b => b.enums);
 
+  // 문항 → 섹션 앵커(§N.M) — conceptId의 라인 좌표 의존 제거 (AN-10)
+  const qidAnchorMap = buildQidAnchorMap(target);
+
   for (const [key, { data, file }] of Object.entries(examDataMap)) {
     const { items, stats } = buildComboItems(key, data, generateComboOptions,
-      { bucket: refAtomsBySubject[SUBJECT_NUM[key]], allEnums: refAllEnums });
+      { bucket: refAtomsBySubject[SUBJECT_NUM[key]], allEnums: refAllEnums }, qidAnchorMap[key]);
 
     // 검증: 스키마 무결성 + 도출 정답을 answer로 고정
     const errs = [];

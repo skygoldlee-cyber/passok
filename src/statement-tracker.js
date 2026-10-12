@@ -4,7 +4,7 @@
 // gradeAnswer()의 perStatement 결과를 두 저장소로 연결한다:
 // - fc_spaced_repetition: sid를 카드 ID로 사용해 간격 반복(FSRS) 스케줄 갱신 (복습 시점 관리)
 // - statement_stats: 진술별 판정 누적 통계 { sid: { j, w, lw, t, truth, cid, last } } (약점 리스트용)
-//   t=진술 텍스트, truth=정답 O/X, cid=conceptId(개념 그룹), last=최근 판정 정오 — 취약 진술 리뷰 화면용 메타
+//   t=진술 텍스트, truth=정답 O/X, cid=conceptId(개념 그룹 — §앵커 또는 레거시 L####, 읽기 시 정규화), last=최근 판정 정오 — 취약 진술 리뷰 화면용 메타
 //
 // sid(진술 전역 안정 ID)가 없는 진술은 문항 안에서만 유효하므로 추적하지 않는다.
 

@@ -46,16 +46,53 @@ export function subjectFromSid(sid) {
 }
 
 /**
- * 진술 cid("L328") → 과목의 chapterRanges로 단원명 해석.
- * "q:..." 폴백 cid는 교재 라인이 아니므로 null.
+ * 저장 cid를 개념 앵커로 정규화한다 (AN-10).
+ *   §N.M        신형 — 그대로
+ *   L####       레거시 라인 좌표 — CID_SECTION[과목][라인]으로 §앵커 환산
+ *               (교재 편집으로 라인이 밀려도 같은 절이면 같은 앵커로 병합된다)
+ *   q:…         폴백(교재 근거 없음) → null — 클러스터 대상 아님
+ *   그 외       참조자료 등 비-라인 개념 키 — 이미 라인 독립이라 원형 유지
+ * @param {string|null|undefined} cid
+ * @param {string|null} subjKey
+ * @param {Object<string,Object<string,string>>} [cidSection] 과목→{"라인":"N.M"}
+ * @returns {string|null}
+ */
+export function normalizeCidAnchor(cid, subjKey, cidSection) {
+    const s = String(cid || '');
+    if (!s || s.startsWith('q:')) return null;
+    if (s.startsWith('§')) return s;
+    const m = s.match(/^L(\d+)$/);
+    if (m && subjKey && cidSection && cidSection[subjKey]) {
+        const a = cidSection[subjKey][m[1]];
+        if (a) return `§${a}`;
+    }
+    return s; // 해석 불가 라인·비-라인 키 모두 원형 유지 — 맵 부재 시 기존 동작 보존
+}
+
+/**
+ * 진술 cid → 단원명 해석. §N.M 앵커는 CHAPTER_TITLES로, 레거시 L####는
+ * CID_SECTION 환산(앵커 경로) 우선·chapterRanges 라인 경계 폴백 순으로 해석한다.
  * @param {string|null} cid
  * @param {string|null} subjKey
  * @param {Object<string,Array<[number,string]>>} chapterRanges
+ * @param {{chapterTitles?:Object<string,Object<string,string>>, cidSection?:Object<string,Object<string,string>>}} [maps]
  * @returns {string|null}
  */
-export function chapterFromCid(cid, subjKey, chapterRanges) {
-    const m = String(cid || '').match(/^L(\d+)$/);
+export function chapterFromCid(cid, subjKey, chapterRanges, maps) {
+    const s = String(cid || '');
+    const titles = subjKey && maps && maps.chapterTitles && maps.chapterTitles[subjKey];
+    const titleOfAnchor = (anchor) => {
+        const n = String(anchor || '').split('.')[0];
+        return (titles && n !== '' && titles[n]) || null;
+    };
+    if (s.startsWith('§')) return titleOfAnchor(s.slice(1));
+    const m = s.match(/^L(\d+)$/);
     if (!m || !subjKey) return null;
+    const sec = maps && maps.cidSection && maps.cidSection[subjKey];
+    if (sec && sec[m[1]]) {
+        const t = titleOfAnchor(sec[m[1]]);
+        if (t) return t;
+    }
     const ranges = chapterRanges && chapterRanges[subjKey];
     if (!Array.isArray(ranges) || !ranges.length) return null;
     const line = parseInt(m[1], 10);
@@ -75,7 +112,7 @@ export function chapterFromCid(cid, subjKey, chapterRanges) {
  * 해석 경로 (모두 실패 시 '기타' 묶음 없이 버림):
  *   - weak_sim_<exam>_q<N>  → questionChapters["<exam>_q<N>"]
  *   - weak_quiz_<id>·일반 퀴즈 id → resolveQuiz(id).quiz.category (로드된 과목만)
- *   - 진술 sid → cid(L####) → chapterRanges[과목] → 단원명
+ *   - 진술 sid → cid(§앵커·레거시 L####는 CID_SECTION 환산) → 단원명
  */
 function _aggregateChapterWrongs(p) {
     const buckets = new Map(); // `${subj}|${chapter}` → {subject, chapter, wrongs}
@@ -106,11 +143,12 @@ function _aggregateChapterWrongs(p) {
         bump(examIdToSubjectId(sim.examId) || '', chapter);
     });
 
-    // (c) 진술 오판 → cid → chapterRanges
+    // (c) 진술 오판 → cid(§앵커/레거시 L#### 환산) → 챕터
     Object.entries(p.statementStats || {}).forEach(([sid, v]) => {
         if (!v || !(v.w > 0) || (v.streak || 0) >= WEAK_GRADUATE_STREAK) return; // 졸업 진술 제외
         const subj = subjectFromSid(sid);
-        bump(subj, chapterFromCid(v.cid, subj, p.chapterRanges));
+        bump(subj, chapterFromCid(v.cid, subj, p.chapterRanges,
+            { chapterTitles: p.chapterTitles, cidSection: p.cidSection }));
     });
     return buckets;
 }
@@ -122,6 +160,8 @@ function _aggregateChapterWrongs(p) {
  * @param {Object} p.statementStats getAllStatementStats() 결과
  * @param {Object} p.questionChapters QUESTION_CHAPTERS 맵
  * @param {Object} p.chapterRanges CHAPTER_RANGES 맵
+ * @param {Object} [p.chapterTitles] CHAPTER_TITLES 맵 — §앵커 챕터 표시명 (AN-10)
+ * @param {Object} [p.cidSection] CID_SECTION 맵 — 레거시 L#### cid → §앵커 환산 (AN-10)
  * @param {(id:string)=>{quiz:object,subjectId:string}|null} p.resolveQuiz weak-items.resolveWrongQuiz
  * @param {(key:string)=>string} [p.subjectName] 과목키→표시명 (없으면 키 그대로)
  */
@@ -265,20 +305,25 @@ export function computePassGap(p) {
    ======================================================= */
 
 /**
- * 취약 진술을 cid(교재 구간)로 묶어 "같은 개념 구간" 오판 집중을 찾는다.
+ * 취약 진술을 개념 앵커(§챕터.절)로 묶어 "같은 개념 구간" 오판 집중을 찾는다.
+ * 저장 cid는 normalizeCidAnchor로 정규화 — 레거시 L####와 신형 §N.M이
+ * 같은 절이면 동일 클러스터로 병합된다 (AN-10).
  * @param {Object} statementStats getAllStatementStats() 결과
  * @param {Object} chapterRanges CHAPTER_RANGES 맵 (단원명 표시용)
  * @param {number} [minSize] 클러스터로 볼 최소 오판 진술 수 (기본 2)
+ * @param {{chapterTitles?:Object, cidSection?:Object}} [maps] 섹션 앵커 해석 맵
  * @returns {Array<{cid:string, subj:string, chapter:string|null, count:number, wrongs:number, sample:string}>}
  */
-export function computeWeakConceptClusters(statementStats, chapterRanges, minSize = 2) {
-    const groups = new Map(); // `${subj}|${cid}` → agg
+export function computeWeakConceptClusters(statementStats, chapterRanges, minSize = 2, maps) {
+    const cidSection = maps && maps.cidSection;
+    const groups = new Map(); // `${subj}|${anchor}` → agg
     Object.entries(statementStats || {}).forEach(([sid, v]) => {
         if (!v || !(v.w > 0) || (v.streak || 0) >= WEAK_GRADUATE_STREAK) return;
-        if (!v.cid || String(v.cid).startsWith('q:')) return; // 교재 라인 cid만 의미 있음
         const subj = subjectFromSid(sid) || '';
-        const key = `${subj}|${v.cid}`;
-        const cur = groups.get(key) || { cid: v.cid, subj, count: 0, wrongs: 0, sample: '' };
+        const anchor = normalizeCidAnchor(v.cid, subj, cidSection);
+        if (!anchor) return; // q: 폴백·빈 cid — 개념 귀속 불가
+        const key = `${subj}|${anchor}`;
+        const cur = groups.get(key) || { cid: anchor, subj, count: 0, wrongs: 0, sample: '' };
         cur.count++;
         cur.wrongs += v.w;
         if (!cur.sample && v.t) cur.sample = v.t;
@@ -286,7 +331,7 @@ export function computeWeakConceptClusters(statementStats, chapterRanges, minSiz
     });
     return [...groups.values()]
         .filter(g => g.count >= minSize)
-        .map(g => ({ ...g, chapter: chapterFromCid(g.cid, g.subj, chapterRanges) }))
+        .map(g => ({ ...g, chapter: chapterFromCid(g.cid, g.subj, chapterRanges, maps) }))
         .sort((a, b) => (b.wrongs - a.wrongs) || (b.count - a.count));
 }
 
