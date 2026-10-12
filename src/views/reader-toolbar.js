@@ -7,6 +7,7 @@ import { STORAGE_KEYS } from '../storage-keys.js';
 import { scheduleSaveReaderPosition } from './textbook-reader.js';
 export const readerChapterContext = { subjId: '', chapterIdx: 0 };
 let readerScrollBound = false;
+let _readerKeyboardBound = false;
 
 export function getReaderBookmarks() {
     try {
@@ -98,6 +99,11 @@ export function bindReaderScrollEvents() {
             document.querySelectorAll('.reader-toc-item').forEach(item => {
                 item.classList.toggle('active', parseInt((/** @type {HTMLElement} */ (item)).dataset.sectionIdx || '') === currentIdx);
             });
+            // TOC 자동 스크롤 — 활성 항목이 목차 패널 가시 영역 밖으로 밀리지 않게 동기화
+            if (currentIdx >= 0) {
+                const tocListEl = document.getElementById('reader-toc-list');
+                if (tocListEl) syncActiveTocItem(tocListEl);
+            }
             // D: 브레드크럼 제거됨 — sticky heading으로 대체
             // Section progress (e.g. "3/5 섹션")
             const sectionProgress = document.getElementById('reader-section-progress');
@@ -218,7 +224,95 @@ export function bindReaderScrollEvents() {
     }
 }
 
+/** 활성 TOC 항목이 목차 패널 가시 영역을 벗어났으면 보이는 위치로 스크롤 */
+export function syncActiveTocItem(tocListEl) {
+    const active = tocListEl && tocListEl.querySelector('.reader-toc-item.active');
+    if (!active) return;
+    const listRect = tocListEl.getBoundingClientRect();
+    const itemRect = active.getBoundingClientRect();
+    if (itemRect.top < listRect.top || itemRect.bottom > listRect.bottom) {
+        active.scrollIntoView({ block: 'nearest' });
+    }
+}
+
+/**
+ * 리더 키보드 내비 — ←/→ 섹션 이동 · Home/End 처음·끝 · / 본문 검색 포커스 ·
+ * b 현재 섹션 북마크 토글 · ESC 모바일 TOC 드로어 닫기.
+ * 입력 필드·수정자키 조합·비활성 뷰에서는 동작하지 않는다.
+ */
+export function bindReaderKeyboard() {
+    if (_readerKeyboardBound || typeof document === 'undefined') return;
+    _readerKeyboardBound = true;
+    document.addEventListener('keydown', (e) => {
+        if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+        const view = document.getElementById('textbook-reader-view');
+        const container = document.getElementById('textbook-reader-container');
+        if (!view || !container || !view.classList.contains('active')) return;
+
+        if (e.key === 'Escape') {
+            const tocAside = document.getElementById('reader-toc');
+            const tocBackdrop = document.getElementById('reader-toc-backdrop');
+            if (tocAside && tocAside.classList.contains('mobile-open')) {
+                tocAside.classList.remove('mobile-open');
+                if (tocBackdrop) tocBackdrop.classList.add('is-hidden');
+            }
+            return;
+        }
+
+        const target = /** @type {HTMLElement|null} */ (e.target);
+        const typing = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA'
+            || target.tagName === 'SELECT' || target.isContentEditable);
+        if (typing) return;
+
+        const cards = container.querySelectorAll('.reader-section-card');
+        if (!cards.length) return;
+
+        const scrollToSection = (idx) => {
+            const card = /** @type {HTMLElement} */ (cards[idx]);
+            if (!card) return;
+            if (card.classList.contains('collapsed')) card.classList.remove('collapsed');
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+        // 스크롤 스파이와 동일 휴리스틱으로 현재 섹션 판정 — 동기화 상태 불일치 방지
+        const containerTop = container.getBoundingClientRect().top;
+        let cur = 0;
+        cards.forEach((card, i) => {
+            if (card.getBoundingClientRect().top - containerTop < 120) cur = i;
+        });
+
+        switch (e.key) {
+            case 'ArrowRight':
+                e.preventDefault();
+                if (cur < cards.length - 1) scrollToSection(cur + 1);
+                break;
+            case 'ArrowLeft':
+                e.preventDefault();
+                if (cur > 0) scrollToSection(cur - 1);
+                break;
+            case 'Home':
+                e.preventDefault();
+                scrollToSection(0);
+                break;
+            case 'End':
+                e.preventDefault();
+                scrollToSection(cards.length - 1);
+                break;
+            case '/':
+                e.preventDefault();
+                document.getElementById('reader-in-content-search')?.focus();
+                break;
+            case 'b': case 'B': {
+                const btn = /** @type {HTMLElement|null} */ (cards[cur]?.querySelector('.reader-bookmark-btn'));
+                if (btn) { e.preventDefault(); btn.click(); }
+                break;
+            }
+        }
+    });
+}
+
 export function initReaderToolbar() {
+    bindReaderKeyboard();
+
     // M: 모바일(≤768px·가로모드 저높이)에서는 펼친 툴바가 수백 px를 차지해
     // 본문 영역을 잠식 — 기본 접힘으로 시작. 세션 내 사용자 토글은 유지.
     const toolbarEl0 = document.getElementById('reader-toolbar');
