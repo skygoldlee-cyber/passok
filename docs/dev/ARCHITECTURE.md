@@ -873,6 +873,20 @@ const state = {
 - `domain` 분류인데 코드에 내장된 시험별 콘텐츠는 점진적으로 `content/exams/<id>/`로 이관하는 것이 목표 방향 (예: `synonyms`, `limits-trainer.json` 이관 패턴)
 - **도메인 규칙 자동 주입**: exams.json 등록 시험의 `contentRoot`/`dataRoot`는 `check_domain_map.js`가 `domain:<id>` 규칙으로 자동 생성 — 새 시험 추가 시 domain-map 편집 불필요. `content/exams/`·`data/exams/` 아래 미등록 id 디렉터리는 오류
 
+### 모듈 방향 규칙 (뷰 → 코어 단방향)
+
+파일 분류(domain-map)와 별개로, `check:imports`가 **import 방향**을 강제한다:
+
+| 계층 | 경로 | 규칙 |
+|------|------|------|
+| 뷰 계층 | `src/views/` · `src/exams/<id>/views/` | 코어 라이브러리·다른 뷰를 import 가능. 뷰 계층 내부 상호 참조 허용 |
+| 코어 라이브러리 | `src/` 루트 · `src/config/` 등 뷰 계층 외 | **`src/views/` import 금지** — 위반 시 check:imports 오류 |
+| 앱 셸 | `src/app.js` · `router.js` · `command-palette.js` · `manual-viewer.js` · `ui-mode.js` | 뷰 합성(뷰 모듈 import·화면 전환)이 허용되는 유일한 비-뷰 계층 |
+
+- 코어가 뷰를 역참조하면 뷰→코어→뷰 순환이 생겨 초기화 순서·테스트 격리가 깨진다 — 의존 역전(이벤트·콜백·해시 라우팅)으로 우회할 것
+- 셸 명단은 `check_imports.js`의 `SHELL_MODULES` — 신규 셸 모듈 추가 시 이 표와 함께 갱신
+- 물리적 `src/core/` 디렉터리 분리는 보류 — 규칙으로 방향을 먼저 강제하고 이동은 대형 변경 시 점진 수행
+
 ### 새 시험 추가 (스캐폴딩)
 
 `npm run scaffold:exam -- <id> --name "시험명" [--short-name X] [--year N] [--dry-run|--force]` — `tools/build/scaffold_exam.js`가 exams.json 엔트리 + manifest/references 골격 + 샘플 교재·문제은행·`docs/` 디렉터리를 생성하고 다음 단계(콘텐츠 교체→`build:data`→기능 플래그)를 출력한다. `<id> --remove`로 골격 전체 제거.

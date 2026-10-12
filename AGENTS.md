@@ -32,7 +32,7 @@ node tools/build/build_doc_bundles.js        # content/exams/<id>/docs/*.md → 
 npm.cmd run build:html                # index.template.html + html/views/*.html → index.html 조립 (뷰 마크업 변경 시 필수)
 npm.cmd run check:html                # index.html이 파셜 조립 결과와 일치하는지 비교 (개행 정규화 — pre-push·CI 게이트)
 npm.cmd run check:parser               # 빌드 파서 ↔ 런타임 파서 등가성 검증
-npm.cmd run check:imports              # src/ 내 ES 모듈 import/export 교차 검증
+npm.cmd run check:imports              # src/ 내 ES 모듈 import/export 교차 검증 + 계층 방향 규칙 (코어→views/ 역참조 차단, 셸 명단 SHELL_MODULES)
 npm.cmd run stamp:sw                   # sw.js CACHE_VERSION을 커밋 해시로 스탬프
 npm.cmd run notes:draft                # 릴리스 노트 pending 초안 생성 (커밋 subject 기반 → data/release-notes.json 수동 편집 후 배포)
 npm.cmd run verify:assets              # SHELL_ASSETS/DATA_ASSETS 파일 존재 검증
