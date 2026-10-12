@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 임베딩 파이프라인 PoC — DOC-DSN-18 타당성 검증
+
+- **신규 `ref-pipeline/embeddings/build_embeddings.py` + `requirements.txt`**: 드릴(ox·combo)·시험 번들에서 진술(sid)·문항(qid) 수집 → `intfloat/multilingual-e5-small`(384d) 임베딩 → int8 대칭 양자화 → 설계 §5 형식 벡터 번들·이웃 인덱스·품질 리포트 산출 (출력 `out/` — gitignore 로컬 전용). 수작업 번들(combo_pilot)은 node eval 폴백, 정답 마커 ①~⑳→선지 텍스트 해석
+- **실측 (cosmetic 5,794항목 — 진술 4,794+문항 1,000)**: CPU 인코딩 ~9초 · 양자화 왕복 코사인 오차 0.00018 · 벡터 번들 3.1MB + 이웃 인덱스 1.9MB (설계 추정 ~560B/항목과 일치). 유사도 품질: 스쿠알렌↔스쿠알란(0.98)·스핑고이드↔스핑고신(0.95)·폐쇄작업↔개방작업(0.97) 등 실혼동쌍 정확히 포착, 문항→진술 교차 연결도 유효
+- **발견된 설계 보완점**: 동일 텍스트 sid 다수(과목 간 중복 진술, cos 1.0 노이즈)·짧은 일반구 유사도 부풀림("표시 방법"↔"사용 방법" 0.95)·혼동 후보 ≥0.85 기준 9,817쌍으로 임계 과다 — 표시층 텍스트 중복 제거·길이 가중 필요
+- 테스트 7건 (`ref-pipeline/tests/test_build_embeddings.py` — 순수 함수, 모델 불요). 런타임·앱 코드 변경 없음
+
 ## 2026-10-12 지능형 학습 설계 문서 2건 — 임베딩 유사도·오답 원인 분류
 
 - **신규 `docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md` (DOC-DSN-18)**: 빌드타임 문장 임베딩(기본안 `intfloat/multilingual-e5-small` 384d) → int8 양자화 + base64 JS 번들(`{dataRoot}/embeddings/`)로 배포, 런타임은 코사인 유사도만 계산하는 오프라인 우선 설계. 대상 = 진술(sid)·문항(qid)·카드·교재 청크. 이중 구조: 프리컴퓨트 이웃 인덱스(neighbors.js)로 고정 top-K UI, 벡터 번들로 임의 유사도·센트로이드. 소비 지점 = 취약 진술 유사 항목(DR-05)·오답 유사 문항·혼동쌍(§앵커와 다른 의미近 진술, AN-10 보완)·검색 결과 확장. 자유 질의 시맨틱 검색은 쿼리 임베딩 경로(앵커 프록시/온디바이스 ONNX/BYOK) 트레이드오프를 명시해 v2로 보류. 신선도 = manifest sourceHash 게이트로 벡터 재계산 없이 검증
