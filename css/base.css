@@ -505,18 +505,23 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* 데스크탑 배경화 — 정선「인왕제색도」(1751, 퍼블릭 도메인) 수묵 산수화 + 테마 딤.
-   모바일(≤900px) 제외: 카드·본문이 뷰포트를 채워 효과가 없고 대역만 소모.
-   딤은 background-image 1레이어로 얹어 backgroundColor 계산값을 바꾸지 않는다 */
-@media (min-width: 901px) {
-    body {
-        background-image:
-            linear-gradient(var(--bg-wallpaper-dim), var(--bg-wallpaper-dim)),
-            url('../icons/bg-landscape.webp');
-        background-position: center;
-        background-size: cover;
-        background-attachment: fixed;
-    }
+/* 배경화 — 정선「인왕제색도」(1751, 퍼블릭 도메인) 수묵 산수화 + 테마 딤.
+   body는 overflow:hidden이라 스크롤하지 않으므로 fixed 없이도 화면 고정
+   (iOS의 background-attachment:fixed 확대 버그 회피). 딤은 background-image
+   1레이어로 얹어 backgroundColor 계산값을 바꾸지 않는다 */
+body {
+    background-image:
+        linear-gradient(var(--bg-wallpaper-dim), var(--bg-wallpaper-dim)),
+        url('../icons/bg-landscape.webp');
+    background-position: center;
+    background-size: cover;
+}
+
+/* 모바일 — 카드·본문이 뷰포트를 채워 빈 영역 텍스트가 그림 위에 직접 놓이므로
+   대비 확보용으로 딤을 더 올림 */
+@media (max-width: 900px) {
+    :root { --bg-wallpaper-dim: rgba(11, 15, 25, 0.78); }
+    .light-theme { --bg-wallpaper-dim: rgba(233, 228, 212, 0.82); }
 }
 
 /* A1: 키보드 접근성 — :focus-visible로 마우스 클릭 시 포커스 링 숨김, 키보드 탐색 시 표시 */
