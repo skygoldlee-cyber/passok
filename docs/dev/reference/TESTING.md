@@ -28,9 +28,9 @@
 | 구분 | 프레임워크 | 환경 | 파일 위치 | 테스트 수 |
 |------|-----------|------|-----------|-----------|
 | **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1197 |
-| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 665 |
+| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 694 |
 | **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 101 |
-| **합계** | | | | **1967** |
+| **합계** | | | | **1992** |
 
 ### 설계 원칙
 
@@ -337,7 +337,9 @@ npm run hooks:install
 | 57 | `ui-structure.dom.test.js` | 19 | UI 구조 불변식 — index.html 실마크업 | | |
 | 58 | `zoom-gestures.dom.test.js` | 8 | 줌 제스처 (TR-26) | | |
 | 59 | `textbook-edition.dom.test.js` | 5 | 교재 개정 배너 (P-14) | 표시·판본 문구·확인 시 기록/재억제·동일 판본·미선언·중복 처리 억제 | 2026-10-13 추가 |
-| | **합계** | **670** | | |
+| 60 | `exam-sim-review.dom.test.js` | 11 | 시뮬레이터 결과 리뷰·분석 (E-04·E-06·E-07) | 만점·오답 카드·combo 정오표 오판·패널 토글·chapterForQuestion·과락/합격/미달 피드백 | 2026-10-13 추가 |
+| 61 | `reader-ref-links.dom.test.js` | 13 | 참조 링크 위임·프리뷰·배지 (RR-02~06·17·19, TR-10) | 5종 data-attr 위임·오프라인 차단·hover 툴팁(fetch 스니펫·실패)·data-ref-bound 가드·배지 트리거 | 2026-10-13 추가 |
+| | **합계** | **694** | | |
 
 ---
 
