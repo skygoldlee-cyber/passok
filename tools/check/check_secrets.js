@@ -19,8 +19,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
-
-const ROOT = path.resolve(__dirname, '..', '..');
+const { ROOT, refFromArgs, changedFiles } = require('./changed_files.js');
 
 const PATTERNS = [
   { re: /-{5}BEGIN (?:RSA |EC |OPENSSH |PGP )?PRIVATE KEY/, label: '개인키 블록' },
@@ -43,11 +42,15 @@ const ALLOWLIST_FILES = new Set([
 const EXTS = new Set(['.js', '.mjs', '.ts', '.json', '.md', '.html', '.css', '.py', '.yml', '.yaml', '.txt', '.env', '.example', '']);
 const MAX_SIZE = 512 * 1024;
 
+// --ref: ref..HEAD+미커밋 변경 파일만 스캔 — 신규 시크릿 유입 탐지 (로컬·pre-push)
+const ref = refFromArgs(process.argv.slice(2));
+const scoped = ref ? changedFiles(ref) : null;
+
 let files;
 try {
-  files = execSync('git ls-files', { cwd: ROOT, encoding: 'utf8' }).split('\n').map((s) => s.trim()).filter(Boolean);
+  files = scoped ?? execSync('git ls-files', { cwd: ROOT, encoding: 'utf8' }).split('\n').map((s) => s.trim()).filter(Boolean);
 } catch (e) {
-  console.log('✗ git ls-files 실패 — git 저장소에서 실행하세요');
+  console.log('✗ git 파일 목록 실패 — git 저장소에서 실행하세요');
   process.exit(2);
 }
 
@@ -72,7 +75,7 @@ for (const rel of files) {
 }
 
 if (!hits.length) {
-  console.log(`✅ 시크릿 스캔 통과 — 추적 파일 ${files.length}개, 위반 0건`);
+  console.log(`✅ 시크릿 스캔 통과 — 파일 ${files.length}개${scoped ? ' (diff 스코프)' : ''}, 위반 0건`);
   process.exit(0);
 }
 

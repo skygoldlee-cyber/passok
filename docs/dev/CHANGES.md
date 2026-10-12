@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 검증 게이트 실행 비용 절감
+
+- **ESLint `--cache`**: lint 전수 3.2s → 웜 0.7s (`node_modules/.cache/eslint`)
+- **`tools/check/step_runner.js` 공용 병렬 실행기**: run.js·push_gate.js가 spawnSync 직렬 → 워커풀(run.js `--jobs N` 기본 3, push_gate 4). `serial:true` 단계(워크트리를 쓰는 `content:datafresh`·`content:build`)는 배치 사이 단독 실행 — 선언 순서·결과 정렬 유지, 단계별 소요시간(ms) 출력 추가
+- **diff 스코프 게이트**: `--ref <ref>` 지원을 posind·docs:paths·docs:storage·escape·secrets 5개 체커에 추가 (`tools/check/changed_files.js` 공용 — ref..HEAD+미커밋 변경 파일 대상). run.js `--ref`는 `diffScoped` 단계에만 전달; push_gate는 docs 프리셋·posind를 `--ref origin/main`으로 호출 — 로컬 게이트는 신규 유입만 검사, CI는 인자 없이 전수 유지
+- **실측**: docs 프리셋 1.8s→0.9s · check:all 순차 대비 병렬 구동 단축 · lint 웜 4배
+- **부수 수정**: `과목4_문제은행` 인용 드리프트 — fix:citations 자동 교정 7건 적용(별도 커밋). 미발견 29건·지지 없음 209건은 수동 저작 대상으로 잔존 (도구 판정 그대로 방치)
+
 ## 2026-10-12 교재 좌표 비의존 정적 게이트 (ID-05)
 
 - **신규 `tools/check/check_position_independence.js` + `check:posind`**: src/·tools/build/ 전수 스캔 — 위치 좌표(라인 번호·`*Idx`/`*index`/`*lineNo`/`scrollTop` 변수)를 식별자·키 lvalue(R1)·bare L#### 리터럴(R2)·영속 저장 키 인자(R3)로 쓰는 패턴을 오류 차단. 기존 로직 수정·신규 로직이 AN-10(§앵커)·TR-27(콘텐츠 북마크 키)로 제거한 결함 유형을 재도입하지 못하도록 기계화

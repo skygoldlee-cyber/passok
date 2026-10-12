@@ -21,15 +21,17 @@
  * (사유 기재 필수). 표시용 #L 링크·(LNN) 인용 텍스트·마이그레이션 독자의
  * L(\d+) 파싱은 식별자 생성이 아니므로 대상 외.
  *
- * 사용: node tools/check/check_position_independence.js
+ * 사용: node tools/check/check_position_independence.js [--ref <ref>]
+ *   --ref 지정 시 ref..HEAD + 미커밋 변경 파일만 스캔 (로컬·pre-push 게이트 —
+ *   신규 위반 유입 탐지. CI/전수 점검은 인자 없이 전체 스캔)
  */
 // @spec ID-05
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
+const { ROOT, refFromArgs, changedFiles } = require('./changed_files.js');
 
-const ROOT = path.resolve(__dirname, '..', '..');
 const SCAN_DIRS = ['src', path.join('tools', 'build')];
 
 // 식별자·키 lvalue — *Key/*Id/*ID/cid/sid/uid 계열 (cache* 는 세션 캐시 관례로 제외)
@@ -139,10 +141,16 @@ function scanFile(relPath, src) {
 }
 
 function main() {
+    // --ref: ref..HEAD+미커밋 변경 파일만 스캔 — 신규 유입 탐지 (로컬·pre-push)
+    const ref = refFromArgs(process.argv.slice(2));
+    const scoped = ref ? new Set(changedFiles(ref)) : null;
+    const scopeNote = scoped ? ` · 변경 파일 ${scoped.size}개 스코프` : '';
+
     const violations = [];
     for (const d of SCAN_DIRS) {
         for (const file of collectJsFiles(path.join(ROOT, d))) {
             const rel = path.relative(ROOT, file).replace(/\\/g, '/');
+            if (scoped && !scoped.has(rel)) continue;
             for (const v of scanFile(rel, fs.readFileSync(file, 'utf8'))) {
                 violations.push({ file: rel, ...v });
             }
@@ -159,7 +167,7 @@ function main() {
         console.error('표시층 등 설계상 정당한 경우는 ALLOWED에 사유와 함께 등록.');
         process.exit(1);
     }
-    console.log(`✅ 교재 좌표 비의존 통과 — 식별자·저장 키에 위치 좌표 없음 (허용 목록 ${ALLOWED.length}건)`);
+    console.log(`✅ 교재 좌표 비의존 통과 — 식별자·저장 키에 위치 좌표 없음 (허용 목록 ${ALLOWED.length}건${scopeNote})`);
 }
 
 if (require.main === module) main();
