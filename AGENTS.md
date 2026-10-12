@@ -191,8 +191,9 @@ src/                    # ES Modules
   textbook-edition.js   # 교재 개정 감지 배너 — registry.textbookEdition vs textbook_edition_seen (P-14)
   markdown-parser.js    # 공통 MD 파서
   mermaid-utils.js       # Mermaid 다이어그램 설정
-  mermaid-render.js      # Mermaid 지연 로딩 + 컨테이너 렌더링 + 다이어그램 확대 모달 (reader/search/manual 공용 — 데스크탑 전용, 모바일은 핀치 줌)
-  image-zoom.js          # 교재 본문 이미지(.reader-img) 라이트박스 확대 모달 — 데스크탑 전용 (모바일은 핀치 줌이 대체, pointer:coarse 시 미바인딩)
+  mermaid-render.js      # Mermaid 지연 로딩 + 컨테이너 렌더링 + 다이어그램 확대 모달 (reader/search/manual 공용, 모바일은 모달 내 핀치 제스처 — TR-26)
+  image-zoom.js          # 교재 본문 이미지(.reader-img) 라이트박스 확대 모달 — 모바일도 바인딩, 모달 내 핀치 제스처 (TR-26)
+  zoom-gestures.js       # 줌 모달 공용 핀치·패닝·더블탭 제스처 (Pointer Events, touch-action:none 표면, 이미지·머메이드 모달 공용 — TR-26)
   pwa-manifest.js        # 시험별 동적 PWA 매니페스트 (클래식 스크립트 — 빌드 산출물 manifest.<id>.webmanifest 실제 파일로 링크 교체 + 문서 제목·설명·apple-mobile-web-app-title 갱신, blob: 금지)
   keyword-index.js      # 교재 셀→참조자료 키워드 매핑 (시험별 — 자동 생성)
   web-vitals.js         # Core Web Vitals 모니터링
