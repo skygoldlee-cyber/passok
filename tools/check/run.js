@@ -121,7 +121,7 @@ const finished = runSteps(execSteps, {
 });
 
 finished.then((ran) => {
-const results = ran.map((r) => ({ label: `[${r.step.layer}] ${r.step.desc}`, ok: r.ok, output: r.output }));
+const results = ran.map((r) => ({ label: `[${r.step.layer}] ${r.step.desc}`, ok: r.ok, output: r.output, ms: r.ms }));
 
 console.log('\n' + '═'.repeat(60));
 console.log(' 검증 리포트');
@@ -136,6 +136,13 @@ for (const r of results) {
     if (m) console.log(`    ℹ 규칙↔인용 불일치 ${m[1]}건 — 상세: node tools/check/check_ref_subjects.js`);
   }
 }
+
+// 소요시간 요약 — 단계 합계(병렬이므로 벽시계 아님) + 최다 소요 TOP 5.
+// 새 단계 추가·스크립트 변경 후 실행시간 회귀를 여기서 잡는다
+const totalMs = results.reduce((a, r) => a + (r.ms || 0), 0);
+const slowest = [...results].sort((a, b) => (b.ms || 0) - (a.ms || 0)).slice(0, 5);
+console.log(`\n ⏱ 단계 합계 ${secs(totalMs)} — 최다 소요:`);
+for (const r of slowest) console.log(`    ${secs(r.ms || 0).padStart(7)}  ${r.label}`);
 
 if (!failed.length) {
   console.log(`\n🎉 전 단계 통과 (${results.length}단계)`);

@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: a20c8f9a7a9c46bd
+> 입력 해시: 2a183bd20889f095
 > 생성: 2026-10-12 · 원천: SPEC.md(481개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 481개 — 문서 연결 307 · 소스 연결 438 · 테스트 연결 467 · 보고서 연결 109
+**커버리지 요약**: 요구사항 481개 — 문서 연결 307 · 소스 연결 439 · 테스트 연결 467 · 보고서 연결 109
 
 ---
 
@@ -207,10 +207,10 @@
 | DI-03 | ✅ | 테스트 | — | src/views/dictionary.js | tests/dom/dictionary-schema.dom.test.js<br>tests/dom/study-dictionary.dom.test.js | — | — |
 | DI-04 | ✅ | 테스트 | — | html/views/dictionary.html<br>index.html<br>src/views/dictionary.js | tests/dom/exams/cosmetic/review-drills-formula.dom.test.js | — | — |
 | DI-05 | ✅ | 테스트 | DOC-DEV-05 | html/views/dictionary.html<br>index.html<br>src/views/dictionary.js | tests/dom/exams/cosmetic/review-drills-formula.dom.test.js | — | — |
-| DI-06 | ✅ | 테스트 | — | src/exams/cosmetic/custom-ingredient-store.js<br>src/exams/cosmetic/views/formula.js<br>src/views/dictionary.js | tests/dom/dictionary-custom.dom.test.js<br>tests/unit/exams/cosmetic/custom-ingredient-store.test.js | — | — |
-| DI-07 | ✅ | 테스트 | — | src/exams/cosmetic/custom-ingredient-store.js<br>src/exams/cosmetic/formula-check.js<br>src/views/dictionary.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js<br>tests/unit/exams/cosmetic/custom-ingredient-store.test.js | — | — |
-| DI-08 | ✅ | 테스트 | — | src/exams/cosmetic/custom-ingredient-store.js<br>src/exams/cosmetic/views/formula.js<br>src/views/dictionary.js | tests/dom/dictionary-custom.dom.test.js<br>tests/unit/exams/cosmetic/custom-ingredient-store.test.js | — | — |
-| DI-09 | ✅ | 테스트 | — | src/exams/cosmetic/custom-ingredient-store.js<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js | — | — |
+| DI-06 | ✅ | 테스트 | — | src/exams/cosmetic/custom-ingredient-store.js<br>src/exams/cosmetic/views/formula-calc.js<br>src/exams/cosmetic/views/formula-ing-modal.js<br>src/exams/cosmetic/views/formula.js<br>…외 1개 | tests/dom/dictionary-custom.dom.test.js<br>tests/unit/exams/cosmetic/custom-ingredient-store.test.js | — | — |
+| DI-07 | ✅ | 테스트 | — | src/exams/cosmetic/custom-ingredient-store.js<br>src/exams/cosmetic/formula-check.js<br>src/exams/cosmetic/views/formula-calc.js<br>src/exams/cosmetic/views/formula-ing-modal.js<br>…외 1개 | tests/dom/exams/cosmetic/formula-calc.dom.test.js<br>tests/unit/exams/cosmetic/custom-ingredient-store.test.js | — | — |
+| DI-08 | ✅ | 테스트 | — | src/exams/cosmetic/custom-ingredient-store.js<br>src/exams/cosmetic/views/formula-core.js<br>src/exams/cosmetic/views/formula-ing-modal.js<br>src/exams/cosmetic/views/formula.js<br>…외 1개 | tests/dom/dictionary-custom.dom.test.js<br>tests/unit/exams/cosmetic/custom-ingredient-store.test.js | — | — |
+| DI-09 | ✅ | 테스트 | — | src/exams/cosmetic/custom-ingredient-store.js<br>src/exams/cosmetic/views/formula-core.js<br>src/exams/cosmetic/views/formula-ing-modal.js<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js | — | — |
 | DI-10 | ✅ | 테스트 | — | src/views/dictionary.js | tests/dom/study-dictionary.dom.test.js | — | — |
 | DI-11 | ✅ | 테스트 | — | src/notice-check.js<br>src/views/dictionary.js | tests/dom/study-dictionary.dom.test.js<br>tests/unit/notice-check.test.js | — | — |
 
@@ -291,7 +291,7 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| FO-01 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11 | src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | — |
+| FO-01 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11 | src/exams/cosmetic/views/formula-core.js<br>src/exams/cosmetic/views/formula-list.js<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | — |
 | FO-02 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11 | src/exams/cosmetic/formula-check.js<br>src/exams/cosmetic/views/formula.js | tests/unit/exams/cosmetic/formula-check.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | 화장품 안전기준 등에 관한 규정(식약처고시 제2026-19호) — 원료별 사용 한도·금지 |
 | FO-03 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11 | src/exams/cosmetic/views/formula.js | tests/unit/exams/cosmetic/formula-os.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | — |
 | FO-04 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11 | src/exams/cosmetic/views/formula.js | tests/unit/exams/cosmetic/formula-os.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | — |
@@ -317,13 +317,13 @@
 | FO-24 | ✅ | 테스트 | DOC-DEV-05<br>DOC-DSN-10<br>DOC-DSN-14 | html/exams/cosmetic/formula.html<br>ref-pipeline/check_mfds_notice.py<br>ref-pipeline/fetch_revision.py<br>src/notice-check.js<br>…외 1개 | tests/dom/exams/cosmetic/formula-nav.dom.test.js<br>tests/unit/notice-check.test.js<br>tests/unit/notice-diff.test.js | — | 식약처 고시 개정 추적 — law.go.kr 오픈API(법제처) + `content/exams/cosmetic/참조자료/법령고시/` PDF 기준본 |
 | FO-25 | ✅ | 테스트 | — | html/exams/cosmetic/formula.html | tests/dom/exams/cosmetic/formula-nav.dom.test.js | — | 화장품 안전기준 등에 관한 규정(별표1·2) — 네거티브 리스트 판정 원칙 · 색소/기능성 고시 — 지정 목록 예외 |
 | FO-26 | ✅ | E2E 테스트 | — | css/exams/cosmetic/formula.css<br>html/exams/cosmetic/formula.html | tests/e2e/exams/cosmetic/formula-tablet.spec.js | — | — |
-| FO-27 | ✅ | E2E 테스트 | — | html/exams/cosmetic/formula.html<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js<br>tests/e2e/exams/cosmetic/formula-tablet.spec.js | — | — |
-| FO-28 | ✅ | E2E 테스트 | — | css/exams/cosmetic/formula.css<br>html/exams/cosmetic/formula.html<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js<br>tests/e2e/exams/cosmetic/formula-tablet.spec.js | — | — |
-| FO-29 | ✅ | E2E 테스트 | — | html/exams/cosmetic/formula.html<br>src/exams/cosmetic/views/formula-print.js<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-print.dom.test.js<br>tests/e2e/exams/cosmetic/formula-tablet.spec.js | — | — |
-| FO-30 | ✅ | E2E 테스트 | — | html/exams/cosmetic/formula.html<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js<br>tests/e2e/exams/cosmetic/formula-tablet.spec.js | — | — |
-| FO-31 | ✅ | E2E 테스트 | — | css/exams/cosmetic/formula.css<br>html/exams/cosmetic/formula.html<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js<br>tests/e2e/exams/cosmetic/formula-tablet.spec.js | — | — |
-| FO-32 | ✅ | 테스트 | DOC-DSN-12<br>DOC-DSN-13 | src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js | — | — |
-| FO-33 | ✅ | 테스트 | DOC-BIZ-02<br>DOC-DSN-15 | src/exams/cosmetic/biz-profile.js<br>src/exams/cosmetic/views/formula-compliance.js<br>src/exams/cosmetic/views/formula-sales.js | tests/dom/exams/cosmetic/formula-sales.dom.test.js<br>tests/unit/exams/cosmetic/formula-sales.test.js | — | — |
+| FO-27 | ✅ | E2E 테스트 | — | html/exams/cosmetic/formula.html<br>src/exams/cosmetic/views/formula-calc.js<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js<br>tests/e2e/exams/cosmetic/formula-tablet.spec.js | — | — |
+| FO-28 | ✅ | E2E 테스트 | — | css/exams/cosmetic/formula.css<br>html/exams/cosmetic/formula.html<br>src/exams/cosmetic/views/formula-weigh.js<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js<br>tests/e2e/exams/cosmetic/formula-tablet.spec.js | — | — |
+| FO-29 | ✅ | E2E 테스트 | — | html/exams/cosmetic/formula.html<br>src/exams/cosmetic/views/formula-io.js<br>src/exams/cosmetic/views/formula-print.js<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-print.dom.test.js<br>tests/e2e/exams/cosmetic/formula-tablet.spec.js | — | — |
+| FO-30 | ✅ | E2E 테스트 | — | html/exams/cosmetic/formula.html<br>src/exams/cosmetic/views/formula-calc.js<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js<br>tests/e2e/exams/cosmetic/formula-tablet.spec.js | — | — |
+| FO-31 | ✅ | E2E 테스트 | — | css/exams/cosmetic/formula.css<br>html/exams/cosmetic/formula.html<br>src/exams/cosmetic/views/formula-hub.js<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js<br>tests/e2e/exams/cosmetic/formula-tablet.spec.js | — | — |
+| FO-32 | ✅ | 테스트 | DOC-DSN-12<br>DOC-DSN-13 | src/exams/cosmetic/views/formula-calc.js<br>src/exams/cosmetic/views/formula-ing-modal.js<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-calc.dom.test.js | — | — |
+| FO-33 | ✅ | 테스트 | DOC-BIZ-02<br>DOC-DSN-15 | src/exams/cosmetic/biz-profile.js<br>src/exams/cosmetic/views/formula-compliance.js<br>src/exams/cosmetic/views/formula-core.js<br>src/exams/cosmetic/views/formula-hub.js<br>…외 1개 | tests/dom/exams/cosmetic/formula-sales.dom.test.js<br>tests/unit/exams/cosmetic/formula-sales.test.js | — | — |
 | FO-34 | ✅ | 테스트 | DOC-BIZ-02<br>DOC-DSN-14<br>DOC-DSN-15 | src/exams/cosmetic/biz-profile.js<br>src/exams/cosmetic/views/formula-compliance.js | tests/dom/exams/cosmetic/formula-sales.dom.test.js<br>tests/unit/exams/cosmetic/formula-sales.test.js | — | — |
 | FO-35 | ✅ | 테스트 | DOC-BIZ-02<br>DOC-DSN-14 | src/exams/cosmetic/views/formula-sales.js | tests/dom/exams/cosmetic/formula-sales.dom.test.js | — | — |
 | FO-36 | ✅ | 테스트 | DOC-BIZ-02<br>DOC-DSN-14 | src/exams/cosmetic/ad-lint.js<br>src/exams/cosmetic/views/formula-sales.js | tests/dom/exams/cosmetic/formula-sales.dom.test.js<br>tests/unit/exams/cosmetic/formula-sales.test.js | — | — |
@@ -352,10 +352,10 @@
 | FO-59 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-15 | src/exams/cosmetic/adverse-store.js<br>src/exams/cosmetic/views/formula-adverse.js<br>src/exams/cosmetic/views/formula-audit.js | tests/dom/exams/cosmetic/formula-practical.dom.test.js<br>tests/unit/exams/cosmetic/formula-practical.test.js | — | — |
 | FO-60 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-15 | src/exams/cosmetic/views/formula-print.js | tests/dom/exams/cosmetic/formula-practical.dom.test.js | — | — |
 | FO-61 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-15 | src/exams/cosmetic/views/formula-batch.js<br>src/exams/cosmetic/views/formula-material.js | tests/unit/exams/cosmetic/formula-practical.test.js | — | — |
-| FO-62 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-15 | src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-practical.dom.test.js | — | — |
+| FO-62 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-15 | src/exams/cosmetic/views/formula-hub.js<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-practical.dom.test.js | — | — |
 | FO-63 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-14<br>DOC-DSN-15 | src/exams/cosmetic/views/formula-audit.js<br>src/exams/cosmetic/views/formula-compliance.js | tests/dom/exams/cosmetic/formula-practical.dom.test.js<br>tests/unit/exams/cosmetic/formula-practical.test.js | — | — |
 | FO-64 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-14 | src/exams/cosmetic/views/formula-audit.js | tests/unit/exams/cosmetic/formula-audit.test.js | — | — |
-| FO-65 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-14 | — | tests/dom/exams/cosmetic/formula-nav.dom.test.js | — | — |
+| FO-65 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-14 | src/exams/cosmetic/views/formula-hub.js | tests/dom/exams/cosmetic/formula-nav.dom.test.js | — | — |
 | FO-66 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-14 | src/exams/cosmetic/views/formula-audit.js | tests/unit/exams/cosmetic/formula-audit.test.js | — | — |
 | FO-67 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-14 | src/exams/cosmetic/views/formula-audit.js | tests/unit/exams/cosmetic/formula-audit.test.js | — | — |
 | FO-68 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-14 | tools/check/check_adlint_coverage.js | tests/unit/exams/cosmetic/formula-sales.test.js | — | — |
@@ -794,6 +794,7 @@
 | DOC-REF-11 | docs/dev/reference/PROJECT_STRUCTURE_TOUR.md | — |
 | DOC-REF-12 | docs/dev/reference/CODE_READING_GUIDE.md | — |
 | DOC-REF-13 | docs/dev/reference/FEATURE_MAP.md | — |
+| DOC-REF-14 | docs/dev/reference/GATE_MAP.md | — |
 | DOC-ROOT-01 | README.md | — |
 | DOC-ROOT-02 | AGENTS.md | — |
 | DOC-USR-01 | docs/exams/cosmetic/user/exam_strategy.md | — |
