@@ -1,12 +1,12 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject2.65ebabfa.js — mode: fact(명제 조합) 19문 / answer(정답 조합) 138문
+// 원본: data/exams/cosmetic/exams/subject2.682401a4.js — mode: fact(명제 조합) 19문 / answer(정답 조합) 138문
 var COMBO_DRILLS_subject2 = [
  {
   "id": "manufacturing_combo_f62cd4",
   "subject": 2,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1516 (출처: 과목2 문제은행 Q1)",
+  "citation": "📖 교재: L1555 (출처: 과목2 문제은행 Q1)",
   "stem": "다음 중 계면활성제의 HLB(친수성-친유성 밸런스)에 관한 설명으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
@@ -89,7 +89,7 @@ var COMBO_DRILLS_subject2 = [
    "수치"
   ],
   "derivedFrom": "subject2_q1",
-  "explain": "📖 교재 근거 (교재: L1516):\n> 해설: HLB 값이 높을수록 친수성이 강하다. HLB 8~18은 O/W 유화제, 세정제, 가용화제로 사용되며, HLB 3~6은 W/O 유화제, 1~3은 소포제이다.",
+  "explain": "📖 교재 근거 (교재: L1555):\n| 친유성/친수성 | 기름에 잘 녹음 / 물에 잘 녹음. 계면활성제는 두 특성 모두 보유. |",
   "source": "화장품 제조 및 품질관리 (250제)",
   "answer": "1"
  },
@@ -5186,7 +5186,7 @@ var COMBO_DRILLS_subject2 = [
   "subject": 2,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1509 (출처: 과목2 문제은행 Q57)",
+  "citation": "📖 교재: L686 (출처: 과목2 문제은행 Q57)",
   "stem": "다음 중 계면활성제가 물에 용해될 때 이온화되지 않는 성질을 가지며, 주로 기초화장품의 유화제로 사용되는 계면활성제에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
@@ -5271,7 +5271,7 @@ var COMBO_DRILLS_subject2 = [
    "정답판정"
   ],
   "derivedFrom": "subject2_q57",
-  "explain": "📖 교재 근거 (교재: L1509):\n> 해설: 세정력 순서는 음이온성 > 양쪽성 > 양이온성 > 비이온성이다. 음이온성 계면활성제(SLS, SLES 등)는 비누·샴푸·폼클렌저에 주로 사용된다.",
+  "explain": "📖 교재 근거 (교재: L686):\n|  | 살균제 · 4급 암모늄·알데히드 | 미생물 살균, 양이온 계면활성제 |",
   "source": "화장품 제조 및 품질관리 (250제)",
   "answer": "3"
  },
@@ -12569,7 +12569,7 @@ var COMBO_DRILLS_subject2 = [
   "subject": 2,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1900 (출처: 과목2 문제은행 Q139)",
+  "citation": "📖 교재: L397 (출처: 과목2 문제은행 Q139)",
   "stem": "화장품 원료 중 「레티놀(비타민 A)」의 주요 기능성 효과에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
@@ -12654,7 +12654,7 @@ var COMBO_DRILLS_subject2 = [
    "정답판정"
   ],
   "derivedFrom": "subject2_q139",
-  "explain": "📖 교재 근거 (교재: L1900):\n> 해설: 기능성화장품은 11가지 효능·효과로 정의되며, 입술 각질 제거는 기능성화장품에 포함되지 않는다. 기능성화장품에는 미백·주름개선·자외선차단·염모·제모·탈모완화·여드름완화·피부장벽회복·튼살 완화 등이 해당한다.",
+  "explain": "📖 교재 근거 (교재: L397):\n| 유효 성분 | 화장품에 특별한 효능을 부여하기 위해 사용하는 물질로 각 제품의 특징을 나타내는 역할을 함 (예: 미백, 주름 개선 및 자외선 차단 성분 등) |",
   "source": "화장품 제조 및 품질관리 (250제)",
   "answer": "4"
  },
@@ -13489,7 +13489,7 @@ var COMBO_DRILLS_subject2 = [
   "subject": 2,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1900 (출처: 과목2 문제은행 Q149)",
+  "citation": "📖 교재: L56 (출처: 과목2 문제은행 Q149)",
   "stem": "화장품 원료 중 「알부틴(Arbutin)」의 주요 기능성 효과에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
@@ -13572,7 +13572,7 @@ var COMBO_DRILLS_subject2 = [
    "정답판정"
   ],
   "derivedFrom": "subject2_q149",
-  "explain": "📖 교재 근거 (교재: L1900):\n> 해설: 기능성화장품은 11가지 효능·효과로 정의되며, 입술 각질 제거는 기능성화장품에 포함되지 않는다. 기능성화장품에는 미백·주름개선·자외선차단·염모·제모·탈모완화·여드름완화·피부장벽회복·튼살 완화 등이 해당한다.",
+  "explain": "📖 교재 근거 (교재: L56):\n| 미백 – 나이아신아마이드 | 2.0~5.0% |",
   "source": "화장품 제조 및 품질관리 (250제)",
   "answer": "5"
  },
@@ -13673,7 +13673,7 @@ var COMBO_DRILLS_subject2 = [
   "subject": 2,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L999 (출처: 과목2 문제은행 Q151)",
+  "citation": "📖 교재: L1354 (출처: 과목2 문제은행 Q151)",
   "stem": "다음 중 화장품의 보존제 역할로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
@@ -13756,7 +13756,7 @@ var COMBO_DRILLS_subject2 = [
    "정답판정"
   ],
   "derivedFrom": "subject2_q151",
-  "explain": "📖 교재 근거 (교재: L999):\n| 토코페릴아세테이트 | 토코페롤의 아세틱애씨드 에스터 |",
+  "explain": "📖 교재 근거 (교재: L1354):\n식품의약품안전처장은 단체 또는 관련 업무를 수행하는 기관 등을 지정하여 화장품의 판매, 표시·광고, 품질 등에 대하여 모니터링을 할 수 있음",
   "source": "화장품 제조 및 품질관리 (250제)",
   "answer": "1"
  },
