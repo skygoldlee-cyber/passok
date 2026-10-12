@@ -37,6 +37,7 @@ const STEP = argValue('--step');
 const LIST = argv.includes('--list');
 const JOBS = Math.max(1, Number(argValue('--jobs')) || 3);
 const REF = argValue('--ref');
+const AFFECTED = argv.includes('--affected');
 const OPTS = {
   quick: argv.includes('--quick'),
   contentOnly: argv.includes('--content-only'),
@@ -48,7 +49,8 @@ const USAGE = `사용법:
   node tools/check/run.js --step <id|npm 스크립트명|check_파일명>
   node tools/check/run.js --list [preset]
 옵션: --quick(느린 단계 생략) · --content-only(콘텐츠 추적 단계만) · --build(build:data 선실행)
-      --jobs N(병렬도, 기본 3 — 1이면 순차) · --ref <ref>(diff 스코프 단계만 변경 파일 대상)`;
+      --jobs N(병렬도, 기본 3 — 1이면 순차) · --ref <ref>(diff 스코프 단계만 변경 파일 대상)
+      --affected(유닛 테스트를 영향 분석 권장 세트로 교체 — 로컬 빠른 재현)`;
 
 if (LIST) {
   const names = [PRESET || argv[argv.indexOf('--list') + 1]].filter(Boolean);
@@ -85,7 +87,8 @@ if (STEP) {
   heading = `검증 실행 — preset:${PRESET}`
     + (OPTS.withBuild ? ' (build:data 선실행)' : '')
     + (OPTS.quick ? ' [quick]' : '')
-    + (OPTS.contentOnly ? ' [content-only]' : '');
+    + (OPTS.contentOnly ? ' [content-only]' : '')
+    + (AFFECTED ? ' [affected]' : '');
 } else {
   console.log(USAGE);
   process.exit(1);
@@ -95,6 +98,12 @@ if (STEP) {
 const execSteps = steps.map((s) => {
   if (!s.diffScoped || !REF) return s;
   return { ...s, args: s.shell ? [...s.args, '--', '--ref', REF] : [...s.args, '--ref', REF] };
+}).map((s) => {
+  // --affected: 유닛 테스트 단계를 영향 분석 권장 테스트로 교체 (로컬 빠른 재현, CI는 전수 유지)
+  if (!AFFECTED || !/(^|:)unit$/.test(s.id)) return s;
+  return { ...s, bin: 'node', shell: false,
+    args: ['tools/check/impact_tests.js', '--ref', REF || 'origin/main', '--run'],
+    desc: `${s.desc} (영향 테스트만)` };
 });
 
 console.log('═'.repeat(60));

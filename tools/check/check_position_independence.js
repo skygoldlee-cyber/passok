@@ -140,9 +140,14 @@ function scanFile(relPath, src) {
     return violations;
 }
 
-function main() {
+/**
+ * 인프로세스/CLI 공용 실행 — {status, output} 계약.
+ * @param {{args?: string[]}} opts — CLI 인자 배열 (process.argv.slice(2) 상당)
+ * @returns {{status:number, output:string}}
+ */
+function run({ args = [] } = {}) {
     // --ref: ref..HEAD+미커밋 변경 파일만 스캔 — 신규 유입 탐지 (로컬·pre-push)
-    const ref = refFromArgs(process.argv.slice(2));
+    const ref = refFromArgs(args);
     const scoped = ref ? new Set(changedFiles(ref)) : null;
     const scopeNote = scoped ? ` · 변경 파일 ${scoped.size}개 스코프` : '';
 
@@ -158,17 +163,22 @@ function main() {
     }
 
     if (violations.length) {
-        console.error('\n❌ 교재 좌표 비의존 위반 — 위치 좌표를 식별자·저장 키로 사용 (ID-05):\n');
+        const lines = ['\n❌ 교재 좌표 비의존 위반 — 위치 좌표를 식별자·저장 키로 사용 (ID-05):\n'];
         for (const v of violations) {
-            console.error(`  ${v.file}:${v.line}  [${v.rule}] ${v.detail}`);
-            console.error(`      ${v.code}`);
+            lines.push(`  ${v.file}:${v.line}  [${v.rule}] ${v.detail}`);
+            lines.push(`      ${v.code}`);
         }
-        console.error(`\n총 ${violations.length}건 — 위치 좌표 대신 콘텐츠·구조 기반 식별자를 사용하세요.`);
-        console.error('표시층 등 설계상 정당한 경우는 ALLOWED에 사유와 함께 등록.');
-        process.exit(1);
+        lines.push(`\n총 ${violations.length}건 — 위치 좌표 대신 콘텐츠·구조 기반 식별자를 사용하세요.`);
+        lines.push('표시층 등 설계상 정당한 경우는 ALLOWED에 사유와 함께 등록.');
+        return { status: 1, output: lines.join('\n') };
     }
-    console.log(`✅ 교재 좌표 비의존 통과 — 식별자·저장 키에 위치 좌표 없음 (허용 목록 ${ALLOWED.length}건${scopeNote})`);
+    return { status: 0,
+        output: `✅ 교재 좌표 비의존 통과 — 식별자·저장 키에 위치 좌표 없음 (허용 목록 ${ALLOWED.length}건${scopeNote})` };
 }
 
-if (require.main === module) main();
-module.exports = { scanLine, scanFile };
+if (require.main === module) {
+    const r = run({ args: process.argv.slice(2) });
+    if (r.output) console.log(r.output);
+    process.exit(r.status);
+}
+module.exports = { scanLine, scanFile, run };

@@ -17,9 +17,11 @@ const path = require('path');
 
 const NPM = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
-function nodeStep(id, script, layer, desc, { args = [], content = false, slow = false, token, diffScoped = false, serial = false } = {}) {
+function nodeStep(id, script, layer, desc, { args = [], content = false, slow = false, token, diffScoped = false, serial = false, inProcess = false } = {}) {
   return { id, bin: 'node', args: [script, ...args], shell: false, layer, desc,
-    token: token ?? path.basename(script), content, slow, diffScoped, serial };
+    token: token ?? path.basename(script), content, slow, diffScoped, serial,
+    // run({args,cwd}) → {status,output} 계약을 export하는 체커는 인프로세스 실행
+    ...(inProcess ? { inProcess: script } : {}) };
 }
 
 function npmStep(id, script, layer, desc, opts = {}) {
@@ -70,7 +72,7 @@ const CONTENT_STEPS = [
   nodeStep('content:datafresh', 'tools/check/check_data_freshness.js', '데이터신선도', 'data/·생성물 ↔ 원본 (빌드 체인 실행 후 git diff — build:data 누락 감지)', { content: true, serial: true }),
   nodeStep('content:parser', 'tools/check/check_parser_parity.js', '파서', '빌드 파서 ↔ 런타임 파서 출력 등가성'),
   nodeStep('content:imports', 'tools/check/check_imports.js', '임포트', 'src/ ES 모듈 import/export 교차 검증'),
-  nodeStep('content:posind', 'tools/check/check_position_independence.js', '규칙', '교재 좌표 비의존 — 위치 기반 식별자·저장 키 정적 탐지 (ID-05)', { diffScoped: true }),
+  nodeStep('content:posind', 'tools/check/check_position_independence.js', '규칙', '교재 좌표 비의존 — 위치 기반 식별자·저장 키 정적 탐지 (ID-05)', { diffScoped: true, inProcess: true }),
   nodeStep('content:assets', 'tools/check/verify_shell_assets.js', '자산', 'sw.js SHELL_ASSETS/DATA_ASSETS 파일 존재'),
   nodeStep('content:cards', 'tools/check/audit_card_quality.js', '카드', '카드 품질 감사 (짧은 설명·중복·참조 링크)', { content: true }),
   nodeStep('content:docbundles', 'tools/build/build_doc_bundles.js', '문서번들', 'docs_md 번들 ↔ 원본 문서 신선도 (build_doc_bundles 필요 감지)', { args: ['--check'], content: true }),

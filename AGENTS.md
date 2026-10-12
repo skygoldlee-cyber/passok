@@ -66,7 +66,7 @@ npm.cmd run check:adlint                # 광고 문구 사전 커버리지 감�
 npm.cmd run check:all                    # 저장소 전체 검증 일괄 실행 (run.js --preset all)
 npm.cmd run check:all:quick              # DOM 테스트 생략 빠른 점검 (= run.js --preset all --quick)
 npm.cmd run check:all:e2e                # 전체 점검 + E2E 실브라우저 (배포 전 완전 검증 — serve 자동 기동, 시간 소요)
-npm.cmd run check:ci                     # CI 게이트 로컬 재현 (= run.js --preset ci — coverage·E2E·audit는 CI 전용)
+npm.cmd run check:ci                     # CI 게이트 로컬 재현 (= run.js --preset ci — coverage·E2E·audit는 CI 전용). `-- --affected`는 유닛을 영향 테스트 권장 세트로 치환하는 빠른 로컬 재현
 npm.cmd run check -- --preset <all|ci|content|docs> [--quick|--content-only|--build]  # 통합 실행기 직접 호출
 npm.cmd run check -- --step <id>         # 단일 단계만 실행 (예: --step manifest, --list로 id 조회)
 
@@ -114,7 +114,7 @@ npm.cmd run check:testfirst             # 로직(src/*.js·ref-pipeline/*.py) �
 npm.cmd run check:trace                 # TRACE_MATRIX 입력 해시 신선도
 npm.cmd run check:lawurls               # law.go.kr 한글주소 유효성 전수 검증 (law-links.js 매핑 실호출, 오류 페이지 본문 판별)
 node tools/check/impact_tests.js              # 변경 파일 → 영향 요구사항·권장 테스트 (미커밋 변경 자동 분석, --ref <ref>로 diff 분석, --run으로 권장 테스트 실제 실행 — pre-push 게이트)
-npm.cmd run hooks:install               # Git 훅 활성화 (opt-in) — pre-commit: check:types+lint (IDE 오류 시 커밋 차단) / pre-push: tools/check/push_gate.js 적응형 게이트 — diff 분류로 문서·콘텐츠 전용 푸시는 경량 단계만, 로직 포함 시 전체 10단계 병렬(4)·failFast·diff 스코프 단계는 --ref 대상 (우회 SKIP_PREPUSH=1 · 전체 강제 PUSH_GATE_ALL=1)
+npm.cmd run hooks:install               # Git 훅 활성화 (opt-in) — pre-commit: check:types+lint (IDE 오류 시 커밋 차단) / pre-push: tools/check/push_gate.js 적응형 게이트 — 파일 경로 태그(STEP_NEEDS 표)로 필요 단계만 실행, 미분류 파일은 전체 폴백·전체 강제 PUSH_GATE_ALL=1 · 통과 결과 캐시(동일 입력 재실행 생략, --no-cache 우회)·병렬(4)·failFast·diff 스코프 단계는 --ref 대상 (우회 SKIP_PREPUSH=1)
 npm.cmd run check:hooks                 # 훅 설치 여부 확인 (권고 — 미설치 시 로컬 게이트 우회됨, check:ci 첫 단계)
 
 # 참조자료 PDF → ref_md 변환 (Python 3 + pdfplumber, 이미지 추출 시 pymupdf 필요)
