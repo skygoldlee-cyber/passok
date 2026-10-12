@@ -94,6 +94,24 @@ test('extractExamHighlights: 2자 이하 결과 제외', () => {
     assert.equal(result.length, 0, '2자 이하는 제외');
 });
 
+test('extractExamHighlights: sectionIdx로 소속 섹션 추적 (중복 제목 병기용)', () => {
+    const chapter = {
+        sections: [
+            { title: '📚 Chapter 01. A', content: '본문' },
+            { title: '📌 챕터 핵심 요약', content: '🔖기출 챕터1 핵심 내용입니다.' },
+            { title: '📚 Chapter 02. B', content: '본문' },
+            { title: '📌 챕터 핵심 요약', content: '🔖기출 챕터2 핵심 내용입니다.' },
+        ],
+    };
+    const result = extractExamHighlights(chapter);
+    assert.equal(result.length, 2, '두 요약 섹션 모두 추출');
+    assert.equal(result[0].sectionIdx, 1, '첫 결과는 섹션 인덱스 1');
+    assert.equal(result[1].sectionIdx, 3, '둘째 결과는 섹션 인덱스 3');
+    // 카드는 이 인덱스로 buildSectionDisplayTitles 결과를 조회해
+    // 'Chapter 01'/'Chapter 02' 병기 제목을 표시한다 (raw sectionTitle은 동일)
+    assert.equal(result[0].sectionTitle, result[1].sectionTitle, '원본 제목은 동일 — 병기는 표시 계층 책임');
+});
+
 // ==================== loadNumberDrills ====================
 
 test('loadNumberDrills: JSON 파일 로드 (fetch mock)', async () => {

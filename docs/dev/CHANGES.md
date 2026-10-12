@@ -12,6 +12,7 @@
 - **문제**: 교재 각 챕터 말미의 `📌 챕터 핵심 요약` 등 동일 제목이 TOC·섹션 헤더에서 구분 불가
 - **수정**: `reader-toc.js`에 `buildSectionDisplayTitles()` 추가 — 챕터 내 2회 이상 반복 제목에 직전 `📚 Chapter NN` 명 병기 (`📌 챕터 핵심 요약 — Chapter 01. 화장품법의 이해`). TOC 항목·섹션 카드 헤더(h4 → sticky heading 연동)에 공용 적용
 - 첫 Chapter 이전 섹션·고유 제목은 원문 유지. `reader-toc.test.js` 계약 테스트 2건 추가
+- **후속**: 기출 핵심 카드(`study-aids.js` exam-highlight-section-title)도 동일 제목 중복 노출 — `extractExamHighlights`에 `sectionIdx` 추가 후 동일 병기 적용
 
 ## 2026-10-12 배포 크기 절감 — docs/exams 제외 + mermaid 프리캐시 제외 (PF-13)
 
