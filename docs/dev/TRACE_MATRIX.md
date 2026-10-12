@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 2294287336aaabb0
+> 입력 해시: 680379d7b04ef1bc
 > 생성: 2026-10-12 · 원천: SPEC.md(480개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -174,7 +174,7 @@
 | RR-10 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
 | RR-11 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
 | RR-12 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
-| RR-13 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-12<br>DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js<br>src/pdf-registry.js<br>tools/build/build_pdf_registry.js | tests/dom/common-htmlviewer.dom.test.js<br>tests/unit/pdf-registry.test.js<br>tests/unit/ref-link-labels.test.js | — | — |
+| RR-13 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-12<br>DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js<br>src/pdf-registry.js<br>tools/build/build_pdf_registry.js<br>tools/check/check_link_lint.js | tests/dom/common-htmlviewer.dom.test.js<br>tests/unit/markdown-links.test.js<br>tests/unit/pdf-registry.test.js<br>tests/unit/ref-link-labels.test.js | — | — |
 | RR-14 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | css/print.css<br>src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
 | RR-15 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | css/html-viewer.css<br>src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
 | RR-16 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
