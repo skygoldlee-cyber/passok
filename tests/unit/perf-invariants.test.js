@@ -1,10 +1,10 @@
 // tests/unit/perf-invariants.test.js — 성능 요구사항 (PF-01~16)
-// @spec PF-01~16
+// @spec PF-01~17
 // 런타임 파싱·온디맨드 로딩·캐싱·지연 로딩 등 성능 최적화 구조를 고정한다.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -180,4 +180,14 @@ test('PF-16: 다이어그램 타입 감지가 mermaid-utils로 공용화됐다',
   // 3개 소비 모듈 중 임포트 확인 (render + 최소 1개 이상의 뷰)
   const consumers = srcFiles.filter(f => /from ['"][^'"]*mermaid-utils/.test(read(f)));
   assert.ok(consumers.length >= 1, `소비 모듈: ${consumers.join(', ')}`);
+});
+
+// ---------- PF-17: 이모지 폰트 서브셋 ----------
+
+test('PF-17: noto-color-emoji가 사용 글자 서브셋이다 (전체 폰트 재삽입 회귀 차단)', () => {
+  const font = join(ROOT, 'vendor', 'fonts', 'noto-color-emoji-400.woff2');
+  assert.ok(existsSync(font), '폰트 파일 존재');
+  const sizeMB = statSync(font).size / 1048576;
+  assert.ok(sizeMB < 1, `서브셋 예산 초과: ${sizeMB.toFixed(2)}MB (전체 폰트 ~5.4MB — 119코드포인트 서브셋 유지 필요)`);
+  assert.ok(read('vendor/fonts/fonts.css').includes('noto-color-emoji-400.woff2'), 'fonts.css 참조 유지');
 });
