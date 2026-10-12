@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261013-3b10727",
+    "date": "2026-10-13",
+    "notes": [
+      "[정리] 부트스트랩 분모 정정 + E2E CI 재시도 + 커버리지 래칭 4차",
+      "[테스트] 커버리지 래칭 3차 — exam-sim-review·reader-ref-links DOM 테스트",
+      "[수정] CI 유닛 테스트 glob 버그 — 미인용 **가 bash에서 축약돼 55/1192만 실행",
+      "리팩터: exam-simulator 뷰 분해 — 파사드+수명주기별 3모듈",
+      "리팩터: formula-products·batch 뷰 분해 + 게이트 성능·래칫 강화"
+    ]
+  },
+  {
     "version": "v20261013-24f346e",
     "date": "2026-10-13",
     "notes": [
@@ -154,13 +165,6 @@
       "[리팩터링·reader] textbook-reader 분할 — render·loader·progress 모듈 추출",
       "[기능·check] pre-push 적응형 게이트 — 변경 유형별 필요 단계만 실행",
       "[테스트·e2e] AN-10 개념 식별자 환산 실측 — 레거시·신형 cid 병합"
-    ]
-  },
-  {
-    "version": "v20261012-35ea90f",
-    "date": "2026-10-12",
-    "notes": [
-      "리더 북마크 콘텐츠 키 전환 — 위치 인덱스 교재 의존 해소 (TR-27)"
     ]
   }
 ]
