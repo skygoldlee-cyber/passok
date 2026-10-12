@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 교재 좌표 비의존 정적 게이트 (ID-05)
+
+- **신규 `tools/check/check_position_independence.js` + `check:posind`**: src/·tools/build/ 전수 스캔 — 위치 좌표(라인 번호·`*Idx`/`*index`/`*lineNo`/`scrollTop` 변수)를 식별자·키 lvalue(R1)·bare L#### 리터럴(R2)·영속 저장 키 인자(R3)로 쓰는 패턴을 오류 차단. 기존 로직 수정·신규 로직이 AN-10(§앵커)·TR-27(콘텐츠 북마크 키)로 제거한 결함 유형을 재도입하지 못하도록 기계화
+- **면제 경계**: 표시층 `#L`/`(LNN)` 인용 텍스트·마이그레이션 독자의 `L\d` 파싱·`cache*` 세션 캐시는 대상 외; 설계상 정당한 위치 키(GLOSSARY_INDEX 조회·생성 키, 통합모의고사 순번 id, 리포트 표시)만 사유 기재 허용 목록 등록 — 미분류는 실패
+- 등록: `check:all`·`check:ci`·CI 워크플로·pre-push logic tier (전체 10단계). 유닛 9건 — R1·R2·R3 탐지/오탐 경계 (마크업 `id=`·콘텐츠 키·표시 접두)
+
 ## 2026-10-12 리더 북마크 콘텐츠 키 전환 (TR-27)
 
 - **문제**: `readerBookmarks` 키가 위치 인덱스(`subja_0_3`) — 교재 편집으로 섹션이 밀리면 북마크가 다른 섹션을 조용히 표시 (구 conceptId와 동일 결함 유형)
