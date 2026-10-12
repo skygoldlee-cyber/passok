@@ -7,6 +7,10 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 학습안내서·사용자 매뉴얼 — 유사 진술 기능 반영
+
+- 취약 진술 리뷰 설명에 "유사" 토글(의미 유사 진술·유사도%·재시도 연결) 문구 추가 — 학습안내서 기능 표 2곳 + user_manual 취약 리뷰 표 1행, 갱신 메타 사유 병기. docs_md 번들 재생성
+
 ## 2026-10-12 임베딩 번들 실배포 연동 + 유사 진술 UI — SEM-01~05 구현
 
 - **파이프라인 → `{dataRoot}/embeddings/` 산출** (`build_embeddings.py`): `npm run build:embeddings`로 manifest.js(EMB_MANIFEST: 모델·files·inputs sha1)·neighbors.js(EMB_NEIGHBORS: adj+texts+sameText)·과목별 `vectors_stmt_subjectN.js`·`vectors_question.js` 생성 — cosmetic 기준 벡터 3.1MB+이웃 2.2MB. 이웃 인덱스에 PoC 보완점 반영: 동일 정규화 텍스트 중복 제거(`sameText` 맵으로 별도 보존)·정규화 12자 미만 단문 후보 제외
