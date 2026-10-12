@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261012-e6fa63e",
+    "date": "2026-10-12",
+    "notes": [
+      "[문서·textbook] 판본 문서 검토일 추가 갱신 — SVG 교체 무영향 확인",
+      "[문서·textbook] 판본:textbook 문서 검토일 갱신 — 마인드맵 SVG 교체 무영향 확인",
+      "[content·textbook] 과목 개요 마인드맵을 정적 SVG로 교체"
+    ]
+  },
+  {
     "version": "v20261012-71987b1",
     "date": "2026-10-12",
     "notes": [
@@ -135,15 +144,6 @@
     "date": "2026-10-10",
     "notes": [
       "[문서·scope] 문서 계층 platform↔exam 분리 + 범위·판본 헤더 체계 도입"
-    ]
-  },
-  {
-    "version": "v20261006-84d6c87",
-    "date": "2026-10-06",
-    "notes": [
-      "[문서·trace] TRACE_MATRIX 재생성 — 신규 문서 헤더 반영",
-      "[문서·ref] 개발자 온보딩 문서 3종 + 참조자료 PDF 외부화 런북",
-      "[리팩터링·views] dashboard.js 분리 + 품질 게이트·테스트 개선 일괄"
     ]
   }
 ]
