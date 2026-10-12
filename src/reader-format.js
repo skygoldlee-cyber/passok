@@ -7,7 +7,7 @@ import { parseMarkdown } from './markdown-parser.js';
 import { contentPath } from './exam-context.js';
 import { PATHS, normalizeRefPath } from './paths.js';
 import { escapeHTML } from './sanitize.js';
-import { resolveRefPath, getRefTables } from './pdf-registry.js';
+import { resolveRefPath, getRefTables, refDocDisplayName } from './pdf-registry.js';
 import { getGlossaryEntry } from './glossary-query.js';
 import { lawUrlFor } from './law-links.js';
 
@@ -173,6 +173,18 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
         ),
     );
 
+    // 참조자료 과목별 MD 링크(법령고시 ref_md·원료 DB 외 — 통합 정리·생리 등 직접 저작 문서)
+    // → 앱 내 MD 뷰어로 열기. 미변환 시 파일명 라벨 + 페이지 기준 상대경로(404)로 노출됨.
+    html = html.replace(
+        /<a href="((?:\.\.\/)?참조자료\/(?!ref_md\/|원료\/)[^"]+\.md)">([^<]+)<\/a>/g,
+        (match, rawPath, linkText) => {
+            const absPath = normalizeRefPath(rawPath);
+            const fileName = decodeURIComponent(rawPath.split('/').pop() || '');
+            const displayName = refDocDisplayName(fileName) || linkText.replace(/\.md$/i, '');
+            return `<a href="#" data-ref-md="${escapeHTML(absPath)}" class="source-link"><i class="fa-solid fa-file-lines"></i> ${escapeHTML(displayName)}</a>`;
+        }
+    );
+
     // 원료 DB MD 파일 링크 → 앱 내 HTML 뷰어로 열기
     // 마크다운 파서가 [text](../참조자료/원료/....md)를 <a href="../참조자료/원료/....md">text</a>로 변환한 후 처리
     html = html.replace(
@@ -228,6 +240,10 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             return match;
         }
     );
+
+    // 유지보수 QA 스탬프 '최종 확인: ...' — 개발 검수 정보이므로 사용자 렌더에서 제거
+    // (소스 md에는 유지 — 법령 대조 추적용). 📌출처 라인 말미의 '| 최종 확인: ...' 제거
+    html = html.replace(/\|?\s*<strong>최종 확인<\/strong>\s*:[^|<]*/g, '');
 
     // 페이지 참조 제거: 다양한 p.NN 패턴 정리
     // mermaid 블록을 플레이스홀더로 보호 (내부 p.NN 패턴이 손상되는 것 방지)

@@ -22,7 +22,7 @@
 //
 import { escapeHTML } from './sanitize.js';
 import { parseMarkdown } from './markdown-parser.js';
-import { resolveRefPath } from './pdf-registry.js';
+import { resolveRefPath, refDocDisplayName } from './pdf-registry.js';
 import { contentPath, dataPath } from './exam-context.js';
 import { getJSON, setJSON } from './storage.js';
 import { STORAGE_KEYS } from './storage-keys.js';
@@ -257,6 +257,22 @@ body.exam-open{overflow:hidden;}
         _resumeTimer = setTimeout(() => chip.classList.add('is-hidden'), 8000);
     }
 
+    // 인용 링크 라벨의 내부 좌표(L####)·파일명을 사용자 표시명으로 정리
+    function _friendlyLinkLabel(label, fileName) {
+        const lbl = String(label || '').trim();
+        if (/L\d/.test(lbl)) {
+            const base = lbl.replace(/:?\s*L\d+(?:\s*[,~\-]\s*L?\d+)*$/, '').trim();
+            if (base === '교재') return '교재 원문';
+            return base || '원문 보기';
+        }
+        if (/\.md$/i.test(lbl)) {
+            const pretty = refDocDisplayName(lbl) || refDocDisplayName(fileName)
+                || lbl.replace(/\.md$/i, '').replace(/\([^)]*\)/g, '').replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
+            return pretty || lbl;
+        }
+        return lbl;
+    }
+
     function _renderBody(title, bodyHtml, mdPath) {
         const el = _ensureOverlay();
         el.querySelector('#exam-ov-title').textContent = title;
@@ -297,10 +313,32 @@ body.exam-open{overflow:hidden;}
             }
         });
 
+        // 크로스 과목 링크(subj:key#chNN) → 교재리더 뷰로 이동
+        // (미처리 시 href="subj:..."가 그대로 남아 죽은 링크가 됨)
+        article.querySelectorAll('a[href]').forEach(a => {
+            const href = a.getAttribute('href') || '';
+            const m = href.match(/^subj:([a-z]+)(?:#(ch\d+))?$/);
+            if (!m) return;
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                close();
+                Promise.all([
+                    import('./views/navigation.js'),
+                    import('./views/textbook-reader.js')
+                ]).then(([nav, reader]) => {
+                    nav.switchView('textbook-reader-view');
+                    reader.openSubjectChapter(m[1], m[2] || '');
+                });
+            });
+        });
+
         // 교재 인용 링크(../교재/.../*.md#LNN) 클릭 → 오버레이 내에서 교재 열기
         article.querySelectorAll('a[href]').forEach(a => {
             const href = a.getAttribute('href') || '';
             if (!/\.md(#L(\d+))?$/i.test(href)) return;
+            // 좌표·파일명 라벨 정리 — '교재: L237'→'교재 원문', '문서명: L495'→'문서명',
+            // 'L228'→'원문 보기', 'xxx(제N호).md'→등록 표시명 (내부 좌표는 사용자 정보 아님)
+            a.textContent = _friendlyLinkLabel(a.textContent || '', href.split('/').pop() || '');
             a.addEventListener('click', (e) => {
                 e.preventDefault();
                 // 현재 문제집 경로를 기준으로 상대 경로 해석
@@ -588,6 +626,7 @@ body.exam-open{overflow:hidden;}
         close,
         isOpen,
         _mdToHtml,  // 테스트용 노출
+        _friendlyLinkLabel,  // 테스트용 노출
         _clearCache: _cache.clear
     };
 })();
