@@ -326,7 +326,11 @@ passory/
 │   │           ├── formula-io.js       # 인쇄·JSON 보내기/가져오기
 │   │           ├── formula-recommend.js # 추천 베이스/원료 패널·맞춤 규칙 UI
 │   │           ├── formula-fields.js   # 처방 작업대 필드 블록
-│   │           ├── formula-batch.js    # 조제 기록(배치) 목록·폼·상세
+│   │           ├── formula-batch.js    # 조제 기록(배치) 목록·상세·저장 (폼은 batch-form)
+│   │           ├── formula-batch-form.js # 배치 신규·보정 폼 (QC·위생·LOT·기한 제안)
+│   │           ├── formula-prod-state.js # 기성품 폼 공유 상태 (prodForm·칩 렌더)
+│   │           ├── formula-prod-vision.js # 기성품 사진 인식 (LLM 초안→칩 검토)
+│   │           ├── formula-prod-detail.js # 기성품 상세·교차·비교
 │   │           ├── formula-customer.js # 고객 관리 패널
 │   │           ├── formula-material.js # 원료 장부 패널 (LOT 추적)
 │   │           ├── formula-adverse.js  # 소비자 이상사례 기록 패널 (FO-59)

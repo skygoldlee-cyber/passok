@@ -255,13 +255,21 @@ function main() {
     const errors = [];
     const warnings = [];
 
+    // 파일 소스 1회 판독 캐시 — 아래 5개 검증 패스가 동일 소스를 공유한다.
+    const srcCache = new Map();
+    const readSrc = (f) => {
+        let s = srcCache.get(f);
+        if (s === undefined) { s = fs.readFileSync(f, 'utf8'); srcCache.set(f, s); }
+        return s;
+    };
+
     // 각 파일의 exports를 미리 수집
     const moduleExports = new Map(); // filepath → Set of export names
     const moduleStarReExports = new Map(); // filepath → array of star re-export targets
     const moduleNamedReExports = new Map(); // filepath → export { A } from './x' 소비 목록
 
     for (const file of files) {
-        const src = fs.readFileSync(file, 'utf8');
+        const src = readSrc(file);
         const { exports, starReExports, namedReExports } = parseExports(src);
         moduleExports.set(file, exports);
         moduleStarReExports.set(file, starReExports);
@@ -270,7 +278,7 @@ function main() {
 
     // 각 파일의 imports를 검증
     for (const file of files) {
-        const src = fs.readFileSync(file, 'utf8');
+        const src = readSrc(file);
         const imports = parseImports(src);
         const importerDir = path.dirname(file);
         const relFile = path.relative(ROOT, file).replace(/\\/g, '/');
@@ -415,7 +423,7 @@ function main() {
         }
     };
     for (const file of files) {
-        const clean = stripComments(fs.readFileSync(file, 'utf8'));
+        const clean = stripComments(readSrc(file));
         for (const m of clean.matchAll(/\b(?:window|globalThis)\.([A-Za-z_$][\w$]*)\s*=/g)) {
             windowPublished.add(m[1]);
         }
@@ -455,7 +463,7 @@ function main() {
     const TYPEOF_RE = /\btypeof\s+([A-Za-z_$][\w$]*)/g;
     const LOCAL_DECL_RE = /\b(?:function\*?|const|let|var|class)\s+([A-Za-z_$][\w$]*)/g;
     for (const file of files) {
-        const src = fs.readFileSync(file, 'utf8');
+        const src = readSrc(file);
         const clean = stripComments(src);
         const bound = new Set();
         for (const imp of parseImports(src)) {
@@ -489,7 +497,7 @@ function main() {
     const cleanDynPath = p => p.split('?')[0].replace(/\$\{[^}]*\}/g, '');
     const allImports = new Set(); // "filepath::name" 형태
     for (const file of files) {
-        const src = fs.readFileSync(file, 'utf8');
+        const src = readSrc(file);
         const imports = parseImports(src);
         const importerDir = path.dirname(file);
         for (const imp of imports) {
@@ -594,31 +602,48 @@ function main() {
         return false;
     }
 
-    // 테스트 파일이 해당 모듈 export를 사용하는지 (정적 + 동적 import)
-    function testFileUses(tf, file, name) {
-        const tsrc = fs.readFileSync(tf, 'utf8');
-        const tdir = path.dirname(tf);
-        for (const timp of parseImports(tsrc)) {
-            const tresolved = resolveModule(tdir, timp.modulePath);
-            if (tresolved === file && timp.names.includes(name)) return true;
-        }
-        // 동적 import: 모듈을 await import()하고 이름이 본문에 등장하면 사용으로 간주
-        const nameRe = new RegExp('\\b' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
-        let dm;
-        DYN_IMPORT_RE.lastIndex = 0;
-        while ((dm = DYN_IMPORT_RE.exec(tsrc)) !== null) {
-            if (resolveModule(tdir, cleanDynPath(dm[1])) === file && nameRe.test(tsrc)) {
-                return true;
+    // 테스트 파일의 모듈 사용 목록을 1회 전수 집계한다.
+    // export 이름별로 전체 테스트를 재스캔하면 O(exports × tests) 판독이 되어
+    // 이 게이트 실행시간의 대부분을 소비하므로, "filepath::name" 집합으로 선계산한다.
+    const testDir = path.join(ROOT, 'tests');
+    const usedInTests = new Set();
+    if (fs.existsSync(testDir)) {
+        const fileMeta = files.map(f => ({
+            file: f,
+            relPath: path.relative(ROOT, f).replace(/\\/g, '/'),
+            baseName: path.basename(f)
+        }));
+        for (const tf of collectJsFiles(testDir)) {
+            const tsrc = fs.readFileSync(tf, 'utf8');
+            const tdir = path.dirname(tf);
+            for (const timp of parseImports(tsrc)) {
+                const tresolved = resolveModule(tdir, timp.modulePath);
+                if (!tresolved) continue;
+                for (const name of timp.names) usedInTests.add(tresolved + '::' + name);
+            }
+            // 동적 import: 모듈을 await import()하고 이름이 본문에 등장하면 사용으로 간주
+            let dm;
+            DYN_IMPORT_RE.lastIndex = 0;
+            while ((dm = DYN_IMPORT_RE.exec(tsrc)) !== null) {
+                const tresolved = resolveModule(tdir, cleanDynPath(dm[1]));
+                if (!tresolved) continue;
+                for (const name of (moduleExports.get(tresolved) || [])) {
+                    if (usedInTests.has(tresolved + '::' + name)) continue;
+                    const nameRe = new RegExp('\\b' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+                    if (nameRe.test(tsrc)) usedInTests.add(tresolved + '::' + name);
+                }
+            }
+            // 계산 경로 폴백: import(pathToFileURL(join(ROOT,'src/x.js')).href) 등
+            // 모듈 파일명을 직접 언급하고 이름이 본문에 있으면 사용으로 간주
+            for (const fm of fileMeta) {
+                if (!tsrc.includes(fm.relPath) && !tsrc.includes(fm.baseName)) continue;
+                for (const name of (moduleExports.get(fm.file) || [])) {
+                    if (usedInTests.has(fm.file + '::' + name)) continue;
+                    const nameRe = new RegExp('\\b' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+                    if (nameRe.test(tsrc)) usedInTests.add(fm.file + '::' + name);
+                }
             }
         }
-        // 계산 경로 폴백: import(pathToFileURL(join(ROOT,'src/x.js')).href) 등
-        // 모듈 파일명을 직접 언급하고 이름이 본문에 있으면 사용으로 간주
-        const relPath = path.relative(ROOT, file).replace(/\\/g, '/');
-        const baseName = path.basename(file);
-        if ((tsrc.includes(relPath) || tsrc.includes(baseName)) && nameRe.test(tsrc)) {
-            return true;
-        }
-        return false;
     }
 
     for (const file of files) {
@@ -631,10 +656,9 @@ function main() {
             if (starTargets.length > 0) continue;
             if (!allImports.has(file + '::' + name)) {
                 // 의도된 공개 API (keep-export 주석) 억제
-                if (isKeptExport(fs.readFileSync(file, 'utf8'), name)) continue;
+                if (isKeptExport(readSrc(file), name)) continue;
                 // 테스트 파일에서 import하는지 확인 (정적 + await import())
-                const testDir = path.join(ROOT, 'tests');
-                if (fs.existsSync(testDir) && collectJsFiles(testDir).some(tf => testFileUses(tf, file, name))) {
+                if (usedInTests.has(file + '::' + name)) {
                     continue;
                 }
                 warnings.push(
