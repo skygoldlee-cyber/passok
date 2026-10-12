@@ -15,12 +15,28 @@
  * // @spec none (검증 실행기)
  */
 const { spawn } = require('child_process');
+const path = require('path');
 
 function runOne(step, cwd) {
     return new Promise((resolve) => {
         const started = Date.now();
         const done = (status, output) =>
             resolve({ step, ok: status === 0, status, output, ms: Date.now() - started });
+        // 인프로세스 단계 — 모듈이 run({args,cwd}) → {status,output} 계약을
+        // export하면 spawn을 건너뛰고 직접 호출한다 (노드 기동 비용 제거).
+        // 계약: 출력·종료코드를 반환값으로 돌려주고 process.exit을 호출하지 않는 것.
+        if (step.inProcess) {
+            (async () => {
+                try {
+                    const mod = require(path.resolve(cwd, step.inProcess));
+                    const r = await mod.run({ args: step.args.slice(1), cwd });
+                    done(r.status ?? (r.ok === false ? 1 : 0), r.output || '');
+                } catch (err) {
+                    done(-1, String(err && err.stack || err));
+                }
+            })();
+            return;
+        }
         let child;
         try {
             child = spawn(step.bin, step.args, { cwd, shell: step.shell });
@@ -57,7 +73,7 @@ async function runBatch(batch, jobs, cwd, failFast, onResult, results) {
  * @param {Array} steps — {bin,args,shell,serial?,...}
  * @param {{jobs?:number, failFast?:boolean, cwd?:string, onResult?:Function}} opts
  */
-async function runSteps(steps, { jobs = 3, failFast = false, cwd, onResult } = {}) {
+async function runSteps(steps, { jobs = 3, failFast = false, cwd = process.cwd(), onResult } = {}) {
     const results = new Array(steps.length);
     let failed = false;
     let i = 0;
