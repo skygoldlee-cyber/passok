@@ -71,6 +71,7 @@ const CONTENT_STEPS = [
   nodeStep('content:combo', 'tools/check/check_combo_pilot.js', '드릴', '복수정답형(combo) 드릴 데이터 정합성', { content: true }),
   nodeStep('content:id-migration', 'tools/build/build_id_migration.js', 'ID이관', '카드/퀴즈 ID 스냅샷 ↔ 콘텐츠 (build:data 누락·진도 손실 감지)', { args: ['--check'], content: true }),
   nodeStep('content:datafresh', 'tools/check/check_data_freshness.js', '데이터신선도', 'data/·생성물 ↔ 원본 (빌드 체인 실행 후 git diff — build:data 누락 감지)', { content: true, serial: true }),
+  nodeStep('content:linklint', 'tools/check/check_link_lint.js', '링크', '렌더 출력 링크 린트 — 원시 경로·좌표/파일명 라벨·QA 스탬프·미승인 외부 링크 노출 탐지', { content: true }),
   nodeStep('content:parser', 'tools/check/check_parser_parity.js', '파서', '빌드 파서 ↔ 런타임 파서 출력 등가성'),
   nodeStep('content:imports', 'tools/check/check_imports.js', '임포트', 'src/ ES 모듈 import/export 교차 검증'),
   nodeStep('content:posind', 'tools/check/check_position_independence.js', '규칙', '교재 좌표 비의존 — 위치 기반 식별자·저장 키 정적 탐지 (ID-05)', { diffScoped: true, inProcess: true }),

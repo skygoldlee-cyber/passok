@@ -192,7 +192,8 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
         (match, rawPath, linkText) => {
             const absPath = normalizeRefPath(rawPath);
             const fileName = decodeURIComponent(rawPath.split('/').pop() || '');
-            return `<a href="#" data-ref-html="${escapeHTML(absPath)}" class="source-link"><i class="fa-solid fa-file-lines"></i> ${escapeHTML(linkText)}</a>${lawExtLink(fileName, 'ref-law-ext', '근거 고시', '근거 고시 원문')}`;
+            const displayName = refDocDisplayName(fileName) || linkText.replace(/\.md$/i, '');
+            return `<a href="#" data-ref-html="${escapeHTML(absPath)}" class="source-link"><i class="fa-solid fa-file-lines"></i> ${escapeHTML(displayName)}</a>${lawExtLink(fileName, 'ref-law-ext', '근거 고시', '근거 고시 원문')}`;
         }
     );
 
