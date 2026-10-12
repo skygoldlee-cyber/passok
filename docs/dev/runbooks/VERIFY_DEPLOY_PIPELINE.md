@@ -55,8 +55,10 @@ flowchart TD
 | `npm run check:all:quick` | 빠른 점검 | 위와 동일하되 DOM 테스트 생략 |
 | `npm run check:ci` | **CI 로컬 재현** | CI와 동일 순서 — hooks 확인 · lint · types · imports · docs · docsync · specrefs · trace · html · content-only · unit test · verify:assets · parser |
 | `npm run check:content` | 콘텐츠 변경 후 통합 검증 | 인용 · 귀속 · 레이아웃 · 드릴 · ID이관 · 데이터신선도 · 문서번들 · 파서 · 임포트 · 자산 · 테스트 |
+| `npm run check` | 통합 실행기 직접 호출 | `--preset all\|ci\|content\|docs` · `--step <id>` · `--list` |
 
-> `check:all -- --quick`은 npm 인자 전달 방식 때문에 플래그가 도달하지 않는다 — 반드시 `check:all:quick` 사용.
+> 모든 check 프리셋은 `tools/check/run.js`(실행기) + `tools/check/steps.js`(단계 레지스트리)로 실행된다 — `check:all`·`check:ci`·`check:content`·`check:docs`는 프리셋 alias이며, 개별 `check:*` 스크립트는 단독 검사용으로 유지된다. 신규 게이트는 steps.js에만 등록하면 프리셋·parity·문서 정합이 자동 추적된다.
+> `--quick`·`--content-only`·`--build` 플래그는 `npm run check -- --preset all --quick`처럼 run.js로 직접 전달된다 (npm 인자 전달 문제는 `check:all:quick` 등 alias로 해소).
 > `check:ci`에는 **coverage · E2E · `npm audit`** 가 없다 (CI 전용). 이 3개를 로컬에서 확인하려면 `npm run coverage`·`npm run test:e2e`를 별도 실행.
 
 ## 3. 생성물 신선도 게이트 (핵심 구조)
