@@ -15,7 +15,8 @@
 - **exam-viewer.js**: `#slug` 앵커 링크 인터셉트(오버레이 내 스크롤 — 참조자료 핵심요약 문서의 TOC 링크 복구) + `_titleFromPath`에 `refDocDisplayName` 폴백 추가(`1.cosmetic-law` 같은 파일명 대신 '화장품법 통합 정리' 표시)
 - **manual-viewer.js**: `#slug` 앵커 early-return을 스크롤 인터셉트로 변경(user_manual §8.5·학습안내서 매핑표 링크 복구)
 - **학습안내서/user_manual**: 저장소 경로·파일명 인라인 코드 표기를 사용자 관점 표현으로 교체("교재 리더 → 1과목", "참조자료 → 색소 원료 목록" 등), `L###` 표기 → "교재 원문 링크", 에디터 `Ctrl+G` 안내 제거
-- **테스트**: ref-link-labels.test.js에 `_titleFromPath` 표시명·`slugifyHeading`·`scrollToHeadingSlug` 5건 추가 (총 19건)
+- **테스트**: ref-link-labels.test.js에 `_titleFromPath` 표시명·`slugifyHeading`·`scrollToHeadingSlug`·`<url>` 링크 7건 추가 (총 21건)
+- **재검증 추가 수정**: ① markdown-parser에 `](<url>)` 전용 패스 추가 — 괄호 포함 ref_md 파일명(`화장품법(법률)(제N호)…`) 인용 링크 142건이 URL 내부 `)`에서 잘려 `&lt;` 접두 href + 잔여 경로가 본문 텍스트로 노출되던 파손 해소 ② exam-viewer `.md` 인터셉트를 `.md#-섹션슬러그`까지 확장 — 참조자료 문서 간 링크(`2과목 Ch03 — 자외선차단제 한도` 등)가 대상 문서를 열고 해당 헤딩으로 스크롤
 
 ## 2026-10-12 참조 링크 사용자 표시 정리 — 내부 좌표·파일명 라벨 제거
 
