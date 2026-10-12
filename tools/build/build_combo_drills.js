@@ -231,14 +231,19 @@ function extractConceptId(qid, anchor) {
   return anchor ? `§${anchor}` : `q:${qid}`;
 }
 
-/** explanation에서 '교재: Lxxxx'·법령 근거를 추출해 citation 생성 */
+/** explanation의 근거 정보로 citation 생성 — 내부 좌표(L####)는 표기하지 않음 */
 function buildCitation(q, examKey, explanation) {
   const qNum = (q.id.match(/_q(\d+)/) || [])[1] || q.id;
   const srcLabel = `과목${SUBJECT_NUM[examKey]} 문제은행 Q${qNum}`;
   const exp = String(explanation || '');
-  const refs = [...exp.matchAll(/교재:\s*L[\d,~\- ]+/g)].map(m => m[0].replace(/\s+/g, ' ').trim());
+  const hasTbRef = /교재\s*근거|교재\s*:/.test(exp);
+  const hasLawRef = /법령\s*근거/.test(exp);
   const lawRefs = [...exp.matchAll(/화장품법\s*제[\d조의]+[\d항호]*/g)].map(m => m[0]);
-  const uniq = [...new Set([...refs, ...lawRefs])].slice(0, 3);
+  const uniq = [...new Set([
+    hasTbRef ? '교재 근거' : '',
+    hasLawRef ? '법령 근거' : '',
+    ...lawRefs
+  ])].filter(Boolean).slice(0, 3);
   return uniq.length
     ? `📖 ${uniq.join(' · ')} (출처: ${srcLabel})`
     : `📖 출처: ${srcLabel}`;

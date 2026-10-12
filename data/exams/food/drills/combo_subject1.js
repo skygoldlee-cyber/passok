@@ -1,12 +1,12 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/food/exams/subject1.c117438b.js — mode: fact(명제 조합) 1문 / answer(정답 조합) 7문
+// 원본: data/exams/food/exams/subject1.e43b02c1.js — mode: fact(명제 조합) 1문 / answer(정답 조합) 7문
 var COMBO_DRILLS_subject1 = [
  {
   "id": "sanitation_combo_7ebbb0",
   "subject": 1,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L57 (출처: 과목1 문제은행 Q1)",
+  "citation": "📖 교재 근거 (출처: 과목1 문제은행 Q1)",
   "stem": "식품위생법 제1조에서 명시한 이 법의 목적으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
@@ -87,7 +87,7 @@ var COMBO_DRILLS_subject1 = [
    "수치"
   ],
   "derivedFrom": "subject1_q1",
-  "explain": "📖 교재 근거 (교재: L57):\n- 제1조(목적): 식품으로 인한 위생상의 위해 방지 + 식품의 영양·품질 향상 + 올바른 정보 제공 → 국민보건 증진이 궁극 목적 🎯",
+  "explain": "📖 교재 근거:\n- 제1조(목적): 식품으로 인한 위생상의 위해 방지 + 식품의 영양·품질 향상 + 올바른 정보 제공 → 국민보건 증진이 궁극 목적 🎯",
   "source": "식품위생법의 이해 (8제)",
   "answer": "2"
  },
@@ -96,7 +96,7 @@ var COMBO_DRILLS_subject1 = [
   "subject": 1,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L63 (출처: 과목1 문제은행 Q2)",
+  "citation": "📖 교재 근거 (출처: 과목1 문제은행 Q2)",
   "stem": "식품위생법 제2조에서 정의하는 \"식품\"에 해당하지 않는 것을 모두 고른 것은?",
   "statements": [
    {
@@ -178,7 +178,7 @@ var COMBO_DRILLS_subject1 = [
    "정의"
   ],
   "derivedFrom": "subject1_q2",
-  "explain": "📖 교재 근거 (교재: L63):\n- 🧠 \"식품\" 이란 의약으로 섭취하는 것을 제외한 모든 음식물을 말한다 (제2조제1호).",
+  "explain": "📖 교재 근거:\n- 🧠 \"식품\" 이란 의약으로 섭취하는 것을 제외한 모든 음식물을 말한다 (제2조제1호).",
   "source": "식품위생법의 이해 (8제)",
   "answer": "3"
  },
@@ -187,7 +187,7 @@ var COMBO_DRILLS_subject1 = [
   "subject": 1,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L66 (출처: 과목1 문제은행 Q3)",
+  "citation": "📖 교재 근거 (출처: 과목1 문제은행 Q3)",
   "stem": "식품위생법상 \"집단급식소\"의 정의로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
@@ -270,7 +270,7 @@ var COMBO_DRILLS_subject1 = [
    "정의"
   ],
   "derivedFrom": "subject1_q3",
-  "explain": "📖 교재 근거 (교재: L66):\n- ⭐ \"집단급식소\" 란 학교·병원·상사·기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것 (제2조제9호) 🎯",
+  "explain": "📖 교재 근거:\n- ⭐ \"집단급식소\" 란 학교·병원·상사·기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것 (제2조제9호) 🎯",
   "source": "식품위생법의 이해 (8제)",
   "answer": "4"
  },
@@ -279,7 +279,7 @@ var COMBO_DRILLS_subject1 = [
   "subject": 1,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L88 (출처: 과목1 문제은행 Q4)",
+  "citation": "📖 교재 근거 (출처: 과목1 문제은행 Q4)",
   "stem": "식품위생법 제4조에 따라 판매 또는 판매할 목적의 제조·수입 등이 금지되는 식품이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
@@ -360,7 +360,7 @@ var COMBO_DRILLS_subject1 = [
    "수치"
   ],
   "derivedFrom": "subject1_q4",
-  "explain": "📖 교재 근거 (교재: L88):\n| 제1호 | 부패·변질·미숙한 식품으로 인체 건강 위해 우려 있는 것 |\n| 제2호 | 유독한 물질이 들어 있거나 닿은 것 등 |",
+  "explain": "📖 교재 근거:\n| 제1호 | 부패·변질·미숙한 식품으로 인체 건강 위해 우려 있는 것 |\n| 제2호 | 유독한 물질이 들어 있거나 닿은 것 등 |",
   "source": "식품위생법의 이해 (8제)",
   "answer": "2"
  },
@@ -369,7 +369,7 @@ var COMBO_DRILLS_subject1 = [
   "subject": 1,
   "type": "combo",
   "points": 4,
-  "citation": "📖 출처: 과목1 문제은행 Q5",
+  "citation": "📖 법령 근거 (출처: 과목1 문제은행 Q5)",
   "stem": "식품공전(식품의 기준 및 규격 고시)의 법령상 근거 조문으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
@@ -462,7 +462,7 @@ var COMBO_DRILLS_subject1 = [
   "subject": 1,
   "type": "combo",
   "points": 4,
-  "citation": "📖 출처: 과목1 문제은행 Q6",
+  "citation": "📖 법령 근거 (출처: 과목1 문제은행 Q6)",
   "stem": "다음 중 식품위생법 제37조에 따른 영업의 허가에 관한 설명으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
@@ -556,7 +556,7 @@ var COMBO_DRILLS_subject1 = [
   "subject": 1,
   "type": "combo",
   "points": 4,
-  "citation": "📖 출처: 과목1 문제은행 Q7",
+  "citation": "📖 법령 근거 (출처: 과목1 문제은행 Q7)",
   "stem": "식품위생법 제44조에 따라 시장·군수·구청장이 명할 수 있는 영업정지 처분의 최대 기간에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
@@ -651,7 +651,7 @@ var COMBO_DRILLS_subject1 = [
   "subject": 1,
   "type": "combo",
   "points": 4,
-  "citation": "📖 출처: 과목1 문제은행 Q8",
+  "citation": "📖 법령 근거 (출처: 과목1 문제은행 Q8)",
   "stem": "식품위생법 제4조를 위반하여 위해식품을 판매할 목적으로 제조·진열한 자에 대한 벌칙으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {

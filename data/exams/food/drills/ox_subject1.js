@@ -1,5 +1,5 @@
 // 자동 생성된 O/X 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_ox_drills.js)
-// 원본: data/exams/food/exams/subject1.c117438b.js — mode: fact(명제 판정) 1문 / answer(정답 판정) 7문
+// 원본: data/exams/food/exams/subject1.e43b02c1.js — mode: fact(명제 판정) 1문 / answer(정답 판정) 7문
 var OX_DRILLS_subject1 = [
  {
   "id": "ox-01-0001",
@@ -13,7 +13,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_5d038d",
   "derivedFrom": "subject1_q1#1",
-  "explain": "📖 교재 근거 (교재: L57):\n- 제1조(목적): 식품으로 인한 위생상의 위해 방지 + 식품의 영양·품질 향상 + 올바른 정보 제공 → 국민보건 증진이 궁극 목적 🎯",
+  "explain": "📖 교재 근거:\n- 제1조(목적): 식품으로 인한 위생상의 위해 방지 + 식품의 영양·품질 향상 + 올바른 정보 제공 → 국민보건 증진이 궁극 목적 🎯",
   "tags": [
    "정답판정",
    "수치"
@@ -32,7 +32,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_ea0947",
   "derivedFrom": "subject1_q1#2",
-  "explain": "📖 교재 근거 (교재: L57):\n- 제1조(목적): 식품으로 인한 위생상의 위해 방지 + 식품의 영양·품질 향상 + 올바른 정보 제공 → 국민보건 증진이 궁극 목적 🎯",
+  "explain": "📖 교재 근거:\n- 제1조(목적): 식품으로 인한 위생상의 위해 방지 + 식품의 영양·품질 향상 + 올바른 정보 제공 → 국민보건 증진이 궁극 목적 🎯",
   "tags": [
    "정답판정",
    "수치"
@@ -51,7 +51,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_2cf1f0",
   "derivedFrom": "subject1_q1#3",
-  "explain": "📖 교재 근거 (교재: L57):\n- 제1조(목적): 식품으로 인한 위생상의 위해 방지 + 식품의 영양·품질 향상 + 올바른 정보 제공 → 국민보건 증진이 궁극 목적 🎯",
+  "explain": "📖 교재 근거:\n- 제1조(목적): 식품으로 인한 위생상의 위해 방지 + 식품의 영양·품질 향상 + 올바른 정보 제공 → 국민보건 증진이 궁극 목적 🎯",
   "tags": [
    "정답판정",
    "수치"
@@ -70,7 +70,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_cbceed",
   "derivedFrom": "subject1_q1#4",
-  "explain": "📖 교재 근거 (교재: L57):\n- 제1조(목적): 식품으로 인한 위생상의 위해 방지 + 식품의 영양·품질 향상 + 올바른 정보 제공 → 국민보건 증진이 궁극 목적 🎯",
+  "explain": "📖 교재 근거:\n- 제1조(목적): 식품으로 인한 위생상의 위해 방지 + 식품의 영양·품질 향상 + 올바른 정보 제공 → 국민보건 증진이 궁극 목적 🎯",
   "tags": [
    "정답판정",
    "수치"
@@ -89,7 +89,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_351bec",
   "derivedFrom": "subject1_q1#5",
-  "explain": "📖 교재 근거 (교재: L57):\n- 제1조(목적): 식품으로 인한 위생상의 위해 방지 + 식품의 영양·품질 향상 + 올바른 정보 제공 → 국민보건 증진이 궁극 목적 🎯",
+  "explain": "📖 교재 근거:\n- 제1조(목적): 식품으로 인한 위생상의 위해 방지 + 식품의 영양·품질 향상 + 올바른 정보 제공 → 국민보건 증진이 궁극 목적 🎯",
   "tags": [
    "정답판정",
    "수치"
@@ -108,7 +108,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_fa8ce6",
   "derivedFrom": "subject1_q2#1",
-  "explain": "📖 교재 근거 (교재: L63):\n- 🧠 \"식품\" 이란 의약으로 섭취하는 것을 제외한 모든 음식물을 말한다 (제2조제1호).",
+  "explain": "📖 교재 근거:\n- 🧠 \"식품\" 이란 의약으로 섭취하는 것을 제외한 모든 음식물을 말한다 (제2조제1호).",
   "tags": [
    "정답판정",
    "수치",
@@ -128,7 +128,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_149c8d",
   "derivedFrom": "subject1_q2#2",
-  "explain": "📖 교재 근거 (교재: L63):\n- 🧠 \"식품\" 이란 의약으로 섭취하는 것을 제외한 모든 음식물을 말한다 (제2조제1호).",
+  "explain": "📖 교재 근거:\n- 🧠 \"식품\" 이란 의약으로 섭취하는 것을 제외한 모든 음식물을 말한다 (제2조제1호).",
   "tags": [
    "정답판정",
    "수치",
@@ -148,7 +148,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_d5e65e",
   "derivedFrom": "subject1_q2#3",
-  "explain": "📖 교재 근거 (교재: L63):\n- 🧠 \"식품\" 이란 의약으로 섭취하는 것을 제외한 모든 음식물을 말한다 (제2조제1호).",
+  "explain": "📖 교재 근거:\n- 🧠 \"식품\" 이란 의약으로 섭취하는 것을 제외한 모든 음식물을 말한다 (제2조제1호).",
   "tags": [
    "정답판정",
    "수치",
@@ -168,7 +168,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_4e4541",
   "derivedFrom": "subject1_q2#4",
-  "explain": "📖 교재 근거 (교재: L63):\n- 🧠 \"식품\" 이란 의약으로 섭취하는 것을 제외한 모든 음식물을 말한다 (제2조제1호).",
+  "explain": "📖 교재 근거:\n- 🧠 \"식품\" 이란 의약으로 섭취하는 것을 제외한 모든 음식물을 말한다 (제2조제1호).",
   "tags": [
    "정답판정",
    "수치",
@@ -188,7 +188,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_ccc6e7",
   "derivedFrom": "subject1_q2#5",
-  "explain": "📖 교재 근거 (교재: L63):\n- 🧠 \"식품\" 이란 의약으로 섭취하는 것을 제외한 모든 음식물을 말한다 (제2조제1호).",
+  "explain": "📖 교재 근거:\n- 🧠 \"식품\" 이란 의약으로 섭취하는 것을 제외한 모든 음식물을 말한다 (제2조제1호).",
   "tags": [
    "정답판정",
    "수치",
@@ -208,7 +208,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_fa0db2",
   "derivedFrom": "subject1_q3#1",
-  "explain": "📖 교재 근거 (교재: L66):\n- ⭐ \"집단급식소\" 란 학교·병원·상사·기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것 (제2조제9호) 🎯",
+  "explain": "📖 교재 근거:\n- ⭐ \"집단급식소\" 란 학교·병원·상사·기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것 (제2조제9호) 🎯",
   "tags": [
    "정답판정",
    "정의"
@@ -227,7 +227,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_abaf1f",
   "derivedFrom": "subject1_q3#2",
-  "explain": "📖 교재 근거 (교재: L66):\n- ⭐ \"집단급식소\" 란 학교·병원·상사·기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것 (제2조제9호) 🎯",
+  "explain": "📖 교재 근거:\n- ⭐ \"집단급식소\" 란 학교·병원·상사·기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것 (제2조제9호) 🎯",
   "tags": [
    "정답판정",
    "정의"
@@ -246,7 +246,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_9bf605",
   "derivedFrom": "subject1_q3#3",
-  "explain": "📖 교재 근거 (교재: L66):\n- ⭐ \"집단급식소\" 란 학교·병원·상사·기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것 (제2조제9호) 🎯",
+  "explain": "📖 교재 근거:\n- ⭐ \"집단급식소\" 란 학교·병원·상사·기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것 (제2조제9호) 🎯",
   "tags": [
    "정답판정",
    "정의"
@@ -265,7 +265,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_0b9b21",
   "derivedFrom": "subject1_q3#4",
-  "explain": "📖 교재 근거 (교재: L66):\n- ⭐ \"집단급식소\" 란 학교·병원·상사·기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것 (제2조제9호) 🎯",
+  "explain": "📖 교재 근거:\n- ⭐ \"집단급식소\" 란 학교·병원·상사·기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것 (제2조제9호) 🎯",
   "tags": [
    "정답판정",
    "정의"
@@ -284,7 +284,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_92571c",
   "derivedFrom": "subject1_q3#5",
-  "explain": "📖 교재 근거 (교재: L66):\n- ⭐ \"집단급식소\" 란 학교·병원·상사·기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것 (제2조제9호) 🎯",
+  "explain": "📖 교재 근거:\n- ⭐ \"집단급식소\" 란 학교·병원·상사·기업체 등 계속하여 특정 다수인에게 식품을 공급하는 급식시설로서 영리를 목적으로 하지 아니하는 것 (제2조제9호) 🎯",
   "tags": [
    "정답판정",
    "정의"
@@ -303,7 +303,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_7222e8",
   "derivedFrom": "subject1_q4#1",
-  "explain": "📖 교재 근거 (교재: L88):\n| 제1호 | 부패·변질·미숙한 식품으로 인체 건강 위해 우려 있는 것 |\n| 제2호 | 유독한 물질이 들어 있거나 닿은 것 등 |",
+  "explain": "📖 교재 근거:\n| 제1호 | 부패·변질·미숙한 식품으로 인체 건강 위해 우려 있는 것 |\n| 제2호 | 유독한 물질이 들어 있거나 닿은 것 등 |",
   "tags": [
    "정답판정",
    "금지원료",
@@ -323,7 +323,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_f129e0",
   "derivedFrom": "subject1_q4#2",
-  "explain": "📖 교재 근거 (교재: L88):\n| 제1호 | 부패·변질·미숙한 식품으로 인체 건강 위해 우려 있는 것 |\n| 제2호 | 유독한 물질이 들어 있거나 닿은 것 등 |",
+  "explain": "📖 교재 근거:\n| 제1호 | 부패·변질·미숙한 식품으로 인체 건강 위해 우려 있는 것 |\n| 제2호 | 유독한 물질이 들어 있거나 닿은 것 등 |",
   "tags": [
    "정답판정",
    "금지원료",
@@ -343,7 +343,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_c12a6e",
   "derivedFrom": "subject1_q4#3",
-  "explain": "📖 교재 근거 (교재: L88):\n| 제1호 | 부패·변질·미숙한 식품으로 인체 건강 위해 우려 있는 것 |\n| 제2호 | 유독한 물질이 들어 있거나 닿은 것 등 |",
+  "explain": "📖 교재 근거:\n| 제1호 | 부패·변질·미숙한 식품으로 인체 건강 위해 우려 있는 것 |\n| 제2호 | 유독한 물질이 들어 있거나 닿은 것 등 |",
   "tags": [
    "정답판정",
    "금지원료",
@@ -363,7 +363,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_f89002",
   "derivedFrom": "subject1_q4#4",
-  "explain": "📖 교재 근거 (교재: L88):\n| 제1호 | 부패·변질·미숙한 식품으로 인체 건강 위해 우려 있는 것 |\n| 제2호 | 유독한 물질이 들어 있거나 닿은 것 등 |",
+  "explain": "📖 교재 근거:\n| 제1호 | 부패·변질·미숙한 식품으로 인체 건강 위해 우려 있는 것 |\n| 제2호 | 유독한 물질이 들어 있거나 닿은 것 등 |",
   "tags": [
    "정답판정",
    "금지원료",
@@ -383,7 +383,7 @@ var OX_DRILLS_subject1 = [
   "mode": "answer",
   "sid": "sanitation_st_3bfe1a",
   "derivedFrom": "subject1_q4#5",
-  "explain": "📖 교재 근거 (교재: L88):\n| 제1호 | 부패·변질·미숙한 식품으로 인체 건강 위해 우려 있는 것 |\n| 제2호 | 유독한 물질이 들어 있거나 닿은 것 등 |",
+  "explain": "📖 교재 근거:\n| 제1호 | 부패·변질·미숙한 식품으로 인체 건강 위해 우려 있는 것 |\n| 제2호 | 유독한 물질이 들어 있거나 닿은 것 등 |",
   "tags": [
    "정답판정",
    "금지원료",
