@@ -9,6 +9,10 @@
 
 ## 2026-10-12 시각 회귀 Linux 기준선 파이프라인 + 문서 스테일 정리
 
+- **E2E 기존 회귀 4건 수정** (CI 복구 과정에서 노출 — 6주간 audit 단계 차단으로 미실행 상태에서 누적):
+  - `analysis-view.spec.js` 시드 레거시 cid 스테일 — 교재 번호체계 개편으로 `CID_SECTION.law['334']`가 삭제돼 L334→§1.2 환산 불가. 클러스터 병합 테스트의 레거시 좌표를 현존 매핑 `L257→1.2`로 교체. 메인 시드 주석도 현재 매핑 기준으로 갱신 (L350→§1.3→'Chapter 01. 화장품법의 이해' · L422→'2. 위생 유지관리')
+  - `app.spec.js` 설정 패널 max-height 기대값 — 모바일(≤768px)에서 의도된 오버라이드 `calc(var(--app-height) - 5rem - 76px - safe-area)`(하단 탭 바 회피, app-responsive.css)를 반영해 뷰포트 분기
+  - `touch-targets.json` — formula-view 개정 알림 배너 버튼(`notice-banner-link`·`notice-banner-close`) 신규 감지 요소 등록 — 인라인 텍스트 링크·× 닫기는 의도된 소형 컨트롤
 - **.github/workflows/visual-baseline.yml** (신규, workflow_dispatch 전용): ubuntu-latest 러너에서 `--update-snapshots`로 `*-linux.png` 기준선 생성 → 아티팩트 업로드. 픽셀 기준선은 OS·폰트 바인딩이라 CI와 동일 러너에서 생성
 - **visual.spec.js CI 활성화**: linux 기준선 6개 커밋으로 `test.skip(!!CI)` 제거 — 이제 test:e2e가 CI(ubuntu)에서 시각 회귀를 실행. 로컬은 기존 win32 기준선 사용
 - **trace_scan EXCLUDE_DIRS 추가**: gitignore된 `ref-pipeline/embeddings/out/`(로컬 생성 .js 산출물)이 해시 입력 파일 목록에 섞여 Windows 로컬 ↔ Linux CI 간 TRACE_MATRIX 입력 해시가 분기하던 오탐 수정. 로컬·CI 해시 일치 확인 (52aa9089da6229d9)

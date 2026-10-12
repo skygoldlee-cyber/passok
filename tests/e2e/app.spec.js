@@ -109,11 +109,15 @@ test.describe('UI 골격', () => {
                 maxH: parseFloat(cs.maxHeight),
                 h: el.getBoundingClientRect().height,
                 vh: window.innerHeight,
+                vw: window.innerWidth,
             };
         });
         expect(m.overflowY).toBe('auto');
-        // max-height: calc(100dvh - 5rem) — 뷰포트를 넘지 않는 상한
-        expect(Math.abs(m.maxH - (m.vh - 80))).toBeLessThanOrEqual(2);
+        // 데스크톱: max-height: calc(100dvh - 5rem) — 뷰포트를 넘지 않는 상한.
+        // 모바일(≤768px): 하단 탭 바 차지분 76px를 추가로 차감한다 (app-responsive.css —
+        // calc(var(--app-height) - 5rem - 76px - safe-area)).
+        const expectedMaxH = m.vw <= 768 ? m.vh - 80 - 76 : m.vh - 80;
+        expect(Math.abs(m.maxH - expectedMaxH)).toBeLessThanOrEqual(2);
         expect(m.h).toBeLessThanOrEqual(m.maxH);
     });
 
