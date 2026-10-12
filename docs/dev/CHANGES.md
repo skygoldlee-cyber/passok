@@ -7,6 +7,11 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 시각 회귀 Linux 기준선 파이프라인 + 문서 스테일 정리
+
+- **.github/workflows/visual-baseline.yml** (신규, workflow_dispatch 전용): ubuntu-latest 러너에서 `--update-snapshots`로 `*-linux.png` 기준선 생성 → 아티팩트 업로드. 픽셀 기준선은 OS·폰트 바인딩이라 CI와 동일 러너에서 생성. `CI: ''` env로 스펙의 CI 스킵 우회
+- **docs 스테일 정리**: ARCHITECTURE·SPEC·FEATURE_MAP의 formula 파사드+모듈 반영, TESTING.md 파일 목록 전수 복원(누락 45개·카운트 드리프트 30개·id_factory 개명), GATE_MAP 단계 수 정정
+
 ## 2026-10-12 프로젝트 평가 후속 — formula 뷰 분해 · 게이트 타이밍 리포트 · 온보딩 게이트 지도 · 시각 회귀
 
 - **formula.js 분해 (평가 제안 ①)**: 1,408라인 뷰 컨트롤러를 역할별 7모듈로 분해 — `formula-core.js`(공용 상태 `calc`·패널 전환·서브내비·성분 인덱스·`CHECK_BADGE`), `formula-hub.js`(허브 초기화·사업 유형 프로파일·점검/백업 리마인더·고대비), `formula-list.js`(My 포뮬러 목록·CRUD), `formula-calc.js`(배합 계산기 행 렌더·검증·드래프트 자동 저장·저장), `formula-weigh.js`(계량 모드 오버레이), `formula-ing-modal.js`(자가 등록 성분 모달·CRUD), `formula-io.js`(조제 기록지·작업지시서 인쇄·JSON 보내기/가져오기). `formula.js`는 named export 재수출 파사드(64라인)로 남겨 app.js data-click 디스패치·형제 서브모듈·DOM 테스트의 기존 import를 전부 무파손 유지. 의존 방향은 core → (hub·calc) → (list·io) 단방향 — `CHECK_BADGE`를 core로 올려 list⇄calc 순환 회피. formula DOM 154건 + review-drills 12건 통과
