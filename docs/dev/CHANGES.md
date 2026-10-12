@@ -13,6 +13,12 @@
 - **tools/check/check_link_lint.js** (신규, `check:linklint`): 콘텐츠 md를 표면별 실제 렌더러로 통과시킨 뒤 출력 HTML을 검사 — 교재는 `formatSectionContentForReader`, 문제은행·참조자료·문서는 `ExamViewer._mdToHtml` 경로. 탐지: LL-01 원시 상대경로 href / LL-02 `](<url>` 파서 절단(`&lt;` 잔재) / LL-03 좌표·파일명 라벨(`.md` 링크는 `_friendlyLinkLabel` 적용 후 평가) / LL-04 미승인 외부 도메인(allowlist: law.go.kr·mfds 계열·aistudio 등) / LL-05 본문 텍스트 경로 조각 누출 / LL-06 `최종 확인` 스탬프 잔존(교재 표면) / LL-07 스테이징 경로(ref_md_v2·_archive). `content:linklint`로 CONTENT_STEPS 등록 → check:content·check:ci(`--content-only` 경유)에 자동 편입. 스테이징·서사 패치 소스는 스캔 제외
 - **reader-format.js**: `../참조자료/원료/*.md` 링크 라벨이 원본 `사용가능원료.md` 그대로 노출되던 것을 `refDocDisplayName` 우선 + `.md` 접미 제거로 정리 — 첫 실행에서 실제 17건 탐지해 수정 확인(기준선 0건)
 - **tests/unit/markdown-links.test.js** (신규 11건): `](<url>)` 괄호·공백·한글 파일명 보존, `&lt;` 잔재·절단 텍스트 부재, 비-URL `[화학명](별칭)` 가드, 이미지 vs 링크, 펜스블록 리터럴 등 링크 파서 엣지 회귀 고정
+- **보완 확장**: ① data/ 생성 번들 스캔 추가 — .js 번들은 vm 샌드박스 평가·.json 파싱 후 문자열 필드 재귀 순회, md 본문은 표면별 렌더러(study_md→리더 표면, 그 외→문서 표면)로 위임, 평문 필드(citation·explain)는 좌표/스탬프/스테이징/미승인 호스트 탐지 ② LL-08 위험 스킴(javascript:/data:/vbscript:) href 차단 ③ LL-05 본문 검사에서 `<code>/<pre>` 선제외(경로 예시 오탐 방지) ④ 진단에 소스 라인 번호 표기 ⑤ `doc:` 링크는 인터셉트 표면(manual-viewer)이 있는 docs/ 계열 파일만 허용 ⑥ 외부 allowlist에 manifest 선언 자료(www.youtube.com·license.korcham.net) 추가
+- **체커가 잡은 실제 결함 3건 수정**:
+  - `exams.plugin.js` 해설 정제 regex `\[(…)\]\([^)]*\)`가 `](<url>)`의 URL 내부 `)`에서 절단 → `L12(제2026-19호)…md#L12>))` 잔여가 explain에 구워져 드릴 UI에 노출되던 것을 `stripMdLinks`(<> 우선·중첩 괄호 1단계 허용)로 수정, 번들 재빌드
+  - `**최종 확인**:` QA 스탬프가 참조자료·docs 12곳에서 문서 뷰어에 그대로 표시되던 것 → `stripQaStamps` 공용 헬퍼(markdown-parser)를 exam-viewer·manual-viewer에도 적용(리더와 동일 정책, '최종 확인하세요' 권고 문구는 콜론 없어 유지)
+  - reader-format의 ref_md/과목N/원료 링크 변환 regex가 `.md#L` 해시 접미를 미변환으로 두던 갭 → `(#[^"]*)?` 수용 + `data-ref-line`/`data-ref-anchor`로 뷰어 스크롤 전달
+- **tests/unit/link-lint.test.js** (신규 15건): 체커 자체 회귀 — 합성 픽스처로 규칙별 탐지(LL-01~08)·라벨 정규화 오탐 방지·코드블록 예외·라인 번호·번들 위임 검증
 
 ## 2026-10-12 내부 링크 전수조사 후속 — 검색 카드 정규화·앵커 스크롤·제목 표시명·문서 경로 표기 정리
 

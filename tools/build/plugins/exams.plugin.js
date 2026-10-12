@@ -2,6 +2,13 @@
 const fs = require('fs');
 const path = require('path');
 
+// 마크다운 링크 → 라벨만 추출.
+// ](<url>) 형태는 URL 내부 괄호가 허용되므로 일반 ](…) 보다 먼저 처리해야
+// 잘린 경로 조각이 결과 텍스트에 남지 않는다 (링크 린트 LL-05 이력).
+const stripMdLinks = (s) => s
+  .replace(/\[([^\]]*)\]\(<[^>]*>\)/g, '$1')
+  .replace(/\[([^\]]*)\]\((?:[^()]|\([^()]*\))*\)/g, '$1');
+
 const parseExamFile = (filePath, examId, examTitle) => {
   if (!fs.existsSync(filePath)) {
     throw new Error(`File not found: ${filePath}`);
@@ -95,7 +102,7 @@ const parseExamFile = (filePath, examId, examTitle) => {
       const newAnsMatch = line.match(/^>\s*\*\*정답\s*[:：]\s*(.+?)\*\*/);
       if (newAnsMatch) {
         if (currentQuestion) {
-          currentQuestion.answer = newAnsMatch[1].replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\*\*/g, '').trim();
+          currentQuestion.answer = stripMdLinks(newAnsMatch[1]).replace(/\*\*/g, '').trim();
         }
         continue;
       }
@@ -129,7 +136,7 @@ const parseExamFile = (filePath, examId, examTitle) => {
         // 신형식: > 교재 근거 블록 인용 → 해설로 수집 (마커·링크·좌표 라벨 정리)
         // '교재: L237' 같은 내부 좌표는 사용자 정보가 아니므로 '(교재: L237)' → '(교재)'
         if (line.startsWith('>')) {
-          const cleaned = line.replace(/^>\s*/, '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\*\*/g, '')
+          const cleaned = stripMdLinks(line.replace(/^>\s*/, '')).replace(/\*\*/g, '')
             .replace(/:\s*L\d+(?:\s*[,~\-]\s*L?\d+)*/g, '').replace(/\s*\(교재\)/g, '').trim();
           if (cleaned) {
             currentQuestion.explanation = currentQuestion.explanation ? currentQuestion.explanation + '\n' + cleaned : cleaned;

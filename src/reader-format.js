@@ -3,7 +3,7 @@
 // 참고: 다수의 정규식이 HTML 문자열에 순차적으로 replace를 적용하여 O(n×k) 비용이 발생
 // (n=HTML 길이, k=정규식 수). 단일 패스 파서 또는 DOM 기반 후처리로 통합하면 성능 개선
 // 가능하나, 현재 측정된 병목이 아니므로 장기 개선으로 보류.
-import { parseMarkdown } from './markdown-parser.js';
+import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
 import { contentPath } from './exam-context.js';
 import { PATHS, normalizeRefPath } from './paths.js';
 import { escapeHTML } from './sanitize.js';
@@ -149,17 +149,24 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
         }
     );
 
+    // 해시 접미를 data-ref-line(#LNN)/data-ref-anchor(슬러그)로 전달 — 뷰어 라인 스크롤용
+    const refHashAttrs = (hash) => {
+        if (!hash || hash.length < 2) return '';
+        const lineM = hash.match(/^#L(\d+)$/i);
+        return lineM ? ` data-ref-line="${lineM[1]}"` : ` data-ref-anchor="${escapeHTML(hash.slice(1))}"`;
+    };
+
     // ref_md MD 파일 링크 → 앱 내 HTML 뷰어로 열기
     // 마크다운 파서가 [text](../참조자료/ref_md/.../....md)를 <a href="../참조자료/ref_md/.../....md">text</a>로 변환한 후 처리
     html = html.replace(
-        /<a href="((?:\.\.\/)?참조자료\/ref_md\/[^"]+\.md)">([^<]+)<\/a>/g,
-        (match, rawPath, linkText) => {
+        /<a href="((?:\.\.\/)?참조자료\/ref_md\/[^"]+\.md)(#[^"]*)?">([^<]+)<\/a>/g,
+        (match, rawPath, hash, linkText) => {
             const absPath = normalizeRefPath(rawPath);
             const fileName = decodeURIComponent(rawPath.split('/').pop() || '');
             const displayName = prettyRefName(fileName || linkText);
             const lawUrl = lawUrlFor(fileName);
             // 스냅샷 배지는 📚 참조 자료 섹션에서만 병기 (본문 📌출처 인라인은 노이즈 방지로 생략)
-            return `<span class="ref-md-row"${lawUrl ? ` data-law-url="${lawUrl}"` : ''}><a href="#" data-ref-html="${escapeHTML(absPath)}" class="source-link"><i class="fa-solid fa-file-lines"></i> ${escapeHTML(displayName)}</a>${lawExtLink(fileName)}</span>`;
+            return `<span class="ref-md-row"${lawUrl ? ` data-law-url="${lawUrl}"` : ''}><a href="#" data-ref-html="${escapeHTML(absPath)}"${refHashAttrs(hash)} class="source-link"><i class="fa-solid fa-file-lines"></i> ${escapeHTML(displayName)}</a>${lawExtLink(fileName)}</span>`;
         }
     );
 
@@ -176,24 +183,24 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
     // 참조자료 과목별 MD 링크(법령고시 ref_md·원료 DB 외 — 통합 정리·생리 등 직접 저작 문서)
     // → 앱 내 MD 뷰어로 열기. 미변환 시 파일명 라벨 + 페이지 기준 상대경로(404)로 노출됨.
     html = html.replace(
-        /<a href="((?:\.\.\/)?참조자료\/(?!ref_md\/|원료\/)[^"]+\.md)">([^<]+)<\/a>/g,
-        (match, rawPath, linkText) => {
+        /<a href="((?:\.\.\/)?참조자료\/(?!ref_md\/|원료\/)[^"]+\.md)(#[^"]*)?">([^<]+)<\/a>/g,
+        (match, rawPath, hash, linkText) => {
             const absPath = normalizeRefPath(rawPath);
             const fileName = decodeURIComponent(rawPath.split('/').pop() || '');
             const displayName = refDocDisplayName(fileName) || linkText.replace(/\.md$/i, '');
-            return `<a href="#" data-ref-md="${escapeHTML(absPath)}" class="source-link"><i class="fa-solid fa-file-lines"></i> ${escapeHTML(displayName)}</a>`;
+            return `<a href="#" data-ref-md="${escapeHTML(absPath)}"${refHashAttrs(hash)} class="source-link"><i class="fa-solid fa-file-lines"></i> ${escapeHTML(displayName)}</a>`;
         }
     );
 
     // 원료 DB MD 파일 링크 → 앱 내 HTML 뷰어로 열기
     // 마크다운 파서가 [text](../참조자료/원료/....md)를 <a href="../참조자료/원료/....md">text</a>로 변환한 후 처리
     html = html.replace(
-        /<a href="((?:\.\.\/)?참조자료\/원료\/[^"]+\.md)">([^<]+)<\/a>/g,
-        (match, rawPath, linkText) => {
+        /<a href="((?:\.\.\/)?참조자료\/원료\/[^"]+\.md)(#[^"]*)?">([^<]+)<\/a>/g,
+        (match, rawPath, hash, linkText) => {
             const absPath = normalizeRefPath(rawPath);
             const fileName = decodeURIComponent(rawPath.split('/').pop() || '');
             const displayName = refDocDisplayName(fileName) || linkText.replace(/\.md$/i, '');
-            return `<a href="#" data-ref-html="${escapeHTML(absPath)}" class="source-link"><i class="fa-solid fa-file-lines"></i> ${escapeHTML(displayName)}</a>${lawExtLink(fileName, 'ref-law-ext', '근거 고시', '근거 고시 원문')}`;
+            return `<a href="#" data-ref-html="${escapeHTML(absPath)}"${refHashAttrs(hash)} class="source-link"><i class="fa-solid fa-file-lines"></i> ${escapeHTML(displayName)}</a>${lawExtLink(fileName, 'ref-law-ext', '근거 고시', '근거 고시 원문')}`;
         }
     );
 
@@ -244,7 +251,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
 
     // 유지보수 QA 스탬프 '최종 확인: ...' — 개발 검수 정보이므로 사용자 렌더에서 제거
     // (소스 md에는 유지 — 법령 대조 추적용). 📌출처 라인 말미의 '| 최종 확인: ...' 제거
-    html = html.replace(/\|?\s*<strong>최종 확인<\/strong>\s*:[^|<]*/g, '');
+    html = stripQaStamps(html);
 
     // 페이지 참조 제거: 다양한 p.NN 패턴 정리
     // mermaid 블록을 플레이스홀더로 보호 (내부 p.NN 패턴이 손상되는 것 방지)
