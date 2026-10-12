@@ -252,7 +252,14 @@ src/                    # ES Modules
       ad-lint.js            # Formula OS — 광고 문구 금지 표현 린트 엔진 (화장품법 제13조)
       usage-guide.js        # Formula OS — 사용 안내문 생성기 (제형 템플릿+원료 주의)
       views/            # Formula OS 뷰 모듈 (practice-registry 지연 로드)
-        formula.js          # 배합 계산기, 추천, My 포뮬러, 서브내비 칩, 인쇄·JSON 공유
+        formula.js          # Formula OS 공용 진입점 파사드 (named export 재수출 — data-click 디스패치·테스트 호환)
+        formula-core.js     # 공용 상태(calc)·패널 전환·서브내비·성분 인덱스
+        formula-hub.js      # 허브 초기화·사업 유형 프로파일·점검/백업 리마인더·고대비
+        formula-list.js     # My 포뮬러 목록·열기/복제/삭제
+        formula-calc.js     # 배합 계산기 행 렌더·검증·드래프트 자동 저장·저장
+        formula-weigh.js    # 계량 모드 오버레이 (원료별 투입량 순회)
+        formula-ing-modal.js # 자가 등록 성분 모달·CRUD
+        formula-io.js       # 조제 기록지·작업지시서 인쇄·JSON 보내기/가져오기
         formula-recommend.js # 추천 베이스·원료 패널 + 맞춤 규칙 UI
         formula-fields.js   # 처방 작업대 고객·안정성 필드 블록
         formula-batch.js    # 조제 기록(배치) 목록·폼·상세 패널

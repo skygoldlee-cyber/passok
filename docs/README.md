@@ -24,8 +24,9 @@
 4. docs/dev/ARCHITECTURE.md  — Local-First·ESM·DataLoader·SW 캐시·동기화 등 설계 결정
 5. docs/dev/SPEC.md          — 구현 완료된 기능의 요구사양 명세
 6. docs/dev/runbooks/CONTENT_WORKFLOW.md — 콘텐츠=SSOT, 빌드 파이프라인 개요
-7. docs/dev/reference/TESTING.md       — 유닛 687 + DOM 388 + E2E 16 테스트 구조
-8. docs/dev/CHANGES.md       — 변경 이력 (왜 바뀌었는지의 맥락)
+7. docs/dev/reference/TESTING.md       — 유닛 1190 + DOM 665 + E2E 101 테스트 구조
+8. docs/dev/reference/GATE_MAP.md      — 검증 게이트 전체 지도 (훅→CI→배포 4층, 실패별 복구)
+9. docs/dev/CHANGES.md       — 변경 이력 (왜 바뀌었는지의 맥락)
 ```
 
 ### ② 교재·문제은행·참조자료 콘텐츠를 편집하는 경우
@@ -328,6 +329,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-REF-11 | `docs/dev/reference/PROJECT_STRUCTURE_TOUR.md` |
 | DOC-REF-12 | `docs/dev/reference/CODE_READING_GUIDE.md` |
 | DOC-REF-13 | `docs/dev/reference/FEATURE_MAP.md` |
+| DOC-REF-14 | `docs/dev/reference/GATE_MAP.md` |
 | DOC-RBK-01 | `docs/dev/runbooks/AUDIO_HOSTING_GUIDE.md` |
 | DOC-RBK-02 | `docs/dev/runbooks/COMBO_GENERATION_GUIDE.md` |
 | DOC-RBK-03 | `docs/dev/runbooks/CONTENT_WORKFLOW.md` |
