@@ -24,14 +24,16 @@ export default defineConfig({
                 'src/theme-init.js',          // DOM 이전 즉시 실행 스크립트
                 'src/web-vitals.js',          // PerformanceObserver
                 'src/views/reader-audio.js',  // Audio API
+                'src/app.js',                 // 진입점 오케스트레이터 — import 자체가 부팅 부작용, E2E 영역
+                'src/exam-data-boot.js',      // 클래식 스크립트(비ESM) — 모듈 import 불가
             ],
-            // 커버리지 하한선 — 실측 베이스라인(2026-10-13): stmts 66.48 / branches 52.58 / funcs 66.94 / lines 71.01
+            // 커버리지 하한선 — 실측 베이스라인(2026-10-13, 부트스트랩 제외 분모 정정): stmts 67.49 / branches 53.03 / funcs 68.51 / lines 72.04
             // 대비 ~0.5pt 여유분. 테스트 추가 시 점진 상향 (하향 수정은 CHANGES.md에 사유 기록 필수).
             thresholds: {
-                lines: 70.5,
-                statements: 66,
-                functions: 66.5,
-                branches: 52,
+                lines: 71.5,
+                statements: 67,
+                functions: 68,
+                branches: 52.5,
             },
         },
     },
