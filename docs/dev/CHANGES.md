@@ -12,6 +12,13 @@
 - **dependabot 분리 PR(#9 coverage-v8·#10 vitest)이 각각 ERESOLVE 실패** — vitest와 @vitest/coverage-v8은 peer 버전을 공유하므로 단독 범프가 불가능. main에서 동시 업그레이드로 해결하고 dependabot PR 2건 close
 - **호환성**: Node 24 요구사양 충족(Vite는 peer로 npm 자동 설치). `clearMocks: true` 기본값 변경·`vi.mock` 함수 내 정의 금지 등 breaking 변경의 영향 없음 — DOM 694개 전량 통과, 병합 커버리지 70.40/66.38/72.11/81.69로 4와 동수치
 - 참고: `qs`(typed-rest-client 경유) moderate 2건은 dev 의존성 체인 — CI audit 게이트(high+ 차단) 비대상
+- **잔여 과제 (비긴급, 2026-10-13 평가 시점)**:
+  - Actions v7 dependabot PR 3건 (#1 upload-artifact·#2 checkout·#3 setup-node) — CI 어노테이션의 Node 20 deprecation 근본 해소 + Ubuntu 26 마이그레이션(2026-10-19) 전 정돈, 워크플로 버전 범프라 위험 낮아 머지 권장
+  - jsdom 30.1.1(#7)·globals 17.13.0(#8) 패치 dependabot PR — 무난
+  - typescript 7.0.2(#4) — 메이저, checkJs 진단 동작 변화 가능해 별도 검토 후 결정
+  - `qs` moderate 2건 — `npm audit fix`로 처리 가능하나 dev 체인이라 비긴급
+  - 0% 실로직 2파일 `app-dashboard.js`(D-02~06)·`quiz-wrong-cause.js`(AN-02) — 다음 커버리지 라운드의 테스트 보강 대상 (부트스트랩 제외 항목과 구분 — 로직이므로 제외하지 않음)
+  - reader 계열 저커버리지 — `reader-render.js` 27%·`reader-loader.js` 29%·`listeners-simulator.js` 30%·`notice-check.js` 배너 경로 43% — reader 기능 변경 시점에 테스트 동반이 자연스러움
 
 ## 2026-10-13 부트스트랩 분모 정정 + E2E CI 재시도 + 래칭 4차
 
