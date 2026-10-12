@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 게이트 계획 정밀화 — 태그 선택·결과 캐시·인프로세스
+
+- **태그 기반 단계 선택 (push_gate.js)**: 3티어 고정 대신 파일 경로 유형 태그(`content/html/docs/src/tools/tests/ci/config/unknown`) × 단계별 필요 태그 표(`STEP_NEEDS`)로 실행 단계 산출 — SPEC.md만 바뀐 푸시는 docs 계열 5단계, html/ 미변경 시 html 신선도 생략 등 세분화. `unknown` 태그 파일 1건이면 전체 폴백 유지
+- **결과 캐시**: `node_modules/.cache/push-gate.json` — HEAD+ref+작업트리/스테이징 diff+untracked+도구 mtime 서명이 동일하면 통과 단계 재실행 생략. 실패 결과는 캐시하지 않음. 우회 `--no-cache`·`PUSH_GATE_NOCACHE=1`
+- **`run.js --affected`**: 유닛 테스트 단계를 `impact_tests --run` 영향 권장 세트로 치환 — 로컬 빠른 CI 재현용, CI는 전수 유지
+- **인프로세스 체커 계약**: 체커가 `run({args,cwd}) → {status,output}`를 export하면 step_runner가 spawn 없이 직접 호출 — `content:posind`·push_gate posind 파일럿 적용 (노드 기동 비용 제거). CLI 경로는 기존 출력·종료코드 동일 유지
+
 ## 2026-10-12 검증 게이트 실행 비용 절감
 
 - **ESLint `--cache`**: lint 전수 3.2s → 웜 0.7s (`node_modules/.cache/eslint`)
