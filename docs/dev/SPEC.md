@@ -1191,7 +1191,8 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | `study-calendar.js` | 학습 캘린더·목표 뷰 |
 | `glossary-renderer.js` | 용어집 렌더링 + `scrollToGlossary()` |
 | `event-listeners.js` | 이벤트 리스너 일괄 바인딩 |
-| `formula.js` | Formula OS — 배합 계산기, 추천, My 포뮬러, 서브내비 칩, 인쇄·JSON 공유 |
+| `formula.js` | Formula OS 공용 진입점 파사드 — named export 재수출 (data-click 디스패치·테스트 호환) |
+| `formula-core.js` · `formula-hub.js` · `formula-list.js` · `formula-calc.js` · `formula-weigh.js` · `formula-ing-modal.js` · `formula-io.js` | Formula OS 뷰 구현 모듈 — 공용 상태·패널·서브내비(core), 허브·리마인더·고대비(hub), My 포뮬러(list), 배합 계산기·드래프트·저장(calc), 계량 모드(weigh), 자가 성분 등록(ing-modal), 인쇄·JSON 공유(io) |
 | `formula-batch.js` | 조제 기록(배치) 목록·폼·상세 패널 |
 | `formula-customer.js` | 고객 관리 패널 (카드·상담 이력·역참조) |
 | `formula-material.js` | 원료 장부 패널 (기한 배지·경고) |

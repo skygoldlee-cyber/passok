@@ -38,8 +38,8 @@
 | 프리셋 | 명령 | 내용 | 언제 |
 |---|---|---|---|
 | `all` | `npm run check:all` | lint·types·html + docs + domainmap + content 전체 | 배포 전 완전 점검 (`--quick`=DOM 테스트 생략) |
-| `ci` | `npm run check:ci` | CI 워크플로 로컬 재현 (~23단계) | 푸시 전 자신 없을 때 (`-- --affected`=영향 테스트만) |
-| `content` | `npm run check:content` | 콘텐츠 추적 ~26단계 (manifest·인용·신선도·링크·카드) | 교재·문제은행·참조자료 편집 후 (`-- --build`=build:data 선행) |
+| `ci` | `npm run check:ci` | CI 워크플로 로컬 재현 (22단계) | 푸시 전 자신 없을 때 (`-- --affected`=영향 테스트만) |
+| `content` | `npm run check:content` | 콘텐츠 추적 27단계 (manifest·인용·신선도·링크·카드) | 교재·문제은행·참조자료 편집 후 (`-- --build`=build:data 선행) |
 | `docs` | `npm run check:docs` | 문서 정합 10단계 (경로·ID·명령·플랜·저장소·CI패리티) | docs/ 편집 후 |
 | `refs` | `npm run check:refs` | 참조자료 4계층 + 득표 귀속 | ref_md·PDF 변경 후 |
 | `freshness` | `npm run check:fresh` | 생성물 신선도 묶음 (html·trace·data·drill·emb·docs_md) | 빌드 산출물 의심 시 |
