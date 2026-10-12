@@ -37,7 +37,7 @@ text{font-family:"Noto Sans CJK KR","Noto Sans KR","Pretendard","Apple SD Gothic
 <line x1="52" y1="294" x2="226" y2="294" stroke="#534AB7" stroke-width="1"/>
 <circle cx="240" cy="208" r="3" fill="#7F77DD"/><text class="ts" x="250" y="208" text-anchor="start" dominant-baseline="central">객관식 746</text>
 <circle cx="240" cy="230" r="3" fill="#7F77DD"/><text class="ts" x="250" y="230" text-anchor="start" dominant-baseline="central">단답형 254</text>
-<circle cx="240" cy="252" r="3" fill="#7F77DD"/><text class="ts" x="250" y="252" text-anchor="start" dominant-baseline="central">ㄱㄴㄷ 1,005</text>
+<circle cx="240" cy="252" r="3" fill="#7F77DD"/><text class="ts" x="250" y="252" text-anchor="start" dominant-baseline="central">ㄱㄴㄷ 1,004</text>
 <circle cx="240" cy="274" r="3" fill="#7F77DD"/><text class="ts" x="250" y="274" text-anchor="start" dominant-baseline="central">OX 3,703</text>
 <rect x="350" y="120" width="290" height="210" rx="12" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/><path d="M350 150V132Q350 120 362 120H628Q640 120 640 132V150Z" fill="#0F6E56"/><text class="tw" x="366" y="135" dominant-baseline="central">학습 방법</text><text class="ts" x="366" y="166" dominant-baseline="central">S·A·B·C 등급 · 4회독 · 앱 학습 순환</text>
 <rect x="368" y="270" width="44" height="24" fill="#9FE1CB" stroke="#085041" stroke-width="0.75"/>
@@ -61,7 +61,7 @@ text{font-family:"Noto Sans CJK KR","Noto Sans KR","Pretendard","Apple SD Gothic
 <text class="ts" x="124" y="496" text-anchor="start" dominant-baseline="central">최종확인일</text>
 <rect x="246" y="370" width="187" height="170" rx="12" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/><path d="M246 400V382Q246 370 258 370H421Q433 370 433 382V400Z" fill="#185FA5"/><text class="tw" x="262" y="385" dominant-baseline="central">시각화</text><text class="ts" x="262" y="416" dominant-baseline="central">한눈에 보는 그림·표</text>
 <path d="M280 474L302 450M280 474L308 474M280 474L302 498" fill="none" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round"/><circle cx="278" cy="474" r="10" fill="#185FA5"/><circle cx="304" cy="448" r="5.5" fill="#EF9F27"/><circle cx="311" cy="474" r="5.5" fill="#D4537E"/><circle cx="304" cy="500" r="5.5" fill="#1D9E75"/>
-<text class="ts" x="328" y="452" text-anchor="start" dominant-baseline="central">Mermaid 61개</text>
+<text class="ts" x="328" y="452" text-anchor="start" dominant-baseline="central">Mermaid 42개</text>
 <text class="ts" x="328" y="474" text-anchor="start" dominant-baseline="central">비교표 4,019행</text>
 <text class="ts" x="328" y="496" text-anchor="start" dominant-baseline="central">체크리스트 37</text>
 <rect x="453" y="370" width="187" height="170" rx="12" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1"/><path d="M453 400V382Q453 370 465 370H628Q640 370 640 382V400Z" fill="#3B6D11"/><text class="tw" x="469" y="385" dominant-baseline="central">법령 일관성</text><text class="ts" x="469" y="416" dominant-baseline="central">과목 간 번호·숫자 일치</text>
