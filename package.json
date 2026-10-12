@@ -93,6 +93,7 @@
     "check:ci": "node tools/check/run.js --preset ci",
     "deploy": "node tools/deploy/deploy.js",
     "audit:combo": "node tools/check/audit_combo.js",
+    "audit:study": "node tools/check/audit_study_quality.js",
     "check:uitext": "node tools/check/check_uitext.js",
     "check:mobilesafe": "node tools/check/check_mobile_safe.js",
     "check:escape": "node tools/check/check_html_escape.js",

@@ -113,6 +113,9 @@ jobs:
       - name: Performance budget (SHELL_ASSETS 크기 상한)
         run: npm run check:perf
 
+      - name: Study quality audit (기준선 회귀)
+        run: node tools/check/audit_study_quality.js --check
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 

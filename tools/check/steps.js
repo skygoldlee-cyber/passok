@@ -34,6 +34,7 @@ const STEP_TYPES = npmStep('types', 'check:types', '품질', 'tsc --noEmit (jsco
 const STEP_HTML = nodeStep('html', 'tools/build/build_html.js', '빌드', 'index.html 조립 신선도 (파셜 편집 시 build:html 필요)', { args: ['--check'] });
 const STEP_DOMAINMAP = npmStep('domainmap', 'check:domainmap', '분류', '파일 계층 분류 강제 (domain-map.json)');
 const STEP_UITEXT = npmStep('uitext', 'check:uitext', '문서', 'UI 텍스트 커버리지 (data-uitext ↔ manifest.uiText)');
+const STEP_STUDYQ = nodeStep('studyq', 'tools/check/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'] });
 
 // ── 문서 정합 묶음 (check:docs → docs 프리셋) ──────────────────────────
 const DOCS_STEPS = [
@@ -103,6 +104,7 @@ const CI_STEPS = [
   npmStep('ci:assets', 'verify:assets', '자산', 'SHELL_ASSETS/DATA_ASSETS 파일 존재'),
   npmStep('ci:parser', 'check:parser', '파서', '빌드 파서 ↔ 런타임 파서 등가성'),
   npmStep('ci:perf', 'check:perf', '성능', 'SHELL_ASSETS 크기 예산 상한'),
+  nodeStep('ci:studyq', 'tools/check/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'] }),
 ];
 
 // ── 참조자료 묶음 (check:refs → refs 프리셋) ──────────────────────────
@@ -144,7 +146,7 @@ const PRESETS = {
   content: (opts) => contentSteps(opts),
   docs: () => DOCS_STEPS.slice(),
   ci: () => CI_STEPS.slice(),
-  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_HTML, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_UITEXT, ...contentSteps(opts)],
+  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_HTML, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_UITEXT, STEP_STUDYQ, ...contentSteps(opts)],
   refs: () => REFS_STEPS.slice(),
   freshness: () => FRESH_STEPS.slice(),
 };
