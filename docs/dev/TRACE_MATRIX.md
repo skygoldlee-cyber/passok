@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: cc876c290db53190
+> 입력 해시: 23fde0be9a77f921
 > 생성: 2026-10-12 · 원천: SPEC.md(471개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -56,7 +56,7 @@
 | AN-07 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/recommendations.js<br>src/views/analysis-view.js | tests/unit/analysis-deepening.test.js | — | — |
 | AN-08 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/views/analysis-view.js | tests/fixtures/analysis-seed.js<br>tests/unit/analysis-deepening.test.js | — | — |
 | AN-09 | ✅ | E2E 테스트 | — | html/views/analysis.html<br>index.html<br>src/analysis-engine.js<br>src/views/analysis-view.js | tests/dom/study-dashboard.dom.test.js<br>tests/e2e/analysis-view.spec.js<br>tests/unit/analysis-deepening.test.js | — | — |
-| AN-10 | ✅ | 테스트 | — | tools/build/textbook_anchors.js | tests/unit/textbook-anchors.test.js | — | — |
+| AN-10 | ✅ | E2E 테스트 | — | tools/build/textbook_anchors.js | tests/e2e/analysis-view.spec.js<br>tests/unit/textbook-anchors.test.js | — | — |
 
 ## 3.2 플래시카드
 
