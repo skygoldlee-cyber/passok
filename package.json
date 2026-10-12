@@ -3,7 +3,7 @@
   "version": "2026.10.12",
   "description": "Passory — 멀티시험 자격시험 스마트 학습 플랫폼",
   "engines": {
-    "node": ">=20.19"
+    "node": ">=24"
   },
   "main": "serve.js",
   "scripts": {

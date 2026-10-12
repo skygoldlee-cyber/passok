@@ -15,7 +15,7 @@
 |------|-----------|------|
 | **Windows 10/11 + PowerShell** | ✅ 주 개발환경 | `npm`/`npx`가 실행 정책으로 차단되므로 **`npm.cmd`/`npx.cmd`** 사용. `&&` 연결자 불가 → `;` 사용 |
 | **macOS / Linux** | ✅ | bash/zsh에서 일반 `npm` 사용 |
-| **GitHub Actions (ubuntu-latest)** | ✅ CI | Node 20으로 unit/DOM 테스트·자산 검증 실행 (`.github/workflows/ci.yml`) |
+| **GitHub Actions (ubuntu-latest)** | ✅ CI | Node 24로 unit/DOM 테스트·자산 검증 실행 (`.github/workflows/ci.yml`) |
 
 ---
 
@@ -23,7 +23,7 @@
 
 | 도구 | 최소 버전 | 확인 명령 | 용도 |
 |------|-----------|-----------|------|
-| **Node.js** | 20.19+ (`.nvmrc`·`engines` = 20 계열 권장) | `node --version` | 앱·빌드·테스트 런타임 전체 — CI는 Node 20 고정이므로 버전 관리자(nvm/fnm) 사용 시 `.nvmrc`가 20으로 정렬. 빌드 플러그인이 `require(ESM)`으로 `src/textbook-core.js`를 로드하므로 20.19 미만에서는 `MODULE_NOT_FOUND` 발생 |
+| **Node.js** | 24+ (`.nvmrc`·`engines` = 24 계열) | `node --version` | 앱·빌드·테스트 런타임 전체 — CI는 Node 24 고정이므로 버전 관리자(nvm/fnm) 사용 시 `.nvmrc`가 24로 정렬. `jsdom@30`(vitest DOM 테스트)이 Node `^22.22.2 || ^24.15.0`를 요구하므로 20 계열에서는 `webidl.util.markAsUncloneable` 오류로 DOM 테스트가 기동 불가 |
 | **npm** | Node 동반 | `npm --version` | devDependencies 설치 (`npm install`) |
 | **Git** | 최신 | `git --version` | 소스 관리 — `deploy` 가드가 clean tree + origin/main 동기화 요구 |
 
@@ -82,7 +82,7 @@ npm.cmd run coverage          # DOM 테스트 + 커버리지 임계값 (lines 60
 npm.cmd run check:content     # 콘텐츠 통합 검증 (대규모 콘텐츠 변경 후)
 ```
 
-CI(`.github/workflows/ci.yml`)가 push/PR마다 `npm ci` → `npm audit`(high+) → `lint`·`check:types`·`check:imports`·`check:docs`·`check_doc_sync`(문서 동기화 게이트)·`check:specrefs`·`check:trace` → `check_content.js --content-only --quick`(교재/문제은행 콘텐츠 추적 게이트: manifest·인용 라인·참조라인·신선도·드릴·ID 이관·카드) → `test`·`coverage`·`coverage:unit`·병합 임계값(`coverage_merge.js --check`)·`verify:assets`·`check:parser` → Playwright 설치 + `test:e2e`를 Node 20으로 실행합니다. PR에는 영향 요구사항 리포트(`tools/check/impact_tests.js --ref origin/main`)가 추가됩니다.
+CI(`.github/workflows/ci.yml`)가 push/PR마다 `npm ci` → `npm audit`(high+) → `lint`·`check:types`·`check:imports`·`check:docs`·`check_doc_sync`(문서 동기화 게이트)·`check:specrefs`·`check:trace` → `check_content.js --content-only --quick`(교재/문제은행 콘텐츠 추적 게이트: manifest·인용 라인·참조라인·신선도·드릴·ID 이관·카드) → `test`·`coverage`·`coverage:unit`·병합 임계값(`coverage_merge.js --check`)·`verify:assets`·`check:parser` → Playwright 설치 + `test:e2e`를 Node 24로 실행합니다. PR에는 영향 요구사항 리포트(`tools/check/impact_tests.js --ref origin/main`)가 추가됩니다.
 
 **선택적 Git 훅**: `npm.cmd run hooks:install`로 `.githooks/` 활성화 — `pre-commit`은 `check:types`+`lint`+문서 동기화 게이트(`check_doc_sync.js --staged`: 소스 스테이징 시 문서 동반 스테이징 강제, `--no-verify` 우회), `pre-push`는 `check:trace`·`check:specrefs`·`check:docs`·문서 동기화(`--ref origin/main`) 추가 (`SKIP_PREPUSH=1 git push` 우회).
 
@@ -128,7 +128,7 @@ npm.cmd run deploy   # 배포 가드(clean tree + origin/main 동기화) → sw 
 ## 10. 요약 체크리스트
 
 ```
-[ ] Node.js 20+ — node --version
+[ ] Node.js 24+ — node --version
 [ ] npm install 완료 — node_modules/ 존재
 [ ] npm run serve → http://localhost:3000 접속 확인
 [ ] npm test + npm run test:dom 통과
