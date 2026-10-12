@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1720 818" width="1720" height="818" font-family="Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans CJK KR', 'Noto Serif CJK KR', sans-serif">
+<defs><radialGradient id="rg" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#2F6FDB" stop-opacity=".75"/><stop offset="1" stop-color="#2F6FDB"/></radialGradient>
+<filter id="sh" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1f2937" flood-opacity=".12"/></filter>
+<pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.3" fill="#2F6FDB" opacity=".13"/></pattern></defs>
+<rect width="1720" height="818" fill="#FBFAF7"/><rect width="1720" height="818" fill="url(#dots)"/>
+<text x="860.0" y="62" text-anchor="middle" font-size="34" font-weight="800" fill="#1F2937">2과목 과목 개요 마인드맵</text>
+<text x="860.0" y="96" text-anchor="middle" font-size="18" fill="#6B7280">맞춤형화장품 조제관리사 · 화장품 제조 및 품질관리</text>
+<rect x="800.0" y="106" width="120" height="4" rx="2" fill="#2F6FDB"/>
+<path d="M732.0 429.0 C666.0 429.0, 666.0 211.0, 600 211.0" fill="none" stroke="#E8505B" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="600" cy="211.0" r="6" fill="#E8505B"/>
+<path d="M732.0 429.0 C666.0 429.0, 666.0 469.0, 600 469.0" fill="none" stroke="#3B82F6" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="600" cy="469.0" r="6" fill="#3B82F6"/>
+<path d="M988.0 429.0 C1054.0 429.0, 1054.0 157.0, 1120 157.0" fill="none" stroke="#10B981" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="1120" cy="157.0" r="6" fill="#10B981"/>
+<path d="M988.0 429.0 C1054.0 429.0, 1054.0 365.0, 1120 365.0" fill="none" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="1120" cy="365.0" r="6" fill="#F59E0B"/>
+<path d="M988.0 429.0 C1054.0 429.0, 1054.0 573.0, 1120 573.0" fill="none" stroke="#8B5CF6" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="1120" cy="573.0" r="6" fill="#8B5CF6"/>
+<g filter="url(#sh)"><rect x="40" y="184.0" width="560" height="232" rx="18" fill="#fff" stroke="#E8505B" stroke-opacity=".35"/></g>
+<path d="M40 202.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#E8505B"/>
+<rect x="56" y="197.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="85" y="217.0" text-anchor="middle" font-size="15" font-weight="800" fill="#E8505B">Ch01</text>
+<text x="128" y="219.0" font-size="20" font-weight="800" fill="#fff">화장품 원료의 종류와 특성</text>
+<circle cx="70" cy="267.0" r="5" fill="#E8505B"/>
+<text x="86" y="272.0" font-size="16.5" font-weight="700" fill="#1F2937">원료 분류</text>
+<text x="86" y="292.0" font-size="14" fill="#6B7280">수성 · 유성 · 계면활성제 · 첨가제</text>
+<line x1="64" y1="299.0" x2="576" y2="299.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="317.0" r="5" fill="#E8505B"/>
+<text x="86" y="322.0" font-size="16.5" font-weight="700" fill="#1F2937">주요 원료의 특성</text>
+<text x="86" y="342.0" font-size="14" fill="#6B7280">비타민 · 보습 원료</text>
+<line x1="64" y1="349.0" x2="576" y2="349.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="367.0" r="5" fill="#E8505B"/>
+<text x="86" y="372.0" font-size="16.5" font-weight="700" fill="#1F2937">기능성 원료</text>
+<text x="86" y="392.0" font-size="14" fill="#6B7280">고시 성분 · 효능별</text>
+<g filter="url(#sh)"><rect x="40" y="442.0" width="560" height="232" rx="18" fill="#fff" stroke="#3B82F6" stroke-opacity=".35"/></g>
+<path d="M40 460.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#3B82F6"/>
+<rect x="56" y="455.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="85" y="475.0" text-anchor="middle" font-size="15" font-weight="800" fill="#3B82F6">Ch02</text>
+<text x="128" y="477.0" font-size="20" font-weight="800" fill="#fff">화장품 제조관리 및 품질</text>
+<circle cx="70" cy="525.0" r="5" fill="#3B82F6"/>
+<text x="86" y="530.0" font-size="16.5" font-weight="700" fill="#1F2937">제조관리 기준</text>
+<text x="86" y="550.0" font-size="14" fill="#6B7280">CGMP · 제조 기술 · 공정</text>
+<line x1="64" y1="557.0" x2="576" y2="557.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="575.0" r="5" fill="#3B82F6"/>
+<text x="86" y="580.0" font-size="16.5" font-weight="700" fill="#1F2937">기능 및 품질</text>
+<text x="86" y="600.0" font-size="14" fill="#6B7280">6종 효과 · 맞춤형 4유형</text>
+<line x1="64" y1="607.0" x2="576" y2="607.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="625.0" r="5" fill="#3B82F6"/>
+<text x="86" y="630.0" font-size="16.5" font-weight="700" fill="#1F2937">시험 · 검사</text>
+<text x="86" y="650.0" font-size="14" fill="#6B7280">CGMP 4대 기준서</text>
+<g filter="url(#sh)"><rect x="1120" y="130.0" width="560" height="182" rx="18" fill="#fff" stroke="#10B981" stroke-opacity=".35"/></g>
+<path d="M1120 148.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#10B981"/>
+<rect x="1136" y="143.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="1165" y="163.0" text-anchor="middle" font-size="15" font-weight="800" fill="#10B981">Ch03</text>
+<text x="1208" y="165.0" font-size="20" font-weight="800" fill="#fff">화장품 사용제한 원료</text>
+<circle cx="1150" cy="213.0" r="5" fill="#10B981"/>
+<text x="1166" y="218.0" font-size="16.5" font-weight="700" fill="#1F2937">사용제한 원료의 종류</text>
+<text x="1166" y="238.0" font-size="14" fill="#6B7280">보존제 · 자외선차단제 · 염모제</text>
+<line x1="1144" y1="245.0" x2="1656" y2="245.0" stroke="#E5E7EB"/>
+<circle cx="1150" cy="263.0" r="5" fill="#10B981"/>
+<text x="1166" y="268.0" font-size="16.5" font-weight="700" fill="#1F2937">사용 제한 원료</text>
+<text x="1166" y="288.0" font-size="14" fill="#6B7280">사용한도 · 천연 · 유기농 · 알레르기</text>
+<g filter="url(#sh)"><rect x="1120" y="338.0" width="560" height="182" rx="18" fill="#fff" stroke="#F59E0B" stroke-opacity=".35"/></g>
+<path d="M1120 356.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#F59E0B"/>
+<rect x="1136" y="351.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="1165" y="371.0" text-anchor="middle" font-size="15" font-weight="800" fill="#F59E0B">Ch04</text>
+<text x="1208" y="373.0" font-size="20" font-weight="800" fill="#fff">화장품 관리</text>
+<circle cx="1150" cy="421.0" r="5" fill="#F59E0B"/>
+<text x="1166" y="426.0" font-size="16.5" font-weight="700" fill="#1F2937">보관 및 유통관리</text>
+<text x="1166" y="446.0" font-size="14" fill="#6B7280">온도 · 습도 · 선입선출</text>
+<line x1="1144" y1="453.0" x2="1656" y2="453.0" stroke="#E5E7EB"/>
+<circle cx="1150" cy="471.0" r="5" fill="#F59E0B"/>
+<text x="1166" y="476.0" font-size="16.5" font-weight="700" fill="#1F2937">사용 방법 및 주의사항</text>
+<text x="1166" y="496.0" font-size="14" fill="#6B7280">제품 유형별 · 성분별 주의</text>
+<g filter="url(#sh)"><rect x="1120" y="546.0" width="560" height="182" rx="18" fill="#fff" stroke="#8B5CF6" stroke-opacity=".35"/></g>
+<path d="M1120 564.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#8B5CF6"/>
+<rect x="1136" y="559.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="1165" y="579.0" text-anchor="middle" font-size="15" font-weight="800" fill="#8B5CF6">Ch05</text>
+<text x="1208" y="581.0" font-size="20" font-weight="800" fill="#fff">위해사례 판단 및 보고</text>
+<circle cx="1150" cy="629.0" r="5" fill="#8B5CF6"/>
+<text x="1166" y="634.0" font-size="16.5" font-weight="700" fill="#1F2937">위해사례의 이해</text>
+<text x="1166" y="654.0" font-size="14" fill="#6B7280">위해성 등급 가 · 나 · 다</text>
+<line x1="1144" y1="661.0" x2="1656" y2="661.0" stroke="#E5E7EB"/>
+<circle cx="1150" cy="679.0" r="5" fill="#8B5CF6"/>
+<text x="1166" y="684.0" font-size="16.5" font-weight="700" fill="#1F2937">위해사례 보고 의무</text>
+<text x="1166" y="704.0" font-size="14" fill="#6B7280">안전성 정보 보고 · 회수 경감</text>
+<circle cx="860.0" cy="429.0" r="146" fill="#2F6FDB" opacity=".12"/>
+<circle cx="860.0" cy="429.0" r="128" fill="url(#rg)" filter="url(#sh)"/>
+<circle cx="860.0" cy="429.0" r="116" fill="none" stroke="#fff" stroke-opacity=".5" stroke-dasharray="4 6"/>
+<g transform="translate(860.0,379.0)" stroke="#fff" stroke-width="3" fill="none" stroke-linejoin="round">
+<path d="M-26 -28 h14 M-22 -28 v16 L-36 20 h42 L-8 -12 v-16"/><path d="M-31 10 h32 l3 10 h-38 Z" fill="#fff" stroke="none" opacity=".85"/>
+<rect x="12" y="-10" width="22" height="32" rx="5"/><rect x="17" y="-20" width="12" height="10" rx="2" fill="#fff"/>
+<circle cx="-18" cy="0" r="2.5" fill="#fff"/><circle cx="-12" cy="8" r="2" fill="#fff"/></g>
+<text x="860.0" y="451.0" text-anchor="middle" font-size="30" font-weight="900" fill="#fff">2과목</text>
+<text x="860.0" y="479.0" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">화장품 제조 및</text>
+<text x="860.0" y="502.0" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">품질관리</text>
+<text x="860.0" y="788" text-anchor="middle" font-size="13" fill="#9CA3AF">5개 챕터 · 중분류 12개</text>
+</svg>

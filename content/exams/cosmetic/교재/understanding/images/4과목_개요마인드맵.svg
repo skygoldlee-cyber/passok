@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1720 1126" width="1720" height="1126" font-family="Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans CJK KR', 'Noto Serif CJK KR', sans-serif">
+<defs><radialGradient id="rg" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#159A6C" stop-opacity=".75"/><stop offset="1" stop-color="#159A6C"/></radialGradient>
+<filter id="sh" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1f2937" flood-opacity=".12"/></filter>
+<pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.3" fill="#159A6C" opacity=".13"/></pattern></defs>
+<rect width="1720" height="1126" fill="#FBFAF7"/><rect width="1720" height="1126" fill="url(#dots)"/>
+<text x="860.0" y="62" text-anchor="middle" font-size="34" font-weight="800" fill="#1F2937">4과목 과목 개요 마인드맵</text>
+<text x="860.0" y="96" text-anchor="middle" font-size="18" fill="#6B7280">맞춤형화장품 조제관리사 · 맞춤형화장품의 이해</text>
+<rect x="800.0" y="106" width="120" height="4" rx="2" fill="#159A6C"/>
+<path d="M732.0 583.0 C666.0 583.0, 666.0 236.0, 600 236.0" fill="none" stroke="#E8505B" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="600" cy="236.0" r="6" fill="#E8505B"/>
+<path d="M732.0 583.0 C666.0 583.0, 666.0 494.0, 600 494.0" fill="none" stroke="#3B82F6" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="600" cy="494.0" r="6" fill="#3B82F6"/>
+<path d="M732.0 583.0 C666.0 583.0, 666.0 752.0, 600 752.0" fill="none" stroke="#10B981" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="600" cy="752.0" r="6" fill="#10B981"/>
+<path d="M988.0 583.0 C1054.0 583.0, 1054.0 157.0, 1120 157.0" fill="none" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="1120" cy="157.0" r="6" fill="#F59E0B"/>
+<path d="M988.0 583.0 C1054.0 583.0, 1054.0 365.0, 1120 365.0" fill="none" stroke="#8B5CF6" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="1120" cy="365.0" r="6" fill="#8B5CF6"/>
+<path d="M988.0 583.0 C1054.0 583.0, 1054.0 623.0, 1120 623.0" fill="none" stroke="#EC4899" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="1120" cy="623.0" r="6" fill="#EC4899"/>
+<path d="M988.0 583.0 C1054.0 583.0, 1054.0 881.0, 1120 881.0" fill="none" stroke="#0EA5A4" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+<circle cx="1120" cy="881.0" r="6" fill="#0EA5A4"/>
+<g filter="url(#sh)"><rect x="40" y="209.0" width="560" height="232" rx="18" fill="#fff" stroke="#E8505B" stroke-opacity=".35"/></g>
+<path d="M40 227.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#E8505B"/>
+<rect x="56" y="222.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="85" y="242.0" text-anchor="middle" font-size="15" font-weight="800" fill="#E8505B">Ch01</text>
+<text x="128" y="244.0" font-size="20" font-weight="800" fill="#fff">맞춤형화장품 개요</text>
+<circle cx="70" cy="292.0" r="5" fill="#E8505B"/>
+<text x="86" y="297.0" font-size="16.5" font-weight="700" fill="#1F2937">맞춤형화장품 정의</text>
+<text x="86" y="317.0" font-size="14" fill="#6B7280">혼합형 · 소분형</text>
+<line x1="64" y1="324.0" x2="576" y2="324.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="342.0" r="5" fill="#E8505B"/>
+<text x="86" y="347.0" font-size="16.5" font-weight="700" fill="#1F2937">주요 규정</text>
+<text x="86" y="367.0" font-size="14" fill="#6B7280">판매업 신고 · 결격사유</text>
+<line x1="64" y1="374.0" x2="576" y2="374.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="392.0" r="5" fill="#E8505B"/>
+<text x="86" y="397.0" font-size="16.5" font-weight="700" fill="#1F2937">안전성 · 유효성 · 안정성</text>
+<text x="86" y="417.0" font-size="14" fill="#6B7280">안전성시험 9종 · 효력/인체적용 · 안정성 4종</text>
+<g filter="url(#sh)"><rect x="40" y="467.0" width="560" height="232" rx="18" fill="#fff" stroke="#3B82F6" stroke-opacity=".35"/></g>
+<path d="M40 485.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#3B82F6"/>
+<rect x="56" y="480.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="85" y="500.0" text-anchor="middle" font-size="15" font-weight="800" fill="#3B82F6">Ch02</text>
+<text x="128" y="502.0" font-size="20" font-weight="800" fill="#fff">피부 및 모발의 생리구조</text>
+<circle cx="70" cy="550.0" r="5" fill="#3B82F6"/>
+<text x="86" y="555.0" font-size="16.5" font-weight="700" fill="#1F2937">피부의 생리구조</text>
+<text x="86" y="575.0" font-size="14" fill="#6B7280">표피 5층 · 진피 2층 · 기능 12가지</text>
+<line x1="64" y1="582.0" x2="576" y2="582.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="600.0" r="5" fill="#3B82F6"/>
+<text x="86" y="605.0" font-size="16.5" font-weight="700" fill="#1F2937">모발의 생리구조</text>
+<text x="86" y="625.0" font-size="14" fill="#6B7280">모간 3층 · 성장주기 3단계</text>
+<line x1="64" y1="632.0" x2="576" y2="632.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="650.0" r="5" fill="#3B82F6"/>
+<text x="86" y="655.0" font-size="16.5" font-weight="700" fill="#1F2937">피부와 모발의 상태 분석</text>
+<text x="86" y="675.0" font-size="14" fill="#6B7280">피부 유형 8가지 · 피츠패트릭 6형</text>
+<g filter="url(#sh)"><rect x="40" y="725.0" width="560" height="232" rx="18" fill="#fff" stroke="#10B981" stroke-opacity=".35"/></g>
+<path d="M40 743.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#10B981"/>
+<rect x="56" y="738.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="85" y="758.0" text-anchor="middle" font-size="15" font-weight="800" fill="#10B981">Ch03</text>
+<text x="128" y="760.0" font-size="20" font-weight="800" fill="#fff">관능평가 방법과 절차</text>
+<circle cx="70" cy="808.0" r="5" fill="#10B981"/>
+<text x="86" y="813.0" font-size="16.5" font-weight="700" fill="#1F2937">관능평가 기초</text>
+<text x="86" y="833.0" font-size="14" fill="#6B7280">평가 환경 · 조건</text>
+<line x1="64" y1="840.0" x2="576" y2="840.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="858.0" r="5" fill="#10B981"/>
+<text x="86" y="863.0" font-size="16.5" font-weight="700" fill="#1F2937">관능평가 실무</text>
+<text x="86" y="883.0" font-size="14" fill="#6B7280">제품별 평가 요소</text>
+<line x1="64" y1="890.0" x2="576" y2="890.0" stroke="#E5E7EB"/>
+<circle cx="70" cy="908.0" r="5" fill="#10B981"/>
+<text x="86" y="913.0" font-size="16.5" font-weight="700" fill="#1F2937">평가 주체</text>
+<text x="86" y="933.0" font-size="14" fill="#6B7280">패널 구성 · 통계 처리</text>
+<g filter="url(#sh)"><rect x="1120" y="130.0" width="560" height="182" rx="18" fill="#fff" stroke="#F59E0B" stroke-opacity=".35"/></g>
+<path d="M1120 148.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#F59E0B"/>
+<rect x="1136" y="143.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="1165" y="163.0" text-anchor="middle" font-size="15" font-weight="800" fill="#F59E0B">Ch04</text>
+<text x="1208" y="165.0" font-size="20" font-weight="800" fill="#fff">제품 상담</text>
+<circle cx="1150" cy="213.0" r="5" fill="#F59E0B"/>
+<text x="1166" y="218.0" font-size="16.5" font-weight="700" fill="#1F2937">효과 · 부작용</text>
+<text x="1166" y="238.0" font-size="14" fill="#6B7280">효과 표시 · 피부 부작용 증상</text>
+<line x1="1144" y1="245.0" x2="1656" y2="245.0" stroke="#E5E7EB"/>
+<circle cx="1150" cy="263.0" r="5" fill="#F59E0B"/>
+<text x="1166" y="268.0" font-size="16.5" font-weight="700" fill="#1F2937">배합금지 · 사용제한</text>
+<text x="1166" y="288.0" font-size="14" fill="#6B7280">배합금지 확인 · 중금속 · 미생물 한도</text>
+<g filter="url(#sh)"><rect x="1120" y="338.0" width="560" height="232" rx="18" fill="#fff" stroke="#8B5CF6" stroke-opacity=".35"/></g>
+<path d="M1120 356.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#8B5CF6"/>
+<rect x="1136" y="351.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="1165" y="371.0" text-anchor="middle" font-size="15" font-weight="800" fill="#8B5CF6">Ch05</text>
+<text x="1208" y="373.0" font-size="20" font-weight="800" fill="#fff">제품 안내</text>
+<circle cx="1150" cy="421.0" r="5" fill="#8B5CF6"/>
+<text x="1166" y="426.0" font-size="16.5" font-weight="700" fill="#1F2937">표시사항</text>
+<text x="1166" y="446.0" font-size="14" fill="#6B7280">1차 · 2차 · 소용량 포장</text>
+<line x1="1144" y1="453.0" x2="1656" y2="453.0" stroke="#E5E7EB"/>
+<circle cx="1150" cy="471.0" r="5" fill="#8B5CF6"/>
+<text x="1166" y="476.0" font-size="16.5" font-weight="700" fill="#1F2937">표시 · 광고</text>
+<text x="1166" y="496.0" font-size="14" fill="#6B7280">실증 자료 · 행정처분</text>
+<line x1="1144" y1="503.0" x2="1656" y2="503.0" stroke="#E5E7EB"/>
+<circle cx="1150" cy="521.0" r="5" fill="#8B5CF6"/>
+<text x="1166" y="526.0" font-size="16.5" font-weight="700" fill="#1F2937">안전 기준 · 특징</text>
+<text x="1166" y="546.0" font-size="14" fill="#6B7280">안전 기준 · 맞춤형화장품 특징</text>
+<g filter="url(#sh)"><rect x="1120" y="596.0" width="560" height="232" rx="18" fill="#fff" stroke="#EC4899" stroke-opacity=".35"/></g>
+<path d="M1120 614.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#EC4899"/>
+<rect x="1136" y="609.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="1165" y="629.0" text-anchor="middle" font-size="15" font-weight="800" fill="#EC4899">Ch06</text>
+<text x="1208" y="631.0" font-size="20" font-weight="800" fill="#fff">혼합 및 소분</text>
+<circle cx="1150" cy="679.0" r="5" fill="#EC4899"/>
+<text x="1166" y="684.0" font-size="16.5" font-weight="700" fill="#1F2937">원료 · 제형 특성</text>
+<text x="1166" y="704.0" font-size="14" fill="#6B7280">제형 안정성 · 호모게나이저 · 디스퍼</text>
+<line x1="1144" y1="711.0" x2="1656" y2="711.0" stroke="#E5E7EB"/>
+<circle cx="1150" cy="729.0" r="5" fill="#EC4899"/>
+<text x="1166" y="734.0" font-size="16.5" font-weight="700" fill="#1F2937">유효성 · 규격</text>
+<text x="1166" y="754.0" font-size="14" fill="#6B7280">pH · 온도 · 농도 단위</text>
+<line x1="1144" y1="761.0" x2="1656" y2="761.0" stroke="#E5E7EB"/>
+<circle cx="1150" cy="779.0" r="5" fill="#EC4899"/>
+<text x="1166" y="784.0" font-size="16.5" font-weight="700" fill="#1F2937">도구 · 준수사항</text>
+<text x="1166" y="804.0" font-size="14" fill="#6B7280">혼합 · 소분 도구 · 판매업 준수사항</text>
+<g filter="url(#sh)"><rect x="1120" y="854.0" width="560" height="182" rx="18" fill="#fff" stroke="#0EA5A4" stroke-opacity=".35"/></g>
+<path d="M1120 872.0 a18 18 0 0 1 18 -18 h524 a18 18 0 0 1 18 18 v36 h-560 Z" fill="#0EA5A4"/>
+<rect x="1136" y="867.0" width="58" height="28" rx="14" fill="#fff" opacity=".95"/><text x="1165" y="887.0" text-anchor="middle" font-size="15" font-weight="800" fill="#0EA5A4">Ch07</text>
+<text x="1208" y="889.0" font-size="20" font-weight="800" fill="#fff">충진 및 포장</text>
+<circle cx="1150" cy="937.0" r="5" fill="#0EA5A4"/>
+<text x="1166" y="942.0" font-size="16.5" font-weight="700" fill="#1F2937">충진 방법</text>
+<text x="1166" y="962.0" font-size="14" fill="#6B7280">충진기 종류</text>
+<line x1="1144" y1="969.0" x2="1656" y2="969.0" stroke="#E5E7EB"/>
+<circle cx="1150" cy="987.0" r="5" fill="#0EA5A4"/>
+<text x="1166" y="992.0" font-size="16.5" font-weight="700" fill="#1F2937">포장 방법</text>
+<text x="1166" y="1012.0" font-size="14" fill="#6B7280">플라스틱 포장재 · 포장공간 비율</text>
+<circle cx="860.0" cy="583.0" r="146" fill="#159A6C" opacity=".12"/>
+<circle cx="860.0" cy="583.0" r="128" fill="url(#rg)" filter="url(#sh)"/>
+<circle cx="860.0" cy="583.0" r="116" fill="none" stroke="#fff" stroke-opacity=".5" stroke-dasharray="4 6"/>
+<g transform="translate(860.0,533.0)" stroke="#fff" stroke-width="3" fill="none" stroke-linejoin="round">
+<rect x="-30" y="-6" width="26" height="30" rx="6"/><rect x="-25" y="-16" width="16" height="10" rx="2" fill="#fff"/>
+<rect x="4" y="4" width="30" height="20" rx="5"/><rect x="2" y="-4" width="34" height="8" rx="3" fill="#fff"/>
+<path d="M-6 -22 C6 -38 26 -34 28 -18 C14 -16 2 -14 -6 -22 Z" fill="#fff" opacity=".9"/></g>
+<text x="860.0" y="605.0" text-anchor="middle" font-size="30" font-weight="900" fill="#fff">4과목</text>
+<text x="860.0" y="633.0" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">맞춤형화장품의</text>
+<text x="860.0" y="656.0" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">이해</text>
+<text x="860.0" y="1096" text-anchor="middle" font-size="13" fill="#9CA3AF">7개 챕터 · 중분류 19개</text>
+</svg>
