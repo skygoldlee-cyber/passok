@@ -160,11 +160,19 @@ function findIssues(file) {
   return issues.map(i => ({ file: rel, ...i }));
 }
 
-const files = docFiles();
+// --ref: ref..HEAD+미커밋 변경 문서만 검사 — 신규 스테일 참조 유입 탐지
+const { refFromArgs, changedFiles } = require('./changed_files.js');
+const ref = refFromArgs(process.argv.slice(2));
+const scoped = ref ? new Set(changedFiles(ref)) : null;
+
+let files = docFiles();
+if (scoped) {
+  files = files.filter((f) => scoped.has(path.relative(ROOT, f).replace(/\\/g, '/')));
+}
 const allIssues = files.flatMap(findIssues);
 
 if (!allIssues.length) {
-  console.log(`✅ 문서 경로 검증 통과 — ${files.length}개 문서, 스테일 참조 없음`);
+  console.log(`✅ 문서 경로 검증 통과 — ${files.length}개 문서${scoped ? ' (diff 스코프)' : ''}, 스테일 참조 없음`);
   process.exit(0);
 }
 

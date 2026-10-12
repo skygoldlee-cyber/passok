@@ -17,9 +17,9 @@ const path = require('path');
 
 const NPM = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
-function nodeStep(id, script, layer, desc, { args = [], content = false, slow = false, token } = {}) {
+function nodeStep(id, script, layer, desc, { args = [], content = false, slow = false, token, diffScoped = false, serial = false } = {}) {
   return { id, bin: 'node', args: [script, ...args], shell: false, layer, desc,
-    token: token ?? path.basename(script), content, slow };
+    token: token ?? path.basename(script), content, slow, diffScoped, serial };
 }
 
 function npmStep(id, script, layer, desc, opts = {}) {
@@ -38,21 +38,21 @@ const STEP_STUDYQ = nodeStep('studyq', 'tools/check/audit_study_quality.js', '�
 
 // ── 문서 정합 묶음 (check:docs → docs 프리셋) ──────────────────────────
 const DOCS_STEPS = [
-  nodeStep('docs:paths', 'tools/check/check_docs_paths.js', '문서', 'README·AGENTS·docs/*.md 경로 참조 존재 검증'),
+  nodeStep('docs:paths', 'tools/check/check_docs_paths.js', '문서', 'README·AGENTS·docs/*.md 경로 참조 존재 검증', { diffScoped: true }),
   nodeStep('docs:ids', 'tools/check/check_doc_ids.js', '문서', '문서 ID 누락·중복·범위·판본 헤더 검증'),
   nodeStep('docs:textbook', 'tools/check/check_textbook_docs.js', '문서', '교재 갱신 ↔ 판본:textbook 문서 신선도'),
   nodeStep('docs:inventory', 'tools/check/check_inventory.js', '문서', '디렉토리 구조 정합 (AGENTS·ARCHITECTURE 트리 ↔ 실물)'),
   nodeStep('docs:commands', 'tools/check/check_npm_commands.js', '문서', 'npm 명령 정합 (스크립트 ↔ 문서 인용 양방향)'),
   nodeStep('docs:plan', 'tools/check/check_plan_features.js', '문서', 'feature-plan 키 ↔ 코드 사용 ↔ 로드맵 정합'),
   nodeStep('docs:featflags', 'tools/check/check_feature_flags.js', '문서', 'exams.json features 키 ↔ 코드 사용 정합'),
-  nodeStep('docs:storage', 'tools/check/check_storage_access.js', '문서', 'localStorage 직접 접근 탐지 (storage.js 우회 차단)'),
+  nodeStep('docs:storage', 'tools/check/check_storage_access.js', '문서', 'localStorage 직접 접근 탐지 (storage.js 우회 차단)', { diffScoped: true }),
   nodeStep('docs:notes', 'tools/check/check_release_notes.js', '문서', '릴리스 노트 스키마·버전 해시·APP_VERSION 정합'),
   nodeStep('docs:ciparity', 'tools/check/check_ci_parity.js', '문서', 'ci.yml 워크플로 ↔ check:ci 프리셋 양방향 정합'),
 ];
 
 // ── 콘텐츠 의존성 단계 (check:content → content 프리셋) ────────────────
 const BUILD_STEP = { id: 'content:build', bin: NPM, args: ['run', 'build:data'], shell: true,
-  layer: '빌드', desc: 'build:data — data/ 번들 전체 재생성 (+인용 라인 동기화)', token: 'npm run build:data', content: true, slow: false };
+  layer: '빌드', desc: 'build:data — data/ 번들 전체 재생성 (+인용 라인 동기화)', token: 'npm run build:data', content: true, slow: false, serial: true };
 
 const CONTENT_STEPS = [
   nodeStep('content:manifest', 'tools/check/check_manifest.js', '선언', 'manifest 선언 ↔ 파일/과목 자산 정합성', { content: true }),
@@ -67,10 +67,10 @@ const CONTENT_STEPS = [
   nodeStep('content:drillfresh', 'tools/check/check_drill_freshness.js', '드릴신선도', '드릴 번들 ↔ 문제은행 번들 (build:drills 필요 감지)', { content: true }),
   nodeStep('content:combo', 'tools/check/check_combo_pilot.js', '드릴', '복수정답형(combo) 드릴 데이터 정합성', { content: true }),
   nodeStep('content:id-migration', 'tools/build/build_id_migration.js', 'ID이관', '카드/퀴즈 ID 스냅샷 ↔ 콘텐츠 (build:data 누락·진도 손실 감지)', { args: ['--check'], content: true }),
-  nodeStep('content:datafresh', 'tools/check/check_data_freshness.js', '데이터신선도', 'data/·생성물 ↔ 원본 (빌드 체인 실행 후 git diff — build:data 누락 감지)', { content: true }),
+  nodeStep('content:datafresh', 'tools/check/check_data_freshness.js', '데이터신선도', 'data/·생성물 ↔ 원본 (빌드 체인 실행 후 git diff — build:data 누락 감지)', { content: true, serial: true }),
   nodeStep('content:parser', 'tools/check/check_parser_parity.js', '파서', '빌드 파서 ↔ 런타임 파서 출력 등가성'),
   nodeStep('content:imports', 'tools/check/check_imports.js', '임포트', 'src/ ES 모듈 import/export 교차 검증'),
-  nodeStep('content:posind', 'tools/check/check_position_independence.js', '규칙', '교재 좌표 비의존 — 위치 기반 식별자·저장 키 정적 탐지 (ID-05)'),
+  nodeStep('content:posind', 'tools/check/check_position_independence.js', '규칙', '교재 좌표 비의존 — 위치 기반 식별자·저장 키 정적 탐지 (ID-05)', { diffScoped: true }),
   nodeStep('content:assets', 'tools/check/verify_shell_assets.js', '자산', 'sw.js SHELL_ASSETS/DATA_ASSETS 파일 존재'),
   nodeStep('content:cards', 'tools/check/audit_card_quality.js', '카드', '카드 품질 감사 (짧은 설명·중복·참조 링크)', { content: true }),
   nodeStep('content:docbundles', 'tools/build/build_doc_bundles.js', '문서번들', 'docs_md 번들 ↔ 원본 문서 신선도 (build_doc_bundles 필요 감지)', { args: ['--check'], content: true }),
@@ -86,7 +86,7 @@ const CONTENT_STEPS = [
 // 각 단계의 token은 ci.yml run: 라인의 토큰과 1:1 대응 — check_ci_parity가 검증.
 const CI_STEPS = [
   npmStep('ci:hooks', 'check:hooks', '로컬', 'Git 훅 설치 여부 (미설치 시 로컬 게이트 우회 경고)'),
-  npmStep('ci:secrets', 'check:secrets', '보안', '추적 파일 시크릿 패턴 스캔'),
+  npmStep('ci:secrets', 'check:secrets', '보안', '추적 파일 시크릿 패턴 스캔', { diffScoped: true }),
   STEP_LINT,
   STEP_TYPES,
   npmStep('ci:imports', 'check:imports', '품질', 'ES 모듈 import/export 교차 검증'),
@@ -95,7 +95,7 @@ const CI_STEPS = [
   STEP_DOMAINMAP,
   STEP_UITEXT,
   npmStep('ci:mobilesafe', 'check:mobilesafe', '규약', '모바일 잘림 규약 (다이얼로그·버튼 행 줄바꿈)'),
-  npmStep('ci:escape', 'check:escape', '규약', 'HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간)'),
+  npmStep('ci:escape', 'check:escape', '규약', 'HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간)', { diffScoped: true }),
   nodeStep('ci:docsync', 'tools/check/check_doc_sync.js', '문서', '소스 변경 시 문서 갱신 강제', { args: ['--ref', 'origin/main'] }),
   nodeStep('ci:testfirst', 'tools/check/check_test_first.js', '테스트', '로직 변경 시 테스트 동반 강제', { args: ['--ref', 'origin/main'] }),
   npmStep('ci:specrefs', 'check:specrefs', '추적', 'SPEC↔@spec 스테일 참조 + 테스트 갭 기준선'),

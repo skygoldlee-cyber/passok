@@ -19,10 +19,10 @@
  */
 
 // @spec none (검증 실행기)
-const { spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const { PRESETS, resolveSteps, findStep } = require('./steps.js');
+const { runSteps } = require('./step_runner.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const argv = process.argv.slice(2);
@@ -35,6 +35,8 @@ function argValue(flag) {
 const PRESET = argValue('--preset');
 const STEP = argValue('--step');
 const LIST = argv.includes('--list');
+const JOBS = Math.max(1, Number(argValue('--jobs')) || 3);
+const REF = argValue('--ref');
 const OPTS = {
   quick: argv.includes('--quick'),
   contentOnly: argv.includes('--content-only'),
@@ -45,7 +47,8 @@ const USAGE = `사용법:
   node tools/check/run.js --preset <${Object.keys(PRESETS).join('|')}> [옵션]
   node tools/check/run.js --step <id|npm 스크립트명|check_파일명>
   node tools/check/run.js --list [preset]
-옵션: --quick(느린 단계 생략) · --content-only(콘텐츠 추적 단계만) · --build(build:data 선실행)`;
+옵션: --quick(느린 단계 생략) · --content-only(콘텐츠 추적 단계만) · --build(build:data 선실행)
+      --jobs N(병렬도, 기본 3 — 1이면 순차) · --ref <ref>(diff 스코프 단계만 변경 파일 대상)`;
 
 if (LIST) {
   const names = [PRESET || argv[argv.indexOf('--list') + 1]].filter(Boolean);
@@ -88,24 +91,28 @@ if (STEP) {
   process.exit(1);
 }
 
-const results = [];
+// --ref 지정 시 diff 스코프 단계만 변경 파일 대상으로 축소 (npm 단계는 `--` 경유 인자)
+const execSteps = steps.map((s) => {
+  if (!s.diffScoped || !REF) return s;
+  return { ...s, args: s.shell ? [...s.args, '--', '--ref', REF] : [...s.args, '--ref', REF] };
+});
+
 console.log('═'.repeat(60));
 console.log(` ${heading}`);
 console.log('═'.repeat(60));
 
-for (const s of steps) {
-  const label = `[${s.layer}] ${s.desc}`;
-  process.stdout.write(`\n▶ ${label}\n`);
-  const r = spawnSync(s.bin, s.args, {
-    cwd: ROOT,
-    shell: s.shell,
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
-  const ok = r.status === 0;
-  results.push({ label, ok, output: (r.stdout || '') + (r.stderr || '') });
-  console.log(ok ? '  ✅ 통과' : `  ❌ 실패 (exit ${r.status})`);
-}
+const secs = (ms) => (ms >= 1000 ? `${(ms / 1000).toFixed(1)}s` : `${ms}ms`);
+const finished = runSteps(execSteps, {
+  jobs: JOBS,
+  cwd: ROOT,
+  onResult: (r) => {
+    const label = `[${r.step.layer}] ${r.step.desc}`;
+    console.log(`\n▶ ${label}\n${r.ok ? `  ✅ 통과 (${secs(r.ms)})` : `  ❌ 실패 (exit ${r.status}, ${secs(r.ms)})`}`);
+  },
+});
+
+finished.then((ran) => {
+const results = ran.map((r) => ({ label: `[${r.step.layer}] ${r.step.desc}`, ok: r.ok, output: r.output }));
 
 console.log('\n' + '═'.repeat(60));
 console.log(' 검증 리포트');
@@ -132,3 +139,4 @@ for (const r of failed) {
   console.log(`─ ${r.label} ${'─'.repeat(40)}\n${tail}\n`);
 }
 process.exit(1);
+}).catch((err) => { console.error(err); process.exit(2); });
