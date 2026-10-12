@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 CI 유닛 테스트 glob 버그 수정 + 커버리지 래칭 2차
+
+- **[심각] CI 유닛 테스트 전량 미실행 수정**: `package.json`의 `node --test tests/unit/**/*.test.js` 인자가 미인용이라 CI(bash)에서 `**`가 `*`로 축약돼 `tests/unit/<하위디렉터리>/*.test.js`만 매칭 — CI는 유닛 **55개만** 실행(로컬 1,192)하고 c8 커버리지도 10개 파일만 수집했다. glob을 인용해 Node 자체 확장으로 전환 → OS 무관 전량 실행. `test`·`test:unit`·`coverage:unit`·`test:all`·`test:watch` 5개 스크립트 동일 수정. check-runner.test.js에 "node --test glob 인용 필수" 회귀 가드 추가
+- **커버리지 래칫 2차 — 실측 복원**: 버그 수정으로 진짜 병합 커버리지 확인 — stmts 69.34 / branches 65.42 / funcs 70.05 / lines 80.34 (CI 리포트는 유닛 유실로 66.19/52.69/65.72/71.72로 과소 계측됐던 것). 임계값을 실측−~0.8%p로 상향 (68.5/64.5/69/79.5)
+- **vitest DOM 임계값도 실측 기준 상향** (65/51.5/65.5/69.5 — 실측 65.67/51.99/66.43/70.09 대비 ~0.5%p)
+- **저커버리지 파일 테스트 보강**: `combo-doc.test.js` 신규 4개 — `buildComboSubjectMd`(함수 커버리지 0%→) 문제부 직렬화·정답 도출·해설 `정답:` 필터·파일럿 표기. `textbook-edition.dom.test.js` 신규 5개 — 개정 배너 표시/판본 문구/확인 시 기록·재억제/동일 판본·미선언·중복 처리 억제 (P-14)
+
 ## 2026-10-13 exam-simulator 뷰 분해 (대형 뷰 분할 후속)
 
 - **exam-simulator.js 분해**: 799라인을 수명주기 단위 4모듈로 분해 — `exam-sim-session.js`(시험 구성: 과목별/ㄱㄴㄷ/통합 모의고사 + startSimSession + 드래프트 복구·나가기, 362라인), `exam-sim-arena.js`(시험 중 기계 장치: 절대 시각 타이머·OMR·문항 렌더·응답·채점 제출 + deriveComboJudgments, 390라인), `exam-sim-draft.js`(드래프트 저장소·복구 배너 — 뷰 무의존 순수 모듈, 55라인). 의존 방향은 session → arena → draft 단방향 — 드래프트 IO를 순수 모듈로 분리해 arena⇄draft 순환 회피

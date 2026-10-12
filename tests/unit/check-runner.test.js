@@ -28,6 +28,22 @@ test('레지스트리 — npm 단계의 스크립트가 package.json에 존재',
   }
 });
 
+test('package.json — node --test glob 인자는 인용 필수 (bash ** → * 축약 차단)', () => {
+    // 회귀 가드: 미인용 tests/unit/**/*.test.js는 POSIX 셸에서 **가 *로 축약돼
+    // 1레벨 하위 디렉터리만 매칭된다 (CI에서 top-level 테스트 전량 미실행 사고).
+    // 인용하면 Node 자체 glob 확장(재귀)이 동작해 OS 무관하게 동일 집합이 실행된다.
+    for (const [name, script] of Object.entries(pkg.scripts)) {
+        if (!/node\s+--test\b/.test(script) || !script.includes('**')) continue;
+        for (const token of script.split(/\s+/)) {
+            if (!token.includes('**')) continue;
+            assert.ok(
+                /^["'].*\*.*["']$/.test(token),
+                `"${name}": node --test glob 인자 미인용 — POSIX 셸에서 **가 *로 축약됨: ${token}`
+            );
+        }
+    }
+});
+
 test('프리셋 — content 플래그 조합이 올바르게 필터링', () => {
   const full = resolveSteps('content', {});
   const quick = resolveSteps('content', { quick: true });
