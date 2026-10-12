@@ -105,3 +105,12 @@ def test_same_text_map():
     m = be.same_text_map(items)
     assert sorted(m["s1"]) == ["s2"] and m["s2"] == ["s1"]
     assert "s3" not in m
+
+
+def test_file_sha1_normalizes_line_endings(tmp_path):
+    # CRLF/LF 작업트리 개행 차이로 해시가 갈리지 않아야 함 (Windows↔CI 오탐 방지)
+    f = tmp_path / "bundle.js"
+    f.write_bytes("var X = [1];\nvar Y = [2];\n".encode())
+    lf = be.file_sha1(f)
+    f.write_bytes("var X = [1];\r\nvar Y = [2];\r\n".encode())
+    assert be.file_sha1(f) == lf
