@@ -16,7 +16,8 @@ import { lawUrlFor } from './law-links.js';
 function lawExtLink(name, anchorCls = 'ref-law-ext', label = '원문', titleSuffix = '공식 최신 통합본') {
     const url = lawUrlFor(name);
     if (!url) return '';
-    return ` <a href="${url}" target="_blank" rel="noopener" class="${anchorCls}" title="${escapeHTML(name)} — law.go.kr ${titleSuffix} (새 탭)" aria-label="${escapeHTML(label)} — law.go.kr (새 탭)"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>${escapeHTML(label)}</a>`;
+    const titleName = refDocDisplayName(name) || prettyRefName(name);
+    return ` <a href="${url}" target="_blank" rel="noopener" class="${anchorCls}" title="${escapeHTML(titleName)} — law.go.kr ${titleSuffix} (새 탭)" aria-label="${escapeHTML(label)} — law.go.kr (새 탭)"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>${escapeHTML(label)}</a>`;
 }
 
 // 파일명 → 읽기용 표시명: 확장자·(발령기관)(제N호)(시행일) 꼬리 제거, 언더스코어→공백

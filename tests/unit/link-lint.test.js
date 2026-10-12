@@ -109,6 +109,16 @@ test('LL-08: 위험 스킴 href 탐지', () => {
     assert.ok(rules(out).includes('LL-08'));
 });
 
+test('LL-09: title/alt/aria-label 속성의 경로·파일명 노출 탐지', () => {
+    const out = [];
+    // lawExtLink 툴팁 이력 — 파일명이 title에 남는 패턴
+    lintHtml(DOC_FILE, '<a title="화장품법(법률)(제1호).md — law.go.kr 공식 통합본">x</a>', 'doc', { ExamViewer, out });
+    assert.ok(rules(out).includes('LL-09'), '파일명 title 노출');
+    const out2 = [];
+    lintHtml(DOC_FILE, '<a title="화장품법 — law.go.kr 공식 통합본 (새 탭)" aria-label="원문 보기">x</a>', 'doc', { ExamViewer, out: out2 });
+    assert.ok(!rules(out2).includes('LL-09'), '정리된 title은 통과');
+});
+
 // ==================== 라인 번호·번들 ====================
 
 test('진단에 소스 라인 번호가 포함된다', () => {
