@@ -1,6 +1,8 @@
 /* Noto Sans KR and Outfit self-hosted fonts */
 
-/* noto-color-emoji-400 (이모지 렌더링 통일: PC/모바일 동일한 구글 Noto Color Emoji 사용) */
+/* noto-color-emoji-400 (이모지 렌더링 통일: PC/모바일 동일한 구글 Noto Color Emoji 사용)
+   PF-17: 사용 글자 119코드포인트 서브셋 (전체 5.4MB → 0.17MB).
+   재생성: 전체 폰트 + fontTools subset — SPEC PF-17 참조. */
 @font-face {
   font-family: 'Noto Color Emoji';
   font-style: normal;
