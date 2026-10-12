@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 vitest 4.1.11 → 5.0.3 업그레이드
+
+- **dependabot 분리 PR(#9 coverage-v8·#10 vitest)이 각각 ERESOLVE 실패** — vitest와 @vitest/coverage-v8은 peer 버전을 공유하므로 단독 범프가 불가능. main에서 동시 업그레이드로 해결하고 dependabot PR 2건 close
+- **호환성**: Node 24 요구사양 충족(Vite는 peer로 npm 자동 설치). `clearMocks: true` 기본값 변경·`vi.mock` 함수 내 정의 금지 등 breaking 변경의 영향 없음 — DOM 694개 전량 통과, 병합 커버리지 70.40/66.38/72.11/81.69로 4와 동수치
+- 참고: `qs`(typed-rest-client 경유) moderate 2건은 dev 의존성 체인 — CI audit 게이트(high+ 차단) 비대상
+
 ## 2026-10-13 부트스트랩 분모 정정 + E2E CI 재시도 + 래칭 4차
 
 - **측정 불가 부트스트랩 2파일을 커버리지 분모에서 제외**: `src/app.js`(진입점 오케스트레이터 — import 자체가 부팅 부작용, E2E 영역), `src/exam-data-boot.js`(클래식 스크립트 비ESM — 모듈 import 물리 불가). `reader-audio.js` 등 기존 제외 선례와 동일 근거. `app-dashboard.js`·`quiz-wrong-cause.js`(0%)는 실제 뷰/기능 로직(@spec D-02~06·AN-02)이라 제외하지 않고 테스트 보강 대상으로 유지 — 분모 정정으로 병합 70.41/66.38/72.14/81.71, DOM 67.49/53.03/68.51/72.04 측정
