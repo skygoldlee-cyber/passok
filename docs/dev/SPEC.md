@@ -596,7 +596,7 @@
 | PF-10 | `console.log` → `console.debug` (프로덕션 콘솔 노이즈 제거) | ✅ |
 | PF-11 | ref_md 대용량 파일 MD 변환 (배포 용량 41% 절감) | ✅ |
 | PF-12 | `KEYWORD_INDEX` 경로 단축 (51KB → 14KB, 72% 절감) | ✅ |
-| PF-13 | Mermaid.js 온디맨드 로드 (3.3MB, mermaid 블록 있을 때만) | ✅ |
+| PF-13 | Mermaid.js 온디맨드 로드 (3.2MB, mermaid 블록 있을 때만). 설치 프리캐시 제외 — networkFirst 런타임 캐시로 커버, 설치 셸 5.4→2.2MB | ✅ |
 | PF-14 | 전역 테이블 가로 스크롤 (CSS 전역 규칙으로 중복 스타일 제거, 렌더링 일관성) | ✅ |
 | PF-15 | 화장품법 PDF 중복 제거 (공통/ 22페이지 → 법령원문/ 30페이지 정본 통합) | ✅ |
 | PF-16 | Mermaid 다이어그램 타입별 초기화 공용화 (`mermaid-utils.js`, 3개 모듈 중복 제거) | ✅ |

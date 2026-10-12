@@ -115,9 +115,13 @@ Thumbs.db
 
 # ---------- 📝 개발 문서·테스트·CI (배포 불필요) ----------
 # docs/user/는 manual-viewer가 런타임 fetch하므로 배포에 포함 (제외하지 않음).
+# docs/exams/는 전부 내부 문서(business·design·reference·report_archive·user) —
+#   앱 런타임 참조 없음 (user/*.md는 build_doc_bundles 입력일 뿐 번들만 서빙).
+#   content/exams/<id>/docs/*.md는 실제 런타임 fetch 대상이라 제외 금지 (섞지 않음).
 # ping.txt는 offline-detection 연결 프로브 — 제외 금지.
 docs/dev/
 docs/business/
+docs/exams/
 tests/
 ref-pipeline/
 .github/
