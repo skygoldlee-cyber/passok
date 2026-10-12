@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 87a2e47ff599598c
-> 생성: 2026-10-12 · 원천: SPEC.md(465개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 8ddb3bd206abefed
+> 생성: 2026-10-12 · 원천: SPEC.md(466개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 465개 — 문서 연결 296 · 소스 연결 430 · 테스트 연결 454 · 보고서 연결 109
+**커버리지 요약**: 요구사항 466개 — 문서 연결 296 · 소스 연결 430 · 테스트 연결 454 · 보고서 연결 109
 
 ---
 
@@ -690,6 +690,7 @@
 | ROAD-L3 | 미구현 | — | — | — | — | — | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
 | ROAD-L4 | 미구현 | — | — | — | — | — | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
 | ROAD-L5 | ✅ 카운터 구현 (판정 데이터 수집 중) | 테스트 | — | src/usage-stats.js | tests/dom/usage-stats.dom.test.js | — | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
+| ROAD-L6 | ①완료 ⑤보류, 나머지 미구현 | — | — | — | — | — | ML 기법 검토 산출 — FSRS_DESIGN.md (FSRS 적용·RL 보류 판정 근거) |
 
 ---
 
