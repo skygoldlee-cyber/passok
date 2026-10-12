@@ -316,7 +316,14 @@ passory/
 │   │       ├── usage-guide.js      #   사용 안내문 생성기
 │   │       ├── store-utils.js      #   스토어 공통 헬퍼 (loadItems/newId/clamp…)
 │   │       └── views/              #   Formula OS 뷰 (practice-registry 지연 로드)
-│   │           ├── formula.js          # 계산기·My 포뮬러·서브내비
+│   │           ├── formula.js          # 공용 진입점 파사드 (named export 재수출)
+│   │           ├── formula-core.js     # 공용 상태(calc)·패널 전환·서브내비·성분 인덱스
+│   │           ├── formula-hub.js      # 허브 초기화·사업 유형·리마인더·고대비
+│   │           ├── formula-list.js     # My 포뮬러 목록·열기/복제/삭제
+│   │           ├── formula-calc.js     # 배합 계산기 행 렌더·검증·드래프트·저장
+│   │           ├── formula-weigh.js    # 계량 모드 오버레이
+│   │           ├── formula-ing-modal.js # 자가 등록 성분 모달·CRUD
+│   │           ├── formula-io.js       # 인쇄·JSON 보내기/가져오기
 │   │           ├── formula-recommend.js # 추천 베이스/원료 패널·맞춤 규칙 UI
 │   │           ├── formula-fields.js   # 처방 작업대 필드 블록
 │   │           ├── formula-batch.js    # 조제 기록(배치) 목록·폼·상세
@@ -585,7 +592,7 @@ passory/
 | `registry.js` → `ingredients` 메타 | 원료 DB `version`·`updatedAt`·`notice`·`history`(개정 이력 누적)·`contentHash`(내용 지문) — `content/…/knowledge/ingredients.json`의 `meta`에서 병합. 사전 버전 배지·갱신 알림·Formula OS 검증 기준이 여기서 나옴 | `tools/build/index.js` |
 | `src/exams/cosmetic/formula-store.js` · `src/exams/cosmetic/formula-rules.js` · `src/exams/cosmetic/formula-check.js` · `src/exams/cosmetic/formula-stability.js` | Formula OS 도메인 레이어 — 포뮬러 CRUD/한도(5개)·고객·안정성 스키마·전성분 표시 순서, 추천 규칙(BASE_TEMPLATES·고민/피부 매핑·맞춤 규칙 병합), 고시 한도 검증 엔진, 제형 안정성 체크(상 비율·상호작용·투입 단계·pH) | 수동 관리 |
 | `src/exams/cosmetic/batch-store.js` · `src/exams/cosmetic/customer-store.js` · `src/exams/cosmetic/material-ledger.js` · `src/exams/cosmetic/adverse-store.js` · `src/exams/cosmetic/usage-guide.js` · `src/exams/cosmetic/store-utils.js` · `src/csv-utils.js` | Formula OS 업무 레이어 — 배치(조제 기록) 채번·QC·위생·스냅샷, 고객 카드·상담 이력, 원료 입고·기한·재고·차감, 이상사례 기록(FO-59), 사용 안내문 생성기, 스토어 공통 헬퍼, CSV 파서·인코딩(EUC-KR 폴백)·직렬화 (FORMULA_OS_WORKFLOW_DESIGN.md) | 수동 관리 |
-| `src/exams/cosmetic/views/formula.js` | Formula OS 뷰 — 배합 계산기(sticky 요약·액션바, 카드형 원료 행, 접이식 고객/제조 정보), My 포뮬러, 추천 패널, 서브내비 칩, 인쇄·JSON 공유 | 수동 관리 |
+| `src/exams/cosmetic/views/formula.js` + `formula-core.js` · `formula-hub.js` · `formula-list.js` · `formula-calc.js` · `formula-weigh.js` · `formula-ing-modal.js` · `formula-io.js` | Formula OS 뷰 — `formula.js`는 named export 재수출 파사드(app.js 디스패치·테스트 호환). 구현은 역할별 모듈: core(공용 상태·패널·서브내비·성분 인덱스), hub(허브·사업 유형·리마인더·고대비), list(My 포뮬러), calc(배합 계산기·드래프트·저장), weigh(계량 모드), ing-modal(자가 성분 등록), io(인쇄·JSON 공유) | 수동 관리 |
 | `src/exams/cosmetic/views/formula-batch.js` · `formula-customer.js` · `formula-material.js` · `formula-compliance.js` · `formula-adverse.js` · `formula-audit.js` · `formula-print.js` | Formula OS 패널 뷰 — 조제 기록(목록·폼·상세), 고객 관리, 원료 장부(LOT 추적), 법규 준수 체크리스트(법령 MD 링크·체크 영속), 이상사례 기록(FO-59), 종합 점검 보고서 수집(FO-56), 인쇄 빌더(기록지·라벨·안내문·종합 보고서·추적·판매내역·동의서) | 수동 관리 |
 | [`data/exams/cosmetic/id_migration.js`](../../data/exams/cosmetic/id_migration.js) | 레거시 ID → 안정 ID 일회성 매핑 | `tools/build/index.js` (id_factory) |
 | [`data/audio_manifest.js`](../../data/audio_manifest.js) | 오디오 파일 경로 매니페스트 | 오디오북 파이프라인 |
@@ -1734,7 +1741,7 @@ npm run deploy
 1. `src/exams/cosmetic/store-utils.js`의 공통 헬퍼(`loadItems`/`saveItems`/`newId`/`clamp`) 재사용
 2. `*_LIMIT_FREE` 상수 + `canCreate()` 게이트로 Free 한도 적용
 3. 스키마 정제 함수(`sanitize*`)로 입력 정규화
-4. `formula.js`의 PANELS/서브내비에 패널 등록 + `index.html`에 패널 섹션 추가
+4. `formula-core.js`의 PANELS/`SUBNAV_ITEMS`에 패널 등록 + `html/exams/cosmetic/formula.html`에 패널 섹션 추가
 
 ### E. 새 시험 추가
 

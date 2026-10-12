@@ -59,7 +59,7 @@
 
 | 무엇을 바꾸고 싶은가 | 핵심 소스 | 관련 테스트 | SPEC |
 |----------------------|-----------|-------------|------|
-| 배합 폼·필드·추천 메인 | `views/formula.js`, `formula-fields.js`, `formula-recommend.js` | `tests/dom/exams/cosmetic/formula*.dom.test.js` | FO-01~* |
+| 배합 폼·필드·추천 메인 | `views/formula.js`(파사드) + `formula-core.js`·`formula-calc.js` 등 뷰 모듈, `formula-fields.js`, `formula-recommend.js` | `tests/dom/exams/cosmetic/formula*.dom.test.js` | FO-01~* |
 | 처방 규칙·적합성 검사 | `formula-rules.js`, `formula-check.js`, `formula-stability.js` | `tests/unit/exams/cosmetic/formula-*.test.js` | FO-* |
 | 고객 관리·상담 이력 | `views/formula-customer.js` + `customer-store.js` | `formula-customer.dom.test.js` | FO-* |
 | 기성품 DB·전성분 비교·OCR | `views/formula-products.js` + `product-store.js` + `product-vision.js` | `formula-products.dom.test.js` | FO-* |
