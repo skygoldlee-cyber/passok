@@ -250,23 +250,8 @@
   },
   {
     "file": "docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md",
-    "ref": "ref-pipeline/embeddings/build_embeddings.py",
-    "reason": "설계안 제안 경로 — 임베딩 사전계산 파이프라인 (미구현)"
-  },
-  {
-    "file": "docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md",
-    "ref": "ref-pipeline/embeddings/requirements.txt",
-    "reason": "설계안 제안 경로 — 임베딩 파이프라인 독립 의존성 (미구현)"
-  },
-  {
-    "file": "docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md",
-    "ref": "ref-pipeline/embeddings/",
-    "reason": "설계안 제안 경로 — 파이프라인 디렉터리 (미구현)"
-  },
-  {
-    "file": "docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md",
     "ref": "ref-pipeline/embeddings/**",
-    "reason": "설계안 제안 경로 — 도메인맵 규칙 등록 대상 (미구현)"
+    "reason": "도메인맵 규칙 등록 대상 언급 (ref-pipeline/embeddings/ 접두사는 PoC로 생성됨)"
   },
   {
     "file": "docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md",
