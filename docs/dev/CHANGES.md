@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 프로젝트 평가 후속 — formula 뷰 분해 · 게이트 타이밍 리포트 · 온보딩 게이트 지도 · 시각 회귀
+
+- **formula.js 분해 (평가 제안 ①)**: 1,408라인 뷰 컨트롤러를 역할별 7모듈로 분해 — `formula-core.js`(공용 상태 `calc`·패널 전환·서브내비·성분 인덱스·`CHECK_BADGE`), `formula-hub.js`(허브 초기화·사업 유형 프로파일·점검/백업 리마인더·고대비), `formula-list.js`(My 포뮬러 목록·CRUD), `formula-calc.js`(배합 계산기 행 렌더·검증·드래프트 자동 저장·저장), `formula-weigh.js`(계량 모드 오버레이), `formula-ing-modal.js`(자가 등록 성분 모달·CRUD), `formula-io.js`(조제 기록지·작업지시서 인쇄·JSON 보내기/가져오기). `formula.js`는 named export 재수출 파사드(64라인)로 남겨 app.js data-click 디스패치·형제 서브모듈·DOM 테스트의 기존 import를 전부 무파손 유지. 의존 방향은 core → (hub·calc) → (list·io) 단방향 — `CHECK_BADGE`를 core로 올려 list⇄calc 순환 회피. formula DOM 154건 + review-drills 12건 통과
+- **tools/check/run.js (평가 제안 ②)**: 검증 리포트에 `⏱ 단계 합계`(병렬이라 벽시계 아닌 단계 ms 합산) + 최다 소요 TOP 5 요약 추가 — 새 단계 추가·스크립트 변경 후 실행시간 회귀 감지용. 실행 의미(워커풀 병렬·serial 격리·failFast)는 무 변경
+- **docs/dev/reference/GATE_MAP.md (평가 제안 ③, DOC-REF-14)**: 신규 기여자 온보딩용 게이트 지도 1페이지 — pre-commit→pre-push→CI→배포 4층 방어의 각 단계·실행 타이밍·`run.js --preset/--step` 사용법·우회 변수(SKIP_*)·자주 묻는 실패 대응. docs/README.md 읽기 순서·레지스트리에 등록
+- **tests/e2e/visual.spec.js (평가 제안 ④)**: 대시보드 스크린샷 회귀 — chromium-desktop·mobile·tablet × dark/light 6기준선(`toHaveScreenshot`, maxDiffPixelRatio 2%). 배경화 산수화·반투명 카드 비침·테마 팔레트의 시각 변경을 자동 탐지. 동적 요소(버전 토스트·시계)는 mask로 제외
+- **AGENTS.md**: 디렉토리 구조 트리에 분해된 formula 뷰 모듈 7종 기재 (check:inventory 대응)
+
 ## 2026-10-12 데스크탑 배경화 — 수묵 산수화 정적 번들 배경
 
 - **icons/bg-landscape.webp** (신규, 279KB): 정선「인왕제색도」(1751, 퍼블릭 도메인 — Wikimedia Commons `File:Inwangjesaekdo.jpg`) 1920px webp 변환. 채도 0.8·명도 1.08·미세 블러 후처리로 배경용 톤다운

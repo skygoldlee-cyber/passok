@@ -27,10 +27,10 @@
 
 | 구분 | 프레임워크 | 환경 | 파일 위치 | 테스트 수 |
 |------|-----------|------|-----------|-----------|
-| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 843 |
-| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 546 |
-| **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 74 |
-| **합계** | | | | **1463** |
+| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1190 |
+| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 665 |
+| **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 101 |
+| **합계** | | | | **1956** |
 
 ### 설계 원칙
 
@@ -570,7 +570,7 @@ export 함수를 직접 호출하고 DOM 반영을 검증한다. `data-click` �
 
 ### 4.14 E2E (Playwright 실브라우저) — 2026-10-14 추가
 
-`tests/e2e/` 13개 spec 파일 · **73 시나리오** × chromium + Pixel 7 + tablet
+`tests/e2e/` 17개 spec 파일 · **101 시나리오** × chromium + Pixel 7 + tablet
 프로젝트. jsdom으로 불가한 영역을 커버한다 — `playwright.config.js`가 `serve.js`를
 webServer로 자동 기동(port 3000, CI에서는 재사용 안 함).
 시험 도메인 기능의 스펙은 도메인 격리 규약대로 `tests/e2e/exams/<id>/`에 둔다.
