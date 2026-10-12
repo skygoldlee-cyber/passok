@@ -7,6 +7,18 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 시험별 스킨 토큰 (DA-14) — 교재/시험 교체 시 UI 팔레트 분리
+
+- **배경**: 스킨 이식성 감사에서 브랜딩 텍스트·도메인 CSS(`css/exams/<id>/`)는 격리돼 있으나 전역 팔레트(`--color-primary` 등)가 base.css 단일 고정으로 시험별 차별화 불가였음
+- **content/exams.json**: `theme` 필드 신설 — `--color-*`/`--bg-*`/`--border-*`/`--stroke-*` 토큰의 시험별 오버라이드 맵. cosmetic은 현행 cyan/violet 명문화, food는 orange/lime으로 메커니즘 실증
+- **src/exam-context.js**: `resolveExamThemeTokens`(순수 — 화이트리스트 정규식으로 허용 계열만 통과, 비문자열·공백 값 폐기) + `applyExamTheme`(`<html data-exam>` 속성 + documentElement 인라인 변수 주입 — 라이트/다크 양쪽 테마 위에서 유효)
+- **src/pwa-manifest.js**: 부팅 최초 프레임부터 활성 시험 팔레트 적용 (클래식 스크립트라 동일 화이트리스트 정규식 인라인 복제 — exam-context와 동기 주석)
+- **src/app-shell.js**: `applyExamBranding`이 `applyExamTheme` 호출 — 시험 전환(리로드) 외 브랜딩 재적용 경로도 일관
+- **tools/build/scaffold_exam.js**: 신규 시험 엔트리 골격에 `theme: {}` 포함 — 스킨 필드 발견성 확보
+- **src/types.js**: `ExamDef.theme` typedef 추가
+- **tests/unit/exam-context.test.js** (+4건, @spec DA-14): 토큰 화이트리스트 수용/거부, 비객체 입력, `data-exam` 부여 + 인라인 주입, document 부재(Node) 무해
+- **CSS 측 확장 규약**: `html[data-exam="<id>"]` 선택자로 theme 필드 범위 밖(폰트·간격 등)의 스킨 차별화도 cascade로 가능 — 별도 로더 없이 base.css 또는 시험 CSS에 선언하면 됨
+
 ## 2026-10-12 렌더 출력 링크 린트 게이트 + 파서 링크 엣지 회귀 스위트
 
 - **배경**: 프로젝트 평가에서 "수동 렌더 감사가 일반 테스트·콘텐츠 체크의 사각지대 결함을 발견"한 것이 확인되어, 그 감사를 자동 게이트로 고정

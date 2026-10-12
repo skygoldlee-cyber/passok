@@ -298,6 +298,7 @@
  * @property {string}   [manifestPath]
  * @property {string}   [registryBundle]
  * @property {string}   [registryGlobal]
+ * @property {Object.<string, string>}  [theme]          시험별 스킨 토큰 오버라이드 (DA-14) — '--color-*'/'--bg-*'/'--border-*'/'--stroke-*' 키만 적용
  * @property {Object.<string, boolean>} [features]
  */
 
