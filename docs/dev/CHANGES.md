@@ -7,6 +7,11 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 배포 크기 절감 — docs/exams 제외 + mermaid 프리캐시 제외 (PF-13)
+
+- **docs/exams/ 배포 제외**: 내부 문서(business·design·reference·report_archive·user) 3.1MB — 런타임 참조 없음 확인(src는 주석만, 사용자 문서는 `content/…/docs/` + `data/docs_md/` 번들로 서빙). `.vercelignore`에 `docs/exams/` 추가 → 배포 32.7→29.7MB. 헤더 주석의 오래된 "~5MB"도 실측값으로 정정
+- **mermaid 프리캐시 제외**: `mermaid.min.js`(3.2MB)를 SHELL_ASSETS에서 제외 — 지연 로딩 + 규칙 5-4 networkFirst 캐시로 커버. 설치 셸 **5.4→2.2MB**. 오프라인 설치 직후 첫 다이어그램 조회만 네트워크 필요 (사용자 선택 정책), 이후는 캐시. PF-13 테스트에 회귀 가드 추가
+
 ## 2026-10-12 이모지 폰트 서브셋 (PF-17)
 
 - **배경**: `noto-color-emoji-400.woff2` 5.4MB가 최대 단일 런타임 자산 — 실사용 글자는 저장소 전체 스캔 기준 119코드포인트뿐
