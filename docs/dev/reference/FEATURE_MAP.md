@@ -62,7 +62,7 @@
 | 배합 폼·필드·추천 메인 | `views/formula.js`(파사드) + `formula-core.js`·`formula-calc.js` 등 뷰 모듈, `formula-fields.js`, `formula-recommend.js` | `tests/dom/exams/cosmetic/formula*.dom.test.js` | FO-01~* |
 | 처방 규칙·적합성 검사 | `formula-rules.js`, `formula-check.js`, `formula-stability.js` | `tests/unit/exams/cosmetic/formula-*.test.js` | FO-* |
 | 고객 관리·상담 이력 | `views/formula-customer.js` + `customer-store.js` | `formula-customer.dom.test.js` | FO-* |
-| 기성품 DB·전성분 비교·OCR | `views/formula-products.js` + `product-store.js` + `product-vision.js` | `formula-products.dom.test.js` | FO-* |
+| 기성품 DB·전성분 비교·OCR | `views/formula-products.js` 파사드 + `formula-prod-state/vision/detail.js` + `product-store.js` + `product-vision.js` | `formula-products.dom.test.js` | FO-* |
 | 원료 장부·LOT·기한 | `views/formula-material.js` + `material-ledger.js` | `formula-material.dom.test.js` | FO-* |
 | 법규 준수 체크리스트 | `views/formula-compliance.js` | `formula-compliance.dom.test.js` | FO-* |
 | 표시사항·광고 문구 점검 | `views/formula-sales.js` + `ad-lint.js` | `formula-sales.dom.test.js` | FO-* |

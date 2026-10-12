@@ -262,9 +262,13 @@ src/                    # ES Modules
         formula-io.js       # 조제 기록지·작업지시서 인쇄·JSON 보내기/가져오기
         formula-recommend.js # 추천 베이스·원료 패널 + 맞춤 규칙 UI
         formula-fields.js   # 처방 작업대 고객·안정성 필드 블록
-        formula-batch.js    # 조제 기록(배치) 목록·폼·상세 패널
+        formula-batch.js    # 조제 기록(배치) 목록·상세·저장·인쇄 + 폼 핸들러 재수출
+        formula-batch-form.js # 배치 신규·보정 폼 (처방/고객 바인딩·QC·위생·LOT·기한 제안)
         formula-customer.js # 고객 관리 패널 (카드·상담 이력·역참조·기성품 알레르기 교차)
-        formula-products.js # 기성품 DB 패널 (목록·폼·상세 분석·전성분 비교)
+        formula-products.js # 기성품 DB 패널 (목록·폼 액션·JSON IO + 분리 모듈 재수출)
+        formula-prod-state.js # 기성품 폼 공유 상태 (prodForm·전성분 칩 렌더)
+        formula-prod-vision.js # 기성품 사진 인식 (LLM 초안→칩 검토, FO-41~43·46·54·55)
+        formula-prod-detail.js # 기성품 상세·교차·비교 (분석·알레르기 교차·포뮬러/기성품 비교)
         formula-material.js # 원료 장부 패널 (기한 배지·경고·LOT 추적)
         formula-adverse.js  # 소비자 이상사례 기록 패널 (FO-59)
         formula-compliance.js # 법규 준수 체크리스트 + 법령 MD 링크 (유형별 세트)
