@@ -1,5 +1,5 @@
 // tests/dom/study-reader.dom.test.js — 교재 리더 시나리오
-// @spec TR-01~18
+// @spec TR-01~18,TR-27
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.2 (Phase 4)
 // 검증: 과목 목록 로드(H) · 과목 선택→본문·TOC 렌더(H) · 읽기 위치 저장·복원(P/R)
 //       · 북마크 토글→영속(P) · 미선택 빈 상태(E)
@@ -96,7 +96,7 @@ describe('교재 리더 — 과목 선택·본문·이어하기·북마크', () 
         expect(el('textbook-reader-container').querySelectorAll('.reader-section-card').length).toBe(2);
     });
 
-    it('북마크 토글 → localStorage 영속 + 아이콘 상태 반영', async () => {
+    it('북마크 토글 → localStorage 영속 + 아이콘 상태 반영 (TR-27 콘텐츠 키)', async () => {
         stubRegistry([SUBJ]);
         renderTextbookReader();
         const sel = el('reader-subject-select');
@@ -107,13 +107,33 @@ describe('교재 리더 — 과목 선택·본문·이어하기·북마크', () 
         const btn = el('textbook-reader-container').querySelector('.reader-bookmark-btn');
         btn.click();
 
-        expect(storedJson(STORAGE_KEYS.READER_BOOKMARKS)).toContain('subja_0_0');
+        // 위치 인덱스가 아닌 콘텐츠 키 — 과목|챕터키|섹션제목
+        expect(storedJson(STORAGE_KEYS.READER_BOOKMARKS)).toContain('subja|ch1|Chapter 01 개론');
         expect(btn.classList.contains('bookmarked')).toBe(true);
 
         // 재클릭 → 해제
         btn.click();
-        expect(storedJson(STORAGE_KEYS.READER_BOOKMARKS)).not.toContain('subja_0_0');
+        expect(storedJson(STORAGE_KEYS.READER_BOOKMARKS)).not.toContain('subja|ch1|Chapter 01 개론');
         expect(btn.classList.contains('bookmarked')).toBe(false);
+    });
+
+    it('구형 위치 인덱스 북마크 키는 읽기 시점에 정리 (TR-27)', async () => {
+        stubRegistry([SUBJ]);
+        // 구형 키 subja_0_0 + 신형 키 혼재 시딩
+        safeSetItem(STORAGE_KEYS.READER_BOOKMARKS,
+            JSON.stringify(['subja_0_0', 'subja|ch1|1. 핵심 개념', 'subjb_1_2']));
+        renderTextbookReader();
+        const sel = el('reader-subject-select');
+        sel.value = 'subja';
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+        await flushAsync(30);
+
+        // 구형 키 제거 + 신형 키만 보존
+        expect(storedJson(STORAGE_KEYS.READER_BOOKMARKS)).toEqual(['subja|ch1|1. 핵심 개념']);
+        // 신형 키 섹션은 북마크 표시 유지
+        const btns = [...el('textbook-reader-container').querySelectorAll('.reader-bookmark-btn')];
+        expect(btns[1].classList.contains('bookmarked')).toBe(true);
+        expect(btns[0].classList.contains('bookmarked')).toBe(false);
     });
 
     it('과목 해제 → 빈 상태 안내', async () => {
