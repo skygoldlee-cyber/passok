@@ -374,6 +374,17 @@ pre.mermaid svg {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     text-align: center;
+    /* TR-26: 모달 내 자체 핀치·패닝(zoom-gestures.js)이 터치를 제어 — 브라우저
+       페이지 줌·네이티브 스크롤이 개입하면 제스처가 이중 발화한다 */
+    touch-action: none;
+    overscroll-behavior: contain;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    cursor: grab;
+}
+.mermaid-zoom-body:active {
+    cursor: grabbing;
 }
 /* 모달 내 pre 복제본 — 인라인 스크롤 대신 모달 본문이 스크롤하도록 */
 .mermaid-zoom-stage {

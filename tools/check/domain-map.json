@@ -141,7 +141,8 @@
         "src/views/trainer.js",
         "src/weak-items.js",
         "src/web-vitals.js",
-        "src/whats-new.js"
+        "src/whats-new.js",
+        "src/zoom-gestures.js"
       ]
     },
     {

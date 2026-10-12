@@ -2,10 +2,11 @@
 // @spec TR-20
 // reader-table-modal 셸 + mermaid-zoom 툴바 CSS를 재사용한다 (배율 단계·맞춤·
 // 드래그 스크롤·Esc/백드롭 닫기). 모달은 role="dialog"이므로 modal-back.js가
-// 뒤로가기 닫기를 자동 감지한다.
-// 데스크탑 전용: 모바일(주 포인터 coarse)은 브라우저 핀치 줌이 대체하므로 바인딩 안 함.
+// 뒤로가기 닫기를 자동 감지한다. 모바일은 모달 내 자체 핀치 제스처(zoom-gestures.js)
+// 로 확대한다 — 페이지 핀치줌은 레이아웃 통째 확대라 대체가 아니다 (TR-26).
 
 import { trapFocus } from './ui-utils.js';
+import { bindZoomGestures } from './zoom-gestures.js';
 
 const ZOOM_STEPS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
 const ZOOM_DRAG_THRESHOLD = 10; // px — 스크롤 드래그와 탭 구분
@@ -49,6 +50,14 @@ function _ensureImgZoomModal() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && _imgZoomModal && !_imgZoomModal.classList.contains('is-hidden')) closeImageZoom();
     });
+    const body = /** @type {HTMLElement|null} */ (modal.querySelector('#img-zoom-body'));
+    if (body) {
+        bindZoomGestures(body, {
+            getScale: () => _imgZoomScale,
+            setScale: _setImgZoom,
+            getFitScale: _fitImgScale,
+        });
+    }
     _imgZoomModal = modal;
     return modal;
 }
@@ -96,6 +105,7 @@ export function openImageZoom(img) {
     const clone = /** @type {HTMLImageElement} */ (img.cloneNode(false));
     clone.className = 'img-zoom-target';
     clone.removeAttribute('loading');
+    clone.setAttribute('draggable', 'false');
     _imgNaturalW = img.naturalWidth || img.width || 800;
     // 지연 로딩 등으로 naturalWidth를 아직 모르면 로드 완료 시 재보정
     if (!img.naturalWidth) {
@@ -129,12 +139,11 @@ export function closeImageZoom() {
 /**
  * 컨테이너 내 .reader-img 클릭 → 확대 모달 바인딩 (이벤트 위임, 1회 바인딩).
  * 리렌더로 자식이 교체돼도 컨테이너 위임이라 유효하다.
- * 주 포인터가 coarse(모바일/터치)면 건너뜀 — 핀치 줌이 확대 경로.
+ * 모바일에서도 바인딩 — 모달 내 자체 핀치 제스처가 페이지 줌을 대체한다 (TR-26).
  * @param {HTMLElement | null} root - 렌더 컨테이너
  */
 export function attachImageZoomIn(root) {
     if (!root || root.dataset.imgZoomBound) return;
-    if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) return;
     root.dataset.imgZoomBound = '1';
     let downX = 0;
     let downY = 0;
