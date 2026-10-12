@@ -100,6 +100,9 @@ content/**/report/
 # pytest 임시 디렉터리
 ref-pipeline/tests/.pytest-tmp/
 
+# 임베딩 파이프라인 PoC 산출물 (로컬 생성물 — 재생성 가능)
+ref-pipeline/embeddings/out/
+
 # 이야기형 정규화 드리프트 검토 리포트 (1회성 산출물)
 tools/build/.story_drift_review.md
 reports/

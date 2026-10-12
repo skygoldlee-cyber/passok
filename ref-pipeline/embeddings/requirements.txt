@@ -1,0 +1,6 @@
+# ref-pipeline/embeddings — 문장 임베딩 파이프라인 의존성
+# 설치: pip install -r ref-pipeline/embeddings/requirements.txt
+# 설계: docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md (DOC-DSN-18)
+
+sentence-transformers==6.1.0   # 임베딩 계산 (torch·transformers 포함 — CPU 전용으로도 동작)
+numpy>=1.24.0                  # 벡터 연산·코사인 유사도
