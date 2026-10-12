@@ -47,7 +47,8 @@ var EXAMS_LIST = {
         "limitsTrainer": true,
         "studyGuide": true,
         "userManual": true,
-        "story_textbook": true
+        "story_textbook": true,
+        "semantic": true
       }
     },
     {
