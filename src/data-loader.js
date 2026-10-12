@@ -33,7 +33,7 @@ export const DataLoader = {
     _manifest: null,
     /** @type {Object.<string, number>|null} */
     _comboIndex: null,
-    /** @type {{questions: Object.<string, string>, ranges: Object.<string, any>}|null} */
+    /** @type {{questions: Object.<string, string>, ranges: Object.<string, any>, cidSection: Object.<string, Object.<string, string>>, chapterTitles: Object.<string, Object.<string, string>>}|null} */
     _questionChapters: null,
     /** @type {string|null} */
     _registryExamId: null,
@@ -405,7 +405,9 @@ export const DataLoader = {
         }
         this._questionChapters = {
             questions: window.QUESTION_CHAPTERS || {},
-            ranges: window.CHAPTER_RANGES || {}
+            ranges: window.CHAPTER_RANGES || {},
+            cidSection: window.CID_SECTION || {},        // 레거시 conceptId(L####) → §앵커 (AN-10)
+            chapterTitles: window.CHAPTER_TITLES || {}   // §앵커 챕터 표시명 (AN-10)
         };
         return this._questionChapters;
     },

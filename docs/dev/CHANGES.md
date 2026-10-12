@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 개념 식별자 교재-비의존 전환 (AN-10)
+
+- **문제**: 진술 `conceptId`가 explanation 첫 교재 라인(L####)이었음 — 교재 편집으로 라인이 밀리면 저장 통계(`statement_stats[].cid`)의 개념 클러스터가 분열·잘못된 챕터로 귀속되는 사일런트 열화
+- **앵커 전환**: 신규 conceptId는 `§챕터.절` 구조 앵커(`tools/build/textbook_anchors.js` — `## 📚 Chapter N.`>`## M.` 번호체계 해석). `build_combo_drills`가 문항 첫 교재 인용(file#L)을 앵커로 해석해 부여, 없으면 `q:<문항id>` 폴백 유지
+- **레거시 이관**: `question_chapters.js`에 `CID_SECTION`(인용 라인 전수→앵커)·`CHAPTER_TITLES`(앵커→챕터 표시명) 방출. 저장 데이터 쓰기 이관 없이 `normalizeCidAnchor`가 읽기 시점에 L####→§앵커 환산 — 분석 엔진(`computeWeakConceptClusters`·`chapterFromCid`)과 훈련소 취약 진술 그룹핑에서 신구 형식이 같은 버킷으로 병합
+- 교재 인용 기반이었던 챕터 표시(`chapterFromCid`)는 CID_SECTION 환산 우선·CHAPTER_RANGES 폴백 — 표시 기능 유지, 개념 정체성만 분리
+- 유닛 10건 추가 (정규화·환산 병합·과목 격리·앵커 경계·인용 파싱)
+
 ## 2026-10-12 줌 모달 모바일 핀치 제스처 (TR-26)
 
 - **신규 `src/zoom-gestures.js`**: 줌 모달 공용 제스처 — 2포인터 핀치=배율(중심점 스크롤 앵커·4x 클램프), 1포인터 드래그=패닝, 더블탭=맞춤↔2배. `touch-action:none`으로 페이지 핀치줌과 이중 발화 차단
