@@ -163,10 +163,11 @@ src/                    # ES Modules
   data-loader.js        # 온디맨드 콘텐츠 로더 (DataLoader)
   scratchpad.js          # 스크래치패드 캔버스 (계산 연습용)
   trainer-calc.js       # 계산 트레이너 문제 생성기 (순수 로직, 전역 스코프 실행)
-  spaced-repetition.js  # SM-2 간격 반복 알고리즘
+  fsrs.js               # FSRS-4.5 기억 모델 순수 함수 (DSR 상태 전이·간격 산출·SM-2 지연 변환)
+  spaced-repetition.js  # FSRS 간격 반복 저장 어댑터 (스케줄 수학은 fsrs.js 위임, 공용 API)
   study-aids.js         # 학습 보조 (기출·중요 마커 추출 카드, 숫자 암기표)
   study-tracker.js      # 학습 캘린더/목표 추적 헬퍼 (recordStudyActivity, getStudyGoals)
-  statement-tracker.js  # 진술 원자(sid) 단위 오판 통계·졸업 추적 (SM-2 연동)
+  statement-tracker.js  # 진술 원자(sid) 단위 오판 통계·졸업 추적 (FSRS 연동)
   recommendations.js    # 합격 전략 추천 엔진 + 예상 점수 추정 + 실제 결과 보고 (순수 로직)
   analysis-engine.js    # 맞춤학습 심층 분석 순수 로직 (AN-01~09 — 예측 점수·취약 단원·주간 리포트)
   command-palette.js    # 통합 검색 팔레트 (Ctrl+K) — 뷰/교재/카드/퀴즈/성분/문제집 검색·실행

@@ -4,7 +4,7 @@
 // 데이터: DataLoader.loadOxDrills(N) → OX_DRILLS_subjectN (build_ox_drills.js 생성)
 //         DataLoader.loadComboDrills() → COMBO_PILOT (수작업 저작)
 // 채점: src/questions.js gradeAnswer — ox는 truth 비교, combo는 members ⊆ 도출 정답 비교
-// 추적: recordStatementJudgments — sid 단위 SM-2 스케줄 + 오판 통계 (statement-tracker.js)
+// 추적: recordStatementJudgments — sid 단위 FSRS 스케줄 + 오판 통계 (statement-tracker.js)
 //       O/X 드릴은 출제 시 오판 이력(sid)이 있는 문항을 우선 편성한다.
 
 export { openComboDrillSetup, startComboDrill, submitComboJudgments, nextComboDrill } from './trainer-drill-combo.js';
@@ -41,7 +41,7 @@ function drillCountFor(items) {
 }
 
 /**
- * 복습 대상 배지 갱신 — SM-2 기한 도래 진술 수를 트레이너 카드·드릴 setup에 표시
+ * 복습 대상 배지 갱신 — FSRS 기한 도래 진술 수를 트레이너 카드·드릴 setup에 표시
  * 트레이너 메뉴/드릴 setup을 열 때마다 호출해 "오늘 할 일"을 시각화한다.
  */
 export function updateDueBadges() {
@@ -262,7 +262,7 @@ export function renderDrillResult(type, statLine, reviewInnerHTML, hasReviewItem
 }
 
 /**
- * 기한 도래 진술(SM-2) → 오판 진술 순으로 최대 절반까지 우선 편성, 나머지는 무작위.
+ * 기한 도래 진술(FSRS) → 오판 진술 순으로 최대 절반까지 우선 편성, 나머지는 무작위.
  * @param {Function} sidsOf 문항 → sid 배열 (ox는 [i.sid], combo는 진술 sids)
  */
 function pickPrioritized(items, count, sidsOf) {

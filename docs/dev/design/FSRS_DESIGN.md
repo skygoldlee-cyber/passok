@@ -1,0 +1,170 @@
+# FSRS 간격 반복 전환 설계 — SM-2 → FSRS-4.5
+
+> 상위 문서: [`SPEC.md`](../SPEC.md) §3.2 (F-07~F-09) · §3.24 (SQ-01~04 감사)
+> 범위: 플래시카드·진술 공용 간격 반복 엔진 `src/spaced-repetition.js`의 스케줄 알고리즘을 SM-2에서 FSRS-4.5로 교체
+> 상태: ✅ 구현됨 (2026-10-12) — §7-1~3 적용 완료, §8 후속(4버튼·파라미터 개인화)은 별도 범위
+> **관련 SPEC ID**: `F-07`(간격 반복 스케줄링) · `F-08`(복습 메타데이터 영속화) · `F-09`(진도 초기화) · `SC-13`(dueBoost 수요) · `DR-03`(진술 SM-2 큐) · `SQ-03`(T3 시뮬)
+> **문서 ID**: DOC-DSN-17
+> **범위**: platform · 판본: none
+
+## 1. 배경·목적
+
+### 1.1 현행 SM-2의 한계
+
+- **이진 품질**: "외움"(5점)/"헷갈림"(2점)만 기록 — "비슷하지만 애매했던 카드"와 "완전히 몰랐던 카드"를 구분하지 못해 간격이 과소·과대 추정된다.
+- **고정 간격 공식**: `1일 → 3일 → EF×누적` — 카드별 난이도·사용자별 기억 특성을 반영하지 못한다. easiness는 갱신되지만 어려운 카드/쉬운 카드의 초기 간격이 동일하다.
+- **망각 곡선 부재**: nextReview만 저장하고 "지금 기억할 확률"을 추정하지 않는다 — due 판정이 경계값 비교로만 이뤄진다.
+- **검증 실측**: `audit_study_quality.js` T3 시뮬(30일·60장·결정론)에서 SM-2는 302회 복습·기한 6일 분산 — 간격이 전 카드 동일 궤적을 따라 클러스터링된다.
+
+### 1.2 목표
+
+- FSRS-4.5의 DSR(Difficulty·Stability·Retrievability) 모델로 카드별·사용자별 망각 곡선을 추정한다.
+- 공개 API(`updateCardSchedule`·`getDueCards`·`getDueCount`)와 저장 키(`fc_spaced_repetition`)를 유지해 호출부·동기화·백업을 무수정으로 보존한다.
+- T3 시뮬을 SM-2/FSRS 비교 계측기로 확장해 개선 폭(복습 총량·기한 분산·예측 정확도)을 정량 입증한다.
+
+### 1.3 비목표
+
+- 4단계 레이팅 UI(Again/Hard/Good/Easy 버튼) — 1차는 이진 입력 유지, 별도 개정으로 분리 (§8).
+- 사용자별 파라미터 최적화 — 리뷰 로그 스토리지가 선행되어야 함 (§8).
+- FSRS-5/6/7 — 당일 복습 반영·소수 간격 등은 추가 복잡도 대비 이득 미미. 4.5가 안정 균형점 (Anki 통합 버전의 바로 상위 마이너).
+
+## 2. FSRS-4.5 모델 명세
+
+### 2.1 카드 상태
+
+| 필드 | 의미 | 범위 |
+|---|---|---|
+| `d` | Difficulty 난이도 | 1~10 |
+| `s` | Stability 안정도 (일) | >0, 망각 확률이 90%가 되는 간격 |
+| `due` | 다음 복습 기한 | YYYY-MM-DD |
+| `lastReview` | 마지막 복습일 | YYYY-MM-DD |
+| `reps` | 누적 복습 수 | ≥0 |
+| `lapses` | 망각(Again) 누적 수 | ≥0 |
+
+### 2.2 망각 곡선·간격
+
+```
+R(t, s) = (1 + FACTOR · t / s) ^ DECAY        # DECAY = -0.5, FACTOR = 19/81
+I(r, s) = s · FACTOR⁻¹ · (r^(1/DECAY) - 1)    # 목표 기억률 r=0.9 해의 간격
+```
+
+복습 시점의 경과일 `t`로 기억 확률 `R`을 계산하고, 성공/실패 각각 안정도 갱신식에 입력한다. 간격 `I`는 갱신된 `s`와 목표 기억률 0.9에서 산출한다.
+
+### 2.3 갱신식 (기본 파라미터 w[0..16])
+
+- **최초 학습**: `d = w[4] - (rating-3)·w[5]`(1~10 절단), `s = w[rating-1]`(레이팅별 초기 안정도)
+- **성공 (G≥3)**: `s' = s·(1 + e^{w8}·(11-d)·s^{-w9}·(e^{w10·(1-R)}-1)·hardPenalty·easyBonus)`
+- **실패 (Again)**: `s' = w11·d^{-w12}·((s+1)^{w13}-1)·e^{w14·(1-R)}`, `d` 상승 갱신 후 절단
+- **난이도 갱신**: `d' = w7·initD(4) + (1-w7)·(d - w6·(rating-3))`, 1~10 절단
+
+기본 파라미터(FSRS-4.5, 17개 w0~w16)는 `src/fsrs.js`에 상수로 내장한다 — 개인 최적화는 후속 단계 (§8). w17~18(FSRS-5의 당일 복습 스텝)은 현행 이진 UI에 불필요해 미포함.
+
+### 2.4 레이팅 매핑 (1차 — 이진 입력 유지)
+
+| UI 입력 | FSRS Rating | 근거 |
+|---|---|---|
+| "헷갈림" | Again (1) | SM-2의 rep=0 리셋에 대응 — 망각으로 간주 |
+| "외움" | Good (3) | 중립 성공 — Hard(2)/Easy(4)는 2차 UI 개정에서 개방 |
+
+이진 입력에서도 FSRS는 SM-2 대비 ① 카드별 초기 안정도 차별화, ② 누적 난이도 d의 상태 추적, ③ 망각 확률 R 기반 간격 산출의 이점을 갖는다. 4단계 레이팅은 개선을 키우지만 UI·핸들러·툴팁 개정이 별도 범위다.
+
+## 3. 저장소·마이그레이션
+
+### 3.1 저장 스키마
+
+`fc_spaced_repetition` 키 유지 — 시험별 접두사·백업·동기화 경로 무수정. 레코드만 교체:
+
+```js
+// 구 (SM-2)
+{ repetition, easiness, nextReview, lastReview }
+// 신 (FSRS)
+{ v: 2, d, s, due, lastReview, reps, lapses }
+```
+
+`v: 2` 마커로 구 레코드와 구분한다.
+
+### 3.2 구 레코드 → FSRS 변환 (지연 마이그레이션)
+
+전면 일괄 변환 대신 **레코드 단위 지연 변환**: 스케줄 로드 시 `v` 없는 레코드를 접할 때 변환한다. 일괄 쓰기 없이 다음 복습에 자연 흡수되어 대규모 덮어쓰기·동기화 충돌 위험이 없다.
+
+| SM-2 필드 | → FSRS 근사 |
+|---|---|
+| `repetition` | `reps` 그대로 계승 |
+| `easiness` | `d` 역산: `d = clamp(11 - easiness·4, 1, 10)` — EF 1.3→d≈10(어려움), 2.5→d≈1(쉬움) |
+| `nextReview - lastReview` | 경과 간격을 `s` 근사: `s = max(interval, 0.4)` — 간격이 곧 안정도 근사치 |
+| `nextReview` | `due` 그대로 계승 — 기존 복습 일정 보존 |
+
+- `lapses`: `repetition === 0` && `lastReview` 있으면 1로 추정, 아니면 0.
+- 변환 함수 `migrateSm2Record(rec)`는 순수 함수로 분리해 단위 테스트 대상으로 한다.
+
+### 3.3 초기화·백업 정합
+
+- `F-09` 진도 초기화는 키 삭제 경로라 무수정.
+- `state.js` 백업 키 목록·`sync.js` 스냅샷은 키 단위라 레코드 형식 변경과 무관.
+- Supabase 동기화는 불투명 blob 전송 — 스키마 변경 전파 없음.
+
+## 4. 공용 API 계약 (무수정 유지)
+
+```js
+updateCardSchedule(cardId, knew)  // knew → Rating.Again : Rating.Good
+getDueCards()                   // due <= 오늘 필터 — 필드명만 nextReview→due
+getDueCount()
+```
+
+호출부 영향 0:
+
+- `listeners-flashcard.js` (2곳 호출) · `statement-tracker.js`(위임) · `flashcard.js`·`analysis-view.js`·`study-calendar.js`(due 조회) — 전부 무수정.
+- 진술 트래커(DR-03)는 동일 키·동일 함수 경유 — 자동으로 FSRS 적용.
+- `recommendations.js` due 요약(`오늘 복습할 카드 N장`) — `getDueCards` 경유라 무수정.
+
+## 5. 배분·분석 연동
+
+- `computeSubjectAllocInputs(dueCardIds)`는 `getDueCards()` 결과를 사용 — 출력 형식 동일이라 `dueBoost`(SC-13) 로직 무수정.
+- **후속 확장(별도 검토)**: FSRS의 `R(due-오늘)` 값을 dueBoost 입력으로 쓰면 "기한 지남" 이진 대신 "망각 임박도" 연속값으로 정교화 가능. 1차 범위 아님.
+
+## 6. 품질 게이트·검증 계획
+
+### 6.1 감사 시나리오 확장 (SQ-03)
+
+- **T3 이중 계측**: 동일 30일 시뮬을 SM-2/FSRS 두 엔진으로 실행 → `reviews 총량·medRep/medStability·distinctDueDates` 병기. 기대: FSRS는 난이도 차별화로 기한 분산 ↑, 실패 카드는 국소 리셋.
+- **T4 신설(감사 시나리오)**: 예측 정확도 — 가상 시계로 카드를 due 경계 ±1일에 복습할 때 FSRS의 R 추정이 실제 레이팅 결과와 단조 정합(간격 ↑ → R ↓).
+- 회귀 기준선 `--update` 갱신 후 `--check` 게이트 편입은 기존 구조 그대로.
+
+### 6.2 단위 테스트
+
+- `migrateSm2Record`: rep/EF/간격 → d·s 매핑 경계값·null 방어.
+- `updateCardSchedule`(FSRS): 최초 학습 초기 s·d, 성공 시 s 단조 증가·due 전진, Again 시 s 하락·lapses 증가, 목표 기억률 기반 간격 상한.
+- 저장 스키마: `v:2` 마커 부여·구 레코드 읽기 호환.
+- 기존 `D5` 시나리오 검사(SM-2 단조성)를 FSRS 불변식으로 개정 — 시나리오 이름·검사 id는 유지해 기준선 키 안정.
+
+### 6.3 리스크·완화
+
+| 리스크 | 완화 |
+|---|---|
+| 마이그레이션 근사 오차로 간격 왜곡 | `due`는 계승하므로 단기 일정 보존 — 첫 복습부터 FSRS 궤적으로 수렴 |
+| 이진 레이팅으로 FSRS 이점 축소 | Again/Good 매핑도 SM-2 대비 s·d 상태 추적은 유지 — T3/T4로 정량 비교 후 4단계 UI 판단 |
+| 파라미터 과적합(기본값이 안 맞음) | `w`를 상수 테이블로 두고 시험별 오버라이드는 manifest 확장으로 유보 |
+| 회귀 게이트 오인 | SM-2 불변식 검사(repetition 필드 등)는 FSRS 필드명으로 갱신 — 키 동일성으로 기준선 연속 유지 |
+
+## 7. 구현 순서
+
+| 단계 | 내용 | 산출물 |
+|---|---|---|
+| 1 | `fsrs.js` 신설 — 상태·갱신·간격 순수 함수 + `migrateSm2Record` | `src/fsrs.js` + 단위 테스트 |
+| 2 | `spaced-repetition.js` 어댑터 — 저장 스키마·지연 변환·API 위임 | 동일 파일 내부 교체 |
+| 3 | `audit_study_quality.js` T3 이중 계측 + T4 추가 | 시나리오 +2~3, 기준선 갱신 |
+| 4 | SPEC(F-07~09 기술 갱신·SQ-03 시나리오 명세)·CHANGES·TRACE | 문서 정합 |
+| 5 | 배포 후 관측 — 실사용 due 분포, 이상 시 FSRS_ROLLBACK 플래그로 SM-2 환원 경로 유지 | `feature-plan` 또는 상수 플래그 |
+
+## 8. 후속 단계 (범위 외 명시)
+
+- **4단계 레이팅 UI**: `fc-easy/hard` 2버튼 → Again/Hard/Good/Easy 4버튼. FSRS-4.5의 효과 극대화에는 필수적이나 키보드 단축키·접근성·모바일 배치 재설계 필요.
+- **개인 파라미터 최적화**: 리뷰 로그(`{cardId, rating, elapsedDays}` 링버퍼) 영속화 선행 → 사용자별 `w` 피팅. FSRS-rs/optimizer 포팅 또는 요약 통계 근사.
+- **R 기반 dueBoost 정교화** (§5 후속).
+- **FSRS-6+ 검토**: 당일 복습·소수 간격 — 도입 근거 데이터 축적 후 재평가.
+
+## 9. 참고
+
+- open-spaced-repetition/srs-benchmark: FSRS-4.5/5/6 vs SM-2·HLR·DASH·LSTM 비교 결과 FSRS 계열 우위
+- FSRS-4.5 기본 파라미터 17개(w0~w16): Anki 통합 버전의 안정 파라미터 세트 (당일 복습 스텝 w17·w18은 4버튼 개정 시 추가)
+- `ts-fsrs`: MIT, 순수 TS — 참조 구현체로 수식 정합 검증에 활용 (번들 미포함, 수식 직접 포팅)

@@ -2,7 +2,7 @@
 // @spec DR-03~05
 //
 // gradeAnswer()의 perStatement 결과를 두 저장소로 연결한다:
-// - fc_spaced_repetition: sid를 카드 ID로 사용해 SM-2 스케줄 갱신 (복습 시점 관리)
+// - fc_spaced_repetition: sid를 카드 ID로 사용해 간격 반복(FSRS) 스케줄 갱신 (복습 시점 관리)
 // - statement_stats: 진술별 판정 누적 통계 { sid: { j, w, lw, t, truth, cid, last } } (약점 리스트용)
 //   t=진술 텍스트, truth=정답 O/X, cid=conceptId(개념 그룹), last=최근 판정 정오 — 취약 진술 리뷰 화면용 메타
 //
@@ -15,7 +15,7 @@ import { todayKey } from './utils.js';
 
 const STATS_KEY = STORAGE_KEYS.STATEMENT_STATS;
 
-// 연속 정답 N회면 취약 목록에서 졸업 (SM-2 스케줄은 계속 유지 — 복습 주기는 별개)
+// 연속 정답 N회면 취약 목록에서 졸업 (FSRS 스케줄은 계속 유지 — 복습 주기는 별개)
 export const WEAK_GRADUATE_STREAK = 3;
 
 /**
@@ -98,15 +98,18 @@ export function getAllStatementStats() {
 }
 
 /**
- * 오늘 복습 대기 중인 진술 sid 목록 (SM-2 스케줄의 nextReview 기준)
+ * 오늘 복습 대기 중인 진술 sid 목록 (FSRS v2 due 기준 — 구 SM-2는 nextReview 폴백)
  * @returns {string[]}
  */
 export function getDueStatementSids() {
     const stats = loadStats();
     const schedules = loadSrSchedules();
     const todayStr = todayKey();
-    return Object.keys(stats).filter(sid =>
-        schedules[sid] && schedules[sid].nextReview <= todayStr);
+    return Object.keys(stats).filter(sid => {
+        const rec = schedules[sid];
+        const due = rec && (rec.due || rec.nextReview);
+        return due && due <= todayStr;
+    });
 }
 
 function loadStats() {
@@ -122,7 +125,7 @@ function saveStats(stats) {
     safeSetItem(STATS_KEY, JSON.stringify(stats));
 }
 
-// spaced-repetition.js와 동일 저장소 — sid 스케줄만 조회 (SM-2 갱신은 updateCardSchedule에 위임)
+// spaced-repetition.js와 동일 저장소 — sid 스케줄만 조회 (FSRS 갱신은 updateCardSchedule에 위임)
 function loadSrSchedules() {
     try {
         const raw = safeGetItem(STORAGE_KEYS.FC_SPACED_REPETITION);
