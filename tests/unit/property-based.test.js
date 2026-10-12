@@ -138,7 +138,7 @@ test('PBT subjectKeyFromItemId: <subj>_card_|_quiz_ 꼬리에서 과목 키 복�
   }), { numRuns: 200 });
 });
 
-// ── SM-2 스케줄러 (spaced-repetition.js) ────────────────────
+// ── FSRS 스케줄러 (spaced-repetition.js → fsrs.js) ──────────
 // updateCardSchedule은 storage 경유 — localStorage를 인메모리로 스텁.
 
 /** @param {Map<string,string>} store */
@@ -151,7 +151,7 @@ const localStorageStub = (store) => ({
   get length() { return store.size; },
 });
 
-test('PBT SM-2: 연속 정답 시 repetition 단조 증가·interval≥1·nextReview>오늘', async () => {
+test('PBT FSRS: reps 단조 증가·lapses=오답 누적·d 1~10·s>0·due>오늘', async () => {
   const store = new Map();
   const orig = globalThis.localStorage;
   Object.defineProperty(globalThis, 'localStorage', { value: localStorageStub(store), configurable: true });
@@ -164,20 +164,18 @@ test('PBT SM-2: 연속 정답 시 repetition 단조 증가·interval≥1·nextRe
       (answers, cardNum) => {
         store.clear(); // 케이스 간 스케줄 상태 격리 — 카드 이력이 다음 케이스로 새지 않게
         const cardId = `pbt_card_${cardNum}`;
-        let prevRep = 0;
+        let prevReps = 0, prevLapses = 0;
         const today = todayKey(); // 로컬 날짜 — updateCardSchedule과 같은 키(UTC는 KST 00~09시에 어긋남)
         for (const knew of answers) {
           const s = updateCardSchedule(cardId, knew);
-          assert.ok(s.repetition >= 0, 'repetition 음수');
-          assert.ok(s.easiness >= 1.3, 'easiness 하한 위반');
-          if (knew) {
-            assert.equal(s.repetition, prevRep + 1, `정답인데 rep ${prevRep}→${s.repetition}`);
-          } else {
-            assert.equal(s.repetition, 0, '오답인데 rep 리셋 안 됨');
-          }
-          assert.ok(s.nextReview > today, `nextReview(${s.nextReview}) ≤ 오늘`);
+          assert.equal(s.v, 2, 'FSRS v2 스키마');
+          assert.ok(s.d >= 1 && s.d <= 10, `난이도 범위 위반 d=${s.d}`);
+          assert.ok(s.s > 0, '안정도 양수');
+          assert.equal(s.reps, prevReps + 1, `rep ${prevReps}→${s.reps}`);
+          assert.equal(s.lapses, prevLapses + (knew ? 0 : 1), 'lapses는 오답만 누적');
+          assert.ok(s.due > today, `due(${s.due}) ≤ 오늘`);
           assert.equal(s.lastReview, today);
-          prevRep = s.repetition;
+          prevReps = s.reps; prevLapses = s.lapses;
         }
       }
     ), { numRuns: 150 });

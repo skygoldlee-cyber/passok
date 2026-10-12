@@ -118,7 +118,7 @@ test('getDueStatementSids: 과거 nextReview는 due로 검출', () => {
     // 스케줄을 과거로 조작
     const raw = mockStorage.getItem(scopedKey(STORAGE_KEYS.FC_SPACED_REPETITION));
     const sch = JSON.parse(raw);
-    sch['a'].nextReview = '2000-01-01';
+    sch['a'].due = '2000-01-01'; // v2 스키마 (구 nextReview 폴백은 구 레코드용)
     mockStorage.setItem(scopedKey(STORAGE_KEYS.FC_SPACED_REPETITION), JSON.stringify(sch));
     assert.deepEqual(getDueStatementSids(), ['a']);
 });
@@ -130,7 +130,7 @@ test('recordStatementJudgments: 정답 선택은 오판 누적 없이 SM-2만 �
     // 스케줄은 3개 sid 모두 생성됨
     const sch = JSON.parse(mockStorage.getItem(scopedKey(STORAGE_KEYS.FC_SPACED_REPETITION)));
     assert.equal(Object.keys(sch).length, 3);
-    assert.equal(sch['st-t-1'].repetition, 1);
+    assert.equal(sch['st-t-1'].reps, 1); // FSRS v2 스키마
 });
 
 test('getAnomalousStatements: 오판율 극단 진술만 플래그 (j≥5·w/j≥0.8)', async () => {

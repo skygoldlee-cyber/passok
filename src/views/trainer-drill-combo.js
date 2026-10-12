@@ -169,7 +169,7 @@ function submitComboAnswer(selectedBtn, optId, optIdx) {
     const isCorrect = res.correct;
     vibrate(isCorrect ? HAPTIC.correct : HAPTIC.wrong);
 
-    // 진술별 판정 결과(members 유도)를 sid 단위 SM-2/오판 통계로 기록
+    // 진술별 판정 결과(members 유도)를 sid 단위 FSRS/오판 통계로 기록
     recordStatementJudgments(res.perStatement);
     recordStudyActivity({ quizzes: 1, correct: isCorrect ? 1 : 0 });
 

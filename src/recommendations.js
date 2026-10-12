@@ -1,7 +1,7 @@
 // recommendations.js — "오늘의 합격 전략" 추천 엔진 (docs/exams/<id>/report_archive/FEATURE_PROPOSALS.md §4.1)
 // @spec D-11,D-13,AN-05,AN-06,AN-07
 //
-// 학습 데이터(SM-2 복습 대기·과락 과목·정답률·헷갈린 카드·미학습)를 종합해
+// 학습 데이터(FSRS 복습 대기·과락 과목·정답률·헷갈린 카드·미학습)를 종합해
 // 우선순위가 정해진 추천 항목을 생성한다.
 // DOM 비의존 순수 로직 — 렌더링은 dashboard.js가 담당.
 
@@ -37,7 +37,7 @@ export function computeRecommendations(subjects, counts) {
         return s ? s.name : key;
     };
 
-    // 1순위: 오늘 복습 대기 카드 (SM-2 간격 반복)
+    // 1순위: 오늘 복습 대기 카드 (FSRS 간격 반복)
     const due = getDueCards();
     if (due.length > 0) {
         const bySubj = {};
@@ -50,7 +50,7 @@ export function computeRecommendations(subjects, counts) {
         recs.push({
             icon: 'fa-clock', color: 'var(--color-primary)',
             title: `오늘 복습할 카드 ${due.length}장`,
-            reason: top ? `SM-2 복습 시간 도래 — ${subjName(top[0])} ${top[1]}장 포함` : 'SM-2 복습 시간 도래',
+            reason: top ? `FSRS 복습 시간 도래 — ${subjName(top[0])} ${top[1]}장 포함` : 'FSRS 복습 시간 도래',
             actions: [
                 { click: 'startSubjectStudy', arg: target, label: '복습 시작', icon: 'fa-layer-group', cls: 'btn-primary' }
             ]

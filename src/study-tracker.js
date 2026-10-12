@@ -548,7 +548,7 @@ export const MAX_DIAG_BOOST = 0.5;
  * @param {Array} [p.exams] registry.exams — 출제 비중 (미전달 시 균등 배분)
  * @param {Object} [p.wrongCauses] {itemId: {cause, ts, subjectId}} — 최근 30일 태그만 집계 (SC-12)
  * @param {Array} [p.weakChapterGroups] computeSubjectWeakChapters 결과 — 과목별 취약 단원 수 (SC-12)
- * @param {Array} [p.dueCardIds] getDueCards() 결과 — SM-2 기한 도래 카드 id 배열 (SC-13)
+ * @param {Array} [p.dueCardIds] getDueCards() 결과 — FSRS 기한 도래 카드 id 배열 (SC-13)
  * @param {Date|number} [p.now] 기준 시각 (테스트 주입용)
  * @returns {{memBySubject:Object, quizBySubject:Object, recentQuizBySubject:Object,
  *   weakBySubject:Object, weightBySubject:Object, diagBySubject:Object, dueBySubject:Object}}
@@ -589,7 +589,7 @@ export function computeSubjectAllocInputs(p = {}) {
     (p.exams || []).forEach(ex => {
         if (ex && ex.subject) weights[ex.subject] = (weights[ex.subject] || 0) + ((ex.stats && ex.stats.questions) || 0);
     });
-    // SC-13 SM-2 복습 대기 — 기한 도래 카드 id를 과목별로 집계
+    // SC-13 FSRS 복습 대기 — 기한 도래 카드 id를 과목별로 집계
     (p.dueCardIds || []).forEach(id => {
         const k = subjectKeyFromItemId(id);
         if (k) due[k] = (due[k] || 0) + 1;
@@ -679,7 +679,7 @@ function _allocWeek(rows, remNow, total) {
  * 약점가중 = 퀴즈 표본 ≥ MIN_ALLOC_SAMPLE 이면 (2 − 정답률) [1.0~2.0], 미만이면 1.0.
  *   최근 표본(`recentQuizBySubject`)이 임계 이상이면 누적 대신 우선 적용하고,
  *   취약 카드 비율(헷갈림 표시 ÷ 잔여)을 최대 +0.5 가산한다 — 상한 MAX_WEAK_WEIGHT.
- *   SC-13: SM-2 기한초과 복습 비율(기한 도래 ÷ 암기 수)도 최대 +0.5 가산하고,
+ *   SC-13: FSRS 기한초과 복습 비율(기한 도래 ÷ 암기 수)도 최대 +0.5 가산하고,
  *   과목별 퀴즈 잔여를 카드와 동일 수요 공식으로 주차 배분한다(주차 총량 = 학습일×일일 퀴즈 목표).
  * 주차를 순차 배정해 과목 조기 완료가 다음 주 배분에 자동 반영된다.
  * @param {Object|null} plan computeStudyPlan() 결과
@@ -691,7 +691,7 @@ function _allocWeek(rows, remNow, total) {
  * @param {Object} [opts.weakBySubject] {key: 취약 카드 수} — 약점 가산 (SC-09)
  * @param {Object} [opts.weightBySubject] {key: 출제 문항 수} — 미선언 시 균등
  * @param {Object} [opts.diagBySubject] {key: {causes, weakChapters}} — 진단 신호 가산 (SC-12)
- * @param {Object} [opts.dueBySubject] {key: SM-2 기한 도래 카드 수} — 복습 대기 가산 (SC-13)
+ * @param {Object} [opts.dueBySubject] {key: FSRS 기한 도래 카드 수} — 복습 대기 가산 (SC-13)
  * @returns {Object|null}
  *   { weeks:[{week, range, total, quizTotal, alloc:[{key, name, cards, quizzes, remaining, quizRemaining,
  *     weakW, diagBoost, dueBoost, weightPct, weakBadge}]}],
@@ -728,7 +728,7 @@ export function computeSubjectAllocation(plan, subjects, opts = {}) {
         // SC-12 진단 신호 가산 — 최근 오답 원인 태그·취약 단원 수 (콜드스타트 과목 반영)
         const dg = diag[s.key] || { causes: 0, weakChapters: 0 };
         const diagBoost = Math.min(MAX_DIAG_BOOST, dg.causes * 0.1 + dg.weakChapters * 0.15);
-        // SC-13 복습 대기 가산 — 암기 카드 중 SM-2 기한초과 비율, 최대 +0.5
+        // SC-13 복습 대기 가산 — 암기 카드 중 FSRS 기한초과 비율, 최대 +0.5
         const dueBoost = Math.min(0.5, (due[s.key] || 0) / Math.max(1, mem[s.key] || 0));
         const weight = hasWeights ? (wBySubj[s.key] || 0) : 1;
         return {

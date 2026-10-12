@@ -45,7 +45,7 @@ export const state = {
         subject: null,           // 초기값 null — initApp()에서 registry 첫 번째 과목으로 설정
         currentIndex: 0,
         keyOnly: false,
-        dueOnly: false,          // true면 오늘 복습 대상(SM-2 due)만 전 과목 합산 출제 — 1회 적용 후 자동 해제
+        dueOnly: false,          // true면 오늘 복습 대상(FSRS due)만 전 과목 합산 출제 — 1회 적용 후 자동 해제
         shuffle: false,          // 랜덤 셔플 모드
         difficultyFilter: 'all', // 'all', 'easy', 'medium', 'hard'
         sortBy: 'importance',    // 'importance' or 'default'
