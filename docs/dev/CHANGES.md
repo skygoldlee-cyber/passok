@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 리더 중복 섹션 제목 챕터 병기 (TR-06)
+
+- **문제**: 교재 각 챕터 말미의 `📌 챕터 핵심 요약` 등 동일 제목이 TOC·섹션 헤더에서 구분 불가
+- **수정**: `reader-toc.js`에 `buildSectionDisplayTitles()` 추가 — 챕터 내 2회 이상 반복 제목에 직전 `📚 Chapter NN` 명 병기 (`📌 챕터 핵심 요약 — Chapter 01. 화장품법의 이해`). TOC 항목·섹션 카드 헤더(h4 → sticky heading 연동)에 공용 적용
+- 첫 Chapter 이전 섹션·고유 제목은 원문 유지. `reader-toc.test.js` 계약 테스트 2건 추가
+
 ## 2026-10-12 배포 크기 절감 — docs/exams 제외 + mermaid 프리캐시 제외 (PF-13)
 
 - **docs/exams/ 배포 제외**: 내부 문서(business·design·reference·report_archive·user) 3.1MB — 런타임 참조 없음 확인(src는 주석만, 사용자 문서는 `content/…/docs/` + `data/docs_md/` 번들로 서빙). `.vercelignore`에 `docs/exams/` 추가 → 배포 32.7→29.7MB. 헤더 주석의 오래된 "~5MB"도 실측값으로 정정

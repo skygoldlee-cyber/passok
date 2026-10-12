@@ -47,6 +47,27 @@ export function cleanRefTitle(title) {
     return t.replace(/^\d+_/, '');
 }
 
+/**
+ * 챕터 내 중복 제목에 소속 Chapter명을 병기한 표시 제목 목록을 생성합니다.
+ * "📌 챕터 핵심 요약"·"✅ 확인문제"처럼 모든 챕터에서 반복되는 헤딩이
+ * TOC·섹션 헤더에서 구분되지 않는 문제 해소 — 첫 Chapter 이전 섹션·고유 제목은 원문 유지.
+ * @param {{ title: string }[]} sections
+ * @returns {string[]} sections와 동순서 표시 제목 배열
+ */
+export function buildSectionDisplayTitles(sections) {
+    const titles = (sections || []).map(s => cleanRefTitle(s.title || ''));
+    const counts = {};
+    titles.forEach(t => { counts[t] = (counts[t] || 0) + 1; });
+    let currentChapter = '';
+    return titles.map(t => {
+        if (/Chapter\s+\d+/i.test(t)) {
+            currentChapter = t.replace(/^📚\s*/, '');
+            return t;
+        }
+        return (counts[t] > 1 && currentChapter) ? `${t} — ${currentChapter}` : t;
+    });
+}
+
 /** 섹션 본문에서 ### / #### 하위 헤딩 추출 */
 export function extractSubHeadings(content) {
     if (!content) return [];

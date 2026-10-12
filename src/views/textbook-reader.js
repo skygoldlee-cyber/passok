@@ -15,7 +15,7 @@ import {
 import { collectGlossaryItems, renderGlossaryTable, appendGlossaryTocItem } from './glossary-renderer.js';
 import {
     isStoryMetaSection, filterMetaSections, getTocLevel,
-    cleanRefTitle, extractSubHeadings
+    extractSubHeadings, buildSectionDisplayTitles
 } from '../reader-toc.js';
 import {
     readerAudioState,
@@ -513,6 +513,9 @@ async function _renderChapterContentInternal(subjId, chapterIdx, subj, chapter, 
 
     const bookmarks = getReaderBookmarks();
 
+    // 챕터마다 반복되는 제목(📌 챕터 핵심 요약 등)에 소속 챕터명 병기 — TOC·섹션 헤더 공용
+    const displayTitles = buildSectionDisplayTitles(chapter.sections);
+
     // Build TOC (A: 계층 들여쓰기, B: 접기/펼치기, D: 브레드크럼, F: 하위 헤딩)
     const tocList = document.getElementById('reader-toc-list');
     if (tocList) {
@@ -546,8 +549,8 @@ async function _renderChapterContentInternal(subjId, chapterIdx, subj, chapter, 
 
         let hasSeenNumbered = false;
         chapter.sections.forEach((section, idx) => {
-            // 참조문서 헤더 (01_화장품법 등) — NN_ 접두사 제거
-            const displayTitle = cleanRefTitle(section.title);
+            // 참조문서 헤더 (01_화장품법 등) — NN_ 접두사 제거 + 중복 제목 챕터 병기
+            const displayTitle = displayTitles[idx];
 
             const isChapterHeader = /Chapter\s+\d+/i.test(section.title);
             const level = getTocLevel(section.title);
@@ -778,7 +781,7 @@ async function _renderChapterContentInternal(subjId, chapterIdx, subj, chapter, 
             <div class="reader-section-card" id="reader-section-${idx}" data-section-idx="${idx}">
                 <div class="reader-section-header" data-section-idx="${idx}">
                     <i class="fa-solid fa-chevron-down reader-section-toggle"></i>
-                    <h4 class="reader-section-title">${esc(section.title)}</h4>
+                    <h4 class="reader-section-title">${esc(displayTitles[idx])}</h4>
                     <button class="reader-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" data-bookmark-key="${esc(bookmarkKey)}" title="북마크 ${isBookmarked ? '제거' : '추가'}">
                         <i class="fa-${isBookmarked ? 'solid' : 'regular'} fa-bookmark"></i>
                     </button>
