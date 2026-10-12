@@ -11930,35 +11930,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_7db482",
-    "conceptId": "§6.3",
+    "conceptId": "§1.1",
     "text": "에탄올",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_59e94b",
-    "conceptId": "§6.3",
+    "conceptId": "§1.1",
     "text": "차아염소산나트륨",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_33710b",
-    "conceptId": "§6.3",
+    "conceptId": "§1.1",
     "text": "과산화수소",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_d1a5a6",
-    "conceptId": "§6.3",
+    "conceptId": "§1.1",
     "text": "정제수",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_d8d365",
-    "conceptId": "§6.3",
+    "conceptId": "§1.1",
     "text": "이소프로필알코올",
     "truth": false
    }
@@ -15789,35 +15789,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_7d82a1",
-    "conceptId": "§5.2",
+    "conceptId": "§2.2",
     "text": "소비자의 직업",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_b83f2c",
-    "conceptId": "§5.2",
+    "conceptId": "§2.2",
     "text": "소비자의 거주지",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_b53a96",
-    "conceptId": "§5.2",
+    "conceptId": "§2.2",
     "text": "소비자의 소득 수준",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_7c8e94",
-    "conceptId": "§5.2",
+    "conceptId": "§2.2",
     "text": "소비자의 취미",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_e20e5c",
-    "conceptId": "§5.2",
+    "conceptId": "§2.2",
     "text": "소비자의 피부 상태 및 알레르기 이력",
     "truth": true
    }

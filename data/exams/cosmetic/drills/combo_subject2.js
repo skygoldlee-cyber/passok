@@ -5192,35 +5192,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_3fc3be",
-    "conceptId": "§1.3",
+    "conceptId": "§1.2",
     "text": "음이온 계면활성제",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_a0e96b",
-    "conceptId": "§1.3",
+    "conceptId": "§1.2",
     "text": "양이온 계면활성제",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_c5ede5",
-    "conceptId": "§1.3",
+    "conceptId": "§1.2",
     "text": "양쪽성 계면활성제",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_15395f",
-    "conceptId": "§1.3",
+    "conceptId": "§1.2",
     "text": "무기 계면활성제",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_4dd375",
-    "conceptId": "§1.3",
+    "conceptId": "§1.2",
     "text": "비이온 계면활성제",
     "truth": true
    }
@@ -12575,35 +12575,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_498a8b",
-    "conceptId": "§2.2",
+    "conceptId": "§1.1",
     "text": "미백",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_58eb74",
-    "conceptId": "§2.2",
+    "conceptId": "§1.1",
     "text": "주름개선",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_441c25",
-    "conceptId": "§2.2",
+    "conceptId": "§1.1",
     "text": "자외선 차단",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_fed44c",
-    "conceptId": "§2.2",
+    "conceptId": "§1.1",
     "text": "여드름 완화",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_dfc791",
-    "conceptId": "§2.2",
+    "conceptId": "§1.1",
     "text": "탈모 방지",
     "truth": false
    }
@@ -13495,35 +13495,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_d8f047",
-    "conceptId": "§2.2",
+    "conceptId": "q:subject2_q149",
     "text": "주름개선",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_d3f80f",
-    "conceptId": "§2.2",
+    "conceptId": "q:subject2_q149",
     "text": "자외선 차단",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_c7e82b",
-    "conceptId": "§2.2",
+    "conceptId": "q:subject2_q149",
     "text": "미백",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_31a9f7",
-    "conceptId": "§2.2",
+    "conceptId": "q:subject2_q149",
     "text": "탈모 방지",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_99eb38",
-    "conceptId": "§2.2",
+    "conceptId": "q:subject2_q149",
     "text": "보습",
     "truth": false
    }
@@ -13679,35 +13679,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_d59934",
-    "conceptId": "§1.1",
+    "conceptId": "§1.5",
     "text": "미생물의 번식을 억제하여 화장품의 보존 기간을 늘린다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_02e6bb",
-    "conceptId": "§1.1",
+    "conceptId": "§1.5",
     "text": "화장품의 점도를 조절하여 사용감을 향상시킨다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_0d8255",
-    "conceptId": "§1.1",
+    "conceptId": "§1.5",
     "text": "원료 내 미량의 금속이온과 결합하여 변색을 방지한다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_55d626",
-    "conceptId": "§1.1",
+    "conceptId": "§1.5",
     "text": "피부에 수분을 공급하고 각질층의 수분 보유력을 높인다.",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_8bc7fa",
-    "conceptId": "§1.1",
+    "conceptId": "§1.5",
     "text": "자외선을 차단하여 피부 손상을 예방한다.",
     "truth": false
    }
