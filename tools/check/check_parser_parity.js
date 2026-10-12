@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /* tools/check/check_parser_parity.js
- * 빌드 파서(tools/build/plugins/textbook.plugin.js)와
- * 런타임 파서(src/textbook-parser.js)가 동일한 content/*.md 에 대해
+ * 빌드 어댑터(tools/build/plugins/textbook.plugin.js)와
+ * 런타임 어댑터(src/textbook-parser.js)가 동일한 content/*.md 에 대해
  * 바이트 단위로 동일한 {name, cards, quizzes, chapters}를 만드는지 검증한다.
  *
- * 두 파서 중 하나만 규칙이 바뀌면 이 검사가 실패하여 조용한 분기(진도 ID 어긋남 등)를 막는다.
- * 별도 정답 파일에 의존하지 않고 두 구현을 직접 대조하므로 콘텐츠가 바뀌어도 유효하다.
+ * 파싱 로직은 src/textbook-core.js 단일 구현으로 공유되지만, 이 검사는 어댑터 결선
+ * (subjectDir·filePathMode·ID 주입) 분기를 잡는 회귀 안전망으로 유지된다.
  *
  * 사용:  node tools/check/check_parser_parity.js   (npm run check:parser)
  * 종료코드: 일치 0 / 불일치 1
@@ -99,7 +99,7 @@ async function main() {
         console.log('\n✅ 두 파서 출력이 완전히 일치합니다.');
         process.exit(0);
     } else {
-        console.error('\n❌ 파서 분기 감지 — tools/build/plugins/textbook.plugin.js 와 src/textbook-parser.js 를 동기화하세요.');
+        console.error('\n❌ 파서 분기 감지 — textbook-core.js 어댑터 결선(경로·filePathMode·ID)을 점검하세요.');
         process.exit(1);
     }
 }

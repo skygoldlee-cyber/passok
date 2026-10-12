@@ -1,0 +1,176 @@
+/**
+ * steps.js — 검증 단계 레지스트리 (run.js 실행기 · check_ci_parity 프리셋 확장 공용)
+ *
+ * 모든 게이트 단계를 이 테이블 한 곳에 선언한다. package.json 스크립트와
+ * ci.yml은 프리셋 호출만 남기므로 "명령 문자열 재조합" 중복이 소멸한다.
+ *
+ * 단계 항목: { id, bin, args, shell, layer, desc, token, content, slow }
+ *   token   — ci.yml run: 라인의 비교 토큰 (npm run X → "npm run X", node 스크립트 → 파일명)
+ *   content — 콘텐츠 추적 단계 여부 (--content-only 필터 대상)
+ *   slow    — --quick 시 생략되는 느린 단계 (DOM 테스트 등)
+ *
+ * 신규 검증 추가 시: nodeStep/npmStep으로 등록 → 원하는 프리셋 배열에 편입.
+ */
+
+// @spec none (검증 레지스트리)
+const path = require('path');
+
+const NPM = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+
+function nodeStep(id, script, layer, desc, { args = [], content = false, slow = false, token } = {}) {
+  return { id, bin: 'node', args: [script, ...args], shell: false, layer, desc,
+    token: token ?? path.basename(script), content, slow };
+}
+
+function npmStep(id, script, layer, desc, opts = {}) {
+  const isTest = script === 'test';
+  return { id, bin: NPM, args: isTest ? ['test'] : ['run', script], shell: true, layer, desc,
+    token: isTest ? 'npm test' : `npm run ${script}`, content: false, slow: false, ...opts };
+}
+
+// ── 기초 품질 단계 (all·ci 프리셋 공용) ────────────────────────────────
+const STEP_LINT = npmStep('lint', 'lint', '품질', 'ESLint — 에러 0 필수');
+const STEP_TYPES = npmStep('types', 'check:types', '품질', 'tsc --noEmit (jsconfig checkJs — JSDoc 타입 진단)');
+const STEP_HTML = nodeStep('html', 'tools/build/build_html.js', '빌드', 'index.html 조립 신선도 (파셜 편집 시 build:html 필요)', { args: ['--check'] });
+const STEP_DOMAINMAP = npmStep('domainmap', 'check:domainmap', '분류', '파일 계층 분류 강제 (domain-map.json)');
+const STEP_UITEXT = npmStep('uitext', 'check:uitext', '문서', 'UI 텍스트 커버리지 (data-uitext ↔ manifest.uiText)');
+
+// ── 문서 정합 묶음 (check:docs → docs 프리셋) ──────────────────────────
+const DOCS_STEPS = [
+  nodeStep('docs:paths', 'tools/check/check_docs_paths.js', '문서', 'README·AGENTS·docs/*.md 경로 참조 존재 검증'),
+  nodeStep('docs:ids', 'tools/check/check_doc_ids.js', '문서', '문서 ID 누락·중복·범위·판본 헤더 검증'),
+  nodeStep('docs:textbook', 'tools/check/check_textbook_docs.js', '문서', '교재 갱신 ↔ 판본:textbook 문서 신선도'),
+  nodeStep('docs:inventory', 'tools/check/check_inventory.js', '문서', '디렉토리 구조 정합 (AGENTS·ARCHITECTURE 트리 ↔ 실물)'),
+  nodeStep('docs:commands', 'tools/check/check_npm_commands.js', '문서', 'npm 명령 정합 (스크립트 ↔ 문서 인용 양방향)'),
+  nodeStep('docs:plan', 'tools/check/check_plan_features.js', '문서', 'feature-plan 키 ↔ 코드 사용 ↔ 로드맵 정합'),
+  nodeStep('docs:featflags', 'tools/check/check_feature_flags.js', '문서', 'exams.json features 키 ↔ 코드 사용 정합'),
+  nodeStep('docs:storage', 'tools/check/check_storage_access.js', '문서', 'localStorage 직접 접근 탐지 (storage.js 우회 차단)'),
+  nodeStep('docs:notes', 'tools/check/check_release_notes.js', '문서', '릴리스 노트 스키마·버전 해시·APP_VERSION 정합'),
+  nodeStep('docs:ciparity', 'tools/check/check_ci_parity.js', '문서', 'ci.yml 워크플로 ↔ check:ci 프리셋 양방향 정합'),
+];
+
+// ── 콘텐츠 의존성 단계 (check:content → content 프리셋) ────────────────
+const BUILD_STEP = { id: 'content:build', bin: NPM, args: ['run', 'build:data'], shell: true,
+  layer: '빌드', desc: 'build:data — data/ 번들 전체 재생성 (+인용 라인 동기화)', token: 'npm run build:data', content: true, slow: false };
+
+const CONTENT_STEPS = [
+  nodeStep('content:manifest', 'tools/check/check_manifest.js', '선언', 'manifest 선언 ↔ 파일/과목 자산 정합성', { content: true }),
+  nodeStep('content:structure', 'tools/sync/sync_textbook_files.js', '구조', '교재/문제은행 파일 ↔ manifest·sw.js MD_ASSETS 구조 드리프트', { args: ['--check'], content: true }),
+  nodeStep('content:citations', 'tools/sync/sync_citation_lines.js', '인용', '문제은행 → 교재 #L라인번호 인용 동기화 상태', { args: ['--check'], content: true }),
+  nodeStep('content:numbering', 'tools/check/check_numbering.js', '번호', '교재 십진법 번호체계 — 구식 잔재·연속성·계층·중복 (표준↔이야기 동기화는 경고)', { content: true }),
+  nodeStep('content:answers', 'tools/check/check_answer_overlap.js', '인용', '문제 정답 ↔ 인용 근거 구절 의미적 지지 (정답 미지지 기준선 게이트)', { content: true }),
+  nodeStep('content:refsubjects', 'tools/check/check_ref_subjects.js', '귀속', 'ref_md 문서의 과목 귀속 vs 실제 인용 득표 (정보 단계 — 불일치는 참고 보고)', { content: true }),
+  nodeStep('content:reflayout', 'tools/check/check_reflayout.js', '레이아웃', '참조자료 폴더/레지스트리 정합성', { content: true }),
+  nodeStep('content:reffresh', 'tools/check/check_ref_freshness.js', '신선도', '참조자료 PDF 해시 ↔ ref_md 변환본 (PDF 교체 감지)', { content: true }),
+  nodeStep('content:reflines', 'tools/check/check_ref_lines.js', '참조라인', '교재/문제은행 (LNN) 참조 라인 ↔ ref_md 실제 내용', { content: true }),
+  nodeStep('content:drillfresh', 'tools/check/check_drill_freshness.js', '드릴신선도', '드릴 번들 ↔ 문제은행 번들 (build:drills 필요 감지)', { content: true }),
+  nodeStep('content:combo', 'tools/check/check_combo_pilot.js', '드릴', '복수정답형(combo) 드릴 데이터 정합성', { content: true }),
+  nodeStep('content:id-migration', 'tools/build/build_id_migration.js', 'ID이관', '카드/퀴즈 ID 스냅샷 ↔ 콘텐츠 (build:data 누락·진도 손실 감지)', { args: ['--check'], content: true }),
+  nodeStep('content:datafresh', 'tools/check/check_data_freshness.js', '데이터신선도', 'data/·생성물 ↔ 원본 (빌드 체인 실행 후 git diff — build:data 누락 감지)', { content: true }),
+  nodeStep('content:parser', 'tools/check/check_parser_parity.js', '파서', '빌드 파서 ↔ 런타임 파서 출력 등가성'),
+  nodeStep('content:imports', 'tools/check/check_imports.js', '임포트', 'src/ ES 모듈 import/export 교차 검증'),
+  nodeStep('content:assets', 'tools/check/verify_shell_assets.js', '자산', 'sw.js SHELL_ASSETS/DATA_ASSETS 파일 존재'),
+  nodeStep('content:cards', 'tools/check/audit_card_quality.js', '카드', '카드 품질 감사 (짧은 설명·중복·참조 링크)', { content: true }),
+  nodeStep('content:docbundles', 'tools/build/build_doc_bundles.js', '문서번들', 'docs_md 번들 ↔ 원본 문서 신선도 (build_doc_bundles 필요 감지)', { args: ['--check'], content: true }),
+  nodeStep('content:textbookdocs', 'tools/check/check_textbook_docs.js', '문서신선도', '교재 갱신 ↔ 판본:textbook 문서 (교재 교체 후 방치 문서 감지)', { content: true }),
+  nodeStep('content:docpaths', 'tools/check/check_docs_paths.js', '문서', 'README·AGENTS·docs/*.md 경로 참조 존재 검증 (스테일 탐지)'),
+  nodeStep('content:specrefs', 'tools/check/check_spec_refs.js', '추적', 'SPEC ID ↔ 코드 @spec 태그 양방향 정합성 (스테일 참조 탐지)'),
+  nodeStep('content:trace', 'tools/build/build_trace_matrix.js', '추적', 'TRACE_MATRIX 입력 해시 신선도 (SPEC·@spec·문서 헤더 변경 시 재생성 강제)', { args: ['--check'] }),
+  nodeStep('content:unit', '--test', '테스트', '유닛 테스트 (node --test)', { args: ['tests/unit/**/*.test.js'], token: 'node --test' }),
+  nodeStep('content:dom', 'node_modules/vitest/vitest.mjs', '테스트', 'DOM 테스트 (vitest + jsdom)', { args: ['run'], slow: true }),
+];
+
+// ── CI 게이트 로컬 재현 (check:ci → ci 프리셋) ─────────────────────────
+// 각 단계의 token은 ci.yml run: 라인의 토큰과 1:1 대응 — check_ci_parity가 검증.
+const CI_STEPS = [
+  npmStep('ci:hooks', 'check:hooks', '로컬', 'Git 훅 설치 여부 (미설치 시 로컬 게이트 우회 경고)'),
+  npmStep('ci:secrets', 'check:secrets', '보안', '추적 파일 시크릿 패턴 스캔'),
+  STEP_LINT,
+  STEP_TYPES,
+  npmStep('ci:imports', 'check:imports', '품질', 'ES 모듈 import/export 교차 검증'),
+  npmStep('ci:docs', 'check:docs', '문서', '문서 정합 묶음 (docs 프리셋 위임)'),
+  STEP_DOMAINMAP,
+  STEP_UITEXT,
+  npmStep('ci:mobilesafe', 'check:mobilesafe', '규약', '모바일 잘림 규약 (다이얼로그·버튼 행 줄바꿈)'),
+  npmStep('ci:escape', 'check:escape', '규약', 'HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간)'),
+  nodeStep('ci:docsync', 'tools/check/check_doc_sync.js', '문서', '소스 변경 시 문서 갱신 강제', { args: ['--ref', 'origin/main'] }),
+  nodeStep('ci:testfirst', 'tools/check/check_test_first.js', '테스트', '로직 변경 시 테스트 동반 강제', { args: ['--ref', 'origin/main'] }),
+  npmStep('ci:specrefs', 'check:specrefs', '추적', 'SPEC↔@spec 스테일 참조 + 테스트 갭 기준선'),
+  npmStep('ci:trace', 'check:trace', '추적', 'TRACE_MATRIX 입력 해시 신선도'),
+  npmStep('ci:html', 'check:html', '빌드', 'index.html 조립 신선도 (파셜 편집 시 build:html 필요)'),
+  nodeStep('ci:content', 'tools/check/check_content.js', '콘텐츠', '콘텐츠 추적 단계 전체 (content 프리셋 위임)', { args: ['--content-only', '--quick'] }),
+  npmStep('ci:unit', 'test', '테스트', '유닛 테스트 (node --test)'),
+  npmStep('ci:assets', 'verify:assets', '자산', 'SHELL_ASSETS/DATA_ASSETS 파일 존재'),
+  npmStep('ci:parser', 'check:parser', '파서', '빌드 파서 ↔ 런타임 파서 등가성'),
+  npmStep('ci:perf', 'check:perf', '성능', 'SHELL_ASSETS 크기 예산 상한'),
+];
+
+// ── 참조자료 묶음 (check:refs → refs 프리셋) ──────────────────────────
+const REFS_STEPS = [
+  nodeStep('refs:layout', 'tools/check/check_reflayout.js', '참조', '참조자료 4계층 정합성 (PDF 폴더↔ref_md↔references.json↔규칙)'),
+  nodeStep('refs:subjects', 'tools/check/check_ref_subjects.js', '참조', 'ref_md 인용 득표 ↔ 과목 귀속 교차 검증'),
+  nodeStep('refs:fresh', 'tools/check/check_ref_freshness.js', '참조', '참조자료 PDF 해시 ↔ ref_md 신선도 (PDF 교체 감지)'),
+  nodeStep('refs:lines', 'tools/check/check_ref_lines.js', '참조', '교재 (LNN)/📌출처 조문 ↔ ref_md 실제 내용'),
+  nodeStep('refs:merge', 'tools/check/check_refmerge.js', '참조', 'ref_md joinWraps 병합 품질 감사'),
+];
+
+// ── 생성물 신선도 묶음 (check:fresh → freshness 프리셋) ────────────────
+// "원본 → 산출물" 신선도 검사를 한 프리셋에 모은다 (content 프리셋 단계 재사용).
+function pickContent(id) {
+  const s = CONTENT_STEPS.find((x) => x.id === id);
+  if (!s) throw new Error(`content 단계 없음: ${id}`);
+  return s;
+}
+const FRESH_STEPS = [
+  STEP_HTML,
+  pickContent('content:trace'),
+  pickContent('content:datafresh'),
+  pickContent('content:drillfresh'),
+  pickContent('content:reffresh'),
+  pickContent('content:docbundles'),
+  pickContent('content:textbookdocs'),
+];
+
+// ── 프리셋 해석 ───────────────────────────────────────────────────────
+function contentSteps({ quick = false, contentOnly = false, withBuild = false } = {}) {
+  let steps = CONTENT_STEPS.slice();
+  if (quick) steps = steps.filter((s) => !s.slow);
+  if (contentOnly) steps = steps.filter((s) => s.content);
+  if (withBuild) steps.unshift(BUILD_STEP);
+  return steps;
+}
+
+const PRESETS = {
+  content: (opts) => contentSteps(opts),
+  docs: () => DOCS_STEPS.slice(),
+  ci: () => CI_STEPS.slice(),
+  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_HTML, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_UITEXT, ...contentSteps(opts)],
+  refs: () => REFS_STEPS.slice(),
+  freshness: () => FRESH_STEPS.slice(),
+};
+
+function resolveSteps(preset, opts = {}) {
+  const fn = PRESETS[preset];
+  if (!fn) throw new Error(`알 수 없는 프리셋: ${preset} (사용 가능: ${Object.keys(PRESETS).join(', ')})`);
+  return fn(opts);
+}
+
+/** --step 조회용 통합 레지스트리 (프리셋 간 id 중복은 같은 명령이므로 첫 등록 유지) */
+function allSteps() {
+  const map = new Map();
+  for (const s of [...contentSteps({}), BUILD_STEP, ...DOCS_STEPS, ...CI_STEPS, ...REFS_STEPS]) {
+    if (!map.has(s.id)) map.set(s.id, s);
+  }
+  return [...map.values()];
+}
+
+/** id·id 접미사·스크립트 파일명·npm 스크립트명으로 단계 검색 */
+function findStep(query) {
+  const q = query.replace(/^check:/, '').replace(/\.js$/, '');
+  return allSteps().find((s) =>
+    s.id === query || s.id === q || s.id.endsWith(`:${q}`) ||
+    s.token === `npm run ${query}` || s.token === `npm run check:${q}` ||
+    s.args.some((a) => path.basename(a, '.js') === q || path.basename(a, '.js') === `check_${q.replace(/-/g, '_')}`));
+}
+
+module.exports = { NPM, nodeStep, npmStep, DOCS_STEPS, CONTENT_STEPS, BUILD_STEP, CI_STEPS, PRESETS, resolveSteps, allSteps, findStep };
