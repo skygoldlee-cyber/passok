@@ -62,9 +62,11 @@ console.log('\n📊 병합 HTML 리포트: coverage-merged/index.html');
 //   실측 stmts 69.34 / branches 65.42 / funcs 70.05 / lines 80.34, 대비 ~0.8%p 여유.
 // 2026-10-13 래칫 3차 — exam-sim-review·reader-ref-links·combo-doc·textbook-edition
 //   테스트 보강으로 실측 69.93/65.94/70.90/81.06, 대비 ~0.8%p로 재조임.
+// 2026-10-13 래칫 4차 — 부트스트랩 분모 정정(app.js·exam-data-boot.js 제외,
+//   측정 불가 영역이라 커버리지 상승이 아닌 분모 정정): 실측 70.41/66.38/72.14/81.71.
 //   커버리지 개선 커밋 시 실측이 오르면 같은 방식(실측−0.5~0.8)으로 계속 조인다.
 // 임계값은 기준선 대비 여유분으로 설정 — 상향은 언제든 가능, 하향 시 CHANGES.md에 사유 기록
-const MERGED_THRESHOLDS = { statements: 69, branches: 65, functions: 70, lines: 80.3 };
+const MERGED_THRESHOLDS = { statements: 69.5, branches: 65.5, functions: 71, lines: 81 };
 if (process.argv.includes('--check')) {
     const summary = map.getCoverageSummary();
     const actual = summary.toJSON();

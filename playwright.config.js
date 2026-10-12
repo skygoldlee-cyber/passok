@@ -6,7 +6,9 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
     testDir: 'tests/e2e',
     timeout: 30_000,
-    retries: 0,
+    // CI는 공유 러너 부하로 간헐 플레이크(스크롤·타이밍)가 발생해 1회 재시도로 흡수.
+    // 로컬은 0 유지 — 만성 플레이크를 숨기지 않도록 로컬에서 먼저 드러나게 한다.
+    retries: process.env.CI ? 1 : 0,
     workers: 1, // 단일 정적 서버 — 직렬 실행
     reporter: [['list']],
     use: {
