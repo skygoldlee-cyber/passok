@@ -477,6 +477,8 @@ docs/                   # 문서 (인덱스: docs/README.md)
 - `docs/dev/reference/ENGINEERING_PRACTICES.md` — 소프트웨어 공학 요소 정리 (SSOT·신선도 게이트·추적성)
 - `docs/dev/reference/SOFTWARE_ENGINEERING_TECHNIQUES.md` — 적용 공학 기법 카탈로그 (PBT·변이·성능 예산·ADR·도메인 경계·텔레메트리 포함 전 기법 색인)
 - `docs/dev/design/DOM_TEST_DESIGN.md` — jsdom UI 시나리오 테스트 설계
+- `docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md` — 빌드타임 임베딩 기반 의미 유사도 설계안 (유사 진술·혼동쌍·검색 확장 — 미구현)
+- `docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md` — 오답 원인 자동 분류 설계안 (임베딩 센트로이드 추정기 — 미구현)
 - `docs/dev/design/SUPABASE_DESIGN.md` — 계정·클라우드 동기화 설계안 (Phase 1~2 구현 완료, Pro entitlement는 미구현)
 - `docs/dev/runbooks/TEXTBOOK_AUTHORING_GUIDE.md` — 교재 작성 가이드
 - `docs/exams/cosmetic/reference/NUMBERING_SYSTEM.md` — 교재 번호체계 가이드 (십진법)
