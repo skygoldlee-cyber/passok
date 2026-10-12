@@ -16,6 +16,7 @@
     --bg-active: rgba(255, 255, 255, 0.08);        /* active/강조 배경 */
     --bg-elevated: rgba(255, 255, 255, 0.1);       /* 떠 있는 배경 */
     --bg-input: rgba(0, 0, 0, 0.25);                /* 다크 입력창 배경 */
+    --bg-wallpaper-dim: rgba(11, 15, 25, 0.72);     /* 데스크탑 배경화 위 딤 (--bg-app 계열) */
     --border-faint: rgba(255, 255, 255, 0.03);     /* 매우 희미한 테두리 */
     --border-subtle: rgba(255, 255, 255, 0.05);    /* 희미한 테두리 */
     --border-strong: rgba(255, 255, 255, 0.15);    /* 강한 테두리 */
@@ -292,6 +293,7 @@
     --bg-active: rgba(15, 23, 42, 0.1);
     --bg-elevated: rgba(15, 23, 42, 0.12);
     --bg-input: #ded9c7;
+    --bg-wallpaper-dim: rgba(233, 228, 212, 0.72);
     --border-faint: rgba(15, 23, 42, 0.1);
     --border-subtle: rgba(15, 23, 42, 0.15);
     --border-strong: rgba(15, 23, 42, 0.3);
@@ -501,6 +503,20 @@ body {
     height: 100vh;
     height: 100dvh; /* iOS Safari 주소창 변동 대응 */
     -webkit-font-smoothing: antialiased;
+}
+
+/* 데스크탑 배경화 — 정선「인왕제색도」(1751, 퍼블릭 도메인) 수묵 산수화 + 테마 딤.
+   모바일(≤900px) 제외: 카드·본문이 뷰포트를 채워 효과가 없고 대역만 소모.
+   딤은 background-image 1레이어로 얹어 backgroundColor 계산값을 바꾸지 않는다 */
+@media (min-width: 901px) {
+    body {
+        background-image:
+            linear-gradient(var(--bg-wallpaper-dim), var(--bg-wallpaper-dim)),
+            url('../icons/bg-landscape.webp');
+        background-position: center;
+        background-size: cover;
+        background-attachment: fixed;
+    }
 }
 
 /* A1: 키보드 접근성 — :focus-visible로 마우스 클릭 시 포커스 링 숨김, 키보드 탐색 시 표시 */
