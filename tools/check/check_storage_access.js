@@ -24,8 +24,8 @@
 // @spec none (인프라 검증)
 const fs = require('fs');
 const path = require('path');
+const { ROOT, refFromArgs, changedFiles } = require('./changed_files.js');
 
-const ROOT = path.resolve(__dirname, '..', '..');
 const SRC = path.join(ROOT, 'src');
 
 const ALLOWED_FILES = new Set([
@@ -45,13 +45,18 @@ function* walk(dir) {
   }
 }
 
+// --ref: ref..HEAD+미커밋 변경 파일만 스캔 — 신규 접근 유입 탐지 (로컬·pre-push)
+const ref = refFromArgs(process.argv.slice(2));
+const scoped = ref ? new Set(changedFiles(ref)) : null;
+
 const issues = [];
 let scanned = 0;
 for (const file of walk(SRC)) {
+  const rel = path.relative(ROOT, file).replace(/\\/g, '/');
+  if (scoped && !scoped.has(rel)) continue;
   scanned++;
   const base = path.basename(file);
   if (ALLOWED_FILES.has(base)) continue;
-  const rel = path.relative(ROOT, file).replace(/\\/g, '/');
   fs.readFileSync(file, 'utf8').split('\n').forEach((line, i) => {
     if (/localStorage\s*[.\[]/.test(line)) {
       issues.push(`${rel}:${i + 1} — localStorage 직접 접근 (storage.js 경유 필요)`);
@@ -60,7 +65,7 @@ for (const file of walk(SRC)) {
 }
 
 if (!issues.length) {
-  console.log(`✅ 저장소 접근 정합 — src/ ${scanned}개 파일, 직접 접근 없음 (허용 ${ALLOWED_FILES.size}개 모듈)`);
+  console.log(`✅ 저장소 접근 정합 — src/ ${scanned}개 파일, 직접 접근 없음 (허용 ${ALLOWED_FILES.size}개 모듈${scoped ? ' · diff 스코프' : ''})`);
   process.exit(0);
 }
 

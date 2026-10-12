@@ -165,12 +165,19 @@ function isSafeInterp(expr) {
 const SINK_RE = /(?:\.innerHTML|\.outerHTML)\s*[+]?=\s*(html)?\s*`/g;
 const SINK_IAH_RE = /\.insertAdjacentHTML\s*\(\s*['"][^'"]*['"]\s*,\s*(html)?\s*`/g;
 
+// --ref: ref..HEAD+미커밋 변경 파일만 스캔 — 신규 싱크 유입 탐지
+// (기준선 비교 대신 변경 파일 내 위반 0건 요구 — 로컬·pre-push 경로)
+const { refFromArgs, changedFiles } = require('./changed_files.js');
+const ref = refFromArgs(process.argv.slice(2));
+const scoped = ref ? new Set(changedFiles(ref)) : null;
+
 const violations = [];
 let sinkCount = 0;
 let interpCount = 0;
 
 for (const file of walk(SRC_DIR)) {
   const rel = path.relative(ROOT, file).replace(/\\/g, '/');
+  if (scoped && !scoped.has(rel)) continue;
   const src = fs.readFileSync(file, 'utf8');
   const lines = src.split('\n');
   const lineOf = (idx) => src.slice(0, idx).split('\n').length;
@@ -197,12 +204,17 @@ for (const file of walk(SRC_DIR)) {
 }
 
 console.log('HTML 이스케이프 싱크 검사 (ROAD-Q5)');
-console.log(`  스캔: src/**/*.js — 직접 템플릿 싱크 ${sinkCount}개, 보간 ${interpCount}개`);
+console.log(`  스캔: src/**/*.js${scoped ? ' (diff 스코프)' : ''} — 직접 템플릿 싱크 ${sinkCount}개, 보간 ${interpCount}개`);
 console.log(`  미이스케이프 보간 후보: ${violations.length}개 (기준선 ${ESCAPE_GAP_BASELINE}개)`);
 
 if (violations.length) {
   for (const v of violations.slice(0, 40)) console.log(`  - ${v}`);
   if (violations.length > 40) console.log(`  …외 ${violations.length - 40}개`);
+}
+// diff 스코프: 변경 파일 내 위반은 전부 신규 — 0건 요구 (기준선 비교 생략)
+if (scoped && violations.length > 0) {
+  console.log('\n실패 — 변경 파일에 미이스케이프 보간 유입. esc()/html`` 로 감싸거나, 검토 후 `esc-ok` 주석으로 면제하세요.');
+  process.exit(1);
 }
 if (violations.length > ESCAPE_GAP_BASELINE) {
   console.log('\n실패 — 기준선 초과. 신규 보간은 esc()/html`` 로 감싸거나, 검토 후 `esc-ok` 주석으로 면제하세요.');
