@@ -1,5 +1,5 @@
 // views/reader-toolbar.js — 교재 리더 툴바·독서 설정·스크롤 이벤트 (textbook-reader.js에서 분리)
-// @spec TR-15,TR-16,TR-16a,TR-18,TR-21~23,UX-SCR-01
+// @spec TR-15,TR-16,TR-16a,TR-18,TR-21~23,TR-27,UX-SCR-01
 // 역할: 북마크 토글, 테마 클래스 적용, 스크롤 스파이(rAF 디바운스),
 //       툴바 버튼 바인딩, 표 전체화면 모달. 렌더링 로직은 textbook-reader.js에 남음.
 import { safeGetItem, safeSetItem } from '../state.js';
@@ -9,10 +9,30 @@ export const readerChapterContext = { subjId: '', chapterIdx: 0 };
 let readerScrollBound = false;
 let _readerKeyboardBound = false;
 
+/**
+ * 북마크 키 생성 — 과목|챕터키|섹션제목 조합 (TR-27).
+ * 구형 `${subj}_${chapterIdx}_${sectionIdx}` 위치 인덱스는 교재 편집으로
+ * 섹션이 밀리면 다른 섹션을 조용히 가리키므로 콘텐츠 기반 키로 대체한다.
+ * chapterKey는 manifest 선언 키(위치 무관), 섹션제목은 표시 정체성이다.
+ */
+export function bookmarkKeyOf(subjId, chapterKey, sectionTitle) {
+    return `${subjId}|${chapterKey || ''}|${sectionTitle || ''}`;
+}
+
+/** 구형 위치 인덱스 키 판별 — `subj_0_3` 형태 (파이프 구분자 부재 + _숫자_숫자) */
+const LEGACY_BOOKMARK_RE = /^[^|]+_\d+_\d+$/;
+
 export function getReaderBookmarks() {
+    let list = [];
     try {
-        return JSON.parse(safeGetItem(STORAGE_KEYS.READER_BOOKMARKS) || '[]') || [];
+        list = JSON.parse(safeGetItem(STORAGE_KEYS.READER_BOOKMARKS) || '[]') || [];
     } catch { return []; }
+    // 구형 위치 키 이관 — 현재 인덱스와의 대응을 보장할 수 없으므로 읽기 시점에 제거 (TR-27)
+    const cleaned = list.filter(k => !LEGACY_BOOKMARK_RE.test(String(k)));
+    if (cleaned.length !== list.length) {
+        safeSetItem(STORAGE_KEYS.READER_BOOKMARKS, JSON.stringify(cleaned));
+    }
+    return cleaned;
 }
 
 export function toggleReaderBookmark(key, btn) {
