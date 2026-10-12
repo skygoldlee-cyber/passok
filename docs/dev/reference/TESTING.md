@@ -179,9 +179,9 @@ npm run hooks:install
 
 | # | 파일 | 테스트 수 | 검증 대상 | 비고 |
 |---|------|-----------|-----------|------|
-| 1 | `sanitize.test.js` | 9 | `escapeHTML()`, `safeTextWithBreaks()`, `esc()` | XSS 방어 유틸리티 |
+| 1 | `sanitize.test.js` | 17 | `escapeHTML()`, `safeTextWithBreaks()`, `esc()` | XSS 방어 유틸리티 |
 | 2 | `sha256.test.js` | 13 | `sha256hex()`, `stableId()` | Node `crypto`와 교차 검증 |
-| 3 | `id_factory.test.js` | 13 | `stableId()`, `shortHash()` | 빌드 타임 ID 생성 로직 |
+| 3 | `id-factory.test.js` | 13 | `stableId()`, `shortHash()` | 빌드 타임 ID 생성 로직 |
 | 4 | `utils.test.js` | 7 | `getChosung()` | 한글 초성 추출 |
 | 5 | `trainer-calc.test.js` | 8 | `buildCalcQuestion()` | 계산 훈련 문제 생성 |
 | 6 | `state.test.js` | 16 | `loadProgress()`, `saveProgress()`, `cleanOrphansForSubject()` | localStorage 모킹 |
@@ -191,21 +191,21 @@ npm run hooks:install
 | 10 | `mermaid/mermaid-textcontent.test.js` | 5 | Mermaid 블록 `textContent` 시뮬레이션 | 브라우저 `textContent` 동작 재현 |
 | 11 | `mermaid/mermaid-reader-format.test.js` | 4 | `formatSectionContentForReader()` 처리 후 Mermaid 블록 보존 | `<br/>` 엔티티, 페이지 참조/용어집 링크 간섭 |
 | 12 | `mermaid/mermaid-pipeline.test.js` | 4 | 전체 파이프라인: MD → HTML → Mermaid 블록 | HTML 태그 미혼입, 볼드/이탤릭/링크 비적용 |
-| 13 | `mermaid/mermaid-rendering.test.js` | 23 | 다이어그램 타입 감지, mindmap 들여쓰기, CSS 클래스 분리, 실제 교재 파일 검증 | 2026-09-02 추가 |
-| 14 | `study-aids.test.js` | 25 | `extractExamHighlights()`, `extractNumberDrills()`, `detectProcedureFlow()`, `detectAdminPenalty()`, `isKeySection()` | 합성 데이터, 교재 무관 |
+| 13 | `mermaid/mermaid-rendering.test.js` | 17 | 다이어그램 타입 감지, mindmap 들여쓰기, CSS 클래스 분리, 실제 교재 파일 검증 | 2026-09-02 추가 |
+| 14 | `study-aids.test.js` | 20 | `extractExamHighlights()`, `extractNumberDrills()`, `detectProcedureFlow()`, `detectAdminPenalty()`, `isKeySection()` | 합성 데이터, 교재 무관 |
 | 15 | `pdf-registry.test.js` | 21 | `resolveRefPath()`, `mapSourceToRef()`, `resolveKeywordRef()`, 데이터 구조 검증 | 합성 데이터, 교재 무관 |
 | 16 | `glossary-query.test.js` | 13 | `getGlossaryByRefFile()`, `getGlossaryByRefFiles()`, `getGlossaryEntry()`, `getAllGlossaryKeywords()` | 합성 데이터, 교재 무관 |
-| 17 | `markdown-parser-general.test.js` | 47 | 헤더, 표, 리스트, 인용문, 특수 토큰, 빈 입력 + `joinWraps`(ref_md 시각적 줄 병합, 러닝헤더 스킵) | 합성 데이터, 교재 무관 |
-| 18 | `reader-format-general.test.js` | 19 | 페이지 참조 제거, 기출문제/참조자료/출처 링크 변환, 용어집 자동 링크, Mermaid 보호 | 합성 데이터, 교재 무관 |
+| 17 | `markdown-parser-general.test.js` | 49 | 헤더, 표, 리스트, 인용문, 특수 토큰, 빈 입력 + `joinWraps`(ref_md 시각적 줄 병합, 러닝헤더 스킵) | 합성 데이터, 교재 무관 |
+| 18 | `reader-format-general.test.js` | 23 | 페이지 참조 제거, 기출문제/참조자료/출처 링크 변환, 용어집 자동 링크, Mermaid 보호 | 합성 데이터, 교재 무관 |
 | 19 | `combo-transform.test.js` | 7 | 복수정답형(ⓐⓑⓒ) 문항 변환 — 진술 추출, 정답 조합, 변형 ID | `src/questions.js` (`generateComboOptions`, `deriveComboAnswer`) |
 | 20 | `statement-tracker.test.js` | 9 | 복수정답형 진술별 정답 추적·통계 | `src/questions.js` (`gradeAnswer`) + `src/statement-tracker.js` |
 | 21 | `questions.test.js` | 17 | `src/questions.js` — 문제 필터·출제 로직 | 합성 데이터 |
 | 22 | `data-loader.test.js` | 7 | `src/data-loader.js` — 데이터 번들 로딩, 캐시 동작 | `window` 글로벌 모킹 |
-| 23 | `exam-context.test.js` | 12 | `src/exam-context.js` — 시험 해석, `scopedKey` 네임스페이스, 기능 플래그 | 합성 데이터 |
+| 23 | `exam-context.test.js` | 16 | `src/exam-context.js` — 시험 해석, `scopedKey` 네임스페이스, 기능 플래그 | 합성 데이터 |
 | 24 | `storage-key-sync.test.js` | 2 | `src/storage-keys.js` 선언 키 ↔ 실제 사용 키 동기화 | 키 누락 회귀 가드 |
 | 25 | `formula-store.test.js` | 31 | `src/exams/cosmetic/formula-store.js` — 포뮬러 CRUD·저장 한도(5), 고객·원료·안정성 스키마 정제, 전성분 표시 순서 | Formula OS, localStorage 모킹 |
 | 26 | `formula-rules.test.js` | 23 | `src/exams/cosmetic/formula-rules.js` — 추천 규칙, 안전 필터(금지·알레르기·임신수유), 맞춤 규칙 병합·직렬화 | Formula OS, 합성 데이터 |
-| 27 | `formula-check.test.js` | 20 | `src/exams/cosmetic/formula-check.js` — 원료 인덱스, 배합 검증(한도이내/초과/금지/확인필요), 고시 출처 | Formula OS, 합성 데이터 |
+| 27 | `formula-check.test.js` | 22 | `src/exams/cosmetic/formula-check.js` — 원료 인덱스, 배합 검증(한도이내/초과/금지/확인필요), 고시 출처 | Formula OS, 합성 데이터 |
 | 28 | `formula-stability.test.js` | 22 | `src/exams/cosmetic/formula-stability.js` — 상 비율·상호작용·투입 단계·pH 규칙, 미판정 불변식 | Formula OS, 합성 데이터 |
 | 29 | `batch-store.test.js` | 14 | `src/exams/cosmetic/batch-store.js` — 배치 채번(YYYYMMDD-NN), identity 불변, QC·위생 병합, `checkSnapshot` 보존, 50건 한도, LOT 추적·인도일·재고 경고·QC 조치 | Formula OS Phase A |
 | 30 | `usage-guide.test.js` | 7 | `src/exams/cosmetic/usage-guide.js` — 제형 템플릿, 원료 주의 규칙(레티노이드·AHA·향료 등), 임신/알레르기 병기 | Formula OS Phase A |
@@ -221,76 +221,120 @@ npm run hooks:install
 | 40 | `storage.test.js` | 12 | `src/storage.js` — 스코프·JSON 헬퍼·쓰기 훅·백엔드 교체·`setMany` 롤백 | 저장소 추상화 |
 | 41 | `whats-new.test.js` | 7 | `src/whats-new.js` — `collectNewEntries` 버전 비교·집계·상한·폴백 | 순수 함수 |
 | 42 | `feedback.test.js` | 13 | `src/feedback.js` — `?src=` 캡처·sanitize, 페이로드 빌드/검증, 쿨다운, 큐·플러시 | window/localStorage 스텁 |
-| 43 | `study-tracker.test.js` | 5 | `src/study-tracker.js` — SC-03 활동 기록·월별 학습일·목표 진행 | localStorage 모킹, 2026-10-14 추가 |
-| 44 | `build-pipeline.test.js` | 16 | BP-01~08 — manifest 스키마·안정 ID·빌드 검증·파서 정합·용어집 인덱스·SW 스탬프·카드 감사 | tools/build 모듈 + subprocess, 2026-10-14 추가 |
+| 43 | `study-tracker.test.js` | 41 | `src/study-tracker.js` — SC-03 활동 기록·월별 학습일·목표 진행 | localStorage 모킹, 2026-10-14 추가 |
+| 44 | `build-pipeline.test.js` | 17 | BP-01~08 — manifest 스키마·안정 ID·빌드 검증·파서 정합·용어집 인덱스·SW 스탬프·카드 감사 | tools/build 모듈 + subprocess, 2026-10-14 추가 |
 | 45 | `content-structure.test.js` | 13 | CS-01~10 — manifest↔파일·교재 8종·문제은행·ref_md 레이아웃·원료 메타·오디오북·슬러그·참조 이미지 | 파일시스템 정적 검증, 2026-10-14 추가 |
 | 46 | `audit-quality.test.js` | 6 | CQ-01~05 — 카드 감사·참조 링크·심각도·콤보 감사·베이스라인 카운트 | subprocess 실행, 2026-10-14 추가 |
 | 47 | `formula-os.test.js` | 11 | FO-03/04/07/09 — 제조 단계·역할→상 매핑·고객 필드·pH·단계 상한·import/export·무료 한도 | 합성 데이터, 2026-10-14 추가 |
 | 48 | `data-architecture.test.js` | 11 | DA-01/02/04/06/08 — 멀티시험 레지스트리·경로·기능 플래그·폴백 번들·스코프 키 | 생성 번들 검증, 2026-10-14 추가 |
 | 49 | `story-textbook.test.js` | 14 | ST-01~08 — 이야기형 교재 구조·마커 쌍·이미지 참조·섹션 | 콘텐츠 정적 검증, 2026-10-14 추가 |
-| 50 | `pwa-sw.test.js` | 15 | P-01~12 — SW 캐시 분기·프리캐시·스큐 방지·업데이트·CACHE_VERSION·설치 캡처·manifest Content-Type·app-fallback·verify:assets | 정적 검증 + subprocess, 2026-10-14 추가 |
+| 50 | `pwa-sw.test.js` | 17 | P-01~12 — SW 캐시 분기·프리캐시·스큐 방지·업데이트·CACHE_VERSION·설치 캡처·manifest Content-Type·app-fallback·verify:assets | 정적 검증 + subprocess, 2026-10-14 추가 |
 | 51 | `security.test.js` | 6 | S-01/07/08 — CSP·인라인 핸들러 부재·보안 헤더·Permissions-Policy·위임 브리지 | vercel.json·index.html 정적 검증, 2026-10-14 추가 |
-| 52 | `perf-invariants.test.js` | 16 | PF-01~16 — 런타임 MD 파싱·과목별 로딩·캐시 TTL·지연 하이라이트·normalize·디바운스·console.log 금지·ref_md·Mermaid 지연·법령 정본 | 소스 패턴 정적 검증, 2026-10-14 추가 |
+| 52 | `perf-invariants.test.js` | 18 | PF-01~16 — 런타임 MD 파싱·과목별 로딩·캐시 TTL·지연 하이라이트·normalize·디바운스·console.log 금지·ref_md·Mermaid 지연·법령 정본 | 소스 패턴 정적 검증, 2026-10-14 추가 |
 | 53 | `ux-invariants.test.js` | 20 | UX-FB/FORM/PWA/SCR/SET — 스크롤바·CSS 변수·설정 패널·44px·버전·토스트·모달·펄스·standalone·app-height·폼 16px·터치 피드백 | CSS·HTML·JS 정적 검증, 2026-10-14 추가 |
 | 54 | `content-engineering.test.js` | 6 | CE-01~05 + TR-16a — 학습 가이드·한 줄 요약·비교표·확인문제·용어 표·툴바 자동 숨김 | 콘텐츠·소스 정적 검증, 2026-10-14 추가 |
 | 55 | `doc-sync.test.js` | 7 | `tools/check/check_doc_sync.js` — 트리거/면제/문서 경로 분류, analyze 위반 판정, porcelain 파서 | 정적 패턴 검증, 2026-10-14 추가 |
 | 56 | `test-first.test.js` | 7 | `tools/check/check_test_first.js` — 로직 트리거/테스트 경로 분류, analyze 위반 판정 | 정적 패턴 검증, 2026-11-02 추가 |
 | 57 | `property-based.test.js` | 8 | `deriveComboAnswer`·`generateComboOptions`·`weak-items` ID 문법·SM-2 불변식 | fast-check 속성 기반 테스트 (PBT), 2026-10-04 추가 |
 | 58 | `error-telemetry.test.js` | 6 | `src/error-telemetry.js` — 페이로드·중복 억제·세션 상한·disabled/failed 경로·리스너 | insert 주입식, 2026-10-04 추가 |
-| 59 | `exams/cosmetic/formula-audit.test.js` | 33 | `src/exams/cosmetic/views/formula-audit.js` — 유형별 섹션 게이트·수집기·빌더 마크업·출력 이력·문서 식별자·고시 스탬프·점검자 성명 + print.css fp-doc 여백 규약 | 2026-10-06 추가 |
-| | **합계** | **748** | | |
+| 59 | `exams/cosmetic/formula-audit.test.js` | 37 | `src/exams/cosmetic/views/formula-audit.js` — 유형별 섹션 게이트·수집기·빌더 마크업·출력 이력·문서 식별자·고시 스탬프·점검자 성명 + print.css fp-doc 여백 규약 | 2026-10-06 추가 |
+| 60 | `analysis-deepening.test.js` | 19 | 맞춤학습 심화 — 결함 클러스터·심화 추천 경로 | |
+| 61 | `analysis-engine.test.js` | 22 | 맞춤학습 분석 엔진 순수 로직 | |
+| 62 | `answer-overlap.test.js` | 13 | `check_answer_overlap.js` — 정답↔근거 지지 판정 | |
+| 63 | `audio-manifest.test.js` | 4 | 오디오 매니페스트 커버리지 | |
+| 64 | `check-runner.test.js` | 6 | 통합 실행기 `run.js`·`steps.js` 레지스트리 무결성 | |
+| 65 | `emb-manifest.test.js` | 4 | 임베딩 manifest 신선도 (SEM-05) | |
+| 66 | `exams/cosmetic/custom-ingredient-store.test.js` | 12 | 자가 등록 성분 CRUD·공식 동명 차단·superseded (DI-06~09) | |
+| 67 | `exams/cosmetic/formula-practical.test.js` | 11 | 실무 도구 확장 순수 로직 (FO-57~63) | |
+| 68 | `exams/cosmetic/formula-sales.test.js` | 12 | 표시사항·광고 문구 점검 로직 (FO-34~36) | |
+| 69 | `exams/cosmetic/product-store.test.js` | 45 | 기성품 DB 스토어 — 스키마·전성분 비교 | |
+| 70 | `exams/cosmetic/product-vision.test.js` | 23 | 기성품 OCR·전성분 추출 | |
+| 71 | `fsrs.test.js` | 9 | FSRS-4.5 순수 함수 + 어댑터 | |
+| 72 | `law-links.test.js` | 8 | `lawUrlFor` — 참조자료 → law.go.kr 링크 매핑 | |
+| 73 | `link-lint.test.js` | 16 | `check_link_lint` 자체 회귀 (LL-01~09) | |
+| 74 | `markdown-links.test.js` | 11 | MD 링크 파서 엣지 — `](<url>`·한글 파일명 | |
+| 75 | `multi-exam-gates.test.js` | 5 | `check:domainmap` 등 멀티시험 게이트 스크립트 | |
+| 76 | `notice-check.test.js` | 24 | `isNewerNotice` — 식약처 고시 감지 배너 판정 | |
+| 77 | `notice-diff.test.js` | 14 | `splitArticles` — 참조 문서 개정 조문 diff | |
+| 78 | `posindep.test.js` | 9 | `check_position_independence` — 위치 좌표 식별자 탐지 (ID-05) | |
+| 79 | `practice-registry.test.js` | 9 | practice-registry 지연 로드 매니페스트 | |
+| 80 | `push-gate.test.js` | 10 | pre-push 적응형 게이트 분류기 | |
+| 81 | `reader-analysis-gates.test.js` | 6 | 리더 위치 보존·맞춤학습 온보딩·서사 커버리지 게이트 | |
+| 82 | `reader-toc.test.js` | 7 | 리더 목차 추출 헬퍼 | |
+| 83 | `ref-link-labels.test.js` | 22 | 참조자료 링크 라벨 정규화 | |
+| 84 | `semantic-index.test.js` | 11 | 의미 인덱스 — 임베딩 유사 진술·이웃 | |
+| 85 | `step-runner.test.js` | 6 | `step_runner` 병렬 실행기 | |
+| 86 | `story-merge.test.js` | 14 | 이야기형 병합 엔진 | |
+| 87 | `study-quality-audit.test.js` | 8 | 학습 품질 감사 지표 헬퍼 + 실행 | |
+| 88 | `textbook-anchors.test.js` | 5 | 교재 라인 → §앵커 해석 헬퍼 | |
+| 89 | `textbook-edition.test.js` | 3 | 교재 판본 메타 (P-14) | |
+| 90 | `textbook-search-ref.test.js` | 10 | `_listRefDocs` — 참조자료 검색 헬퍼 (TS-11) | |
+| | **합계** | **1184** | | |
 
 ### DOM 테스트 (`tests/dom/`)
 
 | # | 파일 | 테스트 수 | 검증 대상 | 비고 |
 |---|------|-----------|-----------|------|
 | 1 | `backup.dom.test.js` | 10 | `getBackupKeys()`, `exportData()`, `triggerImport()`, `importData()` | localStorage + DOM 조작 |
-| 2 | `router.dom.test.js` | 20 | `getViewTitles()`, `navigateToView()`, `initViewHashRouting()` | 뷰 타이틀 맵, active 클래스 동기화, 렌더러 호출, 오디오 정지, 포커스 모드, 해시 라우팅, 뒤로가기 종료 가드 | 2026-09-03 추가 |
+| 2 | `router.dom.test.js` | 27 | `getViewTitles()`, `navigateToView()`, `initViewHashRouting()` | 뷰 타이틀 맵, active 클래스 동기화, 렌더러 호출, 오디오 정지, 포커스 모드, 해시 라우팅, 뒤로가기 종료 가드 | 2026-09-03 추가 |
 | — | `helpers.js` | — | 공통 픽스처 | `loadIndexHtml()`(실제 index.html 주입), `selectFile`, `flushAsync`, `lastToast`, `spyAnchorDownload` | 2026-09-23 추가 |
-| 3 | `formula-nav.dom.test.js` | 6 | 패널 전환·서브내비 | 허브↔서브패널 is-hidden 전환, 서브내비 6칩·활성 칩 | 2026-09-23 추가 |
+| 3 | `formula-nav.dom.test.js` | 10 | 패널 전환·서브내비 | 허브↔서브패널 is-hidden 전환, 서브내비 6칩·활성 칩 | 2026-09-23 추가 |
 | 4 | `formula-customer.dom.test.js` | 9 | 고객 CRUD + CSV | 빈 상태→등록→목록, CSV UTF-8/EUC-KR·중복·confirm 거부·보내기·양식 | 2026-09-23 추가 |
 | 5 | `formula-material.dom.test.js` | 5 | 원료 장부 + CSV | 기한 4상태 배지·경고 배너, CSV 이름+LOT 중복·날짜 정규화 | 2026-09-23 추가 |
 | 6 | `formula-compliance.dom.test.js` | 8 | 법규 체크리스트 | 27항목 렌더·배지, 체크 토글 영속·재토글·초기화, ExamViewer 연동 | 2026-09-23 추가 |
 | 7 | `formula-calc.dom.test.js` | 23 | 배합 계산기·포뮬러 목록 + 태블릿 현장 작업·자가 성분 | 투입량 계산, 합계 100% 판정, 한도 초과/금지/미등록 배지, 고객 불러오기, 저장→목록, 삭제 confirm, JSON 왕복, 배합률 스테퍼·진행 표시, 계량 모드 순회·종료, 드래프트 자동저장·복원, 고대비 토글 (FO-27~31), 자가 등록 배지·모달 프리필·동명 거부·수정삭제 인덱스 갱신 (DI-07·09·FO-32) | 2026-09-23 추가 |
 | 8 | `formula-batch.dom.test.js` | 22 | 조제 기록(배치) | 빈 목록, 처방 바인딩·기본값, QC·위생 렌더, 저장→채번·스냅샷·상세, 순번 증가, 보정 identity 잠금·QC 병합, 삭제 confirm, 인쇄 | 2026-09-23 추가 |
 | 9 | `formula-print.dom.test.js` | 10 | 인쇄 산출물 | 포뮬러/배치 기록지, 라벨 전성분·폴백, 안내문 템플릿·원료 주의, afterprint 정리, 거부 케이스, 작업지시서 단계 그룹·체크란·LOT·서명란 (FO-29) | 2026-09-23 추가 |
-| 10 | `study-quiz.dom.test.js` | 14 | 기출 퀴즈·오답 복습 | 출제·단답/객관식/OX 채점·결과 화면·오답 영속·재시작·약점 퀴즈·복습 필터/제외 | 2026-09-23 추가 |
+| 10 | `study-quiz.dom.test.js` | 15 | 기출 퀴즈·오답 복습 | 출제·단답/객관식/OX 채점·결과 화면·오답 영속·재시작·약점 퀴즈·복습 필터/제외 | 2026-09-23 추가 |
 | 11 | `study-flashcard.dom.test.js` | 8 | 플래시카드 | 중요도 정렬·뒤집기·순환 이동·빈 과목·기출/난이도 필터·외움/헷갈림 영속·재진입 복원 | 2026-09-23 추가 |
-| 12 | `study-dashboard.dom.test.js` | 6 | 대시보드 | 0건 통계·시딩 통계·과목 카드·히트맵·약점 추천(3문 조건)·헷갈림 추천 | 2026-09-23 추가 |
-| 13 | `study-challenge.dom.test.js` | 12 | 데일리 챌린지 | 미완료/완료 상태, 스트릭 유지·리셋, 8문항 모달·채점·분류, 완료 영속·재진입, 이탈 confirm | 2026-09-23 추가 |
+| 12 | `study-dashboard.dom.test.js` | 14 | 대시보드 | 0건 통계·시딩 통계·과목 카드·히트맵·약점 추천(3문 조건)·헷갈림 추천 | 2026-09-23 추가 |
+| 13 | `study-challenge.dom.test.js` | 17 | 데일리 챌린지 | 미완료/완료 상태, 스트릭 유지·리셋, 8문항 모달·채점·분류, 완료 영속·재진입, 이탈 confirm | 2026-09-23 추가 |
 | 14 | `study-pomodoro.dom.test.js` | 7 | 뽀모도로 | 시작/일시정지/리셋, 완주 누적, 날짜 경계 리셋 (fake timers) | 2026-09-23 추가 |
-| 15 | `study-trainer.dom.test.js` | 12 | 스마트 훈련소 | 메뉴/서브패널 전환, 한도 퀴즈 채점, 계산 연습 이력·비수치 경고, 원료 챌린지·빈DB 가드, 취약 진술 복습 | 2026-09-23 추가 |
-| 16 | `study-calendar.dom.test.js` | 6 | 학습 캘린더 | 목표 카드·월 그리드, 활동 기록→학습일·달성률, 월 이동, 목표 저장·기본값, 취소 불변 | 2026-09-23 추가 |
-| 17 | `study-simulator.dom.test.js` | 14 | 모의고사 | 아레나·OMR, 답안·문항 이동, 제출 채점·오답 카드 등록, 리뷰, 드래프트 이어하기, 시간 만료 자동 제출, 오답 모의고사(startWeakExam — 카드/퀴즈/combo 재조립·과목 필터) | 2026-09-23 추가 |
-| 18 | `study-reader.dom.test.js` | 29 | 교재 리더 | 과목 옵션·본문/TOC 렌더, 읽기 위치 이어하기, 북마크 영속, 빈 상태 + 툴바(툴바 접기)·본문 검색 하이라이트·모바일 TOC 드로어·표 인라인 렌더(확장 모달 제거 회귀)·이미지 라이트박스(클릭 확대·배율·닫기·모바일 미바인딩 — 데스크탑 전용)·TOC 클릭 스크롤·테마 동기화 + 이야기형 서사 태깅(명시 마커·sr-only 구간 라벨 포함)(명시 마커 📖┈이야기┈~┈본문┈� + �📖 장면·💭 에필로그·프롤로그 폴백) | 2026-09-23 추가 · 2026-10-06 갱신(글자/줄간격 제거·이미지 라이트박스 데스크탑 복원) |
+| 15 | `study-trainer.dom.test.js` | 14 | 스마트 훈련소 | 메뉴/서브패널 전환, 한도 퀴즈 채점, 계산 연습 이력·비수치 경고, 원료 챌린지·빈DB 가드, 취약 진술 복습 | 2026-09-23 추가 |
+| 16 | `study-calendar.dom.test.js` | 17 | 학습 캘린더 | 목표 카드·월 그리드, 활동 기록→학습일·달성률, 월 이동, 목표 저장·기본값, 취소 불변 | 2026-09-23 추가 |
+| 17 | `study-simulator.dom.test.js` | 15 | 모의고사 | 아레나·OMR, 답안·문항 이동, 제출 채점·오답 카드 등록, 리뷰, 드래프트 이어하기, 시간 만료 자동 제출, 오답 모의고사(startWeakExam — 카드/퀴즈/combo 재조립·과목 필터) | 2026-09-23 추가 |
+| 18 | `study-reader.dom.test.js` | 30 | 교재 리더 | 과목 옵션·본문/TOC 렌더, 읽기 위치 이어하기, 북마크 영속, 빈 상태 + 툴바(툴바 접기)·본문 검색 하이라이트·모바일 TOC 드로어·표 인라인 렌더(확장 모달 제거 회귀)·이미지 라이트박스(클릭 확대·배율·닫기·모바일 미바인딩 — 데스크탑 전용)·TOC 클릭 스크롤·테마 동기화 + 이야기형 서사 태깅(명시 마커·sr-only 구간 라벨 포함)(명시 마커 📖┈이야기┈~┈본문┈� + �📖 장면·💭 에필로그·프롤로그 폴백) | 2026-09-23 추가 · 2026-10-06 갱신(글자/줄간격 제거·이미지 라이트박스 데스크탑 복원) |
 | 19 | `study-search.dom.test.js` | 7 | 교재 검색 | 역색인 검색·하이라이트·건수, AND 교집합, 과목 필터, 결과 없음, 더보기 토글, 초기화 | 2026-09-23 추가 |
-| 20 | `study-dictionary.dom.test.js` | 14 | 성분 사전 + 전체 CSV (DI-10) | 카드·3상태 배지, 이름/영문/초성 검색, type 필터, 빈 DB·결과 없음, 상세 토글, 필터 결과 CSV보내기·전체 CSV보내기 | 2026-10-18 갱신 |
+| 20 | `study-dictionary.dom.test.js` | 17 | 성분 사전 + 전체 CSV (DI-10) | 카드·3상태 배지, 이름/영문/초성 검색, type 필터, 빈 DB·결과 없음, 상세 토글, 필터 결과 CSV보내기·전체 CSV보내기 | 2026-10-18 갱신 |
 | 21 | `study-manual.dom.test.js` | 10 | 매뉴얼 뷰어 | 오버레이·MD 렌더·TOC, doc: 링크 문서 전환, sessionStorage 캐시, mermaid 마크업, 미등록 소스 오류, 인쇄 CSS 좌우 여백(@page margin:0 대응 패딩·clone), 닫기 | 2026-09-23 추가 · 2026-10-06 갱신 |
-| 22 | `study-examviewer.dom.test.js` | 7 | 문제집 뷰어 | 오버레이·MD 렌더·TOC, 인쇄 버튼→window.print, 캐시 재사용, 미존재 문서 오류, 닫기 | 2026-09-23 추가 |
-| 23 | `study-examselect.dom.test.js` | 4 | 시험 선택 | 카드 렌더·현재 시험 배지, 다른 시험→저장·리로드, 같은 시험→대시보드 복귀, 빈 목록 | 2026-09-23 추가 |
+| 22 | `study-examviewer.dom.test.js` | 8 | 문제집 뷰어 | 오버레이·MD 렌더·TOC, 인쇄 버튼→window.print, 캐시 재사용, 미존재 문서 오류, 닫기 | 2026-09-23 추가 |
+| 23 | `study-examselect.dom.test.js` | 6 | 시험 선택 | 카드 렌더·현재 시험 배지, 다른 시험→저장·리로드, 같은 시험→대시보드 복귀, 빈 목록 | 2026-09-23 추가 |
 | 24 | `common-theme.dom.test.js` | 4 | 테마 토글 | data-theme·localStorage 영속, 아이콘 전환, 시스템 테마 초기화 | 2026-09-23 추가 |
 | 25 | `common-offline.dom.test.js` | 4 | 오프라인 감지 | offline 이벤트·프로브 실패→배너 표시, online 복귀→해제 (fake timers) | 2026-09-23 추가 |
 | 26 | `common-scratchpad.dom.test.js` | 4 | 스크래치패드 | 열기/닫기·지우기·포인터 그리기 (canvas 2d 스텁, resetModules) | 2026-09-23 추가 |
 | 27 | `common-a11y.dom.test.js` | 7 | 접근성 | 토스트 role=status, 모달 trapFocus·aria-modal, 아이콘 버튼 aria-label 전수 | 2026-09-23 추가 |
-| 28 | `common-uimode.dom.test.js` | 7 | 학습/실무 UI 모드 | 모드 전환→학습 항목 CSS 숨김(실제 캐스케이드)·학습 도구 펼침·랜딩 리다이렉트·영속 복원·학습/실무 매뉴얼 가시성·토글 2곳(푸터·설정) 동기화 | 2026-09-23 추가 |
+| 28 | `common-uimode.dom.test.js` | 9 | 학습/실무 UI 모드 | 모드 전환→학습 항목 CSS 숨김(실제 캐스케이드)·학습 도구 펼침·랜딩 리다이렉트·영속 복원·학습/실무 매뉴얼 가시성·토글 2곳(푸터·설정) 동기화 | 2026-09-23 추가 |
 | 29 | `common-auth.dom.test.js` | 24 | 계정/로그인 (Supabase) | 모달 열기·로그인 성공/실패 한글 매핑·회원가입·매직링크·OTP 코드 발송/검증·비밀번호 설정·로그아웃·세션 복원 (window.supabase 스텁) | 2026-09-23 추가 |
 | 30 | `common-sync.dom.test.js` | 13 | 클라우드 동기화 | 페이로드 수집(고객 제외)·쓰기 훅 dirty·디바운스 push·pull 적용·충돌 양방향·push 실패·비로그인 무시·Pro 게이트 차단(pro_entitled 없으면 pull/push·syncNow 차단) | 2026-09-23 추가 |
 | 31 | `common-glossary.dom.test.js` | 5 | 용어집 공용 경로 | 용어집 인덱스·링크 렌더 | 2026-09-24 추가 |
 | 32 | `common-htmlviewer.dom.test.js` | 7 | HTML 뷰어 | 외부 HTML 콘텐츠 로드·렌더 경로 | 2026-09-24 추가 |
 | 33 | `common-navigation.dom.test.js` | 8 | 뷰 전환 공용 | navigation 유틸 경로, 스크롤 복원·scrollTop 옵션, 사이드바↔탭 바 parity | 2026-09-27 scrollTop 추가 |
-| 34 | `study-trainer-drills.dom.test.js` | 12 | O/X·복수정답 드릴 | 드릴 UI·채점 경로 | 2026-09-24 추가 |
+| 34 | `study-trainer-drills.dom.test.js` | 16 | O/X·복수정답 드릴 | 드릴 UI·채점 경로 | 2026-09-24 추가 |
 | 35 | `common-eventlisteners.dom.test.js` | 21 | 이벤트 위임·리스너 | data-click/data-args/data-input 디스패치·키보드 접근성, 설정 메뉴·진도 초기화, 플래시카드 버튼·시뮬 이동·퀴즈 단축키 | 2026-09-24 추가 |
 | 36 | `study-commandpalette.dom.test.js` | 9 | 통합 검색 팔레트 | 팔레트 열기·검색·키보드 내비·실행 | 2026-09-26 추가 |
 | 37 | `whats-new.dom.test.js` | 7 | 새 버전 변경 이력 알림 | 최초 실행/업데이트/재부팅 분기, 복귀 사용자 판별, 확인→last_seen 기록, 설정 재열람 | 2026-09-26 추가 |
 | 38 | `feedback.dom.test.js` | 10 | 의견 보내기 모달 | 렌더링, 유형/별점 선택, 성공 제출, 오프라인 큐+플러시, 검증 거부, 허니팝, XSS 이스케이프, 신기능 힌트(점+배지) 표시·소멸 | 2026-09-26 추가 |
 | 39 | `reader-audio.dom.test.js` | 6 | 오디오북 플레이어 (AO-01~05) | 매니페스트 경로 해석·오디오 없음 토스트·Media Session 메타/핸들러·속도 순환·시크·정지 | Audio·mediaSession 스텁, 2026-10-14 추가 |
 | 40 | `charts.dom.test.js` | 7 | 분석 차트 (C-01~05) | 성적 라인차트·합격/과락 진단·레이더 N축·과목 점수행·툴팁 | 성적 이력 시딩(safeSetItem scopedKey), 2026-10-14 추가 |
-| 41 | `review-drills-formula.dom.test.js` | 11 | 복습·숫자 드릴·계산기 (RV-01·ND-01·FO-10/11) | 복습 통합 목록·과목 필터·number-drills fetch/캐시/렌더·계산기 상하 고정바·사전 연동·DB 버전 배지 | fetch 스텁, 2026-10-14 추가 |
-| 42 | `pro-plan.dom.test.js` | 9 | 플랜 안내 모달 (ROAD-P0) | showPlanCompare 플랜 반영 PRO/무료 태그·플랜 전환 반영·설정 진입점·proFeatureNotice 동기화 안내·free 스킵·cloud_sync 행 반영·canCloudSync entitlement 게이트(3 상태) | fetch 스텁, 2026-10-14 추가 |
-| 43 | `usage-stats.dom.test.js` | 8 | 로컬 사용 카운터 (ROAD-L5) | GLOBAL usage_stats 누적·owner 익명 ID·초기화·손상 복구·모달 라벨/합계 렌더·Pro 후보 액션만 판정 합산(20회)·빈 상태·리셋 버튼·설정 진입점 | ui-utils 모킹, 2026-10-16 추가 |
+| 41 | `review-drills-formula.dom.test.js` | 12 | 복습·숫자 드릴·계산기 (RV-01·ND-01·FO-10/11) | 복습 통합 목록·과목 필터·number-drills fetch/캐시/렌더·계산기 상하 고정바·사전 연동·DB 버전 배지 | fetch 스텁, 2026-10-14 추가 |
+| 42 | `pro-plan.dom.test.js` | 12 | 플랜 안내 모달 (ROAD-P0) | showPlanCompare 플랜 반영 PRO/무료 태그·플랜 전환 반영·설정 진입점·proFeatureNotice 동기화 안내·free 스킵·cloud_sync 행 반영·canCloudSync entitlement 게이트(3 상태) | fetch 스텁, 2026-10-14 추가 |
+| 43 | `usage-stats.dom.test.js` | 9 | 로컬 사용 카운터 (ROAD-L5) | GLOBAL usage_stats 누적·owner 익명 ID·초기화·손상 복구·모달 라벨/합계 렌더·Pro 후보 액션만 판정 합산(20회)·빈 상태·리셋 버튼·설정 진입점 | ui-utils 모킹, 2026-10-16 추가 |
 | 44 | `dictionary-custom.dom.test.js` | 8 | 자가 등록 성분 사전 병합 (DI-06·08) | customKey 스키마 게이트, 커스텀 병합·'사용자 등록' 배지·필터·'성분 추가' 버튼, '공식 등록됨' superseded, 카드 수정 액션, '+자가 N' 카운트 | 2026-10-18 추가 |
-| 45 | `formula-sales.dom.test.js` | 13 | 사업 유형·표시사항·광고 점검 (FO-33~36) | 유형 칩·카드/서브내비 게이트·단계 배지 재번호, 체크리스트 세트 분리, 표시사항 체크·전성분 가져오기·인쇄, 린트 실행·지우기 | 2026-10-18 추가 |
-| | **합계** | **435** | | |
+| 45 | `formula-sales.dom.test.js` | 17 | 사업 유형·표시사항·광고 점검 (FO-33~36) | 유형 칩·카드/서브내비 게이트·단계 배지 재번호, 체크리스트 세트 분리, 표시사항 체크·전성분 가져오기·인쇄, 린트 실행·지우기 | 2026-10-18 추가 |
+| 46 | `app-shell.dom.test.js` | 2 | 뷰포트 높이 동기화 (`initViewportHeight`) | 핀치 줌 가드 | |
+| 47 | `dictionary-schema.dom.test.js` | 7 | 지식DB 사전 — 비기본 스키마(식품첨가물) | 스키마 드리븐 렌더 | |
+| 48 | `doc-overlay.dom.test.js` | 19 | MD 문서 오버레이 공용 베이스 | 세션 캐시·앵커 스크롤 | |
+| 49 | `exam-switching.dom.test.js` | 5 | 멀티시험 전환 통합 시나리오 | 비기본 시험 활성화 | |
+| 50 | `formula-audit.dom.test.js` | 8 | 종합 규정 점검 보고서 (FO-56) | 출력·영속 시나리오 | |
+| 51 | `formula-practical.dom.test.js` | 9 | 실무 도구 확장 (FO-57~63) | 유형 게이트·패널 시나리오 | |
+| 52 | `formula-products.dom.test.js` | 33 | 기성품 DB (목록·등록·상세·전성분 비교) | 패널 시나리오 | |
+| 53 | `mermaid-zoom.dom.test.js` | 9 | `mermaid-render.js` 다이어그램 확대 모달 | | |
+| 54 | `onboarding-zoom.dom.test.js` | 6 | 첫 방문 시작 안내 + 이미지 라이트박스 (UX-FB-05) | | |
+| 55 | `reader-keyboard.dom.test.js` | 10 | 리더 키보드 내비 (TR-24) | | |
+| 56 | `story-search.dom.test.js` | 2 | 이야기형 서사 검색 (TS-10) | | |
+| 57 | `ui-structure.dom.test.js` | 19 | UI 구조 불변식 — index.html 실마크업 | | |
+| 58 | `zoom-gestures.dom.test.js` | 8 | 줌 제스처 (TR-26) | | |
+| | **합계** | **665** | | |
 
 ---
 
@@ -315,7 +359,7 @@ npm run hooks:install
 - `stableId()`: 카드/퀴즈 안정 ID 생성 (`subjectKey_card_hash6` 형식)
 - 빈 문자열, 한글, 긴 문자열 등 다양한 입력 검증
 
-#### `id_factory.test.js` (13개)
+#### `id-factory.test.js` (13개)
 - 빌드 타임 `tools/build/id_factory.js`의 ID 생성 로직
 - `stableId()`: 동일 입력 → 동일 ID, 다른 subjectKey → 다른 ID
 - `shortHash()`: 해시 길이 일관성
@@ -647,6 +691,14 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함).
 - **실결함 회귀 가드**: 성분사전 '성분 추가' 버튼 nowrap 잘림과 자가 등록 모달
   등록 버튼 잘림이라는 두 실사례에서 비롯 — 수정을 되돌리는 변이로 실패 확인.
 
+**visual.spec.js — 스크린샷 시각 회귀 (로컬 전용)**
+
+- 대시보드 전체 화면 `toHaveScreenshot` — chromium·mobile·tablet × dark/light
+  6기준선으로 배경화(산수화)·테마 팔레트·반투명 카드 비침의 픽셀 변경 탐지.
+- 버전 토스트 등 동적 요소는 `mask`로 제외, `maxDiffPixelRatio` 1% 허용.
+- 픽셀 기준선은 OS 바인딩 — Windows 생성본 커밋, CI(Linux)는 `test.skip`.
+  의도적 시각 변경 후 `--update-snapshots`로 기준선 재생성·diff 리뷰.
+
 실행: `npm run test:e2e` (최초 1회 `npx playwright install chromium` 필요).
 확장 시 시나리오 단위로 `tests/e2e/**/*.spec.js`에 추가 — 인증 경로는 별도 spec 권장.
 
@@ -675,7 +727,7 @@ test('myFunction: 엣지 케이스', () => {
 **규칙**:
 - `import` from `node:test` 및 `node:assert/strict`
 - 테스트 대상 모듈은 `../../src/`에서 ESM import
-- CommonJS 모듈은 `createRequire(import.meta.url)`로 로드 (`id_factory.test.js` 참조)
+- CommonJS 모듈은 `createRequire(import.meta.url)`로 로드 (`id-factory.test.js` 참조)
 - DOM API(`document`, `localStorage` 등) 사용 불가 → DOM 테스트로 이동
 
 ### 5.2 DOM 테스트 (브라우저 환경 필요)
@@ -773,7 +825,7 @@ function detectDiagramType(textContent) {
 | 파일 | 라인(병합) | 성격 | 개선 방향 |
 |------|------|------|-----------|
 | `app.js` | 0% | 메인 진입점 (1100+ 라인) — 모듈 로드 시 즉시 실행돼 DOM 테스트로는 임포트 불가 | E2E 스모크로 부팅 경로 커버 완료 — 세부 함수는 모듈 분리 후 테스트 |
-| `formula.js` | ~60% | Formula OS 계산기·포뮬러 (1400+ 라인) | 행 렌더·저장 경로 일부 커버 — 추천·규칙 UI 경로 보강 |
+| `formula.js` + `formula-*.js` | ~60% | Formula OS 계산기·포뮬러 — 64라인 파사드 + 7모듈(core·hub·list·calc·weigh·ing-modal·io) | 행 렌더·저장 경로 일부 커버 — 추천·규칙 UI 경로 보강 |
 | `textbook-reader.js` | ~56% | 대형 뷰 컨트롤러 (1650 라인) — 툴바·본문 검색·TOC 드로어·표 모달 커버 완료 | 스크롤 스파이·참조 미리보기·오디오 연동 경로 |
 | `exam-viewer.js` | ~54% | 문제집 뷰어 | 해설·인용 링크 경로 보강 |
 | `exam-simulator.js` | ~67% | 시뮬레이터 | 오답 모의고사(startWeakExam) 커버 완료 — 잔여는 결과 리뷰 세부 경로 |
