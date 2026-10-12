@@ -21,7 +21,7 @@
 //   오버레이 셸·캐시·TOC·번들 주입은 src/doc-overlay.js 공용 베이스 사용
 //
 import { escapeHTML } from './sanitize.js';
-import { parseMarkdown } from './markdown-parser.js';
+import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
 import { resolveRefPath, refDocDisplayName } from './pdf-registry.js';
 import { contentPath, dataPath } from './exam-context.js';
 import { getJSON, setJSON } from './storage.js';
@@ -47,7 +47,8 @@ export const ExamViewer = (() => {
         // ref_md는 #L#### 인용 라인번호 보존을 위해 시각적 줄 그대로 변환된 산출물이라
         // 문장 중간 절단이 많다 — joinWraps로 연속줄을 병합한다 (라인번호는 유지됨)
         const joinWraps = typeof mdPath === 'string' && mdPath.indexOf('ref_md') !== -1;
-        return parseMarkdown(mdText, { allowMermaid: true, addLineNumbers: true, joinWraps: joinWraps });
+        // 유지보수 QA 스탬프(최종 확인: …)는 소스에만 두고 표시층에서 제거 — 리더와 동일 정책
+        return stripQaStamps(parseMarkdown(mdText, { allowMermaid: true, addLineNumbers: true, joinWraps: joinWraps }));
     }
 
     /* =========================================================

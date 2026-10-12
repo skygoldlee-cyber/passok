@@ -549,6 +549,18 @@ export function parseMarkdown(mdText, options = {}) {
 }
 
 /**
+ * 유지보수 QA 스탬프 '최종 확인: ...' 제거 — 개발 검수 정보이므로 모든 표시
+ * 표면(교재 리더·문서 뷰어·매뉴얼)의 렌더 출력에서 제거한다.
+ * 소스 md에는 유지 — 법령 대조 추적용. '최종 확인하세요' 같은 권고 문구는
+ * 콜론이 없으므로 건드리지 않는다.
+ * @param {string} html - 렌더된 HTML
+ * @returns {string} 스탬프 제거된 HTML
+ */
+export function stripQaStamps(html) {
+    return html.replace(/\|?\s*(?:<strong>)?최종 확인(?:<\/strong>)?\s*[:：]\s*[^|<\n]*/g, '');
+}
+
+/**
  * 간단한 LaTeX 수식을 HTML로 변환 (KaTeX 없이 \frac 분수만 지원)
  * @param {string} formula - $$ ... $$ 내부의 LaTeX 수식 문자열
  * @returns {string} HTML 문자열
