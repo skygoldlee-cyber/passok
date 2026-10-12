@@ -13,7 +13,7 @@ const require = createRequire(import.meta.url);
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const {
     isStoryMetaSection, filterMetaSections, getTocLevel,
-    cleanRefTitle, extractSubHeadings,
+    cleanRefTitle, extractSubHeadings, buildSectionDisplayTitles,
 } = require(join(ROOT, 'src/reader-toc.js'));
 
 test('isStoryMetaSection — 메타 섹션 제목 판정', () => {
@@ -48,6 +48,40 @@ test('getTocLevel — 번호 패턴 계층', () => {
 test('cleanRefTitle — NN_ 접두사 제거', () => {
     assert.equal(cleanRefTitle('01_화장품법'), '화장품법');
     assert.equal(cleanRefTitle('화장품법'), '화장품법');
+});
+
+test('buildSectionDisplayTitles — 중복 제목에 소속 챕터명 병기', () => {
+    const sections = [
+        { title: '🧭 학습 아이콘' },
+        { title: '📚 Chapter 01. 화장품법의 이해' },
+        { title: '1. 화장품의 정의' },
+        { title: '📌 챕터 핵심 요약' },
+        { title: '✅ 확인문제' },
+        { title: '📚 Chapter 02. 개인정보 보호법' },
+        { title: '1. 고객관리' },
+        { title: '📌 챕터 핵심 요약' },
+        { title: '✅ 확인문제' },
+    ];
+    const out = buildSectionDisplayTitles(sections);
+    // 중복 제목은 소속 챕터명 병기
+    assert.equal(out[3], '📌 챕터 핵심 요약 — Chapter 01. 화장품법의 이해');
+    assert.equal(out[7], '📌 챕터 핵심 요약 — Chapter 02. 개인정보 보호법');
+    assert.equal(out[8], '✅ 확인문제 — Chapter 02. 개인정보 보호법');
+    // 챕터 헤더·고유 제목·첫 챕터 이전 섹션은 원문 유지
+    assert.equal(out[0], '🧭 학습 아이콘');
+    assert.equal(out[1], '📚 Chapter 01. 화장품법의 이해');
+    assert.equal(out[6], '1. 고객관리');
+});
+
+test('buildSectionDisplayTitles — 첫 Chapter 이전 중복·빈 입력 안전', () => {
+    const out = buildSectionDisplayTitles([
+        { title: '참고' }, { title: '참고' },
+        { title: '📚 Chapter 01. A' }, { title: '참고' },
+    ]);
+    assert.equal(out[0], '참고');  // 챕터 컨텍스트 없음 → 원문
+    assert.equal(out[3], '참고 — Chapter 01. A');
+    assert.deepEqual(buildSectionDisplayTitles([]), []);
+    assert.deepEqual(buildSectionDisplayTitles(null), []);
 });
 
 test('extractSubHeadings — ### / #### 추출, 코드블록 제외', () => {
