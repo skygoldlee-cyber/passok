@@ -187,6 +187,8 @@ function examsEntry(id, name, shortName, year) {
         desc: `${name} — scaffold 생성 골격 (콘텐츠 교체 필요)`,
         icon: 'fa-solid fa-book',
         year: String(year),
+        // 시험별 스킨 (DA-14) — '--color-*'/'--bg-*'/'--border-*'/'--stroke-*' 토큰만 유효
+        theme: {},
         contentRoot: `content/exams/${id}`,
         dataRoot: `data/exams/${id}`,
         manifestPath: `content/exams/${id}/manifest.json`,
