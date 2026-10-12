@@ -111,7 +111,7 @@ npm.cmd run check:testfirst             # 로직(src/*.js·ref-pipeline/*.py) �
 npm.cmd run check:trace                 # TRACE_MATRIX 입력 해시 신선도
 npm.cmd run check:lawurls               # law.go.kr 한글주소 유효성 전수 검증 (law-links.js 매핑 실호출, 오류 페이지 본문 판별)
 node tools/check/impact_tests.js              # 변경 파일 → 영향 요구사항·권장 테스트 (미커밋 변경 자동 분석, --ref <ref>로 diff 분석, --run으로 권장 테스트 실제 실행 — pre-push 게이트)
-npm.cmd run hooks:install               # Git 훅 활성화 (opt-in) — pre-commit: check:types+lint (IDE 오류 시 커밋 차단) / pre-push: +check:trace/specrefs/docs/영향테스트(impact_tests --run)
+npm.cmd run hooks:install               # Git 훅 활성화 (opt-in) — pre-commit: check:types+lint (IDE 오류 시 커밋 차단) / pre-push: tools/check/push_gate.js 적응형 게이트 — diff 분류로 문서·콘텐츠 전용 푸시는 경량 단계만, 로직 포함 시 전체 9단계 (우회 SKIP_PREPUSH=1 · 전체 강제 PUSH_GATE_ALL=1)
 npm.cmd run check:hooks                 # 훅 설치 여부 확인 (권고 — 미설치 시 로컬 게이트 우회됨, check:ci 첫 단계)
 
 # 참조자료 PDF → ref_md 변환 (Python 3 + pdfplumber, 이미지 추출 시 pymupdf 필요)
@@ -323,7 +323,7 @@ data/                   # 빌드 생성 번들
   exams/<id>/           # 추가 시험 데이터 루트 (동일 구조)
 tools/                  # 빌드·검증 스크립트
   build/                # 데이터 파이프라인 (manifest → registry + 해시 번들) + 생성기 (build_trace_matrix·scaffold_exam·drill-utils·trace)
-  check/                # 검증·감사 스크립트 (run.js 통합 실행기·steps.js 단계 레지스트리·check_*·audit_*·verify_shell_assets·coverage_merge·impact_tests)
+  check/                # 검증·감사 스크립트 (run.js 통합 실행기·steps.js 단계 레지스트리·push_gate.js pre-push 적응형 게이트·check_*·audit_*·verify_shell_assets·coverage_merge·impact_tests)
   sync/                 # 콘텐츠 동기화 (sync_citation_lines·sync_textbook_files)
   deploy/               # 배포 가드 (deploy.js)
   lib/                  # 공용 스캔·파싱 라이브러리 (trace_scan.js)
