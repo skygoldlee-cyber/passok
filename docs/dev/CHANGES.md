@@ -7,6 +7,16 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 내부 링크 전수조사 후속 — 검색 카드 정규화·앵커 스크롤·제목 표시명·문서 경로 표기 정리
+
+- **배경**: 전 프로젝트 링크 전수조사에서 4개 잔여 노출/파손 표면 확인 — 검색 결과 카드는 reader-format 후처리 미적용(최종 확인 스탬프·원시 경로·죽은 링크 노출), 문서 내 `#slug` 앵커 ~43개가 해시 오염 죽은 링크, 오버레이 제목이 미등록 문서의 파일명으로 표기, 학습안내서 본문에 저장소 경로(`참조자료/과목N/`·`문제은행/*.md` 등 30여 곳)가 인라인 코드로 노출
+- **textbook-search.js**: `formatSectionContent`를 `formatSectionContentForReader`로 교체 — 출처 스탬프 숨김·ref 링크 data-ref-* 변환이 검색 결과에도 동일 적용. '전체 단원 보기'가 원시 .md 파일을 새 탭으로 여는 것을 data-search-goto + 교재리더 뷰 이동(챕터 앵커는 섹션 제목의 Chapter NN에서 유도)으로 변경. 카드 내 data-ref-subject 클릭 시 뷰 전환 후 과목 이동(문서 위임은 stopPropagation으로 차단)
+- **doc-overlay.js**: `slugifyHeading`·`scrollToHeadingSlug` 공용 헬퍼 추가 — GitHub 스타일 slug(소문자·공백→-·문장부호/이모지 제거)로 헤딩 역해석해 오버레이 내 스크롤
+- **exam-viewer.js**: `#slug` 앵커 링크 인터셉트(오버레이 내 스크롤 — 참조자료 핵심요약 문서의 TOC 링크 복구) + `_titleFromPath`에 `refDocDisplayName` 폴백 추가(`1.cosmetic-law` 같은 파일명 대신 '화장품법 통합 정리' 표시)
+- **manual-viewer.js**: `#slug` 앵커 early-return을 스크롤 인터셉트로 변경(user_manual §8.5·학습안내서 매핑표 링크 복구)
+- **학습안내서/user_manual**: 저장소 경로·파일명 인라인 코드 표기를 사용자 관점 표현으로 교체("교재 리더 → 1과목", "참조자료 → 색소 원료 목록" 등), `L###` 표기 → "교재 원문 링크", 에디터 `Ctrl+G` 안내 제거
+- **테스트**: ref-link-labels.test.js에 `_titleFromPath` 표시명·`slugifyHeading`·`scrollToHeadingSlug` 5건 추가 (총 19건)
+
 ## 2026-10-12 참조 링크 사용자 표시 정리 — 내부 좌표·파일명 라벨 제거
 
 - **배경**: 리더/문제은행 뷰어에 개발자용 정보(교재 라인 좌표 `L####`, 원시 파일명, 유지보수 검수 스탬프)가 사용자 UI에 노출되고 있었고, `참조자료/과목N/*.md` 링크는 페이지 기준 상대경로라 클릭 시 404였음
