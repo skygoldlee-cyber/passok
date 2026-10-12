@@ -25,6 +25,16 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..', '..');
 const SRC_DIR = path.join(ROOT, 'src');
 
+// 계층 방향 규칙 — 뷰 컨트롤러(views/)를 import할 수 있는 앱 셸 모듈 명단.
+// 코어 라이브러리가 뷰를 역참조하면 순환·결합이 생기므로 이 명단 외는 오류.
+const SHELL_MODULES = new Set([
+    'src/app.js',
+    'src/router.js',
+    'src/command-palette.js',
+    'src/manual-viewer.js',
+    'src/ui-mode.js'
+]);
+
 // --- 파일 수집 ---
 function collectJsFiles(dir) {
     const results = [];
@@ -298,6 +308,25 @@ function main() {
                 errors.push(
                     `${relFile}: 다른 시험 도메인 모듈 참조 — '${relResolved}' ` +
                     `(src/exams/${importerExam}/ → src/exams/${targetExam}/ 직접 import 금지)`
+                );
+                continue;
+            }
+
+            // --- 계층 방향 규칙 ---
+            // 코어 라이브러리(src/ 루트·config/ 등)는 뷰 컨트롤러를 import할 수
+            // 없다 — 뷰 → 코어 방향만 허용. 뷰 계층은 src/views/와
+            // src/exams/<id>/views/를 포괄하며, 뷰 계층 내부 상호 참조는 허용.
+            // 뷰 합성은 앱 셸(app.js·router·command-palette·manual-viewer·
+            // ui-mode)의 역할 — 신규 셸이 뷰를 열어야 하면 이 명단에 추가하고
+            // ARCHITECTURE.md "모듈 방향 규칙"에도 기록한다.
+            const importerIsView = relFile.startsWith('src/views/')
+                || /^src\/exams\/[^/]+\/views\//.test(relFile);
+            if (relResolved.startsWith('src/views/')
+                && !importerIsView
+                && !SHELL_MODULES.has(relFile)) {
+                errors.push(
+                    `${relFile}: 코어 모듈이 뷰 컨트롤러를 역참조 — '${imp.modulePath}' ` +
+                    `(계층 규칙: views/ → 코어 단방향. 뷰 합성은 앱 셸만 허용)`
                 );
                 continue;
             }
