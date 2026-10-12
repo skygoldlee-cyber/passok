@@ -4,6 +4,9 @@
 // v2 리뷰 권고 #4: 검색용 한글 초성 추출 헬퍼를 차트 모듈(charts.js)에서
 // 성격에 맞게 범용 유틸로 이동. app.js보다 먼저 로드되어야 합니다.
 
+/** 복수정답형 선지 지시 기호 — 시뮬레이터·드릴·보충번들 공용 (빌드 측도 require(ESM)로 이 값을 사용) */
+export const OPTION_INDICATORS = ['①', '②', '③', '④', '⑤'];
+
 export function shuffle(arr) {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {

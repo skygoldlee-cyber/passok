@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 중복 상수 통합 + 기본 시험 매니페스트 교체 (UX-PWA-06 실효화)
+
+- **OPTION_INDICATORS 단일화**: `['①'~'⑤']` 선지 기호 배열이 4곳에 중복 정의돼 있던 것을 `src/utils.js`로 통합 — `exam-sim-review.js`·`exam-simulator.js`(`SIM_OPTION_INDICATORS` 폐기)·`trainer-drills.js`(re-export 유지)는 ESM import, CJS `tools/build/supplements.js`는 `createRequire`(require-ESM)로 동일 상수 로드 (textbook-core와 동일 패턴)
+- **기본 시험 매니페스트 교체**: `pwa-manifest.js`가 활성 시험을 가리지 않고 항상 `manifest.<id>.webmanifest`로 링크 교체 — cosmetic의 '배합 계산기' shortcut(`#/formula`)이 기존에는 생성물에만 존재하고 실제 설치 매니페스트에는 미반영이던 것을 실효화 (UX-PWA-06). `manifest.webmanifest`는 부팅 전 폴백으로 유지, `id: "cosmetic-pass"` 설치 정체성 불변
+- **로컬 잔여물 정리**: gitignore 대상 로컬 산출물 삭제 (구 docs HTML·PDF, 참조자료 구 HTML 10개, coverage·pytest 캐시 등)
+
 ## 2026-10-10 개정 고시 원문 자동 다운로드 (FO-24 연장)
 
 - **배경**: "고시 갱신 시 파일을 수동 다운로드해야 하나?" — check_mfds_notice는 신판 감지까지만 하고 원문 확보는 수동이었음. DRF 응답 조사 결과: 행정규칙 상세(`lawService.do?target=admrul`)에 `첨부파일` 링크(flDownload.do, 실제 바이너리 반환)가 있어 전문 PDF 자동 확보가 가능하고, 법령(target=law)은 파일 다운로드를 제공하지 않음(type=PDF/HWP/DOC 모두 HTML 오류 페이지 — 확인됨)

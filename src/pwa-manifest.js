@@ -1,7 +1,8 @@
 // src/pwa-manifest.js — 시험별 동적 PWA 매니페스트 (클래식 스크립트, 모듈 아님)
 // @spec P-10,DA-06
-// 정적 manifest.webmanifest는 기본 시험 기준 폴백으로 유지하고,
-// 비기본 시험이 활성이면 빌드가 생성한 실제 파일 manifest.<id>.webmanifest로 링크를 교체한다.
+// 정적 manifest.webmanifest는 부팅 전 플레이스홀더 겸 최후 폴백이고,
+// 활성 시험이 확인되면 빌드가 생성한 실제 파일 manifest.<id>.webmanifest로 링크를 교체한다
+// (기본 시험 포함 — 시험별 pwaShortcuts가 실제 설치 매니페스트에 반영되어야 한다).
 // ⚠️ blob:/data: URL 주입은 금지 — Chrome이 설치 요건에서 유효하지 않은 스킴으로
 //    판정해 beforeinstallprompt가 발생하지 않고, connect-src 'self'가 fetch도 차단한다.
 // data/exams.js 이후, app.js(모듈) 이전에 로드되어야 한다.
@@ -26,12 +27,10 @@
         const link = /** @type {HTMLLinkElement|null} */ (document.querySelector('link[rel="manifest"]'));
         if (!link) return;
 
-        // 기본 시험은 정적 manifest.webmanifest가 이미 동일 내용이므로 유지.
-        // 비기본 시험은 빌드 산출물 manifest.<id>.webmanifest(실제 파일)로 교체 —
-        // 누락 시 정적 매니페스트 폴백이 남아 설치가 깨지지 않는다.
-        if (!exam.default) {
-            link.href = 'manifest.' + encodeURIComponent(exam.id) + '.webmanifest';
-        }
+        // 빌드 산출물 manifest.<id>.webmanifest(실제 파일)로 교체 — 시험별 shortcuts·id 반영.
+        // 생성물이 누락되면 링크가 404가 되어 설치가 깨질 수 있으므로, build:data 산출물 검증과
+        // check:datafresh가 파일 존재·신선도를 보장한다 (manifest.webmanifest 자체는 부팅 전까지의 폴백).
+        link.href = 'manifest.' + encodeURIComponent(exam.id) + '.webmanifest';
 
         // 문서 제목/설명도 활성 시험 기준으로 갱신
         if (exam.title) document.title = exam.title;

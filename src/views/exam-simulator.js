@@ -8,7 +8,7 @@ import { checkShortAnswer } from './trainer.js';
 // [모바일 PWA 견고성] 레지스트리는 window 전역(가드)에서 읽는다(정적 import 하드 의존 지양).
 import { DataLoader } from '../data-loader.js';
 import { showGlobalLoading, hideGlobalLoading, showToast, vibrate, HAPTIC } from '../ui-utils.js';
-import { shuffle, todayKey, fmtMMSS } from '../utils.js';
+import { shuffle, todayKey, fmtMMSS, OPTION_INDICATORS } from '../utils.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
 import { TIMING } from '../config/timing.js';
 import { simState } from './exam-sim-state.js';
@@ -83,7 +83,6 @@ export function startMockExamSim(arg) {
 /* =======================================================
    ㄱㄴㄷ 복수정답형 모의고사 — combo 드릴 번들을 시뮬레이터 형식으로 변환
    ======================================================= */
-const SIM_OPTION_INDICATORS = ['①', '②', '③', '④', '⑤'];
 
 /**
  * combo 문항 → 시뮬레이터 문항 평탄화
@@ -100,7 +99,7 @@ export function comboToSimQuestion(q, subjKey) {
         question: [q.citation, q.stem, stmtLines.join('\n')].filter(Boolean).join('\n\n'),
         comboOptions: q.options || [], // 원본 members 구조 보존 — 채점 시 진술 판정 도출·리뷰 정오표용
         options: (q.options || []).map(o => (o.members || []).join(', ')),
-        answer: SIM_OPTION_INDICATORS[ansIdx] || q.answer,
+        answer: OPTION_INDICATORS[ansIdx] || q.answer,
         explanation: q.explain || ''
     };
 }
@@ -111,7 +110,7 @@ export function comboToSimQuestion(q, subjKey) {
  */
 function deriveComboJudgments(q, userAns) {
     if (!userAns || !Array.isArray(q.statements) || !Array.isArray(q.comboOptions)) return null;
-    const idx = SIM_OPTION_INDICATORS.indexOf(userAns);
+    const idx = OPTION_INDICATORS.indexOf(userAns);
     const opt = idx >= 0 ? q.comboOptions[idx] : null;
     if (!opt) return null;
     const chosen = new Set(opt.members || []);
