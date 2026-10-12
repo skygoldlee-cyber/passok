@@ -60,9 +60,11 @@ console.log('\n📊 병합 HTML 리포트: coverage-merged/index.html');
 //     V8 브랜치 계측 방식이 달라져 기존 기준선과 비교 불가. 실측 대비 소폭 여유로 재설정.
 // 2026-10-13 래칫 2차 상향 — CI glob 버그(유닛 55/1192 실행) 수정으로 실측 복원:
 //   실측 stmts 69.34 / branches 65.42 / funcs 70.05 / lines 80.34, 대비 ~0.8%p 여유.
+// 2026-10-13 래칫 3차 — exam-sim-review·reader-ref-links·combo-doc·textbook-edition
+//   테스트 보강으로 실측 69.93/65.94/70.90/81.06, 대비 ~0.8%p로 재조임.
 //   커버리지 개선 커밋 시 실측이 오르면 같은 방식(실측−0.5~0.8)으로 계속 조인다.
 // 임계값은 기준선 대비 여유분으로 설정 — 상향은 언제든 가능, 하향 시 CHANGES.md에 사유 기록
-const MERGED_THRESHOLDS = { statements: 68.5, branches: 64.5, functions: 69, lines: 79.5 };
+const MERGED_THRESHOLDS = { statements: 69, branches: 65, functions: 70, lines: 80.3 };
 if (process.argv.includes('--check')) {
     const summary = map.getCoverageSummary();
     const actual = summary.toJSON();

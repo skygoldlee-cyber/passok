@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 94a3fa78d3f09838
+> 입력 해시: 36f1284d0bd02f09
 > 생성: 2026-10-12 · 원천: SPEC.md(481개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -96,10 +96,10 @@
 | E-01 | ✅ | 테스트 | — | css/exam.css<br>html/views/exam.html<br>index.html<br>src/views/exam-sim-session.js<br>…외 2개 | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | 조제관리사 국가시험 형식 — 4과목 OMR·시간 제한 (한국산업인력공단 시행 규정) |
 | E-02 | ✅ | 테스트 | — | src/views/exam-sim-session.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
 | E-03 | ✅ | 테스트 | — | src/views/exam-sim-arena.js<br>src/views/exam-sim-state.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
-| E-04 | ✅ | 테스트 | — | src/views/exam-sim-arena.js<br>src/views/exam-sim-review.js<br>src/views/exam-sim-weak.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
+| E-04 | ✅ | 테스트 | — | src/views/exam-sim-arena.js<br>src/views/exam-sim-review.js<br>src/views/exam-sim-weak.js<br>src/views/exam-simulator.js | tests/dom/exam-sim-review.dom.test.js<br>tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
 | E-05 | ✅ | 테스트 | — | src/views/exam-sim-arena.js<br>src/views/exam-sim-draft.js<br>src/views/exam-sim-session.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
-| E-06 | ✅ | 테스트 | — | src/views/exam-sim-arena.js<br>src/views/exam-sim-review.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
-| E-07 | ✅ | 테스트 | — | css/exam.css<br>src/views/exam-sim-review.js<br>src/views/exam-sim-session.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | 시험 합격 기준 — 과목별 40점 미만 과락·전 과목 평균 60점 이상 |
+| E-06 | ✅ | 테스트 | — | src/views/exam-sim-arena.js<br>src/views/exam-sim-review.js<br>src/views/exam-simulator.js | tests/dom/exam-sim-review.dom.test.js<br>tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
+| E-07 | ✅ | 테스트 | — | css/exam.css<br>src/views/exam-sim-review.js<br>src/views/exam-sim-session.js<br>src/views/exam-simulator.js | tests/dom/exam-sim-review.dom.test.js<br>tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | 시험 합격 기준 — 과목별 40점 미만 과락·전 과목 평균 60점 이상 |
 
 ## 3.5 교재 리더
 
@@ -114,7 +114,7 @@
 | TR-07 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/mermaid-render.js<br>src/mermaid-utils.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js<br>tests/unit/mermaid/mermaid-parser.test.js<br>tests/unit/mermaid/mermaid-pipeline.test.js<br>…외 4개 | — | — |
 | TR-08 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/mermaid-render.js<br>src/mermaid-utils.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js<br>tests/unit/mermaid/mermaid-parser.test.js<br>tests/unit/mermaid/mermaid-pipeline.test.js<br>…외 4개 | — | — |
 | TR-09 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/markdown-parser.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js<br>tests/unit/markdown-parser-general.test.js | — | — |
-| TR-10 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/reader-ref-links.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
+| TR-10 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/reader-ref-links.js<br>src/views/textbook-reader.js | tests/dom/reader-ref-links.dom.test.js<br>tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
 | TR-11 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-12 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/reader-progress.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-13 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js | — | — |
@@ -150,7 +150,7 @@
 |----|------|-----------|------|------|--------|--------|------|
 | G-01 | ✅ | 테스트 | — | src/views/glossary-renderer.js<br>src/views/textbook-reader.js | tests/dom/common-glossary.dom.test.js | — | — |
 | G-02 | ✅ | 테스트 | — | src/views/glossary-renderer.js<br>src/views/textbook-reader.js | tests/dom/common-glossary.dom.test.js | — | — |
-| G-03 | ✅ | 테스트 | — | src/views/glossary-renderer.js<br>src/views/reader-ref-links.js<br>src/views/textbook-reader.js | tests/dom/common-glossary.dom.test.js | — | — |
+| G-03 | ✅ | 테스트 | — | src/views/glossary-renderer.js<br>src/views/reader-ref-links.js<br>src/views/textbook-reader.js | tests/dom/common-glossary.dom.test.js<br>tests/dom/reader-ref-links.dom.test.js | — | — |
 | G-04 | ✅ | 테스트 | — | src/views/glossary-renderer.js<br>src/views/textbook-reader.js | tests/dom/common-glossary.dom.test.js | — | — |
 | G-05 | ✅ | 테스트 | — | src/views/glossary-renderer.js<br>src/views/textbook-reader.js | tests/dom/common-glossary.dom.test.js | — | — |
 | G-06 | ✅ | 테스트 | — | src/views/glossary-renderer.js<br>src/views/textbook-reader.js | tests/dom/common-glossary.dom.test.js | — | — |
@@ -163,11 +163,11 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | RR-01 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
-| RR-02 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/views/reader-ref-links.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
-| RR-03 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/views/reader-ref-links.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
-| RR-04 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/keyword-index.js<br>src/views/reader-ref-links.js<br>tools/build/build_keyword_index.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
-| RR-05 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js<br>src/views/reader-ref-links.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
-| RR-06 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js<br>src/views/reader-ref-links.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
+| RR-02 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/views/reader-ref-links.js | tests/dom/common-htmlviewer.dom.test.js<br>tests/dom/reader-ref-links.dom.test.js | — | — |
+| RR-03 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/views/reader-ref-links.js | tests/dom/common-htmlviewer.dom.test.js<br>tests/dom/reader-ref-links.dom.test.js | — | — |
+| RR-04 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/keyword-index.js<br>src/views/reader-ref-links.js<br>tools/build/build_keyword_index.js | tests/dom/common-htmlviewer.dom.test.js<br>tests/dom/reader-ref-links.dom.test.js | — | — |
+| RR-05 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js<br>src/views/reader-ref-links.js | tests/dom/common-htmlviewer.dom.test.js<br>tests/dom/reader-ref-links.dom.test.js | — | — |
+| RR-06 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js<br>src/views/reader-ref-links.js | tests/dom/common-htmlviewer.dom.test.js<br>tests/dom/reader-ref-links.dom.test.js | — | — |
 | RR-07 | ✅ | E2E 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | RR-08 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
 | RR-09 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
@@ -178,9 +178,9 @@
 | RR-14 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | css/print.css<br>src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
 | RR-15 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | css/html-viewer.css<br>src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
 | RR-16 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
-| RR-17 | ✅ | 테스트 | DOC-DSN-10 | src/law-links.js<br>src/views/reader-ref-links.js<br>tools/build/build_pdf_registry.js<br>tools/check/check_law_urls.js | tests/unit/law-links.test.js | — | 국가법령정보센터(law.go.kr) 한글주소 — 공식 최신 통합본 링크 규약 |
+| RR-17 | ✅ | 테스트 | DOC-DSN-10 | src/law-links.js<br>src/views/reader-ref-links.js<br>tools/build/build_pdf_registry.js<br>tools/check/check_law_urls.js | tests/dom/reader-ref-links.dom.test.js<br>tests/unit/law-links.test.js | — | 국가법령정보센터(law.go.kr) 한글주소 — 공식 최신 통합본 링크 규약 |
 | RR-18 | ✅ | 테스트 | — | src/reader-format.js | tests/unit/reader-format-general.test.js | — | — |
-| RR-19 | ✅ | 테스트 | DOC-DEV-05<br>DOC-DSN-10 | src/notice-check.js<br>src/views/reader-ref-links.js | tests/unit/notice-check.test.js | — | 식약처 고시 개정 감지 — 시행 예정본(현행 아님) 구분, `notice_status.json` |
+| RR-19 | ✅ | 테스트 | DOC-DEV-05<br>DOC-DSN-10 | src/notice-check.js<br>src/views/reader-ref-links.js | tests/dom/reader-ref-links.dom.test.js<br>tests/unit/notice-check.test.js | — | 식약처 고시 개정 감지 — 시행 예정본(현행 아님) 구분, `notice_status.json` |
 
 ## 3.9 교재 검색
 
