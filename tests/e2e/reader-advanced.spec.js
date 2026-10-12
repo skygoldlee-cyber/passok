@@ -1,5 +1,5 @@
 // tests/e2e/reader-advanced.spec.js — 리더 고급 기능 실브라우저 회귀
-// @spec TR-06,TR-10,TR-15,TR-16,TR-16a,TR-20,TR-26
+// @spec TR-06,TR-10,TR-15,TR-16,TR-16a,TR-20,TR-26,TR-27
 // 계층 TOC·모바일 드로어 제스처·툴바 자동숨김·Mermaid 렌더·이미지 라이트박스·
 // 줌 핀치 제스처·기출 링크 뷰어 — 레이아웃·제스처·오버레이 상호작용이라 jsdom 불가.
 
@@ -178,5 +178,27 @@ test.describe('교재리더 고급 기능', () => {
         expect(await level()).not.toBe(before);
         await page.locator('#img-zoom-close').click();
         await expect(modal).toHaveClass(/is-hidden/, { timeout: 5_000 });
+    });
+
+    test('북마크 토글이 콘텐츠 키(과목|챕터키|제목)로 저장된다 (TR-27)', async ({ page }) => {
+        test.setTimeout(90_000);
+        await openReader(page);
+        const btn = page.locator('#textbook-reader-container .reader-bookmark-btn').first();
+        await expect(btn).toBeVisible({ timeout: 10_000 });
+        await btn.click();
+        // 저장 키는 위치 인덱스(subj_0_0)가 아니라 콘텐츠 조합(subj|chKey|title) — 교재 편집 내성
+        // localStorage 키는 시험 네임스페이스(scopedKey) 적용 — 접미사로 검색
+        const readBookmarks = () => page.evaluate(() => {
+            const k = Object.keys(localStorage).find(x => x.endsWith('readerBookmarks'));
+            return k ? JSON.parse(localStorage.getItem(k) || '[]') : [];
+        });
+        const keys = await readBookmarks();
+        expect(keys.length).toBeGreaterThan(0);
+        expect(keys[0]).toContain('|');
+        expect(keys[0]).not.toMatch(/^[^|]+_\d+_\d+$/);
+        // 해제 후 저장소 정리
+        await btn.click();
+        const after = await readBookmarks();
+        expect(after).not.toContain(keys[0]);
     });
 });
