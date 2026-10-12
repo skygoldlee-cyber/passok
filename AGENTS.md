@@ -58,14 +58,16 @@ npm.cmd run sbom                        # SPDX 형식 SBOM 생성 → sbom.spdx.
 npm.cmd run audit:combo                 # 복수정답형 품질 감사 (정답 유일성·중복 진술집합·모순쌍·위치편향·경로별 통계)
 npm.cmd run check:adlint                # 광고 문구 사전 커버리지 감사 — 별표5 2항 호별 대표 표현·term 품질·자기 검출 (FO-68)
 
-# 전체 점검 (단일 진입점 — lint·types·html·docs + check:content 전 단계)
-npm.cmd run check:all                    # 저장소 전체 검증 일괄 실행
-npm.cmd run check:all:quick              # DOM 테스트 생략 빠른 점검 (check:all -- --quick 은 플래그 미전달로 동작 안 함)
+# 전체 점검 (단일 진입점 — tools/check/run.js 실행기 + steps.js 단계 레지스트리로 구동)
+npm.cmd run check:all                    # 저장소 전체 검증 일괄 실행 (run.js --preset all)
+npm.cmd run check:all:quick              # DOM 테스트 생략 빠른 점검 (= run.js --preset all --quick)
 npm.cmd run check:all:e2e                # 전체 점검 + E2E 실브라우저 (배포 전 완전 검증 — serve 자동 기동, 시간 소요)
-npm.cmd run check:ci                     # CI 게이트 로컬 재현 — lint·types·imports·docs·docsync·specrefs·trace·html·content-only·unit·assets·parser (coverage·E2E·audit는 CI 전용)
+npm.cmd run check:ci                     # CI 게이트 로컬 재현 (= run.js --preset ci — coverage·E2E·audit는 CI 전용)
+npm.cmd run check -- --preset <all|ci|content|docs> [--quick|--content-only|--build]  # 통합 실행기 직접 호출
+npm.cmd run check -- --step <id>         # 단일 단계만 실행 (예: --step manifest, --list로 id 조회)
 
 # 콘텐츠 통합 검증 (교재 교체 등 대규모 콘텐츠 변경 후)
-npm.cmd run check:content               # 인용·귀속·레이아웃·드릴·ID이관·파서·임포트·자산·카드·문서·테스트 일괄 검증
+npm.cmd run check:content               # 콘텐츠 통합 검증 (= run.js --preset content — 단계 선언은 tools/check/steps.js)
 npm.cmd run check:content -- --build    # build:data 선실행 후 검증 (교재 교체 시 권장)
 npm.cmd run check:content -- --quick    # DOM 테스트 생략
 npm.cmd run check:content -- --content-only  # 콘텐츠 추적 단계만 (CI용 — 파서·임포트·테스트 등 별도 게이트 제외)
@@ -74,6 +76,8 @@ npm.cmd run check:reflayout             # 참조자료 4계층 정합성 (PDF �
 npm.cmd run check:refsubjects           # ref_md 문서의 인용 득표↔과목 귀속 교차 검증
 npm.cmd run check:reffresh              # 참조자료 PDF 해시 ↔ ref_md 신선도 (PDF 교체 감지)
 npm.cmd run check:reflines              # 교재 (LNN)/📌출처 조문 ↔ ref_md 실제 내용 검증
+npm.cmd run check:refs                  # 참조자료 검증 묶음 (= run.js --preset refs — layout·subjects·fresh·lines·merge)
+npm.cmd run check:fresh                 # 생성물 신선도 묶음 (= run.js --preset freshness — html·trace·data·drill·ref·문서번들·교재문서)
 npm.cmd run check:numbering             # 교재 십진법 번호체계 — 구식 잔재·연속성·계층·헤더-본문 중복 게이트 (표준↔이야기 동기화 불일치는 경고)
 npm.cmd run check:drillfresh            # 드릴 번들 ↔ 문제은행 번들 신선도 (stale 시 npm run build:drills)
 npm.cmd run check:answers               # 문제 정답 ↔ 인용 근거 구절 의미적 지지 (내장 인용문→인용 원문 2단계, 정답 미지지 기준선 게이트 — 신규 무근거 인용 차단)
@@ -118,27 +122,19 @@ npm.cmd run check:reffresh -- --update  # 승격 완료 후 PDF 해시 매니페
 
 # 식약처 고시 감지 (참조 법령·고시 다문서 추적 — references.json referenceLaw에서 자동 유도)
 python ref-pipeline/check_mfds_notice.py --update   # 키: LAW_OC_KEY 환경변수 또는 ref-pipeline/.env.local.json (gitignore됨)
-# ※ 대상 시험: --exam <id|경로> 인자 > EXAM_CONTENT_ROOT env > EXAM_ID env > exams.json default
-#   (모든 ref-pipeline 스크립트가 공용 헬퍼 _exam_root.py로 같은 순서 해석)
-# ※ 배너 기준 문서는 references.json.noticeCore, 수동검증값은 law_verified.json — 시험별 설정으로 분리됨
-# ※ baseline(파일명의 제N호·시행일)↔latest(법령=target:law / 고시=target:admrul) 비교를 notice_status.json docs[]에 기록
-#   — 신규 고시 감지 시 Actions가 이슈 생성 + check_law_urls.js로 한글주소 유효성도 함께 검증
-# ※ docs[].currentUrl = 시행일자≤오늘 최신본(현행본)의 시리얼 URL — 한글주소가 시행 예정 개정본으로 연결될 때 앱이
-#   ↗원문 링크를 현행본(lsInfoP/admRulInfoP)으로 보정하고 '⏳ 시행 예정 개정본' 배지 표시 (notice-check.js markStaleRefLinks)
-# ※ 앱은 Formula OS 진입 시 배너 표시 + 허브 '식약처 고시 확인' 버튼으로 law.go.kr 등록 문서 병렬 실시간 조회(src/notice-check.js, 시험별 referenceLaw)
+# ※ 대상 시험 해석(--exam > EXAM_CONTENT_ROOT > EXAM_ID > exams.json default)은 _exam_root.py 공용.
+#   baseline↔latest 비교를 notice_status.json docs[]에 기록 — 신규 고시 시 Actions 이슈 생성 +
+#   check_law_urls.js 검증. currentUrl=현행본 시리얼 URL — 앱이 ↗원문 링크 보정+'⏳ 시행 예정 개정본'
+#   배지 표시(markStaleRefLinks). 앱은 Formula OS 배너 + 허브 '식약처 고시 확인' 버튼으로 실시간 조회.
 npm.cmd run build:noticediff           # ref_md 현행본 ↔ _archive 구본 조문 단위 diff → data/exams/<id>/notice_diff.json
-#   (build:data 체인에 포함 — 문서명 '이름(기관)(제N호)(날짜)' 규약으로 자동 쌍지음. 신설·개정·삭제 조문을
-#    Formula OS 개정 배너 + '고시 정보 보기' 패널에 표시 — 사용자 확인 시 notice_diff_seen 기록으로 억제)
+#   (build:data 체인에 포함 — 신설·개정·삭제 조문을 개정 배너 + '고시 정보 보기' 패널에 표시)
 
 # 개정 원문 자동 확보 — 감지 다음 단계 (check_mfds_notice의 신규 판정분을 대상으로)
 python ref-pipeline/fetch_revision.py [--doc <이름>] [--apply]
-#   고시(admrul): lawService 상세 '첨부파일'의 전문 PDF를 자동 다운로드 → 법령고시/{이름}({기관})({제N호})({날짜}).pdf
-#   + .src.json 출처 메타(URL·sha256·serial) 병기. --apply: 구본 _archive 이동 + references.json 파일명 일괄 치환
-#   법령(target=law): DRF가 문서 파일 미제공(type=PDF/HWP/DOC 모두 오류) — 다운로드 페이지 URL·저장 파일명·개정문 요지 안내만
-#   이후 convert:refs → verify:refs → ref_md 승격 → check:reflines → check:reffresh --update 순서는 동일
-# ※ Actions 크론(주1회 자동)은 선택사항 — 저장소 Settings → Secrets에 LAW_OC_KEY 등록 시 활성화.
-#   미등록이면 수동 실행만 가능. 앱 내 실시간 버튼이 확인을 커버하나, 크론은 이슈 자동 생성 안전망 역할
-# ※ 대조 절차: docs/exams/cosmetic/ingredients_audit_제2026-19호.md
+#   고시(admrul): 전문 PDF 자동 다운로드 + .src.json 출처 병기. --apply: 구본 _archive 이동·references.json 치환
+#   법령(target=law): DRF 파일 미제공 — 다운로드 페이지 URL·파일명·요지 안내만. 이후 승격 절차는 위와 동일
+# ※ Actions 크론은 선택(Settings→Secrets LAW_OC_KEY) — 미등록 시 앱 내 실시간 버튼이 커버.
+#   대조 절차: docs/exams/cosmetic/ingredients_audit_제2026-19호.md
 ```
 
 ## 디렉토리 구조
@@ -188,7 +184,8 @@ src/                    # ES Modules
   html-viewer.js        # 외부 HTML 콘텐츠 뷰어
   reader-format.js      # 교재 본문 포맷터
   reader-toc.js         # 리더 목차 추출 순수 헬퍼 (메타 섹션 필터·계층 판정·하위 헤딩)
-  textbook-parser.js    # 교재 MD 파서
+  textbook-core.js      # 교재 MD 파싱 공통 코어 (런타임·빌드 플러그인 공유)
+  textbook-parser.js    # 교재 MD 파서 런타임 진입점 (textbook-core.js 어댑터)
   textbook-edition.js   # 교재 개정 감지 배너 — registry.textbookEdition vs textbook_edition_seen (P-14)
   markdown-parser.js    # 공통 MD 파서
   mermaid-utils.js       # Mermaid 다이어그램 설정
@@ -323,11 +320,10 @@ data/                   # 빌드 생성 번들
   exams/<id>/           # 추가 시험 데이터 루트 (동일 구조)
 tools/                  # 빌드·검증 스크립트
   build/                # 데이터 파이프라인 (manifest → registry + 해시 번들) + 생성기 (build_trace_matrix·scaffold_exam·drill-utils·trace)
-  check/                # 검증·감사 스크립트 (check_*·audit_*·verify_shell_assets·coverage_merge·impact_tests)
+  check/                # 검증·감사 스크립트 (run.js 통합 실행기·steps.js 단계 레지스트리·check_*·audit_*·verify_shell_assets·coverage_merge·impact_tests)
   sync/                 # 콘텐츠 동기화 (sync_citation_lines·sync_textbook_files)
   deploy/               # 배포 가드 (deploy.js)
   lib/                  # 공용 스캔·파싱 라이브러리 (trace_scan.js)
-  _archive/             # 일회성·이력 스크립트 보관
 ref-pipeline/           # 교재·참조자료 생성/변환 독립 도구함 (PDF→MD, MD→HTML, 오디오북 TTS, 법령 검증) — 사용 절차는 ref-pipeline/README.md 참조
 vendor/                 # 자체 호스팅 자산 (fonts/, fontawesome/)
 tests/                  # 테스트

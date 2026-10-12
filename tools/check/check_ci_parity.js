@@ -7,6 +7,9 @@
  *   - ci.yml의 모든 검증 명령이 check:ci 체인에 있거나 CI_ONLY 명단에 있는가
  *   - check:ci의 모든 명령이 ci.yml에 있거나 LOCAL_ONLY 명단에 있는가
  *
+ * check:ci가 `node tools/check/run.js --preset ci` 형태면 steps.js 레지스트리의
+ * ci 프리셋을 확장해 비교 토큰을 산출한다 (단계 선언 단일 원천).
+ *
  * 신규 게이트 추가 시 어느 한쪽에만 넣으면 여기서 차단된다 — 의도된 비대칭은
  * 아래 명단에 사유를 달아 명시한다.
  *
@@ -59,7 +62,17 @@ function tokenize(cmd) {
 const pkg = JSON.parse(fs.readFileSync(PKG, 'utf8'));
 const chain = pkg.scripts['check:ci'];
 if (!chain) { console.log('✗ package.json에 check:ci 스크립트가 없습니다'); process.exit(1); }
-const localCmds = new Set(tokenize(chain).map((t) => (t.startsWith('npm run ') ? t : t)));
+
+// check:ci가 단일 실행기(run.js --preset ci) 호출이면 steps.js 레지스트리를
+// 확장해 토큰을 산출한다. 명령 문자열 체인(구형)이면 그대로 토큰화.
+let localCmds;
+const presetM = chain.match(/run\.js\b.*--preset\s+([\w-]+)/);
+if (presetM) {
+  const { resolveSteps } = require('./steps.js');
+  localCmds = new Set(resolveSteps(presetM[1]).map((s) => s.token));
+} else {
+  localCmds = new Set(tokenize(chain));
+}
 
 const ciText = fs.readFileSync(WORKFLOW, 'utf8');
 const ciCmds = new Set();

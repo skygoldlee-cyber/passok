@@ -257,7 +257,8 @@ passory/
 │   ├── state.js                #   전역 상태 + 진행 영속성 (저장은 storage.js 위임)
 │   ├── storage.js              #   저장소 추상화 계층 (교체 가능 백엔드, 동기·Async 이중 API)
 │   ├── data-loader.js          #   온디맨드 과목/시험 로딩
-│   ├── textbook-parser.js      #   런타임 MD → 카드/퀴즈/챕터 파싱
+│   ├── textbook-parser.js      #   런타임 MD 파서 진입점 (contentPath 주입 어댑터)
+│   ├── textbook-core.js        #   MD → 카드/퀴즈/챕터 파싱 공통 코어 (빌드 플러그인과 공유)
 │   ├── reader-format.js        #   MD→HTML 변환, 링크 재작성, 키워드 자동링크
 │   ├── markdown-parser.js      #   범용 MD→HTML 파서
 │   ├── pdf-registry.js         #   참조자료 중앙 설정 — 시험별 테이블(_EXAM_TABLES) + getRefTables()
@@ -447,12 +448,7 @@ passory/
 │   │   ├── verify_shell_assets.js  #   프리캐시 파일 존재 CI 검증
 │   │   └── audit_card_quality.js   #   카드 품질 자동 감사 (npm run audit:cards)
 │   ├── sync/                   #   콘텐츠 동기화 (sync_citation_lines·sync_textbook_files — build:data에 통합)
-│   ├── deploy/                 #   배포 가드 (deploy.js — npm run deploy)
-│   └── _archive/               #   일회성 마이그레이션·수동 수정 스크립트 보관
-│       #   (audit_citation_links·audit_hyperlinks·check_pdf_to_md_mapping·
-│       #    convert_pdf_links_to_md·normalize_url_encoding·migrate_ref_md_subjects·
-│       #    extract_notfound·fix_citation_lines·fix_manual_citations·
-│       #    verify_citation_lines·verify_citations·convert_ref_md 등 — 참조용, 현행 파이프라인 아님)
+│   └── deploy/                 #   배포 가드 (deploy.js — npm run deploy)
 │
 ├── ref-pipeline/               # 교재·참조자료 생성/변환 독립 도구함 (Python — 저장소와 무관하게 실행)
 │   ├── pdf2md.py · convert.py    #   참조자료 PDF → ref_md 변환 (기본 GUI·--cli, 절차: README.md)
@@ -1986,7 +1982,6 @@ npm.cmd run deploy
 | `tools/deploy/deploy.js` | `npm run deploy` | 배포 가드 (clean tree + origin 동기화 + 콤보 게이트 + SW 스탬프) |
 | `ref-pipeline/batch_convert.py` | `load_target_groups()` — manifest `subjects[].dir` 기준 glob | 배치 HTML 변환 대상 (과목 추가 시 자동) |
 | `ref-pipeline/md2doc.py` | `--cli --in` 인자 (미지정 시 GUI) | 단일 HTML 변환 |
-| `tools/_archive/convert_ref_md.py` | (아카이브 — 임무 완료) | 구 ref_md HTML→MD 일회성 변환 |
 | `ref-pipeline/audiobook/generate_all_mp3.py` | 과목 키 참조 (`--subject`) | 오디오북 생성 |
 | `ref-pipeline/check_laws.py` | `LAWS` 리스트 (cosmetic 전용 8법령) | 법령 현행성 검증 — 외부화 계획: `law_watch.json` |
 
