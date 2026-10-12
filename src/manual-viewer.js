@@ -11,7 +11,7 @@
 //
 import { escapeHTML } from './sanitize.js';
 import { renderMermaidIn } from './mermaid-render.js';
-import { parseMarkdown } from './markdown-parser.js';
+import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
 import { openSubjectChapter } from './views/textbook-reader.js';
 import { PATHS } from './paths.js';
 import { dataPath } from './exam-context.js';
@@ -35,7 +35,8 @@ export const ManualViewer = (() => {
        마크다운 → HTML 변환 (exam-viewer.js와 동일한 로직)
        ========================================================= */
     function _mdToHtml(mdText) {
-        return parseMarkdown(mdText, { allowMermaid: true });
+        // 유지보수 QA 스탬프(최종 확인: …)는 소스에만 두고 표시층에서 제거
+        return stripQaStamps(parseMarkdown(mdText, { allowMermaid: true }));
     }
 
     /* =========================================================
