@@ -18,7 +18,8 @@
   - `exams.plugin.js` 해설 정제 regex `\[(…)\]\([^)]*\)`가 `](<url>)`의 URL 내부 `)`에서 절단 → `L12(제2026-19호)…md#L12>))` 잔여가 explain에 구워져 드릴 UI에 노출되던 것을 `stripMdLinks`(<> 우선·중첩 괄호 1단계 허용)로 수정, 번들 재빌드
   - `**최종 확인**:` QA 스탬프가 참조자료·docs 12곳에서 문서 뷰어에 그대로 표시되던 것 → `stripQaStamps` 공용 헬퍼(markdown-parser)를 exam-viewer·manual-viewer에도 적용(리더와 동일 정책, '최종 확인하세요' 권고 문구는 콜론 없어 유지)
   - reader-format의 ref_md/과목N/원료 링크 변환 regex가 `.md#L` 해시 접미를 미변환으로 두던 갭 → `(#[^"]*)?` 수용 + `data-ref-line`/`data-ref-anchor`로 뷰어 스크롤 전달
-- **tests/unit/link-lint.test.js** (신규 15건): 체커 자체 회귀 — 합성 픽스처로 규칙별 탐지(LL-01~08)·라벨 정규화 오탐 방지·코드블록 예외·라인 번호·번들 위임 검증
+- **tests/unit/link-lint.test.js** (신규 16건): 체커 자체 회귀 — 합성 픽스처로 규칙별 탐지(LL-01~09)·라벨 정규화 오탐 방지·코드블록 예외·라인 번호·번들 위임 검증
+- **추가 노출 수정**: `lawExtLink`의 ↗원문 툴팁 `title`에 원시 파일명이 남아 481건 노출되던 것을 `refDocDisplayName`/`prettyRefName` 표시명으로 교체. LL-09 규칙(title/alt/aria-label 경로·파일명 노출) 신설로 게이트화
 
 ## 2026-10-12 내부 링크 전수조사 후속 — 검색 카드 정규화·앵커 스크롤·제목 표시명·문서 경로 표기 정리
 
