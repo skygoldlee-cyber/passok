@@ -464,7 +464,7 @@ describe('이야기형 서사 태깅 — markStoryNarrative', () => {
 
 import { attachImageZoomIn, openImageZoom, closeImageZoom } from '../../src/image-zoom.js';
 
-describe('이미지 확대 모달 — image-zoom (데스크탑 전용)', () => {
+describe('이미지 확대 모달 — image-zoom', () => {
     function buildContentWithImg() {
         document.body.innerHTML = `
             <div class="textbook-reader-section-content">
@@ -514,7 +514,7 @@ describe('이미지 확대 모달 — image-zoom (데스크탑 전용)', () => {
         expect(modal.classList.contains('is-hidden')).toBe(true);
     });
 
-    it('주 포인터가 coarse(모바일)면 바인딩하지 않는다 — 핀치 줌이 대체', () => {
+    it('주 포인터가 coarse(모바일)여도 바인딩한다 — 모달 내 핀치 제스처가 대체 (TR-26)', () => {
         const origMM = window.matchMedia;
         window.matchMedia = (q) => ({
             matches: q === '(pointer: coarse)',
@@ -531,7 +531,7 @@ describe('이미지 확대 모달 — image-zoom (데스크탑 전용)', () => {
             attachImageZoomIn(content);
             content.querySelector('img.reader-img')
                 .dispatchEvent(new MouseEvent('click', { bubbles: true }));
-            expect(document.getElementById('reader-img-zoom-modal')).toBeNull();
+            expect(document.getElementById('reader-img-zoom-modal')).not.toBeNull();
         } finally {
             window.matchMedia = origMM;
         }

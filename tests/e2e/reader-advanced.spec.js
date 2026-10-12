@@ -1,7 +1,7 @@
 // tests/e2e/reader-advanced.spec.js — 리더 고급 기능 실브라우저 회귀
-// @spec TR-06,TR-10,TR-15,TR-16,TR-16a,TR-20
+// @spec TR-06,TR-10,TR-15,TR-16,TR-16a,TR-20,TR-26
 // 계층 TOC·모바일 드로어 제스처·툴바 자동숨김·Mermaid 렌더·이미지 라이트박스·
-// 기출 링크 뷰어 — 레이아웃·제스처·오버레이 상호작용이라 jsdom 불가.
+// 줌 핀치 제스처·기출 링크 뷰어 — 레이아웃·제스처·오버레이 상호작용이라 jsdom 불가.
 
 import { test, expect } from '@playwright/test';
 
@@ -107,7 +107,7 @@ test.describe('교재리더 고급 기능', () => {
         await expect(chrome).not.toHaveClass(/reader-chrome-hidden/);
     });
 
-    test('본문 Mermaid 다이어그램이 렌더되고 확대 모달이 동작한다 (TR-06 — 데스크탑 포인터)', async ({ page }) => {
+    test('본문 Mermaid 다이어그램이 렌더되고 확대 모달이 동작한다 (TR-06)', async ({ page }) => {
         test.setTimeout(90_000);
         await openReader(page);
         const count = await page.evaluate(() =>
@@ -117,7 +117,7 @@ test.describe('교재리더 고급 기능', () => {
         await page.waitForFunction(() =>
             document.querySelector('#textbook-reader-container .mermaid svg, #textbook-reader-container pre.mermaid svg'),
             null, { timeout: 30_000 });
-        // 데스크탑: 확대 버튼 → 모달 오픈 (모바일은 미바인딩 — 핀치 줌)
+        // 확대 버튼 → 모달 오픈 (모바일도 바인딩 — TR-26 모달 내 핀치 제스처)
         const btn = page.locator('#textbook-reader-container .mermaid-expand-btn').first();
         await expect(btn).toHaveCount(1);
         await btn.click();
@@ -137,7 +137,7 @@ test.describe('교재리더 고급 기능', () => {
         await expect(page.locator('#exam-overlay')).toHaveClass(/open/, { timeout: 15_000 });
     });
 
-    test('본문 이미지 라이트박스가 열리고 닫힌다 (TR-20 — 데스크탑 포인터)', async ({ page }) => {
+    test('본문 이미지 라이트박스가 열리고 닫힌다 (TR-20)', async ({ page }) => {
         test.setTimeout(90_000);
         await openReader(page);
         const img = page.locator('#textbook-reader-container .reader-img').first();
@@ -150,5 +150,33 @@ test.describe('교재리더 고급 기능', () => {
         await expect(modal).toHaveClass(/is-hidden/, { timeout: 5_000 });
         // 표 확장 모달만 제거 유지 — 핀치 줌이 대체 (회귀 가드)
         await expect(page.locator('#textbook-reader-container .reader-table-expand-btn')).toHaveCount(0);
+    });
+
+    test('이미지 확대 모달이 터치 기기에서도 열리고 줌 표면이 제스처 전용이다 (TR-26)', async ({ page }, testInfo) => {
+        test.setTimeout(90_000);
+        await openReader(page);
+        const img = page.locator('#textbook-reader-container .reader-img').first();
+        if (!(await img.count())) { test.skip(true, '선택 과목 챕터에 이미지 없음'); return; }
+        await img.scrollIntoViewIfNeeded();
+        // 모바일은 탭(터치), 데스크탑은 클릭 — 둘 다 모달이 열려야 한다
+        if (testInfo.project.use?.hasTouch) {
+            const box = await img.boundingBox();
+            await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+        } else {
+            await img.click();
+        }
+        const modal = page.locator('#reader-img-zoom-modal');
+        await expect(modal).not.toHaveClass(/is-hidden/, { timeout: 5_000 });
+        // 줌 표면은 touch-action:none — 페이지 핀치줌과의 이중 발화 차단 계약
+        const touchAction = await page.evaluate(() =>
+            getComputedStyle(document.getElementById('img-zoom-body')).touchAction);
+        expect(touchAction).toBe('none');
+        // 배율 컨트롤 유효 — 모바일 진입 경로에서도 툴바 줌이 동작
+        const level = () => page.locator('#img-zoom-level').textContent();
+        const before = await level();
+        await page.locator('#img-zoom-in').click();
+        expect(await level()).not.toBe(before);
+        await page.locator('#img-zoom-close').click();
+        await expect(modal).toHaveClass(/is-hidden/, { timeout: 5_000 });
     });
 });

@@ -1,5 +1,5 @@
 // @spec TR-06
-// mermaid-render.js 다이어그램 확대 모달 DOM 테스트 (데스크탑 전용 — 모바일은 핀치 줌)
+// mermaid-render.js 다이어그램 확대 모달 DOM 테스트 (모바일은 모달 내 핀치 제스처 — TR-26)
 import { describe, it, beforeEach, expect } from 'vitest';
 import { attachMermaidZoom, openMermaidZoom, closeMermaidZoom } from '../../src/mermaid-render.js';
 
@@ -90,7 +90,7 @@ describe('mermaid-render.js — 다이어그램 확대 모달', () => {
         expect(modal.classList.contains('is-hidden')).toBe(true);
     });
 
-    it('주 포인터가 coarse(모바일)면 확대 버튼을 만들지 않는다 — 핀치 줌이 대체', () => {
+    it('주 포인터가 coarse(모바일)여도 확대 버튼을 만든다 — 모달 내 핀치 제스처가 대체 (TR-26)', () => {
         const origMM = window.matchMedia;
         window.matchMedia = (q) => ({
             matches: q === '(pointer: coarse)',
@@ -105,9 +105,9 @@ describe('mermaid-render.js — 다이어그램 확대 모달', () => {
         try {
             const pre = document.querySelector('pre.mermaid');
             attachMermaidZoom(pre);
-            expect(pre.querySelector('.mermaid-expand-btn')).toBeNull();
-            pre.querySelector('svg').dispatchEvent(new MouseEvent('click', { bubbles: true }));
-            expect(document.getElementById('mermaid-zoom-modal')).toBeNull();
+            expect(pre.querySelector('.mermaid-expand-btn')).not.toBeNull();
+            pre.querySelector('.mermaid-expand-btn').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            expect(document.getElementById('mermaid-zoom-modal')).not.toBeNull();
         } finally {
             window.matchMedia = origMM;
         }

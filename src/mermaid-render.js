@@ -8,6 +8,7 @@
 import { detectMermaidType, getMermaidClassName, getMermaidInitOptions } from './mermaid-utils.js';
 import { PATHS } from './paths.js';
 import { trapFocus } from './ui-utils.js';
+import { bindZoomGestures } from './zoom-gestures.js';
 
 let _mermaidLoadPromise = null;
 
@@ -166,6 +167,14 @@ function _ensureZoomModal() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && _zoomModal && !_zoomModal.classList.contains('is-hidden')) closeMermaidZoom();
     });
+    const body = /** @type {HTMLElement|null} */ (modal.querySelector('#mermaid-zoom-body'));
+    if (body) {
+        bindZoomGestures(body, {
+            getScale: () => _zoomScale,
+            setScale: _setZoom,
+            getFitScale: _fitScale,
+        });
+    }
     _zoomModal = modal;
     return modal;
 }
@@ -242,12 +251,11 @@ export function closeMermaidZoom() {
 
 /**
  * 렌더 완료된 pre.mermaid에 확대 버튼과 클릭-확대를 바인딩한다.
- * 주 포인터가 coarse(모바일/터치)면 건너뜀 — 핀치 줌이 확대 경로.
+ * 모바일에서도 바인딩 — 모달 내 자체 핀치 제스처가 페이지 줌을 대체한다 (TR-26).
  * @param {HTMLElement} pre
  */
 export function attachMermaidZoom(pre) {
     if (!pre || pre.dataset.mermaidZoomBound) return;
-    if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) return;
     pre.dataset.mermaidZoomBound = '1';
     const btn = document.createElement('button');
     btn.type = 'button';
