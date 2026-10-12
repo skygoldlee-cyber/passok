@@ -48,6 +48,9 @@ jobs:
       - name: Import/export cross-check
         run: npm run check:imports
 
+      - name: Position-independence gate (교재 좌표 비의존 식별자·저장 키)
+        run: npm run check:posind
+
       - name: Docs path + document ID check
         run: npm run check:docs
 

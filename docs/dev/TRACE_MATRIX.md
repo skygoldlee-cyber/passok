@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 9c21c3865fe0192a
-> 생성: 2026-10-12 · 원천: SPEC.md(471개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 90244e23ce32f35e
+> 생성: 2026-10-12 · 원천: SPEC.md(472개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 471개 — 문서 연결 300 · 소스 연결 433 · 테스트 연결 460 · 보고서 연결 109
+**커버리지 요약**: 요구사항 472개 — 문서 연결 300 · 소스 연결 434 · 테스트 연결 461 · 보고서 연결 109
 
 ---
 
@@ -621,6 +621,7 @@
 | ID-02 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-08<br>DOC-REF-03<br>DOC-REF-05 | src/sha256.js<br>tools/build/id_factory.js | tests/unit/id-factory.test.js<br>tests/unit/sha256.test.js | — | — |
 | ID-03 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-08<br>DOC-REF-03<br>DOC-REF-05 | tools/build/id_factory.js | tests/unit/id-factory.test.js | — | — |
 | ID-04 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-08<br>DOC-REF-03<br>DOC-REF-05 | tools/build/build_id_migration.js<br>tools/build/id_factory.js | tests/unit/id-factory.test.js | — | — |
+| ID-05 | ✅ | 테스트 | — | tools/check/check_position_independence.js | tests/unit/posindep.test.js | — | — |
 
 ## 5.3 빌드 파이프라인
 

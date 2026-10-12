@@ -10,7 +10,7 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { classifyFile, planSteps } = require('../../tools/check/push_gate.js');
 
-const FULL = ['types', 'trace', 'specrefs', 'docs', 'html', 'lint', 'impact', 'docsync', 'testfirst'];
+const FULL = ['types', 'trace', 'specrefs', 'docs', 'html', 'lint', 'posind', 'impact', 'docsync', 'testfirst'];
 
 test('파일 분류 — docs·content·logic', () => {
     assert.equal(classifyFile('docs/dev/SPEC.md'), 'docs');
