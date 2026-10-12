@@ -346,10 +346,15 @@ body.exam-open{overflow:hidden;}
             });
         });
 
-        // 교재 인용 링크(../교재/.../*.md#LNN) 클릭 → 오버레이 내에서 교재 열기
+        // 교재 인용 링크(../교재/.../*.md#LNN 또는 .md#-섹션슬러그) 클릭 → 오버레이 내에서 교재 열기
         article.querySelectorAll('a[href]').forEach(a => {
             const href = a.getAttribute('href') || '';
-            if (!/\.md(#L(\d+))?$/i.test(href)) return;
+            const mdHashMatch = href.match(/\.md#(.+)$/i);
+            if (!/\.md(#.+)?$/i.test(href)) return;
+            // #LNN은 라인 좌표, 그 외 #-슬러그는 섹션 헤딩 앵커
+            const lineMatch = mdHashMatch && mdHashMatch[1].match(/^L(\d+)$/i);
+            const lineNum = lineMatch ? parseInt(lineMatch[1]) : null;
+            const headingSlug = (!lineMatch && mdHashMatch) ? mdHashMatch[1] : '';
             // 좌표·파일명 라벨 정리 — '교재: L237'→'교재 원문', '문서명: L495'→'문서명',
             // 'L228'→'원문 보기', 'xxx(제N호).md'→등록 표시명 (내부 좌표는 사용자 정보 아님)
             a.textContent = _friendlyLinkLabel(a.textContent || '', href.split('/').pop() || '');
@@ -371,9 +376,14 @@ body.exam-open{overflow:hidden;}
                     // 선행 슬래시 제거 (대시보드에서 열 때와 경로 일치)
                     resolved = resolved.replace(/^\//, '');
                 } catch (err) { resolved = href.replace(/^\.\.\//, contentPath('')).replace(/\.\.\//g, ''); }
-                const lineMatch = href.match(/#L(\d+)$/);
-                const lineNum = lineMatch ? parseInt(lineMatch[1]) : null;
-                openExam(resolved, lineNum);
+                const opened = openExam(resolved, lineNum);
+                // #-슬러그 앵커는 문서 로드 후 대응 헤딩으로 스크롤
+                if (headingSlug) {
+                    Promise.resolve(opened).then(() => {
+                        const art = _overlay.el().querySelector('#exam-article');
+                        if (art) scrollToHeadingSlug(art, '#' + headingSlug);
+                    });
+                }
             });
         });
 

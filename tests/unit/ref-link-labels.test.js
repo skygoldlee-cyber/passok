@@ -171,3 +171,24 @@ test('scrollToHeadingSlug: 헤딩 텍스트 slug 매칭으로 스크롤', () => 
     assert.equal(article.calls.length, 1);
     assert.equal(scrollToHeadingSlug(article, '#없는-헤딩'), false);
 });
+
+// ==================== markdown-parser: <url> 문법 (괄호 파일명) ====================
+
+test('<url> 링크: 괄호 포함 ref_md 경로가 잘리지 않고 전체 href로 보존', () => {
+    const html = ExamViewer._mdToHtml(
+        '> [화장품법 시행규칙: L495](<../참조자료/ref_md/과목1/화장품법 시행규칙(총리령)(제02109호)(20260402)/화장품법 시행규칙(총리령)(제02109호)(20260402).md#L495>)',
+        'exams/cosmetic/문제은행/x.md'
+    );
+    assert.ok(html.includes('href="../참조자료/ref_md/과목1/화장품법 시행규칙(총리령)(제02109호)(20260402)/화장품법 시행규칙(총리령)(제02109호)(20260402).md#L495"'),
+        '전체 경로가 href로 보존 — exam-viewer의 .md 인터셉트 대상');
+    assert.ok(!html.includes('&lt;'), '잘린 잔여 태그 없음');
+    assert.ok(!/href="[^"]*\.md#L495"\)\S/.test(html), 'URL 잔여분이 본문 텍스트로 새지 않음');
+});
+
+test('<url> 링크: 괄호 없는 교재 경로도 정상 변환', () => {
+    const html = ExamViewer._mdToHtml(
+        '> [교재: L237](<../교재/law/1과목_화장품법의이해_표준형.md#L237>)',
+        'exams/cosmetic/문제은행/x.md'
+    );
+    assert.ok(html.includes('href="../교재/law/1과목_화장품법의이해_표준형.md#L237"'));
+});
