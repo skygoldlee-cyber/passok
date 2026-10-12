@@ -85,7 +85,7 @@
 |---|----------|---------------|------------------|
 | 3.1 | **대시보드** | 학습 통계·과목 진행률·정답률 히트맵·약점 추천·합격 전략·D-day·계획 등급·예상 점수·마스터리 레벨·일일 챌린지 | D-01~D-17 (17) |
 | 3.1.5 | **맞춤학습** | 오답 패턴·취약 진술·학습 리듬 진단·복합 예상 점수·추천 효과 추적·학습 패턴·주간 리포트 | AN-01~AN-09 (9) |
-| 3.2 | **플래시카드** | 3D 플립·외움/헷갈림 분류·SM-2 간격 반복·셔플·난이도·과목 필터 | F-01~F-10 (10) |
+| 3.2 | **플래시카드** | 3D 플립·외움/헷갈림 분류·FSRS 간격 반복·셔플·난이도·과목 필터 | F-01~F-10 (10) |
 | 3.3 | **퀴즈** | 객관식 풀이·즉시 채점·오답 노트·과목·난이도 필터·해설 표시 | Q-01~Q-11 (11) |
 | 3.4 | **모의고사** | 실전 타이머 시뮬레이션·성적표·과목별 분석·성적 추이 | E-01~E-07 (7) |
 | 3.5 | **교재 리더** | 챕터 탐색·북마크·진도 표시·폰트·테마·이미지 확대(데스크탑)·머메이드·표 렌더 | TR-01~TR-23 (23) |
@@ -120,16 +120,16 @@
 | D-05 | 추천 링크/유튜브 채널 카드 (manifest.json `resources` 기반 동적 생성) | ✅ |
 | D-06 | 시험 카드 (registry 기반 동적 생성, 하드코딩 없음) | ✅ |
 | D-07 | 일일 챌린지 모달 (데일리 학습 카드) | ✅ |
-| D-08 | 오늘 복습 카드 수 표시 (SM-2 간격 반복 연동) | ✅ |
+| D-08 | 오늘 복습 카드 수 표시 (FSRS 간격 반복 연동) | ✅ |
 | D-09 | 과목별 정답률 히트맵 (색상 코딩: 80%+ 초록, 60-79% 노랑, 40-59% 주황, <40% 빨강, 미응시 회색) | ✅ |
 | D-10 | 약점 과목 자동 추천 (정답률 최저 + 헷갈린 카드最多, "풀기"/"학습" 버튼) | ✅ |
-| D-11 | 오늘의 합격 전략 — 우선순위 추천 엔진 (SM-2 대기 → 과락 과목 → 정답률 최저 → 헷갈린 카드 → 미학습), 이유 표시 + 즉시 실행 버튼 (`recommendations.js`) | ✅ |
+| D-11 | 오늘의 합격 전략 — 우선순위 추천 엔진 (FSRS 복습 대기 → 과락 과목 → 정답률 최저 → 헷갈린 카드 → 미학습), 이유 표시 + 즉시 실행 버튼 (`recommendations.js`) | ✅ |
 | D-12 | 시험일 D-day 카드 + 역산 일일 권장 카드 수 (목표 설정 모달에서 시험일 입력, 캘린더 D-day 칩) | ✅ |
 | D-13 | 예상 점수 추정 — 최근 모의고사 5회 평균 ±1σ + 선형회귀 추세(상승/보합/하락), 합격 진단 카드 하단. "합격 확률"이 아닌 점수 추정치로 표기 한정 | ✅ |
 | D-14 | 실제 시험 결과 자가 보고 (`actual_exam_result`) — D-day 경과 시 진단 카드에 입력 폼, 기록 후 예상 대비 오차 표시. 예측 보정 데이터 수집 경로 | ✅ |
 | D-15 | 대시보드 추천 카드에서 "맞춤학습 보기" 버튼으로 `analysis-view` 연결 (퍼널) — 상세 분석(과목 카드·히트맵·모의고사 차트)은 맞춤학습 뷰로 분리됨 | ✅ |
 | D-16 | 과목별 마스터리 레벨 — 판정 진술 중 졸업(연속 정답 3회, DR-03) 비율을 과목별로 집계해 과목 카드에 Lv.1~5 표시 (`computeMasteryLevels`, 데이터 없으면 미표시) | ✅ |
-| D-17 | 시험일 리드타임 권고 + 계획 등급 — 목표 설정 모달에서 최소 권장 준비 기간 미만 시험일을 인라인 권고(`getExamLeadStatus`). 기준 일수는 manifest `study.minExamLeadDays` 우선, 미선언 시 콘텐츠 규모에서 유도 — `max(총카드÷50×1.4×1.5, 총퀴즈÷10)` 달력일 환산, 레지스트리 없으면 기본 50일 (`getMinExamLeadDays`, cosmetic 선언값 50일 근거: 1,123장 1회전 ~23학습일≈시험 전 33일 하한 + SM-2 마진 + 문제은행 445문÷10/일≈45일). 역산 권장량÷일일 카드 목표 비율로 normal(≤1.0)/tight(≤2.0)/triage(>2.0) 판정해 대시보드 안내 분기(`getExamPlanStatus` — tight는 카드·퀴즈 병행 권장, triage는 출제 비중 최상위 과목 우선 권고) | ✅ |
+| D-17 | 시험일 리드타임 권고 + 계획 등급 — 목표 설정 모달에서 최소 권장 준비 기간 미만 시험일을 인라인 권고(`getExamLeadStatus`). 기준 일수는 manifest `study.minExamLeadDays` 우선, 미선언 시 콘텐츠 규모에서 유도 — `max(총카드÷50×1.4×1.5, 총퀴즈÷10)` 달력일 환산, 레지스트리 없으면 기본 50일 (`getMinExamLeadDays`, cosmetic 선언값 50일 근거: 1,123장 1회전 ~23학습일≈시험 전 33일 하한 + 간격 반복 마진 + 문제은행 445문÷10/일≈45일). 역산 권장량÷일일 카드 목표 비율로 normal(≤1.0)/tight(≤2.0)/triage(>2.0) 판정해 대시보드 안내 분기(`getExamPlanStatus` — tight는 카드·퀴즈 병행 권장, triage는 출제 비중 최상위 과목 우선 권고) | ✅ |
 
 ### 3.1.5 맞춤학습 (Personal Analysis, `analysis-view`)
 
@@ -155,8 +155,8 @@
 | F-04 | "외웠어요" / "헷갈려요" 카드 분류 (Set 기반 O(1) 조회) | ✅ |
 | F-05 | 카드 셔플 (Fisher-Yates 공정 셔플) | ✅ |
 | F-06 | 과목별 카드 필터링 | ✅ |
-| F-07 | SM-2 간격 반복 스케줄링 ("외움" → 간격 확장, "헷갈림" → 1일 리셋, `spaced-repetition.js`) | ✅ |
-| F-08 | 카드별 복습 메타데이터 (repetition, easiness, nextReview, interval) localStorage 영속화 | ✅ |
+| F-07 | FSRS-4.5 간격 반복 스케줄링 — 카드별 난이도·안정도 추적, 목표 기억률 0.9 기반 간격 산출 (외움→Again 대비 확장, 헷갈림→Again, `spaced-repetition.js`→`fsrs.js`) | ✅ |
+| F-08 | 카드별 복습 메타데이터 (v2: d·s·due·reps·lapses, 구 SM-2는 지연 변환) localStorage 영속화 | ✅ |
 | F-09 | 진도 초기화 시 간격 반복 데이터 함께 초기화 | ✅ |
 | F-10 | 난이도 필터 (전체/쉬움/보통/어려움, `difficultyFilter` 상태) | ✅ |
 
@@ -474,17 +474,17 @@
 | SC-10 | 시험일 최우선 설정 안내 — 대시보드 통계 그리드 첫 카드로 D-day 카드를 배치하고, 시험일 미설정 시 `stat-card-attn`으로 강조 + "학습 계획의 시작점" 안내 + `지금 설정` 버튼을 표시 (`_examPlanDescHtml` 미설정 분기) | ✅ |
 | SC-11 | 스마트학습–맞춤학습 연계 — ① 맞춤학습 뷰에 '이번 주 스마트학습' 요약 카드(과목별 실적/배정 + PRO 배지 + 캘린더 링크, `analysis-smart-plan`, `_renderSmartPlanInsight`) ② 계획 패널 칩 옆 `이유` 버튼 → `gotoSubjectAnalysis(과목키)`로 맞춤학습 해당 과목 카드(`subj-card-<키>`) 스크롤·강조 — 배정 근거의 진단 상세로 연결 | ✅ |
 | SC-12 | 약점 신호 통합 — 오답 원인 자가 태깅(`wrongCauses` subjectId별 최근 30일)과 단원 취약(`computeSubjectWeakChapters` 과목별 취약 단원 수)을 약점 가중에 가산(`diagBoost` 최대 +0.5, 합계 상한 MAX_WEAK_WEIGHT 유지) — 퀴즈 표본 부족 과목의 콜드스타트 약점 반영 (`computeSubjectAllocation`의 `diagBySubject` 입력, STUDY_PLAN_PRO_DESIGN.md Rev 2) | ✅ |
-| SC-13 | 스마트학습 퀴즈 배분 + 복습 대기 수요 — ① 과목별 퀴즈 잔여(은행 문항 − 풀이 수)를 카드와 동일 수요 공식(잔여×출제비중×약점가중)으로 주차 배분, 주차 총량 = 학습일×일일 퀴즈 목표. 칩 `카드장·퀴즈문` 실적/배정 병기(캘린더 `quizBySubj` 과목별 퀴즈 증분 기록, `_prevQuizBySubj` 차분), 주차 매트릭스 셀 `카드장·퀴즈문` ② SM-2 기한 도래 복습 대기(`getDueCards` → `dueBySubject`)를 약점 가중에 가산 — 암기 카드 대비 기한초과 비율 `dueBoost` 최대 +0.5, 합계 상한 MAX_WEAK_WEIGHT 유지 (`computeSubjectAllocation`의 `quizBySubject`·`dueBySubject` 입력, STUDY_PLAN_PRO_DESIGN.md Rev 3) | ✅ |
+| SC-13 | 스마트학습 퀴즈 배분 + 복습 대기 수요 — ① 과목별 퀴즈 잔여(은행 문항 − 풀이 수)를 카드와 동일 수요 공식(잔여×출제비중×약점가중)으로 주차 배분, 주차 총량 = 학습일×일일 퀴즈 목표. 칩 `카드장·퀴즈문` 실적/배정 병기(캘린더 `quizBySubj` 과목별 퀴즈 증분 기록, `_prevQuizBySubj` 차분), 주차 매트릭스 셀 `카드장·퀴즈문` ② FSRS 기한 도래 복습 대기(`getDueCards` → `dueBySubject`)를 약점 가중에 가산 — 암기 카드 대비 기한초과 비율 `dueBoost` 최대 +0.5, 합계 상한 MAX_WEAK_WEIGHT 유지 (`computeSubjectAllocation`의 `quizBySubject`·`dueBySubject` 입력, STUDY_PLAN_PRO_DESIGN.md Rev 3) | ✅ |
 | SC-14 | 합격 갭→목표 상향 권고 — 합격 갭 분석 카드에서 예상 점수가 합격선 미만(`gap.gap` > 0)이면 일일 목표 상향 권고 문구 + 목표 설정 버튼(`openGoalSettings`) 표시. 계획 필요량(`plan.perStudyDay`)이 일일 카드 목표를 초과하면 필요량을 권장치로 제시, 아니면 일반 권고 문구 — 진단 결과가 계획 파라미터 조정 동선으로 연결되는 피드백 루프 (`_renderPassGapInsight`) | ✅ |
 | SC-15 | 교재 일독 반영 — ① 교재 읽기를 학습 활동으로 기록: 리더 하트비트(15초 틱, `startReadingSession`)가 뷰 활성+탭 가시 상태에서 체류 시간을 누적해 `recordStudyActivity({readMin})`으로 기록 — 스크롤 없는 정독도 인정되고 뷰 이탈 시간은 오계상되지 않음. 카드·퀴즈 없는 일독일도 캘린더 학습일·주간 목표일·월간 학습일에 반영되고, 학습 패턴(`computeStudyPattern`)은 읽기 전용일을 세션 1건으로 집계 ② 일독 진척 추적: 과목당 문서를 100등분한 청크의 방문 커버리지 `reader_progress`(표준형·이야기형 동일 커버리지로 과목 키 하나에 합산) — 체류 청크만 누적해 목차·이어보기 점프가 진척을 부풀리지 않음. `getTextbookReadProgress`가 집계하며 분모는 `getActiveSubjectCount`(registry.subjects) 우선 ③ 일독 시작(`started`) 후 남은 통독 학습일 `⌈(1−진척)×readThroughDays×readDayShare⌉`(manifest `study.readThroughDays` 미선언 시 10, `study.readDayShare` 0~1 미선언 시 1=통독일 전일 대치)를 역산 학습일에서 주차 순차 차감 — 주차 행 `reading` 표기, 완료 시 자동 소멸. 미독 사용자(`started`=false)는 차감 없음 ④ 주차별 학습일을 Σmin(주간목표일, 주차 잔여일)로 합산해 말주 밀도를 정확화(기존 `⌊dday×주간일÷7⌋` 대체) (`computeStudyPlan`, `textbook-reader.js`, `check:manifest`가 study 값 범위·autoPattern 검증) | ✅ |
 | RV-01 | 오답/중요 복습 뷰 — 헷갈림 카드·틀린 문제 통합 목록 (`review-view`) | ✅ |
 | ND-01 | 숫자 암기 드릴 — `number-drills/` JSON 기반 수치·기한·횟수 훈련 (훈련소 수치 훈련) | ✅ |
 | DR-01 | **O/X 판정 드릴** — 객관식 문항을 진위형으로 자동 변환 (3,700+문, `build_ox_drills.js` → `drills/ox_subject*.js`, `trainer-drills.js`) | ✅ |
 | DR-02 | **복수정답형 드릴** — 진술별 O/X 토글 2단계 응시 + 판정과 모순되는 선지 실시간 소거 표시 (755문, `combo_subject*.js` + 수작업 파일럿 병합) | ✅ |
-| DR-03 | **진술 원자 추적** — 진술 `sid` 단위로 O/X·복수정답형 공유 판정 누적 (`statement_stats` + SM-2 큐, 연속 정답 3회 시 취약 졸업, `statement-tracker.js`) | ✅ |
+| DR-03 | **진술 원자 추적** — 진술 `sid` 단위로 O/X·복수정답형 공유 판정 누적 (`statement_stats` + FSRS 큐, 연속 정답 3회 시 취약 졸업, `statement-tracker.js`) | ✅ |
 | DR-04 | **특수 드릴 모드** — `weak`(취약·복습 진술 필터) / `num`(수치·한도·기한 태그 필터) 전 과목 모드, 출제 수 10/20/전체 | ✅ |
 | DR-05 | **취약 진술 리뷰 패널** — conceptId 개념 그룹핑(참/거짓 혼동쌍 대조), 복습 대상 필터, 졸업 수 표시 | ✅ |
-| DR-06 | **복수정답형 모의고사 연동** — `startComboMockExam`으로 combo 번들→시뮬 형식 평탄화, 채점 시 `deriveComboJudgments`로 진술 판정 역산 → 취약 추적·SM-2 반영 | ✅ |
+| DR-06 | **복수정답형 모의고사 연동** — `startComboMockExam`으로 combo 번들→시뮬 형식 평탄화, 채점 시 `deriveComboJudgments`로 진술 판정 역산 → 취약 추적·FSRS 반영 | ✅ |
 | DR-07 | **문항 스키마 정합성** — single/combo/short/ox 4유형, `deriveComboAnswer`로 정답 도출 + `validateQuestion` 유일성 검증 (정답 오타 구조적 차단, `questions.js`) | ✅ |
 
 ### 3.21 UI 모드 전환 (학습 ↔ 실무)
@@ -528,7 +528,7 @@
 |----|---------|-----------|
 | SQ-01 | 학습 품질 감사 도구 (`tools/check/audit_study_quality.js`, `npm run audit:study`) — 합성 사용자 상태를 주입해 스마트학습 배분·맞춤학습 추천의 규칙 정합을 결정론적으로 검증 (실효성이 아닌 규칙 일관성·내부 정합 감사) | ✅ |
 | SQ-02 | 배분 정합 지표 — coverage(잔여 과목 배정 비율)·consViolations(주차 상한)·overCap(잔여 초과)·reversals(동조건 역전)·weakCorr/boostCorr(약점↔배정 Spearman, 비중 정규화) | ✅ |
-| SQ-03 | 시나리오 스위트 — 콜드스타트(중립 가중)·균등(비례 배분)·약점 편중(배정 증가)·과락 우선(추천 선두)·잔여0(재배분)·임박(triage)·통독 차감(SC-15)·복습 밀림(dueBoost) + 진단·추천·추정·SM-2 불변식 + 시계열 시뮬(계획 준수 D-day 잔여 0·추천 추종 개선 격차·SM-2 30일 분포, 가상 시계 결정론) | ✅ |
+| SQ-03 | 시나리오 스위트 — 콜드스타트(중립 가중)·균등(비례 배분)·약점 편중(배정 증가)·과락 우선(추천 선두)·잔여0(재배분)·임박(triage)·통독 차감(SC-15)·복습 밀림(dueBoost) + 진단·추천·추정·FSRS 불변식 + 시계열 시뮬(계획 준수 D-day 잔여 0·추천 추종 개선 격차·FSRS 30일 분포, 가상 시계 결정론) | ✅ |
 | SQ-04 | 기준선 회귀 게이트 — `--update`로 `study_quality_baseline.json` 갱신, `--check`로 통과→실패 회귀 차단. 산출물 `study_quality_report.json`은 gitignore | ✅ |
 
 ---
@@ -689,7 +689,7 @@
 | UX-FB-02 | **`alert()`/`confirm()` 금지 → 커스텀 모달**: `showConfirm`(확인/취소), `showAlert`(확인만), `showToast`(비차단) | 네이티브 대화상자는 PWA 설치 흐름을 깨고 스타일 제어 불가. 커스텀 모달은 포커스 트랩 + Escape + 배경 클릭 닫기 포함 |
 | UX-FB-03 | **숨겨진 기능은 최초 1회 펄스로 알림**: 발견하기 어려운 핸들(엣지 탭 등)에 첫 표시 시 펄스 애니메이션 + `localStorage` 플래그로 1회 제한 | `animationend` 리스너로 클래스 해제 — `display:none` 상태에서는 애니메이션이 안 돌아 첫 실제 표시에 실행됨. `prefers-reduced-motion`에서는 자동으로 0.01ms 처리됨 |
 | UX-FB-04 | **로딩은 오버레이로 통일**: 데이터 fetch 구간은 `showGlobalLoading()` 전체화면 오버레이 | 부분 스켈레톤보다 구현 비용이 낮고 일관됨 |
-| UX-FB-05 | **첫 방문 시작 안내 모달**: 학습 데이터가 없는 최초 방문에서 1회 표시, 설정 메뉴 "시작 안내"로 재열람 (`onboarding.js`, `onboarding_seen_v1` 플래그). 4단계 — ① 시험일 설정(대시보드 첫 카드) → ② 교재 1회독(표준형/이야기형 구조 파악) → ③ 카드·퀴즈 학습(스마트학습 배분) → ④ 복습·진단 루프(SM-2 + 맞춤학습) | 기존 사용자는 플래그만 기록해 방해하지 않음 — 재방문 강제 안내 금지 |
+| UX-FB-05 | **첫 방문 시작 안내 모달**: 학습 데이터가 없는 최초 방문에서 1회 표시, 설정 메뉴 "시작 안내"로 재열람 (`onboarding.js`, `onboarding_seen_v1` 플래그). 4단계 — ① 시험일 설정(대시보드 첫 카드) → ② 교재 1회독(표준형/이야기형 구조 파악) → ③ 카드·퀴즈 학습(스마트학습 배분) → ④ 복습·진단 루프(FSRS + 맞춤학습) | 기존 사용자는 플래그만 기록해 방해하지 않음 — 재방문 강제 안내 금지 |
 | UX-FB-06 | **모달 카드는 뷰포트 상한 + 내부 스크롤 필수**: `role="dialog"`의 카드는 `max-height: ≤90dvh` + `overflow-y:auto` (또는 본문 스크롤 영역 + 헤더·푸터 `flex-shrink:0` 고정) — 내용이 뷰포트를 넘어도 액션 버튼이 화면 안에 남아야 함 | 자가 등록 모달(`.cing-*`)이 필드 5개로 `90dvh`를 넘겨 등록·취소 버튼이 잘린 실사례. 공용 `.app-confirm-dialog`(컨펌·의견·Pro·온보딩·통계 공유)와 `.auth-modal-card`·`.f-weigh-card`에 적용 — UX-SET-02(설정 패널)의 다이얼로그 일반화. E2E가 세로·가로 뷰포트에서 푸터 버튼 위치를 실측. 신규 카드는 공용 규약 클래스 `.dialog-card`(css/base.css — 90dvh 상한+스크롤) 사용, `check:mobilesafe`가 `role="dialog"` 마크업에 클래스 부재를 정적 검사 |
 
 #### 4.8.5 PWA 고유 UX
@@ -1135,9 +1135,9 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | 키워드 인덱스 | `src/keyword-index.js` | 교재 셀→참조자료 키워드 매핑 (자동 생성) |
 | 용어집 렌더러 | `src/views/glossary-renderer.js` | 용어집 테이블 렌더링, `scrollToGlossary()` 공유 함수 |
 | 학습 보조 | `src/study-aids.js` | 기출 필터, 숫자 암기표 |
-| 간격 반복 | `src/spaced-repetition.js` | SM-2 알고리즘, 복습 스케줄링, 오늘 복습 카드 수 |
+| 간격 반복 | `src/spaced-repetition.js` | FSRS-4.5 알고리즘(fsrs.js), 복습 스케줄링, 오늘 복습 카드 수 |
 | 문항 스키마 | `src/questions.js` | single/combo/short/ox 스키마, `deriveComboAnswer`, `validateQuestion` |
-| 진술 추적 | `src/statement-tracker.js` | 진술 원자(sid) 단위 오판 통계, 졸업 추적, SM-2 연동 |
+| 진술 추적 | `src/statement-tracker.js` | 진술 원자(sid) 단위 오판 통계, 졸업 추적, FSRS 연동 |
 | 학습 추적 | `src/study-tracker.js` | 캘린더 활동 기록·목표 달성률 (`recordStudyActivity`, `getStudyGoals`) |
 | 동적 매니페스트 | `src/pwa-manifest.js` | 활성 시험 기준 PWA manifest 링크 교체 (클래식 스크립트) |
 | 설정 상수 | `src/config/timing.js` · `cache.js` | 타이밍·캐시 상수 중앙 관리 |

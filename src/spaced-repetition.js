@@ -1,86 +1,53 @@
-// spaced-repetition.js — SM-2 알고리즘 기반 간격 반복 학습 시스템
+// spaced-repetition.js — FSRS-4.5 기반 간격 반복 학습 시스템 (구 SM-2)
 // @spec F-07~09
 //
-// 각 카드의 복습 스케줄을 관리:
-// - repetition: 연속 정답 횟수 (0부터 시작)
-// - easiness: 난이도 인자 (1.3~2.5, 기본 2.5)
-// - nextReview: 다음 복습 날짜 (ISO 날짜 문자열)
-// - lastReview: 마지막 복습 날짜
+// 각 카드의 복습 스케줄을 관리 — 스케줄 수학은 src/fsrs.js 순수 함수에 위임:
+// - v2 레코드: { v:2, d(난이도 1~10), s(안정도 일), due, lastReview, reps, lapses, lastInterval }
+// - 구 SM-2 레코드({repetition, easiness, nextReview})는 접근 시 지연 변환 (FSRS_DESIGN §3.2)
+// - 공용 API 시그니처(updateCardSchedule·getDueCards·getDueCount)는 무수정 유지
 
 import { safeGetItem, safeSetItem } from './state.js';
 import { STORAGE_KEYS } from './storage-keys.js';
 import { todayKey } from './utils.js';
+import { Rating, fsrsReview, migrateSm2Record, nextInterval } from './fsrs.js';
 
 const SR_KEY = STORAGE_KEYS.FC_SPACED_REPETITION;
 
-/**
- * SM-2 알고리즘 — 품질 점수(0-5)에 따라 다음 복습 간격 계산
- * @param {number} repetition - 현재 연속 정답 횟수
- * @param {number} easiness - 현재 난이도 인자
- * @param {number} quality - 품질 점수 (0=완전히 틀림, 5=완벽)
- * @returns {{interval: number, repetition: number, easiness: number}}
- */
-function sm2(repetition, easiness, quality) {
-    let newEF = easiness;
-    let newRep = repetition;
-
-    if (quality >= 3) {
-        // 정답 — 간격 확장
-        if (newRep === 0) {
-            return { interval: 1, repetition: 1, easiness: newEF };
-        } else if (newRep === 1) {
-            return { interval: 3, repetition: 2, easiness: newEF };
-        } else {
-            const interval = Math.round(newEF * (newRep >= 2 ? _intervalForRep(newRep - 1, easiness) : 3));
-            return { interval: Math.max(interval, 1), repetition: newRep + 1, easiness: newEF };
-        }
-    } else {
-        // 오답 — 간격 리셋
-        newRep = 0;
-        newEF = Math.max(1.3, easiness + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)));
-        return { interval: 1, repetition: 0, easiness: newEF };
-    }
+/** 구 SM-2 레코드를 FSRS v2로 지연 변환 (이미 v2면 그대로) */
+function _ensureV2(rec, todayStr) {
+    if (!rec) return null;
+    return rec.v === 2 ? rec : migrateSm2Record(rec, todayStr);
 }
 
-// 누적 간격 계산 (재귀 대신 반복문으로 구현)
-function _intervalForRep(rep, easiness) {
-    if (rep <= 0) return 1;
-    if (rep === 1) return 3;
-    let prev = 3;
-    for (let i = 2; i <= rep; i++) {
-        prev = Math.round(prev * easiness);
-    }
-    return Math.max(prev, 1);
+/** 날짜 문자열 차이 (일) — a - b */
+function _daysBetween(a, b) {
+    return Math.round((Date.parse(a + 'T00:00:00') - Date.parse(b + 'T00:00:00')) / 86400000);
 }
 
 // @spec F-07~09
-// SM-2 스케줄 갱신 — repetition/easiness/nextReview 상태 전이
+// FSRS 스케줄 갱신 — d/s/due 상태 전이 (레이팅: 외움=Good, 헷갈림=Again)
 /**
  * 카드의 복습 스케줄 업데이트
  * @param {string} cardId - 카드 ID
- * @param {boolean} knew - 외웠는지 여부 (true=쉬움, false=헷갈림)
+ * @param {boolean} knew - 외웠는지 여부 (true=외움→Good, false=헷갈림→Again)
  */
 export function updateCardSchedule(cardId, knew) {
     const schedules = loadSchedules();
     const today = new Date();
     const todayStr = todayKey(today);
 
-    const current = schedules[cardId] || { repetition: 0, easiness: 2.5, nextReview: todayStr, lastReview: null };
+    const current = _ensureV2(schedules[cardId], todayStr);
+    const rating = knew ? Rating.GOOD : Rating.AGAIN;
+    const elapsed = current && current.lastReview ? Math.max(0, _daysBetween(todayStr, current.lastReview)) : 0;
+    const next = fsrsReview(current, rating, elapsed);
+    const interval = nextInterval(next.s);
 
-    // 품질 점수: 외움=5, 헷갈림=2
-    const quality = knew ? 5 : 2;
-
-    const result = sm2(current.repetition, current.easiness, quality);
-
-    // 다음 복습 날짜 계산
     const nextDate = new Date(today);
-    nextDate.setDate(nextDate.getDate() + result.interval);
-    const nextReview = todayKey(nextDate);
+    nextDate.setDate(nextDate.getDate() + interval);
 
     schedules[cardId] = {
-        repetition: result.repetition,
-        easiness: result.easiness,
-        nextReview: nextReview,
+        ...next,
+        due: todayKey(nextDate),
         lastReview: todayStr
     };
 
@@ -89,13 +56,16 @@ export function updateCardSchedule(cardId, knew) {
 }
 
 /**
- * 오늘 복습해야 할 카드 ID 목록 반환
+ * 오늘 복습해야 할 카드 ID 목록 반환 (FSRS v2 due 필드)
  * @returns {string[]} 오늘 복습할 카드 ID 목록
  */
 export function getDueCards() {
     const schedules = loadSchedules();
     const todayStr = todayKey();
-    return Object.keys(schedules).filter(id => schedules[id].nextReview <= todayStr);
+    return Object.keys(schedules).filter(id => {
+        const rec = _ensureV2(schedules[id], todayStr);
+        return rec && rec.due <= todayStr;
+    });
 }
 
 /**
@@ -107,8 +77,8 @@ export function getDueCount() {
 }
 
 /**
- * 복습 스케줄 전체 로드
- * @returns {Object} { cardId: { repetition, easiness, nextReview, lastReview } }
+ * 복습 스케줄 전체 로드 — 구 SM-2 레코드 포함 (raw 읽기)
+ * @returns {Object} { cardId: { ... } }
  */
 function loadSchedules() {
     try {
@@ -126,4 +96,3 @@ function loadSchedules() {
 function saveSchedules(schedules) {
     safeSetItem(SR_KEY, JSON.stringify(schedules));
 }
-

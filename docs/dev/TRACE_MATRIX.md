@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 83e94ae94faf6e6b
+> 입력 해시: a62d19b9ed3003b0
 > 생성: 2026-10-12 · 원천: SPEC.md(465개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 465개 — 문서 연결 294 · 소스 연결 430 · 테스트 연결 454 · 보고서 연결 109
+**커버리지 요약**: 요구사항 465개 — 문서 연결 296 · 소스 연결 430 · 테스트 연결 454 · 보고서 연결 109
 
 ---
 
@@ -67,9 +67,9 @@
 | F-04 | ✅ | 테스트 | DOC-REF-03 | src/views/flashcard.js<br>src/views/listeners-flashcard.js | tests/dom/study-flashcard.dom.test.js | DOC-ARC-05 | — |
 | F-05 | ✅ | 테스트 | DOC-REF-03 | src/utils.js<br>src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js | DOC-ARC-05 | — |
 | F-06 | ✅ | 테스트 | DOC-REF-03 | src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js | DOC-ARC-05 | — |
-| F-07 | ✅ | 테스트 | DOC-REF-03 | src/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js<br>tests/unit/property-based.test.js | DOC-ARC-05 | — |
-| F-08 | ✅ | 테스트 | DOC-REF-03 | src/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js<br>tests/unit/property-based.test.js | DOC-ARC-05 | — |
-| F-09 | ✅ | 테스트 | DOC-REF-03 | src/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js<br>tests/unit/property-based.test.js | DOC-ARC-05 | — |
+| F-07 | ✅ | 테스트 | DOC-DSN-17<br>DOC-REF-03 | src/fsrs.js<br>src/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js<br>tests/unit/fsrs.test.js<br>tests/unit/property-based.test.js | DOC-ARC-05 | — |
+| F-08 | ✅ | 테스트 | DOC-DSN-17<br>DOC-REF-03 | src/fsrs.js<br>src/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js<br>tests/unit/fsrs.test.js<br>tests/unit/property-based.test.js | DOC-ARC-05 | — |
+| F-09 | ✅ | 테스트 | DOC-DSN-17<br>DOC-REF-03 | src/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js<br>tests/unit/fsrs.test.js<br>tests/unit/property-based.test.js | DOC-ARC-05 | — |
 | F-10 | ✅ | 테스트 | DOC-REF-03 | src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js | DOC-ARC-05 | — |
 
 ## 3.3 퀴즈
@@ -376,7 +376,7 @@
 |----|------|-----------|------|------|--------|--------|------|
 | DR-01 | ✅ | 테스트 | — | html/views/trainer.html<br>index.html<br>src/views/trainer-drills.js<br>tools/build/build_ox_drills.js<br>…외 1개 | tests/dom/study-trainer-drills.dom.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-02 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-02<br>DOC-REF-01 | src/views/trainer-drill-combo.js<br>src/views/trainer-drills.js<br>tools/build/build_combo_drills.js<br>tools/build/drill-utils.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/combo-transform.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
-| DR-03 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
+| DR-03 | ✅ | 테스트 | DOC-DSN-17<br>DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-04 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js<br>src/weak-items.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | 법령·고시 수치 (드릴 콘텐츠의 기원 — 문항 자체는 내부 제작) |
 | DR-05 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-06 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/views/exam-simulator.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
@@ -395,7 +395,7 @@
 | SC-10 | ✅ | 테스트 | — | css/dashboard.css<br>src/views/dashboard.js | tests/dom/study-dashboard.dom.test.js | — | — |
 | SC-11 | ✅ | 테스트 | — | src/views/analysis-view.js | tests/dom/study-calendar.dom.test.js<br>tests/dom/study-dashboard.dom.test.js | — | — |
 | SC-12 | ✅ | 테스트 | — | src/views/analysis-view.js | tests/unit/study-tracker.test.js | — | — |
-| SC-13 | ✅ | 테스트 | — | — | tests/dom/study-calendar.dom.test.js<br>tests/unit/study-tracker.test.js | — | — |
+| SC-13 | ✅ | 테스트 | DOC-DSN-17 | — | tests/dom/study-calendar.dom.test.js<br>tests/unit/study-tracker.test.js | — | — |
 | SC-14 | ✅ | 테스트 | — | — | tests/dom/study-dashboard.dom.test.js | — | — |
 | SC-15 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/study-tracker.js | tests/dom/study-calendar.dom.test.js<br>tests/unit/study-tracker.test.js | — | — |
 
@@ -438,7 +438,7 @@
 |----|------|-----------|------|------|--------|--------|------|
 | SQ-01 | ✅ | 테스트 | — | tools/check/audit_study_quality.js | tests/unit/study-quality-audit.test.js | — | — |
 | SQ-02 | ✅ | 테스트 | — | tools/check/audit_study_quality.js | tests/unit/study-quality-audit.test.js | — | — |
-| SQ-03 | ✅ | 테스트 | — | tools/check/audit_study_quality.js | tests/unit/study-quality-audit.test.js | — | — |
+| SQ-03 | ✅ | 테스트 | DOC-DSN-17 | tools/check/audit_study_quality.js | tests/unit/study-quality-audit.test.js | — | — |
 | SQ-04 | ✅ | 테스트 | — | tools/check/audit_study_quality.js | tests/unit/study-quality-audit.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
@@ -739,6 +739,7 @@
 | DOC-DSN-14 | docs/exams/cosmetic/design/AUDIT_REPORT_DESIGN.md | FO-14, FO-24, FO-34, FO-35, FO-36, FO-56, FO-63, FO-64, FO-65, FO-66, FO-67, FO-68 |
 | DOC-DSN-15 | docs/exams/cosmetic/design/PRACTICAL_TOOLS_DESIGN.md | FO-16, FO-18, FO-33, FO-34, FO-57, FO-58, FO-59, FO-60, FO-61, FO-62, FO-63 |
 | DOC-DSN-16 | docs/dev/design/STUDY_PLAN_PRO_DESIGN.md | D-17, SC-06, SC-07, SC-08 |
+| DOC-DSN-17 | docs/dev/design/FSRS_DESIGN.md | DR-03, F-07, F-08, F-09, SC-13, SQ-03 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |

@@ -22,7 +22,7 @@ const CARD_TYPE_LABELS = {
 export function loadFlashcards() {
     const fcConfig = state.flashcards;
 
-    // 오늘 복습 모드 — SM-2 due 카드를 전 과목에서 합산 출제 (1회 적용 후 해제)
+    // 오늘 복습 모드 — FSRS due 카드를 전 과목에서 합산 출제 (1회 적용 후 해제)
     if (fcConfig.dueOnly) {
         fcConfig.dueOnly = false;
         const dueSet = new Set(getDueCards());

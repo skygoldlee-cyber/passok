@@ -348,7 +348,7 @@ function _renderPassGapInsight() {
 }
 
 /**
- * 오늘 복습 대상(SM-2 due) 카드만 모아 전 과목 합산 플래시카드 세션을 시작합니다.
+ * 오늘 복습 대상(FSRS due) 카드만 모아 전 과목 합산 플래시카드 세션을 시작합니다.
  * 대시보드 '오늘 복습' 카드의 '지금 복습' 버튼에서 호출.
  */
 export function startDueReview() {

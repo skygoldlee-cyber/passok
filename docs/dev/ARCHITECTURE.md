@@ -275,7 +275,7 @@ passory/
 │   ├── storage-keys.js         #   localStorage 키 중앙 관리
 │   ├── study-aids.js           #   기출 필터, 숫자 암기표
 │   ├── study-tracker.js        #   학습 캘린더/목표 추적 (recordStudyActivity, getStudyGoals)
-│   ├── spaced-repetition.js    #   SM-2 간격 반복 알고리즘, 복습 스케줄링
+│   ├── spaced-repetition.js    #   FSRS-4.5 간격 반복 알고리즘(fsrs.js), 복습 스케줄링
 │   ├── recommendations.js      #   "오늘의 합격 전략" 추천 엔진 + 예상 점수 추정 + 실제 결과 보고 (순수 로직)
 │   ├── command-palette.js      #   통합 검색 팔레트 (Ctrl+K) — 뷰/교재/카드/퀴즈/성분/문제집 통합 검색·실행
 │   ├── weak-items.js           #   약점(오답) 항목 ID 문법·해석 + 퀴즈·카드 인덱스 캐시 (DOM 비의존)
@@ -512,7 +512,7 @@ passory/
     │   │   └── SUBSCRIPTION_ROADMAP.md    #  월 구독 전환 로드맵
     │   └── reference/          #     명세·로직·참조 문서 (플랫폼)
     │       ├── TESTING.md                 #  테스트 가이드
-    │       ├── FLASHCARD_LOGIC.md         #  플래시카드·SM-2 로직
+    │       ├── FLASHCARD_LOGIC.md         #  플래시카드·FSRS 로직
     │       ├── MD_TO_HTML_LOGIC.md        #  MD→HTML 변환 로직
     │       ├── COMBO_STUDY_STRATEGY.md    #  복수정답형 학습전략
     │       └── ENGINEERING_PRACTICES.md   #  소프트웨어 공학 요소 정리
@@ -557,8 +557,8 @@ passory/
 | [`src/trainer-calc.js`](../../src/trainer-calc.js) | 계산 훈련 문제 생성기. **순수 로직** — DOM 의존 없이 문제 데이터 객첼만 반환 |
 | [`src/state.js`](../../src/state.js) | 전역 상태 객체(`state`) 정의 + 진행 영속성(`loadProgress`/`saveProgress`). 기본 과목은 `null`이며 `initApp()`에서 registry 첫 과목으로 설정. `saveProgress()`에서 학습 활동 증분을 `study-tracker.js`로 자동 기록. `safeGetItem`/`safeSetItem` 등은 `storage.js` 위임 (하위호환 유지) |
 | [`src/storage.js`](../../src/storage.js) | **저장소 추상화 계층** — 앱의 모든 영속 읽기·쓰기의 단일 퍼널. 논리 키 → `scopedKey` 시험 네임스페이스 적용, 백엔드는 `setStorageBackend()`로 교체 가능(기본 localStorage). 동기 API(`getItem`/`setItem`/`removeItem`/`listKeys`/`getJSON`/`setJSON`)와 비동기 API(`*Async`) 이중 제공 — IndexedDB/SQLite 등 비동기 백엔드는 Async 메서드만 구현하면 되고, sync:false 백엔드에서 동기 API는 null/false+경고. sync dirty 쓰기 훅·쿼터 불가 플래그(`isStorageUnavailable`) 중앙화 |
-| [`src/study-tracker.js`](../../src/study-tracker.js) | 학습 캘린더/목표 추적 헬퍼. 날짜별 학습 활동 기록(`recordStudyActivity`), 학습 목표 조회/저장(`getStudyGoals`/`setStudyGoals`), 오늘/이번주/이번달 달성률 계산, 시험일 D-day·역산 권장량·계획 등급·리드타임 권고(`getDDay`/`getSuggestedDailyCount`/`getExamPlanStatus`/`getExamLeadStatus`), 주간 계획 역산(`computeStudyPlan`)·계획 대비 주간 진행률(`computePlanAdherence`, SC-06)·1회성 마일스톤 안내(`evalStudyMilestones`/`checkStudyMilestones`, SC-07 — seen 세트 `study_milestones_seen`)·과목별 가중 배분(`computeSubjectAllocation`, SC-08 — 잔여×출제 비중×약점 가중 워터필링, `study_plan_pro` 표기)·스마트학습 보강(SC-09 — 캘린더 `bySubj` 과목별 실적·칩 바로가기·약점/비중 배지·최근 표본+취약 카드 약점 확장)·맞춤학습 연계(SC-11 — 분석 뷰 스마트학습 카드·배정 근거 딥링크 `gotoSubjectAnalysis`)·약점 신호 통합(SC-12 — 오답 원인·취약 단원 `diagBySubject` 가산, 공용 입력 `computeSubjectAllocInputs`)·퀴즈 배분+복습 대기(SC-13 — 과목별 퀴즈 잔여 주차 배분·`quizBySubj` 실적·SM-2 기한초과 `dueBySubject` 가산)·합격 갭→목표 상향 권고(SC-14)·교재 일독 반영(SC-15 — `readMin` 학습일 인정·`reader_progress` 진척률·남은 통독일 주차 차감) |
-| [`src/recommendations.js`](../../src/recommendations.js) | "오늘의 합격 전략" 추천 엔진 (Learning Pro). SM-2 대기 → 과락 → 정답률 최저 → 헷갈린 카드 → 미학습 우선순위(`computeRecommendations`), 오답 원인 패턴 집계(`computeWrongCauseSummary`), 모의고사 이력 기반 예상 점수 추정(`estimateExpectedScore` — 합격 확률 아닌 점수 추정치), 실제 결과 자가 보고(`actual_exam_result`). DOM 비의존 순수 로직 |
+| [`src/study-tracker.js`](../../src/study-tracker.js) | 학습 캘린더/목표 추적 헬퍼. 날짜별 학습 활동 기록(`recordStudyActivity`), 학습 목표 조회/저장(`getStudyGoals`/`setStudyGoals`), 오늘/이번주/이번달 달성률 계산, 시험일 D-day·역산 권장량·계획 등급·리드타임 권고(`getDDay`/`getSuggestedDailyCount`/`getExamPlanStatus`/`getExamLeadStatus`), 주간 계획 역산(`computeStudyPlan`)·계획 대비 주간 진행률(`computePlanAdherence`, SC-06)·1회성 마일스톤 안내(`evalStudyMilestones`/`checkStudyMilestones`, SC-07 — seen 세트 `study_milestones_seen`)·과목별 가중 배분(`computeSubjectAllocation`, SC-08 — 잔여×출제 비중×약점 가중 워터필링, `study_plan_pro` 표기)·스마트학습 보강(SC-09 — 캘린더 `bySubj` 과목별 실적·칩 바로가기·약점/비중 배지·최근 표본+취약 카드 약점 확장)·맞춤학습 연계(SC-11 — 분석 뷰 스마트학습 카드·배정 근거 딥링크 `gotoSubjectAnalysis`)·약점 신호 통합(SC-12 — 오답 원인·취약 단원 `diagBySubject` 가산, 공용 입력 `computeSubjectAllocInputs`)·퀴즈 배분+복습 대기(SC-13 — 과목별 퀴즈 잔여 주차 배분·`quizBySubj` 실적·FSRS 기한초과 `dueBySubject` 가산)·합격 갭→목표 상향 권고(SC-14)·교재 일독 반영(SC-15 — `readMin` 학습일 인정·`reader_progress` 진척률·남은 통독일 주차 차감) |
+| [`src/recommendations.js`](../../src/recommendations.js) | "오늘의 합격 전략" 추천 엔진 (Learning Pro). FSRS 복습 대기 → 과락 → 정답률 최저 → 헷갈린 카드 → 미학습 우선순위(`computeRecommendations`), 오답 원인 패턴 집계(`computeWrongCauseSummary`), 모의고사 이력 기반 예상 점수 추정(`estimateExpectedScore` — 합격 확률 아닌 점수 추정치), 실제 결과 자가 보고(`actual_exam_result`). DOM 비의존 순수 로직 |
 | [`src/command-palette.js`](../../src/command-palette.js) | 통합 검색 팔레트 (Ctrl/Cmd+K). `searchAll()` 순수 함수가 뷰(nav-item 스캔 → feature 게이팅 반영)/교재 섹션/카드/퀴즈/성분(초성)/문제집을 통합 검색, 팔레트 UI는 ↑↓·Enter·ESC 키보드 내비. 실행은 기존 경로 재사용(nav 클릭 시뮬레이션, `startSubjectStudy/Quiz`, `openSubjectChapter`, `ExamViewer.openExam`). 전 소스 로컬 데이터로 오프라인 동작 |
 | [`src/weak-items.js`](../../src/weak-items.js) | 약점(오답) 항목 ID 문법의 단일 소스 — `weak_quiz_`/`weak_sim_` 접두사 상수, `weakItemKey`/`parseWeakSimId`/`subjectKeyFromItemId`, 오답 해석(`resolveWrongQuiz`/`resolveCard`/`subjectForWeakItem`). **인덱스 캐시**: 퀴즈·카드를 `id → {항목, subjectId}` Map으로 인덱싱하고 STUDY_DATA·과목 키·배열 참조/길이 비교로 무효화 — `DataLoader.loadSubject()` 점진 로드 시 자동 재구축. DOM 비의존(`window` 가드) |
 | [`src/utils.js`](../../src/utils.js) | 의존성 없는 범용 헬퍼 (한글 초성 추출 `getChosung()` 등) |
@@ -660,7 +660,7 @@ keyword-index.js (교재 셀→참조 키워드) pdf-registry.js (참조자료 �
 html-viewer.js (참조자료 뷰어)        exam-viewer.js (문제집 MD 뷰어)
 manual-viewer.js (안내서/매뉴얼 뷰어)  mermaid-render.js + mermaid-utils.js
 charts.js (SVG 차트)                 scratchpad.js (캔버스)
-spaced-repetition.js (SM-2)          statement-tracker.js (진술 원자 추적)
+spaced-repetition.js (FSRS 어댑터→fsrs.js)          statement-tracker.js (진술 원자 추적)
 questions.js (문항 스키마 검증)       study-aids.js (기출 필터·숫자표)
 study-tracker.js (캘린더 추적)        sha256.js (안정 ID 해시)
 web-vitals.js (성능 모니터링)         glossary-query.js (용어집 쿼리)
@@ -1554,11 +1554,11 @@ data/exams/subjectN.*.js ──► build_ox_drills.js    ──► data/exams/co
 
 - **스키마**: `single`/`combo`/`short`/`ox` 4유형. combo는 진술 `truth`에서 정답 조합을 **도출**(`deriveComboAnswer`)하고 `validateQuestion`으로 유일성을 검증 — 정답 오타를 구조적으로 차단.
 - **복수정답형 변환**(상세: [`QUESTION_SCHEMA_DESIGN.md`](design/QUESTION_SCHEMA_DESIGN.md) §6): 객관식은 선지를 `fact`(명제 진위)/`answer`(정답 여부) 모드로 진술화, 같은 교재 구간(conceptId)의 fact 진술은 재조합해 복수정답 문항을 추가 생성. 단답형은 빈칸 정답이 하나뿐이라 100% 단일정답이 되므로 제외 — 원본 문제은행의 단답형으로 출제. 과목당 65/158/255/277 = 755문.
-- **진술 원자 추적**: 진술의 `sid`(`stableId`)를 O/X·복수정답형이 공유 → [`src/statement-tracker.js`](../../src/statement-tracker.js)가 `perStatement.judgedCorrect` 판정을 `sid` 단위로 `statement_stats` `{j, w, lw, t, truth, cid, last, streak}` + SM-2 큐(`spaced-repetition.js`)에 누적. **연속 정답 3회(`WEAK_GRADUATE_STREAK`) 시 취약 목록 졸업**, 재오판 시 복귀. 드릴 편성은 **SM-2 기한 도래(`getDueStatementSids`) → 오판 진술 → 임의** 순.
+- **진술 원자 추적**: 진술의 `sid`(`stableId`)를 O/X·복수정답형이 공유 → [`src/statement-tracker.js`](../../src/statement-tracker.js)가 `perStatement.judgedCorrect` 판정을 `sid` 단위로 `statement_stats` `{j, w, lw, t, truth, cid, last, streak}` + FSRS 큐(`spaced-repetition.js`)에 누적. **연속 정답 3회(`WEAK_GRADUATE_STREAK`) 시 취약 목록 졸업**, 재오판 시 복귀. 드릴 편성은 **FSRS 기한 도래(`getDueStatementSids`) → 오판 진술 → 임의** 순.
 - **드릴 모드**: 과목별(1~4) 외에 전 과목 특수 모드 `weak`(취약·복습 진술 필터)·`num`(수치·한도·기한 태그 필터 — `inferTags` 부여분) 지원, 출제 수 10/20/전체 선택. 복수정답형은 진술별 O/X 토글 2단계 응시 + 판정과 모순되는 선지 실시간 소거 표시(시험장 소거 전술 훈련).
 - **취약 진술 리뷰 패널**: 누적 통계 열람 — conceptId 개념 그룹핑(참/거짓 혼동쌍 2단 대조), 복습 대상 필터, 최근 판정 배지, 졸업 수 표시, 바로 드릴 진입.
 - **런타임**: `DataLoader.loadOxDrills(N)`/`loadComboDrills(N)`가 `data/exams/cosmetic/drills/` 번들을 클래식 `<script>` 주입으로 로드(`file://` 호환). 복수정답형은 수작업 파일럿(`combo_pilot.js`)과 자동 번들을 병합. UI는 `views/trainer-drills.js` + 트레이너 패널(`index.html`).
-- **모의고사 연동**: 과목 카드의 "복수정답형 풀기"(40/60/전체 선택) → `startComboMockExam('N[:count]')`(`views/exam-simulator.js`)이 combo 번들을 `comboToSimQuestion`으로 시뮬 형식 평탄화(citation·진술 본문 편입, members 문자열화, 정답→지시자)해 시뮬레이터 세션 실행. 원본 members는 `comboOptions`에 보존돼 채점 시 `deriveComboJudgments`로 진술 판정을 역산해 `recordStatementJudgments`에 기록 — 시뮬 성적이 취약 추적·SM-2에 반영. 오답 리뷰는 진술 정오표 표시, 오답 복습(`weak_sim_*_combo_*` 카드)도 해당 번들 로드 후 지원. 통합 모의고사는 `#integrated-mix-combo` 체크 시 과목별 약 20%를 복수정답형으로 혼합.
+- **모의고사 연동**: 과목 카드의 "복수정답형 풀기"(40/60/전체 선택) → `startComboMockExam('N[:count]')`(`views/exam-simulator.js`)이 combo 번들을 `comboToSimQuestion`으로 시뮬 형식 평탄화(citation·진술 본문 편입, members 문자열화, 정답→지시자)해 시뮬레이터 세션 실행. 원본 members는 `comboOptions`에 보존돼 채점 시 `deriveComboJudgments`로 진술 판정을 역산해 `recordStatementJudgments`에 기록 — 시뮬 성적이 취약 추적·FSRS에 반영. 오답 리뷰는 진술 정오표 표시, 오답 복습(`weak_sim_*_combo_*` 카드)도 해당 번들 로드 후 지원. 통합 모의고사는 `#integrated-mix-combo` 체크 시 과목별 약 20%를 복수정답형으로 혼합.
 - **캐시**: `data/exams/cosmetic/drills/`는 레지스트리 미등록 번들이라 `sw.js`의 `pruneStaleDataBundles`에서 `ALWAYS_KEEP`으로 명시 보존.
 - **재생성·검증**: `npm run build:drills` (O/X + 복수정답형 일괄), `npm run check:combo` (파일럿 + 생성 번들 5개 전체 스키마·citation·채점 스모크 검증).
 
