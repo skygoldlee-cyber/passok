@@ -87,6 +87,7 @@
         "src/router.js",
         "src/sanitize.js",
         "src/sha256.js",
+        "src/fsrs.js",
         "src/spaced-repetition.js",
         "src/state.js",
         "src/statement-tracker.js",

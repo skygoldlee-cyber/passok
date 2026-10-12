@@ -7,6 +7,15 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 FSRS-4.5 간격 반복 엔진 전환 (F-07/F-08)
+
+- **배경**: SM-2의 단일 EF 파라미터는 카드별 난이도를 정밀 추적하지 못하고 간격 확장이 경직적 — 조사 결과 FSRS(DSR 모델)가 단일 사용자 로컬 데이터만으로 동작하는 유일한 실용 대안 (FSRS_DESIGN.md, DOC-DSN-17)
+- **구현**: `src/fsrs.js` — FSRS-4.5 순수 함수(기본 파라미터 17개, decay −0.5, 목표 기억률 0.9). `spaced-repetition.js`는 저장 어댑터로 축소 — 공용 API(`updateCardSchedule`/`getDueCards`/`getDueCount`)·저장 키 불변, 레코드는 v2 스키마(`d`·`s`·`due`·`reps`·`lapses`)
+- **마이그레이션**: 구 SM-2 레코드는 `v` 마커 부재로 감지해 접근 시 지연 변환 — `repetition→reps`, `easiness→d` 역산(EF1.3→d≈10, EF2.5→d≈1), `nextReview→due` 계승 (기존 일정 보존)
+- **호환**: `statement-tracker.js`의 due 판정을 `due || nextReview` 폴백으로 확장 — 진술 추적(DR-03)·백업·동기화 경로 무수정. UI는 이진 입력 유지(외움→Good, 헷갈림→Again; Hard/Easy는 4버튼 개정에서 개방)
+- **효과**: T3 30일 시뮬에서 동일 학습 패턴 대비 복습 302→252회(−17%), 중앙 안정도 57.9일 — 백로그 감소를 감사 도구로 계측 확보
+- **문서**: SPEC F-07/F-08·DR-03·SQ-03·D-08/D-11/D-17 명칭 갱신, ARCHITECTURE.md 정합
+
 ## 2026-10-12 주간 리포트 실사용 지표 표면화 (AN-09 확장)
 
 - **배경**: 추천 효과(`evaluateRecommendationEffect`)·예측 보정(`computeCalibrationBias`)은 대시보드 카드에만 표시되고 주간 리포트 텍스트에는 누락

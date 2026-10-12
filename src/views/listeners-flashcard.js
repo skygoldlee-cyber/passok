@@ -131,7 +131,7 @@ export function bindFlashcardListeners() {
 
         state.memorizedCards.add(currentCard.id);
         state.weakCards.delete(currentCard.id);
-        updateCardSchedule(currentCard.id, true); // 2. 간격 반복 (SM-2)
+        updateCardSchedule(currentCard.id, true); // 2. 간격 반복 (FSRS)
         saveProgress();
 
         // 시각 효과 피드백 후 다음 카드로
@@ -149,7 +149,7 @@ export function bindFlashcardListeners() {
 
         state.weakCards.add(currentCard.id);
         state.memorizedCards.delete(currentCard.id);
-        updateCardSchedule(currentCard.id, false); // 2. 간격 반복 (SM-2)
+        updateCardSchedule(currentCard.id, false); // 2. 간격 반복 (FSRS)
         saveProgress();
 
         // 시각 효과 피드백 후 다음 카드로

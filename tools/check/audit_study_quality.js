@@ -392,18 +392,19 @@ async function main() {
         return { delta: eff && eff.items[0] && eff.items[0].delta };
     });
 
-    run('D5 SM-2 스케줄 — 단조 확장·오답 리셋·기한 집계', ok => {
+    run('D5 FSRS 스케줄 — reps 단조·오답 lapses·기한 집계', ok => {
         seedBase(60);
         sr.updateCardSchedule('suba_card_1', true);
         let s = JSON.parse(safeGetItem(STORAGE_KEYS.FC_SPACED_REPETITION)).suba_card_1;
-        ok('rep1', s.repetition === 1);
+        ok('rep1', s.reps === 1 && s.v === 2);
         sr.updateCardSchedule('suba_card_1', true);
         s = JSON.parse(safeGetItem(STORAGE_KEYS.FC_SPACED_REPETITION)).suba_card_1;
-        ok('rep2', s.repetition === 2 && s.nextReview > _dateStr(1), `next=${s.nextReview}`);
+        ok('rep2', s.reps === 2 && s.due > _dateStr(0), `due=${s.due}`);
+        const sBefore = s.s;
         sr.updateCardSchedule('suba_card_1', false);
         s = JSON.parse(safeGetItem(STORAGE_KEYS.FC_SPACED_REPETITION)).suba_card_1;
-        ok('reset', s.repetition === 0);
-        // 기한 도래 카드 별도 시드 → getDueCards 집계 확인 (리셋 카드는 내일 기한이라 미포함)
+        ok('lapse', s.lapses === 1 && s.s <= sBefore, `s ${sBefore}→${s.s}`);
+        // 기한 도래 카드 별도 시드 (구 SM-2 형식 — 지연 변환 호환 검증) → getDueCards 집계 확인
         seed(STORAGE_KEYS.FC_SPACED_REPETITION, { subb_card_9: { repetition: 2, easiness: 2.5, nextReview: '2000-01-01', lastReview: null } });
         const due = sr.getDueCards();
         ok('due', due.includes('subb_card_9'), `due=${due.length}`);
@@ -465,7 +466,7 @@ async function main() {
         return { minFollower: mf, minRobin: mr, distinctTargets: new Set(targets).size };
     });
 
-    run('T3 SM-2 30일 시뮬 — 간격 확장·백로그 발산 없음', ok => {
+    run('T3 FSRS 30일 시뮬 — 안정도 확장·백로그 발산 없음', ok => {
         seedBase(60);
         _setClockOffset(0);
         try {
@@ -480,14 +481,14 @@ async function main() {
             }
             const sched = JSON.parse(safeGetItem(STORAGE_KEYS.FC_SPACED_REPETITION));
             const entries = ids.map(id => sched[id]).filter(Boolean);
-            const reps = entries.map(e => e.repetition).sort((a, b) => a - b);
-            const medRep = reps[Math.floor(reps.length / 2)];
-            const distinctDates = new Set(entries.map(e => e.nextReview)).size;
+            const sList = entries.map(e => e.s).sort((a, b) => a - b);
+            const medS = sList[Math.floor(sList.length / 2)];
+            const distinctDates = new Set(entries.map(e => e.due)).size;
             ok('no-loss', entries.length === ids.length, `${entries.length}/${ids.length}`);
             ok('spacing', reviews <= ids.length * 10, `reviews=${reviews} (일일 복습이면 ${ids.length * 30})`);
-            ok('rep-progress', medRep >= 3, `medianRep=${medRep}`);
+            ok('stability-grow', medS >= 3, `medianS=${medS}일`);
             ok('desync', distinctDates >= 3, `distinctDueDates=${distinctDates}`);
-            return { reviews, medRep, distinctDates };
+            return { reviews, medS, distinctDates };
         } finally { _resetClock(); }
     });
 

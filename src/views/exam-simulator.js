@@ -711,7 +711,7 @@ export function submitExam() {
             : checkShortAnswer(userAns, q.answer);
         vibrate(isCorrect ? HAPTIC.correct : HAPTIC.wrong);
 
-        // 복수정답형: 선택 선지의 members로 진술별 판정을 도출해 취약 추적·SM-2에 기록
+        // 복수정답형: 선택 선지의 members로 진술별 판정을 도출해 취약 추적·FSRS에 기록
         if (q.type === 'combo') {
             const perStatement = deriveComboJudgments(q, userAns);
             if (perStatement) recordStatementJudgments(perStatement);

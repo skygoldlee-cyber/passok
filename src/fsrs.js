@@ -1,0 +1,126 @@
+// fsrs.js — FSRS-4.5 기억 모델 순수 함수 (SM-2 대체 스케줄 엔진)
+// @spec F-07,F-08
+//
+// DSR 모델: 카드마다 Difficulty(난이도)·Stability(안정도, 일)를 추적하고
+// 경과일로부터 Retrievability(기억 확률)를 추정해 목표 기억률 0.9가 되는
+// 시점으로 다음 복습 간격을 산출한다. 저장·시계는 spaced-repetition.js 어댑터 담당.
+// 파라미터·수식 정합 근거: docs/dev/design/FSRS_DESIGN.md (DOC-DSN-17)
+
+// FSRS-4.5 기본 파라미터 (w0..w16 — 공개 안정 세트)
+const W = [0.4, 0.6, 2.4, 5.8, 4.93, 0.94, 0.86, 0.01, 1.49, 0.14, 0.94, 2.18, 0.05, 0.34, 1.26, 0.29, 2.61];
+const DECAY = -0.5;                 // 망각 곡선 지수 (FSRS-4.5 변경점)
+const FACTOR = 19 / 81;             // 곡선 형상 상수 — R(0)=1·R(s)=0.9가 성립
+const REQUEST_RETENTION = 0.9;      // 목표 기억률
+const MAX_INTERVAL = 36500;         // 100년 상한
+
+/** 평가 등급 — 현행 2버튼 UI는 Again/Good만 사용 (4단계는 FSRS_DESIGN §8 후속) */
+export const Rating = { AGAIN: 1, HARD: 2, GOOD: 3, EASY: 4 };
+
+const _clampD = (d) => Math.min(10, Math.max(1, d));
+const _round2 = (v) => Math.round(v * 100) / 100;
+
+/** 최초 학습 카드 초기 난이도 */
+export function initDifficulty(rating) {
+    return _clampD(W[4] - W[5] * (rating - 3));
+}
+
+/** 최초 학습 카드 초기 안정도 (레이팅별 상수) */
+export function initStability(rating) {
+    return Math.max(0.1, W[rating - 1]);
+}
+
+/** 경과 t일 후 기억 확률 — R(t,s) = (1 + FACTOR·t/s)^DECAY */
+export function retrievability(elapsedDays, s) {
+    if (s <= 0) return 0;
+    return Math.pow(1 + (FACTOR * Math.max(0, elapsedDays)) / s, DECAY);
+}
+
+/** 안정도 s에서 목표 기억률이 되는 다음 복습 간격(일) — 정수·하한 1 */
+export function nextInterval(s) {
+    const ivl = Math.round((s / FACTOR) * (Math.pow(REQUEST_RETENTION, 1 / DECAY) - 1));
+    return Math.min(Math.max(ivl, 1), MAX_INTERVAL);
+}
+
+/** 복습 후 난이도 — 평가 방향 이동 + Easy 초기값 방향 평균 회귀 */
+export function nextDifficulty(d, rating) {
+    const next = d - W[6] * (rating - 3);
+    return _clampD(W[7] * initDifficulty(Rating.EASY) + (1 - W[7]) * next);
+}
+
+/** 성공 복습 후 안정도 */
+export function recallStability(d, s, r, rating) {
+    const hardPenalty = rating === Rating.HARD ? W[15] : 1;
+    const easyBonus = rating === Rating.EASY ? W[16] : 1;
+    return _round2(s * (1 + Math.exp(W[8]) * (11 - d) * Math.pow(s, -W[9])
+        * (Math.exp((1 - r) * W[10]) - 1) * hardPenalty * easyBonus));
+}
+
+/** 실패(Again) 복습 후 안정도 — 안정도 감소 */
+export function forgetStability(d, s, r) {
+    return _round2(Math.min(W[11] * Math.pow(d, -W[12])
+        * (Math.pow(s + 1, W[13]) - 1) * Math.exp((1 - r) * W[14]), s));
+}
+
+/**
+ * 카드 상태 갱신 — 순수 계산 (날짜 결정은 호출부).
+ * @param {Object|null} cur {d, s, lastReview, reps, lapses} (null=신규)
+ * @param {number} rating Rating.AGAIN~EASY
+ * @param {number} elapsedDays 마지막 복습 이후 경과일 (신규면 0)
+ * @returns {{v:2, d:number, s:number, reps:number, lapses:number, lastInterval:number}}
+ *   due·lastReview 날짜는 호출부가 elapsed/today로 채운다
+ */
+export function fsrsReview(cur, rating, elapsedDays) {
+    if (!cur) {
+        return {
+            v: 2,
+            d: initDifficulty(rating),
+            s: initStability(rating),
+            reps: 1,
+            lapses: rating === Rating.AGAIN ? 1 : 0,
+            lastInterval: 0
+        };
+    }
+    const d = nextDifficulty(cur.d, rating);
+    const r = retrievability(elapsedDays, cur.s);
+    const s = rating === Rating.AGAIN
+        ? forgetStability(d, cur.s, r)
+        : recallStability(d, cur.s, r, rating);
+    return {
+        v: 2,
+        d: _round2(d),
+        s,
+        reps: (cur.reps || 0) + 1,
+        lapses: (cur.lapses || 0) + (rating === Rating.AGAIN ? 1 : 0),
+        lastInterval: elapsedDays
+    };
+}
+
+/**
+ * SM-2 레코드 → FSRS 레코드 지연 변환 (지연 마이그레이션 — FSRS_DESIGN §3.2).
+ * nextReview는 어댑터가 due로 계승한다 (여기서는 상태 필드만 변환).
+ * @param {Object} rec {repetition, easiness, nextReview, lastReview}
+ * @param {string} [today] YYYY-MM-DD — lastReview 없을 때 간격 근사 기준
+ * @returns {{v:2, d:number, s:number, due:string|null, lastReview:string|null, reps:number, lapses:number}|null}
+ */
+export function migrateSm2Record(rec, today) {
+    if (!rec || typeof rec !== 'object') return null;
+    const repetition = Number.isFinite(rec.repetition) ? rec.repetition : 0;
+    const easiness = Number.isFinite(rec.easiness) ? rec.easiness : 2.5;
+    const lastReview = typeof rec.lastReview === 'string' ? rec.lastReview : null;
+    const nextReview = typeof rec.nextReview === 'string' ? rec.nextReview : null;
+    let interval = 0;
+    if (lastReview && nextReview) {
+        interval = Math.round((Date.parse(nextReview + 'T00:00:00') - Date.parse(lastReview + 'T00:00:00')) / 86400000);
+    } else if (nextReview && today) {
+        interval = Math.max(0, Math.round((Date.parse(nextReview + 'T00:00:00') - Date.parse(today + 'T00:00:00')) / 86400000));
+    }
+    return {
+        v: 2,
+        d: _clampD(10 - ((easiness - 1.3) / 1.2) * 9), // EF 1.3→d=10(어려움), 2.5→d=1(쉬움) 선형 역산
+        s: Math.max(interval, 0.4),          // 기존 간격을 안정도 근사치로
+        due: nextReview,
+        lastReview,
+        reps: repetition,
+        lapses: repetition === 0 && lastReview ? 1 : 0
+    };
+}
