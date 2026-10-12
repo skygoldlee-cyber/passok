@@ -1,18 +1,14 @@
-// tests/e2e/visual.spec.js — 스크린샷 시각 회귀 (로컬 게이트)
+// tests/e2e/visual.spec.js — 스크린샷 시각 회귀
 // @spec none
 //
-// 픽셀 기준선은 폰트 래스터·AA가 플랫폼마다 달라 생성 OS에서만 유효하다.
-// 로컬(Windows)에서 기준선을 생성·커밋하므로 CI(Linux)는 스킵한다.
-// 다른 OS에서 개발하면 기준선을 재생성할 것:
-//   npx.cmd playwright test tests/e2e/visual.spec.js --update-snapshots
-//
-// 의도적 시각 변경(테마·배경·레이아웃) 시에도 같은 명령으로 기준선을 갱신하고
-// diff를 리뷰한다. 기준선 파일은 tests/e2e/visual.spec.js-snapshots/ 아래
-// 프로젝트·플랫폼 접미로 자동 분리된다.
+// 픽셀 기준선은 폰트 래스터·AA가 플랫폼마다 달라 OS별 기준선을 둔다.
+// 현재 커밋된 기준선: win32(로컬 개발) + linux(CI ubuntu-latest).
+// 의도적 시각 변경(테마·배경·레이아웃) 후 기준선 갱신:
+//   - Windows 로컬: npx.cmd playwright test tests/e2e/visual.spec.js --update-snapshots
+//   - Linux(CI용):  .github/workflows/visual-baseline.yml 수동 트리거 → 아티팩트 커밋
+// 기준선 파일은 tests/e2e/visual.spec.js-snapshots/ 아래 프로젝트·플랫폼 접미로 자동 분리된다.
 
 import { test, expect } from '@playwright/test';
-
-test.skip(Boolean(process.env.CI), '시각 기준선은 로컬 플랫폼 전용 — CI 스킵');
 
 // 렌더 시점에 따라 값이 달라지는 요소는 마스크 — 픽셀 비교 대상에서 제외.
 // - #sidebar-version / #settings-version: 배포 스탬프로 매 배포 변경

@@ -9,7 +9,8 @@
 
 ## 2026-10-12 시각 회귀 Linux 기준선 파이프라인 + 문서 스테일 정리
 
-- **.github/workflows/visual-baseline.yml** (신규, workflow_dispatch 전용): ubuntu-latest 러너에서 `--update-snapshots`로 `*-linux.png` 기준선 생성 → 아티팩트 업로드. 픽셀 기준선은 OS·폰트 바인딩이라 CI와 동일 러너에서 생성. `CI: ''` env로 스펙의 CI 스킵 우회
+- **.github/workflows/visual-baseline.yml** (신규, workflow_dispatch 전용): ubuntu-latest 러너에서 `--update-snapshots`로 `*-linux.png` 기준선 생성 → 아티팩트 업로드. 픽셀 기준선은 OS·폰트 바인딩이라 CI와 동일 러너에서 생성
+- **visual.spec.js CI 활성화**: linux 기준선 6개 커밋으로 `test.skip(!!CI)` 제거 — 이제 test:e2e가 CI(ubuntu)에서 시각 회귀를 실행. 로컬은 기존 win32 기준선 사용
 - **docs 스테일 정리**: ARCHITECTURE·SPEC·FEATURE_MAP의 formula 파사드+모듈 반영, TESTING.md 파일 목록 전수 복원(누락 45개·카운트 드리프트 30개·id_factory 개명), GATE_MAP 단계 수 정정
 
 ## 2026-10-12 프로젝트 평가 후속 — formula 뷰 분해 · 게이트 타이밍 리포트 · 온보딩 게이트 지도 · 시각 회귀
