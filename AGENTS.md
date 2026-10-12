@@ -37,6 +37,7 @@ npm.cmd run check:posind               # 교재 좌표 비의존 게이트 — �
 npm.cmd run stamp:sw                   # sw.js CACHE_VERSION을 커밋 해시로 스탬프
 npm.cmd run notes:draft                # 릴리스 노트 pending 초안 생성 (커밋 subject 기반 → data/release-notes.json 수동 편집 후 배포)
 npm.cmd run verify:assets              # SHELL_ASSETS/DATA_ASSETS 파일 존재 검증
+npm.cmd run build:embeddings           # 문장 임베딩 사전 계산 → {dataRoot}/embeddings/ 정적 번들 (Python3 + sentence-transformers, ref-pipeline/embeddings/requirements.txt — DOC-DSN-18, 의미 유사 진술·이웃 인덱스)
 
 npm.cmd run build:story                 # 표준형 + story/*_서사.md 패치 → _이야기형.md 생성 (build:data에 포함, --check=일치 검증 + 서사 커버리지 리포트 — 0블록 패치는 오류, -- --scaffold <subjectKey>=신규 과목 패치 골격)
 #   이야기형 패치 작성법(슬롯 마커·지시어 문법): docs/dev/runbooks/STORY_PATCH_GUIDE.md
@@ -81,9 +82,10 @@ npm.cmd run check:refsubjects           # ref_md 문서의 인용 득표↔과�
 npm.cmd run check:reffresh              # 참조자료 PDF 해시 ↔ ref_md 신선도 (PDF 교체 감지)
 npm.cmd run check:reflines              # 교재 (LNN)/📌출처 조문 ↔ ref_md 실제 내용 검증
 npm.cmd run check:refs                  # 참조자료 검증 묶음 (= run.js --preset refs — layout·subjects·fresh·lines·merge)
-npm.cmd run check:fresh                 # 생성물 신선도 묶음 (= run.js --preset freshness — html·trace·data·drill·ref·문서번들·교재문서)
+npm.cmd run check:fresh                 # 생성물 신선도 묶음 (= run.js --preset freshness — html·trace·data·drill·ref·임베딩·문서번들·교재문서)
 npm.cmd run check:numbering             # 교재 십진법 번호체계 — 구식 잔재·연속성·계층·헤더-본문 중복 게이트 (표준↔이야기 동기화 불일치는 경고)
 npm.cmd run check:drillfresh            # 드릴 번들 ↔ 문제은행 번들 신선도 (stale 시 npm run build:drills)
+npm.cmd run check:embfresh              # 임베딩 manifest.inputs(sha1) ↔ 원본 번들 신선도 (stale 시 npm run build:embeddings — SEM-05, features.semantic 시험만)
 npm.cmd run check:answers               # 문제 정답 ↔ 인용 근거 구절 의미적 지지 (내장 인용문→인용 원문 2단계, 정답 미지지 기준선 게이트 — 신규 무근거 인용 차단)
 npm.cmd run fix:quotes                  # 부실 인용문 자동 보강 — 원문이 정답을 지지하는데 내장 구절이 절단된 경우 인용 라인 이후로 확장·블록 내 지지 라인으로 교체 (--check=보고만)
 npm.cmd run fix:citations               # 정답 미지지 문항 인용 위치 자동 교정 — 인용 파일→시험 코퍼스(교재→참조자료) 순으로 실제 지지 위치를 탐색해 링크·인용문 재지정 (--check=보고만, --annotate=미검증 인용에 ⚠️ 마커 표기·해제)
@@ -171,6 +173,7 @@ src/                    # ES Modules
   study-aids.js         # 학습 보조 (기출·중요 마커 추출 카드, 숫자 암기표)
   study-tracker.js      # 학습 캘린더/목표 추적 헬퍼 (recordStudyActivity, getStudyGoals)
   statement-tracker.js  # 진술 원자(sid) 단위 오판 통계·졸업 추적 (FSRS 연동)
+  semantic-index.js     # 의미 유사도 이웃 인덱스 조회 — 사전계산 임베딩 번들 지연 로드 (SEM-02~04, features.semantic)
   recommendations.js    # 합격 전략 추천 엔진 + 예상 점수 추정 + 실제 결과 보고 (순수 로직)
   analysis-engine.js    # 맞춤학습 심층 분석 순수 로직 (AN-01~09 — 예측 점수·취약 단원·주간 리포트)
   command-palette.js    # 통합 검색 팔레트 (Ctrl+K) — 뷰/교재/카드/퀴즈/성분/문제집 검색·실행
@@ -356,7 +359,7 @@ docs/                   # 문서 (인덱스: docs/README.md)
 ## 멀티시험 구조
 
 - **시험 레지스트리**: `content/exams.json` → `data/exams.js` 번들(`window.EXAMS_LIST`, `npm run build:data`에 포함). 각 시험 엔트리: `id`, `name`, `appName`(시험별 앱 이름 — 브랜드면 표기), `title`/`logoMain`/`logoSub`(브랜딩), `desc`, `icon`, `year`, `default`, `contentRoot`, `dataRoot`, `registryBundle`, `registryGlobal`, `features`(기능 플래그). **`year`가 시험 연도의 유일한 진실 소스(SSOT)** — `build:exams-list`가 각 시험의 `manifest.json` `contentYear`와 `index.html`·`manifest.webmanifest`의 연도 텍스트(기본 시험 기준)로 자동 전파하므로, 연도 변경은 `exams.json`만 수정 후 `build:data` 재실행
-- **시험별 루트 (대칭)**: 모든 시험이 `content/exams/<id>/`(manifest.json + references.json + 교재/문제은행/참조자료/audiobook 등)와 `data/exams/<id>/`(registry.js, subjects/, exams/, drills/, study_md/, docs_md/, supplements/, id_migration.js 등) 구조 — 기본 시험(cosmetic)도 예외 없음. `content/`·`data/` 루트에는 전역 파일만: `exams.json`/`exams.js`, `audio_manifest.js`(시험 id 키 분리), `docs_md/`(앱 공용 문서)
+- **시험별 루트 (대칭)**: 모든 시험이 `content/exams/<id>/`(manifest.json + references.json + 교재/문제은행/참조자료/audiobook 등)와 `data/exams/<id>/`(registry.js, subjects/, exams/, drills/, embeddings/, study_md/, docs_md/, supplements/, id_migration.js 등) 구조 — 기본 시험(cosmetic)도 예외 없음. `content/`·`data/` 루트에는 전역 파일만: `exams.json`/`exams.js`, `audio_manifest.js`(시험 id 키 분리), `docs_md/`(앱 공용 문서)
 - **시험 컨텍스트**: `src/exam-context.js` — `contentPath()`/`dataPath()`(경로 해석), `hasFeature()`(기능 게이팅), `selectExam()`(전환 = `location.reload()`로 모듈 상태 리셋), `scopedKey()`(진도 네임스페이스 `<examId>:key`)
 - **진도 격리**: `safeGetItem`/`safeSetItem` 등이 자동으로 시험 접두사 적용. 테마·리더 설정 등 `GLOBAL_KEYS`만 비네임스페이스. 백업 파일은 비접두사 논리 키(시험 간 호환)
 - **새 시험 추가 절차**: ① `content/exams/<id>/`에 manifest.json + references.json + 교재/문제은행 배치 — 법령 참조가 있으면 `content/lawdb.json`에 엔트리 + `references.json.lawRefs`·`noticeCore` 설정, 사전이 있으면 `manifest.knowledge` 스키마 선언 ② `content/exams.json`에 엔트리 추가 (`contentRoot`/`dataRoot`/`registryBundle`/`registryGlobal` 지정 — 비기본 시험은 `registryGlobal: "DATA_REGISTRY_<id>"`) ③ `npm.cmd run check:content -- --build` → 끝 (앱 로직 변경 불필요). **도메인 자산 규약**: 시험 전용 코드·마크업·스타일·테스트는 `src/exams/<id>/`·`html/exams/<id>/`·`css/exams/<id>/`·`tests/{unit,dom}/exams/<id>/`에, 시험 종속 문서는 `docs/exams/<id>/`에 배치 — 플랫폼 레지스트리가 `exams/${getActiveExamId()}/` 규약으로 해석하므로 기존 실무 피처 재사용은 파일 배치만으로 동작. 상세: `docs/dev/runbooks/NEW_EXAM_RUNBOOK.md`·`docs/dev/design/MULTI_EXAM_DB_DESIGN.md`

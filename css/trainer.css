@@ -1317,6 +1317,49 @@ mark.txt-highlight {
     margin: 0;
 }
 
+/* 의미 유사 진술 패널 (SEM-03 — features.semantic 시험) */
+.weak-sim-btn {
+    padding: 0.2rem 0.6rem;
+    font-size: var(--text-xs);
+}
+.weak-similar {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    background: var(--bg-subtle, rgba(0, 0, 0, 0.03));
+}
+.weak-sim-head {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    margin-bottom: 0.4rem;
+}
+.weak-sim-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding: 0.3rem 0;
+    font-size: var(--text-sm);
+}
+.weak-sim-score {
+    flex: none;
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    min-width: 2.4em;
+}
+.weak-sim-text {
+    flex: 1 1 16em;
+    line-height: 1.5;
+}
+.weak-sim-hint {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin: 0.3rem 0 0;
+}
+
 /* 출제 수 칩 */
 .drill-count-chip.active {
     border-color: var(--color-primary);
