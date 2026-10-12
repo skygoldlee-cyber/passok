@@ -277,7 +277,7 @@ const _EXAM_LAW_URLS = {
 **확정 결정**
 
 1. **플랫폼 브랜드 = `passory`** — 리포지토리·배포 도메인(`passory.vercel.app`)과 일치. 시험별 앱 브랜드(`appName`/`title`, cosmetic = Passmula)는 exams.json 필드로 그대로 유지 — 플랫폼명과 시험 앱명이 분리된다.
-2. **PWA 설치 정체성 = 시험별 개별 설치 유지** — `pwa-manifest.js`의 동적 `manifest.<id>.webmanifest` 교체 방식 불변. `manifest.webmanifest`는 기본 시험(cosmetic)의 매니페스트로 남고, `"id": "cosmetic-pass"`도 cosmetic 앱의 설치 정체성이므로 **변경 금지** (id 변경 시 기존 설치 앱이 별개 앱으로 취급됨).
+2. **PWA 설치 정체성 = 시험별 개별 설치 유지** — `pwa-manifest.js`의 동적 `manifest.<id>.webmanifest` 교체 방식 불변. `manifest.webmanifest`는 부팅 전 플레이스홀더 겸 폴백으로 남고(부팅 후 기본 시험도 `manifest.cosmetic.webmanifest`로 교체 — 동일 내용 + `pwaShortcuts` 반영), `"id": "cosmetic-pass"`도 cosmetic 앱의 설치 정체성이므로 **변경 금지** (id 변경 시 기존 설치 앱이 별개 앱으로 취급됨).
 3. **시험 도메인 모듈 위치 = `src/exams/<examId>/`** — 시험 전용 실행 모듈을 플랫폼 코어(`src/`)와 물리 분리. `domain-map.json`의 `domain:<examId>` 레이어로 분류된다.
 
 **이동 대상 (src/exams/cosmetic/)**

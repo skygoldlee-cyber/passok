@@ -27,7 +27,7 @@ test.describe('비기본 시험(food) 부팅 — 도메인 격리', () => {
         await expect(page.locator('.logo-text span')).toHaveText('기사');
         await expect(page.locator('.logo-icon')).toHaveClass(/fa-bowl-food/);
         await expect(page.locator('[data-app-name]').first()).toHaveText('식품기사');
-        // 비기본 시험은 pwa-manifest.js가 실제 파일로 링크 교체 (시험별 개별 설치)
+        // pwa-manifest.js가 실제 파일로 링크 교체 (시험별 개별 설치 — 기본 시험도 동일)
         await expect(page.locator('link[rel="manifest"]'))
             .toHaveAttribute('href', /manifest\.food\.webmanifest/);
         expect(page._errors.filter(e => !/favicon|manifest/i.test(e))).toEqual([]);

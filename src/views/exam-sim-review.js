@@ -5,8 +5,7 @@ import { esc, safeTextWithBreaks } from '../sanitize.js';
 import { DataLoader } from '../data-loader.js';
 import { getExamRules } from '../exam-context.js';
 import { resetMainScroll } from './navigation.js';
-
-const OPTION_INDICATORS = ['①', '②', '③', '④', '⑤'];
+import { OPTION_INDICATORS } from '../utils.js';
 
 /**
  * 복수정답형 진술 정오표 — 실제 O/X vs 내 선택 선지의 포함 여부로 오판 진술을 표시
