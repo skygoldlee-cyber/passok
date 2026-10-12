@@ -1,14 +1,14 @@
 // tests/unit/push-gate.test.js — pre-push 적응형 게이트 분류기
 // @spec none (검증 실행기)
-// push 대상 diff를 docs/content/logic으로 분류해 필요 단계만 선택하는
-// planSteps의 계층 판정 검증 — 미분류 파일은 보수적으로 전체 게이트.
+// 파일 태그(경로 유형)→단계별 필요 표로 필요 단계만 선택하는 planSteps
+// 검증 — 어떤 규칙에도 안 맞는 파일은 보수적으로 전체 게이트.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const { classifyFile, planSteps } = require('../../tools/check/push_gate.js');
+const { classifyFile, fileTags, planSteps } = require('../../tools/check/push_gate.js');
 
 const FULL = ['types', 'trace', 'specrefs', 'docs', 'html', 'lint', 'posind', 'impact', 'docsync', 'testfirst'];
 
@@ -26,33 +26,64 @@ test('파일 분류 — docs·content·logic', () => {
     assert.equal(classifyFile('.github/workflows/ci.yml'), 'logic');
 });
 
-test('문서 전용 변경 → 경량 단계 (types·lint·impact 생략)', () => {
+test('파일 태그 — 경로 유형 분류, 미분류는 unknown', () => {
+    assert.deepEqual(fileTags('docs/dev/SPEC.md'), ['docs']);
+    assert.deepEqual(fileTags('src/app.js'), ['src']);
+    assert.deepEqual(fileTags('sw.js'), ['src']);
+    assert.deepEqual(fileTags('tools/check/run.js'), ['tools']);
+    assert.deepEqual(fileTags('tests/unit/x.test.js'), ['tests']);
+    assert.deepEqual(fileTags('package.json'), ['config']);
+    assert.deepEqual(fileTags('html/views/reader.html'), ['html']);
+    assert.deepEqual(fileTags('.github/workflows/ci.yml'), ['ci']);
+    assert.deepEqual(fileTags('weird_file.xyz'), ['unknown']);
+});
+
+test('문서 전용 변경 → 문서 관련 단계만', () => {
     const plan = planSteps(['docs/dev/SPEC.md', 'AGENTS.md']);
     assert.equal(plan.tier, 'docs');
-    assert.deepEqual(plan.ids, ['trace', 'specrefs', 'docs', 'docsync', 'testfirst']);
+    assert.deepEqual(plan.ids, ['trace', 'specrefs', 'docs', 'impact', 'docsync']);
 });
 
-test('콘텐츠 전용 변경 → 경량 단계 (docs 검사 제외)', () => {
+test('콘텐츠 전용 변경 → 콘텐츠 추적·문서·동기화 단계', () => {
+    // content/*.md는 content+docs 복합 태그 — docsync도 대상 (기존 커버리지 유지)
     const plan = planSteps(['content/exams/cosmetic/textbook/law.md', 'data/exams/cosmetic/questions.js']);
     assert.equal(plan.tier, 'content');
-    assert.deepEqual(plan.ids, ['trace', 'specrefs', 'docsync', 'testfirst']);
+    assert.deepEqual(plan.ids, ['trace', 'specrefs', 'docs', 'impact', 'docsync']);
 });
 
-test('docs+content 혼합 → 양쪽 단계 합집합', () => {
+test('docs+content 혼합 → 동일 태그 집합', () => {
     const plan = planSteps(['docs/dev/SPEC.md', 'data/exams/cosmetic/questions.js']);
     assert.equal(plan.tier, 'content');
-    assert.deepEqual(plan.ids, ['trace', 'specrefs', 'docs', 'docsync', 'testfirst']);
+    assert.deepEqual(plan.ids, ['trace', 'specrefs', 'docs', 'impact', 'docsync']);
 });
 
-test('로직·미분류 파일이 섞이면 전체 게이트 폴백', () => {
-    assert.deepEqual(planSteps(['docs/dev/SPEC.md', 'src/app.js']).ids, FULL);
-    assert.deepEqual(planSteps(['package.json']).ids, FULL);
-    assert.deepEqual(planSteps(['weird_file.xyz']).ids, FULL); // 미분류 → 보수적 전체
+test('src 변경 → html 제외 전 단계', () => {
+    // index.html 신선도는 html/·템플릿 변경에만 의미가 있다
+    const ids = planSteps(['docs/dev/SPEC.md', 'src/app.js']).ids;
+    assert.deepEqual(ids, FULL.filter((id) => id !== 'html'));
+    assert.ok(ids.includes('posind') && ids.includes('testfirst'));
+});
+
+test('config 변경 → 타입·린트·문서·동기화 단계', () => {
+    assert.deepEqual(planSteps(['package.json']).ids,
+        ['types', 'trace', 'docs', 'lint', 'impact', 'docsync']);
+});
+
+test('tools/tests 변경 → html 제외 로직 단계', () => {
+    const toolsIds = planSteps(['tools/check/run.js']).ids;
+    assert.deepEqual(toolsIds, FULL.filter((id) => id !== 'html'));
+    const testsIds = planSteps(['tests/unit/x.test.js']).ids;
+    assert.deepEqual(testsIds, ['types', 'trace', 'specrefs', 'lint', 'impact', 'docsync']);
+});
+
+test('미분류 파일 → 전체 게이트 폴백', () => {
+    assert.deepEqual(planSteps(['weird_file.xyz']).ids, FULL);
+    assert.deepEqual(planSteps(['src/app.js', 'weird_file.xyz']).ids, FULL);
 });
 
 test('diff 실패(null)·빈 목록도 안전한 계획', () => {
     assert.deepEqual(planSteps(null).ids, FULL);
     const empty = planSteps([]);
     assert.equal(empty.tier, 'docs');
-    assert.ok(empty.ids.includes('docsync'));
+    assert.deepEqual(empty.ids, ['impact']); // 변경 없음 — 분석 단계만
 });

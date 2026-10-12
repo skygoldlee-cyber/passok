@@ -99,6 +99,31 @@ test('failFast — 첫 실패 이후 단계는 실행되지 않는다', async ()
   assert.ok(!fs.existsSync(marker), '실패 이후 단계는 실행되지 않아야 함');
 });
 
+test('inProcess — run() 계약 모듈은 spawn 없이 직접 실행', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'step-runner-ip-'));
+  const modPath = path.join(dir, 'fake_checker.js');
+  fs.writeFileSync(modPath,
+    `module.exports = { run: async ({ args }) => ({` +
+    ` status: args.includes('--fail') ? 1 : 0,` +
+    ` output: 'inprocess:' + args.join(',') }) };`);
+  try {
+    const results = await runSteps(
+      [
+        { inProcess: modPath, bin: 'node', args: ['fake_checker.js', '--ref', 'HEAD~1'], shell: false, desc: 'ok' },
+        { inProcess: modPath, bin: 'node', args: ['fake_checker.js', '--fail'], shell: false, desc: 'bad' },
+      ],
+      { jobs: 2 },
+    );
+    assert.equal(results.length, 2);
+    assert.ok(results[0].ok);
+    assert.match(results[0].output, /inprocess:--ref,HEAD~1/);
+    assert.equal(results[1].ok, false);
+    assert.equal(results[1].status, 1);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('failFast 미지정 시 실패 후에도 나머지 전부 실행', async () => {
   const results = await runSteps(
     [sleepStep(5, { fail: true }), sleepStep(5), sleepStep(5)],
