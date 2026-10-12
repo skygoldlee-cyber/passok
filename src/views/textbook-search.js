@@ -1,13 +1,13 @@
 // views/textbook-search.js - 교재 검색 통합 로직 (Textbook Search Integration)
 // @spec TS-01~09,PF-08,TS-10,TS-11
 import { escapeHTML, esc } from '../sanitize.js';
-import { parseMarkdown } from '../markdown-parser.js';
 import { renderMermaidIn } from '../mermaid-render.js';
 import { attachImageZoomIn } from '../image-zoom.js';
 import { TIMING } from '../config/timing.js';
 import { DataLoader } from '../data-loader.js';
 import { hasFeature } from '../exam-context.js';
-import { getRefTables } from '../pdf-registry.js';
+import { getRefTables, mapSourceToRef } from '../pdf-registry.js';
+import { formatSectionContentForReader } from '../reader-format.js';
 import { PATHS } from '../paths.js';
 import { escapeRegExp, debounce } from '../utils.js';
 // [모바일 PWA 견고성] 레지스트리는 window 전역(가드)에서 읽는다(정적 import 하드 의존 지양).
@@ -309,6 +309,32 @@ export function renderTextbookSearch() {
         });
     }
 
+    // 결과 카드 링크 위임 — '전체 단원 보기'와 카드 내 크로스 과목(data-ref-subject) 링크는
+    // 교재리더 뷰로 전환해야 동작한다 (data-ref-subject 본체 이동은 reader-ref-links 문서 위임이 처리)
+    const resultsContainer = document.getElementById('textbook-results-container');
+    if (resultsContainer && !resultsContainer.dataset.gotoBound) {
+        resultsContainer.dataset.gotoBound = 'true';
+        resultsContainer.addEventListener('click', (e) => {
+            const goto = e.target instanceof Element ? e.target.closest('[data-search-goto]') : null;
+            const subjLink = goto ? null : (e.target instanceof Element ? e.target.closest('a[data-ref-subject]') : null);
+            if (!goto && !subjLink) return;
+            e.preventDefault();
+            e.stopPropagation(); // 문서 위임(reader-ref-links) 중복 실행 차단 — 뷰 전환 후 직접 이동
+            Promise.all([
+                import('./navigation.js'),
+                import('./textbook-reader.js')
+            ]).then(([nav, reader]) => {
+                nav.switchView('textbook-reader-view');
+                if (goto) {
+                    const [subjId, chAnchor] = String(goto.getAttribute('data-search-goto') || '').split('|');
+                    reader.openSubjectChapter(subjId, chAnchor || '');
+                } else if (subjLink instanceof HTMLElement) {
+                    reader.openSubjectChapter(subjLink.dataset.refSubject || '', subjLink.dataset.refChapter || '');
+                }
+            });
+        });
+    }
+
     performTextbookSearch();
 }
 
@@ -501,8 +527,12 @@ function performTextbookSearch() {
 
         const isLong = item.content.length > 300;
         const bodyClass = isLong ? 'textbook-card-body collapsed' : 'textbook-card-body';
-        const formattedContent = formatSectionContent(item.content, terms);
+        const formattedContent = formatSectionContent(item.content, terms, item);
         const storyBadge = item.fromStory ? '<span class="badge badge-gray">서사</span>' : '';
+        // 섹션 제목의 "Chapter NN"에서 챕터 앵커 유도 — '전체 단원 보기'가 리더의 해당 챕터로 이동
+        const chMatch = String(item.sectionTitle || '').match(/Chapter\s*(\d+)/i);
+        const chAnchor = chMatch ? 'ch' + chMatch[1].padStart(2, '0') : '';
+        const gotoData = `${item.subjId}|${chAnchor}`;
 
         const cardId = `textbook-card-${idx}`;
         const cardHTML = `
@@ -514,7 +544,7 @@ function performTextbookSearch() {
                         <i class="fa-solid fa-chevron-right"></i>
                         <span>${esc(item.chapterTitle)}</span>
                     </span>
-                    <a href="${esc(item.filePath)}" target="_blank" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem;">
+                    <a href="#" data-search-goto="${esc(gotoData)}" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem;">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i> 전체 단원 보기
                     </a>
                 </div>
@@ -561,16 +591,15 @@ export function toggleTextbookCard(cardId) {
     }
 }
 
-function formatSectionContent(rawContent, searchTerms = []) {
-    // parseMarkdown으로 마크다운 → HTML 변환 (코드블록, 머메이드, 테이블 등 지원)
-    let html = parseMarkdown(rawContent, {
-        useCustomListDiv: true,
-        useReaderStyles: true,
-        customSpacing: true,
-        allowItalics: false,
-        allowInlineCode: false,
-        allowMermaid: true
-    });
+function formatSectionContent(rawContent, searchTerms = [], item = {}) {
+    // 리더와 동일한 후처리를 적용 — 출처 스탬프(최종 확인) 숨김,
+    // 참조자료/과목간/기출문제 링크를 data-ref-* 액션으로 변환 (원시 경로·죽은 링크 노출 차단)
+    const _rt = getRefTables();
+    const subjRefFiles = (_rt.REFERENCE_FILES || {})[item.subjId] || [];
+    const subjDirName = (_rt.SUBJECT_DIR_MAP || {})[item.subjId] || '';
+    const srcMatch = String(rawContent || '').match(/📌\s*\*\*출처\*\*[:：]\s*(.+?)(?:\||\n)/);
+    const refPath = srcMatch ? mapSourceToRef(srcMatch[1]) : null;
+    let html = formatSectionContentForReader(rawContent, item.filePath, refPath, subjRefFiles, subjDirName, [], item.sectionTitle);
 
     // 검색어 하이라이트 (마크다운 파싱 후 적용)
     if (searchTerms.length > 0) {

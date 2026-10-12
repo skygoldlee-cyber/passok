@@ -31,7 +31,7 @@ import { proFeatureNotice } from './pro-upgrade.js';
 import { renderMermaidIn } from './mermaid-render.js';
 import { DataLoader } from './data-loader.js';
 import { buildComboSubjectMd } from './combo-doc.js';
-import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay } from './doc-overlay.js';
+import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay, scrollToHeadingSlug } from './doc-overlay.js';
 
 export const ExamViewer = (() => {
     // 캐시 포맷 변경: v7 — allowMermaid 활성화 (참조자료 md의 ```mermaid 블록 렌더링)
@@ -66,6 +66,9 @@ export const ExamViewer = (() => {
             const exam = registry.exams.find(e => e.file === filename);
             if (exam && exam.title) return exam.title;
         }
+        // 참조자료 등록 문서는 표시명 사용 — 파일명(1.cosmetic-law) 노출 방지
+        const refName = refDocDisplayName(filename);
+        if (refName) return refName;
         return filename.replace(/\.md$/i, '').replace(/_/g, ' ');
     }
 
@@ -311,6 +314,17 @@ body.exam-open{overflow:hidden;}
                 const icon = a.querySelector('i');
                 if (!icon) a.insertAdjacentHTML('afterbegin', '<i class="fa-solid fa-file-lines"></i> ');
             }
+        });
+
+        // 문서 내 앵커 링크(#-slug) → 오버레이 본문 헤딩으로 스크롤
+        // (미처리 시 location.hash가 바뀌며 히스토리만 오염되는 죽은 링크가 됨)
+        article.querySelectorAll('a[href^="#"]').forEach(a => {
+            const href = a.getAttribute('href') || '';
+            if (href.length < 2) return;
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                scrollToHeadingSlug(article, href);
+            });
         });
 
         // 크로스 과목 링크(subj:key#chNN) → 교재리더 뷰로 이동
@@ -627,6 +641,7 @@ body.exam-open{overflow:hidden;}
         isOpen,
         _mdToHtml,  // 테스트용 노출
         _friendlyLinkLabel,  // 테스트용 노출
+        _titleFromPath,  // 테스트용 노출
         _clearCache: _cache.clear
     };
 })();

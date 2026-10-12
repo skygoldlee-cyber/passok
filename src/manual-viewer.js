@@ -17,7 +17,7 @@ import { PATHS } from './paths.js';
 import { dataPath } from './exam-context.js';
 import { CACHE } from './config/cache.js';
 import { attachImageZoomIn } from './image-zoom.js';
-import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay } from './doc-overlay.js';
+import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay, scrollToHeadingSlug } from './doc-overlay.js';
 
 export const ManualViewer = (() => {
     // 지원하는 마크다운 소스 정의
@@ -228,7 +228,16 @@ body.manual-open{overflow:hidden;}
             const a = e.target.closest('a');
             if (!a) return;
             const href = a.getAttribute('href');
-            if (!href || href.startsWith('#')) return; // 내부 앵커는 무시
+            if (!href) return;
+            // 문서 내 앵커(#slug) — 오버레이 본문 헤딩으로 스크롤
+            // (미처리 시 location.hash만 바뀌는 죽은 링크)
+            if (href.startsWith('#')) {
+                if (href.length > 1) {
+                    e.preventDefault();
+                    scrollToHeadingSlug(article, href);
+                }
+                return;
+            }
             e.preventDefault();
             // 매뉴얼 간 이동 (doc:키) — 같은 오버레이에서 다른 문서로 전환
             const docMatch = href.match(/^doc:([a-z_]+)$/);

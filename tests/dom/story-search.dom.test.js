@@ -101,9 +101,10 @@ describe('이야기형 서사 검색 (TS-10)', () => {
         const card = el('textbook-results-container').querySelector('.textbook-result-card');
         expect(card.textContent).toContain('비누방울');
         expect(card.textContent).toContain('서사');
-        // 링크는 표준형이 아닌 storyFile로 연결된다
-        const link = card.querySelector('a[href]');
-        expect(link.getAttribute('href')).toContain('이야기형');
+        // '전체 단원 보기'는 원시 .md 경로 대신 교재리더 이동 액션(data-search-goto)이다
+        const link = card.querySelector('a[data-search-goto]');
+        expect(link).toBeTruthy();
+        expect(link.getAttribute('data-search-goto')).toContain('subja');
     });
 
     it('본문 검색은 기존 동작 유지 — 서사 항목이 OR로 추가 매칭되지 않음', async () => {
