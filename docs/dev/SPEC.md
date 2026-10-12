@@ -143,7 +143,7 @@
 | AN-06 | 추천 효과 추적 — "오늘의 합격 전략" 발행 시 대상 과목 정답률을 `rec_snapshot` 기준선으로 저장(동일 대상 6시간 내 재기록 방지). 12시간 경과·과목당 신규 표본 5문 이상이면 다음 방문에서 정답률 변화(▲▼%p)를 추천 카드 상단에 표시 (`snapshotRecommendations`/`evaluateRecommendationEffect`) | ✅ |
 | AN-07 | 오답 원인 분류 확장 — 기본 3종(암기/개념/계산)에 manifest `analysis.wrongCauses`(key·label·advice)가 레지스트리 경유로 병합되는 시험별 분류표 (`getWrongCauseTaxonomy`). 자동 추정(`estimateUntaggedCauses`)은 선언된 키만 사용 — 확장 원인의 자동 분류 규칙은 manifest `wrongCauses[].autoPattern`(정규식 문자열)으로 선언하고 엔진은 선언된 패턴을 순회만 함(도메인 정규식이 플랫폼 코드에 하드코딩되지 않음), 비산술 수치→수치 착각 등 내장 추정은 기본 키에 적용. 미선언 시험은 기본 3종만 노출 | ✅ |
 | AN-08 | 학습 패턴 분석 — `recordStudyActivity`가 활동별 시간대 버킷(캘린더 엔트리 `h`)을 기록하고 `computeStudyPattern`이 최다 시간대·요일·주말 비중을 집계해 학습 리듬 카드에 표시 (활동 4일·8회 미만이면 미표시) | ✅ |
-| AN-09 | 주간 리포트보내기 — 진단 요약 섹션의 "주간 리포트" 버튼이 `buildWeeklyReportText`로 평문 리포트(학습량·정답률 추이·예상 점수·합격 갭·취약 단원·패턴·주간 계획 대비 실적)를 생성, Web Share API 또는 클립보드로 출력 (`exportAnalysisReport`, `analysis_report` 액션 카운터). 계획 대비 실적은 SC-06 `computePlanAdherence` 요약을 `p.plan`으로, 과목별 실적/배정 행은 SC-09 배분 결과를 `p.planBySubject`로 전달 | ✅ |
+| AN-09 | 주간 리포트보내기 — 진단 요약 섹션의 "주간 리포트" 버튼이 `buildWeeklyReportText`로 평문 리포트(학습량·정답률 추이·예상 점수·합격 갭·취약 단원·패턴·주간 계획 대비 실적·추천 효과·실제 시험 결과)를 생성, Web Share API 또는 클립보드로 출력 (`exportAnalysisReport`, `analysis_report` 액션 카운터). 계획 대비 실적은 SC-06 `computePlanAdherence` 요약을 `p.plan`으로, 과목별 실적/배정 행은 SC-09 배분 결과를 `p.planBySubject`로, 추천 효과는 AN-06 `evaluateRecommendationEffect`를 `p.recEffect`로, 실제 결과·보정은 AN-05 `getActualResult`+`computeCalibrationBias`를 `p.actual`/`p.bias`로 전달 (보정치 0이면 보정 문구 생략) | ✅ |
 
 ### 3.2 플래시카드 (Flashcard)
 

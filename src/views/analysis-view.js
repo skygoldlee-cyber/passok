@@ -11,7 +11,7 @@ import { esc } from '../sanitize.js';
 import { DataLoader } from '../data-loader.js';
 import { switchView } from './navigation.js';
 import { getDueCount, getDueCards } from '../spaced-repetition.js';
-import { computeWrongCauseSummary, getWrongCauseLabels, getSimHistory } from '../recommendations.js';
+import { computeWrongCauseSummary, getWrongCauseLabels, getSimHistory, evaluateRecommendationEffect, computeCalibrationBias, getActualResult } from '../recommendations.js';
 import {
     getDDay, getStudyGoals, getTodayGoalProgress, getWeeklyGoalProgress,
     getStudyCalendar, computeStudyPlan, computePlanAdherence,
@@ -464,6 +464,9 @@ export function exportAnalysisReport() {
             resolveQuiz: resolveWrongQuiz, subjectName: nameOf, chaptersPerSubject: 1
         }),
         pattern: computeStudyPattern(getStudyCalendar()),
+        recEffect: evaluateRecommendationEffect(getSubjCounts(), nameOf),
+        actual: getActualResult(),
+        bias: computeCalibrationBias(getActualResult()),
         ddayLabel: dday === null ? null : (dday < 0 ? `D+${-dday}` : (dday === 0 ? 'D-Day' : `D-${dday}`))
     });
     if (navigator.share) {
