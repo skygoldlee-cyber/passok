@@ -94,8 +94,9 @@ export function buildAnalysisSeed(examId = 'cosmetic') {
     });
 
     // 진술 오판 — law의 같은 cid(L350) 2건은 "개념 구간 반복 오판" 클러스터를 만든다.
-    // cid는 CHAPTER_RANGES 라인 → L350: law '2. 화장품의 정의', L2209: manufacturing
-    // '1. 사용제한 원료의 종류', L422: safety '1. 위생 기준 및 상태'.
+    // cid는 CID_SECTION 환산 우선·CHAPTER_RANGES 폴백 순 해석 (교재 개편 시
+    // 단원명이 바뀌므로 현재 매핑 기준): L350 → §1.3 → law 'Chapter 01. 화장품법의 이해',
+    // L2209: manufacturing '1. 사용제한 원료의 종류', L422: safety '2. 위생 유지관리'.
     seed[P('statement_stats')] = JSON.stringify({
         'law_st_e2e01':            { j: 5, w: 4, lw: _day(1), t: '맞춤형화장품 조제관리사는 교육을 이수해야 한다', truth: true,  cid: 'L350',  last: false, streak: 0 },
         'law_st_e2e02':            { j: 3, w: 2, lw: _day(0), t: '화장품은 피부·모발을 청결·미화하기 위한 물품이다', truth: true,  cid: 'L350',  last: true,  streak: 0 },
