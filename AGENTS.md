@@ -260,7 +260,10 @@ src/                    # ES Modules
         trainer-ingredients.js # 원료 배합 챌린지 (features.ingredients)
   views/                # 뷰 컨트롤러 (36개)
     navigation.js       # 뷰 전환 유틸 (switchView)
-    textbook-reader.js  # 교재 리더 (본문 + 참조자료)
+    textbook-reader.js  # 교재 리더 오케스트레이터 (과목·챕터 선택·진입점)
+    reader-render.js    # 챕터 본문 렌더 — TOC·섹션 카드·바인딩 (textbook-reader.js에서 분리)
+    reader-loader.js    # 이야기형 챕터 로딩 + LRU 캐시 (textbook-reader.js에서 분리)
+    reader-progress.js  # 리더 세션 상태 + 읽기 위치·진척 영속화 (textbook-reader.js에서 분리)
     reader-ref-links.js # 참조자료 링크 생성·프리뷰·클릭 위임 (textbook-reader.js에서 분리)
     reader-toolbar.js   # 교재 리더 툴바·독서 설정·스크롤 이벤트 (textbook-reader.js에서 분리)
     reader-audio.js     # 오디오북 플레이어
