@@ -1,5 +1,5 @@
 // tests/e2e/analysis-view.spec.js — 맞춤학습(analysis-view) E2E 시뮬레이션 (SPEC ROAD-Q8)
-// @spec AN-01,AN-02,AN-03,AN-04,AN-05,AN-09
+// @spec AN-01,AN-02,AN-03,AN-04,AN-05,AN-09,AN-10
 //
 // jsdom 계층이 커버하지 못하는 브라우저 통합 경로를 검증한다:
 //   ① 합성 이력 시드 → 진단 카드·예측·차트 렌더 (라우팅 + DataLoader + 렌더 통합)
@@ -128,6 +128,33 @@ test.describe('맞춤학습 — 합성 이력 시드', () => {
         expect(clip).toContain('예상 점수');
         expect(clip).toContain('최우선 보강');
         expect(clip).toContain('D-30');
+        expect(cleanErrors(page)).toEqual([]);
+    });
+});
+
+test.describe('맞춤학습 — 개념 식별자 환산 (AN-10)', () => {
+    test('레거시 L####·신형 §N.M cid가 같은 절이면 하나의 클러스터로 병합된다', async ({ page }) => {
+        test.setTimeout(90_000);
+        // 저장 시점에 따라 cid 형식이 섞인다 — 구 버전 앱은 L334(라인 좌표),
+        // 신 버전은 §1.2(구조 앵커)로 기록. CID_SECTION에서 law L334→1.2이므로
+        // 둘은 동일 개념이며, 정규화 후 하나의 클러스터로 묶여야 한다.
+        const seed = buildAnalysisSeed();
+        seed['cosmetic:statement_stats'] = JSON.stringify({
+            'law_st_ba01': { j: 3, w: 2, lw: null, t: '레거시 라인 좌표로 저장된 오판 진술', truth: true, cid: 'L334', last: false, streak: 0 },
+            'law_st_ba02': { j: 2, w: 1, lw: null, t: '신형 섹션 앵커로 저장된 오판 진술', truth: true, cid: '§1.2', last: false, streak: 0 },
+            'law_st_ba03': { j: 1, w: 1, lw: null, t: '다른 절의 단독 오판 진술', truth: true, cid: '§5.2', last: false, streak: 0 }
+        });
+        seedStorage(page, { ...analysisBootKeys(), ...seed });
+        trackErrors(page);
+        await gotoAnalysis(page);
+
+        const weak = page.locator('#analysis-weak-statements');
+        // 두 형식이 §1.2로 병합 → 단일 클러스터 (2개 진술), 챕터 표시명으로 해석
+        await expect(weak).toContainText('같은 개념 구간에서 반복 오판');
+        await expect(weak).toContainText('Chapter 01. 화장품법의 이해');
+        await expect(weak).toContainText('(2개 진술)');
+        await expect(weak).toContainText('레거시 라인 좌표로 저장된 오판 진술');
+        await expect(weak).toContainText('신형 섹션 앵커로 저장된 오판 진술');
         expect(cleanErrors(page)).toEqual([]);
     });
 });
