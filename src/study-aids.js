@@ -4,19 +4,20 @@
 
 import { escapeHTML as esc } from './sanitize.js';  // escapeHTML을 esc로 alias하여 사용
 import { PATHS } from './paths.js';
+import { buildSectionDisplayTitles } from './reader-toc.js';
 
 // --- ② 기출 핵심 요약 ---
 
 /**
  * 챕터에서 기출/중요 마커가 붙은 핵심 라인을 추출합니다.
  * @param {object} chapter - { sections: [{ title, content }] }
- * @returns {{ sectionTitle: string, items: string[] }[]}
+ * @returns {{ sectionTitle: string, sectionIdx: number, items: string[] }[]}
  */
 export function extractExamHighlights(chapter) {
     const sections = chapter.sections || [];
     const result = [];
 
-    sections.forEach(sec => {
+    sections.forEach((sec, secIdx) => {
         const lines = (sec.content || '').split('\n');
         const items = [];
 
@@ -45,7 +46,7 @@ export function extractExamHighlights(chapter) {
         });
 
         if (items.length > 0) {
-            result.push({ sectionTitle: sec.title, items });
+            result.push({ sectionTitle: sec.title, sectionIdx: secIdx, items });
         }
     });
 
@@ -58,6 +59,9 @@ export function extractExamHighlights(chapter) {
 function renderExamHighlightCard(chapter) {
     const highlights = extractExamHighlights(chapter);
     if (highlights.length === 0) return '';
+
+    // 챕터마다 반복되는 제목(📌 챕터 핵심 요약 등)에 소속 챕터명 병기
+    const displayTitles = buildSectionDisplayTitles(chapter.sections);
 
     const totalItems = highlights.reduce((acc, h) => acc + h.items.length, 0);
 
@@ -75,7 +79,7 @@ function renderExamHighlightCard(chapter) {
 
     highlights.forEach(h => {
         html += `<div class="exam-highlight-section">`;
-        html += `<div class="exam-highlight-section-title">${esc(h.sectionTitle)}</div>`;
+        html += `<div class="exam-highlight-section-title">${esc(displayTitles[h.sectionIdx] || h.sectionTitle)}</div>`;
         html += `<ul class="exam-highlight-list">`;
         h.items.forEach(item => {
             html += `<li>${esc(item)}</li>`;
