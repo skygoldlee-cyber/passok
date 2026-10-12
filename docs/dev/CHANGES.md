@@ -13,6 +13,7 @@
 - **visual.spec.js CI 활성화**: linux 기준선 6개 커밋으로 `test.skip(!!CI)` 제거 — 이제 test:e2e가 CI(ubuntu)에서 시각 회귀를 실행. 로컬은 기존 win32 기준선 사용
 - **trace_scan EXCLUDE_DIRS 추가**: gitignore된 `ref-pipeline/embeddings/out/`(로컬 생성 .js 산출물)이 해시 입력 파일 목록에 섞여 Windows 로컬 ↔ Linux CI 간 TRACE_MATRIX 입력 해시가 분기하던 오탐 수정. 로컬·CI 해시 일치 확인 (52aa9089da6229d9)
 - **ARCHITECTURE.md**: 삭제된 `subjects/*.hash.js` 번들 경로 참조 제거 (2026-08-24 런타임 MD 파싱 전환으로 제거된 경로 — 로컬 빈 디렉터리 잔존으로 로컬 검증만 통과하던 CI 오탐)
+- **런타임 Node 24 상향**: jsdom@30이 Node `^22.22.2 || ^24.15.0` 요구 — CI(ubuntu, Node 20)에서 `webidl.util.markAsUncloneable` 오류로 DOM 테스트 기동 불가 발견. `.nvmrc`·`engines`·ci.yml·notice-check.yml·visual-baseline.yml·DEV_ENVIRONMENT.md를 24로 정렬
 - **임베딩 신선도 개행 정규화**: `file_sha1`(build_embeddings.py)·`sha1`(check_emb_freshness.js)이 raw bytes를 해시해 CRLF 작업트리 파일(combo_pilot.js)에서 로컬↔CI 해시 분기. 양쪽 \r\n→\n 정규화 후 해시로 통일 + manifest.inputs의 combo_pilot sha1을 LF 기준으로 갱신 + 파일 자체 LF 정규화. 회귀 테스트(test_file_sha1_normalizes_line_endings) 추가
 - **docs 스테일 정리**: ARCHITECTURE·SPEC·FEATURE_MAP의 formula 파사드+모듈 반영, TESTING.md 파일 목록 전수 복원(누락 45개·카운트 드리프트 30개·id_factory 개명), GATE_MAP 단계 수 정정
 
