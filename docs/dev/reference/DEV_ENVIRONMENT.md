@@ -23,7 +23,7 @@
 
 | 도구 | 최소 버전 | 확인 명령 | 용도 |
 |------|-----------|-----------|------|
-| **Node.js** | 20.x 이상 (`.nvmrc`·`engines` = 20 계열 권장) | `node --version` | 앱·빌드·테스트 런타임 전체 — CI는 Node 20 고정이므로 버전 관리자(nvm/fnm) 사용 시 `.nvmrc`가 20으로 정렬 |
+| **Node.js** | 20.19+ (`.nvmrc`·`engines` = 20 계열 권장) | `node --version` | 앱·빌드·테스트 런타임 전체 — CI는 Node 20 고정이므로 버전 관리자(nvm/fnm) 사용 시 `.nvmrc`가 20으로 정렬. 빌드 플러그인이 `require(ESM)`으로 `src/textbook-core.js`를 로드하므로 20.19 미만에서는 `MODULE_NOT_FOUND` 발생 |
 | **npm** | Node 동반 | `npm --version` | devDependencies 설치 (`npm install`) |
 | **Git** | 최신 | `git --version` | 소스 관리 — `deploy` 가드가 clean tree + origin/main 동기화 요구 |
 

@@ -138,15 +138,26 @@ function main() {
     });
 
     // --- 시험별 도메인 규칙 자동 주입 ---
-    // exams.json 등록 시험의 contentRoot/dataRoot를 domain:<id>로 자동 분류.
+    // exams.json 등록 시험의 contentRoot/dataRoot + 도메인 자산 규약 디렉터리
+    // (src/css/html/tests 하위 exams/<id>)를 domain:<id>로 자동 분류.
     // 파일이 아직 없는 신규 시험은 스테일 오류 대신 경고만 낸다.
     for (const e of examsData.exams || []) {
+        const roots = [];
         for (const key of ['contentRoot', 'dataRoot']) {
             const root = (e[key] || '').replace(/\\/g, '/').replace(/\/$/, '');
-            if (!root) continue;
+            if (root) roots.push({ root, key });
+        }
+        // 도메인 자산 규약 (AGENTS.md "멀티시험 구조"): 시험 전용 실행 코드·
+        // 마크업·스타일·테스트는 exams/<id> 하위 고정 경로 — 규약이 진실이므로
+        // 수동 패턴 선언 없이 자동 주입한다.
+        for (const base of ['src/exams', 'css/exams', 'html/exams',
+            'tests/unit/exams', 'tests/dom/exams', 'tests/e2e/exams']) {
+            roots.push({ root: `${base}/${e.id}`, key: 'convention' });
+        }
+        for (const { root, key } of roots) {
             compiled.push({
                 rule: { layer: `domain:${e.id}`, implicit: true, patterns: [`${root}/**`] },
-                label: `implicit(domain:${e.id} ${key})`,
+                label: `implicit(domain:${e.id} ${key === 'convention' ? root : key})`,
                 regexes: [globToRegExp(`${root}/**`)],
             });
         }
