@@ -9,6 +9,8 @@
   "textbook-reader-view|button#reader-toc-mobile-btn.reader-tool-btn",
   "dictionary-view|button#dict-db-version.dict-db-version",
   "formula-view|button.comp-ref-link",
+  "formula-view|button.notice-banner-link",
+  "formula-view|button.notice-banner-close",
   "calendar-view|button.btn",
   "calendar-view|button.btn"
 ]
