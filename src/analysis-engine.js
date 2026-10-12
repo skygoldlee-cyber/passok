@@ -469,6 +469,9 @@ export function computeStudyPattern(calendar) {
  * @param {Object} [p.pattern] computeStudyPattern 결과
  * @param {Object} [p.plan] SC-06 계획 준수 요약 {weekActual, weekTarget, percent, statusLabel}
  * @param {Array} [p.planBySubject] SC-11 과목별 준수 행 [{name, done, cards, quizDone, quizzes}] — 스마트학습 배분 대비 실적
+ * @param {Object|null} [p.recEffect] AN-06 evaluateRecommendationEffect 결과 — 지난 추천 대상 과목의 정답률 변화
+ * @param {Object|null} [p.actual] AN-05 getActualResult 결과 — 실제 시험 자가 보고 {passed, score}
+ * @param {number} [p.bias] AN-05 computeCalibrationBias 결과 — 0이면 보정 표기 생략
  * @param {string|null} [p.ddayLabel] D-day 표기
  * @returns {string}
  */
@@ -511,6 +514,15 @@ export function buildWeeklyReportText(p) {
     (p.planBySubject || []).forEach(s => {
         lines.push(`  - ${s.name}: ${s.done}/${s.cards}장${s.quizzes > 0 ? ` · 퀴즈 ${s.quizDone || 0}/${s.quizzes}문` : ''}`);
     });
+    if (p.recEffect && p.recEffect.items && p.recEffect.items.length) {
+        const parts = p.recEffect.items.map(i =>
+            `${i.name} ${i.fromRate}%→${i.toRate}% (${i.delta >= 0 ? '▲' : '▼'}${Math.abs(i.delta)}%p)`);
+        lines.push(`■ 추천 효과: ${parts.join(' · ')}`);
+    }
+    if (p.actual && typeof p.actual.score === 'number') {
+        const biasNote = p.bias ? ` · 예측 대비 ${p.bias > 0 ? '+' : ''}${p.bias}점 보정 반영 중` : '';
+        lines.push(`■ 실제 시험: ${p.actual.passed ? '합격' : '불합격'} ${p.actual.score}점${biasNote}`);
+    }
     if (p.ddayLabel) lines.push(`■ 시험일: ${p.ddayLabel}`);
     lines.push('', '— Passory 맞춤학습 리포트');
     return lines.join('\n');

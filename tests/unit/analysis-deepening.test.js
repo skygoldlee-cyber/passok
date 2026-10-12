@@ -246,3 +246,20 @@ test('AN-09: 과목별 스마트학습 준수 행 출력 — planBySubject (SC-1
     assert.ok(text.includes('화장품법: 3/8장'));
     assert.ok(text.includes('맞춤형화장품: 7/17장'));
 });
+
+test('AN-09: 추천 효과·실제 결과 보정 지표가 리포트에 표시된다 (AN-05·AN-06 표면화)', () => {
+    const text = buildWeeklyReportText({
+        recEffect: { items: [{ name: '화장품법', fromRate: 50, toRate: 80, delta: 30, added: 10 }] },
+        actual: { passed: true, score: 72 },
+        bias: 7
+    });
+    assert.ok(text.includes('추천 효과: 화장품법 50%→80% (▲30%p)'));
+    assert.ok(text.includes('실제 시험: 합격 72점'));
+    assert.ok(text.includes('예측 대비 +7점 보정 반영 중'));
+    // 데이터 없으면 두 섹션 모두 생략
+    const empty = buildWeeklyReportText({});
+    assert.ok(!empty.includes('추천 효과') && !empty.includes('실제 시험'));
+    // bias 0이면 보정 문구 생략
+    const noBias = buildWeeklyReportText({ actual: { passed: false, score: 55 }, bias: 0 });
+    assert.ok(noBias.includes('실제 시험: 불합격 55점') && !noBias.includes('보정 반영'));
+});
