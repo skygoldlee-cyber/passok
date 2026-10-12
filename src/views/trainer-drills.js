@@ -12,7 +12,7 @@ import { renderComboQuestion, renderComboResult } from './trainer-drill-combo.js
 
 import { state } from '../state.js';
 import { esc, safeTextWithBreaks } from '../sanitize.js';
-import { shuffle } from '../utils.js';
+import { shuffle, OPTION_INDICATORS } from '../utils.js';
 import { vibrate, showToast, HAPTIC, wrongReviewHtml, trainerResultHtml } from '../ui-utils.js';
 import { DataLoader } from '../data-loader.js';
 import { gradeAnswer } from '../questions.js';
@@ -21,7 +21,7 @@ import { recordStudyActivity } from '../study-tracker.js';
 import { switchView, resetMainScroll } from './navigation.js';
 
 const DRILL_COUNT = 10;
-export const OPTION_INDICATORS = ['①', '②', '③', '④', '⑤'];
+export { OPTION_INDICATORS };
 
 // 출제 수 설정 — 10/20/'all' (두 드릴 setup의 칩에서 공유)
 /** @type {number|'all'} */
