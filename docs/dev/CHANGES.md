@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 커버리지 래칭 3차 — sim-review·ref-links 테스트 보강
+
+- **exam-sim-review.dom.test.js** (신규 11개): 오답 리뷰 패널(만점·유형 배지·combo 진술 정오표 오판 표시), 결과/리뷰 패널 전환, `chapterForQuestion`(combo 출처 Q번호 역추적·L라인 범위 해석·일반 id), `renderSimResultBreakdown`(과락 배지·단원 취약 정렬·합격/과락/평균미달 피드백) — 43%→95% 커버리지
+- **reader-ref-links.dom.test.js** (신규 13개): 5종 data-* 클릭 위임(exam-md·ref-md+line·ref-html·ref-subject·glossary), law.go.kr 오프라인 차단+토스트, hover 프리뷰(fetch 스니펫·검색어 컨텍스트·실패 메시지), `data-ref-bound` 중복 바인딩 가드, `refreshRefLinkNotices` 배지 트리거 — 15%→42% 커버리지
+- **래칫 3차 상향**: 병합 69/65/70/80.3 (실측 69.93/65.94/70.90/81.06 대비 ~0.8%p) · DOM 66/52/66.5/70.5 (실측 66.48/52.58/66.94/71.01 대비 ~0.5%p)
+
 ## 2026-10-13 CI 유닛 테스트 glob 버그 수정 + 커버리지 래칭 2차
 
 - **[심각] CI 유닛 테스트 전량 미실행 수정**: `package.json`의 `node --test tests/unit/**/*.test.js` 인자가 미인용이라 CI(bash)에서 `**`가 `*`로 축약돼 `tests/unit/<하위디렉터리>/*.test.js`만 매칭 — CI는 유닛 **55개만** 실행(로컬 1,192)하고 c8 커버리지도 10개 파일만 수집했다. glob을 인용해 Node 자체 확장으로 전환 → OS 무관 전량 실행. `test`·`test:unit`·`coverage:unit`·`test:all`·`test:watch` 5개 스크립트 동일 수정. check-runner.test.js에 "node --test glob 인용 필수" 회귀 가드 추가
