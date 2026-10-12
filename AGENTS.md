@@ -32,7 +32,8 @@ node tools/build/build_doc_bundles.js        # content/exams/<id>/docs/*.md → 
 npm.cmd run build:html                # index.template.html + html/views/*.html → index.html 조립 (뷰 마크업 변경 시 필수)
 npm.cmd run check:html                # index.html이 파셜 조립 결과와 일치하는지 비교 (개행 정규화 — pre-push·CI 게이트)
 npm.cmd run check:parser               # 빌드 파서 ↔ 런타임 파서 등가성 검증
-npm.cmd run check:imports              # src/ 내 ES 모듈 import/export 교차 검증 + 계층 방향 규칙 (코어→views/ 역참조 차단, 셸 명단 SHELL_MODULES)
+npm.cmd run check:imports              # src/ 내 ES 모듈 import/export 교차 검증
+npm.cmd run check:posind               # 교재 좌표 비의존 게이트 — 위치 좌표(라인·인덱스)를 식별자/영속 키로 쓰는 패턴 차단 (ID-05, check:ci·CI·pre-push 게이트) + 계층 방향 규칙 (코어→views/ 역참조 차단, 셸 명단 SHELL_MODULES)
 npm.cmd run stamp:sw                   # sw.js CACHE_VERSION을 커밋 해시로 스탬프
 npm.cmd run notes:draft                # 릴리스 노트 pending 초안 생성 (커밋 subject 기반 → data/release-notes.json 수동 편집 후 배포)
 npm.cmd run verify:assets              # SHELL_ASSETS/DATA_ASSETS 파일 존재 검증
@@ -111,7 +112,7 @@ npm.cmd run check:testfirst             # 로직(src/*.js·ref-pipeline/*.py) �
 npm.cmd run check:trace                 # TRACE_MATRIX 입력 해시 신선도
 npm.cmd run check:lawurls               # law.go.kr 한글주소 유효성 전수 검증 (law-links.js 매핑 실호출, 오류 페이지 본문 판별)
 node tools/check/impact_tests.js              # 변경 파일 → 영향 요구사항·권장 테스트 (미커밋 변경 자동 분석, --ref <ref>로 diff 분석, --run으로 권장 테스트 실제 실행 — pre-push 게이트)
-npm.cmd run hooks:install               # Git 훅 활성화 (opt-in) — pre-commit: check:types+lint (IDE 오류 시 커밋 차단) / pre-push: tools/check/push_gate.js 적응형 게이트 — diff 분류로 문서·콘텐츠 전용 푸시는 경량 단계만, 로직 포함 시 전체 9단계 (우회 SKIP_PREPUSH=1 · 전체 강제 PUSH_GATE_ALL=1)
+npm.cmd run hooks:install               # Git 훅 활성화 (opt-in) — pre-commit: check:types+lint (IDE 오류 시 커밋 차단) / pre-push: tools/check/push_gate.js 적응형 게이트 — diff 분류로 문서·콘텐츠 전용 푸시는 경량 단계만, 로직 포함 시 전체 10단계 (우회 SKIP_PREPUSH=1 · 전체 강제 PUSH_GATE_ALL=1)
 npm.cmd run check:hooks                 # 훅 설치 여부 확인 (권고 — 미설치 시 로컬 게이트 우회됨, check:ci 첫 단계)
 
 # 참조자료 PDF → ref_md 변환 (Python 3 + pdfplumber, 이미지 추출 시 pymupdf 필요)
