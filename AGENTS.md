@@ -115,6 +115,7 @@ npm.cmd run check:docsync               # 소스 변경 시 문서 갱신 강제
 npm.cmd run check:testfirst             # 로직(src/*.js·ref-pipeline/*.py) 변경 시 테스트(tests/·ref-pipeline/tests/) 동반 강제 — Docs-First 기계화. 우회: SKIP_TESTFIRST=1 · 커밋 메시지 행 끝 [no-test] (--ref 모드, 그 커밋만 면제)
 npm.cmd run check:trace                 # TRACE_MATRIX 입력 해시 신선도
 npm.cmd run check:lawurls               # law.go.kr 한글주소 유효성 전수 검증 (law-links.js 매핑 실호출, 오류 페이지 본문 판별)
+npm.cmd run check:linklint              # 렌더 출력 링크 린트 — 콘텐츠 md를 표면별 렌더러(교재→reader-format, 문서→exam-viewer 경로) 통과 후 원시 경로 href·절단 URL·좌표/파일명 라벨·미승인 외부 링크·본문 경로 누출·QA 스탬프 잔존 탐지 (check:content·check:ci 게이트, LL-01~07)
 node tools/check/impact_tests.js              # 변경 파일 → 영향 요구사항·권장 테스트 (미커밋 변경 자동 분석, --ref <ref>로 diff 분석, --run으로 권장 테스트 실제 실행 — pre-push 게이트)
 npm.cmd run hooks:install               # Git 훅 활성화 (opt-in) — pre-commit: check:types+lint (IDE 오류 시 커밋 차단) / pre-push: tools/check/push_gate.js 적응형 게이트 — 파일 경로 태그(STEP_NEEDS 표)로 필요 단계만 실행, 미분류 파일은 전체 폴백·전체 강제 PUSH_GATE_ALL=1 · 통과 결과 캐시(동일 입력 재실행 생략, --no-cache 우회)·병렬(4)·failFast·diff 스코프 단계는 --ref 대상 (우회 SKIP_PREPUSH=1)
 npm.cmd run check:hooks                 # 훅 설치 여부 확인 (권고 — 미설치 시 로컬 게이트 우회됨, check:ci 첫 단계)
