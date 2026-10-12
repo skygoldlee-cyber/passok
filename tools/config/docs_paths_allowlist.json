@@ -242,5 +242,40 @@
     "file": "docs/dev/runbooks/COMBO_GENERATION_GUIDE.md",
     "ref": "tools/check/combo_review_queue.md",
     "reason": "audit:combo 실행 시 생성되는 검수 큐 산출물 — gitignore"
+  },
+  {
+    "file": "docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md",
+    "ref": "src/semantic-index.js",
+    "reason": "설계안 제안 경로 — 임베딩 런타임 조회 모듈 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md",
+    "ref": "ref-pipeline/embeddings/build_embeddings.py",
+    "reason": "설계안 제안 경로 — 임베딩 사전계산 파이프라인 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md",
+    "ref": "ref-pipeline/embeddings/requirements.txt",
+    "reason": "설계안 제안 경로 — 임베딩 파이프라인 독립 의존성 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md",
+    "ref": "ref-pipeline/embeddings/",
+    "reason": "설계안 제안 경로 — 파이프라인 디렉터리 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md",
+    "ref": "ref-pipeline/embeddings/**",
+    "reason": "설계안 제안 경로 — 도메인맵 규칙 등록 대상 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md",
+    "ref": "src/semantic-index.js",
+    "reason": "설계안 제안 경로 — DOC-DSN-18 선행 의존 모듈 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md",
+    "ref": "src/wrong-cause-classifier.js",
+    "reason": "설계안 제안 경로 — 센트로이드 추정기 모듈 (미구현)"
   }
 ]

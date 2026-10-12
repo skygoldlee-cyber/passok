@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 9550f4afa2809903
+> 입력 해시: 8212ba968108cb98
 > 생성: 2026-10-12 · 원천: SPEC.md(472개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 472개 — 문서 연결 300 · 소스 연결 434 · 테스트 연결 461 · 보고서 연결 109
+**커버리지 요약**: 요구사항 472개 — 문서 연결 307 · 소스 연결 434 · 테스트 연결 461 · 보고서 연결 109
 
 ---
 
@@ -48,15 +48,15 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | AN-01 | ✅ | E2E 테스트 | DOC-DSN-03 | html/views/analysis.html<br>index.html<br>src/analysis-engine.js<br>src/views/analysis-view.js | tests/dom/study-dashboard.dom.test.js<br>tests/e2e/analysis-view.spec.js<br>tests/fixtures/analysis-seed.js<br>tests/unit/analysis-engine.test.js | DOC-ARC-09 | — |
-| AN-02 | ✅ | E2E 테스트 | DOC-DSN-03 | src/analysis-engine.js<br>src/views/analysis-view.js<br>src/views/quiz-wrong-cause.js | tests/dom/study-dashboard.dom.test.js<br>tests/e2e/analysis-view.spec.js<br>tests/fixtures/analysis-seed.js<br>tests/unit/analysis-engine.test.js | DOC-ARC-09 | — |
+| AN-02 | ✅ | E2E 테스트 | DOC-DSN-03<br>DOC-DSN-19 | src/analysis-engine.js<br>src/views/analysis-view.js<br>src/views/quiz-wrong-cause.js | tests/dom/study-dashboard.dom.test.js<br>tests/e2e/analysis-view.spec.js<br>tests/fixtures/analysis-seed.js<br>tests/unit/analysis-engine.test.js | DOC-ARC-09 | — |
 | AN-03 | ✅ | E2E 테스트 | DOC-DSN-03 | src/views/analysis-view.js | tests/dom/study-dashboard.dom.test.js<br>tests/e2e/analysis-view.spec.js<br>tests/fixtures/analysis-seed.js | DOC-ARC-09 | — |
 | AN-04 | ✅ | E2E 테스트 | — | src/views/analysis-view.js | tests/e2e/analysis-view.spec.js<br>tests/fixtures/analysis-seed.js<br>tests/unit/reader-analysis-gates.test.js | — | — |
 | AN-05 | ✅ | E2E 테스트 | — | src/recommendations.js<br>src/views/analysis-view.js<br>src/views/score-estimate.js | tests/e2e/analysis-view.spec.js<br>tests/fixtures/analysis-seed.js<br>tests/unit/analysis-deepening.test.js | — | — |
 | AN-06 | ✅ | 테스트 | — | src/recommendations.js<br>src/views/analysis-view.js | tests/unit/analysis-deepening.test.js | — | — |
-| AN-07 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/recommendations.js<br>src/views/analysis-view.js | tests/unit/analysis-deepening.test.js | — | — |
+| AN-07 | ✅ | 테스트 | DOC-DSN-19 | src/analysis-engine.js<br>src/recommendations.js<br>src/views/analysis-view.js | tests/unit/analysis-deepening.test.js | — | — |
 | AN-08 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/views/analysis-view.js | tests/fixtures/analysis-seed.js<br>tests/unit/analysis-deepening.test.js | — | — |
-| AN-09 | ✅ | E2E 테스트 | — | html/views/analysis.html<br>index.html<br>src/analysis-engine.js<br>src/views/analysis-view.js | tests/dom/study-dashboard.dom.test.js<br>tests/e2e/analysis-view.spec.js<br>tests/unit/analysis-deepening.test.js | — | — |
-| AN-10 | ✅ | E2E 테스트 | — | tools/build/textbook_anchors.js | tests/e2e/analysis-view.spec.js<br>tests/unit/textbook-anchors.test.js | — | — |
+| AN-09 | ✅ | E2E 테스트 | DOC-DSN-19 | html/views/analysis.html<br>index.html<br>src/analysis-engine.js<br>src/views/analysis-view.js | tests/dom/study-dashboard.dom.test.js<br>tests/e2e/analysis-view.spec.js<br>tests/unit/analysis-deepening.test.js | — | — |
+| AN-10 | ✅ | E2E 테스트 | DOC-DSN-18 | tools/build/textbook_anchors.js | tests/e2e/analysis-view.spec.js<br>tests/unit/textbook-anchors.test.js | — | — |
 
 ## 3.2 플래시카드
 
@@ -193,10 +193,10 @@
 | TS-05 | ✅ | 테스트 | — | src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
 | TS-06 | ✅ | 테스트 | — | src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
 | TS-07 | ✅ | 테스트 | — | src/mermaid-render.js<br>src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
-| TS-08 | ✅ | 테스트 | — | src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
-| TS-09 | ✅ | 테스트 | — | src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
-| TS-10 | ✅ | 테스트 | DOC-RBK-13 | src/views/textbook-search.js | tests/dom/story-search.dom.test.js | — | — |
-| TS-11 | ✅ | 테스트 | — | src/views/textbook-search.js | tests/unit/textbook-search-ref.test.js | — | — |
+| TS-08 | ✅ | 테스트 | DOC-DSN-18 | src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
+| TS-09 | ✅ | 테스트 | DOC-DSN-18 | src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
+| TS-10 | ✅ | 테스트 | DOC-DSN-18<br>DOC-RBK-13 | src/views/textbook-search.js | tests/dom/story-search.dom.test.js | — | — |
+| TS-11 | ✅ | 테스트 | DOC-DSN-18 | src/views/textbook-search.js | tests/unit/textbook-search-ref.test.js | — | — |
 
 ## 3.10 성분 사전
 
@@ -383,7 +383,7 @@
 | DR-02 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-02<br>DOC-REF-01 | src/views/trainer-drill-combo.js<br>src/views/trainer-drills.js<br>tools/build/build_combo_drills.js<br>tools/build/drill-utils.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/combo-transform.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-03 | ✅ | 테스트 | DOC-DSN-17<br>DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-04 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js<br>src/weak-items.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | 법령·고시 수치 (드릴 콘텐츠의 기원 — 문항 자체는 내부 제작) |
-| DR-05 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
+| DR-05 | ✅ | 테스트 | DOC-DSN-18<br>DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-06 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/views/exam-simulator.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-07 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/questions.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/fixtures/sample-questions.js<br>tests/unit/combo-transform.test.js<br>tests/unit/property-based.test.js<br>…외 1개 | DOC-ARC-05<br>DOC-ARC-09 | — |
 | ND-01 | ✅ | 테스트 | DOC-USR-03<br>DOC-USR-04<br>DOC-USR-05<br>DOC-USR-06 | src/views/trainer-drills.js<br>src/views/trainer.js | tests/dom/exams/cosmetic/review-drills-formula.dom.test.js | — | — |
@@ -496,7 +496,7 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | PF-01 | ✅ | 테스트 | — | src/data-loader.js | tests/unit/perf-invariants.test.js | — | — |
-| PF-02 | ✅ | 테스트 | — | src/data-loader.js | tests/unit/perf-invariants.test.js | — | — |
+| PF-02 | ✅ | 테스트 | DOC-DSN-18 | src/data-loader.js | tests/unit/perf-invariants.test.js | — | — |
 | PF-03 | ✅ | 테스트 | — | src/data-loader.js | tests/unit/perf-invariants.test.js | — | — |
 | PF-04 | ✅ | 테스트 | — | src/html-viewer.js | tests/unit/perf-invariants.test.js | — | — |
 | PF-05 | ✅ | 테스트 | — | src/html-viewer.js | tests/unit/perf-invariants.test.js | — | — |
@@ -600,13 +600,13 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | DA-01 | ✅ | 테스트 | DOC-RBK-03<br>DOC-RBK-08<br>DOC-REF-08 | tools/build/index.js<br>tools/build/manifest_loader.js | tests/unit/data-architecture.test.js | — | — |
-| DA-02 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | src/data-loader.js<br>tools/build/index.js | tests/unit/data-architecture.test.js | — | — |
+| DA-02 | ✅ | 테스트 | DOC-DSN-18<br>DOC-RBK-03<br>DOC-REF-08 | src/data-loader.js<br>tools/build/index.js | tests/unit/data-architecture.test.js | — | — |
 | DA-03 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | src/data-loader.js | tests/unit/data-loader.test.js | — | — |
 | DA-04 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | tools/build/build_study_md_bundle.js | tests/unit/data-architecture.test.js | — | — |
-| DA-05 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | src/state.js<br>src/storage.js | tests/unit/state.test.js | — | — |
-| DA-06 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-03<br>DOC-REF-08 | src/exam-context.js<br>src/paths.js<br>src/pwa-manifest.js<br>tools/build/exam_targets.js<br>…외 1개 | tests/unit/data-architecture.test.js | — | — |
+| DA-05 | ✅ | 테스트 | DOC-DSN-19<br>DOC-RBK-03<br>DOC-REF-08 | src/state.js<br>src/storage.js | tests/unit/state.test.js | — | — |
+| DA-06 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-18<br>DOC-RBK-03<br>DOC-REF-08 | src/exam-context.js<br>src/paths.js<br>src/pwa-manifest.js<br>tools/build/exam_targets.js<br>…외 1개 | tests/unit/data-architecture.test.js | — | — |
 | DA-07 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-03<br>DOC-REF-08 | src/exam-context.js<br>src/storage-keys.js<br>src/storage.js | tests/unit/storage-key-sync.test.js | — | — |
-| DA-08 | ✅ | 테스트 | DOC-DSN-08<br>DOC-DSN-10<br>DOC-RBK-03<br>DOC-REF-08 | src/exam-context.js | tests/unit/data-architecture.test.js | — | — |
+| DA-08 | ✅ | 테스트 | DOC-DSN-08<br>DOC-DSN-10<br>DOC-DSN-18<br>DOC-DSN-19<br>…외 2개 | src/exam-context.js | tests/unit/data-architecture.test.js | — | — |
 | DA-09 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | src/storage.js | tests/unit/storage.test.js | — | — |
 | DA-10 | ✅ | 테스트 | — | src/exams/cosmetic/customer-store.js<br>src/sync.js | tests/unit/exams/cosmetic/customer-store.test.js | — | 개인정보보호법 — 상동 (조제관리사가 고객 개인정보를 클라우드에 올리지 않는 설계) |
 | DA-11 | ✅ | 테스트 | DOC-RBK-10 | tools/check/check_domain_map.js | tests/unit/multi-exam-gates.test.js | — | — |
@@ -747,6 +747,8 @@
 | DOC-DSN-15 | docs/exams/cosmetic/design/PRACTICAL_TOOLS_DESIGN.md | FO-16, FO-18, FO-33, FO-34, FO-57, FO-58, FO-59, FO-60, FO-61, FO-62, FO-63 |
 | DOC-DSN-16 | docs/dev/design/STUDY_PLAN_PRO_DESIGN.md | D-17, SC-06, SC-07, SC-08 |
 | DOC-DSN-17 | docs/dev/design/FSRS_DESIGN.md | DR-03, F-07, F-08, F-09, SC-13, SQ-03 |
+| DOC-DSN-18 | docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md | AN-10, DA-02, DA-06, DA-08, DR-05, PF-02, TS-08, TS-09, TS-10, TS-11 |
+| DOC-DSN-19 | docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md | AN-02, AN-07, AN-09, DA-05, DA-08 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |

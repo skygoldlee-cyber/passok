@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 지능형 학습 설계 문서 2건 — 임베딩 유사도·오답 원인 분류
+
+- **신규 `docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md` (DOC-DSN-18)**: 빌드타임 문장 임베딩(기본안 `intfloat/multilingual-e5-small` 384d) → int8 양자화 + base64 JS 번들(`{dataRoot}/embeddings/`)로 배포, 런타임은 코사인 유사도만 계산하는 오프라인 우선 설계. 대상 = 진술(sid)·문항(qid)·카드·교재 청크. 이중 구조: 프리컴퓨트 이웃 인덱스(neighbors.js)로 고정 top-K UI, 벡터 번들로 임의 유사도·센트로이드. 소비 지점 = 취약 진술 유사 항목(DR-05)·오답 유사 문항·혼동쌍(§앵커와 다른 의미近 진술, AN-10 보완)·검색 결과 확장. 자유 질의 시맨틱 검색은 쿼리 임베딩 경로(앵커 프록시/온디바이스 ONNX/BYOK) 트레이드오프를 명시해 v2로 보류. 신선도 = manifest sourceHash 게이트로 벡터 재계산 없이 검증
+- **신규 `docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md` (DOC-DSN-19)**: `estimateUntaggedCauses` 정규식의 구조적 한계(부정형 문항 암기 실패도 concept 강제 귀속) 대안 — D18 벡터 위에서 **사용자 태그를 라벨로 쓰는 원인별 임베딩 센트로이드 kNN**. 추가 모델 자산 없이 순수 계산, 라벨 부족 시 규칙 폴백 이중화. 확신도 게이트(margin·유사도·최소 라벨 수) 미달 시 침묵, 제안 칩 UI(수락/거부 계수 → 수용률 지표), 추정은 `wrongCauses`에 미기록(사용자 태그만 authoritative). 선지(`chosen`) 임베딩·fine-tune·BYOK LLM은 단계 2~3 조건부 경로로 명시
+- **`docs_paths_allowlist.json`**: 두 설계 문서의 미구현 제안 경로 7건 등록 (`src/semantic-index.js`·`src/wrong-cause-classifier.js`·`ref-pipeline/embeddings/**` 등)
+- 구현 없음 — SPEC ID 등록·features 선언·domain-map 규칙은 각 문서 §구현 선행 절에 정리
+
 ## 2026-10-12 전체 학습 흐름 SVG 교체
 
 - `content/exams/cosmetic/docs/images/전체_학습흐름.svg` 교체 (사용자 직접 작업) — 5단계 순환(시험일 설정→교재 1회독→스마트학습 배분→매일 실행→맞춤학습 진단)+보조 학습 레이아웃, FSRS 용어 반영 확인. 데일리 챌린지 "8문" 실측 일치(카드3+퀴즈3+계산1+분류1)
