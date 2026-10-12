@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: c5d9cbdeccb6ed25
+> 입력 해시: 9c21c3865fe0192a
 > 생성: 2026-10-12 · 원천: SPEC.md(471개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -105,42 +105,42 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| TR-01 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-03<br>DOC-REF-04<br>…외 1개 | html/views/textbook-reader.html<br>index.html<br>src/markdown-parser.js<br>src/reader-format.js<br>…외 3개 | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js<br>tests/unit/markdown-parser-general.test.js<br>tests/unit/reader-format-general.test.js<br>…외 1개 | — | — |
-| TR-02 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
+| TR-01 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-03<br>DOC-REF-04<br>…외 1개 | html/views/textbook-reader.html<br>index.html<br>src/markdown-parser.js<br>src/reader-format.js<br>…외 4개 | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js<br>tests/unit/markdown-parser-general.test.js<br>tests/unit/reader-format-general.test.js<br>…외 1개 | — | — |
+| TR-02 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/reader-render.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-03 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-04 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
-| TR-05 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js | — | — |
+| TR-05 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/reader-render.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js | — | — |
 | TR-06 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-mermaid.css<br>src/mermaid-render.js<br>src/mermaid-utils.js<br>src/reader-toc.js<br>…외 1개 | tests/dom/mermaid-zoom.dom.test.js<br>tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js<br>tests/unit/mermaid/mermaid-parser.test.js<br>…외 6개 | — | — |
 | TR-07 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/mermaid-render.js<br>src/mermaid-utils.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js<br>tests/unit/mermaid/mermaid-parser.test.js<br>tests/unit/mermaid/mermaid-pipeline.test.js<br>…외 4개 | — | — |
 | TR-08 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/mermaid-render.js<br>src/mermaid-utils.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js<br>tests/unit/mermaid/mermaid-parser.test.js<br>tests/unit/mermaid/mermaid-pipeline.test.js<br>…외 4개 | — | — |
 | TR-09 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/markdown-parser.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js<br>tests/unit/markdown-parser-general.test.js | — | — |
 | TR-10 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/reader-ref-links.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
 | TR-11 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
-| TR-12 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
+| TR-12 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/reader-progress.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-13 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js | — | — |
 | TR-14 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
-| TR-15 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-extras.css<br>css/reader.css<br>src/views/reader-toolbar.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
+| TR-15 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-extras.css<br>css/reader.css<br>src/views/reader-render.js<br>src/views/reader-toolbar.js<br>…외 1개 | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
 | TR-16 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-extras.css<br>css/reader.css<br>src/views/reader-toolbar.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
 | TR-16a | ✅ | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/views/reader-toolbar.js | tests/e2e/reader-advanced.spec.js<br>tests/unit/content-engineering.test.js | — | — |
 | TR-17 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-extras.css<br>css/reader.css<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-18 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-extras.css<br>css/reader.css<br>src/views/reader-toolbar.js<br>src/views/textbook-reader.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-19 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/e2e/reader-flow.spec.js<br>tests/unit/reader-analysis-gates.test.js | — | — |
-| TR-20 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/image-zoom.js | tests/dom/onboarding-zoom.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
+| TR-20 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/image-zoom.js<br>src/views/reader-render.js | tests/dom/onboarding-zoom.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
 | TR-21 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader-toolbar.js | tests/e2e/toc-sidebar.spec.js | — | — |
 | TR-22 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader-toolbar.js | tests/e2e/toc-sidebar.spec.js | — | — |
 | TR-23 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader-toolbar.js | tests/e2e/toc-sidebar.spec.js | — | — |
 | TR-24 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-05 | — | tests/dom/reader-keyboard.dom.test.js | — | — |
 | TR-25 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-05 | — | tests/dom/reader-keyboard.dom.test.js | — | — |
 | TR-26 | ✅ | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/zoom-gestures.js | tests/dom/zoom-gestures.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
-| TR-27 | ✅ | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/views/reader-toolbar.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
+| TR-27 | ✅ | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/views/reader-render.js<br>src/views/reader-toolbar.js | tests/dom/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
 
 ## 3.6 교재 리더 — 학습 보조 도구
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | SA-01 | ✅ | E2E 테스트 | — | — | tests/e2e/reader-flow.spec.js | — | — |
-| SA-02 | ✅ | 테스트 | — | src/study-aids.js<br>src/views/textbook-reader.js | tests/unit/study-aids.test.js | — | — |
-| SA-03 | ✅ | 테스트 | — | src/study-aids.js<br>src/views/textbook-reader.js | tests/unit/study-aids.test.js | — | — |
+| SA-02 | ✅ | 테스트 | — | src/study-aids.js<br>src/views/reader-render.js<br>src/views/textbook-reader.js | tests/unit/study-aids.test.js | — | — |
+| SA-03 | ✅ | 테스트 | — | src/study-aids.js<br>src/views/reader-render.js<br>src/views/textbook-reader.js | tests/unit/study-aids.test.js | — | — |
 | SA-04 | ✅ | 테스트 | — | src/study-aids.js<br>src/views/textbook-reader.js | tests/unit/study-aids.test.js | — | — |
 | SA-05 | ✅ | 테스트 | — | src/study-aids.js<br>src/views/textbook-reader.js | tests/unit/study-aids.test.js | — | — |
 
@@ -402,7 +402,7 @@
 | SC-12 | ✅ | 테스트 | — | src/views/analysis-view.js | tests/unit/study-tracker.test.js | — | — |
 | SC-13 | ✅ | 테스트 | DOC-DSN-17 | — | tests/dom/study-calendar.dom.test.js<br>tests/unit/study-tracker.test.js | — | — |
 | SC-14 | ✅ | 테스트 | — | — | tests/dom/study-dashboard.dom.test.js | — | — |
-| SC-15 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/study-tracker.js | tests/dom/study-calendar.dom.test.js<br>tests/unit/study-tracker.test.js | — | — |
+| SC-15 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/study-tracker.js<br>src/views/reader-progress.js | tests/dom/study-calendar.dom.test.js<br>tests/unit/study-tracker.test.js | — | — |
 
 ## 3.21 UI 모드 전환
 
@@ -668,7 +668,7 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| ST-01 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13 | src/views/textbook-reader.js | tests/unit/story-textbook.test.js | — | — |
+| ST-01 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13 | src/views/reader-loader.js<br>src/views/textbook-reader.js | tests/unit/story-textbook.test.js | — | — |
 | ST-02 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13 | src/views/textbook-reader.js | tests/unit/story-textbook.test.js | — | — |
 | ST-03 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13 | src/views/textbook-reader.js | tests/unit/story-textbook.test.js | — | — |
 | ST-04 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13 | src/views/textbook-reader.js | tests/unit/story-textbook.test.js | — | — |

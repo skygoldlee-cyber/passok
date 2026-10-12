@@ -4,7 +4,7 @@
 //       툴바 버튼 바인딩, 표 전체화면 모달. 렌더링 로직은 textbook-reader.js에 남음.
 import { safeGetItem, safeSetItem } from '../state.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
-import { scheduleSaveReaderPosition } from './textbook-reader.js';
+import { scheduleSaveReaderPosition } from './reader-progress.js';
 export const readerChapterContext = { subjId: '', chapterIdx: 0 };
 let readerScrollBound = false;
 let _readerKeyboardBound = false;
