@@ -11,8 +11,8 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { parseExamFile } = require('./plugins/exams.plugin');
-
-const OPTION_INDICATORS = ['①', '②', '③', '④', '⑤'];
+const { createRequire } = require('module');
+const { OPTION_INDICATORS } = createRequire(__filename)('../../src/utils.js');
 
 function sha6(s) {
   return crypto.createHash('sha256').update(s, 'utf8').digest('hex').substring(0, 6);
