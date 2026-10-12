@@ -15,6 +15,7 @@
 //   LL-06 본문에 '최종 확인' QA 스탬프 잔존
 //   LL-07 스테이징 경로 누출 (ref_md_v2/, _archive/)
 //   LL-08 위험 스킴 href (javascript:/data:/vbscript:)
+//   LL-09 title/alt/aria-label 속성에 경로·파일명 노출 (호버 툴팁 누출)
 //
 // 표면별 허용:
 //   교재(reader-format): <a>는 data-* 액션 또는 # 또는 허용 외부 링크만
@@ -165,6 +166,23 @@ function lintHtml(file, html, surface, opts = {}) {
             flag('LL-03', `좌표 라벨: "${effLabel.slice(0, 50)}"`, needle);
         else if (/\.(md|pdf)$/i.test(effLabel))
             flag('LL-03', `파일명 라벨: "${effLabel.slice(0, 50)}"`, needle);
+    }
+
+    // LL-09 속성 노출 — title/alt/aria-label에 경로·파일명이 남으면 호버 툴팁으로 표시됨
+    for (const m of html.matchAll(/(?:title|alt|aria-label)="([^"]*)"/g)) {
+        const v = m[1];
+        const attrLeaks = [
+            [/\.\.\//, '상대경로'],
+            [/ref_md_v2|_archive/, '스테이징 경로'],
+            [/content\/exams\//, '저장소 경로'],
+            [/ref_md\//, 'ref_md/ 경로'],
+            [/참조자료\/[^\s]+\.(md|pdf)/, '참조자료 파일 경로'],
+            [/교재\/[a-z]+\/|문제은행\/[^\s]+\.md/, '내부 디렉토리 경로'],
+            [/[^\s/]+\.(md|pdf)\b/, '파일명(.md/.pdf)'],
+        ];
+        for (const [re, msg] of attrLeaks) {
+            if (re.test(v)) { flag('LL-09', `${msg} 속성 노출: "${v.slice(0, 80)}"`, v); break; }
+        }
     }
 
     // LL-05 본문 텍스트 누출 — 앵커 라벨 정규화 + 코드블록 제외 후 검사
