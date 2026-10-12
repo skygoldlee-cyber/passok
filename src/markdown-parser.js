@@ -194,12 +194,18 @@ export function parseMarkdown(mdText, options = {}) {
     // (링크 파싱 전에 처리하여 ![alt](url)가 [text](url)로 변환되지 않도록 함)
     html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="reader-img" loading="lazy">');
 
+    // 5-2a. 마크다운 <url> 문법 [text](<url>) — URL 내 괄호·공백 허용
+    // (escapeHTML 통과 후라 < >는 &lt; &gt;로 변환됨). 일반 ]() 파서보다 먼저 처리 —
+    // ref_md의 괄호 포함 파일명(화장품법(법률)(제N호)…)이 ]()에서 잘려
+    // 잔여 경로가 본문 텍스트로 노출되는 파손을 방지한다.
+    html = html.replace(/\[([^\]]+)\]\(&lt;([\s\S]+?)&gt;\)/g, (m, text, url) => {
+        return '<a href="' + url + '">' + text + '</a>';
+    });
+
     // 5-2. 마크다운 링크 [text](url) → <a href="url">text</a>
     // (escapeHTML 통과 후이므로 &amp; 등은 이미 인코딩됨 — href에 그대로 사용)
     // (펜스 블록 내부의 []()는 토큰화되어 있으므로 변환되지 않음)
-    // URL에 괄호가 포함된 경우(예: 화장품법(법률)(제21525호).pdf)를 처리하기 위해
-    // 마지막 ) 까지 greedy 매칭 (URL 인코딩된 %28 %29는 영향 없음)
-    // 마크다운 <url> 문법(angle bracket URL)의 &lt; &gt; 를 제거하여 유효한 href 생성
+    // 마크다운 <url> 문법(angle bracket URL)은 5-2a에서 먼저 처리됨
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (m, text, rawUrl) => {
         let url = rawUrl;
         if (/^&lt;.+&gt;$/.test(url)) {
