@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject1.5d2b8ede.js — mode: fact(명제 조합) 8문 / answer(정답 조합) 57문
+// 원본: data/exams/cosmetic/exams/subject1.c17c54c0.js — mode: fact(명제 조합) 8문 / answer(정답 조합) 57문
 var COMBO_DRILLS_subject1 = [
  {
   "id": "law_combo_f9a972",
@@ -4360,7 +4360,7 @@ var COMBO_DRILLS_subject1 = [
    "절차"
   ],
   "derivedFrom": "subject1_q47",
-  "explain": "📖 교재 근거 (L639):\n#### 안전관리 기준 🎯 기출\n해설: 화장품책임판매업자는 책임판매관리자를 두어 안전관리 정보를 수집·기록하고, 안전확보 조치를 문서로 보고해야 한다. 보고 의무가 없다는 것은 옳지 않다.",
+  "explain": "📖 교재 근거 (L615):\n#### 안전관리 기준 🎯 기출\n해설: 화장품책임판매업자는 책임판매관리자를 두어 안전관리 정보를 수집·기록하고, 안전확보 조치를 문서로 보고해야 한다. 보고 의무가 없다는 것은 옳지 않다.",
   "source": "화장품법의 이해 (100제)",
   "answer": "3"
  },

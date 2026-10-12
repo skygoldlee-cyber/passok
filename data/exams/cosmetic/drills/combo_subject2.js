@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject2.682401a4.js — mode: fact(명제 조합) 19문 / answer(정답 조합) 138문
+// 원본: data/exams/cosmetic/exams/subject2.329e2c1e.js — mode: fact(명제 조합) 19문 / answer(정답 조합) 138문
 var COMBO_DRILLS_subject2 = [
  {
   "id": "manufacturing_combo_f62cd4",
@@ -11200,7 +11200,7 @@ var COMBO_DRILLS_subject2 = [
   "subject": 2,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L928 (출처: 과목2 문제은행 Q123)",
+  "citation": "📖 교재: L891 (출처: 과목2 문제은행 Q123)",
   "stem": "화장품 원료 중 파라벤류(메틸파라벤, 에틸파라벤 등)의 주요 용도에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
@@ -11280,7 +11280,7 @@ var COMBO_DRILLS_subject2 = [
    "정답판정"
   ],
   "derivedFrom": "subject2_q123",
-  "explain": "📖 교재 근거 (교재: L928):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올",
+  "explain": "📖 교재 근거 (교재: L891):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올",
   "source": "화장품 제조 및 품질관리 (250제)",
   "answer": "3"
  },

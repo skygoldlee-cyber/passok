@@ -1,5 +1,5 @@
 // 자동 생성된 O/X 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_ox_drills.js)
-// 원본: data/exams/cosmetic/exams/subject2.682401a4.js — mode: fact(명제 판정) 19문 / answer(정답 판정) 137문
+// 원본: data/exams/cosmetic/exams/subject2.329e2c1e.js — mode: fact(명제 판정) 19문 / answer(정답 판정) 137문
 var OX_DRILLS_subject2 = [
  {
   "id": "ox-02-0001",
@@ -11392,7 +11392,7 @@ var OX_DRILLS_subject2 = [
   "mode": "answer",
   "sid": "manufacturing_st_50c3ac",
   "derivedFrom": "subject2_q123#1",
-  "explain": "📖 교재 근거 (교재: L928):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올",
+  "explain": "📖 교재 근거 (교재: L891):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올",
   "tags": [
    "정답판정"
   ],
@@ -11410,7 +11410,7 @@ var OX_DRILLS_subject2 = [
   "mode": "answer",
   "sid": "manufacturing_st_a3a9ef",
   "derivedFrom": "subject2_q123#2",
-  "explain": "📖 교재 근거 (교재: L928):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올",
+  "explain": "📖 교재 근거 (교재: L891):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올",
   "tags": [
    "정답판정"
   ],
@@ -11428,7 +11428,7 @@ var OX_DRILLS_subject2 = [
   "mode": "answer",
   "sid": "manufacturing_st_e0c77c",
   "derivedFrom": "subject2_q123#3",
-  "explain": "📖 교재 근거 (교재: L928):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올",
+  "explain": "📖 교재 근거 (교재: L891):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올",
   "tags": [
    "정답판정"
   ],
@@ -11446,7 +11446,7 @@ var OX_DRILLS_subject2 = [
   "mode": "answer",
   "sid": "manufacturing_st_1daac5",
   "derivedFrom": "subject2_q123#4",
-  "explain": "📖 교재 근거 (교재: L928):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올",
+  "explain": "📖 교재 근거 (교재: L891):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올",
   "tags": [
    "정답판정"
   ],
@@ -11464,7 +11464,7 @@ var OX_DRILLS_subject2 = [
   "mode": "answer",
   "sid": "manufacturing_st_3ae802",
   "derivedFrom": "subject2_q123#5",
-  "explain": "📖 교재 근거 (교재: L928):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올",
+  "explain": "📖 교재 근거 (교재: L891):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올",
   "tags": [
    "정답판정"
   ],

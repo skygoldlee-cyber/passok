@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 문제은행 스테일 인용 15건 라인 보정
+
+- **배경**: 교재 마인드맵 삽입·알레르기 표 재배치로 인용 대상 라인이 이동했으나, 내장 인용문이 짧아(정규화 10자 미만) sync_citation_lines 자동 재탐색에 실패한 미발견 29개 링크(15개 고유 인용) 잔존
+- **조치**: 4개 문제은행 파일의 `#L`을 인용문 실제 위치로 수동 보정 (정답 링크+📖 근거 헤더 쌍) — 마인드맵 노드 인용은 블록 시작 노드 라인, 표/절 인용은 해당 행·헤딩 라인으로 정합. `sync:citations --check` 미발견 0 확인
+- **`docs_paths_allowlist.json`**: `tools/check/combo_audit_report.json`·`combo_review_queue.md` 등록 — audit:combo 실행 전 clean 상태에서 docs 경로 검사가 gitignore 산출물 참조를 오탐하던 문제 해소. 루트의 구형 `combo_*` 잔재(경로 이전 전 산출물) 삭제
+- 생성물 전량 재빌드 (`build:data` + `build:drills` — 문제은행 해시 변경분 반영)
+
 ## 2026-10-12 게이트 계획 정밀화 — 태그 선택·결과 캐시·인프로세스
 
 - **태그 기반 단계 선택 (push_gate.js)**: 3티어 고정 대신 파일 경로 유형 태그(`content/html/docs/src/tools/tests/ci/config/unknown`) × 단계별 필요 태그 표(`STEP_NEEDS`)로 실행 단계 산출 — SPEC.md만 바뀐 푸시는 docs 계열 5단계, html/ 미변경 시 html 신선도 생략 등 세분화. `unknown` 태그 파일 1건이면 전체 폴백 유지

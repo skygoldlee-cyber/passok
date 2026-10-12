@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject3.dd2c6676.js — mode: fact(명제 조합) 23문 / answer(정답 조합) 226문
+// 원본: data/exams/cosmetic/exams/subject3.b94cc53b.js — mode: fact(명제 조합) 23문 / answer(정답 조합) 226문
 var COMBO_DRILLS_subject3 = [
  {
   "id": "safety_combo_86b500",
@@ -201,7 +201,7 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L171 (출처: 과목3 문제은행 Q3)",
+  "citation": "📖 교재: L142 (출처: 과목3 문제은행 Q3)",
   "stem": "다음 중 작업자의 위생 상태 점검 항목에 속하는 '건강 검진' 주기와 결격 대상 질환에 대한 설명으로 옳은 것을 모두 고른 것은?",
   "statements": [
    {
@@ -286,7 +286,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q3",
-  "explain": "📖 교재 근거 (교재: L171):\nCGMP·안전기준\n화장품 정의\n적용 대상\n유형별 특성\n영업 3종\n화장품제조업\n등록제\n화장품책임판매업\n등록제\n맞춤형화장품판매업\n신고제",
+  "explain": "📖 교재 근거 (교재: L142):\nCGMP·안전기준\n화장품 정의\n적용 대상\n유형별 특성\n영업 3종\n화장품제조업\n등록제\n화장품책임판매업\n등록제\n맞춤형화장품판매업\n신고제",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -7090,7 +7090,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q76",
-  "explain": "📖 법령 근거 (L251):\n원료 품질성적서\nCGMP 4대 기준서\n제품표준서\n제조관리기준서\n품질관리기준서\n위생관리기준서\n```",
+  "explain": "📖 법령 근거 (L214):\n원료 품질성적서\nCGMP 4대 기준서\n제품표준서\n제조관리기준서\n품질관리기준서\n위생관리기준서\n```",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },
@@ -13068,41 +13068,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L320 (출처: 과목3 문제은행 Q142)",
+  "citation": "📖 교재: L285 (출처: 과목3 문제은행 Q142)",
   "stem": "화장품 제조 시 「공정 모니터링」의 대상이 아닌 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_cb82df",
-    "conceptId": "§1.0",
+    "conceptId": "q:subject3_q142",
     "text": "온도",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_52dd33",
-    "conceptId": "§1.0",
+    "conceptId": "q:subject3_q142",
     "text": "작업자의 심박수",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_9515ad",
-    "conceptId": "§1.0",
+    "conceptId": "q:subject3_q142",
     "text": "압력",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_ae7be9",
-    "conceptId": "§1.0",
+    "conceptId": "q:subject3_q142",
     "text": "교반 속도",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_359461",
-    "conceptId": "§1.0",
+    "conceptId": "q:subject3_q142",
     "text": "습도",
     "truth": false
    }
@@ -13153,7 +13153,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q142",
-  "explain": "📖 교재 근거 (교재: L320):\n포장재 관리\n입고 기준\n규격·품질 확인\n검사 합격 후 입고\n보관 관리\n온도·습도 관리\n청결 유지\n구역별 분류 보관\n출고 기준\n선입선출\n선한선출",
+  "explain": "📖 교재 근거 (교재: L285):\n포장재 관리\n입고 기준\n규격·품질 확인\n검사 합격 후 입고\n보관 관리\n온도·습도 관리\n청결 유지\n구역별 분류 보관\n출고 기준\n선입선출\n선한선출",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "1"
  },
@@ -18555,41 +18555,41 @@ var COMBO_DRILLS_subject3 = [
   "subject": 3,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L331 (출처: 과목3 문제은행 Q201)",
+  "citation": "📖 교재: L296 (출처: 과목3 문제은행 Q201)",
   "stem": "작업장 소독에 쓰이는 차아염소산나트륨(락스 등)은 빛과 열에 의해 쉽게 분해되므로 반드시 ________ 용기에 보관해야 한다. (차광 여부 기준으로 작성) 위 빈 칸에 들어갈 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "safety_st_34823b",
-    "conceptId": "§1.0",
+    "conceptId": "q:subject3_q201",
     "text": "밀봉",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_4f7cf8",
-    "conceptId": "§1.0",
+    "conceptId": "q:subject3_q201",
     "text": "차광",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_32e86e",
-    "conceptId": "§1.0",
+    "conceptId": "q:subject3_q201",
     "text": "냉장",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_7de83a",
-    "conceptId": "§1.0",
+    "conceptId": "q:subject3_q201",
     "text": "건조",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_bc67fe",
-    "conceptId": "§1.0",
+    "conceptId": "q:subject3_q201",
     "text": "방습",
     "truth": false
    }
@@ -18638,7 +18638,7 @@ var COMBO_DRILLS_subject3 = [
    "정답판정"
   ],
   "derivedFrom": "subject3_q201",
-  "explain": "📖 교재 근거 (교재: L331):\n사용기한 확인\n포장용기 종류\n밀폐 용기\n기밀 용기\n밀봉 용기\n차광 용기\n안전용기\n아세톤 함유\n탄화수소 10% 이상\n메틸살리실레이트 5% 이상\n포장 시험 방법",
+  "explain": "📖 교재 근거 (교재: L296):\n사용기한 확인\n포장용기 종류\n밀폐 용기\n기밀 용기\n밀봉 용기\n차광 용기\n안전용기\n아세톤 함유\n탄화수소 10% 이상\n메틸살리실레이트 5% 이상\n포장 시험 방법",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },

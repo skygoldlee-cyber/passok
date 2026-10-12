@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject4.99af6037.js — mode: fact(명제 조합) 18문 / answer(정답 조합) 257문
+// 원본: data/exams/cosmetic/exams/subject4.f1cd7b3b.js — mode: fact(명제 조합) 18문 / answer(정답 조합) 257문
 var COMBO_DRILLS_subject4 = [
  {
   "id": "understanding_combo_8317ff",
@@ -4352,7 +4352,7 @@ var COMBO_DRILLS_subject4 = [
   "subject": 4,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: L1385 (출처: 과목4 문제은행 Q48)",
+  "citation": "📖 교재: L1323 (출처: 과목4 문제은행 Q48)",
   "stem": "다음 중 모발의 수분 결합력 및 물리적 탄성을 담당하는 모발 구조 중 가장 부피가 크며 멜라닌 색소가 분포하는 층에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
@@ -4434,7 +4434,7 @@ var COMBO_DRILLS_subject4 = [
    "구성비"
   ],
   "derivedFrom": "subject4_q48",
-  "explain": "📖 교재 근거 (교재: L1385):\n모피질(Cortex)",
+  "explain": "📖 교재 근거 (교재: L1323):\n모피질(Cortex)",
   "source": "맞춤형화장품의 이해 (400제)",
   "answer": "3"
  },
@@ -24222,7 +24222,7 @@ var COMBO_DRILLS_subject4 = [
    "수치"
   ],
   "derivedFrom": "subject4_q263",
-  "explain": "📖 교재 근거 (L1386):\n모피질(Cortex)",
+  "explain": "📖 교재 근거 (L1323):\n모피질(Cortex)",
   "source": "맞춤형화장품의 이해 (400제)",
   "answer": "5"
  },

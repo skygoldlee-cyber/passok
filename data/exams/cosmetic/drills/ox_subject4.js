@@ -1,5 +1,5 @@
 // 자동 생성된 O/X 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_ox_drills.js)
-// 원본: data/exams/cosmetic/exams/subject4.99af6037.js — mode: fact(명제 판정) 17문 / answer(정답 판정) 255문
+// 원본: data/exams/cosmetic/exams/subject4.f1cd7b3b.js — mode: fact(명제 판정) 17문 / answer(정답 판정) 255문
 var OX_DRILLS_subject4 = [
  {
   "id": "ox-04-0001",
@@ -4229,7 +4229,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_16b5bc",
   "derivedFrom": "subject4_q48#1",
-  "explain": "📖 교재 근거 (교재: L1385):\n모피질(Cortex)",
+  "explain": "📖 교재 근거 (교재: L1323):\n모피질(Cortex)",
   "tags": [
    "정답판정",
    "구성비"
@@ -4248,7 +4248,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_06b756",
   "derivedFrom": "subject4_q48#2",
-  "explain": "📖 교재 근거 (교재: L1385):\n모피질(Cortex)",
+  "explain": "📖 교재 근거 (교재: L1323):\n모피질(Cortex)",
   "tags": [
    "정답판정",
    "구성비"
@@ -4267,7 +4267,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_04eb4b",
   "derivedFrom": "subject4_q48#3",
-  "explain": "📖 교재 근거 (교재: L1385):\n모피질(Cortex)",
+  "explain": "📖 교재 근거 (교재: L1323):\n모피질(Cortex)",
   "tags": [
    "정답판정",
    "구성비"
@@ -4286,7 +4286,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_4f3b22",
   "derivedFrom": "subject4_q48#4",
-  "explain": "📖 교재 근거 (교재: L1385):\n모피질(Cortex)",
+  "explain": "📖 교재 근거 (교재: L1323):\n모피질(Cortex)",
   "tags": [
    "정답판정",
    "구성비"
@@ -4305,7 +4305,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_65bf51",
   "derivedFrom": "subject4_q48#5",
-  "explain": "📖 교재 근거 (교재: L1385):\n모피질(Cortex)",
+  "explain": "📖 교재 근거 (교재: L1323):\n모피질(Cortex)",
   "tags": [
    "정답판정",
    "구성비"
@@ -24083,7 +24083,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_820e03",
   "derivedFrom": "subject4_q263#1",
-  "explain": "📖 교재 근거 (L1386):\n모피질(Cortex)",
+  "explain": "📖 교재 근거 (L1323):\n모피질(Cortex)",
   "tags": [
    "정답판정",
    "한도",
@@ -24103,7 +24103,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_a440d3",
   "derivedFrom": "subject4_q263#2",
-  "explain": "📖 교재 근거 (L1386):\n모피질(Cortex)",
+  "explain": "📖 교재 근거 (L1323):\n모피질(Cortex)",
   "tags": [
    "정답판정",
    "한도",
@@ -24123,7 +24123,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_202b05",
   "derivedFrom": "subject4_q263#3",
-  "explain": "📖 교재 근거 (L1386):\n모피질(Cortex)",
+  "explain": "📖 교재 근거 (L1323):\n모피질(Cortex)",
   "tags": [
    "정답판정",
    "한도",
@@ -24143,7 +24143,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_5105e6",
   "derivedFrom": "subject4_q263#4",
-  "explain": "📖 교재 근거 (L1386):\n모피질(Cortex)",
+  "explain": "📖 교재 근거 (L1323):\n모피질(Cortex)",
   "tags": [
    "정답판정",
    "한도",
@@ -24163,7 +24163,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_44b4b3",
   "derivedFrom": "subject4_q263#5",
-  "explain": "📖 교재 근거 (L1386):\n모피질(Cortex)",
+  "explain": "📖 교재 근거 (L1323):\n모피질(Cortex)",
   "tags": [
    "정답판정",
    "한도",

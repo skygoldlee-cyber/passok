@@ -1,5 +1,5 @@
 // 자동 생성된 O/X 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_ox_drills.js)
-// 원본: data/exams/cosmetic/exams/subject3.dd2c6676.js — mode: fact(명제 판정) 22문 / answer(정답 판정) 226문
+// 원본: data/exams/cosmetic/exams/subject3.b94cc53b.js — mode: fact(명제 판정) 22문 / answer(정답 판정) 226문
 var OX_DRILLS_subject3 = [
  {
   "id": "ox-03-0001",
@@ -204,7 +204,7 @@ var OX_DRILLS_subject3 = [
   "mode": "fact",
   "sid": "safety_st_b8f7e3",
   "derivedFrom": "subject3_q3#1",
-  "explain": "📖 교재 근거 (교재: L171):\nCGMP·안전기준\n화장품 정의\n적용 대상\n유형별 특성\n영업 3종\n화장품제조업\n등록제\n화장품책임판매업\n등록제\n맞춤형화장품판매업\n신고제",
+  "explain": "📖 교재 근거 (교재: L142):\nCGMP·안전기준\n화장품 정의\n적용 대상\n유형별 특성\n영업 3종\n화장품제조업\n등록제\n화장품책임판매업\n등록제\n맞춤형화장품판매업\n신고제",
   "tags": [
    "명제판정",
    "기한",
@@ -224,7 +224,7 @@ var OX_DRILLS_subject3 = [
   "mode": "fact",
   "sid": "safety_st_110f45",
   "derivedFrom": "subject3_q3#2",
-  "explain": "📖 교재 근거 (교재: L171):\nCGMP·안전기준\n화장품 정의\n적용 대상\n유형별 특성\n영업 3종\n화장품제조업\n등록제\n화장품책임판매업\n등록제\n맞춤형화장품판매업\n신고제",
+  "explain": "📖 교재 근거 (교재: L142):\nCGMP·안전기준\n화장품 정의\n적용 대상\n유형별 특성\n영업 3종\n화장품제조업\n등록제\n화장품책임판매업\n등록제\n맞춤형화장품판매업\n신고제",
   "tags": [
    "명제판정",
    "기한"
@@ -243,7 +243,7 @@ var OX_DRILLS_subject3 = [
   "mode": "fact",
   "sid": "safety_st_41b2d9",
   "derivedFrom": "subject3_q3#3",
-  "explain": "📖 교재 근거 (교재: L171):\nCGMP·안전기준\n화장품 정의\n적용 대상\n유형별 특성\n영업 3종\n화장품제조업\n등록제\n화장품책임판매업\n등록제\n맞춤형화장품판매업\n신고제",
+  "explain": "📖 교재 근거 (교재: L142):\nCGMP·안전기준\n화장품 정의\n적용 대상\n유형별 특성\n영업 3종\n화장품제조업\n등록제\n화장품책임판매업\n등록제\n맞춤형화장품판매업\n신고제",
   "tags": [
    "명제판정",
    "기한",
@@ -263,7 +263,7 @@ var OX_DRILLS_subject3 = [
   "mode": "fact",
   "sid": "safety_st_c8e369",
   "derivedFrom": "subject3_q3#4",
-  "explain": "📖 교재 근거 (교재: L171):\nCGMP·안전기준\n화장품 정의\n적용 대상\n유형별 특성\n영업 3종\n화장품제조업\n등록제\n화장품책임판매업\n등록제\n맞춤형화장품판매업\n신고제",
+  "explain": "📖 교재 근거 (교재: L142):\nCGMP·안전기준\n화장품 정의\n적용 대상\n유형별 특성\n영업 3종\n화장품제조업\n등록제\n화장품책임판매업\n등록제\n맞춤형화장품판매업\n신고제",
   "tags": [
    "명제판정",
    "기한",
@@ -283,7 +283,7 @@ var OX_DRILLS_subject3 = [
   "mode": "fact",
   "sid": "safety_st_ffda21",
   "derivedFrom": "subject3_q3#5",
-  "explain": "📖 교재 근거 (교재: L171):\nCGMP·안전기준\n화장품 정의\n적용 대상\n유형별 특성\n영업 3종\n화장품제조업\n등록제\n화장품책임판매업\n등록제\n맞춤형화장품판매업\n신고제",
+  "explain": "📖 교재 근거 (교재: L142):\nCGMP·안전기준\n화장품 정의\n적용 대상\n유형별 특성\n영업 3종\n화장품제조업\n등록제\n화장품책임판매업\n등록제\n맞춤형화장품판매업\n신고제",
   "tags": [
    "명제판정",
    "기한"
@@ -7045,7 +7045,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_dc5a60",
   "derivedFrom": "subject3_q76#1",
-  "explain": "📖 법령 근거 (L251):\n원료 품질성적서\nCGMP 4대 기준서\n제품표준서\n제조관리기준서\n품질관리기준서\n위생관리기준서\n```",
+  "explain": "📖 법령 근거 (L214):\n원료 품질성적서\nCGMP 4대 기준서\n제품표준서\n제조관리기준서\n품질관리기준서\n위생관리기준서\n```",
   "tags": [
    "정답판정"
   ],
@@ -7063,7 +7063,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_c302fa",
   "derivedFrom": "subject3_q76#2",
-  "explain": "📖 법령 근거 (L251):\n원료 품질성적서\nCGMP 4대 기준서\n제품표준서\n제조관리기준서\n품질관리기준서\n위생관리기준서\n```",
+  "explain": "📖 법령 근거 (L214):\n원료 품질성적서\nCGMP 4대 기준서\n제품표준서\n제조관리기준서\n품질관리기준서\n위생관리기준서\n```",
   "tags": [
    "정답판정"
   ],
@@ -7081,7 +7081,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_e44dfa",
   "derivedFrom": "subject3_q76#3",
-  "explain": "📖 법령 근거 (L251):\n원료 품질성적서\nCGMP 4대 기준서\n제품표준서\n제조관리기준서\n품질관리기준서\n위생관리기준서\n```",
+  "explain": "📖 법령 근거 (L214):\n원료 품질성적서\nCGMP 4대 기준서\n제품표준서\n제조관리기준서\n품질관리기준서\n위생관리기준서\n```",
   "tags": [
    "정답판정"
   ],
@@ -7099,7 +7099,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_fbaf40",
   "derivedFrom": "subject3_q76#4",
-  "explain": "📖 법령 근거 (L251):\n원료 품질성적서\nCGMP 4대 기준서\n제품표준서\n제조관리기준서\n품질관리기준서\n위생관리기준서\n```",
+  "explain": "📖 법령 근거 (L214):\n원료 품질성적서\nCGMP 4대 기준서\n제품표준서\n제조관리기준서\n품질관리기준서\n위생관리기준서\n```",
   "tags": [
    "정답판정"
   ],
@@ -7117,7 +7117,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_92e1b6",
   "derivedFrom": "subject3_q76#5",
-  "explain": "📖 법령 근거 (L251):\n원료 품질성적서\nCGMP 4대 기준서\n제품표준서\n제조관리기준서\n품질관리기준서\n위생관리기준서\n```",
+  "explain": "📖 법령 근거 (L214):\n원료 품질성적서\nCGMP 4대 기준서\n제품표준서\n제조관리기준서\n품질관리기준서\n위생관리기준서\n```",
   "tags": [
    "정답판정"
   ],
@@ -13087,7 +13087,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_cb82df",
   "derivedFrom": "subject3_q142#1",
-  "explain": "📖 교재 근거 (교재: L320):\n포장재 관리\n입고 기준\n규격·품질 확인\n검사 합격 후 입고\n보관 관리\n온도·습도 관리\n청결 유지\n구역별 분류 보관\n출고 기준\n선입선출\n선한선출",
+  "explain": "📖 교재 근거 (교재: L285):\n포장재 관리\n입고 기준\n규격·품질 확인\n검사 합격 후 입고\n보관 관리\n온도·습도 관리\n청결 유지\n구역별 분류 보관\n출고 기준\n선입선출\n선한선출",
   "tags": [
    "정답판정"
   ],
@@ -13105,7 +13105,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_52dd33",
   "derivedFrom": "subject3_q142#2",
-  "explain": "📖 교재 근거 (교재: L320):\n포장재 관리\n입고 기준\n규격·품질 확인\n검사 합격 후 입고\n보관 관리\n온도·습도 관리\n청결 유지\n구역별 분류 보관\n출고 기준\n선입선출\n선한선출",
+  "explain": "📖 교재 근거 (교재: L285):\n포장재 관리\n입고 기준\n규격·품질 확인\n검사 합격 후 입고\n보관 관리\n온도·습도 관리\n청결 유지\n구역별 분류 보관\n출고 기준\n선입선출\n선한선출",
   "tags": [
    "정답판정"
   ],
@@ -13123,7 +13123,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_9515ad",
   "derivedFrom": "subject3_q142#3",
-  "explain": "📖 교재 근거 (교재: L320):\n포장재 관리\n입고 기준\n규격·품질 확인\n검사 합격 후 입고\n보관 관리\n온도·습도 관리\n청결 유지\n구역별 분류 보관\n출고 기준\n선입선출\n선한선출",
+  "explain": "📖 교재 근거 (교재: L285):\n포장재 관리\n입고 기준\n규격·품질 확인\n검사 합격 후 입고\n보관 관리\n온도·습도 관리\n청결 유지\n구역별 분류 보관\n출고 기준\n선입선출\n선한선출",
   "tags": [
    "정답판정"
   ],
@@ -13141,7 +13141,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_ae7be9",
   "derivedFrom": "subject3_q142#4",
-  "explain": "📖 교재 근거 (교재: L320):\n포장재 관리\n입고 기준\n규격·품질 확인\n검사 합격 후 입고\n보관 관리\n온도·습도 관리\n청결 유지\n구역별 분류 보관\n출고 기준\n선입선출\n선한선출",
+  "explain": "📖 교재 근거 (교재: L285):\n포장재 관리\n입고 기준\n규격·품질 확인\n검사 합격 후 입고\n보관 관리\n온도·습도 관리\n청결 유지\n구역별 분류 보관\n출고 기준\n선입선출\n선한선출",
   "tags": [
    "정답판정"
   ],
@@ -13159,7 +13159,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_359461",
   "derivedFrom": "subject3_q142#5",
-  "explain": "📖 교재 근거 (교재: L320):\n포장재 관리\n입고 기준\n규격·품질 확인\n검사 합격 후 입고\n보관 관리\n온도·습도 관리\n청결 유지\n구역별 분류 보관\n출고 기준\n선입선출\n선한선출",
+  "explain": "📖 교재 근거 (교재: L285):\n포장재 관리\n입고 기준\n규격·품질 확인\n검사 합격 후 입고\n보관 관리\n온도·습도 관리\n청결 유지\n구역별 분류 보관\n출고 기준\n선입선출\n선한선출",
   "tags": [
    "정답판정"
   ],
@@ -18636,7 +18636,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_34823b",
   "derivedFrom": "subject3_q201#1",
-  "explain": "📖 교재 근거 (교재: L331):\n사용기한 확인\n포장용기 종류\n밀폐 용기\n기밀 용기\n밀봉 용기\n차광 용기\n안전용기\n아세톤 함유\n탄화수소 10% 이상\n메틸살리실레이트 5% 이상\n포장 시험 방법",
+  "explain": "📖 교재 근거 (교재: L296):\n사용기한 확인\n포장용기 종류\n밀폐 용기\n기밀 용기\n밀봉 용기\n차광 용기\n안전용기\n아세톤 함유\n탄화수소 10% 이상\n메틸살리실레이트 5% 이상\n포장 시험 방법",
   "tags": [
    "정답판정"
   ],
@@ -18654,7 +18654,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_4f7cf8",
   "derivedFrom": "subject3_q201#2",
-  "explain": "📖 교재 근거 (교재: L331):\n사용기한 확인\n포장용기 종류\n밀폐 용기\n기밀 용기\n밀봉 용기\n차광 용기\n안전용기\n아세톤 함유\n탄화수소 10% 이상\n메틸살리실레이트 5% 이상\n포장 시험 방법",
+  "explain": "📖 교재 근거 (교재: L296):\n사용기한 확인\n포장용기 종류\n밀폐 용기\n기밀 용기\n밀봉 용기\n차광 용기\n안전용기\n아세톤 함유\n탄화수소 10% 이상\n메틸살리실레이트 5% 이상\n포장 시험 방법",
   "tags": [
    "정답판정"
   ],
@@ -18672,7 +18672,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_32e86e",
   "derivedFrom": "subject3_q201#3",
-  "explain": "📖 교재 근거 (교재: L331):\n사용기한 확인\n포장용기 종류\n밀폐 용기\n기밀 용기\n밀봉 용기\n차광 용기\n안전용기\n아세톤 함유\n탄화수소 10% 이상\n메틸살리실레이트 5% 이상\n포장 시험 방법",
+  "explain": "📖 교재 근거 (교재: L296):\n사용기한 확인\n포장용기 종류\n밀폐 용기\n기밀 용기\n밀봉 용기\n차광 용기\n안전용기\n아세톤 함유\n탄화수소 10% 이상\n메틸살리실레이트 5% 이상\n포장 시험 방법",
   "tags": [
    "정답판정"
   ],
@@ -18690,7 +18690,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_7de83a",
   "derivedFrom": "subject3_q201#4",
-  "explain": "📖 교재 근거 (교재: L331):\n사용기한 확인\n포장용기 종류\n밀폐 용기\n기밀 용기\n밀봉 용기\n차광 용기\n안전용기\n아세톤 함유\n탄화수소 10% 이상\n메틸살리실레이트 5% 이상\n포장 시험 방법",
+  "explain": "📖 교재 근거 (교재: L296):\n사용기한 확인\n포장용기 종류\n밀폐 용기\n기밀 용기\n밀봉 용기\n차광 용기\n안전용기\n아세톤 함유\n탄화수소 10% 이상\n메틸살리실레이트 5% 이상\n포장 시험 방법",
   "tags": [
    "정답판정"
   ],
@@ -18708,7 +18708,7 @@ var OX_DRILLS_subject3 = [
   "mode": "answer",
   "sid": "safety_st_bc67fe",
   "derivedFrom": "subject3_q201#5",
-  "explain": "📖 교재 근거 (교재: L331):\n사용기한 확인\n포장용기 종류\n밀폐 용기\n기밀 용기\n밀봉 용기\n차광 용기\n안전용기\n아세톤 함유\n탄화수소 10% 이상\n메틸살리실레이트 5% 이상\n포장 시험 방법",
+  "explain": "📖 교재 근거 (교재: L296):\n사용기한 확인\n포장용기 종류\n밀폐 용기\n기밀 용기\n밀봉 용기\n차광 용기\n안전용기\n아세톤 함유\n탄화수소 10% 이상\n메틸살리실레이트 5% 이상\n포장 시험 방법",
   "tags": [
    "정답판정"
   ],

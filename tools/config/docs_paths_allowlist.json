@@ -232,5 +232,15 @@
     "file": "docs/dev/ARCHITECTURE.md",
     "ref": "tests/unit/mermaid-rendering.test.js",
     "reason": "변경 이력 섹션의 과거 경로 언급 (2026-09-02 이력 — 현 위치 tests/unit/mermaid/)"
+  },
+  {
+    "file": "docs/dev/runbooks/COMBO_GENERATION_GUIDE.md",
+    "ref": "tools/check/combo_audit_report.json",
+    "reason": "audit:combo 실행 시 생성되는 리포트 산출물 — gitignore"
+  },
+  {
+    "file": "docs/dev/runbooks/COMBO_GENERATION_GUIDE.md",
+    "ref": "tools/check/combo_review_queue.md",
+    "reason": "audit:combo 실행 시 생성되는 검수 큐 산출물 — gitignore"
   }
 ]

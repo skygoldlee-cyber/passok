@@ -1841,7 +1841,7 @@ var EXAM_DATA_subject2 = {
         "방부제"
       ],
       "answer": "⑤",
-      "explanation": "📖 교재 근거 (교재: L928):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올"
+      "explanation": "📖 교재 근거 (교재: L891):\n```mermaid\nmindmap\nroot((보존제))\n종류\n파라벤\n대표적 방부제\n저농도·광범위 억제\n페녹시에탄올\n유성·마취작용\n점막 자극 주의\n1,2헥산다이올"
     },
     {
       "id": "subject2_q124",

@@ -721,7 +721,7 @@ var EXAM_DATA_subject4 = {
         "모피질 (Cortex)"
       ],
       "answer": "⑤",
-      "explanation": "📖 교재 근거 (교재: L1385):\n모피질(Cortex)"
+      "explanation": "📖 교재 근거 (교재: L1323):\n모피질(Cortex)"
     },
     {
       "id": "subject4_q49",
@@ -3946,7 +3946,7 @@ var EXAM_DATA_subject4 = {
         "모낭(Hair Follicle)"
       ],
       "answer": "①",
-      "explanation": "📖 교재 근거 (L1386):\n모피질(Cortex)"
+      "explanation": "📖 교재 근거 (L1323):\n모피질(Cortex)"
     },
     {
       "id": "subject4_q264",
@@ -4130,7 +4130,7 @@ var EXAM_DATA_subject4 = {
       "question": "피지선에서 분비되는 유성 물질 중 화학 구조상 탄소 간 이중결합을 가져 산화되기 쉬운 불포화 탄화수소로 피지의 약 12%를 차지하는 특유의 유성 성분 명칭은 **[  (A)  ]**이다.",
       "options": [],
       "answer": "스쿠알렌, 스쿠알렌, squalene",
-      "explanation": "📖 교재 근거 (L1286):\n| 스쿠알렌 | 12% |",
+      "explanation": "📖 교재 근거 (L1224):\n| 스쿠알렌 | 12% |",
       "answerRaw": "스쿠알렌, 스쿠알렌, squalene"
     },
     {
@@ -4475,7 +4475,7 @@ var EXAM_DATA_subject4 = {
       "question": "알레르기 유발 성분 리스트 중 장미 등 꽃향기를 구성하며 전성분 표시 의무가 있는 성분명은 **[  (A)  ]**이다. (Linalool 등 다수 중 표준 고시명 중 하나)",
       "options": [],
       "answer": "제라니올",
-      "explanation": "📖 교재 근거 (교재: L2821):\n| 제라니올 | 쿠마린 |\n| 아니스알코올 | 파네솔 |\n| 신나밀알코올 |  |",
+      "explanation": "📖 교재 근거 (교재: L2792):\n| 제라니올 | 쿠마린 |\n| 아니스알코올 | 파네솔 |\n| 신나밀알코올 |  |",
       "answerRaw": "제라니올"
     },
     {
@@ -4515,7 +4515,7 @@ var EXAM_DATA_subject4 = {
       "question": "시트러스 향 성분 중 알레르기 유발 유효 물질로 고시된 대표적인 휘발성 화합물은 **[  (A)  ]**이다. (Limonene)",
       "options": [],
       "answer": "리모넨",
-      "explanation": "📖 교재 근거 (교재: L2446):\n| 리모넨 | 헥실신남알 |",
+      "explanation": "📖 교재 근거 (교재: L2414):\n| 리모넨 | 헥실신남알 |",
       "answerRaw": "리모넨"
     },
     {
@@ -4615,7 +4615,7 @@ var EXAM_DATA_subject4 = {
       "question": "장미향 오일 등에 포함되며 알레르기 유발 성분으로 등재된 모노테르펜 알코올 화합물명은 **[  (A)  ]**올이다. (Geraniol)",
       "options": [],
       "answer": "제라니",
-      "explanation": "📖 교재 근거 (교재: L2453):\n| 제라니올 | 쿠마린 |",
+      "explanation": "📖 교재 근거 (교재: L2421):\n| 제라니올 | 쿠마린 |",
       "answerRaw": "제라니"
     },
     {
@@ -4675,7 +4675,7 @@ var EXAM_DATA_subject4 = {
       "question": "알레르기 향료 물질 중 시트러스 껍질 오일에 풍부한 리모넨과 쌍을 이루는 꽃향 향료 유효 성분명은 **[  (A)  ]**올이다. (Linalool)",
       "options": [],
       "answer": "리날",
-      "explanation": "📖 교재 근거 (교재: L2445):\n| 리날룰 | 아밀신남알 |",
+      "explanation": "📖 교재 근거 (교재: L2413):\n| 리날룰 | 아밀신남알 |",
       "answerRaw": "리날"
     },
     {
@@ -5350,7 +5350,7 @@ var EXAM_DATA_subject4 = {
       "question": "맞춤형화장품 조제 시 원료의 품질 이상이 발견된 경우 별도 구역에 **[  (A)  ]**하고 폐기 또는 반품해야 한다.",
       "options": [],
       "answer": "격리",
-      "explanation": "📖 교재 근거 (교재: L228):\n위생교육\n신규 교육\n정기 교육\n행동 규칙\n음식물 반입 금지\n질병자 격리\n출입 권한 제한\n소독·세정·복장\n복장 기준\n작업복 착용\n구역별 차등",
+      "explanation": "📖 교재 근거 (교재: L193):\n위생교육\n신규 교육\n정기 교육\n행동 규칙\n음식물 반입 금지\n질병자 격리\n출입 권한 제한\n소독·세정·복장\n복장 기준\n작업복 착용\n구역별 차등",
       "answerRaw": "격리"
     },
     {
