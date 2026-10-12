@@ -107,6 +107,7 @@
 | 3.21 | **UI 모드 전환** | 학습 ↔ 실무(Formula OS) 모드 전환 | UM-01~UM-05 (5) |
 | 3.22 | **시험 선택·전환** | 멀티시험 팩 선택·전환·레지스트리 기반 | ES-01~ES-05 (5) |
 | 3.23 | **사용자 의견** | 피드백 폼·건의 수신 | FB-01~FB-08 (8) |
+| 3.24 | **학습 품질 감사** | 스마트학습 배분·맞춤학습 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -520,6 +521,15 @@
 | FB-08 | 관리자 알림 — Database Webhook → `feedback-notify` Edge Function → Discord 임베드 (USER_FEEDBACK_DESIGN §8-2) | ✅ (코드) / ⚙️ (대시보드 설정 필요) |
 
 > 상세 설계: [`design/USER_FEEDBACK_DESIGN.md`](design/USER_FEEDBACK_DESIGN.md)
+
+### 3.24 학습 품질 감사 (Study Quality Audit)
+
+| ID | 요구사양 | 구현 상태 |
+|----|---------|-----------|
+| SQ-01 | 학습 품질 감사 도구 (`tools/check/audit_study_quality.js`, `npm run audit:study`) — 합성 사용자 상태를 주입해 스마트학습 배분·맞춤학습 추천의 규칙 정합을 결정론적으로 검증 (실효성이 아닌 규칙 일관성·내부 정합 감사) | ✅ |
+| SQ-02 | 배분 정합 지표 — coverage(잔여 과목 배정 비율)·consViolations(주차 상한)·overCap(잔여 초과)·reversals(동조건 역전)·weakCorr/boostCorr(약점↔배정 Spearman, 비중 정규화) | ✅ |
+| SQ-03 | 시나리오 스위트 — 콜드스타트(중립 가중)·균등(비례 배분)·약점 편중(배정 증가)·과락 우선(추천 선두)·잔여0(재배분)·임박(triage)·통독 차감(SC-15)·복습 밀림(dueBoost) + 진단·추천·추정·SM-2 불변식 + 시계열 시뮬(계획 준수 D-day 잔여 0·추천 추종 개선 격차·SM-2 30일 분포, 가상 시계 결정론) | ✅ |
+| SQ-04 | 기준선 회귀 게이트 — `--update`로 `study_quality_baseline.json` 갱신, `--check`로 통과→실패 회귀 차단. 산출물 `study_quality_report.json`은 gitignore | ✅ |
 
 ---
 

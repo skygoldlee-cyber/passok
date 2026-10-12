@@ -7,6 +7,15 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-12 학습 품질 감사 도구 (SQ-01~04)
+
+- **배경**: 스마트학습 배분·맞춤학습 추천이 "동작 테스트"는 있으나 "규칙 정합"(약한 과목에 실제로 더 배정되는가, 과락 과목이 추천 선두인가)의 정량 감사가 없었음
+- **도구**: `audit:study` (`tools/check/audit_study_quality.js`) — 합성 사용자 상태 주입으로 시나리오 13종 검증: 배분 8종(콜드스타트·균등·약점 편중·과락 우선·잔여0·임박·통독·복습 밀림) + 맞춤학습 5종(단원 랭킹·추천 불변식·점수 수렴·효과 추적·SM-2)
+- **지표**: coverage·consViolations·overCap·reversals·weakCorr·boostCorr(비중 정규화 Spearman — 약점 가중 순수 기여도)
+- **게이트**: `--update` 기준선 갱신 + `--check` 회귀 차단, 산출물 study_quality_report.json (gitignore)
+- **편입**: `check:all` 프리셋 + ci.yml·`check:ci`(`ci:studyq`) — 학습 로직 변경 시 회귀 자동 차단
+- **시계열 시뮬**: 가상 시계(전역 Date 오프셋)로 T1~T3 추가 — 계획 준수 시 D-63 잔여 0 도달(9주), 추천 추종 vs 순환 학습자 최약 과목 격차(73% vs 68%), SM-2 30일 복습 분포(302회·중앙 rep4·기한 6일 분산)
+
 ## 2026-10-12 중복 상수 통합 + 기본 시험 매니페스트 교체 (UX-PWA-06 실효화)
 
 - **OPTION_INDICATORS 단일화**: `['①'~'⑤']` 선지 기호 배열이 4곳에 중복 정의돼 있던 것을 `src/utils.js`로 통합 — `exam-sim-review.js`·`exam-simulator.js`(`SIM_OPTION_INDICATORS` 폐기)·`trainer-drills.js`(re-export 유지)는 ESM import, CJS `tools/build/supplements.js`는 `createRequire`(require-ESM)로 동일 상수 로드 (textbook-core와 동일 패턴)
