@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 3da4cc60d7e00978
+> 입력 해시: 1f1b994c4b4b04f1
 > 생성: 2026-10-12 · 원천: SPEC.md(481개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -93,13 +93,13 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| E-01 | ✅ | 테스트 | — | css/exam.css<br>html/views/exam.html<br>index.html<br>src/views/exam-simulator.js<br>…외 1개 | tests/dom/study-simulator.dom.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | 조제관리사 국가시험 형식 — 4과목 OMR·시간 제한 (한국산업인력공단 시행 규정) |
-| E-02 | ✅ | 테스트 | — | src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
-| E-03 | ✅ | 테스트 | — | src/views/exam-sim-state.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
-| E-04 | ✅ | 테스트 | — | src/views/exam-sim-review.js<br>src/views/exam-sim-weak.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
-| E-05 | ✅ | 테스트 | — | src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
-| E-06 | ✅ | 테스트 | — | src/views/exam-sim-review.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
-| E-07 | ✅ | 테스트 | — | css/exam.css<br>src/views/exam-sim-review.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | 시험 합격 기준 — 과목별 40점 미만 과락·전 과목 평균 60점 이상 |
+| E-01 | ✅ | 테스트 | — | css/exam.css<br>html/views/exam.html<br>index.html<br>src/views/exam-sim-session.js<br>…외 2개 | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | 조제관리사 국가시험 형식 — 4과목 OMR·시간 제한 (한국산업인력공단 시행 규정) |
+| E-02 | ✅ | 테스트 | — | src/views/exam-sim-session.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
+| E-03 | ✅ | 테스트 | — | src/views/exam-sim-arena.js<br>src/views/exam-sim-state.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
+| E-04 | ✅ | 테스트 | — | src/views/exam-sim-arena.js<br>src/views/exam-sim-review.js<br>src/views/exam-sim-weak.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
+| E-05 | ✅ | 테스트 | — | src/views/exam-sim-arena.js<br>src/views/exam-sim-draft.js<br>src/views/exam-sim-session.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
+| E-06 | ✅ | 테스트 | — | src/views/exam-sim-arena.js<br>src/views/exam-sim-review.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
+| E-07 | ✅ | 테스트 | — | css/exam.css<br>src/views/exam-sim-review.js<br>src/views/exam-sim-session.js<br>src/views/exam-simulator.js | tests/dom/study-simulator.dom.test.js<br>tests/unit/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | 시험 합격 기준 — 과목별 40점 미만 과락·전 과목 평균 60점 이상 |
 
 ## 3.5 교재 리더
 
@@ -384,7 +384,7 @@
 | DR-03 | ✅ | 테스트 | DOC-DSN-17<br>DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-04 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js<br>src/weak-items.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | 법령·고시 수치 (드릴 콘텐츠의 기원 — 문항 자체는 내부 제작) |
 | DR-05 | ✅ | 테스트 | DOC-DSN-18<br>DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
-| DR-06 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/views/exam-simulator.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
+| DR-06 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/views/exam-sim-arena.js<br>src/views/exam-simulator.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-07 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/questions.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/fixtures/sample-questions.js<br>tests/unit/combo-transform.test.js<br>tests/unit/property-based.test.js<br>…외 1개 | DOC-ARC-05<br>DOC-ARC-09 | — |
 | ND-01 | ✅ | 테스트 | DOC-USR-03<br>DOC-USR-04<br>DOC-USR-05<br>DOC-USR-06 | src/views/trainer-drills.js<br>src/views/trainer.js | tests/dom/exams/cosmetic/review-drills-formula.dom.test.js | — | — |
 | RV-01 | ✅ | 테스트 | — | html/views/review.html<br>index.html<br>src/views/quiz.js<br>src/views/trainer.js | tests/dom/exams/cosmetic/review-drills-formula.dom.test.js | — | — |

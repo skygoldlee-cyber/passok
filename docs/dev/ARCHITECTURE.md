@@ -121,7 +121,7 @@
 │ │  │ views/ (35개 뷰 컨트롤러): dashboard · flashcard     │   │ │
 │ │  │ quiz(+wrong-cause) · daily-challenge · trainer      │   │ │
 │ │  │ (+calc/ingredients/drills+combo) · pomodoro        │   │ │
-│ │  │ exam-simulator(+state/review/weak)                 │   │ │
+│ │  │ exam-simulator(+session/arena/draft/state/review/weak)│ │ │
 │ │  │ textbook-reader · reader-audio · textbook-search    │   │ │
 │ │  │ dictionary · study-calendar · backup · navigation   │   │ │
 │ │  │ glossary-renderer · event-listeners · exam-select   │   │ │
@@ -352,7 +352,10 @@ passory/
 │       ├── trainer-drills.js   #     O/X 드릴 + 드릴 공통 오케스트레이션
 │       ├── trainer-drill-combo.js #  복수정답형(combo) 드릴 (trainer-drills.js에서 분리)
 │       ├── pomodoro.js         #     뽀모도로 타이머 (trainer.js에서 분리)
-│       ├── exam-simulator.js   #     모의고사 시뮬레이터
+│       ├── exam-simulator.js   #     모의고사 파사드 (session/arena/draft 재수출 + 이력 저장)
+│       ├── exam-sim-session.js #     모의고사 세션 수명주기 (시험 구성·시작·복구·나가기)
+│       ├── exam-sim-arena.js   #     모의고사 아레나 (타이머·OMR·렌더·응답·채점)
+│       ├── exam-sim-draft.js   #     모의고사 드래프트 저장·복구 배너
 │       ├── exam-sim-state.js   #     시뮬레이터 상태
 │       ├── exam-sim-review.js  #     시뮬레이터 결과 리뷰
 │       ├── exam-sim-weak.js    #     오답 모의고사 (exam-simulator.js에서 분리)
