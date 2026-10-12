@@ -46,7 +46,7 @@ import { STORAGE_KEYS } from '../storage-keys.js';
 import { PATHS } from '../paths.js';
 import { CACHE } from '../config/cache.js';
 import {
-    readerChapterContext, getReaderBookmarks, toggleReaderBookmark,
+    readerChapterContext, getReaderBookmarks, toggleReaderBookmark, bookmarkKeyOf,
     applyReaderThemeClass,
     bindReaderScrollEvents, initReaderToolbar
 } from './reader-toolbar.js';
@@ -764,7 +764,9 @@ async function _renderChapterContentInternal(subjId, chapterIdx, subj, chapter, 
     const subjDirName = (_rt.SUBJECT_DIR_MAP || {})[subjId] || '';
 
     chapter.sections.forEach((section, idx) => {
-        const bookmarkKey = `${subjId}_${chapterIdx}_${idx}`;
+        // 북마크 키는 콘텐츠 기반 (TR-27) — 위치 인덱스는 교재 편집 시 오표적
+        const bookmarkKey = bookmarkKeyOf(subjId,
+            chapter.chapterKey || chapter.chapterTitle || chapterIdx, section.title || idx);
         const isBookmarked = bookmarks.includes(bookmarkKey);
         const allContent = [section.content || '', ...((section.subsections || []).map(s => s.content || ''))].join('\n');
         const secSrcMatch = allContent.match(/📌\s*\*\*출처\*\*[:：]\s*(.+?)(?:\||\n)/);
