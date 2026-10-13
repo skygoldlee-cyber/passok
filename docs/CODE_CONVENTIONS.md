@@ -47,10 +47,11 @@
 
 | 금지 | 대체 | 강제 |
 |------|------|------|
-| 인라인 `onclick`/`oninput` 등 HTML 핸들러 (CSP 차단) | `data-click`/`data-input`/`data-arg` 위임 + `app.js` 핸들러 맵 | 리뷰 |
-| `element.style.display = …` JS 인라인 표시 | 클래스 토글 (`is-hidden`·`nav-*-only` 선언적 게이팅 — UIUX_GUIDE EXP-6) | 리뷰 |
-| 인라인 `style="display:none"` 마크업 | `class="is-hidden"` | 리뷰 |
-| `alert()`/`confirm()`/`prompt()` | `showConfirm`/`showAlert`/`showToast` (UX-FB-02) | 리뷰 |
+| 인라인 `onclick`/`oninput` 등 HTML 핸들러 (CSP 차단) | `data-click`/`data-input`/`data-arg` 위임 + `app.js` 핸들러 맵 | `check:uistyle` |
+| `element.style.display = …`·`.style.setProperty('display',…)` JS 인라인 표시 | 클래스 토글 (`is-hidden`·`nav-*-only` 선언적 게이팅 — UIUX_GUIDE EXP-6) | `check:uistyle` |
+| 마크업의 인라인 `style="…"` 속성 (표시 상태·레이아웃 전면) | CSS 클래스·유틸리티 (`is-hidden`·`text-muted`·`mb-*`) | `check:uistyle` |
+| `alert()`/`confirm()`/`prompt()` | `showConfirm`/`showAlert`/`showToast` (UX-FB-02) | `check:uistyle` |
+| JS 템플릿 리터럴 내 인라인 `style="…"` | CSS 클래스 (레거시 템플릿 잔존 — 점진 클래스화 대상) | 리뷰 |
 | `localStorage` 직접 접근 | `storage.js` 추상화 + `storage-keys.js` 키 SSOT | `check:storage` |
 | 미이스케이프 보간의 HTML 싱크 대입 (`innerHTML`·`insertAdjacentHTML`) | `sanitize.js` `html` 태그드 템플릿 또는 `esc()` 계열 (S-05) | `check:escape` |
 | 위치 좌표(라인·인덱스·scrollTop)를 식별자·영속 키로 사용 | 콘텐츠 앵커 식별자 (`conceptId §`·`sid` — ID-05) | `check:posind` |
@@ -95,6 +96,7 @@
 | 이스케이프 싱크 (S-05) | `check:escape` | check:ci·CI (기준선 래칫) |
 | UI 텍스트 중립화 (DA-12) | `check:uitext` | check:ci·CI |
 | 모바일 잘림 (UX-VFY-06) | `check:mobilesafe` | check:ci·CI |
+| UI 스타일 (인라인 style·display 조작·인라인 핸들러·네이티브 다이얼로그) | `check:uistyle` | check:ci·CI |
 | 성능 예산 | `check:perf` | check:ci·CI |
 | 린트 규칙 | `npm run lint` | pre-commit·check:ci |
 | 타입 진단 | `check:types` | pre-commit·check:ci |

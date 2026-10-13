@@ -126,21 +126,21 @@
                     <div id="oxdrill-setup">
                         <div class="trainer-arena">
                             <div class="quiz-card">
-                                <div class="quiz-body" style="text-align:center;">
+                                <div class="quiz-body drill-setup-body">
                                     <h2 class="quiz-question-text reader-q-text-lg">과목을 선택하세요</h2>
-                                    <p style="color:var(--color-text-muted); margin-bottom:0.75rem;">복습 기한이 도래한 진술과 오판 진술이 우선 출제됩니다</p>
+                                    <p class="trainer-setup-desc">복습 기한이 도래한 진술과 오판 진술이 우선 출제됩니다</p>
                                     <p id="oxdrill-due-count" class="trainer-due-count"></p>
-                                    <div style="display:flex; gap:0.5rem; justify-content:center; margin-bottom:1.5rem;">
-                                        <button class="btn btn-secondary drill-count-chip active" data-click="setDrillCount" data-arg="10" style="padding:0.3rem 0.9rem; font-size:0.85rem;">10문</button>
-                                        <button class="btn btn-secondary drill-count-chip" data-click="setDrillCount" data-arg="20" style="padding:0.3rem 0.9rem; font-size:0.85rem;">20문</button>
-                                        <button class="btn btn-secondary drill-count-chip" data-click="setDrillCount" data-arg="all" style="padding:0.3rem 0.9rem; font-size:0.85rem;">전체</button>
+                                    <div class="drill-count-row">
+                                        <button class="btn btn-secondary drill-count-chip active" data-click="setDrillCount" data-arg="10">10문</button>
+                                        <button class="btn btn-secondary drill-count-chip" data-click="setDrillCount" data-arg="20">20문</button>
+                                        <button class="btn btn-secondary drill-count-chip" data-click="setDrillCount" data-arg="all">전체</button>
                                     </div>
-                                    <div id="oxdrill-subject-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:0.75rem; max-width:480px; margin:0 auto;">
+                                    <div id="oxdrill-subject-grid" class="drill-subject-grid">
                                         <!-- 과목 버튼은 registry 기반으로 동적 생성됩니다 -->
                                     </div>
-                                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; max-width:480px; margin:0.75rem auto 0;">
-                                        <button class="btn btn-warning" data-click="startOxDrill" data-arg="weak" style="padding:0.75rem;"><i class="fa-solid fa-crosshairs"></i> 취약·복습 진술만<br><small>전 과목</small></button>
-                                        <button class="btn btn-secondary" data-click="startOxDrill" data-arg="num" style="padding:0.75rem;"><i class="fa-solid fa-hashtag"></i> 수치·한도·기한 집중<br><small>전 과목</small></button>
+                                    <div class="drill-action-grid">
+                                        <button class="btn btn-warning" data-click="startOxDrill" data-arg="weak"><i class="fa-solid fa-crosshairs"></i> 취약·복습 진술만<br><small>전 과목</small></button>
+                                        <button class="btn btn-secondary" data-click="startOxDrill" data-arg="num"><i class="fa-solid fa-hashtag"></i> 수치·한도·기한 집중<br><small>전 과목</small></button>
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +159,7 @@
                                     <span class="quiz-context" id="oxdrill-context"></span>
                                 </div>
                                 <div class="quiz-body">
-                                    <p style="font-size:0.85rem; color:var(--color-text-muted); margin-bottom:0.5rem;" id="oxdrill-stem"></p>
+                                    <p id="oxdrill-stem" class="drill-stem-note"></p>
                                     <h2 class="quiz-question-text reader-q-text-lg" id="oxdrill-statement"></h2>
                                     <div class="limits-options-grid mb-6" id="oxdrill-ox-container"></div>
                                     <div class="quiz-feedback is-hidden" id="oxdrill-feedback-panel" role="status" aria-live="polite">
@@ -197,21 +197,21 @@
                     <div id="combo-setup">
                         <div class="trainer-arena">
                             <div class="quiz-card">
-                                <div class="quiz-body" style="text-align:center;">
+                                <div class="quiz-body drill-setup-body">
                                     <h2 class="quiz-question-text reader-q-text-lg">과목을 선택하세요</h2>
-                                    <p style="color:var(--color-text-muted); margin-bottom:0.75rem;">복습 기한 도래·오판 진술을 포함한 문항이 우선 출제됩니다</p>
+                                    <p class="trainer-setup-desc">복습 기한 도래·오판 진술을 포함한 문항이 우선 출제됩니다</p>
                                     <p id="combo-due-count" class="trainer-due-count"></p>
-                                    <div style="display:flex; gap:0.5rem; justify-content:center; margin-bottom:1.5rem;">
-                                        <button class="btn btn-secondary drill-count-chip active" data-click="setDrillCount" data-arg="10" style="padding:0.3rem 0.9rem; font-size:0.85rem;">10문</button>
-                                        <button class="btn btn-secondary drill-count-chip" data-click="setDrillCount" data-arg="20" style="padding:0.3rem 0.9rem; font-size:0.85rem;">20문</button>
-                                        <button class="btn btn-secondary drill-count-chip" data-click="setDrillCount" data-arg="all" style="padding:0.3rem 0.9rem; font-size:0.85rem;">전체</button>
+                                    <div class="drill-count-row">
+                                        <button class="btn btn-secondary drill-count-chip active" data-click="setDrillCount" data-arg="10">10문</button>
+                                        <button class="btn btn-secondary drill-count-chip" data-click="setDrillCount" data-arg="20">20문</button>
+                                        <button class="btn btn-secondary drill-count-chip" data-click="setDrillCount" data-arg="all">전체</button>
                                     </div>
-                                    <div id="combo-subject-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:0.75rem; max-width:480px; margin:0 auto;">
+                                    <div id="combo-subject-grid" class="drill-subject-grid">
                                         <!-- 과목 버튼은 registry 기반으로 동적 생성됩니다 -->
                                     </div>
-                                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; max-width:480px; margin:0.75rem auto 0;">
-                                        <button class="btn btn-warning" data-click="startComboDrill" data-arg="weak" style="padding:0.75rem;"><i class="fa-solid fa-crosshairs"></i> 취약·복습 진술 문항<br><small>전 과목</small></button>
-                                        <button class="btn btn-secondary" data-click="startComboDrill" data-arg="num" style="padding:0.75rem;"><i class="fa-solid fa-hashtag"></i> 수치·한도·기한 집중<br><small>전 과목</small></button>
+                                    <div class="drill-action-grid">
+                                        <button class="btn btn-warning" data-click="startComboDrill" data-arg="weak"><i class="fa-solid fa-crosshairs"></i> 취약·복습 진술 문항<br><small>전 과목</small></button>
+                                        <button class="btn btn-secondary" data-click="startComboDrill" data-arg="num"><i class="fa-solid fa-hashtag"></i> 수치·한도·기한 집중<br><small>전 과목</small></button>
                                     </div>
                                 </div>
                             </div>
@@ -229,10 +229,10 @@
                                     <span class="quiz-context" id="combo-q-category"></span>
                                 </div>
                                 <div class="quiz-body">
-                                    <p id="combo-citation" style="font-size:0.8rem; color:var(--color-text-muted); margin-bottom:0.5rem;"></p>
-                                    <h2 class="quiz-question-text reader-q-text-lg" id="combo-stem" style="margin-bottom:1rem;"></h2>
-                                    <div id="combo-statements" style="margin-bottom:0.5rem;"></div>
-                                    <p id="combo-judge-hint" style="font-size:0.8rem; color:var(--color-text-muted); margin:0 0 1rem;"></p>
+                                    <p id="combo-citation" class="combo-citation"></p>
+                                    <h2 class="quiz-question-text reader-q-text-lg" id="combo-stem" class="mb-4"></h2>
+                                    <div id="combo-statements" class="combo-statements"></div>
+                                    <p id="combo-judge-hint" class="combo-judge-hint"></p>
                                     <div class="limits-options-grid mb-6" id="combo-options-container"></div>
                                     <div class="quiz-feedback is-hidden" id="combo-feedback-panel" role="status" aria-live="polite">
                                         <div class="feedback-icon" id="combo-feedback-icon">
@@ -241,12 +241,12 @@
                                         <div class="feedback-content">
                                             <h4 id="combo-feedback-title"></h4>
                                             <div id="combo-feedback-statements"></div>
-                                            <p id="combo-feedback-desc" style="margin-top:0.5rem;"></p>
+                                            <p id="combo-feedback-desc" class="combo-feedback-desc"></p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="quiz-card-footer justify-end">
-                                    <button id="combo-judge-submit" class="btn btn-primary" data-click="submitComboJudgments" disabled style="margin-right:auto;"><i class="fa-solid fa-check-double" aria-hidden="true"></i> 진술 판정 제출</button>
+                                    <button id="combo-judge-submit" class="btn btn-primary combo-judge-submit" data-click="submitComboJudgments" disabled><i class="fa-solid fa-check-double" aria-hidden="true"></i> 진술 판정 제출</button>
                                     <button id="next-combo-btn" class="btn btn-success is-hidden" data-click="nextComboDrill">다음 문제 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                                 </div>
                             </div>

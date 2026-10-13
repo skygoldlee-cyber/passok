@@ -1515,3 +1515,63 @@ mark.txt-highlight {
 .weak-mastery-cell span {
     color: var(--color-text-muted);
 }
+/* 드릴 설정 화면 공통 — 인라인 스타일 이관 (CODE_CONVENTIONS §4) */
+.drill-setup-body {
+    text-align: center;
+}
+.drill-setup-desc {
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+}
+.drill-count-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+.drill-count-chip {
+    padding: 0.3rem 0.9rem;
+    font-size: 0.85rem;
+}
+.drill-subject-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    max-width: 480px;
+    margin: 0 auto;
+}
+.drill-action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    max-width: 480px;
+    margin: 0.75rem auto 0;
+}
+.drill-action-grid .btn {
+    padding: 0.75rem;
+}
+.drill-stem-note {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+}
+/* 복수정답 드릴 아레나 요소 */
+.combo-citation {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+}
+.combo-statements {
+    margin-bottom: 0.5rem;
+}
+.combo-judge-hint {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin: 0 0 1rem;
+}
+.combo-feedback-desc {
+    margin-top: 0.5rem;
+}
+.combo-judge-submit {
+    margin-right: auto;
+}
