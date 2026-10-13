@@ -306,7 +306,7 @@ describe('학습 캘린더 — 렌더·기록·목표', () => {
 
         const alloc = el('study-calendar-content').querySelector('.plan-alloc');
         expect(alloc).not.toBeNull();
-        expect(alloc.textContent).toContain('스마트학습');
+        expect(alloc.textContent).toContain('주간 배분');
         expect(alloc.textContent).toContain('이번 주 과목별 목표');
         // 비중 1:3 → 과목B 배정이 과목A보다 큼 (칩 형식: "과목명 실적/배정장")
         const chips = [...alloc.querySelectorAll('.alloc-chip')].map(c => c.textContent);
@@ -320,7 +320,7 @@ describe('학습 캘린더 — 렌더·기록·목표', () => {
         expect(alloc.querySelectorAll('.plan-alloc-table tbody tr').length).toBe(2); // D-14 → 2주차
     });
 
-    it('스마트학습 보강 — 칩 버튼 바로가기 + 주간 실적 + 약점·비중 배지 (SC-09)', () => {
+    it('주간 배분 보강 — 칩 버튼 바로가기 + 주간 실적 + 약점·비중 배지 (SC-09)', () => {
         stubRegistry([
             { key: 'suba', name: '과목A', cards: Array.from({ length: 40 }, (_, i) => ({ id: `suba_card_${i}` })) },
             { key: 'subb', name: '과목B', cards: Array.from({ length: 40 }, (_, i) => ({ id: `subb_card_${i}` })) },
@@ -349,13 +349,13 @@ describe('학습 캘린더 — 렌더·기록·목표', () => {
         expect(chipB.textContent).toMatch(/과목B\s*0\/\d+장/);
         expect(chipB.querySelector('.alloc-badge-weak')).toBeNull();
 
-        // SC-11 배정 근거 딥링크 — 칩 옆 ⓘ 버튼이 맞춤학습 과목 분석으로 연결
+        // SC-11 배정 근거 딥링크 — 칩 옆 ⓘ 버튼이 학습 진단 과목 분석으로 연결
         const whyA = alloc.querySelector('.alloc-why[data-arg="suba"]');
         expect(whyA).not.toBeNull();
         expect(whyA.dataset.click).toBe('gotoSubjectAnalysis');
     });
 
-    it('스마트학습 퀴즈 배분 — 칩·매트릭스에 퀴즈 병기 + 실적 집계 (SC-13)', () => {
+    it('주간 배분 퀴즈 배분 — 칩·매트릭스에 퀴즈 병기 + 실적 집계 (SC-13)', () => {
         stubRegistry([
             {
                 key: 'suba', name: '과목A',

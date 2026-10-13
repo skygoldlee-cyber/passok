@@ -109,7 +109,7 @@ export function bindAppListeners() {
         });
     }
 
-    // 맞춤학습 인트로 접이식 — 첫 방문은 열림, 접으면 상태 기억
+    // 학습 진단 인트로 접이식 — 첫 방문은 열림, 접으면 상태 기억
     const introFold = /** @type {HTMLDetailsElement|null} */ (document.getElementById('analysis-intro-fold'));
     if (introFold) {
         introFold.open = safeGetItem('ui_analysis_intro_open') !== '0';

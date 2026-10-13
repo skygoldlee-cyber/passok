@@ -1,4 +1,4 @@
-// tests/fixtures/analysis-seed.js — 맞춤학습(analysis-view) E2E 시드 팩토리 (SPEC ROAD-Q8)
+// tests/fixtures/analysis-seed.js — 학습 진단(analysis-view) E2E 시드 팩토리 (SPEC ROAD-Q8)
 // @spec AN-01,AN-02,AN-03,AN-04,AN-05,AN-08
 //
 // E2E는 빈 localStorage에서 시작하므로 진단 카드가 의미 있게 렌더되려면
@@ -45,7 +45,7 @@ export function analysisBootKeys(examId = 'cosmetic') {
 }
 
 /**
- * 맞춤학습 진단이 활성화되는 "충분한 이력" 시드.
+ * 학습 진단이 활성화되는 "충분한 이력" 시드.
  * 의도된 분석 결과(결정론적):
  *   - 퀴즈 25문 — 표본 충족(AN-04), manufacturing 3/8=38% 최저
  *   - 오답 원인 3건(최근 7일 내) — 암기·계산·법령혼동 각 1건

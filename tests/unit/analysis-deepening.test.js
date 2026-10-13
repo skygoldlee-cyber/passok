@@ -1,4 +1,4 @@
-// tests/unit/analysis-deepening.test.js — 맞춤학습 심화 기능 검증
+// tests/unit/analysis-deepening.test.js — 학습 진단 심화 기능 검증
 // @spec AN-05,AN-06,AN-07,AN-08,AN-09
 // 복합 예상 점수·개인 보정·추천 효과 추적·오답 원인 분류 확장·
 // 학습 패턴·주간 리포트의 순수 로직을 직접 실행해 검증한다.
@@ -234,7 +234,7 @@ test('AN-09: 빈 데이터로도 리포트가 생성된다 (방어)', () => {
     assert.ok(text.includes('주간 학습 리포트'));
 });
 
-test('AN-09: 과목별 스마트학습 준수 행 출력 — planBySubject (SC-11)', () => {
+test('AN-09: 과목별 주간 배분 준수 행 출력 — planBySubject (SC-11)', () => {
     const text = buildWeeklyReportText({
         plan: { weekActual: 10, weekTarget: 25, percent: 40, statusLabel: '추적 중' },
         planBySubject: [

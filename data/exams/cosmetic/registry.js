@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-12T12:19:18.906Z",
+  "generatedAt": "2026-10-13T01:46:44.433Z",
   "subjects": [
     {
       "key": "law",
@@ -472,7 +472,7 @@ var DATA_REGISTRY = {
       "subtitle": "헷갈리거나 어려운 약점 카드 집중 복습"
     },
     "trainer": {
-      "title": "스마트 훈련소",
+      "title": "훈련소",
       "subtitle": "법령 수치 암기 및 배합 계산 트레이닝 센터"
     },
     "exam": {
@@ -480,7 +480,7 @@ var DATA_REGISTRY = {
       "subtitle": "교재 인용 1000제 문제은행으로 과목별 모의고사 및 학습안내서 열람"
     },
     "analysis": {
-      "title": "맞춤학습",
+      "title": "학습 진단",
       "subtitle": "학습 기록을 바탕으로 약점을 분석하여 학습 우선순위를 진단합니다"
     },
     "textbook": {

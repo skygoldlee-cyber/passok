@@ -307,7 +307,7 @@ function setupNavigation() {
         },
         'analysis-view': () => {
             trackAction('personal_analysis');
-            proFeatureNotice('personal_analysis', '맞춤학습');
+            proFeatureNotice('personal_analysis', '학습 진단');
             renderAnalysisView();
             refreshDashboardStatsInBackground();
         },
