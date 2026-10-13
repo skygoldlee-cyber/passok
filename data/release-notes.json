@@ -1,5 +1,12 @@
 [
   {
+    "version": "v20261013-6053e21",
+    "date": "2026-10-13",
+    "notes": [
+      "[기능·check] check:uistyle 정적 게이트 신규 — 인라인 스타일·display 조작 규약 기계 강제"
+    ]
+  },
+  {
     "version": "v20261013-b77184f",
     "date": "2026-10-13",
     "notes": [
@@ -148,22 +155,6 @@
       "[수정] CI 유닛 테스트 glob 버그 — 미인용 **가 bash에서 축약돼 55/1192만 실행",
       "리팩터: exam-simulator 뷰 분해 — 파사드+수명주기별 3모듈",
       "리팩터: formula-products·batch 뷰 분해 + 게이트 성능·래칫 강화"
-    ]
-  },
-  {
-    "version": "v20261013-24f346e",
-    "date": "2026-10-13",
-    "notes": [
-      "[테스트] 기존 E2E 회귀 4건 수정 — CI 복구로 노출된 6주 누적 드리프트",
-      "[정리] 병합 커버리지 임계값 실측 기준 재설정 — CI 6주 중단분 드리프트 반영",
-      "[정리] 런타임 Node 24 상향 — jsdom@30의 Node 22.22+ 요구사항 대응",
-      "[수정] 임베딩 입력 해시 개행 정규화 — CRLF 작업트리로 인한 CI 오탐 수정",
-      "[수정] trace 스캔에서 gitignore된 embeddings/out 제외 — 로컬↔CI 해시 분기 수정",
-      "[문서] 삭제된 subjects 번들 경로 참조 제거 — CI check:docs 실패 수정",
-      "[정리] source-map-js 1.2.2 갱신 — npm audit high 취약점 해소 [no-docs]",
-      "[테스트] 시각 회귀 CI 활성화 — linux 기준선 6개 커밋·test.skip 제거",
-      "[CI] 시각 회귀 Linux 기준선 생성 워크플로 추가 — ubuntu-latest 수동 트리거",
-      "[문서] formula 분해·테스트 파일 목록 스테일 정리 — 내용 수준 문서 갱신"
     ]
   }
 ]
