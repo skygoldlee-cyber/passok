@@ -487,3 +487,27 @@ test('D-22: 진술 스케줄 이벤트(r)는 OX 관측으로 시퀀스에 포함
     assert.equal(out[0].chapter, '2. 분류');
     assert.ok(out[0].mastery > 0.85, `진술 정판 시퀀스가 P(L)에 반영돼야 함 mastery=${out[0].mastery}`);
 });
+
+test('D-22: weak_*·시뮬 문항 id도 원문항으로 귀속 — 복습 세션 재판정이 관측에 포함', async () => {
+    const { computeChapterWeakness } = await import(ENGINE);
+    const prev = globalThis.window;
+    globalThis.window = { DATA_REGISTRY: { exams: [{ key: 'subject1', subject: 'subjA' }] } };
+    try {
+        const resolveQuiz = id => id === 'suba_quiz_1' ? { quiz: { category: '제1장' }, subjectId: 'subjA' } : null;
+        const quizResults = { suba_quiz_1: { correct: false } }; // 제1장 랭킹 진입용 오답 1건
+        const reviewLog = [
+            { c: 'weak_quiz_suba_quiz_1', k: 'q', ok: 1, t: 1 },   // 약점 퀴즈 재판정 → 정답
+            { c: 'weak_quiz_suba_quiz_1', k: 'q', ok: 1, t: 2 },
+            { c: 'subject1_q5', k: 'q', ok: 1, t: 3 },             // 시뮬 문항 원시 id → questionChapters 귀속
+            { c: 'weak_exam_subject1_q5', k: 'q', ok: 1, t: 4 },   // weak_exam 접두사 → 원문항 정규화
+        ];
+        const out = computeChapterWeakness({
+            quizResults, weakCards: new Set(), statementStats: {},
+            questionChapters: { 'subject1_q5': '제1장' }, chapterRanges: {},
+            resolveQuiz, limit: 10, reviewLog
+        });
+        // 제1장: Beta 사전(정답0·오답1 → 0.5)에서 mcq 관측 4연속 정답 → P(L) 상승
+        assert.equal(out[0].chapter, '제1장');
+        assert.ok(out[0].mastery > 0.9, `weak/시뮬 판정 미귀속이면 0.5 정체 — mastery=${out[0].mastery}`);
+    } finally { globalThis.window = prev; }
+});

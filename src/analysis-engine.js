@@ -222,10 +222,14 @@ function _unitObservationSeqs(p) {
     for (const e of (p.reviewLog || [])) {
         if (!e || !e.c) continue;
         if (e.k === 'q') {
-            const resolved = p.resolveQuiz ? p.resolveQuiz(e.c) : null;
-            const subj = (resolved && resolved.subjectId) || subjectKeyFromItemId(e.c) || '';
+            // 약점 복습 세션의 weak_quiz_/weak_exam_ 접두사 정규화 — 재판정도 원문항으로 귀속
+            const qid = e.c.replace(/^weak_(quiz|exam)_/, '');
+            const simM = qid.match(/^(.+)_q\d+$/); // 시뮬 문항 id <examId>_q<N> → exams 매핑
+            const resolved = p.resolveQuiz ? p.resolveQuiz(qid) : null;
+            const subj = (resolved && resolved.subjectId) || subjectKeyFromItemId(qid)
+                || (simM && examIdToSubjectId(simM[1])) || '';
             const chapter = (resolved && resolved.quiz && resolved.quiz.category)
-                || (p.questionChapters && p.questionChapters[e.c]);
+                || (p.questionChapters && p.questionChapters[qid]);
             push(subj, chapter, e.ok === 1, 'mcq');
         } else {
             const st = p.statementStats && p.statementStats[e.c];
