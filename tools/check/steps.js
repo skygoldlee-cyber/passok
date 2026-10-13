@@ -101,6 +101,7 @@ const CI_STEPS = [
   STEP_UITEXT,
   npmStep('ci:mobilesafe', 'check:mobilesafe', '규약', '모바일 잘림 규약 (다이얼로그·버튼 행 줄바꿈)'),
   npmStep('ci:escape', 'check:escape', '규약', 'HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간)', { diffScoped: true }),
+  npmStep('ci:uistyle', 'check:uistyle', '규약', 'UI 스타일 규약 — 인라인 style·JS display 조작·인라인 핸들러·네이티브 다이얼로그 금지', { diffScoped: true }),
   nodeStep('ci:docsync', 'tools/check/check_doc_sync.js', '문서', '소스 변경 시 문서 갱신 강제', { args: ['--ref', 'origin/main'] }),
   nodeStep('ci:testfirst', 'tools/check/check_test_first.js', '테스트', '로직 변경 시 테스트 동반 강제', { args: ['--ref', 'origin/main'] }),
   npmStep('ci:specrefs', 'check:specrefs', '추적', 'SPEC↔@spec 스테일 참조 + 테스트 갭 기준선'),

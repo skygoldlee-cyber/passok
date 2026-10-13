@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 UI 스타일 정적 게이트 신규 + 인라인 스타일 클래스화
+
+- **신규 `check:uistyle` 게이트** (`tools/check/check_ui_style.js`): CODE_CONVENTIONS §4의 비게이트 규약을 기계 강제화 — ① 마크업(`html/`·`index.template.html`) 인라인 `style="…"` 속성 전면 금지 ② JS `.style.display`·`.style.setProperty('display')` 조작 금지 ③ 인라인 `on*` 이벤트 핸들러 금지 ④ 네이티브 `alert`/`confirm`/`prompt` 금지 (메서드 호출 `deferredPrompt.prompt()` 등은 면제). 명시 면제 장치는 `style-ok` 라인 토큰, `--ref` diff 스코프 지원. package.json·steps.js(ci:uistyle)·ci.yml 연결
+- **인라인 스타일 클래스화**: trainer.html 27건·review.html 1건 → css/trainer.css 신규 클래스(`drill-setup-body`·`trainer-setup-desc`·`drill-count-row`·`drill-count-chip`·`drill-subject-grid`·`drill-action-grid`·`drill-stem-note`·`combo-citation`·`combo-statements`·`combo-judge-hint`·`combo-feedback-desc`·`combo-judge-submit`) + 기존 유틸리티(`text-muted`·`mb-4`) 재사용 — 마크업 인라인 스타일 전량 제거 (28→0건)
+- **규약·참조 정합**: CODE_CONVENTIONS §4 강제 열 `리뷰`→`check:uistyle` 갱신 + JS 템플릿 인라인 스타일은 리뷰 등급 유지 행 추가(레거시 잔존 188건 점진 정리 대상), §8 매핑표 행 추가. UIUX_DESIGN_GUIDE §14 게이트 매핑 갱신, GATE_MAP ci 24단계·복구표 행 추가, AGENTS 명령어·코드 스타일 절 갱신
+- **AGENTS.md 스테일 정정**: 유틸리티 클래스 목록의 `.is-flex`·`.is-grid`는 미존재 클래스 — 실존 유틸리티(`.is-hidden`·`.text-muted`·`.mb-*`·`.mt-*`·`.ml-2`)로 정정
+
 ## 2026-10-13 코드 규약 정본 신규 — CODE_CONVENTIONS.md (DOC-DEV-09)
 
 - **신규 `docs/CODE_CONVENTIONS.md` (DOC-DEV-09)**: 소스 코드 규약의 단일 출처(SSOT) — 흩어져 있던 규칙(AGENTS 코드 스타일·domain-map 분류·check 도구 주석의 요구사항)을 §1~10으로 통합: 파일 배치·계층(platform/feature/domain layer·exams/<id>/ 격리·views 역참조 차단)·명칭(kebab-case·테스트 접미사)·언어·서식·금지 패턴 표(인라인 핸들러·style.display·alert·localStorage 직접·미이스케이프 싱크·위치 좌표 키)·저장소/UI/추적성 규약·규약→게이트 매핑표·면제/래칫 규약·변경 절차
