@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 UI/UX 감사 기반 마감 수정 — 탭 라벨·이중 제목·버튼 줄바꿈
+
+- **배경**: Playwright 실브라우저 감사(데스크톱 1366×850 / 모바일 390×844, 10개 뷰) — 가로 오버플로 0px·소형 터치 타겟 0건 확인, 마감 결함 3건 발견·수정
+- **모바일 탭바 라벨 2줄 줄바꿈**: `.mobile-tab-item` 좌우 패딩 0.5rem→0.25rem + `> span`에 `white-space: nowrap` — 390px에서 '대시보드'→'대시보/드', '성분 사전'→'성분 사/전'이던 것을 라벨 높이 34px→17px(1줄)로 실측 개선
+- **뷰 이중 제목 제거**: 헤더 h2(뷰 제목)와 중복되던 뷰 내부 h3 3건 제거 — trainer '훈련소'·exam '실전 모의고사 및 요약본'·textbook '교재·참조자료 통합 검색'. 목적 라인(`view-purpose`)은 유지 (UX-NAV-13/14 잔재 정리)
+- **모의고사 카드 버튼 줄바꿈**: `.exam-btn-sim`에 `white-space: nowrap` — '모의고사 시작' 버튼 높이 2줄(≈55px)→41px 실측 개선
+- **관찰 유보**: 카드 뷰 필터 라벨 세로 쪼개짐·토스트-액션 겹침·`ㄱㄴㄷ` 자모 렌더링은 실기기 확인(UX-VFY-05) 또는 의도 확인 후 판단 — 구조적 변경 아님
+
 ## 2026-10-13 학습 표면 단순화 Phase 2-a 구현 — 표면 진입 계측 (UX-MET-01~04)
 
 - **계측 위임 리스너**: `usage-stats.js`에 `initUsageMetrics()` 추가 — 문서 단 `click`/`toggle`(캡처) 리스너가 `data-click` 디스패치와 별개로 계측만 수행. `setupEventListeners()`에서 `bindDelegation` 직후 1회 설치. 기록 키: `tq_run:<click>`(오늘 할 일 큐)·`trainer_menu:<click>`(`#trainer-view` 스코프 — formula 뷰 동명 카드 제외)·`review_weak_open`(`#review-weak-panel` 열림 시에만)·`pro_badge_click`(`[data-pro-feature]` closest 판정)
