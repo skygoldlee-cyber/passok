@@ -98,7 +98,7 @@ function fillCustomerSelects() {
   const fill = (id, options, placeholder) => {
     const el = /** @type {HTMLSelectElement|null} */ (document.getElementById(id));
     if (!el) return;
-    el.innerHTML = `<option value="">${placeholder}</option>`
+    el.innerHTML = `<option value="">${esc(placeholder)}</option>`
       + options.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
   };
   fill('cust-gender', CUSTOMER_OPTIONS.gender, '미선택');

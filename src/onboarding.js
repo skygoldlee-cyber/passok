@@ -42,7 +42,7 @@ export function showOnboardingModal() {
     const existing = document.getElementById('onboarding-overlay');
     if (existing) existing.remove();
 
-    const items = STEPS.map((s, i) => `
+    const itemsHtml = STEPS.map((s, i) => `
         <li class="onboarding-step">
             <span class="onboarding-step-num">${i + 1}</span>
             <div>
@@ -56,7 +56,7 @@ export function showOnboardingModal() {
     overlay.innerHTML = `
         <div class="app-confirm-dialog dialog-card onboarding-dialog" role="dialog" aria-modal="true" aria-label="시작 안내">
             <h3><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> ${esc(getExamAppName())} 시작 안내</h3>
-            <ol class="onboarding-steps">${items}</ol>
+            <ol class="onboarding-steps">${itemsHtml}</ol>
             <p class="onboarding-foot">진도는 이 기기에 자동 저장되며 오프라인에서도 학습할 수 있습니다.</p>
             <div class="app-confirm-actions">
                 <button class="app-confirm-ok">시작하기</button>

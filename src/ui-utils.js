@@ -180,7 +180,7 @@ export function showToast(message, type = 'info', duration, iconClass = '') {
     const color = style.getPropertyValue(colorVar).trim();
     const item = document.createElement('div');
     item.className = 'app-toast-item is-visible';
-    item.innerHTML = `<i class="fa-solid ${escapeHTML(icon)}" style="color:${color}; margin-right:0.5rem;"></i>${escapeHTML(message)}`;
+    item.innerHTML = `<i class="fa-solid ${escapeHTML(icon)}" style="color:${escapeHTML(color)}; margin-right:0.5rem;"></i>${escapeHTML(message)}`;
     toast.appendChild(item);
     toast.classList.add('is-visible');
     setTimeout(() => {

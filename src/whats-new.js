@@ -52,7 +52,7 @@ export function showReleaseNotesModal(entries, title = '새로운 소식') {
     const existing = document.getElementById('whats-new-overlay');
     if (existing) existing.remove();
 
-    const sections = entries.map(e => `
+    const sectionsHtml = entries.map(e => `
         <div class="whats-new-entry">
             <p class="whats-new-version">${esc(formatAppVersion(e.version))} <span class="whats-new-date">${esc(e.date || '')}</span></p>
             <ul>${e.notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul>
@@ -64,7 +64,7 @@ export function showReleaseNotesModal(entries, title = '새로운 소식') {
     overlay.innerHTML = `
         <div class="app-confirm-dialog dialog-card whats-new-dialog" role="dialog" aria-modal="true" aria-label="${esc(title)}">
             <h3><i class="fa-solid fa-sparkles" aria-hidden="true"></i> ${esc(title)}</h3>
-            <div class="whats-new-body">${sections}</div>
+            <div class="whats-new-body">${sectionsHtml}</div>
             <div class="app-confirm-actions">
                 <button class="app-confirm-ok">확인</button>
             </div>
