@@ -1,14 +1,16 @@
 // tests/e2e/analysis-view.spec.js — 학습 진단(analysis-view) E2E 시뮬레이션 (SPEC ROAD-Q8)
-// @spec AN-01,AN-02,AN-03,AN-04,AN-05,AN-09,AN-10
+// @spec AN-01,AN-02,AN-03,AN-04,AN-05,AN-09,AN-10,D-22
 //
 // jsdom 계층이 커버하지 못하는 브라우저 통합 경로를 검증한다:
 //   ① 합성 이력 시드 → 진단 카드·예측·차트 렌더 (라우팅 + DataLoader + 렌더 통합)
 //   ② 빈 이력 → 진단 준비 온보딩 게이트 (AN-04, 표본 미달 방향)
 //   ③ 실제 퀴즈 완주 → 기록이 분석 뷰에 반영 (기록→분석 파이프라인, AN-04 표본 충족 방향)
+//      + 완주 판정이 fc_review_log에 k:'q' 시퀀스로 적재되는지 확인 (D-22)
+//   ④ 시드된 OX 판정 시퀀스 → 단원 BKT 숙달 % 표시 (D-22 소비 경로)
 // 시드 스키마·의도된 결과값은 tests/fixtures/analysis-seed.js 주석 참조.
 
 import { test, expect } from '@playwright/test';
-import { analysisBootKeys, buildAnalysisSeed } from '../fixtures/analysis-seed.js';
+import { analysisBootKeys, buildAnalysisSeed, buildReviewLogSeed } from '../fixtures/analysis-seed.js';
 
 const seedStorage = (page, entries) => page.addInitScript((kv) => {
     Object.entries(kv).forEach(([k, v]) => localStorage.setItem(k, v));
@@ -103,6 +105,23 @@ test.describe('학습 진단 — 합성 이력 시드', () => {
         await expect(est.locator('.actual-result')).toContainText('합격');
         await expect(est.locator('.actual-result')).toContainText('65점');
 
+        expect(cleanErrors(page)).toEqual([]);
+    });
+
+    test('판정 시퀀스 로그가 단원 숙달 추정에 반영된다 (D-22)', async ({ page }) => {
+        test.setTimeout(90_000);
+        seedStorage(page, { ...analysisBootKeys(), ...buildAnalysisSeed(), ...buildReviewLogSeed() });
+        trackErrors(page);
+        await gotoAnalysis(page);
+
+        // law 'Chapter 01' 행 — Beta 카운트 추정(~40%) 대신 BKT P(L)로 회복 표시.
+        // OX 정판 3연속(G=0.30 할인 반영)으로 사전 0.4 → P(L) ≈ 0.96.
+        const chapter = page.locator('#analysis-chapter-weak');
+        const lawRow = chapter.locator('.wc-subrow', { hasText: 'Chapter 01. 화장품법의 이해' });
+        await expect(lawRow).toHaveCount(1);
+        const m = (await lawRow.textContent()).match(/숙달 (\d+)%/);
+        expect(m, '단원 행에 숙달 % 표시').toBeTruthy();
+        expect(Number(m[1])).toBeGreaterThanOrEqual(90); // 시퀀스 미반영이면 ~40%
         expect(cleanErrors(page)).toEqual([]);
     });
 
@@ -214,6 +233,12 @@ test.describe('학습 진단 — 기록→분석 파이프라인', () => {
             await page.locator('#next-quiz-btn').click();
         }
         await expect(page.locator('#quiz-result-panel')).toBeVisible({ timeout: 10_000 });
+
+        // ③-1 판정 시퀀스 적재 확인 (D-22) — 응답한 문항마다 {c,k:'q',ok:0|1,t} 레코드
+        const judged = await page.evaluate(() =>
+            (JSON.parse(localStorage.getItem('cosmetic:fc_review_log') || '[]')).filter(e => e.k === 'q'));
+        expect(judged.length).toBe(10);
+        expect(judged.every(e => typeof e.c === 'string' && (e.ok === 0 || e.ok === 1) && e.t > 0)).toBe(true);
 
         // ③ 분석 뷰 복귀 — 기록이 반영되어 온보딩 해제·과목 카드에 풀이 수 표시
         await page.evaluate(() => { location.hash = '#/analysis'; });

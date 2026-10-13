@@ -7,6 +7,11 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 E2E: 퀴즈→판정→진단 체인 검증 + pro_notice_seen 스코프 드리프트 수정
+
+- analysis-view.spec: 퀴즈 10문 완주 후 `fc_review_log`의 `k:'q'` 판정 레코드 10건 검증 추가, OX 판정 시퀀스 시드 → 단원 `숙달 %`(BKT) 표시 E2E 신설 (D-22)
+- 픽스처 수정: `pro_notice_seen`이 ROAD-P5에서 GLOBAL_KEYS(비스코프)로 전환됐는데 시드가 구 `cosmetic:` 스코프 키를 심어 Pro 안내 오버레이가 클릭을 차단하던 드리프트 — `_global` 마커 루트 키로 교정해 파이프라인 테스트 복구
+
 ## 2026-10-13 BKT 관측 커버리지 — weak_*·시뮬 문항 id 정규화
 
 - 약점 집중 오답 모의고사의 `weak_quiz_*`·`weak_exam_*` 판정과 시뮬 원시 id(`<examId>_q<N>`)가 단원 귀속에 실패해 BKT 관측에서 누락되던 갭 수정 — `_unitObservationSeqs`가 접두사 정규화 + exams 매핑으로 원문항 귀속
