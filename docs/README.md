@@ -92,6 +92,7 @@ user_manual.md(앱 내) → 학습안내서(앱 내) → exams/cosmetic/user/exa
 ```
 docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
+├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── dev/                         ← 플랫폼 공통 개발 문서 (54개)
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (4개 — README + ADR 3건)
@@ -110,21 +111,7 @@ docs/
 
 ### 🗂️ 문서 분류·배치 규칙
 
-문서가 `dev/`와 `exams/<id>/` 양쪽에 나뉘어 있는 것은 **의도된 도메인 격리**다 — 플랫폼 공통은 `docs/dev/`, 시험 종속은 `docs/exams/<id>/`(DA-13). 어느 버킷에 둘지는 아래 표로 판정한다.
-
-| 배치 | 성격 | 판정 기준 |
-|------|------|-----------|
-| `docs/dev/` 수위 | 플랫폼 최상위 기준서·독립 산출물 | SPEC(요구사항 ID 원천)·ARCHITECTURE·CHANGES·TRACE_MATRIX + 외주 인도 패키지처럼 특정 계열에 속하지 않는 독립 문서 |
-| `docs/dev/adr/` | 아키텍처 결정 기록 | 대안·트레이드오프 등 결정의 "왜" — 새 구조 결정은 ADR 채번 |
-| `docs/dev/design/` | 설계 **의도** 문서 | 설계안·가이드·계획·로드맵·흐름 명세(USER_FLOW) — "무엇을/왜 그렇게 만들 것인가" |
-| `docs/dev/reference/` | **현행 구현** 기술 명세·참조 | 화면 지도·로직 해설·환경·테스트 정책 — "지금 어떻게 동작하는가" |
-| `docs/dev/runbooks/` | 실행 절차 | 작업 순서·운영 체크리스트 — "어떻게 수행하는가" |
-| `docs/exams/<id>/{design,reference,user,business}/` | 시험 종속 문서 | 특정 시험에만 의미가 있는 문서 — dev/와 동일한 분류 기준 적용 |
-| `docs/exams/<id>/report_archive/` | 시점 스냅샷·대체된 원전 | **앱 미참조 전제** — 앱 코드·콘텐츠가 경로를 인용하는 문서는 아카이브 불가 |
-| `docs/exams/<id>/` 루트 | 분류 예외 | 하위 버킷에 넣을 수 없는 특수 문서 — 현재 `ingredients_audit_제2026-19호.md` 1건 (앱 콘텐츠가 인용하는 refmat 스냅샷이라 아카이브 불가, 교재 종속이 아니라 reference 부적합) |
-| `content/exams/<id>/docs/` | 앱 내 사용자 문서 | `manual-viewer`가 런타임 fetch — `docs/`가 아니라 콘텐츠 팩 소속 (갱신 후 `build_doc_bundles.js` 필수) |
-
-**판정 순서**: ① 시험 종속이면 `exams/<id>/`, 플랫폼 공통이면 `dev/` → ② 역할 — 설계 의도=`design/` · 현행 기술=`reference/` · 절차=`runbooks/` · 결정=`adr/` → ③ 대체됐거나 시점 스냅샷이면 `report_archive/`(앱 참조 문서 제외). 설계 문서와 참조 문서의 경계: design은 **의도·결정·계획**, reference는 **구현 사실 기술**이다. 문서 ID 접두사도 위치를 선언한다 — `DOC-DSN`=design, `DOC-REF`=reference, `DOC-RBK`=runbooks, `DOC-ARC`=archive이며 접두사↔디렉터리 불일치는 금지 (수위 계열 `DOC-DEV`·`DOC-IDX`는 예외). 명칭이 `*_DESIGN`이어도 대체된 원전은 report_archive 소속이다 (예: `FORMULA_OS_DESIGN.md`).
+문서가 `dev/`와 `exams/<id>/` 양쪽에 나뉘어 있는 것은 **의도된 도메인 격리**다 — 플랫폼 공통은 `docs/dev/`, 시험 종속은 `docs/exams/<id>/`(DA-13). 버킷별 판정 기준·판정 순서·명칭 규약의 정본은 **[DOC_CONVENTIONS.md](DOC_CONVENTIONS.md)** — 요약: `design/`=설계 의도(설계안·가이드·계획·흐름 명세) / `reference/`=현행 기술 명세 / `runbooks/`=실행 절차 / `adr/`=결정 기록 / `report_archive/`=앱 미참조 스냅샷·대체된 원전 / 시험 루트=분류 예외 / `content/exams/<id>/docs/`=앱 번들 문서.
 
 ---
 
@@ -135,6 +122,7 @@ docs/
 | 문서 | 설명 |
 |------|------|
 | [ARCHITECTURE.md](dev/ARCHITECTURE.md) | 시스템 아키텍처·설계 철학 — Local-First + 선택적 클라우드, ESM 구조, 데이터 흐름, PWA/SW 전략, 계정·동기화, UI 모드, Formula OS, 배포 파이프라인, 구현 레시피, 강건성 가이드라인 |
+| [DOC_CONVENTIONS.md](DOC_CONVENTIONS.md) | 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 규약 + 게이트 매핑 (DOC-DEV-08) |
 | [SPEC.md](dev/SPEC.md) | 요구사양 명세서 — 구현된 기능을 역공학해 정리 (현행 기준서) |
 | [TRACE_MATRIX.md](dev/TRACE_MATRIX.md) | SPEC↔코드 추적 매트릭스 — 요구사항별 @spec 태그·테스트·문서 매핑 (자동 생성 — `npm run build:trace`) |
 | [adr/](dev/adr/README.md) | 아키텍처 결정 기록 — 대안 검토·트레이드오프 등 결정의 "왜" 보존 (색인 README + ADR 3건) |
@@ -289,6 +277,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 
 ## 📌 문서 작성 규칙
 
+문서 작성·배치·명칭·헤더·생명주기 규약의 정본은 **[DOC_CONVENTIONS.md](DOC_CONVENTIONS.md)** (DOC-DEV-08). 핵심 요약:
+
 - **문서 ID**: 모든 문서 상단에 `> **문서 ID**: DOC-XX-NN` 표기 — 아래 레지스트리에서 채번. `npm run check:docs`가 누락·중복을 검증
 - **업데이트 날짜**: 각 문서 상단에 `최종 업데이트` 명시
 - **링크**: 상대 경로 사용 (`../`, `dev/`, `exams/<id>/`); 공백 파일명은 `%20` 인코딩
@@ -304,7 +294,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 |--------|------|------|
 | `DOC-ROOT` | 루트 문서 | README.md · AGENTS.md |
 | `DOC-IDX` | 문서 인덱스 | docs/README.md (본 파일) · docs/exams/<id>/README.md |
-| `DOC-DEV` | 개발 수위 문서 | SPEC · ARCHITECTURE · CHANGES · TRACE_MATRIX |
+| `DOC-DEV` | 개발 수위 문서 | SPEC · ARCHITECTURE · CHANGES · TRACE_MATRIX · 규약·패키지 등 독립 산출물 |
 | `DOC-DSN` | 설계·계획 | docs/dev/design/ · docs/exams/<id>/design/ |
 | `DOC-REF` | 명세·로직 참조 | docs/dev/reference/ · docs/exams/<id>/reference/ |
 | `DOC-RBK` | 운영 런북·절차 | docs/dev/runbooks/ |
@@ -327,6 +317,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DEV-04 | `docs/dev/TRACE_MATRIX.md` (자동 생성 — npm run build:trace) |
 | DOC-DEV-05 | `docs/exams/cosmetic/ingredients_audit_제2026-19호.md` |
 | DOC-DEV-07 | `docs/dev/UIUX_외주전달_패키지.md` |
+| DOC-DEV-08 | `docs/DOC_CONVENTIONS.md` |
 | DOC-DSN-01 | `docs/dev/design/DOM_TEST_DESIGN.md` |
 | DOC-DSN-02 | `docs/exams/cosmetic/design/FORMULA_OS_WORKFLOW_DESIGN.md` |
 | DOC-DSN-03 | `docs/dev/design/LEARNING_PREMIUM_PLAN.md` |
