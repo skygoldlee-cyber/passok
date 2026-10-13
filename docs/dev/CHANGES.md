@@ -17,6 +17,7 @@
 - **`vendor-check.yml`**: 주 1회 + 수동 트리거 — `--latest`로 지연 패키지를 이슈로 보고(자동 갱신 없음). ci.yml `check:vendor` 단계 추가, check:ci 22→23단계
 - **첫 적용 성과**: supabase 2.116.0→2.117.3 동기화, mermaid 10.9.8·fontawesome 6.4.0 버전 확정(FA 지연·mermaid 2메이저 지연이 워크플로 이슈로 가시화)
 - **테스트**: `tests/unit/vendor-manifest.test.js` 6개 (@spec BP-13) — 스키마·실물 정합·CRLF/LF 해시 규약·verify 탐지·probeVersion
+- **후속 정정**: vendor-check.yml 권한 `contents: read` 추가(checkout 필요 — 명시 권한 블록에서 미지정은 none)·존재하지 않는 `maintenance` 라벨 → `dependencies`
 
 ## 2026-10-13 vitest 4.1.11 → 5.0.3 업그레이드
 
