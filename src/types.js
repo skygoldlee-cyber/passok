@@ -273,7 +273,7 @@
  * @property {{wrongCauses?: Array<{key:string, label:string, advice?:string, autoPattern?:string}>}} [analysis]
  *                                            학습 진단 도메인 분류 설정 (manifest.analysis 패스스루 — 오답 원인 분류표 등)
  *                                            autoPattern: 자동 오답 분류 정규식 (estimateUntaggedCauses, AN-07)
- * @property {{minExamLeadDays?:number, readThroughDays?:number, readDayShare?:number}} [study]
+ * @property {{minExamLeadDays?:number, readThroughDays?:number, readDayShare?:number, kt?:{P0?:number, T?:number, G?:{mcq?:number, ox?:number}, S?:number}}} [study]
  *                                            학습 계획 설정 (manifest.study 패스스루 — D-17 리드타임·SC-15 일독 기간.
  *                                            readDayShare: 일독 기간 통독 1일이 대치하는 카드 학습일 비율 0~1 (기본 1).
  *                                            미선언 시 콘텐츠 규모 유도/기본값 — getMinExamLeadDays·getReadThroughDays·getReadDayShare)

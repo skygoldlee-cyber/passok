@@ -2,7 +2,7 @@
 
 > 상위 문서: [`SPEC.md`](../SPEC.md) D-21·D-22 · [`EXAM_R_SCHEDULING_DESIGN.md`](EXAM_R_SCHEDULING_DESIGN.md) (D-18 리뷰 로그) · [`FSRS6_UPGRADE_DESIGN.md`](FSRS6_UPGRADE_DESIGN.md)
 > 범위: 카드 스케줄링(FSRS)과 분리된 **단원·개념 숙달도 추정 계층** — 진단 카드(단원 취약·합격 갭)의 추정 품질 개선
-> 상태: ✅ v1(D-21) 구현됨 · ▶ v2(D-22) 착수 확정 (2026-10-13) — §4.2 순서로 진행, 첫 작업은 판정 시퀀스 로그 스키마 결정
+> 상태: ✅ v1(D-21) 구현됨 · ✅ v2(D-22) 구현됨 (2026-10-13) — `src/knowledge-tracing.js` + 소비자 연결 완료, 감사 시나리오는 §4.2④ 잔여
 > **관련 SPEC ID**: `D-21`(단원 숙달 베이지안 추정) · `D-22`(BKT 지식 추적) · `D-18`(리뷰 로그) · `SC-14`(합격 갭 분석) · `D-15`(취약 단원 분석)
 > **문서 ID**: DOC-DSN-29
 > **범위**: platform · 판본: none
@@ -129,11 +129,13 @@ P_unit = (α₀ + corrects) / (α₀ + β₀ + corrects + wrongs)
 - 후방 호환: `k` 없는 레코드는 스케줄 이벤트로 해석 — `getReviewLog()`·FIFO·백업 무수정
 - 비기입 영역: 시뮬 `weak_sim_*` 오답 카드는 별도 증거 경로로 유지 (§2.1)
 
-**② `knowledge-tracing.js` 순수 모듈** — `bktUpdate(pL, correct, {T,G,S})` · `computeUnitMastery(sequence)` (단원 귀속은 D-21의 `computeUnitEvidence` 귀속 경로 재사용). DOM·저장 비의존 순수 함수.
+**② `knowledge-tracing.js` 순수 모듈** ✅ (2026-10-13) — `bktUpdate`·`computeUnitMastery`·`resolveKtParams`, DOM·저장 비의존. 구현 시 결정된 정밀화 2건:
+- **사전 승계**: `computeUnitMastery(seq, params, p0)`의 `p0`에 v1 카운트 증거의 Beta 사후평균을 초기 P(L)로 주입 — 로그 도입 이전 이력을 버리지 않는다 (콜드스타트 완화)
+- **진술 관측 승계**: 로그의 k 없는 스케줄 이벤트 중 `c`가 `statement_stats`에 존재하면 OX 관측(`r===3` 정판)으로 귀속 — 카드 자기평가는 멤버십 검사로 자연 배제 (§2.1)
 
-**③ 파라미터·소비자 연결** — manifest `study.kt` `{P0, T, G:{mcq, ox}, S}` 오버라이드(기본값 §3.2), 취약 랭킹·합격 갭의 추정치를 Beta → `P(L)`로 교체(표시 문구 "숙달 M%" 유지), 졸업 기준 `P(L) ≥ 0.9`.
+**③ 파라미터·소비자 연결** ✅ (2026-10-13) — cosmetic manifest `study.kt` 명시(`{P0:0.30, T:0.08, G:{mcq:0.15, ox:0.30}, S:0.10}`), `computeChapterWeakness`·`computeSubjectWeakChapters`의 숙달 추정이 시퀀스 있으면 BKT `P(L)`·없으면 Beta 폴백. 호출부(analysis-view 2곳·study-calendar)가 `getReviewLog()`+`resolveKtParams`를 주입. 표시 문구 "숙달 M%" 유지.
 
-**④ 검증** — 골든 수열 테스트(정답 연속→P(L) 상승·오답→감소·T에 의한 점진 회복), 시퀀스 없을 때 v1 폴백, 감사 시나리오 추가.
+**④ 검증** — 골든 수열 테스트(손계산 기대값: 0.3→0.7424→0.9497→0.99195)·정답/오답 방향·OX 추측률 분리·사전 승계·소비자 BKT/Beta 분기·자기평가 제외 ✅. **감사 시나리오 추가는 잔여** (audit:study 확장 후속).
 
 **v2 전까지 병행 가능한 후속**: T4 계측 기반 목표 R 재판정(EXAM_DUE_CLAMP §5) — D-20 클램프의 시험일 R 회복 효과를 감사 시뮬로 계측해 목표 R 간격 단축 필요 여부를 종결한다.
 

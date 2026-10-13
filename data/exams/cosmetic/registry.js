@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-13T01:46:44.433Z",
+  "generatedAt": "2026-10-13T14:38:44.307Z",
   "subjects": [
     {
       "key": "law",
@@ -451,8 +451,17 @@ var DATA_REGISTRY = {
     ]
   },
   "study": {
-    "minExamLeadDays": 50,
-    "readThroughDays": 10
+    "minExamLeadDays": 63,
+    "readThroughDays": 10,
+    "kt": {
+      "P0": 0.3,
+      "T": 0.08,
+      "G": {
+        "mcq": 0.15,
+        "ox": 0.3
+      },
+      "S": 0.1
+    }
   },
   "uiText": {
     "dashboard": {
