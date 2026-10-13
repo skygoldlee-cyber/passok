@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 코드 규약 정본 신규 — CODE_CONVENTIONS.md (DOC-DEV-09)
+
+- **신규 `docs/CODE_CONVENTIONS.md` (DOC-DEV-09)**: 소스 코드 규약의 단일 출처(SSOT) — 흩어져 있던 규칙(AGENTS 코드 스타일·domain-map 분류·check 도구 주석의 요구사항)을 §1~10으로 통합: 파일 배치·계층(platform/feature/domain layer·exams/<id>/ 격리·views 역참조 차단)·명칭(kebab-case·테스트 접미사)·언어·서식·금지 패턴 표(인라인 핸들러·style.display·alert·localStorage 직접·미이스케이프 싱크·위치 좌표 키)·저장소/UI/추적성 규약·규약→게이트 매핑표·면제/래칫 규약·변경 절차
+- **AGENTS.md 정정**: JavaScript 들여쓰기 "2-space" → "4-space" — 실물 코드·`.editorconfig`(`indent_size = 4`)와 불일치하던 스테일 표기 수정 + 코드 스타일 절두에 정본 포인터, docs 트리 주석에 코드 규약 추가
+- **레지스트리**: DOC-DEV-09 채번 + docs/README 인덱스 행·트리 항목 추가
+- **규약 준수 감사**: check:ci 게이트 + 비게이트 패턴 전수 스캔 — 위반 2건 정정: `daily-challenge.js`의 `style.display` 토글 → `is-hidden` 클래스, `dashboard.html` 인라인 `style="display:none"` → `is-hidden` (스트릭 복구권 배지, SC-04). 나머지 전수 통과 — 인라인 핸들러·네이티브 대화상자(pwa-install의 `deferredPrompt.prompt()`는 PWA API 오탐)·window 전역·파일 명칭·테스트 접미사 0건
+
 ## 2026-10-13 문서 규약 준수 감사 — 아카이브 계약·명칭 규약 정정
 
 - **전수 감사**: DOC-DEV-08 기준 docs/ 전체 점검 — ID 접두사↔디렉터리·버킷 배치·헤더 선언 모두 일치 (60+ 문서)

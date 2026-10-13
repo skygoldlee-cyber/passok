@@ -131,6 +131,7 @@ describe('데일리 챌린지 — 생성·진행·완료·스트릭', () => {
         updateStreakAndDailyUI();
 
         expect(el('streak-days').textContent).toBe('0');
+        expect(el('streak-freezes').classList.contains('is-hidden')).toBe(true);
     });
 
     it('SC-04: 복구권 보유 시 배지 + 주간 학습 칩 표시', () => {
@@ -139,7 +140,7 @@ describe('데일리 챌린지 — 생성·진행·완료·스트릭', () => {
 
         const freezeEl = el('streak-freezes');
         expect(freezeEl.textContent).toContain('복구권 2');
-        expect(freezeEl.style.display).not.toBe('none');
+        expect(freezeEl.classList.contains('is-hidden')).toBe(false);
         expect(el('weekly-goal-chip').textContent).toMatch(/이번 주 \d+\/\d+일/);
     });
 
