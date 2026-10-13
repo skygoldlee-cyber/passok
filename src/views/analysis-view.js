@@ -10,7 +10,7 @@ import { state } from '../state.js';
 import { esc } from '../sanitize.js';
 import { DataLoader } from '../data-loader.js';
 import { switchView } from './navigation.js';
-import { getDueCount, getDueCards } from '../spaced-repetition.js';
+import { getDueCount, getDueCards, getExamRiskCards, EXAM_R_SESSION_CAP } from '../spaced-repetition.js';
 import { computeWrongCauseSummary, getWrongCauseLabels, getSimHistory, evaluateRecommendationEffect, computeCalibrationBias, getActualResult } from '../recommendations.js';
 import {
     getDDay, getStudyGoals, getTodayGoalProgress, getWeeklyGoalProgress,
@@ -371,6 +371,28 @@ export function startDueReview() {
             state.flashcards.currentIndex = 0;
             switchView('flashcard-view', { scrollTop: true });
             showToast(`오늘 복습 대상 ${n}장 — 간격 반복 세션을 시작합니다`, 'success');
+        });
+}
+
+/**
+ * 시험일 기억률 미달 카드만 모아 최종 인출 세션을 시작합니다 (D-19).
+ * 대시보드 '오늘 할 일' 큐의 '인출 세션' 버튼에서 호출 — 기억률 낮은 순 출제.
+ */
+export function startExamRiskReview() {
+    const risk = getExamRiskCards(getDDay()).slice(0, EXAM_R_SESSION_CAP);
+    if (!risk.length) {
+        showToast('시험 전 추가 인출이 필요한 카드가 없습니다.', 'info');
+        return;
+    }
+    showGlobalLoading('시험 전 인출 카드를 불러오는 중입니다...');
+    Promise.all(DataLoader.getSubjectList().map(s => DataLoader.loadSubject(s.key)))
+        .catch(() => {})
+        .finally(() => {
+            hideGlobalLoading();
+            state.flashcards.onlyIds = risk.map(r => r.id);
+            state.flashcards.currentIndex = 0;
+            switchView('flashcard-view', { scrollTop: true });
+            showToast(`시험 전 최종 인출 ${risk.length}장 — 기억률 낮은 순으로 출제합니다`, 'success');
         });
 }
 

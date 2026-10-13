@@ -9,6 +9,7 @@ export const STORAGE_KEYS = {
   FC_WEAK: 'fc_weak',
   FC_SPACED_REPETITION: 'fc_spaced_repetition',
   FC_MIGRATED_V2: 'fc_migrated_v2',
+  FC_REVIEW_LOG: 'fc_review_log',          // FSRS 리뷰 이력 링버퍼 [{c,r,e,t}] 최대 2,000건 (D-18)
 
   // 퀴즈 / 시험
   QUIZ_RESULTS: 'quiz_results',
@@ -186,6 +187,7 @@ export const BACKUP_KEYS = [
   STORAGE_KEYS.STATEMENT_STATS,
   STORAGE_KEYS.READER_PROGRESS,     // 교재 일독 진척 — 복원 누락 시 계획의 통독 차감 리셋 (SC-15)
   STORAGE_KEYS.FC_SPACED_REPETITION,  // FSRS 카드별 스케줄 — 복원 누락 시 복습 일정 리셋
+  STORAGE_KEYS.FC_REVIEW_LOG,         // FSRS 리뷰 이력 — 피팅·효능 실측 원천 (D-18)
   STORAGE_KEYS.FORMULA_ITEMS,
   STORAGE_KEYS.FORMULA_RULES,
   STORAGE_KEYS.BATCH_ITEMS,

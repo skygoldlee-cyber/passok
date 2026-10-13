@@ -31,6 +31,7 @@ import {
     startSubjectQuiz,
     startSubjectReader,
     startDueReview,
+    startExamRiskReview,
     exportAnalysisReport,
     gotoSubjectAnalysis
 } from './views/analysis-view.js';
@@ -558,7 +559,7 @@ const DELEGATED_HANDLERS = {
     exitTrainerSubView, startLimitsTrainer, nextLimitsQuestion,
     togglePomodoro, resetPomodoro,
     // 대시보드/리뷰/백업 (과거 브리지 누락으로 배포판에서 죽어 있던 핸들러 포함)
-    startSubjectStudy, startSubjectQuiz, startSubjectReader, startDueReview,
+    startSubjectStudy, startSubjectQuiz, startSubjectReader, startDueReview, startExamRiskReview,
     openSubjectSection,
     removeWeakCard, setReviewFilter, printReviewNotes,
     tagWrongCause, tagWrongCauseAt, wrongActionCard, wrongActionTextbook, wrongActionSimilar,

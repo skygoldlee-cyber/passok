@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 02777c522955edb3
-> 생성: 2026-10-13 · 원천: SPEC.md(501개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 8ac98504880db144
+> 생성: 2026-10-13 · 원천: SPEC.md(503개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 501개 — 문서 연결 361 · 소스 연결 452 · 테스트 연결 484 · 보고서 연결 109
+**커버리지 요약**: 요구사항 503개 — 문서 연결 363 · 소스 연결 454 · 테스트 연결 486 · 보고서 연결 109
 
 ---
 
@@ -42,7 +42,9 @@
 | D-15 | ✅ | 테스트 | — | src/views/dashboard.js<br>src/views/subject-stats.js | tests/dom/study-dashboard.dom.test.js | DOC-ARC-05<br>DOC-ARC-10 | — |
 | D-16 | ✅ | 테스트 | — | html/views/dashboard.html<br>index.html<br>src/analysis-engine.js<br>src/views/dashboard.js<br>…외 1개 | tests/unit/analysis-engine.test.js | — | — |
 | D-17 | ✅ | 테스트 | DOC-DSN-16 | src/study-tracker.js<br>src/views/dashboard.js<br>src/views/study-calendar.js<br>src/views/subject-stats.js | tests/dom/study-calendar.dom.test.js<br>tests/dom/study-dashboard.dom.test.js<br>tests/unit/study-tracker.test.js | — | — |
-| TQ-01 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | src/views/dashboard-queue.js<br>src/views/dashboard.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |
+| D-18 | ✅ | 테스트 | DOC-DSN-26 | src/spaced-repetition.js | tests/unit/fsrs.test.js | — | — |
+| D-19 | ✅ | 테스트 | DOC-DSN-26 | src/spaced-repetition.js | tests/unit/fsrs.test.js<br>tests/unit/today-queue.test.js | — | — |
+| TQ-01 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24<br>DOC-DSN-26 | src/views/dashboard-queue.js<br>src/views/dashboard.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |
 | TQ-02 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | src/views/dashboard-queue.js | tests/unit/today-queue.test.js | — | — |
 | TQ-03 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | src/views/dashboard-queue.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |
 | TQ-04 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | — | tests/unit/today-queue.test.js | — | — |
@@ -73,7 +75,7 @@
 | F-04 | ✅ | 테스트 | DOC-REF-03 | src/views/flashcard.js<br>src/views/listeners-flashcard.js | tests/dom/study-flashcard.dom.test.js | DOC-ARC-05 | — |
 | F-05 | ✅ | 테스트 | DOC-REF-03 | src/utils.js<br>src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js | DOC-ARC-05 | — |
 | F-06 | ✅ | 테스트 | DOC-REF-03 | src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js | DOC-ARC-05 | — |
-| F-07 | ✅ | 테스트 | DOC-DSN-17<br>DOC-REF-03 | src/fsrs.js<br>src/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js<br>tests/unit/fsrs.test.js<br>tests/unit/property-based.test.js | DOC-ARC-05 | — |
+| F-07 | ✅ | 테스트 | DOC-DSN-17<br>DOC-DSN-26<br>DOC-REF-03 | src/fsrs.js<br>src/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js<br>tests/unit/fsrs.test.js<br>tests/unit/property-based.test.js | DOC-ARC-05 | — |
 | F-08 | ✅ | 테스트 | DOC-DSN-17<br>DOC-REF-03 | src/fsrs.js<br>src/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js<br>tests/unit/fsrs.test.js<br>tests/unit/property-based.test.js | DOC-ARC-05 | — |
 | F-09 | ✅ | 테스트 | DOC-DSN-17<br>DOC-REF-03 | src/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js<br>tests/unit/fsrs.test.js<br>tests/unit/property-based.test.js | DOC-ARC-05 | — |
 | F-10 | ✅ | 테스트 | DOC-REF-03 | src/views/flashcard.js | tests/dom/study-flashcard.dom.test.js | DOC-ARC-05 | — |
@@ -796,6 +798,7 @@
 | DOC-DSN-23 | docs/dev/design/LEARNING_UX_PHASE15_DESIGN.md | DR-01, DR-02, ROAD-P0, ROAD-P5 |
 | DOC-DSN-24 | docs/dev/design/LEARNING_UX_PHASE2_DESIGN.md | DR-01, DR-02, DR-04, DR-05, ROAD-L5, ROAD-P5, RV-02, RV-03, TQ-01, TQ-02, TQ-03, TQ-04, TQ-05, UX-GATE-01, UX-GATE-02, UX-GATE-03, UX-MET-01, UX-MET-02, UX-MET-03, UX-MET-04, UX-NAV-12, UX-NAV-13, UX-NAV-14 |
 | DOC-DSN-25 | docs/dev/design/UIUX_DESIGN_GUIDE.md | A-01, A-02, A-03, A-04, A-05, A-06, A-07, ES-02, R-01, R-02, R-03, R-04, R-05, R-06, R-07, R-08, TH-01, TH-02, TH-03, TH-04, TH-05, TH-06, UM-01, UM-02, UM-03, UM-04, UM-05, UX-FB-01, UX-FB-02, UX-FB-03, UX-FB-04, UX-FB-05, UX-FB-06, UX-FORM-01, UX-FORM-02, UX-NAV-01, UX-NAV-02, UX-NAV-03, UX-NAV-04, UX-NAV-05, UX-NAV-06, UX-NAV-07, UX-NAV-08, UX-NAV-09, UX-NAV-10, UX-NAV-11, UX-NAV-12, UX-NAV-13, UX-NAV-14, UX-PWA-01, UX-PWA-02, UX-PWA-03, UX-PWA-04, UX-PWA-05, UX-SCR-01, UX-SCR-02, UX-SET-01, UX-SET-02, UX-SET-03, UX-SET-04, UX-SET-05, UX-VFY-01, UX-VFY-02, UX-VFY-03, UX-VFY-04, UX-VFY-05, UX-VFY-06 |
+| DOC-DSN-26 | docs/dev/design/EXAM_R_SCHEDULING_DESIGN.md | D-18, D-19, F-07, TQ-01 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |

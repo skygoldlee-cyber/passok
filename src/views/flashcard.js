@@ -22,6 +22,22 @@ const CARD_TYPE_LABELS = {
 export function loadFlashcards() {
     const fcConfig = state.flashcards;
 
+    // 지정 id 세션 — 시험 전 최종 인출 등 임의 카드 집합을 지정 순서로 출제 (1회 적용 후 해제, D-19)
+    if (fcConfig.onlyIds) {
+        const order = new Map(fcConfig.onlyIds.map((id, i) => [id, i]));
+        fcConfig.onlyIds = null;
+        const picked = Object.values(window.STUDY_DATA || {})
+            .flatMap(d => (d && d.cards) || [])
+            .filter(c => order.has(c.id))
+            .sort((a, b) => (order.get(a.id) || 0) - (order.get(b.id) || 0));
+        if (picked.length) {
+            fcConfig.data = picked;
+            fcConfig.currentIndex = 0;
+            renderFlashcard();
+            return;
+        }
+    }
+
     // 오늘 복습 모드 — FSRS due 카드를 전 과목에서 합산 출제 (1회 적용 후 해제)
     if (fcConfig.dueOnly) {
         fcConfig.dueOnly = false;

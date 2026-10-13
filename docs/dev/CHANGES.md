@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 FSRS 관측 계층 + 시험일 목표 R 최종 인출 (D-18·D-19)
+
+- **D-18 리뷰 로그 링버퍼**: `fc_review_log` 키 신설 — `updateCardSchedule`의 단일 통로에서 카드·진술 공용으로 `{c,r,e,t}` 레코드 append, 2,000건 FIFO. `BACKUP_KEYS` 등록으로 복원·초기화 정합 자동 성립. 개인 파라미터 피팅·효능 실측·4버튼 재평가의 선행 계층 (EXAM_R_SCHEDULING_DESIGN §2)
+- **D-19 시험일 목표 R 최종 인출**: `getExamRiskCards(dday)` — 다음 예정 복습이 시험일 이후(`due>examDate`)인 스케줄 사각지대 카드 중 `R_exam = retrievability(examDate−lastReview, s) < 0.85`를 R_exam 오름차순 선별. 간격 재작성이 아닌 추가 인출 세션이라 스케줄 왜곡 없음
+- **`onlyIds` 세션 일반화**: `dueOnly`의 1회성 플래그 패턴을 `state.flashcards.onlyIds`(id 배열·지정 순서)로 일반화 — 임의 카드 집합 세션 기동. `loadFlashcards`는 onlyIds 우선 처리, R_exam 오름차순 순서 보존(셔플 없음)
+- **큐 항목**: `buildTodayQueue`에 `kind:'examr'` — ⑤ 취약 진술 직후·잔여 추천 앞, `0≤dday≤14` + 위험 카드 존재 시에만 표시. 세션 상한 60장(`EXAM_R_SESSION_CAP`), `startExamRiskReview` 핸들러 신설
+- 테스트: fsrs.test에 로그 append·FIFO 상한·손상 복구·위험 선별·정렬 7건, today-queue.test에 큐 위치·윈도 경계 2건 추가
+
 ## 2026-10-13 D-5 학습 플랜 FSRS 정합 재설계 (학습안내서)
 
 - **골격 전환 — 재독 우선 → 인출 우선**: `요약→문항→문제은행→모의고사` 4단계 회전을 `복습 큐 → 취약 인출 → 함정표 스캔 → (잔여) 모의고사` 매일 고정 골격으로 재편 — FSRS 복습 카드(망각 직전, 한계효용 최대)가 비협상 ①
