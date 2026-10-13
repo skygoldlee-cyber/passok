@@ -149,21 +149,21 @@ function _showDialog(innerHtml) {
 
 /** 플랜 비교에 노출하는 기능 목록 — feature-plan.json 키와 매핑 */
 const PLAN_FEATURES = [
-    { key: 'personal_analysis', label: '맞춤학습 (예상 점수·취약 분석·주간 리포트)' },
+    { key: 'personal_analysis', label: '학습 진단 (예상 점수·취약 분석·주간 리포트)' },
     { key: 'story_textbook', label: '이야기형 교재 (서사 본문·이야기 회상)' },
     { key: 'mock_exam', label: '실전 모의고사' },
     { key: 'combo_mock', label: 'ㄱㄴㄷ 조합 모의고사' },
     { key: 'combo_set', label: 'ㄱㄴㄷ 조합 문제집' },
     { key: 'combo_drill', label: 'ㄱㄴㄷ 조합 훈련' },
     { key: 'cloud_sync', label: '클라우드 동기화 (여러 디바이스 상태 공유)' },
-    { key: 'study_plan_pro', label: '스마트학습 (과목별 가중 배분 계획)' },
+    { key: 'study_plan_pro', label: '주간 배분 (과목별 가중 배분 계획)' },
 ];
 
 /** 플래그·플랜에서 유도한 Pro 전용 혜택 항목 — 두 모달(showPlanCompare/showUpgradeNotice)이 공유 */
 function _proBenefitItems(extraRow = '') {
     const items = [];
     if (isProFeature('personal_analysis')) {
-        items.push('<li>맞춤학습 리포트 — 복합 예상 점수·실제 결과 보정·취약 단원 추적·주간 리포트 공유</li>');
+        items.push('<li>학습 진단 리포트 — 복합 예상 점수·실제 결과 보정·취약 단원 추적·주간 리포트 공유</li>');
     }
     if (isProFeature('story_textbook')) {
         items.push('<li>이야기형 교재 — 서사 삽입 본문·서사 검색·이야기 회상</li>');

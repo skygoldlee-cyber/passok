@@ -136,7 +136,7 @@ export function renderStudyCalendar() {
     const allocDetail = /** @type {HTMLDetailsElement|null} */ (container.querySelector('.plan-alloc-detail'));
     if (container.querySelector('.plan-alloc')) {
         refreshProBadges(container);
-        proFeatureNotice('study_plan_pro', '스마트학습');
+        proFeatureNotice('study_plan_pro', '주간 배분');
     }
     if (allocDetail) {
         allocDetail.addEventListener('toggle', () => {
@@ -239,7 +239,7 @@ function _studyPlanHtml() {
     </div>`;
 }
 
-/** SC-08·SC-09 스마트학습 — 이번 주 과목별 목표: 잔여×출제 비중×약점 가중 배분 (study_plan_pro 표기).
+/** SC-08·SC-09 주간 배분 — 이번 주 과목별 목표: 잔여×출제 비중×약점 가중 배분 (study_plan_pro 표기).
  *  칩은 주간 실적(N/배정장) + 약점·비중 근거 배지 + 과목 카드 학습 바로가기 버튼. */
 function _subjectAllocHtml(plan) {
     if (!plan || plan.tier === 'done') return '';
@@ -255,7 +255,7 @@ function _subjectAllocHtml(plan) {
         }));
     }
     // 배분 입력은 공용 집계(computeSubjectAllocInputs) — SC-12 진단 신호 포함,
-    // 맞춤학습 카드·주간 리포트와 동일 입력을 공유한다 (SC-11)
+    // 학습 진단 카드·주간 리포트와 동일 입력을 공유한다 (SC-11)
     const qc = (typeof DataLoader !== 'undefined' && DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {} };
     const inputs = computeSubjectAllocInputs({
         memorizedCards: state.memorizedCards,
@@ -285,7 +285,7 @@ function _subjectAllocHtml(plan) {
         const quizPart = a.quizzes > 0 ? `·${qDone}/${a.quizzes}문` : '';
         const badges = (a.weakBadge ? '<span class="alloc-badge alloc-badge-weak" title="약점 가중 반영 — 최근 퀴즈 정답률·취약 카드·오답 원인·취약 단원·밀린 복습">약점</span>' : '')
             + (alloc.hasWeights && a.weightPct > 0 ? `<span class="alloc-badge" title="출제 비중 ${a.weightPct}%">${a.weightPct}%</span>` : '');
-        const whyHtml = `<button type="button" class="alloc-why" data-click="gotoSubjectAnalysis" data-arg="${esc(a.key)}" title="배정 근거 보기 — 맞춤학습의 ${esc(a.name)} 분석으로 이동"><i class="fa-solid fa-circle-question" aria-hidden="true"></i><span class="sr-only">${esc(a.name)} 배정 근거</span></button>`;
+        const whyHtml = `<button type="button" class="alloc-why" data-click="gotoSubjectAnalysis" data-arg="${esc(a.key)}" title="배정 근거 보기 — 학습 진단의 ${esc(a.name)} 분석으로 이동"><i class="fa-solid fa-circle-question" aria-hidden="true"></i><span class="sr-only">${esc(a.name)} 배정 근거</span></button>`;
         return `<span class="alloc-chip-wrap"><button type="button" class="alloc-chip${metCls}" data-click="startSubjectStudy" data-arg="${esc(a.key)}" title="${esc(a.name)} 카드 학습으로 이동">${esc(a.name)} ${done}/${a.cards}장${quizPart}${badges}</button>${whyHtml}</span>`;
     }).join('');
     const cols = alloc.thisWeek.alloc.map(a => `<th>${esc(a.name)}</th>`).join('');
@@ -296,11 +296,11 @@ function _subjectAllocHtml(plan) {
     return `
         <div class="plan-alloc">
             <div class="plan-alloc-head">
-                <span>스마트학습 — 이번 주 과목별 목표</span>
+                <span>주간 배분 — 이번 주 과목별 목표</span>
                 <span class="pro-badge" data-pro-feature="study_plan_pro">PRO</span>
             </div>
             <div class="plan-alloc-chips">${chips}</div>
-            <p class="plan-alloc-basis">${alloc.hasWeights ? '배정 근거: 잔여량 × 출제 비중 × 약점 가중(최근 퀴즈 정답률·취약 카드·오답 원인·취약 단원·밀린 복습)' : '배정 근거: 잔여량 × 약점 가중 (출제 비중 미선언 — 균등 배분)'} · 카드 장수와 퀴즈 문항을 함께 배분 · 칩을 누르면 해당 과목 학습으로 이동 · ⓘ 배정 근거를 맞춤학습에서 확인</p>
+            <p class="plan-alloc-basis">${alloc.hasWeights ? '배정 근거: 잔여량 × 출제 비중 × 약점 가중(최근 퀴즈 정답률·취약 카드·오답 원인·취약 단원·밀린 복습)' : '배정 근거: 잔여량 × 약점 가중 (출제 비중 미선언 — 균등 배분)'} · 카드 장수와 퀴즈 문항을 함께 배분 · 칩을 누르면 해당 과목 학습으로 이동 · ⓘ 배정 근거를 학습 진단에서 확인</p>
             <details class="plan-alloc-detail">
                 <summary>주차별 배분 표 펼치기</summary>
                 <table class="plan-table plan-alloc-table">

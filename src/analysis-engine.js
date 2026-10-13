@@ -1,4 +1,4 @@
-// src/analysis-engine.js — 맞춤학습(analysis-view) 심층 분석 순수 로직
+// src/analysis-engine.js — 학습 진단(analysis-view) 심층 분석 순수 로직
 // @spec AN-01,AN-02,AN-07,AN-08,AN-09,D-16,SC-15
 //
 // 모든 함수는 DOM 비의존·과목 무관 — 데이터를 주입받아 계산만 한다.
@@ -513,7 +513,7 @@ export function computeStudyPattern(calendar) {
  * @param {Array} [p.weakChapters] computeSubjectWeakChapters 결과
  * @param {Object} [p.pattern] computeStudyPattern 결과
  * @param {Object} [p.plan] SC-06 계획 준수 요약 {weekActual, weekTarget, percent, statusLabel}
- * @param {Array} [p.planBySubject] SC-11 과목별 준수 행 [{name, done, cards, quizDone, quizzes}] — 스마트학습 배분 대비 실적
+ * @param {Array} [p.planBySubject] SC-11 과목별 준수 행 [{name, done, cards, quizDone, quizzes}] — 주간 배분 대비 실적
  * @param {Object|null} [p.recEffect] AN-06 evaluateRecommendationEffect 결과 — 지난 추천 대상 과목의 정답률 변화
  * @param {Object|null} [p.actual] AN-05 getActualResult 결과 — 실제 시험 자가 보고 {passed, score}
  * @param {number} [p.bias] AN-05 computeCalibrationBias 결과 — 0이면 보정 표기 생략
@@ -569,6 +569,6 @@ export function buildWeeklyReportText(p) {
         lines.push(`■ 실제 시험: ${p.actual.passed ? '합격' : '불합격'} ${p.actual.score}점${biasNote}`);
     }
     if (p.ddayLabel) lines.push(`■ 시험일: ${p.ddayLabel}`);
-    lines.push('', '— Passory 맞춤학습 리포트');
+    lines.push('', '— Passory 학습 진단 리포트');
     return lines.join('\n');
 }

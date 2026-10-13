@@ -60,7 +60,7 @@ npm.cmd run deploy                     # 배포 가드(clean tree + origin/main 
 npm.cmd run audit:cards                 # 카드 품질 자동 감사 (짧은 설명, 중복, 참조 링크 유효성)
 npm.cmd run sbom                        # SPDX 형식 SBOM 생성 → sbom.spdx.json (CI 아티팩트, gitignore 대상)
 npm.cmd run audit:combo                 # 복수정답형 품질 감사 (정답 유일성·중복 진술집합·모순쌍·위치편향·경로별 통계)
-npm.cmd run audit:study                 # 학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 시나리오 검증 (SQ-01~04, --check=기준선 회귀, --update=기준선 갱신)
+npm.cmd run audit:study                 # 학습 품질 감사 — 주간 배분·학습 진단 추천 규칙 정합 시나리오 검증 (SQ-01~04, --check=기준선 회귀, --update=기준선 갱신)
 npm.cmd run check:adlint                # 광고 문구 사전 커버리지 감사 — 별표5 2항 호별 대표 표현·term 품질·자기 검출 (FO-68)
 
 # 전체 점검 (단일 진입점 — tools/check/run.js 실행기 + steps.js 단계 레지스트리로 구동
@@ -178,7 +178,7 @@ src/                    # ES Modules
   statement-tracker.js  # 진술 원자(sid) 단위 오판 통계·졸업 추적 (FSRS 연동)
   semantic-index.js     # 의미 유사도 이웃 인덱스 조회 — 사전계산 임베딩 번들 지연 로드 (SEM-02~04, features.semantic)
   recommendations.js    # 합격 전략 추천 엔진 + 예상 점수 추정 + 실제 결과 보고 (순수 로직)
-  analysis-engine.js    # 맞춤학습 심층 분석 순수 로직 (AN-01~09 — 예측 점수·취약 단원·주간 리포트)
+  analysis-engine.js    # 학습 진단 심층 분석 순수 로직 (AN-01~09 — 예측 점수·취약 단원·주간 리포트)
   command-palette.js    # 통합 검색 팔레트 (Ctrl+K) — 뷰/교재/카드/퀴즈/성분/문제집 검색·실행
   weak-items.js         # 약점(오답) 항목 ID 문법·해석 공용 모듈 (weak_quiz_/weak_sim_ 접두사, 퀴즈·카드 인덱스 캐시, DOM 비의존)
   questions.js          # 문항 스키마 (single/combo/short/ox), deriveComboAnswer, validateQuestion (샘플 문항은 tests/fixtures/sample-questions.js)
@@ -278,7 +278,7 @@ src/                    # ES Modules
         formula-audit.js    # 종합 규정 점검 보고서 수집기 (FO-56, 유형별 게이트)
         formula-print.js    # 인쇄 빌더 (조제 기록지·라벨·안내문·종합 보고서)
         trainer-ingredients.js # 원료 배합 챌린지 (features.ingredients)
-  views/                # 뷰 컨트롤러 (42개)
+  views/                # 뷰 컨트롤러 (43개)
     navigation.js       # 뷰 전환 유틸 (switchView)
     textbook-reader.js  # 교재 리더 오케스트레이터 (과목·챕터 선택·진입점)
     reader-render.js    # 챕터 본문 렌더 — TOC·섹션 카드·바인딩 (textbook-reader.js에서 분리)
@@ -292,11 +292,12 @@ src/                    # ES Modules
     quiz-wrong-cause.js # 오답 원인 태깅·재학습 액션 (quiz.js에서 분리)
     flashcard.js        # 3D 플래시카드
     daily-challenge.js  # 데일리 챌린지
-    dashboard.js        # 대시보드 뷰 (과목 카드·통계·히트맵·추천)
-    analysis-view.js    # 맞춤학습 뷰 (개인화 진단 카드·주간 리포트, dashboard.js에서 분리)
+    dashboard.js        # 대시보드 뷰 (과목 카드·통계·히트맵)
+    dashboard-queue.js  # "오늘 할 일" 단일 큐 — 추천 소스 병합·렌더 (TQ-01~05)
+    analysis-view.js    # 학습 진단 뷰 (개인화 진단 카드·주간 리포트, dashboard.js에서 분리)
     score-estimate.js   # 복합 예상 점수·실제 결과 기록 (dashboard.js에서 분리)
     subject-stats.js    # 과목별 진행 통계 집계 공용 헬퍼 (dashboard.js에서 분리)
-    trainer.js          # 스마트 훈련소 허브 (재수출)
+    trainer.js          # 훈련소 허브 (재수출)
     trainer-calc-practice.js  # 계산 연습기
     trainer-drills.js   # O/X 드릴 + 드릴 공통 오케스트레이션
     trainer-drill-combo.js # 복수정답형(combo) 드릴 (trainer-drills.js에서 분리)

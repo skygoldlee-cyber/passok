@@ -1,0 +1,247 @@
+// src/views/dashboard-queue.js — "오늘 할 일" 단일 큐 (TQ-01~05, DOC-DSN-21)
+// @spec TQ-01,TQ-02,TQ-03,TQ-05
+//
+// 모든 추천 소스의 출력을 하나의 우선순위 큐로 병합한다.
+// 큐 빌드(buildTodayQueue)는 DOM 비의존 순수 로직 — 렌더는 renderTodayQueue가 담당.
+// 추천·배분 알고리즘 자체는 변경하지 않고 노출 채널만 단일화한다.
+
+import { state } from '../state.js';
+import { esc } from '../sanitize.js';
+import { safeGetItem } from '../state.js';
+import { DataLoader } from '../data-loader.js';
+import { getDueCards } from '../spaced-repetition.js';
+import { getWeakStatements } from '../statement-tracker.js';
+import {
+    getStudyCalendar, computeStudyPlan, computeSubjectAllocation,
+    computeSubjectAllocInputs, sumRecentCardsBySubject, sumRecentQuizzesBySubject,
+    getDDay
+} from '../study-tracker.js';
+import { computeRecommendations, snapshotRecommendations, evaluateRecommendationEffect } from '../recommendations.js';
+import { getSubjCounts, displayCounts } from './subject-stats.js';
+import { subjectKeyFromItemId } from '../weak-items.js';
+import { todayKey } from '../utils.js';
+import { dailyCompletedKey } from '../storage-keys.js';
+
+const MAX_PLAN_ITEMS = 2; // 주간 배정 큐 항목 상한 — 과목 나열은 최대 2개
+
+/**
+ * 오늘 할 일 큐 생성 — 모든 추천 소스를 우선순위 병합 (TQ-01·TQ-02).
+ * @param {Object} p
+ * @param {string[]} [p.dueCardIds] FSRS 기한 도래 카드 id
+ * @param {Array} [p.subjects] 과목 메타 [{key, name, stats}]
+ * @param {Array} [p.recs] computeRecommendations 결과 (흡수 대상 — TQ-01)
+ * @param {Array} [p.allocRemaining] 주간 배정 잔여 [{key,name,cardsLeft,quizzesLeft}]
+ * @param {number} [p.reviewCount] 복습 대기(오답+헷갈림) 수
+ * @param {number} [p.weakStatementCount] 취약 진술 수
+ * @param {boolean} [p.dailyDone] 일일 챌린지 완료 여부
+ * @param {number|null} [p.dday] 시험 D-day (미설정 null)
+ * @param {boolean} [p.hasProgress] 학습 이력 존재 여부
+ * @returns {Array<{icon:string, color:string, title:string, reason:string,
+ *   actions:Array<{click:string, arg?:string, args?:Array, label:string, icon:string, cls:string}>}>}
+ */
+export function buildTodayQueue(p = {}) {
+    const items = [];
+    const used = new Set(); // `click:arg` 중복 방지 — 같은 실행을 두 번 권하지 않음
+    const subjName = (key) => {
+        const s = (p.subjects || []).find(x => x.key === key);
+        return s ? s.name : key;
+    };
+    const push = (item) => {
+        const key = item.actions[0] ? `${item.actions[0].click}:${item.actions[0].arg || ''}` : item.title;
+        if (used.has(key)) return;
+        used.add(key);
+        items.push(item);
+    };
+
+    // ① FSRS 기한 도래 — 시간 민감, 최우선
+    const due = p.dueCardIds || [];
+    if (due.length) {
+        const bySubj = {};
+        due.forEach(id => {
+            const k = subjectKeyFromItemId(id);
+            if (k) bySubj[k] = (bySubj[k] || 0) + 1;
+        });
+        const top = Object.entries(bySubj).sort((a, b) => b[1] - a[1])[0];
+        push({
+            kind: 'due',
+            icon: 'fa-clock', color: 'var(--color-primary)',
+            title: `복습 카드 ${due.length}장`,
+            reason: top ? `FSRS 복습 시간 도래 — ${subjName(top[0])} ${top[1]}장 포함` : 'FSRS 복습 시간 도래',
+            actions: [{ click: 'startDueReview', label: '지금 복습', icon: 'fa-play', cls: 'btn-primary' }]
+        });
+    }
+
+    // ② 과락·위험 추천 — 기존 엔진의 위험 신호는 계획보다 우선
+    const dangerRecs = (p.recs || []).filter(r => r.icon === 'fa-triangle-exclamation');
+    dangerRecs.forEach(r => push({ kind: 'danger', ...r }));
+
+    // ③ 주간 배정 잔여 — 주간 배분(구 스마트학습, study_plan_pro) 이번 주 목표 미달분
+    (p.allocRemaining || [])
+        .filter(a => a.cardsLeft > 0 || a.quizzesLeft > 0)
+        .slice(0, MAX_PLAN_ITEMS)
+        .forEach(a => {
+        const parts = [];
+        if (a.cardsLeft > 0) parts.push(`카드 ${a.cardsLeft}장`);
+        if (a.quizzesLeft > 0) parts.push(`퀴즈 ${a.quizzesLeft}문`);
+        const actions = [];
+        if (a.cardsLeft > 0) actions.push({ click: 'startSubjectStudy', arg: a.key, label: '카드 학습', icon: 'fa-layer-group', cls: 'btn-primary' });
+        if (a.quizzesLeft > 0) actions.push({ click: 'startSubjectQuiz', arg: a.key, label: '퀴즈', icon: 'fa-play', cls: 'btn-secondary' });
+        push({
+            kind: 'alloc',
+            icon: 'fa-calendar-check', color: 'var(--color-primary)',
+            title: `${a.name} 주간 배정 잔여`,
+            reason: `이번 주 목표 미달 — ${parts.join(' · ')} 남음`,
+            actions
+        });
+    });
+
+    // ④ 오답·헷갈림 재채점
+    if ((p.reviewCount || 0) > 0) {
+        push({
+            kind: 'review',
+            icon: 'fa-star', color: 'var(--color-warning)',
+            title: `복습 대기 ${p.reviewCount}건`,
+            reason: '틀린 문제·헷갈린 카드 재채점',
+            actions: [{ click: 'switchView', args: ['review-view', { scrollTop: true }], label: '복습 열기', icon: 'fa-arrow-right', cls: 'btn-primary' }]
+        });
+    }
+
+    // ⑤ 취약 진술·혼동쌍 드릴
+    if ((p.weakStatementCount || 0) > 0) {
+        push({
+            kind: 'weak',
+            icon: 'fa-dumbbell', color: 'var(--color-warning)',
+            title: `취약 진술 ${p.weakStatementCount}개`,
+            reason: '혼동쌍·오판 진술 — 연속 정답 3회 시 졸업',
+            actions: [{ click: 'gotoWeakReview', label: '훈련', icon: 'fa-dumbbell', cls: 'btn-primary' }]
+        });
+    }
+
+    // ⑥ 잔여 추천 — 정답률 최저·헷갈림 집중·미학습 (중복 실행 제외)
+    (p.recs || [])
+        .filter(r => r.icon !== 'fa-triangle-exclamation' && r.icon !== 'fa-clock')
+        .forEach(r => push({ kind: 'rec', ...r }));
+
+    // TQ-05 빈 큐 — 학습 이력이 없으면 시작 안내 항목으로 대체 (챌린지보다 우선)
+    if (!items.length && !p.hasProgress) {
+        if (p.dday === null) {
+            items.push({
+                kind: 'goal',
+                icon: 'fa-calendar-day', color: 'var(--color-primary)',
+                title: '시험일 설정',
+                reason: '학습 계획의 시작점 — 역산 계획·주간 목표가 생성됩니다',
+                actions: [{ click: 'openGoalSettings', label: '지금 설정', icon: 'fa-gear', cls: 'btn-primary' }]
+            });
+        }
+        const first = (p.subjects || [])[0];
+        if (first) {
+            items.push({
+                kind: 'start',
+                icon: 'fa-seedling', color: 'var(--color-success)',
+                title: `첫 학습 시작: ${first.name}`,
+                reason: '카드 학습으로 진단 데이터를 쌓으면 맞춤 큐가 정확해집니다',
+                actions: [{ click: 'startSubjectStudy', arg: first.key, label: '학습 시작', icon: 'fa-seedling', cls: 'btn-secondary' }]
+            });
+        }
+    }
+
+    // ⑦ 일일 챌린지 미완료 — 습관 유지 항목은 후순위
+    if (p.dailyDone === false) {
+        push({
+            kind: 'daily',
+            icon: 'fa-calendar-day', color: 'var(--color-success)',
+            title: '일일 챌린지 미완료',
+            reason: '5분 압축 세트 — 오늘의 학습 습관 유지',
+            actions: [{ click: 'startDailyChallenge', label: '챌린지', icon: 'fa-play', cls: 'btn-success' }]
+        });
+    }
+
+    return items;
+}
+
+/**
+ * 입력 수집 + 큐 렌더 — 기존 weak-subject-recommendation 컨테이너 재사용 (TQ-03).
+ * @param {Array} subjects 과목 메타 목록
+ */
+export function renderTodayQueue(subjects) {
+    const recEl = document.getElementById('weak-subject-recommendation');
+    if (!recEl) return;
+
+    const counts = getSubjCounts();
+    const dueCardIds = getDueCards();
+
+    // 주간 배정 잔여 — 시험일 설정 시에만 계획 존재 (computeStudyPlan은 D-day 없으면 null)
+    let allocRemaining = [];
+    const totalCards = subjects.reduce((s, x) => s + displayCounts(x).cards, 0);
+    const plan = computeStudyPlan(totalCards - state.memorizedCards.size);
+    if (plan) {
+        const inputs = computeSubjectAllocInputs({
+            memorizedCards: state.memorizedCards,
+            quizResults: state.quizResults,
+            weakCards: state.weakCards,
+            exams: (DataLoader.registry && DataLoader.registry.exams) || [],
+            wrongCauses: state.wrongCauses,
+            dueCardIds: dueCardIds
+        });
+        const alloc = computeSubjectAllocation(plan, subjects, inputs);
+        if (alloc && alloc.thisWeek) {
+            const cal = getStudyCalendar();
+            const doneC = sumRecentCardsBySubject(cal);
+            const doneQ = sumRecentQuizzesBySubject(cal);
+            allocRemaining = alloc.thisWeek.alloc.map(a => ({
+                key: a.key, name: a.name,
+                cardsLeft: Math.max(0, a.cards - (doneC[a.key] || 0)),
+                quizzesLeft: Math.max(0, (a.quizzes || 0) - (doneQ[a.key] || 0))
+            })).filter(a => a.cardsLeft > 0 || a.quizzesLeft > 0);
+        }
+    }
+
+    const recs = computeRecommendations(subjects, counts);
+    const hasProgress = subjects.some(s => {
+        const c = counts[s.key];
+        return c && (c.mem > 0 || c.quizSolved > 0);
+    });
+
+    const items = buildTodayQueue({
+        dueCardIds, subjects, recs, allocRemaining,
+        reviewCount: state.weakCards.size,
+        weakStatementCount: getWeakStatements().length,
+        dailyDone: !!safeGetItem(dailyCompletedKey(todayKey())),
+        dday: getDDay(),
+        hasProgress
+    });
+
+    if (!items.length) {
+        recEl.innerHTML = '<p class="rec-empty"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> 오늘의 목표를 모두 달성했습니다 — 수고하셨습니다!</p>';
+        return;
+    }
+
+    // 추천 효과 추적 (AN-06) — 기존 엔진 출력 기준선 유지
+    const nameOf = (k) => { const s = subjects.find(x => x.key === k); return s ? s.name : k; };
+    const effect = evaluateRecommendationEffect(counts, nameOf);
+    snapshotRecommendations(recs, counts);
+
+    let html = '';
+    if (effect) {
+        const parts = effect.items.map(i =>
+            `${esc(i.name)} ${i.fromRate}%→${i.toRate}% (${i.delta >= 0 ? '▲' : '▼'}${Math.abs(i.delta)}%p)`);
+        html += `<p class="rec-effect"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> 지난 추천 이후 ${parts.join(' · ')}</p>`;
+    }
+    html += '<ol class="rec-list today-queue">';
+    items.forEach((item, i) => {
+        const actions = item.actions.map(a => {
+            const argsAttr = a.args ? ` data-args='${esc(JSON.stringify(a.args))}'` : (a.arg !== undefined ? ` data-arg="${esc(a.arg)}"` : '');
+            return `<button class="btn btn-sm ${a.cls}" data-click="${a.click}"${argsAttr}><i class="fa-solid ${a.icon}"></i> ${esc(a.label)}</button>`;
+        }).join('');
+        html += `
+            <li class="rec-item tq-item">
+                <span class="tq-num" aria-hidden="true">${i + 1}</span>
+                <i class="fa-solid ${item.icon}" style="color:${item.color};"></i>
+                <span class="rec-text"><strong>${esc(item.title)}</strong><span class="rec-reason">${esc(item.reason)}</span></span>
+                <div class="rec-actions">${actions}</div>
+            </li>
+        `;
+    });
+    html += '</ol>';
+    recEl.innerHTML = html;
+}

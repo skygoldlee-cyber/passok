@@ -1,4 +1,4 @@
-// tests/unit/analysis-engine.test.js — 맞춤학습 분석 엔진 순수 로직
+// tests/unit/analysis-engine.test.js — 학습 진단 분석 엔진 순수 로직
 // @spec AN-01,AN-02,D-16
 // 과목 무관 데이터 주입형 — 임의 과목 키로 검증 (모듈화 요구: 과목 변경 시 코드 수정 불필요)
 

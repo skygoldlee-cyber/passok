@@ -1,7 +1,7 @@
 // src/views/subject-stats.js — 과목별 진행 통계 집계 공용 헬퍼
 // @spec D-01~17
 //
-// 대시보드(dashboard.js)와 맞춤학습(analysis-view.js)·예상 점수(score-estimate.js)가
+// 대시보드(dashboard.js)와 학습 진단(analysis-view.js)·예상 점수(score-estimate.js)가
 // 공유하는 과목 단위 카운트 집계. dashboard.js에서 분리 (모듈 경계 정리).
 
 import { state } from '../state.js';

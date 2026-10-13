@@ -1,5 +1,5 @@
 // tests/dom/study-dashboard.dom.test.js — 대시보드 통계·추천 시나리오
-// @spec D-01~15,D-17,AN-01~03,AN-09,SC-10,SC-11,SC-14
+// @spec D-01~15,D-17,AN-01~03,AN-09,SC-10,SC-11,SC-14,TQ-01,TQ-03,TQ-05
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.2 (Phase 3)
 // 검증: 진도 0건 렌더(E), 시딩 진도→통계 반영(H/P), 과목 카드·히트맵(H),
 //       약점 과목 추천(H — 최소 3문 응시 조건·헷갈림 카드最多)
@@ -22,7 +22,7 @@ import {
 import { updateGlobalStats, renderDashboard } from '../../src/views/dashboard.js';
 import { renderAnalysisView, gotoSubjectAnalysis } from '../../src/views/analysis-view.js';
 import { setExamDate, setStudyGoals } from '../../src/study-tracker.js';
-import { state } from '../../src/state.js';
+import { state, safeSetItem } from '../../src/state.js';
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
 import { scopedKey } from '../../src/exam-context.js';
 
@@ -69,7 +69,10 @@ describe('대시보드 — 통계·과목 카드·약점 추천', () => {
         expect(el('total-progress-val').textContent).toBe('0%');
         expect(el('solved-quizzes-count').textContent).toBe('0');
         expect(el('quiz-success-rate').textContent).toBe('0%');
-        expect(el('weak-subject-recommendation').textContent).toContain('충분한 학습 데이터가 없습니다');
+        // TQ-03 — 진도 0건이면 큐가 시작 안내(시험일 설정+첫 학습)로 대체된다
+        const queueText = el('weak-subject-recommendation').textContent;
+        expect(queueText).toContain('시험일 설정');
+        expect(queueText).toContain('첫 학습 시작');
     });
 
     it('시딩 진도 → 암기율·정답률·복습 대기 반영', () => {
@@ -240,9 +243,41 @@ describe('대시보드 — 통계·과목 카드·약점 추천', () => {
         expect(rec).not.toContain('정답률 최저');
         expect(rec).toContain('과목2'); // 헷갈린 카드最多 추천은 유지
     });
+
+    it('오늘 할 일 큐 — 복습 대기가 최상단, 번호 리스트·챌린지 항목 렌더 (TQ-01)', () => {
+        seedTwoSubjects();
+        seedProgress({
+            weak: ['subjb_card_1'],
+            memorized: ['subja_card_1'],
+            quizResults: { subja_quiz_1: { solved: true, correct: true } },
+        });
+        // FSRS 복습 기한 도래 카드 시딩 (구 SM-2 레코드는 지연 변환됨)
+        safeSetItem(STORAGE_KEYS.FC_SPACED_REPETITION,
+            JSON.stringify({ subja_card_1: { nextReview: '2000-01-01' } }));
+        renderDashboard();
+
+        const queue = el('weak-subject-recommendation');
+        const items = queue.querySelectorAll('ol.today-queue > li.tq-item');
+        expect(items.length).toBeGreaterThan(0);
+        // ① FSRS 복습 대기가 첫 항목 (TQ-01 우선순위)
+        expect(items[0].textContent).toContain('복습 카드');
+        expect(items[0].querySelector('.tq-num').textContent).toBe('1');
+        // 번호가 1부터 순증
+        items.forEach((li, i) => {
+            expect(li.querySelector('.tq-num').textContent).toBe(String(i + 1));
+        });
+        // 오답 복습 + 미완료 일일 챌린지가 큐에 포함
+        const text = queue.textContent;
+        expect(text).toContain('복습 대기 1건');
+        expect(text).toContain('일일 챌린지');
+        // 모든 액션 버튼은 data-click 위임 스키마
+        queue.querySelectorAll('button[data-click]').forEach(btn => {
+            expect(btn.getAttribute('data-click').length).toBeGreaterThan(0);
+        });
+    });
 });
 
-describe('맞춤학습 뷰 — 진단 요약 카드', () => {
+describe('학습 진단 뷰 — 진단 요약 카드', () => {
     beforeEach(() => {
         localStorage.clear();
         resetStudyState();
@@ -263,7 +298,7 @@ describe('맞춤학습 뷰 — 진단 요약 카드', () => {
         expect(el('analysis-study-rhythm').textContent).toContain('학습 리듬');
     });
 
-    it('이번 주 스마트학습 카드 — 과목별 실적/배정 + 캘린더 링크 (SC-11)', () => {
+    it('이번 주 주간 배분 카드 — 과목별 실적/배정 + 캘린더 링크 (SC-11)', () => {
         seedTwoSubjects();
         // 시험일 미설정 → 설정 유도 빈 상태 카드
         renderAnalysisView();
@@ -275,7 +310,7 @@ describe('맞춤학습 뷰 — 진단 요약 카드', () => {
         setExamDate(todayPlus(60));
         renderAnalysisView();
         card = el('analysis-smart-plan');
-        expect(card.textContent).toContain('이번 주 스마트학습');
+        expect(card.textContent).toContain('이번 주 주간 배분');
         expect(card.textContent).toContain('과목1');
         expect(card.textContent).toMatch(/과목1.*\d+\/\d+장/s);
         const calBtn = card.querySelector('[data-click="switchView"][data-arg="calendar-view"]');

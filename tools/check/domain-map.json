@@ -112,6 +112,7 @@
         "src/views/analysis-view.js",
         "src/views/backup.js",
         "src/views/daily-challenge.js",
+        "src/views/dashboard-queue.js",
         "src/views/dashboard.js",
         "src/views/event-listeners.js",
         "src/views/exam-select.js",

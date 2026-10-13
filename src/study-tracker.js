@@ -42,8 +42,8 @@ export function getStudyCalendar() {
  * 오늘 학습 활동 기록 (누적)
  * @param {Object} activity - { cards: 증가할 카드 수, quizzes: 증가할 퀴즈 수, correct: 정답 수,
  *   readMin: 교재 읽기 분 — SC-15 일독일 학습일 인정용,
- *   bySubj: 과목별 카드 증분 {subjKey: n} — SC-09 스마트학습 과목별 주간 실적용,
- *   quizBySubj: 과목별 퀴즈 증분 {subjKey: n} — SC-13 스마트학습 퀴즈 주간 실적용 }
+ *   bySubj: 과목별 카드 증분 {subjKey: n} — SC-09 주간 배분 과목별 주간 실적용,
+ *   quizBySubj: 과목별 퀴즈 증분 {subjKey: n} — SC-13 주간 배분 퀴즈 주간 실적용 }
  */
 export function recordStudyActivity(activity = {}) {
     const today = getTodayStr();
@@ -538,7 +538,7 @@ export const DIAG_CAUSE_WINDOW_DAYS = 30;
 export const MAX_DIAG_BOOST = 0.5;
 
 /**
- * 스마트학습 배분 입력 집계 (SC-11·SC-12) — 캘린더 칩·맞춤학습 카드·주간 리포트가
+ * 주간 배분 입력 집계 (SC-11·SC-12) — 캘린더 칩·학습 진단 카드·주간 리포트가
  * 동일 입력을 공유하도록 raw state/레지스트리 → computeSubjectAllocation opts 변환을
  * 한 곳에 둔다. 과목 키 해석은 subjectKeyFromItemId (숫자·밑줄 키 안전).
  * @param {Object} p
