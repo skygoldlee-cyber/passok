@@ -1,5 +1,5 @@
 // tests/unit/fsrs.test.js — FSRS-6 순수 함수 + 어댑터 검증
-// @spec F-07,F-08,F-09,F-11,D-18,D-19
+// @spec F-07,F-08,F-09,F-11,D-18,D-19,D-20
 // DSR 상태 전이·망각 곡선·SM-2 지연 마이그레이션을 결정론적으로 검증한다.
 
 import { test, beforeEach, afterEach } from 'node:test';
@@ -251,7 +251,19 @@ test('D-19: due>examDate ∧ R_exam<0.85 인 카드만 선별 — due 큐·예�
     });
     const risk = getExamRiskCards(10);
     assert.deepEqual(risk.map(r => r.id), ['risky']);
-    assert.ok(risk[0].rExam < 0.85);
+    assert.ok(risk[0].rExam < 0.95);
+});
+
+test('D-19: FSRS 정합 레코드(due=lastReview+round(s))도 목표 0.95 밴드에서 선별된다', () => {
+    const srKey = 'simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION;
+    // s=16·interval 16 — due>exam 이고 시험일 R≈0.90 (<0.95 목표 밴드, 0.85 임계로는 절대 도달 불가)
+    mockStorage._store[srKey] = JSON.stringify({
+        near: { v: 2, d: 5, s: 16, reps: 4, lapses: 0, lastInterval: 16, due: dstr(11), lastReview: dstr(-5) },
+        far:  { v: 2, d: 5, s: 60, reps: 8, lapses: 0, lastInterval: 60, due: dstr(55), lastReview: dstr(-5) } // R_exam≥0.95 — 제외
+    });
+    const risk = getExamRiskCards(10);
+    assert.deepEqual(risk.map(r => r.id), ['near']);
+    assert.ok(risk[0].rExam >= 0.9 && risk[0].rExam < 0.95);
 });
 
 test('D-19: R_exam 오름차순 정렬 — 가장 잊을 카드가 먼저', () => {
@@ -264,4 +276,65 @@ test('D-19: R_exam 오름차순 정렬 — 가장 잊을 카드가 먼저', () =
     assert.equal(risk.length, 2);
     assert.equal(risk[0].id, 'most');
     assert.ok(risk[0].rExam < risk[1].rExam);
+});
+
+// ---------- D-20: 시험일 due 클램프 ----------
+
+function setExam(offset) {
+    mockStorage._store['simexam:' + STORAGE_KEYS.EXAM_DATE] = dstr(offset);
+}
+
+function seedCard(id, rec) {
+    const srKey = 'simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION;
+    const cur = JSON.parse(mockStorage._store[srKey] || '{}');
+    cur[id] = rec;
+    mockStorage._store[srKey] = JSON.stringify(cur);
+}
+
+function storedDue(id) {
+    const srKey = 'simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION;
+    return JSON.parse(mockStorage._store[srKey])[id].due;
+}
+
+test('D-20: due>exam ∧ R_exam<0.95 → due를 exam−1로 당긴다', () => {
+    setExam(10);
+    // elapsed=1이라 s≈15 유지 → 간격 ~16 > dday 10, R(10,~16)≈0.93 <0.95
+    seedCard('clampme', { v: 2, d: 5, s: 15, reps: 3, lapses: 0, lastInterval: 15, due: dstr(14), lastReview: dstr(-1) });
+    updateCardSchedule('clampme', true);
+    assert.equal(storedDue('clampme'), dstr(9), 'due가 exam-1로 당겨져야 함');
+});
+
+test('D-20: 성숙 카드(R_exam≥0.95)는 클램프하지 않는다', () => {
+    setExam(10);
+    seedCard('mature', { v: 2, d: 3, s: 100, reps: 9, lapses: 0, lastInterval: 100, due: dstr(99), lastReview: dstr(-1) });
+    const rec = updateCardSchedule('mature', true);
+    assert.ok(rec.due > dstr(10), `due=${rec.due} — 시험 너머 그대로 유지`);
+    assert.notEqual(rec.due, dstr(9));
+});
+
+test('D-20: 시험 전 due인 카드·시험일 미설정·과거 시험일은 클램프 없음', () => {
+    setExam(10);
+    seedCard('soon', { v: 2, d: 5, s: 5, reps: 3, lapses: 0, lastInterval: 5, due: dstr(4), lastReview: dstr(-1) });
+    const soon = updateCardSchedule('soon', true);
+    assert.ok(soon.due <= dstr(10), '산출 due가 시험 전이면 그대로');
+
+    // 시험일 미설정 — 당길 대상이 없다
+    delete mockStorage._store['simexam:' + STORAGE_KEYS.EXAM_DATE];
+    seedCard('noexam', { v: 2, d: 5, s: 15, reps: 3, lapses: 0, lastInterval: 15, due: dstr(14), lastReview: dstr(-1) });
+    const noexam = updateCardSchedule('noexam', true);
+    assert.ok(noexam.due > dstr(10), '미설정 시 산출 due 유지');
+
+    // 과거 시험일 — 비활성
+    setExam(-2);
+    seedCard('pastexam', { v: 2, d: 5, s: 15, reps: 3, lapses: 0, lastInterval: 15, due: dstr(14), lastReview: dstr(-1) });
+    const past = updateCardSchedule('pastexam', true);
+    assert.ok(past.due > dstr(10), '지난 시험일에는 비활성');
+});
+
+test('D-20: 클램프된 카드는 D-19 위험 집합에서 제외된다 (due≤exam)', () => {
+    setExam(10);
+    seedCard('pulled', { v: 2, d: 5, s: 15, reps: 3, lapses: 0, lastInterval: 15, due: dstr(14), lastReview: dstr(-1) });
+    updateCardSchedule('pulled', true);
+    const risk = getExamRiskCards(10);
+    assert.ok(!risk.some(r => r.id === 'pulled'), 'exam−1 due는 시험 전 예정 복습 — 사각지대 해소');
 });
