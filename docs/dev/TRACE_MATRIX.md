@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 6075c6ae2c779e35
+> 입력 해시: a923972ec21f5af0
 > 생성: 2026-10-13 · 원천: SPEC.md(507개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 507개 — 문서 연결 369 · 소스 연결 457 · 테스트 연결 488 · 보고서 연결 109
+**커버리지 요약**: 요구사항 507개 — 문서 연결 369 · 소스 연결 457 · 테스트 연결 489 · 보고서 연결 109
 
 ---
 
@@ -45,7 +45,7 @@
 | D-18 | ✅ | 테스트 | DOC-DSN-26<br>DOC-DSN-27<br>DOC-DSN-29 | src/spaced-repetition.js | tests/unit/fsrs.test.js | — | — |
 | D-19 | ✅ | 테스트 | DOC-DSN-26<br>DOC-DSN-27<br>DOC-DSN-28 | src/spaced-repetition.js | tests/unit/fsrs.test.js<br>tests/unit/today-queue.test.js | — | — |
 | D-20 | ✅ | 테스트 | DOC-DSN-28 | src/spaced-repetition.js | tests/unit/fsrs.test.js | — | — |
-| D-21 | ✅ | 구현 (테스트 갭) | DOC-DSN-29 | src/analysis-engine.js | — | — | — |
+| D-21 | ✅ | 테스트 | DOC-DSN-29 | src/analysis-engine.js | tests/unit/analysis-engine.test.js | — | — |
 | D-22 | ⏳ | 문서 검토 | DOC-DSN-29 | — | — | — | — |
 | TQ-01 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24<br>DOC-DSN-26 | src/views/dashboard-queue.js<br>src/views/dashboard.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |
 | TQ-02 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | src/views/dashboard-queue.js | tests/unit/today-queue.test.js | — | — |
@@ -848,8 +848,4 @@
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
-소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 1개 — 테스트 백로그 후보.
-
-| ID | 절 | 구현 소스 |
-|----|-----|-----------|
-| D-21 | 3.1 대시보드 | src/analysis-engine.js |
+없음 — 소스 연결된 모든 요구사항에 테스트 참조가 있음.
