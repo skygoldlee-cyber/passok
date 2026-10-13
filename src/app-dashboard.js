@@ -202,7 +202,7 @@ ${allBtnsHtml}
         const titleEl = document.getElementById('integrated-exam-title');
         if (titleEl) titleEl.textContent = `통합 실전 모의고사 (${integratedTotal}제)`;
         const btnEl = document.getElementById('integrated-exam-btn');
-        if (btnEl) btnEl.innerHTML = `<i class="fa-solid fa-clock" aria-hidden="true"></i> 통합 모의고사 시작 (${examTimeMin}분)`;
+        if (btnEl) btnEl.innerHTML = `<i class="fa-solid fa-clock" aria-hidden="true"></i> 통합 모의고사 시작 (${esc(examTimeMin)}분)`;
         // 응시 요약 — 최근/최고 정답률 + 이어풀기 가능 여부 표시
         const statsEl = document.getElementById('integrated-exam-stats');
         if (statsEl) {

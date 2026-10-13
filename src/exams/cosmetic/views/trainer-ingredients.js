@@ -195,7 +195,7 @@ function renderIngQuestion() {
             const btn = document.createElement('button');
             btn.className = 'limits-opt-btn';
             btn.dataset.value = optValue;
-            btn.innerHTML = `<span class="limits-opt-num">${optionIndicators[idx]}</span> <span class="limits-opt-text">${esc(optValue)}</span>`;
+            btn.innerHTML = `<span class="limits-opt-num">${esc(optionIndicators[idx])}</span> <span class="limits-opt-text">${esc(optValue)}</span>`;
             btn.addEventListener('click', () => {
                 submitIngChoiceAnswer(btn, optValue, currentQ.correct);
             });

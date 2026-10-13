@@ -70,10 +70,11 @@ function renderFilterBar(batches) {
   if (!bar) return;
   const names = [...new Set(batches.map(b => b.formulaName).filter(Boolean))].sort();
   const opt = (v, cur) => `<option value="${esc(v)}"${v === cur ? ' selected' : ''}>${esc(v || '전체')}</option>`;
+  const optionsHtml = names.map(n => opt(n, listFilter.formula)).join('');
   bar.innerHTML = `
     <select id="batch-filter-formula" class="form-select batch-filter-sel" aria-label="처방 필터">
       <option value="">전체 처방</option>
-      ${names.map(n => opt(n, listFilter.formula)).join('')}
+      ${optionsHtml}
     </select>
     <input type="search" id="batch-filter-customer" class="form-input batch-filter-input"
       placeholder="고객명 검색" value="${esc(listFilter.customer)}" aria-label="고객명 검색">
@@ -173,7 +174,7 @@ function renderBatchList(batches) {
       <div class="formula-card">
         <div class="formula-card-head">
           <h4 class="formula-card-name">${esc(b.batchNo)} — ${esc(b.formulaName)}</h4>
-          <span class="formula-card-meta">조제 ${esc((b.madeAt || '').replace('T', ' '))} · ${b.targetVolume != null ? `${b.targetVolume}${b.unit || 'g'}` : '총량 미지정'}${b.customerName ? ` · ${esc(b.customerName)}` : ''}</span>
+          <span class="formula-card-meta">조제 ${esc((b.madeAt || '').replace('T', ' '))} · ${b.targetVolume != null ? `${esc(b.targetVolume)}${esc(b.unit || 'g')}` : '총량 미지정'}${b.customerName ? ` · ${esc(b.customerName)}` : ''}</span>
         </div>
         <div class="formula-card-checks">${qcHtml}${hygHtml}${expiryHtml}${delivHtml}${dispHtml}</div>
         <div class="formula-card-actions">
@@ -326,12 +327,12 @@ export function batchOpen(id) {
   const box = getEl('batch-detail');
   if (!box) return;
 
-  const qcRows = QC_FIELDS.map(f => {
+  const qcRowsHtml = QC_FIELDS.map(f => {
     const v = b.qc && b.qc[f.key];
     const cls = v === '이상' ? 'f-check-banned' : (v === '정상' ? 'f-check-ok' : 'f-check-unknown');
     return `<div class="batch-qc-row"><span class="batch-qc-label">${esc(f.label)}</span><span class="f-check ${cls}">${esc(v || '미기록')}</span></div>`;
   }).join('');
-  const hyg = HYGIENE_FIELDS.map(f => {
+  const hygHtml = HYGIENE_FIELDS.map(f => {
     const done = !!(b.hygiene && b.hygiene[f.key]);
     return `<span class="f-check ${done ? 'f-check-ok' : 'f-check-unknown'}">${done ? '✓' : '—'} ${esc(f.label)}</span>`;
   }).join(' ');
@@ -344,14 +345,14 @@ export function batchOpen(id) {
     <div class="formula-card">
       <div class="formula-card-head">
         <h4 class="formula-card-name">${esc(b.batchNo)} — ${esc(b.formulaName)}</h4>
-        <span class="formula-card-meta">조제 ${esc((b.madeAt || '').replace('T', ' '))} · ${b.targetVolume != null ? `${b.targetVolume}${b.unit || 'g'}` : '총량 미지정'}${b.formulation ? ` · 제형 ${esc(b.formulation)}` : ''}</span>
+        <span class="formula-card-meta">조제 ${esc((b.madeAt || '').replace('T', ' '))} · ${b.targetVolume != null ? `${esc(b.targetVolume)}${esc(b.unit || 'g')}` : '총량 미지정'}${b.formulation ? ` · 제형 ${esc(b.formulation)}` : ''}</span>
       </div>
       <div class="formula-card-customer"><i class="fa-solid fa-user" aria-hidden="true"></i> ${esc(b.customerName || '고객 미기록')} · 권장 사용기한 ${esc(b.expiryAt || '미기록')}${b.deliveredAt ? ` · 인도일 ${esc(b.deliveredAt)}` : ' · 미인도'}</div>
-      <div class="batch-qc-grid">${qcRows}</div>
+      <div class="batch-qc-grid">${qcRowsHtml}</div>
       ${b.phMeasured != null ? `<div class="formula-card-meta">실측 pH: ${esc(String(b.phMeasured))}</div>` : ''}
       ${b.disposition ? `<div class="formula-card-meta">QC 이상 조치: ${esc(b.disposition)}</div>` : ''}
-      ${b.materialLots && b.materialLots.length ? `<div class="formula-card-meta">사용 LOT: ${esc(b.materialLots.map(l => `${l.name} ${l.lot || ''}`.trim()).join(' · '))}</div>` : ''}
-      <div class="formula-card-checks">${hyg}</div>
+      ${b.materialLots && b.materialLots.length ? `<div class="formula-card-meta">사용 LOT: ${esc(b.materialLots.map(l => (l.name + ' ' + (l.lot || '')).trim()).join(' · '))}</div>` : ''}
+      <div class="formula-card-checks">${hygHtml}</div>
       ${b.fullIngredients && b.fullIngredients.length ? `<div class="formula-card-inci"><i class="fa-solid fa-list-ol" aria-hidden="true"></i> ${esc(b.fullIngredients.join(', '))}</div>` : ''}
       ${snapHtml}
       ${b.notes ? `<div class="formula-card-meta">메모: ${esc(b.notes)}</div>` : ''}

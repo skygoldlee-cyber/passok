@@ -194,7 +194,7 @@ export function renderSimQuestion() {
             btn.setAttribute('role', 'button');
             btn.setAttribute('tabindex', '0');
             btn.setAttribute('aria-label', `선택지 ${optVal}`);
-            btn.innerHTML = `<span class="opt-num"><i class="fa-solid ${optVal === 'O' ? 'fa-circle' : 'fa-xmark'}"></i></span> <span class="opt-text">${optVal} 퀴즈</span>`;
+            btn.innerHTML = `<span class="opt-num"><i class="fa-solid ${optVal === 'O' ? 'fa-circle' : 'fa-xmark'}"></i></span> <span class="opt-text">${esc(optVal)} 퀴즈</span>`;
             btn.addEventListener('click', () => {
                 saveSimAnswer(q.id, optVal);
             });

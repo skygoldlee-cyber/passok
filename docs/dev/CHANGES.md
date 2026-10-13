@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 규약 래칫 확장 — 이스케이프 기준선 0 + JS 템플릿 style 기준선 + UX-NAV-12 단언 + DEP0190 정리
+
+- **check:escape 기준선 78→0**: 미이스케이프 보간 잔여 전량 이관 — 데이터 보간은 `esc()`·`safeTextWithBreaks()`, 조립 마크업 변수는 `*Html` 명명 관례(체커 안전 판정)로 정리. src/ 13개 파일, 기준선 0으로 래칫해 재유입 즉시 실패
+- **check:uistyle ⑤ JS 템플릿 인라인 스타일 기준선**: src/ 의 `style="…"` 중 `display:none` 즉시 금지 + 정적 선언(보간 없음) 기준선 145 래칫(단조 감소·diff 스코프 변경 파일은 0건 요구 — check:escape와 동형). 동적 값 `style="--var:${x}"`만 허용. CODE_CONVENTIONS §4 행 `리뷰`→`check:uistyle` 승격
+- **daily-challenge 모달 클래스화**: 인라인 스타일 17건 + `.style.color` 2건 + `.style.width/marginBottom` 2건 → `css/dashboard.css`의 `daily-modal-*`·`daily-card-*`·`daily-choice-*`·`daily-short-row`·`daily-status-*` 클래스 이관. 모바일 잘림 계약(--app-height)은 인라인→`.daily-modal-overlay` 규칙 이관 + study-challenge DOM 테스트가 CSS 규칙 텍스트까지 단언하도록 갱신
+- **UX-NAV-12 DOM 단언**: common-navigation.dom.test.js에 사이드바↔모바일 더보기 3그룹 라벨(학습·훈련 · 평가·자료 · 도구) 상대 순서 일치 테스트 추가 — 커버리지 공백 해소
+- **DEP0190 정리**: step_runner·deploy·check_vendor의 `shell:true`+인자 배열 실행을 단일 명령 문자열(+직접 인용) 방식으로 전환 — Node child_process 보안 경고 소거, win32 `.cmd` 호환 유지
+
 ## 2026-10-13 UI 스타일 정적 게이트 신규 + 인라인 스타일 클래스화
 
 - **신규 `check:uistyle` 게이트** (`tools/check/check_ui_style.js`): CODE_CONVENTIONS §4의 비게이트 규약을 기계 강제화 — ① 마크업(`html/`·`index.template.html`) 인라인 `style="…"` 속성 전면 금지 ② JS `.style.display`·`.style.setProperty('display')` 조작 금지 ③ 인라인 `on*` 이벤트 핸들러 금지 ④ 네이티브 `alert`/`confirm`/`prompt` 금지 (메서드 호출 `deferredPrompt.prompt()` 등은 면제). 명시 면제 장치는 `style-ok` 라인 토큰, `--ref` diff 스코프 지원. package.json·steps.js(ci:uistyle)·ci.yml 연결

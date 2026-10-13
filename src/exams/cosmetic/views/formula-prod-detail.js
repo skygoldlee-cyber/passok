@@ -5,7 +5,7 @@
 // 표시 순서 힌트, 내 포뮬러·다른 기성품 비교. formula-products.js의 폼·목록과
 // 무관하게 스토어에서 직접 조회한다.
 
-import { esc } from '../../../sanitize.js';
+import { esc, raw } from '../../../sanitize.js';
 import { showToast } from '../../../ui-utils.js';
 import { showPanel, formulaSubNav, getEl, getIndex } from './formula.js';
 import {
@@ -193,9 +193,9 @@ function renderProductCompare(product, otherId) {
       ${items.length ? items.map(n => `<span class="prod-ing-chip ${cls}">${esc(n)}</span>`).join('') : '<span class="formula-rec-note">없음</span>'}
     </div>`;
   box.innerHTML = `<div class="prod-compare-grid">
-    ${col('공통 성분', cmp.common, '')}
-    ${col('이 제품에만', cmp.aOnly, 'is-unknown')}
-    ${col(`${esc(otherTitle)}에만`, cmp.bOnly, 'is-formula')}
+    ${raw(col('공통 성분', cmp.common, ''))}
+    ${raw(col('이 제품에만', cmp.aOnly, 'is-unknown'))}
+    ${raw(col(`${esc(otherTitle)}에만`, cmp.bOnly, 'is-formula'))}
   </div>`;
 }
 
@@ -213,9 +213,9 @@ function renderCompareResult(product, formulaId) {
       ${items.length ? items.map(n => `<span class="prod-ing-chip ${cls}">${esc(n)}</span>`).join('') : '<span class="formula-rec-note">없음</span>'}
     </div>`;
   box.innerHTML = `<div class="prod-compare-grid">
-    ${col('공통 성분', cmp.common, '')}
-    ${col('이 제품에만', cmp.productOnly, 'is-unknown')}
-    ${col('내 포뮬러에만', cmp.formulaOnly, 'is-formula')}
+    ${raw(col('공통 성분', cmp.common, ''))}
+    ${raw(col('이 제품에만', cmp.productOnly, 'is-unknown'))}
+    ${raw(col('내 포뮬러에만', cmp.formulaOnly, 'is-formula'))}
   </div>`;
 }
 

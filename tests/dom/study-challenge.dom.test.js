@@ -5,6 +5,9 @@
 //       · 스트릭 갱신·경과일 리셋(B) · 나가기 confirm(X)
 // DataLoader는 stubRegistry로 fetch 없이 주입 (DataLoader._loaded 선체크 활용)
 
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 vi.mock('../../src/ui-utils.js', async (importOriginal) => ({
@@ -164,7 +167,13 @@ describe('데일리 챌린지 — 생성·진행·완료·스트릭', () => {
         const modal = el('daily-challenge-modal');
         expect(modal.getAttribute('role')).toBe('dialog');
         expect(modal.getAttribute('aria-modal')).toBe('true');
-        expect(modal.style.height).toContain('--app-height');
+        // 실측 높이(--app-height) 계약은 인라인 스타일에서 .daily-modal-overlay CSS 규칙으로 이관
+        // (CODE_CONVENTIONS §4 인라인 스타일 금지 — 규칙 삭제/개명 시 본 단언이 회귀를 잡음)
+        expect(modal.classList.contains('daily-modal-overlay')).toBe(true);
+        const cssSrc = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'css', 'dashboard.css'), 'utf8');
+        const overlayRule = cssSrc.match(/\.daily-modal-overlay\s*\{[^}]*\}/);
+        expect(overlayRule).not.toBeNull();
+        expect(overlayRule[0]).toContain('--app-height');
         // 내용 초과 시 내부 스크롤되는 규약 클래스 (check:mobilesafe)
         expect(modal.querySelector('.dialog-card')).not.toBeNull();
     });

@@ -31,7 +31,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { execFileSync } = require('child_process');
+const { execSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const VENDOR_DIR = path.join(ROOT, 'vendor');
@@ -139,11 +139,12 @@ function restamp(manifest, vendorDir) {
   return [...actual.keys()].sort(); // 잔여 미등록 파일
 }
 
-/** npm registry 최신 버전 조회 (npm.cmd는 shell 경유 필요 — win32 spawn 제약) */
+/** npm registry 최신 버전 조회 (npm.cmd는 shell 경유 필요 — win32 spawn 제약.
+ *  DEP0190 대응: args 배열 대신 인용한 단일 명령 문자열을 사용) */
 function latestVersion(npmName) {
   try {
-    return execFileSync(NPM_BIN, ['view', npmName, 'version'],
-      { encoding: 'utf8', shell: true, stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    return execSync(`${NPM_BIN} view "${npmName}" version`,
+      { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
   } catch {
     return null;
   }
