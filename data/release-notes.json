@@ -1,5 +1,12 @@
 [
   {
+    "version": "v20261013-2a23eff",
+    "date": "2026-10-13",
+    "notes": [
+      "[리팩터링·quality] 규약 래칫 확장 — 이스케이프 기준선 0·JS 스타일 래칫·DEP0190 정리"
+    ]
+  },
+  {
     "version": "v20261013-6053e21",
     "date": "2026-10-13",
     "notes": [
@@ -144,17 +151,6 @@
     "notes": [
       "[정리·deps] vitest 4.1.11 → 5.0.3 + coverage-v8 동시 업그레이드",
       "[문서] .vercelignore 배포 크기 주석을 최신 실측으로 갱신 (50.5MB/1,210파일)"
-    ]
-  },
-  {
-    "version": "v20261013-3b10727",
-    "date": "2026-10-13",
-    "notes": [
-      "[정리] 부트스트랩 분모 정정 + E2E CI 재시도 + 커버리지 래칭 4차",
-      "[테스트] 커버리지 래칭 3차 — exam-sim-review·reader-ref-links DOM 테스트",
-      "[수정] CI 유닛 테스트 glob 버그 — 미인용 **가 bash에서 축약돼 55/1192만 실행",
-      "리팩터: exam-simulator 뷰 분해 — 파사드+수명주기별 3모듈",
-      "리팩터: formula-products·batch 뷰 분해 + 게이트 성능·래칫 강화"
     ]
   }
 ]
