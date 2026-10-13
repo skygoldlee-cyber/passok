@@ -33,12 +33,12 @@ const DOC_FILES = ['AGENTS.md', 'README.md'];
 const REPORT_DIR_RE = /(^|\/)report_archive\//;
 const isReport = (rel) => REPORT_DIR_RE.test(rel + '/');
 
-// check_spec_refs.js와 동일 규격 — 문자 접미사(TR-16a)·로드맵(ROAD-P/L) 모두 지원
-const ID_RE = /\b([A-Z]{1,4}(?:-[A-Z]{1,4})?-(?:\d{2}[a-z]?|[PL]\d))\b/g;
+// check_spec_refs.js와 동일 규격 — 문자 접미사(TR-16a)·로드맵(ROAD-P/L, 단자리·두자리) 모두 지원
+const ID_RE = /\b([A-Z]{1,4}(?:-[A-Z]{1,4})?-(?:\d{2}[a-z]?|[PL]\d{1,2}))\b/g;
 const SPEC_TAG_RE = /@spec\s+([^\n]*)/g;
 const RANGE_RE = /^([A-Z]{1,4}(?:-[A-Z]{1,4})?-[PL]?)(\d{1,2})~[PL]?(\d{1,2})$/;
 const WILDCARD_ID_RE = /^([A-Z]{1,4}(?:-[A-Z]{1,4})?)-\*$/;
-const PURE_ID_RE = /^[A-Z]{1,4}(?:-[A-Z]{1,4})?-(?:\d{2}[a-z]?|[PL]\d)$/;
+const PURE_ID_RE = /^[A-Z]{1,4}(?:-[A-Z]{1,4})?-(?:\d{2}[a-z]?|[PL]\d{1,2})$/;
 const DOC_ID_RE = /\*\*문서 ID\*\*:\s*(DOC-[A-Z]+-\d+)/;
 const RELATED_RE = /^>\s*\*\*관련 SPEC ID\*\*:\s*(.+)$/m;
 
