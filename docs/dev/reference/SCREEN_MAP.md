@@ -27,9 +27,9 @@
 | 교재검색 | `textbook-view` | textbook.html | `#/textbook` | 사이드바 / 더보기 시트 | §3.9 | 학습 전용 |
 | 사전 | `dictionary-view` | dictionary.html | `#/ingredients` | 사이드바 / 탭바 | §3.10 | 공통 (`data-feature="dictionary"`) |
 | 학습 캘린더 | `calendar-view` | calendar.html | `#/calendar` | 사이드바 / 더보기 시트 | §3.20 | 학습 전용 |
-| 시험 선택 | `exam-select-view` | exam-select.html | `#/exams` | nav 없음 — 설정 패널(전 대역)·더보기 시트(모바일) '시험 전환' (`data-feature="examSwitch"`, 등록 시험 ≥2개일 때만 표시) | §3.22 | 공통 |
+| 시험 선택 | `exam-select-view` | exam-select.html | `#/exams` | nav 없음 — 설정 패널(전 대역) '시험 전환' (`data-feature="examSwitch"`, 등록 시험 ≥2개일 때만 표시) | §3.22 | 공통 |
 
-- **모바일 탭바 순서**: 대시보드 · 플래시카드 · 퀴즈 · Formula OS(실무 피처 보유 시) · 사전 · **더보기**(시트에 나머지 전부 + 시험 전환·사용자 매뉴얼·실무 모드 시 실무매뉴얼)
+- **모바일 탭바 순서**: 대시보드 · 플래시카드 · 퀴즈 · Formula OS(실무 피처 보유 시) · 사전 · **더보기**(시트에 나머지 뷰 전부 + 사용자 매뉴얼·실무 모드 시 실무막얼/학습도구 — 테마·시험 전환 등 기능 버튼 정본은 헤더·설정 패널)
 - **`nav-study-only`**: 실무 모드(`ui_mode=practice`)에서 숨김. 현재 뷰가 학습 전용이면 실무 전환 시 `formula-view`로 자동 랜딩 (`src/ui-mode.js`)
 - **`data-feature`**: 시험별 `features` 플래그(`content/exams.json`)로 기능 자체를 숨김 — 뷰가 없는 게 아니라 기능 게이팅
 
@@ -40,7 +40,7 @@
 | 화면 | 요소 | 진입 | 성격 | 관련 규칙 |
 |------|------|------|------|-----------|
 | 설정 패널 | 헤더 ⚙ 드롭다운 | 헤더 버튼 | 관리 기능 통합(백업·시험 전환·시작 안내 등) | UX-SET-01~05 |
-| 더보기 시트 | `#mobile-more-sheet` (`role="dialog"`) | 모바일 탭바 '더보기' | 전체 메뉴 그리드(학습·훈련평가·자료도구·기타) + 시험 전환·매뉴얼 | UX-NAV-01, §4.10.1 |
+| 더보기 시트 | `#mobile-more-sheet` (`role="dialog"`) | 모바일 탭바 '더보기' | 뷰 메뉴 그리드(학습·훈련평가·자료도구) + 매뉴얼 + 기타 그룹(실무 모드 전용: 실무막얼·학습도구) | UX-NAV-01, §4.10.1 |
 | 통합 검색 팔레트 | `#cmdk-overlay` | Ctrl/Cmd+K, 헤더 🔍 | 뷰/교재/카드/퀴즈/성분/문제집 검색·실행 | UX-NAV-06 |
 | 시작 안내 모달 | `#onboarding-overlay` | 최초 방문 1회 / 설정 재열람 | 3단계 안내 | UX-FB-05 |
 | 계정/로그인 모달 | `#auth-modal` | 설정 패널 '계정/로그인' | 이메일+비밀번호 · 로그인 메일(매직링크+OTP) — 미설정 시 안내 문구 | §3.19 (AU-01~08) |
