@@ -92,12 +92,12 @@ user_manual.md(앱 내) → 학습안내서(앱 내) → exams/cosmetic/user/exa
 ```
 docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
-├── dev/                         ← 플랫폼 공통 개발 문서 (46개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (54개)
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (4개 — README + ADR 3건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (13개)
-│   ├── design/                ← 설계·계획·평가 문서 (17개)
-│   └── reference/             ← 명세·로직·참조 문서 (11개 + images/)
+│   ├── design/                ← 설계·계획·평가 문서 (20개)
+│   └── reference/             ← 명세·로직·참조 문서 (12개 + images/)
 └── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개)
     ├── README.md              ← 시험별 문서 인덱스
     ├── user/                  ← 학습자 문서 (5개)
@@ -107,6 +107,24 @@ docs/
     ├── report_archive/        ← 시점 스냅샷 보고서 + 대체된 전략 원전 (11개)
     └── ingredients_audit_제2026-19호.md  ← 고시 대조 리포트 (판본: refmat)
 ```
+
+### 🗂️ 문서 분류·배치 규칙
+
+문서가 `dev/`와 `exams/<id>/` 양쪽에 나뉘어 있는 것은 **의도된 도메인 격리**다 — 플랫폼 공통은 `docs/dev/`, 시험 종속은 `docs/exams/<id>/`(DA-13). 어느 버킷에 둘지는 아래 표로 판정한다.
+
+| 배치 | 성격 | 판정 기준 |
+|------|------|-----------|
+| `docs/dev/` 수위 | 플랫폼 최상위 기준서·독립 산출물 | SPEC(요구사항 ID 원천)·ARCHITECTURE·CHANGES·TRACE_MATRIX + 외주 인도 패키지처럼 특정 계열에 속하지 않는 독립 문서 |
+| `docs/dev/adr/` | 아키텍처 결정 기록 | 대안·트레이드오프 등 결정의 "왜" — 새 구조 결정은 ADR 채번 |
+| `docs/dev/design/` | 설계 **의도** 문서 | 설계안·가이드·계획·로드맵·흐름 명세(USER_FLOW) — "무엇을/왜 그렇게 만들 것인가" |
+| `docs/dev/reference/` | **현행 구현** 기술 명세·참조 | 화면 지도·로직 해설·환경·테스트 정책 — "지금 어떻게 동작하는가" |
+| `docs/dev/runbooks/` | 실행 절차 | 작업 순서·운영 체크리스트 — "어떻게 수행하는가" |
+| `docs/exams/<id>/{design,reference,user,business}/` | 시험 종속 문서 | 특정 시험에만 의미가 있는 문서 — dev/와 동일한 분류 기준 적용 |
+| `docs/exams/<id>/report_archive/` | 시점 스냅샷·대체된 원전 | **앱 미참조 전제** — 앱 코드·콘텐츠가 경로를 인용하는 문서는 아카이브 불가 |
+| `docs/exams/<id>/` 루트 | 분류 예외 | 하위 버킷에 넣을 수 없는 특수 문서 — 현재 `ingredients_audit_제2026-19호.md` 1건 (앱 콘텐츠가 인용하는 refmat 스냅샷이라 아카이브 불가, 교재 종속이 아니라 reference 부적합) |
+| `content/exams/<id>/docs/` | 앱 내 사용자 문서 | `manual-viewer`가 런타임 fetch — `docs/`가 아니라 콘텐츠 팩 소속 (갱신 후 `build_doc_bundles.js` 필수) |
+
+**판정 순서**: ① 시험 종속이면 `exams/<id>/`, 플랫폼 공통이면 `dev/` → ② 역할 — 설계 의도=`design/` · 현행 기술=`reference/` · 절차=`runbooks/` · 결정=`adr/` → ③ 대체됐거나 시점 스냅샷이면 `report_archive/`(앱 참조 문서 제외). 설계 문서와 참조 문서의 경계: design은 **의도·결정·계획**, reference는 **구현 사실 기술**이다. 문서 ID 접두사도 위치를 선언한다 — `DOC-DSN`=design, `DOC-REF`=reference, `DOC-RBK`=runbooks, `DOC-ARC`=archive이며 접두사↔디렉터리 불일치는 금지 (수위 계열 `DOC-DEV`·`DOC-IDX`는 예외). 명칭이 `*_DESIGN`이어도 대체된 원전은 report_archive 소속이다 (예: `FORMULA_OS_DESIGN.md`).
 
 ---
 
@@ -143,6 +161,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [SCREEN_MAP.md](dev/reference/SCREEN_MAP.md) | 화면 지도 — 13개 뷰의 view id ↔ 파셜 ↔ URL 해시 ↔ 내비 위치 ↔ SPEC § 매핑 | "이 화면은 어느 SPEC 섹션인가" 탐색 |
 | [USER_FLOW.md](dev/design/USER_FLOW.md) | 사용자 흐름 명세 — 기동/학습 루프/리더/모의고사/Formula OS/시험 전환/모드 전환의 진입·분기·종료 조건 계약 | 화면 간 전환·상태 분기 작업 |
 | [SPEC.md](dev/SPEC.md) §4.10 | 기기별 UI/UX 계약 — 브레이크포인트 대역·화면별 모바일/태블릿/PC 배치 매트릭스·대역별 공통 규칙·미구현 제안 백로그·검수 뷰포트 | 기기별 레이아웃·입력·PWA 동작 정의 |
+| [UIUX_DESIGN_GUIDE.md](dev/design/UIUX_DESIGN_GUIDE.md) | UI/UX 설계 가이드 — 국제 표준(WCAG·APG·HIG·Material·Nielsen·ISO 9241) 기반 표면 모델·기능 버튼 노출(정본) 규약·규약↔게이트 매핑 (DOC-DSN-25) | UI 요소 배치·노출 원칙 판단 시 |
 | [UIUX_VERIFY_RUNBOOK.md](dev/runbooks/UIUX_VERIFY_RUNBOOK.md) | UI/UX 검증 런북 — TRACE 체계 단계별 확인 (SPEC 선행 → @spec 연결 → E2E 실측 → 배포·실기기 확인) | UI/UX 변경 검증·배포 절차 |
 | [UIUX_외주전달_패키지.md](dev/UIUX_외주전달_패키지.md) | 외주 인도용 추출본 — 위 계열 문서를 프로젝트 중립화해 단일 파일로 묶은 패키지 (수주사 요구사양·산출물 의무·검수 기준) | 외주 개발 발주 시 단독 인도 |
 | [DEV_ENVIRONMENT.md](dev/reference/DEV_ENVIRONMENT.md) | 개발환경 요구사양 — Node/Python/CLI 도구 버전, 최초 설정 절차, 검증·빌드·배포 명령 |
@@ -332,6 +351,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-22 | `docs/dev/design/LEARNING_UX_PHASE1_DESIGN.md` |
 | DOC-DSN-23 | `docs/dev/design/LEARNING_UX_PHASE15_DESIGN.md` |
 | DOC-DSN-24 | `docs/dev/design/LEARNING_UX_PHASE2_DESIGN.md` |
+| DOC-DSN-25 | `docs/dev/design/UIUX_DESIGN_GUIDE.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |

@@ -99,6 +99,6 @@ jobs:
           3. `npm.cmd run convert:refs` → ref_md 변환 후 해당 과목 폴더에 승격
           4. 안전기준 규정 변경이면 `python ref-pipeline/compare_ingredients_official.py` → 원료 DB 대조
           5. 파일명의 (제N호)(시행일)을 새 고시로 바꾸면 baseline이 자동 갱신됨
-          6. 선례: `docs/dev/ingredients_audit_제2026-19호.md` (DOC-DEV-05)
+          6. 선례: `docs/exams/cosmetic/ingredients_audit_제2026-19호.md` (DOC-DEV-05)
           ISSUE
           )"

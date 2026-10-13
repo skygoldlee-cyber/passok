@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 0da06f100142cd22
+> 입력 해시: 9b50834f5ca3ed2a
 > 생성: 2026-10-13 · 원천: SPEC.md(501개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 501개 — 문서 연결 335 · 소스 연결 452 · 테스트 연결 483 · 보고서 연결 109
+**커버리지 요약**: 요구사항 501개 — 문서 연결 358 · 소스 연결 452 · 테스트 연결 483 · 보고서 연결 109
 
 ---
 
@@ -416,18 +416,18 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| UM-01 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-REF-09 | src/practice-registry.js<br>src/ui-mode.js | tests/dom/common-uimode.dom.test.js<br>tests/unit/practice-registry.test.js | DOC-ARC-06 | — |
-| UM-02 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-REF-09 | src/practice-registry.js<br>src/ui-mode.js | tests/dom/common-uimode.dom.test.js<br>tests/unit/practice-registry.test.js | DOC-ARC-06 | — |
-| UM-03 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-REF-09 | src/practice-registry.js<br>src/ui-mode.js | tests/dom/common-uimode.dom.test.js<br>tests/unit/practice-registry.test.js | DOC-ARC-06 | — |
-| UM-04 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-REF-09 | src/practice-registry.js<br>src/router.js<br>src/ui-mode.js | tests/dom/common-uimode.dom.test.js<br>tests/dom/router.dom.test.js<br>tests/dom/ui-structure.dom.test.js<br>tests/unit/practice-registry.test.js | DOC-ARC-06 | — |
-| UM-05 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-REF-09 | src/practice-registry.js<br>src/ui-mode.js | tests/dom/common-uimode.dom.test.js<br>tests/unit/practice-registry.test.js | DOC-ARC-06 | — |
+| UM-01 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 1개 | src/practice-registry.js<br>src/ui-mode.js | tests/dom/common-uimode.dom.test.js<br>tests/unit/practice-registry.test.js | DOC-ARC-06 | — |
+| UM-02 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 1개 | src/practice-registry.js<br>src/ui-mode.js | tests/dom/common-uimode.dom.test.js<br>tests/unit/practice-registry.test.js | DOC-ARC-06 | — |
+| UM-03 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 1개 | src/practice-registry.js<br>src/ui-mode.js | tests/dom/common-uimode.dom.test.js<br>tests/unit/practice-registry.test.js | DOC-ARC-06 | — |
+| UM-04 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 1개 | src/practice-registry.js<br>src/router.js<br>src/ui-mode.js | tests/dom/common-uimode.dom.test.js<br>tests/dom/router.dom.test.js<br>tests/dom/ui-structure.dom.test.js<br>tests/unit/practice-registry.test.js | DOC-ARC-06 | — |
+| UM-05 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 1개 | src/practice-registry.js<br>src/ui-mode.js | tests/dom/common-uimode.dom.test.js<br>tests/unit/practice-registry.test.js | DOC-ARC-06 | — |
 
 ## 3.22 시험 선택·전환
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | ES-01 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-10 | html/views/exam-select.html<br>index.html<br>src/app-dashboard.js<br>src/exam-context.js<br>…외 2개 | tests/dom/exam-switching.dom.test.js<br>tests/dom/study-examselect.dom.test.js<br>tests/unit/exam-context.test.js | DOC-ARC-07 | — |
-| ES-02 | ✅ | 테스트 | DOC-DSN-10 | src/app-shell.js<br>src/exam-context.js<br>src/views/exam-select.js | tests/dom/exam-switching.dom.test.js<br>tests/dom/study-examselect.dom.test.js<br>tests/unit/exam-context.test.js | DOC-ARC-07 | — |
+| ES-02 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-25 | src/app-shell.js<br>src/exam-context.js<br>src/views/exam-select.js | tests/dom/exam-switching.dom.test.js<br>tests/dom/study-examselect.dom.test.js<br>tests/unit/exam-context.test.js | DOC-ARC-07 | — |
 | ES-03 | ✅ | E2E 테스트 | DOC-DSN-10 | src/app-shell.js<br>src/exam-context.js<br>src/views/exam-select.js | tests/dom/exam-switching.dom.test.js<br>tests/dom/study-examselect.dom.test.js<br>tests/e2e/exam-switch.spec.js<br>tests/unit/exam-context.test.js | DOC-ARC-07 | — |
 | ES-04 | ✅ | 테스트 | DOC-DSN-10 | src/exam-context.js | tests/dom/exam-switching.dom.test.js<br>tests/unit/exam-context.test.js | DOC-ARC-07 | — |
 | ES-05 | ✅ | E2E 테스트 | DOC-DSN-10 | src/app-shell.js<br>src/exam-context.js | tests/dom/exam-switching.dom.test.js<br>tests/e2e/exam-switch.spec.js<br>tests/unit/exam-context.test.js | DOC-ARC-07 | — |
@@ -538,26 +538,26 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| A-01 | ✅ | E2E 테스트 | DOC-DSN-01 | index.html | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
-| A-02 | ✅ | E2E 테스트 | DOC-DSN-01 | src/views/flashcard.js | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
-| A-03 | ✅ | E2E 테스트 | DOC-DSN-01 | css/base.css<br>css/dashboard.css<br>css/ui-overlay.css | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
-| A-04 | ✅ | E2E 테스트 | DOC-DSN-01 | css/base.css | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
-| A-05 | ✅ | E2E 테스트 | DOC-DSN-01 | css/base.css<br>css/ui-overlay.css | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
-| A-06 | ✅ | E2E 테스트 | DOC-DSN-01 | css/base.css<br>css/study.css | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
-| A-07 | ✅ | E2E 테스트 | DOC-DSN-01 | src/ui-utils.js | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
+| A-01 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | index.html | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
+| A-02 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | src/views/flashcard.js | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
+| A-03 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css<br>css/dashboard.css<br>css/ui-overlay.css | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
+| A-04 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
+| A-05 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css<br>css/ui-overlay.css | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
+| A-06 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css<br>css/study.css | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
+| A-07 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | src/ui-utils.js | tests/dom/common-a11y.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
 
 ## 4.6 반응형 & 모바일
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| R-01 | ✅ | 테스트 | DOC-DSN-01 | — | tests/dom/common-navigation.dom.test.js | — | — |
-| R-02 | ✅ | E2E 테스트 | DOC-DSN-01 | css/base.css | tests/dom/common-navigation.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
-| R-03 | ✅ | E2E 테스트 | DOC-DSN-01 | css/base.css | tests/dom/common-navigation.dom.test.js<br>tests/e2e/app-chrome.spec.js | — | — |
-| R-04 | ✅ | E2E 테스트 | DOC-DSN-01 | src/views/navigation.js | tests/dom/common-navigation.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
-| R-05 | ✅ | E2E 테스트 | DOC-DSN-01 | css/dashboard.css | tests/dom/common-navigation.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
-| R-06 | ✅ | 테스트 | DOC-DSN-01 | — | tests/dom/common-navigation.dom.test.js | — | — |
-| R-07 | ✅ | 테스트 | DOC-DSN-01 | — | tests/dom/common-navigation.dom.test.js | — | — |
-| R-08 | ✅ | E2E 테스트 | DOC-DSN-01 | src/app-shell.js | tests/dom/common-navigation.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
+| R-01 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-25 | — | tests/dom/common-navigation.dom.test.js | — | — |
+| R-02 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css | tests/dom/common-navigation.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
+| R-03 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css | tests/dom/common-navigation.dom.test.js<br>tests/e2e/app-chrome.spec.js | — | — |
+| R-04 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | src/views/navigation.js | tests/dom/common-navigation.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
+| R-05 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/dashboard.css | tests/dom/common-navigation.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
+| R-06 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-25 | — | tests/dom/common-navigation.dom.test.js | — | — |
+| R-07 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-25 | — | tests/dom/common-navigation.dom.test.js | — | — |
+| R-08 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | src/app-shell.js | tests/dom/common-navigation.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
 | R-09 | ✅ | 테스트 | DOC-DSN-01 | — | tests/dom/common-navigation.dom.test.js | — | — |
 | R-10 | ✅ | E2E 테스트 | — | css/reader.css | tests/e2e/toc-sidebar.spec.js | — | — |
 
@@ -565,59 +565,59 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| TH-01 | ✅ | E2E 테스트 | DOC-DSN-01 | css/base.css<br>css/reader-extras.css<br>src/theme-toggle.js | tests/dom/common-theme.dom.test.js<br>tests/e2e/theme.spec.js | — | — |
-| TH-02 | ✅ | E2E 테스트 | DOC-DSN-01 | css/base.css<br>index.html<br>src/theme-init.js<br>src/theme-toggle.js | tests/dom/common-theme.dom.test.js<br>tests/e2e/theme.spec.js | — | — |
-| TH-03 | ✅ | E2E 테스트 | DOC-DSN-01 | css/base.css<br>src/theme-init.js<br>src/theme-toggle.js | tests/dom/common-theme.dom.test.js<br>tests/e2e/theme.spec.js | — | — |
-| TH-04 | ✅ | E2E 테스트 | DOC-DSN-01 | css/base.css<br>src/theme-toggle.js | tests/dom/common-theme.dom.test.js<br>tests/e2e/theme.spec.js | — | — |
-| TH-05 | ✅ | E2E 테스트 | DOC-DSN-01 | css/base.css<br>css/reader-extras.css<br>src/theme-toggle.js | tests/dom/common-theme.dom.test.js<br>tests/e2e/theme.spec.js | — | — |
-| TH-06 | ✅ | E2E 테스트 | DOC-DSN-01 | css/base.css<br>css/reader-mermaid.css<br>src/mermaid-utils.js | tests/dom/common-theme.dom.test.js<br>tests/e2e/flows.spec.js<br>tests/unit/mermaid/mermaid-utils.test.js | — | — |
+| TH-01 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css<br>css/reader-extras.css<br>src/theme-toggle.js | tests/dom/common-theme.dom.test.js<br>tests/e2e/theme.spec.js | — | — |
+| TH-02 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css<br>index.html<br>src/theme-init.js<br>src/theme-toggle.js | tests/dom/common-theme.dom.test.js<br>tests/e2e/theme.spec.js | — | — |
+| TH-03 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css<br>src/theme-init.js<br>src/theme-toggle.js | tests/dom/common-theme.dom.test.js<br>tests/e2e/theme.spec.js | — | — |
+| TH-04 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css<br>src/theme-toggle.js | tests/dom/common-theme.dom.test.js<br>tests/e2e/theme.spec.js | — | — |
+| TH-05 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css<br>css/reader-extras.css<br>src/theme-toggle.js | tests/dom/common-theme.dom.test.js<br>tests/e2e/theme.spec.js | — | — |
+| TH-06 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css<br>css/reader-mermaid.css<br>src/mermaid-utils.js | tests/dom/common-theme.dom.test.js<br>tests/e2e/flows.spec.js<br>tests/unit/mermaid/mermaid-utils.test.js | — | — |
 
 ## 4.8 UI/UX 설계 요구사양
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| UX-FB-01 | `@media (max-width: 768px) { #app-toast { top:auto; bottom: calc(80px + safe-area) } }` — 하단 탭 바 위 | E2E 테스트 | — | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/a11y-interaction.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-FB-02 | 네이티브 대화상자는 PWA 설치 흐름을 깨고 스타일 제어 불가. 커스텀 모달은 포커스 트랩 + Escape + 배경 클릭 닫기 포함 | E2E 테스트 | — | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-FB-03 | `animationend` 리스너로 클래스 해제 — `display:none` 상태에서는 애니메이션이 안 돌아 첫 실제 표시에 실행됨. `prefers-reduced-motion`에서는 자동으로 0.01ms 처리됨 | E2E 테스트 | — | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/reader-markers.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-FB-04 | 부분 스켈레톤보다 구현 비용이 낮고 일관됨 | E2E 테스트 | — | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/app.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-FB-05 | 기존 사용자는 플래그만 기록해 방해하지 않음 — 재방문 강제 안내 금지 | E2E 테스트 | DOC-DSN-11 | src/onboarding.js | tests/dom/onboarding-zoom.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
-| UX-FB-06 | 자가 등록 모달(`.cing-*`)이 필드 5개로 `90dvh`를 넘겨 등록·취소 버튼이 잘린 실사례. 공용 `.app-confirm-dialog`(컨펌·의견·Pro·온보딩·통계 공유)와 `.auth-modal-card`·`.f-weigh-card`에 적용 — UX-SET-02(설정 패널)의 다이얼로그 일반화. E2E가 세로·가로 뷰포트에서 푸터 버튼 위치를 실측. 신규 카드는 공용 규약 클래스 `.dialog-card`(css/base.css — 90dvh 상한+스크롤) 사용, `check:mobilesafe`가 `role="dialog"` 마크업에 클래스 부재를 정적 검사 | E2E 테스트 | — | — | tests/dom/common-a11y.dom.test.js<br>tests/e2e/mobile-overflow.spec.js | — | — |
-| UX-FORM-01 | 16px 미만이면 iOS Safari가 포커스 시 자동 확대 | E2E 테스트 | — | css/reader.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-FORM-02 | 모바일에서 물리적 눌림감 제공 | E2E 테스트 | — | css/base.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-NAV-01 | 한 번에 하나의 네비게이션만 노출 — 중복 방지. 하단 탭 바는 엄지 도달권, 탭 수가 늘어나면 가로 스크롤보다 핵심 5탭 + `role="dialog"` 시트(`#mobile-more-sheet`)가 발견성·터치 안정성에 유리. 활성 탭은 `scrollIntoView({inline:'center'})`로 가시화 + `aria-current="page"`, 시트 소속 뷰 활성 시 더보기 탭에 활성 표시 | E2E 테스트 | DOC-DSN-01<br>DOC-REF-09 | css/app-responsive.css<br>src/app.js<br>src/router.js | tests/dom/common-navigation.dom.test.js<br>tests/dom/router.dom.test.js<br>tests/dom/ui-structure.dom.test.js<br>tests/e2e/app.spec.js<br>…외 1개 | — | — |
-| UX-NAV-02 | 스크롤 중에도 설정·테마에 접근 가능. 단, 부모가 스크롤 컨테이너(`overflow-y: auto`)일 때만 작동 — `body` 스크롤 구조면 의도대로 동작하는지 확인할 것 | 테스트 | DOC-DSN-01 | — | tests/dom/common-navigation.dom.test.js | — | — |
-| UX-NAV-03 | 드롭다운은 절대위치로 헤더 경계를 넘어야 함. 넘침 제어는 `min-width:0`+말줄임과 `flex-shrink:0`으로 처리 | 테스트 | DOC-DSN-01 | — | tests/dom/common-navigation.dom.test.js | — | — |
-| UX-NAV-04 | `.app-container { width: 100% }`. 특히 클래식 스크롤바가 상시 표시되는 데스크톱에서 차이 발생 | E2E 테스트 | DOC-DSN-01 | — | tests/dom/common-navigation.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
-| UX-NAV-05 | back-to-top(`bottom:1.25rem`)이 탭 바(z 1400)에 완전히 가려진 실제 사례. 배너·토스트·플로팅 버튼 신규 추가 시에도 동일 규칙 적용. `.main-content`는 `padding-bottom: calc(80px + safe)` + `scroll-padding-bottom`으로 콘텐츠·포커스 요소 보호 | E2E 테스트 | DOC-DSN-01 | — | tests/dom/common-navigation.dom.test.js<br>tests/e2e/mobile-overflow.spec.js | — | — |
-| UX-NAV-06 | `searchAll()`은 소스 주입 가능한 순수 함수로 분리해 테스트 가능. 실행은 기존 경로 재사용(nav 클릭 시뮬레이션, `startSubjectStudy/Quiz`, `openSubjectChapter`, `ExamViewer.openExam`) — 네비게이션 분기 신설 금지. 뷰 목록은 nav-item DOM 스캔이라 feature 게이팅(`is-hidden`)을 자동 반영. z-index 2500 (탭 바·모달 위). 전 소스 로컬 데이터로 오프라인 동작 | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-11 | src/command-palette.js | tests/dom/common-navigation.dom.test.js<br>tests/dom/study-commandpalette.dom.test.js<br>tests/e2e/responsive-flow.spec.js<br>tests/unit/command-palette.test.js | — | — |
-| UX-NAV-07 | 내비게이션(사이드바·탭 바·뒤로가기)은 사용자의 이전 위치를 보존하는 게 기대 동작이지만, "맞춤 리포트 보기"·"퀴즈 풀기" 같은 액션 버튼이 이전 스크롤을 복원하면 중간에서 열려 맥락을 잃는다. `restoreScrollPosition`의 `pendingTop` 플래그가 복원 시점에 소비되어 `saveScrollPosition` 덮어쓰기와 무관하게 동작. 새 액션 딥링크 추가 시 `scrollTop: true` 필수 — `data-args='["view-id", {"scrollTop": true}]'` 또는 직접 호출 모두 지원. `.main-content`는 전 뷰 공유 스크롤 컨테이너라 인트라뷰 패널 전환 시 scrollTop이 잔류해 새 화면 상단이 잘림 — `navigation.js`의 `resetMainScroll()`을 각 전환 지점(훈련소 서브패널·드릴/퀴즈/모의고사 문항·결과 전이, Formula OS showPanel, 자체 스크롤 오버레이는 해당 컨테이너 scrollTop)에 호출 | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-11<br>DOC-DSN-22 | src/views/navigation.js | tests/dom/common-navigation.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
-| UX-NAV-08 | SPA에서 뒤로가기가 없으면 Android/PWA 뒤로가기 시 앱이 종료됨. 해시는 공유 가능한 딥링크도 제공. `navigateToView` 재진입은 `_hashNavigating` 플래그로 pushState를 생략해 무한 루프 방지. nav-item 없는 뷰(exam-select)는 `registerViewNavigator`로 등록된 라우터 경로가 `switchView` 폴백을 대신해 제목·해시·렌더를 동일하게 동기화 | E2E 테스트 | DOC-DSN-11<br>DOC-DSN-22<br>DOC-REF-09 | src/modal-back.js<br>src/router.js | tests/dom/router.dom.test.js<br>tests/dom/ui-structure.dom.test.js<br>tests/e2e/app.spec.js<br>tests/e2e/more-sheet.spec.js | — | — |
-| UX-NAV-09 | 인플로우 크롬은 본문 높이를 영구 잠식하고, transform만 적용한 숨김은 공간을 회수하지 못함(실측: 본문 63%→89% vh). 오버레이 시 콘텐츠 스크롤 컨테이너에 `padding-top`=크롬 높이를 줘 첫 화면이 크롬 아래 묻히지 않게 함 — 패딩은 스크롤과 함께 밀려나므로 읽는 중 잠식 0. 크롬 아래를 지나는 다른 오버레이(섹션 표시줄 등)는 `~` 시빌링 셀렉터로 숨김 상태와 위치를 연동할 것 | E2E 테스트 | — | css/reader.css | tests/e2e/toc-sidebar.spec.js | — | — |
-| UX-NAV-10 | 성분사전 검색 행이 버튼 4개(초기화·CSV·전체 CSV·성분 추가)를 nowrap으로 나열해 모바일에서 '성분 추가'가 잘린 실사례. `text-overflow:ellipsis` 말줄임과 가로 스크롤 컨테이너(표 wrapper 등)는 의도된 클립이라 예외. E2E 스윕(`mobile-overflow.spec.js`)이 전 뷰를 프로젝트 뷰포트별로 실측 | E2E 테스트 | — | — | tests/e2e/mobile-overflow.spec.js | — | — |
-| UX-NAV-11 | UX-NAV-05의 실측 확장 — 탭 바 위치 계약을 요소 단위로 검증. 스크롤 컨테이너 가장자리 클립은 스크롤로 도달 가능하므로 예외, 일시 오버레이(토스트·오프라인 배너)는 소멸성이라 예외. E2E(`mobile-overflow.spec.js`)가 전 뷰의 상호작용 요소를 `scrollIntoView`+히트 테스트로 순회 | E2E 테스트 | — | — | tests/e2e/mobile-overflow.spec.js | — | — |
-| UX-NAV-12 | 그룹 라벨은 `index.template.html`의 `.nav-group-label` 정적 마크업 — 모바일 시트는 동일 DOM 슬롯을 공유해 분류가 대역 간 자동 일치. 표시명만 바뀌고 `data-target`·라우트 ID는 불변 | 문서 검토 | DOC-DSN-21<br>DOC-DSN-24 | — | — | — | — |
-| UX-NAV-13 | `html/views/{quiz,exam,trainer,review}.html` 정적 문구 — manifest `uiText` subtitle과 별도 본문 표기라 `check:uitext` 비대상 | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | — | tests/dom/study-review.dom.test.js | — | — |
-| UX-NAV-14 | `html/views/trainer.html` 정적 구조 — 카드 DOM·`data-click`·`data-feature`·배지 id 불변, 그룹 이동만. 라벨은 본문 텍스트라 `check:uitext` 비대상 | E2E 테스트 | DOC-DSN-24 | css/trainer.css<br>html/views/trainer.html<br>index.html | tests/dom/study-trainer.dom.test.js<br>tests/e2e/app.spec.js | — | — |
-| UX-PWA-01 | 모바일 OS(Android/iOS)는 웹의 자체 종료를 차단 — 프로그래밍으로 완전 종료 불가. 데스크톱 설치 PWA는 `close()`가 동작하므로 모바일 안내는 불필요. 차단되면 "최근 앱 목록에서 밀어 닫으세요"(터치)/"창을 닫아주세요"(데스크톱) 안내 화면으로 대체하는 것이 최선 | E2E 테스트 | — | src/app.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-PWA-02 | 브라우저 탭에서 의미 없는 버튼(앱 종료 등)을 숨겨 혼란 방지. iOS는 `navigator.standalone`만 지원하므로 둘 다 확인 필수 | E2E 테스트 | — | src/pwa-install.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-PWA-03 | "배포했는데 안 바뀐다" 보고의 대부분이 이 패턴. 사용자 안내 문구와 업데이트 토스트 필수 | E2E 테스트 | — | sw.js<br>tools/check/check_perf_budget.js | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-PWA-04 | 미설치 상태에서만 노출, 설치 후 자동 숨김 — 헤더 공간 절약 | E2E 테스트 | — | src/pwa-install.js | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-PWA-05 | PWA 콜드 스타트에서 `dvh`가 실제 화면보다 크게 측정되면 `.main-content` 끝이 화면 밖으로 밀려 스크롤 끝 콘텐츠가 탭 바에 가려짐(대시보드 '내 학습 분석·도구' 실제 장애). JS 미실행 시 `100dvh` 폴백 | E2E 테스트 | — | src/app.js | tests/dom/app-shell.dom.test.js<br>tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-FB-01 | `@media (max-width: 768px) { #app-toast { top:auto; bottom: calc(80px + safe-area) } }` — 하단 탭 바 위 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/a11y-interaction.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-FB-02 | 네이티브 대화상자는 PWA 설치 흐름을 깨고 스타일 제어 불가. 커스텀 모달은 포커스 트랩 + Escape + 배경 클릭 닫기 포함 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-FB-03 | `animationend` 리스너로 클래스 해제 — `display:none` 상태에서는 애니메이션이 안 돌아 첫 실제 표시에 실행됨. `prefers-reduced-motion`에서는 자동으로 0.01ms 처리됨 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/reader-markers.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-FB-04 | 부분 스켈레톤보다 구현 비용이 낮고 일관됨 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/app.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-FB-05 | 기존 사용자는 플래그만 기록해 방해하지 않음 — 재방문 강제 안내 금지 | E2E 테스트 | DOC-DSN-11<br>DOC-DSN-25 | src/onboarding.js | tests/dom/onboarding-zoom.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
+| UX-FB-06 | 자가 등록 모달(`.cing-*`)이 필드 5개로 `90dvh`를 넘겨 등록·취소 버튼이 잘린 실사례. 공용 `.app-confirm-dialog`(컨펌·의견·Pro·온보딩·통계 공유)와 `.auth-modal-card`·`.f-weigh-card`에 적용 — UX-SET-02(설정 패널)의 다이얼로그 일반화. E2E가 세로·가로 뷰포트에서 푸터 버튼 위치를 실측. 신규 카드는 공용 규약 클래스 `.dialog-card`(css/base.css — 90dvh 상한+스크롤) 사용, `check:mobilesafe`가 `role="dialog"` 마크업에 클래스 부재를 정적 검사 | E2E 테스트 | DOC-DSN-25 | — | tests/dom/common-a11y.dom.test.js<br>tests/e2e/mobile-overflow.spec.js | — | — |
+| UX-FORM-01 | 16px 미만이면 iOS Safari가 포커스 시 자동 확대 | E2E 테스트 | DOC-DSN-25 | css/reader.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-FORM-02 | 모바일에서 물리적 눌림감 제공 | E2E 테스트 | DOC-DSN-25 | css/base.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-NAV-01 | 한 번에 하나의 네비게이션만 노출 — 중복 방지. 하단 탭 바는 엄지 도달권, 탭 수가 늘어나면 가로 스크롤보다 핵심 5탭 + `role="dialog"` 시트(`#mobile-more-sheet`)가 발견성·터치 안정성에 유리. 활성 탭은 `scrollIntoView({inline:'center'})`로 가시화 + `aria-current="page"`, 시트 소속 뷰 활성 시 더보기 탭에 활성 표시 | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25<br>DOC-REF-09 | css/app-responsive.css<br>src/app.js<br>src/router.js | tests/dom/common-navigation.dom.test.js<br>tests/dom/router.dom.test.js<br>tests/dom/ui-structure.dom.test.js<br>tests/e2e/app.spec.js<br>…외 1개 | — | — |
+| UX-NAV-02 | 스크롤 중에도 설정·테마에 접근 가능. 단, 부모가 스크롤 컨테이너(`overflow-y: auto`)일 때만 작동 — `body` 스크롤 구조면 의도대로 동작하는지 확인할 것 | 테스트 | DOC-DSN-01<br>DOC-DSN-25 | — | tests/dom/common-navigation.dom.test.js | — | — |
+| UX-NAV-03 | 드롭다운은 절대위치로 헤더 경계를 넘어야 함. 넘침 제어는 `min-width:0`+말줄임과 `flex-shrink:0`으로 처리 | 테스트 | DOC-DSN-01<br>DOC-DSN-25 | — | tests/dom/common-navigation.dom.test.js | — | — |
+| UX-NAV-04 | `.app-container { width: 100% }`. 특히 클래식 스크롤바가 상시 표시되는 데스크톱에서 차이 발생 | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | — | tests/dom/common-navigation.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
+| UX-NAV-05 | back-to-top(`bottom:1.25rem`)이 탭 바(z 1400)에 완전히 가려진 실제 사례. 배너·토스트·플로팅 버튼 신규 추가 시에도 동일 규칙 적용. `.main-content`는 `padding-bottom: calc(80px + safe)` + `scroll-padding-bottom`으로 콘텐츠·포커스 요소 보호 | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | — | tests/dom/common-navigation.dom.test.js<br>tests/e2e/mobile-overflow.spec.js | — | — |
+| UX-NAV-06 | `searchAll()`은 소스 주입 가능한 순수 함수로 분리해 테스트 가능. 실행은 기존 경로 재사용(nav 클릭 시뮬레이션, `startSubjectStudy/Quiz`, `openSubjectChapter`, `ExamViewer.openExam`) — 네비게이션 분기 신설 금지. 뷰 목록은 nav-item DOM 스캔이라 feature 게이팅(`is-hidden`)을 자동 반영. z-index 2500 (탭 바·모달 위). 전 소스 로컬 데이터로 오프라인 동작 | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-11<br>DOC-DSN-25 | src/command-palette.js | tests/dom/common-navigation.dom.test.js<br>tests/dom/study-commandpalette.dom.test.js<br>tests/e2e/responsive-flow.spec.js<br>tests/unit/command-palette.test.js | — | — |
+| UX-NAV-07 | 내비게이션(사이드바·탭 바·뒤로가기)은 사용자의 이전 위치를 보존하는 게 기대 동작이지만, "맞춤 리포트 보기"·"퀴즈 풀기" 같은 액션 버튼이 이전 스크롤을 복원하면 중간에서 열려 맥락을 잃는다. `restoreScrollPosition`의 `pendingTop` 플래그가 복원 시점에 소비되어 `saveScrollPosition` 덮어쓰기와 무관하게 동작. 새 액션 딥링크 추가 시 `scrollTop: true` 필수 — `data-args='["view-id", {"scrollTop": true}]'` 또는 직접 호출 모두 지원. `.main-content`는 전 뷰 공유 스크롤 컨테이너라 인트라뷰 패널 전환 시 scrollTop이 잔류해 새 화면 상단이 잘림 — `navigation.js`의 `resetMainScroll()`을 각 전환 지점(훈련소 서브패널·드릴/퀴즈/모의고사 문항·결과 전이, Formula OS showPanel, 자체 스크롤 오버레이는 해당 컨테이너 scrollTop)에 호출 | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-11<br>DOC-DSN-22<br>DOC-DSN-25 | src/views/navigation.js | tests/dom/common-navigation.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
+| UX-NAV-08 | SPA에서 뒤로가기가 없으면 Android/PWA 뒤로가기 시 앱이 종료됨. 해시는 공유 가능한 딥링크도 제공. `navigateToView` 재진입은 `_hashNavigating` 플래그로 pushState를 생략해 무한 루프 방지. nav-item 없는 뷰(exam-select)는 `registerViewNavigator`로 등록된 라우터 경로가 `switchView` 폴백을 대신해 제목·해시·렌더를 동일하게 동기화 | E2E 테스트 | DOC-DSN-11<br>DOC-DSN-22<br>DOC-DSN-25<br>DOC-REF-09 | src/modal-back.js<br>src/router.js | tests/dom/router.dom.test.js<br>tests/dom/ui-structure.dom.test.js<br>tests/e2e/app.spec.js<br>tests/e2e/more-sheet.spec.js | — | — |
+| UX-NAV-09 | 인플로우 크롬은 본문 높이를 영구 잠식하고, transform만 적용한 숨김은 공간을 회수하지 못함(실측: 본문 63%→89% vh). 오버레이 시 콘텐츠 스크롤 컨테이너에 `padding-top`=크롬 높이를 줘 첫 화면이 크롬 아래 묻히지 않게 함 — 패딩은 스크롤과 함께 밀려나므로 읽는 중 잠식 0. 크롬 아래를 지나는 다른 오버레이(섹션 표시줄 등)는 `~` 시빌링 셀렉터로 숨김 상태와 위치를 연동할 것 | E2E 테스트 | DOC-DSN-25 | css/reader.css | tests/e2e/toc-sidebar.spec.js | — | — |
+| UX-NAV-10 | 성분사전 검색 행이 버튼 4개(초기화·CSV·전체 CSV·성분 추가)를 nowrap으로 나열해 모바일에서 '성분 추가'가 잘린 실사례. `text-overflow:ellipsis` 말줄임과 가로 스크롤 컨테이너(표 wrapper 등)는 의도된 클립이라 예외. E2E 스윕(`mobile-overflow.spec.js`)이 전 뷰를 프로젝트 뷰포트별로 실측 | E2E 테스트 | DOC-DSN-25 | — | tests/e2e/mobile-overflow.spec.js | — | — |
+| UX-NAV-11 | UX-NAV-05의 실측 확장 — 탭 바 위치 계약을 요소 단위로 검증. 스크롤 컨테이너 가장자리 클립은 스크롤로 도달 가능하므로 예외, 일시 오버레이(토스트·오프라인 배너)는 소멸성이라 예외. E2E(`mobile-overflow.spec.js`)가 전 뷰의 상호작용 요소를 `scrollIntoView`+히트 테스트로 순회 | E2E 테스트 | DOC-DSN-25 | — | tests/e2e/mobile-overflow.spec.js | — | — |
+| UX-NAV-12 | 그룹 라벨은 `index.template.html`의 `.nav-group-label` 정적 마크업 — 모바일 시트는 동일 DOM 슬롯을 공유해 분류가 대역 간 자동 일치. 표시명만 바뀌고 `data-target`·라우트 ID는 불변 | 문서 검토 | DOC-DSN-21<br>DOC-DSN-24<br>DOC-DSN-25 | — | — | — | — |
+| UX-NAV-13 | `html/views/{quiz,exam,trainer,review}.html` 정적 문구 — manifest `uiText` subtitle과 별도 본문 표기라 `check:uitext` 비대상 | 테스트 | DOC-DSN-22<br>DOC-DSN-24<br>DOC-DSN-25 | — | tests/dom/study-review.dom.test.js | — | — |
+| UX-NAV-14 | `html/views/trainer.html` 정적 구조 — 카드 DOM·`data-click`·`data-feature`·배지 id 불변, 그룹 이동만. 라벨은 본문 텍스트라 `check:uitext` 비대상 | E2E 테스트 | DOC-DSN-24<br>DOC-DSN-25 | css/trainer.css<br>html/views/trainer.html<br>index.html | tests/dom/study-trainer.dom.test.js<br>tests/e2e/app.spec.js | — | — |
+| UX-PWA-01 | 모바일 OS(Android/iOS)는 웹의 자체 종료를 차단 — 프로그래밍으로 완전 종료 불가. 데스크톱 설치 PWA는 `close()`가 동작하므로 모바일 안내는 불필요. 차단되면 "최근 앱 목록에서 밀어 닫으세요"(터치)/"창을 닫아주세요"(데스크톱) 안내 화면으로 대체하는 것이 최선 | E2E 테스트 | DOC-DSN-25 | src/app.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-PWA-02 | 브라우저 탭에서 의미 없는 버튼(앱 종료 등)을 숨겨 혼란 방지. iOS는 `navigator.standalone`만 지원하므로 둘 다 확인 필수 | E2E 테스트 | DOC-DSN-25 | src/pwa-install.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-PWA-03 | "배포했는데 안 바뀐다" 보고의 대부분이 이 패턴. 사용자 안내 문구와 업데이트 토스트 필수 | E2E 테스트 | DOC-DSN-25 | sw.js<br>tools/check/check_perf_budget.js | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-PWA-04 | 미설치 상태에서만 노출, 설치 후 자동 숨김 — 헤더 공간 절약 | E2E 테스트 | DOC-DSN-25 | src/pwa-install.js | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-PWA-05 | PWA 콜드 스타트에서 `dvh`가 실제 화면보다 크게 측정되면 `.main-content` 끝이 화면 밖으로 밀려 스크롤 끝 콘텐츠가 탭 바에 가려짐(대시보드 '내 학습 분석·도구' 실제 장애). JS 미실행 시 `100dvh` 폴백 | E2E 테스트 | DOC-DSN-25 | src/app.js | tests/dom/app-shell.dom.test.js<br>tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
 | UX-PWA-06 | 현장(실습·조제실)에서 대시보드 경유 탭을 생략. 시험 도메인 기능이라 플랫폼 공통 `manifest.webmanifest`가 아닌 시험별 매니페스트에만 선언 — exams.json `pwaShortcuts` → `build_exams_list.js` 패스스루 | E2E 테스트 | — | tools/build/build_exams_list.js | tests/e2e/exams/cosmetic/formula-tablet.spec.js<br>tests/unit/pwa-sw.test.js | — | — |
-| UX-SCR-01 | `@media (pointer: coarse), (max-width: 900px) { * { scrollbar-width: none } ::-webkit-scrollbar { width:0; height:0 } }` — `pointer: coarse`만 믿지 말고 폭 기준을 병기할 것(일부 기기에서 pointer 감지 실패 사례 있음). 모바일 스크롤바는 드래그용이 아니므로 위치 표시도 불필요 | E2E 테스트 | — | css/reader.css<br>src/views/reader-toolbar.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-SCR-02 | `*` 또는 개별 컨테이너에 지정 | E2E 테스트 | — | css/reader.css | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-SCR-01 | `@media (pointer: coarse), (max-width: 900px) { * { scrollbar-width: none } ::-webkit-scrollbar { width:0; height:0 } }` — `pointer: coarse`만 믿지 말고 폭 기준을 병기할 것(일부 기기에서 pointer 감지 실패 사례 있음). 모바일 스크롤바는 드래그용이 아니므로 위치 표시도 불필요 | E2E 테스트 | DOC-DSN-25 | css/reader.css<br>src/views/reader-toolbar.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-SCR-02 | `*` 또는 개별 컨테이너에 지정 | E2E 테스트 | DOC-DSN-25 | css/reader.css | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
 | UX-SCR-03 | 하드코딩 색상은 다크/라이트 한쪽에서 묻힘 (실제로 미정의 변수 폴백으로 라이트 배경에 흰 카드가 되는 사고 있었음 — `.comp-item` 사례) | E2E 테스트 | — | css/reader.css | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-SET-01 | 헤더에 아이콘 버튼을 늘리면 모바일에서 제목과 경쟁. 자주 쓰지 않는 토글(가로/세로 보기 등)은 설정 안으로 이동 | E2E 테스트 | — | css/ui-overlay.css | tests/e2e/app.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-SET-02 | 항목이 늘어나도 뷰포트를 넘지 않음. 없으면 소형 기기에서 하단 항목이 잘림 | E2E 테스트 | — | css/ui-overlay.css | tests/e2e/app.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-SET-03 | Apple HIG/Google Material 최소 터치 영역. 인라인 링크·네이티브 체크박스/라디오(라벨이 타깃)는 면제 — 기준선 축소로 점진 개선 | E2E 테스트 | — | css/ui-overlay.css | tests/e2e/app.spec.js<br>tests/e2e/mobile-overflow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-SET-04 | 사용자가 "몇 버전인지" 문의할 때 유일한 확인 경로. SW 등록 스크립트 URL에서 버전 자동 추출 | E2E 테스트 | — | css/ui-overlay.css | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-SET-05 | 일관된 드롭다운 UX | E2E 테스트 | — | css/ui-overlay.css<br>src/views/listeners-app.js | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
-| UX-VFY-01 | 요구사양 없는 UI 변경은 추적·리뷰 불가 — TR-21~23처럼 선 정의 후 구현하는 관행을 규약화 | 문서 검토 | DOC-RBK-11 | — | — | — | — |
-| UX-VFY-02 | jsdom은 레이아웃을 계산하지 않으므로 DOM/단위 테스트로는 기하 요구사항을 검증할 수 없음 | E2E 테스트 | DOC-RBK-11 | — | tests/e2e/mobile-overflow.spec.js | — | — |
-| UX-VFY-03 | 신규 UI/UX 요구사항은 E2E와 함께 진입 — 기존 백로그(규약형 다수)는 기준선 승계 후 점진 축소 | 문서 검토 | DOC-RBK-11 | — | — | — | — |
-| UX-VFY-04 | 선언이 아닌 계측으로 증명 — 리더 개선(349→527→652px)처럼 전후 수치를 이력에 남김 | 문서 검토 | DOC-RBK-11 | — | — | — | — |
-| UX-VFY-05 | SW Cache First로 즉시 반영되지 않고(UX-PWA-03), 기기별 뷰포트·safe-area는 로컬 에뮬레이션과 다를 수 있음 | 문서 검토 | DOC-RBK-11 | — | — | — | — |
-| UX-VFY-06 | E2E 스윕이 런타임 실측이라면 체커는 패턴 기반 조기 차단 — 마크업만 봐도 새 다이얼로그·버튼 행의 잘림 위험을 알 수 있음. 자체 스크롤 계약(more-sheet·리더 표 모달 등)은 예외 목록에 사유와 함께 선언, 의도된 nowrap은 `data-msafe-ok`로 명시적 면제 | 테스트 | — | tools/check/check_mobile_safe.js | tests/dom/common-a11y.dom.test.js | — | — |
+| UX-SET-01 | 헤더에 아이콘 버튼을 늘리면 모바일에서 제목과 경쟁. 자주 쓰지 않는 토글(가로/세로 보기 등)은 설정 안으로 이동 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css | tests/e2e/app.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-SET-02 | 항목이 늘어나도 뷰포트를 넘지 않음. 없으면 소형 기기에서 하단 항목이 잘림 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css | tests/e2e/app.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-SET-03 | Apple HIG/Google Material 최소 터치 영역. 인라인 링크·네이티브 체크박스/라디오(라벨이 타깃)는 면제 — 기준선 축소로 점진 개선 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css | tests/e2e/app.spec.js<br>tests/e2e/mobile-overflow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-SET-04 | 사용자가 "몇 버전인지" 문의할 때 유일한 확인 경로. SW 등록 스크립트 URL에서 버전 자동 추출 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-SET-05 | 일관된 드롭다운 UX | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/views/listeners-app.js | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
+| UX-VFY-01 | 요구사양 없는 UI 변경은 추적·리뷰 불가 — TR-21~23처럼 선 정의 후 구현하는 관행을 규약화 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
+| UX-VFY-02 | jsdom은 레이아웃을 계산하지 않으므로 DOM/단위 테스트로는 기하 요구사항을 검증할 수 없음 | E2E 테스트 | DOC-DSN-25<br>DOC-RBK-11 | — | tests/e2e/mobile-overflow.spec.js | — | — |
+| UX-VFY-03 | 신규 UI/UX 요구사항은 E2E와 함께 진입 — 기존 백로그(규약형 다수)는 기준선 승계 후 점진 축소 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
+| UX-VFY-04 | 선언이 아닌 계측으로 증명 — 리더 개선(349→527→652px)처럼 전후 수치를 이력에 남김 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
+| UX-VFY-05 | SW Cache First로 즉시 반영되지 않고(UX-PWA-03), 기기별 뷰포트·safe-area는 로컬 에뮬레이션과 다를 수 있음 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
+| UX-VFY-06 | E2E 스윕이 런타임 실측이라면 체커는 패턴 기반 조기 차단 — 마크업만 봐도 새 다이얼로그·버튼 행의 잘림 위험을 알 수 있음. 자체 스크롤 계약(more-sheet·리더 표 모달 등)은 예외 목록에 사유와 함께 선언, 의도된 nowrap은 `data-msafe-ok`로 명시적 면제 | 테스트 | DOC-DSN-25 | tools/check/check_mobile_safe.js | tests/dom/common-a11y.dom.test.js | — | — |
 
 ## 5.1 데이터 아키텍처
 
@@ -793,6 +793,7 @@
 | DOC-DSN-22 | docs/dev/design/LEARNING_UX_PHASE1_DESIGN.md | DR-04, DR-05, TQ-01, TQ-02, TQ-03, TQ-04, TQ-05, UX-NAV-07, UX-NAV-08, UX-NAV-13 |
 | DOC-DSN-23 | docs/dev/design/LEARNING_UX_PHASE15_DESIGN.md | DR-01, DR-02, ROAD-P0, ROAD-P5 |
 | DOC-DSN-24 | docs/dev/design/LEARNING_UX_PHASE2_DESIGN.md | DR-01, DR-02, DR-04, DR-05, ROAD-L5, ROAD-P5, RV-02, RV-03, TQ-01, TQ-02, TQ-03, TQ-04, TQ-05, UX-GATE-01, UX-GATE-02, UX-GATE-03, UX-MET-01, UX-MET-02, UX-MET-03, UX-MET-04, UX-NAV-12, UX-NAV-13, UX-NAV-14 |
+| DOC-DSN-25 | docs/dev/design/UIUX_DESIGN_GUIDE.md | A-01, A-02, A-03, A-04, A-05, A-06, A-07, ES-02, R-01, R-02, R-03, R-04, R-05, R-06, R-07, R-08, TH-01, TH-02, TH-03, TH-04, TH-05, TH-06, UM-01, UM-02, UM-03, UM-04, UM-05, UX-FB-01, UX-FB-02, UX-FB-03, UX-FB-04, UX-FB-05, UX-FB-06, UX-FB-07, UX-FORM-01, UX-FORM-02, UX-NAV-01, UX-NAV-02, UX-NAV-03, UX-NAV-04, UX-NAV-05, UX-NAV-06, UX-NAV-07, UX-NAV-08, UX-NAV-09, UX-NAV-10, UX-NAV-11, UX-NAV-12, UX-NAV-13, UX-NAV-14, UX-PWA-01, UX-PWA-02, UX-PWA-03, UX-PWA-04, UX-PWA-05, UX-SCR-01, UX-SCR-02, UX-SET-01, UX-SET-02, UX-SET-03, UX-SET-04, UX-SET-05, UX-VFY-01, UX-VFY-02, UX-VFY-03, UX-VFY-04, UX-VFY-05, UX-VFY-06 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |
