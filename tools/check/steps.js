@@ -49,6 +49,7 @@ const DOCS_STEPS = [
   nodeStep('docs:plan', 'tools/check/check_plan_features.js', '문서', 'feature-plan 키 ↔ 코드 사용 ↔ 로드맵 정합'),
   nodeStep('docs:featflags', 'tools/check/check_feature_flags.js', '문서', 'exams.json features 키 ↔ 코드 사용 정합'),
   nodeStep('docs:storage', 'tools/check/check_storage_access.js', '문서', 'localStorage 직접 접근 탐지 (storage.js 우회 차단)', { diffScoped: true }),
+  nodeStep('docs:seedkeys', 'tools/check/check_seed_keys.js', '문서', '테스트 시드 키 ↔ GLOBAL_KEYS 스코프 정합 (스코프 시드 무력화 차단)'),
   nodeStep('docs:notes', 'tools/check/check_release_notes.js', '문서', '릴리스 노트 스키마·버전 해시·APP_VERSION 정합'),
   nodeStep('docs:ciparity', 'tools/check/check_ci_parity.js', '문서', 'ci.yml 워크플로 ↔ check:ci 프리셋 양방향 정합'),
 ];
