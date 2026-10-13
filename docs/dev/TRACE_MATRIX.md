@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: a923972ec21f5af0
+> 입력 해시: 96df1f4f2ef679b6
 > 생성: 2026-10-13 · 원천: SPEC.md(507개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 507개 — 문서 연결 369 · 소스 연결 457 · 테스트 연결 489 · 보고서 연결 109
+**커버리지 요약**: 요구사항 507개 — 문서 연결 369 · 소스 연결 458 · 테스트 연결 490 · 보고서 연결 109
 
 ---
 
@@ -46,7 +46,7 @@
 | D-19 | ✅ | 테스트 | DOC-DSN-26<br>DOC-DSN-27<br>DOC-DSN-28 | src/spaced-repetition.js | tests/unit/fsrs.test.js<br>tests/unit/today-queue.test.js | — | — |
 | D-20 | ✅ | 테스트 | DOC-DSN-28 | src/spaced-repetition.js | tests/unit/fsrs.test.js | — | — |
 | D-21 | ✅ | 테스트 | DOC-DSN-29 | src/analysis-engine.js | tests/unit/analysis-engine.test.js | — | — |
-| D-22 | ⏳ | 문서 검토 | DOC-DSN-29 | — | — | — | — |
+| D-22 | ⏳ | 테스트 | DOC-DSN-29 | src/spaced-repetition.js<br>src/views/exam-sim-arena.js<br>src/views/quiz.js | tests/unit/fsrs.test.js | — | — |
 | TQ-01 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24<br>DOC-DSN-26 | src/views/dashboard-queue.js<br>src/views/dashboard.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |
 | TQ-02 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | src/views/dashboard-queue.js | tests/unit/today-queue.test.js | — | — |
 | TQ-03 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | src/views/dashboard-queue.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |

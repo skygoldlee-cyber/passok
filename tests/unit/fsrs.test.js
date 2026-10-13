@@ -1,5 +1,5 @@
 // tests/unit/fsrs.test.js — FSRS-6 순수 함수 + 어댑터 검증
-// @spec F-07,F-08,F-09,F-11,D-18,D-19,D-20
+// @spec F-07,F-08,F-09,F-11,D-18,D-19,D-20,D-22
 // DSR 상태 전이·망각 곡선·SM-2 지연 마이그레이션을 결정론적으로 검증한다.
 
 import { test, beforeEach, afterEach } from 'node:test';
@@ -337,4 +337,30 @@ test('D-20: 클램프된 카드는 D-19 위험 집합에서 제외된다 (due≤
     updateCardSchedule('pulled', true);
     const risk = getExamRiskCards(10);
     assert.ok(!risk.some(r => r.id === 'pulled'), 'exam−1 due는 시험 전 예정 복습 — 사각지대 해소');
+});
+
+// ---------- D-22 선행: 퀴즈 판정 시퀀스 로그 ----------
+
+test('D-22: recordQuizJudgment가 {c,k:q,ok,t} 레코드를 로그에 append한다', async () => {
+    const { recordQuizJudgment } = await import('../../src/spaced-repetition.js');
+    recordQuizJudgment('subject1_q21', true);
+    recordQuizJudgment('subject2_q5', false);
+    updateCardSchedule('card_x', true);  // 스케줄 이벤트와 혼합
+    const log = getReviewLog();
+    assert.equal(log.length, 3);
+    assert.deepEqual({ c: log[0].c, k: log[0].k, ok: log[0].ok }, { c: 'subject1_q21', k: 'q', ok: 1 });
+    assert.equal(log[1].ok, 0);
+    assert.ok(log[0].t > 0 && !('r' in log[0]), '퀴즈 레코드는 레이팅 필드 없음');
+    assert.equal(log[2].r, Rating.GOOD, '스케줄 이벤트는 k 없이 기존 스키마 유지');
+});
+
+test('D-22: 퀴즈·스케줄 레코드가 단일 시계열 링버퍼를 공유한다', async () => {
+    const { recordQuizJudgment } = await import('../../src/spaced-repetition.js');
+    const logKey = 'simexam:' + STORAGE_KEYS.FC_REVIEW_LOG;
+    const seed = Array.from({ length: 2000 }, (_, i) => ({ c: `old_${i}`, r: 3, e: 0, t: i }));
+    mockStorage._store[logKey] = JSON.stringify(seed);
+    recordQuizJudgment('q_new', true);
+    const log = getReviewLog();
+    assert.equal(log.length, 2000);
+    assert.equal(log[1999].k, 'q', 'FIFO 상한 공유 — 퀴즈 레코드도 같은 버퍼');
 });
