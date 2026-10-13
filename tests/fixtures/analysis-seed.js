@@ -9,6 +9,7 @@
 //   spaced-repetition.js               — fc_spaced_repetition {nextReview:'YYYY-MM-DD'}
 //   study-tracker.js                   — study_calendar {cards,quizzes,correct,h}·study_goals·exam_date
 //   recommendations.js                 — actual_exam_result {passed,score,expectedAtReport}
+//   spaced-repetition.js appendReviewLog — fc_review_log [{c,r,e,t}|{c,k:'q',ok,t}] (D-22)
 //   pro-upgrade.js                     — pro_notice_seen (Pro 기능 1회 안내 스킵용)
 // 진도 키는 모두 시험 네임스페이스(`${examId}:` 접두사 — exam-context.js scopedKey).
 // 날짜는 모두 호출 시점 기준 상대일 — 주간 비교·D-day·최근 7일 집계가
@@ -40,7 +41,9 @@ export function analysisBootKeys(examId = 'cosmetic') {
         'current_exam': examId,
         'onboarding_seen_v1': '1',
         [`${examId}:onboarding_seen_v1`]: '1',
-        [`${examId}:pro_notice_seen`]: JSON.stringify({ personal_analysis: '2026-01-01T00:00:00.000Z' })
+        // pro_notice_seen은 GLOBAL_KEYS — 시험 스코프 없이 루트 키로 쓰인다 (ROAD-P5 전역 수렴).
+        // `_global` 마커: 기능별 seen 맵의 단일 수렴 키 (pro-upgrade.js proFeatureNotice)
+        'pro_notice_seen': JSON.stringify({ _global: '2026-01-01T00:00' })
     };
 }
 
@@ -156,6 +159,27 @@ export function buildAnalysisSeed(examId = 'cosmetic') {
     }
 
     return seed;
+}
+
+/**
+ * 판정 시퀀스 로그 시드 (D-22) — 단원 BKT 숙달 추정의 관측 입력.
+ * law_st_e2e01(L350 → law 'Chapter 01')에 OX 정판 3연속을 심으면
+ * Beta 카운트 추정(~40%)이 BKT P(L) ~96%로 회복된다 — 카드의 `숙달 %`로 검증.
+ * 카드 자기평가 레코드(비멤버 id)는 소비자가 제외해야 함 — 미추적 id 1건 혼입.
+ * @param {string} [examId]
+ * @returns {Object<string,string>} localStorage 키→값
+ */
+export function buildReviewLogSeed(examId = 'cosmetic') {
+    const P = (k) => `${examId}:${k}`;
+    const ts = Date.now();
+    return {
+        [P('fc_review_log')]: JSON.stringify([
+            { c: 'law_st_e2e01', r: 3, e: 1, t: ts - 3 * 3600e3 }, // OX 정판 (Rating.GOOD)
+            { c: 'law_st_e2e01', r: 3, e: 1, t: ts - 2 * 3600e3 },
+            { c: 'law_st_e2e01', r: 3, e: 1, t: ts - 1 * 3600e3 },
+            { c: 'card_untracked_1', r: 3, e: 2, t: ts - 500e3 }   // 비멤버 — BKT 제외 대상
+        ])
+    };
 }
 
 /**
