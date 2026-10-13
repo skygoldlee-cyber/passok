@@ -93,6 +93,7 @@ user_manual.md(앱 내) → 학습안내서(앱 내) → exams/cosmetic/user/exa
 docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
+├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
 ├── dev/                         ← 플랫폼 공통 개발 문서 (54개)
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (4개 — README + ADR 3건)
@@ -123,6 +124,7 @@ docs/
 |------|------|
 | [ARCHITECTURE.md](dev/ARCHITECTURE.md) | 시스템 아키텍처·설계 철학 — Local-First + 선택적 클라우드, ESM 구조, 데이터 흐름, PWA/SW 전략, 계정·동기화, UI 모드, Formula OS, 배포 파이프라인, 구현 레시피, 강건성 가이드라인 |
 | [DOC_CONVENTIONS.md](DOC_CONVENTIONS.md) | 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 규약 + 게이트 매핑 (DOC-DEV-08) |
+| [CODE_CONVENTIONS.md](CODE_CONVENTIONS.md) | 코드 규약 정본 — 파일 계층·명칭·금지 패턴·저장소/UI/추적성 규약 + 규약→게이트 매핑 (DOC-DEV-09) |
 | [SPEC.md](dev/SPEC.md) | 요구사양 명세서 — 구현된 기능을 역공학해 정리 (현행 기준서) |
 | [TRACE_MATRIX.md](dev/TRACE_MATRIX.md) | SPEC↔코드 추적 매트릭스 — 요구사항별 @spec 태그·테스트·문서 매핑 (자동 생성 — `npm run build:trace`) |
 | [adr/](dev/adr/README.md) | 아키텍처 결정 기록 — 대안 검토·트레이드오프 등 결정의 "왜" 보존 (색인 README + ADR 3건) |
@@ -318,6 +320,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DEV-05 | `docs/exams/cosmetic/ingredients_audit_제2026-19호.md` |
 | DOC-DEV-07 | `docs/dev/UIUX_외주전달_패키지.md` |
 | DOC-DEV-08 | `docs/DOC_CONVENTIONS.md` |
+| DOC-DEV-09 | `docs/CODE_CONVENTIONS.md` |
 | DOC-DSN-01 | `docs/dev/design/DOM_TEST_DESIGN.md` |
 | DOC-DSN-02 | `docs/exams/cosmetic/design/FORMULA_OS_WORKFLOW_DESIGN.md` |
 | DOC-DSN-03 | `docs/dev/design/LEARNING_PREMIUM_PLAN.md` |

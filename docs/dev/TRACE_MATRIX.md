@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 0313e66eff380ba1
+> 입력 해시: 68b65a1af908c875
 > 생성: 2026-10-13 · 원천: SPEC.md(501개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 501개 — 문서 연결 359 · 소스 연결 452 · 테스트 연결 483 · 보고서 연결 109
+**커버리지 요약**: 요구사항 501개 — 문서 연결 361 · 소스 연결 452 · 테스트 연결 483 · 보고서 연결 109
 
 ---
 
@@ -507,7 +507,7 @@
 | S-02 | ✅ | 테스트 | — | src/app.js<br>src/views/event-listeners.js<br>src/views/listeners-delegation.js | tests/dom/common-eventlisteners.dom.test.js | — | — |
 | S-03 | ✅ | 테스트 | — | src/app.js<br>src/views/event-listeners.js<br>src/views/listeners-delegation.js | tests/dom/common-eventlisteners.dom.test.js | — | — |
 | S-04 | ✅ | 테스트 | — | — | tests/unit/delegation-guard.test.js | — | — |
-| S-05 | ✅ | 테스트 | — | src/sanitize.js<br>tools/check/check_html_escape.js | tests/unit/sanitize.test.js | — | — |
+| S-05 | ✅ | 테스트 | DOC-DEV-09 | src/sanitize.js<br>tools/check/check_html_escape.js | tests/unit/sanitize.test.js | — | — |
 | S-06 | ✅ | 테스트 | — | src/storage-keys.js<br>src/views/backup.js | tests/dom/backup.dom.test.js | — | — |
 | S-07 | ✅ | 테스트 | — | index.html | tests/unit/security.test.js | — | — |
 | S-08 | ✅ | 테스트 | — | src/app.js | tests/unit/security.test.js | — | — |
@@ -617,7 +617,7 @@
 | UX-VFY-03 | 신규 UI/UX 요구사항은 E2E와 함께 진입 — 기존 백로그(규약형 다수)는 기준선 승계 후 점진 축소 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
 | UX-VFY-04 | 선언이 아닌 계측으로 증명 — 리더 개선(349→527→652px)처럼 전후 수치를 이력에 남김 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
 | UX-VFY-05 | SW Cache First로 즉시 반영되지 않고(UX-PWA-03), 기기별 뷰포트·safe-area는 로컬 에뮬레이션과 다를 수 있음 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
-| UX-VFY-06 | E2E 스윕이 런타임 실측이라면 체커는 패턴 기반 조기 차단 — 마크업만 봐도 새 다이얼로그·버튼 행의 잘림 위험을 알 수 있음. 자체 스크롤 계약(more-sheet·리더 표 모달 등)은 예외 목록에 사유와 함께 선언, 의도된 nowrap은 `data-msafe-ok`로 명시적 면제 | 테스트 | DOC-DSN-25 | tools/check/check_mobile_safe.js | tests/dom/common-a11y.dom.test.js | — | — |
+| UX-VFY-06 | E2E 스윕이 런타임 실측이라면 체커는 패턴 기반 조기 차단 — 마크업만 봐도 새 다이얼로그·버튼 행의 잘림 위험을 알 수 있음. 자체 스크롤 계약(more-sheet·리더 표 모달 등)은 예외 목록에 사유와 함께 선언, 의도된 nowrap은 `data-msafe-ok`로 명시적 면제 | 테스트 | DOC-DEV-09<br>DOC-DSN-25 | tools/check/check_mobile_safe.js | tests/dom/common-a11y.dom.test.js | — | — |
 
 ## 5.1 데이터 아키텍처
 
@@ -627,15 +627,15 @@
 | DA-02 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-20<br>DOC-RBK-03<br>DOC-REF-08 | src/data-loader.js<br>tools/build/index.js | tests/unit/data-architecture.test.js | — | — |
 | DA-03 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | src/data-loader.js | tests/unit/data-loader.test.js | — | — |
 | DA-04 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | tools/build/build_study_md_bundle.js | tests/unit/data-architecture.test.js | — | — |
-| DA-05 | ✅ | 테스트 | DOC-DSN-19<br>DOC-RBK-03<br>DOC-REF-08 | src/state.js<br>src/storage.js | tests/unit/state.test.js | — | — |
+| DA-05 | ✅ | 테스트 | DOC-DEV-09<br>DOC-DSN-19<br>DOC-RBK-03<br>DOC-REF-08 | src/state.js<br>src/storage.js | tests/unit/state.test.js | — | — |
 | DA-06 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-18<br>DOC-RBK-03<br>DOC-REF-08 | src/exam-context.js<br>src/paths.js<br>src/pwa-manifest.js<br>tools/build/exam_targets.js<br>…외 1개 | tests/unit/data-architecture.test.js | — | — |
-| DA-07 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-03<br>DOC-REF-08 | src/exam-context.js<br>src/storage-keys.js<br>src/storage.js | tests/unit/storage-key-sync.test.js | — | — |
+| DA-07 | ✅ | 테스트 | DOC-DEV-09<br>DOC-DSN-10<br>DOC-RBK-03<br>DOC-REF-08 | src/exam-context.js<br>src/storage-keys.js<br>src/storage.js | tests/unit/storage-key-sync.test.js | — | — |
 | DA-08 | ✅ | 테스트 | DOC-DSN-08<br>DOC-DSN-10<br>DOC-DSN-18<br>DOC-DSN-19<br>…외 2개 | src/exam-context.js | tests/unit/data-architecture.test.js | — | — |
-| DA-09 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | src/storage.js | tests/unit/storage.test.js | — | — |
+| DA-09 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-03<br>DOC-REF-08 | src/storage.js | tests/unit/storage.test.js | — | — |
 | DA-10 | ✅ | 테스트 | — | src/exams/cosmetic/customer-store.js<br>src/sync.js | tests/unit/exams/cosmetic/customer-store.test.js | — | 개인정보보호법 — 상동 (조제관리사가 고객 개인정보를 클라우드에 올리지 않는 설계) |
 | DA-11 | ✅ | 테스트 | DOC-RBK-10 | tools/check/check_domain_map.js | tests/unit/multi-exam-gates.test.js | — | — |
-| DA-12 | ✅ | 테스트 | DOC-RBK-10 | tools/check/check_uitext.js | tests/unit/multi-exam-gates.test.js | — | — |
-| DA-13 | ✅ | E2E 테스트 | DOC-DEV-08 | — | tests/e2e/exam-switch.spec.js | — | — |
+| DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | tools/check/check_uitext.js | tests/unit/multi-exam-gates.test.js | — | — |
+| DA-13 | ✅ | E2E 테스트 | DOC-DEV-08<br>DOC-DEV-09 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/app-shell.js<br>src/pwa-manifest.js | tests/unit/exam-context.test.js | — | — |
 
 ## 5.2 안정적 ID 체계
@@ -646,7 +646,7 @@
 | ID-02 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-08<br>DOC-REF-03<br>DOC-REF-05 | src/sha256.js<br>tools/build/id_factory.js | tests/unit/id-factory.test.js<br>tests/unit/sha256.test.js | — | — |
 | ID-03 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-08<br>DOC-REF-03<br>DOC-REF-05 | tools/build/id_factory.js | tests/unit/id-factory.test.js | — | — |
 | ID-04 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-08<br>DOC-REF-03<br>DOC-REF-05 | tools/build/build_id_migration.js<br>tools/build/id_factory.js | tests/unit/id-factory.test.js | — | — |
-| ID-05 | ✅ | 테스트 | — | tools/check/check_position_independence.js | tests/unit/posindep.test.js | — | — |
+| ID-05 | ✅ | 테스트 | DOC-DEV-09 | tools/check/check_position_independence.js | tests/unit/posindep.test.js | — | — |
 
 ## 5.3 빌드 파이프라인
 
@@ -770,6 +770,7 @@
 | DOC-DEV-05 | docs/exams/cosmetic/ingredients_audit_제2026-19호.md | DI-05, FO-05, FO-24, RR-19 |
 | DOC-DEV-07 | docs/dev/UIUX_외주전달_패키지.md | — |
 | DOC-DEV-08 | docs/DOC_CONVENTIONS.md | DA-13 |
+| DOC-DEV-09 | docs/CODE_CONVENTIONS.md | DA-05, DA-07, DA-09, DA-12, DA-13, ID-05, S-05, UX-VFY-06 |
 | DOC-DSN-01 | docs/dev/design/DOM_TEST_DESIGN.md | A-01, A-02, A-03, A-04, A-05, A-06, A-07, R-01, R-02, R-03, R-04, R-05, R-06, R-07, R-08, R-09, TH-01, TH-02, TH-03, TH-04, TH-05, TH-06, UM-01, UM-02, UM-03, UM-04, UM-05, UX-NAV-01, UX-NAV-02, UX-NAV-03, UX-NAV-04, UX-NAV-05, UX-NAV-06, UX-NAV-07 |
 | DOC-DSN-02 | docs/exams/cosmetic/design/FORMULA_OS_WORKFLOW_DESIGN.md | FO-01, FO-02, FO-03, FO-04, FO-05, FO-06, FO-07, FO-08, FO-09, FO-10, FO-11, FO-12, FO-13, FO-14, FO-15, FO-16, FO-17, FO-18, FO-19, FO-20, FO-21, FO-22, FO-23, UM-01, UM-02, UM-03, UM-04, UM-05 |
 | DOC-DSN-03 | docs/dev/design/LEARNING_PREMIUM_PLAN.md | AN-01, AN-02, AN-03, ROAD-P0 |
