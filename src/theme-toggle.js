@@ -4,7 +4,7 @@ import { STORAGE_KEYS } from './storage-keys.js';
 import { safeGetItem, safeSetItem } from './state.js';
 
 /**
- * 헤더/모바일 테마 토글 버튼을 초기화하고 전역 테마 API를 노출합니다.
+ * 헤더 테마 토글 버튼을 초기화하고 전역 테마 API를 노출합니다.
  */
 export function setupThemeToggle() {
     const root = document.documentElement;
@@ -31,17 +31,6 @@ export function setupThemeToggle() {
     syncHeaderBtn();
     document.addEventListener('themechange', syncHeaderBtn);
     if (btn) btn.addEventListener('click', toggle);
-
-    // 모바일 하단 탭 바의 테마 토글
-    const mBtn = document.getElementById('mobile-theme-toggle');
-    function syncMobileBtn() {
-        if (!mBtn) return;
-        const i = mBtn.querySelector('i');
-        if (i) i.className = isLight() ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-    }
-    syncMobileBtn();
-    document.addEventListener('themechange', syncMobileBtn);
-    if (mBtn) mBtn.addEventListener('click', toggle);
 
     // 사용자가 수동 선택하지 않았을 때만 시스템 테마 변경을 따라감
     if (window.matchMedia) {
