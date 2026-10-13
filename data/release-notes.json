@@ -1,5 +1,12 @@
 [
   {
+    "version": "v20261013-4730963",
+    "date": "2026-10-13",
+    "notes": [
+      "[정리] TRACE 재생성 + CACHE_VERSION 스탬프 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261013-0c3af0a",
     "date": "2026-10-13",
     "notes": [
@@ -139,15 +146,6 @@
     "date": "2026-10-13",
     "notes": [
       "[수정·dashboard] 시험일 설정 중복 CTA 해소 — 큐가 액션 단독 소유 (SC-10, TQ-03)"
-    ]
-  },
-  {
-    "version": "v20261013-c4f10ce",
-    "date": "2026-10-13",
-    "notes": [
-      "[문서·manual] Phase 1.5 반영 — 훈련소 메뉴 2그룹·Pro 안내 수렴 문구 정합",
-      "[기능·trainer,pro] 훈련소 메뉴 2그룹 재편 + Pro 안내 전역 1회 수렴 (UX-NAV-14, ROAD-P5)",
-      "[문서] 학습 표면 단순화 Phase 1.5 설계안 DOC-DSN-23 — 훈련소 메뉴 재편 + Pro 안내 수렴"
     ]
   }
 ]
