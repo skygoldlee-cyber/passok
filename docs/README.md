@@ -111,7 +111,7 @@ docs/
 
 ### 🗂️ 문서 분류·배치 규칙
 
-문서가 `dev/`와 `exams/<id>/` 양쪽에 나뉘어 있는 것은 **의도된 도메인 격리**다 — 플랫폼 공통은 `docs/dev/`, 시험 종속은 `docs/exams/<id>/`(DA-13). 버킷별 판정 기준·판정 순서·명칭 규약의 정본은 **[DOC_CONVENTIONS.md](DOC_CONVENTIONS.md)** — 요약: `design/`=설계 의도(설계안·가이드·계획·흐름 명세) / `reference/`=현행 기술 명세 / `runbooks/`=실행 절차 / `adr/`=결정 기록 / `report_archive/`=앱 미참조 스냅샷·대체된 원전 / 시험 루트=분류 예외 / `content/exams/<id>/docs/`=앱 번들 문서.
+문서가 `dev/`와 `exams/<id>/` 양쪽에 나뉘어 있는 것은 **의도된 도메인 격리**다 — 플랫폼 공통은 `docs/dev/`, 시험 종속은 `docs/exams/<id>/`(DA-13). 버킷별 판정 기준·판정 순서·명칭 규약의 정본은 **[DOC_CONVENTIONS.md](DOC_CONVENTIONS.md)** — 요약: `design/`=설계 의도(설계안·가이드·계획·흐름 명세) / `reference/`=현행 기술 명세 / `runbooks/`=실행 절차 / `adr/`=결정 기록 / `report_archive/`=앱 런타임·콘텐츠 미참조 스냅샷·대체된 원전 / 시험 루트=분류 예외 / `content/exams/<id>/docs/`=앱 번들 문서.
 
 ---
 
@@ -248,7 +248,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 
 ## 🗄️ 아카이브 (docs/exams/cosmetic/report_archive/)
 
-1회성 분석 보고서 + **대체된 전략/설계 원전** — 앱 코드에서 참조하지 않음. 이력·설계 근거 보관용.
+1회성 분석 보고서 + **대체된 전략/설계 원전** — 앱 런타임·콘텐츠에서 참조하지 않음 (소스 주석의 설계 근거 인용은 허용 — [DOC_CONVENTIONS.md](DOC_CONVENTIONS.md) §3). 이력·설계 근거 보관용.
 
 | 문서 | 설명 |
 |------|------|
