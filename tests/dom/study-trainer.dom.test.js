@@ -2,7 +2,7 @@
 // @spec T-01~05
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.2 (Phase 4)
 // 검증: 메뉴/서브뷰 전이(R) · 수치 훈련 채점(H) · 계산 연습 정답/오답/비수치(X)
-//       · 원료 챌린지 객관식(H/B) · 취약 진술 집계·리뷰(H)
+//       · 원료 챌린지 객관식(H/B) — 취약 진술 리뷰는 study-review.dom.test.js (RV-02)
 // 스크래치패드는 jsdom canvas 미지원으로 모킹
 
 import { describe, it, beforeEach, expect, vi } from 'vitest';
@@ -36,11 +36,10 @@ import {
 import { startCalcPractice, submitCalcAnswer } from '../../src/views/trainer-calc-practice.js';
 import { startIngredientsChallenge } from '../../src/exams/cosmetic/views/trainer-ingredients.js';
 import { DataLoader } from '../../src/data-loader.js';
-import { openWeakReview } from '../../src/views/trainer-drills.js';
-import { recordStatementJudgments } from '../../src/statement-tracker.js';
+import { openOxDrillSetup } from '../../src/views/trainer-drills.js';
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
 
-describe('훈련소 — 수치·계산·원료·취약 리뷰', () => {
+describe('훈련소 — 수치·계산·원료', () => {
     // 선택지 버튼의 표시 문자열("<값><단위> 이하/이상")에서 원본 수치만 추출 —
     // '5'가 '50'·'0.5'에 부분문자열로 매칭되는 오선택을 방지 (flaky 원인)
     function limitsOptValue(btn, unit) {
@@ -75,7 +74,7 @@ describe('훈련소 — 수치·계산·원료·취약 리뷰', () => {
         initTrainer();
         expect(isVisible('trainer-menu-panel')).toBe(true);
         ['trainer-limits-panel', 'trainer-calc-panel', 'trainer-ingredients-panel',
-            'trainer-oxdrill-panel', 'trainer-combo-panel', 'trainer-weak-panel']
+            'trainer-oxdrill-panel', 'trainer-combo-panel']
             .forEach(id => expect(el(id).classList.contains('is-hidden')).toBe(true));
     });
 
@@ -200,31 +199,15 @@ describe('훈련소 — 수치·계산·원료·취약 리뷰', () => {
         expect(el('trainer-menu-panel').classList.contains('is-hidden')).toBe(false);
     });
 
-    it('취약 리뷰 → 오판 시딩 시 취약 진술 목록·요약 렌더', () => {
-        recordStatementJudgments([
-            { sid: 'subja_s1', judgedCorrect: false },
-            { sid: 'subja_s1', judgedCorrect: false },
-            { sid: 'subja_s2', judgedCorrect: true },
-        ]);
-        openWeakReview();
-
-        expect(isVisible('trainer-weak-panel')).toBe(true);
-        expect(el('weak-summary').textContent).toContain('취약 진술');
-        expect(el('weak-list').textContent).toContain('오판');
-        expect(el('weak-list').querySelectorAll('.weak-row').length).toBe(1);
-    });
-
-    it('취약 리뷰 비어있음 → 안내 문구 (E)', () => {
-        openWeakReview();
-        expect(el('weak-summary').textContent).toContain('오판 이력이 없습니다');
-    });
+    // 취약 진술 리뷰 테스트는 복습 뷰 이관과 함께
+    // tests/dom/study-review.dom.test.js로 이동했다 (RV-02).
 
     it('exitTrainerSubView → 메뉴 복귀', () => {
-        openWeakReview();
-        expect(isVisible('trainer-weak-panel')).toBe(true);
+        startCalcPractice();
+        expect(isVisible('trainer-calc-panel')).toBe(true);
         exitTrainerSubView();
         expect(isVisible('trainer-menu-panel')).toBe(true);
-        expect(el('trainer-weak-panel').classList.contains('is-hidden')).toBe(true);
+        expect(el('trainer-calc-panel').classList.contains('is-hidden')).toBe(true);
     });
 
     // UX-NAV-07 — 인트라뷰 서브패널 전환 시 .main-content 스크롤 리셋
@@ -241,7 +224,7 @@ describe('훈련소 — 수치·계산·원료·취약 리뷰', () => {
         expect(mc.scrollTop).toBe(0);
 
         mc.scrollTop = 400;
-        openWeakReview();
+        openOxDrillSetup();
         expect(mc.scrollTop).toBe(0);
 
         // 서브패널 → 메뉴 복귀도 리셋

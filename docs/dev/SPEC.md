@@ -488,12 +488,15 @@
 | SC-14 | 합격 갭→목표 상향 권고 — 합격 갭 분석 카드에서 예상 점수가 합격선 미만(`gap.gap` > 0)이면 일일 목표 상향 권고 문구 + 목표 설정 버튼(`openGoalSettings`) 표시. 계획 필요량(`plan.perStudyDay`)이 일일 카드 목표를 초과하면 필요량을 권장치로 제시, 아니면 일반 권고 문구 — 진단 결과가 계획 파라미터 조정 동선으로 연결되는 피드백 루프 (`_renderPassGapInsight`) | ✅ |
 | SC-15 | 교재 일독 반영 — ① 교재 읽기를 학습 활동으로 기록: 리더 하트비트(15초 틱, `startReadingSession`)가 뷰 활성+탭 가시 상태에서 체류 시간을 누적해 `recordStudyActivity({readMin})`으로 기록 — 스크롤 없는 정독도 인정되고 뷰 이탈 시간은 오계상되지 않음. 카드·퀴즈 없는 일독일도 캘린더 학습일·주간 목표일·월간 학습일에 반영되고, 학습 패턴(`computeStudyPattern`)은 읽기 전용일을 세션 1건으로 집계 ② 일독 진척 추적: 과목당 문서를 100등분한 청크의 방문 커버리지 `reader_progress`(표준형·이야기형 동일 커버리지로 과목 키 하나에 합산) — 체류 청크만 누적해 목차·이어보기 점프가 진척을 부풀리지 않음. `getTextbookReadProgress`가 집계하며 분모는 `getActiveSubjectCount`(registry.subjects) 우선 ③ 일독 시작(`started`) 후 남은 통독 학습일 `⌈(1−진척)×readThroughDays×readDayShare⌉`(manifest `study.readThroughDays` 미선언 시 10, `study.readDayShare` 0~1 미선언 시 1=통독일 전일 대치)를 역산 학습일에서 주차 순차 차감 — 주차 행 `reading` 표기, 완료 시 자동 소멸. 미독 사용자(`started`=false)는 차감 없음 ④ 주차별 학습일을 Σmin(주간목표일, 주차 잔여일)로 합산해 말주 밀도를 정확화(기존 `⌊dday×주간일÷7⌋` 대체) (`computeStudyPlan`, `textbook-reader.js`, `check:manifest`가 study 값 범위·autoPattern 검증) | ✅ |
 | RV-01 | 오답/중요 복습 뷰 — 헷갈림 카드·틀린 문제 통합 목록 (`review-view`) | ✅ |
+| RV-02 | **취약 진술 리뷰 복습 허브 이관** — DR-05 패널을 `trainer-weak-panel` 서브패널에서 복습 뷰 `<details id="review-weak-panel">` 섹션으로 이관(기본 펼침). `openWeakReview`/`gotoWeakReview`는 복습 뷰 전환+섹션 개방으로 재지정, 레거시 `#/trainer/weak` 해시는 `initTrainer`에서 `#/review`로 리다이렉트 | ✅ |
+| RV-03 | **복습 → weak 드릴 원클릭** — 복습 뷰 헤더 `start-weak-oxdrill-btn`(취약·복습 대상 >0일 때 노출, `review-weak-badge`에 대상 수) → `gotoOxDrill('weak')`로 훈련 뷰 전환 후 `startOxDrill` weak 모드 즉시 시작. 리뷰 행·개념 그룹·유사 진술의 재시도 버튼도 `gotoOxDrill`(`sid:`·`concept:` 인자) 경유 | ✅ |
+| RV-04 | **복습 뷰 목적 문구** — "틀린·약한 것 재확인" 경계 문구를 뷰 상단에 정적 표기 (UX-NAV-13과 세트) | ✅ |
 | ND-01 | 숫자 암기 드릴 — `number-drills/` JSON 기반 수치·기한·횟수 훈련 (훈련소 수치 훈련) | ✅ |
 | DR-01 | **O/X 판정 드릴** — 객관식 문항을 진위형으로 자동 변환 (3,700+문, `build_ox_drills.js` → `drills/ox_subject*.js`, `trainer-drills.js`) | ✅ |
 | DR-02 | **복수정답형 드릴** — 진술별 O/X 토글 2단계 응시 + 판정과 모순되는 선지 실시간 소거 표시 (755문, `combo_subject*.js` + 수작업 파일럿 병합) | ✅ |
 | DR-03 | **진술 원자 추적** — 진술 `sid` 단위로 O/X·복수정답형 공유 판정 누적 (`statement_stats` + FSRS 큐, 연속 정답 3회 시 취약 졸업, `statement-tracker.js`) | ✅ |
 | DR-04 | **특수 드릴 모드** — `weak`(취약·복습 진술 필터) / `num`(수치·한도·기한 태그 필터) 전 과목 모드, 출제 수 10/20/전체 | ✅ |
-| DR-05 | **취약 진술 리뷰 패널** — conceptId 개념 그룹핑(참/거짓 혼동쌍 대조), 복습 대상 필터, 졸업 수 표시 | ✅ |
+| DR-05 | **취약 진술 리뷰 패널** — conceptId 개념 그룹핑(참/거짓 혼동쌍 대조), 복습 대상 필터, 졸업 수 표시 (표면 위치는 복습 뷰 — RV-02) | ✅ |
 | DR-06 | **복수정답형 모의고사 연동** — `startComboMockExam`으로 combo 번들→시뮬 형식 평탄화, 채점 시 `deriveComboJudgments`로 진술 판정 역산 → 취약 추적·FSRS 반영 | ✅ |
 | DR-07 | **문항 스키마 정합성** — single/combo/short/ox 4유형, `deriveComboAnswer`로 정답 도출 + `validateQuestion` 유일성 검증 (정답 오타 구조적 차단, `questions.js`) | ✅ |
 
@@ -688,6 +691,7 @@
 | UX-NAV-11 | **상호작용 요소는 다른 요소에 가려져 클릭 불가하면 안 됨**: 버튼·링크·`data-click`·입력 요소가 스크롤로 화면 안에 들어온 위치에서 `elementFromPoint`가 그 요소(또는 자식)를 반환해야 함 — 탭 바·고정 오버레이·이웃 카드에 덮인 "보이는데 못 누르는" 상태 금지 | UX-NAV-05의 실측 확장 — 탭 바 위치 계약을 요소 단위로 검증. 스크롤 컨테이너 가장자리 클립은 스크롤로 도달 가능하므로 예외, 일시 오버레이(토스트·오프라인 배너)는 소멸성이라 예외. E2E(`mobile-overflow.spec.js`)가 전 뷰의 상호작용 요소를 `scrollIntoView`+히트 테스트로 순회 |
 | UX-NAV-10 | **페이지 수평 오버플로 금지**: 모든 뷰에서 `documentElement.scrollWidth ≤ 뷰포트 너비`. 버튼이 나열된 행은 `flex-wrap`, flex 자식은 `min-width:0`, 깨지지 않는 긴 문자열은 `overflow-wrap:anywhere`로 처리. 스크롤 경로 없는 내부 클립(`overflow-x:hidden` + `scrollWidth>clientWidth`)도 동일하게 금지 | 성분사전 검색 행이 버튼 4개(초기화·CSV·전체 CSV·성분 추가)를 nowrap으로 나열해 모바일에서 '성분 추가'가 잘린 실사례. `text-overflow:ellipsis` 말줄임과 가로 스크롤 컨테이너(표 wrapper 등)는 의도된 클립이라 예외. E2E 스윕(`mobile-overflow.spec.js`)이 전 뷰를 프로젝트 뷰포트별로 실측 |
 | UX-NAV-12 | **내비게이션 3그룹 분류**: 사이드바·모바일 더보기 시트가 동일한 그룹 라벨로 항목을 분류 — `학습`(대시보드·학습 진단·플래시카드·기출 퀴즈) / `훈련 · 평가`(훈련소·복습·실전 모의고사) / `자료 · 도구`(교재·사전·실무·캘린더·문서). 기능 표시명은 manifest `uiText`를 원본으로 유지하며 코드 폴백·문서·테스트가 동일 용어 사용 (학습 진단·주간 배분·훈련소) | 그룹 라벨은 `index.template.html`의 `.nav-group-label` 정적 마크업 — 모바일 시트는 동일 DOM 슬롯을 공유해 분류가 대역 간 자동 일치. 표시명만 바뀌고 `data-target`·라우트 ID는 불변 |
+| UX-NAV-13 | **뷰 목적·경계 문구**: 학습 4축 뷰(퀴즈·모의고사·훈련소·복습) 상단에 한 줄 `.view-purpose` 문구로 역할 경계를 명시 — 퀴즈=단원별 연습 / 모의고사=실전 평가 / 훈련소=반복 훈련 / 복습=틀린·약한 것 재확인 | `html/views/{quiz,exam,trainer,review}.html` 정적 문구 — manifest `uiText` subtitle과 별도 본문 표기라 `check:uitext` 비대상 |
 | UX-NAV-09 | **콘텐츠 중심 뷰의 상단 크롬은 오버레이 + 방향 자동 숨김**: 읽기·뷰어처럼 본문이 목적인 화면에서 툴바·필터 등 크롬은 인플로우 배치 금지 → `position:absolute` 오버레이로 올리고, 스크롤 다운 시 `translateY+opacity`로 숨겨 본문이 뷰포트를 전부 차지하게 한다. 복귀는 스크롤 업 — 제스처 없이도 발견 가능. 진행바 등 수px 상태 표시만 상시 노출 | 인플로우 크롬은 본문 높이를 영구 잠식하고, transform만 적용한 숨김은 공간을 회수하지 못함(실측: 본문 63%→89% vh). 오버레이 시 콘텐츠 스크롤 컨테이너에 `padding-top`=크롬 높이를 줘 첫 화면이 크롬 아래 묻히지 않게 함 — 패딩은 스크롤과 함께 밀려나므로 읽는 중 잠식 0. 크롬 아래를 지나는 다른 오버레이(섹션 표시줄 등)는 `~` 시빌링 셀렉터로 숨김 상태와 위치를 연동할 것 |
 
 #### 4.8.2 스크롤바 전략

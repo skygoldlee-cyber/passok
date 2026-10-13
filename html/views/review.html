@@ -1,10 +1,12 @@
-            <!-- @spec RV-01 -->
+            <!-- @spec RV-01,RV-02,RV-03,RV-04 -->
             <section id="review-view" class="view-section">
                 <!-- Print-only Header -->
                 <div class="print-only-header is-hidden" >
                     <h2 id="review-print-title" aria-hidden="true">오답 복습노트</h2>
                     <p id="review-print-sub">Passory</p>
                 </div>
+
+                <p class="view-purpose">틀린·약한 것을 다시 확인하는 곳 — 헷갈린 카드와 드릴에서 오판한 진술이 여기에 모입니다. 반복 훈련은 훈련소, 실전 평가는 모의고사 탭에서 하세요.</p>
 
                 <div class="review-header">
                     <div class="review-stats">
@@ -13,6 +15,9 @@
                     <div class="review-actions-group btn-row">
                         <button id="start-weak-quiz-btn" class="btn btn-warning is-hidden" >
                             <i class="fa-solid fa-bolt" aria-hidden="true"></i> 헷갈린 카드 집중 퀴즈 시작
+                        </button>
+                        <button id="start-weak-oxdrill-btn" class="btn btn-primary is-hidden" data-click="gotoOxDrill" data-arg="weak">
+                            <i class="fa-solid fa-crosshairs" aria-hidden="true"></i> 취약·복습 진술 O/X 드릴 <span class="trainer-due-badge is-hidden" id="review-weak-badge"></span>
                         </button>
                         <button id="start-weak-exam-btn" class="btn btn-primary is-hidden" data-click="startWeakExam" >
                             <i class="fa-solid fa-file-signature" aria-hidden="true"></i> 헷갈린 문제 집중 모의고사 <span class="pro-badge" data-pro-feature="mock_exam">PRO</span>
@@ -38,4 +43,17 @@
                 <div class="review-card-list" id="review-cards-list-container">
                     <!-- Dynamic injection of weak cards -->
                 </div>
+
+                <!-- 취약 진술 리뷰 — O/X·ㄱㄴㄷ 드릴의 오판 진술 열람 (RV-02, 훈련소에서 이관) -->
+                <details id="review-weak-panel" class="review-weak-section" open>
+                    <summary class="review-weak-summary-line">
+                        <span><i class="fa-solid fa-crosshairs" aria-hidden="true"></i> 취약 진술 리뷰</span>
+                        <span class="badge badge-quiz-cat">진술 단위 약점</span>
+                    </summary>
+                    <div class="review-weak-body">
+                        <p id="weak-summary" style="color:var(--color-text-muted); margin-bottom:1rem;"></p>
+                        <div id="weak-mastery"></div>
+                        <div id="weak-list"></div>
+                    </div>
+                </details>
             </section>
