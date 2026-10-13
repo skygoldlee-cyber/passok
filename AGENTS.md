@@ -359,7 +359,7 @@ vendor/                 # 자체 호스팅 자산 (fonts/, fontawesome/)
 tests/                  # 테스트
   unit/                 # node --test 유닛 테스트 (도메인 테스트는 unit/exams/<id>/ 하위)
   dom/                  # Vitest + jsdom DOM 테스트 (도메인 테스트는 dom/exams/<id>/ 하위)
-docs/                   # 문서 (인덱스: docs/README.md)
+docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: docs/DOC_CONVENTIONS.md)
   dev/                  # 플랫폼 공통 개발 문서 — 아키텍처, 명세, 런북, 설계, 참조
     adr/                # 아키텍처 결정 기록 (ADR — 결정의 "왜" 보존, README.md 템플릿·규약)
   exams/cosmetic/       # 시험 종속 문서 — user·business·design·reference·report_archive (범위·판본 헤더로 선언)
@@ -416,6 +416,7 @@ docs/                   # 문서 (인덱스: docs/README.md)
 - 모든 문서는 `> **범위**: platform | exam:<id>` + `· 판본: none | textbook | refmat` 헤더로 시험·판본 종속성을 선언한다 — `check:docs`가 누락·위치 불일치를 검증. `판본: textbook`은 교재 교체 시, `판본: refmat`은 법령·고시 등 참조자료 판본 변경 시 갱신 대상. 기준 판본 라벨은 `manifest.json`의 `textbookEdition`이 선언한다(check:manifest 필수).
 - ID → 파일 매핑 레지스트리는 `docs/README.md` "문서 ID 레지스트리" 절 — 신규 문서는 해당 영역 다음 번호를 채번해 표에 등록한다.
 - `npm.cmd run check:docs`(check_doc_ids.js 포함)가 헤더 누락·형식 오류·ID 중복을 검증한다.
+- 문서 분류·명칭·배치·헤더·생명주기 규약의 정본은 `docs/DOC_CONVENTIONS.md` (DOC-DEV-08) — 신규 문서 배치 판정·버킷 정의·이동 절차는 거기를 따른다.
 
 ## 추적 매트릭스 (TRACE MATRIX)
 
