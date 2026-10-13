@@ -737,54 +737,62 @@
                         <h3>훈련소</h3>
                         <p class="view-purpose">반복 훈련 공간 — 법령 수치 암기·배합 계산·O/X 판정·ㄱㄴㄷ 조합을 드릴로 다집니다. 틀리거나 약한 진술의 재확인은 복습 탭에서 하세요.</p>
                     </div>
-                    <div class="trainer-menu-grid">
-                        <div class="trainer-menu-card" data-click="startLimitsTrainer" data-feature="limitsTrainer">
-                            <div class="trainer-card-icon icon-orange">
-                                <i class="fa-solid fa-hashtag" aria-hidden="true"></i>
+                    <!-- @spec UX-NAV-14 — 메뉴 2그룹: 기출 드릴 / 암기·실무 훈련 -->
+                    <div class="trainer-menu-group">
+                        <p class="trainer-group-label">기출 드릴 <span class="trainer-group-desc">기출 문항을 분해·변환한 판정 훈련</span></p>
+                        <div class="trainer-menu-grid">
+                            <div class="trainer-menu-card" data-click="openOxDrillSetup">
+                                <div class="trainer-card-icon icon-purple">
+                                    <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+                                </div>
+                                <h4>O/X 판정 드릴</h4>
+                                <p>기출 선지를 참/거짓 진술로 분해한 문항으로 판정 속도와 정확도를 훈련합니다. 오판 진술은 자동으로 재출제됩니다.</p>
+                                <span class="trainer-due-badge is-hidden" id="oxdrill-due-badge"></span>
+                                <span class="trainer-card-btn">드릴 시작 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
                             </div>
-                            <h4>핵심 수치 암기 마스터</h4>
-                            <p>배합 한도, 안전관리 허용 한도, 천연/유기농 비율 등 중요 법령 수치를 빈칸 채우기 4지선다형으로 훈련합니다.</p>
-                            <span class="trainer-card-btn">훈련 시작 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
-                        </div>
 
-                        <div class="trainer-menu-card" data-click="startCalcPractice" data-feature="calcPractice">
-                            <div class="trainer-card-icon icon-blue">
-                                <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+                            <div class="trainer-menu-card" data-click="openComboDrillSetup">
+                                <div class="trainer-card-icon icon-blue">
+                                    <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+                                </div>
+                                <h4>ㄱㄴㄷ 조합 훈련 <span class="pro-badge" data-pro-feature="combo_drill">PRO</span></h4>
+                                <p>기출 문항을 ㄱㄴㄷㄹ 진술 조합으로 변환한 문항으로 옳은 조합을 고르는 실전 훈련입니다. 진술별 오판이 자동 추적됩니다.</p>
+                                <span class="trainer-due-badge is-hidden" id="combo-due-badge"></span>
+                                <span class="trainer-card-btn">훈련 시작 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
                             </div>
-                            <h4>원료 배합 계산 연습기</h4>
-                            <p>기본 배합 비율, 희석 농도, 한도 내 최대 추가량 등 다양한 난수형 계산 문제를 무한 생성하여 풀이 공식을 마스터합니다.</p>
-                            <span class="trainer-card-btn">연습 시작 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
                         </div>
+                    </div>
 
-                        <div class="trainer-menu-card" data-click="startIngredientsChallenge" data-feature="ingredients">
-                            <div class="trainer-card-icon icon-green">
-                                <i class="fa-solid fa-flask" aria-hidden="true"></i>
+                    <div class="trainer-menu-group">
+                        <p class="trainer-group-label">암기 · 실무 훈련 <span class="trainer-group-desc">생성형 문항과 계산 연습으로 정밀도를 다집니다</span></p>
+                        <div class="trainer-menu-grid">
+                            <div class="trainer-menu-card" data-click="startLimitsTrainer" data-feature="limitsTrainer">
+                                <div class="trainer-card-icon icon-orange">
+                                    <i class="fa-solid fa-hashtag" aria-hidden="true"></i>
+                                </div>
+                                <h4>핵심 수치 암기 마스터</h4>
+                                <p>배합 한도, 안전관리 허용 한도, 천연/유기농 비율 등 중요 법령 수치를 빈칸 채우기 4지선다형으로 훈련합니다.</p>
+                                <span class="trainer-card-btn">훈련 시작 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
                             </div>
-                            <h4>원료 안전성 챌린지</h4>
-                            <p>사용 가능(approved), 제한(restricted), 금지(banned) 성분을 구분하고 배합한도 및 조제 적합성 문항을 정복합니다.</p>
-                            <span class="trainer-card-btn">도전 시작 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
-                        </div>
 
-                        <div class="trainer-menu-card" data-click="openOxDrillSetup">
-                            <div class="trainer-card-icon icon-purple">
-                                <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+                            <div class="trainer-menu-card" data-click="startIngredientsChallenge" data-feature="ingredients">
+                                <div class="trainer-card-icon icon-green">
+                                    <i class="fa-solid fa-flask" aria-hidden="true"></i>
+                                </div>
+                                <h4>원료 안전성 챌린지</h4>
+                                <p>사용 가능(approved), 제한(restricted), 금지(banned) 성분을 구분하고 배합한도 및 조제 적합성 문항을 정복합니다.</p>
+                                <span class="trainer-card-btn">도전 시작 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
                             </div>
-                            <h4>O/X 판정 드릴</h4>
-                            <p>기출 선지를 참/거짓 진술로 분해한 문항으로 판정 속도와 정확도를 훈련합니다. 오판 진술은 자동으로 재출제됩니다.</p>
-                            <span class="trainer-due-badge is-hidden" id="oxdrill-due-badge"></span>
-                            <span class="trainer-card-btn">드릴 시작 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
-                        </div>
 
-                        <div class="trainer-menu-card" data-click="openComboDrillSetup">
-                            <div class="trainer-card-icon icon-blue">
-                                <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+                            <div class="trainer-menu-card" data-click="startCalcPractice" data-feature="calcPractice">
+                                <div class="trainer-card-icon icon-blue">
+                                    <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+                                </div>
+                                <h4>원료 배합 계산 연습기</h4>
+                                <p>기본 배합 비율, 희석 농도, 한도 내 최대 추가량 등 다양한 난수형 계산 문제를 무한 생성하여 풀이 공식을 마스터합니다.</p>
+                                <span class="trainer-card-btn">연습 시작 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
                             </div>
-                            <h4>ㄱㄴㄷ 조합 훈련 <span class="pro-badge" data-pro-feature="combo_drill">PRO</span></h4>
-                            <p>기출 문항을 ㄱㄴㄷㄹ 진술 조합으로 변환한 문항으로 옳은 조합을 고르는 실전 훈련입니다. 진술별 오판이 자동 추적됩니다.</p>
-                            <span class="trainer-due-badge is-hidden" id="combo-due-badge"></span>
-                            <span class="trainer-card-btn">훈련 시작 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
                         </div>
-
                     </div>
                 </div>
 
