@@ -1,5 +1,5 @@
 // tests/unit/fsrs.test.js — FSRS-4.5 순수 함수 + 어댑터 검증
-// @spec F-07,F-08,F-09
+// @spec F-07,F-08,F-09,D-18,D-19
 // DSR 상태 전이·망각 곡선·SM-2 지연 마이그레이션을 결정론적으로 검증한다.
 
 import { test, beforeEach, afterEach } from 'node:test';
@@ -8,8 +8,16 @@ import {
     Rating, initDifficulty, initStability, retrievability, nextInterval,
     nextDifficulty, recallStability, fsrsReview, migrateSm2Record
 } from '../../src/fsrs.js';
-import { updateCardSchedule, getDueCards } from '../../src/spaced-repetition.js';
+import { updateCardSchedule, getDueCards, getReviewLog, getExamRiskCards } from '../../src/spaced-repetition.js';
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
+import { todayKey } from '../../src/utils.js';
+
+/** 오늘 기준 offset일 뒤/전의 'YYYY-MM-DD' */
+function dstr(offset) {
+    const d = new Date();
+    d.setDate(d.getDate() + offset);
+    return todayKey(d);
+}
 
 function createMockStorage() {
     const store = {};
@@ -136,4 +144,82 @@ test('F-07: 구 SM-2 레코드도 읽기·갱신 호환 (지연 변환)', () => 
     const rec = updateCardSchedule('old_card', true);
     assert.equal(rec.v, 2);
     assert.equal(rec.reps, 3); // rep 계승 +1
+});
+
+// ---------- D-18: 리뷰 로그 링버퍼 ----------
+
+test('D-18: updateCardSchedule이 {c,r,e,t} 레코드를 로그에 append한다', () => {
+    const logKey = 'simexam:' + STORAGE_KEYS.FC_REVIEW_LOG;
+    updateCardSchedule('suba_card_1', true);
+    updateCardSchedule('suba_card_2', false);
+    const log = getReviewLog();
+    assert.equal(log.length, 2);
+    assert.equal(log[0].c, 'suba_card_1');
+    assert.equal(log[0].r, Rating.GOOD);   // 외움 → 3
+    assert.equal(log[0].e, 0);             // 최초 학습 — 경과일 0
+    assert.equal(log[1].r, Rating.AGAIN);  // 헷갈림 → 1
+    assert.ok(Number.isFinite(log[0].t) && log[0].t > 0);
+    assert.ok(JSON.parse(mockStorage._store[logKey]).length === 2);
+});
+
+test('D-18: 경과일은 직전 복습 기준 — lastReview 5일 전 레코드는 e=5', () => {
+    const srKey = 'simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION;
+    mockStorage._store[srKey] = JSON.stringify({
+        card_a: { v: 2, d: 5, s: 5, reps: 2, lapses: 0, lastInterval: 5, due: dstr(-1), lastReview: dstr(-5) }
+    });
+    updateCardSchedule('card_a', true);
+    const log = getReviewLog();
+    assert.equal(log[0].e, 5);
+});
+
+test('D-18: 링버퍼 상한 — 2,000건 초과 시 최오래 항목부터 탈락', () => {
+    const logKey = 'simexam:' + STORAGE_KEYS.FC_REVIEW_LOG;
+    const seed = Array.from({ length: 2000 }, (_, i) => ({ c: `old_${i}`, r: 3, e: 0, t: i }));
+    mockStorage._store[logKey] = JSON.stringify(seed);
+    updateCardSchedule('new_card', true);
+    const log = getReviewLog();
+    assert.equal(log.length, 2000);
+    assert.equal(log[0].c, 'old_1');           // old_0 탈락
+    assert.equal(log[1999].c, 'new_card');
+});
+
+test('D-18: 손상된 로그는 빈 배열로 복구된다', () => {
+    mockStorage._store['simexam:' + STORAGE_KEYS.FC_REVIEW_LOG] = '{broken';
+    assert.deepEqual(getReviewLog(), []);
+    mockStorage._store['simexam:' + STORAGE_KEYS.FC_REVIEW_LOG] = '{"not":"array"}';
+    assert.deepEqual(getReviewLog(), []);
+});
+
+// ---------- D-19: 시험일 목표 R 위험 카드 ----------
+
+test('D-19: dday 미설정·음수·비수치면 빈 배열', () => {
+    assert.deepEqual(getExamRiskCards(null), []);
+    assert.deepEqual(getExamRiskCards(-3), []);
+    assert.deepEqual(getExamRiskCards(NaN), []);
+});
+
+test('D-19: due>examDate ∧ R_exam<0.85 인 카드만 선별 — due 큐·예정 복습 제외', () => {
+    const srKey = 'simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION;
+    mockStorage._store[srKey] = JSON.stringify({
+        risky:     { v: 2, d: 5, s: 2,   reps: 3, lapses: 0, lastInterval: 10, due: dstr(11), lastReview: dstr(-10) },
+        scheduled: { v: 2, d: 5, s: 2,   reps: 3, lapses: 0, lastInterval: 5,  due: dstr(5),  lastReview: dstr(-10) }, // 시험 전 복습 예정
+        duenow:    { v: 2, d: 5, s: 2,   reps: 3, lapses: 0, lastInterval: 5,  due: dstr(0),  lastReview: dstr(-10) }, // due 큐 소유
+        onexam:    { v: 2, d: 5, s: 2,   reps: 3, lapses: 0, lastInterval: 5,  due: dstr(10), lastReview: dstr(-10) }, // 시험일 당일 due
+        safe:      { v: 2, d: 5, s: 200, reps: 9, lapses: 0, lastInterval: 60, due: dstr(15), lastReview: dstr(-10) }
+    });
+    const risk = getExamRiskCards(10);
+    assert.deepEqual(risk.map(r => r.id), ['risky']);
+    assert.ok(risk[0].rExam < 0.85);
+});
+
+test('D-19: R_exam 오름차순 정렬 — 가장 잊을 카드가 먼저', () => {
+    const srKey = 'simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION;
+    mockStorage._store[srKey] = JSON.stringify({
+        less: { v: 2, d: 5, s: 8, reps: 3, lapses: 0, lastInterval: 10, due: dstr(20), lastReview: dstr(-5) },
+        most: { v: 2, d: 5, s: 2, reps: 3, lapses: 0, lastInterval: 10, due: dstr(20), lastReview: dstr(-5) }
+    });
+    const risk = getExamRiskCards(14);
+    assert.equal(risk.length, 2);
+    assert.equal(risk[0].id, 'most');
+    assert.ok(risk[0].rExam < risk[1].rExam);
 });
