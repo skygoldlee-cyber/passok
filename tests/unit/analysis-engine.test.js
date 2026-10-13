@@ -1,5 +1,5 @@
 // tests/unit/analysis-engine.test.js — 학습 진단 분석 엔진 순수 로직
-// @spec AN-01,AN-02,D-16,D-21
+// @spec AN-01,AN-02,D-16,D-21,D-22
 // 과목 무관 데이터 주입형 — 임의 과목 키로 검증 (모듈화 요구: 과목 변경 시 코드 수정 불필요)
 
 import { test } from 'node:test';
@@ -431,4 +431,59 @@ test('computeSubjectWeakChapters: 과목 정렬은 최약 단원 숙달률 기�
     assert.equal(out[0].subjectKey, 'subjB', '정답 증거 없는 과목이 최약');
     assert.equal(out[0].minMastery, out[0].chapters[0].mastery);
     assert.ok(out[0].minMastery < out[1].minMastery);
+});
+
+// ---------- D-22: BKT 시퀀스 소비자 경로 ----------
+
+test('D-22: reviewLog 시퀀스가 있으면 Beta 대신 BKT P(L)로 숙달 추정', async () => {
+    const { computeChapterWeakness } = await import(ENGINE);
+    const resolveQuiz = () => ({ quiz: { category: '2. 분류' }, subjectId: 'subjA' });
+    const quizResults = { 'subjA_quiz_01': { solved: true, correct: false } }; // 카운트 증거(오답) — 랭킹 진입 + BKT 사전
+    const reviewLog = [ // 동일 문항 정답 3연속 시퀀스 — 카운트가 못 보는 최근 숙달
+        { c: 'subjA_quiz_01', k: 'q', ok: 1, t: 1 },
+        { c: 'subjA_quiz_01', k: 'q', ok: 1, t: 2 },
+        { c: 'subjA_quiz_01', k: 'q', ok: 1, t: 3 },
+    ];
+    const p = {
+        quizResults, weakCards: new Set(), statementStats: {},
+        questionChapters: {}, chapterRanges: {}, resolveQuiz, limit: 10
+    };
+    const bkt = computeChapterWeakness({ ...p, reviewLog });
+    const beta = computeChapterWeakness(p); // 시퀀스 없음 → Beta 폴백
+    assert.equal(beta[0].mastery, 0.5, 'Beta(4,3)+오답1 → 0.5');
+    assert.ok(bkt[0].mastery > 0.95, `BKT 정답 시퀀스 반영 mastery=${bkt[0].mastery}`);
+});
+
+test('D-22: 카드 자기평가·미귀속 id는 BKT 관측에서 제외', async () => {
+    const { computeChapterWeakness } = await import(ENGINE);
+    const resolveQuiz = () => null;
+    const quizResults = { 'subjA_quiz_01': { solved: true, correct: false } };
+    const reviewLog = [
+        { c: 'subjA_card_9', r: 3, e: 0, t: 1 },  // 카드 자기평가 — 채점 증거 아님 (설계 §2.1)
+        { c: 'subjA_quiz_xx', k: 'q', ok: 1, t: 2 }, // 단원 귀속 실패 — 버림
+    ];
+    const out = computeChapterWeakness({
+        quizResults, weakCards: new Set(), statementStats: {},
+        questionChapters: { 'subjA_quiz_01': '2. 분류' }, chapterRanges: {},
+        resolveQuiz, limit: 10, reviewLog
+    });
+    assert.equal(out[0].mastery, 0.5, '제외 관측이 숙달률을 오염시키면 안 됨 (Beta 폴백과 동일)');
+});
+
+test('D-22: 진술 스케줄 이벤트(r)는 OX 관측으로 시퀀스에 포함', async () => {
+    const { computeChapterWeakness } = await import(ENGINE);
+    const statementStats = { 'subjA_st_aaa111': { j: 1, w: 1, cid: 'L210', streak: 0 } };
+    const ranges = { subjA: [[200, '2. 분류']] };
+    const reviewLog = [
+        { c: 'subjA_st_aaa111', r: 3, e: 0, t: 1 }, // 정판
+        { c: 'subjA_st_aaa111', r: 3, e: 0, t: 2 },
+        { c: 'subjA_st_aaa111', r: 3, e: 0, t: 3 },
+    ];
+    const out = computeChapterWeakness({
+        quizResults: {}, weakCards: new Set(), statementStats,
+        questionChapters: {}, chapterRanges: ranges,
+        resolveQuiz: () => null, limit: 10, reviewLog
+    });
+    assert.equal(out[0].chapter, '2. 분류');
+    assert.ok(out[0].mastery > 0.85, `진술 정판 시퀀스가 P(L)에 반영돼야 함 mastery=${out[0].mastery}`);
 });

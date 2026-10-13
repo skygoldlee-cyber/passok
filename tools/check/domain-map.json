@@ -67,6 +67,7 @@
         "src/glossary-query.js",
         "src/html-viewer.js",
         "src/image-zoom.js",
+        "src/knowledge-tracing.js",
         "src/manual-viewer.js",
         "src/markdown-parser.js",
         "src/mermaid-render.js",
