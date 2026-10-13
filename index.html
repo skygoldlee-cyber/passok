@@ -233,7 +233,21 @@
                     </div>
                 </div>
 
-                <!-- Daily Challenge & Streak and Data Management Row — 오늘 할 일 CTA가 최상단 -->
+                <!-- 오늘 할 일 — 모든 추천 소스를 단일 우선순위 큐로 병합, 최상단 배치 (TQ-01, DOC-DSN-21) -->
+                <div class="section-title section-title-row">
+                    <div>
+                        <h3><i class="fa-solid fa-list-check" aria-hidden="true"></i> 오늘 할 일</h3>
+                        <p class="section-subtitle">복습 대기·주간 배분·오답·취약 진술을 우선순위로 정렬했습니다 — 순서대로 진행하세요</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm analysis-link-btn" data-click="switchView" data-args='["analysis-view", {"scrollTop": true}]'>
+                        학습 진단 보기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div id="weak-subject-recommendation" class="recommendation-container mb-6">
+                    <!-- 오늘 할 일 큐 (dashboard-queue.js renderTodayQueue에서 렌더링) -->
+                </div>
+
+                <!-- Daily Challenge & Streak and Study Guide Row — 큐 실행의 보조 표면 -->
                 <div class="dashboard-widgets-row daily-challenge-grid">
                     <!-- 1. Daily 5-Min Challenge Card -->
                     <div class="glass-card daily-challenge-card glass-card-base">
@@ -275,32 +289,18 @@
                     </div>
                 </div>
 
-                <!-- 오늘 할 일 — 모든 추천 소스를 단일 우선순위 큐로 병합 (TQ-01, DOC-DSN-21) -->
-                <div class="section-title mt-6 section-title-row">
-                    <div>
-                        <h3><i class="fa-solid fa-list-check" aria-hidden="true"></i> 오늘 할 일</h3>
-                        <p class="section-subtitle">복습 대기·주간 배분·오답·취약 진술을 우선순위로 정렬했습니다 — 순서대로 진행하세요</p>
-                    </div>
-                    <button class="btn btn-secondary btn-sm analysis-link-btn" data-click="switchView" data-args='["analysis-view", {"scrollTop": true}]'>
-                        학습 진단 보기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                    </button>
-                </div>
-                <div id="weak-subject-recommendation" class="recommendation-container mb-7">
-                    <!-- 오늘 할 일 큐 (dashboard-queue.js renderTodayQueue에서 렌더링) -->
-                </div>
-
-                <!-- 학습 통계 — 핵심 3개 상시 + 보조 지표는 접이식 (아이콘 색은 의미 부여용만: 주의=주황) -->
+                <!-- 학습 통계 — 핵심 3개 상시 + 보조 지표는 접이식 (아이콘 색 의미: 일정=파랑 · 진행=초록 · 복습=보라 · 주의=주황) -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon icon-blue"><i class="fa-solid fa-calendar-day" aria-hidden="true"></i></div>
                         <div class="stat-info">
                             <h3>시험까지</h3>
                             <div class="stat-value" id="exam-dday-count">미설정</div>
-                            <p class="stat-desc"><button type="button" class="dday-set-btn" data-click="openGoalSettings"><i class="fa-solid fa-gear"></i> 시험일·목표 설정</button></p>
+                            <p class="stat-desc"><span class="dday-guide">학습 계획의 시작점 — 위 오늘 할 일에서 설정하세요.</span></p>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon icon-blue"><i class="fa-solid fa-book-open" aria-hidden="true"></i></div>
+                        <div class="stat-icon icon-green"><i class="fa-solid fa-book-open" aria-hidden="true"></i></div>
                         <div class="stat-info">
                             <h3>총 학습 진척도</h3>
                             <div class="stat-value" id="total-progress-val">0%</div>
@@ -310,7 +310,7 @@
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon icon-blue"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i></div>
+                        <div class="stat-icon icon-purple"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i></div>
                         <div class="stat-info">
                             <h3>오늘 복습</h3>
                             <div class="stat-value" id="due-review-count">0</div>
