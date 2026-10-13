@@ -178,6 +178,7 @@ const GLOBAL_KEYS = new Set([
     'ui_study_tools_open',
     'device_id',                   // 동기화 기기 식별 — 시험 무관
     'pro_entitled',                // Pro 이용 권한 — 사용자 수준, 시험 무관
+    'pro_notice_seen',             // Pro 안내 전역 1회 seen (ROAD-P5) — 플랜 안내는 시험 무관 사용자 수준
     'usage_stats',                 // 사용 카운터 — 기기(익명 유저) 단위, 시험 전환해도 누적 유지
     'passmula_auth_mail_cooldown_until', // 로그인 메일 재발송 쿨다운 — 시험 무관
     'last_seen_version',       // 새 버전 알림 마지막 확인 버전 — 시험 무관

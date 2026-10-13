@@ -59,14 +59,21 @@ export function canCloudSync() {
     return !isProFeature('cloud_sync') || hasProEntitlement();
 }
 
-/** data-pro-feature 속성을 가진 PRO 배지를 플랜에 맞춰 표시/숨긴다
+/** data-pro-feature 속성을 가진 PRO 배지를 플랜에 맞춰 표시/숨긴다.
+ * ROAD-P5: 배지는 클릭/Enter 시 플랜 비교(showPlanCompare)로 연결되는 단일 진입점.
+ * data-click 위임은 closest()로 배지 자신을 먼저 잡으므로 부모 카드의 data-click과 충돌하지 않는다.
  * @param {Document|HTMLElement} [root]
  */
 export function refreshProBadges(root = document) {
     if (!_featurePlan) return;
     root.querySelectorAll('[data-pro-feature]').forEach(el => {
         el.classList.toggle('is-hidden', !isProFeature(/** @type {HTMLElement} */ (el).dataset.proFeature));
-        if (!el.getAttribute('title')) el.setAttribute('title', 'Pro 제공 예정 기능 — 현재 무료로 이용할 수 있습니다');
+        if (!el.getAttribute('data-click')) {
+            el.setAttribute('data-click', 'showPlanCompare');
+            el.setAttribute('role', 'button');
+            el.setAttribute('tabindex', '0');
+        }
+        el.setAttribute('title', 'Pro 제공 예정 기능 — 눌러서 플랜 비교 보기 (현재 무료로 이용 가능)');
     });
 }
 
@@ -84,24 +91,33 @@ export function showStoreError(result, featureLabel, showToast, fallback = '저�
 }
 
 /**
- * Pro 기능 안내 — 기능 진입 시점에 1회 표시 (기능별 seen 플래그).
+ * Pro 기능 안내 — 최초 Pro 기능 진입 시 전역 1회만 표시 (ROAD-P5).
+ * 기능별 seen 플래그는 `_global` 단일 키로 수렴 — 이미 기능별 안내를 본
+ * 기존 사용자(seen 맵에 임의 키 보유)는 재노출하지 않는다.
  * 무료 회수 없이 "Pro 제공 예정" 사실만 알린다.
  * feature-plan.json에서 'free'로 표시된 기능은 안내하지 않는다.
- * @param {string} featureKey - seen 플래그 키 (예: 'mock_exam', 'combo_drill')
- * @param {string} featureName - 표시용 기능명
+ * @param {string} featureKey - 플랜 판정 키 (예: 'mock_exam', 'combo_drill')
+ * @param {string} featureName - 표시용 기능명 (첫 진입 기능명으로 문구에 포함)
  */
 export function proFeatureNotice(featureKey, featureName) {
     if (!isProFeature(featureKey)) return;
+    /** @type {Record<string, string>} */
     let seen = {};
     try { seen = JSON.parse(safeGetItem(STORAGE_KEYS.PRO_NOTICE_SEEN) || '{}') || {}; } catch (e) { seen = {}; }
-    if (seen[featureKey]) return;
-    seen[featureKey] = localDateTime();
+    if (seen._global || Object.keys(seen).length > 0) {
+        if (!seen._global) {
+            seen._global = localDateTime();
+            safeSetItem(STORAGE_KEYS.PRO_NOTICE_SEEN, JSON.stringify(seen));
+        }
+        return;
+    }
+    seen._global = localDateTime();
     safeSetItem(STORAGE_KEYS.PRO_NOTICE_SEEN, JSON.stringify(seen));
 
     const { overlay, close } = _showDialog(`
         <div class="app-confirm-dialog dialog-card pro-upgrade-dialog" role="alertdialog" aria-modal="true" aria-labelledby="pro-notice-title">
             <h3 id="pro-notice-title">💎 Pro 기능 안내</h3>
-            <p><strong>${esc(featureName)}</strong>은(는) Pro 버전에서 제공되는 기능입니다.<br>현재는 무료 체험 기간으로 누구나 이용할 수 있습니다.</p>
+            <p><strong>${esc(featureName)}</strong>을(를) 포함해 <strong>PRO 배지</strong>가 붙은 기능은 Pro 버전에서 제공될 예정입니다.<br>현재는 무료 체험 기간으로 누구나 이용할 수 있습니다.</p>
             <div class="pro-upgrade-benefits">
                 <p class="pro-upgrade-sub">Pro 가입 시 로그인 계정의 클라우드 동기화로 <strong>여러 디바이스 간 학습 상태가 공유</strong>됩니다.</p>
             </div>

@@ -127,7 +127,7 @@ docs/
 | [VENDOR_MANAGEMENT_DESIGN.md](dev/design/VENDOR_MANAGEMENT_DESIGN.md) | vendor/ 자산 거버넌스 — 매니페스트·해시/버전 무결성 게이트·주기 신선도 워크플로 (DOC-DSN-20, BP-13) |
 | [LEARNING_UX_SIMPLIFICATION_DESIGN.md](dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md) | 학습 표면 단순화 Phase 0 — "오늘 할 일" 단일 큐(TQ-01~05)·네이밍 정리·사이드바 그룹핑(UX-NAV-12) (DOC-DSN-21, 구현 완료) |
 | [LEARNING_UX_PHASE1_DESIGN.md](dev/design/LEARNING_UX_PHASE1_DESIGN.md) | 학습 표면 단순화 Phase 1 — 취약 진술 리뷰의 복습 뷰 이관(RV-02)·복습→드릴 진입(RV-03)·뷰 목적 문구(UX-NAV-13) (DOC-DSN-22, 구현 완료) |
-| [LEARNING_UX_PHASE15_DESIGN.md](dev/design/LEARNING_UX_PHASE15_DESIGN.md) | 학습 표면 단순화 Phase 1.5 — 훈련소 메뉴 2그룹 재편(UX-NAV-14)·Pro 안내 전역 1회 수렴+배지→플랜 비교(ROAD-P5) (DOC-DSN-23, 설계안) |
+| [LEARNING_UX_PHASE15_DESIGN.md](dev/design/LEARNING_UX_PHASE15_DESIGN.md) | 학습 표면 단순화 Phase 1.5 — 훈련소 메뉴 2그룹 재편(UX-NAV-14)·Pro 안내 전역 1회 수렴+배지→플랜 비교(ROAD-P5) (DOC-DSN-23, 구현 완료) |
 | [PROJECT_STRUCTURE_TOUR.md](dev/reference/PROJECT_STRUCTURE_TOUR.md) | 프로젝트 구조 투어 — 비개발자·기획자용 그림 중심 입문 (폴더 지도·데이터 파이프라인·멀티시험·품질 관문·용어 풀이) |
 | [CODE_READING_GUIDE.md](dev/reference/CODE_READING_GUIDE.md) | 코드 읽기 가이드 — 초보 개발자용 부팅 시퀀스·data-click 위임·저장소 2계층·첫 변경 레시피·게이트 치트시트 |
 | [FEATURE_MAP.md](dev/reference/FEATURE_MAP.md) | 기능→소스 지도 — "이 기능을 바꾸려면 어느 파일" 조회표 (도메인별 핵심 소스·관련 테스트·SPEC 접두사) |

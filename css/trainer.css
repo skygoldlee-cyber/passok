@@ -1,11 +1,36 @@
 /* Smart Trainer View Styles */
 
-/* @spec T-04,T-05 */
+/* @spec T-04,T-05,UX-NAV-14 */
+.trainer-menu-group + .trainer-menu-group {
+    margin-top: var(--space-8, 2rem);
+}
+
+.trainer-group-label {
+    font-size: var(--text-xs-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    opacity: 0.85;
+    margin: 0;
+    user-select: none;
+}
+
+.light-theme .trainer-group-label {
+    opacity: 1;
+}
+
+.trainer-group-desc {
+    font-weight: var(--font-weight-normal, 400);
+    letter-spacing: normal;
+    text-transform: none;
+    margin-left: var(--space-2);
+}
+
 .trainer-menu-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
     gap: var(--space-6);
-    margin-top: var(--space-6);
+    margin-top: var(--space-3);
 }
 
 .trainer-menu-card {

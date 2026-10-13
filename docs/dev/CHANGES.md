@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 학습 표면 단순화 Phase 1.5 구현 (UX-NAV-14, ROAD-P5)
+
+- **훈련소 메뉴 2그룹 재편 (UX-NAV-14)**: `trainer-menu-grid`를 `.trainer-menu-group` 2개로 분할 — `기출 드릴`(O/X 판정→ㄱㄴㄷ 조합, 기출 분해·변환 문항)을 상단에, `암기 · 실무 훈련`(수치 암기→원료 챌린지→배합 계산, 생성형)을 하단에 배치하고 각 그룹에 `.trainer-group-label`(제목+설명) 추가. 카드 DOM·`data-click`·`data-feature`·배지 id 불변 — 마크업 이동만
+- **Pro 안내 전역 1회 수렴 (ROAD-P5)**: `proFeatureNotice`의 seen 플래그를 기능별 키에서 `_global` 단일 키로 수렴 — 최초 Pro 기능 진입에만 모달 1회 표시. `pro_notice_seen`을 `GLOBAL_KEYS`로 승격해 시험 전환에도 유지(레거시 시험 스코프 seen은 고아화 — 기존 사용자도 최대 1회의 전역 안내 후 종료). 모달 문구는 "PRO 배지가 붙은 기능은 Pro 제공 예정"으로 일반화
+- **PRO 배지 → 플랜 비교 단일 경로 (ROAD-P5)**: `refreshProBadges`가 배지에 `data-click="showPlanCompare"`·`role="button"`·`tabindex="0"`를 부여 — 클릭/Enter 시 플랜 비교 모달로 직행. `closest` 위임 해석이 배지 자신을 먼저 잡아 부모 카드·버튼 액션과 충돌 없음
+- **테스트**: 신규 `tests/dom/pro-notice.dom.test.js` 5건(전역 1회·레거시 seen 마이그레이션·free 기능 seen 미기록·배지 위임 속성) + `study-trainer.dom.test.js`에 메뉴 2그룹 구조 단언 1건
+
 ## 2026-10-13 학습 표면 단순화 Phase 1 구현 (RV-02~04, UX-NAV-13)
 
 - **취약 진술 리뷰 → 복습 뷰 이관 (RV-02)**: `trainer-weak-panel`을 복습 뷰의 `<details id="review-weak-panel" open>` 섹션으로 이동 — 오판 진술 목록·FSRS 복습 대상·졸업 진행은 복습 성격이라 오답 카드와 한 화면 통합. 훈련소 메뉴의 "취약 진술 리뷰" 카드는 제거(드릴 결과 화면의 `openWeakReview` 버튼이 발견 경로를 유지). `openWeakReview`/`gotoWeakReview`는 복습 뷰 전환+섹션 개방으로 재지정 — 대시보드 큐·학습 진단 카드의 기존 data-click 경로 무변경. 레거시 `#/trainer/weak` 해시는 `initTrainer`에서 `#/review`로 replaceState 정규화 + 리다이렉트 — 북마크·뒤로가기 이력 보존. `TRAINER_SUB_SLUGS`에서 `weak` 엔트리 제거
