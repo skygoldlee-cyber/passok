@@ -83,7 +83,7 @@
 
 | § | 기능 영역 | 주요 지원 기능 | ID 범위 (요구 수) |
 |---|----------|---------------|------------------|
-| 3.1 | **대시보드** | 학습 통계·과목 진행률·정답률 히트맵·약점 추천·합격 전략·D-day·계획 등급·예상 점수·마스터리 레벨·일일 챌린지·오늘 할 일 큐 | D-01~D-17·TQ-01~TQ-05 (22) |
+| 3.1 | **대시보드** | 학습 통계·과목 진행률·정답률 히트맵·약점 추천·합격 전략·D-day·계획 등급·예상 점수·마스터리 레벨·일일 챌린지·오늘 할 일 큐 | D-01~D-22·TQ-01~TQ-05 (27) |
 | 3.1.5 | **학습 진단** | 오답 패턴·취약 진술·학습 리듬 진단·복합 예상 점수·추천 효과 추적·학습 패턴·주간 리포트·개념 앵커 | AN-01~AN-10 (10) |
 | 3.2 | **플래시카드** | 3D 플립·외움/헷갈림 분류·FSRS 간격 반복·셔플·난이도·과목 필터 | F-01~F-11 (11) |
 | 3.3 | **퀴즈** | 객관식 풀이·즉시 채점·오답 노트·과목·난이도 필터·해설 표시 | Q-01~Q-11 (11) |
@@ -133,6 +133,8 @@
 | D-18 | FSRS 리뷰 로그 링버퍼 — `updateCardSchedule`의 단일 통로에 `{c,r,e,t}` 레코드를 append해 레이팅 이력 영속화 (카드·진술 공용 포함). `fc_review_log` 시험 스코프 키, 2,000건 FIFO, `BACKUP_KEYS` 등록으로 복원·초기화 정합. 효능 실측·개인 피팅·4버튼 재평가의 선행 계층 (EXAM_R_SCHEDULING_DESIGN.md §2) | ✅ |
 | D-19 | 시험일 목표 R 최종 인출 — `R_exam = retrievability(examDate−lastReview, s)`로 다음 복습이 시험일 이후(due>examDate)인 카드 중 시험일 목표 기억률 미달분(<0.95)을 선별, D-day ≤14일일 때 "오늘 할 일" 큐에 `시험 전 최종 인출` 항목 표시. R_exam 오름차순 정렬·세션 상한 60장, `state.flashcards.onlyIds` 1회성 id 집합으로 임의 세션 기동 (간격 재작성 아닌 추가 인출 — EXAM_R_SCHEDULING_DESIGN.md §3; 원안 0.85 임계는 불변식상 공집합이라 0.95로 교정) | ✅ |
 | D-20 | 시험일 due 클램프 — `updateCardSchedule` 산출 `due > examDate`이고 갱신 후 `s` 기준 `R_exam < 0.95`인 카드의 `due`를 `examDate − 1`로 당김 (조건부 상한 — 시험일까지 목표 유지 예정 카드는 미당김으로 벽 방지, 발동 대역 s∈(dday, ~2.5·dday)). 시험일 미설정·경과 시 비활성, `fsrs.js` 무수정의 어댑터 정책 계층 (EXAM_DUE_CLAMP_DESIGN.md) | ✅ |
+| D-21 | 단원 숙달 베이지안 추정 — 퀴즈·진술·시뮬 정오 증거를 단원별로 집계(정답 근거 포함, 졸업 진술은 숙달 증거로 반영)하고 Beta(4,3) 사후평균으로 숙달률 추정. 취약 단원 랭킹의 정렬 기준을 오답 빈도→숙달률로 교체해 소표본 노이즈 제거 (KNOWLEDGE_TRACING_DESIGN.md §3.1) | ✅ |
+| D-22 | BKT 지식 추적 — 단원별 은닉 숙달 P(L)을 관측 시퀀스로 갱신 (P₀=0.3·T=0.08·G=5지선다0.15/OX0.30·S=0.10, manifest `study.kt` 오버라이드). 판정 로그 시퀀스 확장이 선행 — 퀴즈는 최종 판정만 보존 중. 망각은 비모델(스냅샷 용도 — 시점 관리는 FSRS) (KNOWLEDGE_TRACING_DESIGN.md §3.2) | ⏳ |
 | TQ-01 | **"오늘 할 일" 단일 큐** — 대시보드의 모든 다음 행동 추천을 하나의 우선순위 목록으로 병합해 번호 매긴 `<ol>`로 렌더. 병합 순서: ① FSRS 복습 대기 → ② 주간 배분(study_plan_pro) 이번 주 잔여 → ③ 오답·헷갈림 재채점 → ④ 취약 진술 드릴 → ⑤ 일일 챌린지(미완료 시) → ⑥ 개인화 추천(D-10·D-11 소스, 큐로 흡수해 별도 추천 카드 중복 발언 제거) (`src/views/dashboard-queue.js` `buildTodayQueue`, LEARNING_UX_SIMPLIFICATION_DESIGN.md) | ✅ |
 | TQ-02 | 큐 항목 스키마 — `{kind, icon, color, title, reason, actions: [{click, args, label, icon, cls}]}` — 실행은 신규 핸들러 없이 기존 `data-click` 위임·딥링크(`gotoWeakReview`·`startSubjectStudy`·`startSubjectQuiz`·`startSubjectReader`·`openDailyChallenge`) 재사용 | ✅ |
 | TQ-03 | `buildTodayQueue({subjects, counts, review, weak, examDate, daily, today})` 순수 함수 — `today` 주입으로 날짜 경계 결정론, DOM·상태 모듈 비의존. 전 소스 공백 시 안내 문구(퀴즈 풀기 유도). 시험일 미설정(`examDate` 없음)이면 이력 무관하게 `goal` 항목을 큐 최우선(⓪)에 배치 — 설정 액션은 큐가 단독 소유(SC-10) | ✅ |
