@@ -125,6 +125,14 @@ test('TQ-03 이력 없음 + D-day 있음 → 첫 학습 안내만', () => {
     assert.deepEqual(kinds(items), ['start']);
 });
 
+// TQ-03 — 시험일 미설정은 이력과 무관하게 goal 항목을 최우선으로 올린다
+// (D-day 카드의 중복 CTA 제거 — 설정 액션은 큐가 단독 소유)
+test('TQ-03 이력 있음 + D-day 미설정 → goal 최우선 + 작업 항목 유지', () => {
+    const items = buildTodayQueue(baseInput({ dday: null, reviewCount: 3 }));
+    assert.equal(kinds(items)[0], 'goal');
+    assert.ok(kinds(items).includes('review'));
+});
+
 // TQ-03 — 이력 있는데 할 일이 없으면 빈 배열(렌더러가 달성 문구 표시)
 test('TQ-03 이력 있음 + 소스 공백 → 빈 큐', () => {
     assert.deepEqual(buildTodayQueue(baseInput()), []);
