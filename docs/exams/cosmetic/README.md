@@ -31,6 +31,7 @@
 
 ## 신규 문서 추가 규칙
 
+- 상위 규약 정본: [`docs/DOC_CONVENTIONS.md`](../../DOC_CONVENTIONS.md) — 분류·명칭·배치·헤더·ID·생명주기. 아래는 시험 범위 파생 규칙이다.
 - 시험 종속 문서는 이 디렉터리 아래에 둔다 (종류별 하위 디렉터리 유지 — 없으면 루트).
 - 헤더에 `> **범위**: exam:cosmetic · 판본: <none|textbook|refmat>` 표기 — `check:docs`가 위치↔선언 일치를 검증한다.
 - 문서 ID는 종류별 접두사로 채번하고 `docs/README.md` 레지스트리에 등록한다 (이 파일의 인덱스 성격 문서는 `DOC-IDX`).

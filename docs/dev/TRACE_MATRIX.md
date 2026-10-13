@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 9b50834f5ca3ed2a
+> 입력 해시: 7e8fba7b80b17de8
 > 생성: 2026-10-13 · 원천: SPEC.md(501개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 501개 — 문서 연결 358 · 소스 연결 452 · 테스트 연결 483 · 보고서 연결 109
+**커버리지 요약**: 요구사항 501개 — 문서 연결 359 · 소스 연결 452 · 테스트 연결 483 · 보고서 연결 109
 
 ---
 
@@ -635,7 +635,7 @@
 | DA-10 | ✅ | 테스트 | — | src/exams/cosmetic/customer-store.js<br>src/sync.js | tests/unit/exams/cosmetic/customer-store.test.js | — | 개인정보보호법 — 상동 (조제관리사가 고객 개인정보를 클라우드에 올리지 않는 설계) |
 | DA-11 | ✅ | 테스트 | DOC-RBK-10 | tools/check/check_domain_map.js | tests/unit/multi-exam-gates.test.js | — | — |
 | DA-12 | ✅ | 테스트 | DOC-RBK-10 | tools/check/check_uitext.js | tests/unit/multi-exam-gates.test.js | — | — |
-| DA-13 | ✅ | E2E 테스트 | — | — | tests/e2e/exam-switch.spec.js | — | — |
+| DA-13 | ✅ | E2E 테스트 | DOC-DEV-08 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/app-shell.js<br>src/pwa-manifest.js | tests/unit/exam-context.test.js | — | — |
 
 ## 5.2 안정적 ID 체계
@@ -769,6 +769,7 @@
 | DOC-DEV-04 | docs/dev/TRACE_MATRIX.md | — |
 | DOC-DEV-05 | docs/exams/cosmetic/ingredients_audit_제2026-19호.md | DI-05, FO-05, FO-24, RR-19 |
 | DOC-DEV-07 | docs/dev/UIUX_외주전달_패키지.md | — |
+| DOC-DEV-08 | docs/DOC_CONVENTIONS.md | DA-13 |
 | DOC-DSN-01 | docs/dev/design/DOM_TEST_DESIGN.md | A-01, A-02, A-03, A-04, A-05, A-06, A-07, R-01, R-02, R-03, R-04, R-05, R-06, R-07, R-08, R-09, TH-01, TH-02, TH-03, TH-04, TH-05, TH-06, UM-01, UM-02, UM-03, UM-04, UM-05, UX-NAV-01, UX-NAV-02, UX-NAV-03, UX-NAV-04, UX-NAV-05, UX-NAV-06, UX-NAV-07 |
 | DOC-DSN-02 | docs/exams/cosmetic/design/FORMULA_OS_WORKFLOW_DESIGN.md | FO-01, FO-02, FO-03, FO-04, FO-05, FO-06, FO-07, FO-08, FO-09, FO-10, FO-11, FO-12, FO-13, FO-14, FO-15, FO-16, FO-17, FO-18, FO-19, FO-20, FO-21, FO-22, FO-23, UM-01, UM-02, UM-03, UM-04, UM-05 |
 | DOC-DSN-03 | docs/dev/design/LEARNING_PREMIUM_PLAN.md | AN-01, AN-02, AN-03, ROAD-P0 |
