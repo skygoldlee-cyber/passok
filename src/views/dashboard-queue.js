@@ -53,6 +53,18 @@ export function buildTodayQueue(p = {}) {
         items.push(item);
     };
 
+    // ⓪ 시험일 미설정 — 역산 계획·주간 배분의 전제 조건이라 최우선.
+    // D-day 카드의 중복 설정 버튼은 제거 — 설정 액션은 이 큐가 단독 소유한다
+    if (p.dday === null) {
+        push({
+            kind: 'goal',
+            icon: 'fa-calendar-day', color: 'var(--color-primary)',
+            title: '시험일 설정',
+            reason: '학습 계획의 시작점 — 역산 계획·주간 목표가 생성됩니다',
+            actions: [{ click: 'openGoalSettings', label: '지금 설정', icon: 'fa-gear', cls: 'btn-primary' }]
+        });
+    }
+
     // ① FSRS 기한 도래 — 시간 민감, 최우선
     const due = p.dueCardIds || [];
     if (due.length) {
@@ -122,17 +134,9 @@ export function buildTodayQueue(p = {}) {
         .filter(r => r.icon !== 'fa-triangle-exclamation' && r.icon !== 'fa-clock')
         .forEach(r => push({ kind: 'rec', ...r }));
 
-    // TQ-05 빈 큐 — 학습 이력이 없으면 시작 안내 항목으로 대체 (챌린지보다 우선)
-    if (!items.length && !p.hasProgress) {
-        if (p.dday === null) {
-            items.push({
-                kind: 'goal',
-                icon: 'fa-calendar-day', color: 'var(--color-primary)',
-                title: '시험일 설정',
-                reason: '학습 계획의 시작점 — 역산 계획·주간 목표가 생성됩니다',
-                actions: [{ click: 'openGoalSettings', label: '지금 설정', icon: 'fa-gear', cls: 'btn-primary' }]
-            });
-        }
+    // TQ-05 빈 큐 — 학습 이력이 없으면 시작 안내 항목으로 대체 (챌린지보다 우선).
+    // goal 항목은 안내성이라 작업 항목 유무 판정에서 제외한다
+    if (!items.some(i => i.kind !== 'goal') && !p.hasProgress) {
         const first = (p.subjects || [])[0];
         if (first) {
             items.push({

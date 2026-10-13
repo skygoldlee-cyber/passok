@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 대시보드 시험일 설정 중복 CTA 해소 (SC-10, TQ-03)
+
+- **문제**: 시험일 미설정 시 D-day 카드(`_examPlanDescHtml`의 `지금 설정` 버튼)와 "오늘 할 일" 큐의 goal 항목이 같은 `openGoalSettings` 대화상자를 여는 버튼 2개를 동시 노출
+- **수정**: 설정 액션을 큐가 단독 소유 — ① `buildTodayQueue`의 goal 항목을 빈 큐 폴백에서 큐 최우선(⓪)으로 승격해 이력 무관하게 시험일 미설정이면 항상 노출 ② D-day 카드는 `stat-card-attn` 강조 + "학습 계획의 시작점" 안내 문구만 표시(버튼 제거). `openGoalSettings` 핸들러·목표 설정 모달·시험일 저장 로직 무변경
+- **테스트**: `today-queue.test.js` +1건(이력 있음+시험일 미설정 → goal 최우선) · `study-dashboard.dom.test.js` SC-10 단언 갱신(카드 버튼 없음·대시보드 내 `openGoalSettings` 1건) + TQ-01 우선순위 테스트에 시험일 시딩
+
 ## 2026-10-13 학습 표면 단순화 Phase 1.5 구현 (UX-NAV-14, ROAD-P5)
 
 - **훈련소 메뉴 2그룹 재편 (UX-NAV-14)**: `trainer-menu-grid`를 `.trainer-menu-group` 2개로 분할 — `기출 드릴`(O/X 판정→ㄱㄴㄷ 조합, 기출 분해·변환 문항)을 상단에, `암기 · 실무 훈련`(수치 암기→원료 챌린지→배합 계산, 생성형)을 하단에 배치하고 각 그룹에 `.trainer-group-label`(제목+설명) 추가. 카드 DOM·`data-click`·`data-feature`·배지 id 불변 — 마크업 이동만

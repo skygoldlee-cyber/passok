@@ -106,8 +106,9 @@ export function updateGlobalStats() {
 // D-17·SC-10 D-day 카드 설명 — 미설정: 최우선 설정 안내 / 계획 등급(tight: 병행 권장 / triage: 비중 큰 과목 우선) 분기
 function _examPlanDescHtml(plan) {
     const openBtn = (label) => `<button type="button" class="dday-set-btn" data-click="openGoalSettings"><i class="fa-solid fa-gear"></i> ${label}</button>`;
+    // 미설정 시 설정 액션은 "오늘 할 일" 큐의 시험일 설정 항목이 단독 소유 — 카드는 안내 문구만 표시 (중복 CTA 방지)
     if (!plan) {
-        return `<span class="dday-guide">학습 계획의 시작점 — 시험일을 설정하면 역산 계획·주간 목표·주간 배분이 생성됩니다.</span> ${openBtn('지금 설정')}`;
+        return `<span class="dday-guide">학습 계획의 시작점 — 시험일을 설정하면 역산 계획·주간 목표·주간 배분이 생성됩니다. 위 오늘 할 일에서 설정하세요.</span>`;
     }
     if (plan.suggested === null) return openBtn('시험일·목표 설정');
     const topName = plan.tier === 'triage' ? _topWeightSubjectName() : null;
