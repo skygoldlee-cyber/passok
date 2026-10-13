@@ -82,9 +82,11 @@ describe('UI 모드 — 학습/실무 전환', () => {
         expect(targets).toContain('dictionary-view');
         // 학습 도구 라벨은 실무 모드에서 표시
         expect(getComputedStyle(document.querySelector('.nav-study-tools-label')).display).not.toBe('none');
-        // 학습 매뉴얼 숨김·실무 매뉴얼 탭은 표시 (모바일 실무매뉴얼 교체)
+        // 학습 매뉴얼 숨김 — 실무매뉴얼은 더보기 시트로 이동 (탭바 노출 금지)
         expect(getComputedStyle(document.querySelector('.manual-nav-link.nav-study-only')).display).toBe('none');
-        // 실무 전용 탭 2개(실무매뉴얼·학습도구) 모두 표시
+        // 탭바에는 실무 전용 항목이 없어야 함 — 실무매뉴얼·학습도구는 더보기 시트 소속
+        expect(document.querySelectorAll('#mobile-tab-bar .nav-practice-only')).toHaveLength(0);
+        // 실무 전용 항목 2개(실무매뉴얼·학습도구 — 모두 시트 내) 모두 표시
         expect(document.querySelectorAll('.nav-practice-only')).toHaveLength(2);
         document.querySelectorAll('.nav-practice-only').forEach(t => {
             expect(getComputedStyle(t).display).not.toBe('none');
