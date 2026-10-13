@@ -15,6 +15,7 @@ import { TIMING } from '../config/timing.js';
 import { simState } from './exam-sim-state.js';
 import { chapterForQuestion, renderSimResultBreakdown } from './exam-sim-review.js';
 import { recordStatementJudgments } from '../statement-tracker.js';
+import { recordQuizJudgment } from '../spaced-repetition.js';
 import { examIdToSubjectId } from '../exam-context.js';
 import { resetMainScroll } from './navigation.js';
 import { WEAK_SIM_PREFIX } from '../weak-items.js';
@@ -328,6 +329,7 @@ export function submitExam() {
             const perStatement = deriveComboJudgments(q, userAns);
             if (perStatement) recordStatementJudgments(perStatement);
         }
+        recordQuizJudgment(q.id, isCorrect); // @spec D-22 — 문항 단위 BKT 시퀀스 로그
 
         if (isCorrect) {
             score++;
