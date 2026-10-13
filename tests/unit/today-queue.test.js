@@ -150,6 +150,7 @@ test('D-19 최종 인출: 윈도 내 위험 카드 → weak 뒤·rec 앞에 exam
     assert.deepEqual(k, ['weak', 'examr', 'rec']);
     const examr = items.find((i) => i.kind === 'examr');
     assert.match(examr.title, /최종 인출 2장/);
+    assert.match(examr.reason, /95%/); // EXAM_TARGET_R=0.95 — UI 문구가 임계값과 정합해야 함
     assert.equal(examr.actions[0].click, 'startExamRiskReview');
 });
 

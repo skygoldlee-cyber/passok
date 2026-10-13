@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 D-19 큐 E2E + 시드 키 스코프 게이트 + 최종 인출 문구 정정
+
+- `tests/e2e/exam-risk.spec.js` 신설 — 시험일 기억률 미달 카드만 "오늘 할 일" 큐에 `시험 전 최종 인출 N장` 표시(미설정 시 미표시) 실브라우저 검증 (D-19·D-20)
+- `check:seedkeys` 신설(docs 단계) — GLOBAL_KEYS 전환 키의 `examId:` 스코프 시드를 정적 차단 (pro_notice_seen 드리프트 재발 방지)
+- 최종 인출 사유 문구 `85%` → `95%` 정정 — EXAM_TARGET_R=0.95와 UI 불일치 해소, today-queue 단위 테스트에 정합 검증 추가
+
 ## 2026-10-14 E2E: 퀴즈→판정→진단 체인 검증 + pro_notice_seen 스코프 드리프트 수정
 
 - analysis-view.spec: 퀴즈 10문 완주 후 `fc_review_log`의 `k:'q'` 판정 레코드 10건 검증 추가, OX 판정 시퀀스 시드 → 단원 `숙달 %`(BKT) 표시 E2E 신설 (D-22)
