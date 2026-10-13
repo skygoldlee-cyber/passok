@@ -125,9 +125,9 @@ P_unit = (α₀ + corrects) / (α₀ + β₀ + corrects + wrongs)
 {c, r, e, t}                                // 스케줄 이벤트 (기존) — k 없음 = 레이팅 레코드
 ```
 
-- 기입점: `views/quiz.js`의 `quizResults` 기록 2곳(텍스트·선택지 채점) + `exam-sim-arena.js` `submitExam` 루프(문항 단위 전건). ㄱㄴㄷ 진술 판정은 기존 경로(`recordStatementJudgments`→`updateCardSchedule`)로 이미 유입 — 문항·진술 이중 계수는 소비자가 `k` 필터로 선택
+- 기입점: `views/quiz.js`의 `quizResults` 기록 2곳(텍스트·선택지 채점) + `exam-sim-arena.js` `submitExam` 루프(문항 단위 전건 — **약점 집중 오답 모의고사(`exam-sim-weak`)도 동일 세션을 공유해 자동 포함**, 로그 id는 `weak_quiz_*`·`weak_exam_*` 접두사라 소비자가 원문항으로 정규화). ㄱㄴㄷ 진술 판정은 기존 경로(`recordStatementJudgments`→`updateCardSchedule`)로 이미 유입 — 문항·진술 이중 계수는 소비자가 `k` 필터로 선택
 - 후방 호환: `k` 없는 레코드는 스케줄 이벤트로 해석 — `getReviewLog()`·FIFO·백업 무수정
-- 비기입 영역: 시뮬 `weak_sim_*` 오답 카드는 별도 증거 경로로 유지 (§2.1)
+- 비기입 영역: 시뮬 `weak_sim_*` 오답 카드는 별도 증거 경로로 유지 (§2.1) · 데일리 챌린지는 임시 생성 문항(안정 id·단원 귀속 부재)이라 증거 제외 · `weak_card_*` 카드 유도 문항도 단원 귀속 불가로 제외
 
 **② `knowledge-tracing.js` 순수 모듈** ✅ (2026-10-13) — `bktUpdate`·`computeUnitMastery`·`resolveKtParams`, DOM·저장 비의존. 구현 시 결정된 정밀화 2건:
 - **사전 승계**: `computeUnitMastery(seq, params, p0)`의 `p0`에 v1 카운트 증거의 Beta 사후평균을 초기 P(L)로 주입 — 로그 도입 이전 이력을 버리지 않는다 (콜드스타트 완화)
