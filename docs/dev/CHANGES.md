@@ -14,6 +14,7 @@
 - **`onlyIds` 세션 일반화**: `dueOnly`의 1회성 플래그 패턴을 `state.flashcards.onlyIds`(id 배열·지정 순서)로 일반화 — 임의 카드 집합 세션 기동. `loadFlashcards`는 onlyIds 우선 처리, R_exam 오름차순 순서 보존(셔플 없음)
 - **큐 항목**: `buildTodayQueue`에 `kind:'examr'` — ⑤ 취약 진술 직후·잔여 추천 앞, `0≤dday≤14` + 위험 카드 존재 시에만 표시. 세션 상한 60장(`EXAM_R_SESSION_CAP`), `startExamRiskReview` 핸들러 신설
 - 테스트: fsrs.test에 로그 append·FIFO 상한·손상 복구·위험 선별·정렬 7건, today-queue.test에 큐 위치·윈도 경계 2건 추가
+- 사용자 문서 반영: 학습안내서 차별화 표·망각 곡선 설명·"오늘 할 일" 소스·D-5 고정 골격·D-1·우선순위 팁에 `시험 전 최종 인출` 안내, user_manual 큐 우선순위 표 ⑤ 행 추가 — docs_md 번들·로컬 html 재생성
 
 ## 2026-10-13 D-5 학습 플랜 FSRS 정합 재설계 (학습안내서)
 
