@@ -125,7 +125,8 @@ docs/
 | [SEMANTIC_EMBEDDING_DESIGN.md](dev/design/SEMANTIC_EMBEDDING_DESIGN.md) | 빌드타임 문장 임베딩 → int8 정적 번들 — 유사 진술·이웃 인덱스 인프라 (DOC-DSN-18) |
 | [WRONG_CAUSE_CLASSIFIER_DESIGN.md](dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md) | 오답 원인 자동 분류 — 임베딩 센트로이드 kNN 설계 (DOC-DSN-19, DOC-DSN-18 선행) |
 | [VENDOR_MANAGEMENT_DESIGN.md](dev/design/VENDOR_MANAGEMENT_DESIGN.md) | vendor/ 자산 거버넌스 — 매니페스트·해시/버전 무결성 게이트·주기 신선도 워크플로 (DOC-DSN-20, BP-13) |
-| [LEARNING_UX_SIMPLIFICATION_DESIGN.md](dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md) | 학습 표면 단순화 Phase 0 — "오늘 할 일" 단일 큐(TQ-01~05)·네이밍 정리·사이드바 그룹핑(UX-NAV-12) (DOC-DSN-21, 설계안) |
+| [LEARNING_UX_SIMPLIFICATION_DESIGN.md](dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md) | 학습 표면 단순화 Phase 0 — "오늘 할 일" 단일 큐(TQ-01~05)·네이밍 정리·사이드바 그룹핑(UX-NAV-12) (DOC-DSN-21, 구현 완료) |
+| [LEARNING_UX_PHASE1_DESIGN.md](dev/design/LEARNING_UX_PHASE1_DESIGN.md) | 학습 표면 단순화 Phase 1 — 취약 진술 리뷰의 복습 뷰 이관(RV-02)·복습→드릴 진입(RV-03)·뷰 목적 문구(UX-NAV-13) (DOC-DSN-22, 설계안) |
 | [PROJECT_STRUCTURE_TOUR.md](dev/reference/PROJECT_STRUCTURE_TOUR.md) | 프로젝트 구조 투어 — 비개발자·기획자용 그림 중심 입문 (폴더 지도·데이터 파이프라인·멀티시험·품질 관문·용어 풀이) |
 | [CODE_READING_GUIDE.md](dev/reference/CODE_READING_GUIDE.md) | 코드 읽기 가이드 — 초보 개발자용 부팅 시퀀스·data-click 위임·저장소 2계층·첫 변경 레시피·게이트 치트시트 |
 | [FEATURE_MAP.md](dev/reference/FEATURE_MAP.md) | 기능→소스 지도 — "이 기능을 바꾸려면 어느 파일" 조회표 (도메인별 핵심 소스·관련 테스트·SPEC 접두사) |
@@ -326,6 +327,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-19 | `docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md` |
 | DOC-DSN-20 | `docs/dev/design/VENDOR_MANAGEMENT_DESIGN.md` |
 | DOC-DSN-21 | `docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md` |
+| DOC-DSN-22 | `docs/dev/design/LEARNING_UX_PHASE1_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |
