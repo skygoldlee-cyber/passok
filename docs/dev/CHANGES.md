@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 문서 규약 정본 신규 — DOC_CONVENTIONS.md (DOC-DEV-08)
+
+- **신규 `docs/DOC_CONVENTIONS.md` (DOC-DEV-08)**: 문서 분류·명칭·배치·헤더·ID·생명주기 규약의 단일 출처(SSOT) — 분산돼 있던 규칙(docs/README 배치 표·작성 규칙, AGENTS.md ID 체계, exams/<id>/README 추가 규칙)을 §1~11로 통합: 문서 계층·버킷 분류표(design=의도/reference=현행 기술 경계)·배치 판정 순서·접미사 명칭 규약·헤더 메타데이터·DOC-* 접두사↔디렉터리 일치·링크/인용 규약·생명주기·검증 게이트 매핑·규약 변경 절차
+- **파생 문서 참조화**: docs/README.md 배치 규칙 섹션·작성 규칙을 요약+정본 링크로 수렴 (규약 복제 금지), AGENTS.md ID 체계 절·docs 트리에 정본 포인터, exams/cosmetic/README.md 추가 규칙을 파생 선언으로 명시
+- **레지스트리**: DOC-DEV-08 채번 + DOC-DEV 범위를 "수위 문서·독립 산출물"로 확장, docs/README 인덱스 행·트리 항목 추가
+
 ## 2026-10-13 설계 문서 분류 정정 — 배치 규칙 명문화 + 인덱스 카운트 정합
 
 - **배경**: 설계 문서가 `dev/design/`·`exams/<id>/design/`·`report_archive/`에 분산돼 보이는 문제 — 조사 결과 배치 자체는 도메인 격리(플랫폼↔시험 종속)와 아카이브 계약에 부합하나, 배치 규칙이 어디에도 명문화되지 않은 것이 실제 결함
