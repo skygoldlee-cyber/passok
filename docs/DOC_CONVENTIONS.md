@@ -43,17 +43,17 @@ docs/
 | `design/` · `reference/` | dev/와 동일 분류 기준을 시험 범위에 적용 |
 | `user/` | 학습자 대상 문서 (시험 공략·암기 정리) |
 | `business/` | 사업 기획·시장 조사·마케팅 |
-| `report_archive/` | 시점 스냅샷 보고서·대체된 전략/설계 원전 — **앱 미참조 전제** |
+| `report_archive/` | 시점 스냅샷 보고서·대체된 전략/설계 원전 — **앱 런타임·콘텐츠 의존 금지** |
 | `<id>/` 루트 | 분류 예외 — 하위 버킷에 넣을 수 없는 특수 문서 (현재 1건: `ingredients_audit_제2026-19호.md` — 앱 콘텐츠가 인용하는 refmat 스냅샷이라 아카이브 불가, 교재 비종속이라 reference 부적합) |
 
-- **report_archive 계약**: 앱 코드·`content/`가 경로를 인용하는 문서는 아카이브 금지. 대체된 설계 원전(`FORMULA_OS_DESIGN.md` 등)은 여기가 정위치다 — 명칭이 `*_DESIGN`이어도 배치가 우선
+- **report_archive 계약**: 앱 런타임이 fetch하거나 `content/`·`data/` 번들(UI 표시 대상)이 경로를 인용하는 문서는 아카이브 금지. 소스 주석의 출처(provenance) 인용은 허용한다 — 아카이브 문서는 재이동하지 않아 경로가 고정되므로 설계 근거 추적에 유효 (선례: `src/recommendations.js`·`src/views/quiz-wrong-cause.js`의 FEATURE_PROPOSALS §4 인용, `src/exams/cosmetic/formula-rules.js`의 FORMULA_OS_DESIGN §9.3 인용). 대체된 설계 원전(`FORMULA_OS_DESIGN.md` 등)은 여기가 정위치다 — 명칭이 `*_DESIGN`이어도 배치가 우선
 - 시험별 인덱스(`docs/exams/<id>/README.md`)는 본 규약의 시험 범위 파생본 — 규약 본문은 복제하지 않는다
 
 ## 4. 배치 판정 순서
 
 1. **도메인** — 시험 종속이면 `exams/<id>/`, 플랫폼 공통이면 `dev/` (§1)
 2. **역할** — §2·§3 표로 버킷 결정 (의도=design · 현행 기술=reference · 절차=runbooks · 결정=adr)
-3. **생명주기** — 대체됐거나 시점 스냅샷이면 `report_archive/` (앱 참조 문서 제외)
+3. **생명주기** — 대체됐거나 시점 스냅샷이면 `report_archive/` (런타임·콘텐츠 참조 문서 제외 — §3 계약)
 4. **예외** — 어느 버킷에도 못 넣으면 해당 루트에 두고 인덱스에 예외 사유를 명시
 
 ## 5. 명칭 규약
@@ -69,9 +69,11 @@ docs/
 | `*_FLOW.md` | 흐름 명세·계약 | design/ |
 | `*_MAP.md` | 지도·매핑표 | reference/ |
 | `*_LOGIC.md` · `*_STRATEGY.md` | 로직 해설·전략 참조 | reference/ |
-| `*_GUIDE.md` · `*_RUNBOOK.md` | 절차·지침 | runbooks/ |
+| `*_GUIDE.md` · `*_RUNBOOK.md` | 절차·지침·안내서 | runbooks/ (수행 절차) · reference/ (독자 안내 — 예: CODE_READING_GUIDE) |
 | `NNNN-slug.md` | ADR (4자리 연속 채번) | adr/ |
 | `README.md` | 디렉터리 인덱스 | 해당 디렉터리 루트 |
+
+- 표에 없는 접미사·무접미사 명칭(`TESTING.md`·`DEV_ENVIRONMENT.md`·`PROJECT_STRUCTURE_TOUR.md` 등)은 §2 역할 판정으로 배치한다 — 접미사 표는 신규 명명 지침이며 기존 명칭의 소급 개명을 요구하지 않는다
 
 - **배치가 명칭에 우선** — `*_DESIGN`이어도 대체된 원전은 report_archive/ 소속
 - 생성물 접미사·경로: `*_이야기형.md`(`build:story`) · `data/**/docs_md/`(`build_doc_bundles`) · `docs/dev/TRACE_MATRIX.md`(`build:trace`) — **직접 편집 금지**, 생성 명령으로만 갱신
@@ -105,7 +107,7 @@ docs/
 
 - **생성**: 헤더 선언 + ID 채번·레지스트리 등록 + `docs/README.md` 인덱스 행 + (시험 문서는 `exams/<id>/README.md` 갱신) + `CHANGES.md` 이력
 - **갱신**: 최종 업데이트 표기 + 판본 선언에 따른 의무 — `판본: textbook` 문서는 교재 커밋 이후 미갱신 시 `check:textbookdocs`가 게이트
-- **대체·아카이브**: 원전을 `report_archive/`로 이동하고 인덱스에 "대체됨 → 후속 문서" 표기. 앱 참조 문서는 아카이브 불가
+- **대체·아카이브**: 원전을 `report_archive/`로 이동하고 인덱스에 "대체됨 → 후속 문서" 표기. 앱 런타임·콘텐츠 참조 문서는 아카이브 불가 (§3 계약)
 - **이동·삭제·개명**: 경로 참조 문서를 전수 갱신한다 — `README.md`·`AGENTS.md` 트리, `ARCHITECTURE.md` 트리·변경 매트릭스, `docs/README.md` 인덱스·레지스트리, 관련 런북. 마지막으로 `build:trace` 재생성
 - **자동 생성 문서**는 생성 명령으로만 갱신 (§5 생성물 목록)
 

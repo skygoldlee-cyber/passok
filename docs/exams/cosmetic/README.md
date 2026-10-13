@@ -15,7 +15,7 @@
 | `business/` | 사업 기획·시장 조사·마케팅 — 사업기획서 v3.5(현행 기준서)·경쟁전략·판매업소 조사·홍보 의뢰 | none |
 | `design/` | 시험 종속 설계 — FORMULA_OS_WORKFLOW·PRODUCT_DB·PRODUCT_VISION·AUDIT_REPORT·PRACTICAL_TOOLS | none |
 | `reference/` | 교재 종속 참조 — `NUMBERING_SYSTEM.md`·`TEXTBOOK_REFERENCE_MAPPING.md` | textbook |
-| `report_archive/` | 시점 스냅샷 보고서 + 대체된 전략·설계 원전 (앱 미참조) | `법령최신확인결과.md`만 refmat |
+| `report_archive/` | 시점 스냅샷 보고서 + 대체된 전략·설계 원전 (앱 런타임·콘텐츠 미참조 — 소스 주석의 출처 인용은 허용) | `법령최신확인결과.md`만 refmat |
 | `ingredients_audit_제2026-19호.md` | 원료 DB ↔ 고시 전수 대조 리포트 (고시 판본 스냅샷) | refmat |
 
 ## 앱 내 문서 (시험 콘텐츠 팩 소속)
