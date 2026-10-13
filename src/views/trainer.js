@@ -6,7 +6,7 @@ import { shuffle } from '../utils.js';
 import { vibrate, HAPTIC, showToast, markChoiceButtons, wrongReviewHtml, trainerResultHtml, showAnswerFeedback } from '../ui-utils.js';
 import { PATHS } from '../paths.js';
 import { DataLoader } from '../data-loader.js';
-import { updateDueBadges } from './trainer-drills.js';
+import { updateDueBadges, gotoWeakReview } from './trainer-drills.js';
 import { resetMainScroll } from './navigation.js';
 
 /* =======================================================
@@ -284,11 +284,12 @@ function renderLimitsResult() {
 
 // 서브패널 ↔ 해시 슬러그 — 열리면 #/trainer/<slug> push,
 // 뒤로가기(#/trainer 복귀) 시 메뉴로 돌린다 (UX-NAV 확장)
+// 'weak' 슬러그는 취약 진술 리뷰가 복습 뷰로 이관되며 제거 (RV-02) —
+// 레거시 #/trainer/weak 해시는 initTrainer에서 #/review로 리다이렉트한다.
 const TRAINER_SUB_SLUGS = {
     'trainer-limits-panel': 'limits',
     'trainer-oxdrill-panel': 'oxdrill',
     'trainer-combo-panel': 'combo',
-    'trainer-weak-panel': 'weak',
     'trainer-calc-panel': 'calc',
     'trainer-ingredients-panel': 'ingredients',
 };
@@ -350,7 +351,6 @@ export function initTrainer() {
     const ingPanel = document.getElementById('trainer-ingredients-panel');
     const oxPanel = document.getElementById('trainer-oxdrill-panel');
     const comboPanel = document.getElementById('trainer-combo-panel');
-    const weakPanel = document.getElementById('trainer-weak-panel');
 
     if (menuPanel) menuPanel.classList.remove('is-hidden');
     if (limitsPanel) limitsPanel.classList.add('is-hidden');
@@ -358,8 +358,16 @@ export function initTrainer() {
     if (ingPanel) ingPanel.classList.add('is-hidden');
     if (oxPanel) oxPanel.classList.add('is-hidden');
     if (comboPanel) comboPanel.classList.add('is-hidden');
-    if (weakPanel) weakPanel.classList.add('is-hidden');
     resetMainScroll();
+
+    // 레거시 #/trainer/weak — 취약 진술 리뷰가 복습 뷰로 이관됐으므로 복습으로 리다이렉트 (RV-02).
+    // hashchange 경유 시 _hashNavigating 중이라 syncViewHash push가 생략되므로 URL을 직접 정규화한다.
+    if (location.hash === '#/trainer/weak') {
+        try { history.replaceState({ view: 'review-view' }, '', '#/review'); }
+        catch (_) { /* 제한 환경 무시 */ }
+        gotoWeakReview();
+        return;
+    }
 
     // 사장된 서브패널 해시 정규화 — 나가기 버튼·딥링크 잔여 해시를 #/trainer로 복원.
     // 뒤로가기 경유(hashchange → initTrainer)는 이미 #/trainer라 이 분기를 타지 않는다.

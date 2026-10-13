@@ -113,7 +113,7 @@ export function buildTodayQueue(p = {}) {
             icon: 'fa-dumbbell', color: 'var(--color-warning)',
             title: `취약 진술 ${p.weakStatementCount}개`,
             reason: '혼동쌍·오판 진술 — 연속 정답 3회 시 졸업',
-            actions: [{ click: 'gotoWeakReview', label: '훈련', icon: 'fa-dumbbell', cls: 'btn-primary' }]
+            actions: [{ click: 'gotoWeakReview', label: '리뷰', icon: 'fa-crosshairs', cls: 'btn-primary' }]
         });
     }
 

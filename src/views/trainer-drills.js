@@ -50,12 +50,15 @@ export function updateDueBadges() {
     const dueCount = getDueStatementSids().length;
     const weakCount = getWeakStatements().length;
     const label = dueCount > 0 ? `오늘 복습 대상 ${dueCount}개` : (weakCount > 0 ? `취약 ${weakCount}개` : '');
-    ['oxdrill-due-badge', 'combo-due-badge', 'weak-due-badge'].forEach(id => {
+    ['oxdrill-due-badge', 'combo-due-badge', 'review-weak-badge'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
         el.textContent = label;
         el.classList.toggle('is-hidden', !label);
     });
+    // 복습 뷰 헤더의 weak 드릴 CTA — 취약·복습 대상이 있을 때만 노출 (RV-03)
+    const drillBtn = document.getElementById('start-weak-oxdrill-btn');
+    if (drillBtn) drillBtn.classList.toggle('is-hidden', dueCount === 0 && weakCount === 0);
     ['oxdrill-due-count', 'combo-due-count'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
@@ -91,7 +94,7 @@ const DRILL_TYPES = {
         label: 'O/X',
         title: 'O/X 드릴',
         ids: { panel: 'trainer-oxdrill-panel', grid: 'oxdrill-subject-grid', setup: 'oxdrill-setup', arena: 'oxdrill-arena', result: 'oxdrill-result' },
-        otherPanels: ['trainer-menu-panel', 'trainer-weak-panel', 'trainer-combo-panel'],
+        otherPanels: ['trainer-menu-panel', 'trainer-combo-panel'],
         startAction: 'startOxDrill',
         stateOf: () => state.trainer.oxdrill,
         load: (n) => DataLoader.loadOxDrills(n),
@@ -134,7 +137,7 @@ const DRILL_TYPES = {
         label: 'ㄱㄴㄷ 조합',
         title: 'ㄱㄴㄷ 조합 드릴',
         ids: { panel: 'trainer-combo-panel', grid: 'combo-subject-grid', setup: 'combo-setup', arena: 'combo-arena', result: 'combo-result' },
-        otherPanels: ['trainer-menu-panel', 'trainer-weak-panel', 'trainer-oxdrill-panel'],
+        otherPanels: ['trainer-menu-panel', 'trainer-oxdrill-panel'],
         startAction: 'startComboDrill',
         stateOf: () => state.trainer.combo,
         load: (n) => DataLoader.loadComboDrills(n),
@@ -405,21 +408,38 @@ function sidSubject(sid) {
     return null;
 }
 
-/** 취약 진술 패널 열기 */
-/** 학습 진단 뷰 → 취약 진술 리뷰 딥링크 (훈련소 뷰 전환 후 패널 오픈) */
+/**
+ * 취약 진술 리뷰 열기 — RV-02로 복습 뷰의 <details> 섹션으로 이관됐으므로
+ * 복습 뷰 밖에서 호출되면 뷰 전환 후 섹션을 펼치고 렌더한다.
+ * data-click="openWeakReview"·"gotoWeakReview" 두 경로 모두 이 함수로 수렴한다.
+ */
+export function openWeakReview() {
+    if (state.currentView !== 'review-view') {
+        switchView('review-view', { scrollTop: true });
+    }
+    const section = /** @type {HTMLDetailsElement|null} */ (document.getElementById('review-weak-panel'));
+    if (section) {
+        section.open = true;
+        if (typeof section.scrollIntoView === 'function') {
+            section.scrollIntoView({ block: 'start' });
+        }
+    }
+    renderWeakReview();
+}
+
+/** 외부 딥링크 호환 시그니처 — 분석 카드·오늘 할 일 큐의 data-click 경로 보존 */
 export function gotoWeakReview() {
-    switchView('trainer-view', { scrollTop: true });
     openWeakReview();
 }
 
-export function openWeakReview() {
-    state.trainer.activeSubView = 'weak';
-    const menu = document.getElementById('trainer-menu-panel');
-    const panel = document.getElementById('trainer-weak-panel');
-    if (menu) menu.classList.add('is-hidden');
-    if (panel) panel.classList.remove('is-hidden');
-    resetMainScroll();
-    renderWeakReview();
+/**
+ * 복습 뷰 → O/X 드릴 딥링크 (RV-03) — 드릴 실행은 훈련소 패널에서 하므로
+ * 뷰 전환 후 지정 모드('weak'|'num'|'sid:<sid>'|'concept:<cid>'|과목번호)로 즉시 시작한다.
+ * @param {string|number} mode
+ */
+export function gotoOxDrill(mode) {
+    switchView('trainer-view', { scrollTop: true });
+    startOxDrill(mode);
 }
 
 let weakFilter = 'all'; // 'all' | 'due' — 취약 리뷰 필터
@@ -449,7 +469,7 @@ function weakRow(w, due, anomalies) {
             ${sub ? `<span class="weak-subject">과목${sub}</span>` : ''}
             ${dueBadge}${lastBadge}${anomalyBadge}
             <span class="weak-stat">오판 ${w.w}회 / 판정 ${w.j}회${w.lw ? ` · 최근 ${w.lw}` : ''}</span>
-            <button class="btn btn-secondary weak-retry-btn" data-click="startOxDrill" data-arg="sid:${esc(w.sid)}" aria-label="이 진술 O/X로 재시도"><i class="fa-solid fa-rotate"></i> 재시도</button>
+            <button class="btn btn-secondary weak-retry-btn" data-click="gotoOxDrill" data-arg="sid:${esc(w.sid)}" aria-label="이 진술 O/X로 재시도"><i class="fa-solid fa-rotate"></i> 재시도</button>
             ${simBtn}
         </div>
         <p class="weak-text">${safeTextWithBreaks(w.t || `(${w.sid})`)}</p>
@@ -488,7 +508,7 @@ export async function toggleSimilarStmts(sid) {
             <span class="weak-sim-score">${Math.round(h.score * 100)}%</span>
             ${sub ? `<span class="weak-subject">과목${sub}</span>` : ''}
             <span class="weak-sim-text">${safeTextWithBreaks(h.text)}</span>
-            <button class="btn btn-secondary weak-retry-btn" data-click="startOxDrill" data-arg="sid:${esc(h.sid)}" aria-label="이 진술 O/X로 재시도"><i class="fa-solid fa-rotate"></i></button>
+            <button class="btn btn-secondary weak-retry-btn" data-click="gotoOxDrill" data-arg="sid:${esc(h.sid)}" aria-label="이 진술 O/X로 재시도"><i class="fa-solid fa-rotate"></i></button>
         </div>`;
     }).join('');
     const dupeHint = dupes.length
@@ -508,10 +528,12 @@ function updateSimBtn(sid, expanded) {
     if (btn) btn.setAttribute('aria-expanded', String(expanded));
 }
 
-function renderWeakReview() {
+export function renderWeakReview() {
     const listEl = document.getElementById('weak-list');
     const summaryEl = document.getElementById('weak-summary');
     if (!listEl) return;
+    // 복습 뷰 헤더의 weak 드릴 CTA·배지도 함께 갱신 — 이 패널이 복습 뷰로 이관됐으므로 (RV-02/RV-03)
+    updateDueBadges();
 
     const weak = getWeakStatements(); // 졸업(연속 정답) 제외, w 내림차순
     const graduated = getWeakStatements(undefined, true).length - weak.length;
@@ -548,7 +570,7 @@ function renderWeakReview() {
             ? (graduated > 0 ? '모든 취약 진술을 졸업했습니다.' : '아직 오판 이력이 없습니다. O/X·ㄱㄴㄷ 조합 드릴을 풀면 진술 단위로 추적됩니다.')
             : `취약 진술 ${weak.length}개 · 오늘 복습 대상 ${dueCount}개${graduated ? ` · 졸업 ${graduated}개` : ''}${anomalyList.length ? ` · <span class="weak-anomaly">이상 의심 ${anomalyList.length}개</span>` : ''}
                <span class="weak-toolbar">
-                   <button class="btn btn-primary weak-drill-btn" data-click="startOxDrill" data-arg="weak"><i class="fa-solid fa-crosshairs"></i> 취약·복습 드릴</button>
+                   <button class="btn btn-primary weak-drill-btn" data-click="gotoOxDrill" data-arg="weak"><i class="fa-solid fa-crosshairs"></i> 취약·복습 드릴</button>
                    <button class="btn btn-secondary weak-filter-btn${weakFilter === 'all' ? ' active' : ''}" data-click="setWeakFilter" data-arg="all">전체</button>
                    <button class="btn btn-secondary weak-filter-btn${weakFilter === 'due' ? ' active' : ''}" data-click="setWeakFilter" data-arg="due">복습 대상만</button>
                </span>`;
@@ -576,7 +598,7 @@ function renderWeakReview() {
     listEl.innerHTML = sorted.map(g => {
         const header = g.cid && g.items.length > 1
             ? `<div class="weak-group-header"><i class="fa-solid fa-link"></i> 개념 ${esc(g.cid)} — 취약 진술 ${g.items.length}개 (혼동쌍 후보)
-                <button class="btn btn-secondary weak-retry-btn" data-click="startOxDrill" data-arg="concept:${esc(g.cid)}"><i class="fa-solid fa-bullseye"></i> 이 개념만 드릴</button></div>`
+                <button class="btn btn-secondary weak-retry-btn" data-click="gotoOxDrill" data-arg="concept:${esc(g.cid)}"><i class="fa-solid fa-bullseye"></i> 이 개념만 드릴</button></div>`
             : '';
         // 혼동쌍 대조: 참·거짓 진술이 섞인 그룹은 2단으로 나란히 배치 (전략 ⑤)
         const oItems = g.items.filter(i => i.truth === true);
