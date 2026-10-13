@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 1a97b57475fb6646
-> 생성: 2026-10-13 · 원천: SPEC.md(505개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 6075c6ae2c779e35
+> 생성: 2026-10-13 · 원천: SPEC.md(507개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 505개 — 문서 연결 365 · 소스 연결 456 · 테스트 연결 488 · 보고서 연결 109
+**커버리지 요약**: 요구사항 507개 — 문서 연결 369 · 소스 연결 457 · 테스트 연결 488 · 보고서 연결 109
 
 ---
 
@@ -39,12 +39,14 @@
 | D-12 | ✅ | 테스트 | — | src/views/dashboard.js<br>src/views/subject-stats.js | tests/dom/study-dashboard.dom.test.js | DOC-ARC-05<br>DOC-ARC-10 | — |
 | D-13 | ✅ | 테스트 | — | src/recommendations.js<br>src/views/dashboard.js<br>src/views/subject-stats.js | tests/dom/study-dashboard.dom.test.js | DOC-ARC-05<br>DOC-ARC-10 | — |
 | D-14 | ✅ | 테스트 | — | src/views/dashboard.js<br>src/views/subject-stats.js | tests/dom/study-dashboard.dom.test.js | DOC-ARC-05<br>DOC-ARC-10 | — |
-| D-15 | ✅ | 테스트 | — | src/views/dashboard.js<br>src/views/subject-stats.js | tests/dom/study-dashboard.dom.test.js | DOC-ARC-05<br>DOC-ARC-10 | — |
+| D-15 | ✅ | 테스트 | DOC-DSN-29 | src/views/dashboard.js<br>src/views/subject-stats.js | tests/dom/study-dashboard.dom.test.js | DOC-ARC-05<br>DOC-ARC-10 | — |
 | D-16 | ✅ | 테스트 | — | html/views/dashboard.html<br>index.html<br>src/analysis-engine.js<br>src/views/dashboard.js<br>…외 1개 | tests/unit/analysis-engine.test.js | — | — |
 | D-17 | ✅ | 테스트 | DOC-DSN-16 | src/study-tracker.js<br>src/views/dashboard.js<br>src/views/study-calendar.js<br>src/views/subject-stats.js | tests/dom/study-calendar.dom.test.js<br>tests/dom/study-dashboard.dom.test.js<br>tests/unit/study-tracker.test.js | — | — |
-| D-18 | ✅ | 테스트 | DOC-DSN-26<br>DOC-DSN-27 | src/spaced-repetition.js | tests/unit/fsrs.test.js | — | — |
+| D-18 | ✅ | 테스트 | DOC-DSN-26<br>DOC-DSN-27<br>DOC-DSN-29 | src/spaced-repetition.js | tests/unit/fsrs.test.js | — | — |
 | D-19 | ✅ | 테스트 | DOC-DSN-26<br>DOC-DSN-27<br>DOC-DSN-28 | src/spaced-repetition.js | tests/unit/fsrs.test.js<br>tests/unit/today-queue.test.js | — | — |
 | D-20 | ✅ | 테스트 | DOC-DSN-28 | src/spaced-repetition.js | tests/unit/fsrs.test.js | — | — |
+| D-21 | ✅ | 구현 (테스트 갭) | DOC-DSN-29 | src/analysis-engine.js | — | — | — |
+| D-22 | ⏳ | 문서 검토 | DOC-DSN-29 | — | — | — | — |
 | TQ-01 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24<br>DOC-DSN-26 | src/views/dashboard-queue.js<br>src/views/dashboard.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |
 | TQ-02 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | src/views/dashboard-queue.js | tests/unit/today-queue.test.js | — | — |
 | TQ-03 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | src/views/dashboard-queue.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |
@@ -413,7 +415,7 @@
 | SC-11 | ✅ | 테스트 | DOC-DSN-21 | src/views/analysis-view.js | tests/dom/study-calendar.dom.test.js<br>tests/dom/study-dashboard.dom.test.js | — | — |
 | SC-12 | ✅ | 테스트 | DOC-DSN-21 | src/views/analysis-view.js | tests/unit/study-tracker.test.js | — | — |
 | SC-13 | ✅ | 테스트 | DOC-DSN-17<br>DOC-DSN-21 | — | tests/dom/study-calendar.dom.test.js<br>tests/unit/study-tracker.test.js | — | — |
-| SC-14 | ✅ | 테스트 | — | — | tests/dom/study-dashboard.dom.test.js | — | — |
+| SC-14 | ✅ | 테스트 | DOC-DSN-29 | — | tests/dom/study-dashboard.dom.test.js | — | — |
 | SC-15 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/study-tracker.js<br>src/views/reader-progress.js | tests/dom/study-calendar.dom.test.js<br>tests/unit/study-tracker.test.js | — | — |
 
 ## 3.21 UI 모드 전환
@@ -803,6 +805,7 @@
 | DOC-DSN-26 | docs/dev/design/EXAM_R_SCHEDULING_DESIGN.md | D-18, D-19, F-07, TQ-01 |
 | DOC-DSN-27 | docs/dev/design/FSRS6_UPGRADE_DESIGN.md | D-18, D-19, F-07, F-11 |
 | DOC-DSN-28 | docs/dev/design/EXAM_DUE_CLAMP_DESIGN.md | D-19, D-20, F-07 |
+| DOC-DSN-29 | docs/dev/design/KNOWLEDGE_TRACING_DESIGN.md | D-15, D-18, D-21, D-22, SC-14 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |
@@ -845,4 +848,8 @@
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
-없음 — 소스 연결된 모든 요구사항에 테스트 참조가 있음.
+소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 1개 — 테스트 백로그 후보.
+
+| ID | 절 | 구현 소스 |
+|----|-----|-----------|
+| D-21 | 3.1 대시보드 | src/analysis-engine.js |

@@ -1,5 +1,5 @@
 // src/analysis-engine.js — 학습 진단(analysis-view) 심층 분석 순수 로직
-// @spec AN-01,AN-02,AN-07,AN-08,AN-09,D-16,SC-15
+// @spec AN-01,AN-02,AN-07,AN-08,AN-09,D-16,D-21,SC-15
 //
 // 모든 함수는 DOM 비의존·과목 무관 — 데이터를 주입받아 계산만 한다.
 // 과목 키/단원명은 manifest·question_chapters·statement_stats에서 동적으로 해석하므로
@@ -108,55 +108,84 @@ export function chapterFromCid(cid, subjKey, chapterRanges, maps) {
    1) 단원별 취약 집계
    ======================================================= */
 
+// @spec D-21
+/** Beta 사전 — 합격선 근처 약한 사전 (α=4, β=3, ~7회 증거분 무게, KNOWLEDGE_TRACING_DESIGN §3.1) */
+const KT_PRIOR_A = 4, KT_PRIOR_B = 3;
+
 /**
- * 오답/오판 항목을 교재 단원별로 집계한다 (내부 버킷).
+ * 단원 숙달률 Beta 사후평균 — 소표본은 사전으로 수축, 대표본은 실측 수렴 (D-21)
+ * @param {number} corrects 정답 판정 수
+ * @param {number} wrongs 오답·오판 수
+ * @returns {number} 0~1 숙달 추정치
+ */
+export function betaPosteriorMean(corrects, wrongs) {
+    return (KT_PRIOR_A + corrects) / (KT_PRIOR_A + KT_PRIOR_B + corrects + wrongs);
+}
+
+/**
+ * 정오 항목을 교재 단원별로 집계한다 (내부 버킷 — 오답뿐 아니라 정답 증거 포함, D-21).
  * 해석 경로 (모두 실패 시 '기타' 묶음 없이 버림):
  *   - weak_sim_<exam>_q<N>  → questionChapters["<exam>_q<N>"]
  *   - weak_quiz_<id>·일반 퀴즈 id → resolveQuiz(id).quiz.category (로드된 과목만)
  *   - 진술 sid → cid(§앵커·레거시 L####는 CID_SECTION 환산) → 단원명
+ * 졸업 진술(streak≥3)은 회복된 숙달 증거 — 누적 w가 아닌 연속 정답 streak만 정답으로 반영.
  */
-function _aggregateChapterWrongs(p) {
-    const buckets = new Map(); // `${subj}|${chapter}` → {subject, chapter, wrongs}
-    const bump = (subj, chapter) => {
+function _aggregateChapterEvidence(p) {
+    const buckets = new Map(); // `${subj}|${chapter}` → {subject, chapter, attempts, corrects, wrongs}
+    const bump = (subj, chapter, correct) => {
         if (!chapter) return;
         const key = `${subj || ''}|${chapter}`;
-        const cur = buckets.get(key) || { subject: subj || '', chapter, wrongs: 0 };
-        cur.wrongs++;
+        const cur = buckets.get(key) || { subject: subj || '', chapter, attempts: 0, corrects: 0, wrongs: 0 };
+        cur.attempts++;
+        if (correct) cur.corrects++; else cur.wrongs++;
         buckets.set(key, cur);
     };
 
-    // (a) 퀴즈 오답 → quiz.category
+    // (a) 퀴즈 정오 전건 → quiz.category (정답도 숙달 증거 — D-21)
     const results = p.quizResults || {};
     Object.keys(results).forEach(id => {
-        if (!results[id] || results[id].correct) return;
+        if (!results[id]) return;
         const resolved = p.resolveQuiz ? p.resolveQuiz(id) : null;
         const subj = (resolved && resolved.subjectId) || subjectKeyFromItemId(id) || '';
         const chapter = (resolved && resolved.quiz && resolved.quiz.category)
             || (p.questionChapters && p.questionChapters[id]);
-        bump(subj, chapter);
+        bump(subj, chapter, !!results[id].correct);
     });
 
-    // (b) 약점 카드 — weak_sim_* 은 문제은행 문항 → questionChapters
+    // (b) 약점 카드 — weak_sim_* 은 문제은행 문항 오답 → questionChapters
     (p.weakCards ? [...p.weakCards] : []).forEach(id => {
         const sim = parseWeakSimId(id);
         if (!sim) return;
         const chapter = p.questionChapters && p.questionChapters[`${sim.examId}_q${sim.qNum}`];
-        bump(examIdToSubjectId(sim.examId) || '', chapter);
+        bump(examIdToSubjectId(sim.examId) || '', chapter, false);
     });
 
-    // (c) 진술 오판 → cid(§앵커/레거시 L#### 환산) → 챕터
+    // (c) 진술 판정 → cid(§앵커/레거시 L#### 환산) → 챕터
     Object.entries(p.statementStats || {}).forEach(([sid, v]) => {
-        if (!v || !(v.w > 0) || (v.streak || 0) >= WEAK_GRADUATE_STREAK) return; // 졸업 진술 제외
+        if (!v || !(v.j > 0)) return;
         const subj = subjectFromSid(sid);
-        bump(subj, chapterFromCid(v.cid, subj, p.chapterRanges,
-            { chapterTitles: p.chapterTitles, cidSection: p.cidSection }));
+        const chapter = chapterFromCid(v.cid, subj, p.chapterRanges,
+            { chapterTitles: p.chapterTitles, cidSection: p.cidSection });
+        if (!chapter) return;
+        const key = `${subj || ''}|${chapter}`;
+        const cur = buckets.get(key) || { subject: subj || '', chapter, attempts: 0, corrects: 0, wrongs: 0 };
+        if ((v.streak || 0) >= WEAK_GRADUATE_STREAK) {
+            // 졸업 진술 — 회복된 숙달: 연속 정답 streak만 정답 증거로 반영 (누적 w는 과거 상태라 제외)
+            cur.attempts += v.streak;
+            cur.corrects += v.streak;
+        } else {
+            cur.attempts += v.j;
+            cur.corrects += Math.max(0, v.j - (v.w || 0));
+            cur.wrongs += v.w || 0;
+        }
+        buckets.set(key, cur);
     });
     return buckets;
 }
 
 /** 공통 파라미터 — computeChapterWeakness/computeSubjectWeakChapters 공용
  * @param {Object} p
- * @param {Object} p.quizResults state.quizResults (오답만 집계)
+ * @param {Object} p.quizResults state.quizResults (정오 전건 집계 — D-21)
  * @param {Set<string>} p.weakCards state.weakCards
  * @param {Object} p.statementStats getAllStatementStats() 결과
  * @param {Object} p.questionChapters QUESTION_CHAPTERS 맵
@@ -168,37 +197,48 @@ function _aggregateChapterWrongs(p) {
  */
 
 /**
- * 오답 집계를 단원별 단일 랭킹으로 반환 (전 과목 혼합).
+ * 취약 단원 단일 랭킹 (전 과목 혼합) — 오답 증거가 있는 단원을 숙달률 오름차순으로.
  * @param {Object} p 공통 파라미터 + p.limit
- * @returns {Array<{subject:string, chapter:string, wrongs:number}>} 오답 건수 내림차순
+ * @returns {Array<{subject:string, chapter:string, wrongs:number, mastery:number}>}
+ *   mastery는 Beta 사후평균 숙달률 (D-21) — 오답 빈도가 아닌 추정 숙달 정도로 정렬
  */
 export function computeChapterWeakness(p) {
     const name = p.subjectName || ((k) => k);
-    const out = [..._aggregateChapterWrongs(p).values()].sort((a, b) => b.wrongs - a.wrongs);
+    const out = [..._aggregateChapterEvidence(p).values()]
+        .filter(b => b.wrongs > 0)
+        .map(b => ({ ...b, mastery: betaPosteriorMean(b.corrects, b.wrongs) }))
+        .sort((a, b) => (a.mastery - b.mastery) || (b.wrongs - a.wrongs));
     out.forEach(b => { b.subject = name(b.subject); });
     return typeof p.limit === 'number' ? out.slice(0, p.limit) : out;
 }
 
 /**
- * 오답 집계를 **과목별로 그룹화**해 반환 — 과락 평가가 과목 단위이므로
+ * 취약 단원을 **과목별로 그룹화**해 반환 — 과락 평가가 과목 단위이므로
  * 각 과목의 최약 단원을 과목별로 보여준다 (어떤 과목이든 같은 구조).
  * @param {Object} p 공통 파라미터 + p.chaptersPerSubject(기본 2)
- * @returns {Array<{subject:string, subjectKey:string, totalWrongs:number,
- *   chapters:Array<{chapter:string, wrongs:number}>}>} 과목 총 오답 내림차순
+ * @returns {Array<{subject:string, subjectKey:string, totalWrongs:number, minMastery:number,
+ *   chapters:Array<{chapter:string, wrongs:number, mastery:number}>}>}
+ *   과목 정렬은 최약 단원 숙달률 오름차순 (D-21), totalWrongs는 표시용 합계
  */
 export function computeSubjectWeakChapters(p) {
     const name = p.subjectName || ((k) => k);
     const perSubj = p.chaptersPerSubject || 2;
-    const bySubj = new Map(); // subjKey → {subject, subjectKey, totalWrongs, chapters}
-    for (const b of _aggregateChapterWrongs(p).values()) {
-        const cur = bySubj.get(b.subject) || { subject: name(b.subject), subjectKey: b.subject, totalWrongs: 0, chapters: [] };
+    const bySubj = new Map(); // subjKey → {subject, subjectKey, totalWrongs, minMastery, chapters}
+    for (const b of _aggregateChapterEvidence(p).values()) {
+        if (b.wrongs <= 0) continue; // 오답 증거 없는 단원은 취약 랭킹 대상 아님
+        const cur = bySubj.get(b.subject) || { subject: name(b.subject), subjectKey: b.subject, totalWrongs: 0, minMastery: Infinity, chapters: [] };
+        const mastery = betaPosteriorMean(b.corrects, b.wrongs);
         cur.totalWrongs += b.wrongs;
-        cur.chapters.push({ chapter: b.chapter, wrongs: b.wrongs });
+        cur.minMastery = Math.min(cur.minMastery, mastery);
+        cur.chapters.push({ chapter: b.chapter, wrongs: b.wrongs, mastery });
         bySubj.set(b.subject, cur);
     }
     const out = [...bySubj.values()];
-    out.forEach(g => g.chapters.sort((a, b) => b.wrongs - a.wrongs).length = Math.min(g.chapters.length, perSubj));
-    return out.sort((a, b) => b.totalWrongs - a.totalWrongs);
+    out.forEach(g => {
+        g.chapters.sort((a, b) => (a.mastery - b.mastery) || (b.wrongs - a.wrongs));
+        g.chapters.length = Math.min(g.chapters.length, perSubj);
+    });
+    return out.sort((a, b) => a.minMastery - b.minMastery);
 }
 
 /* =======================================================

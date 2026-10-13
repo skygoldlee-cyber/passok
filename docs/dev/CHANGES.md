@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 단원 숙달 베이지안 추정 (D-21 — 지식 추적 v1)
+
+- **`_aggregateChapterWrongs` → `_aggregateChapterEvidence`**: 오답만 세던 집계를 정오 전건으로 확장 — 퀴즈 정답·진술 j−w 정답분·시뮬 오답을 단원 버킷으로 집계. 진술 오판은 실횟수 `w` 반영(기존 진술당 1건 → 의미 변경), 졸업 진술(streak≥3)은 회복된 숙달로 연속 정답 streak만 정답 증거 반영
+- **`betaPosteriorMean`** — Beta(4,3) 사후평균: 소표본은 합격선 근처 사전으로 수축(1오답이 0%로 붕괴하지 않음), 대표본은 실측 수렴
+- **랭킹 정렬 교체**: `computeChapterWeakness`·`computeSubjectWeakChapters`의 정렬을 오답 빈도→숙달률 오름차순으로 (wrongs>0 단원만 — 취약 랭킹 의미 유지), `mastery` 필드 추가, 과목 정렬은 최약 단원 숙달률 기준
+- 표시: 단원 행 "오답 N건" → "숙달 M% · 오답 N건" — 카드 위치·행동 불변
+- v2(BKT, D-22)는 판정 시퀀스 로그 확장 선행 — KNOWLEDGE_TRACING_DESIGN §3.2
+
 ## 2026-10-13 시험일 due 클램프 + 시험일 위험 임계 교정 (D-20·D-19 정정)
 
 - **공집합 결함 발견·교정**: `nextInterval ≈ s` 불변식상 `due > exam`이면 `R_exam > 0.9` — 기존 `EXAM_R_THRESHOLD = 0.85`는 실데이터 불도달(배포된 D-19 큐가 실동 불가였음). `EXAM_TARGET_R = 0.95`로 교정해 실제 위험대인 (0.90, 0.95) 밴드를 포착
