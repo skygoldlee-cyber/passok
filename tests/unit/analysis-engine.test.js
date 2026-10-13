@@ -141,22 +141,26 @@ test('computePassGap: 예상 점수 → 합격선 갭 + 최저 과목', async ()
     assert.equal(out.gap, 8);
     assert.equal(out.weakest.key, 'law');
     assert.equal(out.weakest.rate, 45);
+    assert.deepEqual(out.ranking.map(s => s.key), ['law', 'chem']);
 });
 
 test('computePassGap: 모의고사 없으면 퀴즈 정답률 폴백', async () => {
     const { computePassGap } = await import(ENGINE);
     const out = computePassGap({
         estimate: null, simHistory: [],
-        subjects: [{ key: 'law', name: '법령' }, { key: 'chem', name: '화학' }],
+        subjects: [{ key: 'law', name: '법령' }, { key: 'chem', name: '화학' }, { key: 'bio', name: '생물' }],
         counts: {
             law: { quizSolved: 10, quizCorrect: 5 },
             chem: { quizSolved: 10, quizCorrect: 8 },
+            bio: { quizSolved: 2, quizCorrect: 0 },
         },
         rules: { passAverage: 60, subjectFailBelow: 40 }
     });
     assert.equal(out.gap, null);
     assert.equal(out.weakest.key, 'law');
     assert.equal(out.weakest.rate, 50);
+    // 3문 미만 과목(bio)은 순위에서 제외
+    assert.deepEqual(out.ranking.map(s => s.key), ['law', 'chem']);
 });
 
 test('computeWeakConceptClusters: 같은 cid 반복 오판 묶음', async () => {
