@@ -7,6 +7,21 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 설계 문서 분류 정정 — 배치 규칙 명문화 + 인덱스 카운트 정합
+
+- **배경**: 설계 문서가 `dev/design/`·`exams/<id>/design/`·`report_archive/`에 분산돼 보이는 문제 — 조사 결과 배치 자체는 도메인 격리(플랫폼↔시험 종속)와 아카이브 계약에 부합하나, 배치 규칙이 어디에도 명문화되지 않은 것이 실제 결함
+- **분류·배치 규칙 신설** (`docs/README.md` "🗂️ 문서 분류·배치 규칙"): 9개 버킷별 판정 기준 표 + 판정 순서(도메인 → 역할 → 아카이브) — design=설계 의도 / reference=현행 기술 명세 경계, report_archive의 "앱 미참조" 계약, 시험 루트 예외(ingredients_audit), `DOC-*` 접두사↔디렉터리 일치 규칙 명문화
+- **인덱스 카운트 정합**: `docs/README.md` 트리의 스테일 수치 정정 — dev/ 47→54개 · design/ 18→20개 · reference/ 11→12개 (check_inventory는 AGENTS.md 트리만 검증해 docs/README 카운트는 비게이트 — 수동 정합)
+- **스테일 경로 정정**: `.github/workflows/notice-check.yml`의 감사 리포트 선례 경로 `docs/dev/` → `docs/exams/cosmetic/` 실위치로 수정
+- **이동 없음 판정**: `USER_FLOW.md`(design=흐름 명세는 의도 문서), `UIUX_외주전달_패키지.md`(수위 독립 산출물), `FORMULA_OS_DESIGN.md`(report_archive 대체된 원전)은 현 위치가 규칙에 부합
+
+## 2026-10-13 UI/UX 설계 가이드 신규 — 국제 표준 기반 표면·노출 규약 (DOC-DSN-25)
+
+- **신규 `docs/dev/design/UIUX_DESIGN_GUIDE.md` (DOC-DSN-25)**: 국제 표준(WCAG 2.2·WAI-ARIA APG·Apple HIG·Material 3·Nielsen 휴리스틱·ISO 9241-110·W3C i18n)에 근거한 UI/UX 규약집 — 기능 상세는 SPEC이 원천이고 본 문서는 표면 배치·노출 원칙의 단일 출처
+- **핵심 신설 §4 기능 버튼 노출 규약(EXP-1~6)**: 동일 뷰포트×모드 단일 노출 · 전 대역 표면(헤더·설정) 정본 우선 · 뷰포트 상호배타 면제 · 대역 분담 인계 · 진입점 소실 금지 · 선언적 게이팅(nav-study/practice-only·data-feature, JS 인라인 display 금지) + 현재 정본 매핑 표
+- **규약 체계화**: 표면 모델 6종 정의(사이드바·상단바·탭바+시트·헤더·설정·뷰 콘텐츠), 내비/접근성/반응형/다이얼로그/피드백/테마/스크롤/i18n/성능 각 절을 국제 표준 조항에 매핑 + §14 규약↔게이트 매핑표·§15 Docs-First 변경 절차
+- **레지스트리**: docs/README.md design 17→18·dev 46→47·UIUX 명세 표 행 추가·DOC-DSN-25 채번, AGENTS.md 관련 문서 등록
+
 ## 2026-10-13 기능 버튼 중복 표면 정리 — 정본 1곳 규칙 확정
 
 - **배경**: 동일 기능이 2곳 이상에 노출되던 잔여 중복 정리 — 전 대역 존재 표면(헤더·설정 패널)을 정본으로 수렴
