@@ -292,7 +292,7 @@
         align-items: center;
         justify-content: center;
         gap: 0.2rem;
-        padding: 0.4rem 0.5rem;
+        padding: 0.4rem 0.25rem;
         position: relative;
         color: var(--color-text-muted);
         font-size: var(--text-2xs);
@@ -329,6 +329,8 @@
        활성 상태는 아이콘 색으로 전달, 텍스트는 WCAG AA 충족 */
     .mobile-tab-item > span {
         color: var(--color-text-main);
+        /* 라벨 2줄 줄바꿈 방지 — '대시보드'·'성분 사전'이 390px에서 '드'/'전'만 넘어감 */
+        white-space: nowrap;
     }
 
     .mobile-tab-item:active {
