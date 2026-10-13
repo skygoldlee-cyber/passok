@@ -265,6 +265,9 @@ describe('대시보드 — 통계·과목 카드·약점 추천', () => {
         renderDashboard();
 
         const queue = el('weak-subject-recommendation');
+        // 큐는 대시보드 최상단 액션 표면 — 데일리 챌린지·안내서 위젯 행보다 먼저 렌더되어야 한다 (첫 화면 위계)
+        const widgetsRow = document.querySelector('.dashboard-widgets-row');
+        expect(queue.compareDocumentPosition(widgetsRow) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
         const items = queue.querySelectorAll('ol.today-queue > li.tq-item');
         expect(items.length).toBeGreaterThan(0);
         // ① FSRS 복습 대기가 첫 항목 (TQ-01 우선순위)
