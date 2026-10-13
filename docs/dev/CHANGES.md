@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 BKT 단원 숙달 추적 (D-22)
+
+- **`knowledge-tracing.js` 신설** — `bktUpdate`(관측 사후확률+학습 전이)·`computeUnitMastery`(시퀀스→P(L))·`resolveKtParams`(manifest `study.kt` 오버라이드+범위 검증). DOM·저장 비의존 순수 모듈 (KNOWLEDGE_TRACING_DESIGN §3.2·§4.2②)
+- **소비자 연결**: 취약 단원 랭킹의 숙달 추정이 시퀀스 있으면 BKT `P(L)`·없으면 Beta 폴백 — v1 카운트 증거는 BKT 초기 P(L) 사전으로 승계. 진술 스케줄 이벤트는 `statement_stats` 멤버십으로 OX 관측 귀속, 카드 자기평가 자연 배제 (§4.2③)
+- cosmetic manifest `study.kt` 명시 + 번들 재생성 — 부수 교정: `minExamLeadDays 50→63` 스테일 번들 정정
+
 ## 2026-10-13 퀴즈 판정 시퀀스 로그 확장 (D-22 선행 ①)
 
 - **`fc_review_log` 혼합 스키마**: `{c, k:'q', ok, t}` 퀴즈·시뮬 문항 판정 레코드 추가 — `k` 없는 기존 `{c,r,e,t}`는 스케줄 이벤트로 후방 호환, 단일 시계열 링버퍼·백업 정합 자동 승계 (KNOWLEDGE_TRACING_DESIGN §4.2 ①-a)

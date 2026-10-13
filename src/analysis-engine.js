@@ -1,5 +1,5 @@
 // src/analysis-engine.js — 학습 진단(analysis-view) 심층 분석 순수 로직
-// @spec AN-01,AN-02,AN-07,AN-08,AN-09,D-16,D-21,SC-15
+// @spec AN-01,AN-02,AN-07,AN-08,AN-09,D-16,D-21,D-22,SC-15
 //
 // 모든 함수는 DOM 비의존·과목 무관 — 데이터를 주입받아 계산만 한다.
 // 과목 키/단원명은 manifest·question_chapters·statement_stats에서 동적으로 해석하므로
@@ -12,9 +12,12 @@
 //   weakCards        Set<itemId>  (weak_sim_<exam>_qN / weak_quiz_<id> / <subj>_card_N)
 //   questionChapters { "subjectN_qM": "단원명" }  (question_chapters.js)
 //   chapterRanges    { subjKey: [[라인, "단원명"], ...] }  (CHAPTER_RANGES)
+//   reviewLog        [{c,k?,r?,ok?,t}]  (D-18 리뷰 로그 — BKT 관측 시퀀스, D-22)
 
 import { parseWeakSimId, subjectKeyFromItemId, WEAK_QUIZ_PREFIX } from './weak-items.js';
 import { resolveLegacySubjectKey, examIdToSubjectId } from './exam-context.js';
+import { Rating } from './fsrs.js';
+import { computeUnitMastery, KT_DEFAULTS } from './knowledge-tracing.js';
 import { localDateKey } from './utils.js';
 import { WEAK_GRADUATE_STREAK } from './statement-tracker.js';
 import { getWrongCauseLabels, getWrongCauseTaxonomy } from './recommendations.js';
@@ -194,19 +197,71 @@ function _aggregateChapterEvidence(p) {
  * @param {Object} [p.cidSection] CID_SECTION 맵 — 레거시 L#### cid → §앵커 환산 (AN-10)
  * @param {(id:string)=>{quiz:object,subjectId:string}|null} p.resolveQuiz weak-items.resolveWrongQuiz
  * @param {(key:string)=>string} [p.subjectName] 과목키→표시명 (없으면 키 그대로)
+ * @param {Array} [p.reviewLog] D-18 리뷰 로그 — 있으면 BKT 관측 시퀀스 구성 (D-22)
+ * @param {Object} [p.ktParams] resolveKtParams 결과 — 생략 시 기본값
  */
+
+// @spec D-22
+/**
+ * 단원별 BKT 관측 시퀀스 — 리뷰 로그의 시간순 정오를 단원으로 귀속 (D-22).
+ *   - {k:'q'} 퀴즈 판정 → 문항id→단원 (resolveQuiz·questionChapters), kind 'mcq'
+ *   - {r} 스케줄 이벤트 중 진술 sid → 단원(cid→§앵커 환산), kind 'ox', r===3 정판
+ *   - 카드 자기평가는 제외 — 채점 증거만 사용 (설계 §2.1)
+ * @param {Object} p 공통 파라미터 + p.reviewLog (getReviewLog 결과)
+ * @returns {Map<string, Array<{correct:boolean, kind:string}>>} `${subj}|${chapter}` → 시간순 관측
+ */
+function _unitObservationSeqs(p) {
+    const seqs = new Map();
+    const push = (subj, chapter, correct, kind) => {
+        if (!chapter) return;
+        const key = `${subj || ''}|${chapter}`;
+        const cur = seqs.get(key) || [];
+        cur.push({ correct, kind });
+        seqs.set(key, cur);
+    };
+    for (const e of (p.reviewLog || [])) {
+        if (!e || !e.c) continue;
+        if (e.k === 'q') {
+            const resolved = p.resolveQuiz ? p.resolveQuiz(e.c) : null;
+            const subj = (resolved && resolved.subjectId) || subjectKeyFromItemId(e.c) || '';
+            const chapter = (resolved && resolved.quiz && resolved.quiz.category)
+                || (p.questionChapters && p.questionChapters[e.c]);
+            push(subj, chapter, e.ok === 1, 'mcq');
+        } else {
+            const st = p.statementStats && p.statementStats[e.c];
+            if (!st) continue; // 카드 자기평가·미추적 id — 제외
+            const subj = subjectFromSid(e.c);
+            const chapter = chapterFromCid(st.cid, subj, p.chapterRanges,
+                { chapterTitles: p.chapterTitles, cidSection: p.cidSection });
+            push(subj, chapter, e.r === Rating.GOOD, 'ox');
+        }
+    }
+    return seqs;
+}
+
+/**
+ * 단원 숙달 추정 — 시퀀스가 있으면 BKT P(L), 없으면 Beta 사후평균 폴백 (D-22).
+ * 카운트 증거는 BKT 초기 P(L) 사전으로 승계 — v1 증거를 버리지 않는다 (설계 §3.2).
+ */
+function _unitMastery(bucket, seqs, ktParams) {
+    const seq = seqs.get(`${bucket.subject}|${bucket.chapter}`);
+    const prior = bucket.attempts > 0 ? betaPosteriorMean(bucket.corrects, bucket.wrongs) : undefined;
+    if (!seq || !seq.length) return betaPosteriorMean(bucket.corrects, bucket.wrongs);
+    return computeUnitMastery(seq, ktParams || KT_DEFAULTS, prior);
+}
 
 /**
  * 취약 단원 단일 랭킹 (전 과목 혼합) — 오답 증거가 있는 단원을 숙달률 오름차순으로.
- * @param {Object} p 공통 파라미터 + p.limit
+ * @param {Object} p 공통 파라미터 + p.limit + p.reviewLog·p.ktParams (D-22, 생략 시 Beta 폴백)
  * @returns {Array<{subject:string, chapter:string, wrongs:number, mastery:number}>}
- *   mastery는 Beta 사후평균 숙달률 (D-21) — 오답 빈도가 아닌 추정 숙달 정도로 정렬
+ *   mastery는 BKT P(L) (시퀀스 없으면 Beta 사후평균, D-21·D-22) — 오답 빈도가 아닌 추정 숙달 정도로 정렬
  */
 export function computeChapterWeakness(p) {
     const name = p.subjectName || ((k) => k);
+    const seqs = p.reviewLog ? _unitObservationSeqs(p) : new Map();
     const out = [..._aggregateChapterEvidence(p).values()]
         .filter(b => b.wrongs > 0)
-        .map(b => ({ ...b, mastery: betaPosteriorMean(b.corrects, b.wrongs) }))
+        .map(b => ({ ...b, mastery: _unitMastery(b, seqs, p.ktParams) }))
         .sort((a, b) => (a.mastery - b.mastery) || (b.wrongs - a.wrongs));
     out.forEach(b => { b.subject = name(b.subject); });
     return typeof p.limit === 'number' ? out.slice(0, p.limit) : out;
@@ -224,10 +279,11 @@ export function computeSubjectWeakChapters(p) {
     const name = p.subjectName || ((k) => k);
     const perSubj = p.chaptersPerSubject || 2;
     const bySubj = new Map(); // subjKey → {subject, subjectKey, totalWrongs, minMastery, chapters}
+    const seqs = p.reviewLog ? _unitObservationSeqs(p) : new Map();
     for (const b of _aggregateChapterEvidence(p).values()) {
         if (b.wrongs <= 0) continue; // 오답 증거 없는 단원은 취약 랭킹 대상 아님
         const cur = bySubj.get(b.subject) || { subject: name(b.subject), subjectKey: b.subject, totalWrongs: 0, minMastery: Infinity, chapters: [] };
-        const mastery = betaPosteriorMean(b.corrects, b.wrongs);
+        const mastery = _unitMastery(b, seqs, p.ktParams);
         cur.totalWrongs += b.wrongs;
         cur.minMastery = Math.min(cur.minMastery, mastery);
         cur.chapters.push({ chapter: b.chapter, wrongs: b.wrongs, mastery });

@@ -107,7 +107,8 @@
   },
   "study": {
     "minExamLeadDays": 63,
-    "readThroughDays": 10
+    "readThroughDays": 10,
+    "kt": { "P0": 0.30, "T": 0.08, "G": { "mcq": 0.15, "ox": 0.30 }, "S": 0.10 }
   },
   "analysis": {
     "wrongCauses": [
