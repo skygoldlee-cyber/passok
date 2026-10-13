@@ -116,7 +116,18 @@ P_unit = (α₀ + corrects) / (α₀ + β₀ + corrects + wrongs)
 | A. 기존 `fc_review_log` 확장 | `{c, r, e, t}`에 `k` 타입 필드 추가(`'s'` 진술·`'q'` 퀴즈·`'c'` 카드) | 단일 로그로 시퀀스 통합 — 복원·동기·FIFO 정합 자동 승계. 단 스키마 확장이므로 기존 레코드와의 후방 호환(k 없으면 기존 의미) 설계 필요 |
 | B. 별도 `fc_judgment_log` | 퀴즈 판정 전용 `{q, ok, t}` 링버퍼 | 로그 분리로 기존 소비자 무영향 — 단 키·상한·백업 등록 중복 |
 
-**기본 안은 A** — BKT 입력이 "시간순 정오 시퀀스"이므로 단일 시계열이 자연스럽고, 카드·진술 레이팅도 이미 같은 로그에 있어 혼합 시퀀스가 공짜다. 스키마 상세(필드·호환·기입점)는 착수 시 §에 확정한다.
+**기본 안은 A** — BKT 입력이 "시간순 정오 시퀀스"이므로 단일 시계열이 자연스럽고, 카드·진술 레이팅도 이미 같은 로그에 있어 혼합 시퀀스가 공짜다.
+
+**①-a 스키마 확정 (2026-10-13, 안 A 채택)**:
+
+```js
+{c: 문항 id, k: 'q', ok: 1|0, t: unix ms}   // 퀴즈·시뮬 문항 판정 — recordQuizJudgment()
+{c, r, e, t}                                // 스케줄 이벤트 (기존) — k 없음 = 레이팅 레코드
+```
+
+- 기입점: `views/quiz.js`의 `quizResults` 기록 2곳(텍스트·선택지 채점) + `exam-sim-arena.js` `submitExam` 루프(문항 단위 전건). ㄱㄴㄷ 진술 판정은 기존 경로(`recordStatementJudgments`→`updateCardSchedule`)로 이미 유입 — 문항·진술 이중 계수는 소비자가 `k` 필터로 선택
+- 후방 호환: `k` 없는 레코드는 스케줄 이벤트로 해석 — `getReviewLog()`·FIFO·백업 무수정
+- 비기입 영역: 시뮬 `weak_sim_*` 오답 카드는 별도 증거 경로로 유지 (§2.1)
 
 **② `knowledge-tracing.js` 순수 모듈** — `bktUpdate(pL, correct, {T,G,S})` · `computeUnitMastery(sequence)` (단원 귀속은 D-21의 `computeUnitEvidence` 귀속 경로 재사용). DOM·저장 비의존 순수 함수.
 
