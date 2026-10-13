@@ -11,6 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  contents: read
   issues: write
 
 jobs:
@@ -41,7 +42,7 @@ jobs:
         run: |
           gh issue create \
             --title "📦 vendor 라이브러리 업데이트 필요 — 주간 신선도 체크" \
-            --label "maintenance" \
+            --label "dependencies" \
             --body "$(cat vendor-check.log | sed 's/^/    /')
 
           ## 갱신 절차
