@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 043fc38f51144f79
+> 입력 해시: cb6dd3b1756f83c0
 > 생성: 2026-10-13 · 원천: SPEC.md(512개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -43,8 +43,8 @@
 | D-16 | ✅ | 테스트 | — | html/views/dashboard.html<br>index.html<br>src/analysis-engine.js<br>src/views/dashboard.js<br>…외 1개 | tests/unit/analysis-engine.test.js | — | — |
 | D-17 | ✅ | 테스트 | DOC-DSN-16 | src/study-tracker.js<br>src/views/dashboard.js<br>src/views/study-calendar.js<br>src/views/subject-stats.js | tests/dom/study-calendar.dom.test.js<br>tests/dom/study-dashboard.dom.test.js<br>tests/unit/study-tracker.test.js | — | — |
 | D-18 | ✅ | 테스트 | DOC-DSN-26<br>DOC-DSN-27<br>DOC-DSN-29 | src/spaced-repetition.js | tests/unit/fsrs.test.js | — | — |
-| D-19 | ✅ | 테스트 | DOC-DSN-26<br>DOC-DSN-27<br>DOC-DSN-28 | src/spaced-repetition.js | tests/unit/fsrs.test.js<br>tests/unit/today-queue.test.js | — | — |
-| D-20 | ✅ | 테스트 | DOC-DSN-28 | src/spaced-repetition.js | tests/unit/fsrs.test.js | — | — |
+| D-19 | ✅ | E2E 테스트 | DOC-DSN-26<br>DOC-DSN-27<br>DOC-DSN-28 | src/spaced-repetition.js | tests/e2e/exam-risk.spec.js<br>tests/unit/fsrs.test.js<br>tests/unit/today-queue.test.js | — | — |
+| D-20 | ✅ | E2E 테스트 | DOC-DSN-28 | src/spaced-repetition.js | tests/e2e/exam-risk.spec.js<br>tests/unit/fsrs.test.js | — | — |
 | D-21 | ✅ | 테스트 | DOC-DSN-29 | src/analysis-engine.js | tests/unit/analysis-engine.test.js | — | — |
 | D-22 | ✅ | E2E 테스트 | DOC-DSN-29 | src/analysis-engine.js<br>src/knowledge-tracing.js<br>src/spaced-repetition.js<br>src/views/exam-sim-arena.js<br>…외 1개 | tests/e2e/analysis-view.spec.js<br>tests/unit/analysis-engine.test.js<br>tests/unit/fsrs.test.js<br>tests/unit/knowledge-tracing.test.js | — | — |
 | TQ-01 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24<br>DOC-DSN-26 | src/views/dashboard-queue.js<br>src/views/dashboard.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |

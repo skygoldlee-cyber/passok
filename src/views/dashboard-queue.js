@@ -137,7 +137,7 @@ export function buildTodayQueue(p = {}) {
             kind: 'examr',
             icon: 'fa-bullseye', color: 'var(--color-danger)',
             title: `시험 전 최종 인출 ${examRisk.length}장`,
-            reason: '시험일까지 기억률 85% 미만 예상 — 지금 한 번 더 인출',
+            reason: '시험일까지 기억률 95% 미만 예상 — 지금 한 번 더 인출',
             actions: [{ click: 'startExamRiskReview', label: '인출 세션', icon: 'fa-play', cls: 'btn-primary' }]
         });
     }
