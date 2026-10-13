@@ -1,5 +1,5 @@
 // spaced-repetition.js — FSRS-6 기반 간격 반복 학습 시스템 (구 SM-2)
-// @spec F-07~09
+// @spec F-07~09,D-20
 //
 // 각 카드의 복습 스케줄을 관리 — 스케줄 수학은 src/fsrs.js 순수 함수에 위임:
 // - v2 레코드: { v:2, d(난이도 1~10), s(안정도 일), due, lastReview, reps, lapses, lastInterval }
@@ -18,9 +18,10 @@ const LOG_KEY = STORAGE_KEYS.FC_REVIEW_LOG;
 // 리뷰 로그 링버퍼 상한 — 피팅 실질 하한 ~1,000리뷰의 2배 (EXAM_R_SCHEDULING_DESIGN §2)
 const REVIEW_LOG_CAP = 2000;
 
-// @spec D-19
-// 시험일 목표 R 최종 인출 상수 (EXAM_R_SCHEDULING_DESIGN §3)
-const EXAM_R_THRESHOLD = 0.85;      // 시험일 기억률 미달 판정 (목표 0.9 대비 유의미 붕괴)
+// @spec D-19,D-20
+// 시험일 목표 기억률 상수 (EXAM_R_SCHEDULING_DESIGN §3·정정, EXAM_DUE_CLAMP_DESIGN)
+// due>exam 인 카드의 R_exam은 (0.9,1] 대역 — 0.85 임계는 공집합이므로 목표 0.95 미만을 위험대로 둔다
+const EXAM_TARGET_R = 0.95;         // 시험일 목표 기억률 미달 판정
 export const EXAM_R_WINDOW_DAYS = 14;   // 최종 인출 큐 표시 D-day 윈도
 export const EXAM_R_SESSION_CAP = 60;   // 1회 세션 상한 — 크램 벽 방지
 
@@ -33,6 +34,19 @@ function _ensureV2(rec, todayStr) {
 /** 날짜 문자열 차이 (일) — a - b */
 function _daysBetween(a, b) {
     return Math.round((Date.parse(a + 'T00:00:00') - Date.parse(b + 'T00:00:00')) / 86400000);
+}
+
+/** 'YYYY-MM-DD'를 offset일 이동 */
+function _shiftDateStr(dateStr, offset) {
+    const d = new Date(dateStr + 'T00:00:00');
+    d.setDate(d.getDate() + offset);
+    return todayKey(d);
+}
+
+/** 시험일 'YYYY-MM-DD' — 미설정·비정형이면 null (시험 스코프 키, EXAM_DUE_CLAMP_DESIGN §2.1) */
+function _examDateStr() {
+    const v = safeGetItem(STORAGE_KEYS.EXAM_DATE);
+    return typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
 }
 
 // @spec F-07~09
@@ -55,10 +69,18 @@ export function updateCardSchedule(cardId, knew) {
 
     const nextDate = new Date(today);
     nextDate.setDate(nextDate.getDate() + interval);
+    let due = todayKey(nextDate);
+
+    // @spec D-20 — 시험일 클램프: due>exam ∧ 시험일 R<0.95인 카드는 exam−1로 당김 (EXAM_DUE_CLAMP_DESIGN §2)
+    const examStr = _examDateStr();
+    if (examStr && examStr > todayStr && due > examStr) {
+        const rExam = retrievability(_daysBetween(examStr, todayStr), next.s);
+        if (rExam < EXAM_TARGET_R) due = _shiftDateStr(examStr, -1);
+    }
 
     schedules[cardId] = {
         ...next,
-        due: todayKey(nextDate),
+        due,
         lastReview: todayStr
     };
 
@@ -138,7 +160,7 @@ export function getExamRiskCards(dday) {
         if (rec.due <= examStr) return;
         const elapsedAtExam = dday + Math.max(0, _daysBetween(todayStr, rec.lastReview));
         const rExam = retrievability(elapsedAtExam, rec.s);
-        if (rExam < EXAM_R_THRESHOLD) risk.push({ id, rExam });
+        if (rExam < EXAM_TARGET_R) risk.push({ id, rExam });
     });
     return risk.sort((a, b) => a.rExam - b.rExam);
 }
