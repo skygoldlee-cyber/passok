@@ -154,7 +154,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [UIUX_DESIGN_GUIDE.md](dev/design/UIUX_DESIGN_GUIDE.md) | UI/UX 설계 가이드 — 국제 표준(WCAG·APG·HIG·Material·Nielsen·ISO 9241) 기반 표면 모델·기능 버튼 노출(정본) 규약·규약↔게이트 매핑 (DOC-DSN-25) | UI 요소 배치·노출 원칙 판단 시 |
 | [EXAM_R_SCHEDULING_DESIGN.md](dev/design/EXAM_R_SCHEDULING_DESIGN.md) | 리뷰 로그 링버퍼 + 시험일 목표 R 최종 인출 설계 — FSRS 관측 계층·시험일 최적화 경로 (DOC-DSN-26) | 복습 로그·시험 임박 인출 설계 판단 시 |
 | [FSRS6_UPGRADE_DESIGN.md](dev/design/FSRS6_UPGRADE_DESIGN.md) | FSRS-4.5→FSRS-6 엔진 포팅 설계 — 21 파라미터·당일 복습 수식·곡선 지수 w20 (DOC-DSN-27) | 스케줄 엔진 수식 변경 판단 시 |
-| [EXAM_DUE_CLAMP_DESIGN.md](dev/design/EXAM_DUE_CLAMP_DESIGN.md) | 시험일 due 클램프 설계 — `due > examDate` ∧ `R_exam < 0.85` 조건부 당김, D-19와의 역할 분담 (DOC-DSN-28) | 시험일 최적화 스케줄 정책 판단 시 |
+| [EXAM_DUE_CLAMP_DESIGN.md](dev/design/EXAM_DUE_CLAMP_DESIGN.md) | 시험일 due 클램프 설계 — `due > examDate` ∧ `R_exam < 0.95` 조건부 당김, D-19와의 역할 분담 (DOC-DSN-28) | 시험일 최적화 스케줄 정책 판단 시 |
+| [KNOWLEDGE_TRACING_DESIGN.md](dev/design/KNOWLEDGE_TRACING_DESIGN.md) | 지식 추적 설계 — 단원 숙달도 추정: v1 베이지안 스무딩(D-21)·v2 BKT(D-22), FSRS와의 역할 분리 (DOC-DSN-29) | 숙달도 추정·진단 추정기 판단 시 |
 | [UIUX_VERIFY_RUNBOOK.md](dev/runbooks/UIUX_VERIFY_RUNBOOK.md) | UI/UX 검증 런북 — TRACE 체계 단계별 확인 (SPEC 선행 → @spec 연결 → E2E 실측 → 배포·실기기 확인) | UI/UX 변경 검증·배포 절차 |
 | [UIUX_외주전달_패키지.md](dev/UIUX_외주전달_패키지.md) | 외주 인도용 추출본 — 위 계열 문서를 프로젝트 중립화해 단일 파일로 묶은 패키지 (수주사 요구사양·산출물 의무·검수 기준) | 외주 개발 발주 시 단독 인도 |
 | [DEV_ENVIRONMENT.md](dev/reference/DEV_ENVIRONMENT.md) | 개발환경 요구사양 — Node/Python/CLI 도구 버전, 최초 설정 절차, 검증·빌드·배포 명령 |
@@ -352,6 +353,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-26 | `docs/dev/design/EXAM_R_SCHEDULING_DESIGN.md` |
 | DOC-DSN-27 | `docs/dev/design/FSRS6_UPGRADE_DESIGN.md` |
 | DOC-DSN-28 | `docs/dev/design/EXAM_DUE_CLAMP_DESIGN.md` |
+| DOC-DSN-29 | `docs/dev/design/KNOWLEDGE_TRACING_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |
