@@ -194,6 +194,7 @@ describe('대시보드 — 통계·과목 카드·약점 추천', () => {
     });
 
     it('시험일 미설정 — 최우선 설정 안내 + 카드 강조 (SC-10)', () => {
+        seedTwoSubjects();
         updateGlobalStats();
         const card = el('exam-dday-count').closest('.stat-card');
         const desc = el('exam-dday-count').closest('.stat-info').querySelector('.stat-desc');
@@ -201,7 +202,12 @@ describe('대시보드 — 통계·과목 카드·약점 추천', () => {
         expect(card.closest('.stats-grid').querySelector('.stat-card')).toBe(card); // 통계 그리드 첫 카드
         expect(card.classList.contains('stat-card-attn')).toBe(true);
         expect(desc.textContent).toContain('학습 계획의 시작점');
-        expect(desc.querySelector('.dday-set-btn').textContent).toContain('지금 설정');
+        // 설정 CTA는 "오늘 할 일" 큐의 goal 항목이 단독 소유 — 카드는 안내 문구만 (중복 버튼 방지)
+        expect(desc.querySelector('.dday-set-btn')).toBeNull();
+        renderDashboard();
+        const dashboardCtas = [...document.querySelectorAll('#dashboard-view [data-click="openGoalSettings"]')];
+        expect(dashboardCtas).toHaveLength(1);
+        expect(el('weak-subject-recommendation').textContent).toContain('시험일 설정');
 
         // 시험일 설정 후 강조 해제
         setExamDate(todayPlus(30));
@@ -254,6 +260,8 @@ describe('대시보드 — 통계·과목 카드·약점 추천', () => {
         // FSRS 복습 기한 도래 카드 시딩 (구 SM-2 레코드는 지연 변환됨)
         safeSetItem(STORAGE_KEYS.FC_SPACED_REPETITION,
             JSON.stringify({ subja_card_1: { nextReview: '2000-01-01' } }));
+        // 시험일 미설정이면 goal 항목이 최우선으로 온다 — 이 테스트는 작업 항목 우선순위를 검증하므로 시험일을 시딩
+        setExamDate(todayPlus(30));
         renderDashboard();
 
         const queue = el('weak-subject-recommendation');
