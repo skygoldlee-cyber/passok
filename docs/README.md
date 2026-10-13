@@ -96,7 +96,7 @@ docs/
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (4개 — README + ADR 3건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (13개)
-│   ├── design/                ← 설계·계획·평가 문서 (16개)
+│   ├── design/                ← 설계·계획·평가 문서 (17개)
 │   └── reference/             ← 명세·로직·참조 문서 (11개 + images/)
 └── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개)
     ├── README.md              ← 시험별 문서 인덱스
@@ -128,6 +128,7 @@ docs/
 | [LEARNING_UX_SIMPLIFICATION_DESIGN.md](dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md) | 학습 표면 단순화 Phase 0 — "오늘 할 일" 단일 큐(TQ-01~05)·네이밍 정리·사이드바 그룹핑(UX-NAV-12) (DOC-DSN-21, 구현 완료) |
 | [LEARNING_UX_PHASE1_DESIGN.md](dev/design/LEARNING_UX_PHASE1_DESIGN.md) | 학습 표면 단순화 Phase 1 — 취약 진술 리뷰의 복습 뷰 이관(RV-02)·복습→드릴 진입(RV-03)·뷰 목적 문구(UX-NAV-13) (DOC-DSN-22, 구현 완료) |
 | [LEARNING_UX_PHASE15_DESIGN.md](dev/design/LEARNING_UX_PHASE15_DESIGN.md) | 학습 표면 단순화 Phase 1.5 — 훈련소 메뉴 2그룹 재편(UX-NAV-14)·Pro 안내 전역 1회 수렴+배지→플랜 비교(ROAD-P5) (DOC-DSN-23, 구현 완료) |
+| [LEARNING_UX_PHASE2_DESIGN.md](dev/design/LEARNING_UX_PHASE2_DESIGN.md) | 학습 표면 단순화 Phase 2 — 사용량 계측 보강(UX-MET-01~04)·유보 결정 트리거(UX-GATE-01~03) (DOC-DSN-24, 설계안) |
 | [PROJECT_STRUCTURE_TOUR.md](dev/reference/PROJECT_STRUCTURE_TOUR.md) | 프로젝트 구조 투어 — 비개발자·기획자용 그림 중심 입문 (폴더 지도·데이터 파이프라인·멀티시험·품질 관문·용어 풀이) |
 | [CODE_READING_GUIDE.md](dev/reference/CODE_READING_GUIDE.md) | 코드 읽기 가이드 — 초보 개발자용 부팅 시퀀스·data-click 위임·저장소 2계층·첫 변경 레시피·게이트 치트시트 |
 | [FEATURE_MAP.md](dev/reference/FEATURE_MAP.md) | 기능→소스 지도 — "이 기능을 바꾸려면 어느 파일" 조회표 (도메인별 핵심 소스·관련 테스트·SPEC 접두사) |
@@ -330,6 +331,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-21 | `docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md` |
 | DOC-DSN-22 | `docs/dev/design/LEARNING_UX_PHASE1_DESIGN.md` |
 | DOC-DSN-23 | `docs/dev/design/LEARNING_UX_PHASE15_DESIGN.md` |
+| DOC-DSN-24 | `docs/dev/design/LEARNING_UX_PHASE2_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |

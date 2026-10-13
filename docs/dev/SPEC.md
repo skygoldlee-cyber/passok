@@ -1138,7 +1138,21 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | ROAD-Q7 | **조용한 예외 가시화**: 영속성 경로의 `catch {}` 삼켜짐을 쿼터 배너·진단 로그로 연결 | 47곳 중 영속성 관련 우선 | 부분 (`_storageUnavailable` 플래그) |
 | ROAD-Q8 | **학습 진단 E2E 시뮬레이션**: `tests/e2e/analysis-view.spec.js` — 합성 학습 이력 시드 팩토리 `tests/fixtures/analysis-seed.js`(`quiz_results`·`quiz_wrong_causes`·`statement_stats`·`sim_results_history`·`study_calendar`의 `h` 버킷·`study_goals`·`exam_date`·`fc_weak`·`fc_memorized`·`fc_spaced_repetition`·`actual_exam_result`·`ingredients_db_notified`)로 AN-01~09 렌더를 실브라우저에서 검증하고, 실제 퀴즈 완주 1회로 기록→분석 반영 경로를 연결. AN-04 온보딩 게이트 양방향(표본 미달→힌트 카드 / 충족→자동 제거)과 AN-09 주간 리포트 클립보드 폴백을 단언한다 | AN-계열은 UX-VFY-03의 E2E 강제 접두사(UX-·TR-·R-·TH-·A-) 대상이 아닌 자발적 커버리지. 시드 스키마는 `state.js`·`exam-simulator.js` 실저장 형태와 정합 — fixtures 팩토리가 단일 원본. 시드 이력이 `app-shell.js` RETURNING_USER_KEYS를 채우므로 지식DB 갱신 모달 억제 키 포함 (해시는 registry.js에서 동적 추출). 시드 키 목록: `storage-keys.js` STORAGE_KEYS | 구현 (2026-10-03) |
 
-### 7.6 우선순위 원칙
+### 7.6 학습 표면 계측·구조 축소 (학습 단순화 Phase 2)
+
+> Phase 0~1.5(DOC-DSN-21~23)에서 유보한 구조적 결정(드릴 패널 이관·점진적 공개)은 사용량 데이터 없이 판단하지 않는다. 본 절은 판정에 필요한 계측 지표와 결정 트리거를 선언한다 — 상세 설계는 `docs/dev/design/LEARNING_UX_PHASE2_DESIGN.md` (DOC-DSN-24).
+
+| ID | 요구사항 | 전환 트리거 | 상태 |
+|----|---------|------------|------|
+| UX-MET-01 | **표면 진입 계측**: `trackAction` 키 확장 — 큐 실행(`tq_run:<click>`)·드릴 시작(`oxdrill_start:<mode>`·`combo_start:<mode>`)·복습 발 드릴 진입(`drill_from_review`)·취약 리뷰 개방(`review_weak_open`)·훈련소 메뉴 카드(`trainer_menu:<click>`) | Phase 2 착수 | 구현 (2026-10-13) |
+| UX-MET-02 | **PRO 배지 전환 계측**: `pro_badge_click` — 배지→플랜 비교 진입을 다른 `plan_compare` 유입과 구분해 ROAD-P1 판정 입력으로 사용 | Phase 2 착수 | 구현 (2026-10-13) |
+| UX-MET-03 | **사용 통계 내보내기**: '내 사용 통계' 모달에 JSON 클립보드 복사 버튼 — 로컬 전용 계측의 유일한 회수 경로 (사용자 자발 전달) | Phase 2 착수 | 구현 (2026-10-13) |
+| UX-MET-04 | **계측 정합 규약**: 신규 키는 `ACTION_LABELS` 라벨 동반 등록 + `VALUE_ACTIONS` 비포함 — 유료가치 판정(`PRO_VALUE_THRESHOLD`) 지표 오염 방지 | Phase 2 착수 | 구현 (2026-10-13) |
+| UX-GATE-01 | **드릴 실행 패널 이관 결정**: oxdrill·combo 패널의 훈련소 보조 도구화 완결 여부 — 복습 발 weak 드릴 진입 비율로 판정 | 측정 창(계측 배포 후 ≥4주)·회수 표본 ≥3기기 충족 후 `drill_from_review` ÷ weak 모드 시작 ≥60% | 미구현 |
+| UX-GATE-02 | **점진적 공개·표본 게이트**: 저사용 표면의 접힘·시트 이관 — `trackView` 뷰 분포 + `trainer_menu:*` 카드 분포로 관찰 목록 분류 | 측정 창 종료 후 전체 대비 진입 <5% 표면 식별 — 표본 미달 시 어떤 축소도 실행 금지 | 미구현 |
+| UX-GATE-03 | **PRO 경로 수렴 잔여 판정**: 배지→플랜 비교 전환 데이터를 ROAD-P1 entitlement 착수 판정 입력으로 보고 | `pro_badge_click` 대비 `plan_compare` 도달률 분석 가능 시 | 미구현 |
+
+### 7.7 우선순위 원칙
 
 1. **가치 검증 우선**: ROAD-L5(사용률 측정) → 유료 전환 의향 → ROAD-P1~P4(결제 인프라). 결제 인프라를 가치 검증 전에 구축하지 않는다
 2. **트리거 기반 전환**: 저장소 백엔드(ROAD-S1/S3)는 규모·요구사항 트리거 충족 시에만. localStorage는 현재 규모에서 최적

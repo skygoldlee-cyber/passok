@@ -7,6 +7,23 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 학습 표면 단순화 Phase 2-a 구현 — 표면 진입 계측 (UX-MET-01~04)
+
+- **계측 위임 리스너**: `usage-stats.js`에 `initUsageMetrics()` 추가 — 문서 단 `click`/`toggle`(캡처) 리스너가 `data-click` 디스패치와 별개로 계측만 수행. `setupEventListeners()`에서 `bindDelegation` 직후 1회 설치. 기록 키: `tq_run:<click>`(오늘 할 일 큐)·`trainer_menu:<click>`(`#trainer-view` 스코프 — formula 뷰 동명 카드 제외)·`review_weak_open`(`#review-weak-panel` 열림 시에만)·`pro_badge_click`(`[data-pro-feature]` closest 판정)
+- **드릴 진입 계측**: `startDrill`의 출제 성립(문항 0건 토스트 이후) 시점에 `oxdrill_start:<mode>`·`combo_start:<mode>` — `sid:`·`concept:` 재시도 인자는 `retry` 버킷. `gotoOxDrill`에 `drill_from_review`(복습 발 드릴 진입 = UX-GATE-01 판정 분자)
+- **정합 규약 (UX-MET-04)**: 신규 키 7종을 `ACTION_LABELS`에 버킷 라벨로 등록 + `actionLabel()`이 `key.split(':')[0]` 폴백으로 라벨 해석 — `VALUE_ACTIONS` 미포함이라 `PRO_VALUE_THRESHOLD` 판정 오염 없음
+- **회수 경로 (UX-MET-03)**: '내 사용 통계' 모달에 "통계 복사" 버튼 — `buildUsageExport()` JSON(v·owner·기간·days·views·actions만)을 클립보드 복사, 차단 시 `<textarea>` 수동 복사 폴백. 회수 JSON 병합 도구 `tools/check/aggregate_usage.js` 신규 — owner 최신본 병합·액션/뷰 분포·UX-GATE-01~03 판정 입력 출력, 표본 <3기기 시 연기 경고
+- **테스트**: `tests/unit/usage-metrics.test.js` 신규 4건(키 기록·판정 격리·라벨 폴백·내보내기 필드) + `usage-stats.dom.test.js` +9건(위임 리스너 4·드릴 진입 3·복사/폴백 2) + `tests/e2e/usage-metrics.spec.js` 신규 5건(실브라우저 큐·메뉴·details·배지·클립보드)
+- **문서 정합**: SPEC §7.6의 UX-MET-01~04 → 구현. 설계 §6을 실 구현 파일로 갱신 (dashboard-queue·trainer·pro-upgrade 변경 불필요 — 위임·공통 경로로 커버)
+- **비목표 유지**: 구조적 축소·이관·게이팅은 트리거 미충족으로 미실행 — UX-GATE-01~03은 미구현 유지
+
+## 2026-10-13 학습 표면 단순화 Phase 2 설계안 (DOC-DSN-24)
+
+- **신규 `docs/dev/design/LEARNING_UX_PHASE2_DESIGN.md` (DOC-DSN-24)**: Phase 0~1.5에서 "계측 없이 결정하지 않음"으로 유보된 구조적 결정(드릴 실행 패널 이관·점진적 공개·PRO 경로 수렴 잔여)의 판정 인프라 설계 — ① `trackAction` 키 확장 계측(UX-MET-01~02: `tq_run:*`·`oxdrill_start:*`·`combo_start:*`·`drill_from_review`·`review_weak_open`·`trainer_menu:*`·`pro_badge_click`) ② '내 사용 통계' 내보내기로 로컬 전용 계측의 회수 경로 확보(UX-MET-03) + 신규 키의 `VALUE_ACTIONS` 비포함 정합 규약(UX-MET-04) ③ 유보 항목별 결정 트리거(UX-GATE-01~03: 복습 발 weak 드릴 ≥60% / 진입 <5% 관찰 목록 / 배지→플랜 비교 전환) + 측정 창(배포 후 ≥4주)·표본 하한(회수 owner ≥3기기)
+- **SPEC.md §7.6 신설**: "학습 표면 계측·구조 축소" — 신규 ID `UX-MET-01~04`·`UX-GATE-01~03`을 미구현 로드맵으로 선언 (기존 §7.6 우선순위 원칙은 §7.7로 이동)
+- **docs/README.md**: design/ 문서 수 16→17 + 설계 목록·문서 ID 레지스트리에 DOC-DSN-24 등록
+- **allowlist**: 설계안의 계획 경로 2건 등록 (`tools/check/aggregate_usage.js`·`tests/unit/usage-metrics.test.js` — 이후 본 Phase 2-a 항목에서 실구현됨)
+
 ## 2026-10-13 오늘 할 일 큐 번호 배지 타원형 늘어짐 수정
 
 - `.rec-item span { flex: 1 }`(명시도 0,1,1)이 `.tq-num`의 `flex: 0 0 auto`(0,1,0)를 덮어 번호 배지가 가로로 늘어나던 문제 — 복합 셀렉터 `.rec-item .tq-num`(0,2,0)로 승격해 고정 크기 보장
