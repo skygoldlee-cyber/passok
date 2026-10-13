@@ -66,6 +66,9 @@ jobs:
       - name: HTML escape sink check (innerHTML 보간 이스케이프 규약)
         run: npm run check:escape
 
+      - name: UI style convention (인라인 스타일·display 조작 규약)
+        run: npm run check:uistyle
+
       - name: Doc sync gate (소스 변경 시 문서 갱신 강제)
         run: node tools/check/check_doc_sync.js --ref origin/main
 
