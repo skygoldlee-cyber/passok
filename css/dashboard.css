@@ -509,10 +509,11 @@
 /* 오늘 할 일 큐 (TQ-01) — 번호 매긴 우선순위 리스트 */
 ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 .today-queue .tq-item { list-style: none; }
-.tq-num {
+/* .rec-item span{flex:1} 규칙(명시도 0,1,1)에 지지 않도록 복합 셀렉터(0,2,0) 사용 */
+.rec-item .tq-num, .tq-num {
     flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
     width: 1.5rem; height: 1.5rem; border-radius: 50%;
-    background: var(--color-primary); color: var(--color-on-primary, #fff);
+    background: var(--color-primary); color: var(--color-on-brand);
     font-size: var(--text-sm); font-weight: var(--font-weight-bold);
 }
 
