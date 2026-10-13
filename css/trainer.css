@@ -120,7 +120,7 @@
     padding: 0 var(--space-2);
     border-radius: var(--radius-full);
     background: var(--color-primary);
-    color: #fff;
+    color: var(--color-on-brand);
     font-size: var(--text-sm);
     font-weight: var(--font-weight-bold);
     display: flex;
@@ -939,6 +939,16 @@
     pointer-events: none;
 }
 
+/* 라이트 테마 — 카드 배경(--bg-card 라이트값)으로 페이드 */
+.light-theme .textbook-card-body.collapsed::after {
+    background: linear-gradient(to top, #e9e4d4, transparent);
+}
+
+/* 라이트 테마 — 마크다운 표 행의 다크 밴드를 토큰으로 */
+.light-theme .md-table-row {
+    background: var(--bg-muted);
+}
+
 .textbook-card-actions {
     display: flex;
     justify-content: space-between;
@@ -1244,12 +1254,12 @@ mark.txt-highlight {
 .combo-judge-btn.active[data-v="true"] {
     background: var(--color-success);
     border-color: var(--color-success);
-    color: #fff;
+    color: var(--color-on-brand);
 }
 .combo-judge-btn.active[data-v="false"] {
     background: var(--color-danger);
     border-color: var(--color-danger);
-    color: #fff;
+    color: var(--color-on-brand);
 }
 .combo-judge-btn:disabled {
     opacity: 0.55;
