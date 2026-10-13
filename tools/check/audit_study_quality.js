@@ -494,6 +494,31 @@ async function main() {
         } finally { _resetClock(); }
     });
 
+    run('T4 시험일 due 클램프 — 시험일 R<0.95 대역은 exam−1로 당김 (D-20)', ok => {
+        seedBase(10);                        // 시험 D-10
+        _setClockOffset(0);
+        try {
+            const examStr = _dateStr(10), examMinus1 = _dateStr(9);
+            const sched0 = {};
+            // 위험 대역: elapsed≈1 → s≈15 유지, 간격~16 > dday 10, 시험일 R≈0.93
+            memIds('band', 10).forEach(id => {
+                sched0[id] = { v: 2, d: 5, s: 15, reps: 3, lapses: 0, lastInterval: 15, due: _dateStr(14), lastReview: _dateStr(-1) };
+            });
+            sched0.mature = { v: 2, d: 3, s: 100, reps: 9, lapses: 0, lastInterval: 100, due: _dateStr(99), lastReview: _dateStr(-1) };
+            seed(STORAGE_KEYS.FC_SPACED_REPETITION, sched0);
+            const ids = Object.keys(sched0);
+            ids.forEach(id => sr.updateCardSchedule(id, true));
+            const sched = JSON.parse(safeGetItem(STORAGE_KEYS.FC_SPACED_REPETITION));
+            const pulled = ids.filter(id => id !== 'mature' && sched[id].due === examMinus1).length;
+            ok('clamp', pulled === ids.length - 1, `${pulled}/${ids.length - 1} → exam−1`);
+            ok('mature-keep', sched.mature.due > examStr, `mature due=${sched.mature.due}`);
+            // 클램프된 카드는 시험 전 예정 복습 보유 — 위험 집합 해소
+            const riskIds = sr.getExamRiskCards(10).map(r => r.id);
+            ok('risk-clear', !ids.filter(i => i !== 'mature').some(id => riskIds.includes(id)), `risk=${riskIds.length}`);
+            return { pulled, riskLeft: riskIds.length };
+        } finally { _resetClock(); }
+    });
+
     /* ---------- 리포트 ---------- */
 
     let fail = 0;
