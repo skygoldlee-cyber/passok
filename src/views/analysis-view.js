@@ -10,7 +10,8 @@ import { state } from '../state.js';
 import { esc } from '../sanitize.js';
 import { DataLoader } from '../data-loader.js';
 import { switchView } from './navigation.js';
-import { getDueCount, getDueCards, getExamRiskCards, EXAM_R_SESSION_CAP } from '../spaced-repetition.js';
+import { getDueCount, getDueCards, getExamRiskCards, EXAM_R_SESSION_CAP, getReviewLog } from '../spaced-repetition.js';
+import { resolveKtParams } from '../knowledge-tracing.js';
 import { computeWrongCauseSummary, getWrongCauseLabels, getSimHistory, evaluateRecommendationEffect, computeCalibrationBias, getActualResult } from '../recommendations.js';
 import {
     getDDay, getStudyGoals, getTodayGoalProgress, getWeeklyGoalProgress,
@@ -51,6 +52,12 @@ export function renderAnalysisView() {
 // (양방향 import 대신 콜백 등록으로 모듈 순환을 피한다)
 onAnalysisRefresh(_renderChapterWeakness);
 
+/** BKT 입력 공용 — 리뷰 로그 시퀀스 + manifest study.kt 파라미터 (D-22) */
+function _ktInputs() {
+    const kt = DataLoader.registry && DataLoader.registry.study && DataLoader.registry.study.kt;
+    return { reviewLog: getReviewLog(), ktParams: resolveKtParams(kt) };
+}
+
 /** 과목별 취약 단원 그룹 공용 계산 — 단원 카드·주간 배분·리포트가 공유 (SC-11·SC-12) */
 function _weakChapterGroups(chaptersPerSubject = 2) {
     const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {} };
@@ -62,7 +69,8 @@ function _weakChapterGroups(chaptersPerSubject = 2) {
         statementStats: getAllStatementStats(),
         questionChapters: qc.questions, chapterRanges: qc.ranges,
         chapterTitles: qc.chapterTitles, cidSection: qc.cidSection,
-        resolveQuiz: resolveWrongQuiz, subjectName: nameOf, chaptersPerSubject
+        resolveQuiz: resolveWrongQuiz, subjectName: nameOf, chaptersPerSubject,
+        ..._ktInputs()
     });
 }
 
@@ -489,7 +497,8 @@ export function exportAnalysisReport() {
             statementStats: getAllStatementStats(),
             questionChapters: qc.questions, chapterRanges: qc.ranges,
             chapterTitles: qc.chapterTitles, cidSection: qc.cidSection,
-            resolveQuiz: resolveWrongQuiz, subjectName: nameOf, chaptersPerSubject: 1
+            resolveQuiz: resolveWrongQuiz, subjectName: nameOf, chaptersPerSubject: 1,
+            ..._ktInputs()
         }),
         pattern: computeStudyPattern(getStudyCalendar()),
         recEffect: evaluateRecommendationEffect(getSubjCounts(), nameOf),
