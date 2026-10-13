@@ -1,5 +1,5 @@
 // tests/unit/analysis-engine.test.js — 학습 진단 분석 엔진 순수 로직
-// @spec AN-01,AN-02,D-16
+// @spec AN-01,AN-02,D-16,D-21
 // 과목 무관 데이터 주입형 — 임의 과목 키로 검증 (모듈화 요구: 과목 변경 시 코드 수정 불필요)
 
 import { test } from 'node:test';
@@ -50,9 +50,9 @@ test('computeChapterWeakness: 퀴즈 오답 + 진술 오판을 단원별로 집�
         questionChapters: {}, chapterRanges: ranges,
         resolveQuiz, limit: 10
     });
-    // '2. 분류': 퀴즈 오답 2 + 진술 오판 1 = 3건 / '1. 개요': 진술 오판 1건
+    // '2. 분류': 퀴즈 오답 2 + 진술 오판 w=3 = 5건 / '1. 개요': 진술 오판 1건 (w 실횟수 반영 — D-21)
     assert.equal(out[0].chapter, '2. 분류');
-    assert.equal(out[0].wrongs, 3);
+    assert.equal(out[0].wrongs, 5);
     assert.equal(out[1].chapter, '1. 개요');
     assert.equal(out[1].wrongs, 1);
 });
@@ -79,13 +79,13 @@ test('computeSubjectWeakChapters: 과목별 그룹화 — 과락 평가 단위�
         resolveQuiz, subjectName: (k) => ({ subjA: '과목A', subjB: '과목B' })[k] || k,
         chaptersPerSubject: 2
     });
-    // subjB: 퀴즈 2건 + 진술 1건(L050→1.개요) → '1. 개요' 2건 + '3. 절차' 1건 = 총 3건
+    // subjB: 퀴즈 2건 + 진술 오판 2건(L050→1.개요, w=2 실횟수 반영 — D-21) → '1. 개요' 3건 + '3. 절차' 1건 = 총 4건
     assert.equal(out.length, 2);
     assert.equal(out[0].subjectKey, 'subjB');
     assert.equal(out[0].subject, '과목B');
-    assert.equal(out[0].totalWrongs, 3);
+    assert.equal(out[0].totalWrongs, 4);
     assert.equal(out[0].chapters[0].chapter, '1. 개요');
-    assert.equal(out[0].chapters[0].wrongs, 2);
+    assert.equal(out[0].chapters[0].wrongs, 3);
     assert.equal(out[0].chapters[1].chapter, '3. 절차');
     assert.equal(out[1].subjectKey, 'subjA');
     assert.equal(out[1].totalWrongs, 1);
@@ -370,4 +370,65 @@ test('computeStudyPattern: 읽기 전용일도 세션 이벤트로 집계 (SC-15
     assert.ok(out);
     assert.equal(out.activeDays, 8);
     assert.equal(out.events, 8);
+});
+
+// ---------- D-21: 단원 숙달 베이지안 추정 ----------
+
+test('betaPosteriorMean: 사전 수축 — 무증거 ~0.57, 소표본 극단 완화', async () => {
+    const { betaPosteriorMean } = await import(ENGINE);
+    assert.ok(Math.abs(betaPosteriorMean(0, 0) - 4 / 7) < 1e-9, '사전 α4β3 → 0.571');
+    assert.ok(betaPosteriorMean(0, 1) > 0.4, '1오답이어도 0%로 붕괴하지 않음');
+    assert.ok(betaPosteriorMean(25, 5) > 0.75, '대표본은 실측 수렴');
+    assert.ok(betaPosteriorMean(0, 1) < betaPosteriorMean(25, 5), '소표본 오답이 대표본 성공보다 취약');
+});
+
+test('computeChapterWeakness: 숙달률 정렬 — 1오답 단원이 30시도 5오답 단원보다 위', async () => {
+    const { computeChapterWeakness } = await import(ENGINE);
+    // 단원A: 오답 1건만 (기존 오답빈도 정렬이면 하위) / 단원B: 30시도 5오답 (기존이면 최상위 취약)
+    const statementStats = { 'subjA_st_a1': { j: 1, w: 1, cid: 'L210', streak: 0 } };
+    for (let i = 0; i < 5; i++) {
+        statementStats[`subjA_st_b${i}`] = { j: 6, w: 1, cid: 'L250', streak: 0 }; // 합계 j30 w5
+    }
+    const out = computeChapterWeakness({
+        quizResults: {}, weakCards: new Set(), statementStats,
+        questionChapters: {},
+        chapterRanges: { subjA: [[200, 'A단원'], [240, 'B단원']] },
+        resolveQuiz: () => null, limit: 10
+    });
+    assert.equal(out.length, 2);
+    assert.equal(out[0].chapter, 'A단원', '숙달률 낮은 소표본 단원이 최약');
+    assert.ok(out[0].mastery < out[1].mastery);
+    assert.ok(out[0].mastery > 0 && out[0].mastery < 1);
+});
+
+test('computeChapterWeakness: 퀴즈 정답도 숙달 증거 — 정답 포함 시 숙달률 상승', async () => {
+    const { computeChapterWeakness } = await import(ENGINE);
+    const resolveQuiz = () => ({ quiz: { category: '1. 개요' }, subjectId: 'subjA' });
+    const quizResults = { q1: { correct: false } };
+    for (let i = 0; i < 9; i++) quizResults[`ok${i}`] = { correct: true };
+    const out = computeChapterWeakness({
+        quizResults, weakCards: new Set(), statementStats: {},
+        questionChapters: {}, chapterRanges: { subjA: [[1, '1. 개요']] },
+        resolveQuiz, limit: 10
+    });
+    assert.equal(out.length, 1);
+    assert.equal(out[0].wrongs, 1);
+    assert.ok(out[0].mastery > 0.6, `정답 9건 반영 mastery=${out[0].mastery}`);
+});
+
+test('computeSubjectWeakChapters: 과목 정렬은 최약 단원 숙달률 기준 + mastery 필드', async () => {
+    const { computeSubjectWeakChapters } = await import(ENGINE);
+    const resolveQuiz = (id) => ({ quiz: { category: '공통단원' }, subjectId: id.startsWith('a') ? 'subjA' : 'subjB' });
+    const quizResults = {
+        a1: { correct: false }, a2: { correct: true }, a3: { correct: true },  // subjA: 1오답+2정답
+        b1: { correct: false }                                                 // subjB: 1오답만
+    };
+    const out = computeSubjectWeakChapters({
+        quizResults, weakCards: new Set(), statementStats: {},
+        questionChapters: {}, chapterRanges: {}, resolveQuiz, chaptersPerSubject: 2
+    });
+    assert.equal(out.length, 2);
+    assert.equal(out[0].subjectKey, 'subjB', '정답 증거 없는 과목이 최약');
+    assert.equal(out[0].minMastery, out[0].chapters[0].mastery);
+    assert.ok(out[0].minMastery < out[1].minMastery);
 });
