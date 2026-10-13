@@ -241,7 +241,8 @@ test('computePaceProjection: 페이스 부족 → behind + 필요량', async () 
     const calendar = {}; // 최근 14일 학습 없음 → pace 0
     const out = computePaceProjection({ calendar, totalCards: 1000, memorized: 100, dday: 30 });
     assert.equal(out.verdict, 'behind');
-    assert.equal(out.neededPerDay, 30); // 900/30
+    // 학습일 기준 — D-30 달력일 = 학습일 22일 (주 5일 기준, 통독 미시작)
+    assert.equal(out.neededPerDay, 41); // ⌈900/22⌉
     assert.ok(out.projectedCoverage < 100);
 });
 
