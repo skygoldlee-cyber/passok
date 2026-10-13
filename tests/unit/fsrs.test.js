@@ -1,12 +1,12 @@
-// tests/unit/fsrs.test.js — FSRS-4.5 순수 함수 + 어댑터 검증
-// @spec F-07,F-08,F-09,D-18,D-19
+// tests/unit/fsrs.test.js — FSRS-6 순수 함수 + 어댑터 검증
+// @spec F-07,F-08,F-09,F-11,D-18,D-19
 // DSR 상태 전이·망각 곡선·SM-2 지연 마이그레이션을 결정론적으로 검증한다.
 
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import {
     Rating, initDifficulty, initStability, retrievability, nextInterval,
-    nextDifficulty, recallStability, fsrsReview, migrateSm2Record
+    nextDifficulty, recallStability, forgetStability, sameDayStability, fsrsReview, migrateSm2Record
 } from '../../src/fsrs.js';
 import { updateCardSchedule, getDueCards, getReviewLog, getExamRiskCards } from '../../src/spaced-repetition.js';
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
@@ -122,6 +122,48 @@ test('F-08: migrateSm2Record — EF→d 역산·간격→s 근사·nextReview→
     const lapsed = migrateSm2Record({ repetition: 0, easiness: 2.5, lastReview: '2026-10-01', nextReview: '2026-10-02' });
     assert.equal(lapsed.lapses, 1);
     assert.equal(migrateSm2Record(null), null);
+});
+
+// ---------- F-11: FSRS-6 엔진 ----------
+
+test('F-11: 정본 골든 벡터 — nextDifficulty(5.0, G=1..4) (ts-fsrs algorithm.test)', () => {
+    const want = [8.34176237, 6.66599536, 4.99022837, 3.31446137];
+    [1, 2, 3, 4].forEach((g, i) => {
+        const v = nextDifficulty(5.0, g);
+        assert.ok(Math.abs(v - want[i]) < 1e-6, `G=${g}: ${v} vs ${want[i]}`);
+    });
+});
+
+test('F-11: 학습 가능 곡선 — R(s,s)≈0.9 불변식 + 목표 간격 = round(s)', () => {
+    assert.ok(Math.abs(retrievability(8, 8) - 0.9) < 0.02);
+    assert.ok(Math.abs(retrievability(50, 50) - 0.9) < 0.02);
+    assert.equal(nextInterval(12.3), 12);
+});
+
+test('F-11: 지수 초기 난이도 — Again 6.41 → Easy는 1로 클램프', () => {
+    assert.ok(Math.abs(initDifficulty(Rating.AGAIN) - 6.4133) < 1e-4);
+    assert.equal(initDifficulty(Rating.EASY), 1);
+});
+
+test('F-11: 당일 재복습 — 저안정도 카드는 성장, 성숙 카드는 비감소, Again은 감소', () => {
+    // s=1 카드: sinc = e^{w17·w18}·1^{−w19} ≈ 1.05 → 성장 (4.5는 어떤 당일 성공도 증분 0)
+    const fresh = { v: 2, d: 5, s: 1, reps: 1, lapses: 0, lastInterval: 0 };
+    const up = fsrsReview(fresh, Rating.GOOD, 0);
+    assert.ok(up.s > fresh.s, `당일 Good 저안정도: ${fresh.s} → ${up.s}`);
+    // s=5 성숙 카드: maskedSinc 하한 1 → 감소하지 않음
+    const mature = { v: 2, d: 5, s: 5, reps: 2, lapses: 0, lastInterval: 3 };
+    assert.ok(fsrsReview(mature, Rating.GOOD, 0).s >= mature.s);
+    // 단기 공식 직접 — G≥Hard는 비감소, Again은 전용 단기 감소
+    assert.ok(sameDayStability(5, Rating.HARD) >= 5);
+    assert.ok(sameDayStability(5, Rating.GOOD) >= 5);
+    assert.ok(sameDayStability(5, Rating.AGAIN) < 5);
+});
+
+test('F-11: 랩스 상한 — 장기 수식이 s·e^{−w17·w18}를 넘으면 상한으로 절단', () => {
+    // d=1·s=0.5·r=0.3: 장기 수식 ≈0.53 > 상한 0.5·e^{−0.0495}≈0.476 → 0.48(round2)로 절단
+    assert.equal(forgetStability(1, 0.5, 0.3), 0.48);
+    // 상한 미발동 시 장기 수식 결과 그대로 — d=5·s=5·r=0.9
+    assert.ok(forgetStability(5, 5, 0.9) < 5 * Math.exp(-0.5425 * 0.0912) - 0.01);
 });
 
 // ---------- 어댑터 (저장소 결선) ----------
