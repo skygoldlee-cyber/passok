@@ -213,17 +213,6 @@ export function getDDay() {
     return Math.round((exam.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 }
 
-/**
- * D-day 역산 일일 권장량.
- * @param {number} remainingItems 남은 학습 항목 수 (예: 미암기 카드 수)
- * @returns {number|null} 일일 권장 개수 (올림). 미설정/D-day 지남이면 null.
- */
-export function getSuggestedDailyCount(remainingItems) {
-    const dday = getDDay();
-    if (dday === null || dday <= 0 || remainingItems <= 0) return null;
-    return Math.ceil(remainingItems / dday);
-}
-
 // 최소 권장 준비 기간·일독 예상 기간은 시험별 값 — manifest study 블록 또는
 // 콘텐츠 규모 유도로 결정 (exam-context.js의 getMinExamLeadDays/getReadThroughDays, D-17/SC-15)
 
@@ -264,7 +253,9 @@ export function getExamLeadStatus(dateStr, today = new Date()) {
 }
 
 /**
- * D-day 계획 등급 — 역산 권장량 ÷ 일일 카드 목표 비율로 판정.
+ * D-day 계획 등급 — 학습일당 필요량 ÷ 일일 카드 목표 비율로 판정.
+ * 권장량은 computeStudyPlan.perStudyDay(주간 학습일·통독 차감 반영)와 동일 기준 —
+ * 대시보드 카드와 캘린더 계획 패널이 하나의 역산 공식을 공유한다.
  *   'normal' ≤1.0 여유 — 페이스 안내
  *   'tight'  ≤2.0 압축 — 카드·퀴즈 병행 권장
  *   'triage' >2.0 긴급 — 전량 커버 어려움, 과목 우선순위 필요
@@ -277,7 +268,8 @@ export function getExamPlanStatus(remainingItems, dailyGoal) {
     const dday = getDDay();
     if (dday === null) return null;
     if (dday <= 0) return { dday, suggested: null, ratio: null, tier: 'past' };
-    const suggested = getSuggestedDailyCount(remainingItems);
+    const plan = computeStudyPlan(remainingItems);
+    const suggested = plan && plan.remaining > 0 ? plan.perStudyDay : null;
     if (suggested === null) return { dday, suggested: null, ratio: null, tier: 'normal' };
     const goal = (typeof dailyGoal === 'number' && dailyGoal > 0) ? dailyGoal : getStudyGoals().dailyCards;
     const ratio = goal > 0 ? suggested / goal : Infinity;
@@ -298,23 +290,26 @@ export function getExamPlanStatus(remainingItems, dailyGoal) {
  *   SC-15: 일독 시작 후 남은 통독 학습일(⌈(1−진척)×getReadThroughDays()⌉)을
  *   앞쪽 주차 학습일에서 순차 차감 — 통독 기간의 카드 배정이 부풀지 않게 한다
  */
-export function computeStudyPlan(remainingItems) {
-    const dday = getDDay();
-    if (dday === null || dday <= 0) return null;
+/**
+ * D-day 기간의 주차별 학습일 스켈레톤 — 주간 학습일 상한 + 통독 차감 적용.
+ * @param {number} dday 시험까지 남은 달력 일수 (>0)
+ * @returns {{weeks:Array, studyDays:number, goals:Object, read:Object, readDaysLeft:number}}
+ */
+function _planSkeleton(dday) {
     const goals = getStudyGoals();
-    const remaining = Math.max(0, Math.round(remainingItems));
     const read = getTextbookReadProgress();
     // 남은 통독일 × readDayShare — 읽기·카드 병행을 인정하는 팩은 0~1 비율로 부분 차감 (기본 1=전일 대치)
     const readDayCost = () => Math.ceil((1 - read.overall) * getReadThroughDays() * getReadDayShare());
-    let readDaysLeft = read.started ? readDayCost() : 0;
+    const readDaysLeft = read.started ? readDayCost() : 0;
+    let readRemaining = readDaysLeft;
     const weekCount = Math.ceil(dday / 7);
     const weeks = [];
     let studyDays = 0;
     for (let w = 0; w < weekCount; w++) {
         const daysInWeek = Math.min(7, dday - w * 7);
         const base = Math.min(goals.weeklyStudyDays, daysInWeek);
-        const reading = Math.min(base, readDaysLeft);
-        readDaysLeft -= reading;
+        const reading = Math.min(base, readRemaining);
+        readRemaining -= reading;
         const studyDaysInWeek = base - reading;
         studyDays += studyDaysInWeek;
         weeks.push({
@@ -327,7 +322,26 @@ export function computeStudyPlan(remainingItems) {
             percent: 0
         });
     }
-    studyDays = Math.max(1, studyDays);
+    return { weeks, studyDays: Math.max(1, studyDays), goals, read, readDaysLeft };
+}
+
+/**
+ * 잔여 학습일 수 — 주간 학습일 상한·통독 차감을 반영한 단일 기준.
+ * 역산 권장량·페이스 투사 등 "남은 기간 대비 필요량"을 계산하는 모든 로직은
+ * 달력 일수가 아닌 이 값을 분모로 사용한다.
+ * @param {number} dday 시험까지 남은 달력 일수
+ * @returns {number} 잔여 학습일 (dday ≤ 0이면 0, 아니면 최소 1)
+ */
+export function getRemainingStudyDays(dday) {
+    if (typeof dday !== 'number' || dday <= 0) return 0;
+    return _planSkeleton(dday).studyDays;
+}
+
+export function computeStudyPlan(remainingItems) {
+    const dday = getDDay();
+    if (dday === null || dday <= 0) return null;
+    const { weeks, studyDays, goals, read, readDaysLeft } = _planSkeleton(dday);
+    const remaining = Math.max(0, Math.round(remainingItems));
     const perStudyDay = remaining > 0 ? Math.ceil(remaining / studyDays) : 0;
     let covered = 0;
     weeks.forEach(w => {
@@ -348,7 +362,7 @@ export function computeStudyPlan(remainingItems) {
         weeks,
         goals: { dailyCards: goals.dailyCards, dailyQuizzes: goals.dailyQuizzes, weeklyStudyDays: goals.weeklyStudyDays },
         tier,
-        readDaysLeft: read.started ? readDayCost() : 0,
+        readDaysLeft,
         readProgress: Math.round(read.overall * 100)
     };
 }

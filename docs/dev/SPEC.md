@@ -124,12 +124,12 @@
 | D-09 | 과목별 정답률 히트맵 (색상 코딩: 80%+ 초록, 60-79% 노랑, 40-59% 주황, <40% 빨강, 미응시 회색) | ✅ |
 | D-10 | 약점 과목 자동 추천 (정답률 최저 + 헷갈린 카드最多, "풀기"/"학습" 버튼) | ✅ |
 | D-11 | 오늘의 합격 전략 — 우선순위 추천 엔진 (FSRS 복습 대기 → 과락 과목 → 정답률 최저 → 헷갈린 카드 → 미학습), 이유 표시 + 즉시 실행 버튼 (`recommendations.js`) | ✅ |
-| D-12 | 시험일 D-day 카드 + 역산 일일 권장 카드 수 (목표 설정 모달에서 시험일 입력, 캘린더 D-day 칩) | ✅ |
+| D-12 | 시험일 D-day 카드 + 역산 학습일당 권장 카드 수 (목표 설정 모달에서 시험일 입력, 캘린더 D-day 칩) | ✅ |
 | D-13 | 예상 점수 추정 — 최근 모의고사 5회 평균 ±1σ + 선형회귀 추세(상승/보합/하락), 합격 진단 카드 하단. "합격 확률"이 아닌 점수 추정치로 표기 한정 | ✅ |
 | D-14 | 실제 시험 결과 자가 보고 (`actual_exam_result`) — D-day 경과 시 진단 카드에 입력 폼, 기록 후 예상 대비 오차 표시. 예측 보정 데이터 수집 경로 | ✅ |
 | D-15 | 대시보드 추천 카드에서 "학습 진단 보기" 버튼으로 `analysis-view` 연결 (퍼널) — 상세 분석(과목 카드·히트맵·모의고사 차트)은 학습 진단 뷰로 분리됨 | ✅ |
 | D-16 | 과목별 마스터리 레벨 — 판정 진술 중 졸업(연속 정답 3회, DR-03) 비율을 과목별로 집계해 과목 카드에 Lv.1~5 표시 (`computeMasteryLevels`, 데이터 없으면 미표시) | ✅ |
-| D-17 | 시험일 리드타임 권고 + 계획 등급 — 목표 설정 모달에서 최소 권장 준비 기간 미만 시험일을 인라인 권고(`getExamLeadStatus`). 기준 일수는 manifest `study.minExamLeadDays` 우선, 미선언 시 콘텐츠 규모에서 유도 — `max(총카드÷50×1.4×1.5, 총퀴즈÷10)` 달력일 환산, 레지스트리 없으면 기본 50일 (`getMinExamLeadDays`, cosmetic 선언값 50일 근거: 1,123장 1회전 ~23학습일≈시험 전 33일 하한 + 간격 반복 마진 + 문제은행 445문÷10/일≈45일). 역산 권장량÷일일 카드 목표 비율로 normal(≤1.0)/tight(≤2.0)/triage(>2.0) 판정해 대시보드 안내 분기(`getExamPlanStatus` — tight는 카드·퀴즈 병행 권장, triage는 출제 비중 최상위 과목 우선 권고). 50일 산출 근거(카드별 기억률 시뮬·총량 분해): FSRS_DESIGN.md §9 | ✅ |
+| D-17 | 시험일 리드타임 권고 + 계획 등급 — 목표 설정 모달에서 최소 권장 준비 기간 미만 시험일을 인라인 권고(`getExamLeadStatus`). 기준 일수는 manifest `study.minExamLeadDays` 우선, 미선언 시 콘텐츠 규모에서 유도 — `max(총카드÷50학습일, 총퀴즈÷10학습일)`을 학습일→달력일(×7/5) 환산 후 카드 쪽에 FSRS 마진 1.5배, 레지스트리 없으면 기본 50일 (`getMinExamLeadDays`, cosmetic 선언값 63일 근거: 문제은행 445문÷10=45학습일→63달력일 — 카드 1,123장 쪽은 23학습일→33달력×1.5≈48일로 작음). **학습일당 필요량**(`computeStudyPlan.perStudyDay`, `getRemainingStudyDays` 공용)÷일일 카드 목표 비율로 normal(≤1.0)/tight(≤2.0)/triage(>2.0) 판정해 대시보드 안내 분기(`getExamPlanStatus` — tight는 카드·퀴즈 병행 권장, triage는 출제 비중 최상위 과목 우선 권고). 모든 역산·페이스 계산은 달력일이 아닌 학습일 기준(`computePaceProjection` 포함). 50일 산출 근거(카드별 기억률 시뮬·총량 분해): FSRS_DESIGN.md §9 | ✅ |
 | TQ-01 | **"오늘 할 일" 단일 큐** — 대시보드의 모든 다음 행동 추천을 하나의 우선순위 목록으로 병합해 번호 매긴 `<ol>`로 렌더. 병합 순서: ① FSRS 복습 대기 → ② 주간 배분(study_plan_pro) 이번 주 잔여 → ③ 오답·헷갈림 재채점 → ④ 취약 진술 드릴 → ⑤ 일일 챌린지(미완료 시) → ⑥ 개인화 추천(D-10·D-11 소스, 큐로 흡수해 별도 추천 카드 중복 발언 제거) (`src/views/dashboard-queue.js` `buildTodayQueue`, LEARNING_UX_SIMPLIFICATION_DESIGN.md) | ✅ |
 | TQ-02 | 큐 항목 스키마 — `{kind, icon, color, title, reason, actions: [{click, args, label, icon, cls}]}` — 실행은 신규 핸들러 없이 기존 `data-click` 위임·딥링크(`gotoWeakReview`·`startSubjectStudy`·`startSubjectQuiz`·`startSubjectReader`·`openDailyChallenge`) 재사용 | ✅ |
 | TQ-03 | `buildTodayQueue({subjects, counts, review, weak, examDate, daily, today})` 순수 함수 — `today` 주입으로 날짜 경계 결정론, DOM·상태 모듈 비의존. 전 소스 공백 시 안내 문구(퀴즈 풀기 유도). 시험일 미설정(`examDate` 없음)이면 이력 무관하게 `goal` 항목을 큐 최우선(⓪)에 배치 — 설정 액션은 큐가 단독 소유(SC-10) | ✅ |

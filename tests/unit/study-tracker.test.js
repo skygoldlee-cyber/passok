@@ -131,17 +131,18 @@ test('getExamPlanStatus: 미설정 → null, 경과 시험일 → past', () => {
   assert.equal(st.suggested, null);
 });
 
-test('getExamPlanStatus: 권장량÷일일 목표 비율로 normal/tight/triage 판정', () => {
+test('getExamPlanStatus: 학습일당 필요량÷일일 목표 비율로 normal/tight/triage 판정', () => {
+  // D-10 → 학습일 8일 (주간 5일 기준: 첫 주 5일 + 둘째 주 3일)
   tracker.setExamDate(todayPlus(10));
   tracker.setStudyGoals({ dailyCards: 10 });
-  assert.equal(tracker.getExamPlanStatus(100).tier, 'normal'); // 10/10 = 1.0
-  assert.equal(tracker.getExamPlanStatus(150).tier, 'tight');  // 15/10 = 1.5
-  assert.equal(tracker.getExamPlanStatus(200).tier, 'tight');  // 20/10 = 2.0 경계
-  const triage = tracker.getExamPlanStatus(250);
+  assert.equal(tracker.getExamPlanStatus(80).tier, 'normal');  // 10/10 = 1.0
+  assert.equal(tracker.getExamPlanStatus(100).tier, 'tight');  // 13/10 = 1.3
+  assert.equal(tracker.getExamPlanStatus(160).tier, 'tight');  // 20/10 = 2.0 경계
+  const triage = tracker.getExamPlanStatus(200);
   assert.equal(triage.tier, 'triage');                       // 25/10 = 2.5
   assert.equal(triage.suggested, 25);
-  // 일일 목표 인자 덮어쓰기 — 15/20 = 0.75 → normal
-  assert.equal(tracker.getExamPlanStatus(150, 20).tier, 'normal');
+  // 일일 목표 인자 덮어쓰기 — 13/20 = 0.65 → normal
+  assert.equal(tracker.getExamPlanStatus(100, 20).tier, 'normal');
   // 남은 항목 없음 → suggested null
   assert.equal(tracker.getExamPlanStatus(0).suggested, null);
 });
@@ -598,12 +599,13 @@ test('시험별 학습 설정 주입 — manifest study 블록 우선, 미선언
     seedReadProgress({ law: { frac: 0.5, ts: 1 } });
     assert.equal(tracker.computeStudyPlan(1123).readDaysLeft, 2); // ceil(0.5×4)
 
-    // 미선언 시 registry 통계 유도 — 카드 500·퀴즈 200: max(10일 학습일→14달력×1.5=21, 20) = 21
+    // 미선언 시 registry 통계 유도 — 카드 500·퀴즈 200:
+    //   카드 10학습일→14달력×1.5=21, 퀴즈 20학습일→28달력 (둘 다 학습일 기준) → max=28
     globalThis.window = { DATA_REGISTRY: { subjects: [
       { key: 'a', stats: { cards: 500, quizzes: 200 } },
     ] } };
-    assert.equal(tracker.getExamLeadStatus(todayPlus(25)).leadShort, false);
-    assert.equal(tracker.getExamLeadStatus(todayPlus(20)).leadShort, true);
+    assert.equal(tracker.getExamLeadStatus(todayPlus(29)).leadShort, false);
+    assert.equal(tracker.getExamLeadStatus(todayPlus(27)).leadShort, true);
   } finally {
     if (prev === undefined) delete globalThis.window; else globalThis.window = prev;
   }

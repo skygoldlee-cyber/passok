@@ -116,7 +116,7 @@ function _examPlanDescHtml(plan) {
         tight: ' — 일일 목표 초과, 카드·퀴즈 병행 권장',
         triage: ` — 전량 커버 어려움, ${topName ? esc(topName) + ' 등 ' : ''}비중 큰 과목 우선 권장`
     }[plan.tier] || '';
-    return `역산 권장: 하루 카드 ${plan.suggested}장${advice} · ${openBtn('설정')}`;
+    return `역산 권장: 학습일당 카드 ${plan.suggested}장${advice} · ${openBtn('설정')}`;
 }
 
 // 출제 문항 수 합계가 가장 큰 과목명 (registry exams 기준 — 없으면 null)

@@ -3,7 +3,7 @@ import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { scopedKey } from '../../src/exam-context.js';
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
-import { getExamDate, setExamDate, getDDay, getSuggestedDailyCount } from '../../src/study-tracker.js';
+import { getExamDate, setExamDate, getDDay, getExamPlanStatus } from '../../src/study-tracker.js';
 import { getDueCards } from '../../src/spaced-repetition.js';
 import { computeRecommendations, computeWrongCauseSummary, getSimHistory } from '../../src/recommendations.js';
 
@@ -78,12 +78,14 @@ test('잘못된 형식 시험일 → 미설정으로 제거', () => {
     assert.equal(getExamDate(), null);
 });
 
-test('D-day 역산 권장량 — 남은 항목 / 남은 일수 올림', () => {
-    setExamDate(todayPlus(10));
-    assert.equal(getSuggestedDailyCount(95), 10);
-    assert.equal(getSuggestedDailyCount(0), null);
+test('D-day 역산 권장량 — 학습일 기준 필요량은 computeStudyPlan 경유 (getExamPlanStatus)', () => {
+    // 달력일 단순식 getSuggestedDailyCount는 폐기 — 대시보드 카드·캘린더 패널이
+    // computeStudyPlan.perStudyDay(주간 학습일 반영) 단일 공식을 공유한다
+    setExamDate(todayPlus(10)); // 학습일 5+3=8
+    assert.equal(getExamPlanStatus(80).suggested, 10); // ⌈80/8⌉
+    assert.equal(getExamPlanStatus(0).suggested, null);
     mockStorage.clear();
-    assert.equal(getSuggestedDailyCount(95), null); // 시험일 미설정
+    assert.equal(getExamPlanStatus(80), null); // 시험일 미설정
 });
 
 // --- SM-2 복습 대기 ---
