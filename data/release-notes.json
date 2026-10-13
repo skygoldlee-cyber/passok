@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261013-6d2ff64",
+    "date": "2026-10-13",
+    "notes": [
+      "[기능·analysis] 합격 갭 분석 카드 보강 순위 표시 — computePassGap ranking",
+      "[문서·cosmetic] 학습안내서에 망각 곡선 이론·FSRS DSR 모델 소개 추가",
+      "[문서·cosmetic] D-5 학습 플랜 FSRS 정합 재설계 — 재독 우선 → 인출 우선"
+    ]
+  },
+  {
     "version": "v20261013-f4a0cc0",
     "date": "2026-10-13",
     "notes": [
@@ -140,16 +149,6 @@
     "date": "2026-10-13",
     "notes": [
       "[기능·dashboard] \"오늘 할 일\" 단일 큐 도입 + 학습 용어 정리 (TQ-01~05, UX-NAV-12)"
-    ]
-  },
-  {
-    "version": "v20261013-d56b23d",
-    "date": "2026-10-13",
-    "notes": [
-      "[수정·ci] vendor-check 워크플로 권한·라벨 정정 — contents:read 추가, maintenance→dependencies",
-      "[기능·tools] vendor 자산 거버넌스 — 매니페스트·무결성 게이트·sync 유틸 (BP-13, DOC-DSN-20)",
-      "[문서] 학습안내서에 차별화 기능 섹션 추가 — 의미 유사 진술·FSRS·혼동쌍 등 11개",
-      "[문서] 잔여 과제 명기 — Actions v7 PR·0% 실로직·reader 저커버리지 후보"
     ]
   }
 ]
