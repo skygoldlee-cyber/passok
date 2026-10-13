@@ -1,5 +1,5 @@
 // src/usage-stats.js — 로컬 기능 사용 카운터 (유료가치 판정 데이터)
-// @spec ROAD-L5
+// @spec ROAD-L5,UX-MET-01,UX-MET-02,UX-MET-03,UX-MET-04
 //
 // 외부 전송 없이 이 기기의 localStorage에만 누적한다. 뷰 전환과 유료가치
 // 후보 기능(오답→교재 근거·진단 평가·이야기형·학습 진단 등)의 사용 횟수를
@@ -10,7 +10,7 @@
 import { STORAGE_KEYS } from './storage-keys.js';
 import { safeGetItem, safeSetItem } from './state.js';
 import { html, raw } from './sanitize.js';
-import { trapFocus } from './ui-utils.js';
+import { trapFocus, showToast } from './ui-utils.js';
 import { todayKey, localDateTime } from './utils.js';
 
 const DAYS_KEEP = 90; // days 맵 상한 — 저장량 제한
@@ -30,7 +30,20 @@ const ACTION_LABELS = {
     actual_exam_report: '실제 시험 결과 보고',
     command_palette: '통합 검색 (Ctrl+K)',
     plan_compare: 'Free/Pro 플랜 비교',
+    // ── Phase 2 표면 진입 계측 (UX-MET-01~02, DOC-DSN-24) — `:` 접미 키는 접두사로 라벨 해석
+    tq_run: '오늘 할 일 큐 실행',
+    oxdrill_start: 'O/X 드릴 시작',
+    combo_start: 'ㄱㄴㄷ 드릴 시작',
+    drill_from_review: '복습 → 드릴 직행',
+    review_weak_open: '취약 진술 리뷰 개방',
+    trainer_menu: '훈련소 메뉴 진입',
+    pro_badge_click: 'PRO 배지 → 플랜 비교',
 };
+
+/** 액션 키 → 표시 라벨 — `:` 접미 키는 접두사(버킷) 라벨로 해석 (UX-MET-04) */
+export function actionLabel(key) {
+    return ACTION_LABELS[key] || ACTION_LABELS[key.split(':')[0]] || key;
+}
 
 /**
  * 유료가치 판정 대상 (Pro 후보 기능) — PRO_VALUE_THRESHOLD 합산에만 포함.
@@ -88,6 +101,43 @@ export function trackAction(key) { _bump('actions', key); }
 
 export function getUsageStats() { return _load(); }
 
+/** 내보내기 페이로드 — 카운터·기간만 포함, 학습 내용 없음 (UX-MET-03). 로컬 전용 계측의 회수 경로 */
+export function buildUsageExport() {
+    const d = _load();
+    return JSON.stringify({
+        v: 1, owner: d.owner, firstUse: d.firstUse, lastUse: d.lastUse,
+        days: d.days, views: d.views, actions: d.actions,
+    }, null, 2);
+}
+
+/**
+ * 표면 진입 계측 위임 바인딩 — 1회 설치 (UX-MET-01~02).
+ * data-click 디스패치(listeners-delegation.js)와 별개 리스너 — 계측만 수행하고
+ * stopPropagation 없이 동작 경로를 건드리지 않는다.
+ * `toggle` 이벤트는 버블링하지 않으므로 캡처 단계에서 구독한다.
+ */
+let _metricsBound = false;
+export function initUsageMetrics(doc = document) {
+    if (_metricsBound || !doc) return;
+    _metricsBound = true;
+    doc.addEventListener('click', (e) => {
+        const el = e.target instanceof Element ? e.target : /** @type {Node|null} */ (e.target)?.parentElement;
+        if (!el) return;
+        if (el.closest('[data-pro-feature]')) trackAction('pro_badge_click');
+        const tqBtn = el.closest('#weak-subject-recommendation [data-click]');
+        if (tqBtn) trackAction(`tq_run:${tqBtn.getAttribute('data-click')}`);
+        const menuCard = el.closest('#trainer-view .trainer-menu-card'); // formula 뷰의 동명 카드는 제외
+        if (menuCard) {
+            const click = menuCard.getAttribute('data-click');
+            if (click) trackAction(`trainer_menu:${click}`);
+        }
+    });
+    doc.addEventListener('toggle', (e) => {
+        const t = /** @type {HTMLDetailsElement|null} */ (e.target instanceof Element ? e.target : null);
+        if (t && t.id === 'review-weak-panel' && t.open) trackAction('review_weak_open');
+    }, true);
+}
+
 /** Pro 후보 기능 사용 합계가 유료가치 판정 기준(PRO_VALUE_THRESHOLD)에 도달했는지 */
 export function isValueThresholdMet() {
     return getValueActionTotal() >= PRO_VALUE_THRESHOLD;
@@ -129,7 +179,7 @@ export async function showUsageStats() {
     const viewRows = Object.entries(d.views).sort((a, b) => b[1] - a[1])
         .map(([id, n]) => html`<tr><td>${(titles[id] && titles[id].title) || id}</td><td class="usage-num">${n}회</td></tr>`);
     const actionRows = Object.entries(d.actions).sort((a, b) => b[1] - a[1])
-        .map(([k, n]) => html`<tr><td>${ACTION_LABELS[k] || k}</td><td class="usage-num">${n}회</td></tr>`);
+        .map(([k, n]) => html`<tr><td>${actionLabel(k)}</td><td class="usage-num">${n}회</td></tr>`);
     const totalActions = Object.values(d.actions).reduce((s, n) => s + n, 0);
     const valueTotal = Object.entries(d.actions)
         .filter(([k]) => VALUE_ACTIONS.has(k)).reduce((s, [, n]) => s + n, 0);
@@ -156,6 +206,7 @@ export async function showUsageStats() {
             <p class="usage-stats-note">이 데이터는 이 기기에만 저장되며 외부로 전송되지 않습니다.</p>
             <div class="app-confirm-btns">
                 <button type="button" class="btn btn-secondary app-confirm-cancel" data-reset-usage>초기화</button>
+                <button type="button" class="btn btn-secondary" data-copy-usage>통계 복사</button>
                 <button type="button" class="btn btn-primary app-confirm-ok">확인</button>
             </div>
         </div>`;
@@ -174,6 +225,27 @@ export async function showUsageStats() {
     };
     overlay.querySelector('.app-confirm-ok')?.addEventListener('click', close);
     overlay.querySelector('[data-reset-usage]')?.addEventListener('click', () => { resetUsageStats(); close(); showUsageStats(); });
+    overlay.querySelector('[data-copy-usage]')?.addEventListener('click', async () => {
+        // UX-MET-03 — 로컬 전용 계측의 회수 경로: JSON 클립보드 복사, 불가 시 수동 복사 폴백
+        const text = buildUsageExport();
+        try {
+            await navigator.clipboard.writeText(text);
+            showToast('사용 통계를 클립보드에 복사했습니다.', 'success');
+        } catch (e) {
+            if (!dialog.querySelector('.usage-export-fallback')) {
+                const ta = document.createElement('textarea');
+                ta.className = 'usage-export-fallback';
+                ta.readOnly = true;
+                ta.value = text;
+                ta.style.cssText = 'width:100%;height:8rem;margin-top:0.5rem;font-family:monospace;font-size:0.75rem;';
+                dialog.querySelector('.app-confirm-btns')?.before(ta);
+            }
+            const ta = /** @type {HTMLTextAreaElement|null} */ (dialog.querySelector('.usage-export-fallback'));
+            ta?.focus();
+            ta?.select();
+            showToast('자동 복사가 차단됐습니다 — 표시된 내용을 직접 복사하세요.', 'warning');
+        }
+    });
     overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
     const onKey = (e) => {
         if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); close(); }
