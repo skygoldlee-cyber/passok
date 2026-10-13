@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 퀴즈 판정 시퀀스 로그 확장 (D-22 선행 ①)
+
+- **`fc_review_log` 혼합 스키마**: `{c, k:'q', ok, t}` 퀴즈·시뮬 문항 판정 레코드 추가 — `k` 없는 기존 `{c,r,e,t}`는 스케줄 이벤트로 후방 호환, 단일 시계열 링버퍼·백업 정합 자동 승계 (KNOWLEDGE_TRACING_DESIGN §4.2 ①-a)
+- `recordQuizJudgment()` 신설 — 기입점은 퀴즈 채점 2곳(`views/quiz.js`) + 시뮬 `submitExam` 루프 문항 전건
+- BKT의 관측 순서 요구 충족 — v2 본체(`knowledge-tracing.js`·파라미터·소비자 연결)는 후속
+
 ## 2026-10-13 단원 숙달 베이지안 추정 (D-21 — 지식 추적 v1)
 
 - **`_aggregateChapterWrongs` → `_aggregateChapterEvidence`**: 오답만 세던 집계를 정오 전건으로 확장 — 퀴즈 정답·진술 j−w 정답분·시뮬 오답을 단원 버킷으로 집계. 진술 오판은 실횟수 `w` 반영(기존 진술당 1건 → 의미 변경), 졸업 진술(streak≥3)은 회복된 숙달로 연속 정답 streak만 정답 증거 반영

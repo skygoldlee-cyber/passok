@@ -15,6 +15,7 @@ import {
 import { checkShortAnswer } from './trainer.js';
 import { trackAction } from '../usage-stats.js';
 import { updateGlobalStats } from './dashboard.js';
+import { recordQuizJudgment } from '../spaced-repetition.js';
 import { shuffle } from '../utils.js';
 import { showToast, vibrate, HAPTIC } from '../ui-utils.js';
 
@@ -269,6 +270,7 @@ export function submitQuizAnswer() {
         solved: true,
         correct: isCorrect
     };
+    recordQuizJudgment(currentQuiz.id, isCorrect); // @spec D-22 — BKT 시퀀스 로그
 
     // UI 피드백 렌더링
     const feedbackPanel = document.getElementById('quiz-feedback-panel');
@@ -345,6 +347,7 @@ function submitQuizChoiceAnswer(selectedBtn, selectedValue, correctValue) {
         solved: true,
         correct: isCorrect
     };
+    recordQuizJudgment(currentQuiz.id, isCorrect); // @spec D-22 — BKT 시퀀스 로그
 
     // UI 피드백 렌더링
     const feedbackPanel = document.getElementById('quiz-feedback-panel');

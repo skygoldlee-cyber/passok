@@ -115,7 +115,8 @@ export function getDueCount() {
 /**
  * 리뷰 로그에 레코드 1건 append — 2,000건 FIFO 링버퍼.
  * {c: 카드·진술 id, r: FSRS 레이팅(1|3), e: 경과일, t: unix ms}
- * @param {{c:string, r:number, e:number, t:number}} entry
+ * 또는 퀴즈 판정 {c: 문항 id, k:'q', ok: 1|0, t: unix ms} (D-22)
+ * @param {{c:string, r?:number, e?:number, k?:string, ok?:number, t:number}} entry
  */
 function appendReviewLog(entry) {
     const log = getReviewLog();
@@ -124,9 +125,21 @@ function appendReviewLog(entry) {
     safeSetItem(LOG_KEY, JSON.stringify(log));
 }
 
+// @spec D-22
 /**
- * 리뷰 로그 전체 읽기 — 후속 피팅·효능 실측 입력 (D-18)
- * @returns {Array<{c:string, r:number, e:number, t:number}>}
+ * 퀴즈 문항 정오 판정을 리뷰 로그에 기록 — BKT 관측 시퀀스 입력 (D-22 선행).
+ * 스키마: {c: 문항 id, k:'q', ok: 1|0, t: unix ms} — k 필드로 스케줄 이벤트
+ * ({c,r,e,t}, k 없음)와 구분한다. 소비자는 k==='q'로 필터한다.
+ * @param {string} quizId 문항 ID
+ * @param {boolean} correct 정답 여부
+ */
+export function recordQuizJudgment(quizId, correct) {
+    appendReviewLog({ c: quizId, k: 'q', ok: correct ? 1 : 0, t: Date.now() });
+}
+
+/**
+ * 리뷰 로그 전체 읽기 — 후속 피팅·효능 실측·BKT 시퀀스 입력 (D-18·D-22)
+ * @returns {Array<{c:string, r?:number, e?:number, k?:string, ok?:number, t:number}>}
  */
 export function getReviewLog() {
     try {
