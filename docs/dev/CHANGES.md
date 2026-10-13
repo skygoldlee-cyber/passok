@@ -7,6 +7,11 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 감사 계측 확장 — T4 시험일 R 회복·T5 BKT
+
+- **T4 §5 재판정 종결**: 클램프 카드가 `exam−1`에 표면화·복습되면 시험일 최소 `R=0.996` — 목표 R 간격 단축(복습량 ~2.5배)은 불필요로 확정 (EXAM_DUE_CLAMP §5)
+- **T5 시나리오**: BKT가 정답 회복을 P(L) 0.99로 반영(Beta는 0.64 정체)·최근 오답 단원 0.18 최약 유지 — audit:study 18시나리오·61검사
+
 ## 2026-10-13 BKT 단원 숙달 추적 (D-22)
 
 - **`knowledge-tracing.js` 신설** — `bktUpdate`(관측 사후확률+학습 전이)·`computeUnitMastery`(시퀀스→P(L))·`resolveKtParams`(manifest `study.kt` 오버라이드+범위 검증). DOM·저장 비의존 순수 모듈 (KNOWLEDGE_TRACING_DESIGN §3.2·§4.2②)
