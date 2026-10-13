@@ -52,6 +52,9 @@
     "T3 FSRS 30일 시뮬 — 안정도 확장·백로그 발산 없음/no-loss:1",
     "T3 FSRS 30일 시뮬 — 안정도 확장·백로그 발산 없음/spacing:1",
     "T3 FSRS 30일 시뮬 — 안정도 확장·백로그 발산 없음/stability-grow:1",
-    "T3 FSRS 30일 시뮬 — 안정도 확장·백로그 발산 없음/desync:1"
+    "T3 FSRS 30일 시뮬 — 안정도 확장·백로그 발산 없음/desync:1",
+    "T4 시험일 due 클램프 — 시험일 R<0.95 대역은 exam−1로 당김 (D-20)/clamp:1",
+    "T4 시험일 due 클램프 — 시험일 R<0.95 대역은 exam−1로 당김 (D-20)/mature-keep:1",
+    "T4 시험일 due 클램프 — 시험일 R<0.95 대역은 exam−1로 당김 (D-20)/risk-clear:1"
   ]
 }
