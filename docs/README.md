@@ -1,7 +1,7 @@
 # 📚 문서 인덱스 (Documentation Index)
 
 > **Cosmetic Pass Master / Passmula** — 맞춤형화장품 조제관리사 스마트 학습 + 실무(Formula OS) 플랫폼
-> 최종 갱신: 2026-10-10
+> 최종 갱신: 2026-10-13
 > **문서 ID**: DOC-IDX-01
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (문서 인덱스·ID 레지스트리)
@@ -92,11 +92,11 @@ user_manual.md(앱 내) → 학습안내서(앱 내) → exams/cosmetic/user/exa
 ```
 docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
-├── dev/                         ← 플랫폼 공통 개발 문서 (44개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (45개)
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (4개 — README + ADR 3건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (13개)
-│   ├── design/                ← 설계·계획·평가 문서 (11개)
+│   ├── design/                ← 설계·계획·평가 문서 (15개)
 │   └── reference/             ← 명세·로직·참조 문서 (11개 + images/)
 └── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개)
     ├── README.md              ← 시험별 문서 인덱스
@@ -121,6 +121,10 @@ docs/
 | [TRACE_MATRIX.md](dev/TRACE_MATRIX.md) | SPEC↔코드 추적 매트릭스 — 요구사항별 @spec 태그·테스트·문서 매핑 (자동 생성 — `npm run build:trace`) |
 | [adr/](dev/adr/README.md) | 아키텍처 결정 기록 — 대안 검토·트레이드오프 등 결정의 "왜" 보존 (색인 README + ADR 3건) |
 | [MULTI_EXAM_DB_DESIGN.md](dev/design/MULTI_EXAM_DB_DESIGN.md) | 멀티시험 확장 설계 — 법령DB·지식DB의 시험 비종속 일반화 (Phase A~C 구현 완료) |
+| [FSRS_DESIGN.md](dev/design/FSRS_DESIGN.md) | FSRS-4.5 간격 반복 알고리즘 — SM-2 대체 선정 근거·파라미터·마이그레이션 (DOC-DSN-17, 구현 완료) |
+| [SEMANTIC_EMBEDDING_DESIGN.md](dev/design/SEMANTIC_EMBEDDING_DESIGN.md) | 빌드타임 문장 임베딩 → int8 정적 번들 — 유사 진술·이웃 인덱스 인프라 (DOC-DSN-18) |
+| [WRONG_CAUSE_CLASSIFIER_DESIGN.md](dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md) | 오답 원인 자동 분류 — 임베딩 센트로이드 kNN 설계 (DOC-DSN-19, DOC-DSN-18 선행) |
+| [VENDOR_MANAGEMENT_DESIGN.md](dev/design/VENDOR_MANAGEMENT_DESIGN.md) | vendor/ 자산 거버넌스 — 매니페스트·해시/버전 무결성 게이트·주기 신선도 워크플로 (DOC-DSN-20, BP-13) |
 | [PROJECT_STRUCTURE_TOUR.md](dev/reference/PROJECT_STRUCTURE_TOUR.md) | 프로젝트 구조 투어 — 비개발자·기획자용 그림 중심 입문 (폴더 지도·데이터 파이프라인·멀티시험·품질 관문·용어 풀이) |
 | [CODE_READING_GUIDE.md](dev/reference/CODE_READING_GUIDE.md) | 코드 읽기 가이드 — 초보 개발자용 부팅 시퀀스·data-click 위임·저장소 2계층·첫 변경 레시피·게이트 치트시트 |
 | [FEATURE_MAP.md](dev/reference/FEATURE_MAP.md) | 기능→소스 지도 — "이 기능을 바꾸려면 어느 파일" 조회표 (도메인별 핵심 소스·관련 테스트·SPEC 접두사) |
@@ -316,6 +320,10 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-14 | `docs/exams/cosmetic/design/AUDIT_REPORT_DESIGN.md` |
 | DOC-DSN-15 | `docs/exams/cosmetic/design/PRACTICAL_TOOLS_DESIGN.md` |
 | DOC-DSN-16 | `docs/dev/design/STUDY_PLAN_PRO_DESIGN.md` |
+| DOC-DSN-17 | `docs/dev/design/FSRS_DESIGN.md` |
+| DOC-DSN-18 | `docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md` |
+| DOC-DSN-19 | `docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md` |
+| DOC-DSN-20 | `docs/dev/design/VENDOR_MANAGEMENT_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |

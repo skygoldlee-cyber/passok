@@ -38,7 +38,7 @@
 | 프리셋 | 명령 | 내용 | 언제 |
 |---|---|---|---|
 | `all` | `npm run check:all` | lint·types·html + docs + domainmap + content 전체 | 배포 전 완전 점검 (`--quick`=DOM 테스트 생략) |
-| `ci` | `npm run check:ci` | CI 워크플로 로컬 재현 (22단계) | 푸시 전 자신 없을 때 (`-- --affected`=영향 테스트만) |
+| `ci` | `npm run check:ci` | CI 워크플로 로컬 재현 (23단계) | 푸시 전 자신 없을 때 (`-- --affected`=영향 테스트만) |
 | `content` | `npm run check:content` | 콘텐츠 추적 27단계 (manifest·인용·신선도·링크·카드) | 교재·문제은행·참조자료 편집 후 (`-- --build`=build:data 선행) |
 | `docs` | `npm run check:docs` | 문서 정합 10단계 (경로·ID·명령·플랜·저장소·CI패리티) | docs/ 편집 후 |
 | `refs` | `npm run check:refs` | 참조자료 4계층 + 득표 귀속 | ref_md·PDF 변경 후 |
@@ -59,12 +59,15 @@
 | `check:featflags`/`check:plan` | 미선언 feature 키 사용 | exams.json/features 또는 feature-plan.json 선언 |
 | `check:imports` | import/export 불일치 | 누락 export 추가 또는 잘못된 import 정리 |
 | `verify:assets`/`check:perf` | sw.js 프리캐시 목록과 실파일 불일치·예산 초과 | 파일 추가/경로 수정 (예산은 tools/check/check_perf_budget.js) |
+| `check:vendor` | vendor/ 파일 해시·버전이 매니페스트와 불일치 | 수동 변경: `npm run check:vendor -- --update` / 버전 갱신: `npm run sync:vendor -- <key>` |
 
 ## 4. 신규 게이트 추가 규칙
 
 1. `tools/check/`에 `check_<name>.js` 작성 (단독 실행 + 종료코드 계약)
 2. `tools/check/steps.js`에 `nodeStep`/`npmStep`으로 등록 → 적절 프리셋 배열에 편입
 3. **CI 노출이면** ci.yml에 대응 `run:` 토큰 필요 — `check:ciparity`가 양방향 검증
+
+> **스케줄 게이트**: `vendor-check.yml`이 주 1회 `check:vendor -- --latest`를 실행 — 뒤처진 vendored 패키지를 이슈로 보고(exit 2). 자동 갱신은 하지 않고 `sync:vendor -- <key>` 수동 절차로 연결 (DOC-DSN-20).
 4. 신규 게이트는 **실패 가능성이 구체적일 때만** 추가 — 실행시간 총량은 리포트 하단 "최다 소요"에서 감시
 
 ## 5. 더 깊은 문서

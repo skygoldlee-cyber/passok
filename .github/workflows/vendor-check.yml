@@ -1,0 +1,56 @@
+name: Vendor Freshness Check
+
+# 매주 월요일 09:30 KST(UTC 00:30) — vendor/vendor-manifest.json의 npm 추적
+# 패키지를 registry 최신 버전과 비교해 뒤처진 항목이 있으면 이슈를 생성한다.
+# 자동 갱신·커밋은 하지 않는다 (라이브러리 교체는 회귀 리스크 — 사람이
+# sync:vendor 실행 + check:all 검증 후 커밋). 설계: DOC-DSN-20 (BP-13).
+
+on:
+  schedule:
+    - cron: '30 0 * * 1'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: 무결성 검증 + registry 비교
+        id: check
+        run: |
+          set +e
+          node tools/check/check_vendor.js --latest 2>&1 | tee vendor-check.log
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "outdated=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" -eq 1 ]; then exit 1; fi
+
+      - name: 뒤처진 패키지 이슈 생성
+        if: steps.check.outputs.outdated == '2'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "📦 vendor 라이브러리 업데이트 필요 — 주간 신선도 체크" \
+            --label "maintenance" \
+            --body "$(cat vendor-check.log | sed 's/^/    /')
+
+          ## 갱신 절차
+          1. \`npm.cmd run check:vendor -- --latest\`로 뒤처진 패키지 확인
+          2. \`npm.cmd run sync:vendor -- <key>[@버전]\` — npm pack → 복사 → manifest 스탬프
+          3. \`npm.cmd run check:vendor\` → 정합 확인
+          4. \`npm.cmd run check:all\` → 회귀 검증 후 커밋
+
+          ※ 메이저 버전 점프(예: FontAwesome 6→7, Mermaid 10→12)는 아이콘 rename·
+          CSS 변수 변경 등 UI 회귀 가능 — 갱신 후 앱 수동 확인 권장.
+          ※ 설계: docs/dev/design/VENDOR_MANAGEMENT_DESIGN.md (DOC-DSN-20)
+          "

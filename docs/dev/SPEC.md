@@ -971,6 +971,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | BP-10 | **이야기형 서사 커버리지 게이트**: `build_story_textbooks.js`가 챕터별 서사(`story` 플래그) 블록 수를 리포트하고, storyFile 선언 패치에 서사 블록 0개이면 빌드 오류 (이야기형이 표준형과 동일한 사일런트 저하 방지) | ✅ |
 | BP-11 | **서사-본문 정합 검증**: 서사가 인용한 조문·수치 토큰(`제N조/항/호/목`, `%·ppm·점·배·종`)이 표준형 본문에 없으면 경고 — 이야기 속 사실 오탈자·모순 조기 감지 (`findStoryInconsistencies`, 패치·수작업 파일 모두 적용) | ✅ |
 | BP-12 | **이야기 회상 자동 생성**: 본문과 일치하는 서사 속 사실 토큰을 마스킹한 빈칸형 회상 항목을 챕터 말미에 자동 부착 (`extractRecallItems`→`buildRecallSection`, `<!-- recall:start/end -->` 구간 — `extractPatch`는 `stripGenerated`로 제외해 패치 오염 방지) | ✅ |
+| BP-13 | **vendor 자산 매니페스트·무결성 게이트**: `vendor/vendor-manifest.json`이 패키지별 npm 출처·버전·라이선스·파일 sha256을 선언하고, `check_vendor.js`가 매니페스트↔실물(존재·해시·버전 문자열)·미등록 파일을 검증 (`--update` 재스탬프, `--latest` registry 비교 — vendor-check.yml 주간 이슈). 갱신은 `sync_vendor.js`(npm pack → syncMap 복사 → 스탬프) | ✅ |
 
 ### 5.4 콘텐츠 구조
 

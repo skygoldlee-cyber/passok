@@ -7,6 +7,17 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 vendor 자산 거버넌스 도입 (BP-13, DOC-DSN-20)
+
+- **배경**: vendor/ 폴더가 수동 복사·미버전 관리 — mermaid 파일에 버전 표기조차 없어 "현재 무슨 버전을 쓰는지" 파일을 뒤져야 알 수 있었고, FontAwesome 6.4.0(7.x 대비 3메이저 지연)이 무감지로 방치 중이었음
+- **신규 `docs/dev/design/VENDOR_MANAGEMENT_DESIGN.md` (DOC-DSN-20)**: manifest↔실물 해시/버전 정합 게이트 + npm pack 기반 동기화 유틸 + 주간 신선도 워크플로 설계. 기존 `check:reffresh`(PDF 해시)와 동일 패턴의 선언↔실물 게이트
+- **`vendor/vendor-manifest.json`**: 패키지별 npm·버전·라이선스·syncMap + 파일별 sha256 선언 (4 패키지, 22 파일). 텍스트 자산은 LF 정규화 해시로 CRLF 오탐 방지
+- **`tools/check/check_vendor.js`**: 무결성 게이트 — 선언↔실물 해시·버전 probe·미등록 파일 탐지. `--update` 재스탬프, `--latest` registry 비교(최신 아니면 exit 2, 네트워크 실패는 경고만)
+- **`tools/sync/sync_vendor.js`**: `sync:vendor -- <key>[@버전]` — npm pack → syncMap 경로만 추출·복사 → 매니페스트 스탬프. Windows tar 절대경로 문제는 cwd+상대경로로 해결
+- **`vendor-check.yml`**: 주 1회 + 수동 트리거 — `--latest`로 지연 패키지를 이슈로 보고(자동 갱신 없음). ci.yml `check:vendor` 단계 추가, check:ci 22→23단계
+- **첫 적용 성과**: supabase 2.116.0→2.117.3 동기화, mermaid 10.9.8·fontawesome 6.4.0 버전 확정(FA 지연·mermaid 2메이저 지연이 워크플로 이슈로 가시화)
+- **테스트**: `tests/unit/vendor-manifest.test.js` 6개 (@spec BP-13) — 스키마·실물 정합·CRLF/LF 해시 규약·verify 탐지·probeVersion
+
 ## 2026-10-13 vitest 4.1.11 → 5.0.3 업그레이드
 
 - **dependabot 분리 PR(#9 coverage-v8·#10 vitest)이 각각 ERESOLVE 실패** — vitest와 @vitest/coverage-v8은 peer 버전을 공유하므로 단독 범프가 불가능. main에서 동시 업그레이드로 해결하고 dependabot PR 2건 close
