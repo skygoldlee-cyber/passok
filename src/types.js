@@ -92,7 +92,7 @@
  */
 
 /**
- * 스마트 훈련소 세션 상태.
+ * 훈련소 세션 상태.
  * @typedef {Object} TrainerState
  * @property {'menu'|'limits'|'calc'|'ingredients'|string} activeSubView 활성 하위 뷰
  * @property {TrainerLimitsState}      limits
@@ -270,7 +270,7 @@
  * @property {Object.<string, {title?: string, subtitle?: string}>} [uiText] 뷰별 UI 텍스트 오버라이드 (manifest.uiText 패스스루)
  * @property {Object.<string, string[]>} [synonyms] 주관식 채점 유사어 사전 (manifest.synonyms 패스스루 — checkShortAnswer)
  * @property {{wrongCauses?: Array<{key:string, label:string, advice?:string, autoPattern?:string}>}} [analysis]
- *                                            맞춤학습 도메인 분류 설정 (manifest.analysis 패스스루 — 오답 원인 분류표 등)
+ *                                            학습 진단 도메인 분류 설정 (manifest.analysis 패스스루 — 오답 원인 분류표 등)
  *                                            autoPattern: 자동 오답 분류 정규식 (estimateUntaggedCauses, AN-07)
  * @property {{minExamLeadDays?:number, readThroughDays?:number, readDayShare?:number}} [study]
  *                                            학습 계획 설정 (manifest.study 패스스루 — D-17 리드타임·SC-15 일독 기간.

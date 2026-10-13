@@ -1,4 +1,4 @@
-// tests/unit/reader-analysis-gates.test.js — 리더 위치 보존·맞춤학습 온보딩·서사 커버리지 게이트 검증
+// tests/unit/reader-analysis-gates.test.js — 리더 위치 보존·학습 진단 온보딩·서사 커버리지 게이트 검증
 // @spec TR-19,AN-04,BP-10
 // 소스 구조 단언 + 패치 파일 실물 검증으로 세 게이트의 회귀를 감시한다.
 

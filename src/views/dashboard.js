@@ -1,5 +1,5 @@
 // src/views/dashboard.js - 대시보드 뷰 로직 및 전역 통계 관리
-// @spec D-01~17,PF-07,SC-04,SC-06,SC-07,SC-10
+// @spec D-01~17,PF-07,SC-04,SC-06,SC-07,SC-10,TQ-01
 import { state } from '../state.js';
 import { esc } from '../sanitize.js';
 import { DataLoader } from '../data-loader.js';
@@ -7,10 +7,7 @@ import { renderPerformanceChart, renderPassFailDiagnosis, renderRadarChart } fro
 import { updateStreakAndDailyUI } from './daily-challenge.js';
 import { updatePomodoroUI } from './pomodoro.js';
 import { getDueCount } from '../spaced-repetition.js';
-import {
-    computeRecommendations,
-    snapshotRecommendations, evaluateRecommendationEffect
-} from '../recommendations.js';
+import { renderTodayQueue } from './dashboard-queue.js';
 import { getDDay, getExamPlanStatus, checkStudyMilestones } from '../study-tracker.js';
 import { getAllStatementStats } from '../statement-tracker.js';
 import { computeMasteryLevels } from '../analysis-engine.js';
@@ -110,7 +107,7 @@ export function updateGlobalStats() {
 function _examPlanDescHtml(plan) {
     const openBtn = (label) => `<button type="button" class="dday-set-btn" data-click="openGoalSettings"><i class="fa-solid fa-gear"></i> ${label}</button>`;
     if (!plan) {
-        return `<span class="dday-guide">학습 계획의 시작점 — 시험일을 설정하면 역산 계획·주간 목표·스마트학습 배분이 생성됩니다.</span> ${openBtn('지금 설정')}`;
+        return `<span class="dday-guide">학습 계획의 시작점 — 시험일을 설정하면 역산 계획·주간 목표·주간 배분이 생성됩니다.</span> ${openBtn('지금 설정')}`;
     }
     if (plan.suggested === null) return openBtn('시험일·목표 설정');
     const topName = plan.tier === 'triage' ? _topWeightSubjectName() : null;
@@ -237,9 +234,9 @@ export function renderDashboard() {
     updateStreakAndDailyUI();
     updatePomodoroUI();
 
-    // 4. 학습 통계/분석 강화 — 과목별 정답률 히트맵 + 약점 과목 추천
+    // 4. 학습 통계/분석 강화 — 과목별 정답률 히트맵 + "오늘 할 일" 단일 큐 (TQ-01)
     _renderSubjectHeatmap(subjects);
-    _renderWeakSubjectRecommendation(subjects);
+    renderTodayQueue(subjects);
 }
 
 // 4. 과목별 정답률 히트맵 렌더링
@@ -281,43 +278,4 @@ function _renderSubjectHeatmap(subjects) {
     heatmapEl.innerHTML = html;
 }
 
-// 4. 약점 과목 자동 추천 — "오늘의 합격 전략" (recommendations.js 엔진)
-function _renderWeakSubjectRecommendation(subjects) {
-    const recEl = document.getElementById('weak-subject-recommendation');
-    if (!recEl) return;
 
-    const counts = getSubjCounts();
-    const recs = computeRecommendations(subjects, counts);
-
-    if (recs.length === 0) {
-        recEl.innerHTML = '<p class="rec-empty">아직 충분한 학습 데이터가 없습니다. 퀴즈를 풀어보세요!</p>';
-        return;
-    }
-
-    // 추천 효과 추적 — 발행 기준선 기록 + 직전 추천의 개선 평가
-    const nameOf = (k) => { const s = subjects.find(x => x.key === k); return s ? s.name : k; };
-    const effect = evaluateRecommendationEffect(counts, nameOf);
-    snapshotRecommendations(recs, counts);
-
-    let html = '';
-    if (effect) {
-        const parts = effect.items.map(i =>
-            `${esc(i.name)} ${i.fromRate}%→${i.toRate}% (${i.delta >= 0 ? '▲' : '▼'}${Math.abs(i.delta)}%p)`);
-        html += `<p class="rec-effect"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> 지난 추천 이후 ${parts.join(' · ')}</p>`;
-    }
-    html += '<div class="rec-list">';
-    recs.forEach(rec => {
-        const actions = rec.actions.map(a =>
-            `<button class="btn btn-sm ${a.cls}" data-click="${a.click}" data-arg="${esc(a.arg)}"><i class="fa-solid ${a.icon}"></i> ${esc(a.label)}</button>`
-        ).join('');
-        html += `
-            <div class="rec-item">
-                <i class="fa-solid ${rec.icon}" style="color:${rec.color};"></i>
-                <span class="rec-text"><strong>${esc(rec.title)}</strong><span class="rec-reason">${esc(rec.reason)}</span></span>
-                <div class="rec-actions">${actions}</div>
-            </div>
-        `;
-    });
-    html += '</div>';
-    recEl.innerHTML = html;
-}

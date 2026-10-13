@@ -2,7 +2,7 @@
 
 > 상위 문서: [SPEC](../SPEC.md) §3.1(대시보드) · §3.1.5(맞춤학습) · §3.20(캘린더·복습·드릴) · §4.8.1(네비게이션) · [USER_FLOW](USER_FLOW.md) §2(학습 루프)
 > **범위**: platform · 판본: none
-> **상태**: 설계안 — 미구현 (Phase 0 범위만 본 문서가 다룬다. Phase 1 뷰 통합·Phase 2 계측은 후속 문서)
+> **상태**: Phase 0 구현 완료 (TQ-01~05·UX-NAV-12 — `src/views/dashboard-queue.js`, `tests/unit/today-queue.test.js`). Phase 1 뷰 통합·Phase 2 계측은 후속 문서)
 > **관련 SPEC ID**: 신규 `TQ-01~05`(오늘 할 일 큐) · `UX-NAV-12`(사이드바 그룹핑·라벨) · 기존 `D-11`(추천 엔진) · `D-08`(오늘 복습) · `AN-02`(진단 3카드) · `SC-08~13`(스마트학습 배분) · `RV-01`(복습 뷰) · `DR-04~05`(weak 드릴·취약 패널)
 > **문서 ID**: DOC-DSN-21
 

@@ -1,7 +1,7 @@
-// src/views/analysis-view.js — 맞춤학습(개인화 분석) 뷰 컨트롤러
+// src/views/analysis-view.js — 학습 진단(개인화 분석) 뷰 컨트롤러
 // @spec AN-01~09,SC-11,SC-12
 //
-// dashboard.js에서 분리 (모듈 경계 정리) — 맞춤학습 뷰의 진단 카드 7종,
+// dashboard.js에서 분리 (모듈 경계 정리) — 학습 진단 뷰의 진단 카드 7종,
 // 과목별 학습 진입(startSubject*), 주간 리포트보내기를 전담한다.
 // 과목 카드·히트맵·모의고사 차트의 DOM 요소는 대시보드 뷰와 공유한다
 // (renderDashboard가 ID 기준으로 채우므로 그대로 재사용).
@@ -33,7 +33,7 @@ import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { compositeEstimate } from './score-estimate.js';
 
 /**
- * 맞춤학습 뷰 렌더링 — renderDashboard()가 과목 카드·히트맵·차트를
+ * 학습 진단 뷰 렌더링 — renderDashboard()가 과목 카드·히트맵·차트를
  * 채운 뒤, 이 뷰 전용 진단 요약 카드 3종을 추가로 렌더링한다.
  */
 export function renderAnalysisView() {
@@ -51,7 +51,7 @@ export function renderAnalysisView() {
 // (양방향 import 대신 콜백 등록으로 모듈 순환을 피한다)
 onAnalysisRefresh(_renderChapterWeakness);
 
-/** 과목별 취약 단원 그룹 공용 계산 — 단원 카드·스마트학습 배분·리포트가 공유 (SC-11·SC-12) */
+/** 과목별 취약 단원 그룹 공용 계산 — 단원 카드·주간 배분·리포트가 공유 (SC-11·SC-12) */
 function _weakChapterGroups(chaptersPerSubject = 2) {
     const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {} };
     const subjectsMeta = (typeof DataLoader !== 'undefined' && DataLoader.registry)
@@ -66,7 +66,7 @@ function _weakChapterGroups(chaptersPerSubject = 2) {
     });
 }
 
-/** 스마트학습 배분 입력 공용 집계 — 분석 카드·리포트가 캘린더 칩과 동일 입력 공유 (SC-11·SC-12) */
+/** 주간 배분 입력 공용 집계 — 분석 카드·리포트가 캘린더 칩과 동일 입력 공유 (SC-11·SC-12) */
 function _allocInputs() {
     return computeSubjectAllocInputs({
         memorizedCards: state.memorizedCards,
@@ -80,8 +80,8 @@ function _allocInputs() {
 }
 
 /**
- * 이번 주 스마트학습 카드 (SC-11) — 캘린더 계획 패널의 과목별 배분을
- * 맞춤학습 뷰에 요약 표시 (진단 → 실행 연결). 시험일 미설정 시 설정 유도.
+ * 이번 주 주간 배분 카드 (SC-11) — 캘린더 계획 패널의 과목별 배분을
+ * 학습 진단 뷰에 요약 표시 (진단 → 실행 연결). 시험일 미설정 시 설정 유도.
  */
 function _renderSmartPlanInsight() {
     const el = document.getElementById('analysis-smart-plan');
@@ -96,7 +96,7 @@ function _renderSmartPlanInsight() {
     const plan = computeStudyPlan(Math.max(0, totalCards - state.memorizedCards.size));
     const alloc = plan && plan.tier !== 'done' ? computeSubjectAllocation(plan, subjectsMeta, _allocInputs()) : null;
     if (!alloc) {
-        el.innerHTML = `<h4>🧠 이번 주 스마트학습 <span class="pro-badge" data-pro-feature="study_plan_pro">PRO</span></h4>
+        el.innerHTML = `<h4>🧠 이번 주 주간 배분 <span class="pro-badge" data-pro-feature="study_plan_pro">PRO</span></h4>
             <p class="analysis-empty">시험일을 설정하면 출제 비중과 약점 가중으로 과목별 주간 목표를 배분해 보여줍니다.</p>
             <button class="btn btn-primary btn-sm analysis-card-btn" data-click="openGoalSettings"><i class="fa-solid fa-gear" aria-hidden="true"></i> 시험일·목표 설정</button>`;
         return;
@@ -112,14 +112,14 @@ function _renderSmartPlanInsight() {
             + (alloc.hasWeights && a.weightPct > 0 ? ` <span class="alloc-badge">${a.weightPct}%</span>` : '');
         return `<div class="wc-row"><span>${esc(a.name)}${badgesHtml}</span><strong${met ? ' class="alloc-met"' : ''}>${done}/${a.cards}장${quizPart}</strong></div>`;
     }).join('');
-    el.innerHTML = `<h4>🧠 이번 주 스마트학습 <span class="pro-badge" data-pro-feature="study_plan_pro">PRO</span></h4>
+    el.innerHTML = `<h4>🧠 이번 주 주간 배분 <span class="pro-badge" data-pro-feature="study_plan_pro">PRO</span></h4>
         ${rowsHtml}
         <p class="analysis-advice">배정 = 잔여량 × 출제 비중 × 약점 가중(밀린 복습 포함) — 칩의 ⓘ 버튼으로 과목별 근거를 볼 수 있습니다.</p>
         <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="calendar-view"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> 캘린더 보기</button>`;
 }
 
 /**
- * 스마트학습 배정 근거 딥링크 (SC-11) — 맞춤학습 뷰로 전환 후
+ * 주간 배분 배정 근거 딥링크 (SC-11) — 학습 진단 뷰로 전환 후
  * 해당 과목 카드로 스크롤·일시 강조한다.
  */
 export function gotoSubjectAnalysis(subjKey) {
@@ -158,7 +158,7 @@ function _renderAnalysisOnboarding() {
         `<div class="wc-subrow"><span>${label}</span><strong>${cur}/${min}</strong></div>
          <div class="analysis-meter"><div class="analysis-meter-fill" style="width:${pct}%"></div></div>`;
     const html = `<h4>🌱 진단 준비 중</h4>
-        <p class="analysis-empty">맞춤학습은 푼 문제가 쌓일수록 정확해집니다 — 아래 중 하나만 채우면 진단이 시작됩니다.</p>
+        <p class="analysis-empty">학습 진단은 푼 문제가 쌓일수록 정확해집니다 — 아래 중 하나만 채우면 진단이 시작됩니다.</p>
         ${meter(`퀴즈 풀이 (최소 ${ANALYSIS_MIN_QUIZ}문)`, quizSolved, ANALYSIS_MIN_QUIZ, quizPct)}
         ${meter(`모의고사 (최소 ${ANALYSIS_MIN_SIM}회)`, simDone, ANALYSIS_MIN_SIM, simPct)}
         <button class="btn btn-primary btn-sm analysis-card-btn" data-click="startSubjectQuiz"><i class="fa-solid fa-play" aria-hidden="true"></i> 지금 퀴즈 풀기</button>
@@ -437,7 +437,7 @@ export function exportAnalysisReport() {
     const dday = getDDay();
     const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {} };
     const est = compositeEstimate();
-    // 스마트학습 과목별 준수 (SC-11) — 배분이 없으면(시험일 미설정·완료) null
+    // 주간 배분 과목별 준수 (SC-11) — 배분이 없으면(시험일 미설정·완료) null
     const totalCards = subjects.reduce((s, m) => s + displayCounts(m).cards, 0);
     const weekPlan = computeStudyPlan(Math.max(0, totalCards - state.memorizedCards.size));
     const weekAlloc = weekPlan && weekPlan.tier !== 'done'

@@ -1,4 +1,4 @@
-// tests/e2e/analysis-view.spec.js — 맞춤학습(analysis-view) E2E 시뮬레이션 (SPEC ROAD-Q8)
+// tests/e2e/analysis-view.spec.js — 학습 진단(analysis-view) E2E 시뮬레이션 (SPEC ROAD-Q8)
 // @spec AN-01,AN-02,AN-03,AN-04,AN-05,AN-09,AN-10
 //
 // jsdom 계층이 커버하지 못하는 브라우저 통합 경로를 검증한다:
@@ -27,7 +27,7 @@ async function gotoAnalysis(page) {
     await expect(page.locator('#analysis-view')).toHaveClass(/active/, { timeout: 15_000 });
 }
 
-test.describe('맞춤학습 — 합성 이력 시드', () => {
+test.describe('학습 진단 — 합성 이력 시드', () => {
     test.beforeEach(({ page }) => {
         seedStorage(page, { ...analysisBootKeys(), ...buildAnalysisSeed() });
         trackErrors(page);
@@ -132,7 +132,7 @@ test.describe('맞춤학습 — 합성 이력 시드', () => {
     });
 });
 
-test.describe('맞춤학습 — 개념 식별자 환산 (AN-10)', () => {
+test.describe('학습 진단 — 개념 식별자 환산 (AN-10)', () => {
     test('레거시 L####·신형 §N.M cid가 같은 절이면 하나의 클러스터로 병합된다', async ({ page }) => {
         test.setTimeout(90_000);
         // 저장 시점에 따라 cid 형식이 섞인다 — 구 버전 앱은 L257(라인 좌표),
@@ -159,7 +159,7 @@ test.describe('맞춤학습 — 개념 식별자 환산 (AN-10)', () => {
     });
 });
 
-test.describe('맞춤학습 — 온보딩 게이트 (표본 미달)', () => {
+test.describe('학습 진단 — 온보딩 게이트 (표본 미달)', () => {
     test('빈 이력 → 진단 준비 카드와 안내 상태, 퀴즈 CTA가 퀴즈 뷰로 이동한다', async ({ page }) => {
         test.setTimeout(90_000);
         seedStorage(page, analysisBootKeys());
@@ -184,7 +184,7 @@ test.describe('맞춤학습 — 온보딩 게이트 (표본 미달)', () => {
     });
 });
 
-test.describe('맞춤학습 — 기록→분석 파이프라인', () => {
+test.describe('학습 진단 — 기록→분석 파이프라인', () => {
     test('퀴즈 10문 완주 후 분석 뷰에 온보딩 해제·정답률이 반영된다', async ({ page }, testInfo) => {
         // 실경로 완주는 chromium에서 1회 — mobile/tablet 프로젝트는 시드 테스트가 커버
         test.skip(testInfo.project.name !== 'chromium', '실경로 플로우는 chromium에서만 실행');
