@@ -3,7 +3,7 @@
 > 상위 문서: [SPEC](../SPEC.md) §4.5~4.10 (UI/UX 요구사항·기기별 계약) · [SCREEN_MAP](../reference/SCREEN_MAP.md) · [USER_FLOW](USER_FLOW.md)
 > **문서 ID**: DOC-DSN-25
 > **범위**: platform · 판본: none
-> **관련 SPEC ID**: UX-NAV-01~14 · UX-SET-01~05 · UX-FB-01~07 · UX-VFY-01~06 · UX-SCR-01~02 · UX-FORM-01~02 · UX-PWA-01~05 · A-01~07 · R-01~08 · TH-01~06 · ES-02 · UM-01~05
+> **관련 SPEC ID**: UX-NAV-01~14 · UX-SET-01~05 · UX-FB-01~06 · UX-VFY-01~06 · UX-SCR-01~02 · UX-FORM-01~02 · UX-PWA-01~05 · A-01~07 · R-01~08 · TH-01~06 · ES-02 · UM-01~05
 
 ## 1. 목적·적용 범위
 
