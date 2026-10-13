@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: aac448a53b0ec37a
-> 생성: 2026-10-12 · 원천: SPEC.md(481개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 952935e9ee973717
+> 생성: 2026-10-13 · 원천: SPEC.md(482개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 481개 — 문서 연결 307 · 소스 연결 439 · 테스트 연결 467 · 보고서 연결 109
+**커버리지 요약**: 요구사항 482개 — 문서 연결 309 · 소스 연결 440 · 테스트 연결 468 · 보고서 연결 109
 
 ---
 
@@ -524,7 +524,7 @@
 | PF-14 | ✅ | 테스트 | — | css/base.css | tests/unit/perf-invariants.test.js | — | — |
 | PF-15 | ✅ | 테스트 | — | ref-pipeline/convert.py | tests/unit/perf-invariants.test.js | — | — |
 | PF-16 | ✅ | 테스트 | — | src/mermaid-render.js | tests/unit/perf-invariants.test.js | — | — |
-| PF-17 | ✅ (목표 확정) | 테스트 | — | — | tests/unit/perf-invariants.test.js | — | — |
+| PF-17 | ✅ (목표 확정) | 테스트 | DOC-DSN-20 | — | tests/unit/perf-invariants.test.js | — | — |
 
 ## 4.5 접근성
 
@@ -613,7 +613,7 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | DA-01 | ✅ | 테스트 | DOC-RBK-03<br>DOC-RBK-08<br>DOC-REF-08 | tools/build/index.js<br>tools/build/manifest_loader.js | tests/unit/data-architecture.test.js | — | — |
-| DA-02 | ✅ | 테스트 | DOC-DSN-18<br>DOC-RBK-03<br>DOC-REF-08 | src/data-loader.js<br>tools/build/index.js | tests/unit/data-architecture.test.js | — | — |
+| DA-02 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-20<br>DOC-RBK-03<br>DOC-REF-08 | src/data-loader.js<br>tools/build/index.js | tests/unit/data-architecture.test.js | — | — |
 | DA-03 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | src/data-loader.js | tests/unit/data-loader.test.js | — | — |
 | DA-04 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | tools/build/build_study_md_bundle.js | tests/unit/data-architecture.test.js | — | — |
 | DA-05 | ✅ | 테스트 | DOC-DSN-19<br>DOC-RBK-03<br>DOC-REF-08 | src/state.js<br>src/storage.js | tests/unit/state.test.js | — | — |
@@ -653,6 +653,7 @@
 | BP-10 | ✅ | 테스트 | DOC-RBK-02<br>DOC-RBK-13 | tools/build/build_story_textbooks.js | tests/unit/reader-analysis-gates.test.js | — | — |
 | BP-11 | ✅ | 테스트 | DOC-RBK-02<br>DOC-RBK-13 | tools/build/build_story_textbooks.js | tests/unit/story-merge.test.js | — | — |
 | BP-12 | ✅ | 테스트 | DOC-RBK-02<br>DOC-RBK-13 | tools/build/build_story_textbooks.js | tests/unit/story-merge.test.js | — | — |
+| BP-13 | ✅ | 테스트 | DOC-DSN-20<br>DOC-RBK-02 | tools/check/check_vendor.js<br>tools/sync/sync_vendor.js | tests/unit/vendor-manifest.test.js | — | — |
 
 ## 5.4 콘텐츠 구조
 
@@ -763,13 +764,14 @@
 | DOC-DSN-17 | docs/dev/design/FSRS_DESIGN.md | DR-03, F-07, F-08, F-09, SC-13, SQ-03 |
 | DOC-DSN-18 | docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md | AN-10, DA-02, DA-06, DA-08, DR-05, PF-02, TS-08, TS-09, TS-10, TS-11 |
 | DOC-DSN-19 | docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md | AN-02, AN-07, AN-09, DA-05, DA-08 |
+| DOC-DSN-20 | docs/dev/design/VENDOR_MANAGEMENT_DESIGN.md | BP-13, DA-02, PF-17 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |
 | DOC-PPL-02 | ref-pipeline/audiobook/README.md | AO-01, AO-02, AO-03, AO-04, AO-05 |
 | DOC-PPL-03 | ref-pipeline/audiobook/AUDIOBOOK_SUMMARY.md | AO-01, AO-02, AO-03, AO-04, AO-05 |
 | DOC-RBK-01 | docs/dev/runbooks/AUDIO_HOSTING_GUIDE.md | AO-01, AO-02, AO-03, AO-04, AO-05, P-01, P-02, P-03, P-04, P-04a, P-05, P-06, P-07, P-08, P-09, P-10, P-11, P-12, P-13, P-14 |
-| DOC-RBK-02 | docs/dev/runbooks/COMBO_GENERATION_GUIDE.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, BP-09, BP-10, BP-11, BP-12, DR-02, DR-03, DR-04, DR-05, DR-06, DR-07 |
+| DOC-RBK-02 | docs/dev/runbooks/COMBO_GENERATION_GUIDE.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, BP-09, BP-10, BP-11, BP-12, BP-13, DR-02, DR-03, DR-04, DR-05, DR-06, DR-07 |
 | DOC-RBK-03 | docs/dev/runbooks/CONTENT_WORKFLOW.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, DA-01, DA-02, DA-03, DA-04, DA-05, DA-06, DA-07, DA-08, DA-09 |
 | DOC-RBK-04 | docs/dev/runbooks/DEPLOYMENT_GUIDE.md | C-01, C-02, C-03, C-04, C-05, P-01, P-02, P-03, P-04, P-05, P-06, P-07, P-08, P-09, P-10, P-11, P-12, P-13 |
 | DOC-RBK-05 | docs/dev/runbooks/MULTI_MACHINE_SETUP.md | — |

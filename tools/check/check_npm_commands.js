@@ -25,6 +25,7 @@ const DOC_DIRS = ['docs', 'ref-pipeline'];
 const NPM_BUILTINS = new Set([
   'install', 'i', 'ci', 'run', 'exec', 'init', 'start', 'stop', 'restart',
   'publish', 'version', 'help', 'audit', 'update', 'uninstall', 'link', 'cache',
+  'pack', 'view',
 ]);
 
 // 문서 기재를 요구하지 않는 스크립트:
