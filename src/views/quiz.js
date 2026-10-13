@@ -645,7 +645,7 @@ export function renderReviewList() {
             .join(' · ');
         container.insertAdjacentHTML('beforeend', `
             <div class="wrong-cause-summary">
-                <span class="wrong-cause-chip"><i class="fa-solid fa-chart-pie"></i> 오답 패턴 (7일): ${dist}</span>
+                <span class="wrong-cause-chip"><i class="fa-solid fa-chart-pie"></i> 오답 패턴 (7일): ${esc(dist)}</span>
                 <span class="wrong-cause-advice">${esc(causeSummary.advice)}</span>
             </div>
         `);

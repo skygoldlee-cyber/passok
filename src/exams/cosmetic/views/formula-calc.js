@@ -5,7 +5,7 @@
 // 안전 원칙: 배합량을 "제안"하지 않고 사용자가 입력한 값을 고시 데이터로
 // "검증"만 한다. 검증 결과는 법정 한도 기준이며 제품 안전성·안정성·품질 보장이 아니다.
 
-import { esc } from '../../../sanitize.js';
+import { esc, raw } from '../../../sanitize.js';
 import { showToast } from '../../../ui-utils.js';
 import { showStoreError } from '../../../pro-upgrade.js';
 import { switchView } from '../../../views/navigation.js';
@@ -252,7 +252,7 @@ export function renderStability() {
       <span class="formula-rec-note">규칙 기반 참고 — 실제 안정성은 제조 정보의 실험 확인으로 확정</span></div>
     ${confirmHtml}
     ${warnings.length ? `<ul class="formula-stab-list">
-      ${warnings.map(w => `<li class="f-stab-${w.level}">${icon(w.level)} ${esc(w.msg)}</li>`).join('')}
+      ${warnings.map(w => `<li class="f-stab-${esc(w.level)}">${raw(icon(w.level))} ${esc(w.msg)}</li>`).join('')}
     </ul>` : ''}`;
   panel.classList.remove('is-hidden');
 }
@@ -276,7 +276,7 @@ export function renderCalcRows() {
       <div class="f-row-bottom">
         <span class="f-stepper">
           <button type="button" class="f-step-btn" data-dir="-1" aria-label="원료 ${i + 1} 배합률 0.1 감소">−</button>
-          <input type="number" class="f-conc" inputmode="decimal" min="0" step="0.01" value="${item.concentration != null ? item.concentration : ''}"
+          <input type="number" class="f-conc" inputmode="decimal" min="0" step="0.01" value="${esc(item.concentration != null ? item.concentration : '')}"
                  placeholder="%" aria-label="원료 ${i + 1} 배합률(%)">
           <button type="button" class="f-step-btn" data-dir="1" aria-label="원료 ${i + 1} 배합률 0.1 증가">+</button>
         </span>

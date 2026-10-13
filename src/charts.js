@@ -7,6 +7,7 @@
 import { getSimResultsHistory as getSimResults } from './state.js';
 import { TIMING } from './config/timing.js';
 import { getExamRules, resolveLegacySubjectKey } from './exam-context.js';
+import { esc } from './sanitize.js';
 
 // CSS 변수에서 색상 읽기 (하드코딩 대체)
 function cssVar(name, fallback) {
@@ -322,12 +323,12 @@ export function renderPassFailDiagnosis() {
     area.innerHTML = `
         <div class="pred-card-body">
             <div class="pred-status-header">
-                <span class="pred-score-text">최근 평균 ${avgRate}%</span>
-                <span class="pred-status-badge ${statusClass}">${statusText}</span>
+                <span class="pred-score-text">최근 평균 ${esc(avgRate)}%</span>
+                <span class="pred-status-badge ${esc(statusClass)}">${esc(statusText)}</span>
             </div>
             <div class="pred-advice-box">
                 <i class="fa-solid fa-lightbulb" style="color: var(--color-warning); margin-right: 0.5rem;"></i>
-                ${advice}
+                ${esc(advice)}
             </div>
             ${subjectsHTML}
         </div>

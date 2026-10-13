@@ -17,6 +17,12 @@
 const { spawn } = require('child_process');
 const path = require('path');
 
+/** shell 단계의 인자를 cmd.exe 명령행용으로 인용 — 공백·따옴표 포함 인자만 따옴표 처리 */
+function quoteArg(a) {
+    const s = String(a);
+    return /[\s"]/.test(s) ? `"${s.replace(/"/g, '\\"')}"` : s;
+}
+
 function runOne(step, cwd) {
     return new Promise((resolve) => {
         const started = Date.now();
@@ -39,7 +45,12 @@ function runOne(step, cwd) {
         }
         let child;
         try {
-            child = spawn(step.bin, step.args, { cwd, shell: step.shell });
+            // DEP0190 — shell:true + 인자 배열은 이스케이프 없이 concat되어 경고·인젝션
+            // 위험. 인자는 내부 생성 상수이므로 직접 인용한 단일 명령 문자열로 전달한다.
+            // (win32의 npm.cmd 계열은 shell 경유 필수 — shell:false로는 EINVAL)
+            child = step.shell
+                ? spawn([step.bin, ...step.args].map(quoteArg).join(' '), { cwd, shell: true })
+                : spawn(step.bin, step.args, { cwd });
         } catch (err) {
             return done(-1, String(err));
         }

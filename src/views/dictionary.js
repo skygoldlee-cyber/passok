@@ -359,7 +359,7 @@ function createEntityCard(item, schema) {
     const badgeText = item._superseded ? '공식 등록됨' : (badgeField ? badgeLabel(schema, badgeVal) : '');
     const badgeCls = item._superseded ? 'superseded' : (badgeVal == null ? '' : String(badgeVal));
 
-    const detailRows = (schema.details || []).map(d => {
+    const detailRowsHtml = (schema.details || []).map(d => {
         const val = item[d.key];
         if (d.tip) {
             return val ? `<div class="dict-card-tip"><strong>${esc(d.label || 'TIP')}:</strong> ${esc(val)}</div>` : '';
@@ -369,32 +369,32 @@ function createEntityCard(item, schema) {
     }).join('');
 
     const a = schema.action;
-    const actionBtn = (a && (!a.feature || hasFeature(a.feature)))
+    const actionBtnHtml = (a && (!a.feature || hasFeature(a.feature)))
         ? `<button class="btn btn-primary btn-sm dict-add-btn" data-click="${esc(a.click)}" data-arg="${esc(String(item[a.arg] ?? ''))}" title="${esc(a.title || a.label)}"><i class="fa-solid ${esc(a.icon || 'fa-plus')}" aria-hidden="true"></i> ${esc(a.label)}</button>`
         : '';
     // 자가 등록 항목은 수정 액션 제공 — 삭제는 수정 모달 안 (DI-06)
-    const customBtn = item.custom
+    const customBtnHtml = item.custom
         ? `<button class="btn btn-secondary btn-sm" data-click="customIngEdit" data-arg="${esc(item.id)}" title="자가 등록 항목 수정"><i class="fa-solid fa-pen" aria-hidden="true"></i> 수정</button>`
         : '';
     // 함유 기성품 역조회 (FO-40) — 등록 제품이 이 성분을 함유할 때만 표시
     const prodHits = _productIngIndex
         ? (_productIngIndex.get(normalizeEntityName(item[f.title] || '')) || [])
         : [];
-    const productRow = prodHits.length
+    const productRowHtml = prodHits.length
         ? `<div class="dict-detail-item dict-detail-item--col"><span class="dict-detail-label">함유 기성품</span><span class="dict-detail-value"><button class="btn btn-secondary btn-sm" data-click="productOpenByIngredient" data-arg="${esc(String(item[f.title] || ''))}" title="이 성분을 함유한 등록 기성품 목록으로 이동"><i class="fa-solid fa-store" aria-hidden="true"></i> ${prodHits.length}개 제품</button></span></div>`
         : '';
 
     card.innerHTML = `
         <div class="dict-card-header">
             <div class="dict-card-title">${esc(item[f.title] ?? '')}</div>
-            ${badgeField ? `<span class="dict-badge ${esc(badgeCls)}">${badgeText}</span>` : ''}
+            ${badgeField ? `<span class="dict-badge ${esc(badgeCls)}">${esc(badgeText)}</span>` : ''}
         </div>
         <div class="dict-card-subtitle">${esc(item[f.subtitle] || f.subtitleEmpty || '')}</div>
         <div class="dict-card-details is-hidden">
-            ${detailRows}
-            ${productRow}
-            ${actionBtn}
-            ${customBtn}
+            ${detailRowsHtml}
+            ${productRowHtml}
+            ${actionBtnHtml}
+            ${customBtnHtml}
         </div>
     `;
 

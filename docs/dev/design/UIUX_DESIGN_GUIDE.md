@@ -134,7 +134,7 @@
 | 기능 플래그 정합 | `check:featflags` | — |
 | 성능 예산 | `check:perf` | — |
 | 접근성 | `check:specrefs` (테스트 갭) | a11y.spec axe 스캔·실기기 |
-| 노출 규약 (§4) | `check:uistyle` (EXP-6 인라인 display·style 속성 금지) | common-uimode·ui-structure DOM 테스트 |
+| 노출 규약 (§4) | `check:uistyle` (EXP-6 인라인 display·style 속성 금지 + JS 템플릿 정적 style 기준선 래칫) | common-uimode·ui-structure DOM 테스트 |
 
 ## 15. 규약 변경 절차 (Docs-First)
 

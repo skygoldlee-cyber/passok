@@ -5,7 +5,7 @@
 // 제조업·책임판매업 유형에서 서브내비·허브 카드로 노출 (biz-profile BIZ_PANELS).
 // 판정은 자가점검용 참고이며 최종 판단은 법령 원문·광고 심의 기준을 따른다.
 
-import { esc } from '../../../sanitize.js';
+import { esc, raw } from '../../../sanitize.js';
 import { showToast } from '../../../ui-utils.js';
 import { getJSON, setJSON, removeItem } from '../../../storage.js';
 import { STORAGE_KEYS } from '../../../storage-keys.js';
@@ -204,7 +204,7 @@ export function adlintRun() {
     return `<li><span class="adlint-sum adlint-${esc(h.category)}">${esc(h.label)}</span> "<strong>${esc(h.term)}</strong>" <span class="adlint-ctx">…${esc(ctx)}…</span><br><span class="adlint-sug">→ ${esc(h.suggestion)}</span></li>`;
   }).join('');
   box.innerHTML = `<div class="adlint-summary">${sumHtml}</div>
-    <div class="adlint-text">${html.replace(/\n/g, '<br>')}</div>
+    <div class="adlint-text">${raw(html.replace(/\n/g, '<br>'))}</div>
     <ul class="adlint-list">${listHtml}</ul>
     <p class="adlint-note">자동 사전 대조 결과입니다 — 확정 위반 여부는 화장품법 제13조·광고 심의 기준으로 최종 판단하세요.</p>`;
 }

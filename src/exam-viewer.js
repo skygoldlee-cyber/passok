@@ -256,7 +256,7 @@ body.exam-open{overflow:hidden;}
         if (pos < POS_MIN || denom <= 0) { _hideResumeChip(); return; }
         const pct = Math.min(99, Math.round((pos / denom) * 100));
         chip.dataset.pos = String(pos);
-        go.innerHTML = `<i class="fa-solid fa-bookmark"></i> 이어보기 · ${pct}% 지점`;
+        go.innerHTML = `<i class="fa-solid fa-bookmark"></i> 이어보기 · ${escapeHTML(pct)}% 지점`;
         chip.classList.remove('is-hidden');
         _resumeTimer = setTimeout(() => chip.classList.add('is-hidden'), 8000);
     }

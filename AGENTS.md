@@ -107,7 +107,7 @@ npm.cmd run check:domainmap             # 파일 계층 분류 강제 — src/cs
 npm.cmd run check:uitext                # UI 텍스트 커버리지 — data-uitext↔manifest.uiText 양방향 + platform HTML 시험명 잔존 검사
 npm.cmd run check:mobilesafe            # 모바일 잘림 규약 — role="dialog" 카드의 .dialog-card + 버튼 2+ 나열 행 줄바꿈 정적 검사 (check:ci·CI 게이트, UX-VFY-06)
 npm.cmd run check:escape                # HTML 이스케이프 싱크 규약 — innerHTML/insertAdjacentHTML 직접 대입 템플릿의 미이스케이프 보간 탐지, 기준선 단조 감소 (check:ci·CI 게이트, ROAD-Q5 — 신규 코드는 sanitize.js의 html`` 태그드 템플릿 권장)
-npm.cmd run check:uistyle               # UI 스타일 규약 — 마크업 인라인 style 속성 전면 금지 + JS .style.display 조작·인라인 on* 핸들러·네이티브 alert/confirm/prompt 정적 차단 (check:ci·CI 게이트, CODE_CONVENTIONS §4, 명시 면제: 라인에 style-ok 토큰)
+npm.cmd run check:uistyle               # UI 스타일 규약 — 마크업 인라인 style 속성 전면 금지 + JS .style.display 조작·인라인 on* 핸들러·네이티브 alert/confirm/prompt + JS 템플릿 정적 style= 기준선 래칫(display:none 즉시 금지·동적 --var:${x}만 허용) (check:ci·CI 게이트, CODE_CONVENTIONS §4, 명시 면제: 라인에 style-ok 토큰)
 npm.cmd run scaffold:exam -- <id> --name "시험명"  # 새 시험 스캐폴딩 — exams.json 등록 + manifest/references 골격 + 샘플 교재·문제은행·docs/ 생성 (--dry-run=미리보기, <id> --remove=제거)
 npm.cmd run lint                        # ESLint — 에러 0 필수 (--cache 웜 캐시, 기존 경고는 점진 정리 대상)
 npm.cmd run check:types                 # tsc --noEmit (jsconfig checkJs — JSDoc 타입 진단)

@@ -12,7 +12,7 @@ import { STORAGE_KEYS } from '../storage-keys.js';
 import { safeGetItem, state } from '../state.js';
 import { DataLoader } from '../data-loader.js';
 import { switchView } from './navigation.js';
-import { esc } from '../sanitize.js';
+import { esc, raw } from '../sanitize.js';
 import { resolveWrongQuiz } from '../weak-items.js';
 import { getDueCards } from '../spaced-repetition.js';
 
@@ -44,17 +44,17 @@ export function renderStudyCalendar() {
                         <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
                         <span>오늘 목표</span>
                     </div>
-                    <div class="goal-progress-ring" style="--p:${todayProgress.overallPercent}">
-                        <span class="goal-percent">${todayProgress.overallPercent}%</span>
+                    <div class="goal-progress-ring" style="--p:${esc(todayProgress.overallPercent)}">
+                        <span class="goal-percent">${esc(todayProgress.overallPercent)}%</span>
                     </div>
                     <div class="goal-detail">
                         <div class="goal-detail-row">
                             <span>카드</span>
-                            <strong>${todayProgress.cardsDone} / ${todayProgress.cardsGoal}</strong>
+                            <strong>${esc(todayProgress.cardsDone)} / ${esc(todayProgress.cardsGoal)}</strong>
                         </div>
                         <div class="goal-detail-row">
                             <span>퀴즈</span>
-                            <strong>${todayProgress.quizzesDone} / ${todayProgress.quizzesGoal}</strong>
+                            <strong>${esc(todayProgress.quizzesDone)} / ${esc(todayProgress.quizzesGoal)}</strong>
                         </div>
                     </div>
                 </div>
@@ -63,13 +63,13 @@ export function renderStudyCalendar() {
                         <i class="fa-solid fa-calendar-week" aria-hidden="true"></i>
                         <span>이번 주 목표</span>
                     </div>
-                    <div class="goal-progress-ring" style="--p:${weeklyProgress.percent}">
-                        <span class="goal-percent">${weeklyProgress.percent}%</span>
+                    <div class="goal-progress-ring" style="--p:${esc(weeklyProgress.percent)}">
+                        <span class="goal-percent">${esc(weeklyProgress.percent)}%</span>
                     </div>
                     <div class="goal-detail">
                         <div class="goal-detail-row">
                             <span>학습 일수</span>
-                            <strong>${weeklyProgress.studyDays} / ${weeklyProgress.goalDays}일</strong>
+                            <strong>${esc(weeklyProgress.studyDays)} / ${esc(weeklyProgress.goalDays)}일</strong>
                         </div>
                     </div>
                 </div>
@@ -78,13 +78,13 @@ export function renderStudyCalendar() {
                         <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
                         <span>이번 달</span>
                     </div>
-                    <div class="goal-progress-ring" style="--p:${Math.min(100, Math.round(monthlyDays / daysInMonth * 100))}">
-                        <span class="goal-percent">${monthlyDays}일</span>
+                    <div class="goal-progress-ring" style="--p:${esc(Math.min(100, Math.round(monthlyDays / daysInMonth * 100)))}">
+                        <span class="goal-percent">${esc(monthlyDays)}일</span>
                     </div>
                     <div class="goal-detail">
                         <div class="goal-detail-row">
                             <span>연속 학습</span>
-                            <strong>${safeGetItem(STORAGE_KEYS.STUDY_STREAK) || 0}일</strong>
+                            <strong>${esc(safeGetItem(STORAGE_KEYS.STUDY_STREAK) || 0)}일</strong>
                         </div>
                     </div>
                 </div>
@@ -95,7 +95,7 @@ export function renderStudyCalendar() {
                 <button class="btn btn-secondary btn-sm" data-click="openGoalSettings">
                     <i class="fa-solid fa-sliders" aria-hidden="true"></i> 목표 설정
                 </button>
-                ${_ddayChipHtml()}
+                ${raw(_ddayChipHtml())}
             </div>
 
             <!-- SC-05 학습 계획 패널 (시험일 설정 시) -->
@@ -106,15 +106,15 @@ export function renderStudyCalendar() {
                 <button class="btn btn-secondary btn-sm" data-click="prevCalendarMonth" title="이전 달" aria-label="이전 달">
                     <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
                 </button>
-                <h3 class="calendar-title">${_currentYear}년 ${MONTH_NAMES[_currentMonth]}</h3>
+                <h3 class="calendar-title">${esc(_currentYear)}년 ${esc(MONTH_NAMES[_currentMonth])}</h3>
                 <button class="btn btn-secondary btn-sm" data-click="nextCalendarMonth" title="다음 달" aria-label="다음 달">
                     <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
                 </button>
             </div>
 
             <div class="calendar-grid">
-                ${WEEKDAYS.map(d => `<div class="calendar-weekday">${d}</div>`).join('')}
-                ${_renderCalendarDays()}
+                ${WEEKDAYS.map(d => `<div class="calendar-weekday">${esc(d)}</div>`).join('')}
+                ${raw(_renderCalendarDays())}
             </div>
 
             <!-- 범례 -->
@@ -160,7 +160,7 @@ function _ddayChipHtml() {
     if (dday === null) return '';
     const label = dday === 0 ? 'D-Day' : (dday < 0 ? `D+${-dday}` : `D-${dday}`);
     const cls = dday <= 7 ? 'dday-chip dday-urgent' : 'dday-chip';
-    return `<span class="${cls}" title="시험일 ${getExamDate()}"><i class="fa-solid fa-calendar-day"></i> 시험까지 ${label}</span>`;
+    return `<span class="${cls}" title="시험일 ${esc(getExamDate())}"><i class="fa-solid fa-calendar-day"></i> 시험까지 ${label}</span>`;
 }
 
 /** 미암기 카드 수 — registry 목표치 상한 적용 (dashboard.js와 동일 산식) */
