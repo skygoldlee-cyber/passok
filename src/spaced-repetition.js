@@ -1,4 +1,4 @@
-// spaced-repetition.js — FSRS-4.5 기반 간격 반복 학습 시스템 (구 SM-2)
+// spaced-repetition.js — FSRS-6 기반 간격 반복 학습 시스템 (구 SM-2)
 // @spec F-07~09
 //
 // 각 카드의 복습 스케줄을 관리 — 스케줄 수학은 src/fsrs.js 순수 함수에 위임:

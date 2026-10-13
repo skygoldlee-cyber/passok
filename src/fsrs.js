@@ -1,16 +1,18 @@
-// fsrs.js — FSRS-4.5 기억 모델 순수 함수 (SM-2 대체 스케줄 엔진)
-// @spec F-07,F-08
+// fsrs.js — FSRS-6 기억 모델 순수 함수 (SM-2 대체 스케줄 엔진)
+// @spec F-07,F-08,F-11
 //
 // DSR 모델: 카드마다 Difficulty(난이도)·Stability(안정도, 일)를 추적하고
 // 경과일로부터 Retrievability(기억 확률)를 추정해 목표 기억률 0.9가 되는
 // 시점으로 다음 복습 간격을 산출한다. 저장·시계는 spaced-repetition.js 어댑터 담당.
-// 파라미터·수식 정합 근거: docs/dev/design/FSRS_DESIGN.md (DOC-DSN-17)
+// 파라미터·수식 정합 근거: docs/dev/design/FSRS6_UPGRADE_DESIGN.md (DOC-DSN-27)
 
-// FSRS-4.5 기본 파라미터 (w0..w16 — 공개 안정 세트)
-const W = [0.4, 0.6, 2.4, 5.8, 4.93, 0.94, 0.86, 0.01, 1.49, 0.14, 0.94, 2.18, 0.05, 0.34, 1.26, 0.29, 2.61];
-const DECAY = -0.5;                 // 망각 곡선 지수 (FSRS-4.5 변경점)
-const FACTOR = 19 / 81;             // 곡선 형상 상수 — R(0)=1·R(s)=0.9가 성립
+// FSRS-6 기본 파라미터 (w0..w20 — fsrs-rs 6.x / ts-fsrs 공개 안정 세트)
+const W = [0.212, 1.2931, 2.3065, 8.2956, 6.4133, 0.8334, 3.0194, 0.001, 1.8722,
+    0.1666, 0.796, 1.4835, 0.0614, 0.2629, 1.6483, 0.6014, 1.8729, 0.5425, 0.0912, 0.0658, 0.1542];
+const DECAY = -W[20];                          // 망각 곡선 지수 — 피팅 가능 (w20)
+const FACTOR = Math.pow(0.9, -1 / W[20]) - 1;  // 곡선 형상 — w20에서 유도, R(s,s)=0.9 불변식 유지
 const REQUEST_RETENTION = 0.9;      // 목표 기억률
+const S_MIN = 0.01;                 // 안정도 하한
 const MAX_INTERVAL = 36500;         // 100년 상한
 
 /** 평가 등급 — 현행 2버튼 UI는 Again/Good만 사용 (4단계는 FSRS_DESIGN §8 후속) */
@@ -19,14 +21,14 @@ export const Rating = { AGAIN: 1, HARD: 2, GOOD: 3, EASY: 4 };
 const _clampD = (d) => Math.min(10, Math.max(1, d));
 const _round2 = (v) => Math.round(v * 100) / 100;
 
-/** 최초 학습 카드 초기 난이도 */
+/** 최초 학습 카드 초기 난이도 — FSRS-6 지수형 D0(G) = w4 − e^{w5·(G−1)} + 1 */
 export function initDifficulty(rating) {
-    return _clampD(W[4] - W[5] * (rating - 3));
+    return _clampD(W[4] - Math.exp(W[5] * (rating - 1)) + 1);
 }
 
 /** 최초 학습 카드 초기 안정도 (레이팅별 상수) */
 export function initStability(rating) {
-    return Math.max(0.1, W[rating - 1]);
+    return Math.min(Math.max(S_MIN, W[rating - 1]), MAX_INTERVAL);
 }
 
 /** 경과 t일 후 기억 확률 — R(t,s) = (1 + FACTOR·t/s)^DECAY */
@@ -41,10 +43,12 @@ export function nextInterval(s) {
     return Math.min(Math.max(ivl, 1), MAX_INTERVAL);
 }
 
-/** 복습 후 난이도 — 평가 방향 이동 + Easy 초기값 방향 평균 회귀 */
+/** 복습 후 난이도 — Δd 선형 감쇠(d→10 포화 둔화) + Easy 초기값 방향 평균 회귀 */
 export function nextDifficulty(d, rating) {
-    const next = d - W[6] * (rating - 3);
-    return _clampD(W[7] * initDifficulty(Rating.EASY) + (1 - W[7]) * next);
+    const delta = -W[6] * (rating - 3);
+    const next = d + delta * (10 - d) / 9;
+    const d0Easy = W[4] - Math.exp(W[5] * 3) + 1; // 평균 회귀 기준은 클램프 전 원시 D0(4) (정본 동형)
+    return _clampD(W[7] * d0Easy + (1 - W[7]) * next);
 }
 
 /** 성공 복습 후 안정도 */
@@ -55,10 +59,18 @@ export function recallStability(d, s, r, rating) {
         * (Math.exp((1 - r) * W[10]) - 1) * hardPenalty * easyBonus));
 }
 
-/** 실패(Again) 복습 후 안정도 — 안정도 감소 */
+/** 실패(Again) 복습 후 안정도 — 랩스 상한 s·e^{−w17·w18} 적용 (FSRS-6) */
 export function forgetStability(d, s, r) {
-    return _round2(Math.min(W[11] * Math.pow(d, -W[12])
-        * (Math.pow(s + 1, W[13]) - 1) * Math.exp((1 - r) * W[14]), s));
+    const sf = W[11] * Math.pow(d, -W[12])
+        * (Math.pow(s + 1, W[13]) - 1) * Math.exp((1 - r) * W[14]);
+    return _round2(Math.min(Math.max(sf, S_MIN), s * Math.exp(-W[17] * W[18])));
+}
+
+/** 당일(동일일) 복습 후 안정도 — S′ = S·e^{w17·(G−3+w18)}·S^{−w19}, G≥Hard는 감소 없음 (FSRS-6) */
+export function sameDayStability(s, rating) {
+    const sinc = Math.pow(s, -W[19]) * Math.exp(W[17] * (rating - 3 + W[18]));
+    const masked = rating >= Rating.HARD ? Math.max(sinc, 1) : sinc;
+    return _round2(Math.min(Math.max(s * masked, S_MIN), MAX_INTERVAL));
 }
 
 /**
@@ -81,10 +93,12 @@ export function fsrsReview(cur, rating, elapsedDays) {
         };
     }
     const d = nextDifficulty(cur.d, rating);
-    const r = retrievability(elapsedDays, cur.s);
-    const s = rating === Rating.AGAIN
-        ? forgetStability(d, cur.s, r)
-        : recallStability(d, cur.s, r, rating);
+    // @spec F-11 — 당일 재복습(elapsed=0)은 단기 안정도 경로 (4.5의 r=1→증분0 결함 해소)
+    const s = elapsedDays === 0
+        ? sameDayStability(cur.s, rating)
+        : rating === Rating.AGAIN
+            ? forgetStability(d, cur.s, retrievability(elapsedDays, cur.s))
+            : recallStability(d, cur.s, retrievability(elapsedDays, cur.s), rating);
     return {
         v: 2,
         d: _round2(d),
