@@ -72,7 +72,7 @@ export function updateStreakAndDailyUI() {
     if (freezeEl) {
         const freezes = _getFreezeCount();
         freezeEl.textContent = freezes > 0 ? `복구권 ${freezes}` : '';
-        freezeEl.style.display = freezes > 0 ? '' : 'none';
+        freezeEl.classList.toggle('is-hidden', freezes <= 0);
         freezeEl.title = `스트릭 복구권 ${freezes}장 — 어제 학습을 놓치면 자동으로 스트릭을 지켜줍니다 (7일 연속마다 1장, 최대 ${STREAK_FREEZE_MAX}장)`;
     }
     const weeklyEl = document.getElementById('weekly-goal-chip');
