@@ -266,8 +266,8 @@ function _renderStudyRhythmInsight() {
         ? `<p class="analysis-advice">${pace.verdict === 'ahead'
             ? `✅ 현재 페이스면 시험일까지 전체 커버 가능합니다.`
             : pace.verdict === 'ontrack'
-                ? `📈 현재 페이스(하루 ${pace.pacePerDay}장)로 약 ${pace.projectedCoverage}% 커버 예상 — 하루 ${pace.neededPerDay}장 목표로 조금만 더.`
-                : `⚠️ 현재 페이스로는 ${pace.projectedCoverage}% 커버에 그칩니다 — 하루 ${pace.neededPerDay}장 필요합니다.`}</p>`
+                ? `📈 현재 페이스(학습일당 ${pace.pacePerDay}장)로 약 ${pace.projectedCoverage}% 커버 예상 — 학습일당 ${pace.neededPerDay}장 목표로 조금만 더.`
+                : `⚠️ 현재 페이스로는 ${pace.projectedCoverage}% 커버에 그칩니다 — 학습일당 ${pace.neededPerDay}장 필요합니다.`}</p>`
         : '';
 
     el.innerHTML = `<h4>📅 학습 리듬</h4>

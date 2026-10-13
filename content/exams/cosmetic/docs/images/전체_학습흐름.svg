@@ -73,7 +73,7 @@
   <text class="ttl" x="72" y="120">시험일 설정</text>
   <text class="txt" x="46" y="148">학습 캘린더 › 목표 설정</text>
   <text class="txt" x="46" y="168">D-day · 역산 하루 N장</text>
-  <text class="txt" x="46" y="188">권장 준비 기간 50일</text>
+  <text class="txt" x="46" y="188">권장 준비 기간 63일*</text>
 
   <!-- ② 교재 1회독 -->
   <rect class="box" x="270" y="90" width="200" height="110" rx="12"/>
@@ -168,4 +168,6 @@
   <!-- 보조 → 순환 연결 -->
   <path class="arrs" d="M930,446 V418" marker-end="url(#as)"/>
   <text class="lbls" x="922" y="436" text-anchor="end">약점 보강</text>
+
+  <text class="txt" x="40" y="600">* 63일의 근거 — 문제은행 1회전(445문÷학습일당 10문=45학습일)을 주 5일 학습 기준으로 달력일 환산(45×7/5)</text>
 </svg>

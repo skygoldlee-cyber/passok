@@ -18,6 +18,7 @@ import { resolveLegacySubjectKey, examIdToSubjectId } from './exam-context.js';
 import { localDateKey } from './utils.js';
 import { WEAK_GRADUATE_STREAK } from './statement-tracker.js';
 import { getWrongCauseLabels, getWrongCauseTaxonomy } from './recommendations.js';
+import { getRemainingStudyDays, getStudyGoals } from './study-tracker.js';
 
 /**
  * manifest analysis.wrongCauses[].autoPattern → 컴파일된 자동 분류 패턴 목록.
@@ -341,13 +342,16 @@ export function computeWeakConceptClusters(statementStats, chapterRanges, minSiz
 
 /**
  * 최근 학습 페이스로 시험일까지 예상 커버율을 계산한다.
+ * 모든 기간 환산은 학습일 기준 — 페이스는 "최근 구간의 학습일당 카드"로 측정하고
+ * 잔여 기간은 getRemainingStudyDays(주간 학습일·통독 차감)로 환산한다.
  * @param {Object} p
  * @param {Object} p.calendar getStudyCalendar() 결과
  * @param {number} p.totalCards 전체 카드 수
  * @param {number} p.memorized 암기 완료 카드 수
  * @param {number|null} p.dday 시험까지 남은 일수
- * @param {number} [p.paceDays] 페이스 산정 기간 (기본 최근 14일)
+ * @param {number} [p.paceDays] 페이스 산정 기간 (달력일, 기본 최근 14일)
  * @returns {{pacePerDay:number, projectedCoverage:number, neededPerDay:number|null, verdict:'ahead'|'behind'|'ontrack'}|null}
+ *   pacePerDay·neededPerDay는 모두 "학습일당" 카드 수
  */
 export function computePaceProjection(p) {
     const { calendar, totalCards, memorized, dday } = p;
@@ -357,11 +361,15 @@ export function computePaceProjection(p) {
         return { pacePerDay: 0, projectedCoverage: 100, neededPerDay: 0, verdict: 'ahead' };
     }
     const days = p.paceDays || 14;
+    const weekly = getStudyGoals().weeklyStudyDays || 5;
+    // 산정 구간의 학습일 — 주간 학습일 기준으로 달력 구간을 환산
+    const elapsedStudyDays = Math.max(1, Math.floor(days * weekly / 7));
     const stats = _rangeStats(calendar || {}, 0, days - 1);
-    const pacePerDay = stats.cards / days;
-    const projected = memorized + pacePerDay * dday;
+    const pacePerDay = stats.cards / elapsedStudyDays;
+    const studyDaysLeft = getRemainingStudyDays(dday);
+    const projected = memorized + pacePerDay * studyDaysLeft;
     const projectedCoverage = Math.min(100, Math.round((projected / totalCards) * 100));
-    const neededPerDay = Math.ceil(remaining / dday);
+    const neededPerDay = Math.ceil(remaining / studyDaysLeft);
     const verdict = projectedCoverage >= 100 ? 'ahead'
         : (pacePerDay >= neededPerDay * 0.7 ? 'ontrack' : 'behind');
     return { pacePerDay: Math.round(pacePerDay * 10) / 10, projectedCoverage, neededPerDay, verdict };
