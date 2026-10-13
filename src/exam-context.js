@@ -257,8 +257,10 @@ function _registrySubjectTotals() {
 
 /**
  * 최소 권장 준비 기간(일) — manifest study.minExamLeadDays 우선 (D-17).
- * 미선언 시 콘텐츠 규모로 유도: 카드 1회전 학습일(기본 일 50장·주 5일)을 달력일
- * 환산해 FSRS 마진 1.5배, 문제은행 1회전(일 10문)과 큰 쪽. 레지스트리 없으면 50.
+ * 미선언 시 콘텐츠 규모로 유도: 카드 1회전(학습일당 50장)을 달력일 환산해 FSRS
+ * 마진 1.5배, 문제은행 1회전(학습일당 10문) 달력일 환산과 큰 쪽.
+ * 모든 학습량은 주 5일 학습일 기준으로 산정 후 ×7/5로 달력일 변환.
+ * 레지스트리 없으면 50.
  */
 export function getMinExamLeadDays() {
     const s = _registryStudy();
@@ -266,7 +268,8 @@ export function getMinExamLeadDays() {
     const { cards, quizzes } = _registrySubjectTotals();
     if (!cards && !quizzes) return 50;
     const cardCalDays = Math.ceil(cards / 50) * (7 / 5);   // 학습일 → 달력일
-    return Math.ceil(Math.max(cardCalDays * 1.5, quizzes / 10));
+    const quizCalDays = Math.ceil(quizzes / 10) * (7 / 5); // 학습일 → 달력일
+    return Math.ceil(Math.max(cardCalDays * 1.5, quizCalDays));
 }
 
 /**

@@ -219,18 +219,18 @@ describe('대시보드 — 통계·과목 카드·약점 추천', () => {
         seedTwoSubjects(); // 카드 4장 전부 미암기
         setStudyGoals({ dailyCards: 1 });
 
-        // D-2에 4장 남음 → 하루 2장 권장, 목표 1장 대비 ratio 2.0 → tight
+        // D-2에 4장 남음 → 학습일 2일 ÷ 4장 = 학습일당 2장, 목표 1장 대비 ratio 2.0 → tight
         setExamDate(todayPlus(2));
         updateGlobalStats();
         const desc = el('exam-dday-count').closest('.stat-info').querySelector('.stat-desc');
         expect(el('exam-dday-count').textContent).toBe('D-2');
-        expect(desc.textContent).toContain('하루 카드 2장');
+        expect(desc.textContent).toContain('학습일당 카드 2장');
         expect(desc.textContent).toContain('병행');
 
-        // D-1에 4장 남음 → 하루 4장 권장, ratio 4.0 → triage
+        // D-1에 4장 남음 → 학습일당 4장, ratio 4.0 → triage
         setExamDate(todayPlus(1));
         updateGlobalStats();
-        expect(desc.textContent).toContain('하루 카드 4장');
+        expect(desc.textContent).toContain('학습일당 카드 4장');
         expect(desc.textContent).toContain('우선');
     });
 
