@@ -86,9 +86,9 @@ describe('UI 모드 — 학습/실무 전환', () => {
         expect(getComputedStyle(document.querySelector('.manual-nav-link.nav-study-only')).display).toBe('none');
         // 탭바에는 실무 전용 항목이 없어야 함 — 실무매뉴얼·학습도구는 더보기 시트 소속
         expect(document.querySelectorAll('#mobile-tab-bar .nav-practice-only')).toHaveLength(0);
-        // 실무 전용 항목 2개(실무매뉴얼·학습도구 — 모두 시트 내) 모두 표시
-        expect(document.querySelectorAll('.nav-practice-only')).toHaveLength(2);
-        document.querySelectorAll('.nav-practice-only').forEach(t => {
+        // 실무 전용 버튼 2개(실무매뉴얼·학습도구 — 모두 시트 내) 모두 표시
+        expect(document.querySelectorAll('button.nav-practice-only')).toHaveLength(2);
+        document.querySelectorAll('button.nav-practice-only').forEach(t => {
             expect(getComputedStyle(t).display).not.toBe('none');
         });
         // 모바일 학습도구 탭 존재 — 사이드바 없는 환경의 학습 항목 펼침 경로
