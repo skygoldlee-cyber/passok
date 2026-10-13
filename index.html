@@ -583,6 +583,7 @@
             <!-- Quiz View -->
             <!-- @spec Q-01 -->
             <section id="quiz-view" class="view-section">
+                <p class="view-purpose">단원별 연습 — 과목을 골라 기출·핵심 퀴즈로 개념을 확인합니다. 실전 평가는 모의고사, 반복 훈련은 훈련소 탭에서 하세요.</p>
                 <div class="filter-bar">
                     <div class="filter-group">
                         <label for="quiz-subject-select">과목 선택</label>
@@ -600,7 +601,7 @@
                         <div class="progress-bar progress-bar-fill" id="quiz-run-progress"></div>
                     </div>
                     <div class="quiz-score-indicator">
-                        진행: <span id="quiz-curr-idx">1</span>/<span id="quiz-total-idx">10</span> | 
+                        진행: <span id="quiz-curr-idx">1</span>/<span id="quiz-total-idx">10</span> |
                         맞춘 문제: <span id="quiz-correct-count">0</span>
                     </div>
                 </div>
@@ -614,7 +615,7 @@
                         </div>
                         <div class="quiz-body">
                             <h2 class="quiz-question-text" id="quiz-question">여기는 [ 빈칸 ] 입니다.</h2>
-                            
+
                             <!-- 객관식 선택지 컨테이너 -->
                             <div id="quiz-options-container" class="is-hidden mb-4"></div>
 
@@ -667,13 +668,15 @@
             </section>
 
             <!-- Review View (Weak concepts) -->
-            <!-- @spec RV-01 -->
+            <!-- @spec RV-01,RV-02,RV-03,RV-04 -->
             <section id="review-view" class="view-section">
                 <!-- Print-only Header -->
                 <div class="print-only-header is-hidden" >
                     <h2 id="review-print-title" aria-hidden="true">오답 복습노트</h2>
                     <p id="review-print-sub">Passory</p>
                 </div>
+
+                <p class="view-purpose">틀린·약한 것을 다시 확인하는 곳 — 헷갈린 카드와 드릴에서 오판한 진술이 여기에 모입니다. 반복 훈련은 훈련소, 실전 평가는 모의고사 탭에서 하세요.</p>
 
                 <div class="review-header">
                     <div class="review-stats">
@@ -682,6 +685,9 @@
                     <div class="review-actions-group btn-row">
                         <button id="start-weak-quiz-btn" class="btn btn-warning is-hidden" >
                             <i class="fa-solid fa-bolt" aria-hidden="true"></i> 헷갈린 카드 집중 퀴즈 시작
+                        </button>
+                        <button id="start-weak-oxdrill-btn" class="btn btn-primary is-hidden" data-click="gotoOxDrill" data-arg="weak">
+                            <i class="fa-solid fa-crosshairs" aria-hidden="true"></i> 취약·복습 진술 O/X 드릴 <span class="trainer-due-badge is-hidden" id="review-weak-badge"></span>
                         </button>
                         <button id="start-weak-exam-btn" class="btn btn-primary is-hidden" data-click="startWeakExam" >
                             <i class="fa-solid fa-file-signature" aria-hidden="true"></i> 헷갈린 문제 집중 모의고사 <span class="pro-badge" data-pro-feature="mock_exam">PRO</span>
@@ -707,6 +713,19 @@
                 <div class="review-card-list" id="review-cards-list-container">
                     <!-- Dynamic injection of weak cards -->
                 </div>
+
+                <!-- 취약 진술 리뷰 — O/X·ㄱㄴㄷ 드릴의 오판 진술 열람 (RV-02, 훈련소에서 이관) -->
+                <details id="review-weak-panel" class="review-weak-section" open>
+                    <summary class="review-weak-summary-line">
+                        <span><i class="fa-solid fa-crosshairs" aria-hidden="true"></i> 취약 진술 리뷰</span>
+                        <span class="badge badge-quiz-cat">진술 단위 약점</span>
+                    </summary>
+                    <div class="review-weak-body">
+                        <p id="weak-summary" style="color:var(--color-text-muted); margin-bottom:1rem;"></p>
+                        <div id="weak-mastery"></div>
+                        <div id="weak-list"></div>
+                    </div>
+                </details>
             </section>
 
             <!-- Trainer View (Limits & Calculation Practice) -->
@@ -716,7 +735,7 @@
                 <div id="trainer-menu-panel">
                     <div class="section-title-area">
                         <h3>훈련소</h3>
-                        <p>법령 수치 암기·배합 계산·O/X 판정·ㄱㄴㄷ 조합 훈련과 취약 진술 리뷰로 시험 합격의 당락을 정복하세요.</p>
+                        <p class="view-purpose">반복 훈련 공간 — 법령 수치 암기·배합 계산·O/X 판정·ㄱㄴㄷ 조합을 드릴로 다집니다. 틀리거나 약한 진술의 재확인은 복습 탭에서 하세요.</p>
                     </div>
                     <div class="trainer-menu-grid">
                         <div class="trainer-menu-card" data-click="startLimitsTrainer" data-feature="limitsTrainer">
@@ -766,15 +785,6 @@
                             <span class="trainer-card-btn">훈련 시작 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
                         </div>
 
-                        <div class="trainer-menu-card" data-click="openWeakReview">
-                            <div class="trainer-card-icon icon-orange">
-                                <i class="fa-solid fa-crosshairs" aria-hidden="true"></i>
-                            </div>
-                            <h4>취약 진술 리뷰</h4>
-                            <p>O/X·ㄱㄴㄷ 조합에서 오판한 진술을 개념별로 모아봅니다. 같은 교재 구간의 취약 진술은 혼동쌍으로 묶어 표시합니다.</p>
-                            <span class="trainer-due-badge is-hidden" id="weak-due-badge"></span>
-                            <span class="trainer-card-btn">리뷰 열기 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
-                        </div>
                     </div>
                 </div>
 
@@ -971,26 +981,6 @@
                     <div id="combo-result" class="is-hidden"></div>
                 </div>
 
-                <!-- 4-2. 취약 진술 리뷰 Panel -->
-                <div id="trainer-weak-panel" class="is-hidden">
-                    <div class="sim-arena-header mb-6">
-                        <button class="btn btn-secondary" data-click="exitTrainerSubView" title="훈련소 메뉴로 돌아가기"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> 나가기</button>
-                        <div class="sim-title-group">
-                            <h4>취약 진술 리뷰</h4>
-                            <span class="badge badge-quiz-cat">진술 단위 약점</span>
-                        </div>
-                    </div>
-                    <div class="trainer-arena">
-                        <div class="quiz-card">
-                            <div class="quiz-body">
-                                <p id="weak-summary" style="color:var(--color-text-muted); margin-bottom:1rem;"></p>
-                                <div id="weak-mastery"></div>
-                                <div id="weak-list"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- 5. Blending Calculator Panel -->
                 <div id="trainer-calc-panel" class="is-hidden">
                     <div class="sim-arena-header mb-6">
@@ -1135,7 +1125,7 @@
                 <div id="exam-list-panel">
                     <div class="section-title-area">
                         <h3>실전 모의고사 및 요약본</h3>
-                        <p id="exam-view-subtitle">교재 인용 기반 문제은행으로 과목별 모의고사를 보고, 학습안내서로 핵심을 요약할 수 있습니다.</p>
+                        <p id="exam-view-subtitle" class="view-purpose">실전 평가 — 교재 인용 기반 문제은행으로 과목별·통합 모의고사를 보고, 학습안내서로 핵심을 요약할 수 있습니다. 단원별 연습은 퀴즈 탭에서 하세요.</p>
                     </div>
 
                     <div class="exam-list-grid">

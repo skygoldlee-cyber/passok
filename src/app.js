@@ -75,6 +75,8 @@ import {
     submitComboJudgments,
     openWeakReview,
     gotoWeakReview,
+    gotoOxDrill,
+    renderWeakReview,
     setWeakFilter,
     toggleSimilarStmts,
     setDrillCount
@@ -331,11 +333,13 @@ function setupNavigation() {
                 if (isStaleViewGen(gen)) return;
                 hideGlobalLoading();
                 renderReviewList();
+                renderWeakReview(); // 취약 진술 리뷰 섹션 — 훈련소에서 이관 (RV-02)
             }).catch(() => {
                 if (isStaleViewGen(gen)) return;
                 hideGlobalLoading();
                 showToast('복습 데이터를 불러오지 못했습니다.', 'error');
                 renderReviewList();
+                renderWeakReview();
             });
         },
         'trainer-view': () => {
@@ -547,7 +551,7 @@ const DELEGATED_HANDLERS = {
     openComboDrillSetup, startComboDrill, nextComboDrill, submitComboJudgments,
     openWeakReview, setWeakFilter, setDrillCount, toggleSimilarStmts,
     // 뷰 전환 (data-click="switchView" data-arg="<view-id>") — 딥링크 공용
-    switchView, gotoWeakReview, gotoSubjectAnalysis,
+    switchView, gotoWeakReview, gotoOxDrill, gotoSubjectAnalysis,
     // 훈련소 (제한값·계산·원료·뽀모도로)
     // 계산 연습·지식DB 챌린지 핸들러는 LAZY_MODULE_HANDLERS에 등록 (도메인 모듈 지연 로딩)
     exitTrainerSubView, startLimitsTrainer, nextLimitsQuestion,

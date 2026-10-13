@@ -2,7 +2,7 @@
 
 > **목적**: 앱의 모든 화면을 `view id ↔ 마크업 파셜 ↔ URL 해시 ↔ 내비게이션 위치 ↔ SPEC §` 로 매핑한 단일 인벤토리. 화면 관련 작업 시 "이 화면은 어느 SPEC 섹션인가"를 탐색 없이 결정하기 위한 참조.
 > **관련 문서**: [SPEC.md](../SPEC.md) (요구사항 원천 — 기기별 배치 계약은 §4.10) · [USER_FLOW.md](../design/USER_FLOW.md) (화면 간 전환 흐름) · [ARCHITECTURE.md](../ARCHITECTURE.md) (뷰 라우팅 구조)
-> **최종 업데이트**: 2026-10-03
+> **최종 업데이트**: 2026-10-13
 > **문서 ID**: DOC-REF-09
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: `UX-NAV-01`(3단계 네비) · `UX-NAV-08`(해시 라우팅) · `UM-01~05`(학습↔실무 모드)
@@ -20,7 +20,7 @@
 | 개념 플래시카드 | `flashcard-view` | flashcard.html | `#/cards` | 사이드바 / 탭바 2 | §3.2 | 학습 전용 |
 | 기출 및 핵심 퀴즈 | `quiz-view` | quiz.html | `#/quiz` | 사이드바 / 탭바 3 | §3.3 | 학습 전용 |
 | 훈련소 | `trainer-view` | trainer.html | `#/trainer` | 사이드바 / 더보기 시트 | §3.11 | 학습 전용 |
-| 오답 및 중요 복습 | `review-view` | review.html | `#/review` | 사이드바 / 더보기 시트 | §3.20 (`RV-01`) | 학습 전용 |
+| 오답 및 중요 복습 | `review-view` | review.html | `#/review` | 사이드바 / 더보기 시트 | §3.20 (`RV-01~04`) | 학습 전용 |
 | 실전 모의고사 | `exam-view` | exam.html | `#/exam` | 사이드바 / 더보기 시트 | §3.4·§3.14 | 학습 전용 |
 | Formula OS | `formula-view` | formula.html | `#/formula` | 사이드바 / 탭바 (실무 랜딩) | §3.18 | 실무 (학습 모드에서도 노출) |
 | 교재리더 | `textbook-reader-view` | textbook-reader.html | `#/reader` | 사이드바 / 더보기 시트 | §3.5~3.8 | 학습 전용 |
@@ -80,6 +80,7 @@
 | 모의고사 | 유형 선택(실전/ㄱㄴㄷ·문항수) → 응시(OMR·타이머) → 채점(과락 판정) → 리뷰 |
 | 플래시카드 | 과목·필터 선택 → 카드 앞/뒤 → 암기 완료 표시 |
 | 사전 | 검색어 없음(전체/필터) → 검색 결과 → 결과 없음(empty) |
+| 복습 | 헷갈린 카드 없음(empty-state) / 카드 목록+과목 필터 / 취약 진술 리뷰는 `<details id="review-weak-panel">` 접이식 섹션(RV-02, 기본 펼침) — 레거시 `#/trainer/weak` 해시는 `#/review`로 리다이렉트 |
 | 시험 선택 | 현재 시험 배지 / `comingSoon` 시험은 선택 불가(알림) / 다른 시험 선택 시 리로드 |
 | Formula OS | 허브 6메뉴(①고객→②배합 계산기→③My 포뮬러→④원료 장부→⑤조제 기록+법규 준수 상시) + 서브내비 칩 상호 이동 (FO-15) — 각 패널 독립 CRUD 상태 |
 
@@ -87,4 +88,6 @@
 
 - **뷰 추가/삭제**: `html/views/` 파셜 + `index.template.html` include + `VIEW_HASH_SLUGS` + nav 버튼 + SPEC §3.x 요구사항 + **이 표** — `check:docsync`가 문서 동반을 강제
 - **해시 슬러그는 변경 금지**: 기존 딥링크·복원 데이터와 호환 — 변경 시 UX-NAV-08 마이그레이션 필요
+- **레거시 서브해시**: `#/trainer/weak`는 취약 진술 리뷰의 복습 뷰 이관(RV-02)으로 폐기 — `initTrainer`가 `#/review`로 리다이렉트. 훈련소 서브해시는 `limits`·`oxdrill`·`combo`·`calc`·`ingredients`만 유효
+- **뷰 목적 문구**: 퀴즈·모의고사·훈련소·복습 뷰 상단의 `.view-purpose` 한 줄이 학습 루프 경계(연습/평가/훈련/재확인)를 명시 (UX-NAV-13)
 - **기능 플래그 신설**: `data-feature` 속성 + `exams.json.features` 등록 (멀티시험 대칭)

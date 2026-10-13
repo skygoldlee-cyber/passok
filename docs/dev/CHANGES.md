@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 학습 표면 단순화 Phase 1 구현 (RV-02~04, UX-NAV-13)
+
+- **취약 진술 리뷰 → 복습 뷰 이관 (RV-02)**: `trainer-weak-panel`을 복습 뷰의 `<details id="review-weak-panel" open>` 섹션으로 이동 — 오판 진술 목록·FSRS 복습 대상·졸업 진행은 복습 성격이라 오답 카드와 한 화면 통합. 훈련소 메뉴의 "취약 진술 리뷰" 카드는 제거(드릴 결과 화면의 `openWeakReview` 버튼이 발견 경로를 유지). `openWeakReview`/`gotoWeakReview`는 복습 뷰 전환+섹션 개방으로 재지정 — 대시보드 큐·학습 진단 카드의 기존 data-click 경로 무변경. 레거시 `#/trainer/weak` 해시는 `initTrainer`에서 `#/review`로 replaceState 정규화 + 리다이렉트 — 북마크·뒤로가기 이력 보존. `TRAINER_SUB_SLUGS`에서 `weak` 엔트리 제거
+- **복습 → weak 드릴 원클릭 (RV-03)**: 복습 뷰 헤더에 `start-weak-oxdrill-btn` 추가 — 취약·복습 대상 >0일 때만 노출, `review-weak-badge`에 대상 수 표시(`updateDueBadges` 공유). 신규 `gotoOxDrill(mode)` 핸들러가 훈련 뷰 전환 후 `startOxDrill` 즉시 시작 — 리뷰 행 재시도(`sid:`)·개념 드릴(`concept:`)·유사 진술 재시도 버튼도 동일 경로로 재지정. 드릴 실행 표면은 훈련소 잔류(리뷰=읽기 / 드릴=실행 비대칭 유지)
+- **뷰 목적 문구 (UX-NAV-13·RV-04)**: 퀴즈="단원별 연습"·모의고사="실전 평가"·훈련소="반복 훈련"·복습="틀린·약한 것 재확인" — 각 뷰 상단에 `.view-purpose` 정적 문구 1줄 (manifest uiText 비대상 본문 표기)
+- **테스트 재배치**: weak 리뷰 DOM 블록 + SemanticIndex 블록을 신규 `tests/dom/study-review.dom.test.js`로 이동(12건 — 뷰 전환·섹션 개방·CTA 노출/숨김·레거시 해시 리다이렉트 신규 케이스 포함). `switchView` 부분 모킹으로 라우터 없는 jsdom에서 뷰 전환 단언. `study-trainer.dom.test.js`의 exit 테스트는 calc 패널로 대체
+- **정리**: `docs_paths_allowlist.json`의 구현 완료된 설계 경로 3건 제거(dashboard-queue.js·today-queue.test.js·study-review.dom.test.js)
+
 ## 2026-10-13 학습 표면 단순화 Phase 0 구현 (TQ-01~05, UX-NAV-12)
 
 - **"오늘 할 일" 단일 큐**: 신규 `src/views/dashboard-queue.js` — `buildTodayQueue()` 순수 함수가 FSRS 복습 대기 → 과락 위기 추천 → 주간 배분 잔여 → 오답·헷갈림 → 취약 진술 → 잔여 추천 → 일일 챌린지(미완료) 순으로 병합, `click:arg` 중복 제거·배정 항목 상한 2개·이력 없음 빈 큐는 시험일 설정+첫 학습 안내로 대체. 대시보드 기존 `#weak-subject-recommendation` 컨테이너를 번호 매긴 `<ol>` 큐로 전환해 D-10/D-11 별도 추천 카드 흡수. 추천 효과 추적(AN-06 스냅샷·개선 평가)은 큐 발행 경로로 계승

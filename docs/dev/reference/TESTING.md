@@ -28,9 +28,9 @@
 | 구분 | 프레임워크 | 환경 | 파일 위치 | 테스트 수 |
 |------|-----------|------|-----------|-----------|
 | **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1197 |
-| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 694 |
+| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 701 |
 | **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 101 |
-| **합계** | | | | **1992** |
+| **합계** | | | | **1999** |
 
 ### 설계 원칙
 
@@ -292,7 +292,7 @@ npm run hooks:install
 | 12 | `study-dashboard.dom.test.js` | 14 | 대시보드 | 0건 통계·시딩 통계·과목 카드·히트맵·약점 추천(3문 조건)·헷갈림 추천 | 2026-09-23 추가 |
 | 13 | `study-challenge.dom.test.js` | 17 | 데일리 챌린지 | 미완료/완료 상태, 스트릭 유지·리셋, 8문항 모달·채점·분류, 완료 영속·재진입, 이탈 confirm | 2026-09-23 추가 |
 | 14 | `study-pomodoro.dom.test.js` | 7 | 뽀모도로 | 시작/일시정지/리셋, 완주 누적, 날짜 경계 리셋 (fake timers) | 2026-09-23 추가 |
-| 15 | `study-trainer.dom.test.js` | 14 | 스마트 훈련소 | 메뉴/서브패널 전환, 한도 퀴즈 채점, 계산 연습 이력·비수치 경고, 원료 챌린지·빈DB 가드, 취약 진술 복습 | 2026-09-23 추가 |
+| 15 | `study-trainer.dom.test.js` | 12 | 훈련소 | 메뉴/서브패널 전환, 한도 퀴즈 채점, 계산 연습 이력·비수치 경고, 원료 챌린지·빈DB 가드 | 2026-09-23 추가 · 2026-10-13 갱신(취약 리뷰→study-review 이관) |
 | 16 | `study-calendar.dom.test.js` | 17 | 학습 캘린더 | 목표 카드·월 그리드, 활동 기록→학습일·달성률, 월 이동, 목표 저장·기본값, 취소 불변 | 2026-09-23 추가 |
 | 17 | `study-simulator.dom.test.js` | 15 | 모의고사 | 아레나·OMR, 답안·문항 이동, 제출 채점·오답 카드 등록, 리뷰, 드래프트 이어하기, 시간 만료 자동 제출, 오답 모의고사(startWeakExam — 카드/퀴즈/combo 재조립·과목 필터) | 2026-09-23 추가 |
 | 18 | `study-reader.dom.test.js` | 30 | 교재 리더 | 과목 옵션·본문/TOC 렌더, 읽기 위치 이어하기, 북마크 영속, 빈 상태 + 툴바(툴바 접기)·본문 검색 하이라이트·모바일 TOC 드로어·표 인라인 렌더(확장 모달 제거 회귀)·이미지 라이트박스(클릭 확대·배율·닫기·모바일 미바인딩 — 데스크탑 전용)·TOC 클릭 스크롤·테마 동기화 + 이야기형 서사 태깅(명시 마커·sr-only 구간 라벨 포함)(명시 마커 📖┈이야기┈~┈본문┈� + �📖 장면·💭 에필로그·프롤로그 폴백) | 2026-09-23 추가 · 2026-10-06 갱신(글자/줄간격 제거·이미지 라이트박스 데스크탑 복원) |
@@ -311,7 +311,7 @@ npm run hooks:install
 | 31 | `common-glossary.dom.test.js` | 5 | 용어집 공용 경로 | 용어집 인덱스·링크 렌더 | 2026-09-24 추가 |
 | 32 | `common-htmlviewer.dom.test.js` | 7 | HTML 뷰어 | 외부 HTML 콘텐츠 로드·렌더 경로 | 2026-09-24 추가 |
 | 33 | `common-navigation.dom.test.js` | 8 | 뷰 전환 공용 | navigation 유틸 경로, 스크롤 복원·scrollTop 옵션, 사이드바↔탭 바 parity | 2026-09-27 scrollTop 추가 |
-| 34 | `study-trainer-drills.dom.test.js` | 16 | O/X·복수정답 드릴 | 드릴 UI·채점 경로 | 2026-09-24 추가 |
+| 34 | `study-trainer-drills.dom.test.js` | 11 | O/X·복수정답 드릴 | 드릴 UI·채점 경로 | 2026-09-24 추가 · 2026-10-13 갱신(취약 리뷰·유사 진술→study-review 이관) |
 | 35 | `common-eventlisteners.dom.test.js` | 21 | 이벤트 위임·리스너 | data-click/data-args/data-input 디스패치·키보드 접근성, 설정 메뉴·진도 초기화, 플래시카드 버튼·시뮬 이동·퀴즈 단축키 | 2026-09-24 추가 |
 | 36 | `study-commandpalette.dom.test.js` | 9 | 통합 검색 팔레트 | 팔레트 열기·검색·키보드 내비·실행 | 2026-09-26 추가 |
 | 37 | `whats-new.dom.test.js` | 7 | 새 버전 변경 이력 알림 | 최초 실행/업데이트/재부팅 분기, 복귀 사용자 판별, 확인→last_seen 기록, 설정 재열람 | 2026-09-26 추가 |
@@ -339,7 +339,8 @@ npm run hooks:install
 | 59 | `textbook-edition.dom.test.js` | 5 | 교재 개정 배너 (P-14) | 표시·판본 문구·확인 시 기록/재억제·동일 판본·미선언·중복 처리 억제 | 2026-10-13 추가 |
 | 60 | `exam-sim-review.dom.test.js` | 11 | 시뮬레이터 결과 리뷰·분석 (E-04·E-06·E-07) | 만점·오답 카드·combo 정오표 오판·패널 토글·chapterForQuestion·과락/합격/미달 피드백 | 2026-10-13 추가 |
 | 61 | `reader-ref-links.dom.test.js` | 13 | 참조 링크 위임·프리뷰·배지 (RR-02~06·17·19, TR-10) | 5종 data-attr 위임·오프라인 차단·hover 툴팁(fetch 스니펫·실패)·data-ref-bound 가드·배지 트리거 | 2026-10-13 추가 |
-| | **합계** | **694** | | |
+| 62 | `study-review.dom.test.js` | 13 | 복습 허브 — 취약 진술 리뷰·weak 드릴 CTA·유사 진술 (RV-02/RV-03) | 뷰 전환·details 개방·CTA 노출 조건·레거시 #/trainer/weak 리다이렉트·SemanticIndex 지연 로드 | 2026-10-13 추가 |
+| | **합계** | **701** | | |
 
 ---
 
