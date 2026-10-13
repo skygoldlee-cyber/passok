@@ -1,4 +1,4 @@
-// tests/dom/study-trainer.dom.test.js — 스마트 훈련소 시나리오
+// tests/dom/study-trainer.dom.test.js — 훈련소 시나리오
 // @spec T-01~05
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.2 (Phase 4)
 // 검증: 메뉴/서브뷰 전이(R) · 수치 훈련 채점(H) · 계산 연습 정답/오답/비수치(X)
@@ -40,7 +40,7 @@ import { openWeakReview } from '../../src/views/trainer-drills.js';
 import { recordStatementJudgments } from '../../src/statement-tracker.js';
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
 
-describe('스마트 훈련소 — 수치·계산·원료·취약 리뷰', () => {
+describe('훈련소 — 수치·계산·원료·취약 리뷰', () => {
     // 선택지 버튼의 표시 문자열("<값><단위> 이하/이상")에서 원본 수치만 추출 —
     // '5'가 '50'·'0.5'에 부분문자열로 매칭되는 오선택을 방지 (flaky 원인)
     function limitsOptValue(btn, unit) {

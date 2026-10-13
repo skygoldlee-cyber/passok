@@ -301,7 +301,7 @@ export function renderPassFailDiagnosis() {
     } else {
         statusClass = 'fail';
         statusText = '합격 미달';
-        advice = `평균 점수가 합격 기준(${rules.passAverage}%)에 도달하지 못했습니다. 플래시카드와 스마트 훈련소를 통해 암기량을 보충하세요!`;
+        advice = `평균 점수가 합격 기준(${rules.passAverage}%)에 도달하지 못했습니다. 플래시카드와 훈련소를 통해 암기량을 보충하세요!`;
     }
     
     let subjectsHTML = '<div class="pred-subject-scores">';

@@ -4,19 +4,19 @@
                 <!-- 페이지 안내 — Pro 기능 소개와 활용법. 첫 방문은 열림, 접으면 상태 기억 -->
                 <details class="analysis-fold analysis-intro-fold mb-7" id="analysis-intro-fold" open>
                     <summary class="analysis-fold-summary">
-                        <span class="analysis-fold-title"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> 맞춤학습 안내</span>
+                        <span class="analysis-fold-title"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> 학습 진단 안내</span>
                         <span class="analysis-fold-hint">기능 소개와 활용법 보기</span>
                         <i class="fa-solid fa-chevron-down analysis-fold-chevron" aria-hidden="true"></i>
                     </summary>
                 <div class="analytics-card analysis-intro">
-                    <h4><i class="fa-solid fa-bullseye" aria-hidden="true"></i> 맞춤학습</h4>
+                    <h4><i class="fa-solid fa-bullseye" aria-hidden="true"></i> 학습 진단</h4>
                     <p class="section-subtitle">
                         내 학습 기록(퀴즈 정답률·오답 원인·드릴 오판·모의고사 성적)을 모아
                         <strong>지금 약한 곳</strong>과 <strong>먼저 할 일</strong>을 보여주는 개인화 분석 화면입니다.
                         각 카드의 버튼을 누르면 해당 학습 화면으로 바로 이동합니다.
                     </p>
                     <ul class="analysis-intro-list">
-                        <li><strong>이번 주 스마트학습</strong> — 학습 캘린더의 과목별 배분을 실적/배정으로 요약합니다. 여기서 진단한 약점이 다음 배분 가중에 되먹입니다.</li>
+                        <li><strong>이번 주 주간 배분</strong> — 학습 캘린더의 과목별 배분을 실적/배정으로 요약합니다. 여기서 진단한 약점이 다음 배분 가중에 되먹입니다.</li>
                         <li><strong>오답 패턴 분석</strong> — 최근 7일의 틀린 이유(암기 부족·개념 오해·계산 실수 등 시험별 분류)를 집계해 어떤 공부법이 필요한지 알려줍니다. 태그하지 않은 오답도 자동 추정으로 보완합니다.</li>
                         <li><strong>취약 진술 추적</strong> — O/X·ㄱㄴㄷ 조합 드릴에서 반복해서 오판한 진술을 텍스트로 보여주고, 같은 개념 구간의 연쇄 오판도 감지합니다.</li>
                         <li><strong>학습 리듬</strong> — 오늘 목표 달성률·주간 학습일·시험 D-day를 추적하고, 주간 정답률 변화·집중 시간대·주말 비중과 시험일까지의 페이스를 판정합니다. 교재 읽기만 한 날도 학습일로 인정됩니다.</li>
@@ -28,7 +28,7 @@
                     </ul>
                     <p class="section-subtitle mt-3">
                         기록이 쌓일수록 정확해집니다 — 교재 읽기·퀴즈·오답 복습·드릴·모의고사를 진행하면
-                        분포·히트맵·예측이 자동으로 채워지고, 진단은 스마트학습 배분에 되먹습니다.
+                        분포·히트맵·예측이 자동으로 채워지고, 진단은 주간 배분에 되먹습니다.
                     </p>
                 </div>
                 </details>
@@ -40,7 +40,7 @@
                     <button class="btn btn-secondary btn-sm analysis-report-btn" data-click="exportAnalysisReport" title="주간 진단 요약을 공유하거나 클립보드에 복사합니다"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i> 주간 리포트</button>
                 </div>
                 <div class="analysis-insight-grid mb-7">
-                    <div class="analytics-card" id="analysis-smart-plan"><!-- 이번 주 스마트학습 (dashboard.js) --></div>
+                    <div class="analytics-card" id="analysis-smart-plan"><!-- 이번 주 주간 배분 (dashboard.js) --></div>
                     <div class="analytics-card" id="analysis-wrong-cause"><!-- 오답 패턴 (dashboard.js) --></div>
                     <div class="analytics-card" id="analysis-weak-statements"><!-- 취약 진술 (dashboard.js) --></div>
                     <div class="analytics-card" id="analysis-study-rhythm"><!-- 학습 리듬 (dashboard.js) --></div>

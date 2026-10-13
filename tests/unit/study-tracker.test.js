@@ -324,7 +324,7 @@ test('computeSubjectAllocation: plan·과목 없음 → null', () => {
   assert.equal(tracker.computeSubjectAllocation({ weeks: [] }, mkSubjects([['suba', 10]])), null);
 });
 
-// --- SC-09 스마트학습 보강 ---
+// --- SC-09 주간 배분 보강 ---
 
 test('recordStudyActivity: bySubj 과목별 카드 증분 누적', () => {
   tracker.recordStudyActivity({ cards: 3, bySubj: { law: 2, safety: 1 } });

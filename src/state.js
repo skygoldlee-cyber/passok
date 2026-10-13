@@ -62,7 +62,7 @@ export const state = {
         diagnostic: false // 진단 평가 모드 (전 과목 샘플링)
     },
 
-    // 스마트 훈련소 세션 상태
+    // 훈련소 세션 상태
     trainer: {
         activeSubView: 'menu',
         limits: {
@@ -255,7 +255,7 @@ export function saveProgress() {
     const memDelta = state.memorizedCards.size - prevMemCount;
     const quizDelta = Object.keys(state.quizResults).length - prevQuizCount;
     if (memDelta > 0 || quizDelta > 0) {
-        // SC-09 과목별 카드 증분 — 스마트학습 과목별 주간 실적 (bySubj)
+        // SC-09 과목별 카드 증분 — 주간 배분 과목별 주간 실적 (bySubj)
         const memBySubj = _countMemBySubj();
         const prevBySubj = state._prevMemBySubj || {};
         /** @type {Object.<string, number>} */
@@ -265,7 +265,7 @@ export function saveProgress() {
             if (d > 0) bySubj[k] = d;
         });
         state._prevMemBySubj = memBySubj;
-        // SC-13 과목별 퀴즈 증분 — 스마트학습 퀴즈 주간 실적 (quizBySubj)
+        // SC-13 과목별 퀴즈 증분 — 주간 배분 퀴즈 주간 실적 (quizBySubj)
         const quizBySubjAll = _countQuizBySubj();
         const prevQuizBySubj = state._prevQuizBySubj || {};
         /** @type {Object.<string, number>} */
