@@ -2,7 +2,7 @@
 
 > 상위 문서: [SPEC](../SPEC.md) §3.11·§3.20 · [LEARNING_UX_PHASE1_DESIGN](LEARNING_UX_PHASE1_DESIGN.md) (DOC-DSN-22, Phase 1) · [LEARNING_UX_SIMPLIFICATION_DESIGN](LEARNING_UX_SIMPLIFICATION_DESIGN.md) (DOC-DSN-21, Phase 0)
 > **범위**: platform · 판본: none
-> **상태**: 설계안 — 미구현
+> **상태**: 구현 완료 (UX-NAV-14·ROAD-P5 — `tests/dom/pro-notice.dom.test.js`·`study-trainer.dom.test.js`)
 > **관련 SPEC ID**: 신규 `UX-NAV-14`(훈련소 메뉴 그룹핑) · `ROAD-P5`(Pro 안내 수렴) · 기존 `T-01~05` · `DR-01~02` · `ROAD-P0`
 > **문서 ID**: DOC-DSN-23
 
@@ -55,10 +55,10 @@ Phase 1 이후 메뉴 카드는 5장으로 정리됐으나, 성격이 다른 두
 
 | 항목 | 현재 | 변경 |
 |------|------|------|
-| seen 키 | `PRO_NOTICE_SEEN` 맵의 기능별 키 (`{story_textbook: t, ...}`) | 동일 맵의 `_global` 단일 키 |
-| 표시 조건 | 기능별 첫 진입 | **최초 Pro 기능 진입 1회만** — 이후 어떤 Pro 기능을 만나도 모달 없음 |
+| seen 키 | `PRO_NOTICE_SEEN` 맵의 기능별 키 (`{story_textbook: t, ...}`), 시험별 스코프 | 동일 맵의 `_global` 단일 키 + 키를 `GLOBAL_KEYS`로 승격(플랜 안내는 시험 무관 사용자 수준 — `pro_entitled`·`usage_stats`와 같은 분류) |
+| 표시 조건 | 기능별 첫 진입 | **최초 Pro 기능 진입 1회만** — 이후 어떤 Pro 기능·다른 시험을 만나도 모달 없음 |
 | 모달 문구 | `<기능명>은(는) Pro 버전에서…` | 첫 진입 기능명을 인자로 받되, "PRO 배지가 붙은 기능은 Pro에서 제공 예정 — 현재 무료 체험"으로 일반화 문구 |
-| 마이그레이션 | — | 기존 seen 맵에 임의 키가 있으면 `_global`로 간주(재노출 없음) |
+| 마이그레이션 | — | 레거시 시험 스코프 seen(`<exam>:pro_notice_seen`)은 고아 키가 되어 도달 불가 — 기존 사용자도 최대 1회의 전역 안내를 마지막으로 받고 종료(수용 가능: 이후 영구 비노출). 새 `_global` 규약 아래 저장된 맵에 비-`_global` 키가 있으면 seen으로 간주하는 방어 판정 유지 |
 | 플랜 비교 버튼 | 각 모달에 포함 | 동일하게 유지 |
 
 호출부 시그니처 `proFeatureNotice(featureKey, featureName)`는 유지 — 내부에서 `isProFeature(featureKey)` 판정 후 `_global` seen 검사. 호출부 9곳 재배선 없음.
