@@ -86,7 +86,8 @@ export function updateStreakAndDailyUI() {
     if (todayCompleted) {
         if (challengeStatusEl) {
             challengeStatusEl.textContent = '오늘 미션 완료';
-            challengeStatusEl.style.color = 'var(--color-success)';
+            challengeStatusEl.classList.add('daily-status-done');
+            challengeStatusEl.classList.remove('daily-status-muted');
         }
         if (startBtn) {
             startBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> 오늘 완료됨';
@@ -95,7 +96,8 @@ export function updateStreakAndDailyUI() {
     } else {
         if (challengeStatusEl) {
             challengeStatusEl.textContent = '오늘 미션 미완료';
-            challengeStatusEl.style.color = 'var(--color-text-muted)';
+            challengeStatusEl.classList.add('daily-status-muted');
+            challengeStatusEl.classList.remove('daily-status-done');
         }
         if (startBtn) {
             startBtn.innerHTML = '<i class="fa-solid fa-play"></i> 챌린지 시작';
@@ -211,33 +213,33 @@ function showDailyModal() {
     if (oldModal) oldModal.remove();
 
     const modalHTML = `
-        <div id="daily-challenge-modal" role="dialog" aria-modal="true" aria-label="데일리 챌린지" style="position: fixed; top: 0; left: 0; width: 100vw; height: var(--app-height, 100dvh); background: rgba(11, 15, 25, 0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
-            <div class="glass-card dialog-card" style="width: 90%; max-width: 600px; padding: 2.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); position: relative; box-shadow: var(--shadow-lg);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <h3 style="font-weight: 700; color: var(--color-primary); margin: 0; font-size: 1.4rem;"><i class="fa-solid fa-fire"></i> 데일리 챌린지</h3>
-                    <span id="daily-modal-progress" style="font-size: 0.9rem; color: var(--color-text-muted);"></span>
+        <div id="daily-challenge-modal" class="daily-modal-overlay" role="dialog" aria-modal="true" aria-label="데일리 챌린지">
+            <div class="glass-card dialog-card daily-modal-card">
+                <div class="daily-modal-head">
+                    <h3 class="daily-modal-title"><i class="fa-solid fa-fire"></i> 데일리 챌린지</h3>
+                    <span id="daily-modal-progress" class="daily-modal-progress"></span>
                 </div>
 
-                <div class="progress-bar-container" style="height: 6px; margin-bottom: 2rem;">
-                    <div id="daily-modal-bar" class="progress-bar" style="width: 12.5%; background: var(--color-primary);"></div>
+                <div class="progress-bar-container daily-modal-track">
+                    <div id="daily-modal-bar" class="progress-bar daily-modal-bar"></div>
                 </div>
 
-                <div id="daily-modal-q-body" style="min-height: 200px; margin-bottom: 2rem;">
+                <div id="daily-modal-q-body" class="daily-modal-body">
                     질문 로딩 중...
                 </div>
 
-                <div id="daily-modal-answer-area" style="margin-bottom: 2rem;">
+                <div id="daily-modal-answer-area" class="daily-modal-answer">
                 </div>
 
-                <div class="quiz-feedback is-hidden" id="daily-modal-feedback" style="margin-bottom: 2rem; padding: 1.25rem;">
+                <div class="quiz-feedback is-hidden daily-modal-feedback" id="daily-modal-feedback">
                     <div class="feedback-icon" id="daily-modal-feedback-icon"><i class="fa-solid fa-check"></i></div>
                     <div class="feedback-content">
                         <h4 id="daily-modal-feedback-title">정답입니다!</h4>
-                        <p id="daily-modal-feedback-desc" style="font-size: 0.9rem;">설명</p>
+                        <p id="daily-modal-feedback-desc" class="daily-modal-feedback-desc">설명</p>
                     </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="daily-modal-foot">
                     <button class="btn btn-secondary" data-click="closeDailyModal" title="데일리 챌린지 닫기"><i class="fa-solid fa-xmark"></i> 나가기</button>
                     <button id="daily-modal-next-btn" class="btn btn-success is-hidden" data-click="nextDailyStep">다음 단계 <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
@@ -278,7 +280,7 @@ function renderDailyStep() {
 
     const qBody = document.getElementById('daily-modal-q-body');
     if (!qBody) return;
-    qBody.innerHTML = `<h4 style="font-size: 1.15rem; line-height: 1.8; font-weight: 500;">${safeTextWithBreaks(q.question)}</h4>`;
+    qBody.innerHTML = `<h4 class="daily-modal-question">${safeTextWithBreaks(q.question)}</h4>`;
 
     const answerArea = document.getElementById('daily-modal-answer-area');
     if (!answerArea) return;
@@ -286,14 +288,14 @@ function renderDailyStep() {
 
     if (q.type === 'card') {
         qBody.innerHTML = `
-            <div id="daily-card-container" style="perspective: 1000px; margin: 1rem 0; width: 100%; height: 180px; cursor: pointer;">
-                <div id="daily-card-inner" style="width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s;">
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(31, 41, 55, 0.95);">
-                        <p style="text-align: center; font-size: 1rem; line-height: 1.6;">${safeTextWithBreaks(q.cardObj.definition)}</p>
-                        <span style="color: var(--color-primary); font-size: 0.8rem; margin-top: 1rem;"><i class="fa-solid fa-rotate"></i> 카드를 클릭해 뒤집기</span>
+            <div id="daily-card-container" class="daily-card-container">
+                <div id="daily-card-inner" class="daily-card-inner">
+                    <div class="daily-card-face daily-card-front">
+                        <p class="daily-card-def">${safeTextWithBreaks(q.cardObj.definition)}</p>
+                        <span class="daily-card-hint"><i class="fa-solid fa-rotate"></i> 카드를 클릭해 뒤집기</span>
                     </div>
-                    <div style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(17, 24, 39, 0.95); transform: rotateY(180deg);">
-                        <h2 style="font-size: 1.6rem; color: var(--color-primary); font-weight: 800;">${esc(q.cardObj.term)}</h2>
+                    <div class="daily-card-face daily-card-back">
+                        <h2 class="daily-card-term">${esc(q.cardObj.term)}</h2>
                     </div>
                 </div>
             </div>
@@ -306,19 +308,17 @@ function renderDailyStep() {
         });
 
         answerArea.innerHTML = `
-            <div style="display: flex; gap: 1rem; width: 100%;">
-                <button class="btn btn-warning" data-click="submitDailyCardAnswer" data-args="[false]" style="flex: 1; justify-content: center;"><i class="fa-solid fa-question"></i> 아직 헷갈림</button>
-                <button class="btn btn-success" data-click="submitDailyCardAnswer" data-args="[true]" style="flex: 1; justify-content: center;"><i class="fa-solid fa-check"></i> 완벽히 외움</button>
+            <div class="daily-choice-row">
+                <button class="btn btn-warning" data-click="submitDailyCardAnswer" data-args="[false]"><i class="fa-solid fa-question"></i> 아직 헷갈림</button>
+                <button class="btn btn-success" data-click="submitDailyCardAnswer" data-args="[true]"><i class="fa-solid fa-check"></i> 완벽히 외움</button>
             </div>
         `;
     } else if (q.type === 'choice') {
         const optionIndicators = ['A', 'B', 'C', 'D'];
         q.options.forEach((opt, idx) => {
             const btn = document.createElement('button');
-            btn.className = 'limits-opt-btn';
+            btn.className = 'limits-opt-btn daily-choice-btn';
             btn.dataset.value = opt;
-            btn.style.width = '100%';
-            btn.style.marginBottom = '0.75rem';
             btn.innerHTML = `<span class="limits-opt-num">${esc(optionIndicators[idx])}</span> <span class="limits-opt-text">${esc(opt)}</span>`;
             btn.addEventListener('click', () => {
                 submitDailyChoiceAnswer(btn, opt, q.correct);
@@ -327,9 +327,9 @@ function renderDailyStep() {
         });
     } else {
         answerArea.innerHTML = `
-            <div style="display: flex; gap: 1rem; align-items: center; width: 100%;">
-                <input type="text" id="daily-answer-input" class="form-input" placeholder="정답을 기재하세요" style="flex: 1; height: 50px;" autocomplete="off">
-                <button class="btn btn-primary" data-click="submitDailyShortAnswer" style="height: 50px;"><i class="fa-solid fa-circle-check"></i> 제출</button>
+            <div class="daily-short-row">
+                <input type="text" id="daily-answer-input" class="form-input" placeholder="정답을 기재하세요" autocomplete="off">
+                <button class="btn btn-primary" data-click="submitDailyShortAnswer"><i class="fa-solid fa-circle-check"></i> 제출</button>
             </div>
         `;
     }

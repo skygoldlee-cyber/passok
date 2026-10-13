@@ -60,7 +60,7 @@
 | `check:imports` | import/export 불일치 | 누락 export 추가 또는 잘못된 import 정리 |
 | `verify:assets`/`check:perf` | sw.js 프리캐시 목록과 실파일 불일치·예산 초과 | 파일 추가/경로 수정 (예산은 tools/check/check_perf_budget.js) |
 | `check:vendor` | vendor/ 파일 해시·버전이 매니페스트와 불일치 | 수동 변경: `npm run check:vendor -- --update` / 버전 갱신: `npm run sync:vendor -- <key>` |
-| `check:uistyle` | 인라인 style 속성·JS display 조작·인라인 핸들러·네이티브 다이얼로그 | CSS 클래스 토글(`.is-hidden`)·`data-click`·`showToast` 계열로 대체 (면제는 `style-ok` 토큰) |
+| `check:uistyle` | 인라인 style 속성·JS display 조작·인라인 핸들러·네이티브 다이얼로그·JS 템플릿 정적 `style=` 기준선 래칫 | CSS 클래스 토글(`.is-hidden`)·`data-click`·`showToast` 계열로 대체 · 동적 값은 `style="--var:${x}"` 허용 (면제는 `style-ok` 토큰) |
 
 ## 4. 신규 게이트 추가 규칙
 

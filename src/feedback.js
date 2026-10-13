@@ -216,13 +216,13 @@ export function showFeedbackModal(currentView) {
             <div class="feedback-body">
                 <div class="feedback-kinds" role="radiogroup" aria-label="의견 유형">
                     ${FEEDBACK_KINDS.map(k =>
-                        `<button type="button" class="feedback-kind" data-kind="${k.id}" aria-pressed="${k.id === 'improve'}">${k.label}</button>`).join('')}
+                        `<button type="button" class="feedback-kind" data-kind="${esc(k.id)}" aria-pressed="${esc(k.id === 'improve')}">${esc(k.label)}</button>`).join('')}
                 </div>
                 <div class="feedback-stars" role="radiogroup" aria-label="평가 (선택)">
                     ${[1, 2, 3, 4, 5].map(n =>
                         `<button type="button" class="feedback-star" data-star="${n}" aria-label="${n}점">★</button>`).join('')}
                 </div>
-                <textarea class="feedback-text" rows="4" maxlength="${BODY_MAX}"
+                <textarea class="feedback-text" rows="4" maxlength="${esc(BODY_MAX)}"
                     placeholder="어떤 점이 좋았거나 불편했는지 알려주세요"></textarea>
                 <input type="text" class="feedback-hp" tabindex="-1" aria-hidden="true" autocomplete="off" />
                 <p class="feedback-ctx">📎 ${esc(ctxBits || '앱 정보 없음')}</p>

@@ -1,6 +1,7 @@
 // app.js - Passory 멀티시험 학습 플랫폼 애플리케이션 로직
 // @spec S-02,S-03,S-08,UX-NAV-01,UX-PWA-01,UX-PWA-05,PF-10
 import { state, loadProgress } from './state.js';
+import { esc } from './sanitize.js';
 import { shuffle } from './utils.js';
 import { clearScratchpad, toggleCalcScratchpad, toggleScratchpadEraser } from './scratchpad.js';
 import { DataLoader } from './data-loader.js';
@@ -596,7 +597,7 @@ const DELEGATED_HANDLERS = {
                 const guide = isTouch
                     ? '완전히 닫으려면 최근 앱 목록에서 이 화면을 위로 밀어주세요.'
                     : '이 창을 직접 닫아주세요.';
-                exitScreen.innerHTML = `<i class="fa-solid fa-power-off" aria-hidden="true"></i><p>앱을 종료했습니다.<br>${guide}</p>`;
+                exitScreen.innerHTML = `<i class="fa-solid fa-power-off" aria-hidden="true"></i><p>앱을 종료했습니다.<br>${esc(guide)}</p>`;
                 document.body.appendChild(exitScreen);
             }, 600);
         });

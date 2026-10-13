@@ -91,6 +91,12 @@ function git(args, opts = {}) {
     return execSync(`git ${args}`, { encoding: 'utf8', ...opts }).trim();
 }
 
+/** shell 명령행용 인자 인용 — 공백·따옴표 포함 인자만 따옴표 처리 (DEP0190 대응) */
+function quoteArg(a) {
+    const s = String(a);
+    return /[\s"]/.test(s) ? `"${s.replace(/"/g, '\\"')}"` : s;
+}
+
 function fail(msg) {
     console.error(`\n❌ 배포 차단: ${msg}\n`);
     process.exit(1);
@@ -202,10 +208,11 @@ function main() {
         console.log(`✅ sw.js 스탬프 커밋·푸시 완료 (${stamp.newValue})\n`);
     }
 
-    const result = spawnSync('vercel', ['--prod', '--yes', ...vercelScopeArgs()], {
-        stdio: 'inherit',
-        shell: true,
-    });
+    // DEP0190 — shell:true + 인자 배열 금지. win32의 vercel.cmd는 shell 경유가
+    // 필요하므로 직접 인용한 단일 명령 문자열로 전달한다.
+    const result = spawnSync(
+        ['vercel', '--prod', '--yes', ...vercelScopeArgs()].map(quoteArg).join(' '),
+        { stdio: 'inherit', shell: true });
     if ((result.status ?? 1) !== 0) process.exit(result.status ?? 1);
 
     // 배포 후 스모크 — 200·스탬프 불일치·엣지 정체를 자동 탐지

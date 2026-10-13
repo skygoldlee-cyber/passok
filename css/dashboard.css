@@ -863,3 +863,156 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 .actual-form-row { display: flex; gap: var(--space-2); align-items: center; }
 .actual-form-row .form-select { flex: 1; min-width: 0; }
 .actual-form-row input[type="number"] { max-width: 110px; }
+
+/* 데일리 챌린지 모달 — JS 템플릿 인라인 스타일 이관 (CODE_CONVENTIONS §4) */
+.daily-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: var(--app-height, 100dvh);
+    background: rgba(11, 15, 25, 0.9);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+.daily-modal-card {
+    width: 90%;
+    max-width: 600px;
+    padding: 2.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    position: relative;
+    box-shadow: var(--shadow-lg);
+}
+.daily-modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+.daily-modal-title {
+    font-weight: 700;
+    color: var(--color-primary);
+    margin: 0;
+    font-size: 1.4rem;
+}
+.daily-modal-progress {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+.daily-modal-track {
+    height: 6px;
+    margin-bottom: 2rem;
+}
+.daily-modal-bar {
+    background: var(--color-primary);
+}
+.daily-modal-body {
+    min-height: 200px;
+    margin-bottom: 2rem;
+}
+.daily-modal-answer {
+    margin-bottom: 2rem;
+}
+.daily-modal-feedback {
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+}
+.daily-modal-feedback-desc {
+    font-size: 0.9rem;
+}
+.daily-modal-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.daily-modal-question {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    font-weight: 500;
+}
+.daily-card-container {
+    perspective: 1000px;
+    margin: 1rem 0;
+    width: 100%;
+    height: 180px;
+    cursor: pointer;
+}
+.daily-card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+}
+.daily-card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.daily-card-front {
+    background: rgba(31, 41, 55, 0.95);
+}
+.daily-card-back {
+    background: rgba(17, 24, 39, 0.95);
+    transform: rotateY(180deg);
+}
+.daily-card-def {
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+.daily-card-hint {
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    margin-top: 1rem;
+}
+.daily-card-term {
+    font-size: 1.6rem;
+    color: var(--color-primary);
+    font-weight: 800;
+}
+.daily-choice-row {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+.daily-choice-row .btn {
+    flex: 1;
+    justify-content: center;
+}
+.daily-choice-btn {
+    width: 100%;
+    margin-bottom: 0.75rem;
+}
+.daily-short-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+}
+.daily-short-row .form-input {
+    flex: 1;
+    height: 50px;
+}
+.daily-short-row .btn {
+    height: 50px;
+}
+.daily-status-done {
+    color: var(--color-success);
+}
+.daily-status-muted {
+    color: var(--color-text-muted);
+}

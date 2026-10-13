@@ -177,14 +177,14 @@ function _renderWrongCauseInsight() {
     const el = document.getElementById('analysis-wrong-cause');
     if (!el) return;
     const sum = computeWrongCauseSummary(state.wrongCauses);
-    const goBtn = `<button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="review-view"><i class="fa-solid fa-star" aria-hidden="true"></i> 오답 복습으로</button>`;
+    const goBtnHtml = `<button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="review-view"><i class="fa-solid fa-star" aria-hidden="true"></i> 오답 복습으로</button>`;
     if (sum.total === 0) {
         el.innerHTML = `<h4>🧩 오답 패턴 분석</h4>
-            <p class="analysis-empty">오답 복습에서 "틀린 이유"를 태그하면 최근 7일의 실수 패턴을 분석합니다.</p>${goBtn}`;
+            <p class="analysis-empty">오답 복습에서 "틀린 이유"를 태그하면 최근 7일의 실수 패턴을 분석합니다.</p>${goBtnHtml}`;
         return;
     }
-    const rows = Object.entries(getWrongCauseLabels())
-        .map(([k, label]) => `<div class="wc-row"><span>${label}</span><strong>${sum.counts[k] || 0}건</strong></div>`).join('');
+    const rowsHtml = Object.entries(getWrongCauseLabels())
+        .map(([k, label]) => `<div class="wc-row"><span>${esc(label)}</span><strong>${sum.counts[k] || 0}건</strong></div>`).join('');
 
     // 미태깅 오답 자동 추정 (태깅 데이터가 희소할 때 보완)
     const est = estimateUntaggedCauses({
@@ -192,13 +192,13 @@ function _renderWrongCauseInsight() {
         wrongCauses: state.wrongCauses,
         resolveQuiz: resolveWrongQuiz
     });
-    const estRows = est.estimated > 0
+    const estRowsHtml = est.estimated > 0
         ? `<p class="analysis-advice">추정 (미태깅 오답 ${est.estimated}건): 암기 부족 ${est.counts.memorize} · 개념 오해 ${est.counts.concept} · 계산 ${est.counts.calc}</p>`
         : '';
 
-    el.innerHTML = `<h4>🧩 오답 패턴 분석 <span class="analysis-meta">최근 7일 · ${sum.total}건</span></h4>
-        ${rows}
-        <p class="analysis-advice">${esc(sum.advice)}</p>${estRows}${goBtn}`;
+    el.innerHTML = `<h4>🧩 오답 패턴 분석 <span class="analysis-meta">최근 7일 · ${esc(sum.total)}건</span></h4>
+        ${rowsHtml}
+        <p class="analysis-advice">${esc(sum.advice)}</p>${estRowsHtml}${goBtnHtml}`;
 }
 
 /** 취약 진술 카드 — 반복 오판 진술 수 + 오늘 복습 대기 + 리뷰 딥링크 */
@@ -215,7 +215,7 @@ function _renderWeakStatementInsight() {
         return;
     }
     const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {} };
-    const rows = weak.slice(0, 3).map(w => {
+    const rowsHtml = weak.slice(0, 3).map(w => {
         const label = w.t ? w.t : w.sid;
         const truthTag = w.truth === true ? ' <span class="analysis-truth">참</span>'
             : w.truth === false ? ' <span class="analysis-truth">거짓</span>' : '';
@@ -223,12 +223,12 @@ function _renderWeakStatementInsight() {
     }).join('');
     const clusters = computeWeakConceptClusters(getAllStatementStats(), qc.ranges, 2,
         { chapterTitles: qc.chapterTitles, cidSection: qc.cidSection });
-    const clusterNote = clusters.length > 0
+    const clusterNoteHtml = clusters.length > 0
         ? `<p class="analysis-advice">🔗 같은 개념 구간에서 반복 오판: ${esc(clusters[0].chapter || clusters[0].cid)} (${clusters[0].count}개 진술)</p>` : '';
-    const anomalousNote = anomalous.length > 0
+    const anomalousNoteHtml = anomalous.length > 0
         ? `<p class="analysis-advice">⚠️ 반복 오판 진술 ${anomalous.length}개 — 표현 검수가 필요할 수 있습니다.</p>` : '';
-    el.innerHTML = `<h4>🎯 취약 진술 추적 <span class="analysis-meta">오늘 복습 대기 ${dueCount}개</span></h4>
-        ${rows}${clusterNote}${anomalousNote}
+    el.innerHTML = `<h4>🎯 취약 진술 추적 <span class="analysis-meta">오늘 복습 대기 ${esc(dueCount)}개</span></h4>
+        ${rowsHtml}${clusterNoteHtml}${anomalousNoteHtml}
         <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="gotoWeakReview"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i> 취약 리뷰 열기</button>`;
 }
 
@@ -243,13 +243,13 @@ function _renderStudyRhythmInsight() {
 
     // 주간 성장 — 최근 7일 vs 이전 7일
     const growth = computeWeeklyGrowth(getStudyCalendar());
-    const growthRow = growth.thisWeek.rate !== null
+    const growthRowHtml = growth.thisWeek.rate !== null
         ? `<div class="wc-row"><span>주간 정답률</span><strong>${growth.thisWeek.rate}%${growth.rateDelta !== null ? ` <span class="growth-delta ${growth.rateDelta >= 0 ? 'growth-up' : 'growth-down'}">${growth.rateDelta >= 0 ? '▲' : '▼'}${Math.abs(growth.rateDelta)}%p</span>` : ''}</strong></div>`
         : '';
 
     // 학습 패턴 — 최다 활동 시간대·요일 (캘린더 시간대 버킷 집계, 표본 부족 시 미표시)
     const pattern = computeStudyPattern(getStudyCalendar());
-    const patternRow = pattern
+    const patternRowHtml = pattern
         ? `<div class="wc-row"><span>집중 패턴</span><strong>${pattern.topBand ? esc(pattern.topBand.label) : ''}${pattern.topBand && pattern.topDow ? ' · ' : ''}${pattern.topDow ? esc(pattern.topDow.label) : ''}</strong></div>
            <div class="wc-row"><span>주말 학습 비중</span><strong>${pattern.weekendShare}%</strong></div>`
         : '';
@@ -262,7 +262,7 @@ function _renderStudyRhythmInsight() {
         calendar: getStudyCalendar(), totalCards,
         memorized: state.memorizedCards.size, dday
     });
-    const paceNote = pace
+    const paceNoteHtml = pace
         ? `<p class="analysis-advice">${pace.verdict === 'ahead'
             ? `✅ 현재 페이스면 시험일까지 전체 커버 가능합니다.`
             : pace.verdict === 'ontrack'
@@ -271,10 +271,10 @@ function _renderStudyRhythmInsight() {
         : '';
 
     el.innerHTML = `<h4>📅 학습 리듬</h4>
-        <div class="wc-row"><span>오늘 목표 달성</span><strong>${today.overallPercent}%</strong></div>
-        <div class="wc-row"><span>이번 주 학습일</span><strong>${week.studyDays}/${week.goalDays}일</strong></div>
-        <div class="wc-row"><span>시험일</span><strong>${ddayLabel}</strong></div>
-        ${growthRow}${patternRow}${paceNote}
+        <div class="wc-row"><span>오늘 목표 달성</span><strong>${esc(today.overallPercent)}%</strong></div>
+        <div class="wc-row"><span>이번 주 학습일</span><strong>${esc(week.studyDays)}/${esc(week.goalDays)}일</strong></div>
+        <div class="wc-row"><span>시험일</span><strong>${esc(ddayLabel)}</strong></div>
+        ${growthRowHtml}${patternRowHtml}${paceNoteHtml}
         <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="calendar-view"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> 캘린더 보기</button>`;
 }
 
@@ -288,14 +288,14 @@ function _renderChapterWeakness() {
             <p class="analysis-empty">퀴즈·모의고사·드릴에서 오답이 쌓이면 과목별로 어떤 단원이 약한지 보여줍니다.</p>`;
         return;
     }
-    const html = groups.slice(0, 4).map(g => {
+    const sectionsHtml = groups.slice(0, 4).map(g => {
         const chRows = g.chapters.map(c =>
             `<div class="wc-subrow" role="button" tabindex="0" style="cursor:pointer" title="교재에서 이 단원 보기" data-click="openSubjectSection" data-args='${esc(JSON.stringify([g.subjectKey, c.chapter]))}'><span class="analysis-sid">${esc(c.chapter)}</span><span>${c.wrongs}건 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span></div>`
         ).join('');
         return `<div class="wc-row wc-subj-row"><span>${esc(g.subject)}</span><strong>${g.totalWrongs}건</strong></div>${chRows}`;
     }).join('');
     el.innerHTML = `<h4>📖 단원별 취약 분석 <span class="analysis-meta">과목별 오답 집중 단원 — 클릭 시 해당 교재 단원으로 이동</span></h4>
-        ${html}
+        ${sectionsHtml}
         <p class="analysis-advice">과락은 과목 단위 평가 — 각 과목의 최약 단원부터 재학습하면 과락 방어에 효과적입니다.</p>`;
 }
 
@@ -318,13 +318,13 @@ function _renderPassGapInsight() {
             <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="startIntegratedMockExam"><i class="fa-solid fa-clock" aria-hidden="true"></i> 모의고사 시작</button>`;
         return;
     }
-    const gapRow = gap.gap !== null
+    const gapRowHtml = gap.gap !== null
         ? `<div class="wc-row"><span>합격선(평균 ${gap.passLine}점)까지</span><strong>${gap.gap === 0 ? '도달 ✅' : `+${gap.gap}점`}</strong></div>`
         : '';
-    const weakRow = gap.weakest
+    const weakRowHtml = gap.weakest
         ? `<div class="wc-row"><span>최우선 보강</span><strong class="gap-weakest">${esc(gap.weakest.name)} ${gap.weakest.rate}%</strong></div>`
         : '';
-    const weakBtn = gap.weakest
+    const weakBtnHtml = gap.weakest
         ? `<button class="btn btn-primary btn-sm analysis-card-btn" data-click="startSubjectQuiz" data-arg="${esc(gap.weakest.key)}"><i class="fa-solid fa-play" aria-hidden="true"></i> ${esc(gap.weakest.name)} 퀴즈</button>`
         : '';
     // SC-14 합격 갭→목표 상향 권고 — 진단 갭을 계획 파라미터 조정 동선으로 연결
@@ -344,9 +344,9 @@ function _renderPassGapInsight() {
             <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="openGoalSettings"><i class="fa-solid fa-gear" aria-hidden="true"></i> 목표 상향</button>`;
     }
     el.innerHTML = `<h4>🎓 합격 갭 분석</h4>
-        ${gapRow}${weakRow}
+        ${gapRowHtml}${weakRowHtml}
         ${gap.weakest ? `<p class="analysis-advice">${esc(gap.weakest.reason)} — 이 과목이 점수 상승 여력이 가장 큽니다.</p>` : ''}
-        ${weakBtn}${goalAdviceHtml}`;
+        ${weakBtnHtml}${goalAdviceHtml}`;
 }
 
 /**

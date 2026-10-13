@@ -7,6 +7,7 @@ import { PATHS } from '../paths.js';
 import { getActiveExamId, getExamAppName } from '../exam-context.js';
 import { refreshProBadges, proFeatureNotice } from '../pro-upgrade.js';
 import { fmtClock } from '../utils.js';
+import { raw } from '../sanitize.js';
 
 // --- 오디오북 플레이어 상태 ---
 /** @type {{audio: HTMLAudioElement|null, currentSrc: string, subjId: string, chapterIdx: number, chapterTitle: string, wasPlayingBeforeHidden: boolean, sectionBoundaries: {start:number,end:number}[], lastSectionIdx: number, autoScroll: boolean}} */
@@ -290,7 +291,7 @@ export function toggleReaderAutoScroll() {
 function setAudioBtnLabel(html) {
     const ui = getAudioUI();
     if (!ui.btn) return;
-    ui.btn.innerHTML = `${html} <span class="pro-badge" data-pro-feature="audiobook">PRO</span>`;
+    ui.btn.innerHTML = `${raw(html)} <span class="pro-badge" data-pro-feature="audiobook">PRO</span>`;
     refreshProBadges(ui.btn);
 }
 
