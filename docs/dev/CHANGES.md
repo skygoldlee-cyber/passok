@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-13 문서 규약 준수 감사 — 아카이브 계약·명칭 규약 정정
+
+- **전수 감사**: DOC-DEV-08 기준 docs/ 전체 점검 — ID 접두사↔디렉터리·버킷 배치·헤더 선언 모두 일치 (60+ 문서)
+- **report_archive 계약 정정**: "앱 미참조"가 소스 주석의 설계 근거(provenance) 인용과 충돌 — `src/recommendations.js`·`quiz-wrong-cause.js`→FEATURE_PROPOSALS, `formula-rules.js`→FORMULA_OS_DESIGN §9.3. 계약의 취지인 런타임·콘텐츠(UI 표시) 의존 금지로 문구 한정하고 주석 출처 인용은 허용으로 명문화 (아카이브 문서는 재이동 없어 경로 고정). docs/README·exams README 파생 표기 동기화
+- **명칭 접미사 표 보완**: `*_GUIDE`가 runbooks(수행 절차)와 reference(독자 안내 — CODE_READING_GUIDE) 양쪽에 존재함을 명시, 무접미사·비표준 접미사 명칭은 §2 역할 판정으로 배치하고 소급 개명 비요구를 선언 (기존 명칭 유지 근거)
+
 ## 2026-10-13 문서 규약 정본 신규 — DOC_CONVENTIONS.md (DOC-DEV-08)
 
 - **신규 `docs/DOC_CONVENTIONS.md` (DOC-DEV-08)**: 문서 분류·명칭·배치·헤더·ID·생명주기 규약의 단일 출처(SSOT) — 분산돼 있던 규칙(docs/README 배치 표·작성 규칙, AGENTS.md ID 체계, exams/<id>/README 추가 규칙)을 §1~11로 통합: 문서 계층·버킷 분류표(design=의도/reference=현행 기술 경계)·배치 판정 순서·접미사 명칭 규약·헤더 메타데이터·DOC-* 접두사↔디렉터리 일치·링크/인용 규약·생명주기·검증 게이트 매핑·규약 변경 절차
