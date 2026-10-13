@@ -172,6 +172,7 @@ async function main() {
     const analysis = await imp('src/analysis-engine.js');
     const recs = await imp('src/recommendations.js');
     const sr = await imp('src/spaced-repetition.js');
+    const fsrsMod = await imp('src/fsrs.js');
     const { safeSetItem, safeGetItem } = await imp('src/state.js');
     const { STORAGE_KEYS } = await imp('src/storage-keys.js');
 
@@ -515,8 +516,51 @@ async function main() {
             // 클램프된 카드는 시험 전 예정 복습 보유 — 위험 집합 해소
             const riskIds = sr.getExamRiskCards(10).map(r => r.id);
             ok('risk-clear', !ids.filter(i => i !== 'mature').some(id => riskIds.includes(id)), `risk=${riskIds.length}`);
-            return { pulled, riskLeft: riskIds.length };
+            // §5 계측 — exam−1로 당겨진 카드가 실제 복습되면 시험일 R이 회복되는가
+            _setClockOffset(9);          // exam−1 — 당겨진 카드가 due 큐에 표면화돼야 함
+            const dueNow = sr.getDueCards();
+            const surfaced = ids.filter(i => i !== 'mature' && dueNow.includes(i));
+            ok('due-surface', surfaced.length === ids.length - 1, `exam−1 due=${surfaced.length}`);
+            surfaced.forEach(id => sr.updateCardSchedule(id, true)); // due 큐가 복습을 수행
+            const sched2 = JSON.parse(safeGetItem(STORAGE_KEYS.FC_SPACED_REPETITION));
+            // 시험일(d10) 시점 R = 마지막 복습(exam−1) 후 경과 1일
+            const rList = surfaced.map(id => fsrsMod.retrievability(1, sched2[id].s));
+            const minR = rList.length ? Math.min(...rList) : 0;
+            ok('r-recovered', minR >= 0.95, `시험일 최소 R=${minR.toFixed(3)}`);
+            return { pulled, riskLeft: riskIds.length, rExamMin: Math.round(minR * 1000) / 1000 };
         } finally { _resetClock(); }
+    });
+
+    run('T5 BKT 단원 숙달 — 정답 시퀀스의 회복이 P(L)에 반영 (D-22)', ok => {
+        seedBase(60);
+        const ch1 = { quiz: { category: '제1장' }, subjectId: 'suba' };
+        const ch2 = { quiz: { category: '제2장' }, subjectId: 'suba' };
+        const quizResults = {
+            suba_q1: { correct: true }, suba_q2: { correct: true },
+            suba_q3: { correct: true }, suba_q4: { correct: false }, // 제1장 카운트(3정1오)
+            suba_q9: { correct: false }                             // 제2장 카운트(0정1오)
+        };
+        const resolveQuiz = id => ({ suba_q1: ch1, suba_q2: ch1, suba_q3: ch1, suba_q4: ch1, suba_q9: ch2 })[id] || null;
+        const reviewLog = [ // 제1장: 오답 후 정답 3연속 회복 / 제2장: 오답으로 끝남
+            { c: 'suba_q4', k: 'q', ok: 0, t: 1 },
+            { c: 'suba_q1', k: 'q', ok: 1, t: 2 },
+            { c: 'suba_q2', k: 'q', ok: 1, t: 3 },
+            { c: 'suba_q3', k: 'q', ok: 1, t: 4 },
+            { c: 'suba_q9', k: 'q', ok: 0, t: 5 }
+        ];
+        const p = {
+            quizResults, weakCards: new Set(), statementStats: {},
+            questionChapters: {}, chapterRanges: {}, resolveQuiz
+        };
+        const bkt = analysis.computeChapterWeakness({ ...p, reviewLog });
+        const beta = analysis.computeChapterWeakness(p); // 시퀀스 없음 → Beta 폴백
+        const b1 = bkt.find(b => b.chapter === '제1장'), b2 = bkt.find(b => b.chapter === '제2장');
+        const bb1 = beta.find(b => b.chapter === '제1장');
+        ok('recover', b1 && b1.mastery > 0.9, `제1장 P(L)=${b1 && b1.mastery}`);   // 정답 회복 인정 — Beta(~0.64)로는 불가
+        ok('vs-beta', b1 && bb1 && b1.mastery > bb1.mastery + 0.3, `BKT ${b1 && b1.mastery} vs Beta ${bb1 && bb1.mastery}`);
+        ok('weak-order', bkt[0] && bkt[0].chapter === '제2장' && b2.mastery < 0.3,
+            `1위=${bkt[0] && bkt[0].chapter} P(L)=${b2 && b2.mastery}`);          // 최근 오답 단원이 최약 유지
+        return { recovered: Math.round(b1.mastery * 100) / 100, weak: Math.round(b2.mastery * 100) / 100, betaCh1: Math.round(bb1.mastery * 100) / 100 };
     });
 
     /* ---------- 리포트 ---------- */
