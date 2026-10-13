@@ -275,7 +275,7 @@ passory/
 │   ├── storage-keys.js         #   localStorage 키 중앙 관리
 │   ├── study-aids.js           #   기출 필터, 숫자 암기표
 │   ├── study-tracker.js        #   학습 캘린더/목표 추적 (recordStudyActivity, getStudyGoals)
-│   ├── spaced-repetition.js    #   FSRS-4.5 간격 반복 알고리즘(fsrs.js), 복습 스케줄링·리뷰 로그(D-18)·시험일 R 위험 카드 선별(D-19)
+│   ├── spaced-repetition.js    #   FSRS-6 간격 반복 알고리즘(fsrs.js), 복습 스케줄링·리뷰 로그(D-18)·시험일 R 위험 카드 선별(D-19)
 │   ├── recommendations.js      #   "오늘의 합격 전략" 추천 엔진 + 예상 점수 추정 + 실제 결과 보고 (순수 로직)
 │   ├── command-palette.js      #   통합 검색 팔레트 (Ctrl+K) — 뷰/교재/카드/퀴즈/성분/문제집 통합 검색·실행
 │   ├── weak-items.js           #   약점(오답) 항목 ID 문법·해석 + 퀴즈·카드 인덱스 캐시 (DOM 비의존)
