@@ -1,9 +1,10 @@
-// tests/dom/study-trainer-drills.dom.test.js — O/X·복수정답형 드릴 + 취약 리뷰 시나리오
+// tests/dom/study-trainer-drills.dom.test.js — O/X·복수정답형 드릴 시나리오
 // @spec DR-01~07
 // 커버리지 갭 보강: trainer-drills.js (setup→arena→result 파이프라인,
-// 진술 판정 토글·소거 표시·키보드 단축키·취약 리뷰 렌더링)
+// 진술 판정 토글·소거 표시·키보드 단축키)
+// 취약 진술 리뷰·유사 진술 커버리지는 복습 뷰 이관과 함께 study-review.dom.test.js로 이동 (RV-02)
 
-import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
+import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 vi.mock('../../src/ui-utils.js', async (importOriginal) => {
     const actual = await importOriginal();
@@ -35,9 +36,7 @@ import {
     setDrillCount, updateDueBadges,
     openOxDrillSetup, startOxDrill, nextOxDrill,
     openComboDrillSetup, startComboDrill, submitComboJudgments, nextComboDrill,
-    openWeakReview, setWeakFilter, toggleSimilarStmts,
 } from '../../src/views/trainer-drills.js';
-import { SemanticIndex } from '../../src/semantic-index.js';
 import { recordStatementJudgments } from '../../src/statement-tracker.js';
 import { safeSetItem } from '../../src/state.js';
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
@@ -258,114 +257,8 @@ describe('트레이너 드릴 — O/X·복수정답형·취약 리뷰', () => {
         expect(state.trainer.combo.correctCount).toBe(1);
     });
 
-    it('취약 리뷰 — 오판 진술 렌더 + 과목 배지 + 필터 전환', () => {
-        recordStatementJudgments([
-            { sid: 'law_1', judgedCorrect: false, text: '취약 진술 본문', truth: true },
-            { sid: 'law_1', judgedCorrect: false },
-            { sid: 'law_2', judgedCorrect: false, text: '다른 진술', truth: false },
-        ]);
-        safeSetItem(STORAGE_KEYS.FC_SPACED_REPETITION,
-            JSON.stringify({ law_1: { nextReview: '2000-01-01' } }));
-
-        openWeakReview();
-        expect(isVisible('trainer-weak-panel')).toBe(true);
-        expect(el('weak-summary').textContent).toContain('취약 진술 2개');
-        expect(el('weak-summary').textContent).toContain('복습 대상 1개');
-
-        const rows = el('weak-list').querySelectorAll('.weak-row');
-        expect(rows.length).toBe(2);
-        expect(rows[0].innerHTML).toContain('오판 2회'); // w 내림차순
-        expect(rows[0].innerHTML).toContain('과목1'); // sid 'law_' → 과목 키 해석
-        expect(rows[0].innerHTML).toContain('복습 대상');
-        expect(rows[0].innerHTML).toContain('취약 진술 본문');
-
-        // 'due' 필터 → 복습 대상만
-        setWeakFilter('due');
-        expect(el('weak-list').querySelectorAll('.weak-row').length).toBe(1);
-        setWeakFilter('all');
-        expect(el('weak-list').querySelectorAll('.weak-row').length).toBe(2);
-    });
-
-    it('취약 리뷰 — 기록 없으면 빈 상태 안내', () => {
-        openWeakReview();
-        expect(el('weak-summary').textContent).toContain('오판 이력이 없습니다');
-        expect(el('weak-list').textContent).toContain('취약 진술이 없습니다');
-    });
-
-    // SEM-03,SEM-04 — 의미 유사 진술 토글: 피처 게이트·지연 로드·비활성 경로
-    describe('유사 진술 (SemanticIndex)', () => {
-        const NB = {
-            dim: 384, k: 8,
-            adj: {
-                'stmt:law_1': [['stmt:law_9', 0.92], ['q:q1', 0.80], ['stmt:law_8', 0.71]],
-            },
-            texts: {
-                'stmt:law_9': '스쿠알렌 관련 진술',
-                'stmt:law_8': '스핑고신 관련 진술',
-                'q:q1': '관련 문항',
-            },
-            sameText: {},
-        };
-        let savedExams;
-        let savedLoader;
-
-        beforeEach(() => {
-            savedExams = window.EXAMS_LIST;
-            savedLoader = DataLoader.loadBundleScript;
-            SemanticIndex._reset();
-            window.EXAMS_LIST = {
-                exams: [{ id: 'cosmetic', default: true, features: { semantic: true } }],
-            };
-            recordStatementJudgments([
-                { sid: 'law_1', judgedCorrect: false, text: '취약 진술 본문', truth: true },
-            ]);
-        });
-        afterEach(() => {
-            window.EXAMS_LIST = savedExams;
-            DataLoader.loadBundleScript = savedLoader;
-            SemanticIndex._reset();
-        });
-
-        it('semantic 피처 시험에서만 유사 버튼 노출 — 미선언 시 숨김', () => {
-            openWeakReview();
-            expect(el('weak-list').querySelector('.weak-sim-btn')).not.toBeNull();
-            expect(el('weak-sim-law_1')).not.toBeNull();
-
-            window.EXAMS_LIST = { exams: [{ id: 'cosmetic', default: true, features: {} }] };
-            openWeakReview();
-            expect(el('weak-list').querySelector('.weak-sim-btn')).toBeNull();
-        });
-
-        it('토글 → 지연 로드 후 유사 진술 목록·유사도·재시도 버튼 렌더', async () => {
-            DataLoader.loadBundleScript = vi.fn(async () => {
-                window.EMB_NEIGHBORS = NB;
-            });
-            openWeakReview();
-            await toggleSimilarStmts('law_1');
-            await flushAsync();
-
-            const box = el('weak-sim-law_1');
-            expect(box.classList.contains('is-hidden')).toBe(false);
-            const rows = box.querySelectorAll('.weak-sim-row');
-            expect(rows.length).toBe(2);              // q: 항목은 제외
-            expect(rows[0].textContent).toContain('92%');
-            expect(rows[0].textContent).toContain('스쿠알렌');
-            expect(box.querySelector('[data-click="startOxDrill"][data-arg="sid:law_9"]')).not.toBeNull();
-            expect(DataLoader.loadBundleScript).toHaveBeenCalledTimes(1);
-
-            // 재토글 → 접기
-            await toggleSimilarStmts('law_1');
-            expect(box.classList.contains('is-hidden')).toBe(true);
-        });
-
-        it('번들 부재 시 안내 문구만 표시 (에러 무전파)', async () => {
-            DataLoader.loadBundleScript = vi.fn(async () => { throw new Error('404'); });
-            openWeakReview();
-            await toggleSimilarStmts('law_1');
-            await flushAsync();
-            expect(el('weak-sim-law_1').textContent).toContain('불러올 수 없습니다');
-        });
-    });
+    // 취약 진술 리뷰·유사 진술 테스트는 복습 뷰 이관과 함께
+    // tests/dom/study-review.dom.test.js로 이동했다 (RV-02).
 
     // UX-NAV-07 — setup→arena→result·문항 교체 전이 모두 스크롤 리셋
     it('스크롤 잔류 상태에서 setup→arena→다음 문항→result 전이 시 리셋', async () => {

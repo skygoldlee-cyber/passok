@@ -706,3 +706,52 @@
 }
 .quiz-cite strong { color: var(--color-text, #e2e8f0); font-weight: 600; }
 .quiz-cite-sec { opacity: 0.7; }
+
+/* 뷰 목적·경계 한 줄 문구 (UX-NAV-13) — 퀴즈=연습 / 모의고사=평가 / 훈련소=훈련 / 복습=재확인 */
+.view-purpose {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0 0 1rem;
+}
+
+/* 복습 뷰 — 취약 진술 리뷰 details 섹션 (RV-02) */
+.review-weak-section {
+    margin-top: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    overflow: hidden;
+}
+
+.review-weak-summary-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.9rem 1.1rem;
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+    min-height: 44px;
+}
+
+.review-weak-summary-line::-webkit-details-marker {
+    display: none;
+}
+
+.review-weak-summary-line::after {
+    content: "\f078";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: var(--color-text-muted);
+    transition: transform 0.2s;
+}
+
+.review-weak-section[open] .review-weak-summary-line::after {
+    transform: rotate(180deg);
+}
+
+.review-weak-body {
+    padding: 0 1.1rem 1.1rem;
+}

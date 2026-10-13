@@ -252,20 +252,5 @@
     "file": "docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md",
     "ref": "src/wrong-cause-classifier.js",
     "reason": "설계안 제안 경로 — 센트로이드 추정기 모듈 (미구현)"
-  },
-  {
-    "file": "docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md",
-    "ref": "src/views/dashboard-queue.js",
-    "reason": "설계안 제안 경로 — 오늘 할 일 큐 모듈 (미구현)"
-  },
-  {
-    "file": "docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md",
-    "ref": "tests/unit/today-queue.test.js",
-    "reason": "설계안 제안 경로 — 큐 병합 유닛 테스트 (미구현)"
-  },
-  {
-    "file": "docs/dev/design/LEARNING_UX_PHASE1_DESIGN.md",
-    "ref": "tests/dom/study-review.dom.test.js",
-    "reason": "Phase 1 설계안 제안 경로 — weak 리뷰 테스트 재배치 대상 (미구현)"
   }
 ]
