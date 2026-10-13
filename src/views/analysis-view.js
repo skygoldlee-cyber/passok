@@ -324,6 +324,9 @@ function _renderPassGapInsight() {
     const weakRowHtml = gap.weakest
         ? `<div class="wc-row"><span>최우선 보강</span><strong class="gap-weakest">${esc(gap.weakest.name)} ${gap.weakest.rate}%</strong></div>`
         : '';
+    const rankRowHtml = gap.ranking.length > 1
+        ? `<div class="wc-row"><span>보강 순위</span><strong>${esc(gap.ranking.slice(1, 4).map((s, i) => `${i + 2}위 ${s.name} ${s.rate}%`).join(' · '))}</strong></div>`
+        : '';
     const weakBtnHtml = gap.weakest
         ? `<button class="btn btn-primary btn-sm analysis-card-btn" data-click="startSubjectQuiz" data-arg="${esc(gap.weakest.key)}"><i class="fa-solid fa-play" aria-hidden="true"></i> ${esc(gap.weakest.name)} 퀴즈</button>`
         : '';
@@ -344,7 +347,7 @@ function _renderPassGapInsight() {
             <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="openGoalSettings"><i class="fa-solid fa-gear" aria-hidden="true"></i> 목표 상향</button>`;
     }
     el.innerHTML = `<h4>🎓 합격 갭 분석</h4>
-        ${gapRowHtml}${weakRowHtml}
+        ${gapRowHtml}${weakRowHtml}${rankRowHtml}
         ${gap.weakest ? `<p class="analysis-advice">${esc(gap.weakest.reason)} — 이 과목이 점수 상승 여력이 가장 큽니다.</p>` : ''}
         ${weakBtnHtml}${goalAdviceHtml}`;
 }
