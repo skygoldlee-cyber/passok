@@ -1523,12 +1523,9 @@
                             <span>교재검색</span>
                         </button>
                     </div>
-                    <p class="more-sheet-label">기타</p>
+                    <!-- 기타 — 실무 모드 전용 항목만 (기능 버튼 정본: 테마=헤더, 시험 전환=설정 패널) -->
+                    <p class="more-sheet-label nav-practice-only">기타</p>
                     <div class="more-sheet-grid">
-                        <button class="mobile-tab-item mobile-tab-action" id="mobile-theme-toggle" type="button" title="라이트/다크 모드 전환">
-                            <i class="fa-solid fa-moon" aria-hidden="true"></i>
-                            <span>테마</span>
-                        </button>
                         <!-- 실무 모드 전용 — 실무 매뉴얼 바로가기 -->
                         <button type="button" data-click="ManualViewer.openFormulaManual" class="mobile-tab-item nav-practice-only" data-feature="formula">
                             <i class="fa-solid fa-flask" aria-hidden="true"></i>
@@ -1538,11 +1535,6 @@
                         <button type="button" data-click="toggleStudyTools" class="mobile-tab-item nav-practice-only" aria-expanded="false" title="숨겨진 학습 메뉴 펼치기/접기">
                             <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
                             <span>학습도구</span>
-                        </button>
-                        <!-- 시험 전환: 등록 시험이 2개 이상일 때만 표시 (exams.json) -->
-                        <button type="button" data-click="showExamSelect" class="mobile-tab-item" title="다른 시험으로 전환" data-feature="examSwitch">
-                            <i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i>
-                            <span>시험전환</span>
                         </button>
                     </div>
                 </div>

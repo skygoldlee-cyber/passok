@@ -833,7 +833,7 @@ const state = {
 
 ### 시험 선택/전환
 - `src/views/exam-select.js` — 시험 선택 카드 뷰(`exam-select-view`). `current_exam` 미설정 **+ 등록 시험 2개 이상**일 때만 홈으로 표시 — 단일 시험 레지스트리에서는 기본 시험으로 바로 진입해 피커 생략
-- 데스크톱 사이드바 푸터 + 모바일 더보기 시트의 "시험 전환" 버튼 → `showExamSelect()` → 카드 선택 시 `selectExam()` → 리로드. 버튼도 등록 시험 2개 이상일 때만 노출
+- 설정 패널(전 대역)의 "시험 전환" 버튼 → `showExamSelect()` → 카드 선택 시 `selectExam()` → 리로드. 버튼도 등록 시험 2개 이상일 때만 노출
 - `selectExam()`은 활성 시험과 같은 id 선택 시 리로드를 생략하되 **`current_exam` 저장은 항상 수행** — 미선택 상태의 기본 시험 선택도 저장되어야 다음 진입에서 피커가 다시 뜨지 않는다 (저장 생략 시 매번 피커 표시 회귀)
 
 ### 레지스트리 로딩
@@ -1096,8 +1096,7 @@ pullSync() (로그인 시 / "지금 동기화" 버튼)
 | **FOUC 방지 스크립트** | [`index.html`](../../index.html) `<head>` 인라인 | 페인트 전에 `localStorage('appTheme')` 또는 `prefers-color-scheme`을 읽어 `<html>.light-theme` 클래스와 `<meta name="theme-color">`를 즉시 적용 → 테마 깜빡임(FOUC) 제거 |
 | **전역 테마 API** | [`index.html`](../../index.html) 하단 인라인 | `window.AppTheme = { isLight, apply, toggle }` 노출. 테마 변경 시 `localStorage` 저장 + `themechange` 커스텀 이벤트 브로드캐스트 |
 | **CSS 변수 오버라이드** | [`css/base.css`](../../css/base.css) `.light-theme` | `:root`(다크, 기본값)의 디자인 토큰을 라이트 팔레트로 재정의. `.light-theme` 하위 선택자에서만 라이트 전용 보정 규칙 추가. 토큰 전체 카탈로그는 SPEC §4.9 참조 |
-| **헤더 토글 버튼** | `#theme-toggle-btn` | 데스크톱 헤더에서 테마 전환 (해/달 아이콘) |
-| **모바일 탭 토글** | `#mobile-theme-toggle` | 모바일 하단 탭 바의 "테마" 탭에서 전환 |
+| **헤더 토글 버튼** | `#theme-toggle-btn` | 헤더에서 테마 전환 (해/달 아이콘 — 전 대역 단일 진입점) |
 
 ### 테마 결정 우선순위
 

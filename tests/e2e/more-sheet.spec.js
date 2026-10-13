@@ -1,10 +1,11 @@
 // tests/e2e/more-sheet.spec.js — 모바일 더보기 시트 회귀
 // @spec UX-NAV-01, UX-NAV-08
-// modal-back.js의 마커 소비 history.back()가 같은 클릭 안의 data-click
-// 네비게이션(시험전환)과 레이스를 일으켜 사용자를 이전 뷰로 되돌리던 버그:
+// modal-back.js의 마커 소비 history.back()가 같은 클릭 안의 뷰 내비게이션과
+// 레이스를 일으켜 사용자를 이전 뷰로 되돌리던 버그:
 // 시트 닫기 → observer 마이크로태스크 → back() 큐잉 → 위임 핸들러의
 // pushState 뒤에 back()가 해소되어 새 뷰 엔트리를 팝. 시트를 열어둔 채
 // 대기하면 마커가 반드시 존재하므로 실기기에서는 항상 재현됐다.
+// (대상 버튼은 시트 내 뷰 내비 — 시험전환 버튼은 설정 패널 정본으로 이관됨)
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(({ page }) => {
@@ -17,7 +18,7 @@ test.beforeEach(({ page }) => {
     page.on('pageerror', err => page._errors.push(String(err)));
 });
 
-test('더보기 → 시험전환 클릭 시 시험 선택 뷰로 전환된다', async ({ page }) => {
+test('더보기 → 캘린더 클릭 시 캘린더 뷰로 전환된다', async ({ page }) => {
     test.setTimeout(60_000);
     await page.goto('/index.html');
     await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
@@ -28,30 +29,30 @@ test('더보기 → 시험전환 클릭 시 시험 선택 뷰로 전환된다', 
     await page.locator('#mobile-more-btn').click();
     await expect(page.locator('#mobile-more-sheet')).not.toHaveClass(/is-hidden/);
 
-    const btn = page.locator('#mobile-more-sheet [data-click="showExamSelect"]');
+    const btn = page.locator('#mobile-more-sheet [data-target="calendar-view"]');
     await expect(btn).toBeVisible();
     await btn.click();
 
-    await expect(page.locator('#exam-select-view')).toHaveClass(/active/, { timeout: 5_000 });
+    await expect(page.locator('#calendar-view')).toHaveClass(/active/, { timeout: 5_000 });
     await expect(page.locator('#mobile-more-sheet')).toHaveClass(/is-hidden/);
     console.log('errors:', page._errors);
     expect(page._errors.filter(e => !/favicon|manifest/i.test(e))).toEqual([]);
 });
 
-test('시트 스크롤 후 시험전환도 동일하게 동작한다', async ({ page }) => {
+test('시트 스크롤 후 캘린더 내비도 동일하게 동작한다', async ({ page }) => {
     test.setTimeout(60_000);
     await page.goto('/index.html');
     await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
     if (!(await page.locator('#mobile-more-btn').isVisible())) test.skip();
 
     await page.locator('#mobile-more-btn').click();
-    const btn = page.locator('#mobile-more-sheet [data-click="showExamSelect"]');
+    const btn = page.locator('#mobile-more-sheet [data-target="calendar-view"]');
     await btn.scrollIntoViewIfNeeded();
     await page.locator('.more-sheet-scroll').evaluate(el => { el.scrollTop = el.scrollHeight; });
     await page.waitForTimeout(300);
     await btn.tap();
 
-    await expect(page.locator('#exam-select-view')).toHaveClass(/active/, { timeout: 5_000 });
+    await expect(page.locator('#calendar-view')).toHaveClass(/active/, { timeout: 5_000 });
     console.log('errors:', page._errors);
     expect(page._errors.filter(e => !/favicon|manifest/i.test(e))).toEqual([]);
 });
@@ -73,7 +74,7 @@ test('백드롭 닫기 후 modal-back 마커가 소비되어 사장 엔트리가
     await expect(page.locator('#mobile-more-sheet')).toHaveClass(/is-hidden/);
 });
 
-test('다른 뷰(퀴즈)에서 진입해도 시험전환이 시험선택으로 이동한다', async ({ page }) => {
+test('다른 뷰(퀴즈)에서 진입해도 시트 내비가 목표 뷰로 이동한다', async ({ page }) => {
     test.setTimeout(60_000);
     await page.goto('/index.html');
     await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
@@ -82,10 +83,10 @@ test('다른 뷰(퀴즈)에서 진입해도 시험전환이 시험선택으로 �
     // 퀴즈 뷰로 이동 후 더보기 시트 열기
     await page.locator('.mobile-tab-item[data-target="quiz-view"]:visible').first().click();
     await page.locator('#mobile-more-btn').click();
-    const btn = page.locator('#mobile-more-sheet [data-click="showExamSelect"]');
+    const btn = page.locator('#mobile-more-sheet [data-target="calendar-view"]');
     await btn.tap();
 
-    await expect(page.locator('#exam-select-view')).toHaveClass(/active/, { timeout: 5_000 });
+    await expect(page.locator('#calendar-view')).toHaveClass(/active/, { timeout: 5_000 });
     console.log('errors:', page._errors);
     expect(page._errors.filter(e => !/favicon|manifest/i.test(e))).toEqual([]);
 });

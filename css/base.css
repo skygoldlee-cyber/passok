@@ -738,6 +738,14 @@ body.ui-mode-practice .manual-nav-link[data-click$="openFormulaManual"] {
     order: -1;
 }
 
+/* 데스크톱(>900px): 사이드바 푸터에 모드 토글이 있으므로 설정 패널 항목은 중복 숨김.
+   ≤900px(태블릿 상단 바·모바일)는 푸터가 없어 설정 항목이 유일 경로 */
+@media (min-width: 901px) {
+    .settings-item[data-click="toggleUiMode"] {
+        display: none;
+    }
+}
+
 /* 사이드바 푸터의 모드 전환 버튼 */
 .ui-mode-toggle {
     display: flex;

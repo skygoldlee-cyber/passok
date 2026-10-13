@@ -2,7 +2,7 @@
 // @spec TH-01~06
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.3 (Phase 5)
 // 검증: 토글→light-theme 클래스·localStorage·아이콘·theme-color(H/P)
-//       · 모바일 버튼 동기화(H) · 시스템 테마 변경 추종(B)
+//       · 시스템 테마 변경 추종(B)
 
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 
@@ -39,15 +39,12 @@ describe('테마 — 토글·영속·시스템 연동', () => {
         expect(el('theme-toggle-btn').querySelector('i').className).toContain('fa-sun');
         expect(el('theme-toggle-btn').title).toContain('다크');
         expect(events).toEqual([true]);
-
-        // 모바일 버튼도 동기화
-        expect(el('mobile-theme-toggle').querySelector('i').className).toContain('fa-sun');
     });
 
     it('재토글 → 다크 복귀', () => {
         setupThemeToggle();
         el('theme-toggle-btn').click();
-        el('mobile-theme-toggle').click(); // 모바일 버튼으로 다시 토글
+        el('theme-toggle-btn').click(); // 다시 토글 → 다크 복귀
 
         expect(document.documentElement.classList.contains('light-theme')).toBe(false);
         expect(localStorage.getItem(STORAGE_KEYS.APP_THEME)).toBe('dark');
