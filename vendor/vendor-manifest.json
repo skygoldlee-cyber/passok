@@ -1,0 +1,80 @@
+{
+  "$comment": "vendor 자산 매니페스트 — check:vendor (tools/check/check_vendor.js) 가 강제. files 해시는 텍스트(css/js 등)만 LF 정규화 후 sha256, 바이너리(woff2/ttf)는 원본 바이트. 설계: docs/dev/design/VENDOR_MANAGEMENT_DESIGN.md (DOC-DSN-20, BP-13). 갱신: npm.cmd run sync:vendor -- <key>[@버전] 후 check:vendor --update가 아니라 sync가 스탬프까지 수행. 수동 파일 변경 시만 check:vendor -- --update.",
+  "version": 1,
+  "packages": {
+    "fontawesome": {
+      "npm": "@fortawesome/fontawesome-free",
+      "version": "6.4.0",
+      "license": "CC-BY-4.0 / SIL-OFL-1.1 / MIT",
+      "updatedAt": "2026-10-13",
+      "versionProbe": {
+        "file": "css/all.min.css",
+        "pattern": "Font Awesome Free ([0-9.]+)"
+      },
+      "files": {
+        "css/all.min.css": "1edb1725a9ea8ca4dcf2f5508cee183218aa1685e47c1b23056717f754f58ebf",
+        "webfonts/fa-brands-400.ttf": "20c4a58bc9d1d69e935d06f1528923646a715be5e218665655cade8f5f1b8c00",
+        "webfonts/fa-brands-400.woff2": "748332090c4b8e20f95d0ff59f0be20fa9c889359d3b36d4b886d73376054207",
+        "webfonts/fa-regular-400.ttf": "528d022dce6725f8a0811fd91d8e6513445c81ef33353a5c3234eab932551abf",
+        "webfonts/fa-regular-400.woff2": "8e7e5ea1b15f62ab14dbd41768e8fbcd21cc859a4ea5da812457ee714299fb35",
+        "webfonts/fa-solid-900.ttf": "67a65763c7f80903d81603bbeb9049fc2bf28508479b83ed011fe24c71fa950a",
+        "webfonts/fa-solid-900.woff2": "7152a6933ee3d690ec2af3d09da9d701723d16aa3410a6d80f28ff8866f3b880",
+        "webfonts/fa-v4compatibility.ttf": "0515a423f828ce4e6accf92a2ea0b03d19d31cc86d9af0373291e1fd4db5f348",
+        "webfonts/fa-v4compatibility.woff2": "694a17c3d9d6c05f8aac63c544615552a4b220e9a4de863d87341a6bcfc1bc8d"
+      },
+      "syncMap": {
+        "css/all.min.css": "css/all.min.css",
+        "webfonts": "webfonts"
+      }
+    },
+    "mermaid": {
+      "npm": "mermaid",
+      "version": "10.9.8",
+      "license": "MIT",
+      "updatedAt": "2026-10-13",
+      "note": "번호 minified 번들에 안정적 버전 probe 없음 — 무결성은 sha256으로만 검증 (해시가 npm 10.9.8 dist와 일치 확인됨)",
+      "files": {
+        "mermaid.min.js": "8d607d7ef1d077a8aa202e18e62212bfa992c68bfeabc5cf45d51a128fe6675d"
+      },
+      "syncMap": {
+        "dist/mermaid.min.js": "mermaid.min.js"
+      }
+    },
+    "supabase": {
+      "npm": "@supabase/supabase-js",
+      "version": "2.117.3",
+      "license": "MIT",
+      "updatedAt": "2026-10-13",
+      "versionProbe": {
+        "file": "supabase.js",
+        "pattern": "supabase-js/([0-9.]+)"
+      },
+      "files": {
+        "supabase.js": "d6a5c4414a5d4ce646d9c1de223aa7067d3ff664c15394ffeb7fcffc763354a3"
+      },
+      "syncMap": {
+        "dist/umd/supabase.js": "supabase.js"
+      }
+    },
+    "fonts": {
+      "versionFree": true,
+      "source": "google-fonts-subset",
+      "note": "PF-17 서브셋(사용 글자만 추출) — npm 배포물과 해시 불일치. 갱신은 수동 subset 절차 (fonts.css 주석·SPEC PF-17 참조)",
+      "license": "SIL-OFL-1.1",
+      "updatedAt": "2026-10-12",
+      "files": {
+        "fonts.css": "a3b96f40bedc35af634a72418f0c401c55e35fd504adca9ac69d37697841557c",
+        "noto-color-emoji-400.woff2": "c79fe108c42aa125166149201fbb54ea4cac97d7e02990fa241471350a73d6e6",
+        "noto-sans-kr-300.woff2": "84ea75b16f7b0ad379cee22451a688b50495ef5d44f109239ef7d6445bb5182d",
+        "noto-sans-kr-400.woff2": "f5b09bfccde07555802c5c990acb7f0d6bf349362f406ed89769958d3e607b82",
+        "noto-sans-kr-500.woff2": "9cfd8499cb0834973aeee47ab9ce95408ce9ca6b0ada276c3947d4d18b686abb",
+        "noto-sans-kr-700.woff2": "452945755d9531ef349b9fe01cb54e77c1f3c933e999f6088d77a44b2456b5a6",
+        "noto-sans-kr-900.woff2": "c0dea6ce7c574edc48389ec74067b16a12f9d196ee8766aefc5232fb66ae0aed",
+        "outfit-300.woff2": "ef88e74f63ce75b54cce4d5a4087c6f180750b9ebae6ab6e5bf2a9939bf6958f",
+        "outfit-400.woff2": "71f028fd2349990b3f8aa643abe767e82e0f596be407ae66f0004ff164121bdb",
+        "outfit-600.woff2": "8cfe15c2c6de6ef8efff3eedbd52a383ac9ef23d6c23f6cd9f9b838f5f37dc36",
+        "outfit-800.woff2": "eabf8cb2c01d0345e2eb19a49d04e8f8d0d520b74959b173d5ea6c2dcb95e4cd"
+      }
+    }
+  }
+}

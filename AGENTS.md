@@ -37,6 +37,8 @@ npm.cmd run check:posind               # 교재 좌표 비의존 게이트 — �
 npm.cmd run stamp:sw                   # sw.js CACHE_VERSION을 커밋 해시로 스탬프
 npm.cmd run notes:draft                # 릴리스 노트 pending 초안 생성 (커밋 subject 기반 → data/release-notes.json 수동 편집 후 배포)
 npm.cmd run verify:assets              # SHELL_ASSETS/DATA_ASSETS 파일 존재 검증
+npm.cmd run check:vendor               # vendor/ 매니페스트(vendor-manifest.json) ↔ 파일 해시·버전 정합 (BP-13 — check:ci·CI·check:all 게이트, --update=해시 재스탬프, -- --latest=레지스트리 최신 비교)
+npm.cmd run sync:vendor                # vendor npm 패키지 갱신 — sync:vendor -- <key>[@버전] (npm pack → syncMap 복사 → 매니페스트 스탬프, fonts 등 versionFree 수동 자산은 거부)
 npm.cmd run build:embeddings           # 문장 임베딩 사전 계산 → {dataRoot}/embeddings/ 정적 번들 (Python3 + sentence-transformers, ref-pipeline/embeddings/requirements.txt — DOC-DSN-18, 의미 유사 진술·이웃 인덱스)
 
 npm.cmd run build:story                 # 표준형 + story/*_서사.md 패치 → _이야기형.md 생성 (build:data에 포함, --check=일치 검증 + 서사 커버리지 리포트 — 0블록 패치는 오류, -- --scaffold <subjectKey>=신규 과목 패치 골격)

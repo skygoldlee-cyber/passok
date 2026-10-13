@@ -110,6 +110,9 @@ jobs:
       - name: Verify SW precache assets
         run: npm run verify:assets
 
+      - name: Vendor asset integrity (manifest ↔ sha256·버전 정합)
+        run: npm run check:vendor
+
       - name: Run parser parity check
         run: npm run check:parser
 
