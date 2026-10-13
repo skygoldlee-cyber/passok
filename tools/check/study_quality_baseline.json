@@ -55,6 +55,11 @@
     "T3 FSRS 30일 시뮬 — 안정도 확장·백로그 발산 없음/desync:1",
     "T4 시험일 due 클램프 — 시험일 R<0.95 대역은 exam−1로 당김 (D-20)/clamp:1",
     "T4 시험일 due 클램프 — 시험일 R<0.95 대역은 exam−1로 당김 (D-20)/mature-keep:1",
-    "T4 시험일 due 클램프 — 시험일 R<0.95 대역은 exam−1로 당김 (D-20)/risk-clear:1"
+    "T4 시험일 due 클램프 — 시험일 R<0.95 대역은 exam−1로 당김 (D-20)/risk-clear:1",
+    "T4 시험일 due 클램프 — 시험일 R<0.95 대역은 exam−1로 당김 (D-20)/due-surface:1",
+    "T4 시험일 due 클램프 — 시험일 R<0.95 대역은 exam−1로 당김 (D-20)/r-recovered:1",
+    "T5 BKT 단원 숙달 — 정답 시퀀스의 회복이 P(L)에 반영 (D-22)/recover:1",
+    "T5 BKT 단원 숙달 — 정답 시퀀스의 회복이 P(L)에 반영 (D-22)/vs-beta:1",
+    "T5 BKT 단원 숙달 — 정답 시퀀스의 회복이 P(L)에 반영 (D-22)/weak-order:1"
   ]
 }

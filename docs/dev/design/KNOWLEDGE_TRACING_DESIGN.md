@@ -135,7 +135,7 @@ P_unit = (α₀ + corrects) / (α₀ + β₀ + corrects + wrongs)
 
 **③ 파라미터·소비자 연결** ✅ (2026-10-13) — cosmetic manifest `study.kt` 명시(`{P0:0.30, T:0.08, G:{mcq:0.15, ox:0.30}, S:0.10}`), `computeChapterWeakness`·`computeSubjectWeakChapters`의 숙달 추정이 시퀀스 있으면 BKT `P(L)`·없으면 Beta 폴백. 호출부(analysis-view 2곳·study-calendar)가 `getReviewLog()`+`resolveKtParams`를 주입. 표시 문구 "숙달 M%" 유지.
 
-**④ 검증** — 골든 수열 테스트(손계산 기대값: 0.3→0.7424→0.9497→0.99195)·정답/오답 방향·OX 추측률 분리·사전 승계·소비자 BKT/Beta 분기·자기평가 제외 ✅. **감사 시나리오 추가는 잔여** (audit:study 확장 후속).
+**④ 검증** ✅ — 골든 수열 테스트(손계산 기대값: 0.3→0.7424→0.9497→0.99195)·정답/오답 방향·OX 추측률 분리·사전 승계·소비자 BKT/Beta 분기·자기평가 제외 + **T5 감사 시나리오** (audit:study: 정답 회복 단원 P(L) 0.99 vs Beta 0.64·최근 오답 단원 0.18 최약 유지).
 
 **v2 전까지 병행 가능한 후속**: T4 계측 기반 목표 R 재판정(EXAM_DUE_CLAMP §5) — D-20 클램프의 시험일 R 회복 효과를 감사 시뮬로 계측해 목표 R 간격 단축 필요 여부를 종결한다.
 
