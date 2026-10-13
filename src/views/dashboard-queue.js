@@ -9,7 +9,7 @@ import { state } from '../state.js';
 import { esc } from '../sanitize.js';
 import { safeGetItem } from '../state.js';
 import { DataLoader } from '../data-loader.js';
-import { getDueCards } from '../spaced-repetition.js';
+import { getDueCards, getExamRiskCards, EXAM_R_WINDOW_DAYS, EXAM_R_SESSION_CAP } from '../spaced-repetition.js';
 import { getWeakStatements } from '../statement-tracker.js';
 import {
     getStudyCalendar, computeStudyPlan, computeSubjectAllocation,
@@ -35,6 +35,7 @@ const MAX_PLAN_ITEMS = 2; // 주간 배정 큐 항목 상한 — 과목 나열�
  * @param {number} [p.weakStatementCount] 취약 진술 수
  * @param {boolean} [p.dailyDone] 일일 챌린지 완료 여부
  * @param {number|null} [p.dday] 시험 D-day (미설정 null)
+ * @param {string[]} [p.examRiskIds] 시험일 기억률 미달 카드 id — R_exam 오름차순·세션 상한 적용분 (D-19)
  * @param {boolean} [p.hasProgress] 학습 이력 존재 여부
  * @returns {Array<{icon:string, color:string, title:string, reason:string,
  *   actions:Array<{click:string, arg?:string, args?:Array, label:string, icon:string, cls:string}>}>}
@@ -129,6 +130,18 @@ export function buildTodayQueue(p = {}) {
         });
     }
 
+    // ⑤+ 시험일 목표 R 최종 인출 — 다음 복습이 시험일 이후인 스케줄 사각지대 카드 (D-19)
+    const examRisk = p.examRiskIds || [];
+    if (p.dday !== null && p.dday !== undefined && p.dday >= 0 && p.dday <= EXAM_R_WINDOW_DAYS && examRisk.length) {
+        push({
+            kind: 'examr',
+            icon: 'fa-bullseye', color: 'var(--color-danger)',
+            title: `시험 전 최종 인출 ${examRisk.length}장`,
+            reason: '시험일까지 기억률 85% 미만 예상 — 지금 한 번 더 인출',
+            actions: [{ click: 'startExamRiskReview', label: '인출 세션', icon: 'fa-play', cls: 'btn-primary' }]
+        });
+    }
+
     // ⑥ 잔여 추천 — 정답률 최저·헷갈림 집중·미학습 (중복 실행 제외)
     (p.recs || [])
         .filter(r => r.icon !== 'fa-triangle-exclamation' && r.icon !== 'fa-clock')
@@ -206,12 +219,14 @@ export function renderTodayQueue(subjects) {
         return c && (c.mem > 0 || c.quizSolved > 0);
     });
 
+    const dday = getDDay();
     const items = buildTodayQueue({
         dueCardIds, subjects, recs, allocRemaining,
         reviewCount: state.weakCards.size,
         weakStatementCount: getWeakStatements().length,
         dailyDone: !!safeGetItem(dailyCompletedKey(todayKey())),
-        dday: getDDay(),
+        dday,
+        examRiskIds: getExamRiskCards(dday).slice(0, EXAM_R_SESSION_CAP).map(r => r.id),
         hasProgress
     });
 

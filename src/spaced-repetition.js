@@ -9,9 +9,20 @@
 import { safeGetItem, safeSetItem } from './state.js';
 import { STORAGE_KEYS } from './storage-keys.js';
 import { todayKey } from './utils.js';
-import { Rating, fsrsReview, migrateSm2Record, nextInterval } from './fsrs.js';
+import { Rating, fsrsReview, migrateSm2Record, nextInterval, retrievability } from './fsrs.js';
 
 const SR_KEY = STORAGE_KEYS.FC_SPACED_REPETITION;
+const LOG_KEY = STORAGE_KEYS.FC_REVIEW_LOG;
+
+// @spec D-18
+// 리뷰 로그 링버퍼 상한 — 피팅 실질 하한 ~1,000리뷰의 2배 (EXAM_R_SCHEDULING_DESIGN §2)
+const REVIEW_LOG_CAP = 2000;
+
+// @spec D-19
+// 시험일 목표 R 최종 인출 상수 (EXAM_R_SCHEDULING_DESIGN §3)
+const EXAM_R_THRESHOLD = 0.85;      // 시험일 기억률 미달 판정 (목표 0.9 대비 유의미 붕괴)
+export const EXAM_R_WINDOW_DAYS = 14;   // 최종 인출 큐 표시 D-day 윈도
+export const EXAM_R_SESSION_CAP = 60;   // 1회 세션 상한 — 크램 벽 방지
 
 /** 구 SM-2 레코드를 FSRS v2로 지연 변환 (이미 v2면 그대로) */
 function _ensureV2(rec, todayStr) {
@@ -52,6 +63,8 @@ export function updateCardSchedule(cardId, knew) {
     };
 
     saveSchedules(schedules);
+    // @spec D-18 — 레이팅 이력 append (카드·진술 공용 단일 통로, 설계 §2.2)
+    appendReviewLog({ c: cardId, r: rating, e: elapsed, t: today.getTime() });
     return schedules[cardId];
 }
 
@@ -74,6 +87,60 @@ export function getDueCards() {
  */
 export function getDueCount() {
     return getDueCards().length;
+}
+
+// @spec D-18
+/**
+ * 리뷰 로그에 레코드 1건 append — 2,000건 FIFO 링버퍼.
+ * {c: 카드·진술 id, r: FSRS 레이팅(1|3), e: 경과일, t: unix ms}
+ * @param {{c:string, r:number, e:number, t:number}} entry
+ */
+function appendReviewLog(entry) {
+    const log = getReviewLog();
+    log.push(entry);
+    if (log.length > REVIEW_LOG_CAP) log.splice(0, log.length - REVIEW_LOG_CAP);
+    safeSetItem(LOG_KEY, JSON.stringify(log));
+}
+
+/**
+ * 리뷰 로그 전체 읽기 — 후속 피팅·효능 실측 입력 (D-18)
+ * @returns {Array<{c:string, r:number, e:number, t:number}>}
+ */
+export function getReviewLog() {
+    try {
+        const raw = safeGetItem(LOG_KEY);
+        const log = raw ? JSON.parse(raw) : [];
+        return Array.isArray(log) ? log : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+// @spec D-19
+/**
+ * 시험일 기억률 미달 카드 선별 — 다음 예정 복습이 시험일 이후(due > examDate)이고
+ * 시험일 시점 R이 임계값 미만인 카드. R_exam 오름차순 정렬 (가장 잊을 카드 우선).
+ * @param {number|null} dday 시험일까지 잔여 일수 (미설정 null)
+ * @returns {Array<{id:string, rExam:number}>}
+ */
+export function getExamRiskCards(dday) {
+    if (dday === null || dday === undefined || !Number.isFinite(dday) || dday < 0) return [];
+    const schedules = loadSchedules();
+    const todayStr = todayKey();
+    const examDate = new Date();
+    examDate.setDate(examDate.getDate() + dday);
+    const examStr = todayKey(examDate);
+    const risk = [];
+    Object.keys(schedules).forEach(id => {
+        const rec = _ensureV2(schedules[id], todayStr);
+        if (!rec || !rec.due || !rec.lastReview) return;
+        // due ≤ 시험일은 시험 전 예정 복습이 있거나(사각지대 아님) due 큐 소유 — 제외
+        if (rec.due <= examStr) return;
+        const elapsedAtExam = dday + Math.max(0, _daysBetween(todayStr, rec.lastReview));
+        const rExam = retrievability(elapsedAtExam, rec.s);
+        if (rExam < EXAM_R_THRESHOLD) risk.push({ id, rExam });
+    });
+    return risk.sort((a, b) => a.rExam - b.rExam);
 }
 
 /**

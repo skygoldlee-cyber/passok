@@ -46,6 +46,7 @@ export const state = {
         currentIndex: 0,
         keyOnly: false,
         dueOnly: false,          // true면 오늘 복습 대상(FSRS due)만 전 과목 합산 출제 — 1회 적용 후 자동 해제
+        onlyIds: null,           // 카드 id 배열이면 해당 카드만 지정 순서로 출제 — 1회 적용 후 자동 해제 (D-19)
         shuffle: false,          // 랜덤 셔플 모드
         difficultyFilter: 'all', // 'all', 'easy', 'medium', 'hard'
         sortBy: 'importance',    // 'importance' or 'default'

@@ -1,5 +1,5 @@
 // tests/unit/today-queue.test.js — 대시보드 "오늘 할 일" 단일 큐 병합 로직
-// @spec TQ-01,TQ-02,TQ-03,TQ-04
+// @spec TQ-01,TQ-02,TQ-03,TQ-04,D-19
 // buildTodayQueue가 복습 대기·주간 배분·오답·취약 진술·일일 챌린지·개인화 추천을
 // 규정 우선순위로 병합하고, 중복 실행·빈 상태·결정론을 보장하는지 고정한다.
 
@@ -136,6 +136,32 @@ test('TQ-03 이력 있음 + D-day 미설정 → goal 최우선 + 작업 항목 �
 // TQ-03 — 이력 있는데 할 일이 없으면 빈 배열(렌더러가 달성 문구 표시)
 test('TQ-03 이력 있음 + 소스 공백 → 빈 큐', () => {
     assert.deepEqual(buildTodayQueue(baseInput()), []);
+});
+
+// D-19 — 시험 임박 + 위험 카드 있으면 취약 진술 뒤·잔여 추천 앞에 최종 인출 항목
+test('D-19 최종 인출: 윈도 내 위험 카드 → weak 뒤·rec 앞에 examr 항목', () => {
+    const items = buildTodayQueue(baseInput({
+        dday: 5,
+        examRiskIds: ['sub1_card_x', 'sub2_card_y'],
+        weakStatementCount: 3,
+        recs: [rec('fa-bullseye', '정답률 최저 과목')],
+    }));
+    const k = kinds(items);
+    assert.deepEqual(k, ['weak', 'examr', 'rec']);
+    const examr = items.find((i) => i.kind === 'examr');
+    assert.match(examr.title, /최종 인출 2장/);
+    assert.equal(examr.actions[0].click, 'startExamRiskReview');
+});
+
+// D-19 — 윈도 밖·미설정·공백이면 표시하지 않는다
+test('D-19 최종 인출: dday>14·미설정·위험 카드 공백이면 미표시', () => {
+    assert.ok(!kinds(buildTodayQueue(baseInput({ dday: 30, examRiskIds: ['sub1_card_x'] }))).includes('examr'));
+    assert.ok(!kinds(buildTodayQueue(baseInput({ dday: 15, examRiskIds: ['sub1_card_x'] }))).includes('examr'));
+    assert.ok(!kinds(buildTodayQueue(baseInput({ dday: null, examRiskIds: ['sub1_card_x'] }))).includes('examr'));
+    assert.ok(!kinds(buildTodayQueue(baseInput({ dday: 5, examRiskIds: [] }))).includes('examr'));
+    // 경계값: dday=14는 표시, dday=0(당일)도 표시
+    assert.ok(kinds(buildTodayQueue(baseInput({ dday: 14, examRiskIds: ['sub1_card_x'] }))).includes('examr'));
+    assert.ok(kinds(buildTodayQueue(baseInput({ dday: 0, examRiskIds: ['sub1_card_x'] }))).includes('examr'));
 });
 
 // TQ-03 — 결정론: 동일 입력에 동일 출력
