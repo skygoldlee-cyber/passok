@@ -1,5 +1,5 @@
 // src/views/trainer-drills.js — O/X 판정 드릴 + 복수정답형(combo) 드릴
-// @spec DR-01~07,ND-01
+// @spec DR-01~07,ND-01,UX-MET-01
 //
 // 데이터: DataLoader.loadOxDrills(N) → OX_DRILLS_subjectN (build_ox_drills.js 생성)
 //         DataLoader.loadComboDrills() → COMBO_PILOT (수작업 저작)
@@ -21,6 +21,7 @@ import { normalizeCidAnchor, subjectFromSid } from '../analysis-engine.js';
 import { SemanticIndex } from '../semantic-index.js';
 import { recordStudyActivity } from '../study-tracker.js';
 import { switchView, resetMainScroll } from './navigation.js';
+import { trackAction } from '../usage-stats.js';
 
 const DRILL_COUNT = 10;
 export { OPTION_INDICATORS };
@@ -219,6 +220,10 @@ export function startDrill(type, subjectNum) {
             showToast(isSpecial ? '이 조건에 맞는 문항이 없습니다.' : `이 과목에는 출제 가능한 ${cfg.label} 문항이 없습니다.`, 'warning');
             return;
         }
+
+        // UX-MET-01 — 실제 출제 성립 시점에만 계측. sid:/concept: 행 재시도는 'retry' 버킷으로 묶는다
+        const modeBucket = /^(sid|concept):/.test(special) ? 'retry' : special;
+        trackAction(`${type === 'ox' ? 'oxdrill' : 'combo'}_start:${isSpecial ? modeBucket : num}`);
 
         const setup = document.getElementById(cfg.ids.setup);
         const arena = document.getElementById(cfg.ids.arena);
@@ -438,6 +443,7 @@ export function gotoWeakReview() {
  * @param {string|number} mode
  */
 export function gotoOxDrill(mode) {
+    trackAction('drill_from_review'); // UX-MET-01 — 복습 발 드릴 진입 (UX-GATE-01 판정 분자)
     switchView('trainer-view', { scrollTop: true });
     startOxDrill(mode);
 }

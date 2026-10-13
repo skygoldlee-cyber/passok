@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 4c3683207818362e
-> 생성: 2026-10-13 · 원천: SPEC.md(494개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 2297f49ccff041ad
+> 생성: 2026-10-13 · 원천: SPEC.md(501개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 494개 — 문서 연결 324 · 소스 연결 448 · 테스트 연결 479 · 보고서 연결 109
+**커버리지 요약**: 요구사항 501개 — 문서 연결 335 · 소스 연결 452 · 테스트 연결 483 · 보고서 연결 109
 
 ---
 
@@ -42,11 +42,11 @@
 | D-15 | ✅ | 테스트 | — | src/views/dashboard.js<br>src/views/subject-stats.js | tests/dom/study-dashboard.dom.test.js | DOC-ARC-05<br>DOC-ARC-10 | — |
 | D-16 | ✅ | 테스트 | — | html/views/dashboard.html<br>index.html<br>src/analysis-engine.js<br>src/views/dashboard.js<br>…외 1개 | tests/unit/analysis-engine.test.js | — | — |
 | D-17 | ✅ | 테스트 | DOC-DSN-16 | src/study-tracker.js<br>src/views/dashboard.js<br>src/views/study-calendar.js<br>src/views/subject-stats.js | tests/dom/study-calendar.dom.test.js<br>tests/dom/study-dashboard.dom.test.js<br>tests/unit/study-tracker.test.js | — | — |
-| TQ-01 | ✅ | 테스트 | DOC-DSN-22 | src/views/dashboard-queue.js<br>src/views/dashboard.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |
-| TQ-02 | ✅ | 테스트 | DOC-DSN-22 | src/views/dashboard-queue.js | tests/unit/today-queue.test.js | — | — |
-| TQ-03 | ✅ | 테스트 | DOC-DSN-22 | src/views/dashboard-queue.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |
-| TQ-04 | ✅ | 테스트 | DOC-DSN-22 | — | tests/unit/today-queue.test.js | — | — |
-| TQ-05 | ✅ | 테스트 | DOC-DSN-22 | src/views/dashboard-queue.js | tests/dom/study-dashboard.dom.test.js | — | — |
+| TQ-01 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | src/views/dashboard-queue.js<br>src/views/dashboard.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |
+| TQ-02 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | src/views/dashboard-queue.js | tests/unit/today-queue.test.js | — | — |
+| TQ-03 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | src/views/dashboard-queue.js | tests/dom/study-dashboard.dom.test.js<br>tests/unit/today-queue.test.js | — | — |
+| TQ-04 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | — | tests/unit/today-queue.test.js | — | — |
+| TQ-05 | ✅ | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | src/views/dashboard-queue.js | tests/dom/study-dashboard.dom.test.js | — | — |
 
 ## 3.1.5 학습 진단
 
@@ -384,17 +384,17 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| DR-01 | ✅ | 테스트 | DOC-DSN-23 | html/views/trainer.html<br>index.html<br>src/views/trainer-drills.js<br>tools/build/build_ox_drills.js<br>…외 1개 | tests/dom/study-trainer-drills.dom.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
-| DR-02 | ✅ | 테스트 | DOC-DSN-04<br>DOC-DSN-23<br>DOC-RBK-02<br>DOC-REF-01 | src/views/trainer-drill-combo.js<br>src/views/trainer-drills.js<br>tools/build/build_combo_drills.js<br>tools/build/drill-utils.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/combo-transform.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
+| DR-01 | ✅ | 테스트 | DOC-DSN-23<br>DOC-DSN-24 | html/views/trainer.html<br>index.html<br>src/views/trainer-drills.js<br>tools/build/build_ox_drills.js<br>…외 1개 | tests/dom/study-trainer-drills.dom.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
+| DR-02 | ✅ | 테스트 | DOC-DSN-04<br>DOC-DSN-23<br>DOC-DSN-24<br>DOC-RBK-02<br>…외 1개 | src/views/trainer-drill-combo.js<br>src/views/trainer-drills.js<br>tools/build/build_combo_drills.js<br>tools/build/drill-utils.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/combo-transform.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-03 | ✅ | 테스트 | DOC-DSN-17<br>DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
-| DR-04 | ✅ | 테스트 | DOC-DSN-21<br>DOC-DSN-22<br>DOC-RBK-02<br>DOC-REF-01 | src/statement-tracker.js<br>src/views/trainer-drills.js<br>src/weak-items.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | 법령·고시 수치 (드릴 콘텐츠의 기원 — 문항 자체는 내부 제작) |
-| DR-05 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-21<br>DOC-DSN-22<br>DOC-RBK-02<br>…외 1개 | src/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
+| DR-04 | ✅ | 테스트 | DOC-DSN-21<br>DOC-DSN-22<br>DOC-DSN-24<br>DOC-RBK-02<br>…외 1개 | src/statement-tracker.js<br>src/views/trainer-drills.js<br>src/weak-items.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | 법령·고시 수치 (드릴 콘텐츠의 기원 — 문항 자체는 내부 제작) |
+| DR-05 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-21<br>DOC-DSN-22<br>DOC-DSN-24<br>…외 2개 | src/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/unit/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-06 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/views/exam-sim-arena.js<br>src/views/exam-simulator.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-07 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/questions.js<br>src/views/trainer-drills.js | tests/dom/study-trainer-drills.dom.test.js<br>tests/fixtures/sample-questions.js<br>tests/unit/combo-transform.test.js<br>tests/unit/property-based.test.js<br>…외 1개 | DOC-ARC-05<br>DOC-ARC-09 | — |
 | ND-01 | ✅ | 테스트 | DOC-USR-03<br>DOC-USR-04<br>DOC-USR-05<br>DOC-USR-06 | src/views/trainer-drills.js<br>src/views/trainer.js | tests/dom/exams/cosmetic/review-drills-formula.dom.test.js | — | — |
 | RV-01 | ✅ | 테스트 | DOC-DSN-21 | html/views/review.html<br>index.html<br>src/views/quiz.js<br>src/views/trainer.js | tests/dom/exams/cosmetic/review-drills-formula.dom.test.js<br>tests/dom/study-review.dom.test.js | — | — |
-| RV-02 | ✅ | 테스트 | — | html/views/review.html<br>index.html | tests/dom/study-review.dom.test.js | — | — |
-| RV-03 | ✅ | 테스트 | — | html/views/review.html<br>index.html | tests/dom/study-review.dom.test.js | — | — |
+| RV-02 | ✅ | 테스트 | DOC-DSN-24 | html/views/review.html<br>index.html | tests/dom/study-review.dom.test.js | — | — |
+| RV-03 | ✅ | 테스트 | DOC-DSN-24 | html/views/review.html<br>index.html | tests/dom/study-review.dom.test.js | — | — |
 | RV-04 | ✅ | 테스트 | — | html/views/review.html<br>index.html | tests/dom/study-review.dom.test.js | — | — |
 | SC-01 | ✅ | 테스트 | — | css/study-calendar.css<br>html/views/calendar.html<br>index.html<br>src/views/study-calendar.js | tests/dom/study-calendar.dom.test.js | DOC-ARC-05 | — |
 | SC-02 | ✅ | 테스트 | — | src/views/study-calendar.js | tests/dom/study-calendar.dom.test.js | DOC-ARC-05 | — |
@@ -595,9 +595,9 @@
 | UX-NAV-09 | 인플로우 크롬은 본문 높이를 영구 잠식하고, transform만 적용한 숨김은 공간을 회수하지 못함(실측: 본문 63%→89% vh). 오버레이 시 콘텐츠 스크롤 컨테이너에 `padding-top`=크롬 높이를 줘 첫 화면이 크롬 아래 묻히지 않게 함 — 패딩은 스크롤과 함께 밀려나므로 읽는 중 잠식 0. 크롬 아래를 지나는 다른 오버레이(섹션 표시줄 등)는 `~` 시빌링 셀렉터로 숨김 상태와 위치를 연동할 것 | E2E 테스트 | — | css/reader.css | tests/e2e/toc-sidebar.spec.js | — | — |
 | UX-NAV-10 | 성분사전 검색 행이 버튼 4개(초기화·CSV·전체 CSV·성분 추가)를 nowrap으로 나열해 모바일에서 '성분 추가'가 잘린 실사례. `text-overflow:ellipsis` 말줄임과 가로 스크롤 컨테이너(표 wrapper 등)는 의도된 클립이라 예외. E2E 스윕(`mobile-overflow.spec.js`)이 전 뷰를 프로젝트 뷰포트별로 실측 | E2E 테스트 | — | — | tests/e2e/mobile-overflow.spec.js | — | — |
 | UX-NAV-11 | UX-NAV-05의 실측 확장 — 탭 바 위치 계약을 요소 단위로 검증. 스크롤 컨테이너 가장자리 클립은 스크롤로 도달 가능하므로 예외, 일시 오버레이(토스트·오프라인 배너)는 소멸성이라 예외. E2E(`mobile-overflow.spec.js`)가 전 뷰의 상호작용 요소를 `scrollIntoView`+히트 테스트로 순회 | E2E 테스트 | — | — | tests/e2e/mobile-overflow.spec.js | — | — |
-| UX-NAV-12 | 그룹 라벨은 `index.template.html`의 `.nav-group-label` 정적 마크업 — 모바일 시트는 동일 DOM 슬롯을 공유해 분류가 대역 간 자동 일치. 표시명만 바뀌고 `data-target`·라우트 ID는 불변 | 문서 검토 | DOC-DSN-21 | — | — | — | — |
-| UX-NAV-13 | `html/views/{quiz,exam,trainer,review}.html` 정적 문구 — manifest `uiText` subtitle과 별도 본문 표기라 `check:uitext` 비대상 | 테스트 | DOC-DSN-22 | — | tests/dom/study-review.dom.test.js | — | — |
-| UX-NAV-14 | `html/views/trainer.html` 정적 구조 — 카드 DOM·`data-click`·`data-feature`·배지 id 불변, 그룹 이동만. 라벨은 본문 텍스트라 `check:uitext` 비대상 | E2E 테스트 | — | css/trainer.css<br>html/views/trainer.html<br>index.html | tests/dom/study-trainer.dom.test.js<br>tests/e2e/app.spec.js | — | — |
+| UX-NAV-12 | 그룹 라벨은 `index.template.html`의 `.nav-group-label` 정적 마크업 — 모바일 시트는 동일 DOM 슬롯을 공유해 분류가 대역 간 자동 일치. 표시명만 바뀌고 `data-target`·라우트 ID는 불변 | 문서 검토 | DOC-DSN-21<br>DOC-DSN-24 | — | — | — | — |
+| UX-NAV-13 | `html/views/{quiz,exam,trainer,review}.html` 정적 문구 — manifest `uiText` subtitle과 별도 본문 표기라 `check:uitext` 비대상 | 테스트 | DOC-DSN-22<br>DOC-DSN-24 | — | tests/dom/study-review.dom.test.js | — | — |
+| UX-NAV-14 | `html/views/trainer.html` 정적 구조 — 카드 DOM·`data-click`·`data-feature`·배지 id 불변, 그룹 이동만. 라벨은 본문 텍스트라 `check:uitext` 비대상 | E2E 테스트 | DOC-DSN-24 | css/trainer.css<br>html/views/trainer.html<br>index.html | tests/dom/study-trainer.dom.test.js<br>tests/e2e/app.spec.js | — | — |
 | UX-PWA-01 | 모바일 OS(Android/iOS)는 웹의 자체 종료를 차단 — 프로그래밍으로 완전 종료 불가. 데스크톱 설치 PWA는 `close()`가 동작하므로 모바일 안내는 불필요. 차단되면 "최근 앱 목록에서 밀어 닫으세요"(터치)/"창을 닫아주세요"(데스크톱) 안내 화면으로 대체하는 것이 최선 | E2E 테스트 | — | src/app.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
 | UX-PWA-02 | 브라우저 탭에서 의미 없는 버튼(앱 종료 등)을 숨겨 혼란 방지. iOS는 `navigator.standalone`만 지원하므로 둘 다 확인 필수 | E2E 테스트 | — | src/pwa-install.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
 | UX-PWA-03 | "배포했는데 안 바뀐다" 보고의 대부분이 이 패턴. 사용자 안내 문구와 업데이트 토스트 필수 | E2E 테스트 | — | sw.js<br>tools/check/check_perf_budget.js | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
@@ -712,7 +712,7 @@
 | ROAD-P2 | 미구현 | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 2개 | — | — | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P3 | 미구현 | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 2개 | — | — | DOC-ARC-01<br>DOC-ARC-02<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P4 | ✅ 결정·게이트 구현 | 테스트 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 2개 | src/sync.js | tests/dom/common-sync.dom.test.js | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06<br>DOC-ARC-07 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
-| ROAD-P5 | ✅ | 테스트 | DOC-DSN-23 | — | tests/dom/pro-notice.dom.test.js | — | — |
+| ROAD-P5 | ✅ | 테스트 | DOC-DSN-23<br>DOC-DSN-24 | — | tests/dom/pro-notice.dom.test.js | — | — |
 
 ## 7.3 Learning Pro 잔여·차별화
 
@@ -722,8 +722,20 @@
 | ROAD-L2 | 미구현 | — | — | — | — | — | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
 | ROAD-L3 | 미구현 | — | — | — | — | — | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
 | ROAD-L4 | 미구현 | — | — | — | — | — | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
-| ROAD-L5 | ✅ 카운터 구현 (판정 데이터 수집 중) | 테스트 | — | src/usage-stats.js | tests/dom/usage-stats.dom.test.js | — | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
+| ROAD-L5 | ✅ 카운터 구현 (판정 데이터 수집 중) | 테스트 | DOC-DSN-24 | src/usage-stats.js | tests/dom/usage-stats.dom.test.js | — | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
 | ROAD-L6 | ①완료 ⑤보류, 나머지 미구현 | — | — | — | — | — | ML 기법 검토 산출 — FSRS_DESIGN.md (FSRS 적용·RL 보류 판정 근거) |
+
+## 7.6 학습 표면 계측·구조 축소
+
+| ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
+|----|------|-----------|------|------|--------|--------|------|
+| UX-GATE-01 | 미구현 | 문서 검토 | DOC-DSN-24 | — | — | — | — |
+| UX-GATE-02 | 미구현 | 문서 검토 | DOC-DSN-24 | — | — | — | — |
+| UX-GATE-03 | 미구현 | 문서 검토 | DOC-DSN-24 | — | — | — | — |
+| UX-MET-01 | 구현 (2026-10-13) | E2E 테스트 | DOC-DSN-24 | src/usage-stats.js<br>src/views/event-listeners.js<br>src/views/trainer-drills.js | tests/dom/usage-stats.dom.test.js<br>tests/e2e/usage-metrics.spec.js<br>tests/unit/usage-metrics.test.js | — | — |
+| UX-MET-02 | 구현 (2026-10-13) | E2E 테스트 | DOC-DSN-24 | src/usage-stats.js | tests/dom/usage-stats.dom.test.js<br>tests/e2e/usage-metrics.spec.js | — | — |
+| UX-MET-03 | 구현 (2026-10-13) | E2E 테스트 | DOC-DSN-24 | src/usage-stats.js<br>tools/check/aggregate_usage.js | tests/dom/usage-stats.dom.test.js<br>tests/e2e/usage-metrics.spec.js | — | — |
+| UX-MET-04 | 구현 (2026-10-13) | E2E 테스트 | DOC-DSN-24 | src/usage-stats.js | tests/dom/usage-stats.dom.test.js<br>tests/e2e/usage-metrics.spec.js<br>tests/unit/usage-metrics.test.js | — | — |
 
 ---
 
@@ -780,6 +792,7 @@
 | DOC-DSN-21 | docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md | AN-02, D-08, DR-04, DR-05, RV-01, SC-08, SC-09, SC-10, SC-11, SC-12, SC-13, UX-NAV-12 |
 | DOC-DSN-22 | docs/dev/design/LEARNING_UX_PHASE1_DESIGN.md | DR-04, DR-05, TQ-01, TQ-02, TQ-03, TQ-04, TQ-05, UX-NAV-07, UX-NAV-08, UX-NAV-13 |
 | DOC-DSN-23 | docs/dev/design/LEARNING_UX_PHASE15_DESIGN.md | DR-01, DR-02, ROAD-P0, ROAD-P5 |
+| DOC-DSN-24 | docs/dev/design/LEARNING_UX_PHASE2_DESIGN.md | DR-01, DR-02, DR-04, DR-05, ROAD-L5, ROAD-P5, RV-02, RV-03, TQ-01, TQ-02, TQ-03, TQ-04, TQ-05, UX-GATE-01, UX-GATE-02, UX-GATE-03, UX-MET-01, UX-MET-02, UX-MET-03, UX-MET-04, UX-NAV-12, UX-NAV-13, UX-NAV-14 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |
