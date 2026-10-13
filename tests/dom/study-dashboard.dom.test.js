@@ -354,6 +354,9 @@ describe('학습 진단 뷰 — 진단 요약 카드', () => {
         expect(card.textContent).toContain('합격선');
         expect(card.textContent).toContain('미달');
         expect(card.textContent).toContain('1→4장');
+        // 과목 순위 행 — 최우선 외 2위 과목도 노출 (D-5 플랜의 순위 확인 동선)
+        expect(card.textContent).toContain('최우선 보강');
+        expect(card.textContent).toContain('2위 subjb');
         expect(card.querySelector('[data-click="openGoalSettings"]')).not.toBeNull();
     });
 

@@ -251,12 +251,12 @@ export function computeWeeklyGrowth(calendar) {
  * @param {Array<{key:string,name:string}>} p.subjects 과목 메타
  * @param {Object} p.counts 과목별 학습 카운트 (getSubjCounts 결과)
  * @param {{passAverage:number,subjectFailBelow:number}} p.rules getExamRules()
- * @returns {{gap:number|null, passLine:number, weakest:{key:string,name:string,rate:number,reason:string}|null}|null}
+ * @returns {{gap:number|null, passLine:number, weakest:{key:string,name:string,rate:number,reason:string}|null, ranking:Array<{key:string,name:string,rate:number}>}|null}
  */
 export function computePassGap(p) {
     const rules = p.rules || { passAverage: 60, subjectFailBelow: 40 };
-    /** @type {{gap:number|null, passLine:number, weakest:{key:string,name:string,rate:number,reason:string}|null}} */
-    const result = { gap: null, passLine: rules.passAverage, weakest: null };
+    /** @type {{gap:number|null, passLine:number, weakest:{key:string,name:string,rate:number,reason:string}|null, ranking:Array<{key:string,name:string,rate:number}>}} */
+    const result = { gap: null, passLine: rules.passAverage, weakest: null, ranking: [] };
     if (p.estimate && typeof p.estimate.expected === 'number') {
         result.gap = Math.max(0, rules.passAverage - p.estimate.expected);
     }
@@ -265,16 +265,17 @@ export function computePassGap(p) {
     const hist = Array.isArray(p.simHistory) ? p.simHistory : [];
     const last = hist.length ? hist[hist.length - 1] : null;
     if (last && last.subjectRates) {
-        /** @type {{key:string, name:string, rate:number}|null} */
-        let worst = null;
+        const ranking = [];
         for (const [k, rate] of Object.entries(last.subjectRates)) {
             if (rate === null || rate === undefined) continue;
             const key = resolveLegacySubjectKey(k);
             const subj = (p.subjects || []).find(s => s.key === key);
-            const name = subj ? subj.name : key;
-            if (!worst || rate < worst.rate) worst = { key, name, rate };
+            ranking.push({ key, name: subj ? subj.name : key, rate });
         }
-        if (worst) {
+        ranking.sort((a, b) => a.rate - b.rate);
+        if (ranking.length) {
+            result.ranking = ranking;
+            const worst = ranking[0];
             result.weakest = {
                 key: worst.key, name: worst.name, rate: worst.rate,
                 reason: worst.rate < rules.subjectFailBelow
@@ -286,18 +287,20 @@ export function computePassGap(p) {
         // subjectRates가 비어 있으면 퀴즈 정답률 폴백으로 계속 진행
     }
 
-    // 모의고사 없음 → 퀴즈 정답률 최저 과목 (3문 이상)
-    /** @type {{key:string, name:string, rate:number}|null} */
-    let weakest = null;
-    let weakestRate = 101;
-    for (const s of (p.subjects || [])) {
-        const sc = (p.counts || {})[s.key];
-        if (sc && sc.quizSolved >= 3) {
-            const rate = Math.round((sc.quizCorrect / sc.quizSolved) * 100);
-            if (rate < weakestRate) { weakestRate = rate; weakest = { key: s.key, name: s.name, rate }; }
-        }
+    // 모의고사 없음 → 퀴즈 정답률 순위 (3문 이상 푼 과목만)
+    result.ranking = (p.subjects || [])
+        .filter(s => {
+            const sc = (p.counts || {})[s.key];
+            return sc && sc.quizSolved >= 3;
+        })
+        .map(s => {
+            const sc = p.counts[s.key];
+            return { key: s.key, name: s.name, rate: Math.round((sc.quizCorrect / sc.quizSolved) * 100) };
+        })
+        .sort((a, b) => a.rate - b.rate);
+    if (result.ranking.length) {
+        result.weakest = { ...result.ranking[0], reason: '퀴즈 정답률 최저 과목' };
     }
-    if (weakest) result.weakest = { key: weakest.key, name: weakest.name, rate: weakest.rate, reason: '퀴즈 정답률 최저 과목' };
     return result;
 }
 
