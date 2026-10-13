@@ -1,5 +1,5 @@
 // tests/e2e/app.spec.js — 실브라우저 스모크 (jsdom 불가 영역)
-// @spec UX-NAV-01,UX-NAV-08,UX-SET-01,UX-SET-02,UX-SET-03,UX-FB-04,P-01,P-02,P-10,P-11
+// @spec UX-NAV-01,UX-NAV-08,UX-NAV-14,UX-SET-01,UX-SET-02,UX-SET-03,UX-FB-04,P-01,P-02,P-10,P-11
 // 앱 초기화 부팅, 콘솔 오류 부재, 뷰 전환, SW 등록, PWA 자산 응답을 고정한다.
 
 import { test, expect } from '@playwright/test';
@@ -40,6 +40,20 @@ test.describe('앱 부트스트랩', () => {
         await expect(page.locator('#flashcard-view')).toBeVisible();
         // UX-NAV-08: 뷰 전환 시 #/슬러그 pushState — 딥링크·뒤로가기의 기반
         await expect(page).toHaveURL(/#\/cards$/);
+    });
+
+    test('훈련소 메뉴가 기출 드릴·암기/실무 2그룹으로 렌더된다 (UX-NAV-14)', async ({ page }) => {
+        await page.goto('/index.html#/trainer');
+        await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
+        await expect(page.locator('#trainer-view')).toBeVisible();
+        const groups = page.locator('#trainer-menu-panel .trainer-menu-group');
+        await expect(groups).toHaveCount(2);
+        // 기출 드릴 그룹이 상단 — O/X·ㄱㄴㄷ 카드만 포함
+        await expect(groups.nth(0).locator('.trainer-group-label')).toContainText('기출 드릴');
+        await expect(groups.nth(0).locator('[data-click="openOxDrillSetup"]')).toBeVisible();
+        await expect(groups.nth(0).locator('[data-click="openComboDrillSetup"]')).toBeVisible();
+        await expect(groups.nth(1).locator('.trainer-group-label')).toContainText('암기');
+        await expect(groups.nth(1).locator('[data-click="startCalcPractice"]')).toBeVisible();
     });
 });
 

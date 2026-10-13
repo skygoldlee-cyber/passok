@@ -1,5 +1,5 @@
 // tests/dom/study-trainer.dom.test.js — 훈련소 시나리오
-// @spec T-01~05
+// @spec T-01~05,UX-NAV-14
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.2 (Phase 4)
 // 검증: 메뉴/서브뷰 전이(R) · 수치 훈련 채점(H) · 계산 연습 정답/오답/비수치(X)
 //       · 원료 챌린지 객관식(H/B) — 취약 진술 리뷰는 study-review.dom.test.js (RV-02)
@@ -76,6 +76,21 @@ describe('훈련소 — 수치·계산·원료', () => {
         ['trainer-limits-panel', 'trainer-calc-panel', 'trainer-ingredients-panel',
             'trainer-oxdrill-panel', 'trainer-combo-panel']
             .forEach(id => expect(el(id).classList.contains('is-hidden')).toBe(true));
+    });
+
+    it('메뉴가 기출 드릴·암기/실무 2그룹으로 분리되고 기출 그룹이 상단에 온다 (UX-NAV-14)', () => {
+        const groups = [...document.querySelectorAll('#trainer-menu-panel .trainer-menu-group')];
+        expect(groups).toHaveLength(2);
+        const [drill, practical] = groups.map(g => g.querySelector('.trainer-group-label').textContent);
+        expect(drill).toContain('기출 드릴');
+        expect(practical).toContain('암기');
+
+        const cardClicks = g => [...g.querySelectorAll('.trainer-menu-card')].map(c => c.dataset.click);
+        expect(cardClicks(groups[0])).toEqual(['openOxDrillSetup', 'openComboDrillSetup']);
+        expect(cardClicks(groups[1])).toEqual(['startLimitsTrainer', 'startIngredientsChallenge', 'startCalcPractice']);
+        // 배지·feature 게이트 속성은 그룹 이동과 무관하게 유지
+        expect(groups[0].querySelector('#oxdrill-due-badge')).not.toBeNull();
+        expect(groups[0].querySelector('[data-pro-feature="combo_drill"]')).not.toBeNull();
     });
 
     it('수치 훈련 → 문제·4지선다 렌더, 정답 클릭 → 정답 피드백', async () => {

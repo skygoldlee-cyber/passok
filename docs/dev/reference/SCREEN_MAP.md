@@ -90,4 +90,5 @@
 - **해시 슬러그는 변경 금지**: 기존 딥링크·복원 데이터와 호환 — 변경 시 UX-NAV-08 마이그레이션 필요
 - **레거시 서브해시**: `#/trainer/weak`는 취약 진술 리뷰의 복습 뷰 이관(RV-02)으로 폐기 — `initTrainer`가 `#/review`로 리다이렉트. 훈련소 서브해시는 `limits`·`oxdrill`·`combo`·`calc`·`ingredients`만 유효
 - **뷰 목적 문구**: 퀴즈·모의고사·훈련소·복습 뷰 상단의 `.view-purpose` 한 줄이 학습 루프 경계(연습/평가/훈련/재확인)를 명시 (UX-NAV-13)
+- **훈련소 메뉴 그룹핑**: `trainer-menu-panel`은 `.trainer-menu-group` 2개로 분할 — `기출 드릴`(O/X·ㄱㄴㄷ) 상단 + `암기 · 실무 훈련`(수치·원료·계산) 하단 (UX-NAV-14). 카드 추가·삭제·재배치 시 그룹 소속 유지 필수
 - **기능 플래그 신설**: `data-feature` 속성 + `exams.json.features` 등록 (멀티시험 대칭)
