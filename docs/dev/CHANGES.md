@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 롤백 경로 리허설 — 태그→preview 재배포 실증 + 절차 정본 신설
+
+- 롤백 리허설 실측 (프로덕션 불개입): `deploy/v20261014-1169ed2` 태그(HEAD-19커밋) → `git worktree` 체크아웃 → `vercel deploy` preview → `vercel curl` 스모크(index·sw.js·version.js, CACHE_VERSION v20261014-4b281f4 일치) — "태그 시점 재배포" 경로 전 과정 실행 검증
+- **정본 부재 발견·해소**: WHEN_THINGS_BREAK §1이 롤백 절차로 링크한 DEPLOYMENT_GUIDE에 절차 자체가 없었음 → §5-3 신설. 경로 A(대시보드 promote, 최속) + 경로 B(태그 worktree→preview 검증→prod), preview SSO 보호에는 `vercel curl` 필요함을 명시
+- 설계 확인: 롤백은 `npm run deploy`를 쓸 수 없음(가드가 main 브랜치+HEAD CI 강제) — §5-3에 단일 배포 경로의 명시적 예외로 기록
+- 미검증 잔여: 대시보드 promote(UI 경로)는 미실행 — §9 롤백 행은 부분 측정으로 공백 유지(규칙 ②), 다음 기회에 경로 A 리허설 필요
+
 ## 2026-10-14 과업 완주율 측정 경로 — usage_events 퍼널 + report:funnel 집계 도구
 
 - `usage_events` 테이블 신설 (schema.sql §6 — 익명 insert 전용, select 정책 없음) — `session_id`는 페이지 로드당 랜덤 UUID로 start↔complete 쌍 묶기 전용, 기기·사용자 식별 아님
