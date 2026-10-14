@@ -7,17 +7,19 @@
  *
  * 순서:
  *   1) main 브랜치 + 작업 트리 clean + origin/main 동기화 검사
- *   2) sw.js CACHE_VERSION 스탬프 (stamp_sw_version.js)
- *      → 값이 바뀌면 'chore(sw): CACHE_VERSION 스탬프' 자동 커밋 + push
+ *   2) sw.js CACHE_VERSION + 앱 버전/릴리스 노트 스탬프 — 작업 트리에만 적용
+ *      (커밋하지 않는다. vercel은 로컬 파일을 업로드하므로 프로덕션에는
+ *      스탬프된 파일이 그대로 배포된다)
  *   3) vercel --prod --yes 실행
- *   4) 프로덕션 스모크 — https://<projectName>.vercel.app 200 +
+ *   4) 성공 시 deploy/<버전> 태그 생성·push 로 배포 이력 기록 → 스탬프 원복
+ *   5) 프로덕션 스모크 — https://<projectName>.vercel.app 200 +
  *      sw.js·version.js 스탬프 일치 (엣지 전파 대기 재시도 포함)
  *
  * 차단 조건:
  *   - 커밋되지 않은 변경이 있는 경우 (untracked 포함)
  *   - origin/main 에 없는 로컬 커밋이 있는 경우 (unpushed)
  *   - origin/main 보다 뒤처진 경우 (push 전 pull 필요)
- *   - 스탬프 커밋/push 실패
+ *   - 스탬프 태그 생성/push 실패
  *
  * 사용: npm run deploy
  */
@@ -136,10 +138,15 @@ function main() {
 
     console.log('✅ 배포 전 검사 통과 (main · clean · origin/main 동기화)');
 
-    // 영향도 경고 — 직전 배포(스탬프 커밋) 이후 변경 파일의 영향 요구사항 표시.
-    // 차단은 아니며, 고영향 코어 파일 변경 시 검증 스크린샷·스모크 확인을 권고한다.
+    // 영향도 경고 — 직전 배포(deploy/* 태그, 구버전은 스탬프 커밋) 이후 변경 파일의
+    // 영향 요구사항 표시. 차단은 아니며, 고영향 코어 파일 변경 시 스모크 확인을 권고한다.
     try {
-        const lastDeploy = git('log -1 --format=%H --grep="CACHE_VERSION 스탬프"');
+        let lastDeploy = '';
+        try {
+            const tag = git('describe --tags --match "deploy/*" --abbrev=0');
+            if (tag) lastDeploy = git(`rev-list -n 1 ${tag}`);
+        } catch { /* deploy 태그 없음 — 구 스탬프 커밋 기준으로 폴백 */ }
+        if (!lastDeploy) lastDeploy = git('log -1 --format=%H --grep="CACHE_VERSION 스탬프"');
         if (lastDeploy && lastDeploy !== git('rev-parse HEAD')) {
             const impact = spawnSync('node', ['tools/impact_tests.js', '--ref', lastDeploy], { encoding: 'utf8' });
             const out = (impact.stdout || '').trim();
@@ -185,27 +192,28 @@ function main() {
     }
     console.log('✅ 타입·린트 게이트 통과 (IDE 오류 없음)');
 
-    // sw.js CACHE_VERSION + 앱 버전/릴리스 노트 스탬프 — 바뀌면 자동 커밋 + push
+    // sw.js CACHE_VERSION + 앱 버전/릴리스 노트 스탬프 — 커밋하지 않고 작업 트리에만
+    // 적용한다. vercel --prod는 로컬 파일을 업로드하므로 프로덕션에는 스탬프된
+    // 내용이 그대로 배포되고, 배포 후 원복하면 이력 노이즈(chore(sw) 커밋)가 없다.
+    // 배포 이력은 deploy/<버전> 태그가 대신 기록한다.
     const stamp = stampSwVersion();
+    let stampedFiles = [];
+    const restoreStamps = () => {
+        if (!stampedFiles.length) return;
+        try {
+            git(`checkout -- ${stampedFiles.map((f) => `"${f}"`).join(' ')}`);
+        } catch (e) {
+            console.warn(`⚠️  스탬프 원복 실패 — 수동으로 복원하세요: ${stampedFiles.join(', ')} (${e.message})`);
+        }
+    };
     if (stamp.changed) {
         // data/version.js를 동일 버전으로 갱신하고, pending 노트를 확정
         // (pending이 없으면 커밋 subject로 자동 초안 — 배포 전 notes:draft로 편집 권장)
         stampReleaseNotes({ version: stamp.newValue, prevVersion: stamp.oldValue });
-        try {
-            git('add sw.js data/version.js data/release-notes.js data/release-notes.json package.json');
-            // 자동 스탬프 산출물 커밋은 문서 갱신 대상이 아님 — 게이트 우회 이중 적용:
-            // pre-commit(--staged)은 SKIP_DOCSYNC=1, pre-push(--ref)는 [no-docs] 마커를 인식
-            git('commit -m "chore(sw): CACHE_VERSION 스탬프 [no-docs]" --quiet',
-                { env: { ...process.env, SKIP_DOCSYNC: '1' } });
-            git('push origin main --quiet');
-        } catch (e) {
-            fail(`스탬프 커밋/푸시 실패: ${e.message}`);
-        }
-        const stillUnpushed = git('rev-list --count origin/main..HEAD');
-        if (parseInt(stillUnpushed, 10) > 0) {
-            fail('스탬프 커밋이 push되지 않았습니다. 수동으로 확인하세요.');
-        }
-        console.log(`✅ sw.js 스탬프 커밋·푸시 완료 (${stamp.newValue})\n`);
+        stampedFiles = git('status --porcelain').split('\n')
+            .filter((l) => l[1] === 'M') // 수정된 추적 파일만 (untracked '??' 제외)
+            .map((l) => l.slice(3).trim().replace(/^"|"$/g, ''));
+        console.log(`✅ 스탬프 적용 (${stamp.newValue}) — 배포 후 원복 · 이력은 deploy 태그\n`);
     }
 
     // DEP0190 — shell:true + 인자 배열 금지. win32의 vercel.cmd는 shell 경유가
@@ -213,12 +221,35 @@ function main() {
     const result = spawnSync(
         ['vercel', '--prod', '--yes', ...vercelScopeArgs()].map(quoteArg).join(' '),
         { stdio: 'inherit', shell: true });
-    if ((result.status ?? 1) !== 0) process.exit(result.status ?? 1);
+    if ((result.status ?? 1) !== 0) {
+        restoreStamps();
+        process.exit(result.status ?? 1);
+    }
+
+    // 배포 성공 — deploy/<버전> 태그로 이력 기록 후 스탬프 파일 원복.
+    // stamped는 스탬프 변경 시 새 버전, 동일 버전 재배포 시 파일에 남은 값.
+    const stamped = stamp.changed ? stamp.newValue
+        : (fs.readFileSync(path.join(__dirname, '..', '..', 'sw.js'), 'utf8').match(/CACHE_VERSION\s*=\s*'([^']+)'/) || [])[1];
+    try {
+        if (stamped) {
+            const tag = `deploy/${stamped}`;
+            if (git(`tag -l ${tag}`)) {
+                console.log(`ℹ️  deploy 태그 이미 존재 (${tag}) — 동일 버전 재배포`);
+            } else {
+                git(`tag -a ${tag} -m "deploy ${stamped}"`);
+                git(`push origin ${tag} --quiet`);
+                console.log(`✅ 배포 이력 태그 기록 (${tag})`);
+            }
+        }
+    } catch (e) {
+        // 태그 실패는 배포 자체를 무효화하지 않는다 — 이미 프로덕션에 올라간 상태
+        console.warn(`⚠️  deploy 태그 기록 실패 (배포는 완료됨): ${e.message}`);
+    } finally {
+        restoreStamps();
+    }
 
     // 배포 후 스모크 — 200·스탬프 불일치·엣지 정체를 자동 탐지
     const baseUrl = projectUrl();
-    const stamped = stamp.changed ? stamp.newValue
-        : (fs.readFileSync(path.join(__dirname, '..', '..', 'sw.js'), 'utf8').match(/CACHE_VERSION\s*=\s*'([^']+)'/) || [])[1];
     if (baseUrl && stamped) {
         console.log(`\n▶ 배포 후 스모크 — ${baseUrl}`);
         smokeCheck(baseUrl, stamped).then((fails) => {

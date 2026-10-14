@@ -52,7 +52,7 @@ node tools/sync/sync_textbook_files.js       # 교재/문제은행 파일 ↔ ma
 npm.cmd run serve                      # http://localhost:3000
 
 # 배포
-npm.cmd run deploy                     # 배포 가드(clean tree + origin/main 동기화 확인) → sw 스탬프 자동 커밋·푸시 → vercel --prod 실행
+npm.cmd run deploy                     # 배포 가드(clean tree + origin/main 동기화 확인) → sw/버전 스탬프(비커밋, 배포 후 원복) → vercel --prod → deploy/<버전> 태그 이력
 # ※ 사용자가 "배포"라고 요청하면 이 명령 하나로 전체 단계 수행
 # ※ `vercel --prod` 직접 실행 금지 — 미푸시 커밋/미커밋 변경이 프로덕션에 올라감
 
@@ -103,6 +103,7 @@ npm.cmd run check:storage               # src/ 내 localStorage 직접 접근 �
 npm.cmd run check:ciparity              # ci.yml 워크플로 명령 ↔ check:ci 체인 양방향 정합 (비대칭은 CI_ONLY·LOCAL_ONLY 명단에 사유 명시)
 npm.cmd run check:secrets               # 추적 파일 시크릿 패턴 스캔 (개인키·service_role·토큰 — 공개키는 ALLOWLIST, pre-commit 게이트)
 npm.cmd run check:enc                   # U+FFFD 치환 문자 잔존 — 저장 시 이모지 변조 유입 차단 (기준선 단조 감소, --update=잔재 정리 후 하향 — pre-commit·check:docs 게이트)
+npm.cmd run check:orphans               # 미참조 자산(고아 자산) 유입 차단 — 추적 자산 파일의 파일명이 다른 추적 파일에 등장하지 않으면 실패 (_archive/·e2e 스냅샷 규약 제외, 예외는 orphan_assets_baseline.json — pre-commit·check:docs 게이트)
 npm.cmd run check:notes                 # release-notes.json 스키마·버전 해시→커밋 해석·최신 항목↔APP_VERSION 정합
 npm.cmd run check:domainmap             # 파일 계층 분류 강제 — src/css/html/data/content/tests 전 파일이 domain-map.json에 선언 필수 (분류 규약: ARCHITECTURE.md "파일 계층 분류")
 npm.cmd run check:uitext                # UI 텍스트 커버리지 — data-uitext↔manifest.uiText 양방향 + platform HTML 시험명 잔존 검사
