@@ -62,6 +62,7 @@
     "check:storage": "node tools/check/check_storage_access.js",
     "check:ciparity": "node tools/check/check_ci_parity.js",
     "check:secrets": "node tools/check/check_secrets.js",
+    "check:enc": "node tools/check/check_replacement_char.js",
     "check:notes": "node tools/check/check_release_notes.js",
     "check:specrefs": "node tools/check/check_spec_refs.js",
     "check:perf": "node tools/check/check_perf_budget.js",
