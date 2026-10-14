@@ -77,6 +77,22 @@ function writeBaseline(counts) {
   fs.writeFileSync(BASELINE_PATH, JSON.stringify(doc, null, 2) + '\n', 'utf8');
 }
 
+/** 실측 잔재 ↔ 기준선 비교 — 순수 로직 (테스트용 export) */
+function compareCounts(counts, baseline) {
+  const violations = [];
+  const decreased = [];
+  for (const [f, n] of Object.entries(counts)) {
+    const limit = baseline[f];
+    if (limit === undefined) violations.push(`신규 유입: ${f} (+${n}건)`);
+    else if (n > limit) violations.push(`기준선 초과: ${f} (${n} > ${limit})`);
+    else if (n < limit) decreased.push(`${f}: ${limit} → ${n}`);
+  }
+  for (const f of Object.keys(baseline)) {
+    if (!(f in counts)) decreased.push(`${f}: ${baseline[f]} → 0 (깨끗해짐)`);
+  }
+  return { violations, decreased };
+}
+
 function main() {
   const update = process.argv.includes('--update');
   const counts = scan();
@@ -89,18 +105,7 @@ function main() {
   }
 
   const baseline = loadBaseline();
-  const violations = [];
-  const decreased = [];
-
-  for (const [f, n] of Object.entries(counts)) {
-    const limit = baseline[f];
-    if (limit === undefined) violations.push(`신규 유입: ${f} (+${n}건)`);
-    else if (n > limit) violations.push(`기준선 초과: ${f} (${n} > ${limit})`);
-    else if (n < limit) decreased.push(`${f}: ${limit} → ${n}`);
-  }
-  for (const f of Object.keys(baseline)) {
-    if (!(f in counts)) decreased.push(`${f}: ${baseline[f]} → 0 (깨끗해짐)`);
-  }
+  const { violations, decreased } = compareCounts(counts, baseline);
 
   if (violations.length) {
     console.error(`✗ U+FFFD 치환 문자 탐지 — 인코딩 깨짐 유입 ${violations.length}건`);
@@ -119,4 +124,5 @@ function main() {
   }
 }
 
-main();
+module.exports = { FFFD, EXCLUDE_RE, compareCounts, loadBaseline, writeBaseline };
+if (require.main === module) main();
