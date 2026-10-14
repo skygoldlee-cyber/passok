@@ -157,6 +157,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [FSRS6_UPGRADE_DESIGN.md](dev/design/FSRS6_UPGRADE_DESIGN.md) | FSRS-4.5→FSRS-6 엔진 포팅 설계 — 21 파라미터·당일 복습 수식·곡선 지수 w20 (DOC-DSN-27) | 스케줄 엔진 수식 변경 판단 시 |
 | [EXAM_DUE_CLAMP_DESIGN.md](dev/design/EXAM_DUE_CLAMP_DESIGN.md) | 시험일 due 클램프 설계 — `due > examDate` ∧ `R_exam < 0.95` 조건부 당김, D-19와의 역할 분담 (DOC-DSN-28) | 시험일 최적화 스케줄 정책 판단 시 |
 | [KNOWLEDGE_TRACING_DESIGN.md](dev/design/KNOWLEDGE_TRACING_DESIGN.md) | 지식 추적 설계 — 단원 숙달도 추정: v1 베이지안 스무딩(D-21)·v2 BKT(D-22), FSRS와의 역할 분리 (DOC-DSN-29) | 숙달도 추정·진단 추정기 판단 시 |
+| [ADMIN_DESIGN.md](dev/design/ADMIN_DESIGN.md) | 관리자 콘솔 설계 — app_metadata 권한 모델·관리자 RLS·피드백 인박스·사용자 관리·운영 CLI, Phase 1(CLI)→2(인앱 #/admin) 점진 도입 (DOC-DSN-30, 설계안) | 운영 표면·사용자 관리 기능 판단 시 |
 | [UIUX_VERIFY_RUNBOOK.md](dev/runbooks/UIUX_VERIFY_RUNBOOK.md) | UI/UX 검증 런북 — TRACE 체계 단계별 확인 (SPEC 선행 → @spec 연결 → E2E 실측 → 배포·실기기 확인) | UI/UX 변경 검증·배포 절차 |
 | [UIUX_외주전달_패키지.md](dev/UIUX_외주전달_패키지.md) | 외주 인도용 추출본 — 위 계열 문서를 프로젝트 중립화해 단일 파일로 묶은 패키지 (수주사 요구사양·산출물 의무·검수 기준) | 외주 개발 발주 시 단독 인도 |
 | [DEV_ENVIRONMENT.md](dev/reference/DEV_ENVIRONMENT.md) | 개발환경 요구사양 — Node/Python/CLI 도구 버전, 최초 설정 절차, 검증·빌드·배포 명령 |
@@ -359,6 +360,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-27 | `docs/dev/design/FSRS6_UPGRADE_DESIGN.md` |
 | DOC-DSN-28 | `docs/dev/design/EXAM_DUE_CLAMP_DESIGN.md` |
 | DOC-DSN-29 | `docs/dev/design/KNOWLEDGE_TRACING_DESIGN.md` |
+| DOC-DSN-30 | `docs/dev/design/ADMIN_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |
