@@ -230,6 +230,19 @@ alter table client_errors enable row level security;
 create policy "public insert" on client_errors
   for insert to anon, authenticated with check (true);
 -- 조회 정책 없음 = 클라이언트 읽기 차단, 대시보드(service role)·report:errors(Secret 키 env)에서만 확인
+
+-- 과업 퍼널 텔레메트리 — src/usage-telemetry.js (집계: npm run report:funnel)
+-- session_id는 페이지 로드당 랜덤 UUID — start↔complete 쌍 묶기 전용, 사용자 식별 아님
+create table if not exists usage_events (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  session_id uuid not null,
+  event text not null check (char_length(event) between 1 and 60),
+  exam_id text, app_version text, url text, user_agent text, meta jsonb
+);
+alter table usage_events enable row level security;
+create policy "public insert" on usage_events
+  for insert to anon, authenticated with check (true);
 ```
 
 ### 3.1 스냅샷 vs 엔티티 테이블 — 선택: 스냅샷 우선

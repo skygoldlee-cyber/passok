@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 과업 완주율 측정 경로 — usage_events 퍼널 + report:funnel 집계 도구
+
+- `usage_events` 테이블 신설 (schema.sql §6 — 익명 insert 전용, select 정책 없음) — `session_id`는 페이지 로드당 랜덤 UUID로 start↔complete 쌍 묶기 전용, 기기·사용자 식별 아님
+- `src/usage-telemetry.js` 신설 — error-telemetry와 같은 전송 패턴(getSupabase·미설정 no-op·세션 상한 60건), `reportEvent(event, meta)` 단일 API
+- 계측 지점: 퀴즈 `_beginQuizRun`→`renderQuizResult` (진단평가 플래그 구분) + 일일 챌린지 `_startDailyChallengeImpl`→`finishDailyChallenge` — meta는 문항 수·점수 등 집계 수치만, 학습 내용 미포함
+- `tools/check/funnel_report.js` 신설 (`npm run report:funnel`) — 완주율을 두 방식으로 표시: 이벤트 건수 비 + **세션 쌍 비율**(start 있는 session_id 중 complete 도달 — 이탈 식별이 더 엄밀). 평균 점수·소요 시간 부가. `summarize()` 순수 함수
+- 단위 테스트: 페이로드·상한·실패 흡수(usage-telemetry.test.js) + 쌍 인식·이탈·점수·시간 집계(funnel-report.test.js)
+
 ## 2026-10-14 오류율 측정 경로 — 세션 핑 분모 + report:errors 집계 도구
 
 - `client_errors.kind`에 `'session'` 추가 (schema.sql + 기존 배포용 alter 문 주석) — 페이지 로드당 1건 세션 핑이 오류율(오류/세션)의 분모. `error-telemetry.js`는 상한·중복 카운터와 분리해 세션 핑 전송 (세션은 억제 대상이 아님)

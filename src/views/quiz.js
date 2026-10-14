@@ -14,6 +14,7 @@ import {
 } from '../weak-items.js';
 import { checkShortAnswer } from './trainer.js';
 import { trackAction } from '../usage-stats.js';
+import { reportEvent } from '../usage-telemetry.js';
 import { updateGlobalStats } from './dashboard.js';
 import { recordQuizJudgment } from '../spaced-repetition.js';
 import { shuffle } from '../utils.js';
@@ -109,6 +110,11 @@ export function _beginQuizRun() {
     state.quiz.currentIndex = 0;
     state.quiz.correctCount = 0;
     state.quiz.solvedList = [];
+
+    // 과업 퍼널 계측 — quiz_start ↔ renderQuizResult의 quiz_complete 쌍
+    void reportEvent('quiz_start', {
+        count: state.quiz.data.length, diagnostic: !!state.quiz.diagnostic,
+    });
 
     const emptyStateEl = document.getElementById('quiz-empty-state');
     const resultPanelEl = document.getElementById('quiz-result-panel');
@@ -413,6 +419,12 @@ function _citationForQuiz(quizId) {
 
 export function renderQuizResult() {
     const quizState = state.quiz;
+
+    // 과업 퍼널 계측 — 완주 이벤트 (정답률은 집계용 수치, 문항 내용 아님)
+    void reportEvent('quiz_complete', {
+        correct: quizState.correctCount, total: quizState.data.length,
+        diagnostic: !!quizState.diagnostic,
+    });
 
     // UI 전환
     const arenaPanelEl = document.getElementById('quiz-arena-panel');
