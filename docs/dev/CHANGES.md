@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 변이 점수 보강 — 55.04% → 85.36% (최종 실측)
+
+- **원인 1 (측정 결함)**: `commandRunner`가 `fsrs.test.js`를 실행하지 않아 spaced-repetition의 D-18/19/20 테스트가 변이 사냥에 미참여 → 15.04%로 과소 측정. fsrs.test.js + 신규 weak-items.test.js를 러너에 추가
+- **원인 2 (실결함)**: `_STANDARD_TAGS` 죽은 상수 제거(변이 9건 = 미사용 코드 신호), weak-items STUDY_DATA 인덱스 해석 경로 전용 테스트 9건 신규 — resolveWrongQuiz·resolveCard·인덱스 무효화·subjectForWeakItem 커버
+- **원인 3 (경계 미검증)**: scoreExam 합격 경계(60%/40% 등호)·validateQuestion combo 분기·FSRS 비정형 시험일·dday=0·미래 lastReview·due==exam 경계 테스트 추가
+- 최종: 765 mutants — killed 650·survived 112·timeout 3. 잔존 생존자는 등가 변이(`a||b`↔단일 항)·오류 메시지 문자열·catch 분기 위주 — 추가 투자 가치 낮다고 판단
+- §9 품질 ★변이 85.36%로 갱신 — 공백 상한 해제 + 실측 약점 해소
+
 ## 2026-10-14 변이 점수 첫 실측 — 55.04% (저득점 모듈 2개 노출)
 
 - `npm run mutate` 실행 — Stryker 스코프 4개 순수 모듈(questions·spaced-repetition·weak-items·statement-tracker), 774 mutants: killed 423·survived 348·timeout 3
