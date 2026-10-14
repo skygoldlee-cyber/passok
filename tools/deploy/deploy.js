@@ -7,18 +7,22 @@
  *
  * 순서:
  *   1) main 브랜치 + 작업 트리 clean + origin/main 동기화 검사
- *   2) sw.js CACHE_VERSION + 앱 버전/릴리스 노트 스탬프 — 작업 트리에만 적용
+ *   2) CI 게이트 — 배포 대상 커밋의 ci.yml run이 completed+success
+ *      (커밋 스코프로 조회해야 진행 중 run이 이전 커밋 녹색에 올라타지 않는다)
+ *   3) sw.js CACHE_VERSION + 앱 버전/릴리스 노트 스탬프 — 작업 트리에만 적용
  *      (커밋하지 않는다. vercel은 로컬 파일을 업로드하므로 프로덕션에는
  *      스탬프된 파일이 그대로 배포된다)
- *   3) vercel --prod --yes 실행
- *   4) 성공 시 deploy/<버전> 태그 생성·push 로 배포 이력 기록 → 스탬프 원복
- *   5) 프로덕션 스모크 — https://<projectName>.vercel.app 200 +
+ *   4) vercel --prod --yes 실행
+ *   5) 성공 시 deploy/<버전> 태그 생성·push 로 배포 이력 기록 → 스탬프 원복
+ *   6) 프로덕션 스모크 — https://<projectName>.vercel.app 200 +
  *      sw.js·version.js 스탬프 일치 (엣지 전파 대기 재시도 포함)
  *
  * 차단 조건:
  *   - 커밋되지 않은 변경이 있는 경우 (untracked 포함)
  *   - origin/main 에 없는 로컬 커밋이 있는 경우 (unpushed)
  *   - origin/main 보다 뒤처진 경우 (push 전 pull 필요)
+ *   - 대상 커밋의 ci.yml run이 없거나 진행 중이거나 실패인 경우
+ *     (SKIP_CI_GATE=1로 우회 가능 — gh 미설치 환경 등, 권장하지 않음)
  *   - 스탬프 태그 생성/push 실패
  *
  * 사용: npm run deploy
@@ -137,6 +141,37 @@ function main() {
     }
 
     console.log('✅ 배포 전 검사 통과 (main · clean · origin/main 동기화)');
+
+    // CI 게이트 — 레드 상태의 배포를 차단한다. `--branch main` 최신 run을 보는
+    // 방식은 진행 중 run을 건너뛰어 이전 커밋 녹색으로 통과되는 구멍이 있으므로,
+    // 반드시 배포 대상 커밋 스코프로 조회한다 (HEAD == origin/main은 위에서 보장됨).
+    // 57연속 레드가 푸시·배포를 통과한 사고(2026-10)의 재발 방지 장치.
+    if (process.env.SKIP_CI_GATE === '1') {
+        console.warn('⚠️  SKIP_CI_GATE=1 — CI 검증 없이 배포합니다 (권장하지 않음)');
+    } else {
+        const sha = git('rev-parse HEAD');
+        let run;
+        try {
+            const out = execSync(
+                `gh run list --workflow=ci.yml --commit ${sha} --limit 1 --json status,conclusion`,
+                { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+            run = JSON.parse(out)[0];
+        } catch (e) {
+            fail(`CI 상태를 조회할 수 없습니다 — gh 설치·인증(gh auth login) 확인 후 재시도하세요. ` +
+                `조회 불가 상태에서 배포하려면 SKIP_CI_GATE=1 (${e.message.split('\n')[0]})`);
+        }
+        const short = sha.slice(0, 8);
+        if (!run) {
+            fail(`커밋 ${short}에 대한 ci.yml 실행이 없습니다 — push 후 CI 시작 여부를 확인하세요.`);
+        }
+        if (run.status !== 'completed') {
+            fail(`커밋 ${short}의 CI가 ${run.status} 상태입니다 — 완료 후 배포하세요.`);
+        }
+        if (run.conclusion !== 'success') {
+            fail(`커밋 ${short}의 CI가 ${run.conclusion} 입니다 — 레드 상태에서는 배포할 수 없습니다.`);
+        }
+        console.log(`✅ CI 게이트 통과 (${short} — success)`);
+    }
 
     // 영향도 경고 — 직전 배포(deploy/* 태그, 구버전은 스탬프 커밋) 이후 변경 파일의
     // 영향 요구사항 표시. 차단은 아니며, 고영향 코어 파일 변경 시 스모크 확인을 권고한다.
