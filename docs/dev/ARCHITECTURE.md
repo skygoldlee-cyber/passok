@@ -524,12 +524,13 @@ passory/
     │   │   ├── STUDY_APP_DESIGN_GUIDE.md  #  학습 앱 디자인 가이드
     │   │   ├── LEARNING_PREMIUM_PLAN.md   #  Learning Pro 구현 과제
     │   │   └── SUBSCRIPTION_ROADMAP.md    #  월 구독 전환 로드맵
-    │   └── reference/          #     명세·로직·참조 문서 (플랫폼)
-    │       ├── TESTING.md                 #  테스트 가이드
-    │       ├── FLASHCARD_LOGIC.md         #  플래시카드·FSRS 로직
-    │       ├── MD_TO_HTML_LOGIC.md        #  MD→HTML 변환 로직
-    │       ├── COMBO_STUDY_STRATEGY.md    #  복수정답형 학습전략
-    │       └── ENGINEERING_PRACTICES.md   #  소프트웨어 공학 요소 정리
+    │   ├── reference/          #     명세·로직·참조 문서 (플랫폼)
+    │   │   ├── TESTING.md                 #  테스트 가이드
+    │   │   ├── FLASHCARD_LOGIC.md         #  플래시카드·FSRS 로직
+    │   │   ├── MD_TO_HTML_LOGIC.md        #  MD→HTML 변환 로직
+    │   │   ├── COMBO_STUDY_STRATEGY.md    #  복수정답형 학습전략
+    │   │   └── ENGINEERING_PRACTICES.md   #  소프트웨어 공학 요소 정리
+    │   └── evals/               #     프로젝트 평가 보고서 (PROJECT_METRICS §9 스냅샷 이력)
     └── exams/cosmetic/         #   시험 종속 문서 (맞춤형화장품 조제관리사)
         ├── design/             #     Formula OS 계열 설계 — WORKFLOW·PRODUCT_DB/VISION·AUDIT_REPORT·PRACTICAL_TOOLS
         ├── reference/          #     교재 종속 참조 — NUMBERING_SYSTEM·TEXTBOOK_REFERENCE_MAPPING
