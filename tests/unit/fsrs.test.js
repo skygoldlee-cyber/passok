@@ -8,7 +8,7 @@ import {
     Rating, initDifficulty, initStability, retrievability, nextInterval,
     nextDifficulty, recallStability, forgetStability, sameDayStability, fsrsReview, migrateSm2Record
 } from '../../src/fsrs.js';
-import { updateCardSchedule, getDueCards, getReviewLog, getExamRiskCards } from '../../src/spaced-repetition.js';
+import { updateCardSchedule, getDueCards, getDueCount, getReviewLog, getExamRiskCards } from '../../src/spaced-repetition.js';
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
 import { todayKey } from '../../src/utils.js';
 
@@ -238,6 +238,46 @@ test('D-19: dday 미설정·음수·비수치면 빈 배열', () => {
     assert.deepEqual(getExamRiskCards(null), []);
     assert.deepEqual(getExamRiskCards(-3), []);
     assert.deepEqual(getExamRiskCards(NaN), []);
+    assert.deepEqual(getExamRiskCards(undefined), []);
+});
+
+test('D-19: dday=0은 유효 — 시험이 오늘인 경우도 위험 카드를 선별한다', () => {
+    const srKey = 'simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION;
+    mockStorage._store[srKey] = JSON.stringify({
+        risky: { v: 2, d: 5, s: 2, reps: 3, lapses: 0, lastInterval: 10, due: dstr(3), lastReview: dstr(-10) }
+    });
+    // 변이 가드: `dday < 0` → `dday <= 0`이면 이 경로가 빈 배열을 반환
+    assert.equal(getExamRiskCards(0).length, 1);
+});
+
+test('D-19: 데이터가 심어둔 상태에서 음수 dday는 여전히 빈 배열이다', () => {
+    const srKey = 'simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION;
+    mockStorage._store[srKey] = JSON.stringify({
+        risky: { v: 2, d: 5, s: 2, reps: 3, lapses: 0, lastInterval: 10, due: dstr(3), lastReview: dstr(-10) }
+    });
+    // 빈 스케줄이면 `dday < 0` 가드 제거 변이가 구별 불가 — 데이터 필요
+    assert.deepEqual(getExamRiskCards(-3), []);
+});
+
+test('D-19: due·lastReview 필드가 없는 레코드는 건너뛴다', () => {
+    const srKey = 'simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION;
+    mockStorage._store[srKey] = JSON.stringify({
+        nodue:  { v: 2, d: 5, s: 2, reps: 3, lapses: 0, lastInterval: 10, lastReview: dstr(-10) },
+        nolast: { v: 2, d: 5, s: 2, reps: 3, lapses: 0, lastInterval: 10, due: dstr(20) }
+    });
+    assert.deepEqual(getExamRiskCards(10), []);
+});
+
+test('D-19: 미래 lastReview는 경과일 0으로 클램프된다 (음수 경과 방지)', () => {
+    const srKey = 'simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION;
+    mockStorage._store[srKey] = JSON.stringify({
+        fut: { v: 2, d: 5, s: 2, reps: 3, lapses: 0, lastInterval: 5, due: dstr(20), lastReview: dstr(2) }
+    });
+    const risk = getExamRiskCards(10);
+    assert.equal(risk.length, 1);
+    // elapsedAtExam = 10 + max(0, 음수) = 10 — Math.min 변이면 더 작은 R
+    const expected = retrievability(10, 2);
+    assert.ok(Math.abs(risk[0].rExam - expected) < 1e-9, `rExam=${risk[0].rExam} vs ${expected}`);
 });
 
 test('D-19: due>examDate ∧ R_exam<0.85 인 카드만 선별 — due 큐·예정 복습 제외', () => {
@@ -329,6 +369,59 @@ test('D-20: 시험 전 due인 카드·시험일 미설정·과거 시험일은 �
     seedCard('pastexam', { v: 2, d: 5, s: 15, reps: 3, lapses: 0, lastInterval: 15, due: dstr(14), lastReview: dstr(-1) });
     const past = updateCardSchedule('pastexam', true);
     assert.ok(past.due > dstr(10), '지난 시험일에는 비활성');
+});
+
+test('D-20: 비정형 시험일 문자열은 미설정과 동일하게 무시된다', () => {
+    const exKey = 'simexam:' + STORAGE_KEYS.EXAM_DATE;
+    const validDue = (d) => /^\d{4}-\d{2}-\d{2}$/.test(d);
+    for (const bad of ['2026/03/01', '2026-3-1', 'not-a-date', '1invalid', '']) {
+        mockStorage._store[exKey] = bad;
+        // '1invalid'처럼 lexically due보다 작은 문자열이 시험일로 오인되면
+        // due>examStr 조건이 발화해 잘못된 NaN 날짜로 클램프된다 — 정규식 게이트 검증.
+        seedCard('b', { v: 2, d: 5, s: 15, reps: 3, lapses: 0, lastInterval: 15, due: dstr(60), lastReview: dstr(-1) });
+        const rec = updateCardSchedule('b', true);
+        assert.ok(validDue(rec.due), `비정형 "${bad}"인데 클램프 적용됨: due=${rec.due}`);
+        assert.ok(rec.due >= dstr(1), `due가 미래로 정상 산출되어야 함: ${rec.due}`);
+    }
+    // 비문자열 저장값도 무시
+    mockStorage._store[exKey] = 20260301;
+    seedCard('b', { v: 2, d: 5, s: 15, reps: 3, lapses: 0, lastInterval: 15, due: dstr(60), lastReview: dstr(-1) });
+    assert.ok(validDue(updateCardSchedule('b', true).due), '비문자열 exam_date에도 클램프 없어야 함');
+});
+
+test('F-09: 스케줄 저장소 JSON 손상 시 빈 상태로 복구된다', () => {
+    const srKey = 'simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION;
+    mockStorage._store[srKey] = '{broken json';
+    assert.deepEqual(getDueCards(), []);
+    assert.equal(getDueCount(), 0);
+    // 손상 상태에서도 갱신은 정상 기록된다
+    const rec = updateCardSchedule('c1', true);
+    assert.equal(rec.v, 2);
+});
+
+test('F-09: getDueCount는 getDueCards 길이와 일치한다', () => {
+    seedCard('due1', { v: 2, d: 5, s: 2, reps: 1, lapses: 0, lastInterval: 1, due: dstr(0), lastReview: dstr(-1) });
+    seedCard('due2', { v: 2, d: 5, s: 2, reps: 1, lapses: 0, lastInterval: 1, due: dstr(-1), lastReview: dstr(-2) });
+    seedCard('future', { v: 2, d: 5, s: 2, reps: 1, lapses: 0, lastInterval: 1, due: dstr(5), lastReview: dstr(-1) });
+    assert.equal(getDueCount(), 2);
+});
+
+test('D-20: 시험일이 오늘이면 클램프 비활성 (examStr > todayStr 경계)', () => {
+    setExam(0); // 시험 당일 — examStr == todayStr → 클램프 조건 부발화
+    seedCard('edge', { v: 2, d: 5, s: 15, reps: 3, lapses: 0, lastInterval: 15, due: dstr(14), lastReview: dstr(-1) });
+    const rec = updateCardSchedule('edge', true);
+    assert.ok(rec.due >= dstr(1), `당일 시험에 과거로 클램프되면 안 됨: due=${rec.due}`);
+});
+
+test('D-20: due==exam 경계는 사각지대가 아니므로 클램프하지 않는다', () => {
+    setExam(10);
+    // 성숙 카드 — 간격이 커서 산출 due가 exam보다 뒤. due==exam 정확 경계는
+    // updateCardSchedule 경로로 만들기 어려우므로 getExamRiskCards 경계로 검증:
+    const srKey = 'simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION;
+    mockStorage._store[srKey] = JSON.stringify({
+        onexam: { v: 2, d: 5, s: 2, reps: 3, lapses: 0, lastInterval: 5, due: dstr(10), lastReview: dstr(-10) }
+    });
+    assert.deepEqual(getExamRiskCards(10), [], 'due==시험일이면 위험 아님 (변이 due>=exam 가드)');
 });
 
 test('D-20: 클램프된 카드는 D-19 위험 집합에서 제외된다 (due≤exam)', () => {

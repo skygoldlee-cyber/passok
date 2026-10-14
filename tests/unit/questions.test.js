@@ -142,6 +142,48 @@ test('single 채점: correct 옵션 id 비교', () => {
 
 // ── scoreExam ───────────────────────────────────────────────
 
+test('scoreExam: 합격 경계 — 총점 정확히 60%·과목 정확히 40%는 합격', () => {
+  // 정확한 60%/40% 경계 구성 (`>=` ↔ `>` 경계 변이 가드)
+  const exact60 = scoreExam(
+    [
+      { id: 'p', subject: 1, type: 'short', points: 60, accept: ['x'] },
+      { id: 'q', subject: 1, type: 'short', points: 40, accept: ['y'] },
+    ],
+    { p: 'x', q: '오답' }
+  );
+  assert.equal(exact60.totalPct, 0.6);
+  assert.equal(exact60.passed, true, '총점 정확히 60%는 합격');
+
+  const below60 = scoreExam(
+    [
+      { id: 'p', subject: 1, type: 'short', points: 59, accept: ['x'] },
+      { id: 'q', subject: 1, type: 'short', points: 41, accept: ['y'] },
+    ],
+    { p: 'x', q: '오답' }
+  );
+  assert.equal(below60.passed, false, '59%는 불합격');
+
+  // 과목 정확히 40% — 합격 (PASS_SUBJECT 경계)
+  const exactSubj = scoreExam(
+    [
+      { id: 'p', subject: 1, type: 'short', points: 40, accept: ['x'] },
+      { id: 'q', subject: 1, type: 'short', points: 60, accept: ['y'] },
+    ],
+    { p: 'x', q: '오답' }
+  );
+  assert.equal(exactSubj.bySubject[1].pct, 0.4);
+  assert.equal(exactSubj.bySubject[1].pass, true, '과목 정확히 40%는 통과');
+});
+
+test('scoreExam: 응답 없는 문항은 0점 — max 0 문항은 pct 0', () => {
+  const res = scoreExam(
+    [{ id: 'z', subject: 1, type: 'short', points: 0, accept: ['x'] }],
+    {}
+  );
+  assert.equal(res.bySubject[1].pct, 0);           // max=0 → 0 (NaN 방지 가드)
+  assert.equal(res.passed, false);
+});
+
 test('scoreExam: 과목별 집계 + 총점 60%/과목 40% 판정', () => {
   const qs = [
     { id: 'a', subject: 1, type: 'short', points: 100, accept: ['x'] },
@@ -180,6 +222,77 @@ test('generateComboOptions: 정답이 전체집합이면 banFull 없이 정상 �
 });
 
 // ── perStatement text/conceptId ──────────────────────────────
+
+test('gradeAnswer: correctAnswer 폴백 — answer 없으면 빈 문자열, short는 accept[0]', () => {
+  // `q.answer || ''` / `(q.accept||[])[0] || ''` 폴백 변이 가드
+  const single = gradeAnswer({ id: 's', type: 'single', points: 5, options: [{ id: '1' }, { id: '2' }] }, '1');
+  assert.equal(single.correctAnswer, '', 'answer 필드 없으면 빈 문자열');
+
+  const short = gradeAnswer({ id: 't', type: 'short', points: 5, accept: ['포름알데히드', 'formalin'] }, '포름알데히드');
+  assert.equal(short.correctAnswer, '포름알데히드', '정답 표시는 accept 첫 항목');
+  assert.equal(short.correct, true);
+
+  const shortNoAccept = gradeAnswer({ id: 'u', type: 'short', points: 5 }, 'anything');
+  assert.equal(shortNoAccept.correctAnswer, '');
+  assert.equal(shortNoAccept.correct, false);
+});
+
+test('deriveComboAnswer: 정답 진술의 부분집합 옵션은 정답이 아니다', () => {
+  // eq()의 `arr.length === truthSet.size` 변이 가드 — 크기 검사가 빠지면
+  // 부분집합 옵션이 정답으로 오인됨
+  const q = {
+    statements: [
+      { id: 'ㄱ', truth: true }, { id: 'ㄴ', truth: true }, { id: 'ㄷ', truth: false },
+    ],
+    options: [
+      { id: '1', members: ['ㄱ'] },          // 부분집합 — 정답 아님
+      { id: '2', members: ['ㄱ', 'ㄴ'] },    // 정답
+      { id: '3', members: ['ㄱ', 'ㄴ', 'ㄷ'] }, // 상위집합 — 정답 아님
+    ],
+  };
+  assert.equal(deriveComboAnswer(q), '2');
+  // 정답 집합과 다른 옵션만 있으면 null
+  const none = { statements: q.statements, options: [q.options[0], q.options[2]] };
+  assert.equal(deriveComboAnswer(none), null);
+  // every→some 변이 가드: 크기는 맞지만 거짓 진술을 섞은 옵션은 정답이 아니다
+  const mixed = {
+    statements: q.statements,
+    options: [{ id: '1', members: ['ㄱ', 'ㄷ'] }, q.options[1]],
+  };
+  assert.equal(deriveComboAnswer(mixed), '2', 'ㄷ(거짓) 포함 옵션이 정답으로 오인되면 안 됨');
+});
+
+test('validateQuestion: combo 경계 — 진술 2개는 유효, citation 공백·진술 중복·옵션 역참조 검출', () => {
+  const base = {
+    id: 'c1', subject: 1, type: 'combo', points: 5, citation: 'p.1',
+    statements: [
+      { id: 'ㄱ', truth: true }, { id: 'ㄴ', truth: false },
+    ],
+    options: [{ id: '1', members: ['ㄱ'] }, { id: '2', members: ['ㄴ'] }],
+  };
+  assert.deepEqual(validateQuestion(base), [], '진술 2개는 유효 (statements.length < 2 경계)');
+
+  // citation 공백만 있는 경우 — trim 후 빈 문자열 → 오류
+  assert.ok(validateQuestion({ ...base, citation: '   ' }).some(e => e.includes('citation')));
+  // 진술 id 중복
+  const dup = { ...base, statements: [base.statements[0], { ...base.statements[0], truth: false }] };
+  assert.ok(validateQuestion(dup).some(e => e.includes('중복')));
+  // truth 키 자체가 없는 진술
+  const noTruth = { ...base, statements: [{ id: 'ㄱ' }, { id: 'ㄴ', truth: true }] };
+  assert.ok(validateQuestion(noTruth).some(e => e.includes('truth 누락')));
+  // 옵션이 존재하지 않는 진술 id를 참조
+  const badRef = { ...base, options: [{ id: '1', members: ['ㄱ'] }, { id: '2', members: ['ㅂ'] }] };
+  assert.ok(validateQuestion(badRef).some(e => e.includes('없는 진술')));
+});
+
+test('validateQuestion: single 정답 0개·2개 모두 검출, answer↔correct 불일치', () => {
+  const q = { id: 's1', subject: 1, type: 'single', points: 5, options: [{ id: '1' }, { id: '2' }] };
+  assert.ok(validateQuestion(q).some(e => e.includes('single 정답 개수 0')));
+  const two = { ...q, options: [{ id: '1', correct: true }, { id: '2', correct: true }] };
+  assert.ok(validateQuestion(two).some(e => e.includes('single 정답 개수 2')));
+  const mismatch = { ...q, answer: '2', options: [{ id: '1', correct: true }, { id: '2' }] };
+  assert.ok(validateQuestion(mismatch).some(e => e.includes('불일치')));
+});
 
 test('gradeAnswer: perStatement에 진술 text·conceptId 포함', () => {
     const q = SAMPLE_QUESTIONS.find(x => x.type === 'combo');
