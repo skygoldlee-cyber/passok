@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 문서 수치 게이트 + 커버리지 래칫 자동화 + HTML 싱크 센서스
+
+- `check:teststats` 신설(docs 단계) — README·TESTING의 테스트 수치 인용이 `test_stats.json` 실측 SSOT에서 벗어나면 실패 (정적 카운트 드리프트 ±12%·인용 밴드 0.80~1.05×). `stats:stamp`가 unit·vitest list·playwright --list 실측 후 SSOT+문서 인용을 `N+` 바닥 표기로 재기록 — 스테일 표기(687/388/16) 정정
+- `ratchet:coverage` 신설 — `coverage_merge.js --ratchet`이 실측−0.8%p로 MERGED_THRESHOLDS를 인플레이스 상향 (단조 증가만). `--check` 통과 시 상향 가능 지표 힌트 출력
+- `check_html_escape.js --census [--vars]` — innerHTML 싱크 인벤토리: tagged(html``)·template·literal·variable 4분류, 변수 경유 대입(미추적) 목록 출력. 로드맵 Phase A
+
 ## 2026-10-14 D-19 큐 E2E + 시드 키 스코프 게이트 + 최종 인출 문구 정정
 
 - `tests/e2e/exam-risk.spec.js` 신설 — 시험일 기억률 미달 카드만 "오늘 할 일" 큐에 `시험 전 최종 인출 N장` 표시(미설정 시 미표시) 실브라우저 검증 (D-19·D-20)

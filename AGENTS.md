@@ -109,6 +109,9 @@ npm.cmd run check:mobilesafe            # 모바일 잘림 규약 — role="dial
 npm.cmd run check:escape                # HTML 이스케이프 싱크 규약 — innerHTML/insertAdjacentHTML 직접 대입 템플릿의 미이스케이프 보간 탐지, 기준선 단조 감소 (check:ci·CI 게이트, ROAD-Q5 — 신규 코드는 sanitize.js의 html`` 태그드 템플릿 권장)
 npm.cmd run check:uistyle               # UI 스타일 규약 — 마크업 인라인 style 속성 전면 금지 + JS .style.display 조작·인라인 on* 핸들러·네이티브 alert/confirm/prompt + JS 템플릿 정적 style= 기준선 래칫(display:none 즉시 금지·동적 --var:${x}만 허용) (check:ci·CI 게이트, CODE_CONVENTIONS §4, 명시 면제: 라인에 style-ok 토큰)
 npm.cmd run check:seedkeys              # 테스트 시드 키 스코프 정합 — GLOBAL_KEYS 전환 키의 `examId:` 스코프 시드 차단 (시드 무력화 드리프트, check:docs 단계, 명시 면제: 라인에 seedkey-ok 토큰)
+npm.cmd run check:teststats             # 문서 테스트 수치 ↔ test_stats.json 실측 정합 — README·TESTING의 고정 수치 스테일 차단 (check:docs 단계 — 정적 카운트 드리프트 ±12%·인용 밴드 0.80~1.05×, 갱신은 stats:stamp)
+npm.cmd run stats:stamp                 # 테스트 수치 재스탬프 — unit 실행·vitest list·playwright --list 실측 → test_stats.json + 문서 인용을 `N+` 바닥 표기로 갱신
+npm.cmd run ratchet:coverage            # 병합 커버리지 임계값 래칫 상향 — 실측−0.8%p로 MERGED_THRESHOLDS 인플레이스 갱신 (단조 증가, coverage:all 실행 후 사용)
 npm.cmd run scaffold:exam -- <id> --name "시험명"  # 새 시험 스캐폴딩 — exams.json 등록 + manifest/references 골격 + 샘플 교재·문제은행·docs/ 생성 (--dry-run=미리보기, <id> --remove=제거)
 npm.cmd run lint                        # ESLint — 에러 0 필수 (--cache 웜 캐시, 기존 경고는 점진 정리 대상)
 npm.cmd run check:types                 # tsc --noEmit (jsconfig checkJs — JSDoc 타입 진단)
