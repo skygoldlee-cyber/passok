@@ -1,12 +1,13 @@
 // views/reader-progress.js — 리더 세션 상태 + 읽기 위치·진척 영속화
-// @spec TR-12,SC-15
+// @spec TR-12,SC-15,TR-28
 // textbook-reader.js에서 분리. textbookReaderState는 리더의 세션 상태
 // (선택 과목·챕터·이야기형 모드)로, 진척 추적이 같은 상태를 참조하므로
 // 이 모듈에 함께 둔다 — reader-toolbar가 진척만 필요로 할 때 뷰 모듈을
 // 역참조하지 않도록 하는 의도적 배치 (순환 import 해소).
 import { safeGetItem, safeSetItem } from '../state.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
-import { recordStudyActivity } from '../study-tracker.js';
+import { getDDay, getTextbookReadProgress, recordStudyActivity } from '../study-tracker.js';
+import { showAlert } from '../ui-utils.js';
 
 export const textbookReaderState = {
     selectedSubject: '',
@@ -61,6 +62,22 @@ function _markReadChunk(container, subject) {
     // frac 필드는 커버리지 비율 — 기존 스키마(getTextbookReadProgress가 v.frac 소비)와 호환 유지
     map[subject] = { chunks, frac: Math.min(1, chunks.length / READ_CHUNKS), ts: Date.now() };
     safeSetItem(STORAGE_KEYS.READER_PROGRESS, JSON.stringify(map));
+    _checkReadThroughDone();
+}
+
+// TR-28 일독 완료 통지 — 전 과목 청크 커버리지가 100%에 도달하는 순간 1회 모달로 통지.
+// 완료 판정은 SC-15 집계(getTextbookReadProgress.overall===1)와 동일 기준이므로
+// 통독 차감이 소멸하는 시점과 정확히 일치한다. read_through_done 플래그로 재통지 억제 —
+// 플래그는 BACKUP_KEYS·RESET_KEYS에 등록돼 백업 복원·진도 초기화와 수명을 같이 한다.
+function _checkReadThroughDone() {
+    if (safeGetItem(STORAGE_KEYS.READ_THROUGH_DONE)) return;
+    const prog = getTextbookReadProgress();
+    if (!prog.started || prog.overall < 1) return;
+    safeSetItem(STORAGE_KEYS.READ_THROUGH_DONE, String(Date.now()));
+    const msg = getDDay() !== null
+        ? '교재 1회독을 완료했습니다. 통독 예약이 해제되어 남은 기간이 카드·퀴즈 학습일로 전환됩니다.'
+        : '교재 1회독을 완료했습니다. 이제 카드·퀴즈 학습을 본격화하세요.';
+    try { showAlert(msg, '교재 일독 완료'); } catch (e) { /* noop */ }
 }
 
 // SC-15 읽기 시간 기록 — 하트비트 기반 체류 누적. 스크롤 없이 정독하는 시간도 잡히고,
