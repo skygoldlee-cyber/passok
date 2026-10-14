@@ -109,7 +109,7 @@
 | 3.23 | **사용자 의견** | 피드백 폼·건의 수신 | FB-01~FB-08 (8) |
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
-| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI | AD-01~AD-06 (6) |
+| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드 | AD-01~AD-07 (7) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -582,6 +582,7 @@
 | AD-04 | 사용자 관리 — `profiles.email` 백필(트리거 갱신) + 사용자 목록·상세(sync 메타만, payload 비표시 기본) + `admin_set_plan` RPC(security definer·is_admin 가드) + `admin_audit` 감사 로그 | 미구현 (로드맵) |
 | AD-05 | `#/admin` 라우트 — `views/admin.js` lazy import + SW 프리캐시 제외(일반 사용자 번들 무영향) + 비관리자 클레임 시 차단 카드, Supabase 미설정 환경은 사용 불가 안내 | 미구현 (로드맵) |
 | AD-06 | 운영 CLI (Phase 1) — `report:feedback`·`report:user`(sync 메타만)·`admin:grant-pro`(dry-run + `--apply`) — service role 로컬 전용, 스키마 변경 없음 | ✅ |
+| AD-07 | 로컬 HTML 대시보드 (Phase 1.5) — `report:dashboard`가 오류·퍼널·피드백 집계를 단일 자급적 HTML로 덤프 (로컬 파일이라 인증·RLS 불필요, 사용자 텍스트는 이스케이프 필수, 산출물 gitignore) | ✅ |
 
 ---
 
