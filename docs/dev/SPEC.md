@@ -108,6 +108,8 @@
 | 3.22 | **시험 선택·전환** | 멀티시험 팩 선택·전환·레지스트리 기반 | ES-01~ES-05 (5) |
 | 3.23 | **사용자 의견** | 피드백 폼·건의 수신 | FB-01~FB-08 (8) |
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
+| 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
+| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI | AD-01~AD-06 (6) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -567,6 +569,19 @@
 | SEM-06 | 혼동쌍 제안 — cid 상이 의미 근접 쌍 + 사용자 교차 오판률 재순위화 (빌드 산출 후보 1만+쌍 중 실사용 필터링은 별도 설계 필요) | 미구현 (로드맵) |
 | SEM-07 | 유사 문항 추천 — 오답 문항의 의미 유사 문항 제시 (neighbors.js의 q: 키 adj는 이미 산출, UI 소비만 남음) | 미구현 (로드맵) |
 | SEM-08 | 자유 의미 검색 — 교재·진술 대상 시맨틱 쿼리 확장. 쿼리 임베딩 경로(앵커 프록시/온디바이스 ONNX/BYOK/서버) 미결정 — 설계 §8 v2 보류 | 미구현 (로드맵) |
+
+### 3.26 관리자 (Admin)
+
+> 상세 설계: [`design/ADMIN_DESIGN.md`](design/ADMIN_DESIGN.md) (DOC-DSN-30). 사용자 증가 대비 운영 표면 — 권한 모델·피드백 인박스·오류 대시보드·사용자 관리를 RLS 경계 위에 얹는다. Phase 1(CLI) → Phase 2(인앱 `#/admin` 뷰) 순 도입.
+
+| ID | 요구사양 | 구현 상태 |
+|----|---------|-----------|
+| AD-01 | 관리자 권한 모델 — `auth.users.app_metadata.role='admin'`(서버 소유 클레임, user_metadata 혼용 금지) + `public.is_admin()` SQL 헬퍼 + 관리자 select 정책 스위트(feedback·client_errors·usage_events·profiles·sync_snapshots). 기존 insert-only 정책은 유지해 익명 제출 경로 비차단 | 미구현 (로드맵) |
+| AD-02 | 피드백 인박스 뷰 — kind·날짜 필터 목록 → 상세, `meta.session_id`로 `client_errors` 오류 이력 join 링크 | 미구현 (로드맵) |
+| AD-03 | 오류 대시보드 뷰 — `client_errors`/`usage_events` 집계 시각화 (일별 오류율·상위 메시지, `report:errors` 질의의 UI화) | 미구현 (로드맵) |
+| AD-04 | 사용자 관리 — `profiles.email` 백필(트리거 갱신) + 사용자 목록·상세(sync 메타만, payload 비표시 기본) + `admin_set_plan` RPC(security definer·is_admin 가드) + `admin_audit` 감사 로그 | 미구현 (로드맵) |
+| AD-05 | `#/admin` 라우트 — `views/admin.js` lazy import + SW 프리캐시 제외(일반 사용자 번들 무영향) + 비관리자 클레임 시 차단 카드, Supabase 미설정 환경은 사용 불가 안내 | 미구현 (로드맵) |
+| AD-06 | 운영 CLI (Phase 1) — `report:feedback`·`report:user`(sync 메타만)·`admin:grant-pro`(dry-run + `--apply`) — service role 로컬 전용, 스키마 변경 없음 | ✅ |
 
 ---
 
