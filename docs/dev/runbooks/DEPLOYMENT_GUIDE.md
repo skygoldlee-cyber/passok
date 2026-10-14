@@ -283,6 +283,55 @@ PR 경유 강제). `ci.yml`은 이미 `pull_request: [main]` 트리거가 있어
 
 ---
 
+## 5-3. 롤백 절차 (프로덕션을 이전 버전으로 복귀)
+
+> 목적: 배포 후 결함 발견 시 프로덕션을 마지막으로 알려진 좋은 버전으로 되돌린다.
+> `deploy/*` 태그가 "어느 커밋이 프로덕션에 나갔는가"의 SSOT다.
+> **2026-10-14 리허설 실증**: 태그 체크아웃 → preview 배포 → 스모크 전 과정 검증 완료 (아래 B 경로).
+
+### 경로 A — 대시보드 Promote (권장·최속)
+
+재빌드 없이 프로덕션 alias만 전환 — 수 초면 복귀. 로컬 작업 불필요.
+
+1. Vercel 대시보드 → 프로젝트 → **Deployments**
+2. 복귀 대상의 이전 성공 배포(✓ Ready) 선택 → `⋯` → **Promote to Production**
+3. 스모크 확인: `https://<project>.vercel.app/` 200 + `sw.js`의 `CACHE_VERSION`이 해당 배포 버전과 일치
+
+### 경로 B — 태그 시점 재배포 (대시보드 사용 불가 시)
+
+```powershell
+# 1) 롤백 대상 확인 — 최신순 나열, 직전 배포 태그 선택
+git for-each-ref --sort=-creatordate --format="%(refname:short) -> %(objectname:short)" refs/tags/deploy
+
+# 2) 태그 시점을 별도 worktree로 체크아웃 (main 작업 트리 오염 방지)
+git worktree add ../passory-rollback <태그명>
+cp -r .vercel ../passory-rollback/    # .vercel은 gitignore — 프로젝트 링크 수동 복사
+
+# 3) preview로 먼저 검증 (프로덕션 불개입)
+cd ../passory-rollback
+vercel deploy --yes
+vercel curl "<출력된 preview URL>/sw.js"   # 미리보기는 SSO 보호 — curl 대신 vercel curl 사용
+
+# 4) 확인되면 프로덕션으로
+vercel deploy --prod --yes
+
+# 5) 정리
+cd ../passory && git worktree remove ../passory-rollback
+```
+
+> ⚠️ **단일 배포 경로(`npm run deploy`)의 명시적 예외** — 롤백은 `deploy.js`를 쓸 수 없다:
+> 가드가 `main` 브랜치를 강제하고 HEAD 기준으로 스탬프·CI를 검사하므로 태그 체크아웃에서는
+> 실행되지 않는다. 경로 B의 `vercel --prod` 직접 실행은 이 예외 상황에서만 허용된다.
+> 정상 배포는 반드시 `npm run deploy`를 쓴다.
+
+### 복귀 후
+
+- 사고 원인은 별도 브랜치에서 수정 → 정상 배포 경로(`npm run deploy`)로 재배포
+- `deploy/*` 태그는 복귀 배포가 새로 찍으므로 이력에 롤백이 남는다
+- 증상 행 기록: [WHEN_THINGS_BREAK.md](WHEN_THINGS_BREAK.md) §6 규약
+
+---
+
 ## 4. vercel.json 헤더 및 캐시 정책
 
 [`vercel.json`](../../../vercel.json)은 CSP 헤더, 보안 헤더, 캐시 정책을 정의합니다.
