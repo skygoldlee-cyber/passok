@@ -112,6 +112,16 @@ describe('문제집 뷰어 — 열기·TOC·인쇄·캐시', () => {
         expect(el('exam-article').querySelector('span[data-md-line]')).toBeNull();
     });
 
+    it('본문 이미지 — .reader-img 축소 규칙 주입 (큰 SVG·삽화 잘림 방지) (H)', async () => {
+        await ExamViewer.openExam(EXAM_PATH);
+        await flushAsync(30);
+
+        const css = document.getElementById('exam-overlay-style').textContent;
+        expect(css).toContain('#exam-article .reader-img');
+        expect(css).toContain('max-width:100%');
+        expect(css).toContain('height:auto');
+    });
+
     it('닫기 → 오버레이 닫힘·body 클래스 해제', async () => {
         await ExamViewer.openExam(EXAM_PATH);
         await flushAsync(30);
