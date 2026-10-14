@@ -243,13 +243,17 @@ function scaffold(id, opts) {
     console.log('');
     console.log('다음 단계:');
     console.log('  1. 샘플 MD를 실제 교재·문제은행으로 교체하고 manifest.json 수정');
+    console.log('     - title의 "N제"·desc 수치는 ###Q 실측과 정합 (check:manifest)');
+    console.log('     - 미완성 시험은 exams.json 엔트리에 comingSoon: true 추가');
     console.log('  2. (법령 시험이면) content/lawdb.json에 법령 추가 + references.json.lawRefs 나열 → npm.cmd run build:pdf-registry');
     console.log('  3. exams.json의 features 플래그 설정 — 활성 시 필수 문서 (docs/):');
     console.log('       studyGuide→학습안내서.md · appendixDocs→두음법_암기_총정리.md');
     console.log('       userManual→user_manual.md · formula→formula_manual.md');
-    console.log('     (check:docbundles가 플래그↔문서 불변식을 강제)');
-    console.log('  4. npm.cmd run check:content -- --build  (빌드 + 통합 검증)');
-    console.log('  5. npm.cmd run check:domainmap — content/data/exams/<id>는 자동으로 domain 분류됨');
+    console.log('     (check:docbundles가 플래그↔문서 불변식을 강제 — docs/*.md는 문서 ID+범위 헤더 필수)');
+    console.log('  4. npm.cmd run build:data ×2회 → node tools/build/build_doc_bundles.js');
+    console.log('     (sw.js는 기본 시험 패스에서만 갱신되어 신규 시험 registry는 2차 빌드에서 반영)');
+    console.log('  5. 생성물 전부 커밋 후 검증 — check:datafresh는 생성물 경로가 미커밋이면 즉시 중단');
+    console.log('       npm.cmd run check:content → npm.cmd run check:all');
     console.log(`  6. 되돌리려면: node tools/build/scaffold_exam.js ${id} --remove`);
 }
 
@@ -270,9 +274,24 @@ function remove(id) {
             console.log(`  - ${path.relative(ROOT, d)}/`);
         }
     }
+    // 빌드 산출 잔여물 — 미제거 시 check:orphans·domainmap이 잔재를 잡음
+    for (const f of [`manifest.${id}.webmanifest`, path.join('tools', 'build', `.last-stats.${id}.json`)]) {
+        const p = path.join(ROOT, f);
+        if (fs.existsSync(p)) {
+            fs.rmSync(p, { force: true });
+            console.log(`  - ${f}`);
+        }
+    }
+    // 사용자가 후속 추가한 도메인 자산은 자동 삭제하지 않고 경고만
+    const domainDirs = [
+        path.join('src', 'exams', id), path.join('html', 'exams', id), path.join('css', 'exams', id),
+        path.join('tests', 'unit', 'exams', id), path.join('tests', 'dom', 'exams', id), path.join('docs', 'exams', id),
+    ].filter(d => fs.existsSync(path.join(ROOT, d)));
+    if (domainDirs.length) console.log(`  ⚠ 도메인 자산 잔존 — 수동 확인 필요: ${domainDirs.join(', ')}`);
     doc.exams.splice(idx, 1);
     writeJson(EXAMS_JSON, doc);
     console.log(`✓ 시험 제거: ${id}`);
+    console.log('  → sw.js·data/exams.js 잔존 참조 정리: npm.cmd run build:data 재실행 후 커밋');
 }
 
 // ── main ────────────────────────────────────────────────────────────────

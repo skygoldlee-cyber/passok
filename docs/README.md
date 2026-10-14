@@ -94,10 +94,10 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (54개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (70개)
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
-│   ├── adr/                   ← 아키텍처 결정 기록 (4개 — README + ADR 3건)
-│   ├── runbooks/              ← 실행 절차·운영 런북 (13개)
+│   ├── adr/                   ← 아키텍처 결정 기록 (19개 — README + ADR 18건)
+│   ├── runbooks/              ← 실행 절차·운영 런북 (14개)
 │   ├── design/                ← 설계·계획·평가 문서 (20개)
 │   └── reference/             ← 명세·로직·참조 문서 (12개 + images/)
 └── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개)
@@ -127,7 +127,7 @@ docs/
 | [CODE_CONVENTIONS.md](CODE_CONVENTIONS.md) | 코드 규약 정본 — 파일 계층·명칭·금지 패턴·저장소/UI/추적성 규약 + 규약→게이트 매핑 (DOC-DEV-09) |
 | [SPEC.md](dev/SPEC.md) | 요구사양 명세서 — 구현된 기능을 역공학해 정리 (현행 기준서) |
 | [TRACE_MATRIX.md](dev/TRACE_MATRIX.md) | SPEC↔코드 추적 매트릭스 — 요구사항별 @spec 태그·테스트·문서 매핑 (자동 생성 — `npm run build:trace`) |
-| [adr/](dev/adr/README.md) | 아키텍처 결정 기록 — 대안 검토·트레이드오프 등 결정의 "왜" 보존 (색인 README + ADR 3건) |
+| [adr/](dev/adr/README.md) | 아키텍처 결정 기록 — 대안 검토·트레이드오프 등 결정의 "왜" 보존 (색인 README + ADR 18건) |
 | [MULTI_EXAM_DB_DESIGN.md](dev/design/MULTI_EXAM_DB_DESIGN.md) | 멀티시험 확장 설계 — 법령DB·지식DB의 시험 비종속 일반화 (Phase A~C 구현 완료) |
 | [FSRS_DESIGN.md](dev/design/FSRS_DESIGN.md) | FSRS-4.5 간격 반복 알고리즘 — SM-2 대체 선정 근거·파라미터·마이그레이션 (DOC-DSN-17, 구현 완료) |
 | [SEMANTIC_EMBEDDING_DESIGN.md](dev/design/SEMANTIC_EMBEDDING_DESIGN.md) | 빌드타임 문장 임베딩 → int8 정적 번들 — 유사 진술·이웃 인덱스 인프라 (DOC-DSN-18) |
@@ -205,6 +205,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 |------|------|
 | [DEPLOYMENT_GUIDE.md](dev/runbooks/DEPLOYMENT_GUIDE.md) | Vercel 배포·오디오 호스팅 — 용량 최적화, CSP/캐시 정책, 체크리스트, 트러블슈팅 |
 | [VERIFY_DEPLOY_PIPELINE.md](dev/runbooks/VERIFY_DEPLOY_PIPELINE.md) | 전체구조 점검→배포 게이트 파이프라인 — check:all/ci 구성, 생성물 신선도 게이트, 실패 복구 표 |
+| [WHEN_THINGS_BREAK.md](dev/runbooks/WHEN_THINGS_BREAK.md) | 장애·깨짐 증상 색인 — 증상→원인→정본 문서 라우팅, 우회 장치 일람, 기준선 갱신 정당성 규약 (DOC-RBK-14) |
 | [MULTI_MACHINE_SETUP.md](dev/runbooks/MULTI_MACHINE_SETUP.md) | 다중 머신 개발 환경 — GitHub SSH, Vercel CLI 인증, Actions 자동 배포 |
 | [AUDIO_HOSTING_GUIDE.md](dev/runbooks/AUDIO_HOSTING_GUIDE.md) | 오디오북 호스팅·청취 아키텍처 — GitHub Releases 연동, 모바일 청취 동작 |
 | [REF_PDF_EXTERNALIZATION.md](dev/runbooks/REF_PDF_EXTERNALIZATION.md) | 참조자료 PDF(73MB) 외부 호스팅 이전 계획 — Releases + sha256 다운로더, 절차·주의사항 |
@@ -381,10 +382,26 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-RBK-11 | `docs/dev/runbooks/UIUX_VERIFY_RUNBOOK.md` |
 | DOC-RBK-12 | `docs/dev/runbooks/REF_PDF_EXTERNALIZATION.md` |
 | DOC-RBK-13 | `docs/dev/runbooks/STORY_PATCH_GUIDE.md` |
+| DOC-RBK-14 | `docs/dev/runbooks/WHEN_THINGS_BREAK.md` |
 | DOC-ADR-00 | `docs/dev/adr/README.md` |
 | DOC-ADR-01 | `docs/dev/adr/0001-exam-data-boot-document-write.md` |
 | DOC-ADR-02 | `docs/dev/adr/0002-domain-asset-convention-paths.md` |
 | DOC-ADR-03 | `docs/dev/adr/0003-localstorage-first-storage.md` |
+| DOC-ADR-04 | `docs/dev/adr/0004-vanilla-js-no-framework.md` |
+| DOC-ADR-05 | `docs/dev/adr/0005-window-global-data-bundles.md` |
+| DOC-ADR-06 | `docs/dev/adr/0006-storage-single-funnel.md` |
+| DOC-ADR-07 | `docs/dev/adr/0007-csp-self-event-delegation.md` |
+| DOC-ADR-08 | `docs/dev/adr/0008-position-independence-gate.md` |
+| DOC-ADR-09 | `docs/dev/adr/0009-conventions-as-gates.md` |
+| DOC-ADR-10 | `docs/dev/adr/0010-ratchet-baselines.md` |
+| DOC-ADR-11 | `docs/dev/adr/0011-html-partial-assembly.md` |
+| DOC-ADR-12 | `docs/dev/adr/0012-content-md-ssot-committed-bundles.md` |
+| DOC-ADR-13 | `docs/dev/adr/0013-single-deploy-path.md` |
+| DOC-ADR-14 | `docs/dev/adr/0014-three-tier-test-stack.md` |
+| DOC-ADR-15 | `docs/dev/adr/0015-jsdoc-checkjs-over-typescript.md` |
+| DOC-ADR-16 | `docs/dev/adr/0016-multi-exam-registry-feature-flags.md` |
+| DOC-ADR-17 | `docs/dev/adr/0017-vendored-assets-hash-manifest.md` |
+| DOC-ADR-18 | `docs/dev/adr/0018-fsrs-over-sm2.md` |
 | DOC-USR-01 | `docs/exams/cosmetic/user/exam_strategy.md` |
 | DOC-USR-02 | `content/exams/cosmetic/docs/formula_manual.md` |
 | DOC-USR-03 | `docs/exams/cosmetic/user/subject1_numbers.md` |
