@@ -143,7 +143,7 @@ function main() {
     try {
         let lastDeploy = '';
         try {
-            const tag = git('describe --tags --match "deploy/*" --abbrev=0');
+            const tag = git('describe --tags --match "deploy/*" --abbrev=0', { stdio: ['ignore', 'pipe', 'ignore'] });
             if (tag) lastDeploy = git(`rev-list -n 1 ${tag}`);
         } catch { /* deploy 태그 없음 — 구 스탬프 커밋 기준으로 폴백 */ }
         if (!lastDeploy) lastDeploy = git('log -1 --format=%H --grep="CACHE_VERSION 스탬프"');
@@ -197,7 +197,7 @@ function main() {
     // 내용이 그대로 배포되고, 배포 후 원복하면 이력 노이즈(chore(sw) 커밋)가 없다.
     // 배포 이력은 deploy/<버전> 태그가 대신 기록한다.
     const stamp = stampSwVersion();
-    let stampedFiles = [];
+    const stampedFiles = [];
     const restoreStamps = () => {
         if (!stampedFiles.length) return;
         try {
@@ -210,9 +210,10 @@ function main() {
         // data/version.js를 동일 버전으로 갱신하고, pending 노트를 확정
         // (pending이 없으면 커밋 subject로 자동 초안 — 배포 전 notes:draft로 편집 권장)
         stampReleaseNotes({ version: stamp.newValue, prevVersion: stamp.oldValue });
-        stampedFiles = git('status --porcelain').split('\n')
-            .filter((l) => l[1] === 'M') // 수정된 추적 파일만 (untracked '??' 제외)
-            .map((l) => l.slice(3).trim().replace(/^"|"$/g, ''));
+        // porcelain 캡처 대신 스탬프 대상 파일을 명시 — 직후 status가 stat 캐시로
+        // 방금 쓴 파일을 놓치는(racy-clean) 경합이 관측돼 원복 누락이 생겼다.
+        stampedFiles.push('sw.js', 'data/version.js', 'data/release-notes.js',
+            'data/release-notes.json', 'package.json');
         console.log(`✅ 스탬프 적용 (${stamp.newValue}) — 배포 후 원복 · 이력은 deploy 태그\n`);
     }
 
