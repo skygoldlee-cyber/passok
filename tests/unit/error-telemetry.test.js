@@ -6,7 +6,7 @@ import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
-  buildErrorPayload, reportClientError, initErrorTelemetry, _resetTelemetryForTest,
+  buildErrorPayload, reportClientError, reportSessionPing, initErrorTelemetry, _resetTelemetryForTest,
 } from '../../src/error-telemetry.js';
 
 beforeEach(() => _resetTelemetryForTest());
@@ -59,18 +59,49 @@ test('reportClientError: 미설정(disabled)·전송 실패·예외도 throw 없
   assert.equal(await reportClientError('error', new Error('x'), {}, { insert: async () => { throw new Error('net'); } }), 'failed');
 });
 
+// ── 세션 핑 (오류율 분모) ────────────────────────────────────
+
+test('reportSessionPing: kind=session 행 1건 전송 — 상한·중복 억제와 무관', async () => {
+  const rows = [];
+  const insert = async (r) => { rows.push(...r); return {}; };
+  assert.equal(await reportSessionPing({ insert }), 'sent');
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].kind, 'session');
+  assert.equal(rows[0].message, 'session');
+  // 세션 핑은 _sent 카운터를 소비하지 않는다 — 이후 오류 10건까지 전송 가능
+  for (let i = 0; i < 10; i++) {
+    assert.equal(await reportClientError('error', new Error(`e${i}`), {}, { insert }), 'sent');
+  }
+  assert.equal(await reportClientError('error', new Error('e11'), {}, { insert }), 'capped');
+});
+
+test('reportSessionPing: disabled·실패·예외도 상태 반환', async () => {
+  assert.equal(await reportSessionPing({ insert: async () => ({ disabled: true }) }), 'disabled');
+  assert.equal(await reportSessionPing({ insert: async () => ({ error: new Error('db') }) }), 'failed');
+  assert.equal(await reportSessionPing({ insert: async () => { throw new Error('net'); } }), 'failed');
+});
+
+test('buildErrorPayload: kind=session 정규화', () => {
+  assert.equal(buildErrorPayload('session', 'session').kind, 'session');
+  assert.equal(buildErrorPayload('bogus', 'x').kind, 'error');
+});
+
 // ── 리스너 설치 ─────────────────────────────────────────────
 
-test('initErrorTelemetry: error/unhandledrejection 리스너 등록 + 이중 설치 방지', () => {
+test('initErrorTelemetry: error/unhandledrejection 리스너 등록 + 이중 설치 방지', async () => {
   const handlers = {};
   const fakeWin = {
     addEventListener: (type, fn) => { handlers[type] = fn; },
     location: { pathname: '/x' },
   };
-  initErrorTelemetry(fakeWin);
+  const rows = [];
+  initErrorTelemetry(fakeWin, { insert: async (r) => { rows.push(...r); return {}; } });
   initErrorTelemetry(fakeWin); // 이중 호출 무시
   assert.equal(typeof handlers.error, 'function');
   assert.equal(typeof handlers.unhandledrejection, 'function');
+  // 초기화 시 세션 핑 1건만 전송 (이중 호출로 2건이 되지 않음)
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(rows.filter((r) => r.kind === 'session').length, 1);
 
   // 리스너 발화가 절대 throw하지 않음 (전송 실패도 흡수)
   handlers.error({ error: new ReferenceError('r'), filename: 'a.js', lineno: 1 });

@@ -3,8 +3,10 @@
 // ------------------------------------------------------------
 // window 'error'·'unhandledrejection' 이벤트를 수집해 익명 insert가 허용된
 // client_errors 테이블로 보낸다 (feedback.js와 같은 전송 패턴).
+// 초기화 시 세션 핑(kind='session') 1건을 보내 오류율(오류/세션)의 분모를 만든다.
 // - Supabase 미설정: 아무 일도 하지 않음 (조용히 no-op)
 // - 세션당 상한·메시지 중복 억제로 폭주 방지 — 오류 루프가 네트워크 폭주가 되지 않게
+//   (세션 핑은 상한 카운터를 소비하지 않는다 — 오류 상한은 오류에만 적용)
 // - 개인정보 최소화: message/stack/url/버전·UA만 전송, 입력 데이터 미포함
 // ------------------------------------------------------------
 import { getSupabase } from './supabase-client.js';
@@ -27,7 +29,7 @@ export function buildErrorPayload(kind, err, meta = {}) {
     const rawMsg = e ? e.message : ((/** @type {{message?: unknown}} */ (err) || {}).message ?? err);
     const message = String(rawMsg || 'unknown').slice(0, 500);
     return {
-        kind: kind === 'unhandledrejection' ? 'unhandledrejection' : 'error',
+        kind: (kind === 'unhandledrejection' || kind === 'session') ? kind : 'error',
         message,
         stack: (e && e.stack ? String(e.stack) : '').slice(0, STACK_MAX) || null,
         view: meta.view || null,
@@ -75,12 +77,31 @@ export async function reportClientError(kind, err, meta = {}, deps = {}) {
 }
 
 /**
+ * 세션 핑 — 페이지 로드당 1건, 오류율의 분모. 중복 억제·상한 카운터와 분리
+ * (세션 자체는 항상 유효 — 억제 대상이 아니다). 절대 throw하지 않는다.
+ * @param {Object} [deps] 테스트 주입용 { insert }
+ */
+export async function reportSessionPing(deps = {}) {
+    try {
+        const insert = deps.insert || defaultInsert;
+        const res = await insert([buildErrorPayload('session', 'session', {})]);
+        if (res.disabled) return 'disabled';
+        if (res.error) return 'failed';
+        return 'sent';
+    } catch {
+        return 'failed';
+    }
+}
+
+/**
  * window 오류 리스너 설치 — initApp 초기에 1회 호출. 중복 호출은 무시.
  * @param {Window|null} [win] 테스트 주입용
+ * @param {Object} [deps] 테스트 주입용 { insert } — 세션 핑 전송 경로
  */
-export function initErrorTelemetry(win = (typeof window !== 'undefined' ? window : null)) {
+export function initErrorTelemetry(win = (typeof window !== 'undefined' ? window : null), deps = {}) {
     if (_installed || !win || typeof win.addEventListener !== 'function') return;
     _installed = true;
+    void reportSessionPing(deps);
     win.addEventListener('error', (event) => {
         // 모듈/스크립트 로드 실패(error 없이 filename만)는 app-fallback이 담당 — 여기선 런타임 오류만
         if (!event.error) return;
