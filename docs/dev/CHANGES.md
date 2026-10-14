@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 변이 점수 첫 실측 — 55.04% (저득점 모듈 2개 노출)
+
+- `npm run mutate` 실행 — Stryker 스코프 4개 순수 모듈(questions·spaced-repetition·weak-items·statement-tracker), 774 mutants: killed 423·survived 348·timeout 3
+- §9 품질 ★변이 공백 해소(Δ측정) — 품질 ★ 4행 전부 실측 상태로 전환. 실측값이 약점 노출: spaced-repetition 15.0%·weak-items 16.8%는 생존 변이가 다수(해석 경로 테스트 부재)
+- 해소 순서 ⑥을 "측정"에서 "저득점 모듈 테스트 보강"으로 갱신 — 측정 완료 후의 진짜 과제
+
 ## 2026-10-14 런북 커버리지 게이트 — check:runbooks (링크+앵커 정본 도달 검증)
 
 - `tools/check/check_runbook_links.js` 신설 (`check:runbooks`, docs 프리셋 편입) — runbooks/*.md의 상대 링크를 파일 존재 + `#앵커↔GitHub 헤딩 slug` 해석까지 검증. "링크된 파일은 있으나 절차 섹션이 없는" 결함 유형 차단 (롤백 절차 공백 사례 재발 방지). 코드 펜스·인라인 코드·자리표시자 `<경로>` 예시는 스캔 제외
