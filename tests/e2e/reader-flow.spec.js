@@ -1,5 +1,5 @@
 // tests/e2e/reader-flow.spec.js — 교재리더 본체 동작 회귀 (실브라우저)
-// @spec TR-01,TR-02,TR-03,TR-04,TR-11,TR-12,TR-14,TR-17,TR-18,TR-19,SA-01,RR-07
+// @spec TR-01,TR-02,TR-03,TR-04,TR-11,TR-12,TR-14,TR-17,TR-18,TR-19,TR-28,SA-01,RR-07
 // 렌더·TOC·단원 이동·읽기 위치 영속/복원·이야기형 토글·섹션 표시줄을 실측한다.
 // jsdom은 레이아웃·스크롤을 계산하지 않으므로 이 검증은 e2e에서만 유효하다.
 
@@ -220,5 +220,33 @@ test.describe('교재리더 본체', () => {
             return !!document.querySelector('#reader-toc-list .reader-toc-item.active, #reader-toc-list .reader-toc-sub-item.active');
         }, null, { timeout: 5_000 }).then(() => true).catch(() => false);
         expect(spyWorked).toBe(true);
+    });
+
+    test('일독 커버리지 100% 도달 시 완료 모달이 1회 통지된다 (TR-28)', async ({ page }) => {
+        test.setTimeout(90_000);
+        await openReader(page);
+        // 선택 과목만 마지막 청크를 남기고 나머지 과목은 완료 상태로 시드 —
+        // 분모는 registry 과목 수이므로 전 과목 frac=1이어야 overall=1.
+        await page.evaluate(() => {
+            const sel = /** @type {HTMLSelectElement} */ (document.getElementById('reader-subject-select')).value;
+            const keys = ((window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || []).map(s => s.key);
+            const rec = (n) => ({ chunks: Array.from({ length: n }, (_, i) => i), frac: n / 100, ts: Date.now() });
+            const map = {};
+            keys.forEach(k => { map[k] = k === sel ? rec(99) : rec(100); });
+            localStorage.setItem('cosmetic:readerProgress', JSON.stringify(map));
+        });
+        // 본문 끝 스크롤 → 디바운스 저장 경로가 마지막 청크(99)를 기록
+        await page.evaluate(() => {
+            const c = document.getElementById('textbook-reader-container');
+            c.scrollTop = c.scrollHeight;
+            c.dispatchEvent(new Event('scroll'));
+        });
+        const overlay = page.locator('#app-confirm-overlay');
+        await expect(overlay).toBeVisible({ timeout: 20_000 });
+        await expect(overlay.locator('h3')).toContainText('일독');
+        const flag = await page.evaluate(() => localStorage.getItem('cosmetic:read_through_done'));
+        expect(flag).toBeTruthy();
+        await overlay.locator('.app-confirm-ok').click();
+        expect(page._errors.filter(e => !/favicon|manifest/i.test(e))).toEqual([]);
     });
 });
