@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 프로젝트 재평가 — §9 스냅샷 교체 + 기준선 아카이브 (evals/ 신설)
+
+- PROJECT_METRICS §8 경로로 전 항목 재측정: unit 정적 1,315 · DOM 720 · 커버리지 stmts 70.76(래칫 상향 가능 신호) · 복잡도 208경고(+1) · `npm audit` 2 moderate(qs via typed-rest-client→Stryker, dev 전용) · 런북 커버리지 52.9% 유지 · CI 복귀 후 완료분 연속 녹색
+- §9를 재측정 스냅샷으로 교체 + Δ측정/Δ실제 분리 기재 — 운영 버킷에 "deploy CI 게이트 실배치"를 Δ실제로 반영(기준선의 "deploy가 CI 상태 미확인" 문구 폐기), 보안 측정분 판정 양호→주의(audit 0→2)
+- 기준선 스냅샷을 `docs/dev/evals/EVAL_BASELINE_2026-10-14.md`(DOC-DEV-10)로 분리 — §9 "최신 스냅샷만 유지" 규약 이행, `reports/`가 gitignore(mutation 산출물)라 evals 디렉터리 사용
+- 잔여 해소 순서 갱신: ① 프로덕션 schema.sql §5·§6 적용+첫 집계 ② RLS 실검증+규제 검토 ③ 런북 커버리지 전량 ④ 장애 이력 로그·DORA ⑤ ADR 기재율 분모 정의 ⑥ 커버리지 래칫 상향
+
 ## 2026-10-14 변이 점수 보강 — 55.04% → 85.36% (최종 실측)
 
 - **원인 1 (측정 결함)**: `commandRunner`가 `fsrs.test.js`를 실행하지 않아 spaced-repetition의 D-18/19/20 테스트가 변이 사냥에 미참여 → 15.04%로 과소 측정. fsrs.test.js + 신규 weak-items.test.js를 러너에 추가
