@@ -388,7 +388,7 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 - **시험별 루트 (대칭)**: 모든 시험이 `content/exams/<id>/`(manifest.json + references.json + 교재/문제은행/참조자료/audiobook 등)와 `data/exams/<id>/`(registry.js, subjects/, exams/, drills/, embeddings/, study_md/, docs_md/, supplements/, id_migration.js 등) 구조 — 기본 시험(cosmetic)도 예외 없음. `content/`·`data/` 루트에는 전역 파일만: `exams.json`/`exams.js`, `audio_manifest.js`(시험 id 키 분리), `docs_md/`(앱 공용 문서)
 - **시험 컨텍스트**: `src/exam-context.js` — `contentPath()`/`dataPath()`(경로 해석), `hasFeature()`(기능 게이팅), `selectExam()`(전환 = `location.reload()`로 모듈 상태 리셋), `scopedKey()`(진도 네임스페이스 `<examId>:key`)
 - **진도 격리**: `safeGetItem`/`safeSetItem` 등이 자동으로 시험 접두사 적용. 테마·리더 설정 등 `GLOBAL_KEYS`만 비네임스페이스. 백업 파일은 비접두사 논리 키(시험 간 호환)
-- **새 시험 추가 절차**: ① `content/exams/<id>/`에 manifest.json + references.json + 교재/문제은행 배치 — 법령 참조가 있으면 `content/lawdb.json`에 엔트리 + `references.json.lawRefs`·`noticeCore` 설정, 사전이 있으면 `manifest.knowledge` 스키마 선언 ② `content/exams.json`에 엔트리 추가 (`contentRoot`/`dataRoot`/`registryBundle`/`registryGlobal` 지정 — 비기본 시험은 `registryGlobal: "DATA_REGISTRY_<id>"`) ③ `npm.cmd run check:content -- --build` → 끝 (앱 로직 변경 불필요). **도메인 자산 규약**: 시험 전용 코드·마크업·스타일·테스트는 `src/exams/<id>/`·`html/exams/<id>/`·`css/exams/<id>/`·`tests/{unit,dom}/exams/<id>/`에, 시험 종속 문서는 `docs/exams/<id>/`에 배치 — 플랫폼 레지스트리가 `exams/${getActiveExamId()}/` 규약으로 해석하므로 기존 실무 피처 재사용은 파일 배치만으로 동작. 상세: `docs/dev/runbooks/NEW_EXAM_RUNBOOK.md`·`docs/dev/design/MULTI_EXAM_DB_DESIGN.md`
+- **새 시험 추가 절차**: ① `npm.cmd run scaffold:exam -- <id> --name "시험명"`으로 골격 생성(권장 — 수동으로 디렉터리를 먼저 만들면 domainmap 미등록 오류) 후 manifest.json + references.json + 교재/문제은행 배치 — 법령 참조가 있으면 `content/lawdb.json`에 엔트리 + `references.json.lawRefs`·`noticeCore` 설정, 사전이 있으면 `manifest.knowledge` 스키마 선언 ② `content/exams.json`에 엔트리 추가 (`contentRoot`/`dataRoot`/`registryBundle`/`registryGlobal` 지정 — 비기본 시험은 `registryGlobal: "DATA_REGISTRY_<id>"`) ③ `npm.cmd run check:content -- --build` → 끝 (앱 로직 변경 불필요). **도메인 자산 규약**: 시험 전용 코드·마크업·스타일·테스트는 `src/exams/<id>/`·`html/exams/<id>/`·`css/exams/<id>/`·`tests/{unit,dom}/exams/<id>/`에, 시험 종속 문서는 `docs/exams/<id>/`에 배치 — 플랫폼 레지스트리가 `exams/${getActiveExamId()}/` 규약으로 해석하므로 기존 실무 피처 재사용은 파일 배치만으로 동작. 상세: `docs/dev/runbooks/NEW_EXAM_RUNBOOK.md`·`docs/dev/design/MULTI_EXAM_DB_DESIGN.md`
 - **기능 플래그**: `features`에 없는 기능은 `data-feature` 속성/`hasFeature()`로 자동 숨김 — 성분사전·원료배합·계산연습·오디오북·참조자료 등 도메인 특화 기능
 - **Node 도구**: `EXAM_ID`/`EXAM_CONTENT_ROOT`/`EXAM_DATA_ROOT` env로 대상 시험 지정 (예: `EXAM_ID=<id> node tools/build/index.js`)
 - **Python 도구**: ref-pipeline 전 스크립트가 `ref-pipeline/_exam_root.py`로 동일 순서 해석 — `--exam` 인자 > `EXAM_CONTENT_ROOT` > `EXAM_ID` > exams.json default (예: `python ref-pipeline/check_laws.py --exam <id>`)
@@ -488,7 +488,7 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 5. `npm.cmd run verify:assets` — SHELL_ASSETS 파일 존재 확인
 6. `git status` — 임시 파일(`_temp_*.js`, `.git/COMMIT_MSG.txt`) 제거 확인
 7. `sw.js` `CACHE_VERSION` bump 확인
-7. `npm run deploy`의 배포 후 스모크 자동 통과 확인 (200·sw.js·APP_VERSION 스탬프 — passory.vercel.app)
+8. `npm run deploy`의 배포 후 스모크 자동 통과 확인 (200·sw.js·APP_VERSION 스탬프 — passory.vercel.app)
 
 ## 주의사항
 
@@ -503,7 +503,9 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 - `docs/dev/ARCHITECTURE.md` — 시스템 아키텍처 상세
 - `docs/dev/design/UIUX_DESIGN_GUIDE.md` — UI/UX 설계 가이드 — 국제 표준 기반 표면 모델·기능 버튼 노출(정본) 규약
 - `docs/dev/runbooks/DEPLOYMENT_GUIDE.md` — 배포 가이드
+- `docs/dev/reference/GATE_MAP.md` — 검증 게이트 전체 지도 (훅→CI→배포 4층·실패별 복구 표 — 게이트 실패 시 먼저)
 - `docs/dev/runbooks/VERIFY_DEPLOY_PIPELINE.md` — 전체구조 점검→배포 게이트 파이프라인 (신선도 게이트·실패 복구 표)
+- `docs/dev/runbooks/WHEN_THINGS_BREAK.md` — 장애 증상 색인 (증상→정본 문서 라우팅·우회 장치 일람·기준선 갱신 규약)
 - `docs/dev/runbooks/CONTENT_WORKFLOW.md` — content 변경 시 작업 절차 가이드
 - `docs/dev/CHANGES.md` — 변경 이력
 - `docs/dev/reference/TESTING.md` — 테스트 가이드

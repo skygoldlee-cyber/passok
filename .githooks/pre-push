@@ -2,8 +2,8 @@
 # pre-push — push 전 품질 게이트 (opt-in: npm run hooks:install)
 #
 # 적응형 실행 (tools/check/push_gate.js): origin/main..HEAD diff를 분류해
-#   - 로직(src/·tools/·tests/·설정) 포함 → 전체 9단계 (types·trace·specrefs·
-#     docs·html·lint·영향테스트·docsync·testfirst)
+#   - 로직(src/·tools/·tests/·설정) 포함 → 전체 10단계 (types·trace·specrefs·
+#     docs·html·lint·posind·impact·docsync·testfirst)
 #   - 문서(docs/·*.md)만 → trace·specrefs·docs·docsync·testfirst
 #   - 콘텐츠(content/·data/)만 → trace·specrefs·docsync·testfirst
 #   분류 불가 파일은 보수적으로 로직으로 간주한다.

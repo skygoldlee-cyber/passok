@@ -466,7 +466,7 @@ flowchart TD
 
 ### 5.1 Service Worker 버전 bump
 
-애플리케이션 코드/콘텐츠 변경 시 `sw.js`의 `CACHE_VERSION`을 bump:
+애플리케이션 코드/콘텐츠 변경 시 `sw.js`의 `CACHE_VERSION`을 bump (※ `npm run deploy`가 스탬프를 자동 수행하므로 통상 수동 실행은 불필요):
 
 ```powershell
 npm.cmd run stamp:sw   # 커밋 해시로 자동 스탬프
@@ -483,7 +483,7 @@ const CACHE_VERSION = 'v{번호}-{날짜}-{설명}';
 git add -A
 git commit -m "content: 변경 내용 요약"
 git push origin main
-npx.cmd vercel --prod --yes --scope skygold
+npm.cmd run deploy   # 배포 가드 → sw 스탬프(비커밋) → vercel --prod — 직접 vercel --prod 실행 금지
 ```
 
 ### 5.3 배포 확인
@@ -498,7 +498,7 @@ flowchart LR
     B --> C["검증 체크리스트"]
     C --> D["sw.js 버전 bump"]
     D --> E["git commit + push"]
-    E --> F["vercel --prod"]
+    E --> F["npm run deploy<br/>(가드 → 스탬프 → vercel --prod)"]
     F --> G["배포 확인<br/>HTTP 200"]
     G --> H["✅ 완료"]
 

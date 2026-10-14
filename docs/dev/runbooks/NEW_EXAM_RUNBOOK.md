@@ -17,10 +17,10 @@ flowchart TD
     B --> B1["manifest·교재·문제은행 교체"]
     B --> B2["features 플래그 ↔ docs/ 문서 불변식"]
     B --> B3["manifest.uiText 라벨"]
-    B1 & B2 & B3 --> C["③ check:content -- --build<br/>→ check:all"]
-    C -->|"게이트 통과"| D["④ 커밋 → deploy"]
-    C -->|"실패"| E["실패한 게이트 수정<br/>(domainmap·uitext·docbundles…)"]
-    E --> C
+    B1 & B2 & B3 --> C["③ build:data ×2회 + doc 번들<br/>→ 커밋"]
+    C --> D["④ check:content → check:all<br/>→ deploy"]
+    D -->|"실패"| E["실패한 게이트 수정<br/>(domainmap·uitext·docbundles…)"]
+    E --> D
     subgraph AUTO["자동 처리 (편집 불필요)"]
         F1["domain-map 규칙"]
         F2["data/exams.js · 번들"]
@@ -30,8 +30,8 @@ flowchart TD
 
 1. `scaffold:exam`으로 골격 생성 (exams.json 등록 자동)
 2. 샘플 콘텐츠를 실제 콘텐츠로 교체 + 기능 플래그·문서 선언
-3. 빌드·검증 게이트 실행
-4. 커밋·배포
+3. **빌드 → 커밋 → 검증** (순서 중요 — `check:datafresh`는 생성물 경로가 미커밋이면 즉시 실패하므로, 생성물 커밋 후에 검증한다)
+4. 배포
 
 ## 1단계 — 스캐폴딩
 
@@ -63,8 +63,16 @@ content/exams/<id>/
 ### 필수 콘텐츠 교체
 
 - `manifest.json` — `subjects`·`exams`·`integratedExam`을 실제 과목 구성으로. 선택 선언: `uiText`(뷰 라벨)·`synonyms`(주관식 유사어)·`analysis.wrongCauses`(오답 원인 분류 확장 — `key`·`label`·`advice` 배열, 미선언 시 기본 3종)
+  - **표시 수치 정합**: `exams[].title`의 "N제"·`desc`의 "N과목/N문"은 `check:manifest`가 문제은행 `### Q` 실측과 대조 — 실제 수치로 갱신하거나 수치 표기를 생략 (scaffold 기본 문구는 샘플)
+  - **uiText**: 플랫폼 마크업의 `data-uitext` 키 전수를 채워야 도메인 라벨이 cosmetic 전용 문구로 새지 않는다 — cosmetic `manifest.uiText` 블록을 복사해 문구만 교체하는 것이 키 목록 확보의 실질 경로 (`npm run check:uitext`가 누락 경고)
+  - **문서 헤더**: `docs/*.md` 파일 상단에 `> **문서 ID**: DOC-XX-NN` + `> **범위**: exam:<id> · 판본: …` 헤더가 필수 (`check:docs` 강제 — 발번은 `docs/README.md` ID 레지스트리)
 - `교재/`·`문제은행/` — 샘플 파일을 실제 MD로 교체
-- `references.json` — 참조자료 메타데이터. 법령 추적이 필요하면 `content/lawdb.json` + `lawRefs`·`noticeCore` 설정
+- `references.json` — 참조자료 메타데이터 SSOT (`pdf-registry.js`는 여기서 빌드 생성). 파일 내 `*Comment` 필드가 필드별 규약을 자기문서화한다. 필드 그룹:
+  - **문서 레지스트리**: `referenceLaw`·`referenceFiles`·`referenceCommon`·`referenceIngredients`는 `{name,file,type,dir}` 엔트리 — `참조자료/<dir>/`의 물리 파일과 정합. `refDirs`는 디렉터리→파일 목록 선언 (PDF 미확보 시 ref_md 발췌본만 두고 comment 명기 — food 선례)
+  - **과목 귀속**: `subjectDirMap`(과목키→과목N)·`docSubjectRules`(ref_md 디렉터리명→과목 귀속 정규식 `[패턴, 과목번호, 사유]`, 첫 매칭 우선)·`multiSubjectDocs`(다과목 공동 인용 문서)·`subjectDefaultRefdoc`(과목별 기본 문서명)
+  - **출처 매핑**: `sourceRefMap`·`keywordRefMap` — 본문 출처 표기·키워드를 refdoc PDF로 연결하는 정규식 규칙
+  - **법령·고시 연동**: `lawRefs`(`content/lawdb.json`의 법령 id 목록 — 나열 순서가 매칭 우선순위)·`noticeCore`(고시 감시 기준 문서명)·`noticeIngredientDocs`(성분사전 '고시 확인' 대상 고시 subset — dictionary 시험용)
+  - **검증 게이트**: `check:reflayout`(PDF↔ref_md↔references.json 4계층)·`check:refsubjects`(귀속 교차)·`check:reffresh`(PDF 해시 신선도)·`check:lawurls`(law.go.kr slug 실호출). `check_mfds_notice.py` 감시는 `lawRefs`→`referenceLaw`로 유도되는 문서에 lawdb `watch` 필드가 있을 때만 동작
 
 ### 시험 팩 파일 3분류
 
@@ -80,7 +88,9 @@ cosmetic의 모든 파일을 복사할 필요는 없다 — food가 최소 구�
 
 ### 기능 플래그 (`exams.json` 엔트리의 `features`)
 
-켜둔 플래그만 UI에 노출된다 (`data-feature` 게이팅). **플래그 ↔ 필수 문서 불변식**이 강제된다 — 플래그를 켰는데 `docs/`에 문서가 없으면 `check:docbundles --check`가 실패한다 (불변식 SSOT: `docs/dev/ARCHITECTURE.md` "시험별 문서 규약" 절):
+켜둔 플래그만 UI에 노출된다 (`data-feature` 게이팅). **유효 키는 코드 실측 기준** — `check:featflags`가 미선언 키 사용(죽은 경로)과 선언만 되고 미사용 키를 양방향 검증하므로, cosmetic 엔트리(`content/exams.json`)와 `hasFeature`/`data-feature` 사용처 grep이 키 목록의 실질 소스다. 미완성 시험은 `comingSoon: true`를 추가해 선택 UI 노출을 막는다 (food 선례).
+
+**플래그 ↔ 필수 문서 불변식**이 강제된다 — 플래그를 켰는데 `docs/`에 문서가 없으면 `check:docbundles --check`가 실패한다 (불변식 SSOT: `docs/dev/ARCHITECTURE.md` "시험별 문서 규약" 절):
 
 | 플래그 | 필수 문서 | 기능 |
 |---|---|---|
@@ -89,7 +99,23 @@ cosmetic의 모든 파일을 복사할 필요는 없다 — food가 최소 구�
 | `formula` | `{contentRoot}/docs/formula_manual.md` | 실무 매뉴얼 링크 + Formula OS |
 | `appendixDocs` | `{contentRoot}/docs/두음법_암기_총정리.md` | 부록 문서 |
 
-문서가 없는 기능은 플래그를 선언하지 않는다. `docs/*.md`는 **존재 자체가 선언** — 번들 대상은 디렉터리 스캔으로 자동 결정된다.
+문서가 없는 기능은 플래그를 선언하지 않는다. `docs/*.md`는 **존재 자체가 선언** — 번들 대상은 디렉터리 스캔으로 자동 결정된다 (단, `node tools/build/build_doc_bundles.js`를 별도 실행해 `docs_md/` 번들을 생성해야 한다 — `build:data` 체인에 미포함).
+
+문서 외 플래그별 동반 산출물 (UI 토글만으로 산출물이 없는 플래그도 있다):
+
+| 플래그 | 동반 산출물 | 비고 |
+|---|---|---|
+| `dictionary` | `manifest.knowledge` 스키마 + `knowledge/<registryKey>.json` | registryKey 미선언 시 `ingredients` 기본 경로 |
+| `ingredients` | dictionary와 동일 knowledge 데이터 재사용 | 성분 훈련 서브뷰 등 |
+| `calcPractice` | 없음 | 데일리 챌린지 계산 문항은 코드 난수 생성 |
+| `limitsTrainer` | `limits-trainer.json` (contentRoot) | 수치 암기 훈련 마스터 |
+| `audiobook` | `audiobook/mp3/**` + `npm run build:audio-manifest` | TTS 생성 파이프라인 별도 |
+| `story_textbook` | `교재/<과목>/story/*_서사.md` + `chapters[].storyFile` + `npm run build:story` | 패치 문법은 STORY_PATCH_GUIDE.md |
+| `semantic` | `npm run build:embeddings` → `embeddings/` | Python + sentence-transformers 필요 |
+| `formula` 등 실무 피처 | `src/exams/<id>/`·`html/exams/<id>/`·`css/exams/<id>/` 도메인 자산 | 아래 "도메인 자산 규약" |
+| `pomodoro` | 없음 | UI 토글 |
+
+`practiceMode`·`examSwitch`는 exams.json에 선언하지 않는 **동적 판정 키** (app-shell 런타임 상태 — `check:featflags`의 DYNAMIC_KEYS).
 
 **실무작업실 피처**(실습 도구 — cosmetic의 `formula`가 유일 사례): `features` 키 선언 외에 `src/practice-registry.js` 엔트리·뷰 파셜·storage 키 등 선언 접점이 필요하다 — 절차는 `docs/dev/ARCHITECTURE.md` "신규 실무 피처 추가 체크리스트" 참조 (ui-mode·router·app 코어 수정 불필요). **기존 피처를 새 시험에서 재사용하는 경우는 아래 "도메인 자산 규약"만 따르면 된다** — 플랫폼 코드 수정 없이 규약 경로에 파일을 배치하면 활성 시험 id로 자동 해석된다.
 
@@ -121,12 +147,18 @@ cosmetic의 모든 파일을 복사할 필요는 없다 — food가 최소 구�
 - `data/exams/<id>/` 번들 — `build:data`가 전 시험 순회 생성
 - 로컬 저장소 네임스페이스·클라우드 `exam_id` 분리 — `scopedKey`/`exam-context` 자동
 
-## 3단계 — 빌드·검증
+## 3단계 — 빌드 → 커밋 → 검증 (순서 중요)
 
 ```powershell
-npm.cmd run check:content -- --build   # 빌드 + 콘텐츠 통합 검증
+npm.cmd run build:data                 # 1차 — data/exams/<id>/** · exams.js · manifest.<id>.webmanifest 생성
+node tools/build/build_doc_bundles.js  # docs/*.md가 있다면 필수 — build:data 체인에 미포함
+npm.cmd run build:data                 # 2차 — 신규 시험 registry.js·id_migration.js를 sw.js DATA_ASSETS에 반영
+git add -A; git commit -m "content: <id> 시험 추가"   # 생성물 전부 커밋 (data/·manifest.<id>.webmanifest·sw.js 포함)
+npm.cmd run check:content              # 콘텐츠 통합 검증
 npm.cmd run check:all                  # lint·types·imports·html·docs·domainmap·uitext·specrefs·trace·테스트 일괄
 ```
+
+> **왜 2회 빌드 + 커밋 후 검증인가**: `sw.js`의 DATA_ASSETS는 기본 시험(cosmetic) 빌드 패스에서만 재생성되고 "존재하는 번들만" 포함되므로, 신규 시험 첫 빌드에는 registry 번들이 아직 없어 누락된다 — 2차 빌드가 이를 반영한다. 그리고 `check:datafresh`는 생성물 경로에 미커밋·미추적 파일이 있으면 즉시 중단되므로(빌드 덮어쓰기로 사용자 변경 유실 방지), 검증은 반드시 생성물 커밋 **이후**에 실행한다.
 
 주요 게이트와 잡는 결함:
 
@@ -147,10 +179,12 @@ npm.cmd run check:all                  # lint·types·imports·html·docs·domai
 
 ## 체크리스트
 
-- [ ] `scaffold:exam` 실행 — exams.json 엔트리·디렉터리 트리 생성됨
-- [ ] `manifest.json` 실제 과목·문항으로 교체
-- [ ] `features` 플래그 = 보유 기능만 선언 (문서 불변식 충족)
-- [ ] `manifest.uiText` 시험명·과목 라벨 채움
-- [ ] 실무 피처 재사용 시 — `src/exams/<id>/`·`html/exams/<id>/`·`css/exams/<id>/` 규약 경로에 자산 배치 + `features` 선언 (플랫폼 코드 수정 없음)
-- [ ] `check:all` 통과 — domainmap·uitext·docbundles 오류 0
-- [ ] DOM 시험 전환 테스트에서 새 시험 케이스 추가 검토 (`tests/dom/exam-switching.dom.test.js`)
+- [ ] `scaffold:exam` 실행 — exams.json 엔트리·디렉터리 트리 생성됨 (수동으로 `content/exams/<id>/`를 먼저 만들면 `check:domainmap`이 미등록 디렉터리로 실패 — 등록·생성이 원자적인 scaffold를 먼저)
+- [ ] `manifest.json` 실제 과목·문항으로 교체 — title "N제"·desc 수치를 `### Q` 실측과 일치 (`check:manifest`)
+- [ ] `exams.json` 엔트리 브랜딩 채움 — scaffold 기본값(desc 골격 문구·`logoSub:''`·기본 아이콘) 제거, 미완성이면 `comingSoon: true`
+- [ ] `features` 플래그 = 보유 기능만 선언 (문서 불변식 충족) — `dictionary`면 knowledge 스키마·데이터 동반, `semantic`이면 build:embeddings 동반
+- [ ] `manifest.uiText` 시험명·과목 라벨 채움 — `data-uitext` 키 전수 (cosmetic 블록 복사 후 교체)
+- [ ] `docs/*.md` 상단에 `문서 ID`(레지스트리 발번) + `범위: exam:<id> · 판본` 헤더 기입
+- [ ] `build:data` ×2회 + `build_doc_bundles.js` 실행 → **생성물 전부 커밋 후** `check:content`·`check:all` 통과 — domainmap·uitext·docbundles 오류 0
+- [ ] `README.md` 등록 시험 목록 갱신 (현재 등록 열거는 수동 — 게이트 없음)
+- [ ] DOM 시험 전환 테스트에서 새 시험 케이스 추가 검토 (`tests/dom/exam-switching.dom.test.js`) — 추가 시 `npm.cmd run stats:stamp` 수치 재스탬프 + 문서 동반(docsync) 필요
