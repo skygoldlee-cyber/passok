@@ -106,7 +106,7 @@
   <text class="ttl" x="672" y="320">학습 진단</text>
   <rect class="pro" x="792" y="306" width="30" height="16" rx="8"/><text class="prot" x="807" y="317.5" text-anchor="middle">PRO</text>
   <text class="txt" x="646" y="348">오답 패턴 · 취약 진술</text>
-  <text class="txt" x="646" y="368">단원별 취약 · 합격 갭</text>
+  <text class="txt" x="646" y="368">단원 숙달(BKT) · 합격 갭</text>
   <text class="txt" x="646" y="388">주간 리포트 공유</text>
 
   <!-- 목표: 시험 D-day -->
