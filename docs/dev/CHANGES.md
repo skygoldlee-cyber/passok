@@ -7,6 +7,15 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 로컬 HTML 운영 대시보드 (AD-07 — ADMIN_DESIGN Phase 1.5)
+
+- **동기**: "매일 보는 조감 뷰" 수요 — Phase 2(#/admin)는 인증·RLS·RPC 계층이 선행돼야 해서 비용이 크고, 로컬 파일이면 인증 없이 조감 뷰가 가능
+- **구현**: `tools/check/dashboard_report.js` (`npm run report:dashboard`) — client_errors·usage_events·feedback을 한 번에 조회해 기존 3개 리포트의 순수 `summarize()`를 재사용, 단일 자급적 HTML(외부 의존 0)로 덤프 → `tools/check/dashboard_report.html` (gitignore)
+- **화면 구성**: 지표 카드(오류율·세션/오류·피드백·평점 평균) + 일별 오류 추이 + 상위 메시지 + 세션 쌍 퍼널 완주율 + kind별 피드백·최근 30건(bug의 session_id 단축 표시로 `report:errors --session` 연결)
+- **XSS 방어**: 피드백 본문·오류 메시지 등 사용자 제출 텍스트는 `esc()`로 전면 이스케이프 — 로컬 파일이라도 브라우저 렌더링 경로이므로 원문 삽입 차단 (테스트가 검증)
+- SPEC AD-07 ✅ · 설계안 §5 표에 Phase 1.5 행 추가
+- 테스트: tests/unit/dashboard-report — esc 이스케이프·섹션/수치 렌더·빈 데이터 유효성 4건
+
 ## 2026-10-14 관리자 운영 CLI 구현 (AD-06 — ADMIN_DESIGN Phase 1)
 
 - **구현**: Phase 1 세 스크립트를 기존 `tools/check/` 리포트 패턴으로 구현 — 공용 헬퍼 `tools/lib/supabase_ops.js`(SUPABASE_URL 해석·SUPABASE_SECRET_KEY 요구·restGet/restPatch·findUserByEmail)
