@@ -217,9 +217,10 @@
         min-width: 0;
     }
 
-    .app-header p {
+    /* 부제목만 숨김 — 설정 패널 안의 p(그룹 라벨·버전/크레딧 메타)까지 숨기지 않도록 header-title로 한정 */
+    .app-header .header-title p {
         font-size: var(--text-sm);
-        display: none; /* 부제목 숨김으로 공간 확보 */
+        display: none;
     }
 
     /* 헤더 액션 버튼 터치 영역 확대 */
