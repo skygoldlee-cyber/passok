@@ -224,7 +224,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 
 ---
 
-## � 사업 문서 (docs/exams/cosmetic/business/)
+## 💼 사업 문서 (docs/exams/cosmetic/business/)
 
 | 문서 | 설명 |
 |------|------|
@@ -238,7 +238,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 
 ---
 
-## �👤 사용자 문서 (docs/exams/cosmetic/user/)
+## 👤 사용자 문서 (docs/exams/cosmetic/user/)
 
 | 문서 | 설명 | 접근 방법 |
 |------|------|-----------|
