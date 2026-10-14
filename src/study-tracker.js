@@ -1,5 +1,5 @@
 // src/study-tracker.js — 학습 캘린더/목표 추적 헬퍼
-// @spec SC-03,SC-05,SC-06,SC-07,SC-08,SC-09,SC-15,D-17
+// @spec SC-03,SC-05,SC-06,SC-07,SC-08,SC-09,SC-15,D-17,D-23,Q-12
 // 학습 활동을 날짜별로 기록하고, 목표 달성률을 계산합니다.
 import { safeGetItem, safeSetItem } from './state.js';
 import { STORAGE_KEYS } from './storage-keys.js';
@@ -551,6 +551,106 @@ export const DIAG_CAUSE_WINDOW_DAYS = 30;
 /** 진단 신호 가산 상한 — 오답 원인·취약 단원 가산 합계 상한 (SC-12) */
 export const MAX_DIAG_BOOST = 0.5;
 
+// @spec SC-08,D-23,Q-12
+/**
+ * 출제 비중 맵 — registry.exams의 과목별 문제은행 문항 수를 집계한다.
+ * 주간 배분(SC-08)·최종 인출 층화(D-23)·진단 평가 층화(Q-12)의 단일 출처.
+ * @param {Array} [exams] registry.exams — [{subject, stats:{questions}}]
+ * @returns {Object} {subjKey: 출제 문항 수}
+ */
+export function examWeightBySubject(exams) {
+    /** @type {{ [x: string]: number }} */
+    const w = {};
+    (exams || []).forEach(ex => {
+        if (ex && ex.subject) w[ex.subject] = (w[ex.subject] || 0) + ((ex.stats && ex.stats.questions) || 0);
+    });
+    return w;
+}
+
+// @spec D-23,Q-12
+/**
+ * 출제 비중 비례 정수 쿼터 배분 (최대잔여법) — 각 키에 최소 min을 먼저 보장하고
+ * 잔여를 비중 비례로 배분한다. 비중 합계가 0(미선언 시험)이면 균등 배분.
+ * 총합은 항상 total과 일치하고, min×N > total이면 min을 floor(total/N)으로 축소한다.
+ * @param {string[]} keys 대상 과목 키 (수요가 있는 과목만 전달할 것)
+ * @param {Object} weightBySubject examWeightBySubject 결과 {subjKey: 문항 수}
+ * @param {number} total 배분 총량 (정수)
+ * @param {number} [minPerKey] 키당 최소 보장량 (기본 0)
+ * @returns {Object} {key: 배정 수}
+ */
+export function apportionByWeight(keys, weightBySubject, total, minPerKey = 0) {
+    const list = (keys || []).filter(Boolean);
+    /** @type {{ [x: string]: number }} */
+    const out = {};
+    if (!list.length) return out;
+    const cap = Math.max(0, Math.floor(total) || 0);
+    const wMap = weightBySubject || {};
+    const effMin = Math.max(0, Math.min(minPerKey, Math.floor(cap / list.length)));
+    list.forEach(k => { out[k] = effMin; });
+    let pool = cap - effMin * list.length;
+    const wsum = list.reduce((s, k) => s + Math.max(0, wMap[k] || 0), 0);
+    const rows = list.map(k => ({
+        key: k,
+        share: wsum > 0 ? pool * Math.max(0, wMap[k] || 0) / wsum : pool / list.length
+    }));
+    rows.forEach(r => {
+        const g = Math.floor(r.share);
+        out[r.key] += g;
+        pool -= g;
+    });
+    // 최대잔여법 — 소수부 큰 순으로 잔여 1씩 (동점은 keys 선언 순서)
+    rows.sort((a, b) => (b.share - Math.floor(b.share)) - (a.share - Math.floor(a.share)));
+    for (const r of rows) {
+        if (pool <= 0) break;
+        out[r.key] += 1;
+        pool -= 1;
+    }
+    return out;
+}
+
+// @spec D-23
+/**
+ * 최종 인출 세션 과목 층화 — D-19 위험 카드(R_exam 오름차순)가 세션 상한을 넘을 때
+ * 과목별 출제 비중 비례 쿼터 + 과목당 최소 1장으로 자르고, 수요 소진 잔여는
+ * 전역 R_exam 순으로 재충전한다. 소수 비중 과목이 세션에서 탈락하는 것을 차단.
+ * 비중 미선언(합계 0)이면 기존 전역 R 절단. 결과는 R_exam 오름차순 유지.
+ * @param {Array<{id:string, rExam:number}>} risk getExamRiskCards 결과 (R 오름차순)
+ * @param {number} cap 세션 상한
+ * @param {Object} [weightBySubject] examWeightBySubject 결과
+ * @returns {Array<{id:string, rExam:number}>}
+ */
+export function selectExamRiskSession(risk, cap, weightBySubject) {
+    const list = Array.isArray(risk) ? risk : [];
+    const limit = Math.max(0, Math.floor(cap) || 0);
+    if (list.length <= limit) return list.slice();
+    const wsum = Object.values(weightBySubject || {}).reduce((s, n) => s + (n || 0), 0);
+    if (wsum <= 0 || !list.length) return list.slice(0, limit);
+
+    // 과목 그룹화 — subjectKeyFromItemId 해석 불가 id는 '' 버킷 (비중 0, 최소 1 보장)
+    const groups = new Map();
+    for (const r of list) {
+        const k = subjectKeyFromItemId(r.id) || '';
+        if (!groups.has(k)) groups.set(k, []);
+        groups.get(k).push(r);
+    }
+    const quota = apportionByWeight([...groups.keys()], weightBySubject, limit, 1);
+    const wanted = new Set();
+    for (const [k, items] of groups) {
+        items.slice(0, quota[k] || 0).forEach(r => wanted.add(r));
+    }
+    // 수요 소진 잔여 — 전역 R_exam 오름차순으로 재충전
+    let need = limit - wanted.size;
+    if (need > 0) {
+        for (const r of list) {
+            if (!wanted.has(r)) {
+                wanted.add(r);
+                if (--need <= 0) break;
+            }
+        }
+    }
+    return list.filter(r => wanted.has(r));
+}
+
 /**
  * 주간 배분 입력 집계 (SC-11·SC-12) — 캘린더 칩·학습 진단 카드·주간 리포트가
  * 동일 입력을 공유하도록 raw state/레지스트리 → computeSubjectAllocation opts 변환을
@@ -575,7 +675,7 @@ export function computeSubjectAllocInputs(p = {}) {
     /** @type {{ [x: string]: number }} */
     const weak = {};
     /** @type {{ [x: string]: number }} */
-    const weights = {};
+    const weights = examWeightBySubject(p.exams);
     /** @type {{ [x: string]: number }} */
     const due = {};
     /** @type {{ [x: string]: { causes: number, weakChapters: number } }} */
@@ -599,9 +699,6 @@ export function computeSubjectAllocInputs(p = {}) {
         if (!clean.includes('_card_')) return; // 카드 외 항목은 카드 잔여 대비 비율 왜곡 방지
         const k = subjectKeyFromItemId(id);
         if (k) weak[k] = (weak[k] || 0) + 1;
-    });
-    (p.exams || []).forEach(ex => {
-        if (ex && ex.subject) weights[ex.subject] = (weights[ex.subject] || 0) + ((ex.stats && ex.stats.questions) || 0);
     });
     // SC-13 FSRS 복습 대기 — 기한 도래 카드 id를 과목별로 집계
     (p.dueCardIds || []).forEach(id => {

@@ -1,5 +1,5 @@
 // src/views/dashboard-queue.js — "오늘 할 일" 단일 큐 (TQ-01~05, DOC-DSN-21)
-// @spec TQ-01,TQ-02,TQ-03,TQ-05
+// @spec TQ-01,TQ-02,TQ-03,TQ-05,D-23
 //
 // 모든 추천 소스의 출력을 하나의 우선순위 큐로 병합한다.
 // 큐 빌드(buildTodayQueue)는 DOM 비의존 순수 로직 — 렌더는 renderTodayQueue가 담당.
@@ -14,7 +14,7 @@ import { getWeakStatements } from '../statement-tracker.js';
 import {
     getStudyCalendar, computeStudyPlan, computeSubjectAllocation,
     computeSubjectAllocInputs, sumRecentCardsBySubject, sumRecentQuizzesBySubject,
-    getDDay
+    getDDay, examWeightBySubject, selectExamRiskSession
 } from '../study-tracker.js';
 import { computeRecommendations, snapshotRecommendations, evaluateRecommendationEffect } from '../recommendations.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
@@ -220,13 +220,18 @@ export function renderTodayQueue(subjects) {
     });
 
     const dday = getDDay();
+    // D-23 — 세션 상한 초과 시 과목별 출제 비중 층화로 절단 (전역 R 절단의 과락 사각 차단)
+    const examRiskIds = selectExamRiskSession(
+        getExamRiskCards(dday), EXAM_R_SESSION_CAP,
+        examWeightBySubject((DataLoader.registry && DataLoader.registry.exams) || [])
+    ).map(r => r.id);
     const items = buildTodayQueue({
         dueCardIds, subjects, recs, allocRemaining,
         reviewCount: state.weakCards.size,
         weakStatementCount: getWeakStatements().length,
         dailyDone: !!safeGetItem(dailyCompletedKey(todayKey())),
         dday,
-        examRiskIds: getExamRiskCards(dday).slice(0, EXAM_R_SESSION_CAP).map(r => r.id),
+        examRiskIds,
         hasProgress
     });
 
