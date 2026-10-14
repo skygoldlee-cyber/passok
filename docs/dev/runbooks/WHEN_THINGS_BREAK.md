@@ -8,7 +8,7 @@
 이 문서는 **색인**이다 — 절차의 정본을 여기 복제하지 않는다. "증상 → 유력 원인 → 진단 → 정본 문서"를
 한 표로 라우팅하는 것이 목적이며, 절차 본문이 필요하면 표의 정본 링크로 이동한다.
 
-- 게이트 실패별 복구 표의 정본은 **[GATE_MAP.md](../reference/GATE_MAP.md) §3** — 이 문서는 그 표로
+- 게이트 실패별 복구 표의 정본은 **[GATE_MAP.md §3](../reference/GATE_MAP.md#3-흔한-실패-복구)** — 이 문서는 그 표로
   도달하기 위한 증상별 진입점과, GATE_MAP이 다루지 않는 **우회 장치·기준선 갱신 정당성**을 다룬다.
 - 새 장애·오탐을 겪으면 **절차를 쓰기 전에 이 표에 증상 행을 먼저 추가**한다 (§6 기록 규약).
 
@@ -34,7 +34,7 @@
 | 로그인·클라우드 동기화가 안 됨 | Supabase 미설정(정상 — 로컬 모드) 또는 프로젝트 키 문제 | 설정 메뉴에서 계정 상태 확인 | 설계: [SUPABASE_DESIGN.md](../design/SUPABASE_DESIGN.md), 운영: [Supabase SMTP 가이드](Supabase_Custom_SMTP_MagicLink_OTP_설정가이드.md) |
 | 배포는 됐는데 특정 기능만 죽음 | CSP 차단(인라인 스크립트/핸들러) 또는 런타임 오류 | 브라우저 콘솔 CSP 위반 로그 · `client_errors` 텔레메트리(`src/error-telemetry.js`) | `check:uistyle`·`check:escape` 규약 위반 여부 확인 — [CODE_CONVENTIONS.md](../../CODE_CONVENTIONS.md) |
 | 데이터(진행률)가 사라짐 | localStorage 키 변경 또는 시험 전환 스코프 오인 | `src/storage-keys.js`의 `examId:` 스코프 규약 확인 | 백업/복원 경로: `src/views/backup.js` |
-| 롤백이 필요함 | — | `git tag -l "deploy/*"`로 이전 배포 태그 조회 | Vercel 대시보드에서 이전 배포 promote 또는 태그 시점 재배포 — [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) |
+| 롤백이 필요함 | — | `git tag -l "deploy/*"`로 이전 배포 태그 조회 | Vercel 대시보드에서 이전 배포 promote 또는 태그 시점 재배포 — [DEPLOYMENT_GUIDE.md §5-3](DEPLOYMENT_GUIDE.md#5-3-롤백-절차-프로덕션을-이전-버전으로-복귀) |
 
 ## 2. 로컬 개발 — 커밋·푸시·도구 증상
 
@@ -45,12 +45,12 @@
 | 로컬은 통과, CI만 실패 | 로컬/CI 단계 비대칭 또는 미실행 단계 | `npm.cmd run check:ci`로 로컬 재현 | 비대칭은 `check:ciparity`의 CI_ONLY·LOCAL_ONLY 명단 확인 — [GATE_MAP.md](../reference/GATE_MAP.md) §2 |
 | `check:ci`가 너무 느림 | 전체 유닛 대신 영향 테스트로 축소 가능 | `npm.cmd run check:ci -- --affected` | [GATE_MAP.md](../reference/GATE_MAP.md) §2 |
 | 게이트 단계 자체가 예외로 죽음 | 체커 버그 또는 환경 문제 | `npm.cmd run check -- --step <id>`로 단독 재현 (`--list`로 id 조회) | 체커 자체 수정은 §5 "기준선 갱신" 규약과 무관하게 일반 버그로 처리 |
-| `check:*` 단계가 실패했는데 어느 종류인지 모름 | — | 실패한 단계명을 §3 계열 표에 대입 | 복구 표 정본: [GATE_MAP.md](../reference/GATE_MAP.md) §3 |
+| `check:*` 단계가 실패했는데 어느 종류인지 모름 | — | 실패한 단계명을 §3 계열 표에 대입 | 복구 표 정본: [GATE_MAP.md §3](../reference/GATE_MAP.md#3-흔한-실패-복구) |
 | `check:orphans`가 로컬은 통과·CI에서만 실패 | 탐지가 `git ls-files` 한정 — 미커밋 신규 자산은 미검출 | `git status`로 untracked 확인 | 커밋 후 재검사되므로 실패는 정상 — 파일을 참조시키거나 삭제 |
-| `check:datafresh`가 첫 단계에서 즉시 중단 | 생성물 경로에 미커밋·미추적 변경 존재 (빌드 덮어쓰기 방지) | 오류가 나열한 파일 목록 = dirty 생성물 | 빌드 → 생성물 커밋 → 재검증. 순서 규약: [GATE_MAP.md](../reference/GATE_MAP.md) §3 |
+| `check:datafresh`가 첫 단계에서 즉시 중단 | 생성물 경로에 미커밋·미추적 변경 존재 (빌드 덮어쓰기 방지) | 오류가 나열한 파일 목록 = dirty 생성물 | 빌드 → 생성물 커밋 → 재검증. 순서 규약: [GATE_MAP.md §3](../reference/GATE_MAP.md#3-흔한-실패-복구) |
 | pre-push가 불필요한 단계까지 돎 | 적응형 선별이 전체 폴백 | `tools/check/push_gate.js`의 파일 경로 태그 분류 확인 | 미분류 파일은 전체 실행이 정상 — 필요 시 태그 추가 |
 | `scaffold:exam --remove` 후 게이트가 잔재를 잡음 | `manifest.<id>.webmanifest`·`.last-stats.<id>.json`·sw.js/registry 잔존 참조 | `git status`로 잔여물 확인 | `--remove`는 둘을 자동 삭제하도록 개선됨(구버전은 수동 삭제) — 이후 `build:data` 재실행으로 sw.js·exams.js 정리 |
-| 신규 시험의 오프라인 부팅 실패 · registry 404 | `sw.js` DATA_ASSETS는 **기본 시험(cosmetic) 빌드 패스에서만** 재생성 + 존재하는 번들만 포함 → 첫 빌드에 신규 시험 누락 | `sw.js`의 DATA_ASSETS에 `data/exams/<id>/registry.js` 존재 여부 | `npm.cmd run build:data` **2차** 실행으로 반영 — [NEW_EXAM_RUNBOOK.md](NEW_EXAM_RUNBOOK.md) §3 |
+| 신규 시험의 오프라인 부팅 실패 · registry 404 | `sw.js` DATA_ASSETS는 **기본 시험(cosmetic) 빌드 패스에서만** 재생성 + 존재하는 번들만 포함 → 첫 빌드에 신규 시험 누락 | `sw.js`의 DATA_ASSETS에 `data/exams/<id>/registry.js` 존재 여부 | `npm.cmd run build:data` **2차** 실행으로 반영 — [NEW_EXAM_RUNBOOK.md §3](NEW_EXAM_RUNBOOK.md#3단계--빌드--커밋--검증-순서-중요) |
 
 ## 3. 게이트 계열 분류 — 어느 버킷인가
 
