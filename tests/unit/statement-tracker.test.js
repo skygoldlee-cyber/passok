@@ -2,7 +2,8 @@
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-    recordStatementJudgments, getStatementStat, getWeakStatements, getDueStatementSids
+    recordStatementJudgments, getStatementStat, getWeakStatements, getDueStatementSids,
+    getAllStatementStats, getAnomalousStatements
 } from '../../src/statement-tracker.js';
 import { gradeAnswer } from '../../src/questions.js';
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
@@ -77,6 +78,29 @@ test('recordStatementJudgments: 잘못된 입력 안전 처리', () => {
     assert.equal(recordStatementJudgments(null), 0);
     assert.equal(recordStatementJudgments('x'), 0);
     assert.equal(recordStatementJudgments([]), 0);
+    // judgedCorrect가 비불리언인 진술도 건너뜀 (`!== 'boolean'` 변이 가드)
+    assert.equal(recordStatementJudgments([{ sid: 'a', judgedCorrect: 'yes' }]), 0);
+    assert.equal(recordStatementJudgments([{ sid: 'a' }]), 0);
+    // 전부 스킵되면 저장 자체를 하지 않는다 (`recorded > 0` 가드)
+    assert.equal(mockStorage.getItem(scopedKey(STORAGE_KEYS.STATEMENT_STATS)), null);
+});
+
+test('recordStatementJudgments: 선택 필드 없는 진술은 기본값으로 기록', () => {
+    // s.text/truth/conceptId 부재 시 기본값 유지 — 조건부 대입 변이 가드
+    recordStatementJudgments([{ sid: 'bare', judgedCorrect: false }]);
+    const st = getStatementStat('bare');
+    assert.equal(st.t, '');
+    assert.equal(st.truth, null);
+    assert.equal(st.cid, null);
+});
+
+test('getWeakStatements: limit이 비수치면 전체 반환', () => {
+    const statsKey = scopedKey(STORAGE_KEYS.STATEMENT_STATS);
+    mockStorage.setItem(statsKey, JSON.stringify({
+        a: { j: 1, w: 1, lw: 'x', t: '', truth: null, cid: null, last: false, streak: 0 },
+        b: { j: 1, w: 1, lw: 'y', t: '', truth: null, cid: null, last: false, streak: 0 },
+    }));
+    assert.equal(getWeakStatements('2').length, 2, '`typeof limit === "number"` 가드 — 비수치 limit는 전체 반환');
 });
 
 test('getWeakStatements: 오판 많은 순 정렬', () => {
@@ -104,6 +128,52 @@ test('getWeakStatements: 연속 정답 3회면 졸업, 재오판 시 복귀', ()
     assert.equal(getWeakStatements(undefined, true).length, 1, '졸업 포함 조회 시 노출');
     recordStatementJudgments([{ sid: 'a', judgedCorrect: false }]);
     assert.equal(getWeakStatements().length, 1, '재오판 시 취약 목록 복귀');
+});
+
+test('getWeakStatements: 동률은 최근 오판일 우선, limit 미지정 시 전체', () => {
+    const statsKey = scopedKey(STORAGE_KEYS.STATEMENT_STATS);
+    // w 동률(1) — lw가 더 최근인 sid가 앞에 와야 함 (정렬 변이 가드)
+    mockStorage.setItem(statsKey, JSON.stringify({
+        old: { j: 1, w: 1, lw: '2020-01-01', t: '', truth: null, cid: null, last: false, streak: 0 },
+        new: { j: 1, w: 1, lw: '2099-01-01', t: '', truth: null, cid: null, last: false, streak: 0 },
+    }));
+    const weak = getWeakStatements();
+    assert.equal(weak.length, 2);
+    assert.equal(weak[0].sid, 'new', '동률 시 최근 오판(lw) 우선');
+    assert.equal(weak[1].sid, 'old');
+});
+
+test('getAnomalousStatements: 경계값 — j==minJ·ratio==임계도 포함', () => {
+    const statsKey = scopedKey(STORAGE_KEYS.STATEMENT_STATS);
+    mockStorage.setItem(statsKey, JSON.stringify({
+        edge:  { j: 5, w: 4, lw: 'x', t: '', truth: null, cid: null, last: false, streak: 0 },  // j==5, ratio=0.8 정확 경계
+        under: { j: 4, w: 4, lw: 'x', t: '', truth: null, cid: null, last: false, streak: 0 },  // j 부족
+        lowr:  { j: 5, w: 3, lw: 'x', t: '', truth: null, cid: null, last: false, streak: 0 },  // ratio 0.6 < 0.8
+        tie1:  { j: 10, w: 8, lw: 'x', t: '', truth: null, cid: null, last: false, streak: 0 }, // ratio 0.8 동률 → j 큰 쪽 우선
+    }));
+    const anom = getAnomalousStatements();
+    assert.deepEqual(anom.map(a => a.sid), ['tie1', 'edge'], '경계 포함 + ratio 동률 시 j 내림차순');
+});
+
+test('getAllStatementStats: 저장 통계를 그대로 반환하고 손상 시 빈 객체', () => {
+    const statsKey = scopedKey(STORAGE_KEYS.STATEMENT_STATS);
+    mockStorage.setItem(statsKey, JSON.stringify({ a: { j: 1, w: 1 } }));
+    assert.deepEqual(getAllStatementStats(), { a: { j: 1, w: 1 } });
+    mockStorage.setItem(statsKey, '{corrupt');
+    assert.deepEqual(getAllStatementStats(), {});
+});
+
+test('getDueStatementSids: due==오늘인 진술은 복습 대기에 포함 (<= 경계)', async () => {
+    const { getDueStatementSids } = await import('../../src/statement-tracker.js');
+    const { todayKey } = await import('../../src/utils.js');
+    const statsKey = scopedKey(STORAGE_KEYS.STATEMENT_STATS);
+    const srKey = scopedKey(STORAGE_KEYS.FC_SPACED_REPETITION);
+    mockStorage.setItem(statsKey, JSON.stringify({ s1: { j: 1, w: 1 }, s2: { j: 1, w: 1 } }));
+    mockStorage.setItem(srKey, JSON.stringify({
+        s1: { v: 2, due: todayKey(), lastReview: todayKey() },   // 오늘 due → 포함
+        s2: { v: 2, due: '2099-01-01', lastReview: todayKey() }, // 미래 → 제외
+    }));
+    assert.deepEqual(getDueStatementSids(), ['s1']);
 });
 
 test('getDueStatementSids: 오판 진술은 내일 복습 대기 아님(당일 기록 시 오늘 due)', () => {
