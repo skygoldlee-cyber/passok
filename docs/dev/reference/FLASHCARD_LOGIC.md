@@ -368,7 +368,7 @@ if (fcConfig.sortBy === 'importance') {
 
 ---
 
-## � 간격 반복 (Spaced Repetition — SM-2)
+## 🔁 간격 반복 (Spaced Repetition — SM-2)
 
 > **관련 파일**: `src/spaced-repetition.js`, `src/state.js`, `src/views/flashcard.js`, `src/views/dashboard.js`
 
@@ -413,7 +413,7 @@ getDueCount()       // 오늘 복습 대상 카드 수
 
 ---
 
-## �🔒 파서 등가성
+## 🔒 파서 등가성
 
 ### 원칙
 

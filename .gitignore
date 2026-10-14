@@ -36,10 +36,10 @@ dist/
 /build/
 *.egg-info/
 
-# ---------- � SBOM (npm sbom 산출물 — CI 아티팩트·재생성 가능) ----------
+# ---------- 🧾 SBOM (npm sbom 산출물 — CI 아티팩트·재생성 가능) ----------
 sbom.spdx.json
 
-# ---------- �💻 OS/에디터 ----------
+# ---------- 💻 OS/에디터 ----------
 .DS_Store
 Thumbs.db
 *.log
@@ -67,15 +67,15 @@ _report.json
 # Mermaid 사전렌더 SVG 캐시 (md2doc.py — 재생성 가능)
 ref-pipeline/.mermaid_cache/
 
-# ---------- � 테스트 커버리지 ----------
+# ---------- 🧪 테스트 커버리지 ----------
 coverage/
 coverage-unit/
 coverage-merged/
 
-# ---------- �📂 아카이브 ----------
+# ---------- 📂 아카이브 ----------
 archive/
 
-# ----------  대용량 HTML (GitHub 100MB 한도 초과) ----------
+# ---------- 📄 대용량 HTML (GitHub 100MB 한도 초과) ----------
 content/**/*.html
 # MD_to_HTML.py 생성 산출물 (로컬 뷰잉용, 재생성 가능)
 docs/**/*.html

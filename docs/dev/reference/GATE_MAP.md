@@ -26,7 +26,7 @@
 
 | 층 | 목적 | 우회 |
 |---|---|---|
-| pre-commit | IDE 수준 오류(타입·린트)·시크릿·문서/테스트 동반 차단 | `git commit --no-verify` · `SKIP_DOCSYNC=1` · `SKIP_TESTFIRST=1` |
+| pre-commit | IDE 수준 오류(타입·린트)·시크릿·FFFD 인코딩·문서/테스트 동반 차단 | `git commit --no-verify` · `SKIP_DOCSYNC=1` · `SKIP_TESTFIRST=1` |
 | pre-push | 변경 파일에 필요한 단계만 선별 실행 (미분류 파일=전체 폴백) | `SKIP_PREPUSH=1` · `PUSH_GATE_ALL=1`(전체 강제) · 커밋 메시지 끝 `[no-docs]`·`[no-test]` |
 | CI | `check:ci` 프리셋 + 커버리지 + E2E | 없음 — 로컬 재현은 `npm run check:ci` |
 | deploy | 오염된 트리/미푸시 상태의 배포 차단 + 버전 스탬프 + 스모크 | 없음 — `vercel --prod` 직접 실행 금지 |
@@ -40,7 +40,7 @@
 | `all` | `npm run check:all` | lint·types·html + docs + domainmap + content 전체 | 배포 전 완전 점검 (`--quick`=DOM 테스트 생략) |
 | `ci` | `npm run check:ci` | CI 워크플로 로컬 재현 (24단계) | 푸시 전 자신 없을 때 (`-- --affected`=영향 테스트만) |
 | `content` | `npm run check:content` | 콘텐츠 추적 27단계 (manifest·인용·신선도·링크·카드) | 교재·문제은행·참조자료 편집 후 (`-- --build`=build:data 선행) |
-| `docs` | `npm run check:docs` | 문서 정합 11단계 (경로·ID·명령·플랜·저장소·CI패리티·수치) | docs/ 편집 후 |
+| `docs` | `npm run check:docs` | 문서 정합 13단계 (경로·ID·명령·플랜·저장소·CI패리티·수치·인코딩) | docs/ 편집 후 |
 | `refs` | `npm run check:refs` | 참조자료 4계층 + 득표 귀속 | ref_md·PDF 변경 후 |
 | `freshness` | `npm run check:fresh` | 생성물 신선도 묶음 (html·trace·data·drill·emb·docs_md) | 빌드 산출물 의심 시 |
 
@@ -59,6 +59,7 @@
 | `check:featflags`/`check:plan` | 미선언 feature 키 사용 | exams.json/features 또는 feature-plan.json 선언 |
 | `check:imports` | import/export 불일치 | 누락 export 추가 또는 잘못된 import 정리 |
 | `check:teststats` | 문서의 테스트 수치 인용이 실측에서 벗어남 | `npm run stats:stamp` (SSOT+문서 수치 재기록) |
+| `check:enc` | 파일에 U+FFFD 잔존 — 저장 시 이모지가 변조됨 (재저장·도구 경유 사고) | 해당 파일 되돌리거나 원문 복구 · 잔재 정리 후 `node tools/check/check_replacement_char.js --update`로 기준선 하향 |
 | `verify:assets`/`check:perf` | sw.js 프리캐시 목록과 실파일 불일치·예산 초과 | 파일 추가/경로 수정 (예산은 tools/check/check_perf_budget.js) |
 | `check:vendor` | vendor/ 파일 해시·버전이 매니페스트와 불일치 | 수동 변경: `npm run check:vendor -- --update` / 버전 갱신: `npm run sync:vendor -- <key>` |
 | `check:uistyle` | 인라인 style 속성·JS display 조작·인라인 핸들러·네이티브 다이얼로그·JS 템플릿 정적 `style=` 기준선 래칫 | CSS 클래스 토글(`.is-hidden`)·`data-click`·`showToast` 계열로 대체 · 동적 값은 `style="--var:${x}"` 허용 (면제는 `style-ok` 토큰) |

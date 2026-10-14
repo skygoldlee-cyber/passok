@@ -995,7 +995,7 @@ flowchart TD
         P5B1["🔄 포뮬러 버전 관리"]
         P5B2["👤 고객별 기록"]
         P5B3["🔔 법령 업데이트 알림<br/>(Actionable Alert)"]
-        P5B4["� 포뮬러 영향 분석"]
+        P5B4["🧪 포뮬러 영향 분석"]
     end
     P5B --> P5C
     subgraph P5C ["Phase 5-C (데이터 축적 후, 법률 검토 후)"]
