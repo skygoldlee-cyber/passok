@@ -209,6 +209,7 @@ passory/
 
 자세한 설계 컨셉과 상세 아키텍처는 [`docs/dev/ARCHITECTURE.md`](docs/dev/ARCHITECTURE.md)를 참고하세요.
 전체 문서 목록은 [`docs/README.md`](docs/README.md)를 참고하세요.
+개발 규약·검증 게이트는 [`AGENTS.md`](AGENTS.md)와 [`docs/dev/reference/GATE_MAP.md`](docs/dev/reference/GATE_MAP.md)를 참고하세요.
 
 ---
 

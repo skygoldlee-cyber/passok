@@ -19,11 +19,11 @@ flowchart TD
     end
 
     subgraph HOOKS["Git 훅 (opt-in)"]
-        PRECOMMIT["pre-commit<br/>check:types + lint<br/>+ check:html + docsync --staged"]
-        PREPUSH["pre-push<br/>+ check:trace + check:specrefs<br/>+ check:docs + docsync"]
+        PRECOMMIT["pre-commit<br/>check:types + lint + check:html<br/>+ secrets + enc + orphans<br/>+ docsync --staged + testfirst --staged"]
+        PREPUSH["pre-push<br/>적응형 선별 — 태그별 필요 단계만<br/>(전체 10단계: types·trace·specrefs·docs·html·<br/>lint·posind·impact·docsync·testfirst)"]
     end
 
-    subgraph CI["GitHub Actions (ubuntu · Node 20)"]
+    subgraph CI["GitHub Actions (ubuntu · Node 24)"]
         CIFLOW["npm ci → audit → lint → types →<br/>imports → docs → docsync → specrefs →<br/>trace → html → content-only → test →<br/>coverage → verify:assets → parser →<br/>E2E (Playwright)"]
     end
 
@@ -94,14 +94,14 @@ npm.cmd run check:hooks     # 설치 여부 확인 — 미설치 시 권고 출�
 
 | 훅 | 실행 게이트 |
 |---|---|
-| pre-commit | `check:types` + `lint` + `check:html` + `docsync --staged` |
-| pre-push | 위 + `check:trace` + `check:specrefs` + `check:docs` + `docsync --ref origin/main` |
+| pre-commit | `check:types` + `lint` + `check:html` + `check:secrets` + `check:enc` + `check:orphans` + `docsync --staged` + `testfirst --staged` |
+| pre-push | `push_gate.js` 적응형 선별 — 파일 태그별 필요 단계만 실행 (전체 10단계: `types`·`trace`·`specrefs`·`docs`·`html`·`lint`·`posind`·`impact`·`docsync`·`testfirst`, 결과 캐시 — 우회는 `--no-cache`/`PUSH_GATE_NOCACHE=1`) |
 
 훅은 opt-in이라 미설치 환경의 커밋·푸시를 막지 않는다 — `check:hooks`는 이를 가시화하는 권고이며, 최종 방어는 CI다.
 
 ## 6. CI 게이트 (`.github/workflows/ci.yml`)
 
-ubuntu + Node 20에서 순서대로 실행 — 로컬 `check:ci`와 대응 관계:
+ubuntu + Node 24에서 순서대로 실행 — 로컬 `check:ci`와 대응 관계:
 
 1. `npm ci` · `npm audit --audit-level=high` · `npm run sbom` → SPDX SBOM 아티팩트 업로드 *(CI 전용)*  
    + Dependabot(`.github/dependabot.yml`)이 npm·github-actions 생태계 주간 업데이트 PR을 자동 생성 *(저장소 설정)*

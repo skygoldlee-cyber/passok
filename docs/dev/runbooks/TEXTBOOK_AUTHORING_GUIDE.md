@@ -783,7 +783,7 @@ node tools/sync/sync_citation_lines.js             # 실제 동기화 실행
 ## 5. 이야기형 교재 (선택)
 
 각 교재 파일에 대해 **이야기형(Story Mode)** 변형을 선택적으로 작성할 수 있다.
-이야기형 파일은 `manifest.json`에 등록하지 않아도 된다 — 앱이 기본 파일명에서 자동으로 파생하여 로드한다.
+`*_이야기형.md`는 직접 작성·편집하는 파일이 아니라 **생성물**이다 — `교재/<과목>/story/<베이스>_서사.md` 서사 패치를 작성하고 `manifest.json`의 해당 챕터에 `storyFile`을 선언한 뒤 `npm.cmd run build:story`로 생성한다 (패치 작성법·슬롯 마커·지시어 문법은 [STORY_PATCH_GUIDE.md](STORY_PATCH_GUIDE.md) 정본). 아래 §5.1~5.2는 생성되는 파일의 구조 명세다.
 
 ### 5.1 파일명 규칙
 

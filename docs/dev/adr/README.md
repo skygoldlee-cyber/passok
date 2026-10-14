@@ -43,3 +43,18 @@
 | [0001](0001-exam-data-boot-document-write.md) | 활성 시험 데이터 번들을 document.write 부트 스크립트로 로드 | accepted | 2026-10-03 |
 | [0002](0002-domain-asset-convention-paths.md) | 도메인 자산을 `exams/${활성시험}/` 규약 경로로 해석 | accepted | 2026-10-03 |
 | [0003](0003-localstorage-first-storage.md) | localStorage 1차 저장 + Supabase 선택적 동기화 | accepted | 2026-09-30 |
+| [0004](0004-vanilla-js-no-framework.md) | 프레임워크 무의존 Vanilla JS (빌드 도구 없는 ESM) | accepted | 2026-10-14 (백필) |
+| [0005](0005-window-global-data-bundles.md) | 데이터 번들을 window 전역에 할당하는 클래식 스크립트 | accepted | 2026-10-14 (백필) |
+| [0006](0006-storage-single-funnel.md) | 영속 IO의 단일 퍼널 — storage.js 경유 강제 | accepted | 2026-10-14 (백필) |
+| [0007](0007-csp-self-event-delegation.md) | CSP script-src 'self' 유지 + data-click 이벤트 위임 | accepted | 2026-10-14 (백필) |
+| [0008](0008-position-independence-gate.md) | 위치 좌표(라인·인덱스)의 식별자 사용 금지 | accepted | 2026-10-14 (백필) |
+| [0009](0009-conventions-as-gates.md) | 규약의 기계 강제 — 문서 규약은 게이트로 변환한다 | accepted | 2026-10-14 (백필) |
+| [0010](0010-ratchet-baselines.md) | 레거시 잔재는 기준선 래칫으로 관리 — 단조 감소만 허용 | accepted | 2026-10-14 (백필) |
+| [0011](0011-html-partial-assembly.md) | index.html의 템플릿+파셜 조립 빌드 | accepted | 2026-10-14 (백필) |
+| [0012](0012-content-md-ssot-committed-bundles.md) | 콘텐츠 MD를 SSOT로, 생성 번들은 커밋한다 | accepted | 2026-10-14 (백필) |
+| [0013](0013-single-deploy-path.md) | 배포는 npm run deploy 단일 경로 — 스탬프는 비커밋 | accepted | 2026-10-14 (백필) |
+| [0014](0014-three-tier-test-stack.md) | 3계층 테스트 스택 — node:test + Vitest/jsdom + Playwright | accepted | 2026-10-14 (백필) |
+| [0015](0015-jsdoc-checkjs-over-typescript.md) | TypeScript 전환 대신 JSDoc + checkJs | accepted | 2026-10-14 (백필) |
+| [0016](0016-multi-exam-registry-feature-flags.md) | 멀티시험 레지스트리 + feature flag 게이팅 | accepted | 2026-10-14 (백필) |
+| [0017](0017-vendored-assets-hash-manifest.md) | 외부 라이브러리는 vendor/ 벤더링 + 해시 매니페스트 | accepted | 2026-10-14 (백필) |
+| [0018](0018-fsrs-over-sm2.md) | 간격 반복은 SM-2 대신 FSRS | accepted | 2026-10-14 (백필) |

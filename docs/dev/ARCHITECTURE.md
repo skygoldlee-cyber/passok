@@ -2205,6 +2205,7 @@ SPEC.md의 기능/비기능 ID와 이 문서의 설명 위치·구현 모듈 대
 - [`README.md`](../../README.md) — 프로젝트 소개 및 시작 가이드 (폴더 구조 포함)
 - [`DEPLOYMENT_GUIDE.md`](runbooks/DEPLOYMENT_GUIDE.md) — Vercel 배포 및 오디오 호스팅 가이드
 - [`VERIFY_DEPLOY_PIPELINE.md`](runbooks/VERIFY_DEPLOY_PIPELINE.md) — 전체구조 점검→배포 게이트 파이프라인 (신선도 게이트·실패 복구 표)
+- [`WHEN_THINGS_BREAK.md`](runbooks/WHEN_THINGS_BREAK.md) — 장애·깨짐 증상 색인 (증상→원인→정본 라우팅·우회 장치·기준선 규약)
 - [`AUDIO_HOSTING_GUIDE.md`](runbooks/AUDIO_HOSTING_GUIDE.md) — 오디오북 호스팅 및 청취 가이드
 - [`MULTI_MACHINE_SETUP.md`](runbooks/MULTI_MACHINE_SETUP.md) — 다중 머신 개발 환경 설정
 - [`CHANGES.md`](CHANGES.md) — 코드 리뷰 및 아키텍처 개편 수정 이력 (Changelog)
