@@ -1,5 +1,5 @@
 // tests/dom/study-quiz.dom.test.js — 기출 퀴즈·오답 복습 시나리오
-// @spec Q-01~11
+// @spec Q-01~12
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.2 (Phase 3)
 // 검증: 출제→렌더(H), 빈 과목(E), 단답/객관식/OX 채점(H), 완주→결과(H),
 //       오답 영속(P), 재시작 초기화(R), 복습 목록·약점 퀴즈(H/P)
@@ -18,12 +18,14 @@ vi.mock('../../src/ui-utils.js', () => ({
 import { showToast } from '../../src/ui-utils.js';
 import {
     loadIndexHtml, el, isVisible,
-    seedStudyData, seedProgress, resetStudyState, storedJson,
+    seedStudyData, seedProgress, resetStudyState, storedJson, stubRegistry,
 } from './helpers.js';
 import { state } from '../../src/state.js';
+import { DataLoader } from '../../src/data-loader.js';
 import {
     startQuiz, renderQuizQuestion, submitQuizAnswer, nextQuizQuestion,
     renderReviewList, removeWeakCard, setReviewFilter, startWeakFocusQuiz,
+    startDiagnosticQuiz,
 } from '../../src/views/quiz.js';
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
 
@@ -257,5 +259,47 @@ describe('기출 퀴즈 — 출제·채점·결과·복습', () => {
         const container = el('review-cards-list-container');
         expect(container.textContent).toContain('다른과목카드');
         expect(container.textContent).not.toContain('조제관리사');
+    });
+
+    // Q-12 — 진단 평가 출제 비중 층화: 최소 3문 + 잔여 비중 비례(최대잔여법)
+    it('진단 평가 → 출제 비중 비례 층화 표본 (4/5/5/6)', async () => {
+        const mk = (subj) => Array.from({ length: 30 }, (_, i) =>
+            ({ id: `${subj}_quiz_${i}`, type: 'short', question: `${subj} q${i}`, answer: 'a' }));
+        stubRegistry([
+            { key: 'law', quizzes: mk('law') },
+            { key: 'manufacturing', quizzes: mk('manufacturing') },
+            { key: 'safety', quizzes: mk('safety') },
+            { key: 'understanding', quizzes: mk('understanding') },
+        ]);
+        DataLoader.registry.exams = [
+            { key: 'e1', subject: 'law', stats: { questions: 100 } },
+            { key: 'e2', subject: 'manufacturing', stats: { questions: 250 } },
+            { key: 'e3', subject: 'safety', stats: { questions: 250 } },
+            { key: 'e4', subject: 'understanding', stats: { questions: 400 } },
+        ];
+
+        await startDiagnosticQuiz();
+
+        expect(state.quiz.diagnostic).toBe(true);
+        const count = (k) => state.quiz.data.filter(q => q.id.startsWith(`${k}_`)).length;
+        // 최소 3×4=12 + 잔여 8×비중(0.1/0.25/0.25/0.4) 최대잔여 → 4/5/5/6
+        expect(count('law')).toBe(4);
+        expect(count('manufacturing')).toBe(5);
+        expect(count('safety')).toBe(5);
+        expect(count('understanding')).toBe(6);
+        expect(state.quiz.data.length).toBe(20);
+    });
+
+    // Q-12 — 비중 미선언 시험(exams 빈 배열)은 구 균등 배분과 동일
+    it('진단 평가 → 비중 미선언 시 균등 폴백 (5/5/5/5)', async () => {
+        const mk = (subj) => Array.from({ length: 30 }, (_, i) =>
+            ({ id: `${subj}_quiz_${i}`, type: 'short', question: `${subj} q${i}`, answer: 'a' }));
+        stubRegistry(['a', 'b', 'c', 'd'].map(k => ({ key: k, quizzes: mk(k) })));
+
+        await startDiagnosticQuiz();
+
+        const count = (k) => state.quiz.data.filter(q => q.id.startsWith(`${k}_`)).length;
+        ['a', 'b', 'c', 'd'].forEach(k => expect(count(k)).toBe(5));
+        expect(state.quiz.data.length).toBe(20);
     });
 });
