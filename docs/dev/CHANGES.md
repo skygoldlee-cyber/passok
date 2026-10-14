@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 U+FFFD 인코딩 깨짐 게이트 + 기존 잔재 정리
+
+- `check:enc` 신설(docs 단계 + pre-commit 루프) — 추적 텍스트 파일 전수에서 U+FFFD 치환 문자 탐지. git 한글 경로는 `core.quotepath=false`로 해석하고, 바이너리는 NUL 바이트 판별로 제외해 `.gitignore`·`.githooks` 같은 무확장자 파일도 커버. `replacement_char_baseline.json` 기준선 단조 감소(신규 유입·개수 초과 즉시 실패, `--update`로 하향) — 저장 시 이모지가 U+FFFD로 변조되는 사고가 모든 게이트를 무사 통과하던 공백 차단
+- 기존 잔재 정리 — docs 4파일(헤딩 이모지)·food 서사 마커(📖)·`.gitignore`·`.vercelignore` 섹션 헤더 복구, food 이야기형 교재·study_md 번들 재생성. css 주석 모지바케 66건만 기준선으로 승계
+- `.vscode/settings.json`에 `files.encoding: utf8` + `autoGuessEncoding: false` — IDE의 인코딩 오판 재저장 경로 차단 (`.editorconfig` charset과 이중 방어)
+- 사용자 매뉴얼 `user_manual.md`에도 동일 사고로 깨진 헤딩 이모지 2곳(📖 문서 역할 안내·🗂️ 메뉴 구성) 복구 후 `docs_md` 번들 재생성
+
 ## 2026-10-14 문제집 뷰어 본문 이미지 축소 규칙 누락 수정
 
 - `exam-viewer.js` 주입 CSS에 `#exam-article .reader-img{max-width:100%;height:auto}` 추가 — 병렬 구현인 `manual-viewer`에는 있던 규칙이 exam-viewer에만 없어, 교재 인용 링크·문제은행·참조자료 문서를 열 때 intrinsic 크기(예: 마인드맵 SVG 1360px)가 900px 본문 폭을 넘어 우측이 잘리던 갭 수정
