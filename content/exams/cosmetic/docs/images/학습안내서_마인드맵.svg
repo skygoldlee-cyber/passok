@@ -48,8 +48,9 @@ text{font-family:"Noto Sans CJK KR","Noto Sans KR","Pretendard","Apple SD Gothic
 <text class="tb" x="478" y="211" text-anchor="middle" dominant-baseline="central">3회독</text><text class="ts" x="478" y="310" text-anchor="middle" dominant-baseline="central">숫자</text>
 <rect x="500" y="198" width="44" height="96" fill="#0F6E56" stroke="#085041" stroke-width="0.75"/>
 <text class="tb" x="522" y="187" text-anchor="middle" dominant-baseline="central">4회독</text><text class="ts" x="522" y="310" text-anchor="middle" dominant-baseline="central">문제</text>
-<circle cx="560" cy="230" r="3" fill="#1D9E75"/><text class="ts" x="570" y="230" text-anchor="start" dominant-baseline="central">주간 배분</text>
-<circle cx="560" cy="252" r="3" fill="#1D9E75"/><text class="ts" x="570" y="252" text-anchor="start" dominant-baseline="central">학습 진단</text>
+<circle cx="560" cy="208" r="3" fill="#1D9E75"/><text class="ts" x="570" y="208" text-anchor="start" dominant-baseline="central">주간 배분</text>
+<circle cx="560" cy="230" r="3" fill="#1D9E75"/><text class="ts" x="570" y="230" text-anchor="start" dominant-baseline="central">학습 진단</text>
+<circle cx="560" cy="252" r="3" fill="#1D9E75"/><text class="ts" x="570" y="252" text-anchor="start" dominant-baseline="central">BKT 숙달</text>
 <circle cx="560" cy="274" r="3" fill="#1D9E75"/><text class="ts" x="570" y="274" text-anchor="start" dominant-baseline="central">시험 직전</text>
 <rect x="40" y="370" width="187" height="170" rx="12" fill="#FAECE7" stroke="#993C1D" stroke-width="1"/><path d="M40 400V382Q40 370 52 370H215Q227 370 227 382V400Z" fill="#993C1D"/><text class="tw" x="56" y="385" dominant-baseline="central">출처 추적</text><text class="ts" x="56" y="416" dominant-baseline="central">출처 박스 · 원천자료 11개</text>
 <rect x="58" y="440" width="50" height="66" rx="4" fill="#FFFFFF" stroke="#993C1D" stroke-width="1"/><rect x="58" y="440" width="50" height="12" rx="4" fill="#D85A30"/>
@@ -69,4 +70,5 @@ text{font-family:"Noto Sans CJK KR","Noto Sans KR","Pretendard","Apple SD Gothic
 <text class="ts" x="516" y="452" text-anchor="start" dominant-baseline="central">8개 법령 교차검증</text>
 <text class="ts" x="516" y="474" text-anchor="start" dominant-baseline="central">핵심 숫자 5종 확인</text>
 <text class="ts" x="516" y="496" text-anchor="start" dominant-baseline="central">15일 · 15초 · 97%</text>
+<text class="ts" x="516" y="518" text-anchor="start" dominant-baseline="central">60%/40% · 28±3일</text>
 </svg>
