@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 deploy CI 게이트 — 레드 빌드 배포 차단
+
+- `tools/deploy/deploy.js`에 CI 게이트 추가 — origin/main 동기화 검사 통과 직후, 배포 대상 커밋(`git rev-parse HEAD`)의 ci.yml run을 `gh run list --commit <sha>`로 조회해 `status=completed && conclusion=success`가 아니면 배포 중단
+- 커밋 스코프 조회가 핵심 — `--branch main --limit 1`은 진행 중 run을 건너뛰어 이전 커밋의 녹색 결과로 통과되는 구멍이 있음. run 없음(미push·미실행)·진행 중·실패 모두 차단
+- 배경: PROJECT_METRICS §9 기준선 측정에서 확인된 "CI 57연속 레드 + 그 위에서 deploy 3건" 사고 — 신호는 생성됐으나 소비자가 없던 관측 경로 부재를 배포 경로에서 차단
+- 우회: `SKIP_CI_GATE=1` (gh 미설치 등 — 권장하지 않음, 경고 출력됨)
+
 ## 2026-10-14 E2E 적색 15건 정리 — PRO 배지 중첩 인터랙티브 + 대비 + 시각 기준선
 
 - `refreshProBadges`가 `data-pro-feature` 배지에 무조건 `role=button`+`tabindex`+`data-click`을 부여해, `<button>`·`<label>` 안에 중첩된 배지까지 인터랙티브로 승격되던 결함 수정 — axe `nested-interactive` serious 8건(전 프로젝트 대시보드) + 터치 타깃 44px 미만 1건(story_textbook 배지)의 공통 루트. 네이티브 인터랙티브 조상(`button, a, label, role=button/link/checkbox/switch/tab`) 안의 배지는 장식으로 두고, div[data-click] 카드 내 배지는 기존대로 별도 진입점 유지. `pro-notice.dom.test.js`에 중첩 금지 회귀 테스트 추가
