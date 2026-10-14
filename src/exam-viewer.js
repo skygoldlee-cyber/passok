@@ -130,6 +130,8 @@ export const ExamViewer = (() => {
   margin:1.6rem 0;}
 #exam-overlay #exam-article sup{color:var(--color-warning);}
 #exam-overlay #exam-article .reader-table-wrapper{margin:1rem 0;}
+#exam-overlay #exam-article .reader-img{display:block;max-width:100%;height:auto;
+  margin:1rem auto;border-radius:16px;border:1px solid var(--border-color);}
 #exam-overlay #exam-article pre.reader-code-block{margin:1rem 0;padding:1rem;overflow-x:auto;
   border-radius:8px;background:rgba(0,0,0,.3);border:1px solid var(--border-color);}
 html.light-theme #exam-overlay #exam-article pre.reader-code-block{background:rgba(0,0,0,.06);}

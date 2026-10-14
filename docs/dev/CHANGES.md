@@ -7,6 +7,11 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 문제집 뷰어 본문 이미지 축소 규칙 누락 수정
+
+- `exam-viewer.js` 주입 CSS에 `#exam-article .reader-img{max-width:100%;height:auto}` 추가 — 병렬 구현인 `manual-viewer`에는 있던 규칙이 exam-viewer에만 없어, 교재 인용 링크·문제은행·참조자료 문서를 열 때 intrinsic 크기(예: 마인드맵 SVG 1360px)가 900px 본문 폭을 넘어 우측이 잘리던 갭 수정
+- `study-examviewer.dom.test.js`에 스타일 주입 회귀 테스트 추가 (EV 계열)
+
 ## 2026-10-14 문서 수치 게이트 + 커버리지 래칫 자동화 + HTML 싱크 센서스
 
 - `check:teststats` 신설(docs 단계) — README·TESTING의 테스트 수치 인용이 `test_stats.json` 실측 SSOT에서 벗어나면 실패 (정적 카운트 드리프트 ±12%·인용 밴드 0.80~1.05×). `stats:stamp`가 unit·vitest list·playwright --list 실측 후 SSOT+문서 인용을 `N+` 바닥 표기로 재기록 — 스테일 표기(687/388/16) 정정
