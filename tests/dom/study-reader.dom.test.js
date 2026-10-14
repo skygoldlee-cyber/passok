@@ -1,5 +1,5 @@
 // tests/dom/study-reader.dom.test.js — 교재 리더 시나리오
-// @spec TR-01~18,TR-27
+// @spec TR-01~18,TR-27,TR-28
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.2 (Phase 4)
 // 검증: 과목 목록 로드(H) · 과목 선택→본문·TOC 렌더(H) · 읽기 위치 저장·복원(P/R)
 //       · 북마크 토글→영속(P) · 미선택 빈 상태(E)
@@ -9,6 +9,7 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
 vi.mock('../../src/ui-utils.js', () => ({
     showToast: vi.fn(),
     showConfirm: vi.fn(() => Promise.resolve(true)),
+    showAlert: vi.fn(() => Promise.resolve(true)),
     showGlobalLoading: vi.fn(),
     hideGlobalLoading: vi.fn(),
     vibrate: vi.fn(),
@@ -20,7 +21,8 @@ import {
     loadIndexHtml, el, flushAsync, stubRegistry, resetStudyState, storedJson,
 } from './helpers.js';
 import { renderTextbookReader, textbookReaderState, startReadingSession, stopReadingSession } from '../../src/views/textbook-reader.js';
-import { safeSetItem } from '../../src/state.js';
+import { safeGetItem, safeSetItem } from '../../src/state.js';
+import { showAlert } from '../../src/ui-utils.js';
 import { getTodayStr } from '../../src/study-tracker.js';
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
 
@@ -621,6 +623,54 @@ describe('SC-15 읽기 하트비트·청크 커버리지', () => {
             prog = storedJson(STORAGE_KEYS.READER_PROGRESS) || {};
             expect(prog.subja.chunks).toEqual([55, 99]);
             expect(prog.subja.frac).toBeCloseTo(0.02, 5);
+        } finally {
+            stopReadingSession();
+            vi.useRealTimers();
+        }
+    });
+
+    it('전 과목 커버리지 100% 도달 시 일독 완료 모달 1회 통지 (TR-28)', () => {
+        vi.useFakeTimers();
+        try {
+            stopReadingSession();
+            el('textbook-reader-view').classList.add('active');
+            const cont = el('textbook-reader-container');
+            Object.defineProperty(cont, 'scrollHeight', { value: 1000, configurable: true });
+            Object.defineProperty(cont, 'clientHeight', { value: 100, configurable: true });
+            textbookReaderState.selectedSubject = 'subja';
+            // 레지스트리 미스텁 → 분모는 관측 과목 수(1). 99개 청크 완료 상태로 시드
+            safeSetItem(STORAGE_KEYS.READER_PROGRESS, JSON.stringify({
+                subja: { chunks: Array.from({ length: 99 }, (_, i) => i), frac: 0.99, ts: Date.now() }
+            }));
+            cont.scrollTop = 895; // 청크 99 방문 → 커버리지 100%
+            startReadingSession();
+            vi.advanceTimersByTime(15000); // 1틱 — 완료 도달
+            const prog = storedJson(STORAGE_KEYS.READER_PROGRESS) || {};
+            expect(prog.subja.frac).toBe(1);
+            expect(showAlert).toHaveBeenCalledTimes(1);
+            expect(safeGetItem(STORAGE_KEYS.READ_THROUGH_DONE)).toBeTruthy();
+            vi.advanceTimersByTime(45000); // 추가 틱 — 플래그로 재통지 억제
+            expect(showAlert).toHaveBeenCalledTimes(1);
+        } finally {
+            stopReadingSession();
+            vi.useRealTimers();
+        }
+    });
+
+    it('커버리지 미달 시 통지 없음 — 진행 중에는 발화하지 않는다 (TR-28)', () => {
+        vi.useFakeTimers();
+        try {
+            stopReadingSession();
+            el('textbook-reader-view').classList.add('active');
+            const cont = el('textbook-reader-container');
+            Object.defineProperty(cont, 'scrollHeight', { value: 1000, configurable: true });
+            Object.defineProperty(cont, 'clientHeight', { value: 100, configurable: true });
+            textbookReaderState.selectedSubject = 'subja';
+            cont.scrollTop = 500; // 청크 55 하나만 — 커버리지 1%
+            startReadingSession();
+            vi.advanceTimersByTime(30000); // 2틱
+            expect(showAlert).not.toHaveBeenCalled();
+            expect(safeGetItem(STORAGE_KEYS.READ_THROUGH_DONE)).toBeNull();
         } finally {
             stopReadingSession();
             vi.useRealTimers();

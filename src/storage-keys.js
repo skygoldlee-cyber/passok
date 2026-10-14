@@ -146,6 +146,7 @@ export const STORAGE_KEYS = {
   EXAM_VIEW_POS: 'exam_view_pos_v1',   // 문제집 뷰어 이어보기 — 문서별 마지막 스크롤 위치 (exam-viewer.js)
   READER_LAST_POSITION: 'readerLastPosition',
   READER_PROGRESS: 'readerProgress',        // 과목별 교재 일독 진척률 {subjKey: {frac, ts}} — SC-15
+  READ_THROUGH_DONE: 'read_through_done',   // 일독 완료 통지 발화 시각(ts 문자열) — 1회성 플래그 (TR-28)
   READER_BOOKMARKS: 'readerBookmarks',
 
   // 설정
@@ -186,6 +187,7 @@ export const BACKUP_KEYS = [
   STORAGE_KEYS.FC_MIGRATED_V2,
   STORAGE_KEYS.STATEMENT_STATS,
   STORAGE_KEYS.READER_PROGRESS,     // 교재 일독 진척 — 복원 누락 시 계획의 통독 차감 리셋 (SC-15)
+  STORAGE_KEYS.READ_THROUGH_DONE,   // 일독 완료 통지 플래그 — 진척과 함께 복원·초기화 (TR-28)
   STORAGE_KEYS.FC_SPACED_REPETITION,  // FSRS 카드별 스케줄 — 복원 누락 시 복습 일정 리셋
   STORAGE_KEYS.FC_REVIEW_LOG,         // FSRS 리뷰 이력 — 피팅·효능 실측 원천 (D-18)
   STORAGE_KEYS.FORMULA_ITEMS,
