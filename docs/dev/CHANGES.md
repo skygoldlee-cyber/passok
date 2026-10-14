@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 E2E 병렬화 — CI에서 Playwright workers 2 (단계 ~15분 → ~8분 기대)
+
+- `playwright.config.js` `workers: process.env.CI ? 2 : 1` — 직렬이었던 근거("단일 정적 서버")는 `serve.js`가 무상태 정적 서빙이라 병렬에 안전. 테스트별 브라우저 컨텍스트 격리로 localStorage·SW 상태도 분리됨
+- 로컬은 1 유지 — 만성 플레이크를 로컬에서 먼저 드러내는 기존 정책(retries: CI 1·로컬 0)과 같은 방향
+- 검증: 로컬 `CI=1 --workers=2`로 theme.spec 15개 통과. CI 러너 부하 플레이크가 만성화되면 visual.spec 등 타이밍 민감 스펙부터 점검
+
 ## 2026-10-14 신고 기반 오류 연결 — 텔레메트리 세션 ID 공유 (사용자별 장애 이력의 최소 침습 경로)
 
 - `src/telemetry-session.js` 신설 — 페이지 로드당 랜덤 UUID 1개를 client_errors·usage_events·feedback(bug)이 공유. 영속 저장 없음 → 사용자 식별 아닌 "한 페이지 로드" 식별
