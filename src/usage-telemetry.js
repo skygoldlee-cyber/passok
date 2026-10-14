@@ -3,7 +3,8 @@
 // ------------------------------------------------------------
 // 핵심 과업의 시작·완주 이벤트를 익명 insert가 허용된 usage_events
 // 테이블로 보낸다 (error-telemetry.js와 같은 전송 패턴).
-// - session_id: 페이지 로드당 생성되는 랜덤 UUID — quiz_start↔quiz_complete
+// - session_id: 페이지 로드당 생성되는 랜덤 UUID(telemetry-session.js 공유 —
+//   client_errors·bug 피드백과 같은 키로 묶임) — quiz_start↔quiz_complete
 //   같은 쌍을 묶는 용도. 기기·사용자를 식별하지 않는다 (영속 식별자 아님)
 // - Supabase 미설정: 아무 일도 하지 않음 (조용히 no-op)
 // - 세션당 이벤트 상한으로 폭주 방지
@@ -11,11 +12,10 @@
 // ------------------------------------------------------------
 import { getSupabase } from './supabase-client.js';
 import { getActiveExamId } from './exam-context.js';
+import { getTelemetrySessionId } from './telemetry-session.js';
 
 const MAX_EVENTS_PER_SESSION = 60;   // 세션당 전송 상한
 const EVENT_MAX = 60;                // 이벤트명 길이 상한 (스키마 check와 일치)
-const _sessionId = (typeof crypto !== 'undefined' && crypto.randomUUID)
-    ? crypto.randomUUID() : `sess-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 let _sent = 0;
 
 /**
@@ -24,7 +24,7 @@ let _sent = 0;
  * @param {Object} [meta] 집계용 부가 수치 (count·correct·total 등 — 내용 데이터 금지)
  * @param {string} [sessionId] 테스트 주입용 세션 ID
  */
-export function buildEventPayload(event, meta = {}, sessionId = _sessionId) {
+export function buildEventPayload(event, meta = {}, sessionId = getTelemetrySessionId()) {
     return {
         session_id: sessionId,
         event: String(event || 'unknown').slice(0, EVENT_MAX),

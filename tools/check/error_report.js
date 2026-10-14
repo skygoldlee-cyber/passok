@@ -17,6 +17,8 @@
  * 사용법:
  *   $env:SUPABASE_SECRET_KEY="sb_secret_..." ; node tools/check/error_report.js
  *   node tools/check/error_report.js --days 7
+ *   node tools/check/error_report.js --session <uuid>   # bug 신고의 meta.session_id로
+ *                                                       # 해당 페이지 로드의 오류·퍼널 이력 조회
  *
  * Secret 키가 없으면 Supabase 대시보드 SQL 에디터용 동등 쿼리를 출력한다.
  */
@@ -87,12 +89,33 @@ select message, count(*) n from client_errors
 where created_at > now() - interval '30 days' and kind <> 'session'
 group by message order by n desc limit 10;`;
 
+const SESSION_SQL = `\
+-- 신고 기반 조회: feedback(kind='bug') 행의 meta->>'session_id' 값을 <uuid>에 대입
+select created_at, kind, message, view, app_version, url
+from client_errors where session_id = '<uuid>' order by created_at;
+
+select created_at, event, meta
+from usage_events where session_id = '<uuid>' order by created_at;`;
+
+async function fetchRows(secret, table, query) {
+    const res = await fetch(`${supabaseUrl()}/rest/v1/${table}?${query}`, {
+        headers: { apikey: secret, authorization: `Bearer ${secret}` },
+    });
+    if (!res.ok) {
+        console.error(`${table} 조회 실패 HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
+        process.exit(1);
+    }
+    return res.json();
+}
+
 async function main() {
     const args = process.argv.slice(2);
     const di = args.indexOf('--days');
     const days = di >= 0 ? parseInt(args[di + 1], 10) : 30;
-    if (!Number.isFinite(days) || days < 1) {
-        console.error('사용법: node tools/check/error_report.js [--days N]');
+    const si = args.indexOf('--session');
+    const session = si >= 0 ? args[si + 1] : null;
+    if (!Number.isFinite(days) || days < 1 || (si >= 0 && !session)) {
+        console.error('사용법: node tools/check/error_report.js [--days N] [--session <uuid>]');
         process.exit(2);
     }
 
@@ -101,23 +124,40 @@ async function main() {
         console.error('SUPABASE_SECRET_KEY 미설정 — Secret(구 service_role) 키를 env로 전달하세요.');
         console.error('  PowerShell: $env:SUPABASE_SECRET_KEY="sb_secret_..."');
         console.error('\n또는 대시보드에서 동등 쿼리 실행:\n');
-        console.log(FALLBACK_SQL);
+        console.log(session ? SESSION_SQL : FALLBACK_SQL);
         process.exit(2);
     }
 
-    const since = new Date(Date.now() - days * 864e5).toISOString();
-    const url = `${supabaseUrl()}/rest/v1/client_errors`
-        + `?select=created_at,kind,message,app_version,view`
-        + `&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=50000`;
-    const res = await fetch(url, {
-        headers: { apikey: secret, authorization: `Bearer ${secret}` },
-    });
-    if (!res.ok) {
-        console.error(`조회 실패 HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
-        console.error('(client_errors 테이블·정책이 프로덕션에 적용됐는지 확인 — schema.sql §5)');
-        process.exit(1);
+    // --session: 신고 기반 연결 조회 — bug 피드백의 meta.session_id로
+    // 해당 페이지 로드의 오류 + 퍼널 이벤트를 함께 출력한다.
+    if (session) {
+        const sel = 'created_at,kind,message,view,app_version,url';
+        const errors = await fetchRows(secret, 'client_errors',
+            `select=${sel}&session_id=eq.${encodeURIComponent(session)}&order=created_at`);
+        const events = await fetchRows(secret, 'usage_events',
+            `select=created_at,event,exam_id,app_version,meta&session_id=eq.${encodeURIComponent(session)}&order=created_at`);
+        console.log(`세션 ${session} — 오류 ${errors.length}건 · 이벤트 ${events.length}건`);
+        for (const r of errors) {
+            console.log(`  ${r.created_at} [${r.kind}] ${r.message}`
+                + ` (${[r.view, r.app_version, r.url].filter(Boolean).join(' · ')})`);
+        }
+        if (events.length) {
+            console.log('── 퍼널 이벤트 ──');
+            for (const r of events) {
+                console.log(`  ${r.created_at} ${r.event} ${JSON.stringify(r.meta || {})}`);
+            }
+        }
+        if (!errors.length && !events.length) {
+            console.log('⚠ 행이 없습니다 — session_id가 다른 페이지 로드의 것이거나,'
+                + ' schema.sql §5(session_id 컬럼)·§6이 프로덕션에 미적용일 수 있습니다.');
+        }
+        return;
     }
-    const rows = await res.json();
+
+    const since = new Date(Date.now() - days * 864e5).toISOString();
+    const rows = await fetchRows(secret, 'client_errors',
+        `select=created_at,kind,message,app_version,view`
+        + `&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=50000`);
     const s = summarize(rows);
 
     console.log(`client_errors 오류율 리포트 — 최근 ${days}일 (조회 ${rows.length}행)`);

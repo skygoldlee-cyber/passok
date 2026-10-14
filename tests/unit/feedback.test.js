@@ -204,3 +204,14 @@ test('submitFeedback: 선행 큐와 함께 한 번에 전송', async () => {
   assert.equal(res.status, 'sent');
   assert.equal(insertCalls[1].rows.length, 2); // 큐 1 + 신규 1
 });
+
+test('buildFeedbackPayload: kind=bug만 meta.session_id 연결키 첨부 — 신고 기반 오류 조회', async () => {
+  const { buildFeedbackPayload } = await freshModule();
+  const { getTelemetrySessionId } = await import('../../src/telemetry-session.js');
+  const bug = buildFeedbackPayload({ kind: 'bug', body: '오류입니다' });
+  assert.equal(bug.meta.session_id, getTelemetrySessionId());
+  for (const k of ['improve', 'praise', 'idea']) {
+    const p = buildFeedbackPayload({ kind: k, body: '충분한 본문입니다' });
+    assert.equal(p.meta.session_id, undefined, `${k}는 연결키 미첨부`);
+  }
+});
