@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 런북 커버리지 게이트 — check:runbooks (링크+앵커 정본 도달 검증)
+
+- `tools/check/check_runbook_links.js` 신설 (`check:runbooks`, docs 프리셋 편입) — runbooks/*.md의 상대 링크를 파일 존재 + `#앵커↔GitHub 헤딩 slug` 해석까지 검증. "링크된 파일은 있으나 절차 섹션이 없는" 결함 유형 차단 (롤백 절차 공백 사례 재발 방지). 코드 펜스·인라인 코드·자리표시자 `<경로>` 예시는 스캔 제외
+- WHEN_THINGS_BREAK §1·§2 표의 정본 커버리지 출력 — **런북 커버리지 9/17 (52.9%) 실측**: §2.5 지식 비율 지표의 첫 기계 측정값
+- 실측 결함 수정: DEPLOYMENT_GUIDE 목차의 §6 앵커가 헤딩(`— 요약` 추가된)과 불일치 — 앵커 교정 + 신설 §5-3 목차 항목 추가
+- WHEN_THINGS_BREAK 정본 링크에 섹션 앵커 부착 — "파일 존재"가 아니라 "절차 도달"을 게이트가 보장
+- 단위 테스트: slugify 규칙(runbook-links.test.js)
+
 ## 2026-10-14 롤백 경로 리허설 — 태그→preview 재배포 실증 + 절차 정본 신설
 
 - 롤백 리허설 실측 (프로덕션 불개입): `deploy/v20261014-1169ed2` 태그(HEAD-19커밋) → `git worktree` 체크아웃 → `vercel deploy` preview → `vercel curl` 스모크(index·sw.js·version.js, CACHE_VERSION v20261014-4b281f4 일치) — "태그 시점 재배포" 경로 전 과정 실행 검증
