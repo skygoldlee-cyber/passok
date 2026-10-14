@@ -1,5 +1,5 @@
 // tests/unit/study-tracker.test.js — 학습 활동 자동 기록·목표 추적
-// @spec SC-03,SC-05,SC-06,SC-07,SC-08,SC-09,SC-12,SC-13,SC-15,D-17
+// @spec SC-03,SC-05,SC-06,SC-07,SC-08,SC-09,SC-12,SC-13,SC-15,D-17,D-23,Q-12
 // recordStudyActivity가 카드·퀴즈 활동을 날짜별 캘린더에 누적하고,
 // 목표 달성률 계산이 저장된 활동을 반영하는지 고정한다.
 
@@ -634,4 +634,90 @@ test('computeStudyPlan: readDayShare <1이면 통독일을 부분 차감 (SC-15)
   } finally {
     if (prev === undefined) delete globalThis.window; else globalThis.window = prev;
   }
+});
+
+/* ---------- D-23·Q-12: 출제 비중 층화 배분 ---------- */
+
+const COSMETIC_EXAMS = [
+  { key: 'subject1', subject: 'law', stats: { questions: 100 } },
+  { key: 'subject2', subject: 'manufacturing', stats: { questions: 250 } },
+  { key: 'subject3', subject: 'safety', stats: { questions: 250 } },
+  { key: 'subject4', subject: 'understanding', stats: { questions: 400 } },
+];
+
+test('examWeightBySubject: registry.exams → 과목별 출제 문항 수 집계 (D-23·Q-12)', () => {
+  const w = tracker.examWeightBySubject(COSMETIC_EXAMS);
+  assert.deepEqual(w, { law: 100, manufacturing: 250, safety: 250, understanding: 400 });
+  // 미전달·비정형 입력
+  assert.deepEqual(tracker.examWeightBySubject(undefined), {});
+  assert.deepEqual(tracker.examWeightBySubject([{ key: 'x' }, { subject: 'a' }]), { a: 0 });
+});
+
+test('apportionByWeight: 과목당 최소 보장 + 잔여 비중 비례 최대잔여법 (D-23·Q-12)', () => {
+  const w = tracker.examWeightBySubject(COSMETIC_EXAMS);
+  const keys = ['law', 'manufacturing', 'safety', 'understanding'];
+  const q = tracker.apportionByWeight(keys, w, 20, 3);
+  // 최소 3×4=12, 잔여 8 × 비중(0.10/0.25/0.25/0.40) = 0.8/2/2/3.2
+  // → 내림 0/2/2/3, 잔여 1은 최대 소수부 law(0.8) → 4/5/5/6
+  assert.deepEqual(q, { law: 4, manufacturing: 5, safety: 5, understanding: 6 });
+  assert.equal(Object.values(q).reduce((s, n) => s + n, 0), 20);
+});
+
+test('apportionByWeight: 비중 미선언 → 균등 폴백 (구 진단 평가 동작) (Q-12)', () => {
+  assert.deepEqual(tracker.apportionByWeight(['a', 'b', 'c', 'd'], {}, 20, 3),
+    { a: 5, b: 5, c: 5, d: 5 });
+});
+
+test('apportionByWeight: 엣지 — min×N>total 축소·단일 키·빈 입력 (D-23·Q-12)', () => {
+  // 8과목 × min 3 > 20 → min이 floor(20/8)=2로 축소되고 합계는 20 유지
+  const q = tracker.apportionByWeight(['a','b','c','d','e','f','g','h'], {}, 20, 3);
+  assert.equal(Object.values(q).reduce((s, n) => s + n, 0), 20);
+  assert.ok(Object.values(q).every(n => n >= 2));
+  // 단일 키는 전량, 빈 키 목록·total 0은 빈/0
+  assert.deepEqual(tracker.apportionByWeight(['a'], { a: 10 }, 20, 3), { a: 20 });
+  assert.deepEqual(tracker.apportionByWeight([], { a: 1 }, 20, 3), {});
+  assert.deepEqual(tracker.apportionByWeight(['a'], { a: 1 }, 0, 3), { a: 0 });
+});
+
+test('selectExamRiskSession: 상한 미만이면 전량, 비중 없으면 전역 R 절단 (D-23)', () => {
+  const risk = [
+    { id: 'law_card_1', rExam: 0.80 }, { id: 'law_card_2', rExam: 0.90 },
+  ];
+  assert.equal(tracker.selectExamRiskSession(risk, 60, { law: 100 }).length, 2);
+  // 비중 합계 0 → 기존 전역 R 오름차순 절단과 동일
+  const big = Array.from({ length: 10 }, (_, i) => ({ id: `law_card_${i}`, rExam: i / 100 }));
+  const cut = tracker.selectExamRiskSession(big, 5, {});
+  assert.equal(cut.length, 5);
+  assert.equal(cut[4].id, 'law_card_4');
+});
+
+test('selectExamRiskSession: 소수 비중 과목 탈락 차단 — 쿼터 + 최소 1장 (D-23)', () => {
+  // law(10%) 위험 2장 vs understanding(40%) 위험 100장, cap 10 — 전역 R 오름차순
+  // 전역 R 절단이면 law(R 최하위권) 탈락 — 층화는 최소 1장 보장
+  const risk = [
+    ...Array.from({ length: 100 }, (_, i) => ({ id: `understanding_card_${i}`, rExam: 0.50 + i * 0.001 })),
+    { id: 'law_card_1', rExam: 0.70 }, { id: 'law_card_2', rExam: 0.75 },
+  ];
+  const w = tracker.examWeightBySubject(COSMETIC_EXAMS);
+  const sel = tracker.selectExamRiskSession(risk, 10, w);
+  assert.equal(sel.length, 10);
+  // 쿼터: law min1 + 잔여8×0.1=0.8→최대잔여 1 → 2 (수요 2 → 전량), understanding 8
+  assert.equal(sel.filter(r => r.id.startsWith('law_')).length, 2);
+  // R_exam 오름차순 유지
+  for (let i = 1; i < sel.length; i++) assert.ok(sel[i].rExam >= sel[i - 1].rExam);
+});
+
+test('selectExamRiskSession: 수요 소진 잔여는 전역 R 순으로 재충전 (D-23)', () => {
+  // safety 쿼터(최소1+비중)가 수요 1로 소진 → 잔여는 전역 R 순 충전
+  const risk = [
+    { id: 'safety_card_1', rExam: 0.40 },
+    ...Array.from({ length: 20 }, (_, i) => ({ id: `law_card_${i}`, rExam: 0.50 + i * 0.01 })),
+    ...Array.from({ length: 20 }, (_, i) => ({ id: `understanding_card_${i}`, rExam: 0.60 + i * 0.01 })),
+  ];
+  const w = tracker.examWeightBySubject(COSMETIC_EXAMS);
+  const sel = tracker.selectExamRiskSession(risk, 10, w);
+  assert.equal(sel.length, 10);
+  // safety 수요 1 → 쿼터 소진분은 law·understanding에 R 순 재배분
+  assert.equal(sel.filter(r => r.id.startsWith('safety_')).length, 1);
+  assert.ok(sel.every((r, i, a) => i === 0 || r.rExam >= a[i - 1].rExam));
 });
