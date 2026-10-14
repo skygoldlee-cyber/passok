@@ -112,6 +112,7 @@
     "check:seedkeys": "node tools/check/check_seed_keys.js",
     "scaffold:exam": "node tools/build/scaffold_exam.js",
     "report:errors": "node tools/check/error_report.js",
+    "report:funnel": "node tools/check/funnel_report.js",
     "mutate": "stryker run"
   },
   "keywords": [
