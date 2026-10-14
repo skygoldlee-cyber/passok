@@ -3,7 +3,7 @@
 > 상위 문서: `ARCHITECTURE.md` (전체 구조), `SUPABASE_DESIGN.md` (계정·동기화·RLS 기반 — DOC-DSN-08), `USER_FEEDBACK_DESIGN.md` (피드백 스키마 — DOC-DSN-09)
 > **관련 SPEC ID**: `AD-01~06` (SPEC §3.26) · `FB-01~08` (피드백 수집) · `AU-01~08` (인증) · `ROAD-P0`·`ROAD-P1` (Pro entitlement)
 > 목적: 사용자 증가에 대비해 운영 표면(사용자 조회·피드백 인박스·오류 대시보드·Pro 권한 부여)을 체계화한다. 정적 PWA·RLS 경계·프라이버시 최소화라는 기존 불변식 위에 얹는다.
-> **구현 상태**: Phase 1(운영 CLI, AD-06) 구현됨 · Phase 2+(인앱 `#/admin`·RLS·RPC·감사) 설계안 — 미구현.
+> **구현 상태**: Phase 1(운영 CLI, AD-06)·Phase 1.5(로컬 HTML 대시보드, AD-07) 구현됨 · Phase 2+(인앱 `#/admin`·RLS·RPC·감사) 설계안 — 미구현.
 > 전제: Supabase는 계속 "없어도 되는" 선택 계층 — 관리자 기능은 Supabase 설정 프로젝트에서만 의미를 가지며, 미설정 환경의 로컬 전용 사용자에게는 노출되지 않는다.
 > **문서 ID**: DOC-DSN-30
 > **범위**: platform · 판본: none
@@ -135,6 +135,7 @@ end; $$;
 | `report:feedback` | `tools/check/feedback_report.js` | kind별 건수·평점·일별·최근 항목 본문 — bug의 meta.session_id로 `report:errors --session` 연결 (`--days`·`--kind`·`--limit`) |
 | `report:user` | `tools/check/user_report.js` | 이메일→GoTrue Admin API 해석 후 profiles + sync_snapshots **메타만**(exam_id·device_id·updated_at — payload 미열람) + 피드백 이력 |
 | `admin:grant-pro` | `tools/check/grant_pro.js` | 이메일→사용자 해석 후 profiles.plan 갱신 — 기본 dry-run, `--apply` 확정·`--revoke` 회수·동일 상태는 no-op |
+| `report:dashboard` (Phase 1.5) | `tools/check/dashboard_report.js` | 오류·퍼널·피드백 집계를 단일 자급적 HTML로 덤프 (`tools/check/dashboard_report.html`, gitignore) — 로컬 파일이라 인증·RLS 불필요. 기존 3개 리포트의 순수 `summarize()` 재사용, 사용자 텍스트 전면 이스케이프 |
 
 공용 헬퍼는 `tools/lib/supabase_ops.js`(URL 해석·Secret 요구·restGet/Patch·findUserByEmail). 환경변수는 기존 `SUPABASE_SECRET_KEY`(Secret = 구 service_role) 경로 그대로 — §4의 is_admin/감사 스키마와 독립적으로 동작하며 **스키마 변경 없이 동작**한다 (service role은 RLS를 우회하므로). admin_audit 테이블은 AD-04 도입 전까지 grant-pro의 콘솔 출력이 감사 기록을 대신한다.
 
