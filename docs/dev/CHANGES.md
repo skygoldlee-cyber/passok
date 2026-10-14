@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 고아 자산 게이트 + FFFD 기준선 제로 + 배포 스탬프 비커밋화
+
+- `check:orphans` 신설(docs 단계 + pre-commit 루프) — 추적 자산 파일(이미지·폰트·미디어·PDF)의 파일명이 다른 추적 파일에 등장하지 않으면 실패. `_archive/`·e2e `-snapshots/`는 명명 규약 예외, 개별 예외는 `orphan_assets_baseline.json`(사유 기입, `--update` 재작성). 기존 고아 자산 4건 삭제: webp 이관 후 잔존한 과목별 `N과목_삽화.png` 3건 + 콘티 v6 교체 후 고아가 된 구 스토리보드 PNG(~1MB)
+- CSS 주석 모지바케 잔재 정리 — exam.css·reader-extras.css·trainer.css의 깨진 섹션 구분선 주석(각 22건씩 총 66 FFFD)을 정상 한글로 교체하고 `replacement_char_baseline.json` 기준선을 0으로 하향 → 이제 U+FFFD는 전 저장소에서 신규 1건도 실패하는 하드 게이트
+- 배포 스탬프 비커밋화 — `deploy.js`가 sw.js/버전/릴리스 노트를 작업 트리에만 스탬프하고 `vercel --prod` 성공 후 `deploy/<버전>` 어노테이티드 태그 생성·push로 이력을 기록한 뒤 스탬프 파일을 원복. 배포 실패 시에도 원복. `chore(sw)` 커밋 폐지로 커밋 이력 노이즈 제거, 배포 버전이 실제 코드 커밋 해시를 직접 가리킴. 영향 분석의 직전 배포 ref는 `deploy/*` 태그 기준(구 스탬프 커밋 폴백)
+
 ## 2026-10-14 다크모드 링크 가시성 — 전용 토큰·일반 앵커 규칙 추가
 
 - `base.css`에 `--color-link`(cyan-400)·`--color-link-visited`(blue-300)·`--color-link-hover` 토큰 추가 + `.light-theme` 오버라이드(primary-light·violet-700·cyan-800) — 라이트 베이지 배경에서도 대비 확보
