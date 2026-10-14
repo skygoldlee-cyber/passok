@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 다크모드 링크 가시성 — 전용 토큰·일반 앵커 규칙 추가
+
+- `base.css`에 `--color-link`(cyan-400)·`--color-link-visited`(blue-300)·`--color-link-hover` 토큰 추가 + `.light-theme` 오버라이드(primary-light·violet-700·cyan-800) — 라이트 베이지 배경에서도 대비 확보
+- 클래스 없는 일반 `<a>` 규칙 신설 — 마크다운 파서가 생성하는 `[text](url)` 링크가 브라우저 기본색(방문 시 진보라 #551A8B)으로 렌더돼 다크모드에서 묻히던 문제 수정. 클래스 지정 링크(.nav-item·버튼형)는 구체 규칙 우선으로 무영향
+- 다크 `--color-secondary`를 #8b5cf6 → #a78bfa(violet-400)로 상향 — 사이드바 실무 메뉴·badge-violet·OMR 진행률 등 보라 계열 텍스트 19곳의 다크 배경 가시성 개선. 라이트는 #8b5cf6으로 오버라이드해 기존 색 유지
+
 ## 2026-10-14 U+FFFD 인코딩 깨짐 게이트 + 기존 잔재 정리
 
 - `check:enc` 신설(docs 단계 + pre-commit 루프) — 추적 텍스트 파일 전수에서 U+FFFD 치환 문자 탐지. git 한글 경로는 `core.quotepath=false`로 해석하고, 바이너리는 NUL 바이트 판별로 제외해 `.gitignore`·`.githooks` 같은 무확장자 파일도 커버. `replacement_char_baseline.json` 기준선 단조 감소(신규 유입·개수 초과 즉시 실패, `--update`로 하향) — 저장 시 이모지가 U+FFFD로 변조되는 사고가 모든 게이트를 무사 통과하던 공백 차단
