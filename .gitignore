@@ -62,6 +62,8 @@ Thumbs.db
 tools/check/combo_audit_report.json
 tools/check/study_quality_report.json
 tools/check/combo_review_queue.md
+# 로컬 운영 대시보드 (report:dashboard 산출물 — 로컬 전용)
+tools/check/dashboard_report.html
 # ref_md 변환 진단 리포트 (ref-pipeline 산출물 — 런타임 미사용)
 _report.json
 # Mermaid 사전렌더 SVG 캐시 (md2doc.py — 재생성 가능)

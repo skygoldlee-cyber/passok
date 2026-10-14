@@ -126,6 +126,7 @@ npm.cmd run report:funnel               # 과업 완주율 리포트 — usage_e
 npm.cmd run report:feedback             # 피드백 인박스 — feedback 테이블 kind별 건수·평점·일별·최근 본문 (동일 키 요건 · -- --days N · --kind bug · bug의 meta.session_id→report:errors --session 연결, AD-06)
 npm.cmd run report:user                 # 사용자 조회 — npm run report:user -- <email>: GoTrue Admin API 해석 → plan·sync 메타(payload 미열람)·피드백 이력 (동일 키 요건, AD-06)
 npm.cmd run admin:grant-pro             # Pro 부여/회수 — npm run admin:grant-pro -- <email> [--revoke]: 기본 dry-run, --apply로만 실갱신 (동일 키 요건, AD-06)
+npm.cmd run report:dashboard            # 로컬 HTML 운영 대시보드 — 오류율·퍼널·피드백 조감을 단일 HTML로 생성 (동일 키 요건 · -- --days N · --out <path> · 산출물 gitignore, AD-07)
 npm.cmd run check:docsync               # 소스 변경 시 문서 갱신 강제 — src/tools/tests/설정 변경에 docs/·AGENTS·README 갱신 동반 필수. 우회: SKIP_DOCSYNC=1 (모든 단계) · 커밋 메시지 행 끝의 [no-docs] (pre-push --ref 단계에서만 인식 — 마크된 커밋의 파일만 면제되며 다른 커밋은 계속 검사. pre-commit은 메시지 미존재로 불가)
 npm.cmd run check:testfirst             # 로직(src/*.js·ref-pipeline/*.py) 변경 시 테스트(tests/·ref-pipeline/tests/) 동반 강제 — Docs-First 기계화. 우회: SKIP_TESTFIRST=1 · 커밋 메시지 행 끝 [no-test] (--ref 모드, 그 커밋만 면제)
 npm.cmd run check:trace                 # TRACE_MATRIX 입력 해시 신선도

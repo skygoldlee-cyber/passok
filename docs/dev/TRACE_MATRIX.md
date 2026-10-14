@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 5bd1269580a1adc3
-> 생성: 2026-10-14 · 원천: SPEC.md(521개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: d47e85053872d9de
+> 생성: 2026-10-14 · 원천: SPEC.md(522개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 521개 — 문서 연결 379 · 소스 연결 462 · 테스트 연결 494 · 보고서 연결 109
+**커버리지 요약**: 요구사항 522개 — 문서 연결 379 · 소스 연결 463 · 테스트 연결 495 · 보고서 연결 109
 
 ---
 
@@ -486,6 +486,7 @@
 | AD-04 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
 | AD-05 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
 | AD-06 | ✅ | 테스트 | DOC-DSN-30 | tools/check/feedback_report.js<br>tools/check/grant_pro.js<br>tools/check/user_report.js<br>tools/lib/supabase_ops.js | tests/unit/feedback-report.test.js<br>tests/unit/grant-pro.test.js<br>tests/unit/user-report.test.js | — | — |
+| AD-07 | ✅ | 테스트 | — | tools/check/dashboard_report.js | tests/unit/dashboard-report.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
