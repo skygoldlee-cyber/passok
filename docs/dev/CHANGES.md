@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 E2E 적색 15건 정리 — PRO 배지 중첩 인터랙티브 + 대비 + 시각 기준선
+
+- `refreshProBadges`가 `data-pro-feature` 배지에 무조건 `role=button`+`tabindex`+`data-click`을 부여해, `<button>`·`<label>` 안에 중첩된 배지까지 인터랙티브로 승격되던 결함 수정 — axe `nested-interactive` serious 8건(전 프로젝트 대시보드) + 터치 타깃 44px 미만 1건(story_textbook 배지)의 공통 루트. 네이티브 인터랙티브 조상(`button, a, label, role=button/link/checkbox/switch/tab`) 안의 배지는 장식으로 두고, div[data-click] 카드 내 배지는 기존대로 별도 진입점 유지. `pro-notice.dom.test.js`에 중첩 금지 회귀 테스트 추가
+- 라이트 테마 대비 위반 — `--bg-active` 위 `--color-text-muted`가 warm 베이지에서 4.44:1로 4.5 미달. `.light-theme` 스코프에서 `.daily-challenge-badge`·`.weekly-goal-chip` 텍스트를 #3f4856으로 상향 (`.streak-badge`와 동일 패턴)
+- 시각 회귀 win32 기준선 6개 재생성 — 10-12 생성 이후 10-13~14 대시보드 UI 변경("오늘 할 일" 큐·탭바 정리 등)으로 ~7% 픽셀 드리프트. linux 기준선은 `visual-baseline.yml` 워크플로로 재생성 필요
+- 발견 경로: PROJECT_METRICS §9 기준선 측정 중 `test:e2e` 실측에서 포착 — 게이트가 실제 회귀를 잡은 사례
+
 ## 2026-10-14 저장소 무결성 게이트 테스트 커버리지
 
 - `tests/unit/repo-integrity-gates.test.js` 신설(15건) — check_replacement_char(기준선 비교·유입/초과/감소 판정), check_orphan_assets(참조 판정·자기참조 제외·텍스트 자산 참조 인정·규약 면제·예외 명단 비교), check_secrets(9개 패턴 탐지·오탐 경계·라인별 1히트)의 판정 코어를 합성 픽스처로 고정

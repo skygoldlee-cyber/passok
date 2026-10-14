@@ -617,6 +617,12 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
     padding: var(--space-2) var(--space-4);
 }
 
+/* A-01: 라이트 warm 배경(--bg-active) 위 muted 텍스트는 4.44:1로 4.5 미달 — 어두운 톤으로 상향 */
+.light-theme .daily-challenge-badge,
+.light-theme .weekly-goal-chip {
+    color: #3f4856;
+}
+
 /* Backup Restore Card */
 .backup-card-title {
     font-size: var(--text-lg);

@@ -68,12 +68,16 @@ export function refreshProBadges(root = document) {
     if (!_featurePlan) return;
     root.querySelectorAll('[data-pro-feature]').forEach(el => {
         el.classList.toggle('is-hidden', !isProFeature(/** @type {HTMLElement} */ (el).dataset.proFeature));
-        if (!el.getAttribute('data-click')) {
+        // 네이티브 인터랙티브 조상(button·a·role=button/link) 안의 배지는 장식으로 둔다 —
+        // role/tabindex 승격은 nested-interactive 위반 + 44px 미만 포커스 대상을 만든다.
+        // 클릭은 조상으로 버블링되고, Pro 안내는 기능 진입 시 proFeatureNotice가 담당한다.
+        // (div[data-click] 등 비인터랙티브 카드 안의 배지는 기존대로 별도 진입점 유지)
+        if (!el.getAttribute('data-click') && !el.closest('button, a, label, [role="button"], [role="link"], [role="checkbox"], [role="switch"], [role="tab"]')) {
             el.setAttribute('data-click', 'showPlanCompare');
             el.setAttribute('role', 'button');
             el.setAttribute('tabindex', '0');
+            el.setAttribute('title', 'Pro 제공 예정 기능 — 눌러서 플랜 비교 보기 (현재 무료로 이용 가능)');
         }
-        el.setAttribute('title', 'Pro 제공 예정 기능 — 눌러서 플랜 비교 보기 (현재 무료로 이용 가능)');
     });
 }
 
