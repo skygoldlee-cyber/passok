@@ -125,20 +125,39 @@ jobs:
       - name: Study quality audit (기준선 회귀)
         run: node tools/check/audit_study_quality.js --check
 
+      - name: PR impact report
+        if: github.event_name == 'pull_request'
+        run: node tools/check/impact_tests.js --ref origin/main
+
+  # E2E는 test 잡과 병렬로 돌린다 — serve.js가 무상태 정적 서빙이라 프로젝트별
+  # 분리에 안전. 레그당 ~110 시나리오 + workers:2 (playwright.config.js).
+  e2e:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # 한 프로젝트 실패 시에도 나머지 결과를 확보
+      matrix:
+        project: [chromium, mobile, tablet]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
       - name: Run E2E tests (Playwright)
-        run: npm run test:e2e
+        run: npm run test:e2e -- --project=${{ matrix.project }}
 
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-results
+          name: playwright-results-${{ matrix.project }}
           path: test-results/
           retention-days: 7
-
-      - name: PR impact report
-        if: github.event_name == 'pull_request'
-        run: node tools/check/impact_tests.js --ref origin/main
