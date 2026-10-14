@@ -9,7 +9,9 @@ export default defineConfig({
     // CI는 공유 러너 부하로 간헐 플레이크(스크롤·타이밍)가 발생해 1회 재시도로 흡수.
     // 로컬은 0 유지 — 만성 플레이크를 숨기지 않도록 로컬에서 먼저 드러나게 한다.
     retries: process.env.CI ? 1 : 0,
-    workers: 1, // 단일 정적 서버 — 직렬 실행
+    // 로컬은 직렬 유지(디버깅·재현성) — CI는 무상태 정적 서버라 병렬 안전, 4vCPU 러너에서 2개로 절반 단축.
+    // 플레이크는 CI retries:1이 흡수. 만성화 시 visual.spec 등 타이밍 민감 스펙부터 점검.
+    workers: process.env.CI ? 2 : 1,
     reporter: [['list']],
     use: {
         baseURL: 'http://localhost:3000',
