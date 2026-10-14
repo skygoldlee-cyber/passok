@@ -94,12 +94,12 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (70개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (71개)
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (19개 — README + ADR 18건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (14개)
 │   ├── design/                ← 설계·계획·평가 문서 (20개)
-│   └── reference/             ← 명세·로직·참조 문서 (12개 + images/)
+│   └── reference/             ← 명세·로직·참조 문서 (13개 + images/)
 └── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개)
     ├── README.md              ← 시험별 문서 인덱스
     ├── user/                  ← 학습자 문서 (5개)
@@ -180,6 +180,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [COMBO_STUDY_STRATEGY.md](dev/reference/COMBO_STUDY_STRATEGY.md) | 복수정답형 학습 전략 — 진술 원자 단위 학습법, 전략→기능 매핑 (코드 주석에서 참조) |
 | [ENGINEERING_PRACTICES.md](dev/reference/ENGINEERING_PRACTICES.md) | 소프트웨어 공학 요소 — SSOT, 신선도 게이트, 추적성, 다층 검증, 결정성 빌드 등 |
 | [SOFTWARE_ENGINEERING_TECHNIQUES.md](dev/reference/SOFTWARE_ENGINEERING_TECHNIQUES.md) | 적용 공학 기법 카탈로그 — PBT·변이 테스트·성능 예산·ADR·도메인 경계·오류 텔레메트리 포함 전 기법 색인 |
+| [PROJECT_METRICS.md](dev/reference/PROJECT_METRICS.md) | 프로젝트 평가지표 — 5버킷 범용 프레임워크·해석 함정·평가 프로세스·이 저장소 측정 소스·실측 사례 |
 | [ingredients_audit_제2026-19호.md](exams/cosmetic/ingredients_audit_제2026-19호.md) | 원료 DB ↔ 고시 제2026-19호 별표1·별표2 전수 대조 리포트 — 오류 정정·누락 추가·반영 결과 (`ref-pipeline/compare_ingredients_official.py`) |
 
 ### Formula OS (실무)
@@ -369,6 +370,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-REF-12 | `docs/dev/reference/CODE_READING_GUIDE.md` |
 | DOC-REF-13 | `docs/dev/reference/FEATURE_MAP.md` |
 | DOC-REF-14 | `docs/dev/reference/GATE_MAP.md` |
+| DOC-REF-15 | `docs/dev/reference/PROJECT_METRICS.md` |
 | DOC-RBK-01 | `docs/dev/runbooks/AUDIO_HOSTING_GUIDE.md` |
 | DOC-RBK-02 | `docs/dev/runbooks/COMBO_GENERATION_GUIDE.md` |
 | DOC-RBK-03 | `docs/dev/runbooks/CONTENT_WORKFLOW.md` |
