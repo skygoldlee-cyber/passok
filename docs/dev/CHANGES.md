@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 오류율 측정 경로 — 세션 핑 분모 + report:errors 집계 도구
+
+- `client_errors.kind`에 `'session'` 추가 (schema.sql + 기존 배포용 alter 문 주석) — 페이지 로드당 1건 세션 핑이 오류율(오류/세션)의 분모. `error-telemetry.js`는 상한·중복 카운터와 분리해 세션 핑 전송 (세션은 억제 대상이 아님)
+- `tools/check/error_report.js` 신설 (`npm run report:errors`) — PostgREST로 client_errors 조회 → 오류율·일별·상위 메시지·버전/뷰 분포. SUPABASE_SECRET_KEY env 필수(클라이언트 읽기는 RLS로 차단), 미설정 시 대시보드용 동등 SQL 출력. 집계 코어 `summarize()`는 순수 함수
+- 세션 핑 도입 이전 데이터는 분모 없이 'n/a'로 표시 — 측정 공백을 0%로 위장하지 않음 (§9 오류율 행의 "집계 도구 없음" 공백 해소 경로)
+- 단위 테스트: 세션 핑 페이로드·상한 비소비·실패 흡수(error-telemetry.test.js) + summarize 집계 4케이스(error-report.test.js)
+
 ## 2026-10-14 deploy CI 게이트 — 레드 빌드 배포 차단
 
 - `tools/deploy/deploy.js`에 CI 게이트 추가 — origin/main 동기화 검사 통과 직후, 배포 대상 커밋(`git rev-parse HEAD`)의 ci.yml run을 `gh run list --commit <sha>`로 조회해 `status=completed && conclusion=success`가 아니면 배포 중단

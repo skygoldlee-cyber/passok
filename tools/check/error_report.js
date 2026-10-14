@@ -1,0 +1,156 @@
+#!/usr/bin/env node
+/**
+ * error_report.js — client_errors 오류율 리포트 (PROJECT_METRICS §2.6 측정 경로)
+ * @spec none (관측성 인프라)
+ *
+ * src/error-telemetry.js가 수집한 client_errors 행을 Supabase PostgREST로 조회해
+ * 오류율(오류/세션)·일별 추이·상위 메시지·버전/뷰 분포를 출력한다.
+ *
+ * 세션 핑(kind='session')이 분모 — 세션 핑 도입 이전 기간은 오류만 나오고
+ * 세션 수가 없으므로 오류율은 'n/a'로 표시된다 (측정 공백을 0%로 위장하지 않음).
+ *
+ * 사전 조건:
+ *   - SUPABASE_SECRET_KEY 환경변수 (Secret key = 구 service_role — RLS 우회 관리자
+ *     키이므로 env로만 전달, 절대 파일·인자·커밋 금지)
+ *   - SUPABASE_URL 미설정 시 src/supabase-config.js의 값을 사용
+ *
+ * 사용법:
+ *   $env:SUPABASE_SECRET_KEY="sb_secret_..." ; node tools/check/error_report.js
+ *   node tools/check/error_report.js --days 7
+ *
+ * Secret 키가 없으면 Supabase 대시보드 SQL 에디터용 동등 쿼리를 출력한다.
+ */
+'use strict';
+const fs = require('fs');
+const path = require('path');
+
+// ── 순수 집계 (테스트 대상) ──────────────────────────────────
+
+/** 상위 N개 키-카운트 정렬 */
+function topEntries(obj, n) {
+    return Object.entries(obj).sort((a, b) => b[1] - a[1]).slice(0, n);
+}
+
+/**
+ * client_errors 행 배열 → 리포트 구조 (순수 함수 — 네트워크 무관)
+ * @param {Array} rows PostgREST select 결과
+ * @returns {{sessions:number, errors:number, rate:string,
+ *   byDay:Object, topMessages:Array, byVersion:Object, byView:Object, byKind:Object}}
+ */
+function summarize(rows) {
+    const sessions = rows.filter((r) => r.kind === 'session').length;
+    const errRows = rows.filter((r) => r.kind === 'error' || r.kind === 'unhandledrejection');
+    const byDay = {};   // date → {sessions, errors}
+    const byKind = {}, byVersion = {}, byView = {}, msgCount = {};
+    for (const r of rows) {
+        const day = String(r.created_at || '').slice(0, 10) || 'unknown';
+        const d = byDay[day] || (byDay[day] = { sessions: 0, errors: 0 });
+        if (r.kind === 'session') { d.sessions++; continue; }
+        d.errors++;
+        byKind[r.kind] = (byKind[r.kind] || 0) + 1;
+        const v = r.app_version || '(없음)';
+        byVersion[v] = (byVersion[v] || 0) + 1;
+        const vw = r.view || '(없음)';
+        byView[vw] = (byView[vw] || 0) + 1;
+        const m = String(r.message || '').slice(0, 120);
+        msgCount[m] = (msgCount[m] || 0) + 1;
+    }
+    return {
+        sessions,
+        errors: errRows.length,
+        rate: sessions ? `${((errRows.length / sessions) * 100).toFixed(2)}%` : 'n/a (세션 핑 없음)',
+        byDay, topMessages: topEntries(msgCount, 10), byVersion, byView, byKind,
+    };
+}
+
+// ── CLI ─────────────────────────────────────────────────────
+
+function supabaseUrl() {
+    if (process.env.SUPABASE_URL) return process.env.SUPABASE_URL.replace(/\/$/, '');
+    const cfg = fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'supabase-config.js'), 'utf8');
+    const m = cfg.match(/SUPABASE_URL\s*=\s*'([^']+)'/);
+    if (!m) throw new Error('src/supabase-config.js에서 SUPABASE_URL을 읽지 못했습니다');
+    return m[1];
+}
+
+const FALLBACK_SQL = `\
+-- Supabase 대시보드 → SQL Editor (기간 N일에 맞게 interval 조정)
+select
+  count(*) filter (where kind = 'session') as sessions,
+  count(*) filter (where kind <> 'session') as errors,
+  round(100.0 * count(*) filter (where kind <> 'session')
+        / nullif(count(*) filter (where kind = 'session'), 0), 2) as error_rate_pct
+from client_errors
+where created_at > now() - interval '30 days';
+
+select message, count(*) n from client_errors
+where created_at > now() - interval '30 days' and kind <> 'session'
+group by message order by n desc limit 10;`;
+
+async function main() {
+    const args = process.argv.slice(2);
+    const di = args.indexOf('--days');
+    const days = di >= 0 ? parseInt(args[di + 1], 10) : 30;
+    if (!Number.isFinite(days) || days < 1) {
+        console.error('사용법: node tools/check/error_report.js [--days N]');
+        process.exit(2);
+    }
+
+    const secret = process.env.SUPABASE_SECRET_KEY;
+    if (!secret) {
+        console.error('SUPABASE_SECRET_KEY 미설정 — Secret(구 service_role) 키를 env로 전달하세요.');
+        console.error('  PowerShell: $env:SUPABASE_SECRET_KEY="sb_secret_..."');
+        console.error('\n또는 대시보드에서 동등 쿼리 실행:\n');
+        console.log(FALLBACK_SQL);
+        process.exit(2);
+    }
+
+    const since = new Date(Date.now() - days * 864e5).toISOString();
+    const url = `${supabaseUrl()}/rest/v1/client_errors`
+        + `?select=created_at,kind,message,app_version,view`
+        + `&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=50000`;
+    const res = await fetch(url, {
+        headers: { apikey: secret, authorization: `Bearer ${secret}` },
+    });
+    if (!res.ok) {
+        console.error(`조회 실패 HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
+        console.error('(client_errors 테이블·정책이 프로덕션에 적용됐는지 확인 — schema.sql §5)');
+        process.exit(1);
+    }
+    const rows = await res.json();
+    const s = summarize(rows);
+
+    console.log(`client_errors 오류율 리포트 — 최근 ${days}일 (조회 ${rows.length}행)`);
+    console.log(`  세션: ${s.sessions} · 오류: ${s.errors} · 오류율: ${s.rate}`);
+    const kinds = Object.entries(s.byKind).map(([k, n]) => `${k} ${n}`).join(' · ');
+    if (kinds) console.log(`  종류: ${kinds}`);
+
+    const days_ = Object.keys(s.byDay).sort();
+    if (days_.length) {
+        console.log('\n── 일별 ──');
+        for (const d of days_) {
+            const v = s.byDay[d];
+            const r = v.sessions ? `${((v.errors / v.sessions) * 100).toFixed(1)}%` : 'n/a';
+            console.log(`  ${d}: 세션 ${v.sessions} · 오류 ${v.errors} · ${r}`);
+        }
+    }
+    const printTop = (title, obj) => {
+        const es = topEntries(obj, 10);
+        if (!es.length) return;
+        console.log(`\n${title}`);
+        for (const [k, n] of es) console.log(`  ${n} × ${k}`);
+    };
+    printTop('── 상위 메시지 ──', Object.fromEntries(s.topMessages));
+    printTop('── 버전별 오류 ──', s.byVersion);
+    printTop('── 뷰별 오류 ──', s.byView);
+    if (!s.sessions) {
+        console.log('\n⚠ 세션 행이 없습니다 — 오류율 분모 부재. error-telemetry.js 세션 핑이'
+            + ' 배포된 버전부터 집계됩니다 (스키마 kind check에 session 포함 필요).');
+    }
+}
+
+if (require.main === module) {
+    main().catch((e) => { console.error(`조회 실패: ${e.message}`); process.exit(1); });
+}
+
+module.exports = { summarize };

@@ -191,7 +191,7 @@
 | 배포 빈도 | `(git tag -l "deploy/*").Count` (PowerShell) — 태그가 배포 이력 SSOT. 태그명 날짜로 기간당 빈도 산출 |
 | 변이 테스트 | `npm.cmd run mutate` (수동 스팟 체크 — CI 미편입, 지표 공백으로 인식) |
 | E2E·시나리오 (§2.2) | `npm.cmd run test:e2e` — Playwright+axe, test_stats.json 수치 |
-| 오류율·과업 완주 (§2.6) | `src/error-telemetry.js` client_errors 수집 경로는 존재 — 집계 도구·분석 없음(공백) |
+| 오류율 (§2.6) | `npm.cmd run report:errors` — SUPABASE_SECRET_KEY env 필요(미설정 시 대시보드용 SQL 출력). 분모는 세션 핑(kind=session, 페이지 로드당 1건) · 과업 완주는 수단 없음(공백) · schema.sql §5를 프로덕션에 적용해야 집계 시작 |
 | 보안 (§2.7) | `check:secrets` · `check:vendor` 해시 · CSP `script-src 'self'` (vercel.json) · `npm.cmd run sbom` · `npm.cmd audit` · 권한 경계: Supabase RLS — `docs/dev/design/SUPABASE_DESIGN.md` §3 (배포 검증 공백) |
 | 지식 비율 지표 (§2.5) | ADR 기재율·런북 커버리지는 수동 집계 필요 — 자동 명령 없음(공백). 리허설 절차: [WHEN_THINGS_BREAK.md](../runbooks/WHEN_THINGS_BREAK.md) §6 |
 | 배포 검증 | `npm.cmd run deploy`의 배포 후 스모크 자동 단계 |
@@ -218,7 +218,7 @@
 | 지표 | 상태 |
 |------|------|
 | ★ 핵심 과업 완주율 | **공백** — 사용자 과업 계측 없음 (E2E 통과율은 §2.2로 집계 — 이중 반영 금지) |
-| ★ 런타임 오류율 | **공백** — 수단 존재(`error-telemetry.js`), 값 미집계 |
+| ★ 런타임 오류율 | **공백** — 수집(`error-telemetry.js`)+집계(`report:errors`, 세션 핑 분모) 경로 완비, 값 미집계 (프로덕션 스키마 적용·첫 실행 필요 — 완비 자체는 Δ측정, Δ실제 아님) |
 | ★ 실사용 | **공백** — 분석 도구 없음. 배포된 외부 앱이므로 N/A 아님 |
 | 성능 | **실측: 셸 2.4MB(상한 12.5) · JS 1.2MB(상한 4.8) · 최대 파일 279KB(상한 6MB) · index 125KB(상한 160KB)** — 상한 대비 5~78%, 예산 내 양호 |
 | 회귀 신고율 | → §2.4 참조 (변경 실패율과 동일 사건 — 중복 집계 금지) |

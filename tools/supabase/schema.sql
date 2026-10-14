@@ -136,7 +136,7 @@ create policy "public insert" on public.feedback
 create table if not exists public.client_errors (
   id          uuid primary key default gen_random_uuid(),
   created_at  timestamptz not null default now(),
-  kind        text not null check (kind in ('error','unhandledrejection')),
+  kind        text not null check (kind in ('error','unhandledrejection','session')),
   message     text not null check (char_length(message) between 1 and 500),
   stack       text,
   view        text,
@@ -146,6 +146,12 @@ create table if not exists public.client_errors (
   user_agent  text,
   meta        jsonb
 );
+
+-- kind 'session': 페이지 로드당 1건의 세션 핑 — 오류율(오류/세션)의 분모.
+-- 기존 배포에 적용:
+--   alter table public.client_errors drop constraint client_errors_kind_check;
+--   alter table public.client_errors add constraint client_errors_kind_check
+--     check (kind in ('error','unhandledrejection','session'));
 
 alter table public.client_errors enable row level security;
 
