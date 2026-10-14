@@ -11,7 +11,7 @@
 //   node tools/coverage-merge.js  → 병합 요약 + coverage-merged/ 리포트
 // (npm run coverage:all 로 일괄 실행 가능)
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -66,10 +66,37 @@ console.log('\n📊 병합 HTML 리포트: coverage-merged/index.html');
 //   측정 불가 영역이라 커버리지 상승이 아닌 분모 정정): 실측 70.41/66.38/72.14/81.71.
 //   커버리지 개선 커밋 시 실측이 오르면 같은 방식(실측−0.5~0.8)으로 계속 조인다.
 // 임계값은 기준선 대비 여유분으로 설정 — 상향은 언제든 가능, 하향 시 CHANGES.md에 사유 기록
-const MERGED_THRESHOLDS = { statements: 69.5, branches: 65.5, functions: 71, lines: 81 };
+const MERGED_THRESHOLDS = { statements: 69.5, branches: 65.5, functions: 71.3, lines: 81 };
+
+// 래칫 규약을 코드화 — 임계값은 실측 대비 RATCHET_MARGIN%p 여유로 유지하고 상향만 허용.
+// (주석 관례 "실측−0.5~0.8"의 상한 채택 — 상향은 자유, 하향은 스크립트가 거부)
+const RATCHET_MARGIN = 0.8;
+const needsCoverage = ['--check', '--ratchet'].some((f) => process.argv.includes(f));
+const actual = needsCoverage ? map.getCoverageSummary().toJSON() : null;
+
+if (process.argv.includes('--ratchet')) {
+    const next = {};
+    const bumps = [];
+    for (const [metric, min] of Object.entries(MERGED_THRESHOLDS)) {
+        const pct = actual[metric].pct;
+        const cand = Math.floor((pct - RATCHET_MARGIN) * 10) / 10;
+        next[metric] = Math.max(min, cand); // 단조 증가 — 하향 시도는 현재값 유지
+        if (next[metric] > min) bumps.push(`${metric} ${min} → ${next[metric]} (실측 ${pct}%)`);
+    }
+    if (!bumps.length) {
+        console.log(`래칫 상향 없음 — 모든 지표가 임계값+${RATCHET_MARGIN}%p 여유 이내`);
+        process.exit(0);
+    }
+    const f = (v) => (Number.isInteger(v) ? String(v) : v.toFixed(1));
+    const line = `const MERGED_THRESHOLDS = { statements: ${f(next.statements)}, branches: ${f(next.branches)}, functions: ${f(next.functions)}, lines: ${f(next.lines)} };`;
+    const selfPath = fileURLToPath(import.meta.url);
+    writeFileSync(selfPath, readFileSync(selfPath, 'utf8').replace(/const MERGED_THRESHOLDS = \{[^}]*\};/, line));
+    for (const b of bumps) console.log(`⬆ ${b}`);
+    console.log('\nMERGED_THRESHOLDS 갱신 완료 — 변경분 커밋 권장 (하향은 불가, 상향만 자동).');
+    process.exit(0);
+}
+
 if (process.argv.includes('--check')) {
-    const summary = map.getCoverageSummary();
-    const actual = summary.toJSON();
     const failed = [];
     for (const [metric, min] of Object.entries(MERGED_THRESHOLDS)) {
         const pct = actual[metric].pct;
@@ -81,4 +108,11 @@ if (process.argv.includes('--check')) {
         process.exit(1);
     }
     console.log('\n✅ 병합 커버리지 임계값 통과');
+    // 래칫 상향 힌트 — 실측이 임계+마진 이상 여유면 상향 가능을 알림 (차단 없는 정보 출력)
+    const headroom = Object.entries(MERGED_THRESHOLDS)
+        .filter(([m, min]) => Math.floor((actual[m].pct - RATCHET_MARGIN) * 10) / 10 > min)
+        .map(([m]) => m);
+    if (headroom.length) {
+        console.log(`💡 래칫 상향 가능: ${headroom.join(', ')} — node tools/check/coverage_merge.js --ratchet`);
+    }
 }
