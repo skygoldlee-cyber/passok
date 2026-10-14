@@ -218,10 +218,14 @@ create policy "own snapshots" on sync_snapshots
 
 -- 런타임 오류 텔레메트리 — src/error-telemetry.js, feedback과 같은 익명 insert 패턴
 -- kind 'session': 페이지 로드당 1건 세션 핑 → 오류율(오류/세션)의 분모 (집계: npm run report:errors)
+-- session_id: 페이지 로드당 랜덤 UUID(telemetry-session.js 공유) — 사용자 식별 아님.
+--   bug 피드백의 meta.session_id와 join해 "신고 시점 페이지 로드의 오류 이력" 조회
+--   (report:errors --session <uuid> / 대시보드 SQL)
 create table if not exists client_errors (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
   kind text not null check (kind in ('error','unhandledrejection','session')),
+  session_id uuid,
   message text not null check (char_length(message) between 1 and 500),
   stack text, view text, exam_id text, app_version text, url text,
   user_agent text, meta jsonb
