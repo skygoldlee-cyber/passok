@@ -165,6 +165,44 @@ function isSafeInterp(expr) {
 const SINK_RE = /(?:\.innerHTML|\.outerHTML)\s*[+]?=\s*(html)?\s*`/g;
 const SINK_IAH_RE = /\.insertAdjacentHTML\s*\(\s*['"][^'"]*['"]\s*,\s*(html)?\s*`/g;
 
+// ── --census: 싱크 인벤토리 (미검증 싱크 분류 — 변수 경유 대입은 추적 불가 영역) ──
+// 카테고리: tagged(html``)·template(백틱 — 보간 검증 대상)·literal(문자열)·variable(식별자/식 — 미추적)
+// 사용법: node tools/check/check_html_escape.js --census [--vars] (—vars=변수 싱크 목록 출력)
+if (process.argv.includes('--census')) {
+  const CENSUS_SINK_RE = /(?:\.innerHTML|\.outerHTML)\s*\+?=(?![=>])\s*(html)?\s*(.)/g;
+  const CENSUS_IAH_RE = /\.insertAdjacentHTML\s*\(\s*['"][^'"]*['"]\s*,\s*(html)?\s*(.)/g;
+  const showVars = process.argv.includes('--vars');
+  const cat = { tagged: 0, template: 0, literal: 0, variable: 0 };
+  const vars = [];
+  for (const file of walk(SRC_DIR)) {
+    const rel = path.relative(ROOT, file).replace(/\\/g, '/');
+    const src = fs.readFileSync(file, 'utf8');
+    for (const re of [CENSUS_SINK_RE, CENSUS_IAH_RE]) {
+      re.lastIndex = 0;
+      let m;
+      while ((m = re.exec(src))) {
+        if (m[1] === 'html') { cat.tagged++; continue; }
+        const ch = m[2];
+        if (ch === '`') { cat.template++; continue; }
+        if (ch === "'" || ch === '"') { cat.literal++; continue; }
+        cat.variable++;
+        if (showVars) {
+          const line = src.slice(0, m.index).split('\n').length;
+          const rhs = src.slice(m.index + m[0].length - 1, src.indexOf('\n', m.index))
+            .replace(/;.*$/, '').trim().slice(0, 60);
+          vars.push(`  ${rel}:${line} — ${m[0].slice(0, 40).trim()} ${rhs}`);
+        }
+      }
+    }
+  }
+  const total = cat.tagged + cat.template + cat.literal + cat.variable;
+  console.log('HTML 싱크 센서스 (--census)');
+  console.log(`  총 ${total}개 싱크 — tagged(html\`\`) ${cat.tagged} / template ${cat.template} / literal ${cat.literal} / variable ${cat.variable}`);
+  console.log('  ※ variable 싱크는 출처 추적 불가 — *Html 네이밍·raw()/html`` 생산자 규약 대상');
+  if (showVars) for (const v of vars) console.log(v);
+  process.exit(0);
+}
+
 // --ref: ref..HEAD+미커밋 변경 파일만 스캔 — 신규 싱크 유입 탐지
 // (기준선 비교 대신 변경 파일 내 위반 0건 요구 — 로컬·pre-push 경로)
 const { refFromArgs, changedFiles } = require('./changed_files.js');
