@@ -1,5 +1,5 @@
 // src/views/quiz.js - 기출 퀴즈 및 오답 복습 뷰 로직 (데일리 챌린지는 daily-challenge.js로 분리)
-// @spec Q-01~11,RV-01
+// @spec Q-01~12,RV-01
 export { tagWrongCause, tagWrongCauseAt, wrongActionCard, wrongActionTextbook, wrongActionSimilar } from './quiz-wrong-cause.js';
 
 import { state, saveProgress } from '../state.js';
@@ -17,6 +17,7 @@ import { trackAction } from '../usage-stats.js';
 import { reportEvent } from '../usage-telemetry.js';
 import { updateGlobalStats } from './dashboard.js';
 import { recordQuizJudgment } from '../spaced-repetition.js';
+import { apportionByWeight, examWeightBySubject } from '../study-tracker.js';
 import { shuffle } from '../utils.js';
 import { showToast, vibrate, HAPTIC } from '../ui-utils.js';
 
@@ -72,8 +73,14 @@ export function startQuiz() {
     _beginQuizRun();
 }
 
+// @spec Q-12 — 진단 평가 표본 총량·과목당 최소 표본
+const DIAG_TOTAL_QUESTIONS = 20;
+const DIAG_MIN_PER_SUBJECT = 3;
+
 /**
- * 진단 평가 — 전 과목에서 골고루 샘플링해 약점 프로파일을 생성한다.
+ * 진단 평가 — 전 과목에서 샘플링해 약점 프로파일을 생성한다.
+ * 과목별 표본은 출제 비중 비례 층화(과목당 최소 DIAG_MIN_PER_SUBJECT + 잔여 비중 비례,
+ * 비중 미선언 시 균등 폴백)로 배분한다 (Q-12).
  * 오답은 weakCards/wrongCauses로 자동 연결되므로 결과가 추천 엔진에 반영된다.
  */
 export async function startDiagnosticQuiz() {
@@ -85,11 +92,17 @@ export async function startDiagnosticQuiz() {
     // 전 과목 로드 (미로드 과목 대비)
     await Promise.all(subjects.map(s => DataLoader.loadSubject(s.key).catch(() => null)));
 
-    const perSubject = Math.max(3, Math.ceil(20 / subjects.length));
-    const data = [];
-    subjects.forEach(s => {
+    // Q-12 층화 표본 — 문항이 있는 과목만 대상으로 최소 표본 보장 + 출제 비중 비례
+    const weightBySubject = examWeightBySubject((DataLoader.registry && DataLoader.registry.exams) || []);
+    const eligible = subjects.filter(s => {
         const qs = (window.STUDY_DATA && window.STUDY_DATA[s.key] && window.STUDY_DATA[s.key].quizzes) || [];
-        data.push(...shuffle(qs).slice(0, perSubject));
+        return qs.length > 0;
+    });
+    const quotas = apportionByWeight(eligible.map(s => s.key), weightBySubject, DIAG_TOTAL_QUESTIONS, DIAG_MIN_PER_SUBJECT);
+    const data = [];
+    eligible.forEach(s => {
+        const qs = (window.STUDY_DATA && window.STUDY_DATA[s.key] && window.STUDY_DATA[s.key].quizzes) || [];
+        data.push(...shuffle(qs).slice(0, quotas[s.key] || 0));
     });
     if (data.length === 0) {
         showToast('출제 가능한 문제가 없습니다.', 'warning');

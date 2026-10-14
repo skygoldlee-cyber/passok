@@ -1,5 +1,5 @@
 // src/views/analysis-view.js — 학습 진단(개인화 분석) 뷰 컨트롤러
-// @spec AN-01~09,SC-11,SC-12
+// @spec AN-01~09,SC-11,SC-12,D-23
 //
 // dashboard.js에서 분리 (모듈 경계 정리) — 학습 진단 뷰의 진단 카드 7종,
 // 과목별 학습 진입(startSubject*), 주간 리포트보내기를 전담한다.
@@ -17,7 +17,8 @@ import {
     getDDay, getStudyGoals, getTodayGoalProgress, getWeeklyGoalProgress,
     getStudyCalendar, computeStudyPlan, computePlanAdherence,
     computeSubjectAllocation, computeSubjectAllocInputs,
-    sumRecentCardsBySubject, sumRecentQuizzesBySubject
+    sumRecentCardsBySubject, sumRecentQuizzesBySubject,
+    examWeightBySubject, selectExamRiskSession
 } from '../study-tracker.js';
 import { getWeakStatements, getDueStatementSids, getAnomalousStatements, getAllStatementStats } from '../statement-tracker.js';
 import {
@@ -385,9 +386,13 @@ export function startDueReview() {
 /**
  * 시험일 기억률 미달 카드만 모아 최종 인출 세션을 시작합니다 (D-19).
  * 대시보드 '오늘 할 일' 큐의 '인출 세션' 버튼에서 호출 — 기억률 낮은 순 출제.
+ * 상한 초과 시 과목별 출제 비중 층화로 절단한다 (D-23).
  */
 export function startExamRiskReview() {
-    const risk = getExamRiskCards(getDDay()).slice(0, EXAM_R_SESSION_CAP);
+    const risk = selectExamRiskSession(
+        getExamRiskCards(getDDay()), EXAM_R_SESSION_CAP,
+        examWeightBySubject((DataLoader.registry && DataLoader.registry.exams) || [])
+    );
     if (!risk.length) {
         showToast('시험 전 추가 인출이 필요한 카드가 없습니다.', 'info');
         return;
