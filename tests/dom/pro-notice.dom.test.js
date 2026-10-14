@@ -91,4 +91,13 @@ describe('PRO 배지 → 플랜 비교 단일 경로 (ROAD-P5)', () => {
         expect(badge.classList.contains('is-hidden')).toBe(true);
         expect(badge.getAttribute('data-click')).toBe('showPlanCompare');
     });
+
+    it('button 안의 배지는 인터랙티브로 승격하지 않는다 (nested-interactive 방지)', async () => {
+        document.body.innerHTML = '<button class="nav-item"><span class="pro-badge" data-pro-feature="personal_analysis">PRO</span></button>';
+        await stubPlan({ personal_analysis: 'pro' });
+        const badge = document.querySelector('[data-pro-feature]');
+        expect(badge.getAttribute('data-click')).toBeNull();
+        expect(badge.getAttribute('role')).toBeNull();
+        expect(badge.getAttribute('tabindex')).toBeNull();
+    });
 });
