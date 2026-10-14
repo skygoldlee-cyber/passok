@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 E2E matrix 분리 — ci.yml `e2e` 잡 신설 (워크플로 ~18분 → ~8분 기대)
+
+- E2E를 `test` 잡 꼬리에서 분리해 프로젝트별 matrix(chromium·mobile·tablet)로 병렬 — `test` 잡과 동시 시작하므로 총 월클락이 max(test, e2e 레그)로 수렴
+- 직렬 실행 근거("단일 정적 서버")는 serve.js 무상태 정적 서빙 + 컨텍스트 격리로 병렬 안전 — workers:2 선측정은 15.4→13분(16%)에 그쳐 러너 CPU 경합 한계 확인, 잡 분리로 러너 자체를 늘리는 방향 전환
+- 트레이드오프: 게이트 실패 시에도 e2e 레그가 돌아 컴퓨트 낭비 — fail-fast:false로 잔여 레그 결과는 확보. 리포트 아티팩트는 `playwright-results-<project>`로 분리
+
 ## 2026-10-14 E2E 병렬화 — CI에서 Playwright workers 2 (단계 ~15분 → ~8분 기대)
 
 - `playwright.config.js` `workers: process.env.CI ? 2 : 1` — 직렬이었던 근거("단일 정적 서버")는 `serve.js`가 무상태 정적 서빙이라 병렬에 안전. 테스트별 브라우저 컨텍스트 격리로 localStorage·SW 상태도 분리됨

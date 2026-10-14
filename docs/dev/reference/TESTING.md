@@ -628,7 +628,9 @@ export 함수를 직접 호출하고 DOM 반영을 검증한다. `data-click` �
 프로젝트. jsdom으로 불가한 영역을 커버한다 — `playwright.config.js`가 `serve.js`를
 webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 로컬 1(직렬,
 디버깅·재현성)·CI 2 병렬 — `serve.js`가 무상태 정적 서빙이고 테스트별 브라우저
-컨텍스트가 격리되어 병렬 안전, 플레이크는 CI `retries:1`이 흡수한다.
+컨텍스트가 격리되어 병렬 안전, 플레이크는 CI `retries:1`이 흡수한다. CI에서는
+`e2e` 잡이 프로젝트(chromium·mobile·tablet)별 matrix로 `test` 잡과 병렬 실행된다
+(레그당 ~110 시나리오, 아티팩트는 `playwright-results-<project>`).
 시험 도메인 기능의 스펙은 도메인 격리 규약대로 `tests/e2e/exams/<id>/`에 둔다.
 `serve.js`는 vercel.json의 프로덕션 헤더(CSP 포함)를 미러링하므로 E2E는
 배포 환경과 동일한 보안 헤더 하에서 실행된다.
