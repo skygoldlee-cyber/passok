@@ -7,6 +7,23 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 관리자 운영 CLI 구현 (AD-06 — ADMIN_DESIGN Phase 1)
+
+- **구현**: Phase 1 세 스크립트를 기존 `tools/check/` 리포트 패턴으로 구현 — 공용 헬퍼 `tools/lib/supabase_ops.js`(SUPABASE_URL 해석·SUPABASE_SECRET_KEY 요구·restGet/restPatch·findUserByEmail)
+- `report:feedback` (`tools/check/feedback_report.js`) — kind별 건수·평점 평균·일별·최근 항목 본문. bug 항목의 meta.session_id를 노출해 `report:errors -- --session` 연결 조회로 이어짐. `--days`/`--kind`/`--limit`
+- `report:user -- <email>` (`tools/check/user_report.js`) — profiles에 email이 없어 GoTrue Admin API로 이메일→uuid 해석 → plan·sync_snapshots **메타만**(payload 의도적 미조회, ADMIN_DESIGN §6)·피드백 이력 출력
+- `admin:grant-pro -- <email>` (`tools/check/grant_pro.js`) — 기본 dry-run 미리보기, `--apply`로만 실갱신. `--revoke`=free 회수. 동일 상태는 no-op 조기 종료. admin_audit 미존재(AD-04 대상) 기간은 콘솔 출력이 감사 기록 대행
+- Secret 키 미설정 시 각 스크립트가 대시보드 SQL 폴백 출력 — 기존 report:errors 패턴 동일
+- SPEC AD-06 → ✅ · 설계안 §5 Phase 1 표를 실제 경로/옵션으로 갱신 · docs_paths_allowlist의 `tools/report/` 예정 경로 항목 제거(실제 위치는 tools/check)
+- 테스트: tests/unit/feedback-report·user-report·grant-pro — 순수 함수(summarize·buildUserSummary·buildPlanChange·isNoop) 9건
+
+## 2026-10-14 관리자 콘솔 설계안 — ADMIN_DESIGN.md + SPEC §3.26 (AD-01~06, 미구현)
+
+- **동기**: 사용자 증가 대비 운영 표면 정리 — 현재는 사용자 plan 변경이 대시보드 수동 SQL, 피드백·오류 조회가 service role CLI만 존재
+- **핵심 결정**: ① 권한은 `app_metadata.role='admin'` + `is_admin()` RLS 정책 (서버 소유 클레임, user_metadata 혼용 금지) ② service_role 키는 프론트 번들 절대 금지 — 권한 작업은 로컬 CLI·security definer RPC로만 ③ 텔레메트리↔사용자 연결 비도입 유지 (`feedback.user_id`→`session_id` join 경로로 대체, 수집 최소화 유지) ④ `sync_snapshots` payload 비열람 기본값 + `admin_audit` 감사 로그
+- **Phase 구성**: Phase 1 운영 CLI(`report:feedback`/`report:user`/`admin:grant-pro` — 스키마 변경 없이 즉시 가능) → Phase 2 인앱 `#/admin` lazy 로드 뷰(4탭) → Phase 3 별도 콘솔은 보류
+- SPEC §3.26 AD-01~06 행 추가(로드맵 상태) · README DOC-DSN-30 등록 · AGENTS 설계 목록 반영
+
 ## 2026-10-14 교재 일독 완료 통지 (TR-28)
 
 - **동기**: SC-15 통독 차감은 청크 커버리지 100% 도달 시 자동 소멸하지만, 사용자에게는 그 전환 시점이 보이지 않았음 — 완료를 따로 신고할 버튼이 없으므로 "언제 카드 기간으로 넘어갔는지" 인지 경로가 없었음
