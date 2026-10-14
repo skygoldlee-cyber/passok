@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: be9be1263a75223e
-> 생성: 2026-10-14 · 원천: SPEC.md(515개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 5bd1269580a1adc3
+> 생성: 2026-10-14 · 원천: SPEC.md(521개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 515개 — 문서 연결 373 · 소스 연결 461 · 테스트 연결 493 · 보고서 연결 109
+**커버리지 요약**: 요구사항 521개 — 문서 연결 379 · 소스 연결 462 · 테스트 연결 494 · 보고서 연결 109
 
 ---
 
@@ -380,14 +380,14 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| AU-01 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11 | src/auth-view.js | tests/dom/common-auth.dom.test.js | — | — |
-| AU-02 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 1개 | src/auth-view.js<br>src/supabase-client.js | tests/dom/common-auth.dom.test.js<br>tests/unit/supabase-client.test.js | — | — |
-| AU-03 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 1개 | src/auth-view.js | tests/dom/common-auth.dom.test.js | — | — |
-| AU-04 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 1개 | src/auth-view.js | tests/dom/common-auth.dom.test.js | — | — |
-| AU-05 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11 | src/sync.js | tests/dom/common-sync.dom.test.js | — | — |
-| AU-06 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11 | src/sync.js | tests/dom/common-sync.dom.test.js | — | — |
-| AU-07 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11 | src/sync.js | tests/dom/common-sync.dom.test.js<br>tests/unit/storage-key-sync.test.js | — | 개인정보보호법 — 타인(고객) PII의 서버 저장 제한 원칙 |
-| AU-08 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11 | src/auth-view.js<br>src/supabase-client.js<br>src/supabase-config.js<br>src/sync.js | tests/dom/common-auth.dom.test.js<br>tests/dom/common-sync.dom.test.js<br>tests/unit/supabase-client.test.js | — | — |
+| AU-01 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 1개 | src/auth-view.js | tests/dom/common-auth.dom.test.js | — | — |
+| AU-02 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 2개 | src/auth-view.js<br>src/supabase-client.js | tests/dom/common-auth.dom.test.js<br>tests/unit/supabase-client.test.js | — | — |
+| AU-03 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 2개 | src/auth-view.js | tests/dom/common-auth.dom.test.js | — | — |
+| AU-04 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 2개 | src/auth-view.js | tests/dom/common-auth.dom.test.js | — | — |
+| AU-05 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 1개 | src/sync.js | tests/dom/common-sync.dom.test.js | — | — |
+| AU-06 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 1개 | src/sync.js | tests/dom/common-sync.dom.test.js | — | — |
+| AU-07 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 1개 | src/sync.js | tests/dom/common-sync.dom.test.js<br>tests/unit/storage-key-sync.test.js | — | 개인정보보호법 — 타인(고객) PII의 서버 저장 제한 원칙 |
+| AU-08 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 1개 | src/auth-view.js<br>src/supabase-client.js<br>src/supabase-config.js<br>src/sync.js | tests/dom/common-auth.dom.test.js<br>tests/dom/common-sync.dom.test.js<br>tests/unit/supabase-client.test.js | — | — |
 
 ## 3.20 학습 캘린더·복습·드릴
 
@@ -445,14 +445,14 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| FB-01 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
-| FB-02 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
-| FB-03 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
-| FB-04 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
-| FB-05 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
-| FB-06 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
-| FB-07 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
-| FB-08 | ✅ (코드) / ⚙️ (대시보드 설정 필요) | 테스트 | DOC-DSN-05<br>DOC-DSN-09 | src/feedback.js<br>tools/supabase/functions/feedback-notify/index.ts | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
+| FB-01 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09<br>DOC-DSN-30 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
+| FB-02 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09<br>DOC-DSN-30 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
+| FB-03 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09<br>DOC-DSN-30 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
+| FB-04 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09<br>DOC-DSN-30 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
+| FB-05 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09<br>DOC-DSN-30 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
+| FB-06 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09<br>DOC-DSN-30 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
+| FB-07 | ✅ | 테스트 | DOC-DSN-05<br>DOC-DSN-09<br>DOC-DSN-30 | src/feedback.js | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
+| FB-08 | ✅ (코드) / ⚙️ (대시보드 설정 필요) | 테스트 | DOC-DSN-05<br>DOC-DSN-09<br>DOC-DSN-30 | src/feedback.js<br>tools/supabase/functions/feedback-notify/index.ts | tests/dom/feedback.dom.test.js<br>tests/unit/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
 
 ## 3.24 학습 품질 감사
 
@@ -475,6 +475,17 @@
 | SEM-06 | 미구현 (로드맵) | — | — | — | — | — | — |
 | SEM-07 | 미구현 (로드맵) | — | — | — | — | — | — |
 | SEM-08 | 미구현 (로드맵) | — | — | — | — | — | — |
+
+## 3.26 관리자
+
+| ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
+|----|------|-----------|------|------|--------|--------|------|
+| AD-01 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
+| AD-02 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
+| AD-03 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
+| AD-04 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
+| AD-05 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
+| AD-06 | ✅ | 테스트 | DOC-DSN-30 | tools/check/feedback_report.js<br>tools/check/grant_pro.js<br>tools/check/user_report.js<br>tools/lib/supabase_ops.js | tests/unit/feedback-report.test.js<br>tests/unit/grant-pro.test.js<br>tests/unit/user-report.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
@@ -716,8 +727,8 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| ROAD-P0 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 5개 | src/pro-upgrade.js<br>tools/check/check_plan_features.js | tests/dom/pro-plan.dom.test.js<br>tests/unit/learning-pro.test.js | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06 | — |
-| ROAD-P1 | 미구현 (유일한 Phase 1~2 잔여) | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 2개 | — | — | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
+| ROAD-P0 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 6개 | src/pro-upgrade.js<br>tools/check/check_plan_features.js | tests/dom/pro-plan.dom.test.js<br>tests/unit/learning-pro.test.js | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06 | — |
+| ROAD-P1 | 미구현 (유일한 Phase 1~2 잔여) | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 3개 | — | — | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P2 | 미구현 | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 2개 | — | — | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P3 | 미구현 | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 2개 | — | — | DOC-ARC-01<br>DOC-ARC-02<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P4 | ✅ 결정·게이트 구현 | 테스트 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 2개 | src/sync.js | tests/dom/common-sync.dom.test.js | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06<br>DOC-ARC-07 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
@@ -830,6 +841,7 @@
 | DOC-DSN-27 | docs/dev/design/FSRS6_UPGRADE_DESIGN.md | D-18, D-19, F-07, F-11 |
 | DOC-DSN-28 | docs/dev/design/EXAM_DUE_CLAMP_DESIGN.md | D-19, D-20, F-07 |
 | DOC-DSN-29 | docs/dev/design/KNOWLEDGE_TRACING_DESIGN.md | D-15, D-18, D-21, D-22, SC-14 |
+| DOC-DSN-30 | docs/dev/design/ADMIN_DESIGN.md | AD-01, AD-02, AD-03, AD-04, AD-05, AD-06, AU-01, AU-02, AU-03, AU-04, AU-05, AU-06, AU-07, AU-08, FB-01, FB-02, FB-03, FB-04, FB-05, FB-06, FB-07, FB-08, ROAD-P0, ROAD-P1 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |

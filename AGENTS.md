@@ -123,6 +123,9 @@ npm.cmd run check:perf                  # 성능 예산 — sw.js SHELL_ASSETS �
 npm.cmd run mutate                      # 변이 테스트 (Stryker, 수동 스팟 체크 — 순수 핵심 모듈 스코프: questions·spaced-repetition·weak-items·statement-tracker)
 npm.cmd run report:errors               # 오류율 리포트 — client_errors 조회 → 오류/세션·일별·상위 메시지 (SUPABASE_SECRET_KEY env 필요, 미설정 시 대시보드용 SQL 출력 · -- --days N · --session <uuid>=bug 신고의 meta.session_id로 해당 페이지 로드 오류+퍼널 이력 조회)
 npm.cmd run report:funnel               # 과업 완주율 리포트 — usage_events 조회 → quiz/daily start→complete 완주율·이탈·평균 점수·소요 (동일 키 요건 · -- --days N)
+npm.cmd run report:feedback             # 피드백 인박스 — feedback 테이블 kind별 건수·평점·일별·최근 본문 (동일 키 요건 · -- --days N · --kind bug · bug의 meta.session_id→report:errors --session 연결, AD-06)
+npm.cmd run report:user                 # 사용자 조회 — npm run report:user -- <email>: GoTrue Admin API 해석 → plan·sync 메타(payload 미열람)·피드백 이력 (동일 키 요건, AD-06)
+npm.cmd run admin:grant-pro             # Pro 부여/회수 — npm run admin:grant-pro -- <email> [--revoke]: 기본 dry-run, --apply로만 실갱신 (동일 키 요건, AD-06)
 npm.cmd run check:docsync               # 소스 변경 시 문서 갱신 강제 — src/tools/tests/설정 변경에 docs/·AGENTS·README 갱신 동반 필수. 우회: SKIP_DOCSYNC=1 (모든 단계) · 커밋 메시지 행 끝의 [no-docs] (pre-push --ref 단계에서만 인식 — 마크된 커밋의 파일만 면제되며 다른 커밋은 계속 검사. pre-commit은 메시지 미존재로 불가)
 npm.cmd run check:testfirst             # 로직(src/*.js·ref-pipeline/*.py) 변경 시 테스트(tests/·ref-pipeline/tests/) 동반 강제 — Docs-First 기계화. 우회: SKIP_TESTFIRST=1 · 커밋 메시지 행 끝 [no-test] (--ref 모드, 그 커밋만 면제)
 npm.cmd run check:trace                 # TRACE_MATRIX 입력 해시 신선도
@@ -520,6 +523,7 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 - `docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md` — 빌드타임 임베딩 기반 의미 유사도 설계안 (유사 진술·혼동쌍·검색 확장 — 미구현)
 - `docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md` — 오답 원인 자동 분류 설계안 (임베딩 센트로이드 추정기 — 미구현)
 - `docs/dev/design/SUPABASE_DESIGN.md` — 계정·클라우드 동기화 설계안 (Phase 1~2 구현 완료, Pro entitlement는 미구현)
+- `docs/dev/design/ADMIN_DESIGN.md` — 관리자 콘솔 설계안 (권한 모델·피드백 인박스·사용자 관리 — 미구현, AD-01~06)
 - `docs/dev/runbooks/TEXTBOOK_AUTHORING_GUIDE.md` — 교재 작성 가이드
 - `docs/exams/cosmetic/reference/NUMBERING_SYSTEM.md` — 교재 번호체계 가이드 (십진법)
 - `docs/dev/design/QUESTION_SCHEMA_DESIGN.md` — 문항 스키마 + 복수정답형 변환 파이프라인 설계
