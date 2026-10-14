@@ -160,6 +160,32 @@ create policy "public insert" on public.client_errors
   for insert to anon, authenticated with check (true);
 
 -- ============================================================
+-- usage_events: 과업 퍼널 이벤트 (src/usage-telemetry.js)
+--   - 익명 insert 허용 (비로그인도 전송 — 관측성 목적)
+--   - select/update/delete 정책 없음 = 클라이언트 조회 전면 차단
+--   - session_id는 페이지 로드당 생성되는 랜덤 UUID — start↔complete
+--     쌍을 묶는 용도로만 쓰이며 기기·사용자를 식별하지 않는다
+--   - 앱 측에서 세션당 이벤트 상한으로 폭주 방지
+-- ============================================================
+create table if not exists public.usage_events (
+  id          uuid primary key default gen_random_uuid(),
+  created_at  timestamptz not null default now(),
+  session_id  uuid not null,
+  event       text not null check (char_length(event) between 1 and 60),
+  exam_id     text,
+  app_version text,
+  url         text,
+  user_agent  text,
+  meta        jsonb
+);
+
+alter table public.usage_events enable row level security;
+
+drop policy if exists "public insert" on public.usage_events;
+create policy "public insert" on public.usage_events
+  for insert to anon, authenticated with check (true);
+
+-- ============================================================
 -- 확인 쿼리 (선택): 실행 후 테이블 5개·정책 4개·함수 2개가 보이면 성공
 --   select table_name from information_schema.tables where table_schema='public';
 --   select polname, polrelid::regclass from pg_policy;

@@ -7,6 +7,7 @@ import { checkShortAnswer } from './trainer.js';
 import { shuffle, todayKey } from '../utils.js';
 import { showToast, showConfirm, markChoiceButtons, showAnswerFeedback } from '../ui-utils.js';
 import { STORAGE_KEYS, dailyCompletedKey } from '../storage-keys.js';
+import { reportEvent } from '../usage-telemetry.js';
 import { getWeeklyGoalProgress } from '../study-tracker.js';
 import { hasFeature } from '../exam-context.js';
 
@@ -204,6 +205,9 @@ function _startDailyChallengeImpl() {
     dailyState.currentIndex = 0;
     dailyState.correctCount = 0;
     dailyState.questions = qPack;
+
+    // 과업 퍼널 계측 — daily_start ↔ finishDailyChallenge의 daily_complete 쌍
+    void reportEvent('daily_start', { count: qPack.length });
 
     showDailyModal();
 }
@@ -418,6 +422,11 @@ export function nextDailyStep() {
 function finishDailyChallenge() {
     const modal = document.getElementById('daily-challenge-modal');
     if (modal) modal.remove();
+
+    // 과업 퍼널 계측 — 완주 이벤트 (점수는 집계용 수치)
+    void reportEvent('daily_complete', {
+        correct: dailyState.correctCount, total: dailyState.questions.length,
+    });
 
     showToast(`일일 챌린지 완료 — 점수 ${dailyState.correctCount} / ${dailyState.questions.length}`, 'success');
 
