@@ -99,6 +99,7 @@
         "src/study-tracker.js",
         "src/supabase-client.js",
         "src/supabase-config.js",
+        "src/telemetry-session.js",
         "src/sync.js",
         "src/textbook-core.js",
         "src/textbook-edition.js",

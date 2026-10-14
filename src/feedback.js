@@ -9,6 +9,7 @@
 import { getJSON, setJSON, getItem, setItem } from './storage.js';
 import { getActiveExamId } from './exam-context.js';
 import { getSupabase, getAuthSession } from './supabase-client.js';
+import { getTelemetrySessionId } from './telemetry-session.js';
 import { esc } from './sanitize.js';
 import { trapFocus, showToast } from './ui-utils.js';
 
@@ -117,7 +118,14 @@ export function buildFeedbackPayload({ kind, rating, body, view, honeypot, userI
         exam_id: getActiveExamId(),
         user_agent: (typeof navigator !== 'undefined' && navigator.userAgent) || null,
         user_id: userId || null,
-        meta: { honeypot: !!honeypot },
+        meta: {
+            honeypot: !!honeypot,
+            // bug 신고만 텔레메트리 세션 연결키 첨부 — 서버에서 client_errors/
+            // usage_events를 session_id로 join해 "신고 시점의 오류 이력" 조회.
+            // 다른 kind는 연결 불필요(수집 최소화). 페이지 리로드 시 키가 바뀌므로
+            // 리로드 이전 세션의 오류는 연결되지 않는다 (알려진 한계).
+            ...(k === 'bug' ? { session_id: getTelemetrySessionId() } : {}),
+        },
     };
 }
 

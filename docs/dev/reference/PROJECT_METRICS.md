@@ -191,7 +191,7 @@
 | 배포 빈도 | `(git tag -l "deploy/*").Count` (PowerShell) — 태그가 배포 이력 SSOT. 태그명 날짜로 기간당 빈도 산출 |
 | 변이 테스트 | `npm.cmd run mutate` (수동 스팟 체크 — CI 미편입. 스코프: questions·spaced-repetition·weak-items·statement-tracker 4개 순수 모듈, Stryker `reports/mutation/` 리포트) |
 | E2E·시나리오 (§2.2) | `npm.cmd run test:e2e` — Playwright+axe, test_stats.json 수치 |
-| 오류율·과업 완주 (§2.6) | `npm.cmd run report:errors`(오류/세션 — 세션 핑 분모) · `npm.cmd run report:funnel`(quiz/daily start→complete 세션 쌍 완주율) — SUPABASE_SECRET_KEY env 필요(미설정 시 대시보드용 SQL 출력). schema.sql §5·§6을 프로덕션에 적용해야 집계 시작 · 실사용 수단 없음(공백) |
+| 오류율·과업 완주 (§2.6) | `npm.cmd run report:errors`(오류/세션 — 세션 핑 분모 · `-- --session <uuid>`=bug 신고의 meta.session_id로 해당 페이지 로드 오류+퍼널 이력 조회) · `npm.cmd run report:funnel`(quiz/daily start→complete 세션 쌍 완주율) — SUPABASE_SECRET_KEY env 필요(미설정 시 대시보드용 SQL 출력). schema.sql §5·§6을 프로덕션에 적용해야 집계 시작 · 실사용 수단 없음(공백) |
 | 보안 (§2.7) | `check:secrets` · `check:vendor` 해시 · CSP `script-src 'self'` (vercel.json) · `npm.cmd run sbom` · `npm.cmd audit` · 권한 경계: Supabase RLS — `docs/dev/design/SUPABASE_DESIGN.md` §3 (배포 검증 공백) |
 | 지식 비율 지표 (§2.5) | `npm.cmd run check:runbooks` — WHEN_THINGS_BREAK 증상 행 정본 커버리지 자동 집계(파일+앵커 도달). ADR 기재율은 자동 명령 없음(공백). 리허설 절차: [WHEN_THINGS_BREAK.md](../runbooks/WHEN_THINGS_BREAK.md) §6 |
 | 배포 검증 | `npm.cmd run deploy`의 배포 후 스모크 자동 단계 |

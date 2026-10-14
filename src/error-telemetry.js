@@ -8,9 +8,12 @@
 // - 세션당 상한·메시지 중복 억제로 폭주 방지 — 오류 루프가 네트워크 폭주가 되지 않게
 //   (세션 핑은 상한 카운터를 소비하지 않는다 — 오류 상한은 오류에만 적용)
 // - 개인정보 최소화: message/stack/url/버전·UA만 전송, 입력 데이터 미포함
+// - session_id: telemetry-session.js의 페이지 로드당 랜덤 UUID — 사용자가 아니라
+//   "한 페이지 로드"를 식별. bug 피드백(meta.session_id)과의 join 키
 // ------------------------------------------------------------
 import { getSupabase } from './supabase-client.js';
 import { getActiveExamId } from './exam-context.js';
+import { getTelemetrySessionId } from './telemetry-session.js';
 
 const MAX_PER_SESSION = 10;   // 세션당 전송 상한
 const STACK_MAX = 4000;       // 스택 잘라내기
@@ -30,6 +33,7 @@ export function buildErrorPayload(kind, err, meta = {}) {
     const message = String(rawMsg || 'unknown').slice(0, 500);
     return {
         kind: (kind === 'unhandledrejection' || kind === 'session') ? kind : 'error',
+        session_id: getTelemetrySessionId(),
         message,
         stack: (e && e.stack ? String(e.stack) : '').slice(0, STACK_MAX) || null,
         view: meta.view || null,
