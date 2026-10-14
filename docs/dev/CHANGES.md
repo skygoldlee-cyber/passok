@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 저장소 무결성 게이트 테스트 커버리지
+
+- `tests/unit/repo-integrity-gates.test.js` 신설(15건) — check_replacement_char(기준선 비교·유입/초과/감소 판정), check_orphan_assets(참조 판정·자기참조 제외·텍스트 자산 참조 인정·규약 면제·예외 명단 비교), check_secrets(9개 패턴 탐지·오탐 경계·라인별 1히트)의 판정 코어를 합성 픽스처로 고정
+- 3개 체커 리팩터링 — 판정 로직을 순수 함수(`compareCounts`·`collectOrphans`·`compareOrphans`·`scanText`)로 추출해 `module.exports`로 공개하고 `main()`을 `require.main` 가드로 감싸 CLI 동작은 무변경. 게이트 자체의 회귀(탐지 무력화·오탐)를 테스트로 차단
+- `stats:stamp` 실측 갱신 — unit 1256→1271, dom 718→719
+
 ## 2026-10-14 고아 자산 게이트 + FFFD 기준선 제로 + 배포 스탬프 비커밋화
 
 - `check:orphans` 신설(docs 단계 + pre-commit 루프) — 추적 자산 파일(이미지·폰트·미디어·PDF)의 파일명이 다른 추적 파일에 등장하지 않으면 실패. `_archive/`·e2e `-snapshots/`는 명명 규약 예외, 개별 예외는 `orphan_assets_baseline.json`(사유 기입, `--update` 재작성). 기존 고아 자산 4건 삭제: webp 이관 후 잔존한 과목별 `N과목_삽화.png` 3건 + 콘티 v6 교체 후 고아가 된 구 스토리보드 PNG(~1MB)

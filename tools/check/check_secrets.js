@@ -42,45 +42,58 @@ const ALLOWLIST_FILES = new Set([
 const EXTS = new Set(['.js', '.mjs', '.ts', '.json', '.md', '.html', '.css', '.py', '.yml', '.yaml', '.txt', '.env', '.example', '']);
 const MAX_SIZE = 512 * 1024;
 
-// --ref: ref..HEAD+미커밋 변경 파일만 스캔 — 신규 시크릿 유입 탐지 (로컬·pre-push)
-const ref = refFromArgs(process.argv.slice(2));
-const scoped = ref ? changedFiles(ref) : null;
-
-let files;
-try {
-  files = scoped ?? execSync('git ls-files', { cwd: ROOT, encoding: 'utf8' }).split('\n').map((s) => s.trim()).filter(Boolean);
-} catch (e) {
-  console.log('✗ git 파일 목록 실패 — git 저장소에서 실행하세요');
-  process.exit(2);
-}
-
-const hits = [];
-for (const rel of files) {
-  if (ALLOWLIST_FILES.has(rel)) continue;
-  if (!EXTS.has(path.extname(rel).toLowerCase())) continue;
-  const abs = path.join(ROOT, rel);
-  let stat;
-  try { stat = fs.statSync(abs); } catch { continue; }
-  if (stat.size > MAX_SIZE) continue;
-  const text = fs.readFileSync(abs, 'utf8');
+/** 텍스트에서 시크릿 패턴 탐지 — 순수 로직 (테스트용 export). 반환: '라인 — 라벨' 배열 */
+function scanText(text) {
+  const hits = [];
   const lines = text.split('\n');
   for (let i = 0; i < lines.length; i++) {
     for (const p of PATTERNS) {
       if (p.re.test(lines[i])) {
-        hits.push(`${rel}:${i + 1} — ${p.label}`);
+        hits.push(`${i + 1} — ${p.label}`);
         break;
       }
     }
   }
+  return hits;
 }
 
-if (!hits.length) {
-  console.log(`✅ 시크릿 스캔 통과 — 파일 ${files.length}개${scoped ? ' (diff 스코프)' : ''}, 위반 0건`);
-  process.exit(0);
+function main() {
+  // --ref: ref..HEAD+미커밋 변경 파일만 스캔 — 신규 시크릿 유입 탐지 (로컬·pre-push)
+  const ref = refFromArgs(process.argv.slice(2));
+  const scoped = ref ? changedFiles(ref) : null;
+
+  let files;
+  try {
+    files = scoped ?? execSync('git ls-files', { cwd: ROOT, encoding: 'utf8' }).split('\n').map((s) => s.trim()).filter(Boolean);
+  } catch (e) {
+    console.log('✗ git 파일 목록 실패 — git 저장소에서 실행하세요');
+    process.exit(2);
+  }
+
+  const hits = [];
+  for (const rel of files) {
+    if (ALLOWLIST_FILES.has(rel)) continue;
+    if (!EXTS.has(path.extname(rel).toLowerCase())) continue;
+    const abs = path.join(ROOT, rel);
+    let stat;
+    try { stat = fs.statSync(abs); } catch { continue; }
+    if (stat.size > MAX_SIZE) continue;
+    for (const h of scanText(fs.readFileSync(abs, 'utf8'))) {
+      hits.push(`${rel}:${h}`);
+    }
+  }
+
+  if (!hits.length) {
+    console.log(`✅ 시크릿 스캔 통과 — 파일 ${files.length}개${scoped ? ' (diff 스코프)' : ''}, 위반 0건`);
+    process.exit(0);
+  }
+
+  console.log(`⚠ 시크릿 의심 ${hits.length}건 발견:\n`);
+  for (const h of hits.slice(0, 30)) console.log(`  ✗ ${h}`);
+  if (hits.length > 30) console.log(`  …외 ${hits.length - 30}건`);
+  console.log('\n공개 의도 값이면 check_secrets.js의 ALLOWLIST_FILES에 파일 경로로 면제 등록하세요.');
+  process.exit(1);
 }
 
-console.log(`⚠ 시크릿 의심 ${hits.length}건 발견:\n`);
-for (const h of hits.slice(0, 30)) console.log(`  ✗ ${h}`);
-if (hits.length > 30) console.log(`  …외 ${hits.length - 30}건`);
-console.log('\n공개 의도 값이면 check_secrets.js의 ALLOWLIST_FILES에 파일 경로로 면제 등록하세요.');
-process.exit(1);
+module.exports = { PATTERNS, ALLOWLIST_FILES, scanText };
+if (require.main === module) main();

@@ -50,14 +50,8 @@ function isText(file) {
   }
 }
 
-function findOrphans() {
-  const files = trackedFiles();
-  const assets = files.filter((f) => ASSET_RE.test(f) && !EXEMPT_RE.test(f));
-  // 코퍼스 = 텍스트로 읽히는 추적 파일 전체 (svg 같은 텍스트 자산도 참조 주체가 될 수 있다)
-  const corpus = new Map();
-  for (const f of files) {
-    if (isText(f)) corpus.set(f, fs.readFileSync(path.join(ROOT, f), 'utf8'));
-  }
+/** 코퍼스에서 미참조 자산을 분류 — 순수 로직 (테스트용 export) */
+function collectOrphans(assets, corpus) {
   const orphans = [];
   for (const a of assets) {
     const base = a.split('/').pop();
@@ -67,7 +61,18 @@ function findOrphans() {
     }
     if (!refd) orphans.push(a);
   }
-  return { orphans, assetCount: assets.length };
+  return orphans;
+}
+
+function findOrphans() {
+  const files = trackedFiles();
+  const assets = files.filter((f) => ASSET_RE.test(f) && !EXEMPT_RE.test(f));
+  // 코퍼스 = 텍스트로 읽히는 추적 파일 전체 (svg 같은 텍스트 자산도 참조 주체가 될 수 있다)
+  const corpus = new Map();
+  for (const f of files) {
+    if (isText(f)) corpus.set(f, fs.readFileSync(path.join(ROOT, f), 'utf8'));
+  }
+  return { orphans: collectOrphans(assets, corpus), assetCount: assets.length };
 }
 
 function loadBaseline() {
@@ -87,6 +92,20 @@ function writeBaseline(orphans) {
   fs.writeFileSync(BASELINE_PATH, JSON.stringify(doc, null, 2) + '\n', 'utf8');
 }
 
+/** 미참조 자산 ↔ 예외 명단 비교 — 순수 로직 (테스트용 export) */
+function compareOrphans(orphans, baseline) {
+  const violations = [];
+  const resolved = [];
+  for (const f of orphans) {
+    if (f in baseline) continue;
+    violations.push(`미참조 자산: ${f}`);
+  }
+  for (const f of Object.keys(baseline)) {
+    if (!orphans.includes(f)) resolved.push(`${f} — 참조 회복 또는 파일 삭제됨`);
+  }
+  return { violations, resolved };
+}
+
 function main() {
   const update = process.argv.includes('--update');
   const { orphans, assetCount } = findOrphans();
@@ -98,16 +117,7 @@ function main() {
   }
 
   const baseline = loadBaseline();
-  const violations = [];
-  const resolved = [];
-
-  for (const f of orphans) {
-    if (f in baseline) continue;
-    violations.push(`미참조 자산: ${f}`);
-  }
-  for (const f of Object.keys(baseline)) {
-    if (!orphans.includes(f)) resolved.push(`${f} — 참조 회복 또는 파일 삭제됨`);
-  }
+  const { violations, resolved } = compareOrphans(orphans, baseline);
 
   if (violations.length) {
     console.error(`✗ 고아 자산 탐지 — 미참조 자산 ${violations.length}건`);
@@ -125,4 +135,5 @@ function main() {
   }
 }
 
-main();
+module.exports = { ASSET_RE, EXEMPT_RE, collectOrphans, compareOrphans };
+if (require.main === module) main();
