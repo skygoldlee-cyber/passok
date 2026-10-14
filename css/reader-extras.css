@@ -758,7 +758,7 @@ a.glossary-ref-link i {
     to { opacity: 0.95; transform: translateY(0); }
 }
 
-/* === ������Ʈ Ŭ���� ? �ζ��� ��Ÿ�� ���ſ� === */
+/* === 커스텀 컴포넌트 스타일 — 이하 섹션별 조정 === */
 
 /* Reader Empty States */
 .reader-empty-state {

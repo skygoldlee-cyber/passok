@@ -1,6 +1,3 @@
 {
-  "_comment": "U+FFFD 잔존 승계 상한 — 여기 없는 파일의 FFFD·기준선 초과 증가는 check:enc 실패. 잔재 복구 시 --update로 함께 하향한다.",
-  "css/exam.css": 22,
-  "css/reader-extras.css": 22,
-  "css/trainer.css": 22
+  "_comment": "U+FFFD 잔존 승계 상한 — 여기 없는 파일의 FFFD·기준선 초과 증가는 check:enc 실패. 잔재 복구 시 --update로 함께 하향한다."
 }
