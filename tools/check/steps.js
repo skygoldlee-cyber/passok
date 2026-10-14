@@ -55,6 +55,7 @@ const DOCS_STEPS = [
   nodeStep('docs:enc', 'tools/check/check_replacement_char.js', '인코딩', 'U+FFFD 치환 문자 잔존 — 저장 시 이모지 변조 유입 차단 (replacement_char_baseline.json 단조 감소)'),
   nodeStep('docs:orphans', 'tools/check/check_orphan_assets.js', '자산', '미참조 자산(고아 자산) 유입 차단 — orphan_assets_baseline.json 예외 명단'),
   nodeStep('docs:ciparity', 'tools/check/check_ci_parity.js', '문서', 'ci.yml 워크플로 ↔ check:ci 프리셋 양방향 정합'),
+  nodeStep('docs:runbooks', 'tools/check/check_runbook_links.js', '문서', '런북 링크·앵커 정본 도달 검증 + WHEN_THINGS_BREAK 증상 행 커버리지'),
 ];
 
 // ── 콘텐츠 의존성 단계 (check:content → content 프리셋) ────────────────
