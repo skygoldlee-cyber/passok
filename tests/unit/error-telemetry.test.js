@@ -109,3 +109,12 @@ test('initErrorTelemetry: error/unhandledrejection 리스너 등록 + 이중 설
   handlers.unhandledrejection({ reason: new TypeError('p') });
   handlers.unhandledrejection({ reason: null }); // reason 없음 — 무시
 });
+
+test('buildErrorPayload: session_id가 텔레메트리 공유 세션과 일치 — bug 신고 join 키', async () => {
+  const { getTelemetrySessionId } = await import('../../src/telemetry-session.js');
+  const p = buildErrorPayload('error', new Error('x'));
+  assert.equal(p.session_id, getTelemetrySessionId());
+  // 세션 핑도 같은 키 — 오류율 분모 행이 오류 행과 같은 세션으로 묶인다
+  const ping = buildErrorPayload('session', 'session', {});
+  assert.equal(ping.session_id, getTelemetrySessionId());
+});

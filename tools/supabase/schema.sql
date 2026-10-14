@@ -137,6 +137,7 @@ create table if not exists public.client_errors (
   id          uuid primary key default gen_random_uuid(),
   created_at  timestamptz not null default now(),
   kind        text not null check (kind in ('error','unhandledrejection','session')),
+  session_id  uuid,                              -- 페이지 로드당 랜덤 — 사용자 식별 아님, bug 피드백 meta.session_id와의 join 키
   message     text not null check (char_length(message) between 1 and 500),
   stack       text,
   view        text,
@@ -148,10 +149,13 @@ create table if not exists public.client_errors (
 );
 
 -- kind 'session': 페이지 로드당 1건의 세션 핑 — 오류율(오류/세션)의 분모.
+-- session_id: 신고 기반 오류 조회용 상관 키 — feedback(kind='bug')의
+--   meta.session_id와 join하면 신고 시점 페이지 로드의 오류 이력이 나온다.
 -- 기존 배포에 적용:
 --   alter table public.client_errors drop constraint client_errors_kind_check;
 --   alter table public.client_errors add constraint client_errors_kind_check
 --     check (kind in ('error','unhandledrejection','session'));
+--   alter table public.client_errors add column if not exists session_id uuid;
 
 alter table public.client_errors enable row level security;
 

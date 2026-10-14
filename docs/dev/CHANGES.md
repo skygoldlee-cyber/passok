@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-14 신고 기반 오류 연결 — 텔레메트리 세션 ID 공유 (사용자별 장애 이력의 최소 침습 경로)
+
+- `src/telemetry-session.js` 신설 — 페이지 로드당 랜덤 UUID 1개를 client_errors·usage_events·feedback(bug)이 공유. 영속 저장 없음 → 사용자 식별 아닌 "한 페이지 로드" 식별
+- `client_errors.session_id` 컬럼 추가 (schema.sql §5 + 기존 배포용 alter 주석) · bug 피드백만 `meta.session_id` 첨부 — 다른 kind는 수집 최소화로 미첨부
+- `report:errors -- --session <uuid>` — 신고된 세션의 오류+퍼널 이벤트 동시 조회. 운영 흐름: bug 신고 도착 → meta.session_id 추출 → 세션 조회로 재현 컨텍스트 확보
+- 알려진 한계: 페이지 리로드 후 신고 시 이전 세션의 오류는 연결 안 됨 (키가 페이지 로드 스코프)
+- 의도적 비선택: client_errors.user_id 미추가 — 텔레메트리↔계정 연결은 개인정보 처리 범위 확장(규제 검토 선행 필요). 신고 건만 추적하는 C안 채택
+
 ## 2026-10-14 프로젝트 재평가 — §9 스냅샷 교체 + 기준선 아카이브 (evals/ 신설)
 
 - PROJECT_METRICS §8 경로로 전 항목 재측정: unit 정적 1,315 · DOM 720 · 커버리지 stmts 70.76(래칫 상향 가능 신호) · 복잡도 208경고(+1) · `npm audit` 2 moderate(qs via typed-rest-client→Stryker, dev 전용) · 런북 커버리지 52.9% 유지 · CI 복귀 후 완료분 연속 녹색
