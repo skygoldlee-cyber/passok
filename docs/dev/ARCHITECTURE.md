@@ -283,6 +283,7 @@ passory/
 │   ├── statement-tracker.js    #   진술 원자(sid) 단위 오판 통계 + 졸업 추적
 │   ├── charts.js               #   SVG 레이더/꺾은선 차트 + 툴팁
 │   ├── sanitize.js             #   XSS 방어
+│   ├── search-morpheme.js      #   검색 형태소 경계 판정·동의어 확장 순수 로직 (TS-13/TS-14)
 │   ├── sha256.js               #   안정적 ID 해시
 │   ├── web-vitals.js           #   Core Web Vitals (LCP/CLS/INP) 모니터링
 │   ├── trainer-calc.js         #   계산 훈련 문제 생성 (순수 로직)
@@ -578,6 +579,7 @@ passory/
 | [`src/weak-items.js`](../../src/weak-items.js) | 약점(오답) 항목 ID 문법의 단일 소스 — `weak_quiz_`/`weak_sim_` 접두사 상수, `weakItemKey`/`parseWeakSimId`/`subjectKeyFromItemId`, 오답 해석(`resolveWrongQuiz`/`resolveCard`/`subjectForWeakItem`). **인덱스 캐시**: 퀴즈·카드를 `id → {항목, subjectId}` Map으로 인덱싱하고 STUDY_DATA·과목 키·배열 참조/길이 비교로 무효화 — `DataLoader.loadSubject()` 점진 로드 시 자동 재구축. DOM 비의존(`window` 가드) |
 | [`src/utils.js`](../../src/utils.js) | 의존성 없는 범용 헬퍼 (한글 초성 추출 `getChosung()` 등) |
 | [`src/sanitize.js`](../../src/sanitize.js) | HTML/XSS 방어 및 텍스트 정제 유틸리티 |
+| [`src/search-morpheme.js`](../../src/search-morpheme.js) | 통합검색 형태소 경계 판정·동의어 확장 순수 로직 (TS-13/TS-14). `buildBoundaryVocab`이 인덱스 어절에서 독립 어절+재사용 접두를 형태소 어휘로 마이닝하고, `isCoverable`(DP 완전분해)로 매치 직전 접두의 형태소 경계를 판정 — `termHitQuality`가 본매치(2)/부분(1)/없음(0)을 반환해 '보조유화제'는 본매치·'석유화학'은 부분 일치로 분류. `expandSynonyms`는 `registry.synonyms` 정·역방향으로 쿼리 어절을 동의 개념군(그룹 내 OR·그룹 간 AND)으로 확장. DOM 비의존·외부 형태소 분석기 없는 결정론적 구현 |
 | [`src/pdf-registry.js`](../../src/pdf-registry.js) | 참조자료 중앙 설정 모듈. 과목별 참조자료 매핑, 출처→PDF 파일명 매핑, MD 변환본 경로 자동 생성 (`REF_DIRS`, `resolveRefPath`, `mapSourceToRef`). 원본 PDF는 `.vercelignore`로 배포 제외, `ref_md/과목N/*/*.md` 변환본(3.7MB)으로 인앱 뷰어+PDF 저장 지원 |
 | [`src/html-viewer.js`](../../src/html-viewer.js) | 앱 내 HTML/MD 참조자료 뷰어. `fetch()`+`DOMParser`(HTML) 또는 `parseMarkdown()`(MD)로 로드 후 DOM 직접 주입 (iframe 없음). **키워드 기반 스크롤**: `KEYWORD_INDEX`에서 추출한 셀 텍스트 키워드로 검색→첫 번째 하이라이트로 스크롤 (L###은 스크롤에 사용하지 않음). **성능 최적화**: sessionStorage 캐싱(24h TTL)으로 재방문 시 즉시 렌더링, span 일괄 제거(normalize 호출 최소화), 검색 조기 종료(첫 매치 즉시 스크롤 + 나머지 `requestIdleCallback` 지연 하이라이트). 텍스트 노드 순회 검색 + `<mark>` 하이라이트, 검색 결과 내비게이션(이전/다음), 인쇄 지원. **PDF 저장** (v210 도입): 인쇄 전용 CSS로 오버레이 제약 없이 전체 문서를 브라우저 인쇄 다이얼로그로 출력 → "PDF로 저장" 선택 가능 |
 | [`src/reader-format.js`](../../src/reader-format.js) | 교재 리더 본문 포맷터. `parseMarkdown()` + HTML 참조 링크 변환 (`data-ref-html`, `data-ref-search`) + 참조자료 인라인 렌더링. **참조자료 인라인 프리뷰 툴팁** (데스크톱 hover 400ms / 모바일 롱프레스 600ms, 200자 스니펫). 본문 "📚 참조 자료" 섹션의 `ref_md` 링크는 내부 뷰어 + `↗원문`(law.go.kr) 병기 + 스냅샷 배지(제N호·시행일) + 동일 링크 중복 제거. 이야기형 서사 범위 태깅(`markStoryNarrative` — `📖 ┈ 이야기 ┈`/`┈ 본문 ┈ 📘` 명시 마커 우선. 마커 문단은 파서가 `.story-boundary`(+start/end) 부여 → 모든 뷰어 경로에서 숨김, 범위 내 요소에 `.story-narrative` + 서사 시작부 `.story-toggle` 접기 칩 + 구간 양끝 `.sr-only` 라벨(스크린리더) 삽입, 미표시 문서는 📖 장면·💭 에필로그·프롤로그/등장인물 카드 휴리스틱 폴백 → 명조체+골드 색상 구분. `<!-- story:start/end -->` 주석은 `markdown-parser.js`가 렌더에서 제거). **이미지 src 해석** — `images/x.png` 상대 경로는 `filePath` 디렉터리 기준으로, 구형 절대 경로(시험 루트 누락본)는 `contentPath()` 기준으로 재작성 (교재 `images/` 자산) |

@@ -88,7 +88,8 @@ test('PF-08: 교재 검색이 인덱스를 사전 구축하고 키 변경 시에
   const ts = read('src/views/textbook-search.js');
   assert.ok(/_searchIndex/.test(ts), '검색 인덱스 캐시');
   assert.ok(/_searchIndexKeys/.test(ts), '인덱스 키 비교로 재구축 방지');
-  assert.ok(/_invertedIndex/.test(ts), '역색인 인덱스');
+  // TS-13 — 역색인은 어절 단위(_tokenIndex)로 전환 (2-gram 인덱스는 폐기)
+  assert.ok(/_tokenIndex/.test(ts), '어절 역색인 인덱스');
 });
 
 // ---------- PF-09: 디바운스 ----------

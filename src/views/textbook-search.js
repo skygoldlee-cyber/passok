@@ -7,6 +7,7 @@ import { TIMING } from '../config/timing.js';
 import { DataLoader } from '../data-loader.js';
 import { hasFeature, contentPath, dataPath } from '../exam-context.js';
 import { injectBundleScript, fetchMd } from '../doc-overlay.js';
+import { buildBoundaryVocab, termHitQuality, expandSynonyms } from '../search-morpheme.js';
 import { getRefTables, mapSourceToRef } from '../pdf-registry.js';
 import { formatSectionContentForReader } from '../reader-format.js';
 import { buildSectionDisplayTitles, isStoryMetaSection } from '../reader-toc.js';
@@ -26,8 +27,8 @@ const _runSearch = debounce((value) => {
 
 let _searchIndex = null;
 let _searchIndexKeys = null;
-let _invertedIndex = null; // 3. 역색인: 단어 → Set<entryIndex>
-let _invertedIndexKeys = null;
+let _tokenIndex = null;    // 어절 → Set<entryIndex> (TS-13 경계 매칭의 후보 축소)
+let _morphVocab = null;    // TS-13 형태소 경계 어휘 (어절-두어 빈도 마이닝)
 
 // --- TS-10: 이야기형 서사 지연 인덱싱 ---
 // 표준형만 번들되므로 서사 텍스트(비유·예시)는 별도 fetch가 필요하다.
@@ -424,26 +425,23 @@ function _getSearchIndex() {
 }
 
 // 3. 역색인 구축 — 한국어는 공백 기준 토큰화 + 2-gram 보조
+// TS-13 — 어절 토큰은 _tokenIndex로 분리하고, 형태소 경계 어휘를 어절에서 마이닝한다
 function _buildInvertedIndex() {
-    _invertedIndex = new Map();
-    _invertedIndexKeys = _searchIndexKeys;
+    _tokenIndex = new Map();
 
+    const allTokens = [];
     _searchIndex.forEach((entry, idx) => {
         const text = entry._searchText;
         // 공백 기준 토큰화
         const tokens = text.split(/\s+/).filter(t => t.length >= 2);
+        allTokens.push(...tokens);
         tokens.forEach(token => {
-            // 완전 단어 인덱스
-            if (!_invertedIndex.has(token)) _invertedIndex.set(token, new Set());
-            _invertedIndex.get(token).add(idx);
-            // 2-gram 인덱스 (부분 매칭용)
-            for (let i = 0; i < token.length - 1; i++) {
-                const bigram = token.substring(i, i + 2);
-                if (!_invertedIndex.has(bigram)) _invertedIndex.set(bigram, new Set());
-                _invertedIndex.get(bigram).add(idx);
-            }
+            // 어절 인덱스 (후보 축소 + 형태소 경계 판정의 토큰 컨텍스트)
+            if (!_tokenIndex.has(token)) _tokenIndex.set(token, new Set());
+            _tokenIndex.get(token).add(idx);
         });
     });
+    _morphVocab = buildBoundaryVocab(allTokens);
 }
 
 export function renderTextbookSearch() {
@@ -602,27 +600,38 @@ function performTextbookSearch() {
     const refResults = [];
     /** @type {Array<object>} */
     const examResults = [];
+    // TS-13 — 모든 그룹이 매치되지만 하나 이상이 부분(중간) 매치뿐인 항목
+    /** @type {Array<object>} */
+    const weakResults = [];
 
-    // 3. 역색인 활용 — 각 검색어에 대해 후보 섹션 집합을 구하고 교집합 계산
+    // TS-14 — registry.synonyms로 쿼리 용어를 동의 개념군으로 확장 (그룹 내 OR·그룹 간 AND)
+    const synMap = (DataLoader.registry && DataLoader.registry.synonyms) || null;
+    const termGroups = terms.map(t => expandSynonyms(t, synMap));
+
+    // 3. 역색인 활용 — 각 용어 그룹의 후보 엔트리 집합을 구하고 교집합 계산
+    // 어절 토큰 인덱스를 쓰므로 어절 중간 매치까지 후보에 포함된다 (품질은 뒤에서 분류)
     let candidateIndices = null;
-    for (const term of terms) {
-        let termMatches = new Set();
-        // 역색인에서 완전 매칭
-        if (_invertedIndex && _invertedIndex.has(term)) {
-            termMatches = new Set(_invertedIndex.get(term));
-        } else if (_invertedIndex) {
-            // 부분 매칭 — 역색인에서 term을 포함하는 토큰 검색
-            for (const [token, indices] of _invertedIndex) {
-                if (token.includes(term)) {
-                    indices.forEach(i => termMatches.add(i));
+    for (const group of termGroups) {
+        const groupSet = new Set();
+        for (const variant of group) {
+            if (variant.includes(' ')) {
+                // 공백 포함 변형은 어절 인덱스에 없음 — 텍스트 수준으로 직접 판정
+                index.forEach((e, i) => {
+                    if (e._searchText.includes(variant)) groupSet.add(i);
+                });
+            } else if (_tokenIndex) {
+                for (const [token, indices] of _tokenIndex) {
+                    if (token.includes(variant)) {
+                        indices.forEach(i => groupSet.add(i));
+                    }
                 }
             }
         }
         if (candidateIndices === null) {
-            candidateIndices = termMatches;
+            candidateIndices = groupSet;
         } else {
             // 교집합
-            candidateIndices = new Set([...candidateIndices].filter(i => termMatches.has(i)));
+            candidateIndices = new Set([...candidateIndices].filter(i => groupSet.has(i)));
         }
         if (candidateIndices.size === 0) break;
     }
@@ -634,61 +643,78 @@ function performTextbookSearch() {
 
     for (const { entry } of searchEntries) {
         if (textbookState.filter !== 'all' && textbookState.filter !== entry.subjId) continue;
-        const isMatch = terms.every(term => entry._searchText.includes(term));
-        if (!isMatch) continue;
-        // 관련도 — 모든 토큰의 총 매치 수 + 제목 매칭 가산 (검색 의도는 보통 제목 근처)
+        // TS-13/TS-14 — 그룹별 최고 매치 품질: 2=경계(본매치), 1=부분(중간), 0=없음
+        // 모든 그룹이 매치돼야 결과이며, 하나라도 부분 매치뿐이면 '부분 일치' 티어로 내린다
+        let allStrong = true;
         let hits = 0;
-        for (const t of terms) hits += entry._searchText.split(t).length - 1;
+        let titleBoost = 0;
         const head = String(entry.sectionTitle || entry.docName || '').toLowerCase();
-        const score = hits + (terms.some(t => head.includes(t)) ? 50 : 0);
-        if (entry.fromRef) {
-            refResults.push({
-                subjId: entry.subjId,
-                subjName: entry.subjName,
-                docName: entry.docName,
-                filePath: entry.filePath,
-                refText: entry.refText,
-                fromRef: true,
-                _hits: score
-            });
-        } else if (entry.fromExam) {
-            examResults.push({
-                subjId: entry.subjId,
-                subjName: entry.subjName,
-                docName: entry.docName,
-                filePath: entry.filePath,
-                refText: entry.refText,
-                fromExam: true,
-                _hits: score
-            });
-        } else {
-            results.push({
-                subjId: entry.subjId,
-                subjName: entry.subjName,
-                chapterTitle: entry.chapterTitle,
-                filePath: entry.filePath,
-                sectionTitle: entry.sectionTitle,
-                gotoTitle: entry.gotoTitle,
-                chAnchor: entry.chAnchor,
-                content: entry.content,
-                fromStory: !!entry.fromStory,
-                _score: score
-            });
+        let excluded = false;
+        for (const group of termGroups) {
+            let gBest = 0;
+            let gTitleBoost = 0;
+            for (const variant of group) {
+                const q = termHitQuality(entry._searchText, variant, _morphVocab);
+                if (q > gBest) gBest = q;
+                if (q > 0) {
+                    const cnt = entry._searchText.split(variant).length - 1;
+                    hits += (variant === group[0]) ? cnt : cnt * 0.5;
+                }
+                // 제목 가산은 경계 정렬 매치에만 — '석유화학'식 어절-중간 겹침은 가산 제외
+                if (termHitQuality(head, variant, _morphVocab) === 2) {
+                    gTitleBoost = Math.max(gTitleBoost, variant === group[0] ? 50 : 25);
+                }
+            }
+            if (gBest === 0) { excluded = true; break; }
+            if (gBest < 2) allStrong = false;
+            titleBoost = Math.max(titleBoost, gTitleBoost);
         }
+        if (excluded) continue;
+        const score = hits + titleBoost;
+        const item = entry.fromRef || entry.fromExam ? {
+            subjId: entry.subjId,
+            subjName: entry.subjName,
+            docName: entry.docName,
+            filePath: entry.filePath,
+            refText: entry.refText,
+            fromRef: !!entry.fromRef,
+            fromExam: !!entry.fromExam,
+            _hits: score
+        } : {
+            subjId: entry.subjId,
+            subjName: entry.subjName,
+            chapterTitle: entry.chapterTitle,
+            filePath: entry.filePath,
+            sectionTitle: entry.sectionTitle,
+            gotoTitle: entry.gotoTitle,
+            chAnchor: entry.chAnchor,
+            content: entry.content,
+            fromStory: !!entry.fromStory,
+            _score: score
+        };
+        if (!allStrong) { weakResults.push(item); continue; }
+        if (item.fromRef) refResults.push(item);
+        else if (item.fromExam) examResults.push(item);
+        else results.push(item);
     }
 
     // 관련도 정렬 — 동점은 문서 순서 유지 (stable sort). 탐색 순서는
-    // 교재 → 참조자료 → 문제은행 (TS-11/TS-12) — 그룹별 히트수 정렬·상한 적용.
+    // 교재 → 참조자료 → 문제은행 → 부분 일치 (TS-11/TS-12/TS-13) — 그룹별 히트수 정렬·상한.
     results.sort((a, b) => b._score - a._score);
     refResults.sort((a, b) => b._hits - a._hits);
     examResults.sort((a, b) => b._hits - a._hits);
+    weakResults.sort((a, b) => (b._score ?? b._hits ?? 0) - (a._score ?? a._hits ?? 0));
     const SECTION_RESULT_LIMIT = 30;
     const REF_RESULT_LIMIT = 15;
     const EXAM_RESULT_LIMIT = 15;
+    const WEAK_RESULT_LIMIT = 10;
     const shownSections = results.slice(0, SECTION_RESULT_LIMIT);
     const shownRefs = refResults.slice(0, REF_RESULT_LIMIT);
     const shownExams = examResults.slice(0, EXAM_RESULT_LIMIT);
+    const shownWeak = weakResults.slice(0, WEAK_RESULT_LIMIT);
     const allResults = shownSections.concat(shownRefs).concat(shownExams);
+    // 하이라이트·스니펫은 동의어 변형까지 포함, 뷰어 쿼리 전달은 원어만
+    const allVariantTerms = termGroups.flat();
 
     // 지연 인덱스(서사·참조자료·문제은행) 로딩 중 — '결과 없음' 오표시 방지
     const lazyPending = (_storyIndexPromise && _storyEntries === null)
@@ -697,9 +723,10 @@ function performTextbookSearch() {
 
     // Update summary text
     summary.innerHTML = `총 <strong style="color: var(--color-primary);">${results.length + refResults.length + examResults.length}</strong>건의 관련 내용을 찾았습니다.`
+        + (weakResults.length ? ` <span class="text-muted">(+ 부분 일치 ${esc(String(weakResults.length))}건)</span>` : '')
         + (lazyPending ? ' <span class="text-muted">(서사·참조자료·문제은행을 추가로 불러오는 중…)</span>' : '');
 
-    if (allResults.length === 0) {
+    if (allResults.length === 0 && shownWeak.length === 0) {
         // 지연 인덱스 로딩 중이면 '결과 없음' 대신 추가 결과 가능성을 안내
         container.innerHTML = `
             <div class="empty-state">
@@ -719,13 +746,13 @@ function performTextbookSearch() {
         const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
         subjects.forEach((sub, idx) => { badgeColors[sub.key] = colors[idx % colors.length]; });
     }
-    allResults.forEach((item, idx) => {
+    const renderResultCard = (item, idx) => {
         const badgeColor = badgeColors[item.subjId] || 'badge-gray';
 
         // 참조자료·문제은행 결과 — 문서 단위 + 매치 스니펫 + ExamViewer 라인 딥링크 (TS-11/TS-12)
         if (item.fromRef || item.fromExam) {
-            const { snippet, lineNum } = _matchSnippet(item.refText, terms);
-            const argsJson = esc(JSON.stringify([item.filePath, lineNum, terms.join(' ')]));
+            const { snippet, lineNum } = _matchSnippet(item.refText, allVariantTerms);
+            const argsJson = esc(JSON.stringify([item.filePath, lineNum, allVariantTerms.join(' ')]));
             const kindLabel = esc(item.fromExam ? '문제은행' : '참조자료');
             const refCardHTML = `
             <div class="textbook-result-card">
@@ -740,8 +767,8 @@ function performTextbookSearch() {
                         <i class="fa-solid fa-book-open"></i> 원문 보기
                     </button>
                 </div>
-                <h4 class="textbook-card-title">${highlightTextInString(item.docName, terms)}</h4>
-                <div class="textbook-card-body"><div style="white-space:pre-wrap; word-break:break-word; font-size: 0.9rem;">${highlightTextInString(snippet, terms)}</div></div>
+                <h4 class="textbook-card-title">${highlightTextInString(item.docName, allVariantTerms)}</h4>
+                <div class="textbook-card-body"><div style="white-space:pre-wrap; word-break:break-word; font-size: 0.9rem;">${highlightTextInString(snippet, allVariantTerms)}</div></div>
             </div>
         `;
             container.insertAdjacentHTML('beforeend', refCardHTML);
@@ -750,7 +777,7 @@ function performTextbookSearch() {
 
         const isLong = item.content.length > 300;
         const bodyClass = isLong ? 'textbook-card-body collapsed' : 'textbook-card-body';
-        const formattedContent = formatSectionContent(item.content, terms, item);
+        const formattedContent = formatSectionContent(item.content, allVariantTerms, item);
         const storyBadge = item.fromStory ? '<span class="badge badge-gray">서사</span>' : '';
         // '전체 단원 보기' → 리더의 해당 "섹션"으로 이동 — 인덱스가 기록한 표시 제목으로
         // 매칭(중복 제목은 챕터 병기로 구분)하고, 실패 시 소속 챕터 앵커로 폴백한다.
@@ -773,7 +800,7 @@ function performTextbookSearch() {
                         <i class="fa-solid fa-arrow-up-right-from-square"></i> 전체 단원 보기
                     </a>
                 </div>
-                <h4 class="textbook-card-title">${highlightTextInString(item.sectionTitle, terms)}</h4>
+                <h4 class="textbook-card-title">${highlightTextInString(item.sectionTitle, allVariantTerms)}</h4>
                 <div class="${bodyClass}" id="${cardId}-body">
                     ${formattedContent}
                 </div>
@@ -787,7 +814,16 @@ function performTextbookSearch() {
             </div>
         `;
         container.insertAdjacentHTML('beforeend', cardHTML);
-    });
+    };
+
+    allResults.forEach((item, idx) => renderResultCard(item, idx));
+
+    // TS-13 — 부분 일치 티어: 본매치(교재→참조자료→문제은행) 뒤에 구분 배치
+    if (shownWeak.length) {
+        container.insertAdjacentHTML('beforeend',
+            `<div class="search-weak-divider">부분 일치 — 어절 중간에 음절만 겹치는 결과 ${esc(String(weakResults.length))}건</div>`);
+        shownWeak.forEach((item, idx) => renderResultCard(item, allResults.length + idx));
+    }
 
     if (results.length > SECTION_RESULT_LIMIT) {
         container.insertAdjacentHTML('beforeend',
