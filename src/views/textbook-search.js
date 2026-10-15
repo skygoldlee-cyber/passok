@@ -1,14 +1,15 @@
 // views/textbook-search.js - 교재 검색 통합 로직 (Textbook Search Integration)
-// @spec TS-01~09,PF-08,TS-10,TS-11
+// @spec TS-01~12,PF-08
 import { escapeHTML, esc } from '../sanitize.js';
 import { renderMermaidIn } from '../mermaid-render.js';
 import { attachImageZoomIn } from '../image-zoom.js';
 import { TIMING } from '../config/timing.js';
 import { DataLoader } from '../data-loader.js';
-import { hasFeature } from '../exam-context.js';
+import { hasFeature, contentPath, dataPath } from '../exam-context.js';
+import { injectBundleScript, fetchMd } from '../doc-overlay.js';
 import { getRefTables, mapSourceToRef } from '../pdf-registry.js';
 import { formatSectionContentForReader } from '../reader-format.js';
-import { buildSectionDisplayTitles } from '../reader-toc.js';
+import { buildSectionDisplayTitles, isStoryMetaSection } from '../reader-toc.js';
 import { PATHS } from '../paths.js';
 import { escapeRegExp, debounce } from '../utils.js';
 // [모바일 PWA 견고성] 레지스트리는 window 전역(가드)에서 읽는다(정적 import 하드 의존 지양).
@@ -52,55 +53,89 @@ function _toSearchable(text) {
 /** 이야기형 MD에서 story:start/end 블록을 {title, gotoTitle, chAnchor, text} 목록으로 추출 */
 function _extractStoryBlocks(md) {
     const lines = md.split(/\r?\n/);
-    /** @type {Array<{title:string, innerTitle:string, innerLevel:number, h2:string, anchor:string, lines:string[]}>} */
+    /** @type {Array<{title:string, innerTitle:string, h2Ord:number, innerOrd:number, anchor:string, lines:string[]}>} */
     const blocks = [];
-    /** @type {{title:string, innerTitle:string, innerLevel:number, h2:string, anchor:string, lines:string[]}|null} */
+    /** @type {{title:string, innerTitle:string, h2Ord:number, innerOrd:number, anchor:string, lines:string[]}|null} */
     let cur = null;
     let lastHeading = '';
-    let lastH2 = '';
+    let h2Ord = -1;            // 현재 소속 ## 섹션 서序 (리더의 ## 섹션 카드와 동일 순서)
     let chAnchor = '';
+    let sawPreH2Content = false;
+    // 리더는 ## 헤딩마다 섹션 카드를 만든다 — 블록 내부 ##도 새 카드이므로 서序를 함께 추적한다
+    /** @type {Array<{title:string, meta:boolean}>} */
+    const h2List = [];
     for (const l of lines) {
         const t = l.trim();
         const heading = t.match(/^(#{1,6})\s+(.*)/);
+        // 첫 ## 이전의 비헤딩 라인 — 파서가 만드는 암묵 '개요' 섹션 존재 여부
+        // (# H1·## 섹션 헤더는 파서가 본문에 넣지 않으므로 제외, ### 이하는 본문 취급)
+        if (!h2List.length && !(t.startsWith('# ') || t.startsWith('## '))) sawPreH2Content = true;
         if (cur) {
             if (t === '<!-- story:end -->') { blocks.push(cur); cur = null; continue; }
-            // 블록 내부 첫 헤딩을 서사 제목으로 우선 사용 (예: '## 프롤로그 — …')
-            if (heading && !cur.innerTitle) {
-                cur.innerTitle = heading[2].trim();
-                cur.innerLevel = heading[1].length;
+            if (heading) {
+                // 파서 규약과 동일하게 정확한 '## '만 새 섹션 카드가 된다
+                if (t.startsWith('## ')) {
+                    const h2Title = t.substring(3).trim();
+                    h2Ord = h2List.length;
+                    h2List.push({ title: h2Title, meta: isStoryMetaSection(h2Title) });
+                }
+                // 블록 내부 첫 헤딩을 서사 제목으로 우선 사용 (예: '## 프롤로그 — …')
+                if (!cur.innerTitle) {
+                    cur.innerTitle = heading[2].trim();
+                    cur.innerOrd = t.startsWith('## ') ? h2Ord : -1;
+                }
             }
             cur.lines.push(l);
             continue;
         }
         if (t === '<!-- story:start -->') {
-            cur = { title: lastHeading, innerTitle: '', innerLevel: 0, h2: lastH2, anchor: chAnchor, lines: [] };
+            cur = { title: lastHeading, innerTitle: '', h2Ord, innerOrd: -1, anchor: chAnchor, lines: [] };
             continue;
         }
         if (heading) {
             lastHeading = heading[2].trim();
             // 리더 섹션 카드는 ## 헤딩 — ## 소속과 챕터 앵커를 이동 목적지로 추적한다
             // (###/#### 내부 헤딩은 카드 제목이 아니라 매칭 불가)
-            if (heading[1].length === 2) {
-                lastH2 = lastHeading;
-                const m = lastH2.match(/Chapter\s*(\d+)/i);
+            if (t.startsWith('## ')) {
+                h2Ord = h2List.length;
+                h2List.push({ title: lastHeading, meta: isStoryMetaSection(lastHeading) });
+                const m = lastHeading.match(/Chapter\s*(\d+)/i);
                 if (m) chAnchor = 'ch' + m[1].padStart(2, '0');
             }
         }
     }
+    // 리더 렌더 목록 = 암묵 '개요'(첫 ## 이전 콘텐츠) + 메타 제외 ## —
+    // 표시 제목은 중복 시 챕터 병기본이므로 원시 제목으로 넘기면 오이동한다
+    const renderedTitles = (sawPreH2Content ? ['개요'] : [])
+        .concat(h2List.filter(h => !h.meta).map(h => h.title));
+    const displayTitles = buildSectionDisplayTitles(renderedTitles.map(title => ({ title })));
+    // 원시 ## 서序 → 렌더 목록 인덱스 (메타 섹션은 -1 — 리더에 없어 이동 불가)
+    const renderedIdxOf = [];
+    {
+        let ri = sawPreH2Content ? 1 : 0;
+        h2List.forEach(h => { renderedIdxOf.push(h.meta ? -1 : ri++); });
+    }
     return blocks
-        .map(b => ({
-            title: b.innerTitle || b.title,
-            // 이동 목적지: 블록 자체가 ## 섹션이면 그 제목, 아니면 소속 ## 섹션
-            gotoTitle: (b.innerLevel === 2 ? b.innerTitle : b.h2) || b.innerTitle || b.title,
-            chAnchor: b.anchor,
-            text: b.lines.join('\n')
-                .replace(/<!--[^\n]*?-->/g, '')
-                .split('\n')
-                .filter(l => !l.includes('┈') && !l.trim().startsWith('!['))
-                .join('\n')
-                .trim()
-        }))
-        .filter(b => b.text.length > 0);
+        .map(b => {
+            // 이동 목적지: 블록 자체가 ## 섹션이면 그 카드, 아니면 소속 ## 섹션.
+            // 개요 구간 블록(첫 ## 이전)은 첫 렌더 섹션으로 연결한다
+            const targetOrd = b.innerOrd >= 0 ? b.innerOrd : b.h2Ord;
+            const targetIdx = targetOrd >= 0 ? renderedIdxOf[targetOrd] : (renderedTitles.length ? 0 : -1);
+            return {
+                title: b.innerTitle || b.title,
+                gotoTitle: targetIdx >= 0 ? displayTitles[targetIdx] : '',
+                reachable: targetIdx >= 0,
+                chAnchor: b.anchor,
+                text: b.lines.join('\n')
+                    .replace(/<!--[^\n]*?-->/g, '')
+                    .split('\n')
+                    .filter(l => !l.includes('┈') && !l.trim().startsWith('!['))
+                    .join('\n')
+                    .trim()
+            };
+        })
+        // 리더에 렌더되지 않는 메타 섹션 소속 블록은 도달 불가 — 결과에서 제외
+        .filter(b => b.reachable && b.text.length > 0);
 }
 
 /**
@@ -259,6 +294,77 @@ function _ensureRefIndex() {
     return _refIndexPromise;
 }
 
+// --- TS-12: 문제은행 지연 인덱싱 ---
+// 문제은행 MD는 교재 번들과 별개이므로 첫 검색 시 지연 로드해 문서 단위 항목으로 병합한다.
+// 탐색 순서는 교재 → 참조자료 → 문제은행 — 결과는 '문제은행' 배지로 구분해 맨 뒤에 배치.
+/** @type {Array<object>|null} */
+let _examEntries = null;
+/** @type {Promise<number>|null} */
+let _examIndexPromise = null;
+
+/**
+ * 문제은행 MD 원문 확보 — exam-viewer와 같은 로드 규약:
+ * 주입된 __EXAM_MD__ 번들 우선 → http fetch → exams_md 번들 주입 폴백.
+ * 실패 시 null — 해당 문서만 건너뛴다 (참조자료 인덱스와 같은 오프라인 규약).
+ * @param {string} mdPath '{contentRoot}/문제은행/<file>' 형태
+ * @returns {Promise<string|null>}
+ */
+export async function _loadExamMdText(mdPath) {
+    const bundled = () => (
+        typeof window !== 'undefined' && window.__EXAM_MD__ && typeof window.__EXAM_MD__[mdPath] === 'string'
+    ) ? window.__EXAM_MD__[mdPath] : null;
+    const cached = bundled();
+    if (cached !== null) return cached;
+    if (typeof location === 'undefined' || location.protocol !== 'file:') {
+        try { return await fetchMd(mdPath); } catch (e) { /* 번들 폴백으로 진행 */ }
+    }
+    try {
+        const stem = (mdPath.split('/').pop() || '').replace(/\.md$/i, '');
+        await injectBundleScript(dataPath('exams_md/') + stem + '.js', 'data-exam-bundle');
+        return bundled();
+    } catch (e) {
+        return null; // 오프라인·미캐시 — 해당 문서만 건너뜀
+    }
+}
+
+/**
+ * 문제은행 문서를 지연 로드해 검색 인덱스에 병합한다 — registry.exams 기반 열거,
+ * 과목 귀속은 exams[].subject ↔ subjects[].key (과목 필터·배지에 사용).
+ * @returns {Promise<number>} 추가된 항목 수
+ */
+function _ensureExamIndex() {
+    if (_examIndexPromise) return _examIndexPromise;
+    _examIndexPromise = (async () => {
+        const registry = /** @type {{subjects?: any[], exams?: any[]}} */ (DataLoader.registry || {});
+        const subjNameOf = {};
+        for (const s of registry.subjects || []) subjNameOf[s.key] = s.name;
+        const entries = (await Promise.all((registry.exams || []).map(async (ex) => {
+            if (!ex || !ex.file) return null;
+            const mdPath = contentPath(`문제은행/${ex.file}`);
+            const text = await _loadExamMdText(mdPath);
+            if (!text) return null;
+            const docName = ex.title || ex.file;
+            return {
+                subjId: ex.subject || '',
+                subjName: subjNameOf[ex.subject] || ex.subject || '',
+                docName,
+                filePath: mdPath,
+                refText: text,
+                fromExam: true,
+                _searchText: `${docName}\n${_toSearchable(text)}`.toLowerCase()
+            };
+        }))).filter(Boolean);
+        _examEntries = entries;
+        // 이미 구축된 인덱스가 있으면 문제은행 항목을 뒤에 붙이고 역색인을 재구축한다
+        if (_searchIndex && entries.length) {
+            _searchIndex.push(...entries);
+            _buildInvertedIndex();
+        }
+        return entries.length;
+    })().catch(() => { _examIndexPromise = null; return 0; });
+    return _examIndexPromise;
+}
+
 function _getSearchIndex() {
     const STUDY_DATA = (typeof window !== 'undefined' && window.STUDY_DATA) ? window.STUDY_DATA : {};
     const keys = Object.keys(STUDY_DATA).join(',');
@@ -278,6 +384,9 @@ function _getSearchIndex() {
             chapter.sections.forEach((section, sIdx) => {
                 const chM = String(section.title || '').match(/Chapter\s*(\d+)/i);
                 if (chM) chAnchor = 'ch' + chM[1].padStart(2, '0');
+                // 메타 섹션(비교표·확인문제·요약 등)은 리더가 렌더하지 않아
+                // 이동해도 본문에 도달할 수 없다 — 검색 결과에서 제외
+                if (isStoryMetaSection(section.title)) return;
                 // subsections의 content도 검색 인덱스에 포함
                 let fullContent = section.content || '';
                 if (section.subsections && section.subsections.length) {
@@ -308,6 +417,7 @@ function _getSearchIndex() {
     // 서사·참조자료 인덱스가 이미 로드돼 있으면 병합 (지연 로드 시에도 인덱스 재구축 없이 유지)
     if (_storyEntries && _storyEntries.length) _searchIndex.push(..._storyEntries);
     if (_refEntries && _refEntries.length) _searchIndex.push(..._refEntries);
+    if (_examEntries && _examEntries.length) _searchIndex.push(..._examEntries);
     // 3. 역색인 구축 — 각 섹션의 텍스트를 토큰화하여 단어→섹션 인덱스 생성
     _buildInvertedIndex();
     return _searchIndex;
@@ -461,7 +571,7 @@ function performTextbookSearch() {
     }
 
     const terms = query.split(/\s+/).filter(t => t.length > 0);
-    // TS-10/TS-11 — 서사·참조자료 인덱스 최초 1회 지연 로드; 완료 시 같은 검색어로 재실행
+    // TS-10/TS-11/TS-12 — 서사·참조자료·문제은행 인덱스 최초 1회 지연 로드; 완료 시 같은 검색어로 재실행
     // (resolved promise 재사용 시 재실행 루프가 되므로 트리거는 로드 시작 1회에 한정)
     // added=0이어도 재실행해야 lazyPending 로딩 표시가 해제된다
     if (!_storyIndexPromise) {
@@ -478,11 +588,20 @@ function performTextbookSearch() {
             }
         });
     }
+    if (!_examIndexPromise) {
+        _ensureExamIndex().then(() => {
+            if (textbookState.searchQuery.toLowerCase().trim() === query) {
+                performTextbookSearch();
+            }
+        });
+    }
     const index = _getSearchIndex();
     /** @type {Array<object>} */
     const results = [];
     /** @type {Array<object>} */
     const refResults = [];
+    /** @type {Array<object>} */
+    const examResults = [];
 
     // 3. 역색인 활용 — 각 검색어에 대해 후보 섹션 집합을 구하고 교집합 계산
     let candidateIndices = null;
@@ -532,6 +651,16 @@ function performTextbookSearch() {
                 fromRef: true,
                 _hits: score
             });
+        } else if (entry.fromExam) {
+            examResults.push({
+                subjId: entry.subjId,
+                subjName: entry.subjName,
+                docName: entry.docName,
+                filePath: entry.filePath,
+                refText: entry.refText,
+                fromExam: true,
+                _hits: score
+            });
         } else {
             results.push({
                 subjId: entry.subjId,
@@ -548,23 +677,27 @@ function performTextbookSearch() {
         }
     }
 
-    // 관련도 정렬 — 동점은 문서 순서 유지 (stable sort). 참조자료는 조문 원문이라
-    // 매치가 넓어 교재 결과 뒤에 배치 (TS-11), 역시 히트수 정렬·상한 적용.
+    // 관련도 정렬 — 동점은 문서 순서 유지 (stable sort). 탐색 순서는
+    // 교재 → 참조자료 → 문제은행 (TS-11/TS-12) — 그룹별 히트수 정렬·상한 적용.
     results.sort((a, b) => b._score - a._score);
     refResults.sort((a, b) => b._hits - a._hits);
+    examResults.sort((a, b) => b._hits - a._hits);
     const SECTION_RESULT_LIMIT = 30;
     const REF_RESULT_LIMIT = 15;
+    const EXAM_RESULT_LIMIT = 15;
     const shownSections = results.slice(0, SECTION_RESULT_LIMIT);
     const shownRefs = refResults.slice(0, REF_RESULT_LIMIT);
-    const allResults = shownSections.concat(shownRefs);
+    const shownExams = examResults.slice(0, EXAM_RESULT_LIMIT);
+    const allResults = shownSections.concat(shownRefs).concat(shownExams);
 
-    // 지연 인덱스(서사·참조자료) 로딩 중 — '결과 없음' 오표시 방지
+    // 지연 인덱스(서사·참조자료·문제은행) 로딩 중 — '결과 없음' 오표시 방지
     const lazyPending = (_storyIndexPromise && _storyEntries === null)
-        || (_refIndexPromise && _refEntries === null);
+        || (_refIndexPromise && _refEntries === null)
+        || (_examIndexPromise && _examEntries === null);
 
     // Update summary text
-    summary.innerHTML = `총 <strong style="color: var(--color-primary);">${results.length + refResults.length}</strong>건의 관련 내용을 찾았습니다.`
-        + (lazyPending ? ' <span class="text-muted">(서사·참조자료를 추가로 불러오는 중…)</span>' : '');
+    summary.innerHTML = `총 <strong style="color: var(--color-primary);">${results.length + refResults.length + examResults.length}</strong>건의 관련 내용을 찾았습니다.`
+        + (lazyPending ? ' <span class="text-muted">(서사·참조자료·문제은행을 추가로 불러오는 중…)</span>' : '');
 
     if (allResults.length === 0) {
         // 지연 인덱스 로딩 중이면 '결과 없음' 대신 추가 결과 가능성을 안내
@@ -572,7 +705,7 @@ function performTextbookSearch() {
             <div class="empty-state">
                 <i class="fa-solid ${lazyPending ? 'fa-circle-notch fa-spin' : 'fa-triangle-exclamation'}" style="font-size: 3rem; color: var(--color-${lazyPending ? 'primary' : 'warning'}); margin-bottom: 1rem; display: block;"></i>
                 <h3>${lazyPending ? '검색 범위를 확장하는 중입니다' : '일치하는 내용이 없습니다'}</h3>
-                <p>${lazyPending ? '서사·참조자료 인덱스를 불러오고 있습니다 — 결과가 추가될 수 있습니다.' : '다른 검색어로 검색해보거나 띄어쓰기를 확인해보세요.'}</p>
+                <p>${lazyPending ? '서사·참조자료·문제은행 인덱스를 불러오고 있습니다 — 결과가 추가될 수 있습니다.' : '다른 검색어로 검색해보거나 띄어쓰기를 확인해보세요.'}</p>
             </div>
         `;
         return;
@@ -589,16 +722,17 @@ function performTextbookSearch() {
     allResults.forEach((item, idx) => {
         const badgeColor = badgeColors[item.subjId] || 'badge-gray';
 
-        // 참조자료 결과 — 문서 단위 + 매치 스니펫 + ExamViewer 라인 딥링크 (TS-11)
-        if (item.fromRef) {
+        // 참조자료·문제은행 결과 — 문서 단위 + 매치 스니펫 + ExamViewer 라인 딥링크 (TS-11/TS-12)
+        if (item.fromRef || item.fromExam) {
             const { snippet, lineNum } = _matchSnippet(item.refText, terms);
             const argsJson = esc(JSON.stringify([item.filePath, lineNum, terms.join(' ')]));
+            const kindLabel = esc(item.fromExam ? '문제은행' : '참조자료');
             const refCardHTML = `
             <div class="textbook-result-card">
                 <div class="textbook-card-header">
                     <span class="textbook-card-path">
                         <span class="badge ${badgeColor}">${esc(item.subjName)}</span>
-                        <span class="badge badge-gray">참조자료</span>
+                        <span class="badge badge-gray">${kindLabel}</span>
                         <i class="fa-solid fa-chevron-right"></i>
                         <span>${esc(item.docName)}</span>
                     </span>
@@ -662,6 +796,10 @@ function performTextbookSearch() {
     if (refResults.length > REF_RESULT_LIMIT) {
         container.insertAdjacentHTML('beforeend',
             `<div class="search-cap-note">참조자료 결과가 많아 상위 ${esc(String(REF_RESULT_LIMIT))}건만 표시합니다 (전체 ${esc(String(refResults.length))}건).</div>`);
+    }
+    if (examResults.length > EXAM_RESULT_LIMIT) {
+        container.insertAdjacentHTML('beforeend',
+            `<div class="search-cap-note">문제은행 결과가 많아 상위 ${esc(String(EXAM_RESULT_LIMIT))}건만 표시합니다 (전체 ${esc(String(examResults.length))}건).</div>`);
     }
 
     // Mermaid 다이어그램 렌더링 (pre.mermaid 노드가 있을 때만 온디맨드 로드)

@@ -7,6 +7,21 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-15 통합검색 탐색 범위 확장 — 문제은행 계층 추가 (교재→참조자료→문제은행)
+
+- **배경**: 통합검색의 탐색 범위·순서는 교재 → 참조자료 → 문제은행으로 정의 — 기존 구현은 교재+참조자료만 검색하고 문제은행은 팔레트의 제목 메타 매칭(`exam` 그룹)에만 존재해 본문 검색에서 빠져 있었음
+- **수정**: ① `_ensureExamIndex` 신규 — 첫 검색 시 `registry.exams`의 문제은행 MD를 지연 로드(`__EXAM_MD__` 번들 → http fetch → `exams_md` 번들 주입 폴백, exam-viewer와 동일 로드 규약)해 문서 단위 항목으로 검색 인덱스에 병합 ② 결과는 '문제은행' 배지+문서명+매치 스니펫 카드로 참조자료 뒤에 배치(그룹별 히트수 정렬·상한 15건) — 과목 귀속은 `exams[].subject`라 과목 필터·배지에 그대로 적용 ③ 카드의 '원문 보기'는 `ExamViewer.openExam(path, lineNum, query)` — 라인 딥링크+검색어 착지로 문서 상단이 아닌 첫 매치 위치로 이동 ④ 팔레트 전수검색 브리지 문구를 '교재·참조자료·문제은행'으로 갱신해 범위를 명시
+- **오프라인**: 번들 미로딩·fetch 실패 시 해당 문서만 건너뜀(참조자료 인덱스와 동일 규약), file:// 환경은 `injectBundleScript` 폴백으로 동작
+- **테스트**: exam-search.dom 신규 +3(교재→문제은행 배치 순서·ExamViewer data-args 딥링크·과목 필터) + commandpalette dom 라벨 갱신 — SPEC TS-12 추가
+
+## 2026-10-15 통합검색 교재 착지 — 미렌더 메타 섹션 제외 + 렌더 완료 대기
+
+- **증상**: 통합검색에서 CGMP 검색 시 결과 카드 클릭이 본문 설명 위치로 이동하지 않음 — 표준형·이야기형 모두 재현
+- **원인**: ① 검색 인덱스가 리더가 렌더하지 않는 메타 섹션(📊 비교표·✅ 확인문제·학습안내 등)을 결과로 반환 — 'CGMP'는 `📊 CGMP 4대 기준서 비교표`가 제목 매칭 가산(+50)으로 1위가 됐지만 리더의 `filterMetaSections`/`isStoryMetaSection` 필터로 카드가 없어 챕터 헤더로만 폴백 ② 서사 블록의 `gotoTitle`이 원시 `##` 제목이라 챕터마다 반복되는 제목(📌 챕터 핵심 요약 등)은 첫 챕터로 오이동, 메타 섹션 소속 블록은 도달 불가 ③ `openSubjectSection`의 story 플래그가 단방향 — 이야기형 모드에서 표준형 결과를 열면 모드 불일치로 섹션 매칭 실패 가능 ④ 고정 `setTimeout(800)`은 느린 이야기형 로드(지연 fetch·파싱)에서 렌더 전 DOM을 스캔
+- **수정**: ① `_getSearchIndex`·팔레트 `searchAll`이 `isStoryMetaSection` 섹션을 결과에서 제외 — 모든 표시 결과는 실제 렌더 카드로 이동 보장 ② `_extractStoryBlocks`가 문서 순서 `##` 서序(블록 내부 `##`·암묵 '개요' 포함)를 추적해 `gotoTitle`을 리더 렌더 표시 제목(중복 시 챕터 병기)으로 정규화, 메타 섹션 소속 블록은 제외, 첫 `##` 이전 블록은 '개요'로 착지 ③ `openSubjectSection`이 결과 출처에 맞춰 양방향으로 모드 전환(서사→이야기형, 표준형→표준형 + 이야기형 오디오 정지) ④ `_queueChapterRender`로 모든 렌더 트리거의 완료 promise를 추적 — `openSubjectSection`/`openSubjectChapter`는 큐잉된 재렌더 완료까지 기다린 뒤 섹션 탐색(고정 지연 제거)
+- **검증**: 실제 cosmetic 데이터 시뮬레이션 — CGMP 결과 전부 렌더된 섹션 착지(manufacturing '3. 시험·검사', safety '1. 위생 기준 및 상태'), 서사 151블록 목적지 전원 실제 렌더 제목과 일치
+- **테스트**: study-search +1(메타 제외·목적지 페이로드)·story-search +1(중복 제목 챕터 병기·메타 블록 제외)·study-reader +1(표준형 결과 시 이야기형 모드 해제)·command-palette unit +1(메타 섹션 제외) — unit 1342·DOM 741 전부 통과, lint·types·imports·posind·escape·uistyle·specrefs 통과
+
 ## 2026-10-15 통합검색 범위 정제 + 참조링크 검색어 착지
 
 - **배경**: ① 검색 카드 본문의 "참조 자료" 링크(📌출처 → CGMP 등 ref_md 문서)는 `#LNN` 해시가 없어 `data-ref-line`/`data-ref-search` 없이 열림 — 748줄 규정 문서가 상단에 열려 찾은 내용이 안 보임 ② 팔레트의 플래시카드·퀴즈 결과는 착지점이 '매치 항목'이 아닌 과목 학습 첫 화면(카드 index 0, 퀴즈 `shuffle().slice(0,10)` — 매치 문항 미포함 가능) — 통합검색의 정밀 착지 원칙과 충돌

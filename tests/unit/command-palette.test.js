@@ -103,6 +103,31 @@ test('교재 섹션 — 중복 제목은 챕터 병기 표시 제목 + 소속 �
     assert.ok(secs[1].action.title.includes('Chapter 02'));
 });
 
+test('리더 미렌더 메타 섹션은 섹션 결과에서 제외 — 도달 불가 딥링크 방지 (CGMP 회귀)', () => {
+    // '📊 CGMP 비교표'·'✅ 확인문제'는 리더가 렌더하지 않는 메타 섹션 —
+    // 제목이 매치해도 결과로 내면 클릭 시 본문에 도달하지 못한다.
+    const src = {
+        views: [], ingredients: [], registry: { exams: [] },
+        studyData: {
+            s: {
+                name: 'S', cards: [], quizzes: [],
+                chapters: [{
+                    chapterTitle: '전체',
+                    sections: [
+                        { title: '📚 Chapter 01. 품질관리', content: '' },
+                        { title: '3. 시험·검사 — CGMP 기준 설명', content: '' },
+                        { title: '📊 CGMP 비교표', content: '' },
+                        { title: '✅ 확인문제 CGMP', content: '' },
+                    ],
+                }],
+            },
+        },
+    };
+    const secs = searchAll('CGMP', src).filter(x => x.type === 'section');
+    assert.equal(secs.length, 1);
+    assert.equal(secs[0].action.title, '3. 시험·검사 — CGMP 기준 설명');
+});
+
 test('성분 사전 — 한글·영문·초성 매칭', () => {
     assert.ok(searchAll('나이아신', sources).some(x => x.type === 'ingredient'));
     assert.ok(searchAll('niacin', sources).some(x => x.type === 'ingredient'));

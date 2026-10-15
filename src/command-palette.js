@@ -10,7 +10,7 @@ import { getChosung } from './utils.js';
 import { contentPath } from './exam-context.js';
 import { DataLoader } from './data-loader.js';
 import { openSubjectSection } from './views/textbook-reader.js';
-import { buildSectionDisplayTitles } from './reader-toc.js';
+import { buildSectionDisplayTitles, isStoryMetaSection } from './reader-toc.js';
 import { setTextbookSearchQuery } from './views/textbook-search.js';
 import { dictState } from './views/dictionary.js';
 import { trackAction } from './usage-stats.js';
@@ -120,6 +120,8 @@ export function searchAll(query, sources) {
             secs.forEach((sec, sIdx) => {
                 const chM = String(sec.title || '').match(/Chapter\s*(\d+)/i);
                 if (chM) chAnchor = 'ch' + chM[1].padStart(2, '0');
+                // 메타 섹션(비교표·확인문제·요약 등)은 리더 미렌더로 도달 불가 — 결과에서 제외
+                if (isStoryMetaSection(sec.title)) return;
                 const gotoTitle = displayTitles[sIdx] || sec.title;
                 const s = _matchScore(`${sec.title} ${ch.chapterTitle}`, sec.title, terms);
                 if (s >= 0) {
@@ -169,9 +171,10 @@ export function searchAll(query, sources) {
 
     // 본문 전수검색 브리지 — 팔레트는 섹션 "제목"만 인덱스하므로, 본문에서 찾아야 하는
     // 쿼리는 항상 이 항목으로 교재 본문검색(역색인) 뷰에 넘긴다. 결과가 있어도 항상 맨 아래 표시.
+    // 전수검색 뷰의 탐색 범위·순서는 교재 → 참조자료 → 문제은행 (TS-11/TS-12).
     results.push({
         type: 'fulltext', icon: 'fa-magnifying-glass',
-        title: `교재·참조자료에서 "${query}" 전체 검색`, sub: '교재 본문·참조자료 전수 검색 (제목 매칭만으로는 못 찾는 내용)',
+        title: `교재·참조자료·문제은행에서 "${query}" 전체 검색`, sub: '교재 본문·참조자료·문제은행 전수 검색 (제목 매칭만으로는 못 찾는 내용)',
         action: { kind: 'fulltext', query: (query || '').trim() }, score: 0
     });
     return results;
