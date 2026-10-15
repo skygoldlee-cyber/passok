@@ -212,6 +212,7 @@ flowchart TD
 - [ ] ⑦ `id_migration.js` 생성 + lost 항목 검토·안내 결정
 - [ ] ⑧ 필요 파생물(html/mp3/report) 생성 — mp3는 **CDN 업로드**까지
 - [ ] ⑨ test + test:dom 통과, `판본: textbook` 문서 갱신 포함 커밋
+- [ ] ⑨ **통합검색 스모크** — 신 교재의 핵심 용어 1~2개로 검색해 ① 결과 카드 클릭 시 표준형·이야기형 모두 실제 설명 위치 착지 ② 용어가 glossary에 있으면 '용어 정의' 카드 노출 확인. 메타 의심 헤딩이 결과에 섞이면 `check:metasections` 출력을 보고 `reader-toc.js` 패턴 또는 제목 수정
 - [ ] ⑨ `deploy` 스모크 통과 + PWA 재실행 안내 + 대시보드 개정 배너 육안 확인
 
 ## 교재 변경 시 소스코드 수정 지점
