@@ -58,24 +58,13 @@ test('뷰 이름 매칭 → view 결과', () => {
     assert.equal(v.action.target, 'dashboard-view');
 });
 
-test('카드 term 매칭 → card 결과 (과목·유형 메타 포함)', () => {
-    const r = searchAll('화장품 정의', sources);
-    const c = r.find(x => x.type === 'card');
-    assert.ok(c);
-    assert.equal(c.action.kind, 'card');
-    assert.equal(c.action.subject, 'law');
-});
-
-test('카드는 definition 본문도 매칭 대상', () => {
-    const r = searchAll('피부·모발', sources);
-    assert.ok(r.some(x => x.type === 'card'));
-});
-
-test('퀴즈 문항 매칭 → quiz 결과', () => {
-    const r = searchAll('공중위생', sources);
-    const q = r.find(x => x.type === 'quiz');
-    assert.ok(q);
-    assert.equal(q.action.subject, 'law');
+test('카드·퀴즈는 검색 범위에서 제외 — 착지점이 매치 항목이 아닌 과목 첫 화면이므로', () => {
+    // 카드 term·퀴즈 문항에만 매치되는 쿼리도 card/quiz 결과를 내지 않는다
+    // (퀴즈는 shuffle().slice(0,10) 세션 — 매치 문항 미포함 가능, 카드는 index 0 착지)
+    assert.ok(!searchAll('화장품 정의', sources).some(x => x.type === 'card' || x.type === 'quiz'));
+    assert.ok(!searchAll('공중위생', sources).some(x => x.type === 'card' || x.type === 'quiz'));
+    // 섹션 제목 매칭 + 본문검색 브리지는 여전히 동작
+    assert.ok(searchAll('화장품 정의', sources).some(x => x.type === 'section'));
 });
 
 test('교재 섹션 매칭 → 섹션 제목 전달 (형식 독립 딥링크)', () => {
@@ -154,17 +143,20 @@ test('본문 전수검색 브리지 — 매칭 여부와 무관하게 항상 맨
 });
 
 test('그룹별 최대 개수 제한 (MAX_PER_GROUP=5)', () => {
-    const manyCards = {
+    const manySections = {
         views: [], ingredients: [], registry: { exams: [] },
         studyData: {
             s: {
                 name: 'S',
-                cards: Array.from({ length: 12 }, (_, i) => ({ id: 'c' + i, term: '공통어 ' + i, definition: '' })),
-                quizzes: [], chapters: []
+                cards: [], quizzes: [],
+                chapters: [{
+                    chapterTitle: '공통어',
+                    sections: Array.from({ length: 12 }, (_, i) => ({ title: '공통어 섹션 ' + i, content: '' })),
+                }]
             }
         }
     };
-    const r = searchAll('공통어', manyCards);
-    const cards = r.filter(x => x.type === 'card');
-    assert.equal(cards.length, 5);
+    const r = searchAll('공통어', manySections);
+    const sections = r.filter(x => x.type === 'section');
+    assert.equal(sections.length, 5);
 });

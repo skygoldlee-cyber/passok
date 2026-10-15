@@ -122,6 +122,26 @@ describe('문제집 뷰어 — 열기·TOC·인쇄·캐시', () => {
         expect(css).toContain('height:auto');
     });
 
+    it('검색어 인자 → 라인 없이도 첫 매치 요소로 스크롤 + 하이라이트 (H)', async () => {
+        const spy = vi.spyOn(Element.prototype, 'scrollIntoView');
+        await ExamViewer.openExam(EXAM_PATH, null, '다음 문제');
+        await flushAsync(30);
+
+        const marked = el('exam-article').querySelector('.exam-line-highlight');
+        expect(marked).not.toBeNull();
+        expect(marked.textContent).toContain('다음 문제');
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it('검색어 미매치 → 스크롤 없이 문서 상단 유지 (B)', async () => {
+        const spy = vi.spyOn(Element.prototype, 'scrollIntoView');
+        await ExamViewer.openExam(EXAM_PATH, null, '존재하지않는검색어');
+        await flushAsync(30);
+
+        expect(el('exam-article').querySelector('.exam-line-highlight')).toBeNull();
+        expect(spy).not.toHaveBeenCalled();
+    });
+
     it('닫기 → 오버레이 닫힘·body 클래스 해제', async () => {
         await ExamViewer.openExam(EXAM_PATH);
         await flushAsync(30);

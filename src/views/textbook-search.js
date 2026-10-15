@@ -592,7 +592,7 @@ function performTextbookSearch() {
         // 참조자료 결과 — 문서 단위 + 매치 스니펫 + ExamViewer 라인 딥링크 (TS-11)
         if (item.fromRef) {
             const { snippet, lineNum } = _matchSnippet(item.refText, terms);
-            const argsJson = esc(JSON.stringify([item.filePath, lineNum]));
+            const argsJson = esc(JSON.stringify([item.filePath, lineNum, terms.join(' ')]));
             const refCardHTML = `
             <div class="textbook-result-card">
                 <div class="textbook-card-header">
@@ -695,6 +695,14 @@ function formatSectionContent(rawContent, searchTerms = [], item = {}) {
     const srcMatch = String(rawContent || '').match(/📌\s*\*\*출처\*\*[:：]\s*(.+?)(?:\||\n)/);
     const refPath = srcMatch ? mapSourceToRef(srcMatch[1]) : null;
     let html = formatSectionContentForReader(rawContent, item.filePath, refPath, subjRefFiles, subjDirName, [], item.sectionTitle);
+
+    // 검색 컨텍스트 전달 — 카드 내 참조 링크가 검색어를 물고 열리면 뷰어가
+    // 매치 위치로 스크롤한다 (해시 없는 링크는 문서 상단에 떨어지던 문제 — TS-11 후속)
+    if (searchTerms.length > 0) {
+        const q = escapeHTML(searchTerms.join(' '));
+        html = html.replace(/<a\b[^>]*\bdata-ref-(?:html|md)="[^"]*"[^>]*>/g, (tag) =>
+            tag.includes('data-ref-search') ? tag : `${tag.slice(0, -1)} data-ref-search="${q}">`);
+    }
 
     // 검색어 하이라이트 (마크다운 파싱 후 적용)
     if (searchTerms.length > 0) {
