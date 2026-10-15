@@ -913,6 +913,31 @@
     border-top: 1px dashed var(--border-color);
 }
 
+.search-gloss-divider {
+    margin-top: 0;
+    border-top: none;
+}
+
+.search-gloss-body {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 0.9rem;
+}
+
+.search-gloss-src {
+    margin-top: var(--space-2);
+    font-size: 0.85rem;
+}
+
+.search-gloss-src .glossary-ref-link {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.search-gloss-src .glossary-ref-link:hover {
+    text-decoration: underline;
+}
+
 .textbook-card-header {
     display: flex;
     justify-content: space-between;

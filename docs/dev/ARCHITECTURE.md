@@ -435,6 +435,7 @@ passory/
 │   │   ├── schema.js           #   스키마 검증
 │   │   ├── id_factory.js       #   안정적 ID 생성
 │   │   ├── build_keyword_index.js # GLOSSARY_INDEX + 큐레이션 병합
+│   │   ├── extract_glossary_candidates.js # ref_md 용어 후보 추출 리포트 (BP-14)
 │   │   ├── build_audio_manifest.js # 오디오 챕터 매니페스트 생성 (exams.json features.audiobook 선택 시만 항목 발행 — false면 완전 제외). AO-06 커버리지: manifest 챕터 수 ↔ 스캔 MP3 수 과목별 대조 경고
 │   │   ├── build_pdf_registry.js # PDF 레지스트리 생성
 │   │   ├── report.js           #   빌드 통계
