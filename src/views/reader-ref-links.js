@@ -129,7 +129,7 @@ function _initRefLinkDelegation() {
             const mdPath = a.dataset.refMd;
             const lineNum = a.dataset.refLine ? parseInt(a.dataset.refLine) : null;
             if (window.ExamViewer && window.ExamViewer.openExam) {
-                window.ExamViewer.openExam(mdPath, lineNum);
+                window.ExamViewer.openExam(mdPath, lineNum, a.dataset.refSearch || '');
             }
             return;
         }
