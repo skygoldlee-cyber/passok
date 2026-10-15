@@ -211,6 +211,7 @@ flowchart TD
 - [ ] ⑥ ref_md 귀속이 교체 전 기준선 이내
 - [ ] ⑦ `id_migration.js` 생성 + lost 항목 검토·안내 결정
 - [ ] ⑧ 필요 파생물(html/mp3/report) 생성 — mp3는 **CDN 업로드**까지
+- [ ] ⑧ 용어집 생성 — 아래 `#### 7` 절차: `report:glossary` → 리포트 검토 → `--apply`/`--apply-synonyms` → `build:keyword-index`
 - [ ] ⑨ test + test:dom 통과, `판본: textbook` 문서 갱신 포함 커밋
 - [ ] ⑨ **통합검색 스모크** — 신 교재의 핵심 용어 1~2개로 검색해 ① 결과 카드 클릭 시 표준형·이야기형 모두 실제 설명 위치 착지 ② 용어가 glossary에 있으면 '용어 정의' 카드 노출 확인. 메타 의심 헤딩이 결과에 섞이면 `check:metasections` 출력을 보고 `reader-toc.js` 패턴 또는 제목 수정
 - [ ] ⑨ `deploy` 스모크 통과 + PWA 재실행 안내 + 대시보드 개정 배너 육안 확인
@@ -329,10 +330,48 @@ const MD_ASSETS = [
 
 | 파일 | 내용 | 수정 시점 |
 |---|---|---|
-| `교재/glossary/subject{N}.json` | `[{keyword, definition}]` — 큐레이션 용어집. `keyword-index.js` 자동 항목을 덮어씀 | 용어 설명 추가·정정 |
+| `교재/glossary/subject{N}.json` | `[{keyword, definition}]` — 큐레이션 용어집. `keyword-index.js` 자동 항목을 덮어씀 | 용어 설명 추가·정정 — **교재 교체 시 아래 #### 7 절차로 생성** |
 | `number-drills/{key}.json` | 숫자·기한 암기 드릴 | 법령 수치(과태료 상한·기한 등) 변경 |
 | `combo_blocklist.json` | `ids`·`derivedFromPrefixes`(빌드 제외)·`approved`(검수 완료) | 콤보 문항 수동 검수 결과 반영 |
 | `audiobook/mp3/{key}/` | TTS 음원 — 교재 변경 시 `run_pipeline.py --subject {key} --tts` 재생성 → CDN 업로드 | 본문 변경 시 |
+
+#### 7. 용어집 생성 절차 — 교재 교체 시 (BP-14 추출 파이프라인)
+
+`교재/glossary/subject{N}.json`은 통합검색 '용어 정의' 카드(TS-15)와 형태소 경계 어휘 주입(TS-16)의 소스다. `N`은 manifest `subjects[].order`. 신 교재 배치·`check:content --build` 통과 후 아래 순서로 생성·확충한다.
+
+**ⓐ 후보 추출** — 리포트는 검토 전용(`reports/`는 gitignore, 런타임 입력 아님)
+
+```powershell
+npm.cmd run report:glossary   # = node tools/build/extract_glossary_candidates.js
+```
+
+- 스캔 소스: `{contentRoot}/참조자료/ref_md/**` + `교재/<과목키>/*_표준형.md` (이야기형은 표준형과 중복이라 제외)
+- 추출 패턴: `[정의]`(`"X"란`·`가. X란`·헤딩 정의) · `[약칭]`(`이하 "X"라 한다` + 선행 원명 캡처) · `[영문]`(`용어(영문)` 병기, 화학식 필터)
+- `reports/glossary-candidates.md`/`.json`에 기존 용어집 대비 **신규(NEW)/기존(EXISTS)**·과목별 분류로 출력
+
+**ⓑ 리포트 검토** — 오검출(서식 정정 조문·표 파편 등)은 도구의 `STOP_TERMS`에 등록해 재추출을 차단한다. 승인할 후보만 남는다는 기준으로 검토 후 다음 단계.
+
+**ⓒ 병합**
+
+```powershell
+node tools/build/extract_glossary_candidates.js --apply            # 신규 [정의] → subject{N}.json (autoExtracted 표식)
+node tools/build/extract_glossary_candidates.js --apply-synonyms   # 실질 약칭(원명≠약칭)·영문 병기 → manifest.synonyms
+```
+
+- `--apply`는 NEW 정의만 병합 — 기존 키워드·EXISTS·비대상 패턴은 건너뜀. glossary 디렉터리가 없으면 자동 생성(신규 시험 대응)
+- `--patterns 정의,약칭` 등으로 apply 범위를 조정할 수 있으나, 약칭·영문은 정의문이 없어 용어집보다 `--apply-synonyms`가 적합
+- 참고: ref_md에 정의 조항이 희박한 과목(예: 주의사항 표 중심)은 교재 표준형 스캔이 커버리지를 메운다 — 그래도 부족하면 ⓓ로 수작업 보충
+
+**ⓓ 큐레이션 패스** — `autoExtracted` 항목은 법령 원문체라 그대로 사용 가능. 시험 관점 의역 정의(출제 연결고리 포함)는 수작업으로 추가·정정한다. 저신호 일반명사(`건물`·`감사` 등)는 정의 조문 원문이면 유지 — 쿼리 경계 매치(`termHitQuality`≥2)일 때만 카드로 노출되므로 잡음 위험은 낮다.
+
+**ⓔ 인덱스 재생성 + 검증**
+
+```powershell
+npm.cmd run build:keyword-index   # src/keyword-index.js 재생성 (build:data에 포함)
+```
+
+- 런타임 계약: 앱은 생성된 `src/keyword-index.js`만 읽는다 — `reports/`·원본 추출 결과는 절대 런타임 입력이 아니다
+- 완료 체크리스트 ⑨의 통합검색 스모크에서 대표 용어의 정의 카드 노출을 육안 확인한다
 
 ### ② 자동 재생성 — 직접 수정 금지
 
