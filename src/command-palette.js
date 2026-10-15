@@ -8,6 +8,7 @@ import { getChosung } from './utils.js';
 import { contentPath } from './exam-context.js';
 import { DataLoader } from './data-loader.js';
 import { openSubjectSection } from './views/textbook-reader.js';
+import { buildSectionDisplayTitles } from './reader-toc.js';
 import { setTextbookSearchQuery } from './views/textbook-search.js';
 import { dictState } from './views/dictionary.js';
 import { trackAction } from './usage-stats.js';
@@ -18,6 +19,32 @@ const MAX_TOTAL = 24;
 let _open = false;
 let _activeIdx = 0;
 let _results = [];
+/** 과목 데이터 백그라운드 로드 진행 중 중복 방지 */
+let _studyWarmPromise = null;
+
+/**
+ * 팔레트는 어느 뷰에서나 열 수 있어 STUDY_DATA가 미로드일 수 있다 —
+ * 미로드 과목을 백그라운드로 채우고, 채워진 과목 수를 resolve한다.
+ * 콜드스타트에서 카드·퀴즈·교재 결과가 조용히 누락되는 것을 방지.
+ */
+const _warmedKeys = new Set();
+
+function _warmStudyData() {
+    if (_studyWarmPromise) return _studyWarmPromise;
+    const loaded = (typeof window !== 'undefined' && window.STUDY_DATA) || {};
+    // 키당 1회만 시도 — 로드 실패 과목이 매 렌더마다 재시도·재렌더 루프를 만들지 않게 한다
+    const missing = DataLoader.getSubjectList()
+        .filter(s => s && s.key && !loaded[s.key] && !_warmedKeys.has(s.key));
+    if (!missing.length) return Promise.resolve(0);
+    missing.forEach(s => _warmedKeys.add(s.key));
+    _studyWarmPromise = Promise.all(
+        missing.map(s => DataLoader.loadSubject(s.key).catch(() => null))
+    ).then(() => {
+        _studyWarmPromise = null;
+        return missing.length;
+    }).catch(() => { _studyWarmPromise = null; return 0; });
+    return _studyWarmPromise;
+}
 
 /* ---------- 검색 소스 수집 ---------- */
 
@@ -98,13 +125,22 @@ export function searchAll(query, sources) {
             });
         });
         (subj.chapters || []).forEach(ch => {
-            (ch.sections || []).forEach(sec => {
+            const secs = ch.sections || [];
+            // 딥링크 목적지 — 리더 표시 제목(중복 제목은 챕터 병기로 구분) +
+            // 소속 챕터 앵커(직전 "Chapter N" 헤더). 원시 제목만 넘기면
+            // 챕터마다 반복되는 제목(챕터 핵심 요약 등)이 첫 챕터로 오이동한다.
+            const displayTitles = buildSectionDisplayTitles(secs);
+            let chAnchor = '';
+            secs.forEach((sec, sIdx) => {
+                const chM = String(sec.title || '').match(/Chapter\s*(\d+)/i);
+                if (chM) chAnchor = 'ch' + chM[1].padStart(2, '0');
+                const gotoTitle = displayTitles[sIdx] || sec.title;
                 const s = _matchScore(`${sec.title} ${ch.chapterTitle}`, sec.title, terms);
                 if (s >= 0) {
                     push('section', {
-                        type: 'section', icon: 'fa-book-open', title: sec.title,
+                        type: 'section', icon: 'fa-book-open', title: gotoTitle,
                         sub: `${subjName} · ${ch.chapterTitle || '교재'}`,
-                        action: { kind: 'section', subject: subjId, title: sec.title },
+                        action: { kind: 'section', subject: subjId, title: gotoTitle, anchor: chAnchor },
                         score: s + 1
                     });
                 }
@@ -215,6 +251,12 @@ function _renderResults(query) {
     _activeIdx = 0;
     box.scrollTop = 0; // 결과 재구성 시 이전 스크롤 잔류로 목록 상단이 잘리는 것 방지
 
+    // 콜드스타트: 과목 데이터가 미로드면 백그라운드 로드 후 같은 쿼리로 갱신
+    _warmStudyData().then(added => {
+        const inputEl = /** @type {HTMLInputElement|null} */ (document.getElementById('cmdk-input'));
+        if (added && _open && inputEl && inputEl.value === query) _renderResults(query);
+    });
+
     if (!(query || '').trim()) {
         _results = [];
         box.innerHTML = `<div class="cmdk-hint">검색어를 입력하면 화면·교재·카드·퀴즈·성분·문제집을 한 번에 찾습니다.</div>`;
@@ -298,10 +340,13 @@ export function executePaletteResult(idx) {
         case 'quiz':
             if (typeof window.startSubjectQuiz === 'function') window.startSubjectQuiz(a.subject);
             break;
-        case 'section':
+        case 'section': {
             clickNav('textbook-reader-view');
-            openSubjectSection(a.subject, a.title);
+            const paletteInput = /** @type {HTMLInputElement|null} */ (document.getElementById('cmdk-input'));
+            openSubjectSection(a.subject, a.title, a.anchor || '',
+                { query: (paletteInput && paletteInput.value || '').trim() });
             break;
+        }
         case 'ingredient':
             dictState.query = a.name;
             dictState.filter = 'all';

@@ -376,8 +376,9 @@ export async function renderChapterContentInternal(subjId, chapterIdx, subj, cha
             // 목차 항목 텍스트가 포함된 섹션 찾기
             const sectionCards = container.querySelectorAll('.reader-section-card');
             let found = /** @type {Element|null} */ (null);
-            // 1순위: 정확 매칭 (이모지 포함)
+            // 1순위: 정확 매칭 (이모지 포함) — 첫 매칭 채택 (마지막 매칭은 뒤쪽 챕터로 오이동)
             sectionCards.forEach(card => {
+                if (found) return;
                 const titleEl = card.querySelector('.reader-section-title');
                 if (!titleEl) return;
                 const title = titleEl.textContent.trim();
@@ -388,6 +389,7 @@ export async function renderChapterContentInternal(subjId, chapterIdx, subj, cha
             // 2순위: 이모지 무시 매칭
             if (!found && jumpNorm) {
                 sectionCards.forEach(card => {
+                    if (found) return;
                     const titleEl = card.querySelector('.reader-section-title');
                     if (!titleEl) return;
                     const titleNorm = normalize(titleEl.textContent.trim());
@@ -402,6 +404,7 @@ export async function renderChapterContentInternal(subjId, chapterIdx, subj, cha
                 if (chMatch) {
                     const chNum = chMatch[1];
                     sectionCards.forEach(card => {
+                        if (found) return;
                         const titleEl = card.querySelector('.reader-section-title');
                         if (!titleEl) return;
                         const title = titleEl.textContent.trim();
@@ -441,6 +444,7 @@ export async function renderChapterContentInternal(subjId, chapterIdx, subj, cha
             // 5순위: 섹션 본문 내용에서 텍스트 검색 (마인드맵 매핑 표 링크용)
             if (!found && jumpNorm) {
                 sectionCards.forEach(card => {
+                    if (found) return;
                     const body = card.querySelector('.reader-section-body');
                     if (!body) return;
                     const bodyText = body.textContent || '';
