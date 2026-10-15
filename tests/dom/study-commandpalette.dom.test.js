@@ -51,14 +51,16 @@ describe('command-palette — 통합 검색', () => {
         expect(overlay.classList.contains('is-hidden')).toBe(true);
     });
 
-    it('검색어 입력 → 유형별 그룹 헤더와 결과 렌더링', () => {
+    it('검색어 입력 → 유형별 그룹 헤더와 결과 렌더링 (카드·퀴즈 제외)', () => {
         openCommandPalette();
         type('화장품');
         const box = document.getElementById('cmdk-results');
         expect(box.querySelectorAll('.cmdk-item').length).toBeGreaterThan(0);
         const labels = [...box.querySelectorAll('.cmdk-group-label')].map(el => el.textContent);
         expect(labels).toContain('교재');
-        expect(labels).toContain('플래시카드');
+        // 카드·퀴즈는 착지점이 매치 항목이 아닌 과목 첫 화면이라 검색 범위 제외
+        expect(labels).not.toContain('플래시카드');
+        expect(labels).not.toContain('기출 퀴즈');
     });
 
     it('매칭 없을 때 본문검색 브리지 항목 표시', () => {
@@ -99,16 +101,14 @@ describe('command-palette — 통합 검색', () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it('카드 결과 실행 → startSubjectStudy 호출', () => {
-        const spy = vi.fn();
-        window.startSubjectStudy = spy;
+    it('카드·퀴즈 term 매칭만 있어도 card/quiz 결과는 미표시', () => {
+        window.startSubjectStudy = vi.fn();
         openCommandPalette();
+        // '화장품 정의'는 카드 term에만 정확 매치 — 섹션 제목('화장품의 정의')에는 부분 불일치
         type('화장품 정의');
-        const idx = [...document.querySelectorAll('.cmdk-item')]
-            .findIndex(el => el.textContent.includes('화장품 정의'));
-        expect(idx).toBeGreaterThanOrEqual(0);
-        executePaletteResult(idx);
-        expect(spy).toHaveBeenCalledWith('law');
+        const subs = [...document.querySelectorAll('.cmdk-item-sub')].map(el => el.textContent);
+        expect(subs.some(s => s.includes('플래시카드'))).toBe(false);
+        expect(subs.some(s => s.includes('기출 퀴즈'))).toBe(false);
     });
 
     it('특수문자 포함 검색어가 안전하게 렌더링된다', () => {
@@ -121,14 +121,13 @@ describe('command-palette — 통합 검색', () => {
 
     it('콜드스타트 — 미로드 과목은 백그라운드 로드 후 같은 쿼리로 결과 갱신', async () => {
         // 팔레트는 어느 뷰에서도 열 수 있어 STUDY_DATA가 비어 있을 수 있다 —
-        // 종전에는 카드·퀴즈·교재 결과가 조용히 누락됐다.
+        // 종전에는 교재 결과가 조용히 누락됐다.
         window.STUDY_DATA = {};
         DataLoader.registry = { subjects: [{ key: 'law', name: '화장품법' }], exams: [] };
         const origLoad = DataLoader.loadSubject;
         DataLoader.loadSubject = async (key) => {
             window.STUDY_DATA[key] = {
-                name: '화장품법', quizzes: [],
-                cards: [{ id: 'c1', term: '화장품 정의', definition: '피부 미화' }],
+                name: '화장품법', quizzes: [], cards: [],
                 chapters: [{ chapterTitle: 'c', sections: [{ title: '화장품의 정의', content: '' }] }],
             };
         };
@@ -138,7 +137,7 @@ describe('command-palette — 통합 검색', () => {
             await vi.waitFor(() => {
                 const titles = [...document.querySelectorAll('#cmdk-results .cmdk-item-title')]
                     .map(n => n.textContent);
-                expect(titles).toContain('화장품 정의');
+                expect(titles).toContain('화장품의 정의');
             }, { timeout: 2000 });
         } finally {
             DataLoader.loadSubject = origLoad;

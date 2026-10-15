@@ -216,6 +216,26 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
         expect(p1[2]).toBe('ch02');
     });
 
+    it('카드 내 참조 링크에 검색어 전달 — data-ref-search 주입 (해시 없는 링크 상단 착지 회귀)', () => {
+        window.STUDY_DATA = {};
+        const subj = {
+            key: 'subjg', name: '과목G',
+            chapters: [{
+                chapterKey: 'ch1', chapterTitle: 'c', filePath: 'g.md',
+                sections: [{
+                    title: 'CGMP 섹션',
+                    content: 'CGMP 기준을 따른다.\n\n[우수화장품 기준](../참조자료/ref_md/과목2/우수화장품/우수화장품.md)',
+                }],
+            }],
+        };
+        stubRegistry([subj]);
+        search('cgmp');
+
+        const link = el('textbook-results-container').querySelector('a[data-ref-html]');
+        expect(link).not.toBeNull();
+        expect(link.getAttribute('data-ref-search')).toBe('cgmp');
+    });
+
     it('검색 초기화 → 빈 상태 복귀', () => {
         search('화장품');
         clearTextbookSearch();
