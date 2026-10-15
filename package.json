@@ -50,6 +50,7 @@
     "check": "node tools/check/run.js",
     "check:docs": "node tools/check/run.js --preset docs",
     "check:textbookdocs": "node tools/check/check_textbook_docs.js",
+    "check:metasections": "node tools/check/check_meta_sections.js",
     "check:domainmap": "node tools/check/check_domain_map.js",
     "build:html": "node tools/build/build_html.js",
     "check:html": "node tools/build/build_html.js --check",

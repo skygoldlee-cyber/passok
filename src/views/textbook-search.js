@@ -5,7 +5,7 @@ import { renderMermaidIn } from '../mermaid-render.js';
 import { attachImageZoomIn } from '../image-zoom.js';
 import { TIMING } from '../config/timing.js';
 import { DataLoader } from '../data-loader.js';
-import { hasFeature, contentPath, dataPath } from '../exam-context.js';
+import { hasFeature, contentPath, dataPath, getActiveExamId } from '../exam-context.js';
 import { injectBundleScript, fetchMd } from '../doc-overlay.js';
 import { buildBoundaryVocab, termHitQuality, expandSynonyms } from '../search-morpheme.js';
 import { getAllGlossaryKeywords, getGlossaryEntry } from '../glossary-query.js';
@@ -367,10 +367,21 @@ function _ensureExamIndex() {
     return _examIndexPromise;
 }
 
+let _indexExamId = null;    // 인덱스를 구축한 시험 — 시험 전환 시 지연 병합분도 함께 폐기
+
 function _getSearchIndex() {
     const STUDY_DATA = (typeof window !== 'undefined' && window.STUDY_DATA) ? window.STUDY_DATA : {};
-    const keys = Object.keys(STUDY_DATA).join(',');
+    const examId = getActiveExamId();
+    const keys = examId + '|' + Object.keys(STUDY_DATA).join(',');
     if (_searchIndex && _searchIndexKeys === keys) return _searchIndex;
+    if (_indexExamId !== null && _indexExamId !== examId) {
+        // 리로드 없는 시험 전환 방어 — 이전 시험의 서사·참조·문제은행 병합분 폐기
+        _storyEntries = null; _storyIndexPromise = null;
+        _refEntries = null; _refIndexPromise = null;
+        _examEntries = null; _examIndexPromise = null;
+        _morphVocab = null; _tokenIndex = null;
+    }
+    _indexExamId = examId;
     _searchIndexKeys = keys;
     _searchIndex = [];
     Object.keys(STUDY_DATA).forEach(subjId => {

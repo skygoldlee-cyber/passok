@@ -93,6 +93,7 @@ npm.cmd run fix:quotes                  # 부실 인용문 자동 보강 — 원
 npm.cmd run fix:citations               # 정답 미지지 문항 인용 위치 자동 교정 — 인용 파일→시험 코퍼스(교재→참조자료) 순으로 실제 지지 위치를 탐색해 링크·인용문 재지정 (--check=보고만, --annotate=미검증 인용에 ⚠️ 마커 표기·해제)
 npm.cmd run check:docbundles           # docs_md 번들 ↔ 원본 문서 신선도 (check:content에 포함)
 npm.cmd run check:textbookdocs         # 교재 갱신 ↔ `판본: textbook` 문서 신선도 — git 이력으로 교재 커밋 이후 미갱신 교재 종속 문서 게이트 (check:docs·check:content에 포함)
+npm.cmd run check:metasections         # 메타 섹션 규약 기준선 — 교재 `##` 헤딩 중 메타 의심 제목이 reader-toc.js 패턴에 미매칭이면 신규 유입 차단 (TS-17, check:content 포함, --update=기준선 갱신)
 npm.cmd run check:datafresh            # data/·생성물 ↔ 원본 신선도 — 빌드 체인 실행 후 git diff 비교·자동 원복 (생성물 경로가 clean이어야 실행 가능)
 npm.cmd run check:docs                  # README·AGENTS·docs/*.md 내 경로 참조 존재 검증 + 문서 ID 누락·중복 검증 + 디렉토리 구조 정합 (check_inventory) + npm 명령 정합 (check_npm_commands) + 플랜 키 정합 (check_plan_features) + 도메인 기능 플래그 정합 (check_feature_flags) + 저장소 접근 탐지 (check_storage_access) + 릴리스 노트 정합 (check_release_notes) + CI 패리티 (check_ci_parity) + 런북 정본 도달 (check_runbook_links)
 npm.cmd run check:inventory             # AGENTS.md 디렉토리 구조 트리 ↔ 실제 파일시스템 정합 (전 트리 존재성 + src/ 전수·css 목록 양방향 + N개 개수 표기) + ARCHITECTURE.md box 트리(├──/└──) 존재성
