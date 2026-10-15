@@ -362,6 +362,24 @@ class TestMarkdownToTailwindHtmlOffline:
         )
         assert "<title>a&lt;b&gt;&quot;c&quot;</title>" in out
 
+    def test_base_dir_embeds_local_images(self, tmp_path):
+        # base_dir 지정 시 상대경로 이미지가 data URI로 임베드된다
+        (tmp_path / "pic.png").write_bytes(b"pngdata")
+        cfg = md2doc.RenderConfig(prerender_mermaid=False, embed_mermaid=False)
+        out = md2doc.markdown_to_tailwind_html(
+            "# x\n\n![alt](pic.png)\n", config=cfg, base_dir=tmp_path
+        )
+        assert "data:image/png;base64," in out
+        assert 'src="pic.png"' not in out
+
+    def test_no_base_dir_keeps_relative_src(self):
+        # base_dir 미지정 시 기존 동작 유지 (상대 src 그대로)
+        cfg = md2doc.RenderConfig(prerender_mermaid=False, embed_mermaid=False)
+        out = md2doc.markdown_to_tailwind_html(
+            "# x\n\n![alt](pic.png)\n", config=cfg
+        )
+        assert 'src="pic.png"' in out
+
 
 # ---------------------------------------------------------------------------
 # _embed_local_images — base_dir 밖 경로 탈출 차단
