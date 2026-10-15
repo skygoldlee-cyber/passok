@@ -182,6 +182,7 @@ src/                    # ES Modules
   storage.js            # 저장소 추상화 계층 — 백엔드 교체 가능(getItem/setItem 동기·Async 이중 API), 스코프·쓰기훅·쿼터 감지 중앙화
   ui-utils.js           # showToast, showConfirm, trapFocus + 훈련 공용 마크업(markChoiceButtons·wrongReviewHtml·trainerResultHtml·showAnswerFeedback)
   sanitize.js           # XSS 방어 (escapeHTML, safeTextWithBreaks, esc, stripTags)
+  search-morpheme.js    # 검색 형태소 경계 판정·동의어 확장 순수 로직 (어휘 마이닝·DP 커버·termHitQuality·expandSynonyms — TS-13/TS-14)
   data-loader.js        # 온디맨드 콘텐츠 로더 (DataLoader)
   scratchpad.js          # 스크래치패드 캔버스 (계산 연습용)
   trainer-calc.js       # 계산 트레이너 문제 생성기 (순수 로직, 전역 스코프 실행)

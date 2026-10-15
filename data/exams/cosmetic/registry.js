@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-13T14:38:44.307Z",
+  "generatedAt": "2026-10-15T11:15:29.069Z",
   "subjects": [
     {
       "key": "law",
@@ -422,6 +422,14 @@ var DATA_REGISTRY = {
     ],
     "맞춤형화장품": [
       "맞춤형"
+    ],
+    "유화": [
+      "에멀전",
+      "에멀션",
+      "emulsion"
+    ],
+    "보존제": [
+      "방부제"
     ]
   },
   "integratedExam": {
