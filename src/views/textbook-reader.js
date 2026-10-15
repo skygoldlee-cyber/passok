@@ -5,7 +5,7 @@
 //    툴바·스크롤스파이·표 모달 → reader-toolbar.js)
 import { proFeatureNotice } from '../pro-upgrade.js';
 import { trackAction } from '../usage-stats.js';
-import { filterMetaSections } from '../reader-toc.js';
+import { filterMetaSections, buildSectionDisplayTitles } from '../reader-toc.js';
 import {
     readerAudioState,
     showAudioToast,
@@ -35,8 +35,125 @@ import {
 } from './reader-progress.js';
 import { loadStoryChapter } from './reader-loader.js';
 import { renderChapterContentInternal } from './reader-render.js';
+import { escapeRegExp } from '../utils.js';
 
 export { textbookReaderState, startReadingSession, stopReadingSession } from './reader-progress.js';
+
+/** 렌더된 섹션 카드 중 제목 매칭 탐색 — 정확 매칭 우선, 없으면 첫 부분 매칭 */
+function _findSectionCardByTitle(container, sectionTitle) {
+    let exact = /** @type {Element|null} */ (null);
+    let partial = /** @type {Element|null} */ (null);
+    container.querySelectorAll('.reader-section-card').forEach(card => {
+        const titleEl = card.querySelector('.reader-section-title');
+        const title = (titleEl && titleEl.textContent || '').trim();
+        if (!exact && title === sectionTitle) exact = card;
+        else if (!partial && title.includes(sectionTitle)) partial = card;
+    });
+    return exact || partial;
+}
+
+/** 챕터 앵커('chNN') → "Chapter NN" 헤더 섹션 카드 탐색 */
+function _findSectionCardByChapter(container, chapterAnchor) {
+    const chNum = String(chapterAnchor || '').replace(/^ch/i, '');
+    const num = parseInt(chNum, 10);
+    if (!chNum || isNaN(num)) return null;
+    // "Chapter 01"·"Chapter 1" 모두 매칭하되 'Chapter 10' 등의 오매칭은 숫자 경계로 차단
+    const re = new RegExp('Chapter\\s+0*' + num + '(?!\\d)', 'i');
+    let found = /** @type {Element|null} */ (null);
+    container.querySelectorAll('.reader-section-card').forEach(card => {
+        if (found) return;
+        const titleEl = card.querySelector('.reader-section-title');
+        if (titleEl && re.test(titleEl.textContent || '')) found = card;
+    });
+    return found;
+}
+
+/**
+ * 섹션 제목 → STUDY_DATA에서 소속 챕터 앵커('chNN') 역해석.
+ * 리더에 렌더되지 않는 메타 섹션(확인문제·학습 아이콘 등)을 찾을 때의 폴백 —
+ * 호출자가 앵커를 모르고 제목만 넘겨도 올바른 챕터 헤더로 유도한다.
+ */
+function _chapterAnchorForTitle(subjId, title) {
+    const STUDY_DATA = (typeof window !== 'undefined' && window.STUDY_DATA) ? window.STUDY_DATA : {};
+    const subj = STUDY_DATA[subjId];
+    if (!subj || !title) return '';
+    for (const chapter of subj.chapters || []) {
+        const secs = chapter.sections || [];
+        const displayTitles = buildSectionDisplayTitles(secs);
+        let anchor = '';
+        for (let i = 0; i < secs.length; i++) {
+            const m = String(secs[i].title || '').match(/Chapter\s*(\d+)/i);
+            if (m) anchor = 'ch' + m[1].padStart(2, '0');
+            if (secs[i].title === title || displayTitles[i] === title) return anchor;
+        }
+    }
+    return '';
+}
+
+/** 검색 이동으로 삽입된 검색어 하이라이트 마크 */
+const _SEARCH_HIT_SEL = 'mark.reader-search-hit';
+/** 한 카드에 삽입할 하이라이트 상한 — 광범위 토큰의 과도한 DOM 분할 방지 */
+const _SEARCH_HIT_MAX = 80;
+
+/** 이전 검색 이동의 하이라이트 해제 (재렌더 시 자연 소거되지만 동일 DOM 재사용 대비) */
+function _clearReaderSearchHighlights(container) {
+    container.querySelectorAll(_SEARCH_HIT_SEL).forEach(m => {
+        m.replaceWith(document.createTextNode(m.textContent || ''));
+    });
+    container.normalize();
+}
+
+/**
+ * 카드 본문에서 검색어(공백 분리 토큰, OR)를 mark.reader-search-hit으로 감싼다.
+ * @returns {Element|null} 첫 매치 mark — 없으면 null
+ */
+function _highlightQueryInCard(card, query) {
+    const terms = String(query || '').trim().split(/\s+/).filter(Boolean);
+    if (!terms.length) return null;
+    const body = card.querySelector('.reader-section-body') || card;
+    const splitRe = new RegExp('(' + terms.map(escapeRegExp).join('|') + ')', 'gi');
+    const probe = new RegExp(splitRe.source, 'i');
+    const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT);
+    /** @type {Text[]} */
+    const nodes = [];
+    let node;
+    while ((node = /** @type {Text|null} */ (walker.nextNode()))) {
+        if (probe.test(node.nodeValue || '')) nodes.push(node);
+    }
+    let first = null;
+    let marked = 0;
+    for (const textNode of nodes) {
+        if (marked >= _SEARCH_HIT_MAX) break;
+        const parts = (textNode.nodeValue || '').split(splitRe);
+        if (parts.length < 2 || !textNode.parentNode) continue;
+        const frag = document.createDocumentFragment();
+        parts.forEach((part, i) => {
+            if (!part) return;
+            if (i % 2 === 1) {
+                const mark = document.createElement('mark');
+                mark.className = 'reader-search-hit txt-highlight';
+                mark.textContent = part;
+                frag.appendChild(mark);
+                if (!first) first = mark;
+                marked++;
+            } else {
+                frag.appendChild(document.createTextNode(part));
+            }
+        });
+        textNode.parentNode.replaceChild(frag, textNode);
+    }
+    return first;
+}
+
+/** 섹션 카드 펼침 + 스크롤 (미발견 시 상단으로) */
+function _scrollToSectionCard(container, card) {
+    if (!card) {
+        container.scrollTop = 0;
+        return;
+    }
+    card.classList.remove('collapsed');
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
 /**
  * 교재 리더를 특정 과목·챕터로 이동시킨다.
@@ -59,34 +176,7 @@ export function openSubjectChapter(subject, chapterAnchor = '') {
         setTimeout(() => {
             const container = document.getElementById('textbook-reader-container');
             if (!container) return;
-            // 챕터 앵커: ch01 → "Chapter 01" 패턴 매칭
-            const chNum = chapterAnchor.replace(/^ch/, '');
-            const chNumPadded = chNum.padStart(2, '0');
-            // 섹션 카드 중 제목에 "Chapter 01" 또는 "Chapter 1" 포함한 것 찾기
-            const sectionCards = container.querySelectorAll('.reader-section-card');
-            let foundSection = /** @type {Element|null} */ (null);
-            sectionCards.forEach(card => {
-                if (foundSection) return;
-                const titleEl = card.querySelector('.reader-section-title');
-                if (titleEl) {
-                    const title = titleEl.textContent || '';
-                    // "Chapter 01" 또는 "Chapter 1" 패턴 매칭
-                    if (title.includes('Chapter ' + chNumPadded) || title.includes('Chapter ' + parseInt(chNum))) {
-                        foundSection = card;
-                    }
-                }
-            });
-            if (foundSection) {
-                // 섹션 펼치기 (접혀있을 수 있음)
-                if (foundSection.classList.contains('collapsed')) {
-                    foundSection.classList.remove('collapsed');
-                }
-                // 섹션으로 스크롤
-                foundSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-                // 매칭 실패 시 상단으로
-                container.scrollTop = 0;
-            }
+            _scrollToSectionCard(container, _findSectionCardByChapter(container, chapterAnchor));
         }, 800); // 콘텐츠 로드 대기
     } else {
         // 챕터 앵커 없으면 상단으로
@@ -98,35 +188,47 @@ export function openSubjectChapter(subject, chapterAnchor = '') {
 /**
  * 교재 리더를 특정 과목의 섹션 제목으로 이동시킨다.
  * chapter 앵커("Chapter N" 형식 종속) 대신 렌더된 섹션 제목 텍스트로 매칭하므로
- * 교재 형식이 바뀌어도 동작한다. (통합 검색 팔레트에서 사용)
+ * 교재 형식이 바뀌어도 동작한다. (통합 검색 팔레트·검색 결과 카드에서 사용)
  * @param {string} subject - 과목 키
- * @param {string} sectionTitle - 섹션 제목 (부분 매칭)
+ * @param {string} sectionTitle - 섹션 제목 (정확 매칭 우선, 없으면 부분 매칭)
+ * @param {string} [chapterAnchor] - 제목 매칭 실패 시 폴백할 'chNN' 챕터 앵커
+ *   (메타 섹션 등 리더에 렌더되지 않는 결과 대비)
+ * @param {{story?: boolean, query?: string}} [opts] - story=true면 이야기형 모드로
+ *   전환 후 이동 (서사 검색 결과는 이야기형 본문에만 존재). query 지정 시 착지한
+ *   카드 본문의 해당 토큰을 하이라이트하고 첫 매치 위치로 스크롤한다.
  */
-export function openSubjectSection(subject, sectionTitle) {
+export function openSubjectSection(subject, sectionTitle, chapterAnchor = '', opts = {}) {
     if (!subject) return;
+    if (opts.story && !textbookReaderState.storyMode) {
+        textbookReaderState.storyMode = true;
+        const storyToggle = /** @type {HTMLInputElement|null} */ (document.getElementById('reader-story-mode-toggle'));
+        if (storyToggle) storyToggle.checked = true;
+        trackAction('story_textbook');
+        proFeatureNotice('story_textbook', '이야기형 교재 본문 읽기');
+    }
     const subjectSelect = /** @type {HTMLSelectElement|null} */ (document.getElementById('reader-subject-select'));
     if (subjectSelect) {
         subjectSelect.value = subject;
         subjectSelect.dispatchEvent(new Event('change', { bubbles: true }));
     }
-    if (!sectionTitle) return;
+    if (!sectionTitle && !chapterAnchor) return;
     setTimeout(() => {
         const container = document.getElementById('textbook-reader-container');
         if (!container) return;
-        let foundSection = /** @type {Element|null} */ (null);
-        container.querySelectorAll('.reader-section-card').forEach(card => {
-            if (foundSection) return;
-            const titleEl = card.querySelector('.reader-section-title');
-            if (titleEl && (titleEl.textContent || '').includes(sectionTitle)) {
-                foundSection = card;
+        _clearReaderSearchHighlights(container);
+        const card = (sectionTitle && _findSectionCardByTitle(container, sectionTitle))
+            || _findSectionCardByChapter(container,
+                chapterAnchor || _chapterAnchorForTitle(subject, sectionTitle));
+        // 검색어가 카드 본문에 있으면 그 위치로 직접 스크롤 (긴 섹션에서 재검색 불필요)
+        if (card && opts.query) {
+            const hit = _highlightQueryInCard(card, opts.query);
+            if (hit) {
+                card.classList.remove('collapsed');
+                hit.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
             }
-        });
-        if (foundSection) {
-            foundSection.classList.remove('collapsed');
-            foundSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-            container.scrollTop = 0;
         }
+        _scrollToSectionCard(container, card);
     }, 800); // 콘텐츠 로드 대기
 }
 

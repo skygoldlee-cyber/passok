@@ -36,6 +36,18 @@ const STORY_MD = [
     '<!-- story:end -->',
     '',
     '본문 내용.',
+    '',
+    '## 1. 법령 체계',
+    '',
+    '<!-- story:start -->',
+    '',
+    '#### 📖 민수의 장면 — 풍선껌 비유',
+    '',
+    '민수는 풍선껌으로 법령 위계를 이해했다.',
+    '',
+    '<!-- story:end -->',
+    '',
+    '본문 끝.',
 ].join('\n');
 
 const SUBJ_A = {
@@ -89,9 +101,9 @@ describe('이야기형 서사 검색 (TS-10)', () => {
     });
 
     it('서사 전용 표현 검색 — 지연 로드된 storyFile에서 매칭 + 서사 배지', async () => {
-        // '비누방울'은 서사에만 존재 — 첫 실행 시 0건, 인덱스 병합 후 재검색으로 1건
+        // '비누방울'은 서사에만 존재 — 첫 실행 시 인덱스 로딩 안내, 병합 후 재검색으로 1건
         setTextbookSearchQuery('비누방울');
-        expect(el('textbook-results-container').textContent).toContain('일치하는 내용이 없습니다');
+        expect(el('textbook-results-container').textContent).toContain('확장하는 중');
 
         await vi.waitFor(() => {
             const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
@@ -104,7 +116,25 @@ describe('이야기형 서사 검색 (TS-10)', () => {
         // '전체 단원 보기'는 원시 .md 경로 대신 교재리더 이동 액션(data-search-goto)이다
         const link = card.querySelector('a[data-search-goto]');
         expect(link).toBeTruthy();
-        expect(link.getAttribute('data-search-goto')).toContain('subja');
+        // 서사 결과: 이야기형 ## 섹션('프롤로그 — …') + 소속 챕터 앵커 + story 모드 플래그 —
+        // 표준형 모드에서 열면 서사 제목이 없어 맨 위로 튀는 오이동 재발 방지
+        expect(JSON.parse(link.getAttribute('data-search-goto')))
+            .toEqual(['subja', '프롤로그 — 민수의 첫 도전', 'ch01', 'story']);
+    });
+
+    it('서사 내부 #### 헤딩은 소속 ## 섹션 카드로 이동 (리더 카드는 ## 단위)', async () => {
+        setTextbookSearchQuery('풍선껌');
+        await vi.waitFor(() => {
+            expect(el('textbook-results-container').querySelectorAll('.textbook-result-card').length)
+                .toBe(1);
+        }, { timeout: 3000 });
+
+        const link = el('textbook-results-container')
+            .querySelector('.textbook-result-card a[data-search-goto]');
+        // 표시 제목은 #### 서사 제목이지만 목적지는 소속 ## 섹션 '1. 법령 체계'
+        expect(el('textbook-results-container').textContent).toContain('풍선껌 비유');
+        expect(JSON.parse(link.getAttribute('data-search-goto')))
+            .toEqual(['subja', '1. 법령 체계', 'ch01', 'story']);
     });
 
     it('본문 검색은 기존 동작 유지 — 서사 항목이 OR로 추가 매칭되지 않음', async () => {

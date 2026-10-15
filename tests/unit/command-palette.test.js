@@ -86,6 +86,34 @@ test('교재 섹션 매칭 → 섹션 제목 전달 (형식 독립 딥링크)', 
     assert.equal(s.action.subject, 'law');
 });
 
+test('교재 섹션 — 중복 제목은 챕터 병기 표시 제목 + 소속 챕터 앵커로 구분 (오이동 회귀)', () => {
+    // '챕터 핵심 요약'처럼 챕터마다 반복되는 제목은 원시 제목만으로는 첫 챕터로 오이동한다 —
+    // 표시 제목(챕터 병기)과 소속 챕터 앵커를 함께 전달해 해당 챕터에 착지해야 한다.
+    const src = {
+        views: [], ingredients: [], registry: { exams: [] },
+        studyData: {
+            law: {
+                name: '법', cards: [], quizzes: [],
+                chapters: [{
+                    chapterTitle: '전체',
+                    sections: [
+                        { title: '📚 Chapter 01. 정의', content: '' },
+                        { title: '📌 챕터 핵심 요약', content: '1장 요약' },
+                        { title: '📚 Chapter 02. 영업', content: '' },
+                        { title: '📌 챕터 핵심 요약', content: '2장 요약' },
+                    ],
+                }],
+            },
+        },
+    };
+    const secs = searchAll('챕터 핵심 요약', src).filter(x => x.type === 'section');
+    assert.equal(secs.length, 2);
+    assert.equal(secs[0].action.anchor, 'ch01');
+    assert.equal(secs[1].action.anchor, 'ch02');
+    assert.ok(secs[0].action.title.includes('Chapter 01'));
+    assert.ok(secs[1].action.title.includes('Chapter 02'));
+});
+
 test('성분 사전 — 한글·영문·초성 매칭', () => {
     assert.ok(searchAll('나이아신', sources).some(x => x.type === 'ingredient'));
     assert.ok(searchAll('niacin', sources).some(x => x.type === 'ingredient'));

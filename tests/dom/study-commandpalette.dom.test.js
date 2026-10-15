@@ -119,6 +119,32 @@ describe('command-palette — 통합 검색', () => {
         expect(box.querySelector('img')).toBeNull();
     });
 
+    it('콜드스타트 — 미로드 과목은 백그라운드 로드 후 같은 쿼리로 결과 갱신', async () => {
+        // 팔레트는 어느 뷰에서도 열 수 있어 STUDY_DATA가 비어 있을 수 있다 —
+        // 종전에는 카드·퀴즈·교재 결과가 조용히 누락됐다.
+        window.STUDY_DATA = {};
+        DataLoader.registry = { subjects: [{ key: 'law', name: '화장품법' }], exams: [] };
+        const origLoad = DataLoader.loadSubject;
+        DataLoader.loadSubject = async (key) => {
+            window.STUDY_DATA[key] = {
+                name: '화장품법', quizzes: [],
+                cards: [{ id: 'c1', term: '화장품 정의', definition: '피부 미화' }],
+                chapters: [{ chapterTitle: 'c', sections: [{ title: '화장품의 정의', content: '' }] }],
+            };
+        };
+        try {
+            openCommandPalette();
+            type('화장품 정의');
+            await vi.waitFor(() => {
+                const titles = [...document.querySelectorAll('#cmdk-results .cmdk-item-title')]
+                    .map(n => n.textContent);
+                expect(titles).toContain('화장품 정의');
+            }, { timeout: 2000 });
+        } finally {
+            DataLoader.loadSubject = origLoad;
+        }
+    });
+
     it('feature 게이팅된(is-hidden) 뷰는 검색 대상에서 제외', () => {
         openCommandPalette();
         type('성분 사전');
