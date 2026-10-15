@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: f553132f7ae40842
-> 생성: 2026-10-15 · 원천: SPEC.md(523개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 45257d5e581cddca
+> 생성: 2026-10-15 · 원천: SPEC.md(525개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 523개 — 문서 연결 379 · 소스 연결 464 · 테스트 연결 496 · 보고서 연결 109
+**커버리지 요약**: 요구사항 525개 — 문서 연결 379 · 소스 연결 466 · 테스트 연결 498 · 보고서 연결 109
 
 ---
 
@@ -212,6 +212,8 @@
 | TS-10 | ✅ | 테스트 | DOC-DSN-18<br>DOC-RBK-13 | src/views/textbook-search.js | tests/dom/story-search.dom.test.js | — | — |
 | TS-11 | ✅ | 테스트 | DOC-DSN-18 | src/views/textbook-search.js | tests/unit/textbook-search-ref.test.js | — | — |
 | TS-12 | ✅ | 테스트 | — | src/views/textbook-search.js | tests/dom/exam-search.dom.test.js<br>tests/unit/textbook-search-exam.test.js | — | — |
+| TS-13 | ✅ | 테스트 | — | src/search-morpheme.js | tests/dom/morph-search.dom.test.js<br>tests/unit/search-morpheme.test.js | — | — |
+| TS-14 | ✅ | 테스트 | — | src/search-morpheme.js | tests/dom/morph-search.dom.test.js<br>tests/unit/search-morpheme.test.js | — | — |
 
 ## 3.10 성분 사전
 
