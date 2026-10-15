@@ -94,12 +94,17 @@ test.describe('시험 전환 실경로 — selectExam → 리로드 → 부팅',
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
         // 실제 전환 계약: selectExam이 저장 후 location.reload() — 시드가 아닌 호출 경로 검증
+        // reload가 evaluate 해결보다 먼저 컨텍스트를 파괴하면 'Execution context was destroyed'로
+        // 거부되는데, 그 경우 전환 호출 자체는 이미 완료된 것이므로 해당 오류만 흡수한다
+        const swallowNavTeardown = (p) => p.catch((err) => {
+            if (!/Execution context was destroyed/.test(String(err))) throw err;
+        });
         await Promise.all([
             page.waitForEvent('load', { timeout: 15_000 }),
-            page.evaluate(async () => {
+            swallowNavTeardown(page.evaluate(async () => {
                 const m = await import('./src/exam-context.js');
                 m.selectExam('food');
-            }),
+            })),
         ]);
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
         await expect(page).toHaveTitle('식품기사');
@@ -109,10 +114,10 @@ test.describe('시험 전환 실경로 — selectExam → 리로드 → 부팅',
         // 복귀 — cosmetic으로 되돌려 후속 테스트 격리 유지
         await Promise.all([
             page.waitForEvent('load', { timeout: 15_000 }),
-            page.evaluate(async () => {
+            swallowNavTeardown(page.evaluate(async () => {
                 const m = await import('./src/exam-context.js');
                 m.selectExam('cosmetic');
-            }),
+            })),
         ]);
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
         await expect(page.locator('[data-app-name]').first()).toHaveText('Passmula');
