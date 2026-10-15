@@ -223,6 +223,30 @@ describe('교재 리더 — 과목 선택·본문·이어하기·북마크', () 
         expect(scrolled[0].querySelector('.reader-section-title').textContent).toContain('Chapter 02');
     });
 
+    it('openSubjectSection — 표준형 결과(story 미지정)는 이야기형 모드를 해제하고 표준형 섹션으로 이동', async () => {
+        // 이야기형 모드에서 표준형 검색 결과를 클릭하면 섹션 제목 세트가 달라
+        // 매칭에 실패할 수 있다 — 결과 출처에 맞춰 모드를 되돌려야 한다.
+        stubRegistry([SUBJ]);
+        renderTextbookReader();
+        textbookReaderState.storyMode = true;
+        el('reader-story-mode-toggle').checked = true;
+
+        const scrolled = [];
+        const origScroll = Element.prototype.scrollIntoView;
+        Element.prototype.scrollIntoView = function () { scrolled.push(this); };
+        try {
+            openSubjectSection('subja', '1. 핵심 개념');
+            expect(textbookReaderState.storyMode).toBe(false);
+            expect(el('reader-story-mode-toggle').checked).toBe(false);
+            await waitFor(() => scrolled.length > 0, 3000);
+        } finally {
+            Element.prototype.scrollIntoView = origScroll;
+        }
+
+        expect(scrolled.length).toBe(1);
+        expect(scrolled[0].querySelector('.reader-section-title').textContent).toContain('핵심 개념');
+    });
+
     it('openSubjectSection — query 지정 시 카드 본문 검색어 하이라이트 + 해당 위치로 스크롤', async () => {
         const subj = {
             key: 'subja', name: '과목A',

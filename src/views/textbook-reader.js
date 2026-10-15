@@ -155,6 +155,29 @@ function _scrollToSectionCard(container, card) {
     card.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+/** 마지막으로 큐잉된 챕터 렌더의 완료 promise — 검색 이동 등이 렌더 완료를 기다리는 데 사용 */
+let _readerRenderPromise = null;
+
+/**
+ * 과목 로드 → 챕터 렌더를 큐잉하고 완료 promise를 추적한다.
+ * 이 함수로 시작된 렌더만 _readerRenderPromise가 바뀌므로,
+ * 호출자는 이전 promise와 비교해 새 렌더가 큐잉됐는지 판별할 수 있다.
+ */
+function _queueChapterRender(subjId, chapterIdx) {
+    _readerRenderPromise = DataLoader.loadSubject(subjId)
+        .then(() => renderChapterContent(subjId, chapterIdx),
+            err => console.error('loadSubject failed:', err))
+        .catch(err => console.error('renderChapterContent failed:', err));
+    return _readerRenderPromise;
+}
+
+/** 새 렌더가 큐잉됐으면 그 완료 promise, 아니면 즉시 해결된 promise */
+function _renderSettled(prevRender) {
+    return (_readerRenderPromise && _readerRenderPromise !== prevRender)
+        ? _readerRenderPromise
+        : Promise.resolve();
+}
+
 /**
  * 교재 리더를 특정 과목·챕터로 이동시킨다.
  * (뷰 전환은 호출 측에서 수행 — 매뉴얼 뷰어의 subj: 링크, 교차 참조 링크 공용)
@@ -163,6 +186,7 @@ function _scrollToSectionCard(container, card) {
  */
 export function openSubjectChapter(subject, chapterAnchor = '') {
     if (!subject) return;
+    const prevRender = _readerRenderPromise;
     // 과목 선택 드롭다운 업데이트
     const subjectSelect = /** @type {HTMLSelectElement|null} */ (document.getElementById('reader-subject-select'));
     if (subjectSelect) {
@@ -170,18 +194,20 @@ export function openSubjectChapter(subject, chapterAnchor = '') {
         // change 이벤트 트리거
         subjectSelect.dispatchEvent(new Event('change', { bubbles: true }));
     }
-    // 챕터 앵커가 있으면 해당 섹션으로 스크롤 (콘텐츠 로드 후)
+    // 재렌더가 큐잉됐으면 완료까지 대기 — 고정 지연은 느린 로드에서 미렌더 DOM을 스캔한다
+    const pending = _renderSettled(prevRender);
     if (chapterAnchor) {
-        // 콘텐츠 렌더링 대기 후 섹션 검색
-        setTimeout(() => {
+        pending.then(() => {
             const container = document.getElementById('textbook-reader-container');
             if (!container) return;
             _scrollToSectionCard(container, _findSectionCardByChapter(container, chapterAnchor));
-        }, 800); // 콘텐츠 로드 대기
+        });
     } else {
         // 챕터 앵커 없으면 상단으로
-        const container = document.getElementById('textbook-reader-container');
-        if (container) container.scrollTop = 0;
+        pending.then(() => {
+            const container = document.getElementById('textbook-reader-container');
+            if (container) container.scrollTop = 0;
+        });
     }
 }
 
@@ -193,26 +219,38 @@ export function openSubjectChapter(subject, chapterAnchor = '') {
  * @param {string} sectionTitle - 섹션 제목 (정확 매칭 우선, 없으면 부분 매칭)
  * @param {string} [chapterAnchor] - 제목 매칭 실패 시 폴백할 'chNN' 챕터 앵커
  *   (메타 섹션 등 리더에 렌더되지 않는 결과 대비)
- * @param {{story?: boolean, query?: string}} [opts] - story=true면 이야기형 모드로
- *   전환 후 이동 (서사 검색 결과는 이야기형 본문에만 존재). query 지정 시 착지한
+ * @param {{story?: boolean, query?: string}} [opts] - 결과 출처와 렌더 모드를 맞춘다:
+ *   story=true면 이야기형으로, 미지정이면 표준형으로 전환 후 이동. query 지정 시 착지한
  *   카드 본문의 해당 토큰을 하이라이트하고 첫 매치 위치로 스크롤한다.
  */
 export function openSubjectSection(subject, sectionTitle, chapterAnchor = '', opts = {}) {
     if (!subject) return;
-    if (opts.story && !textbookReaderState.storyMode) {
-        textbookReaderState.storyMode = true;
+    // 서사 결과는 이야기형으로, 표준형 결과는 표준형으로 — 단방향 전환이면
+    // 이야기형 모드에서 표준형 결과의 섹션 매칭이 실패할 수 있다
+    const wantStory = !!opts.story;
+    if (wantStory !== textbookReaderState.storyMode) {
+        textbookReaderState.storyMode = wantStory;
         const storyToggle = /** @type {HTMLInputElement|null} */ (document.getElementById('reader-story-mode-toggle'));
-        if (storyToggle) storyToggle.checked = true;
-        trackAction('story_textbook');
-        proFeatureNotice('story_textbook', '이야기형 교재 본문 읽기');
+        if (storyToggle) storyToggle.checked = wantStory;
+        if (wantStory) {
+            trackAction('story_textbook');
+            proFeatureNotice('story_textbook', '이야기형 교재 본문 읽기');
+        } else if (readerAudioState.audio) {
+            // 이야기형 오디오 재생 중 표준형 결과로 이동 — 수동 토글 해제와 동일하게 재생 정지
+            stopReaderAudio();
+            showAudioToast('표준형 모드로 전환되어 오디오 재생이 중지되었습니다.');
+        }
     }
+    const prevRender = _readerRenderPromise;
     const subjectSelect = /** @type {HTMLSelectElement|null} */ (document.getElementById('reader-subject-select'));
     if (subjectSelect) {
         subjectSelect.value = subject;
         subjectSelect.dispatchEvent(new Event('change', { bubbles: true }));
     }
     if (!sectionTitle && !chapterAnchor) return;
-    setTimeout(() => {
+    // 재렌더가 큐잉됐으면 완료까지 대기 — 고정 지연(800ms)은 느린 이야기형 로드에서
+    // 미렌더 DOM을 스캔해 착지 실패로 이어진다
+    _renderSettled(prevRender).then(() => {
         const container = document.getElementById('textbook-reader-container');
         if (!container) return;
         _clearReaderSearchHighlights(container);
@@ -229,7 +267,7 @@ export function openSubjectSection(subject, sectionTitle, chapterAnchor = '', op
             }
         }
         _scrollToSectionCard(container, card);
-    }, 800); // 콘텐츠 로드 대기
+    });
 }
 
 export function renderTextbookReader() {
@@ -278,19 +316,17 @@ export function renderTextbookReader() {
         subjectSelect.value = textbookReaderState.selectedSubject;
         // 단원 선택 UI 제거: 과목 선택 시 자동으로 chapter 0(전체) 로드
         textbookReaderState.selectedChapter = '0';
-        DataLoader.loadSubject(textbookReaderState.selectedSubject).then(() => {
-            renderChapterContent(textbookReaderState.selectedSubject, 0).then(() => {
-                // 스크롤 위치 복원 (콘텐츠 렌더링 후)
-                if (savedPos && savedPos.scrollTop > 0) {
-                    const cont = document.getElementById('textbook-reader-container');
-                    if (cont) {
-                        requestAnimationFrame(() => {
-                            cont.scrollTop = savedPos.scrollTop;
-                        });
-                    }
+        _queueChapterRender(textbookReaderState.selectedSubject, 0).then(() => {
+            // 스크롤 위치 복원 (콘텐츠 렌더링 후)
+            if (savedPos && savedPos.scrollTop > 0) {
+                const cont = document.getElementById('textbook-reader-container');
+                if (cont) {
+                    requestAnimationFrame(() => {
+                        cont.scrollTop = savedPos.scrollTop;
+                    });
                 }
-            }).catch(err => console.error('renderChapterContent failed:', err));
-        }).catch(err => console.error('loadSubject failed:', err));
+            }
+        });
     }
 
     // Bind events only once
@@ -308,9 +344,7 @@ export function renderTextbookReader() {
                 // 단원 선택 UI 제거: 과목 선택 시 자동으로 chapter 0(전체) 로드
                 textbookReaderState.selectedChapter = '0';
                 saveReaderPosition(); // 1. 교재 읽기 이어하기
-                DataLoader.loadSubject(subjId).then(() => {
-                    renderChapterContent(subjId, 0);
-                }).catch(err => console.error('loadSubject failed:', err));
+                _queueChapterRender(subjId, 0);
             } else {
                 textbookReaderState.selectedChapter = '';
                 saveReaderPosition();
@@ -366,7 +400,10 @@ export function renderTextbookReader() {
             saveReaderPosition();
             // Re-render current chapter if one is selected
             if (textbookReaderState.selectedSubject && textbookReaderState.selectedChapter) {
-                Promise.resolve(renderChapterContent(textbookReaderState.selectedSubject, parseInt(textbookReaderState.selectedChapter))).then(() => {
+                _readerRenderPromise = Promise.resolve(renderChapterContent(
+                    textbookReaderState.selectedSubject, parseInt(textbookReaderState.selectedChapter)
+                )).catch(err => console.error('renderChapterContent failed:', err));
+                _readerRenderPromise.then(() => {
                     const cont = document.getElementById('textbook-reader-container');
                     const target = anchorIdx >= 0 ? document.getElementById(`reader-section-${anchorIdx}`) : null;
                     if (cont && target) {

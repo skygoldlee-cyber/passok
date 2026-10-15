@@ -216,6 +216,32 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
         expect(p1[2]).toBe('ch02');
     });
 
+    it('리더 미렌더 메타 섹션은 검색 결과에서 제외 — 도달 불가 목적지 방지 (CGMP 회귀)', () => {
+        // 'CGMP' 검색 시 📊 비교표·✅ 확인문제가 제목 가산으로 상위에 오지만
+        // 리더는 이들을 렌더하지 않아 이동해도 본문에 도달할 수 없다.
+        window.STUDY_DATA = {};
+        const subj = {
+            key: 'subjh', name: '과목H',
+            chapters: [{
+                chapterKey: 'ch1', chapterTitle: 'c', filePath: 'h.md',
+                sections: [
+                    { title: '📚 Chapter 01. 품질관리', content: '개관.' },
+                    { title: '3. 시험·검사', content: '여기에 CGMP 4대 기준서 설명이 있다.' },
+                    { title: '📊 CGMP 4대 기준서 비교표', content: 'CGMP 비교 표.' },
+                    { title: '✅ 확인문제', content: 'CGMP 관련 확인문제.' },
+                ],
+            }],
+        };
+        stubRegistry([subj]);
+        search('CGMP');
+
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        expect(cards.length).toBe(1);
+        expect(cards[0].textContent).toContain('3. 시험·검사');
+        const payload = JSON.parse(cards[0].querySelector('a[data-search-goto]').getAttribute('data-search-goto'));
+        expect(payload).toEqual(['subjh', '3. 시험·검사', 'ch01', '']);
+    });
+
     it('카드 내 참조 링크에 검색어 전달 — data-ref-search 주입 (해시 없는 링크 상단 착지 회귀)', () => {
         window.STUDY_DATA = {};
         const subj = {
