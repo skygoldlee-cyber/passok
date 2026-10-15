@@ -8,6 +8,7 @@ import { DataLoader } from '../data-loader.js';
 import { hasFeature } from '../exam-context.js';
 import { getRefTables, mapSourceToRef } from '../pdf-registry.js';
 import { formatSectionContentForReader } from '../reader-format.js';
+import { buildSectionDisplayTitles } from '../reader-toc.js';
 import { PATHS } from '../paths.js';
 import { escapeRegExp, debounce } from '../utils.js';
 // [모바일 PWA 견고성] 레지스트리는 window 전역(가드)에서 읽는다(정적 import 하드 의존 지양).
@@ -35,30 +36,63 @@ let _storyEntries = null;
 /** @type {Promise<number>|null} */
 let _storyIndexPromise = null;
 
-/** 이야기형 MD에서 story:start/end 블록을 {title, text} 목록으로 추출 */
+/**
+ * 검색 대상 텍스트 정제 — 코드블록·머메이드·이미지·링크 URL 같은 마크다운
+ * 구문은 내용이 아니라 오매칭 노이즈라 _searchText에서 제외한다.
+ * 화면 표시용 content에는 적용하지 않는다.
+ */
+function _toSearchable(text) {
+    return String(text || '')
+        .replace(/```[\s\S]*?```/g, ' ')                 // 펜스 코드·머메이드 블록
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')           // 이미지 (alt·경로)
+        .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')         // 링크 — 텍스트 유지, URL 제거
+        .replace(/`([^`]*)`/g, '$1');                    // 인라인 코드 — 내용 유지
+}
+
+/** 이야기형 MD에서 story:start/end 블록을 {title, gotoTitle, chAnchor, text} 목록으로 추출 */
 function _extractStoryBlocks(md) {
     const lines = md.split(/\r?\n/);
-    /** @type {Array<{title:string, innerTitle:string, lines:string[]}>} */
+    /** @type {Array<{title:string, innerTitle:string, innerLevel:number, h2:string, anchor:string, lines:string[]}>} */
     const blocks = [];
-    /** @type {{title:string, innerTitle:string, lines:string[]}|null} */
+    /** @type {{title:string, innerTitle:string, innerLevel:number, h2:string, anchor:string, lines:string[]}|null} */
     let cur = null;
     let lastHeading = '';
+    let lastH2 = '';
+    let chAnchor = '';
     for (const l of lines) {
         const t = l.trim();
-        const heading = t.match(/^#{1,6}\s+(.*)/);
+        const heading = t.match(/^(#{1,6})\s+(.*)/);
         if (cur) {
             if (t === '<!-- story:end -->') { blocks.push(cur); cur = null; continue; }
             // 블록 내부 첫 헤딩을 서사 제목으로 우선 사용 (예: '## 프롤로그 — …')
-            if (heading && !cur.innerTitle) cur.innerTitle = heading[1].trim();
+            if (heading && !cur.innerTitle) {
+                cur.innerTitle = heading[2].trim();
+                cur.innerLevel = heading[1].length;
+            }
             cur.lines.push(l);
             continue;
         }
-        if (t === '<!-- story:start -->') { cur = { title: lastHeading, innerTitle: '', lines: [] }; continue; }
-        if (heading) lastHeading = heading[1].trim();
+        if (t === '<!-- story:start -->') {
+            cur = { title: lastHeading, innerTitle: '', innerLevel: 0, h2: lastH2, anchor: chAnchor, lines: [] };
+            continue;
+        }
+        if (heading) {
+            lastHeading = heading[2].trim();
+            // 리더 섹션 카드는 ## 헤딩 — ## 소속과 챕터 앵커를 이동 목적지로 추적한다
+            // (###/#### 내부 헤딩은 카드 제목이 아니라 매칭 불가)
+            if (heading[1].length === 2) {
+                lastH2 = lastHeading;
+                const m = lastH2.match(/Chapter\s*(\d+)/i);
+                if (m) chAnchor = 'ch' + m[1].padStart(2, '0');
+            }
+        }
     }
     return blocks
         .map(b => ({
             title: b.innerTitle || b.title,
+            // 이동 목적지: 블록 자체가 ## 섹션이면 그 제목, 아니면 소속 ## 섹션
+            gotoTitle: (b.innerLevel === 2 ? b.innerTitle : b.h2) || b.innerTitle || b.title,
+            chAnchor: b.anchor,
             text: b.lines.join('\n')
                 .replace(/<!--[^\n]*?-->/g, '')
                 .split('\n')
@@ -76,7 +110,8 @@ function _extractStoryBlocks(md) {
 function _ensureStoryIndex() {
     if (_storyIndexPromise) return _storyIndexPromise;
     _storyIndexPromise = (async () => {
-        if (!hasFeature('story_textbook')) return 0;
+        // 미보유 시험도 빈 배열로 마킹 — null이면 로딩중 판정(lazyPending)이 영구 지속된다
+        if (!hasFeature('story_textbook')) { _storyEntries = []; return 0; }
         const manifest = await DataLoader._getManifest();
         const STUDY_DATA = (typeof window !== 'undefined' && window.STUDY_DATA) ? window.STUDY_DATA : {};
         /** @type {Array<object>} */
@@ -97,9 +132,12 @@ function _ensureStoryIndex() {
                             chapterTitle,
                             filePath: PATHS.TEXTBOOK_FILE_REL(subjMeta.dir, chMeta.storyFile),
                             sectionTitle,
+                            // 리더 이야기형 섹션 카드(## 헤딩) 매칭용 — 서사 결과는 이야기형 모드로 열린다
+                            gotoTitle: block.gotoTitle || '',
+                            chAnchor: block.chAnchor || '',
                             content: block.text,
                             fromStory: true,
-                            _searchText: (sectionTitle + ' ' + block.text).toLowerCase()
+                            _searchText: (sectionTitle + ' ' + _toSearchable(block.text)).toLowerCase()
                         });
                     }
                 } catch (e) {
@@ -204,7 +242,7 @@ function _ensureRefIndex() {
                     filePath: d.path,
                     refText: text,
                     fromRef: true,
-                    _searchText: `${d.docName}\n${text}`.toLowerCase()
+                    _searchText: `${d.docName}\n${_toSearchable(text)}`.toLowerCase()
                 };
             } catch (e) {
                 return null; // 오프라인·미캐시 — 해당 문서만 건너뜀
@@ -232,7 +270,14 @@ function _getSearchIndex() {
         if (!subj.chapters) return;
         subj.chapters.forEach(chapter => {
             if (!chapter.sections) return;
-            chapter.sections.forEach(section => {
+            // 섹션별 이동 목적지 — 리더 표시 제목(중복 제목은 챕터 병기된 형태) +
+            // 소속 챕터 앵커(직전 "Chapter N" 헤더). 섹션 제목에서 챕터 번호를
+            // 추출하면 비헤더 섹션은 앵커가 비어 과목 맨 위로 튀는 오이동이 생긴다.
+            const displayTitles = buildSectionDisplayTitles(chapter.sections);
+            let chAnchor = '';
+            chapter.sections.forEach((section, sIdx) => {
+                const chM = String(section.title || '').match(/Chapter\s*(\d+)/i);
+                if (chM) chAnchor = 'ch' + chM[1].padStart(2, '0');
                 // subsections의 content도 검색 인덱스에 포함
                 let fullContent = section.content || '';
                 if (section.subsections && section.subsections.length) {
@@ -252,8 +297,10 @@ function _getSearchIndex() {
                     chapterTitle: chapter.chapterTitle,
                     filePath: chapter.filePath,
                     sectionTitle: section.title,
+                    gotoTitle: displayTitles[sIdx] || section.title,
+                    chAnchor,
                     content: fullContent,
-                    _searchText: (section.title + ' ' + fullContent).toLowerCase()
+                    _searchText: (section.title + ' ' + _toSearchable(fullContent)).toLowerCase()
                 });
             });
         });
@@ -314,24 +361,47 @@ export function renderTextbookSearch() {
     const resultsContainer = document.getElementById('textbook-results-container');
     if (resultsContainer && !resultsContainer.dataset.gotoBound) {
         resultsContainer.dataset.gotoBound = 'true';
-        resultsContainer.addEventListener('click', (e) => {
-            const goto = e.target instanceof Element ? e.target.closest('[data-search-goto]') : null;
-            const subjLink = goto ? null : (e.target instanceof Element ? e.target.closest('a[data-ref-subject]') : null);
-            if (!goto && !subjLink) return;
-            e.preventDefault();
-            e.stopPropagation(); // 문서 위임(reader-ref-links) 중복 실행 차단 — 뷰 전환 후 직접 이동
+
+        const gotoAction = (goto, subjLink) => {
             Promise.all([
                 import('./navigation.js'),
                 import('./textbook-reader.js')
             ]).then(([nav, reader]) => {
                 nav.switchView('textbook-reader-view');
                 if (goto) {
-                    const [subjId, chAnchor] = String(goto.getAttribute('data-search-goto') || '').split('|');
-                    reader.openSubjectChapter(subjId, chAnchor || '');
+                    let payload = [];
+                    try { payload = JSON.parse(goto.getAttribute('data-search-goto') || '[]'); } catch (_) { /* 무시 */ }
+                    const searchInput = /** @type {HTMLInputElement|null} */ (document.getElementById('textbook-search-input'));
+                    reader.openSubjectSection(payload[0] || '', payload[1] || '', payload[2] || '',
+                        { story: payload[3] === 'story', query: (searchInput && searchInput.value || '').trim() });
                 } else if (subjLink instanceof HTMLElement) {
                     reader.openSubjectChapter(subjLink.dataset.refSubject || '', subjLink.dataset.refChapter || '');
                 }
             });
+        };
+
+        resultsContainer.addEventListener('click', (e) => {
+            const t = e.target instanceof Element ? e.target : null;
+            if (!t) return;
+            // 카드 전체 클릭으로 이동 — 단 내부 컨트롤(토글 버튼·참조 링크·이미지 등)은 각자 동작에 양보
+            const innerCtl = t.closest('button, a[href], img');
+            const subjLink = t.closest('a[data-ref-subject]');
+            const goto = t.closest('[data-search-goto]');
+            if (innerCtl && innerCtl !== goto && innerCtl !== subjLink) return;
+            const useGoto = goto && !(innerCtl && innerCtl === subjLink);
+            if (!useGoto && !subjLink) return;
+            e.preventDefault();
+            e.stopPropagation(); // 문서 위임(reader-ref-links) 중복 실행 차단 — 뷰 전환 후 직접 이동
+            gotoAction(useGoto ? goto : null, useGoto ? null : subjLink);
+        });
+
+        // 카드 자체 포커스 상태에서 Enter로 동일 이동 (role="link" 키보드 접근성)
+        resultsContainer.addEventListener('keydown', (e) => {
+            if (e.key !== 'Enter') return;
+            const card = e.target instanceof Element ? e.target : null;
+            if (!card || e.target !== card || !card.matches('.textbook-result-card[data-search-goto]')) return;
+            e.preventDefault();
+            gotoAction(card, null);
         });
     }
 
@@ -393,16 +463,17 @@ function performTextbookSearch() {
     const terms = query.split(/\s+/).filter(t => t.length > 0);
     // TS-10/TS-11 — 서사·참조자료 인덱스 최초 1회 지연 로드; 완료 시 같은 검색어로 재실행
     // (resolved promise 재사용 시 재실행 루프가 되므로 트리거는 로드 시작 1회에 한정)
+    // added=0이어도 재실행해야 lazyPending 로딩 표시가 해제된다
     if (!_storyIndexPromise) {
-        _ensureStoryIndex().then(added => {
-            if (added && textbookState.searchQuery.toLowerCase().trim() === query) {
+        _ensureStoryIndex().then(() => {
+            if (textbookState.searchQuery.toLowerCase().trim() === query) {
                 performTextbookSearch();
             }
         });
     }
     if (!_refIndexPromise) {
-        _ensureRefIndex().then(added => {
-            if (added && textbookState.searchQuery.toLowerCase().trim() === query) {
+        _ensureRefIndex().then(() => {
+            if (textbookState.searchQuery.toLowerCase().trim() === query) {
                 performTextbookSearch();
             }
         });
@@ -446,6 +517,11 @@ function performTextbookSearch() {
         if (textbookState.filter !== 'all' && textbookState.filter !== entry.subjId) continue;
         const isMatch = terms.every(term => entry._searchText.includes(term));
         if (!isMatch) continue;
+        // 관련도 — 모든 토큰의 총 매치 수 + 제목 매칭 가산 (검색 의도는 보통 제목 근처)
+        let hits = 0;
+        for (const t of terms) hits += entry._searchText.split(t).length - 1;
+        const head = String(entry.sectionTitle || entry.docName || '').toLowerCase();
+        const score = hits + (terms.some(t => head.includes(t)) ? 50 : 0);
         if (entry.fromRef) {
             refResults.push({
                 subjId: entry.subjId,
@@ -454,7 +530,7 @@ function performTextbookSearch() {
                 filePath: entry.filePath,
                 refText: entry.refText,
                 fromRef: true,
-                _hits: entry._searchText.split(terms[0]).length - 1
+                _hits: score
             });
         } else {
             results.push({
@@ -463,27 +539,40 @@ function performTextbookSearch() {
                 chapterTitle: entry.chapterTitle,
                 filePath: entry.filePath,
                 sectionTitle: entry.sectionTitle,
+                gotoTitle: entry.gotoTitle,
+                chAnchor: entry.chAnchor,
                 content: entry.content,
-                fromStory: !!entry.fromStory
+                fromStory: !!entry.fromStory,
+                _score: score
             });
         }
     }
 
-    // TS-11 — 참조자료는 조문 원문이라 매치가 넓어 교재 결과 뒤에 배치, 히트수 정렬·상한 적용
+    // 관련도 정렬 — 동점은 문서 순서 유지 (stable sort). 참조자료는 조문 원문이라
+    // 매치가 넓어 교재 결과 뒤에 배치 (TS-11), 역시 히트수 정렬·상한 적용.
+    results.sort((a, b) => b._score - a._score);
     refResults.sort((a, b) => b._hits - a._hits);
+    const SECTION_RESULT_LIMIT = 30;
     const REF_RESULT_LIMIT = 15;
+    const shownSections = results.slice(0, SECTION_RESULT_LIMIT);
     const shownRefs = refResults.slice(0, REF_RESULT_LIMIT);
-    const allResults = results.concat(shownRefs);
+    const allResults = shownSections.concat(shownRefs);
+
+    // 지연 인덱스(서사·참조자료) 로딩 중 — '결과 없음' 오표시 방지
+    const lazyPending = (_storyIndexPromise && _storyEntries === null)
+        || (_refIndexPromise && _refEntries === null);
 
     // Update summary text
-    summary.innerHTML = `총 <strong style="color: var(--color-primary);">${allResults.length}</strong>건의 관련 내용을 찾았습니다.`;
+    summary.innerHTML = `총 <strong style="color: var(--color-primary);">${results.length + refResults.length}</strong>건의 관련 내용을 찾았습니다.`
+        + (lazyPending ? ' <span class="text-muted">(서사·참조자료를 추가로 불러오는 중…)</span>' : '');
 
     if (allResults.length === 0) {
+        // 지연 인덱스 로딩 중이면 '결과 없음' 대신 추가 결과 가능성을 안내
         container.innerHTML = `
             <div class="empty-state">
-                <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem; color: var(--color-warning); margin-bottom: 1rem; display: block;"></i>
-                <h3>일치하는 내용이 없습니다</h3>
-                <p>다른 검색어로 검색해보거나 띄어쓰기를 확인해보세요.</p>
+                <i class="fa-solid ${lazyPending ? 'fa-circle-notch fa-spin' : 'fa-triangle-exclamation'}" style="font-size: 3rem; color: var(--color-${lazyPending ? 'primary' : 'warning'}); margin-bottom: 1rem; display: block;"></i>
+                <h3>${lazyPending ? '검색 범위를 확장하는 중입니다' : '일치하는 내용이 없습니다'}</h3>
+                <p>${lazyPending ? '서사·참조자료 인덱스를 불러오고 있습니다 — 결과가 추가될 수 있습니다.' : '다른 검색어로 검색해보거나 띄어쓰기를 확인해보세요.'}</p>
             </div>
         `;
         return;
@@ -491,13 +580,13 @@ function performTextbookSearch() {
 
     // Render results
     container.innerHTML = '';
-    allResults.forEach((item, idx) => {
+    const badgeColors = {};
+    {
         const colors = ['badge-cyan', 'badge-violet', 'badge-emerald', 'badge-amber', 'badge-rose', 'badge-indigo'];
-        const badgeColors = {};
         const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
-        subjects.forEach((sub, idx) => {
-            badgeColors[sub.key] = colors[idx % colors.length];
-        });
+        subjects.forEach((sub, idx) => { badgeColors[sub.key] = colors[idx % colors.length]; });
+    }
+    allResults.forEach((item, idx) => {
         const badgeColor = badgeColors[item.subjId] || 'badge-gray';
 
         // 참조자료 결과 — 문서 단위 + 매치 스니펫 + ExamViewer 라인 딥링크 (TS-11)
@@ -529,14 +618,16 @@ function performTextbookSearch() {
         const bodyClass = isLong ? 'textbook-card-body collapsed' : 'textbook-card-body';
         const formattedContent = formatSectionContent(item.content, terms, item);
         const storyBadge = item.fromStory ? '<span class="badge badge-gray">서사</span>' : '';
-        // 섹션 제목의 "Chapter NN"에서 챕터 앵커 유도 — '전체 단원 보기'가 리더의 해당 챕터로 이동
-        const chMatch = String(item.sectionTitle || '').match(/Chapter\s*(\d+)/i);
-        const chAnchor = chMatch ? 'ch' + chMatch[1].padStart(2, '0') : '';
-        const gotoData = `${item.subjId}|${chAnchor}`;
+        // '전체 단원 보기' → 리더의 해당 "섹션"으로 이동 — 인덱스가 기록한 표시 제목으로
+        // 매칭(중복 제목은 챕터 병기로 구분)하고, 실패 시 소속 챕터 앵커로 폴백한다.
+        const gotoData = JSON.stringify([
+            item.subjId, item.gotoTitle || item.sectionTitle || '', item.chAnchor || '',
+            item.fromStory ? 'story' : ''
+        ]);
 
         const cardId = `textbook-card-${idx}`;
         const cardHTML = `
-            <div class="textbook-result-card">
+            <div class="textbook-result-card is-clickable" data-search-goto="${esc(gotoData)}" tabindex="0" role="link" aria-label="${esc(item.sectionTitle)} — 교재에서 보기">
                 <div class="textbook-card-header">
                     <span class="textbook-card-path">
                         <span class="badge ${badgeColor}">${esc(item.subjName)}</span>
@@ -564,9 +655,13 @@ function performTextbookSearch() {
         container.insertAdjacentHTML('beforeend', cardHTML);
     });
 
+    if (results.length > SECTION_RESULT_LIMIT) {
+        container.insertAdjacentHTML('beforeend',
+            `<div class="search-cap-note">교재 결과가 많아 상위 ${esc(String(SECTION_RESULT_LIMIT))}건만 표시합니다 (전체 ${esc(String(results.length))}건). 검색어를 더 구체화하거나 과목 필터를 사용하세요.</div>`);
+    }
     if (refResults.length > REF_RESULT_LIMIT) {
         container.insertAdjacentHTML('beforeend',
-            `<div style="opacity:0.6; font-size:0.85rem; text-align:center; padding:0.5rem;">참조자료 결과가 많아 상위 ${esc(String(REF_RESULT_LIMIT))}건만 표시합니다 (전체 ${esc(String(refResults.length))}건).</div>`);
+            `<div class="search-cap-note">참조자료 결과가 많아 상위 ${esc(String(REF_RESULT_LIMIT))}건만 표시합니다 (전체 ${esc(String(refResults.length))}건).</div>`);
     }
 
     // Mermaid 다이어그램 렌더링 (pre.mermaid 노드가 있을 때만 온디맨드 로드)

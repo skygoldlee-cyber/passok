@@ -18,9 +18,9 @@ vi.mock('../../src/ui-utils.js', () => ({
 }));
 
 import {
-    loadIndexHtml, el, flushAsync, stubRegistry, resetStudyState, storedJson,
+    loadIndexHtml, el, flushAsync, stubRegistry, resetStudyState, storedJson, waitFor,
 } from './helpers.js';
-import { renderTextbookReader, textbookReaderState, startReadingSession, stopReadingSession } from '../../src/views/textbook-reader.js';
+import { renderTextbookReader, textbookReaderState, startReadingSession, stopReadingSession, openSubjectSection } from '../../src/views/textbook-reader.js';
 import { safeGetItem, safeSetItem } from '../../src/state.js';
 import { showAlert } from '../../src/ui-utils.js';
 import { getTodayStr } from '../../src/study-tracker.js';
@@ -149,6 +149,112 @@ describe('교재 리더 — 과목 선택·본문·이어하기·북마크', () 
         sel.value = '';
         sel.dispatchEvent(new Event('change', { bubbles: true }));
         expect(el('textbook-reader-container').textContent).toContain('읽을 교재를 선택하세요');
+    });
+
+    it('openSubjectSection — 렌더 제외 메타 섹션 제목은 소속 챕터 헤더로 폴백', async () => {
+        // '✅ 확인문제'는 표준형 리더에서 필터링되어 카드가 없다 —
+        // 제목 매칭 실패 시 STUDY_DATA에서 소속 챕터를 역해석해 그 헤더로 가야 한다.
+        const subj = {
+            key: 'subja', name: '과목A',
+            chapters: [{
+                chapterKey: 'full', filePath: 'x.md',
+                sections: [
+                    { title: 'Chapter 01 개론', content: 'a' },
+                    { title: '1. 핵심 개념', content: 'b' },
+                    { title: '✅ 확인문제', content: 'q' },
+                    { title: 'Chapter 02 응용', content: 'c' },
+                ],
+            }],
+        };
+        stubRegistry([subj]);
+        renderTextbookReader();
+        const sel = el('reader-subject-select');
+        sel.value = 'subja';
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+        await flushAsync(30);
+
+        // 과목 재선택으로 재렌더되므로 카드 단위가 아닌 프로토타입 레벨에서 추적
+        const scrolled = [];
+        const origScroll = Element.prototype.scrollIntoView;
+        Element.prototype.scrollIntoView = function () { scrolled.push(this); };
+        try {
+            openSubjectSection('subja', '✅ 확인문제');
+            await waitFor(() => scrolled.length > 0, 3000);
+        } finally {
+            Element.prototype.scrollIntoView = origScroll;
+        }
+
+        expect(scrolled.length).toBe(1);
+        expect(scrolled[0].querySelector('.reader-section-title').textContent).toContain('Chapter 01');
+    });
+
+    it('openSubjectSection — 중복 제목은 표시 제목(챕터 병기) 정확 매칭으로 해당 챕터에 착지', async () => {
+        const subj = {
+            key: 'subja', name: '과목A',
+            chapters: [{
+                chapterKey: 'full', filePath: 'x.md',
+                sections: [
+                    { title: 'Chapter 01 개론', content: 'a' },
+                    { title: '📌 챕터 핵심 요약', content: '1장 요약' },
+                    { title: 'Chapter 02 응용', content: 'b' },
+                    { title: '📌 챕터 핵심 요약', content: '2장 요약' },
+                ],
+            }],
+        };
+        stubRegistry([subj]);
+        renderTextbookReader();
+        const sel = el('reader-subject-select');
+        sel.value = 'subja';
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+        await flushAsync(30);
+
+        const scrolled = [];
+        const origScroll = Element.prototype.scrollIntoView;
+        Element.prototype.scrollIntoView = function () { scrolled.push(this); };
+        try {
+            // 검색·팔레트가 전달하는 표시 제목 — 부분 매칭이면 첫(Chapter 01) 요약으로 갔을 것
+            openSubjectSection('subja', '📌 챕터 핵심 요약 — Chapter 02 응용');
+            await waitFor(() => scrolled.length > 0, 3000);
+        } finally {
+            Element.prototype.scrollIntoView = origScroll;
+        }
+
+        expect(scrolled.length).toBe(1);
+        expect(scrolled[0].querySelector('.reader-section-title').textContent).toContain('Chapter 02');
+    });
+
+    it('openSubjectSection — query 지정 시 카드 본문 검색어 하이라이트 + 해당 위치로 스크롤', async () => {
+        const subj = {
+            key: 'subja', name: '과목A',
+            chapters: [{
+                chapterKey: 'full', filePath: 'x.md',
+                sections: [
+                    { title: '1. 핵심 개념', content: '앞쪽 내용입니다.\n\n여기에 계면활성제 설명이 있다.\n\n뒤쪽 내용입니다.' },
+                ],
+            }],
+        };
+        stubRegistry([subj]);
+        renderTextbookReader();
+        const sel = el('reader-subject-select');
+        sel.value = 'subja';
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+        await flushAsync(30);
+
+        const scrolled = [];
+        const origScroll = Element.prototype.scrollIntoView;
+        Element.prototype.scrollIntoView = function () { scrolled.push(this); };
+        try {
+            openSubjectSection('subja', '1. 핵심 개념', '', { query: '계면활성제' });
+            await waitFor(() => scrolled.length > 0, 3000);
+        } finally {
+            Element.prototype.scrollIntoView = origScroll;
+        }
+
+        const marks = el('textbook-reader-container').querySelectorAll('mark.reader-search-hit');
+        expect(marks.length).toBe(1);
+        expect(marks[0].textContent).toBe('계면활성제');
+        // 카드 상단이 아니라 검색어 mark 자체로 스크롤
+        expect(scrolled[scrolled.length - 1]).toBe(marks[0]);
     });
 });
 

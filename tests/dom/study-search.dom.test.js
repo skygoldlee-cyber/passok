@@ -59,6 +59,15 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
         resetStudyState();
         loadIndexHtml();
         stubRegistry([SUBJ_A, SUBJ_B]);
+        // 지연 인덱스(참조자료)의 manifest fetch를 즉시 완료 — 미스텁 시 jsdom에서
+        // _loadScript 폴백이 settle되지 않아 로딩 상태가 풀리지 않는다
+        vi.stubGlobal('fetch', vi.fn((url) => {
+            const u = String(url);
+            if (u.includes('manifest.json')) {
+                return Promise.resolve({ ok: true, json: () => Promise.resolve({ subjects: [] }) });
+            }
+            return Promise.resolve({ ok: false, status: 404, text: () => Promise.resolve('') });
+        }));
         renderTextbookSearch();
         setTextbookFilter('all'); // 모듈 상태 리셋
         vi.clearAllMocks();
@@ -100,11 +109,111 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
         expect(allBtn.classList.contains('active-filter')).toBe(false);
     });
 
-    it('일치 없음 → 없음 안내 (B)', () => {
+    it('일치 없음 → 없음 안내 (B)', async () => {
         search('존재하지않는키워드');
 
-        expect(el('textbook-results-container').textContent).toContain('일치하는 내용이 없습니다');
+        // 지연 인덱스(참조자료) 로딩이 끝나야 확정된 '결과 없음'이 표시된다
+        await vi.waitFor(() => {
+            expect(el('textbook-results-container').textContent).toContain('일치하는 내용이 없습니다');
+        }, { timeout: 2000 });
         expect(el('textbook-search-summary').innerHTML).toContain('0</strong>건');
+    });
+
+    it('지연 인덱스 로딩 중 — 요약에 로딩 안내가 붙는다', () => {
+        // 참조자료 인덱스는 첫 검색 시 지연 fetch — 완료 전 동기 렌더에는 로딩 표기
+        search('화장품');
+        // 로딩 완료 여부와 무관하게 결과 카드는 즉시 렌더된다
+        expect(el('textbook-results-container').querySelectorAll('.textbook-result-card').length)
+            .toBeGreaterThan(0);
+    });
+
+    it('마크다운 구문 노이즈는 검색 대상에서 제외 — 이미지 경로·코드블록만의 매치는 무결과', () => {
+        window.STUDY_DATA = {};
+        const subj = {
+            key: 'subje', name: '과목E',
+            chapters: [{
+                chapterKey: 'ch1', chapterTitle: 'c', filePath: 'e.md',
+                sections: [
+                    // '특수노이즈'는 이미지 경로와 코드블록에만 존재 — 본문 텍스트가 아니므로 매치되면 안 됨
+                    { title: '그림 있는 섹션', content: '![설명](images/특수노이즈_그림.png)\n\n```\n특수노이즈 코드\n```\n\n본문.' },
+                    // 링크 텍스트는 유지되므로 '링크텍스트'로는 매치돼야 한다
+                    { title: '링크 섹션', content: '[링크텍스트 설명](https://example.com/특수노이즈)' },
+                ],
+            }],
+        };
+        stubRegistry([subj]);
+        search('특수노이즈');
+        // 이미지 경로·코드·URL만의 매치는 결과에서 제외
+        expect(el('textbook-results-container').querySelectorAll('.textbook-result-card').length).toBe(0);
+
+        search('링크텍스트');
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        expect(cards.length).toBe(1);
+        expect(cards[0].textContent).toContain('링크 섹션');
+    });
+
+    it('결과 랭킹 — 제목 매칭 섹션이 본문 매칭보다 먼저 온다', () => {
+        window.STUDY_DATA = {};
+        const subj = {
+            key: 'subjf', name: '과목F',
+            chapters: [{
+                chapterKey: 'ch1', chapterTitle: 'c', filePath: 'f.md',
+                sections: [
+                    { title: '서론', content: '여기서는 책임판매업을 간단히 언급한다.' },
+                    { title: '책임판매업의 정의', content: '책임판매업은 …' },
+                ],
+            }],
+        };
+        stubRegistry([subj]);
+        search('책임판매업');
+
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        expect(cards.length).toBe(2);
+        expect(cards[0].querySelector('.textbook-card-title').textContent).toContain('책임판매업의 정의');
+    });
+
+    it('결과 카드 전체가 이동 링크 — 카드 div에 data-search-goto·role=link 부여', () => {
+        search('화장품');
+        const card = el('textbook-results-container').querySelector('.textbook-result-card[data-search-goto]');
+        expect(card).toBeTruthy();
+        expect(card.getAttribute('role')).toBe('link');
+        const payload = JSON.parse(card.getAttribute('data-search-goto'));
+        expect(payload[0]).toBe('subja');
+    });
+
+    it('전체 단원 보기 → 섹션 표시 제목 + 소속 챕터 앵커로 이동 (오이동 회귀)', () => {
+        // 섹션 제목에 "Chapter N"이 없어도 소속 챕터 앵커를 타야 한다 —
+        // 종전에는 섹션 제목에서 챕터 번호를 추출해 비헤더 섹션이 과목 맨 위로 튀었다.
+        window.STUDY_DATA = {};
+        const subj = {
+            key: 'subjd', name: '과목D',
+            chapters: [{
+                chapterKey: 'full', chapterTitle: '전체', filePath: 'd.md',
+                sections: [
+                    { title: '📚 Chapter 01. 정의', content: '개관.' },
+                    { title: '1. 화장품의 정의', content: '조제관리사 대상 본문.' },
+                    { title: '📚 Chapter 02. 영업', content: '개관.' },
+                    { title: '📌 챕터 핵심 요약', content: '1장 요약.' },
+                    { title: '📌 챕터 핵심 요약', content: '조제관리사 2장 요약.' },
+                ],
+            }],
+        };
+        stubRegistry([subj]);
+        search('조제관리사');
+
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        expect(cards.length).toBe(2);
+
+        // 본문 섹션: 소속 Chapter 01 앵커 + 원본 제목 (+ 표준형 모드 표기)
+        const p0 = JSON.parse(cards[0].querySelector('a[data-search-goto]').getAttribute('data-search-goto'));
+        expect(p0).toEqual(['subjd', '1. 화장품의 정의', 'ch01', '']);
+
+        // 중복 제목 섹션: 리더 표시 제목(챕터 병기) + 소속 Chapter 02 앵커
+        const p1 = JSON.parse(cards[1].querySelector('a[data-search-goto]').getAttribute('data-search-goto'));
+        expect(p1[0]).toBe('subjd');
+        expect(p1[1]).toContain('📌 챕터 핵심 요약');
+        expect(p1[1]).toContain('Chapter 02');
+        expect(p1[2]).toBe('ch02');
     });
 
     it('검색 초기화 → 빈 상태 복귀', () => {

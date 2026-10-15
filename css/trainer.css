@@ -887,6 +887,23 @@
     box-shadow: var(--shadow-lg), 0 0 15px var(--primary-tint-10);
 }
 
+/* 검색 결과 카드 전체 클릭 이동 — 내부 버튼·링크는 개별 동작 유지 */
+.textbook-result-card.is-clickable {
+    cursor: pointer;
+}
+
+.textbook-result-card.is-clickable:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.search-cap-note {
+    opacity: 0.6;
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 0.5rem;
+}
+
 .textbook-card-header {
     display: flex;
     justify-content: space-between;
