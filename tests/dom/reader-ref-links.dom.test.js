@@ -47,7 +47,14 @@ describe('참조 링크 클릭 위임 (RR-02~06)', () => {
     it('data-ref-md + data-ref-line → openExam(경로, 라인)', () => {
         document.getElementById('root').innerHTML = '<a data-ref-md="docs/ref.md" data-ref-line="42">링크</a>';
         click(document.querySelector('a'));
-        expect(window.ExamViewer.openExam).toHaveBeenCalledWith('docs/ref.md', 42);
+        expect(window.ExamViewer.openExam).toHaveBeenCalledWith('docs/ref.md', 42, '');
+    });
+
+    it('data-ref-md + data-ref-search → openExam(경로, 라인, 검색어) — 검색 컨텍스트 전달', () => {
+        document.getElementById('root').innerHTML =
+            '<a data-ref-md="docs/ref.md" data-ref-search="cgmp">링크</a>';
+        click(document.querySelector('a'));
+        expect(window.ExamViewer.openExam).toHaveBeenCalledWith('docs/ref.md', null, 'cgmp');
     });
 
     it('data-ref-html → openHtmlViewer(경로·검색·앵커·라인)', () => {

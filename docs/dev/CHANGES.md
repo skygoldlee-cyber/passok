@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-15 통합검색 범위 정제 + 참조링크 검색어 착지
+
+- **배경**: ① 검색 카드 본문의 "참조 자료" 링크(📌출처 → CGMP 등 ref_md 문서)는 `#LNN` 해시가 없어 `data-ref-line`/`data-ref-search` 없이 열림 — 748줄 규정 문서가 상단에 열려 찾은 내용이 안 보임 ② 팔레트의 플래시카드·퀴즈 결과는 착지점이 '매치 항목'이 아닌 과목 학습 첫 화면(카드 index 0, 퀴즈 `shuffle().slice(0,10)` — 매치 문항 미포함 가능) — 통합검색의 정밀 착지 원칙과 충돌
+- **수정**: ① 검색 카드 내 `data-ref-html`/`data-ref-md` 링크에 `data-ref-search`(검색어) 자동 주입 → html-viewer는 기존 `_doSearch` 경로로 매치 하이라이트+스크롤, md 경로는 `reader-ref-links`가 쿼리를 `ExamViewer.openExam(path, line, query)`로 전달 — 신규 `_scrollToQuery`(전체 구 우선→토큰 첫 매치→`exam-line-highlight`) ② 팔레트 검색 범위에서 card/quiz 제거(TYPE_LABELS·groups·실행 케이스 정리, 힌트·placeholder 문구 갱신) — 카드·퀴즈 본문 커버리지는 하단 전수검색 브리지가 담당 ③ 문제집(exam) 결과 실행 시 팔레트 쿼리를 openExam 3번째 인자로 전달 — 문서 상단 대신 첫 매치 위치로 착지
+- **테스트**: reader-ref-links +1(링크 data-ref-search 주입)·study-examviewer +2(쿼리 스크롤·미매치 상단 유지)·study-search(참조 카드 쿼리 부착)·command-palette unit/dom 갱신(card/quiz 미반환 단언·그룹 라벨·MAX_PER_GROUP은 섹션 기준) — 전부 통과, 정적 게이트 통과
+
 ## 2026-10-15 통합검색 이동 오이동 수정 + 검색 품질 보완
 
 - **증상**: 통합검색 결과 카드의 "전체 단원 보기" 클릭 시 해당 섹션이 아닌 과목 맨 위로 이동. 1단계(검색 결과)는 정상이나 2단계(이동)에서 엉뚱한 곳 도착

@@ -489,7 +489,27 @@ body.exam-open{overflow:hidden;}
         _openExamInternal(prev.mdPath, prev.lineNum, prev.scrollPos);
     }
 
-    async function _openExamInternal(mdPath, lineNum, restoreScrollPos) {
+    // 렌더 완료 후 착지점 적용 — 라인 좌표 > 검색어 매치 > 복원 위치 > 이어보기 칩
+    // (lineNum이 1이면 검색 측 '매치 없음' 폴백일 수 있어 query를 먼저 시도)
+    function _applyLanding(lineNum, mdText, restoreScrollPos, query, mdPath) {
+        if (lineNum > 1 || (lineNum && !query)) {
+            _scrollToLine(lineNum, mdText);
+            _hideResumeChip();
+        } else if (query && _scrollToQuery(query)) {
+            _hideResumeChip();
+        } else if (lineNum) {
+            _scrollToLine(lineNum, mdText);
+            _hideResumeChip();
+        } else if (restoreScrollPos != null) {
+            const scroll = _overlay.el().querySelector('.exam-ov-scroll');
+            if (scroll) scroll.scrollTop = restoreScrollPos;
+            _hideResumeChip();
+        } else {
+            _maybeShowResumeChip(mdPath);
+        }
+    }
+
+    async function _openExamInternal(mdPath, lineNum, restoreScrollPos, query) {
         const title = _titleFromPath(mdPath);
 
         const cached = _cache.get(mdPath);
@@ -499,16 +519,7 @@ body.exam-open{overflow:hidden;}
             // 오버레이 표시 후 렌더 — mermaid 측정이 display:none 상태에서 부정확할 수 있음
             renderMermaidIn(_overlay.el().querySelector('#exam-article'), '[exam]');
             _updateBackButton();
-            if (lineNum) {
-                _scrollToLine(lineNum, cached.mdText);
-                _hideResumeChip();
-            } else if (restoreScrollPos != null) {
-                const scroll = _overlay.el().querySelector('.exam-ov-scroll');
-                if (scroll) scroll.scrollTop = restoreScrollPos;
-                _hideResumeChip();
-            } else {
-                _maybeShowResumeChip(mdPath);
-            }
+            _applyLanding(lineNum, cached.mdText, restoreScrollPos, query, mdPath);
             return;
         }
 
@@ -521,23 +532,14 @@ body.exam-open{overflow:hidden;}
             _renderBody(title, bodyHtml, mdPath);
             renderMermaidIn(_overlay.el().querySelector('#exam-article'), '[exam]');
             _updateBackButton();
-            if (lineNum) {
-                _scrollToLine(lineNum, mdText);
-                _hideResumeChip();
-            } else if (restoreScrollPos != null) {
-                const scroll = _overlay.el().querySelector('.exam-ov-scroll');
-                if (scroll) scroll.scrollTop = restoreScrollPos;
-                _hideResumeChip();
-            } else {
-                _maybeShowResumeChip(mdPath);
-            }
+            _applyLanding(lineNum, mdText, restoreScrollPos, query, mdPath);
         } catch (err) {
             console.error('Exam load failed:', err);
             _showError(title, err && err.message ? err.message : String(err));
         }
     }
 
-    async function openExam(mdPath, lineNum) {
+    async function openExam(mdPath, lineNum, query) {
         // 이미 열려있는 상태에서 다른 파일을 여는 경우 (인용 링크 클릭)
         // 현재 문서를 히스토리에 저장
         if (isOpen() && _currentMdPath && _currentMdPath !== mdPath) {
@@ -551,7 +553,7 @@ body.exam-open{overflow:hidden;}
             });
         }
         _currentMdPath = mdPath;
-        await _openExamInternal(mdPath, lineNum);
+        await _openExamInternal(mdPath, lineNum, undefined, query);
     }
 
     // 복수정답형 문제집 — Pro 제공 예정 기능.
@@ -645,6 +647,51 @@ body.exam-open{overflow:hidden;}
             const ratio = (lineNum - 1) / lines.length;
             scroll.scrollTop = scroll.scrollHeight * ratio;
         }
+    }
+
+    /* =========================================================
+       검색어 스크롤 헬퍼 — 라인 좌표가 없는 참조 링크의 착지점
+       (검색 카드가 data-ref-search로 쿼리를 넘긴 경우 사용)
+       ========================================================= */
+    function _scrollToQuery(query) {
+        const el = _overlay.el();
+        const article = el && el.querySelector('#exam-article');
+        if (!article) return false;
+        const phrase = String(query || '').toLowerCase().replace(/\s+/g, ' ').trim();
+        const terms = phrase.split(' ').filter(Boolean);
+        if (!terms.length) return false;
+
+        // 1순위: 전체 구(phrase) 첫 매치 — 토큰별 분리 매치는 문맥이 어긋날 수 있다.
+        // 2순위: 토큰별 첫 매치 중 문서 순서상 가장 앞선 것.
+        const firstHit = {};
+        let phraseNode = null;
+        const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT);
+        let node;
+        while ((node = walker.nextNode())) {
+            const txt = (node.nodeValue || '').toLowerCase();
+            if (!phraseNode && terms.length > 1 && txt.includes(phrase)) phraseNode = node;
+            for (const t of terms) {
+                if (!firstHit[t] && txt.includes(t)) firstHit[t] = node;
+            }
+        }
+        let target = phraseNode;
+        if (!target) {
+            for (const t of terms) {
+                const n = firstHit[t];
+                if (n && (!target || (n.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING))) {
+                    target = n;
+                }
+            }
+        }
+        if (!target) return false;
+
+        const parent = target.parentElement;
+        const holder = parent && (parent.closest('p,li,tr,h1,h2,h3,h4,h5,h6,blockquote,pre,td,th') || parent);
+        if (!holder) return false;
+        holder.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        holder.classList.add('exam-line-highlight');
+        setTimeout(() => holder.classList.remove('exam-line-highlight'), 5000);
+        return true;
     }
 
     return {

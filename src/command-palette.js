@@ -1,6 +1,8 @@
 // command-palette.js — 통합 검색 팔레트 (Ctrl+K)
 // @spec UX-NAV-06
-// 뷰 이동·플래시카드·퀴즈·교재 섹션·성분 사전·문제집을 하나의 검색창에서 찾아 실행한다.
+// 뷰 이동·교재 섹션·성분 사전·문제집을 하나의 검색창에서 찾아 실행한다.
+// (카드·퀴즈는 착지점이 '매치 항목'이 아닌 과목 학습 첫 화면 — 셔플·10문 추출로
+//  정밀 착지가 불가하므로 검색 범위에서 제외. 본문 커버리지는 하단 전수검색 브리지가 담당)
 // 모든 데이터는 로컬(window.STUDY_DATA/INGREDIENTS_DATA/DataLoader.registry) — 오프라인 완전 동작.
 
 import { esc } from './sanitize.js';
@@ -25,7 +27,7 @@ let _studyWarmPromise = null;
 /**
  * 팔레트는 어느 뷰에서나 열 수 있어 STUDY_DATA가 미로드일 수 있다 —
  * 미로드 과목을 백그라운드로 채우고, 채워진 과목 수를 resolve한다.
- * 콜드스타트에서 카드·퀴즈·교재 결과가 조용히 누락되는 것을 방지.
+ * 콜드스타트에서 교재 섹션 결과가 조용히 누락되는 것을 방지.
  */
 const _warmedKeys = new Set();
 
@@ -92,7 +94,7 @@ export function searchAll(query, sources) {
     const ingredients = src.ingredients || DataLoader.getKnowledgeItems();
     const registry = src.registry || DataLoader.registry || {};
     const views = src.views || (typeof document !== 'undefined' ? getViewItems() : []);
-    const groups = { view: [], card: [], quiz: [], section: [], ingredient: [], exam: [] };
+    const groups = { view: [], section: [], ingredient: [], exam: [] };
     const push = (type, item) => { if (groups[type].length < MAX_PER_GROUP) groups[type].push(item); };
 
     // 1) 뷰 바로가기
@@ -104,26 +106,10 @@ export function searchAll(query, sources) {
         });
     });
 
-    // 2) 과목 콘텐츠 — 카드·퀴즈·교재 섹션
+    // 2) 과목 콘텐츠 — 교재 섹션 (카드·퀴즈는 매치 항목으로 착지 불가 → 범위 제외)
     Object.keys(studyData).forEach(subjId => {
         const subj = studyData[subjId];
         const subjName = subj.name || subjId;
-        (subj.cards || []).forEach(card => {
-            const s = _matchScore(`${card.term} ${card.definition || ''}`, card.term, terms);
-            if (s >= 0) push('card', {
-                type: 'card', icon: 'fa-layer-group', title: card.term,
-                sub: `${subjName} · 플래시카드`,
-                action: { kind: 'card', subject: subjId }, score: s
-            });
-        });
-        (subj.quizzes || []).forEach(q => {
-            const s = _matchScore(`${q.question} ${(q.options || []).join(' ')}`, q.question, terms);
-            if (s >= 0) push('quiz', {
-                type: 'quiz', icon: 'fa-circle-question',
-                title: (q.question || '').slice(0, 60), sub: `${subjName} · 기출 퀴즈`,
-                action: { kind: 'quiz', subject: subjId }, score: s
-            });
-        });
         (subj.chapters || []).forEach(ch => {
             const secs = ch.sections || [];
             // 딥링크 목적지 — 리더 표시 제목(중복 제목은 챕터 병기로 구분) +
@@ -172,8 +158,8 @@ export function searchAll(query, sources) {
         });
     });
 
-    // 그룹 내 점수 정렬 후 플랫화 — 뷰·섹션·카드·퀴즈·성분·문제집 순
-    const order = ['view', 'section', 'card', 'quiz', 'ingredient', 'exam'];
+    // 그룹 내 점수 정렬 후 플랫화 — 뷰·섹션·성분·문제집 순
+    const order = ['view', 'section', 'ingredient', 'exam'];
     const flat = [];
     order.forEach(type => {
         groups[type].sort((a, b) => b.score - a.score);
@@ -194,8 +180,7 @@ export function searchAll(query, sources) {
 /* ---------- 팔레트 UI ---------- */
 
 const TYPE_LABELS = {
-    view: '화면', section: '교재', card: '플래시카드',
-    quiz: '기출 퀴즈', ingredient: '사전', exam: '문제집',
+    view: '화면', section: '교재', ingredient: '사전', exam: '문제집',
     fulltext: '본문 검색'
 };
 
@@ -219,7 +204,7 @@ function _buildDom() {
             <div class="cmdk-input-row">
                 <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                 <input id="cmdk-input" type="text" autocomplete="off" spellcheck="false"
-                    placeholder="검색: 화면·교재·카드·퀴즈·성분·문제집" aria-label="통합 검색어">
+                    placeholder="검색: 화면·교재·성분·문제집" aria-label="통합 검색어">
                 <kbd>ESC</kbd>
             </div>
             <div id="cmdk-results" class="cmdk-results" role="listbox"></div>
@@ -259,7 +244,7 @@ function _renderResults(query) {
 
     if (!(query || '').trim()) {
         _results = [];
-        box.innerHTML = `<div class="cmdk-hint">검색어를 입력하면 화면·교재·카드·퀴즈·성분·문제집을 한 번에 찾습니다.</div>`;
+        box.innerHTML = `<div class="cmdk-hint">검색어를 입력하면 화면·교재·성분·문제집을 한 번에 찾습니다.</div>`;
         return;
     }
 
@@ -334,12 +319,6 @@ export function executePaletteResult(idx) {
         case 'view':
             clickNav(a.target);
             break;
-        case 'card':
-            if (typeof window.startSubjectStudy === 'function') window.startSubjectStudy(a.subject);
-            break;
-        case 'quiz':
-            if (typeof window.startSubjectQuiz === 'function') window.startSubjectQuiz(a.subject);
-            break;
         case 'section': {
             clickNav('textbook-reader-view');
             const paletteInput = /** @type {HTMLInputElement|null} */ (document.getElementById('cmdk-input'));
@@ -352,11 +331,16 @@ export function executePaletteResult(idx) {
             dictState.filter = 'all';
             clickNav('dictionary-view');
             break;
-        case 'exam':
+        case 'exam': {
             if (window.ExamViewer && window.ExamViewer.openExam) {
-                window.ExamViewer.openExam(contentPath(a.path));
+                // 문제집은 문서 단위 진입점 — 매치 라인이 없으므로 검색어를 넘겨
+                // 첫 매치 위치로 스크롤한다 (문서 상단 착지 방지)
+                const paletteInput = /** @type {HTMLInputElement|null} */ (document.getElementById('cmdk-input'));
+                window.ExamViewer.openExam(contentPath(a.path), null,
+                    (paletteInput && paletteInput.value || '').trim());
             }
             break;
+        }
         case 'fulltext':
             setTextbookSearchQuery(a.query);
             clickNav('textbook-view');
