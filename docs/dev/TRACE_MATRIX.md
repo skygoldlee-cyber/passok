@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 32458669f4a3baee
+> 입력 해시: 25816f7e35190bd9
 > 생성: 2026-10-15 · 원천: SPEC.md(529개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -692,7 +692,7 @@
 | BP-11 | ✅ | 테스트 | DOC-ADR-12<br>DOC-RBK-02<br>DOC-RBK-13 | tools/build/build_story_textbooks.js | tests/unit/story-merge.test.js | — | — |
 | BP-12 | ✅ | 테스트 | DOC-ADR-12<br>DOC-RBK-02<br>DOC-RBK-13 | tools/build/build_story_textbooks.js | tests/unit/story-merge.test.js | — | — |
 | BP-13 | ✅ | 테스트 | DOC-ADR-12<br>DOC-ADR-17<br>DOC-DSN-20<br>DOC-RBK-02 | tools/check/check_vendor.js<br>tools/sync/sync_vendor.js | tests/unit/vendor-manifest.test.js | — | — |
-| BP-14 | ✅ | 테스트 | DOC-RBK-02 | tools/build/extract_glossary_candidates.js | tests/unit/glossary-extract.test.js | — | — |
+| BP-14 | ✅ | 테스트 | DOC-RBK-02 | tools/build/extract_glossary_candidates.js<br>tools/check/check_glossary_signal.js | tests/unit/check-glossary-signal.test.js<br>tests/unit/glossary-extract.test.js | — | — |
 
 ## 5.4 콘텐츠 구조
 
