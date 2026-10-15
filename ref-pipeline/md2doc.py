@@ -994,7 +994,7 @@ def _build_markdown(toc_permalink: bool = True) -> markdown.Markdown:
     )
 
 
-def markdown_to_tailwind_html(md_text: str, title: str = "Document", config: RenderConfig | None = None, progress_cb=None) -> str:
+def markdown_to_tailwind_html(md_text: str, title: str = "Document", config: RenderConfig | None = None, progress_cb=None, base_dir: Path | None = None) -> str:
     config = config or RenderConfig()
     md_text = _auto_fence_ascii_diagrams(md_text)
     md_text = _tag_fenced_diagram_blocks_as_text(md_text)
@@ -1197,6 +1197,11 @@ def markdown_to_tailwind_html(md_text: str, title: str = "Document", config: Ren
             doc_html,
         )
 
+    # 상대경로 이미지를 data URI로 임베드 — 출력 HTML이 MD와 다른 위치에
+    # 저장되거나 단독으로 공유돼도 이미지가 깨지지 않도록 자립형을 유지한다.
+    if base_dir is not None:
+        html_body = _embed_local_images(html_body, Path(base_dir))
+
     # Verify all template placeholders were substituted before inserting the
     # body — checking at this point also avoids false positives from literal
     # "%%FOO%%" text inside the document body itself.
@@ -1219,7 +1224,8 @@ def convert_markdown_file(
     md_text = in_path.read_text(encoding="utf-8-sig")
     out_path = out_path or in_path.with_suffix(".html")
     out_html = markdown_to_tailwind_html(
-        md_text, title=title or in_path.stem, config=config, progress_cb=progress_cb
+        md_text, title=title or in_path.stem, config=config,
+        progress_cb=progress_cb, base_dir=in_path.parent,
     )
     out_path.write_text(out_html, encoding="utf-8")
     return out_path
@@ -1516,6 +1522,7 @@ def run_gui() -> int:
                         title=self._title,
                         config=self._config,
                         progress_cb=lambda cur, tot, st: self.progress_signal.emit(cur, tot, st),
+                        base_dir=self._in_path.parent,
                     )
                     pdf_res = None
                     if self._want_pdf:

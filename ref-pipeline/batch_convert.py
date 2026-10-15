@@ -55,7 +55,7 @@ def convert_one(md_path: Path, out_path: Path, config: RenderConfig) -> float:
     md_text = md_path.read_text(encoding="utf-8")
     title = md_path.stem
     t0 = time.perf_counter()
-    out_html = markdown_to_tailwind_html(md_text, title=title, config=config)
+    out_html = markdown_to_tailwind_html(md_text, title=title, config=config, base_dir=md_path.parent)
     out_path.write_text(out_html, encoding="utf-8")
     elapsed = time.perf_counter() - t0
     size_mb = out_path.stat().st_size / (1024 * 1024)
