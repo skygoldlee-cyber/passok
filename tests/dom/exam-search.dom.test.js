@@ -95,11 +95,11 @@ describe('문제은행 검색 — 지연 인덱싱·배치 순서·딥링크 (TS
 
         // 지연 인덱스 로드 완료 후 재검색될 때까지 대기 — 교재 1건 + 문제은행 2건
         await vi.waitFor(() => {
-            const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+            const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
             expect(cards.length).toBe(3);
         }, { timeout: 3000 });
 
-        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
         // 탐색 순서: 교재 → 참조자료 → 문제은행 — 교재 카드가 먼저, 문제은행이 뒤
         expect(cards[0].getAttribute('data-search-goto')).toBeTruthy();
         expect(cards[0].textContent).toContain('CGMP 개요');
@@ -135,12 +135,12 @@ describe('문제은행 검색 — 지연 인덱싱·배치 순서·딥링크 (TS
         search('CGMP');
         await vi.waitFor(() => {
             expect(el('textbook-results-container')
-                .querySelectorAll('.textbook-result-card').length).toBe(3);
+                .querySelectorAll('.textbook-result-card:not(.search-gloss-card)').length).toBe(3);
         }, { timeout: 3000 });
 
         setTextbookFilter('subjb');
 
-        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
         expect(cards.length).toBe(1);
         expect(cards[0].textContent).toContain('과목B 문제은행');
         expect(cards[0].textContent).toContain('문제은행');

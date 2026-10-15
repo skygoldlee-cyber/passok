@@ -140,11 +140,11 @@ describe('이야기형 서사 검색 (TS-10)', () => {
         expect(el('textbook-results-container').textContent).toContain('확장하는 중');
 
         await vi.waitFor(() => {
-            const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+            const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
             expect(cards.length).toBe(1);
         }, { timeout: 3000 });
 
-        const card = el('textbook-results-container').querySelector('.textbook-result-card');
+        const card = el('textbook-results-container').querySelector('.textbook-result-card:not(.search-gloss-card)');
         expect(card.textContent).toContain('비누방울');
         expect(card.textContent).toContain('서사');
         // '전체 단원 보기'는 원시 .md 경로 대신 교재리더 이동 액션(data-search-goto)이다
@@ -159,7 +159,7 @@ describe('이야기형 서사 검색 (TS-10)', () => {
     it('서사 내부 #### 헤딩은 소속 ## 섹션 카드로 이동 (리더 카드는 ## 단위)', async () => {
         setTextbookSearchQuery('풍선껌');
         await vi.waitFor(() => {
-            expect(el('textbook-results-container').querySelectorAll('.textbook-result-card').length)
+            expect(el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)').length)
                 .toBe(1);
         }, { timeout: 3000 });
 
@@ -175,7 +175,7 @@ describe('이야기형 서사 검색 (TS-10)', () => {
         // 두 번째 '📌 챕터 핵심 요약' 아래의 서사 — 원시 제목만 넘기면 첫 챕터로 오이동한다
         setTextbookSearchQuery('제조기록지');
         await vi.waitFor(() => {
-            expect(el('textbook-results-container').querySelectorAll('.textbook-result-card').length)
+            expect(el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)').length)
                 .toBe(1);
         }, { timeout: 3000 });
 
@@ -195,12 +195,12 @@ describe('이야기형 서사 검색 (TS-10)', () => {
     it('본문 검색은 기존 동작 유지 — 서사 항목이 OR로 추가 매칭되지 않음', async () => {
         setTextbookSearchQuery('화장품');
         await vi.waitFor(() => {
-            expect(el('textbook-results-container').querySelectorAll('.textbook-result-card').length)
+            expect(el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)').length)
                 .toBe(1);
         }, { timeout: 3000 });
         // 서사 인덱스 로드 후에도 '화장품'은 본문 섹션에만 매칭 (서사에 '화장품' 없음)
         await new Promise(r => setTimeout(r, 50));
-        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
         expect(cards.length).toBe(1);
         expect(cards[0].textContent).not.toContain('서사');
     });

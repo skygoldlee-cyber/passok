@@ -3,7 +3,7 @@ var DATA_REGISTRY_FOOD = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-13T14:38:44.541Z",
+  "generatedAt": "2026-10-15T13:16:58.035Z",
   "subjects": [
     {
       "key": "sanitation",
@@ -169,6 +169,17 @@ var DATA_REGISTRY_FOOD = {
       "subtitle": "지정 식품첨가물 검색 — 식품첨가물공전 기준 (파일럿 12종)",
       "searchPlaceholder": "첨가물명·영문명·용도 검색 (예: 소르빈, sorbic, 보존료)"
     }
+  },
+  "synonyms": {
+    "축산물": [
+      "식품"
+    ],
+    "기구 또는 용기ㆍ포장": [
+      "식품등"
+    ],
+    "국가법령정보센터": [
+      "law.go.kr"
+    ]
   },
   "integratedExam": {
     "questionsPerSubject": {

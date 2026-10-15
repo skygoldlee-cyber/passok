@@ -40,14 +40,21 @@
   "knowledge": {
     "registryKey": "additives",
     "global": "ADDITIVES_DATA",
-    "source": { "type": "json" },
+    "source": {
+      "type": "json"
+    },
     "entityUnit": "첨가물",
     "filterField": "useCategory",
     "fields": {
       "title": "name",
       "subtitle": "engName",
       "subtitleEmpty": "영문명 없음",
-      "search": ["name", "engName", "purpose", "useLimit"],
+      "search": [
+        "name",
+        "engName",
+        "purpose",
+        "useLimit"
+      ],
       "chosungField": "name"
     },
     "badge": {
@@ -63,24 +70,87 @@
       }
     },
     "filters": [
-      { "key": "all", "label": "전체 첨가물" },
-      { "key": "preservative", "label": "보존료", "icon": "fa-shield-halved", "color": "var(--color-success)" },
-      { "key": "sweetener", "label": "감미료", "icon": "fa-cubes", "color": "var(--color-warning)" },
-      { "key": "colorant", "label": "착색료", "icon": "fa-palette", "color": "var(--color-danger)" },
-      { "key": "colorFixative", "label": "발색제" },
-      { "key": "antioxidant", "label": "산화방지제" },
-      { "key": "flavorEnhancer", "label": "향미증진제" }
+      {
+        "key": "all",
+        "label": "전체 첨가물"
+      },
+      {
+        "key": "preservative",
+        "label": "보존료",
+        "icon": "fa-shield-halved",
+        "color": "var(--color-success)"
+      },
+      {
+        "key": "sweetener",
+        "label": "감미료",
+        "icon": "fa-cubes",
+        "color": "var(--color-warning)"
+      },
+      {
+        "key": "colorant",
+        "label": "착색료",
+        "icon": "fa-palette",
+        "color": "var(--color-danger)"
+      },
+      {
+        "key": "colorFixative",
+        "label": "발색제"
+      },
+      {
+        "key": "antioxidant",
+        "label": "산화방지제"
+      },
+      {
+        "key": "flavorEnhancer",
+        "label": "향미증진제"
+      }
     ],
     "details": [
-      { "key": "purpose", "label": "용도", "empty": "-" },
-      { "key": "useLimit", "label": "사용기준", "empty": "공전 사용기준표 참조", "wide": true },
-      { "key": "lawRef", "label": "근거", "empty": "식품첨가물공전", "wide": true },
-      { "key": "note", "label": "TIP", "tip": true }
+      {
+        "key": "purpose",
+        "label": "용도",
+        "empty": "-"
+      },
+      {
+        "key": "useLimit",
+        "label": "사용기준",
+        "empty": "공전 사용기준표 참조",
+        "wide": true
+      },
+      {
+        "key": "lawRef",
+        "label": "근거",
+        "empty": "식품첨가물공전",
+        "wide": true
+      },
+      {
+        "key": "note",
+        "label": "TIP",
+        "tip": true
+      }
     ],
     "csv": {
       "filename": "additives",
-      "headers": ["첨가물명", "영문명", "용도", "분류", "사용기준", "근거", "비고"],
-      "fields": ["name", "engName", "purpose", { "badgeLabel": "useCategory" }, "useLimit", "lawRef", "note"]
+      "headers": [
+        "첨가물명",
+        "영문명",
+        "용도",
+        "분류",
+        "사용기준",
+        "근거",
+        "비고"
+      ],
+      "fields": [
+        "name",
+        "engName",
+        "purpose",
+        {
+          "badgeLabel": "useCategory"
+        },
+        "useLimit",
+        "lawRef",
+        "note"
+      ]
     },
     "header": {
       "title": "식품첨가물 사전",
@@ -93,5 +163,16 @@
       "title": "식품첨가물 사전",
       "subtitle": "지정 식품첨가물 검색 — 식품첨가물공전 기준 (파일럿 12종)"
     }
+  },
+  "synonyms": {
+    "축산물": [
+      "식품"
+    ],
+    "기구 또는 용기ㆍ포장": [
+      "식품등"
+    ],
+    "국가법령정보센터": [
+      "law.go.kr"
+    ]
   }
 }

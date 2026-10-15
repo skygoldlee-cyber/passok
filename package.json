@@ -117,6 +117,7 @@
     "report:feedback": "node tools/check/feedback_report.js",
     "report:dashboard": "node tools/check/dashboard_report.js",
     "report:user": "node tools/check/user_report.js",
+    "report:glossary": "node tools/build/extract_glossary_candidates.js",
     "admin:grant-pro": "node tools/check/grant_pro.js",
     "mutate": "stryker run"
   },

@@ -1,5 +1,5 @@
 // tests/unit/search-morpheme.test.js — 형태소 경계·동의어 확장 단위 테스트
-// @spec TS-13,TS-14
+// @spec TS-13,TS-14,TS-16
 // 검증: buildBoundaryVocab — 어절-두어 빈도로 형태소 어휘 마이닝
 //       isCoverable — 접두 완전 분해(DP 커버)로 형태소 경계 판정
 //       termHitQuality — 어절/형태소 경계 매치(2) vs 부분(중간) 매치(1) vs 없음(0)
@@ -74,6 +74,18 @@ test('termHitQuality — 형태소 경계를 걸치는 우연한 음절열은 �
 test('termHitQuality — 본매치·부분 매치가 섞여 있으면 본매치를 반환', () => {
     // '석유화학'(부분) + '보조유화제'(경계) — 최고 품질 2
     assert.equal(termHitQuality('석유화학과 보조유화제', '유화', VOCAB), 2);
+});
+
+// TS-16 — 용어집 키워드 주입의 기반 메커니즘: 코퍼스 빈도가 부족해 접두
+// 마이닝(2회+)에 잡히지 않는 도메인 형태소도 어절(words)로 주입되면
+// DP 커버의 분해 단위로 쓰여 경계로 인정된다.
+test('TS-16 — 용어집 키워드 어절 주입으로 저빈도 형태소 경계 인정', () => {
+    // '책임'이 코퍼스에서 '책임판매업' 1회만 두어 → 접두 마이닝 미채택
+    const vocabNoKw = buildBoundaryVocab(['책임판매업', '판매업', '제조업']);
+    assert.equal(termHitQuality('책임판매업 등록', '판매', vocabNoKw), 1);
+    // 용어집 키워드 '책임'을 어절로 주입 → [책임|판매업] 완전 분해 → 본매치
+    const vocabKw = buildBoundaryVocab(['책임판매업', '판매업', '제조업', '책임']);
+    assert.equal(termHitQuality('책임판매업 등록', '판매', vocabKw), 2);
 });
 
 test('expandSynonyms — 정방향·역방향 모두 확장, 원어 선두', () => {
