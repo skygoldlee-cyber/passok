@@ -24,6 +24,24 @@ test('isStoryMetaSection — 메타 섹션 제목 판정', () => {
     assert.ok(!isStoryMetaSection(''));
 });
 
+test('isStoryMetaSection — TS-17 승격 패턴: 장치 접두는 메타, 최종 복습·콘텐츠는 비메타', () => {
+    // 기준선 래칫 검토로 승격된 장치 섹션 (스토리 슬롯 없음·가이드 장치 규약 정합)
+    assert.ok(isStoryMetaSection('🧭 민수의 여정도 — 이야기 흐름 한눈에 보기'));
+    assert.ok(isStoryMetaSection('🔢 숫자·기한 암기 미리보기'));
+    assert.ok(isStoryMetaSection('🔢 숫자 암기 미리보기'));
+    assert.ok(isStoryMetaSection('📋 목차'));
+    assert.ok(isStoryMetaSection('📋 학습 안내'));
+    // 최종 복습·서사 슬롯 보유·마인드맵 링크 대상 — 실제 콘텐츠라 메타 아님
+    assert.ok(!isStoryMetaSection('⚡ 시험 직전 체크리스트'));
+    assert.ok(!isStoryMetaSection('📝 기출문제'));
+    assert.ok(!isStoryMetaSection('📝 이야기 회상'));
+    assert.ok(!isStoryMetaSection('🧠 30초 회상'));
+    assert.ok(!isStoryMetaSection('📌 챕터 핵심 요약'));
+    assert.ok(!isStoryMetaSection('🗺️ 과목 지도'));
+    assert.ok(!isStoryMetaSection('📋 암기 요약'));      // 암기요약 이미지 — 콘텐츠
+    assert.ok(!isStoryMetaSection('🧭 이야기의 등장인물')); // 등장인물 소개 — 콘텐츠
+});
+
 test('filterMetaSections — 메타 섹션만 제거하고 나머지 보존', () => {
     const chapter = {
         sections: [

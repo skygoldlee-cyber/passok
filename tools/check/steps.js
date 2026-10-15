@@ -86,6 +86,7 @@ const CONTENT_STEPS = [
   nodeStep('content:docbundles', 'tools/build/build_doc_bundles.js', '문서번들', 'docs_md 번들 ↔ 원본 문서 신선도 (build_doc_bundles 필요 감지)', { args: ['--check'], content: true }),
   nodeStep('content:textbookdocs', 'tools/check/check_textbook_docs.js', '문서신선도', '교재 갱신 ↔ 판본:textbook 문서 (교재 교체 후 방치 문서 감지)', { content: true }),
   nodeStep('content:metasections', 'tools/check/check_meta_sections.js', '검색규약', '메타 섹션 규약 기준선 — reader 미렌더 패턴 미매칭 메타 의심 헤딩 신규 유입 차단 (TS-17)', { content: true }),
+  nodeStep('content:glossarysignal', 'tools/check/check_glossary_signal.js', '용어집', '저신호 일반명사 기준선 — 자동 추출 단일어 키워드의 정의 카드 노출 감시 (BP-14)', { content: true }),
   nodeStep('content:docpaths', 'tools/check/check_docs_paths.js', '문서', 'README·AGENTS·docs/*.md 경로 참조 존재 검증 (스테일 탐지)'),
   nodeStep('content:specrefs', 'tools/check/check_spec_refs.js', '추적', 'SPEC ID ↔ 코드 @spec 태그 양방향 정합성 (스테일 참조 탐지)'),
   nodeStep('content:trace', 'tools/build/build_trace_matrix.js', '추적', 'TRACE_MATRIX 입력 해시 신선도 (SPEC·@spec·문서 헤더 변경 시 재생성 강제)', { args: ['--check'] }),
