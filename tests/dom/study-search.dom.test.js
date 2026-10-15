@@ -81,7 +81,7 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
     it('검색어 입력(Enter) → 매칭 섹션 카드·하이라이트·건수 요약 (H)', () => {
         search('화장품');
 
-        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
         expect(cards.length).toBe(3); // 과목A 2건 + 과목B 1건
         expect(el('textbook-search-summary').innerHTML).toContain('3</strong>건');
         expect(cards[0].querySelector('.textbook-card-title').innerHTML).toContain('<mark');
@@ -92,7 +92,7 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
     it('복수 키워드 → AND 검색 (교집합)', () => {
         search('화장품 조제관리사');
 
-        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
         expect(cards.length).toBe(1);
         expect(cards[0].querySelector('.textbook-card-title').textContent).toContain('조제관리사');
     });
@@ -101,7 +101,7 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
         search('화장품');
         setTextbookFilter('subja');
 
-        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
         expect(cards.length).toBe(2);
         cards.forEach(c => expect(c.textContent).toContain('과목A'));
         // 과목 버튼은 동적 생성 — '전체' 버튼의 active 해제로 필터 적용 확인
@@ -123,7 +123,7 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
         // 참조자료 인덱스는 첫 검색 시 지연 fetch — 완료 전 동기 렌더에는 로딩 표기
         search('화장품');
         // 로딩 완료 여부와 무관하게 결과 카드는 즉시 렌더된다
-        expect(el('textbook-results-container').querySelectorAll('.textbook-result-card').length)
+        expect(el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)').length)
             .toBeGreaterThan(0);
     });
 
@@ -144,10 +144,10 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
         stubRegistry([subj]);
         search('특수노이즈');
         // 이미지 경로·코드·URL만의 매치는 결과에서 제외
-        expect(el('textbook-results-container').querySelectorAll('.textbook-result-card').length).toBe(0);
+        expect(el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)').length).toBe(0);
 
         search('링크텍스트');
-        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
         expect(cards.length).toBe(1);
         expect(cards[0].textContent).toContain('링크 섹션');
     });
@@ -167,7 +167,7 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
         stubRegistry([subj]);
         search('책임판매업');
 
-        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
         expect(cards.length).toBe(2);
         expect(cards[0].querySelector('.textbook-card-title').textContent).toContain('책임판매업의 정의');
     });
@@ -201,7 +201,7 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
         stubRegistry([subj]);
         search('조제관리사');
 
-        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
         expect(cards.length).toBe(2);
 
         // 본문 섹션: 소속 Chapter 01 앵커 + 원본 제목 (+ 표준형 모드 표기)
@@ -235,7 +235,7 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
         stubRegistry([subj]);
         search('CGMP');
 
-        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card');
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
         expect(cards.length).toBe(1);
         expect(cards[0].textContent).toContain('3. 시험·검사');
         const payload = JSON.parse(cards[0].querySelector('a[data-search-goto]').getAttribute('data-search-goto'));
