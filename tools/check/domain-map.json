@@ -87,6 +87,7 @@
         "src/recommendations.js",
         "src/router.js",
         "src/sanitize.js",
+        "src/search-index.js",
         "src/search-morpheme.js",
         "src/semantic-index.js",
         "src/sha256.js",

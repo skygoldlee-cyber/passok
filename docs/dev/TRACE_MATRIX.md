@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: c33fa52d496acc88
+> 입력 해시: a710c23c2a1ac91c
 > 생성: 2026-10-15 · 원천: SPEC.md(529개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -209,14 +209,14 @@
 | TS-07 | ✅ | 테스트 | — | src/mermaid-render.js<br>src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
 | TS-08 | ✅ | 테스트 | DOC-DSN-18 | src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
 | TS-09 | ✅ | 테스트 | DOC-DSN-18 | src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
-| TS-10 | ✅ | 테스트 | DOC-DSN-18<br>DOC-RBK-13 | src/views/textbook-search.js | tests/dom/story-search.dom.test.js | — | — |
-| TS-11 | ✅ | 테스트 | DOC-DSN-18 | src/views/textbook-search.js | tests/unit/textbook-search-ref.test.js | — | — |
-| TS-12 | ✅ | 테스트 | — | src/views/textbook-search.js | tests/dom/exam-search.dom.test.js<br>tests/unit/textbook-search-exam.test.js | — | — |
-| TS-13 | ✅ | 테스트 | — | src/search-morpheme.js<br>src/views/textbook-search.js | tests/dom/morph-search.dom.test.js<br>tests/unit/search-morpheme.test.js | — | — |
-| TS-14 | ✅ | 테스트 | — | src/search-morpheme.js<br>src/views/textbook-search.js | tests/dom/morph-search.dom.test.js<br>tests/unit/search-morpheme.test.js | — | — |
-| TS-15 | ✅ | 테스트 | — | src/views/textbook-search.js | tests/dom/glossary-search.dom.test.js | — | — |
-| TS-16 | ✅ | 테스트 | — | src/views/textbook-search.js | tests/dom/glossary-search.dom.test.js<br>tests/unit/search-morpheme.test.js | — | — |
-| TS-17 | ✅ | 테스트 | — | tools/check/check_meta_sections.js | tests/dom/exam-index-scope.dom.test.js<br>tests/unit/check-meta-sections.test.js | — | — |
+| TS-10 | ✅ | 테스트 | DOC-DSN-18<br>DOC-RBK-13 | src/search-index.js<br>src/views/textbook-search.js | tests/dom/story-search.dom.test.js | — | — |
+| TS-11 | ✅ | 테스트 | DOC-DSN-18 | src/search-index.js<br>src/views/textbook-search.js | tests/unit/textbook-search-ref.test.js | — | — |
+| TS-12 | ✅ | 테스트 | — | src/search-index.js<br>src/views/textbook-search.js | tests/dom/exam-search.dom.test.js<br>tests/unit/search-index.test.js<br>tests/unit/textbook-search-exam.test.js | — | — |
+| TS-13 | ✅ | 테스트 | — | src/search-index.js<br>src/search-morpheme.js<br>src/views/textbook-search.js | tests/dom/morph-search.dom.test.js<br>tests/unit/search-index.test.js<br>tests/unit/search-morpheme.test.js | — | — |
+| TS-14 | ✅ | 테스트 | — | src/search-index.js<br>src/search-morpheme.js<br>src/views/textbook-search.js | tests/dom/morph-search.dom.test.js<br>tests/unit/search-index.test.js<br>tests/unit/search-morpheme.test.js | — | — |
+| TS-15 | ✅ | 테스트 | — | src/search-index.js<br>src/views/textbook-search.js | tests/dom/glossary-search.dom.test.js | — | — |
+| TS-16 | ✅ | 테스트 | — | src/search-index.js<br>src/views/textbook-search.js | tests/dom/glossary-search.dom.test.js<br>tests/unit/search-morpheme.test.js | — | — |
+| TS-17 | ✅ | 테스트 | — | src/search-index.js<br>tools/check/check_meta_sections.js | tests/dom/exam-index-scope.dom.test.js<br>tests/unit/check-meta-sections.test.js | — | — |
 
 ## 3.10 성분 사전
 
