@@ -1,6 +1,6 @@
 // views/textbook-search.js - 교재 검색 통합 로직 (Textbook Search Integration)
-// @spec TS-01~12,PF-08
-import { escapeHTML, esc } from '../sanitize.js';
+// @spec TS-01~16,PF-08
+import { escapeHTML, esc, html, raw } from '../sanitize.js';
 import { renderMermaidIn } from '../mermaid-render.js';
 import { attachImageZoomIn } from '../image-zoom.js';
 import { TIMING } from '../config/timing.js';
@@ -8,7 +8,8 @@ import { DataLoader } from '../data-loader.js';
 import { hasFeature, contentPath, dataPath } from '../exam-context.js';
 import { injectBundleScript, fetchMd } from '../doc-overlay.js';
 import { buildBoundaryVocab, termHitQuality, expandSynonyms } from '../search-morpheme.js';
-import { getRefTables, mapSourceToRef } from '../pdf-registry.js';
+import { getAllGlossaryKeywords, getGlossaryEntry } from '../glossary-query.js';
+import { getRefTables, mapSourceToRef, resolveRefPath, refDocDisplayName } from '../pdf-registry.js';
 import { formatSectionContentForReader } from '../reader-format.js';
 import { buildSectionDisplayTitles, isStoryMetaSection } from '../reader-toc.js';
 import { PATHS } from '../paths.js';
@@ -441,6 +442,12 @@ function _buildInvertedIndex() {
             _tokenIndex.get(token).add(idx);
         });
     });
+    // TS-16 — 용어집 키워드를 독립 어절로 주입: 코퍼스 빈도가 낮아 접두
+    // 마이닝(2회+)에 잡히지 않는 도메인 형태소도 DP 커버의 분해 단위가 된다
+    for (const { keyword } of getAllGlossaryKeywords()) {
+        const kw = String(keyword || '').trim().toLowerCase();
+        if (kw.length >= 2 && !/\s/.test(kw)) allTokens.push(kw);
+    }
     _morphVocab = buildBoundaryVocab(allTokens);
 }
 
@@ -547,6 +554,47 @@ export function clearTextbookSearch() {
     }
     textbookState.searchQuery = '';
     performTextbookSearch();
+}
+
+// TS-15 — 용어집 subjectId('과목N') → registry subj key 역매핑 (필터 귀속용)
+function _glossSubjectKey(subjectId) {
+    const map = getRefTables().SUBJECT_DIR_MAP || {};
+    for (const [key, dir] of Object.entries(map)) {
+        if (dir === subjectId) return key;
+    }
+    return '';
+}
+
+// TS-15 — 쿼리 변형(동의어 포함)과 경계 매치하는 용어집 항목을 키워드별 대표로
+// 수집한다. 큐레이션 우선·정확 매치 > 경계 매치·짧은 키워드 우선·상한 5건.
+// 키워드 자체도 형태소 경계 규칙(termHitQuality)으로 판정해 '화' 같은
+// 음절 우연이 아닌 어절/형태소 경계 매치만 정의 카드로 올린다.
+function _matchGlossaryDefs(variants) {
+    if (!variants.length || !_morphVocab) return [];
+    const repByKw = new Map();
+    for (const { keyword, idxKey } of getAllGlossaryKeywords()) {
+        const kwLower = String(keyword || '').trim().toLowerCase();
+        if (kwLower.length < 2) continue;
+        const prev = repByKw.get(kwLower);
+        if (prev && prev.curated) continue;      // 큐레이션 항목이 이미 대표
+        const entry = getGlossaryEntry(idxKey);
+        if (entry && (!prev || entry.curated)) repByKw.set(kwLower, entry);
+    }
+    const hits = [];
+    for (const entry of repByKw.values()) {
+        const kwLower = String(entry.keyword || '').trim().toLowerCase();
+        if (textbookState.filter !== 'all'
+            && textbookState.filter !== _glossSubjectKey(entry.subjectId)) continue;
+        let score = 0;
+        for (const variant of variants) {
+            if (kwLower === variant) { score = 3; break; }
+            if (termHitQuality(kwLower, variant, _morphVocab) === 2) score = Math.max(score, 1);
+        }
+        if (score) hits.push({ entry, score });
+    }
+    hits.sort((a, b) => b.score - a.score
+        || String(a.entry.keyword).length - String(b.entry.keyword).length);
+    return hits.slice(0, 5).map(h => h.entry);
 }
 
 function performTextbookSearch() {
@@ -715,6 +763,8 @@ function performTextbookSearch() {
     const allResults = shownSections.concat(shownRefs).concat(shownExams);
     // 하이라이트·스니펫은 동의어 변형까지 포함, 뷰어 쿼리 전달은 원어만
     const allVariantTerms = termGroups.flat();
+    // TS-15 — 용어 정의 그룹: 쿼리 변형이 용어집 키워드와 경계 매치된 항목
+    const glossDefs = _matchGlossaryDefs(allVariantTerms);
 
     // 지연 인덱스(서사·참조자료·문제은행) 로딩 중 — '결과 없음' 오표시 방지
     const lazyPending = (_storyIndexPromise && _storyEntries === null)
@@ -724,9 +774,11 @@ function performTextbookSearch() {
     // Update summary text
     summary.innerHTML = `총 <strong style="color: var(--color-primary);">${results.length + refResults.length + examResults.length}</strong>건의 관련 내용을 찾았습니다.`
         + (weakResults.length ? ` <span class="text-muted">(+ 부분 일치 ${esc(String(weakResults.length))}건)</span>` : '')
+        + (glossDefs.length ? ` <span class="text-muted">(+ 용어 정의 ${esc(String(glossDefs.length))}건)</span>` : '')
         + (lazyPending ? ' <span class="text-muted">(서사·참조자료·문제은행을 추가로 불러오는 중…)</span>' : '');
 
-    if (allResults.length === 0 && shownWeak.length === 0) {
+    // TS-15 — 본문 결과가 없어도 용어 정의 카드는 표시한다 (용어 단독 조회 지원)
+    if (allResults.length === 0 && shownWeak.length === 0 && glossDefs.length === 0) {
         // 지연 인덱스 로딩 중이면 '결과 없음' 대신 추가 결과 가능성을 안내
         container.innerHTML = `
             <div class="empty-state">
@@ -815,6 +867,38 @@ function performTextbookSearch() {
         `;
         container.insertAdjacentHTML('beforeend', cardHTML);
     };
+
+    // TS-15 — 용어 정의 카드를 본문 결과(교재→참조자료→문제은행→부분 일치)보다
+    // 앞에 별도 그룹으로 배치한다. 출처 링크는 data-ref-html 문서 위임이 처리.
+    if (glossDefs.length) {
+        container.insertAdjacentHTML('beforeend',
+            `<div class="search-weak-divider search-gloss-divider">용어 정의 — 용어집에서 ${esc(String(glossDefs.length))}건</div>`);
+        const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+        for (const entry of glossDefs) {
+            const kw = String(entry.keyword || '');
+            const subjKey = _glossSubjectKey(entry.subjectId);
+            const subjName = (subjects.find(s => s.key === subjKey) || {}).name
+                || entry.subjectId || '';
+            const refPath = entry.refDoc ? resolveRefPath(entry.refDoc + '.pdf') : '';
+            const refLabel = refDocDisplayName(entry.refDoc) || entry.refDoc || '';
+            const srcHtml = refPath
+                ? `<a href="#" data-ref-html="${esc(refPath)}" data-ref-search="${esc(kw.toLowerCase())}" class="glossary-ref-link"><i class="fa-solid fa-file-lines"></i> ${esc(refLabel)}</a>`
+                : esc(refLabel);
+            const glossCardHTML = html`
+            <div class="textbook-result-card search-gloss-card">
+                <div class="textbook-card-header">
+                    <span class="textbook-card-path">
+                        <span class="badge ${badgeColors[subjKey] || 'badge-gray'}">${subjName}</span>
+                        <span class="badge badge-emerald">용어</span>
+                    </span>
+                </div>
+                <h4 class="textbook-card-title">${raw(highlightTextInString(kw, allVariantTerms))}</h4>
+                <div class="textbook-card-body"><div class="search-gloss-body">${String(entry.explanation || '')}</div></div>
+                <div class="search-gloss-src">${raw(srcHtml)}</div>
+            </div>`;
+            container.insertAdjacentHTML('beforeend', glossCardHTML.toString());
+        }
+    }
 
     allResults.forEach((item, idx) => renderResultCard(item, idx));
 
