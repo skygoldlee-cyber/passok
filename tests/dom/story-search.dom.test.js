@@ -48,6 +48,40 @@ const STORY_MD = [
     '<!-- story:end -->',
     '',
     '본문 끝.',
+    '',
+    // 챕터마다 반복되는 ## 제목 — 표시 제목(챕터 병기)으로 목적지가 구분돼야 한다
+    '## 📚 Chapter 02. 응용',
+    '',
+    '본문2.',
+    '',
+    '## 📌 챕터 핵심 요약',
+    '',
+    '첫 번째 요약 본문.',
+    '',
+    '## 📚 Chapter 03. 심화',
+    '',
+    '본문3.',
+    '',
+    '## 📌 챕터 핵심 요약',
+    '',
+    '<!-- story:start -->',
+    '',
+    '#### 📖 수진의 장면 — 제조기록지 비유',
+    '',
+    '수진은 제조기록지로 요약표를 외웠다.',
+    '',
+    '<!-- story:end -->',
+    '',
+    '두 번째 요약 본문.',
+    '',
+    // 메타 섹션 아래의 서사 블록 — 리더가 이 섹션을 렌더하지 않아 도달 불가
+    '## ✅ 확인문제',
+    '',
+    '<!-- story:start -->',
+    '',
+    '메타블록서사 확인용 서사 본문.',
+    '',
+    '<!-- story:end -->',
 ].join('\n');
 
 const SUBJ_A = {
@@ -135,6 +169,27 @@ describe('이야기형 서사 검색 (TS-10)', () => {
         expect(el('textbook-results-container').textContent).toContain('풍선껌 비유');
         expect(JSON.parse(link.getAttribute('data-search-goto')))
             .toEqual(['subja', '1. 법령 체계', 'ch01', 'story']);
+    });
+
+    it('서사 목적지 — 중복 ## 제목은 챕터 병기 표시 제목, 메타 섹션 소속 블록은 제외', async () => {
+        // 두 번째 '📌 챕터 핵심 요약' 아래의 서사 — 원시 제목만 넘기면 첫 챕터로 오이동한다
+        setTextbookSearchQuery('제조기록지');
+        await vi.waitFor(() => {
+            expect(el('textbook-results-container').querySelectorAll('.textbook-result-card').length)
+                .toBe(1);
+        }, { timeout: 3000 });
+
+        const link = el('textbook-results-container')
+            .querySelector('.textbook-result-card a[data-search-goto]');
+        expect(JSON.parse(link.getAttribute('data-search-goto')))
+            .toEqual(['subja', '📌 챕터 핵심 요약 — Chapter 03. 심화', 'ch03', 'story']);
+
+        // ✅ 확인문제 아래의 서사 블록은 리더 미렌더 — 도달 불가이므로 결과에서 제외
+        setTextbookSearchQuery('메타블록서사');
+        await vi.waitFor(() => {
+            expect(el('textbook-results-container').textContent)
+                .toContain('일치하는 내용이 없습니다');
+        }, { timeout: 3000 });
     });
 
     it('본문 검색은 기존 동작 유지 — 서사 항목이 OR로 추가 매칭되지 않음', async () => {
