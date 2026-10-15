@@ -1254,7 +1254,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | `exam-select.js` | 시험 선택/전환 뷰 |
 | `textbook-reader.js` | 교재 리더 + 오디오 + Media Session |
 | `reader-audio.js` | 오디오북 플레이어 |
-| `textbook-search.js` | 교재 본문 검색 |
+| `textbook-search.js` | 교재 본문 검색 뷰 (렌더·이벤트 — 코어는 `search-index.js`) |
 | `dictionary.js` | 성분 사전 검색 |
 | `study-calendar.js` | 학습 캘린더·목표 뷰 |
 | `glossary-renderer.js` | 용어집 렌더링 + `scrollToGlossary()` |
