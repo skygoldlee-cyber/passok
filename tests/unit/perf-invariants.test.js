@@ -85,7 +85,8 @@ test('PF-07: 대시보드가 과목 카운트 맵을 캐시해 과목당 O(1) �
 // ---------- PF-08: 검색 인덱스 사전 구축 ----------
 
 test('PF-08: 교재 검색이 인덱스를 사전 구축하고 키 변경 시에만 재구축한다', () => {
-  const ts = read('src/views/textbook-search.js');
+  // 인덱스 캐시·무효화는 순수 코어 src/search-index.js에 격리 (뷰는 렌더만)
+  const ts = read('src/search-index.js');
   assert.ok(/_searchIndex/.test(ts), '검색 인덱스 캐시');
   assert.ok(/_searchIndexKeys/.test(ts), '인덱스 키 비교로 재구축 방지');
   // TS-13 — 역색인은 어절 단위(_tokenIndex)로 전환 (2-gram 인덱스는 폐기)
