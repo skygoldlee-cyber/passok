@@ -217,9 +217,9 @@ const _EXAM_TABLES = {
         { name: "CGMP 별표3 적합업소로고", file: "CGMP_별표3_적합업소로고.pdf", type: "pdf", dir: "공통" }
         ],
         REFERENCE_INGREDIENTS: [
-        { name: "승인 원료 목록", file: "approved_ingredients.md", type: "md", dir: "원료" },
-        { name: "금지 원료 목록", file: "banned_ingredients.md", type: "md", dir: "원료" },
-        { name: "제한 원료 목록", file: "restricted_ingredients.md", type: "md", dir: "원료" }
+        { name: "승인 원료 목록", file: "approved_ingredients.md", type: "md", dir: "원료", subject: "과목2" },
+        { name: "금지 원료 목록", file: "banned_ingredients.md", type: "md", dir: "원료", subject: "과목2" },
+        { name: "제한 원료 목록", file: "restricted_ingredients.md", type: "md", dir: "원료", subject: "과목2" }
         ],
         REFERENCE_LAW: [
         { name: "화장품법", file: "화장품법(법률)(제21525호)(20261008).pdf", type: "pdf", dir: "법령고시" },

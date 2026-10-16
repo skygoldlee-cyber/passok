@@ -89,6 +89,7 @@
         "src/sanitize.js",
         "src/search-index.js",
         "src/search-morpheme.js",
+        "src/search-sources.js",
         "src/semantic-index.js",
         "src/sha256.js",
         "src/fsrs.js",

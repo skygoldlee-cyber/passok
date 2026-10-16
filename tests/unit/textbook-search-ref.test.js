@@ -6,7 +6,8 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { _listRefDocs, _matchSnippet } from '../../src/search-index.js';
+import { _matchSnippet } from '../../src/search-index.js';
+import { _listRefDocs } from '../../src/search-sources.js';
 
 const TABLES = {
     contentRoot: 'content/exams/cosmetic',
@@ -28,7 +29,9 @@ const TABLES = {
         manufacturing: [{ name: 'KFCC 별표1 통칙', file: 'KFCC_별표1_통칙.pdf', type: 'pdf' }]
     },
     REFERENCE_INGREDIENTS: [
-        { name: '승인 원료 목록', file: 'approved_ingredients.md', type: 'md', dir: '원료' }
+        { name: '승인 원료 목록', file: 'approved_ingredients.md', type: 'md', dir: '원료', subject: '과목2' },
+        { name: '과목키 직접 지정', file: 'key_subject.md', type: 'md', dir: '원료', subject: 'safety' },
+        { name: '미귀속 목록', file: 'unscoped.md', type: 'md', dir: '원료' }
     ]
 };
 
@@ -51,11 +54,22 @@ describe('_listRefDocs — 과목 귀속·표시명·원료', () => {
         assert.equal(docs.find(d => d.file.startsWith('KFCC')).docName, 'KFCC 별표1 통칙');
     });
 
-    test('원료 목록은 과목2 subject key에 귀속되고 ref_md 밖 경로를 가진다', () => {
+    test('원료 목록은 선언된 subject(과목N)의 subject key에 귀속되고 ref_md 밖 경로를 가진다', () => {
         const ing = docs.find(d => d.file === 'approved_ingredients.md');
         assert.equal(ing.subjId, 'manufacturing');
         assert.equal(ing.path, 'content/exams/cosmetic/참조자료/원료/approved_ingredients.md');
         assert.equal(ing.docName, '승인 원료 목록');
+    });
+
+    test('subject를 과목 키로 직접 지정해도 귀속된다', () => {
+        const ing = docs.find(d => d.file === 'key_subject.md');
+        assert.equal(ing.subjId, 'safety');
+    });
+
+    test('subject 미지정 항목도 미귀속(subjId 빈 값)으로 포함된다', () => {
+        const ing = docs.find(d => d.file === 'unscoped.md');
+        assert.equal(ing.subjId, '');
+        assert.equal(ing.path, 'content/exams/cosmetic/참조자료/원료/unscoped.md');
     });
 
     test('참조자료 없는 시험(빈 테이블)은 빈 목록', () => {
@@ -82,6 +96,14 @@ describe('_matchSnippet — 스니펫·라인 번호', () => {
     test('여러 검색어 중 가장 앞선 매치 위치를 사용한다', () => {
         const r = _matchSnippet(text, ['제조업자', '목적'], 10);
         assert.equal(r.lineNum, 1);
+    });
+
+    test('다용어 쿼리는 매치가 가장 밀집한 구간을 스니펫으로 선택한다', () => {
+        // '알파'는 문서 앞에도 있지만 '알파 베타'가 함께 있는 뒤쪽 군집이 선택돼야 한다
+        const text = '알파 초반 문장.\n' + '채움 '.repeat(30) + '\n알파 베타 감마 밀집 문장.';
+        const r = _matchSnippet(text, ['알파', '베타'], 10);
+        assert.ok(r.snippet.includes('알파 베타'));
+        assert.equal(r.lineNum, 3);
     });
 
     test('미매치 시 문서 앞부분 스니펫 + lineNum 1', () => {
