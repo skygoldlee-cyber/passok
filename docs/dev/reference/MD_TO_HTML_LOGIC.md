@@ -637,7 +637,7 @@ class RenderConfig:
 - `_ensure_mermaid_js()`: CDN 3개 순차 시도 (jsdelivr → unpkg → cdnjs), 200KB 미만 응답은 에러 페이지로 간주하고 스킵
 - `_embed_mermaid_js()`: `<script src="...mermaid.min.js">` 태그를 인라인 `<script>`로 교체
 - `</script` → `<\/script` 이스케이프로 인라인 블록 조기 종료 방지
-- 메모리 캐시 (`_MERMAID_JS_MEMORY`) — 디스크 파일 생성 없음
+- 메모리 캐시 (`_mermaid_js_or_raise`의 lru_cache) — 성공 결과만 캐시, 실패는 예외로 표현해 미캐시. 디스크 파일 생성 없음
 
 ### 9.8 JS 런타임 파서와의 차이
 

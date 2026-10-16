@@ -6,7 +6,9 @@ import html
 import re
 import argparse
 import base64
+import functools
 import glob
+import os
 import random
 import hashlib
 import json
@@ -18,6 +20,7 @@ import urllib.parse
 import shutil
 import subprocess
 import tempfile
+import traceback
 import zlib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
@@ -117,19 +120,9 @@ CALLOUT_RULES_DEFAULT: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("callout-exam", ("🎯", "🧠")),
 )
 
-_CALLOUT_RULES_CACHE: tuple[tuple[str, tuple[str, ...]], ...] | None = None
-
-
-def _resolve_callout_rules(rules_file: str | Path | None = None) -> tuple[tuple[str, tuple[str, ...]], ...]:
-    """콜아웃 분류 규칙을 결정한다.
-
-    우선순위: --callout-rules 명시 경로 → 스크립트 옆 callout_rules.json → 기본값.
-    rules_file이 None이면 결과를 캐시한다 (변환마다 반복 로드 방지).
-    """
-    global _CALLOUT_RULES_CACHE
-    if rules_file is None and _CALLOUT_RULES_CACHE is not None:
-        return _CALLOUT_RULES_CACHE
-
+@functools.lru_cache(maxsize=8)
+def _load_callout_rules(rules_file: str | None) -> tuple[tuple[str, tuple[str, ...]], ...]:
+    """규칙 파일 경로별로 캐시되는 콜아웃 규칙 로더 (내부용)."""
     candidates = [Path(rules_file)] if rules_file else [Path(__file__).with_name("callout_rules.json")]
     for cand in candidates:
         try:
@@ -141,15 +134,19 @@ def _resolve_callout_rules(rules_file: str | Path | None = None) -> tuple[tuple[
                     if r.get("class") and r.get("keywords")
                 )
                 if rules:
-                    if rules_file is None:
-                        _CALLOUT_RULES_CACHE = rules
                     return rules
         except Exception as e:
             logger.warning("[callout_rules] failed to load %s: %s", cand, e)
-
-    if rules_file is None:
-        _CALLOUT_RULES_CACHE = CALLOUT_RULES_DEFAULT
     return CALLOUT_RULES_DEFAULT
+
+
+def _resolve_callout_rules(rules_file: str | Path | None = None) -> tuple[tuple[str, tuple[str, ...]], ...]:
+    """콜아웃 분류 규칙을 결정한다.
+
+    우선순위: --callout-rules 명시 경로 → 스크립트 옆 callout_rules.json → 기본값.
+    경로별로 lru_cache되어 변환마다 반복 로드하지 않는다.
+    """
+    return _load_callout_rules(str(rules_file) if rules_file else None)
 
 # Embed the Mermaid library directly into the generated HTML by default.
 # The CDN build (mermaid.min.js) is ~3.5MB; on mobile in-app browsers
@@ -187,7 +184,9 @@ _REPO_VENDOR_MERMAID = (
 )
 
 # In-memory cache for the Mermaid library (no disk writes).
-_MERMAID_JS_MEMORY: str | None = None
+# lru_cache에 성공 결과만 남기도록 실패는 예외로 표현한다.
+class _MermaidUnavailable(LookupError):
+    pass
 
 
 @dataclass(frozen=True)
@@ -196,6 +195,9 @@ class RenderConfig:
     embed_mermaid: bool = EMBED_MERMAID
     prerender_mermaid: bool = True
     callout_rules_file: str | None = None
+    # False면 외부 네트워크 요청을 일절 하지 않는다 — Mermaid 사전렌더는
+    # 디스크 캐시 히트만 사용하고 미스는 클라이언트 렌더링 폴백으로 둔다.
+    allow_network: bool = True
 
 
 def _read_text_if_exists(path: Path) -> str | None:
@@ -222,20 +224,10 @@ def _download_text(url: str, timeout: int = 30) -> str | None:
         return None
 
 
-def _ensure_mermaid_js(assets_dir: Path | None = None) -> str | None:
-    """Return the Mermaid library source, using an in-memory cache.
-
-    우선순위: 인메모리 캐시 → 저장소 vendor 파일(오프라인·버전 확정) →
-    assets_dir 로컬 사본 → 고정 버전 CDN (SRI 검증).
-    첫 성공 결과를 메모리에 캐시한다 (디스크 쓰기 없음).
-
-    Returns None if the library cannot be obtained (offline), in which case
-    the generated HTML keeps its CDN <script> tag as a fallback.
-    """
-    global _MERMAID_JS_MEMORY
-    if _MERMAID_JS_MEMORY is not None:
-        return _MERMAID_JS_MEMORY
-
+@functools.lru_cache(maxsize=8)
+def _mermaid_js_or_raise(assets_dir: str | None, allow_network: bool) -> str:
+    """Mermaid 라이브러리 소스를 반환한다. 취득 실패는 _MermaidUnavailable —
+    실패 결과는 캐시하지 않아 프로세스 내에서 네트워크 복구 시 재시도된다."""
     # 저장소에 자체 호스팅된 빌드 — 네트워크 없이 확정 버전을 얻는 1순위 소스
     for local in (_REPO_VENDOR_MERMAID,
                   Path(assets_dir) / MERMAID_ASSET_NAME if assets_dir else None):
@@ -244,26 +236,44 @@ def _ensure_mermaid_js(assets_dir: Path | None = None) -> str | None:
         try:
             cached = _read_text_if_exists(local)
             if cached and len(cached.encode("utf-8")) >= _MERMAID_MIN_BYTES:
-                _MERMAID_JS_MEMORY = cached
                 return cached
         except Exception:
             pass
 
-    for url in MERMAID_CDN_URLS:
-        text = _download_text(url)
-        if text:
-            # SRI 검증: 알려진 해시가 있으면 검증, 없으면 크기만 검증
-            expected_hash = MERMAID_SRI_HASHES.get(url)
-            if expected_hash is not None:
-                actual_hash = base64.b64encode(
-                    hashlib.sha384(text.encode("utf-8")).digest()
-                ).decode("ascii")
-                if actual_hash != expected_hash:
-                    logger.warning("[Mermaid SRI mismatch] %s", url)
-                    continue  # 해시 불일치 → 다음 CDN 시도
-            _MERMAID_JS_MEMORY = text
-            return text
-    return None
+    if allow_network:
+        for url in MERMAID_CDN_URLS:
+            text = _download_text(url)
+            if text:
+                # SRI 검증: 알려진 해시가 있으면 검증, 없으면 크기만 검증
+                expected_hash = MERMAID_SRI_HASHES.get(url)
+                if expected_hash is not None:
+                    actual_hash = base64.b64encode(
+                        hashlib.sha384(text.encode("utf-8")).digest()
+                    ).decode("ascii")
+                    if actual_hash != expected_hash:
+                        logger.warning("[Mermaid SRI mismatch] %s", url)
+                        continue  # 해시 불일치 → 다음 CDN 시도
+                return text
+    raise _MermaidUnavailable("mermaid library unavailable")
+
+
+def _ensure_mermaid_js(assets_dir: Path | None = None, allow_network: bool = True) -> str | None:
+    """Return the Mermaid library source, using an in-memory cache.
+
+    우선순위: 인메모리 캐시 → 저장소 vendor 파일(오프라인·버전 확정) →
+    assets_dir 로컬 사본 → 고정 버전 CDN (SRI 검증).
+    allow_network=False면 CDN 시도를 건너뛰고 로컬 소스만 사용한다.
+    첫 성공 결과를 메모리에 캐시한다 (디스크 쓰기 없음).
+
+    Returns None if the library cannot be obtained (offline), in which case
+    the generated HTML keeps its CDN <script> tag as a fallback.
+    """
+    try:
+        return _mermaid_js_or_raise(
+            str(assets_dir) if assets_dir else None, allow_network
+        )
+    except _MermaidUnavailable:
+        return None
 
 
 def _embed_mermaid_js(doc_html: str, js_text: str) -> str:
@@ -411,11 +421,11 @@ def _inline_mermaid_fences(md_text: str) -> str:
         s = s.replace("[", "［")
         return s
 
-    def sanitize_mermaid_line(line: str) -> str:
+    def sanitize_mermaid_line(line: str, diagram_type: str = '') -> str:
         # Mermaid does not reliably support "\\n" escapes inside labels; use <br/>.
         line = line.replace("\\n", "<br/>")
 
-        _cur_diagram_type = getattr(sanitize_mermaid_line, '_diagram_type', '')
+        _cur_diagram_type = diagram_type
 
         # Sanitize edge labels written as |label| (flowchart links)
         # FIX: |"label"| 형태(이미 큰따옴표로 감싸진 엣지 레이블)는 그대로 유지.
@@ -520,7 +530,7 @@ def _inline_mermaid_fences(md_text: str) -> str:
         # mindmap         : 들여쓰기 트리 구조, 노드 문법 없음
         # sankey-beta     : CSV 형식, 노드 문법 없음
         # block-beta / packet-beta / architecture-beta : 별도 문법
-        skip_node_pat = getattr(sanitize_mermaid_line, '_diagram_type', '') in (
+        skip_node_pat = diagram_type in (
             'sequenceDiagram', 'xychart-beta', 'quadrantChart',
             'timeline', 'gantt', 'mindmap', 'sankey-beta',
             'block-beta', 'packet-beta', 'architecture-beta',
@@ -565,6 +575,7 @@ def _inline_mermaid_fences(md_text: str) -> str:
             line = protected
         return line
 
+    cur_diagram_type = ''
     while i < len(lines):
         line = lines[i]
         if not in_mermaid:
@@ -573,7 +584,7 @@ def _inline_mermaid_fences(md_text: str) -> str:
                 in_mermaid = True
                 buf = []
                 raw_buf = []   # 원본 라인 보존 (fallback용)
-                sanitize_mermaid_line._diagram_type = ''  # 블록 시작 시 초기화
+                cur_diagram_type = ''  # 블록 시작 시 초기화
                 i += 1
                 continue
             out.append(line)
@@ -582,8 +593,7 @@ def _inline_mermaid_fences(md_text: str) -> str:
 
         # in mermaid fence
         if line.strip() == "```":
-            _diagram_type = getattr(sanitize_mermaid_line, '_diagram_type', '')
-            _is_quadrant  = (_diagram_type == 'quadrantChart')
+            _is_quadrant  = (cur_diagram_type == 'quadrantChart')
 
             # sanitize_mermaid_line 이 '' 를 반환한 라인 제거
             src = "\n".join(ln for ln in buf if ln != '')
@@ -643,10 +653,9 @@ def _inline_mermaid_fences(md_text: str) -> str:
         # e.g. "sequenceDiagram", "xychart-beta", "quadrantChart" 등.
         stripped_line = line.strip()
         if not buf:  # 블록의 첫 번째 라인
-            diagram_type = stripped_line.split()[0] if stripped_line else ''
-            sanitize_mermaid_line._diagram_type = diagram_type
+            cur_diagram_type = stripped_line.split()[0] if stripped_line else ''
         raw_buf.append(line)
-        buf.append(sanitize_mermaid_line(line))
+        buf.append(sanitize_mermaid_line(line, cur_diagram_type))
         i += 1
 
     # Unterminated fence: fall back to the ORIGINAL lines — buf에는
@@ -823,7 +832,7 @@ def _sanitize_svg(svg: str) -> str:
     return svg
 
 
-def _prerender_mermaid_to_svg(html_body: str, progress_cb=None) -> str:
+def _prerender_mermaid_to_svg(html_body: str, progress_cb=None, allow_network: bool = True) -> str:
     """Replace all <div class="mermaid">...</div> with inline SVG from mermaid.ink.
 
     Uses the mermaid.ink render API to pre-render diagrams at build time.
@@ -832,6 +841,7 @@ def _prerender_mermaid_to_svg(html_body: str, progress_cb=None) -> str:
 
     소스 해시 디스크 캐시(.mermaid_cache/)로 재빌드 시 네트워크 요청을 생략하고,
     프로세스 내 dedupe로 동일 다이어그램 중복 렌더링도 막는다.
+    allow_network=False면 캐시 조회만 하고 네트워크 요청은 하지 않는다.
     """
     pattern = re.compile(r'<div class="mermaid">([\s\S]*?)</div>', re.IGNORECASE)
     matches = list(pattern.finditer(html_body))
@@ -842,6 +852,10 @@ def _prerender_mermaid_to_svg(html_body: str, progress_cb=None) -> str:
     # 진행 표시용 라벨 (다이어그램 소스 첫 줄)
     labels = [html.unescape(m.group(1)).strip().split('\n')[0][:60] for m in matches]
 
+    # 회로 차단 — mermaid.ink가 한 번 완전히 실패하면 나머지 다이어그램은
+    # 재시도 비용 없이 바로 kroki 폴백으로 간다 (문서 단위 플래그).
+    ink_down = {"v": False}
+
     def _fetch_svg(src: str, label: str = "") -> str | None:
         # 렌더러별 캐시 — 주 렌더러 키를 먼저 조회하고 폴백 키도 확인
         for renderer in ("mermaid.ink", "kroki"):
@@ -849,34 +863,42 @@ def _prerender_mermaid_to_svg(html_body: str, progress_cb=None) -> str:
             if svg is not None:
                 return svg
 
-        # 메인 웹앱(src/mermaid-utils.js)과 동일한 전략:
-        # mindmap은 항상 'default' 테마로 렌더링 (밝은 파스텔 배경 + 어두운 텍스트).
-        # dark 테마는 노드 배경이 어두워져 텍스트 대비가 급격히 저하됨.
-        # flowchart 등 다른 타입도 동일하게 default로 렌더링하여
-        # 다크 페이지 위에서 "밝은 카드"처럼 표시.
-        # 모든 다이어그램을 default 테마로 렌더링
-        encoded = base64.urlsafe_b64encode(src.encode("utf-8")).decode("ascii")
-        url = f"https://mermaid.ink/svg/{encoded}?theme=default&bgColor=ffffff"
+        if not allow_network:
+            return None  # 오프라인 모드 — 캐시 미스는 클라이언트 렌더링 폴백
 
         svg = None
         renderer_used = None
         last_err = None
-        for _attempt in range(4):
-            try:
-                req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-                with urllib.request.urlopen(req, timeout=30) as resp:
-                    svg = resp.read().decode("utf-8", errors="replace")
-                if svg and svg.strip().startswith("<svg") and "</svg>" in svg:
-                    renderer_used = "mermaid.ink"
-                    break
-                svg = None
-                last_err = "empty/invalid SVG response"
-            except Exception as e:
-                last_err = e
-                svg = None
-            if _attempt < 3:
-                # 503 레이트리밋 대비 지터 백오프 (워커 간 요청 분산)
-                time.sleep(1.5 * (_attempt + 1) + random.random())
+
+        if not ink_down["v"]:
+            # 메인 웹앱(src/mermaid-utils.js)과 동일한 전략:
+            # mindmap은 항상 'default' 테마로 렌더링 (밝은 파스텔 배경 + 어두운 텍스트).
+            # dark 테마는 노드 배경이 어두워져 텍스트 대비가 급격히 저하됨.
+            # flowchart 등 다른 타입도 동일하게 default로 렌더링하여
+            # 다크 페이지 위에서 "밝은 카드"처럼 표시.
+            # 모든 다이어그램을 default 테마로 렌더링
+            encoded = base64.urlsafe_b64encode(src.encode("utf-8")).decode("ascii")
+            url = f"https://mermaid.ink/svg/{encoded}?theme=default&bgColor=ffffff"
+
+            for _attempt in range(4):
+                try:
+                    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                    with urllib.request.urlopen(req, timeout=30) as resp:
+                        svg = resp.read().decode("utf-8", errors="replace")
+                    if svg and svg.strip().startswith("<svg") and "</svg>" in svg:
+                        renderer_used = "mermaid.ink"
+                        break
+                    svg = None
+                    last_err = "empty/invalid SVG response"
+                except Exception as e:
+                    last_err = e
+                    svg = None
+                if _attempt < 3:
+                    # 503 레이트리밋 대비 지터 백오프 (워커 간 요청 분산)
+                    time.sleep(1.5 * (_attempt + 1) + random.random())
+
+            if svg is None:
+                ink_down["v"] = True  # 이후 다이어그램은 kroki로 직행
 
         if svg is None:
             # Fallback renderer: kroki.io (deflate + base64url path encoding).
@@ -1014,14 +1036,28 @@ def _build_heading_map(toc_html_str: str) -> dict:
 
 
 def _find_heading_id(plain_text: str, heading_map: dict) -> str | None:
-    """plain_text와 매칭되는 헤딩 id를 찾는다 (정확 매칭 → 부분 매칭)."""
+    """plain_text와 매칭되는 헤딩 id를 찾는다.
+
+    정확 매칭 → 공백 무시 매칭 → 부분 매칭 순. 부분 매칭은 링크 텍스트가
+    4자 이상이고 후보가 유일할 때만 인정한다 — 애매한 매칭으로 엉뚱한
+    헤딩에 연결하는 것보다 원래의 죽은 링크를 유지하는 편이 안전하다.
+    """
+    if not plain_text:
+        return None
     for htext, hid in heading_map.items():
         if plain_text == htext:
             return hid
+    norm = lambda s: re.sub(r"\s+", "", s)
     for htext, hid in heading_map.items():
-        if plain_text and (plain_text in htext or htext in plain_text):
+        if norm(plain_text) == norm(htext):
             return hid
-    return None
+    if len(plain_text) < 4:
+        return None
+    hits = {
+        hid for htext, hid in heading_map.items()
+        if plain_text in htext or htext in plain_text
+    }
+    return hits.pop() if len(hits) == 1 else None
 
 
 def _linkify_inline_toc(body_html: str, heading_map: dict) -> str:
@@ -1075,17 +1111,24 @@ def _linkify_inline_toc(body_html: str, heading_map: dict) -> str:
 
     # 목차 헤딩('목차'/'차례'/'TOC'/'Table of Contents'를 포함하는 h1~h4) 직후의
     # 첫 번째 블록(<p>, <ol> 또는 <ul>)만 변환.
+    # 헤딩은 전체를 캡처한 뒤 태그를 벗긴 텍스트로 판정한다 — <em>목차</em> 같은
+    # 인라인 태그나 toc permalink 마크업이 섞여 있어도 인식되도록.
+    toc_kw = re.compile(r'목차|차례|toc|table\s+of\s+contents', re.IGNORECASE)
     pattern = re.compile(
-        r'(<h[1-4][^>]*>[^<]*?(?:목차|차례|toc|table\s+of\s+contents).*?</h[1-4]>\s*)(?:<p([^>]*)>([\s\S]*?)</p>|<(ol|ul)([^>]*)>([\s\S]*?)</\4>)',
+        r'(<h([1-4])[^>]*>[\s\S]*?</h\2>\s*)'
+        r'(?:<p([^>]*)>([\s\S]*?)</p>|<(ol|ul)([^>]*)>([\s\S]*?)</\5>)',
         re.IGNORECASE | re.DOTALL,
     )
 
     def _toc_heading_replacer(m: re.Match) -> str:
         heading = m.group(1)
-        if m.group(2) is not None:  # <p> 블록
-            return heading + _linkify_p_content(m.group(2), m.group(3))
-        elif m.group(4) is not None:  # <ol>/<ul> 블록
-            return heading + _fix_list_links(m.group(4), m.group(5), m.group(6))
+        heading_text = re.sub(r'<[^>]+>', '', heading)
+        if not toc_kw.search(heading_text):
+            return m.group(0)
+        if m.group(3) is not None:  # <p> 블록
+            return heading + _linkify_p_content(m.group(3), m.group(4))
+        elif m.group(5) is not None:  # <ol>/<ul> 블록
+            return heading + _fix_list_links(m.group(5), m.group(6), m.group(7))
         return m.group(0)
 
     return pattern.sub(_toc_heading_replacer, body_html)
@@ -1181,7 +1224,9 @@ def markdown_to_tailwind_html(md_text: str, title: str = "Document", config: Ren
     # mobile browser without loading the 3.4MB mermaid.min.js library.
     # Skipped in PC mode for lighter HTML; Mermaid renders client-side via CDN.
     if config.prerender_mermaid:
-        html_body = _prerender_mermaid_to_svg(html_body, progress_cb=progress_cb)
+        html_body = _prerender_mermaid_to_svg(
+            html_body, progress_cb=progress_cb, allow_network=config.allow_network
+        )
 
     # 본문 내 일반 텍스트 목차(• 항목)를 하이퍼링크로 변환하고,
     # 목차 블록 안 <a>의 깨진 href도 실제 헤딩 id로 교정한다.
@@ -1193,8 +1238,14 @@ def markdown_to_tailwind_html(md_text: str, title: str = "Document", config: Ren
     doc_html = HTML_TEMPLATE
     # 제목에 <, >, & 등이 있어도 <title>/헤더 마크업이 깨지지 않도록 이스케이프.
     doc_html = doc_html.replace("%%TITLE%%", html.escape(title))
-    # 빌드 표시: 구버전/신버전 파일 구별용 (모바일 전송 파일 혼동 방지)
-    doc_html = doc_html.replace("%%BUILD%%", "b" + time.strftime("%m%d%H%M"))
+    # 빌드 표시: 구버전/신버전 파일 구별용 (모바일 전송 파일 혼동 방지).
+    # 시각 대신 입력 해시를 쓴다 — 동일 입력 → 동일 출력(재현 가능 빌드)이면서
+    # 내용이 바뀐 재빌드는 다른 스탬프를 갖는다. SOURCE_DATE_EPOCH가 있으면 우선.
+    _epoch = os.environ.get("SOURCE_DATE_EPOCH", "").strip()
+    build_id = _epoch if _epoch.isdigit() else hashlib.sha1(
+        md_text.encode("utf-8")
+    ).hexdigest()[:8]
+    doc_html = doc_html.replace("%%BUILD%%", "b" + build_id)
     # TOC 링크는 순수 <a href="#id">로 둔다 — 드로어 자동 닫기는 링크를
     # <label>로 감싸는 방식이 아니라 :target 마커(#tocOpen)로 처리한다.
     # label 안의 <a> 탭은 iOS Safari·JS 차단 뷰어에서 앵커 이동이 삼켜져
@@ -1220,7 +1271,7 @@ def markdown_to_tailwind_html(md_text: str, title: str = "Document", config: Ren
     # 자체를 제거해 생성 파일 크기를 크게 줄인다.
     needs_mermaid_runtime = '<div class="mermaid"' in html_body
     if needs_mermaid_runtime and config.embed_mermaid:
-        mm_js = _ensure_mermaid_js()
+        mm_js = _ensure_mermaid_js(allow_network=config.allow_network)
         if mm_js:
             doc_html = _embed_mermaid_js(doc_html, mm_js)
     elif not needs_mermaid_runtime:
@@ -1286,399 +1337,549 @@ def _expand_input_paths(patterns: list[str]) -> list[Path]:
     return unique
 
 
-def run_gui() -> int:
+def run_gui(default_pdf: bool = False) -> int:
+    """통합 GUI — HTML/PDF 변환을 한 창에서 처리한다.
+
+    인자 없이 실행 시 진입한다. --pdf로 기동하면 PDF 생성이 미리 체크된
+    상태로 열린다. 변환은 QObject 워커 + moveToThread로 수행해 UI가
+    멈추지 않고, 취소·문서별 결과 테이블·변환 경고 로그를 지원한다
+    (pdf2md GUI와 동일한 스레딩/레이아웃 패턴).
+    """
     try:
-        from PySide6.QtWidgets import (
-            QApplication,
-            QWidget,
-            QVBoxLayout,
-            QHBoxLayout,
-            QLabel,
-            QLineEdit,
-            QPushButton,
-            QFileDialog,
-            QMessageBox,
-            QCheckBox,
-            QComboBox,
+        from PySide6.QtCore import (
+            Qt, QThread, QObject, Signal, QUrl, QSettings,
         )
-        from PySide6.QtCore import Qt, QSettings, QUrl
-        from PySide6.QtGui import QDesktopServices
-    except Exception as e:
+        from PySide6.QtGui import QFont, QDesktopServices
+        from PySide6.QtWidgets import (
+            QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+            QGridLayout, QLabel, QLineEdit, QPushButton, QCheckBox,
+            QListWidget, QPlainTextEdit, QProgressBar, QFileDialog,
+            QGroupBox, QTableWidget, QTableWidgetItem, QAbstractItemView,
+            QHeaderView, QMessageBox, QSplitter, QStatusBar,
+        )
+    except ImportError as e:
         raise SystemExit(
             "PySide6 is not available. Install it (pip install PySide6) or run with --cli.\n"
             f"Details: {e}"
         )
 
     app = QApplication.instance() or QApplication(sys.argv)
-
-    class _DropWidget(QWidget):
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.setAcceptDrops(True)
-            self._on_drop = None
-
-        def dragEnterEvent(self, event):
-            if event.mimeData().hasUrls():
-                event.acceptProposedAction()
-
-        def dropEvent(self, event):
-            urls = event.mimeData().urls()
-            if urls and self._on_drop:
-                path = urls[0].toLocalFile()
-                if path:
-                    self._on_drop(path)
-
-    w = _DropWidget()
-    w.setWindowTitle("md2doc — MD → HTML/PDF Converter")
-    w.setMinimumWidth(620)
-
+    app.setApplicationName('md2doc')
     settings = QSettings("Transformer", "md2doc")
 
-    root = QVBoxLayout(w)
-    root.setContentsMargins(12, 12, 12, 12)
-    root.setSpacing(10)
+    class ConvertWorker(QObject):
+        progress = Signal(int, int)       # (완료 수, 전체 수)
+        doc_done = Signal(dict)           # 문서 1건 결과
+        log = Signal(str)                 # 로그 한 줄
+        finished = Signal(int, int, int)  # (생성 출력 수, 실패 문서 수, 경고 수)
+        fatal = Signal(str)               # 치명 오류(스택)
 
-    def row(label_text: str):
-        box = QHBoxLayout()
-        box.setSpacing(8)
-        lab = QLabel(label_text)
-        lab.setMinimumWidth(120)
-        box.addWidget(lab)
-        return box
+        def __init__(self, paths, out_dir, opts):
+            super().__init__()
+            self.paths = paths
+            self.out_dir = out_dir
+            self.opts = opts
+            self._cancel = False
+            self._warnings = 0
 
-    in_edit = QLineEdit("")
-    in_edit.setPlaceholderText("*.md")
-    out_edit = QLineEdit("")
-    out_edit.setPlaceholderText("*.html")
-    title_edit = QLineEdit("")
+        def cancel(self):
+            self._cancel = True
 
-    r1 = row("Input (.md)")
-    r1.addWidget(in_edit)
-    btn_in = QPushButton("Browse")
-    r1.addWidget(btn_in)
-    root.addLayout(r1)
-
-    r2 = row("Output (.html)")
-    r2.addWidget(out_edit)
-    btn_out = QPushButton("Browse")
-    r2.addWidget(btn_out)
-    root.addLayout(r2)
-
-    r3 = row("Title")
-    r3.addWidget(title_edit)
-    root.addLayout(r3)
-
-    r4 = row("Options")
-
-    chk_mobile = QCheckBox("모바일용 (SVG 사전 렌더링)")
-    chk_mobile.setChecked(True)
-    chk_mobile.setToolTip(
-        "체크: Mermaid 다이어그램을 빌드 시 SVG로 사전 렌더링\n"
-        "      → 모바일/in-app 브라우저에서 JS 없이도 표시, HTML도 가벼움 (~0.3MB)\n"
-        "      ※ 사전 렌더링에 실패한 다이어그램이 있으면 3.5MB 라이브러리를\n"
-        "        자동 임베드하여 폴백 렌더링 보장\n"
-        "해제: CDN 스크립트로 클라이언트 사이드 렌더링 (가벼운 HTML, PC 권장)"
-    )
-
-    chk_pdf = QCheckBox("PDF도 함께 생성")
-    chk_pdf.setToolTip(
-        "HTML 생성 후 같은 내용을 헤드리스 Chrome/Edge 인쇄로 PDF도 만듦\n"
-        "(브라우저 자동 탐색 — 없으면 실패 안내만 표시되고 HTML은 정상 생성됨)"
-    )
-
-    r4.addWidget(chk_mobile)
-    r4.addWidget(chk_pdf)
-    r4.addStretch(1)
-    root.addLayout(r4)
-
-    action_row = QHBoxLayout()
-    action_row.addStretch(1)
-
-    btn_open = QPushButton("Open output")
-    btn_open.setEnabled(False)
-    action_row.addWidget(btn_open)
-
-    btn_folder = QPushButton("Open folder")
-    btn_folder.setEnabled(False)
-    action_row.addWidget(btn_folder)
-
-    btn_run = QPushButton("Generate")
-    btn_run.setDefault(True)
-    btn_run.setMinimumHeight(34)
-    action_row.addWidget(btn_run)
-
-    root.addLayout(action_row)
-
-    last_generated = {"path": None}
-
-    out_manually_set = {"value": False}
-
-    def suggested_out_path(in_text: str) -> str:
-        try:
-            p = Path((in_text or "").strip())
-            if p.name:
-                return str(p.with_suffix('.html'))
-        except Exception:
-            pass
-        return ""
-
-    def maybe_update_out_from_in():
-        if out_manually_set["value"]:
-            return
-        sug = suggested_out_path(in_edit.text())
-        if sug:
-            out_edit.setText(sug)
-
-    def browse_in():
-        p, _ = QFileDialog.getOpenFileName(w, "Select markdown", str(Path.cwd()), "Markdown (*.md);;All files (*.*)")
-        if p:
-            in_edit.setText(p)
+        def run(self):
             try:
-                title_edit.setText(Path(p).stem)
+                self._run()
             except Exception:
-                pass
+                self.fatal.emit(traceback.format_exc())
+
+        def _dest(self, in_path: Path, suffix: str) -> Path:
+            return (
+                self.out_dir / (in_path.stem + suffix)
+                if self.out_dir else in_path.with_suffix(suffix)
+            )
+
+        def _run(self):
+            o = self.opts
+            generated, fail = [], 0
+
+            # 변환 중 warning(이미지 누락·Mermaid 실패 등)을 로그 뷰로 라우팅
+            def _route(m):
+                self._warnings += 1
+                self.log.emit(f'  ⚠️ {m}')
+
+            handler = _CallbackLogHandler(_route)
+            logger.addHandler(handler)
             try:
-                maybe_update_out_from_in()
-            except Exception:
-                pass
+                total = len(self.paths)
+                self.progress.emit(0, total)
+                for i, in_path in enumerate(self.paths, 1):
+                    if self._cancel:
+                        self.log.emit('⏹ 사용자 취소 — 남은 문서 중단')
+                        break
+                    name = in_path.name
+                    self.log.emit(f'[변환 시작] {name}')
+                    result = {'doc': name, 'html': None, 'pdf': None,
+                              'want_html': o['html'], 'want_pdf': o['pdf'],
+                              'status': 'OK', 'paths': []}
 
-    def _handle_drop(path: str):
-        in_edit.setText(path)
-        try:
-            title_edit.setText(Path(path).stem)
-        except Exception:
-            pass
-        try:
-            maybe_update_out_from_in()
-        except Exception:
-            pass
+                    def cb(cur, tot, label, name=name):
+                        self.log.emit(f'  {name}: mermaid {cur}/{tot} — {label}')
 
-    w._on_drop = _handle_drop
-
-    def browse_out():
-        try:
-            base = Path(in_edit.text().strip())
-            default_path = base.with_suffix('.html') if base.name else (Path.cwd() / 'output.html')
-        except Exception:
-            default_path = Path.cwd() / 'output.html'
-        p, _ = QFileDialog.getSaveFileName(w, "Save HTML", str(default_path), "HTML (*.html)")
-        if p:
-            out_edit.setText(p)
-            out_manually_set["value"] = True
-
-    def open_output():
-        try:
-            p = last_generated.get("path")
-            if not p:
-                return
-            QDesktopServices.openUrl(QUrl.fromLocalFile(str(p)))
-        except Exception:
-            return
-
-    def open_folder():
-        try:
-            p = last_generated.get("path")
-            if not p:
-                return
-            folder = Path(str(p)).parent
-            QDesktopServices.openUrl(QUrl.fromLocalFile(str(folder)))
-        except Exception:
-            return
-
-    def run():
-        nonlocal w
-        in_raw = in_edit.text().strip()
-        if not in_raw:
-            QMessageBox.critical(w, "Error", "Please select an input markdown file (*.md).")
-            return
-
-        in_path = Path(in_raw)
-        out_raw = out_edit.text().strip()
-        out_path = Path(out_raw) if out_raw else in_path.with_suffix('.html')
-        if not in_path.exists() or not in_path.is_file():
-            QMessageBox.critical(w, "Error", f"Input file not found:\n{in_path}")
-            return
-
-        render_config = RenderConfig(
-            # 모바일 모드에서는 사전 렌더링 실패분의 폴백으로만 사용되므로 항상 켠다.
-            # (성공 시 임베드되지 않아 크기 비용 없음) / PC 모드는 CDN 사용.
-            embed_mermaid=bool(chk_mobile.isChecked()),
-            prerender_mermaid=bool(chk_mobile.isChecked()),
-        )
-
-        # Read input file in main thread (fast)
-        try:
-            md_text = in_path.read_text(encoding="utf-8-sig")
-        except Exception as e:
-            QMessageBox.critical(w, "Error", f"Failed to read input:\n{e}")
-            return
-
-        title = title_edit.text().strip() or in_path.stem
-
-        # Disable UI during conversion (conversion runs in background thread)
-        btn_run.setEnabled(False)
-        btn_run.setText("Generating...")
-        btn_open.setEnabled(False)
-        btn_folder.setEnabled(False)
-        if chk_mobile.isChecked():
-            status_label = QLabel("Converting... (pre-rendering Mermaid diagrams may take a while)")
-        else:
-            status_label = QLabel("Converting... (PC mode — client-side Mermaid)")
-        status_label.setAlignment(Qt.AlignCenter)
-        status_label.setStyleSheet("color: #3b82f6; padding: 4px;")
-        root.addWidget(status_label)
-        app.processEvents()
-
-        # Use a worker thread to avoid freezing the GUI
-        from PySide6.QtCore import QThread, Signal
-
-        class _Worker(QThread):
-            finished_signal = Signal(object, object, object)  # (result_html, pdf_result, error)
-            progress_signal = Signal(int, int, str)   # (current, total, status)
-            log_signal = Signal(str)                  # 변환 중 발생한 경고 로그
-
-            def __init__(self, md_text, title, config, want_pdf, in_path):
-                super().__init__()
-                self._md_text = md_text
-                self._title = title
-                self._config = config
-                self._want_pdf = want_pdf
-                self._in_path = in_path
-
-            def run(self):
-                # 변환 중 발생한 warning(이미지 누락·Mermaid 실패 등)을 UI로 라우팅
-                handler = _CallbackLogHandler(lambda m: self.log_signal.emit(m))
-                logger.addHandler(handler)
-                try:
-                    out_html = markdown_to_tailwind_html(
-                        self._md_text,
-                        title=self._title,
-                        config=self._config,
-                        progress_cb=lambda cur, tot, st: self.progress_signal.emit(cur, tot, st),
-                        base_dir=self._in_path.parent,
-                    )
-                    pdf_res = None
-                    if self._want_pdf:
+                    if o['html']:
                         try:
-                            pdf_res = convert_markdown_to_pdf(
-                                self._in_path, title=self._title,
-                                progress_cb=lambda cur, tot, st: self.progress_signal.emit(cur, tot, st),
+                            md_text = in_path.read_text(encoding='utf-8-sig')
+                            out_html = markdown_to_tailwind_html(
+                                md_text, title=in_path.stem,
+                                config=o['render_config'],
+                                progress_cb=cb, base_dir=in_path.parent,
                             )
-                        except Exception as pe:
-                            pdf_res = pe  # HTML은 정상 — PDF 실패만 별도 보고
-                    self.finished_signal.emit(out_html, pdf_res, None)
-                except Exception as e:
-                    self.finished_signal.emit(None, None, e)
-                finally:
-                    logger.removeHandler(handler)
+                            dest = self._dest(in_path, '.html')
+                            dest.write_text(out_html, encoding='utf-8')
+                            generated.append(str(dest))
+                            result['html'] = str(dest)
+                            result['paths'].append(str(dest))
+                            self.log.emit(f'[완료] {dest}')
+                        except Exception as e:
+                            result['status'] = 'FAIL'
+                            self.log.emit(f'[오류] {name} (HTML): {e}')
 
-        worker = _Worker(md_text, title, render_config, chk_pdf.isChecked(), in_path)
-        w._active_worker = worker  # prevent GC while running
-        warnings_seen: list[str] = []
-        worker.log_signal.connect(lambda msg: warnings_seen.append(msg))
+                    if o['pdf']:
+                        try:
+                            written = convert_markdown_to_pdf(
+                                in_path, out_path=self._dest(in_path, '.pdf'),
+                                keep_html=o['keep_html'],
+                                render_mermaid=not o['no_mermaid'],
+                                new_page_h2=o['new_page_h2'],
+                                browser=o['browser'] or None,
+                                allow_network=o['allow_network'],
+                                progress_cb=cb,
+                            )
+                            generated.append(str(written))
+                            result['pdf'] = str(written)
+                            result['paths'].append(str(written))
+                            self.log.emit(f'[완료] {written}')
+                        except Exception as e:
+                            result['status'] = 'FAIL'
+                            self.log.emit(f'[오류] {name} (PDF): {e}')
 
-        def _on_progress(cur, tot, st):
-            if st == "done":
-                status_label.setText("Writing HTML...")
-            else:
-                status_label.setText(f"Rendering Mermaid diagram {cur}/{tot}: {st}")
-            app.processEvents()
+                    if result['status'] == 'FAIL':
+                        fail += 1
+                    self.doc_done.emit(result)
+                    self.progress.emit(i, total)
+            finally:
+                logger.removeHandler(handler)
+            self.finished.emit(len(generated), fail, self._warnings)
 
-        worker.progress_signal.connect(_on_progress)
+    class MainWindow(QMainWindow):
+        def __init__(self):
+            super().__init__()
+            self.setWindowTitle('md2doc — MD → HTML/PDF 변환기')
+            self.resize(920, 680)
+            self.setAcceptDrops(True)
+            self.thread = None
+            self.worker = None
+            self._row_paths = {}  # 결과행 → 생성 파일 경로 목록
+            self._build_ui()
+            self._apply_style()
+            self._restore_settings()
 
-        def _on_done(result_html, pdf_res, error):
-            worker.deleteLater()
-            w._active_worker = None
-            status_label.deleteLater()
-            btn_run.setEnabled(True)
-            btn_run.setText("Generate")
+        # --- UI 구성 ---
+        def _build_ui(self):
+            central = QWidget()
+            root = QVBoxLayout(central)
+            root.setContentsMargins(14, 14, 14, 14)
+            root.setSpacing(10)
 
-            if error is not None:
-                QMessageBox.critical(w, "Error", f"Failed to generate HTML:\n{error}")
-                return
+            # 입력 그룹
+            in_group = QGroupBox('입력 Markdown (파일 또는 폴더, 드래그앤드롭 가능)')
+            in_lay = QHBoxLayout(in_group)
+            self.input_list = QListWidget()
+            self.input_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
+            self.input_list.setMinimumHeight(96)
+            in_lay.addWidget(self.input_list, 1)
+            btn_col = QVBoxLayout()
+            for label, slot in (('파일 추가', self.add_files),
+                                ('폴더 추가', self.add_folder),
+                                ('선택 제거', self.remove_selected),
+                                ('비우기', self.input_list.clear)):
+                b = QPushButton(label)
+                b.clicked.connect(slot)
+                btn_col.addWidget(b)
+            btn_col.addStretch(1)
+            in_lay.addLayout(btn_col)
+            root.addWidget(in_group)
 
+            # 출력 + 브라우저
+            io_group = QGroupBox('출력')
+            grid = QGridLayout(io_group)
+            grid.addWidget(QLabel('출력 폴더'), 0, 0)
+            self.out_edit = QLineEdit()
+            self.out_edit.setPlaceholderText('비우면 입력 파일과 같은 폴더')
+            grid.addWidget(self.out_edit, 0, 1)
+            b_out = QPushButton('찾아보기')
+            b_out.clicked.connect(self.pick_out)
+            grid.addWidget(b_out, 0, 2)
+            grid.addWidget(QLabel('브라우저 (PDF용)'), 1, 0)
+            self.browser = QLineEdit()
+            self.browser.setPlaceholderText(
+                _find_browser() or 'chrome.exe 경로 — 자동 탐색 실패 시 지정')
+            grid.addWidget(self.browser, 1, 1)
+            b_br = QPushButton('찾아보기')
+            b_br.clicked.connect(self.pick_browser)
+            grid.addWidget(b_br, 1, 2)
+            grid.setColumnStretch(1, 1)
+            root.addWidget(io_group)
+
+            # 옵션
+            opt_group = QGroupBox('옵션')
+            opt_lay = QVBoxLayout(opt_group)
+            row1 = QHBoxLayout()
+            self.chk_html = QCheckBox('HTML 생성')
+            self.chk_mobile = QCheckBox('모바일용 (Mermaid SVG 사전 렌더링)')
+            self.chk_mobile.setToolTip(
+                '체크: Mermaid 다이어그램을 빌드 시 SVG로 사전 렌더링\n'
+                '      → 모바일/in-app 브라우저에서 JS 없이도 표시, HTML도 가벼움\n'
+                '      ※ 사전 렌더링 실패분은 3.5MB 라이브러리를 임베드해 폴백 보장\n'
+                '해제: CDN 스크립트로 클라이언트 사이드 렌더링 (가벼운 HTML, PC 권장)')
+            self.chk_pdf = QCheckBox('PDF 생성')
+            for cb in (self.chk_html, self.chk_mobile, self.chk_pdf):
+                row1.addWidget(cb)
+            row1.addStretch(1)
+            opt_lay.addLayout(row1)
+
+            row2 = QHBoxLayout()
+            self.keep_html = QCheckBox('중간 HTML 보존 (.print.html)')
+            self.no_mermaid = QCheckBox('PDF: Mermaid 렌더 생략')
+            self.new_page_h2 = QCheckBox('PDF: ## 섹션마다 새 페이지')
+            self.offline = QCheckBox('오프라인 (캐시만 사용)')
+            self.offline.setToolTip(
+                '체크 시 mermaid.ink/kroki/CDN 등 외부 네트워크 요청을 하지 않고\n'
+                '디스크 캐시와 저장소 vendor 파일만 사용한다.\n'
+                '캐시에 없는 다이어그램은 클라이언트 렌더링 폴백으로 남는다.')
+            for cb in (self.keep_html, self.no_mermaid,
+                       self.new_page_h2, self.offline):
+                row2.addWidget(cb)
+            row2.addStretch(1)
+            opt_lay.addLayout(row2)
+            root.addWidget(opt_group)
+
+            # 실행 바
+            run_bar = QHBoxLayout()
+            self.run_btn = QPushButton('변환 시작')
+            self.run_btn.setObjectName('runBtn')
+            self.run_btn.clicked.connect(self.start)
+            self.cancel_btn = QPushButton('취소')
+            self.cancel_btn.setEnabled(False)
+            self.cancel_btn.clicked.connect(self.cancel)
+            self.open_out_btn = QPushButton('출력 폴더 열기')
+            self.open_out_btn.clicked.connect(self.open_out_dir)
+            self.progress = QProgressBar()
+            self.progress.setTextVisible(True)
+            run_bar.addWidget(self.run_btn)
+            run_bar.addWidget(self.cancel_btn)
+            run_bar.addWidget(self.open_out_btn)
+            run_bar.addWidget(self.progress, 1)
+            root.addLayout(run_bar)
+
+            # 결과 테이블 + 로그 (스플리터)
+            split = QSplitter(Qt.Vertical)
+            self.table = QTableWidget(0, 4)
+            self.table.setHorizontalHeaderLabels(['문서', 'HTML', 'PDF', '상태'])
+            self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+            self.table.horizontalHeader().setSectionResizeMode(
+                0, QHeaderView.Stretch)
+            for c in range(1, 4):
+                self.table.horizontalHeader().setSectionResizeMode(
+                    c, QHeaderView.ResizeToContents)
+            self.table.doubleClicked.connect(self.open_selected)
+            split.addWidget(self.table)
+
+            self.log = QPlainTextEdit()
+            self.log.setReadOnly(True)
+            self.log.setFont(QFont('monospace', 10))
+            self.log.setPlaceholderText('변환 로그 · 경고가 여기에 표시됩니다.')
+            split.addWidget(self.log)
+            split.setSizes([340, 200])
+            root.addWidget(split, 1)
+
+            self.setCentralWidget(central)
+            self.setStatusBar(QStatusBar())
+            self.statusBar().showMessage('준비됨')
+
+        def _apply_style(self):
+            self.setStyleSheet("""
+                QWidget { font-size: 13px; }
+                QGroupBox {
+                    border: 1px solid #d0d3d8; border-radius: 8px;
+                    margin-top: 8px; padding: 8px; font-weight: 600;
+                }
+                QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 4px; }
+                QPushButton {
+                    padding: 6px 12px; border: 1px solid #c3c7cd;
+                    border-radius: 6px; background: #f5f6f8;
+                }
+                QPushButton:hover { background: #eceef1; }
+                QPushButton:disabled { color: #9aa0a6; background: #f0f0f0; }
+                QPushButton#runBtn {
+                    background: #2f6feb; color: white; border: none; font-weight: 600;
+                }
+                QPushButton#runBtn:hover { background: #285fce; }
+                QPushButton#runBtn:disabled { background: #a9c0f5; }
+                QLineEdit { padding: 5px; border: 1px solid #c3c7cd; border-radius: 6px; }
+                QProgressBar {
+                    border: 1px solid #c3c7cd; border-radius: 6px; text-align: center;
+                    height: 22px;
+                }
+                QProgressBar::chunk { background: #2f6feb; border-radius: 5px; }
+                QPlainTextEdit, QListWidget, QTableWidget {
+                    border: 1px solid #d0d3d8; border-radius: 6px;
+                }
+            """)
+
+        def _restore_settings(self):
+            def _saved(key: str, fallback: int) -> bool:
+                try:
+                    return bool(int(settings.value(key, fallback) or 0))
+                except Exception:
+                    return bool(fallback)
+
+            self.chk_html.setChecked(_saved('opt_html', 1))
+            self.chk_mobile.setChecked(_saved('opt_mobile', 1))
+            self.chk_pdf.setChecked(_saved('opt_pdf', 1 if default_pdf else 0))
+            self.keep_html.setChecked(_saved('opt_keep_html', 0))
+            self.no_mermaid.setChecked(_saved('opt_no_mermaid', 0))
+            self.new_page_h2.setChecked(_saved('opt_new_page_h2', 0))
+            self.offline.setChecked(_saved('opt_offline', 0))
             try:
-                out_path.write_text(result_html, encoding="utf-8")
-            except Exception as e:
-                QMessageBox.critical(w, "Error", f"Failed to write output:\n{e}")
-                return
-
-            # Persist GUI state
-            try:
-                settings.setValue("in_path", str(in_path))
-                settings.setValue("out_path", str(out_path))
-                settings.setValue("title", str(title_edit.text()))
-                settings.setValue("prerender_mermaid", 1 if chk_mobile.isChecked() else 0)
-                settings.setValue("also_pdf", 1 if chk_pdf.isChecked() else 0)
+                self.browser.setText(str(settings.value('browser', '') or ''))
+                self.out_edit.setText(str(settings.value('out_dir', '') or ''))
             except Exception:
                 pass
 
-            last_generated["path"] = str(out_path)
-            btn_open.setEnabled(True)
-            btn_folder.setEnabled(True)
+        # --- 입력 조작 ---
+        def add_files(self):
+            files, _ = QFileDialog.getOpenFileNames(
+                self, 'Markdown 선택', '', 'Markdown (*.md *.markdown)')
+            self._add_paths(files)
 
-            msg = f"Generated:\n{out_path}"
-            if isinstance(pdf_res, Path):
-                msg += f"\n{pdf_res}"
-            elif isinstance(pdf_res, Exception):
-                QMessageBox.warning(w, "PDF 실패",
-                                    f"HTML은 생성됐지만 PDF 변환에 실패했습니다:\n{pdf_res}")
-            if warnings_seen:
-                msg += f"\n\n⚠️ 경고 {len(warnings_seen)}건:\n" + "\n".join(warnings_seen[:10])
-            QMessageBox.information(w, "Done", msg)
+        def add_folder(self):
+            d = QFileDialog.getExistingDirectory(self, '폴더 선택')
+            if d:
+                self._add_paths([d])
 
-        worker.finished_signal.connect(_on_done)
-        worker.start()
+        def _add_paths(self, paths):
+            existing = {self.input_list.item(i).text()
+                        for i in range(self.input_list.count())}
+            for p in paths:
+                if not p:
+                    continue
+                pp = Path(p)
+                if pp.is_dir():
+                    candidates = sorted(
+                        f for f in pp.rglob('*')
+                        if f.suffix.lower() in ('.md', '.markdown'))
+                else:
+                    candidates = [pp]
+                for f in candidates:
+                    s = str(f)
+                    if s not in existing:
+                        self.input_list.addItem(s)
+                        existing.add(s)
 
-    btn_in.clicked.connect(browse_in)
-    btn_out.clicked.connect(browse_out)
-    btn_run.clicked.connect(run)
-    btn_open.clicked.connect(open_output)
-    btn_folder.clicked.connect(open_folder)
+        def remove_selected(self):
+            for it in self.input_list.selectedItems():
+                self.input_list.takeItem(self.input_list.row(it))
 
-    def on_out_edited(_text: str):
-        # Any manual edit to output path should stop auto-following the input path.
-        if out_edit.hasFocus():
-            out_manually_set["value"] = True
+        def pick_out(self):
+            d = QFileDialog.getExistingDirectory(self, '출력 폴더')
+            if d:
+                self.out_edit.setText(d)
 
-    def on_in_edited(_text: str):
-        maybe_update_out_from_in()
-        try:
-            if not title_edit.text().strip():
-                p = Path(in_edit.text().strip())
-                if p.name:
-                    title_edit.setText(p.stem)
-        except Exception:
-            pass
+        def pick_browser(self):
+            f, _ = QFileDialog.getOpenFileName(
+                self, 'Chrome/Edge 실행 파일', '', 'Executable (*.exe);;All files (*)')
+            if f:
+                self.browser.setText(f)
 
-    out_edit.textEdited.connect(on_out_edited)
-    in_edit.textChanged.connect(on_in_edited)
+        # --- 실행/취소 ---
+        def start(self):
+            if self.thread is not None:
+                return
+            paths = [Path(self.input_list.item(i).text())
+                     for i in range(self.input_list.count())]
+            if not paths:
+                QMessageBox.warning(
+                    self, '입력 없음', '변환할 .md 파일이나 폴더를 추가하세요.')
+                return
+            if not (self.chk_html.isChecked() or self.chk_pdf.isChecked()):
+                QMessageBox.warning(
+                    self, '출력 없음', 'HTML 또는 PDF 중 하나 이상을 선택하세요.')
+                return
+            missing = [p.name for p in paths if not p.is_file()]
+            if missing:
+                QMessageBox.warning(
+                    self, '파일 없음', '파일이 없습니다: ' + ', '.join(missing))
+                return
 
-    # Restore previous session
-    try:
-        prev_prerender = int(settings.value("prerender_mermaid", 1) or 0)
+            allow_network = not self.offline.isChecked()
+            mobile = self.chk_mobile.isChecked()
+            opts = {
+                'html': self.chk_html.isChecked(),
+                'pdf': self.chk_pdf.isChecked(),
+                'render_config': RenderConfig(
+                    # 모바일 모드에서는 사전 렌더링 실패분의 폴백으로만
+                    # mermaid.js를 임베드한다 (성공 시 크기 비용 없음).
+                    embed_mermaid=mobile,
+                    prerender_mermaid=mobile,
+                    allow_network=allow_network,
+                ),
+                'keep_html': self.keep_html.isChecked(),
+                'no_mermaid': self.no_mermaid.isChecked(),
+                'new_page_h2': self.new_page_h2.isChecked(),
+                'browser': self.browser.text().strip(),
+                'allow_network': allow_network,
+            }
+            out_text = self.out_edit.text().strip()
+            out_dir = Path(out_text) if out_text else None
 
-        # Keep input/output fields empty on launch so placeholders (*.md/*.html) are visible.
-        # (We still persist these values on Generate, but we don't auto-restore them.)
-        try:
-            in_edit.setText("")
-            out_edit.setText("")
-            title_edit.setText("")
-            out_manually_set["value"] = False
-        except Exception:
-            pass
-        chk_mobile.setChecked(bool(prev_prerender))
-        chk_pdf.setChecked(bool(int(settings.value("also_pdf", 0) or 0)))
-    except Exception:
-        pass
+            self.table.setRowCount(0)
+            self._row_paths.clear()
+            self.log.clear()
+            self.progress.setRange(0, 0)  # busy until first progress
+            self.statusBar().showMessage('변환 중…')
 
-    w.show()
+            self.thread = QThread(self)
+            self.worker = ConvertWorker(paths, out_dir, opts)
+            self.worker.moveToThread(self.thread)
+            self.thread.started.connect(self.worker.run)
+            self.worker.progress.connect(self.on_progress)
+            self.worker.doc_done.connect(self.on_doc)
+            self.worker.log.connect(self.on_log)
+            self.worker.finished.connect(self.on_finished)
+            self.worker.fatal.connect(self.on_fatal)
+            self.worker.finished.connect(self.thread.quit)
+            self.worker.fatal.connect(self.thread.quit)
+            self.thread.finished.connect(self._cleanup_thread)
+
+            self.run_btn.setEnabled(False)
+            self.cancel_btn.setEnabled(True)
+            self.thread.start()
+
+        def cancel(self):
+            if self.worker:
+                self.worker.cancel()
+                self.cancel_btn.setEnabled(False)
+                self.statusBar().showMessage('취소 요청 — 현재 문서 완료 후 중단')
+
+        def _cleanup_thread(self):
+            if self.thread:
+                self.thread.deleteLater()
+            self.thread = None
+            self.worker = None
+
+        # --- 워커 시그널 핸들러 ---
+        def on_progress(self, done, total):
+            if self.progress.maximum() == 0 and total:
+                self.progress.setRange(0, total)
+            self.progress.setValue(done)
+
+        def on_doc(self, r):
+            row = self.table.rowCount()
+            self.table.insertRow(row)
+
+            def cell(text, align=Qt.AlignLeft):
+                it = QTableWidgetItem(str(text))
+                it.setTextAlignment(align | Qt.AlignVCenter)
+                return it
+
+            self.table.setItem(row, 0, cell(r['doc']))
+            self.table.setItem(row, 1, cell(
+                '✓' if r['html'] else ('✗' if r['want_html'] else '—'),
+                Qt.AlignCenter))
+            self.table.setItem(row, 2, cell(
+                '✓' if r['pdf'] else ('✗' if r['want_pdf'] else '—'),
+                Qt.AlignCenter))
+            self.table.setItem(row, 3, cell(r['status'], Qt.AlignCenter))
+            self._row_paths[row] = r.get('paths') or []
+
+        def on_log(self, line):
+            self.log.appendPlainText(line)
+
+        def on_finished(self, n_out, fail, warnings):
+            self.run_btn.setEnabled(True)
+            self.cancel_btn.setEnabled(False)
+            if self.progress.maximum() == 0:
+                self.progress.setRange(0, 1)
+                self.progress.setValue(1)
+            msg = f'완료 — 출력 {n_out} · 실패 {fail}'
+            if warnings:
+                msg += f' · 경고 {warnings}건'
+            self.statusBar().showMessage(msg)
+            self.log.appendPlainText('\n── ' + msg + ' ──')
+            # 옵션 상태를 다음 실행에 복원한다
+            try:
+                settings.setValue('opt_html', int(self.chk_html.isChecked()))
+                settings.setValue('opt_mobile', int(self.chk_mobile.isChecked()))
+                settings.setValue('opt_pdf', int(self.chk_pdf.isChecked()))
+                settings.setValue('opt_keep_html', int(self.keep_html.isChecked()))
+                settings.setValue('opt_no_mermaid', int(self.no_mermaid.isChecked()))
+                settings.setValue('opt_new_page_h2', int(self.new_page_h2.isChecked()))
+                settings.setValue('opt_offline', int(self.offline.isChecked()))
+                settings.setValue('browser', self.browser.text())
+                settings.setValue('out_dir', self.out_edit.text())
+            except Exception:
+                pass
+
+        def on_fatal(self, tb):
+            self.run_btn.setEnabled(True)
+            self.cancel_btn.setEnabled(False)
+            self.statusBar().showMessage('오류로 중단됨')
+            self.log.appendPlainText('\n[치명 오류]\n' + tb)
+
+        # --- 편의 ---
+        def open_selected(self):
+            rows = {i.row() for i in self.table.selectedIndexes()}
+            for row in rows:
+                for p in self._row_paths.get(row, []):
+                    if os.path.exists(p):
+                        QDesktopServices.openUrl(QUrl.fromLocalFile(p))
+
+        def open_out_dir(self):
+            # 생성물이 있으면 그 폴더, 없으면 출력 폴더 필드
+            target = None
+            produced = [p for ps in self._row_paths.values() for p in ps]
+            if produced:
+                target = str(Path(produced[-1]).parent)
+            elif self.out_edit.text().strip():
+                target = self.out_edit.text().strip()
+            if target and os.path.isdir(target):
+                QDesktopServices.openUrl(QUrl.fromLocalFile(target))
+            else:
+                QMessageBox.information(self, '폴더 없음', '출력 폴더가 아직 없습니다.')
+
+        def dragEnterEvent(self, e):
+            if e.mimeData().hasUrls():
+                e.acceptProposedAction()
+
+        def dropEvent(self, e):
+            self._add_paths([u.toLocalFile() for u in e.mimeData().urls()])
+
+        def closeEvent(self, event):
+            if self.thread is not None and self.thread.isRunning():
+                if self.worker:
+                    self.worker.cancel()
+                self.thread.quit()
+                self.thread.wait(3000)
+            super().closeEvent(event)
+
+    win = MainWindow()
+    win.show()
     # Center on screen
     try:
         screen = app.primaryScreen().availableGeometry()
-        w.move(
-            (screen.width() - w.frameGeometry().width()) // 2,
-            (screen.height() - w.frameGeometry().height()) // 2,
+        win.move(
+            (screen.width() - win.frameGeometry().width()) // 2,
+            (screen.height() - win.frameGeometry().height()) // 2,
         )
     except Exception:
         pass
@@ -1689,12 +1890,24 @@ def run_gui() -> int:
 # MD → PDF 변환 (헤드리스 Chrome 인쇄) — 구 MD_to_PDF.py
 # =============================================================================
 
-# Windows 표준 브라우저 경로 → PATH 순으로 탐색
-_BROWSER_CANDIDATES = (
-    r"C:\Program Files\Google\Chrome\Application\chrome.exe",
-    r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
-    r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
-    r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+# 플랫폼별 표준 브라우저 경로 → PATH 순으로 탐색
+_BROWSER_CANDIDATES = {
+    "win32": (
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+    ),
+    "darwin": (
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+        "/Applications/Chromium.app/Contents/MacOS/Chromium",
+    ),
+}
+_BROWSER_NAMES = (
+    "chrome", "chrome.exe", "msedge", "msedge.exe",
+    "google-chrome", "google-chrome-stable",
+    "chromium", "chromium-browser", "microsoft-edge",
 )
 
 # 인쇄 전용 스타일 — 다크 테마/드로어/플로팅 UI 없는 문서 레이아웃
@@ -1702,10 +1915,14 @@ PRINT_TEMPLATE = _load_template("print.html")
 
 
 def _find_browser() -> str | None:
-    for cand in _BROWSER_CANDIDATES:
+    # MD2DOC_BROWSER 환경변수로 명시 지정 가능 (가장 우선)
+    env = os.environ.get("MD2DOC_BROWSER", "").strip()
+    if env and Path(env).is_file():
+        return env
+    for cand in _BROWSER_CANDIDATES.get(sys.platform, ()):
         if Path(cand).is_file():
             return cand
-    for name in ("chrome", "chrome.exe", "msedge", "msedge.exe", "chromium"):
+    for name in _BROWSER_NAMES:
         found = shutil.which(name)
         if found:
             return found
@@ -1717,6 +1934,7 @@ def md_to_html_body(
     render_mermaid: bool = True,
     new_page_h2: bool = False,
     progress_cb=None,
+    allow_network: bool = True,
 ) -> str:
     # codehilite가 토큰화하기 전에 ```mermaid 펜스를 raw HTML 블록으로 변환
     # (md2doc.py와 동일한 전처리 — 변환 후 정규식은 codehilite 마크업과 불일치)
@@ -1733,7 +1951,9 @@ def md_to_html_body(
     body = _linkify_inline_toc(body, _heading_map)
     body = _repair_dead_fragment_links(body, _heading_map)
     if render_mermaid:
-        body = _prerender_mermaid_to_svg(body, progress_cb=progress_cb)
+        body = _prerender_mermaid_to_svg(
+            body, progress_cb=progress_cb, allow_network=allow_network
+        )
     body = _apply_smart_pagination(body, new_page_h2=new_page_h2)
     return body
 
@@ -1926,6 +2146,7 @@ def convert_markdown_to_pdf(
     new_page_h2: bool = False,
     browser: str | None = None,
     progress_cb=None,
+    allow_network: bool = True,
 ) -> Path:
     """단일 Markdown 파일을 PDF로 변환·저장하고 출력 경로를 반환한다."""
     browser = browser or _find_browser()
@@ -1940,6 +2161,7 @@ def convert_markdown_to_pdf(
         render_mermaid=render_mermaid,
         new_page_h2=new_page_h2,
         progress_cb=progress_cb,
+        allow_network=allow_network,
     )
     # 출력 HTML은 임시 폴더에 생성되므로 상대경로 이미지를 data URI로 임베딩
     body = _embed_local_images(body, in_path.parent)
@@ -1958,207 +2180,6 @@ def convert_markdown_to_pdf(
             html_path.write_text(doc, encoding="utf-8")
             html_to_pdf(html_path, out_path, browser)
     return out_path
-
-
-def run_pdf_gui() -> int:
-    """PySide6 GUI 모드 — 인자 없이 실행 시 진입한다."""
-    from PySide6.QtCore import Qt, QThread, Signal
-    from PySide6.QtWidgets import (
-        QApplication, QCheckBox, QFileDialog, QHBoxLayout, QLabel, QLineEdit,
-        QListWidget, QMainWindow, QMessageBox, QProgressBar, QPushButton,
-        QPlainTextEdit, QVBoxLayout, QWidget,
-    )
-
-    class ConvertWorker(QThread):
-        log = Signal(str)
-        progress = Signal(int, int)  # 완료 수, 전체 수
-        done = Signal(int)           # 성공 파일 수
-
-        def __init__(self, paths, out_dir, opts, parent=None):
-            super().__init__(parent)
-            self._paths = paths
-            self._out_dir = out_dir
-            self._opts = opts
-
-        def run(self):
-            ok = 0
-            total = len(self._paths)
-            # 변환 중 warning(이미지 누락·Mermaid 실패 등)을 로그 뷰로 라우팅
-            handler = _CallbackLogHandler(lambda m: self.log.emit(f"  ⚠️ {m}"))
-            logger.addHandler(handler)
-            try:
-                for i, in_path in enumerate(self._paths):
-                    self.log.emit(f"[변환 시작] {in_path.name}")
-
-                    def mermaid_cb(cur, tot, label, name=in_path.name):
-                        self.log.emit(f"  {name}: mermaid {cur}/{tot} — {label}")
-
-                    try:
-                        out_path = (
-                            (self._out_dir / (in_path.stem + ".pdf"))
-                            if self._out_dir else None
-                        )
-                        written = convert_markdown_to_pdf(
-                            in_path, out_path=out_path,
-                            keep_html=self._opts["keep_html"],
-                            render_mermaid=not self._opts["no_mermaid"],
-                            new_page_h2=self._opts["new_page_h2"],
-                            browser=self._opts["browser"] or None,
-                            progress_cb=mermaid_cb,
-                        )
-                        self.log.emit(f"[완료] {written}")
-                        ok += 1
-                    except Exception as e:
-                        self.log.emit(f"[오류] {in_path.name}: {e}")
-                    self.progress.emit(i + 1, total)
-            finally:
-                logger.removeHandler(handler)
-            self.done.emit(ok)
-
-    class MainWindow(QMainWindow):
-        def __init__(self):
-            super().__init__()
-            self.setWindowTitle("Markdown → PDF 변환기")
-            self.setAcceptDrops(True)
-            self._worker = None
-
-            root = QWidget()
-            self.setCentralWidget(root)
-            lay = QVBoxLayout(root)
-
-            lay.addWidget(QLabel("변환할 Markdown 파일 (드래그앤드롭 가능):"))
-            self.list = QListWidget()
-            self.list.setMinimumHeight(120)
-            lay.addWidget(self.list)
-
-            btn_row = QHBoxLayout()
-            for text, fn in (
-                ("파일 추가…", self.add_files),
-                ("선택 제거", self.remove_selected),
-                ("전체 비우기", self.list.clear),
-            ):
-                b = QPushButton(text)
-                b.clicked.connect(fn)
-                btn_row.addWidget(b)
-            lay.addLayout(btn_row)
-
-            out_row = QHBoxLayout()
-            out_row.addWidget(QLabel("출력 폴더 (비우면 원본과 동일 위치):"))
-            self.out_dir = QLineEdit()
-            self.out_dir.setPlaceholderText("입력 파일과 같은 폴더")
-            out_row.addWidget(self.out_dir, 1)
-            b = QPushButton("찾아보기…")
-            b.clicked.connect(self.pick_out_dir)
-            out_row.addWidget(b)
-            lay.addLayout(out_row)
-
-            self.keep_html = QCheckBox("중간 HTML 보존 (.print.html)")
-            self.no_mermaid = QCheckBox("Mermaid 렌더 생략 (소스 그대로 출력)")
-            self.new_page_h2 = QCheckBox("## 섹션마다 새 페이지 시작")
-            for cb in (self.keep_html, self.no_mermaid, self.new_page_h2):
-                lay.addWidget(cb)
-
-            br_row = QHBoxLayout()
-            br_row.addWidget(QLabel("브라우저 (자동 탐색 실패 시):"))
-            self.browser = QLineEdit()
-            self.browser.setPlaceholderText(_find_browser() or "chrome.exe 경로")
-            br_row.addWidget(self.browser, 1)
-            b = QPushButton("찾아보기…")
-            b.clicked.connect(self.pick_browser)
-            br_row.addWidget(b)
-            lay.addLayout(br_row)
-
-            self.progress = QProgressBar()
-            self.progress.setValue(0)
-            lay.addWidget(self.progress)
-
-            self.convert_btn = QPushButton("PDF로 변환")
-            self.convert_btn.clicked.connect(self.start_convert)
-            lay.addWidget(self.convert_btn)
-
-            lay.addWidget(QLabel("로그:"))
-            self.log_view = QPlainTextEdit()
-            self.log_view.setReadOnly(True)
-            self.log_view.setMinimumHeight(140)
-            lay.addWidget(self.log_view)
-
-            self.resize(680, 620)
-
-        def log(self, msg):
-            self.log_view.appendPlainText(msg)
-
-        def add_files(self):
-            files, _ = QFileDialog.getOpenFileNames(
-                self, "Markdown 파일 선택", "", "Markdown (*.md *.markdown)"
-            )
-            for f in files:
-                self.list.addItem(f)
-
-        def remove_selected(self):
-            for item in self.list.selectedItems():
-                self.list.takeItem(self.list.row(item))
-
-        def pick_out_dir(self):
-            d = QFileDialog.getExistingDirectory(self, "출력 폴더 선택")
-            if d:
-                self.out_dir.setText(d)
-
-        def pick_browser(self):
-            f, _ = QFileDialog.getOpenFileName(
-                self, "Chrome/Edge 실행 파일", "", "Executable (*.exe)"
-            )
-            if f:
-                self.browser.setText(f)
-
-        def dragEnterEvent(self, e):
-            if e.mimeData().hasUrls():
-                e.acceptProposedAction()
-
-        def dropEvent(self, e):
-            for url in e.mimeData().urls():
-                p = url.toLocalFile()
-                if p.lower().endswith((".md", ".markdown")):
-                    self.list.addItem(p)
-
-        def start_convert(self):
-            paths = [
-                Path(self.list.item(i).text()) for i in range(self.list.count())
-            ]
-            if not paths:
-                QMessageBox.warning(self, "입력 없음", "변환할 .md 파일을 추가하세요.")
-                return
-            missing = [p.name for p in paths if not p.is_file()]
-            if missing:
-                QMessageBox.warning(
-                    self, "파일 없음", "파일이 없습니다: " + ", ".join(missing)
-                )
-                return
-            opts = {
-                "keep_html": self.keep_html.isChecked(),
-                "no_mermaid": self.no_mermaid.isChecked(),
-                "new_page_h2": self.new_page_h2.isChecked(),
-                "browser": self.browser.text().strip(),
-            }
-            out_dir = Path(self.out_dir.text()) if self.out_dir.text().strip() else None
-            self.convert_btn.setEnabled(False)
-            self.progress.setValue(0)
-            self._worker = ConvertWorker(paths, out_dir, opts, self)
-            self._worker.log.connect(self.log)
-            self._worker.progress.connect(
-                lambda done, total: self.progress.setValue(int(100 * done / total))
-            )
-            self._worker.done.connect(self.on_done)
-            self._worker.start()
-
-        def on_done(self, ok):
-            self.convert_btn.setEnabled(True)
-            total = self.list.count()
-            self.log(f"=== {ok}/{total}개 변환 완료 ===")
-
-    app = QApplication(sys.argv)
-    win = MainWindow()
-    win.show()
-    return app.exec()
 
 
 if __name__ == "__main__":
@@ -2218,7 +2239,7 @@ if __name__ == "__main__":
         "--pdf",
         action="store_true",
         default=False,
-        help="PDF 모드 — GUI/CLI 모두 MD→PDF로 동작 (헤드리스 Chrome 인쇄)",
+        help="PDF 모드 — CLI는 MD→PDF로 동작, GUI는 PDF 생성 체크 상태로 진입 (헤드리스 Chrome 인쇄)",
     )
     parser.add_argument("--out-dir", dest="out_dir", default=None,
                         help="PDF 모드: 출력 디렉토리 (다중 입력용)")
@@ -2229,7 +2250,9 @@ if __name__ == "__main__":
     parser.add_argument("--new-page-h2", dest="new_page_h2", action="store_true",
                         help="PDF 모드: h2(##) 섹션마다 새 페이지에서 시작")
     parser.add_argument("--browser", dest="browser", default=None,
-                        help="PDF 모드: Chrome/Edge 실행 파일 경로 (자동 탐색 실패 시)")
+                        help="PDF 모드: Chrome/Edge 실행 파일 경로 (자동 탐색 실패 시). MD2DOC_BROWSER 환경변수도 인식.")
+    parser.add_argument("--offline", dest="offline", action="store_true",
+                        help="외부 네트워크 요청 금지 — Mermaid 사전렌더는 캐시만 사용, 미스는 클라이언트 렌더링 폴백")
     parser.add_argument("--verbose", "-v", dest="verbose", action="store_true",
                         help="진단 로그를 DEBUG 수준까지 출력")
     parser.add_argument("--quiet", "-q", dest="quiet", action="store_true",
@@ -2243,9 +2266,9 @@ if __name__ == "__main__":
         format="%(message)s",
     )
 
-    # Default to GUI unless --cli is provided. --pdf는 PDF 전용 GUI로 진입.
+    # Default to GUI unless --cli is provided. --pdf는 통합 GUI에서 PDF 체크 상태로 진입.
     if not bool(args.cli):
-        raise SystemExit(run_pdf_gui() if args.pdf else run_gui())
+        raise SystemExit(run_gui(default_pdf=bool(args.pdf)))
 
     if not args.in_paths:
         raise SystemExit("--in is required in --cli mode. (Run without --cli to launch the GUI.)")
@@ -2276,6 +2299,7 @@ if __name__ == "__main__":
                     render_mermaid=not args.no_mermaid,
                     new_page_h2=args.new_page_h2,
                     browser=args.browser,
+                    allow_network=not args.offline,
                 )
                 print(str(written))
                 done += 1
@@ -2297,6 +2321,7 @@ if __name__ == "__main__":
         embed_mermaid=bool(args.embed_mermaid),
         prerender_mermaid=bool(args.prerender_mermaid),
         callout_rules_file=args.callout_rules,
+        allow_network=not args.offline,
     )
 
     done = 0

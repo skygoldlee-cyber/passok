@@ -180,9 +180,9 @@ _FAKE_JS = "/* mermaid */" + "x" * 250_000  # _MERMAID_MIN_BYTES(200KB) 초과
 
 @pytest.fixture(autouse=True)
 def _reset_mermaid_memory():
-    md2doc._MERMAID_JS_MEMORY = None
+    md2doc._mermaid_js_or_raise.cache_clear()
     yield
-    md2doc._MERMAID_JS_MEMORY = None
+    md2doc._mermaid_js_or_raise.cache_clear()
 
 
 class TestEnsureMermaidJs:
@@ -500,6 +500,244 @@ class TestTocLinksEndToEnd:
         heading_ids = set(md2doc.re.findall(r'<h[1-4][^>]*id="([^"]+)"', body))
         frag_targets = set(md2doc.re.findall(r'<a href="#([^"]+)"', body))
         assert frag_targets <= heading_ids
+
+
+# ---------------------------------------------------------------------------
+# _find_heading_id — 부분 매칭 오교정 차단
+# ---------------------------------------------------------------------------
+
+class TestFindHeadingId:
+    _MAP = {
+        "첫 번째 섹션": "_3",
+        "두 번째 섹션": "_4",
+        "세부 사항 A": "_5",
+        "세부 사항 B": "_6",
+    }
+
+    def test_exact_match(self):
+        assert md2doc._find_heading_id("첫 번째 섹션", self._MAP) == "_3"
+
+    def test_whitespace_normalized_match(self):
+        # 링크 텍스트와 헤딩이 공백만 다르면 매칭된다
+        assert md2doc._find_heading_id("첫번째섹션", self._MAP) == "_3"
+
+    def test_unique_partial_match(self):
+        assert md2doc._find_heading_id("첫 번째", self._MAP) == "_3"
+
+    def test_short_text_no_partial(self):
+        # 4자 미만 텍스트는 부분 매칭을 하지 않는다 (짧은 단어 오매칭 방지)
+        assert md2doc._find_heading_id("섹션", self._MAP) is None
+
+    def test_ambiguous_partial_returns_none(self):
+        # 후보가 둘 이상이면 어느 하나에 잘못 연결하지 않고 None을 반환 —
+        # 죽은 링크를 유지하는 편이 오교정보다 안전하다
+        assert md2doc._find_heading_id("세부 사항", self._MAP) is None
+
+    def test_empty_returns_none(self):
+        assert md2doc._find_heading_id("", self._MAP) is None
+
+
+# ---------------------------------------------------------------------------
+# _linkify_inline_toc — 인라인 태그를 포함한 목차 헤딩 인식
+# ---------------------------------------------------------------------------
+
+class TestTocHeadingInlineTags:
+    _MAP = {"첫 번째 섹션": "_3"}
+
+    def test_heading_with_inline_tag_recognized(self):
+        body = '<h2><em>목차</em></h2><ul><li><a href="#x">첫 번째 섹션</a></li></ul>'
+        out = md2doc._linkify_inline_toc(body, self._MAP)
+        assert '<a href="#_3">첫 번째 섹션</a>' in out
+
+    def test_permalink_markup_heading_recognized(self):
+        # toc permalink 마크업이 헤딩 안에 있어도 키워드 판정이 동작한다
+        body = (
+            '<h2 id="_toc">목차<a class="toclink" href="#_toc">&para;</a></h2>'
+            '<ul><li><a href="#x">첫 번째 섹션</a></li></ul>'
+        )
+        out = md2doc._linkify_inline_toc(body, self._MAP)
+        assert '<a href="#_3">첫 번째 섹션</a>' in out
+
+    def test_heading_without_keyword_untouched(self):
+        body = '<h2>소개</h2><ul><li><a href="#x">첫 번째 섹션</a></li></ul>'
+        out = md2doc._linkify_inline_toc(body, self._MAP)
+        assert 'href="#x"' in out
+
+
+# ---------------------------------------------------------------------------
+# allow_network — 오프라인 모드와 mermaid.ink 회로 차단
+# ---------------------------------------------------------------------------
+
+class _SyncExecutor:
+    """ThreadPoolExecutor 대체용 — 제출 즉시 동기 실행하는 Future를 반환한다."""
+
+    def __init__(self, max_workers=1):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+    def submit(self, fn, *args):
+        from concurrent.futures import Future
+        f = Future()
+        try:
+            f.set_result(fn(*args))
+        except Exception as e:
+            f.set_exception(e)
+        return f
+
+
+class TestOfflinePrerender:
+    _DIVS = (
+        '<div class="mermaid">flowchart LR\nuniq-A--&gt;B</div>'
+        '<div class="mermaid">flowchart LR\nuniq-C--&gt;D</div>'
+    )
+
+    def test_offline_no_network_and_div_kept(self, _cache_tmp, monkeypatch):
+        def _boom(*a, **k):
+            raise AssertionError("network must not be used")
+
+        monkeypatch.setattr(md2doc.urllib.request, "urlopen", _boom)
+        out = md2doc._prerender_mermaid_to_svg(self._DIVS, allow_network=False)
+        assert out.count('<div class="mermaid">') == 2
+        assert "mermaid-img" not in out
+
+    def test_offline_uses_cache(self, _cache_tmp):
+        md2doc._mermaid_cache_write(
+            "flowchart LR\nuniq-A-->B",
+            '<svg xmlns="http://www.w3.org/2000/svg"><text>x</text></svg>',
+        )
+        out = md2doc._prerender_mermaid_to_svg(
+            '<div class="mermaid">flowchart LR\nuniq-A--&gt;B</div>',
+            allow_network=False,
+        )
+        assert "mermaid-img" in out
+
+    def test_circuit_breaker_skips_ink_after_first_failure(
+        self, _cache_tmp, monkeypatch
+    ):
+        calls = {"ink": 0, "kroki": 0}
+
+        def fake_urlopen(req, timeout=30):
+            url = req.full_url if hasattr(req, "full_url") else str(req)
+            calls["ink" if "mermaid.ink" in url else "kroki"] += 1
+            raise OSError("renderer down")
+
+        monkeypatch.setattr(md2doc.urllib.request, "urlopen", fake_urlopen)
+        monkeypatch.setattr(md2doc.time, "sleep", lambda s: None)
+        # 워커 경합으로 판정이 흔들리지 않도록 동기 실행기로 대체한다
+        monkeypatch.setattr(md2doc, "ThreadPoolExecutor", _SyncExecutor)
+        md2doc._prerender_mermaid_to_svg(self._DIVS)
+        # 첫 다이어그램만 ink 4회 재시도 — 이후 다이어그램은 회로 차단으로 kroki 직행
+        assert calls["ink"] == 4
+        assert calls["kroki"] == 4
+
+
+class TestEnsureMermaidJsOffline:
+    def test_offline_skips_network(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(
+            md2doc, "_REPO_VENDOR_MERMAID", tmp_path / "missing.js"
+        )
+
+        def _boom(url, timeout=30):
+            raise AssertionError("network must not be used")
+
+        monkeypatch.setattr(md2doc, "_download_text", _boom)
+        assert md2doc._ensure_mermaid_js(allow_network=False) is None
+
+    def test_offline_uses_vendor(self, tmp_path, monkeypatch):
+        vendor = tmp_path / "mermaid.min.js"
+        vendor.write_text(_FAKE_JS, encoding="utf-8")
+        monkeypatch.setattr(md2doc, "_REPO_VENDOR_MERMAID", vendor)
+        assert md2doc._ensure_mermaid_js(allow_network=False) == _FAKE_JS
+
+
+# ---------------------------------------------------------------------------
+# html_to_pdf / _find_browser
+# ---------------------------------------------------------------------------
+
+class TestHtmlToPdf:
+    def test_invokes_browser_print(self, tmp_path, monkeypatch):
+        html_path = tmp_path / "doc.html"
+        html_path.write_text("<html></html>", encoding="utf-8")
+        pdf_path = tmp_path / "doc.pdf"
+        captured = {}
+
+        class _Result:
+            returncode = 0
+            stdout = ""
+            stderr = ""
+
+        def fake_run(cmd, **kw):
+            captured["cmd"] = cmd
+            captured["kw"] = kw
+            pdf_path.write_bytes(b"%PDF")
+            return _Result()
+
+        monkeypatch.setattr(md2doc.subprocess, "run", fake_run)
+        md2doc.html_to_pdf(html_path, pdf_path, "fakebrowser")
+        assert captured["cmd"][0] == "fakebrowser"
+        assert any(a.startswith("--print-to-pdf=") for a in captured["cmd"])
+        assert captured["kw"]["timeout"] == 120
+
+    def test_failure_raises(self, tmp_path, monkeypatch):
+        html_path = tmp_path / "doc.html"
+        html_path.write_text("<html></html>", encoding="utf-8")
+
+        class _Result:
+            returncode = 1
+            stdout = ""
+            stderr = "boom"
+
+        monkeypatch.setattr(md2doc.subprocess, "run", lambda *a, **k: _Result())
+        with pytest.raises(RuntimeError):
+            md2doc.html_to_pdf(html_path, tmp_path / "out.pdf", "fakebrowser")
+
+
+class TestFindBrowser:
+    def test_env_var_preferred(self, tmp_path, monkeypatch):
+        exe = tmp_path / "mybrowser.exe"
+        exe.write_text("x")
+        monkeypatch.setenv("MD2DOC_BROWSER", str(exe))
+        assert md2doc._find_browser() == str(exe)
+
+    def test_which_fallback(self, monkeypatch):
+        monkeypatch.delenv("MD2DOC_BROWSER", raising=False)
+        monkeypatch.setattr(md2doc.Path, "is_file", lambda self: False)
+        monkeypatch.setattr(
+            md2doc.shutil, "which",
+            lambda n: "/usr/bin/chromium" if n == "chromium" else None,
+        )
+        assert md2doc._find_browser() == "/usr/bin/chromium"
+
+
+# ---------------------------------------------------------------------------
+# %%BUILD%% 스탬프 — 콘텐츠 해시 기반 재현성
+# ---------------------------------------------------------------------------
+
+class TestBuildStamp:
+    def _convert(self, md):
+        cfg = md2doc.RenderConfig(prerender_mermaid=False, embed_mermaid=False)
+        return md2doc.markdown_to_tailwind_html(md, config=cfg)
+
+    def test_deterministic_for_same_input(self, monkeypatch):
+        monkeypatch.delenv("SOURCE_DATE_EPOCH", raising=False)
+        # 시각 의존 제거 — 동일 입력은 바이트 단위로 동일한 출력을 만든다
+        assert self._convert("# 제목\n") == self._convert("# 제목\n")
+
+    def test_differs_for_changed_input(self, monkeypatch):
+        monkeypatch.delenv("SOURCE_DATE_EPOCH", raising=False)
+        a = self._convert("# 제목\n")
+        b = self._convert("# 다른 제목\n")
+        stamp = md2doc.re.compile(r"b[0-9a-f]{8}")
+        assert stamp.search(a).group(0) != stamp.search(b).group(0)
+
+    def test_source_date_epoch_override(self, monkeypatch):
+        monkeypatch.setenv("SOURCE_DATE_EPOCH", "1700000000")
+        assert "b1700000000" in self._convert("# 제목\n")
 
 
 # ---------------------------------------------------------------------------
