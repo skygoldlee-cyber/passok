@@ -268,7 +268,7 @@
  *                                              registryKey가 가변이라 typedef에 고정 키로 선언하지 않음
  * @property {ResourcesMeta}   [resources]
  * @property {Object}          [integratedExam] 통합 시험 규칙 (passAverage·subjectFailBelow 등)
- * @property {Object.<string, {title?: string, subtitle?: string}>} [uiText] 뷰별 UI 텍스트 오버라이드 (manifest.uiText 패스스루)
+ * @property {Object.<string, {title?: string, subtitle?: string, placeholder?: string}>} [uiText] 뷰별 UI 텍스트 오버라이드 (manifest.uiText 패스스루)
  * @property {Object.<string, string[]>} [synonyms] 주관식 채점 유사어 사전 (manifest.synonyms 패스스루 — checkShortAnswer)
  * @property {{wrongCauses?: Array<{key:string, label:string, advice?:string, autoPattern?:string}>}} [analysis]
  *                                            학습 진단 도메인 분류 설정 (manifest.analysis 패스스루 — 오답 원인 분류표 등)
