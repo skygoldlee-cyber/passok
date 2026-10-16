@@ -6,7 +6,8 @@
 > **목적**: 현재 무료 PWA 학습 플랫폼을 월 구독 기반 서비스로 전환하기 위한 필요 작업 정리
 > **문서 ID**: DOC-DSN-07
 > **범위**: platform · 판본: none
-> **관련 SPEC ID**: ROAD-P0~P4 · `AN-01~03`(학습 Pro 구현 과제 — 구 `SUBSCRIPTION_ROADMAP.md`·DOC-DSN-03, 본 문서 하단 절로 통합)
+> **관련 SPEC ID**: ROAD-P0~P4 · `AN-01~03`(학습 Pro 구현 과제 — 본 문서 하단 절로 통합)
+> **통합 문서**: 학습 Pro 구현 과제 — 구 `SUBSCRIPTION_ROADMAP.md`·DOC-DSN-03 흡수
 
 ---
 
