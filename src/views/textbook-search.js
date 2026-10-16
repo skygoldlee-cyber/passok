@@ -6,13 +6,13 @@ import { escapeHTML, esc, html, raw } from '../sanitize.js';
 import { renderMermaidIn } from '../mermaid-render.js';
 import { attachImageZoomIn } from '../image-zoom.js';
 import { TIMING } from '../config/timing.js';
+import { DataLoader } from '../data-loader.js';
 import { getRefTables, mapSourceToRef, resolveRefPath, refDocDisplayName } from '../pdf-registry.js';
 import { formatSectionContentForReader } from '../reader-format.js';
 import { escapeRegExp, debounce } from '../utils.js';
-import { ensureLazyIndexes, runTextbookSearch, _matchSnippet } from '../search-index.js';
+import { ensureLazyIndexes, runUnifiedSearch, _matchSnippet } from '../search-index.js';
 import { glossarySubjectKey } from '../glossary-query.js';
-import { initSearchSources } from '../search-sources.js';
-// [모바일 PWA 견고성] 레지스트리는 window 전역(가드)에서 읽는다(정적 import 하드 의존 지양).
+import { initSearchSources, matchGlossaryDefs } from '../search-sources.js';
 
 const textbookState = {
     filter: 'all',
@@ -42,6 +42,13 @@ const KIND_LABELS = { ref: '참조자료', exam: '문제은행', doc: '문서' }
 export function renderTextbookSearch() {
     initSearchSources(); // TS-18 — 플랫폼 콘텐츠 소스 등록 (idempotent)
     const searchInput = /** @type {HTMLInputElement} */ (document.getElementById('textbook-search-input'));
+
+    // 도메인 검색 카피 — manifest uiText.search가 플레이스홀더·안내 문구를 덮어쓴다 (DA-12)
+    const searchText = (DataLoader.registry && DataLoader.registry.uiText
+        && DataLoader.registry.uiText.search) || {};
+    const descEl = document.getElementById('textbook-search-desc');
+    if (searchInput && searchText.placeholder) searchInput.placeholder = searchText.placeholder;
+    if (descEl && searchText.subtitle) descEl.textContent = searchText.subtitle;
 
     // Bind search input events only once
     if (searchInput && !searchInput.dataset.bound) {
@@ -175,8 +182,10 @@ function performTextbookSearch() {
         });
     }
 
-    const { buckets, allVariantTerms, glossDefs, lazyPending, failedTerms } =
-        runTextbookSearch(query, textbookState.filter);
+    const { buckets, allVariantTerms, lazyPending, failedTerms } =
+        runUnifiedSearch(query, textbookState.filter);
+    // TS-15 — 용어 정의 카드는 콘텐츠 계층(search-sources)이 인덱스 산출 어휘로 선별한다
+    const glossDefs = matchGlossaryDefs(allVariantTerms, textbookState.filter);
 
     // 티어별 정렬·상한 (테이블 주도 — 티어 추가 시 RESULT_TIERS 한 곳만 수정)
     // kinds '*'는 선언되지 않은 나머지 kind 버킷을 전부 받는 폴백 티어다 (TS-18).
@@ -235,7 +244,7 @@ function performTextbookSearch() {
     const badgeColors = {};
     {
         const colors = ['badge-cyan', 'badge-violet', 'badge-emerald', 'badge-amber', 'badge-rose', 'badge-indigo'];
-        const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+        const subjects = (DataLoader.registry && DataLoader.registry.subjects) || [];
         subjects.forEach((sub, idx) => { badgeColors[sub.key] = colors[idx % colors.length]; });
     }
     const renderResultCard = (item, idx) => {
@@ -317,7 +326,7 @@ function performTextbookSearch() {
     if (glossDefs.length) {
         container.insertAdjacentHTML('beforeend',
             `<div class="search-weak-divider search-gloss-divider">용어 정의 — 용어집에서 ${esc(String(glossDefs.length))}건</div>`);
-        const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+        const subjects = (DataLoader.registry && DataLoader.registry.subjects) || [];
         for (const entry of glossDefs) {
             const kw = String(entry.keyword || '');
             const subjKey = glossarySubjectKey(entry.subjectId);

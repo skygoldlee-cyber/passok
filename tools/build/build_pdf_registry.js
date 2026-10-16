@@ -230,7 +230,7 @@ function checkNamedRefs(refs, examId) {
   }
 }
 
-function buildLawLinks(targets, refsByExam, defaultId) {
+function buildLawLinks(targets, refsByExam) {
   const lawdb = loadLawDb();
   if (!lawdb) {
     console.warn('content/lawdb.json not found — law-links.js는 빈 매핑으로 생성됩니다');
@@ -270,16 +270,14 @@ function buildLawLinks(targets, refsByExam, defaultId) {
 
 import { getActiveExamId } from './exam-context.js';
 
-const _DEFAULT_EXAM_ID = ${JSON.stringify(defaultId)};
-
 const _EXAM_LAW_URLS = {
 ${entries.join(',\n')}
 };
 
-// 활성 시험의 매칭 테이블 (미등록 시험은 기본 시험으로 폴백)
+// 활성 시험의 매칭 테이블 (미등록 시험은 빈 테이블 — 다른 시험 문서로 폴백하지 않음)
 function activeLawUrls() {
   const id = getActiveExamId();
-  return _EXAM_LAW_URLS[id] || _EXAM_LAW_URLS[_DEFAULT_EXAM_ID] || [];
+  return _EXAM_LAW_URLS[id] || [];
 }
 
 // 전 시험 매칭 합집합 (URL 기준 중복 제거 — 같은 문서의 matchKey는 첫 것만 유지, 순서 보존)
@@ -311,8 +309,6 @@ export function lawUrlFor(name) {
 
 function build() {
   const targets = getExamTargets(WORKSPACE_DIR);
-  const defaultId = (targets.find(t => t.isDefault) || targets[0] || {}).id || '';
-
   const entries = [];
   const refsByExam = new Map();
   for (const target of targets) {
@@ -350,8 +346,6 @@ function build() {
 
 import { getActiveExamId } from './exam-context.js';
 
-const _DEFAULT_EXAM_ID = ${JSON.stringify(defaultId)};
-
 const _EXAM_TABLES = {
 ${entries.join(',\n')}
 };
@@ -383,7 +377,7 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
 
 /**
  * 활성 시험의 참조자료 테이블 묶음.
- * 활성 시험에 테이블이 없으면 기본 시험으로 폴백 (참조자료 없는 시험은 빈 테이블 반환 가능).
+ * 미등록 시험은 빈 테이블 — 다른 시험의 참조자료로 폴백하지 않는다 (교차 오염 방지).
  * @returns {{contentRoot?: string, SUBJECT_DIR_MAP?: Object, REF_DIRS?: Object,
  *   SOURCE_REF_MAP?: Array, KEYWORD_REF_MAP?: Array, REFERENCE_FILES?: Object,
  *   REFERENCE_COMMON?: Array, REFERENCE_INGREDIENTS?: Array, REFERENCE_LAW?: Array,
@@ -392,8 +386,7 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
  */
 export function getRefTables() {
     const id = getActiveExamId();
-    const eid = _EXAM_TABLES[id] ? id : _DEFAULT_EXAM_ID;
-    return { ...(_EXAM_TABLES[eid] || {}), ...(_EXAM_DERIVED[eid] || {}) };
+    return { ...(_EXAM_TABLES[id] || {}), ...(_EXAM_DERIVED[id] || {}) };
 }
 
 // --- 헬퍼 함수 ---
@@ -467,7 +460,7 @@ export function resolveKeywordRef(text) {
   fs.writeFileSync(outPath, output, 'utf-8');
   console.log(`Generated: src/pdf-registry.js (시험 ${entries.length}개: ${targets.filter(t => fs.existsSync(path.join(WORKSPACE_DIR, t.contentRoot, 'references.json'))).map(t => t.id).join(', ')})`);
 
-  buildLawLinks(targets, refsByExam, defaultId);
+  buildLawLinks(targets, refsByExam);
 }
 
 build();
