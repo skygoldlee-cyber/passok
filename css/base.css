@@ -895,6 +895,14 @@ body.ui-mode-practice .ui-mode-toggle {
     align-items: center;
 }
 
+/* 배경화 크레딧 — 사이드바 제일 아래. 태블릿은 푸터·모바일은 사이드바 전체가 숨겨져 PC에서만 노출 */
+.sidebar-wallpaper {
+    margin: 0;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
 /* Mobile Tab Bar - Hidden by default, shown only on mobile via media query */
 .mobile-tab-bar {
     display: none;
