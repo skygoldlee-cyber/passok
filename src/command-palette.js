@@ -10,7 +10,7 @@ import { getChosung } from './utils.js';
 import { contentPath } from './exam-context.js';
 import { DataLoader } from './data-loader.js';
 import { openSubjectSection } from './views/textbook-reader.js';
-import { buildSectionDisplayTitles, isStoryMetaSection } from './reader-toc.js';
+import { collectTextbookSections } from './search-sources.js';
 import { setTextbookSearchQuery } from './views/textbook-search.js';
 import { dictState } from './views/dictionary.js';
 import { trackAction } from './usage-stats.js';
@@ -107,34 +107,19 @@ export function searchAll(query, sources) {
     });
 
     // 2) 과목 콘텐츠 — 교재 섹션 (카드·퀴즈는 매치 항목으로 착지 불가 → 범위 제외)
-    Object.keys(studyData).forEach(subjId => {
-        const subj = studyData[subjId];
-        const subjName = subj.name || subjId;
-        (subj.chapters || []).forEach(ch => {
-            const secs = ch.sections || [];
-            // 딥링크 목적지 — 리더 표시 제목(중복 제목은 챕터 병기로 구분) +
-            // 소속 챕터 앵커(직전 "Chapter N" 헤더). 원시 제목만 넘기면
-            // 챕터마다 반복되는 제목(챕터 핵심 요약 등)이 첫 챕터로 오이동한다.
-            const displayTitles = buildSectionDisplayTitles(secs);
-            let chAnchor = '';
-            secs.forEach((sec, sIdx) => {
-                const chM = String(sec.title || '').match(/Chapter\s*(\d+)/i);
-                if (chM) chAnchor = 'ch' + chM[1].padStart(2, '0');
-                // 메타 섹션(비교표·확인문제·요약 등)은 리더 미렌더로 도달 불가 — 결과에서 제외
-                if (isStoryMetaSection(sec.title)) return;
-                const gotoTitle = displayTitles[sIdx] || sec.title;
-                const s = _matchScore(`${sec.title} ${ch.chapterTitle}`, sec.title, terms);
-                if (s >= 0) {
-                    push('section', {
-                        type: 'section', icon: 'fa-book-open', title: gotoTitle,
-                        sub: `${subjName} · ${ch.chapterTitle || '교재'}`,
-                        action: { kind: 'section', subject: subjId, title: gotoTitle, anchor: chAnchor },
-                        score: s + 1
-                    });
-                }
+    // 수집·리더 이동 목적지 해석은 검색 소스 프로바이더(search-sources.js)가 담당 (TS-18)
+    for (const e of collectTextbookSections(studyData)) {
+        const s = _matchScore(`${e.title} ${e.crumb || ''}`, e.title, terms);
+        if (s >= 0) {
+            const [subject, gotoTitle, chAnchor] = e.nav.goto;
+            push('section', {
+                type: 'section', icon: 'fa-book-open', title: gotoTitle,
+                sub: `${e.subjName || subject} · ${e.crumb || '교재'}`,
+                action: { kind: 'section', subject, title: gotoTitle, anchor: chAnchor },
+                score: s + 1
             });
-        });
-    });
+        }
+    }
 
     // 3) 지식DB 사전 (초성 검색 지원 — 자모 쿼리는 getChosung 통과 후 substring 매칭)
     const dictLabel = (registry.uiText && registry.uiText.dictionary && registry.uiText.dictionary.title) || '사전';

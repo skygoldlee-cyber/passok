@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: a710c23c2a1ac91c
-> 생성: 2026-10-15 · 원천: SPEC.md(529개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 40dcb91d58060d6a
+> 생성: 2026-10-16 · 원천: SPEC.md(530개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 529개 — 문서 연결 380 · 소스 연결 470 · 테스트 연결 502 · 보고서 연결 109
+**커버리지 요약**: 요구사항 530개 — 문서 연결 384 · 소스 연결 471 · 테스트 연결 503 · 보고서 연결 109
 
 ---
 
@@ -207,16 +207,17 @@
 | TS-05 | ✅ | 테스트 | — | src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
 | TS-06 | ✅ | 테스트 | — | src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
 | TS-07 | ✅ | 테스트 | — | src/mermaid-render.js<br>src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
-| TS-08 | ✅ | 테스트 | DOC-DSN-18 | src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
-| TS-09 | ✅ | 테스트 | DOC-DSN-18 | src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
-| TS-10 | ✅ | 테스트 | DOC-DSN-18<br>DOC-RBK-13 | src/search-index.js<br>src/views/textbook-search.js | tests/dom/story-search.dom.test.js | — | — |
-| TS-11 | ✅ | 테스트 | DOC-DSN-18 | src/search-index.js<br>src/views/textbook-search.js | tests/unit/textbook-search-ref.test.js | — | — |
-| TS-12 | ✅ | 테스트 | — | src/search-index.js<br>src/views/textbook-search.js | tests/dom/exam-search.dom.test.js<br>tests/unit/search-index.test.js<br>tests/unit/textbook-search-exam.test.js | — | — |
+| TS-08 | ✅ | 테스트 | DOC-DSN-18 | src/search-index.js<br>src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
+| TS-09 | ✅ | 테스트 | DOC-DSN-18 | src/search-index.js<br>src/views/textbook-search.js | tests/dom/study-search.dom.test.js | — | — |
+| TS-10 | ✅ | 테스트 | DOC-DSN-18<br>DOC-RBK-13 | src/search-sources.js<br>src/views/textbook-search.js | tests/dom/story-search.dom.test.js | — | — |
+| TS-11 | ✅ | 테스트 | DOC-DSN-18 | src/search-sources.js<br>src/views/textbook-search.js | tests/unit/textbook-search-ref.test.js | — | — |
+| TS-12 | ✅ | 테스트 | — | src/search-sources.js<br>src/views/textbook-search.js | tests/dom/exam-search.dom.test.js<br>tests/unit/search-index.test.js<br>tests/unit/textbook-search-exam.test.js | — | — |
 | TS-13 | ✅ | 테스트 | — | src/search-index.js<br>src/search-morpheme.js<br>src/views/textbook-search.js | tests/dom/morph-search.dom.test.js<br>tests/unit/search-index.test.js<br>tests/unit/search-morpheme.test.js | — | — |
 | TS-14 | ✅ | 테스트 | — | src/search-index.js<br>src/search-morpheme.js<br>src/views/textbook-search.js | tests/dom/morph-search.dom.test.js<br>tests/unit/search-index.test.js<br>tests/unit/search-morpheme.test.js | — | — |
-| TS-15 | ✅ | 테스트 | — | src/search-index.js<br>src/views/textbook-search.js | tests/dom/glossary-search.dom.test.js | — | — |
-| TS-16 | ✅ | 테스트 | — | src/search-index.js<br>src/views/textbook-search.js | tests/dom/glossary-search.dom.test.js<br>tests/unit/search-morpheme.test.js | — | — |
-| TS-17 | ✅ | 테스트 | — | src/search-index.js<br>tools/check/check_meta_sections.js | tests/dom/exam-index-scope.dom.test.js<br>tests/unit/check-meta-sections.test.js | — | — |
+| TS-15 | ✅ | 테스트 | DOC-RBK-08 | src/search-index.js<br>src/views/textbook-search.js | tests/dom/glossary-search.dom.test.js | — | — |
+| TS-16 | ✅ | 테스트 | DOC-RBK-08 | src/search-index.js<br>src/views/textbook-search.js | tests/dom/glossary-search.dom.test.js<br>tests/unit/search-morpheme.test.js | — | — |
+| TS-17 | ✅ | 테스트 | DOC-RBK-08 | src/search-index.js<br>tools/check/check_meta_sections.js | tests/dom/exam-index-scope.dom.test.js<br>tests/unit/check-meta-sections.test.js | — | — |
+| TS-18 | ✅ | 테스트 | DOC-RBK-08 | src/search-index.js<br>src/search-sources.js<br>src/views/textbook-search.js | tests/dom/study-search.dom.test.js<br>tests/unit/search-index.test.js | — | — |
 
 ## 3.10 성분 사전
 
@@ -862,7 +863,7 @@
 | DOC-RBK-05 | docs/dev/runbooks/MULTI_MACHINE_SETUP.md | — |
 | DOC-RBK-06 | docs/dev/runbooks/Supabase_Custom_SMTP_MagicLink_OTP_설정가이드.md | AU-02, AU-03, AU-04 |
 | DOC-RBK-07 | docs/dev/runbooks/TEXTBOOK_AUTHORING_GUIDE.md | CE-01, CE-02, CE-03, CE-04, CE-05, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07, TR-01, TR-02, TR-03, TR-04, TR-05, TR-06, TR-07, TR-08, TR-09, TR-10, TR-11, TR-12, TR-13, TR-14, TR-15, TR-16, TR-16a, TR-17, TR-18, TR-19, TR-20, TR-21, TR-22, TR-23, TR-24, TR-25, TR-26, TR-27, TR-28 |
-| DOC-RBK-08 | docs/dev/runbooks/TEXTBOOK_REPLACEMENT_RUNBOOK.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, DA-01, ID-01, ID-02, ID-03, ID-04, P-14 |
+| DOC-RBK-08 | docs/dev/runbooks/TEXTBOOK_REPLACEMENT_RUNBOOK.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, DA-01, ID-01, ID-02, ID-03, ID-04, P-14, TS-15, TS-16, TS-17, TS-18 |
 | DOC-RBK-09 | docs/dev/runbooks/VERIFY_DEPLOY_PIPELINE.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, P-13 |
 | DOC-RBK-10 | docs/dev/runbooks/NEW_EXAM_RUNBOOK.md | BP-09, DA-11, DA-12, ES-01 |
 | DOC-RBK-11 | docs/dev/runbooks/UIUX_VERIFY_RUNBOOK.md | UX-VFY-01, UX-VFY-02, UX-VFY-03, UX-VFY-04, UX-VFY-05 |

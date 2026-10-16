@@ -3,7 +3,7 @@
 > **대상**: 과목 교재를 통째로 교체하거나 교재 전면 개정을 반영할 때의 **시간 순서 작업 절차**.
 > **이 문서만으로 완결 가능** — 신참자가 처음부터 끝까지 수행할 수 있도록 배경·용어·정상 출력·실패 대응까지 담았다.
 > 상세 근거는 `docs/dev/runbooks/CONTENT_WORKFLOW.md` §3.1-1(8계층)과 `ref-pipeline/README.md` 시나리오 A/B를 따른다.
-> **관련 SPEC ID**: `DA-01` (manifest SSOT) · `CS-01~10` · `BP-01~08` · `ID-01~04` · `P-14`
+> **관련 SPEC ID**: `DA-01` (manifest SSOT) · `CS-01~10` · `BP-01~08` · `ID-01~04` · `P-14` · `TS-15~18` (통합검색)
 > **문서 ID**: DOC-RBK-08
 > **범위**: platform · 판본: none
 
@@ -46,7 +46,7 @@ $env:EXAM_CONTENT_ROOT = "content/exams/cosmetic"
 | `contentRoot` | 시험 콘텐츠 루트 `content/exams/<id>/` — **사람이 편집하는 진실(SSOT)** |
 | `dataRoot` | 빌드 산출물 루트 `data/exams/<id>/` — **직접 편집 금지**, `build:data`가 재생성 |
 | 표준형 / 이야기형 | 같은 교재의 두 본문 — 표준형(번호·표 중심) / 이야기형(서사 내러티브, `교재/*/story/*_서사.md` 패치 → `build:story` 생성물) |
-| `manifest.json` | 과목·교재 파일·문제은행·`textbookEdition`을 선언하는 시험의 SSOT |
+| `manifest.json` | 과목·교재 파일·문제은행·`textbookEdition`·`searchDocs`(검색 대상 문서)를 선언하는 시험의 SSOT |
 | `ref_md` | 참조자료 PDF를 라인번호 인용 가능하도록 변환한 MD (`참조자료/ref_md/과목N/{문서}/{문서}.md`) — 판본은 폴더명의 `제N호·시행일`에 내재화 |
 | `#L###` | 교재/참조자료 라인번호 인용 (문제은행 → 교재의 근거 링크) |
 | `textbookEdition` | manifest에 선언하는 **현재 교재 판본 라벨** — 개정 안내 배너(P-14)·문서 신선도 게이트의 앵커 |
@@ -213,7 +213,7 @@ flowchart TD
 - [ ] ⑧ 필요 파생물(html/mp3/report) 생성 — mp3는 **CDN 업로드**까지
 - [ ] ⑧ 용어집 생성 — 아래 `#### 7` 절차: `report:glossary` → 리포트 검토 → `--apply`/`--apply-synonyms` → `build:keyword-index`
 - [ ] ⑨ test + test:dom 통과, `판본: textbook` 문서 갱신 포함 커밋
-- [ ] ⑨ **통합검색 스모크** — 신 교재의 핵심 용어 1~2개로 검색해 ① 결과 카드 클릭 시 표준형·이야기형 모두 실제 설명 위치 착지 ② 용어가 glossary에 있으면 '용어 정의' 카드 노출 확인. 메타 의심 헤딩이 결과에 섞이면 `check:metasections` 출력을 보고 `reader-toc.js` 패턴 또는 제목 수정
+- [ ] ⑨ **통합검색 스모크** — 신 교재의 핵심 용어 1~2개로 검색해 ① 결과 카드 클릭 시 표준형·이야기형 모두 실제 설명 위치 착지 ② 용어가 glossary에 있으면 '용어 정의' 카드 노출 확인 ③ 첫 검색 직후 잠시 기다려 지연 소스(서사·참조자료·문제은행·`searchDocs` 문서) 결과가 추가 병합되는지 확인 — 검색 인덱스는 런타임 재구축이라 별도 재생성 단계는 없다. 메타 의심 헤딩이 결과에 섞이면 `check:metasections` 출력을 보고 `reader-toc.js` 패턴 또는 제목 수정
 - [ ] ⑨ `deploy` 스모크 통과 + PWA 재실행 안내 + 대시보드 개정 배너 육안 확인
 
 ## 교재 변경 시 소스코드 수정 지점
@@ -280,9 +280,18 @@ node tools/sync/sync_textbook_files.js --rename 교재/law/OLD.md 교재/law/NEW
   }],
   "integratedExam": {
     "questionsPerSubject": { "law": 10, ... }  // 키는 subjects[].key — 없는 키는 선언 단계에서 실패
-  }
+  },
+  "searchDocs": [{                            // 통합검색 대상 문서 (선택, TS-18)
+    "file": "docs/user_manual.md",            // contentRoot 상대 경로 (docs/ 권장 — docs_md 번들과 연동)
+    "title": "사용자 매뉴얼",
+    "subject": "law",                         // 선택 — 과목 키 귀속
+    "kind": "doc",                            // 선택 — 결과 버킷/배지 종류 (기본 'doc')
+    "feature": "userManual"                   // 선택 — 기능 플래그 게이트 (비활성 시험에서 제외)
+  }]
 }
 ```
+
+- `searchDocs`는 통합검색의 시험별 문서 소스 선언 — docs/ 문서를 검색 범위에 넣거나 뺄 때만 갱신하면 되고, 검색 엔진 코드는 무수정이다 (TS-18 프로바이더 구조). file이 가리키는 문서가 없거나 번들/네트워크 로드에 실패해도 해당 문서만 건너뛴다
 
 - **파일명 변경**: `node tools/sync/sync_textbook_files.js --rename <구경로> <신경로>`가 `chapters[].file`/`storyFile` + `sw.js MD_ASSETS` + `문제은행` 인용 경로 3곳을 원자 전파. 수동 시에는 3곳을 함께 갱신할 것
 - **과목 추가**: `subjects[]` + `exams[]` + `integratedExam.questionsPerSubject` + `교재/glossary/subject{N}.json` + `number-drills/{key}.json` 수동 선언 후 `sync_textbook_files.js`가 `MD_ASSETS` 갱신
@@ -390,7 +399,7 @@ npm.cmd run build:keyword-index   # src/keyword-index.js 재생성 (build:data�
 
 | 파일 | 조건 |
 |---|---|
-| `content/exams/{id}/docs/학습안내서.md` | 챕터·과목 구성 변경 시 — `node tools/build/build_doc_bundles.js`로 앱 내 번들 재생성 |
+| `content/exams/{id}/docs/학습안내서.md` | 챕터·과목 구성 변경 시 — `node tools/build/build_doc_bundles.js`로 앱 내 번들 재생성. docs/ 문서를 추가·삭제·개명하면 `manifest.json`의 `searchDocs`도 함께 갱신 (통합검색 대상 선언, TS-18) |
 | `content/exams.json` 엔트리의 `desc` | 과목명·문항 수가 하드코딩된 표시 문구 ("4과목 · 문제은행 1,000문") — 시험 선택 카드에 노출되므로 **구성 변경 시 수동 갱신**. `N과목`·`N문` 수치는 `check:manifest`가 manifest 과목 수·`### Q` 실측 문항 수와 대조해 오류로 차단 (과목명 등 문구 자체는 수동). `manifest.exams[].title`의 `(N제)`도 동일 검증 |
 | `content/exams/{id}/combo_blocklist.json` | `approved`/`derivedFromPrefixes`가 구 교재의 과목 프리픽스 ID를 참조 — 남겨둬도 무해(미매칭 시 no-op)이나 **복수정답 검수 큐는 신 교재 기준으로 다시 쌓임** |
 | `참조자료/*.pdf` + `ref_md/` | 법령 개정 동반 — `convert:refs` → `verify:refs` → `ref_md_v2`→`ref_md` 승격 → `check:reffresh -- --update` |
@@ -407,6 +416,9 @@ npm.cmd run build:keyword-index   # src/keyword-index.js 재생성 (build:data�
 | 새 뷰·기능 추가 (교재 포맷이 아닌 기능) | 해당 view + `manifest.uiText` + `router.js` 폴백 |
 | 마크다운에 새 문법 도입 | `src/markdown-parser.js`·`textbook-parser.js` + `check:parser` 통과 확인 |
 | 시험 추가 | `content/exams.json` 엔트리 + `features` 플래그 (AGENTS.md "새 시험 추가 절차") |
+| 교재 **구조** 변경 (chapters→sections 계약 변경 — 내용 교체가 아님) | `src/search-sources.js`의 `collectTextbookSections()` 하나만 — 검색 코어(`search-index.js`)는 콘텐츠 종류를 모르므로 무수정 (TS-18) |
+
+> 통합검색 인덱스는 번들에서 **런타임에 재구축**된다 — 교재 교체 시 검색용 별도 빌드·재생성은 없다. 서사·참조자료·문제은행·`searchDocs` 문서는 첫 검색 시 지연 로드된다.
 
 ### 검증 게이트 (변경 후 자동 차단)
 
