@@ -94,11 +94,11 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (72개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (73개)
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (19개 — README + ADR 18건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (14개)
-│   ├── design/                ← 설계·계획·평가 문서 (20개)
+│   ├── design/                ← 설계·계획·평가 문서 (21개)
 │   ├── reference/             ← 명세·로직·참조 문서 (13개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (3개 — §9 스냅샷 이력)
 └── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개)
@@ -162,6 +162,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [UIUX_외주전달_패키지.md](dev/UIUX_외주전달_패키지.md) | 외주 인도용 추출본 — 위 계열 문서를 프로젝트 중립화해 단일 파일로 묶은 패키지 (수주사 요구사양·산출물 의무·검수 기준) | 외주 개발 발주 시 단독 인도 |
 | [DEV_ENVIRONMENT.md](dev/reference/DEV_ENVIRONMENT.md) | 개발환경 요구사양 — Node/Python/CLI 도구 버전, 최초 설정 절차, 검증·빌드·배포 명령 |
 | [SUPABASE_DESIGN.md](dev/design/SUPABASE_DESIGN.md) | Supabase 계정·클라우드 동기화·Pro 권한 설계 — Phase 1~2 구현 완료, URL/PWA 동일 로그인 UX |
+| [FIREBASE_DESIGN.md](dev/design/FIREBASE_DESIGN.md) | Firebase 이관 설계 — 인증·DB를 Supabase 대체 시 매핑·차이점 (DOC-DSN-31, 설계안) |
 | [FLASHCARD_LOGIC.md](dev/reference/FLASHCARD_LOGIC.md) | 플래시카드 생성·난이도·필터·SM-2 간격 반복 로직 |
 | [MD_TO_HTML_LOGIC.md](dev/reference/MD_TO_HTML_LOGIC.md) | MD→HTML 변환 로직 — 런타임 파서(manual-viewer)와 빌드 파이프라인 |
 
@@ -365,6 +366,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-28 | `docs/dev/design/EXAM_DUE_CLAMP_DESIGN.md` |
 | DOC-DSN-29 | `docs/dev/design/KNOWLEDGE_TRACING_DESIGN.md` |
 | DOC-DSN-30 | `docs/dev/design/ADMIN_DESIGN.md` |
+| DOC-DSN-31 | `docs/dev/design/FIREBASE_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |
