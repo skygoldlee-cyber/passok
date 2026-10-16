@@ -3,7 +3,7 @@
 //
 // 각 카드의 복습 스케줄을 관리 — 스케줄 수학은 src/fsrs.js 순수 함수에 위임:
 // - v2 레코드: { v:2, d(난이도 1~10), s(안정도 일), due, lastReview, reps, lapses, lastInterval }
-// - 구 SM-2 레코드({repetition, easiness, nextReview})는 접근 시 지연 변환 (FSRS_DESIGN §3.2)
+// - 구 SM-2 레코드({repetition, easiness, nextReview})는 접근 시 지연 변환 (LEARNING_ALGORITHM_DESIGN §3.2)
 // - 공용 API 시그니처(updateCardSchedule·getDueCards·getDueCount)는 무수정 유지
 
 import { safeGetItem, safeSetItem } from './state.js';
@@ -15,11 +15,11 @@ const SR_KEY = STORAGE_KEYS.FC_SPACED_REPETITION;
 const LOG_KEY = STORAGE_KEYS.FC_REVIEW_LOG;
 
 // @spec D-18
-// 리뷰 로그 링버퍼 상한 — 피팅 실질 하한 ~1,000리뷰의 2배 (EXAM_R_SCHEDULING_DESIGN §2)
+// 리뷰 로그 링버퍼 상한 — 피팅 실질 하한 ~1,000리뷰의 2배 (LEARNING_ALGORITHM_DESIGN §2)
 const REVIEW_LOG_CAP = 2000;
 
 // @spec D-19,D-20
-// 시험일 목표 기억률 상수 (EXAM_R_SCHEDULING_DESIGN §3·정정, EXAM_DUE_CLAMP_DESIGN)
+// 시험일 목표 기억률 상수 (LEARNING_ALGORITHM_DESIGN §3·정정, LEARNING_ALGORITHM_DESIGN)
 // due>exam 인 카드의 R_exam은 (0.9,1] 대역 — 0.85 임계는 공집합이므로 목표 0.95 미만을 위험대로 둔다
 const EXAM_TARGET_R = 0.95;         // 시험일 목표 기억률 미달 판정
 export const EXAM_R_WINDOW_DAYS = 14;   // 최종 인출 큐 표시 D-day 윈도
@@ -43,7 +43,7 @@ function _shiftDateStr(dateStr, offset) {
     return todayKey(d);
 }
 
-/** 시험일 'YYYY-MM-DD' — 미설정·비정형이면 null (시험 스코프 키, EXAM_DUE_CLAMP_DESIGN §2.1) */
+/** 시험일 'YYYY-MM-DD' — 미설정·비정형이면 null (시험 스코프 키, LEARNING_ALGORITHM_DESIGN §2.1) */
 function _examDateStr() {
     const v = safeGetItem(STORAGE_KEYS.EXAM_DATE);
     return typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
@@ -71,7 +71,7 @@ export function updateCardSchedule(cardId, knew) {
     nextDate.setDate(nextDate.getDate() + interval);
     let due = todayKey(nextDate);
 
-    // @spec D-20 — 시험일 클램프: due>exam ∧ 시험일 R<0.95인 카드는 exam−1로 당김 (EXAM_DUE_CLAMP_DESIGN §2)
+    // @spec D-20 — 시험일 클램프: due>exam ∧ 시험일 R<0.95인 카드는 exam−1로 당김 (LEARNING_ALGORITHM_DESIGN §2)
     const examStr = _examDateStr();
     if (examStr && examStr > todayStr && due > examStr) {
         const rExam = retrievability(_daysBetween(examStr, todayStr), next.s);

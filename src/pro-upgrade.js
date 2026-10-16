@@ -1,7 +1,7 @@
 /**
  * Pro 업그레이드 안내 — 무료 플랜 한도 도달 시 표시하는 정보성 모달.
  *
- * 결제 인프라 도입 전이므로 "준비 중" 안내에 그친다 (LEARNING_PREMIUM_PLAN 지연 원칙).
+ * 결제 인프라 도입 전이므로 "준비 중" 안내에 그친다 (SUBSCRIPTION_ROADMAP 지연 원칙).
  * 스토어가 `{ ok:false, error:'Free 플랜은 ...' }`를 반환하는 모든 지점에서
  * isFreeLimitError()로 판별 후 showUpgradeNotice()를 호출한다.
  */

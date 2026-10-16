@@ -1,6 +1,6 @@
 # 멀티시험 확장 설계 — 법령DB·지식DB 일반화
 
-> 상위 문서: [`../ARCHITECTURE.md`](../ARCHITECTURE.md) §9 멀티시험 플랫폼 구조 · [`LEARNING_PREMIUM_PLAN.md`](LEARNING_PREMIUM_PLAN.md) "두 번째 시험 추가 전 선결 과제" · [`../../report_archive/PRO_MULTI_EXAM_EVALUATION.md`](../../exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md) (시험 후보 평가)
+> 상위 문서: [`../ARCHITECTURE.md`](../ARCHITECTURE.md) §9 멀티시험 플랫폼 구조 · [`SUBSCRIPTION_ROADMAP.md`](SUBSCRIPTION_ROADMAP.md) "두 번째 시험 추가 전 선결 과제" · [`../../report_archive/PRO_MULTI_EXAM_EVALUATION.md`](../../exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md) (시험 후보 평가)
 > **관련 SPEC ID**: `ES-01~05` (시험 선택·전환) · `DA-06~08` (멀티시험 대칭 구조·경로) · `RR-13` (참조자료 레지스트리) · `RR-17` (law.go.kr 링크) · `RR-19`, `FO-24` (고시 감시) — 로드맵 항목 ROAD-M1(타 시험 등록)의 실행 설계
 > **문서 ID**: DOC-DSN-10
 > **범위**: platform · 판본: none
@@ -18,7 +18,7 @@
 1. **법령DB** — 법령·고시 메타데이터(명칭·종류·law.go.kr 슬러그·감시 설정)를 시험과 분리된 SSOT로 관리하고, 원문 링크·고시 감시·인용 체인이 이를 공유하게 한다.
 2. **지식DB** — 성분사전(`ingredients_data`)으로 검증된 "도메인 엔티티 사전" 패턴을 스키마 일반화해, 시험마다 다른 엔티티(식품첨가물·유해물질·약물 등)를 코드 변경 없이 수용한다.
 
-**검증 기준** (LEARNING_PREMIUM_PLAN의 KPI와 동일): 두 번째 시험 추가 시 `src/`·`tools/` 수정 0줄 — 콘텐츠 배치 + `exams.json` 엔트리만으로 전 기능 동작.
+**검증 기준** (SUBSCRIPTION_ROADMAP의 KPI와 동일): 두 번째 시험 추가 시 `src/`·`tools/` 수정 0줄 — 콘텐츠 배치 + `exams.json` 엔트리만으로 전 기능 동작.
 
 ---
 
@@ -45,7 +45,7 @@
 | `src/law-links.js` | `LAW_DOC_URLS` 상수 | 화장품법 계열 한글주소 매핑이 하드코딩 |
 | `src/notice-check.js` | `RULE_NAME`·`LAW_SEARCH_URL`·repo URL 상수 | 특정 고시·특정 저장소 고정 (`statusUrl`만 examId 인지) |
 | `ref-pipeline/check_mfds_notice.py` | `STATUS_FILE`/`REFS_FILE` 경로 고정 | `content/exams/cosmetic/` 하드코딩 |
-| `ref-pipeline/check_laws.py` | `LAWS` 상수 | cosmetic 전용 8개 법령 (LEARNING_PREMIUM_PLAN 선결 과제) |
+| `ref-pipeline/check_laws.py` | `LAWS` 상수 | cosmetic 전용 8개 법령 (SUBSCRIPTION_ROADMAP 선결 과제) |
 | `src/views/dictionary.js` | 성분 전용 UI | 필드 라벨·검색·배지가 "성분" 도메인에 고정 |
 | `formula-*` 일괄 | cosmetic 도메인 모듈 | `features.formula`로 이미 게이팅 — 타 시험은 `false`면 충분 |
 
@@ -132,7 +132,7 @@ const _EXAM_LAW_URLS = {
 
 | 파일 | 변경 |
 |------|------|
-| `ref-pipeline/_exam_root.py` | 신규 공유 헬퍼 — 시험 해석 순서(CLI `--exam` > `EXAM_CONTENT_ROOT` env > exams.json default)를 한곳에 (LEARNING_PREMIUM_PLAN 선결 과제 이관) |
+| `ref-pipeline/_exam_root.py` | 신규 공유 헬퍼 — 시험 해석 순서(CLI `--exam` > `EXAM_CONTENT_ROOT` env > exams.json default)를 한곳에 (SUBSCRIPTION_ROADMAP 선결 과제 이관) |
 | `ref-pipeline/check_mfds_notice.py` | `STATUS_FILE`/`REFS_FILE`을 `_exam_root.py` 해석 결과로 대체 + `--exam` 인자. 감시 대상은 기존처럼 `references.json.referenceLaw`에서 자동 유도, 기준 문서는 `references.json.noticeCore`에서 읽음 |
 | `ref-pipeline/check_laws.py` | `LAWS` 상수 → 활성 시험의 `referenceLaw` 파일명에서 목록 자동 유도, 수동검증값은 `{시험 루트}/law_verified.json`으로 이관 |
 | `src/notice-check.js` | `RULE_NAME`·`LAW_SEARCH_URL` 상수 → `notice_status.json`의 `docs[]`+`latest.ruleName`으로 일반화, repo URL은 `STATUS_REPO` 상수로 분리 (`statusUrl(examId)`는 기존 구현 유지). Formula OS 배너는 `features.formula` 게이트 유지 |
@@ -253,8 +253,8 @@ const _EXAM_LAW_URLS = {
 | 빌드 정합성 | `check:content -- --build` — 인용·귀속·레이아웃·파서·자산 검증이 시험 순회형으로 이미 동작 |
 | 법령DB | `check:lawurls` 전수 한글주소 검증 (생성 매핑 소비) + `check_mfds_notice.py --exam` 수동 실행 |
 | 지식DB | `schema.json` 스키마 검증을 `build_knowledge_bundles.js`에 내장 (필수 필드·lawRef 참조 유효성) |
-| 골든 회귀 | `ref-pipeline/tests/` 샘플 추가 — pdf2md 엔진 수정 시 안전망 (LEARNING_PREMIUM_PLAN 선결 과제 이관) |
-| KPI | LEARNING_PREMIUM_PLAN 멀티시험 확장 KPI 표로 콘텐츠 제작시간 실측 — `src`/`tools` 수정 0줄 확인 |
+| 골든 회귀 | `ref-pipeline/tests/` 샘플 추가 — pdf2md 엔진 수정 시 안전망 (SUBSCRIPTION_ROADMAP 선결 과제 이관) |
+| KPI | SUBSCRIPTION_ROADMAP 멀티시험 확장 KPI 표로 콘텐츠 제작시간 실측 — `src`/`tools` 수정 0줄 확인 |
 
 ---
 
@@ -355,6 +355,6 @@ const _EXAM_LAW_URLS = {
 ## 📎 관련 문서
 
 - [`../ARCHITECTURE.md`](../ARCHITECTURE.md) — §9 멀티시험 플랫폼 구조, §20 데이터 파이프라인
-- [`LEARNING_PREMIUM_PLAN.md`](LEARNING_PREMIUM_PLAN.md) — 멀티시험 확장 KPI, ref-pipeline 선결 과제 (본 문서 §6 A5·§8로 이관)
+- [`SUBSCRIPTION_ROADMAP.md`](SUBSCRIPTION_ROADMAP.md) — 멀티시험 확장 KPI, ref-pipeline 선결 과제 (본 문서 §6 A5·§8로 이관)
 - [`../../report_archive/PRO_MULTI_EXAM_EVALUATION.md`](../../exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md) — 시험 후보 유형 평가, 킬러 피처 분석
 - [`../SPEC.md`](../SPEC.md) — §7.4 ROAD-M1 (타 시험 등록)

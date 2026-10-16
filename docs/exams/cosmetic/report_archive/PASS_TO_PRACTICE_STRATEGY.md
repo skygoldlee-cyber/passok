@@ -5,7 +5,7 @@
 > **작성일**: 2026-09-11
 > **개정일**: 2026-09-12 — 종합 리뷰 반영: Formula OS 핵심 격상, AI 배합 참고 한 단계 뒤로, verified 세분화, MVP 축소(Phase 5-A), 고객 개인정보 최소화, 법적 한도 ≠ 안전성 UI 분리, ingredient_practice 관계형 분리, 법령 알림 Actionable Alert 강화, Pass Pro vs Practice Pro 분리, Practice 타깃 확장, Knowledge Flywheel, 상위 브랜드 Cosmetic Master 적용
 > **목적**: 합격 후 이탈하는 일반 자격증 플랫폼과 달리, 맞춤형화장품조제관리사의 특성을 활용하여 **합격 후에도 계속 머무는 실무 플랫폼** 으로 확장하는 전략
-> **관련 문서**: [FEATURE_PROPOSALS.md](FEATURE_PROPOSALS.md), [SUBSCRIPTION_ROADMAP.md](../../../dev/design/SUBSCRIPTION_ROADMAP.md), [READER_FEEDBACK_DESIGN.md](../../../dev/design/READER_FEEDBACK_DESIGN.md)
+> **관련 문서**: [FEATURE_PROPOSALS.md](FEATURE_PROPOSALS.md), [SUBSCRIPTION_ROADMAP.md](../../../dev/design/SUBSCRIPTION_ROADMAP.md), [USER_FEEDBACK_DESIGN.md](../../../dev/design/USER_FEEDBACK_DESIGN.md)
 > **문서 ID**: DOC-ARC-06
 > **범위**: exam:cosmetic · 판본: none
 > **관련 SPEC ID**: FO-01~23, UM-01~05, ROAD-P0~P4
@@ -779,7 +779,7 @@ Pass Pro의 존재 이유는 **시간 단축**과 **합격 확률 상승**에 �
 
 ### 9.1 개요
 
-합격자끼리 배합 사례, 조제 경험, 원료 사용 경험을 공유하는 커뮤니티입니다. READER_FEEDBACK_DESIGN.md의 Phase 3~4 커뮤니케이션 창과 연결됩니다.
+합격자끼리 배합 사례, 조제 경험, 원료 사용 경험을 공유하는 커뮤니티입니다. USER_FEEDBACK_DESIGN.md의 Phase 3~4 커뮤니케이션 창과 연결됩니다.
 
 ### 9.2 공유 내용
 
@@ -809,9 +809,9 @@ flowchart TD
 > 시간이 지나면서 Cosmetic Master만의 **실무 데이터 자산**이 됩니다.
 > 단, 검증되지 않은 크라우드 데이터는 "참고"로만 분류하고, AI 학습 데이터에서 제외합니다. (§10 참조)
 
-### 9.4 READER_FEEDBACK_DESIGN.md와의 연결
+### 9.4 USER_FEEDBACK_DESIGN.md와의 연결
 
-| READER_FEEDBACK_DESIGN | 본 전략 |
+| USER_FEEDBACK_DESIGN | 본 전략 |
 |----------------------|---------|
 | Phase 3: 댓글·좋아요·질문 | 합격자 커뮤니티의 기반 |
 | Phase 4: 커뮤니케이션 창 | 배합 사례 공유, 현장 질문 |
@@ -959,7 +959,7 @@ Phase 5 — Practice Platform (실무)  ← 신규
 | 🔔 법령·고시 업데이트 | 법령 개정 알림, 포뮬러 영향 분석 | A (감지) / C (푸시) | Practice Pro |
 | 👤 고객별 조제 기록 | 고객 정보, 피부 타입, 조제 이력 | A (localStorage) / C (동기화) | Practice Pro |
 | 🧠 배합 지식 검색 | 원료, 법령, 포뮬러 통합 검색 (Command Palette 확장) | A | Free |
-| 👥 조제관리사 커뮤니티 | 배합 사례, 조제 경험 공유 (READER_FEEDBACK_DESIGN Phase 3~4 연동) | C (Supabase) | Practice Pro |
+| 👥 조제관리사 커뮤니티 | 배합 사례, 조제 경험 공유 (USER_FEEDBACK_DESIGN Phase 3~4 연동) | C (Supabase) | Practice Pro |
 
 ### 11.3 기존 기능과의 관계
 
@@ -971,7 +971,7 @@ Phase 5 — Practice Platform (실무)  ← 신규
 | 참조자료 뷰어 (`html-viewer.js`) | 법령 원문 실무 참고 | `html-viewer.js` 재사용 |
 | 교재 리더 (`textbook-reader.js`) | 배합 관련 지식 검색 | 검색 인덱스 재사용 |
 | 키워드 인덱스 (`keyword-index.js`) | 원료 ↔ 법령 교차 참조 | `GLOSSARY_INDEX` 확장 |
-| 독자 피드백 (`READER_FEEDBACK_DESIGN`) | 합격자 커뮤니티 | Phase 3~4 연동 |
+| 독자 피드백 (`USER_FEEDBACK_DESIGN`) | 합격자 커뮤니티 | Phase 3~4 연동 |
 
 ### 11.4 구현 우선순위 (리뷰 피드백 반영 — MVP 극소화)
 
@@ -1229,6 +1229,6 @@ flowchart LR
 - [FEATURE_PROPOSALS.md](FEATURE_PROPOSALS.md) — 추천 기능 제안 (Phase 1~4, 본 문서가 Phase 5에 해당)
 - [PASS_CORE_LOOP_REVIEW.md](PASS_CORE_LOOP_REVIEW.md) — 합격 핵심 루프 코드 반영도 리뷰
 - [SUBSCRIPTION_ROADMAP.md](../../../dev/design/SUBSCRIPTION_ROADMAP.md) — 구독 서비스 전환 로드맵 (본 전략이 2단계 LTV 모델로 확장)
-- [READER_FEEDBACK_DESIGN.md](../../../dev/design/READER_FEEDBACK_DESIGN.md) — 독자 피드백 공유 기능 설계 (Phase 3~4 커뮤니티 연동)
+- [USER_FEEDBACK_DESIGN.md](../../../dev/design/USER_FEEDBACK_DESIGN.md) — 독자 피드백 공유 기능 설계 (Phase 3~4 커뮤니티 연동)
 - [SPEC.md](../../../dev/SPEC.md) — 기존 요구사양 명세서
 - [ARCHITECTURE.md](../../../dev/ARCHITECTURE.md) — 시스템 아키텍처

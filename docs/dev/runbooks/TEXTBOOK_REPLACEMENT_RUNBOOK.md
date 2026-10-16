@@ -476,7 +476,7 @@ npm.cmd run deploy                                     # 재배포
 
 - ④ `check:content --build` — 수 분 (전 계층 일괄 검증)
 - ⑧a/b/c — 상호 독립, 병렬 터미널 실행 가능 (⑧b TTS는 챕터당 수 분 + API 레이트리밋)
-- 이 시간들은 `LEARNING_PREMIUM_PLAN.md`의 **콘텐츠 제작시간 KPI** 측정 단위이기도 하다 — 두 번째 시험 추가 시 단계별 실측 기록 권장
+- 이 시간들은 `SUBSCRIPTION_ROADMAP.md`의 **콘텐츠 제작시간 KPI** 측정 단위이기도 하다 — 두 번째 시험 추가 시 단계별 실측 기록 권장
 
 ## 참고 문서 맵 — 상황별 다음 읽을 문서
 

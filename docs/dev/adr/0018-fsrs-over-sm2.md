@@ -3,8 +3,8 @@
 > **문서 ID**: DOC-ADR-18
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: F-07, F-08, F-11, D-18, D-22
-> **상태**: accepted (2026-10-14 — 사후 백필. 선정 근거의 정본은 FSRS_DESIGN.md,
-> FSRS-6 승계는 FSRS6_UPGRADE_DESIGN.md)
+> **상태**: accepted (2026-10-14 — 사후 백필. 선정 근거의 정본은 LEARNING_ALGORITHM_DESIGN.md,
+> FSRS-6 승계는 LEARNING_ALGORITHM_DESIGN.md)
 
 ## 상황 (Context)
 
@@ -22,9 +22,9 @@
 ## 대안 (Alternatives considered)
 
 - **SM-2 유지**: 기각 — 난이도·안정도 분리·목표 기억률 산출 불가
-  (선정 근거 상세는 FSRS_DESIGN.md — 본 ADR은 포인터)
+  (선정 근거 상세는 LEARNING_ALGORITHM_DESIGN.md — 본 ADR은 포인터)
 - **자체 경험적 스케줄**: 기각 — 검증된 알고리즘의 이론 근거가 없는 휴리스틱은
-  신뢰 불가 (FSRS 선정 근거 자체가 "실험 검증된 DSR 모델"이므로 정합 — FSRS_DESIGN 정본)
+  신뢰 불가 (FSRS 선정 근거 자체가 "실험 검증된 DSR 모델"이므로 정합 — LEARNING_ALGORITHM_DESIGN 정본)
 - **외부 라이브러리(ts-fsrs 등) 벤더링/의존**: 기각 — 수식만 자체 구현하고
   정확성은 외부 정본으로 검증하는 경로를 택했다 (CHANGES: FSRS-6 승계 시
   ts-fsrs `algorithm.test.ts` 골든 벡터 정합 기록). 근거: ① 프로젝트 고유

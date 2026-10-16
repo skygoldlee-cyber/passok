@@ -523,11 +523,10 @@ passory/
     │   │   ├── SUPABASE_DESIGN.md         #  Supabase 계정·동기화 설계안
     │   │   ├── QUESTION_SCHEMA_DESIGN.md  #  문항 스키마 + 복수정답형 변환 설계
     │   │   ├── DOM_TEST_DESIGN.md         #  jsdom 시나리오 테스트 설계
-    │   │   ├── READER_FEEDBACK_DESIGN.md  #  교재 리더 피드백 설계
-    │   │   ├── USER_FEEDBACK_DESIGN.md    #  사용자 피드백 수신 설계
+    │   │   ├── USER_FEEDBACK_DESIGN.md    #  사용자 피드백 수신·공유 설계 (독자 피드백 통합)
     │   │   ├── STUDY_APP_DESIGN_GUIDE.md  #  학습 앱 디자인 가이드
-    │   │   ├── LEARNING_PREMIUM_PLAN.md   #  Learning Pro 구현 과제
-    │   │   └── SUBSCRIPTION_ROADMAP.md    #  월 구독 전환 로드맵
+    │   │   ├── LEARNING_ALGORITHM_DESIGN.md # 학습 알고리즘 통합 설계 (FSRS·시험일·지식추적)
+    │   │   └── SUBSCRIPTION_ROADMAP.md    #  월 구독 전환 로드맵 (Learning Pro 과제 통합)
     │   ├── reference/          #     명세·로직·참조 문서 (플랫폼)
     │   │   ├── TESTING.md                 #  테스트 가이드
     │   │   ├── FLASHCARD_LOGIC.md         #  플래시카드·FSRS 로직

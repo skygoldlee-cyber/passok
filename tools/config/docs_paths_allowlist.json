@@ -45,17 +45,17 @@
     "reason": "로드맵상 계획 디렉터리 (E2E 도입 전)"
   },
   {
-    "file": "docs/dev/design/LEARNING_PREMIUM_PLAN.md",
+    "file": "docs/dev/design/SUBSCRIPTION_ROADMAP.md",
     "ref": "ref-pipeline/_exam_root.py",
     "reason": "두 번째 시험 추가 전 선결 과제 (계획 파일)"
   },
   {
-    "file": "docs/dev/design/LEARNING_PREMIUM_PLAN.md",
+    "file": "docs/dev/design/SUBSCRIPTION_ROADMAP.md",
     "ref": "{EXAM_CONTENT_ROOT}/law_watch.json",
     "reason": "선결 과제: check_laws 법령 목록 외부화 예정 경로"
   },
   {
-    "file": "docs/dev/design/LEARNING_PREMIUM_PLAN.md",
+    "file": "docs/dev/design/SUBSCRIPTION_ROADMAP.md",
     "ref": "ref-pipeline/tests/",
     "reason": "선결 과제: ref-pipeline 회귀 테스트 디렉터리 (계획)"
   },
@@ -75,12 +75,12 @@
     "reason": "설계안 제안 경로 — 시험 루트 해석 공유 헬퍼 (미구현)"
   },
   {
-    "file": "docs/dev/design/READER_FEEDBACK_DESIGN.md",
+    "file": "docs/dev/design/USER_FEEDBACK_DESIGN.md",
     "ref": "content/피드백/*.md",
     "reason": "설계안 제안 경로 — 실제 저장은 Supabase 테이블"
   },
   {
-    "file": "docs/dev/design/READER_FEEDBACK_DESIGN.md",
+    "file": "docs/dev/design/USER_FEEDBACK_DESIGN.md",
     "ref": "data/feedback.js",
     "reason": "설계안 제안 번들 경로 — 미구현"
   },
@@ -259,52 +259,52 @@
     "reason": "도메인맵 규칙 등록 대상 언급 (ref-pipeline/embeddings/ 접두사는 PoC로 생성됨)"
   },
   {
-    "file": "docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md",
+    "file": "docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md",
     "ref": "src/wrong-cause-classifier.js",
     "reason": "설계안 제안 경로 — 센트로이드 추정기 모듈 (미구현)"
   },
   {
-    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "file": "docs/dev/design/SUPABASE_DESIGN.md",
     "ref": "src/firebase-config.js",
     "reason": "설계안 제안 경로 — Firebase 프로젝트 연결 설정 (미구현)"
   },
   {
-    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "file": "docs/dev/design/SUPABASE_DESIGN.md",
     "ref": "src/firebase-client.js",
     "reason": "설계안 제안 경로 — firebase lazy init 클라이언트 (미구현)"
   },
   {
-    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "file": "docs/dev/design/SUPABASE_DESIGN.md",
     "ref": "src/cloud-client.js",
     "reason": "설계안 제안 경로 — provider 파사드 선택지 (기각안 언급)"
   },
   {
-    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "file": "docs/dev/design/SUPABASE_DESIGN.md",
     "ref": "vendor/firebase/*",
     "reason": "설계안 제안 경로 — firebase ESM self-host 번들 (미구현)"
   },
   {
-    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "file": "docs/dev/design/SUPABASE_DESIGN.md",
     "ref": "vendor/firebase/",
     "reason": "설계안 제안 경로 — firebase ESM self-host 디렉터리 (미구현)"
   },
   {
-    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "file": "docs/dev/design/SUPABASE_DESIGN.md",
     "ref": "tools/lib/firebase_ops.js",
     "reason": "설계안 제안 경로 — Admin SDK 운영 CLI 헬퍼 (미구현)"
   },
   {
-    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "file": "docs/dev/design/SUPABASE_DESIGN.md",
     "ref": "tools/firebase/",
     "reason": "설계안 제안 경로 — Firebase rules·functions 디렉터리 (미구현)"
   },
   {
-    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "file": "docs/dev/design/SUPABASE_DESIGN.md",
     "ref": "tools/firebase/firestore.rules",
     "reason": "설계안 제안 경로 — Security Rules 정본 (미구현)"
   },
   {
-    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "file": "docs/dev/design/SUPABASE_DESIGN.md",
     "ref": "tools/firebase/functions/",
     "reason": "설계안 제안 경로 — callable·트리거 함수 디렉터리 (미구현)"
   }
