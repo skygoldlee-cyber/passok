@@ -433,6 +433,76 @@ class TestSanitizeSvg:
 
 
 # ---------------------------------------------------------------------------
+# 목차 링크 교정 — _linkify_inline_toc · _repair_dead_fragment_links
+# ---------------------------------------------------------------------------
+
+class TestTocLinkRepair:
+    _MAP = {"첫 번째 섹션": "_3", "두 번째 섹션": "_4"}
+
+    def test_dead_fragment_rewritten_by_text_match(self):
+        body = '<ul><li><a href="#첫-번째-섹션">첫 번째 섹션</a></li></ul><h2 id="_3">첫 번째 섹션</h2>'
+        out = md2doc._repair_dead_fragment_links(body, self._MAP)
+        assert '<a href="#_3">첫 번째 섹션</a>' in out
+
+    def test_live_fragment_untouched(self):
+        body = '<a href="#_3">아무 텍스트</a><h2 id="_3">첫 번째 섹션</h2>'
+        out = md2doc._repair_dead_fragment_links(body, self._MAP)
+        assert '<a href="#_3">아무 텍스트</a>' in out
+
+    def test_unmatched_dead_link_kept(self):
+        # 텍스트가 어떤 헤딩과도 매칭되지 않으면 건드리지 않는다
+        body = '<a href="#없는-슬러그">관련 없는 글</a><h2 id="_3">첫 번째 섹션</h2>'
+        out = md2doc._repair_dead_fragment_links(body, self._MAP)
+        assert 'href="#없는-슬러그"' in out
+
+    def test_inline_toc_github_slug_corrected(self):
+        body = '<h2>목차</h2><ul><li><a href="#첫-번째-섹션">첫 번째 섹션</a></li></ul>'
+        out = md2doc._linkify_inline_toc(body, self._MAP)
+        assert '<a href="#_3">첫 번째 섹션</a>' in out
+
+    def test_inline_toc_bullet_linkified(self):
+        body = '<h2>목차</h2><p>• 첫 번째 섹션\n• 두 번째 섹션</p>'
+        out = md2doc._linkify_inline_toc(body, self._MAP)
+        assert '<a href="#_3">첫 번째 섹션</a>' in out
+        assert '<a href="#_4">두 번째 섹션</a>' in out
+
+    def test_toc_heading_levels_and_keywords(self):
+        # h1·'차례'도 목차 헤딩으로 인식한다
+        for heading in ('<h1>차례</h1>', '<h3>목차</h3>'):
+            body = f'{heading}<ul><li><a href="#x">첫 번째 섹션</a></li></ul>'
+            out = md2doc._linkify_inline_toc(body, self._MAP)
+            assert '<a href="#_3">첫 번째 섹션</a>' in out, heading
+
+
+class TestTocLinksEndToEnd:
+    _MD = (
+        "# 문서\n\n## 목차\n\n"
+        "- [첫 번째 섹션](#첫-번째-섹션)\n\n"
+        "## 첫 번째 섹션\n\n본문\n"
+    )
+
+    def test_standalone_html_toc_links_bare_and_valid(self):
+        # 사이드바 TOC는 label 없는 순수 <a>여야 하고 href가 실제 id를 가리켜야 함
+        cfg = md2doc.RenderConfig(prerender_mermaid=False, embed_mermaid=False)
+        out = md2doc.markdown_to_tailwind_html(self._MD, config=cfg)
+        assert "<label" not in out[out.index("<nav id=\"toc\""):out.index("</nav>")]
+        # 본문 목차의 GitHub 슬러그가 실제 헤딩 id로 교정됐는지 확인
+        assert 'href="#첫-번째-섹션"' not in out
+        heading_ids = set(md2doc.re.findall(r'<h[1-4][^>]*id="([^"]+)"', out))
+        frag_targets = set(md2doc.re.findall(r'<a href="#([^"]+)"', out))
+        broken = frag_targets - heading_ids - {"tocOpen", "_", "mainContent"}
+        assert not broken, f"dead fragment links: {broken}"
+
+    def test_pdf_path_repairs_toc_links(self):
+        # PDF용 본문에서도 목차 링크가 실제 헤딩 id를 가리켜야 내부 GoTo가 동작한다
+        body = md2doc.md_to_html_body(self._MD, render_mermaid=False)
+        assert 'href="#첫-번째-섹션"' not in body
+        heading_ids = set(md2doc.re.findall(r'<h[1-4][^>]*id="([^"]+)"', body))
+        frag_targets = set(md2doc.re.findall(r'<a href="#([^"]+)"', body))
+        assert frag_targets <= heading_ids
+
+
+# ---------------------------------------------------------------------------
 # _build_markdown — 공통 변환기 팩토리
 # ---------------------------------------------------------------------------
 

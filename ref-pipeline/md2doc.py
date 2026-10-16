@@ -50,10 +50,16 @@ except Exception:
 #
 # 3. 모바일 TOC 드로어 미작동
 #    - 원인: 인라인 JS 차단으로 drawer-hidden 클래스 토글 불가
-#    - 해결: #tocSwitch checkbox + :has() 선택자로 CSS-only 드로어 구현
-#           TOC 링크를 <label for="tocSwitch">로 감싸 링크 클릭 시 드로어 자동 닫기
+#    - 해결: #tocOpen 마커 + :target으로 CSS-only 드로어 구현
+#           열기는 <a href="#tocOpen">, 닫기는 어떤 프래그먼트 이동(목차 링크
+#           포함) — :target이 마커를 벗어나면 드로어가 자동으로 닫힌다.
+#           구현 이력: 초기엔 #tocSwitch checkbox + TOC 링크를
+#           <label for="tocSwitch">로 감싸는 방식이었으나, label 안의 <a>
+#           탭을 체크박스 활성화로만 처리해 앵커 이동이 삼켜지는 뷰어
+#           (iOS Safari/WKWebView 등)에서 "목차 클릭 시 미이동" 오류가
+#           발생하여 :target 방식으로 교체했다.
 #    - 추가: 별도 TOC 버튼 대신 왼쪽 끝 스와이프 제스처로 오픈 (모던 패턴)
-#            왼쪽 가장자리에 작은 힌트 탭(<label>)을 두어 JS 없는 환경에서도
+#            왼쪽 가장자리에 작은 힌트 탭(<a>)을 두어 JS 없는 환경에서도
 #            탭으로 열 수 있도록 폴백 유지
 #
 # 4. 모바일 좌우 여백 없음
@@ -994,6 +1000,128 @@ def _build_markdown(toc_permalink: bool = True) -> markdown.Markdown:
     )
 
 
+def _build_heading_map(toc_html_str: str) -> dict:
+    """toc_html에서 {헤딩텍스트: id} 매핑을 추출한다."""
+    mapping = {}
+    if not toc_html_str:
+        return mapping
+    for m in re.finditer(r'<a\s+href="#([^"]+)"[^>]*>(.*?)</a>', toc_html_str, re.DOTALL):
+        hid = m.group(1)
+        htext = re.sub(r'<[^>]+>', '', m.group(2)).strip()
+        if htext and hid:
+            mapping[htext] = hid
+    return mapping
+
+
+def _find_heading_id(plain_text: str, heading_map: dict) -> str | None:
+    """plain_text와 매칭되는 헤딩 id를 찾는다 (정확 매칭 → 부분 매칭)."""
+    for htext, hid in heading_map.items():
+        if plain_text == htext:
+            return hid
+    for htext, hid in heading_map.items():
+        if plain_text and (plain_text in htext or htext in plain_text):
+            return hid
+    return None
+
+
+def _linkify_inline_toc(body_html: str, heading_map: dict) -> str:
+    """본문의 목차 항목을 하이퍼링크로 변환/수정.
+    1) •로 시작하는 일반 텍스트 항목 → <a href="#id">로 변환
+    2) <ol>/<ul> 안의 <li><a> 항목 중 href가 잘못된 경우 → 올바른 id로 수정
+       (소스 마크다운이 GitHub식 슬러그를 쓰면 python-markdown의 실제 id와
+       불일치해 PDF 내부 링크가 끊긴다 — 텍스트 매칭으로 교정)
+    '목차'/'차례'/'TOC'/'Table of Contents'를 포함하는 h1~h4 헤딩 아래의
+    첫 번째 블록만 처리한다."""
+    if not heading_map:
+        return body_html
+
+    def _linkify_p_content(p_attrs: str, content: str) -> str:
+        if '•' not in content:
+            return f'<p{p_attrs}>{content}</p>'
+        lines = content.split('\n')
+        new_lines = []
+        for line in lines:
+            stripped = line.lstrip()
+            if not stripped.startswith('•'):
+                new_lines.append(line)
+                continue
+            after_bullet = stripped[1:].strip()
+            plain = re.sub(r'<[^>]+>', '', after_bullet).strip()
+            matched_id = _find_heading_id(plain, heading_map)
+            if matched_id:
+                new_line = line.replace(
+                    after_bullet,
+                    f'<a href="#{matched_id}">{after_bullet}</a>',
+                    1,
+                )
+                new_lines.append(new_line)
+            else:
+                new_lines.append(line)
+        return f'<p{p_attrs}>{chr(10).join(new_lines)}</p>'
+
+    def _fix_list_links(tag: str, attrs: str, content: str) -> str:
+        """<ol>/<ul> 안의 <li><a href="#잘못된-id"> 텍스트</a>에서
+        텍스트를 헤딩과 매칭하여 올바른 id로 수정한다."""
+        def _fix_a_tag(m: re.Match) -> str:
+            href = m.group(1)
+            text = m.group(2)
+            # 텍스트에서 HTML 태그 제거
+            plain = re.sub(r'<[^>]+>', '', text).strip()
+            matched_id = _find_heading_id(plain, heading_map)
+            if matched_id:
+                return f'<a href="#{matched_id}">{text}</a>'
+            return m.group(0)
+        return f'<{tag}{attrs}>{re.sub(r"<a\s+href=\"#([^\"]+)\"[^>]*>([\s\S]*?)</a>", _fix_a_tag, content, flags=re.DOTALL)}</{tag}>'
+
+    # 목차 헤딩('목차'/'차례'/'TOC'/'Table of Contents'를 포함하는 h1~h4) 직후의
+    # 첫 번째 블록(<p>, <ol> 또는 <ul>)만 변환.
+    pattern = re.compile(
+        r'(<h[1-4][^>]*>[^<]*?(?:목차|차례|toc|table\s+of\s+contents).*?</h[1-4]>\s*)(?:<p([^>]*)>([\s\S]*?)</p>|<(ol|ul)([^>]*)>([\s\S]*?)</\4>)',
+        re.IGNORECASE | re.DOTALL,
+    )
+
+    def _toc_heading_replacer(m: re.Match) -> str:
+        heading = m.group(1)
+        if m.group(2) is not None:  # <p> 블록
+            return heading + _linkify_p_content(m.group(2), m.group(3))
+        elif m.group(4) is not None:  # <ol>/<ul> 블록
+            return heading + _fix_list_links(m.group(4), m.group(5), m.group(6))
+        return m.group(0)
+
+    return pattern.sub(_toc_heading_replacer, body_html)
+
+
+def _repair_dead_fragment_links(body_html: str, heading_map: dict) -> str:
+    """존재하지 않는 id를 가리키는 본문 내 프래그먼트 링크를 복구한다.
+
+    소스 마크다운의 내부 링크가 GitHub식 슬러그(#첫-번째-섹션) 등 생성된
+    헤딩 id와 다른 값을 가리키면, 독립 HTML에서는 아무 일도 안 일어나고
+    PDF에서는 클릭 불능 링크가 된다. 링크 텍스트가 헤딩과 매칭되면
+    실제 id로 재작성한다 — 살아 있는 링크와 매칭 실패 링크는 그대로 둔다.
+    """
+    if not heading_map:
+        return body_html
+    existing_ids = set(re.findall(r'\bid="([^"]+)"', body_html))
+
+    def _fix(m: re.Match) -> str:
+        frag = m.group(1)
+        if not frag or frag in existing_ids:
+            return m.group(0)
+        text = m.group(2)
+        plain = re.sub(r'<[^>]+>', '', text).strip()
+        matched_id = _find_heading_id(plain, heading_map)
+        if matched_id:
+            return f'<a href="#{matched_id}">{text}</a>'
+        return m.group(0)
+
+    return re.sub(
+        r'<a\s+href="#([^"]*)"[^>]*>([\s\S]*?)</a>',
+        _fix,
+        body_html,
+        flags=re.DOTALL,
+    )
+
+
 def markdown_to_tailwind_html(md_text: str, title: str = "Document", config: RenderConfig | None = None, progress_cb=None, base_dir: Path | None = None) -> str:
     config = config or RenderConfig()
     md_text = _auto_fence_ascii_diagrams(md_text)
@@ -1048,98 +1176,6 @@ def markdown_to_tailwind_html(md_text: str, title: str = "Document", config: Ren
         flags=re.IGNORECASE,
     )
 
-    # 본문 내 일반 텍스트 목차(•로 시작하는 항목)를 하이퍼링크로 변환.
-    # md.toc에서 헤딩 텍스트→ID 매핑을 추출하고, 본문의 목차 항목 텍스트와
-    # 매칭하여 <a href="#ID">텍스트</a>로 변환한다.
-    # 모바일 file://에서도 기본 앵커 동작으로 스크롤 이동 작동.
-    def _build_heading_map(toc_html_str: str) -> dict:
-        """toc_html에서 {헤딩텍스트: id} 매핑을 추출한다."""
-        mapping = {}
-        if not toc_html_str:
-            return mapping
-        for m in re.finditer(r'<a\s+href="#([^"]+)"[^>]*>(.*?)</a>', toc_html_str, re.DOTALL):
-            hid = m.group(1)
-            htext = re.sub(r'<[^>]+>', '', m.group(2)).strip()
-            if htext and hid:
-                mapping[htext] = hid
-        return mapping
-
-    def _linkify_inline_toc(body_html: str, heading_map: dict) -> str:
-        """본문의 목차 항목을 하이퍼링크로 변환/수정.
-        1) •로 시작하는 일반 텍스트 항목 → <a href="#id">로 변환
-        2) <ol>/<ul> 안의 <li><a> 항목 중 href가 잘못된 경우 → 올바른 id로 수정
-        '목차'/'TOC'/'Table of Contents'를 포함하는 h2 헤딩 아래의
-        첫 번째 블록만 처리한다."""
-        if not heading_map:
-            return body_html
-
-        def _find_heading_id(plain_text: str) -> str:
-            """plain_text와 매칭되는 헤딩 id를 찾는다."""
-            # 정확 매칭
-            for htext, hid in heading_map.items():
-                if plain_text == htext:
-                    return hid
-            # 부분 매칭
-            for htext, hid in heading_map.items():
-                if plain_text and (plain_text in htext or htext in plain_text):
-                    return hid
-            return None
-
-        def _linkify_p_content(p_attrs: str, content: str) -> str:
-            if '•' not in content:
-                return f'<p{p_attrs}>{content}</p>'
-            lines = content.split('\n')
-            new_lines = []
-            for line in lines:
-                stripped = line.lstrip()
-                if not stripped.startswith('•'):
-                    new_lines.append(line)
-                    continue
-                after_bullet = stripped[1:].strip()
-                plain = re.sub(r'<[^>]+>', '', after_bullet).strip()
-                matched_id = _find_heading_id(plain)
-                if matched_id:
-                    new_line = line.replace(
-                        after_bullet,
-                        f'<a href="#{matched_id}">{after_bullet}</a>',
-                        1,
-                    )
-                    new_lines.append(new_line)
-                else:
-                    new_lines.append(line)
-            return f'<p{p_attrs}>{chr(10).join(new_lines)}</p>'
-
-        def _fix_list_links(tag: str, attrs: str, content: str) -> str:
-            """<ol>/<ul> 안의 <li><a href="#잘못된-id"> 텍스트</a>에서
-            텍스트를 헤딩과 매칭하여 올바른 id로 수정한다."""
-            def _fix_a_tag(m: re.Match) -> str:
-                href = m.group(1)
-                text = m.group(2)
-                # 텍스트에서 HTML 태그 제거
-                plain = re.sub(r'<[^>]+>', '', text).strip()
-                matched_id = _find_heading_id(plain)
-                if matched_id:
-                    return f'<a href="#{matched_id}">{text}</a>'
-                return m.group(0)
-            return f'<{tag}{attrs}>{re.sub(r"<a\s+href=\"#([^\"]+)\"[^>]*>([\s\S]*?)</a>", _fix_a_tag, content, flags=re.DOTALL)}</{tag}>'
-
-        # 목차 헤딩('목차'/'TOC'/'Table of Contents'를 포함하는 h2) 직후의
-        # 첫 번째 블록(<p>, <ol> 또는 <ul>)만 변환.
-        pattern = re.compile(
-            r'(<h2[^>]*>[^<]*?(?:목차|toc|table\s+of\s+contents).*?</h2>\s*)(?:<p([^>]*)>([\s\S]*?)</p>|<(ol|ul)([^>]*)>([\s\S]*?)</\4>)',
-            re.IGNORECASE | re.DOTALL,
-        )
-
-        def _toc_heading_replacer(m: re.Match) -> str:
-            heading = m.group(1)
-            if m.group(2) is not None:  # <p> 블록
-                return heading + _linkify_p_content(m.group(2), m.group(3))
-            elif m.group(4) is not None:  # <ol>/<ul> 블록
-                return heading + _fix_list_links(m.group(4), m.group(5), m.group(6))
-            return m.group(0)
-
-        return pattern.sub(_toc_heading_replacer, body_html)
-
     # Pre-render Mermaid diagrams to inline SVG at build time (mobile mode).
     # This eliminates all client-side JS dependency — diagrams work on any
     # mobile browser without loading the 3.4MB mermaid.min.js library.
@@ -1147,32 +1183,29 @@ def markdown_to_tailwind_html(md_text: str, title: str = "Document", config: Ren
     if config.prerender_mermaid:
         html_body = _prerender_mermaid_to_svg(html_body, progress_cb=progress_cb)
 
-    # 본문 내 일반 텍스트 목차(• 항목)를 하이퍼링크로 변환.
-    # toc_html이 label로 감싸지기 전의 원본에서 heading_map을 추출한다.
+    # 본문 내 일반 텍스트 목차(• 항목)를 하이퍼링크로 변환하고,
+    # 목차 블록 안 <a>의 깨진 href도 실제 헤딩 id로 교정한다.
+    # 추가로 목차 블록 밖의 깨진 프래그먼트 링크도 텍스트 매칭으로 복구한다.
     heading_map = _build_heading_map(toc_html)
     html_body = _linkify_inline_toc(html_body, heading_map)
+    html_body = _repair_dead_fragment_links(html_body, heading_map)
 
     doc_html = HTML_TEMPLATE
     # 제목에 <, >, & 등이 있어도 <title>/헤더 마크업이 깨지지 않도록 이스케이프.
     doc_html = doc_html.replace("%%TITLE%%", html.escape(title))
     # 빌드 표시: 구버전/신버전 파일 구별용 (모바일 전송 파일 혼동 방지)
     doc_html = doc_html.replace("%%BUILD%%", "b" + time.strftime("%m%d%H%M"))
-    # 모바일 TOC 링크 클릭 시 드로어 자동 닫기 (CSS-only):
-    # 각 TOC 링크를 <label for="tocSwitch">로 감싸면, 링크 클릭 시 label이
-    # checkbox를 토글하여 드로어가 닫히고, 링크의 기본 동작(해시 이동)도 유지됨.
-    # JS가 차단된 모바일 file:// 환경에서도 작동.
-    if toc_html:
-        toc_html = re.sub(
-            r'(<a\s+href="#[^"]*"[^>]*>)(.*?)(</a>)',
-            r'<label for="tocSwitch" class="toc-link">\1\2\3</label>',
-            toc_html,
-            flags=re.DOTALL,
-        )
+    # TOC 링크는 순수 <a href="#id">로 둔다 — 드로어 자동 닫기는 링크를
+    # <label>로 감싸는 방식이 아니라 :target 마커(#tocOpen)로 처리한다.
+    # label 안의 <a> 탭은 iOS Safari·JS 차단 뷰어에서 앵커 이동이 삼켜져
+    # "목차를 눌러도 이동하지 않는" 오류가 발생했다.
     doc_html = doc_html.replace("%%TOC_HTML%%", toc_html)
-    doc_html = doc_html.replace("%%COLLAPSE_MIN_LINES%%", str(int(config.collapse_codeblock_min_lines)))
+    # 템플릿의 JS 안 플레이스홀더는 주석으로 감싸 두어 원본도 유효한 JS가 되게
+    # 한다(IDE 정적 분석 오류 방지) — 치환도 주석 포함 형태를 대상으로 한다.
+    doc_html = doc_html.replace("/*%%COLLAPSE_MIN_LINES%%*/0", str(int(config.collapse_codeblock_min_lines)))
     doc_html = doc_html.replace("%%MERMAID_CDN_URL%%", MERMAID_CDN_URLS[0])
     doc_html = doc_html.replace(
-        "%%MERMAID_CDN_URLS_JS%%",
+        "/*%%MERMAID_CDN_URLS_JS%%*/",
         ", ".join(f"'{u}'" for u in MERMAID_CDN_URLS),
     )
     doc_html = doc_html.replace("%%MERMAID_ESM_URL%%", MERMAID_ESM_URL)
@@ -1691,6 +1724,14 @@ def md_to_html_body(
         md_text = _inline_mermaid_fences(md_text)
     md = _build_markdown(toc_permalink=False)
     body = md.convert(md_text)
+    # 본문 내 목차의 깨진/누락된 앵커를 실제 헤딩 id로 교정한다 —
+    # Chrome print-to-PDF는 <a href="#id">를 내부 GoTo 링크로 옮기는데,
+    # href가 존재하지 않는 id를 가리키면 PDF에서 클릭해도 이동하지 않는다.
+    # 스마트 페이지네이션이 h2+블록을 .keep div로 감싸기 전에 실행해야
+    # '목차' h2 직후 블록 패턴이 매칭된다.
+    _heading_map = _build_heading_map(getattr(md, "toc", "") or "")
+    body = _linkify_inline_toc(body, _heading_map)
+    body = _repair_dead_fragment_links(body, _heading_map)
     if render_mermaid:
         body = _prerender_mermaid_to_svg(body, progress_cb=progress_cb)
     body = _apply_smart_pagination(body, new_page_h2=new_page_h2)
