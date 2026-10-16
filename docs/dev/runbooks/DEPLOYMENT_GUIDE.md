@@ -49,7 +49,7 @@
 
 | 서비스 | 방식 | 비고 |
 |--------|------|------|
-| **GitHub** | `gh auth login` (HTTPS + credential helper) | SSH 별칭 `git@github-skygold:...`도 병행 가능 |
+| **GitHub** | `gh auth login` (HTTPS + credential helper) | SSH 별칭 `git@github-skygold:...`도 병행 가능. gh 미설치여도 deploy CI 게이트는 GitHub REST로 폴백 동작 (공개 레포 무인증) |
 | **Vercel CLI** | 글로벌 로그인 (브라우저 OAuth) | `vercel login` 1회 수행 → 토큰 자동 저장 |
 
 > 새 머신 설정이 필요한 경우 [`MULTI_MACHINE_SETUP.md`](MULTI_MACHINE_SETUP.md) 참조.

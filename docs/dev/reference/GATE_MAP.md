@@ -31,7 +31,7 @@
 | pre-commit | IDE 수준 오류(타입·린트)·시크릿·FFFD 인코딩·고아 자산·문서/테스트 동반 차단 | `git commit --no-verify` · `SKIP_PRECOMMIT=1` · `SKIP_DOCSYNC=1` · `SKIP_TESTFIRST=1` |
 | pre-push | 변경 파일에 필요한 단계만 선별 실행 (미분류 파일=전체 폴백) | `SKIP_PREPUSH=1` · `PUSH_GATE_ALL=1`(전체 강제) · 커밋 메시지 끝 `[no-docs]`·`[no-test]` |
 | CI | `check:ci` 프리셋 + 커버리지 + E2E | 없음 — 로컬 재현은 `npm run check:ci` |
-| deploy | 오염된 트리/미푸시/CI 레드 상태의 배포 차단 + 버전 스탬프(비커밋, 배포 후 원복) + `deploy/<버전>` 태그 이력 + 스모크 | `SKIP_CI_GATE=1`(CI 검증만) · `vercel --prod` 직접 실행 금지 |
+| deploy | 오염된 트리/미푸시/CI 레드 상태의 배포 차단(gh → GitHub REST 폴백) + 버전 스탬프(비커밋, 배포 후 원복) + `deploy/<버전>` 태그 이력 + 스모크 | `SKIP_CI_GATE=1`(CI 검증만) · `vercel --prod` 직접 실행 금지 |
 
 ※ Git 훅은 opt-in — `npm run hooks:install` (미설치 시 `check:ci` 첫 단계가 경고)
 
