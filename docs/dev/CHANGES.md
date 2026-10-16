@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-16 deploy CI 게이트 REST 폴백 — gh 미설치 환경 대응
+
+- **배경**: deploy의 CI 게이트가 `gh run list`에만 의존해 gh 미설치·미인증 머신에서는 조회 자체가 불가 — `SKIP_CI_GATE=1` 우회만 남아 게이트가 무력화됨
+- **수정**: `deploy.js`에 `queryCiRun()` 추가 — gh 우선, 실패 시 `git remote get-url origin`에서 owner/repo를 파싱(SSH 별칭·HTTPS 모두 대응)해 `actions/workflows/ci.yml/runs?head_sha=<sha>` REST 조회. 공개 레포는 무인증, 비공개는 `GH_TOKEN`/`GITHUB_TOKEN` env로 인증. 통과 로그에 경로 표시(`· REST 폴백`). 게이트 의미론(completed+success 필수) 불변 — 우회가 아닌 조회 채널 확장
+- **문서**: VERIFY_DEPLOY_PIPELINE §7·GATE_MAP deploy 행·DEPLOYMENT_GUIDE 인증 표·MULTI_MACHINE_SETUP 권장 조합에 폴백 명시
+
 ## 2026-10-16 통합검색 코어 잔여 결합 해소 — glossary 귀속 이동·manifest.searchDocs·kind 폴백 (TS-18 심화)
 
 - **배경**: 소스 프로바이더 분리 후에도 코어에 비교재 결합 3건이 잔류 — ① 용어집 과목 귀속이 생성 테이블의 `과목N` 디렉터리 명명 규약에 역매핑 의존(`_glossSubjectKey`) ② 시험 팩 고유 콘텐츠를 검색 범위에 넣을 선언형 경로 부재(소스 목록 하드코딩) ③ 뷰의 `RESULT_TIERS`가 kind를 고정 나열해 신규 소스 등록 시 뷰 수정이 필요

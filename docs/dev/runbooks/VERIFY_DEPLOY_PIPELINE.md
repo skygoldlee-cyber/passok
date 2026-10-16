@@ -118,7 +118,7 @@ ubuntu + Node 24에서 순서대로 실행 — 로컬 `check:ci`와 대응 관�
 `vercel --prod` 직접 실행은 금지 — 아래 절차가 `deploy` 명령 하나로 수행된다.
 
 1. **배포 가드**: 작업트리 clean + `origin/main`과 동기화 확인 — 미푸시 커밋·미커밋 변경 차단
-   - **CI 게이트**: 배포 대상 커밋(`rev-parse HEAD`)의 ci.yml run이 `completed`+`success`인지 `gh run list --commit`로 확인 — run 없음·진행 중·실패 모두 차단. `--branch main`이 아니라 커밋 스코프로 조회해야 진행 중 run이 이전 커밋 녹색에 올라타는 구멍이 없다 (우회: `SKIP_CI_GATE=1`, 권장하지 않음)
+   - **CI 게이트**: 배포 대상 커밋(`rev-parse HEAD`)의 ci.yml run이 `completed`+`success`인지 `gh run list --commit`로 확인 — run 없음·진행 중·실패 모두 차단. `--branch main`이 아니라 커밋 스코프로 조회해야 진행 중 run이 이전 커밋 녹색에 올라타는 구멍이 없다. gh 부재·미인증 시 GitHub REST(`actions/runs?head_sha=`)로 자동 폴백 — 공개 레포 무인증, 비공개는 `GH_TOKEN`/`GITHUB_TOKEN` env (최종 우회: `SKIP_CI_GATE=1`, 권장하지 않음)
 2. **영향 분석**: `impact_tests.js --ref`로 변경이 닿는 요구사항 수 보고
 3. **품질 게이트**: 콤보 품질 + `check:types` + `lint` 재검사
 4. **버전 스탬프**: `sw.js` `CACHE_VERSION`과 `data/release-notes.json` `APP_VERSION`을 `v<날짜>-<커밋해시>`로 갱신 → 커밋 · 푸시
