@@ -3,7 +3,7 @@ var DATA_REGISTRY_FOOD = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-15T13:16:58.035Z",
+  "generatedAt": "2026-10-16T07:48:24.941Z",
   "subjects": [
     {
       "key": "sanitation",
@@ -193,6 +193,11 @@ var DATA_REGISTRY_FOOD = {
     "dictionary": {
       "title": "식품첨가물 사전",
       "subtitle": "지정 식품첨가물 검색 — 식품첨가물공전 기준 (파일럿 12종)"
+    },
+    "search": {
+      "title": "교재 검색",
+      "subtitle": "교재 본문과 참조자료(법령·공전·표시기준)를 키워드로 함께 검색합니다.",
+      "placeholder": "검색할 키워드를 입력하세요 (예: 영업허가, 식품첨가물, 위해식품)"
     }
   }
 };

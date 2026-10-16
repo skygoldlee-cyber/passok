@@ -3,11 +3,10 @@
 // 인덱스 구축·무효화·역색인·형태소 어휘·매칭/랭킹·소스 레지스트리를 담당한다.
 // 콘텐츠 소스(교재·서사·참조자료·문제은행)의 구조 지식은 search-sources.js의
 // 프로바이더가 갖고, 코어는 범용 SearchDoc 엔트리(kind·subjId·_searchText·nav)만 다룬다.
-// 뷰 계층은 이 모듈의 runTextbookSearch 결과를 렌더만 한다.
+// 뷰 계층은 이 모듈의 runUnifiedSearch 결과를 렌더만 한다.
 import { DataLoader } from './data-loader.js';
 import { getActiveExamId } from './exam-context.js';
 import { termHitQuality, expandSynonyms } from './search-morpheme.js';
-import { getAllGlossaryKeywords, getGlossaryEntry, glossarySubjectKey } from './glossary-query.js';
 
 let _searchIndex = null;
 let _searchIndexKeys = null;
@@ -18,7 +17,22 @@ let _candidateCache = new Map(); // 변형 → 후보 항목 Set (인덱스 변�
 let _vocabWords = null;    // 형태소 어휘 증분 상태 — 독립 어절
 let _vocabPrefixUse = null; // 접두 → 재사용 어절 수
 let _vocabPrefixes = null; // 2회+ 재사용 접두 (형태소 후보)
-let _glossReps = null;     // 키워드별 대표 용어집 항목 캐시 (시험 내 불변)
+
+/** @type {Array<() => Iterable<string>>} 형태소 어휘 공급자 — 콘텐츠 계층이 등록 (TS-16) */
+const _VOCAB_CONTRIBUTORS = [];
+
+/**
+ * 형태소 어휘 공급자 등록 — 인덱스 구축 시 반환 어절들을 독립 어절로 주입한다.
+ * 코퍼스 빈도 마이닝(2회+ 접두)이 놓치는 도메인 용어도 DP 커버의 분해 단위가 되게 한다.
+ * 같은 함수의 재등록은 무시한다(idempotent).
+ * @param {() => Iterable<string>} fn
+ */
+export function registerVocabContributor(fn) {
+    if (typeof fn === 'function' && !_VOCAB_CONTRIBUTORS.includes(fn)) _VOCAB_CONTRIBUTORS.push(fn);
+}
+
+/** 인덱스가 구축한 형태소 경계 어휘 — 콘텐츠 계층의 termHitQuality 판정에 사용 */
+export function _getMorphVocab() { return _morphVocab; }
 
 // --- TS-18: 검색 소스 레지스트리 ---
 // 코어는 콘텐츠 종류를 모른다 — 소스는 registerSearchSource()로 등록되며
@@ -179,7 +193,6 @@ function _getSearchIndex() {
         for (const src of _SOURCES.values()) { src.entries = null; src.promise = null; }
         _morphVocab = null; _tokenIndex = null;
         _candidateCache = new Map();
-        _glossReps = null;
     }
     _indexExamId = examId;
     _searchIndexKeys = keys;
@@ -230,57 +243,16 @@ function _buildInvertedIndex() {
     _vocabPrefixUse = new Map();
     _vocabPrefixes = new Set();
     _searchIndex.forEach((entry, idx) => _indexEntryTokens(entry, idx));
-    // TS-16 — 용어집 키워드를 독립 어절로 주입: 코퍼스 빈도가 낮아 접두
-    // 마이닝(2회+)에 잡히지 않는 도메인 형태소도 DP 커버의 분해 단위가 된다
-    for (const { keyword } of getAllGlossaryKeywords()) {
-        const kw = String(keyword || '').trim().toLowerCase();
-        if (kw.length >= 2 && !/\s/.test(kw)) _feedVocabToken(kw);
+    // TS-16 — 도메인 어휘 주입: 코퍼스 빈도가 낮아 접두 마이닝(2회+)에 잡히지 않는
+    // 어절도 DP 커버의 분해 단위가 된다. 공급자는 콘텐츠 계층이 등록한다 (용어집 등).
+    for (const contrib of _VOCAB_CONTRIBUTORS) {
+        for (const keyword of contrib() || []) {
+            const kw = String(keyword || '').trim().toLowerCase();
+            if (kw.length >= 2 && !/\s/.test(kw)) _feedVocabToken(kw);
+        }
     }
     _morphVocab = { words: _vocabWords, prefixes: _vocabPrefixes, cover: new Map() };
     _candidateCache.clear();
-    _glossReps = null; // 용어집 인덱스는 시험별 — 인덱스 재구축 시 함께 폐기
-}
-
-// TS-15 — 용어집 과목 귀속 해석은 glossary-query가 소유한다 (subjectId→과목 키).
-// 코어는 해석 결과 키만 소비한다 — 디렉터리 명명 규약 지식은 여기 없다.
-
-// TS-15 — 쿼리 변형(동의어 포함)과 경계 매치하는 용어집 항목을 키워드별 대표로
-// 수집한다. 큐레이션 우선·정확 매치 > 경계 매치·짧은 키워드 우선·상한 5건.
-// 키워드 자체도 형태소 경계 규칙(termHitQuality)으로 판정해 '화' 같은
-// 음절 우연이 아닌 어절/형태소 경계 매치만 정의 카드로 올린다.
-/** 키워드 → 대표 용어집 항목 맵 (큐레이션 우선) — 용어집 인덱스는 시험 내 불변이라 캐시 */
-function _glossRepresentatives() {
-    if (_glossReps) return _glossReps;
-    const repByKw = new Map();
-    for (const { keyword, idxKey } of getAllGlossaryKeywords()) {
-        const kwLower = String(keyword || '').trim().toLowerCase();
-        if (kwLower.length < 2) continue;
-        const prev = repByKw.get(kwLower);
-        if (prev && prev.curated) continue;      // 큐레이션 항목이 이미 대표
-        const entry = getGlossaryEntry(idxKey);
-        if (entry && (!prev || entry.curated)) repByKw.set(kwLower, entry);
-    }
-    _glossReps = repByKw;
-    return repByKw;
-}
-
-function _matchGlossaryDefs(variants, filter) {
-    if (!variants.length || !_morphVocab) return [];
-    const repByKw = _glossRepresentatives();
-    const hits = [];
-    for (const entry of repByKw.values()) {
-        const kwLower = String(entry.keyword || '').trim().toLowerCase();
-        if (filter !== 'all' && filter !== glossarySubjectKey(entry.subjectId)) continue;
-        let score = 0;
-        for (const variant of variants) {
-            if (kwLower === variant) { score = 3; break; }
-            if (termHitQuality(kwLower, variant, _morphVocab) === 2) score = Math.max(score, 1);
-        }
-        if (score) hits.push({ entry, score });
-    }
-    hits.sort((a, b) => b.score - a.score
-        || String(a.entry.keyword).length - String(b.entry.keyword).length);
-    return hits.slice(0, 5).map(h => h.entry);
 }
 
 const CANDIDATE_CACHE_MAX = 200; // 변형→후보 캐시 상한 (초과 시 전체 클리어)
@@ -325,14 +297,13 @@ function _countOccurrences(text, needle) {
  * @returns {{
  *   buckets: Record<string, object[]>,
  *   allVariantTerms: string[],
- *   glossDefs: object[],
  *   lazyPending: boolean,
  *   failedTerms: string[]
  * }} buckets는 엔트리 kind를 키로 하는 동적 버킷 + 'weak'(부분 일치 공통 티어).
  *   각 항목에는 _score(관련도 점수)가 부여돼 있다.
  *   failedTerms는 후보가 전혀 없는 쿼리 용어 — AND 불성립 시 안내 표시용.
  */
-export function runTextbookSearch(query, filter = 'all') {
+export function runUnifiedSearch(query, filter = 'all') {
     const index = _getSearchIndex();
     const terms = query.split(/\s+/).filter(t => t.length > 0);
     /** @type {Record<string, object[]>} kind별 버킷 + weak (부분 일치 공통 티어) */
@@ -414,7 +385,6 @@ export function runTextbookSearch(query, filter = 'all') {
     return {
         buckets,
         allVariantTerms: termGroups.flat(),
-        glossDefs: _matchGlossaryDefs(termGroups.flat(), filter),
         lazyPending: lazyIndexesPending(),
         failedTerms,
     };

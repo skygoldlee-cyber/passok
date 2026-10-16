@@ -338,7 +338,6 @@ function buildForExam(target) {
 
 // --- 출력 파일 작성 ---
 const targets = getExamTargets(ROOT);
-const defaultId = (targets.find(t => t.isDefault) || targets[0] || {}).id || '';
 const EXAM_INDEXES = {};
 
 for (const target of targets) {
@@ -380,14 +379,12 @@ const output = `// src/keyword-index.js — 용어집 인덱스 (참조문서에
 // [멀티시험] 시험별 인덱스는 _EXAM_GLOSSARY_INDEX[examId] — getGlossaryIndex()가 활성 시험을 해석한다.
 import { getActiveExamId } from './exam-context.js';
 
-const _DEFAULT_EXAM_ID = ${JSON.stringify(defaultId)};
-
 const _EXAM_GLOSSARY_INDEX = ${JSON.stringify(EXAM_INDEXES)};
 
-/** 활성 시험의 용어집 인덱스 (없으면 기본 시험, 그것도 없으면 빈 객체) */
+/** 활성 시험의 용어집 인덱스 (인덱스 미생성 시험은 빈 객체 — 다른 시험 용어로 폴백하지 않음) */
 export function getGlossaryIndex() {
     const id = getActiveExamId();
-    return _EXAM_GLOSSARY_INDEX[id] || _EXAM_GLOSSARY_INDEX[_DEFAULT_EXAM_ID] || {};
+    return _EXAM_GLOSSARY_INDEX[id] || {};
 }
 `;
 

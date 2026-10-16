@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-15T13:16:57.775Z",
+  "generatedAt": "2026-10-16T07:48:24.694Z",
   "subjects": [
     {
       "key": "law",
@@ -2709,6 +2709,11 @@ var DATA_REGISTRY = {
     "textbook": {
       "title": "교재검색",
       "subtitle": "교재 본문과 참조자료를 실시간 키워드로 검색"
+    },
+    "search": {
+      "title": "교재 검색",
+      "subtitle": "교재 본문과 참조자료(법령·고시·원료 목록)를 키워드로 함께 검색합니다.",
+      "placeholder": "검색할 키워드를 입력하세요 (예: 안전용기, 페녹시에탄올, 미생물)"
     },
     "textbook-reader": {
       "title": "교재리더",

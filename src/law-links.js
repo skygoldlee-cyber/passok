@@ -12,8 +12,6 @@
 
 import { getActiveExamId } from './exam-context.js';
 
-const _DEFAULT_EXAM_ID = "cosmetic";
-
 const _EXAM_LAW_URLS = {
     "cosmetic": [
     ["화장품법시행령", "https://www.law.go.kr/법령/화장품법시행령"],
@@ -49,10 +47,10 @@ const _EXAM_LAW_URLS = {
     ]
 };
 
-// 활성 시험의 매칭 테이블 (미등록 시험은 기본 시험으로 폴백)
+// 활성 시험의 매칭 테이블 (미등록 시험은 빈 테이블 — 다른 시험 문서로 폴백하지 않음)
 function activeLawUrls() {
   const id = getActiveExamId();
-  return _EXAM_LAW_URLS[id] || _EXAM_LAW_URLS[_DEFAULT_EXAM_ID] || [];
+  return _EXAM_LAW_URLS[id] || [];
 }
 
 // 전 시험 매칭 합집합 (URL 기준 중복 제거 — 같은 문서의 matchKey는 첫 것만 유지, 순서 보존)
