@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-17 Firebase 이관 설계문서 추가 — DOC-DSN-31
+
+- **배경**: 인증·DB 백엔드를 Supabase 대신 Firebase(Authentication + Firestore + Cloud Functions)로 쓸 경우의 설계 요청 — 기능 요구사양은 SUPABASE_DESIGN과 동일하고 플랫폼 대응 매핑·차이점을 별도 문서로 분리
+- **추가**: `docs/dev/design/FIREBASE_DESIGN.md` — 서비스 매핑표(§2)·Firestore 데이터 모델+Security Rules(§4)·인증 플로우 차이(§5 — 이메일 링크에 숫자 코드 없음, 가장 큰 UX 차이)·동기화 호출부 교체(§6)·callable redeemCode/Vercel 대안(§7)·운영 CLI(§9)·CSP/벤더링 제약(§3.2)·비용·이관·리스크
+- **등록**: docs/README.md 인덱스+ID 레지스트리+개수 표기(design 21·dev 73), AGENTS.md 관련 문서 목록
+
 ## 2026-10-16 배경화 크레딧 사이드바 푸터 이동 — PC 전용 노출
 
 - **배경**: 배경화 설명(겸재 정선「인왕제색도」)이 설정 패널 `.settings-meta`에만 있어 PC 내비에서 보이지 않았고, 반대로 모바일은 설정 패널 경유로 노출됐음 — 사이드바 최하단 표시 + 모바일 생략 요구에 대응
