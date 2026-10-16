@@ -3,7 +3,7 @@
 > **작성일**: 2026-09-11
 > **개정일**: 2026-09-11 — 합격 핵심 루프 중심 재구성, Free/Pro 균형 조정, PASS MASTER 브랜드 전략 반영, Phase 5 Practice Platform 연동
 > **목적**: 단순 기능 목록이 아닌, **"합격시키고, 합격 후에도 계속 쓰게 만드는 플랫폼"** 의 핵심 제품 전략 문서
-> **관련 문서**: [SPEC.md](../../../dev/SPEC.md), [SUBSCRIPTION_ROADMAP.md](../../../dev/design/SUBSCRIPTION_ROADMAP.md), [READER_FEEDBACK_DESIGN.md](../../../dev/design/READER_FEEDBACK_DESIGN.md), [PASS_TO_PRACTICE_STRATEGY.md](PASS_TO_PRACTICE_STRATEGY.md)
+> **관련 문서**: [SPEC.md](../../../dev/SPEC.md), [SUBSCRIPTION_ROADMAP.md](../../../dev/design/SUBSCRIPTION_ROADMAP.md), [USER_FEEDBACK_DESIGN.md](../../../dev/design/USER_FEEDBACK_DESIGN.md), [PASS_TO_PRACTICE_STRATEGY.md](PASS_TO_PRACTICE_STRATEGY.md)
 > **문서 ID**: DOC-ARC-03
 > **범위**: exam:cosmetic · 판본: none
 > **관련 SPEC ID**: ROAD-P0~P4 (핵심 루프 잔여 과제)
@@ -779,7 +779,7 @@ Phase 5 — Practice Platform (합격 후 실무, 상세: PASS_TO_PRACTICE_STRAT
 ├── 🔔 법령·고시 업데이트 알림 (Practice Pro)
 ├── 👤 고객별 조제 기록 (Practice Pro)
 ├── 🧠 배합 지식 검색 (Command Palette 확장)
-└── 👥 조제관리사 커뮤니티 (READER_FEEDBACK_DESIGN 연동)
+└── 👥 조제관리사 커뮤니티 (USER_FEEDBACK_DESIGN 연동)
 ```
 
 ### 핵심 원칙
@@ -802,7 +802,7 @@ Phase 5 — Practice Platform (합격 후 실무, 상세: PASS_TO_PRACTICE_STRAT
 
 - [SPEC.md](../../../dev/SPEC.md) — 기존 요구사양 명세서 (16개 영역)
 - [SUBSCRIPTION_ROADMAP.md](../../../dev/design/SUBSCRIPTION_ROADMAP.md) — 구독 서비스 전환 로드맵
-- [READER_FEEDBACK_DESIGN.md](../../../dev/design/READER_FEEDBACK_DESIGN.md) — 독자 피드백 공유 기능 설계
+- [USER_FEEDBACK_DESIGN.md](../../../dev/design/USER_FEEDBACK_DESIGN.md) — 독자 피드백 공유 기능 설계
 - [PASS_CORE_LOOP_REVIEW.md](PASS_CORE_LOOP_REVIEW.md) — 합격 핵심 루프 코드 반영도 리뷰
 - [PASS_TO_PRACTICE_STRATEGY.md](PASS_TO_PRACTICE_STRATEGY.md) — Pass → Practice 전략 (Phase 5 상세)
 - [ARCHITECTURE.md](../../../dev/ARCHITECTURE.md) — 시스템 아키텍처

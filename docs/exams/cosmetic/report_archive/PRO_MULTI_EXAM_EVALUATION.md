@@ -1,6 +1,6 @@
 # Learning Pro 멀티시험 킬러 피처 적합성 평가
 
-> 작성: 2026-09-25 · 관련: [LEARNING_PREMIUM_PLAN.md](../../../dev/design/LEARNING_PREMIUM_PLAN.md) · [사업기획서](../business/맞춤형화장품_조제관리사_자격증플랫폼_사업기획서.md)
+> 작성: 2026-09-25 · 관련: [SUBSCRIPTION_ROADMAP.md](../../../dev/design/SUBSCRIPTION_ROADMAP.md) · [사업기획서](../business/맞춤형화장품_조제관리사_자격증플랫폼_사업기획서.md)
 > **문서 ID**: DOC-ARC-07
 > **범위**: exam:cosmetic · 판본: none
 > **관련 SPEC ID**: ES-01~05, ROAD-P4

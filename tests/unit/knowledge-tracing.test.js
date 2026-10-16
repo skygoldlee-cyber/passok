@@ -1,6 +1,6 @@
 // tests/unit/knowledge-tracing.test.js — BKT 단원 숙달 추정 순수 로직
 // @spec D-22
-// KNOWLEDGE_TRACING_DESIGN §3.2 수식의 골든 수열 검증 — 손계산 기대값으로
+// LEARNING_ALGORITHM_DESIGN §3.2 수식의 골든 수열 검증 — 손계산 기대값으로
 // 사후확률 갱신·학습 전이·파라미터 오버라이드를 결정론적으로 확인한다.
 
 import { test } from 'node:test';
