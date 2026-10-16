@@ -291,7 +291,7 @@ tests/dom/
 | 뽀모도로 | `study-pomodoro` ✅ | 시작/정지→누적 표시(H) · 날짜 경계 리셋(P/B) | 타이머 fake timers |
 | 모의고사 | `study-simulator` ✅ | 세션 시작→아레나·OMR(H) · 답안→제출→리뷰(H) · 미응답 오답(B) · 임시저장→이어하기(P/R) · 시간만료 자동제출(B) | 스텁 시험지 주입 |
 | 교재 리더 | `study-reader` ✅ | 과목 선택→본문·TOC 렌더(H) · 읽기 위치 저장→이어하기(P/R) · 북마크(P) · 미선택 안내(E) | STUDY_DATA(chapters) + stubRegistry |
-| 교재 검색 | `study-search` ✅ | 쿼리→결과 카드·하이라이트(H) · AND 교집합(H) · 과목 필터(H) · 결과 0건(E) · 더보기 토글(H) | 역색인 (STUDY_DATA chapters) |
+| 교재 검색 | `study-search` ✅ | 쿼리→결과 카드·하이라이트(H) · AND 교집합·실패 용어 안내(H) · 과목 필터(H) · 결과 0건(E) · 더보기 토글(H) · 미매핑 kind 폴백 티어(H) | 소스 프로바이더(교재=STUDY_DATA)·역색인 코어 분리 (TS-18) |
 | 성분 사전 | `study-dictionary` ✅ | 검색(이름/영문/초성)→카드·배지(H) · type 필터(H) · 빈 DB(E) · 결과 없음(B) | `window.INGREDIENTS_DATA` 스텁 |
 | 용어집 | — (리더 통합) | 별도 뷰 없음 — `collectGlossaryItems`는 리더 렌더 경로에서 실행. 마커 포함 섹션 픽스처로 추후 보강 가능 | 리더 테스트 경유 |
 | 학습 캘린더 | `study-calendar` ✅ | 기록→학습일·달성률 반영(H/P) · 목표 설정 저장·기본값(B) · 월 이동(H) | STUDY_CALENDAR + STUDY_GOALS |

@@ -283,8 +283,9 @@ passory/
 │   ├── statement-tracker.js    #   진술 원자(sid) 단위 오판 통계 + 졸업 추적
 │   ├── charts.js               #   SVG 레이더/꺾은선 차트 + 툴팁
 │   ├── sanitize.js             #   XSS 방어
-│   ├── search-index.js         #   통합검색 인덱스 코어 — 인덱스·지연 로드·랭킹 (TS-10~17)
+│   ├── search-index.js         #   통합검색 인덱스 코어 — 소스 레지스트리·역색인·지연 소스 상태머신·랭킹 (TS-08~09,TS-13~18)
 │   ├── search-morpheme.js      #   검색 형태소 경계 판정·동의어 확장 순수 로직 (TS-13/TS-14)
+│   ├── search-sources.js       #   통합검색 콘텐츠 소스 프로바이더 — 교재/서사/참조자료/문제은행/manifest.searchDocs (TS-10~12,TS-18)
 │   ├── sha256.js               #   안정적 ID 해시
 │   ├── web-vitals.js           #   Core Web Vitals (LCP/CLS/INP) 모니터링
 │   ├── trainer-calc.js         #   계산 훈련 문제 생성 (순수 로직)
@@ -581,7 +582,8 @@ passory/
 | [`src/weak-items.js`](../../src/weak-items.js) | 약점(오답) 항목 ID 문법의 단일 소스 — `weak_quiz_`/`weak_sim_` 접두사 상수, `weakItemKey`/`parseWeakSimId`/`subjectKeyFromItemId`, 오답 해석(`resolveWrongQuiz`/`resolveCard`/`subjectForWeakItem`). **인덱스 캐시**: 퀴즈·카드를 `id → {항목, subjectId}` Map으로 인덱싱하고 STUDY_DATA·과목 키·배열 참조/길이 비교로 무효화 — `DataLoader.loadSubject()` 점진 로드 시 자동 재구축. DOM 비의존(`window` 가드) |
 | [`src/utils.js`](../../src/utils.js) | 의존성 없는 범용 헬퍼 (한글 초성 추출 `getChosung()` 등) |
 | [`src/sanitize.js`](../../src/sanitize.js) | HTML/XSS 방어 및 텍스트 정제 유틸리티 |
-| [`src/search-index.js`](../../src/search-index.js) | 통합검색 인덱스 코어 순수 로직 (TS-10~17). `runTextbookSearch`가 쿼리를 동의어 그룹(그룹 내 OR·그룹 간 AND)으로 확장 → 어절 역색인(`_tokenIndex`) 후보 교집합(빈 그룹 조기 종료) → `termHitQuality` 품질로 교재→참조자료→문제은행→부분 일치 티어 버킷·`_score` 부여. 인덱스는 활성 시험+과목 키로 캐시·시험 전환 시 지연 병합분(서사·참조·문제은행 `_ensure*Index`) 일괄 폐기. DOM 비의존 — 뷰 계층(`views/textbook-search.js`)은 `ensureLazyIndexes` 트리거·결과 렌더만 담당 |
+| [`src/search-index.js`](../../src/search-index.js) | 통합검색 인덱스 코어 순수 로직 (TS-08~09,TS-13~18). `runTextbookSearch`가 쿼리를 동의어 그룹(그룹 내 OR·그룹 간 AND)으로 확장 → 어절 역색인(`_tokenIndex`) 후보 교집합(빈 그룹은 `failedTerms` 보고) → `termHitQuality` 품질로 kind 버킷+부분 일치 티어 분류·`_score` 부여(빈도×idf+제목/구문 가산). 인덱스는 활성 시험+소스 `rev()` 신호로 캐시·시험 전환 시 지연 병합분 일괄 폐기. 소스 프로바이더 레지스트리(`registerSearchSource`) — 코어는 콘텐츠 종류를 모르고 lazy 소스의 시험 가드·실패 재시도 억제를 일원 관리. DOM·콘텐츠 종류 비의존 |
+| [`src/search-sources.js`](../../src/search-sources.js) | 통합검색 콘텐츠 소스 프로바이더 (TS-10~12,TS-18). 교재 섹션(`collectTextbookSections` — STUDY_DATA→SearchDoc, 리더 표시 제목·챕터 앵커 해석)·서사 storyFile·참조자료·문제은행·시험 선언 문서(`manifest.searchDocs` → `__DOC_MD__` 번들/fetch 로드, feature 게이트 지원) 로더가 범용 엔트리 `{kind,title,crumb,subjId,text,nav,_searchText}`를 생산하고 `initSearchSources()`로 코어에 등록한다. `command-palette.js`도 같은 수집 함수를 재사용해 리더 규약 해석 중복을 소거 |
 | [`src/search-morpheme.js`](../../src/search-morpheme.js) | 통합검색 형태소 경계 판정·동의어 확장 순수 로직 (TS-13/TS-14). `buildBoundaryVocab`이 인덱스 어절에서 독립 어절+재사용 접두를 형태소 어휘로 마이닝하고, `isCoverable`(DP 완전분해)로 매치 직전 접두의 형태소 경계를 판정 — `termHitQuality`가 본매치(2)/부분(1)/없음(0)을 반환해 '보조유화제'는 본매치·'석유화학'은 부분 일치로 분류. `expandSynonyms`는 `registry.synonyms` 정·역방향으로 쿼리 어절을 동의 개념군(그룹 내 OR·그룹 간 AND)으로 확장. DOM 비의존·외부 형태소 분석기 없는 결정론적 구현 |
 | [`src/pdf-registry.js`](../../src/pdf-registry.js) | 참조자료 중앙 설정 모듈. 과목별 참조자료 매핑, 출처→PDF 파일명 매핑, MD 변환본 경로 자동 생성 (`REF_DIRS`, `resolveRefPath`, `mapSourceToRef`). 원본 PDF는 `.vercelignore`로 배포 제외, `ref_md/과목N/*/*.md` 변환본(3.7MB)으로 인앱 뷰어+PDF 저장 지원 |
 | [`src/html-viewer.js`](../../src/html-viewer.js) | 앱 내 HTML/MD 참조자료 뷰어. `fetch()`+`DOMParser`(HTML) 또는 `parseMarkdown()`(MD)로 로드 후 DOM 직접 주입 (iframe 없음). **키워드 기반 스크롤**: `KEYWORD_INDEX`에서 추출한 셀 텍스트 키워드로 검색→첫 번째 하이라이트로 스크롤 (L###은 스크롤에 사용하지 않음). **성능 최적화**: sessionStorage 캐싱(24h TTL)으로 재방문 시 즉시 렌더링, span 일괄 제거(normalize 호출 최소화), 검색 조기 종료(첫 매치 즉시 스크롤 + 나머지 `requestIdleCallback` 지연 하이라이트). 텍스트 노드 순회 검색 + `<mark>` 하이라이트, 검색 결과 내비게이션(이전/다음), 인쇄 지원. **PDF 저장** (v210 도입): 인쇄 전용 CSS로 오버레이 제약 없이 전체 문서를 브라우저 인쇄 다이얼로그로 출력 → "PDF로 저장" 선택 가능 |

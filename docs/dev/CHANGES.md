@@ -7,6 +7,30 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-16 통합검색 코어 잔여 결합 해소 — glossary 귀속 이동·manifest.searchDocs·kind 폴백 (TS-18 심화)
+
+- **배경**: 소스 프로바이더 분리 후에도 코어에 비교재 결합 3건이 잔류 — ① 용어집 과목 귀속이 생성 테이블의 `과목N` 디렉터리 명명 규약에 역매핑 의존(`_glossSubjectKey`) ② 시험 팩 고유 콘텐츠를 검색 범위에 넣을 선언형 경로 부재(소스 목록 하드코딩) ③ 뷰의 `RESULT_TIERS`가 kind를 고정 나열해 신규 소스 등록 시 뷰 수정이 필요
+- **① 용어집 귀속 소유권 이동**: `glossarySubjectKey()`를 `glossary-query.js`로 이동 — 디렉터리명은 `SUBJECT_DIR_MAP`으로 역해석하되 과목 키가 직접 오면 그대로 통과해 '과목N' 규약 비종속. `search-index.js`의 `pdf-registry` 임포트 제거
+- **② `manifest.searchDocs` 선언형 소스**: 시험 팩이 `[{file, title, subject?, kind?, feature?}]`를 선언하면 `exam-docs` 지연 소스가 `__DOC_MD__` 번들→fetch→docs_md 주입 폴백(문제은행과 동일 규약, `_loadMdText` 공통화)으로 로드해 인덱스 병합 — 코드 수정 없는 팩 자급 확장. cosmetic manifest에 매뉴얼·학습안내서 4종 선언(기능 플래그 게이트 포함)해 검색 대상에 신규 포함
+- **③ 뷰 폴백**: `RESULT_TIERS`에 `kinds:'*'` 티어 추가 — 미선언 kind는 '기타' 티어(상한 10)로 렌더. 카드 디스패치를 kind 조건에서 nav 타입으로 전환(`nav.mdPath`→문서 카드·`nav.goto`→섹션 카드·없음→정적 카드), 배지는 `KIND_LABELS`+미등록 키 그대로 표시
+- **테스트**: search-index.unit +2(`_loadExamDocEntries` 게이트·과목 귀속, `glossarySubjectKey` 키 통과) · study-search.dom +1(미매핑 kind 폴백 티어 렌더)
+
+## 2026-10-16 통합검색 소스 프로바이더 분리 — 코어의 콘텐츠 종속 해소 (TS-18)
+
+- **배경**: 매칭·랭킹 코어는 범용이었으나 인덱스 구축이 `window.STUDY_DATA` 전역 순회·chapters→sections 트리 파싱·리더 이동 규약(`gotoTitle`/`chAnchor`)에 결합 — 교재 구조 변경 시 코어 수정이 필요하고 동일 로직이 command-palette에 중복
+- **`src/search-sources.js` 신규**: 콘텐츠 소스 프로바이더 계층 — `collectTextbookSections()`(교재 수집+리더 이동 페이로드 해석)·서사/참조자료/문제은행 로더가 범용 엔트리 `{kind,title,crumb,subjId,subjName,text,filePath,nav,_searchText}`를 생산하고 `initSearchSources()`로 등록. `nav`는 `{goto:[…]}|{mdPath}` 오파크 페이로드로 소스별 이동 해석을 캡슐화
+- **코어 범용화**: `search-index.js`는 `registerSearchSource({id,kind,lazy,load,rev})` 레지스트리만 알고 콘텐츠 종류를 모름 — 캐시 키는 `examId+소스별 rev()` 신호, 지연 소스 상태머신(`_ensureSource`)이 시험 전환 가드·실패 재시도 억제를 소스 무관하게 일원화, `runTextbookSearch`는 `buckets[kind]` 동적 생성. `reader-toc.js`·`STUDY_DATA`·`hasFeature` 임포트 전부 제거
+- **뷰·팔레트**: `RESULT_TIERS`가 `kinds` 배열로 kind→표시 티어 매핑(교재 `['section','story']`→참조 `['ref']`→문제은행 `['exam']`→부분일치 `['weak']`), 카드는 `item.nav` 전달. `command-palette.js`는 `collectTextbookSections()` 재사용으로 리더 규약 중복 소거
+- **테스트**: 레지스트리 계약 테스트 추가(커스텀 eager 소스 등록→kind 버킷·lazy 병합) + 기존 유닛의 버킷 키(`buckets.refs`→`buckets['ref']`) 갱신 — unit 1383·DOM 756 통과
+
+## 2026-10-16 통합검색 정합성·성능·품질 보강 12개 — 지연 인덱스 시험 가드·IDF·failedTerms 등
+
+- **정합성**: 지연 소스(서사·참조자료·문제은행) 로드 시작 시 활성 시험 캡처, 완료 시 불일치면 병합 폐기(시험 전환 중 인덱스 오염 차단) · 소스 실패 시 promise 유지로 검색마다 재시도하던 폭풍 억제(시험 전환 리셋 시에만 재시도) · 1글자 쿼리는 지연 페치 기동 안 함
+- **성능**: 변형→후보 Set 캐시(상한 200, 인덱스 변경 시 무효화) · 지연 병합은 새 항목 토큰만 추가하는 증분 역색인(`_indexEntryTokens`) · 용어집 대표 맵 `_glossReps` 캐시 · `split()` 빈도 계산을 `indexOf` 루프(`_countOccurrences`)로 교체
+- **품질**: 빈도×`log(1+N/(1+df))` IDF 가중으로 흔한 용어 지배 차단 · AND 불성립 시 미발견 용어 `failedTerms` 보고 + 뷰에 "미발견 용어를 빼고 검색" 배너 · 쿼리 전체 인접 매치에 구문 부스트(+60) · `_matchSnippet` 슬라이딩 윈도로 다용어 밀집 구간 선택 · 참조자료·문제은행 카드 전체 클릭(`ExamViewer.openExam` 딥링크)·키보드 지원 — 섹션 카드와 UX 일치
+- **도메인 결합 완화**: `references.json`의 `referenceIngredients`에 `subject` 필드 추가(과목N 디렉터리명·과목 키 모두 수용) — cosmetic 전용 지식을 코어에서 설정으로 이전
+- **테스트**: unit +10(IDF 랭킹·구문 부스트·failedTerms·밀집 스니펫·subject 귀속 등) · DOM +3(1글자 게이트·AND 불성립 안내+재검색·카드 클릭 메타데이터)
+
 ## 2026-10-16 통합검색 코어 분리 — views/textbook-search.js → src/search-index.js (TS-10~17 구조화)
 
 - **배경**: `performTextbookSearch`가 DOM·지연 로드·매칭·랭킹·렌더를 한 함수에 담아 330줄까지 비대 — 검색 로직 단순화 요청에 대응해 기능 축소 없이 구조 분리
