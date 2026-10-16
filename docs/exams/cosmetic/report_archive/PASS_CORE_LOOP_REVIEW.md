@@ -483,4 +483,4 @@ D-Day, 학습 목표, 요약 노트가 없습니다.
 - [SPEC.md](../../../dev/SPEC.md) — 기존 요구사양 명세서 (16개 영역)
 - [ARCHITECTURE.md](../../../dev/ARCHITECTURE.md) — 시스템 아키텍처
 - [SUBSCRIPTION_ROADMAP.md](../../../dev/design/SUBSCRIPTION_ROADMAP.md) — 구독 서비스 전환 로드맵
-- [READER_FEEDBACK_DESIGN.md](../../../dev/design/READER_FEEDBACK_DESIGN.md) — 독자 피드백 공유 기능 설계
+- [USER_FEEDBACK_DESIGN.md](../../../dev/design/USER_FEEDBACK_DESIGN.md) — 독자 피드백 공유 기능 설계

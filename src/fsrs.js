@@ -4,7 +4,7 @@
 // DSR 모델: 카드마다 Difficulty(난이도)·Stability(안정도, 일)를 추적하고
 // 경과일로부터 Retrievability(기억 확률)를 추정해 목표 기억률 0.9가 되는
 // 시점으로 다음 복습 간격을 산출한다. 저장·시계는 spaced-repetition.js 어댑터 담당.
-// 파라미터·수식 정합 근거: docs/dev/design/FSRS6_UPGRADE_DESIGN.md (DOC-DSN-27)
+// 파라미터·수식 정합 근거: docs/dev/design/LEARNING_ALGORITHM_DESIGN.md (DOC-DSN-27)
 
 // FSRS-6 기본 파라미터 (w0..w20 — fsrs-rs 6.x / ts-fsrs 공개 안정 세트)
 const W = [0.212, 1.2931, 2.3065, 8.2956, 6.4133, 0.8334, 3.0194, 0.001, 1.8722,
@@ -15,7 +15,7 @@ const REQUEST_RETENTION = 0.9;      // 목표 기억률
 const S_MIN = 0.01;                 // 안정도 하한
 const MAX_INTERVAL = 36500;         // 100년 상한
 
-/** 평가 등급 — 현행 2버튼 UI는 Again/Good만 사용 (4단계는 FSRS_DESIGN §8 후속) */
+/** 평가 등급 — 현행 2버튼 UI는 Again/Good만 사용 (4단계는 LEARNING_ALGORITHM_DESIGN §8 후속) */
 export const Rating = { AGAIN: 1, HARD: 2, GOOD: 3, EASY: 4 };
 
 const _clampD = (d) => Math.min(10, Math.max(1, d));
@@ -110,7 +110,7 @@ export function fsrsReview(cur, rating, elapsedDays) {
 }
 
 /**
- * SM-2 레코드 → FSRS 레코드 지연 변환 (지연 마이그레이션 — FSRS_DESIGN §3.2).
+ * SM-2 레코드 → FSRS 레코드 지연 변환 (지연 마이그레이션 — LEARNING_ALGORITHM_DESIGN §3.2).
  * nextReview는 어댑터가 due로 계승한다 (여기서는 상태 필드만 변환).
  * @param {Object} rec {repetition, easiness, nextReview, lastReview}
  * @param {string} [today] YYYY-MM-DD — lastReview 없을 때 간격 근사 기준

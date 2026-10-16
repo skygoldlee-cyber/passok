@@ -11,7 +11,7 @@
 >
 > **작성일**: 2026-09-12
 > **개정일**: 2026-09-12 — 2차 리뷰 반영: §3.4 "유일한"→"드문"(§5 일치), §1 "법정 필수 인력"→"신고 요건 중 하나"(보수화), §9.2 공격 시나리오 Practice 150→80명(231곳 대비 현실화), §8.3 무료 체험 결제 모델 의도 명시, §3.1 TAM에 231곳 함의 추가
-> **기반 문서**: PASS_TO_PRACTICE_STRATEGY.md, FEATURE_PROPOSALS.md, SUBSCRIPTION_ROADMAP.md, READER_FEEDBACK_DESIGN.md
+> **기반 문서**: PASS_TO_PRACTICE_STRATEGY.md, FEATURE_PROPOSALS.md, SUBSCRIPTION_ROADMAP.md, USER_FEEDBACK_DESIGN.md
 > **성격**: 투자·협업·내부 의사결정용 사업기획서 (제품 전략 문서를 사업 관점으로 재구성 + 시장·마케팅·세일즈 추가)
 
 ---
@@ -220,7 +220,7 @@ Free는 "합격이 가능은 하지만 답답한" 지점에 둔다. **전 과목
 낮은 합격률(20%)이라는 시장 통증을 겨냥해 "회차별 합격률·출제 비중·과목 전략" 같은 사실 기반 무료 콘텐츠로 검색 유입을 만든다. 무료 기출·요약을 미끼(lead magnet)로 제공하고 앱 Free로 연결한다. 솔로 파운더에게 광고보다 **콘텐츠 SEO + 커뮤니티 신뢰**가 비용 대비 효율이 높다.
 
 **Phase 2 — 합격 후기 Flywheel (신뢰의 사회적 증거)**
-합격자의 학습 수기·팁을 큐레이션해 다음 기수 수험생에게 노출한다(READER_FEEDBACK_DESIGN 연동). "이 앱으로 붙었다"는 후기가 다음 수험생을 데려오는 자기강화 루프를 만든다.
+합격자의 학습 수기·팁을 큐레이션해 다음 기수 수험생에게 노출한다(USER_FEEDBACK_DESIGN 연동). "이 앱으로 붙었다"는 후기가 다음 수험생을 데려오는 자기강화 루프를 만든다.
 
 **Phase 3 — 실무 전환 마케팅 (LTV 확대)**
 합격 시즌에 맞춰 "합격 축하 → 실무 모드 1개월 무료 체험" 캠페인을 발송한다. 법령 개정이 있을 때마다 "당신의 포뮬러 N개가 영향받습니다"라는 Actionable Alert가 재방문·재구독의 강력한 트리거가 된다.
@@ -276,7 +276,7 @@ Free는 "합격이 가능은 하지만 답답한" 지점에 둔다. **전 과목
 
 #### 7.6.2 후기·사회적 증거 (Earned Media Flywheel)
 
-- 합격자의 학습 수기·팁을 큐레이션해 다음 기수 수험생에게 노출한다(READER_FEEDBACK_DESIGN 연동).
+- 합격자의 학습 수기·팁을 큐레이션해 다음 기수 수험생에게 노출한다(USER_FEEDBACK_DESIGN 연동).
 - "이 앱으로 합격했다"는 실제 후기는 어떤 광고 카피보다 강한 전환 요인이며, 기수가 쌓일수록 복리로 축적된다.
 - 후기 확보 장치: 합격 자가 보고 시 수기 작성 유도, 우수 수기 노출·소정 혜택.
 
@@ -460,5 +460,5 @@ Free는 "합격이 가능은 하지만 답답한" 지점에 둔다. **전 과목
 - PASS_TO_PRACTICE_STRATEGY.md — Formula OS 전략 (Phase 5 상세)
 - FEATURE_PROPOSALS.md — 제품 기능 카탈로그 (Pass Loop Phase 1~4)
 - SUBSCRIPTION_ROADMAP.md — 구독 전환 로드맵 (Supabase, 게이팅)
-- READER_FEEDBACK_DESIGN.md — 합격 후기·커뮤니티 설계 (마케팅 Flywheel 연동)
+- USER_FEEDBACK_DESIGN.md — 합격 후기·커뮤니티 설계 (마케팅 Flywheel 연동)
 - PASS_CORE_LOOP_REVIEW.md — 합격 핵심 루프 코드 반영도

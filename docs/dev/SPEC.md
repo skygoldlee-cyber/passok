@@ -131,12 +131,12 @@
 | D-14 | 실제 시험 결과 자가 보고 (`actual_exam_result`) — D-day 경과 시 진단 카드에 입력 폼, 기록 후 예상 대비 오차 표시. 예측 보정 데이터 수집 경로 | ✅ |
 | D-15 | 대시보드 추천 카드에서 "학습 진단 보기" 버튼으로 `analysis-view` 연결 (퍼널) — 상세 분석(과목 카드·히트맵·모의고사 차트)은 학습 진단 뷰로 분리됨 | ✅ |
 | D-16 | 과목별 마스터리 레벨 — 판정 진술 중 졸업(연속 정답 3회, DR-03) 비율을 과목별로 집계해 과목 카드에 Lv.1~5 표시 (`computeMasteryLevels`, 데이터 없으면 미표시) | ✅ |
-| D-17 | 시험일 리드타임 권고 + 계획 등급 — 목표 설정 모달에서 최소 권장 준비 기간 미만 시험일을 인라인 권고(`getExamLeadStatus`). 기준 일수는 manifest `study.minExamLeadDays` 우선, 미선언 시 콘텐츠 규모에서 유도 — `max(총카드÷50학습일, 총퀴즈÷10학습일)`을 학습일→달력일(×7/5) 환산 후 카드 쪽에 FSRS 마진 1.5배, 레지스트리 없으면 기본 50일 (`getMinExamLeadDays`, cosmetic 선언값 63일 근거: 문제은행 445문÷10=45학습일→63달력일 — 카드 1,123장 쪽은 23학습일→33달력×1.5≈48일로 작음). **학습일당 필요량**(`computeStudyPlan.perStudyDay`, `getRemainingStudyDays` 공용)÷일일 카드 목표 비율로 normal(≤1.0)/tight(≤2.0)/triage(>2.0) 판정해 대시보드 안내 분기(`getExamPlanStatus` — tight는 카드·퀴즈 병행 권장, triage는 출제 비중 최상위 과목 우선 권고). 모든 역산·페이스 계산은 달력일이 아닌 학습일 기준(`computePaceProjection` 포함). 50일 산출 근거(카드별 기억률 시뮬·총량 분해): FSRS_DESIGN.md §9 | ✅ |
-| D-18 | FSRS 리뷰 로그 링버퍼 — `updateCardSchedule`의 단일 통로에 `{c,r,e,t}` 레코드를 append해 레이팅 이력 영속화 (카드·진술 공용 포함). `fc_review_log` 시험 스코프 키, 2,000건 FIFO, `BACKUP_KEYS` 등록으로 복원·초기화 정합. 효능 실측·개인 피팅·4버튼 재평가의 선행 계층 (EXAM_R_SCHEDULING_DESIGN.md §2) | ✅ |
-| D-19 | 시험일 목표 R 최종 인출 — `R_exam = retrievability(examDate−lastReview, s)`로 다음 복습이 시험일 이후(due>examDate)인 카드 중 시험일 목표 기억률 미달분(<0.95)을 선별, D-day ≤14일일 때 "오늘 할 일" 큐에 `시험 전 최종 인출` 항목 표시. R_exam 오름차순 정렬·세션 상한 60장, `state.flashcards.onlyIds` 1회성 id 집합으로 임의 세션 기동 (간격 재작성 아닌 추가 인출 — EXAM_R_SCHEDULING_DESIGN.md §3; 원안 0.85 임계는 불변식상 공집합이라 0.95로 교정) | ✅ |
-| D-20 | 시험일 due 클램프 — `updateCardSchedule` 산출 `due > examDate`이고 갱신 후 `s` 기준 `R_exam < 0.95`인 카드의 `due`를 `examDate − 1`로 당김 (조건부 상한 — 시험일까지 목표 유지 예정 카드는 미당김으로 벽 방지, 발동 대역 s∈(dday, ~2.5·dday)). 시험일 미설정·경과 시 비활성, `fsrs.js` 무수정의 어댑터 정책 계층 (EXAM_DUE_CLAMP_DESIGN.md) | ✅ |
-| D-21 | 단원 숙달 베이지안 추정 — 퀴즈·진술·시뮬 정오 증거를 단원별로 집계(정답 근거 포함, 졸업 진술은 숙달 증거로 반영)하고 Beta(4,3) 사후평균으로 숙달률 추정. 취약 단원 랭킹의 정렬 기준을 오답 빈도→숙달률로 교체해 소표본 노이즈 제거 (KNOWLEDGE_TRACING_DESIGN.md §3.1) | ✅ |
-| D-22 | BKT 지식 추적 — 단원별 은닉 숙달 P(L)을 리뷰 로그 관측 시퀀스로 갱신 (P₀=0.3·T=0.08·G=5지선다0.15/OX0.30·S=0.10, manifest `study.kt` 오버라이드). 퀴즈 판정은 `{c,k:'q',ok,t}`로 `fc_review_log`에 기록, 진술 스케줄 이벤트(r)는 OX 관측으로 승계. 카운트 증거는 BKT 초기 P(L) 사전으로 승계하고 시퀀스 없으면 Beta 폴백. 망각은 비모델(스냅샷 용도 — 시점 관리는 FSRS) (KNOWLEDGE_TRACING_DESIGN.md §3.2·§4.2) | ✅ |
+| D-17 | 시험일 리드타임 권고 + 계획 등급 — 목표 설정 모달에서 최소 권장 준비 기간 미만 시험일을 인라인 권고(`getExamLeadStatus`). 기준 일수는 manifest `study.minExamLeadDays` 우선, 미선언 시 콘텐츠 규모에서 유도 — `max(총카드÷50학습일, 총퀴즈÷10학습일)`을 학습일→달력일(×7/5) 환산 후 카드 쪽에 FSRS 마진 1.5배, 레지스트리 없으면 기본 50일 (`getMinExamLeadDays`, cosmetic 선언값 63일 근거: 문제은행 445문÷10=45학습일→63달력일 — 카드 1,123장 쪽은 23학습일→33달력×1.5≈48일로 작음). **학습일당 필요량**(`computeStudyPlan.perStudyDay`, `getRemainingStudyDays` 공용)÷일일 카드 목표 비율로 normal(≤1.0)/tight(≤2.0)/triage(>2.0) 판정해 대시보드 안내 분기(`getExamPlanStatus` — tight는 카드·퀴즈 병행 권장, triage는 출제 비중 최상위 과목 우선 권고). 모든 역산·페이스 계산은 달력일이 아닌 학습일 기준(`computePaceProjection` 포함). 50일 산출 근거(카드별 기억률 시뮬·총량 분해): LEARNING_ALGORITHM_DESIGN.md §9 | ✅ |
+| D-18 | FSRS 리뷰 로그 링버퍼 — `updateCardSchedule`의 단일 통로에 `{c,r,e,t}` 레코드를 append해 레이팅 이력 영속화 (카드·진술 공용 포함). `fc_review_log` 시험 스코프 키, 2,000건 FIFO, `BACKUP_KEYS` 등록으로 복원·초기화 정합. 효능 실측·개인 피팅·4버튼 재평가의 선행 계층 (LEARNING_ALGORITHM_DESIGN.md §2) | ✅ |
+| D-19 | 시험일 목표 R 최종 인출 — `R_exam = retrievability(examDate−lastReview, s)`로 다음 복습이 시험일 이후(due>examDate)인 카드 중 시험일 목표 기억률 미달분(<0.95)을 선별, D-day ≤14일일 때 "오늘 할 일" 큐에 `시험 전 최종 인출` 항목 표시. R_exam 오름차순 정렬·세션 상한 60장, `state.flashcards.onlyIds` 1회성 id 집합으로 임의 세션 기동 (간격 재작성 아닌 추가 인출 — LEARNING_ALGORITHM_DESIGN.md §3; 원안 0.85 임계는 불변식상 공집합이라 0.95로 교정) | ✅ |
+| D-20 | 시험일 due 클램프 — `updateCardSchedule` 산출 `due > examDate`이고 갱신 후 `s` 기준 `R_exam < 0.95`인 카드의 `due`를 `examDate − 1`로 당김 (조건부 상한 — 시험일까지 목표 유지 예정 카드는 미당김으로 벽 방지, 발동 대역 s∈(dday, ~2.5·dday)). 시험일 미설정·경과 시 비활성, `fsrs.js` 무수정의 어댑터 정책 계층 (LEARNING_ALGORITHM_DESIGN.md) | ✅ |
+| D-21 | 단원 숙달 베이지안 추정 — 퀴즈·진술·시뮬 정오 증거를 단원별로 집계(정답 근거 포함, 졸업 진술은 숙달 증거로 반영)하고 Beta(4,3) 사후평균으로 숙달률 추정. 취약 단원 랭킹의 정렬 기준을 오답 빈도→숙달률로 교체해 소표본 노이즈 제거 (LEARNING_ALGORITHM_DESIGN.md §3.1) | ✅ |
+| D-22 | BKT 지식 추적 — 단원별 은닉 숙달 P(L)을 리뷰 로그 관측 시퀀스로 갱신 (P₀=0.3·T=0.08·G=5지선다0.15/OX0.30·S=0.10, manifest `study.kt` 오버라이드). 퀴즈 판정은 `{c,k:'q',ok,t}`로 `fc_review_log`에 기록, 진술 스케줄 이벤트(r)는 OX 관측으로 승계. 카운트 증거는 BKT 초기 P(L) 사전으로 승계하고 시퀀스 없으면 Beta 폴백. 망각은 비모델(스냅샷 용도 — 시점 관리는 FSRS) (LEARNING_ALGORITHM_DESIGN.md §3.2·§4.2) | ✅ |
 | D-23 | 최종 인출 세션 과목 층화 — D-19 위험 카드가 세션 상한(60장)을 넘을 때 절단을 전역 R_exam 순에서 **과목별 출제 비중 비례 쿼터 + 수요 과목당 최소 1장 보장**으로 교체 (`selectExamRiskSession`, 최대잔여법 `apportionByWeight`). 과목 수요 소진 후 잔여는 전역 R_exam 오름차순으로 재충전 — 소수 비중 과목이 위험 카드 다수 과목에 밀려 세션에서 제외되는 과락 사각 차단. 비중 미선언 시험(`exams[].stats.questions` 합계 0)은 기존 전역 R 정렬 절단 유지. 위험 선별·R 정렬 자체는 D-19 불변 (FSRS 스케줄러 무수정 — 선택 정책 계층) | ✅ |
 | TQ-01 | **"오늘 할 일" 단일 큐** — 대시보드의 모든 다음 행동 추천을 하나의 우선순위 목록으로 병합해 번호 매긴 `<ol>`로 렌더. 병합 순서: ① FSRS 복습 대기 → ② 주간 배분(study_plan_pro) 이번 주 잔여 → ③ 오답·헷갈림 재채점 → ④ 취약 진술 드릴 → ⑤ 일일 챌린지(미완료 시) → ⑥ 개인화 추천(D-10·D-11 소스, 큐로 흡수해 별도 추천 카드 중복 발언 제거) (`src/views/dashboard-queue.js` `buildTodayQueue`, LEARNING_UX_SIMPLIFICATION_DESIGN.md) | ✅ |
 | TQ-02 | 큐 항목 스키마 — `{kind, icon, color, title, reason, actions: [{click, args, label, icon, cls}]}` — 실행은 신규 핸들러 없이 기존 `data-click` 위임·딥링크(`gotoWeakReview`·`startSubjectStudy`·`startSubjectQuiz`·`startSubjectReader`·`openDailyChallenge`) 재사용 | ✅ |
@@ -173,7 +173,7 @@
 | F-08 | 카드별 복습 메타데이터 (v2: d·s·due·reps·lapses, 구 SM-2는 지연 변환) localStorage 영속화 | ✅ |
 | F-09 | 진도 초기화 시 간격 반복 데이터 함께 초기화 | ✅ |
 | F-10 | 난이도 필터 (전체/쉬움/보통/어려움, `difficultyFilter` 상태) | ✅ |
-| F-11 | FSRS-6 엔진 — 21 파라미터(w0..w20) 전환: 학습 가능 망각 곡선 지수 w20(FACTOR 유도식), 지수 초기 난이도·선형 감쇠, 당일 복습 안정도 공식(elapsed=0 라우팅), 랩스 상한 s·e^{−w17·w18}. 레코드 형식 무수정·마이그레이션 없음, 시그니처 유지로 어댑터 영향 없음 (FSRS6_UPGRADE_DESIGN.md, DOC-DSN-27) | ✅ |
+| F-11 | FSRS-6 엔진 — 21 파라미터(w0..w20) 전환: 학습 가능 망각 곡선 지수 w20(FACTOR 유도식), 지수 초기 난이도·선형 감쇠, 당일 복습 안정도 공식(elapsed=0 라우팅), 랩스 상한 s·e^{−w17·w18}. 레코드 형식 무수정·마이그레이션 없음, 시그니처 유지로 어댑터 영향 없음 (LEARNING_ALGORITHM_DESIGN.md, DOC-DSN-27) | ✅ |
 
 ### 3.3 퀴즈 (Quiz)
 
@@ -1110,7 +1110,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 
 ### 7.2 유료화 인프라 (Premium 출시 선행)
 
-> 상세 설계: `SUBSCRIPTION_ROADMAP.md` §3~§6, `LEARNING_PREMIUM_PLAN.md` D 섹션. **지연 원칙**: 제품 가치 검증(사용률·유료 전환 의향) 전 결제 인프라 구축 금지.
+> 상세 설계: `SUBSCRIPTION_ROADMAP.md` §3~§6, `SUBSCRIPTION_ROADMAP.md` D 섹션. **지연 원칙**: 제품 가치 검증(사용률·유료 전환 의향) 전 결제 인프라 구축 금지.
 
 | ID | 요구사항 | 주요 작업 | 상태 |
 |----|---------|----------|------|
@@ -1130,12 +1130,12 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | ROAD-L3 | **오답 체인 잔여**: `핵심 문장(ref_md 조문 원문 인라인)` → 관련 카드 → 유사문제 → 재시험 추적 | A3 출처 근거의 후속 체인 | 미구현 |
 | ROAD-L4 | **Phase 2 차별화**: 출제 패턴 분석·코칭 리포트·지식 맵·요약 노트 | FEATURE_PROPOSALS Phase 2 (`docs/exams/cosmetic/report_archive/`) | 미구현 |
 | ROAD-L5 | **기능 검증 측정**: 개발 완료 기능(오답 루프·합격 전략·진단 평가)의 사용률·만족도 로컬 측정 → 유료가치 판정 데이터 확보 | `usage-stats.js` 뷰·액션 카운터 + 설정 '내 사용 통계' (로컬 전용, 백업·동기화 제외). **유저 단위 = 기기별 익명 `owner`(device_id) — 로그인 없는 프로모션 기간 대응, GLOBAL 키라 시험 전환해도 누적 유지**. **판정 기준: Pro 후보 액션(`VALUE_ACTIONS` — 오답 루프·진단 평가·이야기형·맞춤 리포트·실제 결과 보고) 합계 20회** (`PRO_VALUE_THRESHOLD`) — 편의/UI 액션(검색·플랜 비교)은 제외. 도달 시 유료가치 인정, ROAD-P1 착수 근거 | ✅ 카운터 구현 (판정 데이터 수집 중) |
-| ROAD-L6 | **ML 기술 로드맵 — 스마트·학습 진단 고도화 기법 검토**: ① FSRS 간격 반복 ✅ 적용 완료(F-07~F-11, `src/fsrs.js` — FSRS-6 승계·T3 시뮬 복습량 −17% 계측, FSRS_DESIGN·FSRS6_UPGRADE_DESIGN.md) ② 빌드타임 콘텐츠 임베딩(중복·개념 클러스터링) — transformers.js 빌드 의존성, 중기 후보 ③ 컨텍스추얼 밴딧(LinUCB — 추천 순위 학습, `REC_SNAPSHOT`·`evaluateRecommendationEffect` 보상 신호 기존) — Supabase 집단 데이터 수집 선행 조건 ④ 지식 추적 ✅ 단원 BKT 적용(D-22, `knowledge-tracing.js` — DKT 계열·LoReKT급 저자원은 집단 데이터+추론 최적화 전제로 장기 유지) ⑤ **강화학습(복습 시점·추천 순서 정책) — 검토 완료·보류 판정**: 사용자당 데이터 규모·희소 지연 보상(합격 = 사용자당 1회)·결정론 감사(SQ)와의 충돌로 비현실적 — 재검토 조건: Supabase 집단 수집 + 밴딧 수익 검증 후. FSRS가 스케줄링 문제를 수식으로 해결해 RL 이점 소멸 | FSRS_DESIGN.md · 검토 산출 본 행 | ①④완료 ⑤보류, 나머지 미구현 |
-| ROAD-L7 | **4버튼 레이팅 UI**: `fc-easy/hard` 2버튼 → Again/Hard/Good/Easy — FSRS 모델 해상도 회복의 최대 항목이나 UI·핸들러·툴팁·모바일 배치 재설계가 별도 범위 | **게이트**: D-18 리뷰 로그로 이진 입력의 실측 손실(Again 과다/Good 남발 분포) 정량화 후 도입 판정 (FSRS_DESIGN §8 · EXAM_R_SCHEDULING §4) | 미구현 |
-| ROAD-L8 | **개인 FSRS 파라미터 피팅**: 사용자별 `w` 추정 — FSRS-6의 학습 가능 망각 곡선 지수 `w20`이 첫 대상, `fc_review_log` `{c,r,e,t}`가 optimizer 입력과 동형 | **게이트**: 로그 ~1,000 리뷰 축적(Anki 최적화기 실질 하한 — 일 60~80장 기준 4~6주, FSRS_DESIGN §9.3) | 미구현 |
+| ROAD-L6 | **ML 기술 로드맵 — 스마트·학습 진단 고도화 기법 검토**: ① FSRS 간격 반복 ✅ 적용 완료(F-07~F-11, `src/fsrs.js` — FSRS-6 승계·T3 시뮬 복습량 −17% 계측, LEARNING_ALGORITHM_DESIGN·LEARNING_ALGORITHM_DESIGN.md) ② 빌드타임 콘텐츠 임베딩(중복·개념 클러스터링) — transformers.js 빌드 의존성, 중기 후보 ③ 컨텍스추얼 밴딧(LinUCB — 추천 순위 학습, `REC_SNAPSHOT`·`evaluateRecommendationEffect` 보상 신호 기존) — Supabase 집단 데이터 수집 선행 조건 ④ 지식 추적 ✅ 단원 BKT 적용(D-22, `knowledge-tracing.js` — DKT 계열·LoReKT급 저자원은 집단 데이터+추론 최적화 전제로 장기 유지) ⑤ **강화학습(복습 시점·추천 순서 정책) — 검토 완료·보류 판정**: 사용자당 데이터 규모·희소 지연 보상(합격 = 사용자당 1회)·결정론 감사(SQ)와의 충돌로 비현실적 — 재검토 조건: Supabase 집단 수집 + 밴딧 수익 검증 후. FSRS가 스케줄링 문제를 수식으로 해결해 RL 이점 소멸 | LEARNING_ALGORITHM_DESIGN.md · 검토 산출 본 행 | ①④완료 ⑤보류, 나머지 미구현 |
+| ROAD-L7 | **4버튼 레이팅 UI**: `fc-easy/hard` 2버튼 → Again/Hard/Good/Easy — FSRS 모델 해상도 회복의 최대 항목이나 UI·핸들러·툴팁·모바일 배치 재설계가 별도 범위 | **게이트**: D-18 리뷰 로그로 이진 입력의 실측 손실(Again 과다/Good 남발 분포) 정량화 후 도입 판정 (LEARNING_ALGORITHM_DESIGN §8 · EXAM_R_SCHEDULING §4) | 미구현 |
+| ROAD-L8 | **개인 FSRS 파라미터 피팅**: 사용자별 `w` 추정 — FSRS-6의 학습 가능 망각 곡선 지수 `w20`이 첫 대상, `fc_review_log` `{c,r,e,t}`가 optimizer 입력과 동형 | **게이트**: 로그 ~1,000 리뷰 축적(Anki 최적화기 실질 하한 — 일 60~80장 기준 4~6주, LEARNING_ALGORITHM_DESIGN §9.3) | 미구현 |
 | ROAD-L9 | **실측 기억률 분석**: 로그의 경과일 `e`·레이팅 `r`로 "예측 R vs 실제 응답" 버킷 대조 — FSRS 효능 검증 + `EXAM_TARGET_R 0.95`·D-19 창(14일) 튜닝 근거 | **게이트**: 로그 축적(경과일 버킷별 표본 확보) — 로그가 차면 다음 자연 단계 (EXAM_R_SCHEDULING §4) | 미구현 |
-| ROAD-L10 | **BKT 파라미터 피팅·시간 감쇠 변형**: `study.kt`의 T·S를 `k:'q'` 판정 시퀀스로 개인 추정, 관측 간 경과일을 전이에 반영하는 변형 검토 | **게이트**: 판정 로그 축적 + 기본형 안정화 관찰 (KNOWLEDGE_TRACING_DESIGN §5) | 미구현 |
-| ROAD-L11 | **conceptId 의미 개념 확장**: 자동 생성 `combo_*`의 `conceptId`가 원문항 provenance(`q:...`)라 개념 단위 KT 불가 — 콘텐츠 생성기에 의미 개념 부여 후 개념 단위 추적 재검토 | **게이트**: 콘텐츠 파이프라인 개선 (KNOWLEDGE_TRACING_DESIGN §1.3·§5) | 미구현 |
+| ROAD-L10 | **BKT 파라미터 피팅·시간 감쇠 변형**: `study.kt`의 T·S를 `k:'q'` 판정 시퀀스로 개인 추정, 관측 간 경과일을 전이에 반영하는 변형 검토 | **게이트**: 판정 로그 축적 + 기본형 안정화 관찰 (LEARNING_ALGORITHM_DESIGN §5) | 미구현 |
+| ROAD-L11 | **conceptId 의미 개념 확장**: 자동 생성 `combo_*`의 `conceptId`가 원문항 provenance(`q:...`)라 개념 단위 KT 불가 — 콘텐츠 생성기에 의미 개념 부여 후 개념 단위 추적 재검토 | **게이트**: 콘텐츠 파이프라인 개선 (LEARNING_ALGORITHM_DESIGN §1.3·§5) | 미구현 |
 
 ### 7.4 멀티시험·도메인 확장
 
@@ -1178,7 +1178,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 
 ### 7.6 학습 표면 계측·구조 축소 (학습 단순화 Phase 2)
 
-> Phase 0~1.5(DOC-DSN-21~23)에서 유보한 구조적 결정(드릴 패널 이관·점진적 공개)은 사용량 데이터 없이 판단하지 않는다. 본 절은 판정에 필요한 계측 지표와 결정 트리거를 선언한다 — 상세 설계는 `docs/dev/design/LEARNING_UX_PHASE2_DESIGN.md` (DOC-DSN-24).
+> Phase 0~1.5(DOC-DSN-21~23)에서 유보한 구조적 결정(드릴 패널 이관·점진적 공개)은 사용량 데이터 없이 판단하지 않는다. 본 절은 판정에 필요한 계측 지표와 결정 트리거를 선언한다 — 상세 설계는 `docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md` (DOC-DSN-24).
 
 | ID | 요구사항 | 전환 트리거 | 상태 |
 |----|---------|------------|------|
@@ -1351,4 +1351,4 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | FB-01~08 | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
 | ROAD-P1~P4 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-L1~L5 | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
-| ROAD-L6 | ML 기법 검토 산출 — FSRS_DESIGN.md (FSRS 적용·RL 보류 판정 근거) |
+| ROAD-L6 | ML 기법 검토 산출 — LEARNING_ALGORITHM_DESIGN.md (FSRS 적용·RL 보류 판정 근거) |

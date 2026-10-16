@@ -7,10 +7,18 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-17 design 문서 통합 정리 — 26개 → 15개 (구 ID 이관 표기)
+
+- **배경**: `docs/dev/design/` 문서가 시리즈·주제별로 분산(26개)해 탐색 비용이 늘어남 — 동일 시리즈·종속 관계의 문서를 통합본으로 수렴
+- **통합**: ① 학습 UX 단순화 4→1 — `LEARNING_UX_SIMPLIFICATION_DESIGN`(DSN-21)에 Phase 1·1.5·2(구 DSN-22~24) 절 통합 ② 학습 알고리즘 5→1 — `LEARNING_ALGORITHM_DESIGN.md` 신설(DSN-32)에 FSRS·FSRS-6·시험일 R·due 클램프·지식 추적(구 DSN-17·26~29) 수록 ③ 의미 분석 2→1 — `SEMANTIC_EMBEDDING_DESIGN`(DSN-18)에 오답 분류(구 DSN-19) 통합 + 스테일 상태 헤더 정정(임베딩 인프라 구현됨) ④ 백엔드·수익화 — `SUPABASE_DESIGN`(DSN-08)에 Firebase 대안(구 DSN-31) 부록화, `SUBSCRIPTION_ROADMAP`(DSN-07)에 Learning Pro 과제(구 DSN-03) 통합 ⑤ 피드백 — `USER_FEEDBACK_DESIGN`(DSN-09)에 독자 피드백 공유(구 DSN-05) 통합
+- **방식**: 흡수 문서는 헤딩 1단계 강등 + `원본 문서` provenance 표기로 전문 보존, 문서 ID 헤더는 변환(중복 선언 게이트 회피) — 구 ID는 레지스트리 회수 없이 "통합 →" 표기
+- **참조 갱신**: 삭제 문서명의 경로 참조 28개 파일 일괄 치환 (docs·src 주석·테스트·content·allowlist file 필드) + README 인덱스·레지스트리·개수(design 15·dev 69)·AGENTS 목록·ARCHITECTURE 트리 정합 + 학습안내서.md 갱신분 docs_md 재빌드 + TRACE 재생성
+- **검증**: `check:docs` 15단계 통과
+
 ## 2026-10-17 Firebase 이관 설계문서 추가 — DOC-DSN-31
 
 - **배경**: 인증·DB 백엔드를 Supabase 대신 Firebase(Authentication + Firestore + Cloud Functions)로 쓸 경우의 설계 요청 — 기능 요구사양은 SUPABASE_DESIGN과 동일하고 플랫폼 대응 매핑·차이점을 별도 문서로 분리
-- **추가**: `docs/dev/design/FIREBASE_DESIGN.md` — 서비스 매핑표(§2)·Firestore 데이터 모델+Security Rules(§4)·인증 플로우 차이(§5 — 이메일 링크에 숫자 코드 없음, 가장 큰 UX 차이)·동기화 호출부 교체(§6)·callable redeemCode/Vercel 대안(§7)·운영 CLI(§9)·CSP/벤더링 제약(§3.2)·비용·이관·리스크
+- **추가**: `docs/dev/design/SUPABASE_DESIGN.md` — 서비스 매핑표(§2)·Firestore 데이터 모델+Security Rules(§4)·인증 플로우 차이(§5 — 이메일 링크에 숫자 코드 없음, 가장 큰 UX 차이)·동기화 호출부 교체(§6)·callable redeemCode/Vercel 대안(§7)·운영 CLI(§9)·CSP/벤더링 제약(§3.2)·비용·이관·리스크
 - **등록**: docs/README.md 인덱스+ID 레지스트리+개수 표기(design 21·dev 73), AGENTS.md 관련 문서 목록
 
 ## 2026-10-16 배경화 크레딧 사이드바 푸터 이동 — PC 전용 노출
@@ -328,13 +336,13 @@
 
 ## 2026-10-13 BKT 단원 숙달 추적 (D-22)
 
-- **`knowledge-tracing.js` 신설** — `bktUpdate`(관측 사후확률+학습 전이)·`computeUnitMastery`(시퀀스→P(L))·`resolveKtParams`(manifest `study.kt` 오버라이드+범위 검증). DOM·저장 비의존 순수 모듈 (KNOWLEDGE_TRACING_DESIGN §3.2·§4.2②)
+- **`knowledge-tracing.js` 신설** — `bktUpdate`(관측 사후확률+학습 전이)·`computeUnitMastery`(시퀀스→P(L))·`resolveKtParams`(manifest `study.kt` 오버라이드+범위 검증). DOM·저장 비의존 순수 모듈 (LEARNING_ALGORITHM_DESIGN §3.2·§4.2②)
 - **소비자 연결**: 취약 단원 랭킹의 숙달 추정이 시퀀스 있으면 BKT `P(L)`·없으면 Beta 폴백 — v1 카운트 증거는 BKT 초기 P(L) 사전으로 승계. 진술 스케줄 이벤트는 `statement_stats` 멤버십으로 OX 관측 귀속, 카드 자기평가 자연 배제 (§4.2③)
 - cosmetic manifest `study.kt` 명시 + 번들 재생성 — 부수 교정: `minExamLeadDays 50→63` 스테일 번들 정정
 
 ## 2026-10-13 퀴즈 판정 시퀀스 로그 확장 (D-22 선행 ①)
 
-- **`fc_review_log` 혼합 스키마**: `{c, k:'q', ok, t}` 퀴즈·시뮬 문항 판정 레코드 추가 — `k` 없는 기존 `{c,r,e,t}`는 스케줄 이벤트로 후방 호환, 단일 시계열 링버퍼·백업 정합 자동 승계 (KNOWLEDGE_TRACING_DESIGN §4.2 ①-a)
+- **`fc_review_log` 혼합 스키마**: `{c, k:'q', ok, t}` 퀴즈·시뮬 문항 판정 레코드 추가 — `k` 없는 기존 `{c,r,e,t}`는 스케줄 이벤트로 후방 호환, 단일 시계열 링버퍼·백업 정합 자동 승계 (LEARNING_ALGORITHM_DESIGN §4.2 ①-a)
 - `recordQuizJudgment()` 신설 — 기입점은 퀴즈 채점 2곳(`views/quiz.js`) + 시뮬 `submitExam` 루프 문항 전건
 - BKT의 관측 순서 요구 충족 — v2 본체(`knowledge-tracing.js`·파라미터·소비자 연결)는 후속
 
@@ -344,7 +352,7 @@
 - **`betaPosteriorMean`** — Beta(4,3) 사후평균: 소표본은 합격선 근처 사전으로 수축(1오답이 0%로 붕괴하지 않음), 대표본은 실측 수렴
 - **랭킹 정렬 교체**: `computeChapterWeakness`·`computeSubjectWeakChapters`의 정렬을 오답 빈도→숙달률 오름차순으로 (wrongs>0 단원만 — 취약 랭킹 의미 유지), `mastery` 필드 추가, 과목 정렬은 최약 단원 숙달률 기준
 - 표시: 단원 행 "오답 N건" → "숙달 M% · 오답 N건" — 카드 위치·행동 불변
-- v2(BKT, D-22)는 판정 시퀀스 로그 확장 선행 — KNOWLEDGE_TRACING_DESIGN §3.2
+- v2(BKT, D-22)는 판정 시퀀스 로그 확장 선행 — LEARNING_ALGORITHM_DESIGN §3.2
 
 ## 2026-10-13 시험일 due 클램프 + 시험일 위험 임계 교정 (D-20·D-19 정정)
 
@@ -361,11 +369,11 @@
 - **`fsrsReview` 시그니처·레코드 `{v:2,d,s,due,…}` 무수정** — 어댑터·진술 트래커·리뷰 로그·R_exam 전부 무수정 승계, 마이그레이션 없음
 - **골든 벡터 정합**: ts-fsrs `algorithm.test.ts`의 `nextDifficulty(5.0,G)` 벡터 일치 (평균 회귀 기준은 클램프 전 원시 D0(4) — 정본 동형)
 - **T3 감사 갱신**: `desync` 임계 3→2 — FSRS-6의 동일 이력 카드 동일 due 수렴은 정상(단일 날짜 몰림 가드 유지), 기준선 재생성
-- 문서: FSRS_DESIGN에 승계 노트, SPEC F-07/F-11·ARCHITECTURE·사용자 문서(학습안내서·매뉴얼) 버전 표기 갱신
+- 문서: LEARNING_ALGORITHM_DESIGN에 승계 노트, SPEC F-07/F-11·ARCHITECTURE·사용자 문서(학습안내서·매뉴얼) 버전 표기 갱신
 
 ## 2026-10-13 FSRS 관측 계층 + 시험일 목표 R 최종 인출 (D-18·D-19)
 
-- **D-18 리뷰 로그 링버퍼**: `fc_review_log` 키 신설 — `updateCardSchedule`의 단일 통로에서 카드·진술 공용으로 `{c,r,e,t}` 레코드 append, 2,000건 FIFO. `BACKUP_KEYS` 등록으로 복원·초기화 정합 자동 성립. 개인 파라미터 피팅·효능 실측·4버튼 재평가의 선행 계층 (EXAM_R_SCHEDULING_DESIGN §2)
+- **D-18 리뷰 로그 링버퍼**: `fc_review_log` 키 신설 — `updateCardSchedule`의 단일 통로에서 카드·진술 공용으로 `{c,r,e,t}` 레코드 append, 2,000건 FIFO. `BACKUP_KEYS` 등록으로 복원·초기화 정합 자동 성립. 개인 파라미터 피팅·효능 실측·4버튼 재평가의 선행 계층 (LEARNING_ALGORITHM_DESIGN §2)
 - **D-19 시험일 목표 R 최종 인출**: `getExamRiskCards(dday)` — 다음 예정 복습이 시험일 이후(`due>examDate`)인 스케줄 사각지대 카드 중 `R_exam = retrievability(examDate−lastReview, s) < 0.85`를 R_exam 오름차순 선별. 간격 재작성이 아닌 추가 인출 세션이라 스케줄 왜곡 없음
 - **`onlyIds` 세션 일반화**: `dueOnly`의 1회성 플래그 패턴을 `state.flashcards.onlyIds`(id 배열·지정 순서)로 일반화 — 임의 카드 집합 세션 기동. `loadFlashcards`는 onlyIds 우선 처리, R_exam 오름차순 순서 보존(셔플 없음)
 - **큐 항목**: `buildTodayQueue`에 `kind:'examr'` — ⑤ 취약 진술 직후·잔여 추천 앞, `0≤dday≤14` + 위험 카드 존재 시에만 표시. 세션 상한 60장(`EXAM_R_SESSION_CAP`), `startExamRiskReview` 핸들러 신설
@@ -376,7 +384,7 @@
 
 - **골격 전환 — 재독 우선 → 인출 우선**: `요약→문항→문제은행→모의고사` 4단계 회전을 `복습 큐 → 취약 인출 → 함정표 스캔 → (잔여) 모의고사` 매일 고정 골격으로 재편 — FSRS 복습 카드(망각 직전, 한계효용 최대)가 비협상 ①
 - **과목 순서 개인화**: 고정 출제 비중(10/25/25/40) → 출제 비중 × 학습 진단 합격 갭 가중, 고정 비중은 데이터 부족 시 폴백으로 격하
-- **모의고사 D-1→D-2 이동**: 시험 전날 120분 전량 모의의 피로 비용 제거 — D-1은 밀린 복습·오답·혼동 카드 재검 중심 최종 인출 세션 (시험 직전 복습이 당일 기억률을 직접 상승 — FSRS_DESIGN §9.1)
+- **모의고사 D-1→D-2 이동**: 시험 전날 120분 전량 모의의 피로 비용 제거 — D-1은 밀린 복습·오답·혼동 카드 재검 중심 최종 인출 세션 (시험 직전 복습이 당일 기억률을 직접 상승 — LEARNING_ALGORITHM_DESIGN §9.1)
 - **신규 학습 정책 명시**: 미학습 카드는 복습 큐 소진 후 D-2까지 허용 (하루 전 학습도 시험일 R 95%), D-1부터 검증만
 - **레이팅 주의 안내**: 마지막 주간 "헷갈림" 정직 표기 — 간격 압축으로 시험 전 재노출 보장
 - **망각 곡선 이론 소개 추가**: 차별화 기능 표 아래 FSRS-4.5의 DSR 모델(난이도·안정도·기억률)과 망각 곡선 원리를 이용자 언어로 한 문단 소개
@@ -389,7 +397,7 @@
 - **`getExamPlanStatus`를 `computeStudyPlan.perStudyDay` 기반으로 전환**: 대시보드 D-day 카드의 역산 권장량이 달력일 단순 나눗셈(잔여÷D-day)에서 캘린더 계획 패널과 동일한 학습일 기준으로 통일. 카드 문구 `하루 카드 N장`→`학습일당 카드 N장`
 - **`computePaceProjection` 학습일 전환**: 분석 뷰 페이스 투사의 3개 달력일 환산을 수정 — 페이스 측정(`cards÷경과 학습일`), 투사 기간(`pace×잔여 학습일`), 필요량(`잔여÷잔여 학습일`). 문구 `하루`→`학습일당`
 - **`getMinExamLeadDays` 퀴즈 쪽 환산 누락 정정**: 카드 쪽만 적용되던 학습일→달력일(×7/5) 변환을 문제은행 1회전에도 적용 — 미선언 시험(food 등)의 최소 준비 기간이 실제 학습일 기준으로 보정
-- **cosmetic `minExamLeadDays` 50→63일 정정**: 선언값이 구 기준(퀴즈 1회전을 달력일로 미환산 — 45학습일≈45일 혼용)으로 고정돼 있던 것을 유도식과 동일한 학습일 기준으로 정합화 — 445문÷10=45학습일→63달력일이 지배 항(카드 쪽 48일). FSRS_DESIGN §9 근거·SPEC D-17·user_manual·학습안내서·학습흐름 SVG 수치 일괄 갱신, docs_md 번들 재생성
+- **cosmetic `minExamLeadDays` 50→63일 정정**: 선언값이 구 기준(퀴즈 1회전을 달력일로 미환산 — 45학습일≈45일 혼용)으로 고정돼 있던 것을 유도식과 동일한 학습일 기준으로 정합화 — 445문÷10=45학습일→63달력일이 지배 항(카드 쪽 48일). LEARNING_ALGORITHM_DESIGN §9 근거·SPEC D-17·user_manual·학습안내서·학습흐름 SVG 수치 일괄 갱신, docs_md 번들 재생성
 - **`getSuggestedDailyCount` 폐기**: 달력일 단순식 공개 API 제거 — 역산 공식 이원화 재발 차단. SPEC D-12/D-17 문구 학습일 기준 갱신, 단위·DOM 테스트 기댓값 갱신
 
 ## 2026-10-13 규약 래칫 확장 — 이스케이프 기준선 0 + JS 템플릿 style 기준선 + UX-NAV-12 단언 + DEP0190 정리
@@ -484,7 +492,7 @@
 
 ## 2026-10-13 학습 표면 단순화 Phase 2 설계안 (DOC-DSN-24)
 
-- **신규 `docs/dev/design/LEARNING_UX_PHASE2_DESIGN.md` (DOC-DSN-24)**: Phase 0~1.5에서 "계측 없이 결정하지 않음"으로 유보된 구조적 결정(드릴 실행 패널 이관·점진적 공개·PRO 경로 수렴 잔여)의 판정 인프라 설계 — ① `trackAction` 키 확장 계측(UX-MET-01~02: `tq_run:*`·`oxdrill_start:*`·`combo_start:*`·`drill_from_review`·`review_weak_open`·`trainer_menu:*`·`pro_badge_click`) ② '내 사용 통계' 내보내기로 로컬 전용 계측의 회수 경로 확보(UX-MET-03) + 신규 키의 `VALUE_ACTIONS` 비포함 정합 규약(UX-MET-04) ③ 유보 항목별 결정 트리거(UX-GATE-01~03: 복습 발 weak 드릴 ≥60% / 진입 <5% 관찰 목록 / 배지→플랜 비교 전환) + 측정 창(배포 후 ≥4주)·표본 하한(회수 owner ≥3기기)
+- **신규 `docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md` (DOC-DSN-24)**: Phase 0~1.5에서 "계측 없이 결정하지 않음"으로 유보된 구조적 결정(드릴 실행 패널 이관·점진적 공개·PRO 경로 수렴 잔여)의 판정 인프라 설계 — ① `trackAction` 키 확장 계측(UX-MET-01~02: `tq_run:*`·`oxdrill_start:*`·`combo_start:*`·`drill_from_review`·`review_weak_open`·`trainer_menu:*`·`pro_badge_click`) ② '내 사용 통계' 내보내기로 로컬 전용 계측의 회수 경로 확보(UX-MET-03) + 신규 키의 `VALUE_ACTIONS` 비포함 정합 규약(UX-MET-04) ③ 유보 항목별 결정 트리거(UX-GATE-01~03: 복습 발 weak 드릴 ≥60% / 진입 <5% 관찰 목록 / 배지→플랜 비교 전환) + 측정 창(배포 후 ≥4주)·표본 하한(회수 owner ≥3기기)
 - **SPEC.md §7.6 신설**: "학습 표면 계측·구조 축소" — 신규 ID `UX-MET-01~04`·`UX-GATE-01~03`을 미구현 로드맵으로 선언 (기존 §7.6 우선순위 원칙은 §7.7로 이동)
 - **docs/README.md**: design/ 문서 수 16→17 + 설계 목록·문서 ID 레지스트리에 DOC-DSN-24 등록
 - **allowlist**: 설계안의 계획 경로 2건 등록 (`tools/check/aggregate_usage.js`·`tests/unit/usage-metrics.test.js` — 이후 본 Phase 2-a 항목에서 실구현됨)
@@ -710,7 +718,7 @@
 ## 2026-10-12 지능형 학습 설계 문서 2건 — 임베딩 유사도·오답 원인 분류
 
 - **신규 `docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md` (DOC-DSN-18)**: 빌드타임 문장 임베딩(기본안 `intfloat/multilingual-e5-small` 384d) → int8 양자화 + base64 JS 번들(`{dataRoot}/embeddings/`)로 배포, 런타임은 코사인 유사도만 계산하는 오프라인 우선 설계. 대상 = 진술(sid)·문항(qid)·카드·교재 청크. 이중 구조: 프리컴퓨트 이웃 인덱스(neighbors.js)로 고정 top-K UI, 벡터 번들로 임의 유사도·센트로이드. 소비 지점 = 취약 진술 유사 항목(DR-05)·오답 유사 문항·혼동쌍(§앵커와 다른 의미近 진술, AN-10 보완)·검색 결과 확장. 자유 질의 시맨틱 검색은 쿼리 임베딩 경로(앵커 프록시/온디바이스 ONNX/BYOK) 트레이드오프를 명시해 v2로 보류. 신선도 = manifest sourceHash 게이트로 벡터 재계산 없이 검증
-- **신규 `docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md` (DOC-DSN-19)**: `estimateUntaggedCauses` 정규식의 구조적 한계(부정형 문항 암기 실패도 concept 강제 귀속) 대안 — D18 벡터 위에서 **사용자 태그를 라벨로 쓰는 원인별 임베딩 센트로이드 kNN**. 추가 모델 자산 없이 순수 계산, 라벨 부족 시 규칙 폴백 이중화. 확신도 게이트(margin·유사도·최소 라벨 수) 미달 시 침묵, 제안 칩 UI(수락/거부 계수 → 수용률 지표), 추정은 `wrongCauses`에 미기록(사용자 태그만 authoritative). 선지(`chosen`) 임베딩·fine-tune·BYOK LLM은 단계 2~3 조건부 경로로 명시
+- **신규 `docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md` (DOC-DSN-19)**: `estimateUntaggedCauses` 정규식의 구조적 한계(부정형 문항 암기 실패도 concept 강제 귀속) 대안 — D18 벡터 위에서 **사용자 태그를 라벨로 쓰는 원인별 임베딩 센트로이드 kNN**. 추가 모델 자산 없이 순수 계산, 라벨 부족 시 규칙 폴백 이중화. 확신도 게이트(margin·유사도·최소 라벨 수) 미달 시 침묵, 제안 칩 UI(수락/거부 계수 → 수용률 지표), 추정은 `wrongCauses`에 미기록(사용자 태그만 authoritative). 선지(`chosen`) 임베딩·fine-tune·BYOK LLM은 단계 2~3 조건부 경로로 명시
 - **`docs_paths_allowlist.json`**: 두 설계 문서의 미구현 제안 경로 7건 등록 (`src/semantic-index.js`·`src/wrong-cause-classifier.js`·`ref-pipeline/embeddings/**` 등)
 - 구현 없음 — SPEC ID 등록·features 선언·domain-map 규칙은 각 문서 §구현 선행 절에 정리
 
@@ -817,7 +825,7 @@
 
 ## 2026-10-12 FSRS-4.5 간격 반복 엔진 전환 (F-07/F-08)
 
-- **배경**: SM-2의 단일 EF 파라미터는 카드별 난이도를 정밀 추적하지 못하고 간격 확장이 경직적 — 조사 결과 FSRS(DSR 모델)가 단일 사용자 로컬 데이터만으로 동작하는 유일한 실용 대안 (FSRS_DESIGN.md, DOC-DSN-17)
+- **배경**: SM-2의 단일 EF 파라미터는 카드별 난이도를 정밀 추적하지 못하고 간격 확장이 경직적 — 조사 결과 FSRS(DSR 모델)가 단일 사용자 로컬 데이터만으로 동작하는 유일한 실용 대안 (LEARNING_ALGORITHM_DESIGN.md, DOC-DSN-17)
 - **구현**: `src/fsrs.js` — FSRS-4.5 순수 함수(기본 파라미터 17개, decay −0.5, 목표 기억률 0.9). `spaced-repetition.js`는 저장 어댑터로 축소 — 공용 API(`updateCardSchedule`/`getDueCards`/`getDueCount`)·저장 키 불변, 레코드는 v2 스키마(`d`·`s`·`due`·`reps`·`lapses`)
 - **마이그레이션**: 구 SM-2 레코드는 `v` 마커 부재로 감지해 접근 시 지연 변환 — `repetition→reps`, `easiness→d` 역산(EF1.3→d≈10, EF2.5→d≈1), `nextReview→due` 계승 (기존 일정 보존)
 - **호환**: `statement-tracker.js`의 due 판정을 `due || nextReview` 폴백으로 확장 — 진술 추적(DR-03)·백업·동기화 경로 무수정. UI는 이진 입력 유지(외움→Good, 헷갈림→Again; Hard/Easy는 4버튼 개정에서 개방)
@@ -2215,7 +2223,7 @@
 ## 2026-09-27 로컬 사용 카운터 구현 (ROAD-L5)
 
 - **`src/usage-stats.js` 신규** (`@spec ROAD-L5`): `trackView(viewId)`(switchView 자동 계측) + `trackAction(key)`로 시험 스코프 `usage_stats` localStorage 키에 `{v, firstUse, lastUse, days(90일 상한), views, actions}` 누적 — 외부 전송 없음
-- **액션 계측 7종**: `weak_to_textbook`·`weak_to_card`·`weak_to_similar`(오답 루프)·`diagnostic_quiz`·`command_palette`·`plan_compare`·`actual_exam_report` — 유료가치 후보 기능(LEARNING_PREMIUM_PLAN 표 대응)
+- **액션 계측 7종**: `weak_to_textbook`·`weak_to_card`·`weak_to_similar`(오답 루프)·`diagnostic_quiz`·`command_palette`·`plan_compare`·`actual_exam_report` — 유료가치 후보 기능(SUBSCRIPTION_ROADMAP 표 대응)
 - **설정 '📊 내 사용 통계'** (`showUsageStats`): 첫/최근 사용일·활동 일수·기능 사용 합계 + 화면별/기능별 횟수 표(내림차순, 뷰 라벨은 `getViewTitles` 동적 해석 — 순환 참조 회피) + 초기화 버튼. "이 기기에만 저장" 고지
 - **저장 정책**: `RESET_KEYS`에 포함(전체 초기화 시 삭제)·`BACKUP_KEYS` 제외 → 백업·Supabase 동기화(`SYNC_STATIC` = BACKUP_KEYS 기반) 모두 제외 — 로컬 전용 원칙 고정
 - **스타일**: `css/ui-overlay.css`에 `.usage-stats-sub/-table/-num/-note` 추가
@@ -2582,7 +2590,7 @@
   FORMULA_OS_WORKFLOW_DESIGN).
 - 참조 경로 동기화: docs/README.md 인덱스 재편(dev 28→24), ARCHITECTURE.md
   문서 트리·관련 문서 링크, SPEC §7 로드맵, SUPABASE_DESIGN·FORMULA_OS_WORKFLOW_DESIGN·
-  LEARNING_PREMIUM_PLAN 상위 문서 헤더, 사업기획서 관련 문서 표, src 주석 3곳
+  SUBSCRIPTION_ROADMAP 상위 문서 헤더, 사업기획서 관련 문서 표, src 주석 3곳
   (formula-rules·recommendations·quiz).
 - DEPLOYMENT_GUIDE §6 오디오 호스팅 절차가 AUDIO_HOSTING_GUIDE §3~5와 이중
   기술돼 있어 요약+링크로 축소 — 호스팅 절차의 진실 소스를 AUDIO_HOSTING_GUIDE로 일원화.
