@@ -7,6 +7,11 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-16 배경화 크레딧 사이드바 푸터 이동 — PC 전용 노출
+
+- **배경**: 배경화 설명(겸재 정선「인왕제색도」)이 설정 패널 `.settings-meta`에만 있어 PC 내비에서 보이지 않았고, 반대로 모바일은 설정 패널 경유로 노출됐음 — 사이드바 최하단 표시 + 모바일 생략 요구에 대응
+- **수정**: `index.template.html`의 `.sidebar-footer` 제일 아래에 `.sidebar-wallpaper` 크레딧 추가(표시·툴팁 문구 동일)하고 설정 패널 줄 제거. 모바일(≤768px)은 `.sidebar` 전체·태블릿(769~900px)은 `.sidebar-footer`가 숨겨지는 기존 규약에 편승해 별도 미디어쿼리 없이 PC 전용 노출. `css/base.css`에 `.sidebar-wallpaper` 스타일 추가(muted·중앙 정렬·`--text-xs`)
+
 ## 2026-10-16 deploy CI 게이트 REST 폴백 — gh 미설치 환경 대응
 
 - **배경**: deploy의 CI 게이트가 `gh run list`에만 의존해 gh 미설치·미인증 머신에서는 조회 자체가 불가 — `SKIP_CI_GATE=1` 우회만 남아 게이트가 무력화됨
