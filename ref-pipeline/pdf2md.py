@@ -35,6 +35,7 @@ try:
     import pymupdf
 except ImportError:
     pymupdf = None  # 이미지 추출 전용 — 없어도 텍스트/표 변환은 동작
+import contextlib
 import os
 import sys
 import glob
@@ -43,6 +44,7 @@ import logging
 import re
 import argparse
 import traceback
+import weakref
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 # Windows cp949 콘솔 대응 — 한글/유니코드 안내 메시지가 깨지지 않게 UTF-8 고정.
@@ -120,6 +122,27 @@ def load_profile(path):
         logger.warning('알 수 없는 프로파일 키 무시 — %s', ', '.join(unknown))
     PROFILE.update({k: v for k, v in prof.items() if k in PROFILE})
     _compile_globals()
+
+
+@contextlib.contextmanager
+def profile_context(profile_path=None, segment=None):
+    """PROFILE·컴파일 전역을 임시 오버라이드하고 종료 시 복원한다.
+
+    GUI 워커처럼 같은 프로세스에서 변환이 반복될 때 이전 실행의
+    프로파일이 다음 실행에 새는 것을 막는다. ProcessPool 워커는
+    프로세스 생애가 곧 설정 생애이므로 _pool_init이 직접 변이시킨다.
+    """
+    saved = dict(PROFILE)
+    try:
+        if profile_path:
+            load_profile(profile_path)
+        if segment is not None:
+            PROFILE['segment'] = segment
+        yield
+    finally:
+        PROFILE.clear()
+        PROFILE.update(saved)
+        _compile_globals()
 
 
 _compile_globals()
@@ -485,22 +508,29 @@ CAS_RE = re.compile(r'\d{2,}-\d+-\d')
 UNIT_RE = re.compile(r'\d+(?:\.\d+)?\s*(?:%|ppm|ppb|mg|mL|㎍|µg|g)', re.I)
 
 
+# 페이지 단위 캐시 — 외부 pdfplumber Page 객체에 속성을 주입하지 않고
+# 약한 참조로 유지한다 (Page는 __slots__가 없어 weakref 가능).
+# Page가 GC되면 엔트리도 함께 정리된다.
+_PAGE_WORDS: "weakref.WeakKeyDictionary" = weakref.WeakKeyDictionary()
+_PAGE_LINES: "weakref.WeakKeyDictionary" = weakref.WeakKeyDictionary()
+
+
 def _words(page):
     """페이지 단위 extract_words 캐시 — fill_empty_cells(표마다 호출),
     재구성, 고아 탐지가 같은 단어 목록을 공유한다."""
-    w = getattr(page, '_pdf2md_words', None)
+    w = _PAGE_WORDS.get(page)
     if w is None:
         w = page.extract_words()
-        page._pdf2md_words = w
+        _PAGE_WORDS[page] = w
     return w
 
 
 def _text_lines(page):
     """페이지 단위 extract_text_lines 캐시"""
-    lines = getattr(page, '_pdf2md_lines', None)
+    lines = _PAGE_LINES.get(page)
     if lines is None:
         lines = page.extract_text_lines()
-        page._pdf2md_lines = lines
+        _PAGE_LINES[page] = lines
     return lines
 
 
@@ -939,6 +969,11 @@ def verify(out_dir, gold_dir, only=None):
         if not os.path.exists(old_p):
             hits = glob.glob(os.path.join(gold_dir, '*', stem, stem + '.md'))
             if hits:
+                if len(hits) > 1:
+                    # 여러 과목에 동명 골드가 있으면 첫 매칭이 오비교일 수 있다
+                    logger.warning(
+                        "골드 매칭 모호 — '%s'에 %d개 후보, 첫 항목 사용: %s",
+                        d, len(hits), hits[0])
                 old_p = hits[0]
         with open(new_p, encoding='utf-8') as f:
             new_text = f.read()
@@ -1187,11 +1222,12 @@ def run_gui():
 
         def _run(self):
             o = self.opts
-            # 프로파일/옵션은 엔진의 전역 상태에 반영 (단일 실행이라 안전)
-            if o.get('profile'):
-                load_profile(o['profile'])
-            PROFILE['segment'] = o['segment']
+            # 프로파일/옵션은 컨텍스트로 격리 — 같은 창에서 연속 실행해도
+            # 이전 실행의 프로파일이 다음 실행에 새지 않는다
+            with profile_context(o.get('profile'), segment=o['segment']):
+                self._run_jobs(o)
 
+        def _run_jobs(self, o):
             root = o.get('pdf_root') or DEFAULT_PDF_ROOT
             pdfs = collect_pdfs(self.inputs, root)
             if not pdfs:
