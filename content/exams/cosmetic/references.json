@@ -580,24 +580,28 @@
       "dir": "공통"
     }
   ],
+  "referenceIngredientsComment": "ref_md 밖(참조자료/원료/ 등 dir 폴더)의 MD 문서 — 검색 인덱스의 과목 귀속은 subject 필드(과목N 디렉터리명 또는 과목 키)로 선언한다",
   "referenceIngredients": [
     {
       "name": "승인 원료 목록",
       "file": "approved_ingredients.md",
       "type": "md",
-      "dir": "원료"
+      "dir": "원료",
+      "subject": "과목2"
     },
     {
       "name": "금지 원료 목록",
       "file": "banned_ingredients.md",
       "type": "md",
-      "dir": "원료"
+      "dir": "원료",
+      "subject": "과목2"
     },
     {
       "name": "제한 원료 목록",
       "file": "restricted_ingredients.md",
       "type": "md",
-      "dir": "원료"
+      "dir": "원료",
+      "subject": "과목2"
     }
   ],
   "referenceLaw": [

@@ -27,10 +27,10 @@
 
 | 구분 | 프레임워크 | 환경 | 파일 위치 | 테스트 수 |
 |------|-----------|------|-----------|-----------|
-| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1,250+ |
-| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 710+ |
+| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1,350+ |
+| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 750+ |
 | **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 110+ |
-| **합계** | | | | **2,100+** |
+| **합계** | | | | **2,250+** |
 
 > 수치는 `check:teststats`(docs 단계)이 `tools/check/test_stats.json` 실측 SSOT와 정합 검증한다 —
 > 스테일 시 `npm run stats:stamp`으로 재측정·재기록 (인용은 `N+` 바닥 표기 유지).
@@ -273,8 +273,11 @@ npm run hooks:install
 | 89 | `study-quality-audit.test.js` | 8 | 학습 품질 감사 지표 헬퍼 + 실행 | |
 | 90 | `textbook-anchors.test.js` | 5 | 교재 라인 → §앵커 해석 헬퍼 | |
 | 91 | `textbook-edition.test.js` | 3 | 교재 판본 메타 (P-14) | |
-| 92 | `textbook-search-ref.test.js` | 10 | `_listRefDocs` — 참조자료 검색 헬퍼 (TS-11) | |
-| | **합계** | **1197** | | |
+| 92 | `textbook-search-ref.test.js` | 13 | `search-sources.js` `_listRefDocs` — 참조자료 검색 헬퍼 (TS-11) | |
+| 93 | `search-index.test.js` | 13 | 통합검색 인덱스 코어 (TS-08~09,TS-13~18) | 소스 레지스트리·kind 버킷·IDF·구문 부스트·failedTerms·lazy 시험 가드·manifest.searchDocs·glossarySubjectKey |
+| 94 | `search-morpheme.test.js` | 8 | 형태소 경계 판정·동의어 확장 (TS-13/TS-14) | |
+| 95 | `textbook-search-exam.test.js` | 2 | `search-sources.js` `_loadExamMdText` — 문제은행 MD 로드 규약 (TS-12) | |
+| | **합계** | **1550** | | |
 
 ### DOM 테스트 (`tests/dom/`)
 
@@ -299,7 +302,7 @@ npm run hooks:install
 | 16 | `study-calendar.dom.test.js` | 17 | 학습 캘린더 | 목표 카드·월 그리드, 활동 기록→학습일·달성률, 월 이동, 목표 저장·기본값, 취소 불변 | 2026-09-23 추가 |
 | 17 | `study-simulator.dom.test.js` | 15 | 모의고사 | 아레나·OMR, 답안·문항 이동, 제출 채점·오답 카드 등록, 리뷰, 드래프트 이어하기, 시간 만료 자동 제출, 오답 모의고사(startWeakExam — 카드/퀴즈/combo 재조립·과목 필터) | 2026-09-23 추가 |
 | 18 | `study-reader.dom.test.js` | 30 | 교재 리더 | 과목 옵션·본문/TOC 렌더, 읽기 위치 이어하기, 북마크 영속, 빈 상태 + 툴바(툴바 접기)·본문 검색 하이라이트·모바일 TOC 드로어·표 인라인 렌더(확장 모달 제거 회귀)·이미지 라이트박스(클릭 확대·배율·닫기·모바일 미바인딩 — 데스크탑 전용)·TOC 클릭 스크롤·테마 동기화 + 이야기형 서사 태깅(명시 마커·sr-only 구간 라벨 포함)(명시 마커 📖┈이야기┈~┈본문┈📘 + 📖 장면·💭 에필로그·프롤로그 폴백) | 2026-09-23 추가 · 2026-10-06 갱신(글자/줄간격 제거·이미지 라이트박스 데스크탑 복원) |
-| 19 | `study-search.dom.test.js` | 7 | 교재 검색 | 역색인 검색·하이라이트·건수, AND 교집합, 과목 필터, 결과 없음, 더보기 토글, 초기화 | 2026-09-23 추가 |
+| 19 | `study-search.dom.test.js` | 17 | 교재 검색 | 역색인 검색·하이라이트·건수, AND 교집합·실패 용어 안내, 과목 필터, 결과 없음, 더보기 토글, 초기화, 1글자 지연 게이트, 미매핑 kind 폴백 티어 (TS-18) | 2026-09-23 추가 · 2026-10-16 갱신 |
 | 20 | `study-dictionary.dom.test.js` | 17 | 성분 사전 + 전체 CSV (DI-10) | 카드·3상태 배지, 이름/영문/초성 검색, type 필터, 빈 DB·결과 없음, 상세 토글, 필터 결과 CSV보내기·전체 CSV보내기 | 2026-10-18 갱신 |
 | 21 | `study-manual.dom.test.js` | 10 | 매뉴얼 뷰어 | 오버레이·MD 렌더·TOC, doc: 링크 문서 전환, sessionStorage 캐시, mermaid 마크업, 미등록 소스 오류, 인쇄 CSS 좌우 여백(@page margin:0 대응 패딩·clone), 닫기 | 2026-09-23 추가 · 2026-10-06 갱신 |
 | 22 | `study-examviewer.dom.test.js` | 8 | 문제집 뷰어 | 오버레이·MD 렌더·TOC, 인쇄 버튼→window.print, 캐시 재사용, 미존재 문서 오류, 닫기 | 2026-09-23 추가 |
@@ -336,7 +339,7 @@ npm run hooks:install
 | 53 | `mermaid-zoom.dom.test.js` | 9 | `mermaid-render.js` 다이어그램 확대 모달 | | |
 | 54 | `onboarding-zoom.dom.test.js` | 6 | 첫 방문 시작 안내 + 이미지 라이트박스 (UX-FB-05) | | |
 | 55 | `reader-keyboard.dom.test.js` | 10 | 리더 키보드 내비 (TR-24) | | |
-| 56 | `story-search.dom.test.js` | 2 | 이야기형 서사 검색 (TS-10) | | |
+| 56 | `story-search.dom.test.js` | 4 | 이야기형 서사 검색 (TS-10) | 서사 블록 인덱싱·배지·중복 제목 챕터 병기·메타 블록 제외 | |
 | 57 | `ui-structure.dom.test.js` | 19 | UI 구조 불변식 — index.html 실마크업 | | |
 | 58 | `zoom-gestures.dom.test.js` | 8 | 줌 제스처 (TR-26) | | |
 | 59 | `textbook-edition.dom.test.js` | 5 | 교재 개정 배너 (P-14) | 표시·판본 문구·확인 시 기록/재억제·동일 판본·미선언·중복 처리 억제 | 2026-10-13 추가 |
@@ -344,7 +347,11 @@ npm run hooks:install
 | 61 | `reader-ref-links.dom.test.js` | 13 | 참조 링크 위임·프리뷰·배지 (RR-02~06·17·19, TR-10) | 5종 data-attr 위임·오프라인 차단·hover 툴팁(fetch 스니펫·실패)·data-ref-bound 가드·배지 트리거 | 2026-10-13 추가 |
 | 62 | `study-review.dom.test.js` | 13 | 복습 허브 — 취약 진술 리뷰·weak 드릴 CTA·유사 진술 (RV-02/RV-03) | 뷰 전환·details 개방·CTA 노출 조건·레거시 #/trainer/weak 리다이렉트·SemanticIndex 지연 로드 | 2026-10-13 추가 |
 | 63 | `pro-notice.dom.test.js` | 5 | Pro 안내 수렴 (ROAD-P5) | 전역 1회 seen·레거시 seen 마이그레이션·free 기능 seen 미기록·배지→플랜 비교 속성 | fetch 스텁, 2026-10-13 추가 |
-| | **합계** | **706** | | |
+| 64 | `exam-search.dom.test.js` | 4 | 문제은행 검색 (TS-12) | 배치 순서·ExamViewer 딥링크·과목 필터·카드 클릭 | |
+| 65 | `morph-search.dom.test.js` | 3 | 형태소 경계·동의어 검색 (TS-13/TS-14) | 본매치·부분 일치·동의어 정역방향 | |
+| 66 | `glossary-search.dom.test.js` | 5 | 용어 정의 카드 그룹 (TS-15/TS-16) | 정의 카드 노출·과목 배지·출처 링크 | |
+| 67 | `exam-index-scope.dom.test.js` | 1 | 검색 인덱스 시험 스코프 (TS-17) | 시험 전환 시 동일 과목 키 인덱스 재구축 | |
+| | **합계** | **757** | | |
 
 ---
 
@@ -630,7 +637,7 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
 디버깅·재현성)·CI 2 병렬 — `serve.js`가 무상태 정적 서빙이고 테스트별 브라우저
 컨텍스트가 격리되어 병렬 안전, 플레이크는 CI `retries:1`이 흡수한다. CI에서는
 `e2e` 잡이 프로젝트(chromium·mobile·tablet)별 matrix로 `test` 잡과 병렬 실행된다
-(레그당 ~110 시나리오, 아티팩트는 `playwright-results-<project>`).
+(레그당 ~110+ 시나리오, 아티팩트는 `playwright-results-<project>`).
 시험 도메인 기능의 스펙은 도메인 격리 규약대로 `tests/e2e/exams/<id>/`에 둔다.
 `serve.js`는 vercel.json의 프로덕션 헤더(CSP 포함)를 미러링하므로 E2E는
 배포 환경과 동일한 보안 헤더 하에서 실행된다.

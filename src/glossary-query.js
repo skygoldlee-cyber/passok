@@ -3,6 +3,8 @@
 // GLOSSARY_INDEX 데이터 구조를 캡슐화하고, 뷰 모듈에 쿼리 API를 제공합니다.
 // 데이터 구조가 변경되어도 이 파일만 수정하면 됩니다.
 import { getGlossaryIndex } from './keyword-index.js';
+import { getRefTables } from './pdf-registry.js';
+import { DataLoader } from './data-loader.js';
 
 /**
  * 특정 참조문서 파일명에 해당하는 용어집 항목들을 반환합니다.
@@ -63,6 +65,23 @@ export function getGlossaryByRefFiles(refFileNames) {
 export function getGlossaryEntry(idxKey) {
     const entry = getGlossaryIndex()[idxKey];
     return entry ? { ...entry } : null;
+}
+
+/**
+ * 용어집 항목의 subjectId를 과목 키로 해석합니다.
+ * subjectId는 과목 디렉터리명(예: '과목1') 또는 과목 키 자체 —
+ * 디렉터리 명명 규약이 다른 시험은 항목에 과목 키를 직접 기록하면 됩니다.
+ * @param {string} subjectId
+ * @returns {string} 과목 키 (미귀속 시 '')
+ */
+export function glossarySubjectKey(subjectId) {
+    if (!subjectId) return '';
+    const map = getRefTables().SUBJECT_DIR_MAP || {};
+    for (const [key, dir] of Object.entries(map)) {
+        if (dir === subjectId) return key;
+    }
+    const subjects = (DataLoader.registry && DataLoader.registry.subjects) || [];
+    return subjects.some(s => s.key === subjectId) ? subjectId : '';
 }
 
 /**

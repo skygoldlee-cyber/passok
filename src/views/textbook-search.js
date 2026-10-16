@@ -1,5 +1,5 @@
 // views/textbook-search.js - 교재 검색 뷰 계층 (Textbook Search View)
-// @spec TS-01~16,PF-08
+// @spec TS-01~16,TS-18,PF-08
 // 인덱스 구축·지연 로드·형태소 매칭·랭킹은 src/search-index.js로 분리 —
 // 이 모듈은 검색창 이벤트·결과 버킷 렌더·뷰 이동 위임만 담당한다.
 import { escapeHTML, esc, html, raw } from '../sanitize.js';
@@ -9,7 +9,9 @@ import { TIMING } from '../config/timing.js';
 import { getRefTables, mapSourceToRef, resolveRefPath, refDocDisplayName } from '../pdf-registry.js';
 import { formatSectionContentForReader } from '../reader-format.js';
 import { escapeRegExp, debounce } from '../utils.js';
-import { ensureLazyIndexes, runTextbookSearch, _matchSnippet, _glossSubjectKey } from '../search-index.js';
+import { ensureLazyIndexes, runTextbookSearch, _matchSnippet } from '../search-index.js';
+import { glossarySubjectKey } from '../glossary-query.js';
+import { initSearchSources } from '../search-sources.js';
 // [모바일 PWA 견고성] 레지스트리는 window 전역(가드)에서 읽는다(정적 import 하드 의존 지양).
 
 const textbookState = {
@@ -23,14 +25,22 @@ const _runSearch = debounce((value) => {
 }, TIMING.SEARCH_DEBOUNCE_MS);
 
 // 결과 티어 — 정렬·상한·캡 노트를 테이블로 일원화 (탐색 순서: 교재→참조자료→문제은행, 부분 일치는 별도 후미 그룹)
+// kinds는 엔트리 kind → 표시 티어 매핑 (TS-18 — 코어는 kind 버킷만 반환, 표시 그룹핑은 뷰 몫)
+// '*' 티어는 앞 티어가 소비하지 않은 모든 kind를 받는다 — 시험 팩이 새 kind 소스를
+// 등록해도 뷰 수정 없이 결과가 표시된다.
 const RESULT_TIERS = [
-    { key: 'sections', limit: 30, capNote: '교재 결과가 많아 상위 {limit}건만 표시합니다 (전체 {total}건). 검색어를 더 구체화하거나 과목 필터를 사용하세요.' },
-    { key: 'refs', limit: 15, capNote: '참조자료 결과가 많아 상위 {limit}건만 표시합니다 (전체 {total}건).' },
-    { key: 'exams', limit: 15, capNote: '문제은행 결과가 많아 상위 {limit}건만 표시합니다 (전체 {total}건).' },
-    { key: 'weak', limit: 10 },
+    { kinds: ['section', 'story'], limit: 30, capNote: '교재 결과가 많아 상위 {limit}건만 표시합니다 (전체 {total}건). 검색어를 더 구체화하거나 과목 필터를 사용하세요.' },
+    { kinds: ['ref'], limit: 15, capNote: '참조자료 결과가 많아 상위 {limit}건만 표시합니다 (전체 {total}건).' },
+    { kinds: ['exam'], limit: 15, capNote: '문제은행 결과가 많아 상위 {limit}건만 표시합니다 (전체 {total}건).' },
+    { kinds: '*', limit: 10, capNote: '기타 결과가 많아 상위 {limit}건만 표시합니다 (전체 {total}건).' },
+    { kinds: ['weak'], limit: 10 },
 ];
 
+// kind → 배지 라벨 (문서 카드용). 미등록 kind는 키 자체를 표시한다.
+const KIND_LABELS = { ref: '참조자료', exam: '문제은행', doc: '문서' };
+
 export function renderTextbookSearch() {
+    initSearchSources(); // TS-18 — 플랫폼 콘텐츠 소스 등록 (idempotent)
     const searchInput = /** @type {HTMLInputElement} */ (document.getElementById('textbook-search-input'));
 
     // Bind search input events only once
@@ -146,7 +156,7 @@ function performTextbookSearch() {
         summary.textContent = '키워드를 입력하면 검색 결과가 여기에 표시됩니다.';
         container.innerHTML = `
             <div class="empty-state">
-                <i class="fa-solid fa-book-open" style="font-size: 3rem; color: var(--color-text-muted); margin-bottom: 1rem; display: block;"></i>
+                <i class="fa-solid fa-book-open"></i>
                 <h3>검색어를 입력하세요</h3>
                 <p>위 검색창에 궁금한 교재 키워드를 입력하고 검색 결과를 확인하세요.</p>
             </div>
@@ -155,39 +165,62 @@ function performTextbookSearch() {
     }
 
     // TS-10/TS-11/TS-12 — 서사·참조자료·문제은행 인덱스 최초 1회 지연 로드; 완료 시 같은 검색어로 재실행
-    // added=0이어도 재실행해야 lazyPending 로딩 표시가 해제된다
-    ensureLazyIndexes(() => {
-        if (textbookState.searchQuery.toLowerCase().trim() === query) {
-            performTextbookSearch();
-        }
-    });
+    // added=0이어도 재실행해야 lazyPending 로딩 표시가 해제된다.
+    // 2자 미만 쿼리에서는 지연 로드를 기동하지 않는다 — 한 글자 입력에 전 문서 fetch가 걸리는 것을 막는다.
+    if (query.length >= 2) {
+        ensureLazyIndexes(() => {
+            if (textbookState.searchQuery.toLowerCase().trim() === query) {
+                performTextbookSearch();
+            }
+        });
+    }
 
-    const { buckets, allVariantTerms, glossDefs, lazyPending } =
+    const { buckets, allVariantTerms, glossDefs, lazyPending, failedTerms } =
         runTextbookSearch(query, textbookState.filter);
 
     // 티어별 정렬·상한 (테이블 주도 — 티어 추가 시 RESULT_TIERS 한 곳만 수정)
+    // kinds '*'는 선언되지 않은 나머지 kind 버킷을 전부 받는 폴백 티어다 (TS-18).
+    const consumedKinds = new Set(['weak']);
     for (const t of RESULT_TIERS) {
-        t.list = buckets[t.key];
+        const ks = Array.isArray(t.kinds)
+            ? t.kinds
+            : Object.keys(buckets).filter(k => !consumedKinds.has(k));
+        ks.forEach(k => consumedKinds.add(k));
+        t.list = ks.flatMap(k => buckets[k] || []);
         t.list.sort((a, b) => b._score - a._score);
         t.shown = t.list.slice(0, t.limit);
     }
-    const [sections, refs, exams, weak] = RESULT_TIERS;
-    const allResults = sections.shown.concat(refs.shown).concat(exams.shown);
+    const [sections, refs, exams, others, weak] = RESULT_TIERS;
+    const allResults = sections.shown.concat(refs.shown, exams.shown, others.shown);
 
     // Update summary text
-    summary.innerHTML = `총 <strong style="color: var(--color-primary);">${sections.list.length + refs.list.length + exams.list.length}</strong>건의 관련 내용을 찾았습니다.`
+    summary.innerHTML = `총 <strong class="text-primary">${sections.list.length + refs.list.length + exams.list.length + others.list.length}</strong>건의 관련 내용을 찾았습니다.`
         + (weak.list.length ? ` <span class="text-muted">(+ 부분 일치 ${esc(String(weak.list.length))}건)</span>` : '')
         + (glossDefs.length ? ` <span class="text-muted">(+ 용어 정의 ${esc(String(glossDefs.length))}건)</span>` : '')
-        + (lazyPending ? ' <span class="text-muted">(서사·참조자료·문제은행을 추가로 불러오는 중…)</span>' : '');
+        + (failedTerms && failedTerms.length ? ` <span class="text-muted">(미발견 용어: ${esc(failedTerms.join(', '))})</span>` : '')
+        + (lazyPending ? ' <span class="text-muted">(추가 검색 소스를 불러오는 중…)</span>' : '');
+
+    // AND 불성립 시 어떤 용어가 실패했는지 안내하고 제외 재검색 버튼을 제공한다.
+    // 실패 용어가 있으면 본문 버킷은 모두 비지만 용어집 카드는 남을 수 있으므로
+    // 안내는 결과 렌더와 별도로 맨 앞에 둔다 (지연 로딩 중에는 잠정 결과라 표시 보류).
+    let failedHtml = '';
+    if (!lazyPending && failedTerms && failedTerms.length) {
+        const remaining = query.split(/\s+/).filter(t => !failedTerms.includes(t));
+        const retryBtn = remaining.length
+            ? `<button class="btn btn-secondary" data-click="setTextbookSearchQuery" data-args='${esc(JSON.stringify([remaining.join(' ')]))}'><i class="fa-solid fa-rotate-right"></i> 미발견 용어를 빼고 검색</button>`
+            : '';
+        failedHtml = `<p>다음 용어는 검색 대상에서 찾지 못했습니다: <strong>${esc(failedTerms.join(', '))}</strong></p>${retryBtn}`;
+    }
 
     // TS-15 — 본문 결과가 없어도 용어 정의 카드는 표시한다 (용어 단독 조회 지원)
     if (allResults.length === 0 && weak.shown.length === 0 && glossDefs.length === 0) {
         // 지연 인덱스 로딩 중이면 '결과 없음' 대신 추가 결과 가능성을 안내
         container.innerHTML = `
             <div class="empty-state">
-                <i class="fa-solid ${lazyPending ? 'fa-circle-notch fa-spin' : 'fa-triangle-exclamation'}" style="font-size: 3rem; color: var(--color-${lazyPending ? 'primary' : 'warning'}); margin-bottom: 1rem; display: block;"></i>
+                <i class="fa-solid ${lazyPending ? 'fa-circle-notch fa-spin empty-icon-primary' : 'fa-triangle-exclamation empty-icon-warning'}"></i>
                 <h3>${lazyPending ? '검색 범위를 확장하는 중입니다' : '일치하는 내용이 없습니다'}</h3>
-                <p>${lazyPending ? '서사·참조자료·문제은행 인덱스를 불러오고 있습니다 — 결과가 추가될 수 있습니다.' : '다른 검색어로 검색해보거나 띄어쓰기를 확인해보세요.'}</p>
+                <p>${lazyPending ? '추가 검색 소스(서사·참조자료·문제은행·선언 문서)를 불러오고 있습니다 — 결과가 추가될 수 있습니다.' : '다른 검색어로 검색해보거나 띄어쓰기를 확인해보세요.'}</p>
+                ${raw(failedHtml)}
             </div>
         `;
         return;
@@ -195,6 +228,10 @@ function performTextbookSearch() {
 
     // Render results
     container.innerHTML = '';
+    if (failedHtml) {
+        container.insertAdjacentHTML('beforeend',
+            `<div class="search-failed-terms">${raw(failedHtml)}</div>`);
+    }
     const badgeColors = {};
     {
         const colors = ['badge-cyan', 'badge-violet', 'badge-emerald', 'badge-amber', 'badge-rose', 'badge-indigo'];
@@ -204,64 +241,68 @@ function performTextbookSearch() {
     const renderResultCard = (item, idx) => {
         const badgeColor = badgeColors[item.subjId] || 'badge-gray';
 
-        // 참조자료·문제은행 결과 — 문서 단위 + 매치 스니펫 + ExamViewer 라인 딥링크 (TS-11/TS-12)
-        if (item.fromRef || item.fromExam) {
-            const { snippet, lineNum } = _matchSnippet(item.refText, allVariantTerms);
-            const argsJson = esc(JSON.stringify([item.filePath, lineNum, allVariantTerms.join(' ')]));
-            const kindLabel = esc(item.fromExam ? '문제은행' : '참조자료');
+        // 문서 결과 — nav.mdPath를 가진 모든 소스 (참조자료·문제은행·시험 선언 문서 등).
+        // 문서 단위 + 매치 스니펫 + ExamViewer 라인 딥링크 (TS-11/TS-12/TS-18)
+        if (item.nav && item.nav.mdPath) {
+            const { snippet, lineNum } = _matchSnippet(item.text, allVariantTerms);
+            const argsJson = esc(JSON.stringify([item.nav.mdPath, lineNum, allVariantTerms.join(' ')]));
+            const kindLabel = esc(KIND_LABELS[item.kind] || item.kind);
+            const subjBadgeHtml = item.subjName ? `<span class="badge ${badgeColor}">${esc(item.subjName)}</span>` : '';
+            // 카드 전체가 원문 딥링크 — 섹션 카드의 is-clickable 규약과 동일 (data-click 위임)
             const refCardHTML = `
-            <div class="textbook-result-card">
+            <div class="textbook-result-card is-clickable" data-click="ExamViewer.openExam" data-args='${argsJson}' tabindex="0" role="link" aria-label="${esc(item.title)} — 원문 보기">
                 <div class="textbook-card-header">
                     <span class="textbook-card-path">
-                        <span class="badge ${badgeColor}">${esc(item.subjName)}</span>
+                        ${subjBadgeHtml}
                         <span class="badge badge-gray">${kindLabel}</span>
                         <i class="fa-solid fa-chevron-right"></i>
-                        <span>${esc(item.docName)}</span>
+                        <span>${esc(item.title)}</span>
                     </span>
-                    <button class="btn btn-secondary" data-click="ExamViewer.openExam" data-args='${argsJson}' style="padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem;">
+                    <button class="btn btn-secondary textbook-card-btn" data-click="ExamViewer.openExam" data-args='${argsJson}'>
                         <i class="fa-solid fa-book-open"></i> 원문 보기
                     </button>
                 </div>
-                <h4 class="textbook-card-title">${highlightTextInString(item.docName, allVariantTerms)}</h4>
-                <div class="textbook-card-body"><div style="white-space:pre-wrap; word-break:break-word; font-size: 0.9rem;">${highlightTextInString(snippet, allVariantTerms)}</div></div>
+                <h4 class="textbook-card-title">${highlightTextInString(item.title, allVariantTerms)}</h4>
+                <div class="textbook-card-body"><div class="search-ref-snippet">${highlightTextInString(snippet, allVariantTerms)}</div></div>
             </div>
         `;
             container.insertAdjacentHTML('beforeend', refCardHTML);
             return;
         }
 
-        const isLong = item.content.length > 300;
+        const isLong = item.text.length > 300;
         const bodyClass = isLong ? 'textbook-card-body collapsed' : 'textbook-card-body';
-        const formattedContent = formatSectionContent(item.content, allVariantTerms, item);
-        const storyBadge = item.fromStory ? '<span class="badge badge-gray">서사</span>' : '';
-        // '전체 단원 보기' → 리더의 해당 "섹션"으로 이동 — 인덱스가 기록한 표시 제목으로
-        // 매칭(중복 제목은 챕터 병기로 구분)하고, 실패 시 소속 챕터 앵커로 폴백한다.
-        const gotoData = JSON.stringify([
-            item.subjId, item.gotoTitle || item.sectionTitle || '', item.chAnchor || '',
-            item.fromStory ? 'story' : ''
-        ]);
+        const formattedContent = formatSectionContent(item.text, allVariantTerms, item);
+        const storyBadge = item.kind === 'story' ? '<span class="badge badge-gray">서사</span>' : '';
+        // '전체 단원 보기' → 리더의 해당 "섹션"으로 이동 — 소스 프로바이더가 기록한
+        // 이동 페이로드(표시 제목·챕터 앵커·모드 플래그)를 그대로 전달한다.
+        // nav.goto가 없는 소스는 이동 링크 없이 카드만 렌더한다.
+        const gotoData = (item.nav && item.nav.goto) ? JSON.stringify(item.nav.goto) : '';
+        const gotoAttr = gotoData ? ` data-search-goto="${esc(gotoData)}" tabindex="0" role="link" aria-label="${esc(item.title)} — 교재에서 보기"` : '';
+        const gotoLink = gotoData
+            ? `<a href="#" data-search-goto="${esc(gotoData)}" class="btn btn-secondary textbook-card-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> 전체 단원 보기</a>`
+            : '';
+        const subjBadge = item.subjName ? `<span class="badge ${badgeColor}">${esc(item.subjName)}</span>` : '';
+        const crumbHtml = item.crumb ? `<i class="fa-solid fa-chevron-right"></i><span>${esc(item.crumb)}</span>` : '';
 
         const cardId = `textbook-card-${idx}`;
         const cardHTML = `
-            <div class="textbook-result-card is-clickable" data-search-goto="${esc(gotoData)}" tabindex="0" role="link" aria-label="${esc(item.sectionTitle)} — 교재에서 보기">
+            <div class="textbook-result-card${gotoData ? ' is-clickable' : ''}"${gotoAttr}>
                 <div class="textbook-card-header">
                     <span class="textbook-card-path">
-                        <span class="badge ${badgeColor}">${esc(item.subjName)}</span>
+                        ${subjBadge}
                         ${storyBadge}
-                        <i class="fa-solid fa-chevron-right"></i>
-                        <span>${esc(item.chapterTitle)}</span>
+                        ${crumbHtml}
                     </span>
-                    <a href="#" data-search-goto="${esc(gotoData)}" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem;">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> 전체 단원 보기
-                    </a>
+                    ${gotoLink}
                 </div>
-                <h4 class="textbook-card-title">${highlightTextInString(item.sectionTitle, allVariantTerms)}</h4>
+                <h4 class="textbook-card-title">${highlightTextInString(item.title, allVariantTerms)}</h4>
                 <div class="${bodyClass}" id="${cardId}-body">
                     ${formattedContent}
                 </div>
                 ${isLong ? `
                 <div class="textbook-card-actions">
-                    <button class="btn btn-secondary" data-click="toggleTextbookCard" data-arg="${cardId}" id="${cardId}-toggle-btn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 600;">
+                    <button class="btn btn-secondary textbook-card-toggle-btn" data-click="toggleTextbookCard" data-arg="${cardId}" id="${cardId}-toggle-btn">
                         <i class="fa-solid fa-chevron-down"></i> 더 보기
                     </button>
                 </div>
@@ -279,7 +320,7 @@ function performTextbookSearch() {
         const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
         for (const entry of glossDefs) {
             const kw = String(entry.keyword || '');
-            const subjKey = _glossSubjectKey(entry.subjectId);
+            const subjKey = glossarySubjectKey(entry.subjectId);
             const subjName = (subjects.find(s => s.key === subjKey) || {}).name
                 || entry.subjectId || '';
             const refPath = entry.refDoc ? resolveRefPath(entry.refDoc + '.pdf') : '';
@@ -349,7 +390,7 @@ function formatSectionContent(rawContent, searchTerms = [], item = {}) {
     const subjDirName = (_rt.SUBJECT_DIR_MAP || {})[item.subjId] || '';
     const srcMatch = String(rawContent || '').match(/📌\s*\*\*출처\*\*[:：]\s*(.+?)(?:\||\n)/);
     const refPath = srcMatch ? mapSourceToRef(srcMatch[1]) : null;
-    let html = formatSectionContentForReader(rawContent, item.filePath, refPath, subjRefFiles, subjDirName, [], item.sectionTitle);
+    let html = formatSectionContentForReader(rawContent, item.filePath, refPath, subjRefFiles, subjDirName, [], item.title);
 
     // 검색 컨텍스트 전달 — 카드 내 참조 링크가 검색어를 물고 열리면 뷰어가
     // 매치 위치로 스크롤한다 (해시 없는 링크는 문서 상단에 떨어지던 문제 — TS-11 후속)

@@ -43,7 +43,7 @@
 | 교재 리더 본문·목차·진도 | `src/views/textbook-reader.js` + `src/reader-toc.js` | `study-reader.dom.test.js` | TR-* |
 | 리더 툴바·독서 설정·스크롤 | `src/views/reader-toolbar.js` | `study-reader.dom.test.js` | TR-* |
 | MD 본문 후처리 (링크·강조 변환) | `src/reader-format.js` | `tests/unit/reader-format-general.test.js`, `reader-toc.test.js` | TR-* |
-| 교재 검색 (역색인) | `src/views/textbook-search.js` | `study-search.dom.test.js`, `story-search.dom.test.js` | TS-* |
+| 통합검색 (역색인) | `src/search-index.js`(코어) + `src/search-sources.js`(소스) + `src/views/textbook-search.js`(뷰) | `search-index.test.js`, `textbook-search-ref.test.js`, `study-search/story-search/exam-search/morph-search/glossary-search.dom.test.js` | TS-* |
 | 용어집 렌더·조회 | `src/views/glossary-renderer.js` + `src/glossary-query.js` | `common-glossary.dom.test.js` | TR-*/DI-* |
 | 참조자료 링크·레지스트리 | `src/views/reader-ref-links.js` + `src/pdf-registry.js`(생성물) | `study-reader.dom.test.js` | RR-* |
 | 법령 한글주소·고시 배너 | `src/law-links.js` + `src/notice-check.js` | `tests/unit/law-links.test.js` | RR-*, CE-* |

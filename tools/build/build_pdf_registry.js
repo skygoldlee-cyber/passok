@@ -47,9 +47,10 @@ function examTablesJs(refs, contentRoot) {
     `        { name: ${JSON.stringify(item.name)}, file: ${JSON.stringify(item.file)}, type: ${JSON.stringify(item.type)}, dir: ${JSON.stringify(item.dir)} }`
   ).join(',\n');
 
-  // REFERENCE_INGREDIENTS
+  // REFERENCE_INGREDIENTS — subject는 ref_md 밖 문서의 과목 귀속 ('과목N' 디렉터리명 또는 과목 키)
   const ingJs = arr(refs.referenceIngredients).map(item =>
-    `        { name: ${JSON.stringify(item.name)}, file: ${JSON.stringify(item.file)}, type: ${JSON.stringify(item.type)}, dir: ${JSON.stringify(item.dir)} }`
+    `        { name: ${JSON.stringify(item.name)}, file: ${JSON.stringify(item.file)}, type: ${JSON.stringify(item.type)}, dir: ${JSON.stringify(item.dir)}`
+    + `${item.subject ? `, subject: ${JSON.stringify(item.subject)}` : ''} }`
   ).join(',\n');
 
   // REFERENCE_LAW

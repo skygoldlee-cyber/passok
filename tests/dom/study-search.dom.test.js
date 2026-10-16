@@ -1,5 +1,5 @@
 // tests/dom/study-search.dom.test.js — 교재 검색 시나리오
-// @spec TS-01~09
+// @spec TS-01~09,TS-18
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.2 (Phase 4)
 // 검증: 검색어 입력→역색인 검색→결과 카드(H) · 과목 필터(H) · 결과 없음(B)
 //       · 초기화→빈 상태(E) · 하이라이트·더보기 토글(H)
@@ -20,6 +20,7 @@ import {
 } from './helpers.js';
 import {
     renderTextbookSearch, setTextbookFilter, clearTextbookSearch, toggleTextbookCard,
+    setTextbookSearchQuery,
 } from '../../src/views/textbook-search.js';
 
 const SUBJ_A = {
@@ -262,6 +263,29 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
         expect(link.getAttribute('data-ref-search')).toBe('cgmp');
     });
 
+    it('1글자 쿼리 — 지연 인덱스(서사·참조·문제은행) fetch를 기동하지 않는다', () => {
+        search('가');
+        // 한 글자 입력에 전 문서 fetch가 걸리지 않아야 한다
+        expect(fetch).not.toHaveBeenCalled();
+        expect(el('textbook-search-summary').textContent).not.toContain('불러오는 중');
+    });
+
+    it('AND 불성립 — 미발견 용어 안내 + 제외 재검색 버튼', async () => {
+        search('화장품 없는용어zzz');
+        await vi.waitFor(() => {
+            expect(el('textbook-results-container').textContent).toContain('찾지 못했습니다');
+        }, { timeout: 2000 });
+        expect(el('textbook-results-container').textContent).toContain('없는용어zzz');
+        const btn = el('textbook-results-container').querySelector('[data-click="setTextbookSearchQuery"]');
+        expect(btn).toBeTruthy();
+        expect(JSON.parse(btn.getAttribute('data-args'))).toEqual(['화장품']);
+        // 재검색 핸들러 — 실패 용어를 뺀 쿼리가 주입되고 결과가 복구된다
+        setTextbookSearchQuery('화장품');
+        expect(el('textbook-search-input').value).toBe('화장품');
+        expect(el('textbook-results-container')
+            .querySelectorAll('.textbook-result-card:not(.search-gloss-card)').length).toBe(3);
+    });
+
     it('검색 초기화 → 빈 상태 복귀', () => {
         search('화장품');
         clearTextbookSearch();
@@ -287,5 +311,45 @@ describe('교재 검색 — 역색인·필터·결과 카드', () => {
         toggleTextbookCard('textbook-card-0');
         expect(body.classList.contains('collapsed')).toBe(false);
         expect(el('textbook-card-0-toggle-btn').textContent).toContain('접기');
+    });
+});
+
+// TS-18 — 미선언 kind 소스의 폴백 티어 표시 (파일 끝 배치 — 등록 소스는 모듈 수명 동안 유지)
+describe('검색 소스 확장 — 미매핑 kind 폴백 티어 (TS-18)', () => {
+    beforeEach(() => {
+        localStorage.clear();
+        resetStudyState();
+        loadIndexHtml();
+        stubRegistry([SUBJ_A]);
+        vi.stubGlobal('fetch', vi.fn((url) => {
+            const u = String(url);
+            if (u.includes('manifest.json')) {
+                return Promise.resolve({ ok: true, json: () => Promise.resolve({ subjects: [] }) });
+            }
+            return Promise.resolve({ ok: false, status: 404, text: () => Promise.resolve('') });
+        }));
+        renderTextbookSearch();
+        setTextbookFilter('all');
+        vi.clearAllMocks();
+    });
+
+    it('RESULT_TIERS에 없는 kind도 기타 티어 카드로 렌더된다', async () => {
+        const { registerSearchSource } = await import('../../src/search-index.js');
+        registerSearchSource({
+            id: 'test-xdoc', kind: 'xdoc',
+            load: () => [{
+                kind: 'xdoc', title: '외부 문서 카드', crumb: '', subjId: '', subjName: '',
+                text: '외부문서용어xyz 본문', nav: { mdPath: 'docs/xdoc.md' },
+                _searchText: '외부 문서 카드 외부문서용어xyz 본문',
+            }],
+        });
+        search('외부문서용어XYZ');
+
+        const cards = el('textbook-results-container').querySelectorAll('.textbook-result-card:not(.search-gloss-card)');
+        expect(cards.length).toBe(1);
+        expect(cards[0].getAttribute('data-click')).toBe('ExamViewer.openExam');
+        expect(cards[0].textContent).toContain('외부 문서 카드');
+        expect(cards[0].textContent).toContain('xdoc'); // 미등록 kind는 키 그대로 배지
+        expect(el('textbook-search-summary').innerHTML).toContain('1</strong>건');
     });
 });

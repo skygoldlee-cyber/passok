@@ -143,7 +143,8 @@ import {
     renderTextbookSearch,
     setTextbookFilter,
     clearTextbookSearch,
-    toggleTextbookCard
+    toggleTextbookCard,
+    setTextbookSearchQuery
 } from './views/textbook-search.js';
 import {
     textbookReaderState,
@@ -537,7 +538,7 @@ const DELEGATED_HANDLERS = {
     // 스크래치패드
     clearScratchpad, toggleCalcScratchpad, toggleScratchpadEraser,
     // 교재 검색/리더/오디오
-    clearTextbookSearch, setTextbookFilter, toggleTextbookCard,
+    clearTextbookSearch, setTextbookFilter, toggleTextbookCard, setTextbookSearchQuery,
     toggleReaderAudio, stopReaderAudio, toggleReaderPlayPause,
     seekReaderAudio, cycleReaderAudioRate, toggleReaderAutoScroll,
     // 학습 캘린더/목표

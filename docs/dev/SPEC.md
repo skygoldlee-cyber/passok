@@ -1,7 +1,7 @@
 # 📋 요구사양 명세서 (Software Requirements Specification)
 
 > **프로젝트**: Passory — 멀티시험 스마트 학습 플랫폼 (첫 콘텐츠 팩: 맞춤형화장품 조제관리사 = 앱명 Passmula)
-> **버전**: 1.15 (2026-10-15 기준 — TS-17 통합검색 교재 교체 안전: 인덱스 시험 스코프 + 메타 섹션 규약 래칫)
+> **버전**: 1.16 (2026-10-15 기준 — TS-18 통합검색 소스 프로바이더 분리: 코어의 교재 종속 해소)
 > **버전 규약**: 본문 요구사항의 추가·변경·제거 시 마이너 버전을 갱신하고 변경 내역은 `CHANGES.md`에 기록한다 — 기준선은 커밋 해시로 확정한다
 > **문서 성격**: 구현 완료된 기능을 역공학하여 체계적으로 정리한 요구사양 명세서
 > **문서 ID**: DOC-DEV-01
@@ -92,7 +92,7 @@
 | 3.6 | **리더 학습 보조** | 기출·중요 마커 추출 카드·숫자 암기표 | SA-01~SA-05 (5) |
 | 3.7 | **용어집** | 용어 검색·정의 카드·관련 용어 | G-01~G-09 (9) |
 | 3.8 | **참조자료 연결** | 법령·고시 원문 라인 인용·현행본 링크·개정 감지 배지·오디오 연계 | RR-01~RR-19 (19) |
-| 3.9 | **교재 검색** | 전문 검색·단원별 필터·결과 하이라이트·위치 이동 | TS-01~TS-17 (17) |
+| 3.9 | **교재 검색** | 전문 검색·단원별 필터·결과 하이라이트·위치 이동 | TS-01~TS-18 (18) |
 | 3.10 | **성분 사전** | 성분 조회·규제 정보·자가 등록·함유 기성품 역조회 | DI-01~DI-11 (11) |
 | 3.11 | **훈련소** | 계산 연습·스크래치패드·집중 훈련 | T-01~T-05 (5) |
 | 3.12 | **오디오북** | MP3 재생·구간 반복·재생 속도·이어듣기 | AO-01~AO-06 (6) |
@@ -299,14 +299,15 @@
 | TS-07 | 검색 결과 Mermaid 다이어그램 온디맨드 렌더링 (`_renderSearchMermaid`) | ✅ |
 | TS-08 | 역색인(inverted index) 기반 검색: 공백 토큰화 + 2-gram 보조 인덱스, 후보 교집합 계산 | ✅ |
 | TS-09 | 역색인 자동 캐싱 (과목 키 변경 시에만 재구축, 반복 검색 성능 향상) | ✅ |
-| TS-10 | **이야기형 서사 검색**: `features.story_textbook` 활성 시 첫 검색에서 storyFile을 지연 로드해 `story:start/end` 블록만 인덱스에 병합 (로드 완료 시 동일 검색어 재실행). 서사 결과는 '서사' 배지 + storyFile 링크로 구분 (`_ensureStoryIndex`, `_extractStoryBlocks`) | ✅ |
-| TS-11 | **참조자료 검색**: 첫 검색 시 pdf-registry(`REF_MD_SUBJECTS`·`SUBJECT_DIR_MAP`·`REFERENCE_*`)로 활성 시험의 과목 귀속 ref_md 문서+원료 목록을 지연 fetch해 문서 단위로 인덱스 병합. 결과는 '참조자료' 배지+문서명+매치 스니펫, `ExamViewer.openExam` 라인 딥링크, 교재 결과 뒤 배치·히트수 정렬·상한 15건 (`_ensureRefIndex`, `_listRefDocs`, `_matchSnippet`) | ✅ |
-| TS-12 | **문제은행 검색**: 첫 검색 시 `registry.exams`의 문제은행 MD를 지연 로드(`__EXAM_MD__` 번들 → fetch → `exams_md` 번들 주입 폴백, exam-viewer와 동일 규약)해 문서 단위로 인덱스 병합. 결과는 '문제은행' 배지+문서명+매치 스니펫, `ExamViewer.openExam` 라인 딥링크+쿼리 착지, 참조자료 결과 뒤 배치·히트수 정렬·상한 15건 — 탐색 순서 교재 → 참조자료 → 문제은행 (`_ensureExamIndex`, `_loadExamMdText`) | ✅ |
+| TS-10 | **이야기형 서사 검색**: `features.story_textbook` 활성 시 첫 검색에서 storyFile을 지연 로드해 `story:start/end` 블록만 인덱스에 병합 (로드 완료 시 동일 검색어 재실행). 서사 결과는 '서사' 배지 + storyFile 링크로 구분 (`search-sources.js` story 소스: `loadStoryEntries`, `_extractStoryBlocks`) | ✅ |
+| TS-11 | **참조자료 검색**: 첫 검색 시 pdf-registry(`REF_MD_SUBJECTS`·`SUBJECT_DIR_MAP`·`REFERENCE_*`)로 활성 시험의 과목 귀속 ref_md 문서+원료 목록을 지연 fetch해 문서 단위로 인덱스 병합. 결과는 '참조자료' 배지+문서명+매치 스니펫, `ExamViewer.openExam` 라인 딥링크, 교재 결과 뒤 배치·히트수 정렬·상한 15건 (`search-sources.js` ref 소스: `loadRefEntries`, `_listRefDocs` · `search-index.js` `_matchSnippet`) | ✅ |
+| TS-12 | **문제은행 검색**: 첫 검색 시 `registry.exams`의 문제은행 MD를 지연 로드(`__EXAM_MD__` 번들 → fetch → `exams_md` 번들 주입 폴백, exam-viewer와 동일 규약)해 문서 단위로 인덱스 병합. 결과는 '문제은행' 배지+문서명+매치 스니펫, `ExamViewer.openExam` 라인 딥링크+쿼리 착지, 참조자료 결과 뒤 배치·히트수 정렬·상한 15건 — 탐색 순서 교재 → 참조자료 → 문제은행 (`search-sources.js` exam 소스: `loadExamEntries`, `_loadExamMdText`) | ✅ |
 | TS-13 | **형태소 경계 인식 매칭**: 쿼리 음절열이 어절 경계(어절 시작·공백·문장부호) 또는 형태소 경계에 정렬될 때만 본매치로 인정 — 어절 중간의 우연한 음절열('석유\|화학'의 '유화', '사유\|화'의 '유화' 등)은 '부분 일치' 하위 티어로 분리해 본매치 뒤에 배치. 경계 사전은 인덱스 어절의 어절-두어 빈도에서 런타임 마이닝(독립 토큰·2회 이상 재사용된 접두 형태소)하고, 접두 완전 분해(DP 커버)로 경계를 판정 (`search-morpheme.js`: `buildBoundaryVocab`, `isCoverable`, `termHitQuality`) | ✅ |
 | TS-14 | **동의어·표기 확장**: `registry.synonyms`(manifest.synonyms 패스스루 — 주관식 유사어 사전과 공유)로 쿼리 용어를 동의 개념군으로 확장(예: 유화↔에멀션·에멀전·emulsion) — 그룹 내 OR·그룹 간 AND 매칭, 원어 매치는 동의어 매치보다 높은 랭크. 동의어 경유 매치도 TS-13 경계 규칙을 그대로 적용 (`search-morpheme.js`: `expandSynonyms`) | ✅ |
 | TS-15 | **용어 정의 결과 그룹**: 쿼리 어절(동의어 변형 포함)이 `getGlossaryIndex()` 키워드와 경계 매치(`termHitQuality`≥2)되면 정의 카드를 결과 최상단 '용어 정의' 그룹으로 표시 — 키워드·정의·출처(refDoc→`data-ref-html` 뷰어 링크)·과목 배지, 큐레이션 우선·키워드 중복 제거·정확 매치 우선 정렬·상한 5건. 교재→참조자료→문제은행→부분 일치 본문 그룹 순서는 변경하지 않고 그 앞에 별도 영역으로 둔다 | ✅ |
 | TS-16 | **용어집 키워드 경계 어휘 주입**: `GLOSSARY_INDEX`의 큐레이션 키워드(공백 미포함·len≥2)를 TS-13 `buildBoundaryVocab`의 독립 어절(words)로 추가 — 코퍼스 빈도가 낮아 접두 마이닝에 잡히지 않는 도메인 복합어도 형태소로 인정해 경계 판정 정밀도를 보강 | ✅ |
 | TS-17 | **검색 계약의 교재 교체 안전**: ① 검색 인덱스 캐시는 활성 시험 id+과목 키로 무효화 — 리로드 없는 시험 전환 시 서사·참조·문제은행 지연 병합분도 함께 폐기해 교차 시험 오염 차단 (`_getSearchIndex`의 `_indexExamId`) ② `check:metasections`(tools/check/check_meta_sections.js)이 교재 `##` 헤딩 중 메타 의심 제목(비교표·확인문제·목차·출처 등)이 `reader-toc.js`의 `isStoryMetaSection` 패턴에 미매칭이면 기준선 래칫으로 신규 유입을 차단 — 교재 교체 시 신규 메타 표기는 "렌더되는데 메타 의도"인 품질 회귀로 검출되어 패턴 확장 검토를 강제 (`meta_sections_baseline.json`, `--update` 갱신) | ✅ |
+| TS-18 | **검색 소스 프로바이더 분리 (교재 종속 해소)**: `search-index.js` 코어는 콘텐츠 종류를 모른다 — 역색인·형태소 매칭·랭킹만 담당하고, 콘텐츠 소스는 `registerSearchSource({id, kind, lazy, load, rev})`로 외부 등록한다 (`search-sources.js`). 소스는 범용 엔트리 `{kind, title, crumb, subjId, subjName, text, filePath, nav, _searchText}`를 반환하고, `nav`는 이동 페이로드({goto:리더 이동 인자}|{mdPath:뷰어 경로})로 소스별 해석을 캡슐화한다. 코어가 소스별로 일원 관리하는 지연 상태는 ① 로드 시작 시 활성 시험 캡처·완료 시 불일치면 병합 폐기 ② 실패 시 promise 유지로 재시도 폭풍 방지 ③ 버킷은 kind 동적 키이며 kind→표시 티어 매핑은 뷰의 `RESULT_TIERS` 몫(`'*'` 폴백 티어가 미매핑 kind를 수용 — 신규 소스는 뷰 수정 없이 표시). 후보 캐시(변형→후보 Set, 인덱스 변형 무효화)·증분 역색인(신규 항목 토큰만 추가)·빈도×idf·구문 부스트·failedTerms(AND 불성립 미발견 용어) 포함. 시험 팩의 선언형 소스 확장은 `manifest.searchDocs`(`{file,title,subject?,kind?,feature?}` — docs_md 번들/fetch로 로드, 기본 kind='doc')로 코드 수정 없이 가능. 용어집 과목 귀속(subjectId→과목 키)은 `glossary-query.js`의 `glossarySubjectKey`가 소유 — 디렉터리명·과목 키 모두 수용. `command-palette.js`는 교재 섹션 수집을 `collectTextbookSections()`로 재사용해 리더 규약 해석 중복을 소거 | ✅ |
 
 ### 3.10 성분 사전 (Dictionary)
 

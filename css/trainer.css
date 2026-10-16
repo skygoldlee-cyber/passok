@@ -933,6 +933,62 @@
     padding: 0.5rem;
 }
 
+/* 검색 결과 카드 액션 버튼 — 헤더 안의 소형 버튼 (원문 보기·전체 단원 보기) */
+.textbook-card-btn {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.textbook-card-toggle-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* 참조자료·문제은행 카드의 매치 스니펫 */
+.search-ref-snippet {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 0.9rem;
+}
+
+/* 검색 빈 상태 아이콘 색 변형 (기본은 .empty-state i의 muted) */
+.empty-state .empty-icon-primary {
+    color: var(--color-primary);
+    opacity: 1;
+}
+
+.empty-state .empty-icon-warning {
+    color: var(--color-warning);
+    opacity: 1;
+}
+
+/* AND 불성립 안내 — 결과(용어집 카드 등)가 있을 때 맨 위에 붙는 슬림 배너 */
+.search-failed-terms {
+    margin: 0 0 var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--bg-subtle);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.search-failed-terms p {
+    margin: 0;
+    color: var(--color-text-muted);
+}
+
+.search-failed-terms .btn {
+    align-self: flex-start;
+}
+
 .search-weak-divider {
     margin: var(--space-5) 0 var(--space-3);
     padding: var(--space-2) var(--space-3);

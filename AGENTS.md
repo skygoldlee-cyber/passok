@@ -185,7 +185,8 @@ src/                    # ES Modules
   storage.js            # 저장소 추상화 계층 — 백엔드 교체 가능(getItem/setItem 동기·Async 이중 API), 스코프·쓰기훅·쿼터 감지 중앙화
   ui-utils.js           # showToast, showConfirm, trapFocus + 훈련 공용 마크업(markChoiceButtons·wrongReviewHtml·trainerResultHtml·showAnswerFeedback)
   sanitize.js           # XSS 방어 (escapeHTML, safeTextWithBreaks, esc, stripTags)
-  search-index.js       # 통합검색 인덱스 코어 순수 로직 (인덱스 구축·시험 스코프 무효화·서사/참조/문제은행 지연 로드·어절 역색인·티어 랭킹 — TS-10~17)
+  search-index.js       # 통합검색 인덱스 코어 순수 로직 (소스 레지스트리·시험 스코프 무효화·지연 소드 상태머신·어절 역색인·티어 랭킹 — TS-08~09,TS-13~18)
+  search-sources.js     # 통합검색 콘텐츠 소스 프로바이더 (교재 섹션 수집·서사/참조/문제은행 로더·리더 이동 페이로드 해석 — TS-10~12,TS-18)
   search-morpheme.js    # 검색 형태소 경계 판정·동의어 확장 순수 로직 (어휘 마이닝·DP 커버·termHitQuality·expandSynonyms — TS-13/TS-14)
   data-loader.js        # 온디맨드 콘텐츠 로더 (DataLoader)
   scratchpad.js          # 스크래치패드 캔버스 (계산 연습용)

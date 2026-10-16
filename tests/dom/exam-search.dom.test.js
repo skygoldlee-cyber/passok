@@ -117,17 +117,34 @@ describe('문제은행 검색 — 지연 인덱싱·배치 순서·딥링크 (TS
         search('CGMP');
         await vi.waitFor(() => {
             expect(el('textbook-results-container')
-                .querySelectorAll('[data-click="ExamViewer.openExam"]').length).toBe(2);
+                .querySelectorAll('button[data-click="ExamViewer.openExam"]').length).toBe(2);
         }, { timeout: 3000 });
 
         const btn = el('textbook-results-container')
-            .querySelector('[data-click="ExamViewer.openExam"]');
+            .querySelector('button[data-click="ExamViewer.openExam"]');
         const args = JSON.parse(btn.getAttribute('data-args'));
         // args = [문제은행 mdPath, lineNum, 검색어] — ExamViewer.openExam 규약
         // (검색어는 참조자료 카드와 동일하게 소문자 정규화 — 뷰어가 대소문자 무관 매칭)
         expect(args[0]).toContain('문제은행');
         expect(args[0]).toContain('subja_문제은행.md');
         expect(typeof args[1]).toBe('number');
+        expect(args[2]).toBe('cgmp');
+    });
+
+    it('문제은행 카드 본체도 클릭 가능 — 카드 div에 data-click·role=link 부여', async () => {
+        search('CGMP');
+        await vi.waitFor(() => {
+            expect(el('textbook-results-container')
+                .querySelectorAll('.textbook-result-card.is-clickable[data-click="ExamViewer.openExam"]').length)
+                .toBe(2);
+        }, { timeout: 3000 });
+
+        const card = el('textbook-results-container')
+            .querySelector('.textbook-result-card.is-clickable[data-click="ExamViewer.openExam"]');
+        expect(card.getAttribute('role')).toBe('link');
+        expect(card.getAttribute('tabindex')).toBe('0');
+        const args = JSON.parse(card.getAttribute('data-args'));
+        expect(args[0]).toContain('문제은행');
         expect(args[2]).toBe('cgmp');
     });
 
