@@ -22,7 +22,8 @@
  *   - origin/main 에 없는 로컬 커밋이 있는 경우 (unpushed)
  *   - origin/main 보다 뒤처진 경우 (push 전 pull 필요)
  *   - 대상 커밋의 ci.yml run이 없거나 진행 중이거나 실패인 경우
- *     (SKIP_CI_GATE=1로 우회 가능 — gh 미설치 환경 등, 권장하지 않음)
+ *     (gh CLI 우선, 부재·실패 시 GitHub REST 폴백 — 공개 레포 무인증,
+ *      비공개는 GH_TOKEN/GITHUB_TOKEN. 조회 불가 시 SKIP_CI_GATE=1로 우회 가능, 권장하지 않음)
  *   - 스탬프 태그 생성/push 실패
  *
  * 사용: npm run deploy
@@ -108,7 +109,33 @@ function fail(msg) {
     process.exit(1);
 }
 
-function main() {
+/**
+ * 대상 커밋의 ci.yml run 조회 — gh CLI 우선, 부재·미인증·실패 시 GitHub REST 폴백.
+ * 공개 레포는 무인증으로 읽힌다. 비공개 레포는 GH_TOKEN/GITHUB_TOKEN env를 사용.
+ * owner/repo는 `git remote get-url origin`에서 파싱 (SSH 별칭·HTTPS 모두 대응).
+ */
+async function queryCiRun(sha) {
+    try {
+        const out = execSync(
+            `gh run list --workflow=ci.yml --commit ${sha} --limit 1 --json status,conclusion`,
+            { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+        return { run: JSON.parse(out)[0], via: 'gh' };
+    } catch { /* gh 미설치·미인증 — REST 폴백 */ }
+    const remote = git('remote get-url origin');
+    const m = remote.match(/[:/]([^/:]+\/[^/]+?)(?:\.git)?$/);
+    if (!m) throw new Error(`origin URL에서 owner/repo 해석 실패: ${remote}`);
+    const headers = { 'Accept': 'application/vnd.github+json', 'User-Agent': 'passory-deploy' };
+    const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
+    if (token) headers.Authorization = `Bearer ${token}`;
+    const res = await fetch(
+        `https://api.github.com/repos/${m[1]}/actions/workflows/ci.yml/runs?head_sha=${sha}&per_page=1`,
+        { headers });
+    if (!res.ok) throw new Error(`GitHub API HTTP ${res.status}`);
+    const body = await res.json();
+    return { run: (body.workflow_runs || [])[0], via: 'REST' };
+}
+
+async function main() {
     // 최신 원격 상태 반영 (실패해도 계속 — 오프라인이면 아래 비교가 로컬 기준으로 동작)
     try {
         git('fetch origin main --quiet');
@@ -150,14 +177,11 @@ function main() {
         console.warn('⚠️  SKIP_CI_GATE=1 — CI 검증 없이 배포합니다 (권장하지 않음)');
     } else {
         const sha = git('rev-parse HEAD');
-        let run;
+        let run, via;
         try {
-            const out = execSync(
-                `gh run list --workflow=ci.yml --commit ${sha} --limit 1 --json status,conclusion`,
-                { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
-            run = JSON.parse(out)[0];
+            ({ run, via } = await queryCiRun(sha));
         } catch (e) {
-            fail(`CI 상태를 조회할 수 없습니다 — gh 설치·인증(gh auth login) 확인 후 재시도하세요. ` +
+            fail(`CI 상태를 조회할 수 없습니다 — gh 설치·인증(gh auth login) 또는 GH_TOKEN/GITHUB_TOKEN 확인 후 재시도하세요. ` +
                 `조회 불가 상태에서 배포하려면 SKIP_CI_GATE=1 (${e.message.split('\n')[0]})`);
         }
         const short = sha.slice(0, 8);
@@ -170,7 +194,7 @@ function main() {
         if (run.conclusion !== 'success') {
             fail(`커밋 ${short}의 CI가 ${run.conclusion} 입니다 — 레드 상태에서는 배포할 수 없습니다.`);
         }
-        console.log(`✅ CI 게이트 통과 (${short} — success)`);
+        console.log(`✅ CI 게이트 통과 (${short} — success${via === 'REST' ? ' · REST 폴백' : ''})`);
     }
 
     // 영향도 경고 — 직전 배포(deploy/* 태그, 구버전은 스탬프 커밋) 이후 변경 파일의
@@ -298,4 +322,7 @@ function main() {
     }
 }
 
-main();
+main().catch((e) => {
+    console.error(`\n❌ 배포 실패: ${e.message}\n`);
+    process.exit(1);
+});
