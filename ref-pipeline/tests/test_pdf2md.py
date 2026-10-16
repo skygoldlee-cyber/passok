@@ -561,3 +561,88 @@ class TestMainExitCode:
             assert e.value.code == 1
         finally:
             pdf2md.PROFILE['segment'] = old
+
+
+# ---------------------------------------------------------------------------
+# profile_context — 실행 간 프로파일 오버라이드 격리
+# ---------------------------------------------------------------------------
+
+class TestProfileContext:
+    def test_overrides_restored(self, tmp_path):
+        prof = tmp_path / 'p.json'
+        prof.write_text('{"margin_pt": 99}', encoding='utf-8')
+        seg_before = pdf2md.PROFILE['segment']
+        margin_before = pdf2md.MARGIN_PT
+        with pdf2md.profile_context(str(prof), segment=False):
+            assert pdf2md.MARGIN_PT == 99          # 컴파일 전역도 갱신됨
+            assert pdf2md.PROFILE['segment'] is False
+        assert pdf2md.MARGIN_PT == margin_before
+        assert pdf2md.PROFILE['segment'] == seg_before
+
+    def test_segment_only(self):
+        seg_before = pdf2md.PROFILE['segment']
+        with pdf2md.profile_context(segment=False):
+            assert pdf2md.PROFILE['segment'] is False
+        assert pdf2md.PROFILE['segment'] == seg_before
+
+
+# ---------------------------------------------------------------------------
+# verify — 골드 글로브 폴백이 모호하면 경고
+# ---------------------------------------------------------------------------
+
+class TestVerifyAmbiguousGold:
+    def test_multiple_gold_hits_warns(self, tmp_path, caplog):
+        out = tmp_path / 'out'
+        gold = tmp_path / 'gold'
+        body = '공통 내용\n'
+        _write(out / 'doc' / 'doc.md', body)
+        # 같은 stem의 골드가 두 과목에 존재 — 어느 쪽과 비교됐는지 알 수 없다
+        _write(gold / '과목1' / 'doc' / 'doc.md', body)
+        _write(gold / '과목2' / 'doc' / 'doc.md', body + '추가 줄이다\n')
+        with caplog.at_level(logging.WARNING, 'pdf2md'):
+            pdf2md.verify(str(out), str(gold))
+        assert any('골드 매칭 모호' in r.getMessage() for r in caplog.records)
+
+
+# ---------------------------------------------------------------------------
+# convert() 골든 회귀 — pdfplumber/pymupdf 필요, 미설치 환경은 스킵
+# ---------------------------------------------------------------------------
+
+def _make_sample_pdf(path):
+    """최소 샘플 PDF 생성 — 텍스트 2줄 + ruled 2열 표 1개 (격자선 감지용)."""
+    pymupdf = pytest.importorskip('pymupdf')
+    doc = pymupdf.open()
+    page = doc.new_page(width=595, height=842)
+    page.insert_text((72, 80), 'Section 1 Purpose of this document sample line.')
+    page.insert_text((72, 96), 'Second paragraph continues the sample text.')
+    # 2열 3행 격자 표 (테두리 rect + 세로선 + 가로선 2개)
+    page.draw_rect(pymupdf.Rect(72, 150, 300, 246))
+    page.draw_line((186, 150), (186, 246))
+    for y in (182, 214):
+        page.draw_line((72, y), (300, y))
+    for x, y, t in ((80, 172, 'No'), (194, 172, 'Name'),
+                    (80, 204, '1'), (194, 204, 'alpha'),
+                    (80, 236, '2'), (194, 236, 'beta')):
+        page.insert_text((x, y), t)
+    doc.save(str(path))
+    doc.close()
+
+
+class TestConvertGolden:
+    def test_convert_extracts_text_and_table(self, tmp_path):
+        pytest.importorskip('pdfplumber')
+        pdf = tmp_path / 'sample.pdf'
+        _make_sample_pdf(pdf)
+        out = pdf2md.convert(str(pdf))
+        assert 'Purpose of this document' in out
+        assert '| No | Name |' in out
+        assert '| 1 | alpha |' in out
+        assert '| 2 | beta |' in out
+
+    def test_convert_respects_no_segment(self, tmp_path, monkeypatch):
+        pytest.importorskip('pdfplumber')
+        pdf = tmp_path / 'sample.pdf'
+        _make_sample_pdf(pdf)
+        monkeypatch.setitem(pdf2md.PROFILE, 'segment', False)
+        out = pdf2md.convert(str(pdf))
+        assert 'Purpose of this document' in out
