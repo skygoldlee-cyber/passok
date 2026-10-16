@@ -1,5 +1,5 @@
 // src/search-sources.js — 통합검색 콘텐츠 소스 프로바이더 (플랫폼 콘텐츠 계층)
-// @spec TS-10~12,TS-18
+// @spec TS-10~12,TS-15~16,TS-18
 // search-index.js 코어는 콘텐츠 종류를 모른다 — 인덱싱·역색인·매칭/랭킹만 담당하고,
 // 각 콘텐츠 소스는 이 모듈이 registerSearchSource()로 등록한다.
 // 교재 번들(STUDY_DATA)·서사 MD·참조자료·문제은행의 구조 지식과
@@ -14,12 +14,14 @@
 //   nav         이동 페이로드 — {goto:[subjId,표시제목,챕터앵커,모드]} 또는 {mdPath}
 //   _searchText 소문자·공백 정규화된 검색 텍스트 (코어가 인덱싱)
 import { DataLoader } from './data-loader.js';
-import { hasFeature, contentPath, dataPath } from './exam-context.js';
+import { hasFeature, contentPath, dataPath, getActiveExamId } from './exam-context.js';
 import { injectBundleScript, fetchMd } from './doc-overlay.js';
 import { getRefTables } from './pdf-registry.js';
 import { buildSectionDisplayTitles, isStoryMetaSection } from './reader-toc.js';
 import { PATHS } from './paths.js';
-import { registerSearchSource, _toSearchable } from './search-index.js';
+import { registerSearchSource, registerVocabContributor, _toSearchable, _getMorphVocab } from './search-index.js';
+import { termHitQuality } from './search-morpheme.js';
+import { getAllGlossaryKeywords, getGlossaryEntry, glossarySubjectKey } from './glossary-query.js';
 
 /** SearchDoc 생성 — _searchText는 제목+본문의 소문자·공백 정규화본 */
 function _doc(fields) {
@@ -381,6 +383,60 @@ export async function _loadExamDocEntries() {
     }))).filter(Boolean);
 }
 
+// --- 용어 정의 카드 (TS-15) ---
+// 용어집 데이터 접근·과목 귀속 해석은 glossary-query가 소유한다 — 이 계층이
+// 쿼리 변형과 경계 매치하는 항목을 고르고, 코어는 형태소 어휘(_getMorphVocab)만 빌려준다.
+// 용어집 인덱스는 시험 내 불변이므로 시험 id 키로 캐시한다.
+
+let _glossReps = null; // {examId, map} — 키워드별 대표 용어집 항목 캐시
+
+/** 키워드 → 대표 용어집 항목 맵 (큐레이션 우선) */
+function _glossRepresentatives() {
+    const examId = getActiveExamId();
+    if (_glossReps && _glossReps.examId === examId) return _glossReps.map;
+    const repByKw = new Map();
+    for (const { keyword, idxKey } of getAllGlossaryKeywords()) {
+        const kwLower = String(keyword || '').trim().toLowerCase();
+        if (kwLower.length < 2) continue;
+        const prev = repByKw.get(kwLower);
+        if (prev && prev.curated) continue;      // 큐레이션 항목이 이미 대표
+        const entry = getGlossaryEntry(idxKey);
+        if (entry && (!prev || entry.curated)) repByKw.set(kwLower, entry);
+    }
+    _glossReps = { examId, map: repByKw };
+    return repByKw;
+}
+
+/**
+ * 쿼리 변형(동의어 포함)과 경계 매치하는 용어집 항목을 키워드별 대표로 수집한다.
+ * 큐레이션 우선·정확 매치 > 경계 매치·짧은 키워드 우선·상한 5건.
+ * 키워드 자체도 형태소 경계 규칙(termHitQuality)으로 판정해 '화' 같은
+ * 음절 우연이 아닌 어절/형태소 경계 매치만 정의 카드로 올린다.
+ * runUnifiedSearch 직후에 호출해야 한다 (형태소 어휘는 인덱스 구축 산출물).
+ * @param {string[]} variants - runUnifiedSearch의 allVariantTerms
+ * @param {string} filter - 과목 필터 ('all' 또는 subjId)
+ * @returns {Array<object>} 용어집 항목 목록 (최대 5건)
+ */
+export function matchGlossaryDefs(variants, filter) {
+    const vocab = _getMorphVocab();
+    if (!variants.length || !vocab) return [];
+    const repByKw = _glossRepresentatives();
+    const hits = [];
+    for (const entry of repByKw.values()) {
+        const kwLower = String(entry.keyword || '').trim().toLowerCase();
+        if (filter !== 'all' && filter !== glossarySubjectKey(entry.subjectId)) continue;
+        let score = 0;
+        for (const variant of variants) {
+            if (kwLower === variant) { score = 3; break; }
+            if (termHitQuality(kwLower, variant, vocab) === 2) score = Math.max(score, 1);
+        }
+        if (score) hits.push({ entry, score });
+    }
+    hits.sort((a, b) => b.score - a.score
+        || String(a.entry.keyword).length - String(b.entry.keyword).length);
+    return hits.slice(0, 5).map(h => h.entry);
+}
+
 // --- 소스 등록 (TS-18) ---
 // 교재는 즉시 수집(eager) 소스 — 인덱스 구축 시 동기 호출.
 // 서사·참조자료·문제은행은 지연(lazy) 소스 — 첫 검색 시 비동기 로드 후 병합.
@@ -401,4 +457,6 @@ export function initSearchSources() {
     registerSearchSource({ id: 'ref', kind: 'ref', lazy: true, load: loadRefEntries });
     registerSearchSource({ id: 'exam', kind: 'exam', lazy: true, load: loadExamEntries });
     registerSearchSource({ id: 'exam-docs', kind: 'doc', lazy: true, load: _loadExamDocEntries });
+    // TS-16 — 용어집 키워드를 형태소 어휘에 주입하는 공급자 (코어가 인덱스 구축 시 호출)
+    registerVocabContributor(() => getAllGlossaryKeywords().map(({ keyword }) => keyword));
 }

@@ -16,8 +16,6 @@
 
 import { getActiveExamId } from './exam-context.js';
 
-const _DEFAULT_EXAM_ID = "cosmetic";
-
 const _EXAM_TABLES = {
     "cosmetic": {
         contentRoot: "content/exams/cosmetic",
@@ -310,7 +308,7 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
 
 /**
  * 활성 시험의 참조자료 테이블 묶음.
- * 활성 시험에 테이블이 없으면 기본 시험으로 폴백 (참조자료 없는 시험은 빈 테이블 반환 가능).
+ * 미등록 시험은 빈 테이블 — 다른 시험의 참조자료로 폴백하지 않는다 (교차 오염 방지).
  * @returns {{contentRoot?: string, SUBJECT_DIR_MAP?: Object, REF_DIRS?: Object,
  *   SOURCE_REF_MAP?: Array, KEYWORD_REF_MAP?: Array, REFERENCE_FILES?: Object,
  *   REFERENCE_COMMON?: Array, REFERENCE_INGREDIENTS?: Array, REFERENCE_LAW?: Array,
@@ -319,8 +317,7 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
  */
 export function getRefTables() {
     const id = getActiveExamId();
-    const eid = _EXAM_TABLES[id] ? id : _DEFAULT_EXAM_ID;
-    return { ...(_EXAM_TABLES[eid] || {}), ...(_EXAM_DERIVED[eid] || {}) };
+    return { ...(_EXAM_TABLES[id] || {}), ...(_EXAM_DERIVED[id] || {}) };
 }
 
 // --- 헬퍼 함수 ---
