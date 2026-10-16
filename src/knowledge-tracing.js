@@ -1,6 +1,6 @@
 // @spec D-22
 // 지식 추적 — 단원별 은닉 숙달 상태 P(L)를 정오 관측 시퀀스로 추정 (BKT).
-// KNOWLEDGE_TRACING_DESIGN §3.2 — DOM·저장 비의존 순수 모듈.
+// LEARNING_ALGORITHM_DESIGN §3.2 — DOM·저장 비의존 순수 모듈.
 // 증거 정의·귀속은 analysis-engine이 담당 — 이 모듈은 시퀀스 → P(L) 변환만.
 // 망각은 모델하지 않는다 (시점 관리는 FSRS 소관 — 설계 §3.2 비모델 명시).
 

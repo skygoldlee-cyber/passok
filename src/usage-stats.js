@@ -18,7 +18,7 @@ const DAYS_KEEP = 90; // days 맵 상한 — 저장량 제한
 /** 유료가치 판정 기준 — 기능 액션 합계가 이 횟수에 도달하면 유료가치 인정 (ROAD-P1 착수 근거) */
 export const PRO_VALUE_THRESHOLD = 20;
 
-/** 액션 키 → 표시 라벨 (유료가치 후보 기능과 LEARNING_PREMIUM_PLAN 표 대응) */
+/** 액션 키 → 표시 라벨 (유료가치 후보 기능과 SUBSCRIPTION_ROADMAP 표 대응) */
 const ACTION_LABELS = {
     weak_to_textbook: '오답 → 교재 근거 보기',
     weak_to_card: '오답 → 복습 노트',

@@ -112,7 +112,7 @@ export function chapterFromCid(cid, subjKey, chapterRanges, maps) {
    ======================================================= */
 
 // @spec D-21
-/** Beta 사전 — 합격선 근처 약한 사전 (α=4, β=3, ~7회 증거분 무게, KNOWLEDGE_TRACING_DESIGN §3.1) */
+/** Beta 사전 — 합격선 근처 약한 사전 (α=4, β=3, ~7회 증거분 무게, LEARNING_ALGORITHM_DESIGN §3.1) */
 const KT_PRIOR_A = 4, KT_PRIOR_B = 3;
 
 /**

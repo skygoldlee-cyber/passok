@@ -63,13 +63,12 @@
 
 ```
 1. docs/exams/cosmetic/business/맞춤형화장품_조제관리사_자격증플랫폼_사업기획서.md — 플랫폼 사업기획서 v3.5 (현행 기준서)
-2. LEARNING_PREMIUM_PLAN.md      — Learning Pro 구현 과제 (우선순위·공수·전제)
-3. SUBSCRIPTION_ROADMAP.md       — 월 구독 전환 로드맵
-4. READER_FEEDBACK_DESIGN.md     — 독자 피드백 공유 기능 설계안 (미구현)
-5. business/FORMULA_OS_경쟁전략.md          — Formula OS 경쟁 지도·차별화 축·시나리오별 대응
-6. business/판매업소_인터뷰_스크립트.md      — Step 0 판매업소 인터뷰 질문·중단 기준·집계 시트
-7. business/맞춤형화장품판매업소_조사_2026-09.md — 판매업소·솔루션 공급사·시장 수치·규제 동향 조사 (인터뷰 모집 자료)
-8. business/유튜브_홍보동영상_제작의뢰서.md   — 홍보 영상 외주 제작 브리프 (콘티·사양·납품 기준)
+2. SUBSCRIPTION_ROADMAP.md       — 월 구독 전환 로드맵 + Learning Pro 구현 과제 (통합본)
+3. USER_FEEDBACK_DESIGN.md       — 사용자 피드백 수신 + 독자 피드백 공유 설계안 (통합본, 공유 쪽 미구현)
+4. business/FORMULA_OS_경쟁전략.md          — Formula OS 경쟁 지도·차별화 축·시나리오별 대응
+5. business/판매업소_인터뷰_스크립트.md      — Step 0 판매업소 인터뷰 질문·중단 기준·집계 시트
+6. business/맞춤형화장품판매업소_조사_2026-09.md — 판매업소·솔루션 공급사·시장 수치·규제 동향 조사 (인터뷰 모집 자료)
+7. business/유튜브_홍보동영상_제작의뢰서.md   — 홍보 영상 외주 제작 브리프 (콘티·사양·납품 기준)
 ```
 
 > **전략 원전 문서 (아카이브)**: 사업기획서 v3.5가 재구성한 상위 전략 문서들은 `exams/cosmetic/report_archive/`에 보관 —
@@ -94,11 +93,11 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (73개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (69개)
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (19개 — README + ADR 18건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (14개)
-│   ├── design/                ← 설계·계획·평가 문서 (21개)
+│   ├── design/                ← 설계·계획·평가 문서 (15개)
 │   ├── reference/             ← 명세·로직·참조 문서 (13개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (3개 — §9 스냅샷 이력)
 └── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개)
@@ -130,14 +129,10 @@ docs/
 | [TRACE_MATRIX.md](dev/TRACE_MATRIX.md) | SPEC↔코드 추적 매트릭스 — 요구사항별 @spec 태그·테스트·문서 매핑 (자동 생성 — `npm run build:trace`) |
 | [adr/](dev/adr/README.md) | 아키텍처 결정 기록 — 대안 검토·트레이드오프 등 결정의 "왜" 보존 (색인 README + ADR 18건) |
 | [MULTI_EXAM_DB_DESIGN.md](dev/design/MULTI_EXAM_DB_DESIGN.md) | 멀티시험 확장 설계 — 법령DB·지식DB의 시험 비종속 일반화 (Phase A~C 구현 완료) |
-| [FSRS_DESIGN.md](dev/design/FSRS_DESIGN.md) | FSRS-4.5 간격 반복 알고리즘 — SM-2 대체 선정 근거·파라미터·마이그레이션 (DOC-DSN-17, 구현 완료) |
-| [SEMANTIC_EMBEDDING_DESIGN.md](dev/design/SEMANTIC_EMBEDDING_DESIGN.md) | 빌드타임 문장 임베딩 → int8 정적 번들 — 유사 진술·이웃 인덱스 인프라 (DOC-DSN-18) |
-| [WRONG_CAUSE_CLASSIFIER_DESIGN.md](dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md) | 오답 원인 자동 분류 — 임베딩 센트로이드 kNN 설계 (DOC-DSN-19, DOC-DSN-18 선행) |
+| [LEARNING_ALGORITHM_DESIGN.md](dev/design/LEARNING_ALGORITHM_DESIGN.md) | 학습 알고리즘 통합본 — FSRS-4.5·FSRS-6 업그레이드·시험일 목표 R·due 클램프·지식 추적 (DOC-DSN-32, 구 DSN-17·26~29 통합) |
+| [SEMANTIC_EMBEDDING_DESIGN.md](dev/design/SEMANTIC_EMBEDDING_DESIGN.md) | 빌드타임 문장 임베딩 → int8 정적 번들 — 유사 진술·이웃 인덱스 인프라 + 오답 원인 자동 분류 설계 (DOC-DSN-18, 구 DSN-19 통합) |
 | [VENDOR_MANAGEMENT_DESIGN.md](dev/design/VENDOR_MANAGEMENT_DESIGN.md) | vendor/ 자산 거버넌스 — 매니페스트·해시/버전 무결성 게이트·주기 신선도 워크플로 (DOC-DSN-20, BP-13) |
-| [LEARNING_UX_SIMPLIFICATION_DESIGN.md](dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md) | 학습 표면 단순화 Phase 0 — "오늘 할 일" 단일 큐(TQ-01~05)·네이밍 정리·사이드바 그룹핑(UX-NAV-12) (DOC-DSN-21, 구현 완료) |
-| [LEARNING_UX_PHASE1_DESIGN.md](dev/design/LEARNING_UX_PHASE1_DESIGN.md) | 학습 표면 단순화 Phase 1 — 취약 진술 리뷰의 복습 뷰 이관(RV-02)·복습→드릴 진입(RV-03)·뷰 목적 문구(UX-NAV-13) (DOC-DSN-22, 구현 완료) |
-| [LEARNING_UX_PHASE15_DESIGN.md](dev/design/LEARNING_UX_PHASE15_DESIGN.md) | 학습 표면 단순화 Phase 1.5 — 훈련소 메뉴 2그룹 재편(UX-NAV-14)·Pro 안내 전역 1회 수렴+배지→플랜 비교(ROAD-P5) (DOC-DSN-23, 구현 완료) |
-| [LEARNING_UX_PHASE2_DESIGN.md](dev/design/LEARNING_UX_PHASE2_DESIGN.md) | 학습 표면 단순화 Phase 2 — 사용량 계측 보강(UX-MET-01~04)·유보 결정 트리거(UX-GATE-01~03) (DOC-DSN-24, 설계안) |
+| [LEARNING_UX_SIMPLIFICATION_DESIGN.md](dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md) | 학습 표면 단순화 통합본 — Phase 0 "오늘 할 일" 큐·Phase 1 복습 허브·Phase 1.5 훈련소 재편·Phase 2 계측+유보 트리거 (DOC-DSN-21, 구 DSN-22~24 통합) |
 | [PROJECT_STRUCTURE_TOUR.md](dev/reference/PROJECT_STRUCTURE_TOUR.md) | 프로젝트 구조 투어 — 비개발자·기획자용 그림 중심 입문 (폴더 지도·데이터 파이프라인·멀티시험·품질 관문·용어 풀이) |
 | [CODE_READING_GUIDE.md](dev/reference/CODE_READING_GUIDE.md) | 코드 읽기 가이드 — 초보 개발자용 부팅 시퀀스·data-click 위임·저장소 2계층·첫 변경 레시피·게이트 치트시트 |
 | [FEATURE_MAP.md](dev/reference/FEATURE_MAP.md) | 기능→소스 지도 — "이 기능을 바꾸려면 어느 파일" 조회표 (도메인별 핵심 소스·관련 테스트·SPEC 접두사) |
@@ -153,16 +148,12 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [USER_FLOW.md](dev/design/USER_FLOW.md) | 사용자 흐름 명세 — 기동/학습 루프/리더/모의고사/Formula OS/시험 전환/모드 전환의 진입·분기·종료 조건 계약 | 화면 간 전환·상태 분기 작업 |
 | [SPEC.md](dev/SPEC.md) §4.10 | 기기별 UI/UX 계약 — 브레이크포인트 대역·화면별 모바일/태블릿/PC 배치 매트릭스·대역별 공통 규칙·미구현 제안 백로그·검수 뷰포트 | 기기별 레이아웃·입력·PWA 동작 정의 |
 | [UIUX_DESIGN_GUIDE.md](dev/design/UIUX_DESIGN_GUIDE.md) | UI/UX 설계 가이드 — 국제 표준(WCAG·APG·HIG·Material·Nielsen·ISO 9241) 기반 표면 모델·기능 버튼 노출(정본) 규약·규약↔게이트 매핑 (DOC-DSN-25) | UI 요소 배치·노출 원칙 판단 시 |
-| [EXAM_R_SCHEDULING_DESIGN.md](dev/design/EXAM_R_SCHEDULING_DESIGN.md) | 리뷰 로그 링버퍼 + 시험일 목표 R 최종 인출 설계 — FSRS 관측 계층·시험일 최적화 경로 (DOC-DSN-26) | 복습 로그·시험 임박 인출 설계 판단 시 |
-| [FSRS6_UPGRADE_DESIGN.md](dev/design/FSRS6_UPGRADE_DESIGN.md) | FSRS-4.5→FSRS-6 엔진 포팅 설계 — 21 파라미터·당일 복습 수식·곡선 지수 w20 (DOC-DSN-27) | 스케줄 엔진 수식 변경 판단 시 |
-| [EXAM_DUE_CLAMP_DESIGN.md](dev/design/EXAM_DUE_CLAMP_DESIGN.md) | 시험일 due 클램프 설계 — `due > examDate` ∧ `R_exam < 0.95` 조건부 당김, D-19와의 역할 분담 (DOC-DSN-28) | 시험일 최적화 스케줄 정책 판단 시 |
-| [KNOWLEDGE_TRACING_DESIGN.md](dev/design/KNOWLEDGE_TRACING_DESIGN.md) | 지식 추적 설계 — 단원 숙달도 추정: v1 베이지안 스무딩(D-21)·v2 BKT(D-22), FSRS와의 역할 분리 (DOC-DSN-29) | 숙달도 추정·진단 추정기 판단 시 |
+| [LEARNING_ALGORITHM_DESIGN.md](dev/design/LEARNING_ALGORITHM_DESIGN.md) | 학습 알고리즘 통합본 — FSRS 스케줄링·시험일 최적화(목표 R·due 클램프)·지식 추적 (DOC-DSN-32, 구 DSN-17·26~29 통합) | 스케줄 엔진·시험일 정책·숙달도 추정 판단 시 |
 | [ADMIN_DESIGN.md](dev/design/ADMIN_DESIGN.md) | 관리자 콘솔 설계 — app_metadata 권한 모델·관리자 RLS·피드백 인박스·사용자 관리·운영 CLI, Phase 1(CLI)→2(인앱 #/admin) 점진 도입 (DOC-DSN-30, 설계안) | 운영 표면·사용자 관리 기능 판단 시 |
 | [UIUX_VERIFY_RUNBOOK.md](dev/runbooks/UIUX_VERIFY_RUNBOOK.md) | UI/UX 검증 런북 — TRACE 체계 단계별 확인 (SPEC 선행 → @spec 연결 → E2E 실측 → 배포·실기기 확인) | UI/UX 변경 검증·배포 절차 |
 | [UIUX_외주전달_패키지.md](dev/UIUX_외주전달_패키지.md) | 외주 인도용 추출본 — 위 계열 문서를 프로젝트 중립화해 단일 파일로 묶은 패키지 (수주사 요구사양·산출물 의무·검수 기준) | 외주 개발 발주 시 단독 인도 |
 | [DEV_ENVIRONMENT.md](dev/reference/DEV_ENVIRONMENT.md) | 개발환경 요구사양 — Node/Python/CLI 도구 버전, 최초 설정 절차, 검증·빌드·배포 명령 |
-| [SUPABASE_DESIGN.md](dev/design/SUPABASE_DESIGN.md) | Supabase 계정·클라우드 동기화·Pro 권한 설계 — Phase 1~2 구현 완료, URL/PWA 동일 로그인 UX |
-| [FIREBASE_DESIGN.md](dev/design/FIREBASE_DESIGN.md) | Firebase 이관 설계 — 인증·DB를 Supabase 대체 시 매핑·차이점 (DOC-DSN-31, 설계안) |
+| [SUPABASE_DESIGN.md](dev/design/SUPABASE_DESIGN.md) | Supabase 계정·클라우드 동기화·Pro 권한 설계 — Phase 1~2 구현 완료, URL/PWA 동일 로그인 UX + Firebase 이관 대안 설계 (구 DSN-31 통합) |
 | [FLASHCARD_LOGIC.md](dev/reference/FLASHCARD_LOGIC.md) | 플래시카드 생성·난이도·필터·SM-2 간격 반복 로직 |
 | [MD_TO_HTML_LOGIC.md](dev/reference/MD_TO_HTML_LOGIC.md) | MD→HTML 변환 로직 — 런타임 파서(manual-viewer)와 빌드 파이프라인 |
 
@@ -223,11 +214,9 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 
 | 문서 | 설명 |
 |------|------|
-| [LEARNING_PREMIUM_PLAN.md](dev/design/LEARNING_PREMIUM_PLAN.md) | Learning Pro 구현 과제 — 우선순위·공수·전제 조건 |
+| [USER_FEEDBACK_DESIGN.md](dev/design/USER_FEEDBACK_DESIGN.md) | 사용자 피드백 수신 + 독자 피드백 공유 — YouTube 유입 추적·앱 내 의견 제출·큐레이션 공유 (DOC-DSN-09, 수신 구현·공유 미구현, 구 DSN-05 통합) |
+| [SUBSCRIPTION_ROADMAP.md](dev/design/SUBSCRIPTION_ROADMAP.md) | 월 구독 서비스 전환 로드맵 + Learning Pro 구현 과제 (구 DSN-03 통합) |
 | [STUDY_PLAN_PRO_DESIGN.md](dev/design/STUDY_PLAN_PRO_DESIGN.md) | 스마트학습 과목별 가중 계획 — 출제 비중·약점 정답률 가중 주차별 배분표 (SC-08, 구현 완료) |
-| [USER_FEEDBACK_DESIGN.md](dev/design/USER_FEEDBACK_DESIGN.md) | 사용자 피드백 수신 — YouTube 유입 추적 + 앱 내 의견 제출 (구현됨: `src/feedback.js`, `feedback` 테이블은 Supabase SQL Editor 수동 실행 필요) |
-| [READER_FEEDBACK_DESIGN.md](dev/design/READER_FEEDBACK_DESIGN.md) | 독자 피드백 공유 기능 설계 제안 (미구현) |
-| [SUBSCRIPTION_ROADMAP.md](dev/design/SUBSCRIPTION_ROADMAP.md) | 월 구독 서비스 전환 로드맵 |
 | [STUDY_APP_DESIGN_GUIDE.md](dev/design/STUDY_APP_DESIGN_GUIDE.md) | 학습 앱 재사용 설계 가이드 — 다른 자격시험/교재 적용 템플릿 |
 
 ---
@@ -268,9 +257,9 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 |------|------|
 | Cosmetic Master Business Plan.md | 구판 사업기획서 — 사업기획서 v3.5(`docs/exams/cosmetic/business/`)로 대체됨 |
 | PASS_TO_PRACTICE_STRATEGY.md | Pass→Practice 전략 원전 — 사업기획서·SPEC §3.18에 흡수 |
-| FEATURE_PROPOSALS.md | 합격 핵심 루프 11단계 제안 원전 — 잔여 과제는 SPEC §7·LEARNING_PREMIUM_PLAN |
+| FEATURE_PROPOSALS.md | 합격 핵심 루프 11단계 제안 원전 — 잔여 과제는 SPEC §7·SUBSCRIPTION_ROADMAP |
 | PASS_CORE_LOOP_REVIEW.md | 핵심 루프 코드 반영도 진단 (2026-09-11 스냅샷) |
-| EXTERNAL_REVIEW_LEARNING_PRO.md | Learning Pro 외부 리뷰 인풋 — 채택분은 LEARNING_PREMIUM_PLAN에 반영 |
+| EXTERNAL_REVIEW_LEARNING_PRO.md | Learning Pro 외부 리뷰 인풋 — 채택분은 SUBSCRIPTION_ROADMAP(구 LEARNING_PREMIUM_PLAN 절)에 반영 |
 | PRO_MULTI_EXAM_EVALUATION.md | Learning Pro 멀티시험 적합성 평가 — 결론은 SPEC §7.4 |
 | FORMULA_OS_DESIGN.md | Phase 5-A 기본 설계 원전 — 현행은 SPEC §3.18 + FORMULA_OS_WORKFLOW_DESIGN |
 | 법령최신확인결과.md | 교재 법령 수치의 최신 개정 반영 여부 조사 |
@@ -338,9 +327,9 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DEV-12 | `docs/dev/evals/EVAL_2026-10-16_2.md` |
 | DOC-DSN-01 | `docs/dev/design/DOM_TEST_DESIGN.md` |
 | DOC-DSN-02 | `docs/exams/cosmetic/design/FORMULA_OS_WORKFLOW_DESIGN.md` |
-| DOC-DSN-03 | `docs/dev/design/LEARNING_PREMIUM_PLAN.md` |
+| DOC-DSN-03 | — (통합 → `docs/dev/design/SUBSCRIPTION_ROADMAP.md` · DOC-DSN-07, 2026-10-17) |
 | DOC-DSN-04 | `docs/dev/design/QUESTION_SCHEMA_DESIGN.md` |
-| DOC-DSN-05 | `docs/dev/design/READER_FEEDBACK_DESIGN.md` |
+| DOC-DSN-05 | — (통합 → `docs/dev/design/USER_FEEDBACK_DESIGN.md` · DOC-DSN-09, 2026-10-17) |
 | DOC-DSN-06 | `docs/dev/design/STUDY_APP_DESIGN_GUIDE.md` |
 | DOC-DSN-07 | `docs/dev/design/SUBSCRIPTION_ROADMAP.md` |
 | DOC-DSN-08 | `docs/dev/design/SUPABASE_DESIGN.md` |
@@ -352,21 +341,22 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-14 | `docs/exams/cosmetic/design/AUDIT_REPORT_DESIGN.md` |
 | DOC-DSN-15 | `docs/exams/cosmetic/design/PRACTICAL_TOOLS_DESIGN.md` |
 | DOC-DSN-16 | `docs/dev/design/STUDY_PLAN_PRO_DESIGN.md` |
-| DOC-DSN-17 | `docs/dev/design/FSRS_DESIGN.md` |
+| DOC-DSN-17 | — (통합 → `docs/dev/design/LEARNING_ALGORITHM_DESIGN.md` · DOC-DSN-32, 2026-10-17) |
 | DOC-DSN-18 | `docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md` |
-| DOC-DSN-19 | `docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md` |
+| DOC-DSN-19 | — (통합 → `docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md` · DOC-DSN-18, 2026-10-17) |
 | DOC-DSN-20 | `docs/dev/design/VENDOR_MANAGEMENT_DESIGN.md` |
 | DOC-DSN-21 | `docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md` |
-| DOC-DSN-22 | `docs/dev/design/LEARNING_UX_PHASE1_DESIGN.md` |
-| DOC-DSN-23 | `docs/dev/design/LEARNING_UX_PHASE15_DESIGN.md` |
-| DOC-DSN-24 | `docs/dev/design/LEARNING_UX_PHASE2_DESIGN.md` |
+| DOC-DSN-22 | — (통합 → `docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md` · DOC-DSN-21, 2026-10-17) |
+| DOC-DSN-23 | — (통합 → `docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md` · DOC-DSN-21, 2026-10-17) |
+| DOC-DSN-24 | — (통합 → `docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md` · DOC-DSN-21, 2026-10-17) |
 | DOC-DSN-25 | `docs/dev/design/UIUX_DESIGN_GUIDE.md` |
-| DOC-DSN-26 | `docs/dev/design/EXAM_R_SCHEDULING_DESIGN.md` |
-| DOC-DSN-27 | `docs/dev/design/FSRS6_UPGRADE_DESIGN.md` |
-| DOC-DSN-28 | `docs/dev/design/EXAM_DUE_CLAMP_DESIGN.md` |
-| DOC-DSN-29 | `docs/dev/design/KNOWLEDGE_TRACING_DESIGN.md` |
+| DOC-DSN-26 | — (통합 → `docs/dev/design/LEARNING_ALGORITHM_DESIGN.md` · DOC-DSN-32, 2026-10-17) |
+| DOC-DSN-27 | — (통합 → `docs/dev/design/LEARNING_ALGORITHM_DESIGN.md` · DOC-DSN-32, 2026-10-17) |
+| DOC-DSN-28 | — (통합 → `docs/dev/design/LEARNING_ALGORITHM_DESIGN.md` · DOC-DSN-32, 2026-10-17) |
+| DOC-DSN-29 | — (통합 → `docs/dev/design/LEARNING_ALGORITHM_DESIGN.md` · DOC-DSN-32, 2026-10-17) |
 | DOC-DSN-30 | `docs/dev/design/ADMIN_DESIGN.md` |
-| DOC-DSN-31 | `docs/dev/design/FIREBASE_DESIGN.md` |
+| DOC-DSN-31 | — (통합 → `docs/dev/design/SUPABASE_DESIGN.md` · DOC-DSN-08, 2026-10-17) |
+| DOC-DSN-32 | `docs/dev/design/LEARNING_ALGORITHM_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |

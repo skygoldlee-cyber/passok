@@ -1,6 +1,6 @@
 // tests/e2e/usage-metrics.spec.js — Phase 2 표면 진입 계측 실브라우저 검증
 // @spec UX-MET-01,UX-MET-02,UX-MET-03,UX-MET-04
-// 설계: docs/dev/design/LEARNING_UX_PHASE2_DESIGN.md (DOC-DSN-24)
+// 설계: docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md (DOC-DSN-24)
 // jsdom 커버 불가 경로: 앱 부트스트랩의 setupEventListeners → initUsageMetrics
 // 설치, 실 data-click 위임과의 공존, 클립보드 복사.
 import { test, expect } from '@playwright/test';
