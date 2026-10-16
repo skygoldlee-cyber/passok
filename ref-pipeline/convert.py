@@ -86,20 +86,16 @@ def main():
             body = pdf2md.convert(job['pdf'], job['images'])
         except Exception as e:
             logger.error('FAIL %s: %s', job['doc'], e)
-            report.append({'doc': job['doc'], 'error': str(e)})
+            report.append(pdf2md.report_row_fail(job, e))
             continue
         md = f'# {job["basename"]}\n\n{body}\n'
         with open(job['md'], 'w', encoding='utf-8') as f:
             f.write(md)
         n_tables = md.count('|---') + md.count('| ---')
-        report.append({
-            'doc': job['doc'], 'src': job['src'],
-            'chars': len(body), 'lines': body.count('\n') + 1,
-            'ws': round(pdf2md.whitespace_ratio(body), 1),
-            'tables': n_tables,
-        })
+        row = pdf2md.report_row_ok(job, body, n_tables)
+        report.append(row)
         logger.info('OK %s: %s자, 공백 %s%%, 표 %d',
-                    job['doc'], f'{len(body):,}', report[-1]['ws'], n_tables)
+                    job['doc'], f'{len(body):,}', row['ws'], n_tables)
     os.makedirs(paths['staging'], exist_ok=True)
     with open(os.path.join(paths['staging'], '_report.json'), 'w', encoding='utf-8') as f:
         json.dump(report, f, ensure_ascii=False, indent=2)

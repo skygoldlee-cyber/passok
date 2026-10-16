@@ -2,8 +2,11 @@
 
 pdfplumber/pymupdf 없이 import 가능하도록 설계된 함수만 대상으로 한다
 (pdf2md는 두 의존성을 lazy import하므로 테스트 환경에 설치 불필요).
+convert() 엔드투엔드 테스트는 pymupdf로 PDF를 런타임 생성하며,
+의존성 미설치 환경에서는 자동 스킵된다.
 실행: python -m pytest ref-pipeline/tests/ -v
 """
+import json
 import logging
 import os
 import sys
@@ -646,3 +649,172 @@ class TestConvertGolden:
         monkeypatch.setitem(pdf2md.PROFILE, 'segment', False)
         out = pdf2md.convert(str(pdf))
         assert 'Purpose of this document' in out
+
+
+def _make_margin_pdf(path, npages=3):
+    """러닝 헤더(상단 마진)·쪽번호(하단)가 매 페이지 반복되는 PDF.
+
+    collect_margin_junk는 같은 마진 텍스트가 MARGIN_FREQ_MIN(3)회 이상
+    반복돼야 잡행으로 수집한다 — 3페이지 모두에 같은 헤더를 배치한다.
+    """
+    pymupdf = pytest.importorskip('pymupdf')
+    doc = pymupdf.open()
+    for i in range(npages):
+        page = doc.new_page(width=595, height=842)
+        page.insert_text((72, 30), 'Repeating Running Header')   # top<45 마진
+        page.insert_text((72, 200),
+                         f'Body paragraph sentence of page {i + 1}.')
+        page.insert_text((280, 820), f'- {i + 1} -')             # 하단 쪽번호
+    doc.save(str(path))
+    doc.close()
+
+
+def _make_borderless_pdf(path):
+    """무선 표 재구성 검증용 — 1행 격자 헤더 + 무선 본문 5행.
+
+    헤더 전용 표(≤3행·≥5열)가 감지되면 열 밴드를 학습해 아래 무선 본문을
+    표로 재구성한다. 행 마커는 ROW_MARKER_RE에 맞는 '1.' 스타일.
+    """
+    pymupdf = pytest.importorskip('pymupdf')
+    doc = pymupdf.open()
+    page = doc.new_page(width=595, height=842)
+    edges = [72, 140, 208, 276, 344, 412]                 # 5열 밴드 경계
+    page.draw_rect(pymupdf.Rect(edges[0], 150, edges[-1], 178))
+    for x in edges[1:-1]:
+        page.draw_line((x, 150), (x, 178))
+    for x, t in zip(edges, ('Num', 'Name', 'CAS', 'Pct', 'Note')):
+        page.insert_text((x + 8, 172), t)
+    rows = [(f'{i}.', f'ing{i}', f'{i}11-{i}1-{i}',
+             f'{i}.0%', f'note{i}') for i in range(1, 6)]
+    for i, row in enumerate(rows):
+        y = 210 + i * 14
+        for x, t in zip(edges[:-1], row):
+            page.insert_text((x + 8, y), t)
+    doc.save(str(path))
+    doc.close()
+
+
+def _make_image_pdf(path):
+    """이미지 1개가 내장된 PDF."""
+    pymupdf = pytest.importorskip('pymupdf')
+    doc = pymupdf.open()
+    page = doc.new_page(width=595, height=842)
+    page.insert_text((72, 100), 'Document with an embedded image below.')
+    pix = pymupdf.Pixmap(pymupdf.csRGB, pymupdf.IRect(0, 0, 8, 8))
+    page.insert_image(pymupdf.Rect(72, 150, 120, 198),
+                      stream=pix.tobytes('png'))
+    doc.save(str(path))
+    doc.close()
+
+
+class TestConvertFixtures:
+    """생성 PDF 기반 엔드투엔드 — 마진 잡행·무선 표·이미지·동명 문서."""
+
+    def test_margin_junk_removed_across_pages(self, tmp_path):
+        pytest.importorskip('pdfplumber')
+        pdf = tmp_path / 'multi.pdf'
+        _make_margin_pdf(pdf)
+        out = pdf2md.convert(str(pdf))
+        # 3페이지 반복 러닝 헤더는 제거, 본문은 유지
+        assert 'Repeating Running Header' not in out
+        assert '- 1 -' not in out
+        assert 'Body paragraph sentence of page 1' in out
+        assert 'Body paragraph sentence of page 3' in out
+
+    def test_borderless_table_reconstructed(self, tmp_path):
+        pytest.importorskip('pdfplumber')
+        pdf = tmp_path / 'borderless.pdf'
+        _make_borderless_pdf(pdf)
+        out = pdf2md.convert(str(pdf))
+        # 무선 본문이 표로 재구성됐다 — 텍스트가 아닌 파이프 행으로 존재
+        assert '| 1. |' in out
+        assert 'ing5' in out and 'note5' in out
+
+    def test_image_extracted_and_referenced(self, tmp_path):
+        pytest.importorskip('pdfplumber')
+        pytest.importorskip('pymupdf')
+        pdf = tmp_path / 'img.pdf'
+        _make_image_pdf(pdf)
+        images_dir = tmp_path / 'out' / 'images'
+        out = pdf2md.convert(str(pdf), str(images_dir))
+        assert '![이미지](images/page000_img00.png)' in out
+        assert (images_dir / 'page000_img00.png').exists()
+        assert 'embedded image' in out
+
+    def test_image_skipped_without_dir(self, tmp_path):
+        pytest.importorskip('pdfplumber')
+        pdf = tmp_path / 'img.pdf'
+        _make_image_pdf(pdf)
+        out = pdf2md.convert(str(pdf))   # images_dir=None → 이미지 미추출
+        assert '![이미지]' not in out
+
+    def test_same_name_docs_disambiguated_e2e(self, tmp_path, monkeypatch):
+        pytest.importorskip('pdfplumber')
+        for sub in ('s1', 's2'):
+            d = tmp_path / sub
+            d.mkdir()
+            _make_sample_pdf(d / 'common.pdf')
+        out_dir = tmp_path / 'out'
+        monkeypatch.setattr(
+            sys, 'argv',
+            ['pdf2md.py', '--cli', str(tmp_path), '-o', str(out_dir)])
+        assert pdf2md.main() is None
+        assert (out_dir / 's1' / 'common' / 'common.md').exists()
+        assert (out_dir / 's2' / 'common' / 'common.md').exists()
+        # 정규화된 리포트 스키마 — status/src가 모든 행에 존재
+        report = json.loads(
+            (out_dir / '_report.json').read_text(encoding='utf-8'))
+        assert len(report) == 2
+        assert all(r['status'] == 'OK' for r in report)
+        assert {r['src'] for r in report} == {'s1', 's2'}
+
+    def test_corrupt_pdf_reports_fail_row(self, tmp_path, monkeypatch):
+        pytest.importorskip('pdfplumber')
+        bad = tmp_path / 'bad.pdf'
+        bad.write_bytes(b'this is not a real pdf file')
+        out_dir = tmp_path / 'out'
+        monkeypatch.setattr(
+            sys, 'argv',
+            ['pdf2md.py', '--cli', str(bad), '-o', str(out_dir)])
+        with pytest.raises(SystemExit) as e:
+            pdf2md.main()
+        assert e.value.code == 1
+        report = json.loads(
+            (out_dir / '_report.json').read_text(encoding='utf-8'))
+        assert report[0]['status'] == 'FAIL'
+        assert report[0]['error'] and report[0]['src']
+
+
+# ---------------------------------------------------------------------------
+# merge_continuation_tables — ±1 열 허용은 유령 열에만 (오병합 차단)
+# ---------------------------------------------------------------------------
+
+class TestPhantomColumnMerge:
+    def test_phantom_col_merged_at_narrower_width(self):
+        t1 = '| 1 | x |\n| --- | --- |\n| 2 | a |'
+        # 3열로 감지됐지만 가운데 열은 전 행이 빈 유령 열
+        t2 = ('| 3 |  | b |\n| --- | --- | --- |\n'
+              '| 4 |  | c |')
+        out = pdf2md.merge_continuation_tables(
+            [(0, 'table', t1), (10, 'table', t2)])
+        assert len(out) == 1
+        assert '| 3 | b |' in out[0][2]
+        assert out[0][2].split('\n')[0].count('|') - 1 == 2
+
+    def test_real_extra_col_not_merged(self):
+        t1 = '| 1 | x |\n| --- | --- |\n| 2 | a |'
+        # 유령 열이 아닌 실제 3열 표 → 별개 표로 남겨야 한다
+        t2 = ('| 3 | mid | b |\n| --- | --- | --- |\n'
+              '| 4 | mid2 | c |')
+        out = pdf2md.merge_continuation_tables(
+            [(0, 'table', t1), (10, 'table', t2)])
+        assert len(out) == 2
+
+    def test_wider_prev_phantom_merged(self):
+        # 앞 표가 유령 열을 가진 경우도 병합
+        t1 = '| 1 |  | x |\n| --- | --- | --- |\n| 2 |  | a |'
+        t2 = '| 3 | b |\n| --- | --- |\n| 4 | c |'
+        out = pdf2md.merge_continuation_tables(
+            [(0, 'table', t1), (10, 'table', t2)])
+        assert len(out) == 1
+        assert '| 4 | c |' in out[0][2]

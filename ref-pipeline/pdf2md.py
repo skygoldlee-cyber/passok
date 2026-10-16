@@ -449,13 +449,37 @@ def _cells_subset(a, b):
     return all(not x or x in y for x, y in zip(ca, cb))
 
 
+def _drop_empty_col(lines):
+    """모든 데이터 행에서 같은 위치가 빈 '유령 열'을 제거한 행 리스트 반환.
+
+    페이지 경계에서 표 감지가 한 열을 부풀리는 경우가 있다 — 이때는
+    넓은 쪽 표의 전 데이터 행이 같은 위치에 빈 셀만 가진다. 구분선
+    (| --- |)은 판정에서 제외하고 결과에는 유지한다. 유령 열이 없으면 None.
+    """
+    rows = [[c.strip() for c in l.strip().strip('|').split('|')]
+            for l in lines]
+    w = max(len(r) for r in rows)
+    if w < 2:
+        return None
+    rows = [r + [''] * (w - len(r)) for r in rows]
+    data_i = [i for i, r in enumerate(rows)
+              if not all(c and set(c) <= {'-'} for c in r)]
+    for ci in range(w):
+        if all(rows[i][ci] == '' for i in data_i):
+            return ['| ' + ' | '.join(c for j, c in enumerate(r) if j != ci)
+                    + ' |' for r in rows]
+    return None
+
+
 def merge_continuation_tables(segments):
     """페이지 경계로 끊긴 인접 표 세그먼트를 병합한다.
 
     다음 페이지에서 별도 표로 감지된 이어지는 표는 첫 데이터 행이
     헤더로 오인된다. 사이에 텍스트가 없고(잡행 텍스트는 건너뜀),
     두 번째 표의 첫 행이 데이터 행이거나 앞 표 헤더의 반복이며
-    열 수가 ±1 이내로 같으면 하나로 합친다.
+    열 수가 같으면 하나로 합친다. 열 수가 ±1 다른 경우는 넓은 쪽 표가
+    유령 열(전 데이터 행이 빈 열)을 가질 때만 허용 — 실제로 열 구성이
+    다른 별개 표를 합치는 오병합을 차단한다.
     """
     out = []
     for seg in segments:
@@ -476,14 +500,30 @@ def merge_continuation_tables(segments):
                 if cont:
                     pw = prev[0].count('|') - 1
                     cw = cur[0].count('|') - 1
-                    if abs(pw - cw) <= 1:
-                        w = max(pw, cw)
-                        # 반복 헤더면 cur[0]도 버리고, 데이터 행이면 cur[0] 유지
-                        tail = cur[2:] if is_rep_header else [cur[0]] + cur[2:]
-                        merged = ([_norm_row(l, w) for l in prev]
-                                  + [_norm_row(l, w) for l in tail])
-                        out[j] = (out[j][0], 'table', '\n'.join(merged))
+                    if pw == cw:
+                        w = pw
+                        prev_lines, cur_lines = prev, cur
+                    elif abs(pw - cw) == 1:
+                        wider = prev if pw > cw else cur
+                        dropped = _drop_empty_col(wider)
+                        if dropped is None:
+                            out.append(seg)
+                            continue
+                        if pw > cw:
+                            prev_lines, cur_lines = dropped, cur
+                        else:
+                            prev_lines, cur_lines = prev, dropped
+                        w = min(pw, cw)
+                    else:
+                        out.append(seg)
                         continue
+                    # 반복 헤더면 cur[0]도 버리고, 데이터 행이면 cur[0] 유지
+                    tail = (cur_lines[2:] if is_rep_header
+                            else [cur_lines[0]] + cur_lines[2:])
+                    merged = ([_norm_row(l, w) for l in prev_lines]
+                              + [_norm_row(l, w) for l in tail])
+                    out[j] = (out[j][0], 'table', '\n'.join(merged))
+                    continue
         out.append(seg)
     return out
 
@@ -708,6 +748,21 @@ def whitespace_ratio(text):
     if not text:
         return 0
     return sum(1 for c in text if c in ' \t') / len(text) * 100
+
+
+# _report.json 행 스키마 — CLI(GUI·convert.py) 세 생산자가 같은 형태로 쓴다.
+# status: 'OK' | 'FAIL' — 소비자는 status로 성패를 판별할 수 있다.
+def report_row_ok(job, body, n_tables):
+    return {'doc': job['doc'], 'src': job['src'], 'status': 'OK',
+            'chars': len(body), 'lines': body.count('\n') + 1,
+            'ws': round(whitespace_ratio(body), 1), 'tables': n_tables}
+
+
+def report_row_fail(job, err):
+    return {'doc': job['doc'], 'src': job['src'],
+            'status': 'FAIL', 'error': str(err)}
+
+
 def _norm_cmp(t):
     """비교용 정규화 — 표 파이프·공백·마크업을 제거해 병합/분할된 줄도 매칭"""
     return re.sub(r'[\s*_`#>|「」()\[\]-]+', '', t)
@@ -1137,7 +1192,7 @@ def main():
         res = bodies[i]
         if isinstance(res, Exception):
             logger.error('FAIL %s: %s', job['doc'], res)
-            report.append({'doc': job['doc'], 'error': str(res)})
+            report.append(report_row_fail(job, res))
             continue
         body = res
         os.makedirs(job['dir'], exist_ok=True)
@@ -1145,13 +1200,10 @@ def main():
         with open(job['md'], 'w', encoding='utf-8') as f:
             f.write(md)
         n_tables = md.count('|---') + md.count('| ---')
-        report.append({
-            'doc': job['doc'], 'src': job['src'],
-            'chars': len(body), 'lines': body.count('\n') + 1,
-            'ws': round(whitespace_ratio(body), 1), 'tables': n_tables,
-        })
+        row = report_row_ok(job, body, n_tables)
+        report.append(row)
         logger.info('OK %s: %s자, 공백 %s%%, 표 %d',
-                    job['doc'], f'{len(body):,}', report[-1]['ws'], n_tables)
+                    job['doc'], f'{len(body):,}', row['ws'], n_tables)
         if args.doctor:
             flagged += doctor_report(job['doc'], md)
 
@@ -1254,7 +1306,7 @@ def run_gui():
                     fail += 1
                     self.log.emit(f'✗ FAIL  {doc_name}: {e}')
                     self.doc_done.emit({'doc': doc_name, 'status': 'FAIL', 'error': str(e)})
-                    report.append({'doc': doc_name, 'error': str(e)})
+                    report.append(report_row_fail(job, e))
                     self.progress.emit(i, total)
                     continue
 
@@ -1277,10 +1329,7 @@ def run_gui():
                     + (f' · ⚠ 표 {len(flags)}건' if flags else ''))
                 for fl in flags:
                     self.log.emit('      ' + fl)
-                report.append({
-                    'doc': doc_name, 'src': job['src'], 'chars': len(body),
-                    'lines': body.count('\n') + 1, 'ws': ws, 'tables': n_tables,
-                })
+                report.append(report_row_ok(job, body, n_tables))
                 self.progress.emit(i, total)
 
             try:
