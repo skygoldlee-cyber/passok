@@ -262,5 +262,50 @@
     "file": "docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md",
     "ref": "src/wrong-cause-classifier.js",
     "reason": "설계안 제안 경로 — 센트로이드 추정기 모듈 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "ref": "src/firebase-config.js",
+    "reason": "설계안 제안 경로 — Firebase 프로젝트 연결 설정 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "ref": "src/firebase-client.js",
+    "reason": "설계안 제안 경로 — firebase lazy init 클라이언트 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "ref": "src/cloud-client.js",
+    "reason": "설계안 제안 경로 — provider 파사드 선택지 (기각안 언급)"
+  },
+  {
+    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "ref": "vendor/firebase/*",
+    "reason": "설계안 제안 경로 — firebase ESM self-host 번들 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "ref": "vendor/firebase/",
+    "reason": "설계안 제안 경로 — firebase ESM self-host 디렉터리 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "ref": "tools/lib/firebase_ops.js",
+    "reason": "설계안 제안 경로 — Admin SDK 운영 CLI 헬퍼 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "ref": "tools/firebase/",
+    "reason": "설계안 제안 경로 — Firebase rules·functions 디렉터리 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "ref": "tools/firebase/firestore.rules",
+    "reason": "설계안 제안 경로 — Security Rules 정본 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/FIREBASE_DESIGN.md",
+    "ref": "tools/firebase/functions/",
+    "reason": "설계안 제안 경로 — callable·트리거 함수 디렉터리 (미구현)"
   }
 ]

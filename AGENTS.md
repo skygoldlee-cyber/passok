@@ -530,6 +530,7 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 - `docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md` — 빌드타임 임베딩 기반 의미 유사도 설계안 (유사 진술·혼동쌍·검색 확장 — 미구현)
 - `docs/dev/design/WRONG_CAUSE_CLASSIFIER_DESIGN.md` — 오답 원인 자동 분류 설계안 (임베딩 센트로이드 추정기 — 미구현)
 - `docs/dev/design/SUPABASE_DESIGN.md` — 계정·클라우드 동기화 설계안 (Phase 1~2 구현 완료, Pro entitlement는 미구현)
+- `docs/dev/design/FIREBASE_DESIGN.md` — Firebase 이관 설계안 (Supabase 대체 시 매핑·차이점 — 미구현, DOC-DSN-31)
 - `docs/dev/design/ADMIN_DESIGN.md` — 관리자 콘솔 설계안 (권한 모델·피드백 인박스·사용자 관리 — 미구현, AD-01~06)
 - `docs/dev/runbooks/TEXTBOOK_AUTHORING_GUIDE.md` — 교재 작성 가이드
 - `docs/exams/cosmetic/reference/NUMBERING_SYSTEM.md` — 교재 번호체계 가이드 (십진법)
