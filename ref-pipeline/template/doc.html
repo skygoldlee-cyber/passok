@@ -85,7 +85,7 @@
     button, [type="button"], [type="search"] { -webkit-appearance: none; appearance: none; }
     button { cursor: pointer; }
     a { color: inherit; text-decoration: inherit; }
-    img, svg, video, canvas { display: block; vertical-align: middle; }
+    img, svg, video, canvas { display: block; }
     img, video { max-width: 100%; height: auto; }
     table { border-collapse: collapse; }
     pre, code, kbd, samp {
@@ -123,14 +123,17 @@
     .gap-3 { gap: 0.75rem; }
 
     .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+    /* 반응형 변형(.lg\:block 등)이 기본 유틸(.hidden)을 덮어쓰려면
+       미디어 쿼리 블록이 반드시 뒤에 와야 한다 — 같은 우선순위는 선언 순서로
+       결정되므로 .hidden이 뒤에 있으면 aside가 데스크톱에서도 숨겨진다. */
+    .hidden { display: none; }
+
     @media (min-width: 1024px) {
       .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
       .lg\:col-span-3 { grid-column: span 3 / span 3; }
       .lg\:col-span-9 { grid-column: span 9 / span 9; }
       .lg\:block { display: block; }
     }
-
-    .hidden { display: none; }
 
     .sticky { position: sticky; }
     .top-0 { top: 0; }
@@ -250,7 +253,7 @@
       50%      { width: 16px; opacity: 1; }
     }
     @media (max-width: 1023px) { .toc-edge-hint { display: block; } }
-    #tocSwitch:checked ~ .toc-edge-hint { display: none; }
+    #tocOpen:target ~ .toc-edge-hint { display: none; }
     #tocMobile {
       flex: 1;
       min-height: 0;
@@ -260,19 +263,25 @@
       padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
-    /* CSS-only TOC 드로어 토글: checkbox #tocSwitch 체크 시 표시 */
-    .toc-switch {
+    /* CSS-only TOC 드로어 토글: #tocOpen 마커가 :target이면 표시.
+       열기는 <a href="#tocOpen">, 닫기는 다른 앵커 이동(목차 링크 포함) —
+       어떤 프래그먼트로든 이동하면 :target이 마커를 벗어나 드로어가 자동 닫힌다.
+       label/checkbox 해법과 달리 iOS·JS 차단 뷰어에서도 앵커 이동이 항상 동작. */
+    .toc-marker {
+      /* position:fixed라 뷰포트 스크롤 흐름에 없음 — #tocOpen으로 이동해도 페이지가 튀지 않는다 */
       position: fixed;
+      top: 0;
+      left: 0;
       width: 0;
       height: 0;
       opacity: 0;
       pointer-events: none;
     }
     #tocDrawer { display: none; }
-    #tocSwitch:checked ~ #tocDrawer { display: block; }
+    #tocOpen:target ~ #tocDrawer { display: block; }
     /* 데스크톱(1024px+)에서는 사이드바 TOC를 쓰므로 모바일 드로어 비활성화 */
     @media (min-width: 1024px) {
-      #tocSwitch:checked ~ #tocDrawer { display: none; }
+      #tocOpen:target ~ #tocDrawer { display: none; }
     }
 
     /* Toast */
@@ -857,8 +866,6 @@
 
     #toc ul { list-style: none; padding-left: 0; margin: 0.25rem 0 0; }
     #toc li { margin: 0.125rem 0; }
-    /* TOC 링크를 감싼 label: 링크처럼 표시 (모바일 드로어 자동 닫기용) */
-    .toc-link { display: block; cursor: pointer; }
     #toc a, #tocMobile a {
       display: block;
       padding: 0.35rem 0.5rem;
@@ -1540,7 +1547,7 @@
     #resumeBtn.show { display: inline-flex; align-items: center; gap: 0.35rem; }
     /* TOC 드로어가 열린 동안에는 이어읽기 버튼을 숨긴다.
        (resumeBtn z-index 65 > 드로어 z-40 이므로 백드롭 위에 떠 보이는 것 방지) */
-    #tocSwitch:checked ~ #resumeBtn { display: none !important; }
+    #tocOpen:target ~ #resumeBtn { display: none !important; }
 
     /* 앵커(목차) 이동 시 대상 heading이 sticky 헤더 뒤에 숨지 않도록
        스크롤 여백을 준다. 헤더 높이(약 60px)보다 넉넉하게 잡는다. */
@@ -1579,15 +1586,17 @@
 <body class="min-h-screen">
   <a class="skip-link" href="#mainContent">본문으로 바로가기</a>
   <!-- CSS-only 컨트롤 입력: :has() 미지원 뷰어 대응을 위해 ~ 형제 선택자를
-       쓰므로, 모든 표시 요소보다 앞(body 최상단)에 둔다 -->
-  <input type="checkbox" id="tocSwitch" class="toc-switch" aria-label="목차 드로어 열기/닫기" />
+       쓰므로, 모든 표시 요소보다 앞(body 최상단)에 둔다.
+       #tocOpen은 :target 드로어 상태 마커 — <a href="#tocOpen">으로 열고,
+       다른 프래그먼트 이동(목차 링크·href="#_")으로 닫힌다 -->
+  <span id="tocOpen" class="toc-marker" aria-hidden="true"></span>
   <input type="checkbox" id="themeSwitch" class="theme-switch" aria-label="다크/라이트 테마 전환" />
   <input type="checkbox" id="fsSwitch" class="theme-switch" aria-label="글자 크기 패널" />
   <input type="radio" name="docfs" id="fs0" class="theme-switch" /><input type="radio" name="docfs" id="fs1" class="theme-switch" /><input type="radio" name="docfs" id="fs2" class="theme-switch" checked /><input type="radio" name="docfs" id="fs3" class="theme-switch" /><input type="radio" name="docfs" id="fs4" class="theme-switch" />
   <!-- 테마 배경 레이어 (body에는 ~ 선택자가 닿지 않아 별도 요소로 칠함) -->
   <div id="pageBg" aria-hidden="true"></div>
   <!-- 왼쪽 가장자리 힌트 탭: 탭하면 드로어 오픈 (JS 없는 환경 폴백) -->
-  <label for="tocSwitch" class="toc-edge-hint" aria-label="목차 열기"></label>
+  <a href="#tocOpen" class="toc-edge-hint" aria-label="목차 열기"></a>
   <header class="topbar sticky top-0 z-50">
     <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -1616,9 +1625,10 @@
     </div>
   </div>
 
-  <!-- Mobile TOC Drawer: checkbox #tocSwitch 체크 시 표시 (CSS-only) -->
+  <!-- Mobile TOC Drawer: #tocOpen 마커가 :target일 때 표시 (CSS-only).
+       닫기용 href="#_"는 존재하지 않는 프래그먼트 — :target만 해제되고 스크롤 없음 -->
   <div id="tocDrawer" class="fixed inset-0 z-40">
-    <label for="tocSwitch" id="tocBackdrop" class="drawer-backdrop fixed inset-0"></label>
+    <a href="#_" id="tocBackdrop" class="drawer-backdrop fixed inset-0" aria-label="목차 닫기"></a>
     <div class="fixed left-0 top-0 drawer-panel">
       <div class="p-4 border-b" style="border-color: var(--border);">
         <div class="flex items-center justify-between">
@@ -1629,7 +1639,7 @@
           <div class="flex items-center gap-2">
             <button id="btnAutoFoldMobile" class="theme-btn js-only rounded-xl px-3 py-2 text-xs font-medium">AutoFold</button>
             <button id="btnFoldMobile" class="theme-btn js-only rounded-xl px-3 py-2 text-xs font-medium">Fold</button>
-            <label for="tocSwitch" id="btnTocClose" class="theme-btn rounded-xl px-3 py-2 text-xs font-medium">Close</label>
+            <a href="#_" id="btnTocClose" class="theme-btn rounded-xl px-3 py-2 text-xs font-medium">Close</a>
           </div>
         </div>
         <div class="mt-3">
@@ -1739,7 +1749,7 @@
       function ensureMermaidLoading() {
         if (ensureMermaidLoading._started || window.mermaid) return;
         ensureMermaidLoading._started = true;
-        var cdns = [%%MERMAID_CDN_URLS_JS%%];
+        var cdns = [/*%%MERMAID_CDN_URLS_JS%%*/];
         var i = 0;
         function tryEsm() {
           if (window.mermaid) return;
@@ -2344,17 +2354,19 @@
       var drawer = document.getElementById('tocDrawer');
       var backdrop = document.getElementById('tocBackdrop');
       var btnClose = document.getElementById('btnTocClose');
-      var tocCb = document.getElementById('tocSwitch');
 
+      // 드로어 상태 = URL 프래그먼트(#tocOpen 마커의 :target).
+      // 주의: history.replaceState는 URL만 바꾸고 :target을 재평가하지 않는다 —
+      // 열기/닫기는 반드시 실제 프래그먼트 이동(location.hash 대입)이어야 한다.
+      // (히스토리 엔트리가 생기지만, Back으로 드로어가 닫히는 것은 자연스러운 UX)
+      function isOpen() { return location.hash === '#tocOpen'; }
       function openDrawer() {
-        if (tocCb) tocCb.checked = true;
+        try { location.hash = 'tocOpen'; } catch (e0) {}
       }
       function closeDrawer() {
-        if (tocCb) tocCb.checked = false;
+        if (!isOpen()) return;
+        try { location.hash = '_'; } catch (e0) {}
       }
-
-      if (btnClose) btnClose.addEventListener('click', closeDrawer);
-      if (backdrop) backdrop.addEventListener('click', closeDrawer);
       document.addEventListener('keydown', function (e) {
         if (e && e.key === 'Escape') closeDrawer();
       });
@@ -2363,7 +2375,6 @@
       // - 화면 왼쪽 끝(24px 이내)에서 오른쪽으로 스와이프 → 드로어 오픈
       // - 드로어가 열린 상태에서 왼쪽으로 스와이프 → 드로어 닫기
       (function () {
-        if (!tocCb) return;
         var EDGE = 24;     // 왼쪽 끝 인식 영역 (px)
         var THRESH = 48;   // 스와이프 인식 최소 거리 (px)
         var startX = 0, startY = 0, tracking = false, wasOpen = false;
@@ -2371,10 +2382,10 @@
         document.addEventListener('touchstart', function (e) {
           if (!e.touches || e.touches.length !== 1) { tracking = false; return; }
           var t = e.touches[0];
-          if (!tocCb.checked && t.clientX <= EDGE) {
+          if (!isOpen() && t.clientX <= EDGE) {
             tracking = true; wasOpen = false;
             startX = t.clientX; startY = t.clientY;
-          } else if (tocCb.checked) {
+          } else if (isOpen()) {
             tracking = true; wasOpen = true;
             startX = t.clientX; startY = t.clientY;
           } else {
@@ -2397,31 +2408,10 @@
         document.addEventListener('touchcancel', function () { tracking = false; }, { passive: true });
       })();
 
-      // 모바일 드로어 안의 목차 링크를 누르면 드로어를 닫아, 이동한 위치가
-      // 보이도록 한다. 드로어는 fixed inset-0으로 화면 전체를 덮기 때문에
-      // 닫지 않으면 앵커 이동이 일어나도 사용자에게는 아무 변화가 없는 것처럼
-      // 보인다. 앵커 기본 동작(해시 이동)은 막지 않는다.
-      var tocMobileNav = document.getElementById('tocMobile');
-      if (tocMobileNav) {
-        tocMobileNav.addEventListener('click', function (e) {
-          var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
-          if (!a) return;
-          var id = (a.getAttribute('href') || '').slice(1);
-          // 드로어를 닫은 뒤, 레이아웃이 반영된 다음 대상으로 스크롤한다.
-          closeDrawer();
-          if (id) {
-            var target = document.getElementById(id);
-            if (target) {
-              e.preventDefault();
-              setTimeout(function () {
-                try { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-                catch (e2) { try { target.scrollIntoView(true); } catch (e3) {} }
-                try { history.replaceState(null, '', '#' + id); } catch (e4) {}
-              }, 60);
-            }
-          }
-        });
-      }
+      // 모바일 드로어 안의 목차 링크는 별도 핸들러 없이 앵커 기본 동작에
+      // 맡긴다 — 프래그먼트 이동 시 :target이 #tocOpen 마커를 벗어나
+      // 드로어가 CSS만으로 자동 닫히고(html.scroll-smooth + 헤딩의
+      // scroll-margin-top 적용), JS 없는 뷰어에서도 동일하게 동작한다.
     });
   </script>
 
@@ -2512,7 +2502,7 @@
       var btnFoldMobile = document.getElementById('btnFoldMobile');
 
       function getFoldMinLinesDefault() {
-        return %%COLLAPSE_MIN_LINES%%;
+        return /*%%COLLAPSE_MIN_LINES%%*/0;
       }
 
       function getFoldMinLines() {
@@ -3076,13 +3066,12 @@
         }
       }
 
-      // 모바일 드로어가 열릴 때 현재 읽는 섹션으로 목차 스크롤
-      var tocSwitchEl = document.getElementById('tocSwitch');
-      if (tocSwitchEl) {
-        tocSwitchEl.addEventListener('change', function () {
-          if (tocSwitchEl.checked && currentId) setActive(currentId);
-        });
-      }
+      // 모바일 드로어가 열릴 때 현재 읽는 섹션으로 목차 스크롤.
+      // 드로어 상태는 #tocOpen 마커의 :target — 앵커 열기는 hashchange,
+      // JS 열기(openDrawer)는 수동 dispatch로 같은 경로를 탄다.
+      window.addEventListener('hashchange', function () {
+        if (location.hash === '#tocOpen' && currentId) setActive(currentId);
+      });
     });
   </script>
 
