@@ -186,6 +186,12 @@ Production:  https://passory.vercel.app
 - `npm test` — 86개 테스트 전체 통과
 - 빌드 실패 시 배포 중단
 
+#### 3-1. 시즌 재개 배포 시 추가 — Supabase 상태 확인
+- 비시즌(시험 연 2회) 이후 첫 배포라면 로그인·동기화 백엔드 상태를 함께 점검 (정본: [SUPABASE_DESIGN.md §12](../design/SUPABASE_DESIGN.md#12-비시즌-비용-평가-supabase-free-keep-alive-채택-2026-10-17))
+  1. Supabase 대시보드에서 프로젝트 **Active** 확인 — Paused면 Resume (데이터 유지, DNS 재전파 수 분~수 시간)
+  2. Actions → `Supabase Keep-Alive` 최근 실행 성공 확인 — 실패 이력·열린 `keep-alive` 이슈가 있으면 원인 확인
+  3. GitHub Settings → Notifications → Actions 실패 메일 수신 설정이 켜져 있는지 확인 (정지 감지 경로)
+
 #### 4. 코드 커밋
 - `git add -A && git commit -m "..." && git push` — 로컬 변경사항이 원격과 동기화
 - 충돌 시 `git stash; git pull; git stash pop` 또는 `git checkout --theirs`로 해결
