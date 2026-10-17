@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-17 Supabase keep-alive 워크플로 — Free 티어 무활동 정지 방지
+
+- **배경**: 시험 연 2회(5월·9월)라 비시즌 무트래픽 → Free 프로젝트가 실제로 일시정지됨을 실측 (7일 무활동 → DNS 레코드 제거, 복수 리졸버 NXDOMAIN). 유료 전환 대신 활동 유지로 비용 $0 유지
+- **추가**: `.github/workflows/supabase-keepalive.yml` — 매일 13:30 KST `sync_snapshots` REST 쿼리 1건으로 활동 판정 충족. URL·키는 `src/supabase-config.js`에서 실행 시 추출(공개 설계라 시크릿 불필요). 핑 실패 = 정지 감지 → Actions 실패 알림 겸용
+- **문서**: SUPABASE_DESIGN §12(비용 대안 평가 — Free+keep-alive 채택, Firebase 이관 보류)·§11 리스크 행 / WHEN_THINGS_BREAK §1 증상 행(NXDOMAIN=정지)·§6 실측 사례
+- **검증**: `check:docs` 15단계 통과 · 워크플로 수동 실행 성공(HTTP 200) · 프로젝트 Resume 후 DNS 복구 확인
+
 ## 2026-10-17 design 문서 통합 정리 — 26개 → 15개 (구 ID 이관 표기)
 
 - **배경**: `docs/dev/design/` 문서가 시리즈·주제별로 분산(26개)해 탐색 비용이 늘어남 — 동일 시리즈·종속 관계의 문서를 통합본으로 수렴
