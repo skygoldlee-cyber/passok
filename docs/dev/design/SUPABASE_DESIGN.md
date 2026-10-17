@@ -403,10 +403,26 @@ Formula OS의 고객 카드·상담 이력은 **타인의 개인정보**(이름�
 
 ### 12.4 keep-alive 실행안
 
-1. **`.github/workflows/supabase-keepalive.yml`** (구현됨) — 매일 13:30 KST `GET {SUPABASE_URL}/rest/v1/sync_snapshots?select=user_id&limit=1` 1건 호출. URL·키는 `src/supabase-config.js`에서 실행 시 추출(공개 설계라 시크릿 불필요, 프로젝트 변경 시 자동 추적). 핑 실패 = 정지·장애 감지 → Actions 실패 알림으로 통지
+1. **`.github/workflows/supabase-keepalive.yml`** (구현됨) — 매일 13:30 KST 두 엔드포인트 핑:
+   - `GET {SUPABASE_URL}/rest/v1/sync_snapshots?select=user_id&limit=1` — 실제 DB 쿼리로 "사용자 DB 활동" 판정 충족
+   - `GET {SUPABASE_URL}/auth/v1/settings` — 인증 서비스(GoTrue) 생존 확인 (§12.5)
+   - URL·키는 `src/supabase-config.js`에서 실행 시 추출(공개 설계라 시크릿 불필요, 프로젝트 변경 시 자동 추적). 실패 = 정지·장애 → Actions 알림 + **이슈 자동 생성**(§12.5)
    - **수동 실행(검증·복구 확인용)**: ① Actions 탭 → `Supabase Keep-Alive` → `Run workflow` (workflow_dispatch) ② CLI: `gh workflow run supabase-keepalive.yml` — 로그에서 `HTTP 200`이면 정상
-2. **이중 안전장치** — pause 사전 경고 메일 수신 주소를 실제 모니터링하는 메일로 지정 + 시즌 시작 4주 전 대시보드 상태 점검을 운영 런북에 추가
+2. **이중 안전장치** — pause 사전 경고 메일 수신 주소를 실제 모니터링하는 메일로 지정 + 시즌 시작 점검(§12.5 표 — DEPLOYMENT_GUIDE 배포 전 체크리스트 반영)
 3. **재검토 트리거** — Supabase가 keep-alive를 정책적으로 차단하거나 Free 한도(500MB·50k MAU) 근접 시 Firebase 절을 재평가. 그 경우에도 PocketBase가 인증 모델(이메일 OTP)·데이터 모델상 현행에 더 가까우므로 함께 비교한다
+
+### 12.5 보완 설계 — 알림 강화·이중화 (2026-10-17)
+
+12.4 기본안 가동 후 남은 약점과 대응:
+
+| 약점 | 대응 | 상태 |
+|---|---|---|
+| 실패 알림이 Actions 이메일뿐 — 놓치면 정지 상태가 방치 | **이슈 자동 생성** — `issues: write` 권한 + `gh issue create` (notice-check.yml 패턴 재사용). 열린 동일 제목 이슈가 있으면 신규 생성 대신 댓글로 누적해 일일 중복 방지 | ✅ 구현 |
+| PostgREST 핑만으론 인증 서비스(GoTrue) 정지 미감지 | `auth/v1/settings` 핑 추가 — 둘 중 하나라도 실패하면 워크플로 실패 | ✅ 구현 |
+| GitHub 스케줄 부하 시 스킵 · 저장소 60일 무활동 시 스케줄 자동 비활성화 | **외부 이중 핑 선택지** — cron-job.org 등 커스텀 헤더 지원 무료 크론으로 동일 쿼리를 독립 채널에서 호출하면 GitHub가 꺼져도 Supabase 활동 유지. GitHub은 비활성화 전 이메일 통지하므로 현재는 선택 사항 | 선택 — 미구현 |
+| 시즌 전 백엔드 상태 확인 절차 부재 | 시즌 4주 전(4월 초·8월 초) 점검 3종: ① 대시보드 Active 확인 ② `Supabase Keep-Alive` 최근 실행 성공 확인 ③ GitHub Settings → Notifications → Actions 실패 메일 수신 설정 확인 — DEPLOYMENT_GUIDE 배포 전 체크리스트에 반영 | ✅ 반영 |
+
+> 기각한 대안 — **주기적 데이터 덤프**: 프로젝트 삭제 대비 백업이나, 클라우드 스냅샷은 백업일 뿐 1차 데이터가 아니다(localStorage 정본). Secret 키 관리 비용 대비 가치가 낮아 기각. **월 1회 타임스탬프 커밋으로 60일 비활성화 방지**: 커밋 노이즈 대비 실익이 낮아 기각 — 외부 이중 핑이 더 깔끔한 해법.
 
 ---
 
