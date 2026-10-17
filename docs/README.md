@@ -93,10 +93,10 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (69개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (70개)
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (19개 — README + ADR 18건)
-│   ├── runbooks/              ← 실행 절차·운영 런북 (14개)
+│   ├── runbooks/              ← 실행 절차·운영 런북 (15개)
 │   ├── design/                ← 설계·계획·평가 문서 (15개)
 │   ├── reference/             ← 명세·로직·참조 문서 (13개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (3개 — §9 스냅샷 이력)
@@ -204,6 +204,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [DEPLOYMENT_GUIDE.md](dev/runbooks/DEPLOYMENT_GUIDE.md) | Vercel 배포·오디오 호스팅 — 용량 최적화, CSP/캐시 정책, 체크리스트, 트러블슈팅 |
 | [VERIFY_DEPLOY_PIPELINE.md](dev/runbooks/VERIFY_DEPLOY_PIPELINE.md) | 전체구조 점검→배포 게이트 파이프라인 — check:all/ci 구성, 생성물 신선도 게이트, 실패 복구 표 |
 | [WHEN_THINGS_BREAK.md](dev/runbooks/WHEN_THINGS_BREAK.md) | 장애·깨짐 증상 색인 — 증상→원인→정본 문서 라우팅, 우회 장치 일람, 기준선 갱신 정당성 규약 (DOC-RBK-14) |
+| [INCIDENT_2026-10-17_SUPABASE_PAUSE.md](dev/runbooks/INCIDENT_2026-10-17_SUPABASE_PAUSE.md) | 인시던트 보고서 — Supabase Free 일시정지 실측·복구·keep-alive 재발 방지 로직 (DOC-RBK-15) |
 | [MULTI_MACHINE_SETUP.md](dev/runbooks/MULTI_MACHINE_SETUP.md) | 다중 머신 개발 환경 — GitHub SSH, Vercel CLI 인증, Actions 자동 배포 |
 | [AUDIO_HOSTING_GUIDE.md](dev/runbooks/AUDIO_HOSTING_GUIDE.md) | 오디오북 호스팅·청취 아키텍처 — GitHub Releases 연동, 모바일 청취 동작 |
 | [REF_PDF_EXTERNALIZATION.md](dev/runbooks/REF_PDF_EXTERNALIZATION.md) | 참조자료 PDF(73MB) 외부 호스팅 이전 계획 — Releases + sha256 다운로더, 절차·주의사항 |
@@ -386,6 +387,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-RBK-12 | `docs/dev/runbooks/REF_PDF_EXTERNALIZATION.md` |
 | DOC-RBK-13 | `docs/dev/runbooks/STORY_PATCH_GUIDE.md` |
 | DOC-RBK-14 | `docs/dev/runbooks/WHEN_THINGS_BREAK.md` |
+| DOC-RBK-15 | `docs/dev/runbooks/INCIDENT_2026-10-17_SUPABASE_PAUSE.md` |
 | DOC-ADR-00 | `docs/dev/adr/README.md` |
 | DOC-ADR-01 | `docs/dev/adr/0001-exam-data-boot-document-write.md` |
 | DOC-ADR-02 | `docs/dev/adr/0002-domain-asset-convention-paths.md` |
