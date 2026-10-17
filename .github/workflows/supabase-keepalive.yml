@@ -1,0 +1,51 @@
+name: Supabase Keep-Alive
+
+# 매일 실행 — Supabase Free 티어는 7일간 사용자 DB 활동이 부족하면 프로젝트를
+# 자동 일시정지한다. 실제 테이블에 REST 쿼리 1건을 보내 활동을 유지한다.
+# 시험이 연 2회(5월·9월)라 비시즌 무트래픽 기간 대비용 (SUPABASE_DESIGN.md §12).
+#
+# URL·publishable key는 이미 공개 설계(src/supabase-config.js — RLS가 보안 담당)라
+# 시크릿 불필요. 소스 파일에서 추출하므로 프로젝트 변경 시 자동 추적한다.
+#
+# 프로젝트가 이미 정지됐거나 장애면 이 워크플로가 실패 → Actions 알림 메일로 감지하고
+# 대시보드에서 복원한다 (정지 후 1년 내 데이터 유지).
+#
+# ⚠️ GitHub는 기본 브랜치 60일 무커밋 시 스케줄 워크플로를 자동 비활성화한다.
+
+on:
+  schedule:
+    - cron: '17 1 * * *'   # 매일 10:17 KST (UTC 01:17)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Supabase REST ping (sync_snapshots 1건 쿼리)
+        run: |
+          set -euo pipefail
+          URL=$(sed -n "s/.*SUPABASE_URL *= *'\([^']*\)'.*/\1/p" src/supabase-config.js)
+          KEY=$(sed -n "s/.*SUPABASE_PUBLISHABLE_KEY *= *'\([^']*\)'.*/\1/p" src/supabase-config.js)
+          if [ -z "$URL" ] || [ -z "$KEY" ]; then
+            echo "supabase-config.js에서 URL·키 추출 실패 — Supabase 미설정 상태이면 이 워크플로를 비활성화할 것"
+            exit 1
+          fi
+          # 연결 자체가 실패하면 DNS 레코드 제거 상태 — Free 프로젝트의 일시정지 증상
+          if ! code=$(curl -sS -o /tmp/keepalive_body -w '%{http_code}' --max-time 30 --retry 3 \
+            -H "apikey: $KEY" -H "Authorization: Bearer $KEY" \
+            "$URL/rest/v1/sync_snapshots?select=user_id&limit=1"); then
+            echo "연결 실패 — 프로젝트 일시정지(NXDOMAIN) 가능성. Supabase 대시보드에서 Resume 확인"
+            exit 1
+          fi
+          echo "HTTP $code"
+          if [ "$code" != "200" ]; then
+            cat /tmp/keepalive_body
+            echo "ping 실패 — 프로젝트 일시정지 또는 장애 가능. 대시보드에서 복원 확인"
+            exit 1
+          fi
