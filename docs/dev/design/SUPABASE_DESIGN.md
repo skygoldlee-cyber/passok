@@ -403,7 +403,8 @@ Formula OS의 고객 카드·상담 이력은 **타인의 개인정보**(이름�
 
 ### 12.4 keep-alive 실행안
 
-1. **`.github/workflows/supabase-keepalive.yml`** (구현됨) — 매일 `GET {SUPABASE_URL}/rest/v1/sync_snapshots?select=user_id&limit=1` 1건 호출. URL·키는 `src/supabase-config.js`에서 실행 시 추출(공개 설계라 시크릿 불필요, 프로젝트 변경 시 자동 추적). 핑 실패 = 정지·장애 감지 → Actions 실패 알림으로 통지
+1. **`.github/workflows/supabase-keepalive.yml`** (구현됨) — 매일 13:30 KST `GET {SUPABASE_URL}/rest/v1/sync_snapshots?select=user_id&limit=1` 1건 호출. URL·키는 `src/supabase-config.js`에서 실행 시 추출(공개 설계라 시크릿 불필요, 프로젝트 변경 시 자동 추적). 핑 실패 = 정지·장애 감지 → Actions 실패 알림으로 통지
+   - **수동 실행(검증·복구 확인용)**: ① Actions 탭 → `Supabase Keep-Alive` → `Run workflow` (workflow_dispatch) ② CLI: `gh workflow run supabase-keepalive.yml` — 로그에서 `HTTP 200`이면 정상
 2. **이중 안전장치** — pause 사전 경고 메일 수신 주소를 실제 모니터링하는 메일로 지정 + 시즌 시작 4주 전 대시보드 상태 점검을 운영 런북에 추가
 3. **재검토 트리거** — Supabase가 keep-alive를 정책적으로 차단하거나 Free 한도(500MB·50k MAU) 근접 시 Firebase 절을 재평가. 그 경우에도 PocketBase가 인증 모델(이메일 OTP)·데이터 모델상 현행에 더 가까우므로 함께 비교한다
 
