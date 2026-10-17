@@ -2,7 +2,8 @@
 
 > **문서 ID**: DOC-RBK-15
 > **범위**: platform · 판본: none
-> **관련 SPEC ID**: AU-01~08 (인증 계층 영향) — 절차 정본은 [SUPABASE_DESIGN.md §12](../design/SUPABASE_DESIGN.md#12-비시즌-비용-평가-supabase-free-keep-alive-채택-2026-10-17) · [WHEN_THINGS_BREAK.md §1](WHEN_THINGS_BREAK.md#1-배포된-앱-사용자-표면-증상)
+> **관련 SPEC ID**: `AU-01~08` (인증 계층 영향)
+> **절차 정본**: [SUPABASE_DESIGN.md §12](../design/SUPABASE_DESIGN.md#12-비시즌-비용-평가-supabase-free-keep-alive-채택-2026-10-17) · [WHEN_THINGS_BREAK.md §1](WHEN_THINGS_BREAK.md#1-배포된-앱-사용자-표면-증상)
 > **상태**: ✅ 해결 완료 — 재발 방지 장치 가동 중
 
 ---
