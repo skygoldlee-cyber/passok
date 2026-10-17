@@ -6,7 +6,7 @@
 > **구현 상태**: ✅ Phase 1~2 구현 완료 (2026-09-23) — Phase 1: `supabase-client.js` lazy init + `auth-view.js` 로그인 모달(이메일+PW·가입·이메일 로그인 통합) + CSP `connect-src` 확장 + vendor/supabase 2.116.0 self-host. Phase 2: `src/sync.js` 스냅샷 동기화(쓰기 훅 dirty·2.5s 디바운스 push·pull·LWW+확인 모달·`지금 동기화` 버튼·`device_id`). 고객 카드·상담 이력은 개인정보 보호로 동기화 제외(§7). Pro(Phase 3)만 남음 — `tools/supabase/schema.sql`을 SQL Editor에서 실행 필요.
 > **UX 개정 (2026-09-23 2차)**: 매직링크·인증 코드 버튼을 **단일 "로그인 메일 보내기"로 통합** — 같은 `signInWithOtp` 메일에 링크+코드가 동봉되므로 URL/PWA 어느 환경이든 동일 절차. 매직링크 랜딩 오류·성공 토스트 추가 (§A.8).
 > 전제: 기존 오프라인 PWA·Zero-Backend 철학 유지 — Supabase는 "없어도 되는" 선택 계층
-> **대안 설계**: 인증·DB를 Firebase(Authentication+Firestore+Functions)로 이관하는 설계는 본 문서 말미 절에 통합 (구 `SUPABASE_DESIGN.md`·DOC-DSN-31 — 설계안, 미구현)
+> **대안 설계**: 인증·DB를 Firebase(Authentication+Firestore+Functions)로 이관하는 설계는 본 문서 말미 절에 통합 (구 `SUPABASE_DESIGN.md`·DOC-DSN-31 — 설계안, 미구현). §12 비용 평가에서 Supabase Free 유지가 채택되어 **보류** 상태
 > **문서 ID**: DOC-DSN-08
 > **범위**: platform · 판본: none
 
@@ -369,6 +369,43 @@ Formula OS의 고객 카드·상담 이력은 **타인의 개인정보**(이름�
 | supabase-js vendored 번들 갱신 누락 | `verify:assets`에 vendor 체크리스트, 버전 주석 |
 | 무료 티어 한도 (500MB DB·50k MAU) | 스냅샷 크기 수 KB 수준 — 실사용에서 한도 도달 어려움 |
 | RLS 정책 누락으로 타 사용자 데이터 노출 | 정책 SQL을 마이그레이션 파일로 관리 + `supabase start` 로컬 검증 |
+| Free 티어 7일 무활동 시 프로젝트 일시정지 | §12 — keep-alive 크론 + 정지 경고 메일 모니터링. 정지돼도 데이터 유지·대시보드 원클릭 복원 (1년 내) |
+
+---
+
+## 12. 비시즌 비용 평가 — Supabase Free + keep-alive 채택 (2026-10-17)
+
+시험이 연 2회(5월·9월)라 비시즌 유휴 기간에도 유료 플랜 비용이 발생한다는 문제로 유료 전환·플랫폼 이관 대안을 비교 평가했다. 결론: **Supabase Free 유지 + 주기적 활동 핑(keep-alive)이 최선** — 비용 $0으로 사실상 동일한 가용성을 얻는다. Firebase 이관은 얻는 것이 "pause 정책 없음" 하나뿐이라 **보류**(설계안은 말미 절에 유지 — §12.3).
+
+### 12.1 비용 동인 — Free 티어 7일 무활동 일시정지
+
+- Free 플랜은 7일간 사용자 DB 활동이 부족하면 프로젝트가 자동 일시정지된다. 정지 1주 전 사전 경고 메일 → 정지 확인 메일 순으로 통지.
+- Supabase 공식 문서상 "이전 주에 며칠 정도의 사용자 DB 요청이면 정지 대상이 아니다" — 주기적 핑은 우회가 아니라 문서화된 활동 판정 기준을 충족하는 방법이다. 다만 활동 기준 변경 가능성은 리스크로 관리 (§11).
+- 정지돼도 데이터·설정은 유지되고 대시보드에서 원클릭 복원(수 분), 정지 후 1년 내 복원 가능 — 실질 위험은 오프시즌 사용자의 로그인 실패 체감뿐.
+- ⚠️ 실측 (2026-10-17): **정지 시 프로젝트의 DNS 레코드 자체가 제거**된다 — 모든 공용 리졸버에서 NXDOMAIN이 되어 클라이언트 입장에서는 정지와 삭제의 증상이 동일하다. 구분은 대시보드에서만 가능(프로젝트가 목록에 있고 Paused 표시면 Resume로 복원, 데이터 유지). DNS 재전파까지 수 분~수 시간. keep-alive 워크플로(§12.4)의 핑 실패 알림이 정지 감지기 역할도 겸한다.
+- 참고: 익명 텔레메트리(`client_errors` 세션 핑·`usage_events`)가 페이지 로드마다 insert되므로 소수 사용자만 앱을 열어도 활동이 된다. 크론은 "완전 무트래픽 7일" 대비용이다.
+
+### 12.2 대안 비교
+
+| 방안 | 연 비용 | 무활동 리스크 | 이관 비용 | 비고 |
+|---|---|---|---|---|
+| **Supabase Free + keep-alive 크론** | $0 | 사실상 없음 | 스케줄 워크플로 ~20줄 | **채택** |
+| Supabase Pro 시즌제 (시즌 ~6개월만 Pro) | ~$150 | 없음 | 없음 | 보험 — keep-alive 정책 차단 시 |
+| Firebase Spark (말미 Firebase 절) | $0 | 없음 (pause 정책 없음) | 큼 — §12.3 | 이관 실익 없음, 보류 |
+| PocketBase 자체호스팅 (Oracle Always Free VM 등) | $0~수만 원 | 없음 | 중간 | 이메일 OTP 인증 지원으로 현행 UX에 가장 유사 — 이관 재검토 시 우선 비교 대상. 단 운영 책임(백업·TLS·도메인) 발생 |
+| Cloudflare Workers + D1 | $0 | 없음 (scale-to-zero) | 큼 | 인증·메일 발송 직접 구현으로 최대 공수 |
+
+### 12.3 Firebase 이관 기각 사유 (요약 — 상세는 말미 Firebase 연동 설계 절)
+
+- **이메일 OTP 코드 부재** — Firebase 패스워드리스는 이메일 링크 전용이라, PWA 세션 분리 문제를 해결한 인증코드 UX(§A.7 통합 이메일 로그인)가 소멸 (Firebase 절 §5.1)
+- **Spark는 Cloud Functions 배포 불가** — `redeem_code` RPC 대응 callable은 Blaze(종량제·결제수단 등록) 필요. Vercel function 대행(Firebase 절 §7.1-B)은 서버 코드가 두 플랫폼에 걸침
+- RLS→Security Rules, PostgREST→Firestore 쿼리, vendored ESM 번들링 파이프라인, 테스트 mock 전면 이식 — 공수 대비 이득이 "pause 없음" 하나뿐이며 이는 keep-alive로 $0에 달성 가능
+
+### 12.4 keep-alive 실행안
+
+1. **`.github/workflows/supabase-keepalive.yml`** (구현됨) — 매일 `GET {SUPABASE_URL}/rest/v1/sync_snapshots?select=user_id&limit=1` 1건 호출. URL·키는 `src/supabase-config.js`에서 실행 시 추출(공개 설계라 시크릿 불필요, 프로젝트 변경 시 자동 추적). 핑 실패 = 정지·장애 감지 → Actions 실패 알림으로 통지
+2. **이중 안전장치** — pause 사전 경고 메일 수신 주소를 실제 모니터링하는 메일로 지정 + 시즌 시작 4주 전 대시보드 상태 점검을 운영 런북에 추가
+3. **재검토 트리거** — Supabase가 keep-alive를 정책적으로 차단하거나 Free 한도(500MB·50k MAU) 근접 시 Firebase 절을 재평가. 그 경우에도 PocketBase가 인증 모델(이메일 OTP)·데이터 모델상 현행에 더 가까우므로 함께 비교한다
 
 ---
 
@@ -611,7 +648,7 @@ select polname, polrelid::regclass from pg_policy;
 > 상위 문서: `ARCHITECTURE.md` (전체 구조), `SUPABASE_DESIGN.md` (DOC-DSN-08 — 현행 구현의 원본 설계)
 > **관련 SPEC ID**: `AU-01~08` (SPEC §3.19) · `DA-08` (고객 PII 동기화 제외) · `S-01` (CSP) · `ROAD-P0` (Pro entitlement) · `FB-05~08` (피드백 수신)
 > 목적: 백엔드를 Supabase → **Firebase(Authentication + Cloud Firestore + Cloud Functions)**로 교체하는 경우의 설계. 기능 요구사양(계정·스냅샷 동기화·Pro entitlement·텔레메트리)은 SUPABASE_DESIGN과 동일하고, 본 문서는 **플랫폼 대응 매핑과 차이점**에 집중한다.
-> **구현 상태**: 설계안 (미구현) — 채택 시 SUPABASE_DESIGN Phase 1~3을 Firebase 경로로 재수행
+> **구현 상태**: 설계안 (미구현) — §12 비용 평가에서 **보류** 판정 (Supabase Free + keep-alive 채택, 이관 실익 없음). 채택 시 SUPABASE_DESIGN Phase 1~3을 Firebase 경로로 재수행
 > 전제: 오프라인 PWA·Zero-Backend 철학 유지 — Firebase도 "없어도 되는" 선택 계층
 > 원본 문서: `FIREBASE_DESIGN.md` — 구 DOC-DSN-31 (2026-10-17 본 문서로 통합)
 > **범위**: platform · 판본: none
