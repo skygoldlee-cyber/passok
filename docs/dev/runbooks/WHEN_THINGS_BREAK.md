@@ -158,7 +158,7 @@
 
 | 발견 | 성격 | 조치 |
 |------|------|------|
-| `hunpzznyiaddekuggupu.supabase.co`가 ISP DNS·8.8.8.8·dns.google 모두 NXDOMAIN | Free 정지 시 DNS 레코드 제거 — 클라이언트에서 정지와 삭제가 구분 불가 | §1 증상 행 추가 + [supabase-keepalive.yml](../../../.github/workflows/supabase-keepalive.yml) 일일 핑 도입 (핑 실패 = 정지 감지 알림 겸함) + SUPABASE_DESIGN §12.1에 실측 기록 |
+| `hunpzznyiaddekuggupu.supabase.co`가 ISP DNS·8.8.8.8·dns.google 모두 NXDOMAIN | Free 정지 시 DNS 레코드 제거 — 클라이언트에서 정지와 삭제가 구분 불가 | §1 증상 행 추가 + [supabase-keepalive.yml](../../../.github/workflows/supabase-keepalive.yml) 일일 핑 도입 (핑 실패 = 정지 감지 알림 겸함) + SUPABASE_DESIGN §12.1에 실측 기록 — 인시던트 보고서: [INCIDENT_2026-10-17_SUPABASE_PAUSE.md](INCIDENT_2026-10-17_SUPABASE_PAUSE.md) |
 | 정지 복구 경로는 대시보드 수동 Resume뿐 — API·CLI 복원 불가 | 운영 절차 필요 | §1 표에 Resume 절차 명시 (복원 후 DNS 재전파 수 분~수 시간) |
 
 ---
