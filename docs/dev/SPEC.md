@@ -131,7 +131,7 @@
 | D-14 | 실제 시험 결과 자가 보고 (`actual_exam_result`) — D-day 경과 시 진단 카드에 입력 폼, 기록 후 예상 대비 오차 표시. 예측 보정 데이터 수집 경로 | ✅ |
 | D-15 | 대시보드 추천 카드에서 "학습 진단 보기" 버튼으로 `analysis-view` 연결 (퍼널) — 상세 분석(과목 카드·히트맵·모의고사 차트)은 학습 진단 뷰로 분리됨 | ✅ |
 | D-16 | 과목별 마스터리 레벨 — 판정 진술 중 졸업(연속 정답 3회, DR-03) 비율을 과목별로 집계해 과목 카드에 Lv.1~5 표시 (`computeMasteryLevels`, 데이터 없으면 미표시) | ✅ |
-| D-17 | 시험일 리드타임 권고 + 계획 등급 — 목표 설정 모달에서 최소 권장 준비 기간 미만 시험일을 인라인 권고(`getExamLeadStatus`). 기준 일수는 manifest `study.minExamLeadDays` 우선, 미선언 시 콘텐츠 규모에서 유도 — `max(총카드÷50학습일, 총퀴즈÷10학습일)`을 학습일→달력일(×7/5) 환산 후 카드 쪽에 FSRS 마진 1.5배, 레지스트리 없으면 기본 50일 (`getMinExamLeadDays`, cosmetic 선언값 63일 근거: 문제은행 445문÷10=45학습일→63달력일 — 카드 1,123장 쪽은 23학습일→33달력×1.5≈48일로 작음). **학습일당 필요량**(`computeStudyPlan.perStudyDay`, `getRemainingStudyDays` 공용)÷일일 카드 목표 비율로 normal(≤1.0)/tight(≤2.0)/triage(>2.0) 판정해 대시보드 안내 분기(`getExamPlanStatus` — tight는 카드·퀴즈 병행 권장, triage는 출제 비중 최상위 과목 우선 권고). 모든 역산·페이스 계산은 달력일이 아닌 학습일 기준(`computePaceProjection` 포함). 50일 산출 근거(카드별 기억률 시뮬·총량 분해): LEARNING_ALGORITHM_DESIGN.md §9 | ✅ |
+| D-17 | 시험일 리드타임 권고 + 계획 등급 — 목표 설정 모달에서 최소 권장 준비 기간 미만 시험일을 인라인 권고(`getExamLeadStatus`). 기준 일수는 manifest `study.minExamLeadDays` 우선, 미선언 시 콘텐츠 규모에서 유도 — `max(총카드÷50학습일, 총퀴즈÷10학습일)`을 학습일→달력일(×7/5) 환산 후 카드 쪽에 FSRS 마진 1.5배, 레지스트리 없으면 기본 50일 (`getMinExamLeadDays`, cosmetic 선언값 90일 근거: 문제은행 1,937문 1회전을 학습일당 ~30문 페이스로 소화(≈64학습일)→90달력일 — 카드 1,123장 쪽은 23학습일→33달력×1.5≈48일로 작음. 구 선언값 63일은 문제은행 445문 시절 산출). **학습일당 필요량**(`computeStudyPlan.perStudyDay`, `getRemainingStudyDays` 공용)÷일일 카드 목표 비율로 normal(≤1.0)/tight(≤2.0)/triage(>2.0) 판정해 대시보드 안내 분기(`getExamPlanStatus` — tight는 카드·퀴즈 병행 권장, triage는 출제 비중 최상위 과목 우선 권고). 모든 역산·페이스 계산은 달력일이 아닌 학습일 기준(`computePaceProjection` 포함). 50일 산출 근거(카드별 기억률 시뮬·총량 분해): LEARNING_ALGORITHM_DESIGN.md §9 | ✅ |
 | D-18 | FSRS 리뷰 로그 링버퍼 — `updateCardSchedule`의 단일 통로에 `{c,r,e,t}` 레코드를 append해 레이팅 이력 영속화 (카드·진술 공용 포함). `fc_review_log` 시험 스코프 키, 2,000건 FIFO, `BACKUP_KEYS` 등록으로 복원·초기화 정합. 효능 실측·개인 피팅·4버튼 재평가의 선행 계층 (LEARNING_ALGORITHM_DESIGN.md §2) | ✅ |
 | D-19 | 시험일 목표 R 최종 인출 — `R_exam = retrievability(examDate−lastReview, s)`로 다음 복습이 시험일 이후(due>examDate)인 카드 중 시험일 목표 기억률 미달분(<0.95)을 선별, D-day ≤14일일 때 "오늘 할 일" 큐에 `시험 전 최종 인출` 항목 표시. R_exam 오름차순 정렬·세션 상한 60장, `state.flashcards.onlyIds` 1회성 id 집합으로 임의 세션 기동 (간격 재작성 아닌 추가 인출 — LEARNING_ALGORITHM_DESIGN.md §3; 원안 0.85 임계는 불변식상 공집합이라 0.95로 교정) | ✅ |
 | D-20 | 시험일 due 클램프 — `updateCardSchedule` 산출 `due > examDate`이고 갱신 후 `s` 기준 `R_exam < 0.95`인 카드의 `due`를 `examDate − 1`로 당김 (조건부 상한 — 시험일까지 목표 유지 예정 카드는 미당김으로 벽 방지, 발동 대역 s∈(dday, ~2.5·dday)). 시험일 미설정·경과 시 비활성, `fsrs.js` 무수정의 어댑터 정책 계층 (LEARNING_ALGORITHM_DESIGN.md) | ✅ |
@@ -510,8 +510,8 @@
 | RV-03 | **복습 → weak 드릴 원클릭** — 복습 뷰 헤더 `start-weak-oxdrill-btn`(취약·복습 대상 >0일 때 노출, `review-weak-badge`에 대상 수) → `gotoOxDrill('weak')`로 훈련 뷰 전환 후 `startOxDrill` weak 모드 즉시 시작. 리뷰 행·개념 그룹·유사 진술의 재시도 버튼도 `gotoOxDrill`(`sid:`·`concept:` 인자) 경유 | ✅ |
 | RV-04 | **복습 뷰 목적 문구** — "틀린·약한 것 재확인" 경계 문구를 뷰 상단에 정적 표기 (UX-NAV-13과 세트) | ✅ |
 | ND-01 | 숫자 암기 드릴 — `number-drills/` JSON 기반 수치·기한·횟수 훈련 (훈련소 수치 훈련) | ✅ |
-| DR-01 | **O/X 판정 드릴** — 객관식 문항을 진위형으로 자동 변환 (3,700+문, `build_ox_drills.js` → `drills/ox_subject*.js`, `trainer-drills.js`) | ✅ |
-| DR-02 | **복수정답형 드릴** — 진술별 O/X 토글 2단계 응시 + 판정과 모순되는 선지 실시간 소거 표시 (755문, `combo_subject*.js` + 수작업 파일럿 병합) | ✅ |
+| DR-01 | **O/X 판정 드릴** — 객관식 문항을 진위형으로 자동 변환 (8,200+문, `build_ox_drills.js` → `drills/ox_subject*.js`, `trainer-drills.js`) | ✅ |
+| DR-02 | **복수정답형 드릴** — 진술별 O/X 토글 2단계 응시 + 판정과 모순되는 선지 실시간 소거 표시 (1,934문, `combo_subject*.js` + 수작업 파일럿 병합) | ✅ |
 | DR-03 | **진술 원자 추적** — 진술 `sid` 단위로 O/X·복수정답형 공유 판정 누적 (`statement_stats` + FSRS 큐, 연속 정답 3회 시 취약 졸업, `statement-tracker.js`) | ✅ |
 | DR-04 | **특수 드릴 모드** — `weak`(취약·복습 진술 필터) / `num`(수치·한도·기한 태그 필터) 전 과목 모드, 출제 수 10/20/전체 | ✅ |
 | DR-05 | **취약 진술 리뷰 패널** — conceptId 개념 그룹핑(참/거짓 혼동쌍 대조), 복습 대상 필터, 졸업 수 표시 (표면 위치는 복습 뷰 — RV-02) | ✅ |
