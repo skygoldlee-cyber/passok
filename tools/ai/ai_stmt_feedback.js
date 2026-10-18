@@ -95,7 +95,7 @@ async function generate(flags, opts) {
     const stats = opts.stats ? loadStats(opts.stats) : null;
     const minWrong = opts['min-wrong'] ? Number(opts['min-wrong']) : 1;
 
-    let total = 0, drafted = 0;
+    let total = 0, drafted = 0, ungrounded = 0;
     for (const target of getTargets(opts)) {
         // 이미 반영된 피드백은 재생성하지 않음 — 반복 실행 시 미커버 진술로 자연 진행
         const appliedFp = path.join(ROOT, target.contentRoot, '피드백', 'stmt_explain.json');
@@ -112,8 +112,14 @@ async function generate(flags, opts) {
             total += entries.length;
             if (drafted >= limit) continue;
             const lines = [`# 진술 피드백 초안 — ${key} (대상 ${entries.length}진술${stats ? ` · 오판 ${minWrong}회+` : ''})`, ''];
+            const ungroundedList = [];
             for (const [sid, s] of entries) {
                 if (drafted >= limit) break;
+                if (!s.parent.explain) { // 모문항 해설(근거) 부재 — 비근거 피드백 생성 차단
+                    ungrounded++;
+                    ungroundedList.push(`- sid ${sid} — 모문항 해설 없음 (출처: ${s.parent.from})`);
+                    continue;
+                }
                 const rec = stats && stats[sid];
                 const prompt = buildPrompt(s, s.parent);
                 lines.push(`## sid ${sid}`, '',
@@ -131,11 +137,14 @@ async function generate(flags, opts) {
                 }
                 drafted++;
             }
+            if (ungroundedList.length) {
+                lines.push('## ⚠️ 근거 부재 — 피드백 미생성 (모문항 해설 보강 후 재실행)', '', ...ungroundedList, '');
+            }
             const out = writeDraft(`stmtfb_${target.id}_${key}.md`, lines, { model: llm.modelName() });
-            console.log(`${key}: 진술 ${entries.length}개 → ${out}`);
+            console.log(`${key}: 진술 ${entries.length}개 (근거 부재 ${ungroundedList.length}개 제외) → ${out}`);
         }
     }
-    console.log(`\n총 대상 진술: ${total}개 · 초안 작성: ${drafted}개${dryRun ? ' (dry-run)' : ''}`);
+    console.log(`\n총 대상 진술: ${total}개 · 초안 작성: ${drafted}개 · 근거 부재: ${ungrounded}개${dryRun ? ' (dry-run)' : ''}`);
 }
 
 /** 초안 파싱 → Map<examId, Map<sid, explain>> */
