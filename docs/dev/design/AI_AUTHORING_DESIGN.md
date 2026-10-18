@@ -50,6 +50,11 @@
 | `ai:draft` | `tools/ai/ai_draft_questions.js` | 지정 교재 파일·섹션 범위를 청크 분할 → `### Q{n}` 초안(선지·정답·인용 LNN·해설) 생성 |
 | `ai:distractors` | `tools/ai/ai_distractors.js` | 단답형 **허용 정답 변형**(띄어쓰기·약어·한자 병기)과 선다형 오답 선지 보강 제안 |
 | `ai:dupcheck` | `tools/ai/ai_dupcheck.js` | `build:embeddings` 산출물(SEM-05 이웃 인덱스)로 초안↔기존 문항 유사도 상한 검사 — 중복 출제 방지 |
+| `ai:statements` | `tools/ai/ai_statements.js` | 복수정답형 진술 설계 — 참 진술의 거짓 반전 변형(수치·주체·허용↔금지 바꿈) + `conceptId`별 진술 재조합 후보. 모순쌍·위치편향은 `audit:combo`가 그대로 게이트 |
+| `ai:stale` | `tools/ai/ai_stale_scan.js` | 법령 개정 영향 분석 — ref_md 개정 diff를 해석해 인용 문항의 정답·해설 유효성을 재판정, stale 후보 리포트. `check:reffresh`의 해시 변경 감지를 의미 판정으로 확장 |
+| `ai:coverage` | `tools/ai/ai_coverage.js` | 출제 커버리지 갭 분석 — 교재 청크 ↔ 기존 문항을 임베딩(SEM-05)으로 매핑해 미출제 중요 구간 리포트 → `ai:draft` 투입 범위 결정 근거 |
+| `ai:tag` | `tools/ai/ai_tag.js` | `tags`(STANDARD_TAGS)·`difficulty`·`conceptId` 의미 라벨 자동 제안 — 규칙 기반 `inferTags`의 의미 판단 한계 보완 |
+| `ai:lint` | `tools/ai/ai_lint.js` | 발문 품질 검수 — 이중부정·모호 지문·답이 새는 발문·진술만으로 추론 가능한 패턴 등 기계 게이트가 못 잡는 영역 |
 | 공통 | `tools/ai/llm_client.js` | 공급자 추상화(OpenAI/Anthropic/Gemini 중 env로 선택)·키 로드·재시도·출력 JSON 스키마 검증·토큰 비용 로깅 |
 
 공통 제약:
@@ -106,8 +111,9 @@ tools/ai 실행 → tmp/ai_drafts/*.md (초안)
 | Phase | 내용 | 검증 |
 |---|---|---|
 | A | `ai:explain` 해설 보강 — 누락 문항 목록화 → 초안 → 리뷰 편입 (**L0 전수 리뷰**) | 초안 10문 수동 평가 → `check:answers` 통과율 |
-| B | `ai:draft` 문제 초안 + `ai:dupcheck` 중복 게이트 + `ai:distractors` | 회차 단위 배치 리뷰 — 채택률·게이트 통과율 기록 |
+| B | `ai:draft` 문제 초안 + `ai:dupcheck` 중복 게이트 + `ai:distractors` + `ai:statements`(진술 반전 변형) + `ai:tag`(태그·난이도) + `ai:lint`(발문 검수) | 회차 단위 배치 리뷰 — 채택률·게이트 통과율 기록 |
 | B+ | **L1 승격** — 자동검증+자기검증+judge 합의 문항 자동 편입, 예외만 리뷰 큐 | §3.1 승격 조건 충족 시 — 자동 편입분의 샘플 오류율 추적 |
+| B2 | `ai:coverage`(커버리지 갭) + `ai:stale`(법령 개정 영향) — 문항 생산이 아닌 **제작 우선순위·유지보수 판단** 지원. 오판 통계(perStatement·conceptId) 기반 보강 영역 제안은 이 단계 후보 | 갭 리포트의 실제 투입률 · stale 리포트 적중률 수동 검증 |
 | C | 런타임 AI — BYOK 우선 평가, 프록시는 Pro 연동 시 재검토 | 별도 설계 문서 |
 
 ## 10. 미결 사항
@@ -116,3 +122,4 @@ tools/ai 실행 → tmp/ai_drafts/*.md (초안)
 2. 외부 저작물 발췌 파일의 LLM 전송 범위 — allowlist 방식
 3. 해설 어조·길이 스타일 가이드 — 기존 해설 예문을 few-shot으로 투입
 4. `ai-draft` 배치 태그의 커밋 subject 규약 확정
+5. 법령 개정 시 `ai:stale` 자동 실행 여부 — `check:reffresh` 변경 감지를 트리거로 워크플로화할지, 수동 실행에 둘지
