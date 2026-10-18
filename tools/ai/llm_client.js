@@ -49,7 +49,7 @@ const PROVIDERS = {
     },
     gemini: {
         env: 'GEMINI_API_KEY',
-        defaultModel: 'gemini-2.0-flash',
+        defaultModel: 'gemini-3.8-flash',
         // key는 쿼리 파라미터 — buildUrl에서 처리
         buildBody: (model, system, prompt) => ({
             contents: [{ parts: [{ text: prompt }] }],

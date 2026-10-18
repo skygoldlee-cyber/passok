@@ -50,8 +50,10 @@ async function main() {
             if (!missing.length) continue;
             totalMissing += missing.length;
 
+            if (drafted >= limit) continue; // 전역 상한 도달 시 잔여 파일은 스캔만
             const lines = [`# 해설 초안 — ${exam.file} (누락 ${missing.length}문)`, ''];
-            for (const q of missing.slice(0, limit === Infinity ? missing.length : limit)) {
+            for (const q of missing) {
+                if (drafted >= limit) break;
                 const ans = answers.get(q.num);
                 const cit = primaryCitation(ans);
                 const ctx = cit ? readContext(resolveCitation(absPath, cit.file), cit.lineNo, 4) : null;
@@ -68,7 +70,6 @@ async function main() {
                         : `> **해설**: ${res.text.trim().replace(/\n+/g, ' ')}`, '');
                 }
                 drafted++;
-                if (drafted >= limit) break;
             }
             const out = writeDraft(`explain_${exam.key}.md`, lines, { model: llm.modelName() });
             console.log(`${exam.file}: 해설 누락 ${missing.length}문 → ${out}`);
