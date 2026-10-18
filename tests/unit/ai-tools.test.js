@@ -190,3 +190,21 @@ test('AI-04: ai:explain --dry-run이 키 없이 초안 골격을 출력한다', 
     const out = runTool('ai_explain.js', ['--exam', 'cosmetic', '--limit', '2', '--dry-run']);
     assert.match(out, /해설 누락|초안/, '스캔·초안 요약 출력');
 });
+
+test('AI-01/AI-04: ai:apply가 초안 해설을 정답 블록 끝에 삽입하고 중복·플레이스홀더를 스킵한다', () => {
+    const { parseExplainDraft, insertExplain } = require('../../tools/ai/ai_apply.js');
+    const dir = mkdtempSync(join(tmpdir(), 'apply-'));
+    const draft = join(dir, 'd.md');
+    writeFileSync(draft, '## Q1\n\n> **해설**: 삽입 대상 해설\n\n## Q2\n\n> **해설**: (미생성 — DRY RUN)\n');
+    const entries = parseExplainDraft(draft);
+    assert.equal(entries.size, 1);                       // 플레이스홀더 제외
+    assert.equal(entries.get(1), '삽입 대상 해설');
+
+    const bank = '**Q1.**\n\n> **정답: ②** [교재: L1](<a.md#L1>)\n>\n> **📖 근거:**\n> 인용\n\n**Q2.**\n\n> **정답: 1**\n';
+    const next = insertExplain(bank, 1, '삽입 대상 해설');
+    assert.ok(next.includes('> **해설**: 삽입 대상 해설'));
+    assert.ok(next.indexOf('해설') > next.indexOf('인용')); // 블록 끝에 삽입
+    assert.equal(insertExplain(next, 1, '재삽입'), null);  // 기존 해설 → 스킵
+    assert.equal(insertExplain(bank, 99, 'x'), null);      // 블록 없음 → 스킵
+    rmSync(dir, { recursive: true, force: true });
+});

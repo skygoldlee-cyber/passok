@@ -13,6 +13,7 @@
 - **추가**: `tools/ai/` — `llm_client.js`(OpenAI/Anthropic/Gemini env 추상화·재시도·무키 dry-run·사용량 로깅) + `lib/`(qbank 문제은행 파서·citations 인용 해석·textbook 청크·similarity int8 디코딩+bigram 폴백) + 도구 9종(`ai:explain` 해설 누락 초안·`ai:draft` 교재 청크→문항·`ai:distractors` 허용정답 변형·`ai:dupcheck` 유사도 게이트·`ai:statements` 진술 반전·재조합·`ai:tag` 태그·난이도·`ai:lint` 발문 검수·`ai:coverage` 커버리지 갭·`ai:stale` 법령 개정 영향)
 - **스펙**: SPEC.md §3.27 신규 섹션 AI-01~13 선언 + tests/unit/ai-tools.test.js(14건)로 갭 기준선 정합
 - **인프라**: package.json `ai:*` 스크립트 9개 · .gitignore `tmp/ai_drafts/` · AGENTS.md 명령 블록+tools 트리 · docs_paths_allowlist 미구현 경로 엔트리 11건 회수 (실존 전환)
+- **추가**: `ai:apply` — 리뷰된 `explain_*.md` 초안의 해설을 문제은행 정답 블록에 편입(기본 미리보기·`--write` 반영). 초안 파일명을 `explain_<examId>_<examKey>.md`로 변경 — scaffold 시험(food)의 동일 examKey와 충돌하는 결함 수정 + 스킵 카운터 파일별 분리
 - **수정**: Gemini 기본 모델 `gemini-2.0-flash` 폐기(404) → `gemini-3.8-flash` 갱신 · `ai:explain --limit`이 파일당 적용되던 것을 전역 상한으로 수정 (Gemini 실호출 검증 — 해설 2문 생성·사용량 로깅 확인, 전체 해설 누락 893문)
 - **검증**: 유닛 14건 통과 · lint·types·specrefs·commands·inventory·docs_paths 게이트 통과 · dry-run 스모크(무키)로 전 도구 동작 확인
 
