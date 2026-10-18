@@ -11,6 +11,7 @@
  * 생성 모드: {dataRoot}/drills/combo_*.js의 진술을 sid 기준 중복 제거해
  *   "왜 참·거짓인지 + 어떤 혼동(수치·주체·극성)을 노리는지" 1~2문장 초안을 만든다.
  *   기본 대상은 거짓 진술(오인 유도 — 오판 피드백 가치가 가장 큼), --all로 전체.
+ *   이미 stmt_explain.json에 반영된 sid는 자동 스킵 — 반복 실행 시 미커버 진술로 진행.
  *   --stats: 앱 백업 JSON(cosmetic_backup_*.json의 statement_stats 키) 또는
  *   {sid:{j,w,...}} 맵을 읽어 오판 w ≥ --min-wrong 진술만 대상으로 하고 오판수 내림차순 정렬.
  *   통계상 오판율이 극단인 진술(j≥5, w/j≥0.8)은 초안에 ⚠️ 표시해 콘텐츠 검수 후보로 구분한다.
@@ -96,9 +97,12 @@ async function generate(flags, opts) {
 
     let total = 0, drafted = 0;
     for (const target of getTargets(opts)) {
+        // 이미 반영된 피드백은 재생성하지 않음 — 반복 실행 시 미커버 진술로 자연 진행
+        const appliedFp = path.join(ROOT, target.contentRoot, '피드백', 'stmt_explain.json');
+        const applied = fs.existsSync(appliedFp) ? JSON.parse(fs.readFileSync(appliedFp, 'utf-8')) : {};
         for (const [key, stmts] of collectStatements(target)) {
             if (opts.subject && key !== opts.subject) continue;
-            let entries = [...stmts.entries()].filter(([, s]) => all || !s.truth);
+            let entries = [...stmts.entries()].filter(([sid, s]) => (all || !s.truth) && !(sid in applied));
             if (stats) {
                 entries = entries
                     .filter(([sid]) => (stats[sid] && stats[sid].w || 0) >= minWrong)
