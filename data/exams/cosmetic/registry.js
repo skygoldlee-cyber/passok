@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-18T06:17:19.203Z",
+  "generatedAt": "2026-10-18T06:37:59.023Z",
   "subjects": [
     {
       "key": "law",
@@ -94,9 +94,9 @@ var DATA_REGISTRY = {
       "part": 1,
       "title": "화장품 제조 및 품질관리 (250제)",
       "file": "과목2_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject2.6abaca77.js",
+      "bundle": "./data/exams/cosmetic/exams/subject2.ee267689.js",
       "global": "EXAM_DATA_subject2",
-      "contentHash": "6abaca77",
+      "contentHash": "ee267689",
       "stats": {
         "questions": 250
       }
