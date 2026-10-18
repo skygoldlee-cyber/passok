@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-18T08:27:47.571Z",
+  "generatedAt": "2026-10-18T08:36:09.251Z",
   "subjects": [
     {
       "key": "law",
@@ -12,13 +12,13 @@ var DATA_REGISTRY = {
       "shortName": "화장품법",
       "contentHash": "1246a6c9",
       "stats": {
-        "cards": 143,
-        "quizzes": 57,
+        "cards": 155,
+        "quizzes": 62,
         "chapters": 1,
         "sourceCards": 183,
         "sourceQuizzes": 82,
-        "targetCards": 143,
-        "targetQuizzes": 57
+        "targetCards": 155,
+        "targetQuizzes": 62
       }
     },
     {
@@ -28,13 +28,13 @@ var DATA_REGISTRY = {
       "shortName": "제조·품질",
       "contentHash": "84a1acb9",
       "stats": {
-        "cards": 281,
-        "quizzes": 111,
+        "cards": 260,
+        "quizzes": 103,
         "chapters": 1,
         "sourceCards": 379,
         "sourceQuizzes": 175,
-        "targetCards": 281,
-        "targetQuizzes": 111
+        "targetCards": 260,
+        "targetQuizzes": 103
       }
     },
     {
@@ -44,13 +44,13 @@ var DATA_REGISTRY = {
       "shortName": "안전관리",
       "contentHash": "88bfa580",
       "stats": {
-        "cards": 259,
-        "quizzes": 103,
+        "cards": 280,
+        "quizzes": 111,
         "chapters": 1,
         "sourceCards": 198,
         "sourceQuizzes": 63,
-        "targetCards": 259,
-        "targetQuizzes": 103
+        "targetCards": 280,
+        "targetQuizzes": 111
       },
       "supplement": "./data/exams/cosmetic/supplements/safety.js",
       "supplementGlobal": "STUDY_SUPPLEMENT_safety"
@@ -62,13 +62,13 @@ var DATA_REGISTRY = {
       "shortName": "맞춤형화장품",
       "contentHash": "d1ea1bd3",
       "stats": {
-        "cards": 440,
-        "quizzes": 174,
+        "cards": 428,
+        "quizzes": 169,
         "chapters": 1,
         "sourceCards": 363,
         "sourceQuizzes": 125,
-        "targetCards": 440,
-        "targetQuizzes": 174
+        "targetCards": 428,
+        "targetQuizzes": 169
       },
       "supplement": "./data/exams/cosmetic/supplements/understanding.js",
       "supplementGlobal": "STUDY_SUPPLEMENT_understanding"
@@ -79,13 +79,13 @@ var DATA_REGISTRY = {
       "key": "subject1",
       "subject": "law",
       "part": 1,
-      "title": "화장품법의 이해 (140제)",
+      "title": "화장품법의 이해 (164제)",
       "file": "과목1_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject1.0af30faa.js",
+      "bundle": "./data/exams/cosmetic/exams/subject1.bdeac41a.js",
       "global": "EXAM_DATA_subject1",
-      "contentHash": "0af30faa",
+      "contentHash": "bdeac41a",
       "stats": {
-        "questions": 140
+        "questions": 164
       }
     },
     {
@@ -105,26 +105,26 @@ var DATA_REGISTRY = {
       "key": "subject3",
       "subject": "safety",
       "part": 1,
-      "title": "유통화장품 안전관리 (253제)",
+      "title": "유통화장품 안전관리 (295제)",
       "file": "과목3_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject3.e08a7bcc.js",
+      "bundle": "./data/exams/cosmetic/exams/subject3.65aab57a.js",
       "global": "EXAM_DATA_subject3",
-      "contentHash": "e08a7bcc",
+      "contentHash": "65aab57a",
       "stats": {
-        "questions": 253
+        "questions": 295
       }
     },
     {
       "key": "subject4",
       "subject": "understanding",
       "part": 1,
-      "title": "맞춤형화장품의 이해 (430제)",
+      "title": "맞춤형화장품의 이해 (451제)",
       "file": "과목4_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject4.23efec07.js",
+      "bundle": "./data/exams/cosmetic/exams/subject4.f34d4cf7.js",
       "global": "EXAM_DATA_subject4",
-      "contentHash": "23efec07",
+      "contentHash": "f34d4cf7",
       "stats": {
-        "questions": 430
+        "questions": 451
       }
     }
   ],
@@ -2700,7 +2700,7 @@ var DATA_REGISTRY = {
     },
     "exam": {
       "title": "실전 모의고사",
-      "subtitle": "교재 인용 1097제 문제은행으로 과목별 모의고사 및 학습안내서 열람"
+      "subtitle": "교재 인용 1184제 문제은행으로 과목별 모의고사 및 학습안내서 열람"
     },
     "analysis": {
       "title": "학습 진단",
