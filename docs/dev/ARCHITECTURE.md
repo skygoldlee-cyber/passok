@@ -451,8 +451,8 @@ passory/
 │   │   ├── build_all_data.js       #   전 시험 순회 빌드 오케스트레이터
 │   │   ├── build_question_chapters.js # 문항→챕터 매핑 번들
 │   │   ├── build_id_migration.js   #   진도 이관 맵 생성
-│   │   ├── build_ox_drills.js      #   O/X 드릴 생성기 (객관식 → 진위형 3,700+문)
-│   │   ├── build_combo_drills.js   #   복수정답형 변환기 (choice → 755문)
+│   │   ├── build_ox_drills.js      #   O/X 드릴 생성기 (객관식 → 진위형 8,200+문)
+│   │   ├── build_combo_drills.js   #   복수정답형 변환기 (choice → 1,934문)
 │   │   └── plugins/
 │   │       ├── textbook.plugin.js
 │   │       ├── exams.plugin.js
@@ -1565,8 +1565,8 @@ content/exams/cosmetic/knowledge/ingredients.json ──► (knowledge plugin) �
 content/**/*.md ───(런타임 fetch)──► src/data-loader.js + src/textbook-parser.js ──► STUDY_DATA (카드/퀴즈/챕터)
 content/**/*.md ───(file:// 폴백)──► tools/build/build_study_md_bundle.js ──► data/exams/cosmetic/study_md/ (과목별 분할)
 
-data/exams/<id>/exams/*.js ──► tools/build/build_ox_drills.js    ──► data/exams/<id>/drills/ox_subject*.js   (O/X 3,700+문)
-data/exams/<id>/exams/*.js ──► tools/build/build_combo_drills.js ──► data/exams/<id>/drills/combo_subject*.js (복수정답형 755문)
+data/exams/<id>/exams/*.js ──► tools/build/build_ox_drills.js    ──► data/exams/<id>/drills/ox_subject*.js   (O/X 8,200+문)
+data/exams/<id>/exams/*.js ──► tools/build/build_combo_drills.js ──► data/exams/<id>/drills/combo_subject*.js (복수정답형 1,934문)
                                                                                 └──(src/combo-doc.js 런타임 직렬화)──► 뷰어 "복수정답형 문제집" 문서
 ```
 
@@ -1587,7 +1587,7 @@ data/exams/subjectN.*.js ──► build_ox_drills.js    ──► data/exams/co
 ```
 
 - **스키마**: `single`/`combo`/`short`/`ox` 4유형. combo는 진술 `truth`에서 정답 조합을 **도출**(`deriveComboAnswer`)하고 `validateQuestion`으로 유일성을 검증 — 정답 오타를 구조적으로 차단.
-- **복수정답형 변환**(상세: [`QUESTION_SCHEMA_DESIGN.md`](design/QUESTION_SCHEMA_DESIGN.md) §6): 객관식은 선지를 `fact`(명제 진위)/`answer`(정답 여부) 모드로 진술화, 같은 교재 구간(conceptId)의 fact 진술은 재조합해 복수정답 문항을 추가 생성. 단답형은 빈칸 정답이 하나뿐이라 100% 단일정답이 되므로 제외 — 원본 문제은행의 단답형으로 출제. 과목당 65/158/255/277 = 755문.
+- **복수정답형 변환**(상세: [`QUESTION_SCHEMA_DESIGN.md`](design/QUESTION_SCHEMA_DESIGN.md) §6): 객관식은 선지를 `fact`(명제 진위)/`answer`(정답 여부) 모드로 진술화, 같은 교재 구간(conceptId)의 fact 진술은 재조합해 복수정답 문항을 추가 생성. 단답형은 빈칸 정답이 하나뿐이라 100% 단일정답이 되므로 제외 — 원본 문제은행의 단답형으로 출제. 과목당 277/375/491/791 = 1,934문.
 - **진술 원자 추적**: 진술의 `sid`(`stableId`)를 O/X·복수정답형이 공유 → [`src/statement-tracker.js`](../../src/statement-tracker.js)가 `perStatement.judgedCorrect` 판정을 `sid` 단위로 `statement_stats` `{j, w, lw, t, truth, cid, last, streak}` + FSRS 큐(`spaced-repetition.js`)에 누적. **연속 정답 3회(`WEAK_GRADUATE_STREAK`) 시 취약 목록 졸업**, 재오판 시 복귀. 드릴 편성은 **FSRS 기한 도래(`getDueStatementSids`) → 오판 진술 → 임의** 순.
 - **드릴 모드**: 과목별(1~4) 외에 전 과목 특수 모드 `weak`(취약·복습 진술 필터)·`num`(수치·한도·기한 태그 필터 — `inferTags` 부여분) 지원, 출제 수 10/20/전체 선택. 복수정답형은 진술별 O/X 토글 2단계 응시 + 판정과 모순되는 선지 실시간 소거 표시(시험장 소거 전술 훈련).
 - **취약 진술 리뷰 패널**: 누적 통계 열람 — conceptId 개념 그룹핑(참/거짓 혼동쌍 2단 대조), 복습 대상 필터, 최근 판정 배지, 졸업 수 표시, 바로 드릴 진입.

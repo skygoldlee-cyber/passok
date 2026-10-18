@@ -106,7 +106,7 @@
     "subjectFailBelow": 40
   },
   "study": {
-    "minExamLeadDays": 63,
+    "minExamLeadDays": 90,
     "readThroughDays": 10,
     "kt": {
       "P0": 0.3,
