@@ -3227,35 +3227,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_8b09e1",
-    "conceptId": "§5.1",
+    "conceptId": "§3.2",
     "text": "원자재가 입고되면 외관 상태 및 제조번호를 확인한다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_b9765c",
-    "conceptId": "§5.1",
+    "conceptId": "§3.2",
     "text": "시험 결과가 나오기 전까지는 '시험 중(대기)' 구역에 보관한다.",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_4322ee",
-    "conceptId": "§5.1",
+    "conceptId": "§3.2",
     "text": "시험 검사 결과 적합 판정이 내려지면 '적합' 라벨을 부착하고 적합 구역으로 이동한다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_cd822c",
-    "conceptId": "§5.1",
+    "conceptId": "§3.2",
     "text": "시험 결과 부적합 판정이 나면 '부적합' 라벨을 부착하고 격리 보관한다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_2a259e",
-    "conceptId": "§5.1",
+    "conceptId": "§3.2",
     "text": "급한 생산 일정을 위해 시험 결과 확인 전에 출고 승인을 진행할 수 있다.",
     "truth": false
    }
@@ -25717,88 +25717,92 @@ var COMBO_DRILLS_subject2 = [
   "answer": "1"
  },
  {
-  "id": "manufacturing_combo-cluster_69f026",
+  "id": "manufacturing_combo-cluster_0e084c",
   "subject": 2,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: §5.1 (출처: 과목2 문제은행 진술 재조합)",
+  "citation": "📖 교재: §3.2 (출처: 과목2 문제은행 진술 재조합)",
   "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "manufacturing_st_2a259e",
-    "conceptId": "§5.1",
-    "text": "급한 생산 일정을 위해 시험 결과 확인 전에 출고 승인을 진행할 수 있다.",
-    "truth": false,
-    "explain": "원본: 과목2 문제은행 Q35 · 교재 §5.1"
+    "sid": "manufacturing_st_81ec9e",
+    "conceptId": "§3.2",
+    "text": "파라벤류는 단일 0.4%, 혼합 0.8%의 한도가 적용되며 페닐 에스터는 제외된다.",
+    "truth": true,
+    "explain": "원본: 과목2 문제은행 Q307 · 교재 §3.2"
    },
    {
     "id": "ㄴ",
-    "sid": "manufacturing_st_b9765c",
-    "conceptId": "§5.1",
-    "text": "시험 결과가 나오기 전까지는 '시험 중(대기)' 구역에 보관한다.",
-    "truth": true,
-    "explain": "원본: 과목2 문제은행 Q35 · 교재 §5.1"
+    "sid": "manufacturing_st_4ae193",
+    "conceptId": "§3.2",
+    "text": "모든 화장품에서 일괄적으로 8.0%까지 허용된다.",
+    "truth": false,
+    "explain": "원본: 과목2 문제은행 Q310 · 교재 §3.2"
    },
    {
     "id": "ㄷ",
-    "sid": "manufacturing_st_cd822c",
-    "conceptId": "§5.1",
-    "text": "시험 결과 부적합 판정이 나면 '부적합' 라벨을 부착하고 격리 보관한다.",
-    "truth": true,
-    "explain": "원본: 과목2 문제은행 Q35 · 교재 §5.1"
+    "sid": "manufacturing_st_2799cd",
+    "conceptId": "§3.2",
+    "text": "에스테르류에는 페닐이 항상 포함되며 예외 규정은 없다.",
+    "truth": false,
+    "explain": "원본: 과목2 문제은행 Q340 · 교재 §3.2"
    },
    {
     "id": "ㄹ",
-    "sid": "manufacturing_st_8b09e1",
-    "conceptId": "§5.1",
-    "text": "원자재가 입고되면 외관 상태 및 제조번호를 확인한다.",
+    "sid": "manufacturing_st_cd822c",
+    "conceptId": "§3.2",
+    "text": "시험 결과 부적합 판정이 나면 '부적합' 라벨을 부착하고 격리 보관한다.",
     "truth": true,
-    "explain": "원본: 과목2 문제은행 Q35 · 교재 §5.1"
+    "explain": "원본: 과목2 문제은행 Q35 · 교재 §3.2"
    },
    {
     "id": "ㅁ",
-    "sid": "manufacturing_st_1fe172",
-    "conceptId": "§5.1",
-    "text": "부적합 원료는 생산부서장의 임의 승인 하에 재작업용 원료로 바로 투입한다.",
-    "truth": false,
-    "explain": "원본: 과목2 문제은행 Q48 · 교재 §5.1"
+    "sid": "manufacturing_st_5c7bef",
+    "conceptId": "§3.2",
+    "text": "기본 함량 상한은 2.4%이며, 얼굴·손·입술에는 5%까지 허용된다.",
+    "truth": true,
+    "explain": "원본: 과목2 문제은행 Q310 · 교재 §3.2"
    }
   ],
   "options": [
    {
     "id": "1",
     "members": [
-     "ㄱ",
      "ㄴ",
-     "ㄹ"
+     "ㄷ",
+     "ㄹ",
+     "ㅁ"
     ]
    },
    {
     "id": "2",
     "members": [
-     "ㄴ",
-     "ㄷ",
+     "ㄱ",
      "ㄹ"
     ]
    },
    {
     "id": "3",
     "members": [
-     "ㄱ"
+     "ㄱ",
+     "ㄷ",
+     "ㄹ",
+     "ㅁ"
     ]
    },
    {
     "id": "4",
     "members": [
-     "ㄷ"
+     "ㄱ",
+     "ㄹ",
+     "ㅁ"
     ]
    },
    {
     "id": "5",
     "members": [
      "ㄱ",
-     "ㄴ",
      "ㄷ",
      "ㄹ"
     ]
@@ -25808,12 +25812,14 @@ var COMBO_DRILLS_subject2 = [
    "자동변환",
    "명제판정",
    "개념재조합",
-   "절차"
+   "한도",
+   "구성비",
+   "수치"
   ],
-  "derivedFrom": "cluster:2|§5.1",
-  "explain": "ㄱ. 원본: 과목2 문제은행 Q35 · 교재 §5.1\nㄴ. 원본: 과목2 문제은행 Q35 · 교재 §5.1\nㄷ. 원본: 과목2 문제은행 Q35 · 교재 §5.1\nㄹ. 원본: 과목2 문제은행 Q35 · 교재 §5.1\nㅁ. 원본: 과목2 문제은행 Q48 · 교재 §5.1",
+  "derivedFrom": "cluster:2|§3.2",
+  "explain": "ㄱ. 원본: 과목2 문제은행 Q307 · 교재 §3.2\nㄴ. 원본: 과목2 문제은행 Q310 · 교재 §3.2\nㄷ. 원본: 과목2 문제은행 Q340 · 교재 §3.2\nㄹ. 원본: 과목2 문제은행 Q35 · 교재 §3.2\nㅁ. 원본: 과목2 문제은행 Q310 · 교재 §3.2",
   "source": "과목2 개념 재조합",
-  "answer": "2"
+  "answer": "4"
  },
  {
   "id": "manufacturing_combo-cluster_134d05",
@@ -25913,110 +25919,6 @@ var COMBO_DRILLS_subject2 = [
   ],
   "derivedFrom": "cluster:2|§2.3",
   "explain": "ㄱ. 원본: 과목2 문제은행 Q261 · 교재 §2.3\nㄴ. 원본: 과목2 문제은행 Q56 · 교재 §2.3\nㄷ. 원본: 과목2 문제은행 Q260 · 교재 §2.3\nㄹ. 원본: 과목2 문제은행 Q251 · 교재 §2.3\nㅁ. 원본: 과목2 문제은행 Q261 · 교재 §2.3",
-  "source": "과목2 개념 재조합",
-  "answer": "4"
- },
- {
-  "id": "manufacturing_combo-cluster_0e084c",
-  "subject": 2,
-  "type": "combo",
-  "points": 4,
-  "citation": "📖 교재: §3.2 (출처: 과목2 문제은행 진술 재조합)",
-  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
-  "statements": [
-   {
-    "id": "ㄱ",
-    "sid": "manufacturing_st_4c878f",
-    "conceptId": "§3.2",
-    "text": "에탄올아민은 염류의 양이온염 예시 중 하나이다.",
-    "truth": true,
-    "explain": "원본: 과목2 문제은행 Q341 · 교재 §3.2"
-   },
-   {
-    "id": "ㄴ",
-    "sid": "manufacturing_st_026ca0",
-    "conceptId": "§3.2",
-    "text": "벤질알코올은 기본 사용한도가 1.0%이나, 두발염색용 용제로는 10%까지 사용할 수 있다.",
-    "truth": true,
-    "explain": "원본: 과목2 문제은행 Q307 · 교재 §3.2"
-   },
-   {
-    "id": "ㄷ",
-    "sid": "manufacturing_st_5c7bef",
-    "conceptId": "§3.2",
-    "text": "기본 함량 상한은 2.4%이며, 얼굴·손·입술에는 5%까지 허용된다.",
-    "truth": true,
-    "explain": "원본: 과목2 문제은행 Q310 · 교재 §3.2"
-   },
-   {
-    "id": "ㄹ",
-    "sid": "manufacturing_st_4ae193",
-    "conceptId": "§3.2",
-    "text": "모든 화장품에서 일괄적으로 8.0%까지 허용된다.",
-    "truth": false,
-    "explain": "원본: 과목2 문제은행 Q310 · 교재 §3.2"
-   },
-   {
-    "id": "ㅁ",
-    "sid": "manufacturing_st_3ce9ed",
-    "conceptId": "§3.2",
-    "text": "씻어내지 않는 제품은 0.01% 초과 시 표시하여야 한다.",
-    "truth": false,
-    "explain": "원본: 과목2 문제은행 Q314 · 교재 §3.2"
-   }
-  ],
-  "options": [
-   {
-    "id": "1",
-    "members": [
-     "ㄴ",
-     "ㄷ",
-     "ㄹ",
-     "ㅁ"
-    ]
-   },
-   {
-    "id": "2",
-    "members": [
-     "ㄱ",
-     "ㄹ"
-    ]
-   },
-   {
-    "id": "3",
-    "members": [
-     "ㄱ",
-     "ㄷ",
-     "ㄹ",
-     "ㅁ"
-    ]
-   },
-   {
-    "id": "4",
-    "members": [
-     "ㄱ",
-     "ㄴ",
-     "ㄷ"
-    ]
-   },
-   {
-    "id": "5",
-    "members": [
-     "ㄱ",
-     "ㄷ",
-     "ㄹ"
-    ]
-   }
-  ],
-  "tags": [
-   "자동변환",
-   "명제판정",
-   "개념재조합",
-   "한도",
-   "수치"
-  ],
-  "derivedFrom": "cluster:2|§3.2",
-  "explain": "ㄱ. 원본: 과목2 문제은행 Q341 · 교재 §3.2\nㄴ. 원본: 과목2 문제은행 Q307 · 교재 §3.2\nㄷ. 원본: 과목2 문제은행 Q310 · 교재 §3.2\nㄹ. 원본: 과목2 문제은행 Q310 · 교재 §3.2\nㅁ. 원본: 과목2 문제은행 Q314 · 교재 §3.2",
   "source": "과목2 개념 재조합",
   "answer": "4"
  },

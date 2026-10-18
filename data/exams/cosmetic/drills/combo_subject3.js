@@ -3460,35 +3460,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_928825",
-    "conceptId": "§3.1",
+    "conceptId": "§2.1",
     "text": "방진 장갑",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_e983fb",
-    "conceptId": "§3.1",
+    "conceptId": "§2.1",
     "text": "마스크",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_68a5bc",
-    "conceptId": "§3.1",
+    "conceptId": "§2.1",
     "text": "방진 안경",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e723c9",
-    "conceptId": "§3.1",
+    "conceptId": "§2.1",
     "text": "위생화",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_11ae94",
-    "conceptId": "§3.1",
+    "conceptId": "§2.1",
     "text": "위생모 (머리덮개)",
     "truth": true
    }

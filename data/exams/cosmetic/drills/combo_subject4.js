@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject4.53fc9f09.js — mode: fact(명제 조합) 149문 / answer(정답 조합) 552문
+// 원본: data/exams/cosmetic/exams/subject4.b78a9896.js — mode: fact(명제 조합) 149문 / answer(정답 조합) 552문
 var COMBO_DRILLS_subject4 = [
  {
   "id": "understanding_combo_8317ff",
@@ -13165,7 +13165,7 @@ var COMBO_DRILLS_subject4 = [
    "수치"
   ],
   "derivedFrom": "subject4_q142",
-  "explain": "📖 교재 근거 (2과목 L4166):\n히알루론산(Hyaluronic Acid) — \"1g이 6L의 물을 보유할 수 있는 강력한 보습제\" (1g ≈ 1mL, 6L = 6,000mL → 약 1,000~6,000배 수분 보유력)\n해설: 히알루론산은 강력한 수분 보유력을 가진 보습 성분으로 자기 질량의 1000배의 수분을 보유할 수 있어 정답은 ④입니다. 따라서 1배, 10배, 100배, 10000배를 제시한 ①, ②, ③, ⑤는 오답입니다.",
+  "explain": "📖 교재 근거 (2과목 L5651):\n히알루론산(Hyaluronic Acid) — \"1g이 6L의 물을 보유할 수 있는 강력한 보습제\" (1g ≈ 1mL, 6L = 6,000mL → 약 1,000~6,000배 수분 보유력)\n해설: 히알루론산은 강력한 수분 보유력을 가진 보습 성분으로 자기 질량의 1000배의 수분을 보유할 수 있어 정답은 ④입니다. 따라서 1배, 10배, 100배, 10000배를 제시한 ①, ②, ③, ⑤는 오답입니다.",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "1"
  },
