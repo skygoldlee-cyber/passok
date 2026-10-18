@@ -93,11 +93,11 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (70개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (71개)
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (19개 — README + ADR 18건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (15개)
-│   ├── design/                ← 설계·계획·평가 문서 (15개)
+│   ├── design/                ← 설계·계획·평가 문서 (16개)
 │   ├── reference/             ← 명세·로직·참조 문서 (13개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (3개 — §9 스냅샷 이력)
 └── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개)
@@ -166,6 +166,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [TEXTBOOK_REPLACEMENT_RUNBOOK.md](dev/runbooks/TEXTBOOK_REPLACEMENT_RUNBOOK.md) | 교재 교체 작업 순서도 — 준비→교체→빌드→인용→이관→파생물→배포·롤백 단일 런북 |
 | [ref-pipeline/README.md](../ref-pipeline/README.md) | 교재·참조자료 변환 도구 — PDF→MD, MD→HTML, 오디오북 TTS, 법령 검증 (독립 실행) |
 | [TEXTBOOK_AUTHORING_GUIDE.md](dev/runbooks/TEXTBOOK_AUTHORING_GUIDE.md) | 교재 Markdown 작성 지침 — 카드/퀴즈 추출 규칙, manifest.json, 빌드 검증 |
+| [AI_AUTHORING_DESIGN.md](dev/design/AI_AUTHORING_DESIGN.md) | AI 제작 지원 설계 — LLM 문제·해설 초안 생성 도구, 근거 강제·기존 감사 게이트 연동 (DOC-DSN-33, 설계안) |
 | [STORY_PATCH_GUIDE.md](dev/runbooks/STORY_PATCH_GUIDE.md) | 이야기형 교재 서사 패치 작성 — 슬롯 마커·지시어 문법 (`*_이야기형.md`는 `build:story` 생성물, 직접 편집 금지) |
 | [NUMBERING_SYSTEM.md](exams/cosmetic/reference/NUMBERING_SYSTEM.md) | 교재 챕터/섹션 십진 번호체계 |
 | [QUESTION_SCHEMA_DESIGN.md](dev/design/QUESTION_SCHEMA_DESIGN.md) | 문항 데이터 스키마 — 복수정답형의 "진술 단위 O/X → 조합 도출" 구조 |
@@ -358,6 +359,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-30 | `docs/dev/design/ADMIN_DESIGN.md` |
 | DOC-DSN-31 | — (통합 → `docs/dev/design/SUPABASE_DESIGN.md` · DOC-DSN-08, 2026-10-17) |
 | DOC-DSN-32 | `docs/dev/design/LEARNING_ALGORITHM_DESIGN.md` |
+| DOC-DSN-33 | `docs/dev/design/AI_AUTHORING_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |
