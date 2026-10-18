@@ -153,3 +153,15 @@ test('lintAdCopy — 전문가 추천·절대 표현 카테고리 확장 (FO-68,
   // 의료기관 암시 표현도 검출
   assert.ok(lintAdCopy('병원 추천 세럼').some(h => h.category === 'endorsement'));
 });
+
+test('lintAdCopy — 라·마·자·차·카호 신규 카테고리 (FO-68, 별표5 2항)', () => {
+  assert.ok(lintAdCopy('해외 직수입 크림').some(h => h.category === 'origin'), '제조국 오인');
+  assert.ok(lintAdCopy('외국 기술제휴로 개발').some(h => h.category === 'tieup'), '기술제휴 허위');
+  assert.ok(lintAdCopy('묵은 때를 벗겨내세요').some(h => h.category === 'vulgar'), '저속 표현');
+  assert.ok(lintAdCopy('천연 사향 함유').some(h => h.category === 'endangered'), '멸종위기종');
+  assert.ok(lintAdCopy('타사 제품 유해 성분').some(h => h.category === 'slander'), '타사 비방');
+  // 5개 신규 카테고리 라벨 등록 확인
+  for (const id of ['origin', 'tieup', 'vulgar', 'endangered', 'slander']) {
+    assert.ok(AD_CATEGORIES[id], `카테고리 미등록: ${id}`);
+  }
+});
