@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-18 AI 제작 지원 도구 구현 — tools/ai/ 9종 + SPEC AI-01~13
+
+- **배경**: DOC-DSN-33 설계안(설계→구현 승격) — 문제은행 제작 비용·해설 커버리지 불완전 대응. LLM은 초안만 생산하고 기존 게이트(check:answers·audit:combo)가 검증선
+- **추가**: `tools/ai/` — `llm_client.js`(OpenAI/Anthropic/Gemini env 추상화·재시도·무키 dry-run·사용량 로깅) + `lib/`(qbank 문제은행 파서·citations 인용 해석·textbook 청크·similarity int8 디코딩+bigram 폴백) + 도구 9종(`ai:explain` 해설 누락 초안·`ai:draft` 교재 청크→문항·`ai:distractors` 허용정답 변형·`ai:dupcheck` 유사도 게이트·`ai:statements` 진술 반전·재조합·`ai:tag` 태그·난이도·`ai:lint` 발문 검수·`ai:coverage` 커버리지 갭·`ai:stale` 법령 개정 영향)
+- **스펙**: SPEC.md §3.27 신규 섹션 AI-01~13 선언 + tests/unit/ai-tools.test.js(14건)로 갭 기준선 정합
+- **인프라**: package.json `ai:*` 스크립트 9개 · .gitignore `tmp/ai_drafts/` · AGENTS.md 명령 블록+tools 트리 · docs_paths_allowlist 미구현 경로 엔트리 11건 회수 (실존 전환)
+- **검증**: 유닛 14건 통과 · lint·types·specrefs·commands·inventory·docs_paths 게이트 통과 · dry-run 스모크(무키)로 전 도구 동작 확인
+
 ## 2026-10-18 AI 제작 지원 확장 + keep-alive 운영 문서화 — 해설 외 AI 활용 5종
 
 - **배경**: 해설 생성 외에 AI가 보조할 수 있는 문제 제작 영역을 검토 — 기존 게이트(audit:combo·check:reffresh·SEM-05 인덱스)가 그대로 검증선으로 재사용되는 영역 위주로 선별

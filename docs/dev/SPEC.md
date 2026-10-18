@@ -591,6 +591,26 @@
 | AD-06 | 운영 CLI (Phase 1) — `report:feedback`·`report:user`(sync 메타만)·`admin:grant-pro`(dry-run + `--apply`) — service role 로컬 전용, 스키마 변경 없음 | ✅ |
 | AD-07 | 로컬 HTML 대시보드 (Phase 1.5) — `report:dashboard`가 오류·퍼널·피드백 집계를 단일 자급적 HTML로 덤프 (로컬 파일이라 인증·RLS 불필요, 사용자 텍스트는 이스케이프 필수, 산출물 gitignore) | ✅ |
 
+### 3.27 AI 제작 지원 (Author-time)
+
+> 상세 설계: [`design/AI_AUTHORING_DESIGN.md`](design/AI_AUTHORING_DESIGN.md) (DOC-DSN-33). LLM은 초안만 생산(`tmp/ai_drafts/`, gitignore)하고 정본 `content/` 편입은 사람 리뷰 경유. 생성물은 기존 게이트(check:answers·audit:combo 등)를 동일하게 통과해야 한다.
+
+| ID | 요구사양 | 구현 상태 |
+|----|---------|-----------|
+| AI-01 | 초안 파이프라인 — AI 산출물은 `tmp/ai_drafts/` 출력 + `<!-- ai-draft -->` 메타 주석, `content/` 직접 편입 경로 없음. 문제은행 파서(`tools/ai/lib/qbank.js`)가 `### Q{n}`·정답 블록을 해석 | ✅ |
+| AI-02 | LLM 클라이언트 (`tools/ai/llm_client.js`) — OpenAI/Anthropic/Gemini를 `AI_PROVIDER` env로 선택, 키는 `AI_API_KEY`/공급자별 env·`.env` 로컬 전용. 재시도·JSON 파싱·사용량 로깅 내장. `--dry-run`/키 부재 시 API 미호출로 동작 검증 가능 | ✅ |
+| AI-03 | 근거 강제 — 생성 문항·해설은 인용(`파일#LNN`) 동반, `tools/ai/lib/citations.js`가 인용 라인을 실제 파일로 해석해 자기검증(범위 초과 인용 = 폐기 후보 표시) | ✅ |
+| AI-04 | `ai:explain` — 해설 누락 문항 스캔 → 정답+인용 근거 구절 컨텍스트로 해설 초안 생성 | ✅ |
+| AI-05 | `ai:draft` — 교재 청크(헤딩 경계 + 라인 번호 부여) → `### Q` 초안(선지·정답·근거 LNN·해설) | ✅ |
+| AI-06 | `ai:distractors` — 단답형 허용 정답 변형(공백·구두점 규칙 + LLM 약어·동의어) 제안 | ✅ |
+| AI-07 | `ai:dupcheck` — 초안↔기존 문항 유사도 상한 검사. SEM-05 이웃 인덱스(기존↔기존 의미 유사) + 문자 bigram 어휘 유사도(미임베딩 초안 폴백) | ✅ |
+| AI-08 | `ai:statements` — 참 진술의 거짓 반전 변형(수치 치환·주체 교환·극성 반전 사전 + LLM) + conceptId별 재조합 후보 | ✅ |
+| AI-09 | `ai:tag` — STANDARD_TAGS(inferTags)·난이도 휴리스틱(수치 밀도·부정 발문·단답형)·conceptId(첫 인용 LNN) 제안 | ✅ |
+| AI-10 | `ai:lint` — 발문 검수: 부정 발문·이중부정·전부정답·선지 길이 불균형·발문 내 정답 노출·인용 부재 규칙 | ✅ |
+| AI-11 | `ai:coverage` — 인용 LNN을 교재 라인에 매핑해 과목별 커버율·미출제 섹션 리포트 (ai:draft 투입 범위 근거) | ✅ |
+| AI-12 | `ai:stale` — ref_md 변경(git diff)을 인용하는 문항 추출 → 재검증 대기 목록. `--llm` 시 정답 영향 판정. `check:reffresh`의 해시 감지를 의미 판정으로 확장 | ✅ |
+| AI-13 | 멀티시험 중립 — 모든 도구가 `exam_targets.js`로 대상을 순회하고 `--exam` 필터 지원, 시험 특화 로직 없음 | ✅ |
+
 ---
 
 ## 4. 비기능 요구사양
