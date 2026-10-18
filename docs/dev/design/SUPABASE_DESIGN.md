@@ -392,8 +392,14 @@ Formula OS의 고객 카드·상담 이력은 **타인의 개인정보**(이름�
 | **Supabase Free + keep-alive 크론** | $0 | 사실상 없음 | 스케줄 워크플로 ~20줄 | **채택** |
 | Supabase Pro 시즌제 (시즌 ~6개월만 Pro) | ~$150 | 없음 | 없음 | 보험 — keep-alive 정책 차단 시 |
 | Firebase Spark (말미 Firebase 절) | $0 | 없음 (pause 정책 없음) | 큼 — §12.3 | **최종 후보 탈락** (구조적 결격 — §12.3) |
-| PocketBase 자체호스팅 (Oracle Always Free VM 등) | $0~수만 원 | 없음 | 중간 | 이메일 OTP 인증 지원으로 현행 UX에 가장 유사 — 이관 재검토 시 우선 비교 대상. 단 운영 책임(백업·TLS·도메인) 발생 |
+| PocketBase 자체호스팅 (Oracle Always Free VM 등) | $0~수만 원 | 없음 | 중간 | 이메일 OTP(`requestOTP`/`authWithOTP`)·Kakao OAuth 지원으로 현행 UX에 가장 유사 — 이관 재검토 시 우선 비교 대상. 단 운영 책임(백업·TLS·도메인) 발생 |
+| PocketBase Cloud (managed, pocketbasecloud.com) | ~$60 (Starter $5/월) | 없음 (Starter) | 중간 | stock PocketBase라 자체호스팅과 동일 API·백업 이식 — managed 과도기로 적합. `redeem_code`는 JS hooks 라우트로 대응. ⚠️ **비공식 제3자·1인 중심 소규모 운영**(24/7 on-call 없음을 약관상 명시). Free는 카드 필수 + 30일 무활동 시 **삭제**라 Free 대안 아님 |
+| Better Auth + Neon + Vercel Functions | $0 | 없음 (모두 scale-to-zero·삭제 정책 없음) | 중간 | `emailOTP` 플러그인·Kakao 프로바이더 내장, `redeem_code`는 Vercel 함수로 대체. 동일 오리진 `/api`라 CSP 변경 불요·제3자 BaaS 의존 소멸 — **$0 무정지의 유일한 managed 경로**. 어드민 UI 없음(텔레메트리는 Neon 콘솔 SQL), 메일은 Resend/Brevo 무료 SMTP 연결 필요 |
+| Appwrite Free | $0 | ⚠️ 7일 무활동 정지 — Supabase와 동일 정책 | 중간 | 정지 회피 목적으론 대안 불성립. Free 추가 제약: 커스텀 SMTP 불가(인증 메일에 Appwrite 브랜딩)·Functions 프로젝트당 2개 |
+| Nhost Starter | $0 | ⚠️ 7일 무활동 정지 — Supabase와 동일 정책 | 중간 | 정지 회피 목적으론 대안 불성립. Postgres+Auth 구조는 Supabase와 유사하나 생태계 더 작음 |
 | Cloudflare Workers + D1 | $0 | 없음 (scale-to-zero) | 큼 | 인증·메일 발송 직접 구현으로 최대 공수 |
+
+> **조사 메모 (2026-10-18)**: managed BaaS 무료티어는 Supabase·Appwrite·Nhost 모두 7일 무활동 정지로 사실상 동일 정책이다 — "정지 회피" 목적의 수평 이관은 무의미. 무정지 무료 경로는 ① 자체호스팅(PocketBase), ② 직접 조립(Better Auth + Neon + Vercel / Cloudflare)뿐이며, 유료 managed 무정지 최저가는 PocketBase Cloud Starter($5/월)다.
 
 ### 12.3 Firebase 최종 후보 탈락 사유 (검토 후보로만 보존)
 
@@ -413,7 +419,7 @@ Firebase는 **검토 후보로는 유지하되, 최종 선택은 구조적으로
    - URL·키는 `src/supabase-config.js`에서 실행 시 추출(공개 설계라 시크릿 불필요, 프로젝트 변경 시 자동 추적). 실패 = 정지·장애 → Actions 알림 + **이슈 자동 생성**(§12.5)
    - **수동 실행(검증·복구 확인용)**: ① Actions 탭 → `Supabase Keep-Alive` → `Run workflow` (workflow_dispatch) ② CLI: `gh workflow run supabase-keepalive.yml` — 로그에서 `HTTP 200`이면 정상
 2. **이중 안전장치** — pause 사전 경고 메일 수신 주소를 실제 모니터링하는 메일로 지정 + 시즌 시작 점검(§12.5 표 — DEPLOYMENT_GUIDE 배포 전 체크리스트 반영)
-3. **재검토 트리거** — Supabase가 keep-alive를 정책적으로 차단하거나 Free 한도(500MB·50k MAU) 근접 시 이관을 재평가. 이 경우에도 Firebase는 §12.3의 구조적 결격으로 최종 후보에서 제외되며, **PocketBase**(이메일 OTP 지원·데이터 모델 유사)가 1차 비교 대상이다
+3. **재검토 트리거** — Supabase가 keep-alive를 정책적으로 차단하거나 Free 한도(500MB·50k MAU) 근접 시 이관을 재평가. 이 경우에도 Firebase는 §12.3의 구조적 결격으로 최종 후보에서 제외된다. 비교 대상(§12.2): 최소 재작성·관리형 경로는 **PocketBase 계열**(자체호스팅 또는 PB Cloud Starter $5/월), $0 무정지 요구 시 **Better Auth + Neon + Vercel Functions** 조합이 1차 후보다
 
 ### 12.5 보완 설계 — 알림 강화·이중화 (2026-10-17)
 
