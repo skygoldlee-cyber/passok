@@ -9,6 +9,8 @@
  *
  * 산출물: tmp/ai_drafts/explain_<examKey>.md — 사람 리뷰 후 문제은행 정답 블록에 편입.
  * 컨텍스트는 정답 + 인용 근거 구절(실제 파일 라인 해석)로 제한한다 (grounded generation).
+ * 근거 구절이 해석되지 않는 문항(인용 부재·깨진 링크)은 LLM에 보내지 않고
+ * 초안 파일의 "근거 미해석" 섹션에 목록만 남긴다 — 비근거 해설 생성 차단.
  */
 
 'use strict';
@@ -40,7 +42,7 @@ async function main() {
     const dryRun = flags.has('dry-run') || !llm.isAvailable();
     const limit = opts.limit ? Number(opts.limit) : Infinity;
 
-    let totalMissing = 0, drafted = 0;
+    let totalMissing = 0, drafted = 0, ungrounded = 0;
     for (const target of getTargets(opts)) {
         for (const { exam, absPath } of listQbanks(target)) {
             const { questions, answers } = parseQuestionBank(absPath);
@@ -54,12 +56,18 @@ async function main() {
 
             if (drafted >= limit) continue; // 전역 상한 도달 시 잔여 파일은 스캔만
             const lines = [`# 해설 초안 — ${exam.file} (대상 ${missing.length}문${minLen ? ` · ${minLen}자 미만 보강 포함` : ''})`, ''];
+            const ungroundedList = [];
             for (const q of missing) {
                 if (drafted >= limit) break;
                 const ans = answers.get(q.num);
                 const cit = primaryCitation(ans);
                 const ctx = cit ? readContext(resolveCitation(absPath, cit.file), cit.lineNo, 4) : null;
-                const prompt = buildPrompt(q, ans, ctx ? { label: cit.label, text: ctx.text } : null);
+                if (!ctx) { // 근거 미해석 — 비근거 해설 생성 차단, 목록만 기록
+                    ungrounded++;
+                    ungroundedList.push(`- Q${q.num} — ${cit ? `인용 미해석: ${cit.label}` : '인용 없음'}`);
+                    continue;
+                }
+                const prompt = buildPrompt(q, ans, { label: cit.label, text: ctx.text });
 
                 lines.push(`## Q${q.num}`, '');
                 if (dryRun) {
@@ -73,12 +81,15 @@ async function main() {
                 }
                 drafted++;
             }
+            if (ungroundedList.length) {
+                lines.push('## ⚠️ 근거 미해석 — 해설 미생성 (인용 보강 후 재실행)', '', ...ungroundedList, '');
+            }
             // 파일명에 시험 id 포함 — 동일 examKey를 쓰는 다른 시험과 충돌 방지
             const out = writeDraft(`explain_${target.id}_${exam.key}.md`, lines, { model: llm.modelName() });
-            console.log(`${exam.file}: 해설 누락 ${missing.length}문 → ${out}`);
+            console.log(`${exam.file}: 해설 누락 ${missing.length}문 (근거 미해석 ${ungroundedList.length}문 제외) → ${out}`);
         }
     }
-    console.log(`\n총 해설 누락: ${totalMissing}문 · 초안 작성: ${drafted}문${dryRun ? ' (dry-run)' : ''}`);
+    console.log(`\n총 해설 누락: ${totalMissing}문 · 초안 작성: ${drafted}문 · 근거 미해석: ${ungrounded}문${dryRun ? ' (dry-run)' : ''}`);
 }
 
 if (require.main === module) main().catch(e => { console.error(e.message); process.exit(1); });
