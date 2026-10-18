@@ -14,6 +14,11 @@ export const AD_CATEGORIES = {
   overclaim: { id: 'overclaim', label: '과대·허위 표현', desc: '절대적·검증 불가 효능 표현' },
   functional: { id: 'functional', label: '기능성 범위 주의', desc: '기능성화장품 심사(보고) 제품만 쓸 수 있는 표현 — 일반 화장품에 사용 금지' },
   endorsement: { id: 'endorsement', label: '전문가 추천 오인', desc: '의사·약사·의료기관 추천·공인 암시 — 시행규칙 별표5 2.다 금지' },
+  origin: { id: 'origin', label: '제조국 오인', desc: '국내·외 제조 제품의 출처를 오인하게 하는 표현 — 시행규칙 별표5 2.라 금지' },
+  tieup: { id: 'tieup', label: '기술제휴 허위', desc: '외국 기술제휴·공동연구의 허위 표현 — 시행규칙 별표5 2.마 금지' },
+  vulgar: { id: 'vulgar', label: '저속·혐오 표현', desc: '저속하거나 혐오감을 주는 표현 — 시행규칙 별표5 2.자 금지' },
+  endangered: { id: 'endangered', label: '멸종위기종 함유', desc: '국제적 멸종위기종 가공품 함유 표현·암시 — 시행규칙 별표5 2.차 금지' },
+  slander: { id: 'slander', label: '타 제품 비방', desc: '사실 유무와 무관하게 다른 제품을 비방·비방 의심 표현 — 시행규칙 별표5 2.카 금지' },
 };
 
 export const AD_BANNED_TERMS = [
@@ -88,6 +93,50 @@ export const AD_BANNED_TERMS = [
   { term: 'PA+', category: 'functional', suggestion: '자외선차단 기능성 심사 제품만 표기 가능' },
   { term: '탈모 증상 완화', category: 'functional', suggestion: '탈모 증상 완화 기능성 심사 제품만 표기 가능' },
   { term: '튼살', category: 'functional', suggestion: '튼살 관련 표현은 기능성 심사 대상' },
+
+  // 제조국 오인 (별표5 2.라) — 실제 제조국과 다른 인상을 주는 표현, 오인 여부 검토 필요
+  { term: '수입 완제품', category: 'origin', suggestion: '실제 제조국·수입 여부를 정확히 명시' },
+  { term: '직수입 완제품', category: 'origin', suggestion: '실제 제조국·수입 여부를 정확히 명시' },
+  { term: '해외 직수입', category: 'origin', suggestion: '실제 수입 사실에 근거한 표현만 허용 — 국내 제조 시 금지' },
+  { term: 'Made in France', category: 'origin', suggestion: '실제 제조국이 맞는 경우에만 사용 — 원산지와 제조국 구분 명시' },
+
+  // 외국 기술제휴 허위 (별표5 2.마) — 실증 자료 없는 제휴·공동개발 암시
+  { term: '외국 기술제휴', category: 'tieup', suggestion: '실제 제휴 계약·실증 자료가 있는 경우에만 구체 내역 명시' },
+  { term: '해외 연구소 공동개발', category: 'tieup', suggestion: '공동개발 실적·증빙이 있을 때만 사실 범위 내 기재' },
+  { term: '해외 독점 기술제휴', category: 'tieup', suggestion: '독점 계약 실증 서류 확인 후 사실에 부합하는 범위로 기재' },
+  { term: '해외 유명 연구진 독점 제휴', category: 'tieup', suggestion: '계약서 등 실증 자료에 기반한 제휴 관계만 명시' },
+
+  // 저속·혐오 표현 (별표5 2.자) — 신체·피부 관련 저속어
+  { term: '개기름', category: 'vulgar', suggestion: '번들거림' },
+  { term: '모낭충', category: 'vulgar', suggestion: '모공 속 노폐물' },
+  { term: '피지 폭발', category: 'vulgar', suggestion: '과다 피지 분비' },
+  { term: '닭살', category: 'vulgar', suggestion: '오돌토돌한 피부' },
+  { term: '뱀살', category: 'vulgar', suggestion: '건조하고 거친 피부' },
+  { term: '묵은 때', category: 'vulgar', suggestion: '불필요한 각질' },
+  { term: '썩은 피부', category: 'vulgar', suggestion: '칙칙한 피부' },
+  { term: '고름', category: 'vulgar', suggestion: '피부 고민 부위' },
+
+  // 멸종위기종 함유 표현 (별표5 2.차) — CITES 가공품 함유 암시
+  { term: '사향노루', category: 'endangered', suggestion: '식물성·합성 머스크 향료' },
+  { term: '천연 사향', category: 'endangered', suggestion: '화이트 머스크 또는 머스크향' },
+  { term: '웅담', category: 'endangered', suggestion: '식물성 진정 추출물' },
+  { term: '곰 쓸개', category: 'endangered', suggestion: '피부 진정 특화 성분' },
+  { term: '호랑이 뼈', category: 'endangered', suggestion: '표현 삭제' },
+  { term: '호랑이 기름', category: 'endangered', suggestion: '식물성 보습 오일' },
+  { term: '서각', category: 'endangered', suggestion: '식물성 영양 성분' },
+  { term: '코뿔소 뿔', category: 'endangered', suggestion: '케라틴 대체 단백질 성분' },
+  { term: '천산갑', category: 'endangered', suggestion: '피부 보호 펩타이드 복합체' },
+  { term: '바다거북 오일', category: 'endangered', suggestion: '식물성 스쿠알란·식물성 오일' },
+
+  // 타 제품 비방 (별표5 2.카) — 경쟁 제품 깎아내리기·음해성 표현
+  { term: '타사 제품 유해', category: 'slander', suggestion: '자사 안전 기준만 서술' },
+  { term: '타사 대비 안전', category: 'slander', suggestion: '자사 기준 안전성 테스트 완료' },
+  { term: '타사 제품 부작용', category: 'slander', suggestion: '피부 저자극 테스트 완료' },
+  { term: '시중 제품의 위험성', category: 'slander', suggestion: '안심 포뮬러 개발' },
+  { term: '화학 덩어리', category: 'slander', suggestion: '자연 유래 성분 배합' },
+  { term: '타사는 흉내만', category: 'slander', suggestion: '자사만의 독자적 공법' },
+  { term: '기존 제품 효과 없음', category: 'slander', suggestion: '만족도 높은 사용감' },
+  { term: '타사 제품 쓰지 마세요', category: 'slander', suggestion: '본 제품 권장 문구로 대체' },
 ];
 
 /**
