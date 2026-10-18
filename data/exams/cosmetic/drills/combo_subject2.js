@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject2.d4fd9eb1.js — mode: fact(명제 조합) 49문 / answer(정답 조합) 192문
+// 원본: data/exams/cosmetic/exams/subject2.56bc0564.js — mode: fact(명제 조합) 49문 / answer(정답 조합) 192문
 var COMBO_DRILLS_subject2 = [
  {
   "id": "manufacturing_combo_f62cd4",
@@ -10183,41 +10183,41 @@ var COMBO_DRILLS_subject2 = [
   "subject": 2,
   "type": "combo",
   "points": 4,
-  "citation": "📖 법령 근거 (출처: 과목2 문제은행 Q112)",
+  "citation": "📖 교재 근거 (출처: 과목2 문제은행 Q112)",
   "stem": "다음 중 CGMP 기준상 시험 검사 적합 판정을 받은 원자재에 부착하는 '적합 승인 라벨'의 표준 색상에 해당하는 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_78d01a",
-    "conceptId": "§1.1",
+    "conceptId": "§4.0",
     "text": "적색",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_dd3863",
-    "conceptId": "§1.1",
+    "conceptId": "§4.0",
     "text": "녹색",
-    "truth": true
+    "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_87b44e",
-    "conceptId": "§1.1",
+    "conceptId": "§4.0",
     "text": "황색",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_0d1041",
-    "conceptId": "§1.1",
+    "conceptId": "§4.0",
     "text": "청색",
-    "truth": false
+    "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_295bf5",
-    "conceptId": "§1.1",
+    "conceptId": "§4.0",
     "text": "흑색",
     "truth": false
    }
@@ -10226,33 +10226,34 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "1",
     "members": [
-     "ㄱ",
-     "ㄴ",
-     "ㄹ"
+     "ㅁ"
     ]
    },
    {
     "id": "2",
     "members": [
-     "ㄷ"
+     "ㄹ"
     ]
    },
    {
     "id": "3",
     "members": [
-     "ㄴ"
+     "ㄹ",
+     "ㅁ"
     ]
    },
    {
     "id": "4",
     "members": [
-     "ㄹ"
+     "ㄷ"
     ]
    },
    {
     "id": "5",
     "members": [
-     "ㅁ"
+     "ㄱ",
+     "ㄴ",
+     "ㄹ"
     ]
    }
   ],
@@ -10262,9 +10263,9 @@ var COMBO_DRILLS_subject2 = [
    "절차"
   ],
   "derivedFrom": "subject2_q112",
-  "explain": "📖 법령 근거:\n| 사용상 제한이 없는 색소 | 청색 1호, 2호, 201호, 204호, 205호 / 녹색 3호, 201호, 202호 / 황색 4호, 5호, 201호, 202호 / 적색 40호, 201호, 202호, 220호, 226호, 227호, 228호, 230호 / 자색 201호 |\n해설: CGMP 기준상 시험 검사 적합 판정을 받은 원자재에 부착하는 적합 승인 라벨의 표준 색상은 ② 녹색이며, ① 적색, ③ 황색, ④ 청색, ⑤ 흑색은 이에 해당하지 않아 오답입니다. 다만 제공된 근거 구절에는 해당 적합 승인 라벨의 규정에 대한 내용이 명시되어 있지 않습니다.",
+  "explain": "📖 교재 근거:\n|  | 입고 라벨 색상 | 백색(입고)→황색(검사중)→청색(적합)/적색(부적합) |\n해설: 교재상 원자재 입고 라벨은 백색(입고)→황색(검사 중)→청색(적합)/적색(부적합) 체계이므로, 적합 판정 원자재에 부착하는 라벨의 표준 색상은 ④ 청색입니다.",
   "source": "화장품 제조 및 품질관리 (336제)",
-  "answer": "3"
+  "answer": "2"
  },
  {
   "id": "manufacturing_combo_d0568d",
@@ -13679,35 +13680,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_d59934",
-    "conceptId": "§1.5",
+    "conceptId": "§3.2",
     "text": "미생물의 번식을 억제하여 화장품의 보존 기간을 늘린다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_02e6bb",
-    "conceptId": "§1.5",
+    "conceptId": "§3.2",
     "text": "화장품의 점도를 조절하여 사용감을 향상시킨다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_0d8255",
-    "conceptId": "§1.5",
+    "conceptId": "§3.2",
     "text": "원료 내 미량의 금속이온과 결합하여 변색을 방지한다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_55d626",
-    "conceptId": "§1.5",
+    "conceptId": "§3.2",
     "text": "피부에 수분을 공급하고 각질층의 수분 보유력을 높인다.",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_8bc7fa",
-    "conceptId": "§1.5",
+    "conceptId": "§3.2",
     "text": "자외선을 차단하여 피부 손상을 예방한다.",
     "truth": false
    }
@@ -13756,7 +13757,7 @@ var COMBO_DRILLS_subject2 = [
    "정답판정"
   ],
   "derivedFrom": "subject2_q151",
-  "explain": "📖 교재 근거:\n식품의약품안전처장은 단체 또는 관련 업무를 수행하는 기관 등을 지정하여 화장품의 판매, 표시·광고, 품질 등에 대하여 모니터링을 할 수 있음\n해설: 제공된 정답에 따르면 화장품 보존제의 역할로 옳은 것은 미생물의 번식을 억제하여 화장품의 보존 기간을 늘리는 ①번입니다. 따라서 화장품의 점도 조절, 변색 방지, 수분 공급, 자외선 차단을 제시한 ②, ③, ④, ⑤번은 보존제의 역할에 해당하지 않아 옳지 않습니다(단, 제시된 근거 구절에는 보존제의 역할에 관한 내용이 포함되어 있지 않습니다).",
+  "explain": "📖 교재 근거:\n| 보존제 | 미생물 증식 억제·살균. 파라벤(0.4%/0.8%), 페녹시에탄올(1.0%), 살리실릭애씨드(0.5%) 등. |\n해설: 보존제는 교재상 \"미생물 증식 억제·살균\" 역할로 정의되므로 미생물 번식을 억제해 보존 기간을 늘리는 ①번이 정답입니다. 점도 조절(②)은 고분자·점증제, 금속이온 결합(③)은 금속이온봉쇄제, 수분 공급(④)은 보습제, 자외선 차단(⑤)은 자외선차단제의 역할입니다.",
   "source": "화장품 제조 및 품질관리 (336제)",
   "answer": "1"
  },
