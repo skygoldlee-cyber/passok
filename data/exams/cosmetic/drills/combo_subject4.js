@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject4.a3e1b591.js — mode: fact(명제 조합) 98문 / answer(정답 조합) 345문
+// 원본: data/exams/cosmetic/exams/subject4.dc82393f.js — mode: fact(명제 조합) 98문 / answer(정답 조합) 345문
 var COMBO_DRILLS_subject4 = [
  {
   "id": "understanding_combo_8317ff",
@@ -1696,9 +1696,9 @@ var COMBO_DRILLS_subject4 = [
    },
    {
     "id": "ㄷ",
-    "sid": "understanding_st_4d3f2f",
+    "sid": "understanding_st_762b67",
     "conceptId": "§2.1",
-    "text": "경피수분손실도 - TEWL (Transepidermal Water Loss)",
+    "text": "경피수분손실도 - TEWL",
     "truth": true
    },
    {
@@ -1785,9 +1785,9 @@ var COMBO_DRILLS_subject4 = [
    },
    {
     "id": "ㄷ",
-    "sid": "understanding_st_66210d",
+    "sid": "understanding_st_8c1934",
     "conceptId": "§4.0",
-    "text": "과량 사용 시 피부 트러블, 알레르기 등의 강한 피부 자극 부작용을 일으킬 우려가 높기 때문",
+    "text": "과량 사용 시 피부 트러블·알레르기 등 강한 피부 자극 부작용 우려 때문",
     "truth": true
    },
    {
@@ -2998,9 +2998,9 @@ var COMBO_DRILLS_subject4 = [
    },
    {
     "id": "ㅁ",
-    "sid": "understanding_st_c06235",
+    "sid": "understanding_st_f54903",
     "conceptId": "§1.1",
-    "text": "미세한 실내 공기의 흐름(바람)에 의한 저울의 떨림과 오차를 방지하기 위해",
+    "text": "미세한 실내 기류(바람)로 인한 저울의 떨림·오차 방지를 위해",
     "truth": true
    }
   ],
@@ -5864,9 +5864,9 @@ var COMBO_DRILLS_subject4 = [
    },
    {
     "id": "ㅁ",
-    "sid": "understanding_st_552889",
+    "sid": "understanding_st_47a6d4",
     "conceptId": "§1.1",
-    "text": "비누와 미온수로 손의 구석구석을 30초 이상 마찰하여 세척 -> 정제수 헹굼 -> 건조 -> 70% 소독 에탄올 분사 및 건조",
+    "text": "비누·미온수로 30초 이상 마찰 세척 -> 헹굼 -> 건조 -> 소독 에탄올 분사",
     "truth": true
    }
   ],
@@ -5912,7 +5912,6 @@ var COMBO_DRILLS_subject4 = [
    "자동변환",
    "정답판정",
    "절차",
-   "한도",
    "수치"
   ],
   "derivedFrom": "subject4_q64",
@@ -5958,9 +5957,9 @@ var COMBO_DRILLS_subject4 = [
    },
    {
     "id": "ㅁ",
-    "sid": "understanding_st_9fd358",
+    "sid": "understanding_st_dd7466",
     "conceptId": "q:subject4_q65",
-    "text": "다점 교정 (Multi-Point Calibration, 주로 3점 교정)",
+    "text": "다점 교정 (Multi-Point, 주로 3점)",
     "truth": true
    }
   ],
@@ -7330,9 +7329,9 @@ var COMBO_DRILLS_subject4 = [
    },
    {
     "id": "ㄷ",
-    "sid": "understanding_st_76f4e6",
+    "sid": "understanding_st_1e4f02",
     "conceptId": "§4.2",
-    "text": "자동 온도 보상 (ATC, Automatic Temperature Compensation) 센서",
+    "text": "자동 온도 보상 (ATC) 센서",
     "truth": true
    },
    {
@@ -8426,9 +8425,9 @@ var COMBO_DRILLS_subject4 = [
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "understanding_st_1bc1bb",
+    "sid": "understanding_st_c47f9b",
     "conceptId": "§2.1",
-    "text": "자외선을 일정하게 받으면 비타민 D를 합성하며, 콜레스테롤이 합성에 중요한 역할을 한다",
+    "text": "자외선을 받으면 비타민 D를 합성하고 콜레스테롤이 합성에 관여한다",
     "truth": true
    },
    {
@@ -9742,9 +9741,9 @@ var COMBO_DRILLS_subject4 = [
    },
    {
     "id": "ㄹ",
-    "sid": "understanding_st_a2b7f5",
+    "sid": "understanding_st_17483a",
     "conceptId": "q:subject4_q106",
-    "text": "동일한 약숟가락(스패튤라)을 세척 없이 여러 원료에 번갈아 사용 / 원료마다 개별 도구 사용",
+    "text": "동일 스패튤라를 세척 없이 여러 원료에 번갈아 사용 / 원료마다 개별 도구 사용",
     "truth": true
    },
    {
@@ -10396,9 +10395,9 @@ var COMBO_DRILLS_subject4 = [
    },
    {
     "id": "ㅁ",
-    "sid": "understanding_st_fb9207",
+    "sid": "understanding_st_8e692a",
     "conceptId": "§2.1",
-    "text": "각질분해효소 (KLK / Kallikrein-related peptidase)",
+    "text": "각질분해효소 (KLK)",
     "truth": true
    }
   ],
@@ -10744,9 +10743,9 @@ var COMBO_DRILLS_subject4 = [
    },
    {
     "id": "ㄷ",
-    "sid": "understanding_st_d5413b",
+    "sid": "understanding_st_4e26ca",
     "conceptId": "§2.2",
-    "text": "TEWL (Transepidermal Water Loss / 경피수분손실도)",
+    "text": "TEWL (경피수분손실도)",
     "truth": true
    },
    {

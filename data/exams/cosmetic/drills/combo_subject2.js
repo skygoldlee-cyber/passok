@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject2.0931be74.js — mode: fact(명제 조합) 49문 / answer(정답 조합) 192문
+// 원본: data/exams/cosmetic/exams/subject2.e5b78bfd.js — mode: fact(명제 조합) 49문 / answer(정답 조합) 192문
 var COMBO_DRILLS_subject2 = [
  {
   "id": "manufacturing_combo_f62cd4",
@@ -666,9 +666,9 @@ var COMBO_DRILLS_subject2 = [
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "manufacturing_st_70be45",
+    "sid": "manufacturing_st_66288e",
     "conceptId": "§4.2",
-    "text": "눈 주위 또는 점막 등에 분사하지 말 것. 다만, 얼굴에 직접 분사하지 말고 손에 덜어 얼굴에 바를 것",
+    "text": "눈 주위·점막에 분사하지 말고, 얼굴은 손에 덜어 바를 것",
     "truth": true
    },
    {
@@ -2985,9 +2985,9 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㄴ",
-    "sid": "manufacturing_st_1e982e",
+    "sid": "manufacturing_st_c08601",
     "conceptId": "§1.1",
-    "text": "자외선 B(UVB)에 의한 피부의 최소홍반량을 몇 배로 지연시키는지 나타내는 지수",
+    "text": "자외선 B(UVB) 홍반 발생을 몇 배 지연시키는지 나타내는 지수",
     "truth": true
    },
    {
@@ -6502,9 +6502,9 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㅁ",
-    "sid": "manufacturing_st_d90408",
+    "sid": "manufacturing_st_cda40a",
     "conceptId": "q:subject2_q72",
-    "text": "창고 청소의 용이성 확보 및 바닥/벽면의 습기 전이로 인한 곰팡이 오염을 방지하기 위해",
+    "text": "창고 청소 용이성 확보와 습기로 인한 곰팡이 오염 방지를 위해",
     "truth": true
    }
   ],
@@ -7042,9 +7042,9 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㄴ",
-    "sid": "manufacturing_st_0a6972",
+    "sid": "manufacturing_st_8e8dcc",
     "conceptId": "§3.1",
-    "text": "살리실릭애씨드로서 0.5%이며, 영유아용 제품류 또는 13세 이하 어린이가 사용할 수 있음을 특정하여 표시하는 제품에는 사용금지(단, 샴푸는 제외)",
+    "text": "살리실릭애씨드로서 0.5%, 영유아·어린이용은 사용금지(샴푸 제외)",
     "truth": true
    },
    {
@@ -8070,9 +8070,9 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㄷ",
-    "sid": "manufacturing_st_aba7b9",
+    "sid": "manufacturing_st_be207e",
     "conceptId": "§1.1",
-    "text": "분자 내에 친수성기와 소수성(친유성)기를 동시에 가지고 있어 라멜라 액정 형성에 핵심적인 역할을 한다.",
+    "text": "친수성기와 소수성기를 동시에 가져 라멜라 액정 형성에 핵심 역할을 한다.",
     "truth": true
    },
    {
@@ -8171,9 +8171,9 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㄹ",
-    "sid": "manufacturing_st_28a5e3",
+    "sid": "manufacturing_st_59e2cd",
     "conceptId": "§5.1",
-    "text": "원료의 노출량과 독성 반응(영향) 사이의 정량적 인과관계를 밝혀 최대무작용량(NOAEL) 등을 구한다.",
+    "text": "노출량-독성 반응의 인과관계로 최대무작용량(NOAEL)을 구한다",
     "truth": true
    },
    {
@@ -8535,9 +8535,9 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㄹ",
-    "sid": "manufacturing_st_780148",
+    "sid": "manufacturing_st_390ed5",
     "conceptId": "§5.2",
-    "text": "행정처분 감경(면제) 신청서 (및 감경 신청의 근거가 되는 회수 완료 종합 보고서)",
+    "text": "행정처분 감경(면제) 신청서와 회수 완료 종합 보고서",
     "truth": true
    },
    {
@@ -8717,9 +8717,9 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㄷ",
-    "sid": "manufacturing_st_ec6189",
+    "sid": "manufacturing_st_e80518",
     "conceptId": "§1.1",
-    "text": "자외선 A(UVA)를 차단하는 효과의 등급으로, PA+, PA++, PA+++, PA++++ 등으로 표시한다.",
+    "text": "자외선 A(UVA) 차단 효과의 등급으로 PA+~PA++++로 표시한다.",
     "truth": true
    },
    {
@@ -8990,9 +8990,9 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㄴ",
-    "sid": "manufacturing_st_c587fb",
+    "sid": "manufacturing_st_af7720",
     "conceptId": "§5.2",
-    "text": "물질의 인체 유해성(독성) 및 유해 인자가 무엇인지 화학적/생물학적으로 밝혀내는 단계",
+    "text": "물질의 인체 유해성(독성)과 유해 인자를 밝혀내는 단계",
     "truth": true
    },
    {
@@ -9178,16 +9178,16 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㄴ",
-    "sid": "manufacturing_st_51f0a4",
+    "sid": "manufacturing_st_e76b25",
     "conceptId": "q:subject2_q101",
-    "text": "사용 후 씻어내는 제품에는 0.01% 초과, 사용 후 씻어내지 않는 제품에는 0.001% 초과 함유하는 경우에 표시한다",
+    "text": "씻어내는 제품 0.01% 초과, 씻어내지 않는 제품 0.001% 초과 함유 시 표시",
     "truth": true
    },
    {
     "id": "ㄷ",
-    "sid": "manufacturing_st_0f7806",
+    "sid": "manufacturing_st_40a90e",
     "conceptId": "q:subject2_q101",
-    "text": "사용 후 씻어내는 제품에는 0.001% 초과, 사용 후 씻어내지 않는 제품에는 0.01% 초과 함유하는 경우에 표시한다",
+    "text": "씻어내는 제품 0.001% 초과, 씻어내지 않는 제품 0.01% 초과 함유 시 표시",
     "truth": false
    },
    {
@@ -9737,9 +9737,9 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㄷ",
-    "sid": "manufacturing_st_bedb4c",
+    "sid": "manufacturing_st_fbf280",
     "conceptId": "§5.2",
-    "text": "노출 대상 인구가 화장품 성분에 노출되는 경로, 빈도, 양, 기간을 정량적으로 산출하는 단계",
+    "text": "노출 경로·빈도·양·기간을 정량적으로 산출하는 단계",
     "truth": true
    },
    {
@@ -10291,9 +10291,9 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㄷ",
-    "sid": "manufacturing_st_d7ba34",
+    "sid": "manufacturing_st_8ca3f6",
     "conceptId": "§5.2",
-    "text": "위험성 확인, 용량-반응 평가, 노출 평가의 모든 정보를 종합하여 실제 인체에 미치는 위해의 가능성과 강도를 최종 판정하는 단계",
+    "text": "위험·용량반응·노출 평가를 종합해 위해를 최종 판정하는 단계",
     "truth": true
    },
    {
@@ -10654,9 +10654,9 @@ var COMBO_DRILLS_subject2 = [
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "manufacturing_st_4c12a2",
+    "sid": "manufacturing_st_d3a165",
     "conceptId": "§2.0",
-    "text": "지구의 중력 가속도 (일반 보관 시 기계적 외력을 제외한 미세 중력은 변질 주원인이 아님)",
+    "text": "지구의 중력 (미세 중력은 변질의 주원인이 아님)",
     "truth": true
    },
    {
@@ -14430,9 +14430,9 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㄴ",
-    "sid": "manufacturing_st_d8b49e",
+    "sid": "manufacturing_st_b713a6",
     "conceptId": "§3.1",
-    "text": "사용 후 씻어내는 제품에 벤잘코늄클로라이드로서 0.1%, 기타 제품에 0.05%",
+    "text": "씻어내는 제품에 0.1%, 기타 제품에 0.05%로 사용",
     "truth": true
    },
    {

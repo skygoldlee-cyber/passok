@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject3.896428a6.js — mode: fact(명제 조합) 72문 / answer(정답 조합) 282문
+// 원본: data/exams/cosmetic/exams/subject3.6d96f5dc.js — mode: fact(명제 조합) 72문 / answer(정답 조합) 282문
 var COMBO_DRILLS_subject3 = [
  {
   "id": "safety_combo_86b500",
@@ -220,9 +220,9 @@ var COMBO_DRILLS_subject3 = [
    },
    {
     "id": "ㄷ",
-    "sid": "safety_st_41b2d9",
+    "sid": "safety_st_c430c2",
     "conceptId": "§1.0",
-    "text": "감염병 예방 및 관리에 관한 법률에 따른 감염병 환자(전염성 피부 질환자 포함)는 화장품 제조 업무에 종사할 수 없다.",
+    "text": "감염병 환자(전염성 피부 질환자 포함)는 화장품 제조 업무에 종사할 수 없다.",
     "truth": true
    },
    {
@@ -2088,9 +2088,9 @@ var COMBO_DRILLS_subject3 = [
    },
    {
     "id": "ㄴ",
-    "sid": "safety_st_3fda2c",
+    "sid": "safety_st_71ee5c",
     "conceptId": "§1.1",
-    "text": "이전 배치 제조 원료나 세척제의 잔류물이 다음 제조 배치에 교차 오염되는 것을 방지하기 위해",
+    "text": "잔류 원료나 세척제가 다음 배치에 교차 오염되는 것을 방지하기 위해",
     "truth": true
    },
    {
@@ -2740,9 +2740,9 @@ var COMBO_DRILLS_subject3 = [
    },
    {
     "id": "ㄴ",
-    "sid": "safety_st_3f6156",
+    "sid": "safety_st_159d04",
     "conceptId": "§4.2",
-    "text": "계면활성제 등 원료 합성 과정(에틸렌옥사이드 부가 반응)에서 비의도적으로 생성되어 잔류해서",
+    "text": "원료 합성 과정(에틸렌옥사이드 부가)에서 비의도적으로 생성·잔류해서",
     "truth": true
    },
    {
@@ -3324,9 +3324,9 @@ var COMBO_DRILLS_subject3 = [
    },
    {
     "id": "ㄹ",
-    "sid": "safety_st_5dd605",
+    "sid": "safety_st_52e9a2",
     "conceptId": "q:subject3_q36",
-    "text": "제조 공정 중 반제품의 물리적 이송 파이프 라인 설계 도면 (설비 사양서 항목)",
+    "text": "반제품 이송 파이프 라인 설계 도면",
     "truth": true
    },
    {
@@ -4263,9 +4263,9 @@ var COMBO_DRILLS_subject3 = [
    },
    {
     "id": "ㅁ",
-    "sid": "safety_st_7b5480",
+    "sid": "safety_st_82c43e",
     "conceptId": "§1.3",
-    "text": "동일 원료이나 먼저 입고된 배치의 품질 시험 결과 부적합 판정이 나서 재시험 중인 경우 (이 경우 부적합/보류이므로 선출고 불가)",
+    "text": "동일 원료이나 먼저 입고된 배치가 부적합 판정으로 재시험 중인 경우",
     "truth": true
    }
   ],
@@ -14025,9 +14025,9 @@ var COMBO_DRILLS_subject3 = [
    },
    {
     "id": "ㄹ",
-    "sid": "safety_st_880f28",
+    "sid": "safety_st_8763cc",
     "conceptId": "§4.1",
-    "text": "미리 정해진 우수화장품 제조 및 품질관리기준(CGMP)을 벗어나 이루어진 행위",
+    "text": "우수화장품 제조 및 품질관리기준(CGMP)을 벗어난 행위",
     "truth": true
    },
    {
@@ -14108,9 +14108,9 @@ var COMBO_DRILLS_subject3 = [
    },
    {
     "id": "ㄴ",
-    "sid": "safety_st_f555c3",
+    "sid": "safety_st_884a69",
     "conceptId": "§4.1",
-    "text": "하나의 공정이나 일련의 공정으로 제조되어 균질성을 갖는 화장품의 일정한 분량",
+    "text": "하나의 공정으로 제조되어 균질성을 갖는 화장품의 일정한 분량",
     "truth": true
    },
    {
@@ -14196,9 +14196,9 @@ var COMBO_DRILLS_subject3 = [
    },
    {
     "id": "ㄴ",
-    "sid": "safety_st_aaba3f",
+    "sid": "safety_st_464e1b",
     "conceptId": "§4.1",
-    "text": "모든 제조, 관리 및 보관된 제품이 규정된 적합 판정 기준에 일치하도록 보장하기 위해 변경하는 것",
+    "text": "제품이 적합 판정 기준에 일치하도록 보장하기 위해 변경하는 것",
     "truth": true
    },
    {
@@ -14280,9 +14280,9 @@ var COMBO_DRILLS_subject3 = [
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "safety_st_6475d9",
+    "sid": "safety_st_d1a6ab",
     "conceptId": "§4.1",
-    "text": "제조 및 품질과 관련한 결과가 계획된 사항과 일치하는지 여부와 적합성을 결정하기 위한 체계적이고 독립적인 조사",
+    "text": "품질 관련 결과가 계획된 사항에 일치하는지 결정하기 위한 체계적·독립적 조사",
     "truth": true
    },
    {
@@ -14467,9 +14467,9 @@ var COMBO_DRILLS_subject3 = [
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "safety_st_b6ae62",
+    "sid": "safety_st_858d2e",
     "conceptId": "§4.2",
-    "text": "적합판정 기준을 벗어난 완제품 또는 벌크제품을 재처리하여 품질이 적합한 범위에 들어오도록 하는 작업",
+    "text": "적합 기준을 벗어난 제품을 재처리하여 적합 범위에 들어오도록 하는 작업",
     "truth": true
    },
    {
@@ -15039,9 +15039,9 @@ var COMBO_DRILLS_subject3 = [
    },
    {
     "id": "ㄴ",
-    "sid": "safety_st_0687c6",
+    "sid": "safety_st_ddd76f",
     "conceptId": "§4.1",
-    "text": "제조공정 중 적합 판정 기준의 충족을 보증하기 위해 공정을 모니터링하거나 조정하는 모든 작업",
+    "text": "적합 판정 기준의 충족을 보증하기 위해 공정을 모니터링·조정하는 작업",
     "truth": true
    },
    {
@@ -15133,9 +15133,9 @@ var COMBO_DRILLS_subject3 = [
    },
    {
     "id": "ㄴ",
-    "sid": "safety_st_9f4dda",
+    "sid": "safety_st_382616",
     "conceptId": "§4.1",
-    "text": "대상물의 표면에 있는 바람직하지 못한 미생물 등 오염물을 감소시키기 위해 시행되는 작업",
+    "text": "대상물 표면의 미생물 등 오염물을 감소시키기 위해 시행하는 작업",
     "truth": true
    },
    {
@@ -15226,9 +15226,9 @@ var COMBO_DRILLS_subject3 = [
    },
    {
     "id": "ㄴ",
-    "sid": "safety_st_bfa4f2",
+    "sid": "safety_st_1eed7f",
     "conceptId": "§4.1",
-    "text": "주문 준비와 관련된 일련의 작업과 운송 수단에 적재하는 활동으로 제조소 외로 제품을 운반하는 것",
+    "text": "주문 준비와 운송 수단 적재 활동으로 제조소 외로 제품을 운반하는 것",
     "truth": true
    },
    {
@@ -15329,9 +15329,9 @@ var COMBO_DRILLS_subject3 = [
    },
    {
     "id": "ㄷ",
-    "sid": "safety_st_1eb87e",
+    "sid": "safety_st_9fa8b2",
     "conceptId": "q:subject3_q166",
-    "text": "직원, 회사 또는 조직을 대신하여 작업을 수행하는 사람, 회사 또는 외부 조직",
+    "text": "직원·회사·조직을 대신하여 작업을 수행하는 사람이나 외부 조직",
     "truth": true
    },
    {
@@ -15410,9 +15410,9 @@ var COMBO_DRILLS_subject3 = [
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "safety_st_5bea51",
+    "sid": "safety_st_029789",
     "conceptId": "§4.1",
-    "text": "제조 및 품질 관련 문서에 명기된 설비로 제품의 품질에 영향을 미치는 필수적인 설비",
+    "text": "문서에 명기된 제품 품질에 영향을 미치는 필수 설비",
     "truth": true
    },
    {
