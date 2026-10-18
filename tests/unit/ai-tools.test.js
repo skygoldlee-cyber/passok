@@ -107,6 +107,31 @@ test('AI-04: buildPrompt에 정답·근거 구절이 컨텍스트로 포함된�
     assert.ok(p.includes('옳은 것은?') && p.includes('②') && p.includes('근거 본문'));
 });
 
+test('AI-04: evidenceFor — 인용 없음·링크 미해석 시 null (비근거 생성 스킵 판정)', () => {
+    const { evidenceFor } = require('../../tools/ai/ai_explain.js');
+    const dir = mkdtempSync(join(tmpdir(), 'explain-ev-'));
+    mkdirSync(join(dir, '문제은행'));
+    mkdirSync(join(dir, '교재'));
+    writeFileSync(join(dir, '교재', 'book.md'), '라인1\n라인2 — 근거 본문\n라인3\n');
+    const qbankPath = join(dir, '문제은행', 'bank.md');
+
+    // 인용 자체가 없음 → null
+    assert.equal(evidenceFor(qbankPath, { answer: '①', accepts: [], citations: [] }), null);
+    // 인용은 있으나 대상 파일 부재 → null
+    assert.equal(evidenceFor(qbankPath, {
+        answer: '①', accepts: [],
+        citations: [{ label: '교재: L1', line: 1, file: '../교재/none.md', lineNo: 1 }],
+    }), null);
+    // 정상 인용 → 근거 구절 반환
+    const ev = evidenceFor(qbankPath, {
+        answer: '①', accepts: [],
+        citations: [{ label: '교재: L2', line: 2, file: '../교재/book.md', lineNo: 2 }],
+    });
+    assert.equal(ev.label, '교재: L2');
+    assert.ok(ev.text.includes('근거 본문'));
+    rmSync(dir, { recursive: true, force: true });
+});
+
 // ---------- AI-06: 허용 정답 규칙 변형 ----------
 
 test('AI-06: 공백·구두점 변형을 규칙으로 생성한다', () => {
