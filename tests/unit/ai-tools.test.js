@@ -259,6 +259,40 @@ test('AI-14: ai:stmtfb --dry-run이 무키로 초안 골격을 출력한다', ()
     assert.match(out, /진술|초안/, '스캔·초안 요약 출력');
 });
 
+test('AI-05: parseQuestionDraft가 ### Q/정답/근거 라인을 추출하고 폐기 후보 청크를 제외한다', () => {
+    const { parseQuestionDraft } = require('../../tools/ai/ai_apply.js');
+    const dir = mkdtempSync(join(tmpdir(), 'qdraft-'));
+    try {
+        const fp = join(dir, 'draft_test.md');
+        writeFileSync(fp, [
+            '# 문제 초안 — 교재 (L1-100)', '',
+            '## 정상 섹션 (L1~L10)', '',
+            '### Q1. 개인정보 수집 요건으로 옳은 것은?',
+            '① 동의 받은 경우',
+            '② 아무 때나 가능',
+            '',
+            '**Q1답**',
+            '> **정답: ①**',
+            '> **근거 라인: L1736-L1738**',
+            '> **해설**: 동의 시 수집 가능하다.',
+            '',
+            '## 폐기 청크 (L20~L30)', '',
+            '> ⚠️ [폐기 후보] 인용 라인 범위 초과: L9999', '',
+            '### Q9. 제시된 청크 발문',
+            '**Q9답**',
+            '> **정답: ②**',
+            '> **근거 라인: L9999**',
+            '> **해설**: 근거 없음.',
+        ].join('\n'));
+        const qs = parseQuestionDraft(fp);
+        assert.equal(qs.length, 1, '폐기 청크 제외 + 정상 1건');
+        assert.equal(qs[0].lo, 1736);
+        assert.equal(qs[0].hi, 1738);
+        assert.equal(qs[0].answer, '①');
+        assert.deepEqual(qs[0].options, ['① 동의 받은 경우', '② 아무 때나 가능']);
+    } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
 test('AI-16: loadStats가 백업 JSON의 statement_stats를 해석하고 순수 맵도 허용한다', () => {
     const { loadStats, isAnomalous } = require('../../tools/ai/ai_stmt_feedback.js');
     const dir = mkdtempSync(join(tmpdir(), 'stmtstats-'));

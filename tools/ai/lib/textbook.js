@@ -40,7 +40,7 @@ function chunkTextbook(absPath) {
         const h = lines[i].match(/^(#{2,3})\s+(.+)$/);
         if (h) {
             chunks.push(fin(cur, i));
-            cur = { heading: h[2].trim(), startLine: i + 1, buf: [] };
+            cur = { heading: h[2].trim(), startLine: i + 2, buf: [] }; // buf는 헤딩 다음 라인부터 — startLine은 첫 본문 라인
         } else cur.buf.push(lines[i]);
     }
     chunks.push(fin(cur, lines.length));
