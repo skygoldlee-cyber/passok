@@ -1,5 +1,5 @@
 // tests/unit/ai-tools.test.js — AI 제작 지원 도구 유닛 테스트
-// @spec AI-01,AI-02,AI-03,AI-04,AI-05,AI-06,AI-07,AI-08,AI-09,AI-10,AI-11,AI-12,AI-13,AI-14,AI-15
+// @spec AI-01,AI-02,AI-03,AI-04,AI-05,AI-06,AI-07,AI-08,AI-09,AI-10,AI-11,AI-12,AI-13,AI-14,AI-15,AI-16
 // llm_client dry-run·문제은행 파서·규칙 변형·검수 규칙·유사도 폴백을 고정한다.
 // 실제 API 키 없이 전부 결정론적으로 동작해야 한다 (--dry-run 계약).
 
@@ -257,4 +257,22 @@ test('AI-15: parseStmtDrafts가 sid→해설을 추출하고 플레이스홀더�
 test('AI-14: ai:stmtfb --dry-run이 무키로 초안 골격을 출력한다', () => {
     const out = runTool('ai_stmt_feedback.js', ['--exam', 'cosmetic', '--limit', '2', '--dry-run']);
     assert.match(out, /진술|초안/, '스캔·초안 요약 출력');
+});
+
+test('AI-16: loadStats가 백업 JSON의 statement_stats를 해석하고 순수 맵도 허용한다', () => {
+    const { loadStats, isAnomalous } = require('../../tools/ai/ai_stmt_feedback.js');
+    const dir = mkdtempSync(join(tmpdir(), 'stmtstats-'));
+    try {
+        // 백업 포맷: 시험 스코프 키 + JSON 문자열 값
+        const bak = join(dir, 'cosmetic_backup.json');
+        writeFileSync(bak, JSON.stringify({ 'cosmetic:statement_stats': JSON.stringify({ aa_st_1: { j: 8, w: 7 } }) }));
+        const s1 = loadStats(bak);
+        assert.equal(s1.aa_st_1.w, 7);
+        assert.ok(isAnomalous(s1.aa_st_1), 'j≥5·w/j≥0.8 → 이상 의심');
+        assert.ok(!isAnomalous({ j: 3, w: 3 }), '표본 부족은 이상 아님');
+        // 순수 {sid:{...}} 맵
+        const plain = join(dir, 'stats.json');
+        writeFileSync(plain, JSON.stringify({ bb_st_2: { j: 2, w: 1 } }));
+        assert.equal(loadStats(plain).bb_st_2.w, 1);
+    } finally { rmSync(dir, { recursive: true, force: true }); }
 });

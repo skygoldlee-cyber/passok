@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-18 오판 통계 → 피드백 대상 선정 연결 — ai:stmtfb --stats (AI-16)
+
+- **배경**: 앱 백업 JSON의 `statement_stats`(진술별 판정 j·오판 w 누적)를 생성 도구가 읽을 수 있게 해, "실제로 자주 틀리는 진술"부터 피드백이 채워지도록 우선순위 연결
+- **추가**: `ai:stmtfb --stats <백업JSON> [--min-wrong N]` — 오판 w≥N 진술만 대상, 오판수 내림차순 정렬, 초안 메타에 `오판 w/j회` 표기. statement-tracker 이상 판정과 동일 기준(j≥5·w/j≥0.8)의 극단 오판율은 ⚠️ 콘텐츠 검수 후보로 구분
+- **스펙**: SPEC §3.27 AI-16 + 설계안 §4 + 테스트 1건(loadStats 백업/순수 맵 양방향·이상 판정)
+
 ## 2026-10-18 진술 단위 오답 피드백 파이프라인 — ai:stmtfb + stmt_explain.json 정본 (AI-14·15)
 
 - **배경**: perStatement 오판은 수집되고(statement-tracker) 뷰도 진술별 `explain`을 렌더하지만 데이터가 비어 있었음 — 오판 진술에 맞춤 피드백을 줄 통로가 없던 것을 AI로 메움
