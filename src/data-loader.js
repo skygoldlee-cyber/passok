@@ -231,6 +231,19 @@ export const DataLoader = {
         return md;
     },
 
+    /** 카드팁 오버레이 피드백 파일 지연 로드 — 없으면 null (http 전용, file://는 미적용) */
+    async _getCardTips() {
+        if (this._cardTips !== undefined) return this._cardTips;
+        this._cardTips = null;
+        if (!IS_FILE) {
+            try {
+                const res = await fetch('./' + contentPath('피드백/card_tip.json'), { cache: 'no-cache' });
+                if (res.ok) this._cardTips = await res.json();
+            } catch (e) { /* 오버레이 부재는 정상 — 미적용으로 진행 */ }
+        }
+        return this._cardTips;
+    },
+
     /** 과목 학습 데이터를 content/*.md 에서 런타임 파싱하여 로드 */
     async loadSubject(key) {
         if (this._loaded[key]) return this._loaded[key];
@@ -247,6 +260,14 @@ export const DataLoader = {
         }
 
         const data = buildSubjectData(subjMeta, mdByFile, { filePathMode: 'md' });
+
+        // 카드팁 오버레이 (AI-12) — 리뷰된 암기팁을 카드 id 기준으로 병합
+        const tips = await this._getCardTips();
+        if (tips) {
+            for (const c of data.cards) {
+                if (tips[c.id]) c.tip = tips[c.id];
+            }
+        }
 
         // 문제은행 보충 카드/퀴즈 병합 (레지스트리가 제공하는 경우 — 출제 비중 보정용)
         const regSubj = (this.registry && Array.isArray(this.registry.subjects))

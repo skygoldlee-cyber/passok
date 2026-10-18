@@ -147,6 +147,7 @@
  * @property {string} [cardType]   카드 유형 ('penalty'|'prohibition'|'exception'|'number'|'requirement'|'comparison'|'procedure'|'definition')
  * @property {number} [importance] 중요도 점수 (0-100)
  * @property {string} [difficulty] 난이도 ('easy'|'medium'|'hard')
+ * @property {string} [tip]        암기팁 — 피드백/card_tip.json 오버레이 병합분 (AI-19)
  */
 
 /**
