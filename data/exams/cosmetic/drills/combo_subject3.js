@@ -516,21 +516,24 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_ee5d06",
     "conceptId": "§5.0",
     "text": "유통기한이 가장 길게 남은 완제품을 먼저 출고하는 방법",
-    "truth": false
+    "truth": false,
+    "explain": "선입선출은 '먼저 입고된 것부터 출고'하는 원칙이므로 거짓입니다. 이는 출고의 판단 기준을 입고 일자가 아닌 유통기한으로 바꾸어 혼동을 유도한 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_2222ee",
     "conceptId": "§5.0",
     "text": "원자재의 가격이 가장 비싼 것을 가장 나중에 출고하는 방법",
-    "truth": false
+    "truth": false,
+    "explain": "선입선출은 '먼저 입고된 것부터 출고'하는 원칙이므로, 출고 기준을 입고 일자가 아닌 '원자재 가격'으로 바꾼 함정 진술입니다."
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_32496b",
     "conceptId": "§5.0",
     "text": "원자재의 무게가 가장 무거운 순서대로 출고하는 방법",
-    "truth": false
+    "truth": false,
+    "explain": "선입선출은 먼저 입고된 것부터 출고하는 원칙이므로, 무게가 무거운 순서대로 출고한다는 설명은 옳지 않습니다. 이는 출고의 기준을 '입고 순서'가 아닌 '원자재의 무게'로 바꾼 함정입니다."
    },
    {
     "id": "ㅁ",
@@ -630,7 +633,8 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_4265db",
     "conceptId": "§2.1",
     "text": "모든 외부인에게 출입을 개방한다",
-    "truth": false
+    "truth": false,
+    "explain": "CGMP 기준에 따르면 작업장에는 접근 권한이 없는 자의 출입을 제한해야 하므로, 모든 외부인에게 출입을 개방한다는 설명은 거짓입니다. 이는 출입 제한 규정을 전면 개방으로 뒤바꾼 극성 반전 함정입니다."
    }
   ],
   "options": [
@@ -725,7 +729,8 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_fb4e02",
     "conceptId": "§2.2",
     "text": "일반 비누와 동일하게 흐르는 물에 사용해야 한다",
-    "truth": false
+    "truth": false,
+    "explain": "손 소독제는 물 없이도 손 소독이 가능한 제제로, 흐르는 물에 비누를 사용하는 '손 세정제'의 사용 방식을 손 소독제에 덧씌운 주체 바꿈 함정입니다."
    }
   ],
   "options": [
@@ -794,7 +799,8 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_9fb241",
     "conceptId": "§4.1",
     "text": "1 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 안티몬의 허용 한도는 '10 ㎍/g 이하'이므로 거짓입니다. 본 진술은 수은의 허용 한도인 '1 ㎍/g 이하'의 수치와 혼동을 유도한 함정입니다."
    },
    {
     "id": "ㄴ",
@@ -808,21 +814,24 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_1bbed9",
     "conceptId": "§4.1",
     "text": "5 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 안티몬의 허용 한도는 '10 ㎍/g 이하'이므로 거짓입니다. 제시된 '5 ㎍/g 이하'는 카드뮴의 기준에 해당하며, 다른 성분의 수치로 혼동을 유도한 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_a0e7bf",
     "conceptId": "§4.1",
     "text": "20 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 안티몬의 허용 한도는 ‘10 ㎍/g 이하’이므로 거짓입니다. 본 진술은 납 등의 허용 한도에 해당하는 기준 수치(20 ㎍/g 이하)를 제시하여 혼동을 유도한 수치 바꿈 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_cc325a",
     "conceptId": "§4.1",
     "text": "50 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 안티몬의 허용 한도는 '10 ㎍/g 이하'이므로 거짓입니다. 이 진술은 납의 허용 한도 기준 등에 해당하는 수치(50 ㎍/g 이하)를 제시하여 혼동을 유도한 수치 바꿈 함정입니다."
    }
   ],
   "options": [
@@ -894,28 +903,32 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_b1c705",
     "conceptId": "§4.1",
     "text": "1 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 카드뮴의 허용 한도는 '5 ㎍/g 이하'이며, '1 ㎍/g 이하'는 수은의 허용 한도에 해당하므로 수치를 바꾼 거짓 진술입니다."
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_c13ba9",
     "conceptId": "§4.1",
     "text": "10 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 카드뮴의 허용 한도는 '5 ㎍/g 이하'이므로 거짓입니다. 제시된 '10 ㎍/g 이하'는 비소 및 안티몬의 허용 한도에 해당하는 것으로, 기준 수치를 바꾼 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_fbce40",
     "conceptId": "§4.1",
     "text": "20 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 카드뮴의 허용 한도는 5 ㎍/g 이하이며, 20 ㎍/g 이하는 납(그 밖의 제품)에 해당하는 기준입니다. 이는 다른 유해물질의 기준 수치를 제시하여 혼동을 유도한 거짓 진술입니다."
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_cb31cc",
     "conceptId": "§4.1",
     "text": "100 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 카드뮴의 허용 한도는 '5 ㎍/g 이하'이므로 거짓입니다. 본 진술은 디옥산의 기준 수치인 '100 ㎍/g 이하'를 제시하여 혼동을 유도한 수치 바꿈 함정입니다."
    }
   ],
   "options": [
@@ -985,14 +998,16 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_166073",
     "conceptId": "§4.1",
     "text": "20 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 디옥산의 허용 한도는 100 μg/g 이하이므로, 기준 수치를 20 ㎍/g 이하로 바꾼 거짓 진술입니다."
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_b2cf01",
     "conceptId": "§4.1",
     "text": "50 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 디옥산의 허용 한도는 '100 μg/g 이하'이므로, 기준 수치를 '50 μg/g 이하'로 바꾼 함정 진술입니다."
    },
    {
     "id": "ㄹ",

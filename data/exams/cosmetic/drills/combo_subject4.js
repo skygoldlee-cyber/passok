@@ -509,21 +509,24 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_78e6a9",
     "conceptId": "§2.1",
     "text": "엘라스틴",
-    "truth": false
+    "truth": false,
+    "explain": "피부의 진피층에서 수분을 당겨 안아 부피감과 보습을 유지하는 강한 친수성 기질 성분은 히알루론산(뮤코다당류)입니다. 엘라스틴은 진피를 이루는 성분이지만 해당 설명의 조건에 부합하지 않으므로 주체를 바꾼 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_f52462",
     "conceptId": "§2.1",
     "text": "피지",
-    "truth": false
+    "truth": false,
+    "explain": "수분을 끌어당겨 부피감과 보습을 유지하는 진피층의 친수성 기질 성분은 히알루론산(뮤코다당류)입니다. 따라서 본 진술은 올바른 성분 대신 피지를 제시하여 주체를 바꾼 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_e8d967",
     "conceptId": "§2.1",
     "text": "세라마이드",
-    "truth": false
+    "truth": false,
+    "explain": "진피층에서 수분을 끌어당겨 부피감과 보습을 유지하는 강한 친수성 기질 성분은 히알루론산이며, 세라마이드는 이에 해당하지 않습니다. 이는 각질층 관련 성분인 세라마이드를 진피층의 친수성 기질 성분과 혼동하도록 유도한 주체 바꿈 함정입니다."
    }
   ],
   "options": [
@@ -584,7 +587,8 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_8cd37d",
     "conceptId": "§2.1",
     "text": "수문장과 장벽 모델",
-    "truth": false
+    "truth": false,
+    "explain": "피부 장벽에서 각질세포와 세포간지질의 결합 상태를 설명하는 대표적인 물리적 비유는 '벽돌과 시멘트 모델'입니다. 따라서 '수문장과 장벽 모델'은 모델의 명칭을 임의로 바꾼 함정 진술로 거짓입니다."
    },
    {
     "id": "ㄴ",
@@ -598,21 +602,24 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_9585c5",
     "conceptId": "§2.1",
     "text": "스펀지 구조 모델",
-    "truth": false
+    "truth": false,
+    "explain": "피부 장벽의 지질 구조에서 각질세포와 세포간지질의 결합 상태를 설명하는 대표적인 물리적 비유는 '벽돌과 시멘트 모델'입니다. 따라서 '스펀지 구조 모델'은 대표적인 비유 모델의 명칭을 다르게 제시하여 혼동을 유도한 함정 진술입니다."
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_dee143",
     "conceptId": "§2.1",
     "text": "모자이크 모델",
-    "truth": false
+    "truth": false,
+    "explain": "피부 장벽에서 각질세포와 세포간지질의 결합 상태를 설명하는 대표적인 물리적 비유는 '벽돌과 시멘트 모델'입니다. 따라서 정답인 벽돌과 시멘트 모델 대신 다른 비유 모델의 명칭을 제시하여 혼동을 유도한 주체 바꿈 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_0aac71",
     "conceptId": "§2.1",
     "text": "샌드위치 모델",
-    "truth": false
+    "truth": false,
+    "explain": "피부 장벽에서 각질세포와 세포간지질의 결합 상태를 설명하는 대표적인 물리적 비유는 '벽돌과 시멘트 모델'이므로 거짓입니다. 이는 정답인 벽돌 구조 대신 다른 비유 명칭을 제시하여 혼동을 유도한 함정입니다."
    }
   ],
   "options": [
@@ -683,28 +690,32 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_73f302",
     "conceptId": "§2.1",
     "text": "모피질 (Cortex)",
-    "truth": false
+    "truth": false,
+    "explain": "모발의 가장 바깥층에 위치하여 비늘 모양으로 내부를 보호하는 부위는 '모표피(Cuticle)'이므로 거짓입니다. 이는 모발의 구조적 명칭을 다른 부위로 바꾼 주체 바꿈 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_c2fc42",
     "conceptId": "§2.1",
     "text": "모수질 (Medulla)",
-    "truth": false
+    "truth": false,
+    "explain": "모발의 가장 바깥쪽에 위치하여 비늘 모양으로 내부를 보호하는 부위는 모표피(Cuticle)이므로, 모수질은 이에 해당하지 않는 오답입니다. 이는 모발의 구조 부위(주체)를 바꾸어 혼동을 유도한 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_e0fcac",
     "conceptId": "§2.1",
     "text": "모유두 (Papilla)",
-    "truth": false
+    "truth": false,
+    "explain": "모발의 가장 바깥쪽에 위치하며 비늘 모양으로 내부를 보호하는 부위는 모표피(Cuticle)입니다. 본 진술은 모표피의 역할을 모발의 다른 구조인 모유두로 바꾼 주체 바꿈 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_42887e",
     "conceptId": "§2.1",
     "text": "모낭 (Follicle)",
-    "truth": false
+    "truth": false,
+    "explain": "모발의 가장 바깥쪽에 위치하며 비늘 모양으로 내부를 보호하는 부위는 모표피(Cuticle)이므로 거짓입니다. 이는 모발의 바깥층 구조(모표피) 자리에 관련 구조인 '모낭'을 제시하여 주체를 바꾼 함정입니다."
    }
   ],
   "options": [
@@ -775,28 +786,32 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_6715da",
     "conceptId": "§2.2",
     "text": "모표피",
-    "truth": false
+    "truth": false,
+    "explain": "모발의 중간 부분에서 멜라닌을 함유하여 모발 색을 나타내는 부위는 '모피질'이므로 거짓입니다. 모표피는 모발의 가장 바깥쪽에 위치한 무색투명한 구조로, 설명의 주체를 바꾼 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_f49403",
     "conceptId": "§2.2",
     "text": "모수질",
-    "truth": false
+    "truth": false,
+    "explain": "모발의 중간 부분에 위치하며 멜라닌 색소를 함유하는 부위는 모수질이 아니라 모피질이므로 거짓입니다. 이는 모발 중심부에 위치하는 '모수질'을 '모피질'의 설명과 혼동하도록 주체를 바꾼 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_c53716",
     "conceptId": "§2.2",
     "text": "모근",
-    "truth": false
+    "truth": false,
+    "explain": "모발의 중간에 위치하며 멜라닌 색소를 함유하여 모발의 색을 나타내는 부위는 '모피질'이므로, '모근'으로 제시한 것은 주체를 바꾼 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_1cb51a",
     "conceptId": "§2.2",
     "text": "모유두",
-    "truth": false
+    "truth": false,
+    "explain": "발문에서 설명하는 모발의 중간에 위치하여 멜라닌을 함유하고 모발의 색을 나타내는 부위는 '모피질'이므로, 주체를 '모유두'로 바꾼 거짓 진술입니다."
    }
   ],
   "options": [
