@@ -1,5 +1,5 @@
 // tests/unit/ai-tools.test.js — AI 제작 지원 도구 유닛 테스트
-// @spec AI-01,AI-02,AI-03,AI-04,AI-05,AI-06,AI-07,AI-08,AI-09,AI-10,AI-11,AI-12,AI-13
+// @spec AI-01,AI-02,AI-03,AI-04,AI-05,AI-06,AI-07,AI-08,AI-09,AI-10,AI-11,AI-12,AI-13,AI-14,AI-15
 // llm_client dry-run·문제은행 파서·규칙 변형·검수 규칙·유사도 폴백을 고정한다.
 // 실제 API 키 없이 전부 결정론적으로 동작해야 한다 (--dry-run 계약).
 
@@ -7,7 +7,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
-import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
@@ -21,6 +21,7 @@ const { ruleVariants } = require('../../tools/ai/ai_distractors.js');
 const { falseVariants } = require('../../tools/ai/ai_statements.js');
 const { estimateDifficulty } = require('../../tools/ai/ai_tag.js');
 const { lintQuestion, lintExplanation } = require('../../tools/ai/ai_lint.js');
+const { getExamTargets } = require('../../tools/build/exam_targets.js');
 
 // ---------- AI-01/AI-03: 문제은행 파서 ----------
 
@@ -223,4 +224,37 @@ test('AI-01/AI-04: ai:apply가 초안 해설을 정답 블록 끝에 삽입하�
     assert.equal(insertExplain(next, 1, '재삽입'), null);  // 기존 해설 → 스킵
     assert.equal(insertExplain(bank, 99, 'x'), null);      // 블록 없음 → 스킵
     rmSync(dir, { recursive: true, force: true });
+});
+
+// ---------- AI-14/AI-15: 진술 피드백 ----------
+
+test('AI-14: ai:stmtfb가 combo 드릴에서 sid 고유 진술을 수집하고 프롬프트에 진위·모문항 해설을 담는다', () => {
+    const { collectStatements, buildPrompt } = require('../../tools/ai/ai_stmt_feedback.js');
+    const cosmetic = getExamTargets(ROOT).find(t => t.id === 'cosmetic');
+    const bundles = collectStatements(cosmetic);
+    const subj1 = bundles.get('subject1');
+    assert.ok(subj1 && subj1.size > 0, 'combo_subject1 진술 수집');
+    const [sid, s] = subj1.entries().next().value;
+    assert.ok(sid.includes('_st_') && typeof s.text === 'string' && typeof s.truth === 'boolean');
+    const prompt = buildPrompt(s, s.parent);
+    assert.match(prompt, /\[진술\]/);
+    assert.match(prompt, /\[실제 진위\] (참|거짓)/);
+});
+
+test('AI-15: parseStmtDrafts가 sid→해설을 추출하고 플레이스홀더를 제외한다', () => {
+    const { parseStmtDrafts } = require('../../tools/ai/ai_stmt_feedback.js');
+    const dir = join(ROOT, 'tmp', 'ai_drafts');
+    mkdirSync(dir, { recursive: true });
+    const fp = join(dir, 'stmtfb_testexam_subjectX.md');
+    writeFileSync(fp, '## sid aa_st_01\n\n> **진술해설**: 거짓 — 수치 바꿈 함정\n\n## sid aa_st_02\n\n> **진술해설**: (미생성 — DRY RUN)\n');
+    try {
+        const map = parseStmtDrafts().get('testexam');
+        assert.ok(map && map.get('aa_st_01') === '거짓 — 수치 바꿈 함정');
+        assert.ok(!map.has('aa_st_02'));
+    } finally { rmSync(fp, { force: true }); }
+});
+
+test('AI-14: ai:stmtfb --dry-run이 무키로 초안 골격을 출력한다', () => {
+    const out = runTool('ai_stmt_feedback.js', ['--exam', 'cosmetic', '--limit', '2', '--dry-run']);
+    assert.match(out, /진술|초안/, '스캔·초안 요약 출력');
 });
