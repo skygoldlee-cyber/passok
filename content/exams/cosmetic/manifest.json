@@ -69,28 +69,28 @@
       "key": "subject1",
       "subject": "law",
       "part": 1,
-      "title": "화장품법의 이해 (179제)",
+      "title": "화장품법의 이해 (274제)",
       "file": "과목1_문제은행.md"
     },
     {
       "key": "subject2",
       "subject": "manufacturing",
       "part": 1,
-      "title": "화장품 제조 및 품질관리 (336제)",
+      "title": "화장품 제조 및 품질관리 (370제)",
       "file": "과목2_문제은행.md"
     },
     {
       "key": "subject3",
       "subject": "safety",
       "part": 1,
-      "title": "유통화장품 안전관리 (358제)",
+      "title": "유통화장품 안전관리 (456제)",
       "file": "과목3_문제은행.md"
     },
     {
       "key": "subject4",
       "subject": "understanding",
       "part": 1,
-      "title": "맞춤형화장품의 이해 (573제)",
+      "title": "맞춤형화장품의 이해 (734제)",
       "file": "과목4_문제은행.md"
     }
   ],
