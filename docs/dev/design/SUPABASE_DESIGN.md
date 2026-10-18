@@ -417,7 +417,9 @@ Firebase는 **검토 후보로는 유지하되, 최종 선택은 구조적으로
    - `GET {SUPABASE_URL}/rest/v1/sync_snapshots?select=user_id&limit=1` — 실제 DB 쿼리로 "사용자 DB 활동" 판정 충족
    - `GET {SUPABASE_URL}/auth/v1/settings` — 인증 서비스(GoTrue) 생존 확인 (§12.5)
    - URL·키는 `src/supabase-config.js`에서 실행 시 추출(공개 설계라 시크릿 불필요, 프로젝트 변경 시 자동 추적). 실패 = 정지·장애 → Actions 알림 + **이슈 자동 생성**(§12.5)
+   - **스케줄 실행 조건**: cron은 **GitHub 서버에서 실행** — 로컬 IDE·Devin 등 개발 환경 상태와 무관. 워크플로 파일이 **기본 브랜치에 존재**해야 스케줄이 동작하고(브랜치에만 있으면 안 돔), GitHub 부하 시 수 분~수십 분 지연 가능 — 목적상 "매일 1회"면 충분. 기본 브랜치 60일 무커밋 시 스케줄 자동 비활성화(§12.5 표, 워크플로 파일 주석)
    - **수동 실행(검증·복구 확인용)**: ① Actions 탭 → `Supabase Keep-Alive` → `Run workflow` (workflow_dispatch) ② CLI: `gh workflow run supabase-keepalive.yml` — 로그에서 `HTTP 200`이면 정상
+   - **실행 이력 확인**: ① Actions 탭 → `Supabase Keep-Alive` — 이벤트 컬럼 `schedule`=자동 / `workflow_dispatch`=수동, 실행 클릭 → `keepalive` 잡 → `Supabase ping` 스텝 로그의 `REST HTTP 200`·`Auth HTTP 200` 확인 ② CLI: `gh run list --workflow=supabase-keepalive.yml --limit 10` / `gh run view --log`. 실패 감지는 이슈 자동 생성·Actions 메일에 맡기면 되므로 상시 확인 불요 (§12.5)
 2. **이중 안전장치** — pause 사전 경고 메일 수신 주소를 실제 모니터링하는 메일로 지정 + 시즌 시작 점검(§12.5 표 — DEPLOYMENT_GUIDE 배포 전 체크리스트 반영)
 3. **재검토 트리거** — Supabase가 keep-alive를 정책적으로 차단하거나 Free 한도(500MB·50k MAU) 근접 시 이관을 재평가. 이 경우에도 Firebase는 §12.3의 구조적 결격으로 최종 후보에서 제외된다. 비교 대상(§12.2): 최소 재작성·관리형 경로는 **PocketBase 계열**(자체호스팅 또는 PB Cloud Starter $5/월), $0 무정지 요구 시 **Better Auth + Neon + Vercel Functions** 조합이 1차 후보다
 
