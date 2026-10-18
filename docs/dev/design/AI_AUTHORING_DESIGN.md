@@ -55,6 +55,7 @@
 | `ai:coverage` | `tools/ai/ai_coverage.js` | 출제 커버리지 갭 분석 — 교재 청크 ↔ 기존 문항을 임베딩(SEM-05)으로 매핑해 미출제 중요 구간 리포트 → `ai:draft` 투입 범위 결정 근거 |
 | `ai:tag` | `tools/ai/ai_tag.js` | `tags`(STANDARD_TAGS)·`difficulty`·`conceptId` 의미 라벨 자동 제안 — 규칙 기반 `inferTags`의 의미 판단 한계 보완 |
 | `ai:lint` | `tools/ai/ai_lint.js` | 발문 품질 검수 — 이중부정·모호 지문·답이 새는 발문·진술만으로 추론 가능한 패턴 등 기계 게이트가 못 잡는 영역 |
+| `ai:apply` | `tools/ai/ai_apply.js` | 리뷰된 `explain_*.md` 초안의 `> **해설**` 행을 문제은행 정답 블록에 편입 — 기본 미리보기, `--write` 반영. 초안 파일명은 `explain_<examId>_<examKey>.md` (시험 간 키 충돌 방지) |
 | 공통 | `tools/ai/llm_client.js` | 공급자 추상화(OpenAI/Anthropic/Gemini 중 env로 선택)·키 로드·재시도·출력 JSON 스키마 검증·토큰 비용 로깅 |
 
 공통 제약:
