@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject2.56bc0564.js — mode: fact(명제 조합) 49문 / answer(정답 조합) 192문
+// 원본: data/exams/cosmetic/exams/subject2.0931be74.js — mode: fact(명제 조합) 49문 / answer(정답 조합) 192문
 var COMBO_DRILLS_subject2 = [
  {
   "id": "manufacturing_combo_f62cd4",
