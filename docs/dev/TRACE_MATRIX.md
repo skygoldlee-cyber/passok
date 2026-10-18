@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 5839dd0098d5bd06
+> 입력 해시: b0a585aaff1be33c
 > 생성: 2026-10-18 · 원천: SPEC.md(543개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -499,10 +499,10 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| AI-01 | ✅ | 테스트 | — | tools/ai/lib/ai_common.js<br>tools/ai/lib/qbank.js | tests/unit/ai-tools.test.js | — | — |
+| AI-01 | ✅ | 테스트 | — | tools/ai/ai_apply.js<br>tools/ai/lib/ai_common.js<br>tools/ai/lib/qbank.js | tests/unit/ai-tools.test.js | — | — |
 | AI-02 | ✅ | 테스트 | — | tools/ai/ai_distractors.js<br>tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/ai_lint.js<br>…외 3개 | tests/unit/ai-tools.test.js | — | — |
 | AI-03 | ✅ | 테스트 | — | tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/lib/citations.js<br>tools/ai/lib/qbank.js | tests/unit/ai-tools.test.js | — | — |
-| AI-04 | ✅ | 테스트 | — | tools/ai/ai_explain.js | tests/unit/ai-tools.test.js | — | — |
+| AI-04 | ✅ | 테스트 | — | tools/ai/ai_apply.js<br>tools/ai/ai_explain.js | tests/unit/ai-tools.test.js | — | — |
 | AI-05 | ✅ | 테스트 | — | tools/ai/ai_draft_questions.js<br>tools/ai/lib/textbook.js | tests/unit/ai-tools.test.js | — | — |
 | AI-06 | ✅ | 테스트 | — | tools/ai/ai_distractors.js | tests/unit/ai-tools.test.js | — | — |
 | AI-07 | ✅ | 테스트 | — | tools/ai/ai_dupcheck.js<br>tools/ai/lib/similarity.js | tests/unit/ai-tools.test.js | — | — |
