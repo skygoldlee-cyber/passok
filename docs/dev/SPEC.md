@@ -612,6 +612,7 @@
 | AI-13 | 멀티시험 중립 — 모든 도구가 `exam_targets.js`로 대상을 순회하고 `--exam` 필터 지원, 시험 특화 로직 없음 | ✅ |
 | AI-14 | `ai:stmtfb` — 복수정답형/OX 드릴의 진술(sid)별 "왜 참·거짓인지 + 어떤 혼동을 노리는지(수치·주체·극성)" 1~2문장 피드백 초안 생성. 모문항의 해설·인용 근거를 컨텍스트로 제한해 근거 강제(AI-03) | ✅ |
 | AI-15 | 진술 피드백 정본 `content/exams/<id>/피드백/stmt_explain.json`(sid→explain, 사람 리뷰 후 편입). `build:drills`가 combo 진술 `explain` 필드에 병합 → perStatement 오판 시 앱이 진술별 피드백 표시. 정본 파일 없으면 기존 폴백(문항 해설) 유지 | ✅ |
+| AI-16 | `ai:stmtfb --stats <백업JSON>` — 앱 백업의 `statement_stats`(또는 순수 {sid:{j,w}} 맵)로 대상을 오판 w≥`--min-wrong` 진술로 제한하고 오판수 내림차순 정렬. 오판율 극단(j≥5·w/j≥0.8, statement-tracker 이상 판정과 동일 기준)은 초안에 ⚠️ 콘텐츠 검수 후보로 표시 | ✅ |
 
 ---
 

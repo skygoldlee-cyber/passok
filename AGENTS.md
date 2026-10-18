@@ -75,7 +75,7 @@ npm.cmd run ai:lint                      # 발문 품질 검수 (이중부정·�
 npm.cmd run ai:coverage                  # 인용 LNN ↔ 교재 커버리지 갭 리포트 (draft 투입 범위 근거)
 npm.cmd run ai:stale                     # ref_md 변경 ↔ 인용 문항 재검증 대기 목록 (--ref <ref>, --llm=영향 판정)
 npm.cmd run ai:apply                     # 리뷰된 해설 초안을 문제은행 정답 블록에 편입 (기본 미리보기, --write=반영)
-npm.cmd run ai:stmtfb                    # combo 진술별 오답 피드백 초안 (기본 거짓 진술, --all=전체). --apply [--write]=리뷰본을 피드백/stmt_explain.json 정본 편입 → build:drills가 진술 explain 병합
+npm.cmd run ai:stmtfb                    # combo 진술별 오답 피드백 초안 (기본 거짓 진술, --all=전체). --stats <백업JSON>=오판 통계로 대상 선정(오판수순, --min-wrong N). --apply [--write]=리뷰본을 피드백/stmt_explain.json 정본 편입 → build:drills가 진술 explain 병합
 
 # 전체 점검 (단일 진입점 — tools/check/run.js 실행기 + steps.js 단계 레지스트리로 구동
 #   비-serial 단계는 워커풀 병렬 실행(--jobs N, 기본 3 · serial 단계는 배치 사이 단독),
