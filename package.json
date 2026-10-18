@@ -131,6 +131,7 @@
     "ai:coverage": "node tools/ai/ai_coverage.js",
     "ai:stale": "node tools/ai/ai_stale_scan.js",
     "ai:apply": "node tools/ai/ai_apply.js",
+    "ai:stmtfb": "node tools/ai/ai_stmt_feedback.js",
     "mutate": "stryker run"
   },
   "keywords": [
