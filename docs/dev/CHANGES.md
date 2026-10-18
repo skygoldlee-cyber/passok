@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-18 AI 제작 지원 설계문서 추가 — DOC-DSN-33
+
+- **배경**: 문제은행 수작업 제작 비용·해설 커버리지 불완전에 대응해 LLM 제작 보조 도입 검토 — 기존 인용 검증 체계(CQ-06 check:answers·sync:citations·audit:combo)가 환각 방어선으로 동작하므로 생성물을 초안으로 취급하는 author-time 파이프라인으로 수렴
+- **추가**: `docs/dev/design/AI_AUTHORING_DESIGN.md` — tools/ai/ 도구 구성(ai:explain 해설 보강·ai:draft 문제 초안·ai:distractors 허용정답 변형·ai:dupcheck 임베딩 중복 게이트), 초안은 tmp/ai_drafts/(gitignore) 출력 후 리뷰 편입·기존 게이트 전수 통과 원칙, 런타임 AI(BYOK/Pro 프록시)는 보류 판정
+- **등록**: docs/README.md 인덱스(콘텐츠 파이프라인)+ID 레지스트리+개수 표기(design 16·dev 71), AGENTS.md 관련 문서 목록
+- **연계**: SUPABASE_DESIGN §12.2 백엔드 대안 비교표 보강(PB Cloud·Better Auth+Neon·Appwrite·Nhost) — 런타임 프록시 경로의 판단 근거로 인용
+
 ## 2026-10-17 Supabase keep-alive 워크플로 — Free 티어 무활동 정지 방지
 
 - **배경**: 시험 연 2회(5월·9월)라 비시즌 무트래픽 → Free 프로젝트가 실제로 일시정지됨을 실측 (7일 무활동 → DNS 레코드 제거, 복수 리졸버 NXDOMAIN). 유료 전환 대신 활동 유지로 비용 $0 유지
