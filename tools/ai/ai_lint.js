@@ -55,7 +55,9 @@ function lintExplanation(q, ans) {
     if (ex.length < 20) issues.push('E2 해설 과단(20자 미만)');
     else if (ex.length > 800) issues.push('E2 해설 과장(800자 초과)');
     // E4 — 근거 부인 자백 (인용 구절이 문항을 지지하지 못함을 해설이 시인)
-    if (/근거에(는)? 없|알 수 없|확인할 수 없|확인 불가|포함되어 있지 않|설명할 수 없/.test(ex)) issues.push('E4 근거 부인 표현');
+    //   주의: "결격사유에 포함되어 있지 않다" 같은 부정형 정답 해설의 정상 표현과 구분하기 위해
+    //   근거·구절·자료를 주어로 한 부정만 탐지한다.
+    if (/(제시|제공|주어진)된?\s*(근거|구절|자료)[^.\n]{0,60}(없|않)|근거(\s구절|\s자료)?에는[^.\n]{0,60}(없|않)|근거에(는)? 없|알 수 없|확인할 수 없|확인 불가|설명할 수 없|작성할 수 없/.test(ex)) issues.push('E4 근거 부인 표현');
     // E1 — 해설이 다른 선지를 정답으로 지칭 (단일선택만)
     const correct = ans.answer.replace(/[^0-9①-⑩]/g, '');
     if (correct && (q.type === 'single' || q.options.length)) {
