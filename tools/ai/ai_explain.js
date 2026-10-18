@@ -36,6 +36,14 @@ function buildPrompt(q, ans, evidence) {
     ].join('\n');
 }
 
+/** 정답 블록의 대표 인용 → 실제 근거 구절 {label, text}. 인용 부재·링크 미해석 시 null (비근거 생성 금지) */
+function evidenceFor(qbankPath, ans) {
+    const cit = primaryCitation(ans);
+    if (!cit) return null;
+    const ctx = readContext(resolveCitation(qbankPath, cit.file), cit.lineNo, 4);
+    return ctx ? { label: cit.label, text: ctx.text } : null;
+}
+
 async function main() {
     loadEnv();
     const { flags, opts } = parseArgs();
@@ -60,14 +68,13 @@ async function main() {
             for (const q of missing) {
                 if (drafted >= limit) break;
                 const ans = answers.get(q.num);
-                const cit = primaryCitation(ans);
-                const ctx = cit ? readContext(resolveCitation(absPath, cit.file), cit.lineNo, 4) : null;
-                if (!ctx) { // 근거 미해석 — 비근거 해설 생성 차단, 목록만 기록
+                const evidence = evidenceFor(absPath, ans);
+                if (!evidence) { // 근거 미해석 — 비근거 해설 생성 차단, 목록만 기록
                     ungrounded++;
-                    ungroundedList.push(`- Q${q.num} — ${cit ? `인용 미해석: ${cit.label}` : '인용 없음'}`);
+                    ungroundedList.push(`- Q${q.num} — ${primaryCitation(ans) ? `인용 미해석: ${primaryCitation(ans).label}` : '인용 없음'}`);
                     continue;
                 }
-                const prompt = buildPrompt(q, ans, { label: cit.label, text: ctx.text });
+                const prompt = buildPrompt(q, ans, evidence);
 
                 lines.push(`## Q${q.num}`, '');
                 if (dryRun) {
@@ -94,4 +101,4 @@ async function main() {
 
 if (require.main === module) main().catch(e => { console.error(e.message); process.exit(1); });
 
-module.exports = { buildPrompt };
+module.exports = { buildPrompt, evidenceFor };
