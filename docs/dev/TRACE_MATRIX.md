@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 846a5675a8e07057
-> 생성: 2026-10-18 · 원천: SPEC.md(530개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 5839dd0098d5bd06
+> 생성: 2026-10-18 · 원천: SPEC.md(543개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 530개 — 문서 연결 393 · 소스 연결 471 · 테스트 연결 503 · 보고서 연결 109
+**커버리지 요약**: 요구사항 543개 — 문서 연결 393 · 소스 연결 484 · 테스트 연결 516 · 보고서 연결 109
 
 ---
 
@@ -494,6 +494,24 @@
 | AD-05 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
 | AD-06 | ✅ | 테스트 | DOC-DSN-30 | tools/check/feedback_report.js<br>tools/check/grant_pro.js<br>tools/check/user_report.js<br>tools/lib/supabase_ops.js | tests/unit/feedback-report.test.js<br>tests/unit/grant-pro.test.js<br>tests/unit/user-report.test.js | — | — |
 | AD-07 | ✅ | 테스트 | — | tools/check/dashboard_report.js | tests/unit/dashboard-report.test.js | — | — |
+
+## 3.27 AI 제작 지원
+
+| ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
+|----|------|-----------|------|------|--------|--------|------|
+| AI-01 | ✅ | 테스트 | — | tools/ai/lib/ai_common.js<br>tools/ai/lib/qbank.js | tests/unit/ai-tools.test.js | — | — |
+| AI-02 | ✅ | 테스트 | — | tools/ai/ai_distractors.js<br>tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/ai_lint.js<br>…외 3개 | tests/unit/ai-tools.test.js | — | — |
+| AI-03 | ✅ | 테스트 | — | tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/lib/citations.js<br>tools/ai/lib/qbank.js | tests/unit/ai-tools.test.js | — | — |
+| AI-04 | ✅ | 테스트 | — | tools/ai/ai_explain.js | tests/unit/ai-tools.test.js | — | — |
+| AI-05 | ✅ | 테스트 | — | tools/ai/ai_draft_questions.js<br>tools/ai/lib/textbook.js | tests/unit/ai-tools.test.js | — | — |
+| AI-06 | ✅ | 테스트 | — | tools/ai/ai_distractors.js | tests/unit/ai-tools.test.js | — | — |
+| AI-07 | ✅ | 테스트 | — | tools/ai/ai_dupcheck.js<br>tools/ai/lib/similarity.js | tests/unit/ai-tools.test.js | — | — |
+| AI-08 | ✅ | 테스트 | — | tools/ai/ai_statements.js | tests/unit/ai-tools.test.js | — | — |
+| AI-09 | ✅ | 테스트 | — | tools/ai/ai_tag.js | tests/unit/ai-tools.test.js | — | — |
+| AI-10 | ✅ | 테스트 | — | tools/ai/ai_lint.js | tests/unit/ai-tools.test.js | — | — |
+| AI-11 | ✅ | 테스트 | — | tools/ai/ai_coverage.js<br>tools/ai/lib/textbook.js | tests/unit/ai-tools.test.js | — | — |
+| AI-12 | ✅ | 테스트 | — | tools/ai/ai_stale_scan.js | tests/unit/ai-tools.test.js | — | — |
+| AI-13 | ✅ | 테스트 | — | tools/ai/ai_coverage.js<br>tools/ai/ai_dupcheck.js<br>tools/ai/ai_stale_scan.js<br>tools/ai/lib/ai_common.js | tests/unit/ai-tools.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 

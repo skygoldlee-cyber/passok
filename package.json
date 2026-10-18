@@ -121,6 +121,15 @@
     "report:user": "node tools/check/user_report.js",
     "report:glossary": "node tools/build/extract_glossary_candidates.js",
     "admin:grant-pro": "node tools/check/grant_pro.js",
+    "ai:explain": "node tools/ai/ai_explain.js",
+    "ai:draft": "node tools/ai/ai_draft_questions.js",
+    "ai:distractors": "node tools/ai/ai_distractors.js",
+    "ai:dupcheck": "node tools/ai/ai_dupcheck.js",
+    "ai:statements": "node tools/ai/ai_statements.js",
+    "ai:tag": "node tools/ai/ai_tag.js",
+    "ai:lint": "node tools/ai/ai_lint.js",
+    "ai:coverage": "node tools/ai/ai_coverage.js",
+    "ai:stale": "node tools/ai/ai_stale_scan.js",
     "mutate": "stryker run"
   },
   "keywords": [
