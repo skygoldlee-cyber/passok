@@ -43,16 +43,16 @@
   },
   "exams": {
     "subject1": {
-      "questions": 164
+      "questions": 179
     },
     "subject2": {
       "questions": 336
     },
     "subject3": {
-      "questions": 343
+      "questions": 358
     },
     "subject4": {
-      "questions": 523
+      "questions": 574
     }
   }
 }
