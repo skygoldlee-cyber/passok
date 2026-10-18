@@ -35,7 +35,8 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_eb6c51",
     "conceptId": "§1.1",
     "text": "고형 비누 등 내용물을 단순 소분하여 판매하는 경우도 반드시 맞춤형화장품판매업 신고가 필요하다.",
-    "truth": false
+    "truth": false,
+    "explain": "고형 비누 등 내용물을 단순 소분하여 판매하는 경우까지 반드시 맞춤형화장품판매업 신고가 필요한 것은 아니므로 거짓입니다. 이는 신고 대상이 아님에도 '반드시 신고가 필요하다'고 단정하여 혼동을 유도한 극성 반전 함정입니다."
    },
    {
     "id": "ㅁ",
@@ -113,7 +114,8 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_f1e32e",
     "conceptId": "§1.1",
     "text": "조제관리사 자격증이 없는 종업원이 조제관리사의 부재 중에 임의로 혼합 및 소분을 하도록 지시한다.",
-    "truth": false
+    "truth": false,
+    "explain": "맞춤형화장품판매업자는 조제관리사 자격이 없는 종업원에게 임의로 혼합 및 소분을 하도록 지시해서는 안 됩니다. 이 진술은 판매업자가 해서는 안 되는 금지 행위를 준수사항인 것처럼 바꾼 극성 반전의 함정입니다."
    },
    {
     "id": "ㄴ",
@@ -205,28 +207,32 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_f816a0",
     "conceptId": "q:subject4_q3",
     "text": "각질층",
-    "truth": false
+    "truth": false,
+    "explain": "천연보습인자(NMF)가 주로 생성되고 세포간지질막 형성이 시작되는 층은 과립층이며, 각질층은 이러한 성분들로 이미 구성되어 있는 층입니다. 이는 NMF와 지질의 생성이 시작되는 표피층의 주체를 과립층에서 각질층으로 바꾼 함정 진술입니다."
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_ed0704",
     "conceptId": "q:subject4_q3",
     "text": "기저층",
-    "truth": false
+    "truth": false,
+    "explain": "천연보습인자가 주로 생성되고 세포간지질막을 형성하기 시작하는 층은 과립층이므로, 멜라닌을 형성하는 기저층으로 주체를 바꾼 함정 진술입니다."
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_14d8b0",
     "conceptId": "q:subject4_q3",
     "text": "투명층",
-    "truth": false
+    "truth": false,
+    "explain": "천연보습인자(NMF)가 주로 생성되고 지질 성분이 분비되어 세포간지질막을 형성하기 시작하는 표피층은 과립층이므로 거짓입니다. 이는 손바닥과 발바닥에 주로 존재하는 투명층을 정답인 과립층 대신 제시한 주체 바꿈 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_a9713e",
     "conceptId": "q:subject4_q3",
     "text": "가시층",
-    "truth": false
+    "truth": false,
+    "explain": "천연보습인자(NMF)가 주로 생성되고 지질 성분이 분비되어 세포간지질막을 형성하기 시작하는 표피층은 '과립층'이므로 거짓입니다. 이는 과립층의 고유한 특징을 가시층(유극층)의 설명으로 제시한 주체 바꿈 함정입니다."
    },
    {
     "id": "ㅁ",
@@ -298,21 +304,24 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_988359",
     "conceptId": "§2.1",
     "text": "가시층",
-    "truth": false
+    "truth": false,
+    "explain": "발문의 설명은 단층의 원추형 세포로 구성되어 활발한 세포 분열을 촉진하는 '기저층'에 해당하며, 5~10층의 다각형 세포층인 '가시층'으로 주체를 바꾼 함정 진술입니다."
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_a47b50",
     "conceptId": "§2.1",
     "text": "과립층",
-    "truth": false
+    "truth": false,
+    "explain": "표피 최하단에서 활발한 세포 분열을 통해 표피 세포를 생성하는 단층의 세포층은 기저층이므로 거짓입니다. 이는 기저층의 특징적인 설명을 과립층과 연결 지은 '주체 바꿈' 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_e78896",
     "conceptId": "§2.1",
     "text": "투명층",
-    "truth": false
+    "truth": false,
+    "explain": "발문의 설명은 표피 세포를 생성하는 ‘기저층’에 해당하며, 투명층은 손·발바닥에 주로 존재하는 층이므로 주체를 바꾼 거짓 진술입니다."
    },
    {
     "id": "ㄹ",
@@ -326,7 +335,8 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_a41066",
     "conceptId": "§2.1",
     "text": "각질층",
-    "truth": false
+    "truth": false,
+    "explain": "발문의 설명은 표피의 최하단에서 세포 분열을 촉진하는 '기저층'에 해당하며, 각질층은 가장 바깥에 위치한 무핵세포층이므로 주체를 바꾼 거짓 진술입니다."
    }
   ],
   "options": [
@@ -388,21 +398,24 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_616ca0",
     "conceptId": "§2.1",
     "text": "기저층",
-    "truth": false
+    "truth": false,
+    "explain": "손바닥과 발바닥에만 특이적으로 존재하며 수분 침투를 방지하는 층은 '투명층'입니다. 기저층은 손바닥과 발바닥에만 존재하는 층이 아니므로, 표피층의 주체를 바꾼 함정입니다."
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_15efac",
     "conceptId": "§2.1",
     "text": "가시층",
-    "truth": false
+    "truth": false,
+    "explain": "손바닥과 발바닥에만 특이적으로 존재하며 수분 침투를 막는 역할을 하는 층은 '투명층'이므로, 가시층은 이에 해당하지 않는 거짓 진술입니다. 이는 표피 5대 층 중 투명층의 고유한 특징을 가시층의 특징인 것처럼 주체를 바꾼 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_f1a208",
     "conceptId": "§2.1",
     "text": "과립층",
-    "truth": false
+    "truth": false,
+    "explain": "손바닥과 발바닥에만 특이적으로 존재하며 수분 침투를 방지하는 층은 '투명층'이므로, 표피의 다른 층인 과립층으로 대상을 바꾼 거짓 진술입니다."
    },
    {
     "id": "ㄹ",
@@ -416,7 +429,8 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_288667",
     "conceptId": "§2.1",
     "text": "각질층",
-    "truth": false
+    "truth": false,
+    "explain": "각질층은 손바닥과 발바닥에만 특이적으로 존재하는 층이 아니므로 거짓입니다. 손바닥과 발바닥에 특이적으로 존재하여 수분 침투를 방지하는 층은 ‘투명층’으로, 표피층의 주체를 바꾼 함정입니다."
    }
   ],
   "options": [
@@ -480,7 +494,8 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_4f139d",
     "conceptId": "§2.1",
     "text": "콜라겐",
-    "truth": false
+    "truth": false,
+    "explain": "피부의 진피층에서 수분을 당겨 안아 부피감과 보습을 유지하는 강한 친수성 기질 성분은 히알루론산(뮤코다당류)입니다. 따라서 콜라겐은 해당 조건에 부합하지 않는 성분을 제시하여 주체를 바꾼 함정 진술입니다."
    },
    {
     "id": "ㄴ",
