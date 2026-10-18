@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-16T07:48:24.694Z",
+  "generatedAt": "2026-10-18T06:06:57.107Z",
   "subjects": [
     {
       "key": "law",
@@ -81,9 +81,9 @@ var DATA_REGISTRY = {
       "part": 1,
       "title": "화장품법의 이해 (100제)",
       "file": "과목1_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject1.5409a492.js",
+      "bundle": "./data/exams/cosmetic/exams/subject1.cafb07ab.js",
       "global": "EXAM_DATA_subject1",
-      "contentHash": "5409a492",
+      "contentHash": "cafb07ab",
       "stats": {
         "questions": 100
       }
