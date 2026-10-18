@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject3.e6650d0c.js — mode: fact(명제 조합) 23문 / answer(정답 조합) 226문
+// 원본: data/exams/cosmetic/exams/subject3.86af433d.js — mode: fact(명제 조합) 23문 / answer(정답 조합) 226문
 var COMBO_DRILLS_subject3 = [
  {
   "id": "safety_combo_86b500",
@@ -5434,35 +5434,35 @@ var COMBO_DRILLS_subject3 = [
    {
     "id": "ㄱ",
     "sid": "safety_st_7d99a2",
-    "conceptId": "§1.1",
+    "conceptId": "§3.1",
     "text": "0.1% 이하",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_58dd9b",
-    "conceptId": "§1.1",
+    "conceptId": "§3.1",
     "text": "0.3% 이하",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_ff535c",
-    "conceptId": "§1.1",
+    "conceptId": "§3.1",
     "text": "1.0% 이하",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_a5d7f1",
-    "conceptId": "§1.1",
+    "conceptId": "§3.1",
     "text": "0.5% 이하",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_d8065f",
-    "conceptId": "§1.1",
+    "conceptId": "§3.1",
     "text": "2.0% 이하",
     "truth": false
    }
@@ -5513,7 +5513,7 @@ var COMBO_DRILLS_subject3 = [
    "수치"
   ],
   "derivedFrom": "subject3_q59",
-  "explain": "📖 교재 근거:\n```mermaid\nflowchart LR\nP[\"페녹시에탄올<br/>보존제\"] -->|\"1.0% 이하\"| L1[\"최종 제품\"]\nB[\"벤조익애씨드<br/>보존제\"] -->|\"0.5% 이하\"| L2[\"씻어내지 않는 제품\"]\nS[\"살리실산\"] -->|\"0.5% 이하\"| L3[\"영유아용 사용금지<br/>(씻어내는 제품 제외)\"]\nT[\"티타늄디옥사이드<br/>자외선차단제\"] -->|\"25.0% 이하\"| L4[\"최종 제품\"]\n```\n해설: 제시된 정답에 따르면 화장품의 사용 제한 보존제 성분 중 페녹시에탄올의 최대 사용 한도는 최종 제품 중 1.0% 이하이므로 ③이 정답입니다. 따라서 1.0% 이하가 아닌 0.1%, 0.3%, 0.5%, 2.0% 이하로 제시된 ①, ②, ④, ⑤는 오답입니다(단, 제공된 교재 근거 구절에는 페녹시에탄올에 관한 내용이 포함되어 있지 않습니다).",
+  "explain": "📖 교재 근거:\n```mermaid\nflowchart LR\nP[\"페녹시에탄올<br/>보존제\"] -->|\"1.0% 이하\"| L1[\"최종 제품\"]\nB[\"벤조익애씨드<br/>보존제\"] -->|\"0.5% 이하\"| L2[\"씻어내지 않는 제품\"]\nS[\"살리실산\"] -->|\"0.5% 이하\"| L3[\"영유아용 사용금지<br/>(씻어내는 제품 제외)\"]\nT[\"티타늄디옥사이드<br/>자외선차단제\"] -->|\"25.0% 이하\"| L4[\"최종 제품\"]\n```\n해설: 화장품 보존제 성분인 '페녹시에탄올'의 최대 사용 한도는 최종 제품 중 1.0% 이하이므로 정답은 ③번입니다. 따라서 1.0% 이하가 아닌 다른 수치를 제시한 ①, ②, ④, ⑤번은 오답입니다.",
   "source": "유통화장품 안전관리 (250제)",
   "answer": "2"
  },

@@ -13,6 +13,10 @@
  *   L4 선지 길이 불균형 (최장이 중앙값의 2배 초과 — 길이 힌트)
  *   L5 발문↔정답 텍스트 겹침 (답이 발문에 샘)
  *   L6 정답 블록·인용 부재 (근거 강제 위반)
+ *   E1 해설이 정답과 다른 선지를 정답으로 지칭 (편입 해설 감사)
+ *   E2 해설 길이 이상 (20자 미만 또는 800자 초과)
+ *   E3 해설 플레이스홀더·검토 요청 잔존 (미생성·TODO·확인 필요 등)
+ *   E4 해설의 근거 부인 표현 ("근거에 없다/알 수 없다" — 환각 자백 의심)
  * LLM 검수(--llm): 모호성·추론 우회 패턴 의미 판정 추가.
  */
 
@@ -36,6 +40,36 @@ function lintQuestion(q, ans) {
     if (ans && q.type === 'short' && ans.answer && stem.includes(ans.answer)) issues.push('L5 발문에 정답 노출');
     if (!ans) issues.push('L6 정답 블록 부재');
     else if (!ans.citations.length) issues.push('L6 인용 부재');
+    if (ans && ans.explain) issues.push(...lintExplanation(q, ans));
+    return issues;
+}
+
+const CIRCLED = '①②③④⑤⑥⑦⑧⑨⑩';
+
+function lintExplanation(q, ans) {
+    const issues = [];
+    const ex = ans.explain;
+    // E3 — 플레이스홀더·검토 요청 잔존
+    if (/미생성|DRY RUN|TODO|확인 필요|검토 필요|FIXME/.test(ex)) issues.push('E3 플레이스홀더 잔존');
+    // E2 — 길이 이상
+    if (ex.length < 20) issues.push('E2 해설 과단(20자 미만)');
+    else if (ex.length > 800) issues.push('E2 해설 과장(800자 초과)');
+    // E4 — 근거 부인 자백 (인용 구절이 문항을 지지하지 못함을 해설이 시인)
+    if (/근거에(는)? 없|알 수 없|확인할 수 없|확인 불가|포함되어 있지 않|설명할 수 없/.test(ex)) issues.push('E4 근거 부인 표현');
+    // E1 — 해설이 다른 선지를 정답으로 지칭 (단일선택만)
+    const correct = ans.answer.replace(/[^0-9①-⑩]/g, '');
+    if (correct && (q.type === 'single' || q.options.length)) {
+        const correctSet = new Set([...correct].map(c => CIRCLED.indexOf(c) >= 0 ? CIRCLED.indexOf(c) + 1 : Number(c)));
+        // "N이/가 정답" "정답은 N" "N번" 직후 정답 단정 패턴만 추출 — 오답 언급("①은 틀렸다")은 무시
+        for (const m of ex.matchAll(/([①-⑩0-9]+)\s*번?이?\s*(?:이|가|는)?\s*정답|정답은?\s*([①-⑩0-9]+)/g)) {
+            const raw = m[1] || m[2];
+            const nums = new Set([...raw].map(c => CIRCLED.indexOf(c) >= 0 ? CIRCLED.indexOf(c) + 1 : Number(c)).filter(n => n > 0));
+            if (nums.size && ![...nums].every(n => correctSet.has(n))) {
+                issues.push(`E1 해설 정답 모순 (정답 ${ans.answer} vs 해설 ${raw})`);
+                break;
+            }
+        }
+    }
     return issues;
 }
 
@@ -49,16 +83,18 @@ async function main() {
         for (const { exam, absPath } of listQbanks(target)) {
             const { questions, answers } = parseQuestionBank(absPath);
             const lines = [`# 발문 검수 리포트 — ${exam.file}`, ''];
+            let fileFlagged = 0;
             for (const q of questions) {
                 total++;
                 const issues = lintQuestion(q, answers.get(q.num));
                 if (!issues.length) continue;
-                flagged++;
+                fileFlagged++;
                 lines.push(`- **Q${q.num}** — ${issues.join(' · ')}`, `  ${q.stem.slice(0, 80)}`);
             }
-            if (flagged) {
+            flagged += fileFlagged;
+            if (fileFlagged) {
                 const out = writeDraft(`lint_${exam.key}.md`, lines, { model: 'rules' });
-                console.log(`${exam.file}: ${flagged}문 지적 → ${out}`);
+                console.log(`${exam.file}: ${fileFlagged}문 지적 → ${out}`);
             } else console.log(`${exam.file}: 지적 없음`);
         }
     }
@@ -68,4 +104,4 @@ async function main() {
 
 if (require.main === module) main().catch(e => { console.error(e.message); process.exit(1); });
 
-module.exports = { lintQuestion };
+module.exports = { lintQuestion, lintExplanation };
