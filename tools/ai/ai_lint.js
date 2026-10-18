@@ -37,7 +37,12 @@ function lintQuestion(q, ans) {
         const med = lens[Math.floor(lens.length / 2)] || 1;
         if (lens[lens.length - 1] > med * 2 && lens[lens.length - 1] > 40) issues.push('L4 선지 길이 불균형');
     }
-    if (ans && q.type === 'short' && ans.answer && stem.includes(ans.answer)) issues.push('L5 발문에 정답 노출');
+    if (ans && q.type === 'short' && ans.answer && ans.answer.length >= 2) {
+      const ai = stem.indexOf(ans.answer);
+      const leftOk = ai === 0 || !/[가-힣A-Za-z0-9]/.test(stem[ai - 1]);
+      const rightOk = !/[가-힣A-Za-z0-9]/.test(stem[ai + ans.answer.length] || '');
+      if (ai >= 0 && leftOk && rightOk) issues.push('L5 발문에 정답 노출');
+    }
     if (!ans) issues.push('L6 정답 블록 부재');
     else if (!ans.citations.length) issues.push('L6 인용 부재');
     if (ans && ans.explain) issues.push(...lintExplanation(q, ans));
