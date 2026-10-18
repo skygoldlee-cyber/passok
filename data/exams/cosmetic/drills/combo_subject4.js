@@ -875,28 +875,32 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_853ec0",
     "conceptId": "§2.1",
     "text": "발생기 -> 휴지기 -> 성장기 -> 퇴행기",
-    "truth": false
+    "truth": false,
+    "explain": "모발의 성장 주기는 '성장기 → 퇴행기 → 휴지기 → 발생기' 순으로 순환하므로 올바른 순서가 아닙니다. 이는 각 단계의 진행 순서를 잘못 뒤바꾸어 혼동을 유도한 함정입니다."
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_96a8aa",
     "conceptId": "§2.1",
     "text": "휴지기 -> 성장기 -> 퇴행기 -> 발생기",
-    "truth": false
+    "truth": false,
+    "explain": "모발의 성장 주기는 성장기 → 퇴행기 → 휴지기 → 발생기 순으로 순환하므로 거짓입니다. 이는 단계의 순환 순서를 뒤바꾸어 혼동을 유도한 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_8451a0",
     "conceptId": "§2.1",
     "text": "퇴행기 -> 휴지기 -> 성장기 -> 발생기",
-    "truth": false
+    "truth": false,
+    "explain": "모발의 성장 주기는 ‘성장기 → 퇴행기 → 휴지기 → 발생기’ 순으로 순환하므로, 휴지기 이후의 순서를 뒤바꿔 혼동을 유도한 거짓 진술입니다."
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_62bcfe",
     "conceptId": "§2.1",
     "text": "성장기 -> 휴지기 -> 퇴행기 -> 발생기",
-    "truth": false
+    "truth": false,
+    "explain": "모발의 성장 주기는 '성장기 → 퇴행기 → 휴지기 → 발생기' 순으로 순환하므로, 성장기 다음 단계인 '퇴행기'와 그 이후 단계인 '휴지기'의 순서를 서로 뒤바꿔 제시한 거짓 진술입니다."
    },
    {
     "id": "ㅁ",
@@ -973,28 +977,32 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_17491d",
     "conceptId": "§2.1",
     "text": "에크린 한선 (소한선)",
-    "truth": false
+    "truth": false,
+    "explain": "향선이라고도 불리며 겨드랑이, 음부 등에 분포하여 체취(액취증)를 유발하는 땀샘은 '아포크린 한선(대한선)'입니다. 따라서 아포크린 한선에 대한 설명을 에크린 한선(소한선)으로 제시한 주체 바꿈 함정의 거짓 진술입니다."
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_f72efe",
     "conceptId": "§2.1",
     "text": "에크린 지선",
-    "truth": false
+    "truth": false,
+    "explain": "향선이라 불리며 겨드랑이 등에 분포해 체취(액취증)를 유발하는 땀샘은 아포크린 한선(대한선)이므로 거짓입니다. 이는 정답인 아포크린 한선 대신 에크린 한선이나 피지선(지선)을 제시하여 땀샘의 주체를 바꾼 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_914862",
     "conceptId": "§2.1",
     "text": "피지선",
-    "truth": false
+    "truth": false,
+    "explain": "향선이라고도 불리며 겨드랑이, 음부 등에 분포해 체취(액취증)를 유발하는 땀샘은 아포크린 한선(대한선)입니다. 따라서 아포크린 한선에 대한 설명을 피지선으로 바꾼 주체 바꿈 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_37e30e",
     "conceptId": "§2.1",
     "text": "아포크린 지선",
-    "truth": false
+    "truth": false,
+    "explain": "해당 설명에 부합하는 땀샘은 '아포크린 한선(대한선)'으로, 한선(땀샘)을 '지선'으로 주체를 바꾸어 혼동을 유도한 거짓 진술입니다."
    },
    {
     "id": "ㅁ",
@@ -1092,7 +1100,8 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_390b61",
     "conceptId": "§2.3",
     "text": "조제실 바닥 소독을 위해 락스 희석액을 화장품 내용물에 직접 첨가한다.",
-    "truth": false
+    "truth": false,
+    "explain": "맞춤형화장품은 화장품 내용물과 원료 등을 혼합하거나 소분하는 것이므로, 조제실 바닥 소독용 락스 희석액을 화장품 내용물에 첨가하는 것은 전혀 적절하지 않은 위생 수칙입니다. 이는 시설 소독용 물질을 화장품 조제 첨가물로 잘못 연결하여 혼동을 유발한 함정입니다."
    }
   ],
   "options": [
@@ -1161,28 +1170,32 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_dc5c03",
     "conceptId": "§1.1",
     "text": "원료 계량 -> 용기 올리기 -> 영점 조절 -> 수평 확인 -> 전원 켜기",
-    "truth": false
+    "truth": false,
+    "explain": "맞춤형화장품 조제 시 전자저울을 사용하는 올바른 순서는 '수평 확인 → 전원 켜기 → 용기 올리기 → 영점(Tare) 조절 → 원료 계량'입니다. 해당 진술은 단계별 절차의 순서를 뒤바꾸어 혼동을 유도한 함정입니다."
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_0d0ff0",
     "conceptId": "§1.1",
     "text": "전원 켜기 -> 용기 올리기 -> 영점 조절 -> 원료 계량 -> 수평 확인",
-    "truth": false
+    "truth": false,
+    "explain": "전자저울을 사용하는 올바른 순서는 가장 먼저 '수평 확인'을 거친 후 '전원 켜기 → 용기 올리기 → 영점 조절 → 원료 계량' 순으로 진행해야 하므로 거짓입니다. 이는 첫 단계인 수평 확인을 맨 마지막 순서로 배치하여 사용 순서의 혼동을 노린 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_264589",
     "conceptId": "§1.1",
     "text": "용기 올리기 -> 전원 켜기 -> 영점 조절 -> 수평 확인 -> 원료 계량",
-    "truth": false
+    "truth": false,
+    "explain": "전자저울을 사용하는 올바른 순서는 ‘수평 확인 → 전원 켜기 → 용기 올리기 → 영점(Tare) 조절 → 원료 계량’입니다. 해당 진술은 측정 준비 단계인 수평 확인 및 전원 켜기 등의 순서를 뒤바꾸어 혼동을 유도한 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_fc207b",
     "conceptId": "§1.1",
     "text": "수평 확인 -> 용기 올리기 -> 전원 켜기 -> 영점 조절 -> 원료 계량",
-    "truth": false
+    "truth": false,
+    "explain": "전자저울의 올바른 사용 순서는 '수평 확인 → 전원 켜기 → 용기 올리기 → 영점(Tare) 조절 → 원료 계량'이므로 거짓입니다. 이는 '전원 켜기' 전에 '용기 올리기'를 먼저 수행하도록 단계의 순서를 바꾼 함정입니다."
    },
    {
     "id": "ㅁ",
@@ -1255,21 +1268,24 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_bba2e8",
     "conceptId": "§1.3",
     "text": "피부의 유분 분비량",
-    "truth": false
+    "truth": false,
+    "explain": "피부의 유분 분비량은 피부 타입을 진단하기 위한 문진 및 촉진 과정에서 실제로 확인하는 항목입니다. 따라서 '확인하는 항목이 아닌 것'을 고르는 발문의 조건을 거꾸로 적용하게 만든 극성 반전의 함정 진술입니다."
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_8347d6",
     "conceptId": "§1.3",
     "text": "피부의 당김이나 건조도",
-    "truth": false
+    "truth": false,
+    "explain": "피부의 당김이나 건조도는 문진과 촉진을 통해 실제로 확인하는 정상 항목이므로 '확인하는 항목이 아닌 것'을 고르는 본 문항에서는 오답(거짓)이 됩니다. 이는 실제 확인 항목을 확인 대상이 아닌 것으로 오인하게 한 극성 반전 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_886d86",
     "conceptId": "§1.3",
     "text": "피부의 모공 크기 및 잔주름 정도",
-    "truth": false
+    "truth": false,
+    "explain": "피부의 모공 크기 및 잔주름 정도는 문진과 촉진을 통해 실제로 확인하는 항목에 해당하므로, 확인하는 항목이 아닌 것을 찾는 문제에서 극성을 반전시켜 혼동을 유도한 거짓 진술입니다."
    },
    {
     "id": "ㄹ",
@@ -1283,7 +1299,8 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_f7f98e",
     "conceptId": "§1.3",
     "text": "화장품 사용 시의 주관적인 민감도나 알레르기 반응",
-    "truth": false
+    "truth": false,
+    "explain": "화장품 사용 시의 주관적인 민감도나 알레르기 반응은 문진과 촉진을 통해 실제로 확인하는 항목에 해당합니다. 따라서 '확인하는 항목이 아닌 것'을 고르는 발문의 기준과 반대로 제시된 극성 반전의 함정입니다."
    }
   ],
   "options": [
@@ -1347,7 +1364,8 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_8ce7e1",
     "conceptId": "§1.2",
     "text": "사람의 눈에 직접 시험 물질을 투여하여 위험성을 예측한다",
-    "truth": false
+    "truth": false,
+    "explain": "안점막 자극시험은 사람의 눈에 직접 투여하는 것이 아니라 동물이나 대체시험(단백질 구조 변화)을 통해 위험성을 예측하므로, 시험 주체(대상)를 바꾼 함정입니다."
    },
    {
     "id": "ㄴ",
@@ -1361,21 +1379,24 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_bff0ee",
     "conceptId": "§1.2",
     "text": "UV램프를 조사하여 자외선에 의해 생기는 자극성을 평가한다",
-    "truth": false
+    "truth": false,
+    "explain": "해당 진술은 안점막 자극시험이 아닌 '광독성시험'에 대한 설명으로, 안전성시험의 종류(주체)를 바꾼 함정입니다. 안점막 자극시험은 동물이나 대체시험을 통해 눈에 들어갔을 때의 위험성을 예측하는 시험입니다."
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_8b5c6e",
     "conceptId": "§1.2",
     "text": "피부에 반복적으로 투여했을 때 나타나는 자극성을 평가한다",
-    "truth": false
+    "truth": false,
+    "explain": "해당 진술은 안점막 자극시험이 아니라 피부에 반복 투여하는 '연속 피부 자극시험'에 대한 설명으로, 시험의 대상을 바꿔 혼동을 유도한 거짓 진술입니다. 안점막 자극시험은 물질이 눈에 들어갔을 때의 위험성을 예측하는 시험입니다."
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_04b1dc",
     "conceptId": "§1.2",
     "text": "박테리아를 이용한 돌연변이시험이다",
-    "truth": false
+    "truth": false,
+    "explain": "안점막 자극시험은 동물이나 대체시험(단백질 구조 변화)을 통해 눈에 들어갔을 때의 위험성을 예측하는 시험이므로 거짓입니다. 이는 안점막 자극시험의 정의가 아닌 다른 시험의 내용을 끌어와 혼동을 유도한 주체 바꿈 함정입니다."
    }
   ],
   "options": [
@@ -1439,7 +1460,8 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_40433d",
     "conceptId": "§1.1",
     "text": "조제된 맞춤형화장품의 명칭",
-    "truth": false
+    "truth": false,
+    "explain": "'조제된 맞춤형화장품의 명칭'은 혼합 및 소분 기록서에 반드시 작성·관리해야 하는 의무 기재 항목에 해당하므로 거짓 진술입니다. 이는 실제 필수 기재 사항을 '의무 항목이 아닌 것'으로 착각하도록 유도한 극성 반전 함정입니다."
    },
    {
     "id": "ㄴ",
@@ -1453,21 +1475,24 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_cc2e39",
     "conceptId": "§1.1",
     "text": "조제연월일 및 조제량(중량 또는 용량)",
-    "truth": false
+    "truth": false,
+    "explain": "조제연월일 및 조제량은 혼합 및 소분 기록서에 반드시 작성·관리해야 하는 의무 기재 항목에 해당합니다. 따라서 '의무 항목이 아닌 것'을 고르는 발문의 조건을 반대로 적용하게 유도한 극성 반전 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_02deb3",
     "conceptId": "§1.1",
     "text": "조제에 사용된 내용물 및 원료의 명칭, 제조번호, 사용기한",
-    "truth": false
+    "truth": false,
+    "explain": "조제에 사용된 원료 관련 정보는 혼합·소분 기록서에 반드시 작성·관리해야 하는 의무 기재 항목에 해당하므로, '의무 항목이 아닌 것'을 묻는 발문에서는 오답(거짓)이 됩니다. 이는 실제 의무 항목을 비의무 항목으로 혼동하도록 유도한 극성 반전의 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_db997c",
     "conceptId": "§1.1",
     "text": "맞춤형화장품을 구매한 소비자의 이름 및 연락처(식별 번호 등)",
-    "truth": false
+    "truth": false,
+    "explain": "소비자의 이름 및 연락처와 같은 소비자 식별 정보는 품질 및 안전 관리를 위해 혼합 및 소분 시 반드시 작성·관리해야 하는 의무 항목에 해당합니다. 따라서 해당 진술은 '의무 항목이 아닌 것'을 묻는 발문의 기준과 반대로 유도한 극성 반전의 함정입니다."
    }
   ],
   "options": [
@@ -1528,7 +1553,8 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_72c40a",
     "conceptId": "§1.2",
     "text": "부유균 시험",
-    "truth": false
+    "truth": false,
+    "explain": "공기 중의 낙하 세균을 측정하기 위해 배양 접시를 열어두고 미생물 증식 개수를 확인하는 위생 시험법은 '낙하균 시험'이므로, 시험법 명칭의 주체를 바꾼 거짓 진술입니다."
    },
    {
     "id": "ㄴ",
@@ -1542,21 +1568,24 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_a77231",
     "conceptId": "§1.2",
     "text": "표면 오염도 시험",
-    "truth": false
+    "truth": false,
+    "explain": "배양 접시를 일정 시간 열어두어 공기 중 낙하 세균을 측정하는 위생 시험법은 '낙하균 시험'이므로 거짓입니다. 이는 낙하균 시험의 설명에 다른 위생 시험법인 '표면 오염도 시험'의 명칭을 대입하여 개념을 혼동하도록 유도한 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_4ab2dd",
     "conceptId": "§1.2",
     "text": "공조 필터 시험",
-    "truth": false
+    "truth": false,
+    "explain": "공기 중의 낙하 세균을 측정하기 위해 배양 접시를 일정 시간 열어두고 미생물 증식을 확인하는 시험법은 '낙하균 시험'입니다. 따라서 본 진술은 올바른 위생 시험법 명칭 대신 다른 명칭을 제시하여 혼동을 유도한 개념(주체) 바꿈 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_9e238c",
     "conceptId": "§1.2",
     "text": "가스 측정 시험",
-    "truth": false
+    "truth": false,
+    "explain": "공기 중의 낙하 세균을 측정하기 위해 배양 접시를 일정 시간 열어두고 미생물 증식 개수를 확인하는 위생 시험법은 '낙하균 시험'이므로 거짓입니다. 이는 해당 시험법의 명칭을 관련 없는 다른 시험으로 바꾼 함정입니다."
    }
   ],
   "options": [
@@ -1625,7 +1654,8 @@ var COMBO_DRILLS_subject4 = [
     "sid": "understanding_st_fc136b",
     "conceptId": "§1.1",
     "text": "20g",
-    "truth": false
+    "truth": false,
+    "explain": "최종 혼합 제품 100g에 나이아신아마이드 3.0%(3g)를 맞추기 위해 투입해야 하는 10% 희석액의 양은 30g이므로 거짓입니다. 이는 정확한 계산 결과인 30g을 20g으로 제시한 수치 바꿈 함정입니다."
    },
    {
     "id": "ㄷ",

@@ -1014,14 +1014,16 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_510bc9",
     "conceptId": "§4.1",
     "text": "10 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 디옥산의 허용 한도는 '100 ㎍/g 이하'이므로, 기준 수치를 '10 ㎍/g 이하'로 바꾼 거짓 진술입니다."
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_3c1615",
     "conceptId": "§4.1",
     "text": "200 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 디옥산의 허용 한도는 100 ㎍/g 이하이므로 거짓입니다. 이는 기준 수치를 100 ㎍/g에서 200 ㎍/g으로 바꾼 함정입니다."
    }
   ],
   "options": [
@@ -1087,21 +1089,24 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_d9c9ab",
     "conceptId": "§4.2",
     "text": "0.002% (v/v) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 일반 화장품의 메탄올 허용 한도는 0.2%(v/v) 이하이며, 0.002% 이하는 물휴지에 적용되는 기준입니다. 따라서 이는 물휴지의 허용 한도를 일반 화장품의 기준으로 제시한 주체 바꿈 함정입니다."
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_ce2e6c",
     "conceptId": "§4.2",
     "text": "0.02% (v/v) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 일반 화장품의 메탄올 허용 한도는 0.2%(v/v) 이하이므로 거짓입니다. 이는 실제 기준 수치인 0.2%의 자릿수를 바꾼 함정 진술입니다."
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_3dd7b2",
     "conceptId": "§4.2",
     "text": "1.0% (v/v) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 일반 화장품의 메탄올 허용 한도는 '0.2%(v/v) 이하'이므로 거짓입니다. 이는 실제 기준 수치인 0.2%를 1.0%로 바꾼 수치 혼동 함정입니다."
    },
    {
     "id": "ㄹ",
@@ -1115,7 +1120,8 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_78bf9f",
     "conceptId": "§4.2",
     "text": "2.0% (v/v) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 일반 화장품의 메탄올 허용 한도는 '0.2%(v/v) 이하'이므로 거짓입니다. 이는 실제 기준 수치인 0.2%를 2.0%로 변형하여 수치 혼동을 유도한 함정입니다."
    }
   ],
   "options": [
@@ -1180,14 +1186,16 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_bfc6f9",
     "conceptId": "q:subject3_q13",
     "text": "0.2% (v/v) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "0.2%(v/v) 이하는 일반 화장품에 적용되는 메탄올 허용 한도이며, 물휴지 제품의 허용 한도는 0.002% 이하입니다. 이는 일반 화장품 기준의 수치를 물휴지 기준인 것처럼 제시하여 혼동을 유도한 함정입니다."
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_903131",
     "conceptId": "q:subject3_q13",
     "text": "0.02% (v/v) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "물휴지의 메탄올 허용 한도는 0.002%(v/v) 이하이므로 거짓입니다. 이는 올바른 기준 수치인 0.002%를 0.02%로 변경하여 혼동을 유발한 수치 바꿈 함정입니다."
    },
    {
     "id": "ㄷ",
@@ -1201,14 +1209,16 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_b8481a",
     "conceptId": "q:subject3_q13",
     "text": "0.5% (v/v) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "메탄올의 허용 한도는 물휴지의 경우 0.002% 이하이므로 거짓입니다. 이는 실제 기준(0.002% 이하)과 무관한 잘못된 기준을 제시하여 수치를 바꾼 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_ca1f73",
     "conceptId": "q:subject3_q13",
     "text": "사용 금지 (검출 한도 음성)",
-    "truth": false
+    "truth": false,
+    "explain": "물휴지의 메탄올 허용 한도는 '사용 금지(검출 한도 음성)'가 아니라 '0.002% 이하'로 규정되어 있으므로 거짓입니다. 이는 규정된 허용 한도 수치를 전면 사용 금지로 극성을 반전시켜 혼동을 유도한 함정입니다."
    }
   ],
   "options": [
@@ -1269,14 +1279,16 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_ab46ae",
     "conceptId": "§5.2",
     "text": "10 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 프탈레이트류의 총 합계 허용 한도는 '100 ㎍/g 이하'입니다. 따라서 이 진술은 기준 수치를 '10 ㎍/g 이하'로 잘못 제시한 수치 바꿈 함정입니다."
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_45a65e",
     "conceptId": "§5.2",
     "text": "50 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 프탈레이트류의 총 합계 허용 한도는 '100 ㎍/g 이하'이므로 거짓입니다. 이는 기준 수치를 '50 ㎍/g 이하'로 변경하여 혼동을 유도한 수치 바꿈 함정입니다."
    },
    {
     "id": "ㄷ",
@@ -1290,14 +1302,16 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_329417",
     "conceptId": "§5.2",
     "text": "200 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 프탈레이트류의 총 합계 허용 한도는 '100 ㎍/g 이하'입니다. 따라서 기준 수치를 200 ㎍/g 이하로 바꾼 거짓 진술입니다."
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_551e55",
     "conceptId": "§5.2",
     "text": "500 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통화장품 안전관리 기준상 프탈레이트류의 총 합계 허용 한도는 '100 ㎍/g 이하'이므로 거짓입니다. 이는 기준 수치를 100 ㎍/g에서 500 ㎍/g으로 바꾼 혼동 함정입니다."
    }
   ],
   "options": [
@@ -1371,28 +1385,32 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_4e576d",
     "conceptId": "q:subject3_q15",
     "text": "500개/g(mL) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "영유아용 및 눈화장용을 제외한 일반 유통 화장품의 총호기성생균수 허용 한도는 1,000개/g(mL) 이하입니다. 500개/g(mL) 이하는 영유아용 및 눈화장용 제품의 기준을 가져와 수치를 혼동하도록 유도한 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_e3a98d",
     "conceptId": "q:subject3_q15",
     "text": "100개/g(mL) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "영유아용 및 눈 화장용을 제외한 일반 유통 화장품의 총호기성생균수 허용 한도는 1,000개/g(mL) 이하이므로 거짓입니다. 본 진술은 물휴지의 기준(100개/g(mL) 이하)과 수치를 바꾸어 혼동을 유도한 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_e9ea7c",
     "conceptId": "q:subject3_q15",
     "text": "5,000개/g(mL) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "영유아용 및 눈화장용 제품을 제외한 일반 유통 화장품의 총호기성생균수 허용 한도는 '1,000개/g(mL) 이하'이므로 거짓입니다. 이는 실제 기준 수치인 1,000개를 잘못된 수치(5,000개)로 바꾼 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_e3e250",
     "conceptId": "q:subject3_q15",
     "text": "10,000개/g(mL) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "영유아용 및 눈화장용 제품을 제외한 일반 유통 화장품의 미생물 총호기성생균수 허용 한도는 1,000개/g(mL) 이하이므로 거짓입니다. 이는 기준 수치를 잘못 제시하여 혼동을 유도한 함정입니다."
    }
   ],
   "options": [
@@ -1466,28 +1484,32 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_2cb394",
     "conceptId": "§4.1",
     "text": "100개/g(mL) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "영유아용 제품류 및 눈화장용 제품류의 총호기성생균수 허용 한도는 500개/g(mL) 이하입니다. 제시된 '100개/g(mL) 이하'는 물휴지의 세균 및 진균수 기준을 끌어와 수치와 주체를 바꾼 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "safety_st_0ccebc",
     "conceptId": "§4.1",
     "text": "1,000개/g(mL) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "영유아용 제품류 및 눈화장용 제품류의 총호기성생균수 허용 한도는 500개/g(mL) 이하이므로 거짓입니다. 진술의 1,000개/g(mL) 이하는 기타 화장품류의 기준을 제시하여 혼동을 유도한 수치 바꿈 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_4829e9",
     "conceptId": "§4.1",
     "text": "2,000개/g(mL) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "영유아용 제품류 및 눈화장용 제품류의 총호기성생균수 허용 한도는 500개/g(mL) 이하이므로 이 진술은 거짓입니다. 이는 기준 수치를 잘못 제시하여 혼동을 유도한 수치 바꿈 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_f3ea54",
     "conceptId": "§4.1",
     "text": "5,000개/g(mL) 이하",
-    "truth": false
+    "truth": false,
+    "explain": "영유아용 제품류 및 눈화장용 제품류의 총호기성생균수 허용 한도는 '500개/g(mL) 이하'이므로 거짓입니다. 이는 기준 수치인 500을 5,000으로 바꾼 함정입니다."
    }
   ],
   "options": [
@@ -1579,7 +1601,8 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_99290e",
     "conceptId": "§2.1",
     "text": "사용 전 위생 상태 점검은 생략해도 된다",
-    "truth": false
+    "truth": false,
+    "explain": "맞춤형화장품 혼합·소분 시에는 철저한 위생관리가 요구되므로 사용 전 위생 상태 점검을 절대 생략해서는 안 됩니다. 따라서 본 진술은 필수적인 의무 절차를 생략해도 된다고 서술하여 옳고 그름을 바꾼 극성 반전의 함정입니다."
    }
   ],
   "options": [
@@ -1677,7 +1700,8 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_2230dc",
     "conceptId": "§4.1",
     "text": "포장재 보관소는 습도가 매우 높아도 종이 박스 등이 젖지 않는 한 습도 제어가 필요 없다.",
-    "truth": false
+    "truth": false,
+    "explain": "포장재 보관소는 안정성시험 결과나 제품표준서 등을 토대로 온도·습도·차광 등 필요한 항목을 설정하여 관리해야 합니다. 따라서 종이 박스가 젖지 않는 한 습도 제어가 필요 없다고 관리 의무를 부정(극성 반전)한 거짓 진술입니다."
    }
   ],
   "options": [
@@ -1746,7 +1770,8 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_52f860",
     "conceptId": "§4.2",
     "text": "품질 검사 부적합이 발생하면 생산 작업자가 임의로 재작업을 시작할 수 있다.",
-    "truth": false
+    "truth": false,
+    "explain": "재작업은 품질 책임자의 결정과 승인을 거친 절차서 및 기록서에 따라 실시해야 하므로 작업자가 임의로 시작할 수 없습니다. 따라서 작업자의 임의 진행 가능 여부를 사실과 반대로 서술한 극성 반전의 함정입니다."
    },
    {
     "id": "ㄴ",
@@ -1760,21 +1785,24 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_a44250",
     "conceptId": "§4.2",
     "text": "재작업을 거친 완제품은 별도의 품질 검사 없이 즉시 출고할 수 있다.",
-    "truth": false
+    "truth": false,
+    "explain": "재작업을 거친 완제품은 품질이 확인되고 품질 책임자의 승인을 얻기 전에는 출하할 수 없으므로 거짓입니다. 이는 품질 확인과 승인 절차를 거쳐야 출하할 수 있다는 규정을 '검사 없이 즉시 출고할 수 있다'로 바꾼 극성 반전의 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "safety_st_8c906f",
     "conceptId": "§4.2",
     "text": "재작업 대상은 유통 기한이 이미 만료되어 폐기해야 하는 완제품 전체이다.",
-    "truth": false
+    "truth": false,
+    "explain": "제시된 해설에 따르면 재작업품은 품질 확인과 품질 책임자의 승인 절차를 거쳐 관리되는 대상이므로, 재작업 대상을 '유통 기한이 만료되어 폐기해야 하는 완제품 전체'로 규정한 것은 대상을 왜곡하여 혼동을 유도한 거짓 진술입니다."
    },
    {
     "id": "ㅁ",
     "sid": "safety_st_0c39b1",
     "conceptId": "§4.2",
     "text": "재작업 기록서는 별도로 작성할 필요가 없다.",
-    "truth": false
+    "truth": false,
+    "explain": "재작업 처리는 품질 책임자의 승인이 끝난 재작업 절차서 및 기록서에 따라 실시해야 하고 제조 및 시험 기록 등을 남겨야 하므로, 기록서 작성이 필요 없다고 한 진술은 극성을 반전시켜 혼동을 유도한 거짓입니다."
    }
   ],
   "options": [
@@ -1835,14 +1863,16 @@ var COMBO_DRILLS_subject3 = [
     "sid": "safety_st_619ecf",
     "conceptId": "§5.2",
     "text": "100 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "포름알데히드의 비의도적 검출 허용 한도는 2,000 ㎍/g 이하이며, 100 ㎍/g 이하는 디옥산의 허용 기준을 가져와 수치를 바꾼 함정 진술입니다."
    },
    {
     "id": "ㄴ",
     "sid": "safety_st_6855ec",
     "conceptId": "§5.2",
     "text": "500 ㎍/g 이하",
-    "truth": false
+    "truth": false,
+    "explain": "유통 화장품 유해물질 기준에서 포름알데히드의 비의도적 검출 허용 한도는 2,000 ㎍/g 이하이므로 거짓입니다. 이는 실제 기준 수치인 2,000 ㎍/g을 '500 ㎍/g'으로 바꾼 수치 바꿈 함정입니다."
    },
    {
     "id": "ㄷ",

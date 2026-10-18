@@ -795,7 +795,8 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_cd5589",
     "conceptId": "§5.1",
     "text": "나등급",
-    "truth": false
+    "truth": false,
+    "explain": "위해화장품의 위해성 등급 중 가장 위해성이 높은 등급은 '가등급'이며, '나등급'은 가등급보다 위해 수준이 낮으므로 거짓입니다. 이는 가장 위해성이 높은 등급을 하위 등급으로 바꾼 함정입니다."
    },
    {
     "id": "ㄷ",
@@ -809,14 +810,16 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_fbec4a",
     "conceptId": "§5.1",
     "text": "A등급",
-    "truth": false
+    "truth": false,
+    "explain": "위해화장품의 위해성 등급은 가등급, 나등급, 다등급으로 분류되므로, 'A등급'은 규정에 없는 등급 명칭을 제시하여 혼동을 유도한 함정입니다. 가장 위해성이 높은 등급은 '가등급'입니다."
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_3ceb85",
     "conceptId": "§5.1",
     "text": "1등급",
-    "truth": false
+    "truth": false,
+    "explain": "위해화장품의 위해성 등급은 가등급, 나등급, 다등급으로 분류되며 가장 위해성이 높은 등급은 ‘가등급’입니다. 따라서 ‘1등급’은 규정에 없는 등급 명칭을 제시하여 수험생의 혼동을 노린 오답입니다."
    }
   ],
   "options": [
@@ -876,7 +879,8 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_05ceb6",
     "conceptId": "§4.1",
     "text": "시험 중 (대기): 황색 (또는 주황색)",
-    "truth": false
+    "truth": false,
+    "explain": "해설에 따르면 ‘시험 중’ 상태의 라벨 색상은 황색(또는 주황색)이 올바른 매칭이므로, 올바르지 않은 것을 고르는 문제에서 정답이 될 수 없도록 한 극성 반전 함정입니다."
    },
    {
     "id": "ㄴ",
@@ -890,21 +894,24 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_00ceeb",
     "conceptId": "§4.1",
     "text": "부적합 (반려): 적색",
-    "truth": false
+    "truth": false,
+    "explain": "해설에 따르면 부적합 및 반품 대기는 '적색' 라벨로 올바르게 표시된 매칭이므로, '올바르지 않은 것'을 찾는 본 문항에서는 거짓(오답) 진술입니다. 이는 옳은 내용의 선지를 정답으로 혼동하게 만드는 극성 반전의 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_03f855",
     "conceptId": "§4.1",
     "text": "적합 (승인): 녹색",
-    "truth": false
+    "truth": false,
+    "explain": "해설에 따르면 원료의 '적합' 표시는 녹색 라벨로 매칭하는 것이 올바르므로, 올바르지 않은 표시를 고르는 모문항의 정답에 해당하지 않는 극성 반전의 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_bcf6ea",
     "conceptId": "§4.1",
     "text": "반품 대기: 적색",
-    "truth": false
+    "truth": false,
+    "explain": "해설에 따르면 '반품 대기'는 적색 라벨로 표시하는 것이 올바른 규정 매칭이므로, 올바르지 않은 설명을 찾는 본 문항의 정답 진술로는 거짓입니다. 이는 정상적으로 매칭된 올바른 보관 상태 표시 라벨을 제시하여 수험생이 잘못된 항목으로 오인하도록 유도한 함정(극성 반전)입니다."
    }
   ],
   "options": [
@@ -972,21 +979,24 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_02270e",
     "conceptId": "q:subject2_q11",
     "text": "음이온 > 양이온 > 양쪽성 > 비이온",
-    "truth": false
+    "truth": false,
+    "explain": "계면활성제의 피부 자극성은 '양이온성 > 음이온성 > 양쪽성 > 비이온성' 순이므로, 음이온성과 양이온성의 순서를 바꾼(주체 바꿈) 거짓 진술입니다."
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_9e0f17",
     "conceptId": "q:subject2_q11",
     "text": "양쪽성 > 양이온 > 음이온 > 비이온",
-    "truth": false
+    "truth": false,
+    "explain": "계면활성제의 자극성은 '양이온성 > 음이온성 > 양쪽성 > 비이온성' 순이므로 틀린 진술입니다. 이는 양쪽성 계면활성제의 자극 순서를 양이온성 및 음이온성보다 앞자리에 두어 순서를 바꾼 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_48fdc3",
     "conceptId": "q:subject2_q11",
     "text": "비이온 > 양쪽성 > 음이온 > 양이온",
-    "truth": false
+    "truth": false,
+    "explain": "계면활성제의 피부 자극성은 '양이온성 > 음이온성 > 양쪽성 > 비이온성' 순으로 높으므로 해당 진술은 거짓입니다. 이는 자극성이 큰 순서와 작은 순서를 정반대로 뒤바꿔 나열한 극성 반전의 함정입니다."
    },
    {
     "id": "ㄹ",
@@ -1000,7 +1010,8 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_a0c93b",
     "conceptId": "q:subject2_q11",
     "text": "음이온 > 양쪽성 > 양이온 > 비이온",
-    "truth": false
+    "truth": false,
+    "explain": "계면활성제의 피부 자극성은 ‘양이온성 > 음이온성 > 양쪽성 > 비이온성’ 순으로 크므로, 양이온성과 음이온성 등의 순서를 바꾼 거짓 진술입니다."
    }
   ],
   "options": [
@@ -1062,14 +1073,16 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_101416",
     "conceptId": "§1.1",
     "text": "라우릭애씨드(Lauric Acid)",
-    "truth": false
+    "truth": false,
+    "explain": "라우릭애씨드는 탄소수가 12개 이상인 고급 지방산에 해당하므로, 고급 지방산에 해당하지 않는 것을 고르는 발문 기준상 틀린 진술입니다. 이는 실제 고급 지방산에 해당하는 원료를 오답으로 유도한 극성 반전 함정입니다."
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_e03f69",
     "conceptId": "§1.1",
     "text": "미리스틱애씨드(Myristic Acid)",
-    "truth": false
+    "truth": false,
+    "explain": "미리스틱애씨드는 화장품 유성 원료 중 고급 지방산에 해당하는 물질이므로, ‘해당하지 않는 것’을 찾는 문제의 조건에 부합하지 않는 극성 반전 함정입니다."
    },
    {
     "id": "ㄷ",
@@ -1083,14 +1096,16 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_8f27a1",
     "conceptId": "§1.1",
     "text": "스테아릭애씨드(Stearic Acid)",
-    "truth": false
+    "truth": false,
+    "explain": "스테아릭애씨드는 고급 지방산에 해당하는 유성 원료이므로 '해당하지 않는 것'을 고르는 문항의 정답이 될 수 없으며, 이는 참·거짓의 조건을 뒤바꾼 극성 반전 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_437579",
     "conceptId": "§1.1",
     "text": "팔미틱애씨드(Palmitic Acid)",
-    "truth": false
+    "truth": false,
+    "explain": "팔미틱애씨드는 고급 지방산에 해당하는 성분이므로, 고급 지방산에 ‘해당하지 않는 것’을 고르는 발문의 조건상 오답(거짓 진술)입니다. 이는 고급 지방산에 해당하는 원료를 옳지 않은 것으로 착각하게 유도한 극성 반전 함정입니다."
    }
   ],
   "options": [
@@ -1160,28 +1175,32 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_e2961a",
     "conceptId": "q:subject2_q13",
     "text": "구아검",
-    "truth": false
+    "truth": false,
+    "explain": "구아검은 화장품 제조 시 점증제로 사용되는 천연 유래 고분자 물질에 해당하므로 '천연 유래 고분자 물질이 아닌 것'을 찾는 본 문항의 진술로는 거짓입니다. 이는 천연 유래 고분자 물질을 비천연 점증제(카보머)와 혼동하도록 유도한 극성 반전 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_44d864",
     "conceptId": "q:subject2_q13",
     "text": "잔탄검",
-    "truth": false
+    "truth": false,
+    "explain": "잔탄검은 화장품 제조 시 점증제로 사용되는 대표적인 천연 유래 고분자 물질에 해당합니다. 따라서 '천연 유래 고분자 물질이 아닌 것'을 찾는 문제의 조건과 반대되는 대상을 제시하여 혼동을 유도한 극성 반전 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_98629b",
     "conceptId": "q:subject2_q13",
     "text": "젤라틴",
-    "truth": false
+    "truth": false,
+    "explain": "젤라틴은 화장품 제조 시 점증제로 사용되는 천연 유래 고분자 물질에 해당하므로 거짓 진술입니다. 이는 천연 유래 고분자 물질 여부의 긍정·부정을 뒤바꾼 극성 반전의 함정입니다."
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_6734d2",
     "conceptId": "q:subject2_q13",
     "text": "아가(한천)",
-    "truth": false
+    "truth": false,
+    "explain": "아가(한천)는 화장품 제조 시 점증제로 사용되는 천연 유래 고분자 물질에 해당하므로 거짓입니다. 이는 ‘천연 유래 고분자 물질이 아닌 것’을 묻는 부정형 발문에서 해당하는 물질을 제시하여 정·오답의 극성 반전을 유도한 함정입니다."
    }
   ],
   "options": [
@@ -1241,28 +1260,32 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_d78e37",
     "conceptId": "q:subject2_q14",
     "text": "원료 보관실",
-    "truth": false
+    "truth": false,
+    "explain": "원료 보관실은 내용물이 완전 폐색된 일반 작업실인 4등급에 해당하므로 거짓입니다. 이는 2등급에 속하는 원료 칭량실 등과 혼동하도록 작업소의 청정도 등급 구분을 바꾼 함정입니다."
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_a3481d",
     "conceptId": "q:subject2_q14",
     "text": "포장 자재 보관실",
-    "truth": false
+    "truth": false,
+    "explain": "포장 자재 보관실은 내용물이 완전히 폐색된 일반 작업실로서 4등급에 해당하므로 2등급에 해당한다는 진술은 거짓입니다. 이는 작업소의 청정도 등급 구분을 2등급과 4등급으로 뒤바꿔 수험생의 혼동을 유도한 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_0413d6",
     "conceptId": "q:subject2_q14",
     "text": "갱의실 (탈의실)",
-    "truth": false
+    "truth": false,
+    "explain": "갱의실(탈의실)은 2등급이 아니라 일반 작업실에 해당하는 4등급 작업소에 속하므로 거짓입니다. 이는 청정도 등급별 작업소 분류를 다른 등급(4등급을 2등급으로)으로 바꾼 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_fdf006",
     "conceptId": "q:subject2_q14",
     "text": "완제품 창고",
-    "truth": false
+    "truth": false,
+    "explain": "완제품 창고(보관소)는 2등급이 아니라 내용물이 완전히 밀폐된 일반 작업실인 4등급에 해당하므로 거짓입니다. 이는 작업소별 청정도 등급을 혼동하도록 등급 구분을 바꾼 함정입니다."
    },
    {
     "id": "ㅁ",
@@ -1334,21 +1357,24 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_b8dc91",
     "conceptId": "§5.2",
     "text": "24시간 이내",
-    "truth": false
+    "truth": false,
+    "explain": "회수계획서는 회수 대상 화장품이라는 사실을 안 날부터 '5일 이내'에 지방식약청장에게 제출해야 하므로 거짓입니다. 이는 법정 제출 기한의 수치를 바꾼 함정입니다."
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_53807e",
     "conceptId": "§5.2",
     "text": "3일 이내",
-    "truth": false
+    "truth": false,
+    "explain": "위해화장품의 회수계획서는 회수 대상 화장품임을 알게 된 날부터 '5일 이내'에 제출해야 하므로 거짓입니다. 이는 법정 제출 기한의 숫자를 '5일'에서 '3일'로 변경하여 혼동을 유도한 수치 바꿈 함정입니다."
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_804601",
     "conceptId": "§5.2",
     "text": "7일 이내",
-    "truth": false
+    "truth": false,
+    "explain": "회수계획서는 회수 대상 화장품임을 안 날부터 '5일 이내'에 제출해야 하므로 거짓입니다. 이는 법정 제출 기한의 숫자를 '5일'에서 '7일'로 바꾼 수치 혼동 함정입니다."
    },
    {
     "id": "ㄹ",
@@ -1362,7 +1388,8 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_ee021b",
     "conceptId": "§5.2",
     "text": "14일 이내",
-    "truth": false
+    "truth": false,
+    "explain": "위해화장품의 회수계획서는 해당 사실을 안 날부터 '5일 이내'에 지방식약청장에게 제출해야 하므로 거짓입니다. 이는 법정 제출 기한을 '5일'에서 '14일'로 변경하여 혼동을 유도한 수치 바꿈 함정입니다."
    }
   ],
   "options": [
@@ -1428,7 +1455,8 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_f43842",
     "conceptId": "§5.2",
     "text": "1차 위반 시: 경고",
-    "truth": false
+    "truth": false,
+    "explain": "화장품법상 위해화장품 공표 의무를 위반했을 때 1차 위반에 대한 행정처분 기준은 '판매업무정지 3개월'입니다. 따라서 처분의 종류를 '경고'로 바꾼 거짓 진술입니다."
    },
    {
     "id": "ㄴ",
@@ -1442,14 +1470,16 @@ var COMBO_DRILLS_subject2 = [
     "sid": "manufacturing_st_5b9ee4",
     "conceptId": "§5.2",
     "text": "1차 위반 시: 판매업무정지 1개월",
-    "truth": false
+    "truth": false,
+    "explain": "화장품법상 위해화장품 공표 의무를 위반했을 때의 1차 행정처분 기준은 '판매업무정지 3개월'입니다. 따라서 정지 처분 기간을 '1개월'로 제시하여 혼동을 유도한 수치 바꿈 함정입니다."
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_ee609c",
     "conceptId": "§5.2",
     "text": "1차 위반 시: 판매업무정지 6개월",
-    "truth": false
+    "truth": false,
+    "explain": "화장품법상 위해화장품 공표 의무를 위반했을 때의 1차 행정처분 기준은 '판매업무정지 3개월'입니다. 따라서 처분 기간의 수치를 3개월에서 6개월로 바꾼 함정 진술입니다."
    },
    {
     "id": "ㅁ",
