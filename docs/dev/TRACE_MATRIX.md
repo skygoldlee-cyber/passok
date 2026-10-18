@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: c7c4b13fb52e12cf
-> 생성: 2026-10-17 · 원천: SPEC.md(530개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 846a5675a8e07057
+> 생성: 2026-10-18 · 원천: SPEC.md(530개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 530개 — 문서 연결 387 · 소스 연결 471 · 테스트 연결 503 · 보고서 연결 109
+**커버리지 요약**: 요구사항 530개 — 문서 연결 393 · 소스 연결 471 · 테스트 연결 503 · 보고서 연결 109
 
 ---
 
@@ -67,7 +67,7 @@
 | AN-07 | ✅ | 테스트 | DOC-DSN-18 | src/analysis-engine.js<br>src/recommendations.js<br>src/views/analysis-view.js | tests/unit/analysis-deepening.test.js | — | — |
 | AN-08 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/views/analysis-view.js | tests/fixtures/analysis-seed.js<br>tests/unit/analysis-deepening.test.js | — | — |
 | AN-09 | ✅ | E2E 테스트 | DOC-DSN-18 | html/views/analysis.html<br>index.html<br>src/analysis-engine.js<br>src/views/analysis-view.js | tests/dom/study-dashboard.dom.test.js<br>tests/e2e/analysis-view.spec.js<br>tests/unit/analysis-deepening.test.js | — | — |
-| AN-10 | ✅ | E2E 테스트 | DOC-DSN-18 | tools/build/textbook_anchors.js | tests/e2e/analysis-view.spec.js<br>tests/unit/textbook-anchors.test.js | — | — |
+| AN-10 | ✅ | E2E 테스트 | DOC-DSN-18<br>DOC-DSN-33 | tools/build/textbook_anchors.js | tests/e2e/analysis-view.spec.js<br>tests/unit/textbook-anchors.test.js | — | — |
 
 ## 3.2 플래시카드
 
@@ -301,12 +301,12 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| CQ-01 | ✅ | 테스트 | — | tools/check/audit_card_quality.js | tests/unit/audit-quality.test.js | — | — |
-| CQ-02 | ✅ | 테스트 | — | tools/check/audit_card_quality.js | tests/unit/audit-quality.test.js | — | — |
-| CQ-03 | ✅ | 테스트 | — | tools/check/audit_card_quality.js | tests/unit/audit-quality.test.js | — | — |
-| CQ-04 | ✅ | 테스트 | — | tools/check/audit_card_quality.js | tests/unit/audit-quality.test.js | — | — |
-| CQ-05 | ✅ | 테스트 | — | tools/check/audit_combo.js<br>tools/check/check_combo_pilot.js | tests/unit/audit-quality.test.js | — | — |
-| CQ-06 | ✅ | 테스트 | — | tools/check/check_answer_overlap.js<br>tools/sync/fix_answer_quotes.js<br>tools/sync/fix_citation_targets.js | tests/unit/answer-overlap.test.js | — | — |
+| CQ-01 | ✅ | 테스트 | DOC-DSN-33 | tools/check/audit_card_quality.js | tests/unit/audit-quality.test.js | — | — |
+| CQ-02 | ✅ | 테스트 | DOC-DSN-33 | tools/check/audit_card_quality.js | tests/unit/audit-quality.test.js | — | — |
+| CQ-03 | ✅ | 테스트 | DOC-DSN-33 | tools/check/audit_card_quality.js | tests/unit/audit-quality.test.js | — | — |
+| CQ-04 | ✅ | 테스트 | DOC-DSN-33 | tools/check/audit_card_quality.js | tests/unit/audit-quality.test.js | — | — |
+| CQ-05 | ✅ | 테스트 | DOC-DSN-33 | tools/check/audit_combo.js<br>tools/check/check_combo_pilot.js | tests/unit/audit-quality.test.js | — | — |
+| CQ-06 | ✅ | 테스트 | DOC-DSN-33 | tools/check/check_answer_overlap.js<br>tools/sync/fix_answer_quotes.js<br>tools/sync/fix_citation_targets.js | tests/unit/answer-overlap.test.js | — | — |
 
 ## 3.18 Formula OS — 실전 배합 작업실
 
@@ -478,7 +478,7 @@
 | SEM-02 | ✅ | 테스트 | — | src/semantic-index.js | tests/unit/semantic-index.test.js | — | — |
 | SEM-03 | ✅ | 테스트 | — | — | tests/unit/semantic-index.test.js | — | — |
 | SEM-04 | ✅ | 테스트 | — | src/semantic-index.js | tests/unit/semantic-index.test.js | — | — |
-| SEM-05 | ✅ | 테스트 | DOC-DSN-18 | tools/check/check_emb_freshness.js | tests/unit/emb-manifest.test.js | — | — |
+| SEM-05 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-33 | tools/check/check_emb_freshness.js | tests/unit/emb-manifest.test.js | — | — |
 | SEM-06 | 미구현 (로드맵) | — | — | — | — | — | — |
 | SEM-07 | 미구현 (로드맵) | — | — | — | — | — | — |
 | SEM-08 | 미구현 (로드맵) | — | — | — | — | — | — |
@@ -652,7 +652,7 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | DA-01 | ✅ | 테스트 | DOC-RBK-03<br>DOC-RBK-08<br>DOC-REF-08 | tools/build/index.js<br>tools/build/manifest_loader.js | tests/unit/data-architecture.test.js | — | — |
-| DA-02 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-20<br>DOC-RBK-03<br>DOC-REF-08 | src/data-loader.js<br>tools/build/index.js | tests/unit/data-architecture.test.js | — | — |
+| DA-02 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-20<br>DOC-DSN-33<br>DOC-RBK-03<br>…외 1개 | src/data-loader.js<br>tools/build/index.js | tests/unit/data-architecture.test.js | — | — |
 | DA-03 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | src/data-loader.js | tests/unit/data-loader.test.js | — | — |
 | DA-04 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | tools/build/build_study_md_bundle.js | tests/unit/data-architecture.test.js | — | — |
 | DA-05 | ✅ | 테스트 | DOC-DEV-09<br>DOC-DSN-18<br>DOC-RBK-03<br>DOC-REF-08 | src/state.js<br>src/storage.js | tests/unit/state.test.js | — | — |
@@ -663,7 +663,7 @@
 | DA-10 | ✅ | 테스트 | — | src/exams/cosmetic/customer-store.js<br>src/sync.js | tests/unit/exams/cosmetic/customer-store.test.js | — | 개인정보보호법 — 상동 (조제관리사가 고객 개인정보를 클라우드에 올리지 않는 설계) |
 | DA-11 | ✅ | 테스트 | DOC-RBK-10 | tools/check/check_domain_map.js | tests/unit/multi-exam-gates.test.js | — | — |
 | DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | tools/check/check_uitext.js | tests/unit/multi-exam-gates.test.js | — | — |
-| DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-DEV-08<br>DOC-DEV-09 | — | tests/e2e/exam-switch.spec.js | — | — |
+| DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-DEV-08<br>DOC-DEV-09<br>DOC-DSN-33 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/app-shell.js<br>src/pwa-manifest.js | tests/unit/exam-context.test.js | — | — |
 
 ## 5.2 안정적 ID 체계
@@ -843,6 +843,7 @@
 | DOC-DSN-25 | docs/dev/design/UIUX_DESIGN_GUIDE.md | A-01, A-02, A-03, A-04, A-05, A-06, A-07, ES-02, R-01, R-02, R-03, R-04, R-05, R-06, R-07, R-08, TH-01, TH-02, TH-03, TH-04, TH-05, TH-06, UM-01, UM-02, UM-03, UM-04, UM-05, UX-FB-01, UX-FB-02, UX-FB-03, UX-FB-04, UX-FB-05, UX-FB-06, UX-FORM-01, UX-FORM-02, UX-NAV-01, UX-NAV-02, UX-NAV-03, UX-NAV-04, UX-NAV-05, UX-NAV-06, UX-NAV-07, UX-NAV-08, UX-NAV-09, UX-NAV-10, UX-NAV-11, UX-NAV-12, UX-NAV-13, UX-NAV-14, UX-PWA-01, UX-PWA-02, UX-PWA-03, UX-PWA-04, UX-PWA-05, UX-SCR-01, UX-SCR-02, UX-SET-01, UX-SET-02, UX-SET-03, UX-SET-04, UX-SET-05, UX-VFY-01, UX-VFY-02, UX-VFY-03, UX-VFY-04, UX-VFY-05, UX-VFY-06 |
 | DOC-DSN-30 | docs/dev/design/ADMIN_DESIGN.md | AD-01, AD-02, AD-03, AD-04, AD-05, AD-06, AU-01, AU-02, AU-03, AU-04, AU-05, AU-06, AU-07, AU-08, FB-01, FB-02, FB-03, FB-04, FB-05, FB-06, FB-07, FB-08, ROAD-P0, ROAD-P1 |
 | DOC-DSN-32 | docs/dev/design/LEARNING_ALGORITHM_DESIGN.md | D-15, D-18, D-19, D-20, D-21, D-22, DR-03, F-07, F-08, F-09, F-11, SC-13, SC-14, SQ-03, TQ-01 |
+| DOC-DSN-33 | docs/dev/design/AI_AUTHORING_DESIGN.md | AN-10, CQ-01, CQ-02, CQ-03, CQ-04, CQ-05, CQ-06, DA-02, DA-13, SEM-05 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |
