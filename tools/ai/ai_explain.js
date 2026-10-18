@@ -71,7 +71,8 @@ async function main() {
                 }
                 drafted++;
             }
-            const out = writeDraft(`explain_${exam.key}.md`, lines, { model: llm.modelName() });
+            // 파일명에 시험 id 포함 — 동일 examKey를 쓰는 다른 시험과 충돌 방지
+            const out = writeDraft(`explain_${target.id}_${exam.key}.md`, lines, { model: llm.modelName() });
             console.log(`${exam.file}: 해설 누락 ${missing.length}문 → ${out}`);
         }
     }
