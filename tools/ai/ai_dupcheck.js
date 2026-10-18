@@ -32,16 +32,18 @@ function parseDraftTexts(mdPath) {
     const out = [];
     let cur = null;
     for (const line of lines) {
-        const qm = line.match(/^###\s*Q?(\d+)\.\s*(.*)$/) || line.match(/^###\s*(\S.*)$/);
-        if (qm) {
+        const qm = line.match(/^###\s*Q?(\d+)\.\s*(.*)$/);
+        const hm = !qm && line.match(/^###\s*(\S.*)$/); // 번호 없는 ### 헤딩도 문항 경계로 처리
+        if (qm || hm) {
             if (cur) out.push(cur);
-            cur = { label: `Q${qm[1]}`, text: qm[2] };
+            cur = qm ? { label: `Q${qm[1]}`, text: qm[2] || '' }
+                     : { label: hm[1].slice(0, 30), text: hm[1] };
             continue;
         }
         if (cur && /^[①②③④⑤]/.test(line.trim())) cur.text += ' ' + line.trim().slice(1);
     }
     if (cur) out.push(cur);
-    return out.filter(d => d.text.trim().length > 10);
+    return out.filter(d => (d.text || '').trim().length > 10);
 }
 
 function existingItems(targets) {
