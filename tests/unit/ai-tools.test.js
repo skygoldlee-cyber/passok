@@ -20,7 +20,7 @@ const llm = require('../../tools/ai/llm_client.js');
 const { ruleVariants } = require('../../tools/ai/ai_distractors.js');
 const { falseVariants } = require('../../tools/ai/ai_statements.js');
 const { estimateDifficulty } = require('../../tools/ai/ai_tag.js');
-const { lintQuestion } = require('../../tools/ai/ai_lint.js');
+const { lintQuestion, lintExplanation } = require('../../tools/ai/ai_lint.js');
 
 // ---------- AI-01/AI-03: 문제은행 파서 ----------
 
@@ -159,6 +159,22 @@ test('AI-10: 부정 발문·전부정답·인용 부재를 탐지한다', () => 
         .some(i => i.startsWith('L3')));
     assert.equal(lintQuestion({ num: 3, stem: '목적은?', options: [], type: 'short' },
         { answer: '보건향상', accepts: [], citations: [{ file: 'a.md', lineNo: 1 }] }).length, 0);
+});
+
+test('AI-10: 해설 감사 규칙 — 정답 모순·플레이스홀더·근거 부인을 탐지한다', () => {
+    const q = { num: 1, stem: '옳은 것은?', options: [{ n: 1, text: 'a' }], type: 'single' };
+    const base = { answer: '⑤', accepts: [], citations: [{ file: 'a.md', lineNo: 1 }] };
+    // E1: 해설이 ③을 정답으로 단정 → 실제 정답 ⑤와 모순
+    assert.ok(lintExplanation(q, { ...base, explain: '규정상 ③번이 정답입니다.' }).some(i => i.startsWith('E1')));
+    // E1: 오답 선지 언급("①은 틀렸다")은 정답 단정이 아니므로 무시
+    assert.equal(lintExplanation(q, { ...base, explain: '⑤번이 정답이며 ①은 근거에 미치지 못해 틀렸습니다.' })
+        .filter(i => i.startsWith('E1')).length, 0);
+    // E3: 플레이스홀더 / E4: 근거 부인
+    assert.ok(lintExplanation(q, { ...base, explain: '(미생성 — DRY RUN)' }).some(i => i.startsWith('E3')));
+    assert.ok(lintExplanation(q, { ...base, explain: '제시된 근거에는 관련 내용이 없어 정확한 이유를 알 수 없습니다.' })
+        .some(i => i.startsWith('E4')));
+    // 정상 해설은 지적 없음
+    assert.equal(lintExplanation(q, { ...base, explain: '법 제1조는 국민 보건 향상을 목적으로 하므로 ⑤번이 정답입니다.' }).length, 0);
 });
 
 // ---------- AI-11/AI-12/AI-13: dry-run 스모크 (실행 가능·무키 동작) ----------
