@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-18T06:58:26.906Z",
+  "generatedAt": "2026-10-18T07:37:10.057Z",
   "subjects": [
     {
       "key": "law",
@@ -120,9 +120,9 @@ var DATA_REGISTRY = {
       "part": 1,
       "title": "맞춤형화장품의 이해 (400제)",
       "file": "과목4_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject4.64a5ed85.js",
+      "bundle": "./data/exams/cosmetic/exams/subject4.c6ab408a.js",
       "global": "EXAM_DATA_subject4",
-      "contentHash": "64a5ed85",
+      "contentHash": "c6ab408a",
       "stats": {
         "questions": 400
       }
