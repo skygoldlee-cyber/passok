@@ -613,6 +613,11 @@
 | AI-14 | `ai:stmtfb` — 복수정답형/OX 드릴의 진술(sid)별 "왜 참·거짓인지 + 어떤 혼동을 노리는지(수치·주체·극성)" 1~2문장 피드백 초안 생성. 모문항의 해설·인용 근거를 컨텍스트로 제한해 근거 강제(AI-03) | ✅ |
 | AI-15 | 진술 피드백 정본 `content/exams/<id>/피드백/stmt_explain.json`(sid→explain, 사람 리뷰 후 편입). `build:drills`가 combo 진술 `explain` 필드에 병합 → perStatement 오판 시 앱이 진술별 피드백 표시. 정본 파일 없으면 기존 폴백(문항 해설) 유지 | ✅ |
 | AI-16 | `ai:stmtfb --stats <백업JSON>` — 앱 백업의 `statement_stats`(또는 순수 {sid:{j,w}} 맵)로 대상을 오판 w≥`--min-wrong` 진술로 제한하고 오판수 내림차순 정렬. 오판율 극단(j≥5·w/j≥0.8, statement-tracker 이상 판정과 동일 기준)은 초안에 ⚠️ 콘텐츠 검수 후보로 표시 | ✅ |
+| AI-17 | `ai:story` — 표준형 `story:slot:` 미작성분(빈 @insert·미패치) 스캔 → 슬롯 주변 본문+기존 서사 샘플(등장인물·첫 블록)을 스타일 근거로 @insert 블록 초안 생성. `--apply`가 서사 패치의 빈 슬롯 채우기·미등록 슬롯 끝 추가 (기존 서사 본문은 보호, 병합 후 `build:story` 재생성) | ✅ |
+| AI-18 | `ai:cards` — 교재 자동 추출 카드 중 정의 짧은 항목(--min-len)에 암기팁 초안 생성. 용어가 등장하는 교재 실제 라인을 근거로 제한, 용어 미발견 카드는 생성 차단·목록화 | ✅ |
+| AI-19 | 카드팁 정본 `content/exams/<id>/피드백/card_tip.json`(cardId→tip, 사람 리뷰 후 편입). `DataLoader.loadSubject`가 오버레이를 카드 id 기준 병합 → 플래시카드 뒷면 `card.tip` 표시. 정본 없으면 미표시 폴백 (AI-15와 동형 오버레이) | ✅ |
+| AI-20 | `ai:glossary` — glossary/subjectN.json 부실 정의(--max-len 미만·말줄임 종료) 항목에 코퍼스 근거 기반 정의 보강 초안 → `--apply`가 정의 교체 | ✅ |
+| AI-21 | `ai:adphrases` — 별표5 2항 각 호 법문+기존 사전을 근거로 금지 표현 후보를 JS 항목 형태로 제안 (미커버 호 라·마·자·차·카 우선). 사전이 코드 파일이라 apply 없이 수동 편입+`check:adlint` 회귀 확인 원칙 | ✅ |
 
 ---
 
