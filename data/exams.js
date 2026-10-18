@@ -12,7 +12,7 @@ var EXAMS_LIST = {
       "title": "Passmula — 맞춤형화장품 조제관리사",
       "logoMain": "Pass",
       "logoSub": "mula",
-      "desc": "화장품법·제조·품질관리·안전관리·맞춤형화장품 4과목 · 문제은행 1,446문",
+      "desc": "화장품법·제조·품질관리·안전관리·맞춤형화장품 4과목 · 문제은행 1,834문",
       "icon": "fa-solid fa-wand-magic-sparkles",
       "year": "2027",
       "theme": {

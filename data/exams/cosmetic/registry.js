@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-18T10:14:42.705Z",
+  "generatedAt": "2026-10-18T10:34:35.417Z",
   "subjects": [
     {
       "key": "law",
@@ -12,13 +12,13 @@ var DATA_REGISTRY = {
       "shortName": "화장품법",
       "contentHash": "1246a6c9",
       "stats": {
-        "cards": 139,
-        "quizzes": 55,
+        "cards": 168,
+        "quizzes": 66,
         "chapters": 1,
         "sourceCards": 183,
         "sourceQuizzes": 82,
-        "targetCards": 139,
-        "targetQuizzes": 55
+        "targetCards": 168,
+        "targetQuizzes": 66
       }
     },
     {
@@ -28,13 +28,13 @@ var DATA_REGISTRY = {
       "shortName": "제조·품질",
       "contentHash": "84a1acb9",
       "stats": {
-        "cards": 261,
-        "quizzes": 104,
+        "cards": 227,
+        "quizzes": 90,
         "chapters": 1,
         "sourceCards": 379,
         "sourceQuizzes": 175,
-        "targetCards": 261,
-        "targetQuizzes": 104
+        "targetCards": 227,
+        "targetQuizzes": 90
       }
     },
     {
@@ -44,13 +44,13 @@ var DATA_REGISTRY = {
       "shortName": "안전관리",
       "contentHash": "88bfa580",
       "stats": {
-        "cards": 278,
-        "quizzes": 110,
+        "cards": 279,
+        "quizzes": 111,
         "chapters": 1,
         "sourceCards": 198,
         "sourceQuizzes": 63,
-        "targetCards": 278,
-        "targetQuizzes": 110
+        "targetCards": 279,
+        "targetQuizzes": 111
       },
       "supplement": "./data/exams/cosmetic/supplements/safety.js",
       "supplementGlobal": "STUDY_SUPPLEMENT_safety"
@@ -62,13 +62,13 @@ var DATA_REGISTRY = {
       "shortName": "맞춤형화장품",
       "contentHash": "d1ea1bd3",
       "stats": {
-        "cards": 445,
-        "quizzes": 176,
+        "cards": 449,
+        "quizzes": 178,
         "chapters": 1,
         "sourceCards": 363,
         "sourceQuizzes": 125,
-        "targetCards": 445,
-        "targetQuizzes": 176
+        "targetCards": 449,
+        "targetQuizzes": 178
       },
       "supplement": "./data/exams/cosmetic/supplements/understanding.js",
       "supplementGlobal": "STUDY_SUPPLEMENT_understanding"
@@ -79,52 +79,52 @@ var DATA_REGISTRY = {
       "key": "subject1",
       "subject": "law",
       "part": 1,
-      "title": "화장품법의 이해 (179제)",
+      "title": "화장품법의 이해 (274제)",
       "file": "과목1_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject1.6ed2ae67.js",
+      "bundle": "./data/exams/cosmetic/exams/subject1.7ee7310c.js",
       "global": "EXAM_DATA_subject1",
-      "contentHash": "6ed2ae67",
+      "contentHash": "7ee7310c",
       "stats": {
-        "questions": 179
+        "questions": 274
       }
     },
     {
       "key": "subject2",
       "subject": "manufacturing",
       "part": 1,
-      "title": "화장품 제조 및 품질관리 (336제)",
+      "title": "화장품 제조 및 품질관리 (370제)",
       "file": "과목2_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject2.e5b78bfd.js",
+      "bundle": "./data/exams/cosmetic/exams/subject2.0e327496.js",
       "global": "EXAM_DATA_subject2",
-      "contentHash": "e5b78bfd",
+      "contentHash": "0e327496",
       "stats": {
-        "questions": 336
+        "questions": 370
       }
     },
     {
       "key": "subject3",
       "subject": "safety",
       "part": 1,
-      "title": "유통화장품 안전관리 (358제)",
+      "title": "유통화장품 안전관리 (456제)",
       "file": "과목3_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject3.6d96f5dc.js",
+      "bundle": "./data/exams/cosmetic/exams/subject3.17b7c0c0.js",
       "global": "EXAM_DATA_subject3",
-      "contentHash": "6d96f5dc",
+      "contentHash": "17b7c0c0",
       "stats": {
-        "questions": 358
+        "questions": 456
       }
     },
     {
       "key": "subject4",
       "subject": "understanding",
       "part": 1,
-      "title": "맞춤형화장품의 이해 (573제)",
+      "title": "맞춤형화장품의 이해 (734제)",
       "file": "과목4_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject4.dc82393f.js",
+      "bundle": "./data/exams/cosmetic/exams/subject4.7c222864.js",
       "global": "EXAM_DATA_subject4",
-      "contentHash": "dc82393f",
+      "contentHash": "7c222864",
       "stats": {
-        "questions": 573
+        "questions": 734
       }
     }
   ],
@@ -2700,7 +2700,7 @@ var DATA_REGISTRY = {
     },
     "exam": {
       "title": "실전 모의고사",
-      "subtitle": "교재 인용 1446제 문제은행으로 과목별 모의고사 및 학습안내서 열람"
+      "subtitle": "교재 인용 1834제 문제은행으로 과목별 모의고사 및 학습안내서 열람"
     },
     "analysis": {
       "title": "학습 진단",
