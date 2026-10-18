@@ -222,6 +222,9 @@ test('AI-01/AI-04: ai:apply가 초안 해설을 정답 블록 끝에 삽입하�
     assert.ok(next.includes('> **해설**: 삽입 대상 해설'));
     assert.ok(next.indexOf('해설') > next.indexOf('인용')); // 블록 끝에 삽입
     assert.equal(insertExplain(next, 1, '재삽입'), null);  // 기존 해설 → 스킵
+    const upgraded = insertExplain(next, 1, '보강 해설', true); // --replace → 교체
+    assert.ok(upgraded.includes('> **해설**: 보강 해설'));
+    assert.ok(!upgraded.includes('삽입 대상 해설'));
     assert.equal(insertExplain(bank, 99, 'x'), null);      // 블록 없음 → 스킵
     rmSync(dir, { recursive: true, force: true });
 });
