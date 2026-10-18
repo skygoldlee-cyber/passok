@@ -111,3 +111,6 @@ tmp/ai_drafts/
 # 이야기형 정규화 드리프트 검토 리포트 (1회성 산출물)
 tools/build/.story_drift_review.md
 reports/
+
+# 사용자 학습 데이터 백업 (--stats 입력용, 로컬 전용)
+*_backup_*.json
