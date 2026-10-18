@@ -63,6 +63,18 @@ npm.cmd run audit:combo                 # 복수정답형 품질 감사 (정답 
 npm.cmd run audit:study                 # 학습 품질 감사 — 주간 배분·학습 진단 추천 규칙 정합 시나리오 검증 (SQ-01~04, --check=기준선 회귀, --update=기준선 갱신)
 npm.cmd run check:adlint                # 광고 문구 사전 커버리지 감사 — 별표5 2항 호별 대표 표현·term 품질·자기 검출 (FO-68)
 
+# AI 제작 지원 (초안만 생산 → tmp/ai_drafts/ → 사람 리뷰 후 content/ 편입 — AI_AUTHORING_DESIGN.md, AI-01~13)
+#   키: AI_PROVIDER=openai|anthropic|gemini + AI_API_KEY (또는 공급자별 키) — .env 로컬 전용, --dry-run=무키 검증
+npm.cmd run ai:explain                   # 해설 누락 문항 초안 (정답+인용 근거 컨텍스트)
+npm.cmd run ai:draft                     # 교재 청크 → 문제 초안 (--subject <key> --lines A-B --type choice)
+npm.cmd run ai:distractors               # 단답형 허용 정답 변형·오답 선지 보강 제안
+npm.cmd run ai:dupcheck                  # 초안↔기존 문항 유사도 상한 검사 (--all=기존 상호 감사, --check=게이트)
+npm.cmd run ai:statements                # 복수정답형 진술 반전 변형 + conceptId 재조합 후보
+npm.cmd run ai:tag                       # 태그·난이도·conceptId 자동 제안
+npm.cmd run ai:lint                      # 발문 품질 검수 (이중부정·길이불균형·답노출·인용부재, --check=게이트)
+npm.cmd run ai:coverage                  # 인용 LNN ↔ 교재 커버리지 갭 리포트 (draft 투입 범위 근거)
+npm.cmd run ai:stale                     # ref_md 변경 ↔ 인용 문항 재검증 대기 목록 (--ref <ref>, --llm=영향 판정)
+
 # 전체 점검 (단일 진입점 — tools/check/run.js 실행기 + steps.js 단계 레지스트리로 구동
 #   비-serial 단계는 워커풀 병렬 실행(--jobs N, 기본 3 · serial 단계는 배치 사이 단독),
 #   --ref <ref> 지정 시 diffScoped 단계만 ref..HEAD+미커밋 변경 파일 대상으로 축소)
@@ -377,6 +389,7 @@ tools/                  # 빌드·검증 스크립트
   sync/                 # 콘텐츠 동기화 (sync_citation_lines·sync_textbook_files)
   deploy/               # 배포 가드 (deploy.js)
   lib/                  # 공용 스캔·파싱 라이브러리 (trace_scan.js)
+  ai/                   # AI 제작 지원 도구 (llm_client + 초안 생성·검수 9종, lib/ 공용 파서 — AI-01~13)
 ref-pipeline/           # 교재·참조자료 생성/변환 독립 도구함 (PDF→MD, MD→HTML, 오디오북 TTS, 법령 검증) — 사용 절차는 ref-pipeline/README.md 참조
 vendor/                 # 자체 호스팅 자산 (fonts/, fontawesome/)
 tests/                  # 테스트
