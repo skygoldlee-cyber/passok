@@ -704,6 +704,13 @@ function buildRefCombos(refPool, examKey, subject, subjKey, genOpts, stats) {
 
 /* ---------- 메인 ---------- */
 
+/** 진술 피드백 정본 — content/exams/<id>/피드백/stmt_explain.json (sid→해설, AI-15) */
+function loadStmtFeedback(target) {
+  const fp = path.join(ROOT, target.contentRoot, '피드백', 'stmt_explain.json');
+  try { return fs.existsSync(fp) ? JSON.parse(fs.readFileSync(fp, 'utf-8')) : {}; }
+  catch { return {}; }
+}
+
 async function buildForExam(target) {
   const EXAMS_DIR = path.join(ROOT, target.dataRoot, 'exams');
   OUT_DIR = path.join(ROOT, target.dataRoot, 'drills');
@@ -747,9 +754,18 @@ async function buildForExam(target) {
   // 문항 → 섹션 앵커(§N.M) — conceptId의 라인 좌표 의존 제거 (AN-10)
   const qidAnchorMap = buildQidAnchorMap(target);
 
+  // 진술 피드백 정본 — 사람 리뷰를 거친 sid→해설 맵 (없으면 {}, 기존 폴백 유지)
+  const stmtFb = loadStmtFeedback(target);
+
   for (const [key, { data, file }] of Object.entries(examDataMap)) {
     const { items, stats } = buildComboItems(key, data, generateComboOptions,
       { bucket: refAtomsBySubject[SUBJECT_NUM[key]], allEnums: refAllEnums }, qidAnchorMap[key]);
+
+    // 리뷰된 진술 피드백 병합 — 진술 자체 explain이 없는 것만 채움 (refst 출처 표기는 유지)
+    let fbKey = 0;
+    for (const it of items) for (const s of it.statements || []) {
+      if (!s.explain && stmtFb[s.sid]) { s.explain = stmtFb[s.sid]; fbKey++; }
+    }
 
     // 검증: 스키마 무결성 + 도출 정답을 answer로 고정
     const errs = [];
@@ -796,7 +812,7 @@ async function buildForExam(target) {
 
     comboCounts[key] = valid.length;
     totalItems += valid.length;
-    console.log(`[combo-drills] ${key}: choice ${stats.choice} → combo ${valid.length} (fact ${stats.fact}/answer ${stats.answer}/재조합 ${stats.cluster}/참조자료 ${stats.ref}, blank 제외 ${stats.skipBlank}, 조합발문 스킵 ${stats.skipComboStem}, '모두'복구 ${stats.allOfAbove})`);
+    console.log(`[combo-drills] ${key}: choice ${stats.choice} → combo ${valid.length} (fact ${stats.fact}/answer ${stats.answer}/재조합 ${stats.cluster}/참조자료 ${stats.ref}, blank 제외 ${stats.skipBlank}, 조합발문 스킵 ${stats.skipComboStem}, '모두'복구 ${stats.allOfAbove}${fbKey ? `, 진술피드백 ${fbKey}` : ''})`);
     const allErrs = [...stats.errors, ...errs];
     if (allErrs.length) {
       console.log(`  ⚠ 오류 ${allErrs.length}건:`);

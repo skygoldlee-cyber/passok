@@ -610,6 +610,8 @@
 | AI-11 | `ai:coverage` — 인용 LNN을 교재 라인에 매핑해 과목별 커버율·미출제 섹션 리포트 (ai:draft 투입 범위 근거) | ✅ |
 | AI-12 | `ai:stale` — ref_md 변경(git diff)을 인용하는 문항 추출 → 재검증 대기 목록. `--llm` 시 정답 영향 판정. `check:reffresh`의 해시 감지를 의미 판정으로 확장 | ✅ |
 | AI-13 | 멀티시험 중립 — 모든 도구가 `exam_targets.js`로 대상을 순회하고 `--exam` 필터 지원, 시험 특화 로직 없음 | ✅ |
+| AI-14 | `ai:stmtfb` — 복수정답형/OX 드릴의 진술(sid)별 "왜 참·거짓인지 + 어떤 혼동을 노리는지(수치·주체·극성)" 1~2문장 피드백 초안 생성. 모문항의 해설·인용 근거를 컨텍스트로 제한해 근거 강제(AI-03) | ✅ |
+| AI-15 | 진술 피드백 정본 `content/exams/<id>/피드백/stmt_explain.json`(sid→explain, 사람 리뷰 후 편입). `build:drills`가 combo 진술 `explain` 필드에 병합 → perStatement 오판 시 앱이 진술별 피드백 표시. 정본 파일 없으면 기존 폴백(문항 해설) 유지 | ✅ |
 
 ---
 

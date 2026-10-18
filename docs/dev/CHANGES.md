@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-18 진술 단위 오답 피드백 파이프라인 — ai:stmtfb + stmt_explain.json 정본 (AI-14·15)
+
+- **배경**: perStatement 오판은 수집되고(statement-tracker) 뷰도 진술별 `explain`을 렌더하지만 데이터가 비어 있었음 — 오판 진술에 맞춤 피드백을 줄 통로가 없던 것을 AI로 메움
+- **추가**: `tools/ai/ai_stmt_feedback.js` — combo 드릴 진술을 sid로 중복 제거해 "왜 참·거짓 + 혼동 유형(수치·주체·극성)" 1~2문장 초안 생성(기본 거짓 진술만, `--all` 전체). `--apply`가 리뷰된 초안을 `content/exams/<id>/피드백/stmt_explain.json` 정본에 병합, `build:drills`가 진술 `explain`에 주입 → 오판 시 진술별 피드백 표시
+- **스펙**: SPEC §3.27 AI-14·15 + 설계안 §4 도구 표 + 테스트 3건 (수집·파싱·dry-run)
+
 ## 2026-10-18 해설 품질 감사 규칙 E1~E4 + 인용 드리프트 교정 — ai_lint 확장
 
 - **배경**: ai:explain으로 편입한 해설 893건의 품질 감사 — 기존 ai_lint는 발문·선지만 검수하고 해설 규칙이 없었음
