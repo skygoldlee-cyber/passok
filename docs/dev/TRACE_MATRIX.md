@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 30daed72632cbd6b
-> 생성: 2026-10-18 · 원천: SPEC.md(545개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 9244ad87ef7bfb1a
+> 생성: 2026-10-18 · 원천: SPEC.md(546개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 545개 — 문서 연결 393 · 소스 연결 486 · 테스트 연결 518 · 보고서 연결 109
+**커버리지 요약**: 요구사항 546개 — 문서 연결 393 · 소스 연결 487 · 테스트 연결 519 · 보고서 연결 109
 
 ---
 
@@ -514,6 +514,7 @@
 | AI-13 | ✅ | 테스트 | — | tools/ai/ai_coverage.js<br>tools/ai/ai_dupcheck.js<br>tools/ai/ai_stale_scan.js<br>tools/ai/lib/ai_common.js | tests/unit/ai-tools.test.js | — | — |
 | AI-14 | ✅ | 테스트 | — | tools/ai/ai_stmt_feedback.js | tests/unit/ai-tools.test.js | — | — |
 | AI-15 | ✅ | 테스트 | — | tools/ai/ai_stmt_feedback.js | tests/unit/ai-tools.test.js | — | — |
+| AI-16 | ✅ | 테스트 | — | tools/ai/ai_stmt_feedback.js | tests/unit/ai-tools.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 

@@ -1,15 +1,19 @@
 #!/usr/bin/env node
 /**
  * ai_stmt_feedback.js — 진술 단위 오답 피드백 초안 생성 + 편입
- * @spec AI-14,AI-15,AI-02,AI-03
+ * @spec AI-14,AI-15,AI-16,AI-02,AI-03
  *
  * 사용법:
  *   node tools/ai/ai_stmt_feedback.js [--exam cosmetic] [--limit 50] [--all] [--dry-run]
+ *   node tools/ai/ai_stmt_feedback.js --stats <백업JSON> [--min-wrong 1] [--limit 50]
  *   node tools/ai/ai_stmt_feedback.js --apply [--write]
  *
  * 생성 모드: {dataRoot}/drills/combo_*.js의 진술을 sid 기준 중복 제거해
  *   "왜 참·거짓인지 + 어떤 혼동(수치·주체·극성)을 노리는지" 1~2문장 초안을 만든다.
  *   기본 대상은 거짓 진술(오인 유도 — 오판 피드백 가치가 가장 큼), --all로 전체.
+ *   --stats: 앱 백업 JSON(cosmetic_backup_*.json의 statement_stats 키) 또는
+ *   {sid:{j,w,...}} 맵을 읽어 오판 w ≥ --min-wrong 진술만 대상으로 하고 오판수 내림차순 정렬.
+ *   통계상 오판율이 극단인 진술(j≥5, w/j≥0.8)은 초안에 ⚠️ 표시해 콘텐츠 검수 후보로 구분한다.
  *   초안: tmp/ai_drafts/stmtfb_<examId>_<bundleKey>.md
  *
  * 편입 모드(--apply): 리뷰된 초안의 `> **진술해설**:` 행을 모아
@@ -64,25 +68,53 @@ function collectStatements(target) {
     return perBundle;
 }
 
+/**
+ * 오판 통계 로드 — 백업 JSON({statement_stats: "<json>"} 또는 "<exam>:statement_stats")과
+ * 순수 {sid:{j,w,...}} 맵 모두 허용한다.
+ * @param {string} file
+ * @returns {Object<string,{j:number,w:number,lw?:string|null,streak?:number}>}
+ */
+function loadStats(file) {
+    const raw = JSON.parse(fs.readFileSync(path.resolve(file), 'utf-8'));
+    const key = Object.keys(raw).find(k => /(^|:)statement_stats$/.test(k));
+    let stats = key ? raw[key] : raw;
+    if (typeof stats === 'string') stats = JSON.parse(stats);
+    return stats && typeof stats === 'object' && stats !== null ? stats : {};
+}
+
+/** 이상 의심 — statement-tracker.getAnomalousStatements와 동일 기준 (j≥5, w/j≥0.8) */
+function isAnomalous(rec) {
+    return rec && (rec.j || 0) >= 5 && (rec.w || 0) / rec.j >= 0.8;
+}
+
 async function generate(flags, opts) {
     const dryRun = flags.has('dry-run') || !llm.isAvailable();
     const all = flags.has('all');
     const limit = opts.limit ? Number(opts.limit) : Infinity;
+    const stats = opts.stats ? loadStats(opts.stats) : null;
+    const minWrong = opts['min-wrong'] ? Number(opts['min-wrong']) : 1;
 
     let total = 0, drafted = 0;
     for (const target of getTargets(opts)) {
         for (const [key, stmts] of collectStatements(target)) {
-            const pool = [...stmts.values()].filter(s => all || !s.truth);
-            if (!pool.length) continue;
-            total += pool.length;
+            let entries = [...stmts.entries()].filter(([, s]) => all || !s.truth);
+            if (stats) {
+                entries = entries
+                    .filter(([sid]) => (stats[sid] && stats[sid].w || 0) >= minWrong)
+                    .sort((a, b) => (stats[b[0]].w - stats[a[0]].w) || ((stats[b[0]].j || 0) - (stats[a[0]].j || 0)));
+            }
+            if (!entries.length) continue;
+            total += entries.length;
             if (drafted >= limit) continue;
-            const lines = [`# 진술 피드백 초안 — ${key} (대상 ${pool.length}진술)`, ''];
-            for (const [sid, s] of stmts) {
-                if (!(all || !s.truth)) continue;
+            const lines = [`# 진술 피드백 초안 — ${key} (대상 ${entries.length}진술${stats ? ` · 오판 ${minWrong}회+` : ''})`, ''];
+            for (const [sid, s] of entries) {
                 if (drafted >= limit) break;
+                const rec = stats && stats[sid];
                 const prompt = buildPrompt(s, s.parent);
                 lines.push(`## sid ${sid}`, '',
-                    `- 진술: ${s.text}`, `- 진위: ${s.truth ? '참' : '거짓'} · 출처: ${s.parent.from}`, '');
+                    `- 진술: ${s.text}`,
+                    `- 진위: ${s.truth ? '참' : '거짓'} · 출처: ${s.parent.from}` +
+                        (rec ? ` · 오판 ${rec.w}/${rec.j}회${isAnomalous(rec) ? ' ⚠️ 이상 의심(표현·진위 검수 후보)' : ''}` : ''), '');
                 if (dryRun) {
                     lines.push('> **진술해설**: (미생성 — DRY RUN 또는 API 키 없음)', '',
                         '<details><summary>전송 예정 프롬프트</summary>', '', '```', prompt, '```', '</details>', '');
@@ -95,7 +127,7 @@ async function generate(flags, opts) {
                 drafted++;
             }
             const out = writeDraft(`stmtfb_${target.id}_${key}.md`, lines, { model: llm.modelName() });
-            console.log(`${key}: 진술 ${pool.length}개 → ${out}`);
+            console.log(`${key}: 진술 ${entries.length}개 → ${out}`);
         }
     }
     console.log(`\n총 대상 진술: ${total}개 · 초안 작성: ${drafted}개${dryRun ? ' (dry-run)' : ''}`);
@@ -151,4 +183,4 @@ async function main() {
 
 if (require.main === module) main().catch(e => { console.error(e.message); process.exit(1); });
 
-module.exports = { buildPrompt, collectStatements, parseStmtDrafts };
+module.exports = { buildPrompt, collectStatements, parseStmtDrafts, loadStats, isAnomalous };
