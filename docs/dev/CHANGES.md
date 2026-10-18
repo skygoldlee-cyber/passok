@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-18 AI 제작 지원 확장 + keep-alive 운영 문서화 — 해설 외 AI 활용 5종
+
+- **배경**: 해설 생성 외에 AI가 보조할 수 있는 문제 제작 영역을 검토 — 기존 게이트(audit:combo·check:reffresh·SEM-05 인덱스)가 그대로 검증선으로 재사용되는 영역 위주로 선별
+- **추가**: AI_AUTHORING_DESIGN §4 도구 표 — `ai:statements`(진술 반전·재조합)·`ai:stale`(법령 개정 영향 분석)·`ai:coverage`(출제 갭 분석)·`ai:tag`(태그·난이도·conceptId)·`ai:lint`(발문 검수) / §9 Phase B2(우선순위·유지보수 지원) 신설 / §10 미결에 법령 개정 시 stale 자동 실행 여부
+- **문서**: SUPABASE_DESIGN §12.4 — keep-alive 스케줄 실행 조건(GitHub 서버 실행·기본 브랜치 필수·지연·60일 비활성화) + 실행 이력 확인 절차(Actions 탭·gh CLI) 명시
+- **등록**: docs_paths_allowlist.json — 설계안 미구현 경로 5건(tools/ai/ai_statements·ai_stale_scan·ai_coverage·ai_tag·ai_lint)
+
 ## 2026-10-18 AI 제작 지원 설계문서 추가 — DOC-DSN-33
 
 - **배경**: 문제은행 수작업 제작 비용·해설 커버리지 불완전에 대응해 LLM 제작 보조 도입 검토 — 기존 인용 검증 체계(CQ-06 check:answers·sync:citations·audit:combo)가 환각 방어선으로 동작하므로 생성물을 초안으로 취급하는 author-time 파이프라인으로 수렴
