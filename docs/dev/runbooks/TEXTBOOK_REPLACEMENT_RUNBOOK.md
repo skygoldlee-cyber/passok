@@ -400,7 +400,7 @@ npm.cmd run build:keyword-index   # src/keyword-index.js 재생성 (build:data�
 | 파일 | 조건 |
 |---|---|
 | `content/exams/{id}/docs/학습안내서.md` | 챕터·과목 구성 변경 시 — `node tools/build/build_doc_bundles.js`로 앱 내 번들 재생성. docs/ 문서를 추가·삭제·개명하면 `manifest.json`의 `searchDocs`도 함께 갱신 (통합검색 대상 선언, TS-18) |
-| `content/exams.json` 엔트리의 `desc` | 과목명·문항 수가 하드코딩된 표시 문구 ("4과목 · 문제은행 1,000문") — 시험 선택 카드에 노출되므로 **구성 변경 시 수동 갱신**. `N과목`·`N문` 수치는 `check:manifest`가 manifest 과목 수·`### Q` 실측 문항 수와 대조해 오류로 차단 (과목명 등 문구 자체는 수동). `manifest.exams[].title`의 `(N제)`도 동일 검증 |
+| `content/exams.json` 엔트리의 `desc` | 과목명·문항 수가 하드코딩된 표시 문구 ("4과목 · 문제은행 1,937문") — 시험 선택 카드에 노출되므로 **구성 변경 시 수동 갱신**. `N과목`·`N문` 수치는 `check:manifest`가 manifest 과목 수·`### Q` 실측 문항 수와 대조해 오류로 차단 (과목명 등 문구 자체는 수동). `manifest.exams[].title`의 `(N제)`도 동일 검증 |
 | `content/exams/{id}/combo_blocklist.json` | `approved`/`derivedFromPrefixes`가 구 교재의 과목 프리픽스 ID를 참조 — 남겨둬도 무해(미매칭 시 no-op)이나 **복수정답 검수 큐는 신 교재 기준으로 다시 쌓임** |
 | `참조자료/*.pdf` + `ref_md/` | 법령 개정 동반 — `convert:refs` → `verify:refs` → `ref_md_v2`→`ref_md` 승격 → `check:reffresh -- --update` |
 | `content/exams.json` | 시험 자체 추가·제거 시만 — 위 `desc` 표시 문구 외에는 교재 변경에 무관 |
