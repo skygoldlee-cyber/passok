@@ -102,6 +102,8 @@ export function renderFlashcard() {
     const starEl = document.getElementById('card-front-star');
     const curIdxEl = document.getElementById('fc-current-index');
     const totalEl = document.getElementById('fc-total-count');
+    const tipWrapEl = document.getElementById('card-tip-container');
+    const tipEl = document.getElementById('card-back-tip');
 
     if (fcConfig.data.length === 0) {
         if (termEl) termEl.textContent = "조건에 맞는 카드가 없습니다.";
@@ -113,6 +115,7 @@ export function renderFlashcard() {
         if (starEl) starEl.classList.remove('active');
         if (curIdxEl) curIdxEl.textContent = '0';
         if (totalEl) totalEl.textContent = '0';
+        if (tipWrapEl) tipWrapEl.hidden = true;
         return;
     }
 
@@ -121,6 +124,11 @@ export function renderFlashcard() {
     // 마크업 데이터 주입
     if (termEl) termEl.textContent = card.term;
     if (defEl) defEl.innerHTML = safeTextWithBreaks(card.definition);
+    // 카드팁 오버레이 (AI-12) — 리뷰된 암기팁이 있으면 정의 아래 표시
+    if (tipWrapEl && tipEl) {
+        tipEl.textContent = card.tip || '';
+        tipWrapEl.hidden = !card.tip;
+    }
     if (frontCatEl) frontCatEl.textContent = card.category || '';
     if (backCatEl) backCatEl.textContent = card.category || '';
 

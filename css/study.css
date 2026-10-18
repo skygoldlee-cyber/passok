@@ -166,6 +166,22 @@
     color: var(--color-text-main);
 }
 
+.card-tip {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: 1.55;
+    text-align: left;
+    white-space: pre-wrap;
+    word-break: keep-all;
+    margin-top: var(--space-3);
+    padding-top: var(--space-2);
+    border-top: 1px dashed rgba(255, 255, 255, 0.18);
+}
+
+.light-theme .card-tip {
+    border-top-color: rgba(0, 0, 0, 0.15);
+}
+
 .flip-hint {
     font-size: var(--text-sm);
     color: var(--color-text-muted);

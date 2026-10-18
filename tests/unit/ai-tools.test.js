@@ -1,5 +1,5 @@
 // tests/unit/ai-tools.test.js — AI 제작 지원 도구 유닛 테스트
-// @spec AI-01,AI-02,AI-03,AI-04,AI-05,AI-06,AI-07,AI-08,AI-09,AI-10,AI-11,AI-12,AI-13,AI-14,AI-15,AI-16
+// @spec AI-01,AI-02,AI-03,AI-04,AI-05,AI-06,AI-07,AI-08,AI-09,AI-10,AI-11,AI-12,AI-13,AI-14,AI-15,AI-16,AI-17,AI-18,AI-19,AI-20,AI-21
 // llm_client dry-run·문제은행 파서·규칙 변형·검수 규칙·유사도 폴백을 고정한다.
 // 실제 API 키 없이 전부 결정론적으로 동작해야 한다 (--dry-run 계약).
 
@@ -337,4 +337,65 @@ test('AI-16: loadStats가 백업 JSON의 statement_stats를 해석하고 순수 
         writeFileSync(plain, JSON.stringify({ bb_st_2: { j: 2, w: 1 } }));
         assert.equal(loadStats(plain).bb_st_2.w, 1);
     } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('AI-17: mergePatch — 빈 @insert 교체·기존 서사 보존·신규 슬롯 추가', () => {
+    const { mergePatch, wrapBlock } = require('../../tools/ai/ai_story.js');
+    const dir = mkdtempSync(join(tmpdir(), 'story-'));
+    try {
+        const fp = join(dir, 'subj_서사.md');
+        writeFileSync(fp, [
+            '<!-- @insert slot="s01" story -->',
+            '', '기존 서사 내용', '', '<!-- /@ -->', '',
+            '<!-- @insert slot="s02" -->', '', '<!-- /@ -->',
+        ].join('\n'));
+        const blocks = new Map([
+            ['s02', wrapBlock('s02', '새 서사 본문')],
+            ['s01', wrapBlock('s01', '덮어쓰기 시도')],
+            ['s99', wrapBlock('s99', '신규 슬롯 서사')],
+        ]);
+        const { text, merged } = mergePatch(fp, blocks);
+        assert.equal(merged, 2, '빈 슬롯 채우기 + 신규 추가만 병합');
+        assert.ok(text.includes('새 서사 본문'), '빈 @insert 교체됨');
+        assert.ok(text.includes('기존 서사 내용') && !text.includes('덮어쓰기 시도'), '기존 서사 보존');
+        assert.ok(text.includes('신규 슬롯 서사'), '미등록 슬롯 파일 끝 추가');
+    } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('AI-18: termContext — 용어 등장 라인 주변 컨텍스트를 교재에서 추출한다', () => {
+    const { termContext } = require('../../tools/ai/ai_cards.js');
+    const ctx = termContext({ 'ch.md': '앞줄\n화장품법이란 법이다\n뒷줄1\n뒷줄2\n' }, '화장품법');
+    assert.ok(ctx.includes('화장품법이란'), '용어 라인 포함');
+    assert.equal(termContext({ 'ch.md': '무관한 내용\n' }, '화장품법'), null, '미발견 시 null');
+});
+
+test('AI-19: 카드팁 오버레이 계약 — flashcard.html 표시 요소·Card.tip 필드 존재', () => {
+    const fs = require('fs'), path = require('path');
+    const html = fs.readFileSync(path.join(process.cwd(), 'html/views/flashcard.html'), 'utf8');
+    assert.ok(html.includes('id="card-back-tip"') && html.includes('id="card-tip-container"'), 'tip 표시 요소');
+    const types = fs.readFileSync(path.join(process.cwd(), 'src/types.js'), 'utf8');
+    assert.ok(types.includes('[tip]'), 'Card typedef에 tip 필드');
+    const loader = fs.readFileSync(path.join(process.cwd(), 'src/data-loader.js'), 'utf8');
+    assert.ok(loader.includes('_getCardTips') && loader.includes('피드백/card_tip.json'), 'DataLoader 오버레이 병합');
+});
+
+test('AI-20: ai_glossary parseGlossaryDrafts — 정의 라인만 추출하고 플레이스홀더 제외', () => {
+    const { parseGlossaryDrafts } = require('../../tools/ai/ai_glossary.js');
+    const { DRAFT_DIR } = require('../../tools/ai/lib/ai_common.js');
+    const fs = require('fs'), path = require('path');
+    fs.mkdirSync(DRAFT_DIR, { recursive: true });
+    const fp = path.join(DRAFT_DIR, 'glossary_testexam_subject9.md');
+    fs.writeFileSync(fp, '## term 시행령\n\n> **정의**: 대통령령이다.\n\n## term 고시\n\n> **정의**: (미생성 — DRY RUN)\n');
+    try {
+        const m = parseGlossaryDrafts().get('testexam');
+        assert.equal(m.get('subject9').get('시행령'), '대통령령이다.');
+        assert.ok(!m.get('subject9').has('고시'), '미생성 제외');
+    } finally { fs.rmSync(fp, { force: true }); }
+});
+
+test('AI-21: ai_adphrases clauseText — 별표5 문서에서 호별 법문 추출', () => {
+    const { clauseText } = require('../../tools/ai/ai_adphrases.js');
+    const doc = '1. 가. 의약품과 오인될 수 있는 표현\n2. 나. 기능성화장품이 아닌 화장품의 효능 표현\n';
+    assert.ok(clauseText(doc, '가').includes('의약품'));
+    assert.ok(clauseText(doc, '나').includes('기능성화장품'));
 });
