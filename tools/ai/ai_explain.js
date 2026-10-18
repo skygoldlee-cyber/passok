@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /**
- * ai_explain.js — 해설 누락 문항 스캔 → 해설 초안 생성
+ * ai_explain.js — 해설 누락·부실 문항 스캔 → 해설 초안 생성
  * @spec AI-04,AI-02,AI-03
  *
  * 사용법:
- *   node tools/ai/ai_explain.js [--exam cosmetic] [--limit 20] [--dry-run]
+ *   node tools/ai/ai_explain.js [--exam cosmetic] [--limit 20] [--min-len 45] [--dry-run]
+ *   --min-len N: 기존 해설이 N자 미만인 문항도 보강 대상에 포함 (초안 리뷰 후 --replace 적용)
  *
  * 산출물: tmp/ai_drafts/explain_<examKey>.md — 사람 리뷰 후 문제은행 정답 블록에 편입.
  * 컨텍스트는 정답 + 인용 근거 구절(실제 파일 라인 해석)로 제한한다 (grounded generation).
@@ -43,15 +44,16 @@ async function main() {
     for (const target of getTargets(opts)) {
         for (const { exam, absPath } of listQbanks(target)) {
             const { questions, answers } = parseQuestionBank(absPath);
+            const minLen = opts['min-len'] ? Number(opts['min-len']) : 0;
             const missing = questions.filter(q => {
                 const a = answers.get(q.num);
-                return a && !a.explain; // 정답 블록 자체가 없는 문항은 check:manifest 영역
+                return a && (!a.explain || (minLen && a.explain.length < minLen));
             });
             if (!missing.length) continue;
             totalMissing += missing.length;
 
             if (drafted >= limit) continue; // 전역 상한 도달 시 잔여 파일은 스캔만
-            const lines = [`# 해설 초안 — ${exam.file} (누락 ${missing.length}문)`, ''];
+            const lines = [`# 해설 초안 — ${exam.file} (대상 ${missing.length}문${minLen ? ` · ${minLen}자 미만 보강 포함` : ''})`, ''];
             for (const q of missing) {
                 if (drafted >= limit) break;
                 const ans = answers.get(q.num);

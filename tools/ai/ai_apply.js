@@ -7,6 +7,7 @@
  *   node tools/ai/ai_apply.js                          # tmp/ai_drafts/explain_*.md 전수 미리보기
  *   node tools/ai/ai_apply.js --file explain_subject1  # 특정 초안
  *   node tools/ai/ai_apply.js --write                  # 실제 반영 (기본은 미리보기)
+ *   node tools/ai/ai_apply.js --write --replace        # 기존 해설 교체 (--min-len 보강 초안 적용용)
  *   node tools/ai/ai_apply.js --drafts [--file law]    # draft_<subjectKey>.md 문항 초안 → 문제은행 편입
  *
  * 문항 초안 편입(--drafts, AI-05):
@@ -44,8 +45,8 @@ function parseExplainDraft(draftPath) {
     return out;
 }
 
-/** 정답 블록에 해설 삽입 — 마지막 `> ` 라인 직후. returns 새 텍스트 또는 null */
-function insertExplain(src, qnum, explain) {
+/** 정답 블록에 해설 삽입 — 마지막 `> ` 라인 직후. --replace면 기존 해설을 교체. returns 새 텍스트 또는 null */
+function insertExplain(src, qnum, explain, replace = false) {
     const lines = src.split(/\r?\n/);
     const start = lines.findIndex(l => l.trim() === `**Q${qnum}.**`);
     if (start < 0) return null;
@@ -54,7 +55,11 @@ function insertExplain(src, qnum, explain) {
     for (let i = start + 1; i < lines.length; i++) {
         if (/^\*\*Q\d+\.\*\*/.test(lines[i])) break;
         if (lines[i].startsWith('>')) {
-            if (/\*\*해설\*\*\s*[:：]/.test(lines[i])) return null; // 이미 해설 있음
+            if (/\*\*해설\*\*\s*[:：]/.test(lines[i])) {
+                if (!replace) return null; // 이미 해설 있음
+                lines[i] = `> **해설**: ${explain}`;
+                return lines.join('\n');
+            }
             lastQ = i;
         }
     }
@@ -190,6 +195,7 @@ function main() {
     const { flags, opts } = parseArgs();
     if (flags.has('drafts')) return applyDrafts(flags, opts);
     const write = flags.has('write');
+    const replace = flags.has('replace'); // 기존 해설 교체 모드 (min-len 보강 초안 적용용)
 
     // 초안 파일 ↔ 문제은행 매칭 — explain_<examKey>.md 규약
     const drafts = fs.existsSync(DRAFT_DIR)
@@ -212,7 +218,7 @@ function main() {
             const appliedNums = [];
             let fileSkipped = 0;
             for (const [qnum, explain] of entries) {
-                const next = insertExplain(src, qnum, explain);
+                const next = insertExplain(src, qnum, explain, replace);
                 if (next === null) { fileSkipped++; continue; }
                 src = next;
                 appliedNums.push(qnum);
@@ -224,7 +230,7 @@ function main() {
             applied += appliedNums.length;
             console.log(`${target.id}/${exam.file}: ${write ? '편입' : '편입 예정'} ${appliedNums.length}건`
                 + ` (Q${appliedNums.slice(0, 10).join(', Q')}${appliedNums.length > 10 ? '…' : ''})`
-                + (fileSkipped ? ` · 스킵 ${fileSkipped}건(기존 해설/블록 없음)` : ''));
+                + (fileSkipped ? ` · 스킵 ${fileSkipped}건(${replace ? '블록 없음' : '기존 해설/블록 없음'})` : ''));
         }
     }
     console.log(`\n${write ? '반영 완료' : '미리보기'}: 편입 ${applied}건 · 스킵 ${skipped}건`
