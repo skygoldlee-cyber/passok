@@ -97,6 +97,7 @@ async function generate(flags, opts) {
     let total = 0, drafted = 0;
     for (const target of getTargets(opts)) {
         for (const [key, stmts] of collectStatements(target)) {
+            if (opts.subject && key !== opts.subject) continue;
             let entries = [...stmts.entries()].filter(([, s]) => all || !s.truth);
             if (stats) {
                 entries = entries
