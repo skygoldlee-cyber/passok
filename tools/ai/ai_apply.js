@@ -28,7 +28,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { parseArgs, getTargets, listQbanks, DRAFT_DIR, ROOT } = require('./lib/ai_common');
+const { parseArgs, getTargets, listQbanks, DRAFT_DIR, ROOT,
+    draftBodyHash, parseDraftMeta, logAdoption } = require('./lib/ai_common');
 const { listTextbooks } = require('./lib/textbook');
 
 /** 초안 md에서 {qnum → 해설 텍스트} 추출 */
@@ -102,6 +103,16 @@ function parseQuestionDraft(draftPath) {
     return out;
 }
 
+/** 초안 파일의 배치 메타 + 리뷰 수정 여부 — 채택 로그용 공통 필드 (AI-23) */
+function batchMeta(f) {
+    const text = fs.readFileSync(path.join(DRAFT_DIR, f), 'utf-8');
+    const meta = parseDraftMeta(text);
+    return {
+        model: meta.model, genDate: meta.date,
+        edited: meta.sha ? draftBodyHash(text) !== meta.sha : undefined,
+    };
+}
+
 /** 문항 초안을 문제은행 정본 포맷으로 편입 (미리보기 기본, --write 실반영) */
 function applyDrafts(flags, opts) {
     const write = flags.has('write');
@@ -153,6 +164,10 @@ function applyDrafts(flags, opts) {
                 if (write) {
                     fs.writeFileSync(bankAbs, newSrc, 'utf-8');
                     syncQuestionCounts(target, exam, newTitle, n);
+                    logAdoption({ ts: new Date().toISOString(), draft: f, kind: 'draft',
+                        target: target.id, bank: exam.file, generated: qs.length,
+                        applied: aBlocks.length, skipped: bad + (qs.length - aBlocks.length - bad),
+                        ...batchMeta(f) });
                 }
                 applied += aBlocks.length;
             }
@@ -226,6 +241,10 @@ function main() {
             skipped += fileSkipped;
             if (appliedNums.length && write) {
                 fs.writeFileSync(absPath, src, 'utf-8');
+                logAdoption({ ts: new Date().toISOString(), draft, kind: 'explain',
+                    target: target.id, bank: exam.file, generated: entries.size,
+                    applied: appliedNums.length, skipped: fileSkipped, replace,
+                    ...batchMeta(draft) });
             }
             applied += appliedNums.length;
             console.log(`${target.id}/${exam.file}: ${write ? '편입' : '편입 예정'} ${appliedNums.length}건`
