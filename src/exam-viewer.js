@@ -23,7 +23,7 @@
 import { escapeHTML } from './sanitize.js';
 import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
 import { resolveRefPath, refDocDisplayName } from './pdf-registry.js';
-import { contentPath, dataPath } from './exam-context.js';
+import { contentPath, dataPath, getActiveRegistry } from './exam-context.js';
 import { getJSON, setJSON } from './storage.js';
 import { STORAGE_KEYS } from './storage-keys.js';
 import { CACHE } from './config/cache.js';
@@ -62,7 +62,7 @@ export const ExamViewer = (() => {
             return `${subj ? subj.name : `과목${num}`} ㄱㄴㄷ 조합형`;
         }
         const filename = mdPath.split('/').pop();
-        const registry = (typeof window !== 'undefined' && window.DATA_REGISTRY) || null;
+        const registry = getActiveRegistry();
         if (registry && Array.isArray(registry.exams)) {
             const exam = registry.exams.find(e => e.file === filename);
             if (exam && exam.title) return exam.title;

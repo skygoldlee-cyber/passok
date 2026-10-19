@@ -72,6 +72,21 @@ export function getActiveExam() {
         || exams[0];
 }
 
+/**
+ * 활성 시험의 레지스트리 오브젝트 — exams.json의 registryGlobal 규약 해석.
+ * window.DATA_REGISTRY 직독은 정적 스크립트가 채우는 "기본 시험 전역"만 보게 되어
+ * 비기본 시험 활성 시 엉뚱한 콘텐츠(기본 시험 과목·규칙·문제은행 맵)를 읽는다.
+ * 플랫폼 모듈은 이 접근자로만 레지스트리에 접근한다 — 예외는 로딩 경로를
+ * 소유하는 data-loader.js뿐이다 (DA-15 R4).
+ * @returns {object|null}
+ */
+export function getActiveRegistry() {
+    if (typeof window === 'undefined') return null;
+    const exam = getActiveExam();
+    const g = window[(exam && exam.registryGlobal) || 'DATA_REGISTRY'];
+    return g || null;
+}
+
 /** 활성 시험 id (목록 부재 시 레지스트리 기본값 — 해석 불가면 null). Node 도구에서는 EXAM_ID 환경변수로 지정 가능. */
 export function getActiveExamId() {
     const exam = getActiveExam();
@@ -259,7 +274,7 @@ export function purgeLegacyStorage(knownKeys, knownPrefixes) {
  *   passAverage: 평균 합격선(기본 60) / subjectFailBelow: 과목 과락선(기본 40)
  */
 export function getExamRules() {
-    const ie = (typeof window !== 'undefined' && window.DATA_REGISTRY && window.DATA_REGISTRY.integratedExam) || {};
+    const ie = (getActiveRegistry() || {}).integratedExam || {};
     return {
         passAverage: typeof ie.passAverage === 'number' ? ie.passAverage : 60,
         subjectFailBelow: typeof ie.subjectFailBelow === 'number' ? ie.subjectFailBelow : 40
@@ -271,11 +286,11 @@ export function getExamRules() {
    ========================================================= */
 
 function _registryStudy() {
-    return (typeof window !== 'undefined' && window.DATA_REGISTRY && window.DATA_REGISTRY.study) || {};
+    return (getActiveRegistry() || {}).study || {};
 }
 
 function _registrySubjectTotals() {
-    const subjects = (typeof window !== 'undefined' && window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+    const subjects = (getActiveRegistry() || {}).subjects || [];
     return subjects.reduce((t, s) => ({
         cards: t.cards + (((s.stats && (s.stats.targetCards || s.stats.cards)) || 0)),
         quizzes: t.quizzes + (((s.stats && (s.stats.targetQuizzes || s.stats.quizzes)) || 0)),
@@ -324,7 +339,7 @@ export function getReadDayShare() {
  * getTextbookReadProgress 분모 등 과목 수가 필요한 집계에서 사용 (SC-15).
  */
 export function getActiveSubjectCount() {
-    const subjects = (typeof window !== 'undefined' && window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+    const subjects = (getActiveRegistry() || {}).subjects || [];
     return subjects.length;
 }
 
@@ -339,7 +354,7 @@ export function getActiveSubjectCount() {
  */
 export function resolveLegacySubjectKey(subj) {
     if (!subj || !subj.startsWith('subject')) return subj;
-    const exams = (typeof window !== 'undefined' && window.DATA_REGISTRY && window.DATA_REGISTRY.exams) || [];
+    const exams = (getActiveRegistry() || {}).exams || [];
     const exam = exams.find(e => e.key === subj || e.key.startsWith(subj));
     return exam ? exam.subject : subj;
 }
@@ -349,7 +364,7 @@ export function resolveLegacySubjectKey(subj) {
  * 정확 일치 → 접두 매칭(subject2_p1 ↔ subject2 호환) → 첫 과목 폴백 순.
  */
 export function examIdToSubjectId(examId) {
-    const registry = (typeof window !== 'undefined' && window.DATA_REGISTRY) || null;
+    const registry = getActiveRegistry();
     if (registry && registry.exams) {
         const exam = registry.exams.find(e => e.key === examId);
         if (exam) return exam.subject;

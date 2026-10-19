@@ -8,7 +8,7 @@
 import { safeGetItem, safeSetItem, getSimResultsHistory } from './state.js';
 import { STORAGE_KEYS } from './storage-keys.js';
 import { getDueCards } from './spaced-repetition.js';
-import { getCurrentExamId, getExamRules, resolveLegacySubjectKey } from './exam-context.js';
+import { getCurrentExamId, getExamRules, resolveLegacySubjectKey, getActiveRegistry } from './exam-context.js';
 import { trackAction } from './usage-stats.js';
 
 /**
@@ -177,8 +177,7 @@ const BASE_WRONG_CAUSES = [
  */
 export function getWrongCauseTaxonomy() {
     const merged = new Map(BASE_WRONG_CAUSES.map(c => [c.key, { ...c }]));
-    const extra = (typeof window !== 'undefined' && window.DATA_REGISTRY
-        && window.DATA_REGISTRY.analysis && window.DATA_REGISTRY.analysis.wrongCauses) || [];
+    const extra = ((getActiveRegistry() || {}).analysis || {}).wrongCauses || [];
     extra.forEach(e => {
         if (e && typeof e.key === 'string' && typeof e.label === 'string') {
             const base = merged.get(e.key) || { key: e.key, label: e.label, advice: '' };

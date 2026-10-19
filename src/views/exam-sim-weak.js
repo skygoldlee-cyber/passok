@@ -4,7 +4,7 @@ import { state } from '../state.js';
 import { DataLoader } from '../data-loader.js';
 import { shuffle } from '../utils.js';
 import { WEAK_SIM_PREFIX, parseWeakSimId, resolveCard, cardSubjectOf } from '../weak-items.js';
-import { examIdToSubjectId } from '../exam-context.js';
+import { examIdToSubjectId, getActiveRegistry } from '../exam-context.js';
 import { proFeatureNotice } from '../pro-upgrade.js';
 import { showToast } from '../ui-utils.js';
 import { startSimSession, comboToSimQuestion, comboSubjOrder } from './exam-simulator.js';
@@ -64,7 +64,7 @@ function _startWeakExamImpl() {
     
     if (weakCards.length === 0 && solvedQuizzes.length === 0) {
         const filterNames = {};
-        const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+        const subjects = (getActiveRegistry() || {}).subjects || [];
         subjects.forEach((sub, idx) => {
             const shortName = sub.shortName || sub.name;
             filterNames[sub.key] = `${idx + 1}과목 (${shortName})`;
@@ -115,7 +115,7 @@ function _startWeakExamImpl() {
             }
             // 복수정답형 오답: COMBO_DRILLS_subjectN 번들에서 검색 (id 형식: <subjKey>_combo_<hash>)
             if (!foundQ) {
-                const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+                const subjects = (getActiveRegistry() || {}).subjects || [];
                 for (const s of subjects) {
                     if (foundQ) break;
                     const bundle = (typeof window !== 'undefined') ? window[`COMBO_DRILLS_subject${s.order}`] : null;
