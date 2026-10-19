@@ -26,7 +26,7 @@
 // 원료 DB가 갱신돼도 과거 포뮬러의 검증 근거가 바뀌지 않게 하기 위함.
 
 import { STORAGE_KEYS } from '../../storage-keys.js';
-import { loadItems, saveItems, newId, clampStr, numOrNull, pickEnum } from './store-utils.js';
+import { loadItems, saveItems, newId, clampStr, numOrNull, pickEnum, sanitizeCustomerFields } from './store-utils.js';
 
 // Free 플랜 저장 한도 (결제 연동 없이 정책 상수로만 동작)
 export const FORMULA_LIMIT_FREE = 5;
@@ -55,9 +55,6 @@ const MAX_NOTE_LEN = 500;
 const MAX_STEPS = 20;
 const MAX_STEP_LEN = 200;
 const MAX_PH = 14;
-const MAX_ALLERGIES = 15;
-const MAX_ALLERGY_LEN = 60;
-const MAX_PRODUCTS_LEN = 300;
 
 /** 고유 ID 생성: fml_<base36시간><난수> */
 export function newFormulaId() {
@@ -104,23 +101,8 @@ function sanitizeIngredient(item) {
 function sanitizeCustomer(customer) {
   if (!customer || typeof customer !== 'object') return null;
   const c = {
-    name: clampStr(customer.name || '', 30).trim(),
-    age: numOrNull(customer.age),
-    gender: pickEnum(customer.gender, CUSTOMER_OPTIONS.gender),
-    skinType: pickEnum(customer.skinType, CUSTOMER_OPTIONS.skinType),
-    concerns: Array.isArray(customer.concerns)
-      ? customer.concerns.filter(v => CUSTOMER_OPTIONS.concerns.includes(v))
-      : [],
+    ...sanitizeCustomerFields(customer, CUSTOMER_OPTIONS),
     formulation: pickEnum(customer.formulation, CUSTOMER_OPTIONS.formulation),
-    allergies: Array.isArray(customer.allergies)
-      ? customer.allergies
-          .map(v => (typeof v === 'string' ? v.trim() : ''))
-          .filter(Boolean)
-          .slice(0, MAX_ALLERGIES)
-          .map(v => v.slice(0, MAX_ALLERGY_LEN))
-      : [],
-    pregnancy: pickEnum(customer.pregnancy, CUSTOMER_OPTIONS.pregnancy),
-    products: clampStr(customer.products || '', MAX_PRODUCTS_LEN).trim(),
   };
   // 모든 필드가 비어 있으면 null — 빈 객체보다 부재가 낫다
   const empty = !c.name && c.age == null && !c.gender && !c.skinType

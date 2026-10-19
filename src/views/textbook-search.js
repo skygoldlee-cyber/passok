@@ -187,19 +187,7 @@ function performTextbookSearch() {
     // TS-15 — 용어 정의 카드는 콘텐츠 계층(search-sources)이 인덱스 산출 어휘로 선별한다
     const glossDefs = matchGlossaryDefs(allVariantTerms, textbookState.filter);
 
-    // 티어별 정렬·상한 (테이블 주도 — 티어 추가 시 RESULT_TIERS 한 곳만 수정)
-    // kinds '*'는 선언되지 않은 나머지 kind 버킷을 전부 받는 폴백 티어다 (TS-18).
-    const consumedKinds = new Set(['weak']);
-    for (const t of RESULT_TIERS) {
-        const ks = Array.isArray(t.kinds)
-            ? t.kinds
-            : Object.keys(buckets).filter(k => !consumedKinds.has(k));
-        ks.forEach(k => consumedKinds.add(k));
-        t.list = ks.flatMap(k => buckets[k] || []);
-        t.list.sort((a, b) => b._score - a._score);
-        t.shown = t.list.slice(0, t.limit);
-    }
-    const [sections, refs, exams, others, weak] = RESULT_TIERS;
+    const [sections, refs, exams, others, weak] = applyResultTiers(buckets);
     const allResults = sections.shown.concat(refs.shown, exams.shown, others.shown);
 
     // Update summary text
@@ -247,111 +235,10 @@ function performTextbookSearch() {
         const subjects = (DataLoader.registry && DataLoader.registry.subjects) || [];
         subjects.forEach((sub, idx) => { badgeColors[sub.key] = colors[idx % colors.length]; });
     }
-    const renderResultCard = (item, idx) => {
-        const badgeColor = badgeColors[item.subjId] || 'badge-gray';
+    const renderResultCard = (item, idx) =>
+        renderSearchResultCard(container, item, idx, allVariantTerms, badgeColors);
 
-        // 문서 결과 — nav.mdPath를 가진 모든 소스 (참조자료·문제은행·시험 선언 문서 등).
-        // 문서 단위 + 매치 스니펫 + ExamViewer 라인 딥링크 (TS-11/TS-12/TS-18)
-        if (item.nav && item.nav.mdPath) {
-            const { snippet, lineNum } = _matchSnippet(item.text, allVariantTerms);
-            const argsJson = esc(JSON.stringify([item.nav.mdPath, lineNum, allVariantTerms.join(' ')]));
-            const kindLabel = esc(KIND_LABELS[item.kind] || item.kind);
-            const subjBadgeHtml = item.subjName ? `<span class="badge ${badgeColor}">${esc(item.subjName)}</span>` : '';
-            // 카드 전체가 원문 딥링크 — 섹션 카드의 is-clickable 규약과 동일 (data-click 위임)
-            const refCardHTML = `
-            <div class="textbook-result-card is-clickable" data-click="ExamViewer.openExam" data-args='${argsJson}' tabindex="0" role="link" aria-label="${esc(item.title)} — 원문 보기">
-                <div class="textbook-card-header">
-                    <span class="textbook-card-path">
-                        ${subjBadgeHtml}
-                        <span class="badge badge-gray">${kindLabel}</span>
-                        <i class="fa-solid fa-chevron-right"></i>
-                        <span>${esc(item.title)}</span>
-                    </span>
-                    <button class="btn btn-secondary textbook-card-btn" data-click="ExamViewer.openExam" data-args='${argsJson}'>
-                        <i class="fa-solid fa-book-open"></i> 원문 보기
-                    </button>
-                </div>
-                <h4 class="textbook-card-title">${highlightTextInString(item.title, allVariantTerms)}</h4>
-                <div class="textbook-card-body"><div class="search-ref-snippet">${highlightTextInString(snippet, allVariantTerms)}</div></div>
-            </div>
-        `;
-            container.insertAdjacentHTML('beforeend', refCardHTML);
-            return;
-        }
-
-        const isLong = item.text.length > 300;
-        const bodyClass = isLong ? 'textbook-card-body collapsed' : 'textbook-card-body';
-        const formattedContent = formatSectionContent(item.text, allVariantTerms, item);
-        const storyBadge = item.kind === 'story' ? '<span class="badge badge-gray">서사</span>' : '';
-        // '전체 단원 보기' → 리더의 해당 "섹션"으로 이동 — 소스 프로바이더가 기록한
-        // 이동 페이로드(표시 제목·챕터 앵커·모드 플래그)를 그대로 전달한다.
-        // nav.goto가 없는 소스는 이동 링크 없이 카드만 렌더한다.
-        const gotoData = (item.nav && item.nav.goto) ? JSON.stringify(item.nav.goto) : '';
-        const gotoAttr = gotoData ? ` data-search-goto="${esc(gotoData)}" tabindex="0" role="link" aria-label="${esc(item.title)} — 교재에서 보기"` : '';
-        const gotoLink = gotoData
-            ? `<a href="#" data-search-goto="${esc(gotoData)}" class="btn btn-secondary textbook-card-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> 전체 단원 보기</a>`
-            : '';
-        const subjBadge = item.subjName ? `<span class="badge ${badgeColor}">${esc(item.subjName)}</span>` : '';
-        const crumbHtml = item.crumb ? `<i class="fa-solid fa-chevron-right"></i><span>${esc(item.crumb)}</span>` : '';
-
-        const cardId = `textbook-card-${idx}`;
-        const cardHTML = `
-            <div class="textbook-result-card${gotoData ? ' is-clickable' : ''}"${gotoAttr}>
-                <div class="textbook-card-header">
-                    <span class="textbook-card-path">
-                        ${subjBadge}
-                        ${storyBadge}
-                        ${crumbHtml}
-                    </span>
-                    ${gotoLink}
-                </div>
-                <h4 class="textbook-card-title">${highlightTextInString(item.title, allVariantTerms)}</h4>
-                <div class="${bodyClass}" id="${cardId}-body">
-                    ${formattedContent}
-                </div>
-                ${isLong ? `
-                <div class="textbook-card-actions">
-                    <button class="btn btn-secondary textbook-card-toggle-btn" data-click="toggleTextbookCard" data-arg="${cardId}" id="${cardId}-toggle-btn">
-                        <i class="fa-solid fa-chevron-down"></i> 더 보기
-                    </button>
-                </div>
-                ` : ''}
-            </div>
-        `;
-        container.insertAdjacentHTML('beforeend', cardHTML);
-    };
-
-    // TS-15 — 용어 정의 카드를 본문 결과(교재→참조자료→문제은행→부분 일치)보다
-    // 앞에 별도 그룹으로 배치한다. 출처 링크는 data-ref-html 문서 위임이 처리.
-    if (glossDefs.length) {
-        container.insertAdjacentHTML('beforeend',
-            `<div class="search-weak-divider search-gloss-divider">용어 정의 — 용어집에서 ${esc(String(glossDefs.length))}건</div>`);
-        const subjects = (DataLoader.registry && DataLoader.registry.subjects) || [];
-        for (const entry of glossDefs) {
-            const kw = String(entry.keyword || '');
-            const subjKey = glossarySubjectKey(entry.subjectId);
-            const subjName = (subjects.find(s => s.key === subjKey) || {}).name
-                || entry.subjectId || '';
-            const refPath = entry.refDoc ? resolveRefPath(entry.refDoc + '.pdf') : '';
-            const refLabel = refDocDisplayName(entry.refDoc) || entry.refDoc || '';
-            const srcHtml = refPath
-                ? `<a href="#" data-ref-html="${esc(refPath)}" data-ref-search="${esc(kw.toLowerCase())}" class="glossary-ref-link"><i class="fa-solid fa-file-lines"></i> ${esc(refLabel)}</a>`
-                : esc(refLabel);
-            const glossCardHTML = html`
-            <div class="textbook-result-card search-gloss-card">
-                <div class="textbook-card-header">
-                    <span class="textbook-card-path">
-                        <span class="badge ${badgeColors[subjKey] || 'badge-gray'}">${subjName}</span>
-                        <span class="badge badge-emerald">용어</span>
-                    </span>
-                </div>
-                <h4 class="textbook-card-title">${raw(highlightTextInString(kw, allVariantTerms))}</h4>
-                <div class="textbook-card-body"><div class="search-gloss-body">${String(entry.explanation || '')}</div></div>
-                <div class="search-gloss-src">${raw(srcHtml)}</div>
-            </div>`;
-            container.insertAdjacentHTML('beforeend', glossCardHTML.toString());
-        }
-    }
+    renderGlossaryCards(container, glossDefs, allVariantTerms, badgeColors);
 
     allResults.forEach((item, idx) => renderResultCard(item, idx));
 
@@ -372,6 +259,136 @@ function performTextbookSearch() {
     // Mermaid 다이어그램 렌더링 (pre.mermaid 노드가 있을 때만 온디맨드 로드)
     renderMermaidIn(container, '[search]');
     attachImageZoomIn(container);
+}
+
+// 티어별 정렬·상한 (테이블 주도 — 티어 추가 시 RESULT_TIERS 한 곳만 수정)
+// kinds '*'는 선언되지 않은 나머지 kind 버킷을 전부 받는 폴백 티어다 (TS-18).
+function applyResultTiers(buckets) {
+    const consumedKinds = new Set(['weak']);
+    for (const t of RESULT_TIERS) {
+        const ks = Array.isArray(t.kinds)
+            ? t.kinds
+            : Object.keys(buckets).filter(k => !consumedKinds.has(k));
+        ks.forEach(k => consumedKinds.add(k));
+        t.list = ks.flatMap(k => buckets[k] || []);
+        t.list.sort((a, b) => b._score - a._score);
+        t.shown = t.list.slice(0, t.limit);
+    }
+    return RESULT_TIERS;
+}
+
+// 문서 결과 — nav.mdPath를 가진 모든 소스 (참조자료·문제은행·시험 선언 문서 등).
+// 문서 단위 + 매치 스니펫 + ExamViewer 라인 딥링크 (TS-11/TS-12/TS-18)
+function renderDocResultCard(container, item, allVariantTerms, badgeColor) {
+    const { snippet, lineNum } = _matchSnippet(item.text, allVariantTerms);
+    const argsJson = esc(JSON.stringify([item.nav.mdPath, lineNum, allVariantTerms.join(' ')]));
+    const kindLabel = esc(KIND_LABELS[item.kind] || item.kind);
+    const subjBadgeHtml = item.subjName ? `<span class="badge ${badgeColor}">${esc(item.subjName)}</span>` : '';
+    // 카드 전체가 원문 딥링크 — 섹션 카드의 is-clickable 규약과 동일 (data-click 위임)
+    const refCardHTML = `
+    <div class="textbook-result-card is-clickable" data-click="ExamViewer.openExam" data-args='${argsJson}' tabindex="0" role="link" aria-label="${esc(item.title)} — 원문 보기">
+        <div class="textbook-card-header">
+            <span class="textbook-card-path">
+                ${subjBadgeHtml}
+                <span class="badge badge-gray">${kindLabel}</span>
+                <i class="fa-solid fa-chevron-right"></i>
+                <span>${esc(item.title)}</span>
+            </span>
+            <button class="btn btn-secondary textbook-card-btn" data-click="ExamViewer.openExam" data-args='${argsJson}'>
+                <i class="fa-solid fa-book-open"></i> 원문 보기
+            </button>
+        </div>
+        <h4 class="textbook-card-title">${highlightTextInString(item.title, allVariantTerms)}</h4>
+        <div class="textbook-card-body"><div class="search-ref-snippet">${highlightTextInString(snippet, allVariantTerms)}</div></div>
+    </div>
+`;
+    container.insertAdjacentHTML('beforeend', refCardHTML);
+}
+
+// 섹션 결과 카드 — 포맷 본문 + '전체 단원 보기' 이동 링크 (nav.goto가 있는 소스만)
+function renderSectionResultCard(container, item, idx, allVariantTerms, badgeColor) {
+    const isLong = item.text.length > 300;
+    const bodyClass = isLong ? 'textbook-card-body collapsed' : 'textbook-card-body';
+    const formattedContent = formatSectionContent(item.text, allVariantTerms, item);
+    const storyBadge = item.kind === 'story' ? '<span class="badge badge-gray">서사</span>' : '';
+    // '전체 단원 보기' → 리더의 해당 "섹션"으로 이동 — 소스 프로바이더가 기록한
+    // 이동 페이로드(표시 제목·챕터 앵커·모드 플래그)를 그대로 전달한다.
+    // nav.goto가 없는 소스는 이동 링크 없이 카드만 렌더한다.
+    const gotoData = (item.nav && item.nav.goto) ? JSON.stringify(item.nav.goto) : '';
+    const gotoAttr = gotoData ? ` data-search-goto="${esc(gotoData)}" tabindex="0" role="link" aria-label="${esc(item.title)} — 교재에서 보기"` : '';
+    const gotoLink = gotoData
+        ? `<a href="#" data-search-goto="${esc(gotoData)}" class="btn btn-secondary textbook-card-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> 전체 단원 보기</a>`
+        : '';
+    const subjBadge = item.subjName ? `<span class="badge ${badgeColor}">${esc(item.subjName)}</span>` : '';
+    const crumbHtml = item.crumb ? `<i class="fa-solid fa-chevron-right"></i><span>${esc(item.crumb)}</span>` : '';
+
+    const cardId = `textbook-card-${idx}`;
+    const cardHTML = `
+        <div class="textbook-result-card${gotoData ? ' is-clickable' : ''}"${gotoAttr}>
+            <div class="textbook-card-header">
+                <span class="textbook-card-path">
+                    ${subjBadge}
+                    ${storyBadge}
+                    ${crumbHtml}
+                </span>
+                ${gotoLink}
+            </div>
+            <h4 class="textbook-card-title">${highlightTextInString(item.title, allVariantTerms)}</h4>
+            <div class="${bodyClass}" id="${cardId}-body">
+                ${formattedContent}
+            </div>
+            ${isLong ? `
+            <div class="textbook-card-actions">
+                <button class="btn btn-secondary textbook-card-toggle-btn" data-click="toggleTextbookCard" data-arg="${cardId}" id="${cardId}-toggle-btn">
+                    <i class="fa-solid fa-chevron-down"></i> 더 보기
+                </button>
+            </div>
+            ` : ''}
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', cardHTML);
+}
+
+function renderSearchResultCard(container, item, idx, allVariantTerms, badgeColors) {
+    const badgeColor = badgeColors[item.subjId] || 'badge-gray';
+    if (item.nav && item.nav.mdPath) {
+        renderDocResultCard(container, item, allVariantTerms, badgeColor);
+        return;
+    }
+    renderSectionResultCard(container, item, idx, allVariantTerms, badgeColor);
+}
+
+// TS-15 — 용어 정의 카드를 본문 결과(교재→참조자료→문제은행→부분 일치)보다
+// 앞에 별도 그룹으로 배치한다. 출처 링크는 data-ref-html 문서 위임이 처리.
+function renderGlossaryCards(container, glossDefs, allVariantTerms, badgeColors) {
+    if (!glossDefs.length) return;
+    container.insertAdjacentHTML('beforeend',
+        `<div class="search-weak-divider search-gloss-divider">용어 정의 — 용어집에서 ${esc(String(glossDefs.length))}건</div>`);
+    const subjects = (DataLoader.registry && DataLoader.registry.subjects) || [];
+    for (const entry of glossDefs) {
+        const kw = String(entry.keyword || '');
+        const subjKey = glossarySubjectKey(entry.subjectId);
+        const subjName = (subjects.find(s => s.key === subjKey) || {}).name
+            || entry.subjectId || '';
+        const refPath = entry.refDoc ? resolveRefPath(entry.refDoc + '.pdf') : '';
+        const refLabel = refDocDisplayName(entry.refDoc) || entry.refDoc || '';
+        const srcHtml = refPath
+            ? `<a href="#" data-ref-html="${esc(refPath)}" data-ref-search="${esc(kw.toLowerCase())}" class="glossary-ref-link"><i class="fa-solid fa-file-lines"></i> ${esc(refLabel)}</a>`
+            : esc(refLabel);
+        const glossCardHTML = html`
+        <div class="textbook-result-card search-gloss-card">
+            <div class="textbook-card-header">
+                <span class="textbook-card-path">
+                    <span class="badge ${badgeColors[subjKey] || 'badge-gray'}">${subjName}</span>
+                    <span class="badge badge-emerald">용어</span>
+                </span>
+            </div>
+            <h4 class="textbook-card-title">${raw(highlightTextInString(kw, allVariantTerms))}</h4>
+            <div class="textbook-card-body"><div class="search-gloss-body">${String(entry.explanation || '')}</div></div>
+            <div class="search-gloss-src">${raw(srcHtml)}</div>
+        </div>`;
+        container.insertAdjacentHTML('beforeend', glossCardHTML.toString());
+    }
 }
 
 export function toggleTextbookCard(cardId) {
