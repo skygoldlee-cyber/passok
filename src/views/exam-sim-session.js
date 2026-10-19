@@ -8,6 +8,7 @@
 
 import { state, safeGetItem } from '../state.js';
 import { DataLoader } from '../data-loader.js';
+import { getActiveRegistry } from '../exam-context.js';
 import { showGlobalLoading, hideGlobalLoading, showToast } from '../ui-utils.js';
 import { shuffle, OPTION_INDICATORS } from '../utils.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
@@ -102,7 +103,7 @@ export function comboToSimQuestion(q, subjKey) {
 
 // 복수정답형 번들 과목 번호 조회 (combo 오답 복습 시 과목 번들 로드용) — registry.subjects의 order 기반
 export function comboSubjOrder(subjKey) {
-    const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+    const subjects = (getActiveRegistry() || {}).subjects || [];
     const s = subjects.find(x => x.key === subjKey);
     return s ? s.order : null;
 }
@@ -121,7 +122,7 @@ export function startComboMockExam(arg) {
     showGlobalLoading('ㄱㄴㄷ 조합 모의고사 데이터를 불러오는 중입니다...');
     DataLoader.loadComboDrills(num).then(questions => {
         hideGlobalLoading();
-        const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+        const subjects = (getActiveRegistry() || {}).subjects || [];
         const subjMeta = subjects.find(s => s.order === num);
         const subjKey = subjMeta ? subjMeta.key : `subject${num}`;
         const subjName = subjMeta ? (subjMeta.shortName || subjMeta.name) : `${num}과목`;
@@ -165,7 +166,7 @@ export function startIntegratedMockExam() {
 
 function _startIntegratedMockExamImpl(mixCombo = false) {
     // 과목별 문제들 동적 수집 (registry 기반 — 과목 키별 자동 분류)
-    const registry = (typeof window !== 'undefined' && window.DATA_REGISTRY) ? window.DATA_REGISTRY : null;
+    const registry = getActiveRegistry();
     const integratedConfig = registry && registry.integratedExam ? registry.integratedExam.questionsPerSubject : null;
     const subjects = registry && registry.subjects ? registry.subjects : [];
 

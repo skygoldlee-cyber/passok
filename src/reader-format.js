@@ -4,7 +4,7 @@
 // (n=HTML 길이, k=정규식 수). 단일 패스 파서 또는 DOM 기반 후처리로 통합하면 성능 개선
 // 가능하나, 현재 측정된 병목이 아니므로 장기 개선으로 보류.
 import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
-import { contentPath } from './exam-context.js';
+import { contentPath, getActiveRegistry } from './exam-context.js';
 import { PATHS, normalizeRefPath } from './paths.js';
 import { escapeHTML } from './sanitize.js';
 import { resolveRefPath, getRefTables, refDocDisplayName } from './pdf-registry.js';
@@ -102,8 +102,9 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
     // 마크다운 파서가 [text](기출문제/과목N_...)를 <a href="기출문제/과목N_...">text</a>로 변환한 후 처리
     // 실제 파일 경로는 DATA_REGISTRY.exams에서 동적 조회 (하드코딩 제거)
     const _examFileMap = {};
-    if (typeof window !== 'undefined' && window.DATA_REGISTRY && Array.isArray(window.DATA_REGISTRY.exams)) {
-        window.DATA_REGISTRY.exams.forEach(e => {
+    const _activeRegistry = getActiveRegistry();
+    if (_activeRegistry && Array.isArray(_activeRegistry.exams)) {
+        _activeRegistry.exams.forEach(e => {
             if (e.key && e.file) _examFileMap[e.key] = e.file;
         });
     }

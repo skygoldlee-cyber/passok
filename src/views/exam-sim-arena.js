@@ -16,7 +16,7 @@ import { simState } from './exam-sim-state.js';
 import { chapterForQuestion, renderSimResultBreakdown } from './exam-sim-review.js';
 import { recordStatementJudgments } from '../statement-tracker.js';
 import { recordQuizJudgment } from '../spaced-repetition.js';
-import { examIdToSubjectId } from '../exam-context.js';
+import { examIdToSubjectId, getActiveRegistry } from '../exam-context.js';
 import { resetMainScroll } from './navigation.js';
 import { WEAK_SIM_PREFIX } from '../weak-items.js';
 import { saveSimDraft, clearSimDraft } from './exam-sim-draft.js';
@@ -301,7 +301,7 @@ export function submitExam() {
     // 과목별 정답 및 총 문제수 집계용 (레지스트리 기반 동적 초기화)
     /** @type {Object<string,{score:number,total:number}>} */
     const subjectScores = {};
-    const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+    const subjects = (getActiveRegistry() || {}).subjects || [];
     subjects.forEach(sub => {
         subjectScores[sub.key] = { score: 0, total: 0 };
     });

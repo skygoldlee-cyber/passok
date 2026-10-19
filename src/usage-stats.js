@@ -9,6 +9,7 @@
 
 import { STORAGE_KEYS } from './storage-keys.js';
 import { safeGetItem, safeSetItem } from './state.js';
+import { getActiveRegistry } from './exam-context.js';
 import { html, raw } from './sanitize.js';
 import { trapFocus, showToast } from './ui-utils.js';
 import { todayKey, localDateTime } from './utils.js';
@@ -173,7 +174,7 @@ export async function showUsageStats() {
     let titles = {};
     try {
         const { getViewTitles } = await import('./router.js');
-        titles = getViewTitles(window.DATA_REGISTRY) || {};
+        titles = getViewTitles(getActiveRegistry()) || {};
     } catch (e) { titles = {}; }
 
     const viewRows = Object.entries(d.views).sort((a, b) => b[1] - a[1])
