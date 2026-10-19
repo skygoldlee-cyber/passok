@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-19 DA-15 적합성 감사 — 로직의 콘텐츠 독립성 정리 (DA-15)
+
+- **감사 결과**: 플랫폼 코어(src/)의 시험·교재 내용 언급은 대부분 주석/예시/생성 데이터(keyword-index·law-links·pdf-registry는 content에서 자동 생성). 실질 결합 2건만 발견
+- **ref_statements.js 내장 폴백 제거**: `DOC_SUBJECT_RULES_FALLBACK`(화장품법·CGMP·KFCC 등 cosmetic 전용 문서명→과목 정규식 9건) 폐기 — `references.json docSubjectRules`를 유일한 소스로 (cosmetic·food 모두 선언됨). 미선언 시험은 경고+빈 규칙
+- **check_ref_subjects.js**: `docSubject(doc)` 호출에 시험 루트(CONTENT) 전달 — 폴백 폐지 후 시험별 규칙이 올바르게 해석되도록 수정
+- **exam-context.js 기본 시험 리터럴 제거**: 최후 폴백 `'cosmetic'` 리터럴을 폐기하고 EXAMS_LIST 번들 → (Node) `content/exams.json` 원본 직독 순으로 지연 해석 — 특정 시험 id가 코드에 없음. 해석 불가 시 null
+- **테스트**: `tests/unit/da15-content-independence.test.js` 신설 — 규칙 미선언 루트에서 cosmetic 문서명 패턴이 과목을 부여하지 않음 + references.json이 유일 소스임을 고정 (유닛 1,420 통과)
+
 ## 2026-10-19 카드·퀴즈 중복성 점검 — 마커 잔재 정제 + 비표준 마커 정규화 (TR-01, AI-22)
 
 - **중복성 점검 결과**: 카드 ID 충돌 0 · 과목 내 동일 용어 0 · 과목 간 동일 용어 43건(동일정의 완전중복 4건 — 과목 경계 개념이라 유지) · 퀴즈 과목 내 동일 본문 0 · 과목 간 동일 본문 1건(기능성화장품 효능 — 양 과목 시험 범위라 유지). 실질 결함 2건만 처리
