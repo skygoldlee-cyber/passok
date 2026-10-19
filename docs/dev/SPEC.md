@@ -621,6 +621,7 @@
 | AI-21 | `ai:adphrases` — 별표5 2항 각 호 법문+기존 사전을 근거로 금지 표현 후보를 JS 항목 형태로 제안 (미커버 호 라·마·자·차·카 우선). 사전이 코드 파일이라 apply 없이 수동 편입+`check:adlint` 회귀 확인 원칙 | ✅ |
 | AI-22 | 카드 제외 정본 `content/exams/<id>/피드백/card_exclude.json`(cardId→사유) — 추출 오염·근거 부재 카드를 `DataLoader.loadSubject`가 파싱 후 목록에서 제거. `ai:cards`도 동일 목록을 대상에서 제외 (AI-19와 동형 오버레이). 정본 없으면 제외 없음 | ✅ |
 | AI-23 | 배치 채택률 계측 — `writeDraft`가 초안 본문 해시(`sha=`)를 메타에 기록, `ai:apply --write`가 초안 파일 단위 {생성·편입·스킵·리뷰수정 여부·모델·생성일}을 추적 파일 `tools/ai/adoption_log.jsonl`에 append. `ai:adoption`이 배치별·누적 채택률 리포트 (설계 §3.1 L1 승격 판단 데이터) | ✅ |
+| AI-24 | `ai:textbook` — 참조자료 ref_md 청크(조문 경계 `^제N조` 분할, 조문 없는 문서는 고정폭 창) → 교재 본문 섹션 초안. `scaffold:chapter`(BP-15)의 `<!-- 작성: 본문 -->` 슬롯 채우기용 — 📌출처·원문 보기 블록은 LLM이 아니라 도구가 결정론 생성해 "편입용 블록"으로 첨부 (CS-11 형식). 자기검증: 생성 본문의 제N조 언급이 청크 원문에 없으면 [폐기 후보] 표시 | ✅ |
 
 ---
 

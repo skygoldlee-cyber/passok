@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 57d7370d4c31b1a1
-> 생성: 2026-10-19 · 원천: SPEC.md(556개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 1d912e9ca8bcf3ff
+> 생성: 2026-10-19 · 원천: SPEC.md(557개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 556개 — 문서 연결 395 · 소스 연결 495 · 테스트 연결 529 · 보고서 연결 109
+**커버리지 요약**: 요구사항 557개 — 문서 연결 395 · 소스 연결 497 · 테스트 연결 530 · 보고서 연결 109
 
 ---
 
@@ -499,9 +499,9 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| AI-01 | ✅ | 테스트 | — | tools/ai/ai_apply.js<br>tools/ai/lib/ai_common.js<br>tools/ai/lib/qbank.js | tests/unit/ai-tools.test.js | — | — |
+| AI-01 | ✅ | 테스트 | — | tools/ai/ai_apply.js<br>tools/ai/ai_textbook.js<br>tools/ai/lib/ai_common.js<br>tools/ai/lib/qbank.js | tests/unit/ai-textbook.test.js<br>tests/unit/ai-tools.test.js | — | — |
 | AI-02 | ✅ | 테스트 | — | tools/ai/ai_distractors.js<br>tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/ai_lint.js<br>…외 5개 | tests/unit/ai-tools.test.js | — | — |
-| AI-03 | ✅ | 테스트 | — | tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/ai_stmt_feedback.js<br>tools/ai/lib/citations.js<br>…외 1개 | tests/unit/ai-tools.test.js | — | — |
+| AI-03 | ✅ | 테스트 | — | tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/ai_stmt_feedback.js<br>tools/ai/ai_textbook.js<br>…외 2개 | tests/unit/ai-textbook.test.js<br>tests/unit/ai-tools.test.js | — | — |
 | AI-04 | ✅ | 테스트 | — | tools/ai/ai_apply.js<br>tools/ai/ai_explain.js | tests/unit/ai-tools.test.js | — | — |
 | AI-05 | ✅ | 테스트 | — | tools/ai/ai_apply.js<br>tools/ai/ai_draft_questions.js<br>tools/ai/lib/textbook.js | tests/unit/ai-tools.test.js | — | — |
 | AI-06 | ✅ | 테스트 | — | tools/ai/ai_distractors.js | tests/unit/ai-tools.test.js | — | — |
@@ -511,7 +511,7 @@
 | AI-10 | ✅ | 테스트 | — | tools/ai/ai_lint.js | tests/unit/ai-tools.test.js | — | — |
 | AI-11 | ✅ | 테스트 | — | tools/ai/ai_coverage.js<br>tools/ai/lib/textbook.js | tests/unit/ai-tools.test.js | — | — |
 | AI-12 | ✅ | 테스트 | — | tools/ai/ai_stale_scan.js | tests/unit/ai-tools.test.js | — | — |
-| AI-13 | ✅ | 테스트 | — | tools/ai/ai_coverage.js<br>tools/ai/ai_dupcheck.js<br>tools/ai/ai_stale_scan.js<br>tools/ai/lib/ai_common.js | tests/unit/ai-tools.test.js | — | — |
+| AI-13 | ✅ | 테스트 | — | tools/ai/ai_coverage.js<br>tools/ai/ai_dupcheck.js<br>tools/ai/ai_stale_scan.js<br>tools/ai/ai_textbook.js<br>…외 1개 | tests/unit/ai-tools.test.js | — | — |
 | AI-14 | ✅ | 테스트 | — | tools/ai/ai_stmt_feedback.js | tests/unit/ai-tools.test.js | — | — |
 | AI-15 | ✅ | 테스트 | — | tools/ai/ai_stmt_feedback.js | tests/unit/ai-tools.test.js | — | — |
 | AI-16 | ✅ | 테스트 | — | tools/ai/ai_stmt_feedback.js | tests/unit/ai-tools.test.js | — | — |
@@ -522,6 +522,7 @@
 | AI-21 | ✅ | 테스트 | — | tools/ai/ai_adphrases.js | tests/unit/ai-tools.test.js | — | — |
 | AI-22 | ✅ | 테스트 | — | src/data-loader.js<br>tools/ai/ai_cards.js | tests/unit/ai-tools.test.js | — | — |
 | AI-23 | ✅ | 테스트 | — | tools/ai/ai_adoption.js | tests/unit/ai-tools.test.js | — | — |
+| AI-24 | ✅ | 테스트 | — | tools/ai/ai_textbook.js | tests/unit/ai-textbook.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
@@ -739,7 +740,7 @@
 | CS-08 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | tools/build/build_study_md_bundle.js | tests/unit/content-structure.test.js | DOC-ARC-08 | — |
 | CS-09 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/convert.py<br>tools/check/check_ref_subjects.js<br>tools/check/check_reflayout.js<br>tools/check/check_refmerge.js | tests/unit/content-structure.test.js | DOC-ARC-08 | — |
 | CS-10 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py | tests/unit/content-structure.test.js | DOC-ARC-08 | — |
-| CS-11 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-07 | — | tests/unit/scaffold-chapter.test.js | — | — |
+| CS-11 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-07 | tools/ai/ai_textbook.js | tests/unit/ai-textbook.test.js<br>tests/unit/scaffold-chapter.test.js | — | — |
 
 ## 5.5 교재 콘텐츠 학습 보조 요소
 
