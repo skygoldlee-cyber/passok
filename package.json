@@ -18,6 +18,7 @@
     "build:audio-manifest": "node tools/build/build_audio_manifest.js",
     "sync:citations": "node tools/sync/sync_citation_lines.js",
     "postbuild:data": "npm run check:parser",
+    "build:derived": "npm run build:html && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js && npm run build:trace && npm run build:embeddings && npm run stats:stamp",
     "check:parser": "node tools/check/check_parser_parity.js",
     "check:imports": "node tools/check/check_imports.js",
     "check:posind": "node tools/check/check_position_independence.js",
