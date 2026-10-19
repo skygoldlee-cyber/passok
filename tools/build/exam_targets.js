@@ -40,7 +40,7 @@ function getDefaultExamRoots(workspaceDir) {
     const targets = getExamTargets(workspaceDir);
     const t = targets.find(x => x.isDefault) || targets[0];
     return t ? { contentRoot: t.contentRoot, dataRoot: t.dataRoot, id: t.id }
-        : { contentRoot: 'content', dataRoot: 'data', id: 'cosmetic' };
+        : { contentRoot: 'content', dataRoot: 'data', id: null };
 }
 
 /**

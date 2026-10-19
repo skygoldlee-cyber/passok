@@ -20,10 +20,11 @@
 const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
+const { getDefaultExamRoots } = require('../build/exam_targets.js');
 
 const VERBOSE = process.argv.includes('--verbose');
 const ROOT = path.resolve(__dirname, '..', '..');
-const REF_MD = path.join(ROOT, 'content/exams/cosmetic/참조자료/ref_md');
+const REF_MD = path.join(ROOT, getDefaultExamRoots(ROOT).contentRoot, '참조자료', 'ref_md');
 
 function* walk(dir) {
     for (const name of fs.readdirSync(dir)) {

@@ -34,6 +34,7 @@ npm.cmd run check:html                # index.html이 파셜 조립 결과와 �
 npm.cmd run check:parser               # 빌드 파서 ↔ 런타임 파서 등가성 검증
 npm.cmd run check:imports              # src/ 내 ES 모듈 import/export 교차 검증
 npm.cmd run check:posind               # 교재 좌표 비의존 게이트 — 위치 좌표(라인·인덱스)를 식별자/영속 키로 쓰는 패턴 차단 (ID-05, check:ci·CI·pre-push 게이트) + 계층 방향 규칙 (코어→views/ 역참조 차단, 셸 명단 SHELL_MODULES)
+npm.cmd run check:contentind           # 로직 콘텐츠 독립 게이트 — 플랫폼·도구 코드의 시험 id·과목 키·시험 경로 리터럴 하드코딩 차단 (DA-15, check:ci·CI·check:all 게이트)
 npm.cmd run stamp:sw                   # sw.js CACHE_VERSION을 커밋 해시로 스탬프
 npm.cmd run notes:draft                # 릴리스 노트 pending 초안 생성 (커밋 subject 기반 → data/release-notes.json 수동 편집 후 배포)
 npm.cmd run verify:assets              # SHELL_ASSETS/DATA_ASSETS 파일 존재 검증

@@ -23,6 +23,8 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
+const { getDefaultExamRoots } = require('../build/exam_targets.js');
+const DEF_ROOTS = getDefaultExamRoots(ROOT);
 
 // 검사 대상 문서
 const DOC_DIRS = ['docs', 'ref-pipeline'];
@@ -41,11 +43,11 @@ const ROOT_FILES = new Set([
   'AGENTS.md', 'README.md', 'style.css', 'pdf_hashes.json', 'vitest.config.js',
 ]);
 
-// 플레이스홀더 → 구체 경로 대체
+// 플레이스홀더 → 기본 시험(exams.json default) 실경로로 대체 — 시험 id는 레지스트리에서 해석 (DA-15)
 const SUBSTITUTIONS = [
-  [/EXAM_CONTENT_ROOT|\{EXAM_CONTENT_ROOT\}|\{EXAM\}|\{contentRoot\}|<root>|\{root\}/g, 'content/exams/cosmetic'],
-  [/\{dataRoot\}|<dataRoot>/g, 'data/exams/cosmetic'],
-  [/<examId>|<id>|\{id\}|\{examId\}/g, 'cosmetic'],
+  [/EXAM_CONTENT_ROOT|\{EXAM_CONTENT_ROOT\}|\{EXAM\}|\{contentRoot\}|<root>|\{root\}/g, DEF_ROOTS.contentRoot],
+  [/\{dataRoot\}|<dataRoot>/g, DEF_ROOTS.dataRoot],
+  [/<examId>|<id>|\{id\}|\{examId\}/g, DEF_ROOTS.id || '*'],
   [/<과목키>|\{과목키\}|\{과목\}|\{key\}|<key>/g, '*'],
   [/과목N|과목\d|subjectN|subject\d|\{문서\}|\{파일명\}|\{doc\}|\{stem\}|NNNN|\{hash\}|\{version\}|\{과목N\}/g, '*'],
 ];
