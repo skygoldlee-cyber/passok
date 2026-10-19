@@ -242,13 +242,16 @@ export function _listRefDocs(t) {
     }
     for (const e of (t.REFERENCE_INGREDIENTS || [])) {
         if (!e.file) continue;
+        // dir은 references.json 엔트리별 선언 — 미선언 항목은 경로 해석 불가라 제외
+        // (코드 기본값 없음 — 디렉터리 규약은 시험 소유)
+        if (!e.dir) continue;
         // subject은 과목 디렉터리명('과목N') 또는 과목 키 모두 허용 — 미지정 시 미귀속('')으로 포함
         const ingSubj = dirToSubj[e.subject]
             || ((t.SUBJECT_DIR_MAP || {})[e.subject] ? e.subject : '');
         docs.push({
             subjId: ingSubj,
             file: e.file,
-            path: `${t.contentRoot || 'content'}/참조자료/${e.dir || '원료'}/${e.file}`,
+            path: `${t.contentRoot || 'content'}/참조자료/${e.dir}/${e.file}`,
             docName: e.name || e.file
         });
     }

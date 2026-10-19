@@ -92,6 +92,25 @@ test('참조자료 링크: [file.pdf](../참조자료/...) → source-link', () 
     assert.ok(html.includes('data-ref-html'), 'data-ref-html 속성');
 });
 
+// ==================== 지식 문서 dir 해석 (REFERENCE_INGREDIENTS 선언 기반) ====================
+
+test('지식 문서 dir는 시험 선언에서 유도 — 선언된 dir(원료)은 data-ref-html 뷰어', () => {
+    // cosmetic REFERENCE_INGREDIENTS가 dir:'원료'를 선언 → 원료/ 링크는 HTML 뷰어 경로
+    const md = '[승인 원료 목록.md](../참조자료/원료/approved_ingredients.md)';
+    const html = formatSectionContentForReader(md);
+    assert.ok(html.includes('data-ref-html'), '선언된 지식 dir는 data-ref-html 뷰어');
+    assert.ok(!html.includes('data-ref-md='), '지식 dir는 일반 ref_md 경로가 아님');
+});
+
+test('미선언 dir는 지식 문서 경로 미적용 — 일반 참조 MD 뷰어(data-ref-md)로 처리', () => {
+    // '첨가물'처럼 REFERENCE_INGREDIENTS에 미선언된 dir는 지식 뷰어 라우팅 대상이 아니며,
+    // 일반 참조자료 MD 규칙(data-ref-md)으로 처리된다 — dir 규약의 코드 고정 없음.
+    const md = '[임의 문서.md](../참조자료/임의dir/임의문서.md)';
+    const html = formatSectionContentForReader(md);
+    assert.ok(html.includes('data-ref-md'), '미선언 dir는 일반 ref MD 뷰어');
+    assert.ok(!html.includes('data-ref-html="../참조자료/임의dir'), '지식 뷰어 경로 미적용');
+});
+
 // ==================== 출처 링크 변환 ====================
 
 test('출처 링크: "출처: `../참조자료/...md`" → data-ref-md', () => {
