@@ -10,6 +10,8 @@
 
 새 시험 추가는 **앱 코드 변경 없이 콘텐츠 선언만으로** 완료된다. 절차는 4단계:
 
+> 📐 **참조 템플릿**: `content/exams/food/`는 완성 시험이 아니라 최소 구성을 실증한 **템플릿 팩**(Phase C 파일럿)이다 — 스키마·파일 배치·선언 형식의 복사 기준 (`content/exams/food/README.md` 참조).
+
 ```mermaid
 flowchart TD
     A["① scaffold:exam -- &lt;id&gt; --name"] --> A1["exams.json 자동 등록<br/>+ content/exams/&lt;id&gt;/ 골격"]

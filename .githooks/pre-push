@@ -9,6 +9,8 @@
 #     + 신선도 3종(drillfresh·embfresh·docbundles — 파생물 재생성 누락 차단)
 #   분류 불가 파일은 보수적으로 로직으로 간주한다.
 #
+# 스코프 모델: pre-push는 diffScoped(변경 태그별 필요 단계만) — 스코프 밖 드리프트·
+#   전수 단계는 .github/workflows/full-gate.yml 주 1회 + push/PR CI 풀세트가 보완.
 # 건너뛰기: SKIP_PREPUSH=1 git push · 전체 강제: PUSH_GATE_ALL=1 git push
 
 if [ "$SKIP_PREPUSH" = "1" ]; then
