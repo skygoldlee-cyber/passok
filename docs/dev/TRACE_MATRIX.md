@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 86e0ced88fd19d52
-> 생성: 2026-10-18 · 원천: SPEC.md(551개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 8241d30eca7fd264
+> 생성: 2026-10-19 · 원천: SPEC.md(551개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -500,7 +500,7 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | AI-01 | ✅ | 테스트 | — | tools/ai/ai_apply.js<br>tools/ai/lib/ai_common.js<br>tools/ai/lib/qbank.js | tests/unit/ai-tools.test.js | — | — |
-| AI-02 | ✅ | 테스트 | — | tools/ai/ai_distractors.js<br>tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/ai_lint.js<br>…외 4개 | tests/unit/ai-tools.test.js | — | — |
+| AI-02 | ✅ | 테스트 | — | tools/ai/ai_distractors.js<br>tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/ai_lint.js<br>…외 5개 | tests/unit/ai-tools.test.js | — | — |
 | AI-03 | ✅ | 테스트 | — | tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/ai_stmt_feedback.js<br>tools/ai/lib/citations.js<br>…외 1개 | tests/unit/ai-tools.test.js | — | — |
 | AI-04 | ✅ | 테스트 | — | tools/ai/ai_apply.js<br>tools/ai/ai_explain.js | tests/unit/ai-tools.test.js | — | — |
 | AI-05 | ✅ | 테스트 | — | tools/ai/ai_apply.js<br>tools/ai/ai_draft_questions.js<br>tools/ai/lib/textbook.js | tests/unit/ai-tools.test.js | — | — |
