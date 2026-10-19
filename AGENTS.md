@@ -161,7 +161,7 @@ npm.cmd run check:reffresh -- --update  # 승격 완료 후 PDF 해시 매니페
 # ※ ref_md는 `#L####` 라인 인용이 의존하므로 항상 시각적 줄 그대로(segment=False) 변환 — 엔진의 --no-segment 상당
 
 # 식약처 고시 감지 (참조 법령·고시 다문서 추적 — references.json referenceLaw에서 자동 유도)
-python ref-pipeline/check_mfds_notice.py --update   # 키: LAW_OC_KEY 환경변수 또는 ref-pipeline/.env.local.json (gitignore됨)
+python ref-pipeline/check_mfds_notice.py --update   # 키: LAW_OC_KEY — 루트 .env 또는 환경변수 (gitignore 대상)
 # ※ 대상 시험 해석(--exam > EXAM_CONTENT_ROOT > EXAM_ID > exams.json default)은 _exam_root.py 공용.
 #   baseline↔latest 비교를 notice_status.json docs[]에 기록 — 신규 고시 시 Actions 이슈 생성 +
 #   check_law_urls.js 검증. currentUrl=현행본 시리얼 URL — 앱이 ↗원문 링크 보정+'⏳ 시행 예정 개정본'

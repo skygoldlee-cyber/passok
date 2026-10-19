@@ -14,21 +14,10 @@
 const fs = require('fs');
 const path = require('path');
 const { getExamTargets } = require('../../build/exam_targets');
+const { loadEnv } = require('../../lib/env');
 
 const ROOT = path.resolve(__dirname, '..', '..', '..');
 const DRAFT_DIR = path.join(ROOT, 'tmp', 'ai_drafts');
-
-/** .env 로드 — 이미 설정된 환경변수는 덮어쓰지 않는다 (로컬 전용 키, AI-02) */
-function loadEnv() {
-    const envPath = path.join(ROOT, '.env');
-    if (!fs.existsSync(envPath)) return;
-    for (const line of fs.readFileSync(envPath, 'utf-8').split(/\r?\n/)) {
-        const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/);
-        if (!m || line.trimStart().startsWith('#')) continue;
-        const val = m[2].replace(/^["']|["']$/g, '');
-        if (process.env[m[1]] === undefined) process.env[m[1]] = val;
-    }
-}
 
 /**
  * CLI 인자 파싱 — `--flag` → flags 집합, `--key value`·`--key=value` → opts.

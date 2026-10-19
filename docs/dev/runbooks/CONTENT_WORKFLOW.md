@@ -260,7 +260,7 @@ npm.cmd run check:content -- --build   # build:data + 전 계층 검증을 한 �
 **8. 파생물 재생성 (`ref-pipeline/` — 상세 절차: `ref-pipeline/README.md`)**
 - [ ] `python ref-pipeline/batch_convert.py` — 교재·안내서·문제은행 → `{EXAM}/html/` 공유용 HTML 재생성 (manifest `subjects[].dir` 기준 glob이라 과목 추가 시에도 자동 대상화)
 - [ ] 오디오북 재생성(사용 시): `python ref-pipeline/audiobook/run_pipeline.py --subject {과목키} --tts` → `audiobook/mp3/` 갱신 후 §3.4 절차 (재생성 없이 MP3만 교체한 경우도 §3.4)
-- [ ] `python ref-pipeline/check_laws.py` — 인용 법령 현행성 재확인 → `{EXAM}/report/` (`LAW_OC` 키 필요, `업데이트 필요` 판정 시 §3.3-1로 연계)
+- [ ] `python ref-pipeline/check_laws.py` — 인용 법령 현행성 재확인 → `{EXAM}/report/` (`LAW_OC_KEY` 필요 — 루트 `.env`, `업데이트 필요` 판정 시 §3.3-1로 연계)
 
 ### 3.2 과목 추가
 
@@ -541,7 +541,7 @@ flowchart LR
 |------|-------------|------|
 | `{contentRoot}/참조자료/ref_md_v2/` → `ref_md/과목N/` | `ref-pipeline/convert.py` (엔진 `pdf2md.py`) | `{contentRoot}/참조자료/{공통,과목N}/*.pdf` |
 | `{contentRoot}/html/*.html` | `ref-pipeline/batch_convert.py` | `교재/*.md`·`학습안내서.md`·`문제은행/*.md`·`report/*.md` |
-| `{contentRoot}/report/법령최신확인결과.md` | `ref-pipeline/check_laws.py` | 내장 법령 목록 + law.go.kr API (`LAW_OC`) |
+| `{contentRoot}/report/법령최신확인결과.md` | `ref-pipeline/check_laws.py` | 내장 법령 목록 + law.go.kr API (`LAW_OC_KEY`) |
 | `{contentRoot}/audiobook/{scripts,chunks,mp3}/` | `ref-pipeline/audiobook/run_pipeline.py` | `{contentRoot}/교재/*.md` |
 
 > ※ `{dataRoot}/drills/`는 `{dataRoot}/exams/`의 2차 파생물입니다 — 문제은행 변경 시 `build:data` 후 `npm run build:drills`로 재생성해야 최신 문항이 반영됩니다. 재생성 누락은 `npm run check:drillfresh`(check:content에 포함)가 감지합니다.

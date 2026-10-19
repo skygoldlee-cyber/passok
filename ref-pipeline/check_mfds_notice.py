@@ -33,7 +33,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _exam_root import exam_root, load_refs_cfg, parse_ref_filename, utf8_stdio  # noqa: E402
+from _exam_root import exam_root, load_dotenv, load_refs_cfg, parse_ref_filename, utf8_stdio  # noqa: E402
 
 utf8_stdio()
 ROOT = Path(__file__).resolve().parent.parent
@@ -63,11 +63,15 @@ def rule_name():
 
 
 def load_oc_key():
-    """OC 키 해석 — ① LAW_OC_KEY 환경변수 → ② ref-pipeline/.env.local.json (gitignore됨)."""
+    """OC 키 해석 — ① LAW_OC_KEY 환경변수 → ② 루트 .env → ③ 레거시 ref-pipeline/.env.local.json."""
     oc = os.environ.get('LAW_OC_KEY', '').strip()
     if oc:
         return oc
-    f = Path(__file__).resolve().parent / '.env.local.json'
+    load_dotenv()
+    oc = os.environ.get('LAW_OC_KEY', '').strip()
+    if oc:
+        return oc
+    f = Path(__file__).resolve().parent / '.env.local.json'  # 레거시 — 루트 .env로 통합됨
     if f.exists():
         try:
             return str(json.loads(f.read_text(encoding='utf-8')).get('LAW_OC_KEY', '')).strip()
@@ -80,8 +84,8 @@ def api_get(path, params, target='admrul'):
     oc = load_oc_key()
     if not oc:
         print('!! LAW_OC_KEY가 없습니다. 둘 중 하나로 설정하세요:')
-        print('   ① 환경변수   PowerShell: $env:LAW_OC_KEY = "<키>"')
-        print('   ② 로컬 파일  ref-pipeline/.env.local.json → {"LAW_OC_KEY": "<키>"} (gitignore됨, 커밋 불가)')
+        print('   ① 루트 .env   LAW_OC_KEY=<키>  (한 줄 추가 — gitignore 대상)')
+        print('   ② 환경변수    PowerShell: $env:LAW_OC_KEY = "<키>"')
         sys.exit(1)
     q = urllib.parse.urlencode({'OC': oc, 'target': target, 'type': 'JSON', **params})
     last_err = None

@@ -19,7 +19,8 @@ check_laws.py (v2) — 시험 대상 8개 법령의 현행 호수·시행일 확
   * HTML 검색페이지 스크래핑(v1 방식)은 봇 차단이 잦아 폐기하고 공식 API로 교체.
 
 ■ 사용법
-    export LAW_OC=your_oc_id
+    루트 .env: LAW_OC_KEY=your_oc_id                    # 권장 — gitignore 대상
+    export LAW_OC_KEY=your_oc_id                        # 구 이름 LAW_OC도 인식
     python ref-pipeline/check_laws.py                 # 콘솔 출력 + report/법령최신확인결과.md 생성
     python ref-pipeline/check_laws.py your_oc_id      # OC를 인자로 전달해도 됨
     python ref-pipeline/check_laws.py --exam <id>     # 다른 시험 대상 (기본: env/기본 시험)
@@ -36,7 +37,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _exam_root import exam_root, load_refs_cfg, parse_ref_filename, utf8_stdio  # noqa: E402
+from _exam_root import exam_root, load_dotenv, load_refs_cfg, parse_ref_filename, utf8_stdio  # noqa: E402
 
 
 def _parse_args(argv):
@@ -60,7 +61,8 @@ def _parse_args(argv):
 _exam_arg, _oc_arg = _parse_args(sys.argv[1:])
 EXAM_ROOT = exam_root(_exam_arg)
 
-OC = os.environ.get("LAW_OC") or _oc_arg
+load_dotenv()
+OC = os.environ.get("LAW_OC_KEY") or os.environ.get("LAW_OC") or _oc_arg
 API = "https://www.law.go.kr/DRF/lawSearch.do"
 TODAY = datetime.date.today().isoformat()
 

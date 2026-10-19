@@ -33,6 +33,7 @@
 const { execSync, spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { loadEnv } = require('../lib/env');
 const { stampSwVersion } = require('../build/stamp_sw_version.js');
 const { stampReleaseNotes } = require('../build/stamp_release_notes.js');
 
@@ -125,6 +126,7 @@ async function queryCiRun(sha) {
     const m = remote.match(/[:/]([^/:]+\/[^/]+?)(?:\.git)?$/);
     if (!m) throw new Error(`origin URL에서 owner/repo 해석 실패: ${remote}`);
     const headers = { 'Accept': 'application/vnd.github+json', 'User-Agent': 'passory-deploy' };
+    loadEnv();
     const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
     if (token) headers.Authorization = `Bearer ${token}`;
     const res = await fetch(
