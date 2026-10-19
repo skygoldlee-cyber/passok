@@ -84,8 +84,6 @@
 ```bash
 # Unit 테스트만 실행
 npm test
-# 또는
-npm run test:unit
 
 # DOM 테스트만 실행
 npm run test:dom
@@ -138,7 +136,6 @@ npm run hooks:install
 | 스크립트 | 명령 | 비고 |
 |----------|------|------|
 | `test` | `node --test tests/unit/**/*.test.js` | Unit 테스트 |
-| `test:unit` | `node --test tests/unit/**/*.test.js` | `test`와 동일 |
 | `test:dom` | `vitest run` | DOM 테스트 (jsdom) |
 | `coverage` | `vitest run --coverage` | DOM 테스트 + V8 커버리지 (src/ 대상, `coverage/` 출력) |
 | `coverage:unit` | `c8 ... node --test tests/unit/**/*.test.js` | 유닛 테스트 커버리지 (src/ 대상, `coverage-unit/` 출력) |
