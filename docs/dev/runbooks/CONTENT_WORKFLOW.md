@@ -149,10 +149,11 @@ flowchart TD
 ### 2.2 부분 빌드 (특정 과목만)
 
 ```powershell
-npm.cmd run build:data:law           # 1과목만
-npm.cmd run build:data:manufacturing # 2과목만
-npm.cmd run build:data:safety        # 3과목만
-npm.cmd run build:data:understanding # 4과목만
+node tools/build/index.js --only law            # 1과목만
+node tools/build/index.js --only manufacturing  # 2과목만
+node tools/build/index.js --only safety         # 3과목만
+node tools/build/index.js --only understanding  # 4과목만
+# ※ 과목 키는 manifest.exams[].subject — 시험별로 다름 (별칭 스크립트는 제공하지 않음)
 ```
 
 ### 2.3 개별 스크립트 실행

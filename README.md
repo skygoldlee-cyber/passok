@@ -278,8 +278,7 @@ npm.cmd run deploy
 # 전체 빌드
 npm run build:data
 
-# 부분 빌드 (변경 과목만)
-npm run build:data:law
+# 부분 빌드 (변경 과목만 — 과목 키 지정)
 node tools/build/index.js --only law,safety
 
 # file:// 폴백 번들 재생성 (교재 MD 수정 시)
