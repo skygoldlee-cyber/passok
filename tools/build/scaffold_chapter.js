@@ -168,4 +168,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { buildChapterSkeleton, encodeRefUrl, listRefDocs, parseArgs };
+module.exports = { buildChapterSkeleton, encodeRefUrl, refLink, listRefDocs, parseArgs };
