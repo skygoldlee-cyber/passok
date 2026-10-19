@@ -82,6 +82,7 @@
     "sbom": "npm sbom --sbom-format spdx > sbom.spdx.json",
     "build:study-md": "node tools/build/build_study_md_bundle.js",
     "build:story": "node tools/build/build_story_textbooks.js",
+    "build:refmap": "node tools/build/build_ref_mapping.js",
     "test": "node --test \"tests/unit/**/*.test.js\"",
     "test:dom": "vitest run",
     "coverage": "vitest run --coverage",
