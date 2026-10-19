@@ -42,6 +42,16 @@ const SAMPLE_MD_NO_QUIZ = `# 3과목: 화장품 제조
 | 원료A | 일반 설명 (기출/중요 마커 없음) |
 `;
 
+const SAMPLE_MD_BACKTICK_MARKERS = `# 4과목: 백틱 마커 정제
+
+## 1단원: 사용제한 원료
+
+| 용어 | 사용한도 |
+| --- | --- |
+| 헥세티딘 \`🎯 기출\` | 사용 후 씻어내는 제품에 0.1% |
+| 호모게나이저 \`기출\` | 내용물의 혼합 및 분산을 위해 사용하는 터빈형 회전날개 교반기 |
+`;
+
 // --- parseMarkdownFile 테스트 ---
 
 test('parseMarkdownFile: 테이블에서 카드 추출', () => {
@@ -125,6 +135,14 @@ test('parseMarkdownFile: 범용 접미사 복합 용어는 카드로 추출', ()
     const terms = cards.map(c => c.term);
     assert.ok(terms.includes('보호 기능'), "'…기능' 복합 용어가 카드로 살아있어야 함");
     assert.ok(terms.includes('자격시험 합격 기준'), "'…기준' 복합 용어가 카드로 살아있어야 함");
+});
+
+test('parseMarkdownFile: 백틱으로 감싼 마커는 term에 잔재를 남기지 않음', () => {
+    const { cards } = parseMarkdownFile(SAMPLE_MD_BACKTICK_MARKERS, 'manufacturing', '1.restricted.md', 'ch1');
+    const terms = cards.map(c => c.term);
+    assert.ok(terms.includes('헥세티딘'), '백틱 마커가 제거된 용어로 추출되어야 함');
+    assert.ok(terms.includes('호모게나이저'), '비표준 `기출` 마커도 제거되어야 함');
+    assert.ok(terms.every(t => !t.includes('`') && !/기출|중요|필수/.test(t)), 'term에 마커·백틱 잔재 금지');
 });
 
 test('parseMarkdownFile: 단일 범용어는 여전히 탈락', () => {

@@ -11,7 +11,7 @@
       }
     },
     "manufacturing": {
-      "cards": 403,
+      "cards": 401,
       "quizzes": 189,
       "files": {
         "교재/manufacturing/2과목_제조및품질관리_표준형.md": {
@@ -21,22 +21,22 @@
       }
     },
     "safety": {
-      "cards": 222,
-      "quizzes": 95,
+      "cards": 221,
+      "quizzes": 96,
       "files": {
         "교재/safety/3과목_유통화장품안전관리_표준형.md": {
           "cards": 271,
-          "quizzes": 95
+          "quizzes": 96
         }
       }
     },
     "understanding": {
-      "cards": 423,
-      "quizzes": 192,
+      "cards": 421,
+      "quizzes": 194,
       "files": {
         "교재/understanding/4과목_맞춤형화장품의이해_표준형.md": {
           "cards": 463,
-          "quizzes": 197
+          "quizzes": 199
         }
       }
     }

@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-19T04:01:39.546Z",
+  "generatedAt": "2026-10-19T04:35:32.161Z",
   "subjects": [
     {
       "key": "law",
@@ -12,13 +12,13 @@ var DATA_REGISTRY = {
       "shortName": "화장품법",
       "contentHash": "3b2b5eda",
       "stats": {
-        "cards": 176,
-        "quizzes": 79,
+        "cards": 175,
+        "quizzes": 80,
         "chapters": 1,
         "sourceCards": 195,
         "sourceQuizzes": 83,
-        "targetCards": 176,
-        "targetQuizzes": 79
+        "targetCards": 175,
+        "targetQuizzes": 80
       }
     },
     {
@@ -26,12 +26,12 @@ var DATA_REGISTRY = {
       "order": 2,
       "name": "화장품 제조 및 품질관리",
       "shortName": "제조·품질",
-      "contentHash": "8efe3bda",
+      "contentHash": "9394aaaa",
       "stats": {
         "cards": 237,
         "quizzes": 107,
         "chapters": 1,
-        "sourceCards": 403,
+        "sourceCards": 401,
         "sourceQuizzes": 189,
         "targetCards": 237,
         "targetQuizzes": 107
@@ -42,14 +42,14 @@ var DATA_REGISTRY = {
       "order": 3,
       "name": "유통화장품 안전관리",
       "shortName": "안전관리",
-      "contentHash": "b257f4a3",
+      "contentHash": "19253be7",
       "stats": {
-        "cards": 293,
+        "cards": 291,
         "quizzes": 132,
         "chapters": 1,
-        "sourceCards": 222,
-        "sourceQuizzes": 95,
-        "targetCards": 293,
+        "sourceCards": 221,
+        "sourceQuizzes": 96,
+        "targetCards": 291,
         "targetQuizzes": 132
       },
       "supplement": "./data/exams/cosmetic/supplements/safety.js",
@@ -60,15 +60,15 @@ var DATA_REGISTRY = {
       "order": 4,
       "name": "맞춤형화장품의 이해",
       "shortName": "맞춤형화장품",
-      "contentHash": "45b19318",
+      "contentHash": "5528b734",
       "stats": {
-        "cards": 537,
-        "quizzes": 241,
+        "cards": 535,
+        "quizzes": 243,
         "chapters": 1,
-        "sourceCards": 423,
-        "sourceQuizzes": 192,
-        "targetCards": 537,
-        "targetQuizzes": 241
+        "sourceCards": 421,
+        "sourceQuizzes": 194,
+        "targetCards": 535,
+        "targetQuizzes": 243
       },
       "supplement": "./data/exams/cosmetic/supplements/understanding.js",
       "supplementGlobal": "STUDY_SUPPLEMENT_understanding"
