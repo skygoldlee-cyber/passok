@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-19T12:16:52.632Z",
+  "generatedAt": "2026-10-19T12:58:41.991Z",
   "subjects": [
     {
       "key": "law",
@@ -12,13 +12,13 @@ var DATA_REGISTRY = {
       "shortName": "화장품법",
       "contentHash": "0c4459c7",
       "stats": {
-        "cards": 178,
-        "quizzes": 81,
+        "cards": 187,
+        "quizzes": 86,
         "chapters": 1,
         "sourceCards": 218,
         "sourceQuizzes": 95,
-        "targetCards": 178,
-        "targetQuizzes": 81
+        "targetCards": 187,
+        "targetQuizzes": 86
       }
     },
     {
@@ -26,15 +26,15 @@ var DATA_REGISTRY = {
       "order": 2,
       "name": "화장품 제조 및 품질관리",
       "shortName": "제조·품질",
-      "contentHash": "9394aaaa",
+      "contentHash": "18a9cceb",
       "stats": {
-        "cards": 241,
-        "quizzes": 110,
+        "cards": 253,
+        "quizzes": 116,
         "chapters": 1,
-        "sourceCards": 401,
-        "sourceQuizzes": 189,
-        "targetCards": 241,
-        "targetQuizzes": 110
+        "sourceCards": 419,
+        "sourceQuizzes": 198,
+        "targetCards": 253,
+        "targetQuizzes": 116
       }
     },
     {
@@ -42,15 +42,15 @@ var DATA_REGISTRY = {
       "order": 3,
       "name": "유통화장품 안전관리",
       "shortName": "안전관리",
-      "contentHash": "19253be7",
+      "contentHash": "1ec0bba6",
       "stats": {
-        "cards": 297,
-        "quizzes": 135,
+        "cards": 311,
+        "quizzes": 144,
         "chapters": 1,
-        "sourceCards": 221,
-        "sourceQuizzes": 96,
-        "targetCards": 297,
-        "targetQuizzes": 135
+        "sourceCards": 248,
+        "sourceQuizzes": 113,
+        "targetCards": 311,
+        "targetQuizzes": 144
       },
       "supplement": "./data/exams/cosmetic/supplements/safety.js",
       "supplementGlobal": "STUDY_SUPPLEMENT_safety"
@@ -60,15 +60,15 @@ var DATA_REGISTRY = {
       "order": 4,
       "name": "맞춤형화장품의 이해",
       "shortName": "맞춤형화장품",
-      "contentHash": "5528b734",
+      "contentHash": "cc36023b",
       "stats": {
-        "cards": 545,
-        "quizzes": 248,
+        "cards": 572,
+        "quizzes": 263,
         "chapters": 1,
-        "sourceCards": 421,
-        "sourceQuizzes": 194,
-        "targetCards": 545,
-        "targetQuizzes": 248
+        "sourceCards": 438,
+        "sourceQuizzes": 203,
+        "targetCards": 572,
+        "targetQuizzes": 263
       },
       "supplement": "./data/exams/cosmetic/supplements/understanding.js",
       "supplementGlobal": "STUDY_SUPPLEMENT_understanding"
@@ -81,9 +81,9 @@ var DATA_REGISTRY = {
       "part": 1,
       "title": "화장품법의 이해 (274제)",
       "file": "과목1_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject1.e680f471.js",
+      "bundle": "./data/exams/cosmetic/exams/subject1.c8774f0b.js",
       "global": "EXAM_DATA_subject1",
-      "contentHash": "e680f471",
+      "contentHash": "c8774f0b",
       "stats": {
         "questions": 274
       }
@@ -94,9 +94,9 @@ var DATA_REGISTRY = {
       "part": 1,
       "title": "화장품 제조 및 품질관리 (370제)",
       "file": "과목2_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject2.ef25a08d.js",
+      "bundle": "./data/exams/cosmetic/exams/subject2.00bf85f8.js",
       "global": "EXAM_DATA_subject2",
-      "contentHash": "ef25a08d",
+      "contentHash": "00bf85f8",
       "stats": {
         "questions": 370
       }
@@ -107,9 +107,9 @@ var DATA_REGISTRY = {
       "part": 1,
       "title": "유통화장품 안전관리 (456제)",
       "file": "과목3_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject3.5b8c22d8.js",
+      "bundle": "./data/exams/cosmetic/exams/subject3.0c7286d1.js",
       "global": "EXAM_DATA_subject3",
-      "contentHash": "5b8c22d8",
+      "contentHash": "0c7286d1",
       "stats": {
         "questions": 456
       }
@@ -120,9 +120,9 @@ var DATA_REGISTRY = {
       "part": 1,
       "title": "맞춤형화장품의 이해 (837제)",
       "file": "과목4_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject4.ccbfd298.js",
+      "bundle": "./data/exams/cosmetic/exams/subject4.cd86053e.js",
       "global": "EXAM_DATA_subject4",
-      "contentHash": "ccbfd298",
+      "contentHash": "cd86053e",
       "stats": {
         "questions": 837
       }
