@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 506523d2312666c0
-> 생성: 2026-10-19 · 원천: SPEC.md(552개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 86e77181379e14d5
+> 생성: 2026-10-19 · 원천: SPEC.md(553개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 552개 — 문서 연결 393 · 소스 연결 492 · 테스트 연결 525 · 보고서 연결 109
+**커버리지 요약**: 요구사항 553개 — 문서 연결 393 · 소스 연결 492 · 테스트 연결 525 · 보고서 연결 109
 
 ---
 
@@ -692,6 +692,7 @@
 | DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | tools/check/check_uitext.js | tests/unit/multi-exam-gates.test.js | — | — |
 | DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-DEV-08<br>DOC-DEV-09<br>DOC-DSN-33 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/app-shell.js<br>src/pwa-manifest.js | tests/unit/exam-context.test.js | — | — |
+| DA-15 | ✅ | — | — | — | — | — | — |
 
 ## 5.2 안정적 ID 체계
 
