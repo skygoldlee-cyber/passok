@@ -31,7 +31,7 @@
 
 | 항목 | 현황 | 재개 조건 |
 |---|---|---|
-| 카드팁 미커버 카드 | ~368장 대상 (min-len 60 기준) — 11차 배치 40건 초안 생성·리뷰 대기 (`tmp/ai_drafts/cardtip_*`) | 리뷰 후 `ai:cards --apply --write` — 오판 우선 선별은 `fc_weak` 백업 축적 후 |
+| ~~카드팁 미커버 카드~~ | ✅ 소진 완료 (2026-10-19 — 11~12차로 348건 전량 편입, 누적 748건) — 잔여 20장은 근거 부재 스킵 | — |
 | combo 진술 피드백 확대 | 240건/6,699 거짓 진술 시드 — 초기 문항 구간 우선 커버 | combo 드릴 플레이 → 백업 내보내기 후 `ai:stmtfb --stats <backup.json>`으로 오판 우선순위 생성 |
 | ~~`tmp/ai_drafts/` 초안 아카이브~~ | ✅ 정리 완료 (2026-10-19 — 리뷰 완료 초안·리포트 삭제) | — |
 | 정보성 린트 잔여 | L1 부정 발문 240건·L4 장문 6건·L2/L3 소수 | 선택적 소화 — 실질 결함 아님 |
@@ -45,6 +45,12 @@
 - **law.go.kr 키**: `_exam_root.load_dotenv()` 신설 — `check_mfds_notice`·`fetch_revision`·`check_laws`가 루트 `.env`의 `LAW_OC_KEY`를 읽음 (레거시 `LAW_OC` env·`ref-pipeline/.env.local.json`은 후순위 폴백 유지)
 - **파일 통합**: `.env.local`의 VERCEL_OIDC_TOKEN을 `.env`로 이관 후 삭제 — 흩어진 로컬 시크릿을 루트 `.env` 하나로 통합 (gitignore `.env*` 커버). `.env`에 SUPABASE_SECRET_KEY·LAW_OC_KEY·ELEVENLABS_API_KEY 슬롯 마련 (빈 값 — 채우면 즉시 동작)
 - **주의**: Vercel CLI가 `.env.local`을 자체 재생성할 수 있음 (OIDC 토큰은 CLI 관리 — `vercel` 명령 시 자동 재작성되면 그대로 두면 됨)
+
+## 2026-10-19 AI 도구 12차 배치 — 카드팁 전량 소진 348건 (AI-18)
+
+- **카드팁 완주** (ai:cards): 11차 40건 + 12차 연속 루프 308건 = **348건 편입** — cosmetic 742건 + food 6건 = **누적 748건**
+- **근거 부재 20장 스킵**: 교재에서 용어 위치 미발견 카드(원료 명명 규칙 카드 등)는 비근거 팁 생성 차단 가드로 미생성 — 정상 동작
+- 잔여 후속 표의 '카드팁 미커버 카드' 항목 해소
 
 ## 2026-10-19 AI 도구 11차 배치 — 카드팁 +40건 초안·tmp 정리 (AI-18)
 
