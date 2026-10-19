@@ -11,11 +11,13 @@ const cleanText = (text) => {
     return text
         .replace(/<br\s*\/?>/gi, '\n')
         .replace(/&nbsp;/g, ' ')
+        .replace(/`\s*(?:🔖기출|📌중요|🎯\s*기출|🎯\s*중요|★\s*필수|기출|중요)\s*`/g, '')
         .replace(/🔖기출/g, '')
         .replace(/📌중요/g, '')
         .replace(/🎯\s*기출/g, '')
         .replace(/🎯\s*중요/g, '')
         .replace(/★\s*필수/g, '')
+        .replace(/`{2,}/g, '')
         .trim();
 };
 
