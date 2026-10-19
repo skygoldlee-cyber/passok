@@ -37,6 +37,15 @@
 | 정보성 린트 잔여 | L1 부정 발문 240건·L4 장문 6건·L2/L3 소수 | 선택적 소화 — 실질 결함 아님 |
 | ~~`tmp/` 조사 스크립트~~ | ✅ 정리 완료 (2026-10-19 — 일회성 스크립트 25개 삭제, 61c9404b) | — |
 
+## 2026-10-19 로컬 시크릿 단일 소스화 — 루트 .env 통합 (AI-02)
+
+- **공유 로더 신설**: `tools/lib/env.js` — ai_common의 loadEnv를 추출해 범용화 (dotenv 의존 없는 최소 파서, 쉘 env 우선)
+- **`.env` 로딩 확장**: `supabase_ops.js`(SUPABASE_SECRET_KEY/URL — report:*·admin:grant-pro 일괄 적용)·`error_report`·`funnel_report`(자체 복제 경로)에 loadEnv 추가 — 기존엔 `$env:` 수동 주입만 가능했던 운영 CLI가 .env로 동작
+- **Python 경로**: `tts_elevenlabs.py` `_load_repo_dotenv()` — ELEVENLABS_API_KEY를 루트 .env에서도 해석
+- **law.go.kr 키**: `_exam_root.load_dotenv()` 신설 — `check_mfds_notice`·`fetch_revision`·`check_laws`가 루트 `.env`의 `LAW_OC_KEY`를 읽음 (레거시 `LAW_OC` env·`ref-pipeline/.env.local.json`은 후순위 폴백 유지)
+- **파일 통합**: `.env.local`의 VERCEL_OIDC_TOKEN을 `.env`로 이관 후 삭제 — 흩어진 로컬 시크릿을 루트 `.env` 하나로 통합 (gitignore `.env*` 커버). `.env`에 SUPABASE_SECRET_KEY·LAW_OC_KEY·ELEVENLABS_API_KEY 슬롯 마련 (빈 값 — 채우면 즉시 동작)
+- **주의**: Vercel CLI가 `.env.local`을 자체 재생성할 수 있음 (OIDC 토큰은 CLI 관리 — `vercel` 명령 시 자동 재작성되면 그대로 두면 됨)
+
 ## 2026-10-19 AI 도구 11차 배치 — 카드팁 +40건 초안·tmp 정리 (AI-18)
 
 - **카드팁 11차** (ai:cards --limit 40): law 13 + manufacturing 27 = 40건 초안 생성 (근거 부재 6장 스킵) — `tmp/ai_drafts/cardtip_*.md`, 리뷰 후 --apply 대기

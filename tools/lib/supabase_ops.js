@@ -9,9 +9,11 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const { loadEnv } = require('./env');
 
 /** SUPABASE_URL env 우선, 미설정 시 src/supabase-config.js에서 읽음 */
 function supabaseUrl() {
+    loadEnv();
     if (process.env.SUPABASE_URL) return process.env.SUPABASE_URL.replace(/\/$/, '');
     const cfg = fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'supabase-config.js'), 'utf8');
     const m = cfg.match(/SUPABASE_URL\s*=\s*'([^']+)'/);
@@ -25,9 +27,11 @@ function supabaseUrl() {
  * @returns {string|null}
  */
 function requireSecret(scriptName) {
+    loadEnv();
     const secret = process.env.SUPABASE_SECRET_KEY;
     if (secret) return secret;
-    console.error('SUPABASE_SECRET_KEY 미설정 — Secret(구 service_role) 키를 env로 전달하세요.');
+    console.error('SUPABASE_SECRET_KEY 미설정 — Secret(구 service_role) 키를 루트 .env 또는 env로 전달하세요.');
+    console.error('  .env: SUPABASE_SECRET_KEY=sb_secret_...  (한 줄 추가)');
     console.error('  PowerShell: $env:SUPABASE_SECRET_KEY="sb_secret_..."'
         + (scriptName ? ` ; node ${scriptName}` : ''));
     return null;

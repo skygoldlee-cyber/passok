@@ -18,6 +18,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const { loadEnv } = require('../lib/env');
 
 // ── 순수 집계 (테스트 대상) ──────────────────────────────────
 
@@ -112,6 +113,7 @@ from s;`;
 function fmtPct(x) { return x === null ? 'n/a' : `${(x * 100).toFixed(1)}%`; }
 
 async function main() {
+    loadEnv();
     const args = process.argv.slice(2);
     const di = args.indexOf('--days');
     const days = di >= 0 ? parseInt(args[di + 1], 10) : 30;
@@ -122,7 +124,8 @@ async function main() {
 
     const secret = process.env.SUPABASE_SECRET_KEY;
     if (!secret) {
-        console.error('SUPABASE_SECRET_KEY 미설정 — Secret(구 service_role) 키를 env로 전달하세요.');
+        console.error('SUPABASE_SECRET_KEY 미설정 — Secret(구 service_role) 키를 루트 .env 또는 env로 전달하세요.');
+        console.error('  .env: SUPABASE_SECRET_KEY=sb_secret_...  (한 줄 추가)');
         console.error('  PowerShell: $env:SUPABASE_SECRET_KEY="sb_secret_..."');
         console.error('\n또는 대시보드에서 동등 쿼리 실행:\n');
         console.log(FALLBACK_SQL);
