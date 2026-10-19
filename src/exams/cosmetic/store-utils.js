@@ -54,6 +54,42 @@ export function pickEnum(value, allowed) {
   return typeof value === 'string' && allowed.includes(value) ? value : '';
 }
 
+/** 문자열 배열 정제 — 비문자열 제거·trim·개수/길이 상한 (내부 헬퍼) */
+function sanitizeStringList(list, maxItems, maxLen) {
+  if (!Array.isArray(list)) return [];
+  return list
+    .map(v => (typeof v === 'string' ? v.trim() : ''))
+    .filter(Boolean)
+    .slice(0, maxItems)
+    .map(v => v.slice(0, maxLen));
+}
+
+// 고객 공통 필드 상한 — customer 정본·포뮬러 인라인 스냅샷 공유
+const MAX_CUSTOMER_NAME_LEN = 30;
+const MAX_ALLERGIES = 15;
+const MAX_ALLERGY_LEN = 60;
+const MAX_PRODUCTS_LEN = 300;
+
+/**
+ * 고객 공통 필드 정제 — name·age·gender·skinType·concerns·allergies·pregnancy·products.
+ * customer-store(정본 카드)와 formula-store(인라인 스냅샷)가 공유한다.
+ * options는 CUSTOMER_OPTIONS(formula-store 정본) — 순환 import 회피를 위해 인자로 받는다.
+ * 스토어 전용 필드(scalpType·purpose·consultLog·formulation)는 호출처가 추가한다.
+ */
+export function sanitizeCustomerFields(data, options) {
+  return {
+    name: clampStr(data.name || '', MAX_CUSTOMER_NAME_LEN).trim(),
+    age: numOrNull(data.age),
+    gender: pickEnum(data.gender, options.gender),
+    skinType: pickEnum(data.skinType, options.skinType),
+    concerns: sanitizeStringList(data.concerns, options.concerns.length, 30)
+      .filter(v => options.concerns.includes(v)),
+    allergies: sanitizeStringList(data.allergies, MAX_ALLERGIES, MAX_ALLERGY_LEN),
+    pregnancy: pickEnum(data.pregnancy, options.pregnancy),
+    products: clampStr(data.products || '', MAX_PRODUCTS_LEN).trim(),
+  };
+}
+
 /** 'YYYY-MM-DD' 형식만 통과 (아니면 '') */
 export function clampDate(s) {
   const v = clampStr(s, 10).trim();

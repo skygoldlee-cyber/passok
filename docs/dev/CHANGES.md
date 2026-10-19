@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-19 뷰 렌더 대형 함수 분할 + 고객 정제 이중 정의 통합 (리팩터링)
+
+- **동작 변경 없음** — 순수 추출 리팩터링. 대상 3건은 코드베이스 감사에서 식별된 유일한 1순위 후보
+- **`reader-render.js`**: `renderChapterContentInternal`(454라인 → ~130라인)을 관심사별 모듈 헬퍼로 분할 — `renderToc`(TOC HTML+클릭·툴팁 바인딩) · `resolveChapterRefPath` · `injectChapterActions` · `renderAudioPlayerArea` · `buildSectionsHtml` · `bindTocJumpLinks`(5단계 매칭 폴백). 챕터 출처 `''` 시맨틱(mapSourceToRef 호출 결과) 보존
+- **`textbook-search.js`**: `performTextbookSearch`(221라인 → ~110라인) — `applyResultTiers`(RESULT_TIERS 정렬·상한) · `renderSearchResultCard`→`renderDocResultCard`/`renderSectionResultCard`(문서 딥링크·섹션 카드 분기) · `renderGlossaryCards`(용어 정의 그룹) 추출
+- **고객 정제 통합**: `sanitizeCustomer`가 formula-store(인라인 스냅샷)와 customer-store(정본 카드)에 이중 정의돼 있던 것을 `store-utils.js`의 `sanitizeCustomerFields`(공통 8필드)로 통합 — CUSTOMER_OPTIONS는 순환 import 회피를 위해 인자 전달. 스토어 전용 필드(formulation·scalpType·purpose·consultLog·notes)와 포뮬러의 전 필드 빈값 null 규칙은 각 스토어가 유지. 부수효과: 포뮬러 스냅샷의 concerns가 정본과 동일한 trim·길이 상한 적용 (유효 값 동일 — 동작 동등)
+- **검증**: 유닛 1,430(스토어 직접 105) · DOM 검색·리더·고객 40+ · eslint·tsc·check:imports 클린
+
 ## 2026-10-19 로컬 시크릿 위생 — check:env 게이트 신설 + 시크릿 소스 단일화
 
 - **배경**: `.env`는 gitignore라 추적 파일 스캔(check:secrets)·pre-commit·CI 어디에도 잡히지 않아 만료 토큰·미선언 키가 방치되는 사각이었음 — 실측으로 만료된 VERCEL_OIDC_TOKEN 발견
