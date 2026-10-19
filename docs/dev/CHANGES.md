@@ -14,6 +14,7 @@
 - **잔존 결합 정리**: `exam_targets.js` 레거시 폴백 `id:'cosmetic'`→null · `check_docs_paths.js` 플레이스홀더 치환의 'cosmetic' 리터럴→getDefaultExamRoots 동적 해석 · `check_refmerge.js` REF_MD 경로→동적 해석 · domain-map `examLiteralAllow` 스테일 항목(exam-context) 제거
 - **예외 명단**: law.go.kr API target 구분자('law' — 법령 vs 행정규칙, 과목 키와 무관) 2곳 · check_adlint_coverage(cosmetic 도메인 전용 감사 도구) — ALLOWED에 사유 기재
 - **테스트**: da15 테스트에 게이트 자체 전수 스캔 0건 검증 추가 (유닛 통과)
+- **후속 수정**: `exam-context.js` 기본값 해석 — vitest SSR 변환에서 import.meta.url이 file: 스킴이 아니어서 fileURLToPath 실패 → window.EXAMS_LIST 우선 참조 + cwd 기반 exams.json 폴백 (브라우저·jsdom·Node 3환경 모두 레지스트리 해석, DOM 757건 통과)
 
 ## 2026-10-19 DA-15 적합성 감사 — 로직의 콘텐츠 독립성 정리 (DA-15)
 
