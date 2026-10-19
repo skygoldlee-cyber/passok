@@ -14,7 +14,8 @@ const CURRENT_EXAM_KEY = 'current_exam';
 let _defaultExamId;
 function resolveDefaultExamId() {
     if (_defaultExamId !== undefined) return _defaultExamId;
-    const list = (globalThis.EXAMS_LIST && globalThis.EXAMS_LIST.exams) || [];
+    const list = ((globalThis.EXAMS_LIST && globalThis.EXAMS_LIST.exams)
+        || (typeof window !== 'undefined' && window.EXAMS_LIST && window.EXAMS_LIST.exams)) || [];
     const def = (Array.isArray(list) && (list.find(e => e && e.default) || list[0])) || null;
     if (def && def.id) {
         _defaultExamId = def.id;
@@ -24,8 +25,12 @@ function resolveDefaultExamId() {
             // Node·테스트 환경 — 번들 없이도 레지스트리 원본(content/exams.json)을 직접 읽는다.
             try {
                 const fs = proc.getBuiltinModule('fs');
+                const pathMod = proc.getBuiltinModule('path');
                 const { fileURLToPath } = proc.getBuiltinModule('url');
-                const raw = fs.readFileSync(fileURLToPath(new URL('../content/exams.json', import.meta.url)), 'utf-8');
+                // import.meta.url이 file: 스킴이 아닌 변환 환경(vitest SSR 등)은 cwd에서 해석
+                let file = pathMod.resolve(proc.cwd(), 'content', 'exams.json');
+                try { file = fileURLToPath(new URL('../content/exams.json', import.meta.url)); } catch { /* cwd 경로 사용 */ }
+                const raw = fs.readFileSync(file, 'utf-8');
                 const exams = JSON.parse(raw).exams || [];
                 const d = exams.find(e => e && e.default) || exams[0];
                 _defaultExamId = (d && d.id) || null;
