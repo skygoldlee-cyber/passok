@@ -1211,6 +1211,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | ROAD-Q6 | **JSON.parse → `storage.getJSON` 이관**: 18개 파일의 개별 try-catch 파싱을 한 줄 헬퍼로 통일 | 파싱 정책 중앙화 | 미착수 |
 | ROAD-Q7 | **조용한 예외 가시화**: 영속성 경로의 `catch {}` 삼켜짐을 쿼터 배너·진단 로그로 연결 | 47곳 중 영속성 관련 우선 | 부분 (`_storageUnavailable` 플래그) |
 | ROAD-Q8 | **학습 진단 E2E 시뮬레이션**: `tests/e2e/analysis-view.spec.js` — 합성 학습 이력 시드 팩토리 `tests/fixtures/analysis-seed.js`(`quiz_results`·`quiz_wrong_causes`·`statement_stats`·`sim_results_history`·`study_calendar`의 `h` 버킷·`study_goals`·`exam_date`·`fc_weak`·`fc_memorized`·`fc_spaced_repetition`·`actual_exam_result`·`ingredients_db_notified`)로 AN-01~09 렌더를 실브라우저에서 검증하고, 실제 퀴즈 완주 1회로 기록→분석 반영 경로를 연결. AN-04 온보딩 게이트 양방향(표본 미달→힌트 카드 / 충족→자동 제거)과 AN-09 주간 리포트 클립보드 폴백을 단언한다 | AN-계열은 UX-VFY-03의 E2E 강제 접두사(UX-·TR-·R-·TH-·A-) 대상이 아닌 자발적 커버리지. 시드 스키마는 `state.js`·`exam-simulator.js` 실저장 형태와 정합 — fixtures 팩토리가 단일 원본. 시드 이력이 `app-shell.js` RETURNING_USER_KEYS를 채우므로 지식DB 갱신 모달 억제 키 포함 (해시는 registry.js에서 동적 추출). 시드 키 목록: `storage-keys.js` STORAGE_KEYS | 구현 (2026-10-03) |
+| ROAD-Q9 | **참조자료→교재 커버리지 (`check:refcoverage`)**: ref_md 문서·조문(`제N조`) 목록 ↔ 교재 `📌출처`·인용 링크 대조로 조문별 교재 반영 여부 리포트 — "다음에 어떤 조문을 다룰지"의 저작 우선순위 데이터 + 출처 미표기 단락(CS-11 위반) 감시. `ai:coverage`(교재→문제은행)의 상위 체인 대칭 — docSubjectRules 귀속·chunkRefDoc 조문 파싱·extractLinks 인용 추출 재사용 | **트리거**: food 등 신규 시험의 교재 저작이 실제 진행될 때 (측정 대상 교재 부재 시 미커버 100%로 무의미) — 리포트형 도입 후 기준선 안정 시 게이트화 | 미구현 |
 
 ### 7.6 학습 표면 계측·구조 축소 (학습 단순화 Phase 2)
 
