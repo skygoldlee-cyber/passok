@@ -375,7 +375,7 @@ content/                # 시험 콘텐츠 컨테이너
     knowledge/          # 지식DB SSOT — ingredients.json (원료 1,402종 items + meta 버전·이력, db_version.json 계승)
     audiobook/          # 오디오북 MP3 산출물 (생성 스크립트는 ref-pipeline/audiobook/)
     number-drills/      # 숫자 암기 드릴 JSON
-    피드백/              # 진술별 피드백 정본 — stmt_explain.json (sid→해설, ai:stmtfb --apply 편입 → build:drills가 진술 explain에 병합, AI-15)
+    피드백/              # 피드백 정본 — stmt_explain.json (sid→해설, ai:stmtfb --apply 편입 → build:drills가 진술 explain에 병합, AI-15) · card_tip.json (cardId→암기팁, ai:cards --apply 편입 → 런타임 오버레이, AI-19) · card_exclude.json (cardId→사유, 런타임 카드 목록 제외, AI-22)
   exams/<id>/           # 추가 시험도 동일한 내부 구조 (대칭)
 data/                   # 빌드 생성 번들
   exams.js              # 전역 시험 목록 (window.EXAMS_LIST)
