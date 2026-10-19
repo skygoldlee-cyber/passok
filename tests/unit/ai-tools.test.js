@@ -1,5 +1,5 @@
 // tests/unit/ai-tools.test.js — AI 제작 지원 도구 유닛 테스트
-// @spec AI-01,AI-02,AI-03,AI-04,AI-05,AI-06,AI-07,AI-08,AI-09,AI-10,AI-11,AI-12,AI-13,AI-14,AI-15,AI-16,AI-17,AI-18,AI-19,AI-20,AI-21,AI-22
+// @spec AI-01,AI-02,AI-03,AI-04,AI-05,AI-06,AI-07,AI-08,AI-09,AI-10,AI-11,AI-12,AI-13,AI-14,AI-15,AI-16,AI-17,AI-18,AI-19,AI-20,AI-21,AI-22,AI-23
 // llm_client dry-run·문제은행 파서·규칙 변형·검수 규칙·유사도 폴백을 고정한다.
 // 실제 API 키 없이 전부 결정론적으로 동작해야 한다 (--dry-run 계약).
 
@@ -7,7 +7,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
@@ -422,4 +422,30 @@ test('AI-21: ai_adphrases clauseText — 별표5 문서에서 호별 법문 추�
     const doc = '1. 가. 의약품과 오인될 수 있는 표현\n2. 나. 기능성화장품이 아닌 화장품의 효능 표현\n';
     assert.ok(clauseText(doc, '가').includes('의약품'));
     assert.ok(clauseText(doc, '나').includes('기능성화장품'));
+});
+
+test('AI-23: 배치 채택 계측 — writeDraft sha 메타↔본문 해시 일치 + summarize 집계', () => {
+    const { writeDraft, draftBodyHash, parseDraftMeta } = require('../../tools/ai/lib/ai_common.js');
+    const { summarize } = require('../../tools/ai/ai_adoption.js');
+    const out = writeDraft('adoption_test.md',
+        ['# 초안', '', '## Q1', '', '> **해설**: 테스트 해설'], { model: 'test' });
+    try {
+        const text = readFileSync(out, 'utf-8');
+        const meta = parseDraftMeta(text);
+        assert.equal(meta.reviewed, 'no');
+        assert.equal(meta.sha, draftBodyHash(text), '메타 sha가 본문 해시와 일치');
+        assert.notEqual(draftBodyHash(text + '\n수정'), meta.sha, '본문 수정 시 해시 불일치 → edited 감지');
+    } finally { rmSync(out, { force: true }); }
+
+    const { total } = summarize([
+        { draft: 'a.md', genDate: '1', generated: 10, applied: 8, skipped: 2 },
+        { draft: 'a.md', genDate: '2', generated: 5, applied: 5, skipped: 0, edited: true },
+        { draft: 'a.md', genDate: '2', generated: 5, applied: 1, skipped: 4 },
+        { draft: 'b.md', genDate: '1', generated: 4, applied: 0, skipped: 4 },
+    ]);
+    assert.equal(total.batches, 3, '같은 초안 재생성(genDate 상이)은 별개 배치, 재실행 레코드는 최대치만');
+    assert.equal(total.generated, 19);
+    assert.equal(total.applied, 13);
+    assert.equal(total.edited, 1);
+    assert.ok(Math.abs(total.adoptionRate - 13 / 19) < 1e-9);
 });
