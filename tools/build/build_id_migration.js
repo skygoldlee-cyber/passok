@@ -34,6 +34,13 @@ const { getExamTargets } = require('./exam_targets.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const norm = s => String(s || '').replace(/\s+/g, ' ').trim();
+// 카드 term 매칭용 추가 정제 — cleanText가 잔류시키던 마커/백틱 잔재를 제거해
+// 정제 전후 term("헥세티딘 ``" → "헥세티딘")이 같은 키로 매칭되게 한다 (진도 이관)
+const cleanTermKey = s => norm(s)
+  .replace(/`\s*(?:🔖기출|📌중요|🎯\s*기출|🎯\s*중요|★\s*필수|기출|중요)\s*`/g, '')
+  .replace(/🔖기출|📌중요|🎯\s*기출|🎯\s*중요|★\s*필수|기출|중요/g, '')
+  .replace(/`+/g, '')
+  .replace(/\s+/g, ' ').trim();
 const CHECK_ONLY = process.argv.includes('--check');
 const LOST_DETAIL_LIMIT = 20;
 
@@ -56,7 +63,7 @@ function buildForTarget(target) {
     const bucket = { cards: {}, quizzes: {} };
     const cIdx = new Map(), qIdx = new Map();
     for (const c of data.cards || []) {
-      const t = norm(c.term);
+      const t = cleanTermKey(c.term);
       bucket.cards[c.id] = t;
       if (!cIdx.has(t)) cIdx.set(t, []);
       cIdx.get(t).push(c.id);
@@ -79,15 +86,15 @@ function buildForTarget(target) {
   for (const [subjKey, prevBucket] of Object.entries(prev)) {
     const curBucket = cur[subjKey];
     if (!curBucket) continue; // 과목 자체가 사라짐 — 이관 대상 없음
-    const apply = (prevIds, idx, curIds) => {
+    const apply = (prevIds, idx, curIds, keyFn = (x) => x) => {
       for (const [oldId, key] of Object.entries(prevIds)) {
         if (curIds[oldId]) continue;                    // ID 불변 — 이관 불필요
-        const cands = (idx.get(key) || []).filter(id => id !== oldId);
+        const cands = (idx.get(keyFn(key)) || []).filter(id => id !== oldId);
         if (cands.length === 1) { map[oldId] = cands[0]; moved++; }
         else lostItems.push({ subjectKey: subjKey, oldId, key });
       }
     };
-    apply(prevBucket.cards || {}, newCardByTerm[subjKey], curBucket.cards);
+    apply(prevBucket.cards || {}, newCardByTerm[subjKey], curBucket.cards, cleanTermKey);
     apply(prevBucket.quizzes || {}, newQuizByKey[subjKey], curBucket.quizzes);
   }
   const lost = lostItems.length;
