@@ -6,7 +6,7 @@ tts_elevenlabs.py
 ElevenLabs API를 사용해 청취용 원고 텍스트를 MP3로 변환하는 모듈.
 
 특징:
-  - API 키는 환경변수 ELEVENLABS_API_KEY 에서 읽음
+  - API 키는 환경변수 ELEVENLABS_API_KEY 또는 repo 루트 .env 에서 읽음
   - 청크별 개별 MP3 저장 → 중간에 실패하더라도 이어서 재개 가능
   - 이미 생성된 MP3는 건너뛰기(--resume)
   - 지수 백오프 재시도 (429/5xx 대응)
@@ -58,12 +58,31 @@ class TTSConfig:
 # 클라이언트
 # ---------------------------------------------------------------------------
 
+def _load_repo_dotenv() -> None:
+    """repo 루트 .env에서 미설정 변수만 채운다 — 로컬 시크릿 단일 소스.
+
+    이미 설정된 환경변수는 덮어쓰지 않는다 (쉘 env 우선).
+    """
+    import re
+
+    env_path = Path(__file__).resolve().parents[2] / ".env"
+    if not env_path.exists():
+        return
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        m = re.match(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$", line)
+        if not m or line.lstrip().startswith("#"):
+            continue
+        os.environ.setdefault(m.group(1), m.group(2).strip("'\""))
+
+
 def get_api_key() -> str:
+    _load_repo_dotenv()
     key = os.getenv("ELEVENLABS_API_KEY", "").strip()
     if not key:
         raise RuntimeError(
             "환경변수 ELEVENLABS_API_KEY가 설정되지 않았습니다.\n"
-            "PowerShell:  $env:ELEVENLABS_API_KEY=\"여기에_키\""
+            "루트 .env:  ELEVENLABS_API_KEY=여기에_키  (한 줄 추가)\n"
+            "PowerShell: $env:ELEVENLABS_API_KEY=\"여기에_키\""
         )
     return key
 

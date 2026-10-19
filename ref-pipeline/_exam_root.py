@@ -37,6 +37,25 @@ def utf8_stdio() -> None:
             pass
 
 
+def load_dotenv() -> None:
+    """repo 루트 .env에서 미설정 변수만 채운다 — 로컬 시크릿 단일 소스.
+
+    KEY=VALUE 행만 해석(# 주석·빈 행 무시, 따옴표 감싸기 제거).
+    이미 설정된 환경변수는 덮어쓰지 않는다 (쉘 env 우선).
+    """
+    env_path = REPO_ROOT / '.env'
+    if not env_path.exists():
+        return
+    try:
+        for line in env_path.read_text(encoding='utf-8').splitlines():
+            m = re.match(r'^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$', line)
+            if not m or line.lstrip().startswith('#'):
+                continue
+            os.environ.setdefault(m.group(1), m.group(2).strip('\'"'))
+    except OSError:
+        pass
+
+
 def exam_targets() -> list:
     """content/exams.json의 시험 목록. 없으면 빈 리스트."""
     if not EXAMS_JSON.exists():
