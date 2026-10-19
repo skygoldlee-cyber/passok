@@ -269,7 +269,11 @@
  *                                              registryKey가 가변이라 typedef에 고정 키로 선언하지 않음
  * @property {ResourcesMeta}   [resources]
  * @property {Object}          [integratedExam] 통합 시험 규칙 (passAverage·subjectFailBelow 등)
- * @property {Object.<string, {title?: string, subtitle?: string, placeholder?: string}>} [uiText] 뷰별 UI 텍스트 오버라이드 (manifest.uiText 패스스루)
+ * @property {Object.<string, Object.<string, string>>} [uiText] 뷰별 UI 텍스트 오버라이드 (manifest.uiText 패스스루 —
+ *                                            표준 필드 title·subtitle·placeholder 외에 loading·error·dataError·
+ *                                            스토어 라벨 등 시험별 확장 필드를 자유롭게 허용. 소비처: data-uitext,
+ *                                            router.getViewTitles, practice-registry.getPracticeViewTitles/enter,
+ *                                            pro-upgrade 플랜 한도 행)
  * @property {Object.<string, string[]>} [synonyms] 주관식 채점 유사어 사전 (manifest.synonyms 패스스루 — checkShortAnswer)
  * @property {{wrongCauses?: Array<{key:string, label:string, advice?:string, autoPattern?:string}>}} [analysis]
  *                                            학습 진단 도메인 분류 설정 (manifest.analysis 패스스루 — 오답 원인 분류표 등)

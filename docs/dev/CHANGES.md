@@ -7,6 +7,16 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-19 도메인 카피 플랫폼 잔재 제거 — uiText 슬롯 확장 (DA-12/DA-15 카피 계층)
+
+- **배경**: 교재 독립성 감사에서 DA-15(리터럴 결합)·posind(좌표)·uitext(시험명) 게이트는 통과하나, **도메인 명사(원료·포뮬러·배합)는 어느 게이트도 못 잡는 사각** 확인 — 무게이트 잔재 2건(세 번째 시험 온보딩 시 cosmetic 문구 노출)과 feature 게이트 내 카피 2건을 정리
+- **무게이트 잔재 → uiText 슬롯**: `dashboard.html` 데일리 챌린지 설명(`data-uitext="dailyChallenge"`)과 `index.template.html` 인증 모달 힌트(`data-uitext="authHint"`)를 uiText로 이전 — 기본 문구는 도메인 중립화, cosmetic 문구는 manifest가 소유
+- **feature 게이트 내 카피 → uiText 슬롯**: `practice-registry` formula 정의의 title·subtitle·loading·error·dataError(`uiText.formula`)와 `pro-upgrade` 플랜 한도 행의 4개 스토어 라벨(`uiText.planLimits`)을 manifest 소유로 — 플랫폼 기본값은 도메인 중립 문구('실습' 등). planLimits는 미선언 시험에서 한도 행 자체 생략
+- **부수 발견**: `enter()` 내 '원료 데이터를 불러오지 못했습니다' 도메인 카피도 `dataError` 슬롯으로 이전
+- **타입**: `types.js`의 uiText typedef를 확장 필드 허용(`Object.<string,string>`)으로 완화 — 표준 필드(title·subtitle·placeholder) 외 시험별 필드 자유 선언
+- **테스트**: uiText 덮어쓰기 병합 + formula 보유 시험의 uiText 카피 슬롯 선언 계약 테스트 2건 추가 (test-first)
+- **설계 원칙 명문화**: 실무 피처 표시 카피는 정의(코드)가 아니라 시험 manifest가 소유 — 신규 실무 피처 추가 시 uiTextKey + manifest 선언이 규약
+
 ## 2026-10-19 뷰 렌더 대형 함수 분할 + 고객 정제 이중 정의 통합 (리팩터링)
 
 - **동작 변경 없음** — 순수 추출 리팩터링. 대상 3건은 코드베이스 감사에서 식별된 유일한 1순위 후보
