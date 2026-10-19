@@ -46,7 +46,7 @@ class TestLoadOcKey:
     def test_empty_env_falls_through(self, tmp_path, monkeypatch):
         monkeypatch.delenv('LAW_OC_KEY', raising=False)
         monkeypatch.setattr(check_mfds_notice, 'load_dotenv', lambda: None)
-        # .env.local.json도 없는 상태 → 빈 문자열
+        # 루트 .env도 못 읽는 상태 → 빈 문자열
         assert check_mfds_notice.load_oc_key() == ''
 
     def test_dotenv_file_resolves_key(self, tmp_path, monkeypatch):

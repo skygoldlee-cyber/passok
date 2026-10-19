@@ -63,21 +63,12 @@ def rule_name():
 
 
 def load_oc_key():
-    """OC 키 해석 — ① LAW_OC_KEY 환경변수 → ② 루트 .env → ③ 레거시 ref-pipeline/.env.local.json."""
+    """OC 키 해석 — ① LAW_OC_KEY 환경변수 → ② 루트 .env (시크릿 단일 소스)."""
     oc = os.environ.get('LAW_OC_KEY', '').strip()
     if oc:
         return oc
     load_dotenv()
-    oc = os.environ.get('LAW_OC_KEY', '').strip()
-    if oc:
-        return oc
-    f = Path(__file__).resolve().parent / '.env.local.json'  # 레거시 — 루트 .env로 통합됨
-    if f.exists():
-        try:
-            return str(json.loads(f.read_text(encoding='utf-8')).get('LAW_OC_KEY', '')).strip()
-        except ValueError:
-            return ''
-    return ''
+    return os.environ.get('LAW_OC_KEY', '').strip()
 
 
 def api_get(path, params, target='admrul'):

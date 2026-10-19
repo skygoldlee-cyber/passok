@@ -36,7 +36,6 @@ const PATTERNS = [
 // 공개 설계상 노출이 의도된 값·파일 — 경로 면제만 허용
 const ALLOWLIST_FILES = new Set([
   'src/supabase-config.js',   // Publishable key — 클라이언트 공개 키 (RLS가 실제 보안)
-  'ref-pipeline/.env.local.json.example',
 ]);
 
 const EXTS = new Set(['.js', '.mjs', '.ts', '.json', '.md', '.html', '.css', '.py', '.yml', '.yaml', '.txt', '.env', '.example', '']);
