@@ -5,9 +5,9 @@
  * TEXTBOOK_REFERENCE_MAPPING.md §2 표를 교재 `📌출처`·`출처` 라인의
  * ref_md 링크 실측으로 재생성한다.
  *
- * 입력 : content/exams/cosmetic/교재/ **\/*_표준형.md (챕터별 ref_md 링크)
- * 출력 : docs/exams/cosmetic/reference/TEXTBOOK_REFERENCE_MAPPING.md
- *        `<!-- refmap:auto:start -->` ~ `<!-- refmap:auto:end -->` 구간만 치환
+ * 입력 : docs/exams/*\/reference/TEXTBOOK_REFERENCE_MAPPING.md 전수 스캔
+ *        (시험 ID는 문서 경로에서 도출 — 교재는 content/exams/<id>/교재/ 의 *_표준형.md)
+ * 출력 : 각 문서의 `<!-- refmap:auto:start -->` ~ `<!-- refmap:auto:end -->` 구간만 치환
  *        — 마커 밖(원칙·관찰·잔여 과제)은 수동 영역으로 보존
  *
  * 사용 : node tools/build/build_ref_mapping.js          # §2 표 재생성
@@ -39,8 +39,7 @@ const glob = (dir, pat) => {
 };
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const DOC = path.join(ROOT, 'docs/exams/cosmetic/reference/TEXTBOOK_REFERENCE_MAPPING.md');
-const TEXTBOOK_DIR = path.join(ROOT, 'content/exams/cosmetic/교재');
+const DOCS_GLOB = path.join(ROOT, 'docs/exams');
 const MARK_START = '<!-- refmap:auto:start -->';
 const MARK_END = '<!-- refmap:auto:end -->';
 
@@ -82,9 +81,9 @@ function subjectTitle(file) {
   return m ? `${m[1]} — ${m[2]}` : base;
 }
 
-function buildSection() {
+function buildSection(textbookDir) {
   const out = ['## 2. 전 과목 매핑 표 (교재 `📌출처` 실측)', ''];
-  const files = glob(TEXTBOOK_DIR, /_표준형\.md$/);
+  const files = glob(textbookDir, /_표준형\.md$/);
   files.forEach((f, i) => {
     out.push(`### 2.${i + 1} ${subjectTitle(f)}`, '');
     out.push('| 교재 챕터 | 근거 ref 문서 |', '|-----------|--------------|');
@@ -99,21 +98,27 @@ function buildSection() {
 
 function main() {
   const check = process.argv.includes('--check');
-  const doc = fs.readFileSync(DOC, 'utf8');
-  const si = doc.indexOf(MARK_START), ei = doc.indexOf(MARK_END);
-  if (si < 0 || ei < 0) {
-    console.error(`❌ 마커 없음: ${MARK_START} / ${MARK_END} 를 문서에 추가하세요.`);
-    process.exit(1);
+  // docs/exams/<id>/reference/TEXTBOOK_REFERENCE_MAPPING.md 전수 — 시험 ID는 경로에서 도출
+  const docs = [];
+  for (const exam of fs.readdirSync(DOCS_GLOB, { withFileTypes: true })) {
+    if (!exam.isDirectory()) continue;
+    const p = path.join(DOCS_GLOB, exam.name, 'reference', 'TEXTBOOK_REFERENCE_MAPPING.md');
+    if (fs.existsSync(p)) docs.push({ exam: exam.name, doc: p });
   }
-  const next = doc.slice(0, si + MARK_START.length) + '\n\n' + buildSection() + '\n' + doc.slice(ei);
-  if (check) {
-    if (next === doc) { console.log('✅ 매핑 표가 교재 출처와 일치합니다.'); return; }
-    console.error('❌ 매핑 표가 교재 출처와 불일치 — `node tools/build/build_ref_mapping.js` 실행 필요');
-    process.exit(1);
+  if (!docs.length) { console.error('❌ 매핑 문서 없음'); process.exit(1); }
+  let stale = 0;
+  for (const { exam, doc: docPath } of docs) {
+    const textbookDir = path.join(ROOT, 'content/exams', exam, '교재');
+    const doc = fs.readFileSync(docPath, 'utf8');
+    const si = doc.indexOf(MARK_START), ei = doc.indexOf(MARK_END);
+    if (si < 0 || ei < 0) { console.error(`⚠️ [${exam}] 마커 없음 — 스킵`); continue; }
+    const next = doc.slice(0, si + MARK_START.length) + '\n\n' + buildSection(textbookDir) + '\n' + doc.slice(ei);
+    if (next === doc) { console.log(`✅ [${exam}] 매핑 표 최신`); continue; }
+    if (check) { stale++; console.error(`❌ [${exam}] 매핑 표 불일치 — build:refmap 필요`); continue; }
+    fs.writeFileSync(docPath, next);
+    console.log(`✅ [${exam}] §2 표 재생성`);
   }
-  if (next === doc) { console.log('변경 없음 — 이미 최신'); return; }
-  fs.writeFileSync(DOC, next);
-  console.log('✅ ' + path.relative(ROOT, DOC) + ' §2 표 재생성');
+  if (check && stale) { console.error(`불일치 ${stale}건 — node tools/build/build_ref_mapping.js 실행 필요`); process.exit(1); }
 }
 
 main();
