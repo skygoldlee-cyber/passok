@@ -8,12 +8,14 @@ import {
     getExamList, getActiveExam, getActiveExamId,
     contentPath, dataPath, hasFeature, scopedKey, unscopedKey,
     purgeLegacyStorage, resolveExamThemeTokens, applyExamTheme,
+    getActiveRegistry,
 } from '../../src/exam-context.js';
 
 const EXAMS = {
     exams: [
         { id: 'alpha', name: '알파시험', contentRoot: 'content/exams/alpha', dataRoot: 'data/exams/alpha', features: { audiobook: true } },
         { id: 'cosmetic', name: '조제관리사', contentRoot: 'content/exams/cosmetic', dataRoot: 'data/exams/cosmetic', default: true, features: { dictionary: true } },
+        { id: 'food', name: '식품기사', contentRoot: 'content/exams/food', dataRoot: 'data/exams/food', registryGlobal: 'DATA_REGISTRY_FOOD' },
     ]
 };
 
@@ -208,5 +210,52 @@ test('applyExamTheme: document 부재(Node 환경)에서 무해', () => {
         if (originalDoc !== undefined) {
             Object.defineProperty(global, 'document', { value: originalDoc, writable: true, configurable: true });
         }
+    }
+});
+
+// ==================== 활성 시험 레지스트리 (DA-15 R4) ====================
+// 비기본 시험 활성 시 window.DATA_REGISTRY(정적 스크립트가 채우는 기본 시험 전역)가
+// 아니라 exams.json의 registryGlobal이 가리키는 전역을 해석해야 한다.
+
+test('getActiveRegistry: 기본 시험은 DATA_REGISTRY 전역 해석', () => {
+    const reg = { subjects: [{ key: 's1' }] };
+    window.DATA_REGISTRY = reg;
+    assert.equal(getActiveRegistry(), reg);
+    delete window.DATA_REGISTRY;
+});
+
+test('getActiveRegistry: registryGlobal 미선언 시험은 기본 전역명 폴백', () => {
+    const reg = { subjects: [{ key: 'alpha-subj' }] };
+    window.DATA_REGISTRY = reg;
+    mockStorage.setItem('current_exam', 'alpha');
+    assert.equal(getActiveRegistry(), reg);
+    delete window.DATA_REGISTRY;
+});
+
+test('getActiveRegistry: 비기본 시험은 자체 registryGlobal 해석 — 기본 전역 오독 방지', () => {
+    window.DATA_REGISTRY = { subjects: [{ key: 'cosmetic-s1' }] };        // 기본 시험 정적 전역
+    window.DATA_REGISTRY_FOOD = { subjects: [{ key: 'food-s1' }] };      // food 동적 번들 전역
+    mockStorage.setItem('current_exam', 'food');
+    const reg = getActiveRegistry();
+    assert.equal(reg, window.DATA_REGISTRY_FOOD);
+    assert.equal(reg.subjects[0].key, 'food-s1');
+    delete window.DATA_REGISTRY;
+    delete window.DATA_REGISTRY_FOOD;
+});
+
+test('getActiveRegistry: 비기본 번들 미로딩 시 null — 기본 시험으로 무음 폴백 없음', () => {
+    window.DATA_REGISTRY = { subjects: [{ key: 'cosmetic-s1' }] };
+    mockStorage.setItem('current_exam', 'food'); // DATA_REGISTRY_FOOD 미설치
+    assert.equal(getActiveRegistry(), null);
+    delete window.DATA_REGISTRY;
+});
+
+test('getActiveRegistry: window 부재(Node 환경)는 null', () => {
+    const win = global.window;
+    try {
+        delete global.window;
+        assert.equal(getActiveRegistry(), null);
+    } finally {
+        Object.defineProperty(global, 'window', { value: win, writable: true, configurable: true });
     }
 });

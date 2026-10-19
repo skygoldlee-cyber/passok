@@ -183,7 +183,7 @@ import { switchView, isStaleViewGen } from './views/navigation.js';
 import { setupOfflineDetection } from './views/offline-detection.js';
 import { setupEventListeners } from './views/event-listeners.js';
 import { getViewTitles, navigateToView, initViewHashRouting } from './router.js';
-import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage } from './exam-context.js';
+import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage, getActiveRegistry } from './exam-context.js';
 import { renderExamSelect, showExamSelect, selectExamAction } from './views/exam-select.js';
 import { initUiMode, toggleUiMode, toggleStudyTools } from './ui-mode.js';
 import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword } from './auth-view.js';
@@ -300,7 +300,7 @@ function setupNavigation() {
     const sections = document.querySelectorAll('.view-section');
     console.debug('[nav] nav-item 개수:', navItems.length, '/ view-section 개수:', sections.length);
 
-    const registry = (typeof window !== 'undefined' && window.DATA_REGISTRY) || null;
+    const registry = getActiveRegistry();
     const titlesMap = getViewTitles(registry);
 
     // 뷰별 렌더 핸들러 맵 (router.js의 navigateToView에서 디스패치)

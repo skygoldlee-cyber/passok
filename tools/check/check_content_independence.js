@@ -43,6 +43,14 @@ const ALLOWED = [
         reason: "law.go.kr API target 구분자(법령 vs admrul 행정규칙) — 과목 키 'law'와 무관한 외부 API 상수"
     },
     {
+        file: 'src/data-loader.js', contains: 'window.DATA_REGISTRY',
+        reason: '레지스트리 로딩 경로 소유처 — registryGlobal 해석·기본 시험 정적 전역 확보·비기본 번들 누락 가드. 다른 모듈은 exam-context.getActiveRegistry()로만 접근'
+    },
+    {
+        file: 'tools/check/audit_study_quality.js', contains: 'window.DATA_REGISTRY',
+        reason: '시뮬레이션 스텁 — 가상 시험(simexam) 레지스트리를 window에 설치하고 스텁 값을 인자로 전달. 기본 시험 전역명 폴백 규약을 검증하는 하네스'
+    },
+    {
         file: 'tools/build/build_pdf_registry.js', contains: "type === 'law'",
         reason: 'law.go.kr 링크 유형 구분자 — 법령/행정규칙 분기, 과목 키 아님'
     },
@@ -125,6 +133,10 @@ function run({ args = [] } = {}) {
     if (subjAlt) {
         RULES.push({ re: new RegExp(`['"\`](?:${subjAlt})['"\`]`), label: 'R2 과목 키 리터럴' });
     }
+    // R4 — 기본 시험 레지스트리 전역 직독 차단. window.DATA_REGISTRY는 정적
+    // 스크립트가 채우는 "기본 시험" 전역이라 비기본 시험 활성 시 엉뚱한 콘텐츠를
+    // 반환한다. 활성 시험 해석은 exam-context.getActiveRegistry() 규약.
+    RULES.push({ re: /window\.DATA_REGISTRY\b/, label: 'R4 기본 시험 레지스트리 직독 — getActiveRegistry() 사용' });
 
     const ref = refFromArgs(args);
     const changed = ref ? changedFiles(ref) : null;
