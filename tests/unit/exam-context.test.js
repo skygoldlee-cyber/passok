@@ -1,5 +1,5 @@
 // tests/unit/exam-context.test.js
-// @spec ES-01~05,DA-14
+// @spec ES-01~05,DA-14,DA-15
 // 멀티시험 컨텍스트 — 활성 시험 해석, 진도 키 네임스페이스, 경로 해석을 검증.
 
 import { test, beforeEach, afterEach } from 'node:test';
@@ -74,7 +74,7 @@ test('getActiveExam: 잘못된 선택 id는 default로 폴백', () => {
 test('getActiveExam: EXAMS_LIST 없으면 null', () => {
     window.EXAMS_LIST = null;
     assert.equal(getActiveExam(), null);
-    assert.equal(getActiveExamId(), 'cosmetic'); // DEFAULT_EXAM_ID 폴백
+    assert.equal(getActiveExamId(), 'cosmetic'); // 레지스트리(exams.json) 기본값 폴백
 });
 
 test('getExamList: malformed 데이터도 배열로 정규화', () => {

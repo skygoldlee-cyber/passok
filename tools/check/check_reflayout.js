@@ -6,7 +6,7 @@
  *   ① 물리 PDF 폴더    content/참조자료/{법령고시,공통,과목N,_archive}/*.pdf
  *   ② ref_md 변환본    content/참조자료/ref_md/과목N/{문서}/{문서}.md
  *   ③ UI 매니페스트    content/references.json (refDirs/referenceFiles/referenceCommon/referenceLaw)
- *   ④ 생성 규칙        tools/build/ref_statements.js DOC_SUBJECT_RULES → docSubject()
+ *   ④ 생성 규칙        references.json docSubjectRules → ref_statements.js docSubject()
  *
  * 검사:
  *   - refDirs에 등록된 PDF → ref_md/과목N/{base}/{base}.md 존재 + N == docSubject(base)
