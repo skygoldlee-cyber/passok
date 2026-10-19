@@ -25,6 +25,7 @@
     "check:parser": "node tools/check/check_parser_parity.js",
     "check:imports": "node tools/check/check_imports.js",
     "check:posind": "node tools/check/check_position_independence.js",
+    "check:contentind": "node tools/check/check_content_independence.js",
     "check:combo": "node tools/check/check_combo_pilot.js",
     "check:refsubjects": "node tools/check/check_ref_subjects.js",
     "check:refmerge": "node tools/check/check_refmerge.js",
