@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-19T07:30:01.211Z",
+  "generatedAt": "2026-10-19T07:46:57.688Z",
   "subjects": [
     {
       "key": "law",
@@ -94,9 +94,9 @@ var DATA_REGISTRY = {
       "part": 1,
       "title": "화장품 제조 및 품질관리 (370제)",
       "file": "과목2_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject2.590937ba.js",
+      "bundle": "./data/exams/cosmetic/exams/subject2.19448911.js",
       "global": "EXAM_DATA_subject2",
-      "contentHash": "590937ba",
+      "contentHash": "19448911",
       "stats": {
         "questions": 370
       }
@@ -107,9 +107,9 @@ var DATA_REGISTRY = {
       "part": 1,
       "title": "유통화장품 안전관리 (456제)",
       "file": "과목3_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject3.c40960d8.js",
+      "bundle": "./data/exams/cosmetic/exams/subject3.9e9d50dc.js",
       "global": "EXAM_DATA_subject3",
-      "contentHash": "c40960d8",
+      "contentHash": "9e9d50dc",
       "stats": {
         "questions": 456
       }
