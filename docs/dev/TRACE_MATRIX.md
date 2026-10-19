@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 53ed188fbee0bab1
+> 입력 해시: a18a3e0130a4b354
 > 생성: 2026-10-19 · 원천: SPEC.md(554개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -327,9 +327,9 @@
 | FO-13 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11 | src/exams/cosmetic/formula-stability.js | tests/unit/exams/cosmetic/formula-stability.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | — |
 | FO-14 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11<br>…외 2개 | src/exams/cosmetic/formula-stability.js<br>src/exams/cosmetic/views/formula-print.js | tests/unit/exams/cosmetic/formula-stability.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | 화장품법 시행규칙 — 전성분 표기 순서 (1% 초과 내림차순 → 1% 이하 → 색소 최하단) |
 | FO-15 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11 | css/exams/cosmetic/formula.css<br>css/trainer.css<br>html/exams/cosmetic/formula.html<br>src/exams/cosmetic/views/formula.js | tests/dom/exams/cosmetic/formula-nav.dom.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | — |
-| FO-16 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11<br>…외 1개 | src/exams/cosmetic/batch-store.js<br>src/exams/cosmetic/store-utils.js<br>src/exams/cosmetic/views/formula-batch-form.js<br>src/exams/cosmetic/views/formula-batch.js | tests/dom/exams/cosmetic/formula-batch.dom.test.js<br>tests/unit/exams/cosmetic/batch-store.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | 화장품법·시행규칙 — 맞춤형화장품 판매업의 조제 기록 의무 |
-| FO-17 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11 | src/exams/cosmetic/customer-store.js<br>src/exams/cosmetic/store-utils.js<br>src/exams/cosmetic/views/formula-customer.js | tests/dom/exams/cosmetic/formula-customer.dom.test.js<br>tests/unit/exams/cosmetic/customer-store.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | — |
-| FO-18 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11<br>…외 1개 | src/exams/cosmetic/material-ledger.js<br>src/exams/cosmetic/store-utils.js<br>src/exams/cosmetic/views/formula-material.js | tests/dom/exams/cosmetic/formula-material.dom.test.js<br>tests/unit/exams/cosmetic/material-ledger.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | — |
+| FO-16 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11<br>…외 1개 | src/exams/cosmetic/batch-store.js<br>src/exams/cosmetic/store-utils.js<br>src/exams/cosmetic/views/formula-batch-form.js<br>src/exams/cosmetic/views/formula-batch.js | tests/dom/exams/cosmetic/formula-batch.dom.test.js<br>tests/unit/exams/cosmetic/batch-store.test.js<br>tests/unit/exams/cosmetic/store-utils.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | 화장품법·시행규칙 — 맞춤형화장품 판매업의 조제 기록 의무 |
+| FO-17 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11 | src/exams/cosmetic/customer-store.js<br>src/exams/cosmetic/store-utils.js<br>src/exams/cosmetic/views/formula-customer.js | tests/dom/exams/cosmetic/formula-customer.dom.test.js<br>tests/unit/exams/cosmetic/customer-store.test.js<br>tests/unit/exams/cosmetic/store-utils.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | — |
+| FO-18 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11<br>…외 1개 | src/exams/cosmetic/material-ledger.js<br>src/exams/cosmetic/store-utils.js<br>src/exams/cosmetic/views/formula-material.js | tests/dom/exams/cosmetic/formula-material.dom.test.js<br>tests/unit/exams/cosmetic/material-ledger.test.js<br>tests/unit/exams/cosmetic/store-utils.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | — |
 | FO-19 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11 | src/exams/cosmetic/views/formula-compliance.js | tests/dom/exams/cosmetic/formula-compliance.dom.test.js<br>tests/unit/exams/cosmetic/formula-compliance.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | 화장품법·시행규칙 전반 — 영업·자격·표시·기록 준수 의무 |
 | FO-20 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11 | src/exams/cosmetic/usage-guide.js | tests/unit/exams/cosmetic/usage-guide.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | — |
 | FO-21 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-05<br>DOC-DSN-02<br>DOC-DSN-11 | css/print.css<br>src/exams/cosmetic/views/formula-print.js | tests/dom/exams/cosmetic/formula-print.dom.test.js | DOC-ARC-01<br>DOC-ARC-04<br>DOC-ARC-06 | 화장품법 표시 규정 — 용기 라벨 기재사항·조제 기록지 |

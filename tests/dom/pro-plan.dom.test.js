@@ -37,6 +37,17 @@ beforeEach(async () => {
         id: 'cosmetic', default: true, name: '테스트 시험',
         features: { formula: true },
     }] };
+    // 한도 행의 엔티티 라벨은 manifest uiText.planLimits 소유 — 미선언 시험은 행 생략
+    const { DataLoader } = await import('../../src/data-loader.js');
+    DataLoader.registry = {
+        uiText: {
+            planLimits: {
+                title: '저장 한도 무제한 — 무료 플랜:',
+                formula: 'My 포뮬러', customer: '고객',
+                material: '원료', batch: '조제 기록',
+            },
+        },
+    };
 });
 
 describe('플랜 안내 모달 (showPlanCompare)', () => {
