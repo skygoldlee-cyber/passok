@@ -21,7 +21,7 @@
 // @spec none (검증 실행기)
 const fs = require('fs');
 const path = require('path');
-const { PRESETS, resolveSteps, findStep } = require('./steps.js');
+const { PRESETS, resolveSteps, findStep, DERIVED_IDS, REMEDIES } = require('./steps.js');
 const { runSteps } = require('./step_runner.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
@@ -121,7 +121,7 @@ const finished = runSteps(execSteps, {
 });
 
 finished.then((ran) => {
-const results = ran.map((r) => ({ label: `[${r.step.layer}] ${r.step.desc}`, ok: r.ok, output: r.output, ms: r.ms }));
+const results = ran.map((r) => ({ step: r.step, label: `[${r.step.layer}] ${r.step.desc}`, ok: r.ok, output: r.output, ms: r.ms }));
 
 console.log('\n' + '═'.repeat(60));
 console.log(' 검증 리포트');
@@ -147,6 +147,17 @@ for (const r of slowest) console.log(`    ${secs(r.ms || 0).padStart(7)}  ${r.la
 if (!failed.length) {
   console.log(`\n🎉 전 단계 통과 (${results.length}단계)`);
   process.exit(0);
+}
+
+// 근본원인 그룹핑 — 파생물 미재생성은 여러 신선도 단계의 공통 원인 (중복 실패 묶음)
+const derivedFail = failed.filter((r) => DERIVED_IDS.has(r.step.id));
+if (derivedFail.length) {
+  console.log(`\n💡 신선도 계열 실패 ${derivedFail.length}건 — 파생물 미재생성이 공통 원인일 수 있습니다:`);
+  console.log('   npm.cmd run build:derived   # html·data·drills·docs_md·trace·임베딩·stats 일괄 재생성 → 커밋 → 재실행');
+}
+for (const r of failed) {
+  const tip = REMEDIES[r.step.id];
+  if (tip) console.log(`💡 ${r.label} → ${tip}`);
 }
 
 console.log(`\n⚠ 실패 ${failed.length}건 — 실패 단계의 출력 끝부분:\n`);

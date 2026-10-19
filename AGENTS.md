@@ -28,6 +28,7 @@ npm.cmd run test:all                   # 전체 테스트 (unit + parser + dom)
 
 # 빌드
 npm.cmd run build:data                 # content/exams/<id>/*.md → data/exams/<id>/ 번들 생성 (모든 시험 순회)
+npm.cmd run build:derived              # 파생 생성물 일괄 재생성 (build:html + build:data + build:drills + docs_md + build:trace + build:embeddings + stats:stamp) — 콘텐츠·SPEC·테스트 변경 후 신선도 게이트 복구 명령
 node tools/build/build_doc_bundles.js        # content/exams/<id>/docs/*.md → {dataRoot}/docs_md/ 번들 (앱 내 문서 갱신 시 필수 — 매뉴얼·학습안내서 모두 시험별 문서)
 npm.cmd run build:html                # index.template.html + html/views/*.html → index.html 조립 (뷰 마크업 변경 시 필수)
 npm.cmd run check:html                # index.html이 파셜 조립 결과와 일치하는지 비교 (개행 정규화 — pre-push·CI 게이트)
