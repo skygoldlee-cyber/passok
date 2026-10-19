@@ -235,6 +235,12 @@ test('AI-05: ai:draft --file이 manifest 미등록 MD도 청킹 대상으로 받
     assert.match(out, /청크|draft/, '--file 청크 스캔·초안 경로 출력');
 });
 
+test('AI-05: ai:draft SYSTEM 프롬프트에 부정 발문 상한 규칙이 포함된다 (1과목 실험 L1 과다 피드백)', () => {
+    // SYSTEM은 dry-run 출력에 나타나지 않으므로 소스 레벨로 규칙 존재를 고정
+    const src = readFileSync(join(ROOT, 'tools/ai/ai_draft_questions.js'), 'utf-8');
+    assert.match(src, /부정 발문.*최대 1문항/, '프롬프트 규칙 반영');
+});
+
 test('AI-04: ai:explain --dry-run이 키 없이 초안 골격을 출력한다', () => {
     const out = runTool('ai_explain.js', ['--exam', 'cosmetic', '--limit', '2', '--dry-run']);
     assert.match(out, /해설 누락|초안/, '스캔·초안 요약 출력');
