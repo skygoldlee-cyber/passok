@@ -5,6 +5,7 @@
  *
  * 사용법:
  *   node tools/ai/ai_draft_questions.js --subject law [--lines 200-400] [--count 5] [--type choice] [--dry-run]
+ *   node tools/ai/ai_draft_questions.js --file <md>  임의 MD(생성 초안·ref 원문 등)를 청킹 대상으로
  *
  * - 지정 교재 파일·라인 범위를 섹션 청크로 분할해 청크별 초안 생성
  * - 출력은 문제은행 포맷(발문/선지 + 정답 블록: 정답·📖 근거 file#LNN·해설) — 파서·게이트 변경 불요
@@ -13,6 +14,7 @@
 
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
 const { parseArgs, getTargets, writeDraft, loadEnv, ROOT } = require('./lib/ai_common');
 const { listTextbooks, chunkTextbook } = require('./lib/textbook');
@@ -46,7 +48,15 @@ async function main() {
 
     const target = getTargets(opts)[0];
     if (!target) { console.error('대상 시험을 찾을 수 없음 (--exam 지정)'); process.exit(1); }
-    const books = listTextbooks(target).filter(b => !opts.subject || b.subjectKey === opts.subject);
+    let books;
+    if (opts.file) {
+        // --file: 임의 MD(생성 초안·ref 원문 등)를 청킹 대상으로 — manifest 미등록 파일도 허용
+        const absPath = path.resolve(ROOT, opts.file);
+        if (!fs.existsSync(absPath)) { console.error(`파일 없음: ${opts.file}`); process.exit(1); }
+        books = [{ file: path.basename(opts.file), absPath, subjectKey: opts.subject || 'refdoc' }];
+    } else {
+        books = listTextbooks(target).filter(b => !opts.subject || b.subjectKey === opts.subject);
+    }
     if (!books.length) { console.error(`교재 없음 — --subject 값 확인 (${(target.manifest.subjects || []).map(s => s.key).join('/')})`); process.exit(1); }
 
     for (const book of books) {

@@ -228,6 +228,13 @@ test('AI-05: ai:draft --dry-run이 교재 청크를 스캔해 초안 골격을 �
     assert.match(out, /청크|draft/, '청크 스캔·초안 경로 출력');
 });
 
+test('AI-05: ai:draft --file이 manifest 미등록 MD도 청킹 대상으로 받는다', () => {
+    const out = runTool('ai_draft_questions.js', ['--exam', 'cosmetic',
+        '--file', 'content/exams/cosmetic/교재/law/1과목_화장품법의이해_표준형.md',
+        '--lines', '1-50', '--count', '1', '--dry-run']);
+    assert.match(out, /청크|draft/, '--file 청크 스캔·초안 경로 출력');
+});
+
 test('AI-04: ai:explain --dry-run이 키 없이 초안 골격을 출력한다', () => {
     const out = runTool('ai_explain.js', ['--exam', 'cosmetic', '--limit', '2', '--dry-run']);
     assert.match(out, /해설 누락|초안/, '스캔·초안 요약 출력');
