@@ -1,5 +1,5 @@
 // src/data-loader.js — 학습 데이터 로더
-// @spec DA-03,PF-01,PF-02,PF-03,PF-07,DA-02
+// @spec DA-03,PF-01,PF-02,PF-03,PF-07,DA-02,AI-22
 // [변경] 교재/카드/퀴즈(STUDY_DATA)는 더 이상 사전 빌드된 data/subjects/*.js 번들을 쓰지 않고,
 //        content/*.md 를 런타임에 fetch → src/textbook-parser.js 로 파싱하여 조립한다.
 //        - http(s): content/manifest.json + content/**/*.md 라이브 fetch (항상 최신, 재빌드 불필요)
@@ -244,6 +244,19 @@ export const DataLoader = {
         return this._cardTips;
     },
 
+    /** 카드 제외 피드백 파일 지연 로드 — {cardId: 사유} 맵, 없으면 null (http 전용) */
+    async _getCardExcludes() {
+        if (this._cardExcludes !== undefined) return this._cardExcludes;
+        this._cardExcludes = null;
+        if (!IS_FILE) {
+            try {
+                const res = await fetch('./' + contentPath('피드백/card_exclude.json'), { cache: 'no-cache' });
+                if (res.ok) this._cardExcludes = await res.json();
+            } catch (e) { /* 제외 목록 부재는 정상 — 미적용으로 진행 */ }
+        }
+        return this._cardExcludes;
+    },
+
     /** 과목 학습 데이터를 content/*.md 에서 런타임 파싱하여 로드 */
     async loadSubject(key) {
         if (this._loaded[key]) return this._loaded[key];
@@ -260,6 +273,12 @@ export const DataLoader = {
         }
 
         const data = buildSubjectData(subjMeta, mdByFile, { filePathMode: 'md' });
+
+        // 카드 제외 목록 — 추출 오염·근거 부재 카드 id를 런타임에서 제거
+        const excludes = await this._getCardExcludes();
+        if (excludes) {
+            data.cards = data.cards.filter(c => !(c.id in excludes));
+        }
 
         // 카드팁 오버레이 (AI-12) — 리뷰된 암기팁을 카드 id 기준으로 병합
         const tips = await this._getCardTips();
