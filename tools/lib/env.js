@@ -1,5 +1,6 @@
 /**
  * env.js — 루트 .env 로더 (dotenv 의존 없이 최소 파서)
+ * @spec AI-02
  *
  * 로컬 시크릿의 단일 소스 — tools/ai 제작 도구·운영 CLI(report:*·admin:grant-pro)
  * 등 로컬 전용 도구가 공유한다. .env는 gitignore 대상으로 절대 커밋 금지.
