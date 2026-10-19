@@ -41,6 +41,7 @@ const CI_ONLY = new Set([
 // 로컬에만 있는 단계 — CI에서 의미 없는 로컬 환경 검증
 const LOCAL_ONLY = new Set([
   'check:hooks',                     // 훅 설치 여부 — 로컬 전용
+  'check_env.js',                    // .env는 gitignore라 CI 도달 불가 — 로컬 시크릿 신선도
 ]);
 
 /** 명령 문자열 → 비교 토큰 (npm run X → X 유지, node tools/… → 경로 유지) */
