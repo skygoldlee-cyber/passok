@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject1.1fb6595a.js — mode: fact(명제 조합) 63문 / answer(정답 조합) 171문
+// 원본: data/exams/cosmetic/exams/subject1.b7e8e74a.js — mode: fact(명제 조합) 63문 / answer(정답 조합) 171문
 var COMBO_DRILLS_subject1 = [
  {
   "id": "law_combo_f9a972",
@@ -8043,7 +8043,7 @@ var COMBO_DRILLS_subject1 = [
    "정의"
   ],
   "derivedFrom": "subject1_q121",
-  "explain": "📖 교재 근거:\n개인정보 수기문서 전달, 시스템 접속 권한을 허용하여 열람·복사가 가능하게 한 경우도 제3자 제공임\n해설: 개인정보가 기재된 수기문서를 전달하는 행위 역시 제3자 제공에 해당하므로, 제3자 제공에 해당하지 않는다고 설명한 ②는 옳지 않습니다.",
+  "explain": "📖 교재 근거:\n개인정보 수기문서 전달, 시스템 접속 권한을 허용하여 열람·복사가 가능하게 한 경우도 제3자 제공임\n해설: 개인정보가 기재된 수기문서를 전달하는 행위 역시 제3자 제공에 해당하므로, 제3자 제공에 해당하지 않는다고 설명한 ②번 선지는 옳지 않습니다. 시스템 접속 권한을 허용하여 열람 및 복사가 가능하게 한 경우뿐만 아니라 수기문서 전달도 제3자 제공으로 봅니다.",
   "source": "화장품법의 이해 (274제)",
   "answer": "4"
  },
