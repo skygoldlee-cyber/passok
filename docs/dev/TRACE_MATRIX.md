@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 09242e1dbff0f96f
+> 입력 해시: c86303c3d10c50ab
 > 생성: 2026-10-19 · 원천: SPEC.md(557개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -176,7 +176,7 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| RR-01 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
+| RR-01 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/html-viewer.js<br>tools/build/build_ref_mapping.js | tests/dom/common-htmlviewer.dom.test.js | — | — |
 | RR-02 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/views/reader-ref-links.js | tests/dom/common-htmlviewer.dom.test.js<br>tests/dom/reader-ref-links.dom.test.js | — | — |
 | RR-03 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/views/reader-ref-links.js | tests/dom/common-htmlviewer.dom.test.js<br>tests/dom/reader-ref-links.dom.test.js | — | — |
 | RR-04 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/keyword-index.js<br>src/views/reader-ref-links.js<br>tools/build/build_keyword_index.js | tests/dom/common-htmlviewer.dom.test.js<br>tests/dom/reader-ref-links.dom.test.js | — | — |

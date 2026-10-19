@@ -45,6 +45,7 @@ npm.cmd run build:embeddings           # 문장 임베딩 사전 계산 → {dat
 
 npm.cmd run build:story                 # 표준형 + story/*_서사.md 패치 → _이야기형.md 생성 (build:data에 포함, --check=일치 검증 + 서사 커버리지 리포트 — 0블록 패치는 오류, -- --scaffold <subjectKey>=신규 과목 패치 골격)
 #   이야기형 패치 작성법(슬롯 마커·지시어 문법): docs/dev/runbooks/STORY_PATCH_GUIDE.md
+npm.cmd run build:refmap                # TEXTBOOK_REFERENCE_MAPPING.md §2 표를 교재 📌출처 ref_md 링크 실측으로 재생성 (마커 구간만 치환, --check=신선도 — check:fresh 게이트)
 # 콘텐츠 동기화 (build:data에 자동 통합됨)
 npm.cmd run sync:citations              # 문제은행 인용 라인번호 동기화
 node tools/sync/sync_citation_lines.js --check  # 변경사항 확인만 (수정 안 함)
