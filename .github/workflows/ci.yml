@@ -72,7 +72,10 @@ jobs:
       - name: UI style convention (인라인 스타일·display 조작 규약)
         run: npm run check:uistyle
 
+      # dependabot PR은 package(-lock).json 변경만 발생시켜 이 게이트가 항상 실패한다 —
+      # 봇은 문서 갱신·[no-docs] 마크가 불가하므로 PR 작성자 기준으로 면제한다.
       - name: Doc sync gate (소스 변경 시 문서 갱신 강제)
+        if: github.event.pull_request.user.login != 'dependabot[bot]'
         run: node tools/check/check_doc_sync.js --ref origin/main
 
       - name: Test-first gate (로직 변경 시 테스트 동반 강제)

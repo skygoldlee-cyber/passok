@@ -127,7 +127,9 @@ node tools/check/impact_tests.js --ref origin/main    # 브랜치 diff 분석 (C
 # Git 훅 (opt-in) — IDE 오류 상태에서 커밋·푸시 차단
 npm run hooks:install
 #   pre-commit: check:types + lint (실패 시 커밋 차단, --no-verify로 우회)
-#   pre-push:   + check:trace/specrefs/docs (SKIP_PREPUSH=1 git push로 우회)
+#   pre-push:   적응형 — 변경 파일 태그별 필요 단계 (콘텐츠 push는 신선도
+#               drillfresh·embfresh·docbundles 추가 — 파생물 재생성 누락 차단,
+#               SKIP_PREPUSH=1 git push로 우회)
 # ※ check:types는 IDE와 동일 계열(TS 5.x) — IDE에 오류가 보이면 훅도 실패한다
 ```
 
