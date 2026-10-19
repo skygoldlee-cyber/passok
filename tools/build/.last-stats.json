@@ -22,21 +22,21 @@
     },
     "safety": {
       "cards": 222,
-      "quizzes": 77,
+      "quizzes": 95,
       "files": {
         "교재/safety/3과목_유통화장품안전관리_표준형.md": {
           "cards": 271,
-          "quizzes": 77
+          "quizzes": 95
         }
       }
     },
     "understanding": {
-      "cards": 419,
-      "quizzes": 145,
+      "cards": 423,
+      "quizzes": 192,
       "files": {
         "교재/understanding/4과목_맞춤형화장품의이해_표준형.md": {
-          "cards": 459,
-          "quizzes": 148
+          "cards": 463,
+          "quizzes": 197
         }
       }
     }
