@@ -1,5 +1,5 @@
 // src/exam-context.js — 멀티시험 컨텍스트 (활성 시험 해석 + 경로/기능 해결)
-// @spec ES-01~05,DA-06~08
+// @spec ES-01~05,DA-06~08,DA-15
 //
 // 시험 목록: data/exams.js 클래식 번들이 window.EXAMS_LIST를 채운다
 // (file:// 호환 — fetch 불가 환경에서도 스크립트 태그로 로드).
@@ -8,14 +8,36 @@
 
 const CURRENT_EXAM_KEY = 'current_exam';
 
-// 레지스트리 부재 시 최후 폴백 — 모듈 평가 시점의 EXAMS_LIST(data/exams.js 클래식
-// 스크립트가 모듈보다 먼저 실행됨)에서 default/첫 시험을 읽는다.
-// 번들 자체가 로드 실패한 Node·테스트·저하 상태에서는 마지막 리터럴이 남는다.
-const DEFAULT_EXAM_ID = (() => {
+// 레지스트리 부재 시 최후 폴백 — EXAMS_LIST 번들 → (Node) content/exams.json 원본
+// 순으로 해석한다. 특정 시험 id를 코드에 박지 않는다 (DA-15).
+// 지연 해석: 번들 미로드 상태의 모듈 평가 시점 순서에 의존하지 않기 위해 첫 호출에서 해석.
+let _defaultExamId;
+function resolveDefaultExamId() {
+    if (_defaultExamId !== undefined) return _defaultExamId;
     const list = (globalThis.EXAMS_LIST && globalThis.EXAMS_LIST.exams) || [];
-    const def = Array.isArray(list) && (list.find(e => e && e.default) || list[0]);
-    return (def && def.id) || 'cosmetic';
-})();
+    const def = (Array.isArray(list) && (list.find(e => e && e.default) || list[0])) || null;
+    if (def && def.id) {
+        _defaultExamId = def.id;
+    } else {
+        const proc = /** @type {any} */ (globalThis.process);
+        if (proc && proc.versions && proc.versions.node && proc.getBuiltinModule) {
+            // Node·테스트 환경 — 번들 없이도 레지스트리 원본(content/exams.json)을 직접 읽는다.
+            try {
+                const fs = proc.getBuiltinModule('fs');
+                const { fileURLToPath } = proc.getBuiltinModule('url');
+                const raw = fs.readFileSync(fileURLToPath(new URL('../content/exams.json', import.meta.url)), 'utf-8');
+                const exams = JSON.parse(raw).exams || [];
+                const d = exams.find(e => e && e.default) || exams[0];
+                _defaultExamId = (d && d.id) || null;
+            } catch (e) {
+                _defaultExamId = null;
+            }
+        } else {
+            _defaultExamId = null;
+        }
+    }
+    return _defaultExamId;
+}
 
 /** 시험 목록 (exams.json → data/exams.js 번들) */
 export function getExamList() {
@@ -45,14 +67,14 @@ export function getActiveExam() {
         || exams[0];
 }
 
-/** 활성 시험 id (목록 부재 시 기본값). Node 도구에서는 EXAM_ID 환경변수로 지정 가능. */
+/** 활성 시험 id (목록 부재 시 레지스트리 기본값 — 해석 불가면 null). Node 도구에서는 EXAM_ID 환경변수로 지정 가능. */
 export function getActiveExamId() {
     const exam = getActiveExam();
     if (exam) return exam.id;
     if (typeof process !== 'undefined' && process.env && process.env.EXAM_ID) {
         return process.env.EXAM_ID;
     }
-    return DEFAULT_EXAM_ID;
+    return resolveDefaultExamId();
 }
 
 /**
@@ -146,7 +168,7 @@ export function contentPath(rel) {
     const exam = getActiveExam();
     const root = (exam && exam.contentRoot)
         || (typeof process !== 'undefined' && process.env && process.env.EXAM_CONTENT_ROOT)
-        || `content/exams/${DEFAULT_EXAM_ID}`;
+        || `content/exams/${resolveDefaultExamId()}`;
     return `${root}/${rel}`;
 }
 
@@ -155,7 +177,7 @@ export function dataPath(rel) {
     const exam = getActiveExam();
     const root = (exam && exam.dataRoot)
         || (typeof process !== 'undefined' && process.env && process.env.EXAM_DATA_ROOT)
-        || `data/exams/${DEFAULT_EXAM_ID}`;
+        || `data/exams/${resolveDefaultExamId()}`;
     return `${root}/${rel}`;
 }
 

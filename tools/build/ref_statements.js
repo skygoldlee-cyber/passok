@@ -23,34 +23,23 @@ const fs = require('fs');
 const path = require('path');
 
 /* ---------- 문서 → 과목 귀속 규칙 ----------
- * 진실은 {contentRoot}/references.json의 docSubjectRules (첫 매칭 우선).
- * 아래 목록은 references.json에 키가 없을 때의 폴백 — 편집은 references.json에서 수행. */
-const DOC_SUBJECT_RULES_FALLBACK = [
-  [/화장품법\(법률\)|화장품법 시행규칙/, 1],
-  [/시행규칙_별표1_/, 2],
-  [/시행규칙_별표3_/, 4],
-  [/시행규칙_별표[2456]_/, 3],
-  [/시행규칙_별표/, 1],
-  [/개인정보/, 1],
-  [/유통안전관리/, 3],
-  [/안전기준|우수화장품|CGMP|색소/, 2],
-  [/KFCC|기능성화장품/, 2],
-  [/주의사항|알레르기/, 4],
-];
-
+ * {contentRoot}/references.json의 docSubjectRules가 유일한 소스 (첫 매칭 우선, DA-15).
+ * 미선언 시험에는 규칙을 적용하지 않는다 — 특정 시험의 문서명 패턴을 코드에 박지 않음. */
 const _docRulesCache = {};
 
-/** references.json의 docSubjectRules 로드 (없으면 내장 폴백). contentRoot 단위 캐시. */
+/** references.json의 docSubjectRules 로드. 미선언 시 빈 배열 + 경고. contentRoot 단위 캐시. */
 function docSubjectRules(contentRoot) {
   const root = contentRoot || path.join(__dirname, '..', '..', 'content');
   if (_docRulesCache[root]) return _docRulesCache[root];
-  let rules = DOC_SUBJECT_RULES_FALLBACK;
+  let rules = [];
   try {
     const doc = JSON.parse(fs.readFileSync(path.join(root, 'references.json'), 'utf-8'));
     if (Array.isArray(doc.docSubjectRules) && doc.docSubjectRules.length) {
       rules = doc.docSubjectRules.map(r => [new RegExp(r[0]), r[1]]);
+    } else {
+      console.warn(`[ref_statements] ${root}/references.json에 docSubjectRules 미선언 — 문서 귀속 생략 (DA-15: 규칙은 콘텐츠에 선언)`);
     }
-  } catch { /* 폴백 사용 */ }
+  } catch { /* references.json 부재 — 규칙 없음 */ }
   _docRulesCache[root] = rules;
   return rules;
 }
