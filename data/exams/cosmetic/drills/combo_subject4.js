@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject4.b78a9896.js — mode: fact(명제 조합) 149문 / answer(정답 조합) 552문
+// 원본: data/exams/cosmetic/exams/subject4.a0f7ae42.js — mode: fact(명제 조합) 149문 / answer(정답 조합) 552문
 var COMBO_DRILLS_subject4 = [
  {
   "id": "understanding_combo_8317ff",
@@ -39980,35 +39980,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_7859a0",
-    "conceptId": "§5.2",
+    "conceptId": "§6.3",
     "text": "공급업자가 혼합·소분의 범위를 정한 경우 그 범위 내에서 실시하여야 한다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_26569d",
-    "conceptId": "§5.2",
+    "conceptId": "§6.3",
     "text": "혼합·소분 전에는 반드시 손을 소독하거나 세정하여야 하며, 일회용 장갑을 착용하더라도 이는 생략할 수 없다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_d5edef",
-    "conceptId": "§5.2",
+    "conceptId": "§6.3",
     "text": "내용물의 사용기한을 초과하여 맞춤형화장품의 사용기한을 정하지 않아야 한다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_780337",
-    "conceptId": "§5.2",
+    "conceptId": "§6.3",
     "text": "남은 내용물 및 원료는 밀폐 마개를 사용하는 등 비의도적 오염을 방지하여야 한다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_2b3621",
-    "conceptId": "§5.2",
+    "conceptId": "§6.3",
     "text": "소비자의 피부 상태나 선호도 확인 없이 미리 혼합·소분하여 보관하거나 판매하여서는 아니 된다.",
     "truth": true
    }
@@ -42093,7 +42093,7 @@ var COMBO_DRILLS_subject4 = [
    "수치"
   ],
   "derivedFrom": "subject4_q585",
-  "explain": "📖 교재 근거:\n| 수은 | 1㎍/g 이하 |\n해설: 수은의 검출 허용 한도는 1㎍/g 이하이다. 카드뮴은 5㎍/g 이하, 비소와 안티몬은 각각 10㎍/g 이하이다.",
+  "explain": "📖 교재 근거:\n| 수은 📌중요| 1㎍/g 이하 |\n해설: 수은의 검출 허용 한도는 1㎍/g 이하이다. 카드뮴은 5㎍/g 이하, 비소와 안티몬은 각각 10㎍/g 이하이다.",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "5"
  },
@@ -65841,6 +65841,106 @@ var COMBO_DRILLS_subject4 = [
   "answer": "5"
  },
  {
+  "id": "understanding_combo-cluster_07e64f",
+  "subject": 4,
+  "type": "combo",
+  "points": 4,
+  "citation": "📖 교재: §6.3 (출처: 과목4 문제은행 진술 재조합)",
+  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
+  "statements": [
+   {
+    "id": "ㄱ",
+    "sid": "understanding_st_5d175c",
+    "conceptId": "§6.3",
+    "text": "가용화 제형은 운점 이상에서 가용화가 깨진다.",
+    "truth": true,
+    "explain": "원본: 과목4 문제은행 Q683 · 교재 §6.3"
+   },
+   {
+    "id": "ㄴ",
+    "sid": "understanding_st_e20c72",
+    "conceptId": "§6.3",
+    "text": "적용 대상은 주로 가용화 제품이다.",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q651 · 교재 §6.3"
+   },
+   {
+    "id": "ㄷ",
+    "sid": "understanding_st_c037a2",
+    "conceptId": "§6.3",
+    "text": "온탕은 약 100℃이다.",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q661 · 교재 §6.3"
+   },
+   {
+    "id": "ㄹ",
+    "sid": "understanding_st_dea583",
+    "conceptId": "§6.3",
+    "text": "작업 시 마스크 착용은 자율이며 위생복만 필수이다.",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q702 · 교재 §6.3"
+   },
+   {
+    "id": "ㅁ",
+    "sid": "understanding_st_d83587",
+    "conceptId": "§6.3",
+    "text": "살균할 도구는 겹치지 않게 1층으로 배치하고 램프의 청결을 확인한다.",
+    "truth": true,
+    "explain": "원본: 과목4 문제은행 Q701 · 교재 §6.3"
+   }
+  ],
+  "options": [
+   {
+    "id": "1",
+    "members": [
+     "ㄴ",
+     "ㄹ"
+    ]
+   },
+   {
+    "id": "2",
+    "members": [
+     "ㄱ",
+     "ㅁ"
+    ]
+   },
+   {
+    "id": "3",
+    "members": [
+     "ㄱ",
+     "ㄴ",
+     "ㄹ"
+    ]
+   },
+   {
+    "id": "4",
+    "members": [
+     "ㄱ",
+     "ㄴ",
+     "ㄹ",
+     "ㅁ"
+    ]
+   },
+   {
+    "id": "5",
+    "members": [
+     "ㄱ",
+     "ㄹ"
+    ]
+   }
+  ],
+  "tags": [
+   "자동변환",
+   "명제판정",
+   "개념재조합",
+   "수치"
+  ],
+  "derivedFrom": "cluster:4|§6.3",
+  "explain": "ㄱ. 원본: 과목4 문제은행 Q683 · 교재 §6.3\nㄴ. 원본: 과목4 문제은행 Q651 · 교재 §6.3\nㄷ. 원본: 과목4 문제은행 Q661 · 교재 §6.3\nㄹ. 원본: 과목4 문제은행 Q702 · 교재 §6.3\nㅁ. 원본: 과목4 문제은행 Q701 · 교재 §6.3",
+  "source": "과목4 개념 재조합",
+  "answer": "2"
+ },
+ {
   "id": "understanding_combo-cluster_1ce39d",
   "subject": 4,
   "type": "combo",
@@ -65850,30 +65950,14 @@ var COMBO_DRILLS_subject4 = [
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "understanding_st_4025eb",
+    "sid": "understanding_st_0e383f",
     "conceptId": "§5.2",
-    "text": "맞춤형화장품 판매 시 소비자에게 제품의 원가 구성 내역을 설명하여야 한다.",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q564 · 교재 §5.2"
+    "text": "사용하는 기구는 깨끗이 세척한다.",
+    "truth": true,
+    "explain": "원본: 과목4 문제은행 Q634 · 교재 §5.2"
    },
    {
     "id": "ㄴ",
-    "sid": "understanding_st_c9c280",
-    "conceptId": "§5.2",
-    "text": "대한화장품협회장에게 매월 말일까지 보고한다.",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q636 · 교재 §5.2"
-   },
-   {
-    "id": "ㄷ",
-    "sid": "understanding_st_2f25f6",
-    "conceptId": "§5.2",
-    "text": "영유아·어린이 화장품은 보존제 함량을 의무적으로 표시해야 한다.",
-    "truth": true,
-    "explain": "원본: 과목4 문제은행 Q633 · 교재 §5.2"
-   },
-   {
-    "id": "ㄹ",
     "sid": "understanding_st_f2a8c8",
     "conceptId": "§5.2",
     "text": "원료 및 화장품의 사용기한을 확인한다.",
@@ -65881,12 +65965,28 @@ var COMBO_DRILLS_subject4 = [
     "explain": "원본: 과목4 문제은행 Q634 · 교재 §5.2"
    },
    {
-    "id": "ㅁ",
-    "sid": "understanding_st_4c959d",
+    "id": "ㄷ",
+    "sid": "understanding_st_e01593",
     "conceptId": "§5.2",
-    "text": "맞춤형화장품 사용과 관련된 부작용 발생사례에 대해서는 지체 없이 식품의약품안전처장에게 보고하여야 한다.",
+    "text": "실증 자료는 요청일로부터 30일 이내에 제출하여야 한다.",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q616 · 교재 §5.2"
+   },
+   {
+    "id": "ㄹ",
+    "sid": "understanding_st_124766",
+    "conceptId": "§5.2",
+    "text": "피부에 적합한 화장품을 사용하므로 심리적 만족을 느낄 수 있다.",
     "truth": true,
-    "explain": "원본: 과목4 문제은행 Q564 · 교재 §5.2"
+    "explain": "원본: 과목4 문제은행 Q565 · 교재 §5.2"
+   },
+   {
+    "id": "ㅁ",
+    "sid": "understanding_st_d88607",
+    "conceptId": "§5.2",
+    "text": "내용물의 혼합 및 소분이 불가능하다.",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q643 · 교재 §5.2"
    }
   ],
   "options": [
@@ -65899,9 +65999,9 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "2",
     "members": [
-     "ㄷ",
-     "ㄹ",
-     "ㅁ"
+     "ㄱ",
+     "ㄴ",
+     "ㄹ"
     ]
    },
    {
@@ -65932,10 +66032,10 @@ var COMBO_DRILLS_subject4 = [
    "개념재조합",
    "기한",
    "절차",
-   "한도"
+   "수치"
   ],
   "derivedFrom": "cluster:4|§5.2",
-  "explain": "ㄱ. 원본: 과목4 문제은행 Q564 · 교재 §5.2\nㄴ. 원본: 과목4 문제은행 Q636 · 교재 §5.2\nㄷ. 원본: 과목4 문제은행 Q633 · 교재 §5.2\nㄹ. 원본: 과목4 문제은행 Q634 · 교재 §5.2\nㅁ. 원본: 과목4 문제은행 Q564 · 교재 §5.2",
+  "explain": "ㄱ. 원본: 과목4 문제은행 Q634 · 교재 §5.2\nㄴ. 원본: 과목4 문제은행 Q634 · 교재 §5.2\nㄷ. 원본: 과목4 문제은행 Q616 · 교재 §5.2\nㄹ. 원본: 과목4 문제은행 Q565 · 교재 §5.2\nㅁ. 원본: 과목4 문제은행 Q643 · 교재 §5.2",
   "source": "과목4 개념 재조합",
   "answer": "2"
  },
@@ -66039,105 +66139,6 @@ var COMBO_DRILLS_subject4 = [
   "explain": "ㄱ. 원본: 과목4 문제은행 Q578 · 교재 §4.1\nㄴ. 원본: 과목4 문제은행 Q577 · 교재 §4.1\nㄷ. 원본: 과목4 문제은행 Q578 · 교재 §4.1\nㄹ. 원본: 과목4 문제은행 Q578 · 교재 §4.1\nㅁ. 원본: 과목4 문제은행 Q577 · 교재 §4.1",
   "source": "과목4 개념 재조합",
   "answer": "1"
- },
- {
-  "id": "understanding_combo-cluster_07e64f",
-  "subject": 4,
-  "type": "combo",
-  "points": 4,
-  "citation": "📖 교재: §6.3 (출처: 과목4 문제은행 진술 재조합)",
-  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
-  "statements": [
-   {
-    "id": "ㄱ",
-    "sid": "understanding_st_981f60",
-    "conceptId": "§6.3",
-    "text": "분산상 크기를 작고 균일하게 만드는 특징이 있다.",
-    "truth": true,
-    "explain": "원본: 과목4 문제은행 Q651 · 교재 §6.3"
-   },
-   {
-    "id": "ㄴ",
-    "sid": "understanding_st_6c0153",
-    "conceptId": "§6.3",
-    "text": "운점 이상으로 온도가 올라가면 가용화가 깨진다.",
-    "truth": true,
-    "explain": "원본: 과목4 문제은행 Q680 · 교재 §6.3"
-   },
-   {
-    "id": "ㄷ",
-    "sid": "understanding_st_139733",
-    "conceptId": "§6.3",
-    "text": "혼합·소분 공간은 위해 우려가 없더라도 예외 없이 무조건 분리해야 한다.",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q703 · 교재 §6.3"
-   },
-   {
-    "id": "ㄹ",
-    "sid": "understanding_st_c38602",
-    "conceptId": "§6.3",
-    "text": "점도 조절만을 목적으로 사용하는 무기물 원료이다.",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q672 · 교재 §6.3"
-   },
-   {
-    "id": "ㅁ",
-    "sid": "understanding_st_62b378",
-    "conceptId": "§6.3",
-    "text": "녹지 않는 성질을 띠며 안료 형태로 작용한다.",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q669 · 교재 §6.3"
-   }
-  ],
-  "options": [
-   {
-    "id": "1",
-    "members": [
-     "ㄴ",
-     "ㄹ"
-    ]
-   },
-   {
-    "id": "2",
-    "members": [
-     "ㄱ",
-     "ㄴ"
-    ]
-   },
-   {
-    "id": "3",
-    "members": [
-     "ㄱ",
-     "ㄴ",
-     "ㄹ"
-    ]
-   },
-   {
-    "id": "4",
-    "members": [
-     "ㄱ",
-     "ㄴ",
-     "ㄹ",
-     "ㅁ"
-    ]
-   },
-   {
-    "id": "5",
-    "members": [
-     "ㄱ",
-     "ㄹ"
-    ]
-   }
-  ],
-  "tags": [
-   "자동변환",
-   "명제판정",
-   "개념재조합"
-  ],
-  "derivedFrom": "cluster:4|§6.3",
-  "explain": "ㄱ. 원본: 과목4 문제은행 Q651 · 교재 §6.3\nㄴ. 원본: 과목4 문제은행 Q680 · 교재 §6.3\nㄷ. 원본: 과목4 문제은행 Q703 · 교재 §6.3\nㄹ. 원본: 과목4 문제은행 Q672 · 교재 §6.3\nㅁ. 원본: 과목4 문제은행 Q669 · 교재 §6.3",
-  "source": "과목4 개념 재조합",
-  "answer": "2"
  },
  {
   "id": "understanding_combo-cluster_02e544",

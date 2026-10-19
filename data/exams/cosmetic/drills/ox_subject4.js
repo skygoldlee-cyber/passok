@@ -1,5 +1,5 @@
 // 자동 생성된 O/X 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_ox_drills.js)
-// 원본: data/exams/cosmetic/exams/subject4.b78a9896.js — mode: fact(명제 판정) 148문 / answer(정답 판정) 550문
+// 원본: data/exams/cosmetic/exams/subject4.a0f7ae42.js — mode: fact(명제 판정) 148문 / answer(정답 판정) 550문
 var OX_DRILLS_subject4 = [
  {
   "id": "ox-04-0001",
@@ -42179,7 +42179,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_fa823d",
   "derivedFrom": "subject4_q585#1",
-  "explain": "📖 교재 근거:\n| 수은 | 1㎍/g 이하 |\n해설: 수은의 검출 허용 한도는 1㎍/g 이하이다. 카드뮴은 5㎍/g 이하, 비소와 안티몬은 각각 10㎍/g 이하이다.",
+  "explain": "📖 교재 근거:\n| 수은 📌중요| 1㎍/g 이하 |\n해설: 수은의 검출 허용 한도는 1㎍/g 이하이다. 카드뮴은 5㎍/g 이하, 비소와 안티몬은 각각 10㎍/g 이하이다.",
   "tags": [
    "정답판정",
    "한도",
@@ -42199,7 +42199,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_fa76b8",
   "derivedFrom": "subject4_q585#2",
-  "explain": "📖 교재 근거:\n| 수은 | 1㎍/g 이하 |\n해설: 수은의 검출 허용 한도는 1㎍/g 이하이다. 카드뮴은 5㎍/g 이하, 비소와 안티몬은 각각 10㎍/g 이하이다.",
+  "explain": "📖 교재 근거:\n| 수은 📌중요| 1㎍/g 이하 |\n해설: 수은의 검출 허용 한도는 1㎍/g 이하이다. 카드뮴은 5㎍/g 이하, 비소와 안티몬은 각각 10㎍/g 이하이다.",
   "tags": [
    "정답판정",
    "한도",
@@ -42219,7 +42219,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_f0e85b",
   "derivedFrom": "subject4_q585#3",
-  "explain": "📖 교재 근거:\n| 수은 | 1㎍/g 이하 |\n해설: 수은의 검출 허용 한도는 1㎍/g 이하이다. 카드뮴은 5㎍/g 이하, 비소와 안티몬은 각각 10㎍/g 이하이다.",
+  "explain": "📖 교재 근거:\n| 수은 📌중요| 1㎍/g 이하 |\n해설: 수은의 검출 허용 한도는 1㎍/g 이하이다. 카드뮴은 5㎍/g 이하, 비소와 안티몬은 각각 10㎍/g 이하이다.",
   "tags": [
    "정답판정",
    "한도",
@@ -42239,7 +42239,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_9f69b9",
   "derivedFrom": "subject4_q585#4",
-  "explain": "📖 교재 근거:\n| 수은 | 1㎍/g 이하 |\n해설: 수은의 검출 허용 한도는 1㎍/g 이하이다. 카드뮴은 5㎍/g 이하, 비소와 안티몬은 각각 10㎍/g 이하이다.",
+  "explain": "📖 교재 근거:\n| 수은 📌중요| 1㎍/g 이하 |\n해설: 수은의 검출 허용 한도는 1㎍/g 이하이다. 카드뮴은 5㎍/g 이하, 비소와 안티몬은 각각 10㎍/g 이하이다.",
   "tags": [
    "정답판정",
    "한도",
@@ -42259,7 +42259,7 @@ var OX_DRILLS_subject4 = [
   "mode": "answer",
   "sid": "understanding_st_24bb3c",
   "derivedFrom": "subject4_q585#5",
-  "explain": "📖 교재 근거:\n| 수은 | 1㎍/g 이하 |\n해설: 수은의 검출 허용 한도는 1㎍/g 이하이다. 카드뮴은 5㎍/g 이하, 비소와 안티몬은 각각 10㎍/g 이하이다.",
+  "explain": "📖 교재 근거:\n| 수은 📌중요| 1㎍/g 이하 |\n해설: 수은의 검출 허용 한도는 1㎍/g 이하이다. 카드뮴은 5㎍/g 이하, 비소와 안티몬은 각각 10㎍/g 이하이다.",
   "tags": [
    "정답판정",
    "한도",
