@@ -48,7 +48,7 @@ flowchart LR
 | `tests/` | md2doc·pdf2md 순수 함수 pytest (`python -m pytest`) | 변환 로직·템플릿·캐시·출력 계획 변경 시 |
 | `callout_rules.json` | md2doc 콜아웃 패턴 규칙 (스크립트 옆 자동 인식) | 자동 |
 | `batch_convert.py` | 시험 교재·안내서·문제은행 MD → `html/` 일괄 변환 | **교재 MD 교체 후 HTML 재생성 시** (시나리오 B) |
-| `check_laws.py` | 국가법령정보센터 OPEN API로 시험 대상 법령 현행성 확인 → `report/` | **법령 개정 점검 시** (시나리오 C, `LAW_OC` 키 필요) |
+| `check_laws.py` | 국가법령정보센터 OPEN API로 시험 대상 법령 현행성 확인 → `report/` | **법령 개정 점검 시** (시나리오 C, `LAW_OC_KEY` 키 필요) |
 | `compare_ingredients_official.py` | 고시 ref_md 별표 원료 ↔ 원료 DB 전수 대조 리포트 | cosmetic 원료 DB 감사 시 (`_exam_root` 해석 — 기본 시험 대상) |
 | `apply_audit_2026_19.py` | 제2026-19호 대조 결과의 원료 DB 일괄 반영 (1회성) | cosmetic 전용 마이그레이션 — 재실행 불필요 |
 | `audiobook/` | 교재 MD → 청취용 원고 → TTS MP3 파이프라인 | **교재 교체 후 오디오북 재생성 시** (시나리오 B, `audiobook/README.md` 상세) |
@@ -68,11 +68,13 @@ winget install ffmpeg        # MP3 병합 품질 향상 (없으면 바이너리 
 
 ### 환경변수 / API 키
 
+로컬 시크릿은 **repo 루트 `.env` 하나에 둔다** (gitignore 대상) — 아래 키들은 `.env`에 `KEY=값` 한 줄로 두면 각 도구가 자동으로 읽는다. 쉘 환경변수가 설정돼 있으면 그쪽이 우선한다.
+
 | 변수 | 용도 | 필요 시점 |
 |---|---|---|
 | `EXAM_CONTENT_ROOT` | 대상 시험 콘텐츠 루트 (기본: `content/exams/cosmetic`) | 다른 시험 대상으로 실행할 때 |
 | `EXAM_ID` | `EXAM_CONTENT_ROOT` 미설정 시 exams.json에서 루트 해석 | 시험 지정 대안 |
-| `LAW_OC` | 국가법령정보센터 OPEN API 인증키 | `check_laws.py` 자동 조회 시 |
+| `LAW_OC_KEY` | 국가법령정보센터 OPEN API 인증키 (구 `LAW_OC` env도 인식) | `check_laws.py`·`check_mfds_notice.py`·`fetch_revision.py` 자동 조회 시 |
 | `ELEVENLABS_API_KEY` | ElevenLabs TTS | 오디오북 `--tts` 실행 시 |
 
 **경로 우선순위**: CLI 인자 > `EXAM_CONTENT_ROOT` > `EXAM_ID` > `content/exams.json` default
@@ -184,7 +186,7 @@ npm.cmd run check:content -- --build
 시험 대상 법령(화장품법 등 8종)이 개정됐는지 주기적으로 점검할 때:
 
 ```powershell
-$env:LAW_OC = "law.go.kr_로그인_이메일_앞부분"     # https://open.law.go.kr 에서 무료 신청
+# 루트 .env에 LAW_OC_KEY=<law.go.kr 로그인 이메일 @ 앞부분> 한 줄 추가 (https://open.law.go.kr 무료 신청)
 python ref-pipeline/check_laws.py
 python ref-pipeline/check_laws.py your_oc_id      # 인자로 전달해도 됨
 ```
@@ -274,6 +276,6 @@ flowchart TB
 |---|---|
 | `ModuleNotFoundError: markdown/pdfplumber` | `pip install -r ref-pipeline/requirements.txt` |
 | md2doc 실행해도 아무 출력 없음 | `--cli` 누락 — 미지정 시 GUI 진입 (PySide6 없으면 오류) |
-| `check_laws.py` 전부 `확인실패` | `LAW_OC` 미설정 또는 API 오류 — 수동 확인처(law.go.kr) 이용 |
+| `check_laws.py` 전부 `확인실패` | `LAW_OC_KEY` 미설정(.env·env 모두) 또는 API 오류 — 수동 확인처(law.go.kr) 이용 |
 | 오디오북 `--list`가 비어 있음 | `EXAM_CONTENT_ROOT` 경로와 `manifest.json`의 `subjects[].dir` 확인 |
 | 변환 후 `(L###)` 인용 깨짐 | 라인 번호가 밀린 것 — `check:reflines`로 확인 후 인용 동기화(`sync:citations`) |
