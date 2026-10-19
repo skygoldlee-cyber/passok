@@ -52,7 +52,7 @@ export function analysisBootKeys(examId = 'cosmetic') {
  * 의도된 분석 결과(결정론적):
  *   - 퀴즈 25문 — 표본 충족(AN-04), manufacturing 3/8=38% 최저
  *   - 오답 원인 3건(최근 7일 내) — 암기·계산·법령혼동 각 1건
- *   - 취약 진술 4건 — 법령 cid L350 클러스터 2개(개념 구간 경고), 졸업 진술 1개 제외
+ *   - 취약 진술 4건 — 법령 cid L348 클러스터 2개(개념 구간 경고), 졸업 진술 1개 제외
  *   - 복습 대기 진술 2개 (nextReview ≤ 오늘)
  *   - 모의고사 4회 52→68 상승 — 예상 점수·레이더·성적 추이·합격 진단 활성화
  *   - 실제 결과 보고(65점, 보고 시 추정 55점) → 보정 +10점 → 예상 64~76점
@@ -96,13 +96,13 @@ export function buildAnalysisSeed(examId = 'cosmetic') {
         'weak_quiz_law_quiz_e2e008':           { cause: 'lawConfusion', ts: ts - 3 * DAY_MS, subjectId: 'law' }
     });
 
-    // 진술 오판 — law의 같은 cid(L350) 2건은 "개념 구간 반복 오판" 클러스터를 만든다.
+    // 진술 오판 — law의 같은 cid(L348) 2건은 "개념 구간 반복 오판" 클러스터를 만든다.
     // cid는 CID_SECTION 환산 우선·CHAPTER_RANGES 폴백 순 해석 (교재 개편 시
-    // 단원명이 바뀌므로 현재 매핑 기준): L350 → §1.3 → law 'Chapter 01. 화장품법의 이해',
+    // 단원명이 바뀌므로 현재 매핑 기준): L348 → §1.3 → law 'Chapter 01. 화장품법의 이해',
     // L2209: manufacturing '1. 사용제한 원료의 종류', L422: safety '2. 위생 유지관리'.
     seed[P('statement_stats')] = JSON.stringify({
-        'law_st_e2e01':            { j: 5, w: 4, lw: _day(1), t: '맞춤형화장품 조제관리사는 교육을 이수해야 한다', truth: true,  cid: 'L350',  last: false, streak: 0 },
-        'law_st_e2e02':            { j: 3, w: 2, lw: _day(0), t: '화장품은 피부·모발을 청결·미화하기 위한 물품이다', truth: true,  cid: 'L350',  last: true,  streak: 0 },
+        'law_st_e2e01':            { j: 5, w: 4, lw: _day(1), t: '맞춤형화장품 조제관리사는 교육을 이수해야 한다', truth: true,  cid: 'L348',  last: false, streak: 0 },
+        'law_st_e2e02':            { j: 3, w: 2, lw: _day(0), t: '화장품은 피부·모발을 청결·미화하기 위한 물품이다', truth: true,  cid: 'L348',  last: true,  streak: 0 },
         'law_st_e2e03':            { j: 6, w: 1, lw: null,    t: '졸업된 진술 — 취약 목록에 나타나면 안 된다',     truth: false, cid: 'L1200', last: true,  streak: 3 },
         'manufacturing_st_e2e01':  { j: 4, w: 3, lw: _day(0), t: '사용제한 원료는 함량 기준을 초과할 수 없다',      truth: true,  cid: 'L2209', last: false, streak: 0 },
         'safety_st_e2e01':         { j: 2, w: 1, lw: _day(2), t: '작업장은 청결한 위생 상태를 유지해야 한다',      truth: false, cid: 'L422',  last: false, streak: 0 }
@@ -163,7 +163,7 @@ export function buildAnalysisSeed(examId = 'cosmetic') {
 
 /**
  * 판정 시퀀스 로그 시드 (D-22) — 단원 BKT 숙달 추정의 관측 입력.
- * law_st_e2e01(L350 → law 'Chapter 01')에 OX 정판 3연속을 심으면
+ * law_st_e2e01(L348 → law 'Chapter 01')에 OX 정판 3연속을 심으면
  * Beta 카운트 추정(~40%)이 BKT P(L) ~96%로 회복된다 — 카드의 `숙달 %`로 검증.
  * 카드 자기평가 레코드(비멤버 id)는 소비자가 제외해야 함 — 미추적 id 1건 혼입.
  * @param {string} [examId]
