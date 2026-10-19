@@ -38,6 +38,7 @@ const STEP_DOMAINMAP = npmStep('domainmap', 'check:domainmap', '분류', '파일
 const STEP_VENDOR = npmStep('vendor', 'check:vendor', '자산', 'vendor 매니페스트 ↔ 파일 해시·버전 정합 (BP-13, 무단 교체·미등록 파일 차단)');
 const STEP_UITEXT = npmStep('uitext', 'check:uitext', '문서', 'UI 텍스트 커버리지 (data-uitext ↔ manifest.uiText)');
 const STEP_STUDYQ = nodeStep('studyq', 'tools/check/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'] });
+const STEP_ENV = nodeStep('env', 'tools/check/check_env.js', '보안', '.env 시크릿 신선도 — 만료 토큰·미선언·빈 키 탐지 (.env 부재 시 스킵 — CI에는 .env 없음, LOCAL_ONLY)');
 
 // ── 문서 정합 묶음 (check:docs → docs 프리셋) ──────────────────────────
 const DOCS_STEPS = [
@@ -100,6 +101,7 @@ const CONTENT_STEPS = [
 const CI_STEPS = [
   npmStep('ci:hooks', 'check:hooks', '로컬', 'Git 훅 설치 여부 (미설치 시 로컬 게이트 우회 경고)'),
   npmStep('ci:secrets', 'check:secrets', '보안', '추적 파일 시크릿 패턴 스캔', { diffScoped: true }),
+  STEP_ENV,
   STEP_LINT,
   STEP_TYPES,
   npmStep('ci:imports', 'check:imports', '품질', 'ES 모듈 import/export 교차 검증'),
@@ -165,7 +167,7 @@ const PRESETS = {
   content: (opts) => contentSteps(opts),
   docs: () => DOCS_STEPS.slice(),
   ci: () => CI_STEPS.slice(),
-  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_HTML, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_VENDOR, STEP_UITEXT, STEP_STUDYQ, ...contentSteps(opts)],
+  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_HTML, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_VENDOR, STEP_ENV, STEP_UITEXT, STEP_STUDYQ, ...contentSteps(opts)],
   refs: () => REFS_STEPS.slice(),
   freshness: () => FRESH_STEPS.slice(),
 };
