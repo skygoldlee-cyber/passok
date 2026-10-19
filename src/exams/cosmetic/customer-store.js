@@ -18,7 +18,8 @@
 
 import { STORAGE_KEYS } from '../../storage-keys.js';
 import {
-  loadItems, saveItems, newId, clampStr, numOrNull, pickEnum, clampDate,
+  loadItems, saveItems, newId, clampStr, pickEnum, clampDate,
+  sanitizeCustomerFields,
 } from './store-utils.js';
 import { todayKey } from '../../utils.js';
 import { CUSTOMER_OPTIONS } from './formula-store.js';
@@ -29,13 +30,9 @@ export const CUSTOMER_LIMIT_FREE = 20;
 // 두피 유형 — CUSTOMER_OPTIONS.skinType과 별도 축 (두피 전용 처방 대비)
 export const SCALP_OPTIONS = Object.freeze(['건성', '지성', '민감성', '정상']);
 
-const MAX_NAME_LEN = 30;
 const MAX_NOTE_LEN = 500;
 const MAX_LOG_LEN = 300;
 const MAX_LOGS = 100;
-const MAX_ALLERGIES = 15;
-const MAX_ALLERGY_LEN = 60;
-const MAX_PRODUCTS_LEN = 300;
 const MAX_PURPOSE_LEN = 120;
 
 /** 고유 ID 생성: cust_<base36시간><난수> */
@@ -49,15 +46,6 @@ function loadAll() {
 
 function saveAll(customers) {
   return saveItems(STORAGE_KEYS.CUSTOMER_ITEMS, customers);
-}
-
-function sanitizeStringList(list, maxItems, maxLen) {
-  if (!Array.isArray(list)) return [];
-  return list
-    .map(v => (typeof v === 'string' ? v.trim() : ''))
-    .filter(Boolean)
-    .slice(0, maxItems)
-    .map(v => v.slice(0, maxLen));
 }
 
 function sanitizeConsultLog(log) {
@@ -74,22 +62,13 @@ function sanitizeConsultLog(log) {
 }
 
 function sanitizeCustomer(data) {
-  const c = {
-    name: clampStr(data.name || '', MAX_NAME_LEN).trim(),
-    age: numOrNull(data.age),
-    gender: pickEnum(data.gender, CUSTOMER_OPTIONS.gender),
-    skinType: pickEnum(data.skinType, CUSTOMER_OPTIONS.skinType),
+  return {
+    ...sanitizeCustomerFields(data, CUSTOMER_OPTIONS),
     scalpType: pickEnum(data.scalpType, SCALP_OPTIONS),
-    concerns: sanitizeStringList(data.concerns, CUSTOMER_OPTIONS.concerns.length, 30)
-      .filter(v => CUSTOMER_OPTIONS.concerns.includes(v)),
-    allergies: sanitizeStringList(data.allergies, MAX_ALLERGIES, MAX_ALLERGY_LEN),
-    pregnancy: pickEnum(data.pregnancy, CUSTOMER_OPTIONS.pregnancy),
-    products: clampStr(data.products || '', MAX_PRODUCTS_LEN).trim(),
     purpose: clampStr(data.purpose || '', MAX_PURPOSE_LEN).trim(),
     consultLog: sanitizeConsultLog(data.consultLog),
     notes: clampStr(data.notes || '', MAX_NOTE_LEN).trim(),
   };
-  return c;
 }
 
 /** 고객 목록 — updatedAt 내림차순 */
