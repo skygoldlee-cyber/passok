@@ -22,6 +22,17 @@ const SAMPLE_MD_LINE = `# 2과목: 유통화장품 안전관리
 - **작업장 청소** 🔖기출: 작업 전후에 **1회** 이상 실시해야 한다
 `;
 
+const SAMPLE_MD_GENERIC = `# 4과목: 범용 용어 필터
+
+## 1단원: 피부 기능
+
+| 용어 | 설명 |
+| --- | --- |
+| 보호 기능 | 물리적 마찰·충격과 화학 물질로부터 피부를 보호하는 역할 |
+| 자격시험 합격 기준 | 전 과목 총점 60% 이상, 매 과목 40% 이상 |
+| 관리 | 품질을 관리하는 일반적인 절차 설명 |
+`;
+
 const SAMPLE_MD_NO_QUIZ = `# 3과목: 화장품 제조
 
 ## 1단원: 원료
@@ -107,6 +118,18 @@ test('parseMarkdownFile: ** 마커는 term에서 제거', () => {
     const card = cards.find(c => c.term === '작업장 청소');
     assert.ok(card, 'term에 **가 제거되어야 함');
     assert.equal(card.term.includes('**'), false);
+});
+
+test('parseMarkdownFile: 범용 접미사 복합 용어는 카드로 추출', () => {
+    const { cards } = parseMarkdownFile(SAMPLE_MD_GENERIC, 'understanding', '1.skin-function.md', 'ch1');
+    const terms = cards.map(c => c.term);
+    assert.ok(terms.includes('보호 기능'), "'…기능' 복합 용어가 카드로 살아있어야 함");
+    assert.ok(terms.includes('자격시험 합격 기준'), "'…기준' 복합 용어가 카드로 살아있어야 함");
+});
+
+test('parseMarkdownFile: 단일 범용어는 여전히 탈락', () => {
+    const { cards } = parseMarkdownFile(SAMPLE_MD_GENERIC, 'understanding', '1.skin-function.md', 'ch1');
+    assert.ok(!cards.some(c => c.term === '관리'), "단일 범용어 '관리'는 카드가 되면 안 됨");
 });
 
 // --- parseTextbookContent 테스트 ---
