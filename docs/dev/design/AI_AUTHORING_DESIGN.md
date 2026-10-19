@@ -40,7 +40,7 @@
 
 - **생성기 자기검증**: 생성기가 출력 전에 자기 인용을 실제 라인으로 해석해 "지지 여부"를 확인, 실패 시 재생성 — 초안 품질 1차 필터
 - **LLM-as-judge**: 생성과 다른 모델·프롬프트가 초안을 채점 — 단일 모델 편향 완화. 판정 불일치 = 자동으로 리뷰 큐행
-- **승격 조건(제안)**: L0에서 채택률·`check:answers` 통과율로 자동 검증의 실효 오류율을 추정하고, 표본 오류율이 연속 N배치 임계 미만이면 L1 승격 — 수치는 Phase A 데이터로 확정
+- **승격 조건(제안)**: L0에서 채택률·`check:answers` 통과율로 자동 검증의 실효 오류율을 추정하고, 표본 오류율이 연속 N배치 임계 미만이면 L1 승격 — 수치는 Phase A 데이터로 확정. 채택률·리뷰수정률은 `ai:adoption`이 `tools/ai/adoption_log.jsonl`에서 배치별로 집계 (AI-23)
 
 ## 4. 도구 구성 (`tools/ai/`, npm 스크립트)
 
@@ -57,12 +57,13 @@
 | `ai:lint` | `tools/ai/ai_lint.js` | 발문 품질 검수 — 이중부정·모호 지문·답이 새는 발문·진술만으로 추론 가능한 패턴 등 기계 게이트가 못 잡는 영역 |
 | `ai:apply` | `tools/ai/ai_apply.js` | 리뷰된 `explain_*.md` 초안의 `> **해설**` 행을 문제은행 정답 블록에 편입 — 기본 미리보기, `--write` 반영. 초안 파일명은 `explain_<examId>_<examKey>.md` (시험 간 키 충돌 방지) |
 | `ai:stmtfb` | `tools/ai/ai_stmt_feedback.js` | 진술 단위 오답 피드백 — combo 드릴의 각 진술(sid)에 "왜 참·거짓인지 + 혼동 유형(수치·주체·극성)" 1~2문장 초안 생성. `--apply` 시 리뷰된 초안을 `content/exams/<id>/피드백/stmt_explain.json` 정본에 편입 → `build:drills`가 `statement.explain`에 병합 → perStatement 오판 표시 경로에 노출. `--stats <백업JSON>`로 statement-tracker 오판 통계를 대상 선정에 연결 (오판수 내림차순·`--min-wrong`, 극단 오판율은 ⚠️ 콘텐츠 검수 후보 표시) |
+| `ai:adoption` | `tools/ai/ai_adoption.js` | 배치 채택률 리포트 — `ai_apply --write`가 `tools/ai/adoption_log.jsonl`에 기록한 {생성·편입·스킵·리뷰수정 여부·모델}을 배치별·누적 집계. §3.1 승격 판단 데이터 (AI-23) |
 | 공통 | `tools/ai/llm_client.js` | 공급자 추상화(OpenAI/Anthropic/Gemini 중 env로 선택)·키 로드·재시도·출력 JSON 스키마 검증·토큰 비용 로깅 |
 
 공통 제약:
 - **grounded generation만** — 프롬프트 컨텍스트는 해당 교재 청크 + `참조자료/ref_md` 원문 조각으로 제한. 모델의 사전 지식에 의존한 문장은 인용 단계에서 걸러진다.
 - 출력은 문제은행 정답 블록 포맷(정답/허용 정답/`📖 근거` 링크+인용문/해설)을 그대로 따른다 — 파서·게이트 변경 불요.
-- 초안 md 상단·문항별 메타 주석 `<!-- ai-draft: model=<id> date=<ISO> reviewed=no -->` — 리뷰 추적용, 편입 시 제거.
+- 초안 md 상단·문항별 메타 주석 `<!-- ai-draft: model=<id> date=<ISO> reviewed=no sha=<본문해시> -->` — 리뷰 추적용, 편입 시 제거. `sha`는 생성 시점 본문 해시로, `ai:apply`가 리뷰 단계 수정 여부 감지에 사용 (AI-23).
 - 법령 인용은 `참조자료/ref_md`의 현행본만 — 생성 시점 고시 판본이 `notice_status.json`과 어긋나면 경고.
 
 ## 5. 검증·편입 절차
@@ -79,6 +80,7 @@ tools/ai 실행 → tmp/ai_drafts/*.md (초안)
 
 추가 품질 장치:
 - **배치 태깅**: 편입 커밋 subject에 `ai-draft` 포함 관례 — `check:answers` 기준선 변화와 상관시켜 AI 배치별 오류율을 사후 추적
+- **채택 계측**: `ai_apply --write`가 초안 파일 단위 {생성·편입·스킵·리뷰수정(본문 해시 대조)·모델·생성일}을 `tools/ai/adoption_log.jsonl`(추적 파일)에 append — `ai:adoption` 리포트로 배치별·누적 채택률 확인 (AI-23)
 - **dupcheck 게이트화**: `ai:dupcheck` 결과 유사도 임계 초과 문항은 리뷰 전 자동 폐기 표시
 
 ## 6. 비용·모델

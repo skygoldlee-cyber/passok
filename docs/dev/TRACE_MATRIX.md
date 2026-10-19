@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 9f4256f3d2aaa3c3
-> 생성: 2026-10-19 · 원천: SPEC.md(553개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 53ed188fbee0bab1
+> 생성: 2026-10-19 · 원천: SPEC.md(554개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 553개 — 문서 연결 393 · 소스 연결 493 · 테스트 연결 526 · 보고서 연결 109
+**커버리지 요약**: 요구사항 554개 — 문서 연결 393 · 소스 연결 494 · 테스트 연결 527 · 보고서 연결 109
 
 ---
 
@@ -521,6 +521,7 @@
 | AI-20 | ✅ | 테스트 | — | tools/ai/ai_glossary.js | tests/unit/ai-tools.test.js | — | — |
 | AI-21 | ✅ | 테스트 | — | tools/ai/ai_adphrases.js | tests/unit/ai-tools.test.js | — | — |
 | AI-22 | ✅ | 테스트 | — | src/data-loader.js<br>tools/ai/ai_cards.js | tests/unit/ai-tools.test.js | — | — |
+| AI-23 | ✅ | 테스트 | — | tools/ai/ai_adoption.js | tests/unit/ai-tools.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 

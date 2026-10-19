@@ -64,7 +64,7 @@ npm.cmd run audit:combo                 # 복수정답형 품질 감사 (정답 
 npm.cmd run audit:study                 # 학습 품질 감사 — 주간 배분·학습 진단 추천 규칙 정합 시나리오 검증 (SQ-01~04, --check=기준선 회귀, --update=기준선 갱신)
 npm.cmd run check:adlint                # 광고 문구 사전 커버리지 감사 — 별표5 2항 호별 대표 표현·term 품질·자기 검출 (FO-68)
 
-# AI 제작 지원 (초안만 생산 → tmp/ai_drafts/ → 사람 리뷰 후 content/ 편입 — AI_AUTHORING_DESIGN.md, AI-01~13)
+# AI 제작 지원 (초안만 생산 → tmp/ai_drafts/ → 사람 리뷰 후 content/ 편입 — AI_AUTHORING_DESIGN.md, AI-01~23)
 #   키: AI_PROVIDER=openai|anthropic|gemini + AI_API_KEY (또는 공급자별 키) — .env 로컬 전용, --dry-run=무키 검증
 npm.cmd run ai:explain                   # 해설 누락 문항 초안 (정답+인용 근거 컨텍스트)
 npm.cmd run ai:draft                     # 교재 청크 → 문제 초안 (--subject <key> --lines A-B --type choice)
@@ -77,6 +77,7 @@ npm.cmd run ai:coverage                  # 인용 LNN ↔ 교재 커버리지 �
 npm.cmd run ai:stale                     # ref_md 변경 ↔ 인용 문항 재검증 대기 목록 (--ref <ref>, --llm=영향 판정)
 npm.cmd run ai:apply                     # 리뷰된 해설 초안을 문제은행 정답 블록에 편입 (기본 미리보기, --write=반영)
 npm.cmd run ai:stmtfb                    # combo 진술별 오답 피드백 초안 (기본 거짓 진술, --all=전체). --stats <백업JSON>=오판 통계로 대상 선정(오판수순, --min-wrong N). --apply [--write]=리뷰본을 피드백/stmt_explain.json 정본 편입 → build:drills가 진술 explain 병합
+npm.cmd run ai:adoption                  # AI 배치 채택률 리포트 — ai_apply --write가 기록한 adoption_log.jsonl의 배치별·누적 채택률·리뷰수정률 (AI-23, 설계 §3.1 L1 승격 판단 데이터)
 
 # 전체 점검 (단일 진입점 — tools/check/run.js 실행기 + steps.js 단계 레지스트리로 구동
 #   비-serial 단계는 워커풀 병렬 실행(--jobs N, 기본 3 · serial 단계는 배치 사이 단독),
