@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-19 활성 시험 레지스트리 접근자 — `window.DATA_REGISTRY` 직독 제거 (DA-15 R4)
+
+- **배경**: 참조자료→교재·문제은행 체인 검증에서 `DataLoader.ensureRegistry()`는 비기본 시험을 `registryGlobal`(예: `DATA_REGISTRY_FOOD`)에 올바르게 적재하나, 플랫폼 모듈 15곳이 이를 우회해 정적 스크립트가 채우는 **기본 시험 전역 `window.DATA_REGISTRY`를 직접 읽는 결함** 확인 — 비기본 시험 활성 시 과목·통합 규칙·문제은행 맵·차트·추천 원인 분류가 기본 시험 콘텐츠로 오독될 구조
+- **`exam-context.getActiveRegistry()` 신설**: 활성 시험의 `registryGlobal`(미선언 시 `DATA_REGISTRY` 폴백)을 해석하는 단일 접근자. `window` 부재(Node)·비기본 번들 미로딩 시 null — 기본 시험으로의 무음 폴백 없음
+- **플랫폼 직독 치환 15곳**: `exam-context`(5)·`charts`(4)·`exam-sim-session`(3)·`exam-sim-weak`(2)·`app`·`exam-viewer`·`reader-format`·`recommendations`·`textbook-edition`·`usage-stats`·`exam-sim-arena`(각 1). `data-loader.js`의 5곳은 레지스트리 로딩 경로 소유처로 의도된 예외 (registryGlobal 해석·기본 전역 확보·누락 가드·부트스트랩 초기화)
+- **게이트**: `check:contentind`에 R4 규칙 추가 — `window.DATA_REGISTRY\b` 패턴을 콘텐츠 결합 리터럴로 차단. 예외는 ALLOWED 목록에 사유 명시 (data-loader 로딩 경로, audit_study_quality 시뮬레이션 스텁)
+- **테스트**: 비기본 시험이 자체 registryGlobal을 해석하고 기본 전역을 오독하지 않음·번들 미로딩 시 무음 폴백 없음을 고정하는 회귀 5건 추가 (test-first)
+
 ## 2026-10-19 참조자료 독립성 — 지식 문서 dir 시험 선언화 + reflayout 전 시험화 (CS-03/CS-09)
 
 - **배경**: 교재 교체 변수(과목수·섹션수·참조자료) 검증에서 `참조자료/원료/` 디렉터리 규약이 플랫폼 코드에 하드코딩된 잔재와 `check_reflayout`의 기본 시험 한정 커버리지를 확인

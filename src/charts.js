@@ -6,7 +6,7 @@
 
 import { getSimResultsHistory as getSimResults } from './state.js';
 import { TIMING } from './config/timing.js';
-import { getExamRules, resolveLegacySubjectKey } from './exam-context.js';
+import { getExamRules, resolveLegacySubjectKey, getActiveRegistry } from './exam-context.js';
 import { esc } from './sanitize.js';
 
 // CSS 변수에서 색상 읽기 (하드코딩 대체)
@@ -207,7 +207,7 @@ export function renderPerformanceChart() {
    ======================================================= */
 function aggregateSubjectRates(history) {
     const subjectRates = {};
-    const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+    const subjects = (getActiveRegistry() || {}).subjects || [];
     subjects.forEach(sub => {
         subjectRates[sub.key] = [];
     });
@@ -226,7 +226,7 @@ function aggregateSubjectRates(history) {
             });
         } else {
             // 구버전 이력의 examId로 과목 매핑
-            const exams = (window.DATA_REGISTRY && window.DATA_REGISTRY.exams) || [];
+            const exams = (getActiveRegistry() || {}).exams || [];
             const exam = exams.find(e => e.key === r.examId || (r.examId && r.examId.startsWith(e.key)));
             if (exam && subjectRates[exam.subject]) {
                 subjectRates[exam.subject].push(r.rate);
@@ -261,7 +261,7 @@ export function renderPassFailDiagnosis() {
     
     // 과목별 최근 점수 추출하여 과락 판정
     const subjectRates = aggregateSubjectRates(history);
-    const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+    const subjects = (getActiveRegistry() || {}).subjects || [];
     
     // 각 과목 최신 성적 추출
     const getLatestRate = (subjKey) => {
@@ -358,7 +358,7 @@ export function renderRadarChart() {
     
     // 과목별 평균 정답률 계산
     const subjectRates = aggregateSubjectRates(history);
-    const subjects = (window.DATA_REGISTRY && window.DATA_REGISTRY.subjects) || [];
+    const subjects = (getActiveRegistry() || {}).subjects || [];
     const N = subjects.length;
     
     if (N < 3) {
