@@ -1049,6 +1049,8 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | BP-13 | **vendor 자산 매니페스트·무결성 게이트**: `vendor/vendor-manifest.json`이 패키지별 npm 출처·버전·라이선스·파일 sha256을 선언하고, `check_vendor.js`가 매니페스트↔실물(존재·해시·버전 문자열)·미등록 파일을 검증 (`--update` 재스탬프, `--latest` registry 비교 — vendor-check.yml 주간 이슈). 갱신은 `sync_vendor.js`(npm pack → syncMap 복사 → 스탬프) | ✅ |
 | BP-14 | **용어 후보 자동 추출 리포트 + 승인 병합**: `npm run report:glossary`(`tools/build/extract_glossary_candidates.js`)가 `{contentRoot}/참조자료/ref_md/`와 `{contentRoot}/교재/<subjKey>/*_표준형.md`를 스캔해 정의 조항(`"X"란`/`X란`/헤딩 정의)·약칭(`이하 "X"라 한다` — 선행 원명 fullForm 캡처)·영문 병기(`용어(영문)` — 화학식 노이즈 필터)를 추출하고, `GLOSSARY_INDEX` 기존 항목과 대조해 신규/기존·과목별로 분류한 리포트를 출력. `--apply`는 신규 [정의] 후보만 `교재/glossary/subject{N}.json`에 병합(`autoExtracted` 표식·중복 건너뜀, `--patterns`로 범위 확장). `--apply-synonyms`는 실질 약칭(원명≠약칭)·영문 병기를 `manifest.synonyms`에 병합(영문 파편·문장조각 게이트). 병합 품질 감시는 `check:glossarysignal`(tools/check/check_glossary_signal.js)이 담당 — autoExtracted 항목 중 2~4자 순수 한글 단일어(일반명사 위험군)를 기준선(`glossary_signal_baseline.json`)과 대조해 신규 유입 시 정의 카드 노출 적정성 검토를 강제 (`--update` 갱신) | ✅ |
 
+| BP-15 | **참조자료→교재 챕터 스캐폴딩**: `npm run scaffold:chapter`(`tools/build/scaffold_chapter.js`)가 `{contentRoot}/참조자료/ref_md/과목N/`의 지정 문서로부터 교재 챕터 골격을 결정론적 생성 — 본문 `<!-- 작성 -->` 슬롯·`📌출처` 블록·백매터 `## 📚 참조 자료` 링크 목록을 CS-11 도출 계약 형식으로 자동 배치 (시험별 contentRoot 대응 — 전 시험 재사용) | ✅ |
+
 ### 5.4 콘텐츠 구조
 
 | ID | 요구사양 | 구현 상태 |
@@ -1063,6 +1065,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | CS-08 | 파일명 ASCII 슬러그화 (CP949↔UTF-8 불일치 원천 제거) | ✅ |
 | CS-09 | 참조자료 귀속은 폴더가 진실 — `ref_md/과목N/{문서}/{문서}.md`, `references.json` 매핑 + `pdf-registry.js`의 `getRefTables()`가 시험별 해석 | ✅ |
 | CS-10 | 문서 이미지는 `ref_md/**/images/` 상대 참조 — 뷰어가 md 디렉터리 기준 절대 URL로 재작성(`html-viewer.js`·`exam-viewer.js`) | ✅ |
+| CS-11 | **참조자료→교재 도출 계약**: 교재 콘텐츠의 근본 소스는 참조자료 — 도출 3원자(조문 원문 임베딩·조문 재서술 본문·표/수치 보조자료), 선별 기준(references.json 과목 귀속 + 출제기준), 추적성 계약(본문 단락↔`📌출처`·ref_md 링크, 백매터 `## 📚 참조 자료`는 해당 챕터가 다루는 ref_md 문서의 링크 목록). 작성 규약은 `TEXTBOOK_AUTHORING_GUIDE` "참조자료 기반 도출" 절이 정본 | ✅ |
 
 ### 5.5 교재 콘텐츠 학습 보조 요소
 

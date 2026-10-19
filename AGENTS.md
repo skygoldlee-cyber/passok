@@ -136,6 +136,7 @@ npm.cmd run check:teststats             # 문서 테스트 수치 ↔ test_stats
 npm.cmd run stats:stamp                 # 테스트 수치 재스탬프 — unit 실행·vitest list·playwright --list 실측 → test_stats.json + 문서 인용을 `N+` 바닥 표기로 갱신
 npm.cmd run ratchet:coverage            # 병합 커버리지 임계값 래칫 상향 — 실측−0.8%p로 MERGED_THRESHOLDS 인플레이스 갱신 (단조 증가, coverage:all 실행 후 사용)
 npm.cmd run scaffold:exam -- <id> --name "시험명"  # 새 시험 스캐폴딩 — exams.json 등록 + manifest/references 골격 + 샘플 교재·문제은행·docs/ 생성 (--dry-run=미리보기, <id> --remove=제거)
+npm.cmd run scaffold:chapter                  # 참조자료→교재 챕터 골격 — --exam <id> --subject N --refs all|doc,... --out 경로 (CS-11 도출 계약 자동 배치, --dry-run=미리보기 — TEXTBOOK_AUTHORING_GUIDE §6)
 npm.cmd run lint                        # ESLint — 에러 0 필수 (--cache 웜 캐시, 기존 경고는 점진 정리 대상)
 npm.cmd run check:types                 # tsc --noEmit (jsconfig checkJs — JSDoc 타입 진단)
 npm.cmd run check:specrefs              # SPEC↔@spec 스테일 참조 + 테스트 갭 기준선(기준선 0 — 신규 갭 즉시 실패)

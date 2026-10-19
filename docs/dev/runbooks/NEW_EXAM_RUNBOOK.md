@@ -66,7 +66,7 @@ content/exams/<id>/
   - **표시 수치 정합**: `exams[].title`의 "N제"·`desc`의 "N과목/N문"은 `check:manifest`가 문제은행 `### Q` 실측과 대조 — 실제 수치로 갱신하거나 수치 표기를 생략 (scaffold 기본 문구는 샘플)
   - **uiText**: 플랫폼 마크업의 `data-uitext` 키 전수를 채워야 도메인 라벨이 cosmetic 전용 문구로 새지 않는다 — cosmetic `manifest.uiText` 블록을 복사해 문구만 교체하는 것이 키 목록 확보의 실질 경로 (`npm run check:uitext`가 누락 경고)
   - **문서 헤더**: `docs/*.md` 파일 상단에 `> **문서 ID**: DOC-XX-NN` + `> **범위**: exam:<id> · 판본: …` 헤더가 필수 (`check:docs` 강제 — 발번은 `docs/README.md` ID 레지스트리)
-- `교재/`·`문제은행/` — 샘플 파일을 실제 MD로 교체
+- `교재/`·`문제은행/` — 샘플 파일을 실제 MD로 교체. 작성 규약·참조자료 도출 방법론은 `TEXTBOOK_AUTHORING_GUIDE.md`가 정본 (§6 참조자료 기반 도출 — `scaffold:chapter`로 챕터 골격 생성 가능)
 - `references.json` — 참조자료 메타데이터 SSOT (`pdf-registry.js`는 여기서 빌드 생성). 파일 내 `*Comment` 필드가 필드별 규약을 자기문서화한다. 필드 그룹:
   - **문서 레지스트리**: `referenceLaw`·`referenceFiles`·`referenceCommon`·`referenceIngredients`는 `{name,file,type,dir}` 엔트리 — `참조자료/<dir>/`의 물리 파일과 정합. `refDirs`는 디렉터리→파일 목록 선언 (PDF 미확보 시 ref_md 발췌본만 두고 comment 명기 — food 선례)
   - **과목 귀속**: `subjectDirMap`(과목키→과목N)·`docSubjectRules`(ref_md 디렉터리명→과목 귀속 정규식 `[패턴, 과목번호, 사유]`, 첫 매칭 우선)·`multiSubjectDocs`(다과목 공동 인용 문서)·`subjectDefaultRefdoc`(과목별 기본 문서명)
