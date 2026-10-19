@@ -46,6 +46,7 @@
 | **Offline-Capable PWA** | Service Worker로 App Shell + 학습 데이터 캐시. 설치 가능 |
 | **Mobile-First** | 모바일 하단 탭 바 ↔ 데스크톱 사이드바 적응형 네비게이션 |
 | **Content-Agnostic** | `{contentRoot}/manifest.json`을 시험별 SSOT로 사용. 교재 전체 교체·시험 추가 시 소스 수정 불필요 |
+| **Logic Independent of Content** | 모든 로직(파싱·추출·채점·퀴즈/카드 생성·동기화·이관)은 교재의 **구조**(표·리스트·헤딩·마커)에만 의존하고 특정 교재의 **내용**(용어·수치·문장)에는 의존하지 않는다 — 콘텐츠는 데이터일 뿐 코드가 아니다 (DA-15) |
 | **Spec-Traceable** | 모든 요구사항은 SPEC ID로 선언하고 코드·테스트·문서는 `@spec` 태그로 연결 — `TRACE_MATRIX.md`(생성물)가 양방향 추적의 진실 소스, `check:specrefs`·`check:trace`·git 훅으로 자동 강제 |
 
 ---
@@ -1016,6 +1017,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | DA-12 | **UI 텍스트 커버리지 감사**: `check:uitext` — `data-uitext` 속성 ↔ 시험 `manifest.uiText` 양방향 검증(dead 키·형식 오류) + platform 분류 마크업에 시험명(name/shortName) 잔존 금지 | ✅ |
 | DA-13 | **시험 도메인 모듈 격리**: 시험 전용 실행 모듈은 `src/exams/<examId>/` 아래에 물리 배치 (도메인 로직 루트 + `views/` 뷰 모듈). 플랫폼 코어(`src/`)는 등록 시험 id를 문자열 리터럴로 참조하지 않고 `exam-context.js`의 레지스트리 해석만 사용 — 위반은 `check:domainmap` 게이트가 차단. 플랫폼→도메인 진입은 기능 플래그 아래 동적 `import()` 문자열만 허용 (`practice-registry.js`·`pro-upgrade.js`) | ✅ |
 | DA-14 | **시험별 스킨 토큰**: exams.json `theme` 필드(`--color-*`·`--bg-*`·`--border-*`·`--stroke-*` 화이트리스트) → `<html data-exam>` 속성 + documentElement 인라인 변수 주입. 부팅 최초 프레임은 `pwa-manifest.js`(클래식)가 적용, 브랜딩 재적용 경로는 `app-shell.js`의 `applyExamBranding` → `applyExamTheme`. 화이트리스트 밖 토큰·비문자열 값은 무시 | ✅ |
+| DA-15 | **로직 교재 무의존 (기본 요구사양)**: 파서·스코어링·필터·퀴즈/카드 생성·ID 이관·동기화 등 모든 로직은 교재 구조(표 행·리스트 항목·헤딩·마커)에만 의존하며, 특정 과목·교재의 용어·수치·문장 같은 콘텐츠 값을 하드코딩하지 않는다. 교재를 통째로 교체해도 로직은 수정 없이 동일하게 동작해야 하고, 콘텐츠 특정 예외가 필요하면 코드가 아니라 데이터(피드백 오버레이·manifest 선언)로 표현한다 | ✅ |
 
 ### 5.2 안정적 ID 체계
 
