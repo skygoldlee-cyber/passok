@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject2.00bf85f8.js — mode: fact(명제 조합) 62문 / answer(정답 조합) 212문
+// 원본: data/exams/cosmetic/exams/subject2.c82958c2.js — mode: fact(명제 조합) 62문 / answer(정답 조합) 212문
 var COMBO_DRILLS_subject2 = [
  {
   "id": "manufacturing_combo_f62cd4",
@@ -1438,7 +1438,7 @@ var COMBO_DRILLS_subject2 = [
    "수치"
   ],
   "derivedFrom": "subject2_q15",
-  "explain": "📖 교재 근거 (L3504):\n- 회수계획서 제출 🔖기출: 회수 대상 화장품이라는 사실을 안 날부터 5일 이내 지방식약청장에게 제출\n해설: 회수계획서는 회수 대상 화장품이라는 사실을 안 날부터 5일 이내에 지방식약청장에게 제출해야 하므로 ④번이 정답입니다. 따라서 24시간 이내, 3일 이내, 7일 이내, 14일 이내로 명시한 ①, ②, ③, ⑤번은 옳지 않습니다.",
+  "explain": "📖 교재 근거 (L3492):\n- 회수계획서 제출 🔖기출: 회수 대상 화장품이라는 사실을 안 날부터 5일 이내 지방식약청장에게 제출\n해설: 회수계획서는 회수 대상 화장품이라는 사실을 안 날부터 5일 이내에 지방식약청장에게 제출해야 하므로 ④번이 정답입니다. 따라서 24시간 이내, 3일 이내, 7일 이내, 14일 이내로 명시한 ①, ②, ③, ⑤번은 옳지 않습니다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "4"
  },
@@ -1739,35 +1739,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_12a8d3",
-    "conceptId": "§5.2",
+    "conceptId": "§5.0",
     "text": "위해도 결정 -> 노출 평가 -> 용량-반응 평가 -> 위험성 확인",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_338a09",
-    "conceptId": "§5.2",
+    "conceptId": "§5.0",
     "text": "용량-반응 평가 -> 위험성 확인 -> 노출 평가 -> 위해도 결정",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_9cdf5e",
-    "conceptId": "§5.2",
+    "conceptId": "§5.0",
     "text": "노출 평가 -> 위험성 확인 -> 용량-반응 평가 -> 위해도 결정",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_2fb626",
-    "conceptId": "§5.2",
+    "conceptId": "§5.0",
     "text": "위험성 확인 -> 노출 평가 -> 용량-반응 평가 -> 위해도 결정",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_1ea8ed",
-    "conceptId": "§5.2",
+    "conceptId": "§5.0",
     "text": "위험성 확인 -> 용량-반응 평가 -> 노출 평가 -> 위해도 결정",
     "truth": true
    }
@@ -1819,7 +1819,7 @@ var COMBO_DRILLS_subject2 = [
    "수치"
   ],
   "derivedFrom": "subject2_q19",
-  "explain": "📖 교재 근거:\n> 해설: 위해성 평가 4단계는 위험성 확인→위험성 결정→노출 평가→위해도 결정 순서이다. 위험성 확인은 독성 자료로 잠재적 성질을 과학적으로 확인, 위험성 결정은 인체노출 허용량 산출, 노출 평가는 사용 노출 수준 산출, 위해도 결정은 유해 영향 발생 가능성 판단이다.",
+  "explain": "📖 교재 근거:\n|  | 위해성 평가 4단계 | 위험성 확인·위험성 결정·노출 평가·위해도 결정 4단계 |",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "5"
  },
@@ -2931,7 +2931,7 @@ var COMBO_DRILLS_subject2 = [
    "수치"
   ],
   "derivedFrom": "subject2_q31",
-  "explain": "📖 교재 근거:\n> 📚 참조자료: 5.hazard.md\n해설: 정답은 ④번입니다. 원료의 유해성(Hazard) 자체의 세기 및 독성 메커니즘은 노출 평가(Exposure Assessment)가 아닌 유해성 확인 및 특성 평가에 해당하는 요인이므로 적합하지 않습니다. 반면 1회 사용량 및 빈도, 접촉 부위와 면적, 대상 연령층, 씻어내는지 여부 등(①, ②, ③, ⑤)은 인체 노출 정도를 산정하는 노출 평가 시 고려하는 요인입니다.",
+  "explain": "📖 교재 근거:\n> - 4과목 4챕터 제품 상담 — 맞춤형화장품 부작용 발생 시 식약처 보고 의무\n해설: 정답은 ④번입니다. 원료의 유해성(Hazard) 자체의 세기 및 독성 메커니즘은 노출 평가(Exposure Assessment)가 아닌 유해성 확인 및 특성 평가에 해당하는 요인이므로 적합하지 않습니다. 반면 1회 사용량 및 빈도, 접촉 부위와 면적, 대상 연령층, 씻어내는지 여부 등(①, ②, ③, ⑤)은 인체 노출 정도를 산정하는 노출 평가 시 고려하는 요인입니다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "1"
  },
@@ -3024,7 +3024,7 @@ var COMBO_DRILLS_subject2 = [
    "정답판정"
   ],
   "derivedFrom": "subject2_q32",
-  "explain": "📖 법령 근거 (L1523):\n> - HPLC (고성능 액체 크로마토그래피): 용매 중의 유기화합물을 성분별로 분석하여 함유량을 측정함\n해설: 고성능 액체 크로마토그래피(HPLC)는 용매 중의 유기화합물을 성분별로 분석하여 함유량을 측정하는 분석 기기이므로 정답은 ⑤번입니다. 반면 굴절계, 점도계, 수분측정기, pH 미터는 유기화합물을 성분별로 분석하여 함유량을 측정하는 기기로 제시되어 있지 않으므로 오답입니다.",
+  "explain": "📖 법령 근거 (L1517):\n> - HPLC (고성능 액체 크로마토그래피): 용매 중의 유기화합물을 성분별로 분석하여 함유량을 측정함\n해설: 고성능 액체 크로마토그래피(HPLC)는 용매 중의 유기화합물을 성분별로 분석하여 함유량을 측정하는 분석 기기이므로 정답은 ⑤번입니다. 반면 굴절계, 점도계, 수분측정기, pH 미터는 유기화합물을 성분별로 분석하여 함유량을 측정하는 기기로 제시되어 있지 않으므로 오답입니다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "4"
  },
@@ -3227,35 +3227,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_8b09e1",
-    "conceptId": "§3.2",
+    "conceptId": "§2.0",
     "text": "원자재가 입고되면 외관 상태 및 제조번호를 확인한다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_b9765c",
-    "conceptId": "§3.2",
+    "conceptId": "§2.0",
     "text": "시험 결과가 나오기 전까지는 '시험 중(대기)' 구역에 보관한다.",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_4322ee",
-    "conceptId": "§3.2",
+    "conceptId": "§2.0",
     "text": "시험 검사 결과 적합 판정이 내려지면 '적합' 라벨을 부착하고 적합 구역으로 이동한다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_cd822c",
-    "conceptId": "§3.2",
+    "conceptId": "§2.0",
     "text": "시험 결과 부적합 판정이 나면 '부적합' 라벨을 부착하고 격리 보관한다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_2a259e",
-    "conceptId": "§3.2",
+    "conceptId": "§2.0",
     "text": "급한 생산 일정을 위해 시험 결과 확인 전에 출고 승인을 진행할 수 있다.",
     "truth": false
    }
@@ -4593,7 +4593,7 @@ var COMBO_DRILLS_subject2 = [
    "수치"
   ],
   "derivedFrom": "subject2_q49",
-  "explain": "📖 교재 근거 (L2112):\n| 미세플라스틱 | 세정, 각질 제거 등의 제품에 남아 있는 5mm 이하의 고체플라스틱으로, 유통화장품 안전성 기준상 배합 금지 성분 |\n해설: 유통화장품 안전성 기준상 배합 금지 성분으로 규정된 미세플라스틱은 ‘세정, 각질 제거 등의 제품에 남아 있는 5mm 크기 이하의 고체플라스틱’으로 정의되므로 ③이 정답입니다. 따라서 크기 기준을 10mm 이하로 표기한 ①번이나 용기 재질, 실리콘 막, 액상 고분자 등을 제시한 선지들은 모두 옳지 않습니다.",
+  "explain": "📖 교재 근거 (L2104):\n| 미세플라스틱 | 세정, 각질 제거 등의 제품에 남아 있는 5mm 이하의 고체플라스틱으로, 유통화장품 안전성 기준상 배합 금지 성분 |\n해설: 유통화장품 안전성 기준상 배합 금지 성분으로 규정된 미세플라스틱은 ‘세정, 각질 제거 등의 제품에 남아 있는 5mm 크기 이하의 고체플라스틱’으로 정의되므로 ③이 정답입니다. 따라서 크기 기준을 10mm 이하로 표기한 ①번이나 용기 재질, 실리콘 막, 액상 고분자 등을 제시한 선지들은 모두 옳지 않습니다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "3"
  },
@@ -5616,35 +5616,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_bb7e99",
-    "conceptId": "§5.2",
+    "conceptId": "§2.0",
     "text": "회수계획서",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_af9088",
-    "conceptId": "§5.2",
+    "conceptId": "§2.0",
     "text": "회수종합보고서",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_b18cd2",
-    "conceptId": "§5.2",
+    "conceptId": "§2.0",
     "text": "생산원가 손실 보고서",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_18d465",
-    "conceptId": "§5.2",
+    "conceptId": "§2.0",
     "text": "회수이행성적서",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_1ab980",
-    "conceptId": "§5.2",
+    "conceptId": "§2.0",
     "text": "회수사실 공표문",
     "truth": false
    }
@@ -5779,7 +5779,7 @@ var COMBO_DRILLS_subject2 = [
    "수치"
   ],
   "derivedFrom": "subject2_q62",
-  "explain": "📖 교재 근거 (L1844):\n> 한 줄 요약: CGMP 4대 기준서(제품표준서·제조관리·품질관리·제조위생관리) + 원료품질성적서 구비.\n해설: 우수화장품 제조 및 품질관리 기준(CGMP)의 4대 기준서는 제품표준서, 제조관리기준서, 품질관리기준서, 제조위생관리기준서입니다. 따라서 ①, ②, ③, ④는 모두 4대 기준서에 해당하며, ⑤ 유통관리기준서는 이에 포함되지 않습니다.",
+  "explain": "📖 교재 근거 (L1838):\n> 한 줄 요약: CGMP 4대 기준서(제품표준서·제조관리·품질관리·제조위생관리) + 원료품질성적서 구비.\n해설: 우수화장품 제조 및 품질관리 기준(CGMP)의 4대 기준서는 제품표준서, 제조관리기준서, 품질관리기준서, 제조위생관리기준서입니다. 따라서 ①, ②, ③, ④는 모두 4대 기준서에 해당하며, ⑤ 유통관리기준서는 이에 포함되지 않습니다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "4"
  },
@@ -5964,7 +5964,7 @@ var COMBO_DRILLS_subject2 = [
    "명제판정"
   ],
   "derivedFrom": "subject2_q64",
-  "explain": "📖 법령 근거 (L3838):\n> 해설: 튜브 충진기는 폼 클렌징, 자외선 차단제 등 튜브 제품을 충진할 때 사용한다. 대용량 액상은 피스톤 방식, 샘플은 파우치 방식, 파우더는 파우더 충진기를 사용한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
+  "explain": "📖 법령 근거 (L3839):\n> 해설: 튜브 충진기는 폼 클렌징, 자외선 차단제 등 튜브 제품을 충진할 때 사용한다. 대용량 액상은 피스톤 방식, 샘플은 파우치 방식, 파우더는 파우더 충진기를 사용한다.\n⚠️ *인용 위치 자동검증 불가 — 근거가 부정확할 수 있습니다*",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "4"
  },
@@ -6070,35 +6070,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_024bdc",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "염기성 영역에서만 활성을 띤다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_9dd994",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "탄소 체인이 짧을수록 피부 장벽 기능이 더 강화된다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_17b976",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "화장품에 배합할 수 없는 원료이다.",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_cadbab",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "물에 아주 잘 녹는 친수성 수용성 원료이다.",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_7ca816",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "피부의 약산성(pH 5.5 내외) 장벽을 유지하는 데 기여한다.",
     "truth": true
    }
@@ -8102,7 +8102,7 @@ var COMBO_DRILLS_subject2 = [
    "금지원료"
   ],
   "derivedFrom": "subject2_q88",
-  "explain": "📖 교재 근거 (L2950):\n#### 제모제 🎯 기출 (치오글라이콜릭애씨드 함유 제품에만 표시함) — 사용금지: ① 생리 전후·산전·산후·병후 ② 얼굴·상처·부스럼·습진·짓무름·염증·반점·자극 피부 ③ 유사 제품 부작용 피부 ④ 약한 피부·남성 수염 부위\n해설: 치오글라이콜릭애씨드 함유 제모제의 사용금지 대상에는 생리 전후·산전·산후·병후의 환자(①), 얼굴·상처·습진 등 염증이나 자극이 있는 피부(②), 유사 제품 부작용 병력이 있는 피부(③), 약한 피부나 남성의 수염 부위(④) 등이 포함되므로 이들은 오답입니다. 반면 건강한 팔·다리의 털이 있는 부위(⑤)는 사용금지 대상에 해당하지 않으므로 정답입니다.",
+  "explain": "📖 교재 근거 (L2940):\n#### 제모제 🎯 기출 (치오글라이콜릭애씨드 함유 제품에만 표시함) — 사용금지: ① 생리 전후·산전·산후·병후 ② 얼굴·상처·부스럼·습진·짓무름·염증·반점·자극 피부 ③ 유사 제품 부작용 피부 ④ 약한 피부·남성 수염 부위\n해설: 치오글라이콜릭애씨드 함유 제모제의 사용금지 대상에는 생리 전후·산전·산후·병후의 환자(①), 얼굴·상처·습진 등 염증이나 자극이 있는 피부(②), 유사 제품 부작용 병력이 있는 피부(③), 약한 피부나 남성의 수염 부위(④) 등이 포함되므로 이들은 오답입니다. 반면 건강한 팔·다리의 털이 있는 부위(⑤)는 사용금지 대상에 해당하지 않으므로 정답입니다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "3"
  },
@@ -9784,35 +9784,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_b3f9d7",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "안전역(MOS)을 도출하는 단계",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_d0ca68",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "물질의 고유한 독성의 세기를 구하는 단계",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_fbf280",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "노출 경로·빈도·양·기간을 정량적으로 산출하는 단계",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_13b446",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "유해 원료 리스트를 법령에 고시하는 단계",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_5ab0ca",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "완제품 적합 여부를 최종 승인하는 단계",
     "truth": false
    }
@@ -9861,7 +9861,7 @@ var COMBO_DRILLS_subject2 = [
    "절차"
   ],
   "derivedFrom": "subject2_q107",
-  "explain": "📖 교재 근거:\n> 해설: 위해성 평가 4단계는 위험성 확인→위험성 결정→노출 평가→위해도 결정 순서이다. 위험성 확인은 독성 자료로 잠재적 성질을 과학적으로 확인, 위험성 결정은 인체노출 허용량 산출, 노출 평가는 사용 노출 수준 산출, 위해도 결정은 유해 영향 발생 가능성 판단이다.",
+  "explain": "📖 교재 근거:\n| 위험성 결정 | 동물독성자료, 인체독성자료 등을 토대로 위해요소의 인체노출 허용량 등을 정량적 또는 정성적으로 산출하는 과정 |",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "2"
  },
@@ -10605,7 +10605,7 @@ var COMBO_DRILLS_subject2 = [
    "수치"
   ],
   "derivedFrom": "subject2_q115",
-  "explain": "📖 교재 근거 (L2466):\n| (8) 원료 조성 🎯 기출 | 천연화장품: 천연 함량 95% 이상 / 유기농화장품: 유기농 함량 포함 천연 함량 95% 이상 + 유기농 함량 10% |\n해설: 천연화장품은 중량 기준으로 천연 함량이 전체 제품의 95% 이상이어야 하므로 ②가 옳습니다. 천연 함량 50%나 100%는 기준에 부합하지 않으며, 유기농 함량 10% 이상 등은 유기농화장품에 대한 기준이므로 오답입니다.",
+  "explain": "📖 교재 근거 (L2458):\n| (8) 원료 조성 🎯 기출 | 천연화장품: 천연 함량 95% 이상 / 유기농화장품: 유기농 함량 포함 천연 함량 95% 이상 + 유기농 함량 10% |\n해설: 천연화장품은 중량 기준으로 천연 함량이 전체 제품의 95% 이상이어야 하므로 ②가 옳습니다. 천연 함량 50%나 100%는 기준에 부합하지 않으며, 유기농 함량 10% 이상 등은 유기농화장품에 대한 기준이므로 오답입니다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "1"
  },
@@ -10715,35 +10715,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_d3a165",
-    "conceptId": "§2.0",
+    "conceptId": "§1.3",
     "text": "지구의 중력 (미세 중력은 변질의 주원인이 아님)",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_2c71e4",
-    "conceptId": "§2.0",
+    "conceptId": "§1.3",
     "text": "자외선 (빛)",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_c826cf",
-    "conceptId": "§2.0",
+    "conceptId": "§1.3",
     "text": "공기 중의 산소",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_2a3a61",
-    "conceptId": "§2.0",
+    "conceptId": "§1.3",
     "text": "온도",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_55700b",
-    "conceptId": "§2.0",
+    "conceptId": "§1.3",
     "text": "수분 (습도)",
     "truth": false
    }
@@ -10895,35 +10895,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_5a9257",
-    "conceptId": "§2.0",
+    "conceptId": "§1.3",
     "text": "W/O형 유화",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_35d520",
-    "conceptId": "§2.0",
+    "conceptId": "§1.3",
     "text": "O/W형 유화",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_8422fb",
-    "conceptId": "§2.0",
+    "conceptId": "§1.3",
     "text": "가용화제",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_010359",
-    "conceptId": "§2.0",
+    "conceptId": "§1.3",
     "text": "세정제",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_eac952",
-    "conceptId": "§2.0",
+    "conceptId": "§1.3",
     "text": "습윤제",
     "truth": false
    }
@@ -11540,35 +11540,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_720b1c",
-    "conceptId": "§2.1",
+    "conceptId": "§1.3",
     "text": "방부제",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_df2fdd",
-    "conceptId": "§2.1",
+    "conceptId": "§1.3",
     "text": "점증제(겔화제)",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_6e0f44",
-    "conceptId": "§2.1",
+    "conceptId": "§1.3",
     "text": "유화제",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_b0e645",
-    "conceptId": "§2.1",
+    "conceptId": "§1.3",
     "text": "산화방지제",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_33e925",
-    "conceptId": "§2.1",
+    "conceptId": "§1.3",
     "text": "착색제",
     "truth": false
    }
@@ -11994,35 +11994,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_524ee2",
-    "conceptId": "§2.3",
+    "conceptId": "§2.2",
     "text": "미백 화장품",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_473f83",
-    "conceptId": "§2.3",
+    "conceptId": "§2.2",
     "text": "주름개선 화장품",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_974113",
-    "conceptId": "§2.3",
+    "conceptId": "§2.2",
     "text": "자외선차단 화장품",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_30b189",
-    "conceptId": "§2.3",
+    "conceptId": "§2.2",
     "text": "보습 화장품",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_c66539",
-    "conceptId": "§2.3",
+    "conceptId": "§2.2",
     "text": "미백·주름복합 화장품",
     "truth": false
    }
@@ -12083,35 +12083,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_6704ca",
-    "conceptId": "§2.1",
+    "conceptId": "§1.3",
     "text": "자외선차단제",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_8fe68f",
-    "conceptId": "§2.1",
+    "conceptId": "§1.3",
     "text": "진정·피부보호제",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_ae3352",
-    "conceptId": "§2.1",
+    "conceptId": "§1.3",
     "text": "표백제",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_20aa46",
-    "conceptId": "§2.1",
+    "conceptId": "§1.3",
     "text": "방부제",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_36da49",
-    "conceptId": "§2.1",
+    "conceptId": "§1.3",
     "text": "계면활성제",
     "truth": false
    }
@@ -12361,35 +12361,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_1fc84a",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "미백",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_7c334e",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "주름개선",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_95a367",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "방부",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_60f816",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "자외선 차단",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_b6fbe3",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "고도 보습",
     "truth": true
    }
@@ -12823,35 +12823,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_135098",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "피부 보습 및 진정",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_04c563",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "자외선 차단",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_d3e68a",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "미백",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_ee0458",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "방부",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_f73f32",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "착색",
     "truth": false
    }
@@ -13088,7 +13088,7 @@ var COMBO_DRILLS_subject2 = [
    "한도"
   ],
   "derivedFrom": "subject2_q143",
-  "explain": "📖 교재 근거 (L2449):\n② 금지되는 공정 `🎯 기출`\n| 화학 처리 | 탈색, 탈취, 방사선 조사, 설폰화, 에칠렌옥사이드, 프로필렌옥사이드 또는 다른 알켄옥사이드 사용, 수은화합물 처리, 포름알데하이드 사용 |\n| 유전자 변형 | 유전자 변형 원료 배합 |\n| 니트로스아민 | 니트로스아민류 배합 및 생성 |\n| 나노물질 | 불용성이거나 생체지속성인 1~100nm 크기의 물질 배합 |\n해설: 탈색·탈취·방사선 조사(①), 설폰화 및 에칠렌옥사이드 사용(②), 유전자 변형 원료 배합(③), 니트로스아민류 배합 및 생성(④)은 모두 금지되는 공정에 해당합니다. 반면, 물을 이용한 물리적 추출은 제시된 금지 공정에 해당하지 않으므로 정답은 ⑤번입니다.",
+  "explain": "📖 교재 근거 (L2441):\n② 금지되는 공정 `🎯 기출`\n| 화학 처리 | 탈색, 탈취, 방사선 조사, 설폰화, 에칠렌옥사이드, 프로필렌옥사이드 또는 다른 알켄옥사이드 사용, 수은화합물 처리, 포름알데하이드 사용 |\n| 유전자 변형 | 유전자 변형 원료 배합 |\n| 니트로스아민 | 니트로스아민류 배합 및 생성 |\n| 나노물질 | 불용성이거나 생체지속성인 1~100nm 크기의 물질 배합 |\n해설: 탈색·탈취·방사선 조사(①), 설폰화 및 에칠렌옥사이드 사용(②), 유전자 변형 원료 배합(③), 니트로스아민류 배합 및 생성(④)은 모두 금지되는 공정에 해당합니다. 반면, 물을 이용한 물리적 추출은 제시된 금지 공정에 해당하지 않으므로 정답은 ⑤번입니다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "4"
  },
@@ -13648,35 +13648,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_4f30d8",
-    "conceptId": "§4.2",
+    "conceptId": "§3.2",
     "text": "외관(색상, 투명도)",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_47f5fe",
-    "conceptId": "§4.2",
+    "conceptId": "§3.2",
     "text": "향기",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_e2b619",
-    "conceptId": "§4.2",
+    "conceptId": "§3.2",
     "text": "유효성분의 화학적 구조 확인",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_3f3f9e",
-    "conceptId": "§4.2",
+    "conceptId": "§3.2",
     "text": "사용감(발림성, 끈적임)",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_45d407",
-    "conceptId": "§4.2",
+    "conceptId": "§3.2",
     "text": "점도",
     "truth": false
    }
@@ -14190,7 +14190,7 @@ var COMBO_DRILLS_subject2 = [
    "정답판정"
   ],
   "derivedFrom": "subject2_q199",
-  "explain": "📖 교재 근거 (L2458):\n#### 1.7 천연화장품·유기농화장품의 용기와 포장 `🎯 기출`\n천연화장품·유기농화장품의 용기와 포장에는 폴리염화비닐(PVC: Polyvinyl Chlorid)과 폴리스티렌폼(Polystyrene Foam)을 사용할 수 없다.\n해설: 천연화장품 및 유기농화장품의 용기와 포장에는 폴리염화비닐(PVC)과 폴리스티렌폼을 사용할 수 없으므로 정답은 ③입니다. 따라서 사용할 수 없는 재질로 명시되지 않은 유리, 폴리에틸렌(PE), 알루미늄, 종이를 제시한 ①, ②, ④, ⑤는 오답입니다.",
+  "explain": "📖 교재 근거 (L2450):\n#### 1.7 천연화장품·유기농화장품의 용기와 포장 `🎯 기출`\n천연화장품·유기농화장품의 용기와 포장에는 폴리염화비닐(PVC: Polyvinyl Chlorid)과 폴리스티렌폼(Polystyrene Foam)을 사용할 수 없다.\n해설: 천연화장품 및 유기농화장품의 용기와 포장에는 폴리염화비닐(PVC)과 폴리스티렌폼을 사용할 수 없으므로 정답은 ③입니다. 따라서 사용할 수 없는 재질로 명시되지 않은 유리, 폴리에틸렌(PE), 알루미늄, 종이를 제시한 ①, ②, ④, ⑤는 오답입니다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "3"
  },
@@ -14281,7 +14281,7 @@ var COMBO_DRILLS_subject2 = [
    "수치"
   ],
   "derivedFrom": "subject2_q209",
-  "explain": "📖 교재 근거 (L2990):\n| 알파-하이드록시애씨드(AHA) 함유 제품 🎯 기출 | • 햇빛에 대한 피부의 감수성을 증가시킬 수 있으므로 자외선 차단제를 함께 사용할 것(씻어내는 제품 및 두발용 제품은 제외) • 일부에 시험 사용하여 피부 이상을 확인할 것 • 고농도의 AHA는 부작용 발생 우려가 있으므로 전문의 등에게 상담할 것(AHA 성분이 10% 초과하여 함유되어 있거나 산도가 3.5 미만인 제품만 표시함) |\n해설: '3세 이하 영유아에게는 사용하지 말 것'은 살리실릭애씨드 및 그 염류 함유제나 아이오도프로피닐부틸카바메이트(IPBC) 함유 제품의 표시 주의사항이므로 ④번은 옳지 않습니다. 알파-하이드록시애씨드(AHA) 함유 제품의 주의사항에는 자외선 차단제 병용, 일부 시험 사용, 고농도 AHA의 경우 전문의 상담(AHA 성분 10% 초과 또는 산도 3.5 미만 제품 한정) 등이 해당합니다.",
+  "explain": "📖 교재 근거 (L2980):\n| 알파-하이드록시애씨드(AHA) 함유 제품 🎯 기출 | • 햇빛에 대한 피부의 감수성을 증가시킬 수 있으므로 자외선 차단제를 함께 사용할 것(씻어내는 제품 및 두발용 제품은 제외) • 일부에 시험 사용하여 피부 이상을 확인할 것 • 고농도의 AHA는 부작용 발생 우려가 있으므로 전문의 등에게 상담할 것(AHA 성분이 10% 초과하여 함유되어 있거나 산도가 3.5 미만인 제품만 표시함) |\n해설: '3세 이하 영유아에게는 사용하지 말 것'은 살리실릭애씨드 및 그 염류 함유제나 아이오도프로피닐부틸카바메이트(IPBC) 함유 제품의 표시 주의사항이므로 ④번은 옳지 않습니다. 알파-하이드록시애씨드(AHA) 함유 제품의 주의사항에는 자외선 차단제 병용, 일부 시험 사용, 고농도 AHA의 경우 전문의 상담(AHA 성분 10% 초과 또는 산도 3.5 미만 제품 한정) 등이 해당합니다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "1"
  },
@@ -14375,7 +14375,7 @@ var COMBO_DRILLS_subject2 = [
    "수치"
   ],
   "derivedFrom": "subject2_q220",
-  "explain": "📖 교재 근거 (L2866):\n| 퍼머넌트 웨이브 제품 및 헤어 스트레이트너 제품 🎯 기출 | • 두피·얼굴·눈·목·손 등에 약액이 묻지 않도록 유의 • 특이체질 등은 사용 피할 것 • 용법·용량 지키고 시험 사용 • 섭씨 15도 이하 어두운 장소 보존, 변색·침전 시 사용 금지 • 개봉 후 7일 이내 사용(에어로졸 등 제외) • 제2단계 퍼머액 중 과산화수소 주성분 제품은 머리카락 갈색 변색 유의 |\n해설: '눈에 들어갔을 때 즉시 씻어낼 것'은 두발용, 두발염색용 및 눈화장용 제품류나 샴푸의 주의사항이며, 퍼머넌트 웨이브 제품 및 헤어 스트레이트너 제품에는 '두피·얼굴·눈·목·손 등에 약액이 묻지 않도록 유의하고, 얼굴 등에 약액이 묻었을 때에는 즉시 물로 씻어낼 것'으로 명시되어 있어 ⑤번은 옳지 않습니다. 반면 ①, ②, ③, ④번은 모두 교재에 규정된 퍼머넌트 웨이브 제품 및 헤어 스트레이트너 제품의 주의사항에 해당합니다.",
+  "explain": "📖 교재 근거 (L2856):\n| 퍼머넌트 웨이브 제품 및 헤어 스트레이트너 제품 🎯 기출 | • 두피·얼굴·눈·목·손 등에 약액이 묻지 않도록 유의 • 특이체질 등은 사용 피할 것 • 용법·용량 지키고 시험 사용 • 섭씨 15도 이하 어두운 장소 보존, 변색·침전 시 사용 금지 • 개봉 후 7일 이내 사용(에어로졸 등 제외) • 제2단계 퍼머액 중 과산화수소 주성분 제품은 머리카락 갈색 변색 유의 |\n해설: '눈에 들어갔을 때 즉시 씻어낼 것'은 두발용, 두발염색용 및 눈화장용 제품류나 샴푸의 주의사항이며, 퍼머넌트 웨이브 제품 및 헤어 스트레이트너 제품에는 '두피·얼굴·눈·목·손 등에 약액이 묻지 않도록 유의하고, 얼굴 등에 약액이 묻었을 때에는 즉시 물로 씻어낼 것'으로 명시되어 있어 ⑤번은 옳지 않습니다. 반면 ①, ②, ③, ④번은 모두 교재에 규정된 퍼머넌트 웨이브 제품 및 헤어 스트레이트너 제품의 주의사항에 해당합니다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "5"
  },
@@ -14469,7 +14469,7 @@ var COMBO_DRILLS_subject2 = [
    "수치"
   ],
   "derivedFrom": "subject2_q229",
-  "explain": "📖 교재 근거 (L2867):\n| 외음부 세정제 🎯 기출 | • 정해진 용법과 용량 준수 • 3세 이하 영유아, 임신 중, 분만 직전 여성의 외음부 주위에는 사용하지 말 것 • 외음부에만 사용하며, 질 내에 사용하지 말 것 • 프로필렌글리콜을 함유하고 있으므로 이 성분에 과민하거나 알레르기 병력이 있는 사람은 신중히 사용할 것(프로필렌글리콜 함유 제품만 표시) |\n해설: 외음부 세정제는 3세 이하 영유아나 임신 중, 분만 직전 여성의 외음부 주위에는 사용하지 않아야 하므로 ②가 정답입니다. 반면 3세 이하 영유아 사용 금지, 질 내 사용 금지, 정해진 용법·용량 준수를 따라야 하며, 프로필렌글리콜 관련 주의사항은 해당 성분을 함유한 제품에만 표시하므로 ①, ③, ④, ⑤는 모두 옳지 않습니다.",
+  "explain": "📖 교재 근거 (L2857):\n| 외음부 세정제 🎯 기출 | • 정해진 용법과 용량 준수 • 3세 이하 영유아, 임신 중, 분만 직전 여성의 외음부 주위에는 사용하지 말 것 • 외음부에만 사용하며, 질 내에 사용하지 말 것 • 프로필렌글리콜을 함유하고 있으므로 이 성분에 과민하거나 알레르기 병력이 있는 사람은 신중히 사용할 것(프로필렌글리콜 함유 제품만 표시) |\n해설: 외음부 세정제는 3세 이하 영유아나 임신 중, 분만 직전 여성의 외음부 주위에는 사용하지 않아야 하므로 ②가 정답입니다. 반면 3세 이하 영유아 사용 금지, 질 내 사용 금지, 정해진 용법·용량 준수를 따라야 하며, 프로필렌글리콜 관련 주의사항은 해당 성분을 함유한 제품에만 표시하므로 ①, ③, ④, ⑤는 모두 옳지 않습니다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "4"
  },
@@ -16512,35 +16512,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_84ff26",
-    "conceptId": "§2.3",
+    "conceptId": "§3.0",
     "text": "15종",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_e34d97",
-    "conceptId": "§2.3",
+    "conceptId": "§3.0",
     "text": "20종",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_4f9df6",
-    "conceptId": "§2.3",
+    "conceptId": "§3.0",
     "text": "25종",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_9770a9",
-    "conceptId": "§2.3",
+    "conceptId": "§3.0",
     "text": "30종",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_f4467f",
-    "conceptId": "§2.3",
+    "conceptId": "§3.0",
     "text": "35종",
     "truth": false
    }
@@ -17810,35 +17810,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_6d1f83",
-    "conceptId": "§1.3",
+    "conceptId": "§1.0",
     "text": "음이온성 > 양쪽성 > 양이온성 > 비이온성",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_579abe",
-    "conceptId": "§1.3",
+    "conceptId": "§1.0",
     "text": "음이온성 > 양이온성 > 양쪽성 > 비이온성",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_a646ef",
-    "conceptId": "§1.3",
+    "conceptId": "§1.0",
     "text": "양이온성 > 음이온성 > 양쪽성 > 비이온성",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_2d1a85",
-    "conceptId": "§1.3",
+    "conceptId": "§1.0",
     "text": "양쪽성 > 음이온성 > 양이온성 > 비이온성",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_a4b120",
-    "conceptId": "§1.3",
+    "conceptId": "§1.0",
     "text": "비이온성 > 양이온성 > 양쪽성 > 음이온성",
     "truth": false
    }
@@ -17886,7 +17886,7 @@ var COMBO_DRILLS_subject2 = [
    "절차"
   ],
   "derivedFrom": "subject2_q287",
-  "explain": "📖 교재 근거:\n해설: 계면활성제의 세정력 크기 순서는 '음이온성 > 양쪽성 > 양이온성 > 비이온성'이므로 ①번이 옳습니다. 따라서 이와 다른 순서로 나열된 ②, ③, ④, ⑤번은 모두 오답입니다.\n해설: 계면활성제의 세정력 순서는 음이온성 > 양쪽성 > 양이온성 > 비이온성이다. 따라서 음이온성 계면활성제의 세정력이 가장 우수하다.",
+  "explain": "📖 교재 근거:\n수성 원료\n정제수·알코올·보습제 폴리올\n유성 원료\n유동파라핀·스쿠알란·에스터류·실리콘유\n계면활성제\n음이온성·양이온성·비이온성·양쪽성\n첨가제\n보존제·향료·색소·자외선차단제\n주요 원료 특성\n비타민 종류\n보습 원료 4종",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "3"
  },
@@ -18001,35 +18001,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_714252",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "SPF는 UVA 차단 등급을 나타내는 지수이다.",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_3d6d60",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "SPF 1은 약 20~30분의 차단 효과를 의미한다.",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_246846",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "차단지수 50 이상의 제품은 SPF 50+로 표시한다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_c21892",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "SPF 10 이하 제품도 자외선 차단에 관한 효능·효과를 기재할 수 있다.",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_f9ed29",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "SPF 수치가 높을수록 친수성이 강해져 W/O 제형에만 적용된다.",
     "truth": false
    }
@@ -18081,7 +18081,7 @@ var COMBO_DRILLS_subject2 = [
    "정의"
   ],
   "derivedFrom": "subject2_q289",
-  "explain": "📖 교재 근거:\n> ② 50 이상의 제품은 SPF 50+로 표시한다\n해설: 자외선 차단지수 50 이상의 제품은 SPF 50+로 표시한다. SPF는 UVB 차단 지수이며 SPF 1은 약 10~15분의 차단 효과를 나타내고, SPF 10 이하 제품은 효능·효과를 기재할 수 없다.",
+  "explain": "📖 교재 근거:\n• 자외선 차단지수(SPF)는 측정 결과에 근거하여 평균값(소수점 이하 절사)으로부터 -20% 이하 범위 내 정수(예: SPF 평균값이 '23'일 경우 19~23 범위 정수로 표시)로 표시하되, SPF 50 이상은 'SPF50+'로 표시한다.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "1"
  },
@@ -21134,7 +21134,7 @@ var COMBO_DRILLS_subject2 = [
    "정답판정"
   ],
   "derivedFrom": "subject2_q323",
-  "explain": "📖 교재 근거:\n> 정답: ② 오스트발트 숙성\n> 해설: 오스트발트 숙성은 유화액 내 큰 입자와 작은 입자가 동시에 존재할 때 작은 입자가 큰 입자에 흡수되어 큰 입자는 더욱 커지는 현상이다. 합일은 분산 입자가 결합하여 더 큰 입자가 되는 것이고, 크리밍화는 비중차에 의한 부유/침강 현상이다.\n해설: 오스트발트 숙성은 유화액 내 큰 입자와 작은 입자가 동시에 존재할 때 작은 입자가 큰 입자에 흡수되어 큰 입자가 더욱 커지는 현상이다. 합일은 분산 입자가 결합하여 더 큰 입자가 되는 것이며, 크리밍화는 비중차에 의한 부유 및 침강 현상이다.",
+  "explain": "📖 교재 근거:\n| 오스트발트 숙성(ostwald ripening) | 유화액 내 큰 입자와 작은 입자가 동시에 존재하는 경우 작은 입자가 큰 입자에 흡수되어 큰 입자는 더욱 커지게 되는 현상 |",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "2"
  },
@@ -21149,35 +21149,35 @@ var COMBO_DRILLS_subject2 = [
    {
     "id": "ㄱ",
     "sid": "manufacturing_st_a5cd9f",
-    "conceptId": "§2.1",
+    "conceptId": "§2.3",
     "text": "제품표준서",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "manufacturing_st_446673",
-    "conceptId": "§2.1",
+    "conceptId": "§2.3",
     "text": "제조관리기준서",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "manufacturing_st_84ecac",
-    "conceptId": "§2.1",
+    "conceptId": "§2.3",
     "text": "품질관리기준서",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "manufacturing_st_89d8d2",
-    "conceptId": "§2.1",
+    "conceptId": "§2.3",
     "text": "제조위생관리기준서",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "manufacturing_st_600142",
-    "conceptId": "§2.1",
+    "conceptId": "§2.3",
     "text": "원료관리기준서",
     "truth": true
    }
@@ -21226,7 +21226,7 @@ var COMBO_DRILLS_subject2 = [
    "수치"
   ],
   "derivedFrom": "subject2_q324",
-  "explain": "📖 교재 근거:\n> 정답: ④ 원료관리기준서\n해설: CGMP 4대 기준서는 제품표준서, 제조관리기준서, 품질관리기준서, 제조위생관리기준서이므로 ①, ②, ③, ④는 모두 4대 기준서에 해당합니다. 따라서 원료관리기준서는 존재하지 않으므로 4대 기준서에 해당하지 않는 것은 ⑤입니다.\n해설: CGMP 4대 기준서는 제품표준서, 제조관리기준서, 품질관리기준서, 제조위생관리기준서이다. 원료관리기준서는 4대 기준서에 해당하지 않는다.",
+  "explain": "📖 교재 근거:\n> 한 줄 요약: CGMP 4대 기준서(제품표준서·제조관리·품질관리·제조위생관리) + 원료품질성적서 구비.",
   "source": "화장품 제조 및 품질관리 (370제)",
   "answer": "2"
  },
@@ -25434,14 +25434,22 @@ var COMBO_DRILLS_subject2 = [
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "manufacturing_st_cd790c",
+    "sid": "manufacturing_st_001cee",
     "conceptId": "§1.3",
-    "text": "50mL 이하 포장은 어떠한 경우에도 전성분 표기를 생략할 수 없다.",
+    "text": "징역형만 면제되고 벌금형은 그대로 부과된다.",
     "truth": false,
-    "explain": "원본: 과목2 문제은행 Q288 · 교재 §1.3"
+    "explain": "원본: 과목2 문제은행 Q75 · 교재 §1.3"
    },
    {
     "id": "ㄴ",
+    "sid": "manufacturing_st_bd6823",
+    "conceptId": "§1.3",
+    "text": "글리세린은 3가 폴리올에 해당한다.",
+    "truth": true,
+    "explain": "원본: 과목2 문제은행 Q298 · 교재 §1.3"
+   },
+   {
+    "id": "ㄷ",
     "sid": "manufacturing_st_871f22",
     "conceptId": "§1.3",
     "text": "샤워콜로뉴의 지속력은 1~2시간이며 알코올 순도 표준은 없다.",
@@ -25449,28 +25457,20 @@ var COMBO_DRILLS_subject2 = [
     "explain": "원본: 과목2 문제은행 Q285 · 교재 §1.3"
    },
    {
-    "id": "ㄷ",
-    "sid": "manufacturing_st_937e70",
-    "conceptId": "§1.3",
-    "text": "성분명은 가나다순으로 표기해야 한다.",
-    "truth": false,
-    "explain": "원본: 과목2 문제은행 Q301 · 교재 §1.3"
-   },
-   {
     "id": "ㄹ",
-    "sid": "manufacturing_st_671eba",
+    "sid": "manufacturing_st_749df5",
     "conceptId": "§1.3",
-    "text": "글자 크기는 5포인트 이상이어야 한다.",
+    "text": "미셀은 가용화의 기본 구조를 이룬다.",
     "truth": true,
-    "explain": "원본: 과목2 문제은행 Q288 · 교재 §1.3"
+    "explain": "원본: 과목2 문제은행 Q295 · 교재 §1.3"
    },
    {
     "id": "ㅁ",
-    "sid": "manufacturing_st_03c81e",
+    "sid": "manufacturing_st_3b097b",
     "conceptId": "§1.3",
-    "text": "화학적 각질 제거 성분이다.",
-    "truth": true,
-    "explain": "원본: 과목2 문제은행 Q304 · 교재 §1.3"
+    "text": "계면활성제가 수용액에서 형성하는 미셀의 구조는 소수기가 바깥쪽, 친수기가 안쪽을 향한다.",
+    "truth": false,
+    "explain": "원본: 과목2 문제은행 Q295 · 교재 §1.3"
    }
   ],
   "options": [
@@ -25485,8 +25485,8 @@ var COMBO_DRILLS_subject2 = [
     "id": "2",
     "members": [
      "ㄴ",
-     "ㄹ",
-     "ㅁ"
+     "ㄷ",
+     "ㄹ"
     ]
    },
    {
@@ -25516,10 +25516,11 @@ var COMBO_DRILLS_subject2 = [
    "자동변환",
    "명제판정",
    "개념재조합",
+   "처분기준",
    "수치"
   ],
   "derivedFrom": "cluster:2|§1.3",
-  "explain": "ㄱ. 원본: 과목2 문제은행 Q288 · 교재 §1.3\nㄴ. 원본: 과목2 문제은행 Q285 · 교재 §1.3\nㄷ. 원본: 과목2 문제은행 Q301 · 교재 §1.3\nㄹ. 원본: 과목2 문제은행 Q288 · 교재 §1.3\nㅁ. 원본: 과목2 문제은행 Q304 · 교재 §1.3",
+  "explain": "ㄱ. 원본: 과목2 문제은행 Q75 · 교재 §1.3\nㄴ. 원본: 과목2 문제은행 Q298 · 교재 §1.3\nㄷ. 원본: 과목2 문제은행 Q285 · 교재 §1.3\nㄹ. 원본: 과목2 문제은행 Q295 · 교재 §1.3\nㅁ. 원본: 과목2 문제은행 Q295 · 교재 §1.3",
   "source": "과목2 개념 재조합",
   "answer": "2"
  },
@@ -25533,19 +25534,19 @@ var COMBO_DRILLS_subject2 = [
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "manufacturing_st_905ea4",
+    "sid": "manufacturing_st_38956f",
     "conceptId": "§1.1",
-    "text": "극성이 전혀 없는 광물성 오일만을 100% 사용하여 유화한다.",
-    "truth": false,
+    "text": "세라마이드, 콜레스테롤, 유리지방산이 3:1:1 부근의 비율로 배합되어야 한다.",
+    "truth": true,
     "explain": "원본: 과목2 문제은행 Q95 · 교재 §1.1"
    },
    {
     "id": "ㄴ",
-    "sid": "manufacturing_st_3fb2b7",
+    "sid": "manufacturing_st_f9ed29",
     "conceptId": "§1.1",
-    "text": "비교적 넓은 pH 범위(3.0 ~ 10.0)에서 안정하며 열에도 강하다.",
-    "truth": true,
-    "explain": "원본: 과목2 문제은행 Q26 · 교재 §1.1"
+    "text": "SPF 수치가 높을수록 친수성이 강해져 W/O 제형에만 적용된다.",
+    "truth": false,
+    "explain": "원본: 과목2 문제은행 Q289 · 교재 §1.1"
    },
    {
     "id": "ㄷ",
@@ -25557,52 +25558,53 @@ var COMBO_DRILLS_subject2 = [
    },
    {
     "id": "ㄹ",
-    "sid": "manufacturing_st_498d03",
+    "sid": "manufacturing_st_3fb2b7",
     "conceptId": "§1.1",
-    "text": "극성이 매우 높은 수성 용제 성질을 가진다.",
-    "truth": false,
-    "explain": "원본: 과목2 문제은행 Q3 · 교재 §1.1"
+    "text": "비교적 넓은 pH 범위(3.0 ~ 10.0)에서 안정하며 열에도 강하다.",
+    "truth": true,
+    "explain": "원본: 과목2 문제은행 Q26 · 교재 §1.1"
    },
    {
     "id": "ㅁ",
-    "sid": "manufacturing_st_38956f",
+    "sid": "manufacturing_st_9b629a",
     "conceptId": "§1.1",
-    "text": "세라마이드, 콜레스테롤, 유리지방산이 3:1:1 부근의 비율로 배합되어야 한다.",
-    "truth": true,
-    "explain": "원본: 과목2 문제은행 Q95 · 교재 §1.1"
+    "text": "자외선 B(UVB)를 차단하는 정도를 나타낸다.",
+    "truth": false,
+    "explain": "원본: 과목2 문제은행 Q96 · 교재 §1.1"
    }
   ],
   "options": [
    {
     "id": "1",
     "members": [
-     "ㄹ"
+     "ㄴ"
     ]
    },
    {
     "id": "2",
     "members": [
-     "ㄴ"
+     "ㄱ"
     ]
    },
    {
     "id": "3",
+    "members": [
+     "ㄴ",
+     "ㄹ",
+     "ㅁ"
+    ]
+   },
+   {
+    "id": "4",
     "members": [
      "ㄱ",
      "ㄹ"
     ]
    },
    {
-    "id": "4",
-    "members": [
-     "ㄱ"
-    ]
-   },
-   {
     "id": "5",
     "members": [
-     "ㄴ",
-     "ㅁ"
+     "ㄹ"
     ]
    }
   ],
@@ -25615,9 +25617,9 @@ var COMBO_DRILLS_subject2 = [
    "수치"
   ],
   "derivedFrom": "cluster:2|§1.1",
-  "explain": "ㄱ. 원본: 과목2 문제은행 Q95 · 교재 §1.1\nㄴ. 원본: 과목2 문제은행 Q26 · 교재 §1.1\nㄷ. 원본: 과목2 문제은행 Q40 · 교재 §1.1\nㄹ. 원본: 과목2 문제은행 Q3 · 교재 §1.1\nㅁ. 원본: 과목2 문제은행 Q95 · 교재 §1.1",
+  "explain": "ㄱ. 원본: 과목2 문제은행 Q95 · 교재 §1.1\nㄴ. 원본: 과목2 문제은행 Q289 · 교재 §1.1\nㄷ. 원본: 과목2 문제은행 Q40 · 교재 §1.1\nㄹ. 원본: 과목2 문제은행 Q26 · 교재 §1.1\nㅁ. 원본: 과목2 문제은행 Q96 · 교재 §1.1",
   "source": "과목2 개념 재조합",
-  "answer": "5"
+  "answer": "4"
  },
  {
   "id": "manufacturing_combo-cluster_ff06ed",
@@ -25715,111 +25717,6 @@ var COMBO_DRILLS_subject2 = [
   "explain": "ㄱ. 원본: 과목2 문제은행 Q318 · 교재 §2.1\nㄴ. 원본: 과목2 문제은행 Q318 · 교재 §2.1\nㄷ. 원본: 과목2 문제은행 Q318 · 교재 §2.1\nㄹ. 원본: 과목2 문제은행 Q29 · 교재 §2.1\nㅁ. 원본: 과목2 문제은행 Q122 · 교재 §2.1",
   "source": "과목2 개념 재조합",
   "answer": "1"
- },
- {
-  "id": "manufacturing_combo-cluster_0e084c",
-  "subject": 2,
-  "type": "combo",
-  "points": 4,
-  "citation": "📖 교재: §3.2 (출처: 과목2 문제은행 진술 재조합)",
-  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
-  "statements": [
-   {
-    "id": "ㄱ",
-    "sid": "manufacturing_st_204b1a",
-    "conceptId": "§3.2",
-    "text": "염류에는 소듐, 포타슘 등의 양이온염이 포함된다.",
-    "truth": true,
-    "explain": "원본: 과목2 문제은행 Q341 · 교재 §3.2"
-   },
-   {
-    "id": "ㄴ",
-    "sid": "manufacturing_st_dfc7df",
-    "conceptId": "§3.2",
-    "text": "염류는 양이온염과 음이온염을 포함한다.",
-    "truth": true,
-    "explain": "원본: 과목2 문제은행 Q340 · 교재 §3.2"
-   },
-   {
-    "id": "ㄷ",
-    "sid": "manufacturing_st_4322ee",
-    "conceptId": "§3.2",
-    "text": "시험 검사 결과 적합 판정이 내려지면 '적합' 라벨을 부착하고 적합 구역으로 이동한다.",
-    "truth": true,
-    "explain": "원본: 과목2 문제은행 Q35 · 교재 §3.2"
-   },
-   {
-    "id": "ㄹ",
-    "sid": "manufacturing_st_6a29a8",
-    "conceptId": "§3.2",
-    "text": "씻어내는 제품과 씻어내지 않는 제품 모두 0.1% 초과 시 표시하여야 한다.",
-    "truth": false,
-    "explain": "원본: 과목2 문제은행 Q314 · 교재 §3.2"
-   },
-   {
-    "id": "ㅁ",
-    "sid": "manufacturing_st_2799cd",
-    "conceptId": "§3.2",
-    "text": "에스테르류에는 페닐이 항상 포함되며 예외 규정은 없다.",
-    "truth": false,
-    "explain": "원본: 과목2 문제은행 Q340 · 교재 §3.2"
-   }
-  ],
-  "options": [
-   {
-    "id": "1",
-    "members": [
-     "ㄴ",
-     "ㄷ",
-     "ㄹ",
-     "ㅁ"
-    ]
-   },
-   {
-    "id": "2",
-    "members": [
-     "ㄱ",
-     "ㄹ"
-    ]
-   },
-   {
-    "id": "3",
-    "members": [
-     "ㄱ",
-     "ㄷ",
-     "ㄹ",
-     "ㅁ"
-    ]
-   },
-   {
-    "id": "4",
-    "members": [
-     "ㄱ",
-     "ㄴ",
-     "ㄷ"
-    ]
-   },
-   {
-    "id": "5",
-    "members": [
-     "ㄱ",
-     "ㄷ",
-     "ㄹ"
-    ]
-   }
-  ],
-  "tags": [
-   "자동변환",
-   "명제판정",
-   "개념재조합",
-   "한도",
-   "구성비",
-   "수치"
-  ],
-  "derivedFrom": "cluster:2|§3.2",
-  "explain": "ㄱ. 원본: 과목2 문제은행 Q341 · 교재 §3.2\nㄴ. 원본: 과목2 문제은행 Q340 · 교재 §3.2\nㄷ. 원본: 과목2 문제은행 Q35 · 교재 §3.2\nㄹ. 원본: 과목2 문제은행 Q314 · 교재 §3.2\nㅁ. 원본: 과목2 문제은행 Q340 · 교재 §3.2",
-  "source": "과목2 개념 재조합",
-  "answer": "4"
  },
  {
   "id": "manufacturing_combo-cluster_134d05",
@@ -25923,74 +25820,75 @@ var COMBO_DRILLS_subject2 = [
   "answer": "4"
  },
  {
-  "id": "manufacturing_combo-cluster_c82c36",
+  "id": "manufacturing_combo-cluster_6f8e68",
   "subject": 2,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: §3.1 (출처: 과목2 문제은행 진술 재조합)",
+  "citation": "📖 교재: §2.2 (출처: 과목2 문제은행 진술 재조합)",
   "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "manufacturing_st_cadbab",
-    "conceptId": "§3.1",
-    "text": "물에 아주 잘 녹는 친수성 수용성 원료이다.",
+    "sid": "manufacturing_st_985adb",
+    "conceptId": "§2.2",
+    "text": "완제품과 동일한 의미이다",
     "truth": false,
-    "explain": "원본: 과목2 문제은행 Q67 · 교재 §3.1"
+    "explain": "원본: 과목2 문제은행 Q154 · 교재 §2.2"
    },
    {
     "id": "ㄴ",
-    "sid": "manufacturing_st_0bef70",
-    "conceptId": "§3.1",
-    "text": "입술에 사용되는 제품에는 사용금지이다",
+    "sid": "manufacturing_st_7ca816",
+    "conceptId": "§2.2",
+    "text": "피부의 약산성(pH 5.5 내외) 장벽을 유지하는 데 기여한다.",
     "truth": true,
-    "explain": "원본: 과목2 문제은행 Q181 · 교재 §3.1"
+    "explain": "원본: 과목2 문제은행 Q67 · 교재 §2.2"
    },
    {
     "id": "ㄷ",
-    "sid": "manufacturing_st_ee80cc",
-    "conceptId": "§3.1",
-    "text": "사용 후 씻어내지 않는 제품에 0.01%까지 사용 가능하다",
+    "sid": "manufacturing_st_5791d0",
+    "conceptId": "§2.2",
+    "text": "제조공정 단계에 있는 것으로서 필요한 제조공정을 더 거쳐야 벌크 제품이 되는 것이다",
     "truth": true,
-    "explain": "원본: 과목2 문제은행 Q181 · 교재 §3.1"
+    "explain": "원본: 과목2 문제은행 Q154 · 교재 §2.2"
    },
    {
     "id": "ㄹ",
-    "sid": "manufacturing_st_09cf79",
-    "conceptId": "§3.1",
-    "text": "데오드란트에 배합할 경우 0.0075%까지 사용 가능하다",
-    "truth": true,
-    "explain": "원본: 과목2 문제은행 Q181 · 교재 §3.1"
+    "sid": "manufacturing_st_38ff81",
+    "conceptId": "§2.2",
+    "text": "충전(1차 포장) 이전의 제조 단계까지 끝낸 화장품이다",
+    "truth": false,
+    "explain": "원본: 과목2 문제은행 Q154 · 교재 §2.2"
    },
    {
     "id": "ㅁ",
-    "sid": "manufacturing_st_17b976",
-    "conceptId": "§3.1",
-    "text": "화장품에 배합할 수 없는 원료이다.",
+    "sid": "manufacturing_st_cadbab",
+    "conceptId": "§2.2",
+    "text": "물에 아주 잘 녹는 친수성 수용성 원료이다.",
     "truth": false,
-    "explain": "원본: 과목2 문제은행 Q67 · 교재 §3.1"
+    "explain": "원본: 과목2 문제은행 Q67 · 교재 §2.2"
    }
   ],
   "options": [
    {
     "id": "1",
     "members": [
-     "ㄴ",
+     "ㄱ",
      "ㄷ",
-     "ㄹ"
+     "ㅁ"
     ]
    },
    {
     "id": "2",
     "members": [
-     "ㅁ"
+     "ㄴ",
+     "ㄷ"
     ]
    },
    {
     "id": "3",
     "members": [
-     "ㄱ",
-     "ㄴ",
+     "ㄷ",
+     "ㄹ",
      "ㅁ"
     ]
    },
@@ -25998,13 +25896,18 @@ var COMBO_DRILLS_subject2 = [
     "id": "4",
     "members": [
      "ㄱ",
-     "ㄷ"
+     "ㄴ",
+     "ㄷ",
+     "ㄹ"
     ]
    },
    {
     "id": "5",
     "members": [
-     "ㄴ"
+     "ㄴ",
+     "ㄷ",
+     "ㄹ",
+     "ㅁ"
     ]
    }
   ],
@@ -26012,14 +25915,13 @@ var COMBO_DRILLS_subject2 = [
    "자동변환",
    "명제판정",
    "개념재조합",
-   "금지원료",
-   "한도",
-   "수치"
+   "수치",
+   "정의"
   ],
-  "derivedFrom": "cluster:2|§3.1",
-  "explain": "ㄱ. 원본: 과목2 문제은행 Q67 · 교재 §3.1\nㄴ. 원본: 과목2 문제은행 Q181 · 교재 §3.1\nㄷ. 원본: 과목2 문제은행 Q181 · 교재 §3.1\nㄹ. 원본: 과목2 문제은행 Q181 · 교재 §3.1\nㅁ. 원본: 과목2 문제은행 Q67 · 교재 §3.1",
+  "derivedFrom": "cluster:2|§2.2",
+  "explain": "ㄱ. 원본: 과목2 문제은행 Q154 · 교재 §2.2\nㄴ. 원본: 과목2 문제은행 Q67 · 교재 §2.2\nㄷ. 원본: 과목2 문제은행 Q154 · 교재 §2.2\nㄹ. 원본: 과목2 문제은행 Q154 · 교재 §2.2\nㅁ. 원본: 과목2 문제은행 Q67 · 교재 §2.2",
   "source": "과목2 개념 재조합",
-  "answer": "1"
+  "answer": "2"
  },
  {
   "id": "manufacturing_combo-cluster_62284c",
@@ -26118,6 +26020,110 @@ var COMBO_DRILLS_subject2 = [
   "explain": "ㄱ. 원본: 과목2 문제은행 Q367 · 교재 §4.2\nㄴ. 원본: 과목2 문제은행 Q366 · 교재 §4.2\nㄷ. 원본: 과목2 문제은행 Q326 · 교재 §4.2\nㄹ. 원본: 과목2 문제은행 Q229 · 교재 §4.2\nㅁ. 원본: 과목2 문제은행 Q367 · 교재 §4.2",
   "source": "과목2 개념 재조합",
   "answer": "5"
+ },
+ {
+  "id": "manufacturing_combo-cluster_0e084c",
+  "subject": 2,
+  "type": "combo",
+  "points": 4,
+  "citation": "📖 교재: §3.2 (출처: 과목2 문제은행 진술 재조합)",
+  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
+  "statements": [
+   {
+    "id": "ㄱ",
+    "sid": "manufacturing_st_9eaf34",
+    "conceptId": "§3.2",
+    "text": "분사형 제품에만 사용이 허용된다.",
+    "truth": false,
+    "explain": "원본: 과목2 문제은행 Q306 · 교재 §3.2"
+   },
+   {
+    "id": "ㄴ",
+    "sid": "manufacturing_st_5c7bef",
+    "conceptId": "§3.2",
+    "text": "기본 함량 상한은 2.4%이며, 얼굴·손·입술에는 5%까지 허용된다.",
+    "truth": true,
+    "explain": "원본: 과목2 문제은행 Q310 · 교재 §3.2"
+   },
+   {
+    "id": "ㄷ",
+    "sid": "manufacturing_st_81ec9e",
+    "conceptId": "§3.2",
+    "text": "파라벤류는 단일 0.4%, 혼합 0.8%의 한도가 적용되며 페닐 에스터는 제외된다.",
+    "truth": true,
+    "explain": "원본: 과목2 문제은행 Q307 · 교재 §3.2"
+   },
+   {
+    "id": "ㄹ",
+    "sid": "manufacturing_st_4c878f",
+    "conceptId": "§3.2",
+    "text": "에탄올아민은 염류의 양이온염 예시 중 하나이다.",
+    "truth": true,
+    "explain": "원본: 과목2 문제은행 Q341 · 교재 §3.2"
+   },
+   {
+    "id": "ㅁ",
+    "sid": "manufacturing_st_63764e",
+    "conceptId": "§3.2",
+    "text": "씻어내지 않는 제품은 함량과 관계없이 모두 표시하여야 한다.",
+    "truth": false,
+    "explain": "원본: 과목2 문제은행 Q314 · 교재 §3.2"
+   }
+  ],
+  "options": [
+   {
+    "id": "1",
+    "members": [
+     "ㄴ",
+     "ㄷ",
+     "ㄹ",
+     "ㅁ"
+    ]
+   },
+   {
+    "id": "2",
+    "members": [
+     "ㄱ",
+     "ㄹ"
+    ]
+   },
+   {
+    "id": "3",
+    "members": [
+     "ㄱ",
+     "ㄷ",
+     "ㄹ",
+     "ㅁ"
+    ]
+   },
+   {
+    "id": "4",
+    "members": [
+     "ㄴ",
+     "ㄷ",
+     "ㄹ"
+    ]
+   },
+   {
+    "id": "5",
+    "members": [
+     "ㄱ",
+     "ㄷ",
+     "ㄹ"
+    ]
+   }
+  ],
+  "tags": [
+   "자동변환",
+   "명제판정",
+   "개념재조합",
+   "한도",
+   "수치"
+  ],
+  "derivedFrom": "cluster:2|§3.2",
+  "explain": "ㄱ. 원본: 과목2 문제은행 Q306 · 교재 §3.2\nㄴ. 원본: 과목2 문제은행 Q310 · 교재 §3.2\nㄷ. 원본: 과목2 문제은행 Q307 · 교재 §3.2\nㄹ. 원본: 과목2 문제은행 Q341 · 교재 §3.2\nㅁ. 원본: 과목2 문제은행 Q314 · 교재 §3.2",
+  "source": "과목2 개념 재조합",
+  "answer": "4"
  },
  {
   "id": "manufacturing_combo-cluster_00489b",

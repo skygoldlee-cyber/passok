@@ -1,5 +1,5 @@
 // 자동 생성된 복수정답형 드릴 데이터입니다. 수정하지 마십시오. (tools/build/build_combo_drills.js)
-// 원본: data/exams/cosmetic/exams/subject4.db30622b.js — mode: fact(명제 조합) 149문 / answer(정답 조합) 552문
+// 원본: data/exams/cosmetic/exams/subject4.b78ebc44.js — mode: fact(명제 조합) 149문 / answer(정답 조합) 552문
 var COMBO_DRILLS_subject4 = [
  {
   "id": "understanding_combo_8317ff",
@@ -2572,35 +2572,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_bc2917",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "원료들을 섞어 새로운 벌크 제품을 대량 제조하는 행위",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_2458ae",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "타 브랜드 라벨을 뜯어내고 자사 라벨을 붙이는 행위",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_4bfff2",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "화장품 박스를 2차 포장재로 교체하는 행위",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_c99ea7",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "벌크 제품을 소량 용기에 나누어 담는 행위 (단순 세정용 비누 소분 제외)",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_94f1ee",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "완제품 화장품의 사용 기한을 연장하는 행위",
     "truth": false
    }
@@ -2759,35 +2759,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_f19502",
-    "conceptId": "§5.1",
+    "conceptId": "§4.2",
     "text": "제품 제조 시 작성된 혼합 및 소분 기록서를 검토하여 원료의 배합 오류 여부를 확인한다.",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_5a5fa4",
-    "conceptId": "§5.1",
+    "conceptId": "§4.2",
     "text": "부작용 부위의 사진 등 객관적인 트러블 증상을 확보한다.",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_9d05d0",
-    "conceptId": "§5.1",
+    "conceptId": "§4.2",
     "text": "즉시 제품의 사용을 중단하고 피부과 전문의의 진단을 받도록 안내한다.",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_97d026",
-    "conceptId": "§5.1",
+    "conceptId": "§4.2",
     "text": "책임판매업자와 상의하여 원료 성분의 안전성 문제 여부를 파악하고 보상 절차를 밟는다.",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_1c1cfb",
-    "conceptId": "§5.1",
+    "conceptId": "§4.2",
     "text": "본 업소의 잘못이 아니라고 강력히 우기며 고객을 돌려보낸다.",
     "truth": false
    }
@@ -3303,35 +3303,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_7d456c",
-    "conceptId": "§3.2",
+    "conceptId": "§3.1",
     "text": "수분측정기",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_c8d9f1",
-    "conceptId": "§3.2",
+    "conceptId": "§3.1",
     "text": "저울",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_b16d3c",
-    "conceptId": "§3.2",
+    "conceptId": "§3.1",
     "text": "마그네틱 스터러 (교반기)",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_1bcdad",
-    "conceptId": "§3.2",
+    "conceptId": "§3.1",
     "text": "메스실린더",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_0de939",
-    "conceptId": "§3.2",
+    "conceptId": "§3.1",
     "text": "원심분리기",
     "truth": false
    }
@@ -3848,7 +3848,7 @@ var COMBO_DRILLS_subject4 = [
    "수치"
   ],
   "derivedFrom": "subject4_q41",
-  "explain": "📖 교재 근거 (L380):\n| 인체 첩포시험(인체 패치테스트) 🎯 기출 | 등, 팔 안쪽에 폐쇄 첩포하여 피부 자극성이나 감작성(알레르기)을 평가함. 국내외 대학 또는 전문 연구기관에서 실시하며, 관련 분야 전문의사, 연구소, 병원 등 관련 기관에서 5년 이상 경력을 가진 자의 지도 및 감독하에 수행·평가되어야 함. |\n해설: 인체 첩포시험(인체 패치테스트)은 등이나 팔 안쪽에 폐쇄 첩포하여 피부 자극성이나 감작성(알레르기)을 평가하는 시험이므로, 동물을 대상으로 실시한다고 한 ④번은 옳지 않습니다. 이 시험은 국내외 대학 또는 전문 연구기관에서 관련 분야 5년 이상의 경력을 가진 자의 지도 및 감독하에 수행·평가되어야 합니다.",
+  "explain": "📖 교재 근거 (L378):\n| 인체 첩포시험(인체 패치테스트) 🎯 기출 | 등, 팔 안쪽에 폐쇄 첩포하여 피부 자극성이나 감작성(알레르기)을 평가함. 국내외 대학 또는 전문 연구기관에서 실시하며, 관련 분야 전문의사, 연구소, 병원 등 관련 기관에서 5년 이상 경력을 가진 자의 지도 및 감독하에 수행·평가되어야 함. |\n해설: 인체 첩포시험(인체 패치테스트)은 등이나 팔 안쪽에 폐쇄 첩포하여 피부 자극성이나 감작성(알레르기)을 평가하는 시험이므로, 동물을 대상으로 실시한다고 한 ④번은 옳지 않습니다. 이 시험은 국내외 대학 또는 전문 연구기관에서 관련 분야 5년 이상의 경력을 가진 자의 지도 및 감독하에 수행·평가되어야 합니다.",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "5"
  },
@@ -6157,7 +6157,7 @@ var COMBO_DRILLS_subject4 = [
    "수치"
   ],
   "derivedFrom": "subject4_q66",
-  "explain": "📖 교재 근거 (L458):\n| ② 인체적용시험 자료 🎯 기출 | 지도·감독: 5년 이상 경력자의 지도·감독 / 윤리 원칙: 헬싱키 선언에 근거 / 과학적 타당성: 과학적으로 타당해야 하며, 시험 자료는 명확하고 상세히 기술 / 의학적 처치: 의사 또는 한의사의 책임 / 동의서: 모든 피험자로부터 자발적인 문서 동의서 |\n해설: 기능성화장품 인체적용시험은 과학적으로 타당해야 하며 시험 자료는 명확하고 상세히 기술되어야 합니다. 따라서 시험 자료를 생략하거나 요약만 기술해도 된다고 한 ⑤번은 잘못된 설명으로 정답입니다.",
+  "explain": "📖 교재 근거 (L456):\n| ② 인체적용시험 자료 🎯 기출 | 지도·감독: 5년 이상 경력자의 지도·감독 / 윤리 원칙: 헬싱키 선언에 근거 / 과학적 타당성: 과학적으로 타당해야 하며, 시험 자료는 명확하고 상세히 기술 / 의학적 처치: 의사 또는 한의사의 책임 / 동의서: 모든 피험자로부터 자발적인 문서 동의서 |\n해설: 기능성화장품 인체적용시험은 과학적으로 타당해야 하며 시험 자료는 명확하고 상세히 기술되어야 합니다. 따라서 시험 자료를 생략하거나 요약만 기술해도 된다고 한 ⑤번은 잘못된 설명으로 정답입니다.",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "1"
  },
@@ -7746,35 +7746,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_c9990f",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "오차가 의심될 때만 비정기적으로",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_b6d6c7",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "1년에 1회",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_d0b2d3",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "3년에 1회",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_a446a2",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "격월 1회",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_f183b3",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "매 작업 시작 전",
     "truth": true
    }
@@ -8471,7 +8471,7 @@ var COMBO_DRILLS_subject4 = [
    "명제판정"
   ],
   "derivedFrom": "subject4_q91",
-  "explain": "📖 교재 근거 (L920):\n| 체온조절 기능 🎯 기출 | 모세혈관의 확장과 수축작용을 통해 열을 차단하거나 확산하여 체온을 조절함. 모세혈관 확장 → 열 확산 → 체온 하강. 모세혈관 수축 → 열 차단 → 체온 상승. |\n해설: 피부의 체온조절 기능에서 모세혈관이 확장되면 열을 확산하여 체온이 하강하고, 모세혈관이 수축하면 열을 차단하여 체온이 상승하므로 ③번이 옳습니다. 따라서 모세혈관 확장 시 열을 차단해 체온이 상승한다거나, 수축 시 열을 확산해 체온이 하강한다고 설명한 선지는 잘못되었습니다.",
+  "explain": "📖 교재 근거 (L918):\n| 체온조절 기능 🎯 기출 | 모세혈관의 확장과 수축작용을 통해 열을 차단하거나 확산하여 체온을 조절함. 모세혈관 확장 → 열 확산 → 체온 하강. 모세혈관 수축 → 열 차단 → 체온 상승. |\n해설: 피부의 체온조절 기능에서 모세혈관이 확장되면 열을 확산하여 체온이 하강하고, 모세혈관이 수축하면 열을 차단하여 체온이 상승하므로 ③번이 옳습니다. 따라서 모세혈관 확장 시 열을 차단해 체온이 상승한다거나, 수축 시 열을 확산해 체온이 하강한다고 설명한 선지는 잘못되었습니다.",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "1"
  },
@@ -9314,35 +9314,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_bf275e",
-    "conceptId": "§3.0",
+    "conceptId": "§2.2",
     "text": "실리콘 오일 및 정제수",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_9b02cd",
-    "conceptId": "§3.0",
+    "conceptId": "§2.2",
     "text": "자유지방산 및 글리세롤",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_bf738a",
-    "conceptId": "§3.0",
+    "conceptId": "§2.2",
     "text": "스쿠알란 및 에스테르",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_548fe2",
-    "conceptId": "§3.0",
+    "conceptId": "§2.2",
     "text": "콜라겐 및 엘라스틴 사슬",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_0a3bf2",
-    "conceptId": "§3.0",
+    "conceptId": "§2.2",
     "text": "아미노산 및 그 대사체",
     "truth": true
    }
@@ -10149,35 +10149,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_059a2d",
-    "conceptId": "§4.0",
+    "conceptId": "§3.2",
     "text": "페녹시에탄올",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_6fc45f",
-    "conceptId": "§4.0",
+    "conceptId": "§3.2",
     "text": "메탄올 (보존 용매 한도 외 원액 사용 금지)",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_6ed61a",
-    "conceptId": "§4.0",
+    "conceptId": "§3.2",
     "text": "징크옥사이드",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_20d433",
-    "conceptId": "§4.0",
+    "conceptId": "§3.2",
     "text": "카보머",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_152ec2",
-    "conceptId": "§4.0",
+    "conceptId": "§3.2",
     "text": "살리실산 (샴푸용 기준 내)",
     "truth": false
    }
@@ -10520,35 +10520,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_ac5c37",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "Bat",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_1676e0",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "Zero",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_245415",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "Tare",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_b7da38",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "Cal",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_558647",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "o-Ld (Overload) 또는 EEEE",
     "truth": true
    }
@@ -10956,7 +10956,7 @@ var COMBO_DRILLS_subject4 = [
    "수치"
   ],
   "derivedFrom": "subject4_q118",
-  "explain": "📖 법령 근거 (L1753):\n| 모발 화장품 | • 세정용: 모발과 두피의 피지, 땀, 각질 등 오염 물질을 제거하여 청결하고 건강하게 유지시킴<br>예) 샴푸, 린스<br>• 정발제: 모발을 물리적으로 원하는 형태로 만들어 주고 형태를 고정시킴<br>예) 헤어 오일, 포마드, 헤어 크림 및 로션, 헤어 스프레이, 헤어 젤, 헤어 왁스 등<br>• 헤어 트리트먼트제: 모발 손상을 방지하고 손상된 모발을 회복하기 위해 사용하여 오일을 함유하여 살균, 청량, 쾌적함을 부여하고 비듬, 가려움을 제거하기 위해 사용함<br>• 양모제: 30~70% 에탄올을 함유하여 살균, 청량, 쾌적함을 부여하고 탈모 증상 완화에 도움을 줌<br>• 퍼머넌트 웨이브 용제: 모발 케라틴 속의 시스틴 결합(-S-S-)을 환원제로 부분적으로 절단한 다음 산화제로 재결합하여 모발에 웨이브를 만들어 줌<br>예) 제1제 - 환원제: 치오글라이콜릭애씨드, 시스테인 / 알칼리제: 암모니아, 모노에탄올아민<br>　　제2제 - 산화제: 브롬산나트륨, 과산화수소<br>• 염모제: 모발의 색상을 변화시킴<br>예) 일시적 염모제, 반영구 염모제, 영구 염모제, 헤어 블리치<br>• 제모제: 손, 발이나 겨드랑이, 다리 등의 털을 제거함<br>예) 물리적 제모제: 제모왁스, 제모 젤·테이프 / 화학적 제모제: 제모 크림 |\n해설: 에탄올은 30~70% 농도에서 살균 작용을 나타내므로, 손 및 기구를 소독하기 위한 살균 스프레이로는 70% 에탄올 스프레이가 적합하여 정답은 ③번입니다. 반면 락스 희석액, 100% 무수 에탄올, 포름알데히드 수용액, 정제수 스프레이 등은 해당 목적의 소독용 용액으로 적절하지 않습니다.",
+  "explain": "📖 법령 근거 (L1747):\n| 모발 화장품 | • 세정용: 모발과 두피의 피지, 땀, 각질 등 오염 물질을 제거하여 청결하고 건강하게 유지시킴<br>예) 샴푸, 린스<br>• 정발제: 모발을 물리적으로 원하는 형태로 만들어 주고 형태를 고정시킴<br>예) 헤어 오일, 포마드, 헤어 크림 및 로션, 헤어 스프레이, 헤어 젤, 헤어 왁스 등<br>• 헤어 트리트먼트제: 모발 손상을 방지하고 손상된 모발을 회복하기 위해 사용하여 오일을 함유하여 살균, 청량, 쾌적함을 부여하고 비듬, 가려움을 제거하기 위해 사용함<br>• 양모제: 30~70% 에탄올을 함유하여 살균, 청량, 쾌적함을 부여하고 탈모 증상 완화에 도움을 줌<br>• 퍼머넌트 웨이브 용제: 모발 케라틴 속의 시스틴 결합(-S-S-)을 환원제로 부분적으로 절단한 다음 산화제로 재결합하여 모발에 웨이브를 만들어 줌<br>예) 제1제 - 환원제: 치오글라이콜릭애씨드, 시스테인 / 알칼리제: 암모니아, 모노에탄올아민<br>　　제2제 - 산화제: 브롬산나트륨, 과산화수소<br>• 염모제: 모발의 색상을 변화시킴<br>예) 일시적 염모제, 반영구 염모제, 영구 염모제, 헤어 블리치<br>• 제모제: 손, 발이나 겨드랑이, 다리 등의 털을 제거함<br>예) 물리적 제모제: 제모왁스, 제모 젤·테이프 / 화학적 제모제: 제모 크림 |\n해설: 에탄올은 30~70% 농도에서 살균 작용을 나타내므로, 손 및 기구를 소독하기 위한 살균 스프레이로는 70% 에탄올 스프레이가 적합하여 정답은 ③번입니다. 반면 락스 희석액, 100% 무수 에탄올, 포름알데히드 수용액, 정제수 스프레이 등은 해당 목적의 소독용 용액으로 적절하지 않습니다.",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "2"
  },
@@ -11528,35 +11528,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_beb950",
-    "conceptId": "§2.2",
+    "conceptId": "§2.1",
     "text": "약 10~20층의 납작한 무핵세포층으로 pH 4.5~5.5 정도의 약산성이다",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_c81957",
-    "conceptId": "§2.2",
+    "conceptId": "§2.1",
     "text": "피부의 가장 바깥에 위치하여 수분 손실을 막고 피부장벽 역할을 한다",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_1ab721",
-    "conceptId": "§2.2",
+    "conceptId": "§2.1",
     "text": "케라틴 약 58%, 천연보습인자(NMF) 약 31%, 세포간지질 약 11%로 구성된다",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_4af174",
-    "conceptId": "§2.2",
+    "conceptId": "§2.1",
     "text": "각질층은 천연보습인자(NMF)를 통해 10~20%의 수분을 함유한다",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_f35da9",
-    "conceptId": "§2.2",
+    "conceptId": "§2.1",
     "text": "각화주기(각질형성주기)는 약 60일이다",
     "truth": false
    }
@@ -11607,7 +11607,7 @@ var COMBO_DRILLS_subject4 = [
    "수치"
   ],
   "derivedFrom": "subject4_q125",
-  "explain": "📖 교재 근거 (L1335):\n| 각질층 🎯 기출 | 약 10~20층의 납작한 무핵세포층으로 pH 4.5~5.5. 케라틴 58%, NMF 31%, 세포간지질 11%. 각질층은 NMF를 통해 10~20% 수분 함유. 각화주기(각질형성주기)는 28±3일 |\n해설: 각질층은 10~20층으로 pH 4.5~5.5의 약산성이며, 피부장벽 역할을 하고 수분 10~20% 및 케라틴 58%, NMF 31%, 세포간지질 11%로 구성되어 있으므로 ①, ②, ③, ④번은 모두 옳은 설명입니다. 따라서 표피 각질층에 대한 설명으로 옳지 않은 것은 ⑤번입니다.",
+  "explain": "📖 교재 근거 (L1333):\n| 각질층 🎯 기출 | 약 10~20층의 납작한 무핵세포층으로 pH 4.5~5.5. 케라틴 58%, NMF 31%, 세포간지질 11%. 각질층은 NMF를 통해 10~20% 수분 함유. 각화주기(각질형성주기)는 28±3일 |\n해설: 각질층은 10~20층으로 pH 4.5~5.5의 약산성이며, 피부장벽 역할을 하고 수분 10~20% 및 케라틴 58%, NMF 31%, 세포간지질 11%로 구성되어 있으므로 ①, ②, ③, ④번은 모두 옳은 설명입니다. 따라서 표피 각질층에 대한 설명으로 옳지 않은 것은 ⑤번입니다.",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "4"
  },
@@ -11898,35 +11898,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_e023d4",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "학력만으로 취득",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_51b82a",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "경력만으로 취득",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_c19ead",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "면허 등록",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_4947bb",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "교육 이수만으로 취득",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_53dd5e",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "국가자격시험 합격",
     "truth": true
    }
@@ -13165,7 +13165,7 @@ var COMBO_DRILLS_subject4 = [
    "수치"
   ],
   "derivedFrom": "subject4_q142",
-  "explain": "📖 교재 근거 (2과목 L5723):\n히알루론산(Hyaluronic Acid) — \"1g이 6L의 물을 보유할 수 있는 강력한 보습제\" (1g ≈ 1mL, 6L = 6,000mL → 약 1,000~6,000배 수분 보유력)\n해설: 히알루론산은 강력한 수분 보유력을 가진 보습 성분으로 자기 질량의 1000배의 수분을 보유할 수 있어 정답은 ④입니다. 따라서 1배, 10배, 100배, 10000배를 제시한 ①, ②, ③, ⑤는 오답입니다.",
+  "explain": "📖 교재 근거 (2과목 L5711):\n히알루론산(Hyaluronic Acid) — \"1g이 6L의 물을 보유할 수 있는 강력한 보습제\" (1g ≈ 1mL, 6L = 6,000mL → 약 1,000~6,000배 수분 보유력)\n해설: 히알루론산은 강력한 수분 보유력을 가진 보습 성분으로 자기 질량의 1000배의 수분을 보유할 수 있어 정답은 ④입니다. 따라서 1배, 10배, 100배, 10000배를 제시한 ①, ②, ③, ⑤는 오답입니다.",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "1"
  },
@@ -13544,35 +13544,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_0dbf6a",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "스패튤라",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_6ee6cf",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "저울",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_94ff16",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "비커",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_8e3dfb",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "현미경",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_f66096",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "메스실린더",
     "truth": false
    }
@@ -13727,35 +13727,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_b6f6d5",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "화장품의 혼합",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_1ea50a",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "화장품의 소분",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_b4cafc",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "조제에 사용하는 원료의 품질관리",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_311f5a",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "일반 의약품의 조제",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_20f136",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "조제 기록의 작성",
     "truth": false
    }
@@ -14736,35 +14736,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_31e2f8",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "사용 원료의 품명 및 중량",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_817bd7",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "조제 일자",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_d19f21",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "소비자의 피부 상태",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_813005",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "조제 담당자(조제관리사) 명",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_e6a149",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "소비자의 주민등록번호",
     "truth": true
    }
@@ -14921,35 +14921,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_874067",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "조제대의 세정·소독",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_40233a",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "기구의 소독",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_992a90",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "소비자의 위생 상태 검진",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_28b447",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "작업 환경의 청결 유지",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_c23535",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "원료의 보관 관리",
     "truth": false
    }
@@ -15195,35 +15195,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_3355f6",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "제조일로부터 1년",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_a4e8fb",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "제한 없음",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_2bf61f",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "조제일로부터 적정 기간(안정성에 따라)",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_37faa2",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "6개월",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_e82910",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "10년",
     "truth": false
    }
@@ -15378,35 +15378,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_9b152a",
-    "conceptId": "§6.0",
+    "conceptId": "§5.2",
     "text": "스패튤라의 소독",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_c1f155",
-    "conceptId": "§6.0",
+    "conceptId": "§5.2",
     "text": "원료 통의 뚜껑 관리",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_36ab13",
-    "conceptId": "§6.0",
+    "conceptId": "§5.2",
     "text": "원료별 전용 스패튤라 사용",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_2229b3",
-    "conceptId": "§6.0",
+    "conceptId": "§5.2",
     "text": "작업 환경의 청결 유지",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_df0b56",
-    "conceptId": "§6.0",
+    "conceptId": "§5.2",
     "text": "원료를 한 번에 모두 섞기",
     "truth": true
    }
@@ -15556,7 +15556,7 @@ var COMBO_DRILLS_subject4 = [
    "수치"
   ],
   "derivedFrom": "subject4_q168",
-  "explain": "📖 교재 근거 (L1144):\n| (2) 모발의 구조 🎯 기출 | 모표피: 모발 가장 바깥쪽 5~15층의 비늘 모양, 멜라닌이 없어 무색투명한 케라틴 단백질, 화학적 저항성이 강한 층. 모피질: 모발의 중간에 위치하며 대부분을 차지(80~90%). |\n해설: 모발의 중간에 위치하며 대부분을 차지하는 것은 모표피가 아닌 모피질(Cortex)에 대한 설명이므로 ④번이 옳지 않습니다. 모표피는 멜라닌이 없어 무색투명한 케라틴 단백질로 구성되며, 두발 내부의 모피질을 감싸고 있는 화학적 저항성이 강한 층입니다.",
+  "explain": "📖 교재 근거 (L1142):\n| (2) 모발의 구조 🎯 기출 | 모표피: 모발 가장 바깥쪽 5~15층의 비늘 모양, 멜라닌이 없어 무색투명한 케라틴 단백질, 화학적 저항성이 강한 층. 모피질: 모발의 중간에 위치하며 대부분을 차지(80~90%). |\n해설: 모발의 중간에 위치하며 대부분을 차지하는 것은 모표피가 아닌 모피질(Cortex)에 대한 설명이므로 ④번이 옳지 않습니다. 모표피는 멜라닌이 없어 무색투명한 케라틴 단백질로 구성되며, 두발 내부의 모피질을 감싸고 있는 화학적 저항성이 강한 층입니다.",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "2"
  },
@@ -16573,35 +16573,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_75f3ff",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "그대로 조제 진행",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_210231",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "향료를 추가하여 감추기",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_ce9611",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "더 많은 원료를 배합",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_00ffb3",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "조제를 중단하고 원인 성분 확인 후 대체 원료 사용",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_458a51",
-    "conceptId": "§2.3",
+    "conceptId": "§2.1",
     "text": "소비자에게 다른 제품 추천",
     "truth": false
    }
@@ -18573,7 +18573,7 @@ var COMBO_DRILLS_subject4 = [
    "수치"
   ],
   "derivedFrom": "subject4_q201",
-  "explain": "📖 법령 근거 (L3305):\n| 다등급 (위해 기준) | • 전부 또는 일부가 변패된 경우<br>• 병원미생물에 오염된 경우<br>• 이물이 혼입되었거나 부착되어 보건위생상 위해를 발생할 우려가 있는 경우<br>• 화장품에 사용할 수 없는 원료를 사용하였거나 유통화장품 안전관리 기준에 적합하지 않은 경우(기능성화장품의 주원료 함량이 부적합한 경우)<br>• 화장품의 사용기한 또는 개봉 후 사용기간(병행표시된 경우 제조연월일을 포함함)을 위조, 변조한 경우<br>• 그 밖에 화장품제조업자 및 책임판매업자 스스로 국민보건에 위해를 끼칠 우려가 있어 회수가 필요하다고 판단되는 경우<br>• 화장품제조업 또는 화장품책임판매업 등록을 하지 아니한 자가 제조한 화장품 또는 제조·수입하여 유통·판매한 화장품<br>• 화장품제조업 또는 화장품책임판매업 신고를 하지 아니한 자가 판매한 맞춤형화장품<br>• 맞춤형화장품조제관리사를 두지 아니하고 판매한 맞춤형화장품<br>• 화장품의 기재사항, 가격표시, 기재·표시상의 주의에 위반되는 화장품 또는 의약품으로 잘못 인식할 우려가 있게 기재·표시된 화장품<br>• 판매의 목적이 아닌 제품의 홍보·판매촉진 등을 위해 미리 소비자가 시험·사용하도록 제조 또는 수입된 화장품(소비자에게 판매하는 화장품에 한함)<br>• 화장품의 포장 및 기재·표시사항을 훼손(맞춤형화장품 판매를 위해 필요한 경우는 제외함) 또는 위조·변조한 것 |\n해설: 맞춤형화장품 조제 시 기록의 보존 기간은 제품의 사용기한이 경과한 후 1년이므로 정답은 ⑤입니다. 따라서 1개월, 6개월, 1년, 2년을 제시한 ①, ②, ③, ④는 올바른 보존 기간이 아니므로 오답입니다.",
+  "explain": "📖 법령 근거 (L3293):\n| 다등급 (위해 기준) | • 전부 또는 일부가 변패된 경우<br>• 병원미생물에 오염된 경우<br>• 이물이 혼입되었거나 부착되어 보건위생상 위해를 발생할 우려가 있는 경우<br>• 화장품에 사용할 수 없는 원료를 사용하였거나 유통화장품 안전관리 기준에 적합하지 않은 경우(기능성화장품의 주원료 함량이 부적합한 경우)<br>• 화장품의 사용기한 또는 개봉 후 사용기간(병행표시된 경우 제조연월일을 포함함)을 위조, 변조한 경우<br>• 그 밖에 화장품제조업자 및 책임판매업자 스스로 국민보건에 위해를 끼칠 우려가 있어 회수가 필요하다고 판단되는 경우<br>• 화장품제조업 또는 화장품책임판매업 등록을 하지 아니한 자가 제조한 화장품 또는 제조·수입하여 유통·판매한 화장품<br>• 화장품제조업 또는 화장품책임판매업 신고를 하지 아니한 자가 판매한 맞춤형화장품<br>• 맞춤형화장품조제관리사를 두지 아니하고 판매한 맞춤형화장품<br>• 화장품의 기재사항, 가격표시, 기재·표시상의 주의에 위반되는 화장품 또는 의약품으로 잘못 인식할 우려가 있게 기재·표시된 화장품<br>• 판매의 목적이 아닌 제품의 홍보·판매촉진 등을 위해 미리 소비자가 시험·사용하도록 제조 또는 수입된 화장품(소비자에게 판매하는 화장품에 한함)<br>• 화장품의 포장 및 기재·표시사항을 훼손(맞춤형화장품 판매를 위해 필요한 경우는 제외함) 또는 위조·변조한 것 |\n해설: 맞춤형화장품 조제 시 기록의 보존 기간은 제품의 사용기한이 경과한 후 1년이므로 정답은 ⑤입니다. 따라서 1개월, 6개월, 1년, 2년을 제시한 ①, ②, ③, ④는 올바른 보존 기간이 아니므로 오답입니다.",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "4"
  },
@@ -19329,35 +19329,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_bf40a3",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "각질층",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_df868a",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "투명층",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_c56ed4",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "과립층",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_825a12",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "기저층",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_3b0b24",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "유극층(가시층)",
     "truth": true
    }
@@ -19602,35 +19602,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_8af709",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "계량의 정확도를 위해",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_436b7d",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "미관을 위해",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_af5847",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "소비자의 신뢰를 위해",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_f17a68",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "법적 의무",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_940201",
-    "conceptId": "§1.3",
+    "conceptId": "§1.1",
     "text": "저울의 수명 연장",
     "truth": false
    }
@@ -19693,35 +19693,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_e22090",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "원료의 가격 때문",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_3e330a",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "원료의 색상 때문",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_11d2d6",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "안전기준 별표 2의 사용 제한 기준 준수",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_2f67fe",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "원료의 향기 때문",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_06bde4",
-    "conceptId": "§5.2",
+    "conceptId": "§5.1",
     "text": "원료의 용기 때문",
     "truth": false
    }
@@ -20237,35 +20237,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_73417c",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "나무",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_8169f9",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "철",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_092500",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "스테인리스 또는 플라스틱(일회용)",
     "truth": true
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_5042a0",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "알루미늄",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_90e279",
-    "conceptId": "§3.1",
+    "conceptId": "§2.2",
     "text": "구리",
     "truth": false
    }
@@ -20326,35 +20326,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_026835",
-    "conceptId": "§4.1",
+    "conceptId": "§3.2",
     "text": "TEWL(경피수분손실량) 측정",
     "truth": true
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_64a8ad",
-    "conceptId": "§4.1",
+    "conceptId": "§3.2",
     "text": "혈액 검사",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_e5b6fd",
-    "conceptId": "§4.1",
+    "conceptId": "§3.2",
     "text": "소변 검사",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_1d525e",
-    "conceptId": "§4.1",
+    "conceptId": "§3.2",
     "text": "체온 측정",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_17b2cf",
-    "conceptId": "§4.1",
+    "conceptId": "§3.2",
     "text": "혈압 측정",
     "truth": false
    }
@@ -21061,35 +21061,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_8f7ea0",
-    "conceptId": "§7.2",
+    "conceptId": "§6.3",
     "text": "원료의 규격서",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_24fc45",
-    "conceptId": "§7.2",
+    "conceptId": "§6.3",
     "text": "원료의 소비자 인지도",
     "truth": true
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_723c46",
-    "conceptId": "§7.2",
+    "conceptId": "§6.3",
     "text": "원료의 외관 상태",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_9f546d",
-    "conceptId": "§7.2",
+    "conceptId": "§6.3",
     "text": "원료의 보관 조건",
     "truth": false
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_addf13",
-    "conceptId": "§7.2",
+    "conceptId": "§6.3",
     "text": "원료의 제조일자 및 유통기한",
     "truth": false
    }
@@ -22715,35 +22715,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_aad2d3",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "원료의 품명",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_ca475c",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "원료의 유통기한",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_b930a4",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "원료의 외관",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_0247d4",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "원료의 제조자 주소",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_8c0a61",
-    "conceptId": "§6.1",
+    "conceptId": "§5.2",
     "text": "원료의 사용 가능 여부",
     "truth": false
    }
@@ -24819,7 +24819,7 @@ var COMBO_DRILLS_subject4 = [
    "수치"
   ],
   "derivedFrom": "subject4_q269",
-  "explain": "📖 교재 근거 (L1191):\n| 퇴행기(Catagen) | 약 3주 | • 전체 모발의 1~2%가 이 시기에 해당함<br>• 모모세포의 분열이 감소하는 시기<br>• 모발의 성장이 멈춘 시기 |\n해설: 전체 모발의 1~2%에 해당하며 모모세포의 분열이 감소하고 성장이 멈추는 시기는 퇴행기(Catagen)입니다. 반면, 성장기는 모모세포의 활동이 활발한 시기(전체 모발의 80~90%)이고, 휴지기는 모낭과 모유두가 완전히 분리되어 모발 탈락이 시작되는 시기(전체 모발의 10~15%)이므로 정답이 아닙니다.",
+  "explain": "📖 교재 근거 (L1189):\n| 퇴행기(Catagen) | 약 3주 | • 전체 모발의 1~2%가 이 시기에 해당함<br>• 모모세포의 분열이 감소하는 시기<br>• 모발의 성장이 멈춘 시기 |\n해설: 전체 모발의 1~2%에 해당하며 모모세포의 분열이 감소하고 성장이 멈추는 시기는 퇴행기(Catagen)입니다. 반면, 성장기는 모모세포의 활동이 활발한 시기(전체 모발의 80~90%)이고, 휴지기는 모낭과 모유두가 완전히 분리되어 모발 탈락이 시작되는 시기(전체 모발의 10~15%)이므로 정답이 아닙니다.",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "2"
  },
@@ -25280,7 +25280,7 @@ var COMBO_DRILLS_subject4 = [
    "구성비"
   ],
   "derivedFrom": "subject4_q399",
-  "explain": "📖 교재 근거 (L3740):\n| 인체 및 두발 세정용 제품류 | 15% 이하 | 2차 이내 |\n해설: 단위제품 중 인체 및 두발 세정용 제품류의 기준은 포장공간 비율 15% 이하, 포장횟수 2차 이내이므로 정답은 ②번입니다. 따라서 포장공간 비율이나 포장횟수의 수치가 다른 ①, ③, ④, ⑤번은 모두 옳지 않습니다.",
+  "explain": "📖 교재 근거 (L3731):\n| 인체 및 두발 세정용 제품류 | 15% 이하 | 2차 이내 |\n해설: 단위제품 중 인체 및 두발 세정용 제품류의 기준은 포장공간 비율 15% 이하, 포장횟수 2차 이내이므로 정답은 ②번입니다. 따라서 포장공간 비율이나 포장횟수의 수치가 다른 ①, ③, ④, ⑤번은 모두 옳지 않습니다.",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "5"
  },
@@ -26128,35 +26128,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_8acbc3",
-    "conceptId": "§3.2",
+    "conceptId": "§3.0",
     "text": "탁도, 변취",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_2c4b06",
-    "conceptId": "§3.2",
+    "conceptId": "§3.0",
     "text": "변취, 점도, 경도",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_262631",
-    "conceptId": "§3.2",
+    "conceptId": "§3.0",
     "text": "탁도, 변취, 분리",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_17df9f",
-    "conceptId": "§3.2",
+    "conceptId": "§3.0",
     "text": "변취, 분리, 점도, 경도, 증발, 표면 굳음",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_2a2d26",
-    "conceptId": "§3.2",
+    "conceptId": "§3.0",
     "text": "변취, 분리, 탁도, 경도, 표면 굳음",
     "truth": false
    }
@@ -26201,7 +26201,7 @@ var COMBO_DRILLS_subject4 = [
    "정답판정"
   ],
   "derivedFrom": "subject4_q409",
-  "explain": "📖 교재 근거:\n> 정답: ② 변취, 분리(성상), 점도, 경도, 증발, 표면 굳음\n> 해설: 크림은 스킨/토너(탁도, 변취)와 로션/에센스(변취, 분리, 점도, 경도)의 요소에 증발과 표면 굳음이 추가된다. 메이크업 베이스/파운데이션은 분리(성상)를 제외한 요소들을 평가한다.\n해설: 크림 제형은 스킨/토너(탁도, 변취)나 로션/에센스(변취, 분리, 점도, 경도)의 평가 요소에 더하여 증발과 표면 굳음이 추가되어 변취, 분리, 점도, 경도, 증발, 표면 굳음을 평가한다.",
+  "explain": "📖 교재 근거:\n> - 핵심 키워드: 오감(시·후·미·촉·청), 관능평가 4단계(표준품 선정→검체 채취→시험→판정), 제품별 평가 요소(스킨=탁도·변취, 크림=변취·분리·점도·경도·증발·표면 굳음), 맹검 vs 비맹검, Rheometer·Cutometer·Glossmeter",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "3"
  },
@@ -26308,35 +26308,35 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "ㄱ",
     "sid": "understanding_st_1bb9da",
-    "conceptId": "§3.2",
+    "conceptId": "§3.1",
     "text": "Cutometer — 광택(번들거림)",
     "truth": false
    },
    {
     "id": "ㄴ",
     "sid": "understanding_st_b61f4f",
-    "conceptId": "§3.2",
+    "conceptId": "§3.1",
     "text": "Rheometer — 피부 탄력(유연성)",
     "truth": false
    },
    {
     "id": "ㄷ",
     "sid": "understanding_st_8ac195",
-    "conceptId": "§3.2",
+    "conceptId": "§3.1",
     "text": "Glossmeter — 점탄성(마찰감, 보송보송함)",
     "truth": false
    },
    {
     "id": "ㄹ",
     "sid": "understanding_st_f03f81",
-    "conceptId": "§3.2",
+    "conceptId": "§3.1",
     "text": "Turbidity meter — 탁도",
     "truth": true
    },
    {
     "id": "ㅁ",
     "sid": "understanding_st_933ad4",
-    "conceptId": "§3.2",
+    "conceptId": "§3.1",
     "text": "Rheometer — 탁도",
     "truth": false
    }
@@ -26380,7 +26380,7 @@ var COMBO_DRILLS_subject4 = [
    "정답판정"
   ],
   "derivedFrom": "subject4_q411",
-  "explain": "📖 교재 근거:\n> 정답: ③ Cutometer\n> 해설: Cutometer는 피부의 유연성을 측정하여 탄력을 평가하는 기기이다. Rheometer는 점탄성(마찰감, 보송보송함 등)을, Glossmeter는 광택(번들거림 등)을, Turbidity meter는 탁도를 측정한다.\n해설: Turbidity meter는 탁도를 측정하는 기기이다. 피부의 유연성을 측정하여 탄력을 평가하는 기기는 Cutometer이며, Rheometer는 점탄성을, Glossmeter는 광택(번들거림)을 측정한다.",
+  "explain": "📖 교재 근거:\n| 탁도(침전) 📌중요| 10mL 바이알에 액체 형태의 화장품을 넣고 탁도계(Turbidity meter)로 탁도 측정 |",
   "source": "맞춤형화장품의 이해 (837제)",
   "answer": "1"
  },
@@ -65035,59 +65035,59 @@ var COMBO_DRILLS_subject4 = [
   "answer": "5"
  },
  {
-  "id": "understanding_combo-cluster_d4f058",
+  "id": "understanding_combo-cluster_0200bb",
   "subject": 4,
   "type": "combo",
   "points": 4,
-  "citation": "📖 교재: §5.1 (출처: 과목4 문제은행 진술 재조합)",
+  "citation": "📖 교재: §4.2 (출처: 과목4 문제은행 진술 재조합)",
   "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "understanding_st_264db0",
-    "conceptId": "§5.1",
-    "text": "화장품을 소비자에게 직접 판매하는 자는 제품의 가격을 일반 소비자가 알기 쉽도록 표기해야 한다.",
-    "truth": true,
-    "explain": "원본: 과목4 문제은행 Q517 · 교재 §5.1"
+    "sid": "understanding_st_d5c935",
+    "conceptId": "§4.2",
+    "text": "비의도적 유입 물질에 대해서는 제품 라벨에 유입 사유만 기재하면 한도 없이 유통 가능하다.",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q582 · 교재 §4.2"
    },
    {
     "id": "ㄴ",
-    "sid": "understanding_st_36b6b2",
-    "conceptId": "§5.1",
-    "text": "화장품 제조업자만이 제품의 가격을 표기할 의무가 있다.",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q517 · 교재 §5.1"
+    "sid": "understanding_st_9d05d0",
+    "conceptId": "§4.2",
+    "text": "즉시 제품의 사용을 중단하고 피부과 전문의의 진단을 받도록 안내한다.",
+    "truth": true,
+    "explain": "원본: 과목4 문제은행 Q30 · 교재 §4.2"
    },
    {
     "id": "ㄷ",
-    "sid": "understanding_st_97d026",
-    "conceptId": "§5.1",
-    "text": "책임판매업자와 상의하여 원료 성분의 안전성 문제 여부를 파악하고 보상 절차를 밟는다.",
-    "truth": true,
-    "explain": "원본: 과목4 문제은행 Q30 · 교재 §5.1"
+    "sid": "understanding_st_fa56a0",
+    "conceptId": "§4.2",
+    "text": "별표 2에 고시된 원료로, 제한적으로 사용이 가능하다.",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q430 · 교재 §4.2"
    },
    {
     "id": "ㄹ",
-    "sid": "understanding_st_0ca142",
-    "conceptId": "§5.1",
-    "text": "제품의 가격은 암호화된 기호로만 표기하여야 한다.",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q517 · 교재 §5.1"
+    "sid": "understanding_st_5a5fa4",
+    "conceptId": "§4.2",
+    "text": "부작용 부위의 사진 등 객관적인 트러블 증상을 확보한다.",
+    "truth": true,
+    "explain": "원본: 과목4 문제은행 Q30 · 교재 §4.2"
    },
    {
     "id": "ㅁ",
-    "sid": "understanding_st_9d1dc9",
-    "conceptId": "§5.1",
-    "text": "2차 포장에만 의무적으로 표기하며 1차 포장에는 기재를 생략한다.",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q521 · 교재 §5.1"
+    "sid": "understanding_st_0e6277",
+    "conceptId": "§4.2",
+    "text": "눈화장용 제품류의 총호기성생균수는 500개/g(mL) 이하여야 한다.",
+    "truth": true,
+    "explain": "원본: 과목4 문제은행 Q593 · 교재 §4.2"
    }
   ],
   "options": [
    {
     "id": "1",
     "members": [
-     "ㄱ",
+     "ㄴ",
      "ㄹ",
      "ㅁ"
     ]
@@ -65095,22 +65095,23 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "2",
     "members": [
+     "ㄱ",
      "ㄴ",
-     "ㄷ"
+     "ㄹ"
     ]
    },
    {
     "id": "3",
     "members": [
-     "ㄱ",
-     "ㄷ"
+     "ㄴ",
+     "ㄷ",
+     "ㄹ",
+     "ㅁ"
     ]
    },
    {
     "id": "4",
     "members": [
-     "ㄱ",
-     "ㄴ",
      "ㄷ",
      "ㄹ"
     ]
@@ -65118,8 +65119,8 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "5",
     "members": [
-     "ㄹ",
-     "ㅁ"
+     "ㄱ",
+     "ㄴ"
     ]
    }
   ],
@@ -65127,13 +65128,13 @@ var COMBO_DRILLS_subject4 = [
    "자동변환",
    "명제판정",
    "개념재조합",
-   "절차",
+   "한도",
    "수치"
   ],
-  "derivedFrom": "cluster:4|§5.1",
-  "explain": "ㄱ. 원본: 과목4 문제은행 Q517 · 교재 §5.1\nㄴ. 원본: 과목4 문제은행 Q517 · 교재 §5.1\nㄷ. 원본: 과목4 문제은행 Q30 · 교재 §5.1\nㄹ. 원본: 과목4 문제은행 Q517 · 교재 §5.1\nㅁ. 원본: 과목4 문제은행 Q521 · 교재 §5.1",
+  "derivedFrom": "cluster:4|§4.2",
+  "explain": "ㄱ. 원본: 과목4 문제은행 Q582 · 교재 §4.2\nㄴ. 원본: 과목4 문제은행 Q30 · 교재 §4.2\nㄷ. 원본: 과목4 문제은행 Q430 · 교재 §4.2\nㄹ. 원본: 과목4 문제은행 Q30 · 교재 §4.2\nㅁ. 원본: 과목4 문제은행 Q593 · 교재 §4.2",
   "source": "과목4 개념 재조합",
-  "answer": "3"
+  "answer": "1"
  },
  {
   "id": "understanding_combo-cluster_414acc",
@@ -65145,43 +65146,43 @@ var COMBO_DRILLS_subject4 = [
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "understanding_st_5b41ec",
+    "sid": "understanding_st_1dc476",
     "conceptId": "§2.2",
-    "text": "주요 특징으로 살균 작용이 있다.",
+    "text": "화학적 저항성이 강하며 무색투명한 층이다.",
     "truth": false,
-    "explain": "원본: 과목4 문제은행 Q736 · 교재 §2.2"
+    "explain": "원본: 과목4 문제은행 Q505 · 교재 §2.2"
    },
    {
     "id": "ㄴ",
-    "sid": "understanding_st_4f5bcd",
+    "sid": "understanding_st_fac357",
     "conceptId": "§2.2",
-    "text": "정제수 100mL에 에탄올 70g을 녹인다.",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q53 · 교재 §2.2"
+    "text": "테스토스테론이 5알파-환원효소에 의해 디하이드로테스토스테론(DHT)으로 전환되어 모낭을 위축시킨다.",
+    "truth": true,
+    "explain": "원본: 과목4 문제은행 Q494 · 교재 §2.2"
    },
    {
     "id": "ㄷ",
-    "sid": "understanding_st_e0d751",
+    "sid": "understanding_st_f6b512",
     "conceptId": "§2.2",
-    "text": "기저층 - 5~10층으로 구성되며 수분저지막이 존재한다.",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q498 · 교재 §2.2"
+    "text": "pH 범위는 4.5~5.5를 나타낸다.",
+    "truth": true,
+    "explain": "원본: 과목4 문제은행 Q497 · 교재 §2.2"
    },
    {
     "id": "ㄹ",
-    "sid": "understanding_st_1ab721",
+    "sid": "understanding_st_595ace",
     "conceptId": "§2.2",
-    "text": "케라틴 약 58%, 천연보습인자(NMF) 약 31%, 세포간지질 약 11%로 구성된다",
-    "truth": true,
-    "explain": "원본: 과목4 문제은행 Q125 · 교재 §2.2"
+    "text": "탄력섬유가 1.5~4.7%를 차지한다.",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q502 · 교재 §2.2"
    },
    {
     "id": "ㅁ",
-    "sid": "understanding_st_4e7466",
+    "sid": "understanding_st_91e1d4",
     "conceptId": "§2.2",
-    "text": "휴지기는 3~4개월간 지속되며 전체 모발의 10~15%의 비율을 차지한다.",
-    "truth": true,
-    "explain": "원본: 과목4 문제은행 Q508 · 교재 §2.2"
+    "text": "세포간지질이 58%로 가장 높은 비율을 차지한다.",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q497 · 교재 §2.2"
    }
   ],
   "options": [
@@ -65219,8 +65220,8 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "5",
     "members": [
-     "ㄹ",
-     "ㅁ"
+     "ㄴ",
+     "ㄷ"
     ]
    }
   ],
@@ -65233,7 +65234,7 @@ var COMBO_DRILLS_subject4 = [
    "수치"
   ],
   "derivedFrom": "cluster:4|§2.2",
-  "explain": "ㄱ. 원본: 과목4 문제은행 Q736 · 교재 §2.2\nㄴ. 원본: 과목4 문제은행 Q53 · 교재 §2.2\nㄷ. 원본: 과목4 문제은행 Q498 · 교재 §2.2\nㄹ. 원본: 과목4 문제은행 Q125 · 교재 §2.2\nㅁ. 원본: 과목4 문제은행 Q508 · 교재 §2.2",
+  "explain": "ㄱ. 원본: 과목4 문제은행 Q505 · 교재 §2.2\nㄴ. 원본: 과목4 문제은행 Q494 · 교재 §2.2\nㄷ. 원본: 과목4 문제은행 Q497 · 교재 §2.2\nㄹ. 원본: 과목4 문제은행 Q502 · 교재 §2.2\nㅁ. 원본: 과목4 문제은행 Q497 · 교재 §2.2",
   "source": "과목4 개념 재조합",
   "answer": "5"
  },
@@ -65247,19 +65248,19 @@ var COMBO_DRILLS_subject4 = [
   "statements": [
    {
     "id": "ㄱ",
-    "sid": "understanding_st_685fe3",
+    "sid": "understanding_st_f35da9",
     "conceptId": "§2.1",
-    "text": "무게는 약 4.0kg 이상이다.",
-    "truth": true,
-    "explain": "원본: 과목4 문제은행 Q490 · 교재 §2.1"
+    "text": "각화주기(각질형성주기)는 약 60일이다",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q125 · 교재 §2.1"
    },
    {
     "id": "ㄴ",
-    "sid": "understanding_st_a8710f",
+    "sid": "understanding_st_900003",
     "conceptId": "§2.1",
-    "text": "피지선이 적고 혈관이 적다.",
+    "text": "모세혈관의 확장으로 열을 차단하여 체온을 상승시킨다",
     "truth": false,
-    "explain": "원본: 과목4 문제은행 Q270 · 교재 §2.1"
+    "explain": "원본: 과목4 문제은행 Q91 · 교재 §2.1"
    },
    {
     "id": "ㄷ",
@@ -65271,19 +65272,19 @@ var COMBO_DRILLS_subject4 = [
    },
    {
     "id": "ㄹ",
-    "sid": "understanding_st_d86a0b",
+    "sid": "understanding_st_c68bd9",
     "conceptId": "§2.1",
-    "text": "모발의 중간에 위치하며 대부분을 차지한다",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q168 · 교재 §2.1"
+    "text": "피지를 분비하는 기관",
+    "truth": true,
+    "explain": "원본: 과목4 문제은행 Q166 · 교재 §2.1"
    },
    {
     "id": "ㅁ",
-    "sid": "understanding_st_1a5e39",
+    "sid": "understanding_st_2d30f2",
     "conceptId": "§2.1",
-    "text": "면적은 약 1.5~2.0m²이다.",
+    "text": "두발 내부의 모피질을 감싸고 있는 화학적 저항성이 강한 층이다",
     "truth": true,
-    "explain": "원본: 과목4 문제은행 Q490 · 교재 §2.1"
+    "explain": "원본: 과목4 문제은행 Q168 · 교재 §2.1"
    }
   ],
   "options": [
@@ -65309,8 +65310,8 @@ var COMBO_DRILLS_subject4 = [
    {
     "id": "4",
     "members": [
-     "ㄱ",
      "ㄷ",
+     "ㄹ",
      "ㅁ"
     ]
    },
@@ -65326,11 +65327,12 @@ var COMBO_DRILLS_subject4 = [
    "자동변환",
    "명제판정",
    "개념재조합",
+   "기한",
    "구성비",
    "수치"
   ],
   "derivedFrom": "cluster:4|§2.1",
-  "explain": "ㄱ. 원본: 과목4 문제은행 Q490 · 교재 §2.1\nㄴ. 원본: 과목4 문제은행 Q270 · 교재 §2.1\nㄷ. 원본: 과목4 문제은행 Q270 · 교재 §2.1\nㄹ. 원본: 과목4 문제은행 Q168 · 교재 §2.1\nㅁ. 원본: 과목4 문제은행 Q490 · 교재 §2.1",
+  "explain": "ㄱ. 원본: 과목4 문제은행 Q125 · 교재 §2.1\nㄴ. 원본: 과목4 문제은행 Q91 · 교재 §2.1\nㄷ. 원본: 과목4 문제은행 Q270 · 교재 §2.1\nㄹ. 원본: 과목4 문제은행 Q166 · 교재 §2.1\nㅁ. 원본: 과목4 문제은행 Q168 · 교재 §2.1",
   "source": "과목4 개념 재조합",
   "answer": "4"
  },
@@ -65539,109 +65541,6 @@ var COMBO_DRILLS_subject4 = [
   "answer": "3"
  },
  {
-  "id": "understanding_combo-cluster_0200bb",
-  "subject": 4,
-  "type": "combo",
-  "points": 4,
-  "citation": "📖 교재: §4.2 (출처: 과목4 문제은행 진술 재조합)",
-  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
-  "statements": [
-   {
-    "id": "ㄱ",
-    "sid": "understanding_st_ff99af",
-    "conceptId": "§4.2",
-    "text": "맞춤형화장품판매업자가 심사를 완료한 경우에만 [별표 2]의 원료를 자유롭게 사용할 수 있다.",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q595 · 교재 §4.2"
-   },
-   {
-    "id": "ㄴ",
-    "sid": "understanding_st_11e9be",
-    "conceptId": "§4.2",
-    "text": "화장품책임판매업자가 해당 원료를 포함하여 기능성화장품 심사를 받은 경우에는 사용 제한에서 제외될 수 있다.",
-    "truth": true,
-    "explain": "원본: 과목4 문제은행 Q598 · 교재 §4.2"
-   },
-   {
-    "id": "ㄷ",
-    "sid": "understanding_st_48a033",
-    "conceptId": "§4.2",
-    "text": "안전성 심사를 거치면 제한적 사용이 허용된다.",
-    "truth": false,
-    "explain": "원본: 과목4 문제은행 Q430 · 교재 §4.2"
-   },
-   {
-    "id": "ㄹ",
-    "sid": "understanding_st_237d87",
-    "conceptId": "§4.2",
-    "text": "별표 1 고시 원료로, 절대 사용이 불가하다.",
-    "truth": true,
-    "explain": "원본: 과목4 문제은행 Q430 · 교재 §4.2"
-   },
-   {
-    "id": "ㅁ",
-    "sid": "understanding_st_52d336",
-    "conceptId": "§4.2",
-    "text": "비의도적으로 유입되는 중금속·유해물질에는 허용 한도가 정해져 있다.",
-    "truth": true,
-    "explain": "원본: 과목4 문제은행 Q583 · 교재 §4.2"
-   }
-  ],
-  "options": [
-   {
-    "id": "1",
-    "members": [
-     "ㄴ",
-     "ㄹ",
-     "ㅁ"
-    ]
-   },
-   {
-    "id": "2",
-    "members": [
-     "ㄱ",
-     "ㄴ",
-     "ㄹ"
-    ]
-   },
-   {
-    "id": "3",
-    "members": [
-     "ㄴ",
-     "ㄷ",
-     "ㄹ",
-     "ㅁ"
-    ]
-   },
-   {
-    "id": "4",
-    "members": [
-     "ㄷ",
-     "ㄹ"
-    ]
-   },
-   {
-    "id": "5",
-    "members": [
-     "ㄱ",
-     "ㄴ"
-    ]
-   }
-  ],
-  "tags": [
-   "자동변환",
-   "명제판정",
-   "개념재조합",
-   "금지원료",
-   "절차",
-   "한도"
-  ],
-  "derivedFrom": "cluster:4|§4.2",
-  "explain": "ㄱ. 원본: 과목4 문제은행 Q595 · 교재 §4.2\nㄴ. 원본: 과목4 문제은행 Q598 · 교재 §4.2\nㄷ. 원본: 과목4 문제은행 Q430 · 교재 §4.2\nㄹ. 원본: 과목4 문제은행 Q430 · 교재 §4.2\nㅁ. 원본: 과목4 문제은행 Q583 · 교재 §4.2",
-  "source": "과목4 개념 재조합",
-  "answer": "1"
- },
- {
   "id": "understanding_combo-cluster_ee5514",
   "subject": 4,
   "type": "combo",
@@ -65738,6 +65637,106 @@ var COMBO_DRILLS_subject4 = [
   "explain": "ㄱ. 원본: 과목4 문제은행 Q479 · 교재 §1.3\nㄴ. 원본: 과목4 문제은행 Q445 · 교재 §1.3\nㄷ. 원본: 과목4 문제은행 Q444 · 교재 §1.3\nㄹ. 원본: 과목4 문제은행 Q441 · 교재 §1.3\nㅁ. 원본: 과목4 문제은행 Q471 · 교재 §1.3",
   "source": "과목4 개념 재조합",
   "answer": "4"
+ },
+ {
+  "id": "understanding_combo-cluster_d4f058",
+  "subject": 4,
+  "type": "combo",
+  "points": 4,
+  "citation": "📖 교재: §5.1 (출처: 과목4 문제은행 진술 재조합)",
+  "stem": "다음 설명 중 옳은 것을 모두 고른 것은?",
+  "statements": [
+   {
+    "id": "ㄱ",
+    "sid": "understanding_st_702dde",
+    "conceptId": "§5.1",
+    "text": "사용기한(또는 개봉 후 사용기간)과 쉽게 구별되도록 기재·표시해야 한다.",
+    "truth": true,
+    "explain": "원본: 과목4 문제은행 Q521 · 교재 §5.1"
+   },
+   {
+    "id": "ㄴ",
+    "sid": "understanding_st_264db0",
+    "conceptId": "§5.1",
+    "text": "화장품을 소비자에게 직접 판매하는 자는 제품의 가격을 일반 소비자가 알기 쉽도록 표기해야 한다.",
+    "truth": true,
+    "explain": "원본: 과목4 문제은행 Q517 · 교재 §5.1"
+   },
+   {
+    "id": "ㄷ",
+    "sid": "understanding_st_43a4c6",
+    "conceptId": "§5.1",
+    "text": "학술 논문에서만 사용되는 임의의 약칭을 기재해야 한다.",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q518 · 교재 §5.1"
+   },
+   {
+    "id": "ㄹ",
+    "sid": "understanding_st_2e0ee0",
+    "conceptId": "§5.1",
+    "text": "성분명은 반드시 제조사 고유의 내부 관리 코드로 표기해야 한다.",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q518 · 교재 §5.1"
+   },
+   {
+    "id": "ㅁ",
+    "sid": "understanding_st_9fd287",
+    "conceptId": "§5.1",
+    "text": "사용기한(또는 개봉 후 사용기간)과 반드시 동일한 위치에 합쳐서 표시해야 한다.",
+    "truth": false,
+    "explain": "원본: 과목4 문제은행 Q521 · 교재 §5.1"
+   }
+  ],
+  "options": [
+   {
+    "id": "1",
+    "members": [
+     "ㄱ",
+     "ㄹ",
+     "ㅁ"
+    ]
+   },
+   {
+    "id": "2",
+    "members": [
+     "ㄴ",
+     "ㄷ"
+    ]
+   },
+   {
+    "id": "3",
+    "members": [
+     "ㄱ",
+     "ㄴ"
+    ]
+   },
+   {
+    "id": "4",
+    "members": [
+     "ㄱ",
+     "ㄴ",
+     "ㄷ",
+     "ㄹ"
+    ]
+   },
+   {
+    "id": "5",
+    "members": [
+     "ㄹ",
+     "ㅁ"
+    ]
+   }
+  ],
+  "tags": [
+   "자동변환",
+   "명제판정",
+   "개념재조합",
+   "기한"
+  ],
+  "derivedFrom": "cluster:4|§5.1",
+  "explain": "ㄱ. 원본: 과목4 문제은행 Q521 · 교재 §5.1\nㄴ. 원본: 과목4 문제은행 Q517 · 교재 §5.1\nㄷ. 원본: 과목4 문제은행 Q518 · 교재 §5.1\nㄹ. 원본: 과목4 문제은행 Q518 · 교재 §5.1\nㅁ. 원본: 과목4 문제은행 Q521 · 교재 §5.1",
+  "source": "과목4 개념 재조합",
+  "answer": "3"
  },
  {
   "id": "understanding_combo-cluster_abf156",

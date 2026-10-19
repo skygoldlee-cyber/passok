@@ -86,6 +86,7 @@ const CONTENT_STEPS = [
   nodeStep('content:assets', 'tools/check/verify_shell_assets.js', '자산', 'sw.js SHELL_ASSETS/DATA_ASSETS 파일 존재'),
   nodeStep('content:cards', 'tools/check/audit_card_quality.js', '카드', '카드 품질 감사 (짧은 설명·중복·참조 링크)', { content: true }),
   nodeStep('content:docbundles', 'tools/build/build_doc_bundles.js', '문서번들', 'docs_md 번들 ↔ 원본 문서 신선도 (build_doc_bundles 필요 감지)', { args: ['--check'], content: true }),
+  nodeStep('content:refmap', 'tools/build/build_ref_mapping.js', '문서신선도', 'TEXTBOOK_REFERENCE_MAPPING §2 표 ↔ 교재 📌출처 ref_md 링크 (build:refmap 필요 감지)', { args: ['--check'], content: true }),
   nodeStep('content:textbookdocs', 'tools/check/check_textbook_docs.js', '문서신선도', '교재 갱신 ↔ 판본:textbook 문서 (교재 교체 후 방치 문서 감지)', { content: true }),
   nodeStep('content:metasections', 'tools/check/check_meta_sections.js', '검색규약', '메타 섹션 규약 기준선 — reader 미렌더 패턴 미매칭 메타 의심 헤딩 신규 유입 차단 (TS-17)', { content: true }),
   nodeStep('content:glossarysignal', 'tools/check/check_glossary_signal.js', '용어집', '저신호 일반명사 기준선 — 자동 추출 단일어 키워드의 정의 카드 노출 감시 (BP-14)', { content: true }),
@@ -151,6 +152,7 @@ const FRESH_STEPS = [
   pickContent('content:embfresh'),
   pickContent('content:reffresh'),
   pickContent('content:docbundles'),
+  pickContent('content:refmap'),
   pickContent('content:textbookdocs'),
 ];
 

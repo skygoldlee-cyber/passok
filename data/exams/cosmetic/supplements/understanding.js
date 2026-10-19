@@ -645,7 +645,7 @@ var STUDY_SUPPLEMENT_understanding = {
       "id": "understanding_card_70d3eb",
       "category": "문제은행 보충",
       "term": "[문제은행 Q411] 피부 및 화장품의 물성을 측정하는 기기와 주된 측정 대…",
-      "definition": "문제: 피부 및 화장품의 물성을 측정하는 기기와 주된 측정 대상의 연결로 옳은 것은?\n정답: ④ Turbidity meter — 탁도\n해설: 📖 교재 근거:\n> 정답: ③ Cutometer\n> 해설: Cutometer는 피부의 유연성을 측정하여 탄력을 평가하는 기기이다. Rheometer는 점탄성(마찰감, 보송보송함 등)을, Glossmeter는 광택(번들거림 등)을, Turbidity meter는 탁도를 측정한다.\n해설: Turbidity meter는 탁도를 측정하는 기기이다. 피부의 유연성을 측정하여 탄력을 평가하는 기기는 Cutometer이며, Rheometer는 점탄성을, Glossmeter는 광택(번들거림)을 측정한다.",
+      "definition": "문제: 피부 및 화장품의 물성을 측정하는 기기와 주된 측정 대상의 연결로 옳은 것은?\n정답: ④ Turbidity meter — 탁도\n해설: 📖 교재 근거:\n| 탁도(침전) 📌중요| 10mL 바이알에 액체 형태의 화장품을 넣고 탁도계(Turbidity meter)로 탁도 측정 |",
       "isKey": false,
       "cardType": "bank",
       "importance": 45,
