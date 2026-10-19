@@ -111,6 +111,7 @@
     "check:uistyle": "node tools/check/check_ui_style.js",
     "check:seedkeys": "node tools/check/check_seed_keys.js",
     "scaffold:exam": "node tools/build/scaffold_exam.js",
+    "scaffold:chapter": "node tools/build/scaffold_chapter.js",
     "check:runbooks": "node tools/check/check_runbook_links.js",
     "report:errors": "node tools/check/error_report.js",
     "report:funnel": "node tools/check/funnel_report.js",
