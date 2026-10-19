@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-19 구식 참조자료 링크 전수 정리 + 매핑 표 자동화
+
+- **교재 링크 정리**: 챕터 헤더 죽은 `N.xxx.md` 참조자료 라인 18곳 정리(16 삭제·2 실링크 교체) + 과목1 Ch02 개인정보보호법 출처 9건을 현행본(제21445호·시행 2026.9.11)으로 정정하고 법률·시행령 ref_md 링크 부착 — 학습안내서 구본 표기 동반 정정
+- **`build:refmap`**: `tools/build/build_ref_mapping.js` — 교재 `📌출처` ref_md 링크 실측으로 TEXTBOOK_REFERENCE_MAPPING §2 표를 마커 구간만 재생성, `--check`를 content·freshness 게이트에 등록. 시험 ID는 `docs/exams/<id>/` 문서 경로에서 도출(DA-15)
+- **인용 재동기화**: 라인 삭제 이동으로 은행 인용 3,890건 재검증 — 저신뢰(짧은·중복 인용문) 43건 개별 교정, 삭제 라인을 인용하던 1건 인용문 원문 교체 → 미발견 0 · check:answers 전량 지지
+
 ## 2026-10-19 게이트 모델 정리 — 주기 풀 게이트·자산 저장 검토·food 템플릿 명문화
 
 - **주기 풀 게이트** (`full-gate.yml`): pre-push는 태그 기반 diffScoped 유지 + push/PR CI 풀세트 — 어느 push에도 걸리지 않는 전수 단계·외부 드리프트(law.go.kr 라이브 링크)를 주 1회 `check:all`+`check:lawurls`로 검출
