@@ -118,10 +118,20 @@ function buildForTarget(target) {
   }
 
   fs.mkdirSync(dataDir, { recursive: true });
+  // 기존 커밋된 맵과 병합 — 스냅샷은 직전 빌드 1회분만 비교하므로, 병합 없이
+  // 덮어쓰면 중간 버전을 건너뛴 사용자의 구ID 이관 경로가 사라진다.
+  const outPath = path.join(dataDir, 'id_migration.js');
+  const prevMap = {};
+  if (fs.existsSync(outPath)) {
+    const prevSrc = fs.readFileSync(outPath, 'utf-8');
+    const m = prevSrc.match(/var ID_MIGRATION_MAP = (\{.*\});/s);
+    if (m) Object.assign(prevMap, JSON.parse(m[1]));
+  }
+  const merged = { ...prevMap, ...map };
   fs.writeFileSync(
-    path.join(dataDir, 'id_migration.js'),
+    outPath,
     '// 자동 생성된 ID 마이그레이션 맵입니다. 수정하지 마십시오. (tools/build/build_id_migration.js)\n' +
-    `var ID_MIGRATION_MAP = ${JSON.stringify(map)};\n` +
+    `var ID_MIGRATION_MAP = ${JSON.stringify(merged)};\n` +
     'if (typeof window !== "undefined") window.ID_MIGRATION_MAP = ID_MIGRATION_MAP;\n',
     'utf-8'
   );
