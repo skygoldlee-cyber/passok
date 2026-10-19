@@ -106,8 +106,8 @@ ref-pipeline/tests/.pytest-tmp/
 # 임베딩 파이프라인 PoC 산출물 (로컬 생성물 — 재생성 가능)
 ref-pipeline/embeddings/out/
 
-# AI 제작 초안 — 리뷰 전 임시 산출물, 정본은 content/ (AI_AUTHORING_DESIGN §2)
-tmp/ai_drafts/
+# AI 제작 초안·평가 산출물 — 리뷰 전 임시 산출물, 정본은 content/ (AI_AUTHORING_DESIGN §2)
+tmp/
 
 # 이야기형 정규화 드리프트 검토 리포트 (1회성 산출물)
 tools/build/.story_drift_review.md
