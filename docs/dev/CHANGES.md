@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-19 게이트 모델 정리 — 주기 풀 게이트·자산 저장 검토·food 템플릿 명문화
+
+- **주기 풀 게이트** (`full-gate.yml`): pre-push는 태그 기반 diffScoped 유지 + push/PR CI 풀세트 — 어느 push에도 걸리지 않는 전수 단계·외부 드리프트(law.go.kr 라이브 링크)를 주 1회 `check:all`+`check:lawurls`로 검출
+- **대형 자산 저장 검토** (`design/ASSET_STORAGE_REVIEW.md`): 실측 — 추적 바이너리 ~60MB(참조 PDF 36M·이미지 9M·생성 번들 15M), 1.7GB 오디오는 이미 gitignore 선례. 결론: 이력 재작성·번들 외부화 기각(배포·해시 게이트 충돌), 신규 >5MB 자산 LFS 검토 + `.git`>2GB 시 재평가
+- **food 팩 템플릿 명문화**: `content/exams/food/README.md`에 참조 템플릿(Phase C 파일럿) 성격·최소 구성 체크리스트 명기 + NEW_EXAM_RUNBOOK에 복사 기준 안내
+
 ## 2026-10-19 맞춤형 고시 2종 온보딩 + 과목4 고시 세부 편입 — lawdb 링크 등록
 
 - **참조자료 온보딩** (`f3daa72e`): admrul API 경로로 맞춤형화장품조제관리사 자격시험 운영에 관한 규정(제2024-15호, 공식 PDF)·맞춤형화장품판매업자의 준수사항에 관한 규정(제2022-3호, 첨부 HWP뿐이라 공식 텍스트 기반 Playwright PDF — 별표 파생 산출물 관례) — `docSubjectRules` 맞춤형화장품(조제관리사|판매업자)→과목4

@@ -1,0 +1,31 @@
+name: Full Gate (주기)
+
+# pre-push는 태그 기반 diffScoped(push 범위 필요 단계만), push/PR CI는 고정 풀세트.
+# 이 워크플로는 어느 push에도 걸리지 않는 전수 단계와 외부 드리프트(라이브 링크)를
+# 주 1회 검출한다 — 스코프 축소의 보완 안전망.
+on:
+  schedule:
+    - cron: '0 2 * * 1'   # 매주 월요일 11:00 KST (UTC 02:00)
+  workflow_dispatch:
+
+jobs:
+  full-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # check:textbookdocs 등 git 이력 비교 단계에 필요
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: check:all (저장소 전체 검증 — DOM 테스트 포함)
+        run: npm run check:all
+
+      - name: law.go.kr 라이브 링크 검증 (외부 드리프트)
+        run: npm run check:lawurls
