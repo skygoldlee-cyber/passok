@@ -89,6 +89,22 @@
       "watch": { "target": "admrul" }
     },
     {
+      "id": "custom-cosmetic-exam-ops",
+      "name": "맞춤형화장품조제관리사 자격시험 운영에 관한 규정",
+      "type": "admrul",
+      "slug": "맞춤형화장품조제관리사자격시험운영에관한규정",
+      "matchKeys": ["맞춤형화장품조제관리사자격시험", "자격시험운영에관한규정"],
+      "watch": { "target": "admrul" }
+    },
+    {
+      "id": "custom-cosmetic-sales-compliance",
+      "name": "맞춤형화장품판매업자의 준수사항에 관한 규정",
+      "type": "admrul",
+      "slug": "맞춤형화장품판매업자의준수사항에관한규정",
+      "matchKeys": ["판매업자의준수사항", "준수사항에관한규정"],
+      "watch": { "target": "admrul" }
+    },
+    {
       "id": "food-sanitation-act",
       "name": "식품위생법",
       "type": "law",

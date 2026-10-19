@@ -12,7 +12,9 @@
     "cosmetic-caution-allergy",
     "cosmetic-colorant-std",
     "cosmetic-safety-std",
-    "cosmetic-cgmp"
+    "cosmetic-cgmp",
+    "custom-cosmetic-exam-ops",
+    "custom-cosmetic-sales-compliance"
   ],
   "noticeCoreComment": "고시 감시 배너의 기준 문서명 (notice_status.json의 레거시 baseline/latest 필드에 기록되는 문서 — 원료 DB 대조 기준)",
   "noticeCore": "화장품 안전기준 등에 관한 규정",

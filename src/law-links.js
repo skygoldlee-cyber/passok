@@ -31,7 +31,11 @@ const _EXAM_LAW_URLS = {
     ["banned_ingredients", "https://www.law.go.kr/행정규칙/화장품안전기준등에관한규정"],
     ["restricted_ingredients", "https://www.law.go.kr/행정규칙/화장품안전기준등에관한규정"],
     ["우수화장품", "https://www.law.go.kr/행정규칙/우수화장품제조및품질관리기준"],
-    ["CGMP", "https://www.law.go.kr/행정규칙/우수화장품제조및품질관리기준"]
+    ["CGMP", "https://www.law.go.kr/행정규칙/우수화장품제조및품질관리기준"],
+    ["맞춤형화장품조제관리사자격시험", "https://www.law.go.kr/행정규칙/맞춤형화장품조제관리사자격시험운영에관한규정"],
+    ["자격시험운영에관한규정", "https://www.law.go.kr/행정규칙/맞춤형화장품조제관리사자격시험운영에관한규정"],
+    ["판매업자의준수사항", "https://www.law.go.kr/행정규칙/맞춤형화장품판매업자의준수사항에관한규정"],
+    ["준수사항에관한규정", "https://www.law.go.kr/행정규칙/맞춤형화장품판매업자의준수사항에관한규정"]
     ],
     "food": [
     ["식품위생법시행규칙", "https://www.law.go.kr/법령/식품위생법시행규칙"],
