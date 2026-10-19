@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 94207dba723cabdd
+> 입력 해시: 09242e1dbff0f96f
 > 생성: 2026-10-19 · 원천: SPEC.md(557개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -870,6 +870,7 @@
 | DOC-DSN-15 | docs/exams/cosmetic/design/PRACTICAL_TOOLS_DESIGN.md | FO-16, FO-18, FO-33, FO-34, FO-57, FO-58, FO-59, FO-60, FO-61, FO-62, FO-63 |
 | DOC-DSN-16 | docs/dev/design/STUDY_PLAN_PRO_DESIGN.md | D-17, SC-06, SC-07, SC-08 |
 | DOC-DSN-18 | docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md | AN-02, AN-07, AN-09, AN-10, DA-02, DA-05, DA-06, DA-08, DR-05, PF-02, SEM-05, TS-08, TS-09, TS-10, TS-11 |
+| DOC-DSN-19 | docs/dev/design/ASSET_STORAGE_REVIEW.md | — |
 | DOC-DSN-20 | docs/dev/design/VENDOR_MANAGEMENT_DESIGN.md | BP-13, DA-02, PF-17 |
 | DOC-DSN-21 | docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md | AN-02, D-08, DR-01, DR-02, DR-04, DR-05, ROAD-L5, ROAD-P0, ROAD-P5, RV-01, RV-02, RV-03, RV-04, SC-08, SC-09, SC-10, SC-11, SC-12, SC-13, T-01, T-02, T-03, T-04, T-05, UX-GATE-01, UX-GATE-02, UX-GATE-03, UX-MET-01, UX-MET-02, UX-MET-03, UX-MET-04, UX-NAV-07, UX-NAV-08, UX-NAV-12, UX-NAV-13, UX-NAV-14 |
 | DOC-DSN-25 | docs/dev/design/UIUX_DESIGN_GUIDE.md | A-01, A-02, A-03, A-04, A-05, A-06, A-07, ES-02, R-01, R-02, R-03, R-04, R-05, R-06, R-07, R-08, TH-01, TH-02, TH-03, TH-04, TH-05, TH-06, UM-01, UM-02, UM-03, UM-04, UM-05, UX-FB-01, UX-FB-02, UX-FB-03, UX-FB-04, UX-FB-05, UX-FB-06, UX-FORM-01, UX-FORM-02, UX-NAV-01, UX-NAV-02, UX-NAV-03, UX-NAV-04, UX-NAV-05, UX-NAV-06, UX-NAV-07, UX-NAV-08, UX-NAV-09, UX-NAV-10, UX-NAV-11, UX-NAV-12, UX-NAV-13, UX-NAV-14, UX-PWA-01, UX-PWA-02, UX-PWA-03, UX-PWA-04, UX-PWA-05, UX-SCR-01, UX-SCR-02, UX-SET-01, UX-SET-02, UX-SET-03, UX-SET-04, UX-SET-05, UX-VFY-01, UX-VFY-02, UX-VFY-03, UX-VFY-04, UX-VFY-05, UX-VFY-06 |
@@ -922,3 +923,7 @@
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
 없음 — 소스 연결된 모든 요구사항에 테스트 참조가 있음.
+
+## 부록 C — 관련 SPEC ID 헤더 누락 문서
+
+- docs/dev/design/ASSET_STORAGE_REVIEW.md
