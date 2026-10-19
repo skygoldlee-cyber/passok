@@ -209,13 +209,19 @@ export async function showPlanCompare() {
     if (hasFeature('formula')) {
         try {
             const eid = getActiveExamId();
-            const [fs, cs, ml, bs] = await Promise.all([
+            const [{ DataLoader }, fs, cs, ml, bs] = await Promise.all([
+                import('./data-loader.js'),
                 import(`./exams/${eid}/formula-store.js`),
                 import(`./exams/${eid}/customer-store.js`),
                 import(`./exams/${eid}/material-ledger.js`),
                 import(`./exams/${eid}/batch-store.js`),
             ]);
-            limitsRow = `<li>저장 한도 무제한 — 무료 플랜: My 포뮬러 ${fs.FORMULA_LIMIT_FREE} · 고객 ${cs.CUSTOMER_LIMIT_FREE} · 원료 ${ml.MATERIAL_LIMIT_FREE} · 조제 기록 ${bs.BATCH_LIMIT_FREE}</li>`;
+            // 엔티티 라벨은 시험 소유 — manifest uiText.planLimits가 4개 스토어
+            // 라벨을 선언하지 않은 시험에서는 한도 행 자체를 생략한다.
+            const t = (DataLoader.registry && DataLoader.registry.uiText && DataLoader.registry.uiText.planLimits) || null;
+            if (t && t.formula && t.customer && t.material && t.batch) {
+                limitsRow = `<li>${esc(t.title || '저장 한도 무제한 — 무료 플랜:')} ${esc(t.formula)} ${fs.FORMULA_LIMIT_FREE} · ${esc(t.customer)} ${cs.CUSTOMER_LIMIT_FREE} · ${esc(t.material)} ${ml.MATERIAL_LIMIT_FREE} · ${esc(t.batch)} ${bs.BATCH_LIMIT_FREE}</li>`;
+            }
         } catch (e) { /* 한도 표기 생략 — 모달 자체는 표시 */ }
     }
     const featureRows = PLAN_FEATURES.map(f => {

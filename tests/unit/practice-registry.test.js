@@ -59,8 +59,39 @@ test('시험 목록 없음 — 진입 불가 판정 (레지스트리 부재 안�
 test('타이틀 맵 — 선언된 실무 뷰의 title/subtitle을 제공', () => {
     setExams([]);
     const titles = getPracticeViewTitles();
-    assert.equal(titles['formula-view'].title, 'Formula OS');
+    assert.equal(titles['formula-view'].title, '실습');
     assert.ok(titles['formula-view'].subtitle.length > 0);
+});
+
+test('타이틀 맵 — registry.uiText[uiTextKey]가 중립 기본값을 덮어쓴다 (도메인 카피는 시험 소유)', () => {
+    setExams([]);
+    const titles = getPracticeViewTitles({ uiText: { formula: { title: 'Formula OS', subtitle: '원료 조회 · 배합 계산' } } });
+    assert.equal(titles['formula-view'].title, 'Formula OS');
+    assert.equal(titles['formula-view'].subtitle, '원료 조회 · 배합 계산');
+    // uiText 미선언(일부 필드만 선언) — 기본값 폴백 유지
+    const partial = getPracticeViewTitles({ uiText: { formula: { title: 'My OS' } } });
+    assert.equal(partial['formula-view'].title, 'My OS');
+    assert.ok(partial['formula-view'].subtitle.length > 0);
+    const none = getPracticeViewTitles({ uiText: {} });
+    assert.equal(none['formula-view'].title, '실습');
+});
+
+test('실무 피처 카피 계약 — formula 보유 시험은 uiText에 카피 슬롯을 선언한다', () => {
+    // 플랫폼 기본값은 도메인 중립 — 도메인 카피(Formula OS·원료·포뮬러 등)는
+    // 시험 manifest uiText.formula/planLimits가 소유해야 실무 뷰·플랜 비교에서
+    // 중립 문구가 노출되지 않는다 (DA-15 정신의 카피 계층 확장).
+    const exams = JSON.parse(fs.readFileSync(path.join(ROOT, 'content', 'exams.json'), 'utf8')).exams || [];
+    for (const exam of exams) {
+        if (!(exam.features && exam.features.formula)) continue;
+        const mp = path.join(ROOT, exam.contentRoot || `content/exams/${exam.id}`, 'manifest.json');
+        const uiText = (JSON.parse(fs.readFileSync(mp, 'utf8')).uiText) || {};
+        assert.ok(uiText.formula && uiText.formula.title, `${exam.id}: uiText.formula.title 누락`);
+        assert.ok(uiText.formula.subtitle, `${exam.id}: uiText.formula.subtitle 누락`);
+        assert.ok(uiText.planLimits && uiText.planLimits.title, `${exam.id}: uiText.planLimits.title 누락`);
+        for (const k of ['formula', 'customer', 'material', 'batch']) {
+            assert.ok(uiText.planLimits[k], `${exam.id}: uiText.planLimits.${k} 라벨 누락`);
+        }
+    }
 });
 
 test('해시 슬러그 — formula-view → formula', () => {
