@@ -82,6 +82,14 @@ test('프리셋 — ci 토큰이 ci.yml 검증 명령을 커버', () => {
   }
 });
 
+test('복구 안내 — DERIVED_IDS·REMEDIES가 실제 단계 id를 가리킴', () => {
+  const ids = new Set(allSteps().map((s) => s.id));
+  for (const id of stepsModule.DERIVED_IDS) assert.ok(ids.has(id), `DERIVED_IDS의 ${id}는 없는 단계`);
+  for (const id of Object.keys(stepsModule.REMEDIES)) assert.ok(ids.has(id), `REMEDIES의 ${id}는 없는 단계`);
+  // 중복 안내 방지 — derived 묶음과 개별 힌트는 상호 배타
+  for (const id of Object.keys(stepsModule.REMEDIES)) assert.ok(!stepsModule.DERIVED_IDS.has(id), `${id}가 양쪽에 중복`);
+});
+
 test('단계 조회 — id·스크립트명·npm 이름으로 findStep 검색', () => {
   assert.equal(findStep('content:manifest')?.id, 'content:manifest');
   assert.equal(findStep('manifest')?.id, 'content:manifest');

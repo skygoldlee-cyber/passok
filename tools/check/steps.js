@@ -154,6 +154,23 @@ const FRESH_STEPS = [
   pickContent('content:textbookdocs'),
 ];
 
+// ── 실패 복구 안내 (run.js 요약의 근본원인 그룹핑) ─────────────────────
+// DERIVED_IDS: `build:derived` 일괄 재생성으로 해결되는 신선도 계열 단계.
+// 파생물 미재생성이라는 같은 원인이 여러 단계 실패로 중복 보고될 때 묶어서 안내.
+const DERIVED_IDS = new Set([
+  'html', 'ci:html', 'content:trace', 'ci:trace',
+  'content:datafresh', 'content:drillfresh', 'content:embfresh', 'content:docbundles',
+]);
+// 개별 복구 힌트 — derived 묶음에 속하지 않는 재생성·스탬프 계열
+const REMEDIES = {
+  'content:reffresh': 'npm.cmd run convert:refs — ref-pipeline Python으로 PDF→ref_md 재변환',
+  'refs:fresh': 'npm.cmd run convert:refs — ref-pipeline Python으로 PDF→ref_md 재변환',
+  'content:textbookdocs': '교재 종속 문서(판본: textbook)를 최신 교재에 맞춰 갱신',
+  'docs:textbook': '교재 종속 문서(판본: textbook)를 최신 교재에 맞춰 갱신',
+  'docs:teststats': 'npm.cmd run stats:stamp — 테스트 수치 실측 스탬프 갱신',
+  'content:id-migration': 'npm.cmd run build:data — ID 이관 맵 미재생성',
+};
+
 // ── 프리셋 해석 ───────────────────────────────────────────────────────
 function contentSteps({ quick = false, contentOnly = false, withBuild = false } = {}) {
   let steps = CONTENT_STEPS.slice();
@@ -181,7 +198,7 @@ function resolveSteps(preset, opts = {}) {
 /** --step 조회용 통합 레지스트리 (프리셋 간 id 중복은 같은 명령이므로 첫 등록 유지) */
 function allSteps() {
   const map = new Map();
-  for (const s of [...contentSteps({}), BUILD_STEP, ...DOCS_STEPS, ...CI_STEPS, ...REFS_STEPS]) {
+  for (const s of [STEP_HTML, ...contentSteps({}), BUILD_STEP, ...DOCS_STEPS, ...CI_STEPS, ...REFS_STEPS]) {
     if (!map.has(s.id)) map.set(s.id, s);
   }
   return [...map.values()];
@@ -196,4 +213,4 @@ function findStep(query) {
     s.args.some((a) => path.basename(a, '.js') === q || path.basename(a, '.js') === `check_${q.replace(/-/g, '_')}`));
 }
 
-module.exports = { NPM, nodeStep, npmStep, DOCS_STEPS, CONTENT_STEPS, BUILD_STEP, CI_STEPS, PRESETS, resolveSteps, allSteps, findStep };
+module.exports = { NPM, nodeStep, npmStep, DOCS_STEPS, CONTENT_STEPS, BUILD_STEP, CI_STEPS, PRESETS, DERIVED_IDS, REMEDIES, resolveSteps, allSteps, findStep };
