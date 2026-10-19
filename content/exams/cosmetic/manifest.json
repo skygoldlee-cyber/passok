@@ -184,6 +184,26 @@
     "dictionary": {
       "title": "성분 사전",
       "subtitle": "화장품 성분별 배합한도 및 고시 기준 조회"
+    },
+    "dailyChallenge": {
+      "title": "매일 한 번 플래시카드, 퀴즈, 계산기, 원료 안전성이 배합된 5분 압축 세트를 풀며 시험 합격 실천 습관을 다집니다."
+    },
+    "authHint": {
+      "title": "Pro 가입 시 학습 진도 또는 포뮬러·조제 기록이 클라우드와 동기화되어 여러 디바이스 간 상태가 공유됩니다. 고객 카드는 개인정보 보호를 위해 이 기기에만 저장됩니다. 로그아웃해도 이 기기의 데이터는 유지됩니다."
+    },
+    "formula": {
+      "title": "Formula OS",
+      "subtitle": "원료 조회 · 배합 계산 · My 포뮬러 저장·검증",
+      "loading": "Formula OS 데이터를 불러오는 중입니다...",
+      "error": "Formula OS를 불러오지 못했습니다.",
+      "dataError": "원료 데이터를 불러오지 못했습니다."
+    },
+    "planLimits": {
+      "title": "저장 한도 무제한 — 무료 플랜:",
+      "formula": "My 포뮬러",
+      "customer": "고객",
+      "material": "원료",
+      "batch": "조제 기록"
     }
   },
   "synonyms": {

@@ -26,8 +26,8 @@ export function getViewTitles(registry) {
         'dictionary-view': uiText.dictionary || { title: '사전', subtitle: '지식DB 항목 검색' },
         'calendar-view': { title: '학습 캘린더', subtitle: '날짜별 학습 기록 및 목표 달성률 추적' },
         'exam-select-view': { title: '시험 선택', subtitle: '학습할 시험을 선택하세요 — 진도는 시험별로 독립 관리됩니다' },
-        // 실무 피처 뷰 타이틀 — practice-registry 선언에서 유도
-        ...getPracticeViewTitles()
+        // 실무 피처 뷰 타이틀 — practice-registry 선언에서 유도 (uiText 덮어쓰기 포함)
+        ...getPracticeViewTitles(registry)
     };
 }
 

@@ -40,10 +40,15 @@ const formula = {
     slug: 'formula',
     // 랜딩 우선순위 — 복수 실무 피처가 유효한 시험에서 작은 값이 랜딩된다 (미지정=0)
     priority: 0,
-    title: 'Formula OS',
-    subtitle: '원료 조회 · 배합 계산 · My 포뮬러 저장·검증',
-    loadingText: 'Formula OS 데이터를 불러오는 중입니다...',
-    loadErrorText: 'Formula OS를 불러오지 못했습니다.',
+    // 표시 카피는 시험 소유 — manifest uiText[uiTextKey]가 아래 중립 기본값을
+    // 덮어쓴다 (title·subtitle은 뷰 타이틀, loading·error·dataError는 enter()의
+    // 로딩·실패 토스트). 미선언 시험에는 도메인 중립 문구가 노출된다.
+    uiTextKey: 'formula',
+    title: '실습',
+    subtitle: '도메인 실습 도구',
+    loadingText: '실습 데이터를 불러오는 중입니다...',
+    loadErrorText: '실습 화면을 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
     // 뷰 마크업 파셜 — 셸(index.html)에는 빈 <section id> 스텁만 존재,
     // enter()/예열 시 fetch로 주입된다. 파셜은 자체 <section>을 포함하므로
     // 스텁을 outerHTML 교체한다. 상대 경로는 html/exams/<활성시험>/ 규약.
@@ -144,7 +149,9 @@ const formula = {
             ]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
         if (stale()) return;
-        showGlobalLoading(formula.loadingText);
+        // 표시 카피는 시험 소유 — manifest uiText.formula가 정의 기본값을 덮어쓴다
+        const ut = (DataLoader.registry && DataLoader.registry.uiText && DataLoader.registry.uiText.formula) || {};
+        showGlobalLoading(ut.loading || formula.loadingText);
         try {
             // 배너·허브 버튼이 뷰 마크업에 의존하므로 주입을 선행한다
             await ensureViewMarkup(formula);
@@ -155,12 +162,12 @@ const formula = {
             try {
                 await DataLoader.loadIngredients();
             } catch (e) {
-                if (!stale()) showToast('원료 데이터를 불러오지 못했습니다.', 'error');
+                if (!stale()) showToast(ut.dataError || formula.dataErrorText, 'error');
             }
             if (stale()) return;
             m.initFormulaView();
         } catch (e) {
-            if (!stale()) showToast(formula.loadErrorText, 'error');
+            if (!stale()) showToast(ut.error || formula.loadErrorText, 'error');
         } finally {
             if (!stale()) hideGlobalLoading();
         }
@@ -248,11 +255,17 @@ export function getPracticeLanding() {
         .sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0))[0].viewId;
 }
 
-/** router 타이틀 맵용 — 선언된 모든 실무 뷰의 {title, subtitle} */
-export function getPracticeViewTitles() {
+/** router 타이틀 맵용 — 선언된 모든 실무 뷰의 {title, subtitle}.
+ * registry.uiText[feature.uiTextKey]가 있으면 정의의 중립 기본값을 덮어쓴다. */
+export function getPracticeViewTitles(registry) {
+    const uiText = (registry && registry.uiText) || {};
     const out = {};
     for (const f of Object.values(PRACTICE_FEATURES)) {
-        out[f.viewId] = { title: f.title, subtitle: f.subtitle };
+        const t = (f.uiTextKey && uiText[f.uiTextKey]) || {};
+        out[f.viewId] = {
+            title: t.title || f.title,
+            subtitle: t.subtitle || f.subtitle,
+        };
     }
     return out;
 }
