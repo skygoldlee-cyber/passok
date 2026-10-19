@@ -291,14 +291,19 @@ npm.cmd run check:content -- --build   # build:data + 전 계층 검증을 한 �
 
 ### 3.3 참조자료 추가
 
-1. `content/exams/cosmetic/참조자료/ref_md/과목N/{파일명}/{파일명}.md` 배치 (PDF→MD 변환본 — 과목 폴더가 문항 생성 귀속의 진실)
-2. `content/exams/cosmetic/references.json` 수정:
+1. 현행본 확보 — law.go.kr DRF 조회 (법령 `lawService.do?target=law` / 행정규칙 `target=admrul`): 일련번호·공포번호·시행일·첨부 파일 확인
+2. PDF 배치 — `content/exams/cosmetic/참조자료/<분류폴더>/` (공식 첨부 우선. 첨부가 HWP뿐이면 공식 API 텍스트 기반으로 PDF 생성 — 별표 PDF와 동일한 파생 산출물 관례)
+3. ref_md 변환 — `content/exams/cosmetic/참조자료/ref_md/과목N/{파일명}/{파일명}.md` 배치 (과목 폴더가 문항 생성 귀속의 진실)
+4. `content/exams/cosmetic/references.json` 수정:
    - `refDirs.{해당폴더}` 배열에 파일명 추가
    - `referenceFiles.{과목}` 또는 `referenceCommon`에 항목 추가
+   - 법령·고시면 `referenceLaw`에 추가 + `docSubjectRules`에 과목 귀속 정규식 규칙 추가
    - 출처 매칭이 필요하면 `sourceRefMap`에 정규식 매핑 추가
    - 본문 자동 링크가 필요하면 `keywordRefMap`에 패턴 추가
-3. `npm.cmd run build:data` 실행
-4. 검증 + 커밋 + 배포
+5. `content/exams/cosmetic/참조자료/pdf_hashes.json` 갱신 (`check:reffresh`가 해시 정합 검증)
+6. **law.go.kr 원문 링크 등록** — `content/lawdb.json`에 법령 엔트리(slug·matchKeys) 추가 + `references.json.lawRefs`에 id 등록 → `npm.cmd run build:pdf-registry`로 `src/law-links.js` 재생성. **누락 시 `law-links.test.js` "미매칭 공식 문서"로 CI 실패**
+7. `npm.cmd run build:data` 실행
+8. 검증 (`check:reflayout`·`check:reffresh`·`check:refsubjects`) + 커밋 + 배포
 
 ### 3.3-1 PDF → MD 재변환 절차 (ref_md 갱신)
 
@@ -340,6 +345,53 @@ npm.cmd run verify:refs                        # (= python ref-pipeline/convert.
   `node tools/sync/sync_citation_lines.js --check`(미발견 0 확인) →
   `npm.cmd run build:data` → `node tools/build/build_combo_drills.js` 순서로
   후속 재생성을 실행한다.
+
+### 3.3-2 참조자료 → 교재 → 문제은행 도출 절차 (CS-11 운영)
+
+> 이론·형식 규약은 `TEXTBOOK_AUTHORING_GUIDE.md` §6, 이 절은 **실제 운영 순서**다.
+
+**순서 계약**: `참조자료 → 교재 → 문제은행` — 문제은행은 교재 이후에 작성한다 (인용 앵커가 교재 `파일#LNN`이라 교재가 선행 필수). 교재·은행의 근본 소스는 둘 다 참조자료다.
+
+**두 층 모델**:
+
+| 층 | 위치 | 역할 |
+|---|---|---|
+| 생성본 (AI 초본) | `tmp/gen_과목N_표준형.md` 등 | **전수 커버 백업 + 갭 탐지** 산출물 — 리뷰 없이 `content/` 승격 금지. `교재/` 배치도 금지 (`_표준형.md` 접미가 `sync_textbook_files`의 표준형 후보 스캔과 충돌) |
+| 정본 (학습 최적화본) | `content/exams/<id>/교재/` | 기존 교재 유지 — 생성본은 갭 발견·검증에만 쓰고, 검증 통과분만 **역방향 편입** |
+
+#### 단계 1 — 참조자료 온보딩
+§3.3 전 단계 수행 (admrul/law API → PDF → ref_md → references.json → pdf_hashes → **lawdb·lawRefs** → ref 게이트 3종).
+
+#### 단계 2 — 교재 초안 생성·평가 (tmp/ 산출물)
+```powershell
+npm.cmd run ai:textbook -- --exam <id> --doc "<ref 문서명>"   # → tmp/ai_drafts/textbook_<문서>.md
+```
+- 문서별 초안을 과목 단위로 조립 → `tmp/gen_과목N_표준형.md` (ref 문서 = 챕터 구조의 전수 커버본)
+- **갭 분석**: 문제은행이 인용하는 ref 라인 ∩ 정본 교재 미커버를 추출. 조문 헤더 없는 고시·별표·표 문서는 조문 매칭이 불가하므로 **인용 라인 앵커**(인용 ref 라인의 앞·중·끝 구절을 정규화 교재에서 탐색)로 측정
+- 후보를 **ref 원문과 대조**해 진성 갭만 선별 — 의역 재서술·기존 표 커버·과목 경계 밖 항목은 오탐으로 제외
+
+#### 단계 3 — 정본 교재 편입 (리뷰 승인분만)
+- 표준형 교재 해당 절에 `📌출처` 링크(ref_md 원문 링크) + 재서술 표·본문 편입
+- 신규 근거와 **기존 서술 교차 검증** — 모순 발견 시 원문 기준으로 교정, 무근거 서술은 근거 링크 보강 또는 제거
+- `npm.cmd run build:story` → 이야기형 재생성 (신규 `###` 섹션은 서사 슬롯이 없으면 표준형 본문 그대로 — 서사 부착은 `story/*_서사.md` 패치 별도 작성)
+- `npm.cmd run sync:citations` → **미발견 0** 확인. 의역 인용(은행 내장 인용문이 교재에 의역으로만 존재)은 수동 재지정 후 재실행
+
+#### 단계 4 — 문제은행 (교재 이후)
+- 인용 주축 = 교재 `파일#LNN` 링크. ref 직접 인용은 `ref:` 파생 문항만 해당
+- 초안은 `npm.cmd run ai:draft` → 리뷰 → 편입 → `sync:citations` 재동기화
+
+#### 단계 5 — 파생 산출물 + 종속 문서 재생성
+```powershell
+npm.cmd run build:data          # 번들 + 파서 등가성 (check:parser)
+npm.cmd run build:drills        # 은행 번들 해시 변경 시 필수 (check:drillfresh)
+python ref-pipeline/embeddings/build_embeddings.py   # 드릴·번들 변경 시 (check:embfresh)
+node tools/build/build_doc_bundles.js                # content/<id>/docs 변경 시
+```
+- `판본: textbook` 선언 문서 검토·갱신 (`check:textbookdocs` — 숫자 가이드·두음법·학습안내서·매핑 문서. 커밋 순서 기준이므로 교재 커밋 이후 갱신 커밋이 필요)
+
+#### 단계 6 — 검증·커밋·push·배포
+- 게이트: `check:reflines` · `check:numbering` · `check:metasections` · `check:manifest` · `check:drillfresh` · `check:embfresh` · `check:textbookdocs`
+- push (pre-push 전량 통과) → CI success 확인 → `npm.cmd run deploy`
 
 ### 3.4 오디오북 추가
 
