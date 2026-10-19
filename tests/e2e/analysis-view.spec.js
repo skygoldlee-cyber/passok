@@ -154,12 +154,12 @@ test.describe('학습 진단 — 합성 이력 시드', () => {
 test.describe('학습 진단 — 개념 식별자 환산 (AN-10)', () => {
     test('레거시 L####·신형 §N.M cid가 같은 절이면 하나의 클러스터로 병합된다', async ({ page }) => {
         test.setTimeout(90_000);
-        // 저장 시점에 따라 cid 형식이 섞인다 — 구 버전 앱은 L257(라인 좌표),
-        // 신 버전은 §1.2(구조 앵커)로 기록. CID_SECTION에서 law L257→1.2이므로
+        // 저장 시점에 따라 cid 형식이 섞인다 — 구 버전 앱은 L256(라인 좌표),
+        // 신 버전은 §1.2(구조 앵커)로 기록. CID_SECTION에서 law L256→1.2이므로
         // 둘은 동일 개념이며, 정규화 후 하나의 클러스터로 묶여야 한다.
         const seed = buildAnalysisSeed();
         seed['cosmetic:statement_stats'] = JSON.stringify({
-            'law_st_ba01': { j: 3, w: 2, lw: null, t: '레거시 라인 좌표로 저장된 오판 진술', truth: true, cid: 'L257', last: false, streak: 0 },
+            'law_st_ba01': { j: 3, w: 2, lw: null, t: '레거시 라인 좌표로 저장된 오판 진술', truth: true, cid: 'L256', last: false, streak: 0 },
             'law_st_ba02': { j: 2, w: 1, lw: null, t: '신형 섹션 앵커로 저장된 오판 진술', truth: true, cid: '§1.2', last: false, streak: 0 },
             'law_st_ba03': { j: 1, w: 1, lw: null, t: '다른 절의 단독 오판 진술', truth: true, cid: '§5.2', last: false, streak: 0 }
         });
