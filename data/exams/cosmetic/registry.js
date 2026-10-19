@@ -3,7 +3,7 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-19T12:58:41.991Z",
+  "generatedAt": "2026-10-19T13:19:15.519Z",
   "subjects": [
     {
       "key": "law",
@@ -42,7 +42,7 @@ var DATA_REGISTRY = {
       "order": 3,
       "name": "유통화장품 안전관리",
       "shortName": "안전관리",
-      "contentHash": "1ec0bba6",
+      "contentHash": "2c2cd948",
       "stats": {
         "cards": 311,
         "quizzes": 144,
@@ -60,7 +60,7 @@ var DATA_REGISTRY = {
       "order": 4,
       "name": "맞춤형화장품의 이해",
       "shortName": "맞춤형화장품",
-      "contentHash": "cc36023b",
+      "contentHash": "b5854838",
       "stats": {
         "cards": 572,
         "quizzes": 263,
@@ -120,9 +120,9 @@ var DATA_REGISTRY = {
       "part": 1,
       "title": "맞춤형화장품의 이해 (837제)",
       "file": "과목4_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject4.cd86053e.js",
+      "bundle": "./data/exams/cosmetic/exams/subject4.7271d8a3.js",
       "global": "EXAM_DATA_subject4",
-      "contentHash": "cd86053e",
+      "contentHash": "7271d8a3",
       "stats": {
         "questions": 837
       }
