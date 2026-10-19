@@ -13,11 +13,14 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { getExamTargets } = require('../../build/exam_targets');
 const { loadEnv } = require('../../lib/env');
 
 const ROOT = path.resolve(__dirname, '..', '..', '..');
 const DRAFT_DIR = path.join(ROOT, 'tmp', 'ai_drafts');
+/** 채택률 로그 — 추적 파일(배치 계측의 영속 SSOT). 레코드 스키마는 ai_adoption.js */
+const ADOPTION_LOG = path.join(ROOT, 'tools', 'ai', 'adoption_log.jsonl');
 
 /**
  * CLI 인자 파싱 — `--flag` → flags 집합, `--key value`·`--key=value` → opts.
@@ -63,10 +66,26 @@ function draftPath(name) {
     return path.join(DRAFT_DIR, name);
 }
 
+/** 초안 본문 해시 — 메타 주석 행을 제외한 본문의 sha1(단축). 리뷰 수정 감지용 (AI-23) */
+function draftBodyHash(text) {
+    const body = String(text).split(/\r?\n/)
+        .filter(l => !l.startsWith('<!-- ai-draft:'))
+        .join('\n').trim();
+    return crypto.createHash('sha1').update(body).digest('hex').slice(0, 12);
+}
+
+/** 초안 메타 주석 파싱 → {model,date,reviewed,sha} (없는 필드는 undefined) */
+function parseDraftMeta(text) {
+    const m = String(text).match(/<!--\s*ai-draft:\s*(.*?)-->/);
+    if (!m) return {};
+    return Object.fromEntries(m[1].trim().split(/\s+/).map(kv => kv.split('=')));
+}
+
 /** 초안 파일 작성 — 상단에 ai-draft 메타 주석 부착 (설계 §4: reviewed=no 추적, 편입 시 제거) */
 function writeDraft(name, bodyLines, meta = {}) {
+    const sha = draftBodyHash(bodyLines.join('\n'));
     const header = [
-        `<!-- ai-draft: model=${meta.model || 'none'} date=${new Date().toISOString()} reviewed=no -->`,
+        `<!-- ai-draft: model=${meta.model || 'none'} date=${new Date().toISOString()} reviewed=no sha=${sha} -->`,
         '',
     ];
     const out = draftPath(name);
@@ -74,7 +93,16 @@ function writeDraft(name, bodyLines, meta = {}) {
     return out;
 }
 
+/**
+ * 배치 채택 기록 — --write 편입 1건(초안 파일 단위)마다 JSONL append (AI-23, 설계 §3.1 승격 지표)
+ * @param {{ts,draft,kind,target,bank,generated,applied,skipped,replace,model,genDate,edited}} rec
+ */
+function logAdoption(rec) {
+    fs.appendFileSync(ADOPTION_LOG, JSON.stringify(rec) + '\n', 'utf-8');
+}
+
 module.exports = {
-    ROOT, DRAFT_DIR,
+    ROOT, DRAFT_DIR, ADOPTION_LOG,
     loadEnv, parseArgs, getTargets, listQbanks, draftPath, writeDraft,
+    draftBodyHash, parseDraftMeta, logAdoption,
 };
