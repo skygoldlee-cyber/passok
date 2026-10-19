@@ -3,22 +3,22 @@ var DATA_REGISTRY = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-19T09:25:37.367Z",
+  "generatedAt": "2026-10-19T12:16:52.632Z",
   "subjects": [
     {
       "key": "law",
       "order": 1,
       "name": "화장품법의 이해",
       "shortName": "화장품법",
-      "contentHash": "3b2b5eda",
+      "contentHash": "0c4459c7",
       "stats": {
-        "cards": 175,
-        "quizzes": 80,
+        "cards": 178,
+        "quizzes": 81,
         "chapters": 1,
-        "sourceCards": 195,
-        "sourceQuizzes": 83,
-        "targetCards": 175,
-        "targetQuizzes": 80
+        "sourceCards": 218,
+        "sourceQuizzes": 95,
+        "targetCards": 178,
+        "targetQuizzes": 81
       }
     },
     {
@@ -28,13 +28,13 @@ var DATA_REGISTRY = {
       "shortName": "제조·품질",
       "contentHash": "9394aaaa",
       "stats": {
-        "cards": 237,
-        "quizzes": 107,
+        "cards": 241,
+        "quizzes": 110,
         "chapters": 1,
         "sourceCards": 401,
         "sourceQuizzes": 189,
-        "targetCards": 237,
-        "targetQuizzes": 107
+        "targetCards": 241,
+        "targetQuizzes": 110
       }
     },
     {
@@ -44,13 +44,13 @@ var DATA_REGISTRY = {
       "shortName": "안전관리",
       "contentHash": "19253be7",
       "stats": {
-        "cards": 291,
-        "quizzes": 132,
+        "cards": 297,
+        "quizzes": 135,
         "chapters": 1,
         "sourceCards": 221,
         "sourceQuizzes": 96,
-        "targetCards": 291,
-        "targetQuizzes": 132
+        "targetCards": 297,
+        "targetQuizzes": 135
       },
       "supplement": "./data/exams/cosmetic/supplements/safety.js",
       "supplementGlobal": "STUDY_SUPPLEMENT_safety"
@@ -62,13 +62,13 @@ var DATA_REGISTRY = {
       "shortName": "맞춤형화장품",
       "contentHash": "5528b734",
       "stats": {
-        "cards": 535,
-        "quizzes": 243,
+        "cards": 545,
+        "quizzes": 248,
         "chapters": 1,
         "sourceCards": 421,
         "sourceQuizzes": 194,
-        "targetCards": 535,
-        "targetQuizzes": 243
+        "targetCards": 545,
+        "targetQuizzes": 248
       },
       "supplement": "./data/exams/cosmetic/supplements/understanding.js",
       "supplementGlobal": "STUDY_SUPPLEMENT_understanding"
@@ -81,9 +81,9 @@ var DATA_REGISTRY = {
       "part": 1,
       "title": "화장품법의 이해 (274제)",
       "file": "과목1_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject1.b7e8e74a.js",
+      "bundle": "./data/exams/cosmetic/exams/subject1.e680f471.js",
       "global": "EXAM_DATA_subject1",
-      "contentHash": "b7e8e74a",
+      "contentHash": "e680f471",
       "stats": {
         "questions": 274
       }
@@ -120,9 +120,9 @@ var DATA_REGISTRY = {
       "part": 1,
       "title": "맞춤형화장품의 이해 (837제)",
       "file": "과목4_문제은행.md",
-      "bundle": "./data/exams/cosmetic/exams/subject4.d4402e2a.js",
+      "bundle": "./data/exams/cosmetic/exams/subject4.ccbfd298.js",
       "global": "EXAM_DATA_subject4",
-      "contentHash": "d4402e2a",
+      "contentHash": "ccbfd298",
       "stats": {
         "questions": 837
       }
