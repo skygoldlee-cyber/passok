@@ -1,9 +1,7 @@
 {
   "$comment": "파일 계층 분류 맵 — check:domainmap (tools/check/check_domain_map.js) 이 강제. watchedDirs 내 모든 파일이 정확히 하나의 layer에 분류되어야 하며, 미분류·중복 분류·사라진 패턴은 오류. layer: platform(시험 무관 코어) / feature:<이름>(플래그·콘텐츠 게이트) / domain:<examId>(시험 전용). generatedBy: 생성물의 원본 빌드 명령/스크립트. catchAll: 다른 규칙에 매칭 안 된 파일만 흡수. domain 규칙은 수동 선언 불필요 — exams.json 등록 시험의 contentRoot/dataRoot + 규약 디렉터리(src/css/html/tests 하위 exams/<id>)가 자동 주입됨.",
   "version": 1,
-  "examLiteralAllow": {
-    "src/exam-context.js": "DEFAULT_EXAM_ID 최후 폴백 — EXAMS_LIST 번들 자체가 로드 실패한 저하 상태용 (모듈 주석 참조)"
-  },
+  "examLiteralAllow": {},
   "watchedDirs": [
     "src",
     "css",

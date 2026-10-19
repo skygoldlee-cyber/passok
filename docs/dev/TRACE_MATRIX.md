@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: ede042785671bb47
+> 입력 해시: 42d5e06bc3ec17a4
 > 생성: 2026-10-19 · 원천: SPEC.md(553개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -692,7 +692,7 @@
 | DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | tools/check/check_uitext.js | tests/unit/multi-exam-gates.test.js | — | — |
 | DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-DEV-08<br>DOC-DEV-09<br>DOC-DSN-33 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/app-shell.js<br>src/pwa-manifest.js | tests/unit/exam-context.test.js | — | — |
-| DA-15 | ✅ | 테스트 | — | src/exam-context.js | tests/unit/da15-content-independence.test.js<br>tests/unit/exam-context.test.js | — | — |
+| DA-15 | ✅ | 테스트 | — | src/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/da15-content-independence.test.js<br>tests/unit/exam-context.test.js | — | — |
 
 ## 5.2 안정적 ID 체계
 

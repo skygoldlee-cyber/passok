@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-19 DA-15 정적 게이트 신설 — 로직의 콘텐츠 독립성 강제 (DA-15)
+
+- **`check_content_independence.js` 신규 게이트**: src/(exams 도메인 모듈 제외)·tools/ 전수 스캔 — R1 시험 식별 리터럴(exams.json의 id·name·appName·title과 동일 인용 문자열) · R2 과목 키 리터럴(manifest.subjects key/dir) · R3 시험 경로 리터럴(`exams/<id>/`)을 오류 차단. 주석 채널 제거 후 코드만 검사, '자동 생성' 헤더의 산출물(keyword-index·law-links·pdf-registry)은 대상 외
+- **등록**: `check:contentind` 스크립트 + content 프리셋(content:contentind)·CI_STEPS(ci:contentind)·ci.yml 스텝 — 로직 수정·신규 시 check:all/check:ci/CI에서 강제
+- **잔존 결합 정리**: `exam_targets.js` 레거시 폴백 `id:'cosmetic'`→null · `check_docs_paths.js` 플레이스홀더 치환의 'cosmetic' 리터럴→getDefaultExamRoots 동적 해석 · `check_refmerge.js` REF_MD 경로→동적 해석 · domain-map `examLiteralAllow` 스테일 항목(exam-context) 제거
+- **예외 명단**: law.go.kr API target 구분자('law' — 법령 vs 행정규칙, 과목 키와 무관) 2곳 · check_adlint_coverage(cosmetic 도메인 전용 감사 도구) — ALLOWED에 사유 기재
+- **테스트**: da15 테스트에 게이트 자체 전수 스캔 0건 검증 추가 (유닛 통과)
+
 ## 2026-10-19 DA-15 적합성 감사 — 로직의 콘텐츠 독립성 정리 (DA-15)
 
 - **감사 결과**: 플랫폼 코어(src/)의 시험·교재 내용 언급은 대부분 주석/예시/생성 데이터(keyword-index·law-links·pdf-registry는 content에서 자동 생성). 실질 결합 2건만 발견
