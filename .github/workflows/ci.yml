@@ -51,6 +51,9 @@ jobs:
       - name: Position-independence gate (교재 좌표 비의존 식별자·저장 키)
         run: npm run check:posind
 
+      - name: Content-independence gate (시험/교재 식별자 하드코딩 차단, DA-15)
+        run: npm run check:contentind
+
       - name: Docs path + document ID check
         run: npm run check:docs
 
