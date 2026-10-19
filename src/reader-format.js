@@ -181,10 +181,20 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
         ),
     );
 
-    // 참조자료 과목별 MD 링크(법령고시 ref_md·원료 DB 외 — 통합 정리·생리 등 직접 저작 문서)
+    // 참조자료 지식 문서 dir — 활성 시험의 REFERENCE_INGREDIENTS dir 선언에서 유도
+    // (디렉터리 규약은 시험 소유 — '원료' 등을 코드에 고정하지 않는다)
+    const ingDocDirs = [...new Set(((getRefTables().REFERENCE_INGREDIENTS) || [])
+        .map(e => e && e.dir).filter(Boolean))];
+    const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const ingDirAlt = ingDocDirs.map(escRe).join('|');
+    const ingDirExclude = ingDocDirs.map(d => escRe(d) + '\\/').join('|');
+
+    // 참조자료 과목별 MD 링크(법령고시 ref_md·지식 문서 dir 외 — 통합 정리·생리 등 직접 저작 문서)
     // → 앱 내 MD 뷰어로 열기. 미변환 시 파일명 라벨 + 페이지 기준 상대경로(404)로 노출됨.
     html = html.replace(
-        /<a href="((?:\.\.\/)?참조자료\/(?!ref_md\/|원료\/)[^"]+\.md)(#[^"]*)?">([^<]+)<\/a>/g,
+        new RegExp(
+            `<a href="((?:\\.\\.\\/)?참조자료\\/(?!ref_md\\/${ingDirExclude ? '|' + ingDirExclude : ''})[^"]+\\.md)(#[^"]*)?">([^<]+)<\\/a>`,
+            'g'),
         (match, rawPath, hash, linkText) => {
             const absPath = normalizeRefPath(rawPath);
             const fileName = decodeURIComponent(rawPath.split('/').pop() || '');
@@ -193,10 +203,12 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
         }
     );
 
-    // 원료 DB MD 파일 링크 → 앱 내 HTML 뷰어로 열기
-    // 마크다운 파서가 [text](../참조자료/원료/....md)를 <a href="../참조자료/원료/....md">text</a>로 변환한 후 처리
-    html = html.replace(
-        /<a href="((?:\.\.\/)?참조자료\/원료\/[^"]+\.md)(#[^"]*)?">([^<]+)<\/a>/g,
+    // 지식 문서(원료 DB 등) MD 링크 → 앱 내 HTML 뷰어로 열기 — dir 미선언 시험은 경로 없음
+    // 마크다운 파서가 [text](../참조자료/<dir>/....md)를 <a href="../참조자료/<dir>/....md">text</a>로 변환한 후 처리
+    if (ingDirAlt) html = html.replace(
+        new RegExp(
+            `<a href="((?:\\.\\.\\/)?참조자료\\/(?:${ingDirAlt})\\/[^"]+\\.md)(#[^"]*)?">([^<]+)<\\/a>`,
+            'g'),
         (match, rawPath, hash, linkText) => {
             const absPath = normalizeRefPath(rawPath);
             const fileName = decodeURIComponent(rawPath.split('/').pop() || '');

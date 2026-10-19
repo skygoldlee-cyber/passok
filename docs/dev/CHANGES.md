@@ -7,6 +7,15 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-19 참조자료 독립성 — 지식 문서 dir 시험 선언화 + reflayout 전 시험화 (CS-03/CS-09)
+
+- **배경**: 교재 교체 변수(과목수·섹션수·참조자료) 검증에서 `참조자료/원료/` 디렉터리 규약이 플랫폼 코드에 하드코딩된 잔재와 `check_reflayout`의 기본 시험 한정 커버리지를 확인
+- **`reader-format.js`**: 참조자료 링크 라우팅의 `원료/` 리터럴 제거 — 활성 시험 `REFERENCE_INGREDIENTS`(references.json→pdf-registry 생성)의 dir 선언 집합에서 정규식을 동적 구성. 미선언 dir는 일반 참조 MD 뷰어(data-ref-md)로 처리
+- **`search-sources.js`**: `e.dir || '원료'` 폴백 제거 — dir 미선언 엔트리는 경로 해석 불가라 제외 (규약은 시험 소유)
+- **`check_reflayout.js` 전 시험 순회화**: `getDefaultExamRoots`→`getExamTargets` — 시험별 4계층 독립 검사·오류 태깅·시험별 요약. **PDF 계층 조건부**: 물리 PDF 미수록 시험(food 파일럿)은 ref_md 구조·과목 귀속·링크만 검사하고 refDirs 선언 PDF는 경고로 가시화
+- **부수 수정 2건**: `docSubject(base)`가 기본 root(`content/`)의 미존재 references.json을 읽어 **과목 귀속 규칙이 사실상 무력화**돼 있던 것을 `docSubject(base, contentRoot)`로 수정 — 귀속 검사가 실동작 (cosmetic 36건·food 3건 전량 정합). food 참조자료가 처음으로 레이아웃 감사 대상에 편입 (링크 22건 정상)
+- **테스트**: 지식 dir 해석 회귀 2건 추가 — 선언 dir는 data-ref-html·미선언 dir는 data-ref-md 경로임을 고정 (test-first)
+
 ## 2026-10-19 도메인 카피 플랫폼 잔재 제거 — uiText 슬롯 확장 (DA-12/DA-15 카피 계층)
 
 - **배경**: 교재 독립성 감사에서 DA-15(리터럴 결합)·posind(좌표)·uitext(시험명) 게이트는 통과하나, **도메인 명사(원료·포뮬러·배합)는 어느 게이트도 못 잡는 사각** 확인 — 무게이트 잔재 2건(세 번째 시험 온보딩 시 cosmetic 문구 노출)과 feature 게이트 내 카피 2건을 정리
