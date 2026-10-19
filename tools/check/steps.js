@@ -129,7 +129,7 @@ const CI_STEPS = [
 
 // ── 참조자료 묶음 (check:refs → refs 프리셋) ──────────────────────────
 const REFS_STEPS = [
-  nodeStep('refs:layout', 'tools/check/check_reflayout.js', '참조', '참조자료 4계층 정합성 (PDF 폴더↔ref_md↔references.json↔규칙)'),
+  nodeStep('refs:layout', 'tools/check/check_reflayout.js', '참조', '참조자료 4계층 정합성 — 전 시험 (PDF 폴더↔ref_md↔references.json↔규칙)'),
   nodeStep('refs:subjects', 'tools/check/check_ref_subjects.js', '참조', 'ref_md 인용 득표 ↔ 과목 귀속 교차 검증'),
   nodeStep('refs:fresh', 'tools/check/check_ref_freshness.js', '참조', '참조자료 PDF 해시 ↔ ref_md 신선도 (PDF 교체 감지)'),
   nodeStep('refs:lines', 'tools/check/check_ref_lines.js', '참조', '교재 (LNN)/📌출처 조문 ↔ ref_md 실제 내용'),
