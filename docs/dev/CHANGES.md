@@ -7,6 +7,17 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-19 로컬 시크릿 위생 — check:env 게이트 신설 + 시크릿 소스 단일화
+
+- **배경**: `.env`는 gitignore라 추적 파일 스캔(check:secrets)·pre-commit·CI 어디에도 잡히지 않아 만료 토큰·미선언 키가 방치되는 사각이었음 — 실측으로 만료된 VERCEL_OIDC_TOKEN 발견
+- **`check:env` 게이트 신설** (`tools/check/check_env.js`): 만료 JWT 실패 / 미선언·중복·미인용`#` 경고 / 빈 값 정보, `.env` 부재 시 스킵. all·ci 프리셋 편입 + ci_parity LOCAL_ONLY 명시 (CI에는 .env 없음)
+- **`.env.example` 스키마 정본** (추적): 유효 키 13개 선언·용도·`@required` 마커 지원 — `.gitignore`에 `!.env.example` 부정 패턴 추가 (`.env*`가 템플릿까지 차단하던 것 해소)
+- **`env.js` 리팩터**: `parseEnvFile` export — 로더·체커가 파서 규칙 단일 원천 공유
+- **시크릿 소스 단일화**: `ref-pipeline/.env.local.json` 폐기 — check_mfds_notice.load_oc_key()의 레거시 폴백 제거(값은 루트 .env와 동일 확인 후 삭제), check_secrets 스테일 allowlist 엔트리 정리
+- **GH_TOKEN 제거**: 레포 public 확인으로 deploy.js의 CI 조회가 무인증 동작 — .env에서 repo+workflow 고권한 토큰 삭제 (발급 토큰은 GitHub 측 폐기 권장)
+- **즉시 조치**: 만료 VERCEL_OIDC_TOKEN·빈 키 주석 플레이스홀더화·불필요 따옴표 제거 — check:env 경고 0·정보 0 달성
+- **테스트**: check-env.test.js 7건 신설 (유닛 통과) · pytest test_exam_root.py 6건 통과
+
 ## 2026-10-19 DA-15 정적 게이트 신설 — 로직의 콘텐츠 독립성 강제 (DA-15)
 
 - **`check_content_independence.js` 신규 게이트**: src/(exams 도메인 모듈 제외)·tools/ 전수 스캔 — R1 시험 식별 리터럴(exams.json의 id·name·appName·title과 동일 인용 문자열) · R2 과목 키 리터럴(manifest.subjects key/dir) · R3 시험 경로 리터럴(`exams/<id>/`)을 오류 차단. 주석 채널 제거 후 코드만 검사, '자동 생성' 헤더의 산출물(keyword-index·law-links·pdf-registry)은 대상 외
