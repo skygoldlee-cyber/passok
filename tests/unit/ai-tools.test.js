@@ -1,5 +1,5 @@
 // tests/unit/ai-tools.test.js — AI 제작 지원 도구 유닛 테스트
-// @spec AI-01,AI-02,AI-03,AI-04,AI-05,AI-06,AI-07,AI-08,AI-09,AI-10,AI-11,AI-12,AI-13,AI-14,AI-15,AI-16,AI-17,AI-18,AI-19,AI-20,AI-21
+// @spec AI-01,AI-02,AI-03,AI-04,AI-05,AI-06,AI-07,AI-08,AI-09,AI-10,AI-11,AI-12,AI-13,AI-14,AI-15,AI-16,AI-17,AI-18,AI-19,AI-20,AI-21,AI-22
 // llm_client dry-run·문제은행 파서·규칙 변형·검수 규칙·유사도 폴백을 고정한다.
 // 실제 API 키 없이 전부 결정론적으로 동작해야 한다 (--dry-run 계약).
 
@@ -377,6 +377,30 @@ test('AI-19: 카드팁 오버레이 계약 — flashcard.html 표시 요소·Car
     assert.ok(types.includes('[tip]'), 'Card typedef에 tip 필드');
     const loader = fs.readFileSync(path.join(process.cwd(), 'src/data-loader.js'), 'utf8');
     assert.ok(loader.includes('_getCardTips') && loader.includes('피드백/card_tip.json'), 'DataLoader 오버레이 병합');
+});
+
+test('AI-22: 카드 제외 목록 — card_exclude.json의 ID가 실제 파싱 카드에 존재하고 로더·도구가 적용', () => {
+    const fs = require('fs'), path = require('path');
+    const root = process.cwd();
+    const loader = fs.readFileSync(path.join(root, 'src/data-loader.js'), 'utf8');
+    assert.ok(loader.includes('_getCardExcludes') && loader.includes('피드백/card_exclude.json'), 'DataLoader 제외 목록 로드');
+    assert.ok(loader.includes('data.cards = data.cards.filter'), 'DataLoader 카드 필터 적용');
+    const aiCards = fs.readFileSync(path.join(root, 'tools/ai/ai_cards.js'), 'utf8');
+    assert.ok(aiCards.includes('card_exclude.json') && aiCards.includes('!(c.id in excluded)'), 'ai:cards 제외 대상 필터');
+
+    // stale 항목 차단 — 제외 목록의 ID는 현재 파싱 결과에 실존해야 함
+    const { loadSubjectCards } = require('../../tools/ai/ai_cards.js');
+    const exclPath = path.join(root, 'content/exams/cosmetic/피드백/card_exclude.json');
+    if (!fs.existsSync(exclPath)) return;
+    const excludes = JSON.parse(fs.readFileSync(exclPath, 'utf8'));
+    const allIds = new Set();
+    for (const s of ['law', 'manufacturing', 'understanding', 'safety']) {
+        const loaded = loadSubjectCards({ id: 'cosmetic', contentRoot: 'content/exams/cosmetic' }, s);
+        if (loaded) loaded.data.cards.forEach(c => allIds.add(c.id));
+    }
+    for (const id of Object.keys(excludes)) {
+        assert.ok(allIds.has(id), `제외 목록의 ${id}가 실제 파싱 카드에 존재`);
+    }
 });
 
 test('AI-20: ai_glossary parseGlossaryDrafts — 정의 라인만 추출하고 플레이스홀더 제외', () => {

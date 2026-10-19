@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * ai_cards.js — 플래시카드 암기팁 초안 생성 → 피드백/card_tip.json 오버레이 반영
- * @spec AI-18
+ * @spec AI-18,AI-22
  *
  * 사용법:
  *   node tools/ai/ai_cards.js [--exam cosmetic] [--subject law] [--min-len 60] [--limit 30] [--dry-run]
@@ -100,12 +100,15 @@ async function generate(opts, flags) {
         // 이미 반영된 팁은 재생성하지 않음
         const appliedFp = path.join(ROOT, target.contentRoot, '피드백', 'card_tip.json');
         const applied = fs.existsSync(appliedFp) ? JSON.parse(fs.readFileSync(appliedFp, 'utf-8')) : {};
+        // 제외 목록 카드는 대상에서 제거 (피드백/card_exclude.json — 런타임과 동일 규칙)
+        const exclFp = path.join(ROOT, target.contentRoot, '피드백', 'card_exclude.json');
+        const excluded = fs.existsSync(exclFp) ? JSON.parse(fs.readFileSync(exclFp, 'utf-8')) : {};
         const mf = JSON.parse(fs.readFileSync(path.join(ROOT, target.contentRoot, 'manifest.json'), 'utf-8'));
         for (const s of mf.subjects || []) {
             if (opts.subject && s.key !== opts.subject) continue;
             const loaded = loadSubjectCards(target, s.key);
             if (!loaded) continue;
-            const cards = loaded.data.cards.filter(c => (flags.has('all') || c.definition.length < minLen) && !(c.id in applied));
+            const cards = loaded.data.cards.filter(c => (flags.has('all') || c.definition.length < minLen) && !(c.id in applied) && !(c.id in excluded));
             if (!cards.length) continue;
             total += cards.length;
             if (drafted >= limit) continue;
