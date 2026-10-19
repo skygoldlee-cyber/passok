@@ -120,6 +120,7 @@ npm.cmd run check:storage               # src/ 내 localStorage 직접 접근 �
 npm.cmd run check:ciparity              # ci.yml 워크플로 명령 ↔ check:ci 체인 양방향 정합 (비대칭은 CI_ONLY·LOCAL_ONLY 명단에 사유 명시)
 npm.cmd run check:runbooks              # 런북 정본 도달 — docs/dev/runbooks 링크 파일 존재 + #앵커↔헤딩 해석 + WHEN_THINGS_BREAK 증상 행 정본 커버리지 출력 (check:docs 단계)
 npm.cmd run check:secrets               # 추적 파일 시크릿 패턴 스캔 (개인키·service_role·토큰 — 공개키는 ALLOWLIST, pre-commit 게이트)
+npm.cmd run check:env                   # .env 로컬 시크릿 신선도 — 만료 JWT·미선언·빈 키 탐지 (스키마 정본 .env.example, .env 부재 시 스킵 — 로컬 전용, check:ci·check:all 게이트)
 npm.cmd run check:enc                   # U+FFFD 치환 문자 잔존 — 저장 시 이모지 변조 유입 차단 (기준선 단조 감소, --update=잔재 정리 후 하향 — pre-commit·check:docs 게이트)
 npm.cmd run check:orphans               # 미참조 자산(고아 자산) 유입 차단 — 추적 자산 파일의 파일명이 다른 추적 파일에 등장하지 않으면 실패 (_archive/·e2e 스냅샷 규약 제외, 예외는 orphan_assets_baseline.json — pre-commit·check:docs 게이트)
 npm.cmd run check:notes                 # release-notes.json 스키마·버전 해시→커밋 해석·최신 항목↔APP_VERSION 정합
@@ -189,6 +190,7 @@ style.css               # CSS 진입점 (@import로 모듈 로드)
 sw.js                   # Service Worker
 manifest.webmanifest    # PWA 매니페스트
 feature-plan.json       # 기능별 무료/Pro 전환 설정 (pro = 배지+안내, free = 완전 무료)
+.env.example            # 루트 .env 스키마 정본 — 선언 키 목록·용도 (check:env 대조 기준, 시크릿 값 기재 금지)
 serve.js                # 로컬 개발 서버
 src/                    # ES Modules
   app.js                # 메인 애플리케이션 로직 (초기화, 이벤트 위임, 라우팅)
