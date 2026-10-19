@@ -618,6 +618,7 @@
 | AI-19 | 카드팁 정본 `content/exams/<id>/피드백/card_tip.json`(cardId→tip, 사람 리뷰 후 편입). `DataLoader.loadSubject`가 오버레이를 카드 id 기준 병합 → 플래시카드 뒷면 `card.tip` 표시. 정본 없으면 미표시 폴백 (AI-15와 동형 오버레이) | ✅ |
 | AI-20 | `ai:glossary` — glossary/subjectN.json 부실 정의(--max-len 미만·말줄임 종료) 항목에 코퍼스 근거 기반 정의 보강 초안 → `--apply`가 정의 교체 | ✅ |
 | AI-21 | `ai:adphrases` — 별표5 2항 각 호 법문+기존 사전을 근거로 금지 표현 후보를 JS 항목 형태로 제안 (미커버 호 라·마·자·차·카 우선). 사전이 코드 파일이라 apply 없이 수동 편입+`check:adlint` 회귀 확인 원칙 | ✅ |
+| AI-22 | 카드 제외 정본 `content/exams/<id>/피드백/card_exclude.json`(cardId→사유) — 추출 오염·근거 부재 카드를 `DataLoader.loadSubject`가 파싱 후 목록에서 제거. `ai:cards`도 동일 목록을 대상에서 제외 (AI-19와 동형 오버레이). 정본 없으면 제외 없음 | ✅ |
 
 ---
 
