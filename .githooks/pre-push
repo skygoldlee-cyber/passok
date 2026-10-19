@@ -6,6 +6,7 @@
 #     docs·html·lint·posind·impact·docsync·testfirst)
 #   - 문서(docs/·*.md)만 → trace·specrefs·docs·docsync·testfirst
 #   - 콘텐츠(content/·data/)만 → trace·specrefs·docsync·testfirst
+#     + 신선도 3종(drillfresh·embfresh·docbundles — 파생물 재생성 누락 차단)
 #   분류 불가 파일은 보수적으로 로직으로 간주한다.
 #
 # 건너뛰기: SKIP_PREPUSH=1 git push · 전체 강제: PUSH_GATE_ALL=1 git push

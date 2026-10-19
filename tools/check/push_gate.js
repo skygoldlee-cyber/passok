@@ -4,6 +4,9 @@
  *
  * `<ref>..HEAD` diff를 분류해 문서·콘텐츠 전용 푸시는 가벼운 단계만 실행하고,
  * 로직(src/·tools/·tests/·설정 등)이 1건이라도 섞이면 기존 9단계 전체를 돌린다.
+ * 콘텐츠 태그는 신선도 3종(drillfresh·embfresh·docbundles — 해시 비교 경량)을
+ * 추가 실행한다 — 파생물 재생성 누락을 CI 이전에 차단. datafresh는 빌드 체인을
+ * 실행하는 중량 단계라 pre-push에는 넣지 않는다 (build:derived로 로컬 해결).
  * 분류되지 않는 파일은 보수적으로 로직으로 간주한다 (생략이 아닌 전체 폴백).
  *
  * 계층 (태그 모델 — 파일 경로 유형별 필요 단계만 실행):
@@ -65,16 +68,21 @@ function fileTags(f) {
 
 // ── 단계별 필요 태그 — 이 태그의 파일이 1개라도 바뀌면 그 단계를 실행한다 ──
 // STEP_NEEDS에 없는 단계(impact)는 항상 실행 (자체가 변경 분석이라 경량)
+// 신선도 3종은 해시 비교라 경량 — 콘텐츠 push에서 파생물 재생성 누락을
+// CI 이전에 차단한다 (datafresh는 빌드 체인 실행이라 중량 → pre-push 제외)
 const STEP_NEEDS = {
-  types:     new Set(['src', 'tools', 'tests', 'config', 'unknown']),
-  trace:     new Set(['docs', 'content', 'src', 'tools', 'tests', 'config', 'unknown']),
-  specrefs:  new Set(['docs', 'content', 'src', 'tools', 'tests', 'unknown']),
-  docs:      new Set(['docs', 'content', 'html', 'src', 'tools', 'config', 'ci', 'unknown']),
-  html:      new Set(['html', 'unknown']),
-  lint:      new Set(['src', 'tools', 'tests', 'config', 'unknown']),
-  posind:    new Set(['src', 'tools', 'unknown']),
-  docsync:   new Set(['docs', 'src', 'tools', 'tests', 'config', 'unknown']),
-  testfirst: new Set(['src', 'tools', 'unknown']),
+  types:      new Set(['src', 'tools', 'tests', 'config', 'unknown']),
+  trace:      new Set(['docs', 'content', 'src', 'tools', 'tests', 'config', 'unknown']),
+  specrefs:   new Set(['docs', 'content', 'src', 'tools', 'tests', 'unknown']),
+  docs:       new Set(['docs', 'content', 'html', 'src', 'tools', 'config', 'ci', 'unknown']),
+  html:       new Set(['html', 'unknown']),
+  lint:       new Set(['src', 'tools', 'tests', 'config', 'unknown']),
+  posind:     new Set(['src', 'tools', 'unknown']),
+  docsync:    new Set(['docs', 'src', 'tools', 'tests', 'config', 'unknown']),
+  testfirst:  new Set(['src', 'tools', 'unknown']),
+  drillfresh: new Set(['content', 'unknown']),
+  embfresh:   new Set(['content', 'unknown']),
+  docbundles: new Set(['content', 'unknown']),
 };
 
 /**
@@ -118,8 +126,11 @@ const STEP_DEFS = () => ({
   impact:   { id: 'impact', bin: 'node', args: ['tools/check/impact_tests.js', '--ref', REF, '--run'], shell: false, desc: '영향 테스트 (@spec 역산)' },
   docsync:  nodeGate('docsync', 'tools/check/check_doc_sync.js', '문서 동기화'),
   testfirst: nodeGate('testfirst', 'tools/check/check_test_first.js', '테스트 선행'),
+  drillfresh: npmGate('drillfresh', 'content:drillfresh', '드릴 번들 신선도'),
+  embfresh:   npmGate('embfresh', 'content:embfresh', '임베딩 신선도'),
+  docbundles: npmGate('docbundles', 'content:docbundles', '문서 번들 신선도'),
 });
-const FULL_IDS = ['types', 'trace', 'specrefs', 'docs', 'html', 'lint', 'posind', 'impact', 'docsync', 'testfirst'];
+const FULL_IDS = ['types', 'trace', 'specrefs', 'docs', 'html', 'lint', 'posind', 'impact', 'docsync', 'testfirst', 'drillfresh', 'embfresh', 'docbundles'];
 
 function changedFiles(ref) {
   // core.quotepath=false — 비ASCII(한글) 경로가 octal 이스케이프되면 classify가 logic으로 오분류

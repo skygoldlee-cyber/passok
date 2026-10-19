@@ -10,7 +10,9 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { classifyFile, fileTags, planSteps } = require('../../tools/check/push_gate.js');
 
-const FULL = ['types', 'trace', 'specrefs', 'docs', 'html', 'lint', 'posind', 'impact', 'docsync', 'testfirst'];
+const FULL = ['types', 'trace', 'specrefs', 'docs', 'html', 'lint', 'posind', 'impact', 'docsync', 'testfirst', 'drillfresh', 'embfresh', 'docbundles'];
+// 콘텐츠 파생물 신선도 — 'content' 태그에만 필요 (로직 변경에는 무관)
+const FRESH = ['drillfresh', 'embfresh', 'docbundles'];
 
 test('파일 분류 — docs·content·logic', () => {
     assert.equal(classifyFile('docs/dev/SPEC.md'), 'docs');
@@ -44,23 +46,24 @@ test('문서 전용 변경 → 문서 관련 단계만', () => {
     assert.deepEqual(plan.ids, ['trace', 'specrefs', 'docs', 'impact', 'docsync']);
 });
 
-test('콘텐츠 전용 변경 → 콘텐츠 추적·문서·동기화 단계', () => {
+test('콘텐츠 전용 변경 → 콘텐츠 추적·문서·동기화·신선도 단계', () => {
     // content/*.md는 content+docs 복합 태그 — docsync도 대상 (기존 커버리지 유지)
+    // 신선도 3종은 파생물 재생성 누락을 CI 이전에 차단 (해시 비교 경량)
     const plan = planSteps(['content/exams/cosmetic/textbook/law.md', 'data/exams/cosmetic/questions.js']);
     assert.equal(plan.tier, 'content');
-    assert.deepEqual(plan.ids, ['trace', 'specrefs', 'docs', 'impact', 'docsync']);
+    assert.deepEqual(plan.ids, ['trace', 'specrefs', 'docs', 'impact', 'docsync', 'drillfresh', 'embfresh', 'docbundles']);
 });
 
 test('docs+content 혼합 → 동일 태그 집합', () => {
     const plan = planSteps(['docs/dev/SPEC.md', 'data/exams/cosmetic/questions.js']);
     assert.equal(plan.tier, 'content');
-    assert.deepEqual(plan.ids, ['trace', 'specrefs', 'docs', 'impact', 'docsync']);
+    assert.deepEqual(plan.ids, ['trace', 'specrefs', 'docs', 'impact', 'docsync', 'drillfresh', 'embfresh', 'docbundles']);
 });
 
-test('src 변경 → html 제외 전 단계', () => {
-    // index.html 신선도는 html/·템플릿 변경에만 의미가 있다
+test('src 변경 → html·신선도 제외 전 단계', () => {
+    // index.html 신선도는 html/·템플릿 변경에만, 파생물 신선도는 content/에만 의미가 있다
     const ids = planSteps(['docs/dev/SPEC.md', 'src/app.js']).ids;
-    assert.deepEqual(ids, FULL.filter((id) => id !== 'html'));
+    assert.deepEqual(ids, FULL.filter((id) => id !== 'html' && !FRESH.includes(id)));
     assert.ok(ids.includes('posind') && ids.includes('testfirst'));
 });
 
@@ -69,9 +72,9 @@ test('config 변경 → 타입·린트·문서·동기화 단계', () => {
         ['types', 'trace', 'docs', 'lint', 'impact', 'docsync']);
 });
 
-test('tools/tests 변경 → html 제외 로직 단계', () => {
+test('tools/tests 변경 → html·신선도 제외 로직 단계', () => {
     const toolsIds = planSteps(['tools/check/run.js']).ids;
-    assert.deepEqual(toolsIds, FULL.filter((id) => id !== 'html'));
+    assert.deepEqual(toolsIds, FULL.filter((id) => id !== 'html' && !FRESH.includes(id)));
     const testsIds = planSteps(['tests/unit/x.test.js']).ids;
     assert.deepEqual(testsIds, ['types', 'trace', 'specrefs', 'lint', 'impact', 'docsync']);
 });
