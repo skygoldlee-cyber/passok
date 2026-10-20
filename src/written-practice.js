@@ -527,7 +527,7 @@ function _renderGrading(card, q, g) {
     }).join('');
     const ts = g.t ? new Date(g.t).toLocaleString('ko-KR') : '';
     gbox.innerHTML = `<div class="g-head">AI 채점 제안 — ${escapeHTML(String(g.s ?? 0))} / ${escapeHTML(String(q.points ?? '—'))}점 (참고용)</div>
-      ${items}
+      ${items}${'' /*esc-ok — items는 r.text·fb를 escapeHTML 처리해 조립한 HTML*/}
       ${g.sum ? `<div class="g-summary">${escapeHTML(g.sum)}</div>` : ''}
       <div class="g-meta">${escapeHTML(g.m || '')} · ${escapeHTML(ts)} · AI 판정은 참고용 — 체크박스를 직접 조정하세요</div>`;
     gbox.classList.add('open');
