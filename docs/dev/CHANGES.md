@@ -7,6 +7,11 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 deploy vercel 업로드 --archive=tgz 전환
+
+- **배경**: Vercel 무료 티어 업로드 API 한도(24h 5,000 파일) 초과로 62.6MB 배포 중단 (`api-upload-free`)
+- **조치**: `tools/deploy/deploy.js`의 `vercel --prod` 호출에 `--archive=tgz` 추가 — 파일 단위 요청을 아카이브 1건으로 통합
+
 ## 2026-10-21 written-practice 채점 제안 보간 esc-ok 면제 — CI escape 게이트 복구
 
 - **배경**: CI `check:escape`가 `src/written-practice.js`의 `${items}` 보간을 미이스케이프 후보로 검출 — items는 rubricItems의 r.text·피드백을 escapeHTML 처리해 조립한 HTML로 raw 보간이 의도된 구조

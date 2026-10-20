@@ -281,7 +281,7 @@ async function main() {
     // DEP0190 — shell:true + 인자 배열 금지. win32의 vercel.cmd는 shell 경유가
     // 필요하므로 직접 인용한 단일 명령 문자열로 전달한다.
     const result = spawnSync(
-        ['vercel', '--prod', '--yes', ...vercelScopeArgs()].map(quoteArg).join(' '),
+        ['vercel', '--prod', '--yes', '--archive=tgz', ...vercelScopeArgs()].map(quoteArg).join(' '),
         { stdio: 'inherit', shell: true });
     if ((result.status ?? 1) !== 0) {
         restoreStamps();
