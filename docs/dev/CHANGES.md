@@ -7,6 +7,15 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-20 손해평가사(lossadj) 1차 법령 2과목 파일럿 온보딩
+
+- **신규 시험 팩** (`content/exams/lossadj/`): `scaffold:exam` 골격을 실콘텐츠로 교체 — 1차 법령 2과목(과목1 상법 보험편 · 과목2 농어업재해보험법령 및 손해평가요령) Phase C 파일럿. 농학개론·2차 주관식은 후속 과목 추가 대상으로 `comingSoon` 유지
+- **ref_md 4건**: law.go.kr DRF 원문 기반 발췌본 — 상법(제21044호, 시행 2026.9.10)·농어업재해보험법(제21023호, 시행 2026.8.15)·시행령(제36555호, 시행 2026.8.15)·농업재해보험 손해평가요령 고시(제2026-66호, 시행 2026.6.10). 공식 이론서는 무단 전재 금지 고지로 자체 작성 교재로 대체
+- **교재 2종 + 문제은행 16제**: 조문 수치·기한 표 + 📌출처 ref_md 링크 체인 — 문제은행 인용 `#LNN` 앵커 전량 실측 동기화(미발견 0)
+- **레지스트리**: `lawdb.json`에 상법·농어업재해보험법·시행령(law)·손해평가요령(admrul) 4건 + `exams.json` lossadj 엔트리 실설정(desc·아이콘·테마) + glossary subject1·2.json
+- **선언 파일**: manifest(subjects insurance·disaster, exams 2건, 통합시험 8+8제) · references(lawRefs·subjectDirMap·docSubjectRules·sourceRefMap·referenceLaw ref_md 포인터)
+- **검증**: check:manifest 통과(경고 5건 = 선택 자산 부재, food 동일 수준) · parser 등가성 · 인용 동기화 0 미발견
+
 ## 2026-10-20 화장품법 시행령 온보딩 + 생성본 사실검증 완료
 
 - **시행령 온보딩**: 「화장품법 시행령」(대통령령 제36176호, 시행 2026.4.2) DRF lawService + lsPdfPrint → ref_md(104라인)·공식 PDF·references.json(docSubjectRules·refDirs·referenceLaw)·pdf_hashes 등록 — 법·령·규칙 3계층 완성. `lawdb.cosmetic-act-enforcement-decree` 기존 등록 재사용
