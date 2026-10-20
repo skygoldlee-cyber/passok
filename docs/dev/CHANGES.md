@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 lossadj 과목4 요지 품목별 판매기간·보험기간 전체표 (§17~18)
+
+- **§17 판매기간**: 이론서 1권 2025년 기준 품목별 보험판매기간 27행 전체 수록(과수 2월·벼 4~6월·시설 2~11월·양파 10~11월 등) + 판매중단 시 농금원 통보 규칙
+- **§18 보험기간**: 보장개시 3유형(계약체결일 24시/작업완료일 24시/시설물 승낙+납입) + 과수 적과전Ⅱ·벼·밭작물 재파종/재정식·시설작물(정식 vs 파종 품목·일조량 특약 12~3월)·버섯재배사·수입감소보장 개시/종료표 + 수입안정 판매지역·기간표 + 시설류 가입금액 기준(90~130%·50~100%)
+- **교재·용어집**: secondTheory 6-1 보강(3유형·품목별 상한·판매기간 대표값)·핵심 카드 2종·체크리스트 +2·출처 §15~18, glossary subject4 +2항(보험판매기간·보장개시일)
+
 ## 2026-10-21 lossadj 주관식 AI 보조 채점 (설계 §4 2단계, WP-07~08)
 
 - **`src/written-grading.js`**: 공급자 계약(openai·anthropic·gemini — `tools/ai/llm_client.js` PROVIDERS 미러, Anthropic은 `dangerous-direct-browser-access` 헤더), `buildGradingPrompt`(문제·모범답안·rubric·답안 구조화), `parseGradingResponse`(코드펜스·잡음 허용·항목 범위 검증), `applyGrading`(점수는 LLM 산출 불신·클라이언트 합산), `gradeAnswer`(오류 코드 분기: nokey/noanswer/norubric/network/key/quota/http/unreadable/aborted — product-vision 패턴)
