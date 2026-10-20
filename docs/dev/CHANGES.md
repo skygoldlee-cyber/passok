@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 ref-pipeline pdf2md — -o 미지정 시 입력 폴더 출력
+
+- **pdf2md.py**: -o 미지정 시 문서별 출력 루트를 입력 PDF의 폴더로 변경 (기존 <pdf-root>/ref_md_v2). 중첩 {dir}/{name}/{name}.md · --flat {dir}/{name}.md 규약 유지 — plan_doc_jobs(out_dir=None)이 job별 root를 dirname(pdf)로 해석
+- **_report.json**: 입력 폴더 공통 상위(os.path.commonpath, 혼합 드라이브 시 첫 입력 폴더)에 기록
+- **불변**: --verify는 ref_md_v2 기본 유지(스테이징 비교 계약), -o 명시·GUI·convert.py(스테이징 명시 전달)는 동작 동일
+- **테스트**: test_pdf2md.py +2건(None out_dir 중첩·평면)
+
 ## 2026-10-21 lossadj 과목5 요지 조사체계·가축 세부 보강 (§18~20)
 
 - **§18 조사 구분·제척·이의신청**: 본조사/재조사(통지일 7일 이내 증빙→다른 평가반)/검증조사(임의추출·현저한 차이 시 전체 재조사), 손해평가반 제척 4항(모집계약·이해관계자·30일 상호평가·자기 평가 검증), 이의신청 2단계(재평가 요청→농림부·해수부 지정기관)

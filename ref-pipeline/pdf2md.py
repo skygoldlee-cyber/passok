@@ -17,6 +17,7 @@ convert_ref_pdfs_v2.py의 변환 엔진(좌표 공백 복원 + 표 구조화 + �
 사용:
   python pdf2md.py                       # GUI 모드 (기본, PySide6 필요)
   python pdf2md.py --cli <입력...>        # CLI — 파일/디렉토리/glob (없으면 --pdf-root 스캔)
+  python pdf2md.py --cli ./a/b.pdf       # → ./a/b/b.md (기본: 입력 파일 옆)
   python pdf2md.py --cli ./refs -o ./out # ./refs 아래 모든 PDF → ./out/{name}/{name}.md
   python pdf2md.py --cli 화장품법          # 경로가 아니면 파일명 필터로 동작 (구버전 호환)
   python pdf2md.py --cli --no-segment ... # 문장 병합 없이 시각적 줄 그대로
@@ -938,6 +939,9 @@ def collect_pdfs(tokens, pdf_root):
 def plan_doc_jobs(pdfs, out_dir, flat=False):
     """PDF 목록 → 문서별 출력 작업 계획.
 
+    out_dir=None이면 문서마다 입력 PDF의 폴더를 출력 루트로 쓴다
+    (입력 파일 옆에 {name}/{name}.md 생성).
+
     같은 basename의 PDF가 2개 이상이면 subdir 라벨로 출력을 구분해
     무음 덮어쓰기를 막는다:
       중첩(기본): {out}/{subdir}/{name}/{name}.md — ref_md/과목N/ 골드 구조와 정합
@@ -955,19 +959,20 @@ def plan_doc_jobs(pdfs, out_dir, flat=False):
     for subdir, pdf_path in pdfs:
         base = os.path.splitext(os.path.basename(pdf_path))[0]
         collided = counts[base] > 1
+        root = out_dir if out_dir is not None else os.path.dirname(pdf_path)
         if flat:
             stem = f'{subdir}__{base}' if collided else base
             jobs.append({
                 'doc': stem, 'src': subdir, 'pdf': pdf_path,
-                'dir': out_dir,
-                'md': os.path.join(out_dir, stem + '.md'),
-                'images': os.path.join(out_dir, 'images'),
+                'dir': root,
+                'md': os.path.join(root, stem + '.md'),
+                'images': os.path.join(root, 'images'),
                 'img_prefix': stem + '_',
                 'collided': collided, 'basename': base,
             })
         else:
             rel = os.path.join(subdir, base) if collided else base
-            doc_dir = os.path.join(out_dir, rel)
+            doc_dir = os.path.join(root, rel)
             jobs.append({
                 'doc': rel.replace(os.sep, '/'), 'src': subdir, 'pdf': pdf_path,
                 'dir': doc_dir,
@@ -1104,7 +1109,8 @@ def main():
     ap.add_argument('--pdf-root', default=DEFAULT_PDF_ROOT,
                     help=f'기본 스캔 루트 (기본: {DEFAULT_PDF_ROOT})')
     ap.add_argument('-o', '--out', default=None,
-                    help='출력 디렉토리 (기본: <pdf-root>/ref_md_v2)')
+                    help='출력 디렉토리 (기본: 각 입력 PDF의 폴더 — '
+                         '--verify 비교 시에는 <pdf-root>/ref_md_v2)')
     ap.add_argument('--gold', default=None,
                     help='--verify 비교 대상 (기본: <pdf-root>/ref_md)')
     ap.add_argument('--flat', action='store_true',
@@ -1147,16 +1153,27 @@ def main():
     if args.no_segment:
         PROFILE['segment'] = False
 
-    out_dir = args.out or os.path.join(args.pdf_root, 'ref_md_v2')
     gold_dir = args.gold or os.path.join(args.pdf_root, 'ref_md')
 
     if args.verify:
+        out_dir = args.out or os.path.join(args.pdf_root, 'ref_md_v2')
         sys.exit(1 if verify(out_dir, gold_dir, args.inputs or None) else 0)
 
     pdfs = collect_pdfs(args.inputs, args.pdf_root)
     if not pdfs:
         logger.error('변환할 PDF가 없습니다. 경로나 필터를 확인하세요.')
         sys.exit(1)
+
+    # -o 미지정 시 문서별 출력 루트는 입력 PDF의 폴더 (입력 옆에 생성)
+    out_dir = args.out
+    if out_dir is None:
+        try:
+            report_dir = os.path.commonpath(
+                [os.path.dirname(p) for _, p in pdfs])
+        except ValueError:
+            report_dir = os.path.dirname(pdfs[0][1])
+    else:
+        report_dir = out_dir
 
     report, flagged = [], 0
     jobs = plan_doc_jobs(pdfs, out_dir, flat=args.flat)
@@ -1207,11 +1224,11 @@ def main():
         if args.doctor:
             flagged += doctor_report(job['doc'], md)
 
-    os.makedirs(out_dir, exist_ok=True)
-    with open(os.path.join(out_dir, '_report.json'), 'w', encoding='utf-8') as f:
+    os.makedirs(report_dir, exist_ok=True)
+    with open(os.path.join(report_dir, '_report.json'), 'w', encoding='utf-8') as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
     fails = [r for r in report if 'error' in r]
-    logger.info('총 %d개 → %s%s', len(report), out_dir,
+    logger.info('총 %d개 → %s%s', len(report), report_dir,
                 f'  ⚠ 실패 {len(fails)}건' if fails else '')
     if args.doctor:
         if flagged:
