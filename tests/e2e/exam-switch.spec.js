@@ -1,46 +1,45 @@
 // tests/e2e/exam-switch.spec.js — 멀티시험 전환·도메인 격리 검증
 // @spec ES-03,ES-05,DA-13
-// 비기본 시험(food, comingSoon) 부팅을 실브라우저로 증명한다.
+// 비기본 시험(lossadj, comingSoon) 부팅을 실브라우저로 증명한다.
 // comingSoon 카드는 UI 클릭 전환이 막혀 있으므로 current_exam을 시드해
 // "다른 시험으로 부팅" 경로를 검증한다 — 시험별 브랜딩·기능 게이팅·
 // 도메인 모듈 미로드가 cosmetic 하드코딩 없이 동작하는지가 관점.
 
 import { test, expect } from '@playwright/test';
 
-test.describe('비기본 시험(food) 부팅 — 도메인 격리', () => {
+test.describe('비기본 시험(lossadj) 부팅 — 도메인 격리', () => {
     test.beforeEach(({ page }) => {
         page.addInitScript(() => {
-            localStorage.setItem('current_exam', 'food');
+            localStorage.setItem('current_exam', 'lossadj');
             localStorage.setItem('onboarding_seen_v1', '1');
-            localStorage.setItem('food:onboarding_seen_v1', '1');
+            localStorage.setItem('lossadj:onboarding_seen_v1', '1');
         });
         page._errors = [];
         page.on('pageerror', err => page._errors.push(String(err)));
     });
 
-    test('시험별 브랜딩 — 타이틀·로고·앱명이 식품기사로 렌더된다', async ({ page }) => {
+    test('시험별 브랜딩 — 타이틀·로고·앱명이 손해평가사로 렌더된다', async ({ page }) => {
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
-        // applyExamBranding: title·로고·data-app-name이 exams.json food 엔트리로 치환
-        await expect(page).toHaveTitle('식품기사');
-        await expect(page.locator('.logo-text h1')).toHaveText('식품');
-        await expect(page.locator('.logo-text span')).toHaveText('기사');
-        await expect(page.locator('.logo-icon')).toHaveClass(/fa-bowl-food/);
-        await expect(page.locator('[data-app-name]').first()).toHaveText('식품기사');
+        // applyExamBranding: title·로고·data-app-name이 exams.json lossadj 엔트리로 치환
+        await expect(page).toHaveTitle('손해평가사');
+        await expect(page.locator('.logo-text h1')).toHaveText('손해평가사');
+        await expect(page.locator('.logo-icon')).toHaveClass(/fa-tractor/);
+        await expect(page.locator('[data-app-name]').first()).toHaveText('손해평가사');
         // pwa-manifest.js가 실제 파일로 링크 교체 (시험별 개별 설치 — 기본 시험도 동일)
         await expect(page.locator('link[rel="manifest"]'))
-            .toHaveAttribute('href', /manifest\.food\.webmanifest/);
+            .toHaveAttribute('href', /manifest\.lossadj\.webmanifest/);
         expect(page._errors.filter(e => !/favicon|manifest/i.test(e))).toEqual([]);
     });
 
     test('기능 플래그 게이팅 — cosmetic 전용 실무 메뉴가 노출되지 않는다', async ({ page }) => {
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
-        // food.features = { dictionary } — formula·ingredients·practiceMode는 is-hidden
+        // lossadj.features = { writtenPractice } — formula·ingredients·dictionary·practiceMode는 is-hidden
         await expect(page.locator('[data-target="formula-view"]').first()).toHaveClass(/is-hidden/);
         await expect(page.locator('#ui-mode-toggle')).toHaveClass(/is-hidden/);
-        // dictionary는 food에 선언 → 네비 항목 유지
-        await expect(page.locator('[data-target="dictionary-view"]').first()).not.toHaveClass(/is-hidden/);
+        // dictionary는 lossadj에 미선언 → 네비 항목도 숨김
+        await expect(page.locator('[data-target="dictionary-view"]').first()).toHaveClass(/is-hidden/);
         // 시험 전환 버튼은 등록 시험 2개(comingSoon 포함)라 multiExam=true로 유지
         await expect(page.locator('[data-feature="examSwitch"]').first()).not.toHaveClass(/is-hidden/);
     });
@@ -59,16 +58,16 @@ test.describe('비기본 시험(food) 부팅 — 도메인 격리', () => {
         }
     });
 
-    test('네트워크 격리 — food 부팅 중 exams/cosmetic/ 자산 요청이 없다', async ({ page }) => {
+    test('네트워크 격리 — lossadj 부팅 중 exams/cosmetic/ 자산 요청이 없다', async ({ page }) => {
         const examReqs = [];
-        page.on('request', r => { if (/exams\/(cosmetic|food)\//.test(r.url())) examReqs.push(r.url()); });
+        page.on('request', r => { if (/exams\/(cosmetic|lossadj)\//.test(r.url())) examReqs.push(r.url()); });
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
         // 도메인 경로 규약 — 비활성 시험의 모듈·마크업·콘텐츠를 요청하지 않아야 한다
-        // (warmPracticeFeatures는 food가 formula 미보유로 발화하지 않음)
+        // (warmPracticeFeatures는 lossadj가 formula 미보유로 발화하지 않음)
         expect(examReqs.filter(u => u.includes('exams/cosmetic/'))).toEqual([]);
-        // 대조: food 자산은 실제로 요청됐어야 한다 (격리가 아닌 미부팅 오탐 방지)
-        expect(examReqs.some(u => u.includes('exams/food/'))).toBe(true);
+        // 대조: lossadj 자산은 실제로 요청됐어야 한다 (격리가 아닌 미부팅 오탐 방지)
+        expect(examReqs.some(u => u.includes('exams/lossadj/'))).toBe(true);
     });
 });
 
@@ -81,16 +80,16 @@ test.describe('시험 전환 실경로 — selectExam → 리로드 → 부팅',
             const m = await import('./src/views/exam-select.js');
             m.renderExamSelect();
         });
-        const foodCard = page.locator('.exam-select-card[data-arg="food"]');
-        await expect(foodCard).toHaveClass(/coming-soon/);
+        const card = page.locator('.exam-select-card[data-arg="lossadj"]');
+        await expect(card).toHaveClass(/coming-soon/);
         // aria-disabled 카드라 Playwright 클릭은 거부 — 이벤트 위임 경로를 직접 디스패치
-        await foodCard.dispatchEvent('click');
+        await card.dispatchEvent('click');
         await expect(page.getByText('시험은 현재 준비 중입니다', { exact: false })).toBeVisible();
         const stored = await page.evaluate(() => localStorage.getItem('current_exam'));
-        expect(stored).not.toBe('food'); // 전환 미발생
+        expect(stored).not.toBe('lossadj'); // 전환 미발생
     });
 
-    test('selectExam(\'food\') 호출 → current_exam 저장 + 리로드 후 식품기사 부팅', async ({ page }) => {
+    test('selectExam(\'lossadj\') 호출 → current_exam 저장 + 리로드 후 손해평가사 부팅', async ({ page }) => {
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
         // 실제 전환 계약: selectExam이 저장 후 location.reload() — 시드가 아닌 호출 경로 검증
@@ -103,14 +102,14 @@ test.describe('시험 전환 실경로 — selectExam → 리로드 → 부팅',
             page.waitForEvent('load', { timeout: 15_000 }),
             swallowNavTeardown(page.evaluate(async () => {
                 const m = await import('./src/exam-context.js');
-                m.selectExam('food');
+                m.selectExam('lossadj');
             })),
         ]);
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
-        await expect(page).toHaveTitle('식품기사');
-        await expect(page.locator('[data-app-name]').first()).toHaveText('식품기사');
+        await expect(page).toHaveTitle('손해평가사');
+        await expect(page.locator('[data-app-name]').first()).toHaveText('손해평가사');
         const stored = await page.evaluate(() => localStorage.getItem('current_exam'));
-        expect(stored).toBe('food');
+        expect(stored).toBe('lossadj');
         // 복귀 — cosmetic으로 되돌려 후속 테스트 격리 유지
         await Promise.all([
             page.waitForEvent('load', { timeout: 15_000 }),

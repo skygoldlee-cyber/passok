@@ -415,7 +415,7 @@ passory/
 │       └── <examId>/           #   시험별 데이터 루트 (dataRoot — 모든 시험 대칭)
 │           ├── registry.js     #     과목/시험/성분 메타 (shortName·file·resources·uiText)
 │           ├── ingredients_data.<hash>.js  # 성분 사전 (해시 파일명)
-│           ├── <key>_data.<hash>.js   #     범용 지식DB 번들 (manifest.knowledge.registryKey — food 예: additives_data)
+│           ├── <key>_data.<hash>.js   #     범용 지식DB 번들 (manifest.knowledge.registryKey 선언 키)
 │           ├── id_migration.js #     레거시 ID → 안정 ID 매핑
 │           ├── card_terms_snapshot.json    # 카드 ID 추적 스냅샷
 │           ├── question_chapters.js        # 문항id→단원 매핑 (취약 분석용)
@@ -602,7 +602,7 @@ passory/
 | [`data/exams/cosmetic/study_md/`](../../data/exams/cosmetic/study_md) | 교재 MD `file://` 폴백 번들 (**과목별 분할**: manifest.js + 과목별 `.js`). http에선 미사용. 과목 로드 시 해당 파일만 온디맨드 로드 | `tools/build/build_study_md_bundle.js` |
 | [`data/exams/<key>.<hash>.js`](../../data/exams) | 시험별 문항 번들 | `tools/build/index.js` (exams plugin) |
 | [`data/exams/cosmetic/ingredients_data.<hash>.js`](../../data) | 화장품 성분 사전 (가용/금지/제한) — `content/exams/cosmetic/knowledge/ingredients.json` SSOT의 `bundleFields` 투영 결과. 참조자료 `참조자료/원료/*.md`의 GENERATED-TABLE 표도 같은 빌드가 재생성 | `tools/build/index.js` (knowledge plugin) |
-| `data/exams/<id>/<key>_data.<hash>.js` | 범용 지식DB 번들 (food 예: `additives_data` — 식품첨가물 사전). `content/exams/food/knowledge/additives.json`처럼 시험 콘텐츠 루트의 `knowledge/` 원본 → `<KEY>_DATA` 전역 + `registry[key]` 메타(version·updatedAt·stats) — `DataLoader.loadDictionary()`가 `registry.knowledge.registryKey`로 온디맨드 로드 | `tools/build/index.js` (knowledge plugin) |
+| `data/exams/<id>/<key>_data.<hash>.js` | 범용 지식DB 번들 (cosmetic 예: `ingredients_data` — 성분 사전). `content/exams/cosmetic/knowledge/ingredients.json`처럼 시험 콘텐츠 루트의 `knowledge/` 원본 → `<KEY>_DATA` 전역 + `registry[key]` 메타(version·updatedAt·stats) — `DataLoader.loadDictionary()`가 `registry.knowledge.registryKey`로 온디맨드 로드 | `tools/build/index.js` (knowledge plugin) |
 | `registry.js` → `ingredients` 메타 | 원료 DB `version`·`updatedAt`·`notice`·`history`(개정 이력 누적)·`contentHash`(내용 지문) — `content/…/knowledge/ingredients.json`의 `meta`에서 병합. 사전 버전 배지·갱신 알림·Formula OS 검증 기준이 여기서 나옴 | `tools/build/index.js` |
 | `src/exams/cosmetic/formula-store.js` · `src/exams/cosmetic/formula-rules.js` · `src/exams/cosmetic/formula-check.js` · `src/exams/cosmetic/formula-stability.js` | Formula OS 도메인 레이어 — 포뮬러 CRUD/한도(5개)·고객·안정성 스키마·전성분 표시 순서, 추천 규칙(BASE_TEMPLATES·고민/피부 매핑·맞춤 규칙 병합), 고시 한도 검증 엔진, 제형 안정성 체크(상 비율·상호작용·투입 단계·pH) | 수동 관리 |
 | `src/exams/cosmetic/batch-store.js` · `src/exams/cosmetic/customer-store.js` · `src/exams/cosmetic/material-ledger.js` · `src/exams/cosmetic/adverse-store.js` · `src/exams/cosmetic/usage-guide.js` · `src/exams/cosmetic/store-utils.js` · `src/csv-utils.js` | Formula OS 업무 레이어 — 배치(조제 기록) 채번·QC·위생·스냅샷, 고객 카드·상담 이력, 원료 입고·기한·재고·차감, 이상사례 기록(FO-59), 사용 안내문 생성기, 스토어 공통 헬퍼, CSV 파서·인코딩(EUC-KR 폴백)·직렬화 (FORMULA_OS_WORKFLOW_DESIGN.md) | 수동 관리 |
@@ -856,10 +856,10 @@ const state = {
 ### 새 시험 추가 절차
 > **전체 런북**: `runbooks/NEW_EXAM_RUNBOOK.md` (스캐폴딩→콘텐츠 선언→검증→배포 4단계 + 체크리스트)
 
-0. `node tools/build/scaffold_exam.js <id> --name "시험명"` — exams.json 엔트리 + manifest/references 골격 + 샘플 교재·문제은행·디렉터리 트리 1커맨드 생성 (Phase B; 실 사용 예는 `food` 시험 — Phase C 파일럿, MULTI_EXAM_DB_DESIGN §9 "Phase C 파일럿 결과" 참조)
+0. `node tools/build/scaffold_exam.js <id> --name "시험명"` — exams.json 엔트리 + manifest/references 골격 + 샘플 교재·문제은행·디렉터리 트리 1커맨드 생성 (Phase B; 실 온보딩 예는 `lossadj` 시험 — Phase C 파일럿 `food`는 2026-10 제거, MULTI_EXAM_DB_DESIGN §9 이력 참조)
 1. `content/exams/<id>/`에 `manifest.json` + `references.json` + `교재/` + `문제은행/` 배치
    - 참조 법령이 있으면: `content/lawdb.json`에 법령 엔트리 추가(공유 법령 재사용) + `references.json`의 `lawRefs`(링크 대상·우선순위)와 `noticeCore`(고시 감시 기준 문서) 설정 → `build:pdf-registry`가 `src/law-links.js` 재생성
-   - 지식DB(사전)가 있으면: `knowledge/<key>.json` 데이터셋(예: `content/exams/food/knowledge/additives.json`) + `manifest.knowledge`에 엔티티 스키마·`registryKey` 선언 + `features.dictionary` 활성화 — 빌드가 `<key>_data.<hash>.js` 번들 생성, `DataLoader.loadDictionary()`가 온디맨드 로드, `dictionary.js`가 스키마 드리븐 렌더
+   - 지식DB(사전)가 있으면: `knowledge/<key>.json` 데이터셋(예: `content/exams/cosmetic/knowledge/ingredients.json`) + `manifest.knowledge`에 엔티티 스키마·`registryKey` 선언 + `features.dictionary` 활성화 — 빌드가 `<key>_data.<hash>.js` 번들 생성, `DataLoader.loadDictionary()`가 온디맨드 로드, `dictionary.js`가 스키마 드리븐 렌더
    - 주관식 채점 유사어가 있으면: `manifest.synonyms`에 `{정답: [동의어…]}` 선언 → 생성 `registry.synonyms`를 `checkShortAnswer()`가 조회 (코드 내장 사전 없음 — 시험별 용어 집합)
    - 오답 원인 분류를 확장하려면: `manifest.analysis.wrongCauses`에 `[{key,label,advice}]` 선언 → 생성 `registry.analysis`를 `getWrongCauseTaxonomy()`가 기본 3종(암기/개념/계산)에 병합 — 태깅 버튼·집계·자동 추정이 분류표를 따름 (미선언 시 기본 3종만; 예: cosmetic은 법령·조문 혼동·수치 착각 추가)
 2. `content/exams.json`에 엔트리 추가 (`contentRoot`/`dataRoot`/`registryBundle`/`registryGlobal` + 기능 플래그)
@@ -885,7 +885,7 @@ const state = {
 |------|-----------|------|
 | `platform` | 시험·도메인 무관, 어느 시험에서도 재사용 | `storage.js`, `router.js`, `views/trainer.js` |
 | `feature:<이름>` | `features` 플래그(`flag` 필드) 또는 콘텐츠 게이트(`gate` 필드)로만 발화 | `views/formula*.js` → `feature:formula`, `notice-check.js` → `feature:regulatory`(references.json 게이트) |
-| `domain:<examId>` | 특정 시험 전용 콘텐츠·데이터 — `content/exams/<id>/`, `data/exams/<id>/` | `domain:cosmetic`, `domain:food` |
+| `domain:<examId>` | 특정 시험 전용 콘텐츠·데이터 — `content/exams/<id>/`, `data/exams/<id>/` | `domain:cosmetic`, `domain:lossadj` |
 
 - **분류 결정 순서**: ① 코드에 시험별 문구/데이터 내장? → `domain` (가능하면 `content/`로 이관) ② 플래그·콘텐츠 없으면 비발화? → `feature` ③ 둘 다 아니면 → `platform`
 - `generatedBy` 속성은 생성물의 원본 빌드 명령을 기록 (스크립트 존재 여부도 검증됨)
@@ -1002,7 +1002,7 @@ pullSync() (로그인 시 / "지금 동기화" 버튼)
 - **피처 자산 격리**: 실무 뷰 마크업은 셸에 빈 `<section data-lazy-view>` 스텁만 두고 엔트리의 `markup` 파셜을 진입 시 fetch+주입. 뷰 모듈은 SHELL_ASSETS 프리캐시에 두지 않고 `warmPracticeFeatures()`(app.js 유휴 예열)가 유효 피처의 모듈·마크업을 미리 요청해 SW 캐시에 적재 — 비활성 시험은 피처 자산을 다운로드하지 않는다. 주입은 스텁의 `outerHTML` 교체라 `navigateToView`가 부여한 런타임 클래스가 소실되므로 `ensureViewMarkup`이 `active`를 보존한다 — 부팅 딥링크(`#/formula` 등)에서는 navigate가 주입보다 먼저 실행돼 이 보존이 없으면 뷰가 숨는다 (formula-tablet.spec.js가 회귀 가드)
 - **도메인 경로 규약**: 피처 자산은 활성 시험 id 아래 시험 무관 동일 상대 경로에 둔다 — 모듈 `src/exams/<시험id>/<rel>`(`_domainImport`), 마크업 `html/exams/<시험id>/<rel>`(`_domainMarkup`), 스타일 `css/exams/<시험id>/`. 로더 호출 시점의 활성 시험으로 해석되므로 **기존 피처를 새 시험에서 재사용할 때는 같은 구조로 파일만 배치하면 되고 플랫폼 코드 수정이 없다**. `check:imports`가 `${getActiveExamId()}` 템플릿을 등록 시험 전수로 확장해 실존·export를 정적 검증하고, `check:domainmap`이 platform 파일의 `exams/<id>/` 경로 리터럴을 차단한다 (재하드코딩 회귀 방지)
 - **도메인 경계 게이트** (check:imports 강제): ① platform 파일의 `src/exams/` 정적 import 금지 — `_domainImport`/템플릿 동적 import만 허용 ② platform 파일의 `import('./exams/<id>…')` 리터럴 동적 import 금지 — `${}` 템플릿만 허용 ③ `src/exams/<a>/` 모듈의 `src/exams/<b>/` 직접 import 금지 — 시험 간 격리
-- **신규 실무 피처 추가 체크리스트** (예: food 시험의 `foodLab`):
+- **신규 실무 피처 추가 체크리스트** (예: cosmetic 시험의 `formula`):
   1. `content/exams.json` — 해당 시험에 `features.<키>` 선언 (check:featflags가 미선언 키 사용을 차단)
   2. `src/practice-registry.js` — 엔트리 추가 (viewId·slug·title·`markup` 파일명·`loaders`의 `_domainImport('<rel>')`·`handlers`·`enter`·필요 시 `priority`) — **엔트리에는 시험 무관 상대 경로(`views/<피처>.js`·`<피처>.html`)만 선언**, 시험 id는 규약이 주입
   3. `html/exams/<시험id>/<피처>.html` — 자체 `<section id>`를 포함하는 자기완결 파셜 + `index.template.html`에 `<section id data-lazy-view="<피처>.html">` 스텁 + nav 버튼(`data-feature="<키>"`) → `build:html` 재생성 (스텁의 `data-lazy-view` 값은 파일명만 — `html/exams/<활성시험>/` 접두는 런타임 해석)

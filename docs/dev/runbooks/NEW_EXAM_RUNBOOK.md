@@ -10,7 +10,7 @@
 
 새 시험 추가는 **앱 코드 변경 없이 콘텐츠 선언만으로** 완료된다. 절차는 4단계:
 
-> 📐 **참조 템플릿**: `content/exams/food/`는 완성 시험이 아니라 최소 구성을 실증한 **템플릿 팩**(Phase C 파일럿)이다 — 스키마·파일 배치·선언 형식의 복사 기준 (`content/exams/food/README.md` 참조).
+> 📐 **참조 팩**: `content/exams/lossadj/`는 다과목 실사용 팩(1차 3과목 + 2차 주관식 2과목) — 스키마·파일 배치·선언 형식의 참조 기준이다 (최소 구성 Phase C 파일럿 `food`는 2026-10 제거 — MULTI_EXAM_DB_DESIGN §9에 이력).
 
 ```mermaid
 flowchart TD
@@ -41,7 +41,7 @@ flowchart TD
 npm.cmd run scaffold:exam -- <id> --name "시험명" [--short-name X] [--year YYYY]
 ```
 
-- `<id>`: 영문 소문자 식별자 (예: `food`) — URL·디렉터리·스토리지 네임스페이스에 사용
+- `<id>`: 영문 소문자 식별자 (예: `lossadj`) — URL·디렉터리·스토리지 네임스페이스에 사용
 - `--dry-run`: 생성 없이 미리보기 · `--force`: 기존 골격 덮어쓰기 · `<id> --remove`: 골격 전체 제거
 
 생성물:
@@ -70,7 +70,7 @@ content/exams/<id>/
   - **문서 헤더**: `docs/*.md` 파일 상단에 `> **문서 ID**: DOC-XX-NN` + `> **범위**: exam:<id> · 판본: …` 헤더가 필수 (`check:docs` 강제 — 발번은 `docs/README.md` ID 레지스트리)
 - `교재/`·`문제은행/` — 샘플 파일을 실제 MD로 교체. 작성 규약·참조자료 도출 방법론은 `TEXTBOOK_AUTHORING_GUIDE.md`가 정본 (§6 참조자료 기반 도출 — `scaffold:chapter`로 챕터 골격 생성 가능)
 - `references.json` — 참조자료 메타데이터 SSOT (`pdf-registry.js`는 여기서 빌드 생성). 파일 내 `*Comment` 필드가 필드별 규약을 자기문서화한다. 필드 그룹:
-  - **문서 레지스트리**: `referenceLaw`·`referenceFiles`·`referenceCommon`·`referenceIngredients`는 `{name,file,type,dir}` 엔트리 — `참조자료/<dir>/`의 물리 파일과 정합. `refDirs`는 디렉터리→파일 목록 선언 (PDF 미확보 시 ref_md 발췌본만 두고 comment 명기 — food 선례)
+  - **문서 레지스트리**: `referenceLaw`·`referenceFiles`·`referenceCommon`·`referenceIngredients`는 `{name,file,type,dir}` 엔트리 — `참조자료/<dir>/`의 물리 파일과 정합. `refDirs`는 디렉터리→파일 목록 선언 (PDF 미확보 시 ref_md 발췌본만 두고 comment 명기 — lossadj 선례)
   - **과목 귀속**: `subjectDirMap`(과목키→과목N)·`docSubjectRules`(ref_md 디렉터리명→과목 귀속 정규식 `[패턴, 과목번호, 사유]`, 첫 매칭 우선)·`multiSubjectDocs`(다과목 공동 인용 문서)·`subjectDefaultRefdoc`(과목별 기본 문서명)
   - **출처 매핑**: `sourceRefMap`·`keywordRefMap` — 본문 출처 표기·키워드를 refdoc PDF로 연결하는 정규식 규칙
   - **법령·고시 연동**: `lawRefs`(`content/lawdb.json`의 법령 id 목록 — 나열 순서가 매칭 우선순위)·`noticeCore`(고시 감시 기준 문서명)·`noticeIngredientDocs`(성분사전 '고시 확인' 대상 고시 subset — dictionary 시험용)
@@ -78,7 +78,7 @@ content/exams/<id>/
 
 ### 시험 팩 파일 3분류
 
-cosmetic의 모든 파일을 복사할 필요는 없다 — food가 최소 구성 실증이다:
+cosmetic의 모든 파일을 복사할 필요는 없다 — 필요한 분류의 파일만 배치하면 된다:
 
 | 분류 | 파일 | 처리 |
 |---|---|---|
@@ -90,7 +90,7 @@ cosmetic의 모든 파일을 복사할 필요는 없다 — food가 최소 구�
 
 ### 기능 플래그 (`exams.json` 엔트리의 `features`)
 
-켜둔 플래그만 UI에 노출된다 (`data-feature` 게이팅). **유효 키는 코드 실측 기준** — `check:featflags`가 미선언 키 사용(죽은 경로)과 선언만 되고 미사용 키를 양방향 검증하므로, cosmetic 엔트리(`content/exams.json`)와 `hasFeature`/`data-feature` 사용처 grep이 키 목록의 실질 소스다. 미완성 시험은 `comingSoon: true`를 추가해 선택 UI 노출을 막는다 (food 선례).
+켜둔 플래그만 UI에 노출된다 (`data-feature` 게이팅). **유효 키는 코드 실측 기준** — `check:featflags`가 미선언 키 사용(죽은 경로)과 선언만 되고 미사용 키를 양방향 검증하므로, cosmetic 엔트리(`content/exams.json`)와 `hasFeature`/`data-feature` 사용처 grep이 키 목록의 실질 소스다. 미완성 시험은 `comingSoon: true`를 추가해 선택 UI 노출을 막는다 (lossadj 선례).
 
 **플래그 ↔ 필수 문서 불변식**이 강제된다 — 플래그를 켰는데 `docs/`에 문서가 없으면 `check:docbundles --check`가 실패한다 (불변식 SSOT: `docs/dev/ARCHITECTURE.md` "시험별 문서 규약" 절):
 
