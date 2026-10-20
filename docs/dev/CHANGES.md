@@ -7,6 +7,10 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 lossadj 2차 교재 dir 명명 정리 — second → secondAssessment
+
+- 과목5 `secondAssessment`의 `subjects[].dir`을 `교재/second` → `교재/secondAssessment`로 통일 (과목4 `secondTheory`와 key=dir 대칭) — 폴더 rename + manifest·sw.js MD_ASSETS 갱신 + 번들 재생성
+
 ## 2026-10-21 ref-pipeline pdf2md — -o 미지정 시 입력 폴더 출력
 
 - **pdf2md.py**: -o 미지정 시 문서별 출력 루트를 입력 PDF의 폴더로 변경 (기존 <pdf-root>/ref_md_v2). 중첩 {dir}/{name}/{name}.md · --flat {dir}/{name}.md 규약 유지 — plan_doc_jobs(out_dir=None)이 job별 root를 dirname(pdf)로 해석
