@@ -54,31 +54,6 @@
       }
     },
     {
-      "id": "food",
-      "name": "식품기사",
-      "shortName": "식품기사",
-      "appName": "식품기사",
-      "title": "식품기사",
-      "logoMain": "식품",
-      "logoSub": "기사",
-      "desc": "식품위생학(법령 암기형) Phase C 파일럿 — 식품위생법·식품공전·표시기준 인용 체인 검증",
-      "icon": "fa-solid fa-bowl-food",
-      "year": "2027",
-      "theme": {
-        "--color-primary": "#f97316",
-        "--color-secondary": "#84cc16"
-      },
-      "comingSoon": true,
-      "contentRoot": "content/exams/food",
-      "dataRoot": "data/exams/food",
-      "manifestPath": "content/exams/food/manifest.json",
-      "registryBundle": "data/exams/food/registry.js",
-      "registryGlobal": "DATA_REGISTRY_FOOD",
-      "features": {
-        "dictionary": true
-      }
-    },
-    {
       "id": "lossadj",
       "name": "손해평가사",
       "shortName": "손해평가사",

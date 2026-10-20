@@ -155,7 +155,7 @@ const _EXAM_LAW_URLS = {
 
 > **Phase A 구현 변형 (2026-09-30)**: 스키마는 `manifest.knowledge` 블록으로 선언되고 `registry.knowledge`로 패스스루된다 — 별도 `schema.json` 대신 기존 manifest→registry 계약을 재사용했다. `dictionary.js`가 이 스키마(엔티티 단위·필드 매핑·배지·필터·CSV·헤더·액션 버튼)로 렌더링하며, 스키마 부재 시 화장품 원료와 동일한 내장 기본값으로 폴백한다.
 >
-> **Phase D 구현 변형 (2026-09-30)**: `knowledge/` 디렉터리의 JSON 데이터셋은 `tools/build/plugins/knowledge.plugin.js`가 처리한다 — `knowledge/<key>.json`(예: `content/exams/food/knowledge/additives.json`) → `{dataRoot}/<key>_data.<hash>.js` + `window.<KEY>_DATA` 전역, `registry[key]`에 `bundle`/`global`/`version`/`updatedAt`/`stats` 메타를 기록(기존 `ingredients` 메타와 동일 계약). 스키마는 `schema.json` 대신 `manifest.knowledge`에 필드·배지·필터·CSV·검색선언을 직접 둔다. `DataLoader.loadDictionary()`가 `registry.knowledge.registryKey`로 온디맨드 로드하며, `ingredients` 키는 기존 `loadIngredients()` 경로로 폴백한다. 데이터셋은 `knowledge/<key>.json`(`{meta, items, bundleFields?, emitMd?}`) — cosmetic의 `ingredients`도 `knowledge/ingredients.json`을 SSOT로 삼아 같은 경로로 빌드되며, `emitMd` 선언 시 참조자료 `원료/*.md`의 GENERATED-TABLE 표를 JSON에서 재생성한다(서술은 MD에 저작 유지, 데이터 행은 JSON이 SSOT — `db_version.json`은 `meta`에 흡수되어 폐기). `source.validate:"ingredients"` 시 기존 원료 스키마 검증을 적용한다. 아래 `schema.json` + `build_knowledge_bundles.js` 분리 구조는 다중 세트 UI(§5.2)가 필요해질 때 재검토 대상으로 유지한다.
+> **Phase D 구현 변형 (2026-09-30)**: `knowledge/` 디렉터리의 JSON 데이터셋은 `tools/build/plugins/knowledge.plugin.js`가 처리한다 — `knowledge/<key>.json`(예: `content/exams/cosmetic/knowledge/ingredients.json`) → `{dataRoot}/<key>_data.<hash>.js` + `window.<KEY>_DATA` 전역, `registry[key]`에 `bundle`/`global`/`version`/`updatedAt`/`stats` 메타를 기록(기존 `ingredients` 메타와 동일 계약). 스키마는 `schema.json` 대신 `manifest.knowledge`에 필드·배지·필터·CSV·검색선언을 직접 둔다. `DataLoader.loadDictionary()`가 `registry.knowledge.registryKey`로 온디맨드 로드하며, `ingredients` 키는 기존 `loadIngredients()` 경로로 폴백한다. 데이터셋은 `knowledge/<key>.json`(`{meta, items, bundleFields?, emitMd?}`) — cosmetic의 `ingredients`도 `knowledge/ingredients.json`을 SSOT로 삼아 같은 경로로 빌드되며, `emitMd` 선언 시 참조자료 `원료/*.md`의 GENERATED-TABLE 표를 JSON에서 재생성한다(서술은 MD에 저작 유지, 데이터 행은 JSON이 SSOT — `db_version.json`은 `meta`에 흡수되어 폐기). `source.validate:"ingredients"` 시 기존 원료 스키마 검증을 적용한다. 아래 `schema.json` + `build_knowledge_bundles.js` 분리 구조는 다중 세트 UI(§5.2)가 필요해질 때 재검토 대상으로 유지한다.
 
 성분사전의 일반화. 원본은 시험 콘텐츠와 함께 버전 관리되는 MD/JSON, 산출물은 클래식 번들:
 
@@ -331,12 +331,12 @@ const _EXAM_LAW_URLS = {
 - E2E `exam-switch.spec.js`에 규약 경로 검증 추가 — cosmetic 부팅 시 `/html/exams/cosmetic/formula.html` 요청 발생 + 네비 클릭으로 실제 뷰 주입(온보딩 오버레이는 `onboarding_seen_v1` 시드로 우회)
 - **네트워크 격리 결함 수정 (E2E 신규 단언이 발견)**: food 부팅이 `data/exams/cosmetic/{registry,id_migration}.js`·`css/exams/cosmetic/formula.css`를 요청하던 결합 해소 — ① 셸의 `__EXAM_DATA_ROOT__` 정적 태그를 `src/exam-data-boot.js`(클래식 부트가 활성 시험 dataRoot를 파싱 중 동기 삽입)로 대체 ② 도메인 CSS를 `styles` 필드 + `<link>` 지연 주입으로 전환(style.css @import 제거). food 부팅 시 `exams/cosmetic/` 요청 0건을 E2E가 단언
 
-### Phase C 파일럿 결과 (food, 2026-09-30)
+### Phase C 파일럿 결과 (food, 2026-09-30) — 팩 자체는 2026-10 제거, 이력으로 유지
 
 - **스코프**: 식품기사 필기의 1과목(식품위생학) 축소본 — 교재 1챕터 + 문항 8제 + ref_md 발췌본 3종(식품위생법 제21065호 / 식품공전 제2026-55호 / 표시기준 제2026-37호). `manifest._pilot` 주석으로 부분 콘텐츠임을 명시.
 - **검증된 체인**: lawdb 5종 추가 → `law-links.js`의 `_EXAM_LAW_URLS.food` 생성 · `check:lawurls` 실검증 15종 통과 · `pdf-registry`/`keyword-index` 시험별 테이블 생성 · 인용 동기화(8개 링크, 미발견 0) · `check_mfds_notice.py`가 `EXAM_ID=food`로 감시 대상 3종(law/admrul target 구분 + baseline 제호·시행일)을 references.json에서 자동 유도.
 - **파일럿에서 발견·수정된 버그**: ① `build_pdf_registry.js`의 `docSubject()` 호출이 `contentRoot`를 전달하지 않아 비기본 시험의 `REF_MD_SUBJECTS`가 기본 시험 규칙으로 계산되던 문제 수정 ② 스캐폴드 `references.json`의 결손 키는 빈 값으로 관대 처리, `lawRefs: []`는 "법령 없음"으로 구분.
-- **Phase D 연결 (2026-09-30)**: `knowledge/additives.json`(식품첨가물 12종) + `manifest.knowledge` 스키마 + `features.dictionary` 활성화 → `data/exams/food/additives_data.<hash>.js` + `ADDITIVES_DATA` 전역. `tests/dom/dictionary-schema.dom.test.js`가 비-cosmetic 스키마(배지·필터·상세·CSV·빈 상태·토스트 문구)를 검증한다. 첨가물공전(lawdb `food-additives-std`) → `lawRef` 필드로 법령DB↔지식DB 연결점도 검증됨.
+- **Phase D 연결 (2026-09-30)**: `knowledge/additives.json`(식품첨가물 12종) + `manifest.knowledge` 스키마 + `features.dictionary` 활성화 → `{dataRoot}/additives_data.<hash>.js` + `ADDITIVES_DATA` 전역. `tests/dom/dictionary-schema.dom.test.js`가 비-cosmetic 스키마(배지·필터·상세·CSV·빈 상태·토스트 문구)를 검증한다. 첨가물공전(lawdb `food-additives-std`) → `lawRef` 필드로 법령DB↔지식DB 연결점도 검증됨.
 - **남은 파일럿 갭**: 물리 PDF 미확보(ref_md 수기 발췌로 대체 — PDF 확보 시 ref-pipeline 변환 절차로 전환), `notice_status.json`은 첫 `--update` 실행 시 생성(현재 시드 없음 — 앱은 미존재 파일을 정상 처리), 문제은행 챕터 매핑 4건 미해석(단일 챕터 구조상 무해).
 
 ---

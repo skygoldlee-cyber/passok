@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 food 시험 팩 제거 — 다중시험 구축용 샘플 역할 종료
+
+- **배경**: food는 멀티시험 아키텍처 검증용 Phase C 파일럿(`comingSoon: true`)으로, 실사용 시험 lossadj 추가로 샘플 역할 종료
+- **삭제**: `content/exams/food/`(교재·문제은행·ref_md·knowledge/additives.json·피드백) · `data/exams/food/` 생성 번들 · `manifest.food.webmanifest` · `tools/build/.last-stats.food.json`
+- **레지스트리**: exams.json food 엔트리 제거(시험 2개: cosmetic·lossadj), `src/pdf-registry.js`·`src/law-links.js` food 블록 제거, sw.js DATA_ASSETS·MD_ASSETS food 행 제거, `tools/config/citation_fingerprints.json` 16건·`tools/check/glossary_signal_baseline.json` food| 4항 제거, `src/keyword-index.js`·`data/exams.js`·`tools/check/test_stats.json` 재생성
+- **테스트 리타겟**: `tests/e2e/exam-switch.spec.js` food→lossadj(브랜딩·게이팅·네트워크 격리·selectExam 실경로 — lossadj는 dictionary 미보유로 게이팅 단정 조정), `tests/unit/ai-textbook.test.js` 실데이터 접근 3건→lossadj(상법 ref_doc·dry-run·findRefDocs)
+- **유지**: DOM·유닛 테스트의 food 목업 픽스처는 실데이터 비의존 일반 픽스처라 유지 (exam-context·exam-switching·common-uimode·exam-index-scope·dictionary-schema·practice-registry·pwa-sw·scaffold-chapter·check-glossary-signal)
+
 ## 2026-10-21 lossadj 2차 교재 dir 명명 정리 — second → secondAssessment
 
 - 과목5 `secondAssessment`의 `subjects[].dir`을 `교재/second` → `교재/secondAssessment`로 통일 (과목4 `secondTheory`와 key=dir 대칭) — 폴더 rename + manifest·sw.js MD_ASSETS 갱신 + 번들 재생성
