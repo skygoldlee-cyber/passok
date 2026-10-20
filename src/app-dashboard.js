@@ -2,7 +2,7 @@
 // @spec D-02,D-04,D-05,D-06,ES-01
 import { esc } from "./sanitize.js";
 import { DataLoader } from "./data-loader.js";
-import { contentPath } from "./exam-context.js";
+import { contentPath, hasFeature } from "./exam-context.js";
 import { refreshProBadges } from "./pro-upgrade.js";
 import { state, getSimResultsHistory, safeGetItem } from "./state.js";
 import { STORAGE_KEYS } from "./storage-keys.js";
@@ -177,6 +177,25 @@ ${allBtnsHtml}
 
         container.insertAdjacentHTML('beforeend', cardHtml);
     });
+
+    // 주관식 연습 카드 — manifest.written[] 선언 + writtenPractice 기능 플래그 (WP-01~06)
+    if (hasFeature('writtenPractice')) {
+        (registry.written || []).forEach(w => {
+            const count = (w.stats && w.stats.questions) || 0;
+            const cardHtml = `                        <div class="exam-card-item">
+                            <div class="exam-card-badge badge-indigo">주관식</div>
+                            <h4 class="exam-card-title">${esc(w.title)}</h4>
+                            <p class="exam-card-desc">${esc(w.desc || '서술·계산형 문항 — 모범답안·채점기준 대조 자기채점')}</p>
+                            <div class="exam-card-btns grid-btns-2">
+                                <div class="exam-btn-pair">
+                                    <button class="exam-btn-sim btn-cyan" data-click="WrittenPractice.openWritten" data-arg="${contentPath(`문제은행/${w.file}`)}"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> 연습 시작${count ? ` (${count}제)` : ''}</button>
+                                    <small class="exam-btn-caption">답안 서술 → 모범답안 대조 → 채점기준 체크 자기평가</small>
+                                </div>
+                            </div>
+                        </div>`;
+            container.insertAdjacentHTML('beforeend', cardHtml);
+        });
+    }
 
     // 플랜이 이미 로드됐다면 새로 그린 배지에도 무료/Pro 표시 반영
     refreshProBadges(container);

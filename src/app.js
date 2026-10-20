@@ -6,6 +6,7 @@ import { shuffle } from './utils.js';
 import { clearScratchpad, toggleCalcScratchpad, toggleScratchpadEraser } from './scratchpad.js';
 import { DataLoader } from './data-loader.js';
 import { ExamViewer } from './exam-viewer.js';
+import { WrittenPractice } from './written-practice.js';
 import { ManualViewer } from './manual-viewer.js';
 import { initWebVitals } from './web-vitals.js';
 import { STORAGE_KEYS } from './storage-keys.js';
@@ -534,7 +535,7 @@ function printReviewNotes() {
 // 모든 data-click/data-input 참조와 이 맵의 교차 일치를 강제 검증한다.
 const DELEGATED_HANDLERS = {
     // 뷰어/로더 객체
-    ManualViewer, ExamViewer, DataLoader,
+    ManualViewer, ExamViewer, WrittenPractice, DataLoader,
     // 스크래치패드
     clearScratchpad, toggleCalcScratchpad, toggleScratchpadEraser,
     // 교재 검색/리더/오디오
