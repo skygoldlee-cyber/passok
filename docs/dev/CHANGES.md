@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 cosmetic 과목별 핵심요지 4건 ref_md 편입 + selfAuthoredDocs 선언
+
+- **콘텐츠**: 식약처 교수학습가이드(개정4판)를 seed로 과목별 자체 재작성 요지 추가 — 과목1 화장품법의 이해 / 과목2 제조·품질관리 / 과목3 유통 안전관리 / 과목4 맞춤형의 이해. 사실·수치·기준만 자체 문장으로 재구성(원문 미수록)
+- **references.json**: `selfAuthoredDocs` 키 신설 — 출처 PDF 없이 자체 작성된 ref_md 문서 선언(4건) + `docSubjectRules` 맨 앞에 핵심요지 귀속 4규칙(과목1~4) 삽입
+- **check_reflayout**: `selfAuthoredDocs` 등록 문서는 ③-3 '출처 PDF 없는 ref_md' 고아 감지 면제 — 폴더 과목↔docSubject 규칙 정합은 그대로 검사
+- 검증: check:reflayout 50건 통과 · check:content 신선도 1건 외 통과(커밋 후 해소)
+
 ## 2026-10-21 food 시험 팩 제거 — 다중시험 구축용 샘플 역할 종료
 
 - **배경**: food는 멀티시험 아키텍처 검증용 Phase C 파일럿(`comingSoon: true`)으로, 실사용 시험 lossadj 추가로 샘플 역할 종료

@@ -10,7 +10,7 @@
  * 검증 규칙 (시험별 독립 적용):
  *   - refDirs에 등록된 PDF → ref_md/과목N/{base}/{base}.md 존재 + N == docSubject(base)
  *   - 물리 PDF → refDirs에 등장 (미등록 PDF 차단, _archive 제외)
- *   - ref_md/과목N/{doc} → 출처 PDF 존재(고아 감지) + 폴더 과목 == docSubject(doc)
+ *   - ref_md/과목N/{doc} → 출처 PDF 존재(고아 감지, references.json selfAuthoredDocs 선언 문서는 면제) + 폴더 과목 == docSubject(doc)
  *   - _archive PDF → ref_md 요구 없음 / _구 ref_md는 허용(교재 참조용, 생성 제외)
  *   - referenceFiles·Common·Law의 file → 참조자료/{dir}/{file} 실존
  *   - {contentRoot}/** 의 ref_md/ 링크 → 실제 파일 해석
@@ -128,9 +128,14 @@ function checkExam(t) {
     }
 
     // ③-3 ref_md → 출처 PDF (고아 감지) + 폴더 과목 정합
+    const selfAuthored = new Set(refs.selfAuthoredDocs || []); // 출처 PDF 없는 자체 작성 문서
     for (const [doc, info2] of Object.entries(refMdDocs)) {
       const src = physicalPdfs[doc];
-      if (!src) { err(`${tag} 출처 PDF 없는 ref_md: 과목${info2.subject}/${doc}`); continue; }
+      if (!src) {
+        if (!selfAuthored.has(doc)) err(`${tag} 출처 PDF 없는 ref_md: 과목${info2.subject}/${doc}`);
+        else { const rs2 = docSubject(doc, CONTENT); if (rs2 && info2.subject !== rs2) err(`${tag} ref_md 폴더 과목 불일치: ${doc} — 폴더=과목${info2.subject}, 규칙=과목${rs2}`); }
+        continue;
+      }
       if (/_구$/.test(doc)) {
         if (src !== '_archive') warn(`${tag} _구 문서 PDF가 _archive 밖에 있음: ${src}/${doc}.pdf`);
         continue;
