@@ -102,7 +102,12 @@ function main() {
     console.log('생성물 신선도 검증 — 빌드 체인 실행 후 git diff 비교\n');
 
     // 1) 사전 조건: 생성물 범위 clean (dirty면 빌드가 덮어써 사용자 변경이 유실됨)
-    const preDirty = [...changedTracked(), ...untracked()].filter(inScope);
+    // 단, 타임스탬프·스탬프 라인만의 차이는 덮어써도 유실이 없으므로 허용한다
+    // (CI처럼 직전에 빌드 체인을 돌린 환경에서 generatedAt 갱신분이 걸리는 문제 방지)
+    const preDirty = [
+        ...changedTracked().filter(inScope).filter((f) => !isNoiseOnlyDiff(f)),
+        ...untracked().filter(inScope),
+    ];
     if (preDirty.length) {
         console.error('❌ 생성물 경로에 미커밋 변경이 있습니다 — 빌드가 덮어쓰므로 커밋·스태시 후 재실행하세요:');
         for (const p of preDirty.slice(0, 15)) console.error(`   - ${p}`);
