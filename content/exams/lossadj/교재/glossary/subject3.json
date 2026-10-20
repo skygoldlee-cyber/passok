@@ -1,0 +1,37 @@
+[
+  {
+    "keyword": "재배학",
+    "definition": "식량·특용·사료·기호 작물의 재배 이론과 기술을 다루는 농학 분야로, 작물의 생육, 환경, 재배양식, 재배관리를 연구 대상으로 한다.",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "원예작물학",
+    "definition": "과수·채소·화훼·관상식물 등 원예작물의 재배·육종·이용을 다루는 농학 분야로, 식량작물 재배학과 구분된다.",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "단일성 작물",
+    "definition": "12시간 이하의 단일 조건에서 개화가 촉진되는 작물로 벼, 콩, 고구마, 국화 등이 해당한다.",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "장일성 작물",
+    "definition": "14시간 이상의 장일 조건에서 개화가 촉진되는 작물로 보리, 밀, 유채 등이 해당한다.",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "연작장해",
+    "definition": "같은 작물을 연속 재배할 때 나타나는 생육 장해로, 윤작·객토·유기물 시용으로 방지한다.",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "접목번식",
+    "definition": "대목과 수종(穂木)을 접목해 품종을 유지하는 영양번식으로, 실생번식에서는 변이가 발생한다.",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "가화불임성",
+    "definition": "자가화분으로는 결실이 어려운 품종 특성으로, 배·복숭아 등은 수분수 배치나 인공수분이 필요하다.",
+    "autoExtracted": false
+  }
+]

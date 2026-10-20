@@ -19,6 +19,16 @@
           "quizzes": 3
         }
       }
+    },
+    "agronomy": {
+      "cards": 8,
+      "quizzes": 0,
+      "files": {
+        "교재/agronomy/3과목_농학개론.md": {
+          "cards": 8,
+          "quizzes": 0
+        }
+      }
     }
   },
   "exams": {
@@ -26,6 +36,9 @@
       "questions": 8
     },
     "subject2": {
+      "questions": 8
+    },
+    "subject3": {
       "questions": 8
     }
   }
