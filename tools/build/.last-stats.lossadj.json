@@ -41,11 +41,11 @@
       }
     },
     "secondAssessment": {
-      "cards": 15,
+      "cards": 22,
       "quizzes": 2,
       "files": {
         "교재/second/2차_손해평가의이론과실무.md": {
-          "cards": 15,
+          "cards": 22,
           "quizzes": 2
         }
       }
