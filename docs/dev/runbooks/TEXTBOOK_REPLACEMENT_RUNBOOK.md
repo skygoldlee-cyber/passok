@@ -36,7 +36,7 @@ npm.cmd run check:all:quick   # 시작 전 저장소가 건강한지 1회 확인
 ```powershell
 # cosmetic이 기본값. 다른 시험은 contentRoot를 명시
 $env:EXAM_CONTENT_ROOT = "content/exams/cosmetic"
-# food 파일럿이면: $env:EXAM_CONTENT_ROOT = "content/exams/food"
+# lossadj면: $env:EXAM_CONTENT_ROOT = "content/exams/lossadj"
 ```
 
 ### 용어 사전 — 이 문서에서만 쓰는 말

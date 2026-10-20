@@ -89,8 +89,8 @@ test('buildPrompt: 라인 번호 부여 원문 + 작성 지시', () => {
 });
 
 test('assembleDraftLines: 편입용 출처 블록이 CS-11 형식으로 첨부', () => {
-    const target = { id: 'food', contentRoot: 'content/exams/food' };
-    const doc = { docName: '식품위생법(법률)(제21065호)(20251001)', mdRel: '참조자료/ref_md/과목1/식품위생법(법률)(제21065호)(20251001)/식품위생법(법률)(제21065호)(20251001).md' };
+    const target = { id: 'lossadj', contentRoot: 'content/exams/lossadj' };
+    const doc = { docName: '상법(법률)(제21044호)(20260910)', mdRel: '참조자료/ref_md/과목1/상법(법률)(제21044호)(20260910)/상법(법률)(제21044호)(20260910).md' };
     const lines = assembleDraftLines({
         target, doc,
         chunks: [{ heading: '제1조', startLine: 1, endLine: 5 }],
@@ -100,7 +100,7 @@ test('assembleDraftLines: 편입용 출처 블록이 CS-11 형식으로 첨부',
     assert.ok(text.includes('## 편입용 블록'), '편입용 블록 존재');
     assert.ok(text.includes('📌 **출처**'));
     assert.ok(text.includes('**원문 보기**'));
-    assert.ok(text.includes('../참조자료/ref_md/과목1/식품위생법%28법률%29'), '인코딩 링크 규약');
+    assert.ok(text.includes('../참조자료/ref_md/과목1/상법%28법률%29'), '인코딩 링크 규약');
     assert.ok(text.includes('content/ 편입') || text.includes('슬롯'), '리뷰 경유 안내');
 });
 
@@ -113,14 +113,14 @@ function runTool(args = []) {
     });
 }
 
-test('AI-24/AI-02: 무키 dry-run으로 food 참조자료 초안 골격을 생성한다', () => {
-    const out = runTool(['--exam', 'food', '--doc', '식품위생법', '--dry-run']);
+test('AI-24/AI-02: 무키 dry-run으로 lossadj 참조자료 초안 골격을 생성한다', () => {
+    const out = runTool(['--exam', 'lossadj', '--doc', '상법', '--dry-run']);
     assert.match(out, /청크 \d+개 → tmp[/\\]ai_drafts[/\\]textbook_/, '초안 산출 출력');
 });
 
 test('AI-24: 미존재 문서는 사용 가능 목록과 함께 실패한다', () => {
     try {
-        runTool(['--exam', 'food', '--doc', '없는문서XYZ']);
+        runTool(['--exam', 'lossadj', '--doc', '없는문서XYZ']);
         assert.fail('실패해야 함');
     } catch (e) {
         assert.match(String(e.stderr || e.message), /ref 문서 없음|사용 가능/);
@@ -129,9 +129,9 @@ test('AI-24: 미존재 문서는 사용 가능 목록과 함께 실패한다', (
 
 test('findRefDocs: 실제 저장소의 ref 문서 해석', () => {
     const { getExamTargets } = require('../../tools/build/exam_targets.js');
-    const food = getExamTargets(ROOT).find(t => t.id === 'food');
-    const docs = findRefDocs(food);
-    assert.ok(docs.length >= 1, 'food ref 문서 존재');
+    const lossadj = getExamTargets(ROOT).find(t => t.id === 'lossadj');
+    const docs = findRefDocs(lossadj);
+    assert.ok(docs.length >= 1, 'lossadj ref 문서 존재');
     assert.ok(docs.every(d => /^과목\d+$/.test(d.subjectDir)));
     assert.ok(docs.every(d => d.mdRel.startsWith('참조자료/ref_md/')));
 });
