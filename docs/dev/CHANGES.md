@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 lossadj 2차 과목 번호 재배정 — 과목4↔과목5 스왑
+
+- **재배정**: 2차 시험 과목 순서에 정렬 — `secondTheory`(2차 과목1, 이론과실무)→order 4, `secondAssessment`(2차 과목2, 손해평가)→order 5
+- **ref_md 스왑**: `과목4`↔`과목5` 폴더 내 문서 이동 (이론과실무 요지→과목4, 손해평가 요지→과목5)
+- **연쇄 갱신**: manifest order, references.json(`subjectDefaultRefdoc`·`subjectDirMap`·`docSubjectRules`·`referenceLaw`), glossary subject4↔5 스왑, 교재 2종 + `2차_주관식_연습.md` 인용 경로 (손해평가 6+2건→과목5, 이론 4건→과목4)
+
 ## 2026-10-21 lossadj 2차 과목1 교재 생성 — secondTheory 과목 신설
 
 - **2차 과목1 교재**: `교재/secondTheory/2차_이론과실무.md` — 이론서 1권 기반 자체 핵심요지(§1~§12: 보험 원리·농업경영위험 5종·재해보험 특징·도입 경과·국가재보험·상품 체계·76개 품목 가입자격·16축종·특약 22개·협정보험가액) 시드 → `ai:textbook` 초안 → 4챕터 교재 편입

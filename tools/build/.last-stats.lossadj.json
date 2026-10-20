@@ -30,16 +30,6 @@
         }
       }
     },
-    "secondAssessment": {
-      "cards": 15,
-      "quizzes": 2,
-      "files": {
-        "교재/second/2차_손해평가의이론과실무.md": {
-          "cards": 15,
-          "quizzes": 2
-        }
-      }
-    },
     "secondTheory": {
       "cards": 10,
       "quizzes": 0,
@@ -47,6 +37,16 @@
         "교재/secondTheory/2차_이론과실무.md": {
           "cards": 10,
           "quizzes": 0
+        }
+      }
+    },
+    "secondAssessment": {
+      "cards": 15,
+      "quizzes": 2,
+      "files": {
+        "교재/second/2차_손해평가의이론과실무.md": {
+          "cards": 15,
+          "quizzes": 2
         }
       }
     }
