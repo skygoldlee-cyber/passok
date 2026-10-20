@@ -48,22 +48,8 @@
       ]
     },
     {
-      "key": "secondAssessment",
-      "order": 4,
-      "name": "2차 과목2: 손해평가의 이론과 실무",
-      "shortName": "2차손해평가",
-      "dir": "교재/second",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "농작물·가축재해보험 손해평가의 이론과 실무",
-          "file": "2차_손해평가의이론과실무.md"
-        }
-      ]
-    },
-    {
       "key": "secondTheory",
-      "order": 5,
+      "order": 4,
       "name": "2차 과목1: 이론과 실무",
       "shortName": "2차이론",
       "dir": "교재/secondTheory",
@@ -72,6 +58,20 @@
           "key": "full",
           "title": "농작물·가축재해보험의 이론과 실무",
           "file": "2차_이론과실무.md"
+        }
+      ]
+    },
+    {
+      "key": "secondAssessment",
+      "order": 5,
+      "name": "2차 과목2: 손해평가의 이론과 실무",
+      "shortName": "2차손해평가",
+      "dir": "교재/second",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "농작물·가축재해보험 손해평가의 이론과 실무",
+          "file": "2차_손해평가의이론과실무.md"
         }
       ]
     }
