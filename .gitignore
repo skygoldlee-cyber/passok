@@ -118,3 +118,16 @@ reports/
 
 # 사용자 학습 데이터 백업 (--stats 입력용, 로컬 전용)
 *_backup_*.json
+
+# ---------- 📦 data/exams 생성 번들 (빌드 재생성 — 커밋 제외로 .git 팽창 방지) ----------
+# build:data·build:drills·build_doc_bundles가 재생성하는 시험별 번들 디렉터리.
+# 시험 루트의 소형 파일(registry·notice_diff·question_chapters 등)과
+# embeddings/(CI Python 비의존 유지 목적)는 계속 추적한다.
+data/docs_md/
+data/exams/*/docs_md/
+data/exams/*/drills/
+data/exams/*/exams/
+data/exams/*/exams_md/
+data/exams/*/study_md/
+data/exams/*/subjects/
+data/exams/*/supplements/

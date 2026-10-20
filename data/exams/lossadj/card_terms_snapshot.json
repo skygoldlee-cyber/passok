@@ -1,0 +1,92 @@
+{
+ "insurance": {
+  "cards": {
+   "insurance_card_c39b5e": "보험계약",
+   "insurance_card_1e8aa6": "낙부 통지",
+   "insurance_card_399f4b": "고지의무",
+   "insurance_card_4919ca": "보험대위",
+   "insurance_card_4e3be8": "일부보험"
+  },
+  "quizzes": {}
+ },
+ "disaster": {
+  "cards": {
+   "disaster_card_d0e053": "제30조제1항",
+   "disaster_card_8bb36c": "제30조제2항",
+   "disaster_card_a753b9": "제30조제3항",
+   "disaster_card_bc7a6f": "제32조"
+  },
+  "quizzes": {
+   "disaster_quiz_d34b4b": "무자격 모집·거짓 손해평가·명의대여 등|제30조제2항",
+   "disaster_quiz_872171": "회계 구분 위반(제15조)|제30조제3항",
+   "disaster_quiz_a6aa50": "보고·서류 미제출·거짓 제출 등|제32조"
+  }
+ },
+ "agronomy": {
+  "cards": {
+   "agronomy_card_feeef3": "재배학",
+   "agronomy_card_a9f0b0": "평년수확량",
+   "agronomy_card_1425fa": "연작장해",
+   "agronomy_card_02f30c": "접목번식",
+   "agronomy_card_13f136": "스마트팜",
+   "agronomy_card_8c3ea5": "수경재배",
+   "agronomy_card_ee0d5d": "조수해",
+   "agronomy_card_84b113": "피해율"
+  },
+  "quizzes": {}
+ },
+ "secondTheory": {
+  "cards": {
+   "secondTheory_card_ef2647": "적과전 종합위험방식Ⅱ",
+   "secondTheory_card_709e99": "착과감소보험금",
+   "secondTheory_card_24292a": "국가재보험",
+   "secondTheory_card_f48841": "농업경영체 등록",
+   "secondTheory_card_0b8861": "기타 가축",
+   "secondTheory_card_c156cc": "보통약관",
+   "secondTheory_card_ed7b26": "특별약관",
+   "secondTheory_card_bc5161": "협정보험가액",
+   "secondTheory_card_01af3f": "유량검정젖소",
+   "secondTheory_card_d9252f": "포괄가입",
+   "secondTheory_card_ea7f74": "요율 상한제",
+   "secondTheory_card_a2d27e": "정부보조보험료",
+   "secondTheory_card_c1abbd": "누적손해율",
+   "secondTheory_card_818e3f": "방재시설 할인 상한",
+   "secondTheory_card_d9a502": "보장개시일",
+   "secondTheory_card_2cd0b5": "판매기간",
+   "secondTheory_card_a0c471": "평년수확량",
+   "secondTheory_card_70c401": "가입수확량",
+   "secondTheory_card_2b4571": "미경과비율표"
+  },
+  "quizzes": {}
+ },
+ "secondAssessment": {
+  "cards": {
+   "secondAssessment_card_c538d9": "손해평가인",
+   "secondAssessment_card_9c918b": "손해평가반",
+   "secondAssessment_card_d6bd0b": "손해평가 단위",
+   "secondAssessment_card_8d8706": "교차손해평가",
+   "secondAssessment_card_d690bb": "피해사실확인조사",
+   "secondAssessment_card_35fef4": "과수 종합위험 수확감소",
+   "secondAssessment_card_cbbfe9": "과수 과실손해",
+   "secondAssessment_card_9a7590": "비가림과수",
+   "secondAssessment_card_86c443": "적과전Ⅱ",
+   "secondAssessment_card_1fbc11": "수확전종합위험",
+   "secondAssessment_card_b5d5e0": "밭 생산비",
+   "secondAssessment_card_6f93c2": "원예시설",
+   "secondAssessment_card_d6c402": "이앙·직파불능 조사",
+   "secondAssessment_card_755140": "재이앙·재직파 조사",
+   "secondAssessment_card_eee0d9": "경작불능조사",
+   "secondAssessment_card_462411": "수확량조사 — 수량요소",
+   "secondAssessment_card_40dad3": "수확량조사 — 표본조사",
+   "secondAssessment_card_e40602": "보험가액",
+   "secondAssessment_card_715037": "미보상감수량",
+   "secondAssessment_card_da2c28": "조사대상나무수",
+   "secondAssessment_card_bd9bf9": "유량검정젖소",
+   "secondAssessment_card_15cfbf": "일부보험"
+  },
+  "quizzes": {
+   "secondAssessment_quiz_acb0ab": "이앙한계일(**7월 31일**) 이후|이앙·직파불능 조사",
+   "secondAssessment_quiz_422a38": "수확 전 14일 전후|수확량조사 — 수량요소"
+  }
+ }
+}

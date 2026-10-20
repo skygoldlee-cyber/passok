@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 .git 이력 재작성 + data/exams 생성물 커밋 제외
+
+- **배경**: `.git` 1GB — 생성물 재커밋 누적(data/ 1.2GB)·삭제된 레거시 경로(exams/ 219MB 등)가 원인
+- **조치 B (이력 재작성)**: git filter-repo로 `data/`·`exams/`·`content/참조자료`·`content/교재`·`content/문제은행`·구 monolith(study_data.js·exam_data.js)·docs 산출 html/pdf·임시 디렉터리를 전 이력에서 제거 → `.git` 1GB→297MB. 커밋 해시 전면 변경 → force-push
+- **조치 C (구조)**: `data/exams/*/` 생성 서브디렉터리 8종(docs_md·drills·exams·exams_md·study_md·subjects·supplements·data/docs_md)을 .gitignore 처리 — 시험 루트 소형 파일(registry·notice_diff·id_migration·question_chapters·card_terms_snapshot·ingredients_data)과 embeddings/는 추적 유지
+- **검증 백업**: `C:/Project/passory-backup.git` (미러) — 재작성 이전 이력 보존
+
 ## 2026-10-21 deploy 스테이징 디렉터리 업로드 전환
 
 - **배경**: `--archive=tgz`가 `.vercelignore` 없이 작업 트리 전체(1.7GB, .tmp_*·audiobook mp3 포함)를 Vercel 서버로 업로드 — 서빙은 차단돼도 비배포 자산이 전송됨
