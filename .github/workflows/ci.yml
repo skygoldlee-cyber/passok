@@ -90,6 +90,10 @@ jobs:
       - name: index.html 조립 신선도
         run: npm run check:html
 
+      # data/exams/*/ 생성 번들은 gitignore 대상 — 클론에 없으므로 콘텐츠 게이트 전에 빌드
+      - name: 생성 번들 빌드 (data/exams — gitignore 대상)
+        run: npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js
+
       - name: Content traceability (교재/문제은행 변경 게이트)
         run: node tools/check/check_content.js --content-only --quick
 

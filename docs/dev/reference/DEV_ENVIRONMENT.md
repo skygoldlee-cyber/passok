@@ -82,7 +82,7 @@ npm.cmd run coverage          # DOM 테스트 + 커버리지 임계값 (lines 60
 npm.cmd run check:content     # 콘텐츠 통합 검증 (대규모 콘텐츠 변경 후)
 ```
 
-CI(`.github/workflows/ci.yml`)가 push/PR마다 `npm ci` → `npm audit`(high+) → `lint`·`check:types`·`check:imports`·`check:docs`·`check_doc_sync`(문서 동기화 게이트)·`check:specrefs`·`check:trace` → `check_content.js --content-only --quick`(교재/문제은행 콘텐츠 추적 게이트: manifest·인용 라인·참조라인·신선도·드릴·ID 이관·카드) → `test`·`coverage`·`coverage:unit`·병합 임계값(`coverage_merge.js --check`)·`verify:assets`·`check:parser` → Playwright 설치 + `test:e2e`를 Node 24로 실행합니다. PR에는 영향 요구사항 리포트(`tools/check/impact_tests.js --ref origin/main`)가 추가됩니다.
+CI(`.github/workflows/ci.yml`)가 push/PR마다 `npm ci` → `npm audit`(high+) → `lint`·`check:types`·`check:imports`·`check:docs`·`check_doc_sync`(문서 동기화 게이트)·`check:specrefs`·`check:trace` → **생성 번들 빌드**(`build:data`+`build:drills`+`build_doc_bundles.js` — `data/exams/*/` 생성 서브디렉터리는 .gitignore 대상이라 클론에 없음. 시험 루트 소형 파일·embeddings/만 추적) → `check_content.js --content-only --quick`(교재/문제은행 콘텐츠 추적 게이트: manifest·인용 라인·참조라인·신선도·드릴·ID 이관·카드) → `test`·`coverage`·`coverage:unit`·병합 임계값(`coverage_merge.js --check`)·`verify:assets`·`check:parser` → Playwright 설치 + `test:e2e`를 Node 24로 실행합니다. PR에는 영향 요구사항 리포트(`tools/check/impact_tests.js --ref origin/main`)가 추가됩니다.
 
 **선택적 Git 훅**: `npm.cmd run hooks:install`로 `.githooks/` 활성화 — `pre-commit`은 `check:types`+`lint`+문서 동기화 게이트(`check_doc_sync.js --staged`: 소스 스테이징 시 문서 동반 스테이징 강제, `--no-verify` 우회), `pre-push`는 `check:trace`·`check:specrefs`·`check:docs`·문서 동기화(`--ref origin/main`) 추가 (`SKIP_PREPUSH=1 git push` 우회).
 
