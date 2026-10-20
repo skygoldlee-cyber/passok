@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 lossadj 2차 시드 보강 + 주관식 자기채점 런타임
+
+- **시드 보강**: 이론서 추출분 추가 — 과목4 요지 §13~§17(보험료 산정·정부 지원 50%·손해율-연수 할인할증표·재해예방시설 할인 30% 상한·보장개시일 예시·평년수확량 정의/수확량실적 산식), 과목5 요지 §16~§17(표본주수표 전체·거대재해 1/2 감축·조사적기). secondTheory 교재 챕터 05·06, secondAssessment 교재 챕터 02 보강
+- **주관식 자기채점 런타임 (설계 §4 1단계)**: `src/written-practice.js` — `parseWrittenBank`(###S 블록→유형·배점·근거·문제·모범답안·답·rubric 항목·흔한오류·⚖️인용) + 자기채점 오버레이(답안 서술 → 모범답안 대조 → rubric 체크 → 자기평가 완료, ⚖️ 인용 → ExamViewer `#LNN` 연동)
+- **배선**: `manifest.written[]` 선언 → `registry.written`(빌드 시 ###S 수 집계) → 시험 뷰 "주관식 연습" 카드(`hasFeature('writtenPractice')` 게이트) → `WrittenPractice.openWritten`. 저장 `STORAGE_KEYS.WRITTEN_PRACTICE`(시험 스코프·data-file-backup 대상, `{stem:{S번호:{a,c[],d}}}`). exams[]·integratedExam 미편입 유지 — 객관식 런타임과 분리
+- **테스트**: `tests/unit/written-practice.test.js` — 샘플 파싱 4건 + 실제 2차 파일 10제 전수 무결성(문제·모범답안·배점·인용·채점기준 존재) 1건
+- sw.js SHELL_ASSETS +2(storage-keys, written-practice 순서 — 의존 역순 정렬 유지: storage-keys는 기존 목록에 이미 있음)
+
 ## 2026-10-21 lossadj 2차 과목 번호 재배정 — 과목4↔과목5 스왑
 
 - **재배정**: 2차 시험 과목 순서에 정렬 — `secondTheory`(2차 과목1, 이론과실무)→order 4, `secondAssessment`(2차 과목2, 손해평가)→order 5

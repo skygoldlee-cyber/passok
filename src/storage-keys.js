@@ -48,6 +48,10 @@ export const STORAGE_KEYS = {
   // 복수정답형/OX 진술 단위 오판 통계 (statement-tracker.js)
   STATEMENT_STATS: 'statement_stats',
 
+  // 주관식 연습 자기채점 진행 (written-practice.js)
+  // { <fileStem>: { <qid>: { a:답안, c:[체크된 rubric idx], d:완료ts|null } } }
+  WRITTEN_PRACTICE: 'written_practice',
+
   /* ── domain:cosmetic 계약 키 ────────────────────────────────
    * 아래 키는 src/exams/<시험id>/ 도메인 모듈이 소유한다.
    * 이 파일에 두는 이유: BACKUP_KEYS/RESET_KEYS/SYNC_EXCLUDE가
@@ -186,6 +190,7 @@ export const BACKUP_KEYS = [
   STORAGE_KEYS.CALC_HISTORY,
   STORAGE_KEYS.FC_MIGRATED_V2,
   STORAGE_KEYS.STATEMENT_STATS,
+  STORAGE_KEYS.WRITTEN_PRACTICE,   // 주관식 자기채점 진행 — 학습 진도로 백업·복원 대상
   STORAGE_KEYS.READER_PROGRESS,     // 교재 일독 진척 — 복원 누락 시 계획의 통독 차감 리셋 (SC-15)
   STORAGE_KEYS.READ_THROUGH_DONE,   // 일독 완료 통지 플래그 — 진척과 함께 복원·초기화 (TR-28)
   STORAGE_KEYS.FC_SPACED_REPETITION,  // FSRS 카드별 스케줄 — 복원 누락 시 복습 일정 리셋

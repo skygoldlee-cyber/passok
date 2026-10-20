@@ -325,7 +325,18 @@ function checkTarget(target) {
       }
     }
   }
+  // 주관식 연습 문항(manifest.written[]) 선언 — 존재·key 중복 검증 후 등록 파일로 인정
+  const seenWritten = new Set();
+  for (const w of m.written || []) {
+    if (!w || !w.key) { err(scope, 'written[] 항목에 key 없음'); continue; }
+    if (seenWritten.has(w.key)) err(scope, `written[].key 중복: ${w.key}`);
+    seenWritten.add(w.key);
+    if (!w.file) { err(scope, `written["${w.key}"].file 없음`); continue; }
+    const wPath = path.join(sroot, '문제은행', w.file);
+    if (!fs.existsSync(wPath)) err(scope, `written["${w.key}"].file 없음: 문제은행/${w.file}`);
+  }
   const declaredExams = new Set(exams.map(e => e.file).filter(Boolean));
+  for (const w of m.written || []) { if (w.file) declaredExams.add(w.file); }
   const bankDir = path.join(sroot, '문제은행');
   if (fs.existsSync(bankDir)) {
     for (const f of fs.readdirSync(bankDir)) {

@@ -247,6 +247,15 @@
       ]
     },
     {
+      "layer": "feature:writtenPractice",
+      "flag": "writtenPractice",
+      "note": "주관식 연습 자기채점 — manifest.written[] 선언 시험만 발화 (###S 파서 + 오버레이)",
+      "patterns": [
+        "src/written-practice.js",
+        "tests/unit/written-practice.test.js"
+      ]
+    },
+    {
       "layer": "feature:regulatory",
       "gate": "references.json.referenceLaw 존재 시 발화 (플래그 아닌 콘텐츠 게이트)",
       "note": "규제 고시 감시 — 라벨·문서 목록은 시험별 references.json에서 유도",

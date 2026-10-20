@@ -275,6 +275,9 @@
  *                                            router.getViewTitles, practice-registry.getPracticeViewTitles/enter,
  *                                            pro-upgrade 플랜 한도 행)
  * @property {Object.<string, string[]>} [synonyms] 주관식 채점 유사어 사전 (manifest.synonyms 패스스루 — checkShortAnswer)
+ * @property {Array<{key:string, title:string, desc:string, file:string, stats:{questions:number}}>} [written]
+ *                                            주관식 연습 문항 목록 (manifest.written 패스스루 —
+ *                                            written-practice.js 자기채점 런타임·시험 뷰 카드, WP-01)
  * @property {{wrongCauses?: Array<{key:string, label:string, advice?:string, autoPattern?:string}>}} [analysis]
  *                                            학습 진단 도메인 분류 설정 (manifest.analysis 패스스루 — 오답 원인 분류표 등)
  *                                            autoPattern: 자동 오답 분류 정규식 (estimateUntaggedCauses, AN-07)
