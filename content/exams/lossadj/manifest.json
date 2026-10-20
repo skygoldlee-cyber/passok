@@ -2,7 +2,8 @@
   "schemaVersion": 1,
   "contentYear": "2026",
   "textbookEdition": "2026",
-  "_pilot": "Phase C 파일럿 — 1차 법령 2과목(상법 보험편·농어업재해보험법령) 축소본. 농학개론·2차 주관식은 후속 콘텐츠 확보 시 subjects에 추가.",
+  "_pilot": "Phase C 파일럿 — 1차 3과목(상법 보험편·농어업재해보험법령·농학개론) 축소본. 2차 주관식은 별도 설계(docs/2차_주관식_설계.md) — 객관식 런타임에 편입하지 않음.",
+  "_reform2028": "2028. 1. 1. 1차 과목 개편(시행령 별표 2의2 — ①법령+상법 ②농학개론: 재배학·가축사양학 ③작물학개론: 식량작물학·원예작물학). 현 과목3은 개편 후 나+다 영역으로 분화 예정 — docs/2028_개편_대비.md 참조.",
   "subjects": [
     {
       "key": "insurance",
@@ -31,6 +32,20 @@
           "file": "2과목_농어업재해보험법령.md"
         }
       ]
+    },
+    {
+      "key": "agronomy",
+      "order": 3,
+      "name": "농학개론(재배학·원예작물학)",
+      "shortName": "농학개론",
+      "dir": "교재/agronomy",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "농학개론(재배학·원예작물학)",
+          "file": "3과목_농학개론.md"
+        }
+      ]
     }
   ],
   "exams": [
@@ -47,14 +62,22 @@
       "part": 2,
       "title": "농어업재해보험법령 및 손해평가요령 (8제)",
       "file": "과목2_문제은행.md"
+    },
+    {
+      "key": "subject3",
+      "subject": "agronomy",
+      "part": 3,
+      "title": "농학개론(재배학·원예작물학) (8제)",
+      "file": "과목3_문제은행.md"
     }
   ],
   "integratedExam": {
     "questionsPerSubject": {
       "insurance": 8,
-      "disaster": 8
+      "disaster": 8,
+      "agronomy": 8
     },
-    "examTimeMin": 25,
+    "examTimeMin": 38,
     "passAverage": 60,
     "subjectFailBelow": 40
   },
