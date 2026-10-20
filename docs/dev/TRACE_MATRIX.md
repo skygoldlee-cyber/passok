@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: c96574fb169e90c7
+> 입력 해시: a6d6e036dcd080aa
 > 생성: 2026-10-20 · 원천: SPEC.md(563개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 563개 — 문서 연결 395 · 소스 연결 503 · 테스트 연결 533 · 보고서 연결 109
+**커버리지 요약**: 요구사항 563개 — 문서 연결 395 · 소스 연결 503 · 테스트 연결 536 · 보고서 연결 109
 
 ---
 
@@ -531,9 +531,9 @@
 | WP-01 | ✅ | 테스트 | — | src/written-practice.js | tests/unit/written-practice.test.js | — | — |
 | WP-02 | ✅ | 테스트 | — | src/written-practice.js | tests/unit/written-practice.test.js | — | — |
 | WP-03 | ✅ | 테스트 | — | src/written-practice.js | tests/unit/written-practice.test.js | — | — |
-| WP-04 | ✅ | 구현 (테스트 갭) | — | src/written-practice.js | — | — | — |
-| WP-05 | ✅ | 구현 (테스트 갭) | — | src/written-practice.js | — | — | — |
-| WP-06 | ✅ | 구현 (테스트 갭) | — | src/written-practice.js | — | — | — |
+| WP-04 | ✅ | 테스트 | — | src/written-practice.js | tests/unit/written-practice.test.js | — | — |
+| WP-05 | ✅ | 테스트 | — | src/written-practice.js | tests/unit/written-practice.test.js | — | — |
+| WP-06 | ✅ | 테스트 | — | src/written-practice.js | tests/unit/written-practice.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
@@ -933,13 +933,7 @@
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
-소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 3개 — 테스트 백로그 후보.
-
-| ID | 절 | 구현 소스 |
-|----|-----|-----------|
-| WP-04 | 3.28 주관식 연습 자기채점 | src/written-practice.js |
-| WP-05 | 3.28 주관식 연습 자기채점 | src/written-practice.js |
-| WP-06 | 3.28 주관식 연습 자기채점 | src/written-practice.js |
+없음 — 소스 연결된 모든 요구사항에 테스트 참조가 있음.
 
 ## 부록 C — 관련 SPEC ID 헤더 누락 문서
 
