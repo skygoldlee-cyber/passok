@@ -418,6 +418,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-USR-07 | `content/exams/cosmetic/docs/user_manual.md` |
 | DOC-USR-08 | `content/exams/cosmetic/docs/학습안내서.md` |
 | DOC-USR-09 | `content/exams/cosmetic/docs/두음법_암기_총정리.md` |
+| DOC-USR-10 | `content/exams/lossadj/docs/2차_주관식_설계.md` |
+| DOC-USR-11 | `content/exams/lossadj/docs/2028_개편_대비.md` |
 | DOC-BIZ-01 | `docs/exams/cosmetic/business/FORMULA_OS_경쟁전략.md` |
 | DOC-BIZ-02 | `docs/exams/cosmetic/business/맞춤형화장품_조제관리사_자격증플랫폼_사업기획서.md` |
 | DOC-BIZ-03 | `docs/exams/cosmetic/business/맞춤형화장품판매업소_조사_2026-09.md` |
