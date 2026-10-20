@@ -342,7 +342,7 @@
 - **인용 동기화**: 4링크 자동 갱신, 미해석 0
 - 생성물 재빌드: 이야기형·study_md·임베딩·문서 번들
 - 카드팁은 400건으로 유지 (잔여 ~400장 — stats 축적 후 우선순위 전환 가능)
-- **배포**: v20261019-53a9722 — CI 전 단계 통과 후 배포, 프로덕션 스모크 통과
+- **배포**: v20261019-b65a881 — CI 전 단계 통과 후 배포, 프로덕션 스모크 통과
 - **배포 연쇄 교훈**: 문제은행 인용 갱신 시 `build:drills → build:embeddings` 순서로 묶어 실행 — 드릴이 임베딩 입력이라 순서가 바뀌면 CI에서 연속 드리프트 발생
 
 ### 잔여 후속 (비차단 — 2026-10-19 기준)
@@ -842,7 +842,7 @@
 
 ## 2026-10-14 롤백 경로 리허설 — 태그→preview 재배포 실증 + 절차 정본 신설
 
-- 롤백 리허설 실측 (프로덕션 불개입): `deploy/v20261014-1169ed2` 태그(HEAD-19커밋) → `git worktree` 체크아웃 → `vercel deploy` preview → `vercel curl` 스모크(index·sw.js·version.js, CACHE_VERSION v20261014-4b281f4 일치) — "태그 시점 재배포" 경로 전 과정 실행 검증
+- 롤백 리허설 실측 (프로덕션 불개입): `deploy/v20261014-a42ca8c` 태그(HEAD-19커밋) → `git worktree` 체크아웃 → `vercel deploy` preview → `vercel curl` 스모크(index·sw.js·version.js, CACHE_VERSION v20261014-6c13148 일치) — "태그 시점 재배포" 경로 전 과정 실행 검증
 - **정본 부재 발견·해소**: WHEN_THINGS_BREAK §1이 롤백 절차로 링크한 DEPLOYMENT_GUIDE에 절차 자체가 없었음 → §5-3 신설. 경로 A(대시보드 promote, 최속) + 경로 B(태그 worktree→preview 검증→prod), preview SSO 보호에는 `vercel curl` 필요함을 명시
 - 설계 확인: 롤백은 `npm run deploy`를 쓸 수 없음(가드가 main 브랜치+HEAD CI 강제) — §5-3에 단일 배포 경로의 명시적 예외로 기록
 - 미검증 잔여: 대시보드 promote(UI 경로)는 미실행 — §9 롤백 행은 부분 측정으로 공백 유지(규칙 ②), 다음 기회에 경로 A 리허설 필요
@@ -2719,7 +2719,7 @@
 버전 체계를 **기계 ID / 표시용 / 콘텐츠** 3계층으로 분리 정리했다.
 
 - **기계층**: `stamp_sw_version.js`의 `derivePrefix` 폐기 — 과거 채널 토큰(`v369`) 영구 보존을 끊고 `v<YYYYMMDD>-<gitShort>`로 고정 (`SW_CACHE_PREFIX`·`--prefix`는 유지)
-- **표시층**: 신규 `src/app-version.js`의 `formatAppVersion()` — `v20261016-fd06122` → `v2026.10.16 · fd06122`. 구 채널 프리픽스 형식도 자동 처리. 사이드바·설정·변경이력 모달에 적용 (비교·저장·피드백 페이로드는 원본 유지)
+- **표시층**: 신규 `src/app-version.js`의 `formatAppVersion()` — `v20261016-100b743` → `v2026.10.16 · fd06122`. 구 채널 프리픽스 형식도 자동 처리. 사이드바·설정·변경이력 모달에 적용 (비교·저장·피드백 페이로드는 원본 유지)
 - **콘텐츠층**: 원료 DB `2026.09.6` CalVer 유지 — 표시 버전과 동일한 날짜 계열로 통일됨
 - **package.json**: `stamp_release_notes.js`가 배포 시 `version`을 `YYYY.M.D` CalVer로 자동 동기화 (사장값 1.0.0 해소), deploy.js 커밋 대상에 추가
 - **템플릿 정리**: `index.template.html`의 하드코딩 `v1.0.0` 플레이스홀더 제거 (JS 실패 시 낡은 버전 노출 방지)
