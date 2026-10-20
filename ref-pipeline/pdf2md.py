@@ -984,6 +984,17 @@ def plan_doc_jobs(pdfs, out_dir, flat=False):
     return jobs
 
 
+def report_dir_for(pdfs, out_dir):
+    """_report.json 기록 위치 — out_dir 지정 시 그곳, 아니면 입력 폴더 공통 상위."""
+    if out_dir:
+        return out_dir
+    dirs = [os.path.dirname(p) for _, p in pdfs]
+    try:
+        return os.path.commonpath(dirs)
+    except ValueError:  # 드라이브가 다른 입력 혼합
+        return dirs[0] if dirs else '.'
+
+
 # ── 골든 비교 (내용 누락 감지) ────────────────────────────────────────────
 def verify(out_dir, gold_dir, only=None):
     """{out}/{doc}/{doc}.md(중첩, 충돌 시 {out}/{subdir}/{doc}/{doc}.md)
@@ -1166,14 +1177,7 @@ def main():
 
     # -o 미지정 시 문서별 출력 루트는 입력 PDF의 폴더 (입력 옆에 생성)
     out_dir = args.out
-    if out_dir is None:
-        try:
-            report_dir = os.path.commonpath(
-                [os.path.dirname(p) for _, p in pdfs])
-        except ValueError:
-            report_dir = os.path.dirname(pdfs[0][1])
-    else:
-        report_dir = out_dir
+    report_dir = report_dir_for(pdfs, out_dir)
 
     report, flagged = [], 0
     jobs = plan_doc_jobs(pdfs, out_dir, flat=args.flat)
@@ -1308,7 +1312,7 @@ def run_gui():
             report = []
             self.progress.emit(0, total)
 
-            jobs = plan_doc_jobs(pdfs, self.out_dir, flat=o['flat'])
+            jobs = plan_doc_jobs(pdfs, self.out_dir or None, flat=o['flat'])
             for i, job in enumerate(jobs, 1):
                 if self._cancel:
                     self.log.emit('⏹ 사용자 취소 — 남은 문서 중단')
@@ -1350,8 +1354,9 @@ def run_gui():
                 self.progress.emit(i, total)
 
             try:
-                os.makedirs(self.out_dir, exist_ok=True)
-                with open(os.path.join(self.out_dir, '_report.json'), 'w',
+                report_dir = report_dir_for(pdfs, self.out_dir or None)
+                os.makedirs(report_dir, exist_ok=True)
+                with open(os.path.join(report_dir, '_report.json'), 'w',
                           encoding='utf-8') as f:
                     json.dump(report, f, ensure_ascii=False, indent=2)
             except Exception as e:
@@ -1407,7 +1412,7 @@ def run_gui():
             grid = QGridLayout(io_group)
             grid.addWidget(QLabel('출력 폴더'), 0, 0)
             self.out_edit = QLineEdit()
-            self.out_edit.setText(os.path.join(DEFAULT_PDF_ROOT, 'ref_md_v2'))
+            self.out_edit.setPlaceholderText('비워두면 각 입력 PDF의 폴더에 출력')
             grid.addWidget(self.out_edit, 0, 1)
             b_out = QPushButton('찾아보기')
             b_out.clicked.connect(self.pick_out)
@@ -1572,10 +1577,7 @@ def run_gui():
             if not inputs:
                 QMessageBox.warning(self, '입력 없음', '변환할 PDF나 폴더를 추가하세요.')
                 return
-            out_dir = self.out_edit.text().strip()
-            if not out_dir:
-                QMessageBox.warning(self, '출력 없음', '출력 폴더를 지정하세요.')
-                return
+            out_dir = self.out_edit.text().strip() or None  # 빈칸=입력 폴더
             prof = self.prof_edit.text().strip()
             if prof and not os.path.isfile(prof):
                 QMessageBox.warning(self, '프로파일 오류', '프로파일 JSON 경로가 올바르지 않습니다.')
@@ -1682,6 +1684,15 @@ def run_gui():
 
         def open_out_dir(self):
             d = self.out_edit.text().strip()
+            if not d:  # 빈칸=입력 폴더 모드 — 입력들의 공통 상위를 연다
+                items = [self.input_list.item(i).text()
+                         for i in range(self.input_list.count())]
+                dirs = [t if os.path.isdir(t) else os.path.dirname(t)
+                        for t in items]
+                try:
+                    d = os.path.commonpath(dirs) if dirs else ''
+                except ValueError:
+                    d = dirs[0] if dirs else ''
             if d and os.path.isdir(d):
                 QDesktopServices.openUrl(QUrl.fromLocalFile(d))
             else:
