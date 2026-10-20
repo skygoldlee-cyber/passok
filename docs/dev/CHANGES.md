@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 CI 생성 번들 빌드 스텝 위치·후속 정합
+
+- ci.yml: `data/exams/*/` 생성 서브디렉터리는 gitignore 대상이라 클론에 없음 → `check:docs` 이전에 `build:data`+`build:drills`+`build_doc_bundles` 스텝 추가 (문서 경로 게이트가 `{dataRoot}/*.js` 생성물 경로를 존재 검증)
+- `combo_pilot.js`는 수작업 파일럿이라 추적 유지 — drills 무시를 내용물 단위(`drills/*`)로 변경 + `!combo_pilot.js` 네게이션
+- `check_data_freshness`: 타임스탬프만 다른 dirty는 사전조건에서 허용 (CI 빌드 직후 실행 대응) · `check_ci_parity` CI_ONLY에 빌드 스텝 등록
+- 이력 재작성으로 릴리스 노트·CHANGES의 `v<날짜>-<해시>` 스탬프가 구 해시 → filter-repo commit-map으로 신 해시 일괄 재매핑 (삭제 커밋은 deploy 태그 대상으로 대체)
+
 ## 2026-10-21 .git 이력 재작성 + data/exams 생성물 커밋 제외
 
 - **배경**: `.git` 1GB — 생성물 재커밋 누적(data/ 1.2GB)·삭제된 레거시 경로(exams/ 219MB 등)가 원인
