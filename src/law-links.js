@@ -48,6 +48,16 @@ const _EXAM_LAW_URLS = {
     ["식품등의 표시기준", "https://www.law.go.kr/행정규칙/식품등의표시기준"],
     ["식품첨가물의기준및규격", "https://www.law.go.kr/행정규칙/식품첨가물의기준및규격"],
     ["식품첨가물공전", "https://www.law.go.kr/행정규칙/식품첨가물의기준및규격"]
+    ],
+    "lossadj": [
+    ["농어업재해보험법시행령", "https://www.law.go.kr/법령/농어업재해보험법시행령"],
+    ["농어업재해보험법 시행령", "https://www.law.go.kr/법령/농어업재해보험법시행령"],
+    ["농어업재해보험법(법률)", "https://www.law.go.kr/법령/농어업재해보험법"],
+    ["농어업재해보험법", "https://www.law.go.kr/법령/농어업재해보험법"],
+    ["농업재해보험손해평가요령", "https://www.law.go.kr/행정규칙/농업재해보험손해평가요령"],
+    ["손해평가요령", "https://www.law.go.kr/행정규칙/농업재해보험손해평가요령"],
+    ["상법(법률)", "https://www.law.go.kr/법령/상법"],
+    ["상법", "https://www.law.go.kr/법령/상법"]
     ]
 };
 

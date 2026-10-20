@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "comment": "참조자료 중앙 설정 (Phase C 파일럿 — 1차 법령 2과목). pdf-registry.js는 이 파일에서 빌드 시 자동 생성됨.",
+  "lawRefsComment": "이 시험이 사용하는 content/lawdb.json 법령 id 목록 — src/law-links.js의 _EXAM_LAW_URLS.lossadj로 생성. 나열 순서가 매칭 우선순위(구체적 법령을 모법보다 먼저).",
+  "lawRefs": [
+    "agri-disaster-insurance-act-enforcement-decree",
+    "agri-disaster-insurance-act",
+    "agri-disaster-assessment-guidelines",
+    "commercial-act"
+  ],
+  "noticeCoreComment": "고시 감시 배너의 기준 문서명 (notice_status.json의 레거시 baseline/latest 필드에 기록되는 문서).",
+  "noticeCore": "농업재해보험 손해평가요령",
+  "subjectDefaultRefdoc": {
+    "과목1": "상법(법률)(제21044호)(20260910).md",
+    "과목2": "농어업재해보험법(법률)(제21023호)(20260815).md"
+  },
+  "subjectDirMap": {
+    "insurance": "과목1",
+    "disaster": "과목2"
+  },
+  "docSubjectRulesComment": "ref_md 문서 디렉터리명 → 과목 번호 귀속 규칙. 첫 매칭이 우선. 이 목록이 해당 시험의 유일한 소스 (DA-15 — 코드에 시험별 내장 폴백 없음).",
+  "docSubjectRules": [
+    ["상법", 1, "상법 보험편 → 과목1(상법 보험편)"],
+    ["농어업재해보험법|손해평가요령|손해평가", 2, "재해보험법령·고시 → 과목2(농어업재해보험법령)"]
+  ],
+  "multiSubjectDocs": [],
+  "refDirs": {},
+  "refDirsComment": "파일럿: 물리 PDF 미확보 — ref_md 발췌본만 존재 (law.go.kr DRF 원문 기반). PDF 확보 시 ref-pipeline 변환 절차로 전환.",
+  "sourceRefMap": [
+    {
+      "test": "농어업재해보험법\\s*시행령|시행령\\s*제?\\d+조",
+      "file": "농어업재해보험법 시행령(대통령령)(제36555호)(20260815).md"
+    },
+    {
+      "test": "손해평가요령|손해평가 요령",
+      "file": "농업재해보험 손해평가요령(농림축산식품부고시)(제2026-66호)(20260610).md"
+    },
+    {
+      "test": "농어업재해보험법\\s*제?\\d+조|농어업재해보험법",
+      "file": "농어업재해보험법(법률)(제21023호)(20260815).md",
+      "exclude": "시행령|시행규칙|고시"
+    },
+    {
+      "test": "상법\\s*제?\\d+조|상법",
+      "file": "상법(법률)(제21044호)(20260910).md"
+    }
+  ],
+  "keywordRefMap": [],
+  "referenceFiles": {},
+  "referenceCommon": [],
+  "referenceIngredients": [],
+  "referenceLaw": [
+    {
+      "name": "상법",
+      "file": "상법(법률)(제21044호)(20260910).md",
+      "type": "ref_md",
+      "dir": "ref_md/과목1/상법(법률)(제21044호)(20260910)"
+    },
+    {
+      "name": "농어업재해보험법",
+      "file": "농어업재해보험법(법률)(제21023호)(20260815).md",
+      "type": "ref_md",
+      "dir": "ref_md/과목2/농어업재해보험법(법률)(제21023호)(20260815)"
+    },
+    {
+      "name": "농어업재해보험법 시행령",
+      "file": "농어업재해보험법 시행령(대통령령)(제36555호)(20260815).md",
+      "type": "ref_md",
+      "dir": "ref_md/과목2/농어업재해보험법 시행령(대통령령)(제36555호)(20260815)"
+    },
+    {
+      "name": "농업재해보험 손해평가요령",
+      "file": "농업재해보험 손해평가요령(농림축산식품부고시)(제2026-66호)(20260610).md",
+      "type": "ref_md",
+      "dir": "ref_md/과목2/농업재해보험 손해평가요령(농림축산식품부고시)(제2026-66호)(20260610)"
+    }
+  ]
+}

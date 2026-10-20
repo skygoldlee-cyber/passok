@@ -1,0 +1,32 @@
+{
+  "subjects": {
+    "insurance": {
+      "cards": 5,
+      "quizzes": 0,
+      "files": {
+        "교재/insurance/1과목_상법보험편.md": {
+          "cards": 5,
+          "quizzes": 0
+        }
+      }
+    },
+    "disaster": {
+      "cards": 4,
+      "quizzes": 3,
+      "files": {
+        "교재/disaster/2과목_농어업재해보험법령.md": {
+          "cards": 5,
+          "quizzes": 3
+        }
+      }
+    }
+  },
+  "exams": {
+    "subject1": {
+      "questions": 8
+    },
+    "subject2": {
+      "questions": 8
+    }
+  }
+}
