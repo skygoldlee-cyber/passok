@@ -49,6 +49,21 @@
     }
   ],
   "keywordRefMap": [],
+  "exam2ndSourcesComment": "2차(주관식) 공식 자료 출처 선언 — 이론서·기출문제는 저작권 제약으로 ref_md 전재 금지, 링크만 선언. 연습 문항(문제은행/2차_주관식_연습.md)은 손해평가요령 별표 산정식 근거의 자체 제작.",
+  "exam2ndSources": [
+    {
+      "name": "농업재해보험·손해평가의 이론과 실무 (이론서)",
+      "publisher": "농업정책보험금융원",
+      "url": "https://www.apfs.kr/front/board/boardContentsListPage.do?boardId=20061&menuId=5404&selTab=1",
+      "license": "무단 도용·상업적 사용·배포 금지 — ref_md 전재 불가, 수험 기준 참조용 링크만"
+    },
+    {
+      "name": "손해평가사 2차 기출문제 (회차별 문제지)",
+      "publisher": "한국산업인력공단(Q-net)/농업정책보험금융원",
+      "url": "https://www.apfs.kr/front/board/boardContentsListPage.do?boardId=20061&menuId=5404&selTab=1",
+      "license": "국가시험 문제지 — 재배포 불가, 유형 분석 용도로만 사용. 공식 모범답안·채점기준 비공개"
+    }
+  ],
   "referenceFiles": {},
   "referenceCommon": [],
   "referenceIngredients": [],
