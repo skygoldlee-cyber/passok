@@ -72,7 +72,14 @@ tools/
 requirements.txt
 .generation_progress.json
 
-# ---------- 🔐 환경 변수 (배포 제외) ----------
+# ---------- 임시 작업 디렉터리 (배포 제외 — 미커밋 작업·seed 자료) ----------
+# .tmp_*/(.tmp/도)는 로컬 임시 분석·seed 원본(PDF 등 저작권 자료 포함) 보관소.
+# .gitignore 대상이지만 .vercelignore와는 별개 — 명시 제외 없으면 정적 서빙된다.
+.tmp_*/
+.tmp/
+.pytest_cache/
+
+# ---------- 환경 변수 (배포 제외) ----------
 # vercel.json 이 public:true 라 배포에 포함된 파일은 정적으로 그대로 서빙된다.
 # 비밀(VERCEL_OIDC_TOKEN 등)이 /.env.local 로 공개 노출되지 않도록 명시적으로 제외한다.
 .env
