@@ -7,6 +7,11 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 written-practice 채점 제안 보간 esc-ok 면제 — CI escape 게이트 복구
+
+- **배경**: CI `check:escape`가 `src/written-practice.js`의 `${items}` 보간을 미이스케이프 후보로 검출 — items는 rubricItems의 r.text·피드백을 escapeHTML 처리해 조립한 HTML로 raw 보간이 의도된 구조
+- **조치**: `${'' /*esc-ok*/}` 형태로 명시 면제 (템플릿 내부라 일반 주석은 렌더됨) — check:escape 후보 0 복구
+
 ## 2026-10-21 모발·피부 수치 잔재 전수 교정 (guide4 정합 후속)
 
 - **범위 확장**: 표준형·문제은행 외 참조자료·피드백·드릴 소스 전수 스캔 — 구치(3주·80~90%·1~2%·10~15%·0.3~0.5mm·2~6년·2~3개월·4kg·1.5~2.0㎡) 잔재 일괄 교정
