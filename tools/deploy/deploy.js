@@ -32,7 +32,9 @@
 // @spec BP-07
 const { execSync, spawnSync } = require('child_process');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
+const ignore = require('ignore');
 const { loadEnv } = require('../lib/env');
 const { stampSwVersion } = require('../build/stamp_sw_version.js');
 const { stampReleaseNotes } = require('../build/stamp_release_notes.js');
@@ -61,6 +63,42 @@ function projectUrl() {
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// 배포 스테이징 — 작업 트리 전체를 .vercelignore 규칙으로 필터링해 임시 디렉터리로
+// 복사한다. vercel --archive=tgz는 ignore 규칙 없이 작업 트리를 통째로 아카이브
+// 하므로(.tmp_*/audiobook mp3 등 비배포 자산이 Vercel 서버로 업로드됨), 업로드
+// 단계부터 배포 집합을 물리적으로 한정한다. 스탬프된 작업 트리 파일(sw.js 등)
+// 도 그대로 반영된다.
+function makeStagingDir() {
+    const ig = ignore().add(fs.readFileSync('.vercelignore', 'utf8'));
+    const deployFiles = [];
+    // .git은 vercelignore 무관하게 항상 제외 — 나머지는 규칙으로 프루닝
+    const walk = (dir) => {
+        for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+            const abs = path.join(dir, e.name);
+            const rel = path.relative('.', abs).split(path.sep).join('/');
+            if (e.isDirectory()) {
+                if (e.name !== '.git' && !ig.ignores(rel + '/')) walk(abs);
+            } else if (!ig.ignores(rel)) {
+                deployFiles.push(rel);
+            }
+        }
+    };
+    walk('.');
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'passory-deploy-'));
+    for (const f of deployFiles) {
+        const dest = path.join(dir, f);
+        fs.mkdirSync(path.dirname(dest), { recursive: true });
+        fs.copyFileSync(f, dest);
+    }
+    // vercel CLI가 요구하는 프로젝트 링크 — .vercel/은 .vercelignore로 비배포
+    const projectJson = path.join('.vercel', 'project.json');
+    if (fs.existsSync(projectJson)) {
+        fs.mkdirSync(path.join(dir, '.vercel'), { recursive: true });
+        fs.copyFileSync(projectJson, path.join(dir, '.vercel', 'project.json'));
+    }
+    return { dir, fileCount: deployFiles.length };
+}
 
 /** 배포 직후 프로덕션 스모크 — 응답·버전 스탬프·SW 실서빙 확인 (엣지 전파 대기 포함) */
 async function smokeCheck(baseUrl, expectedVersion) {
@@ -280,9 +318,18 @@ async function main() {
 
     // DEP0190 — shell:true + 인자 배열 금지. win32의 vercel.cmd는 shell 경유가
     // 필요하므로 직접 인용한 단일 명령 문자열로 전달한다.
-    const result = spawnSync(
-        ['vercel', '--prod', '--yes', '--archive=tgz', ...vercelScopeArgs()].map(quoteArg).join(' '),
-        { stdio: 'inherit', shell: true });
+    // 스테이징 디렉터리에서 실행해 .vercelignore 외 자산(mp3·.tmp 등)이
+    // 아카이브에도 포함되지 않도록 한다.
+    const staging = makeStagingDir();
+    console.log(`📦 배포 스테이징 — ${staging.fileCount}파일 → ${staging.dir}`);
+    let result;
+    try {
+        result = spawnSync(
+            ['vercel', '--prod', '--yes', '--archive=tgz', ...vercelScopeArgs()].map(quoteArg).join(' '),
+            { stdio: 'inherit', shell: true, cwd: staging.dir });
+    } finally {
+        fs.rmSync(staging.dir, { recursive: true, force: true });
+    }
     if ((result.status ?? 1) !== 0) {
         restoreStamps();
         process.exit(result.status ?? 1);

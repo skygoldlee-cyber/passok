@@ -7,6 +7,11 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 deploy 스테이징 디렉터리 업로드 전환
+
+- **배경**: `--archive=tgz`가 `.vercelignore` 없이 작업 트리 전체(1.7GB, .tmp_*·audiobook mp3 포함)를 Vercel 서버로 업로드 — 서빙은 차단돼도 비배포 자산이 전송됨
+- **조치**: `tools/deploy/deploy.js`가 배포 전 `.vercelignore` 규칙으로 필터링한 임시 스테이징 디렉터리를 만들어 그 안에서 `vercel` 실행 — 업로드 단계부터 배포 집합 물리적 한정, 종료 후 스테이징 삭제. `ignore` 패키지 devDependency 추가
+
 ## 2026-10-21 deploy vercel 업로드 --archive=tgz 전환
 
 - **배경**: Vercel 무료 티어 업로드 API 한도(24h 5,000 파일) 초과로 62.6MB 배포 중단 (`api-upload-free`)
