@@ -109,6 +109,9 @@ ref-pipeline/embeddings/out/
 # AI 제작 초안·평가 산출물 — 리뷰 전 임시 산출물, 정본은 content/ (AI_AUTHORING_DESIGN §2)
 tmp/
 
+# 작업용 임시 디렉터리 — 다운로드 원본·변환 중간물 (저작권 제약 자료 포함, 커밋 금지)
+.tmp_*/
+
 # 이야기형 정규화 드리프트 검토 리포트 (1회성 산출물)
 tools/build/.story_drift_review.md
 reports/
