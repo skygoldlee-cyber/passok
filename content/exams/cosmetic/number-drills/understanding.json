@@ -60,8 +60,8 @@
     "category": "💧 농도·함량"
   },
   {
-    "numbers": [{"number": "0.3~0.5", "unit": "mm"}],
-    "context": "모발 성장 속도: 1일 0.3~0.5mm",
+    "numbers": [{"number": "0.2~0.5", "unit": "mm"}],
+    "context": "모발 성장 속도: 1일 0.2~0.5mm",
     "isKey": false,
     "category": "🧪 시험·측정"
   },
@@ -72,20 +72,20 @@
     "category": "🧪 시험·측정"
   },
   {
-    "numbers": [{"number": "3~6", "unit": "년"}, {"number": "80~90", "unit": "%"}],
-    "context": "모발 성장기(Anagen): 3~6년 (전체 80~90%)",
+    "numbers": [{"number": "3~6", "unit": "년"}, {"number": "88", "unit": "%"}],
+    "context": "모발 성장기(Anagen): 3~6년 (전체 약 88%)",
     "isKey": false,
     "category": "📅 기한·기간"
   },
   {
-    "numbers": [{"number": "3", "unit": "주"}],
-    "context": "모발 퇴행기(Catagen): 약 3주 (1~2%)",
+    "numbers": [{"number": "2~3", "unit": "주"}],
+    "context": "모발 퇴행기(Catagen): 약 2~3주 (약 1%)",
     "isKey": false,
     "category": "📅 기한·기간"
   },
   {
     "numbers": [{"number": "3~4", "unit": "개월"}],
-    "context": "모발 휴지기(Telogen): 3~4개월 (10~15%)",
+    "context": "모발 휴지기(Telogen): 3~4개월 (약 11%)",
     "isKey": false,
     "category": "📅 기한·기간"
   },
