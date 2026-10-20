@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 lossadj 2차 과목2 교재 생성 — secondAssessment 과목 신설
+
+- **2차 과목2 교재**: `교재/second/2차_손해평가의이론과실무.md` — 핵심요지 시드(§1~§15 확장: 손해평가 체계·주체·과정·과수/논/밭/시설·수입감소·가축·보험가액) → `ai:textbook`(gemini-3.8-flash) 초안 → 리뷰 후 기존 교재 형식(6챕터·용어 카드·숫자 미리보기·📌출처)으로 편입
+- **manifest subjects +1**: `secondAssessment`(order 4, dir `교재/second`) — exams[]·integratedExam 미등록으로 1차 객관식 런타임과 분리 (주관식 과목이라 문제은행 없음)
+- **핵심요지 ref_md 이동**: `ref_md/과목2` → `ref_md/과목4` — 2차 과목 귀속 정합 (docSubjectRules에 "손해평가 핵심요지"→4 규칙을 일반 "손해평가"→2 규칙보다 선행 배치, subjectDirMap·subjectDefaultRefdoc·referenceLaw 갱신, `2차_주관식_연습.md` S9·S10 인용 경로 수정)
+- **등록 설계 근거**: exams[]는 객관식 문제은행 전용이고 manifest 체크는 과목당 exams 필수가 아님(경고만) — `check:refsubjects`는 교재 dir 인용을 order로 득표하므로 핵심요지의 과목4 폴더 이동이 규칙·인용 일치의 정본
+- exams.json desc "총 4과목(1차 3 + 2차 손해평가 1)" 갱신 — desc N과목 게이트(subjects.length 일치) 대응
+
 ## 2026-10-21 lossadj 2차 이론서 핵심요지 ref_md + 연습 문항 확충
 
 - **이론서 확보**: 농금원 게시판 `boardContentsList.do` AJAX 엔드포인트 경유로 「농업재해보험·손해평가의 이론과 실무」 2026년 수정본(2026.3.31, 835쪽) 다운로드 확인 — `contId=15015`, `commonfile/fileidDownLoad.do` 직링크

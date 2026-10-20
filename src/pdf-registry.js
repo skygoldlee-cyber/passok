@@ -299,7 +299,8 @@ const _EXAM_TABLES = {
         SUBJECT_DIR_MAP: {
         "insurance": "과목1",
         "disaster": "과목2",
-        "agronomy": "과목3"
+        "agronomy": "과목3",
+        "secondAssessment": "과목4"
         },
         REF_MD_SUBJECTS: {
 
@@ -332,7 +333,7 @@ const _EXAM_TABLES = {
         { name: "농어업재해보험법 시행령", file: "농어업재해보험법 시행령(대통령령)(제36555호)(20260815).md", type: "ref_md", dir: "ref_md/과목2/농어업재해보험법 시행령(대통령령)(제36555호)(20260815)" },
         { name: "농업재해보험 손해평가요령", file: "농업재해보험 손해평가요령(농림축산식품부고시)(제2026-66호)(20260610).md", type: "ref_md", dir: "ref_md/과목2/농업재해보험 손해평가요령(농림축산식품부고시)(제2026-66호)(20260610)" },
         { name: "농학개론(재배학·원예작물학) 핵심요지", file: "농학개론(재배학·원예작물학) 핵심요지.md", type: "ref_md", dir: "ref_md/과목3/농학개론(재배학·원예작물학) 핵심요지" },
-        { name: "농업재해보험 손해평가 핵심요지", file: "농업재해보험 손해평가 핵심요지(자체편집).md", type: "ref_md", dir: "ref_md/과목2/농업재해보험 손해평가 핵심요지(자체편집)" }
+        { name: "농업재해보험 손해평가 핵심요지", file: "농업재해보험 손해평가 핵심요지(자체편집).md", type: "ref_md", dir: "ref_md/과목4/농업재해보험 손해평가 핵심요지(자체편집)" }
         ],
         NOTICE_INGREDIENT_DOCS: [
 
