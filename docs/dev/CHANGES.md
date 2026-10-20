@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 lossadj 2차 과목1 교재 생성 — secondTheory 과목 신설
+
+- **2차 과목1 교재**: `교재/secondTheory/2차_이론과실무.md` — 이론서 1권 기반 자체 핵심요지(§1~§12: 보험 원리·농업경영위험 5종·재해보험 특징·도입 경과·국가재보험·상품 체계·76개 품목 가입자격·16축종·특약 22개·협정보험가액) 시드 → `ai:textbook` 초안 → 4챕터 교재 편입
+- **manifest subjects +1**: `secondTheory`(order 5, dir `교재/secondTheory`) — 과목2와 동일하게 exams[]·통합모의고사 미편입
+- **ref_md/과목5 신설**: `농작물·가축재해보험 이론과 실무 핵심요지(자체편집)` — docSubjectRules("이론과 실무 핵심요지|농작물·가축재해보험"→5)·subjectDirMap·subjectDefaultRefdoc·sourceRefMap·referenceLaw 등록, glossary subject5.json
+- exams.json desc "총 5과목(1차 3 + 2차 2 교재)" 갱신
+
 ## 2026-10-21 lossadj 2차 과목2 교재 생성 — secondAssessment 과목 신설
 
 - **2차 과목2 교재**: `교재/second/2차_손해평가의이론과실무.md` — 핵심요지 시드(§1~§15 확장: 손해평가 체계·주체·과정·과수/논/밭/시설·수입감소·가축·보험가액) → `ai:textbook`(gemini-3.8-flash) 초안 → 리뷰 후 기존 교재 형식(6챕터·용어 카드·숫자 미리보기·📌출처)으로 편입
