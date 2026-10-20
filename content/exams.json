@@ -77,6 +77,29 @@
       "features": {
         "dictionary": true
       }
+    },
+    {
+      "id": "lossadj",
+      "name": "손해평가사",
+      "shortName": "손해평가사",
+      "appName": "손해평가사",
+      "title": "손해평가사",
+      "logoMain": "손해평가사",
+      "logoSub": "",
+      "desc": "농어업재해보험 손해평가사 1차 Phase C 파일럿 — 상법 보험편·농어업재해보험법령 2과목 · 문제은행 16문",
+      "icon": "fa-solid fa-tractor",
+      "year": "2026",
+      "theme": {
+        "--color-primary": "#16a34a",
+        "--color-secondary": "#ca8a04"
+      },
+      "comingSoon": true,
+      "contentRoot": "content/exams/lossadj",
+      "dataRoot": "data/exams/lossadj",
+      "manifestPath": "content/exams/lossadj/manifest.json",
+      "registryBundle": "data/exams/lossadj/registry.js",
+      "registryGlobal": "DATA_REGISTRY_LOSSADJ",
+      "features": {}
     }
   ]
 }

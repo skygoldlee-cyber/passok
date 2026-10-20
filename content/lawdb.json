@@ -151,6 +151,38 @@
       "slug": "식품첨가물의기준및규격",
       "matchKeys": ["식품첨가물의기준및규격", "식품첨가물공전"],
       "watch": { "target": "admrul" }
+    },
+    {
+      "id": "agri-disaster-insurance-act",
+      "name": "농어업재해보험법",
+      "type": "law",
+      "slug": "농어업재해보험법",
+      "matchKeys": ["농어업재해보험법(법률)", "농어업재해보험법"],
+      "watch": { "target": "law" }
+    },
+    {
+      "id": "agri-disaster-insurance-act-enforcement-decree",
+      "name": "농어업재해보험법 시행령",
+      "type": "law",
+      "slug": "농어업재해보험법시행령",
+      "matchKeys": ["농어업재해보험법시행령", "농어업재해보험법 시행령"],
+      "watch": { "target": "law" }
+    },
+    {
+      "id": "agri-disaster-assessment-guidelines",
+      "name": "농업재해보험 손해평가요령",
+      "type": "admrul",
+      "slug": "농업재해보험손해평가요령",
+      "matchKeys": ["농업재해보험손해평가요령", "손해평가요령"],
+      "watch": { "target": "admrul" }
+    },
+    {
+      "id": "commercial-act",
+      "name": "상법",
+      "type": "law",
+      "slug": "상법",
+      "matchKeys": ["상법(법률)", "상법"],
+      "watch": { "target": "law" }
     }
   ]
 }
