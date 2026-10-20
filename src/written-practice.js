@@ -15,6 +15,10 @@ import { dataPath } from './exam-context.js';
 import { getJSON, setJSON } from './storage.js';
 import { STORAGE_KEYS } from './storage-keys.js';
 import { fetchMd, injectBundleScript, createDocOverlay } from './doc-overlay.js';
+import {
+    AI_PROVIDERS, getAiProvider, saveAiProvider, getAiModel, saveAiModel,
+    getAiKey, saveAiKey, clearAiKey, maskAiKey, gradeAnswer
+} from './written-grading.js';
 
 /* =========================================================
    마크다운 ### Sn. 블록 파서 (순수 함수 — 단위 테스트 대상)
@@ -250,6 +254,29 @@ const WP_CSS = `
 #wp-overlay .wpq-refs a{color:var(--color-secondary);cursor:pointer;text-decoration:none;}
 #wp-overlay .wpq-refs a:hover{text-decoration:underline;}
 #wp-overlay .wp-loading,#wp-overlay .wp-error{text-align:center;padding:60px 20px;color:var(--color-text-muted);}
+/* --- AI 채점 설정 패널 (WP-07) --- */
+#wp-overlay .wp-aicfg{display:none;flex:0 0 auto;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:8px 16px;border-bottom:1px solid var(--border-color);background:var(--bg-card);}
+#wp-overlay .wp-aicfg.open{display:flex;}
+#wp-overlay .wp-aicfg select,#wp-overlay .wp-aicfg input{border:1px solid var(--border-color);
+  border-radius:8px;background:var(--bg-app);color:inherit;font-family:inherit;
+  font-size:.85rem;padding:6px 10px;}
+#wp-overlay .wp-aicfg input.wp-key{min-width:200px;flex:1 1 200px;}
+#wp-overlay .wp-aicfg input.wp-model{width:180px;}
+#wp-overlay .wp-aicfg .wp-note{font-size:.75rem;color:var(--color-text-muted);}
+/* --- AI 채점 결과 (WP-08) --- */
+#wp-overlay .wpq-grading{margin-top:.7rem;border:1px solid var(--border-color);border-radius:10px;
+  padding:10px 12px;background:rgba(6,182,212,.05);display:none;}
+#wp-overlay .wpq-grading.open{display:block;}
+#wp-overlay .wpq-grading .g-head{font-size:.88rem;font-weight:700;color:var(--color-primary);
+  margin-bottom:.4rem;}
+#wp-overlay .wpq-grading .g-item{display:flex;gap:8px;align-items:flex-start;font-size:.85rem;
+  margin:.3rem 0;}
+#wp-overlay .wpq-grading .g-item .ok{color:#22c55e;flex:0 0 auto;}
+#wp-overlay .wpq-grading .g-item .no{color:#ef4444;flex:0 0 auto;}
+#wp-overlay .wpq-grading .g-summary{font-size:.85rem;color:var(--color-text-muted);
+  margin-top:.5rem;border-top:1px dashed var(--border-color);padding-top:.5rem;}
+#wp-overlay .wpq-grading .g-meta{font-size:.72rem;color:var(--color-text-muted);margin-top:.4rem;}
 `;
 
 const _overlay = createDocOverlay({
@@ -259,20 +286,66 @@ const _overlay = createDocOverlay({
     innerHTML: `<div class="wp-bar">
       <button class="wp-btn" data-wp-close aria-label="닫기"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> 목록으로</button>
       <div class="wp-title"></div>
+      <button class="wp-btn" data-wp-aicfg-toggle title="AI 채점 설정"><i class="fa-solid fa-robot" aria-hidden="true"></i> AI 채점</button>
       <div class="wp-progress"></div>
+    </div>
+    <div class="wp-aicfg">
+      <select data-wp-aiprovider aria-label="AI 공급자"></select>
+      <input class="wp-key" data-wp-aikey type="password" placeholder="API 키 (디바이스 로컬 저장)" autocomplete="off">
+      <input class="wp-model" data-wp-aimodel type="text" placeholder="모델 (비우면 기본값)" autocomplete="off">
+      <button class="wp-btn" data-wp-aisave>저장</button>
+      <button class="wp-btn" data-wp-aiclear>키 삭제</button>
+      <span class="wp-note">키는 이 기기에만 저장되며 백업·동기되지 않습니다. AI 채점은 보조 제안 — 최종 판정은 직접 확인하세요.</span>
     </div>
     <div class="wp-scroll"><div class="wp-wrap"></div></div>`,
     ariaLabel: '주관식 연습',
     bodyClass: 'modal-open',
     historyMarker: 'wp-overlay',
     popstateGuardMs: 50,
-    wire(el) { el.querySelector('[data-wp-close]')?.addEventListener('click', () => _overlay.close()); }
+    wire(el) {
+        el.querySelector('[data-wp-close]')?.addEventListener('click', () => _overlay.close());
+        _wireAiConfig(el);
+    }
 });
 
 let _stem = '';
 let _mdPath = '';
 /** @type {WrittenQuestion[]} */
 let _questions = [];
+
+/* ---------- AI 채점 설정 패널 (WP-07) ---------- */
+function _wireAiConfig(el) {
+    const cfg = el.querySelector('.wp-aicfg');
+    const sel = /** @type {HTMLSelectElement|null} */ (el.querySelector('[data-wp-aiprovider]'));
+    const keyInput = /** @type {HTMLInputElement|null} */ (el.querySelector('[data-wp-aikey]'));
+    const modelInput = /** @type {HTMLInputElement|null} */ (el.querySelector('[data-wp-aimodel]'));
+    if (!cfg || !sel || !keyInput || !modelInput) return;
+    sel.innerHTML = AI_PROVIDERS.map(p =>
+        `<option value="${p}">${p}${p === 'gemini' ? ' (기본)' : ''}</option>`).join('');
+    sel.value = getAiProvider();
+    keyInput.placeholder = getAiKey()
+        ? `키 저장됨 (${maskAiKey(getAiKey())})` : 'API 키 (디바이스 로컬 저장)';
+    modelInput.placeholder = `모델 (비우면 ${getAiModel()})`;
+    el.querySelector('[data-wp-aicfg-toggle]')?.addEventListener('click', () => {
+        cfg.classList.toggle('open');
+    });
+    el.querySelector('[data-wp-aisave]')?.addEventListener('click', () => {
+        saveAiProvider(sel.value);
+        const m = modelInput.value.trim();
+        if (m) saveAiModel(m);
+        const k = keyInput.value.trim();
+        if (k) saveAiKey(k);
+        keyInput.value = '';
+        keyInput.placeholder = getAiKey()
+            ? `키 저장됨 (${maskAiKey(getAiKey())})` : 'API 키 (디바이스 로컬 저장)';
+        modelInput.placeholder = `모델 (비우면 ${getAiModel()})`;
+    });
+    el.querySelector('[data-wp-aiclear]')?.addEventListener('click', () => {
+        clearAiKey();
+        keyInput.value = '';
+        keyInput.placeholder = 'API 키 (디바이스 로컬 저장)';
+    });
+}
 
 /* ---------- 저장 상태 ---------- */
 function _all() { return getJSON(STORAGE_KEYS.WRITTEN_PRACTICE) || {}; }
@@ -316,6 +389,7 @@ function _cardHtml(q) {
       <textarea class="wpq-answer" data-wp-answer placeholder="답안을 서술하세요 (계산문제는 계산과정·답·단위 포함)">${escapeHTML(st.a)}</textarea>
       <div class="wpq-actions">
         <button class="wp-btn" data-wp-toggle>모범답안·채점기준</button>
+        ${q.rubricItems.length ? '<button class="wp-btn" data-wp-grade><i class="fa-solid fa-robot" aria-hidden="true"></i> AI 채점</button>' : ''}
         <span class="wpq-score" data-wp-score></span>
         <button class="wp-btn primary" data-wp-done>${st.d ? '완료 해제' : '자기평가 완료'}</button>
       </div>
@@ -323,6 +397,7 @@ function _cardHtml(q) {
         <div class="wpq-model">${_mdHtml(q.modelAnswer)}</div>
         ${q.finalAnswer ? `<div class="wpq-final">답: ${escapeHTML(q.finalAnswer)}</div>` : ''}
         ${rubricHtml}
+        <div class="wpq-grading" data-wp-grading></div>
         ${q.commonErrors ? `<div class="wpq-errors">⚠ 흔한 오류: ${escapeHTML(q.commonErrors)}</div>` : ''}
         ${refsHtml}
       </div>
@@ -398,8 +473,64 @@ function _wireCards() {
                 _openRef(ref);
             });
         });
+        const gradeBtn = card.querySelector('[data-wp-grade]');
+        if (gradeBtn) {
+            // 저장된 AI 판정이 있으면 재표시 (WP-08)
+            _renderGrading(card, q, _entry(qid).g);
+            gradeBtn.addEventListener('click', async () => {
+                const gbox = card.querySelector('[data-wp-grading]');
+                card.querySelector('[data-wp-reveal]').classList.add('open');
+                const answer = /** @type {HTMLTextAreaElement} */ (
+                    card.querySelector('[data-wp-answer]')).value;
+                gradeBtn.disabled = true;
+                gradeBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> 채점 중…';
+                if (gbox) { gbox.classList.add('open'); gbox.innerHTML = '<div class="g-head">AI 채점 중…</div>'; }
+                const res = await gradeAnswer(q, answer);
+                gradeBtn.disabled = false;
+                gradeBtn.innerHTML = '<i class="fa-solid fa-robot" aria-hidden="true"></i> AI 채점';
+                if (!res.ok) {
+                    if (gbox) gbox.innerHTML = `<div class="g-head">AI 채점 실패</div><div class="g-summary">${escapeHTML(res.error || '')}</div>`;
+                    if (res.code === 'nokey') {
+                        _overlay.el().querySelector('.wp-aicfg')?.classList.add('open');
+                    }
+                    return;
+                }
+                // 제안 판정을 체크박스에 반영 (사용자 수정 가능)
+                const met = res.met || [];
+                const grading = res.grading || { items: [], summary: '' };
+                const fb = new Array(q.rubricItems.length).fill('');
+                for (const it of grading.items) { if (it.i >= 0 && it.i < fb.length) fb[it.i] = it.feedback; }
+                _save(qid, {
+                    c: met.map((m, i) => m ? i : -1).filter(i => i >= 0),
+                    g: { v: met, f: fb, s: res.score, sum: grading.summary, m: res.model, t: Date.now() }
+                });
+                card.querySelectorAll('[data-wp-check]').forEach(cb => {
+                    cb.checked = !!met[parseInt(cb.dataset.wpCheck, 10)];
+                });
+                _renderGrading(card, q, _entry(qid).g);
+                updateScore();
+            });
+        }
         updateScore();
     });
+}
+
+/* ---------- AI 채점 결과 렌더 (WP-08) ---------- */
+function _renderGrading(card, q, g) {
+    const gbox = card.querySelector('[data-wp-grading]');
+    if (!gbox || !g || !Array.isArray(g.v)) return;
+    const items = q.rubricItems.map((r, i) => {
+        const met = !!g.v[i];
+        const fb = (g.f && g.f[i]) || '';
+        return `<div class="g-item"><span class="${met ? 'ok' : 'no'}">${met ? '✓' : '✗'}</span>
+          <span>${escapeHTML(r.text)} — ${escapeHTML(fb)}</span></div>`;
+    }).join('');
+    const ts = g.t ? new Date(g.t).toLocaleString('ko-KR') : '';
+    gbox.innerHTML = `<div class="g-head">AI 채점 제안 — ${escapeHTML(String(g.s ?? 0))} / ${escapeHTML(String(q.points ?? '—'))}점 (참고용)</div>
+      ${items}
+      ${g.sum ? `<div class="g-summary">${escapeHTML(g.sum)}</div>` : ''}
+      <div class="g-meta">${escapeHTML(g.m || '')} · ${escapeHTML(ts)} · AI 판정은 참고용 — 체크박스를 직접 조정하세요</div>`;
+    gbox.classList.add('open');
 }
 
 /* ---------- 참조 링크 → ExamViewer ---------- */

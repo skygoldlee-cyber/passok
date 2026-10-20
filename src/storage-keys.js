@@ -102,6 +102,10 @@ export const STORAGE_KEYS = {
   // Formula OS — 기성품 사진 인식용 사용자 Gemini API 키 (product-vision.js, FO-41)
   // ⚠ 크리덴셜 — BACKUP_KEYS·동기 대상에서 의도적 제외 (디바이스 로컬만)
   FORMULA_GEMINI_KEY: 'formula_gemini_key',
+  // ⚠ 주관식 AI 채점 키 — 디바이스 로컬만 (공급자·모델명은 환경설정이라 백업 대상)
+  WRITTEN_AI_KEY: 'written_ai_key',
+  WRITTEN_AI_PROVIDER: 'written_ai_provider',
+  WRITTEN_AI_MODEL: 'written_ai_model',
 
   // Formula OS — 사진 인식 Gemini 모델명 설정 (product-vision.js, FO-46)
   // 크리덴셜이 아닌 환경설정값 — 백업·동기 대상에 포함해 기기 간 유지
@@ -191,6 +195,8 @@ export const BACKUP_KEYS = [
   STORAGE_KEYS.FC_MIGRATED_V2,
   STORAGE_KEYS.STATEMENT_STATS,
   STORAGE_KEYS.WRITTEN_PRACTICE,   // 주관식 자기채점 진행 — 학습 진도로 백업·복원 대상
+  STORAGE_KEYS.WRITTEN_AI_PROVIDER, // AI 채점 공급자 설정 — 환경설정 (키 아님)
+  STORAGE_KEYS.WRITTEN_AI_MODEL,    // AI 채점 모델명 설정 — 환경설정 (키 아님)
   STORAGE_KEYS.READER_PROGRESS,     // 교재 일독 진척 — 복원 누락 시 계획의 통독 차감 리셋 (SC-15)
   STORAGE_KEYS.READ_THROUGH_DONE,   // 일독 완료 통지 플래그 — 진척과 함께 복원·초기화 (TR-28)
   STORAGE_KEYS.FC_SPACED_REPETITION,  // FSRS 카드별 스케줄 — 복원 누락 시 복습 일정 리셋

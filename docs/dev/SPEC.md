@@ -635,6 +635,8 @@
 | WP-04 | 진행 저장 `STORAGE_KEYS.WRITTEN_PRACTICE`(시험 스코프·백업 대상) — `{stem:{Sn:{a:답안, c:[체크인덱스], d:완료ts}}}`, `isAnswered`와 분리된 "자기평가 완료" 플래그 | ✅ |
 | WP-05 | ⚖️ 인용 `#LNN` → ExamViewer 문제집 뷰어 연동 (상대 경로 해석) | ✅ |
 | WP-06 | 객관식 런타임 분리 유지 — 주관식 문항은 `exams[]`/`integratedExam`에 편입되지 않음 | ✅ |
+| WP-07 | AI 채점 설정 — 공급자(openai·anthropic·gemini)·모델은 환경설정(백업 대상), API 키는 디바이스 로컬 저장(BACKUP_KEYS·동기 제외 — FORMULA_GEMINI_KEY와 동일 계약). 공급자 계약은 `tools/ai/llm_client.js` PROVIDERS 미러 | ✅ |
+| WP-08 | AI 보조 채점 — rubric+모범답안+수험생 답안 → 항목별 충족(met)·피드백 JSON(`parseGradingResponse` — 코드펜스·잡음 허용·항목 범위 검증). 점수는 LLM 산출 불신·클라이언트 합산(`applyGrading`). 제안 판정을 체크박스에 반영하되 사용자 조정 가능, 결과 스냅샷(g) 저장·재표시. 오류 코드 분기: nokey/noanswer/norubric/network/key/quota/http/unreadable/aborted | ✅ |
 
 ---
 

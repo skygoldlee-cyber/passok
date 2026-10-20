@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 lossadj 주관식 AI 보조 채점 (설계 §4 2단계, WP-07~08)
+
+- **`src/written-grading.js`**: 공급자 계약(openai·anthropic·gemini — `tools/ai/llm_client.js` PROVIDERS 미러, Anthropic은 `dangerous-direct-browser-access` 헤더), `buildGradingPrompt`(문제·모범답안·rubric·답안 구조화), `parseGradingResponse`(코드펜스·잡음 허용·항목 범위 검증), `applyGrading`(점수는 LLM 산출 불신·클라이언트 합산), `gradeAnswer`(오류 코드 분기: nokey/noanswer/norubric/network/key/quota/http/unreadable/aborted — product-vision 패턴)
+- **설정 키**: `WRITTEN_AI_KEY` 디바이스 로컬(백업·동기 제외 — FORMULA_GEMINI_KEY 계약), `WRITTEN_AI_PROVIDER`·`WRITTEN_AI_MODEL`은 환경설정(BACKUP_KEYS 포함)
+- **UI**: 오버레이 바 "AI 채점" 토글 → 공급자/키/모델 설정 패널(키 마스킹 표시), 문항 카드 "AI 채점" 버튼 → rubric 항목별 ✓/✗+피드백·합산 제안 점수·요약, 제안 판정을 체크박스에 반영(사용자 조정 가능), 결과 스냅샷 `g`를 진행 키에 저장·재표시. 자기평가 완료는 사용자 수동 유지
+- **테스트**: `tests/unit/written-grading.test.js` 9건 — 키 계약·프롬프트·파싱·합산·3사 요청 형식·오류 분기 (fetch 목업)
+
 ## 2026-10-21 lossadj 2차 시드 보강 + 주관식 자기채점 런타임
 
 - **시드 보강**: 이론서 추출분 추가 — 과목4 요지 §13~§17(보험료 산정·정부 지원 50%·손해율-연수 할인할증표·재해예방시설 할인 30% 상한·보장개시일 예시·평년수확량 정의/수확량실적 산식), 과목5 요지 §16~§17(표본주수표 전체·거대재해 1/2 감축·조사적기). secondTheory 교재 챕터 05·06, secondAssessment 교재 챕터 02 보강

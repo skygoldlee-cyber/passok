@@ -227,6 +227,7 @@ src/                    # ES Modules
   questions.js          # 문항 스키마 (single/combo/short/ox), deriveComboAnswer, validateQuestion (샘플 문항은 tests/fixtures/sample-questions.js)
   exam-viewer.js        # 문제집/참조자료 MD 뷰어
   written-practice.js   # 주관식 연습 자기채점 런타임 — ###S 파서 + 답안 서술·rubric 체크 오버레이 (WP-01~06, manifest.written + features.writtenPractice)
+  written-grading.js    # 주관식 AI 보조 채점 — 공급자(openai·anthropic·gemini) 직접 호출 + rubric 항목 판정 파싱 (WP-07~08, 키 디바이스 로컬)
   combo-doc.js          # 복수정답형 드릴 → 문제집 MD 런타임 직렬화 (과목N_복수정답형.md 산출물 대체)
   manual-viewer.js      # 학습안내서/매뉴얼 MD 뷰어
   doc-overlay.js        # MD 문서 오버레이 공용 베이스 — 세션 캐시·번들 주입·TOC·셸 수명주기 (exam/manual 뷰어 공용)
