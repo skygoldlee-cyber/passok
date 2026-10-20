@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: a6d6e036dcd080aa
-> 생성: 2026-10-20 · 원천: SPEC.md(563개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 973fe02ef964945a
+> 생성: 2026-10-20 · 원천: SPEC.md(565개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 563개 — 문서 연결 395 · 소스 연결 503 · 테스트 연결 536 · 보고서 연결 109
+**커버리지 요약**: 요구사항 565개 — 문서 연결 395 · 소스 연결 505 · 테스트 연결 538 · 보고서 연결 109
 
 ---
 
@@ -534,6 +534,8 @@
 | WP-04 | ✅ | 테스트 | — | src/written-practice.js | tests/unit/written-practice.test.js | — | — |
 | WP-05 | ✅ | 테스트 | — | src/written-practice.js | tests/unit/written-practice.test.js | — | — |
 | WP-06 | ✅ | 테스트 | — | src/written-practice.js | tests/unit/written-practice.test.js | — | — |
+| WP-07 | ✅ | 테스트 | — | src/written-grading.js | tests/unit/written-grading.test.js | — | — |
+| WP-08 | ✅ | 테스트 | — | src/written-grading.js | tests/unit/written-grading.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 

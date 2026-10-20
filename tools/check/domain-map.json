@@ -252,7 +252,9 @@
       "note": "주관식 연습 자기채점 — manifest.written[] 선언 시험만 발화 (###S 파서 + 오버레이)",
       "patterns": [
         "src/written-practice.js",
-        "tests/unit/written-practice.test.js"
+        "src/written-grading.js",
+        "tests/unit/written-practice.test.js",
+        "tests/unit/written-grading.test.js"
       ]
     },
     {
