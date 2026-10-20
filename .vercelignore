@@ -79,6 +79,14 @@ requirements.txt
 .tmp/
 .pytest_cache/
 
+# ---------- 로컬 산출물 (배포 제외 — 테스트·리포트·AI 초안) ----------
+# coverage 리포트가 /.vercelignore 부재로 프로덕션에 공개 서빙되던 것을 차단.
+coverage/
+coverage-unit/
+coverage-merged/
+reports/
+tmp/
+
 # ---------- 환경 변수 (배포 제외) ----------
 # vercel.json 이 public:true 라 배포에 포함된 파일은 정적으로 그대로 서빙된다.
 # 비밀(VERCEL_OIDC_TOKEN 등)이 /.env.local 로 공개 노출되지 않도록 명시적으로 제외한다.
