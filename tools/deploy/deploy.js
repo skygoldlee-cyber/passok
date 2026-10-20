@@ -328,7 +328,13 @@ async function main() {
             ['vercel', '--prod', '--yes', '--archive=tgz', ...vercelScopeArgs()].map(quoteArg).join(' '),
             { stdio: 'inherit', shell: true, cwd: staging.dir });
     } finally {
-        fs.rmSync(staging.dir, { recursive: true, force: true });
+        // win32는 vercel.cmd 자식의 cwd 핸들이 잠시 남아 EPERM이 날 수 있어
+        // 재시도 후에도 실패하면 경고만 남긴다 (배포 성공을 무효화하지 않음)
+        try {
+            fs.rmSync(staging.dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 500 });
+        } catch (e) {
+            console.warn(`⚠️  스테이징 정리 실패 — 수동 삭제: ${staging.dir} (${e.message})`);
+        }
     }
     if ((result.status ?? 1) !== 0) {
         restoreStamps();
