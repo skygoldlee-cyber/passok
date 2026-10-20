@@ -10,8 +10,9 @@
 ## 2026-10-21 ref-pipeline pdf2md — -o 미지정 시 입력 폴더 출력
 
 - **pdf2md.py**: -o 미지정 시 문서별 출력 루트를 입력 PDF의 폴더로 변경 (기존 <pdf-root>/ref_md_v2). 중첩 {dir}/{name}/{name}.md · --flat {dir}/{name}.md 규약 유지 — plan_doc_jobs(out_dir=None)이 job별 root를 dirname(pdf)로 해석
-- **_report.json**: 입력 폴더 공통 상위(os.path.commonpath, 혼합 드라이브 시 첫 입력 폴더)에 기록
-- **불변**: --verify는 ref_md_v2 기본 유지(스테이징 비교 계약), -o 명시·GUI·convert.py(스테이징 명시 전달)는 동작 동일
+- **_report.json**: 입력 폴더 공통 상위(report_dir_for — commonpath, 혼합 드라이브 시 첫 입력 폴더)에 기록
+- **GUI**: 출력 폴더 필드 기본값을 빈칸+placeholder("비워두면 각 입력 PDF의 폴더에 출력")으로 변경 — 빈칸이면 입력 폴더 모드, 폴더 열기 버튼은 공통 상위를 해석해 엶
+- **불변**: --verify는 ref_md_v2 기본 유지(스테이징 비교 계약), -o 명시·GUI 폴더 지정·convert.py(스테이징 명시 전달)는 동작 동일
 - **테스트**: test_pdf2md.py +2건(None out_dir 중첩·평면)
 
 ## 2026-10-21 lossadj 과목5 요지 조사체계·가축 세부 보강 (§18~20)
