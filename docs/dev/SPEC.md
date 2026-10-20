@@ -623,6 +623,19 @@
 | AI-23 | 배치 채택률 계측 — `writeDraft`가 초안 본문 해시(`sha=`)를 메타에 기록, `ai:apply --write`가 초안 파일 단위 {생성·편입·스킵·리뷰수정 여부·모델·생성일}을 추적 파일 `tools/ai/adoption_log.jsonl`에 append. `ai:adoption`이 배치별·누적 채택률 리포트 (설계 §3.1 L1 승격 판단 데이터) | ✅ |
 | AI-24 | `ai:textbook` — 참조자료 ref_md 청크(조문 경계 `^제N조` 분할, 조문 없는 문서는 고정폭 창) → 교재 본문 섹션 초안. `scaffold:chapter`(BP-15)의 `<!-- 작성: 본문 -->` 슬롯 채우기용 — 📌출처·원문 보기 블록은 LLM이 아니라 도구가 결정론 생성해 "편입용 블록"으로 첨부 (CS-11 형식). 자기검증: 생성 본문의 제N조 언급이 청크 원문에 없으면 [폐기 후보] 표시 | ✅ |
 
+### 3.28 주관식 연습 자기채점 (Written Practice)
+
+> `manifest.written[]` 선언 시험의 `### S` 서술·계산형 문항을 자기채점 오버레이로 제공. 객관식 런타임(`exams[]`/`integratedExam`)과 분리. 상세 포맷: `content/exams/lossadj/docs/2차_주관식_설계.md` §3.
+
+| ID | 요구사양 | 구현 상태 |
+|----|---------|-----------|
+| WP-01 | `manifest.written[]` 선언 → `registry.written` 빌드(###S 수 집계) → `features.writtenPractice` 게이트로 시험 뷰 "주관식 연습" 카드 노출 | ✅ |
+| WP-02 | `parseWrittenBank` — `### Sn.` 블록 파서: 유형·배점·근거·문제·모범답안·답·rubric 체크리스트(- [ ] 항목 (N점))·흔한 오류·⚖️ 인용 해석 | ✅ |
+| WP-03 | 자기채점 오버레이 — 문항 카드(답안 textarea + 모범답안/rubric 토글 + 항목 체크 → 자기채점 합산) | ✅ |
+| WP-04 | 진행 저장 `STORAGE_KEYS.WRITTEN_PRACTICE`(시험 스코프·백업 대상) — `{stem:{Sn:{a:답안, c:[체크인덱스], d:완료ts}}}`, `isAnswered`와 분리된 "자기평가 완료" 플래그 | ✅ |
+| WP-05 | ⚖️ 인용 `#LNN` → ExamViewer 문제집 뷰어 연동 (상대 경로 해석) | ✅ |
+| WP-06 | 객관식 런타임 분리 유지 — 주관식 문항은 `exams[]`/`integratedExam`에 편입되지 않음 | ✅ |
+
 ---
 
 ## 4. 비기능 요구사양

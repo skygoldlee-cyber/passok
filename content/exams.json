@@ -99,7 +99,7 @@
       "manifestPath": "content/exams/lossadj/manifest.json",
       "registryBundle": "data/exams/lossadj/registry.js",
       "registryGlobal": "DATA_REGISTRY_LOSSADJ",
-      "features": {}
+      "features": {"writtenPractice": true}
     }
   ]
 }

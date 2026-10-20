@@ -109,6 +109,14 @@
     "passAverage": 60,
     "subjectFailBelow": 40
   },
+  "written": [
+    {
+      "key": "second",
+      "title": "2차 주관식 연습 (서술·계산형)",
+      "desc": "손해평가요령 별표 기반 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
+      "file": "2차_주관식_연습.md"
+    }
+  ],
   "uiText": {
     "search": {
       "title": "교재 검색",
