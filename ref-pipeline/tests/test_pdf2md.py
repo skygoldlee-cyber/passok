@@ -363,6 +363,21 @@ class TestPlanDocJobs:
         assert any('s1__x.md' in m for m in mds)
         assert all(j['img_prefix'].endswith('_') for j in jobs)
 
+    def test_none_out_dir_uses_input_folder(self, tmp_path):
+        """out_dir=None이면 문서 출력 루트는 각 입력 PDF의 폴더."""
+        pdfs = _mk_pdfs(tmp_path, [('과목1', 'a'), ('과목2', 'b')])
+        jobs = pdf2md.plan_doc_jobs(pdfs, None)
+        by_doc = {j['doc']: j for j in jobs}
+        assert by_doc['a']['md'] == str(
+            tmp_path / '과목1' / 'a' / 'a.md')
+        assert by_doc['b']['md'] == str(
+            tmp_path / '과목2' / 'b' / 'b.md')
+
+    def test_none_out_dir_flat(self, tmp_path):
+        pdfs = _mk_pdfs(tmp_path, [('과목1', 'a')])
+        jobs = pdf2md.plan_doc_jobs(pdfs, None, flat=True)
+        assert jobs[0]['md'] == str(tmp_path / '과목1' / 'a.md')
+
 
 # ---------------------------------------------------------------------------
 # verify — 중첩·충돌 구분 산출물 vs 골드
