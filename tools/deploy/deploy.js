@@ -401,6 +401,26 @@ async function main() {
         // 태그 실패는 배포 자체를 무효화하지 않는다 — 이미 프로덕션에 올라간 상태
         console.warn(`⚠️  deploy 태그 기록 실패 (배포는 완료됨): ${e.message}`);
     } finally {
+        // 스탬프 5종은 원복하지 않고 확정 커밋으로 남긴다 — 저장소가 실제
+        // 릴리스 기록(버전·노트·패키지·SW)을 보존해야 한다. release-notes.json을
+        // 원복하면 pending 초안이 소비되지 않아 다음 배포가 같은 초안을
+        // 재스탬프해 같은 노트를 반복 공지하고, version.js가 구 값에 머물러
+        // check:notes의 최신노트↔APP_VERSION 정합이 깨진다.
+        // --no-verify: 스탬프 산출물의 기계적 기록 커밋이라 훅 게이트 비대상.
+        try {
+            if (stampedFiles.length) {
+                git(`add ${stampedFiles.map((f) => `"${f}"`).join(' ')}`);
+                // 동일 버전 재배포 등 이미 확정된 상태면 스킵
+                if (git(`diff --cached --name-only`)) {
+                    git(`commit --no-verify -m "chore(release): ${stamped} 스탬프 확정 [no-docs][no-test]"`);
+                    console.log(`✅ 릴리스 스탬프 확정 커밋 (${stamped}) — 푸시는 다음 작업과 함께`);
+                }
+            }
+        } catch (e) {
+            // 스테이징 잔재 해제 후 원복 경로로 — 트리는 clean으로 돌아간다
+            try { git(`reset -q`); } catch {}
+            console.warn(`⚠️  릴리스 스탬프 확정 커밋 실패 — 수동 커밋 필요: ${stampedFiles.join(', ')} (${e.message})`);
+        }
         restoreStamps();
     }
 

@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 릴리스 노트 미소비 결함 수정 — 스탬프 확정 커밋 도입
+
+- **증상**: 배포 후 "새로운 소식"에 갱신 내용이 안 나옴 — 오늘 5회 배포가 전부 동일한 30개 노트(10-18 작성 pending 초안)를 버전만 바꿔 반복 공지하고, 당일 변경(사이드바·Phase1·2)은 노트에 미반영
+- **원인**: `deploy.js`의 `restoreStamps()`가 `data/release-notes.json`까지 원복해 pending 초안이 저장소에서 영구 미소비 — `notes:draft`는 기존 pending을 덮어쓰지 않아(수동 편집 보존) 신규 초안도 생성 불가. 또한 `version.js`·`package.json` 원복으로 `check:notes`의 최신노트↔APP_VERSION 불변식과 구조적으로 양립 불가
+- **수정**: 배포 성공 후 스탬프 5종(`sw.js`·`data/version.js`·`data/release-notes.json`·`data/release-notes.js`·`package.json`)을 원복 대신 `chore(release): <버전> 스탬프 확정` 자동 커밋 — 저장소가 실제 릴리스 기록을 보존하고 pending이 소비돼 다음 `notes:draft`가 정상 동작. 커밋 실패 시 unstage 후 기존 원복 경로로 폴백. 동일 버전 재배포는 변경 없으면 스킵
+- **즉시 교정**: pending 30건을 `v20261021-1993203`으로 확정 + 당일 변경 2건 노트 보강 — version.js·package.json·sw.js를 배포된 스탬프로 갱신해 확정 커밋과 동일한 상태 재현
+- **`version.js` 부수 효과**: `prevVersion`을 잔존값에서 읽던 우회가 정상화 — 다음 배포의 자동 초안 커밋 범위가 정확해짐
+
 ## 2026-10-21 tools/check 상태·설정 분리 — 계층 리팩토링 Phase 2
 
 - **`tools/state/` 신설** — 게이트 기준선·스탬프 7개(추적: `combo_baseline`·`glossary_signal_baseline`·`meta_sections_baseline`·`orphan_assets_baseline`·`replacement_char_baseline`·`study_quality_baseline`·`test_stats.json`) + 로컬 산출물 출력 경로 4개(gitignore: `combo_audit_report.json`·`study_quality_report.json`·`combo_review_queue.md`·`dashboard_report.html`) — `tools/check/`가 순수 소스(76개 .js)로 정돈
