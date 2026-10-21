@@ -51,6 +51,16 @@ describe('command-palette — 통합 검색', () => {
         expect(overlay.classList.contains('is-hidden')).toBe(true);
     });
 
+    it('placeholder 범위 라벨 — dictionary 피처 없으면 사전 항목 미표기 (도메인 무관)', () => {
+        openCommandPalette();
+        const input = document.getElementById('cmdk-input');
+        // 활성 시험·dictionary 피처가 없는 컨텍스트 — '성분' 등 도메인 명칭이 새면 안 됨
+        expect(input.placeholder).toBe('검색: 화면·교재·문제집');
+        expect(input.placeholder).not.toContain('성분');
+        const hint = document.getElementById('cmdk-results').textContent;
+        expect(hint).not.toContain('성분');
+    });
+
     it('검색어 입력 → 유형별 그룹 헤더와 결과 렌더링 (카드·퀴즈 제외)', () => {
         openCommandPalette();
         type('화장품');

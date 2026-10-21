@@ -520,7 +520,7 @@ export async function checkDictNoticeNow() {
   panel.classList.remove('is-hidden');
   const docs = dictNoticeDocs();
   if (!docs.length) {
-    panel.innerHTML = '<div class="dict-notice-loading">이 시험에는 성분 관련 고시 감시 대상이 선언되어 있지 않습니다.</div>';
+    panel.innerHTML = '<div class="dict-notice-loading">이 시험에는 사전 관련 고시 감시 대상이 선언되어 있지 않습니다.</div>';
     return;
   }
   const btn = /** @type {HTMLButtonElement|null} */ (document.querySelector('[data-click="checkDictNoticeNow"]'));
@@ -535,7 +535,7 @@ export async function checkDictNoticeNow() {
     const failed = rows.filter(r => r.level === 'error').length;
     const head = changed
       ? `⚠ 개정 감지 ${changed}종 — 원문을 확인하세요`
-      : `✅ 성분 관련 고시 ${docs.length - failed}종 모두 기준과 일치`;
+      : `✅ 사전 관련 고시 ${docs.length - failed}종 모두 기준과 일치`;
     panel.innerHTML = html`
       <div class="dict-notice-row dict-notice-head">${head}${failed ? ` (${failed}종 조회 실패)` : ''}</div>
       ${rows.map(r => html`<div class="dict-notice-row"><span class="dict-notice-name">· ${r.name}</span><span>${r.text} ${r.mark} <a href="${r.url}" target="_blank" rel="noopener">원문</a></span></div>`)}`;

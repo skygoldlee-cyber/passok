@@ -61,6 +61,14 @@ describe('router.js — DOM 테스트', () => {
             expect(titles['dictionary-view'].title).toBe('사전');
         });
 
+        it('폴백 부제는 시험 도메인 무관 — cosmetic 용어 미포함', () => {
+            const titles = getViewTitles(null);
+            // uiText 미선언 시험(insadj·admagent 등)에 노출되는 폴백 문구 — 도메인 어휘 금지
+            Object.values(titles).forEach(t => {
+                expect(t.subtitle || '').not.toMatch(/배합|원료|성분|조제|화장품/);
+            });
+        });
+
         it('registry uiText로 커스텀 타이틀 적용', () => {
             const registry = {
                 uiText: {

@@ -7,7 +7,7 @@
 
 import { esc } from './sanitize.js';
 import { getChosung } from './utils.js';
-import { contentPath } from './exam-context.js';
+import { contentPath, hasFeature } from './exam-context.js';
 import { DataLoader } from './data-loader.js';
 import { openSubjectSection } from './views/textbook-reader.js';
 import { collectTextbookSections } from './search-sources.js';
@@ -17,6 +17,17 @@ import { trackAction } from './usage-stats.js';
 
 const MAX_PER_GROUP = 5;
 const MAX_TOTAL = 24;
+
+/** 팔레트 검색 범위 라벨 — 지식DB 사전은 피처 보유 시험만 노출, 라벨은 시험 uiText 해석 (도메인 무관) */
+function _scopeLabel() {
+    const parts = ['화면', '교재'];
+    if (hasFeature('dictionary')) {
+        const reg = /** @type {any} */ (DataLoader.registry) || {};
+        parts.push((reg.uiText && reg.uiText.dictionary && reg.uiText.dictionary.title) || '사전');
+    }
+    parts.push('문제집');
+    return parts.join('·');
+}
 
 let _open = false;
 let _activeIdx = 0;
@@ -192,7 +203,7 @@ function _buildDom() {
             <div class="cmdk-input-row">
                 <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                 <input id="cmdk-input" type="text" autocomplete="off" spellcheck="false"
-                    placeholder="검색: 화면·교재·성분·문제집" aria-label="통합 검색어">
+                    placeholder="검색: ${_scopeLabel()}" aria-label="통합 검색어">
                 <kbd>ESC</kbd>
             </div>
             <div id="cmdk-results" class="cmdk-results" role="listbox"></div>
@@ -232,7 +243,7 @@ function _renderResults(query) {
 
     if (!(query || '').trim()) {
         _results = [];
-        box.innerHTML = `<div class="cmdk-hint">검색어를 입력하면 화면·교재·성분·문제집을 한 번에 찾습니다.</div>`;
+        box.innerHTML = `<div class="cmdk-hint">검색어를 입력하면 ${esc(_scopeLabel())}을(를) 한 번에 찾습니다.</div>`;
         return;
     }
 

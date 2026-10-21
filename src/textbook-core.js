@@ -347,8 +347,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
                 || currentSection.startsWith('📊')
                 || currentSection.startsWith('🔢')
                 || currentSection.startsWith('🔗')
-                || currentSection.includes('데이터 구조')
-                || currentSection.includes('주요 성분 데이터');
+                || currentSection.includes('데이터 구조');
             continue;
         }
 
