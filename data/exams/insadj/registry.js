@@ -3,7 +3,7 @@ var DATA_REGISTRY_INSADJ = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2027",
-  "generatedAt": "2026-10-21T03:58:17.377Z",
+  "generatedAt": "2026-10-21T04:01:12.415Z",
   "subjects": [
     {
       "key": "contract",
@@ -28,7 +28,7 @@ var DATA_REGISTRY_INSADJ = {
       "order": 2,
       "name": "보험업법",
       "shortName": "보험업법",
-      "contentHash": "59490960",
+      "contentHash": "98f95282",
       "stats": {
         "cards": 8,
         "quizzes": 0,
@@ -44,7 +44,7 @@ var DATA_REGISTRY_INSADJ = {
       "order": 3,
       "name": "손해사정이론",
       "shortName": "손사이론",
-      "contentHash": "6ce4d60e",
+      "contentHash": "b2823dda",
       "stats": {
         "cards": 8,
         "quizzes": 0,
@@ -60,7 +60,7 @@ var DATA_REGISTRY_INSADJ = {
       "order": 4,
       "name": "2차 준비(법령·기준 참고)",
       "shortName": "2차 참고",
-      "contentHash": "77522145",
+      "contentHash": "e97083cb",
       "stats": {
         "cards": 4,
         "quizzes": 0,
