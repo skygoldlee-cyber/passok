@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 E2E 시험 전환 스펙 — 서브브랜드·별칭 브랜딩 단정 갱신
+
+- **배경**: appNameEn 도입·서브브랜드 통일(ed0245fa·16fa33b4) 이후 `exam-switch.spec.js`가 구값(`손해평가사`·`Passmula`)을 단정해 CI E2E 3프로젝트 전부 실패
+- **수정**: lossadj 단정 → title `Passory — 농어업재해보험 손해평가사 (Passess)` · logo h1 `Passory` + span `손해평가사 · Passess` · data-app-name `Passory 손해평가사`; cosmetic 복귀 단정 → `Passory 조제관리사`
+- **검증**: `npx playwright test exam-switch.spec.js --project=chromium` 7/7 통과
+
 ## 2026-10-21 시험별 실무 도구 브랜드명(practiceName) 선언 — `<명사> OS` 패턴
 
 - **배경**: cosmetic의 실무 모듈명 Formula OS와 동일 패턴으로 전 시험 실무 도구명 확정 — 실무 피처 미구현 시험은 선언만
