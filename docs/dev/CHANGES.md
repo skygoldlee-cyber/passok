@@ -7,6 +7,10 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 사이드바 크레딧 정렬 — ©/버전 줄과 세로 시작선 일치
+
+- `.sidebar-wallpaper` `text-align: center` → `left` — 사이드바 최하단 배경화 크레딧이 `© PassOK`·버전 줄의 좌측 시작선과 어긋나던 것을 정렬. 텍스트가 컨테이너 폭을 거의 채워 픽셀 차이는 1~2px 이내라 visual 기준선 갱신 불필요 (chromium 스펙 통과 확인)
+
 ## 2026-10-21 체커 회귀 테스트 보강 — git_status lib 공용화
 
 - **`tools/lib/git_status.js` 신설**: `parseStatusLine`(porcelain 상태 열 정규식 파싱)·`parseStatus`·`NOISE_LINE`(생성물 diff 노이즈 규칙)·`isNoiseOnlyDiff`를 공용화 — `check_doc_sync`·`check_test_first`의 중복 구현과 `check_data_freshness`·`deploy.js`의 노이즈 규칙 복제를 단일 정본으로 통합
