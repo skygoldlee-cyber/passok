@@ -22,10 +22,11 @@ test.describe('비기본 시험(lossadj) 부팅 — 도메인 격리', () => {
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
         // applyExamBranding: title·로고·data-app-name이 exams.json lossadj 엔트리로 치환
-        await expect(page).toHaveTitle('손해평가사');
-        await expect(page.locator('.logo-text h1')).toHaveText('손해평가사');
+        await expect(page).toHaveTitle('Passory — 농어업재해보험 손해평가사 (Passess)');
+        await expect(page.locator('.logo-text h1')).toHaveText('Passory');
+        await expect(page.locator('.logo-text span')).toHaveText('손해평가사 · Passess');
         await expect(page.locator('.logo-icon')).toHaveClass(/fa-tractor/);
-        await expect(page.locator('[data-app-name]').first()).toHaveText('손해평가사');
+        await expect(page.locator('[data-app-name]').first()).toHaveText('Passory 손해평가사');
         // pwa-manifest.js가 실제 파일로 링크 교체 (시험별 개별 설치 — 기본 시험도 동일)
         await expect(page.locator('link[rel="manifest"]'))
             .toHaveAttribute('href', /manifest\.lossadj\.webmanifest/);
@@ -106,8 +107,8 @@ test.describe('시험 전환 실경로 — selectExam → 리로드 → 부팅',
             })),
         ]);
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
-        await expect(page).toHaveTitle('손해평가사');
-        await expect(page.locator('[data-app-name]').first()).toHaveText('손해평가사');
+        await expect(page).toHaveTitle('Passory — 농어업재해보험 손해평가사 (Passess)');
+        await expect(page.locator('[data-app-name]').first()).toHaveText('Passory 손해평가사');
         const stored = await page.evaluate(() => localStorage.getItem('current_exam'));
         expect(stored).toBe('lossadj');
         // 복귀 — cosmetic으로 되돌려 후속 테스트 격리 유지
@@ -119,7 +120,7 @@ test.describe('시험 전환 실경로 — selectExam → 리로드 → 부팅',
             })),
         ]);
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
-        await expect(page.locator('[data-app-name]').first()).toHaveText('Passmula');
+        await expect(page.locator('[data-app-name]').first()).toHaveText('Passory 조제관리사');
     });
 });
 
