@@ -123,7 +123,8 @@ function extractSpec() {
 /** SPEC.md → Map(id → 구현 상태 문자열) — 표 행 `| ID | … | 상태 |`의 마지막 셀 */
 function extractSpecStatus() {
   const map = new Map();
-  const ROW_RE = /^\s*\|\s*([A-Z]{1,4}(?:-[A-Z]{1,4})?-(?:\d{2}[a-z]?|[PL]\d))\s*\|/;
+  // 숫자부는 \d{2} 또는 [PL] 접두 1~2자리 — ROAD-L10 같이 두 자리 [PL] 번호도 인식
+  const ROW_RE = /^\s*\|\s*([A-Z]{1,4}(?:-[A-Z]{1,4})?-(?:\d{2}[a-z]?|[PL]\d{1,2}))\s*\|/;
   for (const l of fs.readFileSync(SPEC_FILE, 'utf8').split('\n')) {
     const m = l.match(ROW_RE);
     if (!m) continue;
