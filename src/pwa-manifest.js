@@ -39,7 +39,8 @@
 
         // iOS '홈 화면에 추가' 시 사용되는 앱 이름 — 시험별 앱 이름으로 교체
         // (iOS는 추가 시점의 메타 값을 읽으므로 설치 전에 반영되어야 한다)
-        const appName = exam.appName
+        const appName = exam.appNameEn
+            || exam.appName
             || (((exam.logoMain || '') + (exam.logoSub || '')).trim())
             || exam.name;
         const appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
