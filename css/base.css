@@ -889,7 +889,7 @@ body.ui-mode-practice .ui-mode-toggle {
 }
 
 /* 시험 전환 버튼이 ©/버전 텍스트를 가리지 않도록 별도 행으로 분리.
-   앱명이 시험 서브브랜드로 길어져(Passory 조제관리사 등) 버전과 한 줄에
+   앱명이 시험 서브브랜드로 길어져(PassOK 조제관리사 등) 버전과 한 줄에
    나란히 놓이면 중간 줄바꿈이 생기므로 두 줄 세로 배치로 고정한다. */
 .sidebar-footer-meta {
     display: flex;

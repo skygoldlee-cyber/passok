@@ -1,4 +1,4 @@
-# 💄 Passory
+# 💄 PassOK
 
 > **멀티시험 자격증 학습 플랫폼 — 시험별 콘텐츠 팩 구조**
 >
@@ -15,7 +15,7 @@
 
 ## 📖 프로젝트 소개
 
-**Passory**는 자격시험을 "콘텐츠 팩"으로 수용하는 웹 기반 멀티시험 학습 플랫폼입니다. `content/exams/<시험id>/`에 콘텐츠를 배치하고 `content/exams.json`에 엔트리를 추가하면 새 시험이 온보딩됩니다 (현재 등록: 맞춤형화장품 조제관리사 `cosmetic`, 손해평가사 `lossadj`, 손해사정사 `insadj`, 산업안전기사 `indsafe`, 일반행정사 `admagent`). 순수 HTML/CSS/JavaScript로 구현된 SPA(Single Page Application)로, Vercel에 정적 배포되며 **localStorage가 1차 저장소**입니다 (계정 없이 전 기능 사용 가능). 로그인한 사용자에게는 **선택적 Supabase 클라우드 동기화**를 제공합니다.
+**PassOK**는 자격시험을 "콘텐츠 팩"으로 수용하는 웹 기반 멀티시험 학습 플랫폼입니다. `content/exams/<시험id>/`에 콘텐츠를 배치하고 `content/exams.json`에 엔트리를 추가하면 새 시험이 온보딩됩니다 (현재 등록: 맞춤형화장품 조제관리사 `cosmetic`, 손해평가사 `lossadj`, 손해사정사 `insadj`, 산업안전기사 `indsafe`, 일반행정사 `admagent`). 순수 HTML/CSS/JavaScript로 구현된 SPA(Single Page Application)로, Vercel에 정적 배포되며 **localStorage가 1차 저장소**입니다 (계정 없이 전 기능 사용 가능). 로그인한 사용자에게는 **선택적 Supabase 클라우드 동기화**를 제공합니다.
 
 아래 기능 목록은 기본 시험 팩(cosmetic) 기준입니다 — 시험별 `features` 플래그로 기능이 자동 게이팅됩니다.
 
@@ -75,7 +75,7 @@
 
 **테스트**
 - Node.js 내장 테스트 러너 (`node --test`) — 1,450+ unit tests (sanitize, state, parser, Formula OS 스토어·검증·CSV, 빌드·콘텐츠·보안·성능 불변식 등)
-- Vitest + jsdom — 750+ DOM tests (backup, router, Formula OS·학습·공통·계정/동기화·차트·오디오 시나리오)
+- Vitest + jsdom — 760+ DOM tests (backup, router, Formula OS·학습·공통·계정/동기화·차트·오디오 시나리오)
 - Playwright — 110+ E2E tests (부트스트랩·SW·PWA 자산·데스크톱/모바일 네비게이션)
 - GitHub Actions CI — push 시 lint·types·imports·specrefs·trace → unit·DOM·E2E + parser parity 자동 실행
 
@@ -99,7 +99,7 @@
 ## 📁 폴더 구조 상세
 
 ```
-passory/
+passok/
 │
 ├── 📄 index.html                    ← ✅ 배포 (앱 진입점, 테마 로직 내장)
 ├── 📄 style.css                     ← ✅ 배포 (전역 스타일, 라이트/다크)
@@ -186,7 +186,7 @@ passory/
 │
 ├── 📂 tests/                        ← 자동화 테스트
 │   ├── unit/                        ← Node.js 내장 테스트 러너 (1,450+ unit tests)
-│   ├── dom/                         ← Vitest + jsdom DOM 테스트 (750+ DOM tests)
+│   ├── dom/                         ← Vitest + jsdom DOM 테스트 (760+ DOM tests)
 │   └── e2e/                         ← Playwright 실브라우저 E2E (110+ E2E tests)
 ├── 📂 .github/workflows/            ← GitHub Actions CI (test + parser parity)
 │

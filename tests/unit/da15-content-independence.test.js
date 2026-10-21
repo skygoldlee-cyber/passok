@@ -15,7 +15,7 @@ const require = createRequire(import.meta.url);
 const { docSubject } = require('../../tools/build/ref_statements.js');
 
 function tmpRoot() {
-    return fs.mkdtempSync(path.join(os.tmpdir(), 'passory-da15-'));
+    return fs.mkdtempSync(path.join(os.tmpdir(), 'passok-da15-'));
 }
 
 test('docSubject: 규칙 미선언 시험에서 cosmetic 문서명 패턴이 과목을 부여하지 않는다', () => {

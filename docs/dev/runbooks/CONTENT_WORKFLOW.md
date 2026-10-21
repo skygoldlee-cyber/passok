@@ -541,7 +541,7 @@ npm.cmd run deploy   # 배포 가드 → sw 스탬프(비커밋) → vercel --pr
 
 ### 5.3 배포 확인
 
-- https://passory.vercel.app 접속
+- https://passok.vercel.app 접속
 - HTTP 200 확인
 - 변경된 콘텐츠 정상 표시 확인
 

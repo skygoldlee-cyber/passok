@@ -22,9 +22,9 @@ const EXAMS = {
             features: { formula: true, dictionary: true, calcPractice: true },
         },
         {
-            id: 'insadj', name: '손해사정사', appName: 'Passory 손해사정사', appNameEn: 'Passure',
-            title: 'Passory — 손해사정사 (Passure)',
-            logoMain: 'Passory', logoSub: '손해사정사 · Passure', icon: 'fa-solid fa-scale-balanced',
+            id: 'insadj', name: '손해사정사', appName: 'PassOK 손해사정사', appNameEn: 'Passure',
+            title: 'PassOK — 손해사정사 (Passure)',
+            logoMain: 'PassOK', logoSub: '손해사정사 · Passure', icon: 'fa-solid fa-scale-balanced',
             year: '2027',
             features: { pomodoro: true, dictionary: true },
         },
@@ -57,21 +57,21 @@ describe('멀티시험 전환 — 비기본 시험 활성화', () => {
         // insadj 보유 기능 활성
         expect(hasFeature('pomodoro')).toBe(true);
         expect(hasFeature('dictionary')).toBe(true);
-        expect(getExamAppName()).toBe('Passory 손해사정사');
+        expect(getExamAppName()).toBe('PassOK 손해사정사');
     });
 
-    it('applyExamBranding — iOS 설치명은 시험 무관 ' + 'Passory' + ' 단일 정체성', () => {
+    it('applyExamBranding — iOS 설치명은 시험 무관 ' + 'PassOK' + ' 단일 정체성', () => {
         localStorage.setItem('current_exam', 'insadj');
         applyExamBranding();
 
         const appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
         expect(appleTitle).not.toBeNull();
-        // 단일 앱 정책 — webmanifest name과 동일하게 'Passory' 고정 (어느 시험에서 추가해도 같은 라벨)
-        expect(appleTitle.getAttribute('content')).toBe('Passory');
+        // 단일 앱 정책 — webmanifest name과 동일하게 'PassOK' 고정 (어느 시험에서 추가해도 같은 라벨)
+        expect(appleTitle.getAttribute('content')).toBe('PassOK');
 
         localStorage.setItem('current_exam', 'cosmetic');
         applyExamBranding();
-        expect(appleTitle.getAttribute('content')).toBe('Passory');
+        expect(appleTitle.getAttribute('content')).toBe('PassOK');
     });
 
     it('applyFeatureFlags — insadj에서 formula 게이트 요소 숨김, dictionary·공용 매뉴얼 유지', () => {
@@ -100,10 +100,10 @@ describe('멀티시험 전환 — 비기본 시험 활성화', () => {
         localStorage.setItem('current_exam', 'insadj');
         applyExamBranding();
 
-        expect(document.title).toBe('Passory — 손해사정사 (Passure)');
+        expect(document.title).toBe('PassOK — 손해사정사 (Passure)');
         const logoMain = document.querySelector('.logo-text h1');
         const logoSub = document.querySelector('.logo-text span');
-        if (logoMain) expect(logoMain.textContent).toBe('Passory');
+        if (logoMain) expect(logoMain.textContent).toBe('PassOK');
         if (logoSub) expect(logoSub.textContent).toBe('손해사정사 · Passure');
     });
 

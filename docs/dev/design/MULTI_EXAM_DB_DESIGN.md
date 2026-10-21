@@ -266,7 +266,7 @@ const _EXAM_LAW_URLS = {
 | B — 스캐폴더 | `tools/build/scaffold_exam.js` — ✅ 완료 (2026-09-30) | 더미 시험(dummytest)으로 scaffold→build→피커 표시→제거→잔재 0 라운드트립 통과 |
 | C — 파일럿 | 식품기사(`food`) — 법령 암기형, 식약처 고시 체계 공유로 재사용성 최대 — ✅ 완료 (2026-09-30) | 전 체인 동작: 교재→문항→인용→법령 링크→고시 감시 (아래 "Phase C 파일럿 결과" 참조) |
 | D — 지식DB 일반화 | `dictionary` 스키마 드리븐화 + 두 번째 엔티티 타입 적용 | ✅ 완료 (2026-09-30 — food `additives` 세트, `knowledge.plugin.js`, `loadDictionary()`, 스키마 DOM 테스트 7건) · 엔티티 역참조(§5.3)·다중 세트 UI(§5.2)는 후속 |
-| E — 도메인 모듈 격리 + 플랫폼 브랜딩 | cosmetic 전용 실행 모듈을 `src/exams/cosmetic/`로 물리 이동 (§10 항목 5의 후속 설계 확정) + 플랫폼 식별자를 시험 브랜드에서 분리 (`passory`) | ✅ 완료 (2026-10-03) — 하단 "Phase E" 참조 |
+| E — 도메인 모듈 격리 + 플랫폼 브랜딩 | cosmetic 전용 실행 모듈을 `src/exams/cosmetic/`로 물리 이동 (§10 항목 5의 후속 설계 확정) + 플랫폼 식별자를 시험 브랜드에서 분리 (`passok`) | ✅ 완료 (2026-10-03) — 하단 "Phase E" 참조 |
 
 **의존 관계**: A→C는 순차 (B는 A 이후 언제든). D는 C와 독립 진행 가능 — 다만 지식DB가 있는 시험을 파일럿으로 고르면 D의 검증 경로가 확보된다. E는 A~D의 산출물 위에서 수행.
 
@@ -276,7 +276,7 @@ const _EXAM_LAW_URLS = {
 
 **확정 결정**
 
-1. **플랫폼 브랜드 = `passory`** — 리포지토리·배포 도메인(`passory.vercel.app`)과 일치. 시험별 앱 브랜드(`appName`/`title`, cosmetic = Passmula)는 exams.json 필드로 그대로 유지 — 플랫폼명과 시험 앱명이 분리된다.
+1. **플랫폼 브랜드 = `passok`** — 리포지토리·배포 도메인(`passok.vercel.app`)과 일치. 시험별 앱 브랜드(`appName`/`title`, cosmetic = Passmula)는 exams.json 필드로 그대로 유지 — 플랫폼명과 시험 앱명이 분리된다.
 2. **PWA 설치 정체성 = 시험별 개별 설치 유지** — `pwa-manifest.js`의 동적 `manifest.<id>.webmanifest` 교체 방식 불변. `manifest.webmanifest`는 부팅 전 플레이스홀더 겸 폴백으로 남고(부팅 후 기본 시험도 `manifest.cosmetic.webmanifest`로 교체 — 동일 내용 + `pwaShortcuts` 반영), `"id": "cosmetic-pass"`도 cosmetic 앱의 설치 정체성이므로 **변경 금지** (id 변경 시 기존 설치 앱이 별개 앱으로 취급됨).
 3. **시험 도메인 모듈 위치 = `src/exams/<examId>/`** — 시험 전용 실행 모듈을 플랫폼 코어(`src/`)와 물리 분리. `domain-map.json`의 `domain:<examId>` 레이어로 분류된다.
 
@@ -294,9 +294,9 @@ const _EXAM_LAW_URLS = {
 
 **브랜딩 반영 범위**
 
-- `package.json` `name`/`description` → passory
-- `sw.js` 캐시 접두사 `cosmetic-pass-*` → `passory-*` — `activate`의 비현재 캐시 전수 삭제 로직이 구 접두사 캐시를 자동 정리 (구 `cosmetic-pass-data-v1` 삭제로 데이터 캐시 1회 재다운로드 — 재취득 가능한 콘텐츠라 무해)
-- `index.template.html` 정적 `<title>`·`apple-mobile-web-app-title` → Passory (부팅 전 플레이스홀더 — 부팅 후 `pwa-manifest.js`가 시험별 타이틀로 덮어씀)
+- `package.json` `name`/`description` → passok
+- `sw.js` 캐시 접두사 `cosmetic-pass-*` → `passok-*` — `activate`의 비현재 캐시 전수 삭제 로직이 구 접두사 캐시를 자동 정리 (구 `cosmetic-pass-data-v1` 삭제로 데이터 캐시 1회 재다운로드 — 재취득 가능한 콘텐츠라 무해)
+- `index.template.html` 정적 `<title>`·`apple-mobile-web-app-title` → PassOK (부팅 전 플레이스홀더 — 부팅 후 `pwa-manifest.js`가 시험별 타이틀로 덮어씀)
 - 문서 헤더(README·SPEC·ARCHITECTURE·AGENTS) → 플랫폼 서술
 
 **회귀 방지 게이트**: `check:domainmap`에 platform 레이어 파일의 시험 id 리터럴 탐지 추가 — platform 분류 `src/` 파일이 `exams.json` 등록 id(`cosmetic` 등)를 문자열 리터럴로 포함하면 오류. 예외는 `domain-map.json`의 `examLiteralAllow`에 파일→사유로 명시 (현재 `src/exam-context.js`의 DEFAULT_EXAM_ID 최후 폴백 1건 — `law-links.js`/`pdf-registry.js`/`keyword-index.js`의 `_DEFAULT_EXAM_ID`·`_EXAM_*` 테이블은 feature:refDocs 생성물이라 platform 검사 대상이 아님). + `tests/e2e/exam-switch.spec.js`가 food 부팅(타이틀·로고·manifest.food 링크)·기능 게이팅(formula·practiceMode is-hidden)·도메인 뷰 미로드를 증명.
@@ -304,7 +304,7 @@ const _EXAM_LAW_URLS = {
 **Phase E 결과 (2026-10-03)**
 
 - 이동 완료: 스토어·도메인 로직 9개 + 뷰 9개(Formula OS 8 + trainer-ingredients) → `src/exams/cosmetic/`(+`views/`). 정적 importers는 `app.js`·`practice-registry.js`·`pro-upgrade.js`의 지연 import 문자열 갱신만으로 커버 — 이동 파일 내부의 상대 import는 `../../../` 한 단계 상향으로 재작성.
-- `sw.js` 프리캐시 자산 경로 갱신(`src/exams/cosmetic/views/trainer-ingredients.js`) + 캐시 접두사 `passory-*` 전환(구 `cosmetic-pass-*`는 activate 필터에 양 접두사를 남겨 1회 정리).
+- `sw.js` 프리캐시 자산 경로 갱신(`src/exams/cosmetic/views/trainer-ingredients.js`) + 캐시 접두사 `passok-*` 전환(구 `cosmetic-pass-*`는 activate 필터에 양 접두사를 남겨 1회 정리).
 - `csv-utils.js`는 설계대로 platform 유지(feature:dictionary가 정적 import — 도메인 하위 이동 시 역방향 의존 발생).
 - 게이트 가동: `check:domainmap`의 platform 시험 식별 리터럴 검사 + food 부팅 E2E(`tests/e2e/exam-switch.spec.js`, chromium·mobile·tablet 프로젝트).
 

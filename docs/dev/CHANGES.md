@@ -1,6 +1,6 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
-> 대상: passory (구 Personalized_Skincare / Cosmetic Pass Master) 배포판
+> 대상: passok (구 passory / Personalized_Skincare / Cosmetic Pass Master) 배포판
 > 작업일: 2026-08-23
 > 검증: 모든 `src/*.js` `node --check` 통과 · `node tools/build/index.js` 재빌드 성공 ·
 > **문서 ID**: DOC-DEV-03
@@ -14,18 +14,18 @@
 - gh rename이 로컬 remote를 자동 갱신 — 워크플로는 `github.repository` 컨텍스트라 무수정
 - 참고: 구 URL로의 clone/push는 GitHub 리다이렉트로 동작하나 동일 이름 신규 리포 생성 시 단절
 
-## 2026-10-21 iOS 설치명도 'Passory' 통일 — apple-mobile-web-app-title 단일화
+## 2026-10-21 iOS 설치명도 'PassOK' 통일 — apple-mobile-web-app-title 단일화
 
 - **배경**: 단일 앱 정책(UX-PWA-07) 적용 후에도 iOS 홈 화면 라벨만 시험별 별칭(Passmula·Passure 등)이었다 — `apple-mobile-web-app-title`은 manifest와 별개 메타라 별도 처리 필요
-- **수정**: `pwa-manifest.js`(부팅)·`app-shell.js`(브랜딩 재적용) 양쪽 경로의 apple title을 `'Passory'` 고정 — webmanifest name과 동일 정체성
-- **테스트**: exam-switching DOM의 apple title 단정을 시험 무관 'Passory'로 갱신
+- **수정**: `pwa-manifest.js`(부팅)·`app-shell.js`(브랜딩 재적용) 양쪽 경로의 apple title을 `'PassOK'` 고정 — webmanifest name과 동일 정체성
+- **테스트**: exam-switching DOM의 apple title 단정을 시험 무관 'PassOK'로 갱신
 
 ## 2026-10-21 PWA 단일 플랫폼 앱 통일 — 시험별 manifest 정체성 분리 폐기
 
-- **배경**: "PWA 아이콘이 무조건 'Passory — 맞춤형화장품 조제관리사 (Passmula)'로 표시" — 설치된 PWA의 이름은 설치 시점 manifest에 고정되고, 시험별 `<id>-pass` id는 브라우저가 별개 앱으로 인식해 (1) 시험 전환해도 아이콘 미갱신 (2) 다른 시험에서 설치 시 중복 앱 생성이 가능했다
-- **정책 결정**: 플랫폼 단일 앱 — 어느 시험에서 설치해도 'Passory' 하나 (사용자 선택)
-- **수정**: `buildExamManifest`의 `id`·`name`·`short_name`을 `'passory'`/`'Passory'`로 통일 — 시험별 파일은 `description`·`shortcuts`(pwaShortcuts 패스스루)만 다름. `pwa-manifest.js`의 활성 시험 링크 교체는 유지(시험별 shortcuts·desc 반영)
-- **베이스 갱신**: `manifest.webmanifest` — id `cosmetic-pass`→`passory`, name `Passory`, cosmetic 종속 description→플랫폼 설명 (부팅 전 폴백도 동일 정체성)
+- **배경**: "PWA 아이콘이 무조건 'PassOK — 맞춤형화장품 조제관리사 (Passmula)'로 표시" — 설치된 PWA의 이름은 설치 시점 manifest에 고정되고, 시험별 `<id>-pass` id는 브라우저가 별개 앱으로 인식해 (1) 시험 전환해도 아이콘 미갱신 (2) 다른 시험에서 설치 시 중복 앱 생성이 가능했다
+- **정책 결정**: 플랫폼 단일 앱 — 어느 시험에서 설치해도 'PassOK' 하나 (사용자 선택)
+- **수정**: `buildExamManifest`의 `id`·`name`·`short_name`을 `'passok'`/`'PassOK'`로 통일 — 시험별 파일은 `description`·`shortcuts`(pwaShortcuts 패스스루)만 다름. `pwa-manifest.js`의 활성 시험 링크 교체는 유지(시험별 shortcuts·desc 반영)
+- **베이스 갱신**: `manifest.webmanifest` — id `cosmetic-pass`→`passok`, name `PassOK`, cosmetic 종속 description→플랫폼 설명 (부팅 전 폴백도 동일 정체성)
 - **SPEC**: UX-PWA-07 신규 — 단일 앱 정체성 불변식 명문화
 - **테스트**: pwa-sw에 단일 정체성 불변식 단정 추가 — buildExamManifest 출력 + 생성된 전체 manifest 파일의 id/name 일치 검증
 - **참고**: 기존 설치 앱은 과거 id(`<exam>-pass`)로 남아 업데이트로 자동 전환되지 않음 — 새 정책 적용은 재설치 필요
@@ -71,13 +71,13 @@
 
 ## 2026-10-21 사이드바 푸터 레이아웃 — ©/버전 두 줄 세로 배치
 
-- **배경**: 서브브랜드로 앱명이 길어져(`Passory 조제관리사` 등) space-between 한 줄 배치에서 © 줄과 버전이 중간 줄바꿈으로 엉성해짐
+- **배경**: 서브브랜드로 앱명이 길어져(`PassOK 조제관리사` 등) space-between 한 줄 배치에서 © 줄과 버전이 중간 줄바꿈으로 엉성해짐
 - **수정**: `.sidebar-footer-meta`를 세로 스택(© 줄 위·버전 아래, 좌측 정렬)으로 변경 + 내부 p 마진 제거
 
 ## 2026-10-21 E2E 시험 전환 스펙 — 서브브랜드·별칭 브랜딩 단정 갱신
 
 - **배경**: appNameEn 도입·서브브랜드 통일(ed0245fa·16fa33b4) 이후 `exam-switch.spec.js`가 구값(`손해평가사`·`Passmula`)을 단정해 CI E2E 3프로젝트 전부 실패
-- **수정**: lossadj 단정 → title `Passory — 농어업재해보험 손해평가사 (Passess)` · logo h1 `Passory` + span `손해평가사 · Passess` · data-app-name `Passory 손해평가사`; cosmetic 복귀 단정 → `Passory 조제관리사`
+- **수정**: lossadj 단정 → title `PassOK — 농어업재해보험 손해평가사 (Passess)` · logo h1 `PassOK` + span `손해평가사 · Passess` · data-app-name `PassOK 손해평가사`; cosmetic 복귀 단정 → `PassOK 조제관리사`
 - **검증**: `npx playwright test exam-switch.spec.js --project=chromium` 7/7 통과
 
 ## 2026-10-21 시험별 실무 도구 브랜드명(practiceName) 선언 — `<명사> OS` 패턴
@@ -99,8 +99,8 @@
 
 ## 2026-10-21 시험별 영문 별칭(appNameEn) 추가 — PWA/iOS 설치명 우선 적용
 
-- **배경**: 플랫폼 서브브랜드(Passory <직종>) 유지하면서 영문 별칭을 병기 — 홈 화면 아이콘 라벨 등 짧은 영문이 적합한 표기면에 활용
-- **exams.json**: 5개 시험에 `appNameEn` 신규 필드(cosmetic=Passmula·lossadj=Passess·insadj=Passure·indsafe=Passafe·admagent=Passmin) + `title` 별칭 병기(`Passory — <시험명> (별칭)`) + `logoSub`에 `· 별칭` 병기
+- **배경**: 플랫폼 서브브랜드(PassOK <직종>) 유지하면서 영문 별칭을 병기 — 홈 화면 아이콘 라벨 등 짧은 영문이 적합한 표기면에 활용
+- **exams.json**: 5개 시험에 `appNameEn` 신규 필드(cosmetic=Passmula·lossadj=Passess·insadj=Passure·indsafe=Passafe·admagent=Passmin) + `title` 별칭 병기(`PassOK — <시험명> (별칭)`) + `logoSub`에 `· 별칭` 병기
 - **types.js**: ExamDef JSDoc에 `appNameEn` 옵션 프로퍼티 문서화
 - **pwa-manifest.js·app-shell.js**: `apple-mobile-web-app-title` 갱신 시 `appNameEn` 우선, 없으면 기존 appName 폴백 — iOS 설치명은 짧은 영문 별칭
 - **생성물**: `title` 변경으로 5개 webmanifest `name` 자동 별칭 포함 (`name: e.title` 규칙 그대로)
@@ -206,7 +206,7 @@
 - **배경**: `.git` 1GB — 생성물 재커밋 누적(data/ 1.2GB)·삭제된 레거시 경로(exams/ 219MB 등)가 원인
 - **조치 B (이력 재작성)**: git filter-repo로 `data/`·`exams/`·`content/참조자료`·`content/교재`·`content/문제은행`·구 monolith(study_data.js·exam_data.js)·docs 산출 html/pdf·임시 디렉터리를 전 이력에서 제거 → `.git` 1GB→297MB. 커밋 해시 전면 변경 → force-push
 - **조치 C (구조)**: `data/exams/*/` 생성 서브디렉터리 8종(docs_md·drills·exams·exams_md·study_md·subjects·supplements·data/docs_md)을 .gitignore 처리 — 시험 루트 소형 파일(registry·notice_diff·id_migration·question_chapters·card_terms_snapshot·ingredients_data)과 embeddings/는 추적 유지
-- **검증 백업**: `C:/Project/passory-backup.git` (미러) — 재작성 이전 이력 보존
+- **검증 백업**: `C:/Project/passok-backup.git` (미러) — 재작성 이전 이력 보존
 
 ## 2026-10-21 deploy 스테이징 디렉터리 업로드 전환
 
@@ -1826,7 +1826,7 @@
 
 ## 2026-10-05 인쇄 머리글·바닥글(제목·URL) 제거
 
-- **문제**: 브라우저 '머리글 및 바닥글' 옵션으로 `Passmula — 맞춤형화장품 조제관리사` 제목과 `https://passory.vercel.app/index.html#/formula` URL이 PDF 상·하단에 출력됨 — 페이지 여백 영역에 그려지므로 CSS `display:none`으로는 제거 불가
+- **문제**: 브라우저 '머리글 및 바닥글' 옵션으로 `Passmula — 맞춤형화장품 조제관리사` 제목과 `https://passok.vercel.app/index.html#/formula` URL이 PDF 상·하단에 출력됨 — 페이지 여백 영역에 그려지므로 CSS `display:none`으로는 제거 불가
 - **수정**: `css/print.css` — `@page { margin: 0 }`으로 머리글 영역 자체를 제거하고, 본문 여백은 `.fp-doc`의 `padding: 10mm 0` + `box-decoration-break: clone`(연속 페이지 상하에도 패딩 반복)로 대체. `#review-view` 인쇄에도 `padding: 10mm 8mm` 부여. 검증: Playwright `displayHeaderFooter` 재현에서 제목·URL 미출력 확인
 
 ## 2026-10-05 인쇄 표 우측 세로선 소실 — 2차 수정 (문서 폭이 인쇄 경계와 일치)
@@ -2245,12 +2245,12 @@
 - **테스트**: DOM +6(스테퍼·진행·계량·드래프트·고대비), E2E 신규 `tests/e2e/exams/cosmetic/formula-tablet.spec.js` 4시나리오(834×1112) — 최초 실패 원인은 `current_exam` 미시드로 `#/exams` 리다이렉트, 시드 패턴 문서화
 - 검증: unit 819 · DOM 516(+6) · tablet E2E 4/4 · types·lint·html·imports·domainmap·specrefs 통과
 
-## 2026-10-03 멀티시험 Phase E — 도메인 모듈 격리 + 플랫폼 브랜드 passory (문서 선행)
+## 2026-10-03 멀티시험 Phase E — 도메인 모듈 격리 + 플랫폼 브랜드 passok (문서 선행)
 
-- **결정 3건 확정** (MULTI_EXAM_DB_DESIGN Phase E): 플랫폼 브랜드 `passory` · 시험별 PWA 개별 설치 유지(동적 매니페스트 불변, cosmetic의 `id: "cosmetic-pass"`는 설치 정체성이라 변경 금지) · 시험 도메인 모듈은 `src/exams/<id>/` 물리 격리 (domain-map `domain:<examId>` 레이어)
+- **결정 3건 확정** (MULTI_EXAM_DB_DESIGN Phase E): 플랫폼 브랜드 `passok` · 시험별 PWA 개별 설치 유지(동적 매니페스트 불변, cosmetic의 `id: "cosmetic-pass"`는 설치 정체성이라 변경 금지) · 시험 도메인 모듈은 `src/exams/<id>/` 물리 격리 (domain-map `domain:<examId>` 레이어)
 - **SPEC v1.13**: DA-13(시험 도메인 모듈 격리) 신설 · 헤더/§1.1을 플랫폼 서술로 재작성 · DA-01/04·CS-01~07의 cosmetic 구체 경로를 `{contentRoot}`/`{dataRoot}` 플레이스홀더로 치환 (check_docs_paths가 플레이스홀더→기본 시험으로 해석해 실존 검증 유지)
-- **README·AGENTS·ARCHITECTURE 헤더**: Cosmetic Pass Master → Passory 플랫폼 프레이밍 (Passmula는 cosmetic 팩의 appName으로 유지)
-- 후속 작업: 모듈 물리 이동·import 경로 수정·domain-map/sw.js 갱신·캐시 접두사 passory 전환·플랫폼 시험 id 리터럴 게이트·food 전환 E2E — 구현 시 본 항목에 결과 병기
+- **README·AGENTS·ARCHITECTURE 헤더**: Cosmetic Pass Master → PassOK 플랫폼 프레이밍 (Passmula는 cosmetic 팩의 appName으로 유지)
+- 후속 작업: 모듈 물리 이동·import 경로 수정·domain-map/sw.js 갱신·캐시 접두사 passok 전환·플랫폼 시험 id 리터럴 게이트·food 전환 E2E — 구현 시 본 항목에 결과 병기
 
 ## 2026-10-03 도메인 자산·테스트 물리 격리 — css/html/tests 시험별 하위 디렉터리
 
@@ -2308,11 +2308,11 @@
 - **food E2E 실전환 경로 추가** (`exam-switch.spec.js` +2건): ④ comingSoon 카드 `dispatchEvent('click')` → '준비 중' 안내만 표시·`current_exam` 불변 (aria-disabled라 Playwright 클릭 거부 — 의도된 가드라 디스패치로 위임 경로 검증) ⑤ `selectExam('food')` 모듈 호출 → `current_exam` 저장 + `location.reload` → 식품기사 부팅, 왕복 복귀까지 — 시드가 아닌 실제 전환 계약 경로. 3 프로젝트 15/15 통과
 - 검증: unit(관련 19) · DOM(관련 27) · E2E exam-switch 15/15 · check:types · check:domainmap · verify:assets · check:html · eslint 통과
 
-## 2026-10-03 멀티시험 Phase E 구현 — 모듈 격리 + passory 브랜딩 완료
+## 2026-10-03 멀티시험 Phase E 구현 — 모듈 격리 + passok 브랜딩 완료
 
 - **물리 이동 완료** (`git mv` 18개): 스토어·도메인 로직 9개(`formula-{store,rules,check,stability}`·`batch-store`·`customer-store`·`material-ledger`·`usage-guide`·`store-utils`) → `src/exams/cosmetic/`, 뷰 9개(`formula{,-batch,-compliance,-customer,-fields,-material,-print,-recommend}` + `trainer-ingredients`) → `src/exams/cosmetic/views/`. 이동 파일 내부 상대 import는 `../../../`로 재작성, 플랫폼 진입점(`app.js`·`practice-registry.js`·`pro-upgrade.js`)은 지연 import 문자열만 갱신 — 정적 import 유지 불가라 플래그 off 시험에서 모듈 로드 자체가 안 되는 게이팅 불변
 - **테스트 참조 전수 수정**: DOM·unit 테스트의 정적 import + `vi.mock` 경로 + `tests/unit/exams/cosmetic/formula-os.test.js`의 캐시버스팅 동적 import(`?t=`) + `formula-compliance.test.js`의 `pathToFileURL`까지 — 정규식 일괄 치환 후 타입체크로 잔여 발견·수정
-- **브랜딩**: `package.json` name `cosmetic-pass-master`→`passory` · `sw.js` 캐시 접두사 `cosmetic-pass-*`→`passory-*` (activate 정리 필터는 양 접두사 유지 — 구 캐시 1회 자동 삭제) · `index.template.html` 정적 title/`apple-mobile-web-app-title`/`data-app-name` 플레이스홀더→Passory (부팅 후 시험별 appName으로 덮임) · `analysis-engine`·`exam-context`의 'Passmula' 폴백→'Passory'. **`manifest.webmanifest`의 `id:"cosmetic-pass"`는 유지** — cosmetic 앱의 설치 정체성(변경 시 기존 설치가 별개 앱으로 분리)
+- **브랜딩**: `package.json` name `cosmetic-pass-master`→`passok` · `sw.js` 캐시 접두사 `cosmetic-pass-*`→`passok-*` (activate 정리 필터는 양 접두사 유지 — 구 캐시 1회 자동 삭제) · `index.template.html` 정적 title/`apple-mobile-web-app-title`/`data-app-name` 플레이스홀더→PassOK (부팅 후 시험별 appName으로 덮임) · `analysis-engine`·`exam-context`의 'Passmula' 폴백→'PassOK'. **`manifest.webmanifest`의 `id:"cosmetic-pass"`는 유지** — cosmetic 앱의 설치 정체성(변경 시 기존 설치가 별개 앱으로 분리)
 - **게이트 신설 — 플랫폼 시험 id 리터럴 금지**: `check:domainmap`에 platform 계층 `src/**/*.js`의 `'cosmetic'` 같은 등록 시험 id 문자열 리터럴 탐지 추가. 예외는 `domain-map.json` `examLiteralAllow`(파일→사유) — 현재 `exam-context.js`의 `DEFAULT_EXAM_ID` 최후 폴백 1건만. `law-links.js`·`pdf-registry.js`·`keyword-index.js`는 feature:refDocs 생성물이라 대상 아님(생성기 폴백 `_DEFAULT_EXAM_ID`는 후속 과제)
 - **food 전환 E2E** `tests/e2e/exam-switch.spec.js` 3건: ① food 부팅 브랜딩(타이틀·로고·아이콘·data-app-name·`manifest.food.webmanifest` 링크 교체) ② 기능 게이팅(formula-view 네비·ui-mode-toggle is-hidden, dictionary·examSwitch 유지) ③ 도메인 뷰 미로드(formula-view 빈 섹션·ingredients 카드 is-hidden) — comingSoon 시험이라 `current_exam` 시드로 부팅 경로 검증
 - **domain-map 재분류**: `feature:formula`/`feature:ingredients` 규칙 해소 → `domain:cosmetic`(`src/exams/cosmetic/**`·`css/exams/cosmetic/formula.css`·`html/exams/cosmetic/formula.html`), `csv-utils.js`는 platform 유지(feature:dictionary의 `views/dictionary.js`가 정적 import — domain 하위 이동 시 역방향 의존)

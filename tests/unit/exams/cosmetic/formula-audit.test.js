@@ -303,8 +303,8 @@ test('collectAuditReportData — 같은 입력은 같은 해시, 데이터 변�
 });
 
 test('fnv1aHex — 결정적 8자리 hex + 입력 민감', () => {
-  assert.equal(fnv1aHex('passory'), fnv1aHex('passory'));
-  assert.match(fnv1aHex('passory'), /^[0-9a-f]{8}$/);
+  assert.equal(fnv1aHex('passok'), fnv1aHex('passok'));
+  assert.match(fnv1aHex('passok'), /^[0-9a-f]{8}$/);
   assert.notEqual(fnv1aHex('a'), fnv1aHex('b'));
 });
 

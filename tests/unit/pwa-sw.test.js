@@ -144,23 +144,23 @@ test('UX-PWA-06: buildExamManifest가 exams.json pwaShortcuts를 shortcuts로 �
     assert.ok(!('shortcuts' in without), '미선언 시 shortcuts 없음');
 });
 
-test('UX-PWA-06: 모든 시험 manifest는 단일 앱 정체성(id/name/short_name=passory/Passory)을 공유한다', async () => {
+test('UX-PWA-06: 모든 시험 manifest는 단일 앱 정체성(id/name/short_name=passok/PassOK)을 공유한다', async () => {
     const { buildExamManifest } = await import('../../tools/build/build_exams_list.js');
     const base = { id: 'base', name: 'Base', short_name: 'Base', description: 'base desc' };
     // 시험별 id가 다르면 브라우저가 별개 앱으로 인식해 중복 설치되고,
     // name이 다르면 아이콘이 설치 시점 시험명으로 고정된다
     for (const e of [{ id: 'cosmetic', title: 'A' }, { id: 'insadj', name: 'B' }]) {
         const m = buildExamManifest(base, e);
-        assert.equal(m.id, 'passory', `${e.id}: id는 플랫폼 단일 값`);
-        assert.equal(m.name, 'Passory', `${e.id}: name은 플랫폼 브랜드`);
-        assert.equal(m.short_name, 'Passory', `${e.id}: short_name은 플랫폼 브랜드`);
+        assert.equal(m.id, 'passok', `${e.id}: id는 플랫폼 단일 값`);
+        assert.equal(m.name, 'PassOK', `${e.id}: name은 플랫폼 브랜드`);
+        assert.equal(m.short_name, 'PassOK', `${e.id}: short_name은 플랫폼 브랜드`);
     }
     // 생성물도 동일 정체성 — 시험별 파일은 shortcuts·description만 다르다
     const ids = new Set();
     for (const f of readdirSync(ROOT).filter(f => /^manifest\..+\.webmanifest$/.test(f))) {
         const m = JSON.parse(readFileSync(join(ROOT, f), 'utf-8'));
-        assert.equal(m.id, 'passory', `${f}: 단일 앱 id`);
-        assert.equal(m.name, 'Passory', `${f}: 플랫폼 name`);
+        assert.equal(m.id, 'passok', `${f}: 단일 앱 id`);
+        assert.equal(m.name, 'PassOK', `${f}: 플랫폼 name`);
         ids.add(m.id);
     }
     assert.equal(ids.size, 1, 'manifest id는 전 시험 공통 하나');
