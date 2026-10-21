@@ -529,11 +529,13 @@ if (typeof window !== 'undefined') {
     const mdAssets = [];
     // 참고: 전역 data/exams.js·data/audio_manifest.js는 SHELL_ASSETS에 수동 등록됨 (중복 방지)
     for (const t of allTargets) {
-      // 존재하는 경량 번들만 프리캐시 (없는 파일은 precache 실패/404 방지)
+      // registry.js·id_migration.js는 빌드 산출물 — 디스크 존재가 아니라 시험
+      // 타깃(manifest) 기준으로 열거한다. 기본 시험이 먼저 빌드되는 순서에서
+      // 다른 시험 번들이 아직 없어도(= 클론 직후 CI) 목록이 동일해야 한다.
+      // 실재 누락 파일은 verify:assets 게이트가 별도로 차단한다.
+      if (!t.manifest) continue;
       for (const rel of ['registry.js', 'id_migration.js']) {
-        if (fs.existsSync(path.join(WORKSPACE_DIR, t.dataRoot, rel))) {
-          assetsToCache.push(`./${t.dataRoot}/${rel}`);
-        }
+        assetsToCache.push(`./${t.dataRoot}/${rel}`);
       }
     }
     // MD_ASSETS 목록은 exam_targets.getPrecacheMdAssets로 통합 생성

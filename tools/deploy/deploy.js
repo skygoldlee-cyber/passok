@@ -311,9 +311,19 @@ async function main() {
             fail('build_doc_bundles 실패 — 생성물을 만들 수 없어 배포할 수 없습니다.');
         }
     }
-    const postBuildDirty = git('status --porcelain');
-    if (postBuildDirty) {
-        console.error(postBuildDirty);
+    // 빌드는 sw.js CACHE_VERSION을 HEAD 해시로 재스탬프한다 — 커밋된 값은
+    // 항상 지난 스탬프라 이 라인만의 차이는 정상 (check:datafresh의 노이즈 규칙과 동일)
+    const NOISE_LINE = /"generatedAt"\s*:|^\/\/ 생성:.*\|\s*\d{4}-|CACHE_VERSION\s*=\s*['"]/;
+    const noiseOnlyDiff = (f) => {
+        const diff = git(`diff -U0 HEAD -- "${f}"`);
+        const changed = diff.split('\n').filter((l) =>
+            (l.startsWith('+') && !l.startsWith('+++')) || (l.startsWith('-') && !l.startsWith('---')));
+        return changed.length > 0 && changed.every((l) => NOISE_LINE.test(l.slice(1)));
+    };
+    const postBuildDirty = git('status --porcelain').split('\n').filter(Boolean)
+        .map((l) => l.slice(3)).filter((f) => !noiseOnlyDiff(f));
+    if (postBuildDirty.length) {
+        console.error(postBuildDirty.join('\n'));
         fail('빌드가 추적 파일을 변경했습니다 — 동기화 누락입니다. 변경을 커밋·푸시(CI 통과) 후 재배포하세요.');
     }
     console.log('✅ 생성물 빌드 완료 (index.html · data/ 번들 · 문서 번들)');
