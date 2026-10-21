@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 insadj 콘텐츠 보강 — 이론 Ch7·문제은행 확충·glossary/number-drills
+
+- **교재 보강**: theory/손해사정이론.md에 Chapter 07(위험요소 3종·역선택·인과관계·공제·효용·법정이율·호프만 계수·K-ICS/IFRS17·사회보험 세부) 신설 — 49회 기출 갭 분석 반영
+- **문제은행**: 과목1~3 각 8→16제 (49회 출제포인트 기반 자체 문항, 기출 원문 비전재) + 정답·인용·해설 블록
+- **파생 자산**: 교재/glossary/subject1~4.json (과목별 핵심 용어) · number-drills/{contract,act,theory,second}.json (기한·금액 드릴)
+- **동기화**: sync:citations 4,130링크 미발견 0 (theory 교재 라인 이동분 20건 자동 갱신)
+
 ## 2026-10-21 시험별 소스 스테이징 규약 통일 — tmp/sources/<exam>/
 
 - **배경**: 시험별 참조자료 소스 원본이 `.tmp_cosmetic/`·`.tmp_2nd/`·`tmp/kidi_past_papers/`·`tmp/insadj_db/`로 산재 — 규약 부재

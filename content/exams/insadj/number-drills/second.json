@@ -1,0 +1,38 @@
+[
+  {
+    "numbers": [{"number": "3", "unit": "종별"}],
+    "context": "손해사정사 2차 종별: 재물·차량·신체 3종 (종합사정사=3종 모두 등록)",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "15000", "unit": "만원"}],
+    "context": "책임보험금 사망 한도: 1억5천만원 범위 (자배법 시행령 별표1)",
+    "isKey": true,
+    "category": "💰 금액·비율"
+  },
+  {
+    "numbers": [{"number": "2000", "unit": "만원"}],
+    "context": "사망 책임보험금 최소: 손해액 2천만원 미만 시 2천만원; 대물 의무보험 한도 사고당 2천만원",
+    "isKey": true,
+    "category": "💰 금액·비율"
+  },
+  {
+    "numbers": [{"number": "10000", "unit": "만원"}],
+    "context": "사업용자동차 등 가입의무 금액: 피해자 1명당 1억원 이상 (자배법 시행령 제4조)",
+    "isKey": false,
+    "category": "💰 금액·비율"
+  },
+  {
+    "numbers": [{"number": "300", "unit": "만원"}],
+    "context": "책임보험 미가입 과태료: 300만원 이하 (자배법 제48조③)",
+    "isKey": true,
+    "category": "💰 금액·비율"
+  },
+  {
+    "numbers": [{"number": "4", "unit": "과목"}],
+    "context": "신체 종별 2차 과목: 의학이론·책임근재보·제3보험·자동차보험(대인·자기신체)",
+    "isKey": false,
+    "category": "📋 수량·구분"
+  }
+]

@@ -1,0 +1,97 @@
+[
+  {
+    "keyword": "손해사정",
+    "definition": "보험사고에 따른 손해액 및 보험금의 사정 업무 — 회사 직접 수행·위탁·계약자 선임 3형태 (제185조·제188조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "순수위험",
+    "definition": "손해만 발생할 수 있는 위험으로 보험의 주된 대상 — 이익·손해 양면의 투기위험은 비대상",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "물리적 위험요소",
+    "definition": "건물 노후·방화구조 미비 등 목적물의 물리적 조건에서 오는 위험요소",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "도덕적 위험",
+    "definition": "보험금 취득 목적의 고의적 사고 유발(moral hazard) — 보험사기의 이론적 배경",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "정신적 위태",
+    "definition": "보험 가입으로 인한 부주의·무관심(morale hazard) — 도덕적 위험(고의)과 구별",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "역선택",
+    "definition": "고위험자가 보험 가입에 집중하는 현상 — 인수심사·경험요율로 대응",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "이득금지원칙",
+    "definition": "손해보험에서 피보험자가 실손해를 초과하는 이득을 얻지 못하는 원칙 — 비례보상·중복분담·보험대위로 실현",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "실손보상",
+    "definition": "실제 발생한 손해액만 보상하는 방식 — 정액보험금 지급(인보험)과 구별",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "비례보상",
+    "definition": "일부보험에서 보험금액/보험가액 비율로 손해액을 보상하는 방식 (제674조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "주력적 근접원인설",
+    "definition": "여러 원인이 경합할 때 가장 강력한(주력적) 원인으로 담보 여부를 판단하는 인과관계 학설 — 비례적 근접원인설과 대비",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "공제",
+    "definition": "피보험자가 부담하는 자기부담금(deductible) — 소액청구 절감·보험료 인하·손해방지 유도 효과",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "공동해손",
+    "definition": "해상보험에서 공동의 위험으로부터 선박·화주의 손해를 분담하는 제도",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "재보험",
+    "definition": "보험자가 인수 위험을 다른 보험자에 전가하는 보험 — 원보험과 법률관계 독립 (제661조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "책임준비금",
+    "definition": "보험금 지급 의무 이행을 위해 적립하는 준비금 — 미경과보험료·지급준비금 등",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "K-ICS",
+    "definition": "신지급여력제도 — 시가평가 기반으로 준비금부채를 최선추정부채(BEL)+위험마진으로 측정",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "보험계약마진",
+    "definition": "IFRS17상 보험계약의 미실현 이익(CSM) — 부채로 인식 후 보장기간에 상각",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "호프만 계수",
+    "definition": "사망·후유장해 상실수익액을 단리 할인으로 현가 환산하는 계수 — 라이프니츠 계수(복리)와 구별",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "위험기피",
+    "definition": "동일 기대소득에서 확정 소득을 선호하는 성향 — 보험 수요와 기대효용 이론의 전제",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "사회보험",
+    "definition": "산재·건강·고용·연금보험 — 강제가입·무과실·능력부담 원칙으로 민영보험과 구별",
+    "autoExtracted": false
+  }
+]
