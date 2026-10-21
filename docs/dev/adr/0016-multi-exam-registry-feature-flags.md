@@ -34,6 +34,6 @@ cosmetic 단일 시험 앱을 멀티시험 플랫폼으로 확장해야 했다. 
 - `scaffold:exam`이 골격 생성·제거까지 담당 — NEW_EXAM_RUNBOOK이 절차 정본
 - 조건부 기능이 문항 수 등 표면 수치를 바꾼다 (데일리 챌린지 8문은
   calcPractice+dictionary 충족 시에만) — 기능별 조건 분기가 정상 동작
-- ⚠️ 두 번째 시험(food)은 comingSoon — 추상화의 실측 검증이 아직 한 시험뿐
+- ⚠️ ADR 작성 시점에는 두 번째 시험이 comingSoon 파일럿뿐이라 실측 검증이 한 시험뿐이었음 — 이후 lossadj·insadj·indsafe·admagent 실사용 팩이 온보딩되어 검증됨
   (2026-10-14 rehearsal 시험 스캐폴드 E2E로 온보딩 경로는 검증했으나
   실콘텐츠 시험의 전수 기능 검증은 잔존 과제)

@@ -157,9 +157,9 @@ describe('UI 모드 — formula 미보유 시험', () => {
         loadIndexHtml();
         // formula 피처 없는 시험 — ui_mode는 전역 키라 이전 시험의 'practice'가 잔존할 수 있음
         window.EXAMS_LIST = {
-            exams: [{ id: 'food', name: '식품기사', default: true, features: {} }],
+            exams: [{ id: 'insadj', name: '손해사정사', default: true, features: {} }],
         };
-        localStorage.setItem('current_exam', 'food');
+        localStorage.setItem('current_exam', 'insadj');
         document.body.classList.remove('ui-mode-practice', 'study-tools-open');
         state.currentView = 'dashboard-view';
         vi.clearAllMocks();

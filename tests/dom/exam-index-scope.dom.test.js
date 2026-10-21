@@ -24,7 +24,7 @@ import {
 const EXAMS = {
     exams: [
         { id: 'cosmetic', name: '화장품', default: true, features: {} },
-        { id: 'food', name: '식품기사', features: {} },
+        { id: 'insadj', name: '손해사정사', features: {} },
     ],
 };
 
@@ -78,8 +78,8 @@ describe('검색 인덱스 시험 스코프 무효화 (TS-17)', () => {
             expect(resultTexts().some(t => t.includes('공유 섹션'))).toBe(true);
         }, { timeout: 3000 });
 
-        // food로 전환 — 과목 키 'shared'는 동일하지만 내용은 '베타전용어'
-        localStorage.setItem('current_exam', 'food');
+        // insadj로 전환 — 과목 키 'shared'는 동일하지만 내용은 '베타전용어'
+        localStorage.setItem('current_exam', 'insadj');
         window.STUDY_DATA.shared.chapters[0].sections[0].content = '베타전용어 본문입니다.';
         search('베타전용어');
         await vi.waitFor(() => {

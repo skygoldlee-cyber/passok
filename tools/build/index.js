@@ -380,7 +380,7 @@ function main() {
 
   // 4. Knowledge DB — manifest.knowledge.registryKey 선언 시에만 빌드
   //    소스 형식은 manifest.knowledge.source.type으로 선택
-  //    (cosmetic: "ingredients-md" → 참조자료/원료 MD 표, food 등: "json" → knowledge/<key>.json)
+  //    (cosmetic: "ingredients-md" → 참조자료/원료 MD 표, 그 외 시험: "json" → knowledge/<key>.json)
   const kSchema = manifest.knowledge;
   const kKey = kSchema && kSchema.registryKey;
   if (kKey) {

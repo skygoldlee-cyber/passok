@@ -9,7 +9,7 @@
  * 도구가 결정론적으로 생성해 말미에 첨부한다 (형식 결함류 원천 차단).
  *
  * 사용법:
- *   node tools/ai/ai_textbook.js --exam food --doc "식품위생법" [--lines 1-200] [--dry-run]
+ *   node tools/ai/ai_textbook.js --exam insadj --doc "보험업법" [--lines 1-200] [--dry-run]
  *
  * - --doc은 ref_md 문서 베이스명 또는 부분 문자열 (부분 매칭 다수 시 목록 출력 후 중단)
  * - 조호 자기검증: 생성 본문의 제N조 언급이 청크 원문에 없으면 [폐기 후보] 표시 (AI-03)

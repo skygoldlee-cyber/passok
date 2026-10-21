@@ -146,7 +146,7 @@
 
 - **개념**: 시험별 자산을 `exams/<id>/` 규약 위치에 두고 활성 시험만 런타임 해석 — 설정 파일 대신 디렉터리 규약이 배치를 결정
 - **구현물**: `src/exams/`·`html/exams/`·`css/exams/`·`tests/*/exams/`·`content/exams/`·`data/exams/` 6계층 + `_domainImport()`+`${getActiveExamId()}` 템플릿 + `exam-data-boot.js`(파싱 중 활성 시험 데이터 번들 동기 삽입)
-- **검증**: E2E가 네트워크 수준에서 증명 — food 부팅 시 `exams/cosmetic/` 요청 0건. 규약 테스트가 feature 선언 시험의 실물 파일 존재를 검증
+- **검증**: E2E가 네트워크 수준에서 증명 — 비기본 시험 부팅 시 `exams/cosmetic/` 요청 0건. 규약 테스트가 feature 선언 시험의 실물 파일 존재를 검증
 
 ### 10. 테스트 피라미드 (Test Pyramid)
 

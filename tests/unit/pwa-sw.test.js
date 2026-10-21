@@ -140,7 +140,7 @@ test('UX-PWA-06: buildExamManifest가 exams.json pwaShortcuts를 shortcuts로 �
     const shortcuts = [{ name: '배합 계산기', url: './index.html#/formula' }];
     const withSc = buildExamManifest(base, { id: 'cosmetic', title: 'T', pwaShortcuts: shortcuts });
     assert.deepEqual(withSc.shortcuts, shortcuts, 'pwaShortcuts → shortcuts 패스스루');
-    const without = buildExamManifest(base, { id: 'food', name: 'F' });
+    const without = buildExamManifest(base, { id: 'insadj', name: 'I' });
     assert.ok(!('shortcuts' in without), '미선언 시 shortcuts 없음');
 });
 
