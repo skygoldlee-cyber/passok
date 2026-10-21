@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 체커 회귀 테스트 보강 — git_status lib 공용화
+
+- **`tools/lib/git_status.js` 신설**: `parseStatusLine`(porcelain 상태 열 정규식 파싱)·`parseStatus`·`NOISE_LINE`(생성물 diff 노이즈 규칙)·`isNoiseOnlyDiff`를 공용화 — `check_doc_sync`·`check_test_first`의 중복 구현과 `check_data_freshness`·`deploy.js`의 노이즈 규칙 복제를 단일 정본으로 통합
+- **`trace_scan.js`**: `extractSpecStatus(file)` 인자 추가 — fixture 기반 회귀 테스트 가능화
+- **`tests/unit/gate-lib.test.js` 신규 7건**: 언트랙 전환 후 드러난 체커 버그 3건을 fixture로 고정 — porcelain 첫 줄 trim(`' M sw.js'`→`'w.js'` 배포 차단)·`[PL]` 두 자리 번호 미인식(ROAD-L10/L11 공백 오집계)·노이즈 diff 판정 경계
+- 행동 변화 1건: `check_data_freshness`의 빈 diff 판정이 `true`→`false` — 목록에 잡힌 파일에 diff가 없으면 untracked 신규 산출물이므로 보수적 실패가 정합 (기존 코드 경로상 tracked 파일만 전달돼 실영향 없음)
+
 ## 2026-10-21 SPEC 추적 정합 정리 — 커버리지 공백 0
 
 - **trace_scan.js ROW_RE 버그 수정**: `[PL]\d`가 한 자리만 인식해 `ROAD-L10`·`ROAD-L11`의 상태 셀이 추출되지 않아 미구현 로드맵인데도 커버리지 공백으로 오집계 → `[PL]\d{1,2}`로 확장
