@@ -55,7 +55,7 @@ node tools/sync/sync_textbook_files.js       # 교재/문제은행 파일 ↔ ma
 npm.cmd run serve                      # http://localhost:3000 (index.html·data/ 번들은 git 미추적 — 생성물 없으면 빌드 안내 후 종료)
 
 # 배포
-npm.cmd run deploy                     # 배포 가드(clean tree + origin/main 동기화 + 대상 커밋 CI success 확인) → sw/버전 스탬프(비커밋, 배포 후 원복) → vercel --prod → deploy/<버전> 태그 이력
+npm.cmd run deploy                     # 배포 가드(clean tree + origin/main 동기화 + 대상 커밋 CI success 확인) → sw/버전 스탬프 → vercel --prod → deploy/<버전> 태그 이력 + 스탬프 확정 커밋(릴리스 기록 보존 — pending 노트 소비·버전 정합)
 # ※ 사용자가 "배포"라고 요청하면 이 명령 하나로 전체 단계 수행
 # ※ `vercel --prod` 직접 실행 금지 — 미푸시 커밋/미커밋 변경이 프로덕션에 올라감
 
