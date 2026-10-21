@@ -203,7 +203,7 @@ function _buildDom() {
             <div class="cmdk-input-row">
                 <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                 <input id="cmdk-input" type="text" autocomplete="off" spellcheck="false"
-                    placeholder="검색: ${_scopeLabel()}" aria-label="통합 검색어">
+                    placeholder="검색: ${esc(_scopeLabel())}" aria-label="통합 검색어">
                 <kbd>ESC</kbd>
             </div>
             <div id="cmdk-results" class="cmdk-results" role="listbox"></div>
