@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 시험별 소스 스테이징 규약 통일 — tmp/sources/<exam>/
+
+- **배경**: 시험별 참조자료 소스 원본이 `.tmp_cosmetic/`·`.tmp_2nd/`·`tmp/kidi_past_papers/`·`tmp/insadj_db/`로 산재 — 규약 부재
+- **통일**: `tmp/sources/<시험id>/` 단일 규약 — cosmetic(구 .tmp_cosmetic)·lossadj(구 .tmp_2nd: 손해평가사 2차 이론)·insadj(kidi_past_papers·source_db·tools/)로 이동, 스크립트 경로 상수·README 일괄 갱신
+- **문서**: `tmp/sources/README.md`에 규약·현황·라이선스 주의 기록, NEW_EXAM_RUNBOOK에 스테이징 규약 절 추가
+
 ## 2026-10-21 insadj(손해사정사) 콘텐츠 팩 추가 — 1차 3과목 + 2차 참조자료
 
 - **신규 팩 `content/exams/insadj/`**: 보험개발원 손해사정사 — lossadj(손해평가사)와 별개 자격, 별도 팩으로 격리. exams.json 등록(`comingSoon`), manifest 4과목(contract·act·theory·second)
