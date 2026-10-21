@@ -3,7 +3,7 @@ var DATA_REGISTRY_LOSSADJ = {
   "schemaVersion": 1,
   "contentYear": "2026",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-21T05:02:26.302Z",
+  "generatedAt": "2026-10-21T05:07:49.903Z",
   "subjects": [
     {
       "key": "insurance",
@@ -80,7 +80,7 @@ var DATA_REGISTRY_LOSSADJ = {
       "order": 5,
       "name": "2차 과목2: 손해평가의 이론과 실무",
       "shortName": "2차손해평가",
-      "contentHash": "b15de2ad",
+      "contentHash": "09ae5ac9",
       "stats": {
         "cards": 0,
         "quizzes": 0,
