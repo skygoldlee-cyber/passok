@@ -178,9 +178,11 @@ async function buildForExam(target) {
     const { items, stats } = buildOxItems(key, data);
 
     // validateQuestion은 Question 객체를 요구 — ox 필드 채워서 검증
+    // subjectMax는 시험별 manifest 과목 order에서 파생 (기본 4과목 맵은 cosmetic 전용)
+    const subjectMax = Object.fromEntries(Object.values(SUBJECT_NUM).map(n => [n, 1]));
     const errs = [];
     for (const it of items) {
-      const problems = validateQuestion(it);
+      const problems = validateQuestion(it, subjectMax);
       if (problems.length) errs.push(`${it.id}: ${problems.join(', ')}`);
     }
     totalErrors += errs.length;

@@ -7,6 +7,15 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 validateQuestion 시험별 과목 맵 지원 — 5과목 이상 시험 드릴 빌드 오류 해소
+
+- **배경**: `validateQuestion`의 `SUBJECT_MAX`(cosmetic 전용 4과목 하드코딩) 때문에 5과목 이상 시험(indsafe 7과목)의 OX/combo 드릴 생성물이 "subject 값 이상" 검증 오류로 CI 실패
+- **src/questions.js**: `validateQuestion(q, subjectMax = SUBJECT_MAX)` — 선택적 두 번째 인자로 시험별 과목 맵 수용, 미지정 시 기존 동작 유지(하위 호환)
+- **build_ox_drills.js / build_combo_drills.js**: `getSubjectMaps(manifest)`의 `SUBJECT_NUM` 값(과목 order)으로 `subjectMax` 맵 생성해 검증에 전달 — DA-15 콘텐츠 독립 원칙과 정합
+- **audit_combo.js**: auditExam이 동일한 manifest 파생 맵으로 검증 — manifest 없으면 기본 맵 폴백
+- **테스트**: `questions.test.js`에 커스텀 subjectMax 케이스 추가 (subject 5·8 경계)
+- 검증: indsafe 드릴 오류 64+18건 → 0건, combo_subject5/6 정상 생성, unit 24 pass, audit:combo 통과
+
 ## 2026-10-21 indsafe 신규 시험 팩 구축 — 산업안전기사
 
 - **배경**: 4번째 시험 팩 신설. Q-net 공식 출제기준(2024~2026) 기반 — 필기 6과목(과목당 20문·총 120문·3시간) + 실기 복합형(필답 90분+작업형 60분)

@@ -49,7 +49,7 @@ const vm = require('vm');
 const { pathToFileURL } = require('url');
 
 const ROOT = path.join(__dirname, '..', '..');
-const { getExamTargets } = require('../build/exam_targets.js');
+const { getExamTargets, getSubjectMaps } = require('../build/exam_targets.js');
 const STRICT = process.argv.includes('--strict');
 const UPDATE_BASELINE = process.argv.includes('--update-baseline');
 const ANOM_IDX = process.argv.indexOf('--anomalies');
@@ -124,6 +124,12 @@ function pathOf(q) {
 }
 
 async function auditExam(target, validateQuestion, deriveComboAnswer) {
+  // 시험별 manifest 과목 order → subjectMax 맵 (기본 4과목 맵은 cosmetic 전용)
+  const { SUBJECT_NUM } = target.manifest ? getSubjectMaps(target.manifest) : { SUBJECT_NUM: {} };
+  const subjectMax = Object.fromEntries(Object.values(SUBJECT_NUM).map(n => [n, 1]));
+  const hasSubjectMap = Object.keys(subjectMax).length > 0;
+  const validate = q => validateQuestion(q, hasSubjectMap ? subjectMax : undefined);
+
   // 검수 승인 목록 — 사람이 "양호" 판정한 id는 큐에서 제외 (소진형 검수 워크플로)
   const blPath = path.join(ROOT, target.contentRoot, 'combo_blocklist.json');
   let approvedIds = new Set();
@@ -164,7 +170,7 @@ async function auditExam(target, validateQuestion, deriveComboAnswer) {
       const qFlags = new Set();   // 이 문항에 붙은 경고 카테고리
 
       // ① 스키마·정답 유일성 재검증
-      const problems = validateQuestion(q);
+      const problems = validate(q);
       if (problems.length) err(`${file} ${q.id}: ${problems.join(', ')}`);
 
       const stmts = q.statements || [];
@@ -269,7 +275,7 @@ async function auditExam(target, validateQuestion, deriveComboAnswer) {
 
   // 수제 파일럿 문항도 동일 검증
   for (const q of pilotItems) {
-    const problems = validateQuestion(q);
+    const problems = validate(q);
     if (problems.length) err(`combo_pilot.js ${q.id}: ${problems.join(', ')}`);
   }
 
