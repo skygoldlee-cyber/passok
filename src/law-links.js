@@ -74,6 +74,9 @@ const _EXAM_LAW_URLS = {
     ],
     "indsafe": [
     ["산업재해보상보험법", "https://www.law.go.kr/법령/산업재해보상보험법"]
+    ],
+    "admagent": [
+    ["민법", "https://www.law.go.kr/법령/민법"]
     ]
 };
 
