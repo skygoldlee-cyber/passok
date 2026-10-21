@@ -35,7 +35,7 @@ test('jwtExpiry: exp 클레임 해석, 부재·손상은 null', () => {
 });
 
 test('parseExample: 선언 키와 @required 마커 추출', () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'passory-env-'));
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'passok-env-'));
     const p = path.join(dir, '.env.example');
     fs.writeFileSync(p, [
         '# 주석 행은 무시',

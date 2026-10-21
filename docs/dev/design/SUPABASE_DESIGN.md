@@ -531,8 +531,8 @@ select polname, polrelid::regclass from pg_policy;
 
 | 항목 | 값 |
 |---|---|
-| Site URL | `https://passory.vercel.app` |
-| Redirect URLs | `https://passory.vercel.app/**` + `http://localhost:3000/**` (로컬 테스트용) |
+| Site URL | `https://passok.vercel.app` |
+| Redirect URLs | `https://passok.vercel.app/**` + `http://localhost:3000/**` (로컬 테스트용) |
 
 > 기본 Site URL은 `http://localhost:3000` — 설정 전에 발송된 확인 메일·매직링크는 localhost로 리다이렉트된다. **토큰 검증 자체는 Supabase 서버에서 완료되므로 리다이렉트가 실패해도 이메일 확인은 성공** — 이후 프로덕션에서 정상 로그인 가능. 단, 매직링크 로그인은 리다이렉트가 앱으로 돌아와야 세션이 성립하므로 Site URL 변경은 사실상 필수.
 
@@ -950,7 +950,7 @@ Firebase만으로 운영하려면 A, 비용 최소화/플랫폼 단순화는 B�
 - `vercel.json`: `connect-src`에서 `https://*.supabase.co` 제거 → googleapis 4종 추가 (§3.2)
 - `sw.js`: `vendor/firebase/*` 자산 등록 (비오리진 network-only는 자동 커버)
 - `vendor-manifest.json`: firebase 번들 항목 + 해시 (번들링 단계 도입 시 `sync:vendor` 파이프라인 확장 — VENDOR_MANAGEMENT_DESIGN에 절차 추가)
-- Firebase 콘솔: Authentication → Settings → **Authorized domains**에 `passory.vercel.app` 추가 — 이메일 링크 `actionCodeSettings.url`이 이 도메인을 가리켜야 함 (Supabase Site URL 대응)
+- Firebase 콘솔: Authentication → Settings → **Authorized domains**에 `passok.vercel.app` 추가 — 이메일 링크 `actionCodeSettings.url`이 이 도메인을 가리켜야 함 (Supabase Site URL 대응)
 - `src/firebase-config.js`: `apiKey`·`authDomain`·`projectId`·`appId` — 공개 정보, `isFirebaseConfigured()`로 자리표시자 감지
 - 도메인맵: 신규 `src/firebase-*.js`·`tools/firebase/`를 `domain-map.json`에 등록 (`check:domainmap`)
 
@@ -1029,7 +1029,7 @@ Firebase만으로 운영하려면 A, 비용 최소화/플랫폼 단순화는 B�
 
 #### A.3 생성 후 작업 순서
 
-1. **Authentication → Settings → Authorized domains**에 `passory.vercel.app`(프로덕션) 추가 — `localhost`는 기본 포함
+1. **Authentication → Settings → Authorized domains**에 `passok.vercel.app`(프로덕션) 추가 — `localhost`는 기본 포함
 2. **Firestore → Rules**에 `tools/firebase/firestore.rules` 내용 배포 (또는 `firebase deploy --only firestore:rules`)
 3. Functions 채택 시: 프로젝트를 **Blaze로 업그레이드** → `firebase deploy --only functions` → 예산 알림·사용량 상한 설정
 4. 앱에서 가입·로그인 → 진도 변경 → Firestore 콘솔 `users/{uid}/sync_snapshots`에 문서 생성 확인

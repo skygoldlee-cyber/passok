@@ -635,7 +635,7 @@ export function buildWeeklyReportText(p) {
     const now = new Date();
     const weekAgo = new Date(now); weekAgo.setDate(now.getDate() - 6);
     const fmt = (d) => `${d.getMonth() + 1}/${d.getDate()}`;
-    const lines = [`📋 ${p.appName || 'Passory'} 주간 학습 리포트 (${fmt(weekAgo)}~${fmt(now)})`, ''];
+    const lines = [`📋 ${p.appName || 'PassOK'} 주간 학습 리포트 (${fmt(weekAgo)}~${fmt(now)})`, ''];
 
     const g = p.growth;
     if (g) {
@@ -680,6 +680,6 @@ export function buildWeeklyReportText(p) {
         lines.push(`■ 실제 시험: ${p.actual.passed ? '합격' : '불합격'} ${p.actual.score}점${biasNote}`);
     }
     if (p.ddayLabel) lines.push(`■ 시험일: ${p.ddayLabel}`);
-    lines.push('', '— Passory 학습 진단 리포트');
+    lines.push('', '— PassOK 학습 진단 리포트');
     return lines.join('\n');
 }

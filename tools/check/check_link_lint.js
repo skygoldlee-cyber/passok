@@ -35,7 +35,7 @@ const VERBOSE = process.argv.includes('--verbose');
 const ALLOWED_HOSTS = new Set([
     'law.go.kr', 'www.law.go.kr', 'law.mfds.go.kr', 'www.mfds.go.kr',
     'mfds.go.kr', 'aistudio.google.com', 'fonts.googleapis.com',
-    'fonts.gstatic.com', 'passory.vercel.app',
+    'fonts.gstatic.com', 'passok.vercel.app',
     // manifest externalLinks에 선언된 큐레이션 외부 자료 (강의 채널·시험 주관기관)
     'www.youtube.com', 'youtube.com', 'license.korcham.net'
 ]);

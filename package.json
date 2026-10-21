@@ -1,7 +1,7 @@
 {
-  "name": "passory",
+  "name": "passok",
   "version": "2026.10.14",
-  "description": "Passory — 멀티시험 자격시험 스마트 학습 플랫폼",
+  "description": "PassOK — 멀티시험 자격시험 스마트 학습 플랫폼",
   "engines": {
     "node": ">=24"
   },

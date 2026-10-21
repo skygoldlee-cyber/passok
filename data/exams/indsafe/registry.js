@@ -3,7 +3,7 @@ var DATA_REGISTRY_INDSAFE = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2027",
-  "generatedAt": "2026-10-21T07:52:00.589Z",
+  "generatedAt": "2026-10-21T11:21:52.006Z",
   "subjects": [
     {
       "key": "safetyMgmt",

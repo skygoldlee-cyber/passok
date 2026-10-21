@@ -7,7 +7,7 @@
 
 ## 프로젝트 개요
 
-**Passory** — 멀티시험 자격시험 학습 플랫폼. 시험은 콘텐츠 팩(`content/exams/<id>/` + `exams.json` 엔트리)으로 온보딩되며, 기본 팩은 맞춤형화장품 조제관리사(`cosmetic`, 앱명 Passmula + Formula OS 실무 배합). 시험 전용 실행 모듈은 `src/exams/<id>/`에 격리된다 (SPEC DA-13).
+**PassOK** — 멀티시험 자격시험 학습 플랫폼. 시험은 콘텐츠 팩(`content/exams/<id>/` + `exams.json` 엔트리)으로 온보딩되며, 기본 팩은 맞춤형화장품 조제관리사(`cosmetic`, 앱명 Passmula + Formula OS 실무 배합). 시험 전용 실행 모듈은 `src/exams/<id>/`에 격리된다 (SPEC DA-13).
 
 - 순수 HTML/CSS/JavaScript (Vanilla ES Modules, 프레임워크 없음)
 - PWA (Service Worker 오프라인 캐시, 설치 가능)
@@ -530,7 +530,7 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 5. `npm.cmd run verify:assets` — SHELL_ASSETS 파일 존재 확인
 6. `git status` — 임시 파일(`_temp_*.js`, `.git/COMMIT_MSG.txt`) 제거 확인
 7. `sw.js` `CACHE_VERSION` bump 확인
-8. `npm run deploy`의 배포 후 스모크 자동 통과 확인 (200·sw.js·APP_VERSION 스탬프 — passory.vercel.app)
+8. `npm run deploy`의 배포 후 스모크 자동 통과 확인 (200·sw.js·APP_VERSION 스탬프 — passok.vercel.app)
 
 ## 주의사항
 

@@ -31,9 +31,9 @@
 |------|-----|
 | **projectId** | `prj_706IdDze2DZsNwjADIfhvsfWL3HW` |
 | **orgId** | `team_P4ciaJGD9bvDziPxZM6FOCSK` |
-| **projectName** | `passory` |
-| **프로덕션 URL** | `https://passory.vercel.app` |
-| **Vercel 대시보드** | `https://vercel.com/skygold/passory` |
+| **projectName** | `passok` |
+| **프로덕션 URL** | `https://passok.vercel.app` |
+| **Vercel 대시보드** | `https://vercel.com/skygold/passok` |
 
 > `.vercel/project.json`은 `.gitignore`에 의해 Git에 커밋되지 않지만, `.vercelignore`에서 `.vercel/`이 배포 제외되므로 로컬에만 존재합니다. 새 머신에서는 `vercel` 명령 한 번으로 자동 생성됩니다.
 
@@ -139,7 +139,7 @@ npm.cmd run deploy
 배포 완료 후 출력 예:
 ```
 ✓ Ready in 6s
-Production:  https://passory.vercel.app
+Production:  https://passok.vercel.app
 ```
 
 ### 방법 B: GitHub 연동 자동 배포
@@ -210,7 +210,7 @@ Production:  https://passory.vercel.app
   > Cascade는 동기 대기 시 `WaitDelay expired` 타임아웃 발생. 비동기 + 폴링 방식만 작동함.
 
 #### 6. 배포 확인
-- Production URL: https://passory.vercel.app
+- Production URL: https://passok.vercel.app
 - Inspect URL: 배포 완료 시 출력되는 URL에서 빌드 로그 확인
 - `✓ Ready in Ns` 메시지 확인
 
@@ -313,11 +313,11 @@ PR 경유 강제). `ci.yml`은 이미 `pull_request: [main]` 트리거가 있어
 git for-each-ref --sort=-creatordate --format="%(refname:short) -> %(objectname:short)" refs/tags/deploy
 
 # 2) 태그 시점을 별도 worktree로 체크아웃 (main 작업 트리 오염 방지)
-git worktree add ../passory-rollback <태그명>
-cp -r .vercel ../passory-rollback/    # .vercel은 gitignore — 프로젝트 링크 수동 복사
+git worktree add ../passok-rollback <태그명>
+cp -r .vercel ../passok-rollback/    # .vercel은 gitignore — 프로젝트 링크 수동 복사
 
 # 3) preview로 먼저 검증 (프로덕션 불개입)
-cd ../passory-rollback
+cd ../passok-rollback
 vercel deploy --yes
 vercel curl "<출력된 preview URL>/sw.js"   # 미리보기는 SSO 보호 — curl 대신 vercel curl 사용
 
@@ -325,7 +325,7 @@ vercel curl "<출력된 preview URL>/sw.js"   # 미리보기는 SSO 보호 — c
 vercel deploy --prod --yes
 
 # 5) 정리
-cd ../passory && git worktree remove ../passory-rollback
+cd ../passok && git worktree remove ../passok-rollback
 ```
 
 > ⚠️ **단일 배포 경로(`npm run deploy`)의 명시적 예외** — 롤백은 `deploy.js`를 쓸 수 없다:

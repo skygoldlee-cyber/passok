@@ -85,7 +85,7 @@ function makeStagingDir() {
         }
     };
     walk('.');
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'passory-deploy-'));
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'passok-deploy-'));
     for (const f of deployFiles) {
         const dest = path.join(dir, f);
         fs.mkdirSync(path.dirname(dest), { recursive: true });
@@ -163,7 +163,7 @@ async function queryCiRun(sha) {
     const remote = git('remote get-url origin');
     const m = remote.match(/[:/]([^/:]+\/[^/]+?)(?:\.git)?$/);
     if (!m) throw new Error(`origin URL에서 owner/repo 해석 실패: ${remote}`);
-    const headers = { 'Accept': 'application/vnd.github+json', 'User-Agent': 'passory-deploy' };
+    const headers = { 'Accept': 'application/vnd.github+json', 'User-Agent': 'passok-deploy' };
     loadEnv();
     const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
     if (token) headers.Authorization = `Bearer ${token}`;

@@ -29,7 +29,7 @@
 
 | 증상 | 유력 원인 | 진단 방법 | 복구 / 정본 |
 |------|-----------|-----------|-------------|
-| 배포 후 구버전이 뜨거나 백지 | SW 캐시가 구 셸을 서빙, 또는 스탬프 미적용 | `passory.vercel.app/sw.js`의 `CACHE_VERSION` ↔ 최신 `deploy/*` 태그 비교 | `npm.cmd run deploy` 재실행 (스탬프·스모크 자동). 절차: [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) |
+| 배포 후 구버전이 뜨거나 백지 | SW 캐시가 구 셸을 서빙, 또는 스탬프 미적용 | `passok.vercel.app/sw.js`의 `CACHE_VERSION` ↔ 최신 `deploy/*` 태그 비교 | `npm.cmd run deploy` 재실행 (스탬프·스모크 자동). 절차: [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) |
 | 오프라인에서 앱이 안 켜짐 | `SHELL_ASSETS` 프리캐시 누락 | `npm.cmd run verify:assets` | 누락 자산을 sw.js 목록에 추가 |
 | 로그인·클라우드 동기화가 안 됨 | Supabase 미설정(정상 — 로컬 모드) 또는 프로젝트 키 문제 | 설정 메뉴에서 계정 상태 확인 | 설계: [SUPABASE_DESIGN.md](../design/SUPABASE_DESIGN.md), 운영: [Supabase SMTP 가이드](Supabase_Custom_SMTP_MagicLink_OTP_설정가이드.md) |
 | 로그인·동기화 전면 실패 + `*.supabase.co`가 DNS 조회 실패 (NXDOMAIN·`ERR_NAME_NOT_RESOLVED`) | Free 프로젝트 7일 무활동 **일시정지** — 정지 시 서비스만이 아니라 DNS 레코드 자체가 제거되어 삭제와 증상 동일 | `nslookup <프로젝트ref>.supabase.co 8.8.8.8` — 여러 공용 리졸버(8.8.8.8·1.1.1.1)에서 모두 NXDOMAIN이면 정지 또는 삭제. **구분은 대시보드에서만 가능** | 대시보드 → 프로젝트 선택 → **Resume project** (데이터 유지, DNS 재전파 수 분~수 시간). 프로젝트가 목록에 없으면 삭제 — 스키마 재실행 필요. 예방·감지: [supabase-keepalive.yml](../../../.github/workflows/supabase-keepalive.yml) (핑 실패 = 정지 알림) — 정본: [SUPABASE_DESIGN.md §12](../design/SUPABASE_DESIGN.md#12-비시즌-비용-평가-supabase-free-keep-alive-채택-2026-10-17) |
@@ -138,7 +138,7 @@
 | 단계 | 명령 | 결과 |
 |------|------|------|
 | 대상 선택 | `git for-each-ref --sort=-creatordate refs/tags/deploy` → `deploy/v20261014-1169ed2` (HEAD-19커밋) | ✅ |
-| 복원 | `git worktree add ../passory-rollback <태그>` + `.vercel` 수동 복사(gitignore) | ✅ |
+| 복원 | `git worktree add ../passok-rollback <태그>` + `.vercel` 수동 복사(gitignore) | ✅ |
 | 배포 검증 | `vercel deploy --yes` (preview — 프로덕션 불개입) | ✅ 배포 성공 |
 | 스모크 | `vercel curl`로 index·sw.js·version.js 확인 — `CACHE_VERSION=v20261014-4b281f4` 일치 | ✅ |
 
