@@ -4,7 +4,7 @@
 import { safeGetItem, safeSetItem, safeRemoveItem } from "./state.js";
 import { STORAGE_KEYS } from "./storage-keys.js";
 import { DataLoader } from "./data-loader.js";
-import { getActiveExam, getExamAppName, getExamList, hasFeature, applyExamTheme } from "./exam-context.js";
+import { getActiveExam, getExamList, hasFeature, applyExamTheme } from "./exam-context.js";
 import { isPracticeCapable } from "./practice-registry.js";
 import { showToast, showAlert } from "./ui-utils.js";
 
@@ -113,11 +113,9 @@ export function applyExamBranding() {
     if (logoSub && typeof exam.logoSub === 'string') logoSub.textContent = exam.logoSub;
     if (logoIcon && exam.icon) logoIcon.className = `${exam.icon} logo-icon`;
 
-    const appName = getExamAppName();
     // iOS 홈 화면 라벨 — 단일 앱 정책으로 'PassOK' 고정 (webmanifest name과 동일 정체성)
     const appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
     if (appleTitle) appleTitle.setAttribute('content', 'PassOK');
-    document.querySelectorAll('[data-app-name]').forEach(el => { el.textContent = appName; });
 
     // 인쇄 전용 헤더·퀴즈 빈 상태 등 시험명이 들어가는 정적 영역
     const printTitle = document.getElementById('review-print-title');

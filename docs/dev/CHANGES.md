@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 저작권 표기 플랫폼 고정 — 시험별 앱명 제거
+
+- **증상**: 사이드바·설정의 `©` 줄이 `data-app-name`으로 채워져 시험별 앱명(`PassOK 조제관리사` 등)이 버전과 함께 표시 — 저작권은 플랫폼 귀속인데 시험 브랜드가 들어가는 계약 오용
+- **수정**: `index.template.html` 2곳을 `© PassOK` 고정으로 교체 + `applyExamBranding`의 `[data-app-name]` 채움 루프·`getExamAppName` import 제거 (요소 부재로 사망 코드화). 시험 브랜드는 로고(h1+logoSub)·문서 title이 계속 담당 — `getExamAppName`은 온보딩·미디어 세션·주간 리포트 등 시험 맥락이 맞는 표기면에 잔존
+- **e2e 재결선**: `exam-switch.spec.js`의 브랜딩 프로브를 `data-app-name` → `.logo-text span`(시험별 logoSub)으로 전환 + `© PassOK` 고정을 신규 계약으로 단정
+
 ## 2026-10-21 릴리스 노트 미소비 결함 수정 — 스탬프 확정 커밋 도입
 
 - **증상**: 배포 후 "새로운 소식"에 갱신 내용이 안 나옴 — 오늘 5회 배포가 전부 동일한 30개 노트(10-18 작성 pending 초안)를 버전만 바꿔 반복 공지하고, 당일 변경(사이드바·Phase1·2)은 노트에 미반영
