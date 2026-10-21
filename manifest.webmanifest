@@ -1,8 +1,8 @@
 {
-  "id": "cosmetic-pass",
-  "name": "Passmula — 맞춤형화장품 조제관리사",
-  "short_name": "Passmula",
-  "description": "Passmula — 2027 맞춤형화장품 조제관리사 시험 대비 · Formula OS 실무 통합 플랫폼",
+  "id": "passory",
+  "name": "Passory",
+  "short_name": "Passory",
+  "description": "Passory — 자격증 시험 대비 통합 학습 플랫폼 (교재·퀴즈·모의고사·복습)",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

@@ -1,8 +1,10 @@
-// src/pwa-manifest.js — 시험별 동적 PWA 매니페스트 (클래식 스크립트, 모듈 아님)
+// src/pwa-manifest.js — 활성 시험 기준 PWA 매니페스트 링크 교체 (클래식 스크립트, 모듈 아님)
 // @spec P-10,DA-06,DA-14
 // 정적 manifest.webmanifest는 부팅 전 플레이스홀더 겸 최후 폴백이고,
 // 활성 시험이 확인되면 빌드가 생성한 실제 파일 manifest.<id>.webmanifest로 링크를 교체한다
-// (기본 시험 포함 — 시험별 pwaShortcuts가 실제 설치 매니페스트에 반영되어야 한다).
+// (기본 시험 포함 — 시험별 pwaShortcuts·description이 실제 설치 매니페스트에 반영되어야 한다).
+// ⚠️ 모든 manifest.<id>.webmanifest는 id='passory'·name='Passory'로 통일된 단일 앱이다 —
+//    어느 시험에서 설치해도 같은 PWA 하나(중복 설치·시험명 고정 아이콘 방지).
 // ⚠️ blob:/data: URL 주입은 금지 — Chrome이 설치 요건에서 유효하지 않은 스킴으로
 //    판정해 beforeinstallprompt가 발생하지 않고, connect-src 'self'가 fetch도 차단한다.
 // data/exams.js 이후, app.js(모듈) 이전에 로드되어야 한다.
