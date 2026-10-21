@@ -71,6 +71,9 @@ const _EXAM_LAW_URLS = {
     ["교통사고처리특례법", "https://www.law.go.kr/법령/교통사고처리특례법"],
     ["교통사고처리 특례법", "https://www.law.go.kr/법령/교통사고처리특례법"],
     ["자동차보험진료수가", "https://www.law.go.kr/행정규칙/자동차보험진료수가에관한기준"]
+    ],
+    "indsafe": [
+    ["산업재해보상보험법", "https://www.law.go.kr/법령/산업재해보상보험법"]
     ]
 };
 

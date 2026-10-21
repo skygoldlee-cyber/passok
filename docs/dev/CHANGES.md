@@ -7,6 +7,16 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 indsafe 신규 시험 팩 구축 — 산업안전기사
+
+- **배경**: 4번째 시험 팩 신설. Q-net 공식 출제기준(2024~2026) 기반 — 필기 6과목(과목당 20문·총 120문·3시간) + 실기 복합형(필답 90분+작업형 60분)
+- **manifest 7과목**: safetyMgmt(산업재해 예방 및 안전보건교육)·ergonomics(인간공학 및 위험성평가·관리)·machinery(기계·기구 및 설비 안전관리)·electric(전기설비 안전관리)·chemical(화학설비 안전관리)·construction(건설공사 안전관리)·practical(산업안전관리 실무) — exams.json comingSoon 유지
+- **ref_md 12건 스테이징** (law.go.kr DRF 원문, insadj 명명 규약): 과목1=산안법·시행령·시행규칙·중처법·중처법시행령·산재법 / 과목3=산업안전보건기준에 관한 규칙 / 과목4=전기사업법 / 과목5=위험물안전관리법·시행령·시행규칙·고압가스 안전관리법
+- **references.json**: subjectDirMap·docSubjectRules(기준규칙→3·전기→4·위험물/고압가스→5·나머지→1)·subjectDefaultRefdoc·sourceRefMap·referenceLaw 12건·lawRefs(industrial-accident-insurance-act — lawdb 등록분만)
+- **교재 7종 자체 작성** (출제기준 세부항목 구조 + ref_md 조문·수치 검증): 산안법 조직·위원회·교육시간(시행규칙 별표4)·중처법 3유형 / 위험성평가 제5조(2026 개정 근로자 참여 포함)·FTA/ETA·근골격계·NIOSH / 안전인증·자율확인·검사 3제도·재해지표·양중기·비파괴·소음진동 / 감전 mA 단계·접지종별·방폭구조·위험장소 / 연소·위험물 6류·지정수량·MSDS·PSM / 건설 관리비·유해위험방지계획서·조정자 50억·비계·흙막이 / 실기 필답+작업형 답안 전략·핵심표
+- **문제은행**: 객관식 과목당 8제×6과목(총 48제) + 실기 주관식 6제 — 전부 자체 제작·교재 근거 인용·ref_md 링크
+- 인용 동기화: 초기 미발견 14건 — 짧은 인용문(쉥글 2개 미달) 4건·파편 인용 수정 → 최종 4,226건 미발견 0 / build:data 파서 등가 통과 (safetyMgmt 9·ergonomics 5·machinery 9·electric 12·chemical 6·construction 5·practical 12 cards)
+
 ## 2026-10-21 insadj 2차 교재 보강 — 45~49회 출제주제 갭 분석 반영
 
 - **배경**: 출제분석(41~49회)과 종별 교재 커버리지 대조 — 고빈출 미수록 주제(차량 대물 세부·신체 대인 지급기준)를 ref_md 정본(표준약관·별표1~4·자배법) 검증 후 자체 요약으로 보강

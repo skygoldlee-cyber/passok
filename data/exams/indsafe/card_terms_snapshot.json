@@ -1,0 +1,97 @@
+{
+ "safetyMgmt": {
+  "cards": {
+   "safetyMgmt_card_15035e": "안전보건관리책임자",
+   "safetyMgmt_card_5f73b6": "안전관리자",
+   "safetyMgmt_card_be9c7c": "산업보건의",
+   "safetyMgmt_card_fcf086": "관리감독자",
+   "safetyMgmt_card_929f0f": "특별교육",
+   "safetyMgmt_card_3013d4": "하인리히 법칙",
+   "safetyMgmt_card_fde01f": "안전보건위원회",
+   "safetyMgmt_card_d27c6b": "중대산업재해",
+   "safetyMgmt_card_e62dab": "KOSHA-MS"
+  },
+  "quizzes": {}
+ },
+ "ergonomics": {
+  "cards": {
+   "ergonomics_card_0075b4": "위험성평가",
+   "ergonomics_card_d40ee5": "FTA/ETA",
+   "ergonomics_card_b6993c": "근골격계 부담작업",
+   "ergonomics_card_0c8ea2": "WBGT",
+   "ergonomics_card_5bc651": "수박 진동"
+  },
+  "quizzes": {}
+ },
+ "machinery": {
+  "cards": {
+   "machinery_card_d17dc9": "인터록(interlock)",
+   "machinery_card_0e431a": "양수조작식",
+   "machinery_card_48ef7e": "감응형",
+   "machinery_card_898883": "수동식·조정식",
+   "machinery_card_021dca": "방호장치",
+   "machinery_card_b327a5": "안전인증 vs 자율안전확인",
+   "machinery_card_4e0a34": "도수율/강도율",
+   "machinery_card_e26186": "비파괴검사",
+   "machinery_card_c5d986": "양중기 방호"
+  },
+  "quizzes": {}
+ },
+ "electric": {
+  "cards": {
+   "electric_card_ad83ae": "약 1mA",
+   "electric_card_b0fb4d": "약 10~15mA",
+   "electric_card_c06f5a": "약 50~100mA",
+   "electric_card_5d13ec": "특별제3종",
+   "electric_card_887b7d": "제3종",
+   "electric_card_d32e74": "제1종",
+   "electric_card_3c7b40": "제2종",
+   "electric_card_788255": "이완전류",
+   "electric_card_f1a2ab": "심실세동",
+   "electric_card_0bebd1": "방폭구조 d·e·i·p",
+   "electric_card_98b442": "접지공사",
+   "electric_card_72ca35": "정전기 대책"
+  },
+  "quizzes": {}
+ },
+ "chemical": {
+  "cards": {
+   "chemical_card_3d5903": "제3류",
+   "chemical_card_7d75b4": "지정수량",
+   "chemical_card_154a7b": "인화점 vs 발화점",
+   "chemical_card_c32376": "화재 분류 A~K",
+   "chemical_card_c21d2f": "MSDS",
+   "chemical_card_d786af": "공정안전보고서(PSM)"
+  },
+  "quizzes": {}
+ },
+ "construction": {
+  "cards": {
+   "construction_card_b7f197": "안전보건조정자",
+   "construction_card_502799": "산업안전보건관리비",
+   "construction_card_0c1bbc": "유해위험방지계획서",
+   "construction_card_c5a93b": "추락 방지 계층",
+   "construction_card_b2bae2": "흙막이 지보공"
+  },
+  "quizzes": {}
+ },
+ "practical": {
+  "cards": {
+   "practical_card_4f6b33": "안전보건관리",
+   "practical_card_9e2261": "위원회",
+   "practical_card_e575e9": "위험성 평가",
+   "practical_card_2a58c7": "방호장치",
+   "practical_card_5b23c0": "중처법",
+   "practical_card_217ffc": "안전난간",
+   "practical_card_4d7953": "비파괴",
+   "practical_card_c654f6": "위험성",
+   "practical_card_57bdc4": "필답형",
+   "practical_card_927b57": "작업형",
+   "practical_card_f124ca": "계산형",
+   "practical_card_fbc29a": "복합형 실기"
+  },
+  "quizzes": {
+   "practical_quiz_4e066e": "사망1·부상2(6개월)·질병3 / 경영책임자 1년 징역|중처법"
+  }
+ }
+}
