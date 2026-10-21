@@ -13,7 +13,7 @@
 
 ## 결정 (Decision)
 
-위반 잔재를 기준선 파일(`tools/check/*_baseline.json` 또는 체커 내 상수)로
+위반 잔재를 기준선 파일(`tools/state/*_baseline.json` 또는 체커 내 상수)로
 스냅샷하고 **단조 감소만 허용**한다 — 신규 유입·개수 초과는 즉시 실패,
 잔재는 `--update`/`--stamp` 계열로만 하향 갱신한다. 기준선이 0이 되면
 하드 게이트가 된다 (check:escape 78→0, check:enc FFFD→0이 선례).

@@ -6,7 +6,7 @@
   },
   {
     "file": "docs/dev/design/ADMIN_DESIGN.md",
-    "ref": "tools/check/dashboard_report.html",
+    "ref": "tools/state/dashboard_report.html",
     "reason": "report:dashboard 실행 시 생성되는 산출물 — gitignore (로컬 전용)"
   },
   {
@@ -245,12 +245,12 @@
   },
   {
     "file": "docs/dev/runbooks/COMBO_GENERATION_GUIDE.md",
-    "ref": "tools/check/combo_audit_report.json",
+    "ref": "tools/state/combo_audit_report.json",
     "reason": "audit:combo 실행 시 생성되는 리포트 산출물 — gitignore"
   },
   {
     "file": "docs/dev/runbooks/COMBO_GENERATION_GUIDE.md",
-    "ref": "tools/check/combo_review_queue.md",
+    "ref": "tools/state/combo_review_queue.md",
     "reason": "audit:combo 실행 시 생성되는 검수 큐 산출물 — gitignore"
   },
   {

@@ -121,7 +121,7 @@
 | 이스케이프 싱크 | `tools/check/check_html_escape.js` |
 | SPEC 추적 | `tools/check/check_spec_refs.js` + `tools/lib/trace_scan.js` |
 | 문서 정합 (경로·ID·명령·CI 패리티) | `tools/check/check_docs_*.js`, `check_inventory.js` |
-| 파일 계층 분류 | `tools/check/domain-map.json` + `check_domain_map.js` |
+| 파일 계층 분류 | `tools/config/domain-map.json` + `check_domain_map.js` |
 | 성능 예산 | `tools/check/check_perf_budget.js` |
 | 콘텐츠 통합 게이트 | `tools/check/check_content.js` (23단계 오케스트레이터) |
 | 생성물 신선도 | `tools/check/check_data_freshness.js` |

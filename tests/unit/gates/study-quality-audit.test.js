@@ -14,8 +14,8 @@ import { fileURLToPath } from 'url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const TOOL = join(ROOT, 'tools', 'check', 'audit_study_quality.js');
-const REPORT = join(ROOT, 'tools', 'check', 'study_quality_report.json');
-const BASELINE = join(ROOT, 'tools', 'check', 'study_quality_baseline.json');
+const REPORT = join(ROOT, 'tools', 'state', 'study_quality_report.json');
+const BASELINE = join(ROOT, 'tools', 'state', 'study_quality_baseline.json');
 const req = createRequire(import.meta.url);
 const { spearman, analyzeAlloc } = req('../../../tools/check/audit_study_quality.js');
 

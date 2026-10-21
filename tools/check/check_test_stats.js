@@ -25,7 +25,7 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const STATS_FILE = path.join(ROOT, 'tools', 'check', 'test_stats.json');
+const STATS_FILE = path.join(ROOT, 'tools', 'state', 'test_stats.json');
 
 // 인용 수치 스캔 대상 — "현재 상태"를 서술하는 문서만 지정.
 // CHANGES·설계·이력 문서의 과거 시점 수치는 스테일이 아니라 기록이므로 제외.

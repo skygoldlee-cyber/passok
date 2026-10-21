@@ -30,7 +30,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const BASELINE_PATH = path.join(__dirname, 'orphan_assets_baseline.json');
+const BASELINE_PATH = path.join(__dirname, '..', 'state', 'orphan_assets_baseline.json');
 
 const ASSET_RE = /\.(?:png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|eot|mp3|wav|ogg|mp4|webm|pdf)$/i;
 

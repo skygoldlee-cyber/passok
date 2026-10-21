@@ -7,7 +7,7 @@
 // "설계된 규칙대로 동작하는가"를 결정론적으로 검증한다 (실효성 자체는
 // 합격 데이터 부재로 측정 불가 — 규칙 일관성·내부 정합만 감사).
 //
-// 산출물: tools/check/study_quality_report.json (gitignore — 로컬 감사 산출물)
+// 산출물: tools/state/study_quality_report.json (gitignore — 로컬 감사 산출물)
 //   --update  기준선 study_quality_baseline.json 갱신
 //   --check   기준선 대비 회귀 검증 (신규 실패 검사 항목 차단)
 
@@ -16,8 +16,8 @@ const path = require('path');
 const { pathToFileURL } = require('url');
 
 const ROOT = path.join(__dirname, '..', '..');
-const REPORT_PATH = path.join(__dirname, 'study_quality_report.json');
-const BASELINE_PATH = path.join(__dirname, 'study_quality_baseline.json');
+const REPORT_PATH = path.join(__dirname, '..', 'state', 'study_quality_report.json');
+const BASELINE_PATH = path.join(__dirname, '..', 'state', 'study_quality_baseline.json');
 const CHECK_MODE = process.argv.includes('--check');
 const UPDATE_BASELINE = process.argv.includes('--update');
 

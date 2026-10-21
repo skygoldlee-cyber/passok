@@ -56,7 +56,7 @@ test('CQ-05: audit:combo가 오류 없이 통과한다 (배포 게이트 기준)
 });
 
 test('CQ-05: 회귀 기준선 combo_baseline.json이 과목별 문항 수를 기록한다', () => {
-  const p = join(ROOT, 'tools', 'check', 'combo_baseline.json');
+  const p = join(ROOT, 'tools', 'state', 'combo_baseline.json');
   assert.ok(existsSync(p), 'baseline 파일 존재');
   const baseline = JSON.parse(readFileSync(p, 'utf-8'));
   const exam = baseline.cosmetic || Object.values(baseline)[0] || {};
