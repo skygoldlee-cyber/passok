@@ -35,6 +35,10 @@ flowchart TD
 3. **빌드 → 커밋 → 검증** (순서 중요 — `check:datafresh`는 생성물 경로가 미커밋이면 즉시 실패하므로, 생성물 커밋 후에 검증한다)
 4. 배포
 
+### 소스 자료 스테이징 규약
+
+기출문제·법령 원문·가이드 PDF 등 제작용 소스 자료는 **`tmp/sources/<시험id>/`**에 모은다 (gitignore — 저작권상 편입 불가 자료의 표준 보관소). 루트 `.tmp_*`·`tmp/` 산재 금지, 시험 전용 수집·변환 스크립트는 `tmp/sources/<시험id>/tools/`에 둔다. 현황·라이선스 주의는 `tmp/sources/README.md` 참조.
+
 ## 1단계 — 스캐폴딩
 
 ```powershell
