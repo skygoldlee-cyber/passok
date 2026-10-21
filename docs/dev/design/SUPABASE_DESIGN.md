@@ -182,7 +182,7 @@ sequenceDiagram
 | `src/state.js` | `saveProgress` 등 쓰기 경로에 `sync.markDirty()` 훅 |
 | `vercel.json` | `connect-src` 확장 |
 | `sw.js` | 외부 오리진 network-only 분기 + vendor 자산 등록 |
-| `tests/dom/common-auth.dom.test.js` 등 | 로그인·동기화·충돌 시나리오 (supabase client는 vi.mock) |
+| `tests/dom/common/common-auth.dom.test.js` 등 | 로그인·동기화·충돌 시나리오 (supabase client는 vi.mock) |
 
 ---
 

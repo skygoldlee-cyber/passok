@@ -566,7 +566,7 @@ if (examStr && examStr > todayStr && due > examStr) {
 ### 3. 구현 결과
 
 1. `spaced-repetition.js`: `EXAM_TARGET_R = 0.95` 단일 상수 (구 `EXAM_R_THRESHOLD` 0.85 대체) + `_examDateStr`·`_shiftDateStr` 헬퍼 + `updateCardSchedule` 클램프 블록 + `getExamRiskCards` 임계 교정. `@spec D-20` 태그.
-2. 테스트: `tests/unit/fsrs.test.js` — D-20 5건(클램프·성숙 유지·미설정/과거 비활성·위험 집합 해소) + D-19 정합 레코드 케이스(`due = lastReview + round(s)` 불변식을 지킨 픽스처).
+2. 테스트: `tests/unit/engine/fsrs.test.js` — D-20 5건(클램프·성숙 유지·미설정/과거 비활성·위험 집합 해소) + D-19 정합 레코드 케이스(`due = lastReview + round(s)` 불변식을 지킨 픽스처).
 3. T4 감사 시나리오: `audit_study_quality.js` — D-10 조건에서 위험 대역 10장 전원 exam−1 당김·성숙 카드 유지·위험 집합 해소 검증, 기준선 갱신.
 4. SPEC `D-20` ✅·`D-19` 문구 정정, LEARNING_ALGORITHM_DESIGN 정정 노트, CHANGES, TRACE 재생성.
 

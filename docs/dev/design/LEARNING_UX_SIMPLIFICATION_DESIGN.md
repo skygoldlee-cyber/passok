@@ -94,7 +94,7 @@ Phase 0의 목표는 **추천 발언권을 대시보드 "오늘 할 일" 큐 하
 | 2 | 기존 D-10·D-11 카드의 큐 흡수 + 타 뷰 중복 카피 정리 | `src/recommendations.js` · `src/views/analysis-view.js` · `src/views/study-calendar.js` |
 | 3 | 라벨 정리 (진단/주간 배분/훈련소) | `src/views/navigation.js` · `index.template.html` · `content/exams/cosmetic/manifest.json`(uiText) · `content/exams/cosmetic/docs/학습안내서.md` |
 | 4 | 사이드바 그룹 라벨 + CSS | `index.template.html` · `css/components.css` |
-| 5 | 테스트 | `tests/unit/today-queue.test.js` (큐 병합·우선순위·빈 상태 @spec TQ-01~05) · DOM 테스트 1건 |
+| 5 | 테스트 | `tests/unit/engine/today-queue.test.js` (큐 병합·우선순위·빈 상태 @spec TQ-01~05) · DOM 테스트 1건 |
 | 6 | 문서·추적 | SPEC.md `TQ-01~05`·`UX-NAV-12` 행 + SCREEN_MAP 라벨 갱신 + `build:trace` |
 
 ## 7. 검증·수용 기준
@@ -204,7 +204,7 @@ Phase 1 목표: **"틀린 것·약한 것을 다시 보는" 활동은 복습 뷰
 | 2 | `openWeakReview`/`gotoWeakReview`·`initTrainer`·해시 슬러그·레거시 리다이렉트 | `src/views/trainer-drills.js` · `src/views/trainer.js` · `src/views/navigation.js` |
 | 3 | 복습 헤더에 weak 드릴 버튼 + 배지 타깃 이동 | `html/views/review.html` · `src/views/quiz.js`(renderReviewList) · `src/views/trainer-drills.js` |
 | 4 | 4개 뷰 목적 문구 | `html/views/quiz.html` · `exam.html` · `trainer.html` · `review.html` |
-| 5 | 테스트 — weak 블록 DOM 테스트 재배치 + 진입점·리다이렉트 케이스 (@spec RV-02~04, UX-NAV-13) | `tests/dom/study-review.dom.test.js` · `study-trainer*.dom.test.js` |
+| 5 | 테스트 — weak 블록 DOM 테스트 재배치 + 진입점·리다이렉트 케이스 (@spec RV-02~04, UX-NAV-13) | `tests/dom/study/study-review.dom.test.js` · `study-trainer*.dom.test.js` |
 | 6 | SPEC `RV-02~04`·`UX-NAV-13` 행 + SCREEN_MAP(복습 뷰 상태·취약 패널 행 갱신) + 사용자 매뉴얼 §복습/§훈련소 + `build:html`·`build:trace` | 문서·생성물 |
 
 ### 6. 검증·수용 기준
@@ -230,7 +230,7 @@ Phase 1 목표: **"틀린 것·약한 것을 다시 보는" 활동은 복습 뷰
 
 > 상위 문서: [SPEC](../SPEC.md) §3.11·§3.20 · [LEARNING_UX_SIMPLIFICATION_DESIGN](LEARNING_UX_SIMPLIFICATION_DESIGN.md) (DOC-DSN-22, Phase 1) · [LEARNING_UX_SIMPLIFICATION_DESIGN](LEARNING_UX_SIMPLIFICATION_DESIGN.md) (DOC-DSN-21, Phase 0)
 > **범위**: platform · 판본: none
-> **상태**: 구현 완료 (UX-NAV-14·ROAD-P5 — `tests/dom/pro-notice.dom.test.js`·`study-trainer.dom.test.js`)
+> **상태**: 구현 완료 (UX-NAV-14·ROAD-P5 — `tests/dom/misc/pro-notice.dom.test.js`·`study-trainer.dom.test.js`)
 > **관련 SPEC ID**: 신규 `UX-NAV-14`(훈련소 메뉴 그룹핑) · `ROAD-P5`(Pro 안내 수렴) · 기존 `T-01~05` · `DR-01~02` · `ROAD-P0`
 > 원본 문서: `LEARNING_UX_PHASE15_DESIGN.md` — 구 DOC-DSN-23 (2026-10-17 본 문서로 통합)
 
@@ -310,7 +310,7 @@ Phase 1 이후 메뉴 카드는 5장으로 정리됐으나, 성격이 다른 두
 |------|------|-----------|
 | 1 | 훈련소 메뉴 2그룹 마크업 + 그룹 라벨 스타일 | `html/views/trainer.html` · `css/study.css` |
 | 2 | `proFeatureNotice` 전역 seen 수렴 + 배지 클릭 → `openPlanCompare` | `src/pro-upgrade.js` · `src/app.js`(data-click 등록) |
-| 3 | 테스트 — 메뉴 그룹 구조 DOM 단언 + notice 전역 seen·배지 클릭 단언 (@spec UX-NAV-14, ROAD-P5) | `tests/dom/study-trainer.dom.test.js` · 신규 `tests/dom/pro-notice.dom.test.js` |
+| 3 | 테스트 — 메뉴 그룹 구조 DOM 단언 + notice 전역 seen·배지 클릭 단언 (@spec UX-NAV-14, ROAD-P5) | `tests/dom/study/study-trainer.dom.test.js` · 신규 `tests/dom/misc/pro-notice.dom.test.js` |
 | 4 | SPEC `UX-NAV-14`·`ROAD-P5` 행 + SCREEN_MAP + 사용자 매뉴얼 §훈련소 + CHANGES + `build:html`·`build:trace` | 문서·생성물 |
 
 ### 6. 검증·수용 기준
@@ -439,7 +439,7 @@ Phase 2의 목표는 **축소 결과가 아니라 "축소를 결정할 수 있�
 | 2 | 드릴 진입 계측 — `startDrill` 공통 경로(ox·combo 양쪽 커버) + `gotoOxDrill` 복습 발 | `src/views/trainer-drills.js` (`trainer-drill-combo.js` 변경 불필요 — combo도 `startDrill` 경유) |
 | 3 | 통계 복사 버튼 + 클립보드 폴백 | `src/usage-stats.js` |
 | 4 | 회수 집계 도구 — owner 병합·액션/뷰 합계·UX-GATE 판정 입력 출력 | `tools/check/aggregate_usage.js` (신규) |
-| 5 | 테스트 — 신규 키 기록·details toggle·배지 계측·내보내기 단언 (@spec UX-MET-01~04) | `tests/unit/usage-metrics.test.js` (신규) · `tests/dom/usage-stats.dom.test.js` · `tests/e2e/usage-metrics.spec.js` (신규) |
+| 5 | 테스트 — 신규 키 기록·details toggle·배지 계측·내보내기 단언 (@spec UX-MET-01~04) | `tests/unit/app/usage-metrics.test.js` (신규) · `tests/dom/misc/usage-stats.dom.test.js` · `tests/e2e/usage-metrics.spec.js` (신규) |
 | 6 | SPEC §7.6 상태 갱신 + TRACE_MATRIX 재생성 + CHANGES 기록 | 문서·생성물 |
 
 ### 7. 검증·수용 기준

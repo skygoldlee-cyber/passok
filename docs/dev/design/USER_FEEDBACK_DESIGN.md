@@ -238,7 +238,7 @@ Supabase 대시보드 → **Database → Webhooks → Create a new hook**:
 | 유입 파라미터 캡처 | `app.js` boot | ~20줄 |
 | 스키마 | `tools/supabase/schema.sql` | ~25줄 |
 | 프리캐시 등록 | `sw.js` SHELL_ASSETS | 1줄 |
-| 테스트 | `tests/unit/feedback.test.js` + `tests/dom/feedback.dom.test.js` | 큐잉·쿨다운·모달 |
+| 테스트 | `tests/unit/app/feedback.test.js` + `tests/dom/misc/feedback.dom.test.js` | 큐잉·쿨다운·모달 |
 
 ## 10. 리스크·한계
 

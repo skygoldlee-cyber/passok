@@ -21,20 +21,20 @@
 | 대시보드 과목 카드·통계·히트맵·추천 | `src/views/dashboard.js` + `src/views/subject-stats.js` | `study-dashboard.dom.test.js` | D-* |
 | 맞춤학습 진단 카드·주간 리포트 | `src/views/analysis-view.js` | `study-dashboard.dom.test.js` | AN-*, SC-11/12 |
 | 예상 점수·실제 시험 결과 기록 | `src/views/score-estimate.js` | `study-dashboard.dom.test.js` | AN-05, D-14 |
-| 추천 엔진 ("오늘의 합격 전략") | `src/recommendations.js` | `tests/unit/learning-pro.test.js` | AN-06 |
-| 분석 계산 (취약 단원·성장·합격 갭·리포트) | `src/analysis-engine.js` | `tests/unit/analysis-engine.test.js`, `analysis-deepening.test.js` | AN-* |
+| 추천 엔진 ("오늘의 합격 전략") | `src/recommendations.js` | `tests/unit/app/learning-pro.test.js` | AN-06 |
+| 분석 계산 (취약 단원·성장·합격 갭·리포트) | `src/analysis-engine.js` | `tests/unit/engine/analysis-engine.test.js`, `analysis-deepening.test.js` | AN-* |
 | 플래시카드 세션·플립·스와이프 | `src/views/flashcard.js` | `study-flashcard.dom.test.js` | FC-* |
 | 기출 퀴즈 출제·채점 | `src/views/quiz.js` + `src/questions.js` | `study-quiz.dom.test.js` | QZ-* |
 | 오답 원인 태깅·재학습 | `src/views/quiz-wrong-cause.js` | `study-quiz.dom.test.js` | QZ-*, AN-07 |
-| 오답 복습 (weak pool) | `src/weak-items.js` + `src/views/` review 흐름 | `tests/unit/property-based.test.js` (PBT) | RV-*, DR-* |
-| 간격 반복 (SM-2 due 계산) | `src/spaced-repetition.js` | `tests/unit/property-based.test.js` (PBT 스코프) | FC-*/DR-* |
-| 실전 모의고사·OMR | `src/views/exam-simulator.js` + `exam-sim-state.js` | `tests/dom/study-simulator.dom.test.js` | ES-* |
+| 오답 복습 (weak pool) | `src/weak-items.js` + `src/views/` review 흐름 | `tests/unit/app/property-based.test.js` (PBT) | RV-*, DR-* |
+| 간격 반복 (SM-2 due 계산) | `src/spaced-repetition.js` | `tests/unit/app/property-based.test.js` (PBT 스코프) | FC-*/DR-* |
+| 실전 모의고사·OMR | `src/views/exam-simulator.js` + `exam-sim-state.js` | `tests/dom/study/study-simulator.dom.test.js` | ES-* |
 | 모의고사 결과 리뷰·오답 재응시 | `src/views/exam-sim-review.js` + `exam-sim-weak.js` | — | ES-* |
 | 학습 캘린더·목표·스마트학습 배분 | `src/views/study-calendar.js` + `src/study-tracker.js` | `study-calendar.dom.test.js` | SC-* |
 | 데일리 챌린지·스트릭 | `src/views/daily-challenge.js` | `study-challenge.dom.test.js` | SC-04 |
 | 뽀모도로 타이머 | `src/views/pomodoro.js` | `study-pomodoro.dom.test.js` | — |
-| 훈련소 허브·O/X 드릴·콤보 드릴 | `src/views/trainer.js`, `trainer-drills.js`, `trainer-drill-combo.js` | `tests/dom/study-trainer.dom.test.js`, `study-trainer-drills.dom.test.js` | DR-* |
-| 배합 계산 연습기·스크래치패드 | `src/trainer-calc.js` + `src/views/trainer-calc-practice.js` + `src/scratchpad.js` | `tests/unit/trainer-calc.test.js`, `common-scratchpad.dom.test.js` | FO-*/DR-* |
+| 훈련소 허브·O/X 드릴·콤보 드릴 | `src/views/trainer.js`, `trainer-drills.js`, `trainer-drill-combo.js` | `tests/dom/study/study-trainer.dom.test.js`, `study-trainer-drills.dom.test.js` | DR-* |
+| 배합 계산 연습기·스크래치패드 | `src/trainer-calc.js` + `src/views/trainer-calc-practice.js` + `src/scratchpad.js` | `tests/unit/engine/trainer-calc.test.js`, `common-scratchpad.dom.test.js` | FO-*/DR-* |
 
 ## 2. 콘텐츠 읽기·뷰어
 
@@ -42,16 +42,16 @@
 |----------------------|-----------|-------------|------|
 | 교재 리더 본문·목차·진도 | `src/views/textbook-reader.js` + `src/reader-toc.js` | `study-reader.dom.test.js` | TR-* |
 | 리더 툴바·독서 설정·스크롤 | `src/views/reader-toolbar.js` | `study-reader.dom.test.js` | TR-* |
-| MD 본문 후처리 (링크·강조 변환) | `src/reader-format.js` | `tests/unit/reader-format-general.test.js`, `reader-toc.test.js` | TR-* |
+| MD 본문 후처리 (링크·강조 변환) | `src/reader-format.js` | `tests/unit/content/reader-format-general.test.js`, `reader-toc.test.js` | TR-* |
 | 통합검색 (역색인) | `src/search-index.js`(코어) + `src/search-sources.js`(소스) + `src/views/textbook-search.js`(뷰) | `search-index.test.js`, `textbook-search-ref.test.js`, `study-search/story-search/exam-search/morph-search/glossary-search.dom.test.js` | TS-* |
 | 용어집 렌더·조회 | `src/views/glossary-renderer.js` + `src/glossary-query.js` | `common-glossary.dom.test.js` | TR-*/DI-* |
 | 참조자료 링크·레지스트리 | `src/views/reader-ref-links.js` + `src/pdf-registry.js`(생성물) | `study-reader.dom.test.js` | RR-* |
-| 법령 한글주소·고시 배너 | `src/law-links.js` + `src/notice-check.js` | `tests/unit/law-links.test.js` | RR-*, CE-* |
+| 법령 한글주소·고시 배너 | `src/law-links.js` + `src/notice-check.js` | `tests/unit/gates/law-links.test.js` | RR-*, CE-* |
 | 오디오북 플레이어 | `src/views/reader-audio.js` | `reader-audio.dom.test.js` | AO-* |
 | 성분 사전 (knowledge 스키마 구동) | `src/views/dictionary.js` | `study-dictionary.dom.test.js`, `dictionary-*.dom.test.js` | DI-* |
 | 문제집 뷰어 (PDF형 문서 열람) | `src/exam-viewer.js` | `study-examviewer.dom.test.js` | EV-* |
 | 학습안내서·매뉴얼 뷰어 | `src/manual-viewer.js` | `study-manual.dom.test.js` | MV-* |
-| Markdown → HTML 파서 | `src/markdown-parser.js` | `tests/unit/markdown-parser-general.test.js` | BP-* |
+| Markdown → HTML 파서 | `src/markdown-parser.js` | `tests/unit/content/markdown-parser-general.test.js` | BP-* |
 | Mermaid 다이어그램 렌더 | `src/mermaid-render.js` + `mermaid-utils.js` | `mermaid-zoom.dom.test.js` | TR-* |
 | 이미지 확대·문서 오버레이 | `src/image-zoom.js` + `src/doc-overlay.js` | `doc-overlay.dom.test.js` | TR-* |
 
@@ -70,7 +70,7 @@
 | 인쇄 빌더 (조제 기록지·라벨) | `views/formula-print.js` | `formula-print.dom.test.js` | FO-* |
 | 소비자 이상사례 기록 | `views/formula-adverse.js` + `adverse-store.js` | `formula-adverse.dom.test.js` | FO-59 |
 | 배치·사업자 프로필 저장소 | `batch-store.js`, `biz-profile.js`, `*-store.js` | — | FO-* |
-| 원료 배합 챌린지 | `views/trainer-ingredients.js` | `tests/dom/study-trainer.dom.test.js` | FO-*(ingredients 플래그) |
+| 원료 배합 챌린지 | `views/trainer-ingredients.js` | `tests/dom/study/study-trainer.dom.test.js` | FO-*(ingredients 플래그) |
 | 스토어 공통 기반 (가져오기/보내기·백업) | `store-utils.js` | `tests/unit/exams/cosmetic/formula-store.test.js` | FO-* |
 
 > 도메인 모듈은 `practice-registry.js`가 활성 시험 + features 플래그 확인 후 지연 import — **플랫폼 공통 코드에서 직접 import하지 않습니다**.
@@ -87,18 +87,18 @@
 | 계정 로그인·프로필 | `src/auth-view.js` + `src/supabase-*.js` | `common-auth.dom.test.js` | AU-* |
 | 클라우드 동기화·충돌 해결 | `src/sync.js` | `common-sync.dom.test.js` | AU-*/SY-* |
 | 백업/복원 (보내기·가져오기) | `src/views/backup.js` | `backup.dom.test.js` | BK-* |
-| 상태 객체·진도 저장 | `src/state.js` + `src/storage.js` + `src/storage-keys.js` | `tests/unit/state.test.js`, `storage.test.js`, `storage-key-sync.test.js` | DA-*/ID-* |
+| 상태 객체·진도 저장 | `src/state.js` + `src/storage.js` + `src/storage-keys.js` | `tests/unit/app/state.test.js`, `storage.test.js`, `storage-key-sync.test.js` | DA-*/ID-* |
 | 오프라인 감지 배너 | `src/views/offline-detection.js` | `common-offline.dom.test.js` | PF-*/P-* |
 | Service Worker·캐시 정책·프리캐시 | `sw.js` | `tests/e2e/sw-*.spec.js`, `verify:assets` | P-* |
 | PWA 설치·매니페스트 | `src/pwa-install.js`, `pwa-manifest.js` | E2E 전용 | P-* |
 | 테마·UI 모드 | `src/theme-toggle.js`, `src/ui-mode.js`, `src/theme-init.js` | `common-theme.dom.test.js`, `common-uimode.dom.test.js` | TH-*/UM-* |
 | 토스트·모달·로딩 유틸 | `src/ui-utils.js` + `src/modal-back.js` | `common-a11y.dom.test.js` | UX-* |
-| XSS 이스케이프·`html`` ` 템플릿 | `src/sanitize.js` | `tests/unit/sanitize.test.js` | SEC-* |
+| XSS 이스케이프·`html`` ` 템플릿 | `src/sanitize.js` | `tests/unit/app/sanitize.test.js` | SEC-* |
 | 명령 팔레트 (Ctrl+K) | `src/command-palette.js` | `study-commandpalette.dom.test.js` | UX-*/CQ-* |
 | 차트 렌더링 | `src/charts.js` | `charts.dom.test.js` | D-*/AN-* |
 | 온보딩·신기능 안내·피드백 | `src/onboarding.js`, `whats-new.js`, `feedback.js` | `onboarding-zoom.dom.test.js`, `feedback.dom.test.js` | ON-*/WN-*/FB-* |
 | Pro 배지·플랜 비교 | `src/pro-upgrade.js` + `feature-plan.json` | `pro-plan.dom.test.js` | PL-* |
-| 오류 텔레메트리·폴백 부팅 | `src/error-telemetry.js` + `app-fallback.js` | `tests/unit/error-telemetry.test.js` | — |
+| 오류 텔레메트리·폴백 부팅 | `src/error-telemetry.js` + `app-fallback.js` | `tests/unit/app/error-telemetry.test.js` | — |
 | 사용 통계·웹바이탈 | `src/usage-stats.js`, `src/web-vitals.js` | — | PF-* |
 
 ## 5. 콘텐츠·빌드 파이프라인

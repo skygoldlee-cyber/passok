@@ -406,8 +406,10 @@ tools/                  # 빌드·검증 스크립트
 ref-pipeline/           # 교재·참조자료 생성/변환 독립 도구함 (PDF→MD, MD→HTML, 오디오북 TTS, 법령 검증) — 사용 절차는 ref-pipeline/README.md 참조
 vendor/                 # 자체 호스팅 자산 (fonts/, fontawesome/)
 tests/                  # 테스트
-  unit/                 # node --test 유닛 테스트 (도메인 테스트는 unit/exams/<id>/ 하위)
-  dom/                  # Vitest + jsdom DOM 테스트 (도메인 테스트는 dom/exams/<id>/ 하위)
+  unit/                 # node --test 유닛 테스트 — 주제별 하위 (gates/ 체커·게이트 회귀, engine/ 학습엔진, content/ 파서·콘텐츠, app/ 런타임 인프라, mermaid/ 다이어그램, 도메인 테스트는 unit/exams/<id>/)
+  dom/                  # Vitest + jsdom DOM 테스트 — 주제별 하위 (common/·study/·reader/·exam/·misc/, helpers.js 공용 셋업, 도메인 테스트는 dom/exams/<id>/)
+  fixtures/             # 테스트 픽스처
+  e2e/                  # Playwright 실브라우저 E2E (도메인 테스트는 e2e/exams/<id>/)
 docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: docs/DOC_CONVENTIONS.md=문서 · docs/CODE_CONVENTIONS.md=코드)
   dev/                  # 플랫폼 공통 개발 문서 — 아키텍처, 명세, 런북, 설계, 참조
     adr/                # 아키텍처 결정 기록 (ADR — 결정의 "왜" 보존, README.md 템플릿·규약)
