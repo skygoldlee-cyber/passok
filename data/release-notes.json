@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261022-f1a6f37",
+    "date": "2026-10-22",
+    "notes": [
+      "[수정·ui] 설정 메타를 ©/버전 2행으로 분리",
+      "[정리·release] v20261021-63d0f7d 스탬프 확정 [no-docs][no-test]"
+    ]
+  },
+  {
     "version": "v20261021-63d0f7d",
     "date": "2026-10-21",
     "notes": [
@@ -178,13 +186,6 @@
       "[기능·analysis] 합격 갭 분석 카드 보강 순위 표시 — computePassGap ranking",
       "[문서·cosmetic] 학습안내서에 망각 곡선 이론·FSRS DSR 모델 소개 추가",
       "[문서·cosmetic] D-5 학습 플랜 FSRS 정합 재설계 — 재독 우선 → 인출 우선"
-    ]
-  },
-  {
-    "version": "v20261013-bf0ffdd",
-    "date": "2026-10-13",
-    "notes": [
-      "[수정·study] 역산·페이스·리드타임 전량 학습일 기준 통일 — cosmetic 리드타임 63일 정정"
     ]
   }
 ]
