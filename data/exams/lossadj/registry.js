@@ -3,7 +3,7 @@ var DATA_REGISTRY_LOSSADJ = {
   "schemaVersion": 1,
   "contentYear": "2026",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-21T04:36:04.680Z",
+  "generatedAt": "2026-10-21T05:02:26.302Z",
   "subjects": [
     {
       "key": "insurance",
@@ -80,7 +80,7 @@ var DATA_REGISTRY_LOSSADJ = {
       "order": 5,
       "name": "2차 과목2: 손해평가의 이론과 실무",
       "shortName": "2차손해평가",
-      "contentHash": "bb25dacd",
+      "contentHash": "b15de2ad",
       "stats": {
         "cards": 0,
         "quizzes": 0,
@@ -140,7 +140,7 @@ var DATA_REGISTRY_LOSSADJ = {
       "desc": "손해평가요령 별표 기반 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
       "file": "2차_주관식_연습.md",
       "stats": {
-        "questions": 10
+        "questions": 14
       }
     }
   ],
