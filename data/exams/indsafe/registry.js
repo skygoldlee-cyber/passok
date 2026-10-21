@@ -3,7 +3,7 @@ var DATA_REGISTRY_INDSAFE = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2027",
-  "generatedAt": "2026-10-21T06:35:33.365Z",
+  "generatedAt": "2026-10-21T06:37:40.817Z",
   "subjects": [
     {
       "key": "safetyMgmt",
@@ -116,7 +116,7 @@ var DATA_REGISTRY_INDSAFE = {
       "order": 7,
       "name": "산업안전관리 실무 (실기)",
       "shortName": "실기 실무",
-      "contentHash": "a26f1560",
+      "contentHash": "0ee4804c",
       "stats": {
         "cards": 0,
         "quizzes": 0,
