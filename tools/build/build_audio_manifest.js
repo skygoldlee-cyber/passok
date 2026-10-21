@@ -142,7 +142,7 @@ export const AUDIO_MANIFEST = ${JSON.stringify(manifest, null, 2)};
 /**
  * 활성 시험의 오디오 매니페스트를 반환한다.
  * 시험 키가 없으면(구형 단일 매니페스트 형식) 전체를 그대로 돌려준다.
- * @param {string} examId
+ * @param {string} [examId]
  */
 export function getAudioManifest(examId) {
   if (examId && AUDIO_MANIFEST && AUDIO_MANIFEST[examId]) return AUDIO_MANIFEST[examId];

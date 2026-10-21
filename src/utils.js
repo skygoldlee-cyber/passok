@@ -101,7 +101,7 @@ export function escapeRegExp(string) {
 /** 디바운스 — 마지막 호출 후 delay(ms) 경과 시 1회 실행. .cancel()로 대기 취소 */
 export function debounce(func, delay = 150) {
     let timer;
-    const wrapped = function (...args) {
+    const wrapped = /** @this {any} */ function (...args) {
         clearTimeout(timer);
         timer = setTimeout(() => func.apply(this, args), delay);
     };

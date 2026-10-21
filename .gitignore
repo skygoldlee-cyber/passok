@@ -119,10 +119,17 @@ reports/
 # 사용자 학습 데이터 백업 (--stats 입력용, 로컬 전용)
 *_backup_*.json
 
-# ---------- 📦 data/exams 생성 번들 (빌드 재생성 — 커밋 제외로 .git 팽창 방지) ----------
-# build:data·build:drills·build_doc_bundles가 재생성하는 시험별 번들 디렉터리.
-# 시험 루트의 소형 파일(registry·notice_diff·question_chapters 등)과
-# embeddings/(CI Python 비의존 유지 목적)는 계속 추적한다.
+# ---------- 📦 빌드 생성물 (CI·serve·deploy 시 재생성 — 커밋 제외로 .git 팽창·drift 방지) ----------
+# build:html·build:data·build:drills·build_doc_bundles가 재생성하는 산출물.
+# 추적 유지: embeddings/(Python 필요 — CI Node 빌드 불가)·id_migration.js·
+# card_terms_snapshot.json(진도 이관·감사 스냅샷)·combo_pilot.js(수작업 파일럿)·
+# release-notes.js·version.js(deploy 스탬프 산출물)·manifest.*.webmanifest(소스)
+index.html
+data/exams.js
+data/audio_manifest.js
+data/exams/*/registry.js
+data/exams/*/question_chapters.js
+data/exams/*/notice_diff.json
 data/docs_md/
 data/exams/*/docs_md/
 # drills는 수작업 파일럿(combo_pilot.js)이 섞여 있어 내용물 단위로만 제외

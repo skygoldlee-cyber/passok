@@ -365,7 +365,7 @@ body.manual-open{overflow:hidden;}
             _renderBody(title, bodyHtml, src.path);
         } catch (err) {
             console.error('Document load failed:', err);
-            _showError(title, err && err.message ? err.message : String(err));
+            _showError(title, err instanceof Error ? err.message : String(err));
         }
     }
 

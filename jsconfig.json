@@ -15,6 +15,14 @@
     "noEmit": true,
     "strict": false,
     "strictNullChecks": true,
+    // strict 개별 플래그 점진 상향 (2026-10-21 — 전 src 0 에러 확인 후 활성화)
+    "alwaysStrict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    // noImplicitAny는 백로그(~2800건)가 커서 보류 — 모듈 단위 소진 후 상향 예정
     "skipLibCheck": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "types": []

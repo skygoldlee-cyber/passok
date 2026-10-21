@@ -7,6 +7,15 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 생성물 git 미추적 전환 + jsconfig strict 개별 플래그 상향
+
+- **생성물 언트랙**: `index.html`·`data/exams.js`·`data/audio_manifest.js`·`data/exams/*/registry.js`·`question_chapters.js`·`notice_diff.json`을 .gitignore로 내림 — 큰 번들(subjects/·exams/·study_md/·docs_md/)은 이미 미추적이었고, 잔여 순수 산출물까지 내리면서 커밋 diff 노이즈·신선도 게이트의 실패 표면을 제거
+- **추적 유지**: `embeddings/`(Python 필요 — CI Node 빌드 불가)·`id_migration.js`·`card_terms_snapshot.json`(진도 이관·감사 스냅샷)·`drills/combo_pilot.js`(수작업)·`release-notes.js`·`version.js`(deploy 스탬프)·`manifest.*.webmanifest`(소스)·`content/**/*_이야기형.md`(콘텐츠 산출물)
+- **빌드 보장 경로**: `deploy.js`가 스탬프 전 `build:html`+`build:data`+`build:drills`+`build_doc_bundles`를 실행하고 빌드가 추적 파일을 오염시키면 배포 차단 / `serve.js`는 생성물 부재 시 빌드 안내 후 종료 / CI(ci·full-gate·visual-baseline)는 잡 초반에 생성물 빌드
+- **vercel.json `buildCommand`는 미적용** — 프레임워크 없는 정적 프로젝트에 설정하면 outputDirectory가 `public` 기본값으로 강제돼 `vercel build`가 실패. 배포는 CLI 업로드 경로(deploy.js 로컬 빌드→스테이징)만 사용하므로 문제없음
+- **strict 플래그 상향**: `alwaysStrict`·`strictBindCallApply`·`strictFunctionTypes`·`strictPropertyInitialization`·`noImplicitThis`·`useUnknownInCatchVariables` 활성화 — catch 변수 `e && e.name`→`e instanceof Error` 패턴·Set 타입 주석·debounce `@this` 등 18건 수정. `noImplicitAny`는 백로그(~2800건)가 커서 보류
+- 기존 신선도 게이트(check:datafresh·check:html·check:drillfresh·check:docbundles 등)는 유지 — 커밋 drift 차단 역할은 사라지지만 로컬 스테일 빌드 탐지·빌드 재현성 검증으로 계속 동작
+
 ## 2026-10-21 GitHub 리포 rename passory→passok — slug 참조 갱신
 
 - **배경**: 브랜드 PassOK 전환의 일환으로 리포지토리명 변경 — GitHub가 구 slug 리다이렉트를 유지하나 명시 참조는 정정

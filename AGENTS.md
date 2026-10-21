@@ -52,7 +52,7 @@ node tools/sync/sync_citation_lines.js --check  # 변경사항 확인만 (수정
 node tools/sync/sync_textbook_files.js       # 교재/문제은행 파일 ↔ manifest·sw.js MD_ASSETS 구조 동기화 (--check=보고만, --rename <구> <신>=파일명 변경 전파)
 
 # 로컬 서버 (vercel.json 헤더 미러링 — 프로덕션 CSP·캐시 정책 그대로 적용)
-npm.cmd run serve                      # http://localhost:3000
+npm.cmd run serve                      # http://localhost:3000 (index.html·data/ 번들은 git 미추적 — 생성물 없으면 빌드 안내 후 종료)
 
 # 배포
 npm.cmd run deploy                     # 배포 가드(clean tree + origin/main 동기화 + 대상 커밋 CI success 확인) → sw/버전 스탬프(비커밋, 배포 후 원복) → vercel --prod → deploy/<버전> 태그 이력
@@ -188,7 +188,7 @@ python ref-pipeline/fetch_revision.py [--doc <이름>] [--apply]
 
 ```
 index.template.html     # App Shell 템플릿 — <!-- @include --> 마커로 뷰 파셜 조립
-index.html              # App Shell (생성물 — npm run build:html 산출, 직접 편집 금지)
+index.html              # App Shell (생성물·git 미추적 — npm run build:html 산출, 직접 편집 금지)
 html/views/             # 뷰 마크업 파셜 12개 — 뷰 HTML 편집은 여기서, build:html로 재생성
 html/exams/<id>/        # 시험 도메인 뷰 파셜 (지연 주입 — formula.html 등, data-lazy-view)
 style.css               # CSS 진입점 (@import로 모듈 로드)
@@ -427,7 +427,7 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 ## 멀티시험 구조
 
 - **시험 레지스트리**: `content/exams.json` → `data/exams.js` 번들(`window.EXAMS_LIST`, `npm run build:data`에 포함). 각 시험 엔트리: `id`, `name`, `appName`(시험별 앱 이름 — 브랜드면 표기), `title`/`logoMain`/`logoSub`(브랜딩), `desc`, `icon`, `year`, `default`, `contentRoot`, `dataRoot`, `registryBundle`, `registryGlobal`, `features`(기능 플래그). **`year`가 시험 연도의 유일한 진실 소스(SSOT)** — `build:exams-list`가 각 시험의 `manifest.json` `contentYear`와 `index.html`·`manifest.webmanifest`의 연도 텍스트(기본 시험 기준)로 자동 전파하므로, 연도 변경은 `exams.json`만 수정 후 `build:data` 재실행
-- **시험별 루트 (대칭)**: 모든 시험이 `content/exams/<id>/`(manifest.json + references.json + 교재/문제은행/참조자료/audiobook 등)와 `data/exams/<id>/`(registry.js, subjects/, exams/, drills/, embeddings/, study_md/, docs_md/, supplements/, id_migration.js 등) 구조 — 기본 시험(cosmetic)도 예외 없음. `content/`·`data/` 루트에는 전역 파일만: `exams.json`/`exams.js`, `audio_manifest.js`(시험 id 키 분리), `docs_md/`(앱 공용 문서)
+- **시험별 루트 (대칭)**: 모든 시험이 `content/exams/<id>/`(manifest.json + references.json + 교재/문제은행/참조자료/audiobook 등)와 `data/exams/<id>/`(registry.js, subjects/, exams/, drills/, embeddings/, study_md/, docs_md/, supplements/, id_migration.js 등 — 전부 빌드 생성물로 git 미추적; embeddings/·id_migration.js·card_terms_snapshot.json·combo_pilot.js만 추적) 구조 — 기본 시험(cosmetic)도 예외 없음. `content/`·`data/` 루트에는 전역 파일만: `exams.json`/`exams.js`, `audio_manifest.js`(시험 id 키 분리), `docs_md/`(앱 공용 문서)
 - **시험 컨텍스트**: `src/exam-context.js` — `contentPath()`/`dataPath()`(경로 해석), `hasFeature()`(기능 게이팅), `selectExam()`(전환 = `location.reload()`로 모듈 상태 리셋), `scopedKey()`(진도 네임스페이스 `<examId>:key`)
 - **진도 격리**: `safeGetItem`/`safeSetItem` 등이 자동으로 시험 접두사 적용. 테마·리더 설정 등 `GLOBAL_KEYS`만 비네임스페이스. 백업 파일은 비접두사 논리 키(시험 간 호환)
 - **새 시험 추가 절차**: ① `npm.cmd run scaffold:exam -- <id> --name "시험명"`으로 골격 생성(권장 — 수동으로 디렉터리를 먼저 만들면 domainmap 미등록 오류) 후 manifest.json + references.json + 교재/문제은행 배치 — 법령 참조가 있으면 `content/lawdb.json`에 엔트리 + `references.json.lawRefs`·`noticeCore` 설정, 사전이 있으면 `manifest.knowledge` 스키마 선언 ② `content/exams.json`에 엔트리 추가 (`contentRoot`/`dataRoot`/`registryBundle`/`registryGlobal` 지정 — 비기본 시험은 `registryGlobal: "DATA_REGISTRY_<id>"`) ③ `npm.cmd run check:content -- --build` → 끝 (앱 로직 변경 불필요). **도메인 자산 규약**: 시험 전용 코드·마크업·스타일·테스트는 `src/exams/<id>/`·`html/exams/<id>/`·`css/exams/<id>/`·`tests/{unit,dom}/exams/<id>/`에, 시험 종속 문서는 `docs/exams/<id>/`에 배치 — 플랫폼 레지스트리가 `exams/${getActiveExamId()}/` 규약으로 해석하므로 기존 실무 피처 재사용은 파일 배치만으로 동작. 상세: `docs/dev/runbooks/NEW_EXAM_RUNBOOK.md`·`docs/dev/design/MULTI_EXAM_DB_DESIGN.md`

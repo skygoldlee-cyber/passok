@@ -291,6 +291,33 @@ async function main() {
     }
     console.log('✅ 타입·린트 게이트 통과 (IDE 오류 없음)');
 
+    // 생성물(index.html·data/ 번들)은 git 미추적 — 커밋 상태와 무관하게 배포
+    // 직전 현재 트리에서 재생성해 스테이징 누락을 막는다. 빌드가 추적 파일을
+    // 변경하면(원본↔생성물 동기화 누락) 그 상태는 커밋되지 않은 것이므로 차단.
+    console.log('▶ 배포용 생성물 빌드');
+    for (const cmd of ['build:html', 'build:data', 'build:drills']) {
+        const r = spawnSync(`npm run ${cmd} --silent`, { encoding: 'utf8', shell: true });
+        if (r.status !== 0) {
+            process.stdout.write(r.stdout || '');
+            process.stderr.write(r.stderr || '');
+            fail(`${cmd} 실패 — 생성물을 만들 수 없어 배포할 수 없습니다.`);
+        }
+    }
+    {
+        const r = spawnSync('node tools/build/build_doc_bundles.js', { encoding: 'utf8', shell: true });
+        if (r.status !== 0) {
+            process.stdout.write(r.stdout || '');
+            process.stderr.write(r.stderr || '');
+            fail('build_doc_bundles 실패 — 생성물을 만들 수 없어 배포할 수 없습니다.');
+        }
+    }
+    const postBuildDirty = git('status --porcelain');
+    if (postBuildDirty) {
+        console.error(postBuildDirty);
+        fail('빌드가 추적 파일을 변경했습니다 — 동기화 누락입니다. 변경을 커밋·푸시(CI 통과) 후 재배포하세요.');
+    }
+    console.log('✅ 생성물 빌드 완료 (index.html · data/ 번들 · 문서 번들)');
+
     // sw.js CACHE_VERSION + 앱 버전/릴리스 노트 스탬프 — 커밋하지 않고 작업 트리에만
     // 적용한다. vercel --prod는 로컬 파일을 업로드하므로 프로덕션에는 스탬프된
     // 내용이 그대로 배포되고, 배포 후 원복하면 이력 노이즈(chore(sw) 커밋)가 없다.
