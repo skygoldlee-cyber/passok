@@ -1,5 +1,5 @@
 // tests/unit/pwa-sw.test.js — PWA·Service Worker 불변식 (정적 검증)
-// @spec P-01,P-02,P-03,P-04,P-04a,P-05,P-06,P-07,P-08,P-09,P-10,P-11,P-12,UX-PWA-06
+// @spec P-01,P-02,P-03,P-04,P-04a,P-05,P-06,P-07,P-08,P-09,P-10,P-11,P-12,UX-PWA-06,UX-PWA-07
 // sw.js 캐시 전략 분기, 프리캐시 관용성, 스큐 방지, 업데이트 경로,
 // 캐시 버전·프루닝, 설치 프롬프트 캡처·진단·인앱 감지,
 // 매니페스트 Content-Type·시험별 shortcuts, 자가 복구, 자산 검증을 고정한다.
@@ -144,7 +144,7 @@ test('UX-PWA-06: buildExamManifest가 exams.json pwaShortcuts를 shortcuts로 �
     assert.ok(!('shortcuts' in without), '미선언 시 shortcuts 없음');
 });
 
-test('UX-PWA-06: 모든 시험 manifest는 단일 앱 정체성(id/name/short_name=passok/PassOK)을 공유한다', async () => {
+test('UX-PWA-07: 모든 시험 manifest는 단일 앱 정체성(id/name/short_name=passok/PassOK)을 공유한다', async () => {
     const { buildExamManifest } = await import('../../tools/build/build_exams_list.js');
     const base = { id: 'base', name: 'Base', short_name: 'Base', description: 'base desc' };
     // 시험별 id가 다르면 브라우저가 별개 앱으로 인식해 중복 설치되고,

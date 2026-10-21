@@ -6,7 +6,7 @@
  * 사용: node tools/build/build_exams_list.js  (build:data 체인에 포함)
  */
 
-// @spec BP-01,UX-PWA-06
+// @spec BP-01,UX-PWA-06,UX-PWA-07
 const fs = require('fs');
 const path = require('path');
 
