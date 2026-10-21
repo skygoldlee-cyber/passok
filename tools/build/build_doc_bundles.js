@@ -6,7 +6,7 @@
  * 클래식 <script>로 불러올 수 있는 JS 번들로 굽는다.
  * → file:// 로 index.html을 더블클릭핸들 때 fetch 없이 문서를 열 수 있게 하기 위함.
  *
- * 입력 : docs/exams/<id>/user/*.md (GLOBAL_DOCS 선언분), content/exams/<id>/docs/*.md (디렉터리 스캔)
+ * 입력 : docs/user/*.md (GLOBAL_DOCS 선언분 — 앱 공용), content/exams/<id>/docs/*.md (디렉터리 스캔 — 시험별)
  * 출력 : data/docs_md/<파일명>.js, {dataRoot}/docs_md/<파일명>.js
  *        각 파일은 다음 형태로 전역에 등록한다.
  *          (window.__DOC_MD__ = window.__DOC_MD__ || {})["<경로>/<파일명>.md"] = "<마크다운>";
@@ -35,17 +35,19 @@ const { getExamTargets } = require('./exam_targets');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 
-// 앱 공용 문서 — 현재 없음. 시험 무관 문서가 생기면 여기에 등록
-// (src/manual-viewer.js 의 MD_SOURCES 와 동기화 유지)
-const GLOBAL_DOCS = [];
+// 앱 공용 문서 — 시험 무관 문서 (사용자 매뉴얼). dir은 리포 루트 상대,
+// key는 src/manual-viewer.js 의 MD_SOURCES[].path 와 정확히 일치해야 한다.
+const GLOBAL_DOCS = [
+    { dir: 'docs/user', file: 'user_manual.md', key: 'docs/user/user_manual.md' },
+];
 
 // 기능 플래그 → 필수 문서 불변식.
 // exams.json의 features.<flag> 가 true인 시험은 {contentRoot}/docs/<file>을
 // 반드시 제공해야 한다 (플래그가 링크 노출을 약속하므로).
+// ※ 사용자 매뉴얼은 앱 공용 문서(GLOBAL_DOCS)로 전환되어 시험 플래그 불변식 대상이 아니다.
 const FEATURE_DOCS = {
     studyGuide: '학습안내서.md',
     appendixDocs: '두음법_암기_총정리.md',
-    userManual: 'user_manual.md',
     formula: 'formula_manual.md',
 };
 

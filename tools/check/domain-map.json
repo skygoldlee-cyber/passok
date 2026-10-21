@@ -175,6 +175,14 @@
       ]
     },
     {
+      "layer": "platform",
+      "generatedBy": "node tools/build/build_doc_bundles.js",
+      "note": "앱 공용 문서 번들 (docs/user/*.md 원본 — 시험별 문서는 {dataRoot}/docs_md/로 도메인 자동 주입)",
+      "patterns": [
+        "data/docs_md/**"
+      ]
+    },
+    {
       "layer": "feature:dictionary",
       "flag": "dictionary",
       "note": "용어/원료 사전 — manifest.knowledge 스키마 구동",

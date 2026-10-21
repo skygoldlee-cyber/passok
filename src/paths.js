@@ -51,8 +51,8 @@ export const PATHS = {
   // 벤더 (앱 공용)
   VENDOR_MERMAID: './vendor/mermaid/mermaid.min.js',
 
-  // 문서 (시험별 — {contentRoot}/docs/ 아래)
-  get USER_MANUAL() { return contentPath('docs/user_manual.md'); },
+  // 문서 — 사용자 매뉴얼은 앱 공용(docs/user/, 시험 무관), 실무 매뉴얼은 시험별
+  USER_MANUAL: 'docs/user/user_manual.md',
   get FORMULA_MANUAL() { return contentPath('docs/formula_manual.md'); },
 };
 

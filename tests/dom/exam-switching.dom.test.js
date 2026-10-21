@@ -19,7 +19,7 @@ const EXAMS = {
             title: 'Passmula — 맞춤형화장품 조제관리사',
             logoMain: 'Pass', logoSub: 'mula', icon: 'fa-solid fa-wand-magic-sparkles',
             year: '2027', default: true,
-            features: { formula: true, dictionary: true, userManual: true, calcPractice: true },
+            features: { formula: true, dictionary: true, calcPractice: true },
         },
         {
             id: 'insadj', name: '손해사정사', appName: 'Passory 손해사정사', appNameEn: 'Passure',
@@ -53,7 +53,7 @@ describe('멀티시험 전환 — 비기본 시험 활성화', () => {
         expect(getActiveExam().name).toBe('손해사정사');
         // cosmetic 전용 기능 비활성
         expect(hasFeature('formula')).toBe(false);
-        expect(hasFeature('userManual')).toBe(false);
+        expect(hasFeature('calcPractice')).toBe(false);
         // insadj 보유 기능 활성
         expect(hasFeature('pomodoro')).toBe(true);
         expect(hasFeature('dictionary')).toBe(true);
@@ -75,7 +75,7 @@ describe('멀티시험 전환 — 비기본 시험 활성화', () => {
         expect(appleTitle.getAttribute('content')).toBe('Passmula');
     });
 
-    it('applyFeatureFlags — insadj에서 formula·userManual 게이트 요소 숨김, dictionary 유지', () => {
+    it('applyFeatureFlags — insadj에서 formula 게이트 요소 숨김, dictionary·공용 매뉴얼 유지', () => {
         localStorage.setItem('current_exam', 'insadj');
         applyFeatureFlags();
 
@@ -85,8 +85,14 @@ describe('멀티시험 전환 — 비기본 시험 활성화', () => {
             return [...nodes].every((n) => n.classList.contains('is-hidden'));
         };
         expect(hidden('formula')).toBe(true);   // 실무 매뉴얼 링크 등
-        expect(hidden('userManual')).toBe(true); // 학습 매뉴얼 링크
         expect(hidden('dictionary')).toBe(false); // insadj 보유 기능은 유지
+        // 사용자 매뉴얼은 앱 공용 — 어떤 시험에서도 게이트 없이 노출
+        const manualLinks = document.querySelectorAll('[data-click="ManualViewer.openManual"]');
+        expect(manualLinks.length).toBeGreaterThan(0);
+        for (const n of manualLinks) {
+            expect(n.hasAttribute('data-feature')).toBe(false);
+            expect(n.classList.contains('is-hidden')).toBe(false);
+        }
         // 시험 전환 버튼은 시험 수(2개) 기반으로 노출
         expect(hidden('examSwitch')).toBe(false);
     });

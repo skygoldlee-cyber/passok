@@ -67,12 +67,19 @@ function getSubjectMaps(manifest) {
  * sw.js의 MD_ASSETS를 재생성하는 두 경로(build:index.js, sync_textbook_files.js)가
  * 동일 목록을 만들도록 공통 함수로 둔다.
  * 대상: {contentRoot}/docs/*.md 전체(정렬) + manifest 선언 교재(file/storyFile) + 문제은행(exams[].file)
+ *      + docs/user/*.md (앱 공용 문서 — 시험 무관이므로 전 시험 공통 프리캐시)
  */
 function getPrecacheMdAssets(workspaceDir) {
     const list = [];
     const push = rel => {
         if (fs.existsSync(path.join(workspaceDir, rel))) list.push(`./${rel}`);
     };
+    const globalDocsDir = path.join(workspaceDir, 'docs', 'user');
+    if (fs.existsSync(globalDocsDir)) {
+        for (const f of fs.readdirSync(globalDocsDir).filter(f => f.endsWith('.md')).sort()) {
+            push(`docs/user/${f}`);
+        }
+    }
     for (const t of getExamTargets(workspaceDir)) {
         if (!t.manifest) continue;
         const docsDir = path.join(workspaceDir, t.contentRoot, 'docs');

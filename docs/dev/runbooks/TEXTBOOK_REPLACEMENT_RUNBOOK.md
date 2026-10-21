@@ -282,11 +282,11 @@ node tools/sync/sync_textbook_files.js --rename 교재/law/OLD.md 교재/law/NEW
     "questionsPerSubject": { "law": 10, ... }  // 키는 subjects[].key — 없는 키는 선언 단계에서 실패
   },
   "searchDocs": [{                            // 통합검색 대상 문서 (선택, TS-18)
-    "file": "docs/user_manual.md",            // contentRoot 상대 경로 (docs/ 권장 — docs_md 번들과 연동)
-    "title": "사용자 매뉴얼",
+    "file": "docs/학습안내서.md",              // contentRoot 상대 경로 (docs/ 권장 — docs_md 번들과 연동)
+    "title": "학습 안내서",
     "subject": "law",                         // 선택 — 과목 키 귀속
     "kind": "doc",                            // 선택 — 결과 버킷/배지 종류 (기본 'doc')
-    "feature": "userManual"                   // 선택 — 기능 플래그 게이트 (비활성 시험에서 제외)
+    "feature": "studyGuide"                   // 선택 — 기능 플래그 게이트 (비활성 시험에서 제외)
   }]
 }
 ```

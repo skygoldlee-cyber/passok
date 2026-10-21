@@ -119,7 +119,6 @@
     }
   },
   "searchDocs": [
-    { "file": "docs/user_manual.md", "title": "사용자 매뉴얼", "feature": "userManual" },
     { "file": "docs/formula_manual.md", "title": "실무 매뉴얼 (Formula OS)", "feature": "formula" },
     { "file": "docs/학습안내서.md", "title": "학습 안내서", "feature": "studyGuide" },
     { "file": "docs/두음법_암기_총정리.md", "title": "두음법·숫자 암기 총정리", "feature": "appendixDocs" }

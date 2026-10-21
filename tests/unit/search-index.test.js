@@ -217,17 +217,26 @@ test('_loadExamDocEntries — manifest.searchDocs 선언 문서를 doc 엔트리
         ],
     };
     const mdPath = contentPath('docs/indep_manual.md');
-    globalThis.window = { __DOC_MD__: { [mdPath]: '선언문서 고유용어ZX 본문' } };
+    globalThis.window = { __DOC_MD__: {
+        [mdPath]: '선언문서 고유용어ZX 본문',
+        'docs/user/user_manual.md': '공용매뉴얼 고유용어ZQ 본문',
+    } };
     try {
         const entries = await _loadExamDocEntries();
         // feature 게이트 비활성 + 번들·fetch 실패 문서는 제외된다
-        assert.equal(entries.length, 1);
-        assert.equal(entries[0].kind, 'doc');
-        assert.equal(entries[0].title, '선언독립문서타이틀');
-        assert.equal(entries[0].subjId, 'paper1');
-        assert.equal(entries[0].subjName, '과목일');
-        assert.equal(entries[0].nav.mdPath, mdPath);
-        assert.ok(entries[0]._searchText.includes('고유용어zx'));
+        assert.equal(entries.length, 2);
+        const declared = entries.find(e => e.title === '선언독립문서타이틀');
+        assert.equal(declared.kind, 'doc');
+        assert.equal(declared.subjId, 'paper1');
+        assert.equal(declared.subjName, '과목일');
+        assert.equal(declared.nav.mdPath, mdPath);
+        assert.ok(declared._searchText.includes('고유용어zx'));
+        // 앱 공용 문서(사용자 매뉴얼)는 시험 무관하게 자동 병합 — contentPath가 아닌
+        // 리포 루트 상대 경로가 그대로 쓰여야 한다
+        const common = entries.find(e => e.title === '사용자 매뉴얼');
+        assert.ok(common, '공용 사용자 매뉴얼 엔트리');
+        assert.equal(common.nav.mdPath, 'docs/user/user_manual.md');
+        assert.ok(common._searchText.includes('고유용어zq'));
     } finally {
         DataLoader._manifest = prevManifest;
         delete globalThis.window;

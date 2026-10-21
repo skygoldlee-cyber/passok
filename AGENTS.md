@@ -29,7 +29,7 @@ npm.cmd run test:all                   # 전체 테스트 (unit + parser + dom)
 # 빌드
 npm.cmd run build:data                 # content/exams/<id>/*.md → data/exams/<id>/ 번들 생성 (모든 시험 순회)
 npm.cmd run build:derived              # 파생 생성물 일괄 재생성 (build:html + build:data + build:drills + docs_md + build:trace + build:embeddings + stats:stamp) — 콘텐츠·SPEC·테스트 변경 후 신선도 게이트 복구 명령
-node tools/build/build_doc_bundles.js        # content/exams/<id>/docs/*.md → {dataRoot}/docs_md/ 번들 (앱 내 문서 갱신 시 필수 — 매뉴얼·학습안내서 모두 시험별 문서)
+node tools/build/build_doc_bundles.js        # docs/user/*.md(앱 공용 매뉴얼) → data/docs_md/ + content/exams/<id>/docs/*.md(시험별 — 학습안내서·실무매뉴얼 등) → {dataRoot}/docs_md/ 번들 (앱 내 문서 갱신 시 필수)
 npm.cmd run build:html                # index.template.html + html/views/*.html → index.html 조립 (뷰 마크업 변경 시 필수)
 npm.cmd run check:html                # index.html이 파셜 조립 결과와 일치하는지 비교 (개행 정규화 — pre-push·CI 게이트)
 npm.cmd run check:parser               # 빌드 파서 ↔ 런타임 파서 등가성 검증
@@ -393,7 +393,7 @@ data/                   # 빌드 생성 번들
   version.js            # window.APP_VERSION — 배포 스탬프와 동기화
   release-notes.json    # 사용자용 변경 이력 진실 소스 (notes:draft → JSON 편집 → deploy)
   release-notes.js      # window.RELEASE_NOTES — 생성 파일 (직접 편집 금지)
-  docs_md/              # 앱 공용 문서 번들 (현재 비어 있음 — 인앱 문서는 전부 시험별, MV-04)
+  docs_md/              # 앱 공용 문서 번들 (docs/user/*.md → user_manual.js 등, MV-04)
   exams/cosmetic/       # 기본 시험 데이터 루트 (dataRoot: registry.js, subjects/, exams/, drills/, study_md/, docs_md/, id_migration.js 등)
   exams/<id>/           # 추가 시험 데이터 루트 (동일 구조)
 tools/                  # 빌드·검증 스크립트
@@ -411,6 +411,7 @@ tests/                  # 테스트
 docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: docs/DOC_CONVENTIONS.md=문서 · docs/CODE_CONVENTIONS.md=코드)
   dev/                  # 플랫폼 공통 개발 문서 — 아키텍처, 명세, 런북, 설계, 참조
     adr/                # 아키텍처 결정 기록 (ADR — 결정의 "왜" 보존, README.md 템플릿·규약)
+  user/                 # 앱 공용 사용자 문서 (사용자 매뉴얼 — 런타임 fetch·배포 대상, 시험 무관)
   exams/cosmetic/       # 시험 종속 문서 — user·business·design·reference·report_archive (범위·판본 헤더로 선언)
 ```
 
@@ -564,5 +565,5 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 - `docs/exams/cosmetic/design/FORMULA_OS_WORKFLOW_DESIGN.md` — 조제관리사 9개 업무 전체 커버리지 확장 설계안 (고객·배치·원료장부·안내문)
 - `docs/dev/runbooks/COMBO_GENERATION_GUIDE.md` — 복수정답형 문항 생성 절차·품질 게이트·수치 조정 가이드
 - `docs/dev/reference/COMBO_STUDY_STRATEGY.md` — 복수정답형 학습 전략 (전략→기능 매핑 포함)
-- `content/exams/cosmetic/docs/user_manual.md` — 학습 매뉴얼 (시험 대비 — 시험별 문서)
+- `docs/user/user_manual.md` — 사용자 매뉴얼 (앱 공용 — 시험 무관)
 - `content/exams/cosmetic/docs/formula_manual.md` — 실무 매뉴얼 (Formula OS — 시험별 문서)
