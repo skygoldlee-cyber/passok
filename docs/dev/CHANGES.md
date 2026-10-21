@@ -7,6 +7,16 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 food 파일럿 잔재 전면 제거 — 픽스처·lawdb·문서 현재상태
+
+- **배경**: food 팩은 2026-10-21 커밋에서 콘텐츠·레지스트리가 제거됐으나 테스트 목업 픽스처·lawdb·문서 예시에 잔존 — 사용자 지시로 전면 정리 (이전 "실데이터 비의존 일반 픽스처라 유지" 결정 번복)
+- **lawdb.json**: food-* 법령 6건 제거 (식품위생법·시행령·시행규칙·식품공전·표시기준·식품첨가물공전 — 어느 시험도 미참조)
+- **테스트 픽스처 8종**: food/식품기사 → insadj/손해사정사 실제 시험 ID로 교체 (exam-context·scaffold-chapter·pwa-sw·practice-registry·check-glossary-signal·common-uimode·exam-index-scope·exam-switching)
+- **dictionary-schema DOM**: 식품첨가물 스키마 → 시험 무관 '안전용어 사전' 예시로 재작성 (스키마 드리븐 렌더 검증 의도 유지)
+- **도구 주석**: build/index·ai_textbook·check_content_independence·check_domain_map 예시 갱신
+- **문서 현재상태**: README 등록 시험 목록·PROJECT_STRUCTURE_TOUR·SPEC 트리거·ARCHITECTURE uiText 예시·E2E 검증 기술·ADR-0016 결과주석·STORY_PATCH_GUIDE 갱신 — 과거 이력 기록(본 파일·MULTI_EXAM_DB_DESIGN §9·report_archive)은 사실 기록으로 유지
+- **검증**: unit 1,479 · dom 758 전량 통과
+
 ## 2026-10-21 시험별 영문 별칭(appNameEn) 추가 — PWA/iOS 설치명 우선 적용
 
 - **배경**: 플랫폼 서브브랜드(Passory <직종>) 유지하면서 영문 별칭을 병기 — 홈 화면 아이콘 라벨 등 짧은 영문이 적합한 표기면에 활용

@@ -9,7 +9,7 @@
  *
  * 탐지 규칙:
  *   R1  시험 식별 리터럴 — exams.json의 id·name/appName/shortName/title과
- *       동일한 인용 문자열 ('cosmetic', "식품기사" …)
+ *       동일한 인용 문자열 ('cosmetic', "손해사정사" …)
  *   R2  과목 키 리터럴 — manifest.subjects[].key/dir과 동일한 인용 문자열
  *   R3  시험 경로 리터럴 — exams/<시험id>/ 형태의 경로 문자열 내장
  *

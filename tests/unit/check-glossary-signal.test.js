@@ -42,11 +42,11 @@ test('BP-14 — 저신호 위험군: autoExtracted + 2~4자 순수 한글 단일
 test('BP-14 — 기준선 diff는 exam|keyword 쌍 단위로 신규만 보고', () => {
     const entries = [
         { exam: 'cos', keyword: '관리', file: 'f', definition: 'd' },
-        { exam: 'food', keyword: '관리', file: 'f', definition: 'd' },   // 다른 시험 — 별도 쌍
+        { exam: 'insadj', keyword: '관리', file: 'f', definition: 'd' },   // 다른 시험 — 별도 쌍
         { exam: 'cos', keyword: '관리', file: 'f2', definition: 'd' },   // 같은 쌍 재등장 — 1회만
     ];
     const fresh = diffBaselineKeywords(entries, ['cos|관리']);
-    assert.deepEqual(fresh.map(e => `${e.exam}|${e.keyword}`), ['food|관리']);
+    assert.deepEqual(fresh.map(e => `${e.exam}|${e.keyword}`), ['insadj|관리']);
 });
 
 test('BP-14 — glossary 디렉터리 부재 시험은 건너뜀', () => {
