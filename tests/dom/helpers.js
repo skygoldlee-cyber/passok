@@ -15,6 +15,7 @@ import { state, loadProgress, safeSetItem, safeGetItem } from '../../src/state.j
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
 import { DataLoader } from '../../src/data-loader.js';
 import { getActiveExamId } from '../../src/exam-context.js';
+import { PATHS } from '../../src/paths.js';
 import { TIMING } from '../../src/config/timing.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -200,6 +201,9 @@ export function resetStudyState() {
     delete window.EXAM_DATA;
     delete window.DATA_REGISTRY;
     delete window.INGREDIENTS_DATA;
+    // 공용 문서 번들 시드 — 지연 검색 소스가 번들 <script> 폴백에 진입하면 jsdom에서
+    // load/error가 발화하지 않아 pending으로 남는다. 빈 문자열은 '문서 없음'으로 처리된다.
+    window.__DOC_MD__ = { [PATHS.USER_MANUAL]: '' };
     // DataLoader 캐시/레지스트리 리셋 — 테스트 간 로드 결과 오염 방지
     DataLoader.registry = null;
     DataLoader._loaded = {};

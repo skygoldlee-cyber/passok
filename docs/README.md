@@ -79,7 +79,7 @@
 ### ⑥ 학습자(사용자) 관점 문서
 
 ```
-user_manual.md(앱 내) → 학습안내서(앱 내) → exams/cosmetic/user/exam_strategy.md → exams/cosmetic/user/subject1~4_numbers.md
+docs/user/user_manual.md(앱 내·공용) → 학습안내서(앱 내·시험별) → exams/cosmetic/user/exam_strategy.md → exams/cosmetic/user/subject1~4_numbers.md
 ```
 
 ---
@@ -100,6 +100,7 @@ docs/
 │   ├── design/                ← 설계·계획·평가 문서 (16개)
 │   ├── reference/             ← 명세·로직·참조 문서 (13개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (3개 — §9 스냅샷 이력)
+├── user/                      ← 앱 공용 사용자 문서 (사용자 매뉴얼 + images/ — 런타임 fetch·배포 대상)
 └── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개)
     ├── README.md              ← 시험별 문서 인덱스
     ├── user/                  ← 학습자 문서 (5개)
@@ -237,11 +238,11 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 
 ---
 
-## 👤 사용자 문서 (docs/exams/cosmetic/user/)
+## 👤 사용자 문서 (docs/user/ · docs/exams/cosmetic/user/)
 
 | 문서 | 설명 | 접근 방법 |
 |------|------|-----------|
-| [user_manual.md](../content/exams/cosmetic/docs/user_manual.md) | 사용자 매뉴얼 | 앱 내 "매뉴얼" 메뉴 (manual-viewer 렌더, 시험별 문서) |
+| [user_manual.md](user/user_manual.md) | 사용자 매뉴얼 (앱 공용 — 모든 시험 공통) | 앱 내 "매뉴얼" 메뉴 (manual-viewer 렌더, 공용 문서) |
 | [formula_manual.md](../content/exams/cosmetic/docs/formula_manual.md) | Formula OS 실무 매뉴얼 | 앱 내 실무 매뉴얼 (doc: 링크 연동, 시험별 문서) |
 | [exam_strategy.md](exams/cosmetic/user/exam_strategy.md) | 시험 합격 공략법 — 4과목·100문항·과락 기준 전략 | 직접 열기 |
 | [subject1~4_numbers.md](exams/cosmetic/user/subject1_numbers.md) | 과목별 숫자 암기 요약정리 (4파일) | 직접 열기 |
@@ -304,7 +305,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | `DOC-REF` | 명세·로직 참조 | docs/dev/reference/ · docs/exams/<id>/reference/ |
 | `DOC-RBK` | 운영 런북·절차 | docs/dev/runbooks/ |
 | `DOC-ADR` | 아키텍처 결정 기록 | docs/dev/adr/ |
-| `DOC-USR` | 사용자 문서 | docs/exams/<id>/user/ · content/exams/<id>/docs/ |
+| `DOC-USR` | 사용자 문서 | docs/user/ · docs/exams/<id>/user/ · content/exams/<id>/docs/ |
 | `DOC-BIZ` | 사업 문서 | docs/exams/<id>/business/ |
 | `DOC-ARC` | 아카이브 | docs/exams/<id>/report_archive/ |
 | `DOC-PPL` | 파이프라인 도구 | ref-pipeline/ |
@@ -415,7 +416,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-USR-04 | `docs/exams/cosmetic/user/subject2_numbers.md` |
 | DOC-USR-05 | `docs/exams/cosmetic/user/subject3_numbers.md` |
 | DOC-USR-06 | `docs/exams/cosmetic/user/subject4_numbers.md` |
-| DOC-USR-07 | `content/exams/cosmetic/docs/user_manual.md` |
+| DOC-USR-07 | `docs/user/user_manual.md` |
 | DOC-USR-08 | `content/exams/cosmetic/docs/학습안내서.md` |
 | DOC-USR-09 | `content/exams/cosmetic/docs/두음법_암기_총정리.md` |
 | DOC-USR-10 | `content/exams/lossadj/docs/2차_주관식_설계.md` |

@@ -148,12 +148,13 @@ async function _loadMd(sourceKey) {
 - 클래식 `<script>` 동적 주입으로 로드 (ESM `import` 불필요 → `file://`에서도 동작)
 
 ```
-content/exams/cosmetic/docs/user_manual.md  →  data/exams/cosmetic/docs_md/user_manual.js
-content/exams/cosmetic/docs/학습안내서.md   →  data/exams/cosmetic/docs_md/학습안내서.js
+docs/user/user_manual.md                    →  data/docs_md/user_manual.js        (앱 공용 — GLOBAL_DOCS)
+content/exams/cosmetic/docs/학습안내서.md   →  data/exams/cosmetic/docs_md/학습안내서.js  (시험별)
 ```
 
-> 모든 인앱 문서는 시험별 `{contentRoot}/docs/` → `{dataRoot}/docs_md/` 규약을 따른다
-> (앱 공용 문서 슬롯 `GLOBAL_DOCS`는 현재 비어 있음 — build_doc_bundles.js 참조).
+> 시험별 인앱 문서는 `{contentRoot}/docs/` → `{dataRoot}/docs_md/` 규약을 따르고,
+> 앱 공용 문서(사용자 매뉴얼)는 `docs/user/` → `data/docs_md/` 규약을 따른다
+> (build_doc_bundles.js 의 `GLOBAL_DOCS`·`FEATURE_DOCS` 선언이 정본).
 
 ---
 
@@ -165,7 +166,7 @@ content/exams/cosmetic/docs/학습안내서.md   →  data/exams/cosmetic/docs_m
 
 ```javascript
 const MD_ASSETS = [
-  './content/exams/cosmetic/docs/user_manual.md',
+  './docs/user/user_manual.md',
   './content/exams/cosmetic/docs/학습안내서.md',
   './content/exams/cosmetic/교재/law/1과목_화장품법의이해_표준형.md',
   './content/exams/cosmetic/교재/manufacturing/2과목_제조및품질관리_표준형.md',

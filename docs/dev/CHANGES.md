@@ -7,6 +7,16 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 사용자 매뉴얼 앱 공용 문서화 — 시험별 userManual 플래그 폐기
+
+- **배경**: 사용자 매뉴얼은 플랫폼 공통(앱 조작법) 내용이어야 하고, 교재 학습법은 시험별 학습안내서가 담당해야 한다는 요구. 기존 매뉴얼은 `content/exams/cosmetic/docs/user_manual.md` + `features.userManual` 게이트라 (1) 매뉴얼이 없는 시험에선 내비 버튼 자체가 숨고 (2) 공통 내용이 cosmetic 팩에 종속이었다
+- **이관**: 원본을 `docs/user/user_manual.md`(DOC-USR-07 계승, 범위 platform)로 이전 — 시험 전용 도구 사용법 섹션(수치마스터·배합계산·원료챌린지·성분사전·실무모드)은 cosmetic `학습안내서.md` §5.5로 이동. 흐름 SVG는 `docs/user/images/`로 이관
+- **경로·게이트**: `PATHS.USER_MANUAL`이 고정 경로 `docs/user/user_manual.md` 반환(시험 스코프 해제) · 내비·모바일 탭의 `data-feature="userManual"` 제거(전 시험 무조건 노출) · `exams.json` cosmetic의 `userManual` 플래그·manifest.searchDocs 항목 제거 · FEATURE_DOCS 불변식에서도 제외
+- **공용 문서 인프라 활성화**: `build_doc_bundles.js` GLOBAL_DOCS에 `docs/user/` 등록 → `data/docs_md/` 출력 · `manual-viewer._bundlePathFor`·`search-sources._loadDocMdText`가 `docs/` 접두 경로를 `data/docs_md/`로 해석 · `exam_targets.getPrecacheMdAssets`가 `docs/user/*.md`를 sw MD_ASSETS에 포함
+- **검색**: `search-sources`가 COMMON_DOCS(사용자 매뉴얼)를 manifest.searchDocs와 병합 — 어떤 시험에서도 통합검색 대상
+- **테스트**: 공용 매뉴얼 존재·platform 범위·경로·sw 프리캐시·userManual 미선언 단정 신규 4건 + 검색 병합·DOM 게이트 갱신 — helpers에 `__DOC_MD__` 공용 경로 시드(jsdom `<script>` 폴백 미해결 방지)
+- **도메인 맵**: `data/docs_md/**`를 platform 계층으로 분류 (시험별 `{dataRoot}/docs_md/`는 domain 자동 주입 유지)
+
 ## 2026-10-21 도메인 종속성 전수조사 — 플랫폼 코드·UI의 cosmetic 잔재 중립화
 
 - **배경**: 멀티시험 플랫폼 원칙(DA-13/15)에 따라 `src/`·`html/`·`tools/`·저장 키·피처 기본값 전수 스캔. 내비·뷰 게이트와 per-exam 키드 레지스트리(law-links·pdf-registry·storage-keys의 `domain:cosmetic` 계약 키 구역 — 문서화된 중앙 레지스트리)는 정상 격리로 판정. 실종속은 비게이트/폴백 경로의 cosmetic 문구·로직 8건
