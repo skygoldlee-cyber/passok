@@ -41,9 +41,9 @@
 
 | 항목 | 값 |
 |------|-----|
-| **remote origin** | `https://github.com/skygoldlee-cyber/passory.git` (HTTPS — gh credential helper) |
+| **remote origin** | `https://github.com/skygoldlee-cyber/passok.git` (HTTPS — gh credential helper) |
 | **브랜치** | `main` |
-| **GitHub URL** | `https://github.com/skygoldlee-cyber/passory` |
+| **GitHub URL** | `https://github.com/skygoldlee-cyber/passok` |
 
 ### 1-3. 인증 방식
 
