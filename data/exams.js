@@ -121,6 +121,28 @@ var EXAMS_LIST = {
         "writtenPractice": true
       },
       "comingSoon": true
+    },
+    {
+      "id": "admagent",
+      "name": "일반행정사",
+      "shortName": "행정사",
+      "appName": "일반행정사",
+      "title": "일반행정사",
+      "logoMain": "일반행정사",
+      "logoSub": "",
+      "desc": "일반행정사 — 7과목 (1차 필기: 민법총칙·행정법·행정학개론 과목당 25문 + 2차 주관식: 민법계약·행정절차론·사무관리론·행정사실무법) · 행정사법 시행령 별표1 기준 자체 제작",
+      "icon": "fa-solid fa-file-pen",
+      "year": "2027",
+      "theme": {},
+      "contentRoot": "content/exams/admagent",
+      "dataRoot": "data/exams/admagent",
+      "manifestPath": "content/exams/admagent/manifest.json",
+      "registryBundle": "data/exams/admagent/registry.js",
+      "registryGlobal": "DATA_REGISTRY_ADMAGENT",
+      "features": {
+        "writtenPractice": true
+      },
+      "comingSoon": true
     }
   ]
 };
