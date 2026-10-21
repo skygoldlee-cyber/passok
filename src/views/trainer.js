@@ -137,7 +137,7 @@ function renderLimitsQuestion() {
         progressBar.style.width = `${pct}%`;
     }
 
-    const qText = `다음 중 <strong>${esc(currentQ.category)}</strong> 성분인 <strong>"${esc(currentQ.key)}"</strong>의 기준 수치(<strong>${esc(currentQ.condition)}</strong>)로 올바른 것은?`;
+    const qText = `다음 중 <strong>${esc(currentQ.category)}</strong> 항목인 <strong>"${esc(currentQ.key)}"</strong>의 기준 수치(<strong>${esc(currentQ.condition)}</strong>)로 올바른 것은?`;
     if (questionTextEl) questionTextEl.innerHTML = qText;
 
     const options = generateLimitsOptions(currentQ);
