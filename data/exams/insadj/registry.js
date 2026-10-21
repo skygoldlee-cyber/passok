@@ -3,7 +3,7 @@ var DATA_REGISTRY_INSADJ = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2027",
-  "generatedAt": "2026-10-21T06:35:33.295Z",
+  "generatedAt": "2026-10-21T06:37:40.747Z",
   "subjects": [
     {
       "key": "contract",
