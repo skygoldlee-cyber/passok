@@ -62,6 +62,17 @@ test('validateQuestion: ox 필수 필드 검사', () => {
   }), []);
 });
 
+test('validateQuestion: subjectMax 인자로 시험별 과목 번호 범위 검증', () => {
+  // 기본값은 4과목 맵 — subject 5는 거부
+  const q5 = { id: 'x', subject: 5, type: 'ox', points: 1, statement: 's', truth: true };
+  assert.ok(validateQuestion(q5).some(e => e.includes('subject 값 이상')));
+  // 시험별 manifest 과목 맵을 넘기면 해당 order까지 허용 (indsafe 7과목 등)
+  const indsafeMax = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1 };
+  assert.deepEqual(validateQuestion(q5, indsafeMax), []);
+  const q8 = { ...q5, subject: 8 };
+  assert.ok(validateQuestion(q8, indsafeMax).some(e => e.includes('subject 값 이상')));
+});
+
 // ── deriveComboAnswer / generateComboOptions ────────────────
 
 test('deriveComboAnswer: truth 집합과 일치하는 유일 옵션 도출', () => {

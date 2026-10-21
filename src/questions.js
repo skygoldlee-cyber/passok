@@ -54,7 +54,9 @@
  * @property {string} [source]           // '제10회 기출 변형' 등
  */
 
-const SUBJECT_MAX = { 1: 100, 2: 250, 3: 250, 4: 400 }; // 과목별 만점
+// 과목별 만점 — 기본 시험(4과목) 기준. 다른 시험의 문항을 검증할 때는
+// validateQuestion(q, subjectMax)에 해당 시험 manifest의 과목 맵을 넘긴다.
+const SUBJECT_MAX = { 1: 100, 2: 250, 3: 250, 4: 400 };
 const PASS_TOTAL = 0.60;  // 총점 60%
 const PASS_SUBJECT = 0.40; // 과목별 40% (미만이면 과락)
 
@@ -112,10 +114,10 @@ function generateComboOptions(allIds, truthIds, { count = 5, rng = Math.random, 
  * 문항 데이터 무결성 검사. 문제 없으면 [], 있으면 사유 문자열 배열 반환.
  * 출제/임포트 시점에 돌려서 정답 오타·조합 불일치를 잡는 용도.
  */
-function validateQuestion(q) {
+function validateQuestion(q, subjectMax = SUBJECT_MAX) {
   const errs = [];
   if (!q.id) errs.push('id 없음');
-  if (!SUBJECT_MAX[q.subject]) errs.push(`subject 값 이상: ${q.subject}`);
+  if (!subjectMax[q.subject]) errs.push(`subject 값 이상: ${q.subject}`);
   if (typeof q.points !== 'number') errs.push('points 없음/비수치');
 
   if (q.type === 'single') {
