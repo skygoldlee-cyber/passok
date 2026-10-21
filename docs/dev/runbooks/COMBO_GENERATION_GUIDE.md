@@ -240,10 +240,10 @@ ref_md는 `ref_md/과목N/{문서}/{문서}.md` 과목 폴더 구조이며, `ext
    스키마·정답 유일성 재검증, 동일 진술집합 중복 문항, 모순 의심 쌍(동일 텍스트·상반 truth),
    진술 절단 의심(조사·연결어미 종결), '모두' 퇴화/위반 옵션, 정답 위치 편향(>30%),
    과목별·생성 경로별(bank/cluster/ref:*) 통계. 오류 시 exit 1, `--strict`는 경고도 실패 처리.
-   상세 리포트는 `tools/check/combo_audit_report.json` (gitignore 대상)
-   - **회귀 가드**: `tools/check/combo_baseline.json`(커밋됨)과 과목별 문항 수 비교 — 10% 감소 시 경고, 30% 시 오류.
+   상세 리포트는 `tools/state/combo_audit_report.json` (gitignore 대상)
+   - **회귀 가드**: `tools/state/combo_baseline.json`(커밋됨)과 과목별 문항 수 비교 — 10% 감소 시 경고, 30% 시 오류.
      의도된 생성량 변경 후 `--update-baseline`으로 갱신
-   - **검수 큐**: cluster·ref:note 경로 + 경고 문항을 `tools/check/combo_review_queue.md`로 출력.
+   - **검수 큐**: cluster·ref:note 경로 + 경고 문항을 `tools/state/combo_review_queue.md`로 출력.
      불량 문항은 id를 `<contentRoot>/combo_blocklist.json`의 `ids`(또는 `derivedFromPrefixes`)에
      등록하면 다음 빌드에서 제외됨. 검수 완료(양호)는 `approved`에 등록 → 큐에서 제외되어
      미검토 문항만 남는다

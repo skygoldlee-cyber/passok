@@ -135,7 +135,7 @@ end; $$;
 | `report:feedback` | `tools/check/feedback_report.js` | kind별 건수·평점·일별·최근 항목 본문 — bug의 meta.session_id로 `report:errors --session` 연결 (`--days`·`--kind`·`--limit`) |
 | `report:user` | `tools/check/user_report.js` | 이메일→GoTrue Admin API 해석 후 profiles + sync_snapshots **메타만**(exam_id·device_id·updated_at — payload 미열람) + 피드백 이력 |
 | `admin:grant-pro` | `tools/check/grant_pro.js` | 이메일→사용자 해석 후 profiles.plan 갱신 — 기본 dry-run, `--apply` 확정·`--revoke` 회수·동일 상태는 no-op |
-| `report:dashboard` (Phase 1.5) | `tools/check/dashboard_report.js` | 오류·퍼널·피드백 집계를 단일 자급적 HTML로 덤프 (`tools/check/dashboard_report.html`, gitignore) — 로컬 파일이라 인증·RLS 불필요. 기존 3개 리포트의 순수 `summarize()` 재사용, 사용자 텍스트 전면 이스케이프 |
+| `report:dashboard` (Phase 1.5) | `tools/check/dashboard_report.js` | 오류·퍼널·피드백 집계를 단일 자급적 HTML로 덤프 (`tools/state/dashboard_report.html`, gitignore) — 로컬 파일이라 인증·RLS 불필요. 기존 3개 리포트의 순수 `summarize()` 재사용, 사용자 텍스트 전면 이스케이프 |
 
 공용 헬퍼는 `tools/lib/supabase_ops.js`(URL 해석·Secret 요구·restGet/Patch·findUserByEmail). 환경변수는 기존 `SUPABASE_SECRET_KEY`(Secret = 구 service_role) 경로 그대로 — §4의 is_admin/감사 스키마와 독립적으로 동작하며 **스키마 변경 없이 동작**한다 (service role은 RLS를 우회하므로). admin_audit 테이블은 AD-04 도입 전까지 grant-pro의 콘솔 출력이 감사 기록을 대신한다.
 

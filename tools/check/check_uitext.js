@@ -30,7 +30,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const EXAMS_PATH = path.join(ROOT, 'content', 'exams.json');
-const MAP_PATH = path.join(ROOT, 'tools', 'check', 'domain-map.json');
+const MAP_PATH = path.join(ROOT, 'tools', 'config', 'domain-map.json');
 
 // --- glob → RegExp (check_domain_map.js와 동일 규약) ---
 function globToRegExp(glob) {

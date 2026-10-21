@@ -7,6 +7,15 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 tools/check 상태·설정 분리 — 계층 리팩토링 Phase 2
+
+- **`tools/state/` 신설** — 게이트 기준선·스탬프 7개(추적: `combo_baseline`·`glossary_signal_baseline`·`meta_sections_baseline`·`orphan_assets_baseline`·`replacement_char_baseline`·`study_quality_baseline`·`test_stats.json`) + 로컬 산출물 출력 경로 4개(gitignore: `combo_audit_report.json`·`study_quality_report.json`·`combo_review_queue.md`·`dashboard_report.html`) — `tools/check/`가 순수 소스(76개 .js)로 정돈
+- **`tools/config/` 수용** — `domain-map.json`을 기존 설정 디렉터리로 이동 (docs_paths_allowlist·citation_fingerprints와 동일 계층)
+- **참조 전파 22곳**: 경로 상수 전수 갱신 — `__dirname` 기반은 `'..','state'/'..','config'`, `ROOT` 기반은 `'tools','state'/'tools','config'`. `push_gate.toolsStamp`가 check/ 외에 state/·config/도 스캔해 게이트 입력 mtime을 캐시 서명에 포함 (누락 시 기준선 갱신이 통과 캐시에 무효화되지 않음)
+- **gitignore 패턴 4건** `tools/check/` → `tools/state/` 이전 + 구 위치 산출물 잔재 삭제
+- **문서 동기화**: AGENTS tools 트리에 config/·state/ 행 추가, SPEC DA-11·ARCHITECTURE·런북·설계·참조 11개 문서의 현행 경로 17건 갱신, allowlist 3건 경로 갱신
+- 발견된 사실: `tools/`는 domain-map `watchedDirs` 밖이라 상태 파일 이동이 분류 규칙에 무영향 — check/ 파일은 catchAll도 없어 이동이 자유로움
+
 ## 2026-10-21 테스트 트리 주제별 재편 — 계층 리팩토링 Phase 1
 
 - **`tests/unit/` 97개 → 주제별 하위 폴더**: `gates/`(체커·게이트 회귀 32) · `engine/`(학습엔진 14) · `content/`(파서·콘텐츠 19) · `app/`(런타임 인프라 32). 기존 `exams/<id>/`·`mermaid/` 하위 구조 유지

@@ -271,7 +271,7 @@ async function main() {
     }
 
     // 콘텐츠 품질 게이트 — 콤보 감사 오류(무결성·회귀)가 있으면 배포 차단.
-    // 경고는 통과시키되 리포트는 tools/check/combo_audit_report.json에 남는다.
+    // 경고는 통과시키되 리포트는 tools/state/combo_audit_report.json에 남는다.
     const audit = spawnSync('node', ['tools/check/audit_combo.js'], { encoding: 'utf8' });
     if (audit.status !== 0) {
         process.stdout.write(audit.stdout || '');

@@ -271,7 +271,7 @@ text.replace(FIELD_LABEL, '\n')   // 라벨 → 구분자로 승격 (괄호 주�
 | `src/views/dictionary.js` (또는 도메인 브리지) | 상세 카드 '함유 기성품' 섹션 |
 | `html/exams/cosmetic/formula.html` | 허브 카드 + 패널 3개 마크업 |
 | `css/exams/cosmetic/formula.css` | 제품 카드·칩·비교 3열 스타일 |
-| `tools/check/domain-map.json` | 신규 파일 분류 등록 (check:domainmap) |
+| `tools/config/domain-map.json` | 신규 파일 분류 등록 (check:domainmap) |
 | `AGENTS.md` | 디렉토리 트리에 신규 파일 2개 추가 (check:inventory) |
 | `docs/dev/SPEC.md` | FO-37~40 상태 ✅ 갱신 (구현 시) |
 | `tests/` | §11 테스트 |

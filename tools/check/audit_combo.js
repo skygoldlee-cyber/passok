@@ -22,11 +22,11 @@
  *   - 동일 truth 근접중복 쌍 — 수치 혼동쌍·법령 열거 멤버의 접두사 공유는 정상
  *
  * 회귀 가드:
- *   - tools/check/combo_baseline.json(커밋됨)의 과목별 문항 수와 비교 —
+ *   - tools/state/combo_baseline.json(커밋됨)의 과목별 문항 수와 비교 —
  *     10% 이상 감소 시 경고, 30% 이상 감소 시 오류 (소스·규칙 변경의 조용한 품질 붕괴 감지)
  *
  * 검수 큐:
- *   - 검수 필요 문항(cluster·ref:note 경로 + 경고 대상)을 tools/check/combo_review_queue.md로 출력
+ *   - 검수 필요 문항(cluster·ref:note 경로 + 경고 대상)을 tools/state/combo_review_queue.md로 출력
  *   - 사람이 불량 판정한 id는 <contentRoot>/combo_blocklist.json에 등록 → 빌드에서 제외
  *
  * 통계 리포트: 과목별 문항 수·단일참 비율·derivedFrom 경로별 분포·정답 위치 히스토그램
@@ -56,8 +56,8 @@ const ANOM_IDX = process.argv.indexOf('--anomalies');
 const ANOM_FILE = ANOM_IDX > -1 ? process.argv[ANOM_IDX + 1] : null;
 // 런타임 이상 임계 — 앱 getAnomalousStatements와 동일 기준
 const ANOM_MIN_J = 5, ANOM_RATIO = 0.8;
-const BASELINE_PATH = path.join(ROOT, 'tools', 'check', 'combo_baseline.json');
-const REVIEW_Q_PATH = path.join(ROOT, 'tools', 'check', 'combo_review_queue.md');
+const BASELINE_PATH = path.join(ROOT, 'tools', 'state', 'combo_baseline.json');
+const REVIEW_Q_PATH = path.join(ROOT, 'tools', 'state', 'combo_review_queue.md');
 
 /** 사람 검수가 필요한 생성 경로 (cluster 재조합·note 편집본 — 생성 주석상 '검수 권장') */
 const REVIEW_PATHS = new Set(['cluster', 'ref:note']);
@@ -323,7 +323,7 @@ async function main() {
   // ── 회귀 가드: 기준선 대비 문항 수 감소 감지 ──
   if (UPDATE_BASELINE) {
     fs.writeFileSync(BASELINE_PATH, JSON.stringify(newBaseline, null, 2) + '\n');
-    console.log(`\n기준선 갱신 → tools/check/combo_baseline.json (${Object.values(newBaseline)
+    console.log(`\n기준선 갱신 → tools/state/combo_baseline.json (${Object.values(newBaseline)
       .map(m => Object.values(m).reduce((a, b) => a + b, 0)).reduce((a, b) => a + b, 0)}문)`);
   } else if (fs.existsSync(BASELINE_PATH)) {
     const base = JSON.parse(fs.readFileSync(BASELINE_PATH, 'utf8'));
@@ -337,7 +337,7 @@ async function main() {
       }
     }
   } else {
-    console.log('\n(기준선 없음 — --update-baseline으로 tools/check/combo_baseline.json 생성 가능)');
+    console.log('\n(기준선 없음 — --update-baseline으로 tools/state/combo_baseline.json 생성 가능)');
   }
 
   // ── 검수 큐 출력 ──
@@ -356,7 +356,7 @@ async function main() {
       '', '---', '');
   }
   fs.writeFileSync(REVIEW_Q_PATH, rq.join('\n'));
-  console.log(`\n검수 큐: ${reviewQueue.length}문항 → tools/check/combo_review_queue.md`);
+  console.log(`\n검수 큐: ${reviewQueue.length}문항 → tools/state/combo_review_queue.md`);
 
   console.log(`\n결과: 오류 ${errors.length}건 / 경고 ${warnings.length}건`);
   if (Object.keys(warnCats).length) {
@@ -375,8 +375,8 @@ async function main() {
   shown.slice(0, 20).forEach(w => console.log('  ⚠', w));
   if (shown.length > 20) console.log(`  … 외 ${shown.length - 20}건`);
   if (warnings.length > shown.length)
-    console.log(`  (기타 ${warnings.length - shown.length}건은 요약만 — 전량은 tools/check/combo_audit_report.json)`);
-  fs.writeFileSync(path.join(ROOT, 'tools', 'check', 'combo_audit_report.json'),
+    console.log(`  (기타 ${warnings.length - shown.length}건은 요약만 — 전량은 tools/state/combo_audit_report.json)`);
+  fs.writeFileSync(path.join(ROOT, 'tools', 'state', 'combo_audit_report.json'),
     JSON.stringify({ errors, warnings, warnCats, infoCats }, null, 2));
 
   if (errors.length || (STRICT && warnings.length)) process.exitCode = 1;

@@ -780,7 +780,7 @@ async function buildForExam(target) {
     }
 
     // 검수 블록리스트 — 사람이 불량 판정한 문항을 생성 산출물에서 제외한다.
-    // audit:combo의 검수 큐(tools/check/combo_review_queue.md)에서 id를 옮겨 등록.
+    // audit:combo의 검수 큐(tools/state/combo_review_queue.md)에서 id를 옮겨 등록.
     // 형식: { "ids": ["law_combo_…"], "derivedFromPrefixes": ["ref:note|…"] }
     const blPath = path.join(ROOT, target.contentRoot, 'combo_blocklist.json');
     if (fs.existsSync(blPath)) {

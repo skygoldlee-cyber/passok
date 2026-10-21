@@ -178,7 +178,7 @@
 
 | 지표 | 이 저장소의 측정 경로 |
 |------|----------------------|
-| 테스트 수치 SSOT | `tools/check/test_stats.json` — `npm.cmd run stats:stamp` 갱신, `check:teststats`가 문서 인용↔실측 정합 강제. `e2eScenarios`=시나리오 수, `e2eRuns`=실행 수(시나리오×프로젝트 매트릭스) |
+| 테스트 수치 SSOT | `tools/state/test_stats.json` — `npm.cmd run stats:stamp` 갱신, `check:teststats`가 문서 인용↔실측 정합 강제. `e2eScenarios`=시나리오 수, `e2eRuns`=실행 수(시나리오×프로젝트 매트릭스) |
 | 실통과 | `npm.cmd test` (유닛) · `npm.cmd run test:dom` · `npm.cmd run test:e2e` — 실행 로그의 pass/fail. **N 확보: `gh run list --workflow=ci.yml`** (CI가 전 계층 실행 — 이력이 곧 성공률 시계열) |
 | 커버리지 | `npm.cmd run coverage:all` — c8+vitest 병합 리포트, 래칫 게이트 |
 | 정적 분석 | `npm.cmd run lint` · `npm.cmd run check:types` · 억제 주석: `eslint-disable` 텍스트 스캔 |

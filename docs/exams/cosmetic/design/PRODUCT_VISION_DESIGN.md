@@ -145,7 +145,7 @@
 | `css/exams/cosmetic/formula.css` | 사진 슬롯·썸네일·참조 사진 스타일 |
 | `src/storage-keys.js` | `FORMULA_GEMINI_KEY` — 백업 제외 주석 |
 | `vercel.json` (+`serve.js` 미러 시) | `connect-src`에 Gemini 도메인 추가 |
-| `tools/check/domain-map.json` | `product-vision.js` 분류 (glob 커버면 불필요) |
+| `tools/config/domain-map.json` | `product-vision.js` 분류 (glob 커버면 불필요) |
 | `AGENTS.md` | 트리에 신규 모듈 등록 |
 | `docs/dev/SPEC.md` | FO-41~43 선언 (이 문서와 함께) |
 | `tests/` | §8 테스트 |

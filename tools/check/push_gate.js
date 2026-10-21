@@ -153,10 +153,12 @@ function toolsStamp() {
   // 게이트 도구·설정의 최신 mtime — 도구 자체가 바뀌면 이전 통과 결과는 무의미
   let stamp = 0;
   const files = ['eslint.config.mjs', 'jsconfig.json', 'package.json'];
-  const checkDir = path.join(ROOT, 'tools', 'check');
-  try {
-    for (const f of fs.readdirSync(checkDir)) files.push(path.join('tools', 'check', f));
-  } catch { return 0; }
+  for (const dir of ['check', 'state', 'config']) {
+    const abs = path.join(ROOT, 'tools', dir);
+    try {
+      for (const f of fs.readdirSync(abs)) files.push(path.join('tools', dir, f));
+    } catch { return 0; }
+  }
   for (const f of files) {
     try { stamp = Math.max(stamp, fs.statSync(path.join(ROOT, f)).mtimeMs); } catch {}
   }

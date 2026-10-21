@@ -16,9 +16,9 @@
  * 사용법:
  *   $env:SUPABASE_SECRET_KEY="sb_secret_..." ; npm.cmd run report:dashboard
  *   npm.cmd run report:dashboard -- --days 7
- *   npm.cmd run report:dashboard -- --out tools/check/dashboard_report.html
+ *   npm.cmd run report:dashboard -- --out tools/state/dashboard_report.html
  *
- * 산출물: tools/check/dashboard_report.html (기본, gitignore 대상 — 커밋 금지)
+ * 산출물: tools/state/dashboard_report.html (기본, gitignore 대상 — 커밋 금지)
  * Secret 키가 없으면 대시보드 SQL 에디터용 동등 쿼리를 출력한다.
  */
 'use strict';
@@ -29,7 +29,7 @@ const { summarize: summarizeErrors } = require('./error_report.js');
 const { summarize: summarizeFunnel } = require('./funnel_report.js');
 const { summarize: summarizeFeedback, KINDS } = require('./feedback_report.js');
 
-const DEFAULT_OUT = path.join(__dirname, 'dashboard_report.html');
+const DEFAULT_OUT = path.join(__dirname, '..', 'state', 'dashboard_report.html');
 
 // ── 순수 렌더 (테스트 대상) ──────────────────────────────────
 

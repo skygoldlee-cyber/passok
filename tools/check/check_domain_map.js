@@ -39,7 +39,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const MAP_PATH = path.join(__dirname, 'domain-map.json');
+const MAP_PATH = path.join(__dirname, '..', 'config', 'domain-map.json');
 const EXAMS_PATH = path.join(ROOT, 'content', 'exams.json');
 const PKG_PATH = path.join(ROOT, 'package.json');
 
