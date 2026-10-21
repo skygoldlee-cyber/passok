@@ -1,5 +1,5 @@
 // src/pwa-manifest.js — 활성 시험 기준 PWA 매니페스트 링크 교체 (클래식 스크립트, 모듈 아님)
-// @spec P-10,DA-06,DA-14
+// @spec P-10,DA-06,DA-14,UX-PWA-07
 // 정적 manifest.webmanifest는 부팅 전 플레이스홀더 겸 최후 폴백이고,
 // 활성 시험이 확인되면 빌드가 생성한 실제 파일 manifest.<id>.webmanifest로 링크를 교체한다
 // (기본 시험 포함 — 시험별 pwaShortcuts·description이 실제 설치 매니페스트에 반영되어야 한다).

@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 SPEC 추적 정합 정리 — 커버리지 공백 0
+
+- **trace_scan.js ROW_RE 버그 수정**: `[PL]\d`가 한 자리만 인식해 `ROAD-L10`·`ROAD-L11`의 상태 셀이 추출되지 않아 미구현 로드맵인데도 커버리지 공백으로 오집계 → `[PL]\d{1,2}`로 확장
+- **UX-PWA-07 참조 결선**: 단일 앱 정체성 정책은 `build_exams_list.js`(id·name 통일 생성)와 `pwa-manifest.js`(링크 교체)에 이미 구현돼 있으나 `@spec` 미표기 — 두 파일에 태그 추가. 실증 테스트는 이미 존재: `pwa-sw.test.js`의 단일 정체성 테스트 라벨을 SPEC 원문과 일치하는 `UX-PWA-07`로 정정, `exam-switch.spec.js` e2e(링크 교체 실측)에 태그 추가
+- **ASSET_STORAGE_REVIEW.md**에 `관련 SPEC ID` 헤더 추가 (`DA-02`·`P-02`·`CS-03`)
+- 결과: 코드 미참조 공백 0, 헤더 누락 0, 로드맵 면제 23개로 정확 집계, 테스트·E2E 갭 기준선 복귀
+
 ## 2026-10-21 생성물 git 미추적 전환 + jsconfig strict 개별 플래그 상향
 
 - **생성물 언트랙**: `index.html`·`data/exams.js`·`data/audio_manifest.js`·`data/exams/*/registry.js`·`question_chapters.js`·`notice_diff.json`을 .gitignore로 내림 — 큰 번들(subjects/·exams/·study_md/·docs_md/)은 이미 미추적이었고, 잔여 순수 산출물까지 내리면서 커밋 diff 노이즈·신선도 게이트의 실패 표면을 제거
