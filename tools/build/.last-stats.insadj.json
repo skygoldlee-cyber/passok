@@ -1,32 +1,32 @@
 {
   "subjects": {
     "contract": {
-      "cards": 6,
-      "quizzes": 0,
+      "cards": 20,
+      "quizzes": 2,
       "files": {
         "교재/contract/보험계약법.md": {
-          "cards": 6,
-          "quizzes": 0
+          "cards": 20,
+          "quizzes": 2
         }
       }
     },
     "act": {
-      "cards": 8,
-      "quizzes": 0,
+      "cards": 21,
+      "quizzes": 10,
       "files": {
         "교재/act/보험업법.md": {
-          "cards": 8,
-          "quizzes": 0
+          "cards": 21,
+          "quizzes": 10
         }
       }
     },
     "theory": {
-      "cards": 16,
-      "quizzes": 2,
+      "cards": 24,
+      "quizzes": 5,
       "files": {
         "교재/theory/손해사정이론.md": {
-          "cards": 16,
-          "quizzes": 2
+          "cards": 24,
+          "quizzes": 5
         }
       }
     },
