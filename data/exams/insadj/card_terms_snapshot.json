@@ -6,9 +6,26 @@
    "contract_card_5fac8f": "고지의무",
    "contract_card_b1afba": "보험대위",
    "contract_card_5ccf5e": "일부보험",
-   "contract_card_7821dd": "보증보험"
+   "contract_card_7821dd": "보증보험",
+   "contract_card_2463d0": "계약자가 지정권 미행사 후 사망",
+   "contract_card_8d45cb": "제684조",
+   "contract_card_3dcac0": "제686조",
+   "contract_card_e892cf": "제687조",
+   "contract_card_1c4f36": "제701조",
+   "contract_card_436cd3": "제701조의2",
+   "contract_card_f41551": "제702조",
+   "contract_card_4ab909": "제703조",
+   "contract_card_00dfe6": "제703조의2",
+   "contract_card_5535ff": "제706조",
+   "contract_card_14cb30": "제710조",
+   "contract_card_8b12a2": "제711조",
+   "contract_card_057cb7": "제713·714조",
+   "contract_card_21b7c6": "제716~717조"
   },
-  "quizzes": {}
+  "quizzes": {
+   "contract_quiz_18bfbd": "**선박 행방불명**: 존부 **2개월** 불분명 → 행방불명 간주 → **전손 추정** 🎯|제711조",
+   "contract_quiz_bc492f": "위부 통지는 **상당한 기간 내** 발송 — 위부권 행사 요건|제713·714조"
+  }
  },
  "act": {
   "cards": {
@@ -19,9 +36,33 @@
    "act_card_0d5d76": "보험모집",
    "act_card_58117d": "기초서류",
    "act_card_acf7cb": "손해사정",
-   "act_card_902254": "손해사정업자"
+   "act_card_902254": "손해사정업자",
+   "act_card_43b474": "대주주·자회사 신용공여",
+   "act_card_918dc9": "대주주·자회사 채권·주식",
+   "act_card_3ba131": "부동산 소유",
+   "act_card_ee00ff": "경영개선권고",
+   "act_card_0704c6": "경영개선요구",
+   "act_card_c166db": "경영개선명령",
+   "act_card_66775c": "1개월 이내",
+   "act_card_8dc0ec": "6개월 이내",
+   "act_card_f14386": "부활청구",
+   "act_card_a4e927": "이전 방식",
+   "act_card_881e13": "공고·통지",
+   "act_card_9f096d": "이전 불가",
+   "act_card_8b77b3": "신계약 금지"
   },
-  "quizzes": {}
+  "quizzes": {
+   "act_quiz_4f51c6": "자기자본 40%(총자산 2% 상한)|대주주·자회사 신용공여",
+   "act_quiz_18476e": "자기자본 60%(총자산 3% 상한)|대주주·자회사 채권·주식",
+   "act_quiz_4e969d": "총자산 **25%**|부동산 소유",
+   "act_quiz_f2419c": "**50% 이상 100% 미만**|경영개선권고",
+   "act_quiz_558dcf": "**0% 이상 50% 미만**|경영개선요구",
+   "act_quiz_aa1622": "**0% 미만** 또는 부실금융기관|경영개선명령",
+   "act_quiz_49a2b6": "기존계약 소멸일(또는 신계약 청약일)로부터 1개월 이내 신계약 청약(기존계약 소멸) → 무조건 부당승환. 단, 손해발생 가능성을 알고 본인 자필서명 등 명백한 의사 입증 시 제외|1개월 이내",
+   "act_quiz_4f8cfd": "6개월 이내 승환 + 보험기간·예정이자율 등 **중요사항을 비교하여 알리지 않은** 경우 → 부당승환 간주|6개월 이내",
+   "act_quiz_d70ccf": "계약자는 기존계약 소멸일부터 **6개월 이내** 부활 청구 + 신계약 취소 — 회사는 특별한 사유 없으면 승낙 의무 (중개사 제외)|부활청구",
+   "act_quiz_258486": "이의자가 계약자 총수 **10분의 1 초과** 또는 이의 보험금액이 총액 **10분의 1 초과**|이전 불가"
+  }
  },
  "theory": {
   "cards": {
@@ -31,6 +72,14 @@
    "theory_card_a774c8": "보험대위",
    "theory_card_ed4040": "과실상계",
    "theory_card_7c544e": "제1위험보상",
+   "theory_card_397ab2": "전부보험 간주",
+   "theory_card_fe344e": "일부보험",
+   "theory_card_596807": "보험금액 비례",
+   "theory_card_b9d45b": "독립책임액 비례",
+   "theory_card_d64d11": "정액공제",
+   "theory_card_73743c": "정률공제",
+   "theory_card_7397ac": "소멸성 공제",
+   "theory_card_1225f7": "프랜차이즈 공제",
    "theory_card_afac05": "임의재보험",
    "theory_card_e91821": "특약재보험",
    "theory_card_1553f7": "비례재보험",
@@ -43,6 +92,9 @@
    "theory_card_d7cab3": "역선택"
   },
   "quizzes": {
+   "theory_quiz_35dfe2": "보험금액 ≥ 보험가액 × 80%|전부보험 간주",
+   "theory_quiz_33dbd9": "보험금액 < 보험가액 × 80%|일부보험",
+   "theory_quiz_61cf3c": "일정액 미만 손해는 전부 면책, 도달하면 **전액** 보상|프랜차이즈 공제",
    "theory_quiz_57fa72": "손해액 기준 초과분 담보 — 초과손해(XL)·손해율(Stop Loss)|비비례재보험",
    "theory_quiz_22efb1": "목적물의 물리적 조건|물리적 위험요소"
   }
