@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 iOS 설치명도 'Passory' 통일 — apple-mobile-web-app-title 단일화
+
+- **배경**: 단일 앱 정책(UX-PWA-07) 적용 후에도 iOS 홈 화면 라벨만 시험별 별칭(Passmula·Passure 등)이었다 — `apple-mobile-web-app-title`은 manifest와 별개 메타라 별도 처리 필요
+- **수정**: `pwa-manifest.js`(부팅)·`app-shell.js`(브랜딩 재적용) 양쪽 경로의 apple title을 `'Passory'` 고정 — webmanifest name과 동일 정체성
+- **테스트**: exam-switching DOM의 apple title 단정을 시험 무관 'Passory'로 갱신
+
 ## 2026-10-21 PWA 단일 플랫폼 앱 통일 — 시험별 manifest 정체성 분리 폐기
 
 - **배경**: "PWA 아이콘이 무조건 'Passory — 맞춤형화장품 조제관리사 (Passmula)'로 표시" — 설치된 PWA의 이름은 설치 시점 manifest에 고정되고, 시험별 `<id>-pass` id는 브라우저가 별개 앱으로 인식해 (1) 시험 전환해도 아이콘 미갱신 (2) 다른 시험에서 설치 시 중복 앱 생성이 가능했다

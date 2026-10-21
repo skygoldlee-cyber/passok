@@ -114,8 +114,9 @@ export function applyExamBranding() {
     if (logoIcon && exam.icon) logoIcon.className = `${exam.icon} logo-icon`;
 
     const appName = getExamAppName();
+    // iOS 홈 화면 라벨 — 단일 앱 정책으로 'Passory' 고정 (webmanifest name과 동일 정체성)
     const appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
-    if (appleTitle) appleTitle.setAttribute('content', exam.appNameEn || appName);
+    if (appleTitle) appleTitle.setAttribute('content', 'Passory');
     document.querySelectorAll('[data-app-name]').forEach(el => { el.textContent = appName; });
 
     // 인쇄 전용 헤더·퀴즈 빈 상태 등 시험명이 들어가는 정적 영역

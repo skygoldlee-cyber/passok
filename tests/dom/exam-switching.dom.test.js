@@ -60,19 +60,18 @@ describe('멀티시험 전환 — 비기본 시험 활성화', () => {
         expect(getExamAppName()).toBe('Passory 손해사정사');
     });
 
-    it('applyExamBranding — appNameEn이 있으면 iOS 설치명으로 우선 적용', () => {
+    it('applyExamBranding — iOS 설치명은 시험 무관 ' + 'Passory' + ' 단일 정체성', () => {
         localStorage.setItem('current_exam', 'insadj');
         applyExamBranding();
 
         const appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
         expect(appleTitle).not.toBeNull();
-        // 영문 별칭이 있으면 appName보다 우선 — 홈 화면 아이콘 라벨로 짧은 영문 적합
-        expect(appleTitle.getAttribute('content')).toBe('Passure');
+        // 단일 앱 정책 — webmanifest name과 동일하게 'Passory' 고정 (어느 시험에서 추가해도 같은 라벨)
+        expect(appleTitle.getAttribute('content')).toBe('Passory');
 
-        // 별칭 없는 시험은 appName으로 폴백
         localStorage.setItem('current_exam', 'cosmetic');
         applyExamBranding();
-        expect(appleTitle.getAttribute('content')).toBe('Passmula');
+        expect(appleTitle.getAttribute('content')).toBe('Passory');
     });
 
     it('applyFeatureFlags — insadj에서 formula 게이트 요소 숨김, dictionary·공용 매뉴얼 유지', () => {
