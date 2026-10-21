@@ -8,15 +8,15 @@ import assert from 'node:assert/strict';
 import { buildChapterSkeleton, encodeRefUrl, parseArgs } from '../../tools/build/scaffold_chapter.js';
 
 const REFS = [
-    { docName: '식품위생법(법률)(제21065호)(20251001)', dirRel: '참조자료/ref_md/과목1/식품위생법(법률)(제21065호)(20251001)', mdRel: '참조자료/ref_md/과목1/식품위생법(법률)(제21065호)(20251001)/식품위생법(법률)(제21065호)(20251001).md' },
-    { docName: '식품의 기준 및 규격(고시)(제2026-55호)(20260731)', dirRel: '참조자료/ref_md/과목1/식품의 기준 및 규격(고시)(제2026-55호)(20260731)', mdRel: '참조자료/ref_md/과목1/식품의 기준 및 규격(고시)(제2026-55호)(20260731)/식품의 기준 및 규격(고시)(제2026-55호)(20260731).md' },
+    { docName: '보험업법(법률)(제20436호)(20250131)', dirRel: '참조자료/ref_md/과목1/보험업법(법률)(제20436호)(20250131)', mdRel: '참조자료/ref_md/과목1/보험업법(법률)(제20436호)(20250131)/보험업법(법률)(제20436호)(20250131).md' },
+    { docName: '보험업법 시행령(대통령령)(제36728호)(20261002)', dirRel: '참조자료/ref_md/과목1/보험업법 시행령(대통령령)(제36728호)(20261002)', mdRel: '참조자료/ref_md/과목1/보험업법 시행령(대통령령)(제36728호)(20261002)/보험업법 시행령(대통령령)(제36728호)(20261002).md' },
 ];
 
-const base = { title: '1과목 식품위생학', subjectNum: '1', refs: REFS, contentRoot: 'content/exams/food' };
+const base = { title: '1과목 보험업법', subjectNum: '1', refs: REFS, contentRoot: 'content/exams/insadj' };
 
 test('buildChapterSkeleton: H1·챕터 수·작성 슬롯', () => {
     const md = buildChapterSkeleton(base);
-    assert.ok(md.startsWith('# 📕 1과목 식품위생학'));
+    assert.ok(md.startsWith('# 📕 1과목 보험업법'));
     assert.equal((md.match(/## 📚 Chapter \d{2}\./g) || []).length, 2);
     assert.ok(md.includes('<!-- 작성: 본문 -->'), '본문 슬롯 존재');
 });
@@ -31,8 +31,8 @@ test('buildChapterSkeleton: 각 챕터에 출처·원문 보기 블록 (CS-11 �
 
 test('buildChapterSkeleton: 링크는 인코딩된 ref_md 경로 규약', () => {
     const md = buildChapterSkeleton(base);
-    assert.ok(md.includes('../참조자료/ref_md/과목1/식품위생법%28법률%29%28제21065호%29%2820251001%29/'), '괄호 %28/%29 인코딩');
-    assert.ok(md.includes('식품의%20기준%20및%20규격'), '공백 %20 인코딩');
+    assert.ok(md.includes('../참조자료/ref_md/과목1/보험업법%28법률%29%28제20436호%29%2820250131%29/'), '괄호 %28/%29 인코딩');
+    assert.ok(md.includes('보험업법%20시행령'), '공백 %20 인코딩');
     // 원문 괄호 미인코딩 잔재 없음 (링크 URL 내부)
     const linkUrls = [...md.matchAll(/\]\((<[^>]+>)\)/g)].map(m => m[1]);
     assert.ok(linkUrls.length >= 6, '출처·원문·백매터 링크 전부 <url> 래핑');
@@ -48,10 +48,10 @@ test('buildChapterSkeleton: 백매터 링크 목록이 선택 ref 전량 포함'
 });
 
 test('buildChapterSkeleton: 시험별 contentRoot 독립 — 동일 출력 구조', () => {
-    const food = buildChapterSkeleton(base);
+    const insadj = buildChapterSkeleton(base);
     const cosmetic = buildChapterSkeleton({ ...base, contentRoot: 'content/exams/cosmetic' });
     // 링크는 상대 경로라 contentRoot와 무관 — 출력이 동일 구조임을 확인
-    assert.equal(food.replace(/과목1/g, 'S'), cosmetic.replace(/과목1/g, 'S'));
+    assert.equal(insadj.replace(/과목1/g, 'S'), cosmetic.replace(/과목1/g, 'S'));
 });
 
 test('encodeRefUrl: 공백·괄호만 선택 인코딩', () => {
@@ -60,8 +60,8 @@ test('encodeRefUrl: 공백·괄호만 선택 인코딩', () => {
 });
 
 test('parseArgs: 값 옵션과 플래그 구분', () => {
-    const a = parseArgs(['--exam', 'food', '--subject', '1', '--refs', 'all', '--out', 'x.md', '--dry-run', '--force']);
-    assert.equal(a.exam, 'food');
+    const a = parseArgs(['--exam', 'insadj', '--subject', '1', '--refs', 'all', '--out', 'x.md', '--dry-run', '--force']);
+    assert.equal(a.exam, 'insadj');
     assert.equal(a.subject, '1');
     assert.equal(a.refs, 'all');
     assert.equal(a.out, 'x.md');

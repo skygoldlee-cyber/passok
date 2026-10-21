@@ -43,7 +43,7 @@ test('실무 피처 보유 시험 — isPracticeCapable true, 랜딩은 formula-
 
 test('실무 피처 미보유 시험 — isPracticeCapable false, 랜딩 폴백 dashboard-view', () => {
     setExams([
-        { id: 'food', default: true, features: { dictionary: true } },
+        { id: 'insadj', default: true, features: { dictionary: true } },
     ]);
     assert.equal(isPracticeCapable(), false);
     assert.equal(getPracticeLanding(), 'dashboard-view');

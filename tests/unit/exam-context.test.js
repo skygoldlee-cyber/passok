@@ -15,7 +15,7 @@ const EXAMS = {
     exams: [
         { id: 'alpha', name: '알파시험', contentRoot: 'content/exams/alpha', dataRoot: 'data/exams/alpha', features: { audiobook: true } },
         { id: 'cosmetic', name: '조제관리사', contentRoot: 'content/exams/cosmetic', dataRoot: 'data/exams/cosmetic', default: true, features: { dictionary: true } },
-        { id: 'food', name: '식품기사', contentRoot: 'content/exams/food', dataRoot: 'data/exams/food', registryGlobal: 'DATA_REGISTRY_FOOD' },
+        { id: 'insadj', name: '손해사정사', contentRoot: 'content/exams/insadj', dataRoot: 'data/exams/insadj', registryGlobal: 'DATA_REGISTRY_INSADJ' },
     ]
 };
 
@@ -189,8 +189,8 @@ test('applyExamTheme: data-exam 속성 + 토큰 인라인 주입', () => {
     const originalDoc = global.document;
     Object.defineProperty(global, 'document', { value: { documentElement: el }, writable: true, configurable: true });
     try {
-        applyExamTheme({ id: 'food', theme: { '--color-primary': '#f97316', '--evil-x': 'x' } });
-        assert.equal(el.dataset.exam, 'food');
+        applyExamTheme({ id: 'insadj', theme: { '--color-primary': '#f97316', '--evil-x': 'x' } });
+        assert.equal(el.dataset.exam, 'insadj');
         assert.deepEqual(applied, { '--color-primary': '#f97316' });
     } finally {
         if (originalDoc !== undefined) {
@@ -205,7 +205,7 @@ test('applyExamTheme: document 부재(Node 환경)에서 무해', () => {
     const originalDoc = global.document;
     try {
         delete global.document;
-        applyExamTheme({ id: 'food', theme: { '--color-primary': '#000' } });
+        applyExamTheme({ id: 'insadj', theme: { '--color-primary': '#000' } });
     } finally {
         if (originalDoc !== undefined) {
             Object.defineProperty(global, 'document', { value: originalDoc, writable: true, configurable: true });
@@ -234,18 +234,18 @@ test('getActiveRegistry: registryGlobal 미선언 시험은 기본 전역명 폴
 
 test('getActiveRegistry: 비기본 시험은 자체 registryGlobal 해석 — 기본 전역 오독 방지', () => {
     window.DATA_REGISTRY = { subjects: [{ key: 'cosmetic-s1' }] };        // 기본 시험 정적 전역
-    window.DATA_REGISTRY_FOOD = { subjects: [{ key: 'food-s1' }] };      // food 동적 번들 전역
-    mockStorage.setItem('current_exam', 'food');
+    window.DATA_REGISTRY_INSADJ = { subjects: [{ key: 'insadj-s1' }] };      // insadj 동적 번들 전역
+    mockStorage.setItem('current_exam', 'insadj');
     const reg = getActiveRegistry();
-    assert.equal(reg, window.DATA_REGISTRY_FOOD);
-    assert.equal(reg.subjects[0].key, 'food-s1');
+    assert.equal(reg, window.DATA_REGISTRY_INSADJ);
+    assert.equal(reg.subjects[0].key, 'insadj-s1');
     delete window.DATA_REGISTRY;
-    delete window.DATA_REGISTRY_FOOD;
+    delete window.DATA_REGISTRY_INSADJ;
 });
 
 test('getActiveRegistry: 비기본 번들 미로딩 시 null — 기본 시험으로 무음 폴백 없음', () => {
     window.DATA_REGISTRY = { subjects: [{ key: 'cosmetic-s1' }] };
-    mockStorage.setItem('current_exam', 'food'); // DATA_REGISTRY_FOOD 미설치
+    mockStorage.setItem('current_exam', 'insadj'); // DATA_REGISTRY_INSADJ 미설치
     assert.equal(getActiveRegistry(), null);
     delete window.DATA_REGISTRY;
 });

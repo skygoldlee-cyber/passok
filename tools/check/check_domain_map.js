@@ -218,7 +218,7 @@ function main() {
     {
         const allow = new Set(Object.keys(map.examLiteralAllow || {}));
         // 시험 식별 리터럴 = id + name/appName/shortName/title — 플랫폼 코드에
-        // '식품기사' 같은 브랜드 문자열이 박히는 것도 도메인 결합이다.
+        // '손해사정사' 같은 브랜드 문자열이 박히는 것도 도메인 결합이다.
         const litSet = new Set(examIds);
         for (const e of examsData.exams || []) {
             for (const k of ['name', 'appName', 'shortName', 'title']) {
