@@ -1,0 +1,85 @@
+{
+  "subjects": {
+    "civGen": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/civGen/민법_총칙.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "admLaw": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/admLaw/행정법.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "admSci": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/admSci/행정학개론.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "civContract": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/civContract/민법_계약.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "admProc": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/admProc/행정절차론.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "officeMgmt": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/officeMgmt/사무관리론.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "admPractice": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/admPractice/행정사실무.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {
+    "subject1": {
+      "questions": 8
+    },
+    "subject2": {
+      "questions": 8
+    },
+    "subject3": {
+      "questions": 8
+    }
+  }
+}
