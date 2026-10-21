@@ -19,7 +19,7 @@ export function getViewTitles(registry) {
         'flashcard-view': uiText.flashcard || { title: '개념 플래시카드', subtitle: '과목별 핵심 개념을 카드로 뒤집으며 암기' },
         'quiz-view': uiText.quiz || { title: '기출 및 핵심 퀴즈', subtitle: '빈칸 채우기형 퀴즈로 실전 완벽 대비' },
         'review-view': uiText.review || { title: '오답 및 중요 복습', subtitle: '헷갈리거나 어려운 약점 카드 집중 복습' },
-        'trainer-view': uiText.trainer || { title: '훈련소', subtitle: '법령 수치 암기 및 배합 계산 트레이닝 센터' },
+        'trainer-view': uiText.trainer || { title: '훈련소', subtitle: '수치 암기·판정·실전 연습 트레이닝 센터' },
         'exam-view': uiText.exam || { title: '실전 모의고사', subtitle: '문제은행으로 과목별 모의고사 및 학습안내서 열람' },
         'textbook-view': uiText.textbook || { title: '교재검색', subtitle: '교재 본문과 참조자료를 실시간 키워드로 검색' },
         'textbook-reader-view': uiText['textbook-reader'] || { title: '교재리더', subtitle: '과목을 선택하여 교재 본문을 읽기' },

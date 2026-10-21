@@ -7,6 +7,22 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 도메인 종속성 전수조사 — 플랫폼 코드·UI의 cosmetic 잔재 중립화
+
+- **배경**: 멀티시험 플랫폼 원칙(DA-13/15)에 따라 `src/`·`html/`·`tools/`·저장 키·피처 기본값 전수 스캔. 내비·뷰 게이트와 per-exam 키드 레지스트리(law-links·pdf-registry·storage-keys의 `domain:cosmetic` 계약 키 구역 — 문서화된 중앙 레지스트리)는 정상 격리로 판정. 실종속은 비게이트/폴백 경로의 cosmetic 문구·로직 8건
+- **수정(사용자 노출)**:
+  - `router.js` — trainer 뷰 부제 폴백 "법령 수치 암기 및 배합 계산" → "수치 암기·판정·실전 연습" (cosmetic은 registry.uiText 자체 선언으로 유지)
+  - `command-palette.js` — placeholder·힌트 "화면·교재·성분·문제집" 하드코딩 → `_scopeLabel()`이 `features.dictionary`+uiText로 사전 항목 유무·명칭 결정
+  - `views/trainer.js` — 수치 트레이너 발문 "성분인" → "항목인" (limitsTrainer 피처 게이트지만 미래 시험 대비)
+  - `views/dictionary.js` — DEFAULT_KNOWLEDGE 중립화: entityUnit '원료'→'항목' · '배합 한도'→'기준 한도' · formula 전용 action·'포뮬러에 추가' 기본값 제거 · 자가등록 툴팁은 badge.labels.custom 스키마 유도 · '성분 관련 식약처 고시'→'사전 관련 고시·기준'
+  - `notice-check.js` — 사전 고시 확인 메시지 '성분 관련 고시'→'사전 관련 고시' (2곳)
+  - `study-aids.js` — 단위 카테고리 '🧬 제조·원료'→'🧬 물성·지표'
+- **수정(로직)**:
+  - `textbook-core.js` — 카드/퀴즈 생성 스킵 목록의 '주요 성분 데이터' 제거 (전 시험 챕터 파일에 `## ` 매칭 0건 — 참조자료 전용 제목이라 실질 데드 룰)
+  - `tools/build/build_combo_drills.js` — 인용 추출 정규식 `화장품법\s*제` → `[가-힣]+법(?:\s*시행[령규칙])?\s*제` 일반화 — 모든 시험의 '보험업법·행정절차법·화장품법시행규칙' 등 인용 표시 가능 (드릴 재생성 + 임베딩 재빌드로 SEM-05 복구)
+  - `csv-utils.js` — 헤더 주석 'Formula OS'→공용 유틸 표기 (dictionary.js도 사용)
+- **판정(무조치)**: trainer.html 카드·서브패널(전부 limitsTrainer/ingredients/calcPractice 게이트) · formula-view 스텁·print-area(빈 셸) · notice-check '배합 전' 배너(formula.html 내부 요소) · trainer-calc·daily-challenge 계산 문항(calcPractice 게이트) · storage-keys cosmetic 구역(스코프 키·문서화) · `data-loader` 'ingredients' 기본 레지스트리 키(내부 명명) · `ref_statements TABLE_TOPICS`/`ai_statements AGENT_SWAPS`(키드 조회·미매칭 시 자연 무발동 — 향후 시험 설정 이관 후보) · JSDoc·주석 예시 전량
+
 ## 2026-10-21 범용 뷰의 cosmetic 용어 정정 — 공통 메뉴 표기 중립화
 
 - **배경**: 메뉴 공용성 점검 — 내비·탭·설정 항목은 대부분 범용이며 도메인 항목(성분사전·실무·매뉴얼·수치/원료/계산 트레이너·학습안내·부록문서·뽀모도로·실무모드)은 전부 `data-feature` 게이트 확인됨. 다만 게이트 없는 범용 뷰 2곳의 정적 문구에 조제관리사 용어가 남아 있었음

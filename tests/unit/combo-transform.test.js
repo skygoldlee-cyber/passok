@@ -157,3 +157,31 @@ test('골든: comboStem — fact는 긍정형 재작성, 주제 없으면 실패
     '다음 중 표시사항으로 옳은 것을 모두 고른 것은?');
   assert.equal(comboStem('옳은 것은?', 'fact'), '');       // 스킵 사유
 });
+
+// ── 인용 라벨 — 법령명 일반화 (도메인 무관, 시험별 법령명 추출) ──
+
+test('citation: explanation의 임의 법령명·시행령 인용 추출 (cosmetic 전용 아님)', () => {
+  const { items } = run([{
+    id: 'subject1_q920', type: 'choice',
+    question: '보험업법상 보험계약의 성립 요건으로 옳은 것은?',
+    options: ['청약과 승낙', '등기', '공증', '심사'],
+    answer: '①',
+    explanation: '법령 근거: 보험업법 제95조에 따라 청약과 승낙으로 성립한다.',
+  }]);
+  assert.equal(items.length, 1);
+  // '법령 근거' 마커 + 법령명·조문 추출 모두 인용에 포함
+  assert.match(items[0].citation, /법령 근거/);
+  assert.match(items[0].citation, /보험업법 제95조/);
+});
+
+test('citation: 시행령·시행규칙 명칭도 법령 인용으로 추출', () => {
+  const { items } = run([{
+    id: 'subject1_q921', type: 'choice',
+    question: '화장품 책임판매업자의 준수사항으로 옳은 것은?',
+    options: ['품질관리기준 준수', '제조업 등록', '광고 심의', '수입 신고'],
+    answer: '①',
+    explanation: '화장품법 시행규칙 제12조에 따라 품질관리기준을 준수해야 한다.',
+  }]);
+  assert.equal(items.length, 1);
+  assert.match(items[0].citation, /화장품법 시행규칙 제12조/);
+});

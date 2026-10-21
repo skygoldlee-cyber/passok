@@ -238,7 +238,7 @@ function buildCitation(q, examKey, explanation) {
   const exp = String(explanation || '');
   const hasTbRef = /교재\s*근거|교재\s*:/.test(exp);
   const hasLawRef = /법령\s*근거/.test(exp);
-  const lawRefs = [...exp.matchAll(/화장품법\s*제[\d조의]+[\d항호]*/g)].map(m => m[0]);
+  const lawRefs = [...exp.matchAll(/[가-힣]+법(?:\s*시행(?:령|규칙))?\s*제[\d조의]+[\d항호]*/g)].map(m => m[0]);
   const uniq = [...new Set([
     hasTbRef ? '교재 근거' : '',
     hasLawRef ? '법령 근거' : '',

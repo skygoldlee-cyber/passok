@@ -17,13 +17,15 @@ import { switchView } from './navigation.js';
 import { dictNoticeDocs } from '../notice-check.js';
 
 /**
- * 지식DB 엔티티 스키마 기본값 — 화장품 원료 사전과 동일한 동작.
- * 다른 시험은 manifest.knowledge로 필드 매핑·필터·CSV를 재선언한다.
+ * 지식DB 엔티티 스키마 기본값 — 시험 무관 중립 표기.
+ * 각 시험은 manifest.knowledge로 필드 매핑·필터·CSV·액션을 재선언한다.
+ * 미선언 부분만 이 기본값으로 떨어지므로, 도메인 문구(원료·배합·formula 액션)를
+ * 기본값에 두면 다른 시험 사전에 cosmetic UI가 새어 나온다.
  */
 const DEFAULT_KNOWLEDGE = {
     registryKey: 'ingredients',
     global: 'INGREDIENTS_DATA',
-    entityUnit: '원료',
+    entityUnit: '항목',
     filterField: 'type',
     fields: {
         title: 'name',
@@ -34,32 +36,24 @@ const DEFAULT_KNOWLEDGE = {
     },
     badge: {
         field: 'type',
-        defaultLabel: '사용 가능',
-        labels: { approved: '사용 가능', restricted: '사용 제한', banned: '사용 금지' }
+        defaultLabel: '기준 적합',
+        labels: { approved: '기준 적합', restricted: '조건부 적합', banned: '기준 부적합' }
     },
     filters: [
-        { key: 'all', label: '전체 성분' },
-        { key: 'approved', label: '사용 가능 원료', icon: 'fa-circle-check', color: 'var(--color-success)' },
-        { key: 'restricted', label: '사용 제한 원료', icon: 'fa-triangle-exclamation', color: 'var(--color-warning)' },
-        { key: 'banned', label: '사용 금지 원료', icon: 'fa-ban', color: 'var(--color-danger)' }
+        { key: 'all', label: '전체 항목' },
+        { key: 'approved', label: '기준 적합', icon: 'fa-circle-check', color: 'var(--color-success)' },
+        { key: 'restricted', label: '조건부 적합', icon: 'fa-triangle-exclamation', color: 'var(--color-warning)' },
+        { key: 'banned', label: '기준 부적합', icon: 'fa-ban', color: 'var(--color-danger)' }
     ],
     details: [
         { key: 'category', label: '카테고리', empty: '기타' },
         { key: 'description', label: '설명/특성', empty: '-', wide: true },
-        { key: 'limit', label: '배합 한도', empty: '제한 없음', wide: true },
+        { key: 'limit', label: '기준 한도', empty: '제한 없음', wide: true },
         { key: 'tip', tip: true }
     ],
-    action: {
-        feature: 'formula',
-        click: 'formulaAddIngredient',
-        arg: 'name',
-        label: '포뮬러에 추가',
-        title: '배합 계산기 처방에 이 원료 추가',
-        icon: 'fa-plus'
-    },
     csv: {
-        filename: 'ingredients',
-        headers: ['원료명', '영문명', '유형', '유형코드', '카테고리', '배합한도', '설명', 'TIP'],
+        filename: 'knowledge',
+        headers: ['항목명', '영문명', '유형', '유형코드', '카테고리', '한도', '설명', 'TIP'],
         fields: ['name', 'engName', { badgeLabel: 'type' }, 'type', 'category', 'limit', 'description', 'tip']
     },
     productKey: ''   // 기성품 역조회 — STORAGE_KEYS 멤버명 (customKey와 동일 계약)
@@ -182,13 +176,15 @@ function renderCustomAddButton(schema) {
         /** @type {HTMLButtonElement} */ (btn).type = 'button';
         btn.className = 'btn btn-secondary flex-center gap-2';
         btn.setAttribute('data-click', 'customIngAdd');
-        btn.setAttribute('title', '공식 DB에 없는 원료를 직접 등록 — 등록 항목은 \'사용자 등록 원료\' 배지로 표시되고 자가 선언 한도만 검증됩니다 (법정 판정이 아닌 사내 참고용)');
+        const unit = schema.entityUnit || '항목';
+        const customBadge = (schema.badge && schema.badge.labels && schema.badge.labels.custom) || '사용자 등록';
+        btn.setAttribute('title', `공식 DB에 없는 ${unit}을(를) 직접 등록 — 등록 항목은 '${customBadge}' 배지로 표시되고 자가 선언 정보만 검증됩니다 (법정 판정이 아닌 자가 참고용)`);
         btn.innerHTML = `<i class="fa-solid fa-user-pen" aria-hidden="true"></i> ${esc(schema.customLabel || '항목 추가')}`;
         row.appendChild(btn);
     }
 }
 
-/** 성분 고시 확인 버튼 — references.json.noticeIngredientDocs 선언 시험에만 노출 (DI-11) */
+/** 사전 고시 확인 버튼 — references.json.noticeIngredientDocs 선언 시험에만 노출 (DI-11) */
 function renderDictNoticeButton() {
     const row = document.querySelector('#dictionary-view .dict-search-row');
     if (!row) return;
@@ -200,7 +196,7 @@ function renderDictNoticeButton() {
         /** @type {HTMLButtonElement} */ (btn).type = 'button';
         btn.className = 'btn btn-secondary flex-center gap-2';
         btn.setAttribute('data-click', 'checkDictNoticeNow');
-        btn.setAttribute('title', '성분 관련 식약처 고시의 최신본을 law.go.kr에서 확인 — 개정 감지 시 원문 링크 제공');
+        btn.setAttribute('title', '사전 관련 고시·기준의 최신본을 law.go.kr에서 확인 — 개정 감지 시 원문 링크 제공');
         btn.innerHTML = '<i class="fa-solid fa-file-shield" aria-hidden="true"></i> 고시 확인';
         row.appendChild(btn);
     }
