@@ -27,7 +27,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const BASELINE_PATH = path.join(__dirname, 'replacement_char_baseline.json');
+const BASELINE_PATH = path.join(__dirname, '..', 'state', 'replacement_char_baseline.json');
 
 const FFFD = String.fromCodePoint(0xFFFD); // 리터럴 금지 — 이 파일 자신이 게이트에 걸리지 않도록 코드포인트 표기
 

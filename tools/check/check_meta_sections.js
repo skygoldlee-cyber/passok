@@ -30,7 +30,7 @@ const { getExamTargets } = require('../build/exam_targets.js');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..', '..');
-const BASELINE_PATH = path.join(__dirname, 'meta_sections_baseline.json');
+const BASELINE_PATH = path.join(__dirname, '..', 'state', 'meta_sections_baseline.json');
 
 // 메타 섹션 의심 키워드 — 작성 가이드의 보조 섹션 명명 패턴.
 // 이모지 단독(📌 등)은 본문 섹션에도 쓰이므로 키워드 기준으로만 의심한다.

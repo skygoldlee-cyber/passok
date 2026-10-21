@@ -399,6 +399,8 @@ data/                   # 빌드 생성 번들
 tools/                  # 빌드·검증 스크립트
   build/                # 데이터 파이프라인 (manifest → registry + 해시 번들) + 생성기 (build_trace_matrix·scaffold_exam·drill-utils·trace)
   check/                # 검증·감사 스크립트 (run.js 통합 실행기·steps.js 단계 레지스트리·push_gate.js pre-push 적응형 게이트·check_*·audit_*·verify_shell_assets·coverage_merge·impact_tests)
+  config/               # 도구 설정 (domain-map.json 파일 계층 분류표·docs_paths_allowlist·citation_fingerprints)
+  state/                # 게이트 기준선·스탬프 (*_baseline.json·test_stats.json — 추적) + 로컬 산출물 (리포트·검수 큐·대시보드 — gitignore)
   sync/                 # 콘텐츠 동기화 (sync_citation_lines·sync_textbook_files)
   deploy/               # 배포 가드 (deploy.js)
   lib/                  # 공용 스캔·파싱 라이브러리 (trace_scan.js)

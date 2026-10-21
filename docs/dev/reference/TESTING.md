@@ -32,7 +32,7 @@
 | **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 110+ |
 | **합계** | | | | **2,350+** |
 
-> 수치는 `check:teststats`(docs 단계)이 `tools/check/test_stats.json` 실측 SSOT와 정합 검증한다 —
+> 수치는 `check:teststats`(docs 단계)이 `tools/state/test_stats.json` 실측 SSOT와 정합 검증한다 —
 > 스테일 시 `npm run stats:stamp`으로 재측정·재기록 (인용은 `N+` 바닥 표기 유지).
 
 ### 설계 원칙

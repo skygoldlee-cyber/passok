@@ -159,7 +159,7 @@ flowchart LR
 | `check:docs` | src 변경인데 문서 미갱신 | 관련 문서 동반 수정 (`[no-docs]`는 신중히) |
 | `check:specrefs` | SPEC↔@spec 어긋남 | `@spec ID` 태그 추가·정정 |
 | `check:datafresh` | data/ 생성물이 원본보다 오래됨 | `build:data` 후 결과 커밋 |
-| `check:domainmap` | 새 파일이 분류표에 미등록 | `tools/check/domain-map.json`에 경로 추가 |
+| `check:domainmap` | 새 파일이 분류표에 미등록 | `tools/config/domain-map.json`에 경로 추가 |
 
 ## 10. 자주 하는 질문
 

@@ -27,7 +27,7 @@ const { getExamTargets } = require('../build/exam_targets.js');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..', '..');
-const BASELINE_PATH = path.join(__dirname, 'glossary_signal_baseline.json');
+const BASELINE_PATH = path.join(__dirname, '..', 'state', 'glossary_signal_baseline.json');
 
 // 저신호 위험군 — 자동 추출(autoExtracted) 항목 중 2~4자 순수 한글 단일어.
 // 큐레이션 항목은 작성 시 사람이 검토했으므로 대상에서 제외하고,

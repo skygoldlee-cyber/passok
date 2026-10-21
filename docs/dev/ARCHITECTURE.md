@@ -884,7 +884,7 @@ const state = {
 
 ### 파일 계층 분류 (도메인 맵)
 
-`src/`·`css/`·`html/`·`data/`·`content/`·`tests/` 내 **모든 파일**은 계층이 선언되어야 한다 — 선언은 `tools/check/domain-map.json`, 강제는 `npm run check:domainmap`(`check:all`·`check:ci`에 편입).
+`src/`·`css/`·`html/`·`data/`·`content/`·`tests/` 내 **모든 파일**은 계층이 선언되어야 한다 — 선언은 `tools/config/domain-map.json`, 강제는 `npm run check:domainmap`(`check:all`·`check:ci`에 편입).
 
 | 계층 | 판별 기준 | 예시 |
 |------|-----------|------|
@@ -1014,7 +1014,7 @@ pullSync() (로그인 시 / "지금 동기화" 버튼)
   3. `html/exams/<시험id>/<피처>.html` — 자체 `<section id>`를 포함하는 자기완결 파셜 + `index.template.html`에 `<section id data-lazy-view="<피처>.html">` 스텁 + nav 버튼(`data-feature="<키>"`) → `build:html` 재생성 (스텁의 `data-lazy-view` 값은 파일명만 — `html/exams/<활성시험>/` 접두는 런타임 해석)
   4. 피처 뷰 모듈 — `src/exams/<시험id>/views/<피처>.js`에 두고 `loaders`의 `_domainImport` 경로로만 참조 (SHELL_ASSETS 프리캐시·app.js 정적 import 모두 금지 — 자산 격리 정책). 도메인 스타일은 `css/exams/<시험id>/<피처>.css`에 두고 엔트리 `styles` 필드에 선언 — `<link>` 지연 주입 (style.css @import 금지 — 비활성 시험 미로드)
   5. `storage-keys.js` — 피처 저장 키 + BACKUP/RESET 등록 (스코프 키라 시험별 자동 격리) + `domain:<시험id> 계약 키` 구획 주석
-  6. `tools/check/domain-map.json` — `feature:<피처>` 레이어 + 파일 글로브 선언 (check:domainmap이 미등록 파일을 차단)
+  6. `tools/config/domain-map.json` — `feature:<피처>` 레이어 + 파일 글로브 선언 (check:domainmap이 미등록 파일을 차단)
   7. 테스트 — 도메인 테스트는 `tests/{unit,dom}/exams/<시험id>/`에 배치. testfirst 게이트가 로직 변경의 테스트 동반을 강제
 - **랜딩**: 실무 모드 초기화 시 `getPracticeLanding()` 뷰로 랜딩 (cosmetic = `formula-view`)
 - **토글 게이트**: `data-feature="practiceMode"` 가상 키 — `applyFeatureFlags`가 `isPracticeCapable()`로 판정 (실무 피처가 formula가 아닌 시험에서도 토글 노출)
