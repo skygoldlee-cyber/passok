@@ -3,7 +3,7 @@ var DATA_REGISTRY_INSADJ = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2027",
-  "generatedAt": "2026-10-21T04:01:12.415Z",
+  "generatedAt": "2026-10-21T04:16:14.254Z",
   "subjects": [
     {
       "key": "contract",
@@ -12,12 +12,12 @@ var DATA_REGISTRY_INSADJ = {
       "shortName": "보험계약법",
       "contentHash": "960bc930",
       "stats": {
-        "cards": 9,
+        "cards": 11,
         "quizzes": 1,
         "chapters": 1,
         "sourceCards": 6,
         "sourceQuizzes": 0,
-        "targetCards": 9,
+        "targetCards": 11,
         "targetQuizzes": 1
       },
       "supplement": "./data/exams/insadj/supplements/contract.js",
@@ -30,28 +30,30 @@ var DATA_REGISTRY_INSADJ = {
       "shortName": "보험업법",
       "contentHash": "98f95282",
       "stats": {
-        "cards": 8,
-        "quizzes": 0,
+        "cards": 11,
+        "quizzes": 1,
         "chapters": 1,
         "sourceCards": 8,
         "sourceQuizzes": 0,
-        "targetCards": 8,
-        "targetQuizzes": 0
-      }
+        "targetCards": 11,
+        "targetQuizzes": 1
+      },
+      "supplement": "./data/exams/insadj/supplements/act.js",
+      "supplementGlobal": "STUDY_SUPPLEMENT_act"
     },
     {
       "key": "theory",
       "order": 3,
       "name": "손해사정이론",
       "shortName": "손사이론",
-      "contentHash": "b2823dda",
+      "contentHash": "df039cf8",
       "stats": {
-        "cards": 8,
+        "cards": 11,
         "quizzes": 0,
         "chapters": 1,
-        "sourceCards": 10,
-        "sourceQuizzes": 1,
-        "targetCards": 8,
+        "sourceCards": 16,
+        "sourceQuizzes": 2,
+        "targetCards": 11,
         "targetQuizzes": 0
       }
     },
@@ -62,12 +64,12 @@ var DATA_REGISTRY_INSADJ = {
       "shortName": "2차 참고",
       "contentHash": "e97083cb",
       "stats": {
-        "cards": 4,
+        "cards": 2,
         "quizzes": 0,
         "chapters": 1,
         "sourceCards": 5,
         "sourceQuizzes": 0,
-        "targetCards": 4,
+        "targetCards": 2,
         "targetQuizzes": 0
       }
     }
@@ -79,11 +81,11 @@ var DATA_REGISTRY_INSADJ = {
       "part": 1,
       "title": "보험계약법",
       "file": "과목1_문제은행.md",
-      "bundle": "./data/exams/insadj/exams/subject1.2af1ed40.js",
+      "bundle": "./data/exams/insadj/exams/subject1.e5f48873.js",
       "global": "EXAM_DATA_subject1",
-      "contentHash": "2af1ed40",
+      "contentHash": "e5f48873",
       "stats": {
-        "questions": 8
+        "questions": 16
       }
     },
     {
@@ -92,11 +94,11 @@ var DATA_REGISTRY_INSADJ = {
       "part": 2,
       "title": "보험업법",
       "file": "과목2_문제은행.md",
-      "bundle": "./data/exams/insadj/exams/subject2.73e3066e.js",
+      "bundle": "./data/exams/insadj/exams/subject2.ff58fbdf.js",
       "global": "EXAM_DATA_subject2",
-      "contentHash": "73e3066e",
+      "contentHash": "ff58fbdf",
       "stats": {
-        "questions": 8
+        "questions": 16
       }
     },
     {
@@ -105,11 +107,11 @@ var DATA_REGISTRY_INSADJ = {
       "part": 3,
       "title": "손해사정이론",
       "file": "과목3_문제은행.md",
-      "bundle": "./data/exams/insadj/exams/subject3.44a6f65c.js",
+      "bundle": "./data/exams/insadj/exams/subject3.ce6c5cf7.js",
       "global": "EXAM_DATA_subject3",
-      "contentHash": "44a6f65c",
+      "contentHash": "ce6c5cf7",
       "stats": {
-        "questions": 8
+        "questions": 16
       }
     },
     {

@@ -1,0 +1,44 @@
+[
+  {
+    "numbers": [{"number": "30", "unit": "일"}],
+    "context": "낙부 통지: 청약과 함께 보험료를 받은 경우 30일 이내 승낙·거절 통지 (제638조의2)",
+    "isKey": true,
+    "category": "📅 기한·기간"
+  },
+  {
+    "numbers": [{"number": "3", "unit": "개월"}],
+    "context": "약관 미교부·미설명 계약취소: 성립일부터 3개월 이내 (제638조의3)",
+    "isKey": true,
+    "category": "📅 기한·기간"
+  },
+  {
+    "numbers": [{"number": "1", "unit": "개월"}, {"number": "3", "unit": "년"}],
+    "context": "고지의무 위반 해지권: 안 날부터 1개월 · 체결일부터 3년 (제651조)",
+    "isKey": true,
+    "category": "📅 기한·기간"
+  },
+  {
+    "numbers": [{"number": "10", "unit": "일"}],
+    "context": "보험금 지급: 지급액을 정한 날부터 10일 내 (제658조)",
+    "isKey": true,
+    "category": "📅 기한·기간"
+  },
+  {
+    "numbers": [{"number": "3", "unit": "년"}],
+    "context": "보험금청구권·보험료반환청구권 소멸시효: 3년 (제662조)",
+    "isKey": true,
+    "category": "📅 기한·기간"
+  },
+  {
+    "numbers": [{"number": "2", "unit": "년"}],
+    "context": "보험료청구권 소멸시효: 2년 (제662조)",
+    "isKey": false,
+    "category": "📅 기한·기간"
+  },
+  {
+    "numbers": [{"number": "1", "unit": "개월"}],
+    "context": "보험료 미지급 시 상당한 기간을 정한 최고 후 해지 가능 (제650조)",
+    "isKey": false,
+    "category": "📅 기한·기간"
+  }
+]

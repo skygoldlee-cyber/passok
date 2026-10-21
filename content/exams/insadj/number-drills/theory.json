@@ -1,0 +1,44 @@
+[
+  {
+    "numbers": [{"number": "5", "unit": "%"}],
+    "context": "법정이율: 채권 지연이자 연 5% (민법 제379조) — 보험금 지연 지급 이자 기준",
+    "isKey": true,
+    "category": "💰 금액·비율"
+  },
+  {
+    "numbers": [{"number": "3", "unit": "종"}],
+    "context": "위험요소 3종: 물리적·도덕적(고의)·정신적(부주의)",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "3", "unit": "요건"}],
+    "context": "상해 보험사고 3요건: 급격성·우연성·외래성",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "3", "unit": "형태"}],
+    "context": "손해사정 수행 3형태: 회사 직접·위탁·계약자 선임",
+    "isKey": false,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "2", "unit": "분"}],
+    "context": "준비금부채 구성: 최선추정부채(BEL)+위험마진 (K-ICS 시가평가)",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "100", "unit": "%"}],
+    "context": "전보험(전부보험): 보험금액=보험가액 → 손해 전액 보상; 일부보험은 비례보상",
+    "isKey": false,
+    "category": "💰 금액·비율"
+  },
+  {
+    "numbers": [{"number": "2", "unit": "요율"}],
+    "context": "보험요율 구성: 순요율(사고율)+부가요율(사업비·이윤)",
+    "isKey": false,
+    "category": "💰 금액·비율"
+  }
+]

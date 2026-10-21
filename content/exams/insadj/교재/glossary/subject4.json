@@ -1,0 +1,52 @@
+[
+  {
+    "keyword": "책임보험(대인배상Ⅰ)",
+    "definition": "자동차손해배상 보장법상 모든 자동차 보유자가 가입해야 하는 의무보험 — 미가입 시 과태료·처벌 (자배법 제5조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "대인배상Ⅱ",
+    "definition": "책임보험(대인Ⅰ) 한도를 초과하는 손해를 보상하는 임의 자동차보험 담보",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "정부보장사업",
+    "definition": "무보험자동차·뺑소니 사고 피해자를 정부가 보상하는 자배법상 구제 제도",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "후유장애",
+    "definition": "부상 치료 후 증상이 고정된 상태에서 남은 신체 장애 — 별표 한도금액의 산정 대상",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "상실수익액",
+    "definition": "사망·후유장해로 상실한 장래 수익의 현가 — 호프만 계수로 할인 산정",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "과실상계",
+    "definition": "피해자 과실이 있는 경우 손해배상액을 과실비율만큼 감액하는 제도 — 자동차사고 과실비율 인정기준 적용",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "대인배상 지급기준",
+    "definition": "자동차보험 표준약관 별표1 — 사망·부상·후유장해 항목별 보험금 산정 기준",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "자동차보험진료수가 기준",
+    "definition": "자배법에 따라 자동차보험 진료비의 지급 기준을 정한 국토교통부 고시",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "산업재해보상보험",
+    "definition": "근로자의 업무상 재해를 무과실·강제가입으로 보상하는 사회보험 — 사업주 전액 보험료 부담, 근로복지공단 운영",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "업무상 재해",
+    "definition": "업무 수행성·업무 기인성이 인정되는 재해 — 산재보험 급여와 근기법 재해보상의 대상",
+    "autoExtracted": false
+  }
+]

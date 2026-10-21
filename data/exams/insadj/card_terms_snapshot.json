@@ -34,10 +34,17 @@
    "theory_card_afac05": "임의재보험",
    "theory_card_e91821": "특약재보험",
    "theory_card_1553f7": "비례재보험",
-   "theory_card_3d4715": "비비례재보험"
+   "theory_card_3d4715": "비비례재보험",
+   "theory_card_2f28dd": "물리적 위험요소",
+   "theory_card_05efa1": "도덕적 위험",
+   "theory_card_e55739": "정신적 위태",
+   "theory_card_5b536f": "호프만 계수",
+   "theory_card_8d2041": "K-ICS",
+   "theory_card_d7cab3": "역선택"
   },
   "quizzes": {
-   "theory_quiz_57fa72": "손해액 기준 초과분 담보 — 초과손해(XL)·손해율(Stop Loss)|비비례재보험"
+   "theory_quiz_57fa72": "손해액 기준 초과분 담보 — 초과손해(XL)·손해율(Stop Loss)|비비례재보험",
+   "theory_quiz_22efb1": "목적물의 물리적 조건|물리적 위험요소"
   }
  },
  "second": {
