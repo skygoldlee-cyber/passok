@@ -21,6 +21,7 @@
   - `textbook-core.js` — 카드/퀴즈 생성 스킵 목록의 '주요 성분 데이터' 제거 (전 시험 챕터 파일에 `## ` 매칭 0건 — 참조자료 전용 제목이라 실질 데드 룰)
   - `tools/build/build_combo_drills.js` — 인용 추출 정규식 `화장품법\s*제` → `[가-힣]+법(?:\s*시행[령규칙])?\s*제` 일반화 — 모든 시험의 '보험업법·행정절차법·화장품법시행규칙' 등 인용 표시 가능 (드릴 재생성 + 임베딩 재빌드로 SEM-05 복구)
   - `csv-utils.js` — 헤더 주석 'Formula OS'→공용 유틸 표기 (dictionary.js도 사용)
+- **후속 수정**: 커맨드 팔레트 placeholder의 innerHTML 보간 `${_scopeLabel()}`에 `esc()` 적용 — CI escape 싱크 게이트(ROAD-Q5) 신규 미이스케이프 후보 차단 발견분
 - **판정(무조치)**: trainer.html 카드·서브패널(전부 limitsTrainer/ingredients/calcPractice 게이트) · formula-view 스텁·print-area(빈 셸) · notice-check '배합 전' 배너(formula.html 내부 요소) · trainer-calc·daily-challenge 계산 문항(calcPractice 게이트) · storage-keys cosmetic 구역(스코프 키·문서화) · `data-loader` 'ingredients' 기본 레지스트리 키(내부 명명) · `ref_statements TABLE_TOPICS`/`ai_statements AGENT_SWAPS`(키드 조회·미매칭 시 자연 무발동 — 향후 시험 설정 이관 후보) · JSDoc·주석 예시 전량
 
 ## 2026-10-21 범용 뷰의 cosmetic 용어 정정 — 공통 메뉴 표기 중립화
