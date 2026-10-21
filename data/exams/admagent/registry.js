@@ -3,7 +3,7 @@ var DATA_REGISTRY_ADMAGENT = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2027",
-  "generatedAt": "2026-10-21T07:46:13.133Z",
+  "generatedAt": "2026-10-21T07:52:00.659Z",
   "subjects": [
     {
       "key": "civGen",

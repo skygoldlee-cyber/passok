@@ -294,6 +294,7 @@
  * @property {string}   [name]
  * @property {string}   [shortName]
  * @property {string}   [appName]       시험별 앱 이름 — 브랜드면 표기 (미지정 시 logoMain+logoSub → name 폴백)
+ * @property {string}   [appNameEn]     시험별 영문 별칭 (Passmula·Passure 등) — 표기용 부브랜드
  * @property {string}   [title]
  * @property {string}   [logoMain]
  * @property {string}   [logoSub]
