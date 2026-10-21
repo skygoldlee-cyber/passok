@@ -173,8 +173,8 @@ npm.cmd run check:all                  # lint·types·imports·html·docs·domai
 | `check:uitext` | manifest에 없는 data-uitext, platform HTML의 시험명 잔존 |
 | `check:docbundles` | 플래그↔문서 불변식 위반, 번들 신선도 |
 | `check:manifest` | manifest 선언 ↔ 실제 파일 불일치 |
-| `tests/unit/multi-exam-gates.test.js` | 게이트 자체 + 등록 시험 디렉터리 정합 |
-| `tests/dom/exam-switching.dom.test.js` | 신규 시험 활성 시 게이팅·브랜딩·스코프 격리 |
+| `tests/unit/gates/multi-exam-gates.test.js` | 게이트 자체 + 등록 시험 디렉터리 정합 |
+| `tests/dom/exam/exam-switching.dom.test.js` | 신규 시험 활성 시 게이팅·브랜딩·스코프 격리 |
 
 **제거 롤백**: `npm.cmd run scaffold:exam -- <id> --remove` — 골격 전체 삭제 후 `check:all` 재실행.
 
@@ -192,4 +192,4 @@ npm.cmd run check:all                  # lint·types·imports·html·docs·domai
 - [ ] `docs/*.md` 상단에 `문서 ID`(레지스트리 발번) + `범위: exam:<id> · 판본` 헤더 기입
 - [ ] `build:data` ×2회 + `build_doc_bundles.js` 실행 → **생성물 전부 커밋 후** `check:content`·`check:all` 통과 — domainmap·uitext·docbundles 오류 0
 - [ ] `README.md` 등록 시험 목록 갱신 (현재 등록 열거는 수동 — 게이트 없음)
-- [ ] DOM 시험 전환 테스트에서 새 시험 케이스 추가 검토 (`tests/dom/exam-switching.dom.test.js`) — 추가 시 `npm.cmd run stats:stamp` 수치 재스탬프 + 문서 동반(docsync) 필요
+- [ ] DOM 시험 전환 테스트에서 새 시험 케이스 추가 검토 (`tests/dom/exam/exam-switching.dom.test.js`) — 추가 시 `npm.cmd run stats:stamp` 수치 재스탬프 + 문서 동반(docsync) 필요

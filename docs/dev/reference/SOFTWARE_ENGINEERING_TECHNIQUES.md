@@ -21,7 +21,7 @@
 | 8 | 아키텍처 피트니스 함수 | 계층 분류·경계 규칙 기계 강제 | `check:domainmap`·`check:imports`·`check:storage` |
 | 9 | 도메인 격리·규약 경로 | `exams/<id>/` 배치 + 활성 시험 해석 | `check:domainmap`·E2E 격리 테스트 |
 | 10 | 테스트 피라미드 | unit(node:test) → DOM(vitest) → E2E(playwright) | `test`·`test:dom`·`test:e2e` |
-| 11 | **속성 기반 테스트 (PBT)** | fast-check 불변식 | `tests/unit/property-based.test.js` |
+| 11 | **속성 기반 테스트 (PBT)** | fast-check 불변식 | `tests/unit/app/property-based.test.js` |
 | 12 | **변이 테스트** | Stryker 명령 러너 (순수 모듈 스코프) | `npm run mutate` |
 | 13 | 커버리지 기준선 | 병합 커버리지 임계값 — 악화만 차단 | `coverage_merge.js --check` |
 | 14 | 골든 마스터 비교 | ref_md_v2 vs ref_md 출력 대조 | `verify:refs` |
@@ -44,7 +44,7 @@
 ### 11. 속성 기반 테스트 (Property-Based Testing)
 
 - **개념**: 예제를 나열하는 대신 "항상 성립해야 할 성질(불변식)"을 기술하고, fast-check가 입력 공간을 자동 생성·축소(shrink)해 반례를 찾는다
-- **구현물**: `tests/unit/property-based.test.js` — 8개 속성
+- **구현물**: `tests/unit/app/property-based.test.js` — 8개 속성
 - **적용 대상**: `deriveComboAnswer`(정답 유일성·순서 불변) · `generateComboOptions`(멤버 부분집합·정답 유일·시드 결정성) · `weak-items` ID 문법(왕복·멱등) · SM-2 스케줄러(repetition 단조·easiness≥1.3·nextReview>오늘)
 - **효과**: 작성자가 생각하지 못한 입력 조합을 기계가 탐색 — 첫 실행에서 상태 누수(스텁 공유)를 반례로 잡아낸 이력
 

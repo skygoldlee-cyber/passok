@@ -13,7 +13,7 @@ export default {
   ],
   testRunner: 'command',
   commandRunner: {
-    command: 'node --test tests/unit/questions.test.js tests/unit/property-based.test.js tests/unit/statement-tracker.test.js tests/unit/fsrs.test.js tests/unit/weak-items.test.js',
+    command: 'node --test tests/unit/content/questions.test.js tests/unit/app/property-based.test.js tests/unit/engine/statement-tracker.test.js tests/unit/engine/fsrs.test.js tests/unit/engine/weak-items.test.js',
   },
   coverageAnalysis: 'off',
   reporters: ['clear-text', 'progress', 'html'],

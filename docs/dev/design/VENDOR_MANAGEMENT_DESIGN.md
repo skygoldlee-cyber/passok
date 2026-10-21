@@ -132,5 +132,5 @@ node tools/check/check_vendor.js --latest
 | 갱신 스크립트 | `tools/sync/sync_vendor.js` (`@spec BP-13`) |
 | 워크플로 | `.github/workflows/vendor-check.yml` |
 | 명령 등록 | package.json `check:vendor`·`sync:vendor`, steps.js(all·ci), ci.yml |
-| 테스트 | `tests/unit/vendor-manifest.test.js` (`@spec BP-13`) |
+| 테스트 | `tests/unit/gates/vendor-manifest.test.js` (`@spec BP-13`) |
 | 문서 | AGENTS.md 명령 절 · GATE_MAP.md · docs/README.md 레지스트리 |

@@ -189,8 +189,8 @@
       "patterns": [
         "src/views/dictionary.js",
         "html/views/dictionary.html",
-        "tests/dom/dictionary-schema.dom.test.js",
-        "tests/dom/study-dictionary.dom.test.js"
+        "tests/dom/**/dictionary-schema.dom.test.js",
+        "tests/dom/**/study-dictionary.dom.test.js"
       ]
     },
     {
@@ -239,7 +239,7 @@
       "flag": "pomodoro",
       "patterns": [
         "src/views/pomodoro.js",
-        "tests/dom/study-pomodoro.dom.test.js"
+        "tests/dom/**/study-pomodoro.dom.test.js"
       ]
     },
     {
@@ -250,8 +250,8 @@
         "src/trainer-calc.js",
         "src/scratchpad.js",
         "src/views/trainer-calc-practice.js",
-        "tests/unit/trainer-calc.test.js",
-        "tests/dom/common-scratchpad.dom.test.js"
+        "tests/unit/**/trainer-calc.test.js",
+        "tests/dom/**/common-scratchpad.dom.test.js"
       ]
     },
     {
@@ -261,8 +261,8 @@
       "patterns": [
         "src/written-practice.js",
         "src/written-grading.js",
-        "tests/unit/written-practice.test.js",
-        "tests/unit/written-grading.test.js"
+        "tests/unit/**/written-practice.test.js",
+        "tests/unit/**/written-grading.test.js"
       ]
     },
     {
@@ -271,7 +271,7 @@
       "note": "규제 고시 감시 — 라벨·문서 목록은 시험별 references.json에서 유도",
       "patterns": [
         "src/notice-check.js",
-        "tests/unit/notice-check.test.js"
+        "tests/unit/**/notice-check.test.js"
       ]
     },
     {
@@ -279,9 +279,9 @@
       "gate": "콘텐츠 게이트 — 참조자료(ref_md·pdf registry·keyword index) 존재 시 발화. 런타임 features.refDocs 플래그는 2026-10 폐기",
       "note": "참조자료 링크/레지스트리 테스트",
       "patterns": [
-        "tests/unit/pdf-registry.test.js",
-        "tests/unit/law-links.test.js",
-        "tests/unit/ref-link-labels.test.js"
+        "tests/unit/**/pdf-registry.test.js",
+        "tests/unit/**/law-links.test.js",
+        "tests/unit/**/ref-link-labels.test.js"
       ]
     },
     {
