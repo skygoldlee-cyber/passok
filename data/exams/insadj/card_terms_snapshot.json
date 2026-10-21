@@ -123,13 +123,22 @@
    "prop_card_303810": "공동해손",
    "prop_card_20df8b": "통지의무",
    "prop_card_70dd86": "특수건물 의무가입",
-   "prop_card_84bf51": "영업손실보험"
+   "prop_card_84bf51": "영업손실보험",
+   "prop_card_49c1e0": "현금흐름표",
+   "prop_card_644005": "영업배상책임보험"
   },
   "quizzes": {}
  },
  "vehicle": {
   "cards": {
+   "vehicle_card_603bb3": "순정부품(OEM)",
+   "vehicle_card_6df4dc": "인증·규격부품",
+   "vehicle_card_0d6d8d": "재활용부품",
+   "vehicle_card_f33588": "교환가액",
    "vehicle_card_51e3ba": "시세하락·휴차료",
+   "vehicle_card_37b0d3": "자기부담금",
+   "vehicle_card_9cd6f9": "사고부담금",
+   "vehicle_card_33965d": "보험회사의 대위",
    "vehicle_card_59524a": "차량단독사고 특약",
    "vehicle_card_0a5aa0": "표준작업시간",
    "vehicle_card_416d99": "경성사기·연성사기",
@@ -145,12 +154,19 @@
    "bodily_card_9d8196": "휴업급여",
    "bodily_card_cd7fed": "장해급여",
    "bodily_card_3f5599": "유족급여·장의비",
+   "bodily_card_c1cdfa": "대인배상Ⅰ",
+   "bodily_card_21c184": "대인배상Ⅱ",
+   "bodily_card_6fa0ea": "대물배상",
    "bodily_card_13831d": "반월상연골판",
    "bodily_card_ef80bf": "CDR 척도",
    "bodily_card_3310f0": "평균임금",
    "bodily_card_524476": "휴업급여 70%",
    "bodily_card_65886f": "4세대 실손",
-   "bodily_card_1c5e95": "무보험차상해"
+   "bodily_card_1c5e95": "무보험차상해",
+   "bodily_card_f45883": "호프만계수",
+   "bodily_card_669586": "맥브라이드식",
+   "bodily_card_997225": "사고부담금",
+   "bodily_card_026f5d": "동승자 감액"
   },
   "quizzes": {
    "bodily_quiz_ab2d97": "평균임금 70% (휴업 기간)|휴업급여"
