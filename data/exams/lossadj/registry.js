@@ -3,7 +3,7 @@ var DATA_REGISTRY_LOSSADJ = {
   "schemaVersion": 1,
   "contentYear": "2026",
   "textbookEdition": "2026",
-  "generatedAt": "2026-10-21T04:16:14.189Z",
+  "generatedAt": "2026-10-21T04:36:04.680Z",
   "subjects": [
     {
       "key": "insurance",

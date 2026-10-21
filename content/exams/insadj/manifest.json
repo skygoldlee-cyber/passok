@@ -58,6 +58,48 @@
           "file": "2차_준비.md"
         }
       ]
+    },
+    {
+      "key": "prop",
+      "order": 5,
+      "name": "2차 재물 (회계원리·해상보험·책임화재기술)",
+      "shortName": "2차 재물",
+      "dir": "교재/prop",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "재물 손해사정 (전체)",
+          "file": "재물_손해사정.md"
+        }
+      ]
+    },
+    {
+      "key": "vehicle",
+      "order": 6,
+      "name": "2차 차량 (자동차보험 대물·차손·구조정비)",
+      "shortName": "2차 차량",
+      "dir": "교재/vehicle",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "차량 손해사정 (전체)",
+          "file": "차량_손해사정.md"
+        }
+      ]
+    },
+    {
+      "key": "bodily",
+      "order": 7,
+      "name": "2차 신체 (의학·책임근재보·제3보험·자동차 대인)",
+      "shortName": "2차 신체",
+      "dir": "교재/bodily",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "신체 손해사정 (전체)",
+          "file": "신체_손해사정.md"
+        }
+      ]
     }
   ],
   "exams": [

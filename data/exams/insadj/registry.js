@@ -3,7 +3,7 @@ var DATA_REGISTRY_INSADJ = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2027",
-  "generatedAt": "2026-10-21T04:16:14.254Z",
+  "generatedAt": "2026-10-21T04:36:04.745Z",
   "subjects": [
     {
       "key": "contract",
@@ -12,12 +12,12 @@ var DATA_REGISTRY_INSADJ = {
       "shortName": "보험계약법",
       "contentHash": "960bc930",
       "stats": {
-        "cards": 11,
+        "cards": 20,
         "quizzes": 1,
         "chapters": 1,
         "sourceCards": 6,
         "sourceQuizzes": 0,
-        "targetCards": 11,
+        "targetCards": 20,
         "targetQuizzes": 1
       },
       "supplement": "./data/exams/insadj/supplements/contract.js",
@@ -30,12 +30,12 @@ var DATA_REGISTRY_INSADJ = {
       "shortName": "보험업법",
       "contentHash": "98f95282",
       "stats": {
-        "cards": 11,
+        "cards": 20,
         "quizzes": 1,
         "chapters": 1,
         "sourceCards": 8,
         "sourceQuizzes": 0,
-        "targetCards": 11,
+        "targetCards": 20,
         "targetQuizzes": 1
       },
       "supplement": "./data/exams/insadj/supplements/act.js",
@@ -48,28 +48,78 @@ var DATA_REGISTRY_INSADJ = {
       "shortName": "손사이론",
       "contentHash": "df039cf8",
       "stats": {
-        "cards": 11,
-        "quizzes": 0,
+        "cards": 20,
+        "quizzes": 1,
         "chapters": 1,
         "sourceCards": 16,
         "sourceQuizzes": 2,
-        "targetCards": 11,
-        "targetQuizzes": 0
-      }
+        "targetCards": 20,
+        "targetQuizzes": 1
+      },
+      "supplement": "./data/exams/insadj/supplements/theory.js",
+      "supplementGlobal": "STUDY_SUPPLEMENT_theory"
     },
     {
       "key": "second",
       "order": 4,
       "name": "2차 준비(법령·기준 참고)",
       "shortName": "2차 참고",
-      "contentHash": "e97083cb",
+      "contentHash": "769653a9",
       "stats": {
-        "cards": 2,
+        "cards": 5,
         "quizzes": 0,
         "chapters": 1,
         "sourceCards": 5,
         "sourceQuizzes": 0,
-        "targetCards": 2,
+        "targetCards": 5,
+        "targetQuizzes": 0
+      }
+    },
+    {
+      "key": "prop",
+      "order": 5,
+      "name": "2차 재물 (회계원리·해상보험·책임화재기술)",
+      "shortName": "2차 재물",
+      "contentHash": "26bf1eeb",
+      "stats": {
+        "cards": 0,
+        "quizzes": 0,
+        "chapters": 1,
+        "sourceCards": 13,
+        "sourceQuizzes": 0,
+        "targetCards": 0,
+        "targetQuizzes": 0
+      }
+    },
+    {
+      "key": "vehicle",
+      "order": 6,
+      "name": "2차 차량 (자동차보험 대물·차손·구조정비)",
+      "shortName": "2차 차량",
+      "contentHash": "505f713e",
+      "stats": {
+        "cards": 0,
+        "quizzes": 0,
+        "chapters": 1,
+        "sourceCards": 7,
+        "sourceQuizzes": 0,
+        "targetCards": 0,
+        "targetQuizzes": 0
+      }
+    },
+    {
+      "key": "bodily",
+      "order": 7,
+      "name": "2차 신체 (의학·책임근재보·제3보험·자동차 대인)",
+      "shortName": "2차 신체",
+      "contentHash": "77cc4e86",
+      "stats": {
+        "cards": 0,
+        "quizzes": 0,
+        "chapters": 1,
+        "sourceCards": 10,
+        "sourceQuizzes": 1,
+        "targetCards": 0,
         "targetQuizzes": 0
       }
     }

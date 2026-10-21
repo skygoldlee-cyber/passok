@@ -1,0 +1,32 @@
+[
+  {
+    "numbers": [{"number": "4", "unit": "항목"}],
+    "context": "대물 손해 구성: 수리비·시세하락·휴차료·대차료(영업손실)",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "2", "unit": "과목"}],
+    "context": "차량 종별 2차 과목: 자동차보험(대물·차량손해)·자동차 구조·정비",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "3", "unit": "단계"}],
+    "context": "판금수리 작업공정 3단계: 손상부 판정·탈거 → 판금(인발·성형) → 표면처리·도장 준비",
+    "isKey": false,
+    "category": "🔧 공정·기준"
+  },
+  {
+    "numbers": [{"number": "12", "unit": "V"}],
+    "context": "전기차 저전압 배터리 12V — 고전압 배터리가 DC-DC 컨버터로 충전",
+    "isKey": true,
+    "category": "🔧 공정·기준"
+  },
+  {
+    "numbers": [{"number": "3", "unit": "요소"}],
+    "context": "차륜정렬 3요소: 캠버·캐스터·토인",
+    "isKey": true,
+    "category": "🔧 공정·기준"
+  }
+]

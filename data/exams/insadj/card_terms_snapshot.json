@@ -56,5 +56,52 @@
    "second_card_04f093": "산재보험"
   },
   "quizzes": {}
+ },
+ "prop": {
+  "cards": {
+   "prop_card_8e1d09": "정액법",
+   "prop_card_81db3e": "정률법",
+   "prop_card_170be6": "생산량비례법",
+   "prop_card_f6f028": "ICC(A)",
+   "prop_card_14d833": "ICC(B)",
+   "prop_card_a033fe": "ICC(C)",
+   "prop_card_a220ac": "전문직업배상책임",
+   "prop_card_923888": "손실충당금(ECL)",
+   "prop_card_be1305": "협정보험가액",
+   "prop_card_303810": "공동해손",
+   "prop_card_20df8b": "통지의무",
+   "prop_card_70dd86": "특수건물 의무가입",
+   "prop_card_84bf51": "영업손실보험"
+  },
+  "quizzes": {}
+ },
+ "vehicle": {
+  "cards": {
+   "vehicle_card_51e3ba": "시세하락·휴차료",
+   "vehicle_card_59524a": "차량단독사고 특약",
+   "vehicle_card_0a5aa0": "표준작업시간",
+   "vehicle_card_416d99": "경성사기·연성사기",
+   "vehicle_card_67f7e4": "볼트온·웰드온",
+   "vehicle_card_4c2082": "ADAS 캘리브레이션",
+   "vehicle_card_f02901": "덴드라이트"
+  },
+  "quizzes": {}
+ },
+ "bodily": {
+  "cards": {
+   "bodily_card_7c36dd": "요양급여",
+   "bodily_card_9d8196": "휴업급여",
+   "bodily_card_cd7fed": "장해급여",
+   "bodily_card_3f5599": "유족급여·장의비",
+   "bodily_card_13831d": "반월상연골판",
+   "bodily_card_ef80bf": "CDR 척도",
+   "bodily_card_3310f0": "평균임금",
+   "bodily_card_524476": "휴업급여 70%",
+   "bodily_card_65886f": "4세대 실손",
+   "bodily_card_1c5e95": "무보험차상해"
+  },
+  "quizzes": {
+   "bodily_quiz_ab2d97": "평균임금 70% (휴업 기간)|휴업급여"
+  }
  }
 }
