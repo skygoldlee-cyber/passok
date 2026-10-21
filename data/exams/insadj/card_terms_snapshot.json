@@ -1,0 +1,53 @@
+{
+ "contract": {
+  "cards": {
+   "contract_card_fe7795": "보험계약",
+   "contract_card_5f8773": "낙부 통지",
+   "contract_card_5fac8f": "고지의무",
+   "contract_card_b1afba": "보험대위",
+   "contract_card_5ccf5e": "일부보험",
+   "contract_card_7821dd": "보증보험"
+  },
+  "quizzes": {}
+ },
+ "act": {
+  "cards": {
+   "act_card_54d782": "보험설계사",
+   "act_card_df1e57": "보험대리점",
+   "act_card_35cc1a": "보험중개사",
+   "act_card_3eec05": "제3보험",
+   "act_card_0d5d76": "보험모집",
+   "act_card_58117d": "기초서류",
+   "act_card_acf7cb": "손해사정",
+   "act_card_902254": "손해사정업자"
+  },
+  "quizzes": {}
+ },
+ "theory": {
+  "cards": {
+   "theory_card_579805": "손해사정사",
+   "theory_card_91ca28": "이득 금지의 원칙",
+   "theory_card_e69b2d": "비례보상",
+   "theory_card_a774c8": "보험대위",
+   "theory_card_ed4040": "과실상계",
+   "theory_card_7c544e": "제1위험보상",
+   "theory_card_afac05": "임의재보험",
+   "theory_card_e91821": "특약재보험",
+   "theory_card_1553f7": "비례재보험",
+   "theory_card_3d4715": "비비례재보험"
+  },
+  "quizzes": {
+   "theory_quiz_57fa72": "손해액 기준 초과분 담보 — 초과손해(XL)·손해율(Stop Loss)|비비례재보험"
+  }
+ },
+ "second": {
+  "cards": {
+   "second_card_447081": "책임보험",
+   "second_card_86c1a3": "정부보장사업",
+   "second_card_375716": "별표1 대인배상 지급기준",
+   "second_card_5029b8": "신뢰의 원칙",
+   "second_card_04f093": "산재보험"
+  },
+  "quizzes": {}
+ }
+}

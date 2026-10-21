@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "contentYear": "2027",
+  "textbookEdition": "2027",
+  "subjects": [
+    {
+      "key": "contract",
+      "order": 1,
+      "name": "보험계약법(상법 보험편)",
+      "shortName": "보험계약법",
+      "dir": "교재/contract",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "보험계약법 (전체)",
+          "file": "보험계약법.md"
+        }
+      ]
+    },
+    {
+      "key": "act",
+      "order": 2,
+      "name": "보험업법",
+      "shortName": "보험업법",
+      "dir": "교재/act",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "보험업법 (전체)",
+          "file": "보험업법.md"
+        }
+      ]
+    },
+    {
+      "key": "theory",
+      "order": 3,
+      "name": "손해사정이론",
+      "shortName": "손사이론",
+      "dir": "교재/theory",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "손해사정이론 (전체)",
+          "file": "손해사정이론.md"
+        }
+      ]
+    },
+    {
+      "key": "second",
+      "order": 4,
+      "name": "2차 준비(법령·기준 참고)",
+      "shortName": "2차 참고",
+      "dir": "교재/second",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "2차 준비 (전체)",
+          "file": "2차_준비.md"
+        }
+      ]
+    }
+  ],
+  "exams": [
+    {
+      "key": "subject1",
+      "subject": "contract",
+      "part": 1,
+      "title": "보험계약법",
+      "file": "과목1_문제은행.md"
+    },
+    {
+      "key": "subject2",
+      "subject": "act",
+      "part": 2,
+      "title": "보험업법",
+      "file": "과목2_문제은행.md"
+    },
+    {
+      "key": "subject3",
+      "subject": "theory",
+      "part": 3,
+      "title": "손해사정이론",
+      "file": "과목3_문제은행.md"
+    },
+    {
+      "key": "subject4",
+      "subject": "second",
+      "part": 4,
+      "title": "2차 준비 참고",
+      "file": "과목4_참고.md"
+    }
+  ],
+  "integratedExam": {
+    "questionsPerSubject": {
+      "contract": 40,
+      "act": 40,
+      "theory": 40
+    },
+    "examTimeMin": 120,
+    "passAverage": 60,
+    "subjectFailBelow": 40
+  },
+  "uiText": {}
+}
