@@ -39,14 +39,11 @@
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc && exam.desc) metaDesc.setAttribute('content', exam.desc);
 
-        // iOS '홈 화면에 추가' 시 사용되는 앱 이름 — 시험별 앱 이름으로 교체
-        // (iOS는 추가 시점의 메타 값을 읽으므로 설치 전에 반영되어야 한다)
-        const appName = exam.appNameEn
-            || exam.appName
-            || (((exam.logoMain || '') + (exam.logoSub || '')).trim())
-            || exam.name;
+        // iOS '홈 화면에 추가' 시 사용되는 앱 이름 — 단일 앱 정책으로 'Passory' 고정
+        // (webmanifest name과 동일 정체성 — 어느 시험에서 추가해도 같은 아이콘 라벨.
+        //  iOS는 추가 시점의 메타 값을 읽으므로 부팅 시 반영되어야 한다)
         const appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
-        if (appleTitle && appName) appleTitle.setAttribute('content', appName);
+        if (appleTitle) appleTitle.setAttribute('content', 'Passory');
 
         // 시험별 스킨 (DA-14) — 부팅 최초 프레임부터 활성 시험 팔레트를 적용한다.
         // html[data-exam]은 CSS 측 규약 오버라이드(cascade)용 속성,
