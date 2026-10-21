@@ -345,10 +345,18 @@ async function main() {
             console.warn(`⚠️  스탬프 원복 실패 — 수동으로 복원하세요: ${stampedFiles.join(', ')} (${e.message})`);
         }
     };
-    if (stamp.changed) {
+    if (stamp.newValue) {
+        // build:data가 이미 sw.js를 HEAD 해시로 재스탬프하므로 stamp.changed는
+        // '신버전 배포'가 아니라 빌드 스탬프 여부일 뿐 — version.js·릴리스 노트·
+        // package.json은 배포마다 갱신해야 한다.
+        // prevVersion(자동 초안의 커밋 범위 기준)은 version.js에 남은 이전
+        // 배포 스탬프에서 읽는다 — stamp.oldValue는 이미 HEAD라 쓸 수 없다.
+        const prevDeployed = (fs.readFileSync(
+            path.join(__dirname, '..', '..', 'data', 'version.js'), 'utf8')
+            .match(/APP_VERSION\s*=\s*'([^']+)'/) || [])[1];
         // data/version.js를 동일 버전으로 갱신하고, pending 노트를 확정
         // (pending이 없으면 커밋 subject로 자동 초안 — 배포 전 notes:draft로 편집 권장)
-        stampReleaseNotes({ version: stamp.newValue, prevVersion: stamp.oldValue });
+        stampReleaseNotes({ version: stamp.newValue, prevVersion: prevDeployed });
         // porcelain 캡처 대신 스탬프 대상 파일을 명시 — 직후 status가 stat 캐시로
         // 방금 쓴 파일을 놓치는(racy-clean) 경합이 관측돼 원복 누락이 생겼다.
         stampedFiles.push('sw.js', 'data/version.js', 'data/release-notes.js',
