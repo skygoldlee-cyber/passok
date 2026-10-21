@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 2c1fefd190e72bc7
-> 생성: 2026-10-21 · 원천: SPEC.md(565개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: d18732d243acc0b6
+> 생성: 2026-10-21 · 원천: SPEC.md(566개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 565개 — 문서 연결 395 · 소스 연결 505 · 테스트 연결 538 · 보고서 연결 109
+**커버리지 요약**: 요구사항 566개 — 문서 연결 395 · 소스 연결 505 · 테스트 연결 538 · 보고서 연결 109
 
 ---
 
@@ -282,10 +282,10 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| MV-01 | ✅ | E2E 테스트 | DOC-REF-04 | src/doc-overlay.js<br>src/manual-viewer.js | tests/dom/doc-overlay.dom.test.js<br>tests/dom/study-manual.dom.test.js<br>tests/e2e/flows.spec.js | — | — |
-| MV-02 | ✅ | E2E 테스트 | DOC-REF-04 | src/doc-overlay.js<br>src/manual-viewer.js<br>src/mermaid-render.js | tests/dom/doc-overlay.dom.test.js<br>tests/dom/study-manual.dom.test.js<br>tests/e2e/flows.spec.js | — | — |
-| MV-03 | ✅ | 테스트 | DOC-REF-04 | src/doc-overlay.js<br>src/manual-viewer.js | tests/dom/doc-overlay.dom.test.js<br>tests/dom/study-manual.dom.test.js | — | — |
-| MV-04 | ✅ | 테스트 | DOC-REF-04 | src/doc-overlay.js<br>src/manual-viewer.js<br>tools/build/build_doc_bundles.js | tests/dom/doc-overlay.dom.test.js<br>tests/dom/study-manual.dom.test.js | — | — |
+| MV-01 | ✅ | E2E 테스트 | DOC-REF-04<br>DOC-USR-07 | src/doc-overlay.js<br>src/manual-viewer.js | tests/dom/doc-overlay.dom.test.js<br>tests/dom/study-manual.dom.test.js<br>tests/e2e/flows.spec.js | — | — |
+| MV-02 | ✅ | E2E 테스트 | DOC-REF-04<br>DOC-USR-07 | src/doc-overlay.js<br>src/manual-viewer.js<br>src/mermaid-render.js | tests/dom/doc-overlay.dom.test.js<br>tests/dom/study-manual.dom.test.js<br>tests/e2e/flows.spec.js | — | — |
+| MV-03 | ✅ | 테스트 | DOC-REF-04<br>DOC-USR-07 | src/doc-overlay.js<br>src/manual-viewer.js | tests/dom/doc-overlay.dom.test.js<br>tests/dom/study-manual.dom.test.js | — | — |
+| MV-04 | ✅ | 테스트 | DOC-REF-04<br>DOC-USR-07 | src/doc-overlay.js<br>src/manual-viewer.js<br>tools/build/build_doc_bundles.js | tests/dom/doc-overlay.dom.test.js<br>tests/dom/study-manual.dom.test.js | — | — |
 
 ## 3.16 차트 및 시각화
 
@@ -674,6 +674,7 @@
 | UX-PWA-04 | 미설치 상태에서만 노출, 설치 후 자동 숨김 — 헤더 공간 절약 | E2E 테스트 | DOC-DSN-25 | src/pwa-install.js | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
 | UX-PWA-05 | PWA 콜드 스타트에서 `dvh`가 실제 화면보다 크게 측정되면 `.main-content` 끝이 화면 밖으로 밀려 스크롤 끝 콘텐츠가 탭 바에 가려짐(대시보드 '내 학습 분석·도구' 실제 장애). JS 미실행 시 `100dvh` 폴백 | E2E 테스트 | DOC-DSN-25 | src/app.js | tests/dom/app-shell.dom.test.js<br>tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
 | UX-PWA-06 | 현장(실습·조제실)에서 대시보드 경유 탭을 생략. 시험 도메인 기능이라 플랫폼 공통 `manifest.webmanifest`가 아닌 시험별 매니페스트에만 선언 — exams.json `pwaShortcuts` → `build_exams_list.js` 패스스루 | E2E 테스트 | — | tools/build/build_exams_list.js | tests/e2e/exams/cosmetic/formula-tablet.spec.js<br>tests/unit/pwa-sw.test.js | — | — |
+| UX-PWA-07 | `id`가 다르면 브라우저가 별개 앱으로 인식해 중복 설치되고, `name`이 다르면 아이콘이 설치 시점 시험명으로 고정된다(설치 후 시험 전환해도 갱신 불가 — 설치 시 manifest URL만 재조회). 시험 구분은 document.title·로고·shortcuts 등 앱 내부 브랜딩으로 표현 | — | — | — | — | — | — |
 | UX-SCR-01 | `@media (pointer: coarse), (max-width: 900px) { * { scrollbar-width: none } ::-webkit-scrollbar { width:0; height:0 } }` — `pointer: coarse`만 믿지 말고 폭 기준을 병기할 것(일부 기기에서 pointer 감지 실패 사례 있음). 모바일 스크롤바는 드래그용이 아니므로 위치 표시도 불필요 | E2E 테스트 | DOC-DSN-25 | css/reader.css<br>src/views/reader-toolbar.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
 | UX-SCR-02 | `*` 또는 개별 컨테이너에 지정 | E2E 테스트 | DOC-DSN-25 | css/reader.css | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
 | UX-SCR-03 | 하드코딩 색상은 다크/라이트 한쪽에서 묻힘 (실제로 미정의 변수 폴백으로 라이트 배경에 흰 카드가 되는 사고 있었음 — `.comp-item` 사례) | E2E 테스트 | — | css/reader.css | tests/e2e/app-chrome.spec.js<br>tests/unit/ux-invariants.test.js | — | — |
@@ -932,6 +933,7 @@
 | DOC-USR-04 | docs/exams/cosmetic/user/subject2_numbers.md | ND-01 |
 | DOC-USR-05 | docs/exams/cosmetic/user/subject3_numbers.md | ND-01 |
 | DOC-USR-06 | docs/exams/cosmetic/user/subject4_numbers.md | ND-01 |
+| DOC-USR-07 | docs/user/user_manual.md | MV-01, MV-02, MV-03, MV-04 |
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 

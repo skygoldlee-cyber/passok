@@ -27,7 +27,7 @@ test.describe('비기본 시험(lossadj) 부팅 — 도메인 격리', () => {
         await expect(page.locator('.logo-text span')).toHaveText('손해평가사 · Passess');
         await expect(page.locator('.logo-icon')).toHaveClass(/fa-tractor/);
         await expect(page.locator('[data-app-name]').first()).toHaveText('Passory 손해평가사');
-        // pwa-manifest.js가 실제 파일로 링크 교체 (시험별 개별 설치 — 기본 시험도 동일)
+        // pwa-manifest.js가 실제 파일로 링크 교체 (단일 앱 id='passory' — 시험별 shortcuts·desc만 교체)
         await expect(page.locator('link[rel="manifest"]'))
             .toHaveAttribute('href', /manifest\.lossadj\.webmanifest/);
         expect(page._errors.filter(e => !/favicon|manifest/i.test(e))).toEqual([]);
