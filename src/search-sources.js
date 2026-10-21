@@ -321,9 +321,11 @@ export async function _loadExamMdText(mdPath) {
     return _loadMdText(mdPath, '__EXAM_MD__', dataPath('exams_md/'), 'data-exam-bundle');
 }
 
-/** 시험 문서(docs/) MD — __DOC_MD__ 번들/docs_md 경로 규약 (manual-viewer와 동일) */
+/** 시험 문서(docs/) MD — __DOC_MD__ 번들/docs_md 경로 규약 (manual-viewer와 동일).
+ *  앱 공용 문서(docs/user/ 등 'docs/' 접두)는 data/docs_md/, 시험별 문서는 {dataRoot}/docs_md/. */
 async function _loadDocMdText(mdPath) {
-    return _loadMdText(mdPath, '__DOC_MD__', dataPath('docs_md/'), 'data-doc-bundle');
+    const dir = mdPath.startsWith('docs/') ? 'data/docs_md/' : dataPath('docs_md/');
+    return _loadMdText(mdPath, '__DOC_MD__', dir, 'data-doc-bundle');
 }
 
 /**
@@ -356,22 +358,28 @@ async function loadExamEntries() {
 /**
  * 시험 팩 선언 문서 로드 (지연 소스, 기본 kind='doc').
  * manifest.searchDocs: [{file, title, subject?, kind?, feature?}] —
- *   file    contentRoot 상대 경로 (예: 'docs/user_manual.md')
+ *   file    contentRoot 상대 경로 (예: 'docs/학습안내서.md')
  *   subject 과목 키 (미지정 시 미귀속)
  *   kind    결과 버킷·배지 종류 (기본 'doc')
  *   feature feature 플래그 게이트 — 비활성 시험에서는 건너뜀
  * 시험 팩이 검색 범위를 코드 수정 없이 manifest 선언으로 확장하는 경로다.
+ * 앱 공용 문서(사용자 매뉴얼 — docs/user/)는 COMMON_DOCS로 모든 시험에 자동 병합된다
+ * (common:true 항목의 file은 contentRoot가 아닌 리포 루트 상대 경로).
  * @returns {Promise<Array<object>>}
  */
+const COMMON_DOCS = [
+    { file: PATHS.USER_MANUAL, title: '사용자 매뉴얼', common: true },
+];
+
 export async function _loadExamDocEntries() {
     const manifest = await DataLoader._getManifest();
-    const docs = manifest.searchDocs || [];
+    const docs = [...COMMON_DOCS, ...(manifest.searchDocs || [])];
     const subjNameOf = {};
     for (const s of manifest.subjects || []) subjNameOf[s.key] = s.name;
     return (await Promise.all(docs.map(async (d) => {
         if (!d || !d.file) return null;
         if (d.feature && !hasFeature(d.feature)) return null;
-        const mdPath = contentPath(d.file);
+        const mdPath = d.common ? d.file : contentPath(d.file);
         const text = await _loadDocMdText(mdPath);
         if (!text) return null;
         return _doc({

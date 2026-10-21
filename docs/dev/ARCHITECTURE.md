@@ -920,10 +920,11 @@ const state = {
 |---|---|
 | `studyGuide` | `학습안내서.md` |
 | `appendixDocs` | `두음법_암기_총정리.md` |
-| `userManual` | `user_manual.md` |
 | `formula` | `formula_manual.md` |
 
 위반 시 `check:docbundles`(--check)가 오류로 실패. 문서 없는 시험은 해당 파일을 두지 않으면 된다(경고 없이 스킵).
+
+> ※ 사용자 매뉴얼은 앱 공용 문서로 전환됐다 — `docs/user/user_manual.md` (GLOBAL_DOCS → `data/docs_md/`, 전 시험 무조건 노출). 시험별 `user_manual.md`·`features.userManual` 플래그는 폐기.
 
 ### UI 텍스트 커버리지
 

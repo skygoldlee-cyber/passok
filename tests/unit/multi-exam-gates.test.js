@@ -46,9 +46,10 @@ describe('멀티시험 게이트 — check:uitext', () => {
 
 describe('멀티시험 게이트 — 문서 번들 불변식', () => {
     // build_doc_bundles.js의 FEATURE_DOCS와 동일 계약
+    // 사용자 매뉴얼은 앱 공용 문서(docs/user/)라 플래그 불변식 대상이 아니다
     const FEATURE_DOCS = {
         studyGuide: '학습안내서.md', appendixDocs: '두음법_암기_총정리.md',
-        userManual: 'user_manual.md', formula: 'formula_manual.md',
+        formula: 'formula_manual.md',
     };
 
     it('features 플래그 활성 시험은 대응 문서를 반드시 보유한다', () => {
@@ -68,5 +69,36 @@ describe('멀티시험 게이트 — 문서 번들 불변식', () => {
     it('check:docbundles --check가 통과한다', () => {
         const out = run('tools/build/build_doc_bundles.js', ['--check']);
         assert.match(out, /원본과 일치/);
+    });
+});
+
+describe('멀티시험 게이트 — 앱 공용 사용자 매뉴얼', () => {
+    const COMMON_MANUAL = 'docs/user/user_manual.md';
+
+    it('공용 매뉴얼 원본이 존재하고 platform 범위 헤더를 가진다', () => {
+        const md = readFileSync(join(ROOT, COMMON_MANUAL), 'utf8');
+        assert.match(md, /DOC-USR-\d+/);
+        assert.match(md, /범위\*\*: platform/);
+        // 시험 도메인 경로·전용 도구명이 공용 문서에 새면 안 된다
+        assert.ok(!/content\/exams\//.test(md), '시험 콘텐츠 경로 참조 금지');
+    });
+
+    it('어떤 시험도 userManual 플래그를 선언하지 않는다 (공용 문서라 게이트 불필요)', () => {
+        for (const e of examsData.exams) {
+            assert.ok(!(e.features && 'userManual' in e.features),
+                `${e.id}: userManual은 폐기된 플래그 — 매뉴얼은 docs/user/ 공용 문서`);
+        }
+    });
+
+    it('PATHS.USER_MANUAL은 시험 스코프가 아닌 고정 경로다', async () => {
+        const { PATHS } = await import('../../src/paths.js');
+        assert.equal(PATHS.USER_MANUAL, COMMON_MANUAL);
+        assert.ok(!PATHS.USER_MANUAL.includes('exams/'), '시험별 contentRoot 하위 경로 금지');
+    });
+
+    it('sw.js 프리캐시 MD_ASSETS에 공용 매뉴얼이 포함된다', () => {
+        const sw = readFileSync(join(ROOT, 'sw.js'), 'utf8');
+        assert.ok(sw.includes(`'./${COMMON_MANUAL}'`),
+            'sw.js MD_ASSETS에 ./docs/user/user_manual.md 필요 — sync_textbook_files 실행');
     });
 });

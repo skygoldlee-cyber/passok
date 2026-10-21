@@ -24,7 +24,7 @@
 
 | 문서 | 판본 |
 |------|------|
-| `content/exams/cosmetic/docs/user_manual.md` | none |
+| `docs/user/user_manual.md` (앱 공용 — 시험 무관) | none |
 | `content/exams/cosmetic/docs/formula_manual.md` | none |
 | `content/exams/cosmetic/docs/학습안내서.md` | textbook |
 | `content/exams/cosmetic/docs/두음법_암기_총정리.md` | textbook |

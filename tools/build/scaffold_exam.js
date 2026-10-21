@@ -247,8 +247,8 @@ function scaffold(id, opts) {
     console.log('     - 미완성 시험은 exams.json 엔트리에 comingSoon: true 추가');
     console.log('  2. (법령 시험이면) content/lawdb.json에 법령 추가 + references.json.lawRefs 나열 → npm.cmd run build:pdf-registry');
     console.log('  3. exams.json의 features 플래그 설정 — 활성 시 필수 문서 (docs/):');
-    console.log('       studyGuide→학습안내서.md · appendixDocs→두음법_암기_총정리.md');
-    console.log('       userManual→user_manual.md · formula→formula_manual.md');
+    console.log('       studyGuide→학습안내서.md · appendixDocs→두음법_암기_총정리.md · formula→formula_manual.md');
+    console.log('       (사용자 매뉴얼은 앱 공용 문서 docs/user/user_manual.md — 시험별 불필요)');
     console.log('     (check:docbundles가 플래그↔문서 불변식을 강제 — docs/*.md는 문서 ID+범위 헤더 필수)');
     console.log('  4. npm.cmd run build:data ×2회 → node tools/build/build_doc_bundles.js');
     console.log('     (sw.js는 기본 시험 패스에서만 갱신되어 신규 시험 registry는 2차 빌드에서 반영)');

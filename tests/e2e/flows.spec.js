@@ -79,7 +79,7 @@ test.describe('프로덕션 CSP 하 콘텐츠 렌더', () => {
         expect(csp).toContain("script-src 'self'");
         expect(csp).not.toContain('unsafe-eval');
 
-        // 학습안내서(user_manual)에 mermaid 블록 포함 — 지연 로딩 후 렌더
+        // 사용자 매뉴얼(user_manual — 앱 공용 문서)에 mermaid 블록 포함 — 지연 로딩 후 렌더
         // 데스크톱은 사이드바 매뉴얼 버튼, 모바일은 '더보기' 시트 안에 있다
         const manualBtn = page.locator('[data-click="ManualViewer.openManual"]:visible').first();
         if (await manualBtn.count() > 0) {

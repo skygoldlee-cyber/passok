@@ -3,8 +3,9 @@
 // 외부 의존성: escapeHTML (src/sanitize.js — index.html에서 가장 먼저 로드됨)
 //
 // [설계] 예상문제집 뷰어(src/exam-viewer.js)와 동일한 패턴을 사용하여
-//   docs/user_manual.md 를 런타임에 fetch → MD→HTML 변환 → 전체화면 오버레이로 표시합니다.
-//   - 별도 HTML 파일 생성이 불필요하여 user_manual.md 업데이트 시 자동 동기화
+//   docs/user/user_manual.md(앱 공용)·{contentRoot}/docs/*.md(시험별)를 런타임에
+//   fetch → MD→HTML 변환 → 전체화면 오버레이로 표시합니다.
+//   - 별도 HTML 파일 생성이 불필요하여 원본 md 업데이트 시 자동 동기화
 //   - file:// 프로토콜에서는 fetch가 차단되므로 번들 방식 폰트 폴로백
 //   - 전역 테마(--bg-app, --color-text-main 등)를 자동으로 따라감
 //   - 오버레이 셸·캐시·TOC·번들 주입은 src/doc-overlay.js 공용 베이스 사용
@@ -294,7 +295,7 @@ body.manual-open{overflow:hidden;}
        --------------------------------------------------------- */
 
     // 'content/exams/<id>/docs/학습안내서.md' → '{dataRoot}/docs_md/학습안내서.js' (시험별 문서)
-    // 'docs/<stem>.md' → 'data/docs_md/<stem>.js' (앱 공용 문서 — 현재 미사용 슬롯)
+    // 'docs/<stem>.md' → 'data/docs_md/<stem>.js' (앱 공용 문서 — 사용자 매뉴얼은 docs/user/)
     function _bundlePathFor(sourceKey) {
         const src = MD_SOURCES[sourceKey];
         if (!src) return null;

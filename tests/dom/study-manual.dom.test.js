@@ -99,8 +99,8 @@ describe('매뉴얼 뷰어 — 문서 열기·TOC·전환', () => {
 
         const imgs = el('manual-article').querySelectorAll('img');
         expect(imgs.length).toBe(3);
-        // 상대 경로는 문서가 있는 docs/ 디렉터리 기준 절대 URL로 해석
-        expect(imgs[0].src).toMatch(/^https?:\/\/.+\/docs\/map\.svg$/);
+        // 상대 경로는 문서가 있는 docs/user/ 디렉터리 기준 절대 URL로 해석
+        expect(imgs[0].src).toMatch(/^https?:\/\/.+\/docs\/user\/map\.svg$/);
         // http·data: URL은 그대로 유지
         expect(imgs[1].src).toBe('https://x.test/a.png');
         expect(imgs[2].src).toMatch(/^data:image\/svg/);
