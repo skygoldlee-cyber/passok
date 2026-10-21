@@ -264,7 +264,7 @@ passory/
 │   ├── pdf-registry.js         #   참조자료 중앙 설정 — 시험별 테이블(_EXAM_TABLES) + getRefTables()
 │   ├── mermaid-render.js       #   Mermaid 지연 로딩·렌더링·확대 모달 공용 (reader/search/manual — 데스크탑 전용)
 │   ├── image-zoom.js           #   본문 이미지(.reader-img) 라이트박스 — 데스크탑 전용 (모바일은 핀치 줌)
-│   ├── pwa-manifest.js         #   시험별 동적 PWA 매니페스트 (클래식 스크립트)
+│   ├── pwa-manifest.js         #   활성 시험 기준 PWA 매니페스트 링크 교체 (단일 앱 id='passory' · 클래식)
 │   ├── html-viewer.js          #   참조자료 fetch+DOM 뷰어, 검색, 하이라이트
 │   ├── exam-viewer.js          #   문제은행 MD 런타임 뷰어 (인용 링크 네비게이션, 라인 하이라이트)
 │   ├── combo-doc.js            #   복수정답형 드릴 번들 → 문제집 MD 런타임 직렬화 (openCombo 경유)

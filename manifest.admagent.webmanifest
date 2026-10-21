@@ -1,7 +1,7 @@
 {
-  "id": "admagent-pass",
-  "name": "Passory — 일반행정사 (Passmin)",
-  "short_name": "행정사",
+  "id": "passory",
+  "name": "Passory",
+  "short_name": "Passory",
   "description": "일반행정사 — 7과목 (1차 필기 객관식: 민법총칙·행정법·행정학개론 과목당 25개 + 2차 주관식: 민법계약·행정절차론·사무관리론·행정사실무법) · 행정사법 시행령 별표1 기준 자체 제작 · 문제은행 24문",
   "start_url": "./index.html",
   "scope": "./",

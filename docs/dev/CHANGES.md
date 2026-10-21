@@ -7,6 +7,16 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 PWA 단일 플랫폼 앱 통일 — 시험별 manifest 정체성 분리 폐기
+
+- **배경**: "PWA 아이콘이 무조건 'Passory — 맞춤형화장품 조제관리사 (Passmula)'로 표시" — 설치된 PWA의 이름은 설치 시점 manifest에 고정되고, 시험별 `<id>-pass` id는 브라우저가 별개 앱으로 인식해 (1) 시험 전환해도 아이콘 미갱신 (2) 다른 시험에서 설치 시 중복 앱 생성이 가능했다
+- **정책 결정**: 플랫폼 단일 앱 — 어느 시험에서 설치해도 'Passory' 하나 (사용자 선택)
+- **수정**: `buildExamManifest`의 `id`·`name`·`short_name`을 `'passory'`/`'Passory'`로 통일 — 시험별 파일은 `description`·`shortcuts`(pwaShortcuts 패스스루)만 다름. `pwa-manifest.js`의 활성 시험 링크 교체는 유지(시험별 shortcuts·desc 반영)
+- **베이스 갱신**: `manifest.webmanifest` — id `cosmetic-pass`→`passory`, name `Passory`, cosmetic 종속 description→플랫폼 설명 (부팅 전 폴백도 동일 정체성)
+- **SPEC**: UX-PWA-07 신규 — 단일 앱 정체성 불변식 명문화
+- **테스트**: pwa-sw에 단일 정체성 불변식 단정 추가 — buildExamManifest 출력 + 생성된 전체 manifest 파일의 id/name 일치 검증
+- **참고**: 기존 설치 앱은 과거 id(`<exam>-pass`)로 남아 업데이트로 자동 전환되지 않음 — 새 정책 적용은 재설치 필요
+
 ## 2026-10-21 사용자 매뉴얼 앱 공용 문서화 — 시험별 userManual 플래그 폐기
 
 - **배경**: 사용자 매뉴얼은 플랫폼 공통(앱 조작법) 내용이어야 하고, 교재 학습법은 시험별 학습안내서가 담당해야 한다는 요구. 기존 매뉴얼은 `content/exams/cosmetic/docs/user_manual.md` + `features.userManual` 게이트라 (1) 매뉴얼이 없는 시험에선 내비 버튼 자체가 숨고 (2) 공통 내용이 cosmetic 팩에 종속이었다

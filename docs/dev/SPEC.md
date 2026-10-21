@@ -813,6 +813,7 @@
 | UX-PWA-04 | **설치 버튼은 `beforeinstallprompt` 캡처 후에만 표시** | 미설치 상태에서만 노출, 설치 후 자동 숨김 — 헤더 공간 절약 |
 | UX-PWA-05 | **앱 셸 높이는 JS 실측 `--app-height` 사용**: `.app-container { height: var(--app-height, 100dvh) }` + `visualViewport.height`/`innerHeight` 측정, resize 계열 이벤트에 자동 갱신 | PWA 콜드 스타트에서 `dvh`가 실제 화면보다 크게 측정되면 `.main-content` 끝이 화면 밖으로 밀려 스크롤 끝 콘텐츠가 탭 바에 가려짐(대시보드 '내 학습 분석·도구' 실제 장애). JS 미실행 시 `100dvh` 폴백 |
 | UX-PWA-06 | **manifest `shortcuts`로 작업 직행 제공**: cosmetic 매니페스트에 '배합 계산기' 딥링크(`./index.html#/formula`) 등록 — 설치형 PWA의 앱 아이콘 길게 눌러 바로 진입 | 현장(실습·조제실)에서 대시보드 경유 탭을 생략. 시험 도메인 기능이라 플랫폼 공통 `manifest.webmanifest`가 아닌 시험별 매니페스트에만 선언 — exams.json `pwaShortcuts` → `build_exams_list.js` 패스스루 |
+| UX-PWA-07 | **단일 플랫폼 앱 정체성**: 모든 `manifest.<id>.webmanifest`의 `id`·`name`·`short_name`은 `'passory'`/`'Passory'`로 통일 — 시험별 파일은 `description`·`shortcuts`만 다르고 `pwa-manifest.js`가 활성 시험 파일로 링크를 교체한다 | `id`가 다르면 브라우저가 별개 앱으로 인식해 중복 설치되고, `name`이 다르면 아이콘이 설치 시점 시험명으로 고정된다(설치 후 시험 전환해도 갱신 불가 — 설치 시 manifest URL만 재조회). 시험 구분은 document.title·로고·shortcuts 등 앱 내부 브랜딩으로 표현 |
 
 #### 4.8.6 폼·입력
 
