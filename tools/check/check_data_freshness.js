@@ -40,9 +40,8 @@ const BUILD_STEPS = [
     'build_id_migration.js',
 ];
 
-// 이 패턴에 해당하는 라인만 바뀐 diff는 드리프트로 간주하지 않는다
-// (생성 시각·HEAD 스탬프 — 내용 드리프트가 아님)
-const NOISE_LINE = /"generatedAt"\s*:|^\/\/ 생성:.*\|\s*\d{4}-|CACHE_VERSION\s*=\s*['"]/;
+// 노이즈 라인 판정은 lib 공용 — 생성 시각·HEAD 스탬프만의 차이는 드리프트 아님
+const { isNoiseOnlyDiff: isNoiseOnlyDiffText } = require('../lib/git_status.js');
 
 // 생성물 경로 판정 (git이 반환하는 POSIX 스타일 경로 기준)
 function inScope(p) {
@@ -75,17 +74,11 @@ function untracked() {
 
 /** 파일의 작업트리 diff가 노이즈 라인만으로 구성됐는지 판정 */
 function isNoiseOnlyDiff(file) {
-    let diff;
     try {
-        diff = git(['diff', '-U0', 'HEAD', '--', file]);
+        return isNoiseOnlyDiffText(git(['diff', '-U0', 'HEAD', '--', file]));
     } catch {
         return false;
     }
-    const changed = diff.split('\n').filter(l =>
-        (l.startsWith('+') && !l.startsWith('+++')) ||
-        (l.startsWith('-') && !l.startsWith('---')));
-    if (!changed.length) return true;
-    return changed.every(l => NOISE_LINE.test(l.slice(1)));
 }
 
 /** 생성물 범위를 HEAD 상태로 복원 (수정·삭제 파일은 checkout, 신규 파일은 삭제) */

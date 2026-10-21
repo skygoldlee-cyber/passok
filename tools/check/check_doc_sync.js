@@ -25,6 +25,7 @@
 
 // @spec none (문서 동기화 게이트)
 const { execSync } = require('child_process');
+const { parseStatusLine } = require('../lib/git_status.js');
 
 // 문서 갱신을 요구하는 변경 — 관련 문서가 스테일해질 수 있는 경로
 const TRIGGERS = [
@@ -133,13 +134,6 @@ function listRange(ref) {
     }
     return [...files];
 }
-/** git status --porcelain 한 줄에서 파일 경로를 추출한다.
- * 상태 열은 1~2글자+공백 — 출력 trim으로 첫 줄 선행 공백이 제거될 수 있어 slice(3) 부정확. */
-function parseStatusLine(line) {
-    const path = line.replace(/^[A-Z?! ]{1,2} /, '').split(' -> ').pop();
-    return path.replace(/^"|"$/g, '');
-}
-
 function listWorkingTree() {
     // porcelain으로 신규(untracked) 파일도 포착 — diff HEAD는 미추적 파일을 놓침
     return git('status --porcelain').split('\n').filter(Boolean).map(parseStatusLine);

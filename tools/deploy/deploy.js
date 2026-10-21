@@ -38,6 +38,7 @@ const ignore = require('ignore');
 const { loadEnv } = require('../lib/env');
 const { stampSwVersion } = require('../build/stamp_sw_version.js');
 const { stampReleaseNotes } = require('../build/stamp_release_notes.js');
+const { parseStatusLine, isNoiseOnlyDiff: noiseOnlyDiffText } = require('../lib/git_status.js');
 
 // 팀 프로젝트는 개인 계정 기본 스코프로는 배포가 거부되므로(Not authorized),
 // .vercel/project.json의 orgId를 --scope로 명시한다. 개인 프로젝트(orgId 없음)면 생략.
@@ -313,18 +314,10 @@ async function main() {
     }
     // 빌드는 sw.js CACHE_VERSION을 HEAD 해시로 재스탬프한다 — 커밋된 값은
     // 항상 지난 스탬프라 이 라인만의 차이는 정상 (check:datafresh의 노이즈 규칙과 동일)
-    const NOISE_LINE = /"generatedAt"\s*:|^\/\/ 생성:.*\|\s*\d{4}-|CACHE_VERSION\s*=\s*['"]/;
-    const noiseOnlyDiff = (f) => {
-        const diff = git(`diff -U0 HEAD -- "${f}"`);
-        const changed = diff.split('\n').filter((l) =>
-            (l.startsWith('+') && !l.startsWith('+++')) || (l.startsWith('-') && !l.startsWith('---')));
-        return changed.length > 0 && changed.every((l) => NOISE_LINE.test(l.slice(1)));
-    };
-    // 상태 열은 정규식으로 제거 — 출력 trim으로 첫 줄 선행 공백이 제거될 수
-    // 있어 slice(3)은 부정확 (' M sw.js' → 'M sw.js' → 'w.js', 다른 게이트와 동일 패턴)
+    const noiseOnlyDiff = (f) => noiseOnlyDiffText(git(`diff -U0 HEAD -- "${f}"`));
+    // parseStatusLine: porcelain 상태 열 정규식 제거 (lib 공용)
     const postBuildDirty = git('status --porcelain').split('\n').filter(Boolean)
-        .map((l) => l.replace(/^[A-Z?! ]{1,2} /, '').split(' -> ').pop().replace(/^"|"$/g, ''))
-        .filter((f) => !noiseOnlyDiff(f));
+        .map(parseStatusLine).filter((f) => !noiseOnlyDiff(f));
     if (postBuildDirty.length) {
         console.error(postBuildDirty.join('\n'));
         fail('빌드가 추적 파일을 변경했습니다 — 동기화 누락입니다. 변경을 커밋·푸시(CI 통과) 후 재배포하세요.');
