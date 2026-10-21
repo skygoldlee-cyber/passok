@@ -320,8 +320,11 @@ async function main() {
             (l.startsWith('+') && !l.startsWith('+++')) || (l.startsWith('-') && !l.startsWith('---')));
         return changed.length > 0 && changed.every((l) => NOISE_LINE.test(l.slice(1)));
     };
+    // 상태 열은 정규식으로 제거 — 출력 trim으로 첫 줄 선행 공백이 제거될 수
+    // 있어 slice(3)은 부정확 (' M sw.js' → 'M sw.js' → 'w.js', 다른 게이트와 동일 패턴)
     const postBuildDirty = git('status --porcelain').split('\n').filter(Boolean)
-        .map((l) => l.slice(3)).filter((f) => !noiseOnlyDiff(f));
+        .map((l) => l.replace(/^[A-Z?! ]{1,2} /, '').split(' -> ').pop().replace(/^"|"$/g, ''))
+        .filter((f) => !noiseOnlyDiff(f));
     if (postBuildDirty.length) {
         console.error(postBuildDirty.join('\n'));
         fail('빌드가 추적 파일을 변경했습니다 — 동기화 누락입니다. 변경을 커밋·푸시(CI 통과) 후 재배포하세요.');
