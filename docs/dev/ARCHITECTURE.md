@@ -1,6 +1,6 @@
 # 🏛️ 설계 컨셉 & 아키텍처 (Architecture & Design Concept)
 
-> **대상 프로젝트**: Passory — 멀티시험 스마트 학습 플랫폼 (기본 시험 팩: 맞춤형화장품 조제관리사, 앱명 Passmula + Formula OS 실무)
+> **대상 프로젝트**: PassOK — 멀티시험 스마트 학습 플랫폼 (기본 시험 팩: 맞춤형화장품 조제관리사, 앱명 Passmula + Formula OS 실무)
 > **최종 업데이트**: 2026-09-24
 > **목적**: 시스템의 설계 철학, 아키텍처 구조, 주요 설계 결정 사항을 설명 — 이 문서만으로 신규 기여자가 설계 의도를 파악하고 동일한 패턴으로 구현할 수 있는 수준을 지향
 > **문서 ID**: DOC-DEV-02
@@ -201,7 +201,7 @@
 ## 🌳 계층적 디렉토리 구조
 
 ```
-passory/
+passok/
 ├── index.template.html         # SPA 템플릿 — <!-- @include html/views/*.html --> 마커
 ├── index.html                  # SPA 엔트리 포인트 (생성물 — build:html 산출, 직접 편집 금지)
 ├── html/
@@ -264,7 +264,7 @@ passory/
 │   ├── pdf-registry.js         #   참조자료 중앙 설정 — 시험별 테이블(_EXAM_TABLES) + getRefTables()
 │   ├── mermaid-render.js       #   Mermaid 지연 로딩·렌더링·확대 모달 공용 (reader/search/manual — 데스크탑 전용)
 │   ├── image-zoom.js           #   본문 이미지(.reader-img) 라이트박스 — 데스크탑 전용 (모바일은 핀치 줌)
-│   ├── pwa-manifest.js         #   활성 시험 기준 PWA 매니페스트 링크 교체 (단일 앱 id='passory' · 클래식)
+│   ├── pwa-manifest.js         #   활성 시험 기준 PWA 매니페스트 링크 교체 (단일 앱 id='passok' · 클래식)
 │   ├── html-viewer.js          #   참조자료 fetch+DOM 뷰어, 검색, 하이라이트
 │   ├── exam-viewer.js          #   문제은행 MD 런타임 뷰어 (인용 링크 네비게이션, 라인 하이라이트)
 │   ├── combo-doc.js            #   복수정답형 드릴 번들 → 문제집 MD 런타임 직렬화 (openCombo 경유)

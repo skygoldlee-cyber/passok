@@ -1,6 +1,6 @@
 # 💻 다른 머신에서 GitHub / Vercel 접근 설정 가이드
 
-> **대상 프로젝트**: 맞춤형화장품 조제관리사 스마트 학습 플랫폼 (passory)
+> **대상 프로젝트**: 맞춤형화장품 조제관리사 스마트 학습 플랫폼 (passok)
 > **최종 업데이트**: 2026-08-26
 > **목적**: 새로운 PC·노트북에서 GitHub 푸시와 Vercel 배포를 최소 설정으로 재현하기 위한 표준 절차
 > **문서 ID**: DOC-RBK-05
@@ -42,7 +42,7 @@ gh auth login
 
 # 3. 클론 (gh가 인증을 자동 처리)
 gh repo clone skygoldlee-cyber/passok
-cd passory
+cd passok
 ```
 
 > ✅ 이후 `git push` / `git pull` 도 추가 인증 없이 동작합니다.
@@ -68,13 +68,13 @@ gh auth setup-git   # git이 gh 인증을 사용하도록 설정
 |------|-----|
 | **projectId** | `prj_706IdDze2DZsNwjADIfhvsfWL3HW` |
 | **orgId** | `team_P4ciaJGD9bvDziPxZM6FOCSK` |
-| **projectName** | `passory` |
+| **projectName** | `passok` |
 
 #### 토큰 발급 (기존 머신 또는 웹에서 1회)
 
 1. https://vercel.com/account/tokens 접속 (skygold 계정으로 로그인)
 2. **Create Token** 클릭
-3. Scope를 `passory` 프로젝트로 **제한** (보안 권장)
+3. Scope를 `passok` 프로젝트로 **제한** (보안 권장)
 4. 생성된 토큰을 안전한 곳에 보관 (1Password, Bitwarden 등)
 
 #### 새 머신에서 배포

@@ -1,8 +1,8 @@
 {
-  "id": "passory",
-  "name": "Passory",
-  "short_name": "Passory",
-  "description": "Passory — 자격증 시험 대비 통합 학습 플랫폼 (교재·퀴즈·모의고사·복습)",
+  "id": "passok",
+  "name": "PassOK",
+  "short_name": "PassOK",
+  "description": "PassOK — 자격증 시험 대비 통합 학습 플랫폼 (교재·퀴즈·모의고사·복습)",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

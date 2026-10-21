@@ -1,4 +1,4 @@
-// app.js - Passory 멀티시험 학습 플랫폼 애플리케이션 로직
+// app.js - PassOK 멀티시험 학습 플랫폼 애플리케이션 로직
 // @spec S-02,S-03,S-08,UX-NAV-01,UX-PWA-01,UX-PWA-05,PF-10
 import { state, loadProgress } from './state.js';
 import { esc } from './sanitize.js';

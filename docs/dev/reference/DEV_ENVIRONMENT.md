@@ -49,7 +49,7 @@
 
 ```powershell
 # 1. 클론
-git clone <repo-url> && cd passory
+git clone <repo-url> && cd passok
 
 # 2. 테스트 도구 설치
 npm.cmd install

@@ -3,7 +3,7 @@
 // 정적 manifest.webmanifest는 부팅 전 플레이스홀더 겸 최후 폴백이고,
 // 활성 시험이 확인되면 빌드가 생성한 실제 파일 manifest.<id>.webmanifest로 링크를 교체한다
 // (기본 시험 포함 — 시험별 pwaShortcuts·description이 실제 설치 매니페스트에 반영되어야 한다).
-// ⚠️ 모든 manifest.<id>.webmanifest는 id='passory'·name='Passory'로 통일된 단일 앱이다 —
+// ⚠️ 모든 manifest.<id>.webmanifest는 id='passok'·name='PassOK'로 통일된 단일 앱이다 —
 //    어느 시험에서 설치해도 같은 PWA 하나(중복 설치·시험명 고정 아이콘 방지).
 // ⚠️ blob:/data: URL 주입은 금지 — Chrome이 설치 요건에서 유효하지 않은 스킴으로
 //    판정해 beforeinstallprompt가 발생하지 않고, connect-src 'self'가 fetch도 차단한다.
@@ -39,11 +39,11 @@
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc && exam.desc) metaDesc.setAttribute('content', exam.desc);
 
-        // iOS '홈 화면에 추가' 시 사용되는 앱 이름 — 단일 앱 정책으로 'Passory' 고정
+        // iOS '홈 화면에 추가' 시 사용되는 앱 이름 — 단일 앱 정책으로 'PassOK' 고정
         // (webmanifest name과 동일 정체성 — 어느 시험에서 추가해도 같은 아이콘 라벨.
         //  iOS는 추가 시점의 메타 값을 읽으므로 부팅 시 반영되어야 한다)
         const appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
-        if (appleTitle) appleTitle.setAttribute('content', 'Passory');
+        if (appleTitle) appleTitle.setAttribute('content', 'PassOK');
 
         // 시험별 스킨 (DA-14) — 부팅 최초 프레임부터 활성 시험 팔레트를 적용한다.
         // html[data-exam]은 CSS 측 규약 오버라이드(cascade)용 속성,
