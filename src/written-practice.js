@@ -590,7 +590,7 @@ export const WrittenPractice = {
             _renderBank(bank);
         } catch (e) {
             _overlay.el().querySelector('.wp-wrap').innerHTML =
-                `<div class="wp-error"><p>문항을 불러올 수 없습니다.</p><p>${escapeHTML(e.message)}</p></div>`;
+                `<div class="wp-error"><p>문항을 불러올 수 없습니다.</p><p>${escapeHTML(e instanceof Error ? e.message : String(e))}</p></div>`;
         }
     },
     /** 완료 문항 수 요약 — 카드 라벨용 */

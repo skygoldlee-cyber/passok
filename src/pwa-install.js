@@ -125,7 +125,7 @@ export function setupPWAInstall() {
                         const json = await resp.json();
                         anyIcon = (json.icons || []).some(ic => !ic.purpose || /(^|\s)any(\s|$)/.test(ic.purpose));
                     }
-                } catch (e) { manifestStatus = '실패: ' + e.message; }
+                } catch (e) { manifestStatus = '실패: ' + (e instanceof Error ? e.message : String(e)); }
             } else {
                 manifestStatus = 'manifest link 없음';
             }

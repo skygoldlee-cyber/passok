@@ -320,12 +320,14 @@ export function runUnifiedSearch(query, filter = 'all') {
 
     // 역색인 활용 — 각 용어 그룹의 후보 엔트리 집합을 구하고 교집합 계산
     // 어절 토큰 인덱스를 쓰므로 어절 중간 매치까지 후보에 포함된다 (품질은 뒤에서 분류)
+    /** @type {Set<number>|null} */
     let candidateIndices = null;
     /** @type {string[]} */
     const failedTerms = [];
     /** @type {number[]} 그룹별 idf — 흔한 용어가 빈도로 스코어를 지배하지 못하게 한다 */
     const groupIdf = [];
     for (const group of termGroups) {
+        /** @type {Set<number>} */
         const groupSet = new Set();
         for (const variant of group) {
             _candidatesForVariant(variant, index).forEach(i => groupSet.add(i));
@@ -335,7 +337,7 @@ export function runUnifiedSearch(query, filter = 'all') {
         if (groupSet.size === 0) { failedTerms.push(group[0]); continue; }
         candidateIndices = candidateIndices === null
             ? groupSet
-            : new Set([...candidateIndices].filter(i => groupSet.has(i)));
+            : new Set([...candidateIndices].filter(/** @param {number} i */ (i) => groupSet.has(i)));
     }
 
     // 후보 없는 그룹이 있거나 교집합이 비면 AND 매치 불가 — 전체 스캔 생략

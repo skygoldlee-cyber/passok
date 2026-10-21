@@ -535,7 +535,7 @@ body.exam-open{overflow:hidden;}
             _applyLanding(lineNum, mdText, restoreScrollPos, query, mdPath);
         } catch (err) {
             console.error('Exam load failed:', err);
-            _showError(title, err && err.message ? err.message : String(err));
+            _showError(title, err instanceof Error ? err.message : String(err));
         }
     }
 

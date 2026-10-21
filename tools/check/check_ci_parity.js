@@ -36,7 +36,8 @@ const CI_ONLY = new Set([
   'npx playwright',                  // 브라우저 설치 (playwright install --with-deps)
   'npm run test:e2e',                // E2E는 CI 전용 계층
   'impact_tests.js',                 // PR 영향 리포트 (정보성)
-  'npm run build:data',              // data/exams 생성 번들은 gitignore — 클론에서 빌드 필요
+  'npm run build:html',              // index.html은 gitignore 생성물 — 클론에서 빌드 필요
+  'npm run build:data',              // data/ 생성 번들은 gitignore — 클론에서 빌드 필요
   'npm run build:drills',            // 〃 drills 번들
   'build_doc_bundles.js',            // 〃 docs_md 번들
 ]);
