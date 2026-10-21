@@ -1,0 +1,58 @@
+{
+  "subjects": {
+    "contract": {
+      "cards": 6,
+      "quizzes": 0,
+      "files": {
+        "교재/contract/보험계약법.md": {
+          "cards": 6,
+          "quizzes": 0
+        }
+      }
+    },
+    "act": {
+      "cards": 8,
+      "quizzes": 0,
+      "files": {
+        "교재/act/보험업법.md": {
+          "cards": 8,
+          "quizzes": 0
+        }
+      }
+    },
+    "theory": {
+      "cards": 10,
+      "quizzes": 1,
+      "files": {
+        "교재/theory/손해사정이론.md": {
+          "cards": 10,
+          "quizzes": 1
+        }
+      }
+    },
+    "second": {
+      "cards": 5,
+      "quizzes": 0,
+      "files": {
+        "교재/second/2차_준비.md": {
+          "cards": 5,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {
+    "subject1": {
+      "questions": 8
+    },
+    "subject2": {
+      "questions": 8
+    },
+    "subject3": {
+      "questions": 8
+    },
+    "subject4": {
+      "questions": 4
+    }
+  }
+}

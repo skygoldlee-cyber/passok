@@ -7,6 +7,17 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 insadj(손해사정사) 콘텐츠 팩 추가 — 1차 3과목 + 2차 참조자료
+
+- **신규 팩 `content/exams/insadj/`**: 보험개발원 손해사정사 — lossadj(손해평가사)와 별개 자격, 별도 팩으로 격리. exams.json 등록(`comingSoon`), manifest 4과목(contract·act·theory·second)
+- **교재**: 상법 보험편(제638조~제895조)·보험업법·손해사정이론 자체 작성 — KIDI 41~49회 기출 출제빈도 분석 반영, 원문 미전재
+- **문제은행**: 과목당 자체 문항 8제(4지선다 + 교재 인용 + ⚖️ 법령 링크) — 기출 출제 포인트 기반 재작성
+- **참조자료 ref_md 26건**: 보험업법·시행령·시행규칙(별표2 시험과목)·상법 보험/해상편 + 2차용 자배법·산재법·화재재해법·자동차관리법·민법·교통사고처리특례법·진료수가·감독규정·시행세칙·자동차보험표준약관·별표1~4·부표·과실비율인정기준 (law.go.kr·금감원·손보협 공식 공개본)
+- **lawdb.json**: 관련 법령·고시 11종 등록
+- **인용 정정**: 문제은행 인용문을 교재 원문 지문으로 교정 + 업무 5종 단일행 병합(인용 frag 길이 확보) — sync:citations 미발견 0
+- 기출 원본은 `tmp/kidi_past_papers/`(gitignore)에 분석용 보관 — 49회 1차 출제 포인트 맵·재작성 초안 생성
+- **생성물**: build:data 일괄 — data/exams/insadj 번들·exams.js·pdf-registry·law-links·keyword-index·sw.js MD_ASSETS·manifest.insadj.webmanifest
+
 ## 2026-10-21 CI 생성 번들 빌드 스텝 위치·후속 정합
 
 - ci.yml: `data/exams/*/` 생성 서브디렉터리는 gitignore 대상이라 클론에 없음 → `check:docs` 이전에 `build:data`+`build:drills`+`build_doc_bundles` 스텝 추가 (문서 경로 게이트가 `{dataRoot}/*.js` 생성물 경로를 존재 검증)

@@ -79,6 +79,26 @@ var EXAMS_LIST = {
       "features": {
         "writtenPractice": true
       }
+    },
+    {
+      "id": "insadj",
+      "name": "손해사정사",
+      "shortName": "손해사정사",
+      "appName": "손해사정사",
+      "title": "손해사정사",
+      "logoMain": "손해사정사",
+      "logoSub": "",
+      "desc": "손해사정사 — 4과목 파일럿(1차 보험계약법·보험업법·손해사정이론 + 2차 공통 참고)",
+      "icon": "fa-solid fa-scale-balanced",
+      "year": "2027",
+      "theme": {},
+      "contentRoot": "content/exams/insadj",
+      "dataRoot": "data/exams/insadj",
+      "manifestPath": "content/exams/insadj/manifest.json",
+      "registryBundle": "data/exams/insadj/registry.js",
+      "registryGlobal": "DATA_REGISTRY_INSADJ",
+      "features": {},
+      "comingSoon": true
     }
   ]
 };
