@@ -13,7 +13,7 @@
 
 | 항목 | 현재 상태 | 비고 |
 |------|-----------|------|
-| Git remote | `https://github.com/skygoldlee-cyber/passory.git` | HTTPS (gh credential helper) — SSH 별칭 병행 가능 |
+| Git remote | `https://github.com/skygoldlee-cyber/passok.git` | HTTPS (gh credential helper) — SSH 별칭 병행 가능 |
 | GitHub CLI (`gh`) | 미설치 | 설치 권장 |
 | Vercel 링크 | `.vercel/project.json` Git 추적됨 (`810de57`부터) | projectId/orgId 자동 인식 |
 | Vercel CLI | 설치됨 | `npm run deploy` 경유 (deploy.js 가드) |
@@ -41,7 +41,7 @@ gh auth login
 #   선택지: GitHub.com → HTTPS → Login with a web browser
 
 # 3. 클론 (gh가 인증을 자동 처리)
-gh repo clone skygoldlee-cyber/passory
+gh repo clone skygoldlee-cyber/passok
 cd passory
 ```
 
@@ -52,7 +52,7 @@ cd passory
 이미 SSH로 클론한 경우 아래 명령으로 HTTPS 방식으로 바꿀 수 있습니다.
 
 ```bash
-git remote set-url origin https://github.com/skygoldlee-cyber/passory.git
+git remote set-url origin https://github.com/skygoldlee-cyber/passok.git
 gh auth setup-git   # git이 gh 인증을 사용하도록 설정
 ```
 

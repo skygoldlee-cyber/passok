@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 GitHub 리포 rename passory→passok — slug 참조 갱신
+
+- **배경**: 브랜드 PassOK 전환의 일환으로 리포지토리명 변경 — GitHub가 구 slug 리다이렉트를 유지하나 명시 참조는 정정
+- **수정**: `notice-check.js` `STATUS_REPO`(공지 상태 원격 조회 — 유일한 기능 참조)·`AGENTS.md`·런북 3종(DEPLOYMENT·MULTI_MACHINE·AUDIO_HOSTING)의 `skygoldlee-cyber/passory`→`passok`
+- gh rename이 로컬 remote를 자동 갱신 — 워크플로는 `github.repository` 컨텍스트라 무수정
+- 참고: 구 URL로의 clone/push는 GitHub 리다이렉트로 동작하나 동일 이름 신규 리포 생성 시 단절
+
 ## 2026-10-21 iOS 설치명도 'Passory' 통일 — apple-mobile-web-app-title 단일화
 
 - **배경**: 단일 앱 정책(UX-PWA-07) 적용 후에도 iOS 홈 화면 라벨만 시험별 별칭(Passmula·Passure 등)이었다 — `apple-mobile-web-app-title`은 manifest와 별개 메타라 별도 처리 필요
