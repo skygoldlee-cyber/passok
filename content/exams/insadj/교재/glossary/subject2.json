@@ -1,0 +1,77 @@
+[
+  {
+    "keyword": "보험업",
+    "definition": "보험계약을 통하여 보험사고 발생 시 보험금 지급을 업으로 하는 사업 — 보험종목별 금융위원회 허가 (제2조·제4조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "제3보험",
+    "definition": "사람의 질병·상해 또는 이에 따른 간병에 관하여 급여를 지급할 것을 약속하는 보험종목 (제2조·제4조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "보험설계사",
+    "definition": "보험회사에 소속하여 보험계약의 체결을 중개하는 자 (제84조 등록)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "보험대리점",
+    "definition": "보험회사를 위하여 보험계약의 체결을 대리하는 법인 또는 개인 (제87조 등록)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "보험중개사",
+    "definition": "독립하여 보험계약의 체결을 중개하는 자 — 특정 회사 소속이 아님 (제89조 등록)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "상호회사",
+    "definition": "보험계약자를 사원으로 하는 회사 — 주식회사와 조직 변경 상호 전환은 계약자총회 결의+금융위 인가 (제2조제7호·제20조~제22조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "기초서류",
+    "definition": "보험약관·사업방법서·보험료 및 책임준비금 산출방법서 — 상품 개발·신고의 기초 문서 (제126조~제128조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "특별계정",
+    "definition": "투자손익이 계약자에게 귀속되는 상품(변액보험 등)을 일반계정과 분리하여 운용하는 계정 (제108조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "상호협정",
+    "definition": "보험회사 간 보험요율·약관 등에 관한 협정 — 금융위원회 인가 필요 (제125조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "선임계리사",
+    "definition": "보험회사의 계리업무를 총괄하는 자 — 보험계리사 자격+5년 이내 제재 없음, 검증의견서를 이사회 등에 제출 (제184조~제184조의3)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "손해사정사",
+    "definition": "보험사고에 따른 손해액 및 보험금 사정 업무를 하는 자 — 시험은 금융감독원장, 등록은 금융위원회 (제185조~제186조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "손해사정업자",
+    "definition": "손해사정업무를 영업으로 수행하는 등록 법인 — 일정 수 이상의 손해사정사 보유 요건 (제187조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "보험조사협의회",
+    "definition": "보험사기 조사·예방 등을 위해 설치된 협의체 (제163조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "요율산출기관",
+    "definition": "보험요율의 산출·검증을 전문으로 하는 지정 기관 (제176조)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "모집 금지행위",
+    "definition": "허위 기재·비교오인 유발·강요·특별이익 제공 약속·자기계약 등 모집 시 금지되는 행위 (제97조~제101조)",
+    "autoExtracted": false
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "numbers": [{"number": "300", "unit": "억원"}],
+    "context": "보험업 허가 자본금: 300억원 이상 (시행령)",
+    "isKey": true,
+    "category": "💰 금액·비율"
+  },
+  {
+    "numbers": [{"number": "3", "unit": "종목"}],
+    "context": "보험종목: 생명보험·손해보험·제3보험 3종 — 종목별 금융위 허가 (제4조)",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "3", "unit": "주체"}],
+    "context": "모집종사자 3주체: 설계사(84, 소속중개)·대리점(87, 위한 대리)·중개사(89, 독립중개)",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "4", "unit": "종"}],
+    "context": "기초서류 4종: 약관·사업방법서·보험료 산출방법서·책임준비금 산출방법서",
+    "isKey": false,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "5", "unit": "년"}],
+    "context": "선임계리사 자격요건: 5년 이내 제재 없음 (제184조의2)",
+    "isKey": false,
+    "category": "📅 기한·기간"
+  },
+  {
+    "numbers": [{"number": "5", "unit": "종"}],
+    "context": "손해사정사 업무 5종: 손해사실 확인·손해액 평가·손해사정서 작성·사정의견 개진·부수업무 (제188조)",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  }
+]
