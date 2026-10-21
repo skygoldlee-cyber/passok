@@ -412,7 +412,8 @@ async function main() {
                 git(`add ${stampedFiles.map((f) => `"${f}"`).join(' ')}`);
                 // 동일 버전 재배포 등 이미 확정된 상태면 스킵
                 if (git(`diff --cached --name-only`)) {
-                    git(`commit --no-verify -m "chore(release): ${stamped} 스탬프 확정 [no-docs][no-test]"`);
+                    // 면제 마크는 행 끝 계약이라 같은 줄에 붙이면 앞 마크가 무효 — 각자 행 끝으로
+                    git(`commit --no-verify -m "chore(release): ${stamped} 스탬프 확정 [no-docs]" -m "[no-test]"`);
                     console.log(`✅ 릴리스 스탬프 확정 커밋 (${stamped}) — 푸시는 다음 작업과 함께`);
                 }
             }
