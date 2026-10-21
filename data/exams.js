@@ -99,6 +99,28 @@ var EXAMS_LIST = {
       "registryGlobal": "DATA_REGISTRY_INSADJ",
       "features": {},
       "comingSoon": true
+    },
+    {
+      "id": "indsafe",
+      "name": "산업안전기사",
+      "shortName": "산업안전기사",
+      "appName": "산업안전기사",
+      "title": "산업안전기사",
+      "logoMain": "산업안전기사",
+      "logoSub": "",
+      "desc": "산업안전기사 — 7과목 (필기 6과목 + 실기 산업안전관리 실무) · 출제기준 2024~2026 기준 자체 제작",
+      "icon": "fa-solid fa-helmet-safety",
+      "year": "2027",
+      "theme": {},
+      "contentRoot": "content/exams/indsafe",
+      "dataRoot": "data/exams/indsafe",
+      "manifestPath": "content/exams/indsafe/manifest.json",
+      "registryBundle": "data/exams/indsafe/registry.js",
+      "registryGlobal": "DATA_REGISTRY_INDSAFE",
+      "features": {
+        "writtenPractice": true
+      },
+      "comingSoon": true
     }
   ]
 };

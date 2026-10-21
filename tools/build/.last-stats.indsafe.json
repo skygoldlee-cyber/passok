@@ -1,0 +1,94 @@
+{
+  "subjects": {
+    "safetyMgmt": {
+      "cards": 9,
+      "quizzes": 0,
+      "files": {
+        "교재/safetyMgmt/산업재해예방_안전보건교육.md": {
+          "cards": 10,
+          "quizzes": 0
+        }
+      }
+    },
+    "ergonomics": {
+      "cards": 5,
+      "quizzes": 0,
+      "files": {
+        "교재/ergonomics/인간공학_위험성평가.md": {
+          "cards": 5,
+          "quizzes": 0
+        }
+      }
+    },
+    "machinery": {
+      "cards": 9,
+      "quizzes": 0,
+      "files": {
+        "교재/machinery/기계_기구_설비_안전.md": {
+          "cards": 9,
+          "quizzes": 0
+        }
+      }
+    },
+    "electric": {
+      "cards": 12,
+      "quizzes": 0,
+      "files": {
+        "교재/electric/전기설비_안전.md": {
+          "cards": 12,
+          "quizzes": 0
+        }
+      }
+    },
+    "chemical": {
+      "cards": 6,
+      "quizzes": 0,
+      "files": {
+        "교재/chemical/화학설비_안전.md": {
+          "cards": 6,
+          "quizzes": 0
+        }
+      }
+    },
+    "construction": {
+      "cards": 5,
+      "quizzes": 0,
+      "files": {
+        "교재/construction/건설공사_안전.md": {
+          "cards": 5,
+          "quizzes": 0
+        }
+      }
+    },
+    "practical": {
+      "cards": 12,
+      "quizzes": 1,
+      "files": {
+        "교재/practical/산업안전관리_실무.md": {
+          "cards": 12,
+          "quizzes": 1
+        }
+      }
+    }
+  },
+  "exams": {
+    "subject1": {
+      "questions": 8
+    },
+    "subject2": {
+      "questions": 8
+    },
+    "subject3": {
+      "questions": 8
+    },
+    "subject4": {
+      "questions": 8
+    },
+    "subject5": {
+      "questions": 8
+    },
+    "subject6": {
+      "questions": 8
+    }
+  }
+}
