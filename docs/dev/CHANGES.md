@@ -15,6 +15,7 @@
 - **vercel.json `buildCommand`는 미적용** — 프레임워크 없는 정적 프로젝트에 설정하면 outputDirectory가 `public` 기본값으로 강제돼 `vercel build`가 실패. 배포는 CLI 업로드 경로(deploy.js 로컬 빌드→스테이징)만 사용하므로 문제없음
 - **후속 수정**: 언트랙 후 첫 CI에서 datafresh 실패 — 기본 시험 빌드 시점에 타 시험 `registry.js`가 클론에 없어 `index.js`의 `existsSync` 가드가 sw.js DATA_ASSETS를 부분 목록으로 생성. 시험 타깃(manifest) 기준 열거로 결정론화 + deploy.js 빌드 후 오염 검사에 CACHE_VERSION·generatedAt 노이즈 라인 면제 (빌드가 매번 HEAD 해시로 재스탬프)
 - **deploy.js porcelain 파싱 버그 수정**: `status --porcelain` 출력 trim으로 첫 줄 상태 컬럼 선행 공백이 제거돼 `slice(3)`이 파일명을 깨뜨림(` M sw.js`→`w.js`) → 노이즈 면제가 적용되지 않아 배포가 차단되던 문제. 상태 열 정규식 제거 방식(다른 게이트와 동일)으로 교체
+- **deploy.js 스탬프 조건 수정**: 배포용 `build:data`가 sw.js를 먼저 재스탬프해 `stamp.changed`가 항상 false → version.js·릴리스 노트·package.json 스탬프와 스탬프 원복이 전부 스킵돼 APP_VERSION이 구 값으로 배포되던 회귀. `stamp.newValue` 기준 항상 스탬프로 변경 + `prevVersion`은 sw.js가 아닌 version.js 잔존 값에서 읽음 (자동 초안 커밋 범위 보존)
 - **strict 플래그 상향**: `alwaysStrict`·`strictBindCallApply`·`strictFunctionTypes`·`strictPropertyInitialization`·`noImplicitThis`·`useUnknownInCatchVariables` 활성화 — catch 변수 `e && e.name`→`e instanceof Error` 패턴·Set 타입 주석·debounce `@this` 등 18건 수정. `noImplicitAny`는 백로그(~2800건)가 커서 보류
 - 기존 신선도 게이트(check:datafresh·check:html·check:drillfresh·check:docbundles 등)는 유지 — 커밋 drift 차단 역할은 사라지지만 로컬 스테일 빌드 탐지·빌드 재현성 검증으로 계속 동작
 
