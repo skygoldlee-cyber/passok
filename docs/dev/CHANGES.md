@@ -7,6 +7,15 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 시험별 영문 별칭(appNameEn) 추가 — PWA/iOS 설치명 우선 적용
+
+- **배경**: 플랫폼 서브브랜드(Passory <직종>) 유지하면서 영문 별칭을 병기 — 홈 화면 아이콘 라벨 등 짧은 영문이 적합한 표기면에 활용
+- **exams.json**: 5개 시험에 `appNameEn` 신규 필드(cosmetic=Passmula·lossadj=Passess·insadj=Passure·indsafe=Passafe·admagent=Passmin) + `title` 별칭 병기(`Passory — <시험명> (별칭)`) + `logoSub`에 `· 별칭` 병기
+- **types.js**: ExamDef JSDoc에 `appNameEn` 옵션 프로퍼티 문서화
+- **pwa-manifest.js·app-shell.js**: `apple-mobile-web-app-title` 갱신 시 `appNameEn` 우선, 없으면 기존 appName 폴백 — iOS 설치명은 짧은 영문 별칭
+- **생성물**: `title` 변경으로 5개 webmanifest `name` 자동 별칭 포함 (`name: e.title` 규칙 그대로)
+- **테스트**: exam-switching DOM 픽스처 food→insadj 실제 시험 ID로 교체, apple title 우선/폴백 양방향 검증 (test:dom 758 통과)
+
 ## 2026-10-21 admagent 신규 시험 팩 구축 — 일반행정사
 
 - **배경**: 5번째 시험 팩 신설. 행정사법 시행령 별표1 출제기준 — 1차 필기 객관식 3과목(과목당 25문·75분) + 2차 필답 주관식 4과목(과목당 4문·100분×2교시), 최소선발인원제

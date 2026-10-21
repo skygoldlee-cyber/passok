@@ -124,6 +124,7 @@ export function selectExam(id) {
 /**
  * 활성 시험의 앱 이름 — 브랜드면(iOS 홈화면 타이틀·푸터·온보딩·미디어 세션)에 쓰는 단일 이름.
  * 우선순위: exam.appName → logoMain+logoSub → exam.name → 'Passory'(플랫폼 브랜드 폴백).
+ * 영문 별칭(appNameEn)은 별도 보존 필드 — 표기용 부브랜드(iOS 설치명 등).
  * @returns {string}
  */
 export function getExamAppName() {

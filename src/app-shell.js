@@ -115,7 +115,7 @@ export function applyExamBranding() {
 
     const appName = getExamAppName();
     const appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
-    if (appleTitle) appleTitle.setAttribute('content', appName);
+    if (appleTitle) appleTitle.setAttribute('content', exam.appNameEn || appName);
     document.querySelectorAll('[data-app-name]').forEach(el => { el.textContent = appName; });
 
     // 인쇄 전용 헤더·퀴즈 빈 상태 등 시험명이 들어가는 정적 영역
