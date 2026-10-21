@@ -255,7 +255,7 @@ ref_md는 `ref_md/과목N/{문서}/{문서}.md` 과목 폴더 구조이며, `ext
      '이상 의심'으로 표시 — 취약 진술 목록에서 배지로 노출 (진술 표현·진위 검수 후보).
      앱 백업 JSON을 `audit:combo --anomalies <backup.json>`에 넘기면 이상 진술의
      **포함 문항이 검수 큐에 자동 추가**됨 (sid → 문항 역매핑)
-   - **골든 테스트**: `tests/unit/combo-transform.test.js`가 변환 규칙(극성 역전·'모두' 복구·
+   - **골든 테스트**: `tests/unit/engine/combo-transform.test.js`가 변환 규칙(극성 역전·'모두' 복구·
      스킵 조건·발문 변환)을 고정 — 변환 로직 변경 시 회귀 감지
 3. 같은 문항 정오답 텍스트 중복 — 정규화 키 비교로 0이어야 함
 4. 큐레이션 교차 오류 — 별표1 문항 오답이 `banned_ingredients.md` 멤버이면 오류

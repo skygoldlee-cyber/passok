@@ -476,17 +476,22 @@ passok/
 │   └── requirements.txt        #   Python 의존성 (공통 계약: EXAM_CONTENT_ROOT)
 │
 ├── tests/                      # 자동화 테스트
-│   ├── unit/                   #   단위 테스트 (node --test)
-│   │   └── *.test.js           #     delegation-guard · parser · mermaid · sanitize ·
-│   │                           #     state · storage · store(batch/customer/material/formula) ·
-│   │                           #     sync · exam-context · questions · statement-tracker 등
-│   └── dom/                    #   DOM 테스트 (Vitest + jsdom)
-│       ├── helpers.js          #     공통 DOM 셋업·모킹 헬퍼 (Supabase 모킹 포함)
-│       ├── common-*.dom.test.js    # 공통 시나리오 (a11y/auth/offline/theme/uimode/sync…)
-│       ├── formula-*.dom.test.js   # Formula OS 시나리오
-│       ├── study-*.dom.test.js     # 학습 뷰 시나리오
-│       ├── charts · reader-audio · review-drills-formula # 차트·오디오·복습/드릴 (2026-10-14 추가)
-│       └── backup · router.dom.test.js
+│   ├── unit/                   #   단위 테스트 (node --test) — 주제별 하위
+│   │   ├── gates/              #     체커·게이트 회귀 (check_*·push_gate·doc-sync·repo-integrity…)
+│   │   ├── engine/             #     학습엔진 (fsrs·analysis-engine·weak-items·statement-tracker…)
+│   │   ├── content/            #     파서·콘텐츠 파이프라인 (markdown·textbook·story·questions…)
+│   │   ├── app/                #     런타임 인프라 (storage·state·pwa·security·sanitize…)
+│   │   ├── mermaid/            #     다이어그램 파서·렌더링
+│   │   └── exams/              #     시험 도메인 테스트 (exams/<id>/)
+│   ├── dom/                    #   DOM 테스트 (Vitest + jsdom) — 주제별 하위
+│   │   ├── helpers.js          #     공통 DOM 셋업·모킹 헬퍼 (Supabase 모킹 포함)
+│   │   ├── common/             #     공통 시나리오 (a11y/auth/offline/theme/uimode/sync…)
+│   │   ├── study/              #     학습 뷰 시나리오 (trainer·review·pomodoro·dictionary…)
+│   │   ├── reader/             #     리더·문서 뷰어 시나리오
+│   │   ├── exam/               #     시험 선택·전환 시나리오
+│   │   ├── misc/               #     차트·백업·라우터 등 기타
+│   │   └── exams/              #     시험 도메인 테스트 (exams/<id>/)
+│   ├── fixtures/               #   테스트 픽스처
 │   └── e2e/                    #   E2E 테스트 (Playwright 실브라우저)
 │       └── app.spec.js         #     부트스트랩·네비·manifest/sw·App Shell·설정 패널
 │
@@ -559,7 +564,7 @@ passok/
 - 13개의 `<section class="view-section">`이 하나의 HTML에 공존
 - `router.js`의 `navigateToView(target, ctx)`가 `.active` 클래스를 토글하여 화면 전환 (페이지 리로드 없음). 타이틀/서브타이틀은 `getViewTitles(registry)`가 `DATA_REGISTRY.uiText`에서 동적 생성
 - 뷰 목록: dashboard / analysis / flashcard / quiz / review / trainer / exam / textbook / textbook-reader / dictionary / formula / exam-select / calendar
-- 내비게이션 동기화: `.nav-item`(사이드바)과 `.mobile-tab-item`(핵심 탭 바 + `#mobile-more-sheet`)에 동일 `data-target` 부여 → 뷰 전환 시 양쪽 활성 상태 자동 동기화 (`aria-current="page"` 부여, 탭 바 안 활성 탭은 `scrollIntoView({inline:'center'})`로 가시화, 시트 소속 뷰는 `#mobile-more-btn`이 활성 표시). 양쪽 `data-target` 집합·뷰별 PRO 배지(`data-pro-feature`) 일치는 `tests/dom/common-navigation.dom.test.js`의 parity 테스트가 강제 (한쪽 누락 시 실패)
+- 내비게이션 동기화: `.nav-item`(사이드바)과 `.mobile-tab-item`(핵심 탭 바 + `#mobile-more-sheet`)에 동일 `data-target` 부여 → 뷰 전환 시 양쪽 활성 상태 자동 동기화 (`aria-current="page"` 부여, 탭 바 안 활성 탭은 `scrollIntoView({inline:'center'})`로 가시화, 시트 소속 뷰는 `#mobile-more-btn`이 활성 표시). 양쪽 `data-target` 집합·뷰별 PRO 배지(`data-pro-feature`) 일치는 `tests/dom/common/common-navigation.dom.test.js`의 parity 테스트가 강제 (한쪽 누락 시 실패)
 - **뷰 해시 라우팅**: `navigateToView`가 현재 뷰를 `#/슬러그`로 `pushState` — 브라우저/PWA 뒤로가기로 이전 뷰 복귀 + 딥링크 공유. `initViewHashRouting(ctx)`이 초기 해시를 딥링크로 해석하고 `hashchange`를 구독 (재진입 시 `_hashNavigating` 플래그로 pushState 생략 — 모달 전용 `pushState`/`popstate` 흐름과 충돌 없이 공존)
 - 전환 부가 동작: 이전 뷰 스크롤 위치 저장·복원, 오디오 정지, 뷰별 렌더 핸들러 호출 (`ctx.handlers`)
 - **스크롤 규칙**: 내비 전환은 이전 `scrollTop` 복원, **액션 딥링크(다른 화면을 여는 버튼)는 `switchView(target, { scrollTop: true })`로 맨 위 오픈** — `restoreScrollPosition`의 `pendingTop` 플래그가 복원 시점에 1회 소비되어 `saveScrollPosition` 덮어쓰기와 무관 (SPEC §4.8.1 UX-NAV-07)
@@ -1512,7 +1517,7 @@ app-fallback.js 폴링 시작 (400ms 간격, 15s 데드라인)
   - [`src/app.js`](../../src/app.js)의 `resolveDelegatedHandler()`가 `window`에서 점 표기 네임스페이스(`ManualViewer.openManual` 등)로 함수를 찾아 실행
   - 위임 참조되는 모든 핸들러는 `app.js` 하단에서 `window.<name> = <name>;`로 브리지 노출 필수 (ESM 모듈 스코프 격리 해결)
   - **도메인 모듈 지연 로딩**: `features` 게이트 대상 기능(Formula OS 뷰·계산/원료 챌린지 등)은 `app.js`의 `LAZY_MODULE_HANDLERS`에 `핸들러명: ['./모듈.js', 'export명']`으로 등록 — 첫 `data-click` 호출 시점에만 `import()`되므로 미보유 시험은 모듈을 파싱·평가하지 않음. 이때 `window.<name>` 브리지는 프록시 함수(`_lazyFn`)가 대신한다
-  - **회귀 가드**: [`tests/unit/delegation-guard.test.js`](../../tests/unit/delegation-guard.test.js)가 인라인 `on*=` 속성 잔존 및 `window` 브리지 누락을 자동 검출 (지연 테이블은 문자열 항목까지 스캔)
+  - **회귀 가드**: [`tests/unit/app/delegation-guard.test.js`](../../tests/unit/app/delegation-guard.test.js)가 인라인 `on*=` 속성 잔존 및 `window` 브리지 누락을 자동 검출 (지연 테이블은 문자열 항목까지 스캔)
 
 ---
 
@@ -1872,7 +1877,7 @@ npm run deploy
    - **다이어그램 타입 감지 및 렌더링 분리** (2026-09-02): `_renderReaderMermaid()`에서 각 `pre.mermaid` 블록의 `textContent`를 검사하여 `mindmap`으로 시작하면 `mermaid-mindmap` 클래스, 그 외는 `mermaid-flowchart` 클래스 추가 → 타입별로 독립된 `mermaid.initialize()` 호출 (flowchart에만 `lineWidth: 1` themeVariable 적용, mindmap은 기본값 유지)
    - **CSS 스타일 분리** (2026-09-02): `css/reader.css`에서 `.mermaid-flowchart`와 `.mermaid-mindmap` 선택자로 분리 — flowchart에만 `stroke-width: 1px`, `fill: none`, 노드 배경/테두리, 화살표 마커 스타일 적용, mindmap은 텍스트 대비만 조정 → 두 다이어그램 타입 간 스타일 간섭 원천 차단
    - **마인드맵 들여쓰기 수정** (2026-09-02): `tools/fix-mindmap-indent.mjs` 스크립트로 4개 과목 교재 MD 파일의 mindmap 블록 들여쓰기를 계층 구조에 맞게 수정 (동일 들여쓰기 → root/1level/2level/3level 계층적 들여쓰기)
-   - **단위 테스트 추가** (2026-09-02): `tests/unit/mermaid-rendering.test.js` (23개 테스트) — 다이어그램 타입 감지, mindmap 들여쓰기 검증, 파서 출력 타입 감지, 파이프라인 통합, 실제 교재 파일 검증, CSS 클래스 분리 로직, `<br/>` 태그 보존
+   - **단위 테스트 추가** (2026-09-02): `tests/unit/mermaid/mermaid-rendering.test.js` (23개 테스트) — 다이어그램 타입 감지, mindmap 들여쓰기 검증, 파서 출력 타입 감지, 파이프라인 통합, 실제 교재 파일 검증, CSS 클래스 분리 로직, `<br/>` 태그 보존
 
 17. **과목별 큐레이션 용어집 (Glossary Curation)** ✅ (2026-09-01)
    - `content/exams/cosmetic/교재/glossary/subject{1-4}.json`: 과목별 큐레이션 용어 정의 파일 (수작성)

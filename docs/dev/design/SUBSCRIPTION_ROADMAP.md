@@ -167,7 +167,7 @@
 
 ### 4.2 이벤트 위임 패턴과의 정합성
 - Stripe.js / Supabase SDK는 자체 콜백/이벤트를 쓰므로 인라인 핸들러가 아니어도 동작하지만, **결제·로그인 UI의 이벤트 바인딩은 기존 `resolveDelegatedHandler()` 위임 패턴에 맞춰** 작성한다.
-- 신규 위임 핸들러도 `window.<n> = <n>` 브리지 노출 + `tests/unit/delegation-guard.test.js` 회귀 가드 대상에 포함시킬 것.
+- 신규 위임 핸들러도 `window.<n> = <n>` 브리지 노출 + `tests/unit/app/delegation-guard.test.js` 회귀 가드 대상에 포함시킬 것.
 
 ### 4.3 외부 출처 최소화 원칙 유지
 - FontAwesome 자체 호스팅 전환 등으로 외부 출처를 애써 줄여온 방향과 상충하는 변경이므로, **결제/인증에 필요한 최소 출처만** 허용한다.

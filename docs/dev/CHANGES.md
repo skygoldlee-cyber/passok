@@ -7,6 +7,15 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 테스트 트리 주제별 재편 — 계층 리팩토링 Phase 1
+
+- **`tests/unit/` 97개 → 주제별 하위 폴더**: `gates/`(체커·게이트 회귀 32) · `engine/`(학습엔진 14) · `content/`(파서·콘텐츠 19) · `app/`(런타임 인프라 32). 기존 `exams/<id>/`·`mermaid/` 하위 구조 유지
+- **`tests/dom/` 55개 → 주제별 하위 폴더**: `common/`(12) · `study/`(17) · `reader/`(6) · `exam/`(4) · `misc/`(16). `helpers.js`는 `tests/dom/` 루트 유지 (공용 셋업 — 참조는 `../helpers.js`로 재계산)
+- **테스트 발견 무결**: 발견은 전부 재귀 glob(`tests/unit/**/*.test.js`·`vitest tests/dom/**`·playwright testDir)이라 package.json·vitest·playwright·CI 워크플로 설정 변경 0 — 이동만으로 발견 유지 (unit 1493·dom 760 전부 통과)
+- **경로 재계산**: 상대 import·`require`·`createRequire` 대상·`import.meta.url` 기반 ROOT 유도를 깊이+1로 일괄 재작성. 백틱 템플릿 리터럴 동적 import 3건(`supabase-client`·`feedback`·`data-architecture`)은 스크립트 미포함으로 수동 보정
+- **연동 갱신**: `domain-map.json`의 테스트 패턴 11건을 `tests/**/` glob으로 전환(향후 이동 무내성) · `stryker.conf.mjs` 변이 명령 경로 · `AGENTS.md`·`ARCHITECTURE.md` 트리 · 현행 문서의 테스트 경로 참조 39건 (CHANGES.md 등 과거 이력 멘션은 문서 경로 게이트 면제라 원문 유지)
+- 발견된 사실: `check_docs_paths`가 CHANGES.md를 이력 문서로 면제하고 현행 문서만 검증 — 이동 시 현행 참조만 갱신하면 됨
+
 ## 2026-10-21 사이드바 크레딧 정렬 — ©/버전 줄과 세로 시작선 일치
 
 - `.sidebar-wallpaper` `text-align: center` → `left` — 사이드바 최하단 배경화 크레딧이 `© PassOK`·버전 줄의 좌측 시작선과 어긋나던 것을 정렬. 텍스트가 컨테이너 폭을 거의 채워 픽셀 차이는 1~2px 이내라 visual 기준선 갱신 불필요 (chromium 스펙 통과 확인)
