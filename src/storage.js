@@ -106,7 +106,7 @@ export function setItem(key, value) {
         _notifyWrite(key);
         return true;
     } catch (e) {
-        _markUnavailable(e && e.name);
+        _markUnavailable(e instanceof Error && e.name);
         return false;
     }
 }
@@ -164,7 +164,7 @@ export function setJSON(key, value) {
     try {
         return setItem(key, JSON.stringify(value));
     } catch (e) {
-        _markUnavailable(e && e.name);
+        _markUnavailable(e instanceof Error && e.name);
         return false;
     }
 }
@@ -205,7 +205,7 @@ export function setJSONMany(entries) {
     try {
         for (const k of Object.keys(entries)) serialized[k] = JSON.stringify(entries[k]);
     } catch (e) {
-        _markUnavailable(e && e.name);
+        _markUnavailable(e instanceof Error && e.name);
         return false;
     }
     return setMany(serialized);
@@ -237,7 +237,7 @@ export async function setItemAsync(key, value) {
         _notifyWrite(key);
         return true;
     } catch (e) {
-        _markUnavailable(e && e.name);
+        _markUnavailable(e instanceof Error && e.name);
         return false;
     }
 }
@@ -282,7 +282,7 @@ export async function setJSONAsync(key, value) {
     try {
         return await setItemAsync(key, JSON.stringify(value));
     } catch (e) {
-        _markUnavailable(e && e.name);
+        _markUnavailable(e instanceof Error && e.name);
         return false;
     }
 }

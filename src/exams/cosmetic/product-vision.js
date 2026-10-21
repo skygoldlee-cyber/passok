@@ -257,7 +257,7 @@ export async function extractProductFromImages(images, opts = {}) {
       signal: opts.signal,
     });
   } catch (e) {
-    if (e && e.name === 'AbortError') return { ok: false, code: 'aborted', error: '인식이 취소되었습니다.' };
+    if (e instanceof Error && e.name === 'AbortError') return { ok: false, code: 'aborted', error: '인식이 취소되었습니다.' };
     return { ok: false, code: 'network', error: '네트워크 연결을 확인하세요 — 사진 인식에는 온라인이 필요합니다.' };
   }
   if (res.status === 400 || res.status === 401 || res.status === 403) {

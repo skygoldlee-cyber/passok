@@ -10,6 +10,14 @@ const { URL } = require('url');
 const ROOT = __dirname;
 const PORT = parseInt(process.argv[2], 10) || parseInt(process.env.PORT, 10) || 3000;
 
+// 생성물(index.html·data/ 번들)은 git 미추적 — 클론 직후 첫 서빙 전 빌드가 필요하다
+for (const f of ['index.html', 'data/exams.js']) {
+    if (!fs.existsSync(path.join(ROOT, f))) {
+        console.error(`❌ ${f} 없음 — 생성물은 빌드 산출물입니다. 먼저 'npm.cmd run build:derived'를 실행하세요.`);
+        process.exit(1);
+    }
+}
+
 const MIME = {
     '.html': 'text/html; charset=utf-8',
     '.js': 'application/javascript; charset=utf-8',

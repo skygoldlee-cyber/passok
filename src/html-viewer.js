@@ -299,7 +299,7 @@ async function openHtmlViewer(htmlPath, searchKeyword, anchorId, lineNum) {
         }
     } catch (err) {
         console.error('HTML viewer load failed:', err);
-        loading.innerHTML = `<div style="color:var(--color-danger,#f85149);">문서 로딩 실패: ${esc(err && err.message ? err.message : String(err))}</div>`;
+        loading.innerHTML = `<div style="color:var(--color-danger,#f85149);">문서 로딩 실패: ${esc(err instanceof Error ? err.message : String(err))}</div>`;
         loading.classList.remove('is-hidden');
     }
 }
