@@ -27,6 +27,7 @@
 
 // @spec none (테스트 선행 게이트)
 const { execSync } = require('child_process');
+const { parseStatusLine } = require('../lib/git_status.js');
 
 // 테스트 동반을 요구하는 실행 로직 변경
 const TRIGGERS = [
@@ -112,12 +113,6 @@ function listRange(ref) {
         console.log(`◇ ${BYPASS_MARK} 면제 커밋 ${exempted.length}개: ${exempted.join(' · ')}`);
     }
     return [...files];
-}
-
-/** git status --porcelain 한 줄에서 파일 경로를 추출한다. */
-function parseStatusLine(line) {
-    const path = line.replace(/^[A-Z?! ]{1,2} /, '').split(' -> ').pop();
-    return path.replace(/^"|"$/g, '');
 }
 
 function listWorkingTree() {
