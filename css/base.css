@@ -902,12 +902,13 @@ body.ui-mode-practice .ui-mode-toggle {
     margin: 0;
 }
 
-/* 배경화 크레딧 — 사이드바 제일 아래. 태블릿은 푸터·모바일은 사이드바 전체가 숨겨져 PC에서만 노출 */
+/* 배경화 크레딧 — 사이드바 제일 아래. 태블릿은 푸터·모바일은 사이드바 전체가 숨겨져 PC에서만 노출.
+   ©/버전 줄과 세로 시작선을 맞추기 위해 좌측 정렬 */
 .sidebar-wallpaper {
     margin: 0;
     font-size: var(--text-xs);
     color: var(--color-text-muted);
-    text-align: center;
+    text-align: left;
 }
 
 /* Mobile Tab Bar - Hidden by default, shown only on mobile via media query */
