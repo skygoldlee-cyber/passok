@@ -1,0 +1,72 @@
+[
+  {
+    "keyword": "시세하락",
+    "definition": "사고 수리 후에도 남는 차량 가치 하락분 — 출고 후 일정 기간·중대 손상 시 대물로 인정",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "휴차료",
+    "definition": "영업용 차량의 수리 기간 영업손실 — 차종·운행 실적 기준 산정 (비영업용은 대차료)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "차량단독사고 특약",
+    "definition": "전복·추락·차량 외 물체와의 접촉 등 단독사고를 확장 담보하는 특약 — 보통약관은 타 차량 사고 원칙",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "전손",
+    "definition": "수리비가 차량 시가를 초과하는 상태 — 잔존물 인수·시가 기준 처리",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "표준작업시간",
+    "definition": "부품별·공정별 표준 정비 작업 시간 — 수리비 산정의 객관 기준",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "운전자한정특약",
+    "definition": "기명·부부·임직원 등 운전자 범위 한정 특약 — 한정 위반 운전 시 면책·추가보험료",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "경성사기·연성사기",
+    "definition": "경성=계획·조작된 보험사고(고의충돌·가짜진단서), 연성=실사고 손해 과장·부풀리기",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "볼트온·웰드온",
+    "definition": "차체 체결 방식 — 볼트온은 탈착식(교환 수리), 웰드온은 용접 고정(판금·부분교환 용접)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "프라이머 서페이서",
+    "definition": "도장 중도 도료 — 퍼티 위 도포해 표면 평탄화·상도 접착 기반 형성",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "ADAS",
+    "definition": "첨단운전자보조시스템 — AEB·LDW·ACC 등, 수리 시 센서 캘리브레이션 비용 필수 반영",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "EPB",
+    "definition": "전자식 주차제동장치 — 전동식 주차브레이크, 오토홀드 연동",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "BCM",
+    "definition": "보디 컨트롤 모듈 — 조명·와이퍼·도어 등 차체 전장 통합 제어",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "덴드라이트",
+    "definition": "리튬이온 배터리 음극의 리튬 침상 석출 — 분리막 관통 내부단락·열폭주·화재 위험",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "차륜정렬",
+    "definition": "캠버·캐스터·토인 조정 — 조향 안정·타이어 편마모 방지 (all wheel alignment)",
+    "autoExtracted": false
+  }
+]

@@ -2,7 +2,7 @@
   "id": "insadj-pass",
   "name": "손해사정사",
   "short_name": "손해사정사",
-  "description": "손해사정사 — 4과목 파일럿(1차 보험계약법·보험업법·손해사정이론 + 2차 공통 참고)",
+  "description": "손해사정사 — 7과목 파일럿(1차 보험계약법·보험업법·손해사정이론 + 2차 공통·재물·차량·신체 3종별)",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

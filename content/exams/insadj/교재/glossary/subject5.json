@@ -1,0 +1,82 @@
+[
+  {
+    "keyword": "기대신용손실(ECL)",
+    "definition": "매출채권 등 금융자산의 장래 회수 불능 추정액 — 손실충당금으로 설정해 자산에서 차감",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "평균법(가중평균)",
+    "definition": "재고자산 평가법 — 총 취득가액 ÷ 총 수량의 평균단가로 기말재고·매출원가 산정",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "정액법 감가상각",
+    "definition": "(취득원가 − 잔존가치) ÷ 내용연수 — 매년 동일 상각비, 정률법(가속)과 대비",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "유효이자율법",
+    "definition": "사채 이자비용 = 장부가액 × 유효이자율 — 표시이자와의 차액으로 할인·할증차금 상각",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "협정보험가액",
+    "definition": "당사자 합의로 정한 보험가액(해상보험) — 고의·중과실 과다평가 등 무효 사유 없으면 그대로 적용",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "ICC(A/B/C)",
+    "definition": "적하보험 조건 — A는 All Risks 포괄담보, B는 열거 위험 확장, C는 대형사고 최소담보(FPA 상당)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "공동해손(G/A)",
+    "definition": "공동 위험 제거를 위한 합리적 희생·비용 — 선박·적하·운임이 기여가액 비례 분담 (York-Antwerp Rules)",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "ITC-Hulls",
+    "definition": "선박보험 기간조건 — 항해조항(육지·도크 제한)·4/4 충돌책임조항 포함",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "통지의무(계약 후 알릴 의무)",
+    "definition": "계약 후 보험의 목적 위험 변경·증가 시 지체없는 통지 의무 — 해태 시 해지·해당 사고 면책",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "부보비율·실손보상특약",
+    "definition": "보험금액/보험가액 비율만큼 실손 보상 — 일부보험의 비례보상 조건",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "특수건물 의무가입",
+    "definition": "화재로인한재해보상보험가입법상 학교·병원·다중이용업소 등의 화재보험 의무가입 — 미가입 과태료",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "전문직업배상책임보험",
+    "definition": "의사·설계사·변호사 등 전문직의 업무상 과실 손해를 담보하는 배상책임보험",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "생산물배상책임(PL)",
+    "definition": "제조·판매 제품의 결함으로 제3자에게 입힌 손해를 담보하는 배상책임보험",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "건설공사보험(CAR)",
+    "definition": "공사목적물 물적 손해 + 제3자 배상책임을 종합 담보하는 기술보험",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "조립보험(EAR)",
+    "definition": "기계설비 조립·시운전 과정의 위험을 담보하는 기술보험 — 시운전 기간 담보 특성",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "영업손실보험(기업휴지)",
+    "definition": "보험사고로 인한 영업 중단 손실(이익+고정비)을 복구기간 한도로 보상하는 보험",
+    "autoExtracted": false
+  }
+]

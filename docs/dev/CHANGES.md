@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 insadj 2차 3종별 구축 — 재물·차량·신체 과목+주관식 문제은행
+
+- **신규 과목 3종** (manifest order 5~7): prop(재물 — 회계원리·해상보험·책임화재기술)·vehicle(차량 — 자동차보험 대물·차손·구조정비)·bodily(신체 — 의학이론·책임근재보·제3보험·자동차 대인) — second는 공통 허브 유지
+- **교재 3종**: 41~49회 KIDI 기출 출제주제 분석 반영 자체 작성 (원문 비전재) — 빌드 결과 cards 13/7/10·quizzes 0/0/1 생성
+- **주관식 문제은행 3종**: 문제은행/2차_{재물,차량,신체}_주관식.md — `### S` 헤딩(객관식 ###Q 구분, manifest 미등록·빌드 제외, lossadj 규약 동일), 계산형·약술형 6~7제 + 모범답안·채점기준
+- **메타 갱신**: references.subjectDirMap에 3과목→과목4(공통 ref) 매핑 · exams.json desc 4→7과목 · glossary subject5~7.json · number-drills/{prop,vehicle,bodily}.json · second/2차_준비.md를 종별 허브 문서로 재작성
+
 ## 2026-10-21 insadj 콘텐츠 보강 — 이론 Ch7·문제은행 확충·glossary/number-drills
 
 - **교재 보강**: theory/손해사정이론.md에 Chapter 07(위험요소 3종·역선택·인과관계·공제·효용·법정이율·호프만 계수·K-ICS/IFRS17·사회보험 세부) 신설 — 49회 기출 갭 분석 반영

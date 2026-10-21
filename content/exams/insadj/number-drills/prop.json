@@ -1,0 +1,26 @@
+[
+  {
+    "numbers": [{"number": "3", "unit": "과목"}],
+    "context": "재물 종별 2차 과목: 회계원리·해상보험·책임화재기술",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "80", "unit": "%"}],
+    "context": "부보비율 실손보상 — 보험금액/보험가액 비율로 비례보상 (예: 80% 부보 시 손해의 80%)",
+    "isKey": true,
+    "category": "💰 금액·비율"
+  },
+  {
+    "numbers": [{"number": "4", "unit": "종"}],
+    "context": "배상책임 주요 종별: 제3자·보관자·전문직업·생산물(PL)",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "3", "unit": "종"}],
+    "context": "ICC 적하보험 조건: (A) All Risks · (B) 중간 · (C) 최소담보",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  }
+]
