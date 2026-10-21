@@ -888,11 +888,18 @@ body.ui-mode-practice .ui-mode-toggle {
     gap: var(--space-3);
 }
 
-/* 시험 전환 버튼이 ©/버전 텍스트를 가리지 않도록 별도 행으로 분리 */
+/* 시험 전환 버튼이 ©/버전 텍스트를 가리지 않도록 별도 행으로 분리.
+   앱명이 시험 서브브랜드로 길어져(Passory 조제관리사 등) 버전과 한 줄에
+   나란히 놓이면 중간 줄바꿈이 생기므로 두 줄 세로 배치로 고정한다. */
 .sidebar-footer-meta {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.sidebar-footer-meta p {
+    margin: 0;
 }
 
 /* 배경화 크레딧 — 사이드바 제일 아래. 태블릿은 푸터·모바일은 사이드바 전체가 숨겨져 PC에서만 노출 */
