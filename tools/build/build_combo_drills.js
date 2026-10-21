@@ -768,11 +768,13 @@ async function buildForExam(target) {
     }
 
     // 검증: 스키마 무결성 + 도출 정답을 answer로 고정
+    // subjectMax는 시험별 manifest 과목 order에서 파생 (기본 4과목 맵은 cosmetic 전용)
+    const subjectMax = Object.fromEntries(Object.values(SUBJECT_NUM).map(n => [n, 1]));
     const errs = [];
     const valid = [];
     for (const it of items) {
       it.answer = deriveComboAnswer(it);
-      const problems = validateQuestion(it);
+      const problems = validateQuestion(it, subjectMax);
       if (problems.length) errs.push(`${it.id}(${it.derivedFrom}): ${problems.join(', ')}`);
       else valid.push(it);
     }
