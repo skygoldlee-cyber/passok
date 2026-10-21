@@ -41,31 +41,31 @@
       }
     },
     "prop": {
-      "cards": 13,
+      "cards": 15,
       "quizzes": 0,
       "files": {
         "교재/prop/재물_손해사정.md": {
-          "cards": 13,
+          "cards": 15,
           "quizzes": 0
         }
       }
     },
     "vehicle": {
-      "cards": 7,
+      "cards": 14,
       "quizzes": 0,
       "files": {
         "교재/vehicle/차량_손해사정.md": {
-          "cards": 7,
+          "cards": 14,
           "quizzes": 0
         }
       }
     },
     "bodily": {
-      "cards": 10,
+      "cards": 17,
       "quizzes": 1,
       "files": {
         "교재/bodily/신체_손해사정.md": {
-          "cards": 10,
+          "cards": 17,
           "quizzes": 1
         }
       }
