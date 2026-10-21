@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 dictionary-view 뷰 섹션 feature 게이트 추가 — 조제관리사 종속 명문화
+
+- **배경**: 성분사전은 cosmetic 전용(`features.dictionary`) — 내비·모바일 탭은 이미 `data-feature`로 게이트돼 다른 시험에 미노출이나, 뷰 섹션 자체는 미게이트라 해시 직행·잔존 DOM 시 성분 사전 UI가 비cosmetic 시험에 노출될 여지가 있었음
+- **수정**: `html/views/dictionary.html`의 `#dictionary-view`에 `data-feature="dictionary"` 추가 — `applyFeatureFlags()`가 미보유 시험에서 섹션 자체를 is-hidden 처리 (formula-view와 동일 패턴, 심층 방어)
+- 라벨은 `data-uitext="dictionary"` → registry.uiText로 시험별 치환 구조 유지 (admagent·indsafe는 스캐폴드 플레이스홀더 '지식DB 사전')
+
 ## 2026-10-21 사이드바 푸터 레이아웃 — ©/버전 두 줄 세로 배치
 
 - **배경**: 서브브랜드로 앱명이 길어져(`Passory 조제관리사` 등) space-between 한 줄 배치에서 © 줄과 버전이 중간 줄바꿈으로 엉성해짐
