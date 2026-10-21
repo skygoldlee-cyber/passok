@@ -104,7 +104,7 @@ test('parseWrittenBank: 실제 2차 파일 파싱 (lossadj 팩)', () => {
     const md = readFileSync(
         join(ROOT, 'content/exams/lossadj/문제은행/2차_주관식_연습.md'), 'utf8');
     const bank = parseWrittenBank(md);
-    assert.equal(bank.questions.length, 10);
+    assert.equal(bank.questions.length, 14);
     // 전 문항에 문제·모범답안·배점·인용이 존재해야 한다
     for (const q of bank.questions) {
         assert.ok(q.problem.length > 0, `${q.id} 문제 누락`);
