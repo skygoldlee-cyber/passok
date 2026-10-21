@@ -1,0 +1,50 @@
+[
+  {
+    "numbers": [{"number": "4", "unit": "과목"}],
+    "context": "신체 종별 2차 과목: 의학이론·책임근재보·제3보험·자동차보험(대인·자기신체)",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "3", "unit": "개월"}],
+    "context": "평균임금 산정 기간: 산정사유 발생일 이전 3개월 임금총액 ÷ 총일수 (근기법 제2조)",
+    "isKey": true,
+    "category": "📅 기간·연한"
+  },
+  {
+    "numbers": [{"number": "60", "unit": "%"}],
+    "context": "근로기준법 휴업보상: 평균임금의 60% (제80조)",
+    "isKey": true,
+    "category": "💰 금액·비율"
+  },
+  {
+    "numbers": [{"number": "70", "unit": "%"}],
+    "context": "산재보험 휴업급여: 평균임금의 70% — 근기법 휴업보상(60%)과 구별",
+    "isKey": true,
+    "category": "💰 금액·비율"
+  },
+  {
+    "numbers": [{"number": "14", "unit": "급"}],
+    "context": "산재 장해등급 1~14급 — 등급별 평균임금 일수 곱해 장해급여 산정",
+    "isKey": false,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "20", "unit": "%"}, {"number": "30", "unit": "%"}],
+    "context": "4세대 실손 자기부담률: 급여 20%·비급여 30% (2021.7 개정)",
+    "isKey": true,
+    "category": "💰 금액·비율"
+  },
+  {
+    "numbers": [{"number": "3", "unit": "점"}],
+    "context": "CDR 척도 중증치매 기준: CDR 3점 (경도1·중등도2·중증3)",
+    "isKey": true,
+    "category": "📋 수량·구분"
+  },
+  {
+    "numbers": [{"number": "15000", "unit": "만원"}],
+    "context": "대인Ⅰ 책임보험금 사망 한도 1억5천만원 (자배법 시행령 별표1)",
+    "isKey": true,
+    "category": "💰 금액·비율"
+  }
+]

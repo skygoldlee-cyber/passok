@@ -305,7 +305,10 @@ const _EXAM_TABLES = {
         "contract": "과목1",
         "act": "과목2",
         "theory": "과목3",
-        "second": "과목4"
+        "second": "과목4",
+        "prop": "과목4",
+        "vehicle": "과목4",
+        "bodily": "과목4"
         },
         REF_MD_SUBJECTS: {
 

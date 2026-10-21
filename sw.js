@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03
 
-const CACHE_VERSION = 'v20261021-e26571c';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261021-eb94da4';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passory) — 시험 무관 공유 캐시.
 // 구 접두사(cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -232,6 +232,9 @@ const MD_ASSETS = [
   './content/exams/insadj/교재/act/보험업법.md',
   './content/exams/insadj/교재/theory/손해사정이론.md',
   './content/exams/insadj/교재/second/2차_준비.md',
+  './content/exams/insadj/교재/prop/재물_손해사정.md',
+  './content/exams/insadj/교재/vehicle/차량_손해사정.md',
+  './content/exams/insadj/교재/bodily/신체_손해사정.md',
   './content/exams/insadj/문제은행/과목1_문제은행.md',
   './content/exams/insadj/문제은행/과목2_문제은행.md',
   './content/exams/insadj/문제은행/과목3_문제은행.md',

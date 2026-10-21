@@ -1,0 +1,77 @@
+[
+  {
+    "keyword": "반월상연골판",
+    "definition": "슬관절의 내·외측 C자형 섬유연골 — 하중 분산·관절 안정·윤활, 외상 파열 시 잠김·부종",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "대퇴골두 괴사",
+    "definition": "대퇴골 경부 골절로 혈류 차단 → 무혈성 골괴사 — 골절 후 장해 합병증",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "CDR 척도",
+    "definition": "치매 중증도 평가 — 0(정상)·1(경도)·2(중등도)·3(중증), 치매보험 중증치매 지급 기준",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "평균임금",
+    "definition": "산정사유 발생일 이전 3개월 임금총액 ÷ 총일수 — 재해보상·휴업보상(60%) 산정 기초",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "재해보상(근기법)",
+    "definition": "업무상 재해에 대한 사용자 무과실 보상 — 요양·휴업(60%)·장해·유족·장의비",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "휴업급여",
+    "definition": "산재보험 급여 — 요양으로 취업 못한 기간 평균임금의 70% 지급",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "장해분류표",
+    "definition": "제3보험 후유장해 지급률 표 — 신체 부위·장해 유형별 지급률 × 가입금액으로 보험금 산정",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "보험나이",
+    "definition": "생일 기준 보험연령 — 표준약관 제23조, 계약일 기준 상계·하계로 산정",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "4세대 실손의료보험",
+    "definition": "2021.7 개정 — 급여 자기부담 20%·비급여 30%, 5년 갱신·재가입 심사, 3대 비급여 특약",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "타인(대인배상)",
+    "definition": "피보험자(기명·승낙·사용피보험자 등) 이외의 자 — 피보험자 확대 시 타인 축소로 대인 보호 범위 결정",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "승낙피보험자",
+    "definition": "기명피보험자의 승낙을 받아 보험자동차를 운전한 자 — 약관상 피보험자 지위",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "사고부담금",
+    "definition": "대인 사고 시 피보험자가 부담하는 자기부담금 — 초과분을 보험자가 담보",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "무보험자동차에 의한 상해",
+    "definition": "무보험차·뺑소니 사고 피해를 피보험자 측 보험이 우선 보상 후 구상하는 담보",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "다른 자동차 운전 특약",
+    "definition": "피보험자가 타인 차량 운전 중 사고에 본인 보험 적용 범위를 확장하는 특약",
+    "autoExtracted": false
+  },
+  {
+    "keyword": "업무상 재해",
+    "definition": "업무 수행성 + 업무 기인성이 인정되는 재해 — 출퇴근·외근 사고는 개별 인정",
+    "autoExtracted": false
+  }
+]
