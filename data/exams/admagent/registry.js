@@ -3,14 +3,14 @@ var DATA_REGISTRY_ADMAGENT = {
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2027",
-  "generatedAt": "2026-10-21T07:26:47.364Z",
+  "generatedAt": "2026-10-21T07:29:33.540Z",
   "subjects": [
     {
       "key": "civGen",
       "order": 1,
       "name": "민법(총칙)",
       "shortName": "민법총칙",
-      "contentHash": "4fb4c113",
+      "contentHash": "1acf033b",
       "stats": {
         "cards": 0,
         "quizzes": 0,
@@ -26,7 +26,7 @@ var DATA_REGISTRY_ADMAGENT = {
       "order": 2,
       "name": "행정법",
       "shortName": "행정법",
-      "contentHash": "4ccc8904",
+      "contentHash": "134a5c27",
       "stats": {
         "cards": 0,
         "quizzes": 0,
@@ -42,7 +42,7 @@ var DATA_REGISTRY_ADMAGENT = {
       "order": 3,
       "name": "행정학개론(지방자치행정 포함)",
       "shortName": "행정학",
-      "contentHash": "805fde6c",
+      "contentHash": "fe9b3c36",
       "stats": {
         "cards": 0,
         "quizzes": 0,
@@ -58,7 +58,7 @@ var DATA_REGISTRY_ADMAGENT = {
       "order": 4,
       "name": "민법(계약) — 2차",
       "shortName": "민법계약",
-      "contentHash": "207a1bc3",
+      "contentHash": "f6c4e560",
       "stats": {
         "cards": 0,
         "quizzes": 0,
@@ -74,7 +74,7 @@ var DATA_REGISTRY_ADMAGENT = {
       "order": 5,
       "name": "행정절차론(행정절차법 포함) — 2차",
       "shortName": "행정절차론",
-      "contentHash": "566a8dcc",
+      "contentHash": "ad0f6400",
       "stats": {
         "cards": 0,
         "quizzes": 0,
@@ -90,7 +90,7 @@ var DATA_REGISTRY_ADMAGENT = {
       "order": 6,
       "name": "사무관리론 — 2차",
       "shortName": "사무관리론",
-      "contentHash": "ca63c826",
+      "contentHash": "00028f6c",
       "stats": {
         "cards": 0,
         "quizzes": 0,
@@ -106,7 +106,7 @@ var DATA_REGISTRY_ADMAGENT = {
       "order": 7,
       "name": "행정사실무법 — 2차",
       "shortName": "실무법",
-      "contentHash": "53f3701f",
+      "contentHash": "550a9f2a",
       "stats": {
         "cards": 0,
         "quizzes": 0,

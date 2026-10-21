@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03
 
-const CACHE_VERSION = 'v20261021-9032950';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261021-f73d45b';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passory) — 시험 무관 공유 캐시.
 // 구 접두사(cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -196,7 +196,9 @@ const DATA_ASSETS = [
   './data/exams/insadj/registry.js',
   './data/exams/insadj/id_migration.js',
   './data/exams/indsafe/registry.js',
-  './data/exams/indsafe/id_migration.js'
+  './data/exams/indsafe/id_migration.js',
+  './data/exams/admagent/registry.js',
+  './data/exams/admagent/id_migration.js'
 ];
 
 /** 설치 시 프리캐시할 마크다운 문서 (매뉴얼·요약집 — 오프라인 보장)
