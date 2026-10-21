@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-21 시험별 실무 도구 브랜드명(practiceName) 선언 — `<명사> OS` 패턴
+
+- **배경**: cosmetic의 실무 모듈명 Formula OS와 동일 패턴으로 전 시험 실무 도구명 확정 — 실무 피처 미구현 시험은 선언만
+- **exams.json**: `practiceName` 필드 신규 — cosmetic=Formula OS · lossadj=Assess OS · insadj=Adjust OS · indsafe=Safety OS · admagent=Docs OS
+- **types.js**: ExamDef JSDoc에 `practiceName` 옵션 프로퍼티 문서화
+- 별칭(appNameEn)과 어근 분리 — 별칭은 시험 준비 정체성, OS명은 합격 후 실무 정체성 (Formula ↔ Passmula 관계와 동일)
+
 ## 2026-10-21 food 파일럿 잔재 전면 제거 — 픽스처·lawdb·문서 현재상태
 
 - **배경**: food 팩은 2026-10-21 커밋에서 콘텐츠·레지스트리가 제거됐으나 테스트 목업 픽스처·lawdb·문서 예시에 잔존 — 사용자 지시로 전면 정리 (이전 "실데이터 비의존 일반 픽스처라 유지" 결정 번복)

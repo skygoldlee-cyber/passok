@@ -54,7 +54,8 @@ var EXAMS_LIST = {
         "story_textbook": true,
         "semantic": true
       },
-      "appNameEn": "Passmula"
+      "appNameEn": "Passmula",
+      "practiceName": "Formula OS"
     },
     {
       "id": "lossadj",
@@ -80,7 +81,8 @@ var EXAMS_LIST = {
       "features": {
         "writtenPractice": true
       },
-      "appNameEn": "Passess"
+      "appNameEn": "Passess",
+      "practiceName": "Assess OS"
     },
     {
       "id": "insadj",
@@ -101,7 +103,8 @@ var EXAMS_LIST = {
       "registryGlobal": "DATA_REGISTRY_INSADJ",
       "features": {},
       "comingSoon": true,
-      "appNameEn": "Passure"
+      "appNameEn": "Passure",
+      "practiceName": "Adjust OS"
     },
     {
       "id": "indsafe",
@@ -124,7 +127,8 @@ var EXAMS_LIST = {
         "writtenPractice": true
       },
       "comingSoon": true,
-      "appNameEn": "Passafe"
+      "appNameEn": "Passafe",
+      "practiceName": "Safety OS"
     },
     {
       "id": "admagent",
@@ -147,7 +151,8 @@ var EXAMS_LIST = {
         "writtenPractice": true
       },
       "comingSoon": true,
-      "appNameEn": "Passmin"
+      "appNameEn": "Passmin",
+      "practiceName": "Docs OS"
     }
   ]
 };

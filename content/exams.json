@@ -52,7 +52,8 @@
             "story_textbook": true,
             "semantic": true
          },
-         "appNameEn": "Passmula"
+         "appNameEn": "Passmula",
+         "practiceName": "Formula OS"
       },
       {
          "id": "lossadj",
@@ -78,7 +79,8 @@
          "features": {
             "writtenPractice": true
          },
-         "appNameEn": "Passess"
+         "appNameEn": "Passess",
+         "practiceName": "Assess OS"
       },
       {
          "id": "insadj",
@@ -99,7 +101,8 @@
          "registryGlobal": "DATA_REGISTRY_INSADJ",
          "features": {},
          "comingSoon": true,
-         "appNameEn": "Passure"
+         "appNameEn": "Passure",
+         "practiceName": "Adjust OS"
       },
       {
          "id": "indsafe",
@@ -122,7 +125,8 @@
             "writtenPractice": true
          },
          "comingSoon": true,
-         "appNameEn": "Passafe"
+         "appNameEn": "Passafe",
+         "practiceName": "Safety OS"
       },
       {
          "id": "admagent",
@@ -145,7 +149,8 @@
             "writtenPractice": true
          },
          "comingSoon": true,
-         "appNameEn": "Passmin"
+         "appNameEn": "Passmin",
+         "practiceName": "Docs OS"
       }
    ]
 }
