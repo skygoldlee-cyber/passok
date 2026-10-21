@@ -480,7 +480,7 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 > 코드 규약(배치·계층·명칭·금지 패턴·저장소/UI/추적성)의 정본은 `docs/CODE_CONVENTIONS.md` (DOC-DEV-09) — 아래는 실무 속성표다.
 
 ### 공통
-- **로컬 폴더명·절대 경로 하드코딩 금지** — `C:\Project\...` 같은 로컬 절대 경로는 폴더 리네임·멀티 머신에서 깨짐. 코드는 `__file__`/`import.meta` 기준 상대 경로로 해석하고, 문서의 파일 참조는 저장소 루트 상대(`@/src/...`)로 표기. GitHub 리포 slug(`skygoldlee-cyber/passory`)·Vercel 프로젝트명 같은 원격 식별자는 예외.
+- **로컬 폴더명·절대 경로 하드코딩 금지** — `C:\Project\...` 같은 로컬 절대 경로는 폴더 리네임·멀티 머신에서 깨짐. 코드는 `__file__`/`import.meta` 기준 상대 경로로 해석하고, 문서의 파일 참조는 저장소 루트 상대(`@/src/...`)로 표기. GitHub 리포 slug(`skygoldlee-cyber/passok`)·Vercel 프로젝트명 같은 원격 식별자는 예외.
 
 ### JavaScript
 - ES Modules (`import`/`export`), 클래식 스크립트는 데이터 파일/외부 라이브러리만
