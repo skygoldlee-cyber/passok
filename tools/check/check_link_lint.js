@@ -272,7 +272,7 @@ function evalBundle(file) {
 }
 
 async function main() {
-    const base = pathToFileURL(path.join(ROOT, 'src')).href + '/';
+    const base = pathToFileURL(path.join(ROOT, 'src', 'reader')).href + '/';
     const { ExamViewer } = await import(base + 'exam-viewer.js');
     const { formatSectionContentForReader } = await import(base + 'reader-format.js');
 
