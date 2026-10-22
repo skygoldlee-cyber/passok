@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: bb910c3eb24ed4e8
-> 생성: 2026-10-22 · 원천: SPEC.md(578개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: f401314d8f50c211
+> 생성: 2026-10-22 · 원천: SPEC.md(583개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 578개 — 문서 연결 427 · 소스 연결 515 · 테스트 연결 549 · 보고서 연결 109
+**커버리지 요약**: 요구사항 583개 — 문서 연결 427 · 소스 연결 520 · 테스트 연결 554 · 보고서 연결 109
 
 ---
 
@@ -828,6 +828,16 @@
 | UX-MET-06 | 구현 (2026-10-22) | E2E 테스트 | DOC-ADR-19<br>DOC-DSN-35 | src/telemetry-consent.js<br>src/usage-telemetry.js | tests/dom/misc/telemetry-consent.dom.test.js<br>tests/e2e/usage-metrics.spec.js<br>tests/unit/app/telemetry-consent.test.js<br>tests/unit/app/usage-telemetry.test.js | — | — |
 | UX-MET-07 | 구현 (2026-10-22) | 테스트 | DOC-ADR-19<br>DOC-DSN-35 | src/telemetry-consent.js<br>src/usage-telemetry.js | tests/unit/app/telemetry-consent.test.js<br>tests/unit/app/usage-telemetry.test.js | — | — |
 | UX-MET-08 | 구현 (2026-10-22) | 테스트 | DOC-ADR-19<br>DOC-DSN-35 | src/usage-telemetry.js | tests/unit/app/usage-telemetry.test.js | — | — |
+
+## 7.8 P2 유료 수요 검증 — 결제·라이선스 코드
+
+| ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
+|----|------|-----------|------|------|--------|--------|------|
+| PAY-01 | 구현 (2026-10-22) | 테스트 | — | src/pro-redeem.js | tests/dom/misc/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
+| PAY-02 | 구현 (플래그 off) | 테스트 | — | src/pro-upgrade.js | tests/dom/misc/pro-redeem.dom.test.js | — | — |
+| PAY-03 | 구현 (2026-10-22) | 테스트 | — | src/pro-redeem.js | tests/dom/misc/pro-redeem.dom.test.js | — | — |
+| PAY-04 | 구현 (2026-10-22) | 테스트 | — | src/pro-upgrade.js | tests/unit/app/usage-telemetry.test.js | — | — |
+| PAY-05 | 구현 (2026-10-22) | 테스트 | — | tools/check/issue_pro_code.js | tests/unit/app/pro-redeem.test.js | — | — |
 
 ---
 

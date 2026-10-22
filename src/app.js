@@ -188,6 +188,7 @@ import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage, get
 import { renderExamSelect, showExamSelect, selectExamAction } from './views/exam-select.js';
 import { initUiMode, toggleUiMode, toggleStudyTools } from './ui-mode.js';
 import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword } from './auth-sync/auth-view.js';
+import { showRedeemDialog, initPlanSync } from './pro-redeem.js';
 import { initSync, syncNow } from './auth-sync/sync.js';
 import { initErrorTelemetry } from './error-telemetry.js';
 import { maybeReportUsageSnapshot, reportSessionStart, initTelemetryQueueFlush } from './usage-telemetry.js';
@@ -238,6 +239,8 @@ function initApp() {
             markTelemetryNoticeShown();
         }
     });
+    // 유입 채널(?src=) 캡처 — session_start.meta.entry_src·피드백 entry_src로 첨부 (최초 1회 보존, 전송 전에 캡처 필요)
+    step('captureEntrySource', captureEntrySource);
     step('telemetrySessionStart', () => reportSessionStart());
     step('syncTelemetryToggleLabel', () => {
         const label = document.getElementById('telemetry-toggle-label');
@@ -269,6 +272,8 @@ function initApp() {
     });
     // 계정 세션 복원/구독 — 비동기, 내부에서 오류를 삼켜 앱 초기화를 막지 않음
     step('initAuthView', () => { initAuthView(); });
+    // 서버 plan → pro_entitled 동기화 (PAY-03) — 부팅 1회 + 로그인 이벤트 구독, 비동기
+    step('initPlanSync', () => { void initPlanSync().catch(() => {}); });
     // 클라우드 동기화 — 쓰기 훅 등록 + 로그인 상태면 시작 pull (비동기·실패 무시)
     step('initSync', () => { initSync(); });
     step('setupThemeToggle', setupThemeToggle);
@@ -298,9 +303,6 @@ function initApp() {
             .map(id => document.getElementById(id)).filter(Boolean)
             .forEach(node => { /** @type {HTMLElement} */ (node).textContent = dispVer; });
     }
-
-    // 유입 채널(?src=) 캡처 — 피드백의 entry_src로 첨부 (최초 1회 보존)
-    step('captureEntrySource', captureEntrySource);
 
     // "의견 보내기" 신기능 힌트 — 설정 ⚙️ 점 + NEW 배지 (각 1회)
     step('initFeedbackHint', initFeedbackHint);
@@ -630,6 +632,7 @@ const DELEGATED_HANDLERS = {
     },
     // 계정/로그인 (Supabase Auth)
     openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword,
+    showRedeemCode: showRedeemDialog,
     showPlanCompare,
     showUsageStats,
     /** 텔레메트리 opt-out 토글 (UX-MET-06) — 설정 패널 '사용 통계 전송' 항목 */

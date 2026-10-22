@@ -71,7 +71,7 @@
 | # | 항목 | 설계 | 영향 파일 |
 |---|------|------|-----------|
 | P-UI-1 | **라이선스 코드 입력** | 설정 메뉴 또는 계정 화면에 '라이선스 코드 입력' 항목 → 입력 다이얼로그 → `redeem_code()` RPC → 성공 시 `profiles.plan` 재조회 → `pro_entitled` 갱신 + 확인 토스트 · 비로그인 시 로그인 유도 | 신규 `src/pro-redeem.js` + `index.template.html` + `app.js` 핸들러 |
-| P-UI-2 | **결제 안내 모달** | `showUpgradeNotice`의 "Pro 플랜(준비 중)" → 실제 결제 안내로 교체: 결제 방법(계좌이체/토스 송금)·가격·환불 고지·문의 채널 링크. 게이트는 `feature-plan.json`의 결제 활성 플래그로 제어 — 실험 전까지 표시 비활성 가능 | `src/pro-upgrade.js` + `feature-plan.json` |
+| P-UI-2 | **결제 안내 모달** | `showUpgradeNotice`의 "Pro 플랜(준비 중)" → 실제 결제 안내로 교체: 결제 방법(계좌이체/토스 송금)·가격·환불 고지·문의 채널 링크. 게이트는 `PAYMENT_NOTICE.enabled` 설정 플래그로 제어 — 실험 전까지 표시 비활성 가능 *(구현: feature-plan 플래그 대신 모듈 상수 — plan 키 정합 게이트 오염 회피)* | `src/pro-upgrade.js` |
 | P-OPS-1 | **`admin:issue-code`** | 코드 생성 CLI — `--channel <name> --count N` → `pro_codes` insert (service role) + 생성 목록 출력(발급 대장 = 콘솔 캡처) | `tools/check/issue_pro_code.js` |
 | P-TEL-1 | **전환 텔레메트리** | 화이트리스트에 `plan_compare_view`·`payment_notice_view`·`payment_link_click`·`code_redeem_attempt`·`code_redeem_success` 추가 + `session_start.meta.entry_src` 탑재(`entry_source` 재사용) | `src/usage-telemetry.js`·`usage-stats.js`·`storage-keys.js` |
 | P-SYNC-1 | **plan 동기화 확인** | 로그인/동기화 시 `profiles.plan` → `pro_entitled` 반영 경로 검증 — 현행은 로컬 플래그만 참조 (redeem 후 타 기기 반영 포함) | `src/auth-sync/sync.js` 검토 |
@@ -108,17 +108,19 @@ Pro의 차별점을 "동기화 + 무제한"으로 정리 (feature-plan의 pro �
 | **권장: 7일 미사용 전액 환불** | 코드 미사용 시 청약철회 7일 — 사용(코드 등록) 시 전자상거래법상 철회 제한 고지 | 단순·명확 — 기간권이라 비율공제 계산 불필요 |
 | 대안: 비율 공제 | 사용 후에도 잔여 기간 비율 환불 | 관리 복잡 — 9,900원 규모에 과함 |
 
-고지 위치: ① 결제 안내 모달(P-UI-2) ② 코드 발급 메시지(오픈채팅 답변 템플릿) ③ 사용자 매뉴얼 §11.6 부근. 환불 처리는 `admin:grant-pro --revoke` + 수동 송금, 응답 SLA 48시간 고지.
+고지 위치: ① 결제 안내 모달(P-UI-2) ② 코드 발급 메시지(오픈채팅 답변 템플릿) ③ 사용자 매뉴얼 §11.7. 환불 처리는 `admin:grant-pro --revoke` + 수동 송금, 응답 SLA 48시간 고지.
 
 ## 7. 구현 시퀀스
 
+> **구현 상태 (2026-10-22)**: 1~6 전부 구현 완료 — SPEC §7.8 PAY-01~05. P-UI-2는 `PAYMENT_NOTICE.enabled=false`로 머지돼 실결제 안내는 미노출 — D-1/D-2/D-5 확정 시 상수를 채우고 플래그만 켜면 된다.
+
 ```
-1. P-OPS-1 admin:issue-code           (코드 발급 도구 — 무관 독립)
-2. P-TEL-1 텔레메트리 이벤트 추가      (plan_compare→redeem 퍼널 계측 선행)
-3. P-UI-1  라이선스 코드 입력 UI       (redeem_code RPC 연결 — 핵심)
-4. P-SYNC-1 plan→entitled 동기화 검증 (코드 활성화의 실효 확인)
-5. P-UI-2  결제 안내 모달 교체         (실험 개시 직전에 활성화 플래그)
-6. 문서    사용자 매뉴얼 코드 입력·환불 절 + SPEC 신규 ID + @spec 태그
+1. P-OPS-1 admin:issue-code           (코드 발급 도구 — 무관 독립)        ✅
+2. P-TEL-1 텔레메트리 이벤트 추가      (plan_compare→redeem 퍼널 계측 선행) ✅
+3. P-UI-1  라이선스 코드 입력 UI       (redeem_code RPC 연결 — 핵심)      ✅
+4. P-SYNC-1 plan→entitled 동기화 검증 (코드 활성화의 실효 확인)           ✅ — initPlanSync: 부팅+SIGNED_IN 시 profiles.plan 반영
+5. P-UI-2  결제 안내 모달 교체         (실험 개시 직전에 활성화 플래그)     ✅ — enabled=false 대기 중
+6. 문서    사용자 매뉴얼 코드 입력·환불 절 + SPEC 신규 ID + @spec 태그   ✅ — 매뉴얼 §11.7, SPEC §7.8
 ```
 
 검증: redeem 실패·로그인 유도·중복 사용·환불 회수 경로 단위 테스트 + e2e 코드 활성화 시나리오. 결제는 수동이라 e2e 불가 — 운영 리허설 1건(자가 구매)으로 종단 검증.

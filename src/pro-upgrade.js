@@ -6,13 +6,14 @@
  * isFreeLimitError()로 판별 후 showUpgradeNotice()를 호출한다.
  */
 
-// @spec ROAD-P0
+// @spec ROAD-P0, PAY-02, PAY-04
 
 import { esc } from './sanitize.js';
 import { trapFocus } from './ui-utils.js';
 import { safeGetItem, safeSetItem } from './state.js';
 import { STORAGE_KEYS } from './storage-keys.js';
 import { trackAction } from './usage-stats.js';
+import { reportEvent } from './usage-telemetry.js';
 import { hasFeature, getActiveExamId } from './exam-context.js';
 import { localDateTime } from './utils.js';
 
@@ -20,6 +21,25 @@ import { localDateTime } from './utils.js';
 function isFreeLimitError(error) {
     return typeof error === 'string' && error.startsWith('Free 플랜');
 }
+
+/**
+ * 결제 안내 설정 (PAY-02) — 수동 결제 안내 모달의 내용·활성 플래그.
+ * enabled=false면 showUpgradeNotice가 기존 '준비 중' 표시를 유지한다.
+ * 결제 수단(D-1)·가격(D-2)·문의 채널(D-5) 확정 후 값을 채우고 enabled=true로 전환.
+ * 문구 변경은 이 객체 하나로 관리 — 코드 분기를 건드리지 않는다.
+ */
+const PAYMENT_NOTICE = {
+    enabled: false,
+    priceLabel: '시험 기간권 9,900원 / 90일',
+    methods: [
+        '토스 송금 링크 또는 계좌이체로 결제 — 링크·계좌는 문의 채널에서 안내드립니다',
+        '결제 확인 후 24~48시간 내 라이선스 코드를 발송해 드립니다',
+        '받은 코드는 로그인 후 ⚙️ 설정 → 라이선스 코드에서 입력하면 즉시 Pro가 활성화됩니다',
+    ],
+    refundNotice: '환불: 코드 미사용 시 결제일로부터 7일 이내 전액 환불 (전자상거래법 청약철회) · 코드 사용 후에는 환불이 제한될 수 있습니다',
+    contactLabel: '오픈채팅에서 결제 문의',
+    contactUrl: '',   // 오픈채팅 링크 확정 시 채움 — 빈 문자열이면 버튼 미노출
+};
 
 // --- 기능 플랜 (feature-plan.json — 기능별 무료/Pro 전환) ---
 let _featurePlan = null;
@@ -203,6 +223,7 @@ function _proBenefitItems(extraRow = '') {
  * feature-plan.json의 현재 값을 반영하므로 플랜 전환 시 문구가 어긋나지 않는다. */
 export async function showPlanCompare() {
     trackAction('plan_compare');
+    void reportEvent('plan_compare_view').catch(() => {});   // 전환 퍼널 (PAY-04)
     // 저장 한도 혜택은 Formula OS 기능 보유 시험에서만 노출 — 한도 수치는
     // 각 스토어의 상수에서 유도 (도메인 모듈은 지연 로딩으로 초기 번들 미포함)
     let limitsRow = '';
@@ -323,22 +344,42 @@ export function mountProMoment(container, momentKey) {
     container.prepend(card);
 }
 
-/** Pro 업그레이드 안내 모달 (정보성 — 결제 경로 없음) */
+/** Pro 업그레이드 안내 모달 — PAYMENT_NOTICE.enabled 시 실결제 안내, 아니면 '준비 중' 표시 (PAY-02) */
 export function showUpgradeNotice(featureLabel, limitMessage) {
     const benefitItems = [`<li>${esc(featureLabel)} 저장 한도 무제한</li>`, ..._proBenefitItems()];
+    const pay = PAYMENT_NOTICE.enabled ? `
+            <div class="pro-payment-notice">
+                <p class="pro-upgrade-sub"><strong>💳 Pro 결제 안내</strong> — ${esc(PAYMENT_NOTICE.priceLabel)}</p>
+                <ul>${PAYMENT_NOTICE.methods.map((m) => `<li>${esc(m)}</li>`).join('')}</ul>
+                <p class="pro-payment-refund">${esc(PAYMENT_NOTICE.refundNotice)}</p>
+            </div>` : '';
+    const contactBtn = PAYMENT_NOTICE.enabled && PAYMENT_NOTICE.contactUrl
+        ? '<button class="app-confirm-cancel pro-payment-contact">결제 문의</button>' : '';
     const { overlay, close } = _showDialog(`
         <div class="app-confirm-dialog dialog-card pro-upgrade-dialog" role="alertdialog" aria-modal="true" aria-labelledby="pro-upgrade-title">
-            <h3 id="pro-upgrade-title">💎 무료 한도 도달</h3>
+            <h3 id="pro-upgrade-title">💎 ${PAYMENT_NOTICE.enabled ? 'Pro로 업그레이드' : '무료 한도 도달'}</h3>
             <p>${esc(limitMessage || `${featureLabel}의 무료 플랜 한도에 도달했습니다.`)}</p>
             <div class="pro-upgrade-benefits">
-                <p class="pro-upgrade-sub"><strong>Pro 플랜(준비 중)</strong>에서는:</p>
+                <p class="pro-upgrade-sub"><strong>Pro${PAYMENT_NOTICE.enabled ? '' : ' 플랜(준비 중)'}에서는:</strong></p>
                 <ul>${benefitItems.join('')}</ul>
-            </div>
+            </div>${pay}
             <div class="app-confirm-actions">
+                ${contactBtn}
                 <button class="app-confirm-cancel app-confirm-compare">Free / Pro 비교</button>
                 <button class="app-confirm-ok">확인</button>
             </div>
         </div>
     `);
     overlay.querySelector('.app-confirm-compare')?.addEventListener('click', () => { close(); showPlanCompare(); });
+    const contactEl = overlay.querySelector('.pro-payment-contact');
+    if (contactEl) {
+        void reportEvent('payment_notice_view').catch(() => {});
+        contactEl.addEventListener('click', () => {
+            void reportEvent('payment_link_click').catch(() => {});
+            close();
+            window.open(PAYMENT_NOTICE.contactUrl, '_blank', 'noopener');
+        });
+    } else if (PAYMENT_NOTICE.enabled) {
+        void reportEvent('payment_notice_view').catch(() => {});
+    }
 }

@@ -38,6 +38,9 @@ export const ALLOWED_EVENTS = new Set([
     'quiz_start', 'quiz_complete',
     'daily_start', 'daily_complete',
     'usage_snapshot',
+    // 전환 퍼널 (PAY-04) — 플랜 비교 → 결제 안내 → 코드 활성화 단계 계측
+    'plan_compare_view', 'payment_notice_view', 'payment_link_click',
+    'code_redeem_attempt', 'code_redeem_success',
 ]);
 
 /**
@@ -141,8 +144,11 @@ export async function reportEvent(event, meta = {}, deps = {}) {
  * 방문 분모 이벤트 (UX-MET-06/07) — 페이지 로드당 1회 'session_start' 전송.
  * 세션당 상한·동의·화이트리스트는 reportEvent가 처리한다. 절대 throw하지 않음.
  */
-export function reportSessionStart() {
-    void reportEvent('session_start', {}).catch(() => {});
+export function reportSessionStart(deps = {}) {
+    // entry_src: 유입 채널 추적 (PAY-04 전환 퍼널) — ?src= 캡처값, 미설정 시 생략
+    let entry_src = null;
+    try { entry_src = safeGetItem('entry_source') || null; } catch { /* 무시 */ }
+    void reportEvent('session_start', entry_src ? { entry_src } : {}, deps).catch(() => {});
 }
 
 /** 'online' 복귀 시 큐 플러시 리스너 설치 (UX-MET-08) — 1회 등록 */

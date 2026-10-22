@@ -90,6 +90,29 @@ async function restGetAll(secret, table, query, opts = {}) {
 }
 
 /**
+ * PostgREST 삽입 (service role — RLS 우회)
+ * @param {string} secret SUPABASE_SECRET_KEY
+ * @param {string} table 스키마 public의 테이블명
+ * @param {object|Array} body 삽입 행
+ * @returns {Promise<Array>} Prefer: return=representation 결과
+ */
+async function restPost(secret, table, body) {
+    const res = await fetch(`${supabaseUrl()}/rest/v1/${table}`, {
+        method: 'POST',
+        headers: {
+            apikey: secret, authorization: `Bearer ${secret}`,
+            'content-type': 'application/json', prefer: 'return=representation',
+        },
+        body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+        console.error(`${table} 삽입 실패 HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
+        process.exit(1);
+    }
+    return res.json();
+}
+
+/**
  * PostgREST 갱신 (service role — RLS 우회)
  * @param {string} secret SUPABASE_SECRET_KEY
  * @param {string} table 테이블명
@@ -140,4 +163,4 @@ async function findUserByEmail(secret, email) {
     return null;
 }
 
-module.exports = { supabaseUrl, requireSecret, restGet, restGetAll, restPatch, findUserByEmail };
+module.exports = { supabaseUrl, requireSecret, restGet, restGetAll, restPost, restPatch, findUserByEmail };
