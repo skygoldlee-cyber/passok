@@ -1,5 +1,5 @@
 // tests/unit/usage-telemetry.test.js
-// @spec UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08
+// @spec UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08, PAY-04
 // src/usage-telemetry.js — 페이로드 구성·세션 상한·미설정/실패 경로·동의·화이트리스트·큐
 
 import { test, beforeEach, afterEach } from 'node:test';
@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 
 import {
   buildEventPayload, reportEvent, maybeReportUsageSnapshot, flushTelemetryQueue,
-  ALLOWED_EVENTS, _resetUsageTelemetryForTest,
+  reportSessionStart, ALLOWED_EVENTS, _resetUsageTelemetryForTest,
 } from '../../../src/usage-telemetry.js';
 import { setTelemetryAllowed, getInstallId } from '../../../src/telemetry-consent.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
@@ -101,6 +101,39 @@ test('reportEvent: 화이트리스트 외 이벤트는 skipped', async () => {
         _resetUsageTelemetryForTest();
         assert.equal(await reportEvent(ev, {}, { insert }), 'sent', `${ev} should be allowed`);
     }
+});
+
+// ── 전환 퍼널 (PAY-04) ─────────────────────────────────────
+
+test('PAY-04: 결제 전환 이벤트 5종이 화이트리스트에 등록·전송 가능', async () => {
+    const funnel = ['plan_compare_view', 'payment_notice_view', 'payment_link_click',
+        'code_redeem_attempt', 'code_redeem_success'];
+    for (const ev of funnel) {
+        assert.ok(ALLOWED_EVENTS.has(ev), `${ev} not whitelisted`);
+        _resetUsageTelemetryForTest();
+        const rows = [];
+        const insert = async (r) => { rows.push(...r); return {}; };
+        assert.equal(await reportEvent(ev, {}, { insert }), 'sent');
+        assert.equal(rows[0].event, ev);
+    }
+});
+
+test('PAY-04: reportSessionStart는 entry_source를 meta.entry_src로 탑재', async () => {
+    const rows = [];
+    const insert = async (r) => { rows.push(...r); return {}; };
+    // 캡처값 없음 — meta 생략
+    reportSessionStart({ insert });
+    await new Promise((r) => setTimeout(r, 0));
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].event, 'session_start');
+    assert.equal(rows[0].meta.entry_src, undefined);
+    // 캡처값 있음 — entry_src 첨부
+    _resetUsageTelemetryForTest();
+    rows.length = 0;
+    global.localStorage.setItem('entry_source', 'cafe');
+    reportSessionStart({ insert });
+    await new Promise((r) => setTimeout(r, 0));
+    assert.equal(rows[0].meta.entry_src, 'cafe');
 });
 
 // ── install_id (UX-MET-07) ─────────────────────────────────

@@ -127,6 +127,7 @@
     "report:user": "node tools/check/user_report.js",
     "report:glossary": "node tools/build/extract_glossary_candidates.js",
     "admin:grant-pro": "node tools/check/grant_pro.js",
+    "admin:issue-code": "node tools/check/issue_pro_code.js",
     "ai:explain": "node tools/ai/ai_explain.js",
     "ai:draft": "node tools/ai/ai_draft_questions.js",
     "ai:distractors": "node tools/ai/ai_distractors.js",

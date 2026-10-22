@@ -7,6 +7,18 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 P2 결제 실험 구현 — 라이선스 코드·결제 안내·전환 계측 (PAY-01~05)
+
+- **PAY-01 라이선스 코드 활성화**: 신규 `src/pro-redeem.js` — 설정 메뉴 '라이선스 코드' → 입력 다이얼로그 → `redeem_code` RPC → `pro_entitled` 갱신. 비로그인은 로그인 유도, 실패는 무효/사용됨 동일 안내(오라클 최소화) + `code_redeem_attempt`/`code_redeem_success` 계측
+- **PAY-02 결제 안내 모달**: `pro-upgrade.js`에 `PAYMENT_NOTICE` 설정 객체 — `enabled` 플래그로 '준비 중'↔실결제 안내(가격·수동 결제 방법·환불 고지·문의 링크) 전환, `payment_notice_view`/`payment_link_click` 계측. **D-1/D-2/D-5 확정 전 enabled=false**
+- **PAY-03 plan 서버 동기화**: `initPlanSync` — 부팅 1회 + SIGNED_IN 이벤트마다 `profiles.plan` → `pro_entitled` 반영 (코드 활성화의 타 기기 전파 + `grant-pro --revoke` 회수 반영)
+- **PAY-04 전환 퍼널 이벤트**: usage-telemetry 화이트리스트에 `plan_compare_view`·`payment_notice_view`·`payment_link_click`·`code_redeem_*` 추가 + `session_start.meta.entry_src` 탑재 — `?src=` 캡처(captureEntrySource)를 session_start 전송 전으로 이동
+- **PAY-05 발급 CLI**: `admin:issue-code --channel <채널> --count N [--dry-run]` — `<CHANNEL>-XXXX-XXXX` 코드 생성·`pro_codes` insert (혼동 문자 제외 문자셋). `restPost` 헬퍼 추가
+- **버그 수정**: CODE_BODY가 주석과 달리 혼동 문자 `L`을 포함 → 제외 (유닛 테스트로 검출)
+- **SPEC**: §7.8 신규 — PAY-01~05 등록 (PAY-02는 플래그 off 상태로 구현 완료 표기)
+- **테스트**: `tests/unit/app/pro-redeem.test.js`(정규화·코드 규약) + `tests/dom/misc/pro-redeem.dom.test.js`(다이얼로그·동기화 10건)
+- **매뉴얼**: §11.7 Pro 활성화 — 라이선스 코드 + 설정 메뉴 표 행
+
 ## 2026-10-22 P2 결제 실험 설계 — PAYMENT_PILOT_DESIGN (DOC-DSN-35)
 
 - **신규** `docs/dev/design/PAYMENT_PILOT_DESIGN.md` — 선실험 결제 수단 비교(수동 송금 권고)·라이선스 코드 플로우(admin:issue-code + redeem_code RPC + 코드 입력 UI)·가격안(기간권 9,900원/90일 가칭)·환불 정책(미사용 7일)·전환 계측(채널 프리픽스+신규 이벤트)·미결정 항목 D-1~D-5

@@ -154,6 +154,10 @@
                             <button type="button" class="settings-item" data-click="showPlanCompare" title="Free와 Pro의 기능 차이·혜택 비교 보기">
                                 <i class="fa-solid fa-gem" aria-hidden="true"></i> 플랜 안내 (Free/Pro)
                             </button>
+                            <!-- 라이선스 코드 활성화 (PAY-01) — 로그인 후 redeem_code RPC로 plan='pro' 갱신 -->
+                            <button type="button" class="settings-item" data-click="showRedeemCode" title="구매 후 발급받은 Pro 활성화 코드 입력 — 로그인 필요">
+                                <i class="fa-solid fa-key" aria-hidden="true"></i> 라이선스 코드
+                            </button>
                             <!-- 텔레메트리 opt-out (UX-MET-06, ADR-0019) — 거부 시 전송만 차단, 기능 제한 없음 -->
                             <button type="button" class="settings-item" data-click="toggleTelemetry" title="익명 사용 통계 수집 허용 여부 — 끄면 이 기기에서 통계 전송이 중단됩니다 (기능 제한 없음)">
                                 <i class="fa-solid fa-chart-line" aria-hidden="true"></i> 사용 통계 전송: <span id="telemetry-toggle-label">켜짐</span>
