@@ -3,7 +3,8 @@
  * fetch_ref_pdfs.js — 외부 호스팅 참조자료 PDF 복원 (DOC-RBK-12)
  *
  * {contentRoot}/참조자료/pdf_hosting.json을 선언한 시험만 대상:
- *   { "assetBase": "<릴리스 에셋 베이스 URL>", "manifests": ["pdf_hashes.json", ...],
+ *   { "assetBase": "<릴리스 에셋 베이스 URL>", "mirrors": ["<폴백 베이스 URL>", ...],
+ *     "manifests": ["pdf_hashes.json", ...],
  *     "masterManifests": ["img_masters.json", ...] }
  *
  * manifests — 참조자료/ 상대 '<dir>/<file>.pdf' → sha256 항목.
@@ -34,6 +35,17 @@ async function download(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return Buffer.from(await res.arrayBuffer());
+}
+
+/** assetBase 우선, 실패 시 mirrors 순서로 폴백 — 단일 릴리스 삭제·장애 대비 */
+async function downloadWithMirrors(bases, assetName) {
+  let lastErr;
+  for (const base of bases) {
+    try {
+      return { buf: await download(`${base}/${assetName}`), base };
+    } catch (e) { lastErr = e; }
+  }
+  throw lastErr;
 }
 
 async function main() {
@@ -83,9 +95,11 @@ async function main() {
     for (const [, rel] of [...missing, ...mismatch]) console.log(`    ${rel}`);
     if (CHECK) { failed += missing.length + mismatch.length; continue; }
 
+    const bases = [hosting.assetBase, ...(hosting.mirrors || [])];
     for (const [fp, rel, sha] of [...missing, ...mismatch]) {
       try {
-        const buf = await download(`${hosting.assetBase}/${sha}${path.extname(rel)}`);
+        const { buf, base } = await downloadWithMirrors(bases, `${sha}${path.extname(rel)}`);
+        if (base !== hosting.assetBase) console.log(`      (미러 사용: ${base.split('/').pop()})`);
         const got = crypto.createHash('sha256').update(buf).digest('hex');
         if (got !== sha) throw new Error(`sha256 불일치 (${got.slice(0, 12)}…)`);
         fs.mkdirSync(path.dirname(fp), { recursive: true });
