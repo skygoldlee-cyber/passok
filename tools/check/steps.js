@@ -43,6 +43,7 @@ const STEP_VENDOR = npmStep('vendor', 'check:vendor', '자산', 'vendor 매니�
 const STEP_UITEXT = npmStep('uitext', 'check:uitext', '문서', 'UI 텍스트 커버리지 (data-uitext ↔ manifest.uiText)');
 const STEP_STUDYQ = nodeStep('studyq', 'tools/check/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'], prio: 'p2' });
 const STEP_ENV = nodeStep('env', 'tools/check/check_env.js', '보안', '.env 시크릿 신선도 — 만료 토큰·미선언·빈 키 탐지 (.env 부재 시 스킵 — CI에는 .env 없음, LOCAL_ONLY)', { prio: 'p2' });
+const STEP_SUPABASE = npmStep('supabase', 'check:supabase', '외부', 'Supabase 스키마 적용 상태 — schema.sql 선언 테이블의 프로덕션 존재 프로브 (미적용 시 차단, 네트워크 불가 시 경고+통과)', { prio: 'p1' });
 
 // ── 문서 정합 묶음 (check:docs → docs 프리셋) ──────────────────────────
 const DOCS_STEPS = [
@@ -111,6 +112,7 @@ const CI_STEPS = [
   STEP_LINT,
   STEP_TYPES,
   npmStep('ci:imports', 'check:imports', '품질', 'ES 모듈 import/export 교차 검증', { prio: 'p0' }),
+  STEP_SUPABASE,
   npmStep('ci:posind', 'check:posind', '규칙', '교재 좌표 비의존 — 위치 기반 식별자·저장 키 정적 탐지 (ID-05)', { prio: 'p0' }),
   npmStep('ci:contentind', 'check:contentind', '규칙', '로직 콘텐츠 독립 — 시험 id·과목 키 리터럴 하드코딩 정적 탐지 (DA-15)', { prio: 'p0' }),
   npmStep('ci:docs', 'check:docs', '문서', '문서 정합 묶음 (docs 프리셋 위임)'),

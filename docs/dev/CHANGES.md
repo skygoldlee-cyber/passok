@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 Supabase 스키마 적용 프로브 게이트 (check:supabase)
+
+- **발견**: `feedback`·`client_errors`·`usage_events` 3개 테이블이 프로덕션 미적용 (PGRST205) — 익명 insert 조용한 실패 설계로 텔레메트리 전량 손실을 장기간 미탐지
+- **신규** `tools/check/check_supabase_schema.js` — schema.sql의 `create table` 선언 목록 ↔ 프로덕션 스키마 캐시 프로브 (publishable key 사용, publishable 설계상 공개)
+- **판정**: 테이블 부재(PGRST205)=차단 / 네트워크 불가·5xx=경고+통과(오프라인 개발 비차단, 일시정지는 Keep-Alive 워크플로가 감시)
+- **등록**: `check:supabase` 스크립트 + `check:ci`·ci.yml 스텝 (CI 패리티 유지)
+- **조치 필요**: 대시보드 SQL Editor에서 schema.sql 실행 후 게이트 통과 확인 (현재 3개 테이블 미적용으로 실패 상태 — 의도된 차단)
+
 ## 2026-10-22 텔레메트리 동의·퍼널 측정 (P0 측정 기반 — UX-MET-06/07/08, ADR-0019)
 
 - **ADR-0019** — 텔레메트리는 opt-out 동의 + 퍼스트파티 익명 수집: opt-in 기각(표본 과소), 신규 설치 ID 기각(device_id 재사용), 서드파티 SDK 금지
