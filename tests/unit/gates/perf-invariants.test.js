@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const read = p => readFileSync(join(ROOT, p), 'utf-8');
-const srcFiles = ['src', 'src/views', 'src/config']
+const srcFiles = ['src', 'src/views', 'src/config', 'src/pwa', 'src/auth-sync', 'src/reader']
   .flatMap(d => readdirSync(join(ROOT, d)).filter(f => f.endsWith('.js')).map(f => `${d}/${f}`));
 
 // ---------- PF-01: 런타임 MD 파싱 ----------
@@ -182,7 +182,7 @@ test('PF-15: 화장품법 법령원문이 단일 정본으로 참조된다', () 
 // ---------- PF-16: mermaid-utils 공용화 ----------
 
 test('PF-16: 다이어그램 타입 감지가 mermaid-utils로 공용화됐다', () => {
-  assert.ok(existsSync(join(ROOT, 'src', 'mermaid-utils.js')), '공용 유틸 존재');
+  assert.ok(existsSync(join(ROOT, 'src', 'reader', 'mermaid-utils.js')), '공용 유틸 존재');
   const mu = read('src/reader/mermaid-utils.js');
   assert.ok(/export function detectMermaidType/.test(mu), 'detectMermaidType');
   // 3개 소비 모듈 중 임포트 확인 (render + 최소 1개 이상의 뷰)
