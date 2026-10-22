@@ -5,7 +5,7 @@
 //    툴바·스크롤스파이·표 모달 → reader-toolbar.js)
 import { proFeatureNotice } from '../pro-upgrade.js';
 import { trackAction } from '../usage-stats.js';
-import { filterMetaSections, buildSectionDisplayTitles } from '../reader-toc.js';
+import { filterMetaSections, buildSectionDisplayTitles } from '../reader/reader-toc.js';
 import {
     readerAudioState,
     showAudioToast,

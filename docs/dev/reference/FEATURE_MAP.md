@@ -40,20 +40,20 @@
 
 | 무엇을 바꾸고 싶은가 | 핵심 소스 | 관련 테스트 | SPEC |
 |----------------------|-----------|-------------|------|
-| 교재 리더 본문·목차·진도 | `src/views/textbook-reader.js` + `src/reader-toc.js` | `study-reader.dom.test.js` | TR-* |
+| 교재 리더 본문·목차·진도 | `src/views/textbook-reader.js` + `src/reader/reader-toc.js` | `study-reader.dom.test.js` | TR-* |
 | 리더 툴바·독서 설정·스크롤 | `src/views/reader-toolbar.js` | `study-reader.dom.test.js` | TR-* |
-| MD 본문 후처리 (링크·강조 변환) | `src/reader-format.js` | `tests/unit/content/reader-format-general.test.js`, `reader-toc.test.js` | TR-* |
+| MD 본문 후처리 (링크·강조 변환) | `src/reader/reader-format.js` | `tests/unit/content/reader-format-general.test.js`, `reader-toc.test.js` | TR-* |
 | 통합검색 (역색인) | `src/search-index.js`(코어) + `src/search-sources.js`(소스) + `src/views/textbook-search.js`(뷰) | `search-index.test.js`, `textbook-search-ref.test.js`, `study-search/story-search/exam-search/morph-search/glossary-search.dom.test.js` | TS-* |
-| 용어집 렌더·조회 | `src/views/glossary-renderer.js` + `src/glossary-query.js` | `common-glossary.dom.test.js` | TR-*/DI-* |
+| 용어집 렌더·조회 | `src/views/glossary-renderer.js` + `src/reader/glossary-query.js` | `common-glossary.dom.test.js` | TR-*/DI-* |
 | 참조자료 링크·레지스트리 | `src/views/reader-ref-links.js` + `src/pdf-registry.js`(생성물) | `study-reader.dom.test.js` | RR-* |
 | 법령 한글주소·고시 배너 | `src/law-links.js` + `src/notice-check.js` | `tests/unit/gates/law-links.test.js` | RR-*, CE-* |
 | 오디오북 플레이어 | `src/views/reader-audio.js` | `reader-audio.dom.test.js` | AO-* |
 | 성분 사전 (knowledge 스키마 구동) | `src/views/dictionary.js` | `study-dictionary.dom.test.js`, `dictionary-*.dom.test.js` | DI-* |
-| 문제집 뷰어 (PDF형 문서 열람) | `src/exam-viewer.js` | `study-examviewer.dom.test.js` | EV-* |
-| 학습안내서·매뉴얼 뷰어 | `src/manual-viewer.js` | `study-manual.dom.test.js` | MV-* |
-| Markdown → HTML 파서 | `src/markdown-parser.js` | `tests/unit/content/markdown-parser-general.test.js` | BP-* |
-| Mermaid 다이어그램 렌더 | `src/mermaid-render.js` + `mermaid-utils.js` | `mermaid-zoom.dom.test.js` | TR-* |
-| 이미지 확대·문서 오버레이 | `src/image-zoom.js` + `src/doc-overlay.js` | `doc-overlay.dom.test.js` | TR-* |
+| 문제집 뷰어 (PDF형 문서 열람) | `src/reader/exam-viewer.js` | `study-examviewer.dom.test.js` | EV-* |
+| 학습안내서·매뉴얼 뷰어 | `src/reader/manual-viewer.js` | `study-manual.dom.test.js` | MV-* |
+| Markdown → HTML 파서 | `src/reader/markdown-parser.js` | `tests/unit/content/markdown-parser-general.test.js` | BP-* |
+| Mermaid 다이어그램 렌더 | `src/reader/mermaid-render.js` + `mermaid-utils.js` | `mermaid-zoom.dom.test.js` | TR-* |
+| 이미지 확대·문서 오버레이 | `src/reader/image-zoom.js` + `src/doc-overlay.js` | `doc-overlay.dom.test.js` | TR-* |
 
 ## 3. Formula OS (실무 영역, `src/exams/cosmetic/`)
 

@@ -1,6 +1,6 @@
 // src/markdown-parser.js - 공통 마크다운 런타임 파서 (브라우저 ESM)
 // @spec TR-01,TR-09
-import { escapeHTML } from './sanitize.js';
+import { escapeHTML } from '../sanitize.js';
 
 /* ============================================================
    joinWraps — PDF 고정폭 wrap 연속줄 복원 (ref_md 전용)

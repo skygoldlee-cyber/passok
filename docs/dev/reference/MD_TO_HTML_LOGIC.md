@@ -89,11 +89,11 @@
 
 | 파일 | 역할 |
 |------|------|
-| `src/markdown-parser.js` | 공통 마크다운 → HTML 변환 함수 (순수 함수, ESM) |
+| `src/reader/markdown-parser.js` | 공통 마크다운 → HTML 변환 함수 (순수 함수, ESM) |
 | `src/sanitize.js` | XSS 방어 — `escapeHTML()`, `safeTextWithBreaks()` |
-| `src/manual-viewer.js` | 매뉴얼/학습안내서 런타임 뷰어 (fetch → 파싱 → 오버레이 표시) |
-| `src/reader-format.js` | 교재 리더용 포맷터 (`parseMarkdown`에 reader 옵션 적용) |
-| `src/exam-viewer.js` | 예상문제집 뷰어 (`parseMarkdown` 사용, Mermaid 비활성) |
+| `src/reader/manual-viewer.js` | 매뉴얼/학습안내서 런타임 뷰어 (fetch → 파싱 → 오버레이 표시) |
+| `src/reader/reader-format.js` | 교재 리더용 포맷터 (`parseMarkdown`에 reader 옵션 적용) |
+| `src/reader/exam-viewer.js` | 예상문제집 뷰어 (`parseMarkdown` 사용, Mermaid 비활성) |
 | `sw.js` | Service Worker — `.md` 파일 Cache First, 프리캐시 |
 | `tools/build/build_doc_bundles.js` | `file://` 폴백용 JS 번들 빌드 (`{dataRoot}/docs_md/*.js`) |
 | `ref-pipeline/md2doc.py` | Python 독립 HTML 변환기 (GUI/CLI, Tailwind + Mermaid 임베드) |
@@ -105,7 +105,7 @@
 
 ### 2.1 소스 정의
 
-`@/src/manual-viewer.js:15-18`
+`@/src/reader/manual-viewer.js:15-18`
 
 ```javascript
 const MD_SOURCES = {
@@ -117,7 +117,7 @@ const MD_SOURCES = {
 
 ### 2.2 프로토콜별 로드 전략
 
-`@/src/manual-viewer.js:421-438`
+`@/src/reader/manual-viewer.js:421-438`
 
 ```javascript
 async function _loadMd(sourceKey) {
@@ -141,7 +141,7 @@ async function _loadMd(sourceKey) {
 
 ### 2.3 번들 폴백 메커니즘
 
-`@/src/manual-viewer.js:403-418`
+`@/src/reader/manual-viewer.js:403-418`
 
 - `tools/build/build_doc_bundles.js`가 `.md` 원문을 JS 파일로 번들링
 - 번들 파일은 전역 `window.__DOC_MD__` 객체에 경로별 마크다운 원문 저장
@@ -220,7 +220,7 @@ if (MD_PATTERN.test(url.pathname)) {
 
 ## 4. 마크다운 파서 (`markdown-parser.js`)
 
-`@/src/markdown-parser.js:16-266`
+`@/src/reader/markdown-parser.js:16-266`
 
 ### 4.1 설계 원칙
 
@@ -255,7 +255,7 @@ if (MD_PATTERN.test(url.pathname)) {
 
 ### 4.3 옵션
 
-`@/src/markdown-parser.js:16-24`
+`@/src/reader/markdown-parser.js:16-24`
 
 | 옵션 | 기본값 | 사용처 |
 |------|--------|--------|
@@ -270,7 +270,7 @@ if (MD_PATTERN.test(url.pathname)) {
 
 ### 4.4 테이블 파싱 상세
 
-`@/src/markdown-parser.js:87-117`
+`@/src/reader/markdown-parser.js:87-117`
 
 - 양끝 파이프 `|` 제거 후 내부 `|`로 셀 분리
 - 이스케이프된 파이프 `\|`는 `PIPE_ESC_TOKEN`으로 보호 후 복원
@@ -280,7 +280,7 @@ if (MD_PATTERN.test(url.pathname)) {
 
 ### 4.5 Mermaid 코드블록 처리
 
-`@/src/markdown-parser.js:131-132`
+`@/src/reader/markdown-parser.js:131-132`
 
 ```javascript
 if (allowMermaid && codeLang === 'mermaid') {
@@ -298,7 +298,7 @@ if (allowMermaid && codeLang === 'mermaid') {
 
 ### 5.1 엔트리 포인트
 
-`@/src/manual-viewer.js:443-465`
+`@/src/reader/manual-viewer.js:443-465`
 
 ```javascript
 async function openDocument(sourceKey) {
@@ -319,7 +319,7 @@ async function openDocument(sourceKey) {
 
 ### 5.2 캐시 (sessionStorage)
 
-`@/src/manual-viewer.js:19-61`
+`@/src/reader/manual-viewer.js:19-61`
 
 - **키**: `manual_md_cache_v3_<정규화된_경로>`
 - **값**: `{ timestamp, html }` JSON 문자열
@@ -328,7 +328,7 @@ async function openDocument(sourceKey) {
 
 ### 5.3 오버레이 UI
 
-`@/src/manual-viewer.js:77-198`
+`@/src/reader/manual-viewer.js:77-198`
 
 - **전체화면 오버레이**: `position: fixed; inset: 0; z-index: 9999`
 - **상단 바**: 닫기 버튼, 제목, 인쇄/PDF 버튼
@@ -338,7 +338,7 @@ async function openDocument(sourceKey) {
 
 ### 5.4 목차 자동 생성
 
-`@/src/manual-viewer.js:200-211`
+`@/src/reader/manual-viewer.js:200-211`
 
 - 본문 내 `h2`, `h3` 요소를 스캔하여 `<details>` 목차 생성
 - 각 헤딩에 자동으로 `id` 부여
@@ -356,7 +356,7 @@ async function openDocument(sourceKey) {
 
 ### 6.1 온디맨드 로드
 
-`@/src/manual-viewer.js:215-256`
+`@/src/reader/manual-viewer.js:215-256`
 
 ```javascript
 let _mermaidLoadPromise = null;
@@ -381,7 +381,7 @@ function _ensureMermaid() {
 
 ### 6.2 렌더링 실행
 
-`@/src/manual-viewer.js:233-256`
+`@/src/reader/manual-viewer.js:233-256`
 
 ```javascript
 function _renderMermaid() {
@@ -406,7 +406,7 @@ function _renderMermaid() {
 
 ### 6.3 테마 변경 시 재렌더링
 
-`@/src/manual-viewer.js:472-479`
+`@/src/reader/manual-viewer.js:472-479`
 
 ```javascript
 document.addEventListener('themechange', () => {
@@ -513,11 +513,11 @@ flowchart TD
 
 | 파일 | 경로 |
 |------|------|
-| 마크다운 파서 (JS) | `src/markdown-parser.js` |
+| 마크다운 파서 (JS) | `src/reader/markdown-parser.js` |
 | XSS 방어 | `src/sanitize.js` |
-| 매뉴얼 뷰어 | `src/manual-viewer.js` |
-| 교재 리더 포맷터 | `src/reader-format.js` |
-| 예상문제집 뷰어 | `src/exam-viewer.js` |
+| 매뉴얼 뷰어 | `src/reader/manual-viewer.js` |
+| 교재 리더 포맷터 | `src/reader/reader-format.js` |
+| 예상문제집 뷰어 | `src/reader/exam-viewer.js` |
 | Service Worker | `sw.js` |
 | 번들 빌더 | `tools/build/build_doc_bundles.js` |
 | 이벤트 위임 | `src/app.js` |

@@ -14,7 +14,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const {
     isStoryMetaSection, filterMetaSections, getTocLevel,
     cleanRefTitle, extractSubHeadings, buildSectionDisplayTitles,
-} = require(join(ROOT, 'src/reader-toc.js'));
+} = require(join(ROOT, 'src/reader/reader-toc.js'));
 
 test('isStoryMetaSection — 메타 섹션 제목 판정', () => {
     assert.ok(isStoryMetaSection('🧭 학습 아이콘'));

@@ -26,7 +26,7 @@ const { parseArgs, getTargets, writeDraft, loadEnv, DRAFT_DIR, ROOT } = require(
 const llm = require('./llm_client');
 
 const esmRequire = createRequire(path.join(ROOT, 'tools', 'build', 'plugins', 'textbook.plugin.js'));
-const { buildSubjectData } = esmRequire('../../../src/textbook-core.js');
+const { buildSubjectData } = esmRequire('../../../src/reader/textbook-core.js');
 
 const SYSTEM = '당신은 자격시험 플래시카드의 암기팁 작성 보조입니다. 제공된 정의와 교재 근거만을 바탕으로, 기억·구분에 도움되는 1~2문장의 암기팁을 한국어로 작성하라. 근거에 없는 사실·수치를 만들지 말 것.';
 

@@ -50,7 +50,7 @@ const STORE_CALL_RE = /(?:safeSetItem|safeSetJSON|setItem|setJSON|setItemAsync|s
 /** 허용 목록 — 위치 키가 설계상 정당한 지점만 (file·포함 문자열·사유) */
 const ALLOWED = [
     {
-        file: 'src/reader-format.js', contains: 'idxKey',
+        file: 'src/reader/reader-format.js', contains: 'idxKey',
         reason: 'GLOSSARY_INDEX 조회 키 — 번들과 동일 규칙으로 매 빌드 재계산되는 표시층 인덱스 (사용자 데이터 영속 아님)'
     },
     {

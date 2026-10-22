@@ -2,9 +2,9 @@
 // @spec G-08
 // GLOSSARY_INDEX 데이터 구조를 캡슐화하고, 뷰 모듈에 쿼리 API를 제공합니다.
 // 데이터 구조가 변경되어도 이 파일만 수정하면 됩니다.
-import { getGlossaryIndex } from './keyword-index.js';
-import { getRefTables } from './pdf-registry.js';
-import { DataLoader } from './data-loader.js';
+import { getGlossaryIndex } from '../keyword-index.js';
+import { getRefTables } from '../pdf-registry.js';
+import { DataLoader } from '../data-loader.js';
 
 /**
  * 특정 참조문서 파일명에 해당하는 용어집 항목들을 반환합니다.

@@ -5,7 +5,7 @@
 // 뒤로가기 닫기를 자동 감지한다. 모바일은 모달 내 자체 핀치 제스처(zoom-gestures.js)
 // 로 확대한다 — 페이지 핀치줌은 레이아웃 통째 확대라 대체가 아니다 (TR-26).
 
-import { trapFocus } from './ui-utils.js';
+import { trapFocus } from '../ui-utils.js';
 import { bindZoomGestures } from './zoom-gestures.js';
 
 const ZOOM_STEPS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];

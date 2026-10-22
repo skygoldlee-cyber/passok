@@ -13,7 +13,7 @@
 
 | 사실 | 근거 |
 |------|------|
-| 런타임은 PDF를 서빙하지 않는다 | `.pdf` 링크는 `src/reader-format.js`·`src/exam-viewer.js`가 `ref_md/` MD 경로로 변환. `type:'pdf'`는 "원본이 PDF"라는 표식일 뿐 |
+| 런타임은 PDF를 서빙하지 않는다 | `.pdf` 링크는 `src/reader/reader-format.js`·`src/reader/exam-viewer.js`가 `ref_md/` MD 경로로 변환. `type:'pdf'`는 "원본이 PDF"라는 표식일 뿐 |
 | 배포에도 포함되지 않는다 | `.vercelignore` — `content/exams/*/참조자료/**/*.pdf` 배포 제외 |
 | 소비자는 개발 파이프라인뿐 | `convert:refs`(pdfplumber 변환), `check:reffresh`(해시 신선도), `check:reflayout`(4계층 정합) |
 | 무결성 매니페스트가 이미 있다 | `content/exams/cosmetic/참조자료/pdf_hashes.json`에 41개 SHA-256이 스탬프됨 — 다운로드 검증 키로 그대로 재사용 가능 |

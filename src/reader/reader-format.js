@@ -4,12 +4,12 @@
 // (n=HTML 길이, k=정규식 수). 단일 패스 파서 또는 DOM 기반 후처리로 통합하면 성능 개선
 // 가능하나, 현재 측정된 병목이 아니므로 장기 개선으로 보류.
 import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
-import { contentPath, getActiveRegistry } from './exam-context.js';
-import { PATHS, normalizeRefPath } from './paths.js';
-import { escapeHTML } from './sanitize.js';
-import { resolveRefPath, getRefTables, refDocDisplayName } from './pdf-registry.js';
+import { contentPath, getActiveRegistry } from '../exam-context.js';
+import { PATHS, normalizeRefPath } from '../paths.js';
+import { escapeHTML } from '../sanitize.js';
+import { resolveRefPath, getRefTables, refDocDisplayName } from '../pdf-registry.js';
 import { getGlossaryEntry } from './glossary-query.js';
-import { lawUrlFor } from './law-links.js';
+import { lawUrlFor } from '../law-links.js';
 
 // 참조자료 문서명 → law.go.kr 공식 원문(최신 통합본) 링크 조각 (매칭 없으면 빈 문자열)
 // label/title은 호출부가 문맥에 맞게 지정 (원료 DB는 '근거 고시')

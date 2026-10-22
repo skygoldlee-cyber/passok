@@ -3,15 +3,15 @@
 // 인덱스 구축·지연 로드·형태소 매칭·랭킹은 src/search-index.js로 분리 —
 // 이 모듈은 검색창 이벤트·결과 버킷 렌더·뷰 이동 위임만 담당한다.
 import { escapeHTML, esc, html, raw } from '../sanitize.js';
-import { renderMermaidIn } from '../mermaid-render.js';
-import { attachImageZoomIn } from '../image-zoom.js';
+import { renderMermaidIn } from '../reader/mermaid-render.js';
+import { attachImageZoomIn } from '../reader/image-zoom.js';
 import { TIMING } from '../config/timing.js';
 import { DataLoader } from '../data-loader.js';
 import { getRefTables, mapSourceToRef, resolveRefPath, refDocDisplayName } from '../pdf-registry.js';
-import { formatSectionContentForReader } from '../reader-format.js';
+import { formatSectionContentForReader } from '../reader/reader-format.js';
 import { escapeRegExp, debounce } from '../utils.js';
 import { ensureLazyIndexes, runUnifiedSearch, _matchSnippet } from '../search-index.js';
-import { glossarySubjectKey } from '../glossary-query.js';
+import { glossarySubjectKey } from '../reader/glossary-query.js';
 import { initSearchSources, matchGlossaryDefs } from '../search-sources.js';
 
 const textbookState = {

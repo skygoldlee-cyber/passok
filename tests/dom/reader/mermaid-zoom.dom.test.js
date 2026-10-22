@@ -1,7 +1,7 @@
 // @spec TR-06
 // mermaid-render.js 다이어그램 확대 모달 DOM 테스트 (모바일은 모달 내 핀치 제스처 — TR-26)
 import { describe, it, beforeEach, expect } from 'vitest';
-import { attachMermaidZoom, openMermaidZoom, closeMermaidZoom } from '../../../src/mermaid-render.js';
+import { attachMermaidZoom, openMermaidZoom, closeMermaidZoom } from '../../../src/reader/mermaid-render.js';
 
 const MERMAID_PRE = `
     <pre class="mermaid mermaid-flowchart"><svg viewBox="0 0 800 400" width="100%" style="max-width: 800px;"><rect width="10" height="10"></rect></svg></pre>

@@ -5,7 +5,7 @@
 //       (툴바 "참조자료" 드롭다운 패널은 2026-10 제거 — SPEC RR-07)
 import { esc } from '../sanitize.js';
 import { showToast } from '../ui-utils.js';
-import { openHtmlViewer } from '../html-viewer.js';
+import { openHtmlViewer } from '../reader/html-viewer.js';
 import { scrollToGlossary } from './glossary-renderer.js';
 import { ensureNoticeStatus, markStaleRefLinks } from '../notice-check.js';
 import { TIMING } from '../config/timing.js';

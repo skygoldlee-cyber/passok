@@ -1,7 +1,7 @@
 // src/data-loader.js — 학습 데이터 로더
 // @spec DA-03,PF-01,PF-02,PF-03,PF-07,DA-02,AI-22
 // [변경] 교재/카드/퀴즈(STUDY_DATA)는 더 이상 사전 빌드된 data/subjects/*.js 번들을 쓰지 않고,
-//        content/*.md 를 런타임에 fetch → src/textbook-parser.js 로 파싱하여 조립한다.
+//        content/*.md 를 런타임에 fetch → src/reader/textbook-parser.js 로 파싱하여 조립한다.
 //        - http(s): content/manifest.json + content/**/*.md 라이브 fetch (항상 최신, 재빌드 불필요)
 //        - file://: fetch 차단되므로 data/study_md/ 분할 폴백 번들에서 원문/매니페스트 조회
 
@@ -9,7 +9,7 @@ import { TIMING } from './config/timing.js';
 import { PATHS } from './paths.js';
 //        exam/ingredients 는 기존 레지스트리 번들 방식을 그대로 유지한다.
 import { cleanOrphansForSubject } from './state.js';
-import { buildSubjectData } from './textbook-parser.js';
+import { buildSubjectData } from './reader/textbook-parser.js';
 import { getActiveExam, contentPath, dataPath } from './exam-context.js';
 // [모바일 PWA 견고성] 레지스트리는 window 전역(가드)에서 읽는다. 정적 import 로 하드 의존하면
 // 레지스트리 로드 실패 시 app.js 모듈 그래프 전체가 죽어 흰 화면이 되므로 지양.

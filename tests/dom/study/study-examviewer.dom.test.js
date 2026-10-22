@@ -19,7 +19,7 @@ describe('문제집 뷰어 — 열기·TOC·인쇄·캐시', () => {
         localStorage.clear();
         sessionStorage.clear();
         vi.resetModules();
-        ({ ExamViewer } = await import('../../../src/exam-viewer.js'));
+        ({ ExamViewer } = await import('../../../src/reader/exam-viewer.js'));
         loadIndexHtml();
         window.__EXAM_MD__ = { [EXAM_PATH]: EXAM_MD };
         Element.prototype.scrollIntoView = Element.prototype.scrollIntoView || vi.fn();

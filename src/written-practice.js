@@ -10,7 +10,7 @@
 // 진행은 STORAGE_KEYS.WRITTEN_PRACTICE(시험 스코프)에 문항 id(S번호) 기준 저장.
 // ============================================================
 import { escapeHTML } from './sanitize.js';
-import { parseMarkdown } from './markdown-parser.js';
+import { parseMarkdown } from './reader/markdown-parser.js';
 import { dataPath } from './exam-context.js';
 import { getJSON, setJSON } from './storage.js';
 import { STORAGE_KEYS } from './storage-keys.js';
@@ -542,7 +542,7 @@ async function _openRef(ref) {
         resolved = decodeURIComponent(new URL(encodeURI(ref.path), new URL(encodeURI(baseDir), location.href)).pathname)
             .replace(/^\//, '');
     } catch (e) { resolved = ref.path.replace(/^\.\.\//, ''); }
-    const mod = await import('./exam-viewer.js');
+    const mod = await import('./reader/exam-viewer.js');
     _overlay.close();
     mod.ExamViewer.openExam(resolved, ref.line || undefined);
 }

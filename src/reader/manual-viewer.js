@@ -10,15 +10,15 @@
 //   - 전역 테마(--bg-app, --color-text-main 등)를 자동으로 따라감
 //   - 오버레이 셸·캐시·TOC·번들 주입은 src/doc-overlay.js 공용 베이스 사용
 //
-import { escapeHTML } from './sanitize.js';
+import { escapeHTML } from '../sanitize.js';
 import { renderMermaidIn } from './mermaid-render.js';
 import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
-import { openSubjectChapter } from './views/textbook-reader.js';
-import { PATHS } from './paths.js';
-import { dataPath } from './exam-context.js';
-import { CACHE } from './config/cache.js';
+import { openSubjectChapter } from '../views/textbook-reader.js';
+import { PATHS } from '../paths.js';
+import { dataPath } from '../exam-context.js';
+import { CACHE } from '../config/cache.js';
 import { attachImageZoomIn } from './image-zoom.js';
-import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay, scrollToHeadingSlug } from './doc-overlay.js';
+import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay, scrollToHeadingSlug } from '../doc-overlay.js';
 
 export const ManualViewer = (() => {
     // 지원하는 마크다운 소스 정의

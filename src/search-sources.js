@@ -17,11 +17,11 @@ import { DataLoader } from './data-loader.js';
 import { hasFeature, contentPath, dataPath, getActiveExamId } from './exam-context.js';
 import { injectBundleScript, fetchMd } from './doc-overlay.js';
 import { getRefTables } from './pdf-registry.js';
-import { buildSectionDisplayTitles, isStoryMetaSection } from './reader-toc.js';
+import { buildSectionDisplayTitles, isStoryMetaSection } from './reader/reader-toc.js';
 import { PATHS } from './paths.js';
 import { registerSearchSource, registerVocabContributor, _toSearchable, _getMorphVocab } from './search-index.js';
 import { termHitQuality } from './search-morpheme.js';
-import { getAllGlossaryKeywords, getGlossaryEntry, glossarySubjectKey } from './glossary-query.js';
+import { getAllGlossaryKeywords, getGlossaryEntry, glossarySubjectKey } from './reader/glossary-query.js';
 
 /** SearchDoc 생성 — _searchText는 제목+본문의 소문자·공백 정규화본 */
 function _doc(fields) {

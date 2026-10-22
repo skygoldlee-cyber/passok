@@ -56,7 +56,7 @@ AI 학습 경로 추천 ──────── ❌ 10%   (과목 추천만, "�
 | 단계 | 반영도 | 상태 | 핵심 파일 | 완료 판정 기준 |
 |------|--------|------|-----------|---------------|
 | 교재 읽기 | 100% | ✅ 완전 | `src/views/textbook-reader.js` (84KB) | 4과목 20챕터 렌더링 ✓ |
-| 핵심 개념 추출 | 100% | ✅ 완전 | `src/textbook-parser.js` (자동 추출) | 카드+퀴즈 자동 생성 ✓ |
+| 핵심 개념 추출 | 100% | ✅ 완전 | `src/reader/textbook-parser.js` (자동 추출) | 카드+퀴즈 자동 생성 ✓ |
 | 플래시카드 암기 | 100% | ✅ 완전 | `src/views/flashcard.js` | 필터/정렬/3D 플립 ✓ |
 | 문제 풀이 | 100% | ✅ 완전 | `src/views/quiz.js` + `src/views/exam-simulator.js` | 퀴즈+모의고사 100제 ✓ |
 | 오답 분석 | 30% | ⚠️ 부분 | 오답 수집만, 원인 진단 없음 | 원인 3종 분류 0/3 + 재학습 연결 0/3 = 0/6 |
@@ -76,7 +76,7 @@ AI 학습 경로 추천 ──────── ❌ 10%   (과목 추천만, "�
 
 ### 2.1 교재 읽기 → 핵심 개념 추출: ✅ 완전 연결 (100%)
 
-**구현 파일**: `src/textbook-parser.js` (638 lines)
+**구현 파일**: `src/reader/textbook-parser.js` (638 lines)
 
 `parseMarkdownFile()` 함수가 교재 Markdown에서 카드와 퀴즈를 자동 추출합니다.
 
@@ -90,7 +90,7 @@ AI 학습 경로 추천 ──────── ❌ 10%   (과목 추천만, "�
 
 **파이프라인 연결성**: 교재 MD → 카드/퀴즈 자동 추출 → 빌드 번들 → 런타임 로드. 완전히 연결되어 있습니다.
 
-> 참조: `src/textbook-parser.js` lines 164-180 (parseMarkdownFile), lines 59-77 (classifyCardType), lines 80-130 (scoreCard)
+> 참조: `src/reader/textbook-parser.js` lines 164-180 (parseMarkdownFile), lines 59-77 (classifyCardType), lines 80-130 (scoreCard)
 
 ---
 

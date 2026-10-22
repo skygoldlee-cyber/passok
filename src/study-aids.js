@@ -4,7 +4,7 @@
 
 import { escapeHTML as esc } from './sanitize.js';  // escapeHTML을 esc로 alias하여 사용
 import { PATHS } from './paths.js';
-import { buildSectionDisplayTitles } from './reader-toc.js';
+import { buildSectionDisplayTitles } from './reader/reader-toc.js';
 
 // --- ② 기출 핵심 요약 ---
 

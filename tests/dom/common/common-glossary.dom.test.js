@@ -13,7 +13,7 @@ vi.mock('../../../src/ui-utils.js', () => ({
     HAPTIC: { correct: 30, wrong: [40, 30, 40], tap: 10 },
 }));
 // 용어집 쿼리·참조경로 해석을 스텁 — collectGlossaryItems의 병합 로직만 검증
-vi.mock('../../../src/glossary-query.js', () => ({
+vi.mock('../../../src/reader/glossary-query.js', () => ({
     getGlossaryByRefFile: vi.fn((file, seen) => {
         if (file !== '법령A.md') return [];
         const item = {

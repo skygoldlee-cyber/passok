@@ -6,8 +6,8 @@
 
 // @spec TR-06~08,MV-02,TS-07,PF-13,PF-16
 import { detectMermaidType, getMermaidClassName, getMermaidInitOptions } from './mermaid-utils.js';
-import { PATHS } from './paths.js';
-import { trapFocus } from './ui-utils.js';
+import { PATHS } from '../paths.js';
+import { trapFocus } from '../ui-utils.js';
 import { bindZoomGestures } from './zoom-gestures.js';
 
 let _mermaidLoadPromise = null;

@@ -404,7 +404,7 @@ describe('교재 리더 — 툴바·검색·드로어·표 모달', () => {
     });
 });
 
-import { markStoryNarrative } from '../../../src/reader-format.js';
+import { markStoryNarrative } from '../../../src/reader/reader-format.js';
 
 describe('이야기형 서사 태깅 — markStoryNarrative', () => {
     function buildCard(title, innerHtml) {
@@ -614,7 +614,7 @@ describe('이야기형 서사 태깅 — markStoryNarrative', () => {
     });
 });
 
-import { attachImageZoomIn, openImageZoom, closeImageZoom } from '../../../src/image-zoom.js';
+import { attachImageZoomIn, openImageZoom, closeImageZoom } from '../../../src/reader/image-zoom.js';
 
 describe('이미지 확대 모달 — image-zoom', () => {
     function buildContentWithImg() {

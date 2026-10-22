@@ -6,7 +6,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseMarkdown } from '../../../src/markdown-parser.js';
+import { parseMarkdown } from '../../../src/reader/markdown-parser.js';
 
 /** md → 첫 번째 <a> 태그의 href 추출 (없으면 null) */
 function firstHref(md) {

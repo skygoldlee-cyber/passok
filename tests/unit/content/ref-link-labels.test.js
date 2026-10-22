@@ -9,9 +9,9 @@ import { createRequire } from 'node:module';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { ExamViewer } from '../../../src/exam-viewer.js';
+import { ExamViewer } from '../../../src/reader/exam-viewer.js';
 import { refDocDisplayName } from '../../../src/pdf-registry.js';
-import { formatSectionContentForReader } from '../../../src/reader-format.js';
+import { formatSectionContentForReader } from '../../../src/reader/reader-format.js';
 import { slugifyHeading, scrollToHeadingSlug } from '../../../src/doc-overlay.js';
 
 const require = createRequire(import.meta.url);

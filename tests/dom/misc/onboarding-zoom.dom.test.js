@@ -20,7 +20,7 @@ vi.mock('../../../src/state.js', () => ({
 }));
 
 import { showOnboardingModal, maybeShowOnboarding } from '../../../src/onboarding.js';
-import { openImageZoom, closeImageZoom, attachImageZoomIn } from '../../../src/image-zoom.js';
+import { openImageZoom, closeImageZoom, attachImageZoomIn } from '../../../src/reader/image-zoom.js';
 
 beforeEach(() => {
     localStorage.clear();

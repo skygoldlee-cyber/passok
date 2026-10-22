@@ -4,7 +4,7 @@
 // 데이터 접근은 glossary-query.js를 통해 추상화됩니다.
 import { esc } from '../sanitize.js';
 import { resolveRefPath } from '../pdf-registry.js';
-import { getGlossaryByRefFile, getGlossaryBySubject } from '../glossary-query.js';
+import { getGlossaryByRefFile, getGlossaryBySubject } from '../reader/glossary-query.js';
 
 /**
  * 챕터의 섹션들을 순회하며 용어집 항목을 수집합니다.

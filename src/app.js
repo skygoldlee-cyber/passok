@@ -5,9 +5,9 @@ import { esc } from './sanitize.js';
 import { shuffle } from './utils.js';
 import { clearScratchpad, toggleCalcScratchpad, toggleScratchpadEraser } from './scratchpad.js';
 import { DataLoader } from './data-loader.js';
-import { ExamViewer } from './exam-viewer.js';
+import { ExamViewer } from './reader/exam-viewer.js';
 import { WrittenPractice } from './written-practice.js';
-import { ManualViewer } from './manual-viewer.js';
+import { ManualViewer } from './reader/manual-viewer.js';
 import { initWebVitals } from './web-vitals.js';
 import { STORAGE_KEYS } from './storage-keys.js';
 import { setupPWAInstall } from './pwa/pwa-install.js';
@@ -139,7 +139,7 @@ import {
     triggerImport,
     setupImportListener
 } from './views/backup.js';
-import { checkTextbookEditionBanner } from './textbook-edition.js';
+import { checkTextbookEditionBanner } from './reader/textbook-edition.js';
 import {
     renderTextbookSearch,
     setTextbookFilter,

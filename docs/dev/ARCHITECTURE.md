@@ -257,19 +257,23 @@ passok/
 │   ├── state.js                #   전역 상태 + 진행 영속성 (저장은 storage.js 위임)
 │   ├── storage.js              #   저장소 추상화 계층 (교체 가능 백엔드, 동기·Async 이중 API)
 │   ├── data-loader.js          #   온디맨드 과목/시험 로딩
-│   ├── textbook-parser.js      #   런타임 MD 파서 진입점 (contentPath 주입 어댑터)
-│   ├── textbook-core.js        #   MD → 카드/퀴즈/챕터 파싱 공통 코어 (빌드 플러그인과 공유)
-│   ├── reader-format.js        #   MD→HTML 변환, 링크 재작성, 키워드 자동링크
-│   ├── markdown-parser.js      #   범용 MD→HTML 파서
+│   ├── reader/textbook-parser.js   #   런타임 MD 파서 진입점 (contentPath 주입 어댑터)
+│   ├── reader/textbook-core.js     #   MD → 카드/퀴즈/챕터 파싱 공통 코어 (빌드 플러그인과 공유)
+│   ├── reader/reader-format.js     #   MD→HTML 변환, 링크 재작성, 키워드 자동링크
+│   ├── reader/reader-toc.js        #   리더 목차 추출 순수 헬퍼 (메타 섹션 필터·계층 판정)
+│   ├── reader/markdown-parser.js   #   범용 MD→HTML 파서
 │   ├── pdf-registry.js         #   참조자료 중앙 설정 — 시험별 테이블(_EXAM_TABLES) + getRefTables()
-│   ├── mermaid-render.js       #   Mermaid 지연 로딩·렌더링·확대 모달 공용 (reader/search/manual — 데스크탑 전용)
-│   ├── image-zoom.js           #   본문 이미지(.reader-img) 라이트박스 — 데스크탑 전용 (모바일은 핀치 줌)
+│   ├── reader/mermaid-render.js    #   Mermaid 지연 로딩·렌더링·확대 모달 공용 (reader/search/manual — 데스크탑 전용)
+│   ├── reader/mermaid-utils.js     #   Mermaid 다이어그램 설정
+│   ├── reader/image-zoom.js        #   본문 이미지(.reader-img) 라이트박스 — 데스크탑 전용 (모바일은 핀치 줌)
+│   ├── reader/zoom-gestures.js     #   줌 모달 공용 핀치·패닝·더블탭 제스처 (TR-26)
 │   ├── pwa/pwa-manifest.js         #   활성 시험 기준 PWA 매니페스트 링크 교체 (단일 앱 id='passok' · 클래식)
-│   ├── html-viewer.js          #   참조자료 fetch+DOM 뷰어, 검색, 하이라이트
-│   ├── exam-viewer.js          #   문제은행 MD 런타임 뷰어 (인용 링크 네비게이션, 라인 하이라이트)
+│   ├── reader/html-viewer.js       #   참조자료 fetch+DOM 뷰어, 검색, 하이라이트
+│   ├── reader/exam-viewer.js       #   문제은행 MD 런타임 뷰어 (인용 링크 네비게이션, 라인 하이라이트)
 │   ├── combo-doc.js            #   복수정답형 드릴 번들 → 문제집 MD 런타임 직렬화 (openCombo 경유)
-│   ├── manual-viewer.js        #   학습안내서/매뉴얼 뷰어
-│   ├── glossary-query.js       #   용어집 조회 API
+│   ├── reader/manual-viewer.js     #   학습안내서/매뉴얼 뷰어
+│   ├── reader/glossary-query.js    #   용어집 조회 API
+│   ├── reader/textbook-edition.js  #   교재 개정 감지 배너 (P-14)
 │   ├── keyword-index.js        #   교재 셀→참조자료 키워드 매핑 (자동 생성)
 │   ├── paths.js                #   파일 경로 상수 중앙 관리
 │   ├── storage-keys.js         #   localStorage 키 중앙 관리
@@ -590,11 +594,11 @@ passok/
 | [`src/search-sources.js`](../../src/search-sources.js) | 통합검색 콘텐츠 소스 프로바이더 (TS-10~12,TS-18). 교재 섹션(`collectTextbookSections` — STUDY_DATA→SearchDoc, 리더 표시 제목·챕터 앵커 해석)·서사 storyFile·참조자료·문제은행·시험 선언 문서(`manifest.searchDocs` → `__DOC_MD__` 번들/fetch 로드, feature 게이트 지원) 로더가 범용 엔트리 `{kind,title,crumb,subjId,text,nav,_searchText}`를 생산하고 `initSearchSources()`로 코어에 등록한다. `command-palette.js`도 같은 수집 함수를 재사용해 리더 규약 해석 중복을 소거 |
 | [`src/search-morpheme.js`](../../src/search-morpheme.js) | 통합검색 형태소 경계 판정·동의어 확장 순수 로직 (TS-13/TS-14). `buildBoundaryVocab`이 인덱스 어절에서 독립 어절+재사용 접두를 형태소 어휘로 마이닝하고, `isCoverable`(DP 완전분해)로 매치 직전 접두의 형태소 경계를 판정 — `termHitQuality`가 본매치(2)/부분(1)/없음(0)을 반환해 '보조유화제'는 본매치·'석유화학'은 부분 일치로 분류. `expandSynonyms`는 `registry.synonyms` 정·역방향으로 쿼리 어절을 동의 개념군(그룹 내 OR·그룹 간 AND)으로 확장. DOM 비의존·외부 형태소 분석기 없는 결정론적 구현 |
 | [`src/pdf-registry.js`](../../src/pdf-registry.js) | 참조자료 중앙 설정 모듈. 과목별 참조자료 매핑, 출처→PDF 파일명 매핑, MD 변환본 경로 자동 생성 (`REF_DIRS`, `resolveRefPath`, `mapSourceToRef`). 원본 PDF는 `.vercelignore`로 배포 제외, `ref_md/과목N/*/*.md` 변환본(3.7MB)으로 인앱 뷰어+PDF 저장 지원 |
-| [`src/html-viewer.js`](../../src/html-viewer.js) | 앱 내 HTML/MD 참조자료 뷰어. `fetch()`+`DOMParser`(HTML) 또는 `parseMarkdown()`(MD)로 로드 후 DOM 직접 주입 (iframe 없음). **키워드 기반 스크롤**: `KEYWORD_INDEX`에서 추출한 셀 텍스트 키워드로 검색→첫 번째 하이라이트로 스크롤 (L###은 스크롤에 사용하지 않음). **성능 최적화**: sessionStorage 캐싱(24h TTL)으로 재방문 시 즉시 렌더링, span 일괄 제거(normalize 호출 최소화), 검색 조기 종료(첫 매치 즉시 스크롤 + 나머지 `requestIdleCallback` 지연 하이라이트). 텍스트 노드 순회 검색 + `<mark>` 하이라이트, 검색 결과 내비게이션(이전/다음), 인쇄 지원. **PDF 저장** (v210 도입): 인쇄 전용 CSS로 오버레이 제약 없이 전체 문서를 브라우저 인쇄 다이얼로그로 출력 → "PDF로 저장" 선택 가능 |
-| [`src/reader-format.js`](../../src/reader-format.js) | 교재 리더 본문 포맷터. `parseMarkdown()` + HTML 참조 링크 변환 (`data-ref-html`, `data-ref-search`) + 참조자료 인라인 렌더링. **참조자료 인라인 프리뷰 툴팁** (데스크톱 hover 400ms / 모바일 롱프레스 600ms, 200자 스니펫). 본문 "📚 참조 자료" 섹션의 `ref_md` 링크는 내부 뷰어 + `↗원문`(law.go.kr) 병기 + 스냅샷 배지(제N호·시행일) + 동일 링크 중복 제거. 이야기형 서사 범위 태깅(`markStoryNarrative` — `📖 ┈ 이야기 ┈`/`┈ 본문 ┈ 📘` 명시 마커 우선. 마커 문단은 파서가 `.story-boundary`(+start/end) 부여 → 모든 뷰어 경로에서 숨김, 범위 내 요소에 `.story-narrative` + 서사 시작부 `.story-toggle` 접기 칩 + 구간 양끝 `.sr-only` 라벨(스크린리더) 삽입, 미표시 문서는 📖 장면·💭 에필로그·프롤로그/등장인물 카드 휴리스틱 폴백 → 명조체+골드 색상 구분. `<!-- story:start/end -->` 주석은 `markdown-parser.js`가 렌더에서 제거). **이미지 src 해석** — `images/x.png` 상대 경로는 `filePath` 디렉터리 기준으로, 구형 절대 경로(시험 루트 누락본)는 `contentPath()` 기준으로 재작성 (교재 `images/` 자산) |
+| [`src/reader/html-viewer.js`](../../src/reader/html-viewer.js) | 앱 내 HTML/MD 참조자료 뷰어. `fetch()`+`DOMParser`(HTML) 또는 `parseMarkdown()`(MD)로 로드 후 DOM 직접 주입 (iframe 없음). **키워드 기반 스크롤**: `KEYWORD_INDEX`에서 추출한 셀 텍스트 키워드로 검색→첫 번째 하이라이트로 스크롤 (L###은 스크롤에 사용하지 않음). **성능 최적화**: sessionStorage 캐싱(24h TTL)으로 재방문 시 즉시 렌더링, span 일괄 제거(normalize 호출 최소화), 검색 조기 종료(첫 매치 즉시 스크롤 + 나머지 `requestIdleCallback` 지연 하이라이트). 텍스트 노드 순회 검색 + `<mark>` 하이라이트, 검색 결과 내비게이션(이전/다음), 인쇄 지원. **PDF 저장** (v210 도입): 인쇄 전용 CSS로 오버레이 제약 없이 전체 문서를 브라우저 인쇄 다이얼로그로 출력 → "PDF로 저장" 선택 가능 |
+| [`src/reader/reader-format.js`](../../src/reader/reader-format.js) | 교재 리더 본문 포맷터. `parseMarkdown()` + HTML 참조 링크 변환 (`data-ref-html`, `data-ref-search`) + 참조자료 인라인 렌더링. **참조자료 인라인 프리뷰 툴팁** (데스크톱 hover 400ms / 모바일 롱프레스 600ms, 200자 스니펫). 본문 "📚 참조 자료" 섹션의 `ref_md` 링크는 내부 뷰어 + `↗원문`(law.go.kr) 병기 + 스냅샷 배지(제N호·시행일) + 동일 링크 중복 제거. 이야기형 서사 범위 태깅(`markStoryNarrative` — `📖 ┈ 이야기 ┈`/`┈ 본문 ┈ 📘` 명시 마커 우선. 마커 문단은 파서가 `.story-boundary`(+start/end) 부여 → 모든 뷰어 경로에서 숨김, 범위 내 요소에 `.story-narrative` + 서사 시작부 `.story-toggle` 접기 칩 + 구간 양끝 `.sr-only` 라벨(스크린리더) 삽입, 미표시 문서는 📖 장면·💭 에필로그·프롤로그/등장인물 카드 휴리스틱 폴백 → 명조체+골드 색상 구분. `<!-- story:start/end -->` 주석은 `markdown-parser.js`가 렌더에서 제거). **이미지 src 해석** — `images/x.png` 상대 경로는 `filePath` 디렉터리 기준으로, 구형 절대 경로(시험 루트 누락본)는 `contentPath()` 기준으로 재작성 (교재 `images/` 자산) |
 | [`src/law-links.js`](../../src/law-links.js) | 참조 문서 → law.go.kr 공식 원문 매퍼 (`lawUrlFor`, `LAW_DOC_URLS`). **생성물** — `build_pdf_registry.js`가 `content/lawdb.json`(법령 메타 SSOT) + 각 시험 `references.json.lawRefs`에서 시험별 `_EXAM_LAW_URLS` 테이블을 합성, 활성 시험 해석은 `getActiveExamId()`. 한글주소 규약: 법령=`/법령/`, 고시·기준·규정=`/행정규칙/`, 별표 파편→모법, 원료 DB→근거 고시('근거 고시' 라벨), 내부 정리 문서→null. `tools/check/check_law_urls.js`(check:lawurls)가 매핑 전수를 실호출 검증(한글주소 오류 페이지 본문 판별), notice-check 크론에 통합 |
 | [`src/notice-check.js`](../../src/notice-check.js) | 시험별 법령·고시 다문서 감시 — references.json referenceLaw 자동 유도 문서의 baseline↔latest 비교(`notice_status.json` docs[]), 기준 문서는 `references.json.noticeCore`/`latest.ruleName`로 해석(시험 비종속). 원격 상태 위치는 `STATUS_REPO` 상수 + `statusUrl(examId)`. Formula OS 진입 배너(24h 스로틀·시행일 억제) + '식약처 고시 확인' 버튼(law.go.kr 병렬 실시간) + '고시 정보 보기' 패널(문서별 기준→최신 행). `markStaleRefLinks`는 `[data-law-url]` 링크의 href를 현행본 시리얼 URL(`currentUrl`)로 보정 — 한글주소가 시행 예정 개정본으로 연결되는 사례 방지 — '⚠ 갱신 필요'/'⏳ 시행 예정' 배지 삽입 |
-| [`src/exam-viewer.js`](../../src/exam-viewer.js) | 문제집(MD) 런타임 뷰어. `content/exams/cosmetic/문제은행/*.md` fetch → 자체 MD→HTML 변환 → 인앱 전체화면 오버레이 렌더링. TOC 생성·인쇄·sessionStorage 캐시(24h)·`file://` 번들 폴리백(`data/exams/cosmetic/exams_md/*.js`) 지원. **시험 제목은 registry에서 동적 조회** (하드코딩 없음) |
+| [`src/reader/exam-viewer.js`](../../src/reader/exam-viewer.js) | 문제집(MD) 런타임 뷰어. `content/exams/cosmetic/문제은행/*.md` fetch → 자체 MD→HTML 변환 → 인앱 전체화면 오버레이 렌더링. TOC 생성·인쇄·sessionStorage 캐시(24h)·`file://` 번들 폴리백(`data/exams/cosmetic/exams_md/*.js`) 지원. **시험 제목은 registry에서 동적 조회** (하드코딩 없음) |
 | [`src/pro-upgrade.js`](../../src/pro-upgrade.js) | Pro 안내·entitlement 계층. 루트 `feature-plan.json`을 `loadFeaturePlan()`으로 로드 → 기능별 `pro`/`free` 판정(`isProFeature`). `pro` 기능은 진입 시 1회 정보 모달(`proFeatureNotice`, 기능별 seen 플래그) + `.pro-badge[data-pro-feature]` 배지 표시, `free`는 배지·안내 제거. 스토어 한도 오류(`Free 플랜` 접두사)는 `showStoreError` → `showUpgradeNotice` 업그레이드 모달로 분기. **entitlement**: `hasProEntitlement()`는 `pro_entitled` 로컬 플래그 참조(ROAD-P1 서버 검증 전 임시 시임), `canCloudSync()` = 플랜 free면 전원·pro면 entitlement 필요 — sync.js가 호출 |
 | [`src/usage-stats.js`](../../src/usage-stats.js) | 로컬 사용 카운터 (ROAD-L5 — 유료가치 판정 데이터). `switchView`의 `trackView(viewId)`로 화면별 진입·`trackAction(key)`로 기능 액션 횟수를 `usage_stats` **GLOBAL 키**에 누적 — `days` 맵은 90일 상한. **유저 단위**: `owner`에 익명 `device_id` 기록 — 로그인 없는 프로모션 기간에는 기기=유저로 근사, 시험 전환해도 누적 유지. **로컬 전용**: 백업·클라우드 동기화 제외(`RESET_KEYS`에는 포함 — 전체 초기화 시 삭제). **판정**: `VALUE_ACTIONS`(오답→교재/노트/유사문제·진단 평가·이야기형·맞춤 리포트·실제 결과 보고) 합계 ≥ `PRO_VALUE_THRESHOLD=20`이면 `isValueThresholdMet()` — ROAD-P1 착수 근거. `command_palette`·`plan_compare` 등 편의 액션은 표시만 하고 판정 제외. 설정 '내 사용 통계'(`showUsageStats`)에서 첫/최근 사용일·활동 일수·화면별/기능별 횟수·판정 진행 표 + 초기화 버튼 |
 
@@ -1398,12 +1402,12 @@ app-fallback.js 폴링 시작 (400ms 간격, 15s 데드라인)
 
 | 구성 요소 | 위치 | 역할 |
 |-----------|------|------|
-| **`addLineNumbers` 옵션** | [`src/markdown-parser.js`](../../src/markdown-parser.js) | `parseMarkdown` 호출 시 `addLineNumbers: true`로 각 HTML 요소에 `data-md-line="N"` 속성 부여 (N = MD 원본 라인 번호) |
-| **`joinWraps` 옵션** | [`src/markdown-parser.js`](../../src/markdown-parser.js) | ref_md 전용. PDF 고정폭 wrap으로 문장 중간에 잘린 연속줄을 이전 `<p>`/`<li>`에 병합. 연속줄은 `<span data-md-line>`으로 감싸 L#### 인용이 원줄 위치에 도착. H1 제목과 동일한 반복 단독줄(러닝헤더)은 투명 스킵. `exam-viewer`/`html-viewer`가 경로에 `ref_md` 포함 시 자동 적용. 품질 감사: `npm run check:refmerge` |
-| **인용 링크 클릭 인터셉트** | [`src/exam-viewer.js`](../../src/exam-viewer.js) `_renderBody` | 뷰어 내 `.md` 링크 클릭 시 `e.preventDefault()` 후 `openExam(mdPath, lineNum)` 호출 |
-| **`_scrollToLine`** | [`src/exam-viewer.js`](../../src/exam-viewer.js) | `data-md-line` 속성 기반으로 정확한 라인 매칭 → `scrollIntoView({ block: 'center' })` + 펄스 하이라이트 |
-| **네비게이션 스택** | [`src/exam-viewer.js`](../../src/exam-viewer.js) `_navStack` | 인용 링크 이동 시 현재 문서 경로와 스크롤 위치를 push, "뒤로" 버튼으로 pop |
-| **sessionStorage 캐시** | [`src/exam-viewer.js`](../../src/exam-viewer.js) | 렌더링된 HTML과 MD 원문을 캐시(v5), 재열람 시 즉시 표시 + 라인 스크롤 지원 |
+| **`addLineNumbers` 옵션** | [`src/reader/markdown-parser.js`](../../src/reader/markdown-parser.js) | `parseMarkdown` 호출 시 `addLineNumbers: true`로 각 HTML 요소에 `data-md-line="N"` 속성 부여 (N = MD 원본 라인 번호) |
+| **`joinWraps` 옵션** | [`src/reader/markdown-parser.js`](../../src/reader/markdown-parser.js) | ref_md 전용. PDF 고정폭 wrap으로 문장 중간에 잘린 연속줄을 이전 `<p>`/`<li>`에 병합. 연속줄은 `<span data-md-line>`으로 감싸 L#### 인용이 원줄 위치에 도착. H1 제목과 동일한 반복 단독줄(러닝헤더)은 투명 스킵. `exam-viewer`/`html-viewer`가 경로에 `ref_md` 포함 시 자동 적용. 품질 감사: `npm run check:refmerge` |
+| **인용 링크 클릭 인터셉트** | [`src/reader/exam-viewer.js`](../../src/reader/exam-viewer.js) `_renderBody` | 뷰어 내 `.md` 링크 클릭 시 `e.preventDefault()` 후 `openExam(mdPath, lineNum)` 호출 |
+| **`_scrollToLine`** | [`src/reader/exam-viewer.js`](../../src/reader/exam-viewer.js) | `data-md-line` 속성 기반으로 정확한 라인 매칭 → `scrollIntoView({ block: 'center' })` + 펄스 하이라이트 |
+| **네비게이션 스택** | [`src/reader/exam-viewer.js`](../../src/reader/exam-viewer.js) `_navStack` | 인용 링크 이동 시 현재 문서 경로와 스크롤 위치를 push, "뒤로" 버튼으로 pop |
+| **sessionStorage 캐시** | [`src/reader/exam-viewer.js`](../../src/reader/exam-viewer.js) | 렌더링된 HTML과 MD 원문을 캐시(v5), 재열람 시 즉시 표시 + 라인 스크롤 지원 |
 
 #### 데이터 흐름
 
@@ -1484,11 +1488,11 @@ app-fallback.js 폴링 시작 (400ms 간격, 15s 데드라인)
 |------|------|
 | `src/app-fallback.js` | 초기 로드 시 DOM 미구성 상태에서 실행 — `getComputedStyle` 호출 불가 |
 | `src/theme-init.js`, `src/theme-toggle.js` | 테마 초기화 자체 — CSS 변수 정의 전 실행 |
-| `src/mermaid-utils.js` | Mermaid 테마 정의 자체 — Mermaid 라이브러리에 색상값 전달 |
-| `src/html-viewer.js` | 외부 콘텐츠 격리 스타일링 — 독립적인 색상 체계 |
-| `src/reader-format.js` | GitHub 스타일 코드 블록 테마 — 고정 스타일 매칭 필요 |
+| `src/reader/mermaid-utils.js` | Mermaid 테마 정의 자체 — Mermaid 라이브러리에 색상값 전달 |
+| `src/reader/html-viewer.js` | 외부 콘텐츠 격리 스타일링 — 독립적인 색상 체계 |
+| `src/reader/reader-format.js` | GitHub 스타일 코드 블록 테마 — 고정 스타일 매칭 필요 |
 | `src/views/textbook-reader.js` | 코드 블록 하이라이트 — reader-format.js와 동일한 고정 색상 |
-| `src/exam-viewer.js`, `src/manual-viewer.js` | 인쇄용 고정 색상 — `@media print` 대응 |
+| `src/reader/exam-viewer.js`, `src/reader/manual-viewer.js` | 인쇄용 고정 색상 — `@media print` 대응 |
 
 ---
 
@@ -1500,7 +1504,7 @@ app-fallback.js 폴링 시작 (400ms 간격, 15s 데드라인)
 - 사용자 데이터를 DOM에 삽입할 때 텍스트 정제(sanitize) 적용
 - 신뢰할 수 있는 코드 생성 HTML(숫자 + `<strong>` 등)만 `innerHTML` 허용, raw 사용자 입력은 이스케이프
 
-### 1b. 외부 HTML sanitize ([`src/html-viewer.js`](../../src/html-viewer.js))
+### 1b. 외부 HTML sanitize ([`src/reader/html-viewer.js`](../../src/reader/html-viewer.js))
 - fetch한 참조자료 HTML을 `innerHTML` 삽입 전 DOMParser 기반 sanitize 수행 (외부 라이브러리 없음)
 - `<script>` 요소 제거, `on*` 이벤트 핸들러 속성 제거, `javascript:` URI 제거 (`href`/`src`/`action`/`formaction`)
 
@@ -1568,7 +1572,7 @@ content/exams/**/*.md       ──► (exams plugin)             ──► data/
 content/exams/cosmetic/knowledge/ingredients.json ──► (knowledge plugin) ──► data/exams/cosmetic/ingredients_data.<hash>.js (bundleFields 투영)
                                                             └──► 참조자료/원료/*.md의 GENERATED-TABLE 표 재생성 + registry.js의 ingredients 메타 (meta → version·history·contentHash)
 
-content/**/*.md ───(런타임 fetch)──► src/data-loader.js + src/textbook-parser.js ──► STUDY_DATA (카드/퀴즈/챕터)
+content/**/*.md ───(런타임 fetch)──► src/data-loader.js + src/reader/textbook-parser.js ──► STUDY_DATA (카드/퀴즈/챕터)
 content/**/*.md ───(file:// 폴백)──► tools/build/build_study_md_bundle.js ──► data/exams/cosmetic/study_md/ (과목별 분할)
 
 data/exams/<id>/exams/*.js ──► tools/build/build_ox_drills.js    ──► data/exams/<id>/drills/ox_subject*.js   (O/X 8,200+문)
@@ -1578,7 +1582,7 @@ data/exams/<id>/exams/*.js ──► tools/build/build_combo_drills.js ──►
 
 **특징**:
 - **SSOT**: `content/exams/cosmetic/manifest.json` + `content/**/*.md`가 교재/카드/퀴즈의 단일 진실 원천
-- **런타임 파싱**: `src/textbook-parser.js`가 브라우저에서 카드/퀴즈/챕터를 조립. 카드/퀴즈 안정 ID는 `src/sha256.js`(Node `crypto`와 동일)로 재현되어 진도 보존
+- **런타임 파싱**: `src/reader/textbook-parser.js`가 브라우저에서 카드/퀴즈/챕터를 조립. 카드/퀴즈 안정 ID는 `src/sha256.js`(Node `crypto`와 동일)로 재현되어 진도 보존
 - **재빌드 불필요**: `content/*.md` 수정 시 http 배포는 즉시 반영. `file://` 지원이 필요할 때만 `npm run build:study-md` 실행 (과목별 분할 번들 생성)
 - **온디맨드 로딩**: `src/data-loader.js`가 필요한 과목/시험만 로드하고, 로드 후 registry stats를 실제 개수로 갱신
 - **해시 파일명(시험/성분)**: 번들 내용이 바뀌면 파일명도 바뀌어 캐시 무효화가 자연스럽게 이루어짐
@@ -1659,8 +1663,8 @@ PDF 파일명은 매핑 키로만 사용되며, 실제 서비스되는 것은 �
 | `resolveRefPath()` | `src/pdf-registry.js:242` | PDF 파일명 → MD 경로 조회 (`REF_FILE_TO_PATH` 테이블) |
 | `_toMdPath()` | `src/pdf-registry.js:217` | `xxx.pdf` → `content/exams/cosmetic/참조자료/ref_md/과목N/xxx/xxx.md` 변환 (`REF_MD_SUBJECTS` 맵) |
 | `mapSourceToRef()` | `src/pdf-registry.js:248` | 출처 텍스트 → PDF 파일명 → MD 경로 |
-| PDF 링크 인터셉트 | `src/reader-format.js:61,111,126` | 교재 본문 PDF 링크 → `data-ref-html` MD 링크 변환 |
-| PDF 링크 인터셉트 | `src/exam-viewer.js:251-263` | 시험 문제 HTML PDF 링크 → MD 경로 치환 |
+| PDF 링크 인터셉트 | `src/reader/reader-format.js:61,111,126` | 교재 본문 PDF 링크 → `data-ref-html` MD 링크 변환 |
+| PDF 링크 인터셉트 | `src/reader/exam-viewer.js:251-263` | 시험 문제 HTML PDF 링크 → MD 경로 치환 |
 | 용어집 참조 | `src/views/glossary-renderer.js:52` | `refDoc + '.pdf'` → MD 경로 조회 |
 | 참조자료 목록 | `src/views/textbook-reader.js:1084-1087` | 사이드바 PDF 파일명 → MD 경로 변환 |
 
@@ -1888,7 +1892,7 @@ npm run deploy
 
 18. **HTML 뷰어 스크롤바 가시성 수정** ✅ (2026-09-01)
    - **문제**: `css/base.css` 전역 스크롤바 색상이 `rgba(255,255,255,0.1)` (흰색 반투명) → HTML 뷰어의 흰 배경에서 스크롤바가 안 보임
-   - **해결**: `src/html-viewer.js`에 뷰어 전용 스크롤바 스타일 추가 (`#888` thumb, `#f0f0f0` track, 12px 폭)
+   - **해결**: `src/reader/html-viewer.js`에 뷰어 전용 스크롤바 스타일 추가 (`#888` thumb, `#f0f0f0` track, 12px 폭)
    - **구조 개선**: 오버레이를 flexbox에서 절대 위치(`position:fixed`) 기반으로 변경 — 브라우저별 flexbox 구현 차이에 영향받지 않고 스크롤 영역 확보
 
 19. **교재 리더 이야기형 모드 (Story Mode)** ✅ (2026-09-10)
@@ -2008,10 +2012,10 @@ npm.cmd run deploy
 | `<root>/manifest.json` | 시험 콘텐츠 SSOT — 모든 빌드의 원천 | `subjects[].dir`, `chapters[].file`, `uiText`, `resources` |
 | `<root>/references.json` | 참조자료 매핑 SSOT | `build_pdf_registry.js`의 입력 |
 | `sw.js` | `MD_ASSETS` 하드코딩 | 프리캐시 대상 MD 파일 경로 |
-| `src/manual-viewer.js` | `MD_SOURCES` 객체 | 학습안내서, 사용자매뉴얼 경로 |
+| `src/reader/manual-viewer.js` | `MD_SOURCES` 객체 | 학습안내서, 사용자매뉴얼 경로 |
 | `src/pdf-registry.js` | `SUBJECT_DIR_MAP`, `REF_DIRS`, `REFERENCE_FILES`, `MD_CONVERSION_TARGETS` | 참조자료 중앙 설정 (자동 생성 파일 — `references.json` 수정 후 리빌드) |
 | `src/data-loader.js` | `manifest.subjects[].dir` 동적 참조 | 런타임 MD 로드 (`contentPath()` 경유) |
-| `src/textbook-parser.js` | `manifest.subjects[].dir` 동적 참조 | 런타임 MD 파싱 |
+| `src/reader/textbook-parser.js` | `manifest.subjects[].dir` 동적 참조 | 런타임 MD 파싱 |
 | `tools/build/manifest_loader.js` | `manifest.json` 검증 | 빌드 시 파일 존재 확인 |
 | `tools/build/plugins/textbook.plugin.js` | `subject.dir` 동적 참조 | 빌드 시 MD 파싱 |
 | `tools/build/plugins/knowledge.plugin.js` | `knowledge/<key>.json` 해석 + `emitMd` 표 재생성 | `<root>/knowledge/`, emit 대상은 데이터셋의 `emitMd.dir` |
@@ -2066,7 +2070,7 @@ npm.cmd run deploy
 | `REFERENCE_COMMON` | 공통 참조자료 목록 | 공통 참조자료 변경 시 |
 | `REFERENCE_LAW` | 법령고시 참조자료 목록 | 법령 개정 시 |
 
-### 2순위: `src/reader-format.js` — **조건부** (파일명 패턴 하드코딩)
+### 2순위: `src/reader/reader-format.js` — **조건부** (파일명 패턴 하드코딩)
 
 | 하드코딩 대상 | 위치 | 수정 조건 |
 |---------------|------|----------|
@@ -2158,15 +2162,15 @@ SPEC.md의 기능/비기능 ID와 이 문서의 설명 위치·구현 모듈 대
 | `E-01~07` | §3.4 모의고사 | `src/views/exam-simulator*.js` |
 | `TR-01~18` | §3.5 교재 리더 | `src/views/textbook-reader.js` — 별도 스크롤 복원 |
 | `SA-01~05` | §3.6 학습 보조 도구 | `src/study-aids.js` |
-| `G-01~09` | §3.7 용어집 | `src/glossary-query.js` + `views/glossary-renderer.js` |
-| `RR-01~16` | §3.8 참조자료 연결 | `src/html-viewer.js` + `reader-format.js` + `pdf-registry.js` |
+| `G-01~09` | §3.7 용어집 | `src/reader/glossary-query.js` + `views/glossary-renderer.js` |
+| `RR-01~16` | §3.8 참조자료 연결 | `src/reader/html-viewer.js` + `reader-format.js` + `pdf-registry.js` |
 | `TS-01~09` | §3.9 교재 검색 | `src/views/textbook-search.js` |
 | `DI-01~03` | §3.10 성분 사전 | `src/views/dictionary.js` |
 | `T-01~05` | §3.11 훈련소 | `src/views/trainer*.js` |
 | `AO-01~05` | §3.12 오디오북 | `src/views/reader-audio.js` — Media Session |
 | `B-01~04` | §3.13 백업/복원 | `src/views/backup.js` — ALLOWED_KEYS 화이트리스트 |
-| `EV-01~08` | §3.14 문제집 뷰어 | `src/exam-viewer.js` |
-| `MV-01~04` | §3.15 매뉴얼 뷰어 | `src/manual-viewer.js` |
+| `EV-01~08` | §3.14 문제집 뷰어 | `src/reader/exam-viewer.js` |
+| `MV-01~04` | §3.15 매뉴얼 뷰어 | `src/reader/manual-viewer.js` |
 | `C-01~05` | §3.16 차트 | `src/charts.js` |
 | `CQ-01~05` | §3.17 콘텐츠 감사 | `tools/` audit 스크립트 (`audit:cards`/`audit:combo`) |
 | `FO-01~23` | §3.18 Formula OS | `src/exams/cosmetic/formula-*.js` + `views/formula*.js` — 도메인 아키텍처 절 |

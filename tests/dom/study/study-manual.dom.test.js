@@ -21,7 +21,7 @@ describe('매뉴얼 뷰어 — 문서 열기·TOC·전환', () => {
         localStorage.clear();
         sessionStorage.clear();
         vi.resetModules();
-        ({ ManualViewer } = await import('../../../src/manual-viewer.js'));
+        ({ ManualViewer } = await import('../../../src/reader/manual-viewer.js'));
         loadIndexHtml();
         window.__DOC_MD__ = {
             [PATHS.USER_MANUAL]: MD_USER,

@@ -4,7 +4,7 @@
 //       동일 판본·미선언·이미 표시 중에는 동작하지 않는다.
 
 import { describe, it, beforeEach, expect } from 'vitest';
-import { checkTextbookEditionBanner } from '../../../src/textbook-edition.js';
+import { checkTextbookEditionBanner } from '../../../src/reader/textbook-edition.js';
 import { getItem, setItem } from '../../../src/storage.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 

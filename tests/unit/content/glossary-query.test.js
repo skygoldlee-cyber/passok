@@ -10,7 +10,7 @@ import {
     getGlossaryByRefFiles,
     getGlossaryEntry,
     getAllGlossaryKeywords,
-} from '../../../src/glossary-query.js';
+} from '../../../src/reader/glossary-query.js';
 
 // GLOSSARY_INDEX는 빌드 타임에 생성되므로, 런타임 import 시점의 데이터를 그대로 사용.
 // 데이터가 없는 경우도 안전하게 처리되는지 검증.

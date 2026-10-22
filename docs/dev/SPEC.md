@@ -660,7 +660,7 @@
 | P-11 | 자가 복구 메커니즘 (`app-fallback.js`, 단계적 복구: SW update → 하드 리셋 → 수동 복구) | ✅ |
 | P-12 | CI 검증 (`verify_shell_assets.js`, 배포 전 프리캐시 파일 존재 확인) | ✅ |
 | P-13 | **새 버전 변경 이력 알림** (`src/whats-new.js`) — `APP_VERSION`(data/version.js, 배포 스탬프) vs `last_seen_version` 비교 → 업데이트 후 첫 부팅에 변경 이력 모달 + 설정 메뉴 "변경 이력" 재열람. 전용 `whats-new-overlay`로 다른 모달과 공존, 복귀 사용자는 학습 데이터 키로 판별, 노트 소스는 `data/release-notes.json`(진실 소스, 커밋 subject 자동 초안 → 수동 편집, 파싱 오류 시 배포 차단) → `release-notes.js` 래퍼 자동 생성 | ✅ |
-| P-14 | **교재 개정 안내 배너** (`src/textbook-edition.js`) — `manifest.textbookEdition`(check:manifest 필수 선언)이 `registry.textbookEdition`으로 전파, 기기 로컬 `textbook_edition_seen`(scopedKey 시험별 격리·백업 제외)과 비교 → 개정 후 첫 부팅에 대시보드 배너 표시, '확인' 시 현 판본 기록으로 억제 | ✅ |
+| P-14 | **교재 개정 안내 배너** (`src/reader/textbook-edition.js`) — `manifest.textbookEdition`(check:manifest 필수 선언)이 `registry.textbookEdition`으로 전파, 기기 로컬 `textbook_edition_seen`(scopedKey 시험별 격리·백업 제외)과 비교 → 개정 후 첫 부팅에 대시보드 배너 표시, '확인' 시 현 판본 기록으로 억제 | ✅ |
 
 ### 4.2 오프라인 감지
 
@@ -1264,13 +1264,13 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | 합격 전략 | `src/recommendations.js` | "오늘의 합격 전략" 추천·오답 원인 집계·예상 점수 추정·실제 결과 보고 (DOM 비의존 순수 로직) |
 | 통합 검색 | `src/command-palette.js` | Ctrl/Cmd+K 통합 검색 팔레트 — `searchAll()` 순수 함수 + UI 지연 생성 |
 | 데이터 로더 | `src/data-loader.js` | 온디맨드 과목/시험 로딩 |
-| 교재 파서 | `src/textbook-parser.js` | 런타임 MD → 카드/퀴즈/챕터 조립 |
-| 리더 포맷터 | `src/reader-format.js` | MD→HTML 변환, 링크 재작성, 키워드 자동 링크 |
-| 마크다운 파서 | `src/markdown-parser.js` | MD→HTML 범용 파서 |
+| 교재 파서 | `src/reader/textbook-parser.js` | 런타임 MD → 카드/퀴즈/챕터 조립 |
+| 리더 포맷터 | `src/reader/reader-format.js` | MD→HTML 변환, 링크 재작성, 키워드 자동 링크 |
+| 마크다운 파서 | `src/reader/markdown-parser.js` | MD→HTML 범용 파서 |
 | 참조자료 레지스트리 | `src/pdf-registry.js` | 참조자료 중앙 설정 (과목 변경 시 유일 수정 파일) |
-| HTML 뷰어 | `src/html-viewer.js` | 참조자료 fetch+DOM 주입, 검색, 하이라이트 |
-| 문제집 뷰어 | `src/exam-viewer.js` | 문제은행 MD 런타임 뷰어 |
-| 매뉴얼 뷰어 | `src/manual-viewer.js` | 학습안내서/사용자매뉴얼 뷰어 |
+| HTML 뷰어 | `src/reader/html-viewer.js` | 참조자료 fetch+DOM 주입, 검색, 하이라이트 |
+| 문제집 뷰어 | `src/reader/exam-viewer.js` | 문제은행 MD 런타임 뷰어 |
+| 매뉴얼 뷰어 | `src/reader/manual-viewer.js` | 학습안내서/사용자매뉴얼 뷰어 |
 | 차트 | `src/charts.js` | SVG 레이더/꺾은선 차트 + 인터랙티브 툴팁 |
 | 보안 | `src/sanitize.js` | XSS 방어, 텍스트 정제 |
 | 유틸 | `src/utils.js` | 초성 추출, Fisher-Yates 셔플 |

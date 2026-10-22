@@ -244,7 +244,7 @@ test('_loadExamDocEntries — manifest.searchDocs 선언 문서를 doc 엔트리
 });
 
 test('glossarySubjectKey — 과목 디렉터리명·과목 키 모두 과목 키로 해석한다', async () => {
-    const { glossarySubjectKey } = await import('../../../src/glossary-query.js');
+    const { glossarySubjectKey } = await import('../../../src/reader/glossary-query.js');
     const prev = DataLoader.registry;
     DataLoader.registry = { subjects: [{ key: 'paper1' }] };
     try {
