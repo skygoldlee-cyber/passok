@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 외부 자산 이중화 + qs 취약점 해소
+
+- `fetch_ref_pdfs.js`에 `mirrors` 폴백 추가 + 릴리스 `ref-assets-mirror` 생성(동일 48에셋 복제) — 단일 릴리스 삭제·장애 시 자동 폴백
+- `package.json` overrides로 `typed-rest-client`의 qs 핀(6.15.1, DoS advisory) → 6.16.1 강제 — `npm audit` 0건
+- ASSET_STORAGE_REVIEW에 embeddings 추적 유지 결정·`.git` 최종 크기(57MB) 문서화
+
 ## 2026-10-22 게이트 티어 계층화 + 참조자료 바이너리 외부화
 
 - `tools/check/steps.js` 전 단계에 `prio`(P0 차단 코어·P1 신선도·P2 감시) 부여 + `check:audit` 프리셋 신설 — P2는 리포트만 하고 push를 차단하지 않음

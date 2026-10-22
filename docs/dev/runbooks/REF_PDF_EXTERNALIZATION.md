@@ -1,7 +1,7 @@
 # 📦 참조자료 PDF 외부 호스팅 이전 계획
 
 > **최종 업데이트**: 2026-10-22
-> **상태**: ✅ 시행 완료 (2026-10-22) — 릴리스 `ref-pdf-cosmetic`에 에셋 48개 업로드(서비스 41 + _archive 6 + 교재 PNG 마스터 1), 에셋 파일명은 sha256. 복원: `npm run fetch:refpdfs`. 아카이브 해시는 `archive_hashes.json`, 교재 원본 마스터(교재/*/images/*.png — webp 재인코딩용, 런타임 미참조)는 `img_masters.json` + `pdf_hosting.json`의 `masterManifests`로 선언·복원.
+> **상태**: ✅ 시행 완료 (2026-10-22) — 릴리스 `ref-pdf-cosmetic`에 에셋 48개 업로드(서비스 41 + _archive 6 + 교재 PNG 마스터 1), 에셋 파일명은 sha256. 복원: `npm run fetch:refpdfs`. 아카이브 해시는 `archive_hashes.json`, 교재 원본 마스터(교재/*/images/*.png — webp 재인코딩용, 런타임 미참조)는 `img_masters.json` + `pdf_hosting.json`의 `masterManifests`로 선언·복원. 이중화: `pdf_hosting.json`의 `mirrors`(릴리스 `ref-assets-mirror` — 동일 48에셋 복제본)로 폴백 다운로드 지원, 로컬 사본은 sha256으로 검증 가능하므로 별도 백업도 가능.
 > **목적**: `content/exams/cosmetic/참조자료/`의 원본 PDF(14MB, 47개 — 실행 시점 실측)를 git 저장소에서 분리해 클론 비용을 줄이는 절차
 > **관련 SPEC ID**: `RR-13` (참조자료 레지스트리)
 > **문서 ID**: DOC-RBK-12
