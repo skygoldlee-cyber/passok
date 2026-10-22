@@ -252,7 +252,7 @@ passok/
 │   ├── app-shell.js            #   뷰포트·가로세로·data-click 접근성·브랜딩·기능 플래그
 │   ├── router.js               #   SPA 라우터 (뷰 타이틀 맵, 네비게이션 디스패치)
 │   ├── app-fallback.js         #   ESM 로드 실패 시 자가 복구
-│   ├── pwa-install-capture.js  #   beforeinstallprompt 조기 캡처 + SW 등록
+│   ├── pwa/pwa-install-capture.js  #   beforeinstallprompt 조기 캡처 + SW 등록
 │   ├── theme-init.js           #   FOUC 방지 (페인트 전 테마 적용)
 │   ├── state.js                #   전역 상태 + 진행 영속성 (저장은 storage.js 위임)
 │   ├── storage.js              #   저장소 추상화 계층 (교체 가능 백엔드, 동기·Async 이중 API)
@@ -264,7 +264,7 @@ passok/
 │   ├── pdf-registry.js         #   참조자료 중앙 설정 — 시험별 테이블(_EXAM_TABLES) + getRefTables()
 │   ├── mermaid-render.js       #   Mermaid 지연 로딩·렌더링·확대 모달 공용 (reader/search/manual — 데스크탑 전용)
 │   ├── image-zoom.js           #   본문 이미지(.reader-img) 라이트박스 — 데스크탑 전용 (모바일은 핀치 줌)
-│   ├── pwa-manifest.js         #   활성 시험 기준 PWA 매니페스트 링크 교체 (단일 앱 id='passok' · 클래식)
+│   ├── pwa/pwa-manifest.js         #   활성 시험 기준 PWA 매니페스트 링크 교체 (단일 앱 id='passok' · 클래식)
 │   ├── html-viewer.js          #   참조자료 fetch+DOM 뷰어, 검색, 하이라이트
 │   ├── exam-viewer.js          #   문제은행 MD 런타임 뷰어 (인용 링크 네비게이션, 라인 하이라이트)
 │   ├── combo-doc.js            #   복수정답형 드릴 번들 → 문제집 MD 런타임 직렬화 (openCombo 경유)
@@ -642,14 +642,14 @@ passok/
 ```
 <head> (페인트 전 — FOUC 방지)
   1. src/theme-init.js     (클래식 — 페인트 전 테마 클래스 적용)
-  2. src/pwa-install-capture.js (클래식 — beforeinstallprompt 조기 캡처 + SW 등록)
+  2. src/pwa/pwa-install-capture.js (클래식 — beforeinstallprompt 조기 캡처 + SW 등록)
 
 <body> 하단
   3. data/exams.js                    (클래식 — window.EXAMS_LIST 시험 레지스트리, file:// 호환)
   4. src/exam-data-boot.js            (클래식 — 활성 시험 해석 후 {dataRoot}/id_migration.js +
                                       {dataRoot}/registry.js를 파서 위치에 동기 삽입. 비활성 시험
                                       데이터 번들은 요청하지 않는다 — 도메인 네트워크 격리)
-  5. src/pwa-manifest.js              (클래식 — 활성 시험 기준 동적 manifest 링크 교체)
+  5. src/pwa/pwa-manifest.js              (클래식 — 활성 시험 기준 동적 manifest 링크 교체)
   6. data/audio_manifest.js           (type=module — 오디오 경로, window.AUDIO_MANIFEST 할당)
   7. src/app.js                       (type=module — ESM 진입점, 모든 src/ 모듈을 내부 import)
   8. src/app-fallback.js              (defer — ESM 로드 실패 시 자동 복구, app.js와 독립 실행)
@@ -1200,7 +1200,7 @@ localStorage('appTheme')  >  prefers-color-scheme: light  >  다크(기본)
 
 | 구성 요소 | 위치 | 역할 |
 |-----------|------|------|
-| **조기 캡처 스크립트** | [`src/pwa-install-capture.js`](../../src/pwa-install-capture.js) `<head>` 클래식 스크립트 | `beforeinstallprompt` 이벤트를 최대한 빨리 캡처하여 `window.__deferredPrompt`에 저장. 동시에 SW를 조기 등록하여 Android Chrome이 PWA 설치 가능 판정을 내릴 수 있도록 함 |
+| **조기 캡처 스크립트** | [`src/pwa/pwa-install-capture.js`](../../src/pwa/pwa-install-capture.js) `<head>` 클래식 스크립트 | `beforeinstallprompt` 이벤트를 최대한 빨리 캡처하여 `window.__deferredPrompt`에 저장. 동시에 SW를 조기 등록하여 Android Chrome이 PWA 설치 가능 판정을 내릴 수 있도록 함 |
 | **설치 버튼 UI** | `#pwa-install-btn` (`index.html`) | `beforeinstallprompt` 캡처 시 표시. 클릭 시 `deferredPrompt.prompt()` 호출 |
 | **설치 안내 모달** | `#pwa-install-modal` (`index.html`) | `deferredPrompt`가 null일 때 플랫폼별 수동 설치 안내 (Android/iOS/generic/inapp 분기) |
 | **진단 패널** | `#pwa-diagnostics` (`index.html`) | `beforeinstallprompt` 미발생 시 원인 진단 정보 화면 표시 (SW 상태, display-mode, manifest 검증 등) |

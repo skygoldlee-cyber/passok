@@ -18,8 +18,8 @@ const allCss = readdirSync(join(ROOT, 'css'))
   .map(f => read(`css/${f}`)).join('\n');
 const appJs = ['src/app.js', 'src/app-shell.js', 'src/app-dashboard.js'].map(read).join('\n');
 const uiUtils = read('src/ui-utils.js');
-const pwaInstall = read('src/pwa-install.js');
-const capture = read('src/pwa-install-capture.js');
+const pwaInstall = read('src/pwa/pwa-install.js');
+const capture = read('src/pwa/pwa-install-capture.js');
 const readerJs = ['src/views/textbook-reader.js', 'src/views/reader-toolbar.js', 'src/views/reader-ref-links.js'].map(read).join('\n');
 const listeners = ['src/views/event-listeners.js',
   ...readdirSync(join(ROOT, 'src/views'))

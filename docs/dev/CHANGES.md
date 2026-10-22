@@ -7,6 +7,11 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 src/pwa/ 서브디렉터리 분리 (구조 개선 파일럿)
+
+- `src/pwa-{install,install-capture,manifest}.js` 3개를 `src/pwa/`로 이동 — app.js import·index.template.html 스크립트 src·sw.js 프리캐시·domain-map·테스트 경로 갱신
+- `ALLOWED_FILES`는 basename 매칭이라 무수정 · `SHELL_MODULES`는 views/ 역참조 명단이라 무관 — 게이트 전수 통과 확인
+
 ## 2026-10-22 법령고시 PDF 경로 allowlist 등록
 
 - 외부화된 `content/exams/cosmetic/참조자료/법령고시/`가 신선 클론에서 미존재 → SPEC·TRACE_MATRIX의 의도된 참조를 `tools/config/docs_paths_allowlist.json`에 등록 (fetch:refpdfs 복원 시 생성)

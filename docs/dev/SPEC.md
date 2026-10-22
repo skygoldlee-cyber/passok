@@ -1281,7 +1281,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | 문항 스키마 | `src/questions.js` | single/combo/short/ox 스키마, `deriveComboAnswer`, `validateQuestion` |
 | 진술 추적 | `src/statement-tracker.js` | 진술 원자(sid) 단위 오판 통계, 졸업 추적, FSRS 연동 |
 | 학습 추적 | `src/study-tracker.js` | 캘린더 활동 기록·목표 달성률 (`recordStudyActivity`, `getStudyGoals`) |
-| 동적 매니페스트 | `src/pwa-manifest.js` | 활성 시험 기준 PWA manifest 링크 교체 (클래식 스크립트) |
+| 동적 매니페스트 | `src/pwa/pwa-manifest.js` | 활성 시험 기준 PWA manifest 링크 교체 (클래식 스크립트) |
 | 설정 상수 | `src/config/timing.js` · `cache.js` | 타이밍·캐시 상수 중앙 관리 |
 | 콘텐츠 감사 | `tools/check/audit_card_quality.js` | 카드 품질 자동 감사, 참조자료 링크 유효성 검사 |
 
@@ -1359,7 +1359,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | 모듈 | 책임 |
 |------|------|
 | `src/app-fallback.js` | ESM 로드 실패 시 단계적 복구 (SW update → 하드 리셋 → 수동) |
-| `src/pwa-install-capture.js` | `beforeinstallprompt` 조기 캡처 + SW 조기 등록 + 업데이트 토스트 |
+| `src/pwa/pwa-install-capture.js` | `beforeinstallprompt` 조기 캡처 + SW 조기 등록 + 업데이트 토스트 |
 | `src/theme-init.js` | FOUC 방지 (페인트 전 테마 적용) |
 
 ### Service Worker

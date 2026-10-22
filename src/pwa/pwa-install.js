@@ -1,7 +1,7 @@
 // src/pwa-install.js — PWA 설치 프롬프트 및 설치 안내 모달 로직 (app.js에서 추출)
 // @spec P-07,P-08,UX-PWA-04,P-09,UX-PWA-02,UX-PWA-04
-import { STORAGE_KEYS } from './storage-keys.js';
-import { trapFocus } from './ui-utils.js';
+import { STORAGE_KEYS } from '../storage-keys.js';
+import { trapFocus } from '../ui-utils.js';
 
 /**
  * PWA 설치 버튼, beforeinstallprompt 캡처, 설치 안내 모달을 초기화합니다.
