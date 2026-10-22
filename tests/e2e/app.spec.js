@@ -9,6 +9,7 @@ test.beforeEach(({ page }) => {
     page.addInitScript(() => {
         localStorage.setItem('current_exam', 'cosmetic');
         localStorage.setItem('onboarding_seen_v1', '1');
+        localStorage.setItem('telemetry_notice_shown', '1');
         localStorage.setItem('cosmetic:onboarding_seen_v1', '1');
     });
     // 페이지 레벨 오류는 모든 테스트에서 감지 — 나중에 배열로 확인

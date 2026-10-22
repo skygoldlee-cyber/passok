@@ -41,6 +41,7 @@ export function analysisBootKeys(examId = 'cosmetic') {
         'current_exam': examId,
         'onboarding_seen_v1': '1',
         [`${examId}:onboarding_seen_v1`]: '1',
+        'telemetry_notice_shown': '1',
         // pro_notice_seen은 GLOBAL_KEYS — 시험 스코프 없이 루트 키로 쓰인다 (ROAD-P5 전역 수렴).
         // `_global` 마커: 기능별 seen 맵의 단일 수렴 키 (pro-upgrade.js proFeatureNotice)
         'pro_notice_seen': JSON.stringify({ _global: '2026-01-01T00:00' })

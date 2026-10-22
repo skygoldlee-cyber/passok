@@ -9,6 +9,7 @@ test.beforeEach(({ page }) => {
     page.addInitScript(() => {
         localStorage.setItem('current_exam', 'cosmetic');
         localStorage.setItem('onboarding_seen_v1', '1');
+        localStorage.setItem('telemetry_notice_shown', '1');
         localStorage.setItem('cosmetic:onboarding_seen_v1', '1');
     });
     page._errors = [];
@@ -23,6 +24,7 @@ test.describe('테마 결정 우선순위 (TH-03)', () => {
             localStorage.setItem('appTheme', 'light');
             localStorage.setItem('cosmetic:appTheme', 'light');
             localStorage.setItem('onboarding_seen_v1', '1');
+            localStorage.setItem('telemetry_notice_shown', '1');
         });
         await page.goto('/index.html');
         const isLight = await page.evaluate(() =>
@@ -32,7 +34,7 @@ test.describe('테마 결정 우선순위 (TH-03)', () => {
 
     test('저장값 없으면 prefers-color-scheme를 따른다', async ({ page }) => {
         await page.emulateMedia({ colorScheme: 'light' });
-        await page.addInitScript(() => localStorage.setItem('onboarding_seen_v1', '1'));
+        await page.addInitScript(() => { localStorage.setItem('onboarding_seen_v1', '1'); localStorage.setItem('telemetry_notice_shown', '1'); });
         await page.goto('/index.html');
         const isLight = await page.evaluate(() =>
             document.documentElement.classList.contains('light-theme'));
@@ -41,7 +43,7 @@ test.describe('테마 결정 우선순위 (TH-03)', () => {
 
     test('저장값·시스템 선호 모두 없으면 다크가 기본이다', async ({ page }) => {
         await page.emulateMedia({ colorScheme: 'dark' });
-        await page.addInitScript(() => localStorage.setItem('onboarding_seen_v1', '1'));
+        await page.addInitScript(() => { localStorage.setItem('onboarding_seen_v1', '1'); localStorage.setItem('telemetry_notice_shown', '1'); });
         await page.goto('/index.html');
         const isLight = await page.evaluate(() =>
             document.documentElement.classList.contains('light-theme'));
@@ -53,6 +55,7 @@ test.describe('테마 토글 (TH-01/02/04)', () => {
     test('토글 시 light-theme 클래스·localStorage·themechange·실제 배경색이 동기화된다', async ({ page }) => {
         await page.addInitScript(() => {
             localStorage.setItem('onboarding_seen_v1', '1');
+            localStorage.setItem('telemetry_notice_shown', '1');
             window.__themeEvents = 0;
             document.addEventListener('themechange', () => window.__themeEvents++);
         });
@@ -87,6 +90,7 @@ test.describe('리더 테마 동기화 (TH-05)', () => {
             localStorage.setItem('appTheme', 'light');
             localStorage.setItem('cosmetic:appTheme', 'light');
             localStorage.setItem('onboarding_seen_v1', '1');
+            localStorage.setItem('telemetry_notice_shown', '1');
         });
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
