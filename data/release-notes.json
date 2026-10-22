@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261022-e485842",
+    "date": "2026-10-22",
+    "notes": [
+      "[테스트] e2e 시드에 telemetry_notice_shown 추가 — 최초 고지 토스트 충돌 해소",
+      "[정리] TRACE_MATRIX 재생성 — check:supabase 문서 참조 반영",
+      "[기능] check:supabase 게이트 — 프로덕션 스키마 적용 상태 프로브",
+      "[문서] P2 실험 판정 기준 사전 확정 — §3 TBD 전부 확정 + 2단계 실험 설계 [no-docs]",
+      "[기능] 텔레메트리 동의·익명 설치 ID·오프라인 큐 — P0 측정 기반 (UX-MET-06/07/08, ADR-0019)",
+      "[문서] 사업 검증 계획 정착 — BUSINESS_VALIDATION.md design 버킷 이동 + PROJECT_OVERVIEW 요약 위임 (DOC-DSN-34)",
+      "[문서] PROJECT_OVERVIEW 3차 리뷰 반영 — KPI 정의·실행 순서·실험 판정 규칙 추가 [no-docs]",
+      "[문서] PROJECT_OVERVIEW 2차 리뷰 반영 — 의사결정 완료 기준·KPI 측정 정의 절 추가 [no-docs]",
+      "[문서] PROJECT_OVERVIEW에 사업 검증 현황 절 추가 — 구현됨/미검증 구분 + 30~90일 의사결정 [no-docs]",
+      "[문서] PROJECT_OVERVIEW에 인강·교재 대비 강점 분석 절 추가 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261022-6d8e13a",
     "date": "2026-10-22",
     "notes": [
@@ -187,15 +203,6 @@
     "date": "2026-10-14",
     "notes": [
       "[문서·cosmetic] 망각곡선 SVG 난이도별 이중 곡선으로 갱신"
-    ]
-  },
-  {
-    "version": "v20261013-98c990b",
-    "date": "2026-10-13",
-    "notes": [
-      "[수정·kt] weak_*·시뮬 문항 id 원문항 정규화 — 복습 세션 재판정 BKT 관측 복구",
-      "[문서·spec] 학습 모델 후속 로드맵 ROAD-L7~L11 명기 + 로드맵 ID 두자리 지원",
-      "[테스트·audit] T4 시험일 R 회복 계측 + T5 BKT 시나리오 — §5 재판정 종결"
     ]
   }
 ]
