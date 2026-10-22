@@ -137,16 +137,32 @@ describe('syncPlanFromProfile (PAY-03)', () => {
     });
 });
 
-describe('결제 안내 게이트 (PAY-02)', () => {
-    it('PAYMENT_NOTICE.enabled=false면 실결제 안내·문의 버튼 없이 준비 중 표시를 유지한다', () => {
+describe('결제 안내 모달 (PAY-02)', () => {
+    it('PAYMENT_NOTICE.enabled=true면 결제 안내·문의 버튼이 노출되고 조회가 계측된다', () => {
         window.EXAMS_LIST = { exams: [{ id: 'cosmetic', default: true, name: '테스트 시험', features: {} }] };
         showUpgradeNotice('카드', '카드의 무료 플랜 한도에 도달했습니다.');
         const dlg = document.querySelector('#pro-upgrade-overlay .app-confirm-dialog');
         expect(dlg).not.toBeNull();
-        expect(dlg.textContent).toContain('준비 중');
-        expect(dlg.querySelector('.pro-payment-notice')).toBeNull();
-        expect(dlg.querySelector('.pro-payment-contact')).toBeNull();
-        expect(mockReportEvent).not.toHaveBeenCalledWith('payment_notice_view');
+        expect(dlg.textContent).toContain('9,900원 / 90일');
+        expect(dlg.textContent).toContain('전액 환불');
+        const notice = dlg.querySelector('.pro-payment-notice');
+        const contact = dlg.querySelector('.pro-payment-contact');
+        expect(notice).not.toBeNull();
+        expect(contact).not.toBeNull();
+        expect(mockReportEvent).toHaveBeenCalledWith('payment_notice_view');
+        dlg.remove?.(); document.getElementById('pro-upgrade-overlay')?.remove();
+    });
+
+    it('결제 문의 클릭 시 payment_link_click 계측 + 오픈채팅 링크로 이동한다', () => {
+        window.EXAMS_LIST = { exams: [{ id: 'cosmetic', default: true, name: '테스트 시험', features: {} }] };
+        const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+        showUpgradeNotice('카드', '한도 도달');
+        const contact = document.querySelector('#pro-upgrade-overlay .pro-payment-contact');
+        contact.click();
+        expect(mockReportEvent).toHaveBeenCalledWith('payment_link_click');
+        expect(openSpy).toHaveBeenCalledWith(
+            'https://open.kakao.com/o/sWLzJCTi', '_blank', 'noopener');
+        openSpy.mockRestore();
         document.getElementById('pro-upgrade-overlay')?.remove();
     });
 });

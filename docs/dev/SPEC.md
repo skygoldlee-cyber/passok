@@ -1268,7 +1268,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | ID | 요구사항 | 주요 작업 | 상태 |
 |----|---------|----------|------|
 | PAY-01 | **라이선스 코드 활성화**: 설정 '라이선스 코드' → 입력 다이얼로그 → `redeem_code` RPC → `profiles.plan='pro'` + 로컬 `pro_entitled` 갱신 — 비로그인은 로그인 유도, 실패는 무효/사용됨 구분 없이 동일 안내 (오라클 최소화). 계측 `code_redeem_attempt`/`code_redeem_success` | `src/pro-redeem.js` + 설정 메뉴 항목 + `showRedeemCode` 핸들러 | 구현 (2026-10-22) |
-| PAY-02 | **결제 안내 모달**: `PAYMENT_NOTICE` 설정 객체 — `enabled` 플래그로 '준비 중'↔실결제 안내(가격·수동 결제 방법·환불 고지·문의 링크) 전환. 계측 `payment_notice_view`/`payment_link_click` | `src/pro-upgrade.js` `showUpgradeNotice` 확장 — 결제 수단·가격·채널 확정(D-1/D-2/D-5) 후 enabled=true | 구현 (플래그 off) |
+| PAY-02 | **결제 안내 모달**: `PAYMENT_NOTICE` 설정 객체 — `enabled` 플래그로 '준비 중'↔실결제 안내(가격·수동 결제 방법·환불 고지·문의 링크) 전환. 계측 `payment_notice_view`/`payment_link_click` | `src/pro-upgrade.js` `showUpgradeNotice` 확장 — DOC-DSN-35 §8 결정 반영(9,900원/90일·오픈채팅 문의) | 구현 (활성) |
 | PAY-03 | **plan 서버 동기화**: 로그인 시 `profiles.plan` → `pro_entitled` 반영 — 코드 활성화의 타 기기 전파 + 회수(`grant-pro --revoke`) 반영. 비로그인 로컬 플래그는 유지 | `pro-redeem.js` `syncPlanFromProfile` — app 부팅 step 연결 | 구현 (2026-10-22) |
 | PAY-04 | **전환 퍼널 이벤트 확장**: 화이트리스트에 `plan_compare_view`·`payment_notice_view`·`payment_link_click`·`code_redeem_attempt`·`code_redeem_success` 추가 + `session_start.meta.entry_src` 탑재 (`?src=` 캡처를 전송 전으로 이동) | `usage-telemetry.js` + `pro-upgrade.js` emit + app.js 부팅 순서 | 구현 (2026-10-22) |
 | PAY-05 | **라이선스 코드 발급 CLI**: `admin:issue-code --channel <채널> --count N` — `<CHANNEL>-XXXX-XXXX` 코드 생성·`pro_codes` insert (service role) — 채널 프리픽스로 유입별 전환 추적 | `tools/check/issue_pro_code.js` + `restPost` 헬퍼 | 구현 (2026-10-22) |

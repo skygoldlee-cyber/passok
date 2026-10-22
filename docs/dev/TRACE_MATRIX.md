@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: f401314d8f50c211
+> 입력 해시: c5512b27be422923
 > 생성: 2026-10-22 · 원천: SPEC.md(583개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -834,7 +834,7 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | PAY-01 | 구현 (2026-10-22) | 테스트 | — | src/pro-redeem.js | tests/dom/misc/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
-| PAY-02 | 구현 (플래그 off) | 테스트 | — | src/pro-upgrade.js | tests/dom/misc/pro-redeem.dom.test.js | — | — |
+| PAY-02 | 구현 (활성) | 테스트 | — | src/pro-upgrade.js | tests/dom/misc/pro-redeem.dom.test.js | — | — |
 | PAY-03 | 구현 (2026-10-22) | 테스트 | — | src/pro-redeem.js | tests/dom/misc/pro-redeem.dom.test.js | — | — |
 | PAY-04 | 구현 (2026-10-22) | 테스트 | — | src/pro-upgrade.js | tests/unit/app/usage-telemetry.test.js | — | — |
 | PAY-05 | 구현 (2026-10-22) | 테스트 | — | tools/check/issue_pro_code.js | tests/unit/app/pro-redeem.test.js | — | — |
