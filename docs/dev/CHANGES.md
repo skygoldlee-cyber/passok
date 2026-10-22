@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 운영 리포트 — 활성화 퍼널 + 조회 경로·페이지네이션 수정
+
+- **funnel_report 활성화 퍼널**: `session_start`→`core_learning_action` 세션·설치(install_id) 전환율 — DOC-DSN-34 §4 P0 KPI 조회 경로. `session_start`는 과업 쌍 아닌 방문 분모라 퍼널 표에서 제외
+- **dashboard_report**: 활성화율 카드 2개 추가 (세션·설치)
+- **경로 버그 수정**: supabase_ops.js·error_report.js·funnel_report.js가 `src/supabase-config.js`(미존재)를 읽던 문제 → `src/auth-sync/supabase-config.js`로 정정 (SECRET_KEY 미보유로 미실행이라 잠복해 있던 버그)
+- **페이지네이션**: `restGetAll` 신규 — 서버 max-rows(1000) 절단 해소 (7일 실측 1000→5162행 회수) · error_report·funnel_report·dashboard_report 전환
+
 ## 2026-10-22 스키마 자동 적용 — schema:apply (Management API PAT)
 
 - **신규** `tools/supabase/apply_schema.js` — schema.sql 전체를 `POST /v1/projects/{ref}/database/query`로 실행 후 check_supabase_schema 프로브 검증 — SQL Editor 수동 절차의 자동화 (`--dry-run`=대상 확인만)
