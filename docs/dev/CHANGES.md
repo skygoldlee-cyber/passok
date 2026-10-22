@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 CI 실행시간 단축 (P1 — 즉효 항목)
+
+- E2E를 프로젝트 × 2샤드(6레그)로 분할 — 최장 레그 tablet ~306s → 절반 수준
+- Playwright 브라우저 `~/.cache/ms-playwright` 캐시 도입 (miss 시에만 install, deps는 항상 확인)
+- `setup-node`에 `cache: 'npm'` 추가 (test·e2e 공통)
+- CI의 plain `npm test` 제거 — `coverage:unit`(c8)가 동일 스위트 실행. LOCAL_ONLY에 사유 등록
+
 ## 2026-10-22 그룹화 누락 경로 수정 (CI 복구)
 
 - `check_link_lint.js`의 동적 import base가 `src/`에 남아 있어 CI `test` 잡 연쇄 실패 → `src/reader/`로 수정

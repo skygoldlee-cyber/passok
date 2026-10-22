@@ -46,6 +46,7 @@ const CI_ONLY = new Set([
 const LOCAL_ONLY = new Set([
   'check:hooks',                     // 훅 설치 여부 — 로컬 전용
   'check_env.js',                    // .env는 gitignore라 CI 도달 불가 — 로컬 시크릿 신선도
+  'npm test',                        // CI에선 coverage:unit이 동일 스위트를 c8로 실행 — 중복 방지로 plain 실행 생략
 ]);
 
 /** 명령 문자열 → 비교 토큰 (npm run X → X 유지, node tools/… → 경로 유지) */
