@@ -10,7 +10,7 @@ import { WrittenPractice } from './written-practice.js';
 import { ManualViewer } from './manual-viewer.js';
 import { initWebVitals } from './web-vitals.js';
 import { STORAGE_KEYS } from './storage-keys.js';
-import { setupPWAInstall } from './pwa-install.js';
+import { setupPWAInstall } from './pwa/pwa-install.js';
 import { setupThemeToggle } from './theme-toggle.js';
 import { maybeShowWhatsNew } from './whats-new.js';
 import { maybeShowOnboarding } from './onboarding.js';

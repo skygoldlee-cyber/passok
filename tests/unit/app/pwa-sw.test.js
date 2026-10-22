@@ -13,8 +13,8 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const sw = readFileSync(join(ROOT, 'sw.js'), 'utf-8');
 const indexHtml = readFileSync(join(ROOT, 'index.html'), 'utf-8');
-const capture = readFileSync(join(ROOT, 'src', 'pwa-install-capture.js'), 'utf-8');
-const install = readFileSync(join(ROOT, 'src', 'pwa-install.js'), 'utf-8');
+const capture = readFileSync(join(ROOT, 'src', 'pwa', 'pwa-install-capture.js'), 'utf-8');
+const install = readFileSync(join(ROOT, 'src', 'pwa', 'pwa-install.js'), 'utf-8');
 
 // ---------- P-01: 분기 전략 ----------
 
@@ -99,7 +99,7 @@ test('P-06: pruneStaleDataBundles가 activate에서 구 해시 번들을 정리�
 test('P-07: beforeinstallprompt 캡처 스크립트가 <head> 클래식 스크립트로 로드된다', () => {
   const head = indexHtml.match(/<head[\s\S]*?<\/head>/);
   assert.ok(head, 'head 존재');
-  assert.ok(head[0].includes('src="src/pwa-install-capture.js"'), 'head 내 조기 로드');
+  assert.ok(head[0].includes('src="src/pwa/pwa-install-capture.js"'), 'head 내 조기 로드');
   assert.ok(!/type="module"[^>]*pwa-install-capture/.test(head[0]), '모듈이 아닌 클래식 스크립트');
   assert.ok(capture.includes('beforeinstallprompt'), '이벤트 캡처');
   assert.ok(capture.includes('e.preventDefault'), '기본 미니인포바 억제');

@@ -30,7 +30,7 @@
          차단하므로 외부 self-호스팅 파일로 로드한다. (동일 코드가 src/theme-init.js에 있음) -->
     <script src="src/theme-init.js"></script>
     <!-- PWA: beforeinstallprompt 조기 캡처 (module 스크립트보다 먼저 실행) -->
-    <script src="src/pwa-install-capture.js"></script>
+    <script src="src/pwa/pwa-install-capture.js"></script>
 </head>
 <body class="dark-theme">
     <!-- 본문 바로가기 (키보드·스크린리더 접근성 — 첫 Tab 정지점) -->
@@ -535,7 +535,7 @@
          비기본 시험 부팅 시 기본 시험 번들을 로드하지 않는다 (도메인 격리) -->
     <script src="src/exam-data-boot.js"></script>
     <!-- 활성 시험 기준 동적 PWA 매니페스트 (실패 시 정적 manifest.webmanifest 폴백) -->
-    <script src="src/pwa-manifest.js"></script>
+    <script src="src/pwa/pwa-manifest.js"></script>
     <script type="module" src="data/audio_manifest.js"></script>
     <!-- mermaid(3.3MB)는 매뉴얼/문서 뷰에서만 쓰이므로 즉시 로드하지 않는다.
          src/manual-viewer.js 가 실제 다이어그램이 있을 때만 온디맨드로 주입한다.

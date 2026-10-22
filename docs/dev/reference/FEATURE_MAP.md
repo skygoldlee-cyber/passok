@@ -90,7 +90,7 @@
 | 상태 객체·진도 저장 | `src/state.js` + `src/storage.js` + `src/storage-keys.js` | `tests/unit/app/state.test.js`, `storage.test.js`, `storage-key-sync.test.js` | DA-*/ID-* |
 | 오프라인 감지 배너 | `src/views/offline-detection.js` | `common-offline.dom.test.js` | PF-*/P-* |
 | Service Worker·캐시 정책·프리캐시 | `sw.js` | `tests/e2e/sw-*.spec.js`, `verify:assets` | P-* |
-| PWA 설치·매니페스트 | `src/pwa-install.js`, `pwa-manifest.js` | E2E 전용 | P-* |
+| PWA 설치·매니페스트 | `src/pwa/pwa-install.js`, `pwa-manifest.js` | E2E 전용 | P-* |
 | 테마·UI 모드 | `src/theme-toggle.js`, `src/ui-mode.js`, `src/theme-init.js` | `common-theme.dom.test.js`, `common-uimode.dom.test.js` | TH-*/UM-* |
 | 토스트·모달·로딩 유틸 | `src/ui-utils.js` + `src/modal-back.js` | `common-a11y.dom.test.js` | UX-* |
 | XSS 이스케이프·`html`` ` 템플릿 | `src/sanitize.js` | `tests/unit/app/sanitize.test.js` | SEC-* |
