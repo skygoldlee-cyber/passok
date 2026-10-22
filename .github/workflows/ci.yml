@@ -53,6 +53,9 @@ jobs:
       - name: Import/export cross-check
         run: npm run check:imports
 
+      - name: Supabase schema applied probe (선언 테이블 프로덕션 존재)
+        run: npm run check:supabase
+
       - name: Position-independence gate (교재 좌표 비의존 식별자·저장 키)
         run: npm run check:posind
 
