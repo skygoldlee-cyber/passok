@@ -7,6 +7,10 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 법령고시 PDF 경로 allowlist 등록
+
+- 외부화된 `content/exams/cosmetic/참조자료/법령고시/`가 신선 클론에서 미존재 → SPEC·TRACE_MATRIX의 의도된 참조를 `tools/config/docs_paths_allowlist.json`에 등록 (fetch:refpdfs 복원 시 생성)
+
 ## 2026-10-22 외부 자산 이중화 + qs 취약점 해소
 
 - `fetch_ref_pdfs.js`에 `mirrors` 폴백 추가 + 릴리스 `ref-assets-mirror` 생성(동일 48에셋 복제) — 단일 릴리스 삭제·장애 시 자동 폴백
