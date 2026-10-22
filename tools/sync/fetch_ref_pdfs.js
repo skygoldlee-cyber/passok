@@ -3,11 +3,14 @@
  * fetch_ref_pdfs.js — 외부 호스팅 참조자료 PDF 복원 (DOC-RBK-12)
  *
  * {contentRoot}/참조자료/pdf_hosting.json을 선언한 시험만 대상:
- *   { "assetBase": "<릴리스 에셋 베이스 URL>", "manifests": ["pdf_hashes.json", ...] }
+ *   { "assetBase": "<릴리스 에셋 베이스 URL>", "manifests": ["pdf_hashes.json", ...],
+ *     "masterManifests": ["img_masters.json", ...] }
  *
- * 각 매니페스트의 '<dir>/<file>.pdf' → sha256 항목을 순회하며, 로컬에 없거나
- * 해시가 다른 파일만 `<assetBase>/<sha256>.pdf`에서 받아 sha256 검증 후 기록한다
- * (릴리스 에셋 파일명 = 내용 해시라 이름 충돌·유니코드 인코딩 문제가 없다).
+ * manifests — 참조자료/ 상대 '<dir>/<file>.pdf' → sha256 항목.
+ * masterManifests — contentRoot 상대 경로 → sha256 항목 (교재 images 아래 .png
+ *   원본 마스터 — webp 재인코딩용 원본, 런타임은 .webp만 참조).
+ * 로컬에 없거나 해시가 다른 파일만 `<assetBase>/<sha256>.<원본 확장자>`에서 받아
+ * sha256 검증 후 기록한다 (에셋 파일명 = 내용 해시라 이름 충돌·유니코드 문제 없음).
  *
  * 사용:
  *   node tools/sync/fetch_ref_pdfs.js          # 부재·불일치 PDF 복원
@@ -50,19 +53,24 @@ async function main() {
       continue;
     }
 
-    const wanted = {};
-    for (const m of hosting.manifests || ['pdf_hashes.json']) {
+    const wanted = [];
+    const collect = (m, base) => {
       const mp = path.join(refBase, m);
-      if (fs.existsSync(mp))
-        Object.assign(wanted, JSON.parse(fs.readFileSync(mp, 'utf8')));
-    }
+      if (!fs.existsSync(mp)) return;
+      const hashes = JSON.parse(fs.readFileSync(mp, 'utf8'));
+      for (const [rel, sha] of Object.entries(hashes)) wanted.push([path.join(base, rel), rel, sha]);
+    };
+    // manifests: 참조자료/ 상대 경로 → PDF 에셋 (<sha>.pdf)
+    for (const m of hosting.manifests || ['pdf_hashes.json']) collect(m, refBase);
+    // masterManifests: contentRoot 상대 경로 → 교재 원본 마스터 에셋 (<sha>.<원본 확장자>)
+    const examBase = path.join(ROOT, t.contentRoot);
+    for (const m of hosting.masterManifests || []) collect(m, examBase);
 
     const missing = [], mismatch = [];
-    for (const [rel, sha] of Object.entries(wanted)) {
-      const fp = path.join(refBase, rel);
+    for (const [fp, rel, sha] of wanted) {
       examined++;
-      if (!fs.existsSync(fp)) missing.push([rel, sha]);
-      else if (sha256File(fp) !== sha) mismatch.push([rel, sha]);
+      if (!fs.existsSync(fp)) missing.push([fp, rel, sha]);
+      else if (sha256File(fp) !== sha) mismatch.push([fp, rel, sha]);
       else okCount++;
     }
 
@@ -72,13 +80,12 @@ async function main() {
     }
 
     console.log(`[${t.id}] 복원 대상 — 부재 ${missing.length}개·해시 불일치 ${mismatch.length}개`);
-    for (const [rel] of [...missing, ...mismatch]) console.log(`    ${rel}`);
+    for (const [, rel] of [...missing, ...mismatch]) console.log(`    ${rel}`);
     if (CHECK) { failed += missing.length + mismatch.length; continue; }
 
-    for (const [rel, sha] of [...missing, ...mismatch]) {
-      const fp = path.join(refBase, rel);
+    for (const [fp, rel, sha] of [...missing, ...mismatch]) {
       try {
-        const buf = await download(`${hosting.assetBase}/${sha}.pdf`);
+        const buf = await download(`${hosting.assetBase}/${sha}${path.extname(rel)}`);
         const got = crypto.createHash('sha256').update(buf).digest('hex');
         if (got !== sha) throw new Error(`sha256 불일치 (${got.slice(0, 12)}…)`);
         fs.mkdirSync(path.dirname(fp), { recursive: true });
@@ -92,7 +99,7 @@ async function main() {
     }
   }
 
-  if (!examined) console.log('pdf_hosting.json을 선언한 시험이 없습니다.');
+  if (!examined) console.log('pdf_hosting.json을 선언한 시험이 없습니다 (또는 매니페스트가 비어 있음).');
 
   if (failed) {
     console.log(`\n⚠ 복원 실패·미복원 ${failed}건 — 네트워크·릴리스 에셋을 확인하세요.`);
