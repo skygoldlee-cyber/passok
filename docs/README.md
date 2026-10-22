@@ -98,7 +98,7 @@ docs/
 │   ├── adr/                   ← 아키텍처 결정 기록 (19개 — README + ADR 18건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (16개)
 │   ├── design/                ← 설계·계획·평가 문서 (16개)
-│   ├── reference/             ← 명세·로직·참조 문서 (13개 + images/)
+│   ├── reference/             ← 명세·로직·참조 문서 (14개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (3개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (사용자 매뉴얼 + images/ — 런타임 fetch·배포 대상)
 └── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개)
@@ -134,6 +134,7 @@ docs/
 | [SEMANTIC_EMBEDDING_DESIGN.md](dev/design/SEMANTIC_EMBEDDING_DESIGN.md) | 빌드타임 문장 임베딩 → int8 정적 번들 — 유사 진술·이웃 인덱스 인프라 + 오답 원인 자동 분류 설계 (DOC-DSN-18, 구 DSN-19 통합) |
 | [VENDOR_MANAGEMENT_DESIGN.md](dev/design/VENDOR_MANAGEMENT_DESIGN.md) | vendor/ 자산 거버넌스 — 매니페스트·해시/버전 무결성 게이트·주기 신선도 워크플로 (DOC-DSN-20, BP-13) |
 | [LEARNING_UX_SIMPLIFICATION_DESIGN.md](dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md) | 학습 표면 단순화 통합본 — Phase 0 "오늘 할 일" 큐·Phase 1 복습 허브·Phase 1.5 훈련소 재편·Phase 2 계측+유보 트리거 (DOC-DSN-21, 구 DSN-22~24 통합) |
+| [PROJECT_OVERVIEW.md](dev/reference/PROJECT_OVERVIEW.md) | 프로젝트 개요 — 한 장 요약 (무엇을 하는가·멀티시험 구조·기술 원칙·품질 게이트·배포·문서 지도) (DOC-REF-16) |
 | [PROJECT_STRUCTURE_TOUR.md](dev/reference/PROJECT_STRUCTURE_TOUR.md) | 프로젝트 구조 투어 — 비개발자·기획자용 그림 중심 입문 (폴더 지도·데이터 파이프라인·멀티시험·품질 관문·용어 풀이) |
 | [CODE_READING_GUIDE.md](dev/reference/CODE_READING_GUIDE.md) | 코드 읽기 가이드 — 초보 개발자용 부팅 시퀀스·data-click 위임·저장소 2계층·첫 변경 레시피·게이트 치트시트 |
 | [FEATURE_MAP.md](dev/reference/FEATURE_MAP.md) | 기능→소스 지도 — "이 기능을 바꾸려면 어느 파일" 조회표 (도메인별 핵심 소스·관련 테스트·SPEC 접두사) |
@@ -377,6 +378,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-REF-13 | `docs/dev/reference/FEATURE_MAP.md` |
 | DOC-REF-14 | `docs/dev/reference/GATE_MAP.md` |
 | DOC-REF-15 | `docs/dev/reference/PROJECT_METRICS.md` |
+| DOC-REF-16 | `docs/dev/reference/PROJECT_OVERVIEW.md` |
 | DOC-RBK-01 | `docs/dev/runbooks/AUDIO_HOSTING_GUIDE.md` |
 | DOC-RBK-02 | `docs/dev/runbooks/COMBO_GENERATION_GUIDE.md` |
 | DOC-RBK-03 | `docs/dev/runbooks/CONTENT_WORKFLOW.md` |

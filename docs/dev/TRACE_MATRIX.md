@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 87f7be1663f9c6ef
+> 입력 해시: f1c2f0ff4665cad7
 > 생성: 2026-10-22 · 원천: SPEC.md(575개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -936,6 +936,7 @@
 | DOC-REF-13 | docs/dev/reference/FEATURE_MAP.md | — |
 | DOC-REF-14 | docs/dev/reference/GATE_MAP.md | — |
 | DOC-REF-15 | docs/dev/reference/PROJECT_METRICS.md | — |
+| DOC-REF-16 | docs/dev/reference/PROJECT_OVERVIEW.md | — |
 | DOC-ROOT-01 | README.md | — |
 | DOC-ROOT-02 | AGENTS.md | — |
 | DOC-USR-01 | docs/exams/cosmetic/user/exam_strategy.md | — |

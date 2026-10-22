@@ -27,6 +27,10 @@
 - insadj·indsafe·admagent manifest에 `_pilot` 근거 주석 추가 (파일럿 범위·승격 기준 경로 명시)
 - NEW_EXAM_RUNBOOK에 "파일럿 운영과 정식 승격"·"참조자료 원본 외부화"·"과금·브랜딩 정책" 절 추가 + 체크리스트에 check:onboard 항목
 
+## 2026-10-22 프로젝트 개요 문서 신설 (DOC-REF-16)
+
+- `docs/dev/reference/PROJECT_OVERVIEW.md` — 한 장 요약: 정의·기능 영역·멀티시험 구조(5팩)·기술 원칙·품질 게이트·배포·문서 지도. 신규 합류자·의사결정자용 진입점으로 `docs/README.md` 인덱스 선두에 배치
+
 ## 2026-10-22 파일럿 시험 승격 계획 문서화 (DOC-RBK-16)
 
 - `docs/dev/runbooks/PILOT_EXAM_PROMOTION.md` 신설 — 등록 4개 팩(lossadj·insadj·indsafe·admagent)의 현황 스냅샷(`check:onboard` 실측)·공통 잔여 작업 8항·시험별 체크리스트·승격 검증 명령을 트래커로 정리
