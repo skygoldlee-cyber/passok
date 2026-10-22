@@ -190,6 +190,7 @@ import { initUiMode, toggleUiMode, toggleStudyTools } from './ui-mode.js';
 import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword } from './auth-sync/auth-view.js';
 import { initSync, syncNow } from './auth-sync/sync.js';
 import { initErrorTelemetry } from './error-telemetry.js';
+import { maybeReportUsageSnapshot } from './usage-telemetry.js';
 import {
     populateSubjectSelects, populateExamCards, populateResourceCards, checkStorageWarning
 } from './app-dashboard.js';
@@ -201,6 +202,7 @@ import {
     initCommandPalette, openCommandPalette, closeCommandPalette,
     executePaletteResult
 } from './command-palette.js';
+import { initShortcutHelp } from './shortcuts-help.js';
 
 // --- 런타임 에러 안전망 (런타임 ReferenceError 등을 사용자에게 알림) ---
 window.addEventListener('error', function (event) {
@@ -223,6 +225,8 @@ function initApp() {
     const step = (label, fn) => { try { fn(); console.debug('[init] ' + label + ' OK'); return true; } catch (e) { console.error('[init] ' + label + ' 실패:', e); return false; } };
     // 런타임 오류 텔레메트리 — 가장 먼저 설치해 이후 초기화 실패도 수집 (미설정 시 no-op)
     step('initErrorTelemetry', () => initErrorTelemetry());
+    // 사용 스냅샷 텔레메트리 — UX-GATE 표본 회수, 하루 1회·익명·미설정 시 no-op (UX-MET-05)
+    step('maybeReportUsageSnapshot', () => { void maybeReportUsageSnapshot(); });
     step('initViewportHeight', initViewportHeight);
     step('loadProgress', loadProgress);
     step('checkStorageWarning', checkStorageWarning);
@@ -253,6 +257,8 @@ function initApp() {
     step('setupThemeToggle', setupThemeToggle);
     // 통합 검색 팔레트 (Ctrl+K)
     step('initCommandPalette', initCommandPalette);
+    // 단축키 도움말 (? 키)
+    step('initShortcutHelp', initShortcutHelp);
     // 초기 뷰 렌더링
     step('renderDashboard', renderDashboard);
     step('updateGlobalStats', updateGlobalStats);

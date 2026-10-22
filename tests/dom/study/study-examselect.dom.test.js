@@ -1,5 +1,5 @@
 // tests/dom/study-examselect.dom.test.js — 시험 선택 뷰 시나리오
-// @spec ES-01~03
+// @spec ES-01~03,ES-06,ES-07
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.2 (Phase 5)
 // 검증: EXAMS_LIST→카드 렌더·현재 시험 표시(H) · 다른 시험 선택→저장·리로드(P)
 //       · 같은 시험 선택→대시보드 복귀(H) · 목록 비어있음(E)
@@ -7,12 +7,12 @@
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 import { loadIndexHtml, el } from '../helpers.js';
-import { renderExamSelect, selectExamAction } from '../../../src/views/exam-select.js';
+import { renderExamSelect, selectExamAction, summarizeExamProgress } from '../../../src/views/exam-select.js';
 
 const EXAMS = {
     exams: [
-        { id: 'cosmetic', name: '맞춤형화장품 조제관리사', desc: '기본 시험', icon: 'fa-solid fa-flask', year: '2026', default: true },
-        { id: 'other', name: '다른 시험', desc: '보조 시험', icon: 'fa-solid fa-book', year: '2026' },
+        { id: 'cosmetic', name: '맞춤형화장품 조제관리사', desc: '기본 시험', icon: 'fa-solid fa-flask', year: '2026', default: true, contentStamp: 'aaa111' },
+        { id: 'other', name: '다른 시험', desc: '보조 시험', icon: 'fa-solid fa-book', year: '2026', contentStamp: 'bbb222' },
         { id: 'soon', name: '준비중 시험', desc: '아직 미개방', icon: 'fa-solid fa-hourglass', year: '2027', comingSoon: true },
     ],
 };
@@ -93,5 +93,85 @@ describe('시험 선택 — 목록·전환·복귀', () => {
         delete window.EXAMS_LIST;
         renderExamSelect();
         expect(el('exam-select-list').textContent).toContain('등록된 시험이 없습니다');
+    });
+
+    // ES-06 — 카드 진도 요약
+    it('진도 요약: 카드에 외운 카드·퀴즈 정답률·최근 학습일·D-day 표시, 준비중 카드는 제외', () => {
+        localStorage.setItem('other:fc_memorized', JSON.stringify(['c1', 'c2', 'c3']));
+        localStorage.setItem('other:quiz_results', JSON.stringify({ q1: { correct: true }, q2: { correct: false }, q3: { correct: true }, q4: { correct: true } }));
+        localStorage.setItem('other:study_calendar', JSON.stringify({ '2026-10-20': { cards: 2 }, '2026-10-22': { cards: 1 } }));
+        localStorage.setItem('other:exam_date', '2027-01-01');
+        renderExamSelect();
+
+        const cards = el('exam-select-list').querySelectorAll('.exam-select-card');
+        const otherCard = cards[1];
+        expect(otherCard.textContent).toContain('외운 카드 3');
+        expect(otherCard.textContent).toContain('퀴즈 4문 · 75%');
+        expect(otherCard.textContent).toContain('최근 학습 10/22');
+        expect(otherCard.querySelector('.exam-select-dday')).toBeTruthy();
+        // 준비중 카드는 요약 없음
+        expect(cards[2].querySelector('.exam-select-stats')).toBeNull();
+    });
+
+    it('진도 요약: 학습 기록 없는 시험은 빈 상태 문구', () => {
+        renderExamSelect();
+        const cards = el('exam-select-list').querySelectorAll('.exam-select-card');
+        expect(cards[0].textContent).toContain('학습 기록이 없습니다');
+    });
+
+    it('진도 요약: 손상된 저장값은 무시하고 집계 (E)', () => {
+        localStorage.setItem('other:fc_memorized', 'not-json{');
+        localStorage.setItem('other:quiz_results', '["x"]');
+        renderExamSelect();
+        const cards = el('exam-select-list').querySelectorAll('.exam-select-card');
+        expect(cards[1].textContent).toContain('학습 기록이 없습니다');
+    });
+
+    it('ES-07 — 스탬프 불일치 시험은 갱신됨 배지, 맵에 없는 시험은 신규 배지', () => {
+        localStorage.setItem('exam_stamp_seen', JSON.stringify({ cosmetic: 'aaa111', other: 'stale-old' }));
+        renderExamSelect();
+        const cards = el('exam-select-list').querySelectorAll('.exam-select-card');
+        // other: 확인 스탬프와 현재 스탬프가 다름 → 갱신됨
+        expect(cards[1].querySelector('.exam-select-change:not(.is-new)')).toBeTruthy();
+        expect(cards[1].querySelector('.exam-select-change').textContent).toContain('갱신됨');
+        // cosmetic: 현재 시험이므로 방문 처리 → 배지 없음
+        expect(cards[0].querySelector('.exam-select-change')).toBeNull();
+        // 새로 등장한 시험(맵에 미등록) → 신규
+        const exams4 = JSON.parse(JSON.stringify(EXAMS));
+        exams4.exams.push({ id: 'fresh', name: '새 시험', desc: 'd', contentStamp: 'ccc333' });
+        window.EXAMS_LIST = exams4;
+        renderExamSelect();
+        const freshCard = el('exam-select-list').querySelectorAll('.exam-select-card')[3];
+        expect(freshCard.querySelector('.exam-select-change.is-new')).toBeTruthy();
+        expect(freshCard.querySelector('.is-new').textContent).toContain('신규');
+    });
+
+    it('ES-07 — 최초 실행(맵 비어있음)은 배지 없이 전체 시딩', () => {
+        renderExamSelect();
+        const cards = el('exam-select-list').querySelectorAll('.exam-select-card');
+        expect(cards[0].querySelector('.exam-select-change')).toBeNull();
+        expect(cards[1].querySelector('.exam-select-change')).toBeNull();
+        const seen = JSON.parse(localStorage.getItem('exam_stamp_seen'));
+        expect(seen.other).toBe('bbb222');
+    });
+
+    it('summarizeExamProgress — 순수 집계 로직 (D-day·정답률·빈 입력)', () => {
+        const s = summarizeExamProgress({
+            memorizedJson: '["a","b"]',
+            quizJson: '{"q1":{"correct":true},"q2":{"correct":false}}',
+            calendarJson: '{"2026-01-02":{}}',
+            examDate: '2026-01-12',
+            today: '2026-01-10',
+        });
+        expect(s.cards).toBe(2);
+        expect(s.solved).toBe(2);
+        expect(s.accuracy).toBe(50);
+        expect(s.lastStudy).toBe('2026-01-02');
+        expect(s.dday).toBe(2);
+        // 빈 입력
+        const empty = summarizeExamProgress({ today: '2026-01-10' });
+        expect(empty.cards).toBe(0);
+        expect(empty.accuracy).toBeNull();
+        expect(empty.dday).toBeNull();
     });
 });

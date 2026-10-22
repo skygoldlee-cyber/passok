@@ -176,6 +176,9 @@ export function buildTodayQueue(p = {}) {
     return items;
 }
 
+/** 직전 렌더의 큐 길이 — 완료 전이(>0→0) 시에만 축하 펄스를 1회 부착 (UX-FB-08) */
+let _prevQueueLen = null;
+
 /**
  * 입력 수집 + 큐 렌더 — 기존 weak-subject-recommendation 컨테이너 재사용 (TQ-03).
  * @param {Array} subjects 과목 메타 목록
@@ -183,6 +186,7 @@ export function buildTodayQueue(p = {}) {
 export function renderTodayQueue(subjects) {
     const recEl = document.getElementById('weak-subject-recommendation');
     if (!recEl) return;
+    const prevLen = _prevQueueLen; // 완료 전이 감지용 — 렌더 직전 큐 길이 (UX-FB-08)
 
     const counts = getSubjCounts();
     const dueCardIds = getDueCards();
@@ -235,8 +239,12 @@ export function renderTodayQueue(subjects) {
         hasProgress
     });
 
+    _prevQueueLen = items.length;
+
     if (!items.length) {
-        recEl.innerHTML = '<p class="rec-empty"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> 오늘의 목표를 모두 달성했습니다 — 수고하셨습니다!</p>';
+        // UX-FB-08 — 큐가 있던 상태에서 비워지는 전이에만 축하 펄스 1회 부착
+        const celebrate = prevLen !== null && prevLen > 0 ? ' is-celebrate' : '';
+        recEl.innerHTML = `<p class="rec-empty${celebrate /*esc-ok — 내부 고정 클래스 리터럴(' is-celebrate' 또는 '')*/}"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> 오늘의 목표를 모두 달성했습니다 — 수고하셨습니다!</p>`;
         return;
     }
 

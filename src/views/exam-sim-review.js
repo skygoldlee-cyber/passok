@@ -5,6 +5,7 @@ import { esc, safeTextWithBreaks } from '../sanitize.js';
 import { DataLoader } from '../data-loader.js';
 import { getExamRules } from '../exam-context.js';
 import { resetMainScroll } from './navigation.js';
+import { mountProMoment } from '../pro-upgrade.js';
 import { OPTION_INDICATORS } from '../utils.js';
 
 /**
@@ -265,4 +266,6 @@ export function renderSimResultBreakdown({ score, total, subjectScores, chapterS
 
     breakdownContainer.innerHTML = breakdownHTML;
     breakdownContainer.classList.remove('is-hidden');
+    // ROAD-P6 — 분석 결과 도착(aha 모멘트)에 비차단 Pro 넛지. 쿨다운은 pro-upgrade가 관리
+    mountProMoment(breakdownContainer, 'sim_result');
 }

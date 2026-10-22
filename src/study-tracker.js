@@ -543,10 +543,10 @@ export const MIN_ALLOC_SAMPLE = 20;
 export const MAX_WEAK_WEIGHT = 2.5;
 
 /** 최근 퀴즈 표본 윈도우 — 과목당 최근 N문만 약점 가중에 반영 (SC-09) */
-export const RECENT_QUIZ_WINDOW = 60;
+const RECENT_QUIZ_WINDOW = 60;
 
 /** 진단 신호 윈도우 — 오답 원인 태그는 최근 30일만 가산 (SC-12) */
-export const DIAG_CAUSE_WINDOW_DAYS = 30;
+const DIAG_CAUSE_WINDOW_DAYS = 30;
 
 /** 진단 신호 가산 상한 — 오답 원인·취약 단원 가산 합계 상한 (SC-12) */
 export const MAX_DIAG_BOOST = 0.5;

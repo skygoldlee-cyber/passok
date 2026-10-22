@@ -495,6 +495,42 @@ a:hover, a:focus-visible { color: var(--color-link-hover, var(--color-link, var(
     display: block;
 }
 
+/* 스켈레톤 자리표시 (UX-FB-07) — 비동기 본문 로드 대기 중 레이아웃 형태만 미리 점유.
+   shimmer는 prefers-reduced-motion에서 자동 소거 (아래 미디어 쿼리가 모든 애니메이션 무효화) */
+@keyframes skeleton-shimmer {
+    0% { background-position: -200px 0; }
+    100% { background-position: 200px 0; }
+}
+.skeleton {
+    border-radius: var(--radius-md, 0.5rem);
+    background: linear-gradient(90deg,
+        var(--color-surface-alt, rgba(127,127,127,0.12)) 25%,
+        var(--color-surface, rgba(127,127,127,0.22)) 50%,
+        var(--color-surface-alt, rgba(127,127,127,0.12)) 75%);
+    background-size: 400px 100%;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+    min-height: 1em;
+}
+.skeleton-block { display: block; width: 100%; }
+.skeleton-text { display: block; height: 1em; margin-bottom: var(--space-2); }
+.skeleton-text.w-60 { width: 60%; }
+.skeleton-text.w-80 { width: 80%; }
+/* 리더 본문 로드 자리표시 (UX-FB-07) */
+.reader-skeleton { padding: var(--space-6) var(--space-4); }
+.reader-skeleton .skeleton-text { height: 1.1em; }
+.reader-skeleton .skeleton-text:first-child { height: 1.6em; }
+
+/* 목표 완료 전이 피드백 (UX-FB-08) — 오늘 할 일이 비워지는 전이에만 1회 부착 */
+@keyframes tq-done-pop {
+    0% { transform: scale(0.6); opacity: 0; }
+    60% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.rec-empty.is-celebrate i {
+    animation: tq-done-pop 0.5s ease-out;
+    color: var(--color-success, #22c55e);
+}
+
 /* 추가 유틸리티 — 인라인 스타일 제거용 */
 .mt-5 { margin-top: var(--space-5); }
 .mt-6 { margin-top: var(--space-6); }

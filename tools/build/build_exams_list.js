@@ -9,6 +9,7 @@
 // @spec BP-01,UX-PWA-06,UX-PWA-07
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const SRC = path.join(ROOT, 'content', 'exams.json');
@@ -78,6 +79,21 @@ function buildExamManifest(base, e) {
     return manifest;
 }
 
+/**
+ * 시험 콘텐츠 스탬프 (ES-07) — manifest.json 본문 sha1 단축.
+ * 콘텐츠(과목·문항 선언·메타)가 바뀌면 스탬프가 바뀌어 런타임의
+ * "콘텐츠 갱신" 배지 트리거로 쓰인다. 번들 생성 시 결정론적으로 계산.
+ * @param {object} e - exams.json 엔트리
+ * @returns {string|null}
+ */
+function examContentStamp(e) {
+    const mp = e.manifestPath
+        ? path.join(ROOT, e.manifestPath)
+        : path.join(ROOT, e.contentRoot || '', 'manifest.json');
+    if (!e.contentRoot || !fs.existsSync(mp)) return null;
+    return crypto.createHash('sha1').update(fs.readFileSync(mp)).digest('hex').slice(0, 12);
+}
+
 function main() {
     const exams = JSON.parse(fs.readFileSync(SRC, 'utf-8'));
     if (!exams || !Array.isArray(exams.exams) || exams.exams.length === 0) {
@@ -91,6 +107,8 @@ function main() {
         if (!e.contentRoot || !e.dataRoot) {
             throw new Error(`exams.json: '${e.id}'에 contentRoot/dataRoot가 필요합니다`);
         }
+        const stamp = examContentStamp(e);
+        if (stamp) e.contentStamp = stamp; // ES-07 — 시험 카드 '콘텐츠 갱신' 배지 트리거
     });
     const js = '// 자동 생성된 시험 레지스트리 번들입니다. 수정하지 마십시오.\n' +
         '// 원본: content/exams.json (생성: node tools/build/build_exams_list.js)\n' +

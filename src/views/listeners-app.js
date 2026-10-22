@@ -10,6 +10,7 @@ import { renderReviewList } from './quiz.js';
 import { showToast, showConfirm } from '../ui-utils.js';
 import { showReleaseNotesModal, releaseNotes } from '../whats-new.js';
 import { showOnboardingModal } from '../onboarding.js';
+import { openShortcutHelp } from '../shortcuts-help.js';
 import { showFeedbackModal, dismissFeedbackHint, dismissFeedbackDot } from '../feedback.js';
 
 export function bindAppListeners() {
@@ -50,6 +51,11 @@ export function bindAppListeners() {
     // 시작 안내 버튼 — 첫 방문 온보딩 모달 재열람
     document.getElementById('onboarding-btn')?.addEventListener('click', () => {
         showOnboardingModal();
+    });
+
+    // 단축키 버튼 — 키보드 단축키 도움말 오버레이 (UX-HELP-01)
+    document.getElementById('shortcut-help-btn')?.addEventListener('click', () => {
+        openShortcutHelp();
     });
 
     // 의견 보내기 버튼 — 피드백 모달 (현재 뷰 컨텍스트 첨부)

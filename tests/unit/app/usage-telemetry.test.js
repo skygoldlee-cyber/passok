@@ -6,7 +6,7 @@ import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
-  buildEventPayload, reportEvent, _resetUsageTelemetryForTest,
+  buildEventPayload, reportEvent, maybeReportUsageSnapshot, _resetUsageTelemetryForTest,
 } from '../../../src/usage-telemetry.js';
 
 beforeEach(() => _resetUsageTelemetryForTest());
@@ -47,4 +47,39 @@ test('reportEvent: disabled·실패·예외도 상태 반환', async () => {
     assert.equal(await reportEvent('e', {}, { insert: async () => ({ error: new Error('db') }) }), 'failed');
     _resetUsageTelemetryForTest();
     assert.equal(await reportEvent('e', {}, { insert: async () => { throw new Error('net'); } }), 'failed');
+});
+
+// ── 사용 스냅샷 (UX-MET-05) ────────────────────────────────
+
+test('maybeReportUsageSnapshot: 카운터를 usage_snapshot 이벤트 meta로 전송', async () => {
+    const rows = [];
+    const insert = async (r) => { rows.push(...r); return {}; };
+    const load = async () => JSON.stringify({
+        v: 1, owner: 'dev-x', firstUse: '2026-01-01T09:00', lastUse: '2026-01-10T09:00',
+        days: { '2026-01-09': 3, '2026-01-10': 5 },
+        views: { 'dashboard-view': 10, 'quiz-view': 4 },
+        actions: { drill_from_review: 2, pro_badge_click: 1 },
+    });
+    const res = await maybeReportUsageSnapshot({ insert, load, today: '2026-01-10' });
+    assert.equal(res, 'sent');
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].event, 'usage_snapshot');
+    // 집계 수치만 — owner(영속 식별자)는 meta에 포함되지 않는다
+    assert.equal(rows[0].meta.views['dashboard-view'], 10);
+    assert.equal(rows[0].meta.actions.drill_from_review, 2);
+    assert.equal(rows[0].meta.active_days, 2);
+    assert.equal(rows[0].meta.owner, undefined);
+});
+
+test('maybeReportUsageSnapshot: 손상·빈 스냅샷은 skipped', async () => {
+    const insert = async () => ({});
+    assert.equal(await maybeReportUsageSnapshot({ insert, load: async () => 'not-json', today: '2026-01-10' }), 'skipped');
+    assert.equal(await maybeReportUsageSnapshot({ insert, load: async () => 'null', today: '2026-01-10' }), 'skipped');
+});
+
+test('maybeReportUsageSnapshot: disabled·실패는 reportEvent 상태 그대로', async () => {
+    const load = async () => JSON.stringify({ v: 1, days: {}, views: {}, actions: {} });
+    assert.equal(await maybeReportUsageSnapshot({ insert: async () => ({ disabled: true }), load, today: '2026-01-10' }), 'disabled');
+    _resetUsageTelemetryForTest();
+    assert.equal(await maybeReportUsageSnapshot({ insert: async () => { throw new Error('net'); }, load, today: '2026-01-10' }), 'failed');
 });

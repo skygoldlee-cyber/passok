@@ -1,68 +1,123 @@
-// src/onboarding.js — 첫 방문 시작 안내 모달
-// @spec UX-FB-05
+// src/onboarding.js — 첫 방문 셋업 위저드 + 시작 안내
+// @spec UX-FB-05, OB-01
 // ------------------------------------------------------------
 // 학습 데이터가 전혀 없는 진짜 최초 방문에서만 1회 표시한다.
 // 기존 사용자(학습 키가 이미 있는 경우)는 플래그만 기록하고 방해하지 않는다.
-// 설정 메뉴 "시작 안내" 버튼으로 언제든 재열람 가능.
+// 설정 메뉴 "시작 안내" 버튼으로 언제든 재열람 가능 — 재열람 시에도 동일 위저드.
+//
+// v2 (OB-01): 설명형 모달 → 실행형 3단계 위저드.
+//   ① 시험일 입력 → 즉시 저장 (D-day·역산 계획의 시작점)
+//   ② 일일·주간 목표 입력 → 즉시 저장
+//   ③ 요약 + 첫 카드 학습 버튼 (data-click 위임 — startSubjectStudy)
 // ------------------------------------------------------------
 import { safeGetItem, safeSetItem } from './state.js';
-import { trapFocus } from './ui-utils.js';
-import { getExamAppName } from './exam-context.js';
+import { trapFocus, showToast } from './ui-utils.js';
+import { getExamAppName, getMinExamLeadDays } from './exam-context.js';
 import { esc } from './sanitize.js';
+import { getStudyGoals, setStudyGoals, getExamDate, setExamDate, getExamLeadStatus } from './study-tracker.js';
+import { todayKey } from './utils.js';
 
 const SEEN_KEY = 'onboarding_seen_v1';
 // whats-new.js와 동일 기준 — 이 중 하나라도 있으면 신규 사용자가 아님
 const RETURNING_USER_HINTS = ['quiz_results', 'fc_memorized', 'study_streak', 'sim_results_history'];
 
-const STEPS = [
-    {
-        icon: 'fa-calendar-day',
-        title: '① 시험일 설정',
-        body: '대시보드 "시험까지" 카드 → 지금 설정에서 시험일을 등록하세요. 역산 계획·주간 목표·주간 배분이 생성됩니다.',
-    },
-    {
-        icon: 'fa-book-open',
-        title: '② 교재 1회독',
-        body: '과목 카드의 교재 버튼으로 표준형/이야기형 중 골라 가볍게 통독해 구조를 파악하세요. 읽던 위치는 자동 저장됩니다.',
-    },
-    {
-        icon: 'fa-clone',
-        title: '③ 카드·퀴즈 학습',
-        body: '주간 배분 과목 칩을 눌러 배분량대로 카드를 학습하고 퀴즈·모의고사로 확인하세요. 모의고사는 실전/ㄱㄴㄷ 조합을 지원합니다.',
-    },
-    {
-        icon: 'fa-rotate-left',
-        title: '④ 복습·진단 루프',
-        body: '틀린 문항은 복습노트와 간격 반복(FSRS)에 자동 등록됩니다. 학습 진단에서 취약 진단을 확인하고 약점을 보강하세요.',
-    },
-];
+let _wizStep = 0;
 
-/** 시작 안내 모달 — 최초 방문 자동 표시와 설정 메뉴 재열람 공용 */
+/** 위저드 단계별 본문 HTML (순수 — DOM 미접근 부분만 추출해 테스트 용이) */
+function _stepBody(step) {
+    const goals = getStudyGoals();
+    const examDate = getExamDate() || '';
+    const minDays = getMinExamLeadDays();
+    if (step === 0) {
+        return `
+            <p class="onboarding-step-body">몇 가지만 설정하면 ${esc(getExamAppName())}이 시험일까지의 계획을 자동으로 만들어 드립니다.</p>
+            <label class="onboarding-field">
+                <span class="onboarding-field-label"><i class="fa-solid fa-calendar-day" aria-hidden="true"></i> 시험일 (선택)</span>
+                <input type="date" id="onboarding-exam-date" class="form-input" value="${esc(examDate)}" min="${todayKey()}">
+            </label>
+            <p class="onboarding-hint" id="onboarding-date-hint">시험일을 입력하면 D-day·주간 배분이 활성화됩니다. 권장 준비 기간: ${minDays}일 이상.</p>`;
+    }
+    if (step === 1) {
+        return `
+            <p class="onboarding-step-body">매일의 학습량을 정하면 '오늘 할 일' 큐가 배분을 관리합니다.</p>
+            <label class="onboarding-field">
+                <span class="onboarding-field-label"><i class="fa-solid fa-clone" aria-hidden="true"></i> 일일 카드 목표 (장)</span>
+                <input type="number" id="onboarding-daily-cards" class="form-input" value="${goals.dailyCards}" min="1" max="500">
+            </label>
+            <label class="onboarding-field">
+                <span class="onboarding-field-label"><i class="fa-solid fa-calendar-week" aria-hidden="true"></i> 주간 학습 일수 (일)</span>
+                <input type="number" id="onboarding-weekly-days" class="form-input" value="${goals.weeklyStudyDays}" min="1" max="7">
+            </label>`;
+    }
+    const ddayTxt = (() => {
+        const st = getExamLeadStatus(getExamDate() || '');
+        if (!st) return '시험일 미설정 — 대시보드에서 언제든 설정할 수 있습니다';
+        if (st.past) return '설정된 시험일이 지났습니다 — 설정에서 수정하세요';
+        return st.dday === 0 ? '오늘이 시험일입니다' : `시험까지 D-${st.dday}`;
+    })();
+    return `
+        <ul class="onboarding-summary">
+            <li><i class="fa-solid fa-calendar-day" aria-hidden="true"></i> ${ddayTxt}</li>
+            <li><i class="fa-solid fa-clone" aria-hidden="true"></i> 하루 카드 ${goals.dailyCards}장 · 주 ${goals.weeklyStudyDays}일</li>
+            <li><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> 틀린 문항은 복습노트·간격 반복에 자동 등록됩니다</li>
+        </ul>`;
+}
+
+const _WIZ_TITLES = ['시작하기', '학습 목표', '준비 완료'];
+
+function _renderStep(overlay) {
+    const dialog = overlay.querySelector('.onboarding-dialog');
+    if (!dialog) return;
+    const last = _wizStep === 2;
+    dialog.innerHTML = `
+        <h3><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> ${esc(getExamAppName())} ${esc(_WIZ_TITLES[_wizStep])}</h3>
+        <div class="onboarding-progress" role="progressbar" aria-valuenow="${_wizStep + 1}" aria-valuemin="1" aria-valuemax="3" aria-label="설정 진행">
+            ${_WIZ_TITLES.map((_, i) => `<span class="onboarding-dot${i <= _wizStep ? ' on' : ''}"></span>`).join('')}
+        </div>
+        <div class="onboarding-step-body-wrap">${_stepBody(_wizStep) /*esc-ok — 내부 헬퍼가 esc() 처리된 마크업 조립*/}</div>
+        <div class="app-confirm-actions btn-row">
+            ${_wizStep > 0 ? '<button class="btn btn-secondary" data-onboarding="prev">이전</button>' : ''}
+            ${last ? `
+                <button class="btn btn-secondary" data-onboarding="close">나중에</button>
+                <button class="app-confirm-ok" data-click="startSubjectStudy" data-onboarding="close">첫 카드 학습 시작</button>`
+            : `<button class="btn btn-secondary" data-onboarding="skip">건너뛰기</button>
+               <button class="app-confirm-ok" data-onboarding="next">다음</button>`}
+        </div>`;
+}
+
+/** 현재 단계의 입력값을 저장 — 검증 실패 시 false 반환해 진행 중단 */
+function _commitStep(overlay) {
+    if (_wizStep === 0) {
+        const input = /** @type {HTMLInputElement|null} */ (overlay.querySelector('#onboarding-exam-date'));
+        const v = input ? input.value : '';
+        if (v) setExamDate(v);
+        return true;
+    }
+    if (_wizStep === 1) {
+        const cards = parseInt(/** @type {HTMLInputElement|null} */ (overlay.querySelector('#onboarding-daily-cards'))?.value || '', 10);
+        const days = parseInt(/** @type {HTMLInputElement|null} */ (overlay.querySelector('#onboarding-weekly-days'))?.value || '', 10);
+        if (!Number.isFinite(cards) || cards < 1 || !Number.isFinite(days) || days < 1 || days > 7) {
+            showToast('목표를 확인해 주세요 — 카드 1장 이상, 주 1~7일', 'error');
+            return false;
+        }
+        const g = getStudyGoals();
+        setStudyGoals({ ...g, dailyCards: cards, weeklyStudyDays: days });
+        return true;
+    }
+    return true;
+}
+
+/** 시작 안내 위저드 — 최초 방문 자동 표시와 설정 메뉴 재열람 공용 */
 export function showOnboardingModal() {
     const existing = document.getElementById('onboarding-overlay');
     if (existing) existing.remove();
-
-    const itemsHtml = STEPS.map((s, i) => `
-        <li class="onboarding-step">
-            <span class="onboarding-step-num">${i + 1}</span>
-            <div>
-                <p class="onboarding-step-title"><i class="fa-solid ${s.icon}" aria-hidden="true"></i> ${s.title}</p>
-                <p class="onboarding-step-body">${s.body}</p>
-            </div>
-        </li>`).join('');
+    _wizStep = 0;
 
     const overlay = document.createElement('div');
     overlay.id = 'onboarding-overlay';
-    overlay.innerHTML = `
-        <div class="app-confirm-dialog dialog-card onboarding-dialog" role="dialog" aria-modal="true" aria-label="시작 안내">
-            <h3><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> ${esc(getExamAppName())} 시작 안내</h3>
-            <ol class="onboarding-steps">${itemsHtml}</ol>
-            <p class="onboarding-foot">진도는 이 기기에 자동 저장되며 오프라인에서도 학습할 수 있습니다.</p>
-            <div class="app-confirm-actions">
-                <button class="app-confirm-ok">시작하기</button>
-            </div>
-        </div>`;
+    overlay.innerHTML = '<div class="app-confirm-dialog dialog-card onboarding-dialog" role="dialog" aria-modal="true" aria-label="시작 안내"></div>';
     document.body.appendChild(overlay);
+    _renderStep(overlay);
     const dialog = /** @type {HTMLElement} */ (overlay.querySelector('.app-confirm-dialog'));
     requestAnimationFrame(() => {
         overlay.classList.add('is-visible');
@@ -76,8 +131,19 @@ export function showOnboardingModal() {
         setTimeout(() => { untrapFocus(); overlay.remove(); }, 200);
         safeSetItem(SEEN_KEY, '1');
     };
-    overlay.querySelector('.app-confirm-ok')?.addEventListener('click', close);
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) { close(); return; }
+        const btn = /** @type {Element|null} */ (e.target)?.closest('[data-onboarding]');
+        if (!btn) return;
+        const act = btn.getAttribute('data-onboarding');
+        if (act === 'close') { close(); return; }
+        if (act === 'prev') { _wizStep = Math.max(0, _wizStep - 1); _renderStep(overlay); return; }
+        if (act === 'skip' || act === 'next') {
+            if (act === 'next' && !_commitStep(overlay)) return;
+            _wizStep = Math.min(2, _wizStep + 1);
+            _renderStep(overlay);
+        }
+    });
     const onKey = (e) => {
         if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); close(); }
     };
