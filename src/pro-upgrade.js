@@ -29,16 +29,16 @@ function isFreeLimitError(error) {
  * 문구 변경은 이 객체 하나로 관리 — 코드 분기를 건드리지 않는다.
  */
 const PAYMENT_NOTICE = {
-    enabled: false,
+    enabled: true,
     priceLabel: '시험 기간권 9,900원 / 90일',
     methods: [
-        '토스 송금 링크 또는 계좌이체로 결제 — 링크·계좌는 문의 채널에서 안내드립니다',
+        "'결제 문의'를 눌러 오픈채팅으로 연락주시면 결제 방법(계좌이체·카카오페이)을 안내드립니다",
         '결제 확인 후 24~48시간 내 라이선스 코드를 발송해 드립니다',
         '받은 코드는 로그인 후 ⚙️ 설정 → 라이선스 코드에서 입력하면 즉시 Pro가 활성화됩니다',
     ],
     refundNotice: '환불: 코드 미사용 시 결제일로부터 7일 이내 전액 환불 (전자상거래법 청약철회) · 코드 사용 후에는 환불이 제한될 수 있습니다',
     contactLabel: '오픈채팅에서 결제 문의',
-    contactUrl: '',   // 오픈채팅 링크 확정 시 채움 — 빈 문자열이면 버튼 미노출
+    contactUrl: 'https://open.kakao.com/o/sWLzJCTi',
 };
 
 // --- 기능 플랜 (feature-plan.json — 기능별 무료/Pro 전환) ---
@@ -354,7 +354,7 @@ export function showUpgradeNotice(featureLabel, limitMessage) {
                 <p class="pro-payment-refund">${esc(PAYMENT_NOTICE.refundNotice)}</p>
             </div>` : '';
     const contactBtn = PAYMENT_NOTICE.enabled && PAYMENT_NOTICE.contactUrl
-        ? '<button class="app-confirm-cancel pro-payment-contact">결제 문의</button>' : '';
+        ? `<button class="app-confirm-cancel pro-payment-contact">${esc(PAYMENT_NOTICE.contactLabel)}</button>` : '';
     const { overlay, close } = _showDialog(`
         <div class="app-confirm-dialog dialog-card pro-upgrade-dialog" role="alertdialog" aria-modal="true" aria-labelledby="pro-upgrade-title">
             <h3 id="pro-upgrade-title">💎 ${PAYMENT_NOTICE.enabled ? 'Pro로 업그레이드' : '무료 한도 도달'}</h3>
