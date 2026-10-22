@@ -7,6 +7,10 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 e2e 시드 — telemetry_notice_shown 추가
+
+- UX-MET-06 최초 고지 토스트가 e2e 첫 로드마다 표시돼 a11y 토스트 테스트 strict-mode 충돌·시각 회귀 오염 → 17개 spec + analysis-seed fixture에 `telemetry_notice_shown` 시드 (온보딩 플래그와 동일 패턴)
+
 ## 2026-10-22 Supabase 스키마 적용 프로브 게이트 (check:supabase)
 
 - **발견**: `feedback`·`client_errors`·`usage_events` 3개 테이블이 프로덕션 미적용 (PGRST205) — 익명 insert 조용한 실패 설계로 텔레메트리 전량 손실을 장기간 미탐지

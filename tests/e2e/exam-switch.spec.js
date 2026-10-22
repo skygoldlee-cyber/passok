@@ -12,6 +12,7 @@ test.describe('비기본 시험(lossadj) 부팅 — 도메인 격리', () => {
         page.addInitScript(() => {
             localStorage.setItem('current_exam', 'lossadj');
             localStorage.setItem('onboarding_seen_v1', '1');
+            localStorage.setItem('telemetry_notice_shown', '1');
             localStorage.setItem('lossadj:onboarding_seen_v1', '1');
         });
         page._errors = [];
@@ -133,6 +134,7 @@ test.describe('도메인 경로 규약 — 활성 시험 id로 뷰 모듈·마�
         // 온보딩 오버레이 스킵 — cosmetic 기본 시험의 온보딩 완료를 시드
         await page.addInitScript(() => {
             localStorage.setItem('onboarding_seen_v1', '1');
+            localStorage.setItem('telemetry_notice_shown', '1');
             localStorage.setItem('cosmetic:onboarding_seen_v1', '1');
         });
         await page.goto('/index.html');
