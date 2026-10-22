@@ -27,6 +27,11 @@
 - insadj·indsafe·admagent manifest에 `_pilot` 근거 주석 추가 (파일럿 범위·승격 기준 경로 명시)
 - NEW_EXAM_RUNBOOK에 "파일럿 운영과 정식 승격"·"참조자료 원본 외부화"·"과금·브랜딩 정책" 절 추가 + 체크리스트에 check:onboard 항목
 
+## 2026-10-22 사업 검증 계획 문서 정착 (DOC-DSN-34)
+
+- `docs/dev/design/BUSINESS_VALIDATION.md` — 외부 리뷰 반영본을 정본으로 정착: DOC-REF-17 가칭→DOC-DSN-34(design 버킷 규약), P0 중간 점검(11/4)·종료(11/8) 날짜 정합, 익명 설치 ID↔기존 usage-telemetry 관계 명시
+- `PROJECT_OVERVIEW.md` — 사업 검증 상세를 요약으로 치환(정본은 DOC-DSN-34 위임), 강점 표현에 "가설" 라벨 추가(부록 B), 명칭 위계·수치 신선도 주석 추가
+
 ## 2026-10-22 프로젝트 개요 문서 신설 (DOC-REF-16)
 
 - `docs/dev/reference/PROJECT_OVERVIEW.md` — 한 장 요약: 정의·기능 영역·멀티시험 구조(5팩)·기술 원칙·품질 게이트·배포·문서 지도. 신규 합류자·의사결정자용 진입점으로 `docs/README.md` 인덱스 선두에 배치
