@@ -146,8 +146,10 @@ function checkExam(t) {
         err(`${tag} ref_md 폴더 과목 불일치: ${doc} — 폴더=과목${info2.subject}, 규칙=과목${ruleSubj}`);
     }
   } else {
+    const externalized = fs.existsSync(path.join(REF_BASE, 'pdf_hosting.json'));
     const declared = Object.values(refs.refDirs || {}).flat().length;
     if (declared) warn(`${tag} PDF 원본 미수록 — refDirs 선언 ${declared}건의 출처 정합 검증 불가`);
+    if (externalized) info(`${tag} PDF는 외부 호스팅 자산 (DOC-RBK-12) — 복원: node tools/sync/fetch_ref_pdfs.js`);
     if (Object.keys(refMdDocs).length)
       info(`${tag} PDF 부재 — ref_md ${Object.keys(refMdDocs).length}건은 구조·귀속·링크만 검사`);
   }

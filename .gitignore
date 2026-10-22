@@ -91,6 +91,9 @@ docs/**/*.pdf
 !.vercel/project.json
 .env*
 !.env.example
+# 참조자료 원본 PDF — GitHub Releases 외부 호스팅 (DOC-RBK-12).
+# 복원: npm run fetch:refpdfs (pdf_hosting.json 선언 시험만). 매니페스트 pdf_hashes.json·archive_hashes.json·pdf_hosting.json은 추적 유지.
+content/**/참조자료/**/*.pdf
 # 스테이징: PDF→MD 재변환 검수 산출물 (로컬 전용)
 content/**/참조자료/ref_md_v2/
 # 생성 리포트: check_laws.py 등 파이프라인 산출물 (재생성 가능, 로컬 전용)

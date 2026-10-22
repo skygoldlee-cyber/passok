@@ -11,6 +11,11 @@
  *   - 잔여     매니페스트에는 있으나 PDF 없음 → 매니페스트 정리 필요
  *   (ref_md* 산출물 폴더와 _archive/ 는 해시 대상이 아니다)
  *
+ * 외부 호스팅 (DOC-RBK-12): pdf_hosting.json이 있으면 PDF는 git 외부 자산이다.
+ *   미복원(매니페스트에는 있으나 디스크에 없음)은 오류가 아니라 정보로 보고하고,
+ *   --update는 PDF 미복원 상태에서 매니페스트 소실을 막기 위해 거부한다.
+ *   복원: node tools/sync/fetch_ref_pdfs.js
+ *
  * 사용:
  *   node tools/check/check_ref_freshness.js            # 검증 (불일치 시 exit 1)
  *   node tools/check/check_ref_freshness.js --update   # 현재 PDF 해시로 매니페스트 갱신
@@ -60,6 +65,7 @@ console.log('='.repeat(70));
 
 let failed = 0;
 let scanned = 0;
+let unrestoredTotal = 0;
 
 for (const t of getExamTargets(ROOT)) {
   const refBase = path.join(ROOT, t.contentRoot, '참조자료');
@@ -70,9 +76,15 @@ for (const t of getExamTargets(ROOT)) {
   const manifest = fs.existsSync(manifestPath)
     ? JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
     : {};
+  const externalized = fs.existsSync(path.join(refBase, 'pdf_hosting.json'));
   const pdfs = collectPdfs(refBase);
 
   if (UPDATE) {
+    if (externalized && !Object.keys(pdfs).length) {
+      console.log(`[${t.id}] ✗ PDF 미복원 상태에서 --update 불가 — 매니페스트가 비워집니다. 먼저 실행: node tools/sync/fetch_ref_pdfs.js`);
+      failed++;
+      continue;
+    }
     const next = {};
     for (const [rel, p] of Object.entries(pdfs)) next[rel] = sha256(p);
     fs.writeFileSync(manifestPath, JSON.stringify(next, null, 2) + '\n', 'utf8');
@@ -80,22 +92,26 @@ for (const t of getExamTargets(ROOT)) {
     continue;
   }
 
-  const changed = [], added = [], removed = [];
+  const changed = [], added = [], removed = [], unrestored = [];
   for (const [rel, p] of Object.entries(pdfs)) {
     if (!(rel in manifest)) added.push(rel);
     else if (manifest[rel] !== sha256(p)) changed.push(rel);
   }
   for (const rel of Object.keys(manifest)) {
-    if (!(rel in pdfs)) removed.push(rel);
+    if (!(rel in pdfs)) (externalized ? unrestored : removed).push(rel);
   }
 
+  if (unrestored.length) {
+    unrestoredTotal += unrestored.length;
+    console.log(`[${t.id}] ℹ 외부 호스팅 PDF 미복원 ${unrestored.length}건 — 복원: node tools/sync/fetch_ref_pdfs.js`);
+  }
   if (added.length || changed.length || removed.length) {
     failed++;
     console.log(`\n[${t.id}] ⚠ 신선도 불일치`);
     changed.forEach(r => console.log(`  변경됨 — ref_md 재변환 필요: ${r}`));
     added.forEach(r => console.log(`  미등록 PDF — 변환 후 --update로 등록: ${r}`));
     removed.forEach(r => console.log(`  매니페스트 잔여(PDF 없음): ${r}`));
-  } else {
+  } else if (!unrestored.length) {
     console.log(`[${t.id}] ✅ PDF ${Object.keys(pdfs).length}개 해시 일치`);
   }
 }
@@ -107,4 +123,5 @@ if (failed && !UPDATE) {
     + '`npm run check:reffresh -- --update`로 해시를 스탬프하세요.');
   process.exit(1);
 }
-if (!UPDATE) console.log('\n✅ 모든 참조자료 PDF가 등록 해시와 일치합니다.');
+if (!UPDATE && !unrestoredTotal) console.log('\n✅ 모든 참조자료 PDF가 등록 해시와 일치합니다.');
+if (!UPDATE && unrestoredTotal && !failed) console.log(`\n✅ 오류 없음 — 외부 호스팅 PDF ${unrestoredTotal}건 미복원 (로컬 변환 작업 시 fetch_ref_pdfs.js 먼저 실행)`);
