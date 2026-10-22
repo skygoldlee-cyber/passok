@@ -66,7 +66,7 @@ const DOCS_STEPS = [
 
 // ── 콘텐츠 의존성 단계 (check:content → content 프리셋) ────────────────
 const BUILD_STEP = { id: 'content:build', bin: NPM, args: ['run', 'build:data'], shell: true,
-  layer: '빌드', desc: 'build:data — data/ 번들 전체 재생성 (+인용 라인 동기화)', token: 'npm run build:data', content: true, slow: false, serial: true };
+  layer: '빌드', desc: 'build:data — data/ 번들 전체 재생성 (+인용 라인 동기화)', token: 'npm run build:data', content: true, slow: false, serial: true, prio: 'p0' };
 
 const CONTENT_STEPS = [
   nodeStep('content:manifest', 'tools/check/check_manifest.js', '선언', 'manifest 선언 ↔ 파일/과목 자산 정합성', { content: true }),

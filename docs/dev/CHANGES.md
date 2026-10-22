@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 게이트 티어 계층화 + 참조자료 바이너리 외부화
+
+- `tools/check/steps.js` 전 단계에 `prio`(P0 차단 코어·P1 신선도·P2 감시) 부여 + `check:audit` 프리셋 신설 — P2는 리포트만 하고 push를 차단하지 않음
+- 릴리스 노트 버전 해시 검증 관용화 — 이력 재작성으로 미해석된 과거 버전은 `tools/state/release_notes_legacy_versions.json` 레거시 명단으로 처리
+- 참조자료 원본 PDF 47개 + 교재 PNG 마스터(1과목_삽화.png)를 GitHub Releases 에셋(sha256 파일명)으로 외부화 — `fetch:refpdfs`가 매니페스트 기반 sha256 검증 복원 (DOC-RBK-12 시행)
+- `check:binary` 신규 — 500KB+ 신규 바이너리 커밋 차단 (untracked·staged·ref 스코프, 예외는 `tools/state/binary_allowlist.json`)
+- `steps.js` `content:build` 단계 prio 누락 보정(p0)
+
 ## 2026-10-22 passok_qr.svg 재생성 — 소형화 + 흰 배경 명시
 
 - `docs/exams/cosmetic/business/passok_qr.svg` 재생성: 82×82(2단위 모듈) → 33×33(1단위 모듈, QR 버전4) + `<rect fill="white">` 배경 명시 — 인쇄·삽화 시 명암 대비 확보. 디코드 검증: `https://passok.vercel.app` 유지
