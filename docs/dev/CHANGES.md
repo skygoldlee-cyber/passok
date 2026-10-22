@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 스키마 자동 적용 — schema:apply (Management API PAT)
+
+- **신규** `tools/supabase/apply_schema.js` — schema.sql 전체를 `POST /v1/projects/{ref}/database/query`로 실행 후 check_supabase_schema 프로브 검증 — SQL Editor 수동 절차의 자동화 (`--dry-run`=대상 확인만)
+- **인증**: `SUPABASE_ACCESS_TOKEN` Personal Access Token (.env 로컬 전용 — scoped 권장: 이 프로젝트 + Database read-write). `.env.example` 정본·AGENTS 명령 표 등록
+- 실측: PAT로 적용 실행 + 6개 테이블 프로브 통과 확인
+
 ## 2026-10-22 e2e 시드 — telemetry_notice_shown 추가
 
 - UX-MET-06 최초 고지 토스트가 e2e 첫 로드마다 표시돼 a11y 토스트 테스트 strict-mode 충돌·시각 회귀 오염 → 17개 spec + analysis-seed fixture에 `telemetry_notice_shown` 시드 (온보딩 플래그와 동일 패턴)
