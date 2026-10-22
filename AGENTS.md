@@ -230,29 +230,30 @@ src/                    # ES Modules
   command-palette.js    # 통합 검색 팔레트 (Ctrl+K) — 뷰/교재/카드/퀴즈/성분/문제집 검색·실행
   weak-items.js         # 약점(오답) 항목 ID 문법·해석 공용 모듈 (weak_quiz_/weak_sim_ 접두사, 퀴즈·카드 인덱스 캐시, DOM 비의존)
   questions.js          # 문항 스키마 (single/combo/short/ox), deriveComboAnswer, validateQuestion (샘플 문항은 tests/fixtures/sample-questions.js)
-  exam-viewer.js        # 문제집/참조자료 MD 뷰어
   written-practice.js   # 주관식 연습 자기채점 런타임 — ###S 파서 + 답안 서술·rubric 체크 오버레이 (WP-01~06, manifest.written + features.writtenPractice)
   written-grading.js    # 주관식 AI 보조 채점 — 공급자(openai·anthropic·gemini) 직접 호출 + rubric 항목 판정 파싱 (WP-07~08, 키 디바이스 로컬)
   combo-doc.js          # 복수정답형 드릴 → 문제집 MD 런타임 직렬화 (과목N_복수정답형.md 산출물 대체)
-  manual-viewer.js      # 학습안내서/매뉴얼 MD 뷰어
   doc-overlay.js        # MD 문서 오버레이 공용 베이스 — 세션 캐시·번들 주입·TOC·셸 수명주기 (exam/manual 뷰어 공용)
   modal-back.js         # 모달/오버레이 뒤로가기 닫기 — is-hidden 토글 감시 + 동일 URL 마커 pushState/popstate
   charts.js             # SVG 레이더/꺾은선 차트
   pdf-registry.js       # 참조자료 경로 매핑 (생성물 — 시험별 테이블, getRefTables())
   law-links.js          # 참조 문서 → law.go.kr 원문 링크 매퍼 (생성물 — content/lawdb.json + references.json lawRefs → build:pdf-registry)
   notice-check.js       # 식약처 고시 감시 — 다문서 배너·실시간 확인 버튼·상태 패널·참조 링크 현행본 보정
-  glossary-query.js     # 용어집 인덱스 쿼리 API (getGlossaryIndex())
-  html-viewer.js        # 외부 HTML 콘텐츠 뷰어
-  reader-format.js      # 교재 본문 포맷터
-  reader-toc.js         # 리더 목차 추출 순수 헬퍼 (메타 섹션 필터·계층 판정·하위 헤딩)
-  textbook-core.js      # 교재 MD 파싱 공통 코어 (런타임·빌드 플러그인 공유)
-  textbook-parser.js    # 교재 MD 파서 런타임 진입점 (textbook-core.js 어댑터)
-  textbook-edition.js   # 교재 개정 감지 배너 — registry.textbookEdition vs textbook_edition_seen (P-14)
-  markdown-parser.js    # 공통 MD 파서
-  mermaid-utils.js       # Mermaid 다이어그램 설정
-  mermaid-render.js      # Mermaid 지연 로딩 + 컨테이너 렌더링 + 다이어그램 확대 모달 (reader/search/manual 공용, 모바일은 모달 내 핀치 제스처 — TR-26)
-  image-zoom.js          # 교재 본문 이미지(.reader-img) 라이트박스 확대 모달 — 모바일도 바인딩, 모달 내 핀치 제스처 (TR-26)
-  zoom-gestures.js       # 줌 모달 공용 핀치·패닝·더블탭 제스처 (Pointer Events, touch-action:none 표면, 이미지·머메이드 모달 공용 — TR-26)
+  reader/               # 교재·문서 읽기/표시 모듈 (뷰어·파서·TOC·줌·Mermaid)
+    exam-viewer.js        # 문제집/참조자료 MD 뷰어
+    manual-viewer.js      # 학습안내서/매뉴얼 MD 뷰어
+    glossary-query.js     # 용어집 인덱스 쿼리 API (getGlossaryIndex())
+    html-viewer.js        # 외부 HTML 콘텐츠 뷰어
+    reader-format.js      # 교재 본문 포맷터
+    reader-toc.js         # 리더 목차 추출 순수 헬퍼 (메타 섹션 필터·계층 판정·하위 헤딩)
+    textbook-core.js      # 교재 MD 파싱 공통 코어 (런타임·빌드 플러그인 공유)
+    textbook-parser.js    # 교재 MD 파서 런타임 진입점 (textbook-core.js 어댑터)
+    textbook-edition.js   # 교재 개정 감지 배너 — registry.textbookEdition vs textbook_edition_seen (P-14)
+    markdown-parser.js    # 공통 MD 파서
+    mermaid-utils.js       # Mermaid 다이어그램 설정
+    mermaid-render.js      # Mermaid 지연 로딩 + 컨테이너 렌더링 + 다이어그램 확대 모달 (reader/search/manual 공용, 모바일은 모달 내 핀치 제스처 — TR-26)
+    image-zoom.js          # 교재 본문 이미지(.reader-img) 라이트박스 확대 모달 — 모바일도 바인딩, 모달 내 핀치 제스처 (TR-26)
+    zoom-gestures.js       # 줌 모달 공용 핀치·패닝·더블탭 제스처 (Pointer Events, touch-action:none 표면, 이미지·머메이드 모달 공용 — TR-26)
   keyword-index.js      # 교재 셀→참조자료 키워드 매핑 (시험별 — 자동 생성)
   web-vitals.js         # Core Web Vitals 모니터링
   sha256.js             # 안정적 ID 해시

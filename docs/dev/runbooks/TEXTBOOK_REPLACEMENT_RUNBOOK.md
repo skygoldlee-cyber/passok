@@ -414,7 +414,7 @@ npm.cmd run build:keyword-index   # src/keyword-index.js 재생성 (build:data�
 | 경우 | 수정 파일 |
 |---|---|
 | 새 뷰·기능 추가 (교재 포맷이 아닌 기능) | 해당 view + `manifest.uiText` + `router.js` 폴백 |
-| 마크다운에 새 문법 도입 | `src/markdown-parser.js`·`textbook-parser.js` + `check:parser` 통과 확인 |
+| 마크다운에 새 문법 도입 | `src/reader/markdown-parser.js`·`textbook-parser.js` + `check:parser` 통과 확인 |
 | 시험 추가 | `content/exams.json` 엔트리 + `features` 플래그 (AGENTS.md "새 시험 추가 절차") |
 | 교재 **구조** 변경 (chapters→sections 계약 변경 — 내용 교체가 아님) | `src/search-sources.js`의 `collectTextbookSections()` 하나만 — 검색 코어(`search-index.js`)는 콘텐츠 종류를 모르므로 무수정 (TS-18) |
 

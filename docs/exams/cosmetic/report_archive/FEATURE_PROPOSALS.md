@@ -618,7 +618,7 @@ flowchart TD
 | `src/views/dictionary.js` | 원료 실무 DB | 확장 |
 | `src/trainer-calc.js` | 실무 배합량 계산기 | 재사용 |
 | `src/views/trainer.js` | 원료 안전성 실무 참고 | 데이터 재사용 |
-| `src/html-viewer.js` | 법령 원문 실무 참고 | 재사용 |
+| `src/reader/html-viewer.js` | 법령 원문 실무 참고 | 재사용 |
 | `src/keyword-index.js` | 원료 ↔ 법령 교차 참조 | `GLOSSARY_INDEX` 확장 |
 | `content/exams/cosmetic/참조자료/원료/` | 실무 원료 DB | 데이터 재사용 |
 | `content/exams/cosmetic/참조자료/ref_md/` | 법령 개정 감지 | 데이터 재사용 |

@@ -13,7 +13,7 @@ vi.mock('../../../src/ui-utils.js', () => ({
     vibrate: vi.fn(),
     HAPTIC: { correct: 30, wrong: [40, 30, 40], tap: 10 },
 }));
-vi.mock('../../../src/html-viewer.js', () => ({ openHtmlViewer: vi.fn() }));
+vi.mock('../../../src/reader/html-viewer.js', () => ({ openHtmlViewer: vi.fn() }));
 vi.mock('../../../src/views/glossary-renderer.js', () => ({ scrollToGlossary: vi.fn() }));
 vi.mock('../../../src/views/textbook-reader.js', () => ({ openSubjectChapter: vi.fn() }));
 vi.mock('../../../src/notice-check.js', () => ({
@@ -22,7 +22,7 @@ vi.mock('../../../src/notice-check.js', () => ({
 }));
 
 import { showToast } from '../../../src/ui-utils.js';
-import { openHtmlViewer } from '../../../src/html-viewer.js';
+import { openHtmlViewer } from '../../../src/reader/html-viewer.js';
 import { scrollToGlossary } from '../../../src/views/glossary-renderer.js';
 import { openSubjectChapter } from '../../../src/views/textbook-reader.js';
 import { ensureNoticeStatus, markStaleRefLinks } from '../../../src/notice-check.js';

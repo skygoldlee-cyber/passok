@@ -1,7 +1,7 @@
 // @spec P-14
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { isTextbookEditionNew } from '../../../src/textbook-edition.js';
+import { isTextbookEditionNew } from '../../../src/reader/textbook-edition.js';
 
 test('교재 판본 판정 — 미선언이면 표시하지 않음', () => {
   assert.equal(isTextbookEditionNew(null, null), false);

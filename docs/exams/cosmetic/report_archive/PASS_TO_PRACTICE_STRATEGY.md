@@ -404,7 +404,7 @@ flowchart TD
 |----------|--------------|---------------|
 | `src/keyword-index.js` | 교재 ↔ 참조자료 매핑 | 원료 ↔ 법령 매핑 |
 | `src/pdf-registry.js` | 참조자료 중앙 설정 | 법령 원문 참조 |
-| `src/html-viewer.js` | 참조자료 뷰어 | 법령 원문 뷰어 |
+| `src/reader/html-viewer.js` | 참조자료 뷰어 | 법령 원문 뷰어 |
 | `content/exams/cosmetic/참조자료/원료/` | 시험용 원료 목록 | 실무용 원료 DB |
 | `content/exams/cosmetic/참조자료/ref_md/` | 시험용 법령 원문 | 실무용 법령 참조 |
 | `src/views/dictionary.js` | 성분 검색 (시험용) | 성분 검색 (실무용) |

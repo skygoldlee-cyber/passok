@@ -4,7 +4,7 @@
 // (tools/build/plugins/textbook.plugin.js)과 동일 코어를 공유해
 // 카드/퀴즈/챕터/ID가 빌드 산출물과 바이트 단위로 동일하다.
 // 이 파일은 런타임 컨텍스트(contentPath) 주입 + 기존 export 시그니처 유지만 담당.
-import { contentPath } from './exam-context.js';
+import { contentPath } from '../exam-context.js';
 import { parseMarkdownContent, parseTextbookContent, buildSubjectData as buildSubjectDataCore } from './textbook-core.js';
 
 // parseMarkdownFile(content, subjectId, filename, chapterKey)
@@ -17,7 +17,7 @@ export { parseTextbookContent };
 
 /**
  * 한 과목의 모든 챕터 MD를 파싱해 STUDY_DATA[key] 형태로 조립.
- * @param {import('./types.js').ManifestSubject} subjectMeta - manifest.json subjects[] 항목
+ * @param {import('../types.js').ManifestSubject} subjectMeta - manifest.json subjects[] 항목
  * @param {Record<string,string>} mdByFile - { '1.cosmetic-law.md': '<md text>', ... }
  * @param {{filePathMode?: 'html'|'md'}} [opts] - 원본 링크 경로 확장자 (기본 'md')
  * @returns {{name:string, cards:Array, quizzes:Array, chapters:Array}}

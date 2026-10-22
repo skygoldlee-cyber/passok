@@ -41,7 +41,7 @@ const DATE_IN_LI = /<li>\d{4}\.\s*\d/g;
 const SEP_JOIN = /[가-힣]<\/span><span data-md-line="\d+">[가-힣]/g;
 
 async function main() {
-    const { parseMarkdown } = await import(pathToFileURL(path.join(ROOT, 'src/markdown-parser.js')));
+    const { parseMarkdown } = await import(pathToFileURL(path.join(ROOT, 'src/reader/markdown-parser.js')));
 
     let docs = 0, mergedParas = 0, listBlocks = 0;
     const findings = [];

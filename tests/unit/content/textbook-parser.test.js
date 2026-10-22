@@ -1,7 +1,7 @@
 // @spec TR-01
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseMarkdownFile, parseTextbookContent, buildSubjectData } from '../../../src/textbook-parser.js';
+import { parseMarkdownFile, parseTextbookContent, buildSubjectData } from '../../../src/reader/textbook-parser.js';
 
 // --- 테스트용 MD 샘플 ---
 

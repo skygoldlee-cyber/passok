@@ -31,7 +31,7 @@ const SHELL_MODULES = new Set([
     'src/app.js',
     'src/router.js',
     'src/command-palette.js',
-    'src/manual-viewer.js',
+    'src/reader/manual-viewer.js',
     'src/ui-mode.js'
 ]);
 

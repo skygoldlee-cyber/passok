@@ -1,7 +1,7 @@
 // @spec TR-26
 // zoom-gestures.js — 줌 모달 공용 핀치·패닝·더블탭 제스처 (모바일 핀치줌 대체 경로)
 import { describe, it, beforeEach, expect, vi } from 'vitest';
-import { bindZoomGestures } from '../../../src/zoom-gestures.js';
+import { bindZoomGestures } from '../../../src/reader/zoom-gestures.js';
 
 /** jsdom은 PointerEvent 미지원 — MouseEvent로 시뮬레이션하고 pointerId를 주입한다 */
 function ptr(type, id, x, y) {

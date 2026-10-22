@@ -5,7 +5,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseMarkdown } from '../../../src/markdown-parser.js';
+import { parseMarkdown } from '../../../src/reader/markdown-parser.js';
 
 // ==================== 헤더 ====================
 

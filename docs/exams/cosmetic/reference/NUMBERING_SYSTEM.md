@@ -263,8 +263,8 @@ npm.cmd run test:dom
 | `content/exams/cosmetic/교재/safety/3과목_*.md` | 과목3 교재 |
 | `content/exams/cosmetic/교재/understanding/4과목_*.md` | 과목4 교재 |
 | `src/views/textbook-reader.js` | TOC 렌더링, `_getTocLevel()`, `_extractSubHeadings()` |
-| `src/textbook-parser.js` | 교재 Markdown 파서 |
-| `src/reader-format.js` | 교재 본문 포맷터 |
+| `src/reader/textbook-parser.js` | 교재 Markdown 파서 |
+| `src/reader/reader-format.js` | 교재 본문 포맷터 |
 | `docs/dev/runbooks/TEXTBOOK_AUTHORING_GUIDE.md` | 교재 작성 가이드 (전체) |
 
 ---

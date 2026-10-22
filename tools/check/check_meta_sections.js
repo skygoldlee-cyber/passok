@@ -23,7 +23,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
-import { isStoryMetaSection } from '../../src/reader-toc.js';
+import { isStoryMetaSection } from '../../src/reader/reader-toc.js';
 
 const require = createRequire(import.meta.url);
 const { getExamTargets } = require('../build/exam_targets.js');
@@ -106,7 +106,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     }
     console.log(`❌ 신규 메타 의심 제목 ${fresh.length}건 — 리더가 본문 카드로 렌더·검색 인덱스에도 포함됩니다:\n`);
     for (const s of fresh) console.log(`   ${s.file}:${s.line}  ${s.title}  [${s.exam}]`);
-    console.log('\n조치: 메타 섹션 의도면 src/reader-toc.js의 _STORY_META_PATTERNS에 패턴 추가,');
+    console.log('\n조치: 메타 섹션 의도면 src/reader/reader-toc.js의 _STORY_META_PATTERNS에 패턴 추가,');
     console.log('      본문 의도면 --update로 기준선 갱신 후 커밋하세요.');
     process.exit(1);
 }

@@ -1,7 +1,7 @@
 # 🎴 플래시카드 생성 로직 설계문서
 
 > **최종 업데이트**: 2026-09-10
-> **관련 파일**: `src/textbook-parser.js`, `tools/build/plugins/textbook.plugin.js`, `src/views/flashcard.js`, `src/state.js`, `src/spaced-repetition.js`, `index.html`, `css/study.css`
+> **관련 파일**: `src/reader/textbook-parser.js`, `tools/build/plugins/textbook.plugin.js`, `src/views/flashcard.js`, `src/state.js`, `src/spaced-repetition.js`, `index.html`, `css/study.css`
 > **관련 SPEC ID**: `F-01~10` (플래시카드) · `TR-01` (MD 파싱) · `ID-01~04` (카드 ID)
 > **문서 ID**: DOC-REF-03
 > **범위**: platform · 판본: none
@@ -27,7 +27,7 @@
 
 ### 핵심 원칙
 
-- **이중 파서 패리티**: 빌드 파서(`tools/build/plugins/textbook.plugin.js`)와 런타임 파서(`src/textbook-parser.js`)가 바이트 단위로 동일한 결과를 생성해야 함
+- **이중 파서 패리티**: 빌드 파서(`tools/build/plugins/textbook.plugin.js`)와 런타임 파서(`src/reader/textbook-parser.js`)가 바이트 단위로 동일한 결과를 생성해야 함
 - **점수 기반 품질 관리**: 모든 카드는 0-100점 중요도 점수를 받으며, 40점 미만은 자동 제거
 - **정수 연산**: 부동소수점 오차 방지를 위해 가중치 합산에 정수 산술 사용
 
@@ -417,7 +417,7 @@ getDueCount()       // 오늘 복습 대상 카드 수
 
 ### 원칙
 
-빌드 파서(`tools/build/plugins/textbook.plugin.js`)와 런타임 파서(`src/textbook-parser.js`)는 **바이트 단위로 동일한** `{ name, cards, quizzes, chapters }`를 생성해야 한다.
+빌드 파서(`tools/build/plugins/textbook.plugin.js`)와 런타임 파서(`src/reader/textbook-parser.js`)는 **바이트 단위로 동일한** `{ name, cards, quizzes, chapters }`를 생성해야 한다.
 
 ### 검증
 

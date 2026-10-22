@@ -5,7 +5,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { formatSectionContentForReader } from '../../../src/reader-format.js';
+import { formatSectionContentForReader } from '../../../src/reader/reader-format.js';
 
 // ==================== 페이지 참조 제거 ====================
 

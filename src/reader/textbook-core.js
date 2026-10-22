@@ -3,8 +3,8 @@
 // 런타임(src/textbook-parser.js)과 빌드(tools/build/plugins/textbook.plugin.js)가
 // 이 모듈 하나를 공유한다 — 카드/퀴즈/챕터/ID가 양쪽에서 바이트 단위로 동일해야
 // 진행상황 ID가 보존된다. 파싱 규칙 변경은 이 파일에서만 한다.
-import { stableId } from './sha256.js';
-import { escapeRegExp } from './utils.js';
+import { stableId } from '../sha256.js';
+import { escapeRegExp } from '../utils.js';
 
 const cleanText = (text) => {
     if (!text) return '';
@@ -593,7 +593,7 @@ export function parseTextbookContent(content, filename, subjectDir) {
 
 /**
  * 한 과목의 모든 챕터 MD를 파싱해 STUDY_DATA[key] 형태로 조립.
- * @param {import('./types.js').ManifestSubject} subjectMeta - manifest.json subjects[] 항목
+ * @param {import('../types.js').ManifestSubject} subjectMeta - manifest.json subjects[] 항목
  * @param {Record<string,string>} mdByFile - { '1.cosmetic-law.md': '<md text>', ... }
  * @param {object} opts
  * @param {string} opts.subjectDir - 챕터 filePath 접두 경로 (필수)
@@ -608,8 +608,8 @@ export function buildSubjectData(subjectMeta, mdByFile, opts) {
     const onFile = opts.onFile;
     const data = {
         name: `${subjectMeta.order}과목: ${subjectMeta.name}`,
-        cards: /** @type {import('./types.js').Card[]} */ ([]),
-        quizzes: /** @type {import('./types.js').Quiz[]} */ ([]),
+        cards: /** @type {import('../types.js').Card[]} */ ([]),
+        quizzes: /** @type {import('../types.js').Quiz[]} */ ([]),
         chapters: /** @type {any[]} */ ([])
     };
 
@@ -636,7 +636,7 @@ export function buildSubjectData(subjectMeta, mdByFile, opts) {
     });
 
     // 중복 카드 제거 (같은 chapter 내 용어 사전 표와 본문 표 간 용어 중복 대응)
-    /** @type {import('./types.js').Card[]} */
+    /** @type {import('../types.js').Card[]} */
     const uniqueCards = [];
     const cardMap = new Set();
     data.cards.forEach(c => {
@@ -648,7 +648,7 @@ export function buildSubjectData(subjectMeta, mdByFile, opts) {
     data.cards = uniqueCards;
 
     // 중복 퀴즈 제거
-    /** @type {import('./types.js').Quiz[]} */
+    /** @type {import('../types.js').Quiz[]} */
     const uniqueQuizzes = [];
     const quizMap = new Set();
     data.quizzes.forEach(q => {

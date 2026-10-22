@@ -10,7 +10,7 @@
  * 출력 : data/docs_md/<파일명>.js, {dataRoot}/docs_md/<파일명>.js
  *        각 파일은 다음 형태로 전역에 등록한다.
  *          (window.__DOC_MD__ = window.__DOC_MD__ || {})["<경로>/<파일명>.md"] = "<마크다운>";
- *        키는 src/manual-viewer.js 의 MD_SOURCES[].path 와 정확히 일치한다.
+ *        키는 src/reader/manual-viewer.js 의 MD_SOURCES[].path 와 정확히 일치한다.
  *
  * 문서 존재 = 선언: 시험 문서는 {contentRoot}/docs/ 디렉터리를 스캔해 발견된
  * 파일만 번들한다(시험별 문서 목록을 코드에 선언하지 않음). 단, 기능 플래그로
@@ -36,7 +36,7 @@ const { getExamTargets } = require('./exam_targets');
 const ROOT = path.resolve(__dirname, '..', '..');
 
 // 앱 공용 문서 — 시험 무관 문서 (사용자 매뉴얼). dir은 리포 루트 상대,
-// key는 src/manual-viewer.js 의 MD_SOURCES[].path 와 정확히 일치해야 한다.
+// key는 src/reader/manual-viewer.js 의 MD_SOURCES[].path 와 정확히 일치해야 한다.
 const GLOBAL_DOCS = [
     { dir: 'docs/user', file: 'user_manual.md', key: 'docs/user/user_manual.md' },
 ];

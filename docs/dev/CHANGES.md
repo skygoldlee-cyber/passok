@@ -7,6 +7,10 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 src/reader/ 서브디렉터리 분리 (점진 그룹화 완료)
+
+- 교재·문서 읽기/표시 모듈 14개(`exam-viewer·manual-viewer·html-viewer·glossary-query·reader-format·reader-toc·textbook-{core,parser,edition}·markdown-parser·mermaid-{render,utils}·image-zoom·zoom-gestures`)를 `src/reader/`로 이동 — import/vi.mock 스펙시피어 전수 재작성·sw.js 프리캐시·파서 등가성 게이트 경로·domain-map·아키텍처/참조 문서·테스트 경로 갱신. 이동 파일의 `./config/`·`./views/` 하위 상대경로는 `../`로 재작성
+
 ## 2026-10-22 src/auth-sync/ 서브디렉터리 분리 (pwa/ 파일럿 후속)
 
 - `src/{auth-view,supabase-client,supabase-config,sync}.js` 4개를 `src/auth-sync/`로 이동 — import 스펙시피어 전수 재작성·sw.js 프리캐시·domain-map·supabase-config 경로 파서 도구(check_secrets·error_report·funnel_report·supabase_ops)·아키텍처/설계 문서·테스트 경로 갱신

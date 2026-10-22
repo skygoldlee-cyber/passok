@@ -6,9 +6,9 @@
 // 비교해, 교재가 개정된 뒤 첫 진입에만 대시보드 배너를 띄운다.
 // '확인'을 누르면 현재 판본을 기록해 다음 개정까지 억제한다.
 
-import { getItem, setItem } from './storage.js';
-import { getActiveRegistry } from './exam-context.js';
-import { STORAGE_KEYS } from './storage-keys.js';
+import { getItem, setItem } from '../storage.js';
+import { getActiveRegistry } from '../exam-context.js';
+import { STORAGE_KEYS } from '../storage-keys.js';
 
 /** 판본 라벨이 새로운지 판정 — 미선언·동일 판본·기록 없는 환경은 false (순수 함수 — 테스트용) */
 export function isTextbookEditionNew(edition, seenEdition) {

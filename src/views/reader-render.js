@@ -5,10 +5,10 @@
 // textbook-reader.js / reader-progress.js가 담당한다.
 import { esc } from '../sanitize.js';
 import { refreshProBadges } from '../pro-upgrade.js';
-import { formatSectionContentForReader, markStoryNarrative } from '../reader-format.js';
+import { formatSectionContentForReader, markStoryNarrative } from '../reader/reader-format.js';
 import { renderStudyAids, bindStudyAidToggles } from '../study-aids.js';
-import { renderMermaidIn } from '../mermaid-render.js';
-import { attachImageZoomIn } from '../image-zoom.js';
+import { renderMermaidIn } from '../reader/mermaid-render.js';
+import { attachImageZoomIn } from '../reader/image-zoom.js';
 import {
     getRefTables, mapSourceToRef
 } from '../pdf-registry.js';
@@ -16,7 +16,7 @@ import { collectGlossaryItems, renderGlossaryTable, appendGlossaryTocItem } from
 import {
     getTocLevel,
     extractSubHeadings, buildSectionDisplayTitles
-} from '../reader-toc.js';
+} from '../reader/reader-toc.js';
 import {
     getAudioPathForChapter
 } from './reader-audio.js';

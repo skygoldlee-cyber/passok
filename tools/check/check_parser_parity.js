@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /* tools/check/check_parser_parity.js
  * 빌드 어댑터(tools/build/plugins/textbook.plugin.js)와
- * 런타임 어댑터(src/textbook-parser.js)가 동일한 content/*.md 에 대해
+ * 런타임 어댑터(src/reader/textbook-parser.js)가 동일한 content/*.md 에 대해
  * 바이트 단위로 동일한 {name, cards, quizzes, chapters}를 만드는지 검증한다.
  *
- * 파싱 로직은 src/textbook-core.js 단일 구현으로 공유되지만, 이 검사는 어댑터 결선
+ * 파싱 로직은 src/reader/textbook-core.js 단일 구현으로 공유되지만, 이 검사는 어댑터 결선
  * (subjectDir·filePathMode·ID 주입) 분기를 잡는 회귀 안전망으로 유지된다.
  *
  * 사용:  node tools/check/check_parser_parity.js   (npm run check:parser)
@@ -37,7 +37,7 @@ function firstDiff(aArr, bArr, label) {
 
 async function main() {
     // 런타임 파서는 ESM (src/package.json: type=module) → 동적 import 로 로드
-    const { buildSubjectData } = await import('../../src/textbook-parser.js');
+    const { buildSubjectData } = await import('../../src/reader/textbook-parser.js');
 
     // [멀티시험] content/exams.json의 모든 시험 manifest를 순회 검증한다.
     const targets = getExamTargets(ROOT).filter(t => t.manifest);

@@ -2,10 +2,10 @@
 // @spec RR-01,RR-05~16,PF-04,PF-05,PF-06
 // ref_md의 HTML/MD 변환본을 fetch로 로드하여 DOM에 직접 주입 (iframe 없음)
 import { parseMarkdown } from './markdown-parser.js';
-import { esc } from './sanitize.js';
-import { CACHE } from './config/cache.js';
+import { esc } from '../sanitize.js';
+import { CACHE } from '../config/cache.js';
 import { renderMermaidIn } from './mermaid-render.js';
-import { makeSessionCache } from './doc-overlay.js';
+import { makeSessionCache } from '../doc-overlay.js';
 
 let _overlayEl = null;
 let _contentEl = null;

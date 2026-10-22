@@ -6,8 +6,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'module';
-import { ExamViewer } from '../../../src/exam-viewer.js';
-import { formatSectionContentForReader } from '../../../src/reader-format.js';
+import { ExamViewer } from '../../../src/reader/exam-viewer.js';
+import { formatSectionContentForReader } from '../../../src/reader/reader-format.js';
 
 const require = createRequire(import.meta.url);
 const { lintHtml, lintBundleValue, findLine } = require('../../../tools/check/check_link_lint.js');

@@ -6,8 +6,8 @@
 import { DataLoader } from '../data-loader.js';
 import { PATHS } from '../paths.js';
 import { CACHE } from '../config/cache.js';
-import { parseTextbookContent } from '../textbook-parser.js';
-import { isStoryMetaSection } from '../reader-toc.js';
+import { parseTextbookContent } from '../reader/textbook-parser.js';
+import { isStoryMetaSection } from '../reader/reader-toc.js';
 
 // --- 이야기형 MD 캐시: { "subjId:chapterIdx": { chapterTitle, sections, filePath } } ---
 // LRU 캐시: 최대 항목 수를 초과하면 가장 오래된 항목 제거 (메모리 누수 방지)

@@ -19,7 +19,7 @@ test('PF-01: DataLoader가 content/*.md를 런타임 fetch+파싱한다', () => 
   const dl = read('src/data-loader.js');
   assert.ok(dl.includes('fetch'), 'fetch 사용');
   assert.ok(/\.md/.test(dl), 'MD 대상');
-  const tp = read('src/textbook-parser.js');
+  const tp = read('src/reader/textbook-parser.js');
   assert.ok(/parse|build/.test(tp), '런타임 파서 존재');
 });
 
@@ -44,7 +44,7 @@ test('PF-03: file:// 폴백이 과목별 분할 번들이다 (data-architecture 
 // ---------- PF-04: 참조자료 sessionStorage 캐싱 ----------
 
 test('PF-04: html-viewer가 sessionStorage 24h TTL 캐시를 사용한다', () => {
-  const hv = read('src/html-viewer.js');
+  const hv = read('src/reader/html-viewer.js');
   assert.ok(/makeSessionCache/.test(hv), 'sessionStorage 캐시 (doc-overlay 공용)');
   const cacheCfg = read('src/config/cache.js');
   const m = cacheCfg.match(/FETCH_CACHE_TTL_MS\s*:\s*([^,]+)/);
@@ -56,7 +56,7 @@ test('PF-04: html-viewer가 sessionStorage 24h TTL 캐시를 사용한다', () =
 // ---------- PF-05: 검색 조기 종료 + 지연 하이라이트 ----------
 
 test('PF-05: html-viewer가 requestIdleCallback 지연 하이라이트를 사용한다', () => {
-  const hv = read('src/html-viewer.js');
+  const hv = read('src/reader/html-viewer.js');
   assert.ok(/requestIdleCallback/.test(hv), 'requestIdleCallback');
   assert.ok(/endIdx|highlightRest/.test(hv), '분할 하이라이트');
 });
@@ -64,7 +64,7 @@ test('PF-05: html-viewer가 requestIdleCallback 지연 하이라이트를 사용
 // ---------- PF-06: span 일괄 제거 ----------
 
 test('PF-06: span 제거가 수집 후 일괄 처리 + 부모당 normalize 1회다', () => {
-  const hv = read('src/html-viewer.js');
+  const hv = read('src/reader/html-viewer.js');
   assert.ok(/querySelectorAll\('span'\)/.test(hv), 'span 일괄 수집');
   assert.ok(/normalize\(\)/.test(hv), 'normalize 호출');
   // 개별 replaceWith/innerHTML 반복이 아닌 insertBefore/removeChild 일괄 처리
@@ -139,7 +139,7 @@ test('PF-12: 용어집 인덱스가 문서 전체 경로 대신 단축 refDoc명
 // ---------- PF-13: Mermaid 온디맨드 ----------
 
 test('PF-13: Mermaid.js가 노드 존재 시에만 지연 로드된다', () => {
-  const mr = read('src/mermaid-render.js');
+  const mr = read('src/reader/mermaid-render.js');
   assert.ok(/_mermaidLoadPromise/.test(mr), '로드 프로미스 싱글턴');
   assert.ok(/script\.src\s*=\s*PATHS\.VENDOR_MERMAID/.test(mr), '동적 스크립트 로드');
   // 노드 없으면 ensureMermaid 호출 전에 조기 반환
@@ -183,7 +183,7 @@ test('PF-15: 화장품법 법령원문이 단일 정본으로 참조된다', () 
 
 test('PF-16: 다이어그램 타입 감지가 mermaid-utils로 공용화됐다', () => {
   assert.ok(existsSync(join(ROOT, 'src', 'mermaid-utils.js')), '공용 유틸 존재');
-  const mu = read('src/mermaid-utils.js');
+  const mu = read('src/reader/mermaid-utils.js');
   assert.ok(/export function detectMermaidType/.test(mu), 'detectMermaidType');
   // 3개 소비 모듈 중 임포트 확인 (render + 최소 1개 이상의 뷰)
   const consumers = srcFiles.filter(f => /from ['"][^'"]*mermaid-utils/.test(read(f)));

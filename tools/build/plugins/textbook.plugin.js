@@ -1,7 +1,7 @@
 // tools/build/plugins/textbook.plugin.js — 교재 빌드 플러그인 (파일 I/O 어댑터)
 // @spec BP-01,CS-01
-// 실제 파싱·중복제거 로직은 src/textbook-core.js 단일 구현 — 런타임 파서
-// (src/textbook-parser.js)와 공유해 카드/퀴즈/챕터/ID가 동일하다.
+// 실제 파싱·중복제거 로직은 src/reader/textbook-core.js 단일 구현 — 런타임 파서
+// (src/reader/textbook-parser.js)와 공유해 카드/퀴즈/챕터/ID가 동일하다.
 // 이 파일은 디스크 읽기 + _warnings/_fileStats 메타 부착만 담당한다.
 // (require(ESM) — Node >= 20.19 필요)
 const fs = require('fs');
@@ -9,7 +9,7 @@ const path = require('path');
 const { createRequire } = require('module');
 
 const esmRequire = createRequire(__filename);
-const { buildSubjectData } = esmRequire('../../../src/textbook-core.js');
+const { buildSubjectData } = esmRequire('../../../src/reader/textbook-core.js');
 
 module.exports = {
   name: 'textbook',
