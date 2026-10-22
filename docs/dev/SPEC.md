@@ -1346,9 +1346,9 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 
 | 모듈 | 책임 |
 |------|------|
-| `src/auth-view.js` | 계정/로그인 모달 (이메일+PW·회원가입·로그인 메일 OTP) |
-| `src/sync.js` | 클라우드 스냅샷 동기화 (sync_snapshots push/pull, dirty 훅·디바운스·충돌 확인, 고객 키 제외) |
-| `src/supabase-client.js` | Supabase lazy init — vendor UMD 동적 로드 |
+| `src/auth-sync/auth-view.js` | 계정/로그인 모달 (이메일+PW·회원가입·로그인 메일 OTP) |
+| `src/auth-sync/sync.js` | 클라우드 스냅샷 동기화 (sync_snapshots push/pull, dirty 훅·디바운스·충돌 확인, 고객 키 제외) |
+| `src/auth-sync/supabase-client.js` | Supabase lazy init — vendor UMD 동적 로드 |
 | `src/exam-context.js` | 활성 시험 해석/전환, `scopedKey` 네임스페이스, `hasFeature` |
 | `src/ui-mode.js` | 학습/실무 UI 모드 전환 (`ui_mode` 키, 학습 도구 접이식) |
 | `src/storage-keys.js` | localStorage 키 중앙 관리 |

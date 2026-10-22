@@ -280,10 +280,11 @@ src/                    # ES Modules
   theme-toggle.js       # 테마 토글 UI
   ui-mode.js            # 학습/실무 UI 모드 전환 (ui_mode 전역 키, 학습 도구 접이식)
   practice-registry.js  # 실무작업실 피처 레지스트리 — 시험 features 키 → 뷰/랜딩/지연로더/핸들러 정의 (신규 실무 피처는 여기 엔트리 추가)
-  supabase-config.js    # Supabase 프로젝트 URL·Publishable key (공개 설계상 키)
-  supabase-client.js    # Supabase lazy init — vendor/supabase UMD 동적 로드
-  auth-view.js          # 계정/로그인 모달 (이메일+PW·회원가입·매직링크)
-  sync.js               # 클라우드 스냅샷 동기화 (sync_snapshots push/pull, dirty 훅·디바운스·충돌 확인, 고객 키 제외, Pro entitlement 게이트)
+  auth-sync/            # 계정·인증·클라우드 동기화 모듈
+    supabase-config.js    # Supabase 프로젝트 URL·Publishable key (공개 설계상 키)
+    supabase-client.js    # Supabase lazy init — vendor/supabase UMD 동적 로드
+    auth-view.js          # 계정/로그인 모달 (이메일+PW·회원가입·매직링크)
+    sync.js               # 클라우드 스냅샷 동기화 (sync_snapshots push/pull, dirty 훅·디바운스·충돌 확인, 고객 키 제외, Pro entitlement 게이트)
   globals.d.ts          # 전역 타입 선언 (jsconfig checkJs용)
   package.json          # {"type":"module"} — src/ ESM 선언
   config/

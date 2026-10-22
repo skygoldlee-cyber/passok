@@ -85,7 +85,7 @@ function supabaseUrl() {
     if (process.env.SUPABASE_URL) return process.env.SUPABASE_URL.replace(/\/$/, '');
     const cfg = fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'supabase-config.js'), 'utf8');
     const m = cfg.match(/SUPABASE_URL\s*=\s*'([^']+)'/);
-    if (!m) throw new Error('src/supabase-config.js에서 SUPABASE_URL을 읽지 못했습니다');
+    if (!m) throw new Error('src/auth-sync/supabase-config.js에서 SUPABASE_URL을 읽지 못했습니다');
     return m[1];
 }
 

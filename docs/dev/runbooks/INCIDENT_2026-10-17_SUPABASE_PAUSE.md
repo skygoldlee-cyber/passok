@@ -92,7 +92,7 @@ nslookup <프로젝트ref>.supabase.co 8.8.8.8        # A 레코드 반환 확�
 ```
 
 - 데이터·스키마·설정은 정지 중에도 보존되며, 정지 후 **1년 내**에는 복원 가능
-- 대시보드에 프로젝트 자체가 없으면 삭제 → 재생성 + `tools/supabase/schema.sql` 재실행 + `src/supabase-config.js` 갱신 필요
+- 대시보드에 프로젝트 자체가 없으면 삭제 → 재생성 + `tools/supabase/schema.sql` 재실행 + `src/auth-sync/supabase-config.js` 갱신 필요
 
 ---
 
@@ -107,7 +107,7 @@ nslookup <프로젝트ref>.supabase.co 8.8.8.8        # A 레코드 반환 확�
 | `GET /rest/v1/sync_snapshots?select=user_id&limit=1` | 실제 DB 쿼리 — 공식 문서의 "주 수회 DB 활동" 판정 충족 |
 | `GET /auth/v1/settings` | 인증 서비스(GoTrue) 생존 감시 |
 
-URL·publishable key는 `src/supabase-config.js`에서 실행 시 추출 — 공개 설계(RLS가 보안 담당)라
+URL·publishable key는 `src/auth-sync/supabase-config.js`에서 실행 시 추출 — 공개 설계(RLS가 보안 담당)라
 시크릿 등록 불필요, 프로젝트 교체 시 자동 추적.
 
 ### 6.2 실패 감지 — 이중 경로

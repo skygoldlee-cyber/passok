@@ -3,7 +3,7 @@
 > 상위 문서: `ARCHITECTURE.md` (전체 구조), `docs/exams/cosmetic/report_archive/FORMULA_OS_DESIGN.md` (실무 데이터 모델 — 아카이브, 현행 요구사양은 `SPEC.md` §3.18)
 > **관련 SPEC ID**: `AU-01~08` (SPEC §3.19) · `DA-08` (고객 PII 동기화 제외) · `S-01` (CSP) · `ROAD-P0` (Pro entitlement)
 > 목적: localStorage 전용 구조에 **선택적 계정(로그인) + 클라우드 동기화 + 서버 측 Pro entitlement**를 추가한다.
-> **구현 상태**: ✅ Phase 1~2 구현 완료 (2026-09-23) — Phase 1: `supabase-client.js` lazy init + `auth-view.js` 로그인 모달(이메일+PW·가입·이메일 로그인 통합) + CSP `connect-src` 확장 + vendor/supabase 2.116.0 self-host. Phase 2: `src/sync.js` 스냅샷 동기화(쓰기 훅 dirty·2.5s 디바운스 push·pull·LWW+확인 모달·`지금 동기화` 버튼·`device_id`). 고객 카드·상담 이력은 개인정보 보호로 동기화 제외(§7). Pro(Phase 3)만 남음 — `tools/supabase/schema.sql`을 SQL Editor에서 실행 필요.
+> **구현 상태**: ✅ Phase 1~2 구현 완료 (2026-09-23) — Phase 1: `supabase-client.js` lazy init + `auth-view.js` 로그인 모달(이메일+PW·가입·이메일 로그인 통합) + CSP `connect-src` 확장 + vendor/supabase 2.116.0 self-host. Phase 2: `src/auth-sync/sync.js` 스냅샷 동기화(쓰기 훅 dirty·2.5s 디바운스 push·pull·LWW+확인 모달·`지금 동기화` 버튼·`device_id`). 고객 카드·상담 이력은 개인정보 보호로 동기화 제외(§7). Pro(Phase 3)만 남음 — `tools/supabase/schema.sql`을 SQL Editor에서 실행 필요.
 > **UX 개정 (2026-09-23 2차)**: 매직링크·인증 코드 버튼을 **단일 "로그인 메일 보내기"로 통합** — 같은 `signInWithOtp` 메일에 링크+코드가 동봉되므로 URL/PWA 어느 환경이든 동일 절차. 매직링크 랜딩 오류·성공 토스트 추가 (§A.8).
 > 전제: 기존 오프라인 PWA·Zero-Backend 철학 유지 — Supabase는 "없어도 되는" 선택 계층
 > **대안 설계**: 인증·DB를 Firebase(Authentication+Firestore+Functions)로 이관하는 설계는 본 문서 말미 절에 통합 (구 `SUPABASE_DESIGN.md`·DOC-DSN-31 — 설계안, 미구현). §12.3에서 **최종 후보 탈락** 판정 — 검토 후보로만 보존
@@ -27,8 +27,8 @@
 
 ```
 [기존] localStorage (scopedKey <examId>:*)      ← 1차 저장소, 변경 없음
-   ↕ src/sync.js (신규)                         ← push/pull · 디바운스 · 충돌 처리
-   ↕ src/supabase-client.js (신규)              ← vendored supabase-js lazy init · 세션 복원
+   ↕ src/auth-sync/sync.js (신규)                         ← push/pull · 디바운스 · 충돌 처리
+   ↕ src/auth-sync/supabase-client.js (신규)              ← vendored supabase-js lazy init · 세션 복원
 [Supabase] auth.users + profiles + sync_snapshots
 ```
 
@@ -175,9 +175,9 @@ sequenceDiagram
 | 파일 | 역할 |
 |---|---|
 | `vendor/supabase/` | supabase-js ESM 번들 (self-host) |
-| `src/supabase-client.js` | 프로젝트 URL·publishable key config, `getSupabase()` lazy init, `onAuthChange` |
-| `src/sync.js` | push/pull, dirty flag + 2~3s 디바운스, `updated_at` 충돌 비교, 확인 모달 |
-| `src/auth-view.js` | 로그인 모달 (이메일+PW / 매직링크 / OAuth), 계정 상태 패널 |
+| `src/auth-sync/supabase-client.js` | 프로젝트 URL·publishable key config, `getSupabase()` lazy init, `onAuthChange` |
+| `src/auth-sync/sync.js` | push/pull, dirty flag + 2~3s 디바운스, `updated_at` 충돌 비교, 확인 모달 |
+| `src/auth-sync/auth-view.js` | 로그인 모달 (이메일+PW / 매직링크 / OAuth), 계정 상태 패널 |
 | `index.html` | 로그인 모달 마크업, 설정 메뉴 `계정` 항목 |
 | `src/state.js` | `saveProgress` 등 쓰기 경로에 `sync.markDirty()` 훅 |
 | `vercel.json` | `connect-src` 확장 |
@@ -416,7 +416,7 @@ Firebase는 **검토 후보로는 유지하되, 최종 선택은 구조적으로
 1. **`.github/workflows/supabase-keepalive.yml`** (구현됨) — 매일 13:30 KST 두 엔드포인트 핑:
    - `GET {SUPABASE_URL}/rest/v1/sync_snapshots?select=user_id&limit=1` — 실제 DB 쿼리로 "사용자 DB 활동" 판정 충족
    - `GET {SUPABASE_URL}/auth/v1/settings` — 인증 서비스(GoTrue) 생존 확인 (§12.5)
-   - URL·키는 `src/supabase-config.js`에서 실행 시 추출(공개 설계라 시크릿 불필요, 프로젝트 변경 시 자동 추적). 실패 = 정지·장애 → Actions 알림 + **이슈 자동 생성**(§12.5)
+   - URL·키는 `src/auth-sync/supabase-config.js`에서 실행 시 추출(공개 설계라 시크릿 불필요, 프로젝트 변경 시 자동 추적). 실패 = 정지·장애 → Actions 알림 + **이슈 자동 생성**(§12.5)
    - **스케줄 실행 조건**: cron은 **GitHub 서버에서 실행** — 로컬 IDE·Devin 등 개발 환경 상태와 무관. 워크플로 파일이 **기본 브랜치에 존재**해야 스케줄이 동작하고(브랜치에만 있으면 안 돔), GitHub 부하 시 수 분~수십 분 지연 가능 — 목적상 "매일 1회"면 충분. 기본 브랜치 60일 무커밋 시 스케줄 자동 비활성화(§12.5 표, 워크플로 파일 주석)
    - **수동 실행(검증·복구 확인용)**: ① Actions 탭 → `Supabase Keep-Alive` → `Run workflow` (workflow_dispatch) ② CLI: `gh workflow run supabase-keepalive.yml` — 로그에서 `HTTP 200`이면 정상
    - **실행 이력 확인**: ① Actions 탭 → `Supabase Keep-Alive` — 이벤트 컬럼 `schedule`=자동 / `workflow_dispatch`=수동, 실행 클릭 → `keepalive` 잡 → `Supabase ping` 스텝 로그의 `REST HTTP 200`·`Auth HTTP 200` 확인 ② CLI: `gh run list --workflow=supabase-keepalive.yml --limit 10` / `gh run view --log`. 실패 감지는 이슈 자동 생성·Actions 메일에 맡기면 되므로 상시 확인 불요 (§12.5)
@@ -505,7 +505,7 @@ select polname, polrelid::regclass from pg_policy;
 
 #### 4. 클라이언트 연결
 
-- Project URL + Publishable key를 `src/supabase-config.js`에 반영 (§A.3 — 2개만, 나머지 불필요)
+- Project URL + Publishable key를 `src/auth-sync/supabase-config.js`에 반영 (§A.3 — 2개만, 나머지 불필요)
 - `connect-src 'self' https://*.supabase.co` (vercel.json) + vendor 자산이 `sw.js`에 등록되어 있어야 함 — Phase 1 커밋에서 완료
 
 #### 5. 동작 검증
@@ -725,7 +725,7 @@ SUPABASE_DESIGN §1의 원칙을 그대로 계승하고, Firebase 특유의 차�
 
 ```
 [기존] localStorage (scopedKey <examId>:*)      ← 1차 저장소, 변경 없음
-   ↕ src/sync.js (변경 최소)                     ← push/pull · 디바운스 · 충돌 처리
+   ↕ src/auth-sync/sync.js (변경 최소)                     ← push/pull · 디바운스 · 충돌 처리
    ↕ src/firebase-client.js (신규)              ← vendored firebase lazy init · 세션 복원
 [Firebase] Authentication + Firestore (users·sync_snapshots·feedback·client_errors·usage_events·pro_codes)
 ```
@@ -760,8 +760,8 @@ SUPABASE_DESIGN §1의 원칙을 그대로 계승하고, Firebase 특유의 차�
 | `vendor/firebase/` | firebase ESM 번들 (app·auth·firestore-lite — self-host) |
 | `src/firebase-config.js` | apiKey·authDomain·projectId·appId + `isFirebaseConfigured()` — 공개 설계 (supabase-config.js 대응) |
 | `src/firebase-client.js` | `getFirebaseAuth()`·`getFirestoreDb()` lazy init, `onAuthChange` (supabase-client.js 대응) |
-| `src/sync.js` | `sb.from().upsert` → `setDoc`/`getDoc` 호출부만 교체 (§6) |
-| `src/auth-view.js` | 인증 호출부 교체 + OTP 코드 UI 제거·이메일 링크 랜딩(`isSignInWithEmailLink`) 처리 (§5) |
+| `src/auth-sync/sync.js` | `sb.from().upsert` → `setDoc`/`getDoc` 호출부만 교체 (§6) |
+| `src/auth-sync/auth-view.js` | 인증 호출부 교체 + OTP 코드 UI 제거·이메일 링크 랜딩(`isSignInWithEmailLink`) 처리 (§5) |
 | `src/feedback.js`·`error-telemetry.js`·`usage-telemetry.js` | `insert` → `addDoc`/`writeBatch` 호출부 교체 |
 | `tools/lib/firebase_ops.js` | Admin SDK 공용 헬퍼 (supabase_ops.js 대응, §9) |
 | `tools/firebase/firestore.rules` | Security Rules 정본 + `firebase.json` |

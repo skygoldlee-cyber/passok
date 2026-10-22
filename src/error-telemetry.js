@@ -11,7 +11,7 @@
 // - session_id: telemetry-session.js의 페이지 로드당 랜덤 UUID — 사용자가 아니라
 //   "한 페이지 로드"를 식별. bug 피드백(meta.session_id)과의 join 키
 // ------------------------------------------------------------
-import { getSupabase } from './supabase-client.js';
+import { getSupabase } from './auth-sync/supabase-client.js';
 import { getActiveExamId } from './exam-context.js';
 import { getTelemetrySessionId } from './telemetry-session.js';
 

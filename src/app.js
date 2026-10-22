@@ -187,8 +187,8 @@ import { getViewTitles, navigateToView, initViewHashRouting } from './router.js'
 import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage, getActiveRegistry } from './exam-context.js';
 import { renderExamSelect, showExamSelect, selectExamAction } from './views/exam-select.js';
 import { initUiMode, toggleUiMode, toggleStudyTools } from './ui-mode.js';
-import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword } from './auth-view.js';
-import { initSync, syncNow } from './sync.js';
+import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword } from './auth-sync/auth-view.js';
+import { initSync, syncNow } from './auth-sync/sync.js';
 import { initErrorTelemetry } from './error-telemetry.js';
 import {
     populateSubjectSelects, populateExamCards, populateResourceCards, checkStorageWarning

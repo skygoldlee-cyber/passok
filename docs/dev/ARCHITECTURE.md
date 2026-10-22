@@ -301,10 +301,10 @@ passok/
 │   ├── feedback.js             #   의견 수신 — 설정 "의견 보내기" 모달, ?src= 유입 추적, 익명 insert, 오프라인 큐(pending_feedback), 신기능 힌트(⚙️ 점+NEW 배지)
 │   ├── pro-upgrade.js          #   Pro 안내 — feature-plan.json 무료/Pro 로드, PRO 배지(data-pro-feature) 표시 제어, 진입 1회 안내·한도 초과 업그레이드 모달
 │   ├── usage-stats.js          #   로컬 사용 카운터 (ROAD-L5) — 뷰·액션 카운트를 시험 스코프 usage_stats 키에 로컬 전용 누적, '내 사용 통계' 모달
-│   ├── supabase-config.js      #   Supabase URL·Publishable key (공개 설계상 키)
-│   ├── supabase-client.js      #   Supabase lazy init — vendor UMD 동적 로드
-│   ├── auth-view.js            #   계정/로그인 모달 (이메일+PW·회원가입·매직링크 OTP)
-│   ├── sync.js                 #   클라우드 스냅샷 동기화 (sync_snapshots push/pull, Pro entitlement 게이트 — canCloudSync)
+│   ├── auth-sync/supabase-config.js  #   Supabase URL·Publishable key (공개 설계상 키)
+│   ├── auth-sync/supabase-client.js  #   Supabase lazy init — vendor UMD 동적 로드
+│   ├── auth-sync/auth-view.js        #   계정/로그인 모달 (이메일+PW·회원가입·매직링크 OTP)
+│   ├── auth-sync/sync.js             #   클라우드 스냅샷 동기화 (sync_snapshots push/pull, Pro entitlement 게이트 — canCloudSync)
 │   ├── csv-utils.js            #   CSV 파서·EUC-KR 폴백·BOM 직렬화 (공용)
 │   ├── exams/                  #   시험 도메인 모듈 격리 (DA-13) — 시험 전용 실행 코드
 │   │   └── cosmetic/           #     맞춤형화장품 조제관리사 도메인 (domain:cosmetic)
@@ -955,10 +955,10 @@ const state = {
 
 | 모듈 | 역할 |
 |------|------|
-| [`src/supabase-config.js`](../../src/supabase-config.js) | 프로젝트 URL·Publishable Key 상수 + `isSupabaseConfigured()` (플레이스홀더 감지) |
-| [`src/supabase-client.js`](../../src/supabase-client.js) | lazy 초기화 — `vendor/supabase/supabase.js`(UMD)를 첫 사용 시점에 `<script>` 동적 주입 → `window.supabase.createClient`. `flowType: 'implicit'`, `persistSession`, `autoRefreshToken` 고정 |
-| [`src/auth-view.js`](../../src/auth-view.js) | 계정 모달 — 이메일+PW 로그인/회원가입, `signInWithOtp` 로그인 메일(매직링크+OTP 코드 동봉), `verifyOtp`, 비밀번호 재설정(`updateUser`), 메일 재발송 60초 쿨다운 |
-| [`src/sync.js`](../../src/sync.js) | 스냅샷 동기화 — `sync_snapshots` 테이블 push/pull. **Pro 게이트**: `canCloudSync()`(`feature-plan.json` `cloud_sync`가 pro이면 `pro_entitled` 필요, free면 전원 허용)가 push·pull·markDirty 디바운스·syncNow를 차단 — 차단 시 상태 'Pro 전용', 로컬 데이터는 그대로 |
+| [`src/auth-sync/supabase-config.js`](../../src/auth-sync/supabase-config.js) | 프로젝트 URL·Publishable Key 상수 + `isSupabaseConfigured()` (플레이스홀더 감지) |
+| [`src/auth-sync/supabase-client.js`](../../src/auth-sync/supabase-client.js) | lazy 초기화 — `vendor/supabase/supabase.js`(UMD)를 첫 사용 시점에 `<script>` 동적 주입 → `window.supabase.createClient`. `flowType: 'implicit'`, `persistSession`, `autoRefreshToken` 고정 |
+| [`src/auth-sync/auth-view.js`](../../src/auth-sync/auth-view.js) | 계정 모달 — 이메일+PW 로그인/회원가입, `signInWithOtp` 로그인 메일(매직링크+OTP 코드 동봉), `verifyOtp`, 비밀번호 재설정(`updateUser`), 메일 재발송 60초 쿨다운 |
+| [`src/auth-sync/sync.js`](../../src/auth-sync/sync.js) | 스냅샷 동기화 — `sync_snapshots` 테이블 push/pull. **Pro 게이트**: `canCloudSync()`(`feature-plan.json` `cloud_sync`가 pro이면 `pro_entitled` 필요, free면 전원 허용)가 push·pull·markDirty 디바운스·syncNow를 차단 — 차단 시 상태 'Pro 전용', 로컬 데이터는 그대로 |
 
 ### 동기화 데이터 흐름
 

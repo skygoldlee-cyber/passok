@@ -2,9 +2,9 @@
 // @spec AU-01~04,AU-08
 // 이메일+비밀번호 로그인·회원가입·매직링크. 세션은 supabase-js가 localStorage에 자동 보관.
 import { getSupabase, onAuthChange } from './supabase-client.js';
-import { showToast, showConfirm, trapFocus } from './ui-utils.js';
-import { safeGetItem, safeSetItem, safeRemoveItem } from './state.js';
-import { hasProEntitlement } from './pro-upgrade.js';
+import { showToast, showConfirm, trapFocus } from '../ui-utils.js';
+import { safeGetItem, safeSetItem, safeRemoveItem } from '../state.js';
+import { hasProEntitlement } from '../pro-upgrade.js';
 
 const el = id => /** @type {HTMLInputElement|null} */ (document.getElementById(id));
 const show = n => n && n.classList.remove('is-hidden');

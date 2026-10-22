@@ -125,7 +125,7 @@ npm.cmd run deploy   # 배포 가드(clean tree + origin/main 동기화) → sw 
 앱은 Supabase 없이 완전히 동작합니다. 계정·동기화·피드백을 실제로 운영하려면:
 
 1. Supabase 프로젝트 생성 → `tools/supabase/schema.sql`을 SQL Editor에서 실행
-2. `src/supabase-config.js`에 프로젝트 URL·Publishable key 입력 (공개 설계상 키 — RLS로 보호)
+2. `src/auth-sync/supabase-config.js`에 프로젝트 URL·Publishable key 입력 (공개 설계상 키 — RLS로 보호)
 3. 피드백 알림 원하면 `feedback-notify` Edge Function 배포 + webhook secret 설정 ([USER_FEEDBACK_DESIGN.md](../design/USER_FEEDBACK_DESIGN.md))
 
 ## 10. 요약 체크리스트

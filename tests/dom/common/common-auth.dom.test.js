@@ -41,7 +41,7 @@ import {
     initAuthView, openAuthModal, refreshAuthUI,
     authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword,
     authSendOtp, authVerifyOtp, authForgotPassword, resetEmailLoginCooldown,
-} from '../../../src/auth-view.js';
+} from '../../../src/auth-sync/auth-view.js';
 
 function fillAuth(email, pw) {
     el('auth-email').value = email;

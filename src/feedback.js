@@ -8,7 +8,7 @@
 // ------------------------------------------------------------
 import { getJSON, setJSON, getItem, setItem } from './storage.js';
 import { getActiveExamId } from './exam-context.js';
-import { getSupabase, getAuthSession } from './supabase-client.js';
+import { getSupabase, getAuthSession } from './auth-sync/supabase-client.js';
 import { getTelemetrySessionId } from './telemetry-session.js';
 import { esc } from './sanitize.js';
 import { trapFocus, showToast } from './ui-utils.js';
