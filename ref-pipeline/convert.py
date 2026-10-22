@@ -75,7 +75,12 @@ def main():
     if args.only:
         pdfs = [(l, p) for l, p in pdfs if args.only in os.path.basename(p)]
     if not pdfs:
-        logger.error('변환할 PDF가 없습니다.')
+        # 외부 호스팅 선언(pdf_hosting.json)이 있으면 미복원이 원인 — 복원 절차 안내 (DOC-RBK-12)
+        if os.path.exists(os.path.join(paths['pdf_root'], 'pdf_hosting.json')):
+            logger.error('PDF가 외부 호스팅으로 이전됐고 로컬에 복원되지 않았습니다.\n'
+                         '  먼저 실행: node tools/sync/fetch_ref_pdfs.js  (npm run fetch:refpdfs)')
+        else:
+            logger.error('변환할 PDF가 없습니다.')
         sys.exit(1)
 
     report = []

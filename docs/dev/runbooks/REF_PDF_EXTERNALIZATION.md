@@ -1,7 +1,8 @@
 # 📦 참조자료 PDF 외부 호스팅 이전 계획
 
-> **최종 업데이트**: 2026-10-15
-> **목적**: `content/exams/cosmetic/참조자료/`의 원본 PDF(73MB, 41개)를 git 저장소에서 분리해 클론 비용을 줄이는 절차
+> **최종 업데이트**: 2026-10-22
+> **상태**: ✅ 시행 완료 (2026-10-22) — 릴리스 `ref-pdf-cosmetic`에 에셋 47개 업로드(서비스 41 + _archive 6), 에셋 파일명은 sha256. 복원: `npm run fetch:refpdfs`. 아카이브 해시는 `archive_hashes.json`에 분리 기록.
+> **목적**: `content/exams/cosmetic/참조자료/`의 원본 PDF(14MB, 47개 — 실행 시점 실측)를 git 저장소에서 분리해 클론 비용을 줄이는 절차
 > **관련 SPEC ID**: `RR-13` (참조자료 레지스트리)
 > **문서 ID**: DOC-RBK-12
 > **범위**: platform · 판본: none

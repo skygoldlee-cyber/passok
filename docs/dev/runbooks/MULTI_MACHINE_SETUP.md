@@ -43,9 +43,21 @@ gh auth login
 # 3. 클론 (gh가 인증을 자동 처리)
 gh repo clone skygoldlee-cyber/passok
 cd passok
+npm ci
 ```
 
 > ✅ 이후 `git push` / `git pull` 도 추가 인증 없이 동작합니다.
+
+#### 참조자료 PDF 복원 (PDF 변환 작업이 필요한 경우만)
+
+원본 PDF는 저장소에 추적되지 않고 GitHub Releases에 외부 호스팅됩니다 (DOC-RBK-12).
+`convert:refs`·`check:reffresh --update` 등 PDF가 필요한 파이프라인을 쓸 때만:
+
+```bash
+npm run fetch:refpdfs   # sha256 검증 다운로드 → content/exams/<id>/참조자료/ 복원
+```
+
+앱 개발·테스트·배포만 한다면 이 단계는 불필요합니다 (ref_md 변환본은 저장소에 추적됨).
 
 #### 기존 SSH remote를 HTTPS로 전환 (선택)
 
