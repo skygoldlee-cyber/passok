@@ -217,7 +217,7 @@ npm run hooks:install
 | 34 | `material-ledger.test.js` | 9 | `src/exams/cosmetic/material-ledger.js` — 원료 CRUD, 기한 상태 파생(expired/soon/ok/none), `daysUntilExpiry` 자정 기준 | Formula OS Phase C |
 | 35 | `formula-compliance.test.js` | 4 | `src/exams/cosmetic/views/formula-compliance.js` — 항목 id 고유성, refs 유효성, 법령 파일 실존, 필수 섹션 커버리지 | Formula OS Phase D |
 | 36 | `csv-import.test.js` | 17 | `src/csv-utils.js` 파서·EUC-KR 디코딩 + `importCustomers`/`importMaterials` 중복·한도·sanitize | Formula OS CSV |
-| 37 | `supabase-client.test.js` | 6 | `src/supabase-client.js` — lazy init, UMD 동적 로드, 미설정 폴백 | window 스텁 |
+| 37 | `supabase-client.test.js` | 6 | `src/auth-sync/supabase-client.js` — lazy init, UMD 동적 로드, 미설정 폴백 | window 스텁 |
 | 38 | `sw-prune.test.js` | 5 | `sw.js` 캐시 프루닝 — 한글 경로 인코딩 오삭제 회귀 가드 | 서비스워커 로직 |
 | 39 | `mermaid/mermaid-utils.test.js` | 8 | `src/mermaid-utils.js` — 다이어그램 타입 감지, CSS 클래스, init 옵션(테마 분기) | 순수 함수 |
 | 40 | `command-palette.test.js` | 11 | `src/command-palette.js` — `searchAll()` 통합 검색 순수 로직 | 2026-09-26 추가 |

@@ -84,8 +84,8 @@
 | 시험 선택/전환 화면 | `src/views/exam-select.js` | `study-examselect.dom.test.js` | DA-*/CS-* |
 | data-click 위임 규칙 | `src/views/listeners-delegation.js` | `common-eventlisteners.dom.test.js` | UX-* |
 | 뷰 전환·사이드바 | `src/views/navigation.js` | `common-navigation.dom.test.js` | UX-NAV-* |
-| 계정 로그인·프로필 | `src/auth-view.js` + `src/supabase-*.js` | `common-auth.dom.test.js` | AU-* |
-| 클라우드 동기화·충돌 해결 | `src/sync.js` | `common-sync.dom.test.js` | AU-*/SY-* |
+| 계정 로그인·프로필 | `src/auth-sync/auth-view.js` + `src/supabase-*.js` | `common-auth.dom.test.js` | AU-* |
+| 클라우드 동기화·충돌 해결 | `src/auth-sync/sync.js` | `common-sync.dom.test.js` | AU-*/SY-* |
 | 백업/복원 (보내기·가져오기) | `src/views/backup.js` | `backup.dom.test.js` | BK-* |
 | 상태 객체·진도 저장 | `src/state.js` + `src/storage.js` + `src/storage-keys.js` | `tests/unit/app/state.test.js`, `storage.test.js`, `storage-key-sync.test.js` | DA-*/ID-* |
 | 오프라인 감지 배너 | `src/views/offline-detection.js` | `common-offline.dom.test.js` | PF-*/P-* |

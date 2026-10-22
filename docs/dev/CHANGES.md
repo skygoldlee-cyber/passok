@@ -7,6 +7,10 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 src/auth-sync/ 서브디렉터리 분리 (pwa/ 파일럿 후속)
+
+- `src/{auth-view,supabase-client,supabase-config,sync}.js` 4개를 `src/auth-sync/`로 이동 — import 스펙시피어 전수 재작성·sw.js 프리캐시·domain-map·supabase-config 경로 파서 도구(check_secrets·error_report·funnel_report·supabase_ops)·아키텍처/설계 문서·테스트 경로 갱신
+
 ## 2026-10-22 src/pwa/ 서브디렉터리 분리 (구조 개선 파일럿)
 
 - `src/pwa-{install,install-capture,manifest}.js` 3개를 `src/pwa/`로 이동 — app.js import·index.template.html 스크립트 src·sw.js 프리캐시·domain-map·테스트 경로 갱신

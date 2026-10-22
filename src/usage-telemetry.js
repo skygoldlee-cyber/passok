@@ -10,7 +10,7 @@
 // - 세션당 이벤트 상한으로 폭주 방지
 // - 개인정보 최소화: 이벤트명·문항 수·점수 등 집계용 수치만, 학습 내용 미포함
 // ------------------------------------------------------------
-import { getSupabase } from './supabase-client.js';
+import { getSupabase } from './auth-sync/supabase-client.js';
 import { getActiveExamId } from './exam-context.js';
 import { getTelemetrySessionId } from './telemetry-session.js';
 

@@ -5,11 +5,11 @@
 // 고객 카드·상담 이력(타인 개인정보)은 동기화에서 제외한다 (설계 §7).
 import { getSupabase, getAuthSession } from './supabase-client.js';
 import { isSupabaseConfigured } from './supabase-config.js';
-import { safeGetItem, safeSetItem, listScopedKeys, setDataWriteHook } from './state.js';
-import { STORAGE_KEYS, BACKUP_KEYS, isDailyCompletedKey } from './storage-keys.js';
-import { unscopedKey, getActiveExamId } from './exam-context.js';
-import { canCloudSync } from './pro-upgrade.js';
-import { showToast, showConfirm } from './ui-utils.js';
+import { safeGetItem, safeSetItem, listScopedKeys, setDataWriteHook } from '../state.js';
+import { STORAGE_KEYS, BACKUP_KEYS, isDailyCompletedKey } from '../storage-keys.js';
+import { unscopedKey, getActiveExamId } from '../exam-context.js';
+import { canCloudSync } from '../pro-upgrade.js';
+import { showToast, showConfirm } from '../ui-utils.js';
 
 // @spec AU-07,DA-10
 // 동기화 제외 — 고객 카드·상담 이력은 타인 개인정보라 로컬 전용 (SUPABASE_DESIGN §7)

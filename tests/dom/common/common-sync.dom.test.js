@@ -39,7 +39,7 @@ const sb = {
 };
 window.supabase = { createClient: vi.fn(() => sb) };
 
-import { initSync, markDirty, pushSync, pullSync, syncNow, collectSyncPayload } from '../../../src/sync.js';
+import { initSync, markDirty, pushSync, pullSync, syncNow, collectSyncPayload } from '../../../src/auth-sync/sync.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 import { scopedKey } from '../../../src/exam-context.js';
 

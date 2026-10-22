@@ -8,7 +8,7 @@
  *   - AWS/GCP/GitHub/Slack 등 범용 토큰 접두사
  *   - `password|secret|api_key = "…"` 형태의 하드코딩 대입
  *
- * 공개 설계상 허용되는 값(src/supabase-config.js의 Publishable key 등)은
+ * 공개 설계상 허용되는 값(src/auth-sync/supabase-config.js의 Publishable key 등)은
  * ALLOWLIST에 명시한다. 오탐 추가 시 패턴보다 파일 경로로 면제할 것.
  *
  * 사용법:
@@ -35,7 +35,7 @@ const PATTERNS = [
 
 // 공개 설계상 노출이 의도된 값·파일 — 경로 면제만 허용
 const ALLOWLIST_FILES = new Set([
-  'src/supabase-config.js',   // Publishable key — 클라이언트 공개 키 (RLS가 실제 보안)
+  'src/auth-sync/supabase-config.js',   // Publishable key — 클라이언트 공개 키 (RLS가 실제 보안)
 ]);
 
 const EXTS = new Set(['.js', '.mjs', '.ts', '.json', '.md', '.html', '.css', '.py', '.yml', '.yaml', '.txt', '.env', '.example', '']);

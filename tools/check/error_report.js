@@ -12,7 +12,7 @@
  * 사전 조건:
  *   - SUPABASE_SECRET_KEY 환경변수 (Secret key = 구 service_role — RLS 우회 관리자
  *     키이므로 env로만 전달, 절대 파일·인자·커밋 금지)
- *   - SUPABASE_URL 미설정 시 src/supabase-config.js의 값을 사용
+ *   - SUPABASE_URL 미설정 시 src/auth-sync/supabase-config.js의 값을 사용
  *
  * 사용법:
  *   $env:SUPABASE_SECRET_KEY="sb_secret_..." ; node tools/check/error_report.js
@@ -72,7 +72,7 @@ function supabaseUrl() {
     if (process.env.SUPABASE_URL) return process.env.SUPABASE_URL.replace(/\/$/, '');
     const cfg = fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'supabase-config.js'), 'utf8');
     const m = cfg.match(/SUPABASE_URL\s*=\s*'([^']+)'/);
-    if (!m) throw new Error('src/supabase-config.js에서 SUPABASE_URL을 읽지 못했습니다');
+    if (!m) throw new Error('src/auth-sync/supabase-config.js에서 SUPABASE_URL을 읽지 못했습니다');
     return m[1];
 }
 
