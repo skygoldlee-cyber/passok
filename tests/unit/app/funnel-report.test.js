@@ -53,3 +53,40 @@ test('summarize: 빈 입력 → 빈 분포', () => {
     assert.equal(s.total, 0);
     assert.deepEqual(s.eventCounts, {});
 });
+
+test('summarize: 활성화 — session_start→core_learning_action 세션·설치 전환율', () => {
+    const s = summarize([
+        ev('s1', 'session_start', '2026-10-22T01:00:00Z', { install_id: 'dev-a' }),
+        ev('s1', 'core_learning_action', '2026-10-22T01:01:00Z', { install_id: 'dev-a' }),
+        ev('s2', 'session_start', '2026-10-22T02:00:00Z', { install_id: 'dev-b' }),   // 미도달
+        ev('s3', 'session_start', '2026-10-22T03:00:00Z', { install_id: 'dev-a' }),   // 같은 기기 재방문, 미도달
+    ]);
+    const a = s.activation;
+    assert.equal(a.sessions, 3);
+    assert.equal(a.coreSessions, 1);
+    assert.ok(Math.abs(a.sessionRate - 1 / 3) < 1e-9);
+    assert.equal(a.installs, 2);            // dev-a·dev-b 고유 설치
+    assert.equal(a.coreInstalls, 1);        // dev-a만 도달
+    assert.equal(a.installRate, 0.5);
+});
+
+test('summarize: session_start는 과업 퍼널로 미생성 — activation으로만 집계', () => {
+    const s = summarize([
+        ev('s1', 'session_start', '2026-10-22T01:00:00Z', { install_id: 'dev-a' }),
+        ev('s1', 'quiz_start', '2026-10-22T01:01:00Z'),
+        ev('s1', 'quiz_complete', '2026-10-22T01:05:00Z'),
+    ]);
+    assert.equal(s.funnels.session, undefined);  // session_complete 없는 의사 퍼널 제외
+    assert.ok(s.funnels.quiz);
+});
+
+test('summarize: install_id 없는 행은 설치 기준에서 제외 — 세션 기준만 집계', () => {
+    const s = summarize([
+        ev('s1', 'session_start', '2026-10-22T01:00:00Z'),              // install_id 없음
+        ev('s1', 'core_learning_action', '2026-10-22T01:01:00Z'),
+    ]);
+    assert.equal(s.activation.sessions, 1);
+    assert.equal(s.activation.coreSessions, 1);
+    assert.equal(s.activation.installs, 0);
+    assert.equal(s.activation.installRate, null);
+});

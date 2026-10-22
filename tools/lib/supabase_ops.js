@@ -15,7 +15,7 @@ const { loadEnv } = require('./env');
 function supabaseUrl() {
     loadEnv();
     if (process.env.SUPABASE_URL) return process.env.SUPABASE_URL.replace(/\/$/, '');
-    const cfg = fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'supabase-config.js'), 'utf8');
+    const cfg = fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'auth-sync', 'supabase-config.js'), 'utf8');
     const m = cfg.match(/SUPABASE_URL\s*=\s*'([^']+)'/);
     if (!m) throw new Error('src/auth-sync/supabase-config.js에서 SUPABASE_URL을 읽지 못했습니다');
     return m[1];
@@ -55,6 +55,38 @@ async function restGet(secret, table, query) {
         process.exit(1);
     }
     return res.json();
+}
+
+/**
+ * restGet 페이지네이션 — 서버 max-rows(기본 1000) 상한에 걸려도 offset으로 전량 회수.
+ * PostgREST는 limit보다 서버 max-rows가 우선이라 대량 기간 조회는 단발로는 부족하다.
+ * @param {string} secret SUPABASE_SECRET_KEY
+ * @param {string} table 스키마 public의 테이블명
+ * @param {string} query select·필터·order 쿼리스트링 (limit 제외 — 내부에서 페이지 크기 지정)
+ * @param {{pageSize?:number, maxRows?:number}} [opts]
+ * @returns {Promise<Array>} 전체 행 배열
+ */
+async function restGetAll(secret, table, query, opts = {}) {
+    const pageSize = opts.pageSize || 1000;
+    const maxRows = opts.maxRows || 50_000;
+    const out = [];
+    for (let offset = 0; offset < maxRows; offset += pageSize) {
+        const res = await fetch(
+            `${supabaseUrl()}/rest/v1/${table}?${query}&limit=${pageSize}&offset=${offset}`,
+            { headers: { apikey: secret, authorization: `Bearer ${secret}` } },
+        );
+        if (!res.ok) {
+            console.error(`${table} 조회 실패 HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
+            process.exit(1);
+        }
+        const rows = await res.json();
+        out.push(...rows);
+        if (rows.length < pageSize) break;
+    }
+    if (out.length >= maxRows) {
+        console.error(`⚠ ${table}: maxRows(${maxRows}) 상한 도달 — 기간을 좁혀 재조회하세요.`);
+    }
+    return out;
 }
 
 /**
@@ -108,4 +140,4 @@ async function findUserByEmail(secret, email) {
     return null;
 }
 
-module.exports = { supabaseUrl, requireSecret, restGet, restPatch, findUserByEmail };
+module.exports = { supabaseUrl, requireSecret, restGet, restGetAll, restPatch, findUserByEmail };
