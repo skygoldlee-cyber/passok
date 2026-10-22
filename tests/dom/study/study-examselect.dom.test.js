@@ -7,7 +7,7 @@
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 import { loadIndexHtml, el } from '../helpers.js';
-import { renderExamSelect, selectExamAction, summarizeExamProgress } from '../../../src/views/exam-select.js';
+import { renderExamSelect, selectExamAction, summarizeExamProgress, showExamSelect } from '../../../src/views/exam-select.js';
 
 const EXAMS = {
     exams: [
@@ -173,5 +173,11 @@ describe('시험 선택 — 목록·전환·복귀', () => {
         expect(empty.cards).toBe(0);
         expect(empty.accuracy).toBeNull();
         expect(empty.dday).toBeNull();
+    });
+
+    it('showExamSelect — 시험 피커 뷰로 전환 위임', () => {
+        expect(() => showExamSelect()).not.toThrow();
+        const view = document.getElementById('exam-select-view');
+        expect(view).toBeTruthy();
     });
 });

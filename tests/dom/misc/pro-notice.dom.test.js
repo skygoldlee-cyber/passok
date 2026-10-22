@@ -16,7 +16,7 @@ vi.mock('../../../src/ui-utils.js', () => ({
 }));
 
 import { loadIndexHtml } from '../helpers.js';
-import { loadFeaturePlan, proFeatureNotice, refreshProBadges, mountProMoment, shouldShowProMoment } from '../../../src/pro-upgrade.js';
+import { loadFeaturePlan, proFeatureNotice, refreshProBadges, mountProMoment, shouldShowProMoment, showStoreError } from '../../../src/pro-upgrade.js';
 import { safeGetItem, safeSetItem } from '../../../src/state.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 
@@ -160,5 +160,18 @@ describe('Pro 모멘트 넛지 (ROAD-P6)', () => {
         mountProMoment(document.getElementById('host'), 'sim_result');
         document.querySelector('[data-pro-moment-dismiss]').click();
         expect(document.querySelector('.pro-moment-card')).toBeNull();
+    });
+});
+
+describe('showStoreError — 무료 한도 오류 분기', () => {
+    it('Free 플랜 한도 오류는 업그레이드 안내 모달로 라우팅된다', async () => {
+        const toast = vi.fn();
+        await stubPlan({ personal_analysis: 'pro' });
+        showStoreError({ error: 'Free 플랜 한도에 도달했습니다' }, '분석', toast);
+        expect(toast).not.toHaveBeenCalled();
+        expect(overlay() || document.querySelector('.pro-upgrade-dialog')).toBeTruthy();
+        // 일반 오류는 토스트로 위임
+        showStoreError({ error: '네트워크 오류' }, '분석', toast, '저장 실패');
+        expect(toast).toHaveBeenCalledWith('네트워크 오류', 'error');
     });
 });

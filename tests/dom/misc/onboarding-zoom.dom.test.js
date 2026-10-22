@@ -99,6 +99,29 @@ describe('UX-FB-05 첫 방문 시작 안내', () => {
         expect(dialog).toBeTruthy();
         expect(dialog.getAttribute('aria-label')).toBe('시작 안내');
     });
+
+    it('Escape 키로 위저드가 닫히고 seen 플래그가 기록된다', async () => {
+        vi.useFakeTimers();
+        try {
+            showOnboardingModal();
+            const overlay = document.getElementById('onboarding-overlay');
+            expect(overlay).toBeTruthy();
+            document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+            expect(overlay.classList.contains('is-visible')).toBe(false);
+            expect(localStorage.getItem('onboarding_seen_v1')).toBe('1');
+            // 닫기 전이 타이머: 포커스 해제 + 오버레이 제거
+            vi.advanceTimersByTime(300);
+            expect(document.getElementById('onboarding-overlay')).toBeNull();
+            // 배경 클릭 닫기 경로
+            showOnboardingModal();
+            const overlay2 = document.getElementById('onboarding-overlay');
+            overlay2.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            expect(overlay2.classList.contains('is-visible')).toBe(false);
+            vi.advanceTimersByTime(300);
+        } finally {
+            vi.useRealTimers();
+        }
+    });
 });
 
 describe('TR-20 이미지 라이트박스', () => {
