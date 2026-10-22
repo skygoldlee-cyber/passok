@@ -5,6 +5,8 @@
  * 사용자에게 보이는 변경 이력이 실제 배포 이력과 어긋나지 않는지 검증한다:
  *   - JSON 파싱 + 스키마 (version `vYYYYMMDD-<7hex>`, date ISO, notes 비어있지 않음)
  *   - 각 스탬프 버전의 해시 접미사가 실제 커밋으로 해석되는가 (git cat-file)
+ *     — git 이력 재작성(filter-repo 등)으로 구 해시가 사라진 경우에는
+ *       `deploy/<version>` 태그가 가리키는 커밋으로 대체 검증한다
  *   - 최신 스탬프 항목의 version === data/version.js의 APP_VERSION
  *   - pending 초안 항목은 최대 1개 (stamp_release_notes.js 계약)
  *
@@ -21,6 +23,13 @@ const { spawnSync } = require('child_process');
 const ROOT = path.resolve(__dirname, '..', '..');
 const NOTES = path.join(ROOT, 'data', 'release-notes.json');
 const VERSION_JS = path.join(ROOT, 'data', 'version.js');
+const LEGACY = path.join(ROOT, 'tools', 'state', 'release_notes_legacy_versions.json');
+
+// 이력 재작성으로 커밋 해석이 불가해진 기존 스탬프 버전 면제 명단
+let legacyVersions = new Set();
+try {
+  legacyVersions = new Set(JSON.parse(fs.readFileSync(LEGACY, 'utf8')).versions || []);
+} catch { /* 명단 없으면 공집합 — 전 항목 커밋 해석 요구 */ }
 
 const issues = [];
 
@@ -59,12 +68,17 @@ for (const [i, e] of entries.entries()) {
 }
 
 // 버전 해시 → 실제 커밋 해석 (spawnSync — cmd의 `^` 이스케이프 회피)
+// 이력 재작성으로 구 해시가 유실되면 deploy/<version> 태그로 대체 검증한다
+// (태그명 = 스탬프 버전이라 배포 기록이 남아 있으면 버전 자체는 유효)
+const rewritten = [];
 for (const e of stamped) {
   const hash = e.version.split('-').pop();
   const r = spawnSync('git', ['cat-file', '-e', `${hash}^{commit}`], { cwd: ROOT, stdio: 'pipe' });
-  if (r.status !== 0) {
-    issues.push(`${e.version} — 해시 ${hash}가 실제 커밋으로 해석되지 않음`);
-  }
+  if (r.status === 0) continue;
+  const tag = spawnSync('git', ['rev-parse', '-q', '--verify', `refs/tags/deploy/${e.version}^{commit}`], { cwd: ROOT, stdio: 'pipe' });
+  if (tag.status === 0) { rewritten.push(e.version); continue; }
+  if (legacyVersions.has(e.version)) { rewritten.push(e.version); continue; }
+  issues.push(`${e.version} — 해시 ${hash}가 실제 커밋으로 해석되지 않고 deploy 태그·레거시 명단에도 없음`);
 }
 
 // 최신 스탬프 항목 ↔ APP_VERSION 일치 (노트와 배포 버전의 괴리 탐지)
@@ -76,7 +90,8 @@ try {
 } catch { /* version.js 없으면 스킵 */ }
 
 if (!issues.length) {
-  console.log(`✅ 릴리스 노트 정합 — 항목 ${entries.length}개 (pending ${pendingCount}), 전 버전 커밋 해석됨`);
+  console.log(`✅ 릴리스 노트 정합 — 항목 ${entries.length}개 (pending ${pendingCount}), 전 버전 커밋 해석됨`
+    + (rewritten.length ? ` (재작성 이력 ${rewritten.length}건은 deploy 태그·레거시 명단으로 검증)` : ''));
   process.exit(0);
 }
 

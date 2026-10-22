@@ -59,7 +59,7 @@ if (LIST) {
     let steps;
     try { steps = resolveSteps(name, OPTS); } catch (e) { console.log(`✗ ${e.message}`); process.exit(1); }
     console.log(`\n[${name}] 프리셋 — ${steps.length}단계`);
-    for (const s of steps) console.log(`  ${s.id.padEnd(22)} [${s.layer}] ${s.desc}`);
+    for (const s of steps) console.log(`  ${s.id.padEnd(22)} [${(s.prio || 'p1').toUpperCase()}] [${s.layer}] ${s.desc}`);
   }
   process.exit(0);
 }
@@ -146,6 +146,16 @@ for (const r of slowest) console.log(`    ${secs(r.ms || 0).padStart(7)}  ${r.la
 
 if (!failed.length) {
   console.log(`\n🎉 전 단계 통과 (${results.length}단계)`);
+  process.exit(0);
+}
+
+// audit 프리셋은 감시·감사 전용 — 실패를 리포트하되 종료코드는 0 (비차단)
+if (PRESET === 'audit') {
+  console.log(`\nℹ️ 감시 리포트 — 지표 이상 ${failed.length}건 (차단 없음)`);
+  for (const r of failed) {
+    const tail = r.output.trim().split('\n').slice(-8).join('\n');
+    console.log(`─ ${r.label} ${'─'.repeat(40)}\n${tail}\n`);
+  }
   process.exit(0);
 }
 

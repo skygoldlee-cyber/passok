@@ -16,6 +16,10 @@
  *   ci — .github/workflows/**           config — package/jsconfig/eslint/vercel/…
  *   unknown — 위 어느 규칙에도 안 맞는 파일 → 전 단계 (보수적 폴백)
  *
+ * 생성물 부재 스킵: index.html·data/ 번들은 gitignore 생성물이라 미빌드
+ * 환경(신선 클론 등)에서는 신선도 단계(html·drillfresh·embfresh·docbundles)를
+ * 실패 대신 스킵한다 — 비교 대상이 없는데 차단되는 건 오탐.
+ *
  * 결과 캐시: 같은 HEAD+작업트리+ref+도구 버전에서 통과한 단계는 재실행을
  * 건너뛴다 (node_modules/.cache/push-gate.json). 우회: --no-cache · PUSH_GATE_NOCACHE=1
  *
@@ -132,6 +136,22 @@ const STEP_DEFS = () => ({
 });
 const FULL_IDS = ['types', 'trace', 'specrefs', 'docs', 'html', 'lint', 'posind', 'impact', 'docsync', 'testfirst', 'drillfresh', 'embfresh', 'docbundles'];
 
+// 생성물 비의존 확인 경로 — 없으면 해당 신선도 단계는 비교 대상 자체가 없음
+const GENERATED_PRECOND = {
+  html: 'index.html',
+  drillfresh: 'data/exams.js',
+  embfresh: 'data/exams.js',
+  docbundles: 'data/exams.js',
+};
+
+/** 생성물 부재로 스킵할 단계 id 목록 */
+function missingGenerated(ids) {
+  return ids.filter((id) => {
+    const f = GENERATED_PRECOND[id];
+    return f && !fs.existsSync(path.join(ROOT, f));
+  });
+}
+
 function changedFiles(ref) {
   // core.quotepath=false — 비ASCII(한글) 경로가 octal 이스케이프되면 classify가 logic으로 오분류
   const r = spawnSync('git', ['-c', 'core.quotepath=false', 'diff', '--name-only', `${ref}..HEAD`], { cwd: ROOT, encoding: 'utf8' });
@@ -197,8 +217,9 @@ function main() {
   const sig = gateSignature();
   const cache = loadCache();
   const cachedIds = cache && cache.sig === sig ? new Set(cache.passed) : new Set();
+  const genMissing = missingGenerated(plan.ids);
   const skipped = plan.ids.filter((id) => cachedIds.has(id));
-  const steps = plan.ids.filter((id) => !cachedIds.has(id)).map((id) => defs[id]);
+  const steps = plan.ids.filter((id) => !cachedIds.has(id) && !genMissing.includes(id)).map((id) => defs[id]);
 
   console.log('═'.repeat(60));
   console.log(` pre-push 게이트 — tier:${plan.tier}${FORCE_ALL ? ' (강제 전체)' : ''} · ${steps.length}단계 병렬(4)${skipped.length ? ` · 캐시 통과 ${skipped.length}건` : ''}`);
@@ -206,6 +227,7 @@ function main() {
     console.log(` 변경 ${files.length}개 파일 — ${files.slice(0, 5).join(', ')}${files.length > 5 ? ' …' : ''}`);
   }
   for (const id of skipped) console.log(`▶ ${defs[id].desc}  ⏭ 캐시 통과 (동일 입력)`);
+  for (const id of genMissing) console.log(`▶ ${defs[id].desc}  ⏭ 생성물 부재 스킵 (${GENERATED_PRECOND[id]} 없음 — build:derived 후 재검사)`);
   console.log('═'.repeat(60));
 
   const secs = (ms) => (ms >= 1000 ? `${(ms / 1000).toFixed(1)}s` : `${ms}ms`);

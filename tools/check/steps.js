@@ -4,10 +4,14 @@
  * 모든 게이트 단계를 이 테이블 한 곳에 선언한다. package.json 스크립트와
  * ci.yml은 프리셋 호출만 남기므로 "명령 문자열 재조합" 중복이 소멸한다.
  *
- * 단계 항목: { id, bin, args, shell, layer, desc, token, content, slow }
+ * 단계 항목: { id, bin, args, shell, layer, desc, token, content, slow, prio }
  *   token   — ci.yml run: 라인의 비교 토큰 (npm run X → "npm run X", node 스크립트 → 파일명)
  *   content — 콘텐츠 추적 단계 여부 (--content-only 필터 대상)
  *   slow    — --quick 시 생략되는 느린 단계 (DOM 테스트 등)
+ *   prio    — 우선순위 티어 (기본 p1):
+ *     p0 코어 불변식 — 코드 결함·보안·아키텍처 규칙 위반 (실패 = 반드시 차단)
+ *     p1 정합·신선도 — 생성물 drift·문서/콘텐츠 정합 (기본값 — 차단하되 재생성으로 해소)
+ *     p2 감시·감사 — 기준선 회귀·정보 단계 (audit 프리셋에서 수집 — 비차단 리포트)
  *
  * 신규 검증 추가 시: nodeStep/npmStep으로 등록 → 원하는 프리셋 배열에 편입.
  */
@@ -17,9 +21,9 @@ const path = require('path');
 
 const NPM = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
-function nodeStep(id, script, layer, desc, { args = [], content = false, slow = false, token, diffScoped = false, serial = false, inProcess = false } = {}) {
+function nodeStep(id, script, layer, desc, { args = [], content = false, slow = false, token, diffScoped = false, serial = false, inProcess = false, prio = 'p1' } = {}) {
   return { id, bin: 'node', args: [script, ...args], shell: false, layer, desc,
-    token: token ?? path.basename(script), content, slow, diffScoped, serial,
+    token: token ?? path.basename(script), content, slow, diffScoped, serial, prio,
     // run({args,cwd}) → {status,output} 계약을 export하는 체커는 인프로세스 실행
     ...(inProcess ? { inProcess: script } : {}) };
 }
@@ -27,18 +31,18 @@ function nodeStep(id, script, layer, desc, { args = [], content = false, slow = 
 function npmStep(id, script, layer, desc, opts = {}) {
   const isTest = script === 'test';
   return { id, bin: NPM, args: isTest ? ['test'] : ['run', script], shell: true, layer, desc,
-    token: isTest ? 'npm test' : `npm run ${script}`, content: false, slow: false, ...opts };
+    token: isTest ? 'npm test' : `npm run ${script}`, content: false, slow: false, prio: 'p1', ...opts };
 }
 
 // ── 기초 품질 단계 (all·ci 프리셋 공용) ────────────────────────────────
-const STEP_LINT = npmStep('lint', 'lint', '품질', 'ESLint — 에러 0 필수');
-const STEP_TYPES = npmStep('types', 'check:types', '품질', 'tsc --noEmit (jsconfig checkJs — JSDoc 타입 진단)');
+const STEP_LINT = npmStep('lint', 'lint', '품질', 'ESLint — 에러 0 필수', { prio: 'p0' });
+const STEP_TYPES = npmStep('types', 'check:types', '품질', 'tsc --noEmit (jsconfig checkJs — JSDoc 타입 진단)', { prio: 'p0' });
 const STEP_HTML = nodeStep('html', 'tools/build/build_html.js', '빌드', 'index.html 조립 신선도 (파셜 편집 시 build:html 필요)', { args: ['--check'] });
-const STEP_DOMAINMAP = npmStep('domainmap', 'check:domainmap', '분류', '파일 계층 분류 강제 (domain-map.json)');
-const STEP_VENDOR = npmStep('vendor', 'check:vendor', '자산', 'vendor 매니페스트 ↔ 파일 해시·버전 정합 (BP-13, 무단 교체·미등록 파일 차단)');
+const STEP_DOMAINMAP = npmStep('domainmap', 'check:domainmap', '분류', '파일 계층 분류 강제 (domain-map.json)', { prio: 'p0' });
+const STEP_VENDOR = npmStep('vendor', 'check:vendor', '자산', 'vendor 매니페스트 ↔ 파일 해시·버전 정합 (BP-13, 무단 교체·미등록 파일 차단)', { prio: 'p0' });
 const STEP_UITEXT = npmStep('uitext', 'check:uitext', '문서', 'UI 텍스트 커버리지 (data-uitext ↔ manifest.uiText)');
-const STEP_STUDYQ = nodeStep('studyq', 'tools/check/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'] });
-const STEP_ENV = nodeStep('env', 'tools/check/check_env.js', '보안', '.env 시크릿 신선도 — 만료 토큰·미선언·빈 키 탐지 (.env 부재 시 스킵 — CI에는 .env 없음, LOCAL_ONLY)');
+const STEP_STUDYQ = nodeStep('studyq', 'tools/check/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'], prio: 'p2' });
+const STEP_ENV = nodeStep('env', 'tools/check/check_env.js', '보안', '.env 시크릿 신선도 — 만료 토큰·미선언·빈 키 탐지 (.env 부재 시 스킵 — CI에는 .env 없음, LOCAL_ONLY)', { prio: 'p2' });
 
 // ── 문서 정합 묶음 (check:docs → docs 프리셋) ──────────────────────────
 const DOCS_STEPS = [
@@ -49,7 +53,7 @@ const DOCS_STEPS = [
   nodeStep('docs:commands', 'tools/check/check_npm_commands.js', '문서', 'npm 명령 정합 (스크립트 ↔ 문서 인용 양방향)'),
   nodeStep('docs:plan', 'tools/check/check_plan_features.js', '문서', 'feature-plan 키 ↔ 코드 사용 ↔ 로드맵 정합'),
   nodeStep('docs:featflags', 'tools/check/check_feature_flags.js', '문서', 'exams.json features 키 ↔ 코드 사용 정합'),
-  nodeStep('docs:storage', 'tools/check/check_storage_access.js', '문서', 'localStorage 직접 접근 탐지 (storage.js 우회 차단)', { diffScoped: true }),
+  nodeStep('docs:storage', 'tools/check/check_storage_access.js', '문서', 'localStorage 직접 접근 탐지 (storage.js 우회 차단)', { diffScoped: true, prio: 'p0' }),
   nodeStep('docs:seedkeys', 'tools/check/check_seed_keys.js', '문서', '테스트 시드 키 ↔ GLOBAL_KEYS 스코프 정합 (스코프 시드 무력화 차단)'),
   nodeStep('docs:notes', 'tools/check/check_release_notes.js', '문서', '릴리스 노트 스키마·버전 해시·APP_VERSION 정합'),
   nodeStep('docs:teststats', 'tools/check/check_test_stats.js', '문서', '문서 테스트 수치 ↔ test_stats.json 실측 정합 (스테일 수치 차단 — stats:stamp으로 갱신)'),
@@ -57,6 +61,7 @@ const DOCS_STEPS = [
   nodeStep('docs:orphans', 'tools/check/check_orphan_assets.js', '자산', '미참조 자산(고아 자산) 유입 차단 — orphan_assets_baseline.json 예외 명단'),
   nodeStep('docs:ciparity', 'tools/check/check_ci_parity.js', '문서', 'ci.yml 워크플로 ↔ check:ci 프리셋 양방향 정합'),
   nodeStep('docs:runbooks', 'tools/check/check_runbook_links.js', '문서', '런북 링크·앵커 정본 도달 검증 + WHEN_THINGS_BREAK 증상 행 커버리지'),
+  nodeStep('docs:binary', 'tools/check/check_binary.js', '자산', '대형·외부화 대상 바이너리 신규 유입 차단 (참조자료 PDF·500KB+ 바이너리 — DOC-RBK-12 정착 가드)', { diffScoped: true, prio: 'p0' }),
 ];
 
 // ── 콘텐츠 의존성 단계 (check:content → content 프리셋) ────────────────
@@ -69,7 +74,7 @@ const CONTENT_STEPS = [
   nodeStep('content:citations', 'tools/sync/sync_citation_lines.js', '인용', '문제은행 → 교재 #L라인번호 인용 동기화 상태', { args: ['--check'], content: true }),
   nodeStep('content:numbering', 'tools/check/check_numbering.js', '번호', '교재 십진법 번호체계 — 구식 잔재·연속성·계층·중복 (표준↔이야기 동기화는 경고)', { content: true }),
   nodeStep('content:answers', 'tools/check/check_answer_overlap.js', '인용', '문제 정답 ↔ 인용 근거 구절 의미적 지지 (정답 미지지 기준선 게이트)', { content: true }),
-  nodeStep('content:refsubjects', 'tools/check/check_ref_subjects.js', '귀속', 'ref_md 문서의 과목 귀속 vs 실제 인용 득표 (정보 단계 — 불일치는 참고 보고)', { content: true }),
+  nodeStep('content:refsubjects', 'tools/check/check_ref_subjects.js', '귀속', 'ref_md 문서의 과목 귀속 vs 실제 인용 득표 (정보 단계 — 불일치는 참고 보고)', { content: true, prio: 'p2' }),
   nodeStep('content:reflayout', 'tools/check/check_reflayout.js', '레이아웃', '참조자료 폴더/레지스트리 정합성', { content: true }),
   nodeStep('content:reffresh', 'tools/check/check_ref_freshness.js', '신선도', '참조자료 PDF 해시 ↔ ref_md 변환본 (PDF 교체 감지)', { content: true }),
   nodeStep('content:reflines', 'tools/check/check_ref_lines.js', '참조라인', '교재/문제은행 (LNN) 참조 라인 ↔ ref_md 실제 내용', { content: true }),
@@ -79,62 +84,62 @@ const CONTENT_STEPS = [
   nodeStep('content:id-migration', 'tools/build/build_id_migration.js', 'ID이관', '카드/퀴즈 ID 스냅샷 ↔ 콘텐츠 (build:data 누락·진도 손실 감지)', { args: ['--check'], content: true }),
   nodeStep('content:datafresh', 'tools/check/check_data_freshness.js', '데이터신선도', 'data/·생성물 ↔ 원본 (빌드 체인 실행 후 git diff — build:data 누락 감지)', { content: true, serial: true }),
   nodeStep('content:linklint', 'tools/check/check_link_lint.js', '링크', '렌더 출력 링크 린트 — 원시 경로·좌표/파일명 라벨·QA 스탬프·미승인 외부 링크 노출 탐지', { content: true }),
-  nodeStep('content:parser', 'tools/check/check_parser_parity.js', '파서', '빌드 파서 ↔ 런타임 파서 출력 등가성'),
-  nodeStep('content:imports', 'tools/check/check_imports.js', '임포트', 'src/ ES 모듈 import/export 교차 검증'),
-  nodeStep('content:posind', 'tools/check/check_position_independence.js', '규칙', '교재 좌표 비의존 — 위치 기반 식별자·저장 키 정적 탐지 (ID-05)', { diffScoped: true, inProcess: true }),
-  nodeStep('content:contentind', 'tools/check/check_content_independence.js', '규칙', '로직 콘텐츠 독립 — 시험 id·과목 키 리터럴 하드코딩 정적 탐지 (DA-15)', { diffScoped: true, inProcess: true }),
-  nodeStep('content:assets', 'tools/check/verify_shell_assets.js', '자산', 'sw.js SHELL_ASSETS/DATA_ASSETS 파일 존재'),
-  nodeStep('content:cards', 'tools/check/audit_card_quality.js', '카드', '카드 품질 감사 (짧은 설명·중복·참조 링크)', { content: true }),
+  nodeStep('content:parser', 'tools/check/check_parser_parity.js', '파서', '빌드 파서 ↔ 런타임 파서 출력 등가성', { prio: 'p0' }),
+  nodeStep('content:imports', 'tools/check/check_imports.js', '임포트', 'src/ ES 모듈 import/export 교차 검증', { prio: 'p0' }),
+  nodeStep('content:posind', 'tools/check/check_position_independence.js', '규칙', '교재 좌표 비의존 — 위치 기반 식별자·저장 키 정적 탐지 (ID-05)', { diffScoped: true, inProcess: true, prio: 'p0' }),
+  nodeStep('content:contentind', 'tools/check/check_content_independence.js', '규칙', '로직 콘텐츠 독립 — 시험 id·과목 키 리터럴 하드코딩 정적 탐지 (DA-15)', { diffScoped: true, inProcess: true, prio: 'p0' }),
+  nodeStep('content:assets', 'tools/check/verify_shell_assets.js', '자산', 'sw.js SHELL_ASSETS/DATA_ASSETS 파일 존재', { prio: 'p0' }),
+  nodeStep('content:cards', 'tools/check/audit_card_quality.js', '카드', '카드 품질 감사 (짧은 설명·중복·참조 링크)', { content: true, prio: 'p2' }),
   nodeStep('content:docbundles', 'tools/build/build_doc_bundles.js', '문서번들', 'docs_md 번들 ↔ 원본 문서 신선도 (build_doc_bundles 필요 감지)', { args: ['--check'], content: true }),
   nodeStep('content:refmap', 'tools/build/build_ref_mapping.js', '문서신선도', 'TEXTBOOK_REFERENCE_MAPPING §2 표 ↔ 교재 📌출처 ref_md 링크 (build:refmap 필요 감지)', { args: ['--check'], content: true }),
   nodeStep('content:textbookdocs', 'tools/check/check_textbook_docs.js', '문서신선도', '교재 갱신 ↔ 판본:textbook 문서 (교재 교체 후 방치 문서 감지)', { content: true }),
   nodeStep('content:metasections', 'tools/check/check_meta_sections.js', '검색규약', '메타 섹션 규약 기준선 — reader 미렌더 패턴 미매칭 메타 의심 헤딩 신규 유입 차단 (TS-17)', { content: true }),
-  nodeStep('content:glossarysignal', 'tools/check/check_glossary_signal.js', '용어집', '저신호 일반명사 기준선 — 자동 추출 단일어 키워드의 정의 카드 노출 감시 (BP-14)', { content: true }),
+  nodeStep('content:glossarysignal', 'tools/check/check_glossary_signal.js', '용어집', '저신호 일반명사 기준선 — 자동 추출 단일어 키워드의 정의 카드 노출 감시 (BP-14)', { content: true, prio: 'p2' }),
   nodeStep('content:docpaths', 'tools/check/check_docs_paths.js', '문서', 'README·AGENTS·docs/*.md 경로 참조 존재 검증 (스테일 탐지)'),
-  nodeStep('content:specrefs', 'tools/check/check_spec_refs.js', '추적', 'SPEC ID ↔ 코드 @spec 태그 양방향 정합성 (스테일 참조 탐지)'),
+  nodeStep('content:specrefs', 'tools/check/check_spec_refs.js', '추적', 'SPEC ID ↔ 코드 @spec 태그 양방향 정합성 (스테일 참조 탐지)', { prio: 'p0' }),
   nodeStep('content:trace', 'tools/build/build_trace_matrix.js', '추적', 'TRACE_MATRIX 입력 해시 신선도 (SPEC·@spec·문서 헤더 변경 시 재생성 강제)', { args: ['--check'] }),
-  nodeStep('content:unit', '--test', '테스트', '유닛 테스트 (node --test)', { args: ['tests/unit/**/*.test.js'], token: 'node --test' }),
-  nodeStep('content:dom', 'node_modules/vitest/vitest.mjs', '테스트', 'DOM 테스트 (vitest + jsdom)', { args: ['run'], slow: true }),
+  nodeStep('content:unit', '--test', '테스트', '유닛 테스트 (node --test)', { args: ['tests/unit/**/*.test.js'], token: 'node --test', prio: 'p0' }),
+  nodeStep('content:dom', 'node_modules/vitest/vitest.mjs', '테스트', 'DOM 테스트 (vitest + jsdom)', { args: ['run'], slow: true, prio: 'p0' }),
 ];
 
 // ── CI 게이트 로컬 재현 (check:ci → ci 프리셋) ─────────────────────────
 // 각 단계의 token은 ci.yml run: 라인의 토큰과 1:1 대응 — check_ci_parity가 검증.
 const CI_STEPS = [
-  npmStep('ci:hooks', 'check:hooks', '로컬', 'Git 훅 설치 여부 (미설치 시 로컬 게이트 우회 경고)'),
-  npmStep('ci:secrets', 'check:secrets', '보안', '추적 파일 시크릿 패턴 스캔', { diffScoped: true }),
+  npmStep('ci:hooks', 'check:hooks', '로컬', 'Git 훅 설치 여부 (미설치 시 로컬 게이트 우회 경고)', { prio: 'p2' }),
+  npmStep('ci:secrets', 'check:secrets', '보안', '추적 파일 시크릿 패턴 스캔', { diffScoped: true, prio: 'p0' }),
   STEP_ENV,
   STEP_LINT,
   STEP_TYPES,
-  npmStep('ci:imports', 'check:imports', '품질', 'ES 모듈 import/export 교차 검증'),
-  npmStep('ci:posind', 'check:posind', '규칙', '교재 좌표 비의존 — 위치 기반 식별자·저장 키 정적 탐지 (ID-05)'),
-  npmStep('ci:contentind', 'check:contentind', '규칙', '로직 콘텐츠 독립 — 시험 id·과목 키 리터럴 하드코딩 정적 탐지 (DA-15)'),
+  npmStep('ci:imports', 'check:imports', '품질', 'ES 모듈 import/export 교차 검증', { prio: 'p0' }),
+  npmStep('ci:posind', 'check:posind', '규칙', '교재 좌표 비의존 — 위치 기반 식별자·저장 키 정적 탐지 (ID-05)', { prio: 'p0' }),
+  npmStep('ci:contentind', 'check:contentind', '규칙', '로직 콘텐츠 독립 — 시험 id·과목 키 리터럴 하드코딩 정적 탐지 (DA-15)', { prio: 'p0' }),
   npmStep('ci:docs', 'check:docs', '문서', '문서 정합 묶음 (docs 프리셋 위임)'),
   STEP_DOMAINMAP,
   STEP_UITEXT,
-  npmStep('ci:mobilesafe', 'check:mobilesafe', '규약', '모바일 잘림 규약 (다이얼로그·버튼 행 줄바꿈)'),
-  npmStep('ci:escape', 'check:escape', '규약', 'HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간)', { diffScoped: true }),
-  npmStep('ci:uistyle', 'check:uistyle', '규약', 'UI 스타일 규약 — 인라인 style·JS display 조작·인라인 핸들러·네이티브 다이얼로그 금지', { diffScoped: true }),
+  npmStep('ci:mobilesafe', 'check:mobilesafe', '규약', '모바일 잘림 규약 (다이얼로그·버튼 행 줄바꿈)', { prio: 'p0' }),
+  npmStep('ci:escape', 'check:escape', '규약', 'HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간)', { diffScoped: true, prio: 'p0' }),
+  npmStep('ci:uistyle', 'check:uistyle', '규약', 'UI 스타일 규약 — 인라인 style·JS display 조작·인라인 핸들러·네이티브 다이얼로그 금지', { diffScoped: true, prio: 'p0' }),
   nodeStep('ci:docsync', 'tools/check/check_doc_sync.js', '문서', '소스 변경 시 문서 갱신 강제', { args: ['--ref', 'origin/main'] }),
-  nodeStep('ci:testfirst', 'tools/check/check_test_first.js', '테스트', '로직 변경 시 테스트 동반 강제', { args: ['--ref', 'origin/main'] }),
-  npmStep('ci:specrefs', 'check:specrefs', '추적', 'SPEC↔@spec 스테일 참조 + 테스트 갭 기준선'),
+  nodeStep('ci:testfirst', 'tools/check/check_test_first.js', '테스트', '로직 변경 시 테스트 동반 강제', { args: ['--ref', 'origin/main'], prio: 'p0' }),
+  npmStep('ci:specrefs', 'check:specrefs', '추적', 'SPEC↔@spec 스테일 참조 + 테스트 갭 기준선', { prio: 'p0' }),
   npmStep('ci:trace', 'check:trace', '추적', 'TRACE_MATRIX 입력 해시 신선도'),
   npmStep('ci:html', 'check:html', '빌드', 'index.html 조립 신선도 (파셜 편집 시 build:html 필요)'),
   nodeStep('ci:content', 'tools/check/check_content.js', '콘텐츠', '콘텐츠 추적 단계 전체 (content 프리셋 위임)', { args: ['--content-only', '--quick'] }),
-  npmStep('ci:unit', 'test', '테스트', '유닛 테스트 (node --test)'),
-  npmStep('ci:assets', 'verify:assets', '자산', 'SHELL_ASSETS/DATA_ASSETS 파일 존재'),
+  npmStep('ci:unit', 'test', '테스트', '유닛 테스트 (node --test)', { prio: 'p0' }),
+  npmStep('ci:assets', 'verify:assets', '자산', 'SHELL_ASSETS/DATA_ASSETS 파일 존재', { prio: 'p0' }),
   STEP_VENDOR,
-  npmStep('ci:parser', 'check:parser', '파서', '빌드 파서 ↔ 런타임 파서 등가성'),
-  npmStep('ci:perf', 'check:perf', '성능', 'SHELL_ASSETS 크기 예산 상한'),
-  nodeStep('ci:studyq', 'tools/check/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'] }),
+  npmStep('ci:parser', 'check:parser', '파서', '빌드 파서 ↔ 런타임 파서 등가성', { prio: 'p0' }),
+  npmStep('ci:perf', 'check:perf', '성능', 'SHELL_ASSETS 크기 예산 상한', { prio: 'p0' }),
+  nodeStep('ci:studyq', 'tools/check/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'], prio: 'p2' }),
 ];
 
 // ── 참조자료 묶음 (check:refs → refs 프리셋) ──────────────────────────
 const REFS_STEPS = [
   nodeStep('refs:layout', 'tools/check/check_reflayout.js', '참조', '참조자료 4계층 정합성 — 전 시험 (PDF 폴더↔ref_md↔references.json↔규칙)'),
-  nodeStep('refs:subjects', 'tools/check/check_ref_subjects.js', '참조', 'ref_md 인용 득표 ↔ 과목 귀속 교차 검증'),
+  nodeStep('refs:subjects', 'tools/check/check_ref_subjects.js', '참조', 'ref_md 인용 득표 ↔ 과목 귀속 교차 검증', { prio: 'p2' }),
   nodeStep('refs:fresh', 'tools/check/check_ref_freshness.js', '참조', '참조자료 PDF 해시 ↔ ref_md 신선도 (PDF 교체 감지)'),
   nodeStep('refs:lines', 'tools/check/check_ref_lines.js', '참조', '교재 (LNN)/📌출처 조문 ↔ ref_md 실제 내용'),
-  nodeStep('refs:merge', 'tools/check/check_refmerge.js', '참조', 'ref_md joinWraps 병합 품질 감사'),
+  nodeStep('refs:merge', 'tools/check/check_refmerge.js', '참조', 'ref_md joinWraps 병합 품질 감사', { prio: 'p2' }),
 ];
 
 // ── 생성물 신선도 묶음 (check:fresh → freshness 프리셋) ────────────────
@@ -154,6 +159,23 @@ const FRESH_STEPS = [
   pickContent('content:docbundles'),
   pickContent('content:refmap'),
   pickContent('content:textbookdocs'),
+];
+
+// ── 감시·감사 묶음 (check:audit → audit 프리셋) ────────────────────────
+// prio p2 단계 모음 — 기준선 회귀·품질 감사·정보 단계. run.js에서
+// advisory로 실행되어 실패해도 종료코드 0 (리포트 전용). push/PR 차단 없음.
+// 주의: 같은 단계가 ci·all 프리셋에도 있으면 거기서는 여전히 차단된다 —
+// 완전 비차단화는 해당 프리셋에서의 제외를 동반해야 한다.
+const AUDIT_STEPS = [
+  STEP_STUDYQ,
+  STEP_ENV,
+  pickContent('content:refsubjects'),
+  pickContent('content:glossarysignal'),
+  pickContent('content:cards'),
+  REFS_STEPS.find((s) => s.id === 'refs:merge'),
+  npmStep('audit:combo', 'audit:combo', '감사', '복수정답형 품질 감사 (정답 유일성·중복 진술집합·모순쌍·위치편향)', { prio: 'p2' }),
+  npmStep('audit:adlint', 'check:adlint', '감사', '광고 문구 사전 커버리지 감사 (FO-68)', { prio: 'p2' }),
+  npmStep('audit:lawurls', 'check:lawurls', '감사', 'law.go.kr 라이브 링크 검증 (외부 드리프트 — 네트워크 필요)', { prio: 'p2' }),
 ];
 
 // ── 실패 복구 안내 (run.js 요약의 근본원인 그룹핑) ─────────────────────
@@ -189,6 +211,7 @@ const PRESETS = {
   all: (opts) => [STEP_LINT, STEP_TYPES, STEP_HTML, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_VENDOR, STEP_ENV, STEP_UITEXT, STEP_STUDYQ, ...contentSteps(opts)],
   refs: () => REFS_STEPS.slice(),
   freshness: () => FRESH_STEPS.slice(),
+  audit: () => AUDIT_STEPS.slice(),
 };
 
 function resolveSteps(preset, opts = {}) {
@@ -215,4 +238,4 @@ function findStep(query) {
     s.args.some((a) => path.basename(a, '.js') === q || path.basename(a, '.js') === `check_${q.replace(/-/g, '_')}`));
 }
 
-module.exports = { NPM, nodeStep, npmStep, DOCS_STEPS, CONTENT_STEPS, BUILD_STEP, CI_STEPS, PRESETS, DERIVED_IDS, REMEDIES, resolveSteps, allSteps, findStep };
+module.exports = { NPM, nodeStep, npmStep, DOCS_STEPS, CONTENT_STEPS, BUILD_STEP, CI_STEPS, REFS_STEPS, AUDIT_STEPS, PRESETS, DERIVED_IDS, REMEDIES, resolveSteps, allSteps, findStep };
