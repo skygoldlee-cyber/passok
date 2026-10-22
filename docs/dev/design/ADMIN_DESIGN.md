@@ -137,7 +137,9 @@ end; $$;
 | `admin:grant-pro` | `tools/check/grant_pro.js` | 이메일→사용자 해석 후 profiles.plan 갱신 — 기본 dry-run, `--apply` 확정·`--revoke` 회수·동일 상태는 no-op |
 | `report:dashboard` (Phase 1.5) | `tools/check/dashboard_report.js` | 오류·퍼널·피드백 집계를 단일 자급적 HTML로 덤프 (`tools/state/dashboard_report.html`, gitignore) — 로컬 파일이라 인증·RLS 불필요. 기존 3개 리포트의 순수 `summarize()` 재사용, 사용자 텍스트 전면 이스케이프 |
 
-공용 헬퍼는 `tools/lib/supabase_ops.js`(URL 해석·Secret 요구·restGet/Patch·findUserByEmail). 환경변수는 기존 `SUPABASE_SECRET_KEY`(Secret = 구 service_role) 경로 그대로 — §4의 is_admin/감사 스키마와 독립적으로 동작하며 **스키마 변경 없이 동작**한다 (service role은 RLS를 우회하므로). admin_audit 테이블은 AD-04 도입 전까지 grant-pro의 콘솔 출력이 감사 기록을 대신한다.
+공용 헬퍼는 `tools/lib/supabase_ops.js`(URL 해석·Secret 요구·restGet/**restGetAll**/Patch·findUserByEmail). `restGetAll`은 PostgREST 서버 `max-rows`(기본 1000) 절단을 offset 페이지네이션으로 해소 — 대량 기간 조회는 이 경로를 쓴다 (2026-10-22 실측: usage_events 7일 1,000행 절단 → 5,162행 전량 회수). 환경변수는 기존 `SUPABASE_SECRET_KEY`(Secret = 구 service_role) 경로 그대로 — §4의 is_admin/감사 스키마와 독립적으로 동작하며 **스키마 변경 없이 동작**한다 (service role은 RLS를 우회하므로). admin_audit 테이블은 AD-04 도입 전까지 grant-pro의 콘솔 출력이 감사 기록을 대신한다.
+
+`report:funnel`에는 기존 과업 완주율 외에 **활성화 퍼널**(session_start→core_learning_action 세션·고유 install_id 전환율, DOC-DSN-34 §4의 "방문→핵심 학습 행동" KPI)이 포함되고, `report:dashboard`에는 활성화율 카드가 표시된다. 스키마 적용 자동화는 `npm run schema:apply`(Management API PAT — `SUPABASE_ACCESS_TOKEN`, SUPABASE_DESIGN §셋업 참조)로 SQL Editor 수동 실행을 대체한다.
 
 #### Phase 1 수용 한계 — 사용자 수가 아니라 운영 패턴이 한계다
 

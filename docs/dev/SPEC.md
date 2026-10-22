@@ -593,7 +593,7 @@
 | AD-04 | 사용자 관리 — `profiles.email` 백필(트리거 갱신) + 사용자 목록·상세(sync 메타만, payload 비표시 기본) + `admin_set_plan` RPC(security definer·is_admin 가드) + `admin_audit` 감사 로그 | 미구현 (로드맵) |
 | AD-05 | `#/admin` 라우트 — `views/admin.js` lazy import + SW 프리캐시 제외(일반 사용자 번들 무영향) + 비관리자 클레임 시 차단 카드, Supabase 미설정 환경은 사용 불가 안내 | 미구현 (로드맵) |
 | AD-06 | 운영 CLI (Phase 1) — `report:feedback`·`report:user`(sync 메타만)·`admin:grant-pro`(dry-run + `--apply`) — service role 로컬 전용, 스키마 변경 없음 | ✅ |
-| AD-07 | 로컬 HTML 대시보드 (Phase 1.5) — `report:dashboard`가 오류·퍼널·피드백 집계를 단일 자급적 HTML로 덤프 (로컬 파일이라 인증·RLS 불필요, 사용자 텍스트는 이스케이프 필수, 산출물 gitignore) | ✅ |
+| AD-07 | 로컬 HTML 대시보드 (Phase 1.5) — `report:dashboard`가 오류·활성화율(세션/설치)·퍼널·피드백 집계를 단일 자급적 HTML로 덤프 (로컬 파일이라 인증·RLS 불필요, 사용자 텍스트는 이스케이프 필수, 산출물 gitignore) | ✅ |
 
 ### 3.27 AI 제작 지원 (Author-time)
 
