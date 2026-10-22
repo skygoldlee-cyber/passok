@@ -164,6 +164,20 @@ let _readerRenderPromise = null;
  * 호출자는 이전 promise와 비교해 새 렌더가 큐잉됐는지 판별할 수 있다.
  */
 function _queueChapterRender(subjId, chapterIdx) {
+    // UX-FB-07 — 과목 데이터 미로드 시 스켈레톤 자리표시 (빈 화면 대기 방지)
+    const loaded = typeof window !== 'undefined' && window.STUDY_DATA && window.STUDY_DATA[subjId];
+    if (!loaded) {
+        const container = document.getElementById('textbook-reader-container');
+        if (container && !container.querySelector('.skeleton')) {
+            container.innerHTML = `
+                <div class="reader-skeleton" role="status" aria-label="교재 본문을 불러오는 중">
+                    <span class="skeleton skeleton-text w-60"></span>
+                    <span class="skeleton skeleton-text"></span>
+                    <span class="skeleton skeleton-text"></span>
+                    <span class="skeleton skeleton-text w-80"></span>
+                </div>`;
+        }
+    }
     _readerRenderPromise = DataLoader.loadSubject(subjId)
         .then(() => renderChapterContent(subjId, chapterIdx),
             err => console.error('loadSubject failed:', err))

@@ -7,6 +7,19 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 UI/UX 고도화 일괄 (P0~P3)
+
+- **시험 선택 카드** (ES-01~07) — 교차시험 진척(암기카드·퀴즈 수·정답률)·마지막 학습일·D-day·콘텐츠 갱신 배지. `exam-context.js`에 `peekExamValue`(시험 간 읽기 전용 브리지), `build_exams_list.js`에 contentStamp 주입, comingSoon은 요약 미표시·액센트 스왓치 표시
+- **온보딩 v2** (OB-01) — 4단계 설명 모달 → 3스텝 실행형 위저드(시험일·목표·첫 학습 시작). data-click 위임 재사용으로 import 순환 회피
+- **단축키 도움말** (UX-HELP-01) — `src/shortcuts-help.js` 신규, `?`키 오버레이(role=dialog·포커스트랩·Esc/배경 닫기), 설정 메뉴 진입점
+- **로딩·완료 피드백** (UX-FB-07/08) — `css/base.css` 스켈레톤 유틸, 리더 로딩 스켈레톤, 대시보드 큐 소진 시 1회 완료 플래시
+- **리더 메모** (TR-30) — `src/reader-notes.js` 신규, 안정 키(subjId|chapterKey|title) 매핑으로 판본/좌표 무관, 커맨드 팔레트 검색 통합
+- **시맨틱 검색 v1** (SEM-08) — 쿼리 임베딩 없이 사전계산 이웃 재사용하는 앵커 프록시(`searchByText`/`findAnchorKey`), 팔레트 비동기 그룹 결합
+- **Pro 모멘트 넛지** (ROAD-P6) — 진단 리포트·모의고사 분석 완료 시점 인라인 카드, `pro:moment_seen` 계측·1회 노출
+- **텔레메트리 회수** (UX-MET-05) — opt-in usage_snapshot 주기 전송(로컬 카운터 스냅샷, 상한 적용)
+- **SPEC 동기화** — ES-01~07·OB-01·UX-HELP-01·UX-FB-07/08·TR-30·SEM-08·ROAD-P6·UX-MET-05 행 추가
+- 신규 모듈 2개 domain-map 등록, 미사용 export 3건(ensureNoticeDiff·RECENT_QUIZ_WINDOW·DIAG_CAUSE_WINDOW_DAYS) export 해제
+
 ## 2026-10-22 시험 팩 온보딩·승격 진단 게이트 (check:onboard)
 
 - **신규** `tools/check/check_exam_onboard.js` — exams.json 전 시험의 준비도 표(등급·과목·챕터·문항·features·선택 자산) + 구조 결함(manifest 부재·과목 0·선언 파일 부재) 오류 + comingSoon↔콘텐츠 등급 정합 힌트. 승격 정량 기준 = 과목당 ≥20문(###Q 실측)

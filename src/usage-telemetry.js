@@ -13,6 +13,9 @@
 import { getSupabase } from './auth-sync/supabase-client.js';
 import { getActiveExamId } from './exam-context.js';
 import { getTelemetrySessionId } from './telemetry-session.js';
+import { safeGetItem, safeSetItem } from './state.js';
+import { STORAGE_KEYS } from './storage-keys.js';
+import { todayKey } from './utils.js';
 
 const MAX_EVENTS_PER_SESSION = 60;   // 세션당 전송 상한
 const EVENT_MAX = 60;                // 이벤트명 길이 상한 (스키마 check와 일치)
@@ -60,6 +63,39 @@ export async function reportEvent(event, meta = {}, deps = {}) {
         if (res.error) return 'failed';
         _sent++;
         return 'sent';
+    } catch {
+        return 'failed';
+    }
+}
+
+/**
+ * 사용 카운터 스냅샷 전송 (UX-MET-05) — UX-GATE-01~03 판정 표본 회수 경로.
+ * usage_stats 로컬 카운터(뷰 분포·액션 횟수)를 하루 1회 usage_events에
+ * 'usage_snapshot' 이벤트로 싣는다. 카운터·활동 일수만 포함, 학습 내용·
+ * 영속 식별자 없음 (owner device_id는 보내지 않고 session_id만 사용).
+ * Supabase 미설정 환경은 조용히 no-op. 절대 throw하지 않는다.
+ * @param {Object} [deps] 테스트 주입용 { insert, load, today }
+ * @returns {Promise<'sent'|'skipped'|'capped'|'disabled'|'failed'>}
+ */
+export async function maybeReportUsageSnapshot(deps = {}) {
+    try {
+        const today = deps.today || todayKey();
+        if (!deps.today && safeGetItem(STORAGE_KEYS.USAGE_SNAPSHOT_SENT) === today) return 'skipped';
+        const load = deps.load || (async () => (await import('./usage-stats.js')).buildUsageExport());
+        const rawJson = await load();
+        let d = null;
+        try { d = JSON.parse(rawJson); } catch { d = null; }
+        if (!d || !d.v) return 'skipped';
+        const meta = {
+            active_days: Object.keys(d.days || {}).length,
+            day_counts: d.days || {},
+            views: d.views || {},
+            actions: d.actions || {},
+            first_use: d.firstUse || null,
+        };
+        const res = await reportEvent('usage_snapshot', meta, deps);
+        if (res === 'sent') safeSetItem(STORAGE_KEYS.USAGE_SNAPSHOT_SENT, today);
+        return res;
     } catch {
         return 'failed';
     }

@@ -161,7 +161,7 @@ function diffUrl(examId) {
 }
 
 /** notice_diff.json 캐시 반환 — 원격 우선, 번들 폴백. 없으면 {docs:[]} */
-export function ensureNoticeDiff() {
+function ensureNoticeDiff() {
   if (_diffPromise) return _diffPromise;
   const examId = getActiveExamId();
   _diffPromise = (async () => {

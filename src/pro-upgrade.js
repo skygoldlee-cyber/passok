@@ -259,6 +259,70 @@ export async function showPlanCompare() {
     `);
 }
 
+// --- Pro 전환 모멘트 넛지 (ROAD-P6) ---
+// 고가치 순간(모의고사 분석 완료 등)에 결과 패널 상단의 인라인 카드로
+// 플랜 비교를 제안한다. 모달 대신 비차단 카드 — 학습 흐름을 끊지 않는다.
+
+/** 모멘트 → 플랜 키·표시 문구 매핑 */
+const PRO_MOMENTS = {
+    sim_result: { feature: 'mock_exam', label: '실전 모의고사' },
+    analysis_report: { feature: 'personal_analysis', label: '학습 진단 리포트' },
+};
+
+/** 모멘트별 재노출 쿨다운 — 같은 모멘트는 14일에 1회 */
+const PRO_MOMENT_COOLDOWN_MS = 14 * 86400000;
+
+/**
+ * 모멘트 넛지 표시 여부 판정 (순수 함수 — 테스트 용이).
+ * @param {string} momentKey PRO_MOMENTS 키
+ * @param {{isPro?:function(string):boolean, entitled?:boolean, seenMap?:Object<string,string>, now?:number}} [o]
+ * @returns {boolean}
+ */
+export function shouldShowProMoment(momentKey, o = {}) {
+    const def = PRO_MOMENTS[momentKey];
+    if (!def) return false;
+    const isPro = o.isPro || isProFeature;
+    if (!isPro(def.feature)) return false;
+    const entitled = o.entitled !== undefined ? o.entitled : hasProEntitlement();
+    if (entitled) return false;
+    const seen = o.seenMap || {};
+    const last = Date.parse(seen[momentKey] || '');
+    const now = o.now !== undefined ? o.now : Date.now();
+    return !last || (now - last) > PRO_MOMENT_COOLDOWN_MS;
+}
+
+/**
+ * 고가치 모멘트 넛지 카드 삽입 — 컨테이너 최상단에 비차단 카드로 부착.
+ * 쿨다운·entitlement·플랜 게이트 통과 시에만 렌더, 표시 즉시 seen 기록 + 계측.
+ * @param {HTMLElement|null} container 넛지를 붙일 결과 패널
+ * @param {string} momentKey PRO_MOMENTS 키
+ */
+export function mountProMoment(container, momentKey) {
+    if (!container || typeof document === 'undefined') return;
+    const def = PRO_MOMENTS[momentKey];
+    if (!def) return;
+    /** @type {Object.<string, string>} */
+    let seen = {};
+    try { seen = JSON.parse(safeGetItem(STORAGE_KEYS.PRO_MOMENT_SEEN) || '{}') || {}; } catch (e) { seen = {}; }
+    if (!shouldShowProMoment(momentKey, { seenMap: seen })) return;
+    seen[momentKey] = localDateTime();
+    safeSetItem(STORAGE_KEYS.PRO_MOMENT_SEEN, JSON.stringify(seen));
+    trackAction(`pro_moment:${momentKey}`); // UX-MET-04 — ':' 접두 키는 버킷 라벨로 해석
+
+    container.querySelector('.pro-moment-card')?.remove();
+    const card = document.createElement('div');
+    card.className = 'pro-moment-card';
+    card.innerHTML = `
+        <i class="fa-solid fa-gem" aria-hidden="true"></i>
+        <span class="pro-moment-text"><strong>${esc(def.label)}</strong>은(는) Pro 제공 예정 기능입니다 — 지금은 무료로 이용 중입니다.</span>
+        <div class="pro-moment-actions btn-row">
+            <button type="button" class="btn btn-sm btn-primary" data-click="showPlanCompare">플랜 비교</button>
+            <button type="button" class="btn btn-sm btn-secondary" data-pro-moment-dismiss aria-label="닫기">닫기</button>
+        </div>`;
+    card.querySelector('[data-pro-moment-dismiss]')?.addEventListener('click', () => card.remove());
+    container.prepend(card);
+}
+
 /** Pro 업그레이드 안내 모달 (정보성 — 결제 경로 없음) */
 export function showUpgradeNotice(featureLabel, limitMessage) {
     const benefitItems = [`<li>${esc(featureLabel)} 저장 한도 무제한</li>`, ..._proBenefitItems()];

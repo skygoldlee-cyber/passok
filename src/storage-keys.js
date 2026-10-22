@@ -37,6 +37,9 @@ export const STORAGE_KEYS = {
   // 교재 개정 안내
   TEXTBOOK_EDITION_SEEN: 'textbook_edition_seen', // 마지막 확인 교재 판본 (기기 로컬·백업 제외 — P-14)
 
+  // 시험 콘텐츠 갱신 배지 (ES-07) — {examId: contentStamp} 방문한 시험의 마지막 확인 스탬프. GLOBAL_KEYS
+  EXAM_STAMP_SEEN: 'exam_stamp_seen',
+
   // 학습 목표
   STUDY_GOALS: 'study_goals',  // { dailyCards: 50, dailyQuizzes: 10, weeklyStudyDays: 5 }
   EXAM_DATE: 'exam_date',      // 'YYYY-MM-DD' — 시험일 (D-day 역산)
@@ -137,8 +140,14 @@ export const STORAGE_KEYS = {
   // Pro 기능 안내 표시 이력 — 기능별 1회 안내 (pro-upgrade.js)
   PRO_NOTICE_SEEN: 'pro_notice_seen',
 
+  // Pro 전환 모멘트 넛지 표시 이력 — {moment: isoDateTime}, 모멘트별 쿨다운 (pro-upgrade.js, ROAD-P6)
+  PRO_MOMENT_SEEN: 'pro_moment_seen',
+
   // 기능 사용 카운터 (usage-stats.js — ROAD-L5 유료가치 측정, 로컬 전용·백업/동기화 제외, GLOBAL_KEYS — 익명 유저 단위)
   USAGE_STATS: 'usage_stats',
+
+  // 사용 스냅샷 텔레메트리 마지막 전송일 (usage-telemetry.js — UX-MET-05, 하루 1회 상한, GLOBAL_KEYS)
+  USAGE_SNAPSHOT_SENT: 'usage_snapshot_sent',
 
   // 원료 DB 갱신 감지 — 마지막으로 본 ingredients contentHash (기기 로컬 마커, 백업 제외)
   INGREDIENTS_HASH: 'ingredients_hash',
@@ -156,6 +165,7 @@ export const STORAGE_KEYS = {
   READER_PROGRESS: 'readerProgress',        // 과목별 교재 일독 진척률 {subjKey: {frac, ts}} — SC-15
   READ_THROUGH_DONE: 'read_through_done',   // 일독 완료 통지 발화 시각(ts 문자열) — 1회성 플래그 (TR-28)
   READER_BOOKMARKS: 'readerBookmarks',
+  READER_NOTES: 'reader_notes',       // 섹션 메모 맵 {bookmarkKey:{note,subject,title,updated}} (TR-30)
 
   // 설정
   APP_THEME: 'appTheme',

@@ -39,6 +39,7 @@ const ACTION_LABELS = {
     review_weak_open: '취약 진술 리뷰 개방',
     trainer_menu: '훈련소 메뉴 진입',
     pro_badge_click: 'PRO 배지 → 플랜 비교',
+    pro_moment: 'Pro 모멘트 카드 표시 (ROAD-P6)', // 'pro_moment:<moment>' 접두사 키
 };
 
 /** 액션 키 → 표시 라벨 — `:` 접미 키는 접두사(버킷) 라벨로 해석 (UX-MET-04) */

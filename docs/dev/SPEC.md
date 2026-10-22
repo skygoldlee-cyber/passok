@@ -89,7 +89,7 @@
 | 3.2 | **플래시카드** | 3D 플립·외움/헷갈림 분류·FSRS 간격 반복·셔플·난이도·과목 필터 | F-01~F-11 (11) |
 | 3.3 | **퀴즈** | 객관식 풀이·즉시 채점·오답 노트·과목·난이도 필터·해설 표시 | Q-01~Q-12 (12) |
 | 3.4 | **모의고사** | 실전 타이머 시뮬레이션·성적표·과목별 분석·성적 추이 | E-01~E-07 (7) |
-| 3.5 | **교재 리더** | 챕터 탐색·북마크·진도 표시·폰트·테마·이미지·다이어그램 확대(핀치 제스처)·머메이드·표 렌더·키보드 내비·일독 완료 통지 | TR-01~TR-28 (28) |
+| 3.5 | **교재 리더** | 챕터 탐색·북마크·진도 표시·폰트·테마·이미지·다이어그램 확대(핀치 제스처)·머메이드·표 렌더·키보드 내비·일독 완료 통지·섹션 메모 | TR-01~TR-28, TR-30 (29) |
 | 3.6 | **리더 학습 보조** | 기출·중요 마커 추출 카드·숫자 암기표 | SA-01~SA-05 (5) |
 | 3.7 | **용어집** | 용어 검색·정의 카드·관련 용어 | G-01~G-09 (9) |
 | 3.8 | **참조자료 연결** | 법령·고시 원문 라인 인용·현행본 링크·개정 감지 배지·오디오 연계 | RR-01~RR-19 (19) |
@@ -106,7 +106,7 @@
 | 3.19 | **계정·동기화** | Supabase 로그인·클라우드 스냅샷 동기화(선택적) | AU-01~AU-08 (8) |
 | 3.20 | **캘린더·복습·드릴** | 학습 캘린더·목표·학습 계획·계획 준수·과목 배분·뽀모도로·취약 진술 드릴 | SC-01~DR-07 (17) |
 | 3.21 | **UI 모드 전환** | 학습 ↔ 실무(Formula OS) 모드 전환 | UM-01~UM-05 (5) |
-| 3.22 | **시험 선택·전환** | 멀티시험 팩 선택·전환·레지스트리 기반 | ES-01~ES-05 (5) |
+| 3.22 | **시험 선택·전환** | 멀티시험 팩 선택·전환·레지스트리 기반 | ES-01~ES-07 (7) |
 | 3.23 | **사용자 의견** | 피드백 폼·건의 수신 | FB-01~FB-08 (8) |
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
@@ -238,6 +238,7 @@
 | TR-26 | **줌 모달 핀치 제스처 — 모바일 포함 전 포인터** (`zoom-gestures.js`): 이미지·다이어그램 확대 모달 본문에서 두 손가락 핀치=배율(간격 비율, 최대 4x·맞춤 이하 클램프, 핀치 중심점 스크롤 앵커), 한 손가락 드래그=패닝, 더블탭=맞춤↔2배 토글. `touch-action:none`으로 페이지 핀치줌과 이중 발화 차단 — 페이지 줌은 레이아웃 통째 확대라 대체 불가. 이전 `pointer:coarse` 바인딩 제외 폐기, 이미지·머메이드 모달에 공용 적용 | ✅ |
 | TR-27 | **리더 북마크 콘텐츠 키**: `readerBookmarks` 키를 위치 인덱스(`subj_chIdx_secIdx`)에서 콘텐츠 기반 `${subjId}|${chapterKey}|${sectionTitle}`로 전환 — 교재 편집으로 섹션이 삽입·재정렬돼도 북마크가 다른 섹션을 가리키지 않는다 (AN-10과 동일한 교재-독립 원칙). chapterKey는 manifest 선언 키, 미보유 시 chapterTitle 폴백. 구형 위치 키는 `getReaderBookmarks` 읽기 시점에 필터링해 저장소 정리(인덱스 대응을 보장할 수 없어 이관 대신 제거) | ✅ |
 | TR-28 | **교재 일독 완료 통지** — `_markReadChunk` 기록 직후 `getTextbookReadProgress`로 전 과목 청크 커버리지를 재집계, overall=1 도달 순간 `showAlert` 모달로 1회 통지 (SC-15 통독 차감이 자연 소멸하는 시점과 동일). `read_through_done` 플래그로 중복 억제 — `BACKUP_KEYS` 등록으로 복원 정합 + `RESET_KEYS` 경유로 진도 초기화 시 리셋. 시험일 설정 상태면 통독 예약 해제로 남은 기간이 카드·퀴즈 학습일로 전환됨을 안내, 미설정이면 다음 단계 안내로 분기 (`reader-progress.js` `_checkReadThroughDone`) | ✅ |
+| TR-30 | **리더 섹션 메모 (하이라이트·주석)**: `reader-notes.js` — 섹션 단위 메모를 콘텐츠 기반 북마크 키(`subj|chapterKey|title`, TR-27과 공유)에 매달아 scoped `reader_notes`에 저장. 카드 헤더의 메모 버튼 → 본문 상단 인라인 에디터(저장/삭제/닫기), 메모 있는 섹션은 제목 강조 + 본문 상단에 `.reader-note-view` 카드 표시. 커맨드 팔레트 `note` 그룹으로 메모 본문 검색→섹션 이동 | ID-05 준수 — 위치 좌표 미사용. 본문 구간 드래그 하이라이트는 판본 갱신 시 드리프트 불가피로 범위 제외(섹션 단위로 수렴) |
 
 ### 3.6 교재 리더 — 학습 보조 도구
 
@@ -538,6 +539,8 @@
 | ES-03 | 전환 = `selectExam()` → `location.reload()` — 모듈 상태·전역 캐시 완전 리셋 | ✅ |
 | ES-04 | 진도 격리 — `scopedKey`가 `<examId>:` 접두사 자동 부여, 시험 간 진행상황 독립 | ✅ |
 | ES-05 | 기능 플래그 — 시험별 `features`로 도메인 특화 기능(성분사전·오디오북·참조자료 등) 자동 숨김 (`data-feature` 속성 + `hasFeature()`) | ✅ |
+| ES-06 | 시험 카드 진도 요약 — 카드에 시험별 외운 카드·퀴즈 정답률·최근 학습일·D-day 요약과 액센트 스왓치 표시 (`peekExamValue`로 타 시험 네임스페이스 읽기 전용 조회, comingSoon 카드 제외) | ✅ |
+| ES-07 | 시험 콘텐츠 갱신 배지 — `build_exams_list.js`가 manifest sha1 단축 `contentStamp`를 exams.js에 주입, 카드에 미방문='신규'/스탬프 변경='갱신됨' 배지. 확인 맵은 전역 키 `exam_stamp_seen` {examId:stamp}, 방문(활성화·선택) 시 갱신, 첫 실행 시 전체 시딩으로 오배지 방지 | ✅ |
 
 ### 3.23 사용자 의견 수신 (User Feedback)
 
@@ -576,7 +579,7 @@
 | SEM-05 | 신선도 게이트 — manifest.inputs(소비 번들 sha1)↔현재 파일 비교 `check:embfresh`, sourceHash는 텍스트 집합 결정 해시 (check:fresh·check:content 포함) | ✅ |
 | SEM-06 | 혼동쌍 제안 — cid 상이 의미 근접 쌍 + 사용자 교차 오판률 재순위화 (빌드 산출 후보 1만+쌍 중 실사용 필터링은 별도 설계 필요) | 미구현 (로드맵) |
 | SEM-07 | 유사 문항 추천 — 오답 문항의 의미 유사 문항 제시 (neighbors.js의 q: 키 adj는 이미 산출, UI 소비만 남음) | 미구현 (로드맵) |
-| SEM-08 | 자유 의미 검색 — 교재·진술 대상 시맨틱 쿼리 확장. 쿼리 임베딩 경로(앵커 프록시/온디바이스 ONNX/BYOK/서버) 미결정 — 설계 §8 v2 보류 | 미구현 (로드맵) |
+| SEM-08 | 자유 의미 검색 — 통합 팔레트(Ctrl+K)에 '의미 유사 진술' 그룹. **앵커 프록시 경로 구현**(`SemanticIndex.searchByText`: 쿼리↔texts 어휘 커버율 최고 항목을 앵커로 선정 → 사전계산 이웃 반환, 모델 추론 없음·지연 로드). 진정한 쿼리 임베딩(온디바이스 ONNX/BYOK/서버)은 v2 보류 — 설계 §8 | ✅ v1 (앵커 프록시) |
 
 ### 3.26 관리자 (Admin)
 
@@ -772,6 +775,7 @@
 | UX-NAV-12 | **내비게이션 3그룹 분류**: 사이드바·모바일 더보기 시트가 동일한 그룹 라벨로 항목을 분류 — `학습`(대시보드·학습 진단·플래시카드·기출 퀴즈) / `훈련 · 평가`(훈련소·복습·실전 모의고사) / `자료 · 도구`(교재·사전·실무·캘린더·문서). 기능 표시명은 manifest `uiText`를 원본으로 유지하며 코드 폴백·문서·테스트가 동일 용어 사용 (학습 진단·주간 배분·훈련소) | 그룹 라벨은 `index.template.html`의 `.nav-group-label` 정적 마크업 — 모바일 시트는 동일 DOM 슬롯을 공유해 분류가 대역 간 자동 일치. 표시명만 바뀌고 `data-target`·라우트 ID는 불변 |
 | UX-NAV-13 | **뷰 목적·경계 문구**: 학습 4축 뷰(퀴즈·모의고사·훈련소·복습) 상단에 한 줄 `.view-purpose` 문구로 역할 경계를 명시 — 퀴즈=단원별 연습 / 모의고사=실전 평가 / 훈련소=반복 훈련 / 복습=틀린·약한 것 재확인 | `html/views/{quiz,exam,trainer,review}.html` 정적 문구 — manifest `uiText` subtitle과 별도 본문 표기라 `check:uitext` 비대상 |
 | UX-NAV-14 | **훈련소 메뉴 2그룹 분류**: `trainer-menu-grid`를 `.trainer-menu-group` 2개로 분할 — `기출 드릴`(O/X 판정·ㄱㄴㄷ 조합, 기출 문항 분해·변환) 상단 + `암기 · 실무 훈련`(수치 암기·원료 챌린지·배합 계산, 생성형) 하단. 각 그룹에 `.trainer-group-label`(제목+설명) 정적 마크업 — UX-NAV-12 내비 그룹 라벨과 동일 패턴 | `html/views/trainer.html` 정적 구조 — 카드 DOM·`data-click`·`data-feature`·배지 id 불변, 그룹 이동만. 라벨은 본문 텍스트라 `check:uitext` 비대상 |
+| UX-HELP-01 | **단축키 도움말 오버레이 (`?` 키)**: `src/shortcuts-help.js` — `?`(Shift+/)로 전체 단축키 시트를 `role="dialog"` 오버레이로 표시. 목록 정본은 `SHORTCUT_GROUPS` 선언 — 신규 단축키는 여기에 등록해 도움말·실바인딩 불일치 방지 | 입력 필드·수식키 조합에서는 미동작. `Esc`·`?`·배경 클릭 닫기, 포커스 트랩 적용. 단축키 조합표는 모듈 상수로 분리해 단위 테스트 가능 |
 | UX-NAV-09 | **콘텐츠 중심 뷰의 상단 크롬은 오버레이 + 방향 자동 숨김**: 읽기·뷰어처럼 본문이 목적인 화면에서 툴바·필터 등 크롬은 인플로우 배치 금지 → `position:absolute` 오버레이로 올리고, 스크롤 다운 시 `translateY+opacity`로 숨겨 본문이 뷰포트를 전부 차지하게 한다. 복귀는 스크롤 업 — 제스처 없이도 발견 가능. 진행바 등 수px 상태 표시만 상시 노출 | 인플로우 크롬은 본문 높이를 영구 잠식하고, transform만 적용한 숨김은 공간을 회수하지 못함(실측: 본문 63%→89% vh). 오버레이 시 콘텐츠 스크롤 컨테이너에 `padding-top`=크롬 높이를 줘 첫 화면이 크롬 아래 묻히지 않게 함 — 패딩은 스크롤과 함께 밀려나므로 읽는 중 잠식 0. 크롬 아래를 지나는 다른 오버레이(섹션 표시줄 등)는 `~` 시빌링 셀렉터로 숨김 상태와 위치를 연동할 것 |
 
 #### 4.8.2 스크롤바 전략
@@ -802,6 +806,9 @@
 | UX-FB-04 | **로딩은 오버레이로 통일**: 데이터 fetch 구간은 `showGlobalLoading()` 전체화면 오버레이 | 부분 스켈레톤보다 구현 비용이 낮고 일관됨 |
 | UX-FB-05 | **첫 방문 시작 안내 모달**: 학습 데이터가 없는 최초 방문에서 1회 표시, 설정 메뉴 "시작 안내"로 재열람 (`onboarding.js`, `onboarding_seen_v1` 플래그). 4단계 — ① 시험일 설정(대시보드 첫 카드) → ② 교재 1회독(표준형/이야기형 구조 파악) → ③ 카드·퀴즈 학습(주간 배분) → ④ 복습·진단 루프(FSRS + 학습 진단) | 기존 사용자는 플래그만 기록해 방해하지 않음 — 재방문 강제 안내 금지 |
 | UX-FB-06 | **모달 카드는 뷰포트 상한 + 내부 스크롤 필수**: `role="dialog"`의 카드는 `max-height: ≤90dvh` + `overflow-y:auto` (또는 본문 스크롤 영역 + 헤더·푸터 `flex-shrink:0` 고정) — 내용이 뷰포트를 넘어도 액션 버튼이 화면 안에 남아야 함 | 자가 등록 모달(`.cing-*`)이 필드 5개로 `90dvh`를 넘겨 등록·취소 버튼이 잘린 실사례. 공용 `.app-confirm-dialog`(컨펌·의견·Pro·온보딩·통계 공유)와 `.auth-modal-card`·`.f-weigh-card`에 적용 — UX-SET-02(설정 패널)의 다이얼로그 일반화. E2E가 세로·가로 뷰포트에서 푸터 버튼 위치를 실측. 신규 카드는 공용 규약 클래스 `.dialog-card`(css/base.css — 90dvh 상한+스크롤) 사용, `check:mobilesafe`가 `role="dialog"` 마크업에 클래스 부재를 정적 검사 |
+| OB-01 | **첫 방문 셋업 위저드**: 온보딩을 설명 모달에서 실행형 3단계로 — ① 시험일 입력(즉시 `exam_date` 저장) ② 일일 카드·주간 학습일 목표(즉시 `study_goals` 저장) ③ 요약 + "첫 카드 학습 시작"(첫 과목 플래시카드로 착지) | `onboarding.js` — 단계 진행 도트·건너뛰기·이전 지원, 목표 검증 실패 시 진행 차단. 학습 실행은 `data-click` 위임(모듈 import 없이 기존 액션 재사용). UX-FB-05의 1회성·재열람 계약은 불변 |
+| UX-FB-07 | **비동기 본문 로드는 `.skeleton` 자리표시**: 리더가 미로드 과목을 여는 동안 `#textbook-reader-container`에 `.reader-skeleton`(shimmer) 표시 — 빈 화면 대기 방지 | `.skeleton` 유틸은 base.css 공용 — `skeleton-text`/`skeleton-block`·폭 변형(`w-60`/`w-80`). shimmer는 `@media (prefers-reduced-motion)` 전역 무효화에 포함. 전체화면 fetch는 기존 UX-FB-04 오버레이 유지 (혼용 금지 — 부분 본문 교체에만 스켈레톤) |
+| UX-FB-08 | **큐 완료 전이 미세 피드백**: 오늘 할 일 큐가 비어있지 않다가 비워지는 전이에만 `.rec-empty.is-celebrate` 1회 부착 — `tq-done-pop` 펄스 + 성공색. 재렌더마다 재생하지 않음 | `_prevQueueLen`(직전 큐 길이)로 전이만 감지. `prefers-reduced-motion`에서는 애니메이션 자동 소거 — 상태 메시지 텍스트 자체가 보조 수단 |
 
 #### 4.8.5 PWA 고유 UX
 
@@ -1172,6 +1179,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | ROAD-P4 | **무료 티어 축소·그랜드파더링 정책**: 클라우드 동기화를 Pro 전용으로 전환, 무료 티어 로그인은 비강제 유지 | `feature-plan.json` `cloud_sync: "pro"` + `canCloudSync()`/`pro_entitled` 게이트 (sync.js push·pull·syncNow 차단) | ✅ 결정·게이트 구현 |
 | ROAD-P0 | **Pro 안내 계층**: `feature-plan.json` 기능별 `pro`/`free` 전환 + `src/pro-upgrade.js` (PRO 배지 `data-pro-feature` 제어, 진입 1회 안내 `proFeatureNotice`, Formula OS 한도 초과 업그레이드 모달 `showUpgradeNotice`) — 접근 차단 없이 유료 경계만 인지. soft→hard 전환·grandfathering 정책은 §3.7에 확정. 플랜 비교 모달의 "Pro 전용 혜택"은 플래그·플랜에서 유도한 실제 기능 목록(학습 진단 리포트·이야기형·오디오북·클라우드 동기화·한도 무제한)으로 렌더링 | `SUBSCRIPTION_ROADMAP.md` §3.4 구현 상태 주석·§3.7 전환 정책 | ✅ |
 | ROAD-P5 | **Pro 안내 수렴**: `proFeatureNotice`의 기능별 첫 진입 모달을 **전역 1회**로 수렴 — seen 키는 `pro_notice_seen` 맵의 `_global` 단일 키이며 `GLOBAL_KEYS` 승격으로 시험 전환에도 유지. 레거시 시험 스코프 seen은 고아화되어 기존 사용자도 최대 1회의 전역 안내 후 영구 비노출. PRO 배지는 `refreshProBadges`가 `data-click="showPlanCompare"`·`role="button"`·`tabindex`를 부여해 클릭/Enter 시 플랜 비교로 연결되는 단일 진입점 — `closest` 위임 해석이 배지 자신을 먼저 잡아 부모 카드 액션과 충돌하지 않음 | DOC-DSN-23 §4 | ✅ |
+| ROAD-P6 | **Pro 전환 모멘트 넛지**: 고가치 순간(모의고사 분석 결과·학습 진단 뷰)에 결과 패널 상단 `.pro-moment-card` 인라인 카드로 플랜 비교를 제안 — 모달 대신 비차단 카드로 학습 흐름 유지. `PRO_MOMENTS` 매핑(moment→feature key) + `shouldShowProMoment` 순수 판정(플랜 pro·미entitled·14일 쿨다운) + `mountProMoment` 삽입. 표시 계측 `pro_moment_<moment>` 액션 | `pro_moment_seen` scoped 키로 모멘트별 쿨다운. UX-MET-05 스냅샷이 넛지→plan_compare 전환율 회수 경로 | ✅ |
 
 ### 7.3 Learning Pro 잔여·차별화
 
@@ -1239,6 +1247,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | UX-MET-02 | **PRO 배지 전환 계측**: `pro_badge_click` — 배지→플랜 비교 진입을 다른 `plan_compare` 유입과 구분해 ROAD-P1 판정 입력으로 사용 | Phase 2 착수 | 구현 (2026-10-13) |
 | UX-MET-03 | **사용 통계 내보내기**: '내 사용 통계' 모달에 JSON 클립보드 복사 버튼 — 로컬 전용 계측의 유일한 회수 경로 (사용자 자발 전달) | Phase 2 착수 | 구현 (2026-10-13) |
 | UX-MET-04 | **계측 정합 규약**: 신규 키는 `ACTION_LABELS` 라벨 동반 등록 + `VALUE_ACTIONS` 비포함 — 유료가치 판정(`PRO_VALUE_THRESHOLD`) 지표 오염 방지 | Phase 2 착수 | 구현 (2026-10-13) |
+| UX-MET-05 | **사용 스냅샷 텔레메트리**: `usage-telemetry.js` `maybeReportUsageSnapshot` — usage_stats 로컬 카운터(뷰 분포·액션 횟수·활동 일수)를 하루 1회 `usage_events`의 `usage_snapshot` 이벤트로 전송. UX-GATE-01~03 판정 표본 회수 경로 (클립보드 수동 복사 UX-MET-03의 자동 보완) | 익명 insert 정책 재사용, session_id만 포함(영속 식별자 미전송), `usage_snapshot_sent` 하루 1회 상한. Supabase 미설정 환경 no-op. 학습 내용 미포함 — 카운터 수치만 |
 | UX-GATE-01 | **드릴 실행 패널 이관 결정**: oxdrill·combo 패널의 훈련소 보조 도구화 완결 여부 — 복습 발 weak 드릴 진입 비율로 판정 | 측정 창(계측 배포 후 ≥4주)·회수 표본 ≥3기기 충족 후 `drill_from_review` ÷ weak 모드 시작 ≥60% | 미구현 |
 | UX-GATE-02 | **점진적 공개·표본 게이트**: 저사용 표면의 접힘·시트 이관 — `trackView` 뷰 분포 + `trainer_menu:*` 카드 분포로 관찰 목록 분류 | 측정 창 종료 후 전체 대비 진입 <5% 표면 식별 — 표본 미달 시 어떤 축소도 실행 금지 | 미구현 |
 | UX-GATE-03 | **PRO 경로 수렴 잔여 판정**: 배지→플랜 비교 전환 데이터를 ROAD-P1 entitlement 착수 판정 입력으로 보고 | `pro_badge_click` 대비 `plan_compare` 도달률 분석 가능 시 | 미구현 |
