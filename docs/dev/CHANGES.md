@@ -7,6 +7,16 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 텔레메트리 동의·퍼널 측정 (P0 측정 기반 — UX-MET-06/07/08, ADR-0019)
+
+- **ADR-0019** — 텔레메트리는 opt-out 동의 + 퍼스트파티 익명 수집: opt-in 기각(표본 과소), 신규 설치 ID 기각(device_id 재사용), 서드파티 SDK 금지
+- **동의 게이트** (`src/telemetry-consent.js` 신규) — `isTelemetryAllowed`/`setTelemetryAllowed`/`getInstallId` + 최초 실행 1회 고지 토스트 + 설정 메뉴 '사용 통계 전송' 토글. 거부 시 기능 제한 없이 전송만 차단
+- **설치 ID** — 기존 `DEVICE_ID`를 `meta.install_id`로 전송 (스키마 변경 없음, jsonb 활용)
+- **화이트리스트** — `ALLOWED_EVENTS` 외 이벤트는 'skipped'. 퍼널 확장: `session_start`(방문 분모)·`core_learning_action`(핵심 학습 행동 — `trackAction`의 VALUE_ACTIONS 발생 시)
+- **오프라인 큐** (`telemetry_queue`, 상한 200) — 전송 실패·오프라인 시 보관, `online` 복귀 시 `flushTelemetryQueue` 재시도. 부분 성공 시 실패분만 재큐잉
+- app.js 초기화: `reportSessionStart`·`initTelemetryQueueFlush`·`telemetryConsentNotice` 스텝 추가
+- 단위 5 + DOM 3 테스트 추가. `BUSINESS_VALIDATION.md` §5.1 구현 현황 반영
+
 ## 2026-10-22 UI/UX 고도화 일괄 (P0~P3)
 
 - **시험 선택 카드** (ES-01~07) — 교차시험 진척(암기카드·퀴즈 수·정답률)·마지막 학습일·D-day·콘텐츠 갱신 배지. `exam-context.js`에 `peekExamValue`(시험 간 읽기 전용 브리지), `build_exams_list.js`에 contentStamp 주입, comingSoon은 요약 미표시·액센트 스왓치 표시

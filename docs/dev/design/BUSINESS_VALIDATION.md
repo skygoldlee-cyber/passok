@@ -91,6 +91,8 @@
 - **동의 UX** — 최초 실행 시 고지·거부 가능, 거부 시 기능 제한 없음
 - 오프라인 시 로컬 큐 → 온라인 복귀 시 배치 전송
 
+> **구현 현황 (2026-10-22, ADR-0019·UX-MET-06~08)**: opt-out 동의(`telemetry_opt_out` + 설정 토글 + 최초 고지 토스트)·설치 ID(기존 `device_id`를 `meta.install_id`로 전송 — 별도 ID 신설 대신 재사용)·화이트리스트(`ALLOWED_EVENTS`)·오프라인 큐(`telemetry_queue`, 상한 200)가 구현됐다. 퍼널 이벤트는 `session_start`(방문 분모)·`core_learning_action`(핵심 학습 행동 — VALUE_ACTIONS 액션 발생 시)로 확장됐다. 신규 결정 사항은 ADR-0019에 기록한다.
+
 ### 5.2 결제 — 실험 단계와 정식 단계 분리
 
 | 단계 | 방식 | 권한 검증 |

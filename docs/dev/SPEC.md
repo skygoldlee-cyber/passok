@@ -1248,6 +1248,9 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | UX-MET-03 | **사용 통계 내보내기**: '내 사용 통계' 모달에 JSON 클립보드 복사 버튼 — 로컬 전용 계측의 유일한 회수 경로 (사용자 자발 전달) | Phase 2 착수 | 구현 (2026-10-13) |
 | UX-MET-04 | **계측 정합 규약**: 신규 키는 `ACTION_LABELS` 라벨 동반 등록 + `VALUE_ACTIONS` 비포함 — 유료가치 판정(`PRO_VALUE_THRESHOLD`) 지표 오염 방지 | Phase 2 착수 | 구현 (2026-10-13) |
 | UX-MET-05 | **사용 스냅샷 텔레메트리**: `usage-telemetry.js` `maybeReportUsageSnapshot` — usage_stats 로컬 카운터(뷰 분포·액션 횟수·활동 일수)를 하루 1회 `usage_events`의 `usage_snapshot` 이벤트로 전송. UX-GATE-01~03 판정 표본 회수 경로 (클립보드 수동 복사 UX-MET-03의 자동 보완) | 익명 insert 정책 재사용, session_id만 포함(영속 식별자 미전송), `usage_snapshot_sent` 하루 1회 상한. Supabase 미설정 환경 no-op. 학습 내용 미포함 — 카운터 수치만 |
+| UX-MET-06 | **텔레메트리 opt-out 동의**: `telemetry_opt_out` GLOBAL 키 + 설정 메뉴 토글 + 최초 실행 1회 고지 토스트. 거부 시 기능 제한 없음 — 전송만 차단 | ADR-0019 수집 정당성 확보. DOC-DSN-34 "최초 실행 시 고지·거부 가능" 요구 | 구현 (2026-10-22) |
+| UX-MET-07 | **익명 설치 ID**: `usage-stats.js`의 `device_id`(GLOBAL 익명 기기 식별자)를 `usage_events.meta.install_id`로 전송 — 고유 사용자 추정 단위 | ADR-0019 — 별도 설치 ID 신설 대신 기존 키 재사용. 기기 단위 한계(브라우저 삭제 시 신규 카운트)는 알려진 오차 | 구현 (2026-10-22) |
+| UX-MET-08 | **오프라인 이벤트 큐**: 전송 실패·오프라인 시 `telemetry_queue` 로컬 큐(상한 200)에 보관 — `online` 이벤트·다음 전송 시 재시도 | UX-MET-05 스냅샷 손실 방지 — PWA 오프라인 사용 중 이벤트 누락 보완 | 구현 (2026-10-22) |
 | UX-GATE-01 | **드릴 실행 패널 이관 결정**: oxdrill·combo 패널의 훈련소 보조 도구화 완결 여부 — 복습 발 weak 드릴 진입 비율로 판정 | 측정 창(계측 배포 후 ≥4주)·회수 표본 ≥3기기 충족 후 `drill_from_review` ÷ weak 모드 시작 ≥60% | 미구현 |
 | UX-GATE-02 | **점진적 공개·표본 게이트**: 저사용 표면의 접힘·시트 이관 — `trackView` 뷰 분포 + `trainer_menu:*` 카드 분포로 관찰 목록 분류 | 측정 창 종료 후 전체 대비 진입 <5% 표면 식별 — 표본 미달 시 어떤 축소도 실행 금지 | 미구현 |
 | UX-GATE-03 | **PRO 경로 수렴 잔여 판정**: 배지→플랜 비교 전환 데이터를 ROAD-P1 entitlement 착수 판정 입력으로 보고 | `pro_badge_click` 대비 `plan_compare` 도달률 분석 가능 시 | 미구현 |

@@ -154,6 +154,10 @@
                             <button type="button" class="settings-item" data-click="showPlanCompare" title="Free와 Pro의 기능 차이·혜택 비교 보기">
                                 <i class="fa-solid fa-gem" aria-hidden="true"></i> 플랜 안내 (Free/Pro)
                             </button>
+                            <!-- 텔레메트리 opt-out (UX-MET-06, ADR-0019) — 거부 시 전송만 차단, 기능 제한 없음 -->
+                            <button type="button" class="settings-item" data-click="toggleTelemetry" title="익명 사용 통계 수집 허용 여부 — 끄면 이 기기에서 통계 전송이 중단됩니다 (기능 제한 없음)">
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i> 사용 통계 전송: <span id="telemetry-toggle-label">켜짐</span>
+                            </button>
                             <div class="settings-divider"></div>
                             <p class="settings-group-label">데이터</p>
                             <button type="button" class="settings-item" data-click="exportData">
