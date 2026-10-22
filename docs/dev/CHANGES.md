@@ -7,6 +7,11 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 그룹화 누락 경로 수정 (CI 복구)
+
+- `check_link_lint.js`의 동적 import base가 `src/`에 남아 있어 CI `test` 잡 연쇄 실패 → `src/reader/`로 수정
+- `supabase-keepalive.yml`·`vitest.config.mjs`의 `src/supabase-config.js` 참조 → `src/auth-sync/`로 갱신
+
 ## 2026-10-22 src/reader/ 서브디렉터리 분리 (점진 그룹화 완료)
 
 - 교재·문서 읽기/표시 모듈 14개(`exam-viewer·manual-viewer·html-viewer·glossary-query·reader-format·reader-toc·textbook-{core,parser,edition}·markdown-parser·mermaid-{render,utils}·image-zoom·zoom-gestures`)를 `src/reader/`로 이동 — import/vi.mock 스펙시피어 전수 재작성·sw.js 프리캐시·파서 등가성 게이트 경로·domain-map·아키텍처/참조 문서·테스트 경로 갱신. 이동 파일의 `./config/`·`./views/` 하위 상대경로는 `../`로 재작성

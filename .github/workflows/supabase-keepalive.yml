@@ -4,7 +4,7 @@ name: Supabase Keep-Alive
 # 자동 일시정지한다. 실제 테이블에 REST 쿼리 1건을 보내 활동을 유지한다.
 # 시험이 연 2회(5월·9월)라 비시즌 무트래픽 기간 대비용 (SUPABASE_DESIGN.md §12).
 #
-# URL·publishable key는 이미 공개 설계(src/supabase-config.js — RLS가 보안 담당)라
+# URL·publishable key는 이미 공개 설계(src/auth-sync/supabase-config.js — RLS가 보안 담당)라
 # 시크릿 불필요. 소스 파일에서 추출하므로 프로젝트 변경 시 자동 추적한다.
 #
 # 프로젝트가 이미 정지됐거나 장애면 이 워크플로가 실패 → Actions 알림 메일 +
@@ -31,8 +31,8 @@ jobs:
       - name: Supabase ping (REST + Auth)
         run: |
           set -euo pipefail
-          URL=$(sed -n "s/.*SUPABASE_URL *= *'\([^']*\)'.*/\1/p" src/supabase-config.js)
-          KEY=$(sed -n "s/.*SUPABASE_PUBLISHABLE_KEY *= *'\([^']*\)'.*/\1/p" src/supabase-config.js)
+          URL=$(sed -n "s/.*SUPABASE_URL *= *'\([^']*\)'.*/\1/p" src/auth-sync/supabase-config.js)
+          KEY=$(sed -n "s/.*SUPABASE_PUBLISHABLE_KEY *= *'\([^']*\)'.*/\1/p" src/auth-sync/supabase-config.js)
           if [ -z "$URL" ] || [ -z "$KEY" ]; then
             echo "supabase-config.js에서 URL·키 추출 실패 — Supabase 미설정 상태이면 이 워크플로를 비활성화할 것"
             exit 1

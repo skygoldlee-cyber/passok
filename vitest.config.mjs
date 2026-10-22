@@ -14,7 +14,7 @@ export default defineConfig({
             reporter: ['text', 'html', 'json'],
             include: ['src/**/*.js'],
             exclude: [
-                'src/supabase-config.js', // 상수 선언만 — 측정 대상 아님
+                'src/auth-sync/supabase-config.js', // 상수 선언만 — 측정 대상 아님
                 // jsdom으로 테스트 불가한 환경 의존 모듈 — 분모에서 제외
                 'src/types.js',               // JSDoc typedef 선언 전용 (런타임 코드 없음)
                 'src/app-fallback.js',        // ESM 로드 실패 복구 부트스트랩 (window.onerror)
