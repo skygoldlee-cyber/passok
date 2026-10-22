@@ -1,5 +1,15 @@
 [
   {
+    "file": "docs/dev/design/PAYMENT_PILOT_DESIGN.md",
+    "ref": "src/pro-redeem.js",
+    "reason": "설계안 제안 경로 — 라이선스 코드 입력 모듈 P-UI-1 (미구현)"
+  },
+  {
+    "file": "docs/dev/design/PAYMENT_PILOT_DESIGN.md",
+    "ref": "tools/check/issue_pro_code.js",
+    "reason": "설계안 제안 경로 — 라이선스 코드 발급 CLI P-OPS-1 (미구현)"
+  },
+  {
     "file": "docs/dev/design/ADMIN_DESIGN.md",
     "ref": "src/views/admin.js",
     "reason": "설계안 제안 경로 — 관리자 뷰 모듈 (Phase 2 미구현)"

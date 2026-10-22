@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 P2 결제 실험 설계 — PAYMENT_PILOT_DESIGN (DOC-DSN-35)
+
+- **신규** `docs/dev/design/PAYMENT_PILOT_DESIGN.md` — 선실험 결제 수단 비교(수동 송금 권고)·라이선스 코드 플로우(admin:issue-code + redeem_code RPC + 코드 입력 UI)·가격안(기간권 9,900원/90일 가칭)·환불 정책(미사용 7일)·전환 계측(채널 프리픽스+신규 이벤트)·미결정 항목 D-1~D-5
+- BUSINESS_VALIDATION §5.3 — 체크리스트 6항목을 "설계 완료 — 확정 대기"로 갱신, DOC-DSN-35 참조 연결
+- docs/README.md — DOC-DSN-35 레지스트리·design 카운트(17→18)·인덱스 등록
+
 ## 2026-10-22 운영 리포트 — 활성화 퍼널 + 조회 경로·페이지네이션 수정
 
 - **funnel_report 활성화 퍼널**: `session_start`→`core_learning_action` 세션·설치(install_id) 전환율 — DOC-DSN-34 §4 P0 KPI 조회 경로. `session_start`는 과업 쌍 아닌 방문 분모라 퍼널 표에서 제외

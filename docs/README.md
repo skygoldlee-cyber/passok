@@ -97,7 +97,7 @@ docs/
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (19개 — README + ADR 18건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (16개)
-│   ├── design/                ← 설계·계획·평가 문서 (17개)
+│   ├── design/                ← 설계·계획·평가 문서 (18개)
 │   ├── reference/             ← 명세·로직·참조 문서 (14개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (3개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (사용자 매뉴얼 + images/ — 런타임 fetch·배포 대상)
@@ -222,6 +222,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [USER_FEEDBACK_DESIGN.md](dev/design/USER_FEEDBACK_DESIGN.md) | 사용자 피드백 수신 + 독자 피드백 공유 — YouTube 유입 추적·앱 내 의견 제출·큐레이션 공유 (DOC-DSN-09, 수신 구현·공유 미구현, 구 DSN-05 통합) |
 | [SUBSCRIPTION_ROADMAP.md](dev/design/SUBSCRIPTION_ROADMAP.md) | 월 구독 서비스 전환 로드맵 + Learning Pro 구현 과제 (구 DSN-03 통합) |
 | [BUSINESS_VALIDATION.md](dev/design/BUSINESS_VALIDATION.md) | 사업 검증 계획 — 가설 H1~H5·단계별 진입 조건·판정 기준·KPI 정의·의사결정 로그 (DOC-DSN-34) |
+| [PAYMENT_PILOT_DESIGN.md](dev/design/PAYMENT_PILOT_DESIGN.md) | P2 유료 수요 검증 — 결제 수단·라이선스 코드·가격·환불·전환 계측 실행 설계 (DOC-DSN-35, 선실험 범위) |
 | [STUDY_PLAN_PRO_DESIGN.md](dev/design/STUDY_PLAN_PRO_DESIGN.md) | 스마트학습 과목별 가중 계획 — 출제 비중·약점 정답률 가중 주차별 배분표 (SC-08, 구현 완료) |
 | [STUDY_APP_DESIGN_GUIDE.md](dev/design/STUDY_APP_DESIGN_GUIDE.md) | 학습 앱 재사용 설계 가이드 — 다른 자격시험/교재 적용 템플릿 |
 
@@ -365,6 +366,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-32 | `docs/dev/design/LEARNING_ALGORITHM_DESIGN.md` |
 | DOC-DSN-33 | `docs/dev/design/AI_AUTHORING_DESIGN.md` |
 | DOC-DSN-34 | `docs/dev/design/BUSINESS_VALIDATION.md` |
+| DOC-DSN-35 | `docs/dev/design/PAYMENT_PILOT_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |
