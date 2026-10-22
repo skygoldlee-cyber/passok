@@ -91,7 +91,8 @@ npm.cmd run check:all:e2e                # 전체 점검 + E2E 실브라우저 (
 npm.cmd run check:ci                     # CI 게이트 로컬 재현 (= run.js --preset ci — coverage·E2E·audit는 CI 전용). `-- --affected`는 유닛을 영향 테스트 권장 세트로 치환하는 빠른 로컬 재현
 npm.cmd run check -- --preset <all|ci|content|docs|refs|freshness|audit> [--quick|--content-only|--build]  # 통합 실행기 직접 호출
 npm.cmd run check -- --step <id>         # 단일 단계만 실행 (예: --step manifest, --list로 id 조회 — 출력의 [P0|P1|P2]는 단계 우선순위 티어)
-npm.cmd run check:audit                  # 감시·감사 묶음 (= run.js --preset audit — P2 단계 advisory 실행, 실패해도 종료 0·차단 없음. 카드/콤보/학습품질·용어집 저신호·refmerge·adlint·lawurls)
+npm.cmd run check:audit                  # 감시·감사 묶음 (= run.js --preset audit — P2 단계 advisory 실행, 실패해도 종료 0·차단 없음. 카드/콤보/학습품질·용어집 저신호·refmerge·adlint·lawurls·onboard)
+npm.cmd run check:onboard                # 시험 팩 온보딩·승격 진단 — 시험별 준비도 표 + comingSoon↔콘텐츠 정합·필수 선언 누락·선택 자산 (승격 기준: 과목당 ≥20문, 런북은 NEW_EXAM_RUNBOOK §파일럿 운영)
 
 # 콘텐츠 통합 검증 (교재 교체 등 대규모 콘텐츠 변경 후)
 npm.cmd run check:content               # 콘텐츠 통합 검증 (= run.js --preset content — 단계 선언은 tools/check/steps.js)

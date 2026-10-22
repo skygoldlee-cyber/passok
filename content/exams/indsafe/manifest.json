@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2027",
+  "_pilot": "필기 6과목 + 실기 1과목 파일럿 — 출제기준(2024~2026) 자체 제작본, 과목당 8문항 골격 투입 상태 (check:onboard 준비도 대상). 정식 전환은 NEW_EXAM_RUNBOOK §승격 기준.",
   "subjects": [
     {
       "key": "safetyMgmt",

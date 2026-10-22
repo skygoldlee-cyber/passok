@@ -152,6 +152,28 @@ cosmetic의 모든 파일을 복사할 필요는 없다 — 필요한 분류의 
 - `data/exams/<id>/` 번들 — `build:data`가 전 시험 순회 생성
 - 로컬 저장소 네임스페이스·클라우드 `exam_id` 분리 — `scopedKey`/`exam-context` 자동
 
+### 파일럿 운영과 정식 승격 (`comingSoon`)
+
+`exams.json`의 `comingSoon: true`는 **입구 차단 + '준비중' 배지**다 — 카드는 노출되지만 선택 시 알림만 띄우고 전환하지 않는다 (`exam-select.js`, ES-01). 콘텐츠가 채워지는 동안 시험 존재를 공개하면서 오픈 상태를 구분하는 장치다.
+
+- **파일럿 근거 주석**: comingSoon 시험은 `manifest.json`에 `_pilot`(또는 `_reform2028` 등) 필드로 파일럿 범위·후속 계획을 명기한다 (lossadj 선례 — `check:onboard`가 미선언 시 info로 안내)
+- **콘텐츠 증산 경로**: 문제은행은 AI 제작 체인(`ai:draft` → 리뷰 → 편입, AI_AUTHORING_DESIGN) + `ai:coverage` 갭 리포트로 범위를 정한다. 교재는 `scaffold:chapter` + `ai:textbook` (TEXTBOOK_AUTHORING_GUIDE §6.6). 법령 원문은 `ai:coverage`의 인용 LNN ↔ 교재 커버리지로 우선순위를 잡는다
+- **승격 정량 기준**: **과목당 ≥20문** (manifest `exams` 파일의 `### Q` 실측). `npm run check:onboard`가 시험별 준비도 표·승격 후보 힌트·구조 결함을 출력한다 — `check:audit` 프리셋에 포함된 advisory 단계라 커밋을 차단하지 않는다
+- **정식 전환 절차**: `comingSoon` 제거 → `desc` 수치를 실측과 정합(`check:manifest`) → `build:data` ×2 → 커밋 → `check:content`·`check:all` → 배포. 전환 후에는 3단계 게이트와 동일한 검증을 통과해야 한다
+
+### 참조자료 원본 외부화 (대형 바이너리)
+
+원본 PDF·이미지 마스터는 **git 추적 금지**다 — `check:binary`가 신규 유입을 차단한다 (DOC-RBK-12). 시험이 원본 PDF를 확보하면:
+
+1. `참조자료/pdf_hosting.json` 선언 (`assetBase`·`mirrors`·`manifests`·`masterManifests` — cosmetic 선례)
+2. PDF는 릴리스 에셋(sha256 파일명)으로 업로드, 해시 매니페스트(`pdf_hosting.json`의 `manifests` 항목)만 추적
+3. 로컬 복원은 `npm run fetch:refpdfs` — 신선 클론에서도 ref_md 링크·`check:reflayout` 검증은 PDF 없이 동작한다
+
+### 과금·브랜딩 정책
+
+- **과금**: `feature-plan.json`은 **기능 단위 글로벌** 설정(시험별 플랜 차등은 미지원). 파일럿은 `comingSoon`이 입구를 차단하므로 별도 플랜 매핑 불필요 — 정식 전환 후 기존 기능 키의 free/pro 규칙이 그대로 적용된다
+- **브랜딩**: `theme`(DA-14 스킨 토큰)·`appNameEn`·`practiceName`·`icon`을 채운다. `pwaShortcuts`는 시험 도메인 기능이 있을 때만 선언 (1단계 참조)
+
 ## 3단계 — 빌드 → 커밋 → 검증 (순서 중요)
 
 ```powershell
@@ -191,5 +213,6 @@ npm.cmd run check:all                  # lint·types·imports·html·docs·domai
 - [ ] `manifest.uiText` 시험명·과목 라벨 채움 — `data-uitext` 키 전수 (cosmetic 블록 복사 후 교체)
 - [ ] `docs/*.md` 상단에 `문서 ID`(레지스트리 발번) + `범위: exam:<id> · 판본` 헤더 기입
 - [ ] `build:data` ×2회 + `build_doc_bundles.js` 실행 → **생성물 전부 커밋 후** `check:content`·`check:all` 통과 — domainmap·uitext·docbundles 오류 0
+- [ ] `npm run check:onboard` — 구조 오류 0건 + 등급 정합 확인 (comingSoon이면 `manifest._pilot` 근거 주석 기입)
 - [ ] `README.md` 등록 시험 목록 갱신 (현재 등록 열거는 수동 — 게이트 없음)
 - [ ] DOM 시험 전환 테스트에서 새 시험 케이스 추가 검토 (`tests/dom/exam/exam-switching.dom.test.js`) — 추가 시 `npm.cmd run stats:stamp` 수치 재스탬프 + 문서 동반(docsync) 필요
