@@ -27,6 +27,10 @@
 - insadj·indsafe·admagent manifest에 `_pilot` 근거 주석 추가 (파일럿 범위·승격 기준 경로 명시)
 - NEW_EXAM_RUNBOOK에 "파일럿 운영과 정식 승격"·"참조자료 원본 외부화"·"과금·브랜딩 정책" 절 추가 + 체크리스트에 check:onboard 항목
 
+## 2026-10-22 UX 고도화 후속 — 커버리지 여유 확보
+
+- `usage-stats.dom.test.js`: `maybeReportUsageSnapshot`의 기본 `load` 경로(실 `buildUsageExport` 사용)와 일일 상한(`USAGE_SNAPSHOT_SENT`)을 DOM 테스트로 추가 커버 — 병합 함수 커버리지 71.37%로 임계값(71.3%) 상회 여유 확보
+
 ## 2026-10-22 vitest 커버리지 제외 경로 갱신
 
 - `src/pwa-*.js` 제외 패턴이 flat 경로로 남아 pwa/ 3개가 0%로 분모 유입 → `src/pwa/`로 갱신 (커버리지 임계치 회복)

@@ -283,3 +283,27 @@ describe('사용 통계 회수·판정 격리 (UX-MET-03·04)', () => {
         expect(isValueThresholdMet()).toBe(false);
     });
 });
+
+describe('사용 스냅샷 텔레메트리 (UX-MET-05)', () => {
+    it('기본 load 경로 — buildUsageExport 스냅샷을 usage_snapshot으로 전송', async () => {
+        const { maybeReportUsageSnapshot, _resetUsageTelemetryForTest } = await import('../../../src/usage-telemetry.js');
+        _resetUsageTelemetryForTest();
+        trackView('dashboard-view'); // 스냅샷 페이로드에 실데이터 확보
+        const rows = [];
+        const res = await maybeReportUsageSnapshot({
+            insert: async (r) => { rows.push(...r); return {}; },
+            today: '2026-01-10',
+        });
+        expect(res).toBe('sent');
+        expect(rows[0].event).toBe('usage_snapshot');
+        expect(rows[0].meta.views['dashboard-view']).toBeGreaterThan(0);
+        // today 주입 시 sent-mark 검사는 건너뜀 — 실제 오늘 날짜로 호출하면 하루 1회 상한이 작동
+        const { STORAGE_KEYS } = await import('../../../src/storage-keys.js');
+        const { todayKey } = await import('../../../src/utils.js');
+        const { safeSetItem } = await import('../../../src/state.js');
+        _resetUsageTelemetryForTest();
+        safeSetItem(STORAGE_KEYS.USAGE_SNAPSHOT_SENT, todayKey());
+        const res2 = await maybeReportUsageSnapshot({ insert: async () => ({}) });
+        expect(res2).toBe('skipped');
+    });
+});
