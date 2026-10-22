@@ -307,5 +307,15 @@
     "file": "docs/dev/design/SUPABASE_DESIGN.md",
     "ref": "tools/firebase/functions/",
     "reason": "설계안 제안 경로 — callable·트리거 함수 디렉터리 (미구현)"
+  },
+  {
+    "file": "docs/dev/SPEC.md",
+    "ref": "content/exams/cosmetic/참조자료/법령고시/",
+    "reason": "참조자료 원본 PDF 디렉터리 — gitignore 외부 호스팅(DOC-RBK-12)이라 신선 클론에선 미존재. fetch:refpdfs 복원 시 생성"
+  },
+  {
+    "file": "docs/dev/TRACE_MATRIX.md",
+    "ref": "content/exams/cosmetic/참조자료/법령고시/",
+    "reason": "참조자료 원본 PDF 디렉터리 — gitignore 외부 호스팅(DOC-RBK-12)이라 신선 클론에선 미존재. fetch:refpdfs 복원 시 생성"
   }
 ]
