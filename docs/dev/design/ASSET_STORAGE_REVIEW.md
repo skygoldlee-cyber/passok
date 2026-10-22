@@ -11,8 +11,8 @@
 | 구분 | 용량 | git 추적 | 비고 |
 |---|---|---|---|
 | `content/**/audiobook/mp3/` | ~1.7GB | ❌ (`.gitignore` + `*.mp3`) | 이미 외부화 선례 — TTS 산출물, 재생성·CDN 호스팅 가능 |
-| 참조자료 PDF 46종 | ~36MB | ✅ | 최대 6.5MB/건 — 법령 원본 스냅샷, 해시 무결성 게이트(reffresh) 대상이라 **추적 필수 성격** |
-| 교재 이미지 | ~9MB | ✅ | 최대 8.4MB (1과목_삽화.png) — 콘텐츠 일부 |
+| 참조자료 PDF 46종 | ~36MB | ❌ | GitHub Releases 외부화 완료 (DOC-RBK-12 — 해시 매니페스트만 추적, `fetch:refpdfs`로 복원) |
+| 교재 이미지 | ~9MB | ⚠️ 부분 | 런타임 .webp만 추적 — PNG 원본 마스터(1과목_삽화.png 8.7MB)도 릴리스 에셋으로 외부화 (img_masters.json) |
 | 생성 번들 (`data/`) | ~15MB | ✅ | drills 최대 3.7MB · embeddings ~11MB — 정적 배포 입력물 |
 | **`.git` 이력 전체** | **957MB** | — | 작업트리 대비 16배 — 누적 원인은 아래 §2 |
 

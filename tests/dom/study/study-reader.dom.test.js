@@ -620,7 +620,7 @@ describe('이미지 확대 모달 — image-zoom', () => {
     function buildContentWithImg() {
         document.body.innerHTML = `
             <div class="textbook-reader-section-content">
-                <p class="md-para"><img class="reader-img" src="./content/exams/cosmetic/교재/law/images/1과목_삽화.png" alt="삽화"></p>
+                <p class="md-para"><img class="reader-img" src="./content/exams/cosmetic/교재/law/images/1과목_삽화.webp" alt="삽화"></p>
                 <p class="md-para">본문 문단</p>
             </div>`;
         return document.querySelector('.textbook-reader-section-content');

@@ -163,8 +163,8 @@ npm.cmd run hooks:install               # Git 훅 활성화 (opt-in) — pre-com
 npm.cmd run check:hooks                 # 훅 설치 여부 확인 (권고 — 미설치 시 로컬 게이트 우회됨, check:ci 첫 단계)
 
 # 참조자료 PDF → ref_md 변환 (Python 3 + pdfplumber, 이미지 추출 시 pymupdf 필요)
-# ※ 원본 PDF는 git 추적 해제 — GitHub Releases 에셋 외부 호스팅 (DOC-RBK-12). pdf_hosting.json 선언 시험만 해당
-npm.cmd run fetch:refpdfs               # 외부 호스팅 참조자료 PDF 복원 — pdf_hosting.json 선언 시험의 부재·불일치 PDF를 sha256 검증 다운로드 (선행 조건, --check=상태 보고만)
+# ※ 원본 PDF·교재/*/images/*.png 마스터는 git 추적 해제 — GitHub Releases 에셋 외부 호스팅 (DOC-RBK-12). pdf_hosting.json 선언 시험만 해당
+npm.cmd run fetch:refpdfs               # 외부 호스팅 자산 복원 — pdf_hosting.json 선언 시험의 부재·불일치 PDF(manifests)와 교재 PNG 마스터(masterManifests)를 sha256 검증 다운로드 (선행 조건, --check=상태 보고만)
 npm.cmd run convert:refs                # 참조자료 PDF 전체 → ref_md_v2/ 스테이징 변환 (파일명 필터 인자 가능. PDF 미복원 시 fetch:refpdfs 안내 후 종료)
 npm.cmd run verify:refs                 # ref_md_v2 vs ref_md 골든 비교 (내용 누락 시 exit 1)
 npm.cmd run check:reffresh -- --update  # 승격 완료 후 PDF 해시 매니페스트(pdf_hashes.json) 스탬프
