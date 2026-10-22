@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2027",
+  "_pilot": "1차 3과목 + 2차 3종별 7과목 파일럿 — 과목당 8문항 골격 투입 상태 (check:onboard 준비도 대상). 정식 전환은 NEW_EXAM_RUNBOOK §승격 기준.",
   "subjects": [
     {
       "key": "contract",

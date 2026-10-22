@@ -7,6 +7,13 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-22 시험 팩 온보딩·승격 진단 게이트 (check:onboard)
+
+- **신규** `tools/check/check_exam_onboard.js` — exams.json 전 시험의 준비도 표(등급·과목·챕터·문항·features·선택 자산) + 구조 결함(manifest 부재·과목 0·선언 파일 부재) 오류 + comingSoon↔콘텐츠 등급 정합 힌트. 승격 정량 기준 = 과목당 ≥20문(###Q 실측)
+- 등록: `check:onboard` 스크립트 + `check:audit` 프리셋(advisory p2 — 차단 없음)
+- insadj·indsafe·admagent manifest에 `_pilot` 근거 주석 추가 (파일럿 범위·승격 기준 경로 명시)
+- NEW_EXAM_RUNBOOK에 "파일럿 운영과 정식 승격"·"참조자료 원본 외부화"·"과금·브랜딩 정책" 절 추가 + 체크리스트에 check:onboard 항목
+
 ## 2026-10-22 vitest 커버리지 제외 경로 갱신
 
 - `src/pwa-*.js` 제외 패턴이 flat 경로로 남아 pwa/ 3개가 0%로 분모 유입 → `src/pwa/`로 갱신 (커버리지 임계치 회복)
