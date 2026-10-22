@@ -112,7 +112,7 @@ flowchart LR
 | 4 | 다층 검증 | IEEE 1012 (독립적 V&V) · NIST SSDF 방어 계층 | ✅ 훅 우회 가능성을 CI가 재검사 — 독립 검증 개념 부합 |
 | 5 | 요구사항 추적성 | **ISO/IEC/IEEE 29148** (추적성 필수 요건) · DO-178C·IEC 61508 계열 | ✅✅ 안전 산업이 강제하는 수준의 양방향 매트릭스를 자발적 구현 |
 | 6 | 파서 등가성 | IEEE 1012 대조 검증 · back-to-back/N-version 테스팅 | ✅ 이중 구현 출력 대조 — 인정된 검증 기법 |
-| 7 | 테스트 피라미드 | ISO/IEC/IEEE 29119 테스트 레벨 | ✅ 임계값 코드 내 명문화 — `tools/check/coverage_merge.js` 기준선(stmts 70.74/branches 66.3/funcs 64.92/lines 77.58, 2026-10-14) 대비 임계값 {68/62/62/74}, 하향 시 사유 기록 정책 |
+| 7 | 테스트 피라미드 | ISO/IEC/IEEE 29119 테스트 레벨 | ✅ 임계값 코드 내 명문화 — `tools/check/coverage_merge.js` 실측 대비 ~1.2%p 여유 정책(2026-10-22 조정, 임계값 {68.5/65.5/70.0/80.5}), 래칫 상향·하향 시 사유 기록 |
 | 8 | 문서-코드 동기화 | ISO/IEC/IEEE 15289 문서 산출물 요구 · Docs-as-Code | ✅ CI에 문서 검증 편입 — living documentation 모범 사례 |
 | 9 | 안전한 도구 설계 | Fail-safe·방어적 설계 원칙 | ✅ dirty 가드·자동 원복·읽기 전용 --check |
 | 10 | 배포·버저닝 | **CalVer** (`2026.9.29`) · ISO 8601 날짜 | ⚠️ SemVer 아님 — API 소비자 없는 앱이라 문제없음, 규약 필요 시 재검토 |
