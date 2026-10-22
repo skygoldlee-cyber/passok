@@ -178,6 +178,9 @@ export const STORAGE_KEYS = {
   SYNC_LAST_TS: 'sync_last_ts',    // 마지막으로 반영/푸시한 원격 updated_at
   SYNC_CONFLICT_BACKUP: 'sync_conflict_backup', // 충돌 시 미선택 쪽 스냅샷 보존
   DEVICE_ID: 'device_id',          // 기기 식별 UUID (GLOBAL_KEYS — 시험 무관)
+  TELEMETRY_OPT_OUT: 'telemetry_opt_out',       // 사용 텔레메트리 거부 플래그 (GLOBAL_KEYS — UX-MET-06, ADR-0019)
+  TELEMETRY_NOTICE_SHOWN: 'telemetry_notice_shown', // 텔레메트리 최초 고지 1회 표시 완료 (GLOBAL_KEYS — UX-MET-06)
+  TELEMETRY_QUEUE: 'telemetry_queue',           // 오프라인 이벤트 큐 — 전송 실패분 보관 (GLOBAL_KEYS — UX-MET-08)
   PRO_ENTITLED: 'pro_entitled',    // Pro 이용 권한 플래그 (GLOBAL_KEYS — ROAD-P1 서버 검증 전 임시 시임)
 
   // 세션 (sessionStorage)

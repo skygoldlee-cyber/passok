@@ -220,6 +220,9 @@ const GLOBAL_KEYS = new Set([
     'ui_mode',
     'ui_study_tools_open',
     'device_id',                   // 동기화 기기 식별 — 시험 무관
+    'telemetry_opt_out',           // 사용 텔레메트리 거부 — 기기 단위 (UX-MET-06)
+    'telemetry_notice_shown',      // 텔레메트리 최초 고지 표시 — 기기 단위 (UX-MET-06)
+    'telemetry_queue',             // 오프라인 이벤트 큐 — 기기 단위 (UX-MET-08)
     'pro_entitled',                // Pro 이용 권한 — 사용자 수준, 시험 무관
     'pro_notice_seen',             // Pro 안내 전역 1회 seen (ROAD-P5) — 플랜 안내는 시험 무관 사용자 수준
     'usage_stats',                 // 사용 카운터 — 기기(익명 유저) 단위, 시험 전환해도 누적 유지

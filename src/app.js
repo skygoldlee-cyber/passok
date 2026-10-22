@@ -190,7 +190,11 @@ import { initUiMode, toggleUiMode, toggleStudyTools } from './ui-mode.js';
 import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword } from './auth-sync/auth-view.js';
 import { initSync, syncNow } from './auth-sync/sync.js';
 import { initErrorTelemetry } from './error-telemetry.js';
-import { maybeReportUsageSnapshot } from './usage-telemetry.js';
+import { maybeReportUsageSnapshot, reportSessionStart, initTelemetryQueueFlush } from './usage-telemetry.js';
+import {
+    isTelemetryAllowed, setTelemetryAllowed,
+    isTelemetryNoticeShown, markTelemetryNoticeShown,
+} from './telemetry-consent.js';
 import {
     populateSubjectSelects, populateExamCards, populateResourceCards, checkStorageWarning
 } from './app-dashboard.js';
@@ -227,6 +231,19 @@ function initApp() {
     step('initErrorTelemetry', () => initErrorTelemetry());
     // 사용 스냅샷 텔레메트리 — UX-GATE 표본 회수, 하루 1회·익명·미설정 시 no-op (UX-MET-05)
     step('maybeReportUsageSnapshot', () => { void maybeReportUsageSnapshot(); });
+    // 텔레메트리 퍼널 (UX-MET-06/07/08) — 방문 분모 + 오프라인 큐 플러시 + 최초 고지
+    step('telemetryConsentNotice', () => {
+        if (!isTelemetryNoticeShown()) {
+            showToast('PassOK는 익명 사용 통계를 수집해 학습 품질을 개선합니다 — 설정에서 언제든 끌 수 있습니다', 'info');
+            markTelemetryNoticeShown();
+        }
+    });
+    step('telemetrySessionStart', () => reportSessionStart());
+    step('syncTelemetryToggleLabel', () => {
+        const label = document.getElementById('telemetry-toggle-label');
+        if (label) label.textContent = isTelemetryAllowed() ? '켜짐' : '꺼짐';
+    });
+    step('initTelemetryQueueFlush', () => initTelemetryQueueFlush());
     step('initViewportHeight', initViewportHeight);
     step('loadProgress', loadProgress);
     step('checkStorageWarning', checkStorageWarning);
@@ -615,6 +632,14 @@ const DELEGATED_HANDLERS = {
     openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword,
     showPlanCompare,
     showUsageStats,
+    /** 텔레메트리 opt-out 토글 (UX-MET-06) — 설정 패널 '사용 통계 전송' 항목 */
+    toggleTelemetry() {
+        const nowAllowed = !isTelemetryAllowed();
+        setTelemetryAllowed(nowAllowed);
+        const label = document.getElementById('telemetry-toggle-label');
+        if (label) label.textContent = nowAllowed ? '켜짐' : '꺼짐';
+        showToast(nowAllowed ? '사용 통계 전송이 켜졌습니다' : '사용 통계 전송이 꺼졌습니다 — 앞으로 이 기기에서 수집하지 않습니다', 'info');
+    },
     syncNow,
     /** 모의고사 문항 수 선택 행 토글 — 다른 과목의 열린 행은 닫는다 */
     toggleComboPicker(rowId) {
