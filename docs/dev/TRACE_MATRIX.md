@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: b881463d820f4c13
+> 입력 해시: 87f7be1663f9c6ef
 > 생성: 2026-10-22 · 원천: SPEC.md(575개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 575개 — 문서 연결 396 · 소스 연결 511 · 테스트 연결 545 · 보고서 연결 109
+**커버리지 요약**: 요구사항 575개 — 문서 연결 422 · 소스 연결 511 · 테스트 연결 545 · 보고서 연결 109
 
 ---
 
@@ -443,13 +443,13 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| ES-01 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-10 | html/views/exam-select.html<br>index.html<br>src/app-dashboard.js<br>src/exam-context.js<br>…외 3개 | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-context.test.js<br>tests/unit/gates/exam-onboard.test.js | DOC-ARC-07 | — |
-| ES-02 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-25 | src/app-shell.js<br>src/exam-context.js<br>src/views/exam-select.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
-| ES-03 | ✅ | E2E 테스트 | DOC-DSN-10 | src/app-shell.js<br>src/exam-context.js<br>src/views/exam-select.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/e2e/exam-switch.spec.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
-| ES-04 | ✅ | 테스트 | DOC-DSN-10 | src/exam-context.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
-| ES-05 | ✅ | E2E 테스트 | DOC-DSN-10 | src/app-shell.js<br>src/exam-context.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/e2e/exam-switch.spec.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
-| ES-06 | ✅ | 테스트 | — | src/exam-context.js<br>src/views/exam-select.js | tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-select-summary.test.js | — | — |
-| ES-07 | ✅ | 테스트 | — | — | tests/dom/study/study-examselect.dom.test.js | — | — |
+| ES-01 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-10<br>DOC-RBK-16 | html/views/exam-select.html<br>index.html<br>src/app-dashboard.js<br>src/exam-context.js<br>…외 3개 | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-context.test.js<br>tests/unit/gates/exam-onboard.test.js | DOC-ARC-07 | — |
+| ES-02 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-25<br>DOC-RBK-16 | src/app-shell.js<br>src/exam-context.js<br>src/views/exam-select.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
+| ES-03 | ✅ | E2E 테스트 | DOC-DSN-10<br>DOC-RBK-16 | src/app-shell.js<br>src/exam-context.js<br>src/views/exam-select.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/e2e/exam-switch.spec.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
+| ES-04 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-16 | src/exam-context.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
+| ES-05 | ✅ | E2E 테스트 | DOC-DSN-10<br>DOC-RBK-16 | src/app-shell.js<br>src/exam-context.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/e2e/exam-switch.spec.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
+| ES-06 | ✅ | 테스트 | DOC-RBK-16 | src/exam-context.js<br>src/views/exam-select.js | tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-select-summary.test.js | — | — |
+| ES-07 | ✅ | 테스트 | DOC-RBK-16 | — | tests/dom/study/study-examselect.dom.test.js | — | — |
 
 ## 3.23 사용자 의견 수신
 
@@ -502,29 +502,29 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| AI-01 | ✅ | 테스트 | — | tools/ai/ai_apply.js<br>tools/ai/ai_textbook.js<br>tools/ai/lib/ai_common.js<br>tools/ai/lib/qbank.js | tests/unit/content/ai-textbook.test.js<br>tests/unit/content/ai-tools.test.js | — | — |
-| AI-02 | ✅ | 테스트 | — | tools/ai/ai_distractors.js<br>tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/ai_lint.js<br>…외 5개 | tests/unit/content/ai-tools.test.js | — | — |
-| AI-03 | ✅ | 테스트 | — | tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/ai_stmt_feedback.js<br>tools/ai/ai_textbook.js<br>…외 2개 | tests/unit/content/ai-textbook.test.js<br>tests/unit/content/ai-tools.test.js | — | — |
-| AI-04 | ✅ | 테스트 | — | tools/ai/ai_apply.js<br>tools/ai/ai_explain.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-05 | ✅ | 테스트 | — | tools/ai/ai_apply.js<br>tools/ai/ai_draft_questions.js<br>tools/ai/lib/textbook.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-06 | ✅ | 테스트 | — | tools/ai/ai_distractors.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-07 | ✅ | 테스트 | — | tools/ai/ai_dupcheck.js<br>tools/ai/lib/similarity.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-08 | ✅ | 테스트 | — | tools/ai/ai_statements.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-09 | ✅ | 테스트 | — | tools/ai/ai_tag.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-10 | ✅ | 테스트 | — | tools/ai/ai_lint.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-11 | ✅ | 테스트 | — | tools/ai/ai_coverage.js<br>tools/ai/lib/textbook.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-12 | ✅ | 테스트 | — | tools/ai/ai_stale_scan.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-13 | ✅ | 테스트 | — | tools/ai/ai_coverage.js<br>tools/ai/ai_dupcheck.js<br>tools/ai/ai_stale_scan.js<br>tools/ai/ai_textbook.js<br>…외 1개 | tests/unit/content/ai-tools.test.js | — | — |
-| AI-14 | ✅ | 테스트 | — | tools/ai/ai_stmt_feedback.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-15 | ✅ | 테스트 | — | tools/ai/ai_stmt_feedback.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-16 | ✅ | 테스트 | — | tools/ai/ai_stmt_feedback.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-17 | ✅ | 테스트 | — | tools/ai/ai_story.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-18 | ✅ | 테스트 | — | tools/ai/ai_cards.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-19 | ✅ | 테스트 | — | — | tests/unit/content/ai-tools.test.js | — | — |
-| AI-20 | ✅ | 테스트 | — | tools/ai/ai_glossary.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-21 | ✅ | 테스트 | — | tools/ai/ai_adphrases.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-22 | ✅ | 테스트 | — | src/data-loader.js<br>tools/ai/ai_cards.js | tests/unit/content/ai-tools.test.js | — | — |
-| AI-23 | ✅ | 테스트 | — | tools/ai/ai_adoption.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-01 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_apply.js<br>tools/ai/ai_textbook.js<br>tools/ai/lib/ai_common.js<br>tools/ai/lib/qbank.js | tests/unit/content/ai-textbook.test.js<br>tests/unit/content/ai-tools.test.js | — | — |
+| AI-02 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_distractors.js<br>tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/ai_lint.js<br>…외 5개 | tests/unit/content/ai-tools.test.js | — | — |
+| AI-03 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_draft_questions.js<br>tools/ai/ai_explain.js<br>tools/ai/ai_stmt_feedback.js<br>tools/ai/ai_textbook.js<br>…외 2개 | tests/unit/content/ai-textbook.test.js<br>tests/unit/content/ai-tools.test.js | — | — |
+| AI-04 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_apply.js<br>tools/ai/ai_explain.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-05 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_apply.js<br>tools/ai/ai_draft_questions.js<br>tools/ai/lib/textbook.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-06 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_distractors.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-07 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_dupcheck.js<br>tools/ai/lib/similarity.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-08 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_statements.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-09 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_tag.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-10 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_lint.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-11 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_coverage.js<br>tools/ai/lib/textbook.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-12 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_stale_scan.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-13 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_coverage.js<br>tools/ai/ai_dupcheck.js<br>tools/ai/ai_stale_scan.js<br>tools/ai/ai_textbook.js<br>…외 1개 | tests/unit/content/ai-tools.test.js | — | — |
+| AI-14 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_stmt_feedback.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-15 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_stmt_feedback.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-16 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_stmt_feedback.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-17 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_story.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-18 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_cards.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-19 | ✅ | 테스트 | DOC-RBK-16 | — | tests/unit/content/ai-tools.test.js | — | — |
+| AI-20 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_glossary.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-21 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_adphrases.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-22 | ✅ | 테스트 | DOC-RBK-16 | src/data-loader.js<br>tools/ai/ai_cards.js | tests/unit/content/ai-tools.test.js | — | — |
+| AI-23 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_adoption.js | tests/unit/content/ai-tools.test.js | — | — |
 | AI-24 | ✅ | 테스트 | — | tools/ai/ai_textbook.js | tests/unit/content/ai-textbook.test.js | — | — |
 
 ## 3.28 주관식 연습 자기채점
@@ -715,7 +715,7 @@
 | DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | tools/check/check_uitext.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
 | DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-DEV-08<br>DOC-DEV-09<br>DOC-DSN-33 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/app-shell.js<br>src/pwa/pwa-manifest.js | tests/unit/app/exam-context.test.js | — | — |
-| DA-15 | ✅ | 테스트 | — | src/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
+| DA-15 | ✅ | 테스트 | DOC-RBK-16 | src/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
 
 ## 5.2 안정적 ID 체계
 
@@ -920,6 +920,7 @@
 | DOC-RBK-13 | docs/dev/runbooks/STORY_PATCH_GUIDE.md | BP-10, BP-11, BP-12, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07, TS-10 |
 | DOC-RBK-14 | docs/dev/runbooks/WHEN_THINGS_BREAK.md | — |
 | DOC-RBK-15 | docs/dev/runbooks/INCIDENT_2026-10-17_SUPABASE_PAUSE.md | AU-01, AU-02, AU-03, AU-04, AU-05, AU-06, AU-07, AU-08 |
+| DOC-RBK-16 | docs/dev/runbooks/PILOT_EXAM_PROMOTION.md | AI-01, AI-02, AI-03, AI-04, AI-05, AI-06, AI-07, AI-08, AI-09, AI-10, AI-11, AI-12, AI-13, AI-14, AI-15, AI-16, AI-17, AI-18, AI-19, AI-20, AI-21, AI-22, AI-23, DA-15, ES-01, ES-02, ES-03, ES-04, ES-05, ES-06, ES-07 |
 | DOC-REF-01 | docs/dev/reference/COMBO_STUDY_STRATEGY.md | DR-02, DR-03, DR-04, DR-05, DR-06, DR-07, Q-01, Q-02, Q-03, Q-04, Q-05, Q-06, Q-07, Q-08, Q-09, Q-10, Q-11, Q-12 |
 | DOC-REF-02 | docs/dev/reference/DEV_ENVIRONMENT.md | — |
 | DOC-REF-03 | docs/dev/reference/FLASHCARD_LOGIC.md | F-01, F-02, F-03, F-04, F-05, F-06, F-07, F-08, F-09, F-10, ID-01, ID-02, ID-03, ID-04, TR-01 |

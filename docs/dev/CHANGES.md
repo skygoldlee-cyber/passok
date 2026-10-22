@@ -27,6 +27,11 @@
 - insadj·indsafe·admagent manifest에 `_pilot` 근거 주석 추가 (파일럿 범위·승격 기준 경로 명시)
 - NEW_EXAM_RUNBOOK에 "파일럿 운영과 정식 승격"·"참조자료 원본 외부화"·"과금·브랜딩 정책" 절 추가 + 체크리스트에 check:onboard 항목
 
+## 2026-10-22 파일럿 시험 승격 계획 문서화 (DOC-RBK-16)
+
+- `docs/dev/runbooks/PILOT_EXAM_PROMOTION.md` 신설 — 등록 4개 팩(lossadj·insadj·indsafe·admagent)의 현황 스냅샷(`check:onboard` 실측)·공통 잔여 작업 8항·시험별 체크리스트·승격 검증 명령을 트래커로 정리
+- `docs/README.md` 인덱스·DOC-RBK-16 레지스트리·런북 수(15→16) 갱신, `NEW_EXAM_RUNBOOK.md` §승격 절에 트래커 상호 링크
+
 ## 2026-10-22 병합 커버리지 임계값 정책 조정 — 여유분 확대 하향
 
 - **MERGED_THRESHOLDS 하향**: `functions 71.3→70.0`, `statements 69.5→68.5`, `lines 81→80.5` (branches 65.5 유지)
