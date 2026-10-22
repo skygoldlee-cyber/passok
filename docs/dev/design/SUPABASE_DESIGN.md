@@ -481,13 +481,14 @@ Firebase는 **검토 후보로는 유지하되, 최종 선택은 구조적으로
 
 ### A.5 프로젝트 생성 후 작업 순서
 
-#### 1. 스키마 실행 (SQL Editor)
+#### 1. 스키마 실행 — 두 경로
 
-1. 대시보드 → 좌측 메뉴 **SQL Editor** (`>_` 아이콘) → **+ New query**
-2. `tools/supabase/schema.sql` 전체 복사 → 붙여넣기 → **Run** (`Ctrl+Enter`)
-3. "Success" 메시지 확인 — `create table if not exists`/`create or replace` 구조라 **재실행 안전** (스키마 수정·프로젝트 이전 시 다시 붙여넣으면 됨)
+| 경로 | 절차 |
+|------|------|
+| **A. `npm run schema:apply`** (권장) | Management API로 schema.sql 자동 적용 + `check:supabase` 프로브 검증 — `SUPABASE_ACCESS_TOKEN` PAT 필요 (scoped: 이 프로젝트 + Database read-write) · `--dry-run` 대상 확인만 |
+| **B. SQL Editor** (PAT 없을 때) | 대시보드 → 좌측 **SQL Editor** → `tools/supabase/schema.sql` 전체 붙여넣기 → **Run** — `create table if not exists`/`drop policy if exists` 구조라 **재실행 안전** ("destructive operations" 경고는 정책 재생성용 `drop` 문 때문 — 데이터 손실 없음) |
 
-포함 내용: `profiles`·`sync_snapshots`·`pro_codes` 테이블 + RLS 정책 + 가입 트리거(`handle_new_user`) + `redeem_code` RPC + 기존 사용자 profiles 백필.
+포함 내용: `profiles`·`sync_snapshots`·`pro_codes`·`feedback`·`client_errors`·`usage_events` 테이블 + RLS 정책 + 가입 트리거(`handle_new_user`) + `redeem_code` RPC + 기존 사용자 profiles 백필. 적용 후 검증은 `check:supabase`(check:ci·CI 게이트)가 선언↔프로덕션 드리프트를 감시한다.
 
 #### 2. 생성 확인
 
