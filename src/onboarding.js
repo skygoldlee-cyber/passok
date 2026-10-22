@@ -136,10 +136,10 @@ export function showOnboardingModal() {
         const btn = /** @type {Element|null} */ (e.target)?.closest('[data-onboarding]');
         if (!btn) return;
         const act = btn.getAttribute('data-onboarding');
-        if (act === 'close') { close(); return; }
+        if (act === 'close' || act === 'skip') { close(); return; }
         if (act === 'prev') { _wizStep = Math.max(0, _wizStep - 1); _renderStep(overlay); return; }
-        if (act === 'skip' || act === 'next') {
-            if (act === 'next' && !_commitStep(overlay)) return;
+        if (act === 'next') {
+            if (!_commitStep(overlay)) return;
             _wizStep = Math.min(2, _wizStep + 1);
             _renderStep(overlay);
         }
