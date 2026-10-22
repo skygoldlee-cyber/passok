@@ -128,6 +128,7 @@ npm.cmd run check:runbooks              # 런북 정본 도달 — docs/dev/runb
 npm.cmd run check:secrets               # 추적 파일 시크릿 패턴 스캔 (개인키·service_role·토큰 — 공개키는 ALLOWLIST, pre-commit 게이트)
 npm.cmd run check:env                   # .env 로컬 시크릿 신선도 — 만료 JWT·미선언·빈 키 탐지 (스키마 정본 .env.example, .env 부재 시 스킵 — 로컬 전용, check:ci·check:all 게이트)
 npm.cmd run check:supabase              # Supabase 스키마 적용 상태 — schema.sql 선언 테이블의 프로덕션 존재 프로브 (미적용 시 차단·네트워크 불가 시 경고+통과, check:ci·CI 게이트)
+npm.cmd run schema:apply                # schema.sql을 프로덕션에 Management API로 자동 적용 + 검증 (SUPABASE_ACCESS_TOKEN PAT 필요 — scoped: 이 프로젝트 + Database read-write · -- --dry-run=대상 확인만)
 npm.cmd run check:enc                   # U+FFFD 치환 문자 잔존 — 저장 시 이모지 변조 유입 차단 (기준선 단조 감소, --update=잔재 정리 후 하향 — pre-commit·check:docs 게이트)
 npm.cmd run check:orphans               # 미참조 자산(고아 자산) 유입 차단 — 추적 자산 파일의 파일명이 다른 추적 파일에 등장하지 않으면 실패 (_archive/·e2e 스냅샷 규약 제외, 예외는 orphan_assets_baseline.json — pre-commit·check:docs 게이트)
 npm.cmd run check:binary                # 대형·외부화 바이너리 신규 유입 차단 — 참조자료 PDF(외부 호스팅, DOC-RBK-12)·500KB+ 이미지/폰트/미디어 (untracked·--staged·--ref 모드, 예외는 binary_allowlist.json — check:docs 게이트)

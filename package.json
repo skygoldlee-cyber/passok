@@ -64,6 +64,7 @@
     "check:secrets": "node tools/check/check_secrets.js",
     "check:env": "node tools/check/check_env.js",
     "check:supabase": "node tools/check/check_supabase_schema.js",
+    "schema:apply": "node tools/supabase/apply_schema.js",
     "check:enc": "node tools/check/check_replacement_char.js",
     "check:orphans": "node tools/check/check_orphan_assets.js",
     "check:notes": "node tools/check/check_release_notes.js",
