@@ -96,7 +96,7 @@ docs/
 ├── dev/                         ← 플랫폼 공통 개발 문서 (71개)
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (19개 — README + ADR 18건)
-│   ├── runbooks/              ← 실행 절차·운영 런북 (15개)
+│   ├── runbooks/              ← 실행 절차·운영 런북 (16개)
 │   ├── design/                ← 설계·계획·평가 문서 (16개)
 │   ├── reference/             ← 명세·로직·참조 문서 (13개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (3개 — §9 스냅샷 이력)
@@ -163,6 +163,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | 문서 | 설명 |
 |------|------|
 | [NEW_EXAM_RUNBOOK.md](dev/runbooks/NEW_EXAM_RUNBOOK.md) | 새 시험 추가 런북 — scaffold:exam 스캐폴딩 → 콘텐츠·기능 플래그 선언 → 빌드·검증 → 배포, 체크리스트 |
+| [PILOT_EXAM_PROMOTION.md](dev/runbooks/PILOT_EXAM_PROMOTION.md) | 파일럿 시험 승격 계획 — 등록 4개 팩(lossadj·insadj·indsafe·admagent) 현황·잔여 작업·승격 절차 트래커 (DOC-RBK-16) |
 | [CONTENT_WORKFLOW.md](dev/runbooks/CONTENT_WORKFLOW.md) | 콘텐츠 변경 표준 절차 — `content/`=SSOT, `build:data` 파이프라인, 검증 명령 |
 | [TEXTBOOK_REPLACEMENT_RUNBOOK.md](dev/runbooks/TEXTBOOK_REPLACEMENT_RUNBOOK.md) | 교재 교체 작업 순서도 — 준비→교체→빌드→인용→이관→파생물→배포·롤백 단일 런북 |
 | [ref-pipeline/README.md](../ref-pipeline/README.md) | 교재·참조자료 변환 도구 — PDF→MD, MD→HTML, 오디오북 TTS, 법령 검증 (독립 실행) |
@@ -391,6 +392,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-RBK-13 | `docs/dev/runbooks/STORY_PATCH_GUIDE.md` |
 | DOC-RBK-14 | `docs/dev/runbooks/WHEN_THINGS_BREAK.md` |
 | DOC-RBK-15 | `docs/dev/runbooks/INCIDENT_2026-10-17_SUPABASE_PAUSE.md` |
+| DOC-RBK-16 | `docs/dev/runbooks/PILOT_EXAM_PROMOTION.md` |
 | DOC-ADR-00 | `docs/dev/adr/README.md` |
 | DOC-ADR-01 | `docs/dev/adr/0001-exam-data-boot-document-write.md` |
 | DOC-ADR-02 | `docs/dev/adr/0002-domain-asset-convention-paths.md` |

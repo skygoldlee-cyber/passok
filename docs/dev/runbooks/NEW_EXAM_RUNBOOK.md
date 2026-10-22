@@ -160,6 +160,7 @@ cosmetic의 모든 파일을 복사할 필요는 없다 — 필요한 분류의 
 - **콘텐츠 증산 경로**: 문제은행은 AI 제작 체인(`ai:draft` → 리뷰 → 편입, AI_AUTHORING_DESIGN) + `ai:coverage` 갭 리포트로 범위를 정한다. 교재는 `scaffold:chapter` + `ai:textbook` (TEXTBOOK_AUTHORING_GUIDE §6.6). 법령 원문은 `ai:coverage`의 인용 LNN ↔ 교재 커버리지로 우선순위를 잡는다
 - **승격 정량 기준**: **과목당 ≥20문** (manifest `exams` 파일의 `### Q` 실측). `npm run check:onboard`가 시험별 준비도 표·승격 후보 힌트·구조 결함을 출력한다 — `check:audit` 프리셋에 포함된 advisory 단계라 커밋을 차단하지 않는다
 - **정식 전환 절차**: `comingSoon` 제거 → `desc` 수치를 실측과 정합(`check:manifest`) → `build:data` ×2 → 커밋 → `check:content`·`check:all` → 배포. 전환 후에는 3단계 게이트와 동일한 검증을 통과해야 한다
+- **등록 파일럿의 잔여 작업 트래커**: `PILOT_EXAM_PROMOTION.md`(DOC-RBK-16) — lossadj·insadj·indsafe·admagent 시험별 승격 조건과 진행 체크리스트
 
 ### 참조자료 원본 외부화 (대형 바이너리)
 
