@@ -384,7 +384,7 @@ npm.cmd run ai:textbook -- --exam <id> --doc "<ref 문서명>"   # → tmp/ai_dr
 ```powershell
 npm.cmd run build:data          # 번들 + 파서 등가성 (check:parser)
 npm.cmd run build:drills        # 은행 번들 해시 변경 시 필수 (check:drillfresh)
-python ref-pipeline/embeddings/build_embeddings.py   # 드릴·번들 변경 시 (check:embfresh)
+npm.cmd run build:embeddings    # 드릴·번들 변경 시 (check:embfresh — Node-only, 모델 다운로드 필요)
 node tools/build/build_doc_bundles.js                # content/<id>/docs 변경 시
 ```
 - `판본: textbook` 선언 문서 검토·갱신 (`check:textbookdocs` — 숫자 가이드·두음법·학습안내서·매핑 문서. 커밋 순서 기준이므로 교재 커밋 이후 갱신 커밋이 필요)

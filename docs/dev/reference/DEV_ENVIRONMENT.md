@@ -97,8 +97,8 @@ CI(`.github/workflows/ci.yml`)가 push/PR마다 `npm ci` → `npm audit`(high+) 
 | 명령 | 용도 | 사전 요구 |
 |------|------|-----------|
 | `npm run build:derived` | 파생 생성물 일괄 재생성 (html·data·drills·docs_md·trace·stats) | Node만 — **임베딩 미포함** |
-| `npm run build:derived:full` | 위 + 임베딩까지 전체 재생성 | **Python + sentence-transformers** |
-| `npm run build:embeddings` | 문장 임베딩 사전 계산 → `embeddings/` 번들 (stale 시 `check:embfresh`가 감지) | **Python + sentence-transformers** |
+| `npm run build:derived:full` | 위 + 임베딩까지 전체 재생성 | Node만 — 최초 1회 ONNX 모델 ~470MB 다운로드(HuggingFace) |
+| `npm run build:embeddings` | 문장 임베딩 사전 계산 → `embeddings/` 번들 (stale 시 `check:embfresh`가 감지) | Node만 — `@huggingface/transformers` + ONNX fp32 (파리티 검증: Python 산출물과 int8 벡터 완전 일치) |
 | `npm run build:data` | `content/` → `data/` 전체 번들 재생성 | Node만 |
 | `node tools/build/build_doc_bundles.js` | 사용자 매뉴얼·학습안내서 앱 내 번들 | Node만 |
 | `npm run convert:refs` | 참조자료 PDF → ref_md_v2 스테이징 | **Python + pdfplumber** |

@@ -28,7 +28,7 @@ npm.cmd run test:all                   # 전체 테스트 (unit + parser + dom)
 
 # 빌드
 npm.cmd run build:data                 # content/exams/<id>/*.md → data/exams/<id>/ 번들 생성 (모든 시험 순회)
-npm.cmd run build:derived              # 파생 생성물 일괄 재생성 (build:html + build:data + build:drills + docs_md + build:trace + stats:stamp — Node-only) — 콘텐츠·SPEC·테스트 변경 후 신선도 게이트 복구 명령. 임베딩은 Python 필요로 분리 — `build:derived:full` 또는 `build:embeddings` (stale 시 check:embfresh가 감지)
+npm.cmd run build:derived              # 파생 생성물 일괄 재생성 (build:html + build:data + build:drills + docs_md + build:trace + stats:stamp — Node-only) — 콘텐츠·SPEC·테스트 변경 후 신선도 게이트 복구 명령. 임베딩은 대형 모델 다운로드·연산으로 분리 — `build:derived:full` 또는 `build:embeddings` (stale 시 check:embfresh가 감지)
 node tools/build/build_doc_bundles.js        # docs/user/*.md(앱 공용 매뉴얼) → data/docs_md/ + content/exams/<id>/docs/*.md(시험별 — 학습안내서·실무매뉴얼 등) → {dataRoot}/docs_md/ 번들 (앱 내 문서 갱신 시 필수)
 npm.cmd run build:html                # index.template.html + html/views/*.html → index.html 조립 (뷰 마크업 변경 시 필수)
 npm.cmd run check:html                # index.html이 파셜 조립 결과와 일치하는지 비교 (개행 정규화 — pre-push·CI 게이트)
@@ -41,7 +41,7 @@ npm.cmd run notes:draft                # 릴리스 노트 pending 초안 생성 
 npm.cmd run verify:assets              # SHELL_ASSETS/DATA_ASSETS 파일 존재 검증
 npm.cmd run check:vendor               # vendor/ 매니페스트(vendor-manifest.json) ↔ 파일 해시·버전 정합 (BP-13 — check:ci·CI·check:all 게이트, --update=해시 재스탬프, -- --latest=레지스트리 최신 비교)
 npm.cmd run sync:vendor                # vendor npm 패키지 갱신 — sync:vendor -- <key>[@버전] (npm pack → syncMap 복사 → 매니페스트 스탬프, fonts 등 versionFree 수동 자산은 거부)
-npm.cmd run build:embeddings           # 문장 임베딩 사전 계산 → {dataRoot}/embeddings/ 정적 번들 (Python3 + sentence-transformers, ref-pipeline/embeddings/requirements.txt — DOC-DSN-18, 의미 유사 진술·이웃 인덱스)
+npm.cmd run build:embeddings           # 문장 임베딩 사전 계산 → {dataRoot}/embeddings/ 정적 번들 (Node-only — @huggingface/transformers + ONNX fp32, 최초 1회 모델 ~470MB 다운로드 — DOC-DSN-18, 의미 유사 진술·이웃 인덱스)
 
 npm.cmd run build:story                 # 표준형 + story/*_서사.md 패치 → _이야기형.md 생성 (build:data에 포함, --check=일치 검증 + 서사 커버리지 리포트 — 0블록 패치는 오류, -- --scaffold <subjectKey>=신규 과목 패치 골격)
 #   이야기형 패치 작성법(슬롯 마커·지시어 문법): docs/dev/runbooks/STORY_PATCH_GUIDE.md

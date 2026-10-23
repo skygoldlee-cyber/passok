@@ -66,7 +66,6 @@ function findPlaywrightChromium() {
 }
 
 const PIP_GROUPS = [
-    { mods: ['sentence_transformers'], label: 'sentence-transformers', need: 'npm run build:embeddings' },
     { mods: ['pdfplumber', 'fitz', 'markdown'], label: 'pdfplumber·PyMuPDF·markdown', need: 'convert:refs · verify:refs · md2doc' },
     { mods: ['gtts', 'pyttsx3', 'pydub', 'elevenlabs'], label: 'TTS 모음(gtts·pyttsx3·pydub·elevenlabs)', need: '오디오북 TTS 생성' },
 ];
@@ -117,7 +116,7 @@ function buildRows(env) {
         detail: env.playwrightChromium || '없음 — npx playwright install chromium', need: 'test:e2e' });
     rows.push({ level: 'optional', name: 'Python 3', status: env.python ? 'ok' : 'info',
         detail: env.python ? `${env.python.version} (${env.python.bin})` : '없음 — 제작 경로만 제한 (루틴 경로 정상)',
-        need: 'convert:refs · build:embeddings · 오디오북' });
+        need: 'convert:refs · 오디오북' });
     if (env.python && env.pipMods) {
         for (const g of PIP_GROUPS) {
             const missing = g.mods.filter((m) => !env.pipMods.has(m));

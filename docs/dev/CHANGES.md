@@ -7,6 +7,15 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-23 개발환경 결합도 개선 — 루틴 경로 Node-only 확정 + 임베딩 파이프라인 Node 포팅
+
+- **`build:derived` Node-only 분리**: 파생물 일괄 재생성에서 `build:embeddings` 제외 → 신규 `build:derived:full`로 위임. stale 감지는 `check:embfresh`가 계속 담당하며 복구 안내를 REMEDIES로 이동
+- **`npm run doctor` 신규** (`tools/check/env_doctor.js`): 필수(Node≥24·git·node_modules) vs 선택(훅·playwright·python+pip 그룹·ffmpeg·vercel·deno·.env) 분류 리포트 — 선택 부재는 제한되는 명령을 매핑 표기, 필수 미충족만 exit 1, `--json` 지원
+- **임베딩 Node 포팅** (`tools/build/build_embeddings.js`): `build_embeddings.py`를 @huggingface/transformers + ONNX fp32(`Xenova/multilingual-e5-small`)로 이식 — Python+torch ~2GB 설치 없이 임베딩 재생성 가능. 수집 계약(sourceHash·inputs·texts·sameText·ids) 완전 일치, int8 벡터 99.997% 일치, 이웃 집합 95.5% 동일·전체 Jaccard 0.9865
+- **파리티 검증기** (`tools/check/check_emb_parity.js`): 커밋된 골든 번들 vs ONNX 출력 비교 — q8은 모델 양자화 노이즈로 이웃 Jaccard 0.72 미달 → fp32 채택·기본값 고정. emb_math.js에 공유 수치 헬퍼 추출
+- **잔여 Python 의존**: `convert:refs`(PDF 변환)·오디오북 TTS뿐 — 제작 경로 선택 도구로 분류
+- 테스트: `emb-builder.test.js` 5건(collectItems·정답마커·sameText·sourceHash·이웃 필터) + `env-doctor.test.js` 10건
+
 ## 2026-10-23 Supabase 스키마 견고화 — redeem_code 원자화·feedback 스푸핑 차단·리포트 인덱스
 
 - **`redeem_code` TOCTOU 수정**: select 검사 + update 분리 구조를 단일 `update … where redeemed_by is null returning`으로 원자화 — 동시 사용 시 이중 소비·덮어쓰기 차단

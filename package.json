@@ -37,7 +37,7 @@
     "check:embfresh": "node tools/check/check_emb_freshness.js",
     "check:vendor": "node tools/check/check_vendor.js",
     "sync:vendor": "node tools/sync/sync_vendor.js",
-    "build:embeddings": "python ref-pipeline/embeddings/build_embeddings.py",
+    "build:embeddings": "node tools/build/build_embeddings.js",
     "check:answers": "node tools/check/check_answer_overlap.js",
     "fix:quotes": "node tools/sync/fix_answer_quotes.js",
     "fix:citations": "node tools/sync/fix_citation_targets.js",
@@ -165,6 +165,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
+    "@huggingface/transformers": "^4.2.0",
     "@playwright/test": "^1.63.0",
     "@stryker-mutator/core": "^10.0.0",
     "@vitest/coverage-v8": "^5.0.3",

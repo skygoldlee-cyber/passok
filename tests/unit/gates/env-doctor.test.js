@@ -20,7 +20,7 @@ const BASE = {
     hooksPath: '.githooks',
     playwrightChromium: 'chromium-1243',
     python: { version: 'Python 3.12.1', bin: 'python' },
-    pipMods: new Set(['sentence_transformers', 'pdfplumber', 'fitz', 'markdown', 'gtts', 'pyttsx3', 'pydub', 'elevenlabs']),
+    pipMods: new Set(['pdfplumber', 'fitz', 'markdown', 'gtts', 'pyttsx3', 'pydub', 'elevenlabs']),
     ffmpeg: 'ffmpeg version 7.1',
     deno: 'deno 2.1.4',
     vercel: 'Vercel CLI 48.1.0',
@@ -65,7 +65,7 @@ describe('env_doctor — buildRows 분류', () => {
         assert.equal(requiredFails.length, 0);
         const py = optionalMissing.find((r) => r.name === 'Python 3');
         assert.ok(py);
-        assert.match(py.need, /build:embeddings/);
+        assert.match(py.need, /convert:refs/);
         // python 없으면 pip 모듈 행 자체가 생략된다
         assert.ok(!rows.some((r) => r.name.startsWith('pip:')));
     });
@@ -73,9 +73,9 @@ describe('env_doctor — buildRows 분류', () => {
     it('python은 있으나 pip 모듈 일부 부재 → 그룹별 미설치 행', () => {
         const rows = buildRows({ ...BASE, pipMods: new Set(['pdfplumber', 'fitz', 'markdown']) });
         const missing = analyze(rows).optionalMissing;
-        const emb = missing.find((r) => r.name.includes('sentence-transformers'));
-        assert.ok(emb, '임베딩 모듈 부재 행');
-        assert.match(emb.need, /build:embeddings/);
+        const tts = missing.find((r) => r.name.includes('TTS'));
+        assert.ok(tts, 'TTS 그룹 부재 행');
+        assert.match(tts.need, /오디오북/);
         // pdfplumber 그룹은 전부 있으므로 ok
         assert.ok(rows.find((r) => r.name.includes('pdfplumber')).status === 'ok');
     });
