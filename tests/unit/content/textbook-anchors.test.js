@@ -2,12 +2,16 @@
 // @spec AN-10
 // conceptId의 라인 좌표(L####) 의존 제거 — 구조 앵커(N.M)로의 해석 정확성 검증
 
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+
+const _tmpDirs = [];
+after(() => { for (const d of _tmpDirs) fs.rmSync(d, { recursive: true, force: true }); });
+function tmpDir(prefix) { const d = fs.mkdtempSync(path.join(os.tmpdir(), prefix)); _tmpDirs.push(d); return d; }
 
 const require = createRequire(import.meta.url);
 const { anchorBoundariesOf, anchorAt, parseCitationTarget } =
@@ -29,7 +33,7 @@ const SAMPLE = [
 ].join('\n');
 
 function fixture() {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'anchor-'));
+    const dir = tmpDir('anchor-');
     const file = path.join(dir, '교재.md');
     fs.writeFileSync(file, SAMPLE, 'utf8');
     return file;

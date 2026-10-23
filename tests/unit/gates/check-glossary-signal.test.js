@@ -4,15 +4,19 @@
 // 2~4자 순수 한글 단일어(일반명사 위험군)를 수집 — 자동 병합 파이프라인이
 // 맥락 의존 정의의 일상어 키워드를 유입할 때 정의 카드 노출 검토를 강제한다.
 
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { findGenericGlossaryKeywords, diffBaselineKeywords } from '../../../tools/check/check_glossary_signal.js';
 
+const _tmpDirs = [];
+after(() => { for (const d of _tmpDirs) fs.rmSync(d, { recursive: true, force: true }); });
+function tmpDir(prefix) { const d = fs.mkdtempSync(path.join(os.tmpdir(), prefix)); _tmpDirs.push(d); return d; }
+
 function fixture(files) {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'glosssig-'));
+    const dir = tmpDir('glosssig-');
     for (const [rel, text] of Object.entries(files)) {
         const p = path.join(dir, rel);
         fs.mkdirSync(path.dirname(p), { recursive: true });

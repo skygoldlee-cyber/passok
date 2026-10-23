@@ -4,13 +4,17 @@
 // 추출하고, GLOSSARY_INDEX 기존 항목과 대조해 신규/기존으로 분류하는지 확인한다.
 // 리포트는 검토용 — 어떤 항목도 glossary JSON·synonyms에 자동 병합하지 않는다.
 
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import fs from 'node:fs';
 import os from 'node:os';
+
+const _tmpDirs = [];
+after(() => { for (const d of _tmpDirs) fs.rmSync(d, { recursive: true, force: true }); });
+function tmpDir(prefix) { const d = fs.mkdtempSync(join(os.tmpdir(), prefix)); _tmpDirs.push(d); return d; }
 import { applyGlossaryCandidates, applySynonymCandidates } from '../../../tools/build/extract_glossary_candidates.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
@@ -65,7 +69,7 @@ test('BP-14 — 교재 표준형 스캔: ref_md 정의 희박 과목의 커버�
 // ==================== applySynonymCandidates (--apply-synonyms) ====================
 
 test('BP-14 — apply-synonyms: 영문·실질 약칭을 manifest.synonyms에 병합', () => {
-    const dir = fs.mkdtempSync(join(os.tmpdir(), 'syn-'));
+    const dir = tmpDir('syn-');
     const mf = join(dir, 'manifest.json');
     fs.writeFileSync(mf, JSON.stringify({ synonyms: { '유화': ['에멀전'] } }, null, 2), 'utf-8');
     const res = applySynonymCandidates([
@@ -88,7 +92,7 @@ test('BP-14 — apply-synonyms: 영문·실질 약칭을 manifest.synonyms에 �
 // ==================== applyGlossaryCandidates (--apply) ====================
 
 function tmpGlossaryDir(seed = {}) {
-    const dir = fs.mkdtempSync(join(os.tmpdir(), 'gloss-'));
+    const dir = tmpDir('gloss-');
     for (const [f, items] of Object.entries(seed)) {
         fs.writeFileSync(join(dir, f), JSON.stringify(items, null, 2), 'utf-8');
     }

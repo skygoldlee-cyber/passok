@@ -3,12 +3,16 @@
 // 참조 링크의 사용자 표시 정리를 검증 — 내부 좌표(L####)·파일명 라벨은
 // 개발자 정보이므로 사용자에게는 표시명으로 변환되어야 한다.
 
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+
+const _tmpDirs = [];
+after(() => { for (const d of _tmpDirs) rmSync(d, { recursive: true, force: true }); });
+function tmpDir(prefix) { const d = mkdtempSync(join(tmpdir(), prefix)); _tmpDirs.push(d); return d; }
 import { ExamViewer } from '../../../src/reader/exam-viewer.js';
 import { refDocDisplayName } from '../../../src/pdf-registry.js';
 import { formatSectionContentForReader } from '../../../src/reader/reader-format.js';
@@ -103,7 +107,7 @@ test('원료 DB md 링크: .md 접미 라벨 → 등록 표시명/접미 제거 
 // ==================== exams.plugin: 해설 좌표 라벨 정리 ====================
 
 test('exams.plugin: 해설의 "(교재: L237)" 좌표 라벨이 번들 explain에서 제거된다', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'exam-plugin-'));
+    const dir = tmpDir('exam-plugin-');
     const file = join(dir, 'bank.md');
     writeFileSync(file, [
         '### Q1. [객관식] 가장 옳은 것은?',
