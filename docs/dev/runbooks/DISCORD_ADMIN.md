@@ -15,6 +15,17 @@
 
 Discord 측 필요 자산: **서버 1개 · 채널 1개 · 애플리케이션 1개(Bot)** — 모두 무료.
 
+**설정 진행 상태** (2026-10-23 기준 — 진행하면서 갱신):
+
+| 단계 | 상태 |
+|---|---|
+| §1~2 `DISCORD_WEBHOOK_URL` — `.env` 설정·연결 테스트 | ✅ 완료 (`sent: true` 확인) |
+| §2 CI `DISCORD_WEBHOOK_URL` GitHub Actions 시크릿 | ☐ 선택 |
+| §3.1~3.5 앱·봇 생성 → 시크릿 → 함수 배포 → Endpoint | ☐ 대기 |
+| §3.6 명령 사용 확인 (`/status` 등) | ☐ 대기 |
+
+> 웹후크만 설정돼도 **배포 알림(AD-10)은 즉시 동작**합니다. §3의 조회 명령 봇은 별도 진행.
+
 ---
 
 ## 0. Discord 처음 사용자 전제
@@ -33,7 +44,7 @@ Discord 측 필요 자산: **서버 1개 · 채널 1개 · 애플리케이션 1�
 
 ## 2. 로컬 알림 활성화 (AD-10)
 
-`.env`에 한 줄 추가:
+`.env`의 Discord 섹션(`# ── Discord 운영 알림 …` 주석 아래)에 webhook URL을 설정:
 
 ```dotenv
 DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/<id>/<token>
