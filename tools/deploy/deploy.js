@@ -30,7 +30,7 @@
  */
 
 // @spec BP-07
-const { execSync, spawnSync } = require('child_process');
+const { execSync, spawnSync, spawn } = require('child_process');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -369,21 +369,22 @@ async function main() {
             ['vercel', '--prod', '--yes', '--archive=tgz', ...vercelScopeArgs()].map(quoteArg).join(' '),
             { stdio: 'inherit', shell: true, cwd: staging.dir });
     } finally {
-        // win32는 vercel.cmd 자식의 cwd 핸들이 수 초간 남아 EPERM이 날 수 있어
-        // 백오프 재시도 후에도 실패하면 경고만 남긴다 (배포 성공을 무효화하지 않음)
-        const sleepSync = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, ms);
-        for (let attempt = 0; ; attempt++) {
-            try {
-                fs.rmSync(staging.dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 500 });
-                break;
-            } catch (e) {
-                if (attempt >= 3 || !fs.existsSync(staging.dir)) break;
-                sleepSync(1500 * (attempt + 1));       // 핸들 해제 대기: 1.5·3·4.5s
-                continue;
-            }
-        }
+        // win32는 vercel.cmd 자식의 cwd 핸들이 수십 초간 남아 EPERM이 날 수
+        // 있다. 즉시 삭제를 시도하고, 실패하면 detached 헬퍼가 최대 5분간
+        // 재시도한다 — 배포 흐름을 블로킹하지 않으며 잔재는 Temp라 무해하다.
+        try {
+            fs.rmSync(staging.dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 500 });
+        } catch { /* 아래 분기에서 처리 */ }
         if (fs.existsSync(staging.dir)) {
-            console.warn(`⚠️  스테이징 정리 실패 — 수동 삭제: ${staging.dir}`);
+            try {
+                const child = spawn(
+                    process.execPath,
+                    [path.join(__dirname, 'cleanup_staging.js'), staging.dir],
+                    { detached: true, stdio: 'ignore' });
+                child.unref();
+            } catch {
+                console.warn(`⚠️  스테이징 정리 실패 — 수동 삭제: ${staging.dir}`);
+            }
         }
     }
     if ((result.status ?? 1) !== 0) {
