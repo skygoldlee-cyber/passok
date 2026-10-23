@@ -8,6 +8,7 @@
 - **신규 런북** DOC-RBK-17 `DISCORD_ADMIN.md` — 서버/채널·webhook·애플리케이션 생성부터 Interactions Endpoint 연결까지 최초 1회 절차
 - 테스트: `discord-notify.test.js` 4건 — webhook 미설정 skip·페이로드 계약(allowed_mentions·embeds)·색상 분기·오류 응답 보고
 - **후속 — 런북 갱신**: DISCORD_ADMIN.md 개요에 설정 진행 상태 체크리스트 추가(웹후크 ✅ 검증 완료, CI 시크릿·봇 단계 대기 표기) + §2를 `.env` Discord 섹션 주석 위치 기준으로 서술. `.env`에는 로컬 전용으로 같은 안내 주석 삽입(gitignore 대상 — 커밋 안 됨)
+- **후속 — 테스트 격리 수정**: `discord-notify.test.js`의 '미설정 skip' 테스트가 `delete process.env`로 격리했으나, `loadEnv()`가 `.env`에서 키를 재주입해 실제 webhook이 설정된 환경에서는 실패 → 빈 값(`''`) 설정으로 격리 방식 변경
 
 ---
 

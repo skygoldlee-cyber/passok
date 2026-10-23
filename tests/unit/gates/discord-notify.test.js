@@ -16,7 +16,9 @@ function stubFetch(fn) {
 
 test('webhook 미설정 시 조용히 skip — 발신 없이 false 반환', async () => {
     const saved = process.env.DISCORD_WEBHOOK_URL;
-    delete process.env.DISCORD_WEBHOOK_URL;
+    // delete 대신 빈 값: loadEnv()가 .env에서 undefined 키를 다시 채우므로
+    // 실제 .env에 webhook이 설정돼 있어도 미설정 경로를 격리 검증한다.
+    process.env.DISCORD_WEBHOOK_URL = '';
     const { calls, restore } = stubFetch(async () => new Response(''));
     try {
         const r = await postDiscord({ title: 't' });
@@ -25,7 +27,8 @@ test('webhook 미설정 시 조용히 skip — 발신 없이 false 반환', asyn
         assert.equal(calls.length, 0);       // 발신 자체를 하지 않음
     } finally {
         restore();
-        if (saved !== undefined) process.env.DISCORD_WEBHOOK_URL = saved;
+        if (saved === undefined) delete process.env.DISCORD_WEBHOOK_URL;
+        else process.env.DISCORD_WEBHOOK_URL = saved;
     }
 });
 
