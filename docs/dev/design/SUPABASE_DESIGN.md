@@ -152,7 +152,7 @@ sequenceDiagram
 
     U->>A: Pro 코드 입력
     A->>R: rpc('redeem_code', code)
-    R->>DB: pro_codes에서 코드 확인 (클라이언트 직접 접근 불가)
+    R->>DB: pro_codes 원자적 소비 (update … returning — 동시 사용 레이스 차단)
     alt 유효한 미사용 코드
         R->>DB: profiles.plan = 'pro' 갱신
         R-->>A: success → Pro 활성화
@@ -292,8 +292,9 @@ create policy "public insert" on usage_events
 → profiles.plan='pro' 갱신 → isPro() = 로컬 캐시 + 주기적 서버 확인
 ```
 
-- `redeem_code`는 `security definer` RPC — 코드 테이블(`pro_codes: code, redeemed_by, redeemed_at`)에 직접 접근 불가
+- `redeem_code`는 `security definer` RPC — 코드 테이블(`pro_codes: code, redeemed_by, redeemed_at`)에 직접 접근 불가. 실행 권한은 `authenticated`로 제한 (anon은 revoke)
 - entitlement를 서버가 보유하므로 클라이언트 조작으로 Pro 우회 불가 (이전 "언락 코드 오프라인 검증" 안의 한계 해소)
+- **RPC 견고화 (2026-10-23)**: ① `p_code` 서버측 정규화(공백 제거·대문자) — 클라 `normalizeCode` 우회 직접 호출 방어 ② 미사용 코드 소비를 단일 `update … returning`으로 원자화 — 동시 사용 레이스 차단 ③ `profiles` 행 부재 시 insert 폴백 — 코드만 소비되고 plan 미갱신되는 유실 방지 ④ `pro_since`는 `coalesce`로 최초 활성일 유지(연장 시 미덮어쓰기) ⑤ `redeemed_exam_date`에 사용 시점 시험일 기록 — PAY-08 보정 감사. `feedback` insert 정책도 `user_id is null or = auth.uid()`로 조여 타인 id 스푸핑 차단. 리포트 쿼리용 인덱스 5종 추가(redeemed_by·pro_expires_at·feedback user_id·usage_events event·client_errors created_at)
 - **미결**: 미로그인 사용자의 코드 전용 Pro 허용 여부 — 계정 귀속이 공유 방지에 유리하나 로그인 마찰 증가
 
 ---
