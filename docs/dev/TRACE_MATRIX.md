@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: c5512b27be422923
-> 생성: 2026-10-22 · 원천: SPEC.md(583개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: d09f85f1bb114ac3
+> 생성: 2026-10-23 · 원천: SPEC.md(584개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 583개 — 문서 연결 427 · 소스 연결 520 · 테스트 연결 554 · 보고서 연결 109
+**커버리지 요약**: 요구사항 584개 — 문서 연결 427 · 소스 연결 521 · 테스트 연결 555 · 보고서 연결 109
 
 ---
 
@@ -838,6 +838,7 @@
 | PAY-03 | 구현 (2026-10-22) | 테스트 | — | src/pro-redeem.js | tests/dom/misc/pro-redeem.dom.test.js | — | — |
 | PAY-04 | 구현 (2026-10-22) | 테스트 | — | src/pro-upgrade.js | tests/unit/app/usage-telemetry.test.js | — | — |
 | PAY-05 | 구현 (2026-10-22) | 테스트 | — | tools/check/issue_pro_code.js | tests/unit/app/pro-redeem.test.js | — | — |
+| PAY-06 | 구현 (2026-10-23) | 테스트 | — | src/pro-redeem.js<br>src/pro-upgrade.js | tests/dom/misc/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
 
 ---
 
