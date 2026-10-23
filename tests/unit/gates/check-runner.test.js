@@ -68,7 +68,7 @@ test('프리셋 — all이 docs·content 단계를 인라인 확장', () => {
 test('프리셋 — ci 토큰이 ci.yml 검증 명령을 커버', () => {
   const tokens = new Set(CI_STEPS.map((s) => s.token));
   const ciText = fs.readFileSync(path.join(ROOT, '.github', 'workflows', 'ci.yml'), 'utf8');
-  const CI_ONLY = /(npm ci|npm audit|npm run sbom|npm run coverage|coverage_merge|npx playwright|npm run test:e2e|impact_tests|npm run build:data|npm run build:drills|build_doc_bundles)/;
+  const CI_ONLY = /(npm ci|npm audit|npm run sbom|npm run coverage|coverage_merge|npx playwright|npm run test:e2e|impact_tests|npm run build:data|npm run build:drills|build_doc_bundles|detect_code_changes)/;
   for (const m of ciText.matchAll(/^\s+run:\s*(.+)$/gm)) {
     const line = m[1];
     if (CI_ONLY.test(line)) continue;
