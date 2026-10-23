@@ -28,7 +28,7 @@ npm.cmd run test:all                   # 전체 테스트 (unit + parser + dom)
 
 # 빌드
 npm.cmd run build:data                 # content/exams/<id>/*.md → data/exams/<id>/ 번들 생성 (모든 시험 순회)
-npm.cmd run build:derived              # 파생 생성물 일괄 재생성 (build:html + build:data + build:drills + docs_md + build:trace + build:embeddings + stats:stamp) — 콘텐츠·SPEC·테스트 변경 후 신선도 게이트 복구 명령
+npm.cmd run build:derived              # 파생 생성물 일괄 재생성 (build:html + build:data + build:drills + docs_md + build:trace + stats:stamp — Node-only) — 콘텐츠·SPEC·테스트 변경 후 신선도 게이트 복구 명령. 임베딩은 Python 필요로 분리 — `build:derived:full` 또는 `build:embeddings` (stale 시 check:embfresh가 감지)
 node tools/build/build_doc_bundles.js        # docs/user/*.md(앱 공용 매뉴얼) → data/docs_md/ + content/exams/<id>/docs/*.md(시험별 — 학습안내서·실무매뉴얼 등) → {dataRoot}/docs_md/ 번들 (앱 내 문서 갱신 시 필수)
 npm.cmd run build:html                # index.template.html + html/views/*.html → index.html 조립 (뷰 마크업 변경 시 필수)
 npm.cmd run check:html                # index.html이 파셜 조립 결과와 일치하는지 비교 (개행 정규화 — pre-push·CI 게이트)
@@ -166,6 +166,7 @@ npm.cmd run check:linklint              # 렌더 출력 링크 린트 — 콘텐
 node tools/check/impact_tests.js              # 변경 파일 → 영향 요구사항·권장 테스트 (미커밋 변경 자동 분석, --ref <ref>로 diff 분석, --run으로 권장 테스트 실제 실행 — pre-push 게이트)
 npm.cmd run hooks:install               # Git 훅 활성화 (opt-in) — pre-commit: check:types+lint (IDE 오류 시 커밋 차단) / pre-push: tools/check/push_gate.js 적응형 게이트 — 파일 경로 태그(STEP_NEEDS 표)로 필요 단계만 실행, 미분류 파일은 전체 폴백·전체 강제 PUSH_GATE_ALL=1 · 통과 결과 캐시(동일 입력 재실행 생략, --no-cache 우회)·병렬(4)·failFast·diff 스코프 단계는 --ref 대상 (우회 SKIP_PREPUSH=1)
 npm.cmd run check:hooks                 # 훅 설치 여부 확인 (권고 — 미설치 시 로컬 게이트 우회됨, check:ci 첫 단계)
+npm.cmd run doctor                      # 개발환경 기능별 가용성 진단 — 필수(Node≥24·git·node_modules) vs 선택 도구(playwright·python+pip·ffmpeg·vercel·deno·.env)를 명령 단위로 매핑 리포트 (--json 지원. 필수 미충족만 exit 1 — 루틴 경로 Node-only, 제작 경로만 선택 도구 필요)
 
 # 참조자료 PDF → ref_md 변환 (Python 3 + pdfplumber, 이미지 추출 시 pymupdf 필요)
 # ※ 원본 PDF·교재/*/images/*.png 마스터는 git 추적 해제 — GitHub Releases 에셋 외부 호스팅 (DOC-RBK-12). pdf_hosting.json 선언 시험만 해당

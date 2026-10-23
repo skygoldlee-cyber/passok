@@ -186,10 +186,11 @@ const AUDIT_STEPS = [
 // 파생물 미재생성이라는 같은 원인이 여러 단계 실패로 중복 보고될 때 묶어서 안내.
 const DERIVED_IDS = new Set([
   'html', 'ci:html', 'content:trace', 'ci:trace',
-  'content:datafresh', 'content:drillfresh', 'content:embfresh', 'content:docbundles',
+  'content:datafresh', 'content:drillfresh', 'content:docbundles',
 ]);
 // 개별 복구 힌트 — derived 묶음에 속하지 않는 재생성·스탬프 계열
 const REMEDIES = {
+  'content:embfresh': 'npm.cmd run build:embeddings — Python3 + sentence-transformers 필요 (build:derived 미포함 — 루틴 경로 Node-only 분리, 임베딩은 build:derived:full)',
   'content:reffresh': 'npm.cmd run convert:refs — ref-pipeline Python으로 PDF→ref_md 재변환',
   'refs:fresh': 'npm.cmd run convert:refs — ref-pipeline Python으로 PDF→ref_md 재변환',
   'content:textbookdocs': '교재 종속 문서(판본: textbook)를 최신 교재에 맞춰 갱신',
