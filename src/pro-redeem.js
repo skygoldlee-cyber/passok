@@ -1,5 +1,5 @@
 // src/pro-redeem.js — 라이선스 코드 입력 → Pro 활성화 (PAY-01)
-// @spec PAY-01, PAY-03
+// @spec PAY-01, PAY-03, PAY-06
 // ------------------------------------------------------------
 // P2 선실험(PAYMENT_PILOT_DESIGN §3)의 구매자 활성화 경로:
 //   수동 결제 확인 → 운영자가 admin:issue-code로 발급한 코드를 구매자가 입력
@@ -18,9 +18,35 @@ import { reportEvent } from './usage-telemetry.js';
 import { trapFocus, showToast } from './ui-utils.js';
 
 /**
+ * Pro entitlement 판정 (PAY-06) — plan='pro'이고 만료일이 없거나 미래면 유효.
+ * pro_expires_at=null은 관리자 무기한 부여(grant-pro --days 미지정)로 간주한다.
+ * @param {string} plan profiles.plan
+ * @param {string|null} expiresAt profiles.pro_expires_at (ISO)
+ * @param {number} [now] 기준 시각 (테스트용)
+ */
+export function isEntitledToPro(plan, expiresAt, now = Date.now()) {
+    if (plan !== 'pro') return false;
+    if (!expiresAt) return true;
+    return Date.parse(expiresAt) > now;
+}
+
+/**
+ * profiles 행 조회 — plan + pro_expires_at.
+ * 스키마 미배포 환경(pro_expires_at 컬럼 부재)에서는 plan만 재조회하는 폴백을 둔다
+ * (PAY-06 배포 순서 차익 — 컬럼 추가 전까지 기간권 만료 없이 기존 동작 유지).
+ */
+async function _fetchProfile(sb, uid) {
+    let res = await sb.from('profiles').select('plan,pro_expires_at').eq('id', uid).single();
+    if (res.error) {
+        res = await sb.from('profiles').select('plan').eq('id', uid).single();
+    }
+    return res.error ? null : res.data;
+}
+
+/**
  * 서버 plan → 로컬 pro_entitled 동기화 (PAY-03) — 로그인 세션이 있을 때만 실행.
- * profiles.plan이 서버 정본이므로 'pro'면 플래그를 세우고, 아니면 로컬 잔재를 정리한다
- * (환불 회수 grant-pro --revoke가 plan을 되돌리면 다음 로그인 시 이 기기도 해제).
+ * profiles.plan이 서버 정본이므로 유효한 pro면 플래그를 세우고, 아니면 로컬 잔재를 정리한다
+ * (환불 회수 grant-pro --revoke 또는 기간권 만료 경과 시 다음 로그인에 이 기기도 해제).
  * 비로그인 사용자는 건드리지 않는다 — 로컬 전용 플래그를 유지.
  * @returns {Promise<'pro'|'free'|'skip'>} 적용된 결과 상태
  */
@@ -29,13 +55,16 @@ export async function syncPlanFromProfile() {
     if (!sb) return 'skip';
     const session = await getAuthSession();
     if (!session?.user?.id) return 'skip';
-    const { data, error } = await sb.from('profiles').select('plan').eq('id', session.user.id).single();
-    if (error) return 'skip';
-    if (data?.plan === 'pro') {
+    const data = await _fetchProfile(sb, session.user.id);
+    if (!data) return 'skip';
+    if (isEntitledToPro(data.plan, data.pro_expires_at)) {
         safeSetItem(STORAGE_KEYS.PRO_ENTITLED, '1');
+        if (data.pro_expires_at) safeSetItem(STORAGE_KEYS.PRO_EXPIRES_AT, data.pro_expires_at);
+        else safeRemoveItem(STORAGE_KEYS.PRO_EXPIRES_AT);
         return 'pro';
     }
     safeRemoveItem(STORAGE_KEYS.PRO_ENTITLED);
+    safeRemoveItem(STORAGE_KEYS.PRO_EXPIRES_AT);
     return 'free';
 }
 
@@ -131,7 +160,17 @@ export async function showRedeemDialog() {
                 safeSetItem(STORAGE_KEYS.PRO_ENTITLED, '1');
                 void reportEvent('code_redeem_success').catch(() => {});
                 _closeDialog(overlay);
-                showToast('🎉 Pro가 활성화되었습니다 — 클라우드 동기화로 다른 기기에서도 이어서 학습할 수 있습니다', 'success');
+                // 만료일 안내 — profile 재조회로 티어 기간을 표시 (PAY-06).
+                // 조회 실패해도 RPC가 활성화를 확정했으므로 토스트만 단순화된다.
+                let until = '';
+                const prof = await _fetchProfile(sb, session.user.id).catch(() => null);
+                if (prof && isEntitledToPro(prof.plan, prof.pro_expires_at)) {
+                    if (prof.pro_expires_at) {
+                        safeSetItem(STORAGE_KEYS.PRO_EXPIRES_AT, prof.pro_expires_at);
+                        until = ` (${String(prof.pro_expires_at).slice(0, 10)}까지)`;
+                    }
+                }
+                showToast(`🎉 Pro가 활성화되었습니다${until} — 클라우드 동기화로 다른 기기에서도 이어서 학습할 수 있습니다`, 'success');
                 return;
             }
             msg.textContent = '코드를 확인해주세요 — 입력값이 맞지 않거나 이미 사용된 코드입니다.';

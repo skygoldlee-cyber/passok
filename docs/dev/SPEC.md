@@ -1272,6 +1272,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | PAY-03 | **plan 서버 동기화**: 로그인 시 `profiles.plan` → `pro_entitled` 반영 — 코드 활성화의 타 기기 전파 + 회수(`grant-pro --revoke`) 반영. 비로그인 로컬 플래그는 유지 | `pro-redeem.js` `syncPlanFromProfile` — app 부팅 step 연결 | 구현 (2026-10-22) |
 | PAY-04 | **전환 퍼널 이벤트 확장**: 화이트리스트에 `plan_compare_view`·`payment_notice_view`·`payment_link_click`·`code_redeem_attempt`·`code_redeem_success` 추가 + `session_start.meta.entry_src` 탑재 (`?src=` 캡처를 전송 전으로 이동) | `usage-telemetry.js` + `pro-upgrade.js` emit + app.js 부팅 순서 | 구현 (2026-10-22) |
 | PAY-05 | **라이선스 코드 발급 CLI**: `admin:issue-code --channel <채널> --count N` — `<CHANNEL>-XXXX-XXXX` 코드 생성·`pro_codes` insert (service role) — 채널 프리픽스로 유입별 전환 추적 | `tools/check/issue_pro_code.js` + `restPost` 헬퍼 | 구현 (2026-10-22) |
+| PAY-06 | **기간권 3티어 + 만료 entitlement**: 시험 공지 주기 정합 티어 — 스프린트 9,900/30일 · 스탠다드 14,900/60일 · 풀코스 19,900/90일(월환산 할인 + 다음 회차 특전, 연 단위). `pro_codes.valid_days`·`profiles.pro_expires_at` 추가, `redeem_code`가 활성권은 만료일 위에 연장·만료권은 재기산(무기한 관리자 부여 유지). `syncPlanFromProfile`이 만료 경과 시 pro 해제 + 만료일 표시(`pro_expires_at` 키·계정 모달). 발급 `--days`(기본 90)·`grant-pro --days`·결제 안내 3티어 표. **스키마 재배포 필요** (schema.sql alter 문 주석 참조 — 미배포 시 plan-only 폴백으로 기존 동작 유지) | `tools/supabase/schema.sql` + `issue_pro_code.js --days` + `grant_pro.js --days` + `pro-redeem.js isEntitledToPro` + `pro-upgrade.js PAYMENT_NOTICE.plans` | 구현 (2026-10-23) |
 
 ---
 

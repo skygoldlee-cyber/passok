@@ -9,8 +9,12 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   plan text not null default 'free' check (plan in ('free','pro')),
   pro_since timestamptz,
+  pro_expires_at timestamptz,          -- 기간권 만료 시각 (null = 무기한 — 관리자 수동 부여)
   created_at timestamptz not null default now()
 );
+-- 기존 배포에도 컬럼 추가 — create table은 기존 테이블의 컬럼을 추가하지 않으므로
+-- 별도 alter를 둔다 (if not exists = 멱등, 신규 환경에서도 무해)
+alter table public.profiles add column if not exists pro_expires_at timestamptz;
 
 -- 가입 시 profiles 행 자동 생성
 create or replace function public.handle_new_user()
@@ -51,10 +55,14 @@ create table if not exists public.pro_codes (
   code text primary key,
   redeemed_by uuid references auth.users(id),
   redeemed_at timestamptz,
+  valid_days int not null default 90,    -- 기간권 일수 (PAY-06 — 스프린트 30 / 스탠다드 60 / 풀코스 90)
   created_at timestamptz not null default now()
 );
+alter table public.pro_codes add column if not exists valid_days int not null default 90;
 
--- 코드 사용: 유효한 미사용 코드면 plan='pro'로 갱신하고 true 반환
+-- 코드 사용: 유효한 미사용 코드면 plan='pro'로 갱신하고 true 반환.
+-- 만료일 = max(기존 만료일, now()) + valid_days — 활성 기간권은 연장, 만료분은 오늘부터 재기산.
+-- 관리자 무기한 부여(plan='pro'·pro_expires_at null)는 유지한다.
 create or replace function public.redeem_code(p_code text)
 returns boolean
 language plpgsql security definer set search_path = ''
@@ -74,7 +82,13 @@ begin
     set redeemed_by = auth.uid(), redeemed_at = now()
     where code = p_code;
   update public.profiles
-    set plan = 'pro', pro_since = now()
+    set plan = 'pro',
+        pro_since = now(),
+        pro_expires_at = case
+          when plan = 'pro' and pro_expires_at is null then null
+          else greatest(coalesce(pro_expires_at, now()), now())
+               + make_interval(days => v_code.valid_days)
+        end
     where id = auth.uid();
   return true;
 end;

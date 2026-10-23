@@ -6,7 +6,7 @@
  * isFreeLimitError()로 판별 후 showUpgradeNotice()를 호출한다.
  */
 
-// @spec ROAD-P0, PAY-02, PAY-04
+// @spec ROAD-P0, PAY-02, PAY-04, PAY-06
 
 import { esc } from './sanitize.js';
 import { trapFocus } from './ui-utils.js';
@@ -30,7 +30,13 @@ function isFreeLimitError(error) {
  */
 const PAYMENT_NOTICE = {
     enabled: true,
-    priceLabel: '시험 기간권 9,900원 / 90일',
+    // 기간권 3티어 (PAY-06 — PAYMENT_PILOT_DESIGN §5 안 A): 긴 기간일수록 월환산 할인.
+    // 가격·티어 문구 변경은 이 배열만 수정한다.
+    plans: [
+        { name: '스프린트', period: '30일', price: '9,900원' },
+        { name: '스탠다드', period: '60일', price: '14,900원' },
+        { name: '풀코스', period: '90일', price: '19,900원', note: '월환산 ~6,600원 · 불합격 시 다음 회차 혜택(발급일로부터 1년 유효)' },
+    ],
     methods: [
         "'결제 문의'를 눌러 오픈채팅으로 연락주시면 결제 방법(계좌이체·카카오페이)을 안내드립니다",
         '결제 확인 후 24~48시간 내 라이선스 코드를 발송해 드립니다',
@@ -347,9 +353,12 @@ export function mountProMoment(container, momentKey) {
 /** Pro 업그레이드 안내 모달 — PAYMENT_NOTICE.enabled 시 실결제 안내, 아니면 '준비 중' 표시 (PAY-02) */
 export function showUpgradeNotice(featureLabel, limitMessage) {
     const benefitItems = [`<li>${esc(featureLabel)} 저장 한도 무제한</li>`, ..._proBenefitItems()];
+    const planRows = PAYMENT_NOTICE.plans.map((p) =>
+        `<li><strong>${esc(p.name)}</strong> ${esc(p.period)} — <strong>${esc(p.price)}</strong>${p.note ? `<br><span class="pro-plan-note">${esc(p.note)}</span>` : ''}</li>`).join('');
     const pay = PAYMENT_NOTICE.enabled ? `
             <div class="pro-payment-notice">
-                <p class="pro-upgrade-sub"><strong>💳 Pro 결제 안내</strong> — ${esc(PAYMENT_NOTICE.priceLabel)}</p>
+                <p class="pro-upgrade-sub"><strong>💳 Pro 결제 안내</strong> — 시험 기간권 (일찍 살수록 월 단가 할인)</p>
+                <ul class="pro-plan-list">${planRows}</ul>
                 <ul>${PAYMENT_NOTICE.methods.map((m) => `<li>${esc(m)}</li>`).join('')}</ul>
                 <p class="pro-payment-refund">${esc(PAYMENT_NOTICE.refundNotice)}</p>
             </div>` : '';
