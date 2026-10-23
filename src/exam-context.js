@@ -220,16 +220,22 @@ const GLOBAL_KEYS = new Set([
     'ui_mode',
     'ui_study_tools_open',
     'device_id',                   // 동기화 기기 식별 — 시험 무관
+    'telemetry_opt_out',           // 사용 텔레메트리 거부 — 기기 단위 (UX-MET-06)
+    'telemetry_notice_shown',      // 텔레메트리 최초 고지 표시 — 기기 단위 (UX-MET-06)
+    'telemetry_queue',             // 오프라인 이벤트 큐 — 기기 단위 (UX-MET-08)
     'pro_entitled',                // Pro 이용 권한 — 사용자 수준, 시험 무관
+    'pro_expires_at',              // Pro 기간권 만료 시각 — 사용자 수준, 시험 무관 (PAY-06)
     'pro_notice_seen',             // Pro 안내 전역 1회 seen (ROAD-P5) — 플랜 안내는 시험 무관 사용자 수준
     'usage_stats',                 // 사용 카운터 — 기기(익명 유저) 단위, 시험 전환해도 누적 유지
+    'usage_snapshot_sent',         // 사용 스냅샷 전송일 — 기기 단위 (UX-MET-05)
     'passmula_auth_mail_cooldown_until', // 로그인 메일 재발송 쿨다운 — 시험 무관
     'last_seen_version',       // 새 버전 알림 마지막 확인 버전 — 시험 무관
     'entry_source',            // 최초 유입 채널 (?src= 파라미터) — 시험 무관
     'feedback_last_ts',        // 의견 제출 쿨다운 타임스탬프 — 시험 무관
     'pending_feedback',        // 오프라인 의견 제출 큐 — 시험 무관
     'feedback_hint_seen',      // "의견 보내기" NEW 배지 확인 — 시험 무관
-    'feedback_dot_seen'        // 설정 버튼 점 확인 — 시험 무관
+    'feedback_dot_seen',       // 설정 버튼 점 확인 — 시험 무관
+    'exam_stamp_seen'          // 시험별 콘텐츠 스탬프 확인 맵 {examId:stamp} (ES-07) — 시험 무관
 ]);
 
 // @spec DA-06~08,ES-03
@@ -243,6 +249,20 @@ export function scopedKey(key) {
 export function unscopedKey(raw) {
     const prefix = `${getActiveExamId()}:`;
     return (raw && raw.startsWith(prefix)) ? raw.slice(prefix.length) : null;
+}
+
+// @spec ES-06
+/**
+ * 임의 시험 네임스페이스의 진도 키를 읽기 전용으로 조회 — 시험 선택 카드 요약용.
+ * 활성 시험과 무관하게 `<examId>:<key>`를 읽는다. GLOBAL_KEYS는 비접두사라 그대로 조회.
+ * 쓰기는 제공하지 않는다 — 다른 시험 진도의 변경 경로는 시험 전환뿐이다.
+ * @param {string} examId
+ * @param {string} key - 비접두사 논리 키 (예: 'fc_memorized')
+ * @returns {string|null}
+ */
+export function peekExamValue(examId, key) {
+    const actual = GLOBAL_KEYS.has(key) ? key : `${examId}:${key}`;
+    try { return localStorage.getItem(actual); } catch (e) { return null; }
 }
 
 /**

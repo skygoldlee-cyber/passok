@@ -1,5 +1,5 @@
 // tests/unit/semantic-index.test.js
-// @spec SEM-02,SEM-03,SEM-04
+// @spec SEM-02,SEM-03,SEM-04,SEM-08
 // SemanticIndex — 이웃 인덱스 지연 로드, 유사 진술/문항 조회, 동일 텍스트 힌트,
 // 자산 부재 시 비활성화, int8 벡터 디코딩·코사인 유사도 검증.
 
@@ -150,4 +150,31 @@ test('cosineSimilarity: 영벡터는 0 반환 (나눗셈 안전)', () => {
     const a = new Float32Array([0, 0, 0]);
     const b = new Float32Array([1, 2, 3]);
     assert.equal(cosineSimilarity(a, b), 0);
+});
+
+// ==================== searchByText / findAnchorKey (SEM-08 앵커 프록시) ====================
+
+test('findAnchorKey: 토큰 커버율 최고 항목 선택 — 순수 함수', async () => {
+    const { findAnchorKey } = await import('../../../src/semantic-index.js');
+    const texts = { 'stmt:a': '화장품 제조업 등록 요건', 'stmt:b': '위생 관리 기준', 'q:q1': '화장품 제조 시설 기준' };
+    const a = findAnchorKey('제조업 등록', texts);
+    assert.equal(a.key, 'stmt:a');
+    // 부분 커버(1/2 토큰) 항목보다 전체 커버 항목 우선
+    const b = findAnchorKey('화장품 시설', texts);
+    assert.equal(b.key, 'q:q1');
+    assert.equal(findAnchorKey('없는주제 xyz', texts), null);
+    assert.equal(findAnchorKey('짧', texts), null); // 2자 미만 토큰만이면 앵커 없음
+});
+
+test('searchByText: 앵커 이웃 반환 — 로드 전이면 빈 배열', async () => {
+    DataLoader.loadBundleScript = async () => { mockWin.EMB_NEIGHBORS = NEIGHBORS; };
+    await SemanticIndex.ensureLoaded();
+    const hits = SemanticIndex.searchByText('진술 A', 5);
+    // '진술 A'는 stmt:s_a에 완전 포함 — 앵커 s_a, 이웃 s_b/q:q1/s_c 순
+    assert.deepEqual(hits.map(h => h.key), ['stmt:s_b', 'q:q1', 'stmt:s_c']);
+    assert.equal(hits[0].anchorKey, 'stmt:s_a');
+    assert.equal(hits[0].anchorText, '진술 A');
+    // 미로드 상태 리셋 후 빈 배열
+    SemanticIndex._reset();
+    assert.deepEqual(SemanticIndex.searchByText('진술'), []);
 });

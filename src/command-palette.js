@@ -8,9 +8,12 @@
 import { esc } from './sanitize.js';
 import { getChosung } from './utils.js';
 import { contentPath, hasFeature } from './exam-context.js';
+import { SemanticIndex } from './semantic-index.js';
+import { gotoOxDrill } from './views/trainer-drills.js';
 import { DataLoader } from './data-loader.js';
 import { openSubjectSection } from './views/textbook-reader.js';
 import { collectTextbookSections } from './search-sources.js';
+import { getReaderNotes } from './reader-notes.js';
 import { setTextbookSearchQuery } from './views/textbook-search.js';
 import { dictState } from './views/dictionary.js';
 import { trackAction } from './usage-stats.js';
@@ -105,7 +108,7 @@ export function searchAll(query, sources) {
     const ingredients = src.ingredients || DataLoader.getKnowledgeItems();
     const registry = src.registry || DataLoader.registry || {};
     const views = src.views || (typeof document !== 'undefined' ? getViewItems() : []);
-    const groups = { view: [], section: [], ingredient: [], exam: [] };
+    const groups = { view: [], section: [], note: [], ingredient: [], exam: [] };
     const push = (type, item) => { if (groups[type].length < MAX_PER_GROUP) groups[type].push(item); };
 
     // 1) 뷰 바로가기
@@ -156,8 +159,20 @@ export function searchAll(query, sources) {
         });
     });
 
+    // 5) 교재 섹션 메모 (TR-30) — 메모 본문+섹션 제목 매칭 → 해당 섹션으로 이동
+    const notes = src.notes || getReaderNotes();
+    for (const n of Object.values(notes)) {
+        if (!n || !n.note) continue;
+        const s = _matchScore(`${n.title || ''} ${n.note}`, n.title || '', terms);
+        if (s >= 0) push('note', {
+            type: 'note', icon: 'fa-note-sticky', title: n.title || '섹션 메모',
+            sub: `메모 · ${n.note.slice(0, 50)}`,
+            action: { kind: 'note', subject: n.subject, title: n.title }, score: s
+        });
+    }
+
     // 그룹 내 점수 정렬 후 플랫화 — 뷰·섹션·성분·문제집 순
-    const order = ['view', 'section', 'ingredient', 'exam'];
+    const order = ['view', 'section', 'note', 'ingredient', 'exam'];
     const flat = [];
     order.forEach(type => {
         groups[type].sort((a, b) => b.score - a.score);
@@ -179,8 +194,8 @@ export function searchAll(query, sources) {
 /* ---------- 팔레트 UI ---------- */
 
 const TYPE_LABELS = {
-    view: '화면', section: '교재', ingredient: '사전', exam: '문제집',
-    fulltext: '본문 검색'
+    view: '화면', section: '교재', note: '메모', ingredient: '사전', exam: '문제집',
+    stmt: '의미 유사 진술', fulltext: '본문 검색'
 };
 
 /** 그룹 라벨 — ingredient는 활성 시험의 사전명(uiText.dictionary.title)으로 해석 */
@@ -248,11 +263,16 @@ function _renderResults(query) {
     }
 
     _results = searchAll(query);
+    _maybeAppendSemantic(query); // 어휘 결과와 무관하게 의미 검색은 항상 시도 (비동기 지연 로드)
     if (!_results.length) {
         box.innerHTML = `<div class="cmdk-hint">"${esc(query)}"에 대한 결과가 없습니다.</div>`;
         return;
     }
+    _renderRows(box);
+}
 
+/** 결과 행 렌더 — 동기 결과와 비동기 의미 그룹 추가 시 재사용 */
+function _renderRows(box) {
     let lastType = '';
     box.innerHTML = _results.map((r, i) => {
         const header = r.type !== lastType
@@ -268,6 +288,37 @@ function _renderResults(query) {
                 </span>
             </button>`;
     }).join('');
+}
+
+// 의미 검색 재진입 제어 — 쿼리가 바뀌면 진행 중인 지연 로드 결과를 무효화한다
+let _semToken = 0;
+
+/**
+ * 의미 유사 그룹 (SEM-08 v1 앵커 프록시) — semantic 피처 시험에서만.
+ * neighbors 번들을 지연 로드해 쿼리 앵커의 의미 이웃을 'stmt' 그룹으로 뒤에 붙인다.
+ * 비동기 도착이므로 도착 시점에 같은 쿼리인지 검증 후 _results에 삽입·재렌더.
+ */
+function _maybeAppendSemantic(query) {
+    if (!SemanticIndex.isEnabled() || (query || '').trim().length < 2) return;
+    const token = ++_semToken;
+    SemanticIndex.ensureLoaded().then(ok => {
+        if (!ok || token !== _semToken || !_open) return;
+        const input = /** @type {HTMLInputElement|null} */ (document.getElementById('cmdk-input'));
+        if (!input || input.value !== query) return;
+        const existing = new Set(_results.filter(r => r.type === 'stmt').map(r => r.action.sid));
+        const fresh = SemanticIndex.searchByText(query, 4)
+            .filter(h => h.key.startsWith('stmt:') && !existing.has(h.key.slice(5)))
+            .map(h => ({
+                type: 'stmt', icon: 'fa-wand-magic-sparkles', title: h.text,
+                sub: `유사도 ${Math.round(h.score * 100)}%${h.anchorText ? ` · 앵커: ${h.anchorText.slice(0, 40)}` : ''}`,
+                action: { kind: 'stmt', sid: h.key.slice(5) }, score: 0
+            }));
+        if (!fresh.length) return;
+        const ftIdx = _results.findIndex(r => r.type === 'fulltext');
+        _results.splice(ftIdx === -1 ? _results.length : ftIdx, 0, ...fresh);
+        const box = document.getElementById('cmdk-results');
+        if (box) _renderRows(box);
+    }).catch(() => { /* noop — 의미 그룹 실패는 어휘 결과에 영향 없음 */ });
 }
 
 function _moveActive(delta) {
@@ -340,9 +391,18 @@ export function executePaletteResult(idx) {
             }
             break;
         }
+        case 'note':
+            // 섹션 메모 → 해당 교재 섹션으로 이동 (TR-30)
+            clickNav('textbook-reader-view');
+            openSubjectSection(a.subject, a.title, '');
+            break;
         case 'fulltext':
             setTextbookSearchQuery(a.query);
             clickNav('textbook-view');
+            break;
+        case 'stmt':
+            // 의미 유사 진술 → 해당 진술 O/X 드릴로 즉시 착지 (기존 드릴 경로 재사용)
+            gotoOxDrill(`sid:${a.sid}`);
             break;
     }
 }

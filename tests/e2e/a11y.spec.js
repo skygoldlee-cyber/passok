@@ -50,6 +50,7 @@ test.beforeEach(async ({ page }) => {
     await page.addInitScript(() => {
         localStorage.setItem('current_exam', 'cosmetic');
         localStorage.setItem('onboarding_seen_v1', '1');
+        localStorage.setItem('telemetry_notice_shown', '1');
         localStorage.setItem('cosmetic:onboarding_seen_v1', '1');
     });
 });

@@ -26,6 +26,7 @@ import {
     applyReaderThemeClass,
     bindReaderScrollEvents
 } from './reader-toolbar.js';
+import { getReaderNotes, getReaderNote, setReaderNote } from '../reader-notes.js';
 import { bindReferenceLinks, refreshRefLinkNotices } from './reader-ref-links.js';
 
 // ── 렌더 보조 UI ─────────────────────────────────────────────
@@ -270,16 +271,18 @@ function renderAudioPlayerArea(hasAudio) {
 }
 
 // 섹션 카드 HTML 생성 — ctx: {subjId, chapterIdx, displayTitles, bookmarks,
-//   chapterRefPath, subjRefFiles, subjDirName, glossaryItems}
+//   chapterRefPath, subjRefFiles, subjDirName, glossaryItems, notes}
 function buildSectionsHtml(chapter, ctx) {
     const { subjId, chapterIdx, displayTitles, bookmarks,
-        chapterRefPath, subjRefFiles, subjDirName, glossaryItems } = ctx;
+        chapterRefPath, subjRefFiles, subjDirName, glossaryItems, notes } = ctx;
     let html = '';
     chapter.sections.forEach((section, idx) => {
         // 북마크 키는 콘텐츠 기반 (TR-27) — 위치 인덱스는 교재 편집 시 오표적
         const bookmarkKey = bookmarkKeyOf(subjId,
             chapter.chapterKey || chapter.chapterTitle || chapterIdx, section.title || idx);
         const isBookmarked = bookmarks.includes(bookmarkKey);
+        // 섹션 메모 (TR-30) — 북마크 키를 공유하므로 위치 이동에도 따라붙는다
+        const noteText = (notes && notes[bookmarkKey] && notes[bookmarkKey].note) || '';
         const allContent = [section.content || '', ...((section.subsections || []).map(s => s.content || ''))].join('\n');
         const secSrcMatch = allContent.match(/📌\s*\*\*출처\*\*[:：]\s*(.+?)(?:\||\n)/);
         const secRefPath = secSrcMatch ? mapSourceToRef(secSrcMatch[1]) : null;
@@ -292,15 +295,21 @@ function buildSectionsHtml(chapter, ctx) {
             }
         }
         html += `
-            <div class="reader-section-card" id="reader-section-${idx}" data-section-idx="${idx}">
+            <div class="reader-section-card${noteText ? ' has-note' : ''}" id="reader-section-${idx}" data-section-idx="${idx}">
                 <div class="reader-section-header" data-section-idx="${idx}">
                     <i class="fa-solid fa-chevron-down reader-section-toggle"></i>
                     <h4 class="reader-section-title">${esc(displayTitles[idx])}</h4>
+                    <button class="reader-note-btn${noteText ? ' has-note' : ''}" data-note-key="${esc(bookmarkKey)}"
+                            data-note-subj="${esc(subjId)}" data-note-title="${esc(section.title || '')}"
+                            title="메모 ${noteText ? '보기·수정' : '추가'}" aria-label="섹션 메모">
+                        <i class="fa-${noteText ? 'solid' : 'regular'} fa-note-sticky"></i>
+                    </button>
                     <button class="reader-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" data-bookmark-key="${esc(bookmarkKey)}" title="북마크 ${isBookmarked ? '제거' : '추가'}">
                         <i class="fa-${isBookmarked ? 'solid' : 'regular'} fa-bookmark"></i>
                     </button>
                 </div>
                 <div class="reader-section-body">
+                    ${noteText ? `<div class="reader-note-view"><i class="fa-solid fa-note-sticky" aria-hidden="true"></i> <span class="reader-note-text">${esc(noteText)}</span></div>` : ''}
                     <div class="textbook-reader-section-content">
                         ${sectionHtml}
                     </div>
@@ -309,6 +318,82 @@ function buildSectionsHtml(chapter, ctx) {
         `;
     });
     return html;
+}
+
+/**
+ * 섹션 메모 버튼 바인딩 (TR-30) — 컨테이너 단위, 재렌더마다 재호출.
+ * @param {HTMLElement} container
+ */
+export function bindReaderNotes(container) {
+    if (!container) return;
+    container.querySelectorAll('.reader-note-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            _toggleNoteEditor(/** @type {HTMLElement} */ (btn));
+        });
+    });
+}
+
+/**
+ * 섹션 메모 인라인 에디터 토글 (TR-30) — 카드 본문 상단에 textarea를 둔다.
+ * 저장/삭제 즉시 카드의 메모 표시·버튼 상태를 갱신한다 (재렌더 없이).
+ */
+function _toggleNoteEditor(btn) {
+    const card = btn.closest('.reader-section-card');
+    const body = card && card.querySelector('.reader-section-body');
+    if (!card || !body) return;
+    const existing = body.querySelector('.reader-note-editor');
+    if (existing) { existing.remove(); return; }
+
+    const key = btn.dataset.noteKey || '';
+    const editor = document.createElement('div');
+    editor.className = 'reader-note-editor';
+    editor.innerHTML = `
+        <textarea class="form-input reader-note-input" rows="3"
+            placeholder="이 섹션에 대한 메모를 남기세요…" aria-label="섹션 메모">${esc(getReaderNote(key))}</textarea>
+        <div class="btn-row reader-note-actions">
+            <button type="button" class="btn btn-sm btn-primary" data-note-save>저장</button>
+            <button type="button" class="btn btn-sm btn-secondary" data-note-delete>삭제</button>
+            <button type="button" class="btn btn-sm btn-secondary" data-note-close>닫기</button>
+        </div>`;
+    body.prepend(editor);
+    const input = /** @type {HTMLTextAreaElement|null} */ (editor.querySelector('.reader-note-input'));
+    input?.focus();
+
+    const refresh = () => {
+        const text = getReaderNote(key);
+        card.classList.toggle('has-note', !!text);
+        btn.classList.toggle('has-note', !!text);
+        btn.title = `메모 ${text ? '보기·수정' : '추가'}`;
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = `fa-${text ? 'solid' : 'regular'} fa-note-sticky`;
+        let view = body.querySelector('.reader-note-view');
+        if (text) {
+            if (!view) {
+                view = document.createElement('div');
+                view.className = 'reader-note-view';
+                view.innerHTML = '<i class="fa-solid fa-note-sticky" aria-hidden="true"></i> <span class="reader-note-text"></span>';
+                const content = body.querySelector('.textbook-reader-section-content');
+                body.insertBefore(view, content || null);
+            }
+            const span = view.querySelector('.reader-note-text');
+            if (span) span.textContent = text;
+        } else if (view) {
+            view.remove();
+        }
+    };
+    editor.querySelector('[data-note-save]')?.addEventListener('click', () => {
+        setReaderNote(key, input ? input.value : '', { subject: btn.dataset.noteSubj, title: btn.dataset.noteTitle });
+        refresh();
+        editor.remove();
+    });
+    editor.querySelector('[data-note-delete]')?.addEventListener('click', () => {
+        setReaderNote(key, '');
+        if (input) input.value = '';
+        refresh();
+        editor.remove();
+    });
+    editor.querySelector('[data-note-close]')?.addEventListener('click', () => editor.remove());
 }
 
 // 본문 목차 하이퍼링크 → 대응 섹션으로 스크롤 (5단계 매칭 폴백)
@@ -468,6 +553,7 @@ export async function renderChapterContentInternal(subjId, chapterIdx, subj, cha
     html += buildSectionsHtml(chapter, {
         subjId, chapterIdx, displayTitles, bookmarks,
         chapterRefPath, subjRefFiles, subjDirName, glossaryItems,
+        notes: getReaderNotes(),
     });
 
     // --- 과목별 용어집 테이블 (glossary-renderer 모듈 위임) ---
@@ -497,7 +583,7 @@ export async function renderChapterContentInternal(subjId, chapterIdx, subj, cha
     // Section collapse toggles
     container.querySelectorAll('.reader-section-header').forEach(header => {
         header.addEventListener('click', (e) => {
-            if ((/** @type {Element|null} */ (e.target))?.closest('.reader-bookmark-btn')) return;
+            if ((/** @type {Element|null} */ (e.target))?.closest('.reader-bookmark-btn, .reader-note-btn')) return;
             const card = header.closest('.reader-section-card');
             if (card) card.classList.toggle('collapsed');
         });
@@ -512,6 +598,9 @@ export async function renderChapterContentInternal(subjId, chapterIdx, subj, cha
             toggleReaderBookmark((/** @type {HTMLElement} */ (btn)).dataset.bookmarkKey, btn);
         });
     });
+
+    // Section note buttons (TR-30) — 섹션 카드 본문 상단의 인라인 에디터 토글
+    bindReaderNotes(container);
 
     // Scroll position reset + scroll spy binding
     container.scrollTop = 0;

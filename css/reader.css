@@ -712,6 +712,59 @@
     color: var(--color-warning);
 }
 
+/* 섹션 메모 (TR-30) — 북마크 버튼과 동일 계열, 메모 있는 섹션은 정보색 채움 */
+.reader-note-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: var(--text-1rem);
+    cursor: pointer;
+    padding: 0.35rem;
+    border-radius: var(--radius-xs);
+    transition: var(--transition-base);
+    flex-shrink: 0;
+}
+.reader-note-btn:hover {
+    color: var(--color-primary);
+    background: var(--primary-tint-10, rgba(6, 182, 212, 0.1));
+    transform: scale(1.15);
+}
+.reader-note-btn.has-note { color: var(--color-primary); }
+.reader-section-card.has-note > .reader-section-header .reader-section-title { color: var(--color-primary); }
+
+/* 메모 표시 블록 — 섹션 본문 상단의 인용 카드 형태 */
+.reader-note-view {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2, 0.5rem);
+    padding: 0.6rem 0.8rem;
+    margin-bottom: var(--space-4, 1rem);
+    border-left: 3px solid var(--color-primary);
+    background: var(--primary-tint-10, rgba(6, 182, 212, 0.08));
+    border-radius: 0 var(--radius-xs, 4px) var(--radius-xs, 4px) 0;
+    font-size: var(--text-sm, 0.85rem);
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+.reader-note-view > i { color: var(--color-primary); margin-top: 0.15rem; flex-shrink: 0; }
+
+/* 메모 편집기 — 본문 상단 인라인 */
+.reader-note-editor {
+    padding: 0.6rem 0.8rem;
+    margin-bottom: var(--space-4, 1rem);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
+    border-radius: var(--radius-md, 8px);
+    background: var(--color-surface-alt, rgba(127, 127, 127, 0.06));
+}
+.reader-note-input {
+    width: 100%;
+    resize: vertical;
+    min-height: 4.5rem;
+    font-size: var(--text-sm, 0.85rem);
+    margin-bottom: var(--space-2, 0.5rem);
+}
+.reader-note-actions { gap: var(--space-2, 0.5rem); }
+
 .reader-section-body {
     padding: 1.5rem 1.75rem 1.75rem 1.75rem;
     display: block;

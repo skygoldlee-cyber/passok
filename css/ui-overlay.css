@@ -106,7 +106,8 @@
 #feedback-overlay,
 #pro-upgrade-overlay,
 #usage-stats-overlay,
-#onboarding-overlay {
+#onboarding-overlay,
+#redeem-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
@@ -124,7 +125,8 @@
 #feedback-overlay.is-visible,
 #pro-upgrade-overlay.is-visible,
 #usage-stats-overlay.is-visible,
-#onboarding-overlay.is-visible {
+#onboarding-overlay.is-visible,
+#redeem-overlay.is-visible {
   opacity: 1;
 }
 .app-confirm-dialog {
@@ -256,6 +258,56 @@
   color: var(--color-text-muted, #9ca3af);
   line-height: 1.55;
 }
+/* 온보딩 위저드 (OB-01) — 진행 도트·입력 필드·요약 */
+.onboarding-progress {
+    display: flex;
+    gap: var(--space-2);
+    margin: var(--space-2) 0 var(--space-4);
+}
+.onboarding-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-border);
+}
+.onboarding-dot.on { background: var(--color-primary); }
+.onboarding-field {
+    display: block;
+    margin-bottom: var(--space-4);
+}
+.onboarding-field-label {
+    display: block;
+    margin-bottom: var(--space-2);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.onboarding-field .form-input {
+    width: 100%;
+    min-height: 48px;
+}
+.onboarding-hint {
+    margin: var(--space-2) 0 0;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+.onboarding-summary {
+    list-style: none;
+    margin: 0 0 var(--space-4);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+.onboarding-summary li {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+.onboarding-summary i { color: var(--color-primary); width: 1.1rem; text-align: center; }
+
 .onboarding-foot {
   margin: 0 0 1.25rem;
   font-size: 0.8rem;
@@ -573,6 +625,65 @@
   .cmdk-footer { display: none; }
 }
 
+/* ── 단축키 도움말 (? 키 — shortcuts-help.js) ── */
+.kbd-help-panel { max-width: 480px; }
+.kbd-help-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+.kbd-help-head h3 {
+  margin: 0;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.kbd-help-body {
+  max-height: 55vh;
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-4);
+}
+.kbd-help-group + .kbd-help-group { margin-top: var(--space-4); }
+.kbd-help-group h4 {
+  margin: 0 0 var(--space-2);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.kbd-help-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.kbd-help-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 0.85rem;
+  color: var(--color-text);
+}
+.kbd-help-list kbd {
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 600;
+  min-width: 4.5rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  background: var(--color-bg-subtle, rgba(128, 128, 128, 0.12));
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  flex-shrink: 0;
+}
+
 /* ── 의견 보내기 모달 (feedback.js) ── */
 .feedback-dialog { max-width: 440px; }
 .feedback-body { margin-bottom: 1rem; }
@@ -654,6 +765,58 @@
   line-height: 1.7;
 }
 
+/* ── 결제 안내 (PAY-02) — enabled 시 업그레이드 모달에 표시 ── */
+.pro-payment-notice {
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.16));
+  border-radius: var(--radius-md, 10px);
+  background: var(--color-surface-alt, rgba(255, 255, 255, 0.04));
+}
+.pro-payment-notice .pro-upgrade-sub {
+  margin: 0 0 0.4rem;
+}
+.pro-payment-notice ul {
+  margin: 0 0 0.5rem;
+  padding-left: 1.15rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #9ca3af);
+  line-height: 1.7;
+}
+.pro-payment-refund {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--color-text-muted, #9ca3af);
+  line-height: 1.6;
+}
+
+/* ── 라이선스 코드 입력 (PAY-01) ── */
+.redeem-input {
+  display: block;
+  width: 100%;
+  margin: 0.75rem 0 0.35rem;
+  padding: 0.55rem 0.7rem;
+  font-size: 1rem;
+  font-family: var(--font-mono, monospace);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-main, #fff);
+  background: var(--color-surface-alt, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.2));
+  border-radius: var(--radius-sm, 8px);
+  box-sizing: border-box;
+}
+.redeem-input:focus {
+  outline: none;
+  border-color: var(--color-accent, #4ade80);
+}
+.redeem-msg {
+  margin: 0.3rem 0 0.6rem;
+  min-height: 1.2em;
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #9ca3af);
+}
+
 /* ── 플랜 안내: 무료 제공 태그 (PRO 배지의 반대 표기) ── */
 .plan-free-tag {
   display: inline-block;
@@ -699,6 +862,25 @@
   border-color: #6d28d9;
   background: rgba(109, 40, 217, 0.16);
 }
+
+/* ── Pro 모멘트 넛지 카드 (ROAD-P6) — 결과 패널 상단 인라인, 비차단 ── */
+.pro-moment-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+  flex-wrap: wrap;
+  padding: 0.65rem 0.9rem;
+  margin-bottom: var(--space-4, 1rem);
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--secondary-tint-40, rgba(139, 92, 246, 0.4));
+  background: var(--secondary-tint-10, rgba(139, 92, 246, 0.08));
+  color: var(--color-text, #e5e7eb);
+  font-size: 0.85rem;
+}
+.pro-moment-card > i { color: #a78bfa; }
+.light-theme .pro-moment-card > i { color: #6d28d9; }
+.pro-moment-text { flex: 1; min-width: 0; line-height: 1.5; }
+.pro-moment-actions { gap: var(--space-2, 0.5rem); }
 
 /* ── 내 사용 통계 (usage-stats.js) ── */
 .usage-stats-sub {

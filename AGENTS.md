@@ -91,7 +91,8 @@ npm.cmd run check:all:e2e                # 전체 점검 + E2E 실브라우저 (
 npm.cmd run check:ci                     # CI 게이트 로컬 재현 (= run.js --preset ci — coverage·E2E·audit는 CI 전용). `-- --affected`는 유닛을 영향 테스트 권장 세트로 치환하는 빠른 로컬 재현
 npm.cmd run check -- --preset <all|ci|content|docs|refs|freshness|audit> [--quick|--content-only|--build]  # 통합 실행기 직접 호출
 npm.cmd run check -- --step <id>         # 단일 단계만 실행 (예: --step manifest, --list로 id 조회 — 출력의 [P0|P1|P2]는 단계 우선순위 티어)
-npm.cmd run check:audit                  # 감시·감사 묶음 (= run.js --preset audit — P2 단계 advisory 실행, 실패해도 종료 0·차단 없음. 카드/콤보/학습품질·용어집 저신호·refmerge·adlint·lawurls)
+npm.cmd run check:audit                  # 감시·감사 묶음 (= run.js --preset audit — P2 단계 advisory 실행, 실패해도 종료 0·차단 없음. 카드/콤보/학습품질·용어집 저신호·refmerge·adlint·lawurls·onboard)
+npm.cmd run check:onboard                # 시험 팩 온보딩·승격 진단 — 시험별 준비도 표 + comingSoon↔콘텐츠 정합·필수 선언 누락·선택 자산 (승격 기준: 과목당 ≥20문, 런북은 NEW_EXAM_RUNBOOK §파일럿 운영)
 
 # 콘텐츠 통합 검증 (교재 교체 등 대규모 콘텐츠 변경 후)
 npm.cmd run check:content               # 콘텐츠 통합 검증 (= run.js --preset content — 단계 선언은 tools/check/steps.js)
@@ -126,6 +127,8 @@ npm.cmd run check:ciparity              # ci.yml 워크플로 명령 ↔ check:c
 npm.cmd run check:runbooks              # 런북 정본 도달 — docs/dev/runbooks 링크 파일 존재 + #앵커↔헤딩 해석 + WHEN_THINGS_BREAK 증상 행 정본 커버리지 출력 (check:docs 단계)
 npm.cmd run check:secrets               # 추적 파일 시크릿 패턴 스캔 (개인키·service_role·토큰 — 공개키는 ALLOWLIST, pre-commit 게이트)
 npm.cmd run check:env                   # .env 로컬 시크릿 신선도 — 만료 JWT·미선언·빈 키 탐지 (스키마 정본 .env.example, .env 부재 시 스킵 — 로컬 전용, check:ci·check:all 게이트)
+npm.cmd run check:supabase              # Supabase 스키마 적용 상태 — schema.sql 선언 테이블의 프로덕션 존재 프로브 (미적용 시 차단·네트워크 불가 시 경고+통과, check:ci·CI 게이트)
+npm.cmd run schema:apply                # schema.sql을 프로덕션에 Management API로 자동 적용 + 검증 (SUPABASE_ACCESS_TOKEN PAT 필요 — scoped: 이 프로젝트 + Database read-write · -- --dry-run=대상 확인만)
 npm.cmd run check:enc                   # U+FFFD 치환 문자 잔존 — 저장 시 이모지 변조 유입 차단 (기준선 단조 감소, --update=잔재 정리 후 하향 — pre-commit·check:docs 게이트)
 npm.cmd run check:orphans               # 미참조 자산(고아 자산) 유입 차단 — 추적 자산 파일의 파일명이 다른 추적 파일에 등장하지 않으면 실패 (_archive/·e2e 스냅샷 규약 제외, 예외는 orphan_assets_baseline.json — pre-commit·check:docs 게이트)
 npm.cmd run check:binary                # 대형·외부화 바이너리 신규 유입 차단 — 참조자료 PDF(외부 호스팅, DOC-RBK-12)·500KB+ 이미지/폰트/미디어 (untracked·--staged·--ref 모드, 예외는 binary_allowlist.json — check:docs 게이트)
@@ -147,11 +150,12 @@ npm.cmd run check:specrefs              # SPEC↔@spec 스테일 참조 + 테스
 npm.cmd run check:perf                  # 성능 예산 — sw.js SHELL_ASSETS 크기 계측 (총량·JS·단일파일·index.html 상한, check:ci/CI 게이트)
 npm.cmd run mutate                      # 변이 테스트 (Stryker, 수동 스팟 체크 — 순수 핵심 모듈 스코프: questions·spaced-repetition·weak-items·statement-tracker)
 npm.cmd run report:errors               # 오류율 리포트 — client_errors 조회 → 오류/세션·일별·상위 메시지 (SUPABASE_SECRET_KEY env 필요, 미설정 시 대시보드용 SQL 출력 · -- --days N · --session <uuid>=bug 신고의 meta.session_id로 해당 페이지 로드 오류+퍼널 이력 조회)
-npm.cmd run report:funnel               # 과업 완주율 리포트 — usage_events 조회 → quiz/daily start→complete 완주율·이탈·평균 점수·소요 (동일 키 요건 · -- --days N)
+npm.cmd run report:funnel               # 과업 완주율 + 활성화 퍼널 — usage_events 조회 → quiz/daily start→complete 완주율 + session_start→core_learning_action 세션·설치 전환율 (DOC-DSN-34 §4 P0 KPI · 동일 키 요건 · -- --days N · restGetAll 페이지네이션으로 max-rows 절단 없음)
 npm.cmd run report:feedback             # 피드백 인박스 — feedback 테이블 kind별 건수·평점·일별·최근 본문 (동일 키 요건 · -- --days N · --kind bug · bug의 meta.session_id→report:errors --session 연결, AD-06)
 npm.cmd run report:user                 # 사용자 조회 — npm run report:user -- <email>: GoTrue Admin API 해석 → plan·sync 메타(payload 미열람)·피드백 이력 (동일 키 요건, AD-06)
-npm.cmd run admin:grant-pro             # Pro 부여/회수 — npm run admin:grant-pro -- <email> [--revoke]: 기본 dry-run, --apply로만 실갱신 (동일 키 요건, AD-06)
-npm.cmd run report:dashboard            # 로컬 HTML 운영 대시보드 — 오류율·퍼널·피드백 조감을 단일 HTML로 생성 (동일 키 요건 · -- --days N · --out <path> · 산출물 gitignore, AD-07)
+npm.cmd run admin:grant-pro             # Pro 부여/회수 — npm run admin:grant-pro -- <email> [--revoke]: 기본 dry-run, --apply로만 실갱신 (동일 키 요건, AD-06 · 90일 기간권 만료 회수 경로 — DOC-DSN-35 §8)
+npm.cmd run admin:issue-code            # 라이선스 코드 발급 — npm run admin:issue-code -- --channel <채널> [--count N] [--dry-run]: <CHANNEL>-XXXX-XXXX 생성·pro_codes insert (동일 키 요건, PAY-05 · 발급 대장에 입금자↔코드·만료일 수동 기록)
+npm.cmd run report:dashboard            # 로컬 HTML 운영 대시보드 — 오류율·활성화율(세션/설치)·퍼널·피드백 조감을 단일 HTML로 생성 (동일 키 요건 · -- --days N · --out <path> · 산출물 gitignore — 조회 후 삭제, AD-07)
 npm.cmd run report:glossary             # 용어 후보 추출 리포트 — 참조자료 ref_md + 교재 표준형의 정의 조항·약칭·영문 병기를 스캔해 용어설명집 대비 신규/기존 분류 (BP-14 · 도구 직접 실행 `--apply`=신규 정의→glossary subjectN.json, `--apply-synonyms`=약칭·영문→manifest.synonyms, `--patterns`로 범위 조정)
 npm.cmd run check:docsync               # 소스 변경 시 문서 갱신 강제 — src/tools/tests/설정 변경에 docs/·AGENTS·README 갱신 동반 필수. 우회: SKIP_DOCSYNC=1 (모든 단계) · 커밋 메시지 행 끝의 [no-docs] (pre-push --ref 단계에서만 인식 — 마크된 커밋의 파일만 면제되며 다른 커밋은 계속 검사. pre-commit은 메시지 미존재로 불가)
 npm.cmd run check:testfirst             # 로직(src/*.js·ref-pipeline/*.py) 변경 시 테스트(tests/·ref-pipeline/tests/) 동반 강제 — Docs-First 기계화. 우회: SKIP_TESTFIRST=1 · 커밋 메시지 행 끝 [no-test] (--ref 모드, 그 커밋만 면제)
@@ -224,7 +228,9 @@ src/                    # ES Modules
   study-aids.js         # 학습 보조 (기출·중요 마커 추출 카드, 숫자 암기표)
   study-tracker.js      # 학습 캘린더/목표 추적 헬퍼 (recordStudyActivity, getStudyGoals)
   statement-tracker.js  # 진술 원자(sid) 단위 오판 통계·졸업 추적 (FSRS 연동)
-  semantic-index.js     # 의미 유사도 이웃 인덱스 조회 — 사전계산 임베딩 번들 지연 로드 (SEM-02~04, features.semantic)
+  semantic-index.js     # 의미 유사도 이웃 인덱스 조회 — 사전계산 임베딩 번들 지연 로드 (SEM-02~04, features.semantic) + 앵커 프록시 자유 검색 searchByText (SEM-08 v1)
+  reader-notes.js       # 리더 섹션 메모 스토어 — 북마크 키(subj|chapterKey|title) 매핑 scoped 저장 (TR-30)
+  shortcuts-help.js     # 키보드 단축키 도움말 — SHORTCUT_GROUPS 정본 + `?` 키 오버레이 (UX-HELP-01)
   recommendations.js    # 합격 전략 추천 엔진 + 예상 점수 추정 + 실제 결과 보고 (순수 로직)
   analysis-engine.js    # 학습 진단 심층 분석 순수 로직 (AN-01~09 — 예측 점수·취약 단원·주간 리포트)
   command-palette.js    # 통합 검색 팔레트 (Ctrl+K) — 뷰/교재/카드/퀴즈/성분/문제집 검색·실행
@@ -264,6 +270,7 @@ src/                    # ES Modules
   error-telemetry.js    # 런타임 오류 텔레메트리 — error/unhandledrejection 수집 + 세션 핑(kind=session, 오류율 분모) → client_errors 익명 insert (미설정 시 no-op, 오류 세션 상한·중복 억제)
   usage-telemetry.js    # 과업 퍼널 텔레메트리 — quiz/daily start↔complete 이벤트 → usage_events 익명 insert (세션당 랜덤 UUID 쌍 묶기·이벤트 상한, 미설정 시 no-op)
   telemetry-session.js  # 텔레메트리 공유 세션 ID — 페이지 로드당 랜덤 UUID 1개를 client_errors·usage_events·bug 피드백(meta.session_id)이 공유하는 join 키 (사용자 식별 아님)
+  telemetry-consent.js  # 텔레메트리 동의·익명 설치 ID — opt-out 플래그(telemetry_opt_out)+최초 고지 마커+getInstallId(DEVICE_ID 재사용) (UX-MET-06/07, ADR-0019)
   exam-context.js       # 활성 시험 해석/전환, scopedKey 네임스페이스, hasFeature, getExamAppName(시험별 앱 이름 — exams.json appName)
   exam-data-boot.js     # 활성 시험 데이터 번들 부트 (클래식) — 파싱 중 {dataRoot}/registry.js·id_migration.js 동기 삽입, 비활성 시험 번들 미로드
   csv-utils.js          # CSV 파서·EUC-KR 폴백 디코딩·BOM 직렬화 (사전 내보내기 등 공용)
@@ -275,7 +282,8 @@ src/                    # ES Modules
   whats-new.js          # 새 버전 변경 이력 알림 (APP_VERSION 비교 → 모달, 설정 "변경 이력" 재열람)
   onboarding.js         # 첫 방문 시작 안내 모달 (학습 데이터 없는 최초 방문 1회, 설정에서 재열람)
   feedback.js           # 의견 수신 — 설정 "의견 보내기" 모달, ?src= 유입 추적, 익명 insert, 오프라인 큐
-  pro-upgrade.js        # Pro 안내 — feature-plan.json 로드, PRO 배지(data-pro-feature) 제어, 한도 초과 업그레이드 모달, Free/Pro 플랜 비교 모달 (showPlanCompare — 설정 '플랜 안내')
+  pro-upgrade.js        # Pro 안내 — feature-plan.json 로드, PRO 배지(data-pro-feature) 제어, 한도 초과 업그레이드 모달, Free/Pro 플랜 비교 모달 (showPlanCompare — 설정 '플랜 안내'), PAYMENT_NOTICE 결제 안내 (PAY-02)
+  pro-redeem.js         # 라이선스 코드 활성화 — 설정 '라이선스 코드' 입력 다이얼로그 → redeem_code RPC → pro_entitled (PAY-01) + profiles.plan 서버 동기화 initPlanSync (PAY-03)
   usage-stats.js        # 로컬 사용 카운터 (ROAD-L5) — 뷰·액션 횟수를 기기 단위(익명 device_id) localStorage에 누적, Pro 후보 액션 20회 판정, 설정 '내 사용 통계' 모달
   theme-init.js         # 테마 초기화 (즉시 실행)
   theme-toggle.js       # 테마 토글 UI

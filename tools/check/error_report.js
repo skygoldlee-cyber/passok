@@ -23,9 +23,8 @@
  * Secret 키가 없으면 Supabase 대시보드 SQL 에디터용 동등 쿼리를 출력한다.
  */
 'use strict';
-const fs = require('fs');
-const path = require('path');
 const { loadEnv } = require('../lib/env');
+const { restGetAll } = require('../lib/supabase_ops.js');
 
 // ── 순수 집계 (테스트 대상) ──────────────────────────────────
 
@@ -68,14 +67,6 @@ function summarize(rows) {
 
 // ── CLI ─────────────────────────────────────────────────────
 
-function supabaseUrl() {
-    if (process.env.SUPABASE_URL) return process.env.SUPABASE_URL.replace(/\/$/, '');
-    const cfg = fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'supabase-config.js'), 'utf8');
-    const m = cfg.match(/SUPABASE_URL\s*=\s*'([^']+)'/);
-    if (!m) throw new Error('src/auth-sync/supabase-config.js에서 SUPABASE_URL을 읽지 못했습니다');
-    return m[1];
-}
-
 const FALLBACK_SQL = `\
 -- Supabase 대시보드 → SQL Editor (기간 N일에 맞게 interval 조정)
 select
@@ -99,14 +90,7 @@ select created_at, event, meta
 from usage_events where session_id = '<uuid>' order by created_at;`;
 
 async function fetchRows(secret, table, query) {
-    const res = await fetch(`${supabaseUrl()}/rest/v1/${table}?${query}`, {
-        headers: { apikey: secret, authorization: `Bearer ${secret}` },
-    });
-    if (!res.ok) {
-        console.error(`${table} 조회 실패 HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
-        process.exit(1);
-    }
-    return res.json();
+    return restGetAll(secret, table, query);  // 서버 max-rows(1000) 상한 — 페이지네이션으로 전량 회수
 }
 
 async function main() {
@@ -160,7 +144,7 @@ async function main() {
     const since = new Date(Date.now() - days * 864e5).toISOString();
     const rows = await fetchRows(secret, 'client_errors',
         `select=created_at,kind,message,app_version,view`
-        + `&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=50000`);
+        + `&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc`);
     const s = summarize(rows);
 
     console.log(`client_errors 오류율 리포트 — 최근 ${days}일 (조회 ${rows.length}행)`);

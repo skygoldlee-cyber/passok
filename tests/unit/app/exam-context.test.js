@@ -259,3 +259,19 @@ test('getActiveRegistry: window 부재(Node 환경)는 null', () => {
         Object.defineProperty(global, 'window', { value: win, writable: true, configurable: true });
     }
 });
+
+test('peekExamValue: 지정 시험 네임스페이스 읽기 — 활성 시험과 무관 (ES-06)', async () => {
+    const { peekExamValue } = await import('../../../src/exam-context.js');
+    mockStorage.setItem('current_exam', 'cosmetic');
+    mockStorage.setItem('insadj:fc_memorized', '["a","b"]');
+    mockStorage.setItem('cosmetic:fc_memorized', '["x"]');
+    assert.equal(peekExamValue('insadj', 'fc_memorized'), '["a","b"]');
+    assert.equal(peekExamValue('cosmetic', 'fc_memorized'), '["x"]');
+    assert.equal(peekExamValue('nosuch', 'fc_memorized'), null);
+});
+
+test('peekExamValue: GLOBAL_KEYS는 비접두사 키를 읽는다 (ES-06)', async () => {
+    const { peekExamValue } = await import('../../../src/exam-context.js');
+    mockStorage.setItem('appTheme', 'dark');
+    assert.equal(peekExamValue('insadj', 'appTheme'), 'dark');
+});

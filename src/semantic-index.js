@@ -1,5 +1,5 @@
 // src/semantic-index.js — 의미 유사도 인덱스 (빌드타임 사전계산 이웃 조회)
-// @spec SEM-02,SEM-04
+// @spec SEM-02,SEM-04,SEM-08
 //
 // DOC-DSN-18: 문장 임베딩은 ref-pipeline/embeddings/build_embeddings.py가
 // 사전 계산해 {dataRoot}/embeddings/ 번들로 배포된다. 런타임은 neighbors.js의
@@ -93,6 +93,24 @@ export const SemanticIndex = {
     },
 
     /**
+     * 자유 텍스트 의미 검색 — 앵커 프록시 경로 (SEM-08 v1).
+     * 쿼리와 어휘가 가장 겹치는 항목을 앵커로 선정해 그 의미 이웃을 반환한다.
+     * 모델 추론 없이 사전계산 이웃만 사용 — 로드 전·미지원이면 빈 배열.
+     * @param {string} query
+     * @param {number} [k]
+     * @returns {{key:string, score:number, text:string, anchorKey:string, anchorText:string}[]}
+     */
+    searchByText(query, k = 5) {
+        if (!_neighbors) return [];
+        const anchor = findAnchorKey(query, _neighbors.texts);
+        if (!anchor) return [];
+        return (_neighbors.adj[anchor.key] || [])
+            .filter(([k2]) => k2.startsWith('stmt:') || k2.startsWith('q:'))
+            .slice(0, k)
+            .map(([k2, s]) => ({ key: k2, score: s, text: _neighbors.texts[k2] || '', anchorKey: anchor.key, anchorText: _neighbors.texts[anchor.key] || '' }));
+    },
+
+    /**
      * adjacency 조회 공통부 — 로드 전이면 빈 배열.
      * @param {string} key
      * @param {string} prefix 'stmt:' | 'q:'
@@ -113,6 +131,32 @@ export const SemanticIndex = {
         _loadingPromise = null; _unavailable = false;
     },
 };
+
+/**
+ * 앵커 키 선정 (순수 함수 — 테스트 가능) — 쿼리 토큰(2자 이상)의 텍스트 포함
+ * 비율이 가장 높은 항목을 고른다. 동점이면 짧은 텍스트(더 밀집된 매치) 우선.
+ * @param {string} query
+ * @param {Object<string,string>} texts - key → 표시용 원문
+ * @returns {{key:string, cover:number}|null}
+ */
+export function findAnchorKey(query, texts) {
+    const terms = (query || '').toLowerCase().split(/\s+/).filter(t => t.length >= 2);
+    if (!terms.length || !texts) return null;
+    let best = null;
+    let bestLen = Infinity;
+    for (const [key, text] of Object.entries(texts)) {
+        const hay = (text || '').toLowerCase();
+        if (!hay) continue;
+        const hit = terms.filter(t => hay.includes(t)).length;
+        if (!hit) continue;
+        const cover = hit / terms.length;
+        if (!best || cover > best.cover || (cover === best.cover && hay.length < bestLen)) {
+            best = { key, cover };
+            bestLen = hay.length;
+        }
+    }
+    return best;
+}
 
 /**
  * int8 대칭 양자화 벡터 복원 — vectors_* 번들의 base64를 float32로 디코딩.
