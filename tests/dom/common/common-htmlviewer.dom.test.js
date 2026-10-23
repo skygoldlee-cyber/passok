@@ -1,5 +1,5 @@
 // tests/dom/common-htmlviewer.dom.test.js — 참조자료 HTML/MD 뷰어 오버레이 시나리오
-// @spec RR-01~16
+// @spec RR-01~06,RR-08~16 — RR-07 폐기(사이드바 제거)로 범위 제외
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md — src/reader/html-viewer.js (window.HtmlViewer)
 // 검증: MD 렌더·제목(H) · XSS 제거(X) · 검색 하이라이트·이동(H) · LRU 캐시(P)
 //       · fetch 실패 오류(X) · 닫기(H)

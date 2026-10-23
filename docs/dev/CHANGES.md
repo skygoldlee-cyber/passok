@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-23 SPEC ID 상태 수명 주기 규약 — `폐기`·`통합` 상태 신설
+
+- **배경**: 제거된 기능의 ID가 취소선 표기만으로 `✅` 상태에 남아 추적 의미가 흐려짐 — ID 재사용·폐기 참조에 대한 규약 부재
+- **규약** (SPEC.md 헤더): 상태 체계를 `미구현·보류`(로드맵) · `구현·✅`(현행) · **`폐기`**(철회·제거 — ID 영구 소각, 재사용 금지) · **`통합→XX-NN`**(계승)으로 정형화. 폐기 절차: 제목 취소선 + 사유·일자·대체 수단 기록 + 코드 `@spec` 동반 제거(제거 확인 테스트만 예외)
+- **게이트**: `trace_scan.js`에 `isInactiveSpecStatus`/`isRetiredSpecStatus` 분류 헬퍼 추가 → `check_spec_refs.js`가 폐기·통합 ID를 커버리지 공백에서 제외 + **폐기 ID 잔존 코드 참조 기준선 게이트**(`RETIRED_REF_BASELINE=2` — SA-01·RR-07의 e2e 제거 확인 테스트) 신설
+- **소급 적용**: SA-01(기출 필터)·RR-07(컨텍스트 사이드바) → `폐기` 확정. `html-viewer.js`·dom 테스트의 `@spec` 범위가 폐기된 RR-07을 포함하던 드리프트 정정(`RR-05~06,RR-08~16`)
+- SPEC 버전 1.16 → 1.17
+
 ## 2026-10-23 Discord 운영 표면 — 알림 push + 조회 명령 봇 (AD-10·AD-11)
 
 - **알림 push (AD-10)**: `tools/lib/discord.js` 공용 헬퍼(`postDiscord`·`eventEmbed`, `DISCORD_WEBHOOK_URL` env/.env, 미설정 시 조용히 skip) 신설 → `deploy.js`가 배포 성공/vercel 실패/스모크 실패를 채널에 푸시 + `supabase-keepalive.yml` 실패 시 이슈 생성과 병행해 Discord 통지(GH 시크릿). allowed_mentions 비활성화 방어

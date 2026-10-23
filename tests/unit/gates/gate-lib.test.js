@@ -14,7 +14,7 @@ import gitStatus from '../../../tools/lib/git_status.js';
 import traceScan from '../../../tools/lib/trace_scan.js';
 
 const { parseStatusLine, parseStatus, isNoiseOnlyDiff } = gitStatus;
-const { extractSpecStatus } = traceScan;
+const { extractSpecStatus, isInactiveSpecStatus, isRetiredSpecStatus } = traceScan;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 
 // ---------- parseStatusLine / parseStatus ----------
@@ -105,5 +105,35 @@ test('spec status: 실제 SPEC.md에서 미구현 로드맵 ID가 추출된다',
     // 미구현 표기 로드맵 — 회귀 시 undefined가 돼 커버리지 공백으로 오집계됐다
     for (const id of ['ROAD-L9', 'ROAD-L10', 'ROAD-L11']) {
         assert.match(s.get(id) || '', /미구현|보류/, `${id} 상태 셀 추출 실패`);
+    }
+});
+
+// ---------- 상태 수명 주기 분류 (isInactiveSpecStatus / isRetiredSpecStatus) ----------
+
+test('spec lifecycle: 비활성·폐기 상태를 분류한다', () => {
+    // 비활성 = 커버리지 공백 제외 대상 (미구현·보류·폐기·통합)
+    for (const s of ['미구현', '보류', '폐기', '통합→SA-02']) {
+        assert.equal(isInactiveSpecStatus(s), true, s);
+    }
+    for (const s of ['✅', '구현', 'ID-05 준수 — …']) {
+        assert.equal(isInactiveSpecStatus(s), false, s);
+    }
+    // 폐기(RETIRED) = 비활성의 부분집합 — 잔존 코드 참조 감시 대상
+    for (const s of ['폐기', '통합→FO-06']) {
+        assert.equal(isRetiredSpecStatus(s), true, s);
+    }
+    for (const s of ['미구현', '보류', '✅', '구현']) {
+        assert.equal(isRetiredSpecStatus(s), false, s);
+    }
+    // 미정의·빈 상태는 활성으로 간주 (보수적 — 공백 경고 대상에 포함)
+    assert.equal(isInactiveSpecStatus(undefined), false);
+    assert.equal(isInactiveSpecStatus(''), false);
+});
+
+test('spec status: 실제 SPEC.md에서 폐기 확정 ID(SA-01·RR-07)가 추출된다', () => {
+    const s = extractSpecStatus(path.join(ROOT, 'docs', 'dev', 'SPEC.md'));
+    for (const id of ['SA-01', 'RR-07']) {
+        assert.equal(s.get(id), '폐기', `${id} 상태 셀이 폐기가 아님`);
+        assert.equal(isRetiredSpecStatus(s.get(id)), true);
     }
 });

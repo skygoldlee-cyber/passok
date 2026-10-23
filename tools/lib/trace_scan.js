@@ -134,6 +134,15 @@ function extractSpecStatus(file = SPEC_FILE) {
   return map;
 }
 
+// 요구사항 상태 분류 (SPEC.md 마지막 셀 값) — 수명 주기 규약은 SPEC.md 헤더 참조.
+//   비활성(미구현·보류·폐기·통합): 커버리지 공백 경고 대상에서 제외 — 코드 참조
+//   부재가 정상인 상태. 이 중 폐기·통합(RETIRED)은 "요구사항이 철회·계승된" 상태로
+//   코드 @spec 잔존 참조를 별도 감시한다 (제거 확인 테스트 등 예외 참조만 허용).
+const INACTIVE_SPEC_STATUS_RE = /미구현|보류|폐기|통합/;
+const RETIRED_SPEC_STATUS_RE = /폐기|통합/;
+const isInactiveSpecStatus = (status) => INACTIVE_SPEC_STATUS_RE.test(status || '');
+const isRetiredSpecStatus = (status) => RETIRED_SPEC_STATUS_RE.test(status || '');
+
 /** SPEC.md "부록: 요구사항 출처" 표 → Map(id → 출처 문자열). ID 셀은 범위·나열 지원 */
 function extractSpecSources(specIds = new Set()) {
   const map = new Map();
@@ -224,5 +233,7 @@ module.exports = {
   DOC_DIRS, DOC_FILES, REPORT_DIR_RE, isReport,
   ID_RE, SPEC_TAG_RE, RANGE_RE, WILDCARD_ID_RE, PURE_ID_RE, DOC_ID_RE, RELATED_RE,
   walk, expandIds, extractSpec, extractSpecStatus, extractSpecSources,
+  INACTIVE_SPEC_STATUS_RE, RETIRED_SPEC_STATUS_RE,
+  isInactiveSpecStatus, isRetiredSpecStatus,
   collectCodeRefs, collectDocRefs, idsInFile, scanAll,
 };

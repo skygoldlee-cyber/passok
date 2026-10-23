@@ -26,8 +26,10 @@
  *   - src/css/html/tests/tools/ 파일에 @spec 태그가 아예 없음 → 누락 (exit 1)
  *     ※ tools/_archive·ref-pipeline 제외, `@spec none`으로 의도적 미커버 명시 가능
  *   - SPEC에 있지만 어떤 코드도 참조하지 않는 ID → 커버리지 공백 (경고)
- *     ※ SPEC 상태가 '미구현'/'보류'인 ID는 로드맵 항목으로 공백에서 제외 —
+ *     ※ SPEC 상태가 '미구현'/'보류'/'폐기'/'통합'인 ID는 비활성 항목으로 공백에서 제외 —
  *        구현 시작 시 상태를 바꾸면 자동으로 커버리지 추적 대상이 된다
+ *   - '폐기'/'통합' ID의 코드 잔존 참조 → 기준선(RETIRED_REF_BASELINE) 초과 시 실패
+ *     ※ 상태 수명 주기 규약은 docs/dev/SPEC.md 헤더 "상태 수명 주기 규약" 참조
  */
 
 const fs = require('fs');
@@ -48,6 +50,11 @@ const TEST_GAP_BASELINE = 0;
 const UIUX_PREFIX_RE = /^(?:UX-|TR-|R-|TH-|A-)/;
 const UIUX_E2E_GAP_BASELINE = 4; // UX-VFY-06 (정적 체커 규약형 — e2e 실측 대상 아님)
 //   UX-MET-05/07/08 (텔레메트리 인프라 — 기하 UI 요소 없음, unit/dom 커버 + ADR-0019 설계 정본)
+
+// 폐기·통합 ID의 코드 @spec 잔존 참조 기준선 — 폐기된 요구사항을 참조하는 허용
+// 상한. 제거 확인 테스트 등 정당 참조만 승계하며, 신규 참조가 생기면 실패한다.
+// 잔존 참조를 정리했다면 이 수치를 함께 낮춘다. (수명 주기 규약: SPEC.md 헤더)
+const RETIRED_REF_BASELINE = 2; // SA-01·RR-07 — tests/e2e 제거 확인 테스트
 
 // 절차·규약형 요구사항 — 코드 참조 지점이 존재하지 않아 커버리지 공백 경고에서 제외.
 // 각 ID의 강제 지점(문서·절차·자기 구현)을 사유와 함께 명시한다.
@@ -127,12 +134,16 @@ function main() {
     if (!specIds.has(id)) for (const l of locs) stale.push(`${l.file} — 헤더 "관련 SPEC ID"가 SPEC에 없는 ID: ${id}`);
   }
 
-  // 로드맵 항목(SPEC 상태 미구현·보류)은 코드 참조가 없는 것이 정상 — 공백에서 제외
+  // 비활성 항목(SPEC 상태 미구현·보류·폐기·통합)은 코드 참조 부재가 정상 — 공백에서 제외
   const specStatus = T.extractSpecStatus();
-  const PLANNED_RE = /미구현|보류/;
   const unreferenced = [...specIds].filter((id) => !refs.has(id));
-  const planned = unreferenced.filter((id) => PLANNED_RE.test(specStatus.get(id) || '')).sort();
-  const uncovered = unreferenced.filter((id) => !PLANNED_RE.test(specStatus.get(id) || '') && !PROCESS_ONLY_IDS.has(id)).sort();
+  const planned = unreferenced.filter((id) => T.isInactiveSpecStatus(specStatus.get(id))).sort();
+  const uncovered = unreferenced.filter((id) => !T.isInactiveSpecStatus(specStatus.get(id)) && !PROCESS_ONLY_IDS.has(id)).sort();
+
+  // 폐기·통합 ID의 잔존 코드 참조 — 제거 확인 테스트 등 정당 참조는 기준선 이내에서만
+  const retiredRefs = [...refs.keys()]
+    .filter((id) => specIds.has(id) && T.isRetiredSpecStatus(specStatus.get(id)))
+    .sort();
 
   console.log('SPEC ID 추적 검증');
   console.log(`  SPEC.md 선언 ID: ${specIds.size}개`);
@@ -153,7 +164,14 @@ function main() {
     if (missingHeaders.length > 15) console.log(`  …외 ${missingHeaders.length - 15}개`);
   }
   if (planned.length) {
-    console.log(`\n로드맵 항목 (미구현·보류 — 공백 제외, ${planned.length}개): ${planned.join(', ')}`);
+    console.log(`\n비활성 항목 (미구현·보류·폐기·통합 — 공백 제외, ${planned.length}개): ${planned.join(', ')}`);
+  }
+  if (retiredRefs.length) {
+    console.log(`\n폐기·통합 ID 잔존 참조 (${retiredRefs.length}개, 기준선 ${RETIRED_REF_BASELINE}):`);
+    for (const id of retiredRefs) {
+      const locs = refs.get(id).map((l) => `${l.file}:${l.line}`).join(', ');
+      console.log(`  ${id} — ${locs}`);
+    }
   }
   if (uncovered.length) {
     console.log(`\n커버리지 공백 (코드 미참조 ID ${uncovered.length}개):`);
@@ -186,7 +204,8 @@ function main() {
   console.log(`  UI/UX E2E 갭: ${uxE2eGap.length}개 (기준선 ${UIUX_E2E_GAP_BASELINE}개 — 기하 계열 신규 요구사항은 e2e 실측 필수)`);
   const uxGapExceeded = uxE2eGap.length > UIUX_E2E_GAP_BASELINE;
 
-  const fail = stale.length > 0 || errors.length > 0 || gapExceeded || uxGapExceeded;
+  const retiredExceeded = retiredRefs.length > RETIRED_REF_BASELINE;
+  const fail = stale.length > 0 || errors.length > 0 || gapExceeded || uxGapExceeded || retiredExceeded;
   console.log(fail ? '\n실패 — 스테일 참조·파싱 오류·테스트 갭 증가를 수정하세요.' : '\n통과 — 스테일 참조 없음.');
   if (gapExceeded) {
     console.log(`  테스트 갭 ${testGap.length}개 > 기준선 ${TEST_GAP_BASELINE}개 — 신규 요구사항에 tests/ @spec을 추가하거나,`);
@@ -196,6 +215,10 @@ function main() {
     console.log(`  UI/UX E2E 갭 ${uxE2eGap.length}개 > 기준선 ${UIUX_E2E_GAP_BASELINE}개 — 신규 UI/UX 요구사항에 tests/e2e/ @spec을 추가하거나,`);
     console.log(`  규약·리뷰형 요구사항으로 유지할 경우 UIUX_E2E_GAP_BASELINE을 갱신하세요 (tools/check/check_spec_refs.js).`);
     console.log(`  현재 갭: ${uxE2eGap.join(', ')}`);
+  }
+  if (retiredExceeded) {
+    console.log(`  폐기·통합 ID 잔존 참조 ${retiredRefs.length}개 > 기준선 ${RETIRED_REF_BASELINE}개 — 폐기된 요구사항을 신규 코드가`);
+    console.log(`  참조하지 않도록 잔존 @spec을 제거하거나, 제거 확인 등 정당 참조라면 RETIRED_REF_BASELINE을 갱신하세요.`);
   }
   if (!fail && uncovered.length) console.log('  (커버리지 공백은 경고 — 문서/정책형 요구사항은 코드 참조 없음이 정상일 수 있음)');
   process.exit(fail ? 1 : 0);
