@@ -43,6 +43,8 @@ export const ALLOWED_EVENTS = new Set([
     'code_redeem_attempt', 'code_redeem_success',
     // 만료→연장 퍼널 (PAY-07) — 기간권 임박·만료 배너 노출
     'pro_expire_notice',
+    // 로그인 수단 분포 (AU-09) — 소셜 OAuth 시작 (provider 메타만, 계정 식별자 없음)
+    'oauth_login_start',
 ]);
 
 /**

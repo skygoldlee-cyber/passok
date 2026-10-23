@@ -1,10 +1,11 @@
 // src/auth-view.js — 계정/로그인 모달 (Phase 1: 인증만, 동기화는 Phase 2)
-// @spec AU-01~04,AU-08
-// 이메일+비밀번호 로그인·회원가입·매직링크. 세션은 supabase-js가 localStorage에 자동 보관.
+// @spec AU-01~04,AU-08,AU-09
+// 이메일+비밀번호 로그인·회원가입·매직링크·소셜 로그인(Google·Kakao). 세션은 supabase-js가 localStorage에 자동 보관.
 import { getSupabase, onAuthChange } from './supabase-client.js';
 import { showToast, showConfirm, trapFocus } from '../ui-utils.js';
 import { safeGetItem, safeSetItem, safeRemoveItem } from '../state.js';
 import { hasProEntitlement } from '../pro-upgrade.js';
+import { reportEvent } from '../usage-telemetry.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
 
 const el = id => /** @type {HTMLInputElement|null} */ (document.getElementById(id));
@@ -63,6 +64,14 @@ export async function refreshAuthUI() {
         }
     } else {
         show(form); hide(account);
+    }
+    // AU-09 — 설치형 PWA는 소셜 로그인 버튼을 숨긴다: 외부 OAuth 리다이렉트 세션이
+    // PWA 저장소로 돌아오지 못한다 (이메일 코드 경로가 대체 수단).
+    const oauthArea = el('auth-oauth-area');
+    if (oauthArea) {
+        const standalone = window.matchMedia?.('(display-mode: standalone)')?.matches === true
+            || window.navigator.standalone === true;
+        oauthArea.classList.toggle('is-hidden', standalone);
     }
     return user;
 }
@@ -179,6 +188,27 @@ export async function authEmailLogin() {
     show(el('auth-otp-area'));
     setMsg('로그인 링크와 인증 코드를 이메일로 보냈습니다. 메일의 링크를 누르거나, 메일의 인증 코드를 아래에 입력하세요.');
     startEmailLoginCooldown(document.querySelector('[data-click="authEmailLogin"]'));
+}
+
+// 소셜 로그인 허용 프로바이더 — data-arg 위임이라 임의 문자열이 들어올 수 있어 화이트리스트 검증
+const OAUTH_PROVIDERS = new Set(['google', 'kakao']);
+
+/**
+ * 소셜 로그인 (AU-09) — Supabase가 provider 페이지로 리다이렉트하고,
+ * 복귀는 redirectTo(origin) + #access_token 해시로 돌아와 기존 매직링크 랜딩 경로가 처리한다.
+ * 성공 시 페이지가 떠나므로 이후 코드는 오류 경로에만 도달한다.
+ * 주의: 수단마다 별도 auth.users 계정 — Pro는 활성화한 계정에만 귀속된다.
+ */
+export async function authOAuth(provider) {
+    const sb = await getSupabase();
+    if (!sb || !OAUTH_PROVIDERS.has(provider)) return;
+    setMsg('로그인 페이지로 이동 중…');
+    void reportEvent('oauth_login_start', { provider }).catch(() => {});
+    const { error } = await sb.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo: window.location.origin },
+    });
+    if (error) setMsg(friendlyError(error), true);
 }
 
 /** 비밀번호 분실 — 로그인 메일(OTP)로 로그인한 뒤 계정 화면에서 새 비밀번호 설정 */

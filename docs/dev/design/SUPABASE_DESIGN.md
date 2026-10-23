@@ -669,7 +669,23 @@ select polname, polrelid::regclass from pg_policy;
 - ~~매직링크 랜딩 오류 무표시~~ — ✅ 해결: 해시 `error_*` 파라미터 파싱 → 한글 토스트 (§A.8)
 - 비밀번호 분실 시 대시보드 Users → Delete 후 재가입이 유일한 경로 (비밀번호 재설정 메일 플로우 미구현)
 - iOS PWA의 매직링크 완결 불가는 플랫폼 한계 — 코드 입력 경로로 커버 (통합 버튼으로 기본 UX는 동일)
-- Supabase 기본 SMTP는 스팸함에 들어갈 수 있음 + 이메일 발송 레이트리밋이 낮음 + **템플릿 편집 자체가 Custom SMTP 설정을 요구** — Resend/SendGrid 등 연결 권장 (OTP 코드 메일도 이게 있어야 동작)
+- ~~Supabase 기본 SMTP는 스팸함에 들어갈 수 있음 + 이메일 발송 레이트리밋이 낮음 + 템플릿 편집이 Custom SMTP를 요구~~ — ✅ 해결: Gmail 앱 비밀번호 Custom SMTP 적용 (2026-10-23, Management API)
+
+#### A.9 소셜 로그인 (OAuth) 설정 — AU-09
+
+계정 모달의 `Google로 계속`/`카카오로 계속` 버튼은 `signInWithOAuth({provider, redirectTo: origin})`를 호출한다. 복귀는 redirectTo + `#access_token` 해시라 §A.8 ②의 기존 랜딩·`SIGNED_IN` 경로가 그대로 처리하고, 신규 사용자 프로필은 `handle_new_user` 트리거가 만든다 — 서버 스키마 변경은 없다.
+
+**프로바이더별 콘솔 설정**:
+
+| 프로바이더 | 콘솔 작업 | Supabase 등록 값 (`external_<p>_*`) |
+|---|---|---|
+| Google | console.cloud.google.com → OAuth 동의 화면 → 사용자 인증 정보 → OAuth 클라이언트 ID(웹 애플리케이션) → 승인된 리디렉션 URI `https://<ref>.supabase.co/auth/v1/callback` | `client_id` + `secret` |
+| Kakao | developers.kakao.com → 내 애플리케이션 → 카카오 로그인 활성화 → Redirect URI 동일 등록 → 보안 탭 Client Secret 발급 후 상태 '사용함' | REST API 키 = `client_id` + Client Secret |
+
+- 카카오 `kakao_account.email` 동의 항목 수집은 **비즈앱 전환**(사업자 인증)이 필요 — 미전환 상태에서는 이메일 없는 계정이 생길 수 있으므로 `external_kakao_email_optional=true`로 둔다 (계정 화면은 `user.email` 없으면 '계정'으로 표시 — `refreshAuthUI`가 처리).
+- **수단마다 별도 계정**: 이메일 OTP·Google·카카오는 각각 다른 `auth.users`를 만든다 — Pro 코드는 활성화한 계정에만 귀속되므로 "수단을 바꾸면 Pro가 사라진다" 문의를 응대 문구(§A-2)·계정 모달 힌트로 예방한다.
+- **PWA 제약**: OAuth 리다이렉트 세션은 브라우저 저장소에 성립해 설치형 PWA로 돌아오지 못한다 — `display-mode: standalone`이면 버튼 자체를 숨기고 이메일 코드 경로로 유도 (`refreshAuthUI`).
+- 설정 적용은 Management API(`PATCH /v1/projects/{ref}/config/auth`의 `external_google_*`·`external_kakao_*` 필드)로 코드화 가능 — §SMTP 적용과 같은 패턴. 콘솔 자격 증명은 `.env`에 보관하고 저장소에 커밋하지 않는다.
 
 ---
 
