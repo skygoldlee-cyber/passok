@@ -1,5 +1,5 @@
 // tests/dom/pro-redeem.dom.test.js — 라이선스 코드 활성화 + plan 서버 동기화 + 결제 안내 게이트
-// @spec PAY-01, PAY-02, PAY-03
+// @spec PAY-01, PAY-02, PAY-03, PAY-06
 // 설정의 '라이선스 코드' 다이얼로그가 redeem_code RPC를 호출해 Pro를 활성화하고,
 // 로그인 시 profiles.plan → pro_entitled 동기화로 회수·타 기기 전파를 반영한다.
 
@@ -135,6 +135,41 @@ describe('syncPlanFromProfile (PAY-03)', () => {
         expect(await syncPlanFromProfile()).toBe('skip');
         expect(safeGetItem(STORAGE_KEYS.PRO_ENTITLED)).toBe('1');
     });
+
+    it('pro_expires_at이 미래면 pro + 만료일을 로컬에 기록한다 (PAY-06)', async () => {
+        const future = new Date(Date.now() + 30 * 86400000).toISOString();
+        mockGetSupabase.mockResolvedValue({
+            from: () => ({ select: () => ({ eq: () => ({ single: () => ({ data: { plan: 'pro', pro_expires_at: future }, error: null }) }) }) }),
+        });
+        expect(await syncPlanFromProfile()).toBe('pro');
+        expect(safeGetItem(STORAGE_KEYS.PRO_ENTITLED)).toBe('1');
+        expect(safeGetItem(STORAGE_KEYS.PRO_EXPIRES_AT)).toBe(future);
+    });
+
+    it('pro_expires_at이 과거면 기간권 만료로 free 처리한다 (PAY-06)', async () => {
+        safeSetItem(STORAGE_KEYS.PRO_ENTITLED, '1');
+        const past = new Date(Date.now() - 86400000).toISOString();
+        mockGetSupabase.mockResolvedValue({
+            from: () => ({ select: () => ({ eq: () => ({ single: () => ({ data: { plan: 'pro', pro_expires_at: past }, error: null }) }) }) }),
+        });
+        expect(await syncPlanFromProfile()).toBe('free');
+        expect(safeGetItem(STORAGE_KEYS.PRO_ENTITLED)).toBeNull();
+        expect(safeGetItem(STORAGE_KEYS.PRO_EXPIRES_AT)).toBeNull();
+    });
+
+    it('pro_expires_at 컬럼 부재(스키마 미배포)면 plan만으로 폴백 판정한다 (PAY-06)', async () => {
+        mockGetSupabase.mockResolvedValue({
+            from: () => ({
+                select: (cols) => ({
+                    eq: () => ({ single: () => cols.includes('pro_expires_at')
+                        ? { data: null, error: { message: 'column does not exist' } }
+                        : { data: { plan: 'pro' }, error: null } }),
+                }),
+            }),
+        });
+        expect(await syncPlanFromProfile()).toBe('pro');
+        expect(safeGetItem(STORAGE_KEYS.PRO_ENTITLED)).toBe('1');
+    });
 });
 
 describe('결제 안내 모달 (PAY-02)', () => {
@@ -143,7 +178,10 @@ describe('결제 안내 모달 (PAY-02)', () => {
         showUpgradeNotice('카드', '카드의 무료 플랜 한도에 도달했습니다.');
         const dlg = document.querySelector('#pro-upgrade-overlay .app-confirm-dialog');
         expect(dlg).not.toBeNull();
-        expect(dlg.textContent).toContain('9,900원 / 90일');
+        // 기간권 3티어 (PAY-06) — 스프린트 9,900 / 스탠다드 14,900 / 풀코스 19,900
+        expect(dlg.textContent).toContain('스프린트');
+        expect(dlg.textContent).toContain('9,900원');
+        expect(dlg.textContent).toContain('19,900원');
         expect(dlg.textContent).toContain('전액 환불');
         const notice = dlg.querySelector('.pro-payment-notice');
         const contact = dlg.querySelector('.pro-payment-contact');

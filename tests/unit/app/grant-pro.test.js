@@ -13,8 +13,17 @@ test('buildPlanChange: 부여는 pro + pro_since 시각, 회수는 free + null',
     const grant = buildPlanChange(false);
     assert.equal(grant.plan, 'pro');
     assert.match(grant.pro_since, /^\d{4}-\d{2}-\d{2}T/);
+    assert.equal(grant.pro_expires_at, null);              // --days 미지정 = 무기한 부여
     const rev = buildPlanChange(true);
-    assert.deepEqual(rev, { plan: 'free', pro_since: null });
+    assert.deepEqual(rev, { plan: 'free', pro_since: null, pro_expires_at: null });
+});
+
+test('buildPlanChange: --days 지정 시 pro_expires_at이 now+days로 설정된다 (PAY-06)', () => {
+    const grant = buildPlanChange(false, 30);
+    assert.equal(grant.plan, 'pro');
+    const ms = Date.parse(grant.pro_expires_at) - Date.now();
+    assert.ok(ms > 29 * 86400000 && ms <= 30 * 86400000, `expires ~30일 후여야 함: ${grant.pro_expires_at}`);
+    assert.equal(buildPlanChange(false, 'abc').pro_expires_at, null); // 비숫자는 무기한
 });
 
 test('isNoop: 동일 상태 재적용은 변경 불필요로 판정', () => {
