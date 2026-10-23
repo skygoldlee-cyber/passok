@@ -6,8 +6,57 @@ on:
   pull_request:
     branches: [main]
 
+# 연속 푸시 시 구 커밋 실행을 취소해 러너·과금 절약 (월타임에는 무관)
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  # e2e 스킵 판정 — 문서 전용 변경(docs/**·루트 *.md·tmp/**)이면 E2E 불필요.
+  # 워크플로 paths-ignore는 check-run 자체가 안 생겨 배포 가드를 막으므로
+  # 잡 if: 방식으로 제어 — 스킵된 잡은 워크플로 conclusion에 영향 없음.
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.detect.outputs.code }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # before/base 대비 diff 판정에 필요
+      - name: Detect code-affecting changes
+        id: detect
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          EVENT_BEFORE: ${{ github.event.before }}
+        run: node tools/check/detect_code_changes.js
+
+  # 생성 번들(index.html·data/)은 gitignore라 클론에 없다 — 1회 빌드 후
+  # 아티팩트로 공유해 test·e2e 잡의 중복 빌드(레그당 ~1분×8)를 제거한다.
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: 생성 번들 빌드 (gitignore 대상)
+        run: npm run build:html && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js
+      - name: Upload generated bundles
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-bundles
+          path: |
+            index.html
+            data/
+          retention-days: 1
+
   test:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,6 +71,11 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Download generated bundles
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-bundles
 
       - name: Dependency audit (high+ 취약점 차단)
         run: npm audit --audit-level=high
@@ -39,10 +93,6 @@ jobs:
 
       - name: Secret scan (추적 파일 비밀키 패턴)
         run: npm run check:secrets
-
-      # 생성물(index.html·data/ 번들)은 gitignore 대상 — 클론에 없으므로 문서 경로·콘텐츠 게이트 전에 빌드
-      - name: 생성 번들 빌드 (gitignore 대상)
-        run: npm run build:html && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js
 
       - name: Lint
         run: npm run lint
@@ -143,14 +193,25 @@ jobs:
 
   # E2E는 test 잡과 병렬로 돌린다 — serve.js가 무상태 정적 서빙이라 프로젝트별
   # 분리에 안전. 레그당 ~110 시나리오 + workers:2 (playwright.config.js).
-  # 프로젝트 × 2샤드 = 6레그 — 최장 레그(tablet ~306s)를 절반으로 분할
+  # chromium만 3샤드 — 지연 사례에서 straggler는 chromium 레그였다.
+  # container는 package-lock의 @playwright/test 버전과 맞춘다 — 브라우저+시스템
+  # 의존이 이미지에 내장돼 install-deps·브라우저 캐시 단계가 불필요하다.
   e2e:
+    needs: [build, changes]
+    if: needs.changes.outputs.code == 'true'  # 문서 전용 변경 스킵 (changes 잡)
     runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.63.0-noble
     strategy:
       fail-fast: false # 한 프로젝트 실패 시에도 나머지 결과를 확보
       matrix:
-        project: [chromium, mobile, tablet]
-        shard: [1, 2]
+        include:
+          - { project: chromium, shard: 1, total: 3 }
+          - { project: chromium, shard: 2, total: 3 }
+          - { project: chromium, shard: 3, total: 3 }
+          - { project: mobile, shard: 1, total: 2 }
+          - { project: mobile, shard: 2, total: 2 }
+          - { project: tablet, shard: 1, total: 2 }
+          - { project: tablet, shard: 2, total: 2 }
     steps:
       - uses: actions/checkout@v4
 
@@ -163,26 +224,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 생성물은 gitignore 대상 — e2e 서빙 전 빌드 필수
-      - name: 생성 번들 빌드 (gitignore 대상)
-        run: npm run build:html && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js
-
-      - name: Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v4
+      - name: Download generated bundles
+        uses: actions/download-artifact@v4
         with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          name: generated-bundles
 
-      - name: Install Playwright system deps
-        run: npx playwright install-deps chromium
-
+      # 이미지와 @playwright/test 버전이 맞으면 no-op — 드리프트 시 브라우저 보정
       - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install chromium
 
       - name: Run E2E tests (Playwright)
-        run: npm run test:e2e -- --project=${{ matrix.project }} --shard=${{ matrix.shard }}/2
+        run: npm run test:e2e -- --project=${{ matrix.project }} --shard=${{ matrix.shard }}/${{ matrix.total }}
 
       - name: Upload Playwright report
         if: failure()

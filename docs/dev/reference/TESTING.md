@@ -863,34 +863,27 @@ function detectDiagramType(textContent) {
 
 ### GitHub Actions
 
-`push`/`pull_request` → main 시 `.github/workflows/ci.yml`이 전 단계를 순차 실행한다 (하나라도 실패 시 머지 차단):
+`push`/`pull_request` → main 시 `.github/workflows/ci.yml`이 4개 잡으로 실행된다 (하나라도 실패 시 머지 차단):
 
-```yaml
-# .github/workflows/ci.yml 실행 순서 (요약)
-- npm ci
-- npm audit --audit-level=high   # high+ 취약 의존성 차단
-- npm run lint            # ESLint — 0 problems 필수 (--max-warnings 0)
-- npm run check:types     # tsc --noEmit — JSDoc 타입 진단 (src 전체)
-- npm run check:imports   # import/export 교차 검증
-- npm run check:docs      # 문서 경로 + DOC ID
-- node tools/check/check_doc_sync.js --ref origin/main   # 소스 변경 시 문서 갱신 강제
-- node tools/check/check_test_first.js --ref origin/main # 로직 변경 시 테스트 동반 강제 (Docs-First)
-- npm run check:specrefs  # 스테일 SPEC 참조 + 테스트 갭 기준선(0)
-- npm run check:trace     # TRACE_MATRIX 신선도 (해시)
-- node tools/check/check_content.js --content-only --quick  # 콘텐츠 추적 게이트 (manifest·구조·인용·참조라인·신선도·ID이관·카드)
-- npm test                # Unit 테스트
-- npm run coverage        # DOM 테스트 + 커버리지 임계값
-- npm run coverage:unit   # 유닛 커버리지 (c8)
-- node tools/check/coverage_merge.js --check   # 병합 커버리지 임계값 → 아티팩트 업로드
-- npm run verify:assets   # SW 프리캐시 자산
-- npm run check:parser    # 빌드↔런타임 파서 정합성
-- npx playwright install --with-deps chromium
-- npm run test:e2e        # Playwright E2E → 실패 시 test-results 아티팩트
-- node tools/check/impact_tests.js --ref origin/main   # PR만 — 영향 요구사항 리포트
-```
+- **`changes`** — diff 판정(`tools/check/detect_code_changes.js`): 문서 전용 변경(`docs/**`·루트 `*.md`·`tmp/**`)이면 `code=false` → e2e 잡 전체 스킵. 워크플로 paths-ignore 대신 잡 `if:` 방식 — check-run이 안 생기면 배포 가드가 pending으로 차단되므로.
+- **`build`** — 생성 번들(`index.html`·`data/`) 1회 빌드 → `generated-bundles` 아티팩트로 공유 (test·e2e의 중복 빌드 제거).
+- **`test`** — 아티팩트 다운로드 후 전 게이트 직렬:
+  ```yaml
+  - npm ci / npm audit --audit-level=high / npm run sbom
+  - npm run check:secrets · lint · check:types · check:imports · check:supabase
+  - check:posind · check:contentind · check:docs · check:domainmap · check:uitext
+  - check:mobilesafe · check:escape · check:uistyle
+  - check_doc_sync.js --ref origin/main · check_test_first.js --ref origin/main
+  - check:specrefs · check:trace · check:html · check_content.js --content-only --quick
+  - npm run coverage (DOM+c8) · coverage:unit · coverage_merge.js --check
+  - verify:assets · check:vendor · check:parser · check:perf · audit_study_quality --check
+  - impact_tests.js --ref origin/main  # PR만 — 영향 요구사항 리포트
+  ```
+- **`e2e`** (`needs: build, changes` · `if: code=='true'`) — `mcr.microsoft.com/playwright` 컨테이너(버전은 package-lock의 `@playwright/test`와 동기)로 install-deps·브라우저 캐시 제거. 매트릭스: chromium 3샤드 + mobile·tablet 각 2샤드 = 7레그 병렬, `npm run test:e2e -- --project=<p> --shard=N/T`.
 
 - PR에서는 `impact_tests.js --ref origin/main`이 변경 파일의 영향 요구사항·권장 테스트를 출력한다 — 리뷰어가 회귀 범위를 확인하는 용도.
 - 커버리지 리포트(`coverage/`)는 CI 아티팩트로 14일간, E2E 실패 시 `test-results/`가 7일간 보관된다.
+- `concurrency: ci-<ref>` — 연속 푸시 시 구 커밋 실행 자동 취소.
 
 ### 배포 전 체크리스트
 
