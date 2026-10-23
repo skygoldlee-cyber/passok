@@ -16,6 +16,7 @@
 - **샤드 재분배** — straggler였던 chromium만 3샤드(모바일·태블릿 2 유지) → 7레그
 - **concurrency** — `ci-<ref>` 그룹 연속 푸시 시 구 실행 자동 취소
 - `check_ci_parity` CI_ONLY에 `detect_code_changes.js` 등록 · TESTING.md §7 CI 구조 갱신
+- **후속 수정**: `check-runner.test.js`의 CI-only 정규식에도 `detect_code_changes` 등록 — ci.yml 명령↔ci 프리셋 커버리지 테스트가 오케스트레이션 명령을 위반으로 오인 (첫 CI 실행에서 검출·수정)
 
 ## 2026-10-22 P2 결제 조건 확정 + 결제 안내 활성화 (PAY-02 enabled)
 

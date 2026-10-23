@@ -246,7 +246,7 @@ npm run hooks:install
 | 63 | `analysis-engine.test.js` | 22 | 맞춤학습 분석 엔진 순수 로직 | |
 | 64 | `answer-overlap.test.js` | 13 | `check_answer_overlap.js` — 정답↔근거 지지 판정 | |
 | 65 | `audio-manifest.test.js` | 4 | 오디오 매니페스트 커버리지 | |
-| 66 | `check-runner.test.js` | 7 | 통합 실행기 `run.js`·`steps.js` 레지스트리 무결성 | |
+| 66 | `check-runner.test.js` | 8 | 통합 실행기 `run.js`·`steps.js` 레지스트리 무결성 + ci.yml 명령 ↔ ci 프리셋 커버리지 | |
 | 67 | `emb-manifest.test.js` | 4 | 임베딩 manifest 신선도 (SEM-05) | |
 | 68 | `exams/cosmetic/custom-ingredient-store.test.js` | 12 | 자가 등록 성분 CRUD·공식 동명 차단·superseded (DI-06~09) | |
 | 69 | `exams/cosmetic/formula-practical.test.js` | 11 | 실무 도구 확장 순수 로직 (FO-57~63) | |
