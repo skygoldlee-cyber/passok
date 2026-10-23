@@ -7,6 +7,16 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-23 CI E2E 병목 개선 — 문서 스킵·Playwright 컨테이너·번들 공유·샤드 재분배
+
+- **배경**: 문서-only 커밋에도 전체 E2E가 실행돼 배포 가드(커밋 CI success 필수)가 10분+ 지연
+- **changes 잡** — 신규 `tools/check/detect_code_changes.js`: diff가 `docs/**`·루트 `*.md`·`tmp/**` 전용이면 `code=false` → e2e 잡 스킵. `paths-ignore`는 check-run 미생성으로 배포 가드를 pending 차단하므로 잡 `if:` 방식 채택 (스킵 잡은 워크플로 conclusion에 영향 없음). `E2E_FORCE=1` 우회
+- **build 잡** — `index.html`·`data/` 번들 1회 빌드 → `generated-bundles` 아티팩트 공유: test·e2e 잡의 레그당 중복 빌드 제거
+- **e2e 컨테이너화** — `mcr.microsoft.com/playwright:v1.63.0-noble` (package-lock 버전 동기): `install-deps`(apt, 캐시 불가)·브라우저 캐시 단계 삭제로 레그당 ~2-3분 절감. 브라우저 설치 명령은 no-op 가드로 유지
+- **샤드 재분배** — straggler였던 chromium만 3샤드(모바일·태블릿 2 유지) → 7레그
+- **concurrency** — `ci-<ref>` 그룹 연속 푸시 시 구 실행 자동 취소
+- `check_ci_parity` CI_ONLY에 `detect_code_changes.js` 등록 · TESTING.md §7 CI 구조 갱신
+
 ## 2026-10-22 P2 결제 조건 확정 + 결제 안내 활성화 (PAY-02 enabled)
 
 - **D-1~D-5 확정** (DOC-DSN-35 §8 '미결정' → '결정 기록'): 수동 결제(오픈채팅 안내 — 토스아이디 서비스 종료로 링크 불가, 계좌이체·카카오페이 1:1 안내) · 9,900원/90일 기간권 · 코드 미사용 7일 전액 환불 · 즉시 활성화 · 오픈채팅 문의 채널

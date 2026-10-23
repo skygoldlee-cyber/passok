@@ -40,6 +40,7 @@ const CI_ONLY = new Set([
   'npm run build:data',              // data/ 생성 번들은 gitignore — 클론에서 빌드 필요
   'npm run build:drills',            // 〃 drills 번들
   'build_doc_bundles.js',            // 〃 docs_md 번들
+  'detect_code_changes.js',          // e2e 스킵 판정 — CI 오케스트레이션 전용 (로컬 재현 불필요)
 ]);
 
 // 로컬에만 있는 단계 — CI에서 의미 없는 로컬 환경 검증
