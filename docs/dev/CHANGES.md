@@ -7,6 +7,16 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-23 Supabase 스키마 견고화 — redeem_code 원자화·feedback 스푸핑 차단·리포트 인덱스
+
+- **`redeem_code` TOCTOU 수정**: select 검사 + update 분리 구조를 단일 `update … where redeemed_by is null returning`으로 원자화 — 동시 사용 시 이중 소비·덮어쓰기 차단
+- **profiles 행 부재 유실 방지**: plan update가 0행이면(트리거 누락·수동 생성 계정) insert 폴백 — 코드만 소비되고 Pro 미부여되는 엣지 제거
+- **서버측 코드 정규화**: `p_code := upper(btrim(p_code))` — 클라 `normalizeCode` 우회 직접 호출 방어. anon/public execute revoke → `authenticated`만 호출 가능
+- **`pro_since` 최초 활성일 유지** — `coalesce`로 연장 시 미덮어쓰기. `redeemed_exam_date` 신규 컬럼에 사용 시점 시험일 기록 (PAY-08 보정 감사)
+- **`feedback` 스푸핑 차단**: insert 정책 `check(true)` → `user_id is null or user_id = auth.uid()` — 익명 insert는 유지하면서 타인 id 귀속 차단
+- **리포트 인덱스 5종**: `pro_codes.redeemed_by`(부분)·`profiles.pro_expires_at`(pro 부분)·`feedback(user_id, created_at desc)`·`usage_events(event, created_at)`·`client_errors(created_at)` — AD-08/09·funnel 리포트의 seq scan 방지
+- **적용**: `npm run schema:apply`로 프로덕션 반영 완료 — 멱등 재실행으로 기존 배포에도 동일 적용
+
 ## 2026-10-23 관리자 Pro 모니터링 확장 — 사용자 조회 만료·코드 이력 + Pro 현황 리포트 (AD-08·AD-09)
 
 - **배경**: 기간권 사업에서 `report:user`가 만료일·사용 코드를 보여주지 못했고, 코드 발급↔사용 대사·연장 영업 코호트·가입 수단 분포를 조회할 도구가 없었음

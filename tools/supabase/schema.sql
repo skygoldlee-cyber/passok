@@ -56,14 +56,21 @@ create table if not exists public.pro_codes (
   redeemed_by uuid references auth.users(id),
   redeemed_at timestamptz,
   valid_days int not null default 90,    -- 기간권 일수 (PAY-06 — 스프린트 30 / 스탠다드 60 / 풀코스 90)
+  redeemed_exam_date date,             -- 사용 시점 활성 시험일 (PAY-08 보정 감사용 — 만료일이 valid_days보다 긴 이유 추적)
   created_at timestamptz not null default now()
 );
 alter table public.pro_codes add column if not exists valid_days int not null default 90;
+alter table public.pro_codes add column if not exists redeemed_exam_date date;
 
 -- 코드 사용: 유효한 미사용 코드면 plan='pro'로 갱신하고 true 반환.
 -- 만료일 = max(기존 만료일, now()) + valid_days — 활성 기간권은 연장, 만료분은 오늘부터 재기산.
 -- PAY-08: p_exam_date가 있으면 만료일을 시험일+3일 이상으로 보장한다 (시험 직전 잠김 방지).
 -- 관리자 무기한 부여(plan='pro'·pro_expires_at null)는 유지한다.
+-- 견고화 (2026-10-23):
+--   - p_code 정규화(공백 제거·대문자)를 서버에도 둔다 — 클라 normalizeCode 우회 직접 호출 방어
+--   - select 검사 + update 분리 대신 단일 update … returning으로 원자화 — 동시 사용 레이스 차단
+--   - profiles 행 부재(트리거 누락·수동 생성 계정) 시 insert 폴백 — 코드만 소비되고 plan 미갱신되는 유실 방지
+--   - pro_since는 coalesce로 최초 활성일 유지 — 연장 시 덮어쓰지 않음
 -- 시그니처가 바뀌므로 구 단일인자 버전을 먼저 제거한다 (create or replace는 동일 시그니처만 교체).
 drop function if exists public.redeem_code(text);
 create or replace function public.redeem_code(p_code text, p_exam_date date default null)
@@ -76,17 +83,18 @@ begin
   if auth.uid() is null then
     return false;
   end if;
-  select * into v_code from public.pro_codes
-    where code = p_code and redeemed_by is null;
+  p_code := upper(btrim(p_code));
+  -- 미사용 코드를 원자적으로 소비 — 동시 요청 중 하나만 성공
+  update public.pro_codes
+    set redeemed_by = auth.uid(), redeemed_at = now(), redeemed_exam_date = p_exam_date
+    where code = p_code and redeemed_by is null
+    returning * into v_code;
   if not found then
     return false;
   end if;
-  update public.pro_codes
-    set redeemed_by = auth.uid(), redeemed_at = now()
-    where code = p_code;
   update public.profiles
     set plan = 'pro',
-        pro_since = now(),
+        pro_since = coalesce(pro_since, now()),
         pro_expires_at = case
           when plan = 'pro' and pro_expires_at is null then null
           else greatest(
@@ -95,9 +103,19 @@ begin
                  coalesce((p_exam_date + 3)::timestamptz, '-infinity'::timestamptz))
         end
     where id = auth.uid();
+  if not found then
+    -- profiles 행이 없는 계정(handle_new_user 트리거 누락 등) — 코드는 이미 소비됐으니 plan을 반드시 기록한다
+    insert into public.profiles (id, plan, pro_since, pro_expires_at)
+    values (auth.uid(), 'pro', now(),
+            greatest(now() + make_interval(days => v_code.valid_days),
+                     coalesce((p_exam_date + 3)::timestamptz, '-infinity'::timestamptz)));
+  end if;
   return true;
 end;
 $$;
+-- 익명 호출은 함수 본문의 auth.uid() 가드로 이미 false지만, 권한 경계를 명시한다.
+revoke execute on function public.redeem_code(text, date) from anon, public;
+grant execute on function public.redeem_code(text, date) to authenticated;
 -- 기존 배포에 적용 (구 서명 함수 교체):
 --   위 drop + create or replace 블록 전체를 SQL Editor에 실행하면 p_exam_date 인자가 추가된다.
 --   앱은 미배포 스키마 감지 시 p_code 단독 호출로 폴백한다 (src/pro-redeem.js callRedeemRpc).
@@ -146,8 +164,10 @@ create table if not exists public.feedback (
 alter table public.feedback enable row level security;
 
 drop policy if exists "public insert" on public.feedback;
+-- user_id는 본인 또는 익명만 허용 — 로그인 사용자가 타인 id로 피드백을 심는 스푸핑 차단
 create policy "public insert" on public.feedback
-  for insert to anon, authenticated with check (true);
+  for insert to anon, authenticated
+  with check (user_id is null or user_id = auth.uid());
 
 -- ============================================================
 -- client_errors: 런타임 오류 텔레메트리 (src/error-telemetry.js)
@@ -210,6 +230,23 @@ alter table public.usage_events enable row level security;
 drop policy if exists "public insert" on public.usage_events;
 create policy "public insert" on public.usage_events
   for insert to anon, authenticated with check (true);
+
+-- ============================================================
+-- 조회 인덱스 — 관리자 리포트·시간순 조회의 seq scan 방지
+--   report:user(pro_codes.redeemed_by·feedback.user_id)
+--   report:pro(profiles.pro_expires_at 버킷)
+--   report:funnel·dashboard(usage_events event+created_at, client_errors created_at)
+-- ============================================================
+create index if not exists pro_codes_redeemed_by_idx
+  on public.pro_codes (redeemed_by) where redeemed_by is not null;
+create index if not exists profiles_pro_expires_idx
+  on public.profiles (pro_expires_at) where plan = 'pro';
+create index if not exists feedback_user_created_idx
+  on public.feedback (user_id, created_at desc);
+create index if not exists usage_events_event_created_idx
+  on public.usage_events (event, created_at);
+create index if not exists client_errors_created_idx
+  on public.client_errors (created_at);
 
 -- ============================================================
 -- 확인 쿼리 (선택): 실행 후 테이블 5개·정책 4개·함수 2개가 보이면 성공
