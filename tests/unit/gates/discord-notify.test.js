@@ -10,10 +10,13 @@ import discord from '../../../tools/lib/discord.js';
 const { postDiscord, eventEmbed, postAnnounce, releaseAnnounceEmbed, announceRelease } = discord;
 
 // announce env 키를 저장→테스트 후 복원 (.env에 설정돼 있어도 격리)
+// delete 대신 빈 값: loadEnv()가 .env에서 삭제된 키를 다시 채우므로
+// DISCORD_ANNOUNCE* 전부를 ''로 초기화한 뒤 map을 입힌다.
 function withAnnounceEnv(map, fn) {
-    const keys = ['DISCORD_ANNOUNCE', 'DISCORD_ANNOUNCE_COSMETIC', 'DISCORD_ANNOUNCE_UNKNOWN'];
+    const keys = Object.keys(process.env).filter(k => k.startsWith('DISCORD_ANNOUNCE'));
+    ['DISCORD_ANNOUNCE', 'DISCORD_ANNOUNCE_COSMETIC', 'DISCORD_ANNOUNCE_UNKNOWN'].forEach(k => { if (!keys.includes(k)) keys.push(k); });
     const saved = {};
-    keys.forEach(k => { saved[k] = process.env[k]; delete process.env[k]; });
+    keys.forEach(k => { saved[k] = process.env[k]; process.env[k] = ''; });
     Object.assign(process.env, map);
     return Promise.resolve().then(fn).finally(() => {
         keys.forEach(k => { if (saved[k] === undefined) delete process.env[k]; else process.env[k] = saved[k]; });
