@@ -190,7 +190,7 @@ const DERIVED_IDS = new Set([
 ]);
 // 개별 복구 힌트 — derived 묶음에 속하지 않는 재생성·스탬프 계열
 const REMEDIES = {
-  'content:embfresh': 'npm.cmd run build:embeddings — Python3 + sentence-transformers 필요 (build:derived 미포함 — 루틴 경로 Node-only 분리, 임베딩은 build:derived:full)',
+  'content:embfresh': 'npm.cmd run build:embeddings — Node-only (최초 실행 시 ONNX 모델 ~470MB 다운로드, build:derived 미포함 — 임베딩은 build:derived:full)',
   'content:reffresh': 'npm.cmd run convert:refs — ref-pipeline Python으로 PDF→ref_md 재변환',
   'refs:fresh': 'npm.cmd run convert:refs — ref-pipeline Python으로 PDF→ref_md 재변환',
   'content:textbookdocs': '교재 종속 문서(판본: textbook)를 최신 교재에 맞춰 갱신',

@@ -13,7 +13,7 @@
 | `content/**/audiobook/mp3/` | ~1.7GB | ❌ (`.gitignore` + `*.mp3`) | 이미 외부화 선례 — TTS 산출물, 재생성·CDN 호스팅 가능 |
 | 참조자료 PDF 46종 | ~36MB | ❌ | GitHub Releases 외부화 완료 (DOC-RBK-12 — 해시 매니페스트만 추적, `fetch:refpdfs`로 복원) |
 | 교재 이미지 | ~9MB | ⚠️ 부분 | 런타임 .webp만 추적 — PNG 원본 마스터(1과목_삽화.png 8.7MB)도 릴리스 에셋으로 외부화 (img_masters.json) |
-| 생성 번들 (`data/`) | ~15MB | ✅ | drills 최대 3.7MB · embeddings ~11MB — 정적 배포 입력물. embeddings는 `embfresh` 게이트가 입력 변경 시에만 재빌드를 강제해 이력 증가가 느림 → **추적 유지로 결정** (CI가 Python/sentence-transformers를 못 돌려 외부화 대비 비용 우위) |
+| 생성 번들 (`data/`) | ~15MB | ✅ | drills 최대 3.7MB · embeddings ~11MB — 정적 배포 입력물. embeddings는 `embfresh` 게이트가 입력 변경 시에만 재빌드를 강제해 이력 증가가 느림 → **추적 유지로 결정** (재생성이 모델 다운로드·연산 비용을 요구해 외부화 대비 비용 우위) |
 | **`.git` 이력 전체** | **57MB** (2026-10-22 기준) | — | 306MB → 57MB — 삽화 구버전·PDF·PNG 마스터 이력 제거 후 잔여분은 embeddings 이력 + e2e 스냅샷 + vendor |
 
 ## 2. `.git` 비대화의 실제 동인

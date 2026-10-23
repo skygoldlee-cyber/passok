@@ -6,8 +6,8 @@
  * sha1 목록)를 현재 파일과 비교한다. 원본이 바뀌었거나 입력 파일 집합이
  * 달라지면 `npm run build:embeddings` 재실행이 필요하다.
  *
- * 입력 집합 재현 규칙은 ref-pipeline/embeddings/build_embeddings.py 의
- * collect_items()와 동일해야 한다:
+ * 입력 집합 재현 규칙은 tools/build/build_embeddings.js 의
+ * collectItems()와 동일해야 한다:
  *   - {dataRoot}/drills/ox_*.js
  *   - {dataRoot}/drills/combo_*.js  (index 제외)
  *   - {dataRoot}/exams/*.js

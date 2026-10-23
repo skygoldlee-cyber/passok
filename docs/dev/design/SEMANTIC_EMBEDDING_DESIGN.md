@@ -36,7 +36,7 @@
 
 **차원 축소 옵션**: 384d를 유지하는 것이 기본이다. 번들 크기가 예산(§6-3)을 초과하면 빌드타임 PCA(또는 e5 계열의 head-truncation)로 128d까지 축소를 검토한다 — 축소 여부·기법·분산 설명력도 매니페스트에 기록한다.
 
-**재현성**: 모델은 HuggingFace 리비전(commit SHA)으로 핀하고 `requirements.txt`에 `sentence-transformers` 버전을 고정한다. 동일 입력·동일 리비전이면 동일 벡터가 재생산되어야 하며, 매니페스트의 `sourceHash`(입력 텍스트 집합 해시)가 신선도 게이트의 비교 기준이 된다(§7-3).
+**재현성**: 생성 도구는 `tools/build/build_embeddings.js` — 동일 모델의 ONNX export(`Xenova/multilingual-e5-small`, fp32)를 `@huggingface/transformers`로 인코딩한다. fp32 ONNX 출력은 원본 PyTorch 산출물과 int8 양자화 후 완전 일치함이 `tools/check/check_emb_parity.js`로 검증됐다(벡터 cos 1.00000·이웃 일치 95.7%). 동일 입력이면 동일 벡터가 재생산되어야 하며, 매니페스트의 `sourceHash`(입력 텍스트 집합 해시)가 신선도 게이트의 비교 기준이 된다(§7-3). Python 레퍼런스 구현은 `ref-pipeline/embeddings/build_embeddings.py`에 보존한다.
 
 ## 4. 임베딩 대상·ID 체계
 
@@ -134,13 +134,13 @@ SemanticIndex.topK(queryVec, {type?, subject?, k})        // 전수 스캔 (벡�
 
 ### 7.1 생성 스크립트 (제안)
 
-- `ref-pipeline/embeddings/build_embeddings.py` — 신규. 입력: `build:data` 산출물(드릴 번들의 진술·문항) + `content/exams/<id>/` 교재·카드 원문 → 출력: §5의 번들 + `manifest.js`.
-- `ref-pipeline/embeddings/requirements.txt` — `sentence-transformers` 등 고정 버전(오디오북 파이프라인의 독립 requirements 패턴 동일). torch 계열은 무거우므로 **기본 빌드 체인과 분리**한다.
-- npm 스크립트 `build:embeddings`(제안) — `build:data`와 독립 실행. 임베딩 재생성은 콘텐츠 변경 시에만 필요하며, CPU에서 ~10k 항목 ≈ 수 분.
+- `tools/build/build_embeddings.js` — 생성 스크립트(Node — Python 레퍼런스 `ref-pipeline/embeddings/build_embeddings.py`의 포팅, ONNX fp32 인코딩). 입력: `build:data` 산출물(드릴 번들의 진술·문항) → 출력: §5의 번들 + `manifest.js`.
+- npm 스크립트 `build:embeddings` — `build:data`와 독립 실행. 임베딩 재생성은 콘텐츠 변경 시에만 필요하며, CPU에서 ~10k 항목 ≈ 수 분(모델 다운로드 ~470MB는 최초 1회).
+- 대형 모델 다운로드·전쌍방 유사도 연산은 무거우므로 **기본 빌드 체인과 분리**한다.
 
 ### 7.2 빌드 체인 위치
 
-`build:data` 산출물이 입력이므로 임베딩 빌드는 그 이후에 실행한다. **필수 체인에 포함하지 않는다** — `check:all`이 로컬·CI에서 torch 환경을 요구하게 되는 것을 막기 위함이다. 대신:
+`build:data` 산출물이 입력이므로 임베딩 빌드는 그 이후에 실행한다. **필수 체인에 포함하지 않는다** — `check:all`이 매 실행마다 모델 다운로드·전쌍방 유사도 연산을 수행하는 것을 막기 위함이다. 대신:
 
 - `manifest.js.sourceHash` = 임베딩 입력(대상 텍스트 집합)의 결정적 해시.
 - 신선도 검증은 벡터 재계산 없이 가능: **입력 해시만 다시 계산해 매니페스트와 비교**(해시 입력 스냅샷도 함께 커밋). `check:datafresh` 계열에 `check:embfresh`(제안) 단계를 추가해 "콘텐츠는 바뀌었는데 임베딩이 구형"을 게이트한다. 재계산이 필요할 때만 `build:embeddings`를 수동 실행한다.

@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """build_embeddings.py — 콘텐츠 문장 임베딩 사전 계산 (DOC-DSN-18 PoC)
 
+⚠️ 레퍼런스 구현으로 보존 — 운영 생성 도구는 Node 포팅본 tools/build/build_embeddings.js
+   (`npm run build:embeddings`). ONNX fp32 인코딩이 본 구현의 PyTorch 산출물과 int8
+   양자화 후 완전 일치함이 tools/check/check_emb_parity.js로 검증됨. Python 의존 없이
+   재생성 가능하므로 이 스크립트는 수치 대조용 레퍼런스로만 유지한다.
+
 빌드타임에만 실행되는 파이프라인: 드릴·시험 JS 번들에서 진술(sid)·문항(qid)을 수집해
 문장 임베딩을 계산하고, int8 대칭 양자화 벡터 번들·이웃 인덱스·품질 리포트를 산출한다.
 앱에는 모델이 배포되지 않는다 — 산출물(벡터)만 정적 자산이 된다.

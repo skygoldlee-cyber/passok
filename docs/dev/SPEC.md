@@ -574,7 +574,7 @@
 
 | ID | 요구사양 | 구현 상태 |
 |----|---------|-----------|
-| SEM-01 | 임베딩 자산 스키마 — `{dataRoot}/embeddings/` 하에 `manifest.js`(EMB_MANIFEST: 모델·차원·files·inputs)·`neighbors.js`(EMB_NEIGHBORS: adj·texts·sameText)·과목별 `vectors_stmt_subjectN.js`·`vectors_question.js` (int8 대칭 양자화, `var` 전역 JS 번들 — file:// 호환). 생성은 `ref-pipeline/embeddings/build_embeddings.py` (`npm run build:embeddings`) | ✅ |
+| SEM-01 | 임베딩 자산 스키마 — `{dataRoot}/embeddings/` 하에 `manifest.js`(EMB_MANIFEST: 모델·차원·files·inputs)·`neighbors.js`(EMB_NEIGHBORS: adj·texts·sameText)·과목별 `vectors_stmt_subjectN.js`·`vectors_question.js` (int8 대칭 양자화, `var` 전역 JS 번들 — file:// 호환). 생성은 `tools/build/build_embeddings.js` (`npm run build:embeddings` — Node-only, ONNX fp32) | ✅ |
 | SEM-02 | 런타임 조회 모듈 `src/semantic-index.js` — 이웃 인덱스 지연 로드(최초 사용 시), sid→유사 진술 조회, 동일 정규화 텍스트 중복 제거, 자산 부재 시 기능 비활성화(에러 무전파) | ✅ |
 | SEM-03 | 취약 진술 유사 항목 표시 — 취약 진술 리뷰 행의 "유사" 토글이 같은 진술·단문을 제외한 의미 유사 진술을 유사도와 함께 나열, 진술별 재시도 드릴 연결 | ✅ |
 | SEM-04 | 피처 게이트 — `features.semantic` 시험별 선언, 미선언/자산 부재 시 UI 미노출 | ✅ |

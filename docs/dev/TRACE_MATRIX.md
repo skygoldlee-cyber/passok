@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 29c40bd01b14bde8
+> 입력 해시: 188021d1d5fe100d
 > 생성: 2026-10-23 · 원천: SPEC.md(590개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -479,11 +479,11 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| SEM-01 | ✅ | 테스트 | — | — | tests/unit/gates/emb-manifest.test.js | — | — |
+| SEM-01 | ✅ | 테스트 | — | — | tests/unit/gates/emb-builder.test.js<br>tests/unit/gates/emb-manifest.test.js | — | — |
 | SEM-02 | ✅ | 테스트 | — | src/semantic-index.js | tests/unit/gates/semantic-index.test.js | — | — |
 | SEM-03 | ✅ | 테스트 | — | — | tests/unit/gates/semantic-index.test.js | — | — |
 | SEM-04 | ✅ | 테스트 | — | src/semantic-index.js | tests/unit/gates/semantic-index.test.js | — | — |
-| SEM-05 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-33 | tools/check/check_emb_freshness.js | tests/unit/gates/emb-manifest.test.js | — | — |
+| SEM-05 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-33 | tools/check/check_emb_freshness.js | tests/unit/gates/emb-builder.test.js<br>tests/unit/gates/emb-manifest.test.js | — | — |
 | SEM-06 | 미구현 (로드맵) | — | — | — | — | — | — |
 | SEM-07 | 미구현 (로드맵) | — | — | — | — | — | — |
 | SEM-08 | ✅ v1 (앵커 프록시) | 테스트 | — | src/semantic-index.js | tests/unit/gates/semantic-index.test.js | — | — |

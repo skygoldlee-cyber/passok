@@ -1,12 +1,12 @@
 // src/semantic-index.js — 의미 유사도 인덱스 (빌드타임 사전계산 이웃 조회)
 // @spec SEM-02,SEM-04,SEM-08
 //
-// DOC-DSN-18: 문장 임베딩은 ref-pipeline/embeddings/build_embeddings.py가
+// DOC-DSN-18: 문장 임베딩은 tools/build/build_embeddings.js가
 // 사전 계산해 {dataRoot}/embeddings/ 번들로 배포된다. 런타임은 neighbors.js의
 // top-K 이웃만 조회하며 모델 추론은 수행하지 않는다. features.semantic 미선언
 // 또는 자산 부재 시 조용히 비활성화된다 (기존 학습 흐름에 영향 없음).
 //
-// 번들 구조 (build_embeddings.py emit):
+// 번들 구조 (build_embeddings.js emit):
 //   neighbors.js → window.EMB_NEIGHBORS = {dim, k, adj, texts, sameText}
 //     adj:      { "stmt:<sid>"|"q:<qid>": [[key, cos], ...] } — 동일 정규화
 //               텍스트 중복·MIN_NEIGHBOR_LEN 미만 단문은 빌드에서 이미 제외

@@ -116,7 +116,7 @@ cosmetic의 모든 파일을 복사할 필요는 없다 — 필요한 분류의 
 | `limitsTrainer` | `limits-trainer.json` (contentRoot) | 수치 암기 훈련 마스터 |
 | `audiobook` | `audiobook/mp3/**` + `npm run build:audio-manifest` | TTS 생성 파이프라인 별도 |
 | `story_textbook` | `교재/<과목>/story/*_서사.md` + `chapters[].storyFile` + `npm run build:story` | 패치 문법은 STORY_PATCH_GUIDE.md |
-| `semantic` | `npm run build:embeddings` → `embeddings/` | Python + sentence-transformers 필요 |
+| `semantic` | `npm run build:embeddings` → `embeddings/` | Node-only (최초 1회 ONNX 모델 ~470MB 다운로드) |
 | `formula` 등 실무 피처 | `src/exams/<id>/`·`html/exams/<id>/`·`css/exams/<id>/` 도메인 자산 | 아래 "도메인 자산 규약" |
 | `pomodoro` | 없음 | UI 토글 |
 
