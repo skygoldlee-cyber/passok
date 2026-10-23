@@ -3,7 +3,7 @@
 > 상위 문서: `ARCHITECTURE.md` (전체 구조), `SUPABASE_DESIGN.md` (계정·동기화·RLS 기반 — DOC-DSN-08), `USER_FEEDBACK_DESIGN.md` (피드백 스키마 — DOC-DSN-09)
 > **관련 SPEC ID**: `AD-01~06` (SPEC §3.26) · `FB-01~08` (피드백 수집) · `AU-01~08` (인증) · `ROAD-P0`·`ROAD-P1` (Pro entitlement)
 > 목적: 사용자 증가에 대비해 운영 표면(사용자 조회·피드백 인박스·오류 대시보드·Pro 권한 부여)을 체계화한다. 정적 PWA·RLS 경계·프라이버시 최소화라는 기존 불변식 위에 얹는다.
-> **구현 상태**: Phase 1(운영 CLI, AD-06)·Phase 1.5(로컬 HTML 대시보드, AD-07)·기간권 모니터링 확장(AD-08 사용자 조회·AD-09 Pro 현황 리포트) 구현됨 · Phase 2+(인앱 `#/admin`·RLS·RPC·감사) 설계안 — 미구현.
+> **구현 상태**: Phase 1(운영 CLI, AD-06)·Phase 1.5(로컬 대시보드, AD-07)·기간권 모니터링(AD-08·AD-09)·Discord 운영 표면(Phase 1.7 — AD-10 알림 push·AD-11 조회 봇) 구현됨 · Phase 2+(인앱 `#/admin`·RLS·RPC·감사) 설계안 — 미구현.
 > 전제: Supabase는 계속 "없어도 되는" 선택 계층 — 관리자 기능은 Supabase 설정 프로젝트에서만 의미를 가지며, 미설정 환경의 로컬 전용 사용자에게는 노출되지 않는다.
 > **문서 ID**: DOC-DSN-30
 > **범위**: platform · 판본: none
@@ -167,6 +167,16 @@ end; $$;
 - 비개발자 운영자 투입 → AD-02·AD-04·AD-06 전체
 
 실무적 한계 도달 신호: "bug 신고를 매주 수 건 이상 손으로 분류" 또는 "플랜 관련 문의가 반복 패턴이 됨".
+
+#### Phase 1.7 — Discord 운영 표면 (구현됨, AD-10·AD-11)
+
+CLI 진입 장벽(PowerShell·Secret·repo 클론)을 낮추는 경량 표면 — 모바일에서도 조회 가능:
+
+- **알림 push (AD-10)** — `tools/lib/discord.js`의 `DISCORD_WEBHOOK_URL` 웹훅으로 배포 성공/실패·스모크 결과·keepalive CI 실패를 채널에 푸시. 미설정 시 조용히 skip(알림은 선택 계층). 기존 `feedback-notify`(FB-08)와 같은 webhook 패턴
+- **조회 명령 봇 (AD-11)** — `tools/supabase/functions/admin-bot` Edge Function이 Discord Interactions 엔드포인트로 `/status`·`/user`·`/pro`·`/errors`·`/feedback` 읽기 전용 조회를 응답. ed25519 서명 검증 + `ADMIN_DISCORD_ID` 단일 게이트로 권한 제한. **쓰기 명령은 의도적 미포함** — 상태 변경·감사는 기존 CLI 경로(admin:grant-pro 콘솔 출력 → 향후 admin_audit)를 유지해 감사 공백(§5 한계 3)을 악화시키지 않는다
+- **Phase 2와의 관계** — 인앱 `#/admin`의 대체가 아니라 보완: 비개발자 운영자 투입 전까지의 "조회만 어디서나" 수요를 커버. 한계 4(비개발자 운영 불가)의 부분 완화이며, 쓰기·감사가 필요해지면 Phase 2 발동 조건은 그대로 유효
+
+셋업 절차·명령 표·시크릿 관리: `docs/dev/runbooks/DISCORD_ADMIN.md` (DOC-RBK-17)
 
 ### Phase 2 — 인앱 관리자 뷰 `#/admin`
 

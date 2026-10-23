@@ -42,7 +42,8 @@
 | **Vercel CLI** | 최신 | 프로덕션 배포 — `npm run deploy`가 내부 호출 (전역 설치 `npm i -g vercel` 또는 npx) |
 | **GitHub CLI (`gh`)** | 최신 | 새 머신 인증 간소화 (SSH 키 대체) — [MULTI_MACHINE_SETUP](../runbooks/MULTI_MACHINE_SETUP.md) |
 | **Supabase 계정** | — | 계정·동기화·피드백 기능을 실제 서비스로 운영할 때만. 미설정이어도 앱 정상 동작 |
-| **Deno** | 선택 | `tools/supabase/functions/feedback-notify` Edge Function 로컬 수정·테스트 시 |
+| **Deno** | 선택 | `tools/supabase/functions/` Edge Function 로컬 수정·테스트 시 |
+| **Discord 서버·앱** | — | 운영 알림(AD-10)·조회 봇(AD-11) 사용 시 — 서버·채널·webhook·봇 생성 절차는 [DISCORD_ADMIN](../runbooks/DISCORD_ADMIN.md) 런북 |
 
 ---
 

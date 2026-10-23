@@ -110,7 +110,7 @@
 | 3.23 | **사용자 의견** | 피드백 폼·건의 수신 | FB-01~FB-08 (8) |
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
-| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트 | AD-01~AD-09 (9) |
+| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇 | AD-01~AD-11 (11) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -598,6 +598,8 @@
 | AD-07 | 로컬 HTML 대시보드 (Phase 1.5) — `report:dashboard`가 오류·활성화율(세션/설치)·퍼널·피드백 집계를 단일 자급적 HTML로 덤프 (로컬 파일이라 인증·RLS 불필요, 사용자 텍스트는 이스케이프 필수, 산출물 gitignore) | ✅ |
 | AD-08 | 사용자 조회 확장 — `report:user`가 `profiles.pro_expires_at`(기간권 만료일 + 잔여/경과 일수·무기한 구분)과 사용 코드 이력(`pro_codes.redeemed_by` — 티어 valid_days·사용일)을 함께 표시. payload 비열람 경계 유지 | ✅ |
 | AD-09 | Pro 현황 리포트 — `report:pro`가 ① `pro_codes` 채널(코드 프리픽스)·티어(`valid_days`)별 발급/사용률·미사용 재고 ② `profiles.pro_expires_at` 만료 버킷(D-7 임박·만료 미갱신·활성·무기한) ③ GoTrue Admin `app_metadata.providers` 가입 수단별 계정 분포를 집계 — 기간권 사업의 연장 영업·대사 지표 | ✅ |
+| AD-10 | Discord 운영 알림 push — `tools/lib/discord.js` 공용 헬퍼(`DISCORD_WEBHOOK_URL` env·.env, 미설정 시 조용히 skip)로 배포 성공/실패·스모크 결과를 채널에 푸시 + keepalive 워크플로 실패 시 Discord 통지 (이슈 생성과 병행, 시크릿 미설정 시 skip) — allowed_mentions 비활성화로 멘션 방어 | ✅ |
+| AD-11 | Discord 조회 명령 봇 — `tools/supabase/functions/admin-bot` Edge Function이 Discord Interactions 엔드포인트로 `/status`·`/user <email>`·`/pro`·`/errors [days]`·`/feedback [days]` 읽기 전용 조회 응답. ed25519 서명 검증(`DISCORD_PUBLIC_KEY`) + `ADMIN_DISCORD_ID` 단일 관리자 게이트 + allowed_mentions 비활성화. 쓰기 명령은 의도적 미포함(상태 변경은 기존 CLI 경로). 명령 등록은 `admin:discord`(register_admin_bot.js), 셋업은 DISCORD_ADMIN 런북 | ✅ |
 
 ### 3.27 AI 제작 지원 (Author-time)
 
