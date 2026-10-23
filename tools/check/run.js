@@ -163,7 +163,7 @@ if (PRESET === 'audit') {
 const derivedFail = failed.filter((r) => DERIVED_IDS.has(r.step.id));
 if (derivedFail.length) {
   console.log(`\n💡 신선도 계열 실패 ${derivedFail.length}건 — 파생물 미재생성이 공통 원인일 수 있습니다:`);
-  console.log('   npm.cmd run build:derived   # html·data·drills·docs_md·trace·임베딩·stats 일괄 재생성 → 커밋 → 재실행');
+  console.log('   npm.cmd run build:derived   # html·data·drills·docs_md·trace·stats 일괄 재생성 → 커밋 → 재실행');
 }
 for (const r of failed) {
   const tip = REMEDIES[r.step.id];

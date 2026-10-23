@@ -68,6 +68,7 @@ npm.cmd run serve
 ## 5. 검증 명령어 (환경 정상 여부 확인)
 
 ```powershell
+npm.cmd run doctor            # 환경 진단 — 필수(Node≥24·git·node_modules) vs 선택 도구 가용성을 명령 단위로 리포트 (신규 머신·이상 징후 시 첫 명령, --json 지원)
 npm.cmd test                  # 유닛 테스트 (node --test) — Node만으로 실행
 npm.cmd run test:dom          # DOM 테스트 (Vitest + jsdom) — npm install 필요
 npm.cmd run test:all          # unit + parser + dom 일괄
@@ -95,6 +96,9 @@ CI(`.github/workflows/ci.yml`)가 push/PR마다 `npm ci` → `npm audit`(high+) 
 
 | 명령 | 용도 | 사전 요구 |
 |------|------|-----------|
+| `npm run build:derived` | 파생 생성물 일괄 재생성 (html·data·drills·docs_md·trace·stats) | Node만 — **임베딩 미포함** |
+| `npm run build:derived:full` | 위 + 임베딩까지 전체 재생성 | **Python + sentence-transformers** |
+| `npm run build:embeddings` | 문장 임베딩 사전 계산 → `embeddings/` 번들 (stale 시 `check:embfresh`가 감지) | **Python + sentence-transformers** |
 | `npm run build:data` | `content/` → `data/` 전체 번들 재생성 | Node만 |
 | `node tools/build/build_doc_bundles.js` | 사용자 매뉴얼·학습안내서 앱 내 번들 | Node만 |
 | `npm run convert:refs` | 참조자료 PDF → ref_md_v2 스테이징 | **Python + pdfplumber** |
@@ -131,6 +135,7 @@ npm.cmd run deploy   # 배포 가드(clean tree + origin/main 동기화) → sw 
 ## 10. 요약 체크리스트
 
 ```
+[ ] npm run doctor — 필수 ✅·선택 도구 가용성 한눈에 확인 (아래 항목의 자동 검증)
 [ ] Node.js 24+ — node --version
 [ ] npm install 완료 — node_modules/ 존재
 [ ] npm run serve → http://localhost:3000 접속 확인
