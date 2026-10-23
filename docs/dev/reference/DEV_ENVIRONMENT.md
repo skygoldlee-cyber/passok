@@ -33,9 +33,10 @@
 
 | 도구 | 버전 | 필요한 작업 |
 |------|------|-------------|
-| **Python 3** | 3.10+ (3.12 확인) | `ref-pipeline/` 콘텐츠 변환 — `convert:refs`, `verify:refs`, `check_laws.py`, MD→HTML |
+| **Python 3** | 3.10+ (3.12 확인 — `.python-version` 핀) | `ref-pipeline/` 콘텐츠 변환 — `convert:refs`, `verify:refs`, `check_laws.py`, MD→HTML. **venv 격리 권장** (§4 참조) |
 | pip 패키지 | `pdfplumber>=0.11`, `PyMuPDF>=1.24`, `markdown>=3.5` | `pip install -r ref-pipeline/requirements.txt` — PDF→MD·MD→HTML 필수 |
 | pip 패키지 (오디오북) | `gtts`, `pyttsx3`, `pydub`, `elevenlabs` | `pip install -r ref-pipeline/audiobook/requirements.txt` — MP3 TTS 생성 시에만 |
+| pip 패키지 (임베딩 참조) | `sentence-transformers` | `ref-pipeline/embeddings/requirements.txt` — **참조 구현 전용** (운영 경로는 Node `build:embeddings`). Python 수치 대조 시에만 |
 | **ffmpeg** | 최신 | 오디오북 MP3 병합 (`winget install ffmpeg`) — 선택 |
 | **PySide6** | ≥6.6 | ref-pipeline GUI 사용 시에만 (`python ref-pipeline/pdf2md.py` — 기본 모드) |
 | **Vercel CLI** | 최신 | 프로덕션 배포 — `npm run deploy`가 내부 호출 (전역 설치 `npm i -g vercel` 또는 npx) |
@@ -62,6 +63,25 @@ npm.cmd run serve
 ```
 
 > 서버 없이 `index.html`을 직접 열면 **동작하지 않습니다** — ES Modules는 `file://`에서 CORS로 차단됩니다. 반드시 `npm run serve`(또는 임의 정적 서버)로 접속하세요.
+
+### (선택) Python 제작 경로 — venv 격리
+
+`convert:refs`·오디오북 TTS 등 Python 도구가 필요할 때만 설치합니다. **글로벌 pip 대신 venv 권장** — 다른 프로젝트의 Python 환경과 충돌하지 않고 삭제가 깔끔합니다 (`.venv/`는 gitignore 처리됨):
+
+```powershell
+# 1. venv 생성·활성화 (최초 1회)
+python -m venv .venv
+.venv\Scripts\Activate.ps1    # POSIX는: source .venv/bin/activate
+
+# 2. 필요한 그룹만 설치
+pip install -r ref-pipeline/requirements.txt            # PDF→MD·MD→HTML
+pip install -r ref-pipeline/audiobook/requirements.txt  # 오디오북 TTS 시에만
+
+# 3. venv 활성화 상태에서 doctor 실행 — pip 그룹이 venv 기준으로 진단됨
+npm.cmd run doctor
+```
+
+버전 관리자(pyenv·uv) 사용 시 `.python-version`(3.12)이 자동 정렬됩니다.
 
 > `serve.js`는 `vercel.json`의 프로덕션 헤더(CSP·캐시 정책)를 응답에 미러링합니다 — CSP 변경 등 헤더 수정은 로컬과 `test:e2e`에서 배포 환경과 동일하게 검증됩니다.
 
@@ -140,6 +160,6 @@ npm.cmd run deploy   # 배포 가드(clean tree + origin/main 동기화) → sw 
 [ ] npm install 완료 — node_modules/ 존재
 [ ] npm run serve → http://localhost:3000 접속 확인
 [ ] npm test + npm run test:dom 통과
-[ ] (콘텐츠 변환 시) Python + ref-pipeline/requirements.txt
+[ ] (콘텐츠 변환 시) Python + venv(§4) + ref-pipeline/requirements.txt
 [ ] (배포 시) Vercel CLI + 토큰
 ```

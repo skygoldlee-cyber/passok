@@ -1,5 +1,6 @@
 # ref-pipeline — 콘텐츠 변환 도구 의존성
 # 설치: pip install -r ref-pipeline/requirements.txt
+# ※ 글로벌 pip 대신 venv 격리 권장 — docs/dev/reference/DEV_ENVIRONMENT.md §4
 
 pdfplumber>=0.11.0        # PDF 텍스트·표 추출 (convert.py/pdf2md.py — 필수)
 PyMuPDF>=1.24.0           # 이미지 추출 (선택 — 없으면 텍스트만 변환)
