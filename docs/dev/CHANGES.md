@@ -7,6 +7,14 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-23 관리자 Pro 모니터링 확장 — 사용자 조회 만료·코드 이력 + Pro 현황 리포트 (AD-08·AD-09)
+
+- **배경**: 기간권 사업에서 `report:user`가 만료일·사용 코드를 보여주지 못했고, 코드 발급↔사용 대사·연장 영업 코호트·가입 수단 분포를 조회할 도구가 없었음
+- **AD-08** `report:user` 확장 — `buildUserSummary`에 `pro_expires_at` + `pro_days_left`(올림·경과 시 음수·무기한은 null) + `codes`(code·valid_days·redeemed_at) 추가. CLI 출력에 만료 D-n/무기한 구분·사용 코드 섹션. `pro_codes.redeemed_by` 조회로 발급 대장(Sheets)과의 교차 확인 가능. payload 비열람 경계 유지
+- **AD-09** `report:pro` 신규 — `tools/check/pro_report.js`: ① pro_codes 채널(코드 프리픽스)·티어(valid_days)별 발급/사용률·미사용 재고 ② pro_expires_at 만료 버킷(활성 D-8+·임박 D-7·만료 미갱신·무기한 — PAY-07 툼스톤의 free 복귀자도 이탈 코호트로 집계) ③ `app_metadata.providers` 가입 수단별 계정 분포. `supabase_ops.js`에 `listAllUsers`(GoTrue Admin 페이지네이션) 추가
+- **테스트**: `pro-report.test.js` 5건(채널 파싱·버킷 경계·provider 복수 카운트·빈 입력) + `user-report.test.js`에 만료/코드 케이스 3건 추가
+- **문서**: SPEC AD-08·09 등록(§7 표 AD-01~AD-09), ADMIN_DESIGN Phase 1 표·추적 행 갱신, AGENTS 명령 표
+
 ## 2026-10-23 CI E2E 병목 개선 — 문서 스킵·Playwright 컨테이너·번들 공유·샤드 재분배
 
 - **배경**: 문서-only 커밋에도 전체 E2E가 실행돼 배포 가드(커밋 CI success 필수)가 10분+ 지연

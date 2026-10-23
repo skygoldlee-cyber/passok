@@ -276,7 +276,8 @@ npm run hooks:install
 | 93 | `search-index.test.js` | 13 | 통합검색 인덱스 코어 (TS-08~09,TS-13~18) | 소스 레지스트리·kind 버킷·IDF·구문 부스트·failedTerms·lazy 시험 가드·manifest.searchDocs·glossarySubjectKey |
 | 94 | `search-morpheme.test.js` | 8 | 형태소 경계 판정·동의어 확장 (TS-13/TS-14) | |
 | 95 | `textbook-search-exam.test.js` | 2 | `search-sources.js` `_loadExamMdText` — 문제은행 MD 로드 규약 (TS-12) | |
-| | **합계** | **1550** | | |
+| 96 | `pro-report.test.js` | 5 | `tools/check/pro_report.js` `summarize()` — 채널·티어 발급/사용률·만료 버킷·가입 수단 분포 (AD-09) | 2026-10-23 추가 |
+| | **합계** | **1558** | | |
 
 ### DOM 테스트 (`tests/dom/`)
 

@@ -163,4 +163,28 @@ async function findUserByEmail(secret, email) {
     return null;
 }
 
-module.exports = { supabaseUrl, requireSecret, restGet, restGetAll, restPost, restPatch, findUserByEmail };
+/**
+ * GoTrue Admin API로 전체 사용자 목록 — findUserByEmail과 동일 페이지네이션.
+ * 가입 수단(app_metadata.providers) 분포 집계용 (AD-09 report:pro).
+ * @param {string} secret SUPABASE_SECRET_KEY
+ * @returns {Promise<Array>} auth.users 행 전체
+ */
+async function listAllUsers(secret) {
+    const out = [];
+    for (let page = 1; page <= 50; page++) {
+        const res = await fetch(`${supabaseUrl()}/auth/v1/admin/users?page=${page}&per_page=200`, {
+            headers: { apikey: secret, authorization: `Bearer ${secret}` },
+        });
+        if (!res.ok) {
+            console.error(`admin/users 조회 실패 HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
+            process.exit(1);
+        }
+        const data = await res.json();
+        const users = Array.isArray(data) ? data : (data.users || []);
+        out.push(...users);
+        if (users.length < 200) return out; // 마지막 페이지
+    }
+    return out;
+}
+
+module.exports = { supabaseUrl, requireSecret, restGet, restGetAll, restPost, restPatch, findUserByEmail, listAllUsers };

@@ -3,7 +3,7 @@
 > 상위 문서: `ARCHITECTURE.md` (전체 구조), `SUPABASE_DESIGN.md` (계정·동기화·RLS 기반 — DOC-DSN-08), `USER_FEEDBACK_DESIGN.md` (피드백 스키마 — DOC-DSN-09)
 > **관련 SPEC ID**: `AD-01~06` (SPEC §3.26) · `FB-01~08` (피드백 수집) · `AU-01~08` (인증) · `ROAD-P0`·`ROAD-P1` (Pro entitlement)
 > 목적: 사용자 증가에 대비해 운영 표면(사용자 조회·피드백 인박스·오류 대시보드·Pro 권한 부여)을 체계화한다. 정적 PWA·RLS 경계·프라이버시 최소화라는 기존 불변식 위에 얹는다.
-> **구현 상태**: Phase 1(운영 CLI, AD-06)·Phase 1.5(로컬 HTML 대시보드, AD-07) 구현됨 · Phase 2+(인앱 `#/admin`·RLS·RPC·감사) 설계안 — 미구현.
+> **구현 상태**: Phase 1(운영 CLI, AD-06)·Phase 1.5(로컬 HTML 대시보드, AD-07)·기간권 모니터링 확장(AD-08 사용자 조회·AD-09 Pro 현황 리포트) 구현됨 · Phase 2+(인앱 `#/admin`·RLS·RPC·감사) 설계안 — 미구현.
 > 전제: Supabase는 계속 "없어도 되는" 선택 계층 — 관리자 기능은 Supabase 설정 프로젝트에서만 의미를 가지며, 미설정 환경의 로컬 전용 사용자에게는 노출되지 않는다.
 > **문서 ID**: DOC-DSN-30
 > **범위**: platform · 판본: none
@@ -133,11 +133,12 @@ end; $$;
 | 스크립트 | 파일 | 내용 |
 |---|---|---|
 | `report:feedback` | `tools/check/feedback_report.js` | kind별 건수·평점·일별·최근 항목 본문 — bug의 meta.session_id로 `report:errors --session` 연결 (`--days`·`--kind`·`--limit`) |
-| `report:user` | `tools/check/user_report.js` | 이메일→GoTrue Admin API 해석 후 profiles + sync_snapshots **메타만**(exam_id·device_id·updated_at — payload 미열람) + 피드백 이력 |
+| `report:user` | `tools/check/user_report.js` | 이메일→GoTrue Admin API 해석 후 profiles + sync_snapshots **메타만**(exam_id·device_id·updated_at — payload 미열람) + 피드백 이력 + `pro_expires_at` 잔여/경과 일수·무기한 구분·사용 코드 이력 (AD-08) |
+| `report:pro` | `tools/check/pro_report.js` | Pro 현황 — `pro_codes` 채널(프리픽스)·티어(`valid_days`)별 발급/사용률·미사용 재고 + `pro_expires_at` 만료 버킷(D-7 임박·만료 미갱신·활성·무기한 — PAY-07 툼스톤의 free 복귀자도 이탈 코호트로 집계) + 가입 수단별 계정 분포 (AD-09) |
 | `admin:grant-pro` | `tools/check/grant_pro.js` | 이메일→사용자 해석 후 profiles.plan 갱신 — 기본 dry-run, `--apply` 확정·`--revoke` 회수·동일 상태는 no-op |
 | `report:dashboard` (Phase 1.5) | `tools/check/dashboard_report.js` | 오류·퍼널·피드백 집계를 단일 자급적 HTML로 덤프 (`tools/state/dashboard_report.html`, gitignore) — 로컬 파일이라 인증·RLS 불필요. 기존 3개 리포트의 순수 `summarize()` 재사용, 사용자 텍스트 전면 이스케이프 |
 
-공용 헬퍼는 `tools/lib/supabase_ops.js`(URL 해석·Secret 요구·restGet/**restGetAll**/Patch·findUserByEmail). `restGetAll`은 PostgREST 서버 `max-rows`(기본 1000) 절단을 offset 페이지네이션으로 해소 — 대량 기간 조회는 이 경로를 쓴다 (2026-10-22 실측: usage_events 7일 1,000행 절단 → 5,162행 전량 회수). 환경변수는 기존 `SUPABASE_SECRET_KEY`(Secret = 구 service_role) 경로 그대로 — §4의 is_admin/감사 스키마와 독립적으로 동작하며 **스키마 변경 없이 동작**한다 (service role은 RLS를 우회하므로). admin_audit 테이블은 AD-04 도입 전까지 grant-pro의 콘솔 출력이 감사 기록을 대신한다.
+공용 헬퍼는 `tools/lib/supabase_ops.js`(URL 해석·Secret 요구·restGet/**restGetAll**/Patch·findUserByEmail·**listAllUsers**). `restGetAll`은 PostgREST 서버 `max-rows`(기본 1000) 절단을 offset 페이지네이션으로 해소, `listAllUsers`는 GoTrue Admin API 전체 사용자 순회(200명/페이지 — providers 분포 집계용, AD-09) — 대량 기간 조회는 이 경로를 쓴다 (2026-10-22 실측: usage_events 7일 1,000행 절단 → 5,162행 전량 회수). 환경변수는 기존 `SUPABASE_SECRET_KEY`(Secret = 구 service_role) 경로 그대로 — §4의 is_admin/감사 스키마와 독립적으로 동작하며 **스키마 변경 없이 동작**한다 (service role은 RLS를 우회하므로). admin_audit 테이블은 AD-04 도입 전까지 grant-pro의 콘솔 출력이 감사 기록을 대신한다.
 
 `report:funnel`에는 기존 과업 완주율 외에 **활성화 퍼널**(session_start→core_learning_action 세션·고유 install_id 전환율, DOC-DSN-34 §4의 "방문→핵심 학습 행동" KPI)이 포함되고, `report:dashboard`에는 활성화율 카드가 표시된다. 스키마 적용 자동화는 `npm run schema:apply`(Management API PAT — `SUPABASE_ACCESS_TOKEN`, SUPABASE_DESIGN §셋업 참조)로 SQL Editor 수동 실행을 대체한다.
 
@@ -237,6 +238,8 @@ Supabase 미설정(순수 로컬) 환경에서는 `#/admin` 라우트 자체가 
 | AD-04 | 사용자 관리 — 목록·상세·`admin_set_plan`·`admin_audit` | 2 |
 | AD-05 | `#/admin` 라우트 — lazy 로드·SW 프리캐시 제외·비관리자 차단 | 2 |
 | AD-06 | 운영 CLI — `report:feedback`·`report:user`·`admin:grant-pro` | 1 |
+| AD-08 | `report:user` Pro 확장 — 만료일·잔여일·사용 코드 이력 | 1 |
+| AD-09 | `report:pro` — 코드 발급/사용률·만료 버킷·가입 수단 분포 | 1 |
 
 ---
 

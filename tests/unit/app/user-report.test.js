@@ -1,5 +1,5 @@
 // tests/unit/user-report.test.js
-// @spec AD-06 (관리자 운영 CLI)
+// @spec AD-06, AD-08 (관리자 운영 CLI — 사용자 Pro 만료·코드 이력 조회)
 // tools/check/user_report.js — buildUserSummary() 순수 정규화 검증
 
 import { test } from 'node:test';
@@ -37,6 +37,32 @@ test('buildUserSummary: 프로필·스냅샷 없으면 free·빈 목록 — 미�
     assert.equal(u.last_sign_in_at, null);
     assert.deepEqual(u.snapshots, []);
     assert.deepEqual(u.providers, []);
+});
+
+test('buildUserSummary: 기간권 만료·코드 이력 (AD-08) — 잔여일·무기한·미사용 구분', () => {
+    const now = new Date('2026-10-23T00:00:00Z');
+    const future = buildUserSummary({
+        user,
+        profile: { plan: 'pro', pro_expires_at: '2026-10-27T12:00:00Z' },
+        snapshots: [], feedback: [],
+        codes: [{ code: 'SPR-AAAA-1111', valid_days: 30, redeemed_at: '2026-09-27T00:00:00Z' }],
+        now,
+    });
+    assert.equal(future.pro_expires_at, '2026-10-27T12:00:00Z');
+    assert.equal(future.pro_days_left, 5); // 4.5일 → 올림
+    assert.deepEqual(future.codes, [{ code: 'SPR-AAAA-1111', valid_days: 30, redeemed_at: '2026-09-27T00:00:00Z' }]);
+
+    const expired = buildUserSummary({
+        user, profile: { plan: 'pro', pro_expires_at: '2026-10-20T00:00:00Z' },
+        snapshots: [], feedback: [], now,
+    });
+    assert.equal(expired.pro_days_left, -3);
+
+    const lifetime = buildUserSummary({
+        user, profile: { plan: 'pro', pro_expires_at: null }, snapshots: [], feedback: [], now,
+    });
+    assert.equal(lifetime.pro_days_left, null);
+    assert.deepEqual(lifetime.codes, []);
 });
 
 test('buildUserSummary: 스냅샷 메타만 노출 — payload 키는 구조에 존재하지 않음', () => {

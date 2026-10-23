@@ -145,7 +145,8 @@
     "ai:glossary": "node tools/ai/ai_glossary.js",
     "ai:adphrases": "node tools/ai/ai_adphrases.js",
     "ai:adoption": "node tools/ai/ai_adoption.js",
-    "mutate": "stryker run"
+    "mutate": "stryker run",
+    "report:pro": "node tools/check/pro_report.js"
   },
   "keywords": [
     "cosmetics",
