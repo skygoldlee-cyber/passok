@@ -1,5 +1,5 @@
 // tests/dom/common-auth.dom.test.js — Supabase 계정/로그인 모달 시나리오
-// @spec AU-01~04,AU-08
+// @spec AU-01~04,AU-08,AU-09
 // 설계: docs/dev/design/SUPABASE_DESIGN.md §5·§9 — window.supabase 스텁으로 세션 상태를 제어
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { loadIndexHtml, el, isVisible, lastToast, flushAsync } from '../helpers.js';
@@ -33,6 +33,7 @@ const authStub = {
         session = { user: { email } };
         return { data: { session }, error: null };
     }),
+    signInWithOAuth: vi.fn(async () => ({ data: {}, error: null })),
     onAuthStateChange: vi.fn(),
 };
 window.supabase = { createClient: vi.fn(() => ({ auth: authStub })) };
@@ -40,7 +41,7 @@ window.supabase = { createClient: vi.fn(() => ({ auth: authStub })) };
 import {
     initAuthView, openAuthModal, refreshAuthUI,
     authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword,
-    authSendOtp, authVerifyOtp, authForgotPassword, resetEmailLoginCooldown,
+    authSendOtp, authVerifyOtp, authForgotPassword, resetEmailLoginCooldown, authOAuth,
 } from '../../../src/auth-sync/auth-view.js';
 
 function fillAuth(email, pw) {
@@ -72,6 +73,7 @@ describe('계정/로그인 모달', () => {
             session = { user: { email } };
             return { data: { session }, error: null };
         });
+        authStub.signInWithOAuth.mockImplementation(async () => ({ data: {}, error: null }));
     });
 
     it('모달 열기 — 비로그인 시 로그인 폼 표시·계정 영역 숨김 (H)', async () => {
@@ -275,6 +277,47 @@ describe('계정/로그인 모달', () => {
         await authEmailLogin();
         const until = parseInt(localStorage.getItem('passmula_auth_mail_cooldown_until') || '0', 10);
         expect(until).toBeGreaterThan(Date.now());
+    });
+
+    it('소셜 로그인 — provider·redirectTo로 signInWithOAuth 위임 (AU-09) (H)', async () => {
+        await openAuthModal();
+        await authOAuth('google');
+        expect(authStub.signInWithOAuth).toHaveBeenCalledWith({
+            provider: 'google',
+            options: { redirectTo: location.origin },
+        });
+        await authOAuth('kakao');
+        expect(authStub.signInWithOAuth).toHaveBeenLastCalledWith({
+            provider: 'kakao',
+            options: { redirectTo: location.origin },
+        });
+    });
+
+    it('소셜 로그인 — 허용 목록 밖 provider는 호출하지 않는다 (AU-09) (X)', async () => {
+        await openAuthModal();
+        await authOAuth('github');
+        expect(authStub.signInWithOAuth).not.toHaveBeenCalled();
+    });
+
+    it('소셜 로그인 — OAuth 오류는 한글 안내로 표시 (AU-09) (X)', async () => {
+        authStub.signInWithOAuth.mockResolvedValueOnce({ data: {}, error: new Error('Unsupported provider') });
+        await openAuthModal();
+        await authOAuth('google');
+        expect(el('auth-modal-msg').textContent).toContain('Unsupported provider');
+    });
+
+    it('소셜 로그인 — 브라우저는 버튼 노출, 설치형 PWA는 비노출 (AU-09) (H)', async () => {
+        await openAuthModal();
+        expect(isVisible('auth-oauth-area')).toBe(true);
+        // 설치형 PWA 시뮬레이션 — display-mode standalone 매칭
+        const origMM = window.matchMedia;
+        window.matchMedia = (q) => ({ matches: q === '(display-mode: standalone)', media: q, addEventListener() {}, removeEventListener() {} });
+        try {
+            await refreshAuthUI();
+            expect(isVisible('auth-oauth-area')).toBe(false);
+        } finally {
+            window.matchMedia = origMM;
+        }
     });
 
     it('비밀번호 찾기 — 로그인 메일 발송 + 재설정 절차 안내 (H)', async () => {

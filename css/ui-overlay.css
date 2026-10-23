@@ -508,6 +508,45 @@
 .auth-otp-area { margin-top: var(--space-3); }
 #auth-otp-code { letter-spacing: 0.25em; text-align: center; font-weight: 600; }
 
+/* 소셜 로그인 (AU-09) — Google·Kakao OAuth 버튼 */
+.auth-oauth-area { margin-top: var(--space-3); }
+.auth-oauth-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+.auth-oauth-divider::before,
+.auth-oauth-divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--border-color);
+}
+.auth-oauth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  font-weight: 600;
+}
+.auth-oauth-btn + .auth-oauth-btn { margin-top: var(--space-2); }
+.auth-oauth-icon { width: 18px; height: 18px; flex-shrink: 0; }
+.auth-oauth-google {
+  background: #fff;
+  color: #1f1f1f;
+  border: 1px solid var(--border-color);
+}
+.auth-oauth-google:hover { background: #f5f5f5; }
+.auth-oauth-kakao {
+  background: #fee500;
+  color: #191919;
+  border: 1px solid transparent;
+}
+.auth-oauth-kakao:hover { background: #f2d900; }
+
 /* ===== 통합 검색 팔레트 (Ctrl+K) ===== */
 .cmdk-overlay {
   position: fixed;
