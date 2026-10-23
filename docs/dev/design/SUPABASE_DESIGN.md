@@ -675,12 +675,16 @@ select polname, polrelid::regclass from pg_policy;
 
 계정 모달의 `Google로 계속`/`카카오로 계속` 버튼은 `signInWithOAuth({provider, redirectTo: origin})`를 호출한다. 복귀는 redirectTo + `#access_token` 해시라 §A.8 ②의 기존 랜딩·`SIGNED_IN` 경로가 그대로 처리하고, 신규 사용자 프로필은 `handle_new_user` 트리거가 만든다 — 서버 스키마 변경은 없다.
 
+**적용 상태** (2026-10-23, `v20261023-f093682` 배포): Management API `PATCH /v1/projects/{ref}/config/auth`로 두 프로바이더 활성화 확인 — `external_google_enabled=true`, `external_kakao_enabled=true` + `external_kakao_email_optional=true`. 자격 증명은 `.env`의 `SUPABASE_GOOGLE_CLIENT_ID/SECRET`·`SUPABASE_KAKAO_CLIENT_ID(=REST API 키)/SECRET`에 보관. **잔여 검증**: 브라우저에서 Google/카카오 버튼 실로그인 스모크 (PWA 아닌 브라우저 경로).
+
 **프로바이더별 콘솔 설정**:
 
 | 프로바이더 | 콘솔 작업 | Supabase 등록 값 (`external_<p>_*`) |
 |---|---|---|
-| Google | console.cloud.google.com → OAuth 동의 화면 → 사용자 인증 정보 → OAuth 클라이언트 ID(웹 애플리케이션) → 승인된 리디렉션 URI `https://<ref>.supabase.co/auth/v1/callback` | `client_id` + `secret` |
-| Kakao | developers.kakao.com → 내 애플리케이션 → 카카오 로그인 활성화 → Redirect URI 동일 등록 → 보안 탭 Client Secret 발급 후 상태 '사용함' | REST API 키 = `client_id` + Client Secret |
+| Google | console.cloud.google.com → OAuth 동의 화면(앱 이름 PassOK·외부) → 사용자 인증 정보 → OAuth 클라이언트 ID(웹 애플리케이션) → 승인된 리디렉션 URI `https://<ref>.supabase.co/auth/v1/callback` | `client_id` + `secret` |
+| Kakao | developers.kakao.com → 내 애플리케이션 → 앱 생성(PassOK) → ① 제품 설정 → 카카오 로그인 → 일반 → **사용 설정 상태 ON** ② 앱 설정 → **플랫폼 키 → REST API 키 → 더보기 → 수정** → 카카오 로그인 리다이렉트 URI 동일 등록 + 클라이언트 시크릿 활성화 확인 | REST API 키 = `client_id` + Client Secret |
+
+> 카카오 콘솔은 2025-12 개편으로 경로가 변경됐다 — 리다이렉트 URI·Client Secret은 더 이상 '카카오 로그인 → 보안'에 없고 **플랫폼 키 페이지의 REST API 키 수정 폼** 안에 있다. 신규 앱은 REST API 키 발급 시 클라이언트 시크릿이 **자동 활성화**돼 나오므로 별도 '사용함' 변경은 불필요. `로그아웃 리다이렉트 URI`(고급 탭)는 선택 사항으로 미설정.
 
 - 카카오 `kakao_account.email` 동의 항목 수집은 **비즈앱 전환**(사업자 인증)이 필요 — 미전환 상태에서는 이메일 없는 계정이 생길 수 있으므로 `external_kakao_email_optional=true`로 둔다 (계정 화면은 `user.email` 없으면 '계정'으로 표시 — `refreshAuthUI`가 처리).
 - **수단마다 별도 계정**: 이메일 OTP·Google·카카오는 각각 다른 `auth.users`를 만든다 — Pro 코드는 활성화한 계정에만 귀속되므로 "수단을 바꾸면 Pro가 사라진다" 문의를 응대 문구(§A-2)·계정 모달 힌트로 예방한다.
