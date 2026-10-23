@@ -1,5 +1,5 @@
 // src/html-viewer.js — 앱 내 HTML 참조자료 뷰어 오버레이 (검색 + 하이라이트)
-// @spec RR-01,RR-05~16,PF-04,PF-05,PF-06
+// @spec RR-01,RR-05~06,RR-08~16,PF-04,PF-05,PF-06 — RR-07 폐기(사이드바 제거)로 범위 제외
 // ref_md의 HTML/MD 변환본을 fetch로 로드하여 DOM에 직접 주입 (iframe 없음)
 import { parseMarkdown } from './markdown-parser.js';
 import { esc } from '../sanitize.js';

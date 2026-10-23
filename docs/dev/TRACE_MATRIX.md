@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 27a9f9e78dd42d8a
+> 입력 해시: 9c67b249b9fd72aa
 > 생성: 2026-10-23 · 원천: SPEC.md(592개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 592개 — 문서 연결 429 · 소스 연결 529 · 테스트 연결 563 · 보고서 연결 109
+**커버리지 요약**: 요구사항 592개 — 문서 연결 429 · 소스 연결 528 · 테스트 연결 563 · 보고서 연결 109
 
 ---
 
@@ -153,7 +153,7 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| SA-01 | ✅ | E2E 테스트 | — | — | tests/e2e/reader-flow.spec.js | — | — |
+| SA-01 | 폐기 | E2E 테스트 | — | — | tests/e2e/reader-flow.spec.js | — | — |
 | SA-02 | ✅ | 테스트 | — | src/study-aids.js<br>src/views/reader-render.js<br>src/views/textbook-reader.js | tests/unit/engine/study-aids.test.js | — | — |
 | SA-03 | ✅ | 테스트 | — | src/study-aids.js<br>src/views/reader-render.js<br>src/views/textbook-reader.js | tests/unit/engine/study-aids.test.js | — | — |
 | SA-04 | ✅ | 테스트 | — | src/study-aids.js<br>src/views/textbook-reader.js | tests/unit/engine/study-aids.test.js | — | — |
@@ -183,7 +183,7 @@
 | RR-04 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/keyword-index.js<br>src/views/reader-ref-links.js<br>tools/build/build_keyword_index.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
 | RR-05 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js<br>src/views/reader-ref-links.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
 | RR-06 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js<br>src/views/reader-ref-links.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
-| RR-07 | ✅ | E2E 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
+| RR-07 | 폐기 | E2E 테스트 | DOC-REF-04<br>DOC-REF-07 | — | tests/e2e/reader-flow.spec.js | — | — |
 | RR-08 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
 | RR-09 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
 | RR-10 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
