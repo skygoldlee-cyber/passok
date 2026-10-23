@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261023-61dca92",
+    "date": "2026-10-23",
+    "notes": [
+      "[수정·supabase] redeem_code 원자화·profiles 유실 방지·feedback 스푸핑 차단 + 리포트 인덱스",
+      "[기능·admin] Pro 모니터링 확장 — report:user 만료·코드 이력 + report:pro 현황 (AD-08·AD-09)",
+      "[정리·release] v20261023-c9dbacd 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261023-c9dbacd",
     "date": "2026-10-23",
     "notes": [
@@ -217,13 +226,6 @@
       "[문항] 해설 209문 보강 — 요약형 해설을 근거 기반 해설로 재작성",
       "[문항] 용어집 정의 37개 보강 — 부실·불완전 정의 개선",
       "[문서] 권장 준비기간 63→90일 — 늘어난 문제은행 규모 반영"
-    ]
-  },
-  {
-    "version": "v20261014-6c13148",
-    "date": "2026-10-14",
-    "notes": [
-      "[문서·business] S10 CTA 항목에 표시용 QR 실물 임베드 — passok_qr.svg 명시"
     ]
   }
 ]
