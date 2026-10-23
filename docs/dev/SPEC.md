@@ -116,11 +116,11 @@
 | 3.19 | **계정·동기화** | Supabase 로그인·클라우드 스냅샷 동기화(선택적) | AU-01~AU-09 (9) |
 | 3.20 | **캘린더·복습·드릴** | 학습 캘린더·목표·학습 계획·계획 준수·과목 배분·뽀모도로·취약 진술 드릴 | SC-01~DR-07 (28) |
 | 3.21 | **UI 모드 전환** | 학습 ↔ 실무(Formula OS) 모드 전환 | UM-01~UM-05 (5) |
-| 3.22 | **시험 선택·전환** | 멀티시험 팩 선택·전환·레지스트리 기반 | ES-01~ES-07 (7) |
+| 3.22 | **시험 선택·전환** | 멀티시험 팩 선택·전환·레지스트리 기반 | ES-01~ES-08 (8) |
 | 3.23 | **사용자 의견** | 피드백 폼·건의 수신 | FB-01~FB-08 (8) |
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
-| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇 | AD-01~AD-11 (11) |
+| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇·커뮤니티 공지 | AD-01~AD-12 (12) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -553,6 +553,7 @@
 | ES-05 | 기능 플래그 — 시험별 `features`로 도메인 특화 기능(성분사전·오디오북·참조자료 등) 자동 숨김 (`data-feature` 속성 + `hasFeature()`) | ✅ |
 | ES-06 | 시험 카드 진도 요약 — 카드에 시험별 외운 카드·퀴즈 정답률·최근 학습일·D-day 요약과 액센트 스왓치 표시 (`peekExamValue`로 타 시험 네임스페이스 읽기 전용 조회, comingSoon 카드 제외) | ✅ |
 | ES-07 | 시험 콘텐츠 갱신 배지 — `build_exams_list.js`가 manifest sha1 단축 `contentStamp`를 exams.js에 주입, 카드에 미방문='신규'/스탬프 변경='갱신됨' 배지. 확인 맵은 전역 키 `exam_stamp_seen` {examId:stamp}, 방문(활성화·선택) 시 갱신, 첫 실행 시 전체 시딩으로 오배지 방지 | ✅ |
+| ES-08 | 시험별 커뮤니티 초대 링크 — exams.json `discordInvite` 선언 시 설정 메뉴에 'Discord 커뮤니티' 버튼 노출(`community-btn`, 새 탭 `noopener` 오픈), 미선언 시 숨김. 시험 전환은 reload 기반이라 초기화 1회 판정 (DOC-DSN-36) | ✅ |
 
 ### 3.23 사용자 의견 수신 (User Feedback)
 
@@ -610,6 +611,7 @@
 | AD-09 | Pro 현황 리포트 — `report:pro`가 ① `pro_codes` 채널(코드 프리픽스)·티어(`valid_days`)별 발급/사용률·미사용 재고 ② `profiles.pro_expires_at` 만료 버킷(D-7 임박·만료 미갱신·활성·무기한) ③ GoTrue Admin `app_metadata.providers` 가입 수단별 계정 분포를 집계 — 기간권 사업의 연장 영업·대사 지표 | ✅ |
 | AD-10 | Discord 운영 알림 push — `tools/lib/discord.js` 공용 헬퍼(`DISCORD_WEBHOOK_URL` env·.env, 미설정 시 조용히 skip)로 배포 성공/실패·스모크 결과를 채널에 푸시 + keepalive 워크플로 실패 시 Discord 통지 (이슈 생성과 병행, 시크릿 미설정 시 skip) — allowed_mentions 비활성화로 멘션 방어 | ✅ |
 | AD-11 | Discord 조회 명령 봇 — `tools/supabase/functions/admin-bot` Edge Function이 Discord Interactions 엔드포인트로 `/status`·`/user <email>`·`/pro`·`/errors [days]`·`/feedback [days]` 읽기 전용 조회 응답. ed25519 서명 검증(`DISCORD_PUBLIC_KEY`) + `ADMIN_DISCORD_ID` 단일 관리자 게이트 + allowed_mentions 비활성화. 쓰기 명령은 의도적 미포함(상태 변경은 기존 CLI 경로). 명령 등록은 `admin:discord`(register_admin_bot.js), 셋업은 DISCORD_ADMIN 런북 | ✅ |
+| AD-12 | Discord 커뮤니티 공지 발송 — 배포 성공·스모크 통과 시 `announceRelease()`가 release-notes.json 해당 버전 노트(내부 릴리스 메타 행 제외)를 공지 채널로 fan-out. webhook env 규약: `DISCORD_ANNOUNCE`(전체-공지)·`DISCORD_ANNOUNCE_<EXAM_ID>`(시험별 — exams.json 미등록 id env는 스킵+경고), 같은 URL 중복 선언은 1회 발송. 미설정 시 조용히 skip, 발송 실패도 배포 무효화하지 않음 (DOC-DSN-36 §4) | ✅ |
 
 ### 3.27 AI 제작 지원 (Author-time)
 

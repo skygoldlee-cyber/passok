@@ -96,8 +96,8 @@ docs/
 ├── dev/                         ← 플랫폼 공통 개발 문서 (71개)
 │   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (19개 — README + ADR 18건)
-│   ├── runbooks/              ← 실행 절차·운영 런북 (16개)
-│   ├── design/                ← 설계·계획·평가 문서 (18개)
+│   ├── runbooks/              ← 실행 절차·운영 런북 (17개)
+│   ├── design/                ← 설계·계획·평가 문서 (19개)
 │   ├── reference/             ← 명세·로직·참조 문서 (14개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (3개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (사용자 매뉴얼 + images/ — 런타임 fetch·배포 대상)
@@ -213,6 +213,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [AUDIO_HOSTING_GUIDE.md](dev/runbooks/AUDIO_HOSTING_GUIDE.md) | 오디오북 호스팅·청취 아키텍처 — GitHub Releases 연동, 모바일 청취 동작 |
 | [REF_PDF_EXTERNALIZATION.md](dev/runbooks/REF_PDF_EXTERNALIZATION.md) | 참조자료 PDF(73MB) 외부 호스팅 이전 계획 — Releases + sha256 다운로더, 절차·주의사항 |
 | [Supabase_Custom_SMTP_MagicLink_OTP_설정가이드.md](dev/runbooks/Supabase_Custom_SMTP_MagicLink_OTP_설정가이드.md) | Supabase 운영 런북 — Custom SMTP(Gmail 앱 비밀번호)·Magic Link/OTP 템플릿·체크리스트 |
+| [DISCORD_ADMIN.md](dev/runbooks/DISCORD_ADMIN.md) | Discord 운영 서버 셋업 — 알림 webhook(AD-10)·조회 명령 봇(AD-11) 최초 1회 절차 (DOC-RBK-17) |
+| [DISCORD_COMMUNITY_SETUP.md](dev/runbooks/DISCORD_COMMUNITY_SETUP.md) | Discord 커뮤니티 서버 개설 절차 — Community 활성화·역할 게이트·Onboarding·초대 링크→`discordInvite` 연결 (DOC-RBK-18) |
 | [CHANGES.md](dev/CHANGES.md) | 코드 변경 이력 (Changelog) — 변경의 이유와 맥락 |
 
 ### 제품 전략·기획
@@ -223,6 +225,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [SUBSCRIPTION_ROADMAP.md](dev/design/SUBSCRIPTION_ROADMAP.md) | 월 구독 서비스 전환 로드맵 + Learning Pro 구현 과제 (구 DSN-03 통합) |
 | [BUSINESS_VALIDATION.md](dev/design/BUSINESS_VALIDATION.md) | 사업 검증 계획 — 가설 H1~H5·단계별 진입 조건·판정 기준·KPI 정의·의사결정 로그 (DOC-DSN-34) |
 | [PAYMENT_PILOT_DESIGN.md](dev/design/PAYMENT_PILOT_DESIGN.md) | P2 유료 수요 검증 — 결제 수단·라이선스 코드·가격·환불·전환 계측 실행 설계 (DOC-DSN-35, 선실험 범위) |
+| [DISCORD_COMMUNITY_DESIGN.md](dev/design/DISCORD_COMMUNITY_DESIGN.md) | Discord 커뮤니티 설계 — 시험별 역할 게이트 카테고리·파일럿 축소 채널·유입/자동화/도입 단계 (DOC-DSN-36, 설계안) |
 | [STUDY_PLAN_PRO_DESIGN.md](dev/design/STUDY_PLAN_PRO_DESIGN.md) | 스마트학습 과목별 가중 계획 — 출제 비중·약점 정답률 가중 주차별 배분표 (SC-08, 구현 완료) |
 | [STUDY_APP_DESIGN_GUIDE.md](dev/design/STUDY_APP_DESIGN_GUIDE.md) | 학습 앱 재사용 설계 가이드 — 다른 자격시험/교재 적용 템플릿 |
 
@@ -367,6 +370,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-33 | `docs/dev/design/AI_AUTHORING_DESIGN.md` |
 | DOC-DSN-34 | `docs/dev/design/BUSINESS_VALIDATION.md` |
 | DOC-DSN-35 | `docs/dev/design/PAYMENT_PILOT_DESIGN.md` |
+| DOC-DSN-36 | `docs/dev/design/DISCORD_COMMUNITY_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |
@@ -400,6 +404,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-RBK-15 | `docs/dev/runbooks/INCIDENT_2026-10-17_SUPABASE_PAUSE.md` |
 | DOC-RBK-16 | `docs/dev/runbooks/PILOT_EXAM_PROMOTION.md` |
 | DOC-RBK-17 | `docs/dev/runbooks/DISCORD_ADMIN.md` |
+| DOC-RBK-18 | `docs/dev/runbooks/DISCORD_COMMUNITY_SETUP.md` |
 | DOC-ADR-00 | `docs/dev/adr/README.md` |
 | DOC-ADR-01 | `docs/dev/adr/0001-exam-data-boot-document-write.md` |
 | DOC-ADR-02 | `docs/dev/adr/0002-domain-asset-convention-paths.md` |

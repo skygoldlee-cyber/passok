@@ -312,6 +312,7 @@
  * @property {string}   [registryGlobal]
  * @property {Object.<string, string>}  [theme]          시험별 스킨 토큰 오버라이드 (DA-14) — '--color-*'/'--bg-*'/'--border-*'/'--stroke-*' 키만 적용
  * @property {Object.<string, boolean>} [features]
+ * @property {string}   [discordInvite] 시험별 Discord 커뮤니티 초대 URL — 선언 시 설정 메뉴에 'Discord 커뮤니티' 버튼 노출 (DOC-DSN-36)
  */
 
 /* =======================================================

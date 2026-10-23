@@ -32,6 +32,7 @@
 6. **기능 플래그 최소 세트** — insadj는 현재 0개. 카드·드릴 핵심 루프가 플래그 밖이면 학습 불가 — `features` 선언 표(런북 §2)에서 최소 `{writtenPractice}` 여부와 추가 기능을 판단
 7. **참조자료 PDF 외부화 결정** — 원본 PDF 편입 시 `pdf_hosting.json` 선언 + `fetch:refpdfs` 경로 (DOC-RBK-12). 미편입이면 ref_md 텍스트만으로 `check:reflayout` 통과
 8. **승격 커밋** — `comingSoon` 제거 → `build:data` ×2 → 생성물 커밋 → `check:content`·`check:all` → `check:onboard` 등급 `정식` 확인 → `npm run deploy`
+9. **Discord 카테고리 확장** (서버 운영 시) — 파일럿 축소 채널을 풀 카테고리(공지·질문포럼·오류제보·스터디)로 확장 + `exams.json.discordInvite`(ES-08) 선언으로 앱 내 초대 버튼 노출 (DOC-DSN-36 §6 Phase 4)
 
 ## 시험별 잔여 작업
 

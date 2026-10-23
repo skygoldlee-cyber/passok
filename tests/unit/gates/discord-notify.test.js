@@ -1,10 +1,24 @@
-// tests/unit/gates/discord-notify.test.js — tools/lib/discord.js 회귀 (AD-10)
-// @spec AD-10
+// tests/unit/gates/discord-notify.test.js — tools/lib/discord.js 회귀 (AD-10·AD-12)
+// @spec AD-10,AD-12
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import discord from '../../../tools/lib/discord.js';
 
-const { postDiscord, eventEmbed } = discord;
+const { postDiscord, eventEmbed, postAnnounce, releaseAnnounceEmbed, announceRelease } = discord;
+
+// announce env 키를 저장→테스트 후 복원 (.env에 설정돼 있어도 격리)
+function withAnnounceEnv(map, fn) {
+    const keys = ['DISCORD_ANNOUNCE', 'DISCORD_ANNOUNCE_COSMETIC', 'DISCORD_ANNOUNCE_UNKNOWN'];
+    const saved = {};
+    keys.forEach(k => { saved[k] = process.env[k]; delete process.env[k]; });
+    Object.assign(process.env, map);
+    return Promise.resolve().then(fn).finally(() => {
+        keys.forEach(k => { if (saved[k] === undefined) delete process.env[k]; else process.env[k] = saved[k]; });
+    });
+}
 
 // fetch 목 — 호출 인자를 기록하고 제어 응답을 반환
 function stubFetch(fn) {
@@ -69,4 +83,65 @@ test('Discord 오류 응답·네트워크 예외 — sent:false + reason 보고'
         assert.equal(r.sent, false);
         assert.match(r.reason, /ECONNREFUSED/);
     } finally { s.restore(); }
+});
+
+test('postAnnounce — 공지 env 미설정 시 발신 없이 sent 0 (AD-12)', async () => {
+    const { calls, restore } = stubFetch(async () => new Response(''));
+    try {
+        await withAnnounceEnv({}, async () => {
+            const r = await postAnnounce({ title: 't' });
+            assert.equal(r.sent, 0);
+            assert.equal(calls.length, 0);       // 발신 자체를 하지 않음
+        });
+    } finally { restore(); }
+});
+
+test('postAnnounce — 전체-공지 + 등록 시험 채널 fan-out, 미등록 suffix는 스킵+보고 (AD-12)', async () => {
+    const { calls, restore } = stubFetch(async () => new Response('ok', { status: 200 }));
+    try {
+        await withAnnounceEnv({
+            DISCORD_ANNOUNCE: 'https://discord.test/all',
+            DISCORD_ANNOUNCE_COSMETIC: 'https://discord.test/cos',
+            DISCORD_ANNOUNCE_UNKNOWN: 'https://discord.test/unknown',
+        }, async () => {
+            const r = await postAnnounce({ title: 't' });
+            assert.equal(r.sent, 2);
+            assert.deepEqual(r.skippedUnknown, ['DISCORD_ANNOUNCE_UNKNOWN']);
+            assert.deepEqual(calls.map(c => c[0]).sort(), ['https://discord.test/all', 'https://discord.test/cos']);
+            const body = JSON.parse(calls[0][1].body);
+            assert.deepEqual(body.allowed_mentions, { parse: [] });
+        });
+    } finally { restore(); }
+});
+
+test('releaseAnnounceEmbed — 분류 접두·내부 릴리스 메타 행 제외 (AD-12)', () => {
+    const e = releaseAnnounceEmbed('v20261024-abc1234', [
+        '[기능·community] Discord 커뮤니티 공지 발송',
+        '[정리·release] v20261024-abc1234 스탬프 확정 [no-docs]',
+    ], 'https://app.test');
+    assert.match(e.title, /v20261024-abc1234/);
+    assert.match(e.description, /Discord 커뮤니티 공지 발송/);
+    assert.doesNotMatch(e.description, /스탬프 확정|기능·community/);
+    assert.equal(e.fields[0].value, 'https://app.test');
+});
+
+test('announceRelease — release-notes.json에서 버전 일치 항목을 읽어 발송 (AD-12)', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'announce-'));
+    try {
+        const file = join(dir, 'notes.json');
+        writeFileSync(file, JSON.stringify([
+            { version: 'v20261024-abc1234', date: '2026-10-24', notes: ['[기능·x] 테스트 노트'] },
+            { version: 'v20261023-zzz9999', date: '2026-10-23', notes: ['[기능·y] 구버전 노트'] },
+        ]));
+        const { calls, restore } = stubFetch(async () => new Response('ok', { status: 200 }));
+        try {
+            await withAnnounceEnv({ DISCORD_ANNOUNCE: 'https://discord.test/all' }, async () => {
+                const r = await announceRelease('v20261024-abc1234', { notesPath: file });
+                assert.equal(r.sent, 1);
+                const body = JSON.parse(calls[0][1].body);
+                assert.match(body.embeds[0].description, /테스트 노트/);
+                assert.doesNotMatch(body.embeds[0].description, /구버전 노트/);
+            });
+        } finally { restore(); }
+    } finally { rmSync(dir, { recursive: true, force: true }); }
 });
