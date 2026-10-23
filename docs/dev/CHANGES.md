@@ -7,6 +7,7 @@
 - **런북 연동**: NEW_EXAM_RUNBOOK §파일럿 운영에 "커뮤니티 표면 연동" 절차 + 체크리스트 항목 추가, PILOT_EXAM_PROMOTION 공통 잔여 작업에 Discord 카테고리 확장 단계 추가
 - **후속 — 개설 런북**: DOC-RBK-18 `DISCORD_COMMUNITY_SETUP.md` — 커뮤니티 서버 최초 1회 절차(Community 활성화·채널 트리·역할 게이트·Onboarding·AutoMod·초대 링크→`discordInvite` 연결·외부 시점 검증). README 운영·환경 인덱스에 DISCORD_ADMIN 누락 행도 함께 등록
 - **후속 — Phase 3 공지 자동발송 (AD-12)**: `tools/lib/discord.js`에 announce fan-out 추가 — `DISCORD_ANNOUNCE`(전체-공지)·`DISCORD_ANNOUNCE_<EXAM>`(시험별, 미등록 id env 스킵+경고·URL 중복 1회) webhook 맵. 배포 성공·스모크 통과 시 `deploy.js`의 `notifyCommunity()`가 release-notes 해당 버전 노트(내부 메타 행 제외)를 공지 채널로 발송 — 미설정·발송 실패도 배포 무영향. 유닛 테스트 4건 추가
+- **후속 — 테스트 격리 수정**: `withAnnounceEnv`가 `delete`로 env 격리했으나 `loadEnv()`가 `.env`의 실제 `DISCORD_ANNOUNCE*` 키를 재주입해 .env 설정 환경에서 실패 → `DISCORD_ANNOUNCE*` 전수 빈 값(`''`) 초기화 방식으로 변경 (기존 webhook 테스트와 동일 패턴)
 
 ## 2026-10-23 SPEC ID 상태 수명 주기 규약 — `폐기`·`통합` 상태 신설
 
