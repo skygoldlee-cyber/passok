@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 69774e33417b3ae9
-> 생성: 2026-10-23 · 원천: SPEC.md(590개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 27a9f9e78dd42d8a
+> 생성: 2026-10-23 · 원천: SPEC.md(592개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 590개 — 문서 연결 427 · 소스 연결 527 · 테스트 연결 561 · 보고서 연결 109
+**커버리지 요약**: 요구사항 592개 — 문서 연결 429 · 소스 연결 529 · 테스트 연결 563 · 보고서 연결 109
 
 ---
 
@@ -464,7 +464,7 @@
 | FB-05 | ✅ | 테스트 | DOC-DSN-09<br>DOC-DSN-30 | src/feedback.js | tests/dom/misc/feedback.dom.test.js<br>tests/unit/app/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
 | FB-06 | ✅ | 테스트 | DOC-DSN-09<br>DOC-DSN-30 | src/feedback.js | tests/dom/misc/feedback.dom.test.js<br>tests/unit/app/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
 | FB-07 | ✅ | 테스트 | DOC-DSN-09<br>DOC-DSN-30 | src/feedback.js | tests/dom/misc/feedback.dom.test.js<br>tests/unit/app/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
-| FB-08 | ✅ (코드) / ⚙️ (대시보드 설정 필요) | 테스트 | DOC-DSN-09<br>DOC-DSN-30 | src/feedback.js<br>tools/supabase/functions/feedback-notify/index.ts | tests/dom/misc/feedback.dom.test.js<br>tests/unit/app/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
+| FB-08 | ✅ (코드) / ⚙️ (대시보드 설정 필요) | 테스트 | DOC-DSN-09<br>DOC-DSN-30<br>DOC-RBK-17 | src/feedback.js<br>tools/supabase/functions/feedback-notify/index.ts | tests/dom/misc/feedback.dom.test.js<br>tests/unit/app/feedback.test.js | — | 사업 판단 — docs/dev/design/USER_FEEDBACK_DESIGN.md (유튜브 유입 대응) |
 
 ## 3.24 학습 품질 감사
 
@@ -501,6 +501,8 @@
 | AD-07 | ✅ | 테스트 | — | tools/check/dashboard_report.js | tests/unit/app/dashboard-report.test.js | — | — |
 | AD-08 | ✅ | 테스트 | — | tools/check/user_report.js | tests/unit/app/user-report.test.js | — | — |
 | AD-09 | ✅ | 테스트 | — | tools/check/pro_report.js | tests/unit/app/pro-report.test.js | — | — |
+| AD-10 | ✅ | 테스트 | DOC-RBK-17 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
+| AD-11 | ✅ | 테스트 | DOC-RBK-17 | tools/deploy/register_admin_bot.js<br>tools/supabase/functions/admin-bot/index.ts | tests/unit/gates/admin-bot-contract.test.js | — | — |
 
 ## 3.27 AI 제작 지원
 
@@ -944,6 +946,7 @@
 | DOC-RBK-14 | docs/dev/runbooks/WHEN_THINGS_BREAK.md | — |
 | DOC-RBK-15 | docs/dev/runbooks/INCIDENT_2026-10-17_SUPABASE_PAUSE.md | AU-01, AU-02, AU-03, AU-04, AU-05, AU-06, AU-07, AU-08 |
 | DOC-RBK-16 | docs/dev/runbooks/PILOT_EXAM_PROMOTION.md | AI-01, AI-02, AI-03, AI-04, AI-05, AI-06, AI-07, AI-08, AI-09, AI-10, AI-11, AI-12, AI-13, AI-14, AI-15, AI-16, AI-17, AI-18, AI-19, AI-20, AI-21, AI-22, AI-23, DA-15, ES-01, ES-02, ES-03, ES-04, ES-05, ES-06, ES-07 |
+| DOC-RBK-17 | docs/dev/runbooks/DISCORD_ADMIN.md | AD-10, AD-11, FB-08 |
 | DOC-REF-01 | docs/dev/reference/COMBO_STUDY_STRATEGY.md | DR-02, DR-03, DR-04, DR-05, DR-06, DR-07, Q-01, Q-02, Q-03, Q-04, Q-05, Q-06, Q-07, Q-08, Q-09, Q-10, Q-11, Q-12 |
 | DOC-REF-02 | docs/dev/reference/DEV_ENVIRONMENT.md | — |
 | DOC-REF-03 | docs/dev/reference/FLASHCARD_LOGIC.md | F-01, F-02, F-03, F-04, F-05, F-06, F-07, F-08, F-09, F-10, ID-01, ID-02, ID-03, ID-04, TR-01 |

@@ -62,6 +62,18 @@ jobs:
             exit 1
           fi
 
+      - name: 핑 실패 시 Discord 알림 (AD-10)
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          # 시크릿 미설정이면 조용히 skip — 이슈 생성 단계는 그대로 동작
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then exit 0; fi
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          PAYLOAD="{\"allowed_mentions\":{\"parse\":[]},\"embeds\":[{\"title\":\"🚨 Supabase keep-alive 실패\",\"description\":\"프로젝트 일시정지 또는 장애 가능 — 대시보드에서 Resume 확인\",\"color\":16711680,\"fields\":[{\"name\":\"run\",\"value\":\"${RUN_URL}\"}]}]}"
+          curl -sS --max-time 15 -X POST -H 'content-type: application/json' \
+            "$DISCORD_WEBHOOK_URL" -d "$PAYLOAD" || true   # 알림 실패가 이슈 생성 단계를 막으면 안 됨
+
       - name: 핑 실패 시 이슈 자동 생성
         if: failure()
         env:

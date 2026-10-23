@@ -156,6 +156,7 @@ npm.cmd run report:user                 # 사용자 조회 — npm run report:us
 npm.cmd run report:pro                  # Pro 현황 리포트 — pro_codes 채널·티어별 발급/사용률·미사용 재고 + pro_expires_at 만료 버킷(D-7 임박·미갱신·활성·무기한) + 가입 수단별 계정 분포 (동일 키 요건, AD-09 · 연장 영업·대사 지표)
 npm.cmd run admin:grant-pro             # Pro 부여/회수 — npm run admin:grant-pro -- <email> [--revoke]: 기본 dry-run, --apply로만 실갱신 (동일 키 요건, AD-06 · 90일 기간권 만료 회수 경로 — DOC-DSN-35 §8)
 npm.cmd run admin:issue-code            # 라이선스 코드 발급 — npm run admin:issue-code -- --channel <채널> [--count N] [--dry-run]: <CHANNEL>-XXXX-XXXX 생성·pro_codes insert (동일 키 요건, PAY-05 · 발급 대장에 입금자↔코드·만료일 수동 기록)
+npm.cmd run admin:discord               # Discord 조회 봇 슬래시 명령 등록 — DISCORD_APP_ID·DISCORD_BOT_TOKEN 필요 (-- --list=등록 상태 조회 · 셋업은 docs/dev/runbooks/DISCORD_ADMIN.md, AD-11)
 npm.cmd run report:dashboard            # 로컬 HTML 운영 대시보드 — 오류율·활성화율(세션/설치)·퍼널·피드백 조감을 단일 HTML로 생성 (동일 키 요건 · -- --days N · --out <path> · 산출물 gitignore — 조회 후 삭제, AD-07)
 npm.cmd run report:glossary             # 용어 후보 추출 리포트 — 참조자료 ref_md + 교재 표준형의 정의 조항·약칭·영문 병기를 스캔해 용어설명집 대비 신규/기존 분류 (BP-14 · 도구 직접 실행 `--apply`=신규 정의→glossary subjectN.json, `--apply-synonyms`=약칭·영문→manifest.synonyms, `--patterns`로 범위 조정)
 npm.cmd run check:docsync               # 소스 변경 시 문서 갱신 강제 — src/tools/tests/설정 변경에 docs/·AGENTS·README 갱신 동반 필수. 우회: SKIP_DOCSYNC=1 (모든 단계) · 커밋 메시지 행 끝의 [no-docs] (pre-push --ref 단계에서만 인식 — 마크된 커밋의 파일만 면제되며 다른 커밋은 계속 검사. pre-commit은 메시지 미존재로 불가)

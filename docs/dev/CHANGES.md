@@ -1,5 +1,15 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-23 Discord 운영 표면 — 알림 push + 조회 명령 봇 (AD-10·AD-11)
+
+- **알림 push (AD-10)**: `tools/lib/discord.js` 공용 헬퍼(`postDiscord`·`eventEmbed`, `DISCORD_WEBHOOK_URL` env/.env, 미설정 시 조용히 skip) 신설 → `deploy.js`가 배포 성공/vercel 실패/스모크 실패를 채널에 푸시 + `supabase-keepalive.yml` 실패 시 이슈 생성과 병행해 Discord 통지(GH 시크릿). allowed_mentions 비활성화 방어
+- **조회 명령 봇 (AD-11)**: `tools/supabase/functions/admin-bot` — Discord Interactions 엔드포인트로 `/status`·`/user <email>`·`/pro`·`/errors`·`/feedback` 읽기 전용 조회. ed25519 서명 검증(WebCrypto) + `ADMIN_DISCORD_ID` 단일 게이트 + ephemeral 거절. 쓰기 명령 미포함(상태 변경·감사는 기존 CLI 경로 유지)
+- **명령 등록**: `tools/deploy/register_admin_bot.js` (`npm run admin:discord`, `--list` 조회) — index.ts switch와 명령 정의 1:1
+- **신규 런북** DOC-RBK-17 `DISCORD_ADMIN.md` — 서버/채널·webhook·애플리케이션 생성부터 Interactions Endpoint 연결까지 최초 1회 절차
+- 테스트: `discord-notify.test.js` 4건 — webhook 미설정 skip·페이로드 계약(allowed_mentions·embeds)·색상 분기·오류 응답 보고
+
+---
+
 > 대상: passok (구 passory / Personalized_Skincare / Cosmetic Pass Master) 배포판
 > 작업일: 2026-08-23
 > 검증: 모든 `src/*.js` `node --check` 통과 · `node tools/build/index.js` 재빌드 성공 ·

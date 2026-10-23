@@ -39,6 +39,7 @@ const { loadEnv } = require('../lib/env');
 const { stampSwVersion } = require('../build/stamp_sw_version.js');
 const { stampReleaseNotes } = require('../build/stamp_release_notes.js');
 const { parseStatusLine, isNoiseOnlyDiff: noiseOnlyDiffText } = require('../lib/git_status.js');
+const { postDiscord, eventEmbed } = require('../lib/discord.js');
 
 // 팀 프로젝트는 개인 계정 기본 스코프로는 배포가 거부되므로(Not authorized),
 // .vercel/project.json의 orgId를 --scope로 명시한다. 개인 프로젝트(orgId 없음)면 생략.
@@ -389,6 +390,11 @@ async function main() {
     }
     if ((result.status ?? 1) !== 0) {
         restoreStamps();
+        // 운영 알림 — webhook 미설정이면 내부에서 조용히 skip (AD-10)
+        await postDiscord(eventEmbed('배포 실패 — vercel --prod', false, [
+            { name: '종료 코드', value: String(result.status ?? 1), inline: true },
+            { name: '커밋', value: git('rev-parse --short HEAD') || 'unknown', inline: true },
+        ]));
         process.exit(result.status ?? 1);
     }
 
@@ -439,12 +445,20 @@ async function main() {
     const baseUrl = projectUrl();
     if (baseUrl && stamped) {
         console.log(`\n▶ 배포 후 스모크 — ${baseUrl}`);
-        smokeCheck(baseUrl, stamped).then((fails) => {
+        smokeCheck(baseUrl, stamped).then(async (fails) => {
+            // 운영 알림 — webhook 미설정이면 내부에서 조용히 skip (AD-10)
+            const fields = [
+                { name: '버전', value: stamped, inline: true },
+                { name: 'URL', value: baseUrl, inline: true },
+            ];
             if (fails.length) {
+                fields.push({ name: '스모크 실패', value: fails.join('\n').slice(0, 900) });
                 console.error(`\n❌ 스모크 실패:\n  ${fails.join('\n  ')}\n  배포는 됐지만 프로덕션 응답 이상 — Vercel 대시보드·엣지 캐시 확인`);
+                await postDiscord(eventEmbed('배포 완료 — 스모크 실패 ⚠️', false, fields));
                 process.exit(1);
             }
             console.log('✅ 프로덕션 스모크 통과');
+            await postDiscord(eventEmbed('배포 완료', true, fields));
         });
     }
 }
