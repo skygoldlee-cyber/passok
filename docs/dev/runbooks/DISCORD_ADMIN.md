@@ -17,11 +17,17 @@ Discord 측 필요 자산: **서버 1개 · 채널 1개 · 애플리케이션 1�
 
 ---
 
+## 0. Discord 처음 사용자 전제
+
+1. https://discord.com 계정 가입 (이메일 인증)
+2. 데스크톱 앱 설치 권장 — 웹에서도 되지만 개발자 모드·ID 복사가 앱이 편함
+
 ## 1. 서버·채널 생성 (알림용)
 
-1. Discord 앱 → 좌측 **+** → "직접 만들기" → 개인 운영 서버 생성
-2. 채널 생성 — 예: `#passok-ops` (비공개 권장 — 알림에 운영 정보가 포함됨)
-3. 채널 설정 → **연동 → 웹후크 만들기** → URL 복사
+1. Discord 왼쪽 사이드바 맨 아래 **「+」(서버 추가)** → **「직접 만들기」** → **「나와 친구들을 위한 서버」** → 이름 예: `passok-ops`
+2. `#일반` 옆 **+** → 채널명 `passok-ops` → **비공개 채널 ON** (운영 정보가 올라가므로)
+3. `passok-ops` 채널 → 톱니바퀴(채널 설정) → **연동(Integrations) → 웹후크 → 웹후크 만들기**
+4. 이름 `passok-ops` 등으로 지정 → **「웹후크 URL 복사」**
 
 이 URL이 `DISCORD_WEBHOOK_URL`입니다 — `https://discord.com/api/webhooks/…` 형태.
 
@@ -35,6 +41,7 @@ DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/<id>/<token>
 
 - `npm run deploy`가 배포 성공/실패·스모크 결과를 채널로 푸시
 - 미설정 시 모든 발신 지점이 조용히 skip — 알림은 선택 계층
+- 연결 확인: `node -e "require('./tools/lib/discord.js').postDiscord({title:'테스트',description:'webhook 연결 확인'}).then(console.log)"` → `{ sent: true }` + 채널 메시지 도착이면 성공
 
 ### CI(keepalive) 알림
 
@@ -46,21 +53,26 @@ GitHub repo → Settings → Secrets and variables → Actions → **`DISCORD_WE
 
 ### 3.1 Discord 애플리케이션 생성
 
-1. https://discord.com/developers/applications → **New Application** (이름 예: `passok-admin`)
-2. **General Information** → **Application ID**·**Public Key** 복사
-3. **Bot** → **Reset Token** → 토큰 복사 (1회만 표시)
-4. **Bot → Public Bot OFF** 권장 (타인이 서버에 추가 불가)
-5. **OAuth2 → URL Generator**: scope `bot` + `applications.commands` → 생성된 URL로 내 서버에 초대
+1. https://discord.com/developers/applications → 우상단 **「New Application」** → 이름 예: `passok-admin` → Create
+2. **General Information** 탭에서 복사해 임시 보관:
+   - **Application ID** (숫자)
+   - **Public Key** (64자 16진수)
+3. 왼쪽 **Bot** 탭 → **「Reset Token」** → 토큰 복사 (**1회만 표시 — 바로 저장**)
+4. 같은 Bot 탭에서 **「Public Bot」 스위치 OFF** (타인이 내 서버 밖에 추가 불가)
+5. 왼쪽 **OAuth2 → URL Generator**: scope에 `bot` + `applications.commands` 체크 → 아래 생성된 URL을 브라우저로 열기 → 서버 선택 → 승인 → 봇 입장
 
-### 3.2 시크릿 설정
+### 3.2 관리자 user id 확인
+
+Discord 설정(좌하단 톱니) → **고급(Advanced) → 개발자 모드 ON** → 본인 이름 우클릭 → **「사용자 ID 복사」** — 이 숫자가 `ADMIN_DISCORD_ID`.
+
+### 3.3 시크릿 설정
 
 ```powershell
-# Supabase Edge Function 시크릿
-supabase secrets set DISCORD_PUBLIC_KEY=<Public Key> --project-ref <ref>
-supabase secrets set ADMIN_DISCORD_ID=<내 Discord user id> --project-ref <ref>
+# Supabase Edge Function 시크릿 — <ref>는 src/auth-sync/supabase-config.js의
+# SUPABASE_URL에 있는 <ref>.supabase.co
+npx.cmd supabase secrets set DISCORD_PUBLIC_KEY=<Public Key> --project-ref <ref>
+npx.cmd supabase secrets set ADMIN_DISCORD_ID=<3.2의 내 user id> --project-ref <ref>
 # SUPABASE_URL·SUPABASE_SERVICE_ROLE_KEY는 Edge Runtime이 자동 주입
-
-# Discord user id 확인: Discord 설정 → 고급 → 개발자 모드 ON → 내 아바타 우클릭 → "사용자 ID 복사"
 ```
 
 ```dotenv
@@ -69,15 +81,16 @@ DISCORD_APP_ID=<Application ID>
 DISCORD_BOT_TOKEN=<Bot Token>
 ```
 
-### 3.3 함수 배포·명령 등록
+### 3.4 함수 배포·명령 등록
 
 ```powershell
-supabase functions deploy admin-bot --project-ref <ref>
-npm.cmd run admin:discord          # 슬래시 명령 일괄 등록 (글로벌)
+# supabase CLI 최초 1회 로그인 필요: npx.cmd supabase login
+npx.cmd supabase functions deploy admin-bot --project-ref <ref>
+npm.cmd run admin:discord           # 슬래시 명령 일괄 등록 (글로벌)
 npm.cmd run admin:discord -- --list # 등록 상태 확인
 ```
 
-### 3.4 Interactions Endpoint 연결
+### 3.5 Interactions Endpoint 연결
 
 Developer Portal → **General Information → Interactions Endpoint URL**:
 
@@ -86,6 +99,10 @@ https://<project-ref>.supabase.co/functions/v1/admin-bot
 ```
 
 저장 시 Discord가 `PING` 검증을 보냅니다 — 함수가 서명 검증 후 PONG을 반환하면 저장됩니다. 저장이 거부되면 함수 배포·`DISCORD_PUBLIC_KEY` 시크릿을 확인하세요.
+
+### 3.6 사용 확인
+
+서버 아무 채널에서 `/` 입력 → `/status` `/user` `/pro` `/errors` `/feedback` 목록 표시 (글로벌 명령 전파까지 최대 1시간 — 안 보이면 클라이언트 재시작). `ADMIN_DISCORD_ID` 외 사용자는 "관리자 전용" ephemeral 응답만 받습니다.
 
 ## 4. 명령 표
 
