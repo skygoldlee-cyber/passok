@@ -686,6 +686,16 @@ select polname, polrelid::regclass from pg_policy;
 
 > 카카오 콘솔은 2025-12 개편으로 경로가 변경됐다 — 리다이렉트 URI·Client Secret은 더 이상 '카카오 로그인 → 보안'에 없고 **플랫폼 키 페이지의 REST API 키 수정 폼** 안에 있다. 신규 앱은 REST API 키 발급 시 클라이언트 시크릿이 **자동 활성화**돼 나오므로 별도 '사용함' 변경은 불필요. `로그아웃 리다이렉트 URI`(고급 탭)는 선택 사항으로 미설정.
 
+**리다이렉트 URI 설정 — 두 군데에 등록하는 URI가 다르다**:
+
+| 등록 위치 | URI | 역할 |
+|---|---|---|
+| Google/Kakao **콘솔** | `https://<ref>.supabase.co/auth/v1/callback` (현재 프로젝트: `https://hunpzznyiaddekuggupu.supabase.co/auth/v1/callback`) | 프로바이더 → Supabase로 인가 코드를 돌려주는 주소. 앱 도메인이 아니라 **Supabase 프로젝트 콜백**을 등록한다 |
+| Supabase 대시보드 (Authentication → URL Configuration) | Site URL `https://passok.vercel.app` + Redirect URLs `https://passok.vercel.app/**`, `http://localhost:3000/**` | Supabase → 최종 앱 복귀(`redirectTo`) 허용 목록. `signInWithOAuth`의 `redirectTo: origin`이 여기 매칭돼야 한다 |
+
+- 앱 도메인을 프로바이더 콘솔에 넣으면 인가 코드가 Supabase로 안 돌아와 실패하고, 반대로 Supabase 콜백을 Redirect URLs에 넣을 필요는 없다 — 와일드카드 `/**`로 이미 커버되지 않으므로 혼동 주의.
+- 로컬 개발 테스트는 `http://localhost:3000` origin도 Redirect URLs에 등록돼 있어 동일 버튼으로 검증 가능 (프로바이더 콘솔 쪽은 Supabase 콜백 하나면 충분 — 로컬 전용 콜백 등록 불필요).
+
 - 카카오 `kakao_account.email` 동의 항목 수집은 **비즈앱 전환**(사업자 인증)이 필요 — 미전환 상태에서는 이메일 없는 계정이 생길 수 있으므로 `external_kakao_email_optional=true`로 둔다 (계정 화면은 `user.email` 없으면 '계정'으로 표시 — `refreshAuthUI`가 처리).
 - **수단마다 별도 계정**: 이메일 OTP·Google·카카오는 각각 다른 `auth.users`를 만든다 — Pro 코드는 활성화한 계정에만 귀속되므로 "수단을 바꾸면 Pro가 사라진다" 문의를 응대 문구(§A-2)·계정 모달 힌트로 예방한다.
 - **PWA 제약**: OAuth 리다이렉트 세션은 브라우저 저장소에 성립해 설치형 PWA로 돌아오지 못한다 — `display-mode: standalone`이면 버튼 자체를 숨기고 이메일 코드 경로로 유도 (`refreshAuthUI`).
