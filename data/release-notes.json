@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261023-7f1af2f",
+    "date": "2026-10-23",
+    "notes": [
+      "[기능·spec] SPEC ID 상태 수명 주기 규약 — 폐기·통합 상태 + 잔존 참조 게이트",
+      "[문서·runbook] Discord 알림 경로 실전 검증 반영 — AD-10 체크 완료",
+      "[정리·release] v20261023-d28e8d4 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261023-d28e8d4",
     "date": "2026-10-23",
     "notes": [
@@ -195,13 +204,6 @@
       "[리팩터링·src] auth/sync 4개 모듈을 src/auth-sync/로 분리 — pwa/ 파일럿 후속 그룹화",
       "[리팩터링·src] pwa-* 3개 모듈을 src/pwa/로 분리 — 디렉터리 그룹화 파일럿",
       "[정리·release] v20261022-c1326cb 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261022-c1326cb",
-    "date": "2026-10-22",
-    "notes": [
-      "내부 개선 및 안정성 향상"
     ]
   }
 ]
