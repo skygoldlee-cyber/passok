@@ -15,8 +15,10 @@
  *
  * 사용법:
  *   node tools/build/build_embeddings.js [--exam <id>|all(기본: features.semantic 전체)]
- *       [--out {dataRoot}/embeddings] [--model Xenova/multilingual-e5-small]
+ *       [--out {dataRoot}/embeddings] [--model <onnx-repo>] [--revision <sha>]
  *       [--limit N] [--no-write] [--batch 64]
+ *       (모델·리비전 기본값은 tools/lib/emb_math.js의 EMB_MODEL 핀 —
+ *        revision 미지정 요청은 HF main 최신을 따라가므로 커밋 SHA로 고정)
  *
  * 출력(--out 미지정 시 {dataRoot}/embeddings/, 커밋 대상 정적 자산):
  *   manifest.js              var EMB_MANIFEST — 모델·차원·files·inputs(원본 sha1)
@@ -34,6 +36,7 @@ const { ROOT } = require('../lib/env');
 const { getExamTargets } = require('./exam_targets');
 const {
     textNormKey, quantizeInt8, dequantizeNorm, dotVec, fileSha1, loadVarBundle,
+    EMB_MODEL, EMB_MODEL_REVISION, EMB_MODEL_LOGICAL,
 } = require('../lib/emb_math');
 
 const E5_DOC_PREFIX = 'passage: ';   // e5 계열은 저장 문서에 passage:, 질의에 query: 접두사 요구
@@ -285,8 +288,8 @@ function buildReport(items, keys, adj, meta, dim) {
 
 function parseArgs(argv) {
     const a = {
-        exam: 'all', model: 'Xenova/multilingual-e5-small',
-        modelName: 'intfloat/multilingual-e5-small',
+        exam: 'all', model: EMB_MODEL, revision: EMB_MODEL_REVISION,
+        modelName: EMB_MODEL_LOGICAL,
         out: null, dataRoot: null, limit: 0, batch: 64, write: true,
     };
     for (let i = 0; i < argv.length; i++) {
@@ -318,7 +321,7 @@ async function buildExam(target, a, embedder) {
     const { adj, qerr } = buildAdjacency(deq, emb, capped, norms, dim, TOP_K);
 
     const meta = {
-        model: a.modelName, revision: a.model, dim, quant: 'int8',
+        model: a.modelName, revision: `${a.model}@${a.revision}`, dim, quant: 'int8',
         topK: TOP_K, minNeighborLen: MIN_NEIGHBOR_LEN,
         sourceHash: sourceHash(capped), items: capped.length,
         exam: target.id, quantMeanCosErr: Math.round(qerr * 1e6) / 1e6,
@@ -387,7 +390,7 @@ async function main(argv = process.argv.slice(2)) {
 
     // 모델은 시험 순회 전 1회 로드 (수백 MB — 반복 로드 방지)
     const { pipeline } = require('@huggingface/transformers');
-    const extractor = await pipeline('feature-extraction', a.model, { dtype: 'fp32' });
+    const extractor = await pipeline('feature-extraction', a.model, { dtype: 'fp32', revision: a.revision });
     const embedder = async (texts) => {
         const probe = await extractor([E5_DOC_PREFIX + 'probe'], { pooling: 'mean', normalize: true });
         const dim = probe.dims[1];

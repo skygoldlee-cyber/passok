@@ -10,6 +10,12 @@
 const fs = require('fs');
 const crypto = require('crypto');
 
+// HF Hub 모델 핀 — revision 미지정 요청은 main 최신을 따라가므로 커밋 SHA로
+// 고정한다 (재생성 재현성·공급망 방어). 갱신: huggingface.co/api/models/<id> 의 sha.
+const EMB_MODEL = 'Xenova/multilingual-e5-small';
+const EMB_MODEL_REVISION = '761b726dd34fb83930e26aab4e9ac3899aa1fa78'; // main @2025-07-22
+const EMB_MODEL_LOGICAL = 'intfloat/multilingual-e5-small'; // 매니페스트 기록용 원본 모델명
+
 /** 동일 텍스트 판별용 정규화 키 — 공백 제거·소문자 (Python text_norm_key) */
 function textNormKey(t) { return String(t).replace(/\s+/g, '').toLowerCase(); }
 
@@ -75,4 +81,7 @@ function loadVarBundle(file) {
     return { name: m[1], data };
 }
 
-module.exports = { textNormKey, quantizeInt8, dequantizeNorm, dotVec, fileSha1, loadVarBundle };
+module.exports = {
+    textNormKey, quantizeInt8, dequantizeNorm, dotVec, fileSha1, loadVarBundle,
+    EMB_MODEL, EMB_MODEL_REVISION, EMB_MODEL_LOGICAL,
+};

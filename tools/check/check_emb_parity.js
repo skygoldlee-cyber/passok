@@ -18,7 +18,8 @@
  *
  * 사용법:
  *   node tools/check/check_emb_parity.js [--exam <id>] [--dtype fp32|q8]
- *        [--model Xenova/multilingual-e5-small] [--sample 400] [--batch 64]
+ *        [--model <onnx-repo>] [--revision <sha>] [--sample 400] [--batch 64]
+ *        (모델·리비전 기본값은 tools/lib/emb_math.js의 EMB_MODEL 핀)
  * ※ 기본 dtype은 fp32 — 측정 결과 q8은 모델 양자화 노이즈로 이웃 파리티 미달
  *   (Jaccard 0.72 vs 0.99), 운영 포팅본(build_embeddings.js)도 fp32 고정.
  */
@@ -29,6 +30,7 @@ const { ROOT } = require('../lib/env');
 const { getExamTargets } = require('../build/exam_targets');
 const {
     textNormKey, quantizeInt8, dequantizeNorm, dotVec, loadVarBundle,
+    EMB_MODEL, EMB_MODEL_REVISION,
 } = require('../lib/emb_math');
 
 const E5_DOC_PREFIX = 'passage: ';
@@ -69,9 +71,9 @@ function loadEmbeddings(embDir) {
 }
 
 // ── 임베딩 (ONNX) ───────────────────────────────────────────────────
-async function embedAll(texts, { model, dtype, batch }) {
+async function embedAll(texts, { model, revision, dtype, batch }) {
     const { pipeline } = require('@huggingface/transformers');
-    const extractor = await pipeline('feature-extraction', model, { dtype });
+    const extractor = await pipeline('feature-extraction', model, { dtype, revision });
     const dim = (await extractor([E5_DOC_PREFIX + 'dimension probe'], { pooling: 'mean', normalize: true })).dims[1];
     const out = new Float32Array(texts.length * dim);
     for (let s = 0; s < texts.length; s += batch) {
@@ -91,7 +93,7 @@ function makeRng(seed) {
 }
 
 function parseArgs(argv) {
-    const a = { exam: null, dtype: 'fp32', model: 'Xenova/multilingual-e5-small', sample: 400, batch: 64 };
+    const a = { exam: null, dtype: 'fp32', model: EMB_MODEL, revision: EMB_MODEL_REVISION, sample: 400, batch: 64 };
     for (let i = 0; i < argv.length; i += 2) {
         const k = argv[i].replace(/^--/, '');
         if (k in a) a[k] = /^\d+$/.test(argv[i + 1]) ? parseInt(argv[i + 1], 10) : argv[i + 1];
@@ -127,7 +129,7 @@ async function main(argv = process.argv.slice(2)) {
     const norms = texts.map(textNormKey);
     console.log(`  항목 ${keys.length} · 저장 이웃 k=${neighbors.k} · PY 벡터 ${pyVec.size} (${a.dtype} ONNX 비교 대상)`);
 
-    console.log(`[2/4] ONNX 임베딩: ${a.model} (${a.dtype}, batch ${a.batch})`);
+    console.log(`[2/4] ONNX 임베딩: ${a.model}@${a.revision.slice(0, 12)} (${a.dtype}, batch ${a.batch})`);
     const { mat, dim } = await embedAll(texts, a);
     const { q, scales } = quantizeInt8(mat, texts.length, dim);
     const jsVec = dequantizeNorm(q, scales, texts.length, dim);

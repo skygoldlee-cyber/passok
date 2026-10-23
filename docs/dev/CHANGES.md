@@ -21,6 +21,7 @@
 - **임베딩 Node 포팅** (`tools/build/build_embeddings.js`): `build_embeddings.py`를 @huggingface/transformers + ONNX fp32(`Xenova/multilingual-e5-small`)로 이식 — Python+torch ~2GB 설치 없이 임베딩 재생성 가능. 수집 계약(sourceHash·inputs·texts·sameText·ids) 완전 일치, int8 벡터 99.997% 일치, 이웃 집합 95.5% 동일·전체 Jaccard 0.9865
 - **파리티 검증기** (`tools/check/check_emb_parity.js`): 커밋된 골든 번들 vs ONNX 출력 비교 — q8은 모델 양자화 노이즈로 이웃 Jaccard 0.72 미달 → fp32 채택·기본값 고정. emb_math.js에 공유 수치 헬퍼 추출
 - **잔여 Python 의존**: `convert:refs`(PDF 변환)·오디오북 TTS뿐 — 제작 경로 선택 도구로 분류
+- **모델 소스 핀 (P3)**: `EMB_MODEL_REVISION` 커밋 SHA 고정 — revision 미지정 요청은 HF main 최신을 따라가 동일 입력에도 출력이 drift할 수 있어 차단. manifest `revision`은 `<repo>@<sha>`로 기록 (설계 §3 재현성 조항 구현)
 - 테스트: `emb-builder.test.js` 5건(collectItems·정답마커·sameText·sourceHash·이웃 필터) + `env-doctor.test.js` 10건
 
 ## 2026-10-23 Supabase 스키마 견고화 — redeem_code 원자화·feedback 스푸핑 차단·리포트 인덱스

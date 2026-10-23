@@ -36,7 +36,7 @@
 
 **차원 축소 옵션**: 384d를 유지하는 것이 기본이다. 번들 크기가 예산(§6-3)을 초과하면 빌드타임 PCA(또는 e5 계열의 head-truncation)로 128d까지 축소를 검토한다 — 축소 여부·기법·분산 설명력도 매니페스트에 기록한다.
 
-**재현성**: 생성 도구는 `tools/build/build_embeddings.js` — 동일 모델의 ONNX export(`Xenova/multilingual-e5-small`, fp32)를 `@huggingface/transformers`로 인코딩한다. fp32 ONNX 출력은 원본 PyTorch 산출물과 int8 양자화 후 완전 일치함이 `tools/check/check_emb_parity.js`로 검증됐다(벡터 cos 1.00000·이웃 일치 95.7%). 동일 입력이면 동일 벡터가 재생산되어야 하며, 매니페스트의 `sourceHash`(입력 텍스트 집합 해시)가 신선도 게이트의 비교 기준이 된다(§7-3). Python 레퍼런스 구현은 `ref-pipeline/embeddings/build_embeddings.py`에 보존한다.
+**재현성**: 생성 도구는 `tools/build/build_embeddings.js` — 동일 모델의 ONNX export(`Xenova/multilingual-e5-small`, fp32)를 `@huggingface/transformers`로 인코딩한다. 모델은 커밋 SHA로 핀한다(`tools/lib/emb_math.js`의 `EMB_MODEL_REVISION` — revision 미지정 요청은 HF main 최신을 따라가 출력 drift를 허용하므로). 매니페스트 `revision`은 `<repo>@<sha>`로 기록된다. fp32 ONNX 출력은 원본 PyTorch 산출물과 int8 양자화 후 완전 일치함이 `tools/check/check_emb_parity.js`로 검증됐다(벡터 cos 1.00000·이웃 일치 95.7%). 동일 입력이면 동일 벡터가 재생산되어야 하며, 매니페스트의 `sourceHash`(입력 텍스트 집합 해시)가 신선도 게이트의 비교 기준이 된다(§7-3). Python 레퍼런스 구현은 `ref-pipeline/embeddings/build_embeddings.py`에 보존한다.
 
 ## 4. 임베딩 대상·ID 체계
 
