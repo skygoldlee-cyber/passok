@@ -110,7 +110,7 @@
 | 3.23 | **사용자 의견** | 피드백 폼·건의 수신 | FB-01~FB-08 (8) |
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
-| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드 | AD-01~AD-07 (7) |
+| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트 | AD-01~AD-09 (9) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -596,6 +596,8 @@
 | AD-05 | `#/admin` 라우트 — `views/admin.js` lazy import + SW 프리캐시 제외(일반 사용자 번들 무영향) + 비관리자 클레임 시 차단 카드, Supabase 미설정 환경은 사용 불가 안내 | 미구현 (로드맵) |
 | AD-06 | 운영 CLI (Phase 1) — `report:feedback`·`report:user`(sync 메타만)·`admin:grant-pro`(dry-run + `--apply`) — service role 로컬 전용, 스키마 변경 없음 | ✅ |
 | AD-07 | 로컬 HTML 대시보드 (Phase 1.5) — `report:dashboard`가 오류·활성화율(세션/설치)·퍼널·피드백 집계를 단일 자급적 HTML로 덤프 (로컬 파일이라 인증·RLS 불필요, 사용자 텍스트는 이스케이프 필수, 산출물 gitignore) | ✅ |
+| AD-08 | 사용자 조회 확장 — `report:user`가 `profiles.pro_expires_at`(기간권 만료일 + 잔여/경과 일수·무기한 구분)과 사용 코드 이력(`pro_codes.redeemed_by` — 티어 valid_days·사용일)을 함께 표시. payload 비열람 경계 유지 | ✅ |
+| AD-09 | Pro 현황 리포트 — `report:pro`가 ① `pro_codes` 채널(코드 프리픽스)·티어(`valid_days`)별 발급/사용률·미사용 재고 ② `profiles.pro_expires_at` 만료 버킷(D-7 임박·만료 미갱신·활성·무기한) ③ GoTrue Admin `app_metadata.providers` 가입 수단별 계정 분포를 집계 — 기간권 사업의 연장 영업·대사 지표 | ✅ |
 
 ### 3.27 AI 제작 지원 (Author-time)
 
