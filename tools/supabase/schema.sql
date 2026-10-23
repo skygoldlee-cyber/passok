@@ -62,8 +62,11 @@ alter table public.pro_codes add column if not exists valid_days int not null de
 
 -- 코드 사용: 유효한 미사용 코드면 plan='pro'로 갱신하고 true 반환.
 -- 만료일 = max(기존 만료일, now()) + valid_days — 활성 기간권은 연장, 만료분은 오늘부터 재기산.
+-- PAY-08: p_exam_date가 있으면 만료일을 시험일+3일 이상으로 보장한다 (시험 직전 잠김 방지).
 -- 관리자 무기한 부여(plan='pro'·pro_expires_at null)는 유지한다.
-create or replace function public.redeem_code(p_code text)
+-- 시그니처가 바뀌므로 구 단일인자 버전을 먼저 제거한다 (create or replace는 동일 시그니처만 교체).
+drop function if exists public.redeem_code(text);
+create or replace function public.redeem_code(p_code text, p_exam_date date default null)
 returns boolean
 language plpgsql security definer set search_path = ''
 as $$
@@ -86,13 +89,18 @@ begin
         pro_since = now(),
         pro_expires_at = case
           when plan = 'pro' and pro_expires_at is null then null
-          else greatest(coalesce(pro_expires_at, now()), now())
-               + make_interval(days => v_code.valid_days)
+          else greatest(
+                 greatest(coalesce(pro_expires_at, now()), now())
+                      + make_interval(days => v_code.valid_days),
+                 coalesce((p_exam_date + 3)::timestamptz, '-infinity'::timestamptz))
         end
     where id = auth.uid();
   return true;
 end;
 $$;
+-- 기존 배포에 적용 (구 서명 함수 교체):
+--   위 drop + create or replace 블록 전체를 SQL Editor에 실행하면 p_exam_date 인자가 추가된다.
+--   앱은 미배포 스키마 감지 시 p_code 단독 호출로 폴백한다 (src/pro-redeem.js callRedeemRpc).
 
 -- ============================================================
 -- 4) Row Level Security — 모든 테이블에서 자기 데이터만 접근

@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 1c53231b3603b286
-> 생성: 2026-10-23 · 원천: SPEC.md(584개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 18fe1a7c748b698e
+> 생성: 2026-10-23 · 원천: SPEC.md(587개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 584개 — 문서 연결 427 · 소스 연결 521 · 테스트 연결 555 · 보고서 연결 109
+**커버리지 요약**: 요구사항 587개 — 문서 연결 427 · 소스 연결 524 · 테스트 연결 558 · 보고서 연결 109
 
 ---
 
@@ -428,6 +428,7 @@
 | SC-13 | ✅ | 테스트 | DOC-DSN-21<br>DOC-DSN-32 | — | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
 | SC-14 | ✅ | 테스트 | DOC-DSN-32 | — | tests/dom/study/study-dashboard.dom.test.js | — | — |
 | SC-15 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/study-tracker.js<br>src/views/reader-progress.js | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
+| SC-16 | ✅ | 테스트 | — | src/onboarding.js<br>src/views/dashboard.js<br>src/views/study-calendar.js | tests/unit/engine/study-tracker.test.js | — | — |
 
 ## 3.21 UI 모드 전환
 
@@ -839,6 +840,8 @@
 | PAY-04 | 구현 (2026-10-22) | 테스트 | — | src/pro-upgrade.js | tests/unit/app/usage-telemetry.test.js | — | — |
 | PAY-05 | 구현 (2026-10-22) | 테스트 | — | tools/check/issue_pro_code.js | tests/unit/app/pro-redeem.test.js | — | — |
 | PAY-06 | 구현 (2026-10-23) | 테스트 | — | src/pro-redeem.js<br>src/pro-upgrade.js | tests/dom/misc/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
+| PAY-07 | 구현 (2026-10-23) | 테스트 | — | html/views/dashboard.html<br>index.html<br>src/pro-expiry.js<br>src/pro-redeem.js<br>…외 2개 | tests/dom/misc/pro-plan.dom.test.js<br>tests/dom/misc/pro-redeem.dom.test.js<br>tests/unit/app/pro-expiry.test.js | — | — |
+| PAY-08 | 구현 (2026-10-23) | 테스트 | — | src/pro-redeem.js | tests/dom/misc/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
 
 ---
 

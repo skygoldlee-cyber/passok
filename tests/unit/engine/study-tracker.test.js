@@ -1,5 +1,5 @@
 // tests/unit/study-tracker.test.js — 학습 활동 자동 기록·목표 추적
-// @spec SC-03,SC-05,SC-06,SC-07,SC-08,SC-09,SC-12,SC-13,SC-15,D-17,D-23,Q-12
+// @spec SC-03,SC-05,SC-06,SC-07,SC-08,SC-09,SC-12,SC-13,SC-15,SC-16,D-17,D-23,Q-12
 // recordStudyActivity가 카드·퀴즈 활동을 날짜별 캘린더에 누적하고,
 // 목표 달성률 계산이 저장된 활동을 반영하는지 고정한다.
 
@@ -720,4 +720,13 @@ test('selectExamRiskSession: 수요 소진 잔여는 전역 R 순으로 재충�
   // safety 수요 1 → 쿼터 소진분은 law·understanding에 R 순 재배분
   assert.equal(sel.filter(r => r.id.startsWith('safety_')).length, 1);
   assert.ok(sel.every((r, i, a) => i === 0 || r.rExam >= a[i - 1].rExam));
+});
+
+test('tierStudyHint: 계획 등급 → 기간 대응 학습법 프리셋 (SC-16)', () => {
+  assert.equal(tracker.tierStudyHint('normal'), '순환형');
+  assert.equal(tracker.tierStudyHint('tight'), '압축형');
+  assert.equal(tracker.tierStudyHint('triage'), '선별형');
+  assert.equal(tracker.tierStudyHint('done'), '');
+  assert.equal(tracker.tierStudyHint('past'), '');
+  assert.equal(tracker.tierStudyHint('bogus'), '');
 });

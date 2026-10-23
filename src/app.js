@@ -17,6 +17,7 @@ import { maybeShowOnboarding } from './onboarding.js';
 import { appVersion, formatAppVersion } from './app-version.js';
 import { captureEntrySource, flushPendingFeedback, initFeedbackHint } from './feedback.js';
 import { loadFeaturePlan, proFeatureNotice, showPlanCompare } from './pro-upgrade.js';
+import { openProExtend } from './pro-expiry.js';
 import { showUsageStats, trackAction } from './usage-stats.js';
 import { setupModalBackHandler } from './modal-back.js';
 
@@ -634,6 +635,7 @@ const DELEGATED_HANDLERS = {
     openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword,
     showRedeemCode: showRedeemDialog,
     showPlanCompare,
+    openProExtend,   // PAY-07 — 기간권 만료 배너의 연장 CTA
     showUsageStats,
     /** 텔레메트리 opt-out 토글 (UX-MET-06) — 설정 패널 '사용 통계 전송' 항목 */
     toggleTelemetry() {

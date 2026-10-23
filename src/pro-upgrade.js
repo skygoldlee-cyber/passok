@@ -6,7 +6,7 @@
  * isFreeLimitError()로 판별 후 showUpgradeNotice()를 호출한다.
  */
 
-// @spec ROAD-P0, PAY-02, PAY-04, PAY-06
+// @spec ROAD-P0, PAY-02, PAY-04, PAY-06, PAY-07
 
 import { esc } from './sanitize.js';
 import { trapFocus } from './ui-utils.js';
@@ -70,11 +70,15 @@ function isProFeature(featureKey) {
 }
 
 /**
- * Pro 이용 권한 여부 — ROAD-P1에서 Supabase entitlement 서버 검증으로 교체 예정.
- * 현재는 로컬 플래그(pro_entitled)만 참조하며, 설정 경로는 결제 인프라와 함께 도입된다.
+ * Pro 이용 권한 여부 — 로컬 플래그(pro_entitled) + 로컬 만료일(pro_expires_at) 시각 비교 (PAY-07).
+ * 앱 열람 중 만료가 경과하면 다음 판정부터 해제 — 서버 재확인은 syncPlanFromProfile이 담당한다.
+ * 만료일 없음은 무기한(관리자 부여·비로그인 로컬 부여)으로 유효하다.
+ * ROAD-P1에서 Supabase entitlement 서버 검증으로 교체 예정.
  */
 export function hasProEntitlement() {
-    return safeGetItem(STORAGE_KEYS.PRO_ENTITLED) === '1';
+    if (safeGetItem(STORAGE_KEYS.PRO_ENTITLED) !== '1') return false;
+    const exp = safeGetItem(STORAGE_KEYS.PRO_EXPIRES_AT);
+    return !exp || Date.parse(exp) > Date.now();
 }
 
 /**

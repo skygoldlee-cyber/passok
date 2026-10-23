@@ -1,5 +1,5 @@
 // tests/dom/pro-plan.dom.test.js — 플랜 안내 모달 (Free/Pro 비교)
-// @spec ROAD-P0
+// @spec ROAD-P0, PAY-07
 // feature-plan.json의 현재 값을 반영해 기능별 PRO/무료 태그를 렌더링한다 —
 // 플랜 전환 시 고객이 보는 비교 표가 설정과 어긋나지 않음을 고정한다.
 
@@ -136,6 +136,24 @@ describe('Pro entitlement 게이트 (canCloudSync)', () => {
     it('cloud_sync가 free로 전환되면 entitlement 없이 동기화 허용', async () => {
         await stubPlan({ cloud_sync: 'free' });
         expect(canCloudSync()).toBe(true);
+    });
+
+    // PAY-07 — 로컬 만료일 즉시 판정 (열람 중 만료 경과 시 다음 판정부터 해제)
+    it('만료일이 지난 entitlement는 해제된다', async () => {
+        await stubPlan({ cloud_sync: 'pro' });
+        localStorage.setItem('pro_entitled', '1');
+        localStorage.setItem('pro_expires_at', new Date(Date.now() - 86400000).toISOString());
+        expect(hasProEntitlement()).toBe(false);
+        expect(canCloudSync()).toBe(false);
+    });
+
+    it('만료일이 미래면 entitlement 유지, 만료일 없음은 무기한', async () => {
+        await stubPlan({ cloud_sync: 'pro' });
+        localStorage.setItem('pro_entitled', '1');
+        localStorage.setItem('pro_expires_at', new Date(Date.now() + 86400000).toISOString());
+        expect(hasProEntitlement()).toBe(true);
+        localStorage.removeItem('pro_expires_at');
+        expect(hasProEntitlement()).toBe(true);   // 무기한 (관리자 부여)
     });
 });
 

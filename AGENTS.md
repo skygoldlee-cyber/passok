@@ -284,6 +284,7 @@ src/                    # ES Modules
   feedback.js           # 의견 수신 — 설정 "의견 보내기" 모달, ?src= 유입 추적, 익명 insert, 오프라인 큐
   pro-upgrade.js        # Pro 안내 — feature-plan.json 로드, PRO 배지(data-pro-feature) 제어, 한도 초과 업그레이드 모달, Free/Pro 플랜 비교 모달 (showPlanCompare — 설정 '플랜 안내'), PAYMENT_NOTICE 결제 안내 (PAY-02)
   pro-redeem.js         # 라이선스 코드 활성화 — 설정 '라이선스 코드' 입력 다이얼로그 → redeem_code RPC → pro_entitled (PAY-01) + profiles.plan 서버 동기화 initPlanSync (PAY-03)
+  pro-expiry.js         # Pro 만료 상태 판정 + 대시보드 만료 임박·만료·연장 배너 (PAY-07) — 만료일 tombstone·시험일-만료 괴리 경고
   usage-stats.js        # 로컬 사용 카운터 (ROAD-L5) — 뷰·액션 횟수를 기기 단위(익명 device_id) localStorage에 누적, Pro 후보 액션 20회 판정, 설정 '내 사용 통계' 모달
   theme-init.js         # 테마 초기화 (즉시 실행)
   theme-toggle.js       # 테마 토글 UI

@@ -41,6 +41,8 @@ export const ALLOWED_EVENTS = new Set([
     // 전환 퍼널 (PAY-04) — 플랜 비교 → 결제 안내 → 코드 활성화 단계 계측
     'plan_compare_view', 'payment_notice_view', 'payment_link_click',
     'code_redeem_attempt', 'code_redeem_success',
+    // 만료→연장 퍼널 (PAY-07) — 기간권 임박·만료 배너 노출
+    'pro_expire_notice',
 ]);
 
 /**

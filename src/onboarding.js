@@ -1,5 +1,5 @@
 // src/onboarding.js — 첫 방문 셋업 위저드 + 시작 안내
-// @spec UX-FB-05, OB-01
+// @spec UX-FB-05, OB-01, SC-16
 // ------------------------------------------------------------
 // 학습 데이터가 전혀 없는 진짜 최초 방문에서만 1회 표시한다.
 // 기존 사용자(학습 키가 이미 있는 경우)는 플래그만 기록하고 방해하지 않는다.
@@ -49,17 +49,20 @@ function _stepBody(step) {
                 <input type="number" id="onboarding-weekly-days" class="form-input" value="${goals.weeklyStudyDays}" min="1" max="7">
             </label>`;
     }
+    const st = getExamLeadStatus(getExamDate() || '');
     const ddayTxt = (() => {
-        const st = getExamLeadStatus(getExamDate() || '');
         if (!st) return '시험일 미설정 — 대시보드에서 언제든 설정할 수 있습니다';
         if (st.past) return '설정된 시험일이 지났습니다 — 설정에서 수정하세요';
         return st.dday === 0 ? '오늘이 시험일입니다' : `시험까지 D-${st.dday}`;
     })();
+    // SC-16 — 권장 준비 기간 미만이면 통독 경로 대신 선별 학습법을 안내
+    const shortLead = st && !st.past && st.dday > 0 && st.dday < minDays;
     return `
         <ul class="onboarding-summary">
             <li><i class="fa-solid fa-calendar-day" aria-hidden="true"></i> ${ddayTxt}</li>
             <li><i class="fa-solid fa-clone" aria-hidden="true"></i> 하루 카드 ${goals.dailyCards}장 · 주 ${goals.weeklyStudyDays}일</li>
             <li><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> 틀린 문항은 복습노트·간격 반복에 자동 등록됩니다</li>
+            ${shortLead ? '<li><i class="fa-solid fa-bolt" aria-hidden="true"></i> 권장 준비 기간보다 짧습니다 — 통독 대신 핵심 카드·퀴즈·훈련 중심으로 시작하세요</li>' : ''}
         </ul>`;
 }
 

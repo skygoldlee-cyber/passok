@@ -1,5 +1,5 @@
 // tests/dom/pro-redeem.dom.test.js — 라이선스 코드 활성화 + plan 서버 동기화 + 결제 안내 게이트
-// @spec PAY-01, PAY-02, PAY-03, PAY-06
+// @spec PAY-01, PAY-02, PAY-03, PAY-06, PAY-07, PAY-08
 // 설정의 '라이선스 코드' 다이얼로그가 redeem_code RPC를 호출해 Pro를 활성화하고,
 // 로그인 시 profiles.plan → pro_entitled 동기화로 회수·타 기기 전파를 반영한다.
 
@@ -74,7 +74,8 @@ describe('showRedeemDialog (PAY-01)', () => {
         await showRedeemDialog();
         expect(overlay()).not.toBeNull();
         await submitCode(' cafe-ab12-cd34 ');
-        expect(mockRpc).toHaveBeenCalledWith('redeem_code', { p_code: 'CAFE-AB12-CD34' });
+        // PAY-08 — 활성 시험일을 시험일+3일 최소 보장 인자로 전달 (미설정 null)
+        expect(mockRpc).toHaveBeenCalledWith('redeem_code', { p_code: 'CAFE-AB12-CD34', p_exam_date: null });
         expect(safeGetItem(STORAGE_KEYS.PRO_ENTITLED)).toBe('1');
         expect(showToast).toHaveBeenCalledWith(expect.stringContaining('Pro가 활성화'), 'success');
         expect(mockReportEvent).toHaveBeenCalledWith('code_redeem_attempt');
@@ -146,11 +147,23 @@ describe('syncPlanFromProfile (PAY-03)', () => {
         expect(safeGetItem(STORAGE_KEYS.PRO_EXPIRES_AT)).toBe(future);
     });
 
-    it('pro_expires_at이 과거면 기간권 만료로 free 처리한다 (PAY-06)', async () => {
+    it('pro_expires_at이 과거면 기간권 만료로 free 처리하되 만료일 tombstone은 남는다 (PAY-06·PAY-07)', async () => {
         safeSetItem(STORAGE_KEYS.PRO_ENTITLED, '1');
         const past = new Date(Date.now() - 86400000).toISOString();
         mockGetSupabase.mockResolvedValue({
             from: () => ({ select: () => ({ eq: () => ({ single: () => ({ data: { plan: 'pro', pro_expires_at: past }, error: null }) }) }) }),
+        });
+        expect(await syncPlanFromProfile()).toBe('free');
+        expect(safeGetItem(STORAGE_KEYS.PRO_ENTITLED)).toBeNull();
+        // PAY-07 — 만료일은 tombstone으로 유지 (만료자 연장 안내 분기; 회수 시에만 제거)
+        expect(safeGetItem(STORAGE_KEYS.PRO_EXPIRES_AT)).toBe(past);
+    });
+
+    it('plan=free(회수)면 만료일 tombstone도 제거된다 (PAY-07)', async () => {
+        safeSetItem(STORAGE_KEYS.PRO_ENTITLED, '1');
+        safeSetItem(STORAGE_KEYS.PRO_EXPIRES_AT, new Date(Date.now() + 86400000).toISOString());
+        mockGetSupabase.mockResolvedValue({
+            from: () => ({ select: () => ({ eq: () => ({ single: () => ({ data: { plan: 'free', pro_expires_at: null }, error: null }) }) }) }),
         });
         expect(await syncPlanFromProfile()).toBe('free');
         expect(safeGetItem(STORAGE_KEYS.PRO_ENTITLED)).toBeNull();
