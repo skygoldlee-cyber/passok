@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261023-54ba64c",
+    "date": "2026-10-23",
+    "notes": [
+      "[수정·deploy] 스테이징 정리 EPERM — 백오프 재시도로 vercel 자식 핸들 대기",
+      "[정리·release] v20261023-5f531aa 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261023-5f531aa",
     "date": "2026-10-23",
     "notes": [
@@ -191,14 +199,6 @@
     "notes": [
       "[수정·ui] 설정 메타를 ©/버전 2행으로 분리",
       "[정리·release] v20261021-63d0f7d 스탬프 확정 [no-docs][no-test]"
-    ]
-  },
-  {
-    "version": "v20261021-63d0f7d",
-    "date": "2026-10-21",
-    "notes": [
-      "[수정·branding] 저작권 표기를 플랫폼 '© PassOK'로 고정 — 시험별 appName 제거",
-      "[정리·release] v20261021-4e5c4cf 스탬프 확정 [no-docs][no-test]"
     ]
   }
 ]
