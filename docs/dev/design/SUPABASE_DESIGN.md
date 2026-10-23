@@ -599,7 +599,7 @@ select polname, polrelid::regclass from pg_policy;
    | Username | 발신용 Gmail 주소 |
    | Password | 16자리 앱 비밀번호 (공백 제외) |
    | Sender email | 같은 Gmail 주소 |
-   | Sender name | 서비스명 (예: `Passmula`) |
+   | Sender name | 서비스명 (예: `PassOK`) |
 
 3. 저장 + **Enable Custom SMTP** ON → 이후 Templates 편집 가능
 
