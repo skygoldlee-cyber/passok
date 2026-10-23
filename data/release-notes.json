@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261023-c9dbacd",
+    "date": "2026-10-23",
+    "notes": [
+      "[테스트·gates] check-runner CI-only 명단에 detect_code_changes 등록",
+      "[정리·trace] detect_code_changes.js @spec 태그 반영 재생성",
+      "[CI] E2E 병목 개선 — 문서 스킵·Playwright 컨테이너·번들 공유·샤드 재분배",
+      "[문서·design] OAuth 잔여 작업 명기 — 스모크·시크릿 재발급·리허설 교차참조 (AU-09)",
+      "[정리·release] v20261023-33c0337 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261023-33c0337",
     "date": "2026-10-23",
     "notes": [
@@ -213,13 +224,6 @@
     "date": "2026-10-14",
     "notes": [
       "[문서·business] S10 CTA 항목에 표시용 QR 실물 임베드 — passok_qr.svg 명시"
-    ]
-  },
-  {
-    "version": "v20261014-459ccd4",
-    "date": "2026-10-14",
-    "notes": [
-      "내부 개선 및 안정성 향상"
     ]
   }
 ]
