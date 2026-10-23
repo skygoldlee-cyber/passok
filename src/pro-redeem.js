@@ -1,5 +1,5 @@
 // src/pro-redeem.js — 라이선스 코드 입력 → Pro 활성화 (PAY-01)
-// @spec PAY-01, PAY-03, PAY-06
+// @spec PAY-01, PAY-03, PAY-06, PAY-07, PAY-08
 // ------------------------------------------------------------
 // P2 선실험(PAYMENT_PILOT_DESIGN §3)의 구매자 활성화 경로:
 //   수동 결제 확인 → 운영자가 admin:issue-code로 발급한 코드를 구매자가 입력
@@ -16,6 +16,7 @@ import { safeSetItem, safeRemoveItem } from './state.js';
 import { STORAGE_KEYS } from './storage-keys.js';
 import { reportEvent } from './usage-telemetry.js';
 import { trapFocus, showToast } from './ui-utils.js';
+import { getExamDate } from './study-tracker.js';
 
 /**
  * Pro entitlement 판정 (PAY-06) — plan='pro'이고 만료일이 없거나 미래면 유효.
@@ -44,6 +45,32 @@ async function _fetchProfile(sb, uid) {
 }
 
 /**
+ * 서버 plan 결과를 로컬 키에 반영 (저장 쓰기만 — Supabase 비의존, 테스트 용이).
+ * PAY-07: plan은 'pro'지만 만료 경과한 경우 만료일을 tombstone으로 유지해
+ * 만료자(연장 유도 대상)와 미구매자·회수자를 분기한다.
+ * 회수(plan='free')·만료일 없음이면 잔재를 제거한다.
+ * @param {string} plan profiles.plan
+ * @param {string|null|undefined} expiresAt profiles.pro_expires_at (ISO)
+ * @returns {'pro'|'free'} 적용된 결과 상태
+ */
+export function applyPlanToLocal(plan, expiresAt) {
+    const exp = expiresAt ?? null;
+    if (isEntitledToPro(plan, exp)) {
+        safeSetItem(STORAGE_KEYS.PRO_ENTITLED, '1');
+        if (expiresAt) safeSetItem(STORAGE_KEYS.PRO_EXPIRES_AT, expiresAt);
+        else safeRemoveItem(STORAGE_KEYS.PRO_EXPIRES_AT);
+        return 'pro';
+    }
+    safeRemoveItem(STORAGE_KEYS.PRO_ENTITLED);
+    if (plan === 'pro' && exp) {
+        safeSetItem(STORAGE_KEYS.PRO_EXPIRES_AT, exp);
+    } else {
+        safeRemoveItem(STORAGE_KEYS.PRO_EXPIRES_AT);
+    }
+    return 'free';
+}
+
+/**
  * 서버 plan → 로컬 pro_entitled 동기화 (PAY-03) — 로그인 세션이 있을 때만 실행.
  * profiles.plan이 서버 정본이므로 유효한 pro면 플래그를 세우고, 아니면 로컬 잔재를 정리한다
  * (환불 회수 grant-pro --revoke 또는 기간권 만료 경과 시 다음 로그인에 이 기기도 해제).
@@ -57,15 +84,7 @@ export async function syncPlanFromProfile() {
     if (!session?.user?.id) return 'skip';
     const data = await _fetchProfile(sb, session.user.id);
     if (!data) return 'skip';
-    if (isEntitledToPro(data.plan, data.pro_expires_at)) {
-        safeSetItem(STORAGE_KEYS.PRO_ENTITLED, '1');
-        if (data.pro_expires_at) safeSetItem(STORAGE_KEYS.PRO_EXPIRES_AT, data.pro_expires_at);
-        else safeRemoveItem(STORAGE_KEYS.PRO_EXPIRES_AT);
-        return 'pro';
-    }
-    safeRemoveItem(STORAGE_KEYS.PRO_ENTITLED);
-    safeRemoveItem(STORAGE_KEYS.PRO_EXPIRES_AT);
-    return 'free';
+    return applyPlanToLocal(data.plan, data.pro_expires_at);
 }
 
 /**
@@ -86,6 +105,22 @@ export async function initPlanSync() {
 /** 코드 입력값 정규화 — 공백 제거·대문자 변환 (형식: CHANNEL-XXXX-XXXX) */
 export function normalizeCode(raw) {
     return String(raw || '').trim().toUpperCase().replace(/\s+/g, '');
+}
+
+/**
+ * redeem_code RPC 호출 (PAY-08) — 활성 시험의 exam_date를 넘겨 만료일이
+ * 시험일+3일 아래로 내려가지 않도록 한다 (시험 직전 entitlement 절벽 방지).
+ * 시험일 미설정이면 null — 서버는 기존 규칙(기준일+valid_days)만 적용.
+ * 구 서명 스키마(p_code만 받는 버전) 미배포 환경에서는 인자 없이 재시도하는 폴백을 둔다
+ * (배포 순서 차익 — PAY-06의 _fetchProfile 폴백과 같은 패턴).
+ */
+export async function callRedeemRpc(sb, code) {
+    const examDate = getExamDate();
+    let res = await sb.rpc('redeem_code', { p_code: code, p_exam_date: examDate });
+    if (res.error) {
+        res = await sb.rpc('redeem_code', { p_code: code });
+    }
+    return res;
 }
 
 let _onClose = null;
@@ -155,7 +190,7 @@ export async function showRedeemDialog() {
         msg.textContent = '확인 중…';
         void reportEvent('code_redeem_attempt').catch(() => {});
         try {
-            const { data, error } = await sb.rpc('redeem_code', { p_code: code });
+            const { data, error } = await callRedeemRpc(sb, code);
             if (!error && data === true) {
                 safeSetItem(STORAGE_KEYS.PRO_ENTITLED, '1');
                 void reportEvent('code_redeem_success').catch(() => {});

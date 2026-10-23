@@ -1,5 +1,5 @@
 // src/views/dashboard.js - 대시보드 뷰 로직 및 전역 통계 관리
-// @spec D-01~17,PF-07,SC-04,SC-06,SC-07,SC-10,TQ-01
+// @spec D-01~17,PF-07,SC-04,SC-06,SC-07,SC-10,SC-16,TQ-01,PAY-07
 import { state } from '../state.js';
 import { esc } from '../sanitize.js';
 import { DataLoader } from '../data-loader.js';
@@ -8,7 +8,8 @@ import { updateStreakAndDailyUI } from './daily-challenge.js';
 import { updatePomodoroUI } from './pomodoro.js';
 import { getDueCount } from '../spaced-repetition.js';
 import { renderTodayQueue } from './dashboard-queue.js';
-import { getDDay, getExamPlanStatus, checkStudyMilestones } from '../study-tracker.js';
+import { refreshProExpiryBanner } from '../pro-expiry.js';
+import { getDDay, getExamPlanStatus, checkStudyMilestones, tierStudyHint } from '../study-tracker.js';
 import { getAllStatementStats } from '../statement-tracker.js';
 import { computeMasteryLevels } from '../analysis-engine.js';
 import { showToast } from '../ui-utils.js';
@@ -112,9 +113,10 @@ function _examPlanDescHtml(plan) {
     }
     if (plan.suggested === null) return openBtn('시험일·목표 설정');
     const topName = plan.tier === 'triage' ? _topWeightSubjectName() : null;
+    const preset = tierStudyHint(plan.tier);   // SC-16 — 기간 대응 학습법 프리셋
     const advice = {
-        tight: ' — 일일 목표 초과, 카드·퀴즈 병행 권장',
-        triage: ` — 전량 커버 어려움, ${topName ? esc(topName) + ' 등 ' : ''}비중 큰 과목 우선 권장`
+        tight: ` — ${preset}: 통독 가속, 카드·퀴즈 병행 권장`,
+        triage: ` — ${preset}: 통독 생략, ${topName ? esc(topName) + ' 등 ' : ''}비중 큰 과목·복습 우선 권장`
     }[plan.tier] || '';
     return `역산 권장: 학습일당 카드 ${plan.suggested}장${advice} · ${openBtn('설정')}`;
 }
@@ -237,6 +239,7 @@ export function renderDashboard() {
 
     // 4. 학습 통계/분석 강화 — 과목별 정답률 히트맵 + "오늘 할 일" 단일 큐 (TQ-01)
     _renderSubjectHeatmap(subjects);
+    refreshProExpiryBanner();   // PAY-07 — 기간권 만료 임박·만료 안내
     renderTodayQueue(subjects);
 }
 

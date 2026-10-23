@@ -278,6 +278,20 @@ export function getExamPlanStatus(remainingItems, dailyGoal) {
 }
 
 /**
+ * 계획 등급 → 기간 대응 학습법 프리셋 라벨 (SC-16) — 순수 함수.
+ * 플랫폼은 프리셋 라벨만 공급한다; 기간별 학습법 상세(통독 생략·선별 우선순위 등)는
+ * 시험 콘텐츠 소유 (DA-15 — `content/exams/<id>/docs/` 학습안내서).
+ *   'normal' → '순환형'  (통독 → 카드·퀴즈 순환)
+ *   'tight'  → '압축형'  (통독 가속 + 카드·퀴즈 병행)
+ *   'triage' → '선별형'  (통독 생략, 비중 큰 과목·복습·드릴 우선)
+ * @param {string} tier getExamPlanStatus/computeStudyPlan의 tier
+ * @returns {string} 프리셋 라벨 (알 수 없는 tier는 '')
+ */
+export function tierStudyHint(tier) {
+    return { normal: '순환형', tight: '압축형', triage: '선별형' }[tier] || '';
+}
+
+/**
  * 시험일 역산 학습 계획 — 설정된 목표(주간 학습일 반영)와 잔여 학습량으로
  * 학습 가능 일수·학습일당 필요량·주차별 마일스톤을 생성한다 (SC-05 계획 패널).
  * 학습 가능 일수 = ⌊dday × 주간 학습일 ÷ 7⌋ — 단순 달력 역산보다 실제 약속 기준.

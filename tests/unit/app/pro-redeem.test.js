@@ -1,11 +1,12 @@
 // tests/unit/app/pro-redeem.test.js
-// @spec PAY-01, PAY-05, PAY-06
-// pro-redeem.js normalizeCode + isEntitledToPro + issue_pro_code.js 코드 생성·티어 규약 검증
+// @spec PAY-01, PAY-05, PAY-06, PAY-08
+// pro-redeem.js normalizeCode + isEntitledToPro + callRedeemRpc + issue_pro_code.js 코드 생성·티어 규약 검증
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { normalizeCode, isEntitledToPro } from '../../../src/pro-redeem.js';
+import { normalizeCode, isEntitledToPro, callRedeemRpc } from '../../../src/pro-redeem.js';
+import { setItem, removeItem } from '../../../src/storage.js';
 
 const require = createRequire(import.meta.url);
 const { normalizeChannel, genCode, parseDays, TIER_LABELS, CODE_BODY } = require('../../../tools/check/issue_pro_code.js');
@@ -52,6 +53,52 @@ test('isEntitledToPro: plan·만료일 조합 판정 (PAY-06)', () => {
     assert.equal(isEntitledToPro('pro', past, now), false);        // 만료 경과
     assert.equal(isEntitledToPro('free', future, now), false);     // free는 만료일 무관
     assert.equal(isEntitledToPro('free', null, now), false);
+});
+
+test('callRedeemRpc: 활성 시험일을 p_exam_date로 전달 (PAY-08)', async () => {
+    // localStorage 목 — 기본 백엔드 메서드는 호출 시점에 global.localStorage를 참조
+    const store = {};
+    const mock = {
+        getItem: (k) => (k in store ? store[k] : null),
+        setItem: (k, v) => { store[k] = String(v); },
+        removeItem: (k) => { delete store[k]; },
+        get length() { return Object.keys(store).length; },
+        key: (i) => Object.keys(store)[i] ?? null,
+    };
+    const origLS = global.localStorage;
+    Object.defineProperty(global, 'localStorage', { value: mock, configurable: true, writable: true });
+    try {
+        setItem('exam_date', '2026-11-30');
+        const calls = [];
+        const sb = { rpc: (fn, args) => { calls.push(args); return Promise.resolve({ data: true, error: null }); } };
+        const res = await callRedeemRpc(sb, 'TEST-AAAA-BBBB');
+        assert.equal(calls.length, 1);
+        assert.deepEqual(calls[0], { p_code: 'TEST-AAAA-BBBB', p_exam_date: '2026-11-30' });
+        assert.equal(res.data, true);
+
+        // 시험일 미설정이면 p_exam_date=null — 서버는 기존 규칙만 적용
+        removeItem('exam_date');
+        calls.length = 0;
+        await callRedeemRpc(sb, 'TEST-AAAA-BBBB');
+        assert.equal(calls[0].p_exam_date, null);
+    } finally {
+        Object.defineProperty(global, 'localStorage', { value: origLS, configurable: true, writable: true });
+    }
+});
+
+test('callRedeemRpc: 구 서명 스키마 오류 시 p_code 단독 호출로 폴백 (PAY-08)', async () => {
+    const calls = [];
+    const sb = { rpc: (fn, args) => {
+        calls.push(args);
+        return Promise.resolve(calls.length === 1
+            ? { data: null, error: { message: 'function not found' } }
+            : { data: true, error: null });
+    } };
+    const res = await callRedeemRpc(sb, 'TEST-AAAA-BBBB');
+    assert.equal(calls.length, 2);
+    assert.equal('p_exam_date' in calls[0], true);   // 신 서명 시도
+    assert.deepEqual(calls[1], { p_code: 'TEST-AAAA-BBBB' }); // 구 서명 폴백
+    assert.equal(res.data, true);
 });
 
 test('parseDays: 기본 90일, 1~365 범위 검증 + 티어 라벨 (PAY-06)', () => {

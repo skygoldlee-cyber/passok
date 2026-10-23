@@ -1,6 +1,6 @@
 // src/views/study-calendar.js — 학습 캘린더/목표 뷰
-// @spec SC-01,SC-02,SC-05,SC-06,SC-07,SC-08,SC-09,D-17
-import { getStudyCalendar, getStudyGoals, setStudyGoals, getTodayGoalProgress, getWeeklyGoalProgress, getMonthlyStudyDays, getTodayStr, getExamDate, setExamDate, getDDay, getExamLeadStatus, computeStudyPlan, computePlanAdherence, checkStudyMilestones, computeSubjectAllocation, computeSubjectAllocInputs, sumRecentCardsBySubject, sumRecentQuizzesBySubject } from '../study-tracker.js';
+// @spec SC-01,SC-02,SC-05,SC-06,SC-07,SC-08,SC-09,SC-16,D-17
+import { getStudyCalendar, getStudyGoals, setStudyGoals, getTodayGoalProgress, getWeeklyGoalProgress, getMonthlyStudyDays, getTodayStr, getExamDate, setExamDate, getDDay, getExamLeadStatus, computeStudyPlan, computePlanAdherence, checkStudyMilestones, computeSubjectAllocation, computeSubjectAllocInputs, sumRecentCardsBySubject, sumRecentQuizzesBySubject, tierStudyHint } from '../study-tracker.js';
 import { getMinExamLeadDays } from '../exam-context.js';
 import { computeSubjectWeakChapters } from '../analysis-engine.js';
 import { getAllStatementStats } from '../statement-tracker.js';
@@ -198,9 +198,11 @@ function _studyPlanHtml() {
         </div>`;
     }
     const tierLabel = { done: '완료', normal: '여유', tight: '압축', triage: '긴급' }[plan.tier];
+    // SC-16 — tier별 학습법 프리셋 안내 (플랫폼은 프리셋 라벨만, 상세 학습법은 시험 콘텐츠 소유)
+    const preset = tierStudyHint(plan.tier);
     const advice = {
-        tight: '설정 목표를 초과하는 페이스입니다 — 카드·퀴즈 병행 학습을 권장합니다.',
-        triage: '현재 페이스로는 전량 커버가 어렵습니다 — 출제 비중이 큰 과목부터 우선하거나 목표를 조정하세요.'
+        tight: `${preset} — 설정 목표를 초과하는 페이스입니다. 통독은 핵심 속독으로 줄이고 카드·퀴즈를 병행하세요.`,
+        triage: `${preset} — 현재 페이스로는 전량 커버가 어렵습니다. 통독을 생략하고 비중 큰 과목·복습 대기·취약 진술 드릴부터 우선하거나 목표를 조정하세요.`
     }[plan.tier] || '';
     // SC-06 계획 대비 주간 진행률 — 이번 주 배정량 대 최근 7일 실적
     const adh = computePlanAdherence(plan);
