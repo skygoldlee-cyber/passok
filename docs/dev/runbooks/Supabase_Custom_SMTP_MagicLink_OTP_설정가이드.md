@@ -99,7 +99,7 @@ Gmail을 발신 SMTP로 사용할 경우 다음과 같이 설정합니다.
 | Username | 발신용 Gmail 주소 |
 | Password | Gmail 앱 비밀번호 16자리 |
 | Sender email | 같은 Gmail 주소 |
-| Sender name | `Passmula` 등 서비스명 |
+| Sender name | `PassOK` 등 서비스명 |
 
 설정 후:
 
@@ -340,7 +340,7 @@ Supabase
 이메일에 다음과 같이 표시되면 정상입니다.
 
 ```text
-Passmula 로그인
+PassOK 로그인
 
 앱에 아래 인증 코드를 입력하세요.
 
@@ -429,7 +429,7 @@ Supabase 세션 생성
 메일 (§11 예시와 동일 — `Magic link or OTP` + `Confirm signup` 공통):
 
 ```text
-Passmula 로그인
+PassOK 로그인
 
 앱에 아래 인증 코드를 입력하세요.
 
@@ -501,7 +501,7 @@ PWA
 실제 Supabase Body에는 아래 HTML을 사용하면 됩니다 (`Magic link or OTP`와 `Confirm signup` 양쪽에 적용 — `Confirm signup`에서는 링크 끝의 `type=email`을 **`type=signup`**으로 변경).
 
 ```html
-<h2>Passmula 로그인</h2>
+<h2>PassOK 로그인</h2>
 <p>앱에 아래 인증 코드를 입력하세요.</p>
 <p style="font-size:28px;font-weight:700;letter-spacing:6px">{{ .Token }}</p>
 <p>브라우저에서 이용 중이라면 아래 버튼으로도 로그인할 수 있습니다.<br>
