@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261023-5f531aa",
+    "date": "2026-10-23",
+    "notes": [
+      "[테스트·gates] mkdtemp 픽스처 after 정리 훅 — Temp 디렉터리 누수 차단",
+      "[정리·release] v20261023-d25a1ff 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261023-d25a1ff",
     "date": "2026-10-23",
     "notes": [
@@ -191,13 +199,6 @@
     "notes": [
       "[수정·branding] 저작권 표기를 플랫폼 '© PassOK'로 고정 — 시험별 appName 제거",
       "[정리·release] v20261021-4e5c4cf 스탬프 확정 [no-docs][no-test]"
-    ]
-  },
-  {
-    "version": "v20261021-4e5c4cf",
-    "date": "2026-10-21",
-    "notes": [
-      "[수정·release] 스탬프 확정 커밋 도입 — 릴리스 노트 반복 공지·미소비 결함 수정"
     ]
   }
 ]
