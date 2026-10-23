@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 188021d1d5fe100d
+> 입력 해시: 69774e33417b3ae9
 > 생성: 2026-10-23 · 원천: SPEC.md(590개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -741,7 +741,7 @@
 | BP-04 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/build/build_exam_bundles.js<br>tools/build/index.js | tests/unit/gates/build-pipeline.test.js | — | — |
 | BP-05 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/check/check_parser_parity.js | tests/unit/gates/build-pipeline.test.js | — | — |
 | BP-06 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/build/build_keyword_index.js | tests/unit/gates/build-pipeline.test.js | — | — |
-| BP-07 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/build/stamp_release_notes.js<br>tools/build/stamp_sw_version.js<br>tools/deploy/deploy.js | tests/unit/gates/build-pipeline.test.js | — | — |
+| BP-07 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/build/stamp_release_notes.js<br>tools/build/stamp_sw_version.js<br>tools/deploy/cleanup_staging.js<br>tools/deploy/deploy.js | tests/unit/gates/build-pipeline.test.js | — | — |
 | BP-08 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/check/audit_card_quality.js | tests/unit/gates/build-pipeline.test.js | — | — |
 | BP-09 | ✅ | 테스트 | DOC-ADR-12<br>DOC-RBK-02<br>DOC-RBK-10 | tools/build/build_doc_bundles.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
 | BP-10 | ✅ | 테스트 | DOC-ADR-12<br>DOC-RBK-02<br>DOC-RBK-13 | tools/build/build_story_textbooks.js | tests/unit/gates/reader-analysis-gates.test.js | — | — |
