@@ -675,7 +675,13 @@ select polname, polrelid::regclass from pg_policy;
 
 계정 모달의 `Google로 계속`/`카카오로 계속` 버튼은 `signInWithOAuth({provider, redirectTo: origin})`를 호출한다. 복귀는 redirectTo + `#access_token` 해시라 §A.8 ②의 기존 랜딩·`SIGNED_IN` 경로가 그대로 처리하고, 신규 사용자 프로필은 `handle_new_user` 트리거가 만든다 — 서버 스키마 변경은 없다.
 
-**적용 상태** (2026-10-23, `v20261023-f093682` 배포): Management API `PATCH /v1/projects/{ref}/config/auth`로 두 프로바이더 활성화 확인 — `external_google_enabled=true`, `external_kakao_enabled=true` + `external_kakao_email_optional=true`. 자격 증명은 `.env`의 `SUPABASE_GOOGLE_CLIENT_ID/SECRET`·`SUPABASE_KAKAO_CLIENT_ID(=REST API 키)/SECRET`에 보관. **잔여 검증**: 브라우저에서 Google/카카오 버튼 실로그인 스모크 (PWA 아닌 브라우저 경로).
+**적용 상태** (2026-10-23, `v20261023-33c0337` 배포): Management API `PATCH /v1/projects/{ref}/config/auth`로 두 프로바이더 활성화 확인 — `external_google_enabled=true`, `external_kakao_enabled=true` + `external_kakao_email_optional=true`. 자격 증명은 `.env`의 `SUPABASE_GOOGLE_CLIENT_ID/SECRET`·`SUPABASE_KAKAO_CLIENT_ID(=REST API 키)/SECRET`에 보관.
+
+**남은 작업 (미완)**:
+
+- ⬜ **OAuth 실로그인 스모크** — 일반 브라우저(PWA 아님)에서 Google·카카오 버튼 각 1회: 동의 화면 → 콜백 복귀 → 로그인 성립까지 확인. 카카오는 동의 화면에 앱 이름 `PassOK` 표시·이메일 없이도 가입되는지(`email_optional`) 확인.
+- ⬜ **카카오 Client Secret 재발급** — 설정 과정에서 코드가 대화에 노출됐으므로 콘솔 `플랫폼 키 → REST API 키 수정 → 클라이언트 시크릿 → 코드 재발급`으로 폐기 후 새 값을 `.env`(`SUPABASE_KAKAO_CLIENT_SECRET`)와 Supabase(`external_kakao_secret`, Management API PATCH)에 재적용. 기능 영향 없이 즉시 가능.
+- ⬜ 결제 리허설 — `PAYMENT_PILOT_DESIGN.md` 부록 A 진행 상황 ⑤ (테스트 코드 `TEST-7P6Z-RX5F` 활성화·만료일 토스트 확인) 참조.
 
 **프로바이더별 콘솔 설정**:
 
