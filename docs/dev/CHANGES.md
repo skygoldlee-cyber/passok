@@ -22,6 +22,7 @@
 - **파리티 검증기** (`tools/check/check_emb_parity.js`): 커밋된 골든 번들 vs ONNX 출력 비교 — q8은 모델 양자화 노이즈로 이웃 Jaccard 0.72 미달 → fp32 채택·기본값 고정. emb_math.js에 공유 수치 헬퍼 추출
 - **잔여 Python 의존**: `convert:refs`(PDF 변환)·오디오북 TTS뿐 — 제작 경로 선택 도구로 분류
 - **모델 소스 핀 (P3)**: `EMB_MODEL_REVISION` 커밋 SHA 고정 — revision 미지정 요청은 HF main 최신을 따라가 동일 입력에도 출력이 drift할 수 있어 차단. manifest `revision`은 `<repo>@<sha>`로 기록 (설계 §3 재현성 조항 구현)
+- **Python venv 격리 명문화 (P5)**: `.python-version`(3.12) 추가 + DEV_ENVIRONMENT §4에 venv 절차·§3 표에 venv 권장·임베딩 requirements를 참조 구현 전용으로 표기. 글로벌 pip 충돌 위험 해소 — `npm run doctor`는 venv 활성화 상태에서 venv 기준으로 진단. .gitignore의 embeddings 추적 사유도 Node 포팅 후 현황(재생성 비용 회피)으로 정정
 - 테스트: `emb-builder.test.js` 5건(collectItems·정답마커·sameText·sourceHash·이웃 필터) + `env-doctor.test.js` 10건
 
 ## 2026-10-23 Supabase 스키마 견고화 — redeem_code 원자화·feedback 스푸핑 차단·리포트 인덱스
