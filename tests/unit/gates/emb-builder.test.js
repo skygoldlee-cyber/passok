@@ -3,9 +3,9 @@
 // build_embeddings.js(Node 포팅)의 순수 함수 검증 — 모델 없이 수집·정규화·이웃 규칙 재현.
 // Python 구현(ref-pipeline/embeddings/build_embeddings.py)과 1:1 대응 계약 보호.
 
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -16,9 +16,13 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const B = require(join(ROOT, 'tools', 'build', 'build_embeddings.js'));
 const { textNormKey } = require(join(ROOT, 'tools', 'lib', 'emb_math.js'));
 
+const _tmpDirs = [];
+after(() => { for (const d of _tmpDirs) rmSync(d, { recursive: true, force: true }); });
+
 /** 최소 데이터 루트 픽스처 — ox 드릴 + combo + 시험 번들 */
 function fixtureDataRoot() {
     const root = mkdtempSync(join(tmpdir(), 'emb-fixture-'));
+    _tmpDirs.push(root);
     mkdirSync(join(root, 'drills'), { recursive: true });
     mkdirSync(join(root, 'exams'), { recursive: true });
     const ox = [

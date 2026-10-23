@@ -7,6 +7,12 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+## 2026-10-23 테스트 임시 디렉터리 누수 차단 — mkdtemp 픽스처 after 정리 훅
+
+- **배경**: `mkdtempSync` 후 정리 없이 종료하는 테스트가 %TEMP%에 픽스처 디렉터리를 누적 — 잔재 ~3,800개 관측(manifest-·anchor-·gloss-·sw-·metasec-·glosssig-·exam-plugin-·syn-·passok-*)
+- **수정**: 누수 중이던 9개 테스트 파일에 `_tmpDirs` 레지스트리 + `after(() => rmSync)` 훅 + `tmpDir(prefix)` 래퍼 적용 — 실행당 최대 9개 누수 차단. 기존 정리 중이던 4개 파일(ai-tools·ai-textbook·vendor-manifest·step-runner)은 미변경
+- 검증: 수정 파일 76/76 통과 · 실행 후 임시 디렉터리 잔재 0
+
 ## 2026-10-23 개발환경 결합도 개선 — 루틴 경로 Node-only 확정 + 임베딩 파이프라인 Node 포팅
 
 - **`build:derived` Node-only 분리**: 파생물 일괄 재생성에서 `build:embeddings` 제외 → 신규 `build:derived:full`로 위임. stale 감지는 `check:embfresh`가 계속 담당하며 복구 안내를 REMEDIES로 이동

@@ -2,7 +2,7 @@
 // @spec none
 // check_env.js 순수 판정 로직 — JWT 만료·스키마 대조·인라인 주석 오염 탐지.
 
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -11,6 +11,10 @@ import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const { isJwtLike, jwtExpiry, parseExample, analyze } = require('../../../tools/check/check_env.js');
+
+const _tmpDirs = [];
+after(() => { for (const d of _tmpDirs) fs.rmSync(d, { recursive: true, force: true }); });
+function tmpDir(prefix) { const d = fs.mkdtempSync(path.join(os.tmpdir(), prefix)); _tmpDirs.push(d); return d; }
 
 const NOW = 1_800_000_000; // 2027-01-15 부근
 
@@ -35,7 +39,7 @@ test('jwtExpiry: exp 클레임 해석, 부재·손상은 null', () => {
 });
 
 test('parseExample: 선언 키와 @required 마커 추출', () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'passok-env-'));
+    const dir = tmpDir('passok-env-');
     const p = path.join(dir, '.env.example');
     fs.writeFileSync(p, [
         '# 주석 행은 무시',

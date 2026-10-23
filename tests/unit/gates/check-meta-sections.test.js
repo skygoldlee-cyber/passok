@@ -4,15 +4,19 @@
 // isStoryMetaSection 패턴에 매칭되지 않는 헤딩을 수집 — 교재 교체 시 신규 메타
 // 표기가 "렌더되는데 메타 의도"인 회귀로 검출되는지 고정한다.
 
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { findMetaSuspects, diffBaselineTitles } from '../../../tools/check/check_meta_sections.js';
 
+const _tmpDirs = [];
+after(() => { for (const d of _tmpDirs) fs.rmSync(d, { recursive: true, force: true }); });
+function tmpDir(prefix) { const d = fs.mkdtempSync(path.join(os.tmpdir(), prefix)); _tmpDirs.push(d); return d; }
+
 function fixture(files) {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'metasec-'));
+    const dir = tmpDir('metasec-');
     for (const [rel, text] of Object.entries(files)) {
         const p = path.join(dir, rel);
         fs.mkdirSync(path.dirname(p), { recursive: true });

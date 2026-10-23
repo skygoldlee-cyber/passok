@@ -3,11 +3,11 @@
 // 매니페스트 로드/검증, 스키마 검증, 마커 감시, 파서 등가성,
 // 용어집 인덱스 생성, SW 버전 스탬프, 감사 스크립트 존재를 고정한다.
 
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
-import { writeFileSync, mkdtempSync, readFileSync } from 'node:fs';
+import { writeFileSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,6 +23,10 @@ const textbookPlugin = require('../../../tools/build/plugins/textbook.plugin.js'
 const { getExamTargets } = require('../../../tools/build/exam_targets.js');
 
 const MANIFEST = join(ROOT, 'content', 'exams', 'cosmetic', 'manifest.json');
+
+const _tmpDirs = [];
+after(() => { for (const d of _tmpDirs) rmSync(d, { recursive: true, force: true }); });
+function tmpDir(prefix) { const d = mkdtempSync(join(tmpdir(), prefix)); _tmpDirs.push(d); return d; }
 
 // ---------- BP-01: 매니페스트 로드 + id_factory ----------
 
@@ -84,7 +88,7 @@ test('BP-02: 중복 문항 ID를 감지한다', () => {
 // ---------- BP-03: 매니페스트 자체 검증 ----------
 
 function writeTmpManifest(manifest, files = {}) {
-  const dir = mkdtempSync(join(tmpdir(), 'manifest-'));
+  const dir = tmpDir('manifest-');
   writeFileSync(join(dir, 'manifest.json'), JSON.stringify(manifest));
   for (const [rel, content] of Object.entries(files)) {
     const p = join(dir, rel);
@@ -168,7 +172,7 @@ test('BP-07: computeVersion 날짜는 로컬 시각이 아니라 HEAD 커밋 날
 });
 
 test('BP-07: stampSwVersion이 CACHE_VERSION 라인만 치환하고 나머지를 보존한다', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'sw-'));
+  const dir = tmpDir('sw-');
   const swPath = join(dir, 'sw.js');
   const original = "// 헤더\nconst CACHE_VERSION = 'v1-old';\nconst DATA_CACHE_VERSION = 'data-1';\n// 푸터\n";
   writeFileSync(swPath, original);
@@ -182,7 +186,7 @@ test('BP-07: stampSwVersion이 CACHE_VERSION 라인만 치환하고 나머지를
 });
 
 test('BP-07: 동일 버전 재스탬프는 no-op이다', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'sw-'));
+  const dir = tmpDir('sw-');
   const swPath = join(dir, 'sw.js');
   writeFileSync(swPath, "const CACHE_VERSION = 'v9-x';\n");
   const r = stampSwVersion({ swPath, version: 'v9-x', silent: true });

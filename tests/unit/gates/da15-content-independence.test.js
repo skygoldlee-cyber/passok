@@ -3,7 +3,7 @@
 // Logic Independent of Content — 콘텐츠 특정 규칙이 플랫폼·빌드 로직에
 // 내장되지 않았음을 검증. docSubjectRules는 references.json이 유일한 소스다.
 
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -14,8 +14,12 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { docSubject } = require('../../../tools/build/ref_statements.js');
 
+const _tmpDirs = [];
+after(() => { for (const d of _tmpDirs) fs.rmSync(d, { recursive: true, force: true }); });
 function tmpRoot() {
-    return fs.mkdtempSync(path.join(os.tmpdir(), 'passok-da15-'));
+    const d = fs.mkdtempSync(path.join(os.tmpdir(), 'passok-da15-'));
+    _tmpDirs.push(d);
+    return d;
 }
 
 test('docSubject: 규칙 미선언 시험에서 cosmetic 문서명 패턴이 과목을 부여하지 않는다', () => {
