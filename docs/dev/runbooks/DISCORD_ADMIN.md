@@ -19,7 +19,7 @@ Discord 측 필요 자산: **서버 1개 · 채널 1개 · 애플리케이션 1�
 
 | 단계 | 상태 |
 |---|---|
-| §1~2 `DISCORD_WEBHOOK_URL` — `.env` 설정·연결 테스트 | ✅ 완료 (`sent: true` 확인) |
+| §1~2 `DISCORD_WEBHOOK_URL` — `.env` 설정·연결 테스트·실배포 알림 도착 | ✅ 완료 |
 | §2 CI `DISCORD_WEBHOOK_URL` GitHub Actions 시크릿 | ☐ 선택 |
 | §3.1~3.5 앱·봇 생성 → 시크릿 → 함수 배포 → Endpoint | ☐ 대기 |
 | §3.6 명령 사용 확인 (`/status` 등) | ☐ 대기 |
