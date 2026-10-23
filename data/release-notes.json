@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261023-077f471",
+    "date": "2026-10-23",
+    "notes": [
+      "[문서·env] Python 제작 경로 venv 격리 명문화 — .python-version 핀 (P5)",
+      "[정리·embeddings] 모델 소스 핀 — HF 리비전 SHA 고정 (P3)",
+      "[수정·deploy] 스테이징 정리 detached 헬퍼 위임 — 배포 비블로킹",
+      "[정리·release] v20261023-54ba64c 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261023-54ba64c",
     "date": "2026-10-23",
     "notes": [
@@ -191,14 +201,6 @@
       "[기능·nav] 사이드바 실무 매뉴얼을 실무 그룹으로 이동",
       "[수정·deploy] 스탬프 확정 커밋의 면제 마크를 행별 분리",
       "[정리·release] v20261022-f1a6f37 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261022-f1a6f37",
-    "date": "2026-10-22",
-    "notes": [
-      "[수정·ui] 설정 메타를 ©/버전 2행으로 분리",
-      "[정리·release] v20261021-63d0f7d 스탬프 확정 [no-docs][no-test]"
     ]
   }
 ]
