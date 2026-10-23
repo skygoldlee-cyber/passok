@@ -154,6 +154,14 @@
                             <button type="button" class="settings-item" data-click="showPlanCompare" title="Free와 Pro의 기능 차이·혜택 비교 보기">
                                 <i class="fa-solid fa-gem" aria-hidden="true"></i> 플랜 안내 (Free/Pro)
                             </button>
+                            <!-- 라이선스 코드 활성화 (PAY-01) — 로그인 후 redeem_code RPC로 plan='pro' 갱신 -->
+                            <button type="button" class="settings-item" data-click="showRedeemCode" title="구매 후 발급받은 Pro 활성화 코드 입력 — 로그인 필요">
+                                <i class="fa-solid fa-key" aria-hidden="true"></i> 라이선스 코드
+                            </button>
+                            <!-- 텔레메트리 opt-out (UX-MET-06, ADR-0019) — 거부 시 전송만 차단, 기능 제한 없음 -->
+                            <button type="button" class="settings-item" data-click="toggleTelemetry" title="익명 사용 통계 수집 허용 여부 — 끄면 이 기기에서 통계 전송이 중단됩니다 (기능 제한 없음)">
+                                <i class="fa-solid fa-chart-line" aria-hidden="true"></i> 사용 통계 전송: <span id="telemetry-toggle-label">켜짐</span>
+                            </button>
                             <div class="settings-divider"></div>
                             <p class="settings-group-label">데이터</p>
                             <button type="button" class="settings-item" data-click="exportData">
@@ -187,8 +195,11 @@
                             <button id="whats-new-btn" class="settings-item" title="최근 업데이트 변경 내용 보기">
                                 <i class="fa-solid fa-sparkles" aria-hidden="true"></i> 변경 이력
                             </button>
-                            <button id="onboarding-btn" class="settings-item" title="앱 사용법 3단계 안내 다시 보기">
+                            <button id="onboarding-btn" class="settings-item" title="시작 설정(시험일·목표) 다시 하기">
                                 <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> 시작 안내
+                            </button>
+                            <button id="shortcut-help-btn" class="settings-item" title="키보드 단축키 목록 보기 (? 키로도 열림)">
+                                <i class="fa-solid fa-keyboard" aria-hidden="true"></i> 단축키
                             </button>
                             <button id="feedback-btn" class="settings-item" title="칭찬·개선·오류·기능 제안 보내기">
                                 <i class="fa-solid fa-comment-dots" aria-hidden="true"></i> 의견 보내기

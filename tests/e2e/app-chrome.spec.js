@@ -37,6 +37,7 @@ test.beforeEach(({ page }) => {
     page.addInitScript(() => {
         localStorage.setItem('current_exam', 'cosmetic');
         localStorage.setItem('onboarding_seen_v1', '1');
+        localStorage.setItem('telemetry_notice_shown', '1');
         localStorage.setItem('cosmetic:onboarding_seen_v1', '1');
         window.__nativeCalls = { alert: 0, confirm: 0 };
         window.alert = () => { window.__nativeCalls.alert++; };

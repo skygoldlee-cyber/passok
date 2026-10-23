@@ -24,7 +24,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { requireSecret, restGet } = require('../lib/supabase_ops.js');
+const { requireSecret, restGet, restGetAll } = require('../lib/supabase_ops.js');
 const { summarize: summarizeErrors } = require('./error_report.js');
 const { summarize: summarizeFunnel } = require('./funnel_report.js');
 const { summarize: summarizeFeedback, KINDS } = require('./feedback_report.js');
@@ -110,6 +110,8 @@ footer{margin:28px 0 8px;font-size:11px;color:#999}
   <div class="card"><div class="k">세션 / 오류</div><div class="v">${errors.sessions} / ${errors.errors}</div></div>
   <div class="card"><div class="k">피드백</div><div class="v">${feedback.total}</div></div>
   <div class="card"><div class="k">평점 평균</div><div class="v">${esc(feedback.ratingAvg)}</div></div>
+  <div class="card"><div class="k">활성화율 (세션)</div><div class="v">${esc(fmtPct(funnel.activation && funnel.activation.sessionRate))}</div><div class="dim">핵심 행동 ${funnel.activation ? funnel.activation.coreSessions : 0}/${funnel.activation ? funnel.activation.sessions : 0}</div></div>
+  <div class="card"><div class="k">활성화율 (설치)</div><div class="v">${esc(fmtPct(funnel.activation && funnel.activation.installRate))}</div><div class="dim">고유 설치 ${funnel.activation ? funnel.activation.coreInstalls : 0}/${funnel.activation ? funnel.activation.installs : 0}</div></div>
 </div>
 
 <h2>오류 — 일별</h2>
@@ -172,10 +174,10 @@ async function main(argv) {
     const since = new Date(Date.now() - days * 864e5).toISOString();
     const gte = `created_at=gte.${encodeURIComponent(since)}`;
     const [errRows, evRows, fbRows] = await Promise.all([
-        restGet(secret, 'client_errors',
-            `select=created_at,kind,message,app_version,view&${gte}&order=created_at.desc&limit=50000`),
-        restGet(secret, 'usage_events',
-            `select=created_at,session_id,event,meta&${gte}&order=created_at.desc&limit=50000`),
+        restGetAll(secret, 'client_errors',
+            `select=created_at,kind,message,app_version,view&${gte}&order=created_at.desc`),
+        restGetAll(secret, 'usage_events',
+            `select=created_at,session_id,event,meta&${gte}&order=created_at.desc`),
         restGet(secret, 'feedback',
             `select=created_at,kind,rating,body,view,app_version,entry_src,exam_id,user_id,meta`
             + `&${gte}&order=created_at.desc&limit=200`),

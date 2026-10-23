@@ -27,10 +27,10 @@
 
 | 구분 | 프레임워크 | 환경 | 파일 위치 | 테스트 수 |
 |------|-----------|------|-----------|-----------|
-| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1,450+ |
-| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 760+ |
+| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1,500+ |
+| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 780+ |
 | **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 110+ |
-| **합계** | | | | **2,350+** |
+| **합계** | | | | **2,400+** |
 
 > 수치는 `check:teststats`(docs 단계)이 `tools/state/test_stats.json` 실측 SSOT와 정합 검증한다 —
 > 스테일 시 `npm run stats:stamp`으로 재측정·재기록 (인용은 `N+` 바닥 표기 유지).
@@ -824,7 +824,7 @@ function detectDiagramType(textContent) {
 
 ## 6. 커버리지 현황
 
-`npm run coverage:all` 기준 **병합 수치** (2026-10-14 측정): statements 70.9% · branches 66.4% · functions 67.1% · **lines 78.4%** — 병합 임계값(`coverage_merge.js --check`: stmts 68/branches 62/funcs 62/lines 74) 통과.
+`npm run coverage:all` 기준 **병합 수치** (2026-10-22 측정): statements 69.7% · branches 66.9% · functions 71.4% · **lines 81.7%** — 병합 임계값(`coverage_merge.js --check`: stmts 68.5/branches 65.5/funcs 70.0/lines 80.5, 실측 대비 ~1.2%p 여유 정책) 통과.
 
 - 병합 리포트(`coverage-merged/index.html`)가 실질 수치 — vitest 단독 리포트는 유닛 테스트가 커버하는 순수 로직을 0%로 표시하므로 과소평가된다.
 - jsdom으로 검증 불가한 환경 의존 모듈은 `vitest.config.mjs` `coverage.exclude`로 분모에서 제외 (`types.js`, `app-fallback`, `pwa-install*`, `theme-init`, `web-vitals`, `reader-audio`).

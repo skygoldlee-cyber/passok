@@ -27,6 +27,7 @@ async function boot(page, theme) {
         localStorage.setItem('appTheme', t);
         localStorage.setItem('cosmetic:appTheme', t);
         localStorage.setItem('onboarding_seen_v1', '1');
+        localStorage.setItem('telemetry_notice_shown', '1');
         localStorage.setItem('cosmetic:onboarding_seen_v1', '1');
     }, theme);
     await page.goto('/index.html');

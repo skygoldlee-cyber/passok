@@ -191,7 +191,7 @@
 | 배포 빈도 | `(git tag -l "deploy/*").Count` (PowerShell) — 태그가 배포 이력 SSOT. 태그명 날짜로 기간당 빈도 산출 |
 | 변이 테스트 | `npm.cmd run mutate` (수동 스팟 체크 — CI 미편입. 스코프: questions·spaced-repetition·weak-items·statement-tracker 4개 순수 모듈, Stryker `reports/mutation/` 리포트) |
 | E2E·시나리오 (§2.2) | `npm.cmd run test:e2e` — Playwright+axe, test_stats.json 수치 |
-| 오류율·과업 완주 (§2.6) | `npm.cmd run report:errors`(오류/세션 — 세션 핑 분모 · `-- --session <uuid>`=bug 신고의 meta.session_id로 해당 페이지 로드 오류+퍼널 이력 조회) · `npm.cmd run report:funnel`(quiz/daily start→complete 세션 쌍 완주율) — SUPABASE_SECRET_KEY env 필요(미설정 시 대시보드용 SQL 출력). schema.sql §5·§6을 프로덕션에 적용해야 집계 시작 · 실사용 수단 없음(공백) |
+| 오류율·과업 완주·활성화 (§2.6) | `npm.cmd run report:errors`(오류/세션 — 세션 핑 분모 · `-- --session <uuid>`=bug 신고의 meta.session_id로 해당 페이지 로드 오류+퍼널 이력 조회) · `npm.cmd run report:funnel`(quiz/daily 완주율 + **활성화 퍼널** session_start→core_learning_action 세션·설치 전환율 — DOC-DSN-34 §4 P0 KPI) · `npm.cmd run report:dashboard`(조감 HTML, AD-07) — SUPABASE_SECRET_KEY env 필요(미설정 시 대시보드용 SQL 출력). 스키마 적용 자동화는 `npm.cmd run schema:apply`(PAT) · 프로덕션 개통 실측(10-22): 최근 7일 세션 2,488·고유 설치 2,349·핵심 행동 도달 229(9.2~9.7%)·quiz 완주율 62.2% |
 | 보안 (§2.7) | `check:secrets` · `check:vendor` 해시 · CSP `script-src 'self'` (vercel.json) · `npm.cmd run sbom` · `npm.cmd audit` · 권한 경계: Supabase RLS — `docs/dev/design/SUPABASE_DESIGN.md` §3 (배포 검증 공백) |
 | 지식 비율 지표 (§2.5) | `npm.cmd run check:runbooks` — WHEN_THINGS_BREAK 증상 행 정본 커버리지 자동 집계(파일+앵커 도달). ADR 기재율은 자동 명령 없음(공백). 리허설 절차: [WHEN_THINGS_BREAK.md](../runbooks/WHEN_THINGS_BREAK.md) §6 |
 | 배포 검증 | `npm.cmd run deploy`의 배포 후 스모크 자동 단계 |
@@ -217,17 +217,17 @@
 
 | 지표 | 상태 |
 |------|------|
-| ★ 핵심 과업 완주율 | **공백** — 계측 경로 완비(`report:funnel`), 프로덕션 스키마(schema.sql §5·§6) 미적용으로 값 미집계 |
-| ★ 런타임 오류율 | **공백** — 수집·집계 경로 완비(`report:errors`), 값 미집계 |
-| ★ 실사용 | **공백** — 분석 도구 없음. 배포된 외부 앱이므로 N/A 아님 |
+| ★ 핵심 과업 완주율 | **10-22 개통** — 스키마 적용·배포 완료, `report:funnel` 실측: quiz 완주율 62.2%(28/45, 최근 7일) · 활성화 session→핵심 행동 9.2% |
+| ★ 런타임 오류율 | **10-22 개통** — `report:errors`·`report:dashboard`로 client_errors 조회 가능 (첫 실측값은 차기 평가에서 기재) |
+| ★ 실사용 | **10-22 개통** — `report:funnel`/`report:dashboard` 실측: 최근 7일 session_start 2,488·고유 설치(install_id) 2,349 — UX-MET-05~08 텔레메트리 라이브 |
 | 성능 | **실측: 셸 2.5MB(상한 12.5) · JS 1.3MB(상한 4.8) · 최대 파일 279KB(상한 6MB) · index 125KB(상한 160KB)** — 상한 대비 20~78%, 예산 내 양호 |
 | 회귀 신고율 | → §2.4 참조 (변경 실패율과 동일 사건 — 중복 집계 금지) |
 
-**가치 버킷 판정: 공백 (측정 0/3 · 비핵심 측정분 양호)** — ★ 3행 전부 미측정 불변. 계측 경로는 완비, 프로덕션 스키마 적용이 유일 차단점.
+**가치 버킷 판정: 공백 해소 진행 (10-22 개통)** — ★ 3행 모두 10-22에 측정 경로 개통 + 첫 실측 확보 (스키마 적용·텔레메리 배포·리포트 실행). 정식 판정(기준 대비 양호/주의)은 차기 평가에서 시계열 축적 후 기재.
 
 ### 다음 평가를 위한 기록 규약
 
 - 본 §9는 **최신 스냅샷만** 유지한다 — 차기 평가 때 이 표를 새 측정으로 교체하고 Δ를 기재.
 - 분기별 상세 보고서는 **별도 문서 파일**로 커밋하고 아래 이력에 링크한다 (§9를 로그로 비대하게 만들지 않음 — §7-1의 범용/전용 분리 유지). 보고서 위치: `docs/dev/evals/` (`reports/`는 mutation 산출물 경로로 gitignore 대상이라 evals를 사용).
 - 보고서 이력: 2026-10-14 기준선 ([evals/EVAL_BASELINE_2026-10-14.md](../evals/EVAL_BASELINE_2026-10-14.md)) · 2026-10-14 재측정 (본 절 구판 — git 이력) · 2026-10-16 재측정 ([evals/EVAL_2026-10-16.md](../evals/EVAL_2026-10-16.md)) · 2026-10-16 2차 재측정 ([evals/EVAL_2026-10-16_2.md](../evals/EVAL_2026-10-16_2.md)).
-- 기준선 해소 순서 ①~④·⑥ 완료(① deploy CI 게이트 · ② 오류율+퍼널 경로 · ③ 롤백 경로B 리허설 · ④ 런북 커버리지 52.9% 실측·게이트 편입 · ⑥ 변이 85.36%). **잔여 해소 순서**: ① **프로덕션 schema.sql §5·§6 적용 → 배포 → `report:errors`·`report:funnel` 첫 실행** — 가치 ★ 3행이 한 경로로 동시 개통(최대 Δ측정) ② **RLS 배포 실검증 + 규제 검토**(개인정보 처리방침 게시 판단 — Supabase 자격증명 필요, 저장소 외 작업) ③ 런북 커버리지 52.9%→전량(증상 8행의 정본 절차 보강) ④ 장애 이력 로그 + DORA 시계열 축적 ⑤ ADR 기재율 분모 정의 ⑥ 커버리지 래칫 상향(`coverage_merge.js --ratchet` — 상향 가능 신호 출력 중).
+- 기준선 해소 순서 ①~④·⑥ 완료 + **잔여 ① 해소(10-22)**: 프로덕션 스키마 적용(schema:apply)·텔레메트리 배포(v20261022-e485842)·`report:errors`/`report:funnel` 첫 실행 실측 — 가치 ★ 3행 개통. **잔여 해소 순서**: ② **RLS 배포 실검증 + 규제 검토**(개인정보 처리방침 게시 판단) ③ 런북 커버리지 52.9%→전량(증상 8행의 정본 절차 보강) ④ 장애 이력 로그 + DORA 시계열 축적 ⑤ ADR 기재율 분모 정의 ⑥ 커버리지 래칫 상향(`coverage_merge.js --ratchet` — 상향 가능 신호 출력 중).

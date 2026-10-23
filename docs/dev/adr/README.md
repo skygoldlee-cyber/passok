@@ -58,3 +58,4 @@
 | [0016](0016-multi-exam-registry-feature-flags.md) | 멀티시험 레지스트리 + feature flag 게이팅 | accepted | 2026-10-14 (백필) |
 | [0017](0017-vendored-assets-hash-manifest.md) | 외부 라이브러리는 vendor/ 벤더링 + 해시 매니페스트 | accepted | 2026-10-14 (백필) |
 | [0018](0018-fsrs-over-sm2.md) | 간격 반복은 SM-2 대신 FSRS | accepted | 2026-10-14 (백필) |
+| [0019](0019-telemetry-consent-first-party.md) | 텔레메트리는 opt-out 동의 + 퍼스트파티 익명 수집 | accepted | 2026-10-22 |

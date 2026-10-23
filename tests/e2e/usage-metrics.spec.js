@@ -1,5 +1,5 @@
 // tests/e2e/usage-metrics.spec.js — Phase 2 표면 진입 계측 실브라우저 검증
-// @spec UX-MET-01,UX-MET-02,UX-MET-03,UX-MET-04
+// @spec UX-MET-01,UX-MET-02,UX-MET-03,UX-MET-04,UX-MET-06
 // 설계: docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md (DOC-DSN-24)
 // jsdom 커버 불가 경로: 앱 부트스트랩의 setupEventListeners → initUsageMetrics
 // 설치, 실 data-click 위임과의 공존, 클립보드 복사.
@@ -10,6 +10,7 @@ test.beforeEach(({ page }) => {
     page.addInitScript(() => {
         localStorage.setItem('current_exam', 'cosmetic');
         localStorage.setItem('onboarding_seen_v1', '1');
+        localStorage.setItem('telemetry_notice_shown', '1');
         localStorage.setItem('cosmetic:onboarding_seen_v1', '1');
     });
 });
@@ -90,4 +91,20 @@ test('내 사용 통계 → 통계 복사가 JSON을 클립보드에 기록 (UX-
     const exported = JSON.parse(await page.evaluate(() => navigator.clipboard.readText()));
     expect(exported.actions['trainer_menu:openOxDrillSetup']).toBeGreaterThanOrEqual(1);
     await page.keyboard.press('Escape');
+});
+
+test('설정 사용 통계 전송 토글 → opt-out 플래그·라벨 갱신 (UX-MET-06)', async ({ page }) => {
+    await page.goto('/#/dashboard');
+    await appBooted(page);
+    await page.locator('#settings-toggle-btn').click();
+    const toggle = page.locator('[data-click="toggleTelemetry"]');
+    await expect(toggle).toBeVisible();
+    // 기본 켜짐 → 클릭하면 opt-out 저장 + 라벨 '꺼짐'
+    await toggle.click();
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('telemetry_opt_out'))).toBe('1');
+    await page.locator('#settings-toggle-btn').click();
+    await expect(page.locator('#telemetry-toggle-label')).toHaveText('꺼짐');
+    // 재클릭 시 복귀
+    await page.locator('[data-click="toggleTelemetry"]').click();
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('telemetry_opt_out'))).toBe('0');
 });

@@ -1,6 +1,6 @@
 {
   "name": "passok",
-  "version": "2026.10.22",
+  "version": "2026.10.23",
   "description": "PassOK — 멀티시험 자격시험 스마트 학습 플랫폼",
   "engines": {
     "node": ">=24"
@@ -63,6 +63,8 @@
     "check:ciparity": "node tools/check/check_ci_parity.js",
     "check:secrets": "node tools/check/check_secrets.js",
     "check:env": "node tools/check/check_env.js",
+    "check:supabase": "node tools/check/check_supabase_schema.js",
+    "schema:apply": "node tools/supabase/apply_schema.js",
     "check:enc": "node tools/check/check_replacement_char.js",
     "check:orphans": "node tools/check/check_orphan_assets.js",
     "check:notes": "node tools/check/check_release_notes.js",
@@ -104,6 +106,7 @@
     "check:all:e2e": "node tools/check/run.js --preset all && npm run test:e2e",
     "check:ci": "node tools/check/run.js --preset ci",
     "check:audit": "node tools/check/run.js --preset audit",
+    "check:onboard": "node tools/check/check_exam_onboard.js",
     "deploy": "node tools/deploy/deploy.js",
     "audit:combo": "node tools/check/audit_combo.js",
     "audit:study": "node tools/check/audit_study_quality.js",
@@ -124,6 +127,7 @@
     "report:user": "node tools/check/user_report.js",
     "report:glossary": "node tools/build/extract_glossary_candidates.js",
     "admin:grant-pro": "node tools/check/grant_pro.js",
+    "admin:issue-code": "node tools/check/issue_pro_code.js",
     "ai:explain": "node tools/ai/ai_explain.js",
     "ai:draft": "node tools/ai/ai_draft_questions.js",
     "ai:distractors": "node tools/ai/ai_distractors.js",

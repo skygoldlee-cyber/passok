@@ -16,9 +16,8 @@
  *   node tools/check/funnel_report.js --days 7
  */
 'use strict';
-const fs = require('fs');
-const path = require('path');
 const { loadEnv } = require('../lib/env');
+const { restGetAll } = require('../lib/supabase_ops.js');
 
 // ── 순수 집계 (테스트 대상) ──────────────────────────────────
 
@@ -30,18 +29,42 @@ const { loadEnv } = require('../lib/env');
 function summarize(rows) {
     const eventCounts = {};
     const sessions = {};   // session_id → { event → [iso timestamps] }
+    const startSessions = new Set();   // session_start 세션 (방문 분모)
+    const coreSessions = new Set();    // core_learning_action 발생 세션
+    const installs = new Set();        // meta.install_id — 고유 설치 추정
+    const coreInstalls = new Set();    // 핵심 행동 도달 설치
     for (const r of rows) {
         const ev = String(r.event || 'unknown');
         eventCounts[ev] = (eventCounts[ev] || 0) + 1;
+        const installId = r.meta && r.meta.install_id;
+        if (installId) installs.add(installId);
+        if (ev === 'session_start') {
+            if (r.session_id) startSessions.add(r.session_id);
+        }
+        if (ev === 'core_learning_action') {
+            if (r.session_id) coreSessions.add(r.session_id);
+            if (installId) coreInstalls.add(installId);
+        }
         if (!r.session_id) continue;
         const s = sessions[r.session_id] || (sessions[r.session_id] = {});
         (s[ev] || (s[ev] = [])).push(String(r.created_at || ''));
     }
 
+    // 활성화 퍼널 — DOC-DSN-34 §4 "방문→핵심 학습 행동" (UX-MET-06/07)
+    const activation = {
+        sessions: startSessions.size,
+        coreSessions: coreSessions.size,
+        sessionRate: startSessions.size ? coreSessions.size / startSessions.size : null,
+        installs: installs.size,
+        coreInstalls: coreInstalls.size,
+        installRate: installs.size ? coreInstalls.size / installs.size : null,
+    };
+
     const funnels = {};
     for (const ev of Object.keys(eventCounts)) {
         if (!ev.endsWith('_start')) continue;
         const prefix = ev.slice(0, -'_start'.length);
+        if (prefix === 'session') continue;  // session_start는 방문 분모 — 과업 쌍 아님 (activation으로 표시)
         const completeEv = `${prefix}_complete`;
         const starts = eventCounts[ev];
         const completes = eventCounts[completeEv] || 0;
@@ -76,18 +99,10 @@ function summarize(rows) {
             avgDurationMs: avg(durations),
         };
     }
-    return { total: rows.length, eventCounts, funnels };
+    return { total: rows.length, eventCounts, funnels, activation };
 }
 
 // ── CLI ─────────────────────────────────────────────────────
-
-function supabaseUrl() {
-    if (process.env.SUPABASE_URL) return process.env.SUPABASE_URL.replace(/\/$/, '');
-    const cfg = fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'supabase-config.js'), 'utf8');
-    const m = cfg.match(/SUPABASE_URL\s*=\s*'([^']+)'/);
-    if (!m) throw new Error('src/auth-sync/supabase-config.js에서 SUPABASE_URL을 읽지 못했습니다');
-    return m[1];
-}
 
 const FALLBACK_SQL = `\
 -- Supabase 대시보드 → SQL Editor (기간에 맞게 interval 조정)
@@ -133,18 +148,9 @@ async function main() {
     }
 
     const since = new Date(Date.now() - days * 864e5).toISOString();
-    const url = `${supabaseUrl()}/rest/v1/usage_events`
-        + `?select=created_at,session_id,event,meta`
-        + `&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=50000`;
-    const res = await fetch(url, {
-        headers: { apikey: secret, authorization: `Bearer ${secret}` },
-    });
-    if (!res.ok) {
-        console.error(`조회 실패 HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
-        console.error('(usage_events 테이블·정책이 프로덕션에 적용됐는지 확인 — schema.sql §6)');
-        process.exit(1);
-    }
-    const rows = await res.json();
+    const rows = await restGetAll(secret, 'usage_events',
+        `select=created_at,session_id,event,meta`
+        + `&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc`);
     const s = summarize(rows);
 
     console.log(`usage_events 완주율 리포트 — 최근 ${days}일 (조회 ${rows.length}행)`);
@@ -152,6 +158,13 @@ async function main() {
     if (evs.length) {
         console.log('\n── 이벤트 건수 ──');
         for (const [k, n] of evs) console.log(`  ${n} × ${k}`);
+    }
+    const a = s.activation;
+    if (a.sessions || a.installs) {
+        console.log('\n── 활성화 (방문→핵심 학습 행동 · DOC-DSN-34 §4) ──');
+        console.log(`  세션: ${a.coreSessions}/${a.sessions} = ${fmtPct(a.sessionRate)}`
+            + ` · 설치: ${a.coreInstalls}/${a.installs} = ${fmtPct(a.installRate)}`);
+        console.log('  · 세션율=session_start 세션 중 핵심 행동 도달 · 설치율=고유 install_id 기준 추정');
     }
     const fs_ = Object.entries(s.funnels);
     if (fs_.length) {

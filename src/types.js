@@ -304,6 +304,7 @@
  * @property {string}   [year]
  * @property {boolean}  [default]
  * @property {boolean}  [comingSoon]     준비 중인 시험 — 카드에 '준비중' 배지 표시 + 선택 시 알림만 띄우고 전환하지 않음
+ * @property {string}   [contentStamp]   콘텐츠 갱신 스탬프 — build_exams_list가 팩 원본 해시로 생성 (ES-07 갱신 배지 비교용)
  * @property {string}   [contentRoot]
  * @property {string}   [dataRoot]
  * @property {string}   [manifestPath]

@@ -46,7 +46,8 @@ const TEST_GAP_BASELINE = 0;
 // 기존 백로그(규약·리뷰형 다수)를 승계하되, 신규 UI/UX 요구사항이 갭을 늘리면 실패한다.
 // e2e @spec을 추가해 갭을 줄였다면 이 수치를 함께 낮춘다.
 const UIUX_PREFIX_RE = /^(?:UX-|TR-|R-|TH-|A-)/;
-const UIUX_E2E_GAP_BASELINE = 1; // UX-VFY-06 (정적 체커 규약형 — e2e 실측 대상 아님)
+const UIUX_E2E_GAP_BASELINE = 4; // UX-VFY-06 (정적 체커 규약형 — e2e 실측 대상 아님)
+//   UX-MET-05/07/08 (텔레메트리 인프라 — 기하 UI 요소 없음, unit/dom 커버 + ADR-0019 설계 정본)
 
 // 절차·규약형 요구사항 — 코드 참조 지점이 존재하지 않아 커버리지 공백 경고에서 제외.
 // 각 ID의 강제 지점(문서·절차·자기 구현)을 사유와 함께 명시한다.

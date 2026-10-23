@@ -6,13 +6,14 @@
  * isFreeLimitError()로 판별 후 showUpgradeNotice()를 호출한다.
  */
 
-// @spec ROAD-P0
+// @spec ROAD-P0, PAY-02, PAY-04, PAY-06
 
 import { esc } from './sanitize.js';
 import { trapFocus } from './ui-utils.js';
 import { safeGetItem, safeSetItem } from './state.js';
 import { STORAGE_KEYS } from './storage-keys.js';
 import { trackAction } from './usage-stats.js';
+import { reportEvent } from './usage-telemetry.js';
 import { hasFeature, getActiveExamId } from './exam-context.js';
 import { localDateTime } from './utils.js';
 
@@ -20,6 +21,31 @@ import { localDateTime } from './utils.js';
 function isFreeLimitError(error) {
     return typeof error === 'string' && error.startsWith('Free 플랜');
 }
+
+/**
+ * 결제 안내 설정 (PAY-02) — 수동 결제 안내 모달의 내용·활성 플래그.
+ * enabled=false면 showUpgradeNotice가 기존 '준비 중' 표시를 유지한다.
+ * 결제 수단(D-1)·가격(D-2)·문의 채널(D-5) 확정 후 값을 채우고 enabled=true로 전환.
+ * 문구 변경은 이 객체 하나로 관리 — 코드 분기를 건드리지 않는다.
+ */
+const PAYMENT_NOTICE = {
+    enabled: true,
+    // 기간권 3티어 (PAY-06 — PAYMENT_PILOT_DESIGN §5 안 A): 긴 기간일수록 월환산 할인.
+    // 가격·티어 문구 변경은 이 배열만 수정한다.
+    plans: [
+        { name: '스프린트', period: '30일', price: '9,900원' },
+        { name: '스탠다드', period: '60일', price: '14,900원' },
+        { name: '풀코스', period: '90일', price: '19,900원', note: '월환산 ~6,600원 · 불합격 시 다음 회차 혜택(발급일로부터 1년 유효)' },
+    ],
+    methods: [
+        "'결제 문의'를 눌러 오픈채팅으로 연락주시면 결제 방법(계좌이체·카카오페이)을 안내드립니다",
+        '결제 확인 후 24~48시간 내 라이선스 코드를 발송해 드립니다',
+        '받은 코드는 로그인 후 ⚙️ 설정 → 라이선스 코드에서 입력하면 즉시 Pro가 활성화됩니다',
+    ],
+    refundNotice: '환불: 코드 미사용 시 결제일로부터 7일 이내 전액 환불 (전자상거래법 청약철회) · 코드 사용 후에는 환불이 제한될 수 있습니다',
+    contactLabel: '오픈채팅에서 결제 문의',
+    contactUrl: 'https://open.kakao.com/o/sWLzJCTi',
+};
 
 // --- 기능 플랜 (feature-plan.json — 기능별 무료/Pro 전환) ---
 let _featurePlan = null;
@@ -203,6 +229,7 @@ function _proBenefitItems(extraRow = '') {
  * feature-plan.json의 현재 값을 반영하므로 플랜 전환 시 문구가 어긋나지 않는다. */
 export async function showPlanCompare() {
     trackAction('plan_compare');
+    void reportEvent('plan_compare_view').catch(() => {});   // 전환 퍼널 (PAY-04)
     // 저장 한도 혜택은 Formula OS 기능 보유 시험에서만 노출 — 한도 수치는
     // 각 스토어의 상수에서 유도 (도메인 모듈은 지연 로딩으로 초기 번들 미포함)
     let limitsRow = '';
@@ -259,22 +286,109 @@ export async function showPlanCompare() {
     `);
 }
 
-/** Pro 업그레이드 안내 모달 (정보성 — 결제 경로 없음) */
+// --- Pro 전환 모멘트 넛지 (ROAD-P6) ---
+// 고가치 순간(모의고사 분석 완료 등)에 결과 패널 상단의 인라인 카드로
+// 플랜 비교를 제안한다. 모달 대신 비차단 카드 — 학습 흐름을 끊지 않는다.
+
+/** 모멘트 → 플랜 키·표시 문구 매핑 */
+const PRO_MOMENTS = {
+    sim_result: { feature: 'mock_exam', label: '실전 모의고사' },
+    analysis_report: { feature: 'personal_analysis', label: '학습 진단 리포트' },
+};
+
+/** 모멘트별 재노출 쿨다운 — 같은 모멘트는 14일에 1회 */
+const PRO_MOMENT_COOLDOWN_MS = 14 * 86400000;
+
+/**
+ * 모멘트 넛지 표시 여부 판정 (순수 함수 — 테스트 용이).
+ * @param {string} momentKey PRO_MOMENTS 키
+ * @param {{isPro?:function(string):boolean, entitled?:boolean, seenMap?:Object<string,string>, now?:number}} [o]
+ * @returns {boolean}
+ */
+export function shouldShowProMoment(momentKey, o = {}) {
+    const def = PRO_MOMENTS[momentKey];
+    if (!def) return false;
+    const isPro = o.isPro || isProFeature;
+    if (!isPro(def.feature)) return false;
+    const entitled = o.entitled !== undefined ? o.entitled : hasProEntitlement();
+    if (entitled) return false;
+    const seen = o.seenMap || {};
+    const last = Date.parse(seen[momentKey] || '');
+    const now = o.now !== undefined ? o.now : Date.now();
+    return !last || (now - last) > PRO_MOMENT_COOLDOWN_MS;
+}
+
+/**
+ * 고가치 모멘트 넛지 카드 삽입 — 컨테이너 최상단에 비차단 카드로 부착.
+ * 쿨다운·entitlement·플랜 게이트 통과 시에만 렌더, 표시 즉시 seen 기록 + 계측.
+ * @param {HTMLElement|null} container 넛지를 붙일 결과 패널
+ * @param {string} momentKey PRO_MOMENTS 키
+ */
+export function mountProMoment(container, momentKey) {
+    if (!container || typeof document === 'undefined') return;
+    const def = PRO_MOMENTS[momentKey];
+    if (!def) return;
+    /** @type {Object.<string, string>} */
+    let seen = {};
+    try { seen = JSON.parse(safeGetItem(STORAGE_KEYS.PRO_MOMENT_SEEN) || '{}') || {}; } catch (e) { seen = {}; }
+    if (!shouldShowProMoment(momentKey, { seenMap: seen })) return;
+    seen[momentKey] = localDateTime();
+    safeSetItem(STORAGE_KEYS.PRO_MOMENT_SEEN, JSON.stringify(seen));
+    trackAction(`pro_moment:${momentKey}`); // UX-MET-04 — ':' 접두 키는 버킷 라벨로 해석
+
+    container.querySelector('.pro-moment-card')?.remove();
+    const card = document.createElement('div');
+    card.className = 'pro-moment-card';
+    card.innerHTML = `
+        <i class="fa-solid fa-gem" aria-hidden="true"></i>
+        <span class="pro-moment-text"><strong>${esc(def.label)}</strong>은(는) Pro 제공 예정 기능입니다 — 지금은 무료로 이용 중입니다.</span>
+        <div class="pro-moment-actions btn-row">
+            <button type="button" class="btn btn-sm btn-primary" data-click="showPlanCompare">플랜 비교</button>
+            <button type="button" class="btn btn-sm btn-secondary" data-pro-moment-dismiss aria-label="닫기">닫기</button>
+        </div>`;
+    card.querySelector('[data-pro-moment-dismiss]')?.addEventListener('click', () => card.remove());
+    container.prepend(card);
+}
+
+/** Pro 업그레이드 안내 모달 — PAYMENT_NOTICE.enabled 시 실결제 안내, 아니면 '준비 중' 표시 (PAY-02) */
 export function showUpgradeNotice(featureLabel, limitMessage) {
     const benefitItems = [`<li>${esc(featureLabel)} 저장 한도 무제한</li>`, ..._proBenefitItems()];
+    const planRows = PAYMENT_NOTICE.plans.map((p) =>
+        `<li><strong>${esc(p.name)}</strong> ${esc(p.period)} — <strong>${esc(p.price)}</strong>${p.note ? `<br><span class="pro-plan-note">${esc(p.note)}</span>` : ''}</li>`).join('');
+    const pay = PAYMENT_NOTICE.enabled ? `
+            <div class="pro-payment-notice">
+                <p class="pro-upgrade-sub"><strong>💳 Pro 결제 안내</strong> — 시험 기간권 (일찍 살수록 월 단가 할인)</p>
+                <ul class="pro-plan-list">${planRows}</ul>
+                <ul>${PAYMENT_NOTICE.methods.map((m) => `<li>${esc(m)}</li>`).join('')}</ul>
+                <p class="pro-payment-refund">${esc(PAYMENT_NOTICE.refundNotice)}</p>
+            </div>` : '';
+    const contactBtn = PAYMENT_NOTICE.enabled && PAYMENT_NOTICE.contactUrl
+        ? `<button class="app-confirm-cancel pro-payment-contact">${esc(PAYMENT_NOTICE.contactLabel)}</button>` : '';
     const { overlay, close } = _showDialog(`
         <div class="app-confirm-dialog dialog-card pro-upgrade-dialog" role="alertdialog" aria-modal="true" aria-labelledby="pro-upgrade-title">
-            <h3 id="pro-upgrade-title">💎 무료 한도 도달</h3>
+            <h3 id="pro-upgrade-title">💎 ${PAYMENT_NOTICE.enabled ? 'Pro로 업그레이드' : '무료 한도 도달'}</h3>
             <p>${esc(limitMessage || `${featureLabel}의 무료 플랜 한도에 도달했습니다.`)}</p>
             <div class="pro-upgrade-benefits">
-                <p class="pro-upgrade-sub"><strong>Pro 플랜(준비 중)</strong>에서는:</p>
+                <p class="pro-upgrade-sub"><strong>Pro${PAYMENT_NOTICE.enabled ? '' : ' 플랜(준비 중)'}에서는:</strong></p>
                 <ul>${benefitItems.join('')}</ul>
-            </div>
+            </div>${pay}
             <div class="app-confirm-actions">
+                ${contactBtn}
                 <button class="app-confirm-cancel app-confirm-compare">Free / Pro 비교</button>
                 <button class="app-confirm-ok">확인</button>
             </div>
         </div>
     `);
     overlay.querySelector('.app-confirm-compare')?.addEventListener('click', () => { close(); showPlanCompare(); });
+    const contactEl = overlay.querySelector('.pro-payment-contact');
+    if (contactEl) {
+        void reportEvent('payment_notice_view').catch(() => {});
+        contactEl.addEventListener('click', () => {
+            void reportEvent('payment_link_click').catch(() => {});
+            close();
+            window.open(PAYMENT_NOTICE.contactUrl, '_blank', 'noopener');
+        });
+    } else if (PAYMENT_NOTICE.enabled) {
+        void reportEvent('payment_notice_view').catch(() => {});
+    }
 }

@@ -753,6 +753,57 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
     font-weight: var(--font-weight-bold, 600);
 }
 
+/* 시험 카드 진도 요약 + 시험별 액센트 스왓치 (ES-06) */
+.exam-select-card[style*="--exam-accent"] .exam-select-icon {
+    color: var(--exam-accent);
+}
+.exam-select-card[style*="--exam-accent"].current {
+    border-color: var(--exam-accent);
+    box-shadow: 0 0 0 1px var(--exam-accent);
+}
+.exam-select-card[style*="--exam-accent"] .exam-select-current {
+    color: var(--exam-accent);
+}
+.exam-select-stats {
+    margin: 0 0 var(--space-3, 0.75rem);
+    font-size: var(--text-sm, 0.8rem);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
+    align-items: center;
+}
+.exam-select-stats-empty {
+    font-style: italic;
+}
+.exam-select-dday {
+    color: var(--exam-accent, var(--color-primary));
+    font-weight: var(--font-weight-bold, 600);
+    border: 1px solid var(--exam-accent, var(--color-primary));
+    border-radius: var(--radius-pill, 999px);
+    padding: 0 var(--space-2, 0.5rem);
+    font-size: var(--text-sm, 0.78rem);
+}
+.exam-select-dday.past {
+    color: var(--color-text-muted);
+    border-color: var(--color-border);
+}
+/* 콘텐츠 갱신·신규 배지 (ES-07) */
+.exam-select-change {
+    color: var(--color-success, #22c55e);
+    font-size: var(--text-sm, 0.8rem);
+    font-weight: var(--font-weight-bold, 600);
+    border: 1px solid var(--color-success, #22c55e);
+    border-radius: var(--radius-pill, 999px);
+    padding: 0 var(--space-2, 0.5rem);
+}
+.exam-select-change.is-new {
+    color: var(--exam-accent, var(--color-primary));
+    border-color: var(--exam-accent, var(--color-primary));
+}
+
 /* 대시보드 상세 분석 접이식 — 기본 접힘으로 첫 화면 복잡도 완화 */
 .analysis-fold {
     margin-top: var(--space-5);

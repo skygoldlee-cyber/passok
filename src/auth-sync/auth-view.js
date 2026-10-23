@@ -5,6 +5,7 @@ import { getSupabase, onAuthChange } from './supabase-client.js';
 import { showToast, showConfirm, trapFocus } from '../ui-utils.js';
 import { safeGetItem, safeSetItem, safeRemoveItem } from '../state.js';
 import { hasProEntitlement } from '../pro-upgrade.js';
+import { STORAGE_KEYS } from '../storage-keys.js';
 
 const el = id => /** @type {HTMLInputElement|null} */ (document.getElementById(id));
 const show = n => n && n.classList.remove('is-hidden');
@@ -54,7 +55,12 @@ export async function refreshAuthUI() {
         const emailEl = el('auth-account-email');
         if (emailEl) emailEl.textContent = user.email || '';
         const planEl = el('auth-account-plan');
-        if (planEl) planEl.textContent = hasProEntitlement() ? 'Pro' : 'Free';
+        if (planEl) {
+            const exp = safeGetItem(STORAGE_KEYS.PRO_EXPIRES_AT);
+            planEl.textContent = hasProEntitlement()
+                ? (exp ? `Pro (~${String(exp).slice(0, 10)})` : 'Pro')
+                : 'Free';
+        }
     } else {
         show(form); hide(account);
     }

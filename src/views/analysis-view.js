@@ -33,6 +33,7 @@ import { trackAction } from '../usage-stats.js';
 import { renderDashboard, onAnalysisRefresh } from './dashboard.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { compositeEstimate } from './score-estimate.js';
+import { mountProMoment } from '../pro-upgrade.js';
 
 /**
  * 학습 진단 뷰 렌더링 — renderDashboard()가 과목 카드·히트맵·차트를
@@ -47,6 +48,8 @@ export function renderAnalysisView() {
     _renderStudyRhythmInsight();
     _renderChapterWeakness();
     _renderPassGapInsight();
+    // ROAD-P6 — 진단 리포트 열람(aha 모멘트)에 비차단 Pro 넛지
+    mountProMoment(document.getElementById('analysis-view'), 'analysis_report');
 }
 
 // 백그라운드 통계 갱신 시 분석 뷰도 함께 갱신 — dashboard.js의 onAnalysisRefresh 훅

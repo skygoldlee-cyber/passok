@@ -188,8 +188,14 @@ import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage, get
 import { renderExamSelect, showExamSelect, selectExamAction } from './views/exam-select.js';
 import { initUiMode, toggleUiMode, toggleStudyTools } from './ui-mode.js';
 import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword } from './auth-sync/auth-view.js';
+import { showRedeemDialog, initPlanSync } from './pro-redeem.js';
 import { initSync, syncNow } from './auth-sync/sync.js';
 import { initErrorTelemetry } from './error-telemetry.js';
+import { maybeReportUsageSnapshot, reportSessionStart, initTelemetryQueueFlush } from './usage-telemetry.js';
+import {
+    isTelemetryAllowed, setTelemetryAllowed,
+    isTelemetryNoticeShown, markTelemetryNoticeShown,
+} from './telemetry-consent.js';
 import {
     populateSubjectSelects, populateExamCards, populateResourceCards, checkStorageWarning
 } from './app-dashboard.js';
@@ -201,6 +207,7 @@ import {
     initCommandPalette, openCommandPalette, closeCommandPalette,
     executePaletteResult
 } from './command-palette.js';
+import { initShortcutHelp } from './shortcuts-help.js';
 
 // --- 런타임 에러 안전망 (런타임 ReferenceError 등을 사용자에게 알림) ---
 window.addEventListener('error', function (event) {
@@ -223,6 +230,23 @@ function initApp() {
     const step = (label, fn) => { try { fn(); console.debug('[init] ' + label + ' OK'); return true; } catch (e) { console.error('[init] ' + label + ' 실패:', e); return false; } };
     // 런타임 오류 텔레메트리 — 가장 먼저 설치해 이후 초기화 실패도 수집 (미설정 시 no-op)
     step('initErrorTelemetry', () => initErrorTelemetry());
+    // 사용 스냅샷 텔레메트리 — UX-GATE 표본 회수, 하루 1회·익명·미설정 시 no-op (UX-MET-05)
+    step('maybeReportUsageSnapshot', () => { void maybeReportUsageSnapshot(); });
+    // 텔레메트리 퍼널 (UX-MET-06/07/08) — 방문 분모 + 오프라인 큐 플러시 + 최초 고지
+    step('telemetryConsentNotice', () => {
+        if (!isTelemetryNoticeShown()) {
+            showToast('PassOK는 익명 사용 통계를 수집해 학습 품질을 개선합니다 — 설정에서 언제든 끌 수 있습니다', 'info');
+            markTelemetryNoticeShown();
+        }
+    });
+    // 유입 채널(?src=) 캡처 — session_start.meta.entry_src·피드백 entry_src로 첨부 (최초 1회 보존, 전송 전에 캡처 필요)
+    step('captureEntrySource', captureEntrySource);
+    step('telemetrySessionStart', () => reportSessionStart());
+    step('syncTelemetryToggleLabel', () => {
+        const label = document.getElementById('telemetry-toggle-label');
+        if (label) label.textContent = isTelemetryAllowed() ? '켜짐' : '꺼짐';
+    });
+    step('initTelemetryQueueFlush', () => initTelemetryQueueFlush());
     step('initViewportHeight', initViewportHeight);
     step('loadProgress', loadProgress);
     step('checkStorageWarning', checkStorageWarning);
@@ -248,11 +272,15 @@ function initApp() {
     });
     // 계정 세션 복원/구독 — 비동기, 내부에서 오류를 삼켜 앱 초기화를 막지 않음
     step('initAuthView', () => { initAuthView(); });
+    // 서버 plan → pro_entitled 동기화 (PAY-03) — 부팅 1회 + 로그인 이벤트 구독, 비동기
+    step('initPlanSync', () => { void initPlanSync().catch(() => {}); });
     // 클라우드 동기화 — 쓰기 훅 등록 + 로그인 상태면 시작 pull (비동기·실패 무시)
     step('initSync', () => { initSync(); });
     step('setupThemeToggle', setupThemeToggle);
     // 통합 검색 팔레트 (Ctrl+K)
     step('initCommandPalette', initCommandPalette);
+    // 단축키 도움말 (? 키)
+    step('initShortcutHelp', initShortcutHelp);
     // 초기 뷰 렌더링
     step('renderDashboard', renderDashboard);
     step('updateGlobalStats', updateGlobalStats);
@@ -275,9 +303,6 @@ function initApp() {
             .map(id => document.getElementById(id)).filter(Boolean)
             .forEach(node => { /** @type {HTMLElement} */ (node).textContent = dispVer; });
     }
-
-    // 유입 채널(?src=) 캡처 — 피드백의 entry_src로 첨부 (최초 1회 보존)
-    step('captureEntrySource', captureEntrySource);
 
     // "의견 보내기" 신기능 힌트 — 설정 ⚙️ 점 + NEW 배지 (각 1회)
     step('initFeedbackHint', initFeedbackHint);
@@ -607,8 +632,17 @@ const DELEGATED_HANDLERS = {
     },
     // 계정/로그인 (Supabase Auth)
     openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword,
+    showRedeemCode: showRedeemDialog,
     showPlanCompare,
     showUsageStats,
+    /** 텔레메트리 opt-out 토글 (UX-MET-06) — 설정 패널 '사용 통계 전송' 항목 */
+    toggleTelemetry() {
+        const nowAllowed = !isTelemetryAllowed();
+        setTelemetryAllowed(nowAllowed);
+        const label = document.getElementById('telemetry-toggle-label');
+        if (label) label.textContent = nowAllowed ? '켜짐' : '꺼짐';
+        showToast(nowAllowed ? '사용 통계 전송이 켜졌습니다' : '사용 통계 전송이 꺼졌습니다 — 앞으로 이 기기에서 수집하지 않습니다', 'info');
+    },
     syncNow,
     /** 모의고사 문항 수 선택 행 토글 — 다른 과목의 열린 행은 닫는다 */
     toggleComboPicker(rowId) {

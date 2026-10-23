@@ -16,7 +16,8 @@ vi.mock('../../../src/ui-utils.js', () => ({
 }));
 
 import { loadIndexHtml } from '../helpers.js';
-import { loadFeaturePlan, proFeatureNotice, refreshProBadges } from '../../../src/pro-upgrade.js';
+import { loadFeaturePlan, proFeatureNotice, refreshProBadges, mountProMoment, shouldShowProMoment, showStoreError } from '../../../src/pro-upgrade.js';
+import { safeGetItem, safeSetItem } from '../../../src/state.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 
 function stubPlan(features) {
@@ -99,5 +100,78 @@ describe('PRO 배지 → 플랜 비교 단일 경로 (ROAD-P5)', () => {
         expect(badge.getAttribute('data-click')).toBeNull();
         expect(badge.getAttribute('role')).toBeNull();
         expect(badge.getAttribute('tabindex')).toBeNull();
+    });
+});
+
+describe('Pro 모멘트 넛지 (ROAD-P6)', () => {
+    it('pro 플랜 기능·미entitled·쿨다운 외 → 카드 표시 + seen 기록', async () => {
+        await stubPlan({ mock_exam: 'pro' });
+        document.body.innerHTML = '<div id="host"></div>';
+        mountProMoment(document.getElementById('host'), 'sim_result');
+        const card = document.querySelector('.pro-moment-card');
+        expect(card).toBeTruthy();
+        expect(card.textContent).toContain('실전 모의고사');
+        expect(card.querySelector('[data-click="showPlanCompare"]')).toBeTruthy();
+        const seen = JSON.parse(safeGetItem(STORAGE_KEYS.PRO_MOMENT_SEEN));
+        expect(seen.sim_result).toBeTruthy();
+    });
+
+    it('쿨다운 이내 재호출은 카드를 다시 띄우지 않는다', async () => {
+        await stubPlan({ mock_exam: 'pro' });
+        safeSetItem(STORAGE_KEYS.PRO_MOMENT_SEEN,
+            JSON.stringify({ sim_result: new Date().toISOString().slice(0, 19) }));
+        document.body.innerHTML = '<div id="host"></div>';
+        mountProMoment(document.getElementById('host'), 'sim_result');
+        expect(document.querySelector('.pro-moment-card')).toBeNull();
+    });
+
+    it('free 플랜 기능·entitled 사용자·알 수 없는 모멘트는 표시 안 함', async () => {
+        await stubPlan({ mock_exam: 'free' });
+        document.body.innerHTML = '<div id="host"></div>';
+        mountProMoment(document.getElementById('host'), 'sim_result');
+        expect(document.querySelector('.pro-moment-card')).toBeNull();
+        mountProMoment(document.getElementById('host'), 'nope');
+        expect(document.querySelector('.pro-moment-card')).toBeNull();
+        localStorage.setItem(STORAGE_KEYS.PRO_ENTITLED, '1');
+        await stubPlan({ analysis_report: 'pro' });
+        mountProMoment(document.getElementById('host'), 'analysis_report');
+        expect(document.querySelector('.pro-moment-card')).toBeNull();
+    });
+
+    it('shouldShowProMoment — 순수 판정 (플랜·entitlement·쿨다운)', () => {
+        const isPro = k => k === 'mock_exam';
+        const now = Date.now();
+        expect(shouldShowProMoment('sim_result', { isPro, entitled: false, seenMap: {}, now })).toBe(true);
+        expect(shouldShowProMoment('sim_result', { isPro, entitled: true, seenMap: {}, now })).toBe(false);
+        expect(shouldShowProMoment('sim_result', {
+            isPro, entitled: false, now,
+            seenMap: { sim_result: new Date(now - 86400000).toISOString() },
+        })).toBe(false); // 1일 전 — 쿨다운 내
+        expect(shouldShowProMoment('sim_result', {
+            isPro, entitled: false, now,
+            seenMap: { sim_result: new Date(now - 20 * 86400000).toISOString() },
+        })).toBe(true); // 20일 전 — 쿨다운 경과
+        expect(shouldShowProMoment('bogus', { isPro, now })).toBe(false);
+    });
+
+    it('닫기 버튼으로 카드 제거', async () => {
+        await stubPlan({ mock_exam: 'pro' });
+        document.body.innerHTML = '<div id="host"></div>';
+        mountProMoment(document.getElementById('host'), 'sim_result');
+        document.querySelector('[data-pro-moment-dismiss]').click();
+        expect(document.querySelector('.pro-moment-card')).toBeNull();
+    });
+});
+
+describe('showStoreError — 무료 한도 오류 분기', () => {
+    it('Free 플랜 한도 오류는 업그레이드 안내 모달로 라우팅된다', async () => {
+        const toast = vi.fn();
+        await stubPlan({ personal_analysis: 'pro' });
+        showStoreError({ error: 'Free 플랜 한도에 도달했습니다' }, '분석', toast);
+        expect(toast).not.toHaveBeenCalled();
+        expect(overlay() || document.querySelector('.pro-upgrade-dialog')).toBeTruthy();
+        // 일반 오류는 토스트로 위임
+        showStoreError({ error: '네트워크 오류' }, '분석', toast, '저장 실패');
+        expect(toast).toHaveBeenCalledWith('네트워크 오류', 'error');
     });
 });
