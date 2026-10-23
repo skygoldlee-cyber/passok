@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-24 Discord 커뮤니티 설계안 신규 — DOC-DSN-36
+
+- **신규 문서**: `docs/dev/design/DISCORD_COMMUNITY_DESIGN.md` — 시험별 홍보·소통용 공개 커뮤니티 서버 설계 (기존 `passok-ops` 운영 서버와 분리). 단일 서버 + 역할 게이트 카테고리, 포럼 채널 태그=manifest subjects 동기화, 파일럿 축소 채널→승격 시 확장, `exams.json.discordInvite` 선언 경로(DA-15 정합), 릴리스→시험 공지 webhook 자동발송(기존 `tools/lib/discord.js` 확장) 포함
+- **후속 — Phase 2 앱 측 구현 (ES-08)**: `exams.json.discordInvite` 선택 필드(현재 미선언 — 서버 개설 후 기입) + 설정 메뉴 'Discord 커뮤니티' 버튼(`community-btn`, 선언 시험만 노출, 새 탭 `noopener` 오픈). `listeners-app.js` 바인딩 + `ExamDef` 타입 + SPEC ES-08 추가, DOM 테스트 3건
+- **런북 연동**: NEW_EXAM_RUNBOOK §파일럿 운영에 "커뮤니티 표면 연동" 절차 + 체크리스트 항목 추가, PILOT_EXAM_PROMOTION 공통 잔여 작업에 Discord 카테고리 확장 단계 추가
+- **후속 — 개설 런북**: DOC-RBK-18 `DISCORD_COMMUNITY_SETUP.md` — 커뮤니티 서버 최초 1회 절차(Community 활성화·채널 트리·역할 게이트·Onboarding·AutoMod·초대 링크→`discordInvite` 연결·외부 시점 검증). README 운영·환경 인덱스에 DISCORD_ADMIN 누락 행도 함께 등록
+- **후속 — Phase 3 공지 자동발송 (AD-12)**: `tools/lib/discord.js`에 announce fan-out 추가 — `DISCORD_ANNOUNCE`(전체-공지)·`DISCORD_ANNOUNCE_<EXAM>`(시험별, 미등록 id env 스킵+경고·URL 중복 1회) webhook 맵. 배포 성공·스모크 통과 시 `deploy.js`의 `notifyCommunity()`가 release-notes 해당 버전 노트(내부 메타 행 제외)를 공지 채널로 발송 — 미설정·발송 실패도 배포 무영향. 유닛 테스트 4건 추가
+
 ## 2026-10-23 SPEC ID 상태 수명 주기 규약 — `폐기`·`통합` 상태 신설
 
 - **배경**: 제거된 기능의 ID가 취소선 표기만으로 `✅` 상태에 남아 추적 의미가 흐려짐 — ID 재사용·폐기 참조에 대한 규약 부재

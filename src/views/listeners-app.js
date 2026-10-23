@@ -1,5 +1,5 @@
 // src/views/listeners-app.js — 앱 셸 공통 이벤트 바인딩 (event-listeners.js §1에서 분리)
-// @spec UX-SET-05
+// @spec UX-SET-05,ES-08
 // 진도 초기화·변경 이력·온보딩·피드백 버튼, 설정 메뉴, OMR·대시보드 접이식.
 import { state, saveProgress, safeGetItem, safeSetItem, safeRemoveItem, listScopedKeys } from '../state.js';
 import { removeItemRaw } from '../storage.js';
@@ -12,6 +12,7 @@ import { showReleaseNotesModal, releaseNotes } from '../whats-new.js';
 import { showOnboardingModal } from '../onboarding.js';
 import { openShortcutHelp } from '../shortcuts-help.js';
 import { showFeedbackModal, dismissFeedbackHint, dismissFeedbackDot } from '../feedback.js';
+import { getActiveExam } from '../exam-context.js';
 
 export function bindAppListeners() {
     // 진도 초기화 버튼
@@ -63,6 +64,17 @@ export function bindAppListeners() {
         dismissFeedbackHint(); // NEW 배지 1회성 제거
         showFeedbackModal(state.currentView);
     });
+
+    // Discord 커뮤니티 초대 — 활성 시험이 exams.json에 discordInvite를 선언한 경우에만 노출.
+    // 시험 전환은 reload 기반이라 초기화 시점 1회 판정으로 충분하다.
+    const communityInvite = getActiveExam()?.discordInvite;
+    const communityBtn = document.getElementById('community-btn');
+    if (communityBtn && communityInvite) {
+        communityBtn.classList.remove('is-hidden');
+        communityBtn.addEventListener('click', () => {
+            window.open(communityInvite, '_blank', 'noopener');
+        });
+    }
 
     // 설정 메뉴 토글 — 외부 클릭/Escape/항목 선택 시 닫힘
     const settingsBtn = document.getElementById('settings-toggle-btn');

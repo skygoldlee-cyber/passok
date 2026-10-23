@@ -39,7 +39,7 @@ const { loadEnv } = require('../lib/env');
 const { stampSwVersion } = require('../build/stamp_sw_version.js');
 const { stampReleaseNotes } = require('../build/stamp_release_notes.js');
 const { parseStatusLine, isNoiseOnlyDiff: noiseOnlyDiffText } = require('../lib/git_status.js');
-const { postDiscord, eventEmbed } = require('../lib/discord.js');
+const { postDiscord, eventEmbed, announceRelease } = require('../lib/discord.js');
 
 // 팀 프로젝트는 개인 계정 기본 스코프로는 배포가 거부되므로(Not authorized),
 // .vercel/project.json의 orgId를 --scope로 명시한다. 개인 프로젝트(orgId 없음)면 생략.
@@ -65,6 +65,23 @@ function projectUrl() {
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// 커뮤니티 공지 — DISCORD_ANNOUNCE[_<EXAM>] 채널로 릴리스 노트 push (AD-12).
+// 채널 미설정 시 내부에서 조용히 skip — 발송 실패도 배포를 무효화하지 않는다.
+async function notifyCommunity(version, url) {
+    try {
+        const ann = await announceRelease(version, { url });
+        if (ann.sent) console.log(`📣 커뮤니티 공지 발송 — ${ann.sent}개 채널`);
+        if (ann.skippedUnknown && ann.skippedUnknown.length) {
+            console.warn(`⚠️  미등록 시험 공지 env 스킵: ${ann.skippedUnknown.join(', ')}`);
+        }
+        if (ann.failed && ann.failed.length) {
+            console.warn(`⚠️  커뮤니티 공지 일부 실패: ${ann.failed.map((f) => `${f.key}(${f.reason})`).join(', ')}`);
+        }
+    } catch (e) {
+        console.warn(`⚠️  커뮤니티 공지 발송 실패 (배포는 완료됨): ${e.message}`);
+    }
+}
 
 // 배포 스테이징 — 작업 트리 전체를 .vercelignore 규칙으로 필터링해 임시 디렉터리로
 // 복사한다. vercel --archive=tgz는 ignore 규칙 없이 작업 트리를 통째로 아카이브
@@ -459,7 +476,11 @@ async function main() {
             }
             console.log('✅ 프로덕션 스모크 통과');
             await postDiscord(eventEmbed('배포 완료', true, fields));
+            await notifyCommunity(stamped, baseUrl);
         });
+    } else if (stamped) {
+        // 스모크 대상 URL을 모르는 환경에서도 커뮤니티 공지는 발송
+        await notifyCommunity(stamped, baseUrl);
     }
 }
 

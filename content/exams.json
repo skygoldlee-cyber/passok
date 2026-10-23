@@ -1,6 +1,6 @@
 {
    "schemaVersion": 1,
-   "note": "시험 레지스트리 — 새 시험은 이 파일에 엔트리를 추가하고 content/exams/<id>/ + data/exams/<id>/ 구조로 콘텐츠를 배치한다 (모든 시험이 대칭 구조). data/exams.js 는 tools/build_exams_list.js가 이 파일에서 생성한다.",
+   "note": "시험 레지스트리 — 새 시험은 이 파일에 엔트리를 추가하고 content/exams/<id>/ + data/exams/<id>/ 구조로 콘텐츠를 배치한다 (모든 시험이 대칭 구조). data/exams.js 는 tools/build_exams_list.js가 이 파일에서 생성한다. 선택 필드 discordInvite: 시험별 Discord 초대 URL — 선언 시 설정 메뉴에 커뮤니티 버튼 노출 (DOC-DSN-36).",
    "exams": [
       {
          "id": "cosmetic",
