@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-24 빌드 고아 번들 스윕 — manifest 엔트리 제거 시 잔존 생성물 정리
+
+- `removeOrphanBundles` 공통 헬퍼 추가(exam_targets.js) — 미선언 키의 번들 파일 삭제
+- 적용 경로: `exams/`·`subjects/` 해시 번들(index.js), `<key>_data.<hash>.js` 지식DB, `supplements/<key>.js`, `drills/ox_*`·`combo_*` (combo_index·combo_pilot은 비키 파일로 보존)
+- 배경: insadj 과목4 엔트리 제거 후 `subject4.*.js` 잔존 → build:drills 디렉터리 순회에서 "subject 값 이상" 오류로 check:all 실패 — 키별 청소(clearOldBundles)는 선언 키만 커버하는 구조적 갭
+- 부수 효과: insadj `supplements/second.js` 실물 스테일 파일 발견·제거
+- 유닛 테스트 2건 추가 (build-pipeline.test.js 17→19)
+
 ## 2026-10-24 CI 실패 수정 — 주관식 계수 정규식 + 테스트 정합
 
 - check_exam_onboard.js 주관식 계수 정규식 복원(→ — 패치 시 이스케이프 유실)
