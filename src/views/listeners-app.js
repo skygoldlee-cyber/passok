@@ -1,6 +1,6 @@
 // src/views/listeners-app.js — 앱 셸 공통 이벤트 바인딩 (event-listeners.js §1에서 분리)
 // @spec UX-SET-05,ES-08
-// 진도 초기화·변경 이력·온보딩·피드백 버튼, 설정 메뉴, OMR·대시보드 접이식.
+// 진도 초기화·변경 이력·온보딩·피드백 버튼, 설정·도움말 메뉴, OMR·대시보드 접이식.
 import { state, saveProgress, safeGetItem, safeSetItem, safeRemoveItem, listScopedKeys } from '../state.js';
 import { removeItemRaw } from '../storage.js';
 import { RESET_KEYS, isDailyCompletedKey } from '../storage-keys.js';
@@ -76,33 +76,41 @@ export function bindAppListeners() {
         });
     }
 
-    // 설정 메뉴 토글 — 외부 클릭/Escape/항목 선택 시 닫힘
-    const settingsBtn = document.getElementById('settings-toggle-btn');
-    const settingsPanel = document.getElementById('settings-panel');
-    if (settingsBtn && settingsPanel) {
-        const closeSettings = () => {
-            settingsPanel.classList.add('is-hidden');
-            settingsBtn.setAttribute('aria-expanded', 'false');
+    // 헤더 드롭다운 메뉴 공통 바인딩 — 설정(⚙️)·도움말(?) 패널.
+    // 항목 선택·외부 클릭·Escape로 닫히고, 한 번에 하나만 열린다.
+    const menuClosers = [];
+    const closeAllMenus = () => menuClosers.forEach(close => close());
+    const bindDropMenu = (btnId, panelId, onOpen) => {
+        const btn = document.getElementById(btnId);
+        const panel = document.getElementById(panelId);
+        if (!btn || !panel) return;
+        const close = () => {
+            panel.classList.add('is-hidden');
+            btn.setAttribute('aria-expanded', 'false');
         };
-        settingsBtn.addEventListener('click', (e) => {
+        menuClosers.push(close);
+        btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const willOpen = settingsPanel.classList.contains('is-hidden');
-            settingsPanel.classList.toggle('is-hidden');
-            settingsBtn.setAttribute('aria-expanded', String(willOpen));
-            if (willOpen) dismissFeedbackDot(); // 패널 첫 오픈 → 점 제거
-        });
-        settingsPanel.addEventListener('click', (e) => {
-            if ((/** @type {Element|null} */ (e.target))?.closest('.settings-item')) closeSettings();
-        });
-        document.addEventListener('click', (e) => {
-            if (!settingsPanel.classList.contains('is-hidden') && !(/** @type {Element|null} */ (e.target))?.closest('.settings-menu')) {
-                closeSettings();
+            const willOpen = panel.classList.contains('is-hidden');
+            closeAllMenus();
+            if (willOpen) {
+                panel.classList.remove('is-hidden');
+                btn.setAttribute('aria-expanded', 'true');
+                onOpen?.();
             }
         });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeSettings();
+        panel.addEventListener('click', (e) => {
+            if ((/** @type {Element|null} */ (e.target))?.closest('.settings-item')) closeAllMenus();
         });
-    }
+    };
+    bindDropMenu('settings-toggle-btn', 'settings-panel');
+    bindDropMenu('help-toggle-btn', 'help-panel', dismissFeedbackDot); // 패널 첫 오픈 → 점 제거
+    document.addEventListener('click', (e) => {
+        if (!(/** @type {Element|null} */ (e.target))?.closest('.settings-menu')) closeAllMenus();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeAllMenus();
+    });
 
     // OMR 답안지 접이식 — 모바일(≤900px)에서는 기본 접힘, 문제 영역 우선
     const omrToggle = document.getElementById('omr-toggle');

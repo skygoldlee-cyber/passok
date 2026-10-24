@@ -80,10 +80,27 @@ test('UX-SET-04: 버전 표기가 설정 패널 하단에 있다', () => {
   assert.ok(appJs.includes('settings-version'), '버전 값 주입 코드');
 });
 
-test('UX-SET-05: 항목 선택·외부 클릭·Escape로 설정 패널이 닫힌다', () => {
-  assert.ok(/settings-item.*closeSettings|closeSettings\(\)/.test(listeners), '항목 클릭 시 닫힘');
+test('UX-SET-05: 항목 선택·외부 클릭·Escape로 드롭다운 메뉴가 닫힌다', () => {
+  assert.ok(/settings-item[\s\S]*closeAllMenus/.test(listeners), '항목 클릭 시 닫힘');
   assert.ok(/Escape/.test(listeners), 'Escape 닫힘');
-  assert.ok(/settings-menu/.test(listeners) && /closeSettings/.test(listeners), '외부 클릭 닫힘');
+  assert.ok(/settings-menu/.test(listeners) && /closeAllMenus/.test(listeners), '외부 클릭 닫힘');
+});
+
+test('UX-SET-07: 도움말 메뉴가 설정과 분리된 드롭다운으로 존재한다', () => {
+  assert.ok(indexHtml.includes('id="help-toggle-btn"'), '도움말 토글 버튼');
+  assert.ok(/bindDropMenu\('help-toggle-btn',\s*'help-panel'/.test(listeners), '도움말 패널 바인딩');
+  const settingsIdx = indexHtml.indexOf('id="settings-panel"');
+  const settingsEnd = indexHtml.indexOf('id="import-file-input"');
+  const helpIdx = indexHtml.indexOf('id="help-panel"');
+  assert.ok(settingsIdx > -1 && helpIdx > settingsEnd, '설정 패널 뒤에 도움말 패널');
+  // 도움말성 항목은 도움말 패널 소속이며 설정 패널 구간에는 남지 않는다
+  for (const id of ['onboarding-btn', 'shortcut-help-btn', 'whats-new-btn', 'feedback-btn', 'community-btn']) {
+    const idx = indexHtml.indexOf(`id="${id}"`);
+    assert.ok(idx > helpIdx, `${id}는 도움말 패널 소속`);
+    assert.ok(!(idx > settingsIdx && idx < settingsEnd), `${id}는 설정 패널 밖`);
+  }
+  const statsIdx = indexHtml.indexOf('data-click="showUsageStats"');
+  assert.ok(statsIdx > helpIdx, '내 사용 통계는 도움말 패널 소속');
 });
 
 // ---------- UX-FB: 피드백·알림 ----------

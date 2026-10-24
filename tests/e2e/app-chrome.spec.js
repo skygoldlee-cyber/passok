@@ -79,11 +79,25 @@ test.describe('설정 메뉴', () => {
         // 4) 재오픈 → 항목 선택 → 닫힘 (항목의 부수 동작과 무관하게 패널은 닫혀야 함)
         await toggle.click();
         await expect(panel).not.toHaveClass(/is-hidden/);
-        await page.locator('#whats-new-btn').click();
+        await page.locator('#settings-panel [data-click="showPlanCompare"]').click();
         await expect(panel).toHaveClass(/is-hidden/);
+        await page.evaluate(() => {
+            document.querySelectorAll('#pro-upgrade-overlay, #app-confirm-overlay, .modal-overlay, [role="dialog"]').forEach(el => {
+                if (el.id === 'pwa-install-modal') el.classList.add('is-hidden');
+                else el.remove();
+            });
+        });
+
+        // 5) 도움말 메뉴도 같은 닫힘 계약 — 토글 오픈 → 항목 선택 → 닫힘
+        const helpPanel = page.locator('#help-panel');
+        await page.locator('#help-toggle-btn').click();
+        await expect(helpPanel).not.toHaveClass(/is-hidden/);
+        await page.locator('#whats-new-btn').click();
+        await expect(helpPanel).toHaveClass(/is-hidden/);
         await page.evaluate(() => {
             document.querySelectorAll('#app-confirm-overlay, .modal-overlay, [role="dialog"]').forEach(el => {
                 if (el.id === 'pwa-install-modal') el.classList.add('is-hidden');
+                else el.remove();
             });
         });
     });

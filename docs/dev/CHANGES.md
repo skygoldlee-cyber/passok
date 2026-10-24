@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-25 설정 메뉴 분할 — ⚙️ 설정 + ? 도움말 2메뉴 체계
+
+- 헤더 `?` 도움말 메뉴 신설 (`help-toggle-btn`/`help-panel`) — 안내(시작 안내·단축키·변경 이력) + 활동·소통(내 사용 통계·의견 보내기·Discord) 이관. 설정 패널은 계정/데이터/보기·도구/앱 4그룹으로 축소 (최대 17→10항목)
+- '플랜 안내'+'라이선스 코드' 항목 통합 — 플랜 비교 모달 하단 '라이선스 코드 입력' 버튼(`data-click="showRedeemCode"` 위임 + 모달 close)으로 편입, 설정 항목은 '플랜 안내 · 라이선스 코드' 하나로
+- `listeners-app.js` 드롭다운 바인딩 공용화 (`bindDropMenu`/`closeAllMenus` — 동시 1개 오픈·외부 클릭·Escape, UX-SET-05 계약 동일). 피드백 NEW 도트 타겟 ⚙️→? 버튼 이동 (`feedback_dot_seen` 키 유지)
+- 사용자 매뉴얼 설정/도움말 표 분리 + 경로 문구(학습안내서·formula_manual·런북·P-UI-1) 갱신, docs_md·exams.js 재생성. UX-SET-07 불변 테스트 신설
+- 테스트 갱신: 도트 셀렉터·E2E 진입 경로(사용 통계·변경 이력 클릭 전 ? 오픈) + 도움말 토글·상호배타 케이스 추가
+
 ## 2026-10-25 파일명 대소문자 규약 코드화 — `check:filenames` 게이트
 
 - CODE_CONVENTIONS §2.1 신설: 영역별 패턴(src/tests=kebab · tools=snake · docs/*.md=SCREAMING · *.json=단일패턴 · 자산=kebab)

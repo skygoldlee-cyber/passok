@@ -175,7 +175,7 @@ function _fmtDate(iso) {
 }
 
 /**
- * 내 사용 통계 모달 — 설정 메뉴에서 연다.
+ * 내 사용 통계 모달 — 도움말 메뉴에서 연다.
  * 뷰 라벨은 router.getViewTitles를 동적 import로 해석 (navigation→usage-stats
  * 정적 import 경로와의 순환 참조 회피 — state.js의 study-tracker 패턴과 동일).
  */
