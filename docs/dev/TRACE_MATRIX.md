@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 34b60694c6af7007
+> 입력 해시: b508268aee80c17e
 > 생성: 2026-10-24 · 원천: SPEC.md(595개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -932,6 +932,7 @@
 | DOC-DSN-37 | docs/dev/design/PROMOTION_DESIGN.md | AD-10, AD-11, AD-12, AU-09, DA-15, ES-08 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
+| DOC-IDX-03 | docs/assets/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |
 | DOC-PPL-02 | ref-pipeline/audiobook/README.md | AO-01, AO-02, AO-03, AO-04, AO-05 |
 | DOC-PPL-03 | ref-pipeline/audiobook/AUDIOBOOK_SUMMARY.md | AO-01, AO-02, AO-03, AO-04, AO-05 |
@@ -981,3 +982,7 @@
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
 없음 — 소스 연결된 모든 요구사항에 테스트 참조가 있음.
+
+## 부록 C — 관련 SPEC ID 헤더 누락 문서
+
+- docs/assets/README.md
