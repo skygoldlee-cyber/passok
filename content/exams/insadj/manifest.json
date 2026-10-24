@@ -135,11 +135,11 @@
   ],
   "integratedExam": {
     "questionsPerSubject": {
-      "contract": 40,
-      "act": 40,
-      "theory": 40
+      "contract": 20,
+      "act": 20,
+      "theory": 20
     },
-    "examTimeMin": 120,
+    "examTimeMin": 60,
     "passAverage": 60,
     "subjectFailBelow": 40
   },
