@@ -81,21 +81,21 @@
       "key": "subject1",
       "subject": "insurance",
       "part": 1,
-      "title": "상법 보험편 (8제)",
+      "title": "상법 보험편 (22제)",
       "file": "과목1_문제은행.md"
     },
     {
       "key": "subject2",
       "subject": "disaster",
       "part": 2,
-      "title": "농어업재해보험법령 및 손해평가요령 (8제)",
+      "title": "농어업재해보험법령 및 손해평가요령 (22제)",
       "file": "과목2_문제은행.md"
     },
     {
       "key": "subject3",
       "subject": "agronomy",
       "part": 3,
-      "title": "농학개론(재배학·원예작물학) (8제)",
+      "title": "농학개론(재배학·원예작물학) (22제)",
       "file": "과목3_문제은행.md"
     }
   ],
