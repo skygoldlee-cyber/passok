@@ -141,6 +141,7 @@ npm.cmd run check:escape                # HTML 이스케이프 싱크 규약 —
 npm.cmd run check:uistyle               # UI 스타일 규약 — 마크업 인라인 style 속성 전면 금지 + JS .style.display 조작·인라인 on* 핸들러·네이티브 alert/confirm/prompt + JS 템플릿 정적 style= 기준선 래칫(display:none 즉시 금지·동적 --var:${x}만 허용) (check:ci·CI 게이트, CODE_CONVENTIONS §4, 명시 면제: 라인에 style-ok 토큰)
 npm.cmd run check:zlayer                # z-index 계층 계약 — 뷰 오버레이 ≤--z-sticky · 앱 크롬 --z-popover 단독(chromePatterns) · takeover ≥--z-drawer · 사이 대역 금지 (check:ci·CI 게이트, UX-SET-06 — 설정 패널 오클루전 재발 차단, 예외는 tools/config/layer_registry.json)
 npm.cmd run check:diffcov               # 변경 라인 차등 커버리지 — git diff 헝크 브랜치 ≥80%·신규 파일 ≥85% (CI 게이트, 커버리지 리포트 부재 시 스킵 — coverage:all 선실행 시 로컬 활성, -- --ref <base>)
+npm.cmd run check:filenames             # 파일명 대소문자 규약 — 영역별 kebab/snake/SCREAMING 패턴, 신규 위반만 차단 (check:ci·CI 게이트, CODE_CONVENTIONS §2.1 — --update=기준선 단조 감소)
 npm.cmd run check:seedkeys              # 테스트 시드 키 스코프 정합 — GLOBAL_KEYS 전환 키의 `examId:` 스코프 시드 차단 (시드 무력화 드리프트, check:docs 단계, 명시 면제: 라인에 seedkey-ok 토큰)
 npm.cmd run check:teststats             # 문서 테스트 수치 ↔ test_stats.json 실측 정합 — README·TESTING의 고정 수치 스테일 차단 (check:docs 단계 — 정적 카운트 드리프트 ±12%·인용 밴드 0.80~1.05×, 갱신은 stats:stamp)
 npm.cmd run stats:stamp                 # 테스트 수치 재스탬프 — unit 실행·vitest list·playwright --list 실측 → test_stats.json + 문서 인용을 `N+` 바닥 표기로 갱신

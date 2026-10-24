@@ -122,6 +122,7 @@ const CI_STEPS = [
   npmStep('ci:escape', 'check:escape', '규약', 'HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간)', { diffScoped: true, prio: 'p0' }),
   npmStep('ci:uistyle', 'check:uistyle', '규약', 'UI 스타일 규약 — 인라인 style·JS display 조작·인라인 핸들러·네이티브 다이얼로그 금지', { diffScoped: true, prio: 'p0' }),
   npmStep('ci:zlayer', 'check:zlayer', '규약', 'z-index 계층 계약 — 앱 크롬 대역 보호·금지 대역 차단 (UX-SET-06)', { diffScoped: true, prio: 'p0' }),
+  npmStep('ci:filenames', 'check:filenames', '규약', '파일명 대소문자 규약 — 영역별 kebab/snake/SCREAMING 패턴, 신규 위반 차단 (CODE_CONVENTIONS §2.1)', { prio: 'p0' }),
   nodeStep('ci:docsync', 'tools/check/check_doc_sync.js', '문서', '소스 변경 시 문서 갱신 강제', { args: ['--ref', 'origin/main'] }),
   nodeStep('ci:testfirst', 'tools/check/check_test_first.js', '테스트', '로직 변경 시 테스트 동반 강제', { args: ['--ref', 'origin/main'], prio: 'p0' }),
   npmStep('ci:specrefs', 'check:specrefs', '추적', 'SPEC↔@spec 스테일 참조 + 테스트 갭 기준선', { prio: 'p0' }),
