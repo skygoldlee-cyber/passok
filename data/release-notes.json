@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261024-f9fc3fc",
+    "date": "2026-10-24",
+    "notes": [
+      "[정리·deps] npm audit fix — dev 의존성 취약점 3건 해소 [no-docs]",
+      "[문서·runbook] Discord 초대 URL 발급 절차 세분화 — 만료 없음 설정·시험별 추적",
+      "[테스트·gates] discord 공지 테스트 env 격리 — .env 실키 재주입 차단",
+      "[기능·discord] 커뮤니티 설계·개설 런북 + 시험별 초대 버튼·릴리스 공지 (ES-08·AD-12)",
+      "[정리·release] v20261023-7f1af2f 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261023-7f1af2f",
     "date": "2026-10-23",
     "notes": [
@@ -190,20 +201,6 @@
     "notes": [
       "[기능·check] 시험 팩 온보딩·승격 진단 게이트 (check:onboard)",
       "[정리·release] v20261022-0ad2303 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261022-0ad2303",
-    "date": "2026-10-22",
-    "notes": [
-      "[수정·ci] vitest 커버리지 제외 경로를 src/pwa/ 이동에 맞춰 갱신 — 분모 누수로 임계치 미달 해소",
-      "[CI] E2E 샤딩·브라우저/npm 캐시·unit 중복 실행 제거 — 벽시계 ~6min → ~3~4min 목표",
-      "[수정·ci] reader/auth-sync 이동 누락 경로 수정 — link-lint 동적 import·keepalive·vitest 커버리지 제외 경로",
-      "[테스트·gates] PF-16 스캔 대상에 src/{pwa,auth-sync,reader}/ 추가 — 그룹화 후속",
-      "[리팩터링·src] reader 도메인 14개 모듈을 src/reader/로 분리 — 점진 그룹화 완료",
-      "[리팩터링·src] auth/sync 4개 모듈을 src/auth-sync/로 분리 — pwa/ 파일럿 후속 그룹화",
-      "[리팩터링·src] pwa-* 3개 모듈을 src/pwa/로 분리 — 디렉터리 그룹화 파일럿",
-      "[정리·release] v20261022-c1326cb 스탬프 확정 [no-docs]"
     ]
   }
 ]
