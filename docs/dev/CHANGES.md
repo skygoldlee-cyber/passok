@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-24 indsafe 필기 과목 문항 증산 — 과목당 8→22문 (6과목 132문)
+
+- ai:coverage 갭 기준 6과목 초안 생성 후 과목당 14문 선별 편입 (8→22, 합계 48→132)
+- 표·마커 장식 라인 인용이 sync 미검증 → 5건 스왑으로 미발견 0건 (선별 풀은 표 형식 라인 제외 규칙 추가)
+- integratedExam(20문/과목·180분)은 실측과 이미 정합 — 추가 변경 없음
+- 검증: sync 미발견 0 · build:data · build:drills · check:onboard(indsafe 132문) 통과
+
 ## 2026-10-24 insadj 승격 보류 — 전 과목 ≥20문 게이트 미충족 확인
 
 - **게이트 확인**: check:onboard는 manifest 전 과목(객관식 `exams` 외 주관식 `written` 전용 과목 포함)에 과목당 ≥20문 요구 — insadj는 `second`(참고 4문)과 2차 주관식 3과목(prop·vehicle·bodily, `### S` 각 8·8·9문)이 미달 → comingSoon 해제 시 "정식 시험인데 과목 문항 부족" 경고 + `exam-onboard` 유닛 테스트 실패 확인 후 원복

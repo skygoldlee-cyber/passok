@@ -73,22 +73,22 @@
   },
   "exams": {
     "subject1": {
-      "questions": 8
+      "questions": 22
     },
     "subject2": {
-      "questions": 8
+      "questions": 22
     },
     "subject3": {
-      "questions": 8
+      "questions": 22
     },
     "subject4": {
-      "questions": 8
+      "questions": 22
     },
     "subject5": {
-      "questions": 8
+      "questions": 22
     },
     "subject6": {
-      "questions": 8
+      "questions": 22
     }
   }
 }
