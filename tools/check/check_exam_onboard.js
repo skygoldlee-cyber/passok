@@ -88,7 +88,7 @@ for (const t of targets) {
         if (!w.key || !w.file) continue;
         const wPath = path.join(ROOT, t.contentRoot, '문제은행', w.file);
         if (!fs.existsSync(wPath)) continue;
-        const sN = (fs.readFileSync(wPath, 'utf8').match(/^###s*Sd+/gm) || []).length;
+        const sN = (fs.readFileSync(wPath, 'utf8').match(/^###\s*S\d+/gm) || []).length;
         qBySubject[w.key] = (qBySubject[w.key] || 0) + sN;
     }
 

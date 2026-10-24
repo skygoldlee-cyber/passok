@@ -102,9 +102,9 @@ test('parseWrittenBank: ⚖️ 인용 링크 → path+line 해석', () => {
 
 test('parseWrittenBank: 실제 2차 파일 파싱 (lossadj 팩)', () => {
     const md = readFileSync(
-        join(ROOT, 'content/exams/lossadj/문제은행/2차_주관식_연습.md'), 'utf8');
+        join(ROOT, 'content/exams/lossadj/문제은행/2차_손해평가_주관식.md'), 'utf8');
     const bank = parseWrittenBank(md);
-    assert.equal(bank.questions.length, 14);
+    assert.equal(bank.questions.length, 34);
     // 전 문항에 문제·모범답안·배점·인용이 존재해야 한다
     for (const q of bank.questions) {
         assert.ok(q.problem.length > 0, `${q.id} 문제 누락`);
@@ -154,24 +154,24 @@ test('WP-04: 진행 저장은 시험 스코프 키이며 백업 대상', () => {
     assert.ok(BACKUP_KEYS.includes(STORAGE_KEYS.WRITTEN_PRACTICE), 'BACKUP_KEYS 누락');
     // 시드: lossadj 스코프 키에 자기채점 진행 — d(완료ts)만 완료로 집계
     _mockStorage.setItem('lossadj:' + STORAGE_KEYS.WRITTEN_PRACTICE, JSON.stringify({
-        '2차_주관식_연습': {
+        '2차_손해평가_주관식': {
             S1: { a: '답안', c: [0, 1], d: 1729900000000 },
             S2: { a: '작성중', c: [], d: null },
             S3: { a: '', c: [], d: null }
         }
     }));
-    assert.deepEqual(WrittenPractice.getProgress('2차_주관식_연습'), { done: 1 });
+    assert.deepEqual(WrittenPractice.getProgress('2차_손해평가_주관식'), { done: 1 });
     assert.deepEqual(WrittenPractice.getProgress('없는파일'), { done: 0 });
     // 객관식 isAnswered와 분리 — 진행 키는 WRITTEN_PRACTICE에만 쓴다
     assert.ok(!('isAnswered' in (JSON.parse(
-        _mockStorage.getItem('lossadj:' + STORAGE_KEYS.WRITTEN_PRACTICE))['2차_주관식_연습'].S1)));
+        _mockStorage.getItem('lossadj:' + STORAGE_KEYS.WRITTEN_PRACTICE))['2차_손해평가_주관식'].S1)));
 });
 
 /* ---------- WP-05: ⚖️ 인용 → 문제집 뷰어 연동 데이터 ---------- */
 
 test('WP-05: 인용 refs는 뷰어가 필요로 하는 path+line을 제공', () => {
     const md = readFileSync(
-        join(ROOT, 'content/exams/lossadj/문제은행/2차_주관식_연습.md'), 'utf8');
+        join(ROOT, 'content/exams/lossadj/문제은행/2차_손해평가_주관식.md'), 'utf8');
     const bank = parseWrittenBank(md);
     for (const q of bank.questions) {
         for (const r of q.refs) {
