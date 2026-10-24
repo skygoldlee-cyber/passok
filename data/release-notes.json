@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261025-1ecfe33",
+    "date": "2026-10-25",
+    "notes": [
+      "[정리·trace] DOC-IDX-03 반영 TRACE_MATRIX 재생성 [no-docs]",
+      "[문서·assets] QR 자산 정리 — 2홈 체계 + 인덱스(DOC-IDX-03) + kebab 네이밍 통일",
+      "[정리·release] v20261025-c1ed9ae 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-c1ed9ae",
     "date": "2026-10-25",
     "notes": [
@@ -174,15 +183,6 @@
       "[문서·design] OAuth 리다이렉트 URI 등록 위치·값 구분 기록 (AU-09)",
       "[문서·design] OAuth 적용 상태·카카오 콘솔 개편 경로 기록 (AU-09)",
       "[정리·release] v20261023-f093682 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261023-f093682",
-    "date": "2026-10-23",
-    "notes": [
-      "[기능] 소셜 로그인 Google·Kakao (AU-09)",
-      "[문서] 인증 메일 발신자명 Passmula → PassOK — SMTP 적용값과 문서 정합",
-      "[정리·release] v20261023-4685cbb 스탬프 확정 [no-docs]"
     ]
   }
 ]
