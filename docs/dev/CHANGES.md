@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-24 설계 문서 보완 — PROMOTION §8 지표·제약, PAYMENT §9 방어·행정 요건
+
+- **PROMOTION_DESIGN**: §8 순서 모순 정정 — "채널 확장 전 계측 선행" 원칙에 맞춰 P6(UTM 계측)을 5→3번으로 상향 + 항목별 성공 지표 열 추가. §0에 범위 밖(채널 운영 실행) 명시, P1(og:image 절대 URL·시험별 분기 불가 제약)·P2(share files 폴백)·P3(타입·게이트·테스트 선행 작업)·P5(네이버 JS 렌더링 약함 — 정적 랜딩 필수 조건)·P6(storage.js·telemetry 화이트리스트·첫 진입 값 보존) 기술 제약 보강
+- **PAYMENT_PILOT_DESIGN §9**: 선행 조건에 통신판매업 신고·현금영수증/부가세 의무 추가, 수수료 참고치 주석, B안에 PWA 결제 리다이렉트 제약(AU-09 동형 — 설치형 PWA 복귀 불가 → 브라우저 전용 유도)·위변조/멱등 방어(amount·orderId↔uid 대조·이중 confirm·웹훅 서명) 명시, 미결정에 연장 구매 정책·결제 실패/부분취소 경로 추가, §2 표에 §9 포인터
+
 ## 2026-10-24 향후 카드 결제 선택안 문서화 — PAYMENT_PILOT_DESIGN §9
 
 - **문서 갱신**: `docs/dev/design/PAYMENT_PILOT_DESIGN.md` §9 "향후 카드 결제 — 정식 경로 선택안" 추가 — 수동 결제(선실험) 이후 본실험 정식 경로의 선택안 비교(토스페이먼츠 결제링크 브릿지 · 결제위젯+Edge Function · 포트원 · 해외 MoR)와 B안 구현 개요(paymentKey confirm → profiles 직접 갱신 — `redeem_code` entitlement 경로 재사용)
