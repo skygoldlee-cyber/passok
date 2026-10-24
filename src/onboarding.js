@@ -30,7 +30,7 @@ function _stepBody(step) {
     const minDays = getMinExamLeadDays();
     if (step === 0) {
         return `
-            <p class="onboarding-step-body">몇 가지만 설정하면 ${esc(getExamAppName())}이 시험일까지의 계획을 자동으로 만들어 드립니다.</p>
+            <p class="onboarding-step-body">몇 가지만 설정하면 ${esc(getExamAppName())}에서 시험일까지의 계획을 자동으로 만들어 드립니다.</p>
             <label class="onboarding-field">
                 <span class="onboarding-field-label"><i class="fa-solid fa-calendar-day" aria-hidden="true"></i> 시험일 (선택)</span>
                 <input type="date" id="onboarding-exam-date" class="form-input" value="${esc(examDate)}" min="${todayKey()}">
