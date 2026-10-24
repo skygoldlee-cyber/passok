@@ -42,7 +42,7 @@ const fs = require('fs');
 const path = require('path');
 const { stableId } = require('./id_factory.js');
 const { inferTags } = require('./drill-utils.js');
-const { getExamTargets, getSubjectMaps, getDefaultExamRoots } = require('./exam_targets.js');
+const { getExamTargets, getSubjectMaps, getDefaultExamRoots, removeOrphanBundles } = require('./exam_targets.js');
 const { extractRefAtoms } = require('./ref_statements.js');
 const { makeAnchorResolver, parseCitationTarget } = require('./textbook_anchors.js');
 
@@ -821,6 +821,14 @@ async function buildForExam(target) {
       allErrs.slice(0, 8).forEach(e => console.log('   -', e));
       if (allErrs.length > 8) console.log(`   … 외 ${allErrs.length - 8}건`);
     }
+  }
+
+  // 입력 번들이 사라진 키의 잔존 산출물 정리 — combo_index(파생 인덱스)·
+  // combo_pilot(수작업 파일럿)은 키 산출물이 아니므로 유지 대상에 포함한다
+  if (!DRY_RUN) {
+    removeOrphanBundles(OUT_DIR,
+      new Set([...Object.keys(comboCounts), 'index', 'pilot']), /^combo_(.+)\.js$/)
+      .forEach(f => console.log(`[combo-drills] 고아 드릴 삭제: ${f}`));
   }
 
   // 과목별 복수정답형 문항 수 인덱스 — 모의고사 카드의 "전체 N문" 라벨용.

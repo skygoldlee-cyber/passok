@@ -226,7 +226,7 @@ npm run hooks:install
 | 43 | `whats-new.test.js` | 7 | `src/whats-new.js` — `collectNewEntries` 버전 비교·집계·상한·폴백 | 순수 함수 |
 | 44 | `feedback.test.js` | 13 | `src/feedback.js` — `?src=` 캡처·sanitize, 페이로드 빌드/검증, 쿨다운, 큐·플러시 | window/localStorage 스텁 |
 | 45 | `study-tracker.test.js` | 41 | `src/study-tracker.js` — SC-03 활동 기록·월별 학습일·목표 진행 | localStorage 모킹, 2026-10-14 추가 |
-| 46 | `build-pipeline.test.js` | 17 | BP-01~08 — manifest 스키마·안정 ID·빌드 검증·파서 정합·용어집 인덱스·SW 스탬프·카드 감사 | tools/build 모듈 + subprocess, 2026-10-14 추가 |
+| 46 | `build-pipeline.test.js` | 19 | BP-01~08 — manifest 스키마·안정 ID·빌드 검증·파서 정합·용어집 인덱스·SW 스탬프·카드 감사·고아 번들 스윕 | tools/build 모듈 + subprocess, 2026-10-14 추가 |
 | 47 | `content-structure.test.js` | 13 | CS-01~10 — manifest↔파일·교재 8종·문제은행·ref_md 레이아웃·원료 메타·오디오북·슬러그·참조 이미지 | 파일시스템 정적 검증, 2026-10-14 추가 |
 | 48 | `audit-quality.test.js` | 6 | CQ-01~05 — 카드 감사·참조 링크·심각도·콤보 감사·베이스라인 카운트 | subprocess 실행, 2026-10-14 추가 |
 | 49 | `formula-os.test.js` | 11 | FO-03/04/07/09 — 제조 단계·역할→상 매핑·고객 필드·pH·단계 상한·import/export·무료 한도 | 합성 데이터, 2026-10-14 추가 |
@@ -277,7 +277,7 @@ npm run hooks:install
 | 94 | `search-morpheme.test.js` | 8 | 형태소 경계 판정·동의어 확장 (TS-13/TS-14) | |
 | 95 | `textbook-search-exam.test.js` | 2 | `search-sources.js` `_loadExamMdText` — 문제은행 MD 로드 규약 (TS-12) | |
 | 96 | `pro-report.test.js` | 5 | `tools/check/pro_report.js` `summarize()` — 채널·티어 발급/사용률·만료 버킷·가입 수단 분포 (AD-09) | 2026-10-23 추가 |
-| | **합계** | **1558** | | |
+| | **합계** | **1560** | | |
 
 ### DOM 테스트 (`tests/dom/`)
 
