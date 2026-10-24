@@ -325,6 +325,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-ROOT-03 | `combo_review_queue.md` (자동 생성, gitignore) |
 | DOC-IDX-01 | `docs/README.md` |
 | DOC-IDX-02 | `docs/exams/cosmetic/README.md` |
+| DOC-IDX-03 | `docs/assets/README.md` |
 | DOC-DEV-01 | `docs/dev/SPEC.md` |
 | DOC-DEV-02 | `docs/dev/ARCHITECTURE.md` |
 | DOC-DEV-03 | `docs/dev/CHANGES.md` |
