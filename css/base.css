@@ -1205,8 +1205,8 @@ table {
 }
 
 
-/* ── 신기능 힌트 — 설정 ⚙️ 점 + "의견 보내기" NEW 배지 (feedback.js, 각 1회성) ── */
-#settings-toggle-btn {
+/* ── 신기능 힌트 — 도움말 ? 점 + "의견 보내기" NEW 배지 (feedback.js, 각 1회성) ── */
+#help-toggle-btn {
     position: relative;
 }
 .feedback-dot {

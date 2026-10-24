@@ -133,7 +133,7 @@ function _closeDialog(overlay) {
     setTimeout(() => { if (cb) cb(); overlay.remove(); }, 200);
 }
 
-/** 라이선스 코드 입력 다이얼로그 — 설정 메뉴 '라이선스 코드'에서 호출 */
+/** 라이선스 코드 입력 다이얼로그 — 설정 메뉴 '플랜 안내 · 라이선스 코드'의 플랜 비교 모달에서 호출 */
 export async function showRedeemDialog() {
     const sb = await getSupabase();
     if (!sb) {
