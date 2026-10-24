@@ -1,0 +1,14 @@
+{
+    "_note": "check_zlayer.js 계층 계약 — z-index 대역 규칙의 예외·허용 명단. 셀렉터는 콤마 분할 파트 단위로 정규식 매칭. 신규 위반은 여기에 '사유와 함께' 등록하거나 대역을 교정할 것.",
+    "chromePatterns": {
+        "^\\.app-header(?:$|[\\s.:#>\\[+,~])": 200,
+        "^#toc-tooltip(?:$|[\\s.:#>\\[+,~])": 200
+    },
+    "zoneExceptions": {
+        "^\\.reader-toc-edge-hint(?:$|[\\s.:#>\\[+,~])": "모바일 목차 엣지 힌트 — calc(--z-drawer - 1)=1399, 드로어 바로 아래 의도적 배치"
+    },
+    "rawNumericAllowlist": {
+        "^\\.daily-modal-overlay": "9999 — 데일리 챌린지 모달 (dashboard.css — 토큰 미이관 잔재)",
+        "^#formula-print-area \\.fp-watermark": "9999 — 인쇄 전용 워터마크 (print.css — @media print 한정, FO-70)"
+    }
+}

@@ -91,9 +91,14 @@ if (process.argv.includes('--ratchet')) {
     }
     const f = (v) => (Number.isInteger(v) ? String(v) : v.toFixed(1));
     const line = `const MERGED_THRESHOLDS = { statements: ${f(next.statements)}, branches: ${f(next.branches)}, functions: ${f(next.functions)}, lines: ${f(next.lines)} };`;
+    for (const b of bumps) console.log(`⬆ ${b}`);
+    if (process.argv.includes('--dry-run')) {
+        // 주간 워크플로(coverage-ratchet.yml) 미리보기 모드 — 파일 미변경
+        console.log(`\n[dry-run] 제안 임계값: ${line}`);
+        process.exit(3); // 3 = 상향 가능 신호 (워크플로가 이슈 생성 트리거로 사용)
+    }
     const selfPath = fileURLToPath(import.meta.url);
     writeFileSync(selfPath, readFileSync(selfPath, 'utf8').replace(/const MERGED_THRESHOLDS = \{[^}]*\};/, line));
-    for (const b of bumps) console.log(`⬆ ${b}`);
     console.log('\nMERGED_THRESHOLDS 갱신 완료 — 변경분 커밋 권장 (하향은 불가, 상향만 자동).');
     process.exit(0);
 }

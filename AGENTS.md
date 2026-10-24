@@ -64,6 +64,7 @@ npm.cmd run audit:cards                 # 카드 품질 자동 감사 (짧은 �
 npm.cmd run sbom                        # SPDX 형식 SBOM 생성 → sbom.spdx.json (CI 아티팩트, gitignore 대상)
 npm.cmd run audit:combo                 # 복수정답형 품질 감사 (정답 유일성·중복 진술집합·모순쌍·위치편향·경로별 통계)
 npm.cmd run audit:study                 # 학습 품질 감사 — 주간 배분·학습 진단 추천 규칙 정합 시나리오 검증 (SQ-01~04, --check=기준선 회귀, --update=기준선 갱신)
+npm.cmd run audit:tools                 # tools/ 사용률 감사 — 진입점→import 그래프 도달 불가 파일(사망 후보)·프리셋 미소속 단계·step_runs.jsonl 미실행 단계 (advisory — check:audit 프리셋, 죽은 게이트 정리용)
 npm.cmd run check:adlint                # 광고 문구 사전 커버리지 감사 — 별표5 2항 호별 대표 표현·term 품질·자기 검출 (FO-68)
 
 # AI 제작 지원 (초안만 생산 → tmp/ai_drafts/ → 사람 리뷰 후 content/ 편입 — AI_AUTHORING_DESIGN.md, AI-01~23)
@@ -138,10 +139,13 @@ npm.cmd run check:uitext                # UI 텍스트 커버리지 — data-uit
 npm.cmd run check:mobilesafe            # 모바일 잘림 규약 — role="dialog" 카드의 .dialog-card + 버튼 2+ 나열 행 줄바꿈 정적 검사 (check:ci·CI 게이트, UX-VFY-06)
 npm.cmd run check:escape                # HTML 이스케이프 싱크 규약 — innerHTML/insertAdjacentHTML 직접 대입 템플릿의 미이스케이프 보간 탐지, 기준선 단조 감소 (check:ci·CI 게이트, ROAD-Q5 — 신규 코드는 sanitize.js의 html`` 태그드 템플릿 권장)
 npm.cmd run check:uistyle               # UI 스타일 규약 — 마크업 인라인 style 속성 전면 금지 + JS .style.display 조작·인라인 on* 핸들러·네이티브 alert/confirm/prompt + JS 템플릿 정적 style= 기준선 래칫(display:none 즉시 금지·동적 --var:${x}만 허용) (check:ci·CI 게이트, CODE_CONVENTIONS §4, 명시 면제: 라인에 style-ok 토큰)
+npm.cmd run check:zlayer                # z-index 계층 계약 — 뷰 오버레이 ≤--z-sticky · 앱 크롬 --z-popover 단독(chromePatterns) · takeover ≥--z-drawer · 사이 대역 금지 (check:ci·CI 게이트, UX-SET-06 — 설정 패널 오클루전 재발 차단, 예외는 tools/config/layer_registry.json)
+npm.cmd run check:diffcov               # 변경 라인 차등 커버리지 — git diff 헝크 브랜치 ≥80%·신규 파일 ≥85% (CI 게이트, 커버리지 리포트 부재 시 스킵 — coverage:all 선실행 시 로컬 활성, -- --ref <base>)
 npm.cmd run check:seedkeys              # 테스트 시드 키 스코프 정합 — GLOBAL_KEYS 전환 키의 `examId:` 스코프 시드 차단 (시드 무력화 드리프트, check:docs 단계, 명시 면제: 라인에 seedkey-ok 토큰)
 npm.cmd run check:teststats             # 문서 테스트 수치 ↔ test_stats.json 실측 정합 — README·TESTING의 고정 수치 스테일 차단 (check:docs 단계 — 정적 카운트 드리프트 ±12%·인용 밴드 0.80~1.05×, 갱신은 stats:stamp)
 npm.cmd run stats:stamp                 # 테스트 수치 재스탬프 — unit 실행·vitest list·playwright --list 실측 → test_stats.json + 문서 인용을 `N+` 바닥 표기로 갱신
-npm.cmd run ratchet:coverage            # 병합 커버리지 임계값 래칫 상향 — 실측−0.8%p로 MERGED_THRESHOLDS 인플레이스 갱신 (단조 증가, coverage:all 실행 후 사용)
+npm.cmd run ratchet:coverage            # 병합 커버리지 임계값 래칫 상향 — 실측−0.8%p로 MERGED_THRESHOLDS 인플레이스 갱신 (단조 증가, coverage:all 실행 후 사용 — 주간 coverage-ratchet 워크플로가 상향 여유를 이슈로 알림)
+npm.cmd run coverage:gaps               # 분기 커버리지 하위 파일 리포트 — 유닛+DOM 병합 맵에서 브랜치% 오름차순 순위 (테스트 보강 표적 선정, -- --top N · --dir src/views · --json)
 npm.cmd run scaffold:exam -- <id> --name "시험명"  # 새 시험 스캐폴딩 — exams.json 등록 + manifest/references 골격 + 샘플 교재·문제은행·docs/ 생성 (--dry-run=미리보기, <id> --remove=제거)
 npm.cmd run scaffold:chapter                  # 참조자료→교재 챕터 골격 — --exam <id> --subject N --refs all|doc,... --out 경로 (CS-11 도출 계약 자동 배치, --dry-run=미리보기 — TEXTBOOK_AUTHORING_GUIDE §6)
 npm.cmd run lint                        # ESLint — 에러 0 필수 (--cache 웜 캐시, 기존 경고는 점진 정리 대상)
@@ -419,7 +423,7 @@ data/                   # 빌드 생성 번들
 tools/                  # 빌드·검증 스크립트
   build/                # 데이터 파이프라인 (manifest → registry + 해시 번들) + 생성기 (build_trace_matrix·scaffold_exam·drill-utils·trace)
   check/                # 검증·감사 스크립트 (run.js 통합 실행기·steps.js 단계 레지스트리·push_gate.js pre-push 적응형 게이트·check_*·audit_*·verify_shell_assets·coverage_merge·impact_tests)
-  config/               # 도구 설정 (domain-map.json 파일 계층 분류표·docs_paths_allowlist·citation_fingerprints)
+  config/               # 도구 설정 (domain-map.json 파일 계층 분류표·docs_paths_allowlist·citation_fingerprints·layer_registry z-index 대역 예외)
   state/                # 게이트 기준선·스탬프 (*_baseline.json·test_stats.json — 추적) + 로컬 산출물 (리포트·검수 큐·대시보드 — gitignore)
   sync/                 # 콘텐츠 동기화 (sync_citation_lines·sync_textbook_files)
   deploy/               # 배포 가드 (deploy.js)

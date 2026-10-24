@@ -1,5 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-24 시각 회귀·커버리지·도구 사용률 — 자동화 게이트 3종 + 관측 장치 3종
+
+- **UX-SET-06 신설 + `check:zlayer`** — z-index 계층 계약 정적 게이트 (뷰 오버레이 ≤--z-sticky · 앱 크롬 --z-popover 전용 · takeover ≥--z-drawer · 사이 대역 금지). 크롬 셀렉터 대역 이탈(헤더 하향 회귀)도 차단. 예외는 tools/config/layer_registry.json
+- **`settings-occlusion.spec.js`** — 11개 뷰 순회하며 설정 패널을 열고 `elementFromPoint` 실측 — 패널 위를 덮는 요소 0건 요구 (zlayer가 못 잡는 display 조건·동적 요소 커버)
+- **`check:diffcov`** — 변경 라인 차등 커버리지: git diff 헝크에 걸린 브랜치만 계측해 ≥80%(신규 85%) 요구. 파일 단위가 아니라 라인 단위라 저커버 파일 소규모 편집은 무차단 — CI merged 게이트 직후 배치
+- **`coverage:gaps`** — 병합 맵 분기 커버 하위 파일 순위 리포트 (보강 표적)
+- **`coverage_merge --ratchet --dry-run` + coverage-ratchet.yml** — 주간 래칫 여유 판정(exit 3) → 상향 가능 시 이슈 자동 생성 (vendor-check 패턴 — 자동 커밋 없음)
+- **`audit:tools` + run.js 텔레메트리** — tools/ 도달성 감사(진입점→import 그래프, 오탐 14→4 보정: path.join·문서 진입점 반영) + 프리셋 미소속 단계 탐지 + step_runs.jsonl 실행 이력 누적(gitignore) → 미실행 단계 리포트
+
 ## 2026-10-24 설정 드롭다운이 리더 크롬 카드 아래로 가려지는 쌓임 수정
 
 - `.app-header` z-index `--z-sticky`(100) → `--z-popover`(200) 상향 (base.css + app-responsive.css 모바일 재선언분)
