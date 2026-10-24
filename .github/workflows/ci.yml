@@ -133,6 +133,9 @@ jobs:
       - name: z-index layer contract (앱 크롬 대역 보호, UX-SET-06)
         run: npm run check:zlayer
 
+      - name: Filename case convention (CODE_CONVENTIONS §2.1)
+        run: npm run check:filenames
+
       # dependabot PR은 package(-lock).json 변경만 발생시켜 이 게이트가 항상 실패한다 —
       # 봇은 문서 갱신·[no-docs] 마크가 불가하므로 PR 작성자 기준으로 면제한다.
       - name: Doc sync gate (소스 변경 시 문서 갱신 강제)

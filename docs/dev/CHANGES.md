@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-25 파일명 대소문자 규약 코드화 — `check:filenames` 게이트
+
+- CODE_CONVENTIONS §2.1 신설: 영역별 패턴(src/tests=kebab · tools=snake · docs/*.md=SCREAMING · *.json=단일패턴 · 자산=kebab)
+- `check:filenames` 신규 위반만 차단 — 기존 일탈 92건은 `filename_baseline.json` 승계(--update 단조 감소)
+- ci:filenames P0 단계 등록 + ci.yml 단계 추가
+
 ## 2026-10-25 QR 자산 정리 — 2홈 체계 + 인덱스 + 네이밍 정규화
 
 - 플랫폼 공용 `docs/assets/` ↔ 시험 비즈니스 `docs/exams/<id>/business/` 2홈 확정

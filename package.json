@@ -153,7 +153,8 @@
     "ai:adphrases": "node tools/ai/ai_adphrases.js",
     "ai:adoption": "node tools/ai/ai_adoption.js",
     "mutate": "stryker run",
-    "report:pro": "node tools/check/pro_report.js"
+    "report:pro": "node tools/check/pro_report.js",
+    "check:filenames": "node tools/check/check_filenames.js"
   },
   "keywords": [
     "cosmetics",

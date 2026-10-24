@@ -35,6 +35,19 @@
 - 시험 종속 파일은 도메인 디렉터리 하위에 동일 패턴 (`tests/dom/exams/<id>/*.dom.test.js`)
 - 클래식(비ESM) 스크립트는 부트스트랩·데이터 번들로 한정 — `exam-data-boot.js`·`pwa-manifest.js`·`theme-init.js` 등 (§6 저장소 예외와 연동)
 
+### 2.1 파일명 대소문자 규칙 (`check:filenames` 게이트)
+
+영역별 지배 패턴을 코드화 — **신규 파일만 적용**, 기존 일탈은 `tools/state/filename_baseline.json`으로 승계(단조 감소).
+
+| 영역 | 패턴 | 예시 |
+|---|---|---|
+| `src/` · `html/` · `css/` · `tests/` · `.github/workflows/` | `kebab-case` | `textbook-reader.js`, `settings-occlusion.spec.js` |
+| `tools/` | `snake_case` | `check_zlayer.js`, `build_all_data.js` |
+| `docs/**/*.md` | `SCREAMING_SNAKE` 또는 한글 포함 | `DISCORD_COMMUNITY_SETUP.md`, `사업기획서.md` |
+| `*.json` (전역) | `snake_case` 또는 `kebab-case` 단일 패턴 (혼용 금지) | `layer_registry.json`, `touch-targets.json` |
+| 이미지·음성 자산 (`svg\|png\|jpg\|webp\|mp3\|mp4` …) | `kebab-case` — `content/` 한글 자산은 면제 | `discord-invite-qr.svg` |
+| 루트(깊이 0) 파일 | 규약 면제 (관습적 이름) | `serve.js`, `package.json`, `AGENTS.md` |
+
 ## 3. 언어·서식
 
 - **ES Modules 전용** (`import`/`export`) — 클래식 스크립트는 §2 한정 예외
