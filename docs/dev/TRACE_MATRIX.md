@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 9ad629603e7b1d76
-> 생성: 2026-10-24 · 원천: SPEC.md(594개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 34b60694c6af7007
+> 생성: 2026-10-24 · 원천: SPEC.md(595개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 594개 — 문서 연결 432 · 소스 연결 530 · 테스트 연결 565 · 보고서 연결 109
+**커버리지 요약**: 요구사항 595개 — 문서 연결 432 · 소스 연결 531 · 테스트 연결 566 · 보고서 연결 109
 
 ---
 
@@ -698,6 +698,7 @@
 | UX-SET-03 | Apple HIG/Google Material 최소 터치 영역. 인라인 링크·네이티브 체크박스/라디오(라벨이 타깃)는 면제 — 기준선 축소로 점진 개선 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css | tests/e2e/app.spec.js<br>tests/e2e/mobile-overflow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-SET-04 | 사용자가 "몇 버전인지" 문의할 때 유일한 확인 경로. SW 등록 스크립트 URL에서 버전 자동 추출 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-SET-05 | 일관된 드롭다운 UX | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/views/listeners-app.js | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
+| UX-SET-06 | `.reader-chrome`이 헤더와 같은 z(100)라 DOM 후순으로 패널 상단이 불투명 카드 아래로 가려진 실사례(2026-10-24). `tests/e2e/settings-occlusion.spec.js`가 뷰별 `elementFromPoint` 실측으로 차단, `check:zlayer`가 CSS 대역 계약을 정적 검사 | E2E 테스트 | — | tools/check/check_zlayer.js | tests/e2e/settings-occlusion.spec.js | — | — |
 | UX-VFY-01 | 요구사양 없는 UI 변경은 추적·리뷰 불가 — TR-21~23처럼 선 정의 후 구현하는 관행을 규약화 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
 | UX-VFY-02 | jsdom은 레이아웃을 계산하지 않으므로 DOM/단위 테스트로는 기하 요구사항을 검증할 수 없음 | E2E 테스트 | DOC-DSN-25<br>DOC-RBK-11 | — | tests/e2e/mobile-overflow.spec.js | — | — |
 | UX-VFY-03 | 신규 UI/UX 요구사항은 E2E와 함께 진입 — 기존 백로그(규약형 다수)는 기준선 승계 후 점진 축소 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
