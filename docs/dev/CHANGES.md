@@ -1,5 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-24 insadj 팩 구조 결함 보완 — features·uiText·synonyms·docs (승격 트래커 1순위)
+
+- **`features` 선언**: exams.json insadj에 `writtenPractice` 추가 + `manifest.written` 3종(재물·차량·신체 주관식) 등록 — `### S` 주관식 파일이 빌드 제외 상태에서 주관식 연습 번들로 편입 (registry.written 반영 확인)
+- **`uiText` 12키 작성**: 검색 placeholder 손해사정 도메인화(고지의무·대인배상·손해사정), authHint에서 cosmetic 전용 고객카드 조항 제거, trainer 부제목을 법령 수치·보험금 산정 기준으로 교체
+- **`synonyms` 18키**: 손사·자배법·보사기·대인배상·자손·자차·무보험차상해·GA·부보 등 도메인 약어·통칭
+- **`docs/` 신설**: `시험_구조_안내.md`(DOC-USR-12) — 1차 객관식+2차 주관식 구조·파일럿 범위·승격 잔여 체크리스트
+- **브랜딩**: insadj `theme` 채움(파랑 계열 — 빈 객체였음), desc에 "문제은행 52문" 수치 추가 (check:manifest 실측 정합 유지)
+- 검증: `build:data`·`check:manifest`(오류 0)·`check:uitext`·`check:onboard`(insadj features 0→1) 통과
+
 ## 2026-10-24 설계 문서 보완 — PROMOTION §8 지표·제약, PAYMENT §9 방어·행정 요건
 
 - **PROMOTION_DESIGN**: §8 순서 모순 정정 — "채널 확장 전 계측 선행" 원칙에 맞춰 P6(UTM 계측)을 5→3번으로 상향 + 항목별 성공 지표 열 추가. §0에 범위 밖(채널 운영 실행) 명시, P1(og:image 절대 URL·시험별 분기 불가 제약)·P2(share files 폴백)·P3(타입·게이트·테스트 선행 작업)·P5(네이버 JS 렌더링 약함 — 정적 랜딩 필수 조건)·P6(storage.js·telemetry 화이트리스트·첫 진입 값 보존) 기술 제약 보강
