@@ -7,6 +7,7 @@
 - `listeners-app.js` 드롭다운 바인딩 공용화 (`bindDropMenu`/`closeAllMenus` — 동시 1개 오픈·외부 클릭·Escape, UX-SET-05 계약 동일). 피드백 NEW 도트 타겟 ⚙️→? 버튼 이동 (`feedback_dot_seen` 키 유지)
 - 사용자 매뉴얼 설정/도움말 표 분리 + 경로 문구(학습안내서·formula_manual·런북·P-UI-1) 갱신, docs_md·exams.js 재생성. UX-SET-07 불변 테스트 신설
 - 테스트 갱신: 도트 셀렉터·E2E 진입 경로(사용 통계·변경 이력 클릭 전 ? 오픈) + 도움말 토글·상호배타 케이스 추가
+- 시각 회귀 기준선 12파일 재생성 (헤더 ? 버튼 반영 — win32 로컬 + linux는 visual-baseline 워크플로 아티팩트)
 
 ## 2026-10-25 파일명 대소문자 규약 코드화 — `check:filenames` 게이트
 
