@@ -104,9 +104,27 @@
     }
   ],
   "exams": [
-    { "key": "subject1", "subject": "civGen", "part": 1, "title": "민법(총칙)", "file": "과목1_문제은행.md" },
-    { "key": "subject2", "subject": "admLaw", "part": 2, "title": "행정법", "file": "과목2_문제은행.md" },
-    { "key": "subject3", "subject": "admSci", "part": 3, "title": "행정학개론", "file": "과목3_문제은행.md" }
+    {
+      "key": "subject1",
+      "subject": "civGen",
+      "part": 1,
+      "title": "민법(총칙)",
+      "file": "과목1_문제은행.md"
+    },
+    {
+      "key": "subject2",
+      "subject": "admLaw",
+      "part": 2,
+      "title": "행정법",
+      "file": "과목2_문제은행.md"
+    },
+    {
+      "key": "subject3",
+      "subject": "admSci",
+      "part": 3,
+      "title": "행정학개론",
+      "file": "과목3_문제은행.md"
+    }
   ],
   "integratedExam": {
     "questionsPerSubject": {
@@ -123,5 +141,13 @@
       "title": "지식DB 사전",
       "subtitle": "엔티티 검색 (manifest.knowledge 스키마 필요)"
     }
-  }
+  },
+  "written": [
+    {
+      "key": "second",
+      "title": "2차 주관식 연습 — 민법(계약)·행정절차론·사무관리론·행정사실무법",
+      "desc": "2차 실기 4과목 자체 제작 문항(과목당 3제·총 12제) — 서술 입력 후 모범답안·채점기준 대조 자기채점",
+      "file": "2차_주관식_연습.md"
+    }
+  ]
 }
