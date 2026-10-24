@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-25 QR 자산 정리 — 2홈 체계 + 인덱스 + 네이밍 정규화
+
+- 플랫폼 공용 `docs/assets/` ↔ 시험 비즈니스 `docs/exams/<id>/business/` 2홈 확정
+- 리네임 3건: `passok_qr`→`passok-app-qr` · `passmula_QR`→`passmula-legacy-qr` · `오픈채팅_QR`→`openchat-pro-qr` (kebab-case 통일, 한글 파일명 해소 — 참조 4곳 갱신)
+- `docs/assets/README.md`(DOC-IDX-03) 신설 — 전체 QR 인덱스(파일→대상URL→용도→재생성 명령) + 네이밍·배치 규칙
+
 ## 2026-10-24 시각 회귀·커버리지·도구 사용률 — 자동화 게이트 3종 + 관측 장치 3종
 
 - **UX-SET-06 신설 + `check:zlayer`** — z-index 계층 계약 정적 게이트 (뷰 오버레이 ≤--z-sticky · 앱 크롬 --z-popover 전용 · takeover ≥--z-drawer · 사이 대역 금지). 크롬 셀렉터 대역 이탈(헤더 하향 회귀)도 차단. 예외는 tools/config/layer_registry.json
@@ -357,9 +363,9 @@
 - `check:binary` 신규 — 500KB+ 신규 바이너리 커밋 차단 (untracked·staged·ref 스코프, 예외는 `tools/state/binary_allowlist.json`)
 - `steps.js` `content:build` 단계 prio 누락 보정(p0)
 
-## 2026-10-22 passok_qr.svg 재생성 — 소형화 + 흰 배경 명시
+## 2026-10-22 passok-app-qr.svg 재생성 — 소형화 + 흰 배경 명시
 
-- `docs/exams/cosmetic/business/passok_qr.svg` 재생성: 82×82(2단위 모듈) → 33×33(1단위 모듈, QR 버전4) + `<rect fill="white">` 배경 명시 — 인쇄·삽화 시 명암 대비 확보. 디코드 검증: `https://passok.vercel.app` 유지
+- `docs/exams/cosmetic/business/passok-app-qr.svg` 재생성: 82×82(2단위 모듈) → 33×33(1단위 모듈, QR 버전4) + `<rect fill="white">` 배경 명시 — 인쇄·삽화 시 명암 대비 확보. 디코드 검증: `https://passok.vercel.app` 유지
 
 ## 2026-10-22 사이드바 실무 그룹 최하단 이동
 

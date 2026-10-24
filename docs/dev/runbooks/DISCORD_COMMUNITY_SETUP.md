@@ -115,6 +115,7 @@
 - `docs/assets/discord-invite-qr.png` — 1024px 래스터 (슬라이드·문서 삽입)
 
 재생성: `npx qrcode "<초대URL>" -t svg -o docs/assets/discord-invite-qr.svg` (PNG는 `-t png -w 1024 -m 4`)
+전체 QR 자산 인덱스: [docs/assets/README.md](../../assets/README.md)
 
 ## 7. 검증 — 외부 계정 시점
 
