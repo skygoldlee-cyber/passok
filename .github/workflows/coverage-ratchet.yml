@@ -1,0 +1,70 @@
+name: Coverage Ratchet Check
+
+# 매주 화요일 10:00 KST(UTC 01:00) — 병합 커버리지 실측이 임계값+마진을
+# 상회하면 래칫 상향 제안 이슈를 생성한다. 자동 커밋은 하지 않는다
+# (vendor-check.yml과 같은 패턴 — 임계 변경은 회귀 리스크가 있어
+# 사람이 coverage_merge.js --ratchet 실행 + check:all 검증 후 커밋).
+# 감사 도구: tools/check/check_diff_coverage.js(증분 게이트)와 보완 —
+# 평균은 래칫으로, 만진 라인은 차등 게이트로 올린다.
+
+on:
+  schedule:
+    - cron: '0 1 * * 2'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  ratchet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: 생성 번들 빌드 (gitignore 대상)
+        run: npm run build:html && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js
+
+      - name: 병합 커버리지 측정
+        run: npm run coverage && npm run coverage:unit
+
+      - name: 래칫 상향 여유 판정 (dry-run)
+        id: ratchet
+        run: |
+          set +e
+          node tools/check/coverage_merge.js --ratchet --dry-run 2>&1 | tee ratchet.log
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" -ne 0 ] && [ "$code" -ne 3 ]; then exit 1; fi
+
+      - name: 래칫 상향 가능 이슈 생성
+        if: steps.ratchet.outputs.code == '3'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "📈 병합 커버리지 래칫 상향 가능 — 주간 측정" \
+            --label "quality" \
+            --body "$(cat ratchet.log | sed 's/^/    /')
+
+          ## 반영 절차
+          1. \`npm.cmd run coverage:all\` — 두 리포트 병합 확인
+          2. \`node tools/check/coverage_merge.js --ratchet\` — 임계값 자동 상향 (상향만 가능, 하향 차단)
+          3. \`npm.cmd run check:all\` — 회귀 검증 후 커밋
+
+          ※ 보강 표적은 \`npm.cmd run coverage:gaps\` (분기 커버 하위 파일)로 확인.
+          ※ 증분 게이트: ci의 check:diffcov가 변경 라인 브랜치 ≥80%를 별도 강제.
+          "
+
+      - name: 도구 사용률 감사 (advisory)
+        run: node tools/check/audit_tool_usage.js
+        continue-on-error: true

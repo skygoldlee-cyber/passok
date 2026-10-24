@@ -813,6 +813,7 @@
 | UX-SET-03 | **항목 터치 타겟 44px**: `.settings-item { min-height: 44px }`. 전 뷰 확장은 기준선 스윕으로 관리 — `tests/e2e/mobile-overflow.spec.js`가 모바일 대역에서 상호작용 요소의 `boundingBox`를 실측하고, `tests/e2e/baselines/touch-targets.json`에 등록된 기존 소형 요소(다중집합)를 초과하는 **신규 위반만 실패** | Apple HIG/Google Material 최소 터치 영역. 인라인 링크·네이티브 체크박스/라디오(라벨이 타깃)는 면제 — 기준선 축소로 점진 개선 |
 | UX-SET-04 | **버전 표기는 설정 패널에**: 사이드바 푸터는 모바일에서 숨겨지므로 버전/카피라이트는 설정 하단에도 표시 | 사용자가 "몇 버전인지" 문의할 때 유일한 확인 경로. SW 등록 스크립트 URL에서 버전 자동 추출 |
 | UX-SET-05 | **외부 클릭/Escape/항목 선택 시 닫힘**: 패널 클릭 핸들러에서 `.settings-item` 클릭 시 `closeSettings()` | 일관된 드롭다운 UX |
+| UX-SET-06 | **설정 패널은 모든 뷰 오버레이 위에 그려져야 함**: 앱 크롬(`.app-header`) 계층은 뷰 내부 오버레이 대역(≤`--z-sticky`)보다 위. 헤더를 덮는 요소는 전면 takeover(≥`--z-drawer`)만 허용 — 중간 대역은 `tools/config/layer_registry.json` 계약으로 차단 | `.reader-chrome`이 헤더와 같은 z(100)라 DOM 후순으로 패널 상단이 불투명 카드 아래로 가려진 실사례(2026-10-24). `tests/e2e/settings-occlusion.spec.js`가 뷰별 `elementFromPoint` 실측으로 차단, `check:zlayer`가 CSS 대역 계약을 정적 검사 |
 
 #### 4.8.4 피드백·알림
 
