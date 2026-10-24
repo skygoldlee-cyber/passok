@@ -106,6 +106,16 @@
    → 설정 메뉴에 'Discord 커뮤니티' 버튼 노출 (ES-08, `community-btn`)
 3. 파일럿 시험은 `discordInvite` 기입 전이라도 `#시험-관심등록` 고정 메시지로 서버 초대 + 관심 반응 지시를 안내한다
 
+### 6.3 오프라인 QR 자산 (인쇄물·전단용)
+
+앱 내 노출은 클릭 링크가 정본 — QR은 같은 기기에서 스캔 불가라 화면 배치 가치가 없다.
+인쇄물·스터디카페 전단 등 오프라인 배포 시 아래 생성물을 사용한다 (영구 링크 기반이라 스테일 없음 — 초대 URL 교체 시 재생성 필요):
+
+- `docs/assets/discord-invite-qr.svg` — 벡터 (인쇄 확대 무손실)
+- `docs/assets/discord-invite-qr.png` — 1024px 래스터 (슬라이드·문서 삽입)
+
+재생성: `npx qrcode "<초대URL>" -t svg -o docs/assets/discord-invite-qr.svg` (PNG는 `-t png -w 1024 -m 4`)
+
 ## 7. 검증 — 외부 계정 시점
 
 별도 계정 또는 시크릿 창으로 확인:
