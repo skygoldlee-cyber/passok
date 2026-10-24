@@ -438,6 +438,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-USR-10 | `content/exams/lossadj/docs/2차_주관식_설계.md` |
 | DOC-USR-11 | `content/exams/lossadj/docs/2028_개편_대비.md` |
 | DOC-USR-12 | `content/exams/insadj/docs/시험_구조_안내.md` |
+| DOC-USR-13 | `content/exams/insadj/docs/과목4_참고_문항.md` |
 | DOC-BIZ-01 | `docs/exams/cosmetic/business/FORMULA_OS_경쟁전략.md` |
 | DOC-BIZ-02 | `docs/exams/cosmetic/business/맞춤형화장품_조제관리사_자격증플랫폼_사업기획서.md` |
 | DOC-BIZ-03 | `docs/exams/cosmetic/business/맞춤형화장품판매업소_조사_2026-09.md` |

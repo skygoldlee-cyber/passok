@@ -89,7 +89,7 @@
          "title": "PassOK — 손해사정사 (Passure)",
          "logoMain": "PassOK",
          "logoSub": "손해사정사 · Passure",
-         "desc": "손해사정사 — 7과목(1차 보험계약법·보험업법·손해사정이론 + 2차 공통·재물·차량·신체 3종별) · 문제은행 70문",
+         "desc": "손해사정사 — 6과목(1차 보험계약법·보험업법·손해사정이론 + 2차 재물·차량·신체 3종별) · 문제은행 66문",
          "icon": "fa-solid fa-scale-balanced",
          "year": "2027",
          "theme": {
@@ -104,7 +104,6 @@
          "features": {
             "writtenPractice": true
          },
-         "comingSoon": true,
          "appNameEn": "Passure",
          "practiceName": "Adjust OS"
       },
