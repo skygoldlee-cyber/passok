@@ -30,16 +30,6 @@
         }
       }
     },
-    "second": {
-      "cards": 5,
-      "quizzes": 0,
-      "files": {
-        "교재/second/2차_준비.md": {
-          "cards": 5,
-          "quizzes": 0
-        }
-      }
-    },
     "prop": {
       "cards": 15,
       "quizzes": 0,
@@ -80,9 +70,6 @@
     },
     "subject3": {
       "questions": 22
-    },
-    "subject4": {
-      "questions": 4
     }
   }
 }
