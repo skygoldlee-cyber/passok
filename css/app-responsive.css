@@ -198,7 +198,7 @@
         padding: 1rem 1.25rem;
         position: sticky;
         top: 0;
-        z-index: var(--z-sticky);
+        z-index: var(--z-popover);
         background: var(--drawer-bg);
         -webkit-backdrop-filter: blur(12px);
         backdrop-filter: blur(12px);
