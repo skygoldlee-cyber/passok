@@ -68,6 +68,14 @@ describe('UX-FB-05 첫 방문 시작 안내', () => {
         expect(overlay.querySelector('[data-onboarding="prev"]')).toBeTruthy();
     });
 
+    it('안내문은 appName 뒤 조사 변화가 필요 없는 표현을 쓴다 (모음 종결 이름도 깨지지 않음)', () => {
+        showOnboardingModal();
+        const body = document.querySelector('.onboarding-step-body');
+        // getExamAppName()='Passmula' 목 — 구 코드의 "Passmula이" 형태는 금지
+        expect(body.textContent).toContain('Passmula에서');
+        expect(body.textContent).not.toContain('Passmula이');
+    });
+
     it('위저드: 잘못된 목표 입력은 진행을 막고 이전 버튼으로 되돌아간다', () => {
         showOnboardingModal();
         const overlay = document.getElementById('onboarding-overlay');
