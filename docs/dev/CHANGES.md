@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-24 향후 카드 결제 선택안 문서화 — PAYMENT_PILOT_DESIGN §9
+
+- **문서 갱신**: `docs/dev/design/PAYMENT_PILOT_DESIGN.md` §9 "향후 카드 결제 — 정식 경로 선택안" 추가 — 수동 결제(선실험) 이후 본실험 정식 경로의 선택안 비교(토스페이먼츠 결제링크 브릿지 · 결제위젯+Edge Function · 포트원 · 해외 MoR)와 B안 구현 개요(paymentKey confirm → profiles 직접 갱신 — `redeem_code` entitlement 경로 재사용)
+- **권고**: A(링크) 브릿지 → B(위젯) 본실험 목표 — 공통 선행 조건(사업자등록 + PG 가맹 심사)이 크리티컬 패스로 명시
+
 ## 2026-10-24 온보딩 안내 문구 조사 처리 수정
 
 - **수정**: `src/onboarding.js` 위저드 안내문 `${getExamAppName()}이` → `${getExamAppName()}에서` — 앱명이 "PassOK 조제관리사"처럼 모음 종결 이름이면 "조제관리사이"로 깨지던 문제. 조사 변화 불필요한 `에서`로 교체해 시험별 임의 appName에서도 자연스럽게 표기
