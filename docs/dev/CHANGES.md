@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-24 홍보·유입 기능 보완 설계안 신규 — DOC-DSN-37
+
+- **신규 문서**: `docs/dev/design/PROMOTION_DESIGN.md` — 홍보 표면 현황 인벤토리(구현됐지만 미가동인 Discord 인프라·부재한 OG 태그/UTM 계측·단일뿐인 공유 경로) + P0~P6 우선순위 백로그 (인프라 가동 → OG 태그 → 다중 커뮤니티 링크 → 성과 공유 카드 → 유입 계측 → 추천 코드 → SEO)
+- **관련 결정 메모**: `discordInvite` → `communityLinks` 다중 링크 일반화(DA-15 정합 — 시험별 링크는 `exams.json` 선언 경로), 카카오 공유 SDK는 vendor/CSP 비용으로 Web Share API 우선, 추천 코드는 `redeem_code` 원자 소비 구조 재활용
+
 ## 2026-10-24 Discord 커뮤니티 설계안 신규 — DOC-DSN-36
 
 - **신규 문서**: `docs/dev/design/DISCORD_COMMUNITY_DESIGN.md` — 시험별 홍보·소통용 공개 커뮤니티 서버 설계 (기존 `passok-ops` 운영 서버와 분리). 단일 서버 + 역할 게이트 카테고리, 포럼 채널 태그=manifest subjects 동기화, 파일럿 축소 채널→승격 시 확장, `exams.json.discordInvite` 선언 경로(DA-15 정합), 릴리스→시험 공지 webhook 자동발송(기존 `tools/lib/discord.js` 확장) 포함

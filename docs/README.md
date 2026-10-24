@@ -226,6 +226,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [BUSINESS_VALIDATION.md](dev/design/BUSINESS_VALIDATION.md) | 사업 검증 계획 — 가설 H1~H5·단계별 진입 조건·판정 기준·KPI 정의·의사결정 로그 (DOC-DSN-34) |
 | [PAYMENT_PILOT_DESIGN.md](dev/design/PAYMENT_PILOT_DESIGN.md) | P2 유료 수요 검증 — 결제 수단·라이선스 코드·가격·환불·전환 계측 실행 설계 (DOC-DSN-35, 선실험 범위) |
 | [DISCORD_COMMUNITY_DESIGN.md](dev/design/DISCORD_COMMUNITY_DESIGN.md) | Discord 커뮤니티 설계 — 시험별 역할 게이트 카테고리·파일럿 축소 채널·유입/자동화/도입 단계 (DOC-DSN-36, 설계안) |
+| [PROMOTION_DESIGN.md](dev/design/PROMOTION_DESIGN.md) | 홍보·유입 기능 보완 — 현황 인벤토리 + OG 태그·성과 공유 카드·다중 커뮤니티 링크·추천 코드·SEO·UTM 계측 백로그 (DOC-DSN-37, 설계안) |
 | [STUDY_PLAN_PRO_DESIGN.md](dev/design/STUDY_PLAN_PRO_DESIGN.md) | 스마트학습 과목별 가중 계획 — 출제 비중·약점 정답률 가중 주차별 배분표 (SC-08, 구현 완료) |
 | [STUDY_APP_DESIGN_GUIDE.md](dev/design/STUDY_APP_DESIGN_GUIDE.md) | 학습 앱 재사용 설계 가이드 — 다른 자격시험/교재 적용 템플릿 |
 
@@ -371,6 +372,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-34 | `docs/dev/design/BUSINESS_VALIDATION.md` |
 | DOC-DSN-35 | `docs/dev/design/PAYMENT_PILOT_DESIGN.md` |
 | DOC-DSN-36 | `docs/dev/design/DISCORD_COMMUNITY_DESIGN.md` |
+| DOC-DSN-37 | `docs/dev/design/PROMOTION_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |

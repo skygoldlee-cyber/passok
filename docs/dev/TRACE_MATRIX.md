@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 6a09232024f99d04
-> 생성: 2026-10-23 · 원천: SPEC.md(594개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 9ad629603e7b1d76
+> 생성: 2026-10-24 · 원천: SPEC.md(594개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 594개 — 문서 연결 430 · 소스 연결 530 · 테스트 연결 565 · 보고서 연결 109
+**커버리지 요약**: 요구사항 594개 — 문서 연결 432 · 소스 연결 530 · 테스트 연결 565 · 보고서 연결 109
 
 ---
 
@@ -396,7 +396,7 @@
 | AU-06 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 2개 | src/auth-sync/sync.js | tests/dom/common/common-sync.dom.test.js | — | — |
 | AU-07 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 2개 | src/auth-sync/sync.js | tests/dom/common/common-sync.dom.test.js<br>tests/unit/gates/storage-key-sync.test.js | — | 개인정보보호법 — 타인(고객) PII의 서버 저장 제한 원칙 |
 | AU-08 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 2개 | src/auth-sync/auth-view.js<br>src/auth-sync/supabase-client.js<br>src/auth-sync/supabase-config.js<br>src/auth-sync/sync.js | tests/dom/common/common-auth.dom.test.js<br>tests/dom/common/common-sync.dom.test.js<br>tests/unit/app/supabase-client.test.js | — | — |
-| AU-09 | ✅ | 테스트 | — | index.html<br>src/auth-sync/auth-view.js | tests/dom/common/common-auth.dom.test.js | — | — |
+| AU-09 | ✅ | 테스트 | DOC-DSN-37 | index.html<br>src/auth-sync/auth-view.js | tests/dom/common/common-auth.dom.test.js | — | — |
 
 ## 3.20 학습 캘린더·복습·드릴
 
@@ -452,7 +452,7 @@
 | ES-05 | ✅ | E2E 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-RBK-16 | src/app-shell.js<br>src/exam-context.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/e2e/exam-switch.spec.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
 | ES-06 | ✅ | 테스트 | DOC-DSN-36<br>DOC-RBK-16 | src/exam-context.js<br>src/views/exam-select.js | tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-select-summary.test.js | — | — |
 | ES-07 | ✅ | 테스트 | DOC-DSN-36<br>DOC-RBK-16 | — | tests/dom/study/study-examselect.dom.test.js | — | — |
-| ES-08 | ✅ | 테스트 | DOC-RBK-18 | src/views/listeners-app.js | tests/dom/common/community-invite.dom.test.js | — | — |
+| ES-08 | ✅ | 테스트 | DOC-DSN-37<br>DOC-RBK-18 | src/views/listeners-app.js | tests/dom/common/community-invite.dom.test.js | — | — |
 
 ## 3.23 사용자 의견 수신
 
@@ -502,9 +502,9 @@
 | AD-07 | ✅ | 테스트 | — | tools/check/dashboard_report.js | tests/unit/app/dashboard-report.test.js | — | — |
 | AD-08 | ✅ | 테스트 | — | tools/check/user_report.js | tests/unit/app/user-report.test.js | — | — |
 | AD-09 | ✅ | 테스트 | — | tools/check/pro_report.js | tests/unit/app/pro-report.test.js | — | — |
-| AD-10 | ✅ | 테스트 | DOC-DSN-36<br>DOC-RBK-17<br>DOC-RBK-18 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
-| AD-11 | ✅ | 테스트 | DOC-DSN-36<br>DOC-RBK-17 | tools/deploy/register_admin_bot.js<br>tools/supabase/functions/admin-bot/index.ts | tests/unit/gates/admin-bot-contract.test.js | — | — |
-| AD-12 | ✅ | 테스트 | — | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
+| AD-10 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-RBK-17<br>DOC-RBK-18 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
+| AD-11 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-RBK-17 | tools/deploy/register_admin_bot.js<br>tools/supabase/functions/admin-bot/index.ts | tests/unit/gates/admin-bot-contract.test.js | — | — |
+| AD-12 | ✅ | 테스트 | DOC-DSN-37 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
 
 ## 3.27 AI 제작 지원
 
@@ -723,7 +723,7 @@
 | DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | tools/check/check_uitext.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
 | DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-DEV-08<br>DOC-DEV-09<br>DOC-DSN-33 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/app-shell.js<br>src/pwa/pwa-manifest.js | tests/unit/app/exam-context.test.js | — | — |
-| DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-RBK-16 | src/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
+| DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-RBK-16 | src/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
 
 ## 5.2 안정적 ID 체계
 
@@ -928,6 +928,7 @@
 | DOC-DSN-34 | docs/dev/design/BUSINESS_VALIDATION.md | — |
 | DOC-DSN-35 | docs/dev/design/PAYMENT_PILOT_DESIGN.md | ROAD-L5, ROAD-P0, ROAD-P1, ROAD-P2, ROAD-P3, ROAD-P4, ROAD-P5, ROAD-P6, UX-MET-02, UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08 |
 | DOC-DSN-36 | docs/dev/design/DISCORD_COMMUNITY_DESIGN.md | AD-10, AD-11, DA-15, ES-01, ES-02, ES-03, ES-04, ES-05, ES-06, ES-07, FB-08 |
+| DOC-DSN-37 | docs/dev/design/PROMOTION_DESIGN.md | AD-10, AD-11, AD-12, AU-09, DA-15, ES-08 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |
