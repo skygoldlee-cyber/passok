@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-24 승격 게이트 주관식 계수 (B안) + admagent written 분할
+
+- **check:onboard 수정**: manifest.written[]의 `### S` 문항을 key 과목에 계수 — 주관식 전용 과목도 객관식과 동일 ≥20문 기준 적용 (정책 B안)
+- **admagent written 분할**: 통합 `2차_주관식_연습.md` → 과목별 4파일(civContract·admProc·officeMgmt·admPractice)로 분할, written[] 4항목 등록
+- **잔여**: 주관식 과목별 ≥20문 증산 필요 — insadj 8·8·9 / admagent 3×4 / indsafe practical / lossadj 2차
+
 ## 2026-10-24 admagent 1차 과목 문항 증산 + written 등록 — 과목당 8→25문
 
 - ai:draft 초안 중 과목당 17문 선별 편입 (총 75문 — desc "과목당 25개" 선언과 정합)

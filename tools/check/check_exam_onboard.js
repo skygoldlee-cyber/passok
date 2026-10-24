@@ -83,6 +83,14 @@ for (const t of targets) {
         totalQ += n;
         if (ex.subject) qBySubject[ex.subject] = (qBySubject[ex.subject] || 0) + n;
     }
+    // 주관식 전용 과목 — manifest.written[]의 ### S 문항을 key 과목에 계수 (객관식과 동일 기준 적용)
+    for (const w of t.manifest.written || []) {
+        if (!w.key || !w.file) continue;
+        const wPath = path.join(ROOT, t.contentRoot, '문제은행', w.file);
+        if (!fs.existsSync(wPath)) continue;
+        const sN = (fs.readFileSync(wPath, 'utf8').match(/^###s*Sd+/gm) || []).length;
+        qBySubject[w.key] = (qBySubject[w.key] || 0) + sN;
+    }
 
     // ── 등급 정합 ──
     if (!soon && totalQ === 0) err(t.id, '정식 시험인데 문제은행 문항 0 — 콘텐츠 투입 또는 comingSoon 표기 필요');
