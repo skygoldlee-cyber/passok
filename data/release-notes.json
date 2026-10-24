@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261024-09fee96",
+    "date": "2026-10-24",
+    "notes": [
+      "[수정·community] discordInvite를 영구 링크로 교체 (ES-08)",
+      "[정리·release] v20261024-29c5240 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261024-29c5240",
     "date": "2026-10-24",
     "notes": [
@@ -188,17 +196,6 @@
       "[문서] TRACE_MATRIX 재생성 (리포트 도구 변경 반영)",
       "[기능] 운영 리포트 활성화 퍼널 + 조회 페이지네이션 (P0 KPI 조회 경로)",
       "[정리·release] v20261022-9c3041f 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261022-9c3041f",
-    "date": "2026-10-22",
-    "notes": [
-      "[문서] TRACE_MATRIX 재생성 (apply_schema.js 반영)",
-      "[기능] 스키마 자동 적용 스크립트 — schema:apply (Management API PAT)",
-      "[문서] 사용자 매뉴얼에 익명 사용 통계 전송 안내 추가 (§11.6) [no-docs]",
-      "[문서] P0 완료 충족 반영 + P2 선실험 준비 체크리스트 (§5.3) [no-docs]",
-      "[정리·release] v20261022-e485842 스탬프 확정 [no-docs]"
     ]
   }
 ]
