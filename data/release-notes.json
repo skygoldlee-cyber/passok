@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261025-f7ef740",
+    "date": "2026-10-25",
+    "notes": [
+      "[수정·ui] 실무 탭 상시 유색 제거 — 활성화 방식 다른 탭과 통일",
+      "[정리·release] v20261025-be072e0 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-be072e0",
     "date": "2026-10-25",
     "notes": [
@@ -175,15 +183,6 @@
       "[정리·trace] 규약 문서 변경 반영 TRACE_MATRIX 재생성 [no-docs]",
       "[기능·gates] 파일명 대소문자 규약 게이트 (CODE_CONVENTIONS §2.1) — 신규 위반 차단",
       "[정리·release] v20261025-1ecfe33 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261025-1ecfe33",
-    "date": "2026-10-25",
-    "notes": [
-      "[정리·trace] DOC-IDX-03 반영 TRACE_MATRIX 재생성 [no-docs]",
-      "[문서·assets] QR 자산 정리 — 2홈 체계 + 인덱스(DOC-IDX-03) + kebab 네이밍 통일",
-      "[정리·release] v20261025-c1ed9ae 스탬프 확정 [no-docs]"
     ]
   }
 ]
