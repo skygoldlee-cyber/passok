@@ -4,7 +4,7 @@
 import { safeGetItem, safeSetItem, safeRemoveItem } from "./state.js";
 import { STORAGE_KEYS } from "./storage-keys.js";
 import { DataLoader } from "./data-loader.js";
-import { getActiveExam, getExamList, hasFeature, applyExamTheme } from "./exam-context.js";
+import { getActiveExam, getCurrentExamId, getExamList, hasFeature, applyExamTheme } from "./exam-context.js";
 import { isPracticeCapable } from "./practice-registry.js";
 import { showToast, showAlert } from "./ui-utils.js";
 
@@ -105,12 +105,14 @@ export function applyExamBranding() {
     const exam = getActiveExam();
     if (!exam) return;
     applyExamTheme(exam); // 시험별 스킨 토큰 — 브랜딩 재적용 경로에서도 일관 (DA-14)
-    if (exam.title) document.title = exam.title;
+    // 명시 선택된 시험만 브랜딩 — 미선택(기본 시험 폴백)이면 플랫폼 브랜드 유지
+    const chosen = !!getCurrentExamId();
+    document.title = (chosen && exam.title) ? exam.title : 'PassOK';
     const logoMain = document.querySelector('.logo-text h1');
     const logoSub = document.querySelector('.logo-text span');
     const logoIcon = document.querySelector('.logo-icon');
-    if (logoMain && typeof exam.logoMain === 'string') logoMain.textContent = exam.logoMain;
-    if (logoSub && typeof exam.logoSub === 'string') logoSub.textContent = exam.logoSub;
+    if (logoMain) logoMain.textContent = (chosen && typeof exam.logoMain === 'string') ? exam.logoMain : 'Pass';
+    if (logoSub) logoSub.textContent = (chosen && typeof exam.logoSub === 'string') ? exam.logoSub : 'OK';
     if (logoIcon && exam.icon) logoIcon.className = `${exam.icon} logo-icon`;
 
     // iOS 홈 화면 라벨 — 단일 앱 정책으로 'PassOK' 고정 (webmanifest name과 동일 정체성)

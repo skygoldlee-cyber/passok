@@ -96,6 +96,17 @@ describe('멀티시험 전환 — 비기본 시험 활성화', () => {
         expect(hidden('examSwitch')).toBe(false);
     });
 
+    it('applyExamBranding — 미선택이면 시험 브랜드 대신 플랫폼 브랜드', () => {
+        localStorage.removeItem('current_exam');
+        applyExamBranding();
+
+        expect(document.title).toBe('PassOK');
+        const logoMain = document.querySelector('.logo-text h1');
+        const logoSub = document.querySelector('.logo-text span');
+        if (logoMain) expect(logoMain.textContent).toBe('Pass');
+        if (logoSub) expect(logoSub.textContent).toBe('OK');
+    });
+
     it('applyExamBranding — 타이틀·로고가 insadj 값으로 갱신', () => {
         localStorage.setItem('current_exam', 'insadj');
         applyExamBranding();
