@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261026-73ad3b2",
+    "date": "2026-10-26",
+    "notes": [
+      "[수정·ux] 시험 피커 서비스 소개 링크를 부제 아래로 이동 — 즉시 가시성",
+      "[정리·release] v20261026-1fc0d9b 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261026-1fc0d9b",
     "date": "2026-10-26",
     "notes": [
@@ -177,15 +185,6 @@
       "[수정·exams] appraisal references.json 필수 필드 추가 — refDirs·subjectDirMap",
       "[기능·exams] 감정평가사(appraisal) 시험 팩 골격 등록 — comingSoon",
       "[정리·release] v20261025-2ab8760 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261025-2ab8760",
-    "date": "2026-10-25",
-    "notes": [
-      "[기능·data] 진도 스키마 버전 마커 — progress_schema_version 기록",
-      "[문서·strategy] 네이티브 앱 전환 전략 검토 — DOC-DSN-39",
-      "[정리·release] v20261025-3bff82e 스탬프 확정 [no-docs]"
     ]
   }
 ]
