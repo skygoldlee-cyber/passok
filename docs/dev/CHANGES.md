@@ -4,6 +4,10 @@
 
 - `docs/dev/design/NATIVE_APP_STRATEGY.md` — PWA 검증→네이티브 계획 검토 기록. TWA→Capacitor→Flutter 단계 권고, 리포지토리 기준 전환 비용 분석, 이주 대비 지침
 
+## 2026-10-25 appraisal references.json 보정
+
+- refDirs·subjectDirMap 필드 누락으로 build:data 실패 — 파일럿 팩 필수 필드 추가
+
 ## 2026-10-25 감정평가사(appraisal) 시험 팩 골격 등록
 
 - `exams.json` comingSoon 엔트리 + `content/exams/appraisal/` — 1차 필기 3과목(부동산학개론·감정평가관련법규·감정평가 및 통계원론) manifest·references·교재 3권·문제은행 12문 골격. 승격은 과목당 ≥20문 등 check:onboard 기준 (NEW_EXAM_RUNBOOK)
