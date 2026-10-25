@@ -5,7 +5,7 @@
  "_pilot": false,
  "subjects": [
   {
-   "key": "estate-intro",
+   "key": "estate_intro",
    "order": 1,
    "name": "부동산학개론",
    "shortName": "부동산학",
@@ -19,7 +19,7 @@
    ]
   },
   {
-   "key": "civil-broker",
+   "key": "civil_broker",
    "order": 2,
    "name": "민법(중개 관련)",
    "shortName": "민법",
@@ -33,7 +33,7 @@
    ]
   },
   {
-   "key": "broker-law",
+   "key": "broker_law",
    "order": 3,
    "name": "공인중개사법",
    "shortName": "중개사법",
@@ -47,7 +47,7 @@
    ]
   },
   {
-   "key": "estate-publaw",
+   "key": "estate_publaw",
    "order": 4,
    "name": "부동산공법",
    "shortName": "공법",
@@ -61,7 +61,7 @@
    ]
   },
   {
-   "key": "estate-registry",
+   "key": "estate_registry",
    "order": 5,
    "name": "부동산공시법",
    "shortName": "공시",
@@ -75,7 +75,7 @@
    ]
   },
   {
-   "key": "estate-tax",
+   "key": "estate_tax",
    "order": 6,
    "name": "부동산세법",
    "shortName": "세법",
@@ -89,7 +89,7 @@
    ]
   },
   {
-   "key": "broker-practice",
+   "key": "broker_practice",
    "order": 7,
    "name": "중개실무",
    "shortName": "실무",
@@ -106,49 +106,49 @@
  "exams": [
   {
    "key": "q_estate_intro",
-   "subject": "estate-intro",
+   "subject": "estate_intro",
    "part": 1,
    "title": "부동산학개론",
    "file": "부동산학개론_문제은행.md"
   },
   {
    "key": "q_civil_broker",
-   "subject": "civil-broker",
+   "subject": "civil_broker",
    "part": 2,
    "title": "민법(중개 관련)",
    "file": "민법_중개관련_문제은행.md"
   },
   {
    "key": "q_broker_law",
-   "subject": "broker-law",
+   "subject": "broker_law",
    "part": 3,
    "title": "공인중개사법",
    "file": "공인중개사법_문제은행.md"
   },
   {
    "key": "q_estate_publaw",
-   "subject": "estate-publaw",
+   "subject": "estate_publaw",
    "part": 4,
    "title": "부동산공법",
    "file": "부동산공법_문제은행.md"
   },
   {
    "key": "q_estate_registry",
-   "subject": "estate-registry",
+   "subject": "estate_registry",
    "part": 5,
    "title": "부동산공시법",
    "file": "부동산공시법_문제은행.md"
   },
   {
    "key": "q_estate_tax",
-   "subject": "estate-tax",
+   "subject": "estate_tax",
    "part": 6,
    "title": "부동산세법",
    "file": "부동산세법_문제은행.md"
   },
   {
    "key": "q_broker_practice",
-   "subject": "broker-practice",
+   "subject": "broker_practice",
    "part": 7,
    "title": "중개실무",
    "file": "중개실무_문제은행.md"
