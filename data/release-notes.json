@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261026-cef8318",
+    "date": "2026-10-26",
+    "notes": [
+      "[수정·ux] 대시보드 타이틀을 명시 선택값으로 게이트 — 미선택 시 기본 시험 브랜드 미표시",
+      "[정리·release] v20261025-d432b0b 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-d432b0b",
     "date": "2026-10-25",
     "notes": [
@@ -174,17 +182,6 @@
       "[수정·ui] 버전 표기를 설정 패널에서 도움말 패널로 이동",
       "[수정·landing] 랜딩 페이지 세로 스크롤 불가 수정",
       "[정리·release] v20261025-87bd684 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261025-87bd684",
-    "date": "2026-10-25",
-    "notes": [
-      "[테스트·landing] landing.dom.test.js 파일명 baseline 등록 [no-docs]",
-      "[테스트·landing] 랜딩 위젯 DOM 테스트 — 커버리지 임계 회복",
-      "[수정·ci] 랜딩 생성물 CI 반영 — build 잡에 build:landing + 아티팩트",
-      "[기능·landing] 서비스 소개 랜딩 페이지 신설 — /landing.html (LP-01~09)",
-      "[정리·release] v20261025-9c54bb8 스탬프 확정 [no-docs]"
     ]
   }
 ]
