@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 appraisal ref_md 조문 본문 누락 수정
+
+- DRF 응답의 `항[]` 배열 미처리로 항·호 본문이 빠졌던 6건 재추출 — 시행령 제9조(시험과목) 등 본문 복구
+
 ## 2026-10-25 appraisal Q-net 기출문제·최종정답 내려받기
 
 - 기출문제 8건(34~37회 1차 1·2교시 PDF) + 최종정답 2건(hwp) — tmp/qnet-exams/ 보관, SOURCE_COLLECT 갱신. 기출은 빈출 분석 참고 전용
