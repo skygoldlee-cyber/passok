@@ -1,0 +1,40 @@
+{
+  "subjects": {
+    "estate-intro": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {}
+    },
+    "civil-broker": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {}
+    },
+    "broker-law": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {}
+    },
+    "estate-publaw": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {}
+    },
+    "estate-registry": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {}
+    },
+    "estate-tax": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {}
+    },
+    "broker-practice": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {}
+    }
+  },
+  "exams": {}
+}
