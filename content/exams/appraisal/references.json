@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "comment": "참조자료 중앙 설정 — appraisal(감정평가사) 파일럿: 1차 필기 3과목. pdf-registry.js는 이 파일에서 빌드 시 자동 생성.",
+  "lawRefsComment": "이 시험이 사용하는 content/lawdb.json 법령 id 목록 — 감평법·부동산공시법은 lawdb 미등록",
+  "lawRefs": [],
+  "noticeCore": null,
+  "subjectDefaultRefdoc": {}
+}
