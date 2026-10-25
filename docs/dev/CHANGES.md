@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 appraisal Q-net 기출문제·최종정답 내려받기
+
+- 기출문제 8건(34~37회 1차 1·2교시 PDF) + 최종정답 2건(hwp) — tmp/qnet-exams/ 보관, SOURCE_COLLECT 갱신. 기출은 빈출 분석 참고 전용
+
 ## 2026-10-25 appraisal 감정평가 실무기준 수집
 
 - DRF admrul로 고시 전문 추출 → ref_md/과목3 (제2023-522호, ~76k자) — 과목3 평가원론 공식 근거. SOURCE_COLLECT.md 수집 현황 노트 추가
