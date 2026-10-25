@@ -128,11 +128,14 @@ export function applyExamBranding() {
     if (quizEmpty && exam.name) quizEmpty.textContent = `${exam.name} 모의 퀴즈`;
 
     // 도메인 특화 뷰 라벨 — manifest uiText가 있으면 정적 라벨을 덮어쓴다 (data-uitext 속성)
+    // "key:field" 문법 — uiText.<key>.<field> 우선, 없으면 .title 폴백 (단축 라벨은 :nav)
     const uiText = (DataLoader.registry && DataLoader.registry.uiText) || {};
     document.querySelectorAll('[data-uitext]').forEach(node => {
         const el = /** @type {HTMLElement} */ (node);
-        const t = el.dataset.uitext ? uiText[el.dataset.uitext] : null;
-        if (t && t.title) el.textContent = t.title;
+        const [key, field] = (el.dataset.uitext || '').split(':');
+        const t = key ? uiText[key] : null;
+        const v = t ? ((field && t[field]) || t.title) : null;
+        if (v) el.textContent = v;
     });
 }
 
@@ -218,6 +221,7 @@ export function showIngredientsChangelog() {
 export function applyFeatureFlags() {
     const multiExam = getExamList().length > 1;
     const chosen = !!getCurrentExamId(); // 미선택 시 시험 스코프 피처 비활성 — 성분 사전 등 기본 시험 폴백 노출 차단
+    document.body.classList.toggle('exam-unselected', !chosen); // ES-09 — 미선택 내비 시각적 dim
     document.querySelectorAll('[data-feature]').forEach(node => {
         const el = /** @type {HTMLElement} */ (node);
         // 시험 전환 버튼은 플래그가 아닌 실제 시험 수로 결정 — 1개면 무의미.
