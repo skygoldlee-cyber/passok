@@ -22,6 +22,7 @@ export default defineConfig({
                 'src/pwa/pwa-install-capture.js', // 모듈 로드 즉시 beforeinstallprompt 캡처
                 'src/pwa/pwa-manifest.js',        // 매니페스트 링크 교체 (로드 즉시 실행)
                 'src/theme-init.js',          // DOM 이전 즉시 실행 스크립트
+                'src/landing-redirect.js',    // index.html 부트 이전 동기 리다이렉트 (클래식 스크립트)
                 'src/web-vitals.js',          // PerformanceObserver
                 'src/views/reader-audio.js',  // Audio API
                 'src/app.js',                 // 진입점 오케스트레이터 — import 자체가 부팅 부작용, E2E 영역

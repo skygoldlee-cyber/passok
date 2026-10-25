@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: e4b3c196fc2a8972
-> 생성: 2026-10-25 · 원천: SPEC.md(604개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: cd71cb8564caf91b
+> 생성: 2026-10-25 · 원천: SPEC.md(605개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 604개 — 문서 연결 441 · 소스 연결 540 · 테스트 연결 575 · 보고서 연결 109
+**커버리지 요약**: 요구사항 605개 — 문서 연결 441 · 소스 연결 541 · 테스트 연결 576 · 보고서 연결 109
 
 ---
 
@@ -561,6 +561,7 @@
 | LP-07 | ✅ | 테스트 | DOC-DSN-38 | sw.js | tests/unit/gates/build-landing.test.js | — | — |
 | LP-08 | ✅ | 테스트 | DOC-DSN-38 | tools/build/build_landing.js | tests/unit/gates/build-landing.test.js | — | — |
 | LP-09 | ✅ | 테스트 | DOC-DSN-38 | src/landing.js<br>tools/build/build_landing.js | tests/dom/misc/landing.dom.test.js<br>tests/unit/app/landing.test.js<br>tests/unit/gates/build-landing.test.js | — | — |
+| LP-10 | ✅ | 테스트 | — | src/landing-redirect.js | tests/unit/app/ux-invariants.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 

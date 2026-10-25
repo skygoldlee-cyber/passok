@@ -78,7 +78,7 @@ function el(tag, cls, text) {
 
 function appCta(label) {
     const a = el('a', 'btn btn-primary', label);
-    a.href = './index.html';
+    a.href = './index.html?app=1';
     return a;
 }
 
@@ -207,7 +207,7 @@ function initInstallCta() {
     }
     btn.addEventListener('click', async () => {
         const prompt = window.__deferredPrompt;
-        if (!prompt) { window.location.href = './index.html'; return; }
+        if (!prompt) { window.location.href = './index.html?app=1'; return; }
         prompt.prompt();
         try { await prompt.userChoice; } catch (_) { /* 무시 */ }
         window.__deferredPrompt = null;
@@ -216,6 +216,7 @@ function initInstallCta() {
 
 function init() {
     if (typeof document === 'undefined' || !document.getElementById('landing-main')) return;
+    try { localStorage.setItem('passok_landing_seen', '1'); } catch (_) { /* 사생활 모드 등 무시 */ }
     const data = parseDemoData();
     const section = document.getElementById('landing-demo-section');
     if (data && section) {

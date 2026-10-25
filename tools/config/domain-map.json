@@ -67,6 +67,7 @@
         "src/fsrs.js",
         "src/globals.d.ts",
         "src/knowledge-tracing.js",
+        "src/landing-redirect.js",
         "src/landing.js",
         "src/modal-back.js",
         "src/onboarding.js",

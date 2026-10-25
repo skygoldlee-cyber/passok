@@ -64,7 +64,7 @@
             <h1 class="landing-tagline">자격시험 합격을 위한 통합 학습 플랫폼</h1>
             <p class="landing-sub">교재 · 퀴즈 · 모의고사 · 스마트 복습 — 계정 없이 바로 시작, 설치하면 오프라인에서도 학습</p>
             <div class="landing-cta">
-                <a class="btn btn-primary" href="./index.html"><i class="fa-solid fa-play" aria-hidden="true"></i> 지금 바로 시작</a>
+                <a class="btn btn-primary" href="./index.html?app=1"><i class="fa-solid fa-play" aria-hidden="true"></i> 지금 바로 시작</a>
                 <button type="button" id="landing-install-btn" class="btn btn-secondary" aria-label="앱 설치">
                     <i class="fa-solid fa-download" aria-hidden="true"></i> 앱 설치
                 </button>
@@ -208,12 +208,16 @@
                     </li>
                 </ol>
                 <div class="landing-cta">
-                    <a class="btn btn-primary" href="./index.html"><i class="fa-solid fa-play" aria-hidden="true"></i> 지금 바로 시작</a>
+                    <a class="btn btn-primary" href="./index.html?app=1"><i class="fa-solid fa-play" aria-hidden="true"></i> 지금 바로 시작</a>
                 </div>
             </section>
         </main>
 
         <footer class="landing-footer">
+            <div class="landing-qr">
+                <img src="landing-qr.svg" alt="PassOK 랜딩 페이지 QR 코드" width="96" height="96" loading="lazy">
+                <p class="landing-qr-caption">QR로 공유 — https://passok.vercel.app/landing.html</p>
+            </div>
             <p>© PassOK · <span id="landing-version"></span></p>
             <p class="landing-privacy"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> 학습 데이터는 기기에만 저장됩니다 — 계정 없이 모든 기능을 사용할 수 있습니다.</p>
         </footer>

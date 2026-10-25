@@ -295,6 +295,14 @@ body {
     color: var(--color-text-muted);
     font-size: var(--text-sm, 0.8rem);
 }
+.landing-qr { margin-bottom: var(--space-4, 1rem); }
+.landing-qr img {
+    border-radius: var(--radius-sm, 6px);
+    background: #fff;
+    padding: var(--space-2, 0.5rem);
+    box-sizing: content-box;
+}
+.landing-qr-caption { font-size: var(--text-xs, 0.72rem); margin: var(--space-2, 0.5rem) 0 0; }
 .landing-privacy { margin-top: var(--space-2, 0.5rem); }
 .landing-privacy i { color: var(--color-primary); margin-right: var(--space-1, 0.25rem); }
 

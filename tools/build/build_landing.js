@@ -53,7 +53,7 @@ function renderExamCards(exams) {
         + `                    <div class="landing-exam-meta"><span class="landing-exam-coming">준비 중</span>${year}${discord}</div>\n`
         + `                </div>`;
     }
-    return `                <a class="landing-exam-card" href="./index.html"${style}>\n`
+    return `                <a class="landing-exam-card" href="./index.html?app=1"${style}>\n`
       + `                    <i class="${icon} landing-exam-icon" aria-hidden="true"></i>\n`
       + `                    <h3>${title}</h3>\n`
       + `                    <p>${desc}</p>\n`

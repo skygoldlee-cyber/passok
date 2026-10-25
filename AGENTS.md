@@ -301,6 +301,7 @@ src/                    # ES Modules
   theme-init.js         # 테마 초기화 (즉시 실행)
   theme-toggle.js       # 테마 토글 UI
   landing.js            # 서비스 소개 랜딩 스크립트 — 체험 데모(퀴즈·학습계획)·설치 CTA·버전 (LP-04/05/09)
+  landing-redirect.js   # 신규 방문자 '/' → landing.html 안내 (LP-10 — 부트 이전 동기 판정, index.html에서 로드)
   ui-mode.js            # 학습/실무 UI 모드 전환 (ui_mode 전역 키, 학습 도구 접이식)
   practice-registry.js  # 실무작업실 피처 레지스트리 — 시험 features 키 → 뷰/랜딩/지연로더/핸들러 정의 (신규 실무 피처는 여기 엔트리 추가)
   auth-sync/            # 계정·인증·클라우드 동기화 모듈
