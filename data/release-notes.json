@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261025-8e72117",
+    "date": "2026-10-25",
+    "notes": [
+      "[정리·gen] pdf-registry·sw 재생성 — 실무기준 반영 [no-docs]",
+      "[기능·exams] appraisal 감정평가 실무기준 수집 + 수집 현황 노트",
+      "[정리·release] v20261025-d196770 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-d196770",
     "date": "2026-10-25",
     "notes": [
@@ -161,14 +170,6 @@
     "notes": [
       "[문서·user-manual] 설정 메뉴에 Discord 커뮤니티 항목 기재 (ES-08)",
       "[정리·release] v20261024-09fee96 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261024-09fee96",
-    "date": "2026-10-24",
-    "notes": [
-      "[수정·community] discordInvite를 영구 링크로 교체 (ES-08)",
-      "[정리·release] v20261024-29c5240 스탬프 확정 [no-docs]"
     ]
   }
 ]
