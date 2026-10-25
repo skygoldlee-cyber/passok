@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 appraisal 감정평가이론 교재 작성
+
+- 2차 평가이론 과목 교재 — 실무기준 체계(총칙~3방식~토지평가) 7챕터 + 논문형 서술 포인트. manifest에 2차 과목 등록
+
 ## 2026-10-25 appraisal 경로 표기 정리 + 생성물 재빌드
 
 - 교재·은행 내 ref_md 경로 표기 정리 (링크 린트 LL-05) + sync_textbook_files·build:data 재빌드로 구조 드리프트 해소 — CI 실패(06e920b8) 수정
