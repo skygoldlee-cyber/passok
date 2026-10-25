@@ -67,7 +67,7 @@ describe('landing.js — DOM 위젯', () => {
         document.querySelectorAll('.demo-choice')[1].click();
         document.querySelector('.demo-actions .btn').click();
         expect(document.querySelector('.demo-result-score').textContent).toBe('1 / 2');
-        expect(document.querySelector('.demo-result a').getAttribute('href')).toBe('./index.html');
+        expect(document.querySelector('.demo-result a').getAttribute('href')).toBe('./index.html?app=1');
     });
 
     it('계획 — 시험일 입력 → D-day·단계·과목 비중·CTA', async () => {
