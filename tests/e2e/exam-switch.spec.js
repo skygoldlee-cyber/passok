@@ -1,5 +1,5 @@
 // tests/e2e/exam-switch.spec.js — 멀티시험 전환·도메인 격리 검증
-// @spec ES-03,ES-05,DA-13,UX-PWA-07
+// @spec ES-03,ES-05,ES-10,DA-13,UX-PWA-07
 // 비기본 시험(lossadj, comingSoon) 부팅을 실브라우저로 증명한다.
 // comingSoon 카드는 UI 클릭 전환이 막혀 있으므로 current_exam을 시드해
 // "다른 시험으로 부팅" 경로를 검증한다 — 시험별 브랜딩·기능 게이팅·
