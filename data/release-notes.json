@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261025-be072e0",
+    "date": "2026-10-25",
+    "notes": [
+      "[수정·ui] 미션 배지 높이 규칙을 폰 미디어 블록(≤768px)으로 이동",
+      "[정리·release] v20261025-af407f8 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-af407f8",
     "date": "2026-10-25",
     "notes": [
@@ -176,14 +184,6 @@
       "[정리·trace] DOC-IDX-03 반영 TRACE_MATRIX 재생성 [no-docs]",
       "[문서·assets] QR 자산 정리 — 2홈 체계 + 인덱스(DOC-IDX-03) + kebab 네이밍 통일",
       "[정리·release] v20261025-c1ed9ae 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261025-c1ed9ae",
-    "date": "2026-10-25",
-    "notes": [
-      "[문서·community] Discord 초대 오프라인 QR 자산 + 런북 §6.3 재생성 절차",
-      "[정리·release] v20261025-525d004 스탬프 확정 [no-docs]"
     ]
   }
 ]
