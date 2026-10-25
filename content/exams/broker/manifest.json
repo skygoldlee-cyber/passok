@@ -105,49 +105,49 @@
  ],
  "exams": [
   {
-   "key": "q_estate-intro",
+   "key": "q_estate_intro",
    "subject": "estate-intro",
    "part": 1,
    "title": "부동산학개론",
    "file": "부동산학개론_문제은행.md"
   },
   {
-   "key": "q_civil-broker",
+   "key": "q_civil_broker",
    "subject": "civil-broker",
    "part": 2,
    "title": "민법(중개 관련)",
    "file": "민법_중개관련_문제은행.md"
   },
   {
-   "key": "q_broker-law",
+   "key": "q_broker_law",
    "subject": "broker-law",
    "part": 3,
    "title": "공인중개사법",
    "file": "공인중개사법_문제은행.md"
   },
   {
-   "key": "q_estate-publaw",
+   "key": "q_estate_publaw",
    "subject": "estate-publaw",
    "part": 4,
    "title": "부동산공법",
    "file": "부동산공법_문제은행.md"
   },
   {
-   "key": "q_estate-registry",
+   "key": "q_estate_registry",
    "subject": "estate-registry",
    "part": 5,
    "title": "부동산공시법",
    "file": "부동산공시법_문제은행.md"
   },
   {
-   "key": "q_estate-tax",
+   "key": "q_estate_tax",
    "subject": "estate-tax",
    "part": 6,
    "title": "부동산세법",
    "file": "부동산세법_문제은행.md"
   },
   {
-   "key": "q_broker-practice",
+   "key": "q_broker_practice",
    "subject": "broker-practice",
    "part": 7,
    "title": "중개실무",
