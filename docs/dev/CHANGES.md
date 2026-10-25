@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 appraisal CI 수정 — 메타 헤딩 전수 정정
+
+- 부록 헤딩 7건 전수 정정(TS-17) + 재빌드 — e2b036af CI 실패 후속
+
 ## 2026-10-25 appraisal CI 수정 — 메타 헤딩·동기화
 
 - 부록 헤딩 메타 의심(TS-17) 정정 + sync_textbook_files·build:data 재빌드
