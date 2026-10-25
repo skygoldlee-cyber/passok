@@ -113,6 +113,12 @@ test('LP-06: 랜딩 페이지 진입점이 도움말 패널과 시험 선택 뷰
   assert.ok(examSelect.includes('href="landing.html"'), '시험 선택 뷰 서비스 소개 링크');
 });
 
+test('진도 데이터 스키마 버전 마커가 saveProgress에서 기록된다 (DOC-DSN-39)', () => {
+  const keys = read('src/storage-keys.js');
+  assert.ok(/SCHEMA_VERSION:\s*'progress_schema_version'/.test(keys), '키 등록');
+  assert.ok(read('src/state.js').includes("STORAGE_KEYS.SCHEMA_VERSION"), 'saveProgress 기록');
+});
+
 test('LP-10: 신규 방문자 리다이렉트 스크립트가 index.html에 로드되고 조건을 갖는다', () => {
   const redirect = read('src/landing-redirect.js');
   assert.ok(indexHtml.includes('src="src/landing-redirect.js"'), '템플릿 로드');

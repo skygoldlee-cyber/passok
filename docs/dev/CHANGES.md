@@ -4,6 +4,10 @@
 
 - `docs/dev/design/NATIVE_APP_STRATEGY.md` — PWA 검증→네이티브 계획 검토 기록. TWA→Capacitor→Flutter 단계 권고, 리포지토리 기준 전환 비용 분석, 이주 대비 지침
 
+## 2026-10-25 진도 스키마 버전 마커 추가 (DOC-DSN-39 이주 대비)
+
+- `storage-keys.js` `progress_schema_version` 키 + `saveProgress()`가 `SCHEMA_VERSION=1` 기록 — 형식 변경·네이티브 이주 시 구버전 판별
+
 ## 2026-10-25 SW 업데이트 시 모달 대기 단축 — 변경이력 미해소 체감 개선
 
 - `tryReload` 모달 대기 상한 ~20초→~4초 — whats-new는 리로드 후 어차피 다시 표시되므로 업데이트 지연 가치 없음
