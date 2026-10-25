@@ -1,10 +1,34 @@
 {
   "subjects": {
-    "theory": {
+    "civil": {
+      "cards": 4,
+      "quizzes": 4,
+      "files": {
+        "교재/civil/민법_총칙물권.md": {
+          "cards": 4,
+          "quizzes": 4
+        }
+      }
+    },
+    "econ": {
+      "cards": 3,
+      "quizzes": 0,
+      "files": {
+        "교재/econ/경제학원론.md": {
+          "cards": 3,
+          "quizzes": 0
+        }
+      }
+    },
+    "realestate": {
       "cards": 0,
       "quizzes": 0,
       "files": {
-        "교재/theory/부동산학개론.md": {
+        "교재/realestate/부동산학원론.md": {
+          "cards": 0,
+          "quizzes": 0
+        },
+        "교재/realestate/../theory/부동산학개론.md": {
           "cards": 0,
           "quizzes": 0
         }
@@ -20,26 +44,32 @@
         }
       }
     },
-    "appraisal": {
-      "cards": 0,
-      "quizzes": 0,
+    "accounting": {
+      "cards": 3,
+      "quizzes": 1,
       "files": {
-        "교재/appraisal/감정평가_통계원론.md": {
-          "cards": 0,
-          "quizzes": 0
+        "교재/accounting/회계학.md": {
+          "cards": 3,
+          "quizzes": 1
         }
       }
     }
   },
   "exams": {
-    "subject1": {
-      "questions": 4
+    "s_civil": {
+      "questions": 10
     },
-    "subject2": {
-      "questions": 4
+    "s_econ": {
+      "questions": 10
     },
-    "subject3": {
-      "questions": 4
+    "s_law": {
+      "questions": 10
+    },
+    "s_realestate": {
+      "questions": 10
+    },
+    "s_accounting": {
+      "questions": 10
     }
   }
 }
