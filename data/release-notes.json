@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261025-2db5cf4",
+    "date": "2026-10-25",
+    "notes": [
+      "[copy·landing] 히어로·데모 문구 수정 — 스마트 학습 플랫폼·체험해보세요",
+      "[정리·release] v20261025-5d0bc75 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-5d0bc75",
     "date": "2026-10-25",
     "notes": [
@@ -174,16 +182,6 @@
       "[문서·runbook] DISCORD_ADMIN 초보자용 상세 절차로 확장",
       "[기능·admin] Discord 운영 표면 — 알림 push + 조회 명령 봇 (AD-10·AD-11)",
       "[정리·release] v20261023-077f471 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261023-077f471",
-    "date": "2026-10-23",
-    "notes": [
-      "[문서·env] Python 제작 경로 venv 격리 명문화 — .python-version 핀 (P5)",
-      "[정리·embeddings] 모델 소스 핀 — HF 리비전 SHA 고정 (P3)",
-      "[수정·deploy] 스테이징 정리 detached 헬퍼 위임 — 배포 비블로킹",
-      "[정리·release] v20261023-54ba64c 스탬프 확정 [no-docs]"
     ]
   }
 ]

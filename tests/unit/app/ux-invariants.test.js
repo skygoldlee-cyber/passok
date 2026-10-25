@@ -187,6 +187,14 @@ test('UX-PWA-04: 설치 버튼 표시가 beforeinstallprompt 캡처 여부로 �
   assert.ok(/appinstalled|is-hidden/.test(capture) || /appinstalled/.test(pwaInstall), '설치 후 숨김 처리');
 });
 
+test('UX-PWA-06: SW 업데이트 리로드가 랜딩·모달 상황에서도 정체하지 않는다', () => {
+  const reloadBlock = capture.match(/function tryReload[\s\S]{0,900}/);
+  assert.ok(reloadBlock, 'tryReload 존재');
+  assert.ok(reloadBlock[0].includes('landing-main'), '랜딩은 __APP_INITIALIZED 없이 리로드');
+  const overlayWait = reloadBlock[0].match(/attempts < (\d+)/);
+  assert.ok(overlayWait, '모달 대기 상한 존재');
+});
+
 test('UX-PWA-05: 앱 셸 높이가 JS 실측 --app-height를 사용한다', () => {
   assert.ok(/--app-height/.test(appJs), 'JS 측정 변수 설정');
   assert.ok(/innerHeight|visualViewport/.test(appJs), '실측 소스');
