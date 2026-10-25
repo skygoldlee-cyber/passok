@@ -12,6 +12,7 @@
 (function () {
     try {
         if (location.hash || /(?:\?|&)app=1\b/.test(location.search)) return;
+        if (navigator.webdriver) return; // E2E·자동화 컨텍스트 — 빈 스토리지 첫 실행 플로우 검증 보호
         if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) return;
         if (navigator.standalone === true) return;
         if (localStorage.length > 0) return;
