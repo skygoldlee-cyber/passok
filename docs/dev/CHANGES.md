@@ -8,6 +8,8 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-26 fix: 실무 메뉴 라벨 "실무도구" 통일 — PC·모바일 formula:nav 연동
+
 ## 2026-10-26 feat: 동적 메뉴 보완 4종 — uiText 전면 확장
 
 - appraisal 등 uiText 비어있던 시험에 표준 뷰 키 채움 + calendar/manual/studyTools 신규 키
