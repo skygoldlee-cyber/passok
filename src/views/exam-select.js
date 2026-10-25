@@ -8,7 +8,6 @@ import { STORAGE_KEYS } from '../storage-keys.js';
 import { esc } from '../sanitize.js';
 import { todayKey } from '../utils.js';
 import { switchView } from './navigation.js';
-import { applyExamBranding } from '../app-shell.js';
 import { showAlert, showToast } from '../ui-utils.js';
 
 /**
@@ -148,7 +147,19 @@ export function showExamSelect() {
 /** 선택 해제 — current_exam 제거로 "선택 없음" 상태로 되돌림. 다음 부팅부터 피커가 초기화면 */
 export function resetExamSelection() {
     clearCurrentExam();
-    applyExamBranding(); // 문서 타이틀·로고를 플랫폼 브랜드로 즉시 복귀
+    // 브랜딩 즉시 복귀 — 문서 타이틀·로고를 플랫폼 브랜드로 (app-shell 임포트는 모듈 DOM 접근으로 Node 테스트에서 크래시)
+    if (typeof document !== 'undefined') {
+        document.title = 'PassOK';
+        const logoMain = document.querySelector('.logo-text h1');
+        const logoSub = document.querySelector('.logo-text span');
+        if (logoMain) logoMain.textContent = 'PassOK';
+        if (logoSub) logoSub.textContent = '';
+        // 시험 스코프 메뉴도 즉시 숨김 — 성분 사전 등 미선택 노출 차단 (examSwitch는 피커 진입로라 유지)
+        document.querySelectorAll('[data-feature]').forEach(node => {
+            const el = /** @type {HTMLElement} */ (node);
+            if (el.dataset.feature !== 'examSwitch') el.classList.add('is-hidden');
+        });
+    }
     renderExamSelect();
     showToast('시험 선택이 해제됐습니다 — 다음 실행부터 시험 선택이 먼저 표시됩니다', 'info');
 }

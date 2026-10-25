@@ -217,6 +217,7 @@ export function showIngredientsChangelog() {
 /** 활성 시험의 features 플래그에 따라 도메인 특화 UI 숨김 (data-feature 속성 기반) */
 export function applyFeatureFlags() {
     const multiExam = getExamList().length > 1;
+    const chosen = !!getCurrentExamId(); // 미선택 시 시험 스코프 피처 비활성 — 성분 사전 등 기본 시험 폴백 노출 차단
     document.querySelectorAll('[data-feature]').forEach(node => {
         const el = /** @type {HTMLElement} */ (node);
         // 시험 전환 버튼은 플래그가 아닌 실제 시험 수로 결정 — 1개면 무의미.
@@ -224,9 +225,9 @@ export function applyFeatureFlags() {
         // (실무 피처가 formula가 아닌 시험에서도 모드 토글이 떠야 한다).
         const on = el.dataset.feature === 'examSwitch'
             ? multiExam
-            : el.dataset.feature === 'practiceMode'
+            : chosen && (el.dataset.feature === 'practiceMode'
                 ? isPracticeCapable()
-                : hasFeature(el.dataset.feature);
+                : hasFeature(el.dataset.feature));
         if (!on) el.classList.add('is-hidden');
     });
 }
