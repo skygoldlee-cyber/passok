@@ -25,7 +25,8 @@ describe('시험 선택 — 목록·전환·복귀', () => {
         vi.clearAllMocks();
     });
 
-    it('목록 렌더 → 시험 카드 3장 + 현재(기본) 시험 표시', () => {
+    it('목록 렌더 → 시험 카드 3장 + 명시 선택 시험만 현재 표시', () => {
+        localStorage.setItem('current_exam', 'cosmetic');
         renderExamSelect();
 
         const cards = el('exam-select-list').querySelectorAll('.exam-select-card');
@@ -34,6 +35,17 @@ describe('시험 선택 — 목록·전환·복귀', () => {
         expect(cards[0].classList.contains('current')).toBe(true);
         expect(cards[0].textContent).toContain('현재 시험');
         expect(cards[1].classList.contains('current')).toBe(false);
+    });
+
+    it('미선택 상태 → 어떤 카드도 현재로 표시되지 않음 (기본 시험 폴백 금지)', () => {
+        renderExamSelect();
+
+        const cards = el('exam-select-list').querySelectorAll('.exam-select-card');
+        expect(cards.length).toBe(3);
+        cards.forEach(c => {
+            expect(c.classList.contains('current')).toBe(false);
+            expect(c.textContent).not.toContain('현재 시험');
+        });
     });
 
     it('다른 시험 선택 → current_exam 저장 + 리로드 트리거(P)', () => {

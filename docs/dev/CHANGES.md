@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 fix: 시험 피커 "현재 시험" 표시를 명시 선택값으로
+
+- getActiveExamId(기본 폴백) → getCurrentExamId — 미선택 시 어떤 카드도 현재로 표시 안 함
+
 ## 2026-10-25 fix: 헤더 타이틀 래퍼 축소 허용 — header-actions 오버플로 근본 수정
 
 - .header-title에 min-width:0 추가 — h2가 축소돼도 래퍼가 내용물 폭을 유지하던 문제 해소 (긴 타이틀 시 헤더 액션 밀림)

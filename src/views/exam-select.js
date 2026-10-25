@@ -2,7 +2,7 @@
 // @spec ES-01~03,ES-06
 // 멀티시험 플랫폼의 홈: 등록된 시험 목록을 카드로 표시하고 선택 시 시험을 전환한다.
 // 카드에는 시험별 진도 요약(외운 카드·퀴즈 정답률·최근 학습일·D-day)과 액센트 스왓치를 표시한다.
-import { getExamList, getActiveExamId, selectExam, peekExamValue, resolveExamThemeTokens } from '../exam-context.js';
+import { getExamList, getCurrentExamId, selectExam, peekExamValue, resolveExamThemeTokens } from '../exam-context.js';
 import { getItem, setItem } from '../storage.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
 import { esc } from '../sanitize.js';
@@ -95,7 +95,8 @@ export function renderExamSelect() {
     const container = document.getElementById('exam-select-list');
     if (!container) return;
     const exams = getExamList();
-    const currentId = getActiveExamId(); // 저장값 없으면 기본 시험 폴백 — "현재 시험" 배지가 유효 시험을 반영
+    // 명시 선택값만 "현재 시험"으로 표시 — 미선택(기본 시험 폴백) 상태는 어떤 카드도 현재로 찍지 않음
+    const currentId = getCurrentExamId();
 
     if (!exams.length) {
         container.innerHTML = '<p style="color:var(--color-text-muted);">등록된 시험이 없습니다. content/exams.json을 확인하세요.</p>';
