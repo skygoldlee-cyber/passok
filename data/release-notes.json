@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261025-f921ba1",
+    "date": "2026-10-25",
+    "notes": [
+      "[copy·landing] 히어로 제목 '통합' 삭제 — 스마트 학습 플랫폼",
+      "[정리·release] v20261025-d65eb3d 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-d65eb3d",
     "date": "2026-10-25",
     "notes": [
@@ -169,15 +177,6 @@
       "[테스트·gates] discord 공지 테스트 env 격리 — .env 실키 재주입 차단",
       "[기능·discord] 커뮤니티 설계·개설 런북 + 시험별 초대 버튼·릴리스 공지 (ES-08·AD-12)",
       "[정리·release] v20261023-7f1af2f 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261023-7f1af2f",
-    "date": "2026-10-23",
-    "notes": [
-      "[기능·spec] SPEC ID 상태 수명 주기 규약 — 폐기·통합 상태 + 잔존 참조 게이트",
-      "[문서·runbook] Discord 알림 경로 실전 검증 반영 — AD-10 체크 완료",
-      "[정리·release] v20261023-d28e8d4 스탬프 확정 [no-docs]"
     ]
   }
 ]
