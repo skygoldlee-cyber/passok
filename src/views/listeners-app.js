@@ -1,5 +1,5 @@
 // src/views/listeners-app.js — 앱 셸 공통 이벤트 바인딩 (event-listeners.js §1에서 분리)
-// @spec UX-SET-05,ES-08
+// @spec UX-SET-05,ES-08,LP-06
 // 진도 초기화·변경 이력·온보딩·피드백 버튼, 설정·도움말 메뉴, OMR·대시보드 접이식.
 import { state, saveProgress, safeGetItem, safeSetItem, safeRemoveItem, listScopedKeys } from '../state.js';
 import { removeItemRaw } from '../storage.js';
@@ -63,6 +63,11 @@ export function bindAppListeners() {
     document.getElementById('feedback-btn')?.addEventListener('click', () => {
         dismissFeedbackHint(); // NEW 배지 1회성 제거
         showFeedbackModal(state.currentView);
+    });
+
+    // 서비스 소개 — 랜딩 페이지를 새 탭으로 (LP-06)
+    document.getElementById('service-intro-btn')?.addEventListener('click', () => {
+        window.open('landing.html', '_blank', 'noopener');
     });
 
     // Discord 커뮤니티 초대 — 활성 시험이 exams.json에 discordInvite를 선언한 경우에만 노출.

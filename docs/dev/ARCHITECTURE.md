@@ -204,6 +204,8 @@
 passok/
 ├── index.template.html         # SPA 템플릿 — <!-- @include html/views/*.html --> 마커
 ├── index.html                  # SPA 엔트리 포인트 (생성물 — build:html 산출, 직접 편집 금지)
+├── landing.template.html       # 서비스 소개 랜딩 템플릿 — @landing-exams/@landing-demo 마커 (LP-01~09)
+├── landing.html                # 서비스 소개 페이지 (생성물 — build:landing 산출)
 ├── html/
 │   ├── views/                  # 뷰 마크업 파셜 12개 (dashboard·trainer·…)
 │   └── exams/cosmetic/         # 도메인 뷰 파셜 (formula.html — data-lazy-view 지연 주입)
@@ -240,6 +242,7 @@ passok/
 │   ├── reader-mermaid.css      #   Mermaid 다이어그램 전용 스타일
 │   ├── trainer.css             #   훈련소, 계산기, 손글씨
 │   ├── html-viewer.css         #   참조자료 HTML 뷰어
+│   ├── landing.css             #   서비스 소개 랜딩 페이지 전용 (style.css 외 별도 링크)
 │   ├── ui-overlay.css          #   오버레이, 모달, 토스트
 │   ├── study-calendar.css      #   학습 캘린더, 목표 달성률
 │   ├── print.css               #   인쇄 전용 (조제 기록지·라벨·안내문)

@@ -1,5 +1,5 @@
 // tests/unit/ux-invariants.test.js — UI/UX 설계 요구사항 (정적 검증)
-// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05
+// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,LP-06
 // CSS 규칙·마크업 구조·JS 구현 패턴이 설계 요구사항을 유지하는지 고정한다.
 
 import { test } from 'node:test';
@@ -94,13 +94,20 @@ test('UX-SET-07: 도움말 메뉴가 설정과 분리된 드롭다운으로 존�
   const helpIdx = indexHtml.indexOf('id="help-panel"');
   assert.ok(settingsIdx > -1 && helpIdx > settingsEnd, '설정 패널 뒤에 도움말 패널');
   // 도움말성 항목은 도움말 패널 소속이며 설정 패널 구간에는 남지 않는다
-  for (const id of ['onboarding-btn', 'shortcut-help-btn', 'whats-new-btn', 'feedback-btn', 'community-btn']) {
+  for (const id of ['onboarding-btn', 'service-intro-btn', 'shortcut-help-btn', 'whats-new-btn', 'feedback-btn', 'community-btn']) {
     const idx = indexHtml.indexOf(`id="${id}"`);
     assert.ok(idx > helpIdx, `${id}는 도움말 패널 소속`);
     assert.ok(!(idx > settingsIdx && idx < settingsEnd), `${id}는 설정 패널 밖`);
   }
   const statsIdx = indexHtml.indexOf('data-click="showUsageStats"');
   assert.ok(statsIdx > helpIdx, '내 사용 통계는 도움말 패널 소속');
+});
+
+test('LP-06: 랜딩 페이지 진입점이 도움말 패널과 시험 선택 뷰에 존재한다', () => {
+  assert.ok(indexHtml.includes('id="service-intro-btn"'), '도움말 패널 서비스 소개 버튼');
+  assert.ok(/service-intro-btn[\s\S]*window\.open\(['"]landing\.html/.test(listeners), '새 탭 오픈 바인딩');
+  const examSelect = read('html/views/exam-select.html');
+  assert.ok(examSelect.includes('href="landing.html"'), '시험 선택 뷰 서비스 소개 링크');
 });
 
 // ---------- UX-FB: 피드백·알림 ----------
