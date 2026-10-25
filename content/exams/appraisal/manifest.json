@@ -101,6 +101,20 @@
       "part": 1,
       "title": "감정평가 관계 법규",
       "file": "과목2_문제은행.md"
+    },
+    {
+      "key": "s_realestate",
+      "subject": "realestate",
+      "part": 1,
+      "title": "부동산학원론",
+      "file": "과목4_문제은행.md"
+    },
+    {
+      "key": "s_accounting",
+      "subject": "accounting",
+      "part": 1,
+      "title": "회계학",
+      "file": "과목5_문제은행.md"
     }
   ]
 }
