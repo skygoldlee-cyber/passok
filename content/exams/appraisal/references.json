@@ -4,5 +4,12 @@
   "lawRefsComment": "이 시험이 사용하는 content/lawdb.json 법령 id 목록 — 감평법·부동산공시법은 lawdb 미등록",
   "lawRefs": [],
   "noticeCore": null,
-  "subjectDefaultRefdoc": {}
+  "subjectDefaultRefdoc": {},
+  "refDirs": [],
+  "refDirsComment": "파일럿: 물리 PDF 미확보 — ref_md 발췌본 확보 시 전환",
+  "subjectDirMap": {
+    "theory": "과목1",
+    "law": "과목2",
+    "appraisal": "과목3"
+  }
 }

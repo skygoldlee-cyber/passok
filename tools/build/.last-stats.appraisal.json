@@ -1,0 +1,45 @@
+{
+  "subjects": {
+    "theory": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/theory/부동산학개론.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "law": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/law/감정평가관련법규.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "appraisal": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/appraisal/감정평가_통계원론.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {
+    "subject1": {
+      "questions": 4
+    },
+    "subject2": {
+      "questions": 4
+    },
+    "subject3": {
+      "questions": 4
+    }
+  }
+}

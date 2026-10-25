@@ -77,6 +77,9 @@ const _EXAM_LAW_URLS = {
     ],
     "admagent": [
     ["민법", "https://www.law.go.kr/법령/민법"]
+    ],
+    "appraisal": [
+
     ]
 };
 
