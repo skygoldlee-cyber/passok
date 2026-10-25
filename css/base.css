@@ -1231,3 +1231,14 @@ table {
     line-height: 1.4;
     pointer-events: none;
 }
+
+/* ES-09: 시험 미선택 — 내비 항목 시각적 dim (클릭은 피커로 리다이렉트, 선택 유도) */
+.exam-unselected .nav-item,
+.exam-unselected .mobile-tab-item {
+    opacity: 0.5;
+}
+.exam-unselected .nav-item[data-feature="examSwitch"],
+.exam-unselected .exam-select-card,
+.exam-unselected #exam-select-clear {
+    opacity: 1;
+}

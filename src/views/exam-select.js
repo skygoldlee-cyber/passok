@@ -150,6 +150,7 @@ export function resetExamSelection() {
     // 브랜딩 즉시 복귀 — 문서 타이틀·로고를 플랫폼 브랜드로 (app-shell 임포트는 모듈 DOM 접근으로 Node 테스트에서 크래시)
     if (typeof document !== 'undefined') {
         document.title = 'PassOK';
+        document.body.classList.add('exam-unselected'); // 미선택 내비 dim (ES-09)
         const logoMain = document.querySelector('.logo-text h1');
         const logoSub = document.querySelector('.logo-text span');
         if (logoMain) logoMain.textContent = 'PassOK';

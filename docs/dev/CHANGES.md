@@ -8,6 +8,12 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-26 feat: 동적 메뉴 보완 4종 — uiText 전면 확장
+
+- appraisal 등 uiText 비어있던 시험에 표준 뷰 키 채움 + calendar/manual/studyTools 신규 키
+- data-uitext "key:field" 문법 — :nav 단축 라벨로 탭바 라벨 시험별 표시
+- 미선택 시 body.exam-unselected → 내비 항목 dim 처리 (examSwitch 제외)
+
 ## 2026-10-26 fix: 피커 서비스 소개 링크를 부제 아래로 — 목록 하단→헤더 영역 이동
 
 ## 2026-10-26 docs: 시험 선택 기반 동적 메뉴 요구사항을 ES-09~11로 명시
