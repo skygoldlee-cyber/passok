@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261025-9c54bb8",
+    "date": "2026-10-25",
+    "notes": [
+      "[수정·ui] 모바일 설정·도움말 드롭다운 항목 중앙정렬 수정",
+      "[정리·release] v20261025-c6a7869 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-c6a7869",
     "date": "2026-10-25",
     "notes": [
@@ -172,15 +180,6 @@
       "[정리·tools] 루틴 경로 Node-only 분리 + npm run doctor 환경 진단",
       "[정리·stats] 테스트 수치 재측정 스탬프 — unit 1,558·dom 813·e2e 345",
       "[정리·release] v20261023-61dca92 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261023-61dca92",
-    "date": "2026-10-23",
-    "notes": [
-      "[수정·supabase] redeem_code 원자화·profiles 유실 방지·feedback 스푸핑 차단 + 리포트 인덱스",
-      "[기능·admin] Pro 모니터링 확장 — report:user 만료·코드 이력 + report:pro 현황 (AD-08·AD-09)",
-      "[정리·release] v20261023-c9dbacd 스탬프 확정 [no-docs]"
     ]
   }
 ]
