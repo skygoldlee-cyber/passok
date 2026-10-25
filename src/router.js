@@ -5,7 +5,7 @@ import { saveScrollPosition, restoreScrollPosition, registerViewNavigator, bumpV
 import { showToast, hideGlobalLoading } from './ui-utils.js';
 import { isAnyModalOpen, consumedModalPop } from './modal-back.js';
 import { getPracticeViewTitles, getPracticeHashSlugs } from './practice-registry.js';
-import { getCurrentExamId, getActiveExam } from './exam-context.js';
+import { getCurrentExamId, getExamAppName } from './exam-context.js';
 
 /**
  * 레지스트리 기반 뷰 타이틀 맵 생성
@@ -14,10 +14,11 @@ import { getCurrentExamId, getActiveExam } from './exam-context.js';
  */
 export function getViewTitles(registry) {
     const uiText = (registry && registry.uiText) || {};
-    // 선택된 시험 이름을 최상위 타이틀에 반영 — "OOO 대시보드"
-    const examName = (getActiveExam() || {}).name || '';
+    // 선택된 시험의 앱 브랜드명을 최상위 타이틀에 반영 — "Passmula 대시보드"
+    // (exam.name 전체는 모바일 헤더 폭을 초과해 오버플로를 유발 → 짧은 브랜드명 사용)
+    const examName = getExamAppName();
     const dashUi = uiText.dashboard || {};
-    const dashboardTitle = examName ? `${examName} 대시보드` : (dashUi.title || '학습 대시보드');
+    const dashboardTitle = examName && examName !== 'PassOK' ? `${examName} 대시보드` : (dashUi.title || '학습 대시보드');
     return {
         'dashboard-view': { title: dashboardTitle, subtitle: dashUi.subtitle || '시험 합격을 위한 분석 및 스마트 툴' },
         'analysis-view': uiText.analysis || { title: '학습 진단', subtitle: '학습 기록을 바탕으로 약점을 분석하여 학습 우선순위를 진단합니다' },

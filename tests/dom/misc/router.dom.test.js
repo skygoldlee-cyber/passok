@@ -84,6 +84,12 @@ describe('router.js — DOM 테스트', () => {
             expect(titles['flashcard-view'].title).toBe('개념 플래시카드');
         });
 
+        it('대시보드 타이틀 — 시험 목록 없으면 폴백, 있으면 브랜드명 대시보드', () => {
+            // 시험 목록 부재 → getExamAppName()이 'PassOK' 폴백 → 기본 타이틀 유지
+            const titles = getViewTitles(null);
+            expect(titles['dashboard-view'].title).toBe('학습 대시보드');
+        });
+
         it('모든 뷰 ID에 대해 타이틀 존재', () => {
             const titles = getViewTitles(null);
             const expectedViews = [
