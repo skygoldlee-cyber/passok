@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261025-2ab8760",
+    "date": "2026-10-25",
+    "notes": [
+      "[기능·data] 진도 스키마 버전 마커 — progress_schema_version 기록",
+      "[문서·strategy] 네이티브 앱 전환 전략 검토 — DOC-DSN-39",
+      "[정리·release] v20261025-3bff82e 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-3bff82e",
     "date": "2026-10-25",
     "notes": [
@@ -166,14 +175,6 @@
     "notes": [
       "[수정·onboarding] 안내 문구 조사 처리 — appName 뒤 이 → 에서",
       "[정리·release] v20261024-6bd1569 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261024-6bd1569",
-    "date": "2026-10-24",
-    "notes": [
-      "[문서·design] 홍보·유입 기능 보완 설계안 신규 — DOC-DSN-37",
-      "[정리·release] v20261024-f9fc3fc 스탬프 확정 [no-docs]"
     ]
   }
 ]
