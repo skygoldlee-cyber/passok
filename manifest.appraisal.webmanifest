@@ -2,7 +2,7 @@
   "id": "passok",
   "name": "PassOK",
   "short_name": "PassOK",
-  "description": "감정평가사 — 5과목 (1차 필기 객관식: 부동산학개론·감정평가관련법규·감정평가 및 통계원론) · 출제기준 기반 자체 제작 · 2차 주관식은 대상 외",
+  "description": "감정평가사 — 8과목 (1차 필기 객관식: 부동산학개론·감정평가관련법규·감정평가 및 통계원론) · 출제기준 기반 자체 제작 · 2차 주관식은 대상 외",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

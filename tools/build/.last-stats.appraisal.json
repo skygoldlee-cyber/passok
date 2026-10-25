@@ -53,22 +53,65 @@
           "quizzes": 1
         }
       }
+    },
+    "appraisalthy": {
+      "cards": 4,
+      "quizzes": 2,
+      "files": {
+        "교재/appraisal/감정평가이론.md": {
+          "cards": 4,
+          "quizzes": 2
+        },
+        "교재/appraisal/감정평가_통계원론.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "appraisallaw": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/appraisal/감정평가및보상법규.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "appraisalwork": {
+      "cards": 3,
+      "quizzes": 2,
+      "files": {
+        "교재/appraisal/감정평가실무.md": {
+          "cards": 3,
+          "quizzes": 2
+        }
+      }
     }
   },
   "exams": {
     "s_civil": {
-      "questions": 10
+      "questions": 20
     },
     "s_econ": {
-      "questions": 10
+      "questions": 20
     },
     "s_law": {
-      "questions": 10
+      "questions": 20
     },
     "s_realestate": {
-      "questions": 10
+      "questions": 20
     },
     "s_accounting": {
+      "questions": 20
+    },
+    "s2_theory": {
+      "questions": 10
+    },
+    "s2_law": {
+      "questions": 10
+    },
+    "s2_work": {
       "questions": 10
     }
   }

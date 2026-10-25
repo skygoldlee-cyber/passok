@@ -508,7 +508,10 @@ const _EXAM_TABLES = {
         "econ": "과목1",
         "realestate": "과목1",
         "law": "과목2",
-        "accounting": "과목1"
+        "accounting": "과목1",
+        "appraisalthy": "과목3",
+        "appraisallaw": "과목2",
+        "appraisalwork": "과목3"
         },
         REF_MD_SUBJECTS: {
 

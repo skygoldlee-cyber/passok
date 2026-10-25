@@ -38,5 +38,32 @@
   "quizzes": {
    "accounting_quiz_4dafdb": "20~50% 유의적 영향력|지분법"
   }
+ },
+ "appraisalthy": {
+  "cards": {
+   "appraisalthy_card_9c9e32": "3방식 비교",
+   "appraisalthy_card_923b02": "사정보정·시점수정",
+   "appraisalthy_card_3d248c": "환원율 도출",
+   "appraisalthy_card_a64998": "지역·개별비교"
+  },
+  "quizzes": {
+   "appraisalthy_quiz_76c113": "원리→적용 조건→장단→대상별 적합성 순|3방식 비교",
+   "appraisalthy_quiz_42da84": "지가비준표 구조 → 비교표 작성 절차|지역·개별비교"
+  }
+ },
+ "appraisallaw": {
+  "cards": {},
+  "quizzes": {}
+ },
+ "appraisalwork": {
+  "cards": {
+   "appraisalwork_card_ade4e9": "평가서 작성",
+   "appraisalwork_card_ef7352": "보상평가",
+   "appraisalwork_card_f48b5e": "지가 산정"
+  },
+  "quizzes": {
+   "appraisalwork_quiz_c4f14b": "사업인정→열람·의견→재결 절차에 따른 평가|보상평가",
+   "appraisalwork_quiz_563ed7": "표준지 선정→지역비교→개별비교→비준표 적용|지가 산정"
+  }
  }
 }
