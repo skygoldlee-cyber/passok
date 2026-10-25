@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: c284759aafb6c721
+> 입력 해시: e4b3c196fc2a8972
 > 생성: 2026-10-25 · 원천: SPEC.md(604개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -555,12 +555,12 @@
 | LP-01 | ✅ | 테스트 | DOC-DSN-38 | css/landing.css | tests/unit/gates/build-landing.test.js | — | — |
 | LP-02 | ✅ | 테스트 | DOC-DSN-38 | tools/build/build_landing.js | tests/unit/gates/build-landing.test.js | — | — |
 | LP-03 | ✅ | 테스트 | DOC-DSN-38 | tools/build/build_landing.js | tests/unit/gates/build-landing.test.js | — | — |
-| LP-04 | ✅ | 테스트 | DOC-DSN-38 | src/landing.js<br>tools/build/build_landing.js | tests/unit/app/landing.test.js<br>tests/unit/gates/build-landing.test.js | — | — |
-| LP-05 | ✅ | 테스트 | DOC-DSN-38 | src/landing.js | tests/unit/app/landing.test.js | — | — |
+| LP-04 | ✅ | 테스트 | DOC-DSN-38 | src/landing.js<br>tools/build/build_landing.js | tests/dom/misc/landing.dom.test.js<br>tests/unit/app/landing.test.js<br>tests/unit/gates/build-landing.test.js | — | — |
+| LP-05 | ✅ | 테스트 | DOC-DSN-38 | src/landing.js | tests/dom/misc/landing.dom.test.js<br>tests/unit/app/landing.test.js | — | — |
 | LP-06 | ✅ | 테스트 | DOC-DSN-38 | src/views/listeners-app.js | tests/unit/app/ux-invariants.test.js | — | — |
 | LP-07 | ✅ | 테스트 | DOC-DSN-38 | sw.js | tests/unit/gates/build-landing.test.js | — | — |
 | LP-08 | ✅ | 테스트 | DOC-DSN-38 | tools/build/build_landing.js | tests/unit/gates/build-landing.test.js | — | — |
-| LP-09 | ✅ | 테스트 | DOC-DSN-38 | src/landing.js<br>tools/build/build_landing.js | tests/unit/app/landing.test.js<br>tests/unit/gates/build-landing.test.js | — | — |
+| LP-09 | ✅ | 테스트 | DOC-DSN-38 | src/landing.js<br>tools/build/build_landing.js | tests/dom/misc/landing.dom.test.js<br>tests/unit/app/landing.test.js<br>tests/unit/gates/build-landing.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
