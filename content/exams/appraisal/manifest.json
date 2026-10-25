@@ -191,7 +191,8 @@
    "nav": "대시보드"
   },
   "analysis": {
-   "title": "학습 진단"
+   "title": "학습진단",
+   "nav": "학습진단"
   },
   "flashcard": {
    "title": "개념 플래시카드",
