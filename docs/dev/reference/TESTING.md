@@ -277,7 +277,9 @@ npm run hooks:install
 | 94 | `search-morpheme.test.js` | 8 | 형태소 경계 판정·동의어 확장 (TS-13/TS-14) | |
 | 95 | `textbook-search-exam.test.js` | 2 | `search-sources.js` `_loadExamMdText` — 문제은행 MD 로드 규약 (TS-12) | |
 | 96 | `pro-report.test.js` | 5 | `tools/check/pro_report.js` `summarize()` — 채널·티어 발급/사용률·만료 버킷·가입 수단 분포 (AD-09) | 2026-10-23 추가 |
-| | **합계** | **1560** | | |
+| 97 | `landing.test.js` | 3 | `src/landing.js` 순수 함수 — `daysUntil`·`computePlanPreview`·`subjectShares` (LP-09) | 2026-10-25 추가 |
+| 98 | `gates/build-landing.test.js` | 8 | `build_landing.js` — 카드 렌더·이스케이프·마커 주입·데모 수집·스키마·manifest 비중·SW 미포함·OG 메타 (LP-01~04,07~09) | 2026-10-25 추가 |
+| | **합계** | **1571** | | |
 
 ### DOM 테스트 (`tests/dom/`)
 
@@ -351,7 +353,8 @@ npm run hooks:install
 | 65 | `morph-search.dom.test.js` | 3 | 형태소 경계·동의어 검색 (TS-13/TS-14) | 본매치·부분 일치·동의어 정역방향 | |
 | 66 | `glossary-search.dom.test.js` | 5 | 용어 정의 카드 그룹 (TS-15/TS-16) | 정의 카드 노출·과목 배지·출처 링크 | |
 | 67 | `exam-index-scope.dom.test.js` | 1 | 검색 인덱스 시험 스코프 (TS-17) | 시험 전환 시 동일 과목 키 인덱스 재구축 | |
-| | **합계** | **757** | | |
+| 68 | `landing.dom.test.js` | 6 | 랜딩 위젯 (LP-04/05/09) | parseDemoData·init 렌더·퀴즈 피드백→결과·계획 D-day/압축/과거 날짜·설치 CTA | 2026-10-25 추가 |
+| | **합계** | **763** | | |
 
 ---
 
