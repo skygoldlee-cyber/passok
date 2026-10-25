@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261025-d432b0b",
+    "date": "2026-10-25",
+    "notes": [
+      "[수정·ux] 선택 해제를 clearCurrentExam 헬퍼 경유로 — storage 접근 규약 준수",
+      "[기능·ux] 시험 피커에 선택 해제 버튼 — 선택 없음 상태로 복귀 가능",
+      "[정리·release] v20261025-59e1e18 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-59e1e18",
     "date": "2026-10-25",
     "notes": [
@@ -176,14 +185,6 @@
       "[수정·ci] 랜딩 생성물 CI 반영 — build 잡에 build:landing + 아티팩트",
       "[기능·landing] 서비스 소개 랜딩 페이지 신설 — /landing.html (LP-01~09)",
       "[정리·release] v20261025-9c54bb8 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261025-9c54bb8",
-    "date": "2026-10-25",
-    "notes": [
-      "[수정·ui] 모바일 설정·도움말 드롭다운 항목 중앙정렬 수정",
-      "[정리·release] v20261025-c6a7869 스탬프 확정 [no-docs]"
     ]
   }
 ]
