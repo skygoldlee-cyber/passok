@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 fix: 모바일 탭바 실무 메뉴 상시 활성 표시
+
+- .mobile-tab-practice 기본 상태의 violet tint 배경 제거 — 활성 탭처럼 보이던 오류. 강조는 active 상태에만 적용
+
 ## 2026-10-25 appraisal CI 수정 — 메타 헤딩 전수 정정
 
 - 부록 헤딩 7건 전수 정정(TS-17) + 재빌드 — e2b036af CI 실패 후속
