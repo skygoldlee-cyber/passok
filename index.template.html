@@ -289,10 +289,6 @@
                 <i class="fa-solid fa-circle-question" aria-hidden="true"></i>
                 <span data-uitext="quiz:nav">퀴즈</span>
             </button>
-            <button class="mobile-tab-item" data-target="dictionary-view" data-feature="dictionary">
-                <i class="fa-solid fa-book-open" aria-hidden="true"></i>
-                <span data-uitext="dictionary:nav">성분사전</span>
-            </button>
             <button class="mobile-tab-item mobile-tab-practice" data-target="formula-view" data-feature="formula">
                 <i class="fa-solid fa-flask-vial" aria-hidden="true"></i>
                 <span data-uitext="formula:nav">실무도구</span>
@@ -314,6 +310,12 @@
                     </button>
                 </div>
                 <div class="more-sheet-scroll">
+                    <div class="more-sheet-grid">
+                        <button type="button" data-click="ManualViewer.openManual" class="mobile-tab-item nav-study-only">
+                            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                            <span data-uitext="manual">매뉴얼</span>
+                        </button>
+                    </div>
                     <p class="more-sheet-label nav-study-only">학습</p>
                     <div class="more-sheet-grid">
                         <button class="mobile-tab-item nav-study-only" data-target="analysis-view">
@@ -325,9 +327,9 @@
                             <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
                             <span data-uitext="calendar">캘린더</span>
                         </button>
-                        <button type="button" data-click="ManualViewer.openManual" class="mobile-tab-item nav-study-only">
-                            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-                            <span data-uitext="manual">매뉴얼</span>
+                        <button class="mobile-tab-item" data-target="dictionary-view" data-feature="dictionary">
+                            <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+                            <span data-uitext="dictionary:nav">성분사전</span>
                         </button>
                     </div>
                     <p class="more-sheet-label nav-study-only">훈련 · 평가</p>
