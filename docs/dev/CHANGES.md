@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 fix: 대시보드 타이틀 브랜드명으로 — 오버플로 방지
+
+- 긴 시험명(맞춤형화장품 조제관리사)이 모바일 헤더를 밀어 E2E 실패 — getExamAppName() 브랜드명으로 축약
+
 ## 2026-10-25 feat: 시험 미선택 시 시험선택 뷰 우선 + 대시보드 타이틀 시험명 반영
 
 - 부팅 시 current_exam 없으면 exam-select 뷰 진입 (선택 시 저장되어 이후 대시보드 직행) — 기본 시험 자동 진입 개선
