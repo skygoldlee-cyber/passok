@@ -1,5 +1,12 @@
 [
   {
+    "version": "v20261025-d65eb3d",
+    "date": "2026-10-25",
+    "notes": [
+      "[정리·release] v20261025-2db5cf4 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-2db5cf4",
     "date": "2026-10-25",
     "notes": [
@@ -171,17 +178,6 @@
       "[기능·spec] SPEC ID 상태 수명 주기 규약 — 폐기·통합 상태 + 잔존 참조 게이트",
       "[문서·runbook] Discord 알림 경로 실전 검증 반영 — AD-10 체크 완료",
       "[정리·release] v20261023-d28e8d4 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261023-d28e8d4",
-    "date": "2026-10-23",
-    "notes": [
-      "[테스트·gates] discord 미설정 경로 격리 — 실제 .env webhook 무관하게 검증",
-      "[문서·runbook] Discord 설정 진행 상태 체크리스트 추가",
-      "[문서·runbook] DISCORD_ADMIN 초보자용 상세 절차로 확장",
-      "[기능·admin] Discord 운영 표면 — 알림 push + 조회 명령 봇 (AD-10·AD-11)",
-      "[정리·release] v20261023-077f471 스탬프 확정 [no-docs]"
     ]
   }
 ]
