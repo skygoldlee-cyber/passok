@@ -216,6 +216,13 @@
         flex-wrap: nowrap;
     }
 
+    /* 타이틀 래퍼도 축소 허용 — min-width:auto이면 h2가 내용물 폭 이하로
+       줄지 못해 header-actions가 뷰포트 밖으로 밀린다 */
+    .app-header .header-title {
+        min-width: 0;
+        flex-shrink: 1;
+    }
+
     .app-header h2 {
         font-size: var(--text-lg);
         /* 타이틀이 너무 길면 말줄임 */
