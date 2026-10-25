@@ -1,5 +1,27 @@
 {
- "theory": {
+ "civil": {
+  "cards": {
+   "civil_card_95e6d3": "무효 vs 취소",
+   "civil_card_856510": "사실인 관습 vs 관습법",
+   "civil_card_91f84c": "허위표시의 제3자",
+   "civil_card_c9f7ea": "조건 vs 기한"
+  },
+  "quizzes": {
+   "civil_quiz_45ca51": "무효는 당초부터·누구나 주장 가능, 취소는 유효였다가 소급 소멸·당사자만|무효 vs 취소",
+   "civil_quiz_5f985b": "사실인 관습=법원 아님(해석 기준), 관습법=법원(법질서 부합 필요)|사실인 관습 vs 관습법",
+   "civil_quiz_ceaa6f": "108조2항 \"선의\"면 족함(무과실 불요) — 외형상 형성자는 제외|허위표시의 제3자",
+   "civil_quiz_c070f3": "조건=불확실 사실, 기한=확실 사실(시기 불명 기한도 기한)|조건 vs 기한"
+  }
+ },
+ "econ": {
+  "cards": {
+   "econ_card_6e609d": "화폐승수",
+   "econ_card_c39f35": "개방승수",
+   "econ_card_96527a": "변동환율·완전자본이동"
+  },
+  "quizzes": {}
+ },
+ "realestate": {
   "cards": {},
   "quizzes": {}
  },
@@ -7,8 +29,14 @@
   "cards": {},
   "quizzes": {}
  },
- "appraisal": {
-  "cards": {},
-  "quizzes": {}
+ "accounting": {
+  "cards": {
+   "accounting_card_926149": "확정급여",
+   "accounting_card_cb5105": "지분법",
+   "accounting_card_d881d3": "현금흐름표"
+  },
+  "quizzes": {
+   "accounting_quiz_4dafdb": "20~50% 유의적 영향력|지분법"
+  }
  }
 }

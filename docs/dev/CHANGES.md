@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 appraisal 경로 표기 정리 + 생성물 재빌드
+
+- 교재·은행 내 ref_md 경로 표기 정리 (링크 린트 LL-05) + sync_textbook_files·build:data 재빌드로 구조 드리프트 해소 — CI 실패(06e920b8) 수정
+
 ## 2026-10-25 appraisal 문제은행 전수 + 이론 본문 확충
 
 - 부동산학원론·회계학 은행 신규(5과목 전수), manifest exams 5과목 정합 — 이론 4권에 혼동비교·공식·기출포인트 부록 추가
