@@ -357,11 +357,17 @@ describe('router.js — DOM 테스트', () => {
             expect(state.currentView).toBe('exam-select-view');
         });
 
-        it('시험 미선택이라도 딥링크 해시가 우선', () => {
+        it('시험 미선택 — 다른 뷰 진입 시 피커로 리다이렉트', () => {
+            localStorage.removeItem('current_exam');
+            navigateToView('quiz-view', ctx());
+            expect(state.currentView).toBe('exam-select-view');
+        });
+
+        it('시험 미선택 — 딥링크 해시도 피커로 차단', () => {
             localStorage.removeItem('current_exam');
             history.pushState(null, '', '#/cards');
             initViewHashRouting(ctx());
-            expect(state.currentView).toBe('flashcard-view');
+            expect(state.currentView).toBe('exam-select-view');
         });
     });
 
