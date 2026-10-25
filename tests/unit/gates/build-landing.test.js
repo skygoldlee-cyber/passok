@@ -24,8 +24,8 @@ test('LP-03: 시험 카드가 exams.json 순회로 생성되고 comingSoon이 �
         assert.ok(/landing-exam-coming">준비 중</.test(html), 'comingSoon 배지');
         assert.ok(!/coming-soon"[^>]*href/.test(html), 'comingSoon 카드는 링크 없음');
     }
-    // 실제 시험 카드는 앱 링크
-    assert.ok(html.includes('href="./index.html"'), '앱 링크');
+    // 실제 시험 카드는 앱 링크 (?app=1 — LP-10 리다이렉트 우회 표시)
+    assert.ok(html.includes('href="./index.html?app=1"'), '앱 링크');
 });
 
 test('LP-03: 카드 텍스트는 HTML 이스케이프된다', () => {
