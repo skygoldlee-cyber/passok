@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 appraisal 관계법규 교재 8법 확장 + 문제은행 재작성 + 영어 안내
+
+- 관계법규 교재를 9법 전수 챕터로 확장(국토계획 최다 비중 반영) + 문제은행 3권을 기출 유형(5지선다·ㄱㄴㄷ)으로 재작성 + 영어 대체 안내 문서
+
 ## 2026-10-25 appraisal 회계학 교재 + manifest 법정 과목 재편
 
 - 회계학 골격(6챕터: 개념체계~CVP) + manifest subjects→법정 5과목(civil·econ·realestate·law·accounting), 문제은행·desc 정합
