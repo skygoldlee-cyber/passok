@@ -116,7 +116,7 @@ test('LP-06: 랜딩 페이지 진입점이 도움말 패널과 시험 선택 뷰
 test('LP-10: 신규 방문자 리다이렉트 스크립트가 index.html에 로드되고 조건을 갖는다', () => {
   const redirect = read('src/landing-redirect.js');
   assert.ok(indexHtml.includes('src="src/landing-redirect.js"'), '템플릿 로드');
-  for (const cond of ['localStorage.length', 'standalone', 'location.hash', 'location.replace']) {
+  for (const cond of ['localStorage.length', 'standalone', 'navigator.webdriver', 'location.hash', 'location.replace']) {
     assert.ok(redirect.includes(cond), `리다이렉트 조건: ${cond}`);
   }
 });

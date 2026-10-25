@@ -8,6 +8,7 @@
 - `유튜브_홍보동영상_제작의뢰서.md` v7 — 진입 URL·CTA QR을 랜딩 전용으로 갱신
 - check_storage ALLOWED_FILES에 landing-redirect.js·landing.js 등록, vitest 커버리지 제외(즉시실행 스크립트)
 - 테스트 단정 갱신 — `?app=1` CTA 변경에 맞춰 landing.dom·build-landing 테스트의 href 단정 수정
+- `navigator.webdriver` 생략 조건 추가 — E2E 빈 스토리지 컨텍스트(첫 실행 플로우 검증)가 랜딩으로 빠지지 않도록 자동화 환경 안내 생략
 
 ## 2026-10-25 버전 표기 위치 이동 — 설정(⚙️) → 도움말(?) 패널
 
