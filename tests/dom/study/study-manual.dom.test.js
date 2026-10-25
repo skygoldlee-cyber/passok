@@ -19,6 +19,7 @@ describe('매뉴얼 뷰어 — 문서 열기·TOC·전환', () => {
     let ManualViewer;
     beforeEach(async () => {
         localStorage.clear();
+        localStorage.setItem('current_exam', 'cosmetic'); // 미선택 진입 가드 — 매뉴얼도 선택 후 컨텍스트
         sessionStorage.clear();
         vi.resetModules();
         ({ ManualViewer } = await import('../../../src/reader/manual-viewer.js'));
