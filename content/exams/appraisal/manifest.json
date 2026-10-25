@@ -162,6 +162,27 @@
       "part": 1,
       "title": "회계학",
       "file": "과목5_문제은행.md"
+    },
+    {
+      "key": "s2_theory",
+      "subject": "appraisalthy",
+      "part": 2,
+      "title": "감정평가이론 (서술형)",
+      "file": "2차_평가이론_주관식.md"
+    },
+    {
+      "key": "s2_law",
+      "subject": "appraisallaw",
+      "part": 2,
+      "title": "감정평가 및 보상 법규 (서술형)",
+      "file": "2차_보상법규_주관식.md"
+    },
+    {
+      "key": "s2_work",
+      "subject": "appraisalwork",
+      "part": 2,
+      "title": "감정평가실무 (서술형)",
+      "file": "2차_평가실무_주관식.md"
     }
   ]
 }
