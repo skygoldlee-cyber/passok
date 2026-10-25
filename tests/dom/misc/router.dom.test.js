@@ -90,6 +90,17 @@ describe('router.js — DOM 테스트', () => {
             expect(titles['dashboard-view'].title).toBe('학습 대시보드');
         });
 
+        it('대시보드 타이틀 — 명시 선택 시 브랜드명, 선택 해제 시 일반 타이틀', () => {
+            window.EXAMS_LIST = { exams: [{ id: 'cosmetic', name: '맞춤형화장품 조제관리사', appName: 'Passmula' }] };
+            localStorage.setItem('current_exam', 'cosmetic');
+            expect(getViewTitles(null)['dashboard-view'].title).toBe('Passmula 대시보드');
+
+            // 선택 해제 → 기본 시험 폴백 브랜드가 아닌 일반 타이틀
+            localStorage.removeItem('current_exam');
+            expect(getViewTitles(null)['dashboard-view'].title).toBe('학습 대시보드');
+            delete window.EXAMS_LIST;
+        });
+
         it('모든 뷰 ID에 대해 타이틀 존재', () => {
             const titles = getViewTitles(null);
             const expectedViews = [

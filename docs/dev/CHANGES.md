@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 fix: 선택 해제 후에도 대시보드 타이틀에 기본 시험 브랜드 노출
+
+- 대시보드 타이틀을 명시 선택(getCurrentExamId) 게이트 — 미선택 시 기본 시험 폴백 브랜드 미표시
+
 ## 2026-10-25 fix: 선택 해제를 clearCurrentExam 헬퍼 경유로
 
 - exam-select.js의 localStorage 직접 접근을 exam-context 헬퍼로 이전 — storage 접근 규약 준수
