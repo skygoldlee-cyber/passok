@@ -4,8 +4,18 @@
   "quizzes": {}
  },
  "civil-broker": {
-  "cards": {},
-  "quizzes": {}
+  "cards": {
+   "civil-broker_card_604b94": "무효 vs 취소",
+   "civil-broker_card_d157c5": "사실인 관습 vs 관습법",
+   "civil-broker_card_cea8e1": "허위표시의 제3자",
+   "civil-broker_card_04ec63": "조건 vs 기한"
+  },
+  "quizzes": {
+   "civil-broker_quiz_7c6e51": "무효는 당초부터·누구나 주장 가능, 취소는 유효였다가 소급 소멸·당사자만|무효 vs 취소",
+   "civil-broker_quiz_aa86aa": "사실인 관습=법원 아님(해석 기준), 관습법=법원(법질서 부합 필요)|사실인 관습 vs 관습법",
+   "civil-broker_quiz_778b79": "108조2항 \"선의\"면 족함(무과실 불요) — 외형상 형성자는 제외|허위표시의 제3자",
+   "civil-broker_quiz_1efb19": "조건=불확실 사실, 기한=확실 사실(시기 불명 기한도 기한)|조건 vs 기한"
+  }
  },
  "broker-law": {
   "cards": {},

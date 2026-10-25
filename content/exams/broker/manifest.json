@@ -10,7 +10,13 @@
    "name": "부동산학개론",
    "shortName": "부동산학",
    "dir": "교재/theory",
-   "chapters": []
+   "chapters": [
+    {
+     "key": "full",
+     "title": "부동산학개론 (전체)",
+     "file": "부동산학개론.md"
+    }
+   ]
   },
   {
    "key": "civil-broker",
@@ -18,7 +24,13 @@
    "name": "민법(중개 관련)",
    "shortName": "민법",
    "dir": "교재/law",
-   "chapters": []
+   "chapters": [
+    {
+     "key": "full",
+     "title": "민법(중개 관련) (전체)",
+     "file": "민법_중개관련.md"
+    }
+   ]
   },
   {
    "key": "broker-law",
@@ -26,7 +38,13 @@
    "name": "공인중개사법",
    "shortName": "중개사법",
    "dir": "교재/law",
-   "chapters": []
+   "chapters": [
+    {
+     "key": "full",
+     "title": "공인중개사법 (전체)",
+     "file": "공인중개사법.md"
+    }
+   ]
   },
   {
    "key": "estate-publaw",
@@ -34,7 +52,13 @@
    "name": "부동산공법",
    "shortName": "공법",
    "dir": "교재/law",
-   "chapters": []
+   "chapters": [
+    {
+     "key": "full",
+     "title": "부동산공법 (전체)",
+     "file": "부동산공법.md"
+    }
+   ]
   },
   {
    "key": "estate-registry",
@@ -42,7 +66,13 @@
    "name": "부동산공시법",
    "shortName": "공시",
    "dir": "교재/law",
-   "chapters": []
+   "chapters": [
+    {
+     "key": "full",
+     "title": "부동산공시법 (전체)",
+     "file": "부동산공시법.md"
+    }
+   ]
   },
   {
    "key": "estate-tax",
@@ -50,7 +80,13 @@
    "name": "부동산세법",
    "shortName": "세법",
    "dir": "교재/law",
-   "chapters": []
+   "chapters": [
+    {
+     "key": "full",
+     "title": "부동산세법 (전체)",
+     "file": "부동산세법.md"
+    }
+   ]
   },
   {
    "key": "broker-practice",
@@ -58,7 +94,13 @@
    "name": "중개실무",
    "shortName": "실무",
    "dir": "교재/practice",
-   "chapters": []
+   "chapters": [
+    {
+     "key": "full",
+     "title": "중개실무 (전체)",
+     "file": "중개실무.md"
+    }
+   ]
   }
  ],
  "exams": [],
