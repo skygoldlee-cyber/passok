@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-26 feat: 내비 라벨 시험별 uiText 연동
+
+- 사이드바 내비 라벨 9개에 data-uitext 연결 — 시험별 uiText.<view>.title로 메뉴 표시 덮어쓰기
+
 ## 2026-10-26 feat: 시험 미선택 시 모든 뷰 진입 차단
 
 - navigateToView 중앙 가드 — 미선택 시 피커 외 뷰는 피커로 리다이렉트 + 안내 토스트 (nav·탭바·딥링크 포함)
