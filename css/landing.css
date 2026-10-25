@@ -2,6 +2,16 @@
    디자인 토큰은 base.css `:root` 변수만 사용 (style.css 선행 로드)
    @spec LP-01 */
 
+/* 앱 셸 규약 해제 — base.css의 body{overflow:hidden;height:100vh}는
+   SPA 뷰 내부 스크롤용이라 랜딩에서는 문서 스크롤로 되돌린다.
+   이 파일은 landing.html에만 로드되므로 앱에는 영향 없음. */
+body {
+    overflow: auto;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
 .landing {
     max-width: 960px;
     margin: 0 auto;

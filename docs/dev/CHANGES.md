@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-25 랜딩 페이지 세로 스크롤 불가 수정
+
+- `css/landing.css` — `body { overflow:auto; height:auto }` 추가: base.css의 앱 셸 규약(`overflow:hidden;height:100vh` — SPA 뷰 내부 스크롤용)이 랜딩 문서 스크롤을 차단하던 건 해제
+
 ## 2026-10-25 서비스 소개 랜딩 페이지 구현 — /landing.html (LP-01~09)
 
 - `landing.template.html` + `tools/build/build_landing.js` → `landing.html` 조립 (`@landing-exams`/`@landing-demo` 마커, check:landing 신선도, build:derived·deploy·fresh 프리셋 편입)
