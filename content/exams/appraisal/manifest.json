@@ -12,6 +12,11 @@
       "dir": "교재/theory",
       "chapters": [
         {
+          "key": "civil",
+          "title": "민법 (총칙·물권)",
+          "file": "민법_총칙물권.md"
+        },
+        {
           "key": "realestate",
           "title": "부동산학원론",
           "file": "부동산학원론.md"
