@@ -159,6 +159,8 @@ describe('뷰 전환 계약', () => {
     beforeEach(() => {
         history.replaceState(null, '', location.pathname);
         state.currentView = 'dashboard-view';
+        // 시험 선택 완료 상태로 부팅 (미선택 시 exam-select 뷰 우선 진입이 기본)
+        localStorage.setItem('current_exam', 'cosmetic');
         document.body.innerHTML = `
             <div id="view-title"></div>
             <div id="view-subtitle"></div>
