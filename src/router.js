@@ -49,7 +49,7 @@ export function getViewTitles(registry) {
  */
 export function navigateToView(target, ctx) {
     const { titlesMap, handlers } = ctx;
-    // 시험 미선택: 피커 외 모든 뷰 진입 차단 — 피커로 리다이렉트
+    // 시험 미선택: 피커 외 모든 뷰 진입 차단 — 피커로 리다이렉트 (ES-09)
     // (nav-item·탭바·더보기·딥링크 모두 이 경로를 통과)
     if (target !== 'exam-select-view' && !getCurrentExamId()) {
         showToast('먼저 학습할 시험을 선택하세요', 'info');

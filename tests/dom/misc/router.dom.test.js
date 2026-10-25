@@ -1,4 +1,4 @@
-// @spec UX-NAV-01,UX-NAV-08,UM-04
+// @spec UX-NAV-01,UX-NAV-08,UM-04,ES-09
 import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
 import { getViewTitles, navigateToView, initViewHashRouting, resetExitGuardState } from '../../../src/router.js';
 import { isStaleViewGen } from '../../../src/views/navigation.js';
