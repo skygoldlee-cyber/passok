@@ -8,6 +8,7 @@ import { STORAGE_KEYS } from '../storage-keys.js';
 import { esc } from '../sanitize.js';
 import { todayKey } from '../utils.js';
 import { switchView } from './navigation.js';
+import { applyExamBranding } from '../app-shell.js';
 import { showAlert, showToast } from '../ui-utils.js';
 
 /**
@@ -147,6 +148,7 @@ export function showExamSelect() {
 /** 선택 해제 — current_exam 제거로 "선택 없음" 상태로 되돌림. 다음 부팅부터 피커가 초기화면 */
 export function resetExamSelection() {
     clearCurrentExam();
+    applyExamBranding(); // 문서 타이틀·로고를 플랫폼 브랜드로 즉시 복귀
     renderExamSelect();
     showToast('시험 선택이 해제됐습니다 — 다음 실행부터 시험 선택이 먼저 표시됩니다', 'info');
 }

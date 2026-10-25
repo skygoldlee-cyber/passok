@@ -8,6 +8,8 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-26 fix: 선택 해제 후 브랜딩 잔류 — 해제 시 applyExamBranding 재적용
+
 ## 2026-10-26 test: 매뉴얼·모드 테스트에 시험 선택 상태 셋업
 
 ## 2026-10-26 feat: 미선택 시 매뉴얼·모드 전환도 차단

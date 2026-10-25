@@ -57,6 +57,10 @@ describe('시험 선택 — 목록·전환·복귀', () => {
 
         expect(localStorage.getItem('current_exam')).toBeNull();
         expect(el('exam-select-list').querySelector('.exam-select-card.current')).toBeNull();
+        // 브랜딩도 플랫폼 브랜드로 복귀 — 선택 시험명 잔류 방지
+        const logoMain = document.querySelector('.logo-text h1');
+        if (logoMain) expect(logoMain.textContent).toBe('PassOK');
+        expect(document.title).toBe('PassOK');
     });
 
     it('다른 시험 선택 → current_exam 저장 + 리로드 트리거(P)', () => {
