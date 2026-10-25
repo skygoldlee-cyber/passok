@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: c36ee9067410579c
-> 생성: 2026-10-25 · 원천: SPEC.md(605개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 76d9c275f3d12228
+> 생성: 2026-10-25 · 원천: SPEC.md(608개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 605개 — 문서 연결 442 · 소스 연결 541 · 테스트 연결 576 · 보고서 연결 109
+**커버리지 요약**: 요구사항 608개 — 문서 연결 442 · 소스 연결 541 · 테스트 연결 579 · 보고서 연결 109
 
 ---
 
@@ -453,6 +453,9 @@
 | ES-06 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-38<br>DOC-RBK-16 | src/exam-context.js<br>src/views/exam-select.js | tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-select-summary.test.js | — | — |
 | ES-07 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-38<br>DOC-RBK-16 | — | tests/dom/study/study-examselect.dom.test.js | — | — |
 | ES-08 | ✅ | 테스트 | DOC-DSN-37<br>DOC-DSN-38<br>DOC-RBK-18 | src/views/listeners-app.js | tests/dom/common/community-invite.dom.test.js | — | — |
+| ES-09 | ✅ | 테스트 | — | — | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/misc/router.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js | — | — |
+| ES-10 | ✅ | E2E 테스트 | — | — | tests/dom/exam/exam-switching.dom.test.js<br>tests/e2e/exam-switch.spec.js | — | — |
+| ES-11 | ✅ | 테스트 | — | — | tests/dom/study/study-examselect.dom.test.js | — | — |
 
 ## 3.23 사용자 의견 수신
 
