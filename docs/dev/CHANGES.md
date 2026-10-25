@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 appraisal 감정평가 실무기준 수집
+
+- DRF admrul로 고시 전문 추출 → ref_md/과목3 (제2023-522호, ~76k자) — 과목3 평가원론 공식 근거. SOURCE_COLLECT.md 수집 현황 노트 추가
+
 ## 2026-10-25 appraisal 법령 참조자료 수집
 
 - law.go.kr DRF API(LAW_OC_KEY)로 과목2 근거 법령 6건 ref_md 추출 — 감평법(법·령·규칙) + 가격공시법(법·령·규칙), 조문 289개. `subjectDefaultRefdoc`·`referenceLaw` 등록
