@@ -120,9 +120,18 @@
         gap: 0.75rem !important;
     }
 
-    .daily-challenge-card #daily-challenge-status {
+    /* 세로 스택에서 배지가 버튼보다 작게 보이는 불균형 해소 —
+       버튼과 동일한 높이감으로 패딩·정렬 */
+    .daily-challenge-card #daily-challenge-status,
+    .daily-challenge-card #weekly-goal-chip {
         text-align: center !important;
         width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.9375rem !important;
+        min-height: 44px !important;
     }
 
     .daily-challenge-card #start-daily-btn {
