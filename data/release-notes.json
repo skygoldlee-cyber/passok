@@ -36,7 +36,7 @@
     "version": "v20261026-cf7009e",
     "date": "2026-10-26",
     "notes": [
-      "[기능·ux] 동적 메뉴 보완 — uiText 전면 확장 + 미선택 내비 dim (ES-10)",
+      "[기능·ux] 동적 메뉴 보완 — uiText 전면 확장 + 미선택 내비 dim",
       "[정리·release] v20261026-73ad3b2 스탬프 확정 [no-docs]"
     ]
   },
