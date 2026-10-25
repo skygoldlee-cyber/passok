@@ -8,6 +8,8 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-26 test: 매뉴얼·모드 테스트에 시험 선택 상태 셋업
+
 ## 2026-10-26 feat: 미선택 시 매뉴얼·모드 전환도 차단
 
 - ManualViewer.openManual/openFormulaManual·toggleUiMode에 선택 가드 — data-click 경로 우회 차단
