@@ -25,6 +25,8 @@ vi.mock('../../../src/views/navigation.js', () => {
 describe('router.js — DOM 테스트', () => {
     beforeEach(() => {
         state.currentView = 'dashboard-view';
+        // 시험 선택 완료 상태로 부팅 (미선택 시 exam-select 뷰 우선 진입이 기본)
+        localStorage.setItem('current_exam', 'cosmetic');
         history.replaceState(null, '', location.pathname);
         document.body.innerHTML = `
             <div id="view-title"></div>
@@ -330,6 +332,19 @@ describe('router.js — DOM 테스트', () => {
             history.pushState(null, '', '#/nope');
             window.dispatchEvent(new Event('hashchange'));
             expect(state.currentView).toBe('dashboard-view');
+        });
+
+        it('시험 미선택 부팅 → 시험 선택 뷰 우선 진입', () => {
+            localStorage.removeItem('current_exam');
+            initViewHashRouting(ctx());
+            expect(state.currentView).toBe('exam-select-view');
+        });
+
+        it('시험 미선택이라도 딥링크 해시가 우선', () => {
+            localStorage.removeItem('current_exam');
+            history.pushState(null, '', '#/cards');
+            initViewHashRouting(ctx());
+            expect(state.currentView).toBe('flashcard-view');
         });
     });
 
