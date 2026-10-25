@@ -76,7 +76,10 @@ test('UX-SET-03: 설정 항목의 최소 터치 타겟이 44px이다', () => {
 });
 
 test('UX-SET-04: 버전 표기가 설정 패널 하단에 있다', () => {
-  assert.ok(indexHtml.includes('id="settings-version"'), '설정 패널 버전 스팬');
+  assert.ok(indexHtml.includes('id="settings-version"'), '버전 스팬 존재');
+  const helpIdx = indexHtml.indexOf('id="help-panel"');
+  const verIdx = indexHtml.indexOf('id="settings-version"');
+  assert.ok(helpIdx > -1 && verIdx > helpIdx, '버전 표기는 도움말 패널 소속');
   assert.ok(appJs.includes('settings-version'), '버전 값 주입 코드');
 });
 
