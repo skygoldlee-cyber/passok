@@ -134,6 +134,7 @@ reports/
 # card_terms_snapshot.json(진도 이관·감사 스냅샷)·combo_pilot.js(수작업 파일럿)·
 # release-notes.js·version.js(deploy 스탬프 산출물)·manifest.*.webmanifest(소스)
 index.html
+landing.html
 data/exams.js
 data/audio_manifest.js
 data/exams/*/registry.js

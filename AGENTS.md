@@ -32,6 +32,8 @@ npm.cmd run build:derived              # 파생 생성물 일괄 재생성 (buil
 node tools/build/build_doc_bundles.js        # docs/user/*.md(앱 공용 매뉴얼) → data/docs_md/ + content/exams/<id>/docs/*.md(시험별 — 학습안내서·실무매뉴얼 등) → {dataRoot}/docs_md/ 번들 (앱 내 문서 갱신 시 필수)
 npm.cmd run build:html                # index.template.html + html/views/*.html → index.html 조립 (뷰 마크업 변경 시 필수)
 npm.cmd run check:html                # index.html이 파셜 조립 결과와 일치하는지 비교 (개행 정규화 — pre-push·CI 게이트)
+npm.cmd run build:landing             # landing.template.html + exams.json + 시험별 landing_demo.json/manifest → landing.html 조립 (LP-02)
+npm.cmd run check:landing             # landing.html 조립 신선도 (check:fresh·check:all 게이트)
 npm.cmd run check:parser               # 빌드 파서 ↔ 런타임 파서 등가성 검증
 npm.cmd run check:imports              # src/ 내 ES 모듈 import/export 교차 검증
 npm.cmd run check:posind               # 교재 좌표 비의존 게이트 — 위치 좌표(라인·인덱스)를 식별자/영속 키로 쓰는 패턴 차단 (ID-05, check:ci·CI·pre-push 게이트) + 계층 방향 규칙 (코어→views/ 역참조 차단, 셸 명단 SHELL_MODULES)
@@ -206,6 +208,8 @@ python ref-pipeline/fetch_revision.py [--doc <이름>] [--apply]
 ```
 index.template.html     # App Shell 템플릿 — <!-- @include --> 마커로 뷰 파셜 조립
 index.html              # App Shell (생성물·git 미추적 — npm run build:html 산출, 직접 편집 금지)
+landing.template.html   # 서비스 소개 랜딩 템플릿 — <!-- @landing-exams -->/@landing-demo 마커 (LP-01~09)
+landing.html            # 서비스 소개 페이지 (생성물·git 미추적 — npm run build:landing 산출)
 html/views/             # 뷰 마크업 파셜 12개 — 뷰 HTML 편집은 여기서, build:html로 재생성
 html/exams/<id>/        # 시험 도메인 뷰 파셜 (지연 주입 — formula.html 등, data-lazy-view)
 style.css               # CSS 진입점 (@import로 모듈 로드)
@@ -296,6 +300,7 @@ src/                    # ES Modules
   usage-stats.js        # 로컬 사용 카운터 (ROAD-L5) — 뷰·액션 횟수를 기기 단위(익명 device_id) localStorage에 누적, Pro 후보 액션 20회 판정, 설정 '내 사용 통계' 모달
   theme-init.js         # 테마 초기화 (즉시 실행)
   theme-toggle.js       # 테마 토글 UI
+  landing.js            # 서비스 소개 랜딩 스크립트 — 체험 데모(퀴즈·학습계획)·설치 CTA·버전 (LP-04/05/09)
   ui-mode.js            # 학습/실무 UI 모드 전환 (ui_mode 전역 키, 학습 도구 접이식)
   practice-registry.js  # 실무작업실 피처 레지스트리 — 시험 features 키 → 뷰/랜딩/지연로더/핸들러 정의 (신규 실무 피처는 여기 엔트리 추가)
   auth-sync/            # 계정·인증·클라우드 동기화 모듈
@@ -394,7 +399,7 @@ src/                    # ES Modules
     listeners-delegation.js # data-click/data-input 위임 (CSP 대응)
     backup.js           # 백업/복원
     offline-detection.js # 오프라인 감지 (app.js에서 분리)
-css/                    # 스타일시트 모듈 (base.css, reader.css, app-responsive.css, reader-extras.css, reader-mermaid.css, trainer.css, exam.css, dashboard.css, study.css, study-calendar.css, print.css, ui-overlay.css, html-viewer.css — @import 순서가 캐스케이드, style.css 참조)
+css/                    # 스타일시트 모듈 (base.css, reader.css, app-responsive.css, reader-extras.css, reader-mermaid.css, trainer.css, exam.css, dashboard.css, study.css, study-calendar.css, print.css, ui-overlay.css, html-viewer.css, landing.css — @import 순서가 캐스케이드, style.css 참조. landing.css만 랜딩 전용 별도 링크로 @import 예외)
   exams/<id>/           # 시험 도메인 스타일 (cosmetic/formula.css 등) — 피처 진입 시 practice-registry가 <link> 지연 주입 (style.css @import 아님 — 비활성 시험 미로드)
 content/                # 시험 콘텐츠 컨테이너
   exams.json            # 시험 레지스트리 (멀티시험 엔트리 — 멀티시험 구조 섹션 참조)
@@ -411,6 +416,7 @@ content/                # 시험 콘텐츠 컨테이너
     audiobook/          # 오디오북 MP3 산출물 (생성 스크립트는 ref-pipeline/audiobook/)
     number-drills/      # 숫자 암기 드릴 JSON
     피드백/              # 피드백 정본 — stmt_explain.json (sid→해설, ai:stmtfb --apply 편입 → build:drills가 진술 explain에 병합, AI-15) · card_tip.json (cardId→암기팁, ai:cards --apply 편입 → 런타임 오버레이, AI-19) · card_exclude.json (cardId→사유, 런타임 카드 목록 제외, AI-22)
+    landing_demo.json    # 랜딩 체험 퀴즈 문항 (선택 자산 — 선언 시험만 랜딩 데모 노출, LP-04)
   exams/<id>/           # 추가 시험도 동일한 내부 구조 (대칭)
 data/                   # 빌드 생성 번들
   exams.js              # 전역 시험 목록 (window.EXAMS_LIST)

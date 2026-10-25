@@ -1,5 +1,18 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-25 서비스 소개 랜딩 페이지 구현 — /landing.html (LP-01~09)
+
+- `landing.template.html` + `tools/build/build_landing.js` → `landing.html` 조립 (`@landing-exams`/`@landing-demo` 마커, check:landing 신선도, build:derived·deploy·fresh 프리셋 편입)
+- 정보 구조: 히어로(앱 열기·PWA 설치 CTA) → **지금 바로 체험**(미니 퀴즈 3문 — 정오답+해설+교재 인용, 시험일→주차별 학습계획 미리보기) → **교재·CBT·인강 비교표**(차별점 명시) → 지원 시험 카드(exams.json 순회, comingSoon 배지) → 기능·시작방법·푸터
+- 콘텐츠: `content/exams/cosmetic/landing_demo.json`(실제 문제은행 3문 큐레이션) + manifest subjects/문항 수·minExamLeadDays 빌드 주입 — DA-15
+- 진입점: 도움말(?) 패널 '서비스 소개' + 시험 선택 뷰 링크 (새 탭, 리다이렉트 없음). SW 프리캐시 제외, OG/JSON-LD 메타
+- SPEC.md §3.29 LP-01~09 등록, 유닛 테스트 15건 (build-landing + landing + UX-SET 불변)
+
+## 2026-10-25 서비스 소개 랜딩 페이지 설계안 신규 — DOC-DSN-38
+
+- `docs/dev/design/LANDING_PAGE_DESIGN.md` 신설 — `/landing.html` 별도 정적 페이지 방안 확정 (앱 내 뷰·루트 전환 기각)
+- 시험 카드는 `exams.json` 빌드타임 주입(DA-15), `build:landing`/`check:landing` 게이트·`style.css`+`landing.css` 스타일 계층·SW 프리캐시 제외 정책·도움말/시험선택 진입 링크 설계. SPEC 접두사 `LP-` 신설 예정
+
 ## 2026-10-25 모바일 설정·도움말 드롭다운 항목 중앙정렬 수정
 
 - 모바일 미디어쿼리(≤768px)의 `.header-actions button` 터치 영역 확대 규칙이 드롭다운 내 `.settings-item`까지 `justify-content: center`·`inline-flex`·`padding`으로 덮어써 항목이 중앙정렬로 깨짐 (데스크톱은 정상)

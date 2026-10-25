@@ -121,6 +121,7 @@
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
 | 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇·커뮤니티 공지 | AD-01~AD-12 (12) |
+| 3.29 | **서비스 소개 (랜딩)** | `/landing.html` 정적 소개 페이지 — 시험 카드·체험 데모(퀴즈·학습계획)·설치 CTA·SEO/OG | LP-01~LP-09 (9) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -658,6 +659,22 @@
 | WP-06 | 객관식 런타임 분리 유지 — 주관식 문항은 `exams[]`/`integratedExam`에 편입되지 않음 | ✅ |
 | WP-07 | AI 채점 설정 — 공급자(openai·anthropic·gemini)·모델은 환경설정(백업 대상), API 키는 디바이스 로컬 저장(BACKUP_KEYS·동기 제외 — FORMULA_GEMINI_KEY와 동일 계약). 공급자 계약은 `tools/ai/llm_client.js` PROVIDERS 미러 | ✅ |
 | WP-08 | AI 보조 채점 — rubric+모범답안+수험생 답안 → 항목별 충족(met)·피드백 JSON(`parseGradingResponse` — 코드펜스·잡음 허용·항목 범위 검증). 점수는 LLM 산출 불신·클라이언트 합산(`applyGrading`). 제안 판정을 체크박스에 반영하되 사용자 조정 가능, 결과 스냅샷(g) 저장·재표시. 오류 코드 분기: nokey/noanswer/norubric/network/key/quota/http/unreadable/aborted | ✅ |
+
+### 3.29 서비스 소개 랜딩 페이지 (Landing)
+
+> 앱(`index.html`)과 분리된 정적 소개 페이지 `/landing.html` — 외부 공유·검색 유입의 착륙점이자 앱으로의 관문. 시험 카드·문구는 `exams.json`·시험별 자산 빌드타임 주입 (DA-15). 상세 설계: [`design/LANDING_PAGE_DESIGN.md`](design/LANDING_PAGE_DESIGN.md) (DOC-DSN-38)
+
+| ID | 요구사항 | 구현 상태 |
+|----|---------|-----------|
+| LP-01 | `/landing.html` 독립 정적 페이지 — 앱 셸과 분리된 자체 문서. 인라인 스크립트 없이 외부 self-호스팅 스크립트만 사용 (CSP `script-src 'self'` 준수) | ✅ |
+| LP-02 | 빌드 조립 — `tools/build/build_landing.js`가 `landing.template.html` + `content/exams.json` + 시험별 `landing_demo.json`을 조립해 `landing.html` 생성 (gitignore 생성물, `build:landing`/`check:landing` 신선도 게이트) | ✅ |
+| LP-03 | 시험 카드 그리드 — `exams.json` 순회로 `appName`·`desc`·`icon`·`theme` 액센트·`comingSoon` 배지 자동 반영 (신규 시험 온보딩 시 재빌드만으로 갱신) | ✅ |
+| LP-04 | 체험 데모 — `{contentRoot}/landing_demo.json` 선언 시험의 미니 퀴즈 위젯 (선지 선택 → 정오답 피드백 → 해설+📌출처 → 결과 CTA). 데모 데이터는 `<script type="application/json">` 내장, 미선언 시험은 블록 미렌더 | ✅ |
+| LP-05 | 설치 CTA — `pwa-install-capture.js` 재사용(`__deferredPrompt`), standalone(설치됨) 감지 시 버튼이 "앱 열기"로 전환 | ✅ |
+| LP-06 | 진입점 — 도움말 패널 "서비스 소개" 항목 + 시험 선택 뷰 링크, 새 탭 `noopener` 오픈. 첫 방문 리다이렉트 없음 (재방문 UX 보존) | ✅ |
+| LP-07 | SW 정책 — `SHELL_ASSETS` 프리캐시 미포함 (쉘 경량화). 오프라인 요청은 기존 네비게이션 폴백이 캐시된 `index.html` 서빙 | ✅ |
+| LP-08 | SEO·공유 메타 — description·canonical·OG(website)·twitter:card·JSON-LD(SoftwareApplication) | ✅ |
+| LP-09 | 학습계획 미리보기 — 시험일 입력 → 잔여 주수·단계별 로드맵(통독→문풀·복습→모의고사)·과목별 문항 비중 바 시연. 데이터는 `{contentRoot}/manifest.json`의 subjects·exams 문항 수·study.minExamLeadDays 빌드타임 주입, 권장 리드타임 미만 시 압축 플랜 안내 | ✅ |
 
 ---
 

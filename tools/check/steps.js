@@ -38,6 +38,7 @@ function npmStep(id, script, layer, desc, opts = {}) {
 const STEP_LINT = npmStep('lint', 'lint', '품질', 'ESLint — 에러 0 필수', { prio: 'p0' });
 const STEP_TYPES = npmStep('types', 'check:types', '품질', 'tsc --noEmit (jsconfig checkJs — JSDoc 타입 진단)', { prio: 'p0' });
 const STEP_HTML = nodeStep('html', 'tools/build/build_html.js', '빌드', 'index.html 조립 신선도 (파셜 편집 시 build:html 필요)', { args: ['--check'] });
+const STEP_LANDING = nodeStep('landing', 'tools/build/build_landing.js', '빌드', 'landing.html 조립 신선도 (템플릿·exams.json 편집 시 build:landing 필요)', { args: ['--check'] });
 const STEP_DOMAINMAP = npmStep('domainmap', 'check:domainmap', '분류', '파일 계층 분류 강제 (domain-map.json)', { prio: 'p0' });
 const STEP_VENDOR = npmStep('vendor', 'check:vendor', '자산', 'vendor 매니페스트 ↔ 파일 해시·버전 정합 (BP-13, 무단 교체·미등록 파일 차단)', { prio: 'p0' });
 const STEP_UITEXT = npmStep('uitext', 'check:uitext', '문서', 'UI 텍스트 커버리지 (data-uitext ↔ manifest.uiText)');
@@ -156,6 +157,7 @@ function pickContent(id) {
 }
 const FRESH_STEPS = [
   STEP_HTML,
+  STEP_LANDING,
   pickContent('content:trace'),
   pickContent('content:datafresh'),
   pickContent('content:drillfresh'),
@@ -189,7 +191,7 @@ const AUDIT_STEPS = [
 // DERIVED_IDS: `build:derived` 일괄 재생성으로 해결되는 신선도 계열 단계.
 // 파생물 미재생성이라는 같은 원인이 여러 단계 실패로 중복 보고될 때 묶어서 안내.
 const DERIVED_IDS = new Set([
-  'html', 'ci:html', 'content:trace', 'ci:trace',
+  'html', 'ci:html', 'landing', 'content:trace', 'ci:trace',
   'content:datafresh', 'content:drillfresh', 'content:docbundles',
 ]);
 // 개별 복구 힌트 — derived 묶음에 속하지 않는 재생성·스탬프 계열
@@ -216,7 +218,7 @@ const PRESETS = {
   content: (opts) => contentSteps(opts),
   docs: () => DOCS_STEPS.slice(),
   ci: () => CI_STEPS.slice(),
-  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_HTML, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_VENDOR, STEP_ENV, STEP_UITEXT, STEP_STUDYQ, ...contentSteps(opts)],
+  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_HTML, STEP_LANDING, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_VENDOR, STEP_ENV, STEP_UITEXT, STEP_STUDYQ, ...contentSteps(opts)],
   refs: () => REFS_STEPS.slice(),
   freshness: () => FRESH_STEPS.slice(),
   audit: () => AUDIT_STEPS.slice(),
@@ -231,7 +233,7 @@ function resolveSteps(preset, opts = {}) {
 /** --step 조회용 통합 레지스트리 (프리셋 간 id 중복은 같은 명령이므로 첫 등록 유지) */
 function allSteps() {
   const map = new Map();
-  for (const s of [STEP_HTML, ...contentSteps({}), BUILD_STEP, ...DOCS_STEPS, ...CI_STEPS, ...REFS_STEPS]) {
+  for (const s of [STEP_HTML, STEP_LANDING, ...contentSteps({}), BUILD_STEP, ...DOCS_STEPS, ...CI_STEPS, ...REFS_STEPS]) {
     if (!map.has(s.id)) map.set(s.id, s);
   }
   return [...map.values()];
