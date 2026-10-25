@@ -7,6 +7,7 @@
 - 콘텐츠: `content/exams/cosmetic/landing_demo.json`(실제 문제은행 3문 큐레이션) + manifest subjects/문항 수·minExamLeadDays 빌드 주입 — DA-15
 - 진입점: 도움말(?) 패널 '서비스 소개' + 시험 선택 뷰 링크 (새 탭, 리다이렉트 없음). SW 프리캐시 제외, OG/JSON-LD 메타
 - SPEC.md §3.29 LP-01~09 등록, 유닛 테스트 15건 (build-landing + landing + UX-SET 불변)
+- CI 반영: ci.yml 생성 번들 잡에 `build:landing` + `landing.html` 아티팩트 공유 (test 잡 check_inventory 부재 오류 수정), `check_docs_paths` ROOT_FILES에 랜딩 파일 등록 · `check_ci_parity` CI_ONLY에 build:landing 등록
 
 ## 2026-10-25 서비스 소개 랜딩 페이지 설계안 신규 — DOC-DSN-38
 
