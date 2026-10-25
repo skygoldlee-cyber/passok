@@ -41,6 +41,9 @@ async function boot(page, theme) {
 }
 
 test.describe('시각 회귀 — 앱 셸 배경·테마', () => {
+    // 픽셀 기준선은 linux(CI)만 관리 — 로컬 실행·win32 기준선 폐기, 기준선 재생성은
+    // visual-baseline.yml이 CI 실패 시 자동 수행 (테스트 유지비 경감)
+    test.beforeEach(() => { test.skip(!process.env.CI, 'CI(linux) 전용'); });
     const shotOpts = (page) => ({
         animations: 'disabled',
         maxDiffPixelRatio: 0.01, // 안티앨리어싱 미세 차이 허용폭

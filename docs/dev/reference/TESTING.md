@@ -720,7 +720,7 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
 - 대시보드 전체 화면 `toHaveScreenshot` — chromium·mobile·tablet × dark/light
   6기준선으로 배경화(산수화)·테마 팔레트·반투명 카드 비침의 픽셀 변경 탐지.
 - 버전 토스트 등 동적 요소는 `mask`로 제외, `maxDiffPixelRatio` 1% 허용.
-- 픽셀 기준선은 OS 바인딩 — win32(로컬)·linux(CI ubuntu-latest) 양쪽 커밋.
+- 픽셀 기준선은 linux(CI)만 관리 — 로컬 실행·win32 기준선 폐기. CI 시각 실패 시 visual-baseline.yml이 workflow_run으로 자동 재생성·커밋.
   의도적 시각 변경 후 로컬은 `--update-snapshots`, CI용은
   `visual-baseline.yml` 워크플로 수동 트리거 → 아티팩트 커밋으로 갱신.
 
