@@ -7,10 +7,20 @@
     {
       "key": "theory",
       "order": 1,
-      "name": "부동산학개론",
+      "name": "1교시 이론 과목 (민법·경제학·부동산학)",
       "shortName": "부동산학",
       "dir": "교재/theory",
       "chapters": [
+        {
+          "key": "realestate",
+          "title": "부동산학원론",
+          "file": "부동산학원론.md"
+        },
+        {
+          "key": "econ",
+          "title": "경제학원론",
+          "file": "경제학원론.md"
+        },
         {
           "key": "full",
           "title": "부동산학개론 (전체)",
