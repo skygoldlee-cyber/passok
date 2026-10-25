@@ -212,7 +212,8 @@
    "subtitle": "원료 조회 · 배합 계산 · My 포뮬러 저장·검증",
    "loading": "Formula OS 데이터를 불러오는 중입니다...",
    "error": "Formula OS를 불러오지 못했습니다.",
-   "dataError": "원료 데이터를 불러오지 못했습니다."
+   "dataError": "원료 데이터를 불러오지 못했습니다.",
+   "nav": "실무도구"
   },
   "planLimits": {
    "title": "저장 한도 무제한 — 무료 플랜:",
