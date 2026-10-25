@@ -14,9 +14,9 @@ import { getCurrentExamId, getExamAppName } from './exam-context.js';
  */
 export function getViewTitles(registry) {
     const uiText = (registry && registry.uiText) || {};
-    // 선택된 시험의 앱 브랜드명을 최상위 타이틀에 반영 — "Passmula 대시보드"
-    // (exam.name 전체는 모바일 헤더 폭을 초과해 오버플로를 유발 → 짧은 브랜드명 사용)
-    const examName = getExamAppName();
+    // 명시 선택된 시험의 앱 브랜드명만 타이틀에 반영 — "Passmula 대시보드"
+    // 미선택(기본 시험 폴백) 상태에서도 폴백 시험 브랜드가 뜨지 않도록 게이트
+    const examName = getCurrentExamId() ? getExamAppName() : '';
     const dashUi = uiText.dashboard || {};
     const dashboardTitle = examName && examName !== 'PassOK' ? `${examName} 대시보드` : (dashUi.title || '학습 대시보드');
     return {
