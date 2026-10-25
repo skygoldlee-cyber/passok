@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 appraisal CI 수정 — 메타 헤딩·동기화
+
+- 부록 헤딩 메타 의심(TS-17) 정정 + sync_textbook_files·build:data 재빌드
+
 ## 2026-10-25 appraisal 2차 서술형 문제은행
 
 - 평가이론·보상법규·평가실무 주관식 은행 각 10문 + 모범답안 — 2차 논문형·기입형 문형 대응
