@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "contentYear": "2027",
+  "textbookEdition": "2027",
+  "_pilot": "감정평가사 1차 필기 3과목 파일럿 — 출제기준 기반 자체 제작본, 과목당 골격 문항 투입 상태 (check:onboard 준비도 대상). 정식 전환은 NEW_EXAM_RUNBOOK §승격 기준. 2차 주관식은 CBT 구조와 미부합으로 대상 외.",
+  "subjects": [
+    {
+      "key": "theory",
+      "order": 1,
+      "name": "부동산학개론",
+      "shortName": "부동산학",
+      "dir": "교재/theory",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "부동산학개론 (전체)",
+          "file": "부동산학개론.md"
+        }
+      ]
+    },
+    {
+      "key": "law",
+      "order": 2,
+      "name": "감정평가관련법규",
+      "shortName": "평가법규",
+      "dir": "교재/law",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "감정평가관련법규 (전체)",
+          "file": "감정평가관련법규.md"
+        }
+      ]
+    },
+    {
+      "key": "appraisal",
+      "order": 3,
+      "name": "감정평가 및 통계원론",
+      "shortName": "평가·통계",
+      "dir": "교재/appraisal",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "감정평가 및 통계원론 (전체)",
+          "file": "감정평가_통계원론.md"
+        }
+      ]
+    }
+  ],
+  "exams": [
+    {
+      "key": "subject1",
+      "subject": "theory",
+      "part": 1,
+      "title": "부동산학개론",
+      "file": "과목1_문제은행.md"
+    },
+    {
+      "key": "subject2",
+      "subject": "law",
+      "part": 1,
+      "title": "감정평가관련법규",
+      "file": "과목2_문제은행.md"
+    },
+    {
+      "key": "subject3",
+      "subject": "appraisal",
+      "part": 1,
+      "title": "감정평가 및 통계원론",
+      "file": "과목3_문제은행.md"
+    }
+  ]
+}
