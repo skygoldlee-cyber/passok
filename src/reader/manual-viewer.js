@@ -371,13 +371,13 @@ body.manual-open{overflow:hidden;}
     }
 
     // 편의 메서드
-    // 시험 미선택 차단 — 매뉴얼도 시험 컨텍스트 문서라 선택 전 진입 불가
+    // 실무 매뉴얼은 시험 컨텍스트 문서 — 선택 전 진입 불가. 사용자 매뉴얼은 플랫폼 공통 문서로 선택 여부와 무관하게 허용
     function _requireExamSelection() {
         if (getCurrentExamId()) return true;
         showToast('먼저 학습할 시험을 선택하세요', 'info');
         return false;
     }
-    function openManual() { if (_requireExamSelection()) return openDocument('user_manual'); }
+    function openManual() { return openDocument('user_manual'); }
     function openFormulaManual() { if (_requireExamSelection()) return openDocument('formula_manual'); }
     function openSummary() { return openDocument('study_summary'); }
     function openMnemonicGuide() { return openDocument('mnemonic_guide'); }
