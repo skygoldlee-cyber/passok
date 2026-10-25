@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-25 버전 표기 위치 이동 — 설정(⚙️) → 도움말(?) 패널
+
+- `index.template.html` — `© PassOK` + 버전(`#settings-version`)을 설정 패널 하단에서 도움말 패널 '활동 · 소통' 그룹 아래로 이동 (도움말·정보 성격에 부합)
+
 ## 2026-10-25 랜딩 페이지 세로 스크롤 불가 수정
 
 - `css/landing.css` — `body { overflow:auto; height:auto }` 추가: base.css의 앱 셸 규약(`overflow:hidden;height:100vh` — SPA 뷰 내부 스크롤용)이 랜딩 문서 스크롤을 차단하던 건 해제
