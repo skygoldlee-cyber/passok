@@ -37,6 +37,10 @@
 
 ## 2026-10-26 test: 매뉴얼·모드 테스트에 시험 선택 상태 셋업
 
+## 2026-10-26 fix: 사용자 매뉴얼은 선택 무관 접근 허용 — 플랫폼 공통 문서
+
+- openManual의 선택 가드 해제 (실무 매뉴얼만 시험 컨텍스트로 유지)
+
 ## 2026-10-26 feat: 미선택 시 매뉴얼·모드 전환도 차단
 
 - ManualViewer.openManual/openFormulaManual·toggleUiMode에 선택 가드 — data-click 경로 우회 차단
