@@ -8,7 +8,7 @@ import { STORAGE_KEYS } from '../storage-keys.js';
 import { esc } from '../sanitize.js';
 import { todayKey } from '../utils.js';
 import { switchView } from './navigation.js';
-import { showAlert } from '../ui-utils.js';
+import { showAlert, showToast } from '../ui-utils.js';
 
 /**
  * 시험 카드 요약 지표 집계 — 원시 저장값(JSON 문자열)을 파싱해 순수하게 계산 (ES-06).
@@ -108,6 +108,10 @@ export function renderExamSelect() {
     const currentExam = exams.find(e => e.id === currentId);
     if (currentExam && currentExam.contentStamp) _markStampSeen(currentId, currentExam.contentStamp);
 
+    // 선택 해제 버튼은 저장된 선택이 있을 때만 표시
+    const clearBtn = document.getElementById('exam-select-clear');
+    if (clearBtn) clearBtn.classList.toggle('is-hidden', !currentId);
+
     container.innerHTML = exams.map(e => {
         const isCurrent = e.id === currentId;
         const isSoon = !!e.comingSoon;
@@ -138,6 +142,13 @@ export function renderExamSelect() {
 /** 시험 전환 버튼 → 피커 뷰 표시 (렌더링은 라우터의 viewRenderers 디스패치에 위임) */
 export function showExamSelect() {
     switchView('exam-select-view', { scrollTop: true });
+}
+
+/** 선택 해제 — current_exam 제거로 "선택 없음" 상태로 되돌림. 다음 부팅부터 피커가 초기화면 */
+export function resetExamSelection() {
+    try { localStorage.removeItem('current_exam'); } catch (e) { /* noop */ }
+    renderExamSelect();
+    showToast('시험 선택이 해제됐습니다 — 다음 실행부터 시험 선택이 먼저 표시됩니다', 'info');
 }
 
 /** 시험 카드 선택 — 준비중 시험은 알림만, 다른 시험이면 selectExam이 리로드, 같으면 대시보드로 복귀 */
