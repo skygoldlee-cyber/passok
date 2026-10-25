@@ -111,8 +111,8 @@ export function applyExamBranding() {
     const logoMain = document.querySelector('.logo-text h1');
     const logoSub = document.querySelector('.logo-text span');
     const logoIcon = document.querySelector('.logo-icon');
-    if (logoMain) logoMain.textContent = (chosen && typeof exam.logoMain === 'string') ? exam.logoMain : 'Pass';
-    if (logoSub) logoSub.textContent = (chosen && typeof exam.logoSub === 'string') ? exam.logoSub : 'OK';
+    if (logoMain) logoMain.textContent = (chosen && typeof exam.logoMain === 'string') ? exam.logoMain : 'PassOK';
+    if (logoSub) logoSub.textContent = (chosen && typeof exam.logoSub === 'string') ? exam.logoSub : '';
     if (logoIcon && exam.icon) logoIcon.className = `${exam.icon} logo-icon`;
 
     // iOS 홈 화면 라벨 — 단일 앱 정책으로 'PassOK' 고정 (webmanifest name과 동일 정체성)
