@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261025-0ff65b6",
+    "date": "2026-10-25",
+    "notes": [
+      "[테스트·exams] appraisal stats 파일명 baseline 등록 [no-docs]",
+      "[수정·exams] appraisal references.json 필수 필드 추가 — refDirs·subjectDirMap",
+      "[기능·exams] 감정평가사(appraisal) 시험 팩 골격 등록 — comingSoon",
+      "[정리·release] v20261025-2ab8760 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-2ab8760",
     "date": "2026-10-25",
     "notes": [
@@ -167,14 +177,6 @@
       "[기능·insadj] 2차 주관식 ### S 증산 — 재물19·차량20·신체24",
       "[기능·onboard] 승격 게이트 주관식 계수 (B안) + admagent written 분할",
       "[기능·admagent] 1차 과목 증산 8→25제 + 주관식 파일 written 등록"
-    ]
-  },
-  {
-    "version": "v20261024-3535022",
-    "date": "2026-10-24",
-    "notes": [
-      "[수정·onboarding] 안내 문구 조사 처리 — appName 뒤 이 → 에서",
-      "[정리·release] v20261024-6bd1569 스탬프 확정 [no-docs]"
     ]
   }
 ]
