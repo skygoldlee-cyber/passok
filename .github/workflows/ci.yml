@@ -45,13 +45,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: 생성 번들 빌드 (gitignore 대상)
-        run: npm run build:html && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js
+        run: npm run build:html && npm run build:landing && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js
       - name: Upload generated bundles
         uses: actions/upload-artifact@v4
         with:
           name: generated-bundles
           path: |
             index.html
+            landing.html
             data/
           retention-days: 1
 

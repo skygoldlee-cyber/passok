@@ -38,7 +38,8 @@ const ROOT_PREFIXES = [
   'docs/', 'tests/', 'vendor/',
 ];
 const ROOT_FILES = new Set([
-  'sw.js', 'index.html', 'serve.js', 'package.json', 'package-lock.json',
+  'sw.js', 'index.html', 'landing.html', 'landing.template.html',
+  'serve.js', 'package.json', 'package-lock.json',
   'manifest.webmanifest', 'vercel.json', '.vercelignore', '.gitignore',
   'AGENTS.md', 'README.md', 'style.css', 'pdf_hashes.json', 'vitest.config.js',
 ]);
