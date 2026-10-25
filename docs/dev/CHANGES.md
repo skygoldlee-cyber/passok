@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 appraisal 회계학 교재 + manifest 법정 과목 재편
+
+- 회계학 골격(6챕터: 개념체계~CVP) + manifest subjects→법정 5과목(civil·econ·realestate·law·accounting), 문제은행·desc 정합
+
 ## 2026-10-25 appraisal 공익사업보상법 3종 수집
 
 - 2차 평가및보상법규 핵심 법령(법·령·규칙, 284조) 추출 — 37회 2교시에 회계학(41번~, K-IFRS) 출제 확인, 회계학 교재 필요

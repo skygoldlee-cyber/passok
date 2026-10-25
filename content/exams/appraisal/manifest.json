@@ -5,84 +5,102 @@
   "_pilot": "감정평가사 1차 필기 3과목 파일럿 — 출제기준 기반 자체 제작본, 과목당 골격 문항 투입 상태 (check:onboard 준비도 대상). 정식 전환은 NEW_EXAM_RUNBOOK §승격 기준. 2차 주관식은 CBT 구조와 미부합으로 대상 외.",
   "subjects": [
     {
-      "key": "theory",
+      "key": "civil",
       "order": 1,
-      "name": "1교시 이론 과목 (민법·경제학·부동산학)",
-      "shortName": "부동산학",
-      "dir": "교재/theory",
+      "name": "민법 (총칙·물권)",
+      "shortName": "민법",
+      "dir": "교재/civil",
       "chapters": [
         {
-          "key": "civil",
+          "key": "full",
           "title": "민법 (총칙·물권)",
           "file": "민법_총칙물권.md"
-        },
+        }
+      ]
+    },
+    {
+      "key": "econ",
+      "order": 2,
+      "name": "경제학원론",
+      "shortName": "경제학",
+      "dir": "교재/econ",
+      "chapters": [
         {
-          "key": "realestate",
+          "key": "full",
+          "title": "경제학원론",
+          "file": "경제학원론.md"
+        }
+      ]
+    },
+    {
+      "key": "realestate",
+      "order": 3,
+      "name": "부동산학원론",
+      "shortName": "부동산학",
+      "dir": "교재/realestate",
+      "chapters": [
+        {
+          "key": "full",
           "title": "부동산학원론",
           "file": "부동산학원론.md"
         },
         {
-          "key": "econ",
-          "title": "경제학원론",
-          "file": "경제학원론.md"
-        },
-        {
-          "key": "full",
-          "title": "부동산학개론 (전체)",
-          "file": "부동산학개론.md"
+          "key": "intro",
+          "title": "부동산학개론 (구 골격)",
+          "file": "../theory/부동산학개론.md"
         }
       ]
     },
     {
       "key": "law",
-      "order": 2,
-      "name": "감정평가관련법규",
-      "shortName": "평가법규",
+      "order": 4,
+      "name": "감정평가 관계 법규",
+      "shortName": "법규",
       "dir": "교재/law",
       "chapters": [
         {
           "key": "full",
-          "title": "감정평가관련법규 (전체)",
+          "title": "감정평가관련법규",
           "file": "감정평가관련법규.md"
         }
       ]
     },
     {
-      "key": "appraisal",
-      "order": 3,
-      "name": "감정평가 및 통계원론",
-      "shortName": "평가·통계",
-      "dir": "교재/appraisal",
+      "key": "accounting",
+      "order": 5,
+      "name": "회계학",
+      "shortName": "회계학",
+      "dir": "교재/accounting",
       "chapters": [
         {
           "key": "full",
-          "title": "감정평가 및 통계원론 (전체)",
-          "file": "감정평가_통계원론.md"
+          "title": "회계학",
+          "file": "회계학.md"
         }
       ]
     }
   ],
   "exams": [
     {
-      "key": "subject1",
-      "subject": "theory",
+      "key": "s_civil",
+      "subject": "civil",
       "part": 1,
-      "title": "부동산학개론",
+      "title": "민법 (총칙·물권)",
       "file": "과목1_문제은행.md"
     },
     {
-      "key": "subject2",
-      "subject": "law",
+      "key": "s_econ",
+      "subject": "econ",
       "part": 1,
-      "title": "감정평가관련법규",
-      "file": "과목2_문제은행.md"
+      "title": "경제학원론",
+      "file": "과목3_문제은행.md"
     },
     {
-      "key": "subject3",
-      "subject": "appraisal",
+      "key": "s_law",
+      "subject": "law",
       "part": 1,
-      "title": "감정평가 및 통계원론",
-      "file": "과목3_문제은행.md"
+      "title": "감정평가 관계 법규",
+      "file": "과목2_문제은행.md"
     }
   ]
 }
