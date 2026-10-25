@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261025-d196770",
+    "date": "2026-10-25",
+    "notes": [
+      "[수정·exams] appraisal referenceLaw 형식 보정 + 생성물 재빌드",
+      "[정리·release] v20261025-0ff65b6 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-0ff65b6",
     "date": "2026-10-25",
     "notes": [
@@ -161,22 +169,6 @@
     "notes": [
       "[수정·community] discordInvite를 영구 링크로 교체 (ES-08)",
       "[정리·release] v20261024-29c5240 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261024-29c5240",
-    "date": "2026-10-24",
-    "notes": [
-      "[기능·community] Discord 커뮤니티 서버 개설 + cosmetic discordInvite 연결 (ES-08)",
-      "[수정·build] manifest 엔트리 제거 시 고아 번들 잔존 — removeOrphanBundles 스윕 추가",
-      "[수정·onboard,tests] 주관식 계수 정규식 복원 + 생성 블록 품질 정리",
-      "[기능·insadj] 정식 승격 — second 분리(A안) + comingSoon 해제",
-      "[기능·lossadj,indsafe,admagent] 2차 주관식 ### S 증산 — 전 과목 ≥20문",
-      "[기능·admagent] 2차 주관식 ### S 증산 — 각 19~21문",
-      "[기능·insadj] 2차 주관식 ### S 증산 완료 — 전 과목 ≥20문",
-      "[기능·insadj] 2차 주관식 ### S 증산 — 재물19·차량20·신체24",
-      "[기능·onboard] 승격 게이트 주관식 계수 (B안) + admagent written 분할",
-      "[기능·admagent] 1차 과목 증산 8→25제 + 주관식 파일 written 등록"
     ]
   }
 ]
