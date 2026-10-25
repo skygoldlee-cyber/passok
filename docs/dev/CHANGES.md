@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-25 프로모션 진입점 — 신규 방문자 '/' → 랜딩 안내 + QR 자산 (LP-10)
+
+- `src/landing-redirect.js` 신규 — 저장 키 없음·비 standalone·딥링크/`?app=1` 아닌 최초 방문자만 `landing.html`로 안내 (부트 이전 동기 판정, index.html 로드)
+- `src/landing.js` — 랜딩 방문 시 `passok_landing_seen` 기록(이후 '/'는 앱 직행) + 모든 앱 진입 CTA를 `index.html?app=1`로 통일 (리다이렉트 루프 방지)
+- `landing-qr.svg` — passok.vercel.app/landing.html QR 자산 (qrcode@1.5.4 생성, 푸터 표시) + `docs/exams/cosmetic/business/passok-landing-qr.svg` 홍보용 복사본
+- `유튜브_홍보동영상_제작의뢰서.md` v7 — 진입 URL·CTA QR을 랜딩 전용으로 갱신
+- check_storage ALLOWED_FILES에 landing-redirect.js·landing.js 등록, vitest 커버리지 제외(즉시실행 스크립트)
+
 ## 2026-10-25 버전 표기 위치 이동 — 설정(⚙️) → 도움말(?) 패널
 
 - `index.template.html` — `© PassOK` + 버전(`#settings-version`)을 설정 패널 하단에서 도움말 패널 '활동 · 소통' 그룹 아래로 이동 (도움말·정보 성격에 부합)

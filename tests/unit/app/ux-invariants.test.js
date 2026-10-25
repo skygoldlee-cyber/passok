@@ -1,5 +1,5 @@
 // tests/unit/ux-invariants.test.js — UI/UX 설계 요구사항 (정적 검증)
-// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,LP-06
+// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,LP-06,LP-10
 // CSS 규칙·마크업 구조·JS 구현 패턴이 설계 요구사항을 유지하는지 고정한다.
 
 import { test } from 'node:test';
@@ -111,6 +111,14 @@ test('LP-06: 랜딩 페이지 진입점이 도움말 패널과 시험 선택 뷰
   assert.ok(/service-intro-btn[\s\S]*window\.open\(['"]landing\.html/.test(listeners), '새 탭 오픈 바인딩');
   const examSelect = read('html/views/exam-select.html');
   assert.ok(examSelect.includes('href="landing.html"'), '시험 선택 뷰 서비스 소개 링크');
+});
+
+test('LP-10: 신규 방문자 리다이렉트 스크립트가 index.html에 로드되고 조건을 갖는다', () => {
+  const redirect = read('src/landing-redirect.js');
+  assert.ok(indexHtml.includes('src="src/landing-redirect.js"'), '템플릿 로드');
+  for (const cond of ['localStorage.length', 'standalone', 'location.hash', 'location.replace']) {
+    assert.ok(redirect.includes(cond), `리다이렉트 조건: ${cond}`);
+  }
 });
 
 // ---------- UX-FB: 피드백·알림 ----------

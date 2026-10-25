@@ -121,7 +121,7 @@
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
 | 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇·커뮤니티 공지 | AD-01~AD-12 (12) |
-| 3.29 | **서비스 소개 (랜딩)** | `/landing.html` 정적 소개 페이지 — 시험 카드·체험 데모(퀴즈·학습계획)·설치 CTA·SEO/OG | LP-01~LP-09 (9) |
+| 3.29 | **서비스 소개 (랜딩)** | `/landing.html` 정적 소개 페이지 — 시험 카드·체험 데모(퀴즈·학습계획)·설치 CTA·SEO/OG·프로모션 진입점 | LP-01~LP-10 (10) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -675,6 +675,7 @@
 | LP-07 | SW 정책 — `SHELL_ASSETS` 프리캐시 미포함 (쉘 경량화). 오프라인 요청은 기존 네비게이션 폴백이 캐시된 `index.html` 서빙 | ✅ |
 | LP-08 | SEO·공유 메타 — description·canonical·OG(website)·twitter:card·JSON-LD(SoftwareApplication) | ✅ |
 | LP-09 | 학습계획 미리보기 — 시험일 입력 → 잔여 주수·단계별 로드맵(통독→문풀·복습→모의고사)·과목별 문항 비중 바 시연. 데이터는 `{contentRoot}/manifest.json`의 subjects·exams 문항 수·study.minExamLeadDays 빌드타임 주입, 권장 리드타임 미만 시 압축 플랜 안내 | ✅ |
+| LP-10 | 프로모션 진입점 — 신규 방문자(저장 키 없음·비 standalone·딥링크/`?app=1` 아님)는 `/` 접속 시 `landing.html`로 안내 (`src/landing-redirect.js`, 앱 부트 이전 동기 판정). 랜딩 방문 시 `passok_landing_seen` 기록 → 이후 `/`는 앱으로 직행. `landing-qr.svg` QR 자산으로 홍보 유입 지원 | ✅ |
 
 ---
 
