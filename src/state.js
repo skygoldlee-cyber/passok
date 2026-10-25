@@ -244,9 +244,12 @@ function _countQuizBySubj() {
 
 // 로컬스토리지에 진도 저장
 export function saveProgress() {
+    // 진도 데이터 스키마 버전 — 저장 형식 변경 시 +1하고 마이그레이션 경로를 함께 추가 (DOC-DSN-39)
+    const SCHEMA_VERSION = 1;
     const prevMemCount = state._prevMemCount || 0;
     const prevQuizCount = state._prevQuizCount || 0;
 
+    safeSetItem(STORAGE_KEYS.SCHEMA_VERSION, String(SCHEMA_VERSION));
     safeSetItem(STORAGE_KEYS.FC_MEMORIZED, JSON.stringify([...state.memorizedCards]));
     safeSetItem(STORAGE_KEYS.FC_WEAK, JSON.stringify([...state.weakCards]));
     safeSetItem(STORAGE_KEYS.QUIZ_RESULTS, JSON.stringify(state.quizResults));
