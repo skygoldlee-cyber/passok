@@ -1,6 +1,6 @@
 {
   "subjects": {
-    "estate-intro": {
+    "estate_intro": {
       "cards": 0,
       "quizzes": 0,
       "files": {
@@ -10,7 +10,7 @@
         }
       }
     },
-    "civil-broker": {
+    "civil_broker": {
       "cards": 4,
       "quizzes": 4,
       "files": {
@@ -20,7 +20,7 @@
         }
       }
     },
-    "broker-law": {
+    "broker_law": {
       "cards": 0,
       "quizzes": 0,
       "files": {
@@ -30,7 +30,7 @@
         }
       }
     },
-    "estate-publaw": {
+    "estate_publaw": {
       "cards": 0,
       "quizzes": 0,
       "files": {
@@ -40,7 +40,7 @@
         }
       }
     },
-    "estate-registry": {
+    "estate_registry": {
       "cards": 0,
       "quizzes": 0,
       "files": {
@@ -50,7 +50,7 @@
         }
       }
     },
-    "estate-tax": {
+    "estate_tax": {
       "cards": 0,
       "quizzes": 0,
       "files": {
@@ -60,7 +60,7 @@
         }
       }
     },
-    "broker-practice": {
+    "broker_practice": {
       "cards": 0,
       "quizzes": 0,
       "files": {
