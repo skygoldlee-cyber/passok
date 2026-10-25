@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03,LP-07
 
-const CACHE_VERSION = 'v20261026-8bef89b';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261026-dec8193';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passok) — 시험 무관 공유 캐시.
 // 구 접두사(passory-*·cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -295,6 +295,13 @@ const MD_ASSETS = [
   './content/exams/broker/교재/law/부동산공시법.md',
   './content/exams/broker/교재/law/부동산세법.md',
   './content/exams/broker/교재/practice/중개실무.md',
+  './content/exams/broker/문제은행/부동산학개론_문제은행.md',
+  './content/exams/broker/문제은행/민법_중개관련_문제은행.md',
+  './content/exams/broker/문제은행/공인중개사법_문제은행.md',
+  './content/exams/broker/문제은행/부동산공법_문제은행.md',
+  './content/exams/broker/문제은행/부동산공시법_문제은행.md',
+  './content/exams/broker/문제은행/부동산세법_문제은행.md',
+  './content/exams/broker/문제은행/중개실무_문제은행.md',
   // MD_ASSETS:END
 ];
 
