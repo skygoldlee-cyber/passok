@@ -85,9 +85,9 @@
           let attempts = 0;
           function tryReload() {
             attempts++;
-            // 모달 열림은 최대 ~20초까지만 대기 — 사용자가 닫지 않아도 업데이트가 멈추지 않게
+            // 모달 열림은 ~4초까지만 양보 — whats-new는 리로드 후 다시 표시되므로 오래 기다릴 필요가 없다
             const overlayOpen = document.getElementById('app-confirm-overlay') || document.getElementById('whats-new-overlay');
-            if (overlayOpen && attempts < 40) {
+            if (overlayOpen && attempts < 8) {
               setTimeout(tryReload, 500);
               return;
             }

@@ -192,7 +192,7 @@ test('UX-PWA-06: SW 업데이트 리로드가 랜딩·모달 상황에서도 정
   assert.ok(reloadBlock, 'tryReload 존재');
   assert.ok(reloadBlock[0].includes('landing-main'), '랜딩은 __APP_INITIALIZED 없이 리로드');
   const overlayWait = reloadBlock[0].match(/attempts < (\d+)/);
-  assert.ok(overlayWait, '모달 대기 상한 존재');
+  assert.ok(overlayWait && Number(overlayWait[1]) <= 10, '모달 대기 상한 ~5초 이내 (whats-new는 리로드 후 재표시)');
 });
 
 test('UX-PWA-05: 앱 셸 높이가 JS 실측 --app-height를 사용한다', () => {
