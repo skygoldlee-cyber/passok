@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261025-3bff82e",
+    "date": "2026-10-25",
+    "notes": [
+      "[수정·pwa] SW 업데이트 모달 대기 ~20초→~4초 — 변경이력 미해소 체감 개선",
+      "[정리·release] v20261025-f921ba1 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-f921ba1",
     "date": "2026-10-25",
     "notes": [
@@ -166,17 +174,6 @@
     "notes": [
       "[문서·design] 홍보·유입 기능 보완 설계안 신규 — DOC-DSN-37",
       "[정리·release] v20261024-f9fc3fc 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261024-f9fc3fc",
-    "date": "2026-10-24",
-    "notes": [
-      "[정리·deps] npm audit fix — dev 의존성 취약점 3건 해소 [no-docs]",
-      "[문서·runbook] Discord 초대 URL 발급 절차 세분화 — 만료 없음 설정·시험별 추적",
-      "[테스트·gates] discord 공지 테스트 env 격리 — .env 실키 재주입 차단",
-      "[기능·discord] 커뮤니티 설계·개설 런북 + 시험별 초대 버튼·릴리스 공지 (ES-08·AD-12)",
-      "[정리·release] v20261023-7f1af2f 스탬프 확정 [no-docs]"
     ]
   }
 ]
