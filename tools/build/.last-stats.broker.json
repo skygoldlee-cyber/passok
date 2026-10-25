@@ -71,5 +71,27 @@
       }
     }
   },
-  "exams": {}
+  "exams": {
+    "q_estate-intro": {
+      "questions": 20
+    },
+    "q_civil-broker": {
+      "questions": 20
+    },
+    "q_broker-law": {
+      "questions": 20
+    },
+    "q_estate-publaw": {
+      "questions": 20
+    },
+    "q_estate-registry": {
+      "questions": 20
+    },
+    "q_estate-tax": {
+      "questions": 20
+    },
+    "q_broker-practice": {
+      "questions": 20
+    }
+  }
 }
