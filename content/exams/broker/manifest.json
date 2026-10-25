@@ -1,0 +1,17 @@
+{
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
+ "_pilot": false,
+ "subjects": {
+  "estate-intro": { "name": "부동산학개론", "part": 1, "chapters": [] },
+  "civil-broker": { "name": "민법(중개 관련)", "part": 1, "chapters": [] },
+  "broker-law": { "name": "공인중개사법", "part": 2, "chapters": [] },
+  "estate-publaw": { "name": "부동산공법", "part": 2, "chapters": [] },
+  "estate-registry": { "name": "부동산공시법", "part": 2, "chapters": [] },
+  "estate-tax": { "name": "부동산세법", "part": 2, "chapters": [] },
+  "broker-practice": { "name": "중개실무", "part": 2, "chapters": [] }
+ },
+ "exams": [],
+ "uiText": {}
+}
