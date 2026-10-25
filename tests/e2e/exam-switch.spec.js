@@ -132,10 +132,12 @@ test.describe('도메인 경로 규약 — 활성 시험 id로 뷰 모듈·마�
         const requests = [];
         page.on('request', r => { if (r.url().includes('/html/exams/')) requests.push(r.url()); });
         // 온보딩 오버레이 스킵 — cosmetic 기본 시험의 온보딩 완료를 시드
+        // 시험 스코프 기능은 명시 선택 상태가 필요 (미선택 진입 차단 계약)
         await page.addInitScript(() => {
             localStorage.setItem('onboarding_seen_v1', '1');
             localStorage.setItem('telemetry_notice_shown', '1');
             localStorage.setItem('cosmetic:onboarding_seen_v1', '1');
+            localStorage.setItem('current_exam', 'cosmetic');
         });
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });

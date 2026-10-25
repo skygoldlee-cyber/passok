@@ -8,6 +8,8 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-26 test: exam-switch E2E에 시험 선택 시드 — 미선택 기능 게이트 대응
+
 ## 2026-10-26 fix: 미선택 시 사전 등 시험 스코프 메뉴 노출 + 해제 후 브랜딩 잔류
 
 - applyFeatureFlags를 명시 선택 게이트 — 미선택 시 data-feature 항목(examSwitch 제외) 숨김
