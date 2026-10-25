@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261025-5d0bc75",
+    "date": "2026-10-25",
+    "notes": [
+      "[수정·landing] 자동화 컨텍스트 리다이렉트 생략 — E2E 첫 실행 플로우 보호",
+      "[테스트·landing] ?app=1 CTA href 단정 갱신",
+      "[기능·landing] 프로모션 진입점 — 신규 방문자 '/'→랜딩 안내 + QR 자산 (LP-10)",
+      "[정리·release] v20261025-423b749 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-423b749",
     "date": "2026-10-25",
     "notes": [
@@ -174,14 +184,6 @@
       "[정리·embeddings] 모델 소스 핀 — HF 리비전 SHA 고정 (P3)",
       "[수정·deploy] 스테이징 정리 detached 헬퍼 위임 — 배포 비블로킹",
       "[정리·release] v20261023-54ba64c 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261023-54ba64c",
-    "date": "2026-10-23",
-    "notes": [
-      "[수정·deploy] 스테이징 정리 EPERM — 백오프 재시도로 vercel 자식 핸들 대기",
-      "[정리·release] v20261023-5f531aa 스탬프 확정 [no-docs]"
     ]
   }
 ]
