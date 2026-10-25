@@ -223,9 +223,9 @@
         display: none;
     }
 
-    /* 헤더 액션 버튼 터치 영역 확대 */
+    /* 헤더 액션 버튼 터치 영역 확대 — 드롭다운 메뉴 항목(.settings-item)은 제외 (좌측 정렬 유지) */
     .header-actions .btn,
-    .header-actions button {
+    .header-actions button:not(.settings-item) {
         min-width: 44px;
         min-height: 44px;
         padding: 0.5rem !important;
@@ -854,7 +854,7 @@ body.landscape-mode .app-header p {
 }
 
 body.landscape-mode .header-actions .btn,
-body.landscape-mode .header-actions button {
+body.landscape-mode .header-actions button:not(.settings-item) {
     min-width: 36px !important;
     min-height: 36px !important;
     padding: 0.25rem 0.5rem !important;
