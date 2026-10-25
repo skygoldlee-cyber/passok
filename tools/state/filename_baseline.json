@@ -44,6 +44,7 @@
   "tests/dom/misc/doc-overlay.dom.test.js — tests 코드 파일명은 kebab-case (doc-overlay.dom.test.js)",
   "tests/dom/misc/feedback.dom.test.js — tests 코드 파일명은 kebab-case (feedback.dom.test.js)",
   "tests/dom/misc/glossary-search.dom.test.js — tests 코드 파일명은 kebab-case (glossary-search.dom.test.js)",
+  "tests/dom/misc/landing.dom.test.js — tests 코드 파일명은 kebab-case (landing.dom.test.js)",
   "tests/dom/misc/morph-search.dom.test.js — tests 코드 파일명은 kebab-case (morph-search.dom.test.js)",
   "tests/dom/misc/onboarding-zoom.dom.test.js — tests 코드 파일명은 kebab-case (onboarding-zoom.dom.test.js)",
   "tests/dom/misc/pro-notice.dom.test.js — tests 코드 파일명은 kebab-case (pro-notice.dom.test.js)",
