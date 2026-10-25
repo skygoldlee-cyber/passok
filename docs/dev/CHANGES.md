@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-26 feat: 미선택 시 매뉴얼·모드 전환도 차단
+
+- ManualViewer.openManual/openFormulaManual·toggleUiMode에 선택 가드 — data-click 경로 우회 차단
+
 ## 2026-10-26 feat: 내비 라벨 시험별 uiText 연동
 
 - 사이드바 내비 라벨 9개에 data-uitext 연결 — 시험별 uiText.<view>.title로 메뉴 표시 덮어쓰기
