@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261025-af7592e",
+    "date": "2026-10-25",
+    "notes": [
+      "[수정·exams] appraisal ref_md 표기 정리 + 생성물 재빌드 — CI 수정",
+      "[문서] CHANGES — appraisal 은행 전수·본문 부록 기록",
+      "[기능·exams] appraisal 이론 4권 본문 확충 — 혼동비교·공식·기출포인트 부록",
+      "[기능·exams] appraisal 관계법규 8법 확장 + 기출유형 문제은행 + 영어 안내",
+      "[기능·exams] appraisal 회계학 골격 + manifest 법정 5과목 재편",
+      "[기능·exams] appraisal 공익사업보상법 3종 수집 — 2차 법규 과목 대비",
+      "[기능·exams] appraisal 민법(총칙·물권) 교재 골격 — 1교시 최대 과목",
+      "[기능·exams] appraisal 이론 교재 골격 2권 — 기출 토픽 기반 자체 제작",
+      "[문서·exams] appraisal 2차 기출·정답 전수 수집 기록",
+      "[문서·exams] appraisal 기출문제 1차 전수 수집 기록 — SOURCE_COLLECT 갱신"
+    ]
+  },
+  {
     "version": "v20261025-8e72117",
     "date": "2026-10-25",
     "notes": [
@@ -162,14 +178,6 @@
     "notes": [
       "[문서·user-manual] Discord 커뮤니티 행을 의견 보내기 아래로 이동 — 앱 메뉴 순서와 정합",
       "[정리·release] v20261024-5a34660 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261024-5a34660",
-    "date": "2026-10-24",
-    "notes": [
-      "[문서·user-manual] 설정 메뉴에 Discord 커뮤니티 항목 기재 (ES-08)",
-      "[정리·release] v20261024-09fee96 스탬프 확정 [no-docs]"
     ]
   }
 ]
