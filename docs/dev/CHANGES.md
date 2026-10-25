@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 fix: 모바일 대시보드 미션 배지 높이 불균형
+
+- 오늘 미션·주간 목표 배지가 챌린지 시작 버튼보다 작게 표시되던 문제 — 배지에 버튼급 높이(44px)·패딩·중앙정렬 적용
+
 ## 2026-10-25 fix: 모바일 탭바 실무 메뉴 상시 활성 표시
 
 - .mobile-tab-practice 기본 상태의 violet tint 배경 제거 — 활성 탭처럼 보이던 오류. 강조는 active 상태에만 적용
