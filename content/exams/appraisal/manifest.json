@@ -78,6 +78,25 @@
           "file": "회계학.md"
         }
       ]
+    },
+    {
+      "key": "appraisalthy",
+      "order": 6,
+      "name": "감정평가이론 (2차)",
+      "shortName": "평가이론",
+      "dir": "교재/appraisal",
+      "chapters": [
+        {
+          "key": "theory",
+          "title": "감정평가이론",
+          "file": "감정평가이론.md"
+        },
+        {
+          "key": "stats",
+          "title": "감정평가 및 통계원론 (참고)",
+          "file": "감정평가_통계원론.md"
+        }
+      ]
     }
   ],
   "exams": [
