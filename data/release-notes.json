@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261026-cf7009e",
+    "date": "2026-10-26",
+    "notes": [
+      "[기능·ux] 동적 메뉴 보완 — uiText 전면 확장 + 미선택 내비 dim (ES-10)",
+      "[정리·release] v20261026-73ad3b2 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261026-73ad3b2",
     "date": "2026-10-26",
     "notes": [
@@ -175,16 +183,6 @@
     "notes": [
       "[수정·exams] appraisal referenceLaw 형식 보정 + 생성물 재빌드",
       "[정리·release] v20261025-0ff65b6 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261025-0ff65b6",
-    "date": "2026-10-25",
-    "notes": [
-      "[테스트·exams] appraisal stats 파일명 baseline 등록 [no-docs]",
-      "[수정·exams] appraisal references.json 필수 필드 추가 — refDirs·subjectDirMap",
-      "[기능·exams] 감정평가사(appraisal) 시험 팩 골격 등록 — comingSoon",
-      "[정리·release] v20261025-2ab8760 스탬프 확정 [no-docs]"
     ]
   }
 ]
