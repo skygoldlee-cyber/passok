@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 feat: 시험 선택 해제 버튼 — 선택 없음 상태로 복귀
+
+- 피커에 "선택 해제" 버튼 (선택 저장된 경우만 표시) — current_exam 제거로 다음 부팅부터 피커가 초기화면
+
 ## 2026-10-25 fix: 시험 피커 "현재 시험" 표시를 명시 선택값으로
 
 - getActiveExamId(기본 폴백) → getCurrentExamId — 미선택 시 어떤 카드도 현재로 표시 안 함

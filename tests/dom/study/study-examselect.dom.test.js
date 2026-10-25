@@ -7,7 +7,7 @@
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 import { loadIndexHtml, el } from '../helpers.js';
-import { renderExamSelect, selectExamAction, summarizeExamProgress, showExamSelect } from '../../../src/views/exam-select.js';
+import { renderExamSelect, selectExamAction, summarizeExamProgress, showExamSelect, resetExamSelection } from '../../../src/views/exam-select.js';
 
 const EXAMS = {
     exams: [
@@ -46,6 +46,17 @@ describe('시험 선택 — 목록·전환·복귀', () => {
             expect(c.classList.contains('current')).toBe(false);
             expect(c.textContent).not.toContain('현재 시험');
         });
+    });
+
+    it('선택 해제 → current_exam 제거 + 모든 카드 비선택 표시', () => {
+        localStorage.setItem('current_exam', 'cosmetic');
+        renderExamSelect();
+        expect(el('exam-select-list').querySelector('.exam-select-card.current')).not.toBeNull();
+
+        resetExamSelection();
+
+        expect(localStorage.getItem('current_exam')).toBeNull();
+        expect(el('exam-select-list').querySelector('.exam-select-card.current')).toBeNull();
     });
 
     it('다른 시험 선택 → current_exam 저장 + 리로드 트리거(P)', () => {
