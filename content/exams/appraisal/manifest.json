@@ -97,6 +97,34 @@
           "file": "감정평가_통계원론.md"
         }
       ]
+    },
+    {
+      "key": "appraisallaw",
+      "order": 7,
+      "name": "감정평가 및 보상 법규 (2차)",
+      "shortName": "보상법규",
+      "dir": "교재/appraisal",
+      "chapters": [
+        {
+          "key": "law",
+          "title": "감정평가 및 보상 법규",
+          "file": "감정평가및보상법규.md"
+        }
+      ]
+    },
+    {
+      "key": "appraisalwork",
+      "order": 8,
+      "name": "감정평가실무 (2차)",
+      "shortName": "평가실무",
+      "dir": "교재/appraisal",
+      "chapters": [
+        {
+          "key": "work",
+          "title": "감정평가실무",
+          "file": "감정평가실무.md"
+        }
+      ]
     }
   ],
   "exams": [
