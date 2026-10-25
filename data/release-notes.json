@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261025-87bd684",
+    "date": "2026-10-25",
+    "notes": [
+      "[테스트·landing] landing.dom.test.js 파일명 baseline 등록 [no-docs]",
+      "[테스트·landing] 랜딩 위젯 DOM 테스트 — 커버리지 임계 회복",
+      "[수정·ci] 랜딩 생성물 CI 반영 — build 잡에 build:landing + 아티팩트",
+      "[기능·landing] 서비스 소개 랜딩 페이지 신설 — /landing.html (LP-01~09)",
+      "[정리·release] v20261025-9c54bb8 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261025-9c54bb8",
     "date": "2026-10-25",
     "notes": [
@@ -170,16 +181,6 @@
     "notes": [
       "[테스트·gates] mkdtemp 픽스처 after 정리 훅 — Temp 디렉터리 누수 차단",
       "[정리·release] v20261023-d25a1ff 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261023-d25a1ff",
-    "date": "2026-10-23",
-    "notes": [
-      "[기능·embeddings] 임베딩 파이프라인 Node 포팅 — Python+torch 의존 제거 (SEM-01)",
-      "[정리·tools] 루틴 경로 Node-only 분리 + npm run doctor 환경 진단",
-      "[정리·stats] 테스트 수치 재측정 스탬프 — unit 1,558·dom 813·e2e 345",
-      "[정리·release] v20261023-61dca92 스탬프 확정 [no-docs]"
     ]
   }
 ]
