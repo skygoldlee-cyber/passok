@@ -8,6 +8,10 @@
 
 - pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
 
+## 2026-10-25 fix: 선택 해제를 clearCurrentExam 헬퍼 경유로
+
+- exam-select.js의 localStorage 직접 접근을 exam-context 헬퍼로 이전 — storage 접근 규약 준수
+
 ## 2026-10-25 feat: 시험 선택 해제 버튼 — 선택 없음 상태로 복귀
 
 - 피커에 "선택 해제" 버튼 (선택 저장된 경우만 표시) — current_exam 제거로 다음 부팅부터 피커가 초기화면

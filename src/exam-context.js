@@ -59,6 +59,13 @@ export function getCurrentExamId() {
     }
 }
 
+/** 명시 시험 선택 해제 — 미선택 상태로 되돌림. 다음 부팅부터 시험 선택 뷰가 초기화면 */
+export function clearCurrentExam() {
+    try {
+        localStorage.removeItem(CURRENT_EXAM_KEY);
+    } catch (e) { /* noop */ }
+}
+
 /**
  * 활성 시험 엔트리 해석.
  * 우선순위: 선택된 시험 → default 플래그 → 목록 첫 항목 → null(레지스트리 없음).
