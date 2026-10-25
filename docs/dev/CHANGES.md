@@ -4,6 +4,10 @@
 
 - `docs/dev/design/NATIVE_APP_STRATEGY.md` — PWA 검증→네이티브 계획 검토 기록. TWA→Capacitor→Flutter 단계 권고, 리포지토리 기준 전환 비용 분석, 이주 대비 지침
 
+## 2026-10-25 appraisal 법령 참조자료 수집
+
+- law.go.kr DRF API(LAW_OC_KEY)로 과목2 근거 법령 6건 ref_md 추출 — 감평법(법·령·규칙) + 가격공시법(법·령·규칙), 조문 289개. `subjectDefaultRefdoc`·`referenceLaw` 등록
+
 ## 2026-10-25 appraisal references.json 보정
 
 - refDirs·subjectDirMap 필드 누락으로 build:data 실패 — 파일럿 팩 필수 필드 추가
