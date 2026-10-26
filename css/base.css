@@ -566,6 +566,15 @@ body {
     background-size: cover;
 }
 
+/* 데스크탑 — 전체 그림 노출: cover는 뷰포트와 종횡비가 다르면 그림을 잘라낸다.
+   contain으로 인왕제색도(1920×1115, 1.72:1) 전체를 표시 — 바깥 여백은 body 배경색 */
+@media (min-width: 901px) {
+    body {
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+}
+
 /* 모바일 — 카드·본문이 뷰포트를 채워 빈 영역 텍스트가 그림 위에 직접 놓이므로
    대비 확보용으로 딤을 더 올림 */
 @media (max-width: 900px) {
