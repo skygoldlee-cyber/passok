@@ -1,4 +1,5 @@
 // tools/lib/generated_files.js — 빌드 체인이 생성하는 src/ 하위 산출물 경로 (단일 소스)
+// @spec none (게이트 공통 상수)
 //
 // src/ 아래에 두는 생성물은 git 추적 대상이면서도 사람이 편집하지 않는다.
 // 게이트(check_test_first·check_doc_sync)가 이 파일들의 변경을 로직 변경으로
