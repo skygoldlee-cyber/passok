@@ -1,6 +1,7 @@
 {
- "examId": "hairdresser",
- "dataRegistryGlobal": "DATA_REGISTRY_HAIRDRESSER",
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
  "_pilot": {
   "added": "2026-10-26",
   "basis": "2027 출제기준(2027.1.1~2031.12.31) 자체 제작",
@@ -9,68 +10,124 @@
  "subjects": [
   {
    "key": "skin",
+   "order": 1,
    "name": "피부학",
-   "file": "교재/skin/피부학.md"
+   "shortName": "피부학",
+   "dir": "교재/skin",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "피부학 (전체)",
+     "file": "피부학.md"
+    }
+   ]
   },
   {
    "key": "hair",
+   "order": 2,
    "name": "모발학",
-   "file": "교재/hair/모발학.md"
+   "shortName": "모발학",
+   "dir": "교재/hair",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "모발학 (전체)",
+     "file": "모발학.md"
+    }
+   ]
   },
   {
    "key": "cosmetics",
+   "order": 3,
    "name": "화장품학",
-   "file": "교재/cosmetics/화장품학.md"
+   "shortName": "화장품학",
+   "dir": "교재/cosmetics",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "화장품학 (전체)",
+     "file": "화장품학.md"
+    }
+   ]
   },
   {
    "key": "hygiene",
+   "order": 4,
    "name": "공중위생관리학",
-   "file": "교재/hygiene/공중위생관리학.md"
+   "shortName": "위생관리",
+   "dir": "교재/hygiene",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "공중위생관리학 (전체)",
+     "file": "공중위생관리학.md"
+    }
+   ]
   },
   {
    "key": "disinfection",
+   "order": 5,
    "name": "소독학",
-   "file": "교재/disinfection/소독학.md"
+   "shortName": "소독학",
+   "dir": "교재/disinfection",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "소독학 (전체)",
+     "file": "소독학.md"
+    }
+   ]
   },
   {
    "key": "practical",
+   "order": 6,
    "name": "미용실무",
-   "file": "교재/practical/미용실무.md"
+   "shortName": "실무",
+   "dir": "교재/practical",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "미용실무 (전체)",
+     "file": "미용실무.md"
+    }
+   ]
   }
  ],
  "exams": [
   {
    "key": "skin",
+   "subject": "skin",
+   "part": 1,
    "title": "피부학",
    "file": "과목1_피부학_문제은행.md"
   },
   {
    "key": "hair",
+   "subject": "hair",
+   "part": 1,
    "title": "모발학",
    "file": "과목2_모발학_문제은행.md"
   },
   {
    "key": "cosmetics",
+   "subject": "cosmetics",
+   "part": 1,
    "title": "화장품학",
    "file": "과목3_화장품학_문제은행.md"
   },
   {
    "key": "hygiene",
+   "subject": "hygiene",
+   "part": 1,
    "title": "공중위생관리학",
    "file": "과목4_공중위생관리학_문제은행.md"
   },
   {
    "key": "disinfection",
+   "subject": "disinfection",
+   "part": 1,
    "title": "소독학",
    "file": "과목5_소독학_문제은행.md"
-  }
- ],
- "written": [
-  {
-   "key": "practical",
-   "title": "실기 주관식 연습 (필답·작업형)",
-   "desc": "수기 순서·도구 선택·관리계획 서술 — 모범답안 대비 자가채점",
-   "file": "실기_주관식_연습.md"
   }
  ],
  "integratedExam": {
@@ -99,10 +156,9 @@
     "key": "disinfection",
     "count": 10
    }
-  ],
-  "note": "모발학·피부학 비중 최대 — 출제기준 추정 배분, 과락 없음"
+  ]
  },
- "synonyms": {},
+ "integratedExamComment": "모발학·피부학 비중 최대 — 출제기준 추정 배분, 과락 없음",
  "uiText": {
   "dashboard": {
    "title": "학습 대시보드",
@@ -166,6 +222,13 @@
    "placeholder": "검색 (예: 모발, 소독, 면허)"
   }
  },
- "refDirsComment": "참조자료/ref_md — 공중위생관리법 3종·소독기준 고시(과목4~5), 화장품법·안전기준(과목3)",
- "contentYear": "2027"
+ "synonyms": {},
+ "written": [
+  {
+   "key": "practical",
+   "title": "실기 주관식 연습 (필답·작업형)",
+   "desc": "수기 순서·도구 선택·관리계획 서술 — 모범답안 대비 자가채점",
+   "file": "실기_주관식_연습.md"
+  }
+ ]
 }
