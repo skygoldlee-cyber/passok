@@ -1,6 +1,6 @@
 {
   "name": "passok",
-  "version": "2026.10.24",
+  "version": "2026.10.26",
   "description": "PassOK — 멀티시험 자격시험 스마트 학습 플랫폼",
   "engines": {
     "node": ">=24"
@@ -18,7 +18,7 @@
     "build:audio-manifest": "node tools/build/build_audio_manifest.js",
     "sync:citations": "node tools/sync/sync_citation_lines.js",
     "postbuild:data": "npm run check:parser",
-    "build:derived": "npm run build:html && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js && npm run build:trace && npm run stats:stamp",
+    "build:derived": "npm run build:html && npm run build:landing && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js && npm run build:trace && npm run stats:stamp",
     "build:derived:full": "npm run build:derived && npm run build:embeddings",
     "check:parser": "node tools/check/check_parser_parity.js",
     "check:imports": "node tools/check/check_imports.js",
@@ -53,7 +53,9 @@
     "check:glossarysignal": "node tools/check/check_glossary_signal.js",
     "check:domainmap": "node tools/check/check_domain_map.js",
     "build:html": "node tools/build/build_html.js",
+    "build:landing": "node tools/build/build_landing.js",
     "check:html": "node tools/build/build_html.js --check",
+    "check:landing": "node tools/build/build_landing.js --check",
     "check:docsync": "node tools/check/check_doc_sync.js",
     "check:testfirst": "node tools/check/check_test_first.js",
     "check:inventory": "node tools/check/check_inventory.js",
@@ -92,6 +94,7 @@
     "coverage": "vitest run --coverage",
     "coverage:unit": "c8 --reporter=json --report-dir=coverage-unit --include \"src/**/*.js\" node --test \"tests/unit/**/*.test.js\"",
     "coverage:all": "npm run coverage && npm run coverage:unit && node tools/check/coverage_merge.js --check",
+    "coverage:gaps": "node tools/check/coverage_gaps.js",
     "ratchet:coverage": "node tools/check/coverage_merge.js --ratchet",
     "test:all": "node --test \"tests/unit/**/*.test.js\" && node tools/check/check_parser_parity.js && node tools/check/check_imports.js && vitest run",
     "test:e2e": "playwright test",
@@ -112,12 +115,15 @@
     "deploy": "node tools/deploy/deploy.js",
     "audit:combo": "node tools/check/audit_combo.js",
     "audit:study": "node tools/check/audit_study_quality.js",
+    "audit:tools": "node tools/check/audit_tool_usage.js",
     "check:uitext": "node tools/check/check_uitext.js",
     "check:teststats": "node tools/check/check_test_stats.js",
     "stats:stamp": "node tools/check/check_test_stats.js --stamp",
     "check:mobilesafe": "node tools/check/check_mobile_safe.js",
     "check:escape": "node tools/check/check_html_escape.js",
     "check:uistyle": "node tools/check/check_ui_style.js",
+    "check:zlayer": "node tools/check/check_zlayer.js",
+    "check:diffcov": "node tools/check/check_diff_coverage.js",
     "check:seedkeys": "node tools/check/check_seed_keys.js",
     "scaffold:exam": "node tools/build/scaffold_exam.js",
     "scaffold:chapter": "node tools/build/scaffold_chapter.js",
@@ -149,7 +155,8 @@
     "ai:adphrases": "node tools/ai/ai_adphrases.js",
     "ai:adoption": "node tools/ai/ai_adoption.js",
     "mutate": "stryker run",
-    "report:pro": "node tools/check/pro_report.js"
+    "report:pro": "node tools/check/pro_report.js",
+    "check:filenames": "node tools/check/check_filenames.js"
   },
   "keywords": [
     "cosmetics",
@@ -179,6 +186,7 @@
     "istanbul-lib-report": "^3.0.1",
     "istanbul-reports": "^3.2.0",
     "jsdom": "^30.0.1",
+    "qrcode": "^1.5.4",
     "typescript": "^5.9.3",
     "vitest": "^5.0.3"
   }

@@ -5,6 +5,7 @@ import { saveScrollPosition, restoreScrollPosition, registerViewNavigator, bumpV
 import { showToast, hideGlobalLoading } from './ui-utils.js';
 import { isAnyModalOpen, consumedModalPop } from './modal-back.js';
 import { getPracticeViewTitles, getPracticeHashSlugs } from './practice-registry.js';
+import { getCurrentExamId, getExamAppName } from './exam-context.js';
 
 /**
  * 레지스트리 기반 뷰 타이틀 맵 생성
@@ -13,8 +14,13 @@ import { getPracticeViewTitles, getPracticeHashSlugs } from './practice-registry
  */
 export function getViewTitles(registry) {
     const uiText = (registry && registry.uiText) || {};
+    // 명시 선택된 시험의 앱 브랜드명만 타이틀에 반영 — "Passmula 대시보드"
+    // 미선택(기본 시험 폴백) 상태에서도 폴백 시험 브랜드가 뜨지 않도록 게이트
+    const examName = getCurrentExamId() ? getExamAppName() : '';
+    const dashUi = uiText.dashboard || {};
+    const dashboardTitle = examName && examName !== 'PassOK' ? `${examName} 대시보드` : (dashUi.title || '학습 대시보드');
     return {
-        'dashboard-view': uiText.dashboard || { title: '학습 대시보드', subtitle: '시험 합격을 위한 분석 및 스마트 툴' },
+        'dashboard-view': { title: dashboardTitle, subtitle: dashUi.subtitle || '시험 합격을 위한 분석 및 스마트 툴' },
         'analysis-view': uiText.analysis || { title: '학습 진단', subtitle: '학습 기록을 바탕으로 약점을 분석하여 학습 우선순위를 진단합니다' },
         'flashcard-view': uiText.flashcard || { title: '개념 플래시카드', subtitle: '과목별 핵심 개념을 카드로 뒤집으며 암기' },
         'quiz-view': uiText.quiz || { title: '기출 및 핵심 퀴즈', subtitle: '빈칸 채우기형 퀴즈로 실전 완벽 대비' },
@@ -43,6 +49,12 @@ export function getViewTitles(registry) {
  */
 export function navigateToView(target, ctx) {
     const { titlesMap, handlers } = ctx;
+    // 시험 미선택: 피커 외 모든 뷰 진입 차단 — 피커로 리다이렉트 (ES-09)
+    // (nav-item·탭바·더보기·딥링크 모두 이 경로를 통과)
+    if (target !== 'exam-select-view' && !getCurrentExamId()) {
+        showToast('먼저 학습할 시험을 선택하세요', 'info');
+        target = 'exam-select-view';
+    }
     const sections = document.querySelectorAll('.view-section');
 
     // 현재 뷰 스크롤 위치 저장
@@ -259,6 +271,13 @@ export function initViewHashRouting(ctx) {
     if (initial && initial !== state.currentView) {
         _hashNavigating = true;
         navigateToView(initial, ctx);
+        _hashNavigating = false;
+    }
+    // 시험 미선택(기본 시험 자동 적용) 상태면 시험 선택 뷰를 먼저 표시 —
+    // 카드 선택 시 current_exam이 저장되어 이후 부팅은 대시보드로 진입
+    else if (!getCurrentExamId() && initial !== 'exam-select-view') {
+        _hashNavigating = true;
+        navigateToView('exam-select-view', ctx);
         _hashNavigating = false;
     }
     // 뒤로가기 기저 지점 — 현재 뷰를 히스토리 첫 엔트리로 기록

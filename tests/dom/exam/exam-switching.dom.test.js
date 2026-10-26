@@ -1,5 +1,5 @@
 // tests/dom/exam-switching.dom.test.js — 멀티시험 전환 통합 시나리오
-// @spec ES-01~05
+// @spec ES-01~05,ES-09,ES-10
 // 목적: 비기본 시험(insadj) 활성 시 기능 플래그 게이팅·브랜딩·스토리지
 //       네임스페이스가 시험 컨텍스트를 정확히 따르는지 회귀 검증.
 //       (cosmetic 전용 UI가 insadj에 새어 나오지 않아야 한다)
@@ -94,6 +94,17 @@ describe('멀티시험 전환 — 비기본 시험 활성화', () => {
         }
         // 시험 전환 버튼은 시험 수(2개) 기반으로 노출
         expect(hidden('examSwitch')).toBe(false);
+    });
+
+    it('applyExamBranding — 미선택이면 시험 브랜드 대신 플랫폼 브랜드', () => {
+        localStorage.removeItem('current_exam');
+        applyExamBranding();
+
+        expect(document.title).toBe('PassOK');
+        const logoMain = document.querySelector('.logo-text h1');
+        const logoSub = document.querySelector('.logo-text span');
+        if (logoMain) expect(logoMain.textContent).toBe('PassOK');
+        if (logoSub) expect(logoSub.textContent).toBe('');
     });
 
     it('applyExamBranding — 타이틀·로고가 insadj 값으로 갱신', () => {

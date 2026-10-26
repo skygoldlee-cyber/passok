@@ -167,6 +167,24 @@ describe('설정 메뉴·진도 초기화 리스너', () => {
         expect(panel.classList.contains('is-hidden')).toBe(true);
     });
 
+    it('도움말 버튼 → 패널 토글, 설정 패널과 동시에 열리지 않음', () => {
+        const settingsBtn = el('settings-toggle-btn');
+        const settingsPanel = el('settings-panel');
+        const helpBtn = el('help-toggle-btn');
+        const helpPanel = el('help-panel');
+
+        settingsBtn.click();
+        expect(settingsPanel.classList.contains('is-hidden')).toBe(false);
+
+        helpBtn.click(); // 도움말 오픈 → 설정은 닫힘
+        expect(helpPanel.classList.contains('is-hidden')).toBe(false);
+        expect(settingsPanel.classList.contains('is-hidden')).toBe(true);
+        expect(helpBtn.getAttribute('aria-expanded')).toBe('true');
+
+        helpBtn.click(); // 재클릭 → 닫힘
+        expect(helpPanel.classList.contains('is-hidden')).toBe(true);
+    });
+
     it('진도 초기화 → confirm 승인 시 카드/퀴즈 상태·스토리지 정리 + 토스트', async () => {
         state.memorizedCards.add('c1');
         state.weakCards.add('c2');

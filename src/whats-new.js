@@ -3,7 +3,7 @@
 // ------------------------------------------------------------
 // window.APP_VERSION(data/version.js, 배포 스탬프)과 마지막으로 본 버전
 // (last_seen_version, 앱 전역 키)을 비교해 업데이트 후 첫 부팅에서
-// 변경 이력 모달을 띄운다. 설정 메뉴 "변경 이력" 버튼으로도 재열람 가능.
+// 변경 이력 모달을 띄운다. 도움말 메뉴 "변경 이력" 버튼으로도 재열람 가능.
 // 이력 소스: window.RELEASE_NOTES (data/release-notes.js — 배포 시 커밋
 // subject로 자동 초안 생성, 수동 편집 권장).
 // ------------------------------------------------------------
@@ -44,7 +44,7 @@ export function collectNewEntries(notes, lastSeen) {
     }));
 }
 
-/** 변경 이력 모달 — 부팅 자동 표시와 설정 메뉴 재열람 공용 */
+/** 변경 이력 모달 — 부팅 자동 표시와 도움말 메뉴 재열람 공용 */
 export function showReleaseNotesModal(entries, title = '새로운 소식') {
     if (!entries.length) return;
     // 전용 오버레이 ID — showConfirm/showAlert(app-confirm-overlay)와 독립.

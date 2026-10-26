@@ -63,6 +63,32 @@ function getSubjectMaps(manifest) {
 }
 
 /**
+ * dir 안에서 declaredKeys에 없는 키의 생성 번들을 삭제한다.
+ * manifest에서 과목/시험 엔트리가 제거되면 키 접두 청소(clearOldBundles)만으로는
+ * 이전 생성물이 잔존해 drills 빌드 등 디렉터리 순회 도구를 깨뜨린다.
+ * @param {string} dir
+ * @param {Set<string>} declaredKeys 유지할 번들 키 집합
+ * @param {RegExp} [pattern] 파일명 매치 정규식 — 1번 캡처 그룹이 번들 키 (기본: <key>.<8hex>.js)
+ * @returns {string[]} 삭제한 파일명
+ */
+function removeOrphanBundles(dir, declaredKeys, pattern = /^(.+)\.[0-9a-f]{8}\.js$/) {
+    if (!fs.existsSync(dir)) return [];
+    const removed = [];
+    for (const file of fs.readdirSync(dir)) {
+        const m = file.match(pattern);
+        if (m && !declaredKeys.has(m[1])) {
+            try {
+                fs.unlinkSync(path.join(dir, file));
+                removed.push(file);
+            } catch (e) {
+                console.warn(`Warning: 고아 번들 삭제 실패 ${file}:`, e.message);
+            }
+        }
+    }
+    return removed;
+}
+
+/**
  * 모든 시험의 프리캐시 MD 자산 목록 ('./' 접두, 존재하는 파일만).
  * sw.js의 MD_ASSETS를 재생성하는 두 경로(build:index.js, sync_textbook_files.js)가
  * 동일 목록을 만들도록 공통 함수로 둔다.
@@ -128,4 +154,4 @@ function getPrecacheMediaAssets(workspaceDir) {
     return list.sort();
 }
 
-module.exports = { getExamTargets, getSubjectMaps, getDefaultExamRoots, getPrecacheMdAssets, getPrecacheMediaAssets };
+module.exports = { getExamTargets, getSubjectMaps, getDefaultExamRoots, getPrecacheMdAssets, getPrecacheMediaAssets, removeOrphanBundles };

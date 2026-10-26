@@ -1,159 +1,200 @@
 {
-   "schemaVersion": 1,
-   "note": "시험 레지스트리 — 새 시험은 이 파일에 엔트리를 추가하고 content/exams/<id>/ + data/exams/<id>/ 구조로 콘텐츠를 배치한다 (모든 시험이 대칭 구조). data/exams.js 는 tools/build_exams_list.js가 이 파일에서 생성한다. 선택 필드 discordInvite: 시험별 Discord 초대 URL — 선언 시 설정 메뉴에 커뮤니티 버튼 노출 (DOC-DSN-36).",
-   "exams": [
+ "schemaVersion": 1,
+ "note": "시험 레지스트리 — 새 시험은 이 파일에 엔트리를 추가하고 content/exams/<id>/ + data/exams/<id>/ 구조로 콘텐츠를 배치한다 (모든 시험이 대칭 구조). data/exams.js 는 tools/build_exams_list.js가 이 파일에서 생성한다. 선택 필드 discordInvite: 시험별 Discord 초대 URL — 선언 시 도움말 메뉴에 커뮤니티 버튼 노출 (DOC-DSN-36).",
+ "exams": [
+  {
+   "id": "cosmetic",
+   "name": "맞춤형화장품 조제관리사",
+   "shortName": "조제관리사",
+   "appName": "PassOK 조제관리사",
+   "title": "PassOK — 맞춤형화장품 조제관리사 (Passmula)",
+   "logoMain": "PassOK",
+   "logoSub": "조제관리사 · Passmula",
+   "desc": "화장품법·제조·품질관리·안전관리·맞춤형화장품 4과목 · 문제은행 1,979문",
+   "icon": "fa-solid fa-wand-magic-sparkles",
+   "year": "2027",
+   "theme": {
+    "--color-primary": "#06b6d4",
+    "--color-secondary": "#8b5cf6"
+   },
+   "pwaShortcuts": [
+    {
+     "name": "배합 계산기",
+     "short_name": "배합 계산",
+     "description": "Formula OS 배합 계산기로 바로 이동",
+     "url": "./index.html#/formula",
+     "icons": [
       {
-         "id": "cosmetic",
-         "name": "맞춤형화장품 조제관리사",
-         "shortName": "조제관리사",
-         "appName": "PassOK 조제관리사",
-         "title": "PassOK — 맞춤형화장품 조제관리사 (Passmula)",
-         "logoMain": "PassOK",
-         "logoSub": "조제관리사 · Passmula",
-         "desc": "화장품법·제조·품질관리·안전관리·맞춤형화장품 4과목 · 문제은행 1,979문",
-         "icon": "fa-solid fa-wand-magic-sparkles",
-         "year": "2027",
-         "theme": {
-            "--color-primary": "#06b6d4",
-            "--color-secondary": "#8b5cf6"
-         },
-         "pwaShortcuts": [
-            {
-               "name": "배합 계산기",
-               "short_name": "배합 계산",
-               "description": "Formula OS 배합 계산기로 바로 이동",
-               "url": "./index.html#/formula",
-               "icons": [
-                  {
-                     "src": "icons/icon-192.png",
-                     "sizes": "192x192",
-                     "type": "image/png"
-                  }
-               ]
-            }
-         ],
-         "default": true,
-         "contentRoot": "content/exams/cosmetic",
-         "dataRoot": "data/exams/cosmetic",
-         "manifestPath": "content/exams/cosmetic/manifest.json",
-         "registryBundle": "data/exams/cosmetic/registry.js",
-         "registryGlobal": "DATA_REGISTRY",
-         "features": {
-            "dictionary": true,
-            "calcPractice": true,
-            "ingredients": true,
-            "audiobook": false,
-            "appendixDocs": true,
-            "pomodoro": true,
-            "formula": true,
-            "limitsTrainer": true,
-            "studyGuide": true,
-            "story_textbook": true,
-            "semantic": true
-         },
-         "appNameEn": "Passmula",
-         "practiceName": "Formula OS"
-      },
-      {
-         "id": "lossadj",
-         "name": "손해평가사",
-         "shortName": "손해평가사",
-         "appName": "PassOK 손해평가사",
-         "title": "PassOK — 농어업재해보험 손해평가사 (Passess)",
-         "logoMain": "PassOK",
-         "logoSub": "손해평가사 · Passess",
-         "desc": "농어업재해보험 손해평가사 Phase C 파일럿 — 총 5과목(1차 상법·재해보험법령·농학개론 + 2차 이론·손해평가 교재) · 문제은행 66문",
-         "icon": "fa-solid fa-tractor",
-         "year": "2026",
-         "theme": {
-            "--color-primary": "#16a34a",
-            "--color-secondary": "#ca8a04"
-         },
-         "comingSoon": true,
-         "contentRoot": "content/exams/lossadj",
-         "dataRoot": "data/exams/lossadj",
-         "manifestPath": "content/exams/lossadj/manifest.json",
-         "registryBundle": "data/exams/lossadj/registry.js",
-         "registryGlobal": "DATA_REGISTRY_LOSSADJ",
-         "features": {
-            "writtenPractice": true
-         },
-         "appNameEn": "Passess",
-         "practiceName": "Assess OS"
-      },
-      {
-         "id": "insadj",
-         "name": "손해사정사",
-         "shortName": "손해사정사",
-         "appName": "PassOK 손해사정사",
-         "title": "PassOK — 손해사정사 (Passure)",
-         "logoMain": "PassOK",
-         "logoSub": "손해사정사 · Passure",
-         "desc": "손해사정사 — 6과목(1차 보험계약법·보험업법·손해사정이론 + 2차 재물·차량·신체 3종별) · 문제은행 66문",
-         "icon": "fa-solid fa-scale-balanced",
-         "year": "2027",
-         "theme": {
-            "--color-primary": "#2563eb",
-            "--color-secondary": "#64748b"
-         },
-         "contentRoot": "content/exams/insadj",
-         "dataRoot": "data/exams/insadj",
-         "manifestPath": "content/exams/insadj/manifest.json",
-         "registryBundle": "data/exams/insadj/registry.js",
-         "registryGlobal": "DATA_REGISTRY_INSADJ",
-         "features": {
-            "writtenPractice": true
-         },
-         "appNameEn": "Passure",
-         "practiceName": "Adjust OS"
-      },
-      {
-         "id": "indsafe",
-         "name": "산업안전기사",
-         "shortName": "산업안전기사",
-         "appName": "PassOK 산업안전기사",
-         "title": "PassOK — 산업안전기사 (Passafe)",
-         "logoMain": "PassOK",
-         "logoSub": "산업안전기사 · Passafe",
-         "desc": "산업안전기사 — 7과목 (필기 6과목 + 실기 산업안전관리 실무) · 출제기준 2024~2026 기준 자체 제작",
-         "icon": "fa-solid fa-helmet-safety",
-         "year": "2027",
-         "theme": {},
-         "contentRoot": "content/exams/indsafe",
-         "dataRoot": "data/exams/indsafe",
-         "manifestPath": "content/exams/indsafe/manifest.json",
-         "registryBundle": "data/exams/indsafe/registry.js",
-         "registryGlobal": "DATA_REGISTRY_INDSAFE",
-         "features": {
-            "writtenPractice": true
-         },
-         "comingSoon": true,
-         "appNameEn": "Passafe",
-         "practiceName": "Safety OS"
-      },
-      {
-         "id": "admagent",
-         "name": "일반행정사",
-         "shortName": "행정사",
-         "appName": "PassOK 일반행정사",
-         "title": "PassOK — 일반행정사 (Passmin)",
-         "logoMain": "PassOK",
-         "logoSub": "행정사 · Passmin",
-         "desc": "일반행정사 — 7과목 (1차 필기 객관식: 민법총칙·행정법·행정학개론 과목당 25개 + 2차 주관식: 민법계약·행정절차론·사무관리론·행정사실무법) · 행정사법 시행령 별표1 기준 자체 제작 · 문제은행 75문",
-         "icon": "fa-solid fa-file-pen",
-         "year": "2027",
-         "theme": {},
-         "contentRoot": "content/exams/admagent",
-         "dataRoot": "data/exams/admagent",
-         "manifestPath": "content/exams/admagent/manifest.json",
-         "registryBundle": "data/exams/admagent/registry.js",
-         "registryGlobal": "DATA_REGISTRY_ADMAGENT",
-         "features": {
-            "writtenPractice": true
-         },
-         "comingSoon": true,
-         "appNameEn": "Passmin",
-         "practiceName": "Docs OS"
+       "src": "icons/icon-192.png",
+       "sizes": "192x192",
+       "type": "image/png"
       }
-   ]
+     ]
+    }
+   ],
+   "default": true,
+   "contentRoot": "content/exams/cosmetic",
+   "dataRoot": "data/exams/cosmetic",
+   "manifestPath": "content/exams/cosmetic/manifest.json",
+   "registryBundle": "data/exams/cosmetic/registry.js",
+   "registryGlobal": "DATA_REGISTRY",
+   "features": {
+    "dictionary": true,
+    "calcPractice": true,
+    "ingredients": true,
+    "audiobook": false,
+    "appendixDocs": true,
+    "pomodoro": true,
+    "formula": true,
+    "limitsTrainer": true,
+    "studyGuide": true,
+    "story_textbook": true,
+    "semantic": true
+   },
+   "appNameEn": "Passmula",
+   "practiceName": "Formula OS",
+   "discordInvite": "https://discord.gg/eHerSQG9hj"
+  },
+  {
+   "id": "lossadj",
+   "name": "손해평가사",
+   "shortName": "손해평가사",
+   "appName": "PassOK 손해평가사",
+   "title": "PassOK — 농어업재해보험 손해평가사 (Passess)",
+   "logoMain": "PassOK",
+   "logoSub": "손해평가사 · Passess",
+   "desc": "농어업재해보험 손해평가사 Phase C 파일럿 — 총 5과목(1차 상법·재해보험법령·농학개론 + 2차 이론·손해평가 교재) · 문제은행 66문",
+   "icon": "fa-solid fa-tractor",
+   "year": "2026",
+   "theme": {
+    "--color-primary": "#16a34a",
+    "--color-secondary": "#ca8a04"
+   },
+   "comingSoon": true,
+   "contentRoot": "content/exams/lossadj",
+   "dataRoot": "data/exams/lossadj",
+   "manifestPath": "content/exams/lossadj/manifest.json",
+   "registryBundle": "data/exams/lossadj/registry.js",
+   "registryGlobal": "DATA_REGISTRY_LOSSADJ",
+   "features": {
+    "writtenPractice": true
+   },
+   "appNameEn": "Passess",
+   "practiceName": "Assess OS"
+  },
+  {
+   "id": "insadj",
+   "name": "손해사정사",
+   "shortName": "손해사정사",
+   "appName": "PassOK 손해사정사",
+   "title": "PassOK — 손해사정사 (Passure)",
+   "logoMain": "PassOK",
+   "logoSub": "손해사정사 · Passure",
+   "desc": "손해사정사 — 6과목(1차 보험계약법·보험업법·손해사정이론 + 2차 재물·차량·신체 3종별) · 문제은행 66문",
+   "icon": "fa-solid fa-scale-balanced",
+   "year": "2027",
+   "theme": {
+    "--color-primary": "#2563eb",
+    "--color-secondary": "#64748b"
+   },
+   "contentRoot": "content/exams/insadj",
+   "dataRoot": "data/exams/insadj",
+   "manifestPath": "content/exams/insadj/manifest.json",
+   "registryBundle": "data/exams/insadj/registry.js",
+   "registryGlobal": "DATA_REGISTRY_INSADJ",
+   "features": {
+    "writtenPractice": true
+   },
+   "appNameEn": "Passure",
+   "practiceName": "Adjust OS"
+  },
+  {
+   "id": "indsafe",
+   "name": "산업안전기사",
+   "shortName": "산업안전기사",
+   "appName": "PassOK 산업안전기사",
+   "title": "PassOK — 산업안전기사 (Passafe)",
+   "logoMain": "PassOK",
+   "logoSub": "산업안전기사 · Passafe",
+   "desc": "산업안전기사 — 7과목 (필기 6과목 + 실기 산업안전관리 실무) · 출제기준 2024~2026 기준 자체 제작",
+   "icon": "fa-solid fa-helmet-safety",
+   "year": "2027",
+   "theme": {},
+   "contentRoot": "content/exams/indsafe",
+   "dataRoot": "data/exams/indsafe",
+   "manifestPath": "content/exams/indsafe/manifest.json",
+   "registryBundle": "data/exams/indsafe/registry.js",
+   "registryGlobal": "DATA_REGISTRY_INDSAFE",
+   "features": {
+    "writtenPractice": true
+   },
+   "comingSoon": true,
+   "appNameEn": "Passafe",
+   "practiceName": "Safety OS"
+  },
+  {
+   "id": "admagent",
+   "name": "일반행정사",
+   "shortName": "행정사",
+   "appName": "PassOK 일반행정사",
+   "title": "PassOK — 일반행정사 (Passmin)",
+   "logoMain": "PassOK",
+   "logoSub": "행정사 · Passmin",
+   "desc": "일반행정사 — 7과목 (1차 필기 객관식: 민법총칙·행정법·행정학개론 과목당 25개 + 2차 주관식: 민법계약·행정절차론·사무관리론·행정사실무법) · 행정사법 시행령 별표1 기준 자체 제작 · 문제은행 75문",
+   "icon": "fa-solid fa-file-pen",
+   "year": "2027",
+   "theme": {},
+   "contentRoot": "content/exams/admagent",
+   "dataRoot": "data/exams/admagent",
+   "manifestPath": "content/exams/admagent/manifest.json",
+   "registryBundle": "data/exams/admagent/registry.js",
+   "registryGlobal": "DATA_REGISTRY_ADMAGENT",
+   "features": {
+    "writtenPractice": true
+   },
+   "comingSoon": true,
+   "appNameEn": "Passmin",
+   "practiceName": "Docs OS"
+  },
+  {
+   "id": "appraisal",
+   "name": "감정평가사",
+   "shortName": "감평사",
+   "appName": "PassOK 감정평가사",
+   "title": "PassOK — 감정평가사 (Passpraisal)",
+   "logoMain": "PassOK",
+   "logoSub": "감평사 · Passpraisal",
+   "desc": "감정평가사 — 8과목 (1차 필기 객관식: 부동산학개론·감정평가관련법규·감정평가 및 통계원론) · 출제기준 기반 자체 제작 · 2차 주관식은 대상 외",
+   "icon": "fa-solid fa-scale-balanced",
+   "year": "2027",
+   "theme": {},
+   "contentRoot": "content/exams/appraisal",
+   "dataRoot": "data/exams/appraisal",
+   "manifestPath": "content/exams/appraisal/manifest.json",
+   "registryBundle": "data/exams/appraisal/registry.js",
+   "registryGlobal": "DATA_REGISTRY_APPRAISAL",
+   "comingSoon": true,
+   "appNameEn": "Passpraisal",
+   "practiceName": "Appraisal OS"
+  },
+  {
+   "id": "broker",
+   "name": "공인중개사",
+   "shortName": "공인중개사",
+   "appName": "PassOK 공인중개사",
+   "title": "PassOK — 공인중개사 (Passbroker)",
+   "logoMain": "PassOK",
+   "logoSub": "공인중개사 · Passbroker",
+   "desc": "공인중개사 — 7과목 (1차: 부동산학개론·민법 / 2차: 중개사법·공법·공시·세법·실무) · 시험법령+기출 기반 자체 제작",
+   "icon": "fa-solid fa-key",
+   "year": "2027",
+   "theme": {},
+   "contentRoot": "content/exams/broker",
+   "dataRoot": "data/exams/broker",
+   "manifestPath": "content/exams/broker/manifest.json",
+   "registryBundle": "data/exams/broker/registry.js",
+   "registryGlobal": "DATA_REGISTRY_BROKER",
+   "comingSoon": true
+  }
+ ]
 }

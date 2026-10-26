@@ -126,14 +126,14 @@ describe('feedback.js — 의견 보내기 모달', () => {
         expect(lastToast()[0]).toContain('감사'); // 봇에겐 성공인 척
     });
 
-    it('신기능 힌트: 처음엔 ⚙️ 점 + NEW 배지, 확인 후 각각 제거', () => {
+    it('신기능 힌트: 처음엔 ? 점 + NEW 배지, 확인 후 각각 제거', () => {
         loadIndexHtml();
         initFeedbackHint();
-        expect(document.querySelector('#settings-toggle-btn .feedback-dot')).not.toBeNull();
+        expect(document.querySelector('#help-toggle-btn .feedback-dot')).not.toBeNull();
         expect(document.querySelector('#feedback-btn .feedback-new')).not.toBeNull();
 
         dismissFeedbackDot();   // 패널 첫 오픈
-        expect(document.querySelector('#settings-toggle-btn .feedback-dot')).toBeNull();
+        expect(document.querySelector('#help-toggle-btn .feedback-dot')).toBeNull();
         expect(localStorage.getItem('feedback_dot_seen')).toBe('1');
 
         dismissFeedbackHint();  // 의견 보내기 첫 클릭

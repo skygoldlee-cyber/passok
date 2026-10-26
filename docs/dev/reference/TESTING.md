@@ -226,7 +226,7 @@ npm run hooks:install
 | 43 | `whats-new.test.js` | 7 | `src/whats-new.js` — `collectNewEntries` 버전 비교·집계·상한·폴백 | 순수 함수 |
 | 44 | `feedback.test.js` | 13 | `src/feedback.js` — `?src=` 캡처·sanitize, 페이로드 빌드/검증, 쿨다운, 큐·플러시 | window/localStorage 스텁 |
 | 45 | `study-tracker.test.js` | 41 | `src/study-tracker.js` — SC-03 활동 기록·월별 학습일·목표 진행 | localStorage 모킹, 2026-10-14 추가 |
-| 46 | `build-pipeline.test.js` | 17 | BP-01~08 — manifest 스키마·안정 ID·빌드 검증·파서 정합·용어집 인덱스·SW 스탬프·카드 감사 | tools/build 모듈 + subprocess, 2026-10-14 추가 |
+| 46 | `build-pipeline.test.js` | 19 | BP-01~08 — manifest 스키마·안정 ID·빌드 검증·파서 정합·용어집 인덱스·SW 스탬프·카드 감사·고아 번들 스윕 | tools/build 모듈 + subprocess, 2026-10-14 추가 |
 | 47 | `content-structure.test.js` | 13 | CS-01~10 — manifest↔파일·교재 8종·문제은행·ref_md 레이아웃·원료 메타·오디오북·슬러그·참조 이미지 | 파일시스템 정적 검증, 2026-10-14 추가 |
 | 48 | `audit-quality.test.js` | 6 | CQ-01~05 — 카드 감사·참조 링크·심각도·콤보 감사·베이스라인 카운트 | subprocess 실행, 2026-10-14 추가 |
 | 49 | `formula-os.test.js` | 11 | FO-03/04/07/09 — 제조 단계·역할→상 매핑·고객 필드·pH·단계 상한·import/export·무료 한도 | 합성 데이터, 2026-10-14 추가 |
@@ -277,7 +277,9 @@ npm run hooks:install
 | 94 | `search-morpheme.test.js` | 8 | 형태소 경계 판정·동의어 확장 (TS-13/TS-14) | |
 | 95 | `textbook-search-exam.test.js` | 2 | `search-sources.js` `_loadExamMdText` — 문제은행 MD 로드 규약 (TS-12) | |
 | 96 | `pro-report.test.js` | 5 | `tools/check/pro_report.js` `summarize()` — 채널·티어 발급/사용률·만료 버킷·가입 수단 분포 (AD-09) | 2026-10-23 추가 |
-| | **합계** | **1558** | | |
+| 97 | `landing.test.js` | 3 | `src/landing.js` 순수 함수 — `daysUntil`·`computePlanPreview`·`subjectShares` (LP-09) | 2026-10-25 추가 |
+| 98 | `gates/build-landing.test.js` | 8 | `build_landing.js` — 카드 렌더·이스케이프·마커 주입·데모 수집·스키마·manifest 비중·SW 미포함·OG 메타 (LP-01~04,07~09) | 2026-10-25 추가 |
+| | **합계** | **1571** | | |
 
 ### DOM 테스트 (`tests/dom/`)
 
@@ -351,7 +353,8 @@ npm run hooks:install
 | 65 | `morph-search.dom.test.js` | 3 | 형태소 경계·동의어 검색 (TS-13/TS-14) | 본매치·부분 일치·동의어 정역방향 | |
 | 66 | `glossary-search.dom.test.js` | 5 | 용어 정의 카드 그룹 (TS-15/TS-16) | 정의 카드 노출·과목 배지·출처 링크 | |
 | 67 | `exam-index-scope.dom.test.js` | 1 | 검색 인덱스 시험 스코프 (TS-17) | 시험 전환 시 동일 과목 키 인덱스 재구축 | |
-| | **합계** | **757** | | |
+| 68 | `landing.dom.test.js` | 6 | 랜딩 위젯 (LP-04/05/09) | parseDemoData·init 렌더·퀴즈 피드백→결과·계획 D-day/압축/과거 날짜·설치 CTA | 2026-10-25 추가 |
+| | **합계** | **763** | | |
 
 ---
 
@@ -717,7 +720,7 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
 - 대시보드 전체 화면 `toHaveScreenshot` — chromium·mobile·tablet × dark/light
   6기준선으로 배경화(산수화)·테마 팔레트·반투명 카드 비침의 픽셀 변경 탐지.
 - 버전 토스트 등 동적 요소는 `mask`로 제외, `maxDiffPixelRatio` 1% 허용.
-- 픽셀 기준선은 OS 바인딩 — win32(로컬)·linux(CI ubuntu-latest) 양쪽 커밋.
+- 픽셀 기준선은 linux(CI)만 관리 — 로컬 실행·win32 기준선 폐기. CI 시각 실패 시 visual-baseline.yml이 workflow_run으로 자동 재생성·커밋.
   의도적 시각 변경 후 로컬은 `--update-snapshots`, CI용은
   `visual-baseline.yml` 워크플로 수동 트리거 → 아티팩트 커밋으로 갱신.
 

@@ -1,4 +1,4 @@
-// @spec UX-NAV-01,UX-NAV-08,UM-04
+// @spec UX-NAV-01,UX-NAV-08,UM-04,ES-09
 import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
 import { getViewTitles, navigateToView, initViewHashRouting, resetExitGuardState } from '../../../src/router.js';
 import { isStaleViewGen } from '../../../src/views/navigation.js';
@@ -25,6 +25,8 @@ vi.mock('../../../src/views/navigation.js', () => {
 describe('router.js — DOM 테스트', () => {
     beforeEach(() => {
         state.currentView = 'dashboard-view';
+        // 시험 선택 완료 상태로 부팅 (미선택 시 exam-select 뷰 우선 진입이 기본)
+        localStorage.setItem('current_exam', 'cosmetic');
         history.replaceState(null, '', location.pathname);
         document.body.innerHTML = `
             <div id="view-title"></div>
@@ -80,6 +82,23 @@ describe('router.js — DOM 테스트', () => {
             expect(titles['dashboard-view'].subtitle).toBe('커스텀 부제');
             // 미정의 뷰는 기본값
             expect(titles['flashcard-view'].title).toBe('개념 플래시카드');
+        });
+
+        it('대시보드 타이틀 — 시험 목록 없으면 폴백, 있으면 브랜드명 대시보드', () => {
+            // 시험 목록 부재 → getExamAppName()이 'PassOK' 폴백 → 기본 타이틀 유지
+            const titles = getViewTitles(null);
+            expect(titles['dashboard-view'].title).toBe('학습 대시보드');
+        });
+
+        it('대시보드 타이틀 — 명시 선택 시 브랜드명, 선택 해제 시 일반 타이틀', () => {
+            window.EXAMS_LIST = { exams: [{ id: 'cosmetic', name: '맞춤형화장품 조제관리사', appName: 'Passmula' }] };
+            localStorage.setItem('current_exam', 'cosmetic');
+            expect(getViewTitles(null)['dashboard-view'].title).toBe('Passmula 대시보드');
+
+            // 선택 해제 → 기본 시험 폴백 브랜드가 아닌 일반 타이틀
+            localStorage.removeItem('current_exam');
+            expect(getViewTitles(null)['dashboard-view'].title).toBe('학습 대시보드');
+            delete window.EXAMS_LIST;
         });
 
         it('모든 뷰 ID에 대해 타이틀 존재', () => {
@@ -330,6 +349,25 @@ describe('router.js — DOM 테스트', () => {
             history.pushState(null, '', '#/nope');
             window.dispatchEvent(new Event('hashchange'));
             expect(state.currentView).toBe('dashboard-view');
+        });
+
+        it('시험 미선택 부팅 → 시험 선택 뷰 우선 진입', () => {
+            localStorage.removeItem('current_exam');
+            initViewHashRouting(ctx());
+            expect(state.currentView).toBe('exam-select-view');
+        });
+
+        it('시험 미선택 — 다른 뷰 진입 시 피커로 리다이렉트', () => {
+            localStorage.removeItem('current_exam');
+            navigateToView('quiz-view', ctx());
+            expect(state.currentView).toBe('exam-select-view');
+        });
+
+        it('시험 미선택 — 딥링크 해시도 피커로 차단', () => {
+            localStorage.removeItem('current_exam');
+            history.pushState(null, '', '#/cards');
+            initViewHashRouting(ctx());
+            expect(state.currentView).toBe('exam-select-view');
         });
     });
 

@@ -317,5 +317,10 @@
     "file": "docs/dev/TRACE_MATRIX.md",
     "ref": "content/exams/cosmetic/참조자료/법령고시/",
     "reason": "참조자료 원본 PDF 디렉터리 — gitignore 외부 호스팅(DOC-RBK-12)이라 신선 클론에선 미존재. fetch:refpdfs 복원 시 생성"
+  },
+  {
+    "file": "docs/dev/design/LANDING_PAGE_DESIGN.md",
+    "ref": "content/exams/<id>/landing_demo.json",
+    "reason": "설계안 제안 경로 — 시험별 랜딩 체험 데모 자산 (<id> 플레이스홀더, 실물은 exams/cosmetic에 존재)"
   }
 ]

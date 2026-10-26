@@ -5,6 +5,7 @@
 import { state, safeGetItem, safeSetItem } from './state.js';
 import { STORAGE_KEYS } from './storage-keys.js';
 import { isPracticeCapable, getPracticeLanding } from './practice-registry.js';
+import { getCurrentExamId } from './exam-context.js';
 import { switchView } from './views/navigation.js';
 import { showToast } from './ui-utils.js';
 
@@ -59,6 +60,7 @@ export function initUiMode() {
 }
 
 export function toggleUiMode() {
+    if (!getCurrentExamId()) { showToast('먼저 학습할 시험을 선택하세요', 'info'); return; } // 미선택 차단
     if (!isPracticeCapable()) return; // 토글 버튼은 data-feature="practiceMode"로 숨김 — 직접 호출 방어
     const next = isPracticeMode() ? 'study' : 'practice';
     safeSetItem(STORAGE_KEYS.UI_MODE, next);

@@ -116,11 +116,12 @@
 | 3.19 | **계정·동기화** | Supabase 로그인·클라우드 스냅샷 동기화(선택적) | AU-01~AU-09 (9) |
 | 3.20 | **캘린더·복습·드릴** | 학습 캘린더·목표·학습 계획·계획 준수·과목 배분·뽀모도로·취약 진술 드릴 | SC-01~DR-07 (28) |
 | 3.21 | **UI 모드 전환** | 학습 ↔ 실무(Formula OS) 모드 전환 | UM-01~UM-05 (5) |
-| 3.22 | **시험 선택·전환** | 멀티시험 팩 선택·전환·레지스트리 기반 | ES-01~ES-08 (8) |
+| 3.22 | **시험 선택·전환** | 멀티시험 팩 선택·전환·레지스트리 기반 | ES-01~ES-11 (11) |
 | 3.23 | **사용자 의견** | 피드백 폼·건의 수신 | FB-01~FB-08 (8) |
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
 | 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇·커뮤니티 공지 | AD-01~AD-12 (12) |
+| 3.29 | **서비스 소개 (랜딩)** | `/landing.html` 정적 소개 페이지 — 시험 카드·체험 데모(퀴즈·학습계획)·설치 CTA·SEO/OG·프로모션 진입점 | LP-01~LP-10 (10) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -554,6 +555,9 @@
 | ES-06 | 시험 카드 진도 요약 — 카드에 시험별 외운 카드·퀴즈 정답률·최근 학습일·D-day 요약과 액센트 스왓치 표시 (`peekExamValue`로 타 시험 네임스페이스 읽기 전용 조회, comingSoon 카드 제외) | ✅ |
 | ES-07 | 시험 콘텐츠 갱신 배지 — `build_exams_list.js`가 manifest sha1 단축 `contentStamp`를 exams.js에 주입, 카드에 미방문='신규'/스탬프 변경='갱신됨' 배지. 확인 맵은 전역 키 `exam_stamp_seen` {examId:stamp}, 방문(활성화·선택) 시 갱신, 첫 실행 시 전체 시딩으로 오배지 방지 | ✅ |
 | ES-08 | 시험별 커뮤니티 초대 링크 — exams.json `discordInvite` 선언 시 설정 메뉴에 'Discord 커뮤니티' 버튼 노출(`community-btn`, 새 탭 `noopener` 오픈), 미선언 시 숨김. 시험 전환은 reload 기반이라 초기화 1회 판정 (DOC-DSN-36) | ✅ |
+| ES-09 | 미선택 = 선택 없음 — `current_exam` 미설정 시 부팅은 피커(`exam-select-view`) 우선, 피커 외 모든 뷰·기능 진입 차단 (`navigateToView` 중앙 가드 — nav·탭바·더보기·딥링크 리다이렉트 + 매뉴얼·모드 전환 data-click 가드). 기본 시험 폴백이 "현재 시험"으로 표시되지 않음 — 피커 배지·대시보드 타이틀·문서 타이틀·로고는 모두 명시 선택값(`getCurrentExamId()`) 기준 | ✅ |
+| ES-10 | 시험별 메뉴 표시 — 메뉴 구성(라벨·노출)이 선택 시험을 동적 반영. 라벨은 `data-uitext` 주입기가 `uiText.<view>.title`로 덮어씀 (사이드바 내비·모바일 탭바·더보기 시트 공통), 노출은 `data-feature` + `hasFeature()` 게이트 — 미선택 시 시험 스코프 항목(examSwitch 제외)은 기본 시험 폴백 피처로도 숨김 | ✅ |
+| ES-11 | 첫 명시 선택은 리로드 — 비선택 브랜드로 그려진 셸을 선택 시험 브랜딩으로 전환하기 위해 `selectExam()`이 기본 시험 폴백 선택도 리로드 처리 (`hadChoice` 검사), 선택 해제(`clearCurrentExam`)는 브랜딩·기능 메뉴를 즉시 플랫폼 상태로 복귀 | ✅ |
 
 ### 3.23 사용자 의견 수신 (User Feedback)
 
@@ -658,6 +662,23 @@
 | WP-06 | 객관식 런타임 분리 유지 — 주관식 문항은 `exams[]`/`integratedExam`에 편입되지 않음 | ✅ |
 | WP-07 | AI 채점 설정 — 공급자(openai·anthropic·gemini)·모델은 환경설정(백업 대상), API 키는 디바이스 로컬 저장(BACKUP_KEYS·동기 제외 — FORMULA_GEMINI_KEY와 동일 계약). 공급자 계약은 `tools/ai/llm_client.js` PROVIDERS 미러 | ✅ |
 | WP-08 | AI 보조 채점 — rubric+모범답안+수험생 답안 → 항목별 충족(met)·피드백 JSON(`parseGradingResponse` — 코드펜스·잡음 허용·항목 범위 검증). 점수는 LLM 산출 불신·클라이언트 합산(`applyGrading`). 제안 판정을 체크박스에 반영하되 사용자 조정 가능, 결과 스냅샷(g) 저장·재표시. 오류 코드 분기: nokey/noanswer/norubric/network/key/quota/http/unreadable/aborted | ✅ |
+
+### 3.29 서비스 소개 랜딩 페이지 (Landing)
+
+> 앱(`index.html`)과 분리된 정적 소개 페이지 `/landing.html` — 외부 공유·검색 유입의 착륙점이자 앱으로의 관문. 시험 카드·문구는 `exams.json`·시험별 자산 빌드타임 주입 (DA-15). 상세 설계: [`design/LANDING_PAGE_DESIGN.md`](design/LANDING_PAGE_DESIGN.md) (DOC-DSN-38)
+
+| ID | 요구사항 | 구현 상태 |
+|----|---------|-----------|
+| LP-01 | `/landing.html` 독립 정적 페이지 — 앱 셸과 분리된 자체 문서. 인라인 스크립트 없이 외부 self-호스팅 스크립트만 사용 (CSP `script-src 'self'` 준수) | ✅ |
+| LP-02 | 빌드 조립 — `tools/build/build_landing.js`가 `landing.template.html` + `content/exams.json` + 시험별 `landing_demo.json`을 조립해 `landing.html` 생성 (gitignore 생성물, `build:landing`/`check:landing` 신선도 게이트) | ✅ |
+| LP-03 | 시험 카드 그리드 — `exams.json` 순회로 `appName`·`desc`·`icon`·`theme` 액센트·`comingSoon` 배지 자동 반영 (신규 시험 온보딩 시 재빌드만으로 갱신) | ✅ |
+| LP-04 | 체험 데모 — `{contentRoot}/landing_demo.json` 선언 시험의 미니 퀴즈 위젯 (선지 선택 → 정오답 피드백 → 해설+📌출처 → 결과 CTA). 데모 데이터는 `<script type="application/json">` 내장, 미선언 시험은 블록 미렌더 | ✅ |
+| LP-05 | 설치 CTA — `pwa-install-capture.js` 재사용(`__deferredPrompt`), standalone(설치됨) 감지 시 버튼이 "앱 열기"로 전환 | ✅ |
+| LP-06 | 진입점 — 도움말 패널 "서비스 소개" 항목 + 시험 선택 뷰 링크, 새 탭 `noopener` 오픈. 첫 방문 리다이렉트 없음 (재방문 UX 보존) | ✅ |
+| LP-07 | SW 정책 — `SHELL_ASSETS` 프리캐시 미포함 (쉘 경량화). 오프라인 요청은 기존 네비게이션 폴백이 캐시된 `index.html` 서빙 | ✅ |
+| LP-08 | SEO·공유 메타 — description·canonical·OG(website)·twitter:card·JSON-LD(SoftwareApplication) | ✅ |
+| LP-09 | 학습계획 미리보기 — 시험일 입력 → 잔여 주수·단계별 로드맵(통독→문풀·복습→모의고사)·과목별 문항 비중 바 시연. 데이터는 `{contentRoot}/manifest.json`의 subjects·exams 문항 수·study.minExamLeadDays 빌드타임 주입, 권장 리드타임 미만 시 압축 플랜 안내 | ✅ |
+| LP-10 | 프로모션 진입점 — 신규 방문자(저장 키 없음·비 standalone·딥링크/`?app=1` 아님)는 `/` 접속 시 `landing.html`로 안내 (`src/landing-redirect.js`, 앱 부트 이전 동기 판정). 랜딩 방문 시 `passok_landing_seen` 기록 → 이후 `/`는 앱으로 직행. `landing-qr.svg` QR 자산으로 홍보 유입 지원 | ✅ |
 
 ---
 
@@ -813,6 +834,7 @@
 | UX-SET-03 | **항목 터치 타겟 44px**: `.settings-item { min-height: 44px }`. 전 뷰 확장은 기준선 스윕으로 관리 — `tests/e2e/mobile-overflow.spec.js`가 모바일 대역에서 상호작용 요소의 `boundingBox`를 실측하고, `tests/e2e/baselines/touch-targets.json`에 등록된 기존 소형 요소(다중집합)를 초과하는 **신규 위반만 실패** | Apple HIG/Google Material 최소 터치 영역. 인라인 링크·네이티브 체크박스/라디오(라벨이 타깃)는 면제 — 기준선 축소로 점진 개선 |
 | UX-SET-04 | **버전 표기는 설정 패널에**: 사이드바 푸터는 모바일에서 숨겨지므로 버전/카피라이트는 설정 하단에도 표시 | 사용자가 "몇 버전인지" 문의할 때 유일한 확인 경로. SW 등록 스크립트 URL에서 버전 자동 추출 |
 | UX-SET-05 | **외부 클릭/Escape/항목 선택 시 닫힘**: 패널 클릭 핸들러에서 `.settings-item` 클릭 시 `closeSettings()` | 일관된 드롭다운 UX |
+| UX-SET-06 | **설정 패널은 모든 뷰 오버레이 위에 그려져야 함**: 앱 크롬(`.app-header`) 계층은 뷰 내부 오버레이 대역(≤`--z-sticky`)보다 위. 헤더를 덮는 요소는 전면 takeover(≥`--z-drawer`)만 허용 — 중간 대역은 `tools/config/layer_registry.json` 계약으로 차단 | `.reader-chrome`이 헤더와 같은 z(100)라 DOM 후순으로 패널 상단이 불투명 카드 아래로 가려진 실사례(2026-10-24). `tests/e2e/settings-occlusion.spec.js`가 뷰별 `elementFromPoint` 실측으로 차단, `check:zlayer`가 CSS 대역 계약을 정적 검사 |
 
 #### 4.8.4 피드백·알림
 

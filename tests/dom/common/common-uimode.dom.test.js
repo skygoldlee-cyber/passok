@@ -46,6 +46,7 @@ function visibleNavTargets() {
 describe('UI 모드 — 학습/실무 전환', () => {
     beforeEach(() => {
         localStorage.clear();
+        localStorage.setItem('current_exam', 'cosmetic'); // 미선택 진입 가드 — 모드 전환은 선택 후 컨텍스트
         document.head.querySelectorAll('style').forEach(s => s.remove());
         injectCssFile('css/base.css');
         loadIndexHtml();
@@ -152,6 +153,7 @@ describe('UI 모드 — 학습/실무 전환', () => {
 describe('UI 모드 — formula 미보유 시험', () => {
     beforeEach(() => {
         localStorage.clear();
+        localStorage.setItem('current_exam', 'cosmetic'); // 미선택 진입 가드 — 모드 전환은 선택 후 컨텍스트
         document.head.querySelectorAll('style').forEach(s => s.remove());
         injectCssFile('css/base.css');
         loadIndexHtml();

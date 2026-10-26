@@ -78,7 +78,7 @@ test('내 사용 통계 → 통계 복사가 JSON을 클립보드에 기록 (UX-
     await appBooted(page);
     // 카드 클릭으로 계측 데이터를 하나 남겨 내보내기 페이로드가 비지 않게 한다
     await page.locator('.trainer-menu-card[data-click="openOxDrillSetup"]').first().click();
-    await page.locator('#settings-toggle-btn').click();
+    await page.locator('#help-toggle-btn').click();
     await page.locator('[data-click="showUsageStats"]').click();
     const overlay = page.locator('#usage-stats-overlay');
     await expect(overlay.locator('[role="alertdialog"]')).toBeVisible();

@@ -1,5 +1,349 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-26 fix: 모바일 메뉴 재배치 — 매뉴얼 더보기 최상단·성분사전 시트 이동
+
+- 탭바의 성분사전을 더보기 시트로 이동 (탭 6→5개), 매뉴얼을 시트 첫 항목으로
+
+## 2026-10-26 feat: 공인중개사 문항 인용 링크 보강 — 140문 교재 라인 인용 삽입 (린트 0건)
+
+## 2026-10-26 feat: 공인중개사 골격 교재 5권 본문 확충 + 문항 린트 정합
+
+- 중개사법·공법·공시·세법·실무 교재 챕터 본문 작성 + 문제은행 정답 블록을 **Qn.** 형식으로 재변환 (린트 140→7문)
+
+## 2026-10-26 chore: 공인중개사 생성물 갱신 — keyword-index·law-links·pdf-registry·sw
+
+## 2026-10-26 fix: 공인중개사 정합성 정정 — 과목 키 밑줄·챕터 헤딩·ref_md 과목 귀속
+
+- subjects/exams 키 밑줄화 (supplement 번들 식별자 정합) · 골격 교재 ## N. 챕터 헤딩 · ref_md를 과목별 폴더로 귀속
+
+## 2026-10-26 fix: 공인중개사 시험 키 밑줄 정정 — EXAM_DATA 번들 식별자 정합
+
+- exams[].key의 하이픈을 밑줄로 (EXAM_DATA_q_broker-law 형식 오류 해소)
+
+## 2026-10-26 feat: 공인중개사 문제은행 7과목 (과목당 20문)
+
+- AI 초안(ref_md·교재 청크 기반)을 문제은행 형식으로 변환 편입 + manifest exams 등록
+
+## 2026-10-26 feat: 공인중개사 교재 골격 + 법령 수집
+
+- 7과목 chapters 등록 + 재사용 교재 이식 (부동산학개론·민법), 신규 5과목 골격 작성
+- 중개사법 3종·세법 3종·실무규정 3건 DRF 수집 (ref_md 27건)
+
+## 2026-10-26 feat: 공인중개사 팩 온보딩 (comingSoon)
+
+- content/exams/broker — 7과목 manifest (1차 부동산학·민법 / 2차 중개사법·공법·공시·세법·실무)
+- appraisal 재사용 법령 18건 복사 (민법·국토계획·건축·도시정비·공간정보·등기·가격공시), 미수집: 중개사법·세법·실무 규정
+
+## 2026-10-25 네이티브 앱 전환 전략 검토 문서 — DOC-DSN-39
+
+- `docs/dev/design/NATIVE_APP_STRATEGY.md` — PWA 검증→네이티브 계획 검토 기록. TWA→Capacitor→Flutter 단계 권고, 리포지토리 기준 전환 비용 분석, 이주 대비 지침
+
+## 2026-10-25 appraisal 생성물·referenceLaw 보정
+
+- pdf-registry·sw 재생성 + referenceLaw를 {name,file,type,dir} 형식으로 정정
+
+## 2026-10-26 fix: 실무 메뉴 라벨 "실무도구" 통일 — PC·모바일 formula:nav 연동
+
+## 2026-10-26 feat: 동적 메뉴 보완 4종 — uiText 전면 확장
+
+- appraisal 등 uiText 비어있던 시험에 표준 뷰 키 채움 + calendar/manual/studyTools 신규 키
+- data-uitext "key:field" 문법 — :nav 단축 라벨로 탭바 라벨 시험별 표시
+- 미선택 시 body.exam-unselected → 내비 항목 dim 처리 (examSwitch 제외)
+
+## 2026-10-26 fix: 피커 서비스 소개 링크를 부제 아래로 — 목록 하단→헤더 영역 이동
+
+## 2026-10-26 docs: 시험 선택 기반 동적 메뉴 요구사항을 ES-09~11로 명시
+
+- ES-09 미선택 차단·브랜딩 게이트 / ES-10 시험별 메뉴 표시(uiText·기능 게이트) / ES-11 첫 선택 리로드·해제 복귀
+
+## 2026-10-26 feat: 모바일 탭바·더보기 라벨도 시험별 uiText 연동
+
+- 탭바 실무 + 더보기 시트 6항목에 data-uitext — 모바일·태블릿도 시험별 메뉴 표시
+
+## 2026-10-26 test: exam-switch E2E에 시험 선택 시드 — 미선택 기능 게이트 대응
+
+## 2026-10-26 fix: 미선택 시 사전 등 시험 스코프 메뉴 노출 + 해제 후 브랜딩 잔류
+
+- applyFeatureFlags를 명시 선택 게이트 — 미선택 시 data-feature 항목(examSwitch 제외) 숨김
+- resetExamSelection도 기능 플래그 즉시 적용 + 브랜딩 복귀를 인라인으로 (app-shell 임포트는 Node 크래시)
+
+## 2026-10-26 fix: 선택 해제 후 브랜딩 잔류 — 해제 시 applyExamBranding 재적용
+
+## 2026-10-26 test: 매뉴얼·모드 테스트에 시험 선택 상태 셋업
+
+## 2026-10-26 fix: 사용자 매뉴얼은 선택 무관 접근 허용 — 플랫폼 공통 문서
+
+- openManual의 선택 가드 해제 (실무 매뉴얼만 시험 컨텍스트로 유지)
+
+## 2026-10-26 feat: 미선택 시 매뉴얼·모드 전환도 차단
+
+- ManualViewer.openManual/openFormulaManual·toggleUiMode에 선택 가드 — data-click 경로 우회 차단
+
+## 2026-10-26 feat: 내비 라벨 시험별 uiText 연동
+
+- 사이드바 내비 라벨 9개에 data-uitext 연결 — 시험별 uiText.<view>.title로 메뉴 표시 덮어쓰기
+
+## 2026-10-26 feat: 시험 미선택 시 모든 뷰 진입 차단
+
+- navigateToView 중앙 가드 — 미선택 시 피커 외 뷰는 피커로 리다이렉트 + 안내 토스트 (nav·탭바·딥링크 포함)
+
+## 2026-10-26 fix: 미선택 로고 줄바꿈 + 첫 시험 선택 후 타이틀 미갱신
+
+- 미선택 로고를 "PassOK" 단일 표기 (span 부제 비움) — 두 줄 표시 수정
+- 기본 시험 첫 명시 선택도 리로드 — 비선택 브랜드가 선택 후에도 남던 오류
+
+## 2026-10-25 fix: 미선택 시 문서 타이틀·로고에 기본 시험 브랜드 노출
+
+- applyExamBranding을 명시 선택(getCurrentExamId) 게이트 — 미선택 시 PassOK 플랫폼 브랜드
+
+## 2026-10-25 fix: 선택 해제 후에도 대시보드 타이틀에 기본 시험 브랜드 노출
+
+- 대시보드 타이틀을 명시 선택(getCurrentExamId) 게이트 — 미선택 시 기본 시험 폴백 브랜드 미표시
+
+## 2026-10-25 fix: 선택 해제를 clearCurrentExam 헬퍼 경유로
+
+- exam-select.js의 localStorage 직접 접근을 exam-context 헬퍼로 이전 — storage 접근 규약 준수
+
+## 2026-10-25 feat: 시험 선택 해제 버튼 — 선택 없음 상태로 복귀
+
+- 피커에 "선택 해제" 버튼 (선택 저장된 경우만 표시) — current_exam 제거로 다음 부팅부터 피커가 초기화면
+
+## 2026-10-25 fix: 시험 피커 "현재 시험" 표시를 명시 선택값으로
+
+- getActiveExamId(기본 폴백) → getCurrentExamId — 미선택 시 어떤 카드도 현재로 표시 안 함
+
+## 2026-10-25 fix: 헤더 타이틀 래퍼 축소 허용 — header-actions 오버플로 근본 수정
+
+- .header-title에 min-width:0 추가 — h2가 축소돼도 래퍼가 내용물 폭을 유지하던 문제 해소 (긴 타이틀 시 헤더 액션 밀림)
+
+## 2026-10-25 fix: 대시보드 타이틀 브랜드명으로 — 오버플로 방지
+
+- 긴 시험명(맞춤형화장품 조제관리사)이 모바일 헤더를 밀어 E2E 실패 — getExamAppName() 브랜드명으로 축약
+
+## 2026-10-25 feat: 시험 미선택 시 시험선택 뷰 우선 + 대시보드 타이틀 시험명 반영
+
+- 부팅 시 current_exam 없으면 exam-select 뷰 진입 (선택 시 저장되어 이후 대시보드 직행) — 기본 시험 자동 진입 개선
+- 대시보드 최상위 타이틀을 "선택 시험명 대시보드"로 표시
+
+## 2026-10-25 fix: 실무 탭 활성화 방식 통일
+
+- 실무 탭의 상시 violet 아이콘 제거 — 다른 탭과 동일하게 비활성 회색, 활성 시 violet+tint 강조
+
+## 2026-10-25 fix: 미션 배지 높이 수정 재보정
+
+- 이전 수정이 태블릿 구간(769-900px) 미디어 블록에 들어가 폰에 미적용 — 실제 모바일 블록(≤768px)에 동일 규칙 적용
+
+## 2026-10-25 fix: 모바일 대시보드 미션 배지 높이 불균형
+
+- 오늘 미션·주간 목표 배지가 챌린지 시작 버튼보다 작게 표시되던 문제 — 배지에 버튼급 높이(44px)·패딩·중앙정렬 적용
+
+## 2026-10-25 fix: 모바일 탭바 실무 메뉴 상시 활성 표시
+
+- .mobile-tab-practice 기본 상태의 violet tint 배경 제거 — 활성 탭처럼 보이던 오류. 강조는 active 상태에만 적용
+
+## 2026-10-25 appraisal CI 수정 — 메타 헤딩 전수 정정
+
+- 부록 헤딩 7건 전수 정정(TS-17) + 재빌드 — e2b036af CI 실패 후속
+
+## 2026-10-25 appraisal CI 수정 — 메타 헤딩·동기화
+
+- 부록 헤딩 메타 의심(TS-17) 정정 + sync_textbook_files·build:data 재빌드
+
+## 2026-10-25 appraisal 2차 서술형 문제은행
+
+- 평가이론·보상법규·평가실무 주관식 은행 각 10문 + 모범답안 — 2차 논문형·기입형 문형 대응
+
+## 2026-10-25 appraisal 2차 평가실무·보상법규 교재
+
+- 평가실무(평가서 작성 체계·종류별 특례) + 보상법규(손실보상 원리·절차 5단계·수용위원회) — 2차 과목 전수 완성, manifest 8과목
+
+## 2026-10-25 appraisal 감정평가이론 교재 작성
+
+- 2차 평가이론 과목 교재 — 실무기준 체계(총칙~3방식~토지평가) 7챕터 + 논문형 서술 포인트. manifest에 2차 과목 등록
+
+## 2026-10-25 appraisal 경로 표기 정리 + 생성물 재빌드
+
+- 교재·은행 내 ref_md 경로 표기 정리 (링크 린트 LL-05) + sync_textbook_files·build:data 재빌드로 구조 드리프트 해소 — CI 실패(06e920b8) 수정
+
+## 2026-10-25 appraisal 문제은행 전수 + 이론 본문 확충
+
+- 부동산학원론·회계학 은행 신규(5과목 전수), manifest exams 5과목 정합 — 이론 4권에 혼동비교·공식·기출포인트 부록 추가
+
+## 2026-10-25 appraisal 관계법규 교재 8법 확장 + 문제은행 재작성 + 영어 안내
+
+- 관계법규 교재를 9법 전수 챕터로 확장(국토계획 최다 비중 반영) + 문제은행 3권을 기출 유형(5지선다·ㄱㄴㄷ)으로 재작성 + 영어 대체 안내 문서
+
+## 2026-10-25 appraisal 회계학 교재 + manifest 법정 과목 재편
+
+- 회계학 골격(6챕터: 개념체계~CVP) + manifest subjects→법정 5과목(civil·econ·realestate·law·accounting), 문제은행·desc 정합
+
+## 2026-10-25 appraisal 공익사업보상법 3종 수집
+
+- 2차 평가및보상법규 핵심 법령(법·령·규칙, 284조) 추출 — 37회 2교시에 회계학(41번~, K-IFRS) 출제 확인, 회계학 교재 필요
+
+## 2026-10-25 appraisal 민법 교재 골격
+
+- 민법(총칙·물권) 6챕터 작성 — 1교시 최대 비중(40문) 챕터 체계: 법원~시효 / 물건~담보물권
+
+## 2026-10-25 appraisal 이론 교재 골격 작성
+
+- 37회 기출 텍스트 추출(pdftotext)로 과목 구성 확정: 1교시=민법+경제학+부동산학(80문), 2교시=관계법규(28문) — 5지선다·ㄱㄴㄷ형
+- 경제학원론·부동산학원론 교재 골격 작성 — 기출 토픽 기반 챕터(수요공급~문델플레밍 / 토지특성~REITs)
+
+## 2026-10-25 appraisal 2차 기출+정답 전수 수집
+
+- 2차 19~37회 + 1차 정답 19~35회 — Q-net 기출·정답 전수 완결. 2차 3과목: 평가실무·평가이론·평가및보상법규
+
+## 2026-10-25 appraisal 기출문제 1차 전수 수집
+
+- Q-net 자료실 5페이지 순회 — 19~37회(2008~2026) 1차 문제지 전수 내려받기 (PDF·zip 혼합). 33회 2교시 파일명에서 회계학 과목 확인
+
+## 2026-10-25 appraisal 동산담보등기규칙 수집 — 관계법규 전수 완결
+
+- 동산담보법 하위규칙도 대법원규칙(담보등기 규칙) — 추출로 관계법규 미수집 제로
+
+## 2026-10-25 appraisal 관계법규 시행규칙 5건 추가
+
+- 국토계획·건축·공간정보·국유재산·도시정비 시행규칙 추출 — 관계법규 3종 세트 완결(동산담보 시행규칙은 DRF 명칭 불일치로 보류)
+
+## 2026-10-25 appraisal 부동산등기규칙 수집
+
+- 등기법 하위규칙은 시행령이 아닌 대법원규칙(부동산등기규칙, 218조) — 추출·등록으로 관계법규 세트 완결
+
+## 2026-10-25 appraisal 관계법규 시행령 6건 추가
+
+- 국토계획·건축·공간정보·국유재산·도시정비·동산담보 시행령 전문 추출. 부동산등기법 시행령은 명칭 불일치로 보류
+
+## 2026-10-25 appraisal 관계법규 8법 추가 수집 + 출제과목 발견
+
+- 시행령 별표1 추출로 법정 1차 과목 확정: 민법(총칙·물권)·경제학원론·부동산학원론·감정평가관계법규·영어 — 초기 골격 과목명(부동산학개론 등)과 다르므로 과목 구조 재설계 필요
+- 관계법규 8법 추출: 민법·국토계획법·건축법·공간정보법·국유재산법·도시정비법·부동산등기법·동산채권담보법 + 시행령·시행규칙 별표 포함
+
+## 2026-10-25 appraisal ref_md 조문 본문 누락 수정
+
+- DRF 응답의 `항[]` 배열 미처리로 항·호 본문이 빠졌던 6건 재추출 — 시행령 제9조(시험과목) 등 본문 복구
+
+## 2026-10-25 appraisal Q-net 기출문제·최종정답 내려받기
+
+- 기출문제 8건(34~37회 1차 1·2교시 PDF) + 최종정답 2건(hwp) — tmp/qnet-exams/ 보관, SOURCE_COLLECT 갱신. 기출은 빈출 분석 참고 전용
+
+## 2026-10-25 appraisal 감정평가 실무기준 수집
+
+- DRF admrul로 고시 전문 추출 → ref_md/과목3 (제2023-522호, ~76k자) — 과목3 평가원론 공식 근거. SOURCE_COLLECT.md 수집 현황 노트 추가
+
+## 2026-10-25 appraisal 법령 참조자료 수집
+
+- law.go.kr DRF API(LAW_OC_KEY)로 과목2 근거 법령 6건 ref_md 추출 — 감평법(법·령·규칙) + 가격공시법(법·령·규칙), 조문 289개. `subjectDefaultRefdoc`·`referenceLaw` 등록
+
+## 2026-10-25 appraisal references.json 보정
+
+- refDirs·subjectDirMap 필드 누락으로 build:data 실패 — 파일럿 팩 필수 필드 추가
+
+## 2026-10-25 감정평가사(appraisal) 시험 팩 골격 등록
+
+- `exams.json` comingSoon 엔트리 + `content/exams/appraisal/` — 1차 필기 3과목(부동산학개론·감정평가관련법규·감정평가 및 통계원론) manifest·references·교재 3권·문제은행 12문 골격. 승격은 과목당 ≥20문 등 check:onboard 기준 (NEW_EXAM_RUNBOOK)
+
+## 2026-10-25 진도 스키마 버전 마커 추가 (DOC-DSN-39 이주 대비)
+
+- `storage-keys.js` `progress_schema_version` 키 + `saveProgress()`가 `SCHEMA_VERSION=1` 기록 — 형식 변경·네이티브 이주 시 구버전 판별
+
+## 2026-10-25 SW 업데이트 시 모달 대기 단축 — 변경이력 미해소 체감 개선
+
+- `tryReload` 모달 대기 상한 ~20초→~4초 — whats-new는 리로드 후 어차피 다시 표시되므로 업데이트 지연 가치 없음
+
+## 2026-10-25 랜딩 히어로 제목 추가 수정
+
+- "통합 스마트 학습 플랫폼"→"스마트 학습 플랫폼" ("통합" 삭제)
+
+## 2026-10-25 SW 업데이트 "배포중" 토스트 미해소 수정
+
+- `pwa-install-capture.js` `tryReload` — 랜딩 페이지는 `__APP_INITIALIZED`가 없어 30초 대기하던 것을 `#landing-main` 존재 시 즉시 리로드로 변경. 모달(확인·변경이력) 열림 대기도 무한→최대 ~20초 상한으로 수정
+
+## 2026-10-25 랜딩 카피 수정
+
+- 히어로 제목 "통합 학습 플랫폼"→"통합 스마트 학습 플랫폼", 데모 서브 "겪어보세요"→"체험해보세요"
+
+## 2026-10-25 프로모션 진입점 — 신규 방문자 '/' → 랜딩 안내 + QR 자산 (LP-10)
+
+- `src/landing-redirect.js` 신규 — 저장 키 없음·비 standalone·딥링크/`?app=1` 아닌 최초 방문자만 `landing.html`로 안내 (부트 이전 동기 판정, index.html 로드)
+- `src/landing.js` — 랜딩 방문 시 `passok_landing_seen` 기록(이후 '/'는 앱 직행) + 모든 앱 진입 CTA를 `index.html?app=1`로 통일 (리다이렉트 루프 방지)
+- `landing-qr.svg` — passok.vercel.app/landing.html QR 자산 (qrcode@1.5.4 생성, 푸터 표시) + `docs/exams/cosmetic/business/passok-landing-qr.svg` 홍보용 복사본
+- `유튜브_홍보동영상_제작의뢰서.md` v7 — 진입 URL·CTA QR을 랜딩 전용으로 갱신
+- check_storage ALLOWED_FILES에 landing-redirect.js·landing.js 등록, vitest 커버리지 제외(즉시실행 스크립트)
+- 테스트 단정 갱신 — `?app=1` CTA 변경에 맞춰 landing.dom·build-landing 테스트의 href 단정 수정
+- `navigator.webdriver` 생략 조건 추가 — E2E 빈 스토리지 컨텍스트(첫 실행 플로우 검증)가 랜딩으로 빠지지 않도록 자동화 환경 안내 생략
+
+## 2026-10-25 버전 표기 위치 이동 — 설정(⚙️) → 도움말(?) 패널
+
+- `index.template.html` — `© PassOK` + 버전(`#settings-version`)을 설정 패널 하단에서 도움말 패널 '활동 · 소통' 그룹 아래로 이동 (도움말·정보 성격에 부합)
+
+## 2026-10-25 랜딩 페이지 세로 스크롤 불가 수정
+
+- `css/landing.css` — `body { overflow:auto; height:auto }` 추가: base.css의 앱 셸 규약(`overflow:hidden;height:100vh` — SPA 뷰 내부 스크롤용)이 랜딩 문서 스크롤을 차단하던 건 해제
+
+## 2026-10-25 서비스 소개 랜딩 페이지 구현 — /landing.html (LP-01~09)
+
+- `landing.template.html` + `tools/build/build_landing.js` → `landing.html` 조립 (`@landing-exams`/`@landing-demo` 마커, check:landing 신선도, build:derived·deploy·fresh 프리셋 편입)
+- 정보 구조: 히어로(앱 열기·PWA 설치 CTA) → **지금 바로 체험**(미니 퀴즈 3문 — 정오답+해설+교재 인용, 시험일→주차별 학습계획 미리보기) → **교재·CBT·인강 비교표**(차별점 명시) → 지원 시험 카드(exams.json 순회, comingSoon 배지) → 기능·시작방법·푸터
+- 콘텐츠: `content/exams/cosmetic/landing_demo.json`(실제 문제은행 3문 큐레이션) + manifest subjects/문항 수·minExamLeadDays 빌드 주입 — DA-15
+- 진입점: 도움말(?) 패널 '서비스 소개' + 시험 선택 뷰 링크 (새 탭, 리다이렉트 없음). SW 프리캐시 제외, OG/JSON-LD 메타
+- SPEC.md §3.29 LP-01~09 등록, 유닛 테스트 15건 (build-landing + landing + UX-SET 불변)
+- CI 반영: ci.yml 생성 번들 잡에 `build:landing` + `landing.html` 아티팩트 공유 (test 잡 check_inventory 부재 오류 수정), `check_docs_paths` ROOT_FILES에 랜딩 파일 등록 · `check_ci_parity` CI_ONLY에 build:landing 등록
+
+## 2026-10-25 서비스 소개 랜딩 페이지 설계안 신규 — DOC-DSN-38
+
+- `docs/dev/design/LANDING_PAGE_DESIGN.md` 신설 — `/landing.html` 별도 정적 페이지 방안 확정 (앱 내 뷰·루트 전환 기각)
+- 시험 카드는 `exams.json` 빌드타임 주입(DA-15), `build:landing`/`check:landing` 게이트·`style.css`+`landing.css` 스타일 계층·SW 프리캐시 제외 정책·도움말/시험선택 진입 링크 설계. SPEC 접두사 `LP-` 신설 예정
+
+## 2026-10-25 모바일 설정·도움말 드롭다운 항목 중앙정렬 수정
+
+- 모바일 미디어쿼리(≤768px)의 `.header-actions button` 터치 영역 확대 규칙이 드롭다운 내 `.settings-item`까지 `justify-content: center`·`inline-flex`·`padding`으로 덮어써 항목이 중앙정렬로 깨짐 (데스크톱은 정상)
+- `:not(.settings-item)`로 패널 항목 제외 — 토글 버튼의 터치 영역 확대는 `.btn` 선택자로 유지. landscape-mode 축소 규칙(패딩·폰트)도 동일하게 제외
+
+## 2026-10-25 설정 메뉴 분할 — ⚙️ 설정 + ? 도움말 2메뉴 체계
+
+- 헤더 `?` 도움말 메뉴 신설 (`help-toggle-btn`/`help-panel`) — 안내(시작 안내·단축키·변경 이력) + 활동·소통(내 사용 통계·의견 보내기·Discord) 이관. 설정 패널은 계정/데이터/보기·도구/앱 4그룹으로 축소 (최대 17→10항목)
+- '플랜 안내'+'라이선스 코드' 항목 통합 — 플랜 비교 모달 하단 '라이선스 코드 입력' 버튼(`data-click="showRedeemCode"` 위임 + 모달 close)으로 편입, 설정 항목은 '플랜 안내 · 라이선스 코드' 하나로
+- `listeners-app.js` 드롭다운 바인딩 공용화 (`bindDropMenu`/`closeAllMenus` — 동시 1개 오픈·외부 클릭·Escape, UX-SET-05 계약 동일). 피드백 NEW 도트 타겟 ⚙️→? 버튼 이동 (`feedback_dot_seen` 키 유지)
+- 사용자 매뉴얼 설정/도움말 표 분리 + 경로 문구(학습안내서·formula_manual·런북·P-UI-1) 갱신, docs_md·exams.js 재생성. UX-SET-07 불변 테스트 신설
+- 테스트 갱신: 도트 셀렉터·E2E 진입 경로(사용 통계·변경 이력 클릭 전 ? 오픈) + 도움말 토글·상호배타 케이스 추가
+- 시각 회귀 기준선 12파일 재생성 (헤더 ? 버튼 반영 — win32 로컬 + linux는 visual-baseline 워크플로 아티팩트)
+
+## 2026-10-25 파일명 대소문자 규약 코드화 — `check:filenames` 게이트
+
+- CODE_CONVENTIONS §2.1 신설: 영역별 패턴(src/tests=kebab · tools=snake · docs/*.md=SCREAMING · *.json=단일패턴 · 자산=kebab)
+- `check:filenames` 신규 위반만 차단 — 기존 일탈 92건은 `filename_baseline.json` 승계(--update 단조 감소)
+- ci:filenames P0 단계 등록 + ci.yml 단계 추가
+
+## 2026-10-25 QR 자산 정리 — 2홈 체계 + 인덱스 + 네이밍 정규화
+
+- 플랫폼 공용 `docs/assets/` ↔ 시험 비즈니스 `docs/exams/<id>/business/` 2홈 확정
+- 리네임 3건: `passok_qr`→`passok-app-qr` · `passmula_QR`→`passmula-legacy-qr` · `오픈채팅_QR`→`openchat-pro-qr` (kebab-case 통일, 한글 파일명 해소 — 참조 4곳 갱신)
+- `docs/assets/README.md`(DOC-IDX-03) 신설 — 전체 QR 인덱스(파일→대상URL→용도→재생성 명령) + 네이밍·배치 규칙
+
+## 2026-10-24 시각 회귀·커버리지·도구 사용률 — 자동화 게이트 3종 + 관측 장치 3종
+
+- **UX-SET-06 신설 + `check:zlayer`** — z-index 계층 계약 정적 게이트 (뷰 오버레이 ≤--z-sticky · 앱 크롬 --z-popover 전용 · takeover ≥--z-drawer · 사이 대역 금지). 크롬 셀렉터 대역 이탈(헤더 하향 회귀)도 차단. 예외는 tools/config/layer_registry.json
+- **`settings-occlusion.spec.js`** — 11개 뷰 순회하며 설정 패널을 열고 `elementFromPoint` 실측 — 패널 위를 덮는 요소 0건 요구 (zlayer가 못 잡는 display 조건·동적 요소 커버)
+- **`check:diffcov`** — 변경 라인 차등 커버리지: git diff 헝크에 걸린 브랜치만 계측해 ≥80%(신규 85%) 요구. 파일 단위가 아니라 라인 단위라 저커버 파일 소규모 편집은 무차단 — CI merged 게이트 직후 배치
+- **`coverage:gaps`** — 병합 맵 분기 커버 하위 파일 순위 리포트 (보강 표적)
+- **`coverage_merge --ratchet --dry-run` + coverage-ratchet.yml** — 주간 래칫 여유 판정(exit 3) → 상향 가능 시 이슈 자동 생성 (vendor-check 패턴 — 자동 커밋 없음)
+- **`audit:tools` + run.js 텔레메트리** — tools/ 도달성 감사(진입점→import 그래프, 오탐 14→4 보정: path.join·문서 진입점 반영) + 프리셋 미소속 단계 탐지 + step_runs.jsonl 실행 이력 누적(gitignore) → 미실행 단계 리포트
+
+## 2026-10-24 설정 드롭다운이 리더 크롬 카드 아래로 가려지는 쌓임 수정
+
+- `.app-header` z-index `--z-sticky`(100) → `--z-popover`(200) 상향 (base.css + app-responsive.css 모바일 재선언분)
+- 원인: 교재 리더 `.reader-chrome` 오버레이 카드가 헤더와 같은 z=100 — 동일 레벨이면 DOM 순서가 늦은 리더가 위에 그려져, 모바일에서 설정 패널 상단이 불투명 카드 뒤로 들어감
+- `.formula-calc-bar` 등 뷰 내부 sticky 오버레이(z≤100)가 헤더 드롭다운을 덮는 동형 잠재 버그도 함께 해소 — 헤더를 덮어야 하는 드로어·모달은 1400+로 영향 없음
+
+## 2026-10-24 빌드 고아 번들 스윕 — manifest 엔트리 제거 시 잔존 생성물 정리
+
+- `removeOrphanBundles` 공통 헬퍼 추가(exam_targets.js) — 미선언 키의 번들 파일 삭제
+- 적용 경로: `exams/`·`subjects/` 해시 번들(index.js), `<key>_data.<hash>.js` 지식DB, `supplements/<key>.js`, `drills/ox_*`·`combo_*` (combo_index·combo_pilot은 비키 파일로 보존)
+- 배경: insadj 과목4 엔트리 제거 후 `subject4.*.js` 잔존 → build:drills 디렉터리 순회에서 "subject 값 이상" 오류로 check:all 실패 — 키별 청소(clearOldBundles)는 선언 키만 커버하는 구조적 갭
+- 부수 효과: insadj `supplements/second.js` 실물 스테일 파일 발견·제거
+- 유닛 테스트 2건 추가 (build-pipeline.test.js 17→19)
+
 ## 2026-10-24 CI 실패 수정 — 주관식 계수 정규식 + 테스트 정합
 
 - check_exam_onboard.js 주관식 계수 정규식 복원(→ — 패치 시 이스케이프 유실)
@@ -334,9 +678,9 @@
 - `check:binary` 신규 — 500KB+ 신규 바이너리 커밋 차단 (untracked·staged·ref 스코프, 예외는 `tools/state/binary_allowlist.json`)
 - `steps.js` `content:build` 단계 prio 누락 보정(p0)
 
-## 2026-10-22 passok_qr.svg 재생성 — 소형화 + 흰 배경 명시
+## 2026-10-22 passok-app-qr.svg 재생성 — 소형화 + 흰 배경 명시
 
-- `docs/exams/cosmetic/business/passok_qr.svg` 재생성: 82×82(2단위 모듈) → 33×33(1단위 모듈, QR 버전4) + `<rect fill="white">` 배경 명시 — 인쇄·삽화 시 명암 대비 확보. 디코드 검증: `https://passok.vercel.app` 유지
+- `docs/exams/cosmetic/business/passok-app-qr.svg` 재생성: 82×82(2단위 모듈) → 33×33(1단위 모듈, QR 버전4) + `<rect fill="white">` 배경 명시 — 인쇄·삽화 시 명암 대비 확보. 디코드 검증: `https://passok.vercel.app` 유지
 
 ## 2026-10-22 사이드바 실무 그룹 최하단 이동
 

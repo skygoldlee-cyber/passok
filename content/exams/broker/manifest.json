@@ -1,0 +1,211 @@
+{
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
+ "_pilot": false,
+ "subjects": [
+  {
+   "key": "estate_intro",
+   "order": 1,
+   "name": "부동산학개론",
+   "shortName": "부동산학",
+   "dir": "교재/theory",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "부동산학개론 (전체)",
+     "file": "부동산학개론.md"
+    }
+   ]
+  },
+  {
+   "key": "civil_broker",
+   "order": 2,
+   "name": "민법(중개 관련)",
+   "shortName": "민법",
+   "dir": "교재/law",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "민법(중개 관련) (전체)",
+     "file": "민법_중개관련.md"
+    }
+   ]
+  },
+  {
+   "key": "broker_law",
+   "order": 3,
+   "name": "공인중개사법",
+   "shortName": "중개사법",
+   "dir": "교재/law",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "공인중개사법 (전체)",
+     "file": "공인중개사법.md"
+    }
+   ]
+  },
+  {
+   "key": "estate_publaw",
+   "order": 4,
+   "name": "부동산공법",
+   "shortName": "공법",
+   "dir": "교재/law",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "부동산공법 (전체)",
+     "file": "부동산공법.md"
+    }
+   ]
+  },
+  {
+   "key": "estate_registry",
+   "order": 5,
+   "name": "부동산공시법",
+   "shortName": "공시",
+   "dir": "교재/law",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "부동산공시법 (전체)",
+     "file": "부동산공시법.md"
+    }
+   ]
+  },
+  {
+   "key": "estate_tax",
+   "order": 6,
+   "name": "부동산세법",
+   "shortName": "세법",
+   "dir": "교재/law",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "부동산세법 (전체)",
+     "file": "부동산세법.md"
+    }
+   ]
+  },
+  {
+   "key": "broker_practice",
+   "order": 7,
+   "name": "중개실무",
+   "shortName": "실무",
+   "dir": "교재/practice",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "중개실무 (전체)",
+     "file": "중개실무.md"
+    }
+   ]
+  }
+ ],
+ "exams": [
+  {
+   "key": "q_estate_intro",
+   "subject": "estate_intro",
+   "part": 1,
+   "title": "부동산학개론",
+   "file": "부동산학개론_문제은행.md"
+  },
+  {
+   "key": "q_civil_broker",
+   "subject": "civil_broker",
+   "part": 2,
+   "title": "민법(중개 관련)",
+   "file": "민법_중개관련_문제은행.md"
+  },
+  {
+   "key": "q_broker_law",
+   "subject": "broker_law",
+   "part": 3,
+   "title": "공인중개사법",
+   "file": "공인중개사법_문제은행.md"
+  },
+  {
+   "key": "q_estate_publaw",
+   "subject": "estate_publaw",
+   "part": 4,
+   "title": "부동산공법",
+   "file": "부동산공법_문제은행.md"
+  },
+  {
+   "key": "q_estate_registry",
+   "subject": "estate_registry",
+   "part": 5,
+   "title": "부동산공시법",
+   "file": "부동산공시법_문제은행.md"
+  },
+  {
+   "key": "q_estate_tax",
+   "subject": "estate_tax",
+   "part": 6,
+   "title": "부동산세법",
+   "file": "부동산세법_문제은행.md"
+  },
+  {
+   "key": "q_broker_practice",
+   "subject": "broker_practice",
+   "part": 7,
+   "title": "중개실무",
+   "file": "중개실무_문제은행.md"
+  }
+ ],
+ "uiText": {
+  "dashboard": {
+   "title": "학습 대시보드",
+   "nav": "대시보드"
+  },
+  "analysis": {
+   "title": "학습진단",
+   "nav": "진단"
+  },
+  "flashcard": {
+   "title": "개념 플래시카드",
+   "nav": "카드"
+  },
+  "quiz": {
+   "title": "핵심 퀴즈",
+   "nav": "퀴즈"
+  },
+  "review": {
+   "title": "오답·중요 복습",
+   "nav": "복습"
+  },
+  "trainer": {
+   "title": "훈련소",
+   "nav": "훈련"
+  },
+  "exam": {
+   "title": "모의고사",
+   "nav": "모의고사"
+  },
+  "textbook": {
+   "title": "교재 리더",
+   "nav": "교재"
+  },
+  "calendar": {
+   "title": "학습 캘린더",
+   "nav": "캘린더"
+  },
+  "manual": {
+   "title": "사용자 매뉴얼",
+   "nav": "매뉴얼"
+  },
+  "studyTools": {
+   "title": "학습 도구",
+   "nav": "학습도구"
+  },
+  "dictionary": {
+   "title": "용어사전",
+   "nav": "사전"
+  },
+  "search": {
+   "title": "교재 검색",
+   "nav": "검색"
+  }
+ }
+}

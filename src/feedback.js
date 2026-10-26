@@ -17,7 +17,7 @@ const ENTRY_SRC_KEY = 'entry_source';
 const QUEUE_KEY = 'pending_feedback';
 const COOLDOWN_KEY = 'feedback_last_ts';
 const HINT_KEY = 'feedback_hint_seen';   // "의견 보내기" NEW 배지 클릭 여부
-const DOT_KEY = 'feedback_dot_seen';     // 설정 버튼 점 — 패널 첫 오픈까지
+const DOT_KEY = 'feedback_dot_seen';     // 도움말 버튼 점 — 패널 첫 오픈까지
 const COOLDOWN_MS = 60_000;
 const QUEUE_MAX = 20;
 const BODY_MIN = 4;
@@ -60,13 +60,13 @@ export function getEntrySource() {
 }
 
 // ---------------------------------------------------------------------------
-// 신기능 안내 힌트 — 설정 ⚙️ 점 + "의견 보내기" NEW 배지 (각 1회성)
+// 신기능 안내 힌트 — 도움말(?) 점 + "의견 보내기" NEW 배지 (각 1회성)
 // ---------------------------------------------------------------------------
 
-/** 부팅 시 호출 — 아직 안 봤으면 설정 버튼에 점, 메뉴 항목에 NEW 배지 부착 */
+/** 부팅 시 호출 — 아직 안 봤으면 도움말 버튼에 점, 메뉴 항목에 NEW 배지 부착 */
 export function initFeedbackHint() {
     if (!getItem(DOT_KEY)) {
-        const btn = document.getElementById('settings-toggle-btn');
+        const btn = document.getElementById('help-toggle-btn');
         if (btn && !btn.querySelector('.feedback-dot')) {
             const dot = document.createElement('span');
             dot.className = 'feedback-dot';
@@ -85,11 +85,11 @@ export function initFeedbackHint() {
     }
 }
 
-/** 설정 패널 첫 오픈 → ⚙️ 점 제거 */
+/** 도움말 패널 첫 오픈 → ? 점 제거 */
 export function dismissFeedbackDot() {
     if (!getItem(DOT_KEY)) {
         setItem(DOT_KEY, '1');
-        document.querySelector('#settings-toggle-btn .feedback-dot')?.remove();
+        document.querySelector('#help-toggle-btn .feedback-dot')?.remove();
     }
 }
 

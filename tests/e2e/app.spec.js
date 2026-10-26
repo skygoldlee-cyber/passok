@@ -110,6 +110,19 @@ test.describe('UI 골격', () => {
         await expect(panel).not.toHaveClass(/is-hidden/);
     });
 
+    test('도움말 패널이 토글되고 설정 패널과 동시에 열리지 않는다', async ({ page }) => {
+        await page.goto('/index.html');
+        await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
+        const settingsPanel = page.locator('#settings-panel');
+        const helpPanel = page.locator('#help-panel');
+        await expect(helpPanel).toHaveClass(/is-hidden/);
+        await page.locator('#settings-toggle-btn').click();
+        await expect(settingsPanel).not.toHaveClass(/is-hidden/);
+        await page.locator('#help-toggle-btn').click();
+        await expect(helpPanel).not.toHaveClass(/is-hidden/);
+        await expect(settingsPanel).toHaveClass(/is-hidden/);
+    });
+
     test('설정 패널은 뷰포트 한계 내에서 내부 스크롤한다 (UX-SET-02)', async ({ page }) => {
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });

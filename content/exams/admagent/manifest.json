@@ -1,171 +1,216 @@
 {
-  "schemaVersion": 1,
-  "contentYear": "2027",
-  "textbookEdition": "2027",
-  "_pilot": "1차 3과목 + 2차 4과목 파일럿 — 행정사법 시행령 별표1 기준 자체 제작, 과목당 8문항 골격 투입 상태 (check:onboard 준비도 대상). 정식 전환은 NEW_EXAM_RUNBOOK §승격 기준.",
-  "subjects": [
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
+ "_pilot": "1차 3과목 + 2차 4과목 파일럿 — 행정사법 시행령 별표1 기준 자체 제작, 과목당 8문항 골격 투입 상태 (check:onboard 준비도 대상). 정식 전환은 NEW_EXAM_RUNBOOK §승격 기준.",
+ "subjects": [
+  {
+   "key": "civGen",
+   "order": 1,
+   "name": "민법(총칙)",
+   "shortName": "민법총칙",
+   "dir": "교재/civGen",
+   "chapters": [
     {
-      "key": "civGen",
-      "order": 1,
-      "name": "민법(총칙)",
-      "shortName": "민법총칙",
-      "dir": "교재/civGen",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "민법(총칙) (전체)",
-          "file": "민법_총칙.md"
-        }
-      ]
-    },
-    {
-      "key": "admLaw",
-      "order": 2,
-      "name": "행정법",
-      "shortName": "행정법",
-      "dir": "교재/admLaw",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "행정법 (전체)",
-          "file": "행정법.md"
-        }
-      ]
-    },
-    {
-      "key": "admSci",
-      "order": 3,
-      "name": "행정학개론(지방자치행정 포함)",
-      "shortName": "행정학",
-      "dir": "교재/admSci",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "행정학개론 (전체)",
-          "file": "행정학개론.md"
-        }
-      ]
-    },
-    {
-      "key": "civContract",
-      "order": 4,
-      "name": "민법(계약) — 2차",
-      "shortName": "민법계약",
-      "dir": "교재/civContract",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "민법(계약) (전체)",
-          "file": "민법_계약.md"
-        }
-      ]
-    },
-    {
-      "key": "admProc",
-      "order": 5,
-      "name": "행정절차론(행정절차법 포함) — 2차",
-      "shortName": "행정절차론",
-      "dir": "교재/admProc",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "행정절차론 (전체)",
-          "file": "행정절차론.md"
-        }
-      ]
-    },
-    {
-      "key": "officeMgmt",
-      "order": 6,
-      "name": "사무관리론 — 2차",
-      "shortName": "사무관리론",
-      "dir": "교재/officeMgmt",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "사무관리론 (전체)",
-          "file": "사무관리론.md"
-        }
-      ]
-    },
-    {
-      "key": "admPractice",
-      "order": 7,
-      "name": "행정사실무법 — 2차",
-      "shortName": "실무법",
-      "dir": "교재/admPractice",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "행정사실무법 (전체)",
-          "file": "행정사실무.md"
-        }
-      ]
+     "key": "full",
+     "title": "민법(총칙) (전체)",
+     "file": "민법_총칙.md"
     }
-  ],
-  "exams": [
-    {
-      "key": "subject1",
-      "subject": "civGen",
-      "part": 1,
-      "title": "민법(총칙)",
-      "file": "과목1_문제은행.md"
-    },
-    {
-      "key": "subject2",
-      "subject": "admLaw",
-      "part": 2,
-      "title": "행정법",
-      "file": "과목2_문제은행.md"
-    },
-    {
-      "key": "subject3",
-      "subject": "admSci",
-      "part": 3,
-      "title": "행정학개론",
-      "file": "과목3_문제은행.md"
-    }
-  ],
-  "integratedExam": {
-    "questionsPerSubject": {
-      "civGen": 25,
-      "admLaw": 25,
-      "admSci": 25
-    },
-    "examTimeMin": 75,
-    "passAverage": 60,
-    "subjectFailBelow": 40
+   ]
   },
-  "uiText": {
-    "dictionary": {
-      "title": "지식DB 사전",
-      "subtitle": "엔티티 검색 (manifest.knowledge 스키마 필요)"
+  {
+   "key": "admLaw",
+   "order": 2,
+   "name": "행정법",
+   "shortName": "행정법",
+   "dir": "교재/admLaw",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "행정법 (전체)",
+     "file": "행정법.md"
     }
+   ]
   },
-  "written": [
+  {
+   "key": "admSci",
+   "order": 3,
+   "name": "행정학개론(지방자치행정 포함)",
+   "shortName": "행정학",
+   "dir": "교재/admSci",
+   "chapters": [
     {
-      "key": "civContract",
-      "title": "2차 민법(계약) 주관식 연습",
-      "desc": "2차 실기 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
-      "file": "2차_민법계약_주관식.md"
-    },
-    {
-      "key": "admProc",
-      "title": "2차 행정절차론 주관식 연습",
-      "desc": "2차 실기 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
-      "file": "2차_행정절차론_주관식.md"
-    },
-    {
-      "key": "officeMgmt",
-      "title": "2차 사무관리론 주관식 연습",
-      "desc": "2차 실기 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
-      "file": "2차_사무관리론_주관식.md"
-    },
-    {
-      "key": "admPractice",
-      "title": "2차 행정사실무법 주관식 연습",
-      "desc": "2차 실기 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
-      "file": "2차_행정사실무_주관식.md"
+     "key": "full",
+     "title": "행정학개론 (전체)",
+     "file": "행정학개론.md"
     }
-  ]
+   ]
+  },
+  {
+   "key": "civContract",
+   "order": 4,
+   "name": "민법(계약) — 2차",
+   "shortName": "민법계약",
+   "dir": "교재/civContract",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "민법(계약) (전체)",
+     "file": "민법_계약.md"
+    }
+   ]
+  },
+  {
+   "key": "admProc",
+   "order": 5,
+   "name": "행정절차론(행정절차법 포함) — 2차",
+   "shortName": "행정절차론",
+   "dir": "교재/admProc",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "행정절차론 (전체)",
+     "file": "행정절차론.md"
+    }
+   ]
+  },
+  {
+   "key": "officeMgmt",
+   "order": 6,
+   "name": "사무관리론 — 2차",
+   "shortName": "사무관리론",
+   "dir": "교재/officeMgmt",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "사무관리론 (전체)",
+     "file": "사무관리론.md"
+    }
+   ]
+  },
+  {
+   "key": "admPractice",
+   "order": 7,
+   "name": "행정사실무법 — 2차",
+   "shortName": "실무법",
+   "dir": "교재/admPractice",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "행정사실무법 (전체)",
+     "file": "행정사실무.md"
+    }
+   ]
+  }
+ ],
+ "exams": [
+  {
+   "key": "subject1",
+   "subject": "civGen",
+   "part": 1,
+   "title": "민법(총칙)",
+   "file": "과목1_문제은행.md"
+  },
+  {
+   "key": "subject2",
+   "subject": "admLaw",
+   "part": 2,
+   "title": "행정법",
+   "file": "과목2_문제은행.md"
+  },
+  {
+   "key": "subject3",
+   "subject": "admSci",
+   "part": 3,
+   "title": "행정학개론",
+   "file": "과목3_문제은행.md"
+  }
+ ],
+ "integratedExam": {
+  "questionsPerSubject": {
+   "civGen": 25,
+   "admLaw": 25,
+   "admSci": 25
+  },
+  "examTimeMin": 75,
+  "passAverage": 60,
+  "subjectFailBelow": 40
+ },
+ "uiText": {
+  "dictionary": {
+   "title": "지식DB 사전",
+   "subtitle": "엔티티 검색 (manifest.knowledge 스키마 필요)"
+  },
+  "dashboard": {
+   "title": "학습 대시보드",
+   "nav": "대시보드"
+  },
+  "analysis": {
+   "title": "학습진단",
+   "nav": "학습진단"
+  },
+  "flashcard": {
+   "title": "개념 플래시카드",
+   "nav": "카드"
+  },
+  "quiz": {
+   "title": "기출 및 핵심 퀴즈",
+   "nav": "퀴즈"
+  },
+  "trainer": {
+   "title": "훈련소"
+  },
+  "review": {
+   "title": "오답 및 중요 복습",
+   "nav": "복습"
+  },
+  "exam": {
+   "title": "실전 모의고사",
+   "nav": "모의고사"
+  },
+  "textbook-reader": {
+   "title": "교재리더"
+  },
+  "textbook": {
+   "title": "교재검색"
+  },
+  "calendar": {
+   "title": "캘린더"
+  },
+  "manual": {
+   "title": "매뉴얼"
+  },
+  "studyTools": {
+   "title": "학습도구"
+  },
+  "formula-manual": {
+   "title": "실무매뉴얼"
+  }
+ },
+ "written": [
+  {
+   "key": "civContract",
+   "title": "2차 민법(계약) 주관식 연습",
+   "desc": "2차 실기 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
+   "file": "2차_민법계약_주관식.md"
+  },
+  {
+   "key": "admProc",
+   "title": "2차 행정절차론 주관식 연습",
+   "desc": "2차 실기 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
+   "file": "2차_행정절차론_주관식.md"
+  },
+  {
+   "key": "officeMgmt",
+   "title": "2차 사무관리론 주관식 연습",
+   "desc": "2차 실기 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
+   "file": "2차_사무관리론_주관식.md"
+  },
+  {
+   "key": "admPractice",
+   "title": "2차 행정사실무법 주관식 연습",
+   "desc": "2차 실기 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
+   "file": "2차_행정사실무_주관식.md"
+  }
+ ]
 }

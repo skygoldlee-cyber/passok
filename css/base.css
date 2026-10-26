@@ -970,7 +970,7 @@ body.ui-mode-practice .ui-mode-toggle {
     background: var(--drawer-bg);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
-    z-index: var(--z-sticky);
+    z-index: var(--z-popover);
 }
 
 .header-title h2 {
@@ -1205,8 +1205,8 @@ table {
 }
 
 
-/* ── 신기능 힌트 — 설정 ⚙️ 점 + "의견 보내기" NEW 배지 (feedback.js, 각 1회성) ── */
-#settings-toggle-btn {
+/* ── 신기능 힌트 — 도움말 ? 점 + "의견 보내기" NEW 배지 (feedback.js, 각 1회성) ── */
+#help-toggle-btn {
     position: relative;
 }
 .feedback-dot {
@@ -1230,4 +1230,15 @@ table {
     font-weight: var(--font-weight-bold, 700);
     line-height: 1.4;
     pointer-events: none;
+}
+
+/* ES-09: 시험 미선택 — 내비 항목 시각적 dim (클릭은 피커로 리다이렉트, 선택 유도) */
+.exam-unselected .nav-item,
+.exam-unselected .mobile-tab-item {
+    opacity: 0.5;
+}
+.exam-unselected .nav-item[data-feature="examSwitch"],
+.exam-unselected .exam-select-card,
+.exam-unselected #exam-select-clear {
+    opacity: 1;
 }

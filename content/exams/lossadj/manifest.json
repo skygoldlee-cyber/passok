@@ -1,144 +1,189 @@
 {
-  "schemaVersion": 1,
-  "contentYear": "2026",
-  "textbookEdition": "2026",
-  "_pilot": "Phase C 파일럿 — 1차 3과목(상법 보험편·농어업재해보험법령·농학개론) 축소본 + 2차 2과목(이론과 실무·손해평가의 이론과 실무) 교재. 2차 주관식 문항은 별도 설계(docs/2차_주관식_설계.md) — exams[]·통합모의고사에 편입하지 않음.",
-  "_reform2028": "2028. 1. 1. 1차 과목 개편(시행령 별표 2의2 — ①법령+상법 ②농학개론: 재배학·가축사양학 ③작물학개론: 식량작물학·원예작물학). 현 과목3은 개편 후 나+다 영역으로 분화 예정 — docs/2028_개편_대비.md 참조.",
-  "subjects": [
+ "schemaVersion": 1,
+ "contentYear": "2026",
+ "textbookEdition": "2026",
+ "_pilot": "Phase C 파일럿 — 1차 3과목(상법 보험편·농어업재해보험법령·농학개론) 축소본 + 2차 2과목(이론과 실무·손해평가의 이론과 실무) 교재. 2차 주관식 문항은 별도 설계(docs/2차_주관식_설계.md) — exams[]·통합모의고사에 편입하지 않음.",
+ "_reform2028": "2028. 1. 1. 1차 과목 개편(시행령 별표 2의2 — ①법령+상법 ②농학개론: 재배학·가축사양학 ③작물학개론: 식량작물학·원예작물학). 현 과목3은 개편 후 나+다 영역으로 분화 예정 — docs/2028_개편_대비.md 참조.",
+ "subjects": [
+  {
+   "key": "insurance",
+   "order": 1,
+   "name": "상법 보험편",
+   "shortName": "상법",
+   "dir": "교재/insurance",
+   "chapters": [
     {
-      "key": "insurance",
-      "order": 1,
-      "name": "상법 보험편",
-      "shortName": "상법",
-      "dir": "교재/insurance",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "상법 보험편",
-          "file": "1과목_상법보험편.md"
-        }
-      ]
-    },
-    {
-      "key": "disaster",
-      "order": 2,
-      "name": "농어업재해보험법령 및 손해평가요령",
-      "shortName": "재해보험",
-      "dir": "교재/disaster",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "농어업재해보험법령 및 손해평가요령",
-          "file": "2과목_농어업재해보험법령.md"
-        }
-      ]
-    },
-    {
-      "key": "agronomy",
-      "order": 3,
-      "name": "농학개론(재배학·원예작물학)",
-      "shortName": "농학개론",
-      "dir": "교재/agronomy",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "농학개론(재배학·원예작물학)",
-          "file": "3과목_농학개론.md"
-        }
-      ]
-    },
-    {
-      "key": "secondTheory",
-      "order": 4,
-      "name": "2차 과목1: 이론과 실무",
-      "shortName": "2차이론",
-      "dir": "교재/secondTheory",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "농작물·가축재해보험의 이론과 실무",
-          "file": "2차_이론과실무.md"
-        }
-      ]
-    },
-    {
-      "key": "secondAssessment",
-      "order": 5,
-      "name": "2차 과목2: 손해평가의 이론과 실무",
-      "shortName": "2차손해평가",
-      "dir": "교재/secondAssessment",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "농작물·가축재해보험 손해평가의 이론과 실무",
-          "file": "2차_손해평가의이론과실무.md"
-        }
-      ]
+     "key": "full",
+     "title": "상법 보험편",
+     "file": "1과목_상법보험편.md"
     }
-  ],
-  "exams": [
-    {
-      "key": "subject1",
-      "subject": "insurance",
-      "part": 1,
-      "title": "상법 보험편 (22제)",
-      "file": "과목1_문제은행.md"
-    },
-    {
-      "key": "subject2",
-      "subject": "disaster",
-      "part": 2,
-      "title": "농어업재해보험법령 및 손해평가요령 (22제)",
-      "file": "과목2_문제은행.md"
-    },
-    {
-      "key": "subject3",
-      "subject": "agronomy",
-      "part": 3,
-      "title": "농학개론(재배학·원예작물학) (22제)",
-      "file": "과목3_문제은행.md"
-    }
-  ],
-  "integratedExam": {
-    "questionsPerSubject": {
-      "insurance": 8,
-      "disaster": 8,
-      "agronomy": 8
-    },
-    "examTimeMin": 38,
-    "passAverage": 60,
-    "subjectFailBelow": 40
+   ]
   },
-  "written": [
+  {
+   "key": "disaster",
+   "order": 2,
+   "name": "농어업재해보험법령 및 손해평가요령",
+   "shortName": "재해보험",
+   "dir": "교재/disaster",
+   "chapters": [
     {
-      "key": "secondAssessment",
-      "title": "2차 주관식 연습 — 손해평가 (서술·계산형)",
-      "desc": "손해평가요령 별표 기반 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
-      "file": "2차_손해평가_주관식.md"
-    },
-    {
-      "key": "secondTheory",
-      "title": "2차 주관식 연습 — 이론과 실무",
-      "desc": "2차 이론과 실무 과목 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
-      "file": "2차_이론_주관식.md"
+     "key": "full",
+     "title": "농어업재해보험법령 및 손해평가요령",
+     "file": "2과목_농어업재해보험법령.md"
     }
-  ],
-  "uiText": {
-    "search": {
-      "title": "교재 검색",
-      "subtitle": "교재 본문과 참조자료(법령·고시)를 키워드로 함께 검색합니다.",
-      "placeholder": "검색할 키워드를 입력하세요 (예: 고지의무, 손해평가사, 보험가액)"
-    }
+   ]
   },
-  "synonyms": {
-    "국가법령정보센터": [
-      "law.go.kr"
-    ],
-    "농금원": [
-      "농업정책보험금융원"
-    ],
-    "손평사": [
-      "손해평가사"
-    ]
+  {
+   "key": "agronomy",
+   "order": 3,
+   "name": "농학개론(재배학·원예작물학)",
+   "shortName": "농학개론",
+   "dir": "교재/agronomy",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "농학개론(재배학·원예작물학)",
+     "file": "3과목_농학개론.md"
+    }
+   ]
+  },
+  {
+   "key": "secondTheory",
+   "order": 4,
+   "name": "2차 과목1: 이론과 실무",
+   "shortName": "2차이론",
+   "dir": "교재/secondTheory",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "농작물·가축재해보험의 이론과 실무",
+     "file": "2차_이론과실무.md"
+    }
+   ]
+  },
+  {
+   "key": "secondAssessment",
+   "order": 5,
+   "name": "2차 과목2: 손해평가의 이론과 실무",
+   "shortName": "2차손해평가",
+   "dir": "교재/secondAssessment",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "농작물·가축재해보험 손해평가의 이론과 실무",
+     "file": "2차_손해평가의이론과실무.md"
+    }
+   ]
   }
+ ],
+ "exams": [
+  {
+   "key": "subject1",
+   "subject": "insurance",
+   "part": 1,
+   "title": "상법 보험편 (22제)",
+   "file": "과목1_문제은행.md"
+  },
+  {
+   "key": "subject2",
+   "subject": "disaster",
+   "part": 2,
+   "title": "농어업재해보험법령 및 손해평가요령 (22제)",
+   "file": "과목2_문제은행.md"
+  },
+  {
+   "key": "subject3",
+   "subject": "agronomy",
+   "part": 3,
+   "title": "농학개론(재배학·원예작물학) (22제)",
+   "file": "과목3_문제은행.md"
+  }
+ ],
+ "integratedExam": {
+  "questionsPerSubject": {
+   "insurance": 8,
+   "disaster": 8,
+   "agronomy": 8
+  },
+  "examTimeMin": 38,
+  "passAverage": 60,
+  "subjectFailBelow": 40
+ },
+ "written": [
+  {
+   "key": "secondAssessment",
+   "title": "2차 주관식 연습 — 손해평가 (서술·계산형)",
+   "desc": "손해평가요령 별표 기반 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
+   "file": "2차_손해평가_주관식.md"
+  },
+  {
+   "key": "secondTheory",
+   "title": "2차 주관식 연습 — 이론과 실무",
+   "desc": "2차 이론과 실무 과목 자체 제작 문항 — 서술 입력 후 모범답안·채점기준 대조 자기채점",
+   "file": "2차_이론_주관식.md"
+  }
+ ],
+ "uiText": {
+  "search": {
+   "title": "교재 검색",
+   "subtitle": "교재 본문과 참조자료(법령·고시)를 키워드로 함께 검색합니다.",
+   "placeholder": "검색할 키워드를 입력하세요 (예: 고지의무, 손해평가사, 보험가액)"
+  },
+  "dashboard": {
+   "title": "학습 대시보드",
+   "nav": "대시보드"
+  },
+  "analysis": {
+   "title": "학습진단",
+   "nav": "학습진단"
+  },
+  "flashcard": {
+   "title": "개념 플래시카드",
+   "nav": "카드"
+  },
+  "quiz": {
+   "title": "기출 및 핵심 퀴즈",
+   "nav": "퀴즈"
+  },
+  "trainer": {
+   "title": "훈련소"
+  },
+  "review": {
+   "title": "오답 및 중요 복습",
+   "nav": "복습"
+  },
+  "exam": {
+   "title": "실전 모의고사",
+   "nav": "모의고사"
+  },
+  "textbook-reader": {
+   "title": "교재리더"
+  },
+  "textbook": {
+   "title": "교재검색"
+  },
+  "calendar": {
+   "title": "캘린더"
+  },
+  "manual": {
+   "title": "매뉴얼"
+  },
+  "studyTools": {
+   "title": "학습도구"
+  },
+  "formula-manual": {
+   "title": "실무매뉴얼"
+  }
+ },
+ "synonyms": {
+  "국가법령정보센터": [
+   "law.go.kr"
+  ],
+  "농금원": [
+   "농업정책보험금융원"
+  ],
+  "손평사": [
+   "손해평가사"
+  ]
+ }
 }

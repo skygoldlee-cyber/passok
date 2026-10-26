@@ -1,0 +1,40 @@
+{
+ "estate_intro": {
+  "cards": {},
+  "quizzes": {}
+ },
+ "civil_broker": {
+  "cards": {
+   "civil_broker_card_6c65de": "무효 vs 취소",
+   "civil_broker_card_faae48": "사실인 관습 vs 관습법",
+   "civil_broker_card_75c5e0": "허위표시의 제3자",
+   "civil_broker_card_77299d": "조건 vs 기한"
+  },
+  "quizzes": {
+   "civil_broker_quiz_8978c7": "무효는 당초부터·누구나 주장 가능, 취소는 유효였다가 소급 소멸·당사자만|무효 vs 취소",
+   "civil_broker_quiz_538136": "사실인 관습=법원 아님(해석 기준), 관습법=법원(법질서 부합 필요)|사실인 관습 vs 관습법",
+   "civil_broker_quiz_ac7626": "108조2항 \"선의\"면 족함(무과실 불요) — 외형상 형성자는 제외|허위표시의 제3자",
+   "civil_broker_quiz_3bf63e": "조건=불확실 사실, 기한=확실 사실(시기 불명 기한도 기한)|조건 vs 기한"
+  }
+ },
+ "broker_law": {
+  "cards": {},
+  "quizzes": {}
+ },
+ "estate_publaw": {
+  "cards": {},
+  "quizzes": {}
+ },
+ "estate_registry": {
+  "cards": {},
+  "quizzes": {}
+ },
+ "estate_tax": {
+  "cards": {},
+  "quizzes": {}
+ },
+ "broker_practice": {
+  "cards": {},
+  "quizzes": {}
+ }
+}
