@@ -28,6 +28,7 @@
 // @spec none (테스트 선행 게이트)
 const { execSync } = require('child_process');
 const { parseStatusLine } = require('../lib/git_status.js');
+const { GENERATED_SRC } = require('../lib/generated_files.js');
 
 // 테스트 동반을 요구하는 실행 로직 변경
 const TRIGGERS = [
@@ -53,8 +54,10 @@ function git(args) {
     return execSync(`git -c core.quotepath=false ${args}`, { encoding: 'utf8' }).trim();
 }
 
+const GENERATED = new Set(GENERATED_SRC);
+
 function isTrigger(file) {
-    return TRIGGERS.some((re) => re.test(file)) && !TESTS.some((re) => re.test(file));
+    return TRIGGERS.some((re) => re.test(file)) && !TESTS.some((re) => re.test(file)) && !GENERATED.has(file);
 }
 function isTest(file) {
     return TESTS.some((re) => re.test(file));
@@ -187,4 +190,4 @@ if (isDirectRun) {
     process.exit(main());
 }
 
-module.exports = { TRIGGERS, TESTS, BYPASS_MARK, isTrigger, isTest, analyze, parseStatusLine, run, main };
+module.exports = { TRIGGERS, TESTS, BYPASS_MARK, GENERATED_SRC, isTrigger, isTest, analyze, parseStatusLine, run, main };

@@ -29,6 +29,12 @@ test('테스트·마크업·설정·문서·도구는 트리거가 아니다', (
     }
 });
 
+test('src/ 하위 빌드 생성물은 트리거가 아니다 (GENERATED_SRC)', () => {
+    for (const f of checker.GENERATED_SRC) {
+        assert.ok(!isTrigger(f), f);
+    }
+});
+
 test('테스트 경로는 인정된다', () => {
     for (const f of [
         'tests/unit/x.test.js', 'tests/e2e/y.spec.js',

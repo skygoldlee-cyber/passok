@@ -208,7 +208,7 @@ npm.cmd run check:all                  # lint·types·imports·html·docs·domai
 
 ## 체크리스트
 
-- [ ] `scaffold:exam` 실행 — exams.json 엔트리·디렉터리 트리 생성됨 (수동으로 `content/exams/<id>/`를 먼저 만들면 `check:domainmap`이 미등록 디렉터리로 실패 — 등록·생성이 원자적인 scaffold를 먼저)
+- [ ] `scaffold:exam` 실행 — exams.json 엔트리·디렉터리 트리 생성됨 (수동으로 `content/exams/<id>/`를 먼저 만들면 `check:domainmap`이 미등록 디렉터리로 실패 — 등록·생성이 원자적인 scaffold를 먼저). `filename_baseline.json`의 `.last-stats.<id>.json` 예외는 scaffold가 자동 등록·제거하므로 수동 편집 불필요
 - [ ] `manifest.json` 실제 과목·문항으로 교체 — title "N제"·desc 수치를 `### Q` 실측과 일치 (`check:manifest`)
 - [ ] `exams.json` 엔트리 브랜딩 채움 — scaffold 기본값(desc 골격 문구·`logoSub:''`·기본 아이콘) 제거, 미완성이면 `comingSoon: true`
 - [ ] `features` 플래그 = 보유 기능만 선언 (문서 불변식 충족) — `dictionary`면 knowledge 스키마·데이터 동반, `semantic`이면 build:embeddings 동반

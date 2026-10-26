@@ -76,8 +76,11 @@ function git(args) {
     return execSync(`git -c core.quotepath=false ${args}`, { encoding: 'utf8' }).trim();
 }
 
+const { GENERATED_SRC } = require('../lib/generated_files.js');
+const GENERATED = new Set(GENERATED_SRC);
+
 function isExempt(file) {
-    return EXEMPT.some((re) => re.test(file));
+    return EXEMPT.some((re) => re.test(file)) || GENERATED.has(file);
 }
 function isTrigger(file) {
     return !isExempt(file) && TRIGGERS.some((re) => re.test(file));

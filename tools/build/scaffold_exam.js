@@ -228,6 +228,7 @@ function scaffold(id, opts) {
         files.forEach(([f]) => console.log('  +', path.relative(ROOT, f)));
         dirs.forEach(d => console.log('  +', path.relative(ROOT, d) + '/'));
         console.log('  ~ content/exams.json — 엔트리 추가:', id);
+        console.log(`  ~ tools/state/filename_baseline.json — .last-stats.${id}.json 예외 승계`);
         return;
     }
 
@@ -236,6 +237,7 @@ function scaffold(id, opts) {
 
     doc.exams.push(examsEntry(id, name, opts.short_name, year));
     writeJson(EXAMS_JSON, doc);
+    registerFilenameBaseline(id);
 
     console.log(`✓ 시험 골격 생성: ${id}`);
     console.log(`  contentRoot: content/exams/${id}`);
@@ -255,6 +257,29 @@ function scaffold(id, opts) {
     console.log('  5. 생성물 전부 커밋 후 검증 — check:datafresh는 생성물 경로가 미커밋이면 즉시 중단');
     console.log('       npm.cmd run check:content → npm.cmd run check:all');
     console.log(`  6. 되돌리려면: node tools/build/scaffold_exam.js ${id} --remove`);
+}
+
+// 신규 시험의 빌드 산출물(.last-stats.<id>.json)은 파일명 규약 위반이지만
+// 기존 시험들과 동일한 패턴이므로 생성 시 baseline에 자동 승계한다.
+const FILENAME_BASELINE = path.join(ROOT, 'tools', 'state', 'filename_baseline.json');
+const statsBaselineEntry = (id) => `tools/build/.last-stats.${id}.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.${id})`;
+
+function registerFilenameBaseline(id) {
+    if (!fs.existsSync(FILENAME_BASELINE)) return;
+    const arr = JSON.parse(fs.readFileSync(FILENAME_BASELINE, 'utf-8'));
+    const entry = statsBaselineEntry(id);
+    if (arr.includes(entry)) return;
+    arr.push(entry);
+    arr.sort();
+    writeJson(FILENAME_BASELINE, arr);
+    console.log(`  + filename_baseline 등록: tools/build/.last-stats.${id}.json`);
+}
+
+function unregisterFilenameBaseline(id) {
+    if (!fs.existsSync(FILENAME_BASELINE)) return;
+    const arr = JSON.parse(fs.readFileSync(FILENAME_BASELINE, 'utf-8'));
+    const next = arr.filter((x) => x !== statsBaselineEntry(id));
+    if (next.length !== arr.length) writeJson(FILENAME_BASELINE, next);
 }
 
 function remove(id) {
@@ -288,6 +313,7 @@ function remove(id) {
         path.join('tests', 'unit', 'exams', id), path.join('tests', 'dom', 'exams', id), path.join('docs', 'exams', id),
     ].filter(d => fs.existsSync(path.join(ROOT, d)));
     if (domainDirs.length) console.log(`  ⚠ 도메인 자산 잔존 — 수동 확인 필요: ${domainDirs.join(', ')}`);
+    unregisterFilenameBaseline(id);
     doc.exams.splice(idx, 1);
     writeJson(EXAMS_JSON, doc);
     console.log(`✓ 시험 제거: ${id}`);
