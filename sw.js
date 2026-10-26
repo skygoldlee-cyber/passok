@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03,LP-07
 
-const CACHE_VERSION = 'v20261026-9a283de';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261026-a3a942e';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passok) — 시험 무관 공유 캐시.
 // 구 접두사(passory-*·cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -304,6 +304,7 @@ const MD_ASSETS = [
   './content/exams/broker/문제은행/부동산공시법_문제은행.md',
   './content/exams/broker/문제은행/부동산세법_문제은행.md',
   './content/exams/broker/문제은행/중개실무_문제은행.md',
+  './content/exams/skincare/docs/시험_구조_안내.md',
   './content/exams/skincare/docs/학습안내서.md',
   './content/exams/skincare/교재/skinTheory/피부미용이론.md',
   './content/exams/skincare/교재/anatomy/해부생리학.md',

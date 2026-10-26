@@ -63,19 +63,19 @@
   },
   "exams": {
     "subject1": {
-      "questions": 8
+      "questions": 20
     },
     "subject2": {
-      "questions": 8
+      "questions": 20
     },
     "subject3": {
-      "questions": 8
+      "questions": 20
     },
     "subject4": {
-      "questions": 8
+      "questions": 20
     },
     "subject5": {
-      "questions": 8
+      "questions": 20
     }
   }
 }

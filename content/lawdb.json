@@ -471,6 +471,19 @@
    "watch": {
     "target": "law"
    }
+  },
+  {
+   "id": "public-hygiene-disinfection-notice",
+   "name": "이용·미용기구별 소독기준 및 방법",
+   "type": "notice",
+   "slug": "이용·미용기구별 소독기준 및 방법",
+   "matchKeys": [
+    "이용·미용기구별 소독기준 및 방법",
+    "소독기준 및 방법"
+   ],
+   "watch": {
+    "target": "administrative-rule"
+   }
   }
  ]
 }
