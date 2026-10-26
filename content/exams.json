@@ -223,6 +223,30 @@
    "comingSoon": true,
    "appNameEn": "Passpraisal",
    "practiceName": "Appraisal OS"
+  },
+  {
+   "id": "hairdresser",
+   "name": "미용사(일반)",
+   "shortName": "헤어미용사",
+   "appName": "PassOK 헤어미용사",
+   "title": "PassOK — 미용사(일반) (Passhair)",
+   "logoMain": "PassOK",
+   "logoSub": "헤어미용사 · Passhair",
+   "desc": "미용사(일반) — 6과목 (필기 통합 5과목: 피부학·모발학·화장품학·공중위생관리학·소독학 + 실기 미용실무) · 객관식 60문항/60분 · 출제기준 2027~2031 기준 자체 제작 · 문제은행 40문",
+   "icon": "fa-solid fa-scissors",
+   "year": "2027",
+   "theme": {},
+   "contentRoot": "content/exams/hairdresser",
+   "dataRoot": "data/exams/hairdresser",
+   "manifestPath": "content/exams/hairdresser/manifest.json",
+   "registryBundle": "data/exams/hairdresser/registry.js",
+   "registryGlobal": "DATA_REGISTRY_HAIRDRESSER",
+   "features": {
+    "writtenPractice": true
+   },
+   "appNameEn": "Passhair",
+   "practiceName": "Hair OS",
+   "comingSoon": true
   }
  ]
 }

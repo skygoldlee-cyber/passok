@@ -98,6 +98,21 @@ const _EXAM_LAW_URLS = {
     ],
     "appraisal": [
 
+    ],
+    "hairdresser": [
+    ["공중위생관리법(법률)", "https://www.law.go.kr/법령/공중위생관리법"],
+    ["공중위생관리법", "https://www.law.go.kr/법령/공중위생관리법"],
+    ["공중위생관리법 시행령(대통령령)", "https://www.law.go.kr/법령/공중위생관리법 시행령"],
+    ["공중위생관리법 시행령", "https://www.law.go.kr/법령/공중위생관리법 시행령"],
+    ["공중위생관리법 시행규칙(부령)", "https://www.law.go.kr/법령/공중위생관리법 시행규칙"],
+    ["공중위생관리법 시행규칙", "https://www.law.go.kr/법령/공중위생관리법 시행규칙"],
+    ["이용·미용기구별 소독기준 및 방법", "https://www.law.go.kr/행정규칙/이용·미용기구별 소독기준 및 방법"],
+    ["소독기준 및 방법", "https://www.law.go.kr/행정규칙/이용·미용기구별 소독기준 및 방법"],
+    ["화장품법(법률)", "https://www.law.go.kr/법령/화장품법"],
+    ["화장품법", "https://www.law.go.kr/법령/화장품법"],
+    ["안전기준", "https://www.law.go.kr/행정규칙/화장품안전기준등에관한규정"],
+    ["banned_ingredients", "https://www.law.go.kr/행정규칙/화장품안전기준등에관한규정"],
+    ["restricted_ingredients", "https://www.law.go.kr/행정규칙/화장품안전기준등에관한규정"]
     ]
 };
 

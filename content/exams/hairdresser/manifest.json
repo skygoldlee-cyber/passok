@@ -1,0 +1,171 @@
+{
+ "examId": "hairdresser",
+ "dataRegistryGlobal": "DATA_REGISTRY_HAIRDRESSER",
+ "_pilot": {
+  "added": "2026-10-26",
+  "basis": "2027 출제기준(2027.1.1~2031.12.31) 자체 제작",
+  "status": "seed — 과목당 8문, 승격 시 과목당 ≥20문"
+ },
+ "subjects": [
+  {
+   "key": "skin",
+   "name": "피부학",
+   "file": "교재/skin/피부학.md"
+  },
+  {
+   "key": "hair",
+   "name": "모발학",
+   "file": "교재/hair/모발학.md"
+  },
+  {
+   "key": "cosmetics",
+   "name": "화장품학",
+   "file": "교재/cosmetics/화장품학.md"
+  },
+  {
+   "key": "hygiene",
+   "name": "공중위생관리학",
+   "file": "교재/hygiene/공중위생관리학.md"
+  },
+  {
+   "key": "disinfection",
+   "name": "소독학",
+   "file": "교재/disinfection/소독학.md"
+  },
+  {
+   "key": "practical",
+   "name": "미용실무",
+   "file": "교재/practical/미용실무.md"
+  }
+ ],
+ "exams": [
+  {
+   "key": "skin",
+   "title": "피부학",
+   "file": "과목1_피부학_문제은행.md"
+  },
+  {
+   "key": "hair",
+   "title": "모발학",
+   "file": "과목2_모발학_문제은행.md"
+  },
+  {
+   "key": "cosmetics",
+   "title": "화장품학",
+   "file": "과목3_화장품학_문제은행.md"
+  },
+  {
+   "key": "hygiene",
+   "title": "공중위생관리학",
+   "file": "과목4_공중위생관리학_문제은행.md"
+  },
+  {
+   "key": "disinfection",
+   "title": "소독학",
+   "file": "과목5_소독학_문제은행.md"
+  }
+ ],
+ "written": [
+  {
+   "key": "practical",
+   "title": "실기 주관식 연습 (필답·작업형)",
+   "desc": "수기 순서·도구 선택·관리계획 서술 — 모범답안 대비 자가채점",
+   "file": "실기_주관식_연습.md"
+  }
+ ],
+ "integratedExam": {
+  "name": "통합 모의고사",
+  "minutes": 60,
+  "total": 60,
+  "passAverage": 60,
+  "subjects": [
+   {
+    "key": "skin",
+    "count": 14
+   },
+   {
+    "key": "hair",
+    "count": 18
+   },
+   {
+    "key": "cosmetics",
+    "count": 8
+   },
+   {
+    "key": "hygiene",
+    "count": 10
+   },
+   {
+    "key": "disinfection",
+    "count": 10
+   }
+  ],
+  "note": "모발학·피부학 비중 최대 — 출제기준 추정 배분, 과락 없음"
+ },
+ "synonyms": {},
+ "uiText": {
+  "dashboard": {
+   "title": "학습 대시보드",
+   "subtitle": "헤어미용사 학습 현황"
+  },
+  "analysis": {
+   "title": "학습 분석",
+   "subtitle": "과목별 이해 분석"
+  },
+  "flashcard": {
+   "title": "카드",
+   "subtitle": "핵심 개념 카드 암기"
+  },
+  "quiz": {
+   "title": "퀴즈",
+   "subtitle": "객관식 4지선다 문제 풀이"
+  },
+  "trainer": {
+   "title": "숫자 연습",
+   "subtitle": "법정 수치·기온·농도 암기"
+  },
+  "review": {
+   "title": "복습",
+   "subtitle": "틀린 문제·북마크 복습"
+  },
+  "exam": {
+   "title": "통합 모의고사",
+   "subtitle": "60문항/60분 실전 연습"
+  },
+  "textbook": {
+   "title": "교재",
+   "subtitle": "5개 필기 영역 + 실기"
+  },
+  "textbook-reader": {
+   "title": "교재리더",
+   "subtitle": "본문 읽기"
+  },
+  "calendar": {
+   "title": "캘린더",
+   "subtitle": "학습 계획·D-day"
+  },
+  "manual": {
+   "title": "학습안내서",
+   "subtitle": "시험 구조·학습 경로"
+  },
+  "study-tools": {
+   "title": "학습 도구",
+   "subtitle": "검색·사전·수치"
+  },
+  "formula-manual": {
+   "title": "필답 매뉴얼",
+   "subtitle": "실기 서술 정리"
+  },
+  "dictionary": {
+   "title": "용어 사전",
+   "subtitle": "미용 용어 검색"
+  },
+  "search": {
+   "title": "교재 검색",
+   "subtitle": "본문·참조자료 통합 검색",
+   "placeholder": "검색 (예: 모발, 소독, 면허)"
+  }
+ },
+ "refDirsComment": "참조자료/ref_md — 공중위생관리법 3종·소독기준 고시(과목4~5), 화장품법·안전기준(과목3)",
+ "contentYear": "2027"
+}
