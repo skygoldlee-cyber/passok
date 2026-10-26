@@ -1,5 +1,17 @@
 [
   {
+    "version": "v20261026-b1a891f",
+    "date": "2026-10-26",
+    "notes": [
+      "[정리·build] 파생물 일괄 재생성 — docs_md·TRACE_MATRIX·test_stats",
+      "[리팩터링·quiz] 오답 노트 뷰를 quiz-review.js로 분리 — 배럴 패턴",
+      "[리팩터링·infra] 스탬프 머지 드라이버 + study-tracker 분리 + P2 게이트 효용 감사",
+      "[문서·exam] 공인중개사 문형 감사 결과 기록 — 구조 정합·보정 과제 정리",
+      "[정리·release] v20261026-1f88495 스탬프 확정 [no-docs]",
+      "[정리·release] v20261024-980ef49 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261026-1f88495",
     "date": "2026-10-26",
     "notes": [
@@ -160,29 +172,6 @@
       "[테스트·ux] 매뉴얼·모드 테스트에 시험 선택 상태 셋업 — 미선택 가드 대응",
       "[기능·ux] 미선택 시 매뉴얼·모드 전환 진입 차단 — data-click 가드",
       "[기능·ux] 내비 라벨을 시험별 uiText로 — 메뉴 표시 시험 연동"
-    ]
-  },
-  {
-    "version": "v20261026-1a77e07",
-    "date": "2026-10-26",
-    "notes": [
-      "[기능·ux] 시험 미선택 시 모든 뷰 진입 차단 — 피커 리다이렉트"
-    ]
-  },
-  {
-    "version": "v20261024-980ef49",
-    "date": "2026-10-24",
-    "notes": [
-      "[수정·onboard,tests] 주관식 계수 정규식 복원 + 생성 블록 품질 정리",
-      "[기능·insadj] 정식 승격 — second 분리(A안) + comingSoon 해제",
-      "[기능·lossadj,indsafe,admagent] 2차 주관식 ### S 증산 — 전 과목 ≥20문",
-      "[기능·admagent] 2차 주관식 ### S 증산 — 각 19~21문",
-      "[기능·insadj] 2차 주관식 ### S 증산 완료 — 전 과목 ≥20문",
-      "[기능·insadj] 2차 주관식 ### S 증산 — 재물19·차량20·신체24",
-      "[기능·onboard] 승격 게이트 주관식 계수 (B안) + admagent written 분할",
-      "[기능·admagent] 1차 과목 증산 8→25제 + 주관식 파일 written 등록",
-      "[기능·indsafe] 필기 6과목 문항 증산 8→22제 — 승격 기준 충족",
-      "[수정·insadj] integratedExam 실측 정합 + 승격 보류 문서화"
     ]
   }
 ]
