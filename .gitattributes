@@ -14,3 +14,13 @@
 *.ttf binary
 *.woff binary
 *.woff2 binary
+
+# 배포 스탬프 파일 — 전용 머지 드라이버 (tools/merge/merge_stamps.js)
+# 양 머신 pull 시 같은 라인에 반복 충돌하는 것을 자동 병합으로 제거
+#   (버전 큰 값 채택 / 릴리스 노트 version 키 합집합+20건 트림)
+# 드라이버 등록은 clone마다 1회 필요 — `npm.cmd run hooks:install`이 함께 수행
+data/version.js merge=stamps
+data/release-notes.json merge=stamps
+data/release-notes.js merge=stamps
+sw.js merge=stamps
+package.json merge=stamps

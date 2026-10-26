@@ -67,6 +67,7 @@ npm.cmd run sbom                        # SPDX 형식 SBOM 생성 → sbom.spdx.
 npm.cmd run audit:combo                 # 복수정답형 품질 감사 (정답 유일성·중복 진술집합·모순쌍·위치편향·경로별 통계)
 npm.cmd run audit:study                 # 학습 품질 감사 — 주간 배분·학습 진단 추천 규칙 정합 시나리오 검증 (SQ-01~04, --check=기준선 회귀, --update=기준선 갱신)
 npm.cmd run audit:tools                 # tools/ 사용률 감사 — 진입점→import 그래프 도달 불가 파일(사망 후보)·프리셋 미소속 단계·step_runs.jsonl 미실행 단계 (advisory — check:audit 프리셋, 죽은 게이트 정리용)
+npm.cmd run audit:gates                 # P2 게이트 효용 감사 — step_runs.jsonl 실행·실패 횟수 + tools/state 기준선 git 갱신 이력으로 미발화(silent)·미실행(dormant)·고빈도(noisy) 단계 식별 (advisory — check:audit 프리셋, 분기 리뷰용)
 npm.cmd run check:adlint                # 광고 문구 사전 커버리지 감사 — 별표5 2항 호별 대표 표현·term 품질·자기 검출 (FO-68)
 
 # AI 제작 지원 (초안만 생산 → tmp/ai_drafts/ → 사람 리뷰 후 content/ 편입 — AI_AUTHORING_DESIGN.md, AI-01~23)
@@ -172,7 +173,7 @@ npm.cmd run check:trace                 # TRACE_MATRIX 입력 해시 신선도
 npm.cmd run check:lawurls               # law.go.kr 한글주소 유효성 전수 검증 (law-links.js 매핑 실호출, 오류 페이지 본문 판별)
 npm.cmd run check:linklint              # 렌더 출력 링크 린트 — 콘텐츠 md를 표면별 렌더러(교재→reader-format, 문서·생성 번들→exam-viewer 경로) 통과 후 원시 경로 href·절단 URL·좌표/파일명 라벨·미승인 외부 링크·본문 경로 누출·QA 스탬프 잔존·위험 스킴 탐지 (check:content·check:ci 게이트, LL-01~08)
 node tools/check/impact_tests.js              # 변경 파일 → 영향 요구사항·권장 테스트 (미커밋 변경 자동 분석, --ref <ref>로 diff 분석, --run으로 권장 테스트 실제 실행 — pre-push 게이트)
-npm.cmd run hooks:install               # Git 훅 활성화 (opt-in) — pre-commit: check:types+lint (IDE 오류 시 커밋 차단) / pre-push: tools/check/push_gate.js 적응형 게이트 — 파일 경로 태그(STEP_NEEDS 표)로 필요 단계만 실행, 미분류 파일은 전체 폴백·전체 강제 PUSH_GATE_ALL=1 · 통과 결과 캐시(동일 입력 재실행 생략, --no-cache 우회)·병렬(4)·failFast·diff 스코프 단계는 --ref 대상 (우회 SKIP_PREPUSH=1)
+npm.cmd run hooks:install               # Git 훅 + merge.stamps 드라이버 활성화 (opt-in, clone마다 1회) — pre-commit: check:types+lint (IDE 오류 시 커밋 차단) / pre-push: tools/check/push_gate.js 적응형 게이트 — 파일 경로 태그(STEP_NEEDS 표)로 필요 단계만 실행, 미분류 파일은 전체 폴백·전체 강제 PUSH_GATE_ALL=1 · 통과 결과 캐시(동일 입력 재실행 생략, --no-cache 우회)·병렬(4)·failFast·diff 스코프 단계는 --ref 대상 (우회 SKIP_PREPUSH=1) / merge.stamps: 배포 스탬프 파일(version.js·sw.js·release-notes.*·package.json) pull 충돌 자동 병합 (.gitattributes merge=stamps → tools/merge/merge_stamps.js — 스탬프 외 양측 변경 시 수동 해결로 폴백)
 npm.cmd run check:hooks                 # 훅 설치 여부 확인 (권고 — 미설치 시 로컬 게이트 우회됨, check:ci 첫 단계)
 npm.cmd run doctor                      # 개발환경 기능별 가용성 진단 — 필수(Node≥24·git·node_modules) vs 선택 도구(playwright·python+pip·ffmpeg·vercel·deno·.env)를 명령 단위로 매핑 리포트 (--json 지원. 필수 미충족만 exit 1 — 루틴 경로 Node-only, 제작 경로만 선택 도구 필요)
 
@@ -238,7 +239,11 @@ src/                    # ES Modules
   knowledge-tracing.js  # BKT 단원 숙달 추정 순수 함수 (관측 시퀀스 → P(L), D-22)
   spaced-repetition.js  # FSRS 간격 반복 저장 어댑터 (스케줄 수학은 fsrs.js 위임, 공용 API)
   study-aids.js         # 학습 보조 (기출·중요 마커 추출 카드, 숫자 암기표)
-  study-tracker.js      # 학습 캘린더/목표 추적 헬퍼 (recordStudyActivity, getStudyGoals)
+  study-tracker.js      # 학습 캘린더/목표 추적 배럴 (re-export — 분리: -activity 캘린더·목표, -plan D-day·역산, -adherence 준수율·마일스톤, -alloc 과목별 가중 배분)
+  study-tracker-activity.js    # 학습 캘린더 기록 + 일일/주간 목표 (recordStudyActivity, getStudyGoals)
+  study-tracker-plan.js        # 시험일·D-day·역산 학습 계획 (computeStudyPlan, getDDay, getExamLeadStatus)
+  study-tracker-adherence.js   # 계획 준수율·학습 마일스톤 (computePlanAdherence, evalStudyMilestones)
+  study-tracker-alloc.js       # 과목별 가중 배분 순수 로직 (computeSubjectAllocation, apportionByWeight, selectExamRiskSession)
   statement-tracker.js  # 진술 원자(sid) 단위 오판 통계·졸업 추적 (FSRS 연동)
   semantic-index.js     # 의미 유사도 이웃 인덱스 조회 — 사전계산 임베딩 번들 지연 로드 (SEM-02~04, features.semantic) + 앵커 프록시 자유 검색 searchByText (SEM-08 v1)
   reader-notes.js       # 리더 섹션 메모 스토어 — 북마크 키(subj|chapterKey|title) 매핑 scoped 저장 (TR-30)
@@ -435,6 +440,7 @@ tools/                  # 빌드·검증 스크립트
   state/                # 게이트 기준선·스탬프 (*_baseline.json·test_stats.json — 추적) + 로컬 산출물 (리포트·검수 큐·대시보드 — gitignore)
   sync/                 # 콘텐츠 동기화 (sync_citation_lines·sync_textbook_files)
   deploy/               # 배포 가드 (deploy.js)
+  merge/                # git 머지 드라이버 (merge_stamps.js — 배포 스탬프 파일 자동 병합, .gitattributes merge=stamps)
   lib/                  # 공용 스캔·파싱 라이브러리 (trace_scan.js)
   ai/                   # AI 제작 지원 도구 (llm_client + 초안 생성·검수 9종, lib/ 공용 파서 — AI-01~13)
 ref-pipeline/           # 교재·참조자료 생성/변환 독립 도구함 (PDF→MD, MD→HTML, 오디오북 TTS, 법령 검증) — 사용 절차는 ref-pipeline/README.md 참조
