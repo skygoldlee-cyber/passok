@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261026-dd4548d",
+    "date": "2026-10-26",
+    "notes": [
+      "[빌드] 시험 배치 재정렬분 생성물 재생성",
+      "[content] 시험 배치 재정렬 — 정식·승격 준비순 (cosmetic→skincare→insadj→lossadj→broker→indsafe→admagent→appraisal)",
+      "[정리·release] v20261026-6a8d21c 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261026-6a8d21c",
     "date": "2026-10-26",
     "notes": [
@@ -176,13 +185,6 @@
     "date": "2026-10-26",
     "notes": [
       "[수정·ux] 실무 메뉴 라벨을 \"실무도구\"로 통일 — PC 사이드바·모바일 탭 formula:nav"
-    ]
-  },
-  {
-    "version": "v20261026-cf7009e",
-    "date": "2026-10-26",
-    "notes": [
-      "[기능·ux] 동적 메뉴 보완 — uiText 전면 확장 + 미선택 내비 dim"
     ]
   }
 ]
