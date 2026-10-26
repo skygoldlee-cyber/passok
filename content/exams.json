@@ -56,6 +56,34 @@
    "discordInvite": "https://discord.gg/eHerSQG9hj"
   },
   {
+   "id": "skincare",
+   "name": "미용사(피부)",
+   "shortName": "피부미용사",
+   "appName": "PassOK 피부미용사",
+   "title": "PassOK — 미용사(피부) (Passkin)",
+   "logoMain": "PassOK",
+   "logoSub": "피부미용사 · Passkin",
+   "desc": "미용사(피부) — 6과목 (필기 통합 5과목: 피부미용이론·해부생리학·피부미용기기학·화장품학·공중위생관리학 + 실기 피부미용실무) · CBT 상시검정 · 출제기준 2027~2031 기준 자체 제작 · 문제은행 100문",
+   "icon": "fa-solid fa-spa",
+   "year": "2027",
+   "theme": {
+    "--color-primary": "#ec4899",
+    "--color-secondary": "#14b8a6"
+   },
+   "contentRoot": "content/exams/skincare",
+   "dataRoot": "data/exams/skincare",
+   "manifestPath": "content/exams/skincare/manifest.json",
+   "registryBundle": "data/exams/skincare/registry.js",
+   "registryGlobal": "DATA_REGISTRY_SKINCARE",
+   "features": {
+    "writtenPractice": true,
+    "studyGuide": true
+   },
+   "comingSoon": true,
+   "appNameEn": "Passkin",
+   "practiceName": "Skin OS"
+  },
+  {
    "id": "lossadj",
    "name": "손해평가사",
    "shortName": "손해평가사",
@@ -195,34 +223,6 @@
    "registryBundle": "data/exams/broker/registry.js",
    "registryGlobal": "DATA_REGISTRY_BROKER",
    "comingSoon": true
-  },
-  {
-   "id": "skincare",
-   "name": "미용사(피부)",
-   "shortName": "피부미용사",
-   "appName": "PassOK 피부미용사",
-   "title": "PassOK — 미용사(피부) (Passkin)",
-   "logoMain": "PassOK",
-   "logoSub": "피부미용사 · Passkin",
-   "desc": "미용사(피부) — 6과목 (필기 통합 5과목: 피부미용이론·해부생리학·피부미용기기학·화장품학·공중위생관리학 + 실기 피부미용실무) · CBT 상시검정 · 출제기준 2027~2031 기준 자체 제작 · 문제은행 100문",
-   "icon": "fa-solid fa-spa",
-   "year": "2027",
-   "theme": {
-    "--color-primary": "#ec4899",
-    "--color-secondary": "#14b8a6"
-   },
-   "contentRoot": "content/exams/skincare",
-   "dataRoot": "data/exams/skincare",
-   "manifestPath": "content/exams/skincare/manifest.json",
-   "registryBundle": "data/exams/skincare/registry.js",
-   "registryGlobal": "DATA_REGISTRY_SKINCARE",
-   "features": {
-    "writtenPractice": true,
-    "studyGuide": true
-   },
-   "comingSoon": true,
-   "appNameEn": "Passkin",
-   "practiceName": "Skin OS"
   }
  ]
 }
