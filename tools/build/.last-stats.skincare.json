@@ -1,0 +1,81 @@
+{
+  "subjects": {
+    "skinTheory": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/skinTheory/피부미용이론.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "anatomy": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/anatomy/해부생리학.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "devices": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/devices/피부미용기기학.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "cosmetics": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/cosmetics/화장품학.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "hygiene": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/hygiene/공중위생관리학.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "practical": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/practical/피부미용실무.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {
+    "subject1": {
+      "questions": 8
+    },
+    "subject2": {
+      "questions": 8
+    },
+    "subject3": {
+      "questions": 8
+    },
+    "subject4": {
+      "questions": 8
+    },
+    "subject5": {
+      "questions": 8
+    }
+  }
+}

@@ -1,0 +1,213 @@
+{
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
+ "_pilot": "미용사(피부) 파일럿 — 필기 통합 60문(CBT 상시검정) + 실기 작업형. 출제기준(2027.1.1~2031.12.31) 기반 자체 제작본, 과목당 시드 문항 투입 상태 (check:onboard 준비도 대상). 실기는 관리계획 차트·수기순서 서술 연습만 커버(작업형 실습은 범위 밖). 정식 전환은 NEW_EXAM_RUNBOOK §승격 기준.",
+ "subjects": [
+  {
+   "key": "skinTheory",
+   "order": 1,
+   "name": "피부미용이론",
+   "shortName": "피부미용",
+   "dir": "교재/skinTheory",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "피부미용이론 (전체)",
+     "file": "피부미용이론.md"
+    }
+   ]
+  },
+  {
+   "key": "anatomy",
+   "order": 2,
+   "name": "해부생리학",
+   "shortName": "해부생리",
+   "dir": "교재/anatomy",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "해부생리학 (전체)",
+     "file": "해부생리학.md"
+    }
+   ]
+  },
+  {
+   "key": "devices",
+   "order": 3,
+   "name": "피부미용기기학",
+   "shortName": "기기학",
+   "dir": "교재/devices",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "피부미용기기학 (전체)",
+     "file": "피부미용기기학.md"
+    }
+   ]
+  },
+  {
+   "key": "cosmetics",
+   "order": 4,
+   "name": "화장품학",
+   "shortName": "화장품",
+   "dir": "교재/cosmetics",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "화장품학 (전체)",
+     "file": "화장품학.md"
+    }
+   ]
+  },
+  {
+   "key": "hygiene",
+   "order": 5,
+   "name": "공중위생관리학",
+   "shortName": "공중위생",
+   "dir": "교재/hygiene",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "공중위생관리학 (전체)",
+     "file": "공중위생관리학.md"
+    }
+   ]
+  },
+  {
+   "key": "practical",
+   "order": 6,
+   "name": "피부미용실무 (실기)",
+   "shortName": "실기 실무",
+   "dir": "교재/practical",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "피부미용실무 (실기) (전체)",
+     "file": "피부미용실무.md"
+    }
+   ]
+  }
+ ],
+ "exams": [
+  {
+   "key": "subject1",
+   "subject": "skinTheory",
+   "part": 1,
+   "title": "피부미용이론",
+   "file": "과목1_피부미용이론_문제은행.md"
+  },
+  {
+   "key": "subject2",
+   "subject": "anatomy",
+   "part": 1,
+   "title": "해부생리학",
+   "file": "과목2_해부생리학_문제은행.md"
+  },
+  {
+   "key": "subject3",
+   "subject": "devices",
+   "part": 1,
+   "title": "피부미용기기학",
+   "file": "과목3_피부미용기기학_문제은행.md"
+  },
+  {
+   "key": "subject4",
+   "subject": "cosmetics",
+   "part": 1,
+   "title": "화장품학",
+   "file": "과목4_화장품학_문제은행.md"
+  },
+  {
+   "key": "subject5",
+   "subject": "hygiene",
+   "part": 1,
+   "title": "공중위생관리학",
+   "file": "과목5_공중위생관리학_문제은행.md"
+  }
+ ],
+ "integratedExam": {
+  "questionsPerSubject": {
+   "skinTheory": 31,
+   "anatomy": 6,
+   "devices": 5,
+   "cosmetics": 6,
+   "hygiene": 12
+  },
+  "examTimeMin": 60,
+  "passAverage": 60
+ },
+ "integratedExamComment": "필기는 통합 1과목 60문항·60분 CBT — 과락 없이 총점 60점(36문) 이상 합격. 문항 배분은 출제기준 주요항목 비중(피부미용이론 약 52%)을 반영한 추정치. 실기는 작업형(관리계획 차트+피부관리 실습, 약 2~3시간)으로 별도 응시.",
+ "uiText": {
+  "dashboard": {
+   "title": "학습 대시보드",
+   "nav": "대시보드"
+  },
+  "analysis": {
+   "title": "학습진단",
+   "nav": "학습진단"
+  },
+  "flashcard": {
+   "title": "개념 플래시카드",
+   "nav": "카드"
+  },
+  "quiz": {
+   "title": "핵심 예상 퀴즈",
+   "nav": "퀴즈"
+  },
+  "trainer": {
+   "title": "훈련소"
+  },
+  "review": {
+   "title": "오답 및 중요 복습",
+   "nav": "복습"
+  },
+  "exam": {
+   "title": "실전 모의고사",
+   "nav": "모의고사"
+  },
+  "textbook-reader": {
+   "title": "교재리더"
+  },
+  "textbook": {
+   "title": "교재검색"
+  },
+  "dictionary": {
+   "title": "지식DB 사전",
+   "subtitle": "엔티티 검색 (manifest.knowledge 스키마 필요)"
+  },
+  "calendar": {
+   "title": "캘린더"
+  },
+  "manual": {
+   "title": "매뉴얼"
+  },
+  "studyTools": {
+   "title": "학습도구"
+  },
+  "search": {
+   "title": "교재 검색",
+   "subtitle": "교재 본문과 참조자료(법령·고시)를 키워드로 함께 검색합니다.",
+   "placeholder": "검색할 키워드를 입력하세요 (예: 표피, 갈바닉, 소독, 기능성화장품)"
+  },
+  "formula-manual": {
+   "title": "실무매뉴얼"
+  }
+ },
+ "synonyms": {
+  "피부미용사": ["미용사(피부)", "피부관리사", "에스테티션"],
+  "큐넷": ["Q-net", "Q넷", "한국산업인력공단"],
+  "표피": ["에피더미스", "epidermis"],
+  "진피": ["더미스", "dermis"],
+  "매뉴얼테크닉": ["수기관리", "손마사지"],
+  "공중위생관리법": ["공중위생법"]
+ },
+ "written": [
+  {
+   "key": "practical",
+   "title": "실기 주관식 연습 (관리계획 차트·서술)",
+   "desc": "공개문제·출제기준 기반 자체 제작 문항 — 관리계획 차트 작성·수기 순서 서술 입력 후 모범답안 대조 자기채점",
+   "file": "실기_주관식_연습.md"
+  }
+ ]
+}

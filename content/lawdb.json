@@ -432,6 +432,19 @@
    "watch": {
     "target": "law"
    }
+  },
+  {
+   "id": "public-hygiene-act",
+   "name": "공중위생관리법",
+   "type": "law",
+   "slug": "공중위생관리법",
+   "matchKeys": [
+    "공중위생관리법(법률)",
+    "공중위생관리법"
+   ],
+   "watch": {
+    "target": "law"
+   }
   }
  ]
 }

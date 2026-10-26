@@ -83,6 +83,10 @@ const _EXAM_LAW_URLS = {
     ],
     "broker": [
 
+    ],
+    "skincare": [
+    ["공중위생관리법(법률)", "https://www.law.go.kr/법령/공중위생관리법"],
+    ["공중위생관리법", "https://www.law.go.kr/법령/공중위생관리법"]
     ]
 };
 

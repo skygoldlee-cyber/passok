@@ -635,6 +635,44 @@ const _EXAM_TABLES = {
         NOTICE_INGREDIENT_DOCS: [
 
         ]
+    },
+    "skincare": {
+        contentRoot: "content/exams/skincare",
+        SUBJECT_DIR_MAP: {
+        "skinTheory": "과목1",
+        "anatomy": "과목2",
+        "devices": "과목3",
+        "cosmetics": "과목4",
+        "hygiene": "과목5",
+        "practical": "과목6"
+        },
+        REF_MD_SUBJECTS: {
+
+        },
+        REF_DIRS: {
+
+        },
+        SOURCE_REF_MAP: [
+        { test: /공중위생관리법|미용사면허|위생교육|영업정지|과태료|피부미용업/, file: "공중위생관리법(법률)(제21098호)(20261112).md" }
+        ],
+        KEYWORD_REF_MAP: [
+
+        ],
+        REFERENCE_FILES: {
+
+        },
+        REFERENCE_COMMON: [
+
+        ],
+        REFERENCE_INGREDIENTS: [
+
+        ],
+        REFERENCE_LAW: [
+        { name: "공중위생관리법", file: "공중위생관리법(법률)(제21098호)(20261112).md", type: "ref_md", dir: "ref_md/과목5/공중위생관리법(법률)(제21098호)(20261112)" }
+        ],
+        NOTICE_INGREDIENT_DOCS: [
+
+        ]
     }
 };
 
