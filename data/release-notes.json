@@ -1,5 +1,20 @@
 [
   {
+    "version": "v20261026-a24dd73",
+    "date": "2026-10-26",
+    "notes": [
+      "[빌드] skincare ref·docs 추가분 생성물 재생성",
+      "[정리] .last-stats.skincare.json filename baseline",
+      "[수정·docs] skincare 시험 문서 판본 헤더 규약 교정 (none)",
+      "[content] exams.json skincare 배치를 cosmetic 직후로 이동",
+      "[content] skincare 승격 잔여 자산 — 화장품법·소독고시 ref + synonyms + 구조안내",
+      "[content] skincare 문제은행 증산 — 과목당 20문(총 100문) + 시험구조 문항 인용 교정",
+      "[content] skincare 시행령·시행규칙 ref_md 추가 + 학습안내서",
+      "[content] skincare(미용사/피부) 시험 파일럿 골격 추가",
+      "[정리·release] v20261026-b1a891f 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261026-b1a891f",
     "date": "2026-10-26",
     "notes": [
@@ -163,15 +178,6 @@
       "[테스트·e2e] exam-switch 도메인 경로 스펙에 current_exam 시드 — 미선택 게이트 대응",
       "[수정·ux] 미선택 시 시험 스코프 메뉴 숨김 + 해제 후 브랜딩 즉시 복귀",
       "[수정·ux] 선택 해제 시 브랜딩 즉시 복귀 — 문서 타이틀·로고 시험명 잔류 수정"
-    ]
-  },
-  {
-    "version": "v20261026-f3c6b12",
-    "date": "2026-10-26",
-    "notes": [
-      "[테스트·ux] 매뉴얼·모드 테스트에 시험 선택 상태 셋업 — 미선택 가드 대응",
-      "[기능·ux] 미선택 시 매뉴얼·모드 전환 진입 차단 — data-click 가드",
-      "[기능·ux] 내비 라벨을 시험별 uiText로 — 메뉴 표시 시험 연동"
     ]
   }
 ]
