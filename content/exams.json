@@ -217,7 +217,8 @@
    "registryBundle": "data/exams/skincare/registry.js",
    "registryGlobal": "DATA_REGISTRY_SKINCARE",
    "features": {
-    "writtenPractice": true
+    "writtenPractice": true,
+    "studyGuide": true
    },
    "comingSoon": true,
    "appNameEn": "Passkin",

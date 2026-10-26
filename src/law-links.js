@@ -86,7 +86,11 @@ const _EXAM_LAW_URLS = {
     ],
     "skincare": [
     ["공중위생관리법(법률)", "https://www.law.go.kr/법령/공중위생관리법"],
-    ["공중위생관리법", "https://www.law.go.kr/법령/공중위생관리법"]
+    ["공중위생관리법", "https://www.law.go.kr/법령/공중위생관리법"],
+    ["공중위생관리법 시행령(대통령령)", "https://www.law.go.kr/법령/공중위생관리법 시행령"],
+    ["공중위생관리법 시행령", "https://www.law.go.kr/법령/공중위생관리법 시행령"],
+    ["공중위생관리법 시행규칙(부령)", "https://www.law.go.kr/법령/공중위생관리법 시행규칙"],
+    ["공중위생관리법 시행규칙", "https://www.law.go.kr/법령/공중위생관리법 시행규칙"]
     ]
 };
 
