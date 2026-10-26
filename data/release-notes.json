@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261026-9119580",
+    "date": "2026-10-26",
+    "notes": [
+      "[수정] generated_files.js @spec 태그 추가 + TRACE_MATRIX 재생성",
+      "[정리] TRACE_MATRIX 재생성 — 게이트 변경 반영",
+      "[리팩터링·gates] src/ 빌드 생성물을 게이트 트리거에서 면제 + scaffold baseline 자동 등록",
+      "[정리·release] v20261026-a24dd73 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261026-a24dd73",
     "date": "2026-10-26",
     "notes": [
@@ -169,15 +179,6 @@
     "date": "2026-10-26",
     "notes": [
       "[기능·ux] 모바일 탭바·더보기 시트 라벨을 시험별 uiText로 연동"
-    ]
-  },
-  {
-    "version": "v20261026-76c9a1c",
-    "date": "2026-10-26",
-    "notes": [
-      "[테스트·e2e] exam-switch 도메인 경로 스펙에 current_exam 시드 — 미선택 게이트 대응",
-      "[수정·ux] 미선택 시 시험 스코프 메뉴 숨김 + 해제 후 브랜딩 즉시 복귀",
-      "[수정·ux] 선택 해제 시 브랜딩 즉시 복귀 — 문서 타이틀·로고 시험명 잔류 수정"
     ]
   }
 ]
