@@ -1,0 +1,35 @@
+[
+ {
+  "numbers": [
+   {
+    "number": "1000",
+    "unit": "ppm"
+   }
+  ],
+  "context": "타올·가운 소독 차아염소산나트륨 유효염소",
+  "isKey": true,
+  "category": "🔢 수치"
+ },
+ {
+  "numbers": [
+   {
+    "number": "10",
+    "unit": "분 이상"
+   }
+  ],
+  "context": "소독액·열탕 침지 시간",
+  "isKey": true,
+  "category": "🔢 수치"
+ },
+ {
+  "numbers": [
+   {
+    "number": "80",
+    "unit": "℃ 이상"
+   }
+  ],
+  "context": "스팀타올 사용 전 보관 온도",
+  "isKey": true,
+  "category": "🔢 수치"
+ }
+]

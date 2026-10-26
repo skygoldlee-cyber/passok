@@ -1,0 +1,35 @@
+[
+ {
+  "numbers": [
+   {
+    "number": "80~90",
+    "unit": "%"
+   }
+  ],
+  "context": "코르텍스가 차지하는 모발 무게 비중",
+  "isKey": true,
+  "category": "🔢 수치"
+ },
+ {
+  "numbers": [
+   {
+    "number": "10~15",
+    "unit": "만 개"
+   }
+  ],
+  "context": "성인 두피 모발 수",
+  "isKey": true,
+  "category": "🔢 수치"
+ },
+ {
+  "numbers": [
+   {
+    "number": "200~300",
+    "unit": "개/cm²"
+   }
+  ],
+  "context": "두피 모발 밀도",
+  "isKey": true,
+  "category": "🔢 수치"
+ }
+]

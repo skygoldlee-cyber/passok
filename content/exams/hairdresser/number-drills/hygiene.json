@@ -1,0 +1,13 @@
+[
+ {
+  "numbers": [
+   {
+    "number": "300",
+    "unit": "만 원 이하"
+   }
+  ],
+  "context": "위생교육 미이수 등 과태료 상한",
+  "isKey": true,
+  "category": "🔢 수치"
+ }
+]

@@ -63,19 +63,19 @@
   },
   "exams": {
     "skin": {
-      "questions": 8
+      "questions": 20
     },
     "hair": {
-      "questions": 8
+      "questions": 20
     },
     "cosmetics": {
-      "questions": 8
+      "questions": 20
     },
     "hygiene": {
-      "questions": 8
+      "questions": 20
     },
     "disinfection": {
-      "questions": 8
+      "questions": 20
     }
   }
 }

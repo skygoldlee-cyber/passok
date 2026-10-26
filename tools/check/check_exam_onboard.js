@@ -126,9 +126,10 @@ for (const t of targets) {
 
 // ── 리포트 ──
 console.log('시험 팩 온보딩·승격 진단\n');
-console.log('  ' + 'id'.padEnd(10) + '등급'.padEnd(6) + '과목'.padEnd(5) + '챕터'.padEnd(5) + '문항'.padEnd(8) + 'features'.padEnd(9) + '선택자산');
+const ID_W = Math.max(10, Math.max(...rows.map(r => r.id.length)) + 1);
+console.log('  ' + 'id'.padEnd(ID_W) + '등급'.padEnd(6) + '과목'.padEnd(5) + '챕터'.padEnd(5) + '문항'.padEnd(8) + 'features'.padEnd(9) + '선택자산');
 for (const r of rows) {
-    console.log('  ' + r.id.padEnd(10) + (r.soon ? '준비중' : '정식').padEnd(6)
+    console.log('  ' + r.id.padEnd(ID_W) + (r.soon ? '준비중' : '정식').padEnd(6)
         + String(r.subjects).padEnd(5) + String(r.textbookFiles).padEnd(5)
         + String(r.totalQ).padEnd(8) + String(r.features).padEnd(9) + r.optional);
 }

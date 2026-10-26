@@ -1,0 +1,13 @@
+[
+ {
+  "numbers": [
+   {
+    "number": "48",
+    "unit": "시간"
+   }
+  ],
+  "context": "염색약 패치테스트 반응 관찰 시간",
+  "isKey": true,
+  "category": "🔢 수치"
+ }
+]

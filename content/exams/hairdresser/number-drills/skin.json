@@ -1,0 +1,35 @@
+[
+ {
+  "numbers": [
+   {
+    "number": "4.5",
+    "unit": ""
+   }
+  ],
+  "context": "피부 표면 정상 pH — 약산성 산성피막",
+  "isKey": true,
+  "category": "🔢 수치"
+ },
+ {
+  "numbers": [
+   {
+    "number": "2~6",
+    "unit": "년"
+   }
+  ],
+  "context": "두피 모발 성장기 지속 기간",
+  "isKey": true,
+  "category": "🔢 수치"
+ },
+ {
+  "numbers": [
+   {
+    "number": "50~100",
+    "unit": "개"
+   }
+  ],
+  "context": "하루 정상 탈모 수 범위",
+  "isKey": true,
+  "category": "🔢 수치"
+ }
+]
