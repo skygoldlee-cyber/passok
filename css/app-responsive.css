@@ -1053,3 +1053,63 @@ body.landscape-mode .glass-card {
     }
 }
 
+
+/* 시험 선택 — 배경화가 보이는 초기 화면: 카드가 세로로 길어지지 않도록
+   모바일에서 2열 컴팩트 그리드로 전환해 전체 시험을 스크롤 없이 노출 */
+@media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
+    .exam-select-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-2, 0.5rem);
+    }
+    .exam-select-card {
+        padding: var(--space-3, 0.75rem);
+    }
+    .exam-select-icon {
+        font-size: 1.25rem;
+        margin-bottom: var(--space-1, 0.25rem);
+    }
+    .exam-select-card h4 {
+        font-size: var(--text-base, 0.9rem);
+        margin-bottom: var(--space-1, 0.25rem);
+    }
+    .exam-select-card p {
+        font-size: var(--text-sm, 0.78rem);
+        line-height: 1.35;
+        margin-bottom: var(--space-2, 0.5rem);
+        /* 카드 설명이 길어도 높이를 균일하게 — 2행 말줄임 */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .exam-select-stats {
+        font-size: var(--text-sm, 0.72rem);
+        margin-bottom: var(--space-2, 0.5rem);
+    }
+}
+
+/* 480px 이하 — 설명·통계 생략해 카드를 더 낮게 (8개 카드 한 화면 수납) */
+@media (max-width: 480px) {
+    .exam-select-card p,
+    .exam-select-stats {
+        display: none;
+    }
+    .exam-select-card {
+        padding: var(--space-2, 0.5rem);
+    }
+    .exam-select-icon {
+        font-size: 1.1rem;
+        margin-bottom: var(--space-1, 0.25rem);
+    }
+    .exam-select-card h4 {
+        font-size: var(--text-sm, 0.82rem);
+        margin-bottom: var(--space-2, 0.5rem);
+    }
+    /* 선택 해제 버튼은 보조 행동 — 한 줄로 압축 */
+    #exam-select-clear {
+        font-size: var(--text-sm, 0.78rem);
+    }
+    #exam-select-view .section-title-area p {
+        margin-bottom: var(--space-1, 0.25rem);
+    }
+}
