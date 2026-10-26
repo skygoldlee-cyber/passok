@@ -1,5 +1,19 @@
 [
   {
+    "version": "v20261026-01f33dd",
+    "date": "2026-10-26",
+    "notes": [
+      "[content] hairdresser 배치 이동 — skincare 뒤 뷰티 3연속 구성 (3번째)",
+      "[수정] hairdresser docs ID 중복 선언 제거",
+      "[수정] hairdresser docs 헤더 규약 교정 — blockquote 문서ID·범위 형식",
+      "[content] hairdresser 승격 자산 — 과목당 20문·docs 2종·synonyms·용어집·number-drills",
+      "[빌드] hairdresser data 번들 + references.json 스키마 정합",
+      "[content] hairdresser manifest 스키마 정합 + desc 수치 교정",
+      "[content] hairdresser(미용사/일반) 시험 파일럿 골격 추가",
+      "[정리·release] v20261026-dd4548d 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261026-dd4548d",
     "date": "2026-10-26",
     "notes": [
@@ -178,13 +192,6 @@
     "date": "2026-10-26",
     "notes": [
       "[수정·ux] 사전 라벨 \"성분사전\"으로 통일 — 띄어쓰기 제거"
-    ]
-  },
-  {
-    "version": "v20261026-fefb904",
-    "date": "2026-10-26",
-    "notes": [
-      "[수정·ux] 실무 메뉴 라벨을 \"실무도구\"로 통일 — PC 사이드바·모바일 탭 formula:nav"
     ]
   }
 ]
