@@ -4,6 +4,8 @@
 
 - 탭바의 성분사전을 더보기 시트로 이동 (탭 6→5개), 매뉴얼을 시트 첫 항목으로
 
+## 2026-10-26 chore: 공인중개사 생성물 갱신 — keyword-index·law-links·pdf-registry·sw
+
 ## 2026-10-26 fix: 공인중개사 정합성 정정 — 과목 키 밑줄·챕터 헤딩·ref_md 과목 귀속
 
 - subjects/exams 키 밑줄화 (supplement 번들 식별자 정합) · 골격 교재 ## N. 챕터 헤딩 · ref_md를 과목별 폴더로 귀속

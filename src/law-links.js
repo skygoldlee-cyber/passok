@@ -80,6 +80,9 @@ const _EXAM_LAW_URLS = {
     ],
     "appraisal": [
 
+    ],
+    "broker": [
+
     ]
 };
 
