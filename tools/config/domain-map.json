@@ -150,6 +150,7 @@
         "src/views/listeners-simulator.js",
         "src/views/navigation.js",
         "src/views/offline-detection.js",
+        "src/views/quiz-review.js",
         "src/views/quiz-wrong-cause.js",
         "src/views/quiz.js",
         "src/views/reader-loader.js",
