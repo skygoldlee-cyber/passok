@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 76d9c275f3d12228
-> 생성: 2026-10-25 · 원천: SPEC.md(608개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: e093aacc1d57f0db
+> 생성: 2026-10-26 · 원천: SPEC.md(608개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 608개 — 문서 연결 442 · 소스 연결 541 · 테스트 연결 579 · 보고서 연결 109
+**커버리지 요약**: 요구사항 608개 — 문서 연결 442 · 소스 연결 542 · 테스트 연결 579 · 보고서 연결 109
 
 ---
 
@@ -41,13 +41,13 @@
 | D-14 | ✅ | 테스트 | — | src/views/dashboard.js<br>src/views/subject-stats.js | tests/dom/study/study-dashboard.dom.test.js | DOC-ARC-05<br>DOC-ARC-10 | — |
 | D-15 | ✅ | 테스트 | DOC-DSN-32 | src/views/dashboard.js<br>src/views/subject-stats.js | tests/dom/study/study-dashboard.dom.test.js | DOC-ARC-05<br>DOC-ARC-10 | — |
 | D-16 | ✅ | 테스트 | — | html/views/dashboard.html<br>index.html<br>src/analysis-engine.js<br>src/views/dashboard.js<br>…외 1개 | tests/unit/engine/analysis-engine.test.js | — | — |
-| D-17 | ✅ | 테스트 | DOC-DSN-16 | src/study-tracker.js<br>src/views/dashboard.js<br>src/views/study-calendar.js<br>src/views/subject-stats.js | tests/dom/study/study-calendar.dom.test.js<br>tests/dom/study/study-dashboard.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
+| D-17 | ✅ | 테스트 | DOC-DSN-16 | src/study-tracker-plan.js<br>src/study-tracker.js<br>src/views/dashboard.js<br>src/views/study-calendar.js<br>…외 1개 | tests/dom/study/study-calendar.dom.test.js<br>tests/dom/study/study-dashboard.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
 | D-18 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32 | src/spaced-repetition.js | tests/unit/engine/fsrs.test.js | — | — |
 | D-19 | ✅ | E2E 테스트 | DOC-DSN-32 | src/spaced-repetition.js | tests/e2e/exam-risk.spec.js<br>tests/unit/engine/fsrs.test.js<br>tests/unit/engine/today-queue.test.js | — | — |
 | D-20 | ✅ | E2E 테스트 | DOC-DSN-32 | src/spaced-repetition.js | tests/e2e/exam-risk.spec.js<br>tests/unit/engine/fsrs.test.js | — | — |
 | D-21 | ✅ | 테스트 | DOC-DSN-32 | src/analysis-engine.js | tests/unit/engine/analysis-engine.test.js | — | — |
 | D-22 | ✅ | E2E 테스트 | DOC-ADR-18<br>DOC-DSN-32 | src/analysis-engine.js<br>src/knowledge-tracing.js<br>src/spaced-repetition.js<br>src/views/exam-sim-arena.js<br>…외 1개 | tests/e2e/analysis-view.spec.js<br>tests/unit/engine/analysis-engine.test.js<br>tests/unit/engine/fsrs.test.js<br>tests/unit/engine/knowledge-tracing.test.js | — | — |
-| D-23 | ✅ | 테스트 | — | src/study-tracker.js<br>src/views/analysis-view.js<br>src/views/dashboard-queue.js | tests/unit/engine/study-tracker.test.js | — | — |
+| D-23 | ✅ | 테스트 | — | src/study-tracker-alloc.js<br>src/study-tracker.js<br>src/views/analysis-view.js<br>src/views/dashboard-queue.js | tests/unit/engine/study-tracker.test.js | — | — |
 | TQ-01 | ✅ | 테스트 | DOC-DSN-32 | src/views/dashboard-queue.js<br>src/views/dashboard.js | tests/dom/study/study-dashboard.dom.test.js<br>tests/unit/engine/today-queue.test.js | — | — |
 | TQ-02 | ✅ | 테스트 | — | src/views/dashboard-queue.js | tests/unit/engine/today-queue.test.js | — | — |
 | TQ-03 | ✅ | 테스트 | — | src/views/dashboard-queue.js | tests/dom/study/study-dashboard.dom.test.js<br>tests/unit/engine/today-queue.test.js | — | — |
@@ -100,7 +100,7 @@
 | Q-09 | ✅ | 테스트 | DOC-DSN-04<br>DOC-REF-01 | src/views/quiz.js | tests/dom/study/study-quiz.dom.test.js | DOC-ARC-05<br>DOC-ARC-09<br>DOC-ARC-11 | — |
 | Q-10 | ✅ | 테스트 | DOC-DSN-04<br>DOC-REF-01 | src/views/quiz.js | tests/dom/study/study-quiz.dom.test.js | DOC-ARC-05<br>DOC-ARC-09<br>DOC-ARC-11 | — |
 | Q-11 | ✅ | 테스트 | DOC-DSN-04<br>DOC-REF-01 | src/views/quiz.js | tests/dom/study/study-quiz.dom.test.js | DOC-ARC-05<br>DOC-ARC-09<br>DOC-ARC-11 | — |
-| Q-12 | ✅ | 테스트 | DOC-REF-01 | src/study-tracker.js<br>src/views/quiz.js | tests/dom/study/study-quiz.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
+| Q-12 | ✅ | 테스트 | DOC-REF-01 | src/study-tracker-alloc.js<br>src/study-tracker.js<br>src/views/quiz.js | tests/dom/study/study-quiz.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
 
 ## 3.4 모의고사
 
@@ -410,26 +410,26 @@
 | DR-06 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/views/exam-sim-arena.js<br>src/views/exam-simulator.js<br>src/views/trainer-drills.js | tests/dom/study/study-trainer-drills.dom.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-07 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/questions.js<br>src/views/trainer-drills.js | tests/dom/study/study-trainer-drills.dom.test.js<br>tests/fixtures/sample-questions.js<br>tests/unit/app/property-based.test.js<br>tests/unit/content/questions.test.js<br>…외 1개 | DOC-ARC-05<br>DOC-ARC-09 | — |
 | ND-01 | ✅ | 테스트 | DOC-USR-03<br>DOC-USR-04<br>DOC-USR-05<br>DOC-USR-06 | src/views/trainer-drills.js<br>src/views/trainer.js | tests/dom/exams/cosmetic/review-drills-formula.dom.test.js | — | — |
-| RV-01 | ✅ | 테스트 | DOC-DSN-21 | html/views/review.html<br>index.html<br>src/views/quiz.js<br>src/views/trainer.js | tests/dom/exams/cosmetic/review-drills-formula.dom.test.js<br>tests/dom/study/study-review.dom.test.js | — | — |
+| RV-01 | ✅ | 테스트 | DOC-DSN-21 | html/views/review.html<br>index.html<br>src/views/quiz-review.js<br>src/views/quiz.js<br>…외 1개 | tests/dom/exams/cosmetic/review-drills-formula.dom.test.js<br>tests/dom/study/study-review.dom.test.js | — | — |
 | RV-02 | ✅ | 테스트 | DOC-DSN-21 | html/views/review.html<br>index.html | tests/dom/study/study-review.dom.test.js | — | — |
 | RV-03 | ✅ | 테스트 | DOC-DSN-21 | html/views/review.html<br>index.html | tests/dom/study/study-review.dom.test.js | — | — |
 | RV-04 | ✅ | 테스트 | DOC-DSN-21 | html/views/review.html<br>index.html | tests/dom/study/study-review.dom.test.js | — | — |
 | SC-01 | ✅ | 테스트 | — | css/study-calendar.css<br>html/views/calendar.html<br>index.html<br>src/views/study-calendar.js | tests/dom/study/study-calendar.dom.test.js | DOC-ARC-05 | — |
 | SC-02 | ✅ | 테스트 | — | src/views/study-calendar.js | tests/dom/study/study-calendar.dom.test.js | DOC-ARC-05 | — |
-| SC-03 | ✅ | 테스트 | — | src/study-tracker.js | tests/unit/app/utils.test.js<br>tests/unit/engine/study-tracker.test.js | DOC-ARC-05 | — |
+| SC-03 | ✅ | 테스트 | — | src/study-tracker-activity.js<br>src/study-tracker.js | tests/unit/app/utils.test.js<br>tests/unit/engine/study-tracker.test.js | DOC-ARC-05 | — |
 | SC-04 | ✅ | 테스트 | — | html/views/dashboard.html<br>index.html<br>src/views/daily-challenge.js<br>src/views/dashboard.js | tests/dom/study/study-challenge.dom.test.js | — | — |
-| SC-05 | ✅ | 테스트 | — | css/study-calendar.css<br>src/study-tracker.js<br>src/views/study-calendar.js | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
-| SC-06 | ✅ | 테스트 | DOC-DSN-16 | css/study-calendar.css<br>src/study-tracker.js<br>src/views/dashboard.js<br>src/views/study-calendar.js | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
-| SC-07 | ✅ | 테스트 | DOC-DSN-16 | src/study-tracker.js<br>src/views/dashboard.js<br>src/views/study-calendar.js | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
-| SC-08 | ✅ | 테스트 | DOC-DSN-16<br>DOC-DSN-21 | css/study-calendar.css<br>src/study-tracker.js<br>src/views/study-calendar.js | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
-| SC-09 | ✅ | 테스트 | DOC-DSN-21 | src/study-tracker.js<br>src/views/study-calendar.js | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
+| SC-05 | ✅ | 테스트 | — | css/study-calendar.css<br>src/study-tracker-plan.js<br>src/study-tracker.js<br>src/views/study-calendar.js | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
+| SC-06 | ✅ | 테스트 | DOC-DSN-16 | css/study-calendar.css<br>src/study-tracker-adherence.js<br>src/study-tracker.js<br>src/views/dashboard.js<br>…외 1개 | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
+| SC-07 | ✅ | 테스트 | DOC-DSN-16 | src/study-tracker-adherence.js<br>src/study-tracker.js<br>src/views/dashboard.js<br>src/views/study-calendar.js | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
+| SC-08 | ✅ | 테스트 | DOC-DSN-16<br>DOC-DSN-21 | css/study-calendar.css<br>src/study-tracker-alloc.js<br>src/study-tracker.js<br>src/views/study-calendar.js | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
+| SC-09 | ✅ | 테스트 | DOC-DSN-21 | src/study-tracker-activity.js<br>src/study-tracker-adherence.js<br>src/study-tracker-alloc.js<br>src/study-tracker.js<br>…외 1개 | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
 | SC-10 | ✅ | 테스트 | DOC-DSN-21 | css/dashboard.css<br>src/views/dashboard.js | tests/dom/study/study-dashboard.dom.test.js | — | — |
 | SC-11 | ✅ | 테스트 | DOC-DSN-21 | src/views/analysis-view.js | tests/dom/study/study-calendar.dom.test.js<br>tests/dom/study/study-dashboard.dom.test.js | — | — |
-| SC-12 | ✅ | 테스트 | DOC-DSN-21 | src/views/analysis-view.js | tests/unit/engine/study-tracker.test.js | — | — |
-| SC-13 | ✅ | 테스트 | DOC-DSN-21<br>DOC-DSN-32 | — | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
+| SC-12 | ✅ | 테스트 | DOC-DSN-21 | src/study-tracker-alloc.js<br>src/views/analysis-view.js | tests/unit/engine/study-tracker.test.js | — | — |
+| SC-13 | ✅ | 테스트 | DOC-DSN-21<br>DOC-DSN-32 | src/study-tracker-activity.js<br>src/study-tracker-alloc.js | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
 | SC-14 | ✅ | 테스트 | DOC-DSN-32 | — | tests/dom/study/study-dashboard.dom.test.js | — | — |
-| SC-15 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/study-tracker.js<br>src/views/reader-progress.js | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
-| SC-16 | ✅ | 테스트 | — | src/onboarding.js<br>src/views/dashboard.js<br>src/views/study-calendar.js | tests/unit/engine/study-tracker.test.js | — | — |
+| SC-15 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/study-tracker-activity.js<br>src/study-tracker-plan.js<br>src/study-tracker.js<br>…외 1개 | tests/dom/study/study-calendar.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
+| SC-16 | ✅ | 테스트 | — | src/onboarding.js<br>src/study-tracker-plan.js<br>src/views/dashboard.js<br>src/views/study-calendar.js | tests/unit/engine/study-tracker.test.js | — | — |
 
 ## 3.21 UI 모드 전환
 
