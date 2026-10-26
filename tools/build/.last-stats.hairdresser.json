@@ -1,0 +1,81 @@
+{
+  "subjects": {
+    "skin": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/skin/피부학.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "hair": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/hair/모발학.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "cosmetics": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/cosmetics/화장품학.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "hygiene": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/hygiene/공중위생관리학.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "disinfection": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/disinfection/소독학.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "practical": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/practical/미용실무.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {
+    "skin": {
+      "questions": 8
+    },
+    "hair": {
+      "questions": 8
+    },
+    "cosmetics": {
+      "questions": 8
+    },
+    "hygiene": {
+      "questions": 8
+    },
+    "disinfection": {
+      "questions": 8
+    }
+  }
+}

@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03,LP-07
 
-const CACHE_VERSION = 'v20261026-dd4548d';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261026-ea89f72';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passok) — 시험 무관 공유 캐시.
 // 구 접두사(passory-*·cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -204,7 +204,9 @@ const DATA_ASSETS = [
   './data/exams/admagent/registry.js',
   './data/exams/admagent/id_migration.js',
   './data/exams/appraisal/registry.js',
-  './data/exams/appraisal/id_migration.js'
+  './data/exams/appraisal/id_migration.js',
+  './data/exams/hairdresser/registry.js',
+  './data/exams/hairdresser/id_migration.js'
 ];
 
 /** 설치 시 프리캐시할 마크다운 문서 (매뉴얼·요약집 — 오프라인 보장)
@@ -317,6 +319,17 @@ const MD_ASSETS = [
   './content/exams/appraisal/문제은행/2차_평가이론_주관식.md',
   './content/exams/appraisal/문제은행/2차_보상법규_주관식.md',
   './content/exams/appraisal/문제은행/2차_평가실무_주관식.md',
+  './content/exams/hairdresser/교재/skin/피부학.md',
+  './content/exams/hairdresser/교재/hair/모발학.md',
+  './content/exams/hairdresser/교재/cosmetics/화장품학.md',
+  './content/exams/hairdresser/교재/hygiene/공중위생관리학.md',
+  './content/exams/hairdresser/교재/disinfection/소독학.md',
+  './content/exams/hairdresser/교재/practical/미용실무.md',
+  './content/exams/hairdresser/문제은행/과목1_피부학_문제은행.md',
+  './content/exams/hairdresser/문제은행/과목2_모발학_문제은행.md',
+  './content/exams/hairdresser/문제은행/과목3_화장품학_문제은행.md',
+  './content/exams/hairdresser/문제은행/과목4_공중위생관리학_문제은행.md',
+  './content/exams/hairdresser/문제은행/과목5_소독학_문제은행.md',
   // MD_ASSETS:END
 ];
 
