@@ -84,12 +84,15 @@
           // 모달이 아직 안 떴을 수 있으므로 앱 초기화(__APP_INITIALIZED) 전에는 최대 ~30초 대기.
           let attempts = 0;
           function tryReload() {
-            if (document.getElementById('app-confirm-overlay') || document.getElementById('whats-new-overlay')) {
+            attempts++;
+            // 모달 열림은 ~4초까지만 양보 — whats-new는 리로드 후 다시 표시되므로 오래 기다릴 필요가 없다
+            const overlayOpen = document.getElementById('app-confirm-overlay') || document.getElementById('whats-new-overlay');
+            if (overlayOpen && attempts < 8) {
               setTimeout(tryReload, 500);
               return;
             }
-            if (!window.__APP_INITIALIZED && attempts < 60) {
-              attempts++;
+            // __APP_INITIALIZED는 앱 전용 플래그 — 랜딩(정적 페이지)은 즉시 리로드 가능
+            if (!window.__APP_INITIALIZED && !document.getElementById('landing-main') && attempts < 60) {
               setTimeout(tryReload, 500);
               return;
             }

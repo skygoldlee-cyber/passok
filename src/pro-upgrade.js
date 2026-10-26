@@ -40,7 +40,7 @@ const PAYMENT_NOTICE = {
     methods: [
         "'결제 문의'를 눌러 오픈채팅으로 연락주시면 결제 방법(계좌이체·카카오페이)을 안내드립니다",
         '결제 확인 후 24~48시간 내 라이선스 코드를 발송해 드립니다',
-        '받은 코드는 로그인 후 ⚙️ 설정 → 라이선스 코드에서 입력하면 즉시 Pro가 활성화됩니다',
+        '받은 코드는 로그인 후 ⚙️ 설정 → 플랜 안내 · 라이선스 코드에서 입력하면 즉시 Pro가 활성화됩니다',
     ],
     refundNotice: '환불: 코드 미사용 시 결제일로부터 7일 이내 전액 환불 (전자상거래법 청약철회) · 코드 사용 후에는 환불이 제한될 수 있습니다',
     contactLabel: '오픈채팅에서 결제 문의',
@@ -268,7 +268,7 @@ export async function showPlanCompare() {
                 <p class="pro-upgrade-sub"><strong>Pro 전용 혜택</strong> — 결제 도입 시 적용</p>
                 <ul>${proBenefits.join('')}</ul>`;
 
-    _showDialog(`
+    const { overlay, close } = _showDialog(`
         <div class="app-confirm-dialog dialog-card pro-upgrade-dialog" role="alertdialog" aria-modal="true" aria-labelledby="plan-compare-title">
             <h3 id="plan-compare-title">💎 Free / Pro 안내</h3>
             <p>현재는 <strong>무료 체험 기간</strong>으로 Pro 표시 기능도 무료로 이용할 수 있습니다.</p>
@@ -284,10 +284,13 @@ export async function showPlanCompare() {
                 <p class="pro-upgrade-sub">그 외 학습 도구(퀴즈·플래시카드·교재 표준형·검색·사전·캘린더·훈련소·백업)는 <strong>항상 무료</strong>입니다.</p>
             </div>
             <div class="app-confirm-actions">
+                <button class="app-confirm-cancel plan-redeem-link" data-click="showRedeemCode">라이선스 코드 입력</button>
                 <button class="app-confirm-ok">확인</button>
             </div>
         </div>
     `);
+    // 비교 모달을 닫고 코드 입력 다이얼로그로 연결 — 실제 호출은 data-click 위임
+    overlay.querySelector('.plan-redeem-link')?.addEventListener('click', () => close());
 }
 
 // --- Pro 전환 모멘트 넛지 (ROAD-P6) ---

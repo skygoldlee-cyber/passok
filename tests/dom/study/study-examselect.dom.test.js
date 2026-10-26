@@ -1,5 +1,5 @@
 // tests/dom/study-examselect.dom.test.js — 시험 선택 뷰 시나리오
-// @spec ES-01~03,ES-06,ES-07
+// @spec ES-01~03,ES-06,ES-07,ES-09,ES-11
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.2 (Phase 5)
 // 검증: EXAMS_LIST→카드 렌더·현재 시험 표시(H) · 다른 시험 선택→저장·리로드(P)
 //       · 같은 시험 선택→대시보드 복귀(H) · 목록 비어있음(E)
@@ -7,7 +7,7 @@
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 import { loadIndexHtml, el } from '../helpers.js';
-import { renderExamSelect, selectExamAction, summarizeExamProgress, showExamSelect } from '../../../src/views/exam-select.js';
+import { renderExamSelect, selectExamAction, summarizeExamProgress, showExamSelect, resetExamSelection } from '../../../src/views/exam-select.js';
 
 const EXAMS = {
     exams: [
@@ -25,7 +25,8 @@ describe('시험 선택 — 목록·전환·복귀', () => {
         vi.clearAllMocks();
     });
 
-    it('목록 렌더 → 시험 카드 3장 + 현재(기본) 시험 표시', () => {
+    it('목록 렌더 → 시험 카드 3장 + 명시 선택 시험만 현재 표시', () => {
+        localStorage.setItem('current_exam', 'cosmetic');
         renderExamSelect();
 
         const cards = el('exam-select-list').querySelectorAll('.exam-select-card');
@@ -34,6 +35,32 @@ describe('시험 선택 — 목록·전환·복귀', () => {
         expect(cards[0].classList.contains('current')).toBe(true);
         expect(cards[0].textContent).toContain('현재 시험');
         expect(cards[1].classList.contains('current')).toBe(false);
+    });
+
+    it('미선택 상태 → 어떤 카드도 현재로 표시되지 않음 (기본 시험 폴백 금지)', () => {
+        renderExamSelect();
+
+        const cards = el('exam-select-list').querySelectorAll('.exam-select-card');
+        expect(cards.length).toBe(3);
+        cards.forEach(c => {
+            expect(c.classList.contains('current')).toBe(false);
+            expect(c.textContent).not.toContain('현재 시험');
+        });
+    });
+
+    it('선택 해제 → current_exam 제거 + 모든 카드 비선택 표시', () => {
+        localStorage.setItem('current_exam', 'cosmetic');
+        renderExamSelect();
+        expect(el('exam-select-list').querySelector('.exam-select-card.current')).not.toBeNull();
+
+        resetExamSelection();
+
+        expect(localStorage.getItem('current_exam')).toBeNull();
+        expect(el('exam-select-list').querySelector('.exam-select-card.current')).toBeNull();
+        // 브랜딩도 플랫폼 브랜드로 복귀 — 선택 시험명 잔류 방지
+        const logoMain = document.querySelector('.logo-text h1');
+        if (logoMain) expect(logoMain.textContent).toBe('PassOK');
+        expect(document.title).toBe('PassOK');
     });
 
     it('다른 시험 선택 → current_exam 저장 + 리로드 트리거(P)', () => {
@@ -48,14 +75,16 @@ describe('시험 선택 — 목록·전환·복귀', () => {
         expect(el('dashboard-view').classList.contains('active')).toBe(false);
     });
 
-    it('미선택 상태에서 기본 시험 선택 → current_exam 저장 (재진입 피커 생략)', () => {
+    it('미선택 상태에서 기본 시험 선택 → current_exam 저장 + 리로드 (브랜딩 갱신)', () => {
         // 회귀: current_exam 미설정 시 getActiveExamId()가 기본 시험으로 폴백해
         // "같은 시험"으로 오인 → 저장 생략 → 매번 피커가 뜨던 버그
         renderExamSelect();
+        el('dashboard-view').classList.remove('active');
         selectExamAction('cosmetic');
 
         expect(localStorage.getItem('current_exam')).toBe('cosmetic');
-        expect(el('dashboard-view').classList.contains('active')).toBe(true);
+        // 첫 명시 선택은 브랜딩·타이틀 전체 갱신을 위해 리로드 — 뷰 전환은 리로드 후 부팅이 담당
+        expect(el('dashboard-view').classList.contains('active')).toBe(false);
     });
 
     it('같은 시험 선택 → 리로드 없이 대시보드로 복귀 (H)', () => {

@@ -123,6 +123,16 @@ const finished = runSteps(execSteps, {
 finished.then((ran) => {
 const results = ran.map((r) => ({ step: r.step, label: `[${r.step.layer}] ${r.step.desc}`, ok: r.ok, output: r.output, ms: r.ms }));
 
+// 실행 텔레메트리 — 단계별 실행 이력을 JSONL로 누적 (audit:tools의 미실행 단계
+// 감사 입력). 로컬 상태 파일이라 gitignore 대상 — 쓰기 실패는 조용히 무시.
+try {
+  const via = PRESET ? `preset:${PRESET}` : `step:${STEP || '?'}`;
+  const logPath = path.join(ROOT, 'tools', 'state', 'step_runs.jsonl');
+  const lines = results.map((r) =>
+    JSON.stringify({ ts: new Date().toISOString(), via, id: r.step.id, ok: r.ok, ms: r.ms })).join('\n') + '\n';
+  fs.appendFileSync(logPath, lines);
+} catch { /* 텔레메트리 실패는 검증 결과와 무관 */ }
+
 console.log('\n' + '═'.repeat(60));
 console.log(' 검증 리포트');
 console.log('═'.repeat(60));

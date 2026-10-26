@@ -20,7 +20,7 @@ const { validateSubjectData, validateExamData } = require('../../../tools/build/
 const idFactory = require('../../../tools/build/id_factory.js');
 const { computeVersion, stampSwVersion } = require('../../../tools/build/stamp_sw_version.js');
 const textbookPlugin = require('../../../tools/build/plugins/textbook.plugin.js');
-const { getExamTargets } = require('../../../tools/build/exam_targets.js');
+const { getExamTargets, removeOrphanBundles } = require('../../../tools/build/exam_targets.js');
 
 const MANIFEST = join(ROOT, 'content', 'exams', 'cosmetic', 'manifest.json');
 
@@ -191,6 +191,29 @@ test('BP-07: 동일 버전 재스탬프는 no-op이다', () => {
   writeFileSync(swPath, "const CACHE_VERSION = 'v9-x';\n");
   const r = stampSwVersion({ swPath, version: 'v9-x', silent: true });
   assert.equal(r.changed, false);
+});
+
+// ---------- BP-01 보조: 고아 번들 정리 (manifest 엔트리 제거 시 잔존 생성물 삭제) ----------
+
+test('BP-01: removeOrphanBundles가 미선언 키의 해시 번들만 삭제한다', () => {
+  const dir = tmpDir('orphan-');
+  writeFileSync(join(dir, 'subject1.aaaa1111.js'), 'x');
+  writeFileSync(join(dir, 'subject4.bbbb2222.js'), 'x'); // manifest에서 제거된 키
+  writeFileSync(join(dir, 'notes.txt'), 'x');            // 비번들 파일 — 유지
+  writeFileSync(join(dir, 'subject2.js'), 'x');          // 해시 없는 파일 — 패턴 불일치로 유지
+  const removed = removeOrphanBundles(dir, new Set(['subject1']));
+  assert.deepEqual(removed, ['subject4.bbbb2222.js']);
+  const { readdirSync } = require('fs');
+  assert.deepEqual(readdirSync(dir).sort(),
+    ['notes.txt', 'subject1.aaaa1111.js', 'subject2.js']);
+});
+
+test('BP-01: removeOrphanBundles가 커스텀 패턴(<key>_data.<hash>.js)에도 동작한다', () => {
+  const dir = tmpDir('orphan-k-');
+  writeFileSync(join(dir, 'ingredients_data.aaaa1111.js'), 'x');
+  writeFileSync(join(dir, 'oldkey_data.bbbb2222.js'), 'x');
+  const removed = removeOrphanBundles(dir, new Set(['ingredients']), /^(.+)_data\.[0-9a-f]{8}\.js$/);
+  assert.deepEqual(removed, ['oldkey_data.bbbb2222.js']);
 });
 
 // ---------- BP-08: 콘텐츠 품질 감사 스크립트 ----------

@@ -6,6 +6,7 @@
 export const STORAGE_KEYS = {
   // 플래시카드
   FC_MEMORIZED: 'fc_memorized',
+  SCHEMA_VERSION: 'progress_schema_version', // 진도 데이터 스키마 버전 — 네이티브 이주·형식 변경 시 마이그레이션 판별용 (DOC-DSN-39)
   FC_WEAK: 'fc_weak',
   FC_SPACED_REPETITION: 'fc_spaced_repetition',
   FC_MIGRATED_V2: 'fc_migrated_v2',

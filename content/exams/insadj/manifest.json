@@ -1,259 +1,277 @@
 {
-  "schemaVersion": 1,
-  "contentYear": "2027",
-  "textbookEdition": "2027",
-  "_pilot": "1차 3과목 + 2차 3종별 7과목 파일럿 — 과목당 8문항 골격 투입 상태 (check:onboard 준비도 대상). 정식 전환은 NEW_EXAM_RUNBOOK §승격 기준.",
-  "subjects": [
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
+ "_pilot": "1차 3과목 + 2차 3종별 7과목 파일럿 — 과목당 8문항 골격 투입 상태 (check:onboard 준비도 대상). 정식 전환은 NEW_EXAM_RUNBOOK §승격 기준.",
+ "subjects": [
+  {
+   "key": "contract",
+   "order": 1,
+   "name": "보험계약법(상법 보험편)",
+   "shortName": "보험계약법",
+   "dir": "교재/contract",
+   "chapters": [
     {
-      "key": "contract",
-      "order": 1,
-      "name": "보험계약법(상법 보험편)",
-      "shortName": "보험계약법",
-      "dir": "교재/contract",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "보험계약법 (전체)",
-          "file": "보험계약법.md"
-        }
-      ]
-    },
-    {
-      "key": "act",
-      "order": 2,
-      "name": "보험업법",
-      "shortName": "보험업법",
-      "dir": "교재/act",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "보험업법 (전체)",
-          "file": "보험업법.md"
-        }
-      ]
-    },
-    {
-      "key": "theory",
-      "order": 3,
-      "name": "손해사정이론",
-      "shortName": "손사이론",
-      "dir": "교재/theory",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "손해사정이론 (전체)",
-          "file": "손해사정이론.md"
-        }
-      ]
-    },
-    {
-      "key": "prop",
-      "order": 5,
-      "name": "2차 재물 (회계원리·해상보험·책임화재기술)",
-      "shortName": "2차 재물",
-      "dir": "교재/prop",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "재물 손해사정 (전체)",
-          "file": "재물_손해사정.md"
-        }
-      ]
-    },
-    {
-      "key": "vehicle",
-      "order": 6,
-      "name": "2차 차량 (자동차보험 대물·차손·구조정비)",
-      "shortName": "2차 차량",
-      "dir": "교재/vehicle",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "차량 손해사정 (전체)",
-          "file": "차량_손해사정.md"
-        }
-      ]
-    },
-    {
-      "key": "bodily",
-      "order": 7,
-      "name": "2차 신체 (의학·책임근재보·제3보험·자동차 대인)",
-      "shortName": "2차 신체",
-      "dir": "교재/bodily",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "신체 손해사정 (전체)",
-          "file": "신체_손해사정.md"
-        }
-      ]
+     "key": "full",
+     "title": "보험계약법 (전체)",
+     "file": "보험계약법.md"
     }
-  ],
-  "exams": [
-    {
-      "key": "subject1",
-      "subject": "contract",
-      "part": 1,
-      "title": "보험계약법",
-      "file": "과목1_문제은행.md"
-    },
-    {
-      "key": "subject2",
-      "subject": "act",
-      "part": 2,
-      "title": "보험업법",
-      "file": "과목2_문제은행.md"
-    },
-    {
-      "key": "subject3",
-      "subject": "theory",
-      "part": 3,
-      "title": "손해사정이론",
-      "file": "과목3_문제은행.md"
-    }
-  ],
-  "integratedExam": {
-    "questionsPerSubject": {
-      "contract": 20,
-      "act": 20,
-      "theory": 20
-    },
-    "examTimeMin": 60,
-    "passAverage": 60,
-    "subjectFailBelow": 40
+   ]
   },
-  "written": [
+  {
+   "key": "act",
+   "order": 2,
+   "name": "보험업법",
+   "shortName": "보험업법",
+   "dir": "교재/act",
+   "chapters": [
     {
-      "key": "prop",
-      "title": "2차 재물 주관식 연습",
-      "desc": "회계원리·해상보험·책임화재기술 영역 자체 제작 문항 — 서술·계산 입력 후 모범답안·채점기준 대조 자기채점",
-      "file": "2차_재물_주관식.md"
-    },
-    {
-      "key": "vehicle",
-      "title": "2차 차량 주관식 연습",
-      "desc": "자동차보험 대물·차손·구조정비 영역 자체 제작 문항 — 서술·계산 입력 후 모범답안·채점기준 대조 자기채점",
-      "file": "2차_차량_주관식.md"
-    },
-    {
-      "key": "bodily",
-      "title": "2차 신체 주관식 연습",
-      "desc": "의학·책임근재보·제3보험·자동차 대인 영역 자체 제작 문항 — 서술·계산 입력 후 모범답안·채점기준 대조 자기채점",
-      "file": "2차_신체_주관식.md"
+     "key": "full",
+     "title": "보험업법 (전체)",
+     "file": "보험업법.md"
     }
-  ],
-  "uiText": {
-    "dashboard": {
-      "title": "학습 대시보드",
-      "subtitle": "{year} 시험 합격을 위한 분석 및 스마트 툴"
-    },
-    "flashcard": {
-      "title": "개념 플래시카드",
-      "subtitle": "과목별 핵심 개념을 카드로 뒤집으며 암기"
-    },
-    "quiz": {
-      "title": "기출 및 핵심 퀴즈",
-      "subtitle": "빈칸 채우기형 퀴즈로 실전 완벽 대비"
-    },
-    "review": {
-      "title": "오답 및 중요 복습",
-      "subtitle": "헷갈리거나 어려운 약점 카드 집중 복습"
-    },
-    "trainer": {
-      "title": "훈련소",
-      "subtitle": "법령 수치·보험금 산정 기준 암기 트레이닝 센터"
-    },
-    "exam": {
-      "title": "실전 모의고사",
-      "subtitle": "교재 인용 {totalQuestions}제 문제은행으로 과목별 모의고사"
-    },
-    "analysis": {
-      "title": "학습 진단",
-      "subtitle": "학습 기록을 바탕으로 약점을 분석하여 학습 우선순위를 진단합니다"
-    },
-    "textbook": {
-      "title": "교재검색",
-      "subtitle": "교재 본문과 참조자료를 실시간 키워드로 검색"
-    },
-    "search": {
-      "title": "교재 검색",
-      "subtitle": "교재 본문과 참조자료(법령·약관·기준)를 키워드로 함께 검색합니다.",
-      "placeholder": "검색할 키워드를 입력하세요 (예: 고지의무, 대인배상, 손해사정)"
-    },
-    "textbook-reader": {
-      "title": "교재리더",
-      "subtitle": "과목을 선택하여 교재 본문을 읽기"
-    },
-    "dailyChallenge": {
-      "title": "매일 한 번 플래시카드·퀴즈 5분 압축 세트로 시험 합격 실천 습관을 다집니다."
-    },
-    "authHint": {
-      "title": "Pro 가입 시 학습 진도와 기록이 클라우드와 동기화되어 여러 디바이스 간 상태가 공유됩니다. 로그아웃해도 이 기기의 데이터는 유지됩니다."
-    }
+   ]
   },
-  "synonyms": {
-    "손해사정사": [
-      "손사"
-    ],
-    "손사": [
-      "손해사정사",
-      "손해사정"
-    ],
-    "손해사정협회": [
-      "손사협회"
-    ],
-    "자동차손해배상보장법": [
-      "자배법"
-    ],
-    "자배법": [
-      "자동차손해배상보장법"
-    ],
-    "보험사기방지특별법": [
-      "보사기특별법",
-      "보사기"
-    ],
-    "대인배상": [
-      "대인배상Ⅰ",
-      "대인배상1",
-      "대인"
-    ],
-    "대물배상": [
-      "대물"
-    ],
-    "자기신체사고": [
-      "자손",
-      "자기신체사고담보"
-    ],
-    "자기차량손해": [
-      "자차",
-      "자기차량손해담보"
-    ],
-    "무보험자동차에의한상해": [
-      "무보험차상해",
-      "무보험차"
-    ],
-    "책임보험": [
-      "의무보험"
-    ],
-    "보험종목": [
-      "보종"
-    ],
-    "독립보험대리점": [
-      "GA"
-    ],
-    "보험가액": [
-      "보험가입금액",
-      "가입금액"
-    ],
-    "고지의무": [
-      "사전고지",
-      "고지 의무"
-    ],
-    "통지의무": [
-      "통지 의무"
-    ],
-    "부보": [
-      "보험가입"
-    ]
+  {
+   "key": "theory",
+   "order": 3,
+   "name": "손해사정이론",
+   "shortName": "손사이론",
+   "dir": "교재/theory",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "손해사정이론 (전체)",
+     "file": "손해사정이론.md"
+    }
+   ]
+  },
+  {
+   "key": "prop",
+   "order": 5,
+   "name": "2차 재물 (회계원리·해상보험·책임화재기술)",
+   "shortName": "2차 재물",
+   "dir": "교재/prop",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "재물 손해사정 (전체)",
+     "file": "재물_손해사정.md"
+    }
+   ]
+  },
+  {
+   "key": "vehicle",
+   "order": 6,
+   "name": "2차 차량 (자동차보험 대물·차손·구조정비)",
+   "shortName": "2차 차량",
+   "dir": "교재/vehicle",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "차량 손해사정 (전체)",
+     "file": "차량_손해사정.md"
+    }
+   ]
+  },
+  {
+   "key": "bodily",
+   "order": 7,
+   "name": "2차 신체 (의학·책임근재보·제3보험·자동차 대인)",
+   "shortName": "2차 신체",
+   "dir": "교재/bodily",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "신체 손해사정 (전체)",
+     "file": "신체_손해사정.md"
+    }
+   ]
   }
+ ],
+ "exams": [
+  {
+   "key": "subject1",
+   "subject": "contract",
+   "part": 1,
+   "title": "보험계약법",
+   "file": "과목1_문제은행.md"
+  },
+  {
+   "key": "subject2",
+   "subject": "act",
+   "part": 2,
+   "title": "보험업법",
+   "file": "과목2_문제은행.md"
+  },
+  {
+   "key": "subject3",
+   "subject": "theory",
+   "part": 3,
+   "title": "손해사정이론",
+   "file": "과목3_문제은행.md"
+  }
+ ],
+ "integratedExam": {
+  "questionsPerSubject": {
+   "contract": 20,
+   "act": 20,
+   "theory": 20
+  },
+  "examTimeMin": 60,
+  "passAverage": 60,
+  "subjectFailBelow": 40
+ },
+ "written": [
+  {
+   "key": "prop",
+   "title": "2차 재물 주관식 연습",
+   "desc": "회계원리·해상보험·책임화재기술 영역 자체 제작 문항 — 서술·계산 입력 후 모범답안·채점기준 대조 자기채점",
+   "file": "2차_재물_주관식.md"
+  },
+  {
+   "key": "vehicle",
+   "title": "2차 차량 주관식 연습",
+   "desc": "자동차보험 대물·차손·구조정비 영역 자체 제작 문항 — 서술·계산 입력 후 모범답안·채점기준 대조 자기채점",
+   "file": "2차_차량_주관식.md"
+  },
+  {
+   "key": "bodily",
+   "title": "2차 신체 주관식 연습",
+   "desc": "의학·책임근재보·제3보험·자동차 대인 영역 자체 제작 문항 — 서술·계산 입력 후 모범답안·채점기준 대조 자기채점",
+   "file": "2차_신체_주관식.md"
+  }
+ ],
+ "uiText": {
+  "dashboard": {
+   "title": "학습 대시보드",
+   "subtitle": "{year} 시험 합격을 위한 분석 및 스마트 툴",
+   "nav": "대시보드"
+  },
+  "flashcard": {
+   "title": "개념 플래시카드",
+   "subtitle": "과목별 핵심 개념을 카드로 뒤집으며 암기",
+   "nav": "카드"
+  },
+  "quiz": {
+   "title": "기출 및 핵심 퀴즈",
+   "subtitle": "빈칸 채우기형 퀴즈로 실전 완벽 대비",
+   "nav": "퀴즈"
+  },
+  "review": {
+   "title": "오답 및 중요 복습",
+   "subtitle": "헷갈리거나 어려운 약점 카드 집중 복습",
+   "nav": "복습"
+  },
+  "trainer": {
+   "title": "훈련소",
+   "subtitle": "법령 수치·보험금 산정 기준 암기 트레이닝 센터"
+  },
+  "exam": {
+   "title": "실전 모의고사",
+   "subtitle": "교재 인용 {totalQuestions}제 문제은행으로 과목별 모의고사",
+   "nav": "모의고사"
+  },
+  "analysis": {
+   "title": "학습진단",
+   "subtitle": "학습 기록을 바탕으로 약점을 분석하여 학습 우선순위를 진단합니다",
+   "nav": "학습진단"
+  },
+  "textbook": {
+   "title": "교재검색",
+   "subtitle": "교재 본문과 참조자료를 실시간 키워드로 검색"
+  },
+  "search": {
+   "title": "교재 검색",
+   "subtitle": "교재 본문과 참조자료(법령·약관·기준)를 키워드로 함께 검색합니다.",
+   "placeholder": "검색할 키워드를 입력하세요 (예: 고지의무, 대인배상, 손해사정)"
+  },
+  "textbook-reader": {
+   "title": "교재리더",
+   "subtitle": "과목을 선택하여 교재 본문을 읽기"
+  },
+  "dailyChallenge": {
+   "title": "매일 한 번 플래시카드·퀴즈 5분 압축 세트로 시험 합격 실천 습관을 다집니다."
+  },
+  "authHint": {
+   "title": "Pro 가입 시 학습 진도와 기록이 클라우드와 동기화되어 여러 디바이스 간 상태가 공유됩니다. 로그아웃해도 이 기기의 데이터는 유지됩니다."
+  },
+  "calendar": {
+   "title": "캘린더"
+  },
+  "manual": {
+   "title": "매뉴얼"
+  },
+  "studyTools": {
+   "title": "학습도구"
+  },
+  "formula-manual": {
+   "title": "실무매뉴얼"
+  }
+ },
+ "synonyms": {
+  "손해사정사": [
+   "손사"
+  ],
+  "손사": [
+   "손해사정사",
+   "손해사정"
+  ],
+  "손해사정협회": [
+   "손사협회"
+  ],
+  "자동차손해배상보장법": [
+   "자배법"
+  ],
+  "자배법": [
+   "자동차손해배상보장법"
+  ],
+  "보험사기방지특별법": [
+   "보사기특별법",
+   "보사기"
+  ],
+  "대인배상": [
+   "대인배상Ⅰ",
+   "대인배상1",
+   "대인"
+  ],
+  "대물배상": [
+   "대물"
+  ],
+  "자기신체사고": [
+   "자손",
+   "자기신체사고담보"
+  ],
+  "자기차량손해": [
+   "자차",
+   "자기차량손해담보"
+  ],
+  "무보험자동차에의한상해": [
+   "무보험차상해",
+   "무보험차"
+  ],
+  "책임보험": [
+   "의무보험"
+  ],
+  "보험종목": [
+   "보종"
+  ],
+  "독립보험대리점": [
+   "GA"
+  ],
+  "보험가액": [
+   "보험가입금액",
+   "가입금액"
+  ],
+  "고지의무": [
+   "사전고지",
+   "고지 의무"
+  ],
+  "통지의무": [
+   "통지 의무"
+  ],
+  "부보": [
+   "보험가입"
+  ]
+ }
 }

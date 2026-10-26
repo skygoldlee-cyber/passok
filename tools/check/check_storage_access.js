@@ -35,6 +35,8 @@ const ALLOWED_FILES = new Set([
   'pwa-manifest.js',
   'pwa-install-capture.js',
   'exam-data-boot.js',
+  'landing-redirect.js', // 부트 이전 동기 판정 — storage.js(ESM) 로드 불가 시점
+  'landing.js',          // 랜딩 전용 — seen 플래그 1개만 기록, 앱 스토리지 스코프 불요
 ]);
 
 function* walk(dir) {

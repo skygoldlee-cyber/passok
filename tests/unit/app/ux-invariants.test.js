@@ -1,5 +1,5 @@
 // tests/unit/ux-invariants.test.js — UI/UX 설계 요구사항 (정적 검증)
-// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05
+// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,LP-06,LP-10
 // CSS 규칙·마크업 구조·JS 구현 패턴이 설계 요구사항을 유지하는지 고정한다.
 
 import { test } from 'node:test';
@@ -76,14 +76,55 @@ test('UX-SET-03: 설정 항목의 최소 터치 타겟이 44px이다', () => {
 });
 
 test('UX-SET-04: 버전 표기가 설정 패널 하단에 있다', () => {
-  assert.ok(indexHtml.includes('id="settings-version"'), '설정 패널 버전 스팬');
+  assert.ok(indexHtml.includes('id="settings-version"'), '버전 스팬 존재');
+  const helpIdx = indexHtml.indexOf('id="help-panel"');
+  const verIdx = indexHtml.indexOf('id="settings-version"');
+  assert.ok(helpIdx > -1 && verIdx > helpIdx, '버전 표기는 도움말 패널 소속');
   assert.ok(appJs.includes('settings-version'), '버전 값 주입 코드');
 });
 
-test('UX-SET-05: 항목 선택·외부 클릭·Escape로 설정 패널이 닫힌다', () => {
-  assert.ok(/settings-item.*closeSettings|closeSettings\(\)/.test(listeners), '항목 클릭 시 닫힘');
+test('UX-SET-05: 항목 선택·외부 클릭·Escape로 드롭다운 메뉴가 닫힌다', () => {
+  assert.ok(/settings-item[\s\S]*closeAllMenus/.test(listeners), '항목 클릭 시 닫힘');
   assert.ok(/Escape/.test(listeners), 'Escape 닫힘');
-  assert.ok(/settings-menu/.test(listeners) && /closeSettings/.test(listeners), '외부 클릭 닫힘');
+  assert.ok(/settings-menu/.test(listeners) && /closeAllMenus/.test(listeners), '외부 클릭 닫힘');
+});
+
+test('UX-SET-07: 도움말 메뉴가 설정과 분리된 드롭다운으로 존재한다', () => {
+  assert.ok(indexHtml.includes('id="help-toggle-btn"'), '도움말 토글 버튼');
+  assert.ok(/bindDropMenu\('help-toggle-btn',\s*'help-panel'/.test(listeners), '도움말 패널 바인딩');
+  const settingsIdx = indexHtml.indexOf('id="settings-panel"');
+  const settingsEnd = indexHtml.indexOf('id="import-file-input"');
+  const helpIdx = indexHtml.indexOf('id="help-panel"');
+  assert.ok(settingsIdx > -1 && helpIdx > settingsEnd, '설정 패널 뒤에 도움말 패널');
+  // 도움말성 항목은 도움말 패널 소속이며 설정 패널 구간에는 남지 않는다
+  for (const id of ['onboarding-btn', 'service-intro-btn', 'shortcut-help-btn', 'whats-new-btn', 'feedback-btn', 'community-btn']) {
+    const idx = indexHtml.indexOf(`id="${id}"`);
+    assert.ok(idx > helpIdx, `${id}는 도움말 패널 소속`);
+    assert.ok(!(idx > settingsIdx && idx < settingsEnd), `${id}는 설정 패널 밖`);
+  }
+  const statsIdx = indexHtml.indexOf('data-click="showUsageStats"');
+  assert.ok(statsIdx > helpIdx, '내 사용 통계는 도움말 패널 소속');
+});
+
+test('LP-06: 랜딩 페이지 진입점이 도움말 패널과 시험 선택 뷰에 존재한다', () => {
+  assert.ok(indexHtml.includes('id="service-intro-btn"'), '도움말 패널 서비스 소개 버튼');
+  assert.ok(/service-intro-btn[\s\S]*window\.open\(['"]landing\.html/.test(listeners), '새 탭 오픈 바인딩');
+  const examSelect = read('html/views/exam-select.html');
+  assert.ok(examSelect.includes('href="landing.html"'), '시험 선택 뷰 서비스 소개 링크');
+});
+
+test('진도 데이터 스키마 버전 마커가 saveProgress에서 기록된다 (DOC-DSN-39)', () => {
+  const keys = read('src/storage-keys.js');
+  assert.ok(/SCHEMA_VERSION:\s*'progress_schema_version'/.test(keys), '키 등록');
+  assert.ok(read('src/state.js').includes("STORAGE_KEYS.SCHEMA_VERSION"), 'saveProgress 기록');
+});
+
+test('LP-10: 신규 방문자 리다이렉트 스크립트가 index.html에 로드되고 조건을 갖는다', () => {
+  const redirect = read('src/landing-redirect.js');
+  assert.ok(indexHtml.includes('src="src/landing-redirect.js"'), '템플릿 로드');
+  for (const cond of ['localStorage.length', 'standalone', 'navigator.webdriver', 'location.hash', 'location.replace']) {
+    assert.ok(redirect.includes(cond), `리다이렉트 조건: ${cond}`);
+  }
 });
 
 // ---------- UX-FB: 피드백·알림 ----------
@@ -150,6 +191,14 @@ test('UX-PWA-04: 설치 버튼 표시가 beforeinstallprompt 캡처 여부로 �
   assert.ok(/installBtn\.classList\.add\('is-hidden'\)/.test(pwaInstall), '비대상 상태 숨김');
   // 설치 완료(appinstalled) 후 자동 숨김
   assert.ok(/appinstalled|is-hidden/.test(capture) || /appinstalled/.test(pwaInstall), '설치 후 숨김 처리');
+});
+
+test('UX-PWA-06: SW 업데이트 리로드가 랜딩·모달 상황에서도 정체하지 않는다', () => {
+  const reloadBlock = capture.match(/function tryReload[\s\S]{0,900}/);
+  assert.ok(reloadBlock, 'tryReload 존재');
+  assert.ok(reloadBlock[0].includes('landing-main'), '랜딩은 __APP_INITIALIZED 없이 리로드');
+  const overlayWait = reloadBlock[0].match(/attempts < (\d+)/);
+  assert.ok(overlayWait && Number(overlayWait[1]) <= 10, '모달 대기 상한 ~5초 이내 (whats-new는 리로드 후 재표시)');
 });
 
 test('UX-PWA-05: 앱 셸 높이가 JS 실측 --app-height를 사용한다', () => {

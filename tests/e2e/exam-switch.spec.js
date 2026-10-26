@@ -1,5 +1,5 @@
 // tests/e2e/exam-switch.spec.js — 멀티시험 전환·도메인 격리 검증
-// @spec ES-03,ES-05,DA-13,UX-PWA-07
+// @spec ES-03,ES-05,ES-10,DA-13,UX-PWA-07
 // 비기본 시험(lossadj, comingSoon) 부팅을 실브라우저로 증명한다.
 // comingSoon 카드는 UI 클릭 전환이 막혀 있으므로 current_exam을 시드해
 // "다른 시험으로 부팅" 경로를 검증한다 — 시험별 브랜딩·기능 게이팅·
@@ -132,10 +132,12 @@ test.describe('도메인 경로 규약 — 활성 시험 id로 뷰 모듈·마�
         const requests = [];
         page.on('request', r => { if (r.url().includes('/html/exams/')) requests.push(r.url()); });
         // 온보딩 오버레이 스킵 — cosmetic 기본 시험의 온보딩 완료를 시드
+        // 시험 스코프 기능은 명시 선택 상태가 필요 (미선택 진입 차단 계약)
         await page.addInitScript(() => {
             localStorage.setItem('onboarding_seen_v1', '1');
             localStorage.setItem('telemetry_notice_shown', '1');
             localStorage.setItem('cosmetic:onboarding_seen_v1', '1');
+            localStorage.setItem('current_exam', 'cosmetic');
         });
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });

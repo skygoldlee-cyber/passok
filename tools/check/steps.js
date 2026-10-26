@@ -38,6 +38,7 @@ function npmStep(id, script, layer, desc, opts = {}) {
 const STEP_LINT = npmStep('lint', 'lint', '품질', 'ESLint — 에러 0 필수', { prio: 'p0' });
 const STEP_TYPES = npmStep('types', 'check:types', '품질', 'tsc --noEmit (jsconfig checkJs — JSDoc 타입 진단)', { prio: 'p0' });
 const STEP_HTML = nodeStep('html', 'tools/build/build_html.js', '빌드', 'index.html 조립 신선도 (파셜 편집 시 build:html 필요)', { args: ['--check'] });
+const STEP_LANDING = nodeStep('landing', 'tools/build/build_landing.js', '빌드', 'landing.html 조립 신선도 (템플릿·exams.json 편집 시 build:landing 필요)', { args: ['--check'] });
 const STEP_DOMAINMAP = npmStep('domainmap', 'check:domainmap', '분류', '파일 계층 분류 강제 (domain-map.json)', { prio: 'p0' });
 const STEP_VENDOR = npmStep('vendor', 'check:vendor', '자산', 'vendor 매니페스트 ↔ 파일 해시·버전 정합 (BP-13, 무단 교체·미등록 파일 차단)', { prio: 'p0' });
 const STEP_UITEXT = npmStep('uitext', 'check:uitext', '문서', 'UI 텍스트 커버리지 (data-uitext ↔ manifest.uiText)');
@@ -121,6 +122,8 @@ const CI_STEPS = [
   npmStep('ci:mobilesafe', 'check:mobilesafe', '규약', '모바일 잘림 규약 (다이얼로그·버튼 행 줄바꿈)', { prio: 'p0' }),
   npmStep('ci:escape', 'check:escape', '규약', 'HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간)', { diffScoped: true, prio: 'p0' }),
   npmStep('ci:uistyle', 'check:uistyle', '규약', 'UI 스타일 규약 — 인라인 style·JS display 조작·인라인 핸들러·네이티브 다이얼로그 금지', { diffScoped: true, prio: 'p0' }),
+  npmStep('ci:zlayer', 'check:zlayer', '규약', 'z-index 계층 계약 — 앱 크롬 대역 보호·금지 대역 차단 (UX-SET-06)', { diffScoped: true, prio: 'p0' }),
+  npmStep('ci:filenames', 'check:filenames', '규약', '파일명 대소문자 규약 — 영역별 kebab/snake/SCREAMING 패턴, 신규 위반 차단 (CODE_CONVENTIONS §2.1)', { prio: 'p0' }),
   nodeStep('ci:docsync', 'tools/check/check_doc_sync.js', '문서', '소스 변경 시 문서 갱신 강제', { args: ['--ref', 'origin/main'] }),
   nodeStep('ci:testfirst', 'tools/check/check_test_first.js', '테스트', '로직 변경 시 테스트 동반 강제', { args: ['--ref', 'origin/main'], prio: 'p0' }),
   npmStep('ci:specrefs', 'check:specrefs', '추적', 'SPEC↔@spec 스테일 참조 + 테스트 갭 기준선', { prio: 'p0' }),
@@ -133,6 +136,7 @@ const CI_STEPS = [
   npmStep('ci:parser', 'check:parser', '파서', '빌드 파서 ↔ 런타임 파서 등가성', { prio: 'p0' }),
   npmStep('ci:perf', 'check:perf', '성능', 'SHELL_ASSETS 크기 예산 상한', { prio: 'p0' }),
   nodeStep('ci:studyq', 'tools/check/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'], prio: 'p2' }),
+  nodeStep('ci:diffcov', 'tools/check/check_diff_coverage.js', '테스트', '변경 라인 차등 커버리지 — diff 헝크 브랜치 ≥80%·신규 ≥85% (리포트 부재 시 스킵)', { diffScoped: true, prio: 'p0' }),
 ];
 
 // ── 참조자료 묶음 (check:refs → refs 프리셋) ──────────────────────────
@@ -153,6 +157,7 @@ function pickContent(id) {
 }
 const FRESH_STEPS = [
   STEP_HTML,
+  STEP_LANDING,
   pickContent('content:trace'),
   pickContent('content:datafresh'),
   pickContent('content:drillfresh'),
@@ -179,13 +184,14 @@ const AUDIT_STEPS = [
   npmStep('audit:adlint', 'check:adlint', '감사', '광고 문구 사전 커버리지 감사 (FO-68)', { prio: 'p2' }),
   npmStep('audit:lawurls', 'check:lawurls', '감사', 'law.go.kr 라이브 링크 검증 (외부 드리프트 — 네트워크 필요)', { prio: 'p2' }),
   nodeStep('audit:onboard', 'tools/check/check_exam_onboard.js', '감사', '시험 팩 온보딩·승격 진단 (comingSoon↔콘텐츠 정합·필수 선언·선택 자산)', { prio: 'p2' }),
+  nodeStep('audit:tools', 'tools/check/audit_tool_usage.js', '감사', 'tools/ 도달성·죽은 단계 감사 — 진입점→import 그래프 도달 불가 파일·프리셋 미소속 단계', { prio: 'p2' }),
 ];
 
 // ── 실패 복구 안내 (run.js 요약의 근본원인 그룹핑) ─────────────────────
 // DERIVED_IDS: `build:derived` 일괄 재생성으로 해결되는 신선도 계열 단계.
 // 파생물 미재생성이라는 같은 원인이 여러 단계 실패로 중복 보고될 때 묶어서 안내.
 const DERIVED_IDS = new Set([
-  'html', 'ci:html', 'content:trace', 'ci:trace',
+  'html', 'ci:html', 'landing', 'content:trace', 'ci:trace',
   'content:datafresh', 'content:drillfresh', 'content:docbundles',
 ]);
 // 개별 복구 힌트 — derived 묶음에 속하지 않는 재생성·스탬프 계열
@@ -212,7 +218,7 @@ const PRESETS = {
   content: (opts) => contentSteps(opts),
   docs: () => DOCS_STEPS.slice(),
   ci: () => CI_STEPS.slice(),
-  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_HTML, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_VENDOR, STEP_ENV, STEP_UITEXT, STEP_STUDYQ, ...contentSteps(opts)],
+  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_HTML, STEP_LANDING, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_VENDOR, STEP_ENV, STEP_UITEXT, STEP_STUDYQ, ...contentSteps(opts)],
   refs: () => REFS_STEPS.slice(),
   freshness: () => FRESH_STEPS.slice(),
   audit: () => AUDIT_STEPS.slice(),
@@ -227,7 +233,7 @@ function resolveSteps(preset, opts = {}) {
 /** --step 조회용 통합 레지스트리 (프리셋 간 id 중복은 같은 명령이므로 첫 등록 유지) */
 function allSteps() {
   const map = new Map();
-  for (const s of [STEP_HTML, ...contentSteps({}), BUILD_STEP, ...DOCS_STEPS, ...CI_STEPS, ...REFS_STEPS]) {
+  for (const s of [STEP_HTML, STEP_LANDING, ...contentSteps({}), BUILD_STEP, ...DOCS_STEPS, ...CI_STEPS, ...REFS_STEPS]) {
     if (!map.has(s.id)) map.set(s.id, s);
   }
   return [...map.values()];

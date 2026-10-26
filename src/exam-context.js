@@ -59,6 +59,13 @@ export function getCurrentExamId() {
     }
 }
 
+/** 명시 시험 선택 해제 — 미선택 상태로 되돌림. 다음 부팅부터 시험 선택 뷰가 초기화면 */
+export function clearCurrentExam() {
+    try {
+        localStorage.removeItem(CURRENT_EXAM_KEY);
+    } catch (e) { /* noop */ }
+}
+
 /**
  * 활성 시험 엔트리 해석.
  * 우선순위: 선택된 시험 → default 플래그 → 목록 첫 항목 → null(레지스트리 없음).
@@ -107,11 +114,17 @@ export function selectExam(id) {
     const exam = exams.find(e => e.id === id);
     if (!exam) return false;
     if (getActiveExamId() === id) {
-        // 같은 시험: 리로드 불필요. 단, 미선택 상태에서 기본 시험을 고른 경우도
-        // current_exam을 저장해야 한다 — 저장 생략 시 매번 피커가 뜨는 회귀.
+        // 같은 시험: 원칙적으로 리로드 불필요. 단, 미선택 상태의 첫 명시 선택은
+        // 이미 비선택 브랜드로 그려진 셸을 갱신하기 위해 리로드한다 —
+        // 저장 생략 시 매번 피커가 뜨는 회귀도 함께 방지.
+        const hadChoice = !!getCurrentExamId();
         try {
             localStorage.setItem(CURRENT_EXAM_KEY, id);
         } catch (e) { /* noop */ }
+        if (!hadChoice) {
+            try { location.reload(); } catch (e) { /* noop */ }
+            return true;
+        }
         return false;
     }
     try {

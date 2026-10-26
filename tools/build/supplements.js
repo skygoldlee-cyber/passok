@@ -11,6 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { parseExamFile } = require('./plugins/exams.plugin');
+const { removeOrphanBundles } = require('./exam_targets.js');
 const { createRequire } = require('module');
 const { OPTION_INDICATORS } = createRequire(__filename)('../../src/utils.js');
 
@@ -174,6 +175,11 @@ function buildSupplements(manifest, rawCounts, ctx) {
     generated[key] = { cards: cards.length, quizzes: quizzes.length };
     console.log(`- Supplement ${key}: cards +${cards.length}, quizzes +${quizzes.length} (목표 ${tCards}/${tQuizzes})`);
   });
+
+  // 잔존 번들 정리 — manifest에서 제거된 과목이거나 이번 산출에서 보충이
+  // 필요 없어진 과목(목표 하향·원본 증가)의 이전 파일은 registry가 참조하지 않으므로 삭제
+  removeOrphanBundles(outDir, new Set(Object.keys(files)), /^(.+)\.js$/)
+    .forEach(f => console.log(`- Supplement 고아 번들 삭제: ${f}`));
 
   // 목표를 채우지 못하게 된 과목은 없는지 로그 (문제은행 풀 부족 등)
   keys.forEach((key, i) => {

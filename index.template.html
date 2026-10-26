@@ -29,6 +29,8 @@
     <!-- 페인트 전 테마 적용(FOUC 방지). 프로덕션 CSP(script-src 'self')가 인라인 스크립트를
          차단하므로 외부 self-호스팅 파일로 로드한다. (동일 코드가 src/theme-init.js에 있음) -->
     <script src="src/theme-init.js"></script>
+    <!-- 신규 방문자(저장 키 없음·비PWA·딥링크 아님)는 서비스 소개 랜딩으로 안내 (LP-10) -->
+    <script src="src/landing-redirect.js"></script>
     <!-- PWA: beforeinstallprompt 조기 캡처 (module 스크립트보다 먼저 실행) -->
     <script src="src/pwa/pwa-install-capture.js"></script>
 </head>
@@ -61,36 +63,36 @@
                 </button>
                 <div class="nav-group-label nav-study-only">학습</div>
                 <button class="nav-item nav-study-only active" data-target="dashboard-view">
-                    <i class="fa-solid fa-chart-pie" aria-hidden="true"></i> 대시보드
+                    <i class="fa-solid fa-chart-pie" aria-hidden="true"></i> <span data-uitext="dashboard">대시보드</span>
                 </button>
                 <button class="nav-item nav-study-only" data-target="analysis-view">
-                    <i class="fa-solid fa-bullseye" aria-hidden="true"></i> 학습 진단 <span class="pro-badge" data-pro-feature="personal_analysis">PRO</span>
+                    <i class="fa-solid fa-bullseye" aria-hidden="true"></i> <span data-uitext="analysis">학습진단</span> <span class="pro-badge" data-pro-feature="personal_analysis">PRO</span>
                 </button>
                 <button class="nav-item nav-study-only" data-target="flashcard-view">
-                    <i class="fa-solid fa-layer-group" aria-hidden="true"></i> 플래시카드
+                    <i class="fa-solid fa-layer-group" aria-hidden="true"></i> <span data-uitext="flashcard">플래시카드</span>
                 </button>
                 <button class="nav-item nav-study-only" data-target="quiz-view">
-                    <i class="fa-solid fa-circle-question" aria-hidden="true"></i> 기출 퀴즈
+                    <i class="fa-solid fa-circle-question" aria-hidden="true"></i> <span data-uitext="quiz">기출 퀴즈</span>
                 </button>
                 <div class="nav-group-label nav-study-only">훈련 · 평가</div>
                 <button class="nav-item nav-study-only" data-target="trainer-view">
-                    <i class="fa-solid fa-dumbbell" aria-hidden="true"></i> 훈련소
+                    <i class="fa-solid fa-dumbbell" aria-hidden="true"></i> <span data-uitext="trainer">훈련소</span>
                 </button>
                 <button class="nav-item nav-study-only" data-target="review-view">
-                    <i class="fa-solid fa-star" aria-hidden="true"></i> 오답/중요 복습
+                    <i class="fa-solid fa-star" aria-hidden="true"></i> <span data-uitext="review">오답/중요 복습</span>
                 </button>
                 <button class="nav-item nav-study-only" data-target="exam-view">
-                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i> 실전 모의고사 <span class="pro-badge" data-pro-feature="mock_exam">PRO</span>
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i> <span data-uitext="exam">실전 모의고사</span> <span class="pro-badge" data-pro-feature="mock_exam">PRO</span>
                 </button>
                 <div class="nav-group-label">자료 · 도구</div>
                 <button class="nav-item nav-study-only" data-target="textbook-reader-view">
-                    <i class="fa-solid fa-book-open" aria-hidden="true"></i> 교재리더
+                    <i class="fa-solid fa-book-open" aria-hidden="true"></i> <span data-uitext="textbook-reader">교재리더</span>
                 </button>
                 <button class="nav-item nav-study-only" data-target="textbook-view">
-                    <i class="fa-solid fa-book" aria-hidden="true"></i> 교재검색
+                    <i class="fa-solid fa-book" aria-hidden="true"></i> <span data-uitext="textbook">교재검색</span>
                 </button>
                 <button class="nav-item" data-target="dictionary-view" data-feature="dictionary">
-                    <i class="fa-solid fa-book-open" aria-hidden="true"></i> <span data-uitext="dictionary">성분 사전</span>
+                    <i class="fa-solid fa-book-open" aria-hidden="true"></i> <span data-uitext="dictionary:nav">성분사전</span>
                 </button>
                 <button class="nav-item nav-study-only" data-target="calendar-view">
                     <i class="fa-solid fa-calendar-check" aria-hidden="true"></i> 학습 캘린더
@@ -100,7 +102,7 @@
                     <i class="fa-solid fa-flask" aria-hidden="true"></i> 실무 매뉴얼
                 </button>
                 <button class="nav-item nav-item-practice" data-target="formula-view" data-feature="formula">
-                    <i class="fa-solid fa-flask-vial" aria-hidden="true"></i> 실무 작업실
+                    <i class="fa-solid fa-flask-vial" aria-hidden="true"></i> <span data-uitext="formula:nav">실무도구</span>
                 </button>
             </nav>
             <div class="sidebar-footer">
@@ -137,7 +139,7 @@
                     <button id="pwa-install-btn" class="btn btn-primary" aria-label="앱 설치">
                         <i class="fa-solid fa-download" aria-hidden="true"></i> <span class="btn-text">앱 설치</span>
                     </button>
-                    <!-- 설정 메뉴: 백업/복원·초기화·시험 전환 등 관리 기능 통합 -->
+                    <!-- 설정 메뉴: 계정·데이터·보기·앱 관리 기능 -->
                     <div class="settings-menu">
                         <button id="settings-toggle-btn" class="btn btn-secondary" title="설정 및 데이터 관리" aria-label="설정" aria-expanded="false" aria-haspopup="true" aria-controls="settings-panel">
                             <i class="fa-solid fa-gear" aria-hidden="true"></i>
@@ -148,15 +150,9 @@
                             <button type="button" class="settings-item" data-click="openAuthModal">
                                 <i class="fa-solid fa-user" aria-hidden="true"></i> <span id="auth-menu-label">계정 / 로그인</span>
                             </button>
-                            <button type="button" class="settings-item" data-click="showUsageStats" title="이 기기의 기능 사용 횟수·학습 활동 요약 보기">
-                                <i class="fa-solid fa-chart-simple" aria-hidden="true"></i> 내 사용 통계
-                            </button>
-                            <button type="button" class="settings-item" data-click="showPlanCompare" title="Free와 Pro의 기능 차이·혜택 비교 보기">
-                                <i class="fa-solid fa-gem" aria-hidden="true"></i> 플랜 안내 (Free/Pro)
-                            </button>
-                            <!-- 라이선스 코드 활성화 (PAY-01) — 로그인 후 redeem_code RPC로 plan='pro' 갱신 -->
-                            <button type="button" class="settings-item" data-click="showRedeemCode" title="구매 후 발급받은 Pro 활성화 코드 입력 — 로그인 필요">
-                                <i class="fa-solid fa-key" aria-hidden="true"></i> 라이선스 코드
+                            <!-- 플랜 안내 + 라이선스 코드 입력은 플랜 비교 모달에서 함께 제공 (PAY-01) -->
+                            <button type="button" class="settings-item" data-click="showPlanCompare" title="Free와 Pro의 기능 차이·혜택 비교 보기 — 모달에서 라이선스 코드 입력 가능">
+                                <i class="fa-solid fa-gem" aria-hidden="true"></i> 플랜 안내 · 라이선스 코드
                             </button>
                             <!-- 텔레메트리 opt-out (UX-MET-06, ADR-0019) — 거부 시 전송만 차단, 기능 제한 없음 -->
                             <button type="button" class="settings-item" data-click="toggleTelemetry" title="익명 사용 통계 수집 허용 여부 — 끄면 이 기기에서 통계 전송이 중단됩니다 (기능 제한 없음)">
@@ -192,14 +188,33 @@
                             <button id="reset-progress-btn" class="settings-item settings-item-danger" title="학습 진도·통계를 모두 삭제 (복구 불가)">
                                 <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> 진도 초기화
                             </button>
-                            <button id="whats-new-btn" class="settings-item" title="최근 업데이트 변경 내용 보기">
-                                <i class="fa-solid fa-sparkles" aria-hidden="true"></i> 변경 이력
-                            </button>
+                        </div>
+                        <input type="file" id="import-file-input" class="is-hidden" accept=".json">
+                    </div>
+                    <!-- 도움말 메뉴: 안내·활동 통계·의견/커뮤니티 채널 -->
+                    <div class="settings-menu">
+                        <button id="help-toggle-btn" class="btn btn-secondary" title="도움말 · 정보" aria-label="도움말" aria-expanded="false" aria-haspopup="true" aria-controls="help-panel">
+                            <i class="fa-solid fa-circle-question" aria-hidden="true"></i>
+                        </button>
+                        <div id="help-panel" class="settings-panel is-hidden">
+                            <p class="settings-group-label">안내</p>
                             <button id="onboarding-btn" class="settings-item" title="시작 설정(시험일·목표) 다시 하기">
                                 <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> 시작 안내
                             </button>
+                            <!-- 서비스 소개 랜딩 페이지 — 새 탭으로 열기 (LP-06) -->
+                            <button id="service-intro-btn" class="settings-item" title="PassOK 서비스 소개 페이지 — 새 탭으로 열기">
+                                <i class="fa-solid fa-house" aria-hidden="true"></i> 서비스 소개
+                            </button>
                             <button id="shortcut-help-btn" class="settings-item" title="키보드 단축키 목록 보기 (? 키로도 열림)">
                                 <i class="fa-solid fa-keyboard" aria-hidden="true"></i> 단축키
+                            </button>
+                            <button id="whats-new-btn" class="settings-item" title="최근 업데이트 변경 내용 보기">
+                                <i class="fa-solid fa-sparkles" aria-hidden="true"></i> 변경 이력
+                            </button>
+                            <div class="settings-divider"></div>
+                            <p class="settings-group-label">활동 · 소통</p>
+                            <button type="button" class="settings-item" data-click="showUsageStats" title="이 기기의 기능 사용 횟수·학습 활동 요약 보기">
+                                <i class="fa-solid fa-chart-simple" aria-hidden="true"></i> 내 사용 통계
                             </button>
                             <button id="feedback-btn" class="settings-item" title="칭찬·개선·오류·기능 제안 보내기">
                                 <i class="fa-solid fa-comment-dots" aria-hidden="true"></i> 의견 보내기
@@ -209,9 +224,9 @@
                                 <i class="fa-brands fa-discord" aria-hidden="true"></i> Discord 커뮤니티
                             </button>
                             <div class="settings-divider"></div>
+                            <!-- 버전 표기 — 도움말·정보 패널 소속 (설정 패널에서 이동) -->
                             <p class="settings-meta">© PassOK<br><span id="settings-version"></span></p>
                         </div>
-                        <input type="file" id="import-file-input" class="is-hidden" accept=".json">
                     </div>
                 </div>
             </header>
@@ -219,7 +234,7 @@
             <!-- Dashboard View -->
             <!-- @include html/views/dashboard.html -->
 
-            <!-- 학습 진단 뷰 — 개인화 학습 허브 (Pro 후보: personal_analysis) -->
+            <!-- 학습진단 뷰 — 개인화 학습 허브 (Pro 후보: personal_analysis) -->
             <!-- @include html/views/analysis.html -->
 
             <!-- Flashcard View -->
@@ -262,25 +277,25 @@
 
         <!-- Mobile Bottom Tab Bar (모바일 하단 네비게이션 — 핵심 탭 + 더보기 시트) -->
         <nav class="mobile-tab-bar" id="mobile-tab-bar" aria-label="하단 탭 메뉴">
+            <button class="mobile-tab-item" data-click="ManualViewer.openManual">
+                <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                <span data-uitext="manual">매뉴얼</span>
+            </button>
             <button class="mobile-tab-item nav-study-only active" data-target="dashboard-view">
                 <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
-                <span>대시보드</span>
+                <span data-uitext="dashboard:nav">대시보드</span>
             </button>
             <button class="mobile-tab-item nav-study-only" data-target="flashcard-view">
                 <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
-                <span>카드</span>
+                <span data-uitext="flashcard:nav">카드</span>
             </button>
             <button class="mobile-tab-item nav-study-only" data-target="quiz-view">
                 <i class="fa-solid fa-circle-question" aria-hidden="true"></i>
-                <span>퀴즈</span>
-            </button>
-            <button class="mobile-tab-item" data-target="dictionary-view" data-feature="dictionary">
-                <i class="fa-solid fa-book-open" aria-hidden="true"></i>
-                <span data-uitext="dictionary">성분 사전</span>
+                <span data-uitext="quiz:nav">퀴즈</span>
             </button>
             <button class="mobile-tab-item mobile-tab-practice" data-target="formula-view" data-feature="formula">
                 <i class="fa-solid fa-flask-vial" aria-hidden="true"></i>
-                <span>실무</span>
+                <span data-uitext="formula:nav">실무도구</span>
             </button>
             <button class="mobile-tab-item mobile-tab-more" id="mobile-more-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="mobile-more-sheet" title="전체 메뉴 보기">
                 <i class="fa-solid fa-ellipsis" aria-hidden="true"></i>
@@ -303,31 +318,23 @@
                     <div class="more-sheet-grid">
                         <button class="mobile-tab-item nav-study-only" data-target="analysis-view">
                             <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
-                            <span>학습 진단</span>
+                            <span data-uitext="analysis">학습진단</span>
                             <span class="pro-badge" data-pro-feature="personal_analysis">PRO</span>
-                        </button>
-                        <button class="mobile-tab-item nav-study-only" data-target="calendar-view">
-                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-                            <span>캘린더</span>
-                        </button>
-                        <button type="button" data-click="ManualViewer.openManual" class="mobile-tab-item nav-study-only">
-                            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-                            <span>매뉴얼</span>
                         </button>
                     </div>
                     <p class="more-sheet-label nav-study-only">훈련 · 평가</p>
                     <div class="more-sheet-grid">
                         <button class="mobile-tab-item nav-study-only" data-target="trainer-view">
                             <i class="fa-solid fa-dumbbell" aria-hidden="true"></i>
-                            <span>훈련소</span>
+                            <span data-uitext="trainer">훈련소</span>
                         </button>
                         <button class="mobile-tab-item nav-study-only" data-target="review-view">
                             <i class="fa-solid fa-star" aria-hidden="true"></i>
-                            <span>복습</span>
+                            <span data-uitext="review">복습</span>
                         </button>
                         <button class="mobile-tab-item nav-study-only" data-target="exam-view">
                             <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
-                            <span>모의고사</span>
+                            <span data-uitext="exam">모의고사</span>
                             <span class="pro-badge" data-pro-feature="mock_exam">PRO</span>
                         </button>
                     </div>
@@ -335,11 +342,19 @@
                     <div class="more-sheet-grid">
                         <button class="mobile-tab-item nav-study-only" data-target="textbook-reader-view">
                             <i class="fa-solid fa-book-open" aria-hidden="true"></i>
-                            <span>교재리더</span>
+                            <span data-uitext="textbook-reader">교재리더</span>
                         </button>
                         <button class="mobile-tab-item nav-study-only" data-target="textbook-view">
                             <i class="fa-solid fa-book" aria-hidden="true"></i>
-                            <span>교재검색</span>
+                            <span data-uitext="textbook">교재검색</span>
+                        </button>
+                        <button class="mobile-tab-item" data-target="dictionary-view" data-feature="dictionary">
+                            <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+                            <span data-uitext="dictionary:nav">성분사전</span>
+                        </button>
+                        <button class="mobile-tab-item nav-study-only" data-target="calendar-view">
+                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                            <span data-uitext="calendar">캘린더</span>
                         </button>
                     </div>
                     <!-- 기타 — 실무 모드 전용 항목만 (기능 버튼 정본: 테마=헤더, 시험 전환=설정 패널) -->
@@ -348,12 +363,12 @@
                         <!-- 실무 모드 전용 — 실무 매뉴얼 바로가기 -->
                         <button type="button" data-click="ManualViewer.openFormulaManual" class="mobile-tab-item nav-practice-only" data-feature="formula">
                             <i class="fa-solid fa-flask" aria-hidden="true"></i>
-                            <span>실무매뉴얼</span>
+                            <span data-uitext="formula-manual">실무메뉴얼</span>
                         </button>
                         <!-- 실무 모드 전용 — 숨겨진 학습 항목 펼침 (사이드바 '학습 도구' 라벨의 모바일 대응) -->
                         <button type="button" data-click="toggleStudyTools" class="mobile-tab-item nav-practice-only" aria-expanded="false" title="숨겨진 학습 메뉴 펼치기/접기">
                             <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
-                            <span>학습도구</span>
+                            <span data-uitext="studyTools">학습도구</span>
                         </button>
                     </div>
                 </div>

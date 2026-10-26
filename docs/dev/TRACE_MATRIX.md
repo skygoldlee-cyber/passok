@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 9ad629603e7b1d76
-> 생성: 2026-10-24 · 원천: SPEC.md(594개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 76d9c275f3d12228
+> 생성: 2026-10-25 · 원천: SPEC.md(608개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 594개 — 문서 연결 432 · 소스 연결 530 · 테스트 연결 565 · 보고서 연결 109
+**커버리지 요약**: 요구사항 608개 — 문서 연결 442 · 소스 연결 541 · 테스트 연결 579 · 보고서 연결 109
 
 ---
 
@@ -445,14 +445,17 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| ES-01 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-RBK-10<br>DOC-RBK-16 | html/views/exam-select.html<br>index.html<br>src/app-dashboard.js<br>src/exam-context.js<br>…외 3개 | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-context.test.js<br>tests/unit/gates/exam-onboard.test.js | DOC-ARC-07 | — |
-| ES-02 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-25<br>DOC-DSN-36<br>DOC-RBK-16 | src/app-shell.js<br>src/exam-context.js<br>src/views/exam-select.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
-| ES-03 | ✅ | E2E 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-RBK-16 | src/app-shell.js<br>src/exam-context.js<br>src/views/exam-select.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/e2e/exam-switch.spec.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
-| ES-04 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-RBK-16 | src/exam-context.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
-| ES-05 | ✅ | E2E 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-RBK-16 | src/app-shell.js<br>src/exam-context.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/e2e/exam-switch.spec.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
-| ES-06 | ✅ | 테스트 | DOC-DSN-36<br>DOC-RBK-16 | src/exam-context.js<br>src/views/exam-select.js | tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-select-summary.test.js | — | — |
-| ES-07 | ✅ | 테스트 | DOC-DSN-36<br>DOC-RBK-16 | — | tests/dom/study/study-examselect.dom.test.js | — | — |
-| ES-08 | ✅ | 테스트 | DOC-DSN-37<br>DOC-RBK-18 | src/views/listeners-app.js | tests/dom/common/community-invite.dom.test.js | — | — |
+| ES-01 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-DSN-38<br>DOC-RBK-10<br>…외 1개 | html/views/exam-select.html<br>index.html<br>src/app-dashboard.js<br>src/exam-context.js<br>…외 3개 | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-context.test.js<br>tests/unit/gates/exam-onboard.test.js | DOC-ARC-07 | — |
+| ES-02 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-25<br>DOC-DSN-36<br>DOC-DSN-38<br>…외 1개 | src/app-shell.js<br>src/exam-context.js<br>src/views/exam-select.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
+| ES-03 | ✅ | E2E 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-DSN-38<br>DOC-RBK-16 | src/app-shell.js<br>src/exam-context.js<br>src/views/exam-select.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/e2e/exam-switch.spec.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
+| ES-04 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-DSN-38<br>DOC-RBK-16 | src/exam-context.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
+| ES-05 | ✅ | E2E 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-DSN-38<br>DOC-RBK-16 | src/app-shell.js<br>src/exam-context.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/e2e/exam-switch.spec.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
+| ES-06 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-38<br>DOC-RBK-16 | src/exam-context.js<br>src/views/exam-select.js | tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-select-summary.test.js | — | — |
+| ES-07 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-38<br>DOC-RBK-16 | — | tests/dom/study/study-examselect.dom.test.js | — | — |
+| ES-08 | ✅ | 테스트 | DOC-DSN-37<br>DOC-DSN-38<br>DOC-RBK-18 | src/views/listeners-app.js | tests/dom/common/community-invite.dom.test.js | — | — |
+| ES-09 | ✅ | 테스트 | — | — | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/misc/router.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js | — | — |
+| ES-10 | ✅ | E2E 테스트 | — | — | tests/dom/exam/exam-switching.dom.test.js<br>tests/e2e/exam-switch.spec.js | — | — |
+| ES-11 | ✅ | 테스트 | — | — | tests/dom/study/study-examselect.dom.test.js | — | — |
 
 ## 3.23 사용자 의견 수신
 
@@ -548,18 +551,33 @@
 | WP-07 | ✅ | 테스트 | — | src/written-grading.js | tests/unit/engine/written-grading.test.js | — | — |
 | WP-08 | ✅ | 테스트 | — | src/written-grading.js | tests/unit/engine/written-grading.test.js | — | — |
 
+## 3.29 서비스 소개 랜딩 페이지
+
+| ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
+|----|------|-----------|------|------|--------|--------|------|
+| LP-01 | ✅ | 테스트 | DOC-DSN-38<br>DOC-DSN-39 | css/landing.css | tests/unit/gates/build-landing.test.js | — | — |
+| LP-02 | ✅ | 테스트 | DOC-DSN-38<br>DOC-DSN-39 | tools/build/build_landing.js | tests/unit/gates/build-landing.test.js | — | — |
+| LP-03 | ✅ | 테스트 | DOC-DSN-38<br>DOC-DSN-39 | tools/build/build_landing.js | tests/unit/gates/build-landing.test.js | — | — |
+| LP-04 | ✅ | 테스트 | DOC-DSN-38<br>DOC-DSN-39 | src/landing.js<br>tools/build/build_landing.js | tests/dom/misc/landing.dom.test.js<br>tests/unit/app/landing.test.js<br>tests/unit/gates/build-landing.test.js | — | — |
+| LP-05 | ✅ | 테스트 | DOC-DSN-38<br>DOC-DSN-39 | src/landing.js | tests/dom/misc/landing.dom.test.js<br>tests/unit/app/landing.test.js | — | — |
+| LP-06 | ✅ | 테스트 | DOC-DSN-38<br>DOC-DSN-39 | src/views/listeners-app.js | tests/unit/app/ux-invariants.test.js | — | — |
+| LP-07 | ✅ | 테스트 | DOC-DSN-38<br>DOC-DSN-39 | sw.js | tests/unit/gates/build-landing.test.js | — | — |
+| LP-08 | ✅ | 테스트 | DOC-DSN-38<br>DOC-DSN-39 | tools/build/build_landing.js | tests/unit/gates/build-landing.test.js | — | — |
+| LP-09 | ✅ | 테스트 | DOC-DSN-38<br>DOC-DSN-39 | src/landing.js<br>tools/build/build_landing.js | tests/dom/misc/landing.dom.test.js<br>tests/unit/app/landing.test.js<br>tests/unit/gates/build-landing.test.js | — | — |
+| LP-10 | ✅ | 테스트 | DOC-DSN-39 | src/landing-redirect.js | tests/unit/app/ux-invariants.test.js | — | — |
+
 ## 4.1 PWA & 오프라인
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| P-01 | ✅ | E2E 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-RBK-01<br>…외 1개 | sw.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
-| P-02 | ✅ | E2E 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-19<br>…외 2개 | src/config/cache.js<br>sw.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
-| P-03 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-RBK-01<br>…외 1개 | sw.js | tests/unit/app/pwa-sw.test.js | — | — |
-| P-04 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-RBK-01<br>…외 1개 | sw.js | tests/unit/app/pwa-sw.test.js | — | — |
+| P-01 | ✅ | E2E 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
+| P-02 | ✅ | E2E 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-19<br>…외 3개 | src/config/cache.js<br>sw.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
+| P-03 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js | tests/unit/app/pwa-sw.test.js | — | — |
+| P-04 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js | tests/unit/app/pwa-sw.test.js | — | — |
 | P-04a | ✅ | 테스트 | DOC-RBK-01 | css/app-responsive.css | tests/unit/app/pwa-sw.test.js | — | — |
-| P-05 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-RBK-01<br>…외 1개 | sw.js<br>tools/build/stamp_sw_version.js | tests/unit/app/pwa-sw.test.js | — | — |
-| P-06 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-RBK-01<br>…외 1개 | sw.js | tests/unit/app/pwa-sw.test.js<br>tests/unit/app/sw-prune.test.js | — | — |
-| P-07 | ✅ | 테스트 | DOC-RBK-01<br>DOC-RBK-04 | css/app-responsive.css<br>src/pwa/pwa-install-capture.js<br>src/pwa/pwa-install.js | tests/unit/app/pwa-sw.test.js | — | — |
+| P-05 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js<br>tools/build/stamp_sw_version.js | tests/unit/app/pwa-sw.test.js | — | — |
+| P-06 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js | tests/unit/app/pwa-sw.test.js<br>tests/unit/app/sw-prune.test.js | — | — |
+| P-07 | ✅ | 테스트 | DOC-DSN-38<br>DOC-DSN-39<br>DOC-RBK-01<br>DOC-RBK-04 | css/app-responsive.css<br>src/pwa/pwa-install-capture.js<br>src/pwa/pwa-install.js | tests/unit/app/pwa-sw.test.js | — | — |
 | P-08 | ✅ | 테스트 | DOC-RBK-01<br>DOC-RBK-04 | src/app-shell.js<br>src/pwa/pwa-install.js | tests/unit/app/pwa-sw.test.js | — | — |
 | P-09 | ✅ | 테스트 | DOC-RBK-01<br>DOC-RBK-04 | src/pwa/pwa-install.js | tests/unit/app/pwa-sw.test.js | — | — |
 | P-10 | ✅ | E2E 테스트 | DOC-RBK-01<br>DOC-RBK-04 | src/pwa/pwa-manifest.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
@@ -698,6 +716,7 @@
 | UX-SET-03 | Apple HIG/Google Material 최소 터치 영역. 인라인 링크·네이티브 체크박스/라디오(라벨이 타깃)는 면제 — 기준선 축소로 점진 개선 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css | tests/e2e/app.spec.js<br>tests/e2e/mobile-overflow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-SET-04 | 사용자가 "몇 버전인지" 문의할 때 유일한 확인 경로. SW 등록 스크립트 URL에서 버전 자동 추출 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-SET-05 | 일관된 드롭다운 UX | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/views/listeners-app.js | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
+| UX-SET-06 | `.reader-chrome`이 헤더와 같은 z(100)라 DOM 후순으로 패널 상단이 불투명 카드 아래로 가려진 실사례(2026-10-24). `tests/e2e/settings-occlusion.spec.js`가 뷰별 `elementFromPoint` 실측으로 차단, `check:zlayer`가 CSS 대역 계약을 정적 검사 | E2E 테스트 | — | tools/check/check_zlayer.js | tests/e2e/settings-occlusion.spec.js | — | — |
 | UX-VFY-01 | 요구사양 없는 UI 변경은 추적·리뷰 불가 — TR-21~23처럼 선 정의 후 구현하는 관행을 규약화 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
 | UX-VFY-02 | jsdom은 레이아웃을 계산하지 않으므로 DOM/단위 테스트로는 기하 요구사항을 검증할 수 없음 | E2E 테스트 | DOC-DSN-25<br>DOC-RBK-11 | — | tests/e2e/mobile-overflow.spec.js | — | — |
 | UX-VFY-03 | 신규 UI/UX 요구사항은 E2E와 함께 진입 — 기존 백로그(규약형 다수)는 기준선 승계 후 점진 축소 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
@@ -723,7 +742,7 @@
 | DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | tools/check/check_uitext.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
 | DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-DEV-08<br>DOC-DEV-09<br>DOC-DSN-33 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/app-shell.js<br>src/pwa/pwa-manifest.js | tests/unit/app/exam-context.test.js | — | — |
-| DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-RBK-16 | src/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
+| DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-38<br>DOC-RBK-16 | src/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
 
 ## 5.2 안정적 ID 체계
 
@@ -929,8 +948,11 @@
 | DOC-DSN-35 | docs/dev/design/PAYMENT_PILOT_DESIGN.md | ROAD-L5, ROAD-P0, ROAD-P1, ROAD-P2, ROAD-P3, ROAD-P4, ROAD-P5, ROAD-P6, UX-MET-02, UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08 |
 | DOC-DSN-36 | docs/dev/design/DISCORD_COMMUNITY_DESIGN.md | AD-10, AD-11, DA-15, ES-01, ES-02, ES-03, ES-04, ES-05, ES-06, ES-07, FB-08 |
 | DOC-DSN-37 | docs/dev/design/PROMOTION_DESIGN.md | AD-10, AD-11, AD-12, AU-09, DA-15, ES-08 |
+| DOC-DSN-38 | docs/dev/design/LANDING_PAGE_DESIGN.md | DA-15, ES-01, ES-02, ES-03, ES-04, ES-05, ES-06, ES-07, ES-08, LP-01, LP-02, LP-03, LP-04, LP-05, LP-06, LP-07, LP-08, LP-09, P-07 |
+| DOC-DSN-39 | docs/dev/design/NATIVE_APP_STRATEGY.md | LP-01, LP-02, LP-03, LP-04, LP-05, LP-06, LP-07, LP-08, LP-09, LP-10, P-01, P-02, P-03, P-04, P-05, P-06, P-07 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
+| DOC-IDX-03 | docs/assets/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |
 | DOC-PPL-02 | ref-pipeline/audiobook/README.md | AO-01, AO-02, AO-03, AO-04, AO-05 |
 | DOC-PPL-03 | ref-pipeline/audiobook/AUDIOBOOK_SUMMARY.md | AO-01, AO-02, AO-03, AO-04, AO-05 |
@@ -980,3 +1002,7 @@
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
 없음 — 소스 연결된 모든 요구사항에 테스트 참조가 있음.
+
+## 부록 C — 관련 SPEC ID 헤더 누락 문서
+
+- docs/assets/README.md

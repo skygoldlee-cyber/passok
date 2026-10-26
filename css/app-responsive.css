@@ -120,9 +120,18 @@
         gap: 0.75rem !important;
     }
 
-    .daily-challenge-card #daily-challenge-status {
+    /* 세로 스택에서 배지가 버튼보다 작게 보이는 불균형 해소 —
+       버튼과 동일한 높이감으로 패딩·정렬 */
+    .daily-challenge-card #daily-challenge-status,
+    .daily-challenge-card #weekly-goal-chip {
         text-align: center !important;
         width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.9375rem !important;
+        min-height: 44px !important;
     }
 
     .daily-challenge-card #start-daily-btn {
@@ -198,13 +207,20 @@
         padding: 1rem 1.25rem;
         position: sticky;
         top: 0;
-        z-index: var(--z-sticky);
+        z-index: var(--z-popover);
         background: var(--drawer-bg);
         -webkit-backdrop-filter: blur(12px);
         backdrop-filter: blur(12px);
         /* 모바일에서 헤더가 넘치지 않도록 (h2 min-width:0 말줄임 + header-actions flex-shrink:0으로 제어)
            ※ overflow:hidden 금지 — 설정 드롭다운이 헤더 아래로 펼쳐질 때 잘려서 보이지 않음 */
         flex-wrap: nowrap;
+    }
+
+    /* 타이틀 래퍼도 축소 허용 — min-width:auto이면 h2가 내용물 폭 이하로
+       줄지 못해 header-actions가 뷰포트 밖으로 밀린다 */
+    .app-header .header-title {
+        min-width: 0;
+        flex-shrink: 1;
     }
 
     .app-header h2 {
@@ -223,9 +239,9 @@
         display: none;
     }
 
-    /* 헤더 액션 버튼 터치 영역 확대 */
+    /* 헤더 액션 버튼 터치 영역 확대 — 드롭다운 메뉴 항목(.settings-item)은 제외 (좌측 정렬 유지) */
     .header-actions .btn,
-    .header-actions button {
+    .header-actions button:not(.settings-item) {
         min-width: 44px;
         min-height: 44px;
         padding: 0.5rem !important;
@@ -338,10 +354,9 @@
         transform: scale(0.92);
     }
 
-    /* Formula OS — 실무 도메인 구분 (사이드바와 동일한 violet 아이덴티티) */
+    /* Formula OS — 실무 도메인 구분: 활성화 방식은 다른 탭과 통일
+       (비활성 회색 → 활성 시 violet 강조. 상시 유색은 활성처럼 보이는 오류) */
     .mobile-tab-item.mobile-tab-practice {
-        color: var(--color-secondary);
-        background: var(--secondary-tint-12);
         border-radius: var(--radius-md);
     }
 
@@ -854,7 +869,7 @@ body.landscape-mode .app-header p {
 }
 
 body.landscape-mode .header-actions .btn,
-body.landscape-mode .header-actions button {
+body.landscape-mode .header-actions button:not(.settings-item) {
     min-width: 36px !important;
     min-height: 36px !important;
     padding: 0.25rem 0.5rem !important;
@@ -1019,9 +1034,18 @@ body.landscape-mode .glass-card {
         align-items: stretch !important;
         gap: 0.75rem !important;
     }
-    .daily-challenge-card #daily-challenge-status {
+    /* 세로 스택에서 배지가 버튼보다 작게 보이는 불균형 해소 —
+       버튼과 동일한 높이감으로 패딩·정렬 */
+    .daily-challenge-card #daily-challenge-status,
+    .daily-challenge-card #weekly-goal-chip {
         text-align: center !important;
         width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.9375rem !important;
+        min-height: 44px !important;
     }
     .daily-challenge-card #start-daily-btn {
         width: 100% !important;

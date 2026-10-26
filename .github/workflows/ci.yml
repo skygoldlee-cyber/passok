@@ -45,13 +45,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: 생성 번들 빌드 (gitignore 대상)
-        run: npm run build:html && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js
+        run: npm run build:html && npm run build:landing && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js
       - name: Upload generated bundles
         uses: actions/upload-artifact@v4
         with:
           name: generated-bundles
           path: |
             index.html
+            landing.html
             data/
           retention-days: 1
 
@@ -130,6 +131,12 @@ jobs:
       - name: UI style convention (인라인 스타일·display 조작 규약)
         run: npm run check:uistyle
 
+      - name: z-index layer contract (앱 크롬 대역 보호, UX-SET-06)
+        run: npm run check:zlayer
+
+      - name: Filename case convention (CODE_CONVENTIONS §2.1)
+        run: npm run check:filenames
+
       # dependabot PR은 package(-lock).json 변경만 발생시켜 이 게이트가 항상 실패한다 —
       # 봇은 문서 갱신·[no-docs] 마크가 불가하므로 PR 작성자 기준으로 면제한다.
       - name: Doc sync gate (소스 변경 시 문서 갱신 강제)
@@ -160,6 +167,9 @@ jobs:
 
       - name: Merged coverage threshold gate
         run: node tools/check/coverage_merge.js --check
+
+      - name: Differential coverage gate (변경 라인 브랜치 ≥80%)
+        run: node tools/check/check_diff_coverage.js --ref origin/main
 
       - name: Upload coverage report
         if: always()

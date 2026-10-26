@@ -4,7 +4,7 @@
 import { safeGetItem, safeSetItem, safeRemoveItem } from "./state.js";
 import { STORAGE_KEYS } from "./storage-keys.js";
 import { DataLoader } from "./data-loader.js";
-import { getActiveExam, getExamList, hasFeature, applyExamTheme } from "./exam-context.js";
+import { getActiveExam, getCurrentExamId, getExamList, hasFeature, applyExamTheme } from "./exam-context.js";
 import { isPracticeCapable } from "./practice-registry.js";
 import { showToast, showAlert } from "./ui-utils.js";
 
@@ -105,12 +105,14 @@ export function applyExamBranding() {
     const exam = getActiveExam();
     if (!exam) return;
     applyExamTheme(exam); // 시험별 스킨 토큰 — 브랜딩 재적용 경로에서도 일관 (DA-14)
-    if (exam.title) document.title = exam.title;
+    // 명시 선택된 시험만 브랜딩 — 미선택(기본 시험 폴백)이면 플랫폼 브랜드 유지
+    const chosen = !!getCurrentExamId();
+    document.title = (chosen && exam.title) ? exam.title : 'PassOK';
     const logoMain = document.querySelector('.logo-text h1');
     const logoSub = document.querySelector('.logo-text span');
     const logoIcon = document.querySelector('.logo-icon');
-    if (logoMain && typeof exam.logoMain === 'string') logoMain.textContent = exam.logoMain;
-    if (logoSub && typeof exam.logoSub === 'string') logoSub.textContent = exam.logoSub;
+    if (logoMain) logoMain.textContent = (chosen && typeof exam.logoMain === 'string') ? exam.logoMain : 'PassOK';
+    if (logoSub) logoSub.textContent = (chosen && typeof exam.logoSub === 'string') ? exam.logoSub : '';
     if (logoIcon && exam.icon) logoIcon.className = `${exam.icon} logo-icon`;
 
     // iOS 홈 화면 라벨 — 단일 앱 정책으로 'PassOK' 고정 (webmanifest name과 동일 정체성)
@@ -126,11 +128,14 @@ export function applyExamBranding() {
     if (quizEmpty && exam.name) quizEmpty.textContent = `${exam.name} 모의 퀴즈`;
 
     // 도메인 특화 뷰 라벨 — manifest uiText가 있으면 정적 라벨을 덮어쓴다 (data-uitext 속성)
+    // "key:field" 문법 — uiText.<key>.<field> 우선, 없으면 .title 폴백 (단축 라벨은 :nav)
     const uiText = (DataLoader.registry && DataLoader.registry.uiText) || {};
     document.querySelectorAll('[data-uitext]').forEach(node => {
         const el = /** @type {HTMLElement} */ (node);
-        const t = el.dataset.uitext ? uiText[el.dataset.uitext] : null;
-        if (t && t.title) el.textContent = t.title;
+        const [key, field] = (el.dataset.uitext || '').split(':');
+        const t = key ? uiText[key] : null;
+        const v = t ? ((field && t[field]) || t.title) : null;
+        if (v) el.textContent = v;
     });
 }
 
@@ -215,6 +220,8 @@ export function showIngredientsChangelog() {
 /** 활성 시험의 features 플래그에 따라 도메인 특화 UI 숨김 (data-feature 속성 기반) */
 export function applyFeatureFlags() {
     const multiExam = getExamList().length > 1;
+    const chosen = !!getCurrentExamId(); // 미선택 시 시험 스코프 피처 비활성 — 성분 사전 등 기본 시험 폴백 노출 차단
+    document.body.classList.toggle('exam-unselected', !chosen); // ES-09 — 미선택 내비 시각적 dim
     document.querySelectorAll('[data-feature]').forEach(node => {
         const el = /** @type {HTMLElement} */ (node);
         // 시험 전환 버튼은 플래그가 아닌 실제 시험 수로 결정 — 1개면 무의미.
@@ -222,9 +229,9 @@ export function applyFeatureFlags() {
         // (실무 피처가 formula가 아닌 시험에서도 모드 토글이 떠야 한다).
         const on = el.dataset.feature === 'examSwitch'
             ? multiExam
-            : el.dataset.feature === 'practiceMode'
+            : chosen && (el.dataset.feature === 'practiceMode'
                 ? isPracticeCapable()
-                : hasFeature(el.dataset.feature);
+                : hasFeature(el.dataset.feature));
         if (!on) el.classList.add('is-hidden');
     });
 }

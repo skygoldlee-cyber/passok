@@ -314,7 +314,7 @@ async function main() {
     // 직전 현재 트리에서 재생성해 스테이징 누락을 막는다. 빌드가 추적 파일을
     // 변경하면(원본↔생성물 동기화 누락) 그 상태는 커밋되지 않은 것이므로 차단.
     console.log('▶ 배포용 생성물 빌드');
-    for (const cmd of ['build:html', 'build:data', 'build:drills']) {
+    for (const cmd of ['build:html', 'build:landing', 'build:data', 'build:drills']) {
         const r = spawnSync(`npm run ${cmd} --silent`, { encoding: 'utf8', shell: true });
         if (r.status !== 0) {
             process.stdout.write(r.stdout || '');

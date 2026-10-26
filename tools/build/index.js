@@ -15,7 +15,7 @@ const WORKSPACE_DIR = path.resolve(__dirname, '../..');
 // [멀티시험] 루트 기본값: EXAM_CONTENT_ROOT/EXAM_DATA_ROOT env → 없으면
 // exams.json의 default 시험(또는 첫 항목)으로 해석. IS_DEFAULT_EXAM은 경로
 // 문자열이 아니라 default 플래그로 판정한다 (시험 이동/이름변경과 무관).
-const { getExamTargets } = require('./exam_targets');
+const { getExamTargets, removeOrphanBundles } = require('./exam_targets');
 const EXAM_TARGETS = getExamTargets(WORKSPACE_DIR);
 const examsDoc = JSON.parse(fs.readFileSync(path.join(WORKSPACE_DIR, 'content', 'exams.json'), 'utf-8'));
 
@@ -269,6 +269,11 @@ function main() {
     }
   });
 
+  // manifest에서 제거된 과목의 고아 번들 정리 — 키별 청소는 선언된 키만 커버하므로
+  // 엔트리 삭제 시 이전 생성물이 잔존해 drills 빌드 등 디렉터리 순회 도구를 깨뜨림
+  removeOrphanBundles(SUBJECTS_OUT_DIR, new Set(manifest.subjects.map(s => s.key)))
+    .forEach(f => console.log(`- 고아 과목 번들 삭제: ${f}`));
+
   // 3. Exams (과목이 대상일 때만 재빌드, 나머지는 이전 항목 재사용)
   const examsPlugin = require('./plugins/exams.plugin');
   manifest.exams.forEach(exam => {
@@ -321,6 +326,10 @@ function main() {
       process.exit(1);
     }
   });
+
+  // manifest에서 제거된 시험 엔트리의 고아 번들 정리 (과목 스윕과 동일 사유)
+  removeOrphanBundles(EXAMS_OUT_DIR, new Set(manifest.exams.map(e => e.key)))
+    .forEach(f => console.log(`- 고아 시험 번들 삭제: ${f}`));
 
   // 3.4 Written (주관식 연습 문항 — manifest.written 선언 시에만 registry에 기록)
   //   자기채점 런타임(src/written-practice.js)이 읽는 목록. ### S 헤딩 수를 집계한다.
@@ -446,6 +455,10 @@ function main() {
       console.log(`Skipping Knowledge DB "${kKey}" (기존 번들 유지)`);
     }
   }
+
+  // registryKey 변경·제거 시 이전 지식DB 번들 잔존 방지 (고아 스윕과 동일 규칙)
+  removeOrphanBundles(DATA_DIR, new Set(kKey ? [kKey] : []), /^(.+)_data\.[0-9a-f]{8}\.js$/)
+    .forEach(f => console.log(`- 고아 지식DB 번들 삭제: ${f}`));
 
   // 5. Resources (추천 링크 — manifest에서 registry로 전달)
   if (manifest.resources) {

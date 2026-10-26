@@ -2,13 +2,13 @@
 // @spec ES-01~03,ES-06
 // 멀티시험 플랫폼의 홈: 등록된 시험 목록을 카드로 표시하고 선택 시 시험을 전환한다.
 // 카드에는 시험별 진도 요약(외운 카드·퀴즈 정답률·최근 학습일·D-day)과 액센트 스왓치를 표시한다.
-import { getExamList, getActiveExamId, selectExam, peekExamValue, resolveExamThemeTokens } from '../exam-context.js';
+import { getExamList, getCurrentExamId, clearCurrentExam, selectExam, peekExamValue, resolveExamThemeTokens } from '../exam-context.js';
 import { getItem, setItem } from '../storage.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
 import { esc } from '../sanitize.js';
 import { todayKey } from '../utils.js';
 import { switchView } from './navigation.js';
-import { showAlert } from '../ui-utils.js';
+import { showAlert, showToast } from '../ui-utils.js';
 
 /**
  * 시험 카드 요약 지표 집계 — 원시 저장값(JSON 문자열)을 파싱해 순수하게 계산 (ES-06).
@@ -95,7 +95,8 @@ export function renderExamSelect() {
     const container = document.getElementById('exam-select-list');
     if (!container) return;
     const exams = getExamList();
-    const currentId = getActiveExamId(); // 저장값 없으면 기본 시험 폴백 — "현재 시험" 배지가 유효 시험을 반영
+    // 명시 선택값만 "현재 시험"으로 표시 — 미선택(기본 시험 폴백) 상태는 어떤 카드도 현재로 찍지 않음
+    const currentId = getCurrentExamId();
 
     if (!exams.length) {
         container.innerHTML = '<p style="color:var(--color-text-muted);">등록된 시험이 없습니다. content/exams.json을 확인하세요.</p>';
@@ -106,6 +107,10 @@ export function renderExamSelect() {
     // 현재(활성) 시험은 사용 중이므로 확인 스탬프를 즉시 최신화한다
     const currentExam = exams.find(e => e.id === currentId);
     if (currentExam && currentExam.contentStamp) _markStampSeen(currentId, currentExam.contentStamp);
+
+    // 선택 해제 버튼은 저장된 선택이 있을 때만 표시
+    const clearBtn = document.getElementById('exam-select-clear');
+    if (clearBtn) clearBtn.classList.toggle('is-hidden', !currentId);
 
     container.innerHTML = exams.map(e => {
         const isCurrent = e.id === currentId;
@@ -137,6 +142,27 @@ export function renderExamSelect() {
 /** 시험 전환 버튼 → 피커 뷰 표시 (렌더링은 라우터의 viewRenderers 디스패치에 위임) */
 export function showExamSelect() {
     switchView('exam-select-view', { scrollTop: true });
+}
+
+/** 선택 해제 — current_exam 제거로 "선택 없음" 상태로 되돌림. 다음 부팅부터 피커가 초기화면 */
+export function resetExamSelection() {
+    clearCurrentExam();
+    // 브랜딩 즉시 복귀 — 문서 타이틀·로고를 플랫폼 브랜드로 (app-shell 임포트는 모듈 DOM 접근으로 Node 테스트에서 크래시)
+    if (typeof document !== 'undefined') {
+        document.title = 'PassOK';
+        document.body.classList.add('exam-unselected'); // 미선택 내비 dim (ES-09)
+        const logoMain = document.querySelector('.logo-text h1');
+        const logoSub = document.querySelector('.logo-text span');
+        if (logoMain) logoMain.textContent = 'PassOK';
+        if (logoSub) logoSub.textContent = '';
+        // 시험 스코프 메뉴도 즉시 숨김 — 성분 사전 등 미선택 노출 차단 (examSwitch는 피커 진입로라 유지)
+        document.querySelectorAll('[data-feature]').forEach(node => {
+            const el = /** @type {HTMLElement} */ (node);
+            if (el.dataset.feature !== 'examSwitch') el.classList.add('is-hidden');
+        });
+    }
+    renderExamSelect();
+    showToast('시험 선택이 해제됐습니다 — 다음 실행부터 시험 선택이 먼저 표시됩니다', 'info');
 }
 
 /** 시험 카드 선택 — 준비중 시험은 알림만, 다른 시험이면 selectExam이 리로드, 같으면 대시보드로 복귀 */

@@ -64,6 +64,8 @@ tools/state/study_quality_report.json
 tools/state/combo_review_queue.md
 # 로컬 운영 대시보드 (report:dashboard 산출물 — 로컬 전용)
 tools/state/dashboard_report.html
+# 검증 단계 실행 이력 (run.js 텔레메트리 — audit:tools 미실행 감사 입력, 로컬 전용)
+tools/state/step_runs.jsonl
 # ref_md 변환 진단 리포트 (ref-pipeline 산출물 — 런타임 미사용)
 _report.json
 # Mermaid 사전렌더 SVG 캐시 (md2doc.py — 재생성 가능)
@@ -132,6 +134,7 @@ reports/
 # card_terms_snapshot.json(진도 이관·감사 스냅샷)·combo_pilot.js(수작업 파일럿)·
 # release-notes.js·version.js(deploy 스탬프 산출물)·manifest.*.webmanifest(소스)
 index.html
+landing.html
 data/exams.js
 data/audio_manifest.js
 data/exams/*/registry.js

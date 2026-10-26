@@ -27,7 +27,7 @@ const fs = require('fs');
 const path = require('path');
 const { stableId } = require('./id_factory.js');
 const { inferTags } = require('./drill-utils.js');
-const { getExamTargets, getSubjectMaps } = require('./exam_targets.js');
+const { getExamTargets, getSubjectMaps, removeOrphanBundles } = require('./exam_targets.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 
@@ -172,9 +172,11 @@ async function buildForExam(target) {
 
   let totalItems = 0;
   let totalErrors = 0;
+  const builtKeys = new Set();
 
   for (const file of files) {
     const { key, data } = loadExamFile(path.join(EXAMS_DIR, file));
+    builtKeys.add(key);
     const { items, stats } = buildOxItems(key, data);
 
     // validateQuestion은 Question 객체를 요구 — ox 필드 채워서 검증
@@ -200,6 +202,11 @@ async function buildForExam(target) {
       errs.slice(0, 5).forEach(e => console.log('   -', e));
     }
   }
+
+  // 입력 번들이 사라진 키의 잔존 산출물 정리 — exams/ 고아가 제거돼도
+  // 이전에 생성된 ox_<key>.js는 남으므로 여기서 함께 청소한다
+  removeOrphanBundles(OUT_DIR, builtKeys, /^ox_(.+)\.js$/)
+    .forEach(f => console.log(`[ox-drills] 고아 드릴 삭제: ${f}`));
 
   console.log(`[ox-drills] ${target.id}: 총 ${totalItems}개 O/X 문항 생성, 검증 오류 ${totalErrors}건 → ${path.relative(ROOT, OUT_DIR)}/`);
 }
