@@ -566,12 +566,18 @@ body {
     background-size: cover;
 }
 
-/* 데스크탑 — 전체 그림 노출: cover는 뷰포트와 종횡비가 다르면 그림을 잘라낸다.
-   contain으로 인왕제색도(1920×1115, 1.72:1) 전체를 표시 — 바깥 여백은 body 배경색 */
+/* 데스크탑 — 전체 그림 노출 + 레터박스 채움: contain 레이어(전체 그림) 아래에
+   같은 이미지의 cover 레이어를 깔아 위·아래 여백을 같은 그림으로 이어준다.
+   (동영상 플레이어의 블러 레터박스 원리 — 딤 오버레이가 경계를 부드럽게 함) */
 @media (min-width: 901px) {
     body {
-        background-size: contain;
-        background-repeat: no-repeat;
+        background-image:
+            linear-gradient(var(--bg-wallpaper-dim), var(--bg-wallpaper-dim)),
+            url('../icons/bg-landscape.webp'),
+            url('../icons/bg-landscape.webp');
+        background-position: center, center, center;
+        background-size: 100% 100%, contain, cover;
+        background-repeat: no-repeat, no-repeat, no-repeat;
     }
 }
 
