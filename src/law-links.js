@@ -52,16 +52,6 @@ const _EXAM_LAW_URLS = {
     ["이용·미용기구별 소독기준 및 방법", "https://www.law.go.kr/행정규칙/이용·미용기구별 소독기준 및 방법"],
     ["소독기준 및 방법", "https://www.law.go.kr/행정규칙/이용·미용기구별 소독기준 및 방법"]
     ],
-    "lossadj": [
-    ["농어업재해보험법시행령", "https://www.law.go.kr/법령/농어업재해보험법시행령"],
-    ["농어업재해보험법 시행령", "https://www.law.go.kr/법령/농어업재해보험법시행령"],
-    ["농어업재해보험법(법률)", "https://www.law.go.kr/법령/농어업재해보험법"],
-    ["농어업재해보험법", "https://www.law.go.kr/법령/농어업재해보험법"],
-    ["농업재해보험손해평가요령", "https://www.law.go.kr/행정규칙/농업재해보험손해평가요령"],
-    ["손해평가요령", "https://www.law.go.kr/행정규칙/농업재해보험손해평가요령"],
-    ["상법(법률)", "https://www.law.go.kr/법령/상법"],
-    ["상법", "https://www.law.go.kr/법령/상법"]
-    ],
     "insadj": [
     ["상법(법률)", "https://www.law.go.kr/법령/상법"],
     ["상법", "https://www.law.go.kr/법령/상법"],
@@ -87,7 +77,17 @@ const _EXAM_LAW_URLS = {
     ["교통사고처리 특례법", "https://www.law.go.kr/법령/교통사고처리특례법"],
     ["자동차보험진료수가", "https://www.law.go.kr/행정규칙/자동차보험진료수가에관한기준"]
     ],
-    "appraisal": [
+    "lossadj": [
+    ["농어업재해보험법시행령", "https://www.law.go.kr/법령/농어업재해보험법시행령"],
+    ["농어업재해보험법 시행령", "https://www.law.go.kr/법령/농어업재해보험법시행령"],
+    ["농어업재해보험법(법률)", "https://www.law.go.kr/법령/농어업재해보험법"],
+    ["농어업재해보험법", "https://www.law.go.kr/법령/농어업재해보험법"],
+    ["농업재해보험손해평가요령", "https://www.law.go.kr/행정규칙/농업재해보험손해평가요령"],
+    ["손해평가요령", "https://www.law.go.kr/행정규칙/농업재해보험손해평가요령"],
+    ["상법(법률)", "https://www.law.go.kr/법령/상법"],
+    ["상법", "https://www.law.go.kr/법령/상법"]
+    ],
+    "broker": [
 
     ],
     "indsafe": [
@@ -96,7 +96,7 @@ const _EXAM_LAW_URLS = {
     "admagent": [
     ["민법", "https://www.law.go.kr/법령/민법"]
     ],
-    "broker": [
+    "appraisal": [
 
     ]
 };
