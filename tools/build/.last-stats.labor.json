@@ -1,0 +1,55 @@
+{
+  "subjects": {
+    "labor_law1": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/labor_law1/1과목_노동법(1)개별관계.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "labor_law2": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/labor_law2/2과목_노동법(2)집단관계.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "civil": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/civil/3과목_민법.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "social_ins": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/social_ins/4과목_사회보험법.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "elective": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/elective/5과목_선택과목.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {}
+}

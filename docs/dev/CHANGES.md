@@ -8294,3 +8294,7 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 ## #75 — binary_allowlist 정위치 이동 (2026-10-28)
 
 - tools/check → tools/state/binary_allowlist.json 이동 (검사기가 읽는 정본 경로)
+
+## #76 — labor 팩 생성물 + 배포 준비 (2026-10-28)
+
+- data/exams/labor 번들·manifest.labor.webmanifest·sw.js·키워드/법령 인덱스 재생성
