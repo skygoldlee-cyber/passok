@@ -1,7 +1,21 @@
 {
  "estate_intro": {
-  "cards": {},
-  "quizzes": {}
+  "cards": {
+   "estate_intro_card_34c1ca": "경제론",
+   "estate_intro_card_19276e": "시장론",
+   "estate_intro_card_4ab291": "정책론",
+   "estate_intro_card_16ef7c": "투자론",
+   "estate_intro_card_be2439": "금융론",
+   "estate_intro_card_b8cae9": "개발관리론",
+   "estate_intro_card_54c4d6": "감정평가론",
+   "estate_intro_card_705dd7": "농업입지론",
+   "estate_intro_card_48f22e": "중심지이론",
+   "estate_intro_card_223837": "행정·공급"
+  },
+  "quizzes": {
+   "estate_intro_quiz_bdf1e6": "개발사업 유형·절차, 부동산 관리(자산·시설·임대·운영), 마케팅 4P|개발관리론",
+   "estate_intro_quiz_286204": "평가 3방식(원가·비교·수익), 가격원칙, 지역·개별분석, 공시제도|감정평가론"
+  }
  },
  "civil_broker": {
   "cards": {
@@ -18,23 +32,50 @@
   }
  },
  "broker_law": {
-  "cards": {},
-  "quizzes": {}
+  "cards": {
+   "broker_law_card_50c131": "보수·감독",
+   "broker_law_card_c30705": "500만원 이하",
+   "broker_law_card_200f6a": "100만원 이하"
+  },
+  "quizzes": {
+   "broker_law_quiz_b42535": "부당 표시·광고, 중개보조원 신분 미고지, 확인·설명 위반, 연수교육 미이수, 공제 운용실적 미공시, 감독상 보고·검사 거부|500만원 이하",
+   "broker_law_quiz_cbbd90": "등록증·보증서류 미게시, 명칭 미사용, 이전·휴폐업 신고 불이행, 증서 사본 미교부, 자격증·등록증 미반납|100만원 이하"
+  }
  },
  "estate_publaw": {
   "cards": {},
   "quizzes": {}
  },
  "estate_registry": {
-  "cards": {},
-  "quizzes": {}
+  "cards": {
+   "estate_registry_card_a98144": "부동산등기법",
+   "estate_registry_card_d20eba": "공간정보법",
+   "estate_registry_card_2a8c4f": "가격공시법",
+   "estate_registry_card_966327": "거래신고법"
+  },
+  "quizzes": {
+   "estate_registry_quiz_88f1d7": "권리표시주의·대항요건, 표제부+갑구+을구, 공동신청 원칙·단독신청 예외, 가등기 순위보전|부동산등기법",
+   "estate_registry_quiz_6b14f6": "표준지공시지가(국토부) vs 개별공시지가(시군구), 이의신청 30일|가격공시법",
+   "estate_registry_quiz_c81956": "실거래 신고 30일, 허위신고 과태료, 신고 생략 예외|거래신고법"
+  }
  },
  "estate_tax": {
   "cards": {},
   "quizzes": {}
  },
  "broker_practice": {
-  "cards": {},
-  "quizzes": {}
+  "cards": {
+   "broker_practice_card_c0d99b": "확인·설명",
+   "broker_practice_card_6f4ce9": "계약서",
+   "broker_practice_card_c3b512": "중개보수·실비",
+   "broker_practice_card_c8337d": "거래신고",
+   "broker_practice_card_69f7db": "전자계약",
+   "broker_practice_card_f7ffd7": "손해배상"
+  },
+  "quizzes": {
+   "broker_practice_quiz_94678f": "실거래 신고 30일 + 거래계약서명부 보관|거래신고",
+   "broker_practice_quiz_df8b50": "irts 시스템 5단계 — 작성→서명→확정→자동신고→보관|전자계약",
+   "broker_practice_quiz_b3e138": "보증설정금액(개인2억/법인4억)·공제 절차|손해배상"
+  }
  }
 }

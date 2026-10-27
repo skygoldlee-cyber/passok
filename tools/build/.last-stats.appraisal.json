@@ -58,11 +58,11 @@
       "cards": 4,
       "quizzes": 2,
       "files": {
-        "교재/appraisal/감정평가이론.md": {
+        "교재/appraisalthy/감정평가이론.md": {
           "cards": 4,
           "quizzes": 2
         },
-        "교재/appraisal/감정평가_통계원론.md": {
+        "교재/appraisalthy/감정평가_통계원론.md": {
           "cards": 0,
           "quizzes": 0
         }
@@ -72,7 +72,7 @@
       "cards": 0,
       "quizzes": 0,
       "files": {
-        "교재/appraisal/감정평가및보상법규.md": {
+        "교재/appraisallaw/감정평가및보상법규.md": {
           "cards": 0,
           "quizzes": 0
         }
@@ -82,7 +82,7 @@
       "cards": 3,
       "quizzes": 2,
       "files": {
-        "교재/appraisal/감정평가실무.md": {
+        "교재/appraisalwork/감정평가실무.md": {
           "cards": 3,
           "quizzes": 2
         }

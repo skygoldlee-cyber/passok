@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 92b1f845d963590e
+> 입력 해시: ae849607c15060c1
 > 생성: 2026-10-27 · 원천: SPEC.md(608개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -974,6 +974,7 @@
 | DOC-RBK-16 | docs/dev/runbooks/PILOT_EXAM_PROMOTION.md | AI-01, AI-02, AI-03, AI-04, AI-05, AI-06, AI-07, AI-08, AI-09, AI-10, AI-11, AI-12, AI-13, AI-14, AI-15, AI-16, AI-17, AI-18, AI-19, AI-20, AI-21, AI-22, AI-23, DA-15, ES-01, ES-02, ES-03, ES-04, ES-05, ES-06, ES-07 |
 | DOC-RBK-17 | docs/dev/runbooks/DISCORD_ADMIN.md | AD-10, AD-11, FB-08 |
 | DOC-RBK-18 | docs/dev/runbooks/DISCORD_COMMUNITY_SETUP.md | AD-10, ES-08 |
+| DOC-RBK-19 | docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md | — |
 | DOC-REF-01 | docs/dev/reference/COMBO_STUDY_STRATEGY.md | DR-02, DR-03, DR-04, DR-05, DR-06, DR-07, Q-01, Q-02, Q-03, Q-04, Q-05, Q-06, Q-07, Q-08, Q-09, Q-10, Q-11, Q-12 |
 | DOC-REF-02 | docs/dev/reference/DEV_ENVIRONMENT.md | — |
 | DOC-REF-03 | docs/dev/reference/FLASHCARD_LOGIC.md | F-01, F-02, F-03, F-04, F-05, F-06, F-07, F-08, F-09, F-10, ID-01, ID-02, ID-03, ID-04, TR-01 |
@@ -1006,3 +1007,4 @@
 ## 부록 C — 관련 SPEC ID 헤더 누락 문서
 
 - docs/assets/README.md
+- docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md
