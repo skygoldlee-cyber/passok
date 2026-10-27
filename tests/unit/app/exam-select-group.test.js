@@ -1,4 +1,5 @@
-// 시험 선택 뷰 그룹핑 (ES-08) — groupExamsForSelect 순수 함수 테스트
+// 시험 선택 뷰 그룹핑 — groupExamsForSelect 순수 함수 테스트
+// @spec ES-01
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { groupExamsForSelect } from '../../../src/views/exam-select.js';
