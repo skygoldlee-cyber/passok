@@ -341,6 +341,7 @@ const MD_ASSETS = [
   './content/exams/labor/교재/elective/5과목_선택과목.md',
   './content/exams/labor/문제은행/과목1_문제은행.md',
   './content/exams/labor/문제은행/과목2_문제은행.md',
+  './content/exams/labor/문제은행/과목3_문제은행.md',
   // MD_ASSETS:END
 ];
 

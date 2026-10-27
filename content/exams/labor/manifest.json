@@ -88,6 +88,13 @@
    "part": 2,
    "title": "노동법(2) 집단관계",
    "file": "과목2_문제은행.md"
+  },
+  {
+   "key": "subject3",
+   "subject": "civil",
+   "part": 3,
+   "title": "민법",
+   "file": "과목3_문제은행.md"
   }
  ],
  "integratedExam": {
