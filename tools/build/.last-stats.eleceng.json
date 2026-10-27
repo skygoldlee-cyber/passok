@@ -40,11 +40,11 @@
         }
       }
     },
-    "code": {
+    "regs": {
       "cards": 0,
       "quizzes": 0,
       "files": {
-        "교재/code/5과목_전기설비기술기준 및 판단기준.md": {
+        "교재/regs/5과목_전기설비기술기준 및 판단기준.md": {
           "cards": 0,
           "quizzes": 0
         }

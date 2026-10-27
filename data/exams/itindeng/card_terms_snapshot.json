@@ -1,13 +1,5 @@
 {
- "swdesign": {
-  "cards": {},
-  "quizzes": {}
- },
- "swdev": {
-  "cards": {},
-  "quizzes": {}
- },
- "db": {
+ "sysbase": {
   "cards": {},
   "quizzes": {}
  },
@@ -15,7 +7,7 @@
   "cards": {},
   "quizzes": {}
  },
- "sysmgmt": {
+ "db": {
   "cards": {},
   "quizzes": {}
  }
