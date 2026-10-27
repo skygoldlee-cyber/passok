@@ -80,6 +80,7 @@
         "src/pwa/pwa-install-capture.js",
         "src/pwa/pwa-install.js",
         "src/pwa/pwa-manifest.js",
+        "src/pwa/version-watch.js",
         "src/questions.js",
         "src/reader-notes.js",
         "src/reader/exam-viewer.js",
