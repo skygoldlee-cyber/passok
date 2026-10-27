@@ -8298,3 +8298,9 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 ## #76 — labor 팩 생성물 + 배포 준비 (2026-10-28)
 
 - data/exams/labor 번들·manifest.labor.webmanifest·sw.js·키워드/법령 인덱스 재생성
+
+## #77 — scaffold:chapter 규약 선재화 (2026-10-28)
+
+- refLink를 insadj 규약으로 통일: 꺽쇠·../../ 제거 → ../참조자료 + %28%29/%20 인코딩
+- 섹션 슬롯을 `### N.` 장 내 독립 번호로 내장 (N.M 금지 주석 — check:numbering 규약)
+- scaffold-chapter 테스트 갱신 — broker 게이트 3건 실패(링크·번호)의 재발 차단

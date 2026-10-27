@@ -33,9 +33,10 @@ test('buildChapterSkeleton: 링크는 인코딩된 ref_md 경로 규약', () => 
     const md = buildChapterSkeleton(base);
     assert.ok(md.includes('../참조자료/ref_md/과목1/보험업법%28법률%29%28제20436호%29%2820250131%29/'), '괄호 %28/%29 인코딩');
     assert.ok(md.includes('보험업법%20시행령'), '공백 %20 인코딩');
-    // 원문 괄호 미인코딩 잔재 없음 (링크 URL 내부)
-    const linkUrls = [...md.matchAll(/\]\((<[^>]+>)\)/g)].map(m => m[1]);
-    assert.ok(linkUrls.length >= 6, '출처·원문·백매터 링크 전부 <url> 래핑');
+    // 원문 괄호 미인코딩 잔재 없음 (링크 URL 내부) — insadj 규약: 꺽쇠 없는 (../참조자료/…) 형식
+    const linkUrls = [...md.matchAll(/\]\((\.\.\/참조자료[^)]+)\)/g)].map(m => m[1]);
+    assert.ok(linkUrls.length >= 6, '출처·원문·백매터 링크 전부 ../참조자료 형식');
+    assert.ok(!md.includes('(<../참조자료'), '꺽쇠 래핑 없음');
     linkUrls.forEach(u => assert.ok(!u.includes('('), `URL 내 생괄호 없음: ${u}`));
 });
 

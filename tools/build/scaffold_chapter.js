@@ -82,10 +82,10 @@ function listRefDocs(contentRoot, subjectNum) {
         .sort();
 }
 
-/** 교재 파일에서 참조하는 상대 링크 — 교재/<key>/file.md 기준 `../참조자료/…` 규약 */
+/** 교재 파일에서 참조하는 상대 링크 — 교재/<key>/file.md 기준 `../참조자료/…` 규약 (insadj 선례 — 꺽쇠·../../ 미사용, 공백·괄호는 인코딩) */
 function refLink(contentRoot, mdRel) {
     // 교재 파일은 {contentRoot}/교재/<subjKey>/에 위치 — `../참조자료/` 상대 경로가 규약
-    return `<../참조자료/${encodeRefUrl(mdRel.replace(/^참조자료\//, ''))}>`;
+    return `../참조자료/${encodeRefUrl(mdRel.replace(/^참조자료\//, ''))}`;
 }
 
 /** 챕터 골격 MD 생성 (순수 함수 — 테스트 대상) */
@@ -98,8 +98,8 @@ function buildChapterSkeleton({ title, refs, contentRoot }) {
         const link = refLink(contentRoot, r.mdRel);
         const chNo = String(idx + 1).padStart(2, '0');
         lines.push(`## 📚 Chapter ${chNo}. ${r.docName} — <!-- 작성: 챕터 부제 -->`, '');
-        lines.push('<!-- 작성: 본문 — 참조 원문을 근거로 재서술 (CS-11 도출 원자 ②). 출제기준으로 선별한 조문·표만 다룸 -->', '');
-        lines.push('### <!-- 작성: 섹션 제목 (예: 제1조 목적·정의) -->', '');
+        lines.push('<!-- 작성: 본문 — 참조 원문을 근거로 재서술 (CS-11 도출 원자 ②). 출제기준으로 선별한 조문·표만 다룸. 섹션은 `### N.` 장 내 독립 번호 (N.M 하위번호 사용 금지 — check:numbering 규약) -->', '');
+        lines.push('### 1. <!-- 작성: 섹션 제목 (예: 제1조 목적·정의) -->', '');
         lines.push('<!-- 작성: 본문 -->', '');
         lines.push(`> 📌 **출처**: ${r.docName} <!-- 작성: 제N조 --> | **참조 자료**: [${r.docName}.md](${link}) | **시행일**: <!-- 작성 --> | **최종 확인**: <!-- 작성 -->`, '');
         lines.push(`> **원문 보기**: [${r.docName}.md](${link})`, '');
