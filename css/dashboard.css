@@ -690,6 +690,11 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 /* ============================================================
    시험 선택 (멀티시험 플랫폼)
    ============================================================ */
+.exam-select-actions {
+    display: flex;
+    gap: var(--space-2, 0.5rem);
+    margin-top: var(--space-3, 0.75rem);
+}
 .exam-select-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));

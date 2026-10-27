@@ -186,7 +186,7 @@ import { setupOfflineDetection } from './views/offline-detection.js';
 import { setupEventListeners } from './views/event-listeners.js';
 import { getViewTitles, navigateToView, initViewHashRouting } from './router.js';
 import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage, getActiveRegistry } from './exam-context.js';
-import { renderExamSelect, showExamSelect, selectExamAction, resetExamSelection } from './views/exam-select.js';
+import { renderExamSelect, showExamSelect, selectExamAction, resetExamSelection, hardReloadApp } from './views/exam-select.js';
 import { initUiMode, toggleUiMode, toggleStudyTools } from './ui-mode.js';
 import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword, authOAuth } from './auth-sync/auth-view.js';
 import { showRedeemDialog, initPlanSync } from './pro-redeem.js';
@@ -601,7 +601,7 @@ const DELEGATED_HANDLERS = {
     startDailyChallenge, closeDailyModal, nextDailyStep,
     submitDailyCardAnswer, submitDailyShortAnswer,
     // 사전/시험 전환
-    clearDictSearch, setDictFilter, dictExportCsv, dictOpenByName, checkDictNoticeNow, showExamSelect, selectExamAction, resetExamSelection,
+    clearDictSearch, setDictFilter, dictExportCsv, dictOpenByName, checkDictNoticeNow, showExamSelect, selectExamAction, resetExamSelection, hardReloadApp,
     // Formula OS (배합 계산·My 포뮬러) — 모듈·핸들러는 practice-registry 지연 로딩 (LAZY_MODULE_HANDLERS)
     showIngredientsChangelog,
     // 학습/실무 UI 모드

@@ -8,8 +8,13 @@
                         — PassOK는 어떤 앱인가?
                     </p>
                 </div>
-                <button type="button" id="exam-select-clear" class="btn btn-secondary btn-sm is-hidden" data-click="resetExamSelection">
-                    <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> 선택 해제 — 다음 실행부터 시험 선택이 먼저 표시됩니다
-                </button>
+                <div class="exam-select-actions">
+                    <button type="button" id="exam-select-clear" class="btn btn-secondary btn-sm is-hidden" data-click="resetExamSelection">
+                        <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> 선택 해제 — 다음 실행부터 시험 선택이 먼저 표시됩니다
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-click="hardReloadApp" title="최신 콘텐츠·캐시 강제 새로고침 (Ctrl+F5)">
+                        <i class="fa-solid fa-rotate" aria-hidden="true"></i> 새로고침
+                    </button>
+                </div>
                 <div id="exam-select-list" class="exam-select-grid"></div>
             </section>

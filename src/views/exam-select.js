@@ -200,6 +200,22 @@ export function resetExamSelection() {
     showToast('시험 선택이 해제됐습니다 — 다음 실행부터 시험 선택이 먼저 표시됩니다', 'info');
 }
 
+/** 강제 새로고침 — SW 캐시 우회 + 페이지 리로드 (Ctrl+F5 동일 효과) */
+export async function hardReloadApp() {
+    try {
+        // 서비스워커 캐시 전량 제거 — 오래된 번들이 남는 문제 방지
+        if ('caches' in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map(k => caches.delete(k)));
+        }
+        if (navigator.serviceWorker) {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(regs.map(r => r.unregister()));
+        }
+    } catch (e) { /* noop — 캐시 삭제 실패해도 리로드는 수행 */ }
+    location.reload();
+}
+
 /** 시험 카드 선택 — 준비중 시험은 알림만, 다른 시험이면 selectExam이 리로드, 같으면 대시보드로 복귀 */
 export function selectExamAction(id) {
     const def = getExamList().find(e => e.id === id);
