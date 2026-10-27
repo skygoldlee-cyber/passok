@@ -88,6 +88,7 @@
   "tools/build/.last-stats.indsafe.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.indsafe)",
   "tools/build/.last-stats.insadj.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.insadj)",
   "tools/build/.last-stats.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats)",
+  "tools/build/.last-stats.labor.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.labor)",
   "tools/build/.last-stats.lossadj.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.lossadj)",
   "tools/build/.last-stats.skincare.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.skincare)",
   "tools/build/drill-utils.js — tools 파일명은 snake_case (drill-utils.js)",

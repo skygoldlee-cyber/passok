@@ -247,6 +247,26 @@
    "comingSoon": true,
    "appNameEn": "Passpraisal",
    "practiceName": "Appraisal OS"
+  },
+  {
+   "id": "labor",
+   "name": "공인노무사",
+   "shortName": "노무사",
+   "appName": "공인노무사",
+   "title": "공인노무사",
+   "logoMain": "공인노무사",
+   "logoSub": "",
+   "desc": "공인노무사 1차·2차 — 노동법·민법·사회보험법 등 (콘텐츠 구축 중)",
+   "icon": "fa-solid fa-book",
+   "year": "2027",
+   "theme": {},
+   "contentRoot": "content/exams/labor",
+   "dataRoot": "data/exams/labor",
+   "manifestPath": "content/exams/labor/manifest.json",
+   "registryBundle": "data/exams/labor/registry.js",
+   "registryGlobal": "DATA_REGISTRY_LABOR",
+   "features": {},
+   "comingSoon": true
   }
  ]
 }

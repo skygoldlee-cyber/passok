@@ -8270,3 +8270,19 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 - `npm test` 248 pass, 0 fail
 - 인용 링크 999/999 유효, 0 unresolved
 - CACHE_VERSION → `v301-20260910-unify-ch-root-nodes`
+
+## #73 — 공인노무사 시험팩 온보딩 + broker Phase B 표준형 완료 (2026-10-28)
+
+> **목표**: broker 전 과목 표준형 교재 완성 + ai 초안 통합 + 공인노무사 신규 팩 착수
+
+### 변경 내용
+
+- broker 표준형 7과목 완성 (골격 40KB → 표준형 ~100KB) + ref_md 27→69건
+- ai 초안 통합: 과목4 국토이용법(개발행위·계획체계 심화), 과목2 민법(채권·계약법 장 신설 + 물권 심화 장)
+- 교재 링크 규약 정합화 — insadj 규약(`../`·%28%29 인코딩) + `### M.` 장 내 독립 번호체계 적용
+- labor 팩 scaffold + 1차 법령 ref_md 23건 (노동법(1) 11·(2) 5·민법 1·사회보험 6) + comingSoon
+- check:all 56단계 전체 통과 (broker 정합화 포함)
+
+### 검증
+
+- `check:reflayout` labor 23건 깨짐 0 · `check:all` broker 정합화 후 전체 통과
