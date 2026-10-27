@@ -8286,3 +8286,7 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 ### 검증
 
 - `check:reflayout` labor 23건 깨짐 0 · `check:all` broker 정합화 후 전체 통과
+
+## #74 — 손해평가 이론서 대형 이미지 allowlist 등록 (2026-10-28)
+
+- lossadj ref_md/과목5 이론서 스캔 이미지 13건(>500KB) binary_allowlist 등록 — 출처 보존 목적
