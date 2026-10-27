@@ -156,7 +156,8 @@ function main() {
 
     const outAbs = path.resolve(ROOT, target.contentRoot, args.out);
     const relOut = path.relative(ROOT, outAbs);
-    if (!relOut.startsWith(target.contentRoot)) fail(`--out은 ${target.contentRoot}/ 하위여야 함: ${relOut}`);
+    const relOutFwd = relOut.split(path.sep).join('/');
+    if (!relOutFwd.startsWith(target.contentRoot)) fail(`--out은 ${target.contentRoot}/ 하위여야 함: ${relOut}`);
     if (fs.existsSync(outAbs) && !args.force) fail(`파일 존재 — --force 필요: ${relOut}`);
     fs.mkdirSync(path.dirname(outAbs), { recursive: true });
     fs.writeFileSync(outAbs, md, 'utf-8');
