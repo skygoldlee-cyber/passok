@@ -368,12 +368,12 @@ const MD_ASSETS = [
   './content/exams/eleceng/교재/power/2과목_전력공학.md',
   './content/exams/eleceng/교재/mach/3과목_전기기기.md',
   './content/exams/eleceng/교재/circuit/4과목_회로이론 및 제어공학.md',
-  './content/exams/eleceng/교재/code/5과목_전기설비기술기준 및 판단기준.md',
+  './content/exams/eleceng/교재/regs/5과목_전기설비기술기준 및 판단기준.md',
   './content/exams/elecindeng/교재/em/1과목_전기자기학.md',
   './content/exams/elecindeng/교재/power/2과목_전력공학.md',
   './content/exams/elecindeng/교재/mach/3과목_전기기기.md',
   './content/exams/elecindeng/교재/circuit/4과목_회로이론 및 제어공학.md',
-  './content/exams/elecindeng/교재/code/5과목_전기설비기술기준 및 판단기준.md',
+  './content/exams/elecindeng/교재/regs/5과목_전기설비기술기준 및 판단기준.md',
   // MD_ASSETS:END
 ];
 

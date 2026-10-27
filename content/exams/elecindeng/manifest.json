@@ -60,11 +60,11 @@
    ]
   },
   {
-   "key": "code",
+   "key": "regs",
    "order": 5,
    "name": "전기설비기술기준 및 판단기준",
    "shortName": "기술기준",
-   "dir": "교재/code",
+   "dir": "교재/regs",
    "chapters": [
     {
      "key": "full",
@@ -81,7 +81,7 @@
    "power": 20,
    "mach": 20,
    "circuit": 20,
-   "code": 20
+   "regs": 20
   },
   "examTimeMin": 150,
   "passAverage": 60,
