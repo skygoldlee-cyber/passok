@@ -277,7 +277,7 @@ const MD_ASSETS = [
   './content/exams/lossadj/문제은행/과목1_문제은행.md',
   './content/exams/lossadj/문제은행/과목2_문제은행.md',
   './content/exams/lossadj/문제은행/과목3_문제은행.md',
-  './content/exams/broker/교재/estate_intro/부동산학개론.md',
+  './content/exams/broker/교재/estate_intro/1과목_부동산학개론_표준형.md',
   './content/exams/broker/교재/civil_broker/2과목_민법_표준형.md',
   './content/exams/broker/교재/broker_law/3과목_공인중개사법_표준형.md',
   './content/exams/broker/교재/estate_publaw/4과목_부동산공법_표준형.md',
