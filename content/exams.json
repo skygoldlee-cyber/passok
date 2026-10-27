@@ -53,7 +53,8 @@
       },
       "appNameEn": "Passmula",
       "practiceName": "Formula OS",
-      "discordInvite": "https://discord.gg/eHerSQG9hj"
+      "discordInvite": "https://discord.gg/eHerSQG9hj",
+      "group": "미용·화장품"
     },
     {
       "id": "skincare",
@@ -81,7 +82,8 @@
       },
       "comingSoon": true,
       "appNameEn": "Passkin",
-      "practiceName": "Skin OS"
+      "practiceName": "Skin OS",
+      "group": "미용·화장품"
     },
     {
       "id": "hairdresser",
@@ -105,7 +107,8 @@
       },
       "appNameEn": "Passhair",
       "practiceName": "Hair OS",
-      "comingSoon": true
+      "comingSoon": true,
+      "group": "미용·화장품"
     },
     {
       "id": "insadj",
@@ -131,7 +134,8 @@
         "writtenPractice": true
       },
       "appNameEn": "Passure",
-      "practiceName": "Adjust OS"
+      "practiceName": "Adjust OS",
+      "group": "보험·평가·부동산"
     },
     {
       "id": "lossadj",
@@ -158,7 +162,8 @@
         "writtenPractice": true
       },
       "appNameEn": "Passess",
-      "practiceName": "Assess OS"
+      "practiceName": "Assess OS",
+      "group": "보험·평가·부동산"
     },
     {
       "id": "broker",
@@ -177,7 +182,8 @@
       "manifestPath": "content/exams/broker/manifest.json",
       "registryBundle": "data/exams/broker/registry.js",
       "registryGlobal": "DATA_REGISTRY_BROKER",
-      "comingSoon": true
+      "comingSoon": true,
+      "group": "법무·노무"
     },
     {
       "id": "indsafe",
@@ -201,7 +207,8 @@
       },
       "comingSoon": true,
       "appNameEn": "Passafe",
-      "practiceName": "Safety OS"
+      "practiceName": "Safety OS",
+      "group": "산업안전"
     },
     {
       "id": "admagent",
@@ -225,7 +232,8 @@
       },
       "comingSoon": true,
       "appNameEn": "Passmin",
-      "practiceName": "Docs OS"
+      "practiceName": "Docs OS",
+      "group": "법무·노무"
     },
     {
       "id": "appraisal",
@@ -246,7 +254,8 @@
       "registryGlobal": "DATA_REGISTRY_APPRAISAL",
       "comingSoon": true,
       "appNameEn": "Passpraisal",
-      "practiceName": "Appraisal OS"
+      "practiceName": "Appraisal OS",
+      "group": "보험·평가·부동산"
     },
     {
       "id": "labor",
@@ -266,7 +275,8 @@
       "registryBundle": "data/exams/labor/registry.js",
       "registryGlobal": "DATA_REGISTRY_LABOR",
       "features": {},
-      "comingSoon": true
+      "comingSoon": true,
+      "group": "법무·노무"
     },
     {
       "id": "iteng",
@@ -285,7 +295,9 @@
       "manifestPath": "content/exams/iteng/manifest.json",
       "registryBundle": "data/exams/iteng/registry.js",
       "registryGlobal": "DATA_REGISTRY_ITENG",
-      "features": {}
+      "features": {},
+      "group": "정보처리",
+      "comingSoon": true
     },
     {
       "id": "itindeng",
@@ -304,7 +316,9 @@
       "manifestPath": "content/exams/itindeng/manifest.json",
       "registryBundle": "data/exams/itindeng/registry.js",
       "registryGlobal": "DATA_REGISTRY_ITINDENG",
-      "features": {}
+      "features": {},
+      "group": "정보처리",
+      "comingSoon": true
     },
     {
       "id": "indsafeind",
@@ -323,7 +337,9 @@
       "manifestPath": "content/exams/indsafeind/manifest.json",
       "registryBundle": "data/exams/indsafeind/registry.js",
       "registryGlobal": "DATA_REGISTRY_INDSAFEIND",
-      "features": {}
+      "features": {},
+      "group": "산업안전",
+      "comingSoon": true
     },
     {
       "id": "eleceng",
@@ -342,7 +358,9 @@
       "manifestPath": "content/exams/eleceng/manifest.json",
       "registryBundle": "data/exams/eleceng/registry.js",
       "registryGlobal": "DATA_REGISTRY_ELECENG",
-      "features": {}
+      "features": {},
+      "group": "전기",
+      "comingSoon": true
     },
     {
       "id": "elecindeng",
@@ -361,7 +379,9 @@
       "manifestPath": "content/exams/elecindeng/manifest.json",
       "registryBundle": "data/exams/elecindeng/registry.js",
       "registryGlobal": "DATA_REGISTRY_ELECINDENG",
-      "features": {}
+      "features": {},
+      "group": "전기",
+      "comingSoon": true
     }
   ]
 }

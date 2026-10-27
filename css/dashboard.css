@@ -696,6 +696,33 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
     gap: var(--space-4, 1rem);
     margin-top: var(--space-4, 1rem);
 }
+.exam-select-group {
+    grid-column: 1 / -1;
+    display: block;
+}
+.exam-select-group + .exam-select-group {
+    margin-top: var(--space-6, 1.5rem);
+}
+.exam-select-group-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3, 0.75rem);
+    margin-bottom: var(--space-2, 0.5rem);
+    padding-bottom: var(--space-2, 0.5rem);
+    border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.08));
+}
+.exam-select-group-name {
+    font-size: var(--font-size-lg, 1.05rem);
+    font-weight: 600;
+    color: var(--color-text, #e8eaf0);
+}
+.exam-select-group-count {
+    font-size: var(--font-size-sm, 0.8rem);
+    color: var(--color-text-muted, #9aa0b0);
+}
+.exam-select-group .exam-select-grid {
+    margin-top: var(--space-2, 0.5rem);
+}
 .exam-select-card {
     background: var(--color-surface, rgba(255,255,255,0.03));
     border: 1px solid var(--color-border, rgba(255,255,255,0.08));

@@ -2,6 +2,7 @@
 // @spec ES-01~03,ES-06
 // 멀티시험 플랫폼의 홈: 등록된 시험 목록을 카드로 표시하고 선택 시 시험을 전환한다.
 // 카드에는 시험별 진도 요약(외운 카드·퀴즈 정답률·최근 학습일·D-day)과 액센트 스왓치를 표시한다.
+/** @typedef {import('../types.js').ExamDef} ExamDef */
 import { getExamList, getCurrentExamId, clearCurrentExam, selectExam, peekExamValue, resolveExamThemeTokens } from '../exam-context.js';
 import { getItem, setItem } from '../storage.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
@@ -112,7 +113,7 @@ export function renderExamSelect() {
     const clearBtn = document.getElementById('exam-select-clear');
     if (clearBtn) clearBtn.classList.toggle('is-hidden', !currentId);
 
-    container.innerHTML = exams.map(e => {
+    const cardHtml = e => {
         const isCurrent = e.id === currentId;
         const isSoon = !!e.comingSoon;
         const accent = resolveExamThemeTokens(e)['--color-primary'];
@@ -136,7 +137,41 @@ export function renderExamSelect() {
                 </div>
             </div>
         `;
-    }).join('');
+    };
+
+    // 유사 시험 그룹핑 (ES-08) — exams.json의 group 필드로 섹션을 나눈다.
+    const groups = groupExamsForSelect(exams);
+    if (!groups) {
+        container.innerHTML = exams.map(cardHtml).join('');
+        return;
+    }
+    container.innerHTML = groups.map(([g, members]) => `
+        <div class="exam-select-group">
+            <div class="exam-select-group-head"><span class="exam-select-group-name">${esc(g)}</span>
+                <span class="exam-select-group-count">${members.length}개</span></div>
+            <div class="exam-select-group-grid exam-select-grid">${members.map(cardHtml).join('')}</div>
+        </div>`).join('');
+}
+
+/**
+ * 시험 목록을 그룹 섹션으로 묶는다 (ES-08 — 순수 함수, 테스트 가능).
+ * - group 필드가 하나도 없으면 null (기존 평면 그리드 유지)
+ * - group 미지정 시험은 '기타' 섹션, 항상 맨 뒤
+ * - 그룹 내 순서·그룹 간 순서는 exams.json 선언 순서 유지
+ * @param {ExamDef[]} exams
+ * @returns {[string, ExamDef[]][]|null}
+ */
+export function groupExamsForSelect(exams) {
+    if (!exams.some(e => e.group)) return null;
+    const order = [];
+    const byGroup = new Map();
+    for (const e of exams) {
+        const g = e.group || '기타';
+        if (!byGroup.has(g)) { byGroup.set(g, []); order.push(g); }
+        byGroup.get(g).push(e);
+    }
+    order.sort((a, b) => (a === '기타' ? 1 : 0) - (b === '기타' ? 1 : 0));
+    return order.map(g => [g, byGroup.get(g)]);
 }
 
 /** 시험 전환 버튼 → 피커 뷰 표시 (렌더링은 라우터의 viewRenderers 디스패치에 위임) */

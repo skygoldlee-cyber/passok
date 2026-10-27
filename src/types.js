@@ -313,6 +313,7 @@
  * @property {string}   [manifestPath]
  * @property {string}   [registryBundle]
  * @property {string}   [registryGlobal]
+ * @property {string}   [group]        시험 그룹 라벨 — 시험 선택 뷰에서 유사 시험을 섹션으로 묶는다 (ES-08)
  * @property {Object.<string, string>}  [theme]          시험별 스킨 토큰 오버라이드 (DA-14) — '--color-*'/'--bg-*'/'--border-*'/'--stroke-*' 키만 적용
  * @property {Object.<string, boolean>} [features]
  * @property {string}   [discordInvite] 시험별 Discord 커뮤니티 초대 URL — 선언 시 도움말 메뉴에 'Discord 커뮤니티' 버튼 노출 (DOC-DSN-36)
