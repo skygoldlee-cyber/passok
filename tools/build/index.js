@@ -345,6 +345,20 @@ function main() {
     return { key: w.key, title: w.title, desc: w.desc || '', file: w.file, stats: { questions: count } };
   });
 
+  // 3.4-2 PastExams (기출·보충 객관식 — manifest.pastExams 선언 시에만 registry에 기록)
+  //   대시보드 기출 카드가 ExamViewer로 여는 목록. ### Q 헤딩 수를 집계한다.
+  registry.pastExams = (manifest.pastExams || []).map(w => {
+    const fp = path.join(WORKSPACE_DIR, EXAM_CONTENT_ROOT, '문제은행', w.file || '');
+    let count = 0;
+    try {
+      count = (fs.readFileSync(fp, 'utf8').match(/^###\s*Q\d+/gm) || []).length;
+    } catch (e) {
+      console.error(`pastExams["${w.key}"].file 없음: ${fp}`);
+      process.exit(1);
+    }
+    return { key: w.key, title: w.title, desc: w.desc || '', file: w.file, kind: w.kind || 'past', stats: { questions: count } };
+  });
+
   // 3.5 Supplements — 문제은행 출제 비중 기준 카드/퀴즈 목표 산출 + 부족 과목 보충 번들 생성
   // (교재 파생 수량이 문제은행 비율과 괴리되므로, 부족분은 문제은행 문항을 카드/퀴즈로 변환해
   //  data/supplements/ 번들로 채우고, 초과분은 stats.targetCards/Quizzes 표시 상한으로 조정)

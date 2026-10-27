@@ -22,6 +22,8 @@
  *   node tools/sync/sync_textbook_files.js --check   # 불일치 보고만 (exit 1 on drift)
  *   node tools/sync/sync_textbook_files.js --rename <contentRoot 상대 구경로> <신경로>
  *       예: --rename 교재/law/OLD.md 교재/law/NEW.md
+ *   node tools/sync/sync_textbook_files.js --rename-batch <JSON파일>
+ *       예: --rename-batch tmp/renames.json  (형식: [{"from":"문제은행/구.md","to":"문제은행/신.md"}, ...])
  */
 
 // @spec none (콘텐츠 구조 동기화 도구)
@@ -41,6 +43,10 @@ const renameIdx = process.argv.indexOf('--rename');
 const RENAME = renameIdx >= 0
     ? { from: process.argv[renameIdx + 1], to: process.argv[renameIdx + 2] }
     : null;
+
+// --rename-batch <json>: [{from,to}, ...] 일괄 리네임 (applyRename과 동일 전파 규칙)
+const batchIdx = process.argv.indexOf('--rename-batch');
+const RENAME_BATCH = batchIdx >= 0 ? process.argv[batchIdx + 1] : null;
 
 const posix = p => p.split(path.sep).join('/');
 const jstr = s => JSON.stringify(s); // JSON 문자열 리터럴 (이스케이프 일관)
@@ -156,7 +162,12 @@ function syncManifest(target) {
 
     // 문제은행 — 과목N_ 접두로 subjects[].order와 매칭해 미등록 파일 자동 등록
     const bankDir = path.join(sroot, '문제은행');
-    const declaredExams = new Set((m.exams || []).map(e => e.file).filter(Boolean));
+    const declaredExams = new Set(
+        (m.exams || []).map(e => e.file)
+            .concat((m.written || []).map(w => w.file))
+            .concat((m.pastExams || []).map(w => w.file))
+            .filter(Boolean)
+    );
     const declaredKeys = new Set((m.exams || []).map(e => e.key));
     const orderToSubject = {};
     for (const s of m.subjects || []) {
@@ -277,6 +288,14 @@ function applyRename(target, from, to) {
             e.file = newBase; touched++;
         }
     }
+    for (const key of ['written', 'pastExams']) {
+        for (const w of m[key] || []) {
+            if (`문제은행/${w.file || ''}` === posix(from)) {
+                edits.push({ search: `"file": ${jstr(w.file)}`, replace: `"file": ${jstr(newBase)}` });
+                w.file = newBase; touched++;
+            }
+        }
+    }
     if (edits.length) applyManifestEdits(target, edits, []);
 
     // 3) sw.js MD_ASSETS 경로 문자열
@@ -324,14 +343,22 @@ if (CHECK_ONLY) console.log('[--check] 쓰기 없이 불일치만 보고합니�
 
 const targets = getExamTargets(ROOT);
 
-if (RENAME) {
-    if (!RENAME.from || !RENAME.to) {
-        console.error('사용법: --rename <contentRoot 상대 구경로> <신경로>');
+if (RENAME || RENAME_BATCH) {
+    const pairs = [];
+    if (RENAME) pairs.push(RENAME);
+    if (RENAME_BATCH) {
+        const spec = JSON.parse(fs.readFileSync(path.resolve(RENAME_BATCH), 'utf-8'));
+        for (const p of spec) pairs.push(p);
+    }
+    if (pairs.some(p => !p.from || !p.to)) {
+        console.error('사용법: --rename <구경로> <신경로> 또는 --rename-batch <[{from,to}] json>');
         process.exit(2);
     }
     let touched = 0;
-    for (const t of targets) touched += applyRename(t, RENAME.from, RENAME.to);
-    console.log(`리네임 전파 완료 (${touched}개 지점). 이어서 일반 동기화를 실행합니다.\n`);
+    for (const p of pairs) {
+        for (const t of targets) touched += applyRename(t, p.from, p.to);
+    }
+    console.log(`리네임 전파 완료 (${pairs.length}건 · ${touched}개 지점). 이어서 일반 동기화를 실행합니다.\n`);
 }
 
 for (const t of targets) {

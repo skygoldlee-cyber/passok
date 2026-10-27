@@ -1,321 +1,336 @@
 {
-  "schemaVersion": 1,
-  "contentYear": "2027",
-  "textbookEdition": "2027",
-  "_pilot": "감정평가사 1차 필기 3과목 파일럿 — 출제기준 기반 자체 제작본, 과목당 골격 문항 투입 상태 (check:onboard 준비도 대상). 정식 전환은 NEW_EXAM_RUNBOOK §승격 기준. 2차 주관식은 CBT 구조와 미부합으로 대상 외.",
-  "subjects": [
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
+ "_pilot": "감정평가사 1차 필기 3과목 파일럿 — 출제기준 기반 자체 제작본, 과목당 골격 문항 투입 상태 (check:onboard 준비도 대상). 정식 전환은 NEW_EXAM_RUNBOOK §승격 기준. 2차 주관식은 CBT 구조와 미부합으로 대상 외.",
+ "subjects": [
+  {
+   "key": "civil",
+   "order": 1,
+   "name": "민법 (총칙·물권)",
+   "shortName": "민법",
+   "dir": "교재/civil",
+   "chapters": [
     {
-      "key": "civil",
-      "order": 1,
-      "name": "민법 (총칙·물권)",
-      "shortName": "민법",
-      "dir": "교재/civil",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "민법 (총칙·물권)",
-          "file": "민법_총칙물권.md"
-        }
-      ]
-    },
-    {
-      "key": "econ",
-      "order": 2,
-      "name": "경제학원론",
-      "shortName": "경제학",
-      "dir": "교재/econ",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "경제학원론",
-          "file": "경제학원론.md"
-        }
-      ]
-    },
-    {
-      "key": "realestate",
-      "order": 3,
-      "name": "부동산학원론",
-      "shortName": "부동산학",
-      "dir": "교재/realestate",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "부동산학원론",
-          "file": "부동산학원론.md"
-        },
-        {
-          "key": "intro",
-          "title": "부동산학개론 (구 골격)",
-          "file": "../theory/부동산학개론.md"
-        }
-      ]
-    },
-    {
-      "key": "law",
-      "order": 4,
-      "name": "감정평가 관계 법규",
-      "shortName": "법규",
-      "dir": "교재/law",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "감정평가관련법규",
-          "file": "감정평가관련법규.md"
-        }
-      ]
-    },
-    {
-      "key": "accounting",
-      "order": 5,
-      "name": "회계학",
-      "shortName": "회계학",
-      "dir": "교재/accounting",
-      "chapters": [
-        {
-          "key": "full",
-          "title": "회계학",
-          "file": "회계학.md"
-        }
-      ]
-    },
-    {
-      "key": "appraisalthy",
-      "order": 6,
-      "name": "감정평가이론 (2차)",
-      "shortName": "평가이론",
-      "dir": "교재/appraisal",
-      "chapters": [
-        {
-          "key": "theory",
-          "title": "감정평가이론",
-          "file": "감정평가이론.md"
-        },
-        {
-          "key": "stats",
-          "title": "감정평가 및 통계원론 (참고)",
-          "file": "감정평가_통계원론.md"
-        }
-      ]
-    },
-    {
-      "key": "appraisallaw",
-      "order": 7,
-      "name": "감정평가 및 보상 법규 (2차)",
-      "shortName": "보상법규",
-      "dir": "교재/appraisal",
-      "chapters": [
-        {
-          "key": "law",
-          "title": "감정평가 및 보상 법규",
-          "file": "감정평가및보상법규.md"
-        }
-      ]
-    },
-    {
-      "key": "appraisalwork",
-      "order": 8,
-      "name": "감정평가실무 (2차)",
-      "shortName": "평가실무",
-      "dir": "교재/appraisal",
-      "chapters": [
-        {
-          "key": "work",
-          "title": "감정평가실무",
-          "file": "감정평가실무.md"
-        }
-      ]
+     "key": "full",
+     "title": "민법 (총칙·물권)",
+     "file": "민법_총칙물권.md"
     }
-  ],
-  "exams": [
-    {
-      "key": "s_civil",
-      "subject": "civil",
-      "part": 1,
-      "title": "민법 (총칙·물권)",
-      "file": "과목1_문제은행.md"
-    },
-    {
-      "key": "s_econ",
-      "subject": "econ",
-      "part": 1,
-      "title": "경제학원론",
-      "file": "과목3_문제은행.md"
-    },
-    {
-      "key": "s_law",
-      "subject": "law",
-      "part": 1,
-      "title": "감정평가 관계 법규",
-      "file": "과목2_문제은행.md"
-    },
-    {
-      "key": "s_realestate",
-      "subject": "realestate",
-      "part": 1,
-      "title": "부동산학원론",
-      "file": "과목4_문제은행.md"
-    },
-    {
-      "key": "s_accounting",
-      "subject": "accounting",
-      "part": 1,
-      "title": "회계학",
-      "file": "과목5_문제은행.md"
-    },
-    {
-      "key": "s2_theory",
-      "subject": "appraisalthy",
-      "part": 2,
-      "title": "감정평가이론 (서술형)",
-      "file": "2차_평가이론_주관식.md"
-    },
-    {
-      "key": "s2_law",
-      "subject": "appraisallaw",
-      "part": 2,
-      "title": "감정평가 및 보상 법규 (서술형)",
-      "file": "2차_보상법규_주관식.md"
-    },
-    {
-      "key": "s2_work",
-      "subject": "appraisalwork",
-      "part": 2,
-      "title": "감정평가실무 (서술형)",
-      "file": "2차_평가실무_주관식.md"
-    }
-  ],
-  "uiText": {
-    "dashboard": {
-      "title": "학습 대시보드",
-      "nav": "대시보드"
-    },
-    "analysis": {
-      "title": "학습진단",
-      "nav": "학습진단"
-    },
-    "flashcard": {
-      "title": "개념 플래시카드",
-      "nav": "카드"
-    },
-    "quiz": {
-      "title": "기출 및 핵심 퀴즈",
-      "nav": "퀴즈"
-    },
-    "trainer": {
-      "title": "훈련소"
-    },
-    "review": {
-      "title": "오답 및 중요 복습",
-      "nav": "복습"
-    },
-    "exam": {
-      "title": "실전 모의고사",
-      "nav": "모의고사"
-    },
-    "textbook-reader": {
-      "title": "교재리더"
-    },
-    "textbook": {
-      "title": "교재검색"
-    },
-    "calendar": {
-      "title": "캘린더"
-    },
-    "manual": {
-      "title": "매뉴얼"
-    },
-    "studyTools": {
-      "title": "학습도구"
-    },
-    "formula-manual": {
-      "title": "실무매뉴얼"
-    }
+   ]
   },
-  "written": [
+  {
+   "key": "econ",
+   "order": 2,
+   "name": "경제학원론",
+   "shortName": "경제학",
+   "dir": "교재/econ",
+   "chapters": [
     {
-      "key": "past3620251교시",
-      "title": "제36회 기출 1교시",
-      "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
-      "file": "기출제36회_2025_1교시.md"
-    },
-    {
-      "key": "past3620252교시",
-      "title": "제36회 기출 2교시",
-      "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
-      "file": "기출제36회_2025_2교시.md"
-    },
-    {
-      "key": "past3720261교시",
-      "title": "제37회 기출 1교시",
-      "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
-      "file": "기출제37회_2026_1교시.md"
-    },
-    {
-      "key": "past3720262교시",
-      "title": "제37회 기출 2교시",
-      "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
-      "file": "기출제37회_2026_2교시.md"
-    },
-    {
-      "key": "past2320121",
-      "title": "기출 제23회_2012_1교시",
-      "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
-      "file": "기출제23회_2012_1교시.md"
-    },
-    {
-      "key": "past2320122",
-      "title": "기출 제23회_2012_2교시",
-      "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
-      "file": "기출제23회_2012_2교시.md"
-    },
-    {
-      "key": "past351",
-      "title": "기출 제35회__1교시",
-      "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
-      "file": "기출제35회__1교시.md"
-    },
-    {
-      "key": "past352",
-      "title": "기출 제35회__2교시",
-      "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
-      "file": "기출제35회__2교시.md"
-    },
-    {
-      "file": "기출제19회_2008_1교시.md",
-      "title": "제19회 1교시 기출 (2008)",
-      "date": "2008-05",
-      "key": "past191"
-    },
-    {
-      "file": "기출제19회_2008_2교시.md",
-      "title": "제19회 2교시 기출 (2008)",
-      "date": "2008-05",
-      "key": "past192"
-    },
-    {
-      "file": "기출제28회_2017_1교시.md",
-      "title": "제28회 1교시 기출 (2017)",
-      "date": "2017-04",
-      "key": "past281"
-    },
-    {
-      "file": "기출제28회_2017_2교시.md",
-      "title": "제28회 2교시 기출 (2017)",
-      "date": "2017-04",
-      "key": "past282"
-    },
-    {
-      "file": "기출제29회_2018_1교시.md",
-      "title": "제29회 1교시 기출 (2018)",
-      "date": "2018-04",
-      "key": "past291"
-    },
-    {
-      "file": "기출제29회_2018_2교시.md",
-      "title": "제29회 2교시 기출 (2018)",
-      "date": "2018-04",
-      "key": "past292"
+     "key": "full",
+     "title": "경제학원론",
+     "file": "경제학원론.md"
     }
-  ]
+   ]
+  },
+  {
+   "key": "realestate",
+   "order": 3,
+   "name": "부동산학원론",
+   "shortName": "부동산학",
+   "dir": "교재/realestate",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "부동산학원론",
+     "file": "부동산학원론.md"
+    },
+    {
+     "key": "intro",
+     "title": "부동산학개론 (구 골격)",
+     "file": "../theory/부동산학개론.md"
+    }
+   ]
+  },
+  {
+   "key": "law",
+   "order": 4,
+   "name": "감정평가 관계 법규",
+   "shortName": "법규",
+   "dir": "교재/law",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "감정평가관련법규",
+     "file": "감정평가관련법규.md"
+    }
+   ]
+  },
+  {
+   "key": "accounting",
+   "order": 5,
+   "name": "회계학",
+   "shortName": "회계학",
+   "dir": "교재/accounting",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "회계학",
+     "file": "회계학.md"
+    }
+   ]
+  },
+  {
+   "key": "appraisalthy",
+   "order": 6,
+   "name": "감정평가이론 (2차)",
+   "shortName": "평가이론",
+   "dir": "교재/appraisal",
+   "chapters": [
+    {
+     "key": "theory",
+     "title": "감정평가이론",
+     "file": "감정평가이론.md"
+    },
+    {
+     "key": "stats",
+     "title": "감정평가 및 통계원론 (참고)",
+     "file": "감정평가_통계원론.md"
+    }
+   ]
+  },
+  {
+   "key": "appraisallaw",
+   "order": 7,
+   "name": "감정평가 및 보상 법규 (2차)",
+   "shortName": "보상법규",
+   "dir": "교재/appraisal",
+   "chapters": [
+    {
+     "key": "law",
+     "title": "감정평가 및 보상 법규",
+     "file": "감정평가및보상법규.md"
+    }
+   ]
+  },
+  {
+   "key": "appraisalwork",
+   "order": 8,
+   "name": "감정평가실무 (2차)",
+   "shortName": "평가실무",
+   "dir": "교재/appraisal",
+   "chapters": [
+    {
+     "key": "work",
+     "title": "감정평가실무",
+     "file": "감정평가실무.md"
+    }
+   ]
+  }
+ ],
+ "exams": [
+  {
+   "key": "s_civil",
+   "subject": "civil",
+   "part": 1,
+   "title": "민법 (총칙·물권)",
+   "file": "과목1_문제은행.md"
+  },
+  {
+   "key": "s_econ",
+   "subject": "econ",
+   "part": 1,
+   "title": "경제학원론",
+   "file": "과목3_문제은행.md"
+  },
+  {
+   "key": "s_law",
+   "subject": "law",
+   "part": 1,
+   "title": "감정평가 관계 법규",
+   "file": "과목2_문제은행.md"
+  },
+  {
+   "key": "s_realestate",
+   "subject": "realestate",
+   "part": 1,
+   "title": "부동산학원론",
+   "file": "과목4_문제은행.md"
+  },
+  {
+   "key": "s_accounting",
+   "subject": "accounting",
+   "part": 1,
+   "title": "회계학",
+   "file": "과목5_문제은행.md"
+  },
+  {
+   "key": "s2_theory",
+   "subject": "appraisalthy",
+   "part": 2,
+   "title": "감정평가이론 (서술형)",
+   "file": "2차_평가이론_주관식.md"
+  },
+  {
+   "key": "s2_law",
+   "subject": "appraisallaw",
+   "part": 2,
+   "title": "감정평가 및 보상 법규 (서술형)",
+   "file": "2차_보상법규_주관식.md"
+  },
+  {
+   "key": "s2_work",
+   "subject": "appraisalwork",
+   "part": 2,
+   "title": "감정평가실무 (서술형)",
+   "file": "2차_평가실무_주관식.md"
+  }
+ ],
+ "uiText": {
+  "dashboard": {
+   "title": "학습 대시보드",
+   "nav": "대시보드"
+  },
+  "analysis": {
+   "title": "학습진단",
+   "nav": "학습진단"
+  },
+  "flashcard": {
+   "title": "개념 플래시카드",
+   "nav": "카드"
+  },
+  "quiz": {
+   "title": "기출 및 핵심 퀴즈",
+   "nav": "퀴즈"
+  },
+  "trainer": {
+   "title": "훈련소"
+  },
+  "review": {
+   "title": "오답 및 중요 복습",
+   "nav": "복습"
+  },
+  "exam": {
+   "title": "실전 모의고사",
+   "nav": "모의고사"
+  },
+  "textbook-reader": {
+   "title": "교재리더"
+  },
+  "textbook": {
+   "title": "교재검색"
+  },
+  "calendar": {
+   "title": "캘린더"
+  },
+  "manual": {
+   "title": "매뉴얼"
+  },
+  "studyTools": {
+   "title": "학습도구"
+  },
+  "formula-manual": {
+   "title": "실무매뉴얼"
+  }
+ },
+ "written": [],
+ "pastExams": [
+  {
+   "key": "past3620251교시",
+   "title": "제36회 1차 기출 — 1교시",
+   "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
+   "file": "기출_1차_36회_2025_1교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past3620252교시",
+   "title": "제36회 1차 기출 — 2교시",
+   "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
+   "file": "기출_1차_36회_2025_2교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past3720261교시",
+   "title": "제37회 1차 기출 — 1교시",
+   "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
+   "file": "기출_1차_37회_2026_1교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past3720262교시",
+   "title": "제37회 1차 기출 — 2교시",
+   "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
+   "file": "기출_1차_37회_2026_2교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past2320121",
+   "title": "제23회 1차 기출 — 1교시",
+   "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
+   "file": "기출_1차_23회_2012_1교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past2320122",
+   "title": "제23회 1차 기출 — 2교시",
+   "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
+   "file": "기출_1차_23회_2012_2교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past351",
+   "title": "제35회 1차 기출 — 1교시",
+   "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
+   "file": "기출_1차_35회_2024_1교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past352",
+   "title": "제35회 1차 기출 — 2교시",
+   "desc": "Q-net 공개 감정평가사 기출 (공공누리)",
+   "file": "기출_1차_35회_2024_2교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past191",
+   "title": "제19회 1차 기출 — 1교시",
+   "desc": "",
+   "file": "기출_1차_19회_2008_1교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past192",
+   "title": "제19회 1차 기출 — 2교시",
+   "desc": "",
+   "file": "기출_1차_19회_2008_2교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past281",
+   "title": "제28회 1차 기출 — 1교시",
+   "desc": "",
+   "file": "기출_1차_28회_2017_1교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past282",
+   "title": "제28회 1차 기출 — 2교시",
+   "desc": "",
+   "file": "기출_1차_28회_2017_2교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past291",
+   "title": "제29회 1차 기출 — 1교시",
+   "desc": "",
+   "file": "기출_1차_29회_2018_1교시.md",
+   "kind": "past"
+  },
+  {
+   "key": "past292",
+   "title": "제29회 1차 기출 — 2교시",
+   "desc": "",
+   "file": "기출_1차_29회_2018_2교시.md",
+   "kind": "past"
+  }
+ ]
 }

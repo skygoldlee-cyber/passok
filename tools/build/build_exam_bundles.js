@@ -34,11 +34,13 @@ function buildForExam(target) {
     }
 
     // manifest.json에 등록된 시험 파일만 번들한다.
-    // 주관식 연습 문항(manifest.written[])도 뷰어 대상 — 자기채점 런타임이 같은 번들을 쓴다.
+    // 주관식 연습 문항(manifest.written[])과 기출·보충 문제집(manifest.pastExams[])도
+    // 뷰어 대상 — 자기채점·기출 런타임이 같은 번들을 쓴다.
     // 문제은행 폴더의 다른 MD(설계 문서 등)는 뷰어 대상이 아니다.
     const examFiles = new Set(
         (target.manifest.exams || []).map((e) => e.file)
             .concat((target.manifest.written || []).map((w) => w.file))
+            .concat((target.manifest.pastExams || []).map((w) => w.file))
     );
 
     const mdFiles = fs.readdirSync(SRC_DIR)

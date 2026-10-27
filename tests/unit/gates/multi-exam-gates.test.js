@@ -72,6 +72,50 @@ describe('멀티시험 게이트 — 문서 번들 불변식', () => {
     });
 });
 
+describe('멀티시험 게이트 — 문제은행 분류 (written[] ↔ pastExams[])', () => {
+    // written[]은 자기채점 주관식(### S) 전용, pastExams[]는 객관식(### Q) 기출·보충 전용.
+    // ### Q 파일을 written[]에 두면 대시보드 카드가 "### S 문항이 없습니다"로 깨진다 (2026-10 정리 사유).
+    const PASTEXAM_NAME_RE = /^기출_\d차_\d+회_\d{4}(_[^.]+)?\.md$/;
+    const bankPath = (e, f) => join(ROOT, e.contentRoot, '문제은행', f);
+    const countBlocks = (p, re) =>
+        existsSync(p) ? (readFileSync(p, 'utf8').match(re) || []).length : 0;
+
+    it('written[] 파일은 ### S 주관식 문항을 1개 이상 포함한다', () => {
+        for (const e of examsData.exams) {
+            const m = JSON.parse(readFileSync(join(ROOT, e.contentRoot, 'manifest.json'), 'utf8'));
+            for (const w of m.written || []) {
+                assert.ok(countBlocks(bankPath(e, w.file), /^###\s*S\d+/gm) > 0,
+                    `${e.id}: written["${w.key}"] ${w.file}에 ### S 문항 없음 — 객관식이면 pastExams[]로 이동`);
+            }
+        }
+    });
+
+    it('pastExams[] 파일은 ### Q 객관식 문항을 1개 이상 포함하고 파일명 규약을 지킨다', () => {
+        for (const e of examsData.exams) {
+            const m = JSON.parse(readFileSync(join(ROOT, e.contentRoot, 'manifest.json'), 'utf8'));
+            const keys = new Set();
+            for (const w of m.pastExams || []) {
+                assert.ok(!keys.has(w.key), `${e.id}: pastExams key 중복 ${w.key}`);
+                keys.add(w.key);
+                assert.ok(countBlocks(bankPath(e, w.file), /^###\s*Q\d+/gm) > 0,
+                    `${e.id}: pastExams["${w.key}"] ${w.file}에 ### Q 문항 없음`);
+                if ((w.kind || 'past') === 'past') {
+                    assert.match(w.file, PASTEXAM_NAME_RE,
+                        `${e.id}: pastExams 파일명 규약 위반 ${w.file} — 기출_{차}차_{회}회_{연도}[_식별].md`);
+                } else {
+                    assert.equal(w.kind, 'supplement',
+                        `${e.id}: pastExams kind "${w.kind}" — 허용: past | supplement`);
+                }
+            }
+        }
+    });
+
+    it('check:manifest가 오류 없이 통과한다', () => {
+        const out = run('tools/check/check_manifest.js');
+        assert.match(out, /오류 0건/);
+    });
+});
+
 describe('멀티시험 게이트 — 앱 공용 사용자 매뉴얼', () => {
     const COMMON_MANUAL = 'docs/user/user_manual.md';
 

@@ -197,6 +197,52 @@ ${allBtnsHtml}
         });
     }
 
+    // 기출·보충 문제집 카드 — manifest.pastExams[] 선언 (객관식 ### Q → ExamViewer)
+    //   kind=past 는 회차별 그룹 카드, kind=supplement 는 개별 보충 카드
+    const pastExams = registry.pastExams || [];
+    if (pastExams.length) {
+        const groups = new Map();
+        const supplements = [];
+        for (const w of pastExams) {
+            if (w.kind === 'supplement') { supplements.push(w); continue; }
+            const gm = (w.file || '').match(/_(\d+)회_/) || (w.title || '').match(/제?(\d+)회/);
+            const g = gm ? gm[1] : '기타';
+            if (!groups.has(g)) groups.set(g, []);
+            groups.get(g).push(w);
+        }
+        const sortedGroups = [...groups.entries()]
+            .sort((a, b) => (parseInt(a[0], 10) || 999) - (parseInt(b[0], 10) || 999));
+        for (const [round, items] of sortedGroups) {
+            const btnsHtml = items.map(w => {
+                const label = String(w.title || '')
+                    .replace(/제?\d+회/g, '').replace(/\(\d{4}\)/g, '').replace(/\d{4}/g, '')
+                    .replace(/기출/g, '').replace(/[_—-]+/g, ' ').replace(/\s+/g, ' ').trim() || '전체';
+                const count = (w.stats && w.stats.questions) || 0;
+                return `                                    <button data-click="ExamViewer.openExam" data-arg="${contentPath(`문제은행/${w.file}`)}" class="exam-btn-link"><i class="fa-solid fa-file-lines"></i> ${esc(label)}${count ? ` (${count}제)` : ''}</button>`;
+            }).join('\n');
+            const cardHtml = `                        <div class="exam-card-item">
+                            <div class="exam-card-badge badge-amber">기출</div>
+                            <h4 class="exam-card-title">제${esc(round)}회 기출</h4>
+                            <div class="exam-card-btns grid-btns-2">
+${btnsHtml}
+                            </div>
+                        </div>`;
+            container.insertAdjacentHTML('beforeend', cardHtml);
+        }
+        supplements.forEach(w => {
+            const count = (w.stats && w.stats.questions) || 0;
+            const cardHtml = `                        <div class="exam-card-item">
+                            <div class="exam-card-badge badge-gray">보충</div>
+                            <h4 class="exam-card-title">${esc(w.title)}</h4>
+                            <p class="exam-card-desc">${esc(w.desc || '자체 제작 보충 문항')}</p>
+                            <div class="exam-card-btns">
+                                <button data-click="ExamViewer.openExam" data-arg="${contentPath(`문제은행/${w.file}`)}" class="exam-btn-link"><i class="fa-solid fa-file-lines"></i> 문제집 보기${count ? ` (${count}제)` : ''}</button>
+                            </div>
+                        </div>`;
+            container.insertAdjacentHTML('beforeend', cardHtml);
+        });
+    }
+
     // 플랜이 이미 로드됐다면 새로 그린 배지에도 무료/Pro 표시 반영
     refreshProBadges(container);
 

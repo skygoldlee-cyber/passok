@@ -325,7 +325,7 @@ function checkTarget(target) {
       }
     }
   }
-  // 주관식 연습 문항(manifest.written[]) 선언 — 존재·key 중복 검증 후 등록 파일로 인정
+  // 주관식 연습 문항(manifest.written[]) 선언 — 존재·key 중복·### S 포맷 검증 후 등록 파일로 인정
   const seenWritten = new Set();
   for (const w of m.written || []) {
     if (!w || !w.key) { err(scope, 'written[] 항목에 key 없음'); continue; }
@@ -333,10 +333,37 @@ function checkTarget(target) {
     seenWritten.add(w.key);
     if (!w.file) { err(scope, `written["${w.key}"].file 없음`); continue; }
     const wPath = path.join(sroot, '문제은행', w.file);
-    if (!fs.existsSync(wPath)) err(scope, `written["${w.key}"].file 없음: 문제은행/${w.file}`);
+    if (!fs.existsSync(wPath)) { err(scope, `written["${w.key}"].file 없음: 문제은행/${w.file}`); continue; }
+    // written[]은 자기채점 주관식(### S) 전용 — 객관식(### Q)은 pastExams[]로 선언해야 뷰어가 열림
+    const wTxt = fs.readFileSync(wPath, 'utf-8');
+    if (!/^###\s*S\d+/m.test(wTxt)) {
+      err(scope, `written["${w.key}"] ### S 문항 없음 (주관식 포맷 아님): 문제은행/${w.file} — 객관식이면 pastExams[]로 이동`);
+    }
+  }
+  // 기출·보충 문제집(manifest.pastExams[]) — ### Q 포맷 검증 + 파일명 규약 (기출_{차}차_{회}회_{연도}[_식별].md)
+  const PASTEXAM_NAME_RE = /^기출_\d차_\d+회_\d{4}(_[^.]+)?\.md$/;
+  const seenPast = new Set();
+  for (const w of m.pastExams || []) {
+    if (!w || !w.key) { err(scope, 'pastExams[] 항목에 key 없음'); continue; }
+    if (seenPast.has(w.key)) err(scope, `pastExams[].key 중복: ${w.key}`);
+    seenPast.add(w.key);
+    if (w.kind && w.kind !== 'past' && w.kind !== 'supplement') {
+      err(scope, `pastExams["${w.key}"].kind "${w.kind}" — 허용: past | supplement`);
+    }
+    if (!w.file) { err(scope, `pastExams["${w.key}"].file 없음`); continue; }
+    const wPath = path.join(sroot, '문제은행', w.file);
+    if (!fs.existsSync(wPath)) { err(scope, `pastExams["${w.key}"].file 없음: 문제은행/${w.file}`); continue; }
+    const wTxt = fs.readFileSync(wPath, 'utf-8');
+    if (!/^###\s*Q\d+/m.test(wTxt)) {
+      err(scope, `pastExams["${w.key}"] ### Q 문항 없음 (객관식 포맷 아님): 문제은행/${w.file}`);
+    }
+    if ((w.kind || 'past') === 'past' && !PASTEXAM_NAME_RE.test(w.file)) {
+      err(scope, `pastExams["${w.key}"] 파일명 규약 위반: ${w.file} — 기출_{차}차_{회}회_{연도}[_식별].md`);
+    }
   }
   const declaredExams = new Set(exams.map(e => e.file).filter(Boolean));
   for (const w of m.written || []) { if (w.file) declaredExams.add(w.file); }
+  for (const w of m.pastExams || []) { if (w.file) declaredExams.add(w.file); }
   const bankDir = path.join(sroot, '문제은행');
   if (fs.existsSync(bankDir)) {
     for (const f of fs.readdirSync(bankDir)) {
