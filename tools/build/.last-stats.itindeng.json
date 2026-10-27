@@ -1,0 +1,55 @@
+{
+  "subjects": {
+    "swdesign": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/swdesign/1과목_소프트웨어설계.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "swdev": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/swdev/2과목_소프트웨어개발.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "db": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/db/3과목_데이터베이스구축.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "proglang": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/proglang/4과목_프로그래밍언어활용.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "sysmgmt": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/sysmgmt/5과목_정보시스템구축관리.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {}
+}

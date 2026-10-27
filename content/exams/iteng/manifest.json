@@ -1,0 +1,96 @@
+{
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
+ "subjects": [
+  {
+   "key": "swdesign",
+   "order": 1,
+   "name": "소프트웨어설계",
+   "shortName": "소프트웨어설계",
+   "dir": "교재/swdesign",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "소프트웨어설계 (전체)",
+     "file": "1과목_소프트웨어설계.md"
+    }
+   ]
+  },
+  {
+   "key": "swdev",
+   "order": 2,
+   "name": "소프트웨어개발",
+   "shortName": "소프트웨어개발",
+   "dir": "교재/swdev",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "소프트웨어개발 (전체)",
+     "file": "2과목_소프트웨어개발.md"
+    }
+   ]
+  },
+  {
+   "key": "db",
+   "order": 3,
+   "name": "데이터베이스구축",
+   "shortName": "데이터베이스",
+   "dir": "교재/db",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "데이터베이스구축 (전체)",
+     "file": "3과목_데이터베이스구축.md"
+    }
+   ]
+  },
+  {
+   "key": "proglang",
+   "order": 4,
+   "name": "프로그래밍언어활용",
+   "shortName": "프로그래밍언어활용",
+   "dir": "교재/proglang",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "프로그래밍언어활용 (전체)",
+     "file": "4과목_프로그래밍언어활용.md"
+    }
+   ]
+  },
+  {
+   "key": "sysmgmt",
+   "order": 5,
+   "name": "정보시스템구축관리",
+   "shortName": "정보시스템구축관리",
+   "dir": "교재/sysmgmt",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "정보시스템구축관리 (전체)",
+     "file": "5과목_정보시스템구축관리.md"
+    }
+   ]
+  }
+ ],
+ "exams": [],
+ "integratedExam": {
+  "questionsPerSubject": {
+   "swdesign": 20,
+   "swdev": 20,
+   "db": 20,
+   "proglang": 20,
+   "sysmgmt": 20
+  },
+  "examTimeMin": 150,
+  "passAverage": 60,
+  "subjectFailBelow": 40
+ },
+ "uiText": {
+  "dictionary": {
+   "title": "지식DB 사전",
+   "subtitle": "엔티티 검색 (manifest.knowledge 스키마 필요)"
+  }
+ }
+}
