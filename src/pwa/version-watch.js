@@ -6,6 +6,7 @@
 // 브라우저가 SW 업데이트를 확인하기 전에도 배포를 감지할 수 있다.
 
 import { appVersion } from '../app-version.js';
+import { esc } from '../sanitize.js';
 
 const POLL_INTERVAL_MS = 5 * 60 * 1000; // 5분
 let _timer = null;
@@ -61,7 +62,7 @@ export function showNewVersionPrompt(deployed) {
         'font-family:system-ui,-apple-system,sans-serif'
     ].join(';');
     const label = document.createElement('span');
-    label.innerHTML = `<i class="fa-solid fa-circle-arrow-up" style="color:#4ade80;margin-right:6px;" aria-hidden="true"></i>새 버전이 있습니다${deployed ? ` <span style="opacity:0.65;font-size:12px;">(${deployed})</span>` : ''}`;
+    label.innerHTML = `<i class="fa-solid fa-circle-arrow-up" style="color:#4ade80;margin-right:6px;" aria-hidden="true"></i>새 버전이 있습니다${deployed ? ` <span style="opacity:0.65;font-size:12px;">(${esc(deployed)})</span>` : ''}`;
     const reloadBtn = document.createElement('button');
     reloadBtn.type = 'button';
     reloadBtn.textContent = '새로고침';
