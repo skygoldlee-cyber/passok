@@ -102,9 +102,6 @@ const _EXAM_LAW_URLS = {
     ["상법(법률)", "https://www.law.go.kr/법령/상법"],
     ["상법", "https://www.law.go.kr/법령/상법"]
     ],
-    "broker": [
-
-    ],
     "indsafe": [
     ["산업재해보상보험법", "https://www.law.go.kr/법령/산업재해보상보험법"]
     ],
@@ -112,6 +109,9 @@ const _EXAM_LAW_URLS = {
     ["민법", "https://www.law.go.kr/법령/민법"]
     ],
     "appraisal": [
+
+    ],
+    "broker": [
 
     ],
     "labor": [
