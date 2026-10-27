@@ -102,9 +102,6 @@ const _EXAM_LAW_URLS = {
     ["상법(법률)", "https://www.law.go.kr/법령/상법"],
     ["상법", "https://www.law.go.kr/법령/상법"]
     ],
-    "indsafe": [
-    ["산업재해보상보험법", "https://www.law.go.kr/법령/산업재해보상보험법"]
-    ],
     "admagent": [
     ["민법", "https://www.law.go.kr/법령/민법"]
     ],
@@ -175,13 +172,16 @@ const _EXAM_LAW_URLS = {
     ["이용·미용기구별 소독기준 및 방법", "https://www.law.go.kr/행정규칙/이용·미용기구별 소독기준 및 방법"],
     ["소독기준 및 방법", "https://www.law.go.kr/행정규칙/이용·미용기구별 소독기준 및 방법"]
     ],
+    "indsafe": [
+    ["산업재해보상보험법", "https://www.law.go.kr/법령/산업재해보상보험법"]
+    ],
+    "indsafeind": [
+
+    ],
     "iteng": [
 
     ],
     "itindeng": [
-
-    ],
-    "indsafeind": [
 
     ],
     "eleceng": [

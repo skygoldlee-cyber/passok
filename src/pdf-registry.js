@@ -477,61 +477,6 @@ const _EXAM_TABLES = {
 
         ]
     },
-    "indsafe": {
-        contentRoot: "content/exams/indsafe",
-        SUBJECT_DIR_MAP: {
-        "safetyMgmt": "과목1",
-        "ergonomics": "과목1",
-        "machinery": "과목3",
-        "electric": "과목4",
-        "chemical": "과목5",
-        "construction": "과목3",
-        "practical": "과목1"
-        },
-        REF_MD_SUBJECTS: {
-
-        },
-        REF_DIRS: {
-
-        },
-        SOURCE_REF_MAP: [
-        { test: /산업안전보건법\s*시행규칙|시행규칙\s*제?[0-9]+조/, file: "산업안전보건법 시행규칙(부령)(제00477호)(20260801).md" },
-        { test: /산업안전보건법\s*시행령|시행령\s*제?[0-9]+조/, file: "산업안전보건법 시행령(대통령령)(제36540호)(20260801).md" },
-        { test: /산업안전보건기준|방호장치|안전난간|방호망|락아웃|작업환경측정/, file: "산업안전보건기준에 관한 규칙(부령)(제00450호)(20260302).md" },
-        { test: /중대재해|중대산업재해|경영책임자/, file: "중대재해 처벌 등에 관한 법률(법률)(제17907호)(20220127).md" },
-        { test: /위험물|인화점|발화점|지정수량/, file: "위험물안전관리법(법률)(제20231호)(20250807).md" },
-        { test: /산업재해보상보험|요양급여|휴업급여/, file: "산업재해보상보험법(법률)(제21375호)(20260701).md" }
-        ],
-        KEYWORD_REF_MAP: [
-
-        ],
-        REFERENCE_FILES: {
-
-        },
-        REFERENCE_COMMON: [
-
-        ],
-        REFERENCE_INGREDIENTS: [
-
-        ],
-        REFERENCE_LAW: [
-        { name: "산업안전보건법", file: "산업안전보건법(법률)(제21374호)(20260801).md", type: "ref_md", dir: "ref_md/과목1/산업안전보건법(법률)(제21374호)(20260801)" },
-        { name: "산업안전보건법 시행령", file: "산업안전보건법 시행령(대통령령)(제36540호)(20260801).md", type: "ref_md", dir: "ref_md/과목1/산업안전보건법 시행령(대통령령)(제36540호)(20260801)" },
-        { name: "산업안전보건법 시행규칙", file: "산업안전보건법 시행규칙(부령)(제00477호)(20260801).md", type: "ref_md", dir: "ref_md/과목1/산업안전보건법 시행규칙(부령)(제00477호)(20260801)" },
-        { name: "중대재해 처벌 등에 관한 법률", file: "중대재해 처벌 등에 관한 법률(법률)(제17907호)(20220127).md", type: "ref_md", dir: "ref_md/과목1/중대재해 처벌 등에 관한 법률(법률)(제17907호)(20220127)" },
-        { name: "중대재해 처벌 등에 관한 법률 시행령", file: "중대재해 처벌 등에 관한 법률 시행령(대통령령)(제35805호)(20251001).md", type: "ref_md", dir: "ref_md/과목1/중대재해 처벌 등에 관한 법률 시행령(대통령령)(제35805호)(20251001)" },
-        { name: "산업재해보상보험법", file: "산업재해보상보험법(법률)(제21375호)(20260701).md", type: "ref_md", dir: "ref_md/과목1/산업재해보상보험법(법률)(제21375호)(20260701)" },
-        { name: "산업안전보건기준에 관한 규칙", file: "산업안전보건기준에 관한 규칙(부령)(제00450호)(20260302).md", type: "ref_md", dir: "ref_md/과목3/산업안전보건기준에 관한 규칙(부령)(제00450호)(20260302)" },
-        { name: "전기사업법", file: "전기사업법(법률)(제21467호)(20260918).md", type: "ref_md", dir: "ref_md/과목4/전기사업법(법률)(제21467호)(20260918)" },
-        { name: "위험물안전관리법", file: "위험물안전관리법(법률)(제20231호)(20250807).md", type: "ref_md", dir: "ref_md/과목5/위험물안전관리법(법률)(제20231호)(20250807)" },
-        { name: "위험물안전관리법 시행령", file: "위험물안전관리법 시행령(대통령령)(제36432호)(20260701).md", type: "ref_md", dir: "ref_md/과목5/위험물안전관리법 시행령(대통령령)(제36432호)(20260701)" },
-        { name: "위험물안전관리법 시행규칙", file: "위험물안전관리법 시행규칙(부령)(제00628호)(20260701).md", type: "ref_md", dir: "ref_md/과목5/위험물안전관리법 시행규칙(부령)(제00628호)(20260701)" },
-        { name: "고압가스 안전관리법", file: "고압가스 안전관리법(법률)(제21438호)(20260310).md", type: "ref_md", dir: "ref_md/과목5/고압가스 안전관리법(법률)(제21438호)(20260310)" }
-        ],
-        NOTICE_INGREDIENT_DOCS: [
-
-        ]
-    },
     "admagent": {
         contentRoot: "content/exams/admagent",
         SUBJECT_DIR_MAP: {
@@ -863,6 +808,94 @@ const _EXAM_TABLES = {
 
         ]
     },
+    "indsafe": {
+        contentRoot: "content/exams/indsafe",
+        SUBJECT_DIR_MAP: {
+        "safetyMgmt": "과목1",
+        "ergonomics": "과목1",
+        "machinery": "과목3",
+        "electric": "과목4",
+        "chemical": "과목5",
+        "construction": "과목3",
+        "practical": "과목1"
+        },
+        REF_MD_SUBJECTS: {
+
+        },
+        REF_DIRS: {
+
+        },
+        SOURCE_REF_MAP: [
+        { test: /산업안전보건법\s*시행규칙|시행규칙\s*제?[0-9]+조/, file: "산업안전보건법 시행규칙(부령)(제00477호)(20260801).md" },
+        { test: /산업안전보건법\s*시행령|시행령\s*제?[0-9]+조/, file: "산업안전보건법 시행령(대통령령)(제36540호)(20260801).md" },
+        { test: /산업안전보건기준|방호장치|안전난간|방호망|락아웃|작업환경측정/, file: "산업안전보건기준에 관한 규칙(부령)(제00450호)(20260302).md" },
+        { test: /중대재해|중대산업재해|경영책임자/, file: "중대재해 처벌 등에 관한 법률(법률)(제17907호)(20220127).md" },
+        { test: /위험물|인화점|발화점|지정수량/, file: "위험물안전관리법(법률)(제20231호)(20250807).md" },
+        { test: /산업재해보상보험|요양급여|휴업급여/, file: "산업재해보상보험법(법률)(제21375호)(20260701).md" }
+        ],
+        KEYWORD_REF_MAP: [
+
+        ],
+        REFERENCE_FILES: {
+
+        },
+        REFERENCE_COMMON: [
+
+        ],
+        REFERENCE_INGREDIENTS: [
+
+        ],
+        REFERENCE_LAW: [
+        { name: "산업안전보건법", file: "산업안전보건법(법률)(제21374호)(20260801).md", type: "ref_md", dir: "ref_md/과목1/산업안전보건법(법률)(제21374호)(20260801)" },
+        { name: "산업안전보건법 시행령", file: "산업안전보건법 시행령(대통령령)(제36540호)(20260801).md", type: "ref_md", dir: "ref_md/과목1/산업안전보건법 시행령(대통령령)(제36540호)(20260801)" },
+        { name: "산업안전보건법 시행규칙", file: "산업안전보건법 시행규칙(부령)(제00477호)(20260801).md", type: "ref_md", dir: "ref_md/과목1/산업안전보건법 시행규칙(부령)(제00477호)(20260801)" },
+        { name: "중대재해 처벌 등에 관한 법률", file: "중대재해 처벌 등에 관한 법률(법률)(제17907호)(20220127).md", type: "ref_md", dir: "ref_md/과목1/중대재해 처벌 등에 관한 법률(법률)(제17907호)(20220127)" },
+        { name: "중대재해 처벌 등에 관한 법률 시행령", file: "중대재해 처벌 등에 관한 법률 시행령(대통령령)(제35805호)(20251001).md", type: "ref_md", dir: "ref_md/과목1/중대재해 처벌 등에 관한 법률 시행령(대통령령)(제35805호)(20251001)" },
+        { name: "산업재해보상보험법", file: "산업재해보상보험법(법률)(제21375호)(20260701).md", type: "ref_md", dir: "ref_md/과목1/산업재해보상보험법(법률)(제21375호)(20260701)" },
+        { name: "산업안전보건기준에 관한 규칙", file: "산업안전보건기준에 관한 규칙(부령)(제00450호)(20260302).md", type: "ref_md", dir: "ref_md/과목3/산업안전보건기준에 관한 규칙(부령)(제00450호)(20260302)" },
+        { name: "전기사업법", file: "전기사업법(법률)(제21467호)(20260918).md", type: "ref_md", dir: "ref_md/과목4/전기사업법(법률)(제21467호)(20260918)" },
+        { name: "위험물안전관리법", file: "위험물안전관리법(법률)(제20231호)(20250807).md", type: "ref_md", dir: "ref_md/과목5/위험물안전관리법(법률)(제20231호)(20250807)" },
+        { name: "위험물안전관리법 시행령", file: "위험물안전관리법 시행령(대통령령)(제36432호)(20260701).md", type: "ref_md", dir: "ref_md/과목5/위험물안전관리법 시행령(대통령령)(제36432호)(20260701)" },
+        { name: "위험물안전관리법 시행규칙", file: "위험물안전관리법 시행규칙(부령)(제00628호)(20260701).md", type: "ref_md", dir: "ref_md/과목5/위험물안전관리법 시행규칙(부령)(제00628호)(20260701)" },
+        { name: "고압가스 안전관리법", file: "고압가스 안전관리법(법률)(제21438호)(20260310).md", type: "ref_md", dir: "ref_md/과목5/고압가스 안전관리법(법률)(제21438호)(20260310)" }
+        ],
+        NOTICE_INGREDIENT_DOCS: [
+
+        ]
+    },
+    "indsafeind": {
+        contentRoot: "content/exams/indsafeind",
+        SUBJECT_DIR_MAP: {
+
+        },
+        REF_MD_SUBJECTS: {
+
+        },
+        REF_DIRS: {
+
+        },
+        SOURCE_REF_MAP: [
+
+        ],
+        KEYWORD_REF_MAP: [
+
+        ],
+        REFERENCE_FILES: {
+
+        },
+        REFERENCE_COMMON: [
+
+        ],
+        REFERENCE_INGREDIENTS: [
+
+        ],
+        REFERENCE_LAW: [
+
+        ],
+        NOTICE_INGREDIENT_DOCS: [
+
+        ]
+    },
     "iteng": {
         contentRoot: "content/exams/iteng",
         SUBJECT_DIR_MAP: {
@@ -898,39 +931,6 @@ const _EXAM_TABLES = {
     },
     "itindeng": {
         contentRoot: "content/exams/itindeng",
-        SUBJECT_DIR_MAP: {
-
-        },
-        REF_MD_SUBJECTS: {
-
-        },
-        REF_DIRS: {
-
-        },
-        SOURCE_REF_MAP: [
-
-        ],
-        KEYWORD_REF_MAP: [
-
-        ],
-        REFERENCE_FILES: {
-
-        },
-        REFERENCE_COMMON: [
-
-        ],
-        REFERENCE_INGREDIENTS: [
-
-        ],
-        REFERENCE_LAW: [
-
-        ],
-        NOTICE_INGREDIENT_DOCS: [
-
-        ]
-    },
-    "indsafeind": {
-        contentRoot: "content/exams/indsafeind",
         SUBJECT_DIR_MAP: {
 
         },
