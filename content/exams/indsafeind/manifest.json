@@ -1,0 +1,111 @@
+{
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
+ "subjects": [
+  {
+   "key": "prevedu",
+   "order": 1,
+   "name": "산업재해 예방 및 안전보건교육",
+   "shortName": "안전교육",
+   "dir": "교재/prevedu",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "산업재해 예방 및 안전보건교육 (전체)",
+     "file": "1과목_산업재해 예방 및 안전보건교육.md"
+    }
+   ]
+  },
+  {
+   "key": "human",
+   "order": 2,
+   "name": "인간공학 및 위험성 평가·관리",
+   "shortName": "인간공학",
+   "dir": "교재/human",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "인간공학 및 위험성 평가·관리 (전체)",
+     "file": "2과목_인간공학 및 위험성 평가·관리.md"
+    }
+   ]
+  },
+  {
+   "key": "mach",
+   "order": 3,
+   "name": "기계·기구 및 설비 안전 관리",
+   "shortName": "기계안전",
+   "dir": "교재/mach",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "기계·기구 및 설비 안전 관리 (전체)",
+     "file": "3과목_기계·기구 및 설비 안전 관리.md"
+    }
+   ]
+  },
+  {
+   "key": "elec",
+   "order": 4,
+   "name": "전기설비 안전관리",
+   "shortName": "전기안전",
+   "dir": "교재/elec",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "전기설비 안전관리 (전체)",
+     "file": "4과목_전기설비 안전관리.md"
+    }
+   ]
+  },
+  {
+   "key": "chem",
+   "order": 5,
+   "name": "화학설비 안전관리",
+   "shortName": "화학안전",
+   "dir": "교재/chem",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "화학설비 안전관리 (전체)",
+     "file": "5과목_화학설비 안전관리.md"
+    }
+   ]
+  },
+  {
+   "key": "constr",
+   "order": 6,
+   "name": "건설공사 안전 관리",
+   "shortName": "건설안전",
+   "dir": "교재/constr",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "건설공사 안전 관리 (전체)",
+     "file": "6과목_건설공사 안전 관리.md"
+    }
+   ]
+  }
+ ],
+ "exams": [],
+ "integratedExam": {
+  "questionsPerSubject": {
+   "prevedu": 20,
+   "human": 20,
+   "mach": 20,
+   "elec": 20,
+   "chem": 20,
+   "constr": 20
+  },
+  "examTimeMin": 120,
+  "passAverage": 60,
+  "subjectFailBelow": 40
+ },
+ "uiText": {
+  "dictionary": {
+   "title": "지식DB 사전",
+   "subtitle": "엔티티 검색 (manifest.knowledge 스키마 필요)"
+  }
+ }
+}

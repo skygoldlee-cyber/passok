@@ -1,0 +1,65 @@
+{
+  "subjects": {
+    "prevedu": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/prevedu/1과목_산업재해 예방 및 안전보건교육.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "human": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/human/2과목_인간공학 및 위험성 평가·관리.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "mach": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/mach/3과목_기계·기구 및 설비 안전 관리.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "elec": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/elec/4과목_전기설비 안전관리.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "chem": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/chem/5과목_화학설비 안전관리.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "constr": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/constr/6과목_건설공사 안전 관리.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {}
+}

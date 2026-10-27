@@ -928,6 +928,39 @@ const _EXAM_TABLES = {
         NOTICE_INGREDIENT_DOCS: [
 
         ]
+    },
+    "indsafeind": {
+        contentRoot: "content/exams/indsafeind",
+        SUBJECT_DIR_MAP: {
+
+        },
+        REF_MD_SUBJECTS: {
+
+        },
+        REF_DIRS: {
+
+        },
+        SOURCE_REF_MAP: [
+
+        ],
+        KEYWORD_REF_MAP: [
+
+        ],
+        REFERENCE_FILES: {
+
+        },
+        REFERENCE_COMMON: [
+
+        ],
+        REFERENCE_INGREDIENTS: [
+
+        ],
+        REFERENCE_LAW: [
+
+        ],
+        NOTICE_INGREDIENT_DOCS: [
+
+        ]
     }
 };
 

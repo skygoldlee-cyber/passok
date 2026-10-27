@@ -180,6 +180,9 @@ const _EXAM_LAW_URLS = {
     ],
     "itindeng": [
 
+    ],
+    "indsafeind": [
+
     ]
 };
 

@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03,LP-07
 
-const CACHE_VERSION = 'v20261028-dd6de8e';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261028-ca52f7c';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passok) — 시험 무관 공유 캐시.
 // 구 접두사(passory-*·cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -212,7 +212,9 @@ const DATA_ASSETS = [
   './data/exams/iteng/registry.js',
   './data/exams/iteng/id_migration.js',
   './data/exams/itindeng/registry.js',
-  './data/exams/itindeng/id_migration.js'
+  './data/exams/itindeng/id_migration.js',
+  './data/exams/indsafeind/registry.js',
+  './data/exams/indsafeind/id_migration.js'
 ];
 
 /** 설치 시 프리캐시할 마크다운 문서 (매뉴얼·요약집 — 오프라인 보장)
@@ -357,6 +359,12 @@ const MD_ASSETS = [
   './content/exams/itindeng/교재/db/3과목_데이터베이스구축.md',
   './content/exams/itindeng/교재/proglang/4과목_프로그래밍언어활용.md',
   './content/exams/itindeng/교재/sysmgmt/5과목_정보시스템구축관리.md',
+  './content/exams/indsafeind/교재/prevedu/1과목_산업재해 예방 및 안전보건교육.md',
+  './content/exams/indsafeind/교재/human/2과목_인간공학 및 위험성 평가·관리.md',
+  './content/exams/indsafeind/교재/mach/3과목_기계·기구 및 설비 안전 관리.md',
+  './content/exams/indsafeind/교재/elec/4과목_전기설비 안전관리.md',
+  './content/exams/indsafeind/교재/chem/5과목_화학설비 안전관리.md',
+  './content/exams/indsafeind/교재/constr/6과목_건설공사 안전 관리.md',
   // MD_ASSETS:END
 ];
 

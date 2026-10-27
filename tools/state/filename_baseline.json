@@ -86,6 +86,7 @@
   "tools/build/.last-stats.broker.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.broker)",
   "tools/build/.last-stats.hairdresser.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.hairdresser)",
   "tools/build/.last-stats.indsafe.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.indsafe)",
+  "tools/build/.last-stats.indsafeind.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.indsafeind)",
   "tools/build/.last-stats.insadj.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.insadj)",
   "tools/build/.last-stats.iteng.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.iteng)",
   "tools/build/.last-stats.itindeng.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.itindeng)",
