@@ -95,6 +95,13 @@
    "part": 3,
    "title": "민법",
    "file": "과목3_문제은행.md"
+  },
+  {
+   "key": "subject4",
+   "subject": "social_ins",
+   "part": 4,
+   "title": "사회보험법",
+   "file": "과목4_문제은행.md"
   }
  ],
  "integratedExam": {

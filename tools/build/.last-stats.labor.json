@@ -57,6 +57,12 @@
     },
     "subject2": {
       "questions": 60
+    },
+    "subject3": {
+      "questions": 60
+    },
+    "subject4": {
+      "questions": 60
     }
   }
 }
