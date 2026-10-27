@@ -1,0 +1,96 @@
+{
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
+ "subjects": [
+  {
+   "key": "em",
+   "order": 1,
+   "name": "전기자기학",
+   "shortName": "전기자기학",
+   "dir": "교재/em",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "전기자기학 (전체)",
+     "file": "1과목_전기자기학.md"
+    }
+   ]
+  },
+  {
+   "key": "power",
+   "order": 2,
+   "name": "전력공학",
+   "shortName": "전력공학",
+   "dir": "교재/power",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "전력공학 (전체)",
+     "file": "2과목_전력공학.md"
+    }
+   ]
+  },
+  {
+   "key": "mach",
+   "order": 3,
+   "name": "전기기기",
+   "shortName": "전기기기",
+   "dir": "교재/mach",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "전기기기 (전체)",
+     "file": "3과목_전기기기.md"
+    }
+   ]
+  },
+  {
+   "key": "circuit",
+   "order": 4,
+   "name": "회로이론 및 제어공학",
+   "shortName": "회로이론",
+   "dir": "교재/circuit",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "회로이론 및 제어공학 (전체)",
+     "file": "4과목_회로이론 및 제어공학.md"
+    }
+   ]
+  },
+  {
+   "key": "code",
+   "order": 5,
+   "name": "전기설비기술기준 및 판단기준",
+   "shortName": "기술기준",
+   "dir": "교재/code",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "전기설비기술기준 및 판단기준 (전체)",
+     "file": "5과목_전기설비기술기준 및 판단기준.md"
+    }
+   ]
+  }
+ ],
+ "exams": [],
+ "integratedExam": {
+  "questionsPerSubject": {
+   "em": 20,
+   "power": 20,
+   "mach": 20,
+   "circuit": 20,
+   "code": 20
+  },
+  "examTimeMin": 150,
+  "passAverage": 60,
+  "subjectFailBelow": 40
+ },
+ "uiText": {
+  "dictionary": {
+   "title": "지식DB 사전",
+   "subtitle": "엔티티 검색 (manifest.knowledge 스키마 필요)"
+  }
+ }
+}

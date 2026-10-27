@@ -183,6 +183,12 @@ const _EXAM_LAW_URLS = {
     ],
     "indsafeind": [
 
+    ],
+    "eleceng": [
+
+    ],
+    "elecindeng": [
+
     ]
 };
 

@@ -961,6 +961,72 @@ const _EXAM_TABLES = {
         NOTICE_INGREDIENT_DOCS: [
 
         ]
+    },
+    "eleceng": {
+        contentRoot: "content/exams/eleceng",
+        SUBJECT_DIR_MAP: {
+
+        },
+        REF_MD_SUBJECTS: {
+
+        },
+        REF_DIRS: {
+
+        },
+        SOURCE_REF_MAP: [
+
+        ],
+        KEYWORD_REF_MAP: [
+
+        ],
+        REFERENCE_FILES: {
+
+        },
+        REFERENCE_COMMON: [
+
+        ],
+        REFERENCE_INGREDIENTS: [
+
+        ],
+        REFERENCE_LAW: [
+
+        ],
+        NOTICE_INGREDIENT_DOCS: [
+
+        ]
+    },
+    "elecindeng": {
+        contentRoot: "content/exams/elecindeng",
+        SUBJECT_DIR_MAP: {
+
+        },
+        REF_MD_SUBJECTS: {
+
+        },
+        REF_DIRS: {
+
+        },
+        SOURCE_REF_MAP: [
+
+        ],
+        KEYWORD_REF_MAP: [
+
+        ],
+        REFERENCE_FILES: {
+
+        },
+        REFERENCE_COMMON: [
+
+        ],
+        REFERENCE_INGREDIENTS: [
+
+        ],
+        REFERENCE_LAW: [
+
+        ],
+        NOTICE_INGREDIENT_DOCS: [
+
+        ]
     }
 };
 

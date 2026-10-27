@@ -1,0 +1,55 @@
+{
+  "subjects": {
+    "em": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/em/1과목_전기자기학.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "power": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/power/2과목_전력공학.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "mach": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/mach/3과목_전기기기.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "circuit": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/circuit/4과목_회로이론 및 제어공학.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "code": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/code/5과목_전기설비기술기준 및 판단기준.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {}
+}
