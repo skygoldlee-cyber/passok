@@ -139,7 +139,7 @@ export function renderExamSelect() {
         `;
     };
 
-    // 유사 시험 그룹핑 (ES-08) — exams.json의 group 필드로 섹션을 나눈다.
+    // 유사 시험 그룹핑 — exams.json의 group 필드로 섹션을 나눈다.
     const groups = groupExamsForSelect(exams);
     if (!groups) {
         container.innerHTML = exams.map(cardHtml).join('');
@@ -154,7 +154,7 @@ export function renderExamSelect() {
 }
 
 /**
- * 시험 목록을 그룹 섹션으로 묶는다 (ES-08 — 순수 함수, 테스트 가능).
+ * 시험 목록을 그룹 섹션으로 묶는다 (순수 함수 — 테스트 가능).
  * - group 필드가 하나도 없으면 null (기존 평면 그리드 유지)
  * - group 미지정 시험은 '기타' 섹션, 항상 맨 뒤
  * - 그룹 내 순서·그룹 간 순서는 exams.json 선언 순서 유지
