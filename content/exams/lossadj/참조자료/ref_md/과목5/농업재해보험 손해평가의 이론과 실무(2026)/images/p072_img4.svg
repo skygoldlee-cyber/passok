@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 710 545" width="710" height="545" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR','Noto Sans CJK KR',sans-serif">
+  <title>그림 2-2 위험 분류와 위험관리 주체 구분</title>
+  <defs>
+    <linearGradient id="o" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fde2c6"/><stop offset="1" stop-color="#f6913c"/></linearGradient>
+    <linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dbe6fa"/><stop offset="1" stop-color="#5b80d6"/></linearGradient>
+    <linearGradient id="ar" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#fde6d2"/><stop offset="1" stop-color="#f6b17f"/></linearGradient>
+    <marker id="ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2d3a8c"/></marker>
+  </defs>
+  <rect x="3" y="3" width="704" height="539" rx="8" fill="#fff" stroke="#222" stroke-width="2"/>
+  <g stroke="#2d3a8c" stroke-width="2" fill="none"><line x1="104" y1="474" x2="104" y2="44" marker-end="url(#ax)"/><line x1="104" y1="474" x2="668" y2="474" marker-end="url(#ax)"/></g>
+  <path d="M170 76 C 205 220, 260 300, 400 340 C 470 360, 530 372, 586 380" fill="none" stroke="#111" stroke-width="4"/>
+  <path d="M312 270 L366 216 L352 202 L392 200 L390 240 L376 226 L322 280 Z" fill="url(#ar)"/>
+  <ellipse cx="432" cy="125" rx="80" ry="58" fill="url(#o)"/>
+  <ellipse cx="232" cy="384" rx="102" ry="60" fill="url(#b)"/>
+  <g font-weight="700" font-size="20" text-anchor="middle" fill="#1d1d1d">
+    <text x="432" y="120">정부역할</text><text x="432" y="150">개입확대</text>
+    <text x="232" y="378">농가</text><text x="232" y="408">자율적 관리</text>
+  </g>
+  <g font-size="17" fill="#7a2b8f">
+    <text x="20" y="108">대재해</text><text x="20" y="410">통상적</text><text x="28" y="438">위험</text>
+    <text x="116" y="498">특정독립적 위험</text><text x="546" y="498">체계적 위험</text>
+  </g>
+  <g font-size="17" fill="#1d1d1d" text-anchor="middle"><text x="642" y="376">정부개입</text><text x="642" y="402">동일 수준선</text></g>
+</svg>

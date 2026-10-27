@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 580" width="920" height="580" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR','Noto Sans CJK KR',sans-serif">
+  <title>그림 1-1 위태, 손인 및 손해의 관계</title>
+  <defs>
+    <radialGradient id="g" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#e6f6fd"/><stop offset="1" stop-color="#9fdaf2"/></radialGradient>
+    <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10z" fill="#24324a"/></marker>
+  </defs>
+  <rect x="8" y="8" width="904" height="564" rx="18" fill="#fbfcff" stroke="#d3dcf5" stroke-width="6"/>
+  <g text-anchor="middle">
+    <g>
+      <ellipse cx="148" cy="145" rx="108" ry="72" fill="url(#g)" stroke="#8fcbe6"/>
+      <text x="148" y="140" font-size="40" font-weight="700">위태</text>
+      <text x="148" y="182" font-size="22" font-weight="700">(위험상황)</text>
+      <text x="148" y="308" font-size="34" fill="#e8141b">Hazard</text>
+      <rect x="40" y="342" width="222" height="168" rx="22" fill="none" stroke="#f5c69a" stroke-width="3" stroke-dasharray="9 6"/>
+      <text x="151" y="398" font-size="21">사고발생 가능성</text>
+      <text x="151" y="432" font-size="21">사고의 원인</text>
+      <text x="151" y="468" font-size="21" font-weight="700">(발생 전 단계)</text>
+    </g>
+    <g>
+      <ellipse cx="458" cy="145" rx="108" ry="72" fill="url(#g)" stroke="#8fcbe6"/>
+      <text x="458" y="140" font-size="40" font-weight="700">손인</text>
+      <text x="458" y="182" font-size="22" font-weight="700">(사고)</text>
+      <text x="448" y="308" font-size="34" fill="#e8141b">Peril</text>
+      <rect x="340" y="342" width="222" height="168" rx="22" fill="none" stroke="#f5c69a" stroke-width="3" stroke-dasharray="9 6"/>
+      <text x="451" y="398" font-size="21">위험의 현실화</text>
+      <text x="451" y="432" font-size="21">손해의 원인</text>
+      <text x="451" y="468" font-size="21" font-weight="700">(발생)</text>
+    </g>
+    <g>
+      <ellipse cx="752" cy="145" rx="108" ry="72" fill="url(#g)" stroke="#8fcbe6"/>
+      <text x="752" y="140" font-size="40" font-weight="700">손해</text>
+      <text x="752" y="182" font-size="22" font-weight="700">(가치감소)</text>
+      <text x="754" y="308" font-size="34" fill="#e8141b">Loss</text>
+      <rect x="642" y="342" width="222" height="168" rx="22" fill="none" stroke="#f5c69a" stroke-width="3" stroke-dasharray="9 6"/>
+      <text x="753" y="398" font-size="21">사고발생 결과</text>
+      <text x="753" y="432" font-size="21">경제적 수요발생</text>
+      <text x="753" y="468" font-size="21" font-weight="700">(발생 후 단계)</text>
+    </g>
+  </g>
+  <line x1="264" y1="148" x2="316" y2="148" stroke="#24324a" stroke-width="12" marker-end="url(#ar)"/>
+  <line x1="572" y1="148" x2="624" y2="148" stroke="#24324a" stroke-width="12" marker-end="url(#ar)"/>
+</svg>

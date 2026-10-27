@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 400" width="540" height="400" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR','Noto Sans CJK KR',sans-serif">
+  <title>그림 2-25 이랑 길이 측정</title>
+  <defs><radialGradient id="on" cx="40%" cy="35%" r="65%"><stop offset="0" stop-color="#ffc06a"/><stop offset=".7" stop-color="#e57a1c"/><stop offset="1" stop-color="#b8560e"/></radialGradient>
+  <g id="o"><path d="M0 -20 q-3 -6 0 -10 q3 4 0 10z" fill="#9a5a1e"/><ellipse cx="0" cy="0" rx="19" ry="18" fill="url(#on)"/><path d="M-8 -12 q8 6 0 26 M8 -12 q-8 6 0 26" stroke="#c4661a" stroke-width="1" fill="none" opacity=".6"/><path d="M-4 18 h8" stroke="#6b3a12" stroke-width="2"/></g><marker id="a" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#555"/></marker></defs>
+  <rect width="540" height="400" fill="#fff"/>
+  <text x="10" y="28" font-size="22" font-weight="700" fill="#8dbf3a">이랑길이 측정</text>
+  <use href="#o" x="40" y="104"/>
+  <use href="#o" x="91" y="104"/>
+  <use href="#o" x="142" y="104"/>
+  <use href="#o" x="193" y="104"/>
+  <use href="#o" x="244" y="104"/>
+  <use href="#o" x="295" y="104"/>
+  <use href="#o" x="346" y="104"/>
+  <use href="#o" x="397" y="104"/>
+  <use href="#o" x="448" y="104"/>
+  <use href="#o" x="499" y="104"/>
+  <use href="#o" x="40" y="162"/>
+  <use href="#o" x="91" y="162"/>
+  <use href="#o" x="142" y="162"/>
+  <use href="#o" x="193" y="162"/>
+  <use href="#o" x="244" y="162"/>
+  <use href="#o" x="295" y="162"/>
+  <use href="#o" x="346" y="162"/>
+  <use href="#o" x="397" y="162"/>
+  <use href="#o" x="448" y="162"/>
+  <use href="#o" x="499" y="162"/>
+  <use href="#o" x="40" y="220"/>
+  <use href="#o" x="91" y="220"/>
+  <use href="#o" x="142" y="220"/>
+  <use href="#o" x="193" y="220"/>
+  <use href="#o" x="244" y="220"/>
+  <use href="#o" x="295" y="220"/>
+  <use href="#o" x="346" y="220"/>
+  <use href="#o" x="397" y="220"/>
+  <use href="#o" x="448" y="220"/>
+  <use href="#o" x="499" y="220"/>
+  <text x="158" y="258" font-size="12" fill="#555" text-anchor="middle">1</text>
+  <text x="213" y="258" font-size="12" fill="#555" text-anchor="middle">2</text>
+  <text x="268" y="258" font-size="12" fill="#555" text-anchor="middle">3</text>
+  <text x="323" y="258" font-size="12" fill="#555" text-anchor="middle">4</text>
+  <text x="378" y="258" font-size="12" fill="#555" text-anchor="middle">5</text>
+  <text x="433" y="258" font-size="12" fill="#555" text-anchor="middle">6</text>
+  <g stroke="#555" stroke-width="1.2"><line x1="132" y1="214" x2="132" y2="304"/><line x1="420" y1="214" x2="420" y2="304"/><line x1="134" y1="288" x2="418" y2="288" marker-start="url(#a)" marker-end="url(#a)"/></g>
+  <text x="276" y="304" font-size="12" fill="#333" text-anchor="middle">5주의 길이 (m로 측정)</text>
+  <rect x="40" y="330" width="484" height="56" rx="10" fill="#f3f9e6" stroke="#9cc95a" stroke-width="2"/>
+  <text x="282" y="354" font-size="13" fill="#333" text-anchor="middle">1번 식물체의 처음부터 5주를 완전히 포함하고 6번 식물체의 시작까지</text>
+  <text x="282" y="374" font-size="13" fill="#333" text-anchor="middle">측정해야 온전한 5주의 길이를 측정할 수 있다.</text>
+</svg>

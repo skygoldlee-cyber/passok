@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 430" width="560" height="430" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR','Noto Sans CJK KR',sans-serif">
+  <title>그림 2-8 적과전종합위험방식의 보험금산정 - 적과 종료 전 착과감소가 있는 경우</title>
+  <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#c9c9c9"/><stop offset=".5" stop-color="#e6e6e6"/><stop offset="1" stop-color="#bdbdbd"/></linearGradient>
+  <linearGradient id="g2" x1="0" x2="1"><stop offset="0" stop-color="#6fb52c"/><stop offset=".5" stop-color="#a8db5f"/><stop offset="1" stop-color="#5a9c22"/></linearGradient>
+  <marker id="ao" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#f08a24"/></marker>
+  <marker id="ag" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5fae3a"/></marker>
+  <marker id="ak" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#777"/></marker></defs>
+  <rect width="560" height="430" fill="#fff"/>
+  <rect x="14" y="30" width="186" height="34" rx="17" fill="#fff" stroke="#8dc63f" stroke-width="2"/><rect x="8" y="38" width="8" height="18" rx="2" fill="#5aa02c"/><rect x="198" y="38" width="8" height="18" rx="2" fill="#5aa02c"/>
+  <text x="107" y="53" font-size="14" fill="#5aa02c" text-anchor="middle">적과전종합위험 보험금산정</text>
+  <text x="218" y="52" font-size="12" fill="#333">개념정리 / 적과 종료 전 착과감소가 있는 경우</text>
+  <line x1="72" y1="100" x2="72" y2="394" stroke="#999"/><line x1="72" y1="394" x2="470" y2="394" stroke="#999"/>
+  <rect x="98" y="102" width="72" height="292" fill="url(#g1)"/><text x="134" y="132" font-size="12" font-weight="700" fill="#222" text-anchor="middle">평년착과수</text>
+  <rect x="188" y="158" width="72" height="236" fill="url(#g2)"/><text x="224" y="226" font-size="12" font-weight="700" fill="#222" text-anchor="middle">적과후착과수</text>
+  <rect x="302" y="312" width="70" height="82" fill="url(#g2)"/><text x="337" y="333" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">수확과실수</text>
+  <g stroke="#ddd"><line x1="260" y1="158" x2="380" y2="158"/><line x1="260" y1="270" x2="380" y2="270"/></g>
+  <line x1="300" y1="106" x2="300" y2="150" stroke="#5fae3a" stroke-width="4" marker-start="url(#ag)" marker-end="url(#ag)"/><text x="310" y="132" font-size="12" fill="#333">착과감소</text>
+  <line x1="352" y1="162" x2="352" y2="264" stroke="#f08a24" stroke-width="4" marker-start="url(#ao)" marker-end="url(#ao)"/><text x="342" y="186" font-size="12" fill="#f08a24" text-anchor="end">과실손해</text>
+  <text x="340" y="288" font-size="12" fill="#333" text-anchor="middle">미보상감수과실수</text>
+  <line x1="396" y1="100" x2="396" y2="392" stroke="#777" stroke-width="4" marker-start="url(#ak)" marker-end="url(#ak)"/>
+  <text x="406" y="270" font-size="12" fill="#333">기준착과수 = 평년착과수</text>
+  <text x="72" y="414" font-size="10" fill="#555">※ 평년착과수의 100%를 가입착과수로 한 경우임</text>
+</svg>

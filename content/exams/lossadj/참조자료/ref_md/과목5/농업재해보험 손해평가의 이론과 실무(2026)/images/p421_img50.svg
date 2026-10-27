@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 340" width="860" height="340" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR','Noto Sans CJK KR',sans-serif">
+  <title>그림 2-5 수관면적</title>
+  <defs>
+    <radialGradient id="c" cx="40%" cy="30%" r="75%"><stop offset="0" stop-color="#b5d96a"/><stop offset=".55" stop-color="#5e9e2e"/><stop offset="1" stop-color="#2f6a1a"/></radialGradient>
+    <linearGradient id="tr" x1="0" x2="1"><stop offset="0" stop-color="#6b4b2a"/><stop offset=".5" stop-color="#a98a5c"/><stop offset="1" stop-color="#5a3d22"/></linearGradient>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8aa0c0"/></marker>
+  </defs>
+  <rect width="860" height="340" fill="#fff"/>
+  <ellipse cx="390" cy="296" rx="190" ry="26" fill="#f4b183" opacity=".9"/>
+  <path d="M376 290 q8 -40 4 -80 q-2 -20 -14 -34 h44 q-10 16 -10 36 q-2 40 12 78z" fill="url(#tr)"/>
+  <path d="M368 292 q-14 -2 -18 -10 q14 2 22 -4z M410 292 q16 0 20 -10 q-14 2 -22 -4z" fill="#b5476b"/>
+  <g fill="url(#c)">
+    <circle cx="300" cy="120" r="70"/><circle cx="390" cy="84" r="80"/><circle cx="480" cy="118" r="76"/>
+    <circle cx="340" cy="160" r="60"/><circle cx="440" cy="166" r="62"/><circle cx="530" cy="150" r="46"/><circle cx="254" cy="150" r="44"/>
+  </g>
+  <g fill="#cfe89a" opacity=".55"><circle cx="350" cy="70" r="20"/><circle cx="300" cy="104" r="14"/><circle cx="430" cy="64" r="16"/><circle cx="470" cy="100" r="12"/></g>
+  <g stroke="#b03a2e" stroke-width="3" stroke-dasharray="20 12"><line x1="200" y1="118" x2="200" y2="270"/><line x1="580" y1="118" x2="580" y2="270"/></g>
+  <line x1="660" y1="258" x2="598" y2="282" stroke="#8aa0c0" stroke-width="2" marker-end="url(#a)"/>
+  <text x="672" y="262" font-size="22" fill="#333">수관 면적</text>
+</svg>

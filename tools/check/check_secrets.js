@@ -63,7 +63,7 @@ function main() {
 
   let files;
   try {
-    files = scoped ?? execSync('git ls-files', { cwd: ROOT, encoding: 'utf8' }).split('\n').map((s) => s.trim()).filter(Boolean);
+    files = scoped ?? execSync('git ls-files', { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).split('\n').map((s) => s.trim()).filter(Boolean);
   } catch (e) {
     console.log('✗ git 파일 목록 실패 — git 저장소에서 실행하세요');
     process.exit(2);

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 490" width="1000" height="490" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR','Noto Sans CJK KR',sans-serif">
+  <title>그림 2-19 표본구간 선정 예시</title>
+  <rect width="1000" height="490" fill="#fafafa"/>
+  <g stroke="#cfcfcf" stroke-width="1.5" stroke-dasharray="2 4"><line x1="78" y1="10" x2="78" y2="485"/><line x1="216" y1="10" x2="216" y2="485"/><line x1="354" y1="10" x2="354" y2="485"/><line x1="492" y1="10" x2="492" y2="485"/><line x1="630" y1="10" x2="630" y2="485"/><line x1="768" y1="10" x2="768" y2="485"/><line x1="906" y1="10" x2="906" y2="485"/><line x1="10" y1="246" x2="990" y2="246"/></g>
+  <g stroke="#999" stroke-width="2" stroke-dasharray="2 4"><line x1="78" y1="246" x2="990" y2="16"/><line x1="78" y1="470" x2="990" y2="250"/></g>
+  <circle cx="78" cy="468" r="11" fill="#fff" stroke="#e57a1c" stroke-width="4"/>
+  <path d="M94 460 l10 -8 a26 26 0 1 1 10 6 z" fill="#0b65b8"/><circle cx="128" cy="442" r="26" fill="#0b65b8"/><text x="128" y="449" font-size="20" fill="#fff" text-anchor="middle">01</text>
+  <circle cx="216" cy="212" r="11" fill="#fff" stroke="#e57a1c" stroke-width="4"/>
+  <path d="M232 204 l10 -8 a26 26 0 1 1 10 6 z" fill="#0b65b8"/><circle cx="266" cy="186" r="26" fill="#0b65b8"/><text x="266" y="193" font-size="20" fill="#fff" text-anchor="middle">02</text>
+  <circle cx="354" cy="408" r="11" fill="#fff" stroke="#e57a1c" stroke-width="4"/>
+  <path d="M370 400 l10 -8 a26 26 0 1 1 10 6 z" fill="#0b65b8"/><circle cx="404" cy="382" r="26" fill="#0b65b8"/><text x="404" y="389" font-size="20" fill="#fff" text-anchor="middle">03</text>
+  <circle cx="492" cy="142" r="11" fill="#fff" stroke="#e57a1c" stroke-width="4"/>
+  <path d="M508 134 l10 -8 a26 26 0 1 1 10 6 z" fill="#0b65b8"/><circle cx="542" cy="116" r="26" fill="#0b65b8"/><text x="542" y="123" font-size="20" fill="#fff" text-anchor="middle">04</text>
+  <circle cx="630" cy="338" r="11" fill="#fff" stroke="#e57a1c" stroke-width="4"/>
+  <path d="M646 330 l10 -8 a26 26 0 1 1 10 6 z" fill="#0b65b8"/><circle cx="680" cy="312" r="26" fill="#0b65b8"/><text x="680" y="319" font-size="20" fill="#fff" text-anchor="middle">05</text>
+  <circle cx="768" cy="68" r="11" fill="#fff" stroke="#e57a1c" stroke-width="4"/>
+  <path d="M784 60 l10 -8 a26 26 0 1 1 10 6 z" fill="#0b65b8"/><circle cx="818" cy="42" r="26" fill="#0b65b8"/><text x="818" y="49" font-size="20" fill="#fff" text-anchor="middle">06</text>
+</svg>

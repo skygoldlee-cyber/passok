@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 934 646" width="934" height="646" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR','Noto Sans CJK KR',sans-serif">
+  <title>그림 2-4 정책보험으로서의 농업재해보험</title>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0L10 5L0 10z" fill="#111"/></marker></defs>
+  <rect x="2" y="2" width="930" height="642" fill="#fff" stroke="#111" stroke-width="3"/>
+  <g stroke="#111" stroke-width="2"><line x1="100" y1="40" x2="100" y2="582"/><line x1="100" y1="582" x2="900" y2="582"/></g>
+  <g stroke="#555" stroke-width="1.5" stroke-dasharray="3 4"><line x1="100" y1="390" x2="358" y2="390"/><line x1="358" y1="390" x2="358" y2="582"/></g>
+  <g stroke="#555" stroke-width="2"><line x1="130" y1="428" x2="756" y2="12"/><line x1="130" y1="512" x2="872" y2="550"/></g>
+  <g stroke="#111" stroke-width="7"><line x1="172" y1="510" x2="836" y2="78"/><line x1="138" y1="358" x2="878" y2="462"/></g>
+  <g stroke="#111" stroke-width="2"><line x1="464" y1="208" x2="526" y2="258" marker-end="url(#a)"/><line x1="522" y1="528" x2="522" y2="436" marker-end="url(#a)"/></g>
+  <g font-family="'Times New Roman',serif" font-size="30" fill="#111"><text x="34" y="82">P</text><text x="760" y="24">S</text><text x="836" y="92">S'</text><text x="36" y="400">P<tspan font-size="20" dy="6">0</tspan></text><text x="884" y="476">D'</text><text x="880" y="546">D</text><text x="338" y="622">Q<tspan font-size="20" dy="6">0</tspan></text><text x="872" y="640">Q</text></g>
+  <g font-size="22" fill="#333"><text x="140" y="174">· 관리운영비 지원(보장)</text><text x="140" y="206">· 국가재보험 운영</text><text x="608" y="358">· 부가보험료 국가부담</text><text x="608" y="390">· 농가부담 보험료 지원</text><text x="618" y="418">(국가, 지자체, 농협 등)</text></g>
+</svg>

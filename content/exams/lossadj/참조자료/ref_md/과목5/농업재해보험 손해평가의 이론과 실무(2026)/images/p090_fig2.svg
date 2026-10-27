@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 1380" width="1160" height="1380" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR','Noto Sans CJK KR',sans-serif">
+  <title>그림 3-1 농작물재해보험 및 재보험 운영체계</title>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#111"/></marker></defs>
+  <rect width="1160" height="1380" fill="#fff"/>
+  <g fill="none" stroke="#111" stroke-width="2.5">
+    <rect x="358" y="12" width="406" height="316"/><line x1="358" y1="158" x2="764" y2="158"/>
+    <rect x="12" y="534" width="180" height="276"/><rect x="358" y="534" width="406" height="276"/><rect x="950" y="534" width="192" height="276"/>
+    <rect x="12" y="886" width="180" height="190"/><rect x="358" y="1076" width="406" height="290"/><rect x="902" y="1076" width="240" height="290"/>
+  </g>
+  <g stroke="#111" stroke-width="1.6" fill="none">
+    <polyline points="456,330 556,410 652,330"/>
+    <line x1="556" y1="410" x2="556" y2="516" marker-end="url(#a)"/>
+    <line x1="208" y1="648" x2="340" y2="648" marker-end="url(#a)"/><line x1="344" y1="700" x2="210" y2="700" marker-end="url(#a)"/>
+    <line x1="778" y1="636" x2="930" y2="636" marker-end="url(#a)"/><line x1="926" y1="704" x2="780" y2="704" marker-end="url(#a)"/>
+    <line x1="350" y1="770" x2="152" y2="866" marker-end="url(#a)"/><line x1="196" y1="950" x2="442" y2="828" marker-end="url(#a)"/>
+    <line x1="524" y1="832" x2="524" y2="1050" marker-end="url(#a)"/><line x1="582" y1="1046" x2="582" y2="830" marker-end="url(#a)"/>
+    <line x1="940" y1="1046" x2="774" y2="832" marker-end="url(#a)"/>
+  </g>
+  <g font-size="28" fill="#111" text-anchor="middle">
+    <text x="561" y="72">농림축산식품부</text><text x="561" y="114">(농업정책보험금융원)</text>
+    <text x="102" y="660">계약자</text><text x="102" y="702">피보험자</text>
+    <text x="561" y="684">재해보험사업자</text>
+    <text x="1046" y="660">국내외</text><text x="1046" y="702">민영보험사</text>
+    <text x="102" y="948">손해평가사</text><text x="102" y="990">손해평가인</text><text x="102" y="1032">손해사정사</text>
+    <text x="561" y="1130">국 가</text><text x="561" y="1172">(거대재해 인수)</text>
+    <text x="274" y="640">보험료</text><text x="274" y="694">보험금</text>
+    <text x="852" y="628">재보험료</text><text x="852" y="694">재보험금</text>
+    <text x="500" y="464">보험료</text><text x="616" y="464">운영비</text>
+    <text x="456" y="952">재보험료</text><text x="662" y="952">재보험금</text>
+    <text x="276" y="900">수당지급</text>
+  </g>
+  <g font-size="26" fill="#333" text-anchor="middle"><text x="292" y="988">손해평가</text><text x="292" y="1028">결과제출</text></g>
+  <g font-size="28" fill="#111">
+    <text x="376" y="214">-  재해보험사업자 선정.</text><text x="404" y="252">약정체결</text><text x="376" y="298">-  보조금(보험료, 운영비)</text>
+    <text x="376" y="1216">-  농어업재해재보험기금에서</text><text x="404" y="1252">자금 집행</text><text x="376" y="1290">-  농업정책보험금융원에</text><text x="404" y="1330">기금 운용 위탁</text>
+    <text x="920" y="1170">보험개발원 등</text><text x="932" y="1206">-보험료율 산출</text><text x="920" y="1256">금융감독원</text><text x="932" y="1292">-기초서류 확인</text>
+  </g>
+</svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 870 580" width="870" height="580" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR','Noto Sans CJK KR',sans-serif">
+  <title>그림 2-3 품목별 유과타박률 조사요령</title>
+  <defs><radialGradient id="f" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#e3f3a8"/><stop offset="1" stop-color="#6aa82a"/></radialGradient>
+  <g id="cl"><path d="M0 0 l-14 -18 M0 0 l-4 -24 M0 0 l10 -22 M0 0 l18 -12" stroke="#4d3b2a" stroke-width="2"/><circle cx="-16" cy="-22" r="9" fill="url(#f)"/><circle cx="-4" cy="-30" r="10" fill="url(#f)"/><circle cx="12" cy="-26" r="9" fill="url(#f)"/><circle cx="22" cy="-14" r="8" fill="url(#f)"/><circle cx="-24" cy="-10" r="8" fill="url(#f)"/></g></defs>
+  <rect width="870" height="580" fill="#fff"/>
+  <circle cx="38" cy="34" r="4" fill="#7fc3a0"/><text x="52" y="40" font-size="19" font-weight="700" fill="#333">품목별 유과타박률 조사요령</text>
+  <text x="50" y="76" font-size="17" fill="#6fbfa6">사과, 배</text>
+  <g font-size="20" fill="#444"><text x="50" y="110">선택된 과(화)총당 동일한 위치</text><text x="50" y="140">(번호)의 유과(꽃)에 대하여</text><text x="50" y="170">우박피해 여부를 조사</text>
+  <text x="50" y="364" font-size="17" fill="#6fbfa6">단감, 떫은감</text><text x="50" y="402">선택된 유과(꽃)에 대하여</text><text x="50" y="432">우박피해 여부를 조사</text></g>
+  <!-- apple/pear branch -->
+  <g stroke="#4d3b2a" stroke-linecap="round" fill="none"><path d="M432 226 q14 -60 -6 -128" stroke-width="26"/><path d="M440 214 q120 -64 260 -78 q80 -8 150 -14" stroke-width="14"/></g>
+  <use href="#cl" x="530" y="172"/><use href="#cl" x="624" y="146"/><use href="#cl" x="716" y="134"/><use href="#cl" x="806" y="126"/>
+  <g font-size="14" fill="#555" text-anchor="middle"><text x="516" y="126">(1번과총)</text><text x="616" y="102">(2번과총)</text><text x="716" y="92">(3번과총)</text></g>
+  <g font-size="16" fill="#444"><text x="424" y="262">샘플유과를 2번 유과로 선택 시 과총별로 2번유과만</text><text x="424" y="286">선택하여 조사</text></g>
+  <!-- persimmon branch -->
+  <g stroke="#2b2420" stroke-linecap="round" fill="none">
+    <path d="M412 566 q120 -70 230 -120 q120 -54 210 -86" stroke-width="12"/>
+    <path d="M560 474 q60 -30 120 -30 q60 6 140 40" stroke-width="7"/>
+    <path d="M470 528 q-4 -60 -30 -84 M470 528 q20 -50 30 -96" stroke-width="6"/>
+    <path d="M700 410 q-30 -16 -48 -26 q-20 -10 -40 -30" stroke-width="5"/>
+    <path d="M760 386 q-10 -20 -2 -40" stroke-width="4"/>
+  </g>
+  <g fill="url(#f)" stroke="#5a8a22" stroke-width="1.5">
+    <circle cx="510" cy="508" r="20"/><circle cx="478" cy="474" r="14"/><circle cx="518" cy="444" r="16"/><circle cx="634" cy="382" r="11"/><circle cx="640" cy="414" r="14"/>
+    <circle cx="772" cy="434" r="22"/><circle cx="652" cy="520" r="20"/><circle cx="732" cy="490" r="14"/><circle cx="756" cy="526" r="13"/>
+  </g>
+</svg>

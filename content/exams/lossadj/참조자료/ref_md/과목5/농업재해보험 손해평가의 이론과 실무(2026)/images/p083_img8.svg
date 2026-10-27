@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 808" width="1180" height="808" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR','Noto Sans CJK KR',sans-serif">
+  <title>그림 2-5 농어업재해보험법령 체계도</title>
+  <rect width="1180" height="808" fill="#fff"/>
+  <text x="20" y="40" font-size="20" fill="#1f5fa8">상하위법</text>
+  <path d="M30 82 V108 H52" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M66 116 V142 H88" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M102 150 V176 H124" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M102 150 V210 H124" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M102 150 V244 H124" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M102 150 V278 H124" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M102 150 V312 H124" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M102 150 V346 H124" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M102 150 V380 H124" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M102 150 V414 H124" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M102 150 V448 H124" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M102 150 V482 H124" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M30 82 V516 H52" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M66 524 V550 H88" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M66 524 V584 H88" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M66 524 V618 H88" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M66 524 V652 H88" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M66 524 V686 H88" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M66 524 V720 H88" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M66 524 V754 H88" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="2 2"/>
+  <path d="M20 66 h9 l3 3 h14 v14 h-26z" fill="#f4c542" stroke="#c99a1c"/>
+  <rect x="52" y="63" width="44" height="21" rx="2" fill="#5aa02c"/><text x="74.0" y="79" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">법률</text>
+  <text x="104" y="80" font-size="17" fill="#333">농어업재해보험법 <tspan fill="#1f5fa8">[시행 2026. 1. 2.] [법률 제21065호, 2025. 10. 1., 타법개정]</tspan></text>
+  <path d="M56 100 h9 l3 3 h14 v14 h-26z" fill="#f4c542" stroke="#c99a1c"/>
+  <rect x="88" y="97" width="60" height="21" rx="2" fill="#5aa02c"/><text x="118.0" y="113" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">시행령</text>
+  <text x="156" y="114" font-size="17" fill="#333">농어업재해보험법 시행령 <tspan fill="#1f5fa8">[시행 2026. 1. 2.] [대통령령 제35947호, 2025. 12. 30., 타법개정]</tspan></text>
+  <path d="M92 134 h9 l3 3 h14 v14 h-26z" fill="#f4c542" stroke="#c99a1c"/>
+  <text x="124" y="148" font-size="17" fill="#333">행정규칙 <tspan fill="#1f5fa8"></tspan></text>
+  <path d="M131 166 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="160" y="165" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="182.0" y="181" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="212" y="182" font-size="17" fill="#333">농업재해보험 보험목적물별 보상하는 병충해 및 질병규정 <tspan fill="#1f5fa8">[시행 2025. 5. 27.] [고시 제2025-59호, 2025. 5. 27., 일부개정]</tspan></text>
+  <path d="M131 200 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="160" y="199" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="182.0" y="215" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="212" y="216" font-size="17" fill="#333">농업재해보험 손해평가요령 <tspan fill="#1f5fa8">[시행 2024. 3. 29.] [고시 제2024-25호, 2024. 3. 29., 일부개정]</tspan></text>
+  <path d="M131 234 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="160" y="233" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="182.0" y="249" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="212" y="250" font-size="17" fill="#333">농업재해보험에서 보상하는 보험목적물의 범위 <tspan fill="#1f5fa8">[시행 2025. 5. 27.] [고시 제2025-58호, 2025. 5. 27., 일부개정]</tspan></text>
+  <path d="M131 268 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="160" y="267" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="182.0" y="283" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="212" y="284" font-size="17" fill="#333">농업재해보험통계 생산·관리 수탁관리자 지정 <tspan fill="#1f5fa8">[시행 2018. 1. 1.] [고시 제2017-108호, 2017. 12. 11., 일부개정]</tspan></text>
+  <path d="M131 302 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="160" y="301" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="182.0" y="317" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="212" y="318" font-size="17" fill="#333">양식수산물재해보험 손해평가요령 <tspan fill="#1f5fa8">[시행 2021. 6. 14.] [고시 제2021-120호, 2021. 6. 14., 일부개정]</tspan></text>
+  <path d="M131 336 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="160" y="335" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="182.0" y="351" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="212" y="352" font-size="17" fill="#333">양식수산물재해보험사업의 운영 등에 관한 규정 <tspan fill="#1f5fa8">[시행 2021. 7. 1.] [고시 제2021-109호, 2021. 6. 1., 제정]</tspan></text>
+  <path d="M131 370 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="160" y="369" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="182.0" y="385" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="212" y="386" font-size="17" fill="#333">양식수산물재해보험에서 보상하는 보험목적물의 범위 <tspan fill="#1f5fa8">[시행 2020. 1. 6.] [고시 제2019-222호, 2019. 12. 31., 일부개정]</tspan></text>
+  <path d="M131 404 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="160" y="403" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="182.0" y="419" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="212" y="420" font-size="17" fill="#333">양식수산물재해보험의 보험목적물별 보상 질병 규정 <tspan fill="#1f5fa8">[시행 2021. 6. 14.] [고시 제2021-121호, 2021. 6. 14., 일부개정]</tspan></text>
+  <path d="M131 438 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="160" y="437" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="182.0" y="453" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="212" y="454" font-size="17" fill="#333">양식수산물재해보험통계 생산·관리 수탁관리자 지정 <tspan fill="#1f5fa8">[시행 2021. 7. 1.] [고시 제2021-110호, 2021. 6. 1., 제정]</tspan></text>
+  <path d="M131 472 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="160" y="471" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="182.0" y="487" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="212" y="488" font-size="17" fill="#333">재보험사업 및 농업재해보험사업의 운영 등에 관한 규정 <tspan fill="#1f5fa8">[시행 2020. 2. 12.] [고시 제2020-16호, 2020. 2. 12., 일부개정]</tspan></text>
+  <path d="M56 508 h9 l3 3 h14 v14 h-26z" fill="#f4c542" stroke="#c99a1c"/>
+  <text x="88" y="522" font-size="17" fill="#333">행정규칙 <tspan fill="#1f5fa8"></tspan></text>
+  <path d="M95 540 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="124" y="539" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="146.0" y="555" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="176" y="556" font-size="17" fill="#333">(농림축산식품부) 손해평가 재평가 결과에 대한 이의신청 처리에 관한 지침 <tspan fill="#1f5fa8">[시행 2024. 10. 4.] [고시 제2024-75호, 2024. 10. 4., 제정]</tspan></text>
+  <path d="M95 574 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="124" y="573" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="146.0" y="589" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="176" y="590" font-size="17" fill="#333">(해양수산부) 손해평가 재평가 결과에 대한 이의신청 처리에 관한 지침 <tspan fill="#1f5fa8">[시행 2023. 12. 26.] [고시 제2023-182호, 2023. 12. 26., 제정]</tspan></text>
+  <path d="M95 608 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="124" y="607" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="146.0" y="623" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="176" y="624" font-size="17" fill="#333">농업재해보험 손해평가요령 <tspan fill="#1f5fa8">[시행 2024. 3. 29.] [고시 제2024-25호, 2024. 3. 29., 일부개정]</tspan></text>
+  <path d="M95 642 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="124" y="641" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="146.0" y="657" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="176" y="658" font-size="17" fill="#333">농업재해보험에서 보상하는 보험목적물의 범위 <tspan fill="#1f5fa8">[시행 2025. 5. 27.] [고시 제2025-58호, 2025. 5. 27., 일부개정]</tspan></text>
+  <path d="M95 676 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="124" y="675" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="146.0" y="691" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="176" y="692" font-size="17" fill="#333">양식수산물재해보험 손해평가요령 <tspan fill="#1f5fa8">[시행 2021. 6. 14.] [고시 제2021-120호, 2021. 6. 14., 일부개정]</tspan></text>
+  <path d="M95 710 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="124" y="709" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="146.0" y="725" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="176" y="726" font-size="17" fill="#333">양식수산물재해보험에서 보상하는 보험목적물의 범위 <tspan fill="#1f5fa8">[시행 2020. 1. 6.] [고시 제2019-222호, 2019. 12. 31., 일부개정]</tspan></text>
+  <path d="M95 744 h13 l5 5 v17 h-18z" fill="#eaf2fb" stroke="#6b8fbf"/>
+  <rect x="124" y="743" width="44" height="21" rx="2" fill="#5b6fc9"/><text x="146.0" y="759" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">고시</text>
+  <text x="176" y="760" font-size="17" fill="#333">양식수산물재해보험의 보험료율 산정을 위한 권역단위 규정 <tspan fill="#1f5fa8">[시행 2021. 6. 14.] [고시 제2021-123호, 2021. 6. 14., 일부개정]</tspan></text>
+</svg>
