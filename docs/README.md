@@ -410,6 +410,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-RBK-16 | `docs/dev/runbooks/PILOT_EXAM_PROMOTION.md` |
 | DOC-RBK-17 | `docs/dev/runbooks/DISCORD_ADMIN.md` |
 | DOC-RBK-18 | `docs/dev/runbooks/DISCORD_COMMUNITY_SETUP.md` |
+| DOC-RBK-20 | `docs/dev/runbooks/GATE_TROUBLESHOOTING.md` |
 | DOC-ADR-00 | `docs/dev/adr/README.md` |
 | DOC-ADR-01 | `docs/dev/adr/0001-exam-data-boot-document-write.md` |
 | DOC-ADR-02 | `docs/dev/adr/0002-domain-asset-convention-paths.md` |

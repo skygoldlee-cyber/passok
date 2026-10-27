@@ -295,6 +295,7 @@ src/                    # ES Modules
     pwa-install.js        # PWA 설치 프롬프트 설정
     pwa-install-capture.js # beforeinstallprompt 조기 캡처 + SW 조기 등록 (<head> 즉시 실행, 클래식 스크립트)
     pwa-manifest.js       # 시험별 동적 PWA 매니페스트 (클래식 스크립트 — 빌드 산출물 manifest.<id>.webmanifest 실제 파일로 링크 교체 + 문서 제목·설명·apple-mobile-web-app-title 갱신, blob: 금지)
+    version-watch.js       # 배포 버전 감시 — data/version.js 무캐시 폴링(5분+탭 복귀)으로 APP_VERSION 불일치 시 새 버전 프롬프트 배너 → 확인 시 SW 캐시 우회 리로드
   app-version.js        # 앱 버전 접근·표시 포맷터 (window.APP_VERSION → formatAppVersion)
   whats-new.js          # 새 버전 변경 이력 알림 (APP_VERSION 비교 → 모달, 설정 "변경 이력" 재열람)
   onboarding.js         # 첫 방문 시작 안내 모달 (학습 데이터 없는 최초 방문 1회, 설정에서 재열람)

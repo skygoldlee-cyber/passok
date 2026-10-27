@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: bb814947428e3935
+> 입력 해시: 0b910f9568743944
 > 생성: 2026-10-27 · 원천: SPEC.md(608개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -577,7 +577,7 @@
 | P-04a | ✅ | 테스트 | DOC-RBK-01 | css/app-responsive.css | tests/unit/app/pwa-sw.test.js | — | — |
 | P-05 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js<br>tools/build/stamp_sw_version.js | tests/unit/app/pwa-sw.test.js | — | — |
 | P-06 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js | tests/unit/app/pwa-sw.test.js<br>tests/unit/app/sw-prune.test.js | — | — |
-| P-07 | ✅ | 테스트 | DOC-DSN-38<br>DOC-DSN-39<br>DOC-RBK-01<br>DOC-RBK-04 | css/app-responsive.css<br>src/pwa/pwa-install-capture.js<br>src/pwa/pwa-install.js | tests/unit/app/pwa-sw.test.js | — | — |
+| P-07 | ✅ | 테스트 | DOC-DSN-38<br>DOC-DSN-39<br>DOC-RBK-01<br>DOC-RBK-04<br>…외 1개 | css/app-responsive.css<br>src/pwa/pwa-install-capture.js<br>src/pwa/pwa-install.js<br>src/pwa/version-watch.js | tests/unit/app/pwa-sw.test.js<br>tests/unit/pwa/version-watch.test.js | — | — |
 | P-08 | ✅ | 테스트 | DOC-RBK-01<br>DOC-RBK-04 | src/app-shell.js<br>src/pwa/pwa-install.js | tests/unit/app/pwa-sw.test.js | — | — |
 | P-09 | ✅ | 테스트 | DOC-RBK-01<br>DOC-RBK-04 | src/pwa/pwa-install.js | tests/unit/app/pwa-sw.test.js | — | — |
 | P-10 | ✅ | E2E 테스트 | DOC-RBK-01<br>DOC-RBK-04 | src/pwa/pwa-manifest.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
@@ -742,7 +742,7 @@
 | DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | tools/check/check_uitext.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
 | DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-DEV-08<br>DOC-DEV-09<br>DOC-DSN-33 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/app-shell.js<br>src/pwa/pwa-manifest.js | tests/unit/app/exam-context.test.js | — | — |
-| DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-38<br>DOC-RBK-16 | src/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
+| DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-38<br>DOC-RBK-16<br>…외 1개 | src/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
 
 ## 5.2 안정적 ID 체계
 
@@ -752,7 +752,7 @@
 | ID-02 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-08<br>DOC-REF-03<br>DOC-REF-05 | src/sha256.js<br>tools/build/id_factory.js | tests/unit/app/id-factory.test.js<br>tests/unit/app/sha256.test.js | — | — |
 | ID-03 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-08<br>DOC-REF-03<br>DOC-REF-05 | tools/build/id_factory.js | tests/unit/app/id-factory.test.js | — | — |
 | ID-04 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-08<br>DOC-REF-03<br>DOC-REF-05 | tools/build/build_id_migration.js<br>tools/build/id_factory.js | tests/unit/app/id-factory.test.js | — | — |
-| ID-05 | ✅ | 테스트 | DOC-ADR-08<br>DOC-DEV-09 | tools/check/check_position_independence.js | tests/unit/gates/posindep.test.js | — | — |
+| ID-05 | ✅ | 테스트 | DOC-ADR-08<br>DOC-DEV-09<br>DOC-RBK-20 | tools/check/check_position_independence.js | tests/unit/gates/posindep.test.js | — | — |
 
 ## 5.3 빌드 파이프라인
 
@@ -975,6 +975,7 @@
 | DOC-RBK-17 | docs/dev/runbooks/DISCORD_ADMIN.md | AD-10, AD-11, FB-08 |
 | DOC-RBK-18 | docs/dev/runbooks/DISCORD_COMMUNITY_SETUP.md | AD-10, ES-08 |
 | DOC-RBK-19 | docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md | — |
+| DOC-RBK-20 | docs/dev/runbooks/GATE_TROUBLESHOOTING.md | DA-15, ID-05, P-07 |
 | DOC-REF-01 | docs/dev/reference/COMBO_STUDY_STRATEGY.md | DR-02, DR-03, DR-04, DR-05, DR-06, DR-07, Q-01, Q-02, Q-03, Q-04, Q-05, Q-06, Q-07, Q-08, Q-09, Q-10, Q-11, Q-12 |
 | DOC-REF-02 | docs/dev/reference/DEV_ENVIRONMENT.md | — |
 | DOC-REF-03 | docs/dev/reference/FLASHCARD_LOGIC.md | F-01, F-02, F-03, F-04, F-05, F-06, F-07, F-08, F-09, F-10, ID-01, ID-02, ID-03, ID-04, TR-01 |

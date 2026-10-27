@@ -187,6 +187,7 @@ import { setupEventListeners } from './views/event-listeners.js';
 import { getViewTitles, navigateToView, initViewHashRouting } from './router.js';
 import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage, getActiveRegistry } from './exam-context.js';
 import { renderExamSelect, showExamSelect, selectExamAction, resetExamSelection, hardReloadApp } from './views/exam-select.js';
+import { startVersionWatch } from './pwa/version-watch.js';
 import { initUiMode, toggleUiMode, toggleStudyTools } from './ui-mode.js';
 import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword, authOAuth } from './auth-sync/auth-view.js';
 import { showRedeemDialog, initPlanSync } from './pro-redeem.js';
@@ -264,6 +265,8 @@ function initApp() {
     step('initViewHashRouting', () => { if (_routerCtx) initViewHashRouting(_routerCtx); });
     step('setupEventListeners', () => setupEventListeners(enhanceDataClickAccessibility));
     step('setupPWAInstall', setupPWAInstall);
+    // 배포 버전 감시 — 새 버전이 올라가면 프롬프트 배너로 새로고침 유도 (장시간 열린 탭 대응)
+    step('startVersionWatch', startVersionWatch);
     // 앱 종료 버튼은 설치형 PWA(standalone)에서만 노출 — 브라우저 탭에서는 무의미
     step('setupAppQuit', () => {
         const quitBtn = document.getElementById('app-quit-btn');

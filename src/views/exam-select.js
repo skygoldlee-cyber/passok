@@ -3,6 +3,7 @@
 // 멀티시험 플랫폼의 홈: 등록된 시험 목록을 카드로 표시하고 선택 시 시험을 전환한다.
 // 카드에는 시험별 진도 요약(외운 카드·퀴즈 정답률·최근 학습일·D-day)과 액센트 스왓치를 표시한다.
 /** @typedef {import('../types.js').ExamDef} ExamDef */
+import { hardReload } from '../pwa/version-watch.js';
 import { getExamList, getCurrentExamId, clearCurrentExam, selectExam, peekExamValue, resolveExamThemeTokens } from '../exam-context.js';
 import { getItem, setItem } from '../storage.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
@@ -200,20 +201,9 @@ export function resetExamSelection() {
     showToast('시험 선택이 해제됐습니다 — 다음 실행부터 시험 선택이 먼저 표시됩니다', 'info');
 }
 
-/** 강제 새로고침 — SW 캐시 우회 + 페이지 리로드 (Ctrl+F5 동일 효과) */
+/** 강제 새로고침 — SW 캐시 우회 + 페이지 리로드 (Ctrl+F5 동일 효과). 구현은 pwa/version-watch.js */
 export async function hardReloadApp() {
-    try {
-        // 서비스워커 캐시 전량 제거 — 오래된 번들이 남는 문제 방지
-        if ('caches' in window) {
-            const keys = await caches.keys();
-            await Promise.all(keys.map(k => caches.delete(k)));
-        }
-        if (navigator.serviceWorker) {
-            const regs = await navigator.serviceWorker.getRegistrations();
-            await Promise.all(regs.map(r => r.unregister()));
-        }
-    } catch (e) { /* noop — 캐시 삭제 실패해도 리로드는 수행 */ }
-    location.reload();
+    return hardReload();
 }
 
 /** 시험 카드 선택 — 준비중 시험은 알림만, 다른 시험이면 selectExam이 리로드, 같으면 대시보드로 복귀 */
