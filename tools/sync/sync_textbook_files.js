@@ -137,8 +137,17 @@ function syncManifest(target) {
     const eol = fs.readFileSync(target.manifestPath, 'utf-8').includes('\r\n') ? '\r\n' : '\n';
     const edits = [], inserts = [];
 
+    // 공유 dir 가드 — 한 dir을 여러 과목이 공유하면 표준형 자동할당이 전 과목에 퍼진다
+    // (과목별 독립 dir이 규약 — CONTENT_PIPELINE_SPEC §2)
+    const dirOwners = {};
+    for (const s of m.subjects || []) { if (s.dir) (dirOwners[s.dir] = dirOwners[s.dir] || []).push(s.key); }
+
     for (const s of m.subjects || []) {
         if (!s.dir) continue;
+        if ((dirOwners[s.dir] || []).length > 1) {
+            manual.push(`[${target.id}] ${s.dir}: ${dirOwners[s.dir].join('+')} 과목 공유 — 표준형 자동할당 스킵 (과목별 독립 dir로 분리 필요)`);
+            continue;
+        }
         const dirAbs = path.join(sroot, s.dir);
         const { standard, story } = scanTextbookDir(dirAbs);
         for (const ch of s.chapters || []) {

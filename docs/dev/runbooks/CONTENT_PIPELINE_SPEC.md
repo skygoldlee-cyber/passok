@@ -84,6 +84,7 @@ ref_md/과목N/{문서명}/images/    ← 변환 이미지 (있을 때)
 - 마크업 규약 전반은 **TEXTBOOK_AUTHORING_GUIDE**가 정본 (헤더·3영역·아이콘·📌출처·확인문제·서사 슬롯)
 - 표준형 계약 요약: 학습안내 → 아이콘 범례 → 직전 지도 → 최우선 암기축 → 🔢숫자표 → 십진법 장절 본문 → 📌출처(ref_md `문서#LNN`) → 📝확인문제 → ⚖️법령 원문
 - 파일명: `과목N_{이름}_표준형.md` (이야기형은 생성물 — 직접 작성 금지)
+- **과목별 독립 디렉터리 필수**: `subjects[].dir`은 반드시 과목 1개가 점유한다 (`교재/law` 같은 다과목 공유 dir은 `_표준형` 자동할당이 전 과목에 퍼지는 오작동 유발 — sync_textbook_files가 공유 감지 시 자동할당 스킵·경고). dir명은 과목 key 권장 (`교재/broker_law` — broker·appraisal 마이그레이션 선례)
 - 선언: `manifest.subjects[].dir` + `chapters[].file` — 신규 파일은 `sync_textbook_files.js`가 자동 등록·검증
 - 이야기형: `story/*_서사.md` 패치 + `build:story` 생성 (features.storyTextbook 팩만)
 - 초안 경로: `npm.cmd run ai:textbook` → `tmp/ai_drafts/` → **리뷰 승인분만 편입** (생성본 교재 직배치 금지 — CONTENT_WORKFLOW §3.3-2)
