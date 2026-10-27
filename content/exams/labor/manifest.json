@@ -92,5 +92,55 @@
    "title": "지식DB 사전",
    "subtitle": "엔티티 검색 (manifest.knowledge 스키마 필요)"
   }
- }
+ },
+ "pastExams": [
+  {
+   "key": "past35_1차_노동법1",
+   "title": "제35회 1차 기출 — 노동법(1)",
+   "desc": "Q-net 공개 공인노무사 기출 (최종정답 A형 기준)",
+   "file": "기출_1차_35회_2026_노동법1.md",
+   "kind": "past",
+   "subject": "labor_law1"
+  },
+  {
+   "key": "past35_1차_노동법2",
+   "title": "제35회 1차 기출 — 노동법(2)",
+   "desc": "Q-net 공개 공인노무사 기출 (최종정답 A형 기준)",
+   "file": "기출_1차_35회_2026_노동법2.md",
+   "kind": "past",
+   "subject": "labor_law2"
+  },
+  {
+   "key": "past35_1차_민법",
+   "title": "제35회 1차 기출 — 민법",
+   "desc": "Q-net 공개 공인노무사 기출 (최종정답 A형 기준)",
+   "file": "기출_1차_35회_2026_민법.md",
+   "kind": "past",
+   "subject": "civil"
+  },
+  {
+   "key": "past35_1차_사회보험법",
+   "title": "제35회 1차 기출 — 사회보험법",
+   "desc": "Q-net 공개 공인노무사 기출 (최종정답 A형 기준)",
+   "file": "기출_1차_35회_2026_사회보험법.md",
+   "kind": "past",
+   "subject": "social_ins"
+  },
+  {
+   "key": "past35_1차_경영학개론",
+   "title": "제35회 1차 기출 — 경영학개론(선택)",
+   "desc": "Q-net 공개 공인노무사 기출 (최종정답 A형 기준)",
+   "file": "기출_1차_35회_2026_경영학개론.md",
+   "kind": "past",
+   "subject": "elective"
+  },
+  {
+   "key": "past35_1차_경제학원론",
+   "title": "제35회 1차 기출 — 경제학원론(선택)",
+   "desc": "Q-net 공개 공인노무사 기출 (최종정답 A형 기준)",
+   "file": "기출_1차_35회_2026_경제학원론.md",
+   "kind": "past",
+   "subject": "elective"
+  }
+ ]
 }
