@@ -37,7 +37,7 @@ flowchart TD
 
 ### 소스 자료 스테이징 규약
 
-기출문제·법령 원문·가이드 PDF 등 제작용 소스 자료는 **`tmp/sources/<시험id>/`**에 모은다 (gitignore — 저작권상 편입 불가 자료의 표준 보관소). 루트 `.tmp_*`·`tmp/` 산재 금지, 시험 전용 수집·변환 스크립트는 `tmp/sources/<시험id>/tools/`에 둔다. 현황·라이선스 주의는 `tmp/sources/README.md` 참조.
+기출문제·법령 원문·가이드 PDF 등 제작용 소스 자료는 **`tmp/materials/<시험id>/`**에 모은다 (gitignore — 저작권상 편입 불가 자료의 표준 보관소). 팩별 `NEEDS.md`로 수집 현황을 추적하고, 수집·변환 스크립트는 `tmp/materials/<시험id>/tools/`에 둔다. 현황은 `tmp/materials/INVENTORY.md`·`SOURCES.md` 참조. **자료수집 → 참조자료 → 문제은행·교재 전체 파이프라인 규약은 `docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md`** (DOC-RBK-19).
 
 ## 1단계 — 스캐폴딩
 
