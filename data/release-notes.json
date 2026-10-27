@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261028-a9998aa",
+    "date": "2026-10-28",
+    "notes": [
+      "[정리] TRACE_MATRIX 재생성 — 테스트 @spec 반영 [no-docs]",
+      "[테스트·exam-select] 그룹핑 테스트 @spec 헤더 추가 [no-docs]",
+      "[정리] ES-08 임의 라벨 제거 — 스펙 참조 게이트 정합 [no-docs]",
+      "[정리] TRACE_MATRIX 재생성 — ES-08 참조 반영 [no-docs]",
+      "[기능·exam-select] 유사 시험 그룹핑 + 신규 팩 comingSoon 표기 [no-docs]",
+      "[정리] 과목 키 변경 후 생성 데이터 재빌드 [no-docs]",
+      "[수정·eleceng,elecindeng] 과목 키 code→regs — DA-15 콘텐츠 독립 게이트 충돌 해소 [no-docs]",
+      "[기능·itindeng,indsafeind] 실제 출제기준 과목 구조로 교정 + 출제 포인트 골격 [no-docs]",
+      "[기능·eleceng,elecindeng] 출제기준 챕터 골격 + KOCW 전기기기·설비 소재 [no-docs]",
+      "[기능·eleceng,elecindeng] 전기기사·전기산업기사 시험 팩 골격 + 출제기준 수집 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261027-8cbe760",
     "date": "2026-10-27",
     "notes": [
@@ -194,14 +210,6 @@
       "[수정·release] 사용자 릴리스 노트에서 내부 SPEC ID·정리 항목 제거",
       "[수정·ux] 피커 링크에서 내부 SPEC ID 제거 — 사용자 대면 문구 정리",
       "[정리·release] v20261026-3b23804 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-3b23804",
-    "date": "2026-10-26",
-    "notes": [
-      "[수정·ux] 피커 소개 링크 문구 — \"PassOK는 어떤 앱인가?\"로 변경",
-      "[수정·ux] 사용자 매뉴얼은 시험 선택 무관 접근 — 플랫폼 공통 문서"
     ]
   }
 ]
