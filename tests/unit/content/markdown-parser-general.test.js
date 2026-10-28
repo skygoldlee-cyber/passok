@@ -322,3 +322,35 @@ test('joinWraps: 옵션 미지정 시 줄 단위 문단 유지 (기본 동작 �
     const html = parseMarkdown('화장품을 말\n한다.');
     assert.equal((html.match(/<p>/g) || []).length, 2, '기본은 병합 없음');
 });
+
+// ==================== 입력 정규화 (렌더 방어) ====================
+
+test('정규화: lone \r은 줄바꿈으로 처리 (PDF 덤프 셀 구분자)', () => {
+    const html = parseMarkdown('과목\r주요항목\r세부내용');
+    assert.equal((html.match(/<p>/g) || []).length, 3, '\r이 \n처럼 줄 분리');
+    assert.ok(html.includes('<p>과목</p>') && html.includes('<p>세부내용</p>'), '각 셀이 문단으로');
+});
+
+test('정규화: \r\n 개행은 \n과 동일하게 처리', () => {
+    const a = parseMarkdown('첫째\r\n둘째');
+    const b = parseMarkdown('첫째\n둘째');
+    assert.equal(a, b, 'CRLF ≡ LF');
+});
+
+test('정규화: C0 제어문자 제거 (추출 잔재)', () => {
+    const html = parseMarkdown('가\x02나\x0b다');
+    assert.ok(html.includes('<p>가나다</p>'), '제어문자 소거 후 결합');
+    assert.ok(!/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(html), '제어문자 잔존 없음');
+});
+
+test('정규화: PUA 글리프 제거 (전용폰트 추출 잔재)', () => {
+    const html = parseMarkdown('값\ue034은\uf0fc 표시');
+    assert.ok(html.includes('<p>값은 표시</p>'), 'PUA 소거 후 결합');
+    assert.ok(!/[\u{e000}-\u{f8ff}\u{f0000}-\u{ffffd}]/u.test(html), 'PUA 잔존 없음');
+});
+
+test('정규화: \x00 보호 토큰 경로와 무관 — 일반 변환 불변', () => {
+    const html = parseMarkdown('**굵게** `코드`');
+    assert.ok(html.includes('<strong>굵게</strong>'), '인라인 서식 유지');
+    assert.ok(html.includes('<code>코드</code>'), '인라인 코드 유지');
+});
