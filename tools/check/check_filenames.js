@@ -21,6 +21,7 @@
 
 // @spec none (규약 게이트)
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { execSync } = require('child_process');
 
@@ -73,7 +74,7 @@ function check(file) {
     return null;
 }
 
-const files = execSync('git -c core.quotepath=false ls-files', { encoding: 'utf8', cwd: ROOT })
+const files = (() => { const lf = require('path').join(os.tmpdir(), 'gate-lsfiles-' + process.pid + '.txt'); try { execSync('git -c core.quotepath=false ls-files > "' + lf + '"', {  encoding: 'utf8', cwd: ROOT , shell: true }); return fs.readFileSync(lf, 'utf8'); } finally { try { fs.unlinkSync(lf); } catch {} } })()
     .split('\n').filter(Boolean);
 
 const violations = [];

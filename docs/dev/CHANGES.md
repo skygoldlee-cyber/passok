@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-28 feat(content): iteng NCS 학습모듈 55건 ref_md 편입
+
+- `content/exams/iteng/참조자료/ref_md/` — NCS 학습모듈 55건 pdf2md 변환 편입: 과목1 응용SW엔지니어링 20건·과목2 DB엔지니어링 14건(+SQL활용 구판)·과목3 프로그래밍 계열 7건·과목4 보안엔지니어링 15건(+기술적 보안). 출제기준 22 능력단위 중 21건 대응 (배치 프로그램 구현만 공식 모듈 부재)
+- `content/exams/iteng/references.json` — 신규 작성: docSubjectRules 귀속 규칙 + 출제기준 multiSubjectDocs
+- `tools/sync/fix_refmd_glyphs.js` — GLYPH_MAP 확장: NCS PDF Wingdings 계열 매핑 추가 (공백 f020·불릿 f09f/f06d·원형 번호 f02b1~f02b9·화살표 f0e8·마커 f00da·ERD 까마귀발 조각 e0e6/e0fc/e0fd) — 2,885글리프 치환
+- `tools/check/` ENOBUFS 일괄 수정 — 대형 트리(245K 파일)에서 git 출력이 Windows spawnSync 파이프 한계를 넘어 secrets·enc·filenames·orphans·doc_sync·test_first 6개 게이트가 연쇄 차단 → 임시파일 리다이렉트 방식으로 교체 (커밋 게이트 블로커 해소)
+
 ## 2026-10-28 fix: 시험 선택 인트로 매뉴얼 링크 높이 — 텍스트 링크 모양으로 중화
 
 - `css/exam.css` — `.exam-select-intro .exam-btn-link` 오버라이드: 카드용 패딩·보더·인라인플렉스 제거, `서비스 소개` 앵커와 동일한 인라인 밑줄 링크로 정렬

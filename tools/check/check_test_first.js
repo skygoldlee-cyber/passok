@@ -27,6 +27,9 @@
 
 // @spec none (테스트 선행 게이트)
 const { execSync } = require('child_process');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const { parseStatusLine } = require('../lib/git_status.js');
 const { GENERATED_SRC } = require('../lib/generated_files.js');
 
@@ -51,7 +54,12 @@ const TRIGGER_HINTS = [
 
 function git(args) {
     // -c core.quotepath=false — 비ASCII(한글) 경로의 옥탈 이스케이프·인용 방지
-    return execSync(`git -c core.quotepath=false ${args}`, { encoding: 'utf8' }).trim();
+    // Windows spawnSync는 대용량 stdout 파이프에서 ENOBUFS — 임시파일 리다이렉트로 우회
+    const tmp = path.join(os.tmpdir(), `testfirst-git-${process.pid}-${Math.random().toString(36).slice(2)}.txt`);
+    try {
+        execSync(`git -c core.quotepath=false ${args} > "${tmp}"`, { shell: true });
+        return fs.readFileSync(tmp, 'utf8').trim();
+    } finally { try { fs.unlinkSync(tmp); } catch {} }
 }
 
 const GENERATED = new Set(GENERATED_SRC);

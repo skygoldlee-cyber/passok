@@ -1,15 +1,36 @@
 {
  "schemaVersion": 1,
- "_comment": "참조자료 매핑 설정. lawRefs: content/lawdb.json의 법령 id 목록 (나열 순서 = 매칭 우선순위). noticeCore: 고시 감시 배너의 기준 문서명. 자세한 구조는 design/MULTI_EXAM_DB_DESIGN.md §4",
+ "_comment": "참조자료 매핑 설정. 자세한 구조는 design/MULTI_EXAM_DB_DESIGN.md §4. ref_md 문서 = NCS 학습모듈(능력단위별) + 출제기준",
  "lawRefs": [],
  "noticeCore": null,
- "subjectDefaultRefdoc": {},
- "subjectDirMap": {},
+ "subjectDirMap": {
+  "정보처리기사 출제기준(한국산업인력공단)(2027)": "과목1"
+ },
  "docSubjectRules": [
   [
-   "출제기준|시험제도|시행계획",
+   "출제기준",
    1,
-   "출제기준·시행제도 문서 → 과목1 귀속 (multiSubjectDocs 공동 인용)"
+   "출제기준 통합 문서 → 과목1 귀속"
+  ],
+  [
+   "SQL|데이터 ?(베이스|품질|표준화|전환|구현)|개념데이터|논리 데이터|물리 데이터",
+   2,
+   "DB엔지니어링 모듈 → 과목2"
+  ],
+  [
+   "서버 프로그램|프로그래밍 언어|응용SW 기초|개발자 환경|개발 환경|자료구조",
+   3,
+   "프로그래밍 언어 활용 과목 → 과목3"
+  ],
+  [
+   "보안|기술적 보안",
+   4,
+   "보안엔지니어링 모듈 → 과목4 (정보시스템 구축관리)"
+  ],
+  [
+   "요구사항|통합 구현|정보시스템 이행|제품소프트웨어|인터페이스|애플리케이션|모델|화면|소프트웨어공학|방법론|데이터 입출력",
+   1,
+   "응용SW엔지니어링 설계·개발 계열 → 과목1"
   ]
  ],
  "multiSubjectDocs": [

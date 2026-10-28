@@ -27,6 +27,7 @@
 // @spec none (저장소 무결성 게이트)
 const { execSync } = require('child_process');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
@@ -38,7 +39,7 @@ const ASSET_RE = /\.(?:png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|eot|mp3|wav|ogg
 const EXEMPT_RE = /(?:^|\/)_archive\/|tests\/e2e\/[^\n]*-snapshots\//;
 
 function trackedFiles() {
-  const out = execSync('git -c core.quotepath=false ls-files', { cwd: ROOT, encoding: 'utf8' });
+  const out = (() => { const lf = require('path').join(os.tmpdir(), 'gate-lsfiles-' + process.pid + '.txt'); try { execSync('git -c core.quotepath=false ls-files > "' + lf + '"', {  cwd: ROOT, encoding: 'utf8' , shell: true }); return fs.readFileSync(lf, 'utf8'); } finally { try { fs.unlinkSync(lf); } catch {} } })();
   return out.split('\n').map((s) => s.trim()).filter(Boolean);
 }
 

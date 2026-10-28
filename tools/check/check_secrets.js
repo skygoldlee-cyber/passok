@@ -17,6 +17,7 @@
 
 // @spec none (보안 검증)
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { execSync } = require('child_process');
 const { ROOT, refFromArgs, changedFiles } = require('./changed_files.js');
@@ -63,7 +64,14 @@ function main() {
 
   let files;
   try {
-    files = scoped ?? execSync('git ls-files', { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).split('\n').map((s) => s.trim()).filter(Boolean);
+    // Windows spawnSync는 대용량 stdout 파이프에서 ENOBUFS — 임시파일 리다이렉트로 우회
+    files = scoped ?? (() => {
+        const tmp = path.join(os.tmpdir(), `secrets-lsfiles-${process.pid}.txt`);
+        try {
+            execSync(`git ls-files > "${tmp}"`, { cwd: ROOT, shell: true });
+            return fs.readFileSync(tmp, 'utf8').split('\n').map((s) => s.trim()).filter(Boolean);
+        } finally { try { fs.unlinkSync(tmp); } catch {} }
+    })();
   } catch (e) {
     console.log('✗ git 파일 목록 실패 — git 저장소에서 실행하세요');
     process.exit(2);
