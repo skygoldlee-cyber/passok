@@ -484,6 +484,55 @@
    "watch": {
     "target": "administrative-rule"
    }
+  },
+  {
+   "id": "certified-labor-attorney-act-enforcement-decree",
+   "name": "공인노무사법 시행령",
+   "type": "law",
+   "slug": "공인노무사법시행령",
+   "matchKeys": [
+    "공인노무사법시행령"
+   ],
+   "watch": {
+    "target": "law"
+   }
+  },
+  {
+   "id": "certified-labor-attorney-act",
+   "name": "공인노무사법",
+   "type": "law",
+   "slug": "공인노무사법",
+   "matchKeys": [
+    "공인노무사법"
+   ],
+   "watch": {
+    "target": "law"
+   }
+  },
+  {
+   "id": "real-estate-appraisal-act-enforcement-decree",
+   "name": "감정평가 및 감정평가사에 관한 법률 시행령",
+   "type": "law",
+   "slug": "감정평가및감정평가사에관한법률시행령",
+   "matchKeys": [
+    "감정평가및감정평가사에관한법률시행령",
+    "감정평가사법시행령"
+   ],
+   "watch": {
+    "target": "law"
+   }
+  },
+  {
+   "id": "real-estate-brokerage-act-enforcement-decree",
+   "name": "공인중개사법 시행령",
+   "type": "law",
+   "slug": "공인중개사법시행령",
+   "matchKeys": [
+    "공인중개사법시행령"
+   ],
+   "watch": {
+    "target": "law"
+   }
   }
  ]
 }
