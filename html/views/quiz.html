@@ -33,6 +33,11 @@
                         <div class="quiz-body">
                             <h2 class="quiz-question-text" id="quiz-question">여기는 [ 빈칸 ] 입니다.</h2>
 
+                            <!-- 확신 응답 토글 (PS-08 — 확신 오답은 개념 오류 추정 신호) -->
+                            <label class="quiz-confidence" title="확신하고 틀린 문제는 개념 오류로 추정됩니다">
+                                <input type="checkbox" id="quiz-confidence-toggle" aria-label="이 문제에 확신합니다"> 확신함
+                            </label>
+
                             <!-- 객관식 선택지 컨테이너 -->
                             <div id="quiz-options-container" class="is-hidden mb-4"></div>
 

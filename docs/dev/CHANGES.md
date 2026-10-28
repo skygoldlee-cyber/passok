@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-28 feat: PS-08 행동 신호 계측 + 피팅 효과 계측
+
+- `changed`: 시뮬레이터 `saveSimAnswer`에서 응답 변경 추적(`simState.answerChanges`, 세션 리셋) → 채점 시 리뷰 로그 `chg` 필드 기록; `confidence`: 퀴즈 아레나에 "확신함" 토글 → 오답 원인 추정에 확신 신호 반영
+- `recordQuizJudgment(quizId, correct, meta)` 확장 — `chg`·`conf` 행동 신호를 로그에 영속
+- 피팅 효과: `fitFsrsParams`가 `cost`·`baseCost`(기본 w20 대비 오차), `fitKT`가 `baseLogLik`(기본 T 대비 우도) 반환 → `PERSONAL_FIT`에 `w20Gain`·`ktGain` 영속
+- 진단 뷰 학습 리듬 카드에 "개인 피팅 적용 중 — w20=x.xx (예측 오차 -N%) · 전이율 N개" 표시
+
 ## 2026-10-28 feat: 개인 맞춤 고도화 뷰 연결 — PS-01~11 UI 배선
 
 - `src/views/personalization-view.js` 신설 — 순수 로직↔뷰·저장소 어댑터: 피팅 결과 영속(PERSONAL_FIT)·리뷰 로그 재피팅(12h 스로틀)·의미 이웃 클러스터·cid→단원 해석·원인 추정 키 매핑

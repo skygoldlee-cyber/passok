@@ -144,22 +144,28 @@ export function weakRefLink(statEntry, resolve) {
 /**
  * @param {Array<{days:number, correct:boolean, stability:number}>} log
  * @param {number} [minSamples=300] - 피팅 실질 하한
- * @returns {{ w20:number|null, samples:number, fitted:boolean }}
+ * @returns {{ w20:number|null, samples:number, fitted:boolean, cost?:number, baseCost?:number }}
+ *   cost: 피팅 w20의 예측 오차, baseCost: 기본 w20(0.1542) 동일 표본 오차 — 효과 계측용
  */
 export function fitFsrsParams(log, minSamples = 300) {
     const samples = (log || []).filter(r => r.days > 0 && r.stability > 0);
     if (samples.length < minSamples) return { w20: null, samples: samples.length, fitted: false };
-    let best = { w20: 0.1542, cost: Infinity }; // 기본값에서 탐색
-    for (let w = 0.05; w <= 0.40; w += 0.01) {
+    const costOf = (w) => {
         const decay = -w, factor = Math.pow(0.9, -1 / w) - 1;
         let cost = 0;
         for (const r of samples) {
             const R = Math.pow(1 + factor * r.days / r.stability, decay);
             cost += (R - (r.correct ? 1 : 0)) ** 2;
         }
+        return cost;
+    };
+    const baseCost = costOf(0.1542); // FSRS-6 기본 w20
+    let best = { w20: 0.1542, cost: Infinity }; // 기본값에서 탐색
+    for (let w = 0.05; w <= 0.40; w += 0.01) {
+        const cost = costOf(w);
         if (cost < best.cost) best = { w20: +w.toFixed(4), cost };
     }
-    return { w20: best.w20, samples: samples.length, fitted: true };
+    return { w20: best.w20, samples: samples.length, fitted: true, cost: best.cost, baseCost };
 }
 
 // ── PS-07 입문 진단 P0 초기화 ────────────────────────────────────
@@ -229,12 +235,13 @@ export function generateClinic(cluster, opts = {}) {
 /**
  * @param {boolean[]} seq - 시간순 정오 관측
  * @param {Object} [params] { P0, G, S } — T만 피팅
- * @returns {{ T:number, logLik:number }}
+ * @returns {{ T:number, logLik:number, baseLogLik?:number }}
+ *   baseLogLik: 기본 T(0.08)의 로그우도 — 피팅 효과(우도 개선) 계측용
  */
 export function fitKT(seq, params = {}) {
     const { P0 = 0.30, G = 0.15, S = 0.10 } = params;
     if (!seq || !seq.length) return { T: 0.08, logLik: 0 };
-    let best = { T: 0.08, logLik: -Infinity };
+    let best = { T: 0.08, logLik: -Infinity }, baseLogLik = 0;
     for (let T = 0.02; T <= 0.30; T += 0.01) {
         let pl = P0, ll = 0;
         for (const ok of seq) {
@@ -243,7 +250,8 @@ export function fitKT(seq, params = {}) {
             const post = ok ? (pl * (1 - S)) / pC : (pl * S) / (1 - pC);
             pl = post + (1 - post) * T;
         }
+        if (Math.abs(T - 0.08) < 0.001) baseLogLik = ll; // 기본 T 우도
         if (ll > best.logLik) best = { T: +T.toFixed(2), logLik: ll };
     }
-    return best;
+    return { ...best, baseLogLik };
 }

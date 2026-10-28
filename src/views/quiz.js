@@ -49,7 +49,9 @@ function renderWrongCausePicker(suggestedKey) {
 function markQuizWrong(currentQuiz) {
     state.weakCards.add(weakItemKey(currentQuiz.id));
     const ms = state.quiz._qStart ? Date.now() - state.quiz._qStart : null;
-    const suggested = suggestWrongCauseKey({ ms, changed: false, confidence: null, wasCorrect: false });
+    // PS-08 — 확신 토글 상태를 confidence 신호로 (퀴즈는 클릭 즉시 제출이라 changed 관측 불가)
+    const confOn = !!/** @type {HTMLInputElement|null} */ (document.getElementById('quiz-confidence-toggle'))?.checked;
+    const suggested = suggestWrongCauseKey({ ms, changed: false, confidence: confOn ? 'high' : null, wasCorrect: false });
     renderWrongCausePicker(suggested);
 }
 
@@ -242,8 +244,10 @@ export function renderQuizQuestion() {
         }
     }
 
-    // PS-08 — 풀이 시작 시각 (오답 원인 자동 추정의 ms 신호)
+    // PS-08 — 풀이 시작 시각 + 확신 토글 리셋 (오답 원인 자동 추정 신호)
     quizState._qStart = Date.now();
+    const confToggle = /** @type {HTMLInputElement|null} */ (document.getElementById('quiz-confidence-toggle'));
+    if (confToggle) confToggle.checked = false;
 }
 
 /**

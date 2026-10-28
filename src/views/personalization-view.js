@@ -98,14 +98,26 @@ export function refitPersonalModels(force = false) {
         }
     }
     const fsrs = fitFsrsParams(fsrsSamples);
-    if (fsrs.fitted) fit.w20 = fsrs.w20;
+    if (fsrs.fitted) {
+        fit.w20 = fsrs.w20;
+        // 피팅 효과 — 기본 w20 대비 예측 오차 감소율 (0~1, 효과 없으면 음수 가능)
+        fit.w20Gain = (typeof fsrs.baseCost === 'number' && fsrs.baseCost > 0 && typeof fsrs.cost === 'number')
+            ? +(1 - fsrs.cost / fsrs.baseCost).toFixed(3) : null;
+    }
 
-    // PS-11 — 과목별 정오 시퀀스가 충분하면 T 격자 탐색
-    const ktT = {};
+    // PS-11 — 과목별 정오 시퀀스가 충분하면 T 격자 탐색 (+ 기본 T 대비 우도 개선 기록)
+    const ktT = {}, ktGain = {};
     for (const [subj, seq] of subjectJudgmentSeqs()) {
-        if (seq.length >= KT_FIT_MIN_SEQ) ktT[subj] = fitKT(seq).T;
+        if (seq.length >= KT_FIT_MIN_SEQ) {
+            const k = fitKT(seq);
+            ktT[subj] = k.T;
+            if (typeof k.baseLogLik === 'number' && k.baseLogLik !== 0) {
+                ktGain[subj] = +(k.logLik - k.baseLogLik).toFixed(3);
+            }
+        }
     }
     fit.ktT = ktT;
+    fit.ktGain = ktGain;
     fit.fittedAt = Date.now();
     _saveFit(fit);
     applyPersonalFit();

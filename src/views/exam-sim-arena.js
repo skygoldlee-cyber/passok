@@ -258,6 +258,11 @@ export function renderSimQuestion() {
 }
 
 export function saveSimAnswer(qId, value, triggerRender = true) {
+    // PS-08 — 선택지 변경 추적: 기존 응답과 다르면 '망설임' 신호로 기록
+    const prev = simState.userAnswers[qId];
+    if (prev !== undefined && prev !== value) {
+        (simState.answerChanges ||= {})[qId] = true;
+    }
     simState.userAnswers[qId] = value;
     if (triggerRender) {
         renderSimQuestion();
@@ -329,7 +334,8 @@ export function submitExam() {
             const perStatement = deriveComboJudgments(q, userAns);
             if (perStatement) recordStatementJudgments(perStatement);
         }
-        recordQuizJudgment(q.id, isCorrect); // @spec D-22 — 문항 단위 BKT 시퀀스 로그
+        // @spec D-22 — 문항 단위 BKT 시퀀스 로그 + PS-08 선택지 변경 신호
+        recordQuizJudgment(q.id, isCorrect, { chg: (simState.answerChanges && simState.answerChanges[q.id]) ? 1 : 0 });
 
         if (isCorrect) {
             score++;

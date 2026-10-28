@@ -541,6 +541,18 @@
     color: var(--color-text-secondary);
 }
 
+/* PS-08 — 확신 응답 토글 (확신 오답 → 개념 오류 추정 신호) */
+.quiz-confidence {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    user-select: none;
+}
+
 .wrong-cause-reco {
     margin-top: 0.5rem;
     font-size: 0.82rem;

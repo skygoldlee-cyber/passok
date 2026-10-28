@@ -129,18 +129,20 @@ function appendReviewLog(entry) {
 // @spec D-22
 /**
  * 퀴즈 문항 정오 판정을 리뷰 로그에 기록 — BKT 관측 시퀀스 입력 (D-22 선행).
- * 스키마: {c: 문항 id, k:'q', ok: 1|0, t: unix ms} — k 필드로 스케줄 이벤트
+ * 스키마: {c: 문항 id, k:'q', ok: 1|0, t: unix ms, chg?: 1|0, conf?: 1|0} — k 필드로 스케줄 이벤트
  * ({c,r,e,t}, k 없음)와 구분한다. 소비자는 k==='q'로 필터한다.
+ * chg: 제출 전 선택지 변경 신호 (PS-08 망설임), conf: 확신 응답 신호 (PS-08 확신 오답)
  * @param {string} quizId 문항 ID
  * @param {boolean} correct 정답 여부
+ * @param {Object} [meta] { chg?:1|0, conf?:1|0 } 행동 신호 메타 (PS-08)
  */
-export function recordQuizJudgment(quizId, correct) {
-    appendReviewLog({ c: quizId, k: 'q', ok: correct ? 1 : 0, t: Date.now() });
+export function recordQuizJudgment(quizId, correct, meta) {
+    appendReviewLog({ c: quizId, k: 'q', ok: correct ? 1 : 0, t: Date.now(), ...(meta || {}) });
 }
 
 /**
  * 리뷰 로그 전체 읽기 — 후속 피팅·효능 실측·BKT 시퀀스 입력 (D-18·D-22·PS-06)
- * @returns {Array<{c:string, r?:number, e?:number, s?:number, k?:string, ok?:number, t:number}>}
+ * @returns {Array<{c:string, r?:number, e?:number, s?:number, k?:string, ok?:number, chg?:number, conf?:number, t:number}>}
  */
 export function getReviewLog() {
     try {

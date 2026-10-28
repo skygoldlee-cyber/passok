@@ -28,7 +28,7 @@ import {
 import { SemanticIndex } from '../semantic-index.js';
 import { generateClinic, estimatePassProb, weeklyReport, weakRefLink } from '../personalization.js';
 import {
-    personalKtParams, weakClusters, resolveCidChapter, refitPersonalModels
+    personalKtParams, weakClusters, resolveCidChapter, refitPersonalModels, getPersonalFit
 } from './personalization-view.js';
 import { resolveWrongQuiz } from '../weak-items.js';
 import { showToast, showGlobalLoading, hideGlobalLoading } from '../ui-utils.js';
@@ -313,11 +313,23 @@ function _renderStudyRhythmInsight() {
                 : `⚠️ 현재 페이스로는 ${pace.projectedCoverage}% 커버에 그칩니다 — 학습일당 ${pace.neededPerDay}장 필요합니다.`}</p>`
         : '';
 
+    // PS-06·PS-11 — 개인 피팅 적용 상태 + 효과 (표본 미달 시 미피팅이면 미표시)
+    const fit = getPersonalFit();
+    const fitParts = [];
+    if (typeof fit.w20 === 'number') {
+        fitParts.push(`망각 곡선 w20=${fit.w20}${fit.w20Gain > 0 ? ` (예측 오차 -${Math.round(fit.w20Gain * 100)}%)` : ''}`);
+    }
+    if (fit.ktT && Object.keys(fit.ktT).length) {
+        fitParts.push(`과목별 전이율 ${Object.keys(fit.ktT).length}개 피팅`);
+    }
+    const fitNoteHtml = fitParts.length
+        ? `<p class="analysis-advice">⚙️ 개인 피팅 적용 중 — ${esc(fitParts.join(' · '))}</p>` : '';
+
     el.innerHTML = `<h4>📅 학습 리듬</h4>
         <div class="wc-row"><span>오늘 목표 달성</span><strong>${esc(today.overallPercent)}%</strong></div>
         <div class="wc-row"><span>이번 주 학습일</span><strong>${esc(week.studyDays)}/${esc(week.goalDays)}일</strong></div>
         <div class="wc-row"><span>시험일</span><strong>${esc(ddayLabel)}</strong></div>
-        ${growthRowHtml}${patternRowHtml}${paceNoteHtml}
+        ${growthRowHtml}${patternRowHtml}${paceNoteHtml}${fitNoteHtml}
         <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="calendar-view"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> 캘린더 보기</button>`;
 }
 

@@ -59,6 +59,15 @@ test('PS-05: 딥링크 해석 — cid→URL 위임', () => {
     assert.equal(r.url, '#c1');
 });
 
+test('PS-06: 피팅 효과 — cost/baseCost로 개선율 계측', () => {
+    const log = [];
+    for (let i = 0; i < 350; i++) log.push({ days: 1 + (i % 20), correct: (i % 5) > 0, stability: 5 + (i % 10) });
+    const r = fitFsrsParams(log);
+    assert.equal(r.fitted, true);
+    assert.ok(typeof r.cost === 'number' && typeof r.baseCost === 'number');
+    assert.ok(r.cost <= r.baseCost); // 피팅 w20은 기본값 이하 오차
+});
+
 test('PS-06: FSRS 피팅 — 표본 부족 시 미피팅, 충분 시 w20 반환', () => {
     assert.equal(fitFsrsParams([{ days: 1, correct: true, stability: 2 }]).fitted, false);
     const log = Array.from({ length: 400 }, (_, i) => ({ days: (i % 20) + 1, correct: i % 20 < 14, stability: 5 }));
@@ -90,5 +99,7 @@ test('PS-10: 클리닉 처방 — 클러스터→복습 스텝 생성', () => {
 
 test('PS-11: BKT 전이율 피팅 — 유효 범위 반환', () => {
     const r = fitKT([false, false, true, true, true, true]);
+    assert.ok(typeof r.baseLogLik === 'number'); // PS-11 효과 계측 — 기본 T 우도 비교치
+    assert.ok(r.logLik >= r.baseLogLik - 1e-9); // 피팅 T는 기본 T 이상 우도
     assert.ok(r.T >= 0.02 && r.T <= 0.30);
 });
