@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: a29838b8452a0948
+> 입력 해시: 40e9f900b93688d6
 > 생성: 2026-10-28 · 원천: SPEC.md(619개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 619개 — 문서 연결 442 · 소스 연결 553 · 테스트 연결 590 · 보고서 연결 109
+**커버리지 요약**: 요구사항 619개 — 문서 연결 442 · 소스 연결 556 · 테스트 연결 591 · 보고서 연결 109
 
 ---
 
@@ -698,8 +698,8 @@
 | UX-FB-04 | 부분 스켈레톤보다 구현 비용이 낮고 일관됨 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/app.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FB-05 | 기존 사용자는 플래그만 기록해 방해하지 않음 — 재방문 강제 안내 금지 | E2E 테스트 | DOC-DSN-11<br>DOC-DSN-25 | src/onboarding.js | tests/dom/misc/onboarding-zoom.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
 | UX-FB-06 | 자가 등록 모달(`.cing-*`)이 필드 5개로 `90dvh`를 넘겨 등록·취소 버튼이 잘린 실사례. 공용 `.app-confirm-dialog`(컨펌·의견·Pro·온보딩·통계 공유)와 `.auth-modal-card`·`.f-weigh-card`에 적용 — UX-SET-02(설정 패널)의 다이얼로그 일반화. E2E가 세로·가로 뷰포트에서 푸터 버튼 위치를 실측. 신규 카드는 공용 규약 클래스 `.dialog-card`(css/base.css — 90dvh 상한+스크롤) 사용, `check:mobilesafe`가 `role="dialog"` 마크업에 클래스 부재를 정적 검사 | E2E 테스트 | DOC-DSN-25 | — | tests/dom/common/common-a11y.dom.test.js<br>tests/e2e/mobile-overflow.spec.js | — | — |
-| UX-FB-07 | `.skeleton` 유틸은 base.css 공용 — `skeleton-text`/`skeleton-block`·폭 변형(`w-60`/`w-80`). shimmer는 `@media (prefers-reduced-motion)` 전역 무효화에 포함. 전체화면 fetch는 기존 UX-FB-04 오버레이 유지 (혼용 금지 — 부분 본문 교체에만 스켈레톤) | — | — | — | — | — | — |
-| UX-FB-08 | `_prevQueueLen`(직전 큐 길이)로 전이만 감지. `prefers-reduced-motion`에서는 애니메이션 자동 소거 — 상태 메시지 텍스트 자체가 보조 수단 | — | — | — | — | — | — |
+| UX-FB-07 | `.skeleton` 유틸은 base.css 공용 — `skeleton-text`/`skeleton-block`·폭 변형(`w-60`/`w-80`). shimmer는 `@media (prefers-reduced-motion)` 전역 무효화에 포함. 전체화면 fetch는 기존 UX-FB-04 오버레이 유지 (혼용 금지 — 부분 본문 교체에만 스켈레톤) | 구현 (테스트 갭) | — | src/views/textbook-reader.js | — | — | — |
+| UX-FB-08 | `_prevQueueLen`(직전 큐 길이)로 전이만 감지. `prefers-reduced-motion`에서는 애니메이션 자동 소거 — 상태 메시지 텍스트 자체가 보조 수단 | 구현 (테스트 갭) | — | src/views/dashboard-queue.js | — | — | — |
 | UX-FORM-01 | 16px 미만이면 iOS Safari가 포커스 시 자동 확대 | E2E 테스트 | DOC-DSN-25 | css/reader.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FORM-02 | 모바일에서 물리적 눌림감 제공 | E2E 테스트 | DOC-DSN-25 | css/base.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-HELP-01 | 입력 필드·수식키 조합에서는 미동작. `Esc`·`?`·배경 클릭 닫기, 포커스 트랩 적용. 단축키 조합표는 모듈 상수로 분리해 단위 테스트 가능 | E2E 테스트 | — | src/shortcuts-help.js | tests/dom/misc/shortcut-help.dom.test.js<br>tests/e2e/ux-surfaces.spec.js<br>tests/unit/app/shortcuts-help.test.js | — | — |
@@ -838,7 +838,7 @@
 | ROAD-P3 | 미구현 | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 3개 | — | — | DOC-ARC-01<br>DOC-ARC-02<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P4 | ✅ 결정·게이트 구현 | 테스트 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 3개 | src/auth-sync/sync.js | tests/dom/common/common-sync.dom.test.js | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06<br>DOC-ARC-07 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P5 | ✅ | 테스트 | DOC-DSN-21<br>DOC-DSN-35 | — | tests/dom/misc/pro-notice.dom.test.js | — | — |
-| ROAD-P6 | ✅ | 문서 검토 | DOC-DSN-35 | — | — | — | — |
+| ROAD-P6 | ✅ | 테스트 | DOC-DSN-35 | src/pro-upgrade.js | tests/dom/misc/pro-notice.dom.test.js | — | — |
 
 ## 7.3 Learning Pro 잔여·차별화
 
@@ -1019,7 +1019,12 @@
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
-없음 — 소스 연결된 모든 요구사항에 테스트 참조가 있음.
+소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 2개 — 테스트 백로그 후보.
+
+| ID | 절 | 구현 소스 |
+|----|-----|-----------|
+| UX-FB-07 | 4.8 UI/UX 설계 요구사양 | src/views/textbook-reader.js |
+| UX-FB-08 | 4.8 UI/UX 설계 요구사양 | src/views/dashboard-queue.js |
 
 ## 부록 C — 관련 SPEC ID 헤더 누락 문서
 

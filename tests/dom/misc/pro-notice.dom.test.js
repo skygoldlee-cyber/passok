@@ -1,5 +1,5 @@
 // tests/dom/pro-notice.dom.test.js — Pro 안내 수렴 (전역 1회 seen + 배지→플랜 비교 경로)
-// @spec ROAD-P5
+// @spec ROAD-P5,ROAD-P6
 // 기능별 첫 진입 모달을 전역 1회로 수렴하고, PRO 배지를 플랜 비교 단일 진입점으로
 // 만드는 정책을 고정한다 — 동일 내용의 모달 반복 노출과 재노출 회귀 차단.
 

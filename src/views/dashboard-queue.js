@@ -1,5 +1,5 @@
 // src/views/dashboard-queue.js — "오늘 할 일" 단일 큐 (TQ-01~05, DOC-DSN-21)
-// @spec TQ-01,TQ-02,TQ-03,TQ-05,D-23,PS-01,PS-03,PS-10
+// @spec TQ-01,TQ-02,TQ-03,TQ-05,D-23,UX-FB-08,PS-01,PS-03,PS-10
 //
 // 모든 추천 소스의 출력을 하나의 우선순위 큐로 병합한다.
 // 큐 빌드(buildTodayQueue)는 DOM 비의존 순수 로직 — 렌더는 renderTodayQueue가 담당.

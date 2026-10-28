@@ -1,3 +1,4 @@
+// @spec none (교재↔출제기준 정합 advisory 감사 도구 — 요구사양 미대응)
 // tools/audit/audit_syllabus_alignment.js — 교재 과목·챕터 구조 ↔ 출제기준 문서 정합성 감사
 // 각 시험 팩의 manifest subjects[].chapters(표준형 교재) 챕터 헤딩(## N. 제목)과
 // 참조자료/ref_md/*출제기준*.md 표의 주요항목(N.M 항목명)을 비교한다.
