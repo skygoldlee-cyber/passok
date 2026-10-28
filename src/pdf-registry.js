@@ -1031,7 +1031,7 @@ const _EXAM_TABLES = {
     "compapp1": {
         contentRoot: "content/exams/compapp1",
         SUBJECT_DIR_MAP: {
-
+        "컴퓨터활용능력 출제기준(대한상공회의소)(2027)": "과목1"
         },
         REF_MD_SUBJECTS: {
 
@@ -1064,7 +1064,7 @@ const _EXAM_TABLES = {
     "compapp2": {
         contentRoot: "content/exams/compapp2",
         SUBJECT_DIR_MAP: {
-
+        "컴퓨터활용능력 출제기준(대한상공회의소)(2027)": "과목1"
         },
         REF_MD_SUBJECTS: {
 
