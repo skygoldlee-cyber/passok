@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261028-43ba33f",
+    "date": "2026-10-28",
+    "notes": [
+      "[수정·exams] 시험 선택 카드 아이콘 고유화 + 중복 차단 게이트",
+      "[리팩터링·ref_md] 표시 형식 정리 — 추출 잔재 정제·평탄화 재분할·형식 게이트 [no-docs]",
+      "[수정·cosmetic] 출제기준·시행계획공고 ref_md를 selfAuthoredDocs에 등록 [no-docs]",
+      "[수정·cosmetic] 출제기준 ref_md NUL 바이트·추출 잔재 정제 [no-docs]",
+      "[수정·compapp] 문제은행 인용문 형식 교정 — 따옴표 래퍼 제거로 인용 동기화 해석 [no-docs]",
+      "[정리·compapp] 문제은행 MD_ASSETS 동기화 [no-docs]",
+      "[기능·compapp1,compapp2] 문제은행 exams[] 과목당 20문 자체 제작 [no-docs]",
+      "[기능·labor,broker] 시험과목 시행령 법령 referenceLaw·lawdb 편입 [no-docs]",
+      "[기능·exams] 출제기준·시행제도 ref_md 참조자료 일괄 편입 [no-docs]",
+      "[기능·compapp1,compapp2] 출제기준 ref_md 참조자료 편입 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261028-b7ead45",
     "date": "2026-10-28",
     "notes": [
@@ -202,15 +218,6 @@
     "notes": [
       "[테스트·e2e] 시각 회귀 CI 전용화 + 기준선 자동 재생성 — 유지비 경감",
       "[정리·release] v20261026-e91e64e 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-e91e64e",
-    "date": "2026-10-26",
-    "notes": [
-      "[테스트·e2e] 탭바 매뉴얼 반영 시각 기준선 갱신 (linux)",
-      "[수정·ux] 매뉴얼을 하단 탭바 최좌측으로 이동 — 헤더 제거 + 탭바 배치",
-      "[정리·release] v20261026-dbbbb9b 스탬프 확정 [no-docs]"
     ]
   }
 ]
