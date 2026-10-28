@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-28 feat: 시험 선택 인트로에 매뉴얼 링크 추가
+
+- `html/views/exam-select.html` — "서비스 소개 — PassOK는 어떤 앱인가?" 뒤에 "상세설명은 매뉴얼을 참조하세요" 문구 추가, 매뉴얼은 `ManualViewer.openManual`로 앱 내 사용자 매뉴얼을 연다
+
 ## 2026-10-28 fix: hardReload 직후 새로운 소식 모달 미표시 — INBOUND 플래그 오발화
 
 - `src/pwa/pwa-install-capture.js` — `__SW_UPDATE_INBOUND`를 `hadController`일 때만 설정: 버전 프롬프트의 새로고침(`hardReload` = 캐시 삭제 + SW unregister + reload) 직후엔 페이지가 이미 최신본인데 같은 세대 SW의 신규 설치(`reg.installing`)를 업데이트 도래로 오인해 플래그가 세워지고, controllerchange도 `hadController=false`라 자동 리로드가 없어 whats-new 모달이 그 세션 내내 억제되던 문제
