@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261028-6e06420",
+    "date": "2026-10-28",
+    "notes": [
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[기능·content] 3개 팩 출제기준 수행준거 용어 정리 절 추가",
+      "[수정·content] 출제기준 항목명·세부내용 정교화 — 경계 오탐 소거 [no-docs]",
+      "[수정·audit] 타과목 커버 폴백 — syllabus 항목 귀속 오류 오탐 소거",
+      "[기능·audit] audit:syllabus를 check:audit 프리셋에 등록",
+      "[기능·content] hairdresser 미용실무 NCS 수행준거 챕터 추가",
+      "[수정·audit] ## Chapter NN. 헤딩 인식 — 비활성 팩 챕터 파싱 활성화",
+      "[수정·content] broker 출제기준 공고 원문 1:1 교정 — 농지법·출제비율 구조 반영 [no-docs]",
+      "[문서·content] broker 출제기준 세부내역 검증 주석 [no-docs]",
+      "[기능·content] broker 민사특별법 챕터 추가 (syllabus 갭 해소)"
+    ]
+  },
+  {
     "version": "v20261028-43ba33f",
     "date": "2026-10-28",
     "notes": [
@@ -210,14 +226,6 @@
       "[기능·exam] 공인중개사 교재 골격 — 7과목 chapters 등록 + 재사용 교재 이식",
       "[기능·exam] 공인중개사 법령 수집 — 중개사법 3종·세법·실무규정 9건 추가",
       "[기능·exam] 공인중개사 manifest 구조 정정 + 재사용 법령 18건 복사"
-    ]
-  },
-  {
-    "version": "v20261026-ae50238",
-    "date": "2026-10-26",
-    "notes": [
-      "[테스트·e2e] 시각 회귀 CI 전용화 + 기준선 자동 재생성 — 유지비 경감",
-      "[정리·release] v20261026-e91e64e 스탬프 확정 [no-docs]"
     ]
   }
 ]
