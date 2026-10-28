@@ -1629,6 +1629,12 @@ mark.txt-highlight {
     margin-left: 0.5rem;
 }
 
+/* PS-05 — 취약 진술 → 교재 단원 딥링크 버튼 */
+.weak-ref-btn {
+    padding: 0.2rem 0.6rem;
+    font-size: var(--text-xs);
+}
+
 /* 과목별 진술 마스터 진행도 */
 .weak-mastery-grid {
     display: grid;

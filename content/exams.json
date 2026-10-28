@@ -54,7 +54,8 @@
       "appNameEn": "Passmula",
       "practiceName": "Formula OS",
       "discordInvite": "https://discord.gg/eHerSQG9hj",
-      "group": "미용·화장품"
+      "group": "미용·화장품",
+      "tier": "active"
     },
     {
       "id": "skincare",
@@ -83,7 +84,8 @@
       "comingSoon": true,
       "appNameEn": "Passkin",
       "practiceName": "Skin OS",
-      "group": "미용·화장품"
+      "group": "미용·화장품",
+      "tier": "pilot"
     },
     {
       "id": "hairdresser",
@@ -108,7 +110,8 @@
       "appNameEn": "Passhair",
       "practiceName": "Hair OS",
       "comingSoon": true,
-      "group": "미용·화장품"
+      "group": "미용·화장품",
+      "tier": "pilot"
     },
     {
       "id": "insadj",
@@ -135,7 +138,8 @@
       },
       "appNameEn": "Passure",
       "practiceName": "Adjust OS",
-      "group": "보험·평가·부동산"
+      "group": "보험·평가·부동산",
+      "tier": "pilot"
     },
     {
       "id": "lossadj",
@@ -163,7 +167,8 @@
       },
       "appNameEn": "Passess",
       "practiceName": "Assess OS",
-      "group": "보험·평가·부동산"
+      "group": "보험·평가·부동산",
+      "tier": "pilot"
     },
     {
       "id": "admagent",
@@ -188,7 +193,8 @@
       "comingSoon": true,
       "appNameEn": "Passmin",
       "practiceName": "Docs OS",
-      "group": "법무·노무"
+      "group": "법무·노무",
+      "tier": "pilot"
     },
     {
       "id": "appraisal",
@@ -199,7 +205,7 @@
       "logoMain": "PassOK",
       "logoSub": "감평사 · Passpraisal",
       "desc": "감정평가사 — 8과목 (1차 필기 객관식: 부동산학개론·감정평가관련법규·감정평가 및 통계원론) · 출제기준 기반 자체 제작 · 2차 주관식은 대상 외",
-      "icon": "fa-solid fa-scale-balanced",
+      "icon": "fa-solid fa-building",
       "year": "2027",
       "theme": {},
       "contentRoot": "content/exams/appraisal",
@@ -210,7 +216,8 @@
       "comingSoon": true,
       "appNameEn": "Passpraisal",
       "practiceName": "Appraisal OS",
-      "group": "보험·평가·부동산"
+      "group": "보험·평가·부동산",
+      "tier": "pilot"
     },
     {
       "id": "broker",
@@ -230,7 +237,8 @@
       "registryBundle": "data/exams/broker/registry.js",
       "registryGlobal": "DATA_REGISTRY_BROKER",
       "comingSoon": true,
-      "group": "보험·평가·부동산"
+      "group": "보험·평가·부동산",
+      "tier": "pilot"
     },
     {
       "id": "labor",
@@ -241,7 +249,7 @@
       "logoMain": "공인노무사",
       "logoSub": "",
       "desc": "공인노무사 1차·2차 — 노동법·민법·사회보험법 등 (콘텐츠 구축 중)",
-      "icon": "fa-solid fa-book",
+      "icon": "fa-solid fa-briefcase",
       "year": "2027",
       "theme": {},
       "contentRoot": "content/exams/labor",
@@ -251,7 +259,8 @@
       "registryGlobal": "DATA_REGISTRY_LABOR",
       "features": {},
       "comingSoon": true,
-      "group": "법무·노무"
+      "group": "법무·노무",
+      "tier": "pilot"
     },
     {
       "id": "indsafe",
@@ -276,7 +285,8 @@
       "comingSoon": true,
       "appNameEn": "Passafe",
       "practiceName": "Safety OS",
-      "group": "산업안전"
+      "group": "산업안전",
+      "tier": "pilot"
     },
     {
       "id": "indsafeind",
@@ -287,7 +297,7 @@
       "logoMain": "산업안전산업기사",
       "logoSub": "",
       "desc": "산업안전산업기사 — scaffold 생성 골격 (콘텐츠 교체 필요)",
-      "icon": "fa-solid fa-book",
+      "icon": "fa-solid fa-industry",
       "year": "2027",
       "theme": {},
       "contentRoot": "content/exams/indsafeind",
@@ -297,7 +307,8 @@
       "registryGlobal": "DATA_REGISTRY_INDSAFEIND",
       "features": {},
       "group": "산업안전",
-      "comingSoon": true
+      "comingSoon": true,
+      "tier": "draft"
     },
     {
       "id": "iteng",
@@ -308,7 +319,7 @@
       "logoMain": "정보처리기사",
       "logoSub": "",
       "desc": "정보처리기사 — scaffold 생성 골격 (콘텐츠 교체 필요)",
-      "icon": "fa-solid fa-book",
+      "icon": "fa-solid fa-laptop-code",
       "year": "2027",
       "theme": {},
       "contentRoot": "content/exams/iteng",
@@ -318,7 +329,8 @@
       "registryGlobal": "DATA_REGISTRY_ITENG",
       "features": {},
       "group": "정보처리",
-      "comingSoon": true
+      "comingSoon": true,
+      "tier": "draft"
     },
     {
       "id": "itindeng",
@@ -329,7 +341,7 @@
       "logoMain": "정보처리산업기사",
       "logoSub": "",
       "desc": "정보처리산업기사 — scaffold 생성 골격 (콘텐츠 교체 필요)",
-      "icon": "fa-solid fa-book",
+      "icon": "fa-solid fa-server",
       "year": "2027",
       "theme": {},
       "contentRoot": "content/exams/itindeng",
@@ -339,7 +351,8 @@
       "registryGlobal": "DATA_REGISTRY_ITINDENG",
       "features": {},
       "group": "정보처리",
-      "comingSoon": true
+      "comingSoon": true,
+      "tier": "draft"
     },
     {
       "id": "eleceng",
@@ -350,7 +363,7 @@
       "logoMain": "전기기사",
       "logoSub": "",
       "desc": "전기기사 — scaffold 생성 골격 (콘텐츠 교체 필요)",
-      "icon": "fa-solid fa-book",
+      "icon": "fa-solid fa-bolt",
       "year": "2027",
       "theme": {},
       "contentRoot": "content/exams/eleceng",
@@ -360,7 +373,8 @@
       "registryGlobal": "DATA_REGISTRY_ELECENG",
       "features": {},
       "group": "전기",
-      "comingSoon": true
+      "comingSoon": true,
+      "tier": "draft"
     },
     {
       "id": "elecindeng",
@@ -371,7 +385,7 @@
       "logoMain": "전기산업기사",
       "logoSub": "",
       "desc": "전기산업기사 — scaffold 생성 골격 (콘텐츠 교체 필요)",
-      "icon": "fa-solid fa-book",
+      "icon": "fa-solid fa-plug-circle-bolt",
       "year": "2027",
       "theme": {},
       "contentRoot": "content/exams/elecindeng",
@@ -381,7 +395,8 @@
       "registryGlobal": "DATA_REGISTRY_ELECINDENG",
       "features": {},
       "group": "전기",
-      "comingSoon": true
+      "comingSoon": true,
+      "tier": "draft"
     },
     {
       "id": "compapp1",
@@ -407,7 +422,8 @@
       "comingSoon": true,
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
-      "group": "정보처리"
+      "group": "정보처리",
+      "tier": "pilot"
     },
     {
       "id": "compapp2",
@@ -433,7 +449,8 @@
       "comingSoon": true,
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
-      "group": "정보처리"
+      "group": "정보처리",
+      "tier": "pilot"
     }
   ]
 }

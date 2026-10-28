@@ -116,6 +116,15 @@ export function parseMarkdown(mdText, options = {}) {
 
     let html = String(mdText);
 
+    // 0. 렌더 방어 정규화 — 원시 추출 잔재가 소스에 남아도 표시 파손만은 차단
+    //    - 개행 정규화: \r\n·lone \r → \n (PDF 덤프의 \r 셀 구분자 유입 대비)
+    //    - C0 제어문자·PUA 글리프 제거 (전용폰트 추출 잔재 — 소스 정제는
+    //      tools/sync/fix_refmd_glyphs.js가 수행, 여기선 표시 파손 차단만)
+    //    \x00 보호 토큰은 이후 단계에서 삽입되므로 입력 정제와 충돌 없음
+    html = html.replace(/\r\n?/g, '\n')
+               .replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, '')
+               .replace(/[\u{e000}-\u{f8ff}\u{f0000}-\u{ffffd}]/gu, '');
+
     // 1. 안전한 인라인 태그/특수 토큰 치환 (이스케이프 전에 처리)
     //    보호 토큰은 \x00…\x00 구분자 형식 — 토큰끼리 부분문자열 관계가
     //    생겨도(SQUOT ⊃ QUOT처럼) 복원 치환 순서와 무관하게 충돌하지 않는다.

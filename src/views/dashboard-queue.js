@@ -1,5 +1,5 @@
 // src/views/dashboard-queue.js — "오늘 할 일" 단일 큐 (TQ-01~05, DOC-DSN-21)
-// @spec TQ-01,TQ-02,TQ-03,TQ-05,D-23
+// @spec TQ-01,TQ-02,TQ-03,TQ-05,D-23,UX-FB-08,PS-01,PS-03,PS-10
 //
 // 모든 추천 소스의 출력을 하나의 우선순위 큐로 병합한다.
 // 큐 빌드(buildTodayQueue)는 DOM 비의존 순수 로직 — 렌더는 renderTodayQueue가 담당.
@@ -14,9 +14,11 @@ import { getWeakStatements } from '../statement-tracker.js';
 import {
     getStudyCalendar, computeStudyPlan, computeSubjectAllocation,
     computeSubjectAllocInputs, sumRecentCardsBySubject, sumRecentQuizzesBySubject,
-    getDDay, examWeightBySubject, selectExamRiskSession
+    getDDay, getStudyGoals, examWeightBySubject, selectExamRiskSession
 } from '../study-tracker.js';
 import { computeRecommendations, snapshotRecommendations, evaluateRecommendationEffect } from '../recommendations.js';
+import { buildTodayQueue as buildPersonalQueue } from '../personalization.js';
+import { weakClusters } from './personalization-view.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { subjectKeyFromItemId } from '../weak-items.js';
 import { todayKey } from '../utils.js';
@@ -37,6 +39,9 @@ const MAX_PLAN_ITEMS = 2; // 주간 배정 큐 항목 상한 — 과목 나열�
  * @param {number|null} [p.dday] 시험 D-day (미설정 null)
  * @param {string[]} [p.examRiskIds] 시험일 기억률 미달 카드 id — R_exam 오름차순·세션 상한 적용분 (D-19)
  * @param {boolean} [p.hasProgress] 학습 이력 존재 여부
+ * @param {Array} [p.behindSubjects] 계획 밀림 과목 [{key,name,daysBehind}] — PS-03 우선순위 입력
+ * @param {number} [p.unlearnedCount] 미학습 카드 수 — PS-03 우선순위 입력
+ * @param {Object} [p.topCluster] 최다 오개념 클러스터 (weakClusters()[0] — PS-01·PS-10 클리닉 항목)
  * @returns {Array<{icon:string, color:string, title:string, reason:string,
  *   actions:Array<{click:string, arg?:string, args?:Array, label:string, icon:string, cls:string}>}>}
  */
@@ -130,6 +135,17 @@ export function buildTodayQueue(p = {}) {
         });
     }
 
+    // ⑤# 무너진 개념 축 — 약점 개념 클러스터 최상위의 클리닉 진입점 (PS-01·PS-10)
+    if (p.topCluster) {
+        push({
+            kind: 'clinic',
+            icon: 'fa-flask-vial', color: 'var(--color-warning)',
+            title: `오개념 클리닉: ${p.topCluster.label}`,
+            reason: `같은 개념 축 ${p.topCluster.size}개 진술에서 ${p.topCluster.totalWrong}회 오판 — 개념 단위 복습 권장`,
+            actions: [{ click: 'switchView', args: ['analysis-view', { scrollTop: true }], label: '진단 보기', icon: 'fa-stethoscope', cls: 'btn-primary' }]
+        });
+    }
+
     // ⑤+ 시험일 목표 R 최종 인출 — 다음 복습이 시험일 이후인 스케줄 사각지대 카드 (D-19)
     const examRisk = p.examRiskIds || [];
     if (p.dday !== null && p.dday !== undefined && p.dday >= 0 && p.dday <= EXAM_R_WINDOW_DAYS && examRisk.length) {
@@ -172,6 +188,37 @@ export function buildTodayQueue(p = {}) {
             actions: [{ click: 'startDailyChallenge', label: '챌린지', icon: 'fa-play', cls: 'btn-success' }]
         });
     }
+
+    // PS-03 — 통합 학습 큐 우선순위 정렬 엔진. personalization.buildTodayQueue가
+    // 계획 밀림(최우선)→SRS 대기→취약 진술→미학습의 유형별 우선순위를 결정하면,
+    // 로컬 고유 항목(goal·danger·examr·review·clinic·rec·start·daily)은
+    // 고정 우선순위로 사이에 배치해 최종 순서를 만든다 (안정 정렬 — 동순위는 생성 순).
+    const personal = buildPersonalQueue({
+        dueCount: due.length,
+        weakCount: p.weakStatementCount || 0,
+        behindSubjects: p.behindSubjects || [],
+        unlearnedCount: p.unlearnedCount || 0
+    });
+    const behindPrio = new Map();
+    let srsPrio = 0, weakPrio = 0;
+    personal.forEach(i => {
+        if (i.type === 'behind') behindPrio.set(i.payload.key, i.priority);
+        else if (i.type === 'srs') srsPrio = i.priority;
+        else if (i.type === 'weak') weakPrio = i.priority;
+    });
+    // PS-03 미관할 항목의 고정 우선순위 — 기존 상대 순서(due>danger>review>weak>examr>rec>start/daily) 보존
+    const FIXED_PRIO = {
+        goal: 1000, danger: 79, review: 70, clinic: 65, examr: 55, rec: 50, daily: 10, start: 5
+    };
+    const prioMap = new Map();
+    items.forEach(it => {
+        // alloc: 밀림 데이터가 있을 때만 개인화 우선순위(90+일수)로 승격 — 없으면 기존 위치(danger 아래)
+        prioMap.set(it, it.kind === 'alloc' ? (behindPrio.get(it.actions[0] && it.actions[0].arg) ?? 78)
+            : it.kind === 'due' ? (srsPrio || 80)
+            : it.kind === 'weak' ? (weakPrio || 60)
+            : (FIXED_PRIO[it.kind] ?? 40));
+    });
+    items.sort((a, b) => (prioMap.get(b) || 0) - (prioMap.get(a) || 0));
 
     return items;
 }
@@ -229,6 +276,14 @@ export function renderTodayQueue(subjects) {
         getExamRiskCards(dday), EXAM_R_SESSION_CAP,
         examWeightBySubject((DataLoader.registry && DataLoader.registry.exams) || [])
     ).map(r => r.id);
+    // PS-03 우선순위 입력 — 잔여 배정량을 일일 목표로 환산해 밀림 일수 추정.
+    // 1일치 미만 잔여는 주 초반 정상 배정 잔여이므로 밀림으로 취급하지 않는다
+    // (≥2일치 = 실질 계획 지연이 있을 때만 최우선 승격 — 정상 잔여는 기존 순위 유지)
+    const dailyCards = Math.max(1, getStudyGoals().dailyCards || 1);
+    const behindSubjects = allocRemaining.map(a => ({
+        key: a.key, name: a.name,
+        daysBehind: Math.ceil((a.cardsLeft + (a.quizzesLeft || 0)) / dailyCards)
+    })).filter(s => s.daysBehind >= 2);
     const items = buildTodayQueue({
         dueCardIds, subjects, recs, allocRemaining,
         reviewCount: state.weakCards.size,
@@ -236,7 +291,10 @@ export function renderTodayQueue(subjects) {
         dailyDone: !!safeGetItem(dailyCompletedKey(todayKey())),
         dday,
         examRiskIds,
-        hasProgress
+        hasProgress,
+        behindSubjects,
+        unlearnedCount: Math.max(0, totalCards - state.memorizedCards.size),
+        topCluster: weakClusters()[0] || null
     });
 
     _prevQueueLen = items.length;

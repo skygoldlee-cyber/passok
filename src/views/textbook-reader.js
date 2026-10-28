@@ -1,5 +1,5 @@
 // views/textbook-reader.js - 교재 리더 오케스트레이터 (과목·챕터 선택·뷰 상태·진입점)
-// @spec TR-01~19,SA-02~05,G-01~09,ST-01~07
+// @spec TR-01~19,SA-02~05,G-01~09,ST-01~07,UX-FB-07
 //   (챕터 렌더 → reader-render.js · 이야기형 로드 → reader-loader.js ·
 //    위치/진척 → reader-progress.js · 참조 링크 → reader-ref-links.js ·
 //    툴바·스크롤스파이·표 모달 → reader-toolbar.js)

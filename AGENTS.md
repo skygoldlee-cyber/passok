@@ -61,6 +61,12 @@ npm.cmd run deploy                     # 배포 가드(clean tree + origin/main 
 # ※ 사용자가 "배포"라고 요청하면 이 명령 하나로 전체 단계 수행
 # ※ `vercel --prod` 직접 실행 금지 — 미푸시 커밋/미커밋 변경이 프로덕션에 올라감
 
+# CI 진단·재실행
+npm.cmd run ci:diagnose                # CI 실패 위치 진단 — 커밋의 ci.yml 실패 잡·스텝 나열 (기본 HEAD, 인자 sha 지정 가능 · --specs=실패 e2e 샤드 스펙 목록)
+npm.cmd run ci:retrigger               # CI 플레이크 재실행 — 빈 커밋 push → ci.yml 완료 폴링·결과 보고 (로컬 재현 통과 확인 후 사용 — 동일 스텝 재실패는 회귀로 간주)
+# ※ CI 실패 시 절차: ci:diagnose → 실패 스텝 로컬 재현 → 통과하면 ci:retrigger, 실패하면 수정
+# ※ 만성 플레이크 스펙 임시 제외: PW_QUARANTINE="visual.spec" npm run test:e2e (playwright.config.js testIgnore)
+
 # 감사
 npm.cmd run audit:cards                 # 카드 품질 자동 감사 (짧은 설명, 중복, 참조 링크 유효성)
 npm.cmd run sbom                        # SPDX 형식 SBOM 생성 → sbom.spdx.json (CI 아티팩트, gitignore 대상)
@@ -68,6 +74,7 @@ npm.cmd run audit:combo                 # 복수정답형 품질 감사 (정답 
 npm.cmd run audit:study                 # 학습 품질 감사 — 주간 배분·학습 진단 추천 규칙 정합 시나리오 검증 (SQ-01~04, --check=기준선 회귀, --update=기준선 갱신)
 npm.cmd run audit:tools                 # tools/ 사용률 감사 — 진입점→import 그래프 도달 불가 파일(사망 후보)·프리셋 미소속 단계·step_runs.jsonl 미실행 단계 (advisory — check:audit 프리셋, 죽은 게이트 정리용)
 npm.cmd run audit:gates                 # P2 게이트 효용 감사 — step_runs.jsonl 실행·실패 횟수 + tools/state 기준선 git 갱신 이력으로 미발화(silent)·미실행(dormant)·고빈도(noisy) 단계 식별 (advisory — check:audit 프리셋, 분기 리뷰용)
+npm.cmd run audit:syllabus              # 교재 챕터 구조 ↔ 출제기준 문서(ref_md *출제기준*.md) 정합 감사 — 과목별 커버리지·미반영 항목 리포트 (advisory — 표·Q-net 텍스트 형식 파싱)
 npm.cmd run check:adlint                # 광고 문구 사전 커버리지 감사 — 별표5 2항 호별 대표 표현·term 품질·자기 검출 (FO-68)
 
 # AI 제작 지원 (초안만 생산 → tmp/ai_drafts/ → 사람 리뷰 후 content/ 편입 — AI_AUTHORING_DESIGN.md, AI-01~23)
@@ -96,7 +103,7 @@ npm.cmd run check:ci                     # CI 게이트 로컬 재현 (= run.js 
 npm.cmd run check -- --preset <all|ci|content|docs|refs|freshness|audit> [--quick|--content-only|--build]  # 통합 실행기 직접 호출
 npm.cmd run check -- --step <id>         # 단일 단계만 실행 (예: --step manifest, --list로 id 조회 — 출력의 [P0|P1|P2]는 단계 우선순위 티어)
 npm.cmd run check:audit                  # 감시·감사 묶음 (= run.js --preset audit — P2 단계 advisory 실행, 실패해도 종료 0·차단 없음. 카드/콤보/학습품질·용어집 저신호·refmerge·adlint·lawurls·onboard)
-npm.cmd run check:onboard                # 시험 팩 온보딩·승격 진단 — 시험별 준비도 표 + comingSoon↔콘텐츠 정합·필수 선언 누락·선택 자산 (승격 기준: 과목당 ≥20문, 런북은 NEW_EXAM_RUNBOOK §파일럿 운영)
+npm.cmd run check:onboard                # 시험 팩 온보딩·승격 진단 — 시험별 준비도 표 + comingSoon↔콘텐츠 정합·필수 선언 누락·선택 자산 + **성숙도 티어 게이트** (exams.json `tier`: draft=선언만 · pilot=출제기준 문서+`## Chapter NN.` 표준형 챕터 · active=pilot+과목당 ≥20문 — 선언 티어 미달 시 차단, 표 형식 아닌 출제기준은 변환 권장 경고)
 
 # 콘텐츠 통합 검증 (교재 교체 등 대규모 콘텐츠 변경 후)
 npm.cmd run check:content               # 콘텐츠 통합 검증 (= run.js --preset content — 단계 선언은 tools/check/steps.js)
@@ -284,6 +291,7 @@ src/                    # ES Modules
   types.js              # 중앙 JSDoc 타입 정의 모듈 (@spec none)
   storage-keys.js       # localStorage 키 중앙 관리
   paths.js              # 파일 경로 상수 중앙 관리 (시험 루트 인지형)
+  personalization.js    # 개인 맞춤 고도화 순수 로직 (PS-01~11 — 약점 개념 클러스터·취약 자동편성·통합 큐·합격 확률·딥링크·FSRS/BKT 피팅·원인 추론·주간 리포트·클리닉)
   error-telemetry.js    # 런타임 오류 텔레메트리 — error/unhandledrejection 수집 + 세션 핑(kind=session, 오류율 분모) → client_errors 익명 insert (미설정 시 no-op, 오류 세션 상한·중복 억제)
   usage-telemetry.js    # 과업 퍼널 텔레메트리 — quiz/daily start↔complete 이벤트 → usage_events 익명 insert (세션당 랜덤 UUID 쌍 묶기·이벤트 상한, 미설정 시 no-op)
   telemetry-session.js  # 텔레메트리 공유 세션 ID — 페이지 로드당 랜덤 UUID 1개를 client_errors·usage_events·bug 피드백(meta.session_id)이 공유하는 join 키 (사용자 식별 아님)
@@ -362,7 +370,7 @@ src/                    # ES Modules
         formula-audit.js    # 종합 규정 점검 보고서 수집기 (FO-56, 유형별 게이트)
         formula-print.js    # 인쇄 빌더 (조제 기록지·라벨·안내문·종합 보고서)
         trainer-ingredients.js # 원료 배합 챌린지 (features.ingredients)
-  views/                # 뷰 컨트롤러 (44개)
+  views/                # 뷰 컨트롤러 (45개)
     navigation.js       # 뷰 전환 유틸 (switchView)
     textbook-reader.js  # 교재 리더 오케스트레이터 (과목·챕터 선택·진입점)
     reader-render.js    # 챕터 본문 렌더 — TOC·섹션 카드·바인딩 (textbook-reader.js에서 분리)
@@ -380,6 +388,7 @@ src/                    # ES Modules
     dashboard.js        # 대시보드 뷰 (과목 카드·통계·히트맵)
     dashboard-queue.js  # "오늘 할 일" 단일 큐 — 추천 소스 병합·렌더 (TQ-01~05)
     analysis-view.js    # 학습 진단 뷰 (개인화 진단 카드·주간 리포트, dashboard.js에서 분리)
+    personalization-view.js # 개인 맞춤 뷰 어댑터 — personalization.js ↔ 뷰·저장소 접착 (피팅 영속·클러스터·cid 해석, PS-01~11)
     score-estimate.js   # 복합 예상 점수·실제 결과 기록 (dashboard.js에서 분리)
     subject-stats.js    # 과목별 진행 통계 집계 공용 헬퍼 (dashboard.js에서 분리)
     trainer.js          # 훈련소 허브 (재수출)
@@ -442,6 +451,7 @@ tools/                  # 빌드·검증 스크립트
   state/                # 게이트 기준선·스탬프 (*_baseline.json·test_stats.json — 추적) + 로컬 산출물 (리포트·검수 큐·대시보드 — gitignore)
   sync/                 # 콘텐츠 동기화 (sync_citation_lines·sync_textbook_files)
   deploy/               # 배포 가드 (deploy.js)
+  ci/                   # CI 진단·재실행 도구 (ci_diagnose.js 실패 잡·스텝 조회 + --specs 샤드 스펙 나열 · ci_retrigger.js 빈 커밋 재트리거 + 완료 폴링)
   merge/                # git 머지 드라이버 (merge_stamps.js — 배포 스탬프 파일 자동 병합, .gitattributes merge=stamps)
   lib/                  # 공용 스캔·파싱 라이브러리 (trace_scan.js)
   ai/                   # AI 제작 지원 도구 (llm_client + 초안 생성·검수 9종, lib/ 공용 파서 — AI-01~13)

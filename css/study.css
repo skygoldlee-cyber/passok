@@ -522,6 +522,37 @@
     color: var(--color-on-brand);
 }
 
+/* PS-08 — 행동 신호 기반 원인 자동 추정 표시 */
+.wrong-cause-btn.suggested {
+    border-color: var(--color-primary);
+    border-style: dashed;
+}
+.cause-suggest {
+    display: inline-block;
+    margin-left: 0.3rem;
+    padding: 0 0.35rem;
+    font-size: 0.68rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-primary);
+    color: var(--color-on-brand);
+}
+.cause-suggest-hint {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+}
+
+/* PS-08 — 확신 응답 토글 (확신 오답 → 개념 오류 추정 신호) */
+.quiz-confidence {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    user-select: none;
+}
+
 .wrong-cause-reco {
     margin-top: 0.5rem;
     font-size: 0.82rem;

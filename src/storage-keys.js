@@ -52,6 +52,10 @@ export const STORAGE_KEYS = {
   // 복수정답형/OX 진술 단위 오판 통계 (statement-tracker.js)
   STATEMENT_STATS: 'statement_stats',
 
+  // 개인 맞춤 모델 피팅 결과 (personalization-view.js)
+  // { w20: number|null, ktT: {subj: T}, ktP0: {subj: P0}, fittedAt: unix ms } (PS-06·PS-07·PS-11)
+  PERSONAL_FIT: 'personal_fit',
+
   // 주관식 연습 자기채점 진행 (written-practice.js)
   // { <fileStem>: { <qid>: { a:답안, c:[체크된 rubric idx], d:완료ts|null } } }
   WRITTEN_PRACTICE: 'written_practice',

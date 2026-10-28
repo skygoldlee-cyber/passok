@@ -1,5 +1,5 @@
 // src/views/quiz.js - 기출 퀴즈 및 오답 복습 뷰 로직 (데일리 챌린지는 daily-challenge.js, 오답 노트는 quiz-review.js로 분리)
-// @spec Q-01~12,RV-01
+// @spec Q-01~12,RV-01,PS-07,PS-08
 export { tagWrongCause, tagWrongCauseAt, wrongActionCard, wrongActionTextbook, wrongActionSimilar } from './quiz-wrong-cause.js';
 export { renderReviewList, removeWeakCard, setReviewFilter, startWeakFocusQuiz } from './quiz-review.js';
 
@@ -19,21 +19,23 @@ import { recordQuizJudgment } from '../spaced-repetition.js';
 import { apportionByWeight, examWeightBySubject } from '../study-tracker.js';
 import { shuffle } from '../utils.js';
 import { showToast, vibrate, HAPTIC } from '../ui-utils.js';
+import { suggestWrongCauseKey, recordDiagnosticP0 } from './personalization-view.js';
 
 /**
  * 퀴즈 오답 후 피드백 패널에 "틀린 이유" 자가 태깅 버튼을 표시한다.
+ * @param {string|null} [suggestedKey] PS-08 자동 추정 원인 키 — 해당 버튼에 '추정' 배지
  */
-function renderWrongCausePicker() {
+function renderWrongCausePicker(suggestedKey) {
     const feedbackPanel = document.getElementById('quiz-feedback-panel');
     if (!feedbackPanel) return;
     feedbackPanel.querySelector('.wrong-cause-picker')?.remove();
     const row = document.createElement('div');
     row.className = 'wrong-cause-picker';
     row.innerHTML = `
-        <p class="wrong-cause-label">틀린 이유를 선택해 보세요:</p>
+        <p class="wrong-cause-label">틀린 이유를 선택해 보세요:${suggestedKey ? ' <span class="cause-suggest-hint">(행동 신호 기반 추정 표시)</span>' : ''}</p>
         <div class="wrong-cause-btns">
             ${Object.entries(getWrongCauseLabels()).map(([k, label]) =>
-                `<button type="button" class="wrong-cause-btn" data-click="tagWrongCause" data-args='["${k}"]'>${esc(label)}</button>`).join('')}
+                `<button type="button" class="wrong-cause-btn${k === suggestedKey ? ' suggested' : ''}" data-click="tagWrongCause" data-args='["${k}"]'>${esc(label)}${k === suggestedKey ? ' <span class="cause-suggest">추정</span>' : ''}</button>`).join('')}
         </div>
         <div class="wrong-cause-reco is-hidden"></div>
     `;
@@ -42,10 +44,15 @@ function renderWrongCausePicker() {
 
 /**
  * 퀴즈 오답 시 weakCards에 weak_quiz_ 항목으로 추가 + 원인 태깅 UI 표시.
+ * PS-08 — 풀이 시간 등 행동 신호로 원인 후보를 추정해 버튼에 표시한다.
  */
 function markQuizWrong(currentQuiz) {
     state.weakCards.add(weakItemKey(currentQuiz.id));
-    renderWrongCausePicker();
+    const ms = state.quiz._qStart ? Date.now() - state.quiz._qStart : null;
+    // PS-08 — 확신 토글 상태를 confidence 신호로 (퀴즈는 클릭 즉시 제출이라 changed 관측 불가)
+    const confOn = !!/** @type {HTMLInputElement|null} */ (document.getElementById('quiz-confidence-toggle'))?.checked;
+    const suggested = suggestWrongCauseKey({ ms, changed: false, confidence: confOn ? 'high' : null, wasCorrect: false });
+    renderWrongCausePicker(suggested);
 }
 
 /**
@@ -236,6 +243,11 @@ export function renderQuizQuestion() {
             inputEl.focus();
         }
     }
+
+    // PS-08 — 풀이 시작 시각 + 확신 토글 리셋 (오답 원인 자동 추정 신호)
+    quizState._qStart = Date.now();
+    const confToggle = /** @type {HTMLInputElement|null} */ (document.getElementById('quiz-confidence-toggle'));
+    if (confToggle) confToggle.checked = false;
 }
 
 /**
@@ -530,6 +542,13 @@ function _renderDiagnosticProfile(reviewListEl) {
         .map(([key, v]) => ({ key, ...v, rate: Math.round((v.correct / v.solved) * 100) }))
         .sort((a, b) => a.rate - b.rate);
 
+    // PS-07 — 입문 진단 정답률을 과목별 BKT P0로 영속 (콜드스타트 개인화)
+    try {
+        const rates = {};
+        rows.forEach(r => { rates[r.key] = r.rate / 100; });
+        recordDiagnosticP0(rates);
+    } catch (e) { /* P0 영속 실패는 진단 표시를 막지 않음 */ }
+
     let html = `
         <div class="diagnostic-profile">
             <h3 style="margin-bottom:0.6rem; font-size:1.1rem;"><i class="fa-solid fa-stethoscope"></i> 진단 결과 — 과목별 약점 프로파일</h3>`;
@@ -543,7 +562,7 @@ function _renderDiagnosticProfile(reviewListEl) {
                 <button type="button" class="wrong-relearn-btn" data-click="startSubjectQuiz" data-arg="${esc(r.key)}"><i class="fa-solid fa-play"></i> 집중 퀴즈</button>
             </div>`;
     });
-    html += `<p class="diagnostic-hint">오답은 자동으로 복습 노트에 수집되었습니다 — 정답률이 낮은 과목부터 보강하세요.</p></div>`;
+    html += `<p class="diagnostic-hint">오답은 자동으로 복습 노트에 수집되었습니다 — 정답률이 낮은 과목부터 보강하세요. 진단 결과는 과목별 초기 숙달도로 반영됩니다.</p></div>`;
     reviewListEl.insertAdjacentHTML('afterbegin', html);
 }
 

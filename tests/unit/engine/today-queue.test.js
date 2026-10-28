@@ -1,5 +1,5 @@
 // tests/unit/today-queue.test.js — 대시보드 "오늘 할 일" 단일 큐 병합 로직
-// @spec TQ-01,TQ-02,TQ-03,TQ-04,D-19
+// @spec TQ-01,TQ-02,TQ-03,TQ-04,D-19,PS-01,PS-03,PS-10
 // buildTodayQueue가 복습 대기·주간 배분·오답·취약 진술·일일 챌린지·개인화 추천을
 // 규정 우선순위로 병합하고, 중복 실행·빈 상태·결정론을 보장하는지 고정한다.
 
@@ -169,4 +169,38 @@ test('D-19 최종 인출: dday>14·미설정·위험 카드 공백이면 미표�
 test('TQ-03 동일 입력에 동일 출력(결정론)', () => {
     const input = baseInput({ dueCardIds: ['sub1_card_a'], reviewCount: 1, dailyDone: false });
     assert.equal(JSON.stringify(buildTodayQueue(input)), JSON.stringify(buildTodayQueue(input)));
+});
+
+// PS-03 — 계획 밀림 과목은 개인화 우선순위로 복습 대기보다 앞선다 (최우선 승격)
+test('PS-03 밀림 과목은 복습 대기보다 최우선으로 올라간다', () => {
+    const items = buildTodayQueue(baseInput({
+        dueCardIds: ['sub1_card_a', 'sub1_card_b'],
+        allocRemaining: [{ key: 'sub1', name: '과목1', cardsLeft: 5, quizzesLeft: 0 }],
+        behindSubjects: [{ key: 'sub1', name: '과목1', daysBehind: 3 }],
+    }));
+    assert.equal(kinds(items)[0], 'alloc');
+    assert.equal(kinds(items)[1], 'due');
+});
+
+// PS-03 — 밀림 데이터가 없으면 alloc 항목은 기존 위치(danger 아래)를 유지한다
+test('PS-03 밀림 데이터 없으면 alloc은 기존 순위를 유지한다', () => {
+    const items = buildTodayQueue(baseInput({
+        dueCardIds: ['sub1_card_a'],
+        recs: [rec('fa-triangle-exclamation', '과락 위기 과목')],
+        allocRemaining: [{ key: 'sub1', name: '과목1', cardsLeft: 5, quizzesLeft: 0 }],
+    }));
+    assert.deepEqual(kinds(items).slice(0, 3), ['due', 'danger', 'alloc']);
+});
+
+// PS-01·PS-10 — 최다 오개념 클러스터가 있으면 클리닉 항목이 큐에 들어간다
+test('PS-10 topCluster가 있으면 오개념 클리닉 항목이 큐에 포함된다', () => {
+    const items = buildTodayQueue(baseInput({
+        topCluster: { label: '원료 배합 금지 규정', size: 3, totalWrong: 9 },
+    }));
+    const clinic = items.find((i) => i.kind === 'clinic');
+    assert.ok(clinic, 'clinic 항목 존재');
+    assert.match(clinic.title, /오개념 클리닉/);
+    assert.match(clinic.reason, /3개 진술/);
+    assert.equal(clinic.actions[0].click, 'switchView');
+    assert.equal(clinic.actions[0].args[0], 'analysis-view');
 });

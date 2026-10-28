@@ -249,9 +249,12 @@ function _unitObservationSeqs(p) {
  */
 function _unitMastery(bucket, seqs, ktParams) {
     const seq = seqs.get(`${bucket.subject}|${bucket.chapter}`);
+    // @spec PS-07,PS-11 — 과목별 개인 피팅 파라미터(ktParams.bySubject)가 있으면
+    // 해당 과목 버킷의 BKT P0·T를 개인값으로 오버라이드 (콜드스타트·학습 속도 차이 반영)
+    const kp = (ktParams && ktParams.bySubject && ktParams.bySubject[bucket.subject]) || ktParams;
     const prior = bucket.attempts > 0 ? betaPosteriorMean(bucket.corrects, bucket.wrongs) : undefined;
     if (!seq || !seq.length) return betaPosteriorMean(bucket.corrects, bucket.wrongs);
-    return computeUnitMastery(seq, ktParams || KT_DEFAULTS, prior);
+    return computeUnitMastery(seq, kp || KT_DEFAULTS, prior);
 }
 
 /**

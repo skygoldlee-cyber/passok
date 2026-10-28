@@ -80,6 +80,7 @@ const CONTENT_STEPS = [
   nodeStep('content:reflayout', 'tools/check/check_reflayout.js', '레이아웃', '참조자료 폴더/레지스트리 정합성', { content: true }),
   nodeStep('content:reffresh', 'tools/check/check_ref_freshness.js', '신선도', '참조자료 PDF 해시 ↔ ref_md 변환본 (PDF 교체 감지)', { content: true }),
   nodeStep('content:reflines', 'tools/check/check_ref_lines.js', '참조라인', '교재/문제은행 (LNN) 참조 라인 ↔ ref_md 실제 내용', { content: true }),
+  nodeStep('content:refformat', 'tools/check/check_refmd_format.js', '형식', 'ref_md 추출 잔재·평탄화 형식 — lone CR·제어문자·PUA 글리프·초장문 줄 차단', { content: true }),
   nodeStep('content:drillfresh', 'tools/check/check_drill_freshness.js', '드릴신선도', '드릴 번들 ↔ 문제은행 번들 (build:drills 필요 감지)', { content: true }),
   nodeStep('content:embfresh', 'tools/check/check_emb_freshness.js', '임베딩신선도', '임베딩 manifest.inputs(sha1) ↔ 원본 번들 (build:embeddings 필요 감지 — SEM-05)', { content: true }),
   nodeStep('content:combo', 'tools/check/check_combo_pilot.js', '드릴', '복수정답형(combo) 드릴 데이터 정합성', { content: true }),
@@ -145,6 +146,7 @@ const REFS_STEPS = [
   nodeStep('refs:subjects', 'tools/check/check_ref_subjects.js', '참조', 'ref_md 인용 득표 ↔ 과목 귀속 교차 검증', { prio: 'p2' }),
   nodeStep('refs:fresh', 'tools/check/check_ref_freshness.js', '참조', '참조자료 PDF 해시 ↔ ref_md 신선도 (PDF 교체 감지)'),
   nodeStep('refs:lines', 'tools/check/check_ref_lines.js', '참조', '교재 (LNN)/📌출처 조문 ↔ ref_md 실제 내용'),
+  nodeStep('refs:format', 'tools/check/check_refmd_format.js', '참조', 'ref_md 추출 잔재·평탄화 형식 — lone CR·제어문자·PUA·초장문 줄 차단'),
   nodeStep('refs:merge', 'tools/check/check_refmerge.js', '참조', 'ref_md joinWraps 병합 품질 감사', { prio: 'p2' }),
 ];
 
@@ -181,6 +183,7 @@ const AUDIT_STEPS = [
   pickContent('content:cards'),
   REFS_STEPS.find((s) => s.id === 'refs:merge'),
   npmStep('audit:combo', 'audit:combo', '감사', '복수정답형 품질 감사 (정답 유일성·중복 진술집합·모순쌍·위치편향)', { prio: 'p2' }),
+  npmStep('audit:syllabus', 'audit:syllabus', '감사', '출제기준 정합 감사 — 교재 과목·챕터 ↔ 출제기준 문서 대조 (문서부재·미반영 리포트)', { prio: 'p2' }),
   npmStep('audit:adlint', 'check:adlint', '감사', '광고 문구 사전 커버리지 감사 (FO-68)', { prio: 'p2' }),
   npmStep('audit:lawurls', 'check:lawurls', '감사', 'law.go.kr 라이브 링크 검증 (외부 드리프트 — 네트워크 필요)', { prio: 'p2' }),
   nodeStep('audit:onboard', 'tools/check/check_exam_onboard.js', '감사', '시험 팩 온보딩·승격 진단 (comingSoon↔콘텐츠 정합·필수 선언·선택 자산)', { prio: 'p2' }),
@@ -204,6 +207,8 @@ const REMEDIES = {
   'docs:textbook': '교재 종속 문서(판본: textbook)를 최신 교재에 맞춰 갱신',
   'docs:teststats': 'npm.cmd run stats:stamp — 테스트 수치 실측 스탬프 갱신',
   'content:id-migration': 'npm.cmd run build:data — ID 이관 맵 미재생성',
+  'content:refformat': 'node tools/sync/fix_refmd_glyphs.js (PUA·잔재 치환) · node tools/sync/reflow_flat_lines.js (평탄화 분할)',
+  'refs:format': 'node tools/sync/fix_refmd_glyphs.js (PUA·잔재 치환) · node tools/sync/reflow_flat_lines.js (평탄화 분할)',
 };
 
 // ── 프리셋 해석 ───────────────────────────────────────────────────────

@@ -25,6 +25,7 @@ export function startSimSession(examData) {
     simState.data = examData;
     simState.currentIndex = 0;
     simState.userAnswers = {};
+    simState.answerChanges = {}; // PS-08 — 세션 시작 시 변경 추적 리셋
     // 문항당 1분 기산, 실전 형식(통합 모의고사)은 명시된 제한시간 우선 (실제 시험: 100문/120분)
     simState.timeLeft = examData.timeLimitSec || examData.questions.length * TIMING.EXAM_TIME_PER_QUESTION_SEC;
     simState.wrongQuestions = [];
