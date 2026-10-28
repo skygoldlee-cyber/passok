@@ -8416,3 +8416,7 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 
 - workflow_run 트리거 시 head_sha checkout → detached HEAD에서 `git push`가 'not currently on a branch'(exit 128)로 실패 → `git push origin HEAD:main`으로 수정. 이로써 시각 회귀 실패 시 기준선 자동 재생성→커밋 파이프라인이 복구됨
 - 별도 확인: e2e visual.spec 실패의 실체는 대시보드 개인화 카드 추가에 따른 정당한 UI 변경 — linux 기준선 재생성이 필요한 상태
+
+## 2026-10-28 fix: Visual Baselines GITHUB_TOKEN 쓰기 권한
+
+- workflow_run 트리거는 기본 토큰이 read-only라 baseline push가 403 — `permissions: contents: write` 선언으로 자동 복구 파이프라인 완성

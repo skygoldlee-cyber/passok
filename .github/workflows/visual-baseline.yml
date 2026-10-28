@@ -10,6 +10,10 @@ on:
     types: [completed]
     branches: [main]
 
+# workflow_run 트리거는 GITHUB_TOKEN이 읽기 전용 — 기준선 커밋·푸시에 쓰기 권한 명시 필요
+permissions:
+  contents: write
+
 jobs:
   generate:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'failure'
