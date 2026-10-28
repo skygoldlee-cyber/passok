@@ -103,7 +103,7 @@ npm.cmd run check:ci                     # CI 게이트 로컬 재현 (= run.js 
 npm.cmd run check -- --preset <all|ci|content|docs|refs|freshness|audit> [--quick|--content-only|--build]  # 통합 실행기 직접 호출
 npm.cmd run check -- --step <id>         # 단일 단계만 실행 (예: --step manifest, --list로 id 조회 — 출력의 [P0|P1|P2]는 단계 우선순위 티어)
 npm.cmd run check:audit                  # 감시·감사 묶음 (= run.js --preset audit — P2 단계 advisory 실행, 실패해도 종료 0·차단 없음. 카드/콤보/학습품질·용어집 저신호·refmerge·adlint·lawurls·onboard)
-npm.cmd run check:onboard                # 시험 팩 온보딩·승격 진단 — 시험별 준비도 표 + comingSoon↔콘텐츠 정합·필수 선언 누락·선택 자산 (승격 기준: 과목당 ≥20문, 런북은 NEW_EXAM_RUNBOOK §파일럿 운영)
+npm.cmd run check:onboard                # 시험 팩 온보딩·승격 진단 — 시험별 준비도 표 + comingSoon↔콘텐츠 정합·필수 선언 누락·선택 자산 + **성숙도 티어 게이트** (exams.json `tier`: draft=선언만 · pilot=출제기준 문서+`## Chapter NN.` 표준형 챕터 · active=pilot+과목당 ≥20문 — 선언 티어 미달 시 차단, 표 형식 아닌 출제기준은 변환 권장 경고)
 
 # 콘텐츠 통합 검증 (교재 교체 등 대규모 콘텐츠 변경 후)
 npm.cmd run check:content               # 콘텐츠 통합 검증 (= run.js --preset content — 단계 선언은 tools/check/steps.js)

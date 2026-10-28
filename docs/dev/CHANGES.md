@@ -8387,3 +8387,10 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 - `tools/ci/ci_retrigger.js` (`npm run ci:retrigger`) — 플레이크 판정 시 빈 커밋 push → ci.yml 완료 폴링·결과 보고 (로컬 재현 통과 전제)
 - `playwright.config.js` — `PW_QUARANTINE` env로 만성 플레이크 스펙 임시 제외 (testIgnore 연동)
 - 실측: mobile 샤드 2/2 로컬 재현 52/52 통과 — CI 실패는 공유 러너 플레이크로 확인
+
+## 2026-10-28 feat: 시험 팩 성숙도 티어 제도 (tier 게이트)
+
+- exams.json `tier` 필드 신설 — cosmetic=active, pilot 11팩(출제기준+표준형 챕터 보유), draft 8팩 (labor·compapp1·compapp2 포함 — 표준형 챕터 형식 미달로 우선 draft 배정, 형식 변환 시 pilot 복귀)
+- `check_exam_onboard.js` — 티어별 요건 차단: pilot+=출제기준 문서(`ref_md/**/출제기준*.md`)+전 과목 `## Chapter NN.`/`## N.` 챕터, active=+과목당 ≥20문. 비표형식 출제기준은 표 변환 권장 경고(5팩 노출)
+- 표준형 챕터 규약: `## Chapter NN.` 유일 권장 형식 — 법조문 원문은 챕터가 아니라 ref_md로 분리 (labor 민법 케이스)
+- tier 미선언 시 comingSoon→pilot·정식→active 추정 + 명시 권장 INFO

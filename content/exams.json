@@ -54,7 +54,8 @@
       "appNameEn": "Passmula",
       "practiceName": "Formula OS",
       "discordInvite": "https://discord.gg/eHerSQG9hj",
-      "group": "미용·화장품"
+      "group": "미용·화장품",
+      "tier": "active"
     },
     {
       "id": "skincare",
@@ -83,7 +84,8 @@
       "comingSoon": true,
       "appNameEn": "Passkin",
       "practiceName": "Skin OS",
-      "group": "미용·화장품"
+      "group": "미용·화장품",
+      "tier": "pilot"
     },
     {
       "id": "hairdresser",
@@ -108,7 +110,8 @@
       "appNameEn": "Passhair",
       "practiceName": "Hair OS",
       "comingSoon": true,
-      "group": "미용·화장품"
+      "group": "미용·화장품",
+      "tier": "pilot"
     },
     {
       "id": "insadj",
@@ -135,7 +138,8 @@
       },
       "appNameEn": "Passure",
       "practiceName": "Adjust OS",
-      "group": "보험·평가·부동산"
+      "group": "보험·평가·부동산",
+      "tier": "pilot"
     },
     {
       "id": "lossadj",
@@ -163,7 +167,8 @@
       },
       "appNameEn": "Passess",
       "practiceName": "Assess OS",
-      "group": "보험·평가·부동산"
+      "group": "보험·평가·부동산",
+      "tier": "pilot"
     },
     {
       "id": "admagent",
@@ -188,7 +193,8 @@
       "comingSoon": true,
       "appNameEn": "Passmin",
       "practiceName": "Docs OS",
-      "group": "법무·노무"
+      "group": "법무·노무",
+      "tier": "pilot"
     },
     {
       "id": "appraisal",
@@ -210,7 +216,8 @@
       "comingSoon": true,
       "appNameEn": "Passpraisal",
       "practiceName": "Appraisal OS",
-      "group": "보험·평가·부동산"
+      "group": "보험·평가·부동산",
+      "tier": "pilot"
     },
     {
       "id": "broker",
@@ -230,7 +237,8 @@
       "registryBundle": "data/exams/broker/registry.js",
       "registryGlobal": "DATA_REGISTRY_BROKER",
       "comingSoon": true,
-      "group": "보험·평가·부동산"
+      "group": "보험·평가·부동산",
+      "tier": "pilot"
     },
     {
       "id": "labor",
@@ -251,7 +259,8 @@
       "registryGlobal": "DATA_REGISTRY_LABOR",
       "features": {},
       "comingSoon": true,
-      "group": "법무·노무"
+      "group": "법무·노무",
+      "tier": "draft"
     },
     {
       "id": "indsafe",
@@ -276,7 +285,8 @@
       "comingSoon": true,
       "appNameEn": "Passafe",
       "practiceName": "Safety OS",
-      "group": "산업안전"
+      "group": "산업안전",
+      "tier": "pilot"
     },
     {
       "id": "indsafeind",
@@ -297,7 +307,8 @@
       "registryGlobal": "DATA_REGISTRY_INDSAFEIND",
       "features": {},
       "group": "산업안전",
-      "comingSoon": true
+      "comingSoon": true,
+      "tier": "draft"
     },
     {
       "id": "iteng",
@@ -318,7 +329,8 @@
       "registryGlobal": "DATA_REGISTRY_ITENG",
       "features": {},
       "group": "정보처리",
-      "comingSoon": true
+      "comingSoon": true,
+      "tier": "draft"
     },
     {
       "id": "itindeng",
@@ -339,7 +351,8 @@
       "registryGlobal": "DATA_REGISTRY_ITINDENG",
       "features": {},
       "group": "정보처리",
-      "comingSoon": true
+      "comingSoon": true,
+      "tier": "draft"
     },
     {
       "id": "eleceng",
@@ -360,7 +373,8 @@
       "registryGlobal": "DATA_REGISTRY_ELECENG",
       "features": {},
       "group": "전기",
-      "comingSoon": true
+      "comingSoon": true,
+      "tier": "draft"
     },
     {
       "id": "elecindeng",
@@ -381,7 +395,8 @@
       "registryGlobal": "DATA_REGISTRY_ELECINDENG",
       "features": {},
       "group": "전기",
-      "comingSoon": true
+      "comingSoon": true,
+      "tier": "draft"
     },
     {
       "id": "compapp1",
@@ -407,7 +422,8 @@
       "comingSoon": true,
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
-      "group": "정보처리"
+      "group": "정보처리",
+      "tier": "draft"
     },
     {
       "id": "compapp2",
@@ -433,7 +449,8 @@
       "comingSoon": true,
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
-      "group": "정보처리"
+      "group": "정보처리",
+      "tier": "draft"
     }
   ]
 }

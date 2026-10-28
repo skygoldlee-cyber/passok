@@ -33,6 +33,35 @@ const QUIET = process.argv.includes('--quiet');
 /** 정식 승격 정량 기준 — 과목당 최소 문항 수 (manifest exams 파일 ###Q 실측) */
 const GRAD_MIN_PER_SUBJECT = 20;
 
+/** 성숙도 티어 — draft(선언) < pilot(출제기준+표준형 챕터) < active(pilot+과목당 ≥최소 문항) */
+const TIERS = ['draft', 'pilot', 'active'];
+const tierOf = (entry) => entry.tier || (entry.comingSoon ? 'pilot' : 'active');
+
+/** 참조자료/ref_md 하위의 출제기준 문서 경로 (파일명 매칭, 깊이 제한) */
+function findSyllabusDoc(dir, depth = 0) {
+    if (depth > 5 || !fs.existsSync(dir)) return null;
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        if (e.isDirectory()) {
+            const found = findSyllabusDoc(path.join(dir, e.name), depth + 1);
+            if (found) return found;
+        } else if (e.isFile() && e.name.endsWith('.md') && e.name.includes('출제기준')) {
+            return path.join(dir, e.name);
+        }
+    }
+    return null;
+}
+
+/** 출제기준 문서가 과목|주요항목|세부내용 표 형식을 포함하는지 (감사 파싱 가능 형식) */
+function hasSyllabusTable(file) {
+    return /\|\s*과목\s*\|/m.test(fs.readFileSync(file, 'utf8'));
+}
+
+/** 챕터 파일 존재 + 번호 챕터 헤딩 (## N. 또는 ## Chapter NN. — 표준 규약은 Chapter NN.) */
+function isStandardChapter(file) {
+    if (!fs.existsSync(file)) return false;
+    return /^##\s+(?:Chapter\s+)?\d+\./m.test(fs.readFileSync(file, 'utf8').slice(0, 20000));
+}
+
 const errors = [];
 const warns = [];
 const infos = [];
@@ -110,6 +139,33 @@ for (const t of targets) {
         }
     }
 
+    // ── 성숙도 티어 요건 (tier 전이 시점 차단 게이트) ──
+    const tier = tierOf(entry);
+    if (!TIERS.includes(tier)) {
+        err(t.id, `tier 값이 유효하지 않습니다: ${entry.tier} (draft|pilot|active)`);
+    } else {
+        if (!entry.tier) info(t.id, `tier 미선언 — 추정 "${tier}" (exams.json에 명시 권장)`);
+        const lvl = TIERS.indexOf(tier);
+        if (lvl >= 1) {
+            const syl = findSyllabusDoc(path.join(cr, '참조자료', 'ref_md'));
+            if (!syl) {
+                err(t.id, `tier ${tier} 요건: 출제기준 문서 없음 — 참조자료/ref_md 하위에 출제기준 md 필요`);
+            } else if (!hasSyllabusTable(syl)) {
+                warn(t.id, `출제기준 문서가 표 형식(과목|주요항목|세부내용)이 아님 — 감사 정밀도를 위해 표 형식 변환 권장`);
+            }
+            const noChap = subjects.filter(s => !(s.chapters || []).some(c => c.file && isStandardChapter(path.join(cr, s.dir || '', c.file))));
+            if (noChap.length) {
+                err(t.id, `tier ${tier} 요건: 표준형 챕터 부재 — ${noChap.map(s => s.key).join(', ')} (## Chapter NN. 헤딩 챕터 필요)`);
+            }
+        }
+        if (lvl >= 2 && subjects.length) {
+            const thinT = subjects.filter((s) => (qBySubject[s.key] || 0) < GRAD_MIN_PER_SUBJECT);
+            if (thinT.length) {
+                err(t.id, `tier active 요건: 과목당 ≥${GRAD_MIN_PER_SUBJECT}문 미충족 — ${thinT.map((s) => `${s.key}:${qBySubject[s.key] || 0}문`).join(', ')}`);
+            }
+        }
+    }
+
     // ── 선택 자산 진단 ──
     const hasRefs = fs.existsSync(path.join(cr, '참조자료'));
     const pdfHosting = fs.existsSync(path.join(cr, '참조자료', 'pdf_hosting.json'));
@@ -117,7 +173,7 @@ for (const t of targets) {
     const optional = ['docs', 'knowledge', '피드백', 'number-drills'].filter((d) => fs.existsSync(path.join(cr, d)));
 
     rows.push({
-        id: t.id, soon, subjects: subjects.length,
+        id: t.id, soon, tier, subjects: subjects.length,
         textbookFiles: subjects.reduce((n, s) => n + (s.chapters || []).length, 0),
         totalQ, features: Object.keys(entry.features || {}).length,
         optional: optional.join('+') || '-',
@@ -127,9 +183,9 @@ for (const t of targets) {
 // ── 리포트 ──
 console.log('시험 팩 온보딩·승격 진단\n');
 const ID_W = Math.max(10, Math.max(...rows.map(r => r.id.length)) + 1);
-console.log('  ' + 'id'.padEnd(ID_W) + '등급'.padEnd(6) + '과목'.padEnd(5) + '챕터'.padEnd(5) + '문항'.padEnd(8) + 'features'.padEnd(9) + '선택자산');
+console.log('  ' + 'id'.padEnd(ID_W) + '등급'.padEnd(8) + 'tier'.padEnd(7) + '과목'.padEnd(5) + '챕터'.padEnd(5) + '문항'.padEnd(8) + 'features'.padEnd(9) + '선택자산');
 for (const r of rows) {
-    console.log('  ' + r.id.padEnd(ID_W) + (r.soon ? '준비중' : '정식').padEnd(6)
+    console.log('  ' + r.id.padEnd(ID_W) + (r.soon ? '준비중' : '정식').padEnd(8) + String(r.tier).padEnd(7)
         + String(r.subjects).padEnd(5) + String(r.textbookFiles).padEnd(5)
         + String(r.totalQ).padEnd(8) + String(r.features).padEnd(9) + r.optional);
 }
