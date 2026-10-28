@@ -8336,3 +8336,9 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 - refLink를 insadj 규약으로 통일: 꺽쇠·../../ 제거 → ../참조자료 + %28%29/%20 인코딩
 - 섹션 슬롯을 `### N.` 장 내 독립 번호로 내장 (N.M 금지 주석 — check:numbering 규약)
 - scaffold-chapter 테스트 갱신 — broker 게이트 3건 실패(링크·번호)의 재발 차단
+
+## 2026-10-28 feat: 6개 팩 출제기준 문서 편입 (ref_md)
+
+- admagent(행정사)·appraisal(감정평가사)·broker(공인중개사)·insadj(손해사정사)·labor(공인노무사)·lossadj(손해평가사) — 각 시행령 별표·시행계획 공고·보험개발원 안내 기반 `ref_md/과목1/` 출제기준 md 신규 편입
+- audit:syllabus 감사 대상이 전 17개 시험으로 확장 (문서부재 0)
+- 실공백 발견: broker 4항목(부동산감정평가론·민사특별법·부동산거래신고법×2), admagent 1항목 — 나머지 팩은 실질 커버 또는 교재 형식 상이(appraisal·insadj·hairdresser·skincare·indsafe 계열)
