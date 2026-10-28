@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261028-5399835",
+    "date": "2026-10-28",
+    "notes": [
+      "[수정·pwa] whats-new 모달 webdriver 가드 — e2e 합성 이력 시드의 returning-user 오발화 차단",
+      "[수정·pwa] hardReload 직후 새로운 소식 모달 미표시 — INBOUND 플래그를 hadController 게이트로",
+      "[정리·release] v20261028-6dfadb5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261028-6dfadb5",
     "date": "2026-10-28",
     "notes": [
@@ -225,14 +234,6 @@
       "[문서·exam] 공인중개사 문형 감사 결과 기록 — 구조 정합·보정 과제 정리",
       "[정리·release] v20261026-1f88495 스탬프 확정 [no-docs]",
       "[정리·release] v20261024-980ef49 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-1f88495",
-    "date": "2026-10-26",
-    "notes": [
-      "[수정·ux] 더보기 시트 성분사전·캘린더를 자료·도구 그룹으로 이동",
-      "[정리·release] v20261026-c73a69f 스탬프 확정 [no-docs]"
     ]
   }
 ]
