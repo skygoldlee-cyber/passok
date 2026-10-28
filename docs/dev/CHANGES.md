@@ -8411,3 +8411,8 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 ## 2026-10-28 fix: 커버리지 functions 임계값 하향 (68 → 67.5)
 
 - CI에서 functions 67.95% 측정으로 exit 1 — 832개 테스트는 전부 통과. PS-01~11 뷰 연결로 personalization.js 등 함수 분모 확대된 회귀 ~0.55pt (기준선 68.51 대비). 임계 ~0.5pt 여유 정책에 따라 조정 — 후속 커버리지 보강 시 재상향 예정. merged 게이트(coverage:unit 포함)는 별도 측정으로 유지
+
+## 2026-10-28 fix: Visual Baselines detached HEAD push 수정
+
+- workflow_run 트리거 시 head_sha checkout → detached HEAD에서 `git push`가 'not currently on a branch'(exit 128)로 실패 → `git push origin HEAD:main`으로 수정. 이로써 시각 회귀 실패 시 기준선 자동 재생성→커밋 파이프라인이 복구됨
+- 별도 확인: e2e visual.spec 실패의 실체는 대시보드 개인화 카드 추가에 따른 정당한 UI 변경 — linux 기준선 재생성이 필요한 상태
