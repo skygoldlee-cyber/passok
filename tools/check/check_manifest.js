@@ -379,6 +379,20 @@ function main() {
   const targets = getExamTargets(ROOT);
   for (const t of targets) checkTarget(t);
 
+  // exams[].icon 고유성 — 시험 선택 카드의 시각 구분 (신규 팩 플레이스홀더 중복 차단)
+  {
+    const entries = fs.existsSync(EXAMS_JSON)
+      ? (JSON.parse(fs.readFileSync(EXAMS_JSON, 'utf-8')).exams || []) : [];
+    const byIcon = new Map();
+    for (const e of entries) {
+      if (!e.icon) continue;
+      (byIcon.get(e.icon) || byIcon.set(e.icon, []).get(e.icon)).push(e.id);
+    }
+    for (const [icon, ids] of byIcon) {
+      if (ids.length > 1) err('exams.json', `icon "${icon}" 중복 — 시험 선택 카드 구분 실종: ${ids.join(', ')}`);
+    }
+  }
+
   console.log(`manifest 정합성 검사 — 시험 ${targets.length}개\n`);
   for (const w of warns) console.log(`  ⚠ ${w}`);
   for (const e of errors) console.log(`  ❌ ${e}`);

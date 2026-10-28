@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-28 fix: 시험 선택 카드 아이콘 고유화 + 중복 차단 게이트
+
+- `exams[].icon` fa-book 6곳·fa-scale-balanced 2곳 중복 해소 — 시험별 의미 아이콘 배정 (labor→briefcase, indsafeind→industry, iteng→laptop-code, itindeng→server, eleceng→bolt, elecindeng→plug-circle-bolt, appraisal→building)
+- `check_manifest`에 icon 고유성 검증 추가 — 신규 팩 온보딩 시 중복 유입 차단
+
 ## 2026-10-26 fix: check_secrets git ls-files ENOBUFS 해소 — maxBuffer 64MB 확대
 
 - 추적 파일 6,286개 규모에서 `git ls-files` 출력이 기본 버퍼 초과 → 시크릿 게이트 영구 실패 상태 해소
