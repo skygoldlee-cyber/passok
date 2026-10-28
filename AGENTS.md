@@ -68,6 +68,7 @@ npm.cmd run audit:combo                 # 복수정답형 품질 감사 (정답 
 npm.cmd run audit:study                 # 학습 품질 감사 — 주간 배분·학습 진단 추천 규칙 정합 시나리오 검증 (SQ-01~04, --check=기준선 회귀, --update=기준선 갱신)
 npm.cmd run audit:tools                 # tools/ 사용률 감사 — 진입점→import 그래프 도달 불가 파일(사망 후보)·프리셋 미소속 단계·step_runs.jsonl 미실행 단계 (advisory — check:audit 프리셋, 죽은 게이트 정리용)
 npm.cmd run audit:gates                 # P2 게이트 효용 감사 — step_runs.jsonl 실행·실패 횟수 + tools/state 기준선 git 갱신 이력으로 미발화(silent)·미실행(dormant)·고빈도(noisy) 단계 식별 (advisory — check:audit 프리셋, 분기 리뷰용)
+npm.cmd run audit:syllabus              # 교재 챕터 구조 ↔ 출제기준 문서(ref_md *출제기준*.md) 정합 감사 — 과목별 커버리지·미반영 항목 리포트 (advisory — 표·Q-net 텍스트 형식 파싱)
 npm.cmd run check:adlint                # 광고 문구 사전 커버리지 감사 — 별표5 2항 호별 대표 표현·term 품질·자기 검출 (FO-68)
 
 # AI 제작 지원 (초안만 생산 → tmp/ai_drafts/ → 사람 리뷰 후 content/ 편입 — AI_AUTHORING_DESIGN.md, AI-01~23)

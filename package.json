@@ -117,6 +117,7 @@
     "audit:study": "node tools/check/audit_study_quality.js",
     "audit:tools": "node tools/check/audit_tool_usage.js",
     "audit:gates": "node tools/check/audit_gate_utility.js",
+    "audit:syllabus": "node tools/audit/audit_syllabus_alignment.js",
     "check:uitext": "node tools/check/check_uitext.js",
     "check:teststats": "node tools/check/check_test_stats.js",
     "stats:stamp": "node tools/check/check_test_stats.js --stamp",
