@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261028-4cd7f38",
+    "date": "2026-10-28",
+    "notes": [
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[테스트·e2e] 시각 기준선 자동 재생성 — CI 실패 감지 후 복구 (linux) [skip ci]",
+      "[수정·ci] Visual Baselines GITHUB_TOKEN 쓰기 권한 — workflow_run push 403",
+      "[수정·ci] Visual Baselines detached HEAD push — origin HEAD:main 명시",
+      "[수정·ci] 커버리지 functions 임계 67.5 — PS 뷰 연결 분모 확대 회귀 반영",
+      "[수정·ci] vitest CI 워커 상한 — jsdom 병렬 메모리 압박 완화",
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[기능·content] 비표형식 출제기준 5팩 과목 대조표 추가",
+      "[수정·gate] 온보딩 챕터 정규식 이모지 접두 허용 — labor·compapp pilot 복원",
+      "[기능·gate] 시험 팩 성숙도 티어 제도 — exams.json tier + check:onboard 요건 강제"
+    ]
+  },
+  {
     "version": "v20261028-6e06420",
     "date": "2026-10-28",
     "notes": [
@@ -210,22 +226,6 @@
     "notes": [
       "[기능·exam] 공인중개사 교재 5권 본문 확충 + 문제은행 정답 블록 형식 정합",
       "[정리·release] v20261026-7e6b038 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-7e6b038",
-    "date": "2026-10-26",
-    "notes": [
-      "[정리·build] broker 팩 생성물 갱신 — keyword-index·law-links·pdf-registry·sw",
-      "[수정·exam] 공인중개사 references.json 등록 — ref_md 27건 레지스트리 정합",
-      "[수정·exam] 공인중개사 정합성 정정 — 과목 키 밑줄·챕터 헤딩·ref_md 과목 귀속",
-      "[정리] broker .last-stats 파일명 베이스라인 등록 — 기존 시험과 동일 예외",
-      "[수정·exam] 공인중개사 시험 키 하이픈→밑줄 — EXAM_DATA 식별자 규칙 정합",
-      "[기능·exam] 공인중개사 manifest uiText 채움 — 동적 메뉴 라벨 정합 (ES-10)",
-      "[기능·exam] 공인중개사 문제은행 7과목 — 과목당 20문 AI 초안 편입 + exams 등록",
-      "[기능·exam] 공인중개사 교재 골격 — 7과목 chapters 등록 + 재사용 교재 이식",
-      "[기능·exam] 공인중개사 법령 수집 — 중개사법 3종·세법·실무규정 9건 추가",
-      "[기능·exam] 공인중개사 manifest 구조 정정 + 재사용 법령 18건 복사"
     ]
   }
 ]
