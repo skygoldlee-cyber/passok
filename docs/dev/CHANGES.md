@@ -8403,3 +8403,7 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 
 - skincare·hairdresser·indsafe·compapp1·compapp2 출제기준 문서에 `| 과목 | 주요항목 | 세부내용 |` 요약 표 추가 — check:onboard 비표 경고 전부 해소, audit:syllabus 표 파싱 대상 확장
 - NCS 수행준거·대한상공회의소 원문 구조를 그룹·항목 단위로 요약 (원문 세부는 문서 본문 유지)
+
+## 2026-10-28 fix: vitest CI 워커 상한 (jsdom 병렬 메모리 압박)
+
+- CI에서 `maxWorkers: 2` — 73개 jsdom 환경 fork가 러너 코어 수만큼 병렬되어 간헐 OOM/exit 1 유발 가능성 완화 (로컬은 무변경)

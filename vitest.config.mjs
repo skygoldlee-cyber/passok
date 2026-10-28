@@ -9,6 +9,8 @@ export default defineConfig({
         // FileReader·타이머 의존 테스트는 부하 상태에서 간헐 실패 가능 — 1회 재시도로 흡수.
         // 만성 플레이크를 숨기지 않도록 2회 이상으로 올리지 않는다.
         retry: 1,
+        // CI 러너에서 jsdom 73개 환경의 기본 CPU 병렬 fork는 메모리 압박 유발 가능 — 워커 상한
+        ...(process.env.CI ? { maxWorkers: 2 } : {}),
         coverage: {
             provider: 'v8',
             reporter: ['text', 'html', 'json'],
