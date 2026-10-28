@@ -3,7 +3,8 @@
 ## 2026-10-28 fix: hardReload 직후 새로운 소식 모달 미표시 — INBOUND 플래그 오발화
 
 - `src/pwa/pwa-install-capture.js` — `__SW_UPDATE_INBOUND`를 `hadController`일 때만 설정: 버전 프롬프트의 새로고침(`hardReload` = 캐시 삭제 + SW unregister + reload) 직후엔 페이지가 이미 최신본인데 같은 세대 SW의 신규 설치(`reg.installing`)를 업데이트 도래로 오인해 플래그가 세워지고, controllerchange도 `hadController=false`라 자동 리로드가 없어 whats-new 모달이 그 세션 내내 억제되던 문제
-- `tests/unit/app/pwa-sw.test.js` — INBOUND 설정 3곳(updatefound·waiting·installing)의 hadController 게이트 + controllerchange 조기 반환 불변식 추가
+- `src/whats-new.js` — `maybeShowWhatsNew`에 `navigator.webdriver` 가드 추가: 억제 해제 후 e2e의 합성 이력 시드가 returning-user 판정을 받아 모달이 클릭 대상을 가리는 CI 회귀 차단 (landing-redirect.js와 같은 관례, seen은 기록)
+- `tests/unit/app/pwa-sw.test.js` — INBOUND 설정 3곳(updatefound·waiting·installing)의 hadController 게이트 + controllerchange 조기 반환 불변식 추가 · `tests/dom/misc/whats-new.dom.test.js` — webdriver 억제 시나리오 추가
 
 ## 2026-10-28 fix: stamps 머지 드라이버 same-date 정렬 — theirs 우선으로 APP_VERSION 정합
 

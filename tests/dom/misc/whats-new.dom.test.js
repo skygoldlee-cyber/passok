@@ -69,4 +69,18 @@ describe('whats-new.js — 새 버전 알림', () => {
         maybeShowWhatsNew();
         expect(document.getElementById('whats-new-overlay')).toBeNull();
     });
+
+    it('webdriver(E2E) 컨텍스트는 모달 없이 seen만 기록', () => {
+        // e2e가 합성 이력을 심으면 returning-user 판정으로 모달이 떠
+        // 클릭 대상을 가리는 회귀를 막는다 (landing-redirect.js와 같은 관례)
+        Object.defineProperty(Navigator.prototype, 'webdriver', { value: true, configurable: true });
+        try {
+            localStorage.setItem('cosmetic:quiz_results', '{}');
+            maybeShowWhatsNew();
+            expect(document.getElementById('whats-new-overlay')).toBeNull();
+            expect(safeGetItem('last_seen_version')).toBe('v-test-new');
+        } finally {
+            Object.defineProperty(Navigator.prototype, 'webdriver', { value: false, configurable: true });
+        }
+    });
 });

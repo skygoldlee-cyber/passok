@@ -99,6 +99,13 @@ const RETURNING_USER_HINTS = ['quiz_results', 'fc_memorized', 'study_streak', 's
 export function maybeShowWhatsNew() {
     const current = appVersion();
     if (!current) return;
+    // E2E·자동화 컨텍스트(Playwright webdriver) — 합성 이력 시드가 returning-user로
+    // 판정돼 모달이 떠 클릭 대상을 가리는 회귀 방지 (landing-redirect.js와 같은 관례).
+    // seen은 기록한다 — 설정 메뉴의 수동 재열람 경로와는 무관하다.
+    if (typeof navigator !== 'undefined' && navigator.webdriver) {
+        safeSetItem(SEEN_KEY, current);
+        return;
+    }
     // SW 업데이트가 진행 중이면 이 페이지는 구버전 스냅샷 — 여기서 모달을 띄우면
     // controllerchange 리로드 후 신버전이 같은 모달을 다시 띄워 이중 표시가 된다.
     // seen은 기록하지 않는다 — 리로드된 신버전 페이지에서 1회 표시하면 된다.
