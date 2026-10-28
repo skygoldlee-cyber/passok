@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261028-6dfadb5",
+    "date": "2026-10-28",
+    "notes": [
+      "[수정·merge] stamps 드라이버 same-date 정렬 — theirs 우선으로 연대기·APP_VERSION 정합",
+      "[정리·release] v20261028-4cd7f38 스탬프 확정 [no-docs]",
+      "[정리·release] v20261028-c2e1bf2 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261028-4cd7f38",
     "date": "2026-10-28",
     "notes": [
@@ -224,47 +233,6 @@
     "notes": [
       "[수정·ux] 더보기 시트 성분사전·캘린더를 자료·도구 그룹으로 이동",
       "[정리·release] v20261026-c73a69f 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-c73a69f",
-    "date": "2026-10-26",
-    "notes": [
-      "[수정·exam] 공인중개사 문항 인용 경로 정정 — ../교재 상대경로",
-      "[기능·exam] 공인중개사 문항 인용 링크 보강 — 교재 라인 인용 140문 삽입",
-      "[정리·release] v20261026-cca2ceb 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-cca2ceb",
-    "date": "2026-10-26",
-    "notes": [
-      "[기능·exam] 공인중개사 교재 5권 본문 확충 + 문제은행 정답 블록 형식 정합",
-      "[정리·release] v20261026-7e6b038 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-7e6b038",
-    "date": "2026-10-26",
-    "notes": [
-      "[정리·build] broker 팩 생성물 갱신 — keyword-index·law-links·pdf-registry·sw",
-      "[수정·exam] 공인중개사 references.json 등록 — ref_md 27건 레지스트리 정합",
-      "[수정·exam] 공인중개사 정합성 정정 — 과목 키 밑줄·챕터 헤딩·ref_md 과목 귀속",
-      "[정리] broker .last-stats 파일명 베이스라인 등록 — 기존 시험과 동일 예외",
-      "[수정·exam] 공인중개사 시험 키 하이픈→밑줄 — EXAM_DATA 식별자 규칙 정합",
-      "[기능·exam] 공인중개사 manifest uiText 채움 — 동적 메뉴 라벨 정합 (ES-10)",
-      "[기능·exam] 공인중개사 문제은행 7과목 — 과목당 20문 AI 초안 편입 + exams 등록",
-      "[기능·exam] 공인중개사 교재 골격 — 7과목 chapters 등록 + 재사용 교재 이식",
-      "[기능·exam] 공인중개사 법령 수집 — 중개사법 3종·세법·실무규정 9건 추가",
-      "[기능·exam] 공인중개사 manifest 구조 정정 + 재사용 법령 18건 복사"
-    ]
-  },
-  {
-    "version": "v20261026-ae50238",
-    "date": "2026-10-26",
-    "notes": [
-      "[테스트·e2e] 시각 회귀 CI 전용화 + 기준선 자동 재생성 — 유지비 경감",
-      "[정리·release] v20261026-e91e64e 스탬프 확정 [no-docs]"
     ]
   }
 ]
