@@ -1,5 +1,5 @@
 // spaced-repetition.js — FSRS-6 기반 간격 반복 학습 시스템 (구 SM-2)
-// @spec F-07~09,D-20
+// @spec F-07~09,D-20,PS-06
 //
 // 각 카드의 복습 스케줄을 관리 — 스케줄 수학은 src/fsrs.js 순수 함수에 위임:
 // - v2 레코드: { v:2, d(난이도 1~10), s(안정도 일), due, lastReview, reps, lapses, lastInterval }
@@ -86,7 +86,8 @@ export function updateCardSchedule(cardId, knew) {
 
     saveSchedules(schedules);
     // @spec D-18 — 레이팅 이력 append (카드·진술 공용 단일 통로, 설계 §2.2)
-    appendReviewLog({ c: cardId, r: rating, e: elapsed, t: today.getTime() });
+    // @spec PS-06 — s: 복습 전 안정도를 함께 기록해 개인 w20 피팅 입력으로 사용
+    appendReviewLog({ c: cardId, r: rating, e: elapsed, s: (current && current.s) || 0, t: today.getTime() });
     return schedules[cardId];
 }
 
@@ -114,9 +115,9 @@ export function getDueCount() {
 // @spec D-18
 /**
  * 리뷰 로그에 레코드 1건 append — 2,000건 FIFO 링버퍼.
- * {c: 카드·진술 id, r: FSRS 레이팅(1|3), e: 경과일, t: unix ms}
+ * {c: 카드·진술 id, r: FSRS 레이팅(1|3), e: 경과일, s: 복습 전 안정도, t: unix ms}
  * 또는 퀴즈 판정 {c: 문항 id, k:'q', ok: 1|0, t: unix ms} (D-22)
- * @param {{c:string, r?:number, e?:number, k?:string, ok?:number, t:number}} entry
+ * @param {{c:string, r?:number, e?:number, s?:number, k?:string, ok?:number, t:number}} entry
  */
 function appendReviewLog(entry) {
     const log = getReviewLog();
@@ -138,8 +139,8 @@ export function recordQuizJudgment(quizId, correct) {
 }
 
 /**
- * 리뷰 로그 전체 읽기 — 후속 피팅·효능 실측·BKT 시퀀스 입력 (D-18·D-22)
- * @returns {Array<{c:string, r?:number, e?:number, k?:string, ok?:number, t:number}>}
+ * 리뷰 로그 전체 읽기 — 후속 피팅·효능 실측·BKT 시퀀스 입력 (D-18·D-22·PS-06)
+ * @returns {Array<{c:string, r?:number, e?:number, s?:number, k?:string, ok?:number, t:number}>}
  */
 export function getReviewLog() {
     try {

@@ -109,6 +109,7 @@ const SHELL_ASSETS = [
   './src/feedback.js',
   './src/views/dashboard.js',
   './src/views/analysis-view.js',
+  './src/views/personalization-view.js',
   './src/views/score-estimate.js',
   './src/views/subject-stats.js',
   './src/views/flashcard.js',

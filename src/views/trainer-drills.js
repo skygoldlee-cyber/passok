@@ -1,5 +1,5 @@
 // src/views/trainer-drills.js — O/X 판정 드릴 + 복수정답형(combo) 드릴
-// @spec DR-01~07,ND-01,UX-MET-01
+// @spec DR-01~07,ND-01,UX-MET-01,PS-05
 //
 // 데이터: DataLoader.loadOxDrills(N) → OX_DRILLS_subjectN (build_ox_drills.js 생성)
 //         DataLoader.loadComboDrills() → COMBO_PILOT (수작업 저작)
@@ -19,6 +19,8 @@ import { gradeAnswer } from '../questions.js';
 import { recordStatementJudgments, getWeakStatements, getDueStatementSids, getAllStatementStats, getAnomalousStatements, WEAK_GRADUATE_STREAK } from '../statement-tracker.js';
 import { normalizeCidAnchor, subjectFromSid } from '../analysis-engine.js';
 import { SemanticIndex } from '../semantic-index.js';
+import { weakRefLink } from '../personalization.js';
+import { resolveCidChapter } from './personalization-view.js';
 import { recordStudyActivity } from '../study-tracker.js';
 import { switchView, resetMainScroll } from './navigation.js';
 import { trackAction } from '../usage-stats.js';
@@ -469,6 +471,12 @@ function weakRow(w, due, anomalies) {
     const simBtn = SemanticIndex.isEnabled()
         ? `<button class="btn btn-secondary weak-sim-btn" data-click="toggleSimilarStmts" data-arg="${esc(w.sid)}" aria-label="의미상 유사한 진술 보기" aria-expanded="false"><i class="fa-solid fa-wand-magic-sparkles"></i> 유사</button>`
         : '';
+    // PS-05 — 취약→교재 딥링크: cid를 단원으로 해석해 해당 교재 섹션으로 바로 이동
+    const subjKey = subjectFromSid(w.sid) || '';
+    const refLink = weakRefLink(w, cid => resolveCidChapter(cid, subjKey));
+    const refBtn = (subjKey && refLink.url)
+        ? `<button class="btn btn-secondary weak-ref-btn" data-click="openSubjectSection" data-args='${esc(JSON.stringify([subjKey, refLink.url]))}' aria-label="교재 해당 단원 보기"><i class="fa-solid fa-book-open"></i> 교재</button>`
+        : '';
     return `<div class="weak-row">
         <div class="weak-row-head">
             <span class="weak-truth ${w.truth ? 'is-o' : 'is-x'}">${w.truth === true ? 'O' : w.truth === false ? 'X' : '?'}</span>
@@ -476,7 +484,7 @@ function weakRow(w, due, anomalies) {
             ${dueBadge}${lastBadge}${anomalyBadge}
             <span class="weak-stat">오판 ${w.w}회 / 판정 ${w.j}회${w.lw ? ` · 최근 ${w.lw}` : ''}</span>
             <button class="btn btn-secondary weak-retry-btn" data-click="gotoOxDrill" data-arg="sid:${esc(w.sid)}" aria-label="이 진술 O/X로 재시도"><i class="fa-solid fa-rotate"></i> 재시도</button>
-            ${simBtn}
+            ${simBtn}${refBtn}
         </div>
         <p class="weak-text">${safeTextWithBreaks(w.t || `(${w.sid})`)}</p>
         ${simBtn ? `<div class="weak-similar is-hidden" id="weak-sim-${esc(w.sid)}"></div>` : ''}

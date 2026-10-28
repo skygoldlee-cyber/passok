@@ -210,6 +210,7 @@ import {
     executePaletteResult
 } from './command-palette.js';
 import { initShortcutHelp } from './shortcuts-help.js';
+import { applyPersonalFit } from './views/personalization-view.js';
 
 // --- 런타임 에러 안전망 (런타임 ReferenceError 등을 사용자에게 알림) ---
 window.addEventListener('error', function (event) {
@@ -251,6 +252,8 @@ function initApp() {
     step('initTelemetryQueueFlush', () => initTelemetryQueueFlush());
     step('initViewportHeight', initViewportHeight);
     step('loadProgress', loadProgress);
+    // 개인 피팅 파라미터 적용 — 저장된 w20이 있으면 FSRS 망각 곡선에 반영 (PS-06)
+    step('applyPersonalFit', () => applyPersonalFit());
     step('checkStorageWarning', checkStorageWarning);
     step('populateSubjectSelects', populateSubjectSelects);
     step('populateExamCards', populateExamCards);

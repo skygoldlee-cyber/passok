@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 7a74eea14fcd901a
+> 입력 해시: a9f5a81dc40e9e57
 > 생성: 2026-10-28 · 원천: SPEC.md(619개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -570,17 +570,17 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| PS-01 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
-| PS-02 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
-| PS-03 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
-| PS-04 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
-| PS-05 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
-| PS-06 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
-| PS-07 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
-| PS-08 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
-| PS-09 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
-| PS-10 | ✅ v1 | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
-| PS-11 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
+| PS-01 | ✅ | 테스트 | — | src/personalization.js<br>src/views/analysis-view.js<br>src/views/dashboard-queue.js<br>src/views/personalization-view.js | tests/unit/engine/today-queue.test.js<br>tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-02 | ✅ | 테스트 | — | src/personalization.js<br>src/views/exam-sim-weak.js | tests/unit/personalization.test.js | — | — |
+| PS-03 | ✅ | 테스트 | — | src/personalization.js<br>src/views/dashboard-queue.js<br>src/views/personalization-view.js | tests/unit/engine/today-queue.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-04 | ✅ | 테스트 | — | src/personalization.js<br>src/views/analysis-view.js | tests/unit/personalization.test.js | — | — |
+| PS-05 | ✅ | 테스트 | — | src/personalization.js<br>src/views/analysis-view.js<br>src/views/personalization-view.js<br>src/views/trainer-drills.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-06 | ✅ | 테스트 | — | src/fsrs.js<br>src/personalization.js<br>src/spaced-repetition.js<br>src/views/personalization-view.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-07 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/personalization.js<br>src/views/personalization-view.js<br>src/views/quiz.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-08 | ✅ | 테스트 | — | src/personalization.js<br>src/views/personalization-view.js<br>src/views/quiz.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-09 | ✅ | 테스트 | — | src/personalization.js<br>src/views/analysis-view.js | tests/unit/personalization.test.js | — | — |
+| PS-10 | ✅ v1 | 테스트 | — | src/personalization.js<br>src/views/analysis-view.js<br>src/views/dashboard-queue.js | tests/unit/engine/today-queue.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-11 | ✅ | 테스트 | — | src/analysis-engine.js<br>src/personalization.js<br>src/views/personalization-view.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 

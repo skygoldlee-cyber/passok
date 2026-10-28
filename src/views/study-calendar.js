@@ -15,7 +15,7 @@ import { switchView } from './navigation.js';
 import { esc, raw } from '../sanitize.js';
 import { resolveWrongQuiz } from '../weak-items.js';
 import { getDueCards, getReviewLog } from '../spaced-repetition.js';
-import { resolveKtParams } from '../knowledge-tracing.js';
+import { personalKtParams } from './personalization-view.js';
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
 const MONTH_NAMES = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
@@ -274,7 +274,7 @@ function _subjectAllocHtml(plan) {
             chapterTitles: qc.chapterTitles, cidSection: qc.cidSection,
             resolveQuiz: resolveWrongQuiz, chaptersPerSubject: 2,
             reviewLog: getReviewLog(),
-            ktParams: resolveKtParams(DataLoader.registry && DataLoader.registry.study && DataLoader.registry.study.kt)
+            ktParams: personalKtParams()
         })
     });
     const alloc = computeSubjectAllocation(plan, subjects, inputs);

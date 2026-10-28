@@ -1,5 +1,5 @@
 // fsrs.js — FSRS-6 기억 모델 순수 함수 (SM-2 대체 스케줄 엔진)
-// @spec F-07,F-08,F-11
+// @spec F-07,F-08,F-11,PS-06
 //
 // DSR 모델: 카드마다 Difficulty(난이도)·Stability(안정도, 일)를 추적하고
 // 경과일로부터 Retrievability(기억 확률)를 추정해 목표 기억률 0.9가 되는
@@ -9,8 +9,29 @@
 // FSRS-6 기본 파라미터 (w0..w20 — fsrs-rs 6.x / ts-fsrs 공개 안정 세트)
 const W = [0.212, 1.2931, 2.3065, 8.2956, 6.4133, 0.8334, 3.0194, 0.001, 1.8722,
     0.1666, 0.796, 1.4835, 0.0614, 0.2629, 1.6483, 0.6014, 1.8729, 0.5425, 0.0912, 0.0658, 0.1542];
-const DECAY = -W[20];                          // 망각 곡선 지수 — 피팅 가능 (w20)
-const FACTOR = Math.pow(0.9, -1 / W[20]) - 1;  // 곡선 형상 — w20에서 유도, R(s,s)=0.9 불변식 유지
+let DECAY = -W[20];                          // 망각 곡선 지수 — 피팅 가능 (w20)
+let FACTOR = Math.pow(0.9, -1 / W[20]) - 1;  // 곡선 형상 — w20에서 유도, R(s,s)=0.9 불변식 유지
+
+// @spec PS-06
+/**
+ * 개인 피팅된 망각 지수 w20 적용 — DECAY·FACTOR를 재계산한다.
+ * personalization.js fitFsrsParams가 리뷰 로그로 추정한 값만 유효 범위
+ * (0.05~0.40, 격자 탐색 범위와 동일)에서 수용 — 범위 밖·비수치는 무시해
+ * 스케줄 손상을 방지한다. 미적용 시 FSRS-6 기본값 유지.
+ * @param {number} w20 망각 곡선 지수 (0.05~0.40)
+ * @returns {boolean} 적용 여부
+ */
+export function setPersonalDecay(w20) {
+    if (typeof w20 !== 'number' || !Number.isFinite(w20) || w20 < 0.05 || w20 > 0.40) return false;
+    DECAY = -w20;
+    FACTOR = Math.pow(0.9, -1 / w20) - 1;
+    return true;
+}
+
+/** 현재 적용 중인 망각 지수 w20 — 피팅 상태 표시·테스트용 */
+export function currentDecayW20() {
+    return -DECAY;
+}
 const REQUEST_RETENTION = 0.9;      // 목표 기억률
 const S_MIN = 0.01;                 // 안정도 하한
 const MAX_INTERVAL = 36500;         // 100년 상한

@@ -228,6 +228,33 @@
     color: var(--color-text-secondary);
 }
 
+/* PS-10 — 오개념 클리닉 처방 블록 (약점 개념 클러스터 복습 지시) */
+.clinic-block {
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    border-left: 3px solid var(--color-warning);
+    background: var(--bg-muted, rgba(128, 128, 128, 0.08));
+    border-radius: var(--radius-sm);
+}
+.clinic-head {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-1);
+}
+.clinic-steps {
+    margin: 0 0 var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+}
+.clinic-steps li {
+    margin-bottom: 0.15rem;
+}
+.clinic-actions {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
 /* 진단 온보딩 진행률 미터 */
 .analysis-meter {
     height: 6px;

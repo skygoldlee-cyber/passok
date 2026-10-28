@@ -1,5 +1,5 @@
 // src/views/analysis-view.js — 학습 진단(개인화 분석) 뷰 컨트롤러
-// @spec AN-01~09,SC-11,SC-12,D-23
+// @spec AN-01~09,SC-11,SC-12,D-23,PS-01,PS-04,PS-05,PS-09,PS-10
 //
 // dashboard.js에서 분리 (모듈 경계 정리) — 학습 진단 뷰의 진단 카드 7종,
 // 과목별 학습 진입(startSubject*), 주간 리포트보내기를 전담한다.
@@ -11,7 +11,6 @@ import { esc } from '../sanitize.js';
 import { DataLoader } from '../data-loader.js';
 import { switchView } from './navigation.js';
 import { getDueCount, getDueCards, getExamRiskCards, EXAM_R_SESSION_CAP, getReviewLog } from '../spaced-repetition.js';
-import { resolveKtParams } from '../knowledge-tracing.js';
 import { computeWrongCauseSummary, getWrongCauseLabels, getSimHistory, evaluateRecommendationEffect, computeCalibrationBias, getActualResult } from '../recommendations.js';
 import {
     getDDay, getStudyGoals, getTodayGoalProgress, getWeeklyGoalProgress,
@@ -24,8 +23,13 @@ import { getWeakStatements, getDueStatementSids, getAnomalousStatements, getAllS
 import {
     computeSubjectWeakChapters, computeWeeklyGrowth, computePassGap,
     computeWeakConceptClusters, computePaceProjection, estimateUntaggedCauses,
-    computeStudyPattern, buildWeeklyReportText
+    computeStudyPattern, buildWeeklyReportText, computeMasteryLevels, normalizeCidAnchor, subjectFromSid
 } from '../analysis-engine.js';
+import { SemanticIndex } from '../semantic-index.js';
+import { generateClinic, estimatePassProb, weeklyReport, weakRefLink } from '../personalization.js';
+import {
+    personalKtParams, weakClusters, resolveCidChapter, refitPersonalModels
+} from './personalization-view.js';
 import { resolveWrongQuiz } from '../weak-items.js';
 import { showToast, showGlobalLoading, hideGlobalLoading } from '../ui-utils.js';
 import { getExamRules, getExamAppName } from '../exam-context.js';
@@ -48,6 +52,13 @@ export function renderAnalysisView() {
     _renderStudyRhythmInsight();
     _renderChapterWeakness();
     _renderPassGapInsight();
+    // PS-01 — 의미 이웃 자산 미로드 시 지연 로드 후 취약 진술 카드만 재렌더
+    // (첫 렌더는 cid 단독 클러스터, 로드 완료 시 이웃 결합 클러스터로 승격)
+    if (SemanticIndex.isEnabled() && !(typeof window !== 'undefined' && /** @type {any} */ (window).EMB_NEIGHBORS && /** @type {any} */ (window).EMB_NEIGHBORS.adj)) {
+        SemanticIndex.ensureLoaded().then(ok => { if (ok) _renderWeakStatementInsight(); });
+    }
+    // PS-06·PS-11 — 개인 파라미터 재피팅 (내부 12h 스로틀 — 실패가 진단 렌더를 막지 않도록 격리)
+    try { refitPersonalModels(); } catch (e) { /* 피팅은 부가 기능 — 조용히 폴백 */ }
     // ROAD-P6 — 진단 리포트 열람(aha 모멘트)에 비차단 Pro 넛지
     mountProMoment(document.getElementById('analysis-view'), 'analysis_report');
 }
@@ -56,10 +67,9 @@ export function renderAnalysisView() {
 // (양방향 import 대신 콜백 등록으로 모듈 순환을 피한다)
 onAnalysisRefresh(_renderChapterWeakness);
 
-/** BKT 입력 공용 — 리뷰 로그 시퀀스 + manifest study.kt 파라미터 (D-22) */
+/** BKT 입력 공용 — 리뷰 로그 시퀀스 + manifest·개인 피팅 병합 kt 파라미터 (D-22·PS-07·PS-11) */
 function _ktInputs() {
-    const kt = DataLoader.registry && DataLoader.registry.study && DataLoader.registry.study.kt;
-    return { reviewLog: getReviewLog(), ktParams: resolveKtParams(kt) };
+    return { reviewLog: getReviewLog(), ktParams: personalKtParams() };
 }
 
 /** 과목별 취약 단원 그룹 공용 계산 — 단원 카드·주간 배분·리포트가 공유 (SC-11·SC-12) */
@@ -237,10 +247,31 @@ function _renderWeakStatementInsight() {
         { chapterTitles: qc.chapterTitles, cidSection: qc.cidSection });
     const clusterNoteHtml = clusters.length > 0
         ? `<p class="analysis-advice">🔗 같은 개념 구간에서 반복 오판: ${esc(clusters[0].chapter || clusters[0].cid)} (${clusters[0].count}개 진술)</p>` : '';
+
+    // PS-01 — union-find 약점 개념 축 (의미 이웃+cid 결합) → PS-10 클리닉 처방 + PS-05 교재·드릴 딥링크
+    const conceptClusters = weakClusters();
+    let clinicHtml = '';
+    if (conceptClusters.length > 0) {
+        const top = conceptClusters[0];
+        const rep = top.members[0];
+        const subj = rep ? subjectFromSid(rep.sid) || '' : '';
+        const anchor = rep ? normalizeCidAnchor(rep.cid, subj, qc.cidSection) : null;
+        const chapter = rep ? resolveCidChapter(rep.cid, subj) : null;
+        const link = rep ? weakRefLink(rep, () => chapter) : null;
+        const clinic = generateClinic(top, { neighborCount: top.size - 1, refUrl: link && link.url });
+        const stepsHtml = clinic.steps.slice(1).map(s => `<li>${esc(s)}</li>`).join('');
+        clinicHtml = `<div class="clinic-block">
+            <p class="clinic-head">🧪 ${esc(clinic.headline)}</p>
+            <ul class="clinic-steps">${stepsHtml}</ul>
+            <div class="clinic-actions">
+                ${(subj && chapter) ? `<button class="btn btn-secondary btn-sm" data-click="openSubjectSection" data-args='${esc(JSON.stringify([subj, chapter]))}'><i class="fa-solid fa-book-open" aria-hidden="true"></i> 교재</button>` : ''}
+                ${anchor ? `<button class="btn btn-secondary btn-sm" data-click="gotoOxDrill" data-arg="concept:${esc(anchor)}"><i class="fa-solid fa-bullseye" aria-hidden="true"></i> 이 개념 드릴</button>` : ''}
+            </div></div>`;
+    }
     const anomalousNoteHtml = anomalous.length > 0
         ? `<p class="analysis-advice">⚠️ 반복 오판 진술 ${anomalous.length}개 — 표현 검수가 필요할 수 있습니다.</p>` : '';
     el.innerHTML = `<h4>🎯 취약 진술 추적 <span class="analysis-meta">오늘 복습 대기 ${esc(dueCount)}개</span></h4>
-        ${rowsHtml}${clusterNoteHtml}${anomalousNoteHtml}
+        ${rowsHtml}${clusterNoteHtml}${clinicHtml}${anomalousNoteHtml}
         <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="gotoWeakReview"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i> 취약 리뷰 열기</button>`;
 }
 
@@ -317,12 +348,13 @@ function _renderPassGapInsight() {
     if (!el) return;
     const subjects = (typeof DataLoader !== 'undefined' && DataLoader.registry)
         ? DataLoader.getSubjectList() : [];
+    const rules = getExamRules();
     const gap = computePassGap({
         estimate: compositeEstimate(),
         simHistory: getSimHistory(),
         subjects,
         counts: getSubjCounts(),
-        rules: getExamRules()
+        rules
     });
     if (!gap || (!gap.weakest && gap.gap === null)) {
         el.innerHTML = `<h4>🎓 합격 갭 분석</h4>
@@ -330,6 +362,24 @@ function _renderPassGapInsight() {
             <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="startIntegratedMockExam"><i class="fa-solid fa-clock" aria-hidden="true"></i> 모의고사 시작</button>`;
         return;
     }
+    // PS-04 — 합격 확률 추정: 과목 숙달(0.5)+모의고사 추세(0.3)+기억률(0.2) 로지스틱 혼합
+    const masteryLevels = computeMasteryLevels(getAllStatementStats());
+    const subjectMastery = {};
+    Object.entries(masteryLevels).forEach(([k, m]) => { subjectMastery[k] = m.percent / 100; });
+    const mockRates = getSimHistory().slice(-5).map(h => (h.rate || 0) / 100);
+    const totalCardsEst = subjects.reduce((s, m) => s + displayCounts(m).cards, 0);
+    const hasEstData = Object.keys(subjectMastery).length > 0 || mockRates.length > 0;
+    const passEst = hasEstData ? estimatePassProb({
+        subjectMastery,
+        dueRatio: getDueCount() / Math.max(1, totalCardsEst),
+        mockRates,
+        cutoff: (rules.passAverage || 60) / 100
+    }) : null;
+    const probRowHtml = passEst
+        ? `<div class="wc-row"><span>합격 확률 추정</span><strong>${Math.round(passEst.probability * 100)}%</strong></div>` : '';
+    const needRowHtml = (passEst && passEst.weakest && passEst.needHours[passEst.weakest] > 0)
+        ? `<div class="wc-subrow"><span>보강 필요 학습량</span><strong>${esc((subjects.find(s => s.key === passEst.weakest) || { name: passEst.weakest }).name)} ≈${passEst.needHours[passEst.weakest]}h</strong></div>` : '';
+
     const gapRowHtml = gap.gap !== null
         ? `<div class="wc-row"><span>합격선(평균 ${gap.passLine}점)까지</span><strong>${gap.gap === 0 ? '도달 ✅' : `+${gap.gap}점`}</strong></div>`
         : '';
@@ -359,7 +409,7 @@ function _renderPassGapInsight() {
             <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="openGoalSettings"><i class="fa-solid fa-gear" aria-hidden="true"></i> 목표 상향</button>`;
     }
     el.innerHTML = `<h4>🎓 합격 갭 분석</h4>
-        ${gapRowHtml}${weakRowHtml}${rankRowHtml}
+        ${probRowHtml}${needRowHtml}${gapRowHtml}${weakRowHtml}${rankRowHtml}
         ${gap.weakest ? `<p class="analysis-advice">${esc(gap.weakest.reason)} — 이 과목이 점수 상승 여력이 가장 큽니다.</p>` : ''}
         ${weakBtnHtml}${goalAdviceHtml}`;
 }
@@ -490,16 +540,18 @@ export function exportAnalysisReport() {
             .filter(a => a.remaining > 0 && a.cards > 0)
             .map(a => ({ name: a.name, done: doneBySubj[a.key] || 0, cards: a.cards, quizDone: quizDoneBySubj[a.key] || 0, quizzes: a.quizzes || 0 }))
         : null;
+    const growth = computeWeeklyGrowth(getStudyCalendar());
+    const gapForReport = computePassGap({
+        estimate: est, simHistory: getSimHistory(), subjects,
+        counts: getSubjCounts(), rules: getExamRules()
+    });
     const text = buildWeeklyReportText({
         appName: getExamAppName(),
         plan: _planAdherenceSummary(subjects),
         planBySubject,
-        growth: computeWeeklyGrowth(getStudyCalendar()),
+        growth,
         estimate: est,
-        gap: computePassGap({
-            estimate: est, simHistory: getSimHistory(), subjects,
-            counts: getSubjCounts(), rules: getExamRules()
-        }),
+        gap: gapForReport,
         weakChapters: computeSubjectWeakChapters({
             quizResults: state.quizResults, weakCards: state.weakCards,
             statementStats: getAllStatementStats(),
@@ -513,7 +565,17 @@ export function exportAnalysisReport() {
         actual: getActualResult(),
         bias: computeCalibrationBias(getActualResult()),
         ddayLabel: dday === null ? null : (dday < 0 ? `D+${-dday}` : (dday === 0 ? 'D-Day' : `D-${dday}`))
-    });
+    }) + (() => {
+        // PS-09 — 주간 리포트: 계획 순응도 헤드라인 + 최다 오개념·취약 과목 제안
+        const wr = weeklyReport({
+            solvedWeek: growth.thisWeek.quizzes,
+            planWeek: weekAlloc ? weekAlloc.thisWeek.alloc.reduce((s, a) => s + (a.quizzes || 0), 0) : 0,
+            wrongWeek: Math.max(0, growth.thisWeek.quizzes - growth.thisWeek.correct),
+            topCluster: (weakClusters()[0] || {}).label || null,
+            weakestSubject: (gapForReport && gapForReport.weakest && gapForReport.weakest.name) || null
+        });
+        return `\n${wr.headline}\n💡 ${wr.suggestion}`;
+    })();
     if (navigator.share) {
         navigator.share({ title: `${getExamAppName()} 주간 학습 리포트`, text })
             .then(() => {})

@@ -39,6 +39,7 @@
  * @property {number}   correctCount 맞힌 개수
  * @property {Array<{quizId: string, question?: string, selected: (number|string), correctAnswer?: (number|string), correct: boolean}>} solvedList 이번 세션 제출 기록
  * @property {boolean} [diagnostic]    진단 평가 모드 (전 과목 샘플링)
+ * @property {number}   [_qStart]     현재 문항 풀이 시작 시각 unix ms (PS-08 오답 원인 추정 ms 신호)
  */
 
 /**
