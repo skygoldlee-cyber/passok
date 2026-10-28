@@ -382,6 +382,58 @@
       "features": {},
       "group": "전기",
       "comingSoon": true
+    },
+    {
+      "id": "compapp1",
+      "name": "컴퓨터활용능력 1급",
+      "shortName": "컴활1급",
+      "appName": "PassOK 컴퓨터활용능력 1급",
+      "title": "PassOK — 컴퓨터활용능력 1급 (Passcomp)",
+      "logoMain": "PassOK",
+      "logoSub": "컴활1급 · Passcomp",
+      "desc": "컴퓨터활용능력 1급 — 필기 3과목(컴퓨터 일반·스프레드시트 일반·데이터베이스 일반) 객관식 60문/60분 + 실기 작업형(스프레드시트·데이터베이스 실무) · 대한상공회의소 · 출제기준 2027~2029 기준 자체 제작",
+      "icon": "fa-solid fa-table-cells",
+      "year": "2027",
+      "theme": {
+        "--color-primary": "#217346",
+        "--color-secondary": "#a4373a"
+      },
+      "contentRoot": "content/exams/compapp1",
+      "dataRoot": "data/exams/compapp1",
+      "manifestPath": "content/exams/compapp1/manifest.json",
+      "registryBundle": "data/exams/compapp1/registry.js",
+      "registryGlobal": "DATA_REGISTRY_COMPAPP1",
+      "features": {},
+      "comingSoon": true,
+      "appNameEn": "Passcomp",
+      "practiceName": "Sheet OS",
+      "group": "정보처리"
+    },
+    {
+      "id": "compapp2",
+      "name": "컴퓨터활용능력 2급",
+      "shortName": "컴활2급",
+      "appName": "PassOK 컴퓨터활용능력 2급",
+      "title": "PassOK — 컴퓨터활용능력 2급 (Passcomp)",
+      "logoMain": "PassOK",
+      "logoSub": "컴활2급 · Passcomp",
+      "desc": "컴퓨터활용능력 2급 — 필기 2과목(컴퓨터 일반·스프레드시트 일반) 객관식 40문/40분 + 실기 작업형(스프레드시트 실무) · 대한상공회의소 · 출제기준 2027~2029 기준 자체 제작",
+      "icon": "fa-solid fa-table-list",
+      "year": "2027",
+      "theme": {
+        "--color-primary": "#217346",
+        "--color-secondary": "#2e75b6"
+      },
+      "contentRoot": "content/exams/compapp2",
+      "dataRoot": "data/exams/compapp2",
+      "manifestPath": "content/exams/compapp2/manifest.json",
+      "registryBundle": "data/exams/compapp2/registry.js",
+      "registryGlobal": "DATA_REGISTRY_COMPAPP2",
+      "features": {},
+      "comingSoon": true,
+      "appNameEn": "Passcomp",
+      "practiceName": "Sheet OS",
+      "group": "정보처리"
     }
   ]
 }

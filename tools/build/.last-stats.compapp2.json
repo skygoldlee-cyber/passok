@@ -1,0 +1,25 @@
+{
+  "subjects": {
+    "computer": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/computer/1과목_컴퓨터 일반.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "spreadsheet": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/spreadsheet/2과목_스프레드시트 일반.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {}
+}

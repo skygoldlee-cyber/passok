@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "contentYear": "2027",
+  "textbookEdition": "2027",
+  "_pilot": "컴퓨터활용능력 2급 파일럿 — 대한상공회의소 국가기술자격. 필기 2과목 객관식 40문/40분(과목당 40점·평균 60점) + 실기 작업형(스프레드시트 실무 40분·70점). 출제기준 2027~2029 적용. 기출은 주최측 7일 한정 공개로 비공개 — 자체 제작 문항으로 증산 (승격 기준 과목당 ≥20문). 실기는 written[] 후속. 컴퓨터 일반 과목은 1급과 출제기준 동일.",
+  "subjects": [
+    {
+      "key": "computer",
+      "order": 1,
+      "name": "컴퓨터 일반",
+      "shortName": "컴퓨터 일반",
+      "dir": "교재/computer",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "컴퓨터 일반 (전체)",
+          "file": "1과목_컴퓨터 일반.md"
+        }
+      ]
+    },
+    {
+      "key": "spreadsheet",
+      "order": 2,
+      "name": "스프레드시트 일반",
+      "shortName": "스프레드시트 일반",
+      "dir": "교재/spreadsheet",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "스프레드시트 일반 (전체)",
+          "file": "2과목_스프레드시트 일반.md"
+        }
+      ]
+    }
+  ],
+  "exams": [],
+  "integratedExam": {
+    "questionsPerSubject": {
+      "computer": 20,
+      "spreadsheet": 20
+    },
+    "examTimeMin": 40,
+    "passAverage": 60,
+    "subjectFailBelow": 40
+  },
+  "uiText": {
+    "dictionary": {
+      "title": "지식DB 사전",
+      "subtitle": "엔티티 검색 (manifest.knowledge 스키마 필요)"
+    }
+  }
+}

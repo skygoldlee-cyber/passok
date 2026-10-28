@@ -189,6 +189,12 @@ const _EXAM_LAW_URLS = {
     ],
     "elecindeng": [
 
+    ],
+    "compapp1": [
+
+    ],
+    "compapp2": [
+
     ]
 };
 

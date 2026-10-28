@@ -1027,6 +1027,72 @@ const _EXAM_TABLES = {
         NOTICE_INGREDIENT_DOCS: [
 
         ]
+    },
+    "compapp1": {
+        contentRoot: "content/exams/compapp1",
+        SUBJECT_DIR_MAP: {
+
+        },
+        REF_MD_SUBJECTS: {
+
+        },
+        REF_DIRS: {
+
+        },
+        SOURCE_REF_MAP: [
+
+        ],
+        KEYWORD_REF_MAP: [
+
+        ],
+        REFERENCE_FILES: {
+
+        },
+        REFERENCE_COMMON: [
+
+        ],
+        REFERENCE_INGREDIENTS: [
+
+        ],
+        REFERENCE_LAW: [
+
+        ],
+        NOTICE_INGREDIENT_DOCS: [
+
+        ]
+    },
+    "compapp2": {
+        contentRoot: "content/exams/compapp2",
+        SUBJECT_DIR_MAP: {
+
+        },
+        REF_MD_SUBJECTS: {
+
+        },
+        REF_DIRS: {
+
+        },
+        SOURCE_REF_MAP: [
+
+        ],
+        KEYWORD_REF_MAP: [
+
+        ],
+        REFERENCE_FILES: {
+
+        },
+        REFERENCE_COMMON: [
+
+        ],
+        REFERENCE_INGREDIENTS: [
+
+        ],
+        REFERENCE_LAW: [
+
+        ],
+        NOTICE_INGREDIENT_DOCS: [
+
+        ]
     }
 };
 
