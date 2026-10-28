@@ -8398,3 +8398,8 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 ## 2026-10-28 fix: 온보딩 챕터 정규식 이모지 접두 허용
 
 - `## 📚 Chapter NN.` 형식을 인식 못해 labor·compapp1·compapp2가 표준형 챕터 미달 오탐 → 정규식에 임의 접두 토큰 허용, 3팩 pilot 복원
+
+## 2026-10-28 feat: 비표형식 출제기준 5팩 과목 대조표 추가
+
+- skincare·hairdresser·indsafe·compapp1·compapp2 출제기준 문서에 `| 과목 | 주요항목 | 세부내용 |` 요약 표 추가 — check:onboard 비표 경고 전부 해소, audit:syllabus 표 파싱 대상 확장
+- NCS 수행준거·대한상공회의소 원문 구조를 그룹·항목 단위로 요약 (원문 세부는 문서 본문 유지)
