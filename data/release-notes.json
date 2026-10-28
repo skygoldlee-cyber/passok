@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261028-7f572ea",
+    "date": "2026-10-28",
+    "notes": [
+      "[기능·exam-select] 인트로에 매뉴얼 링크 추가 — 상세설명 안내",
+      "[정리·release] v20261028-5399835 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261028-5399835",
     "date": "2026-10-28",
     "notes": [
@@ -222,18 +230,6 @@
       "[content] skincare 시행령·시행규칙 ref_md 추가 + 학습안내서",
       "[content] skincare(미용사/피부) 시험 파일럿 골격 추가",
       "[정리·release] v20261026-b1a891f 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-b1a891f",
-    "date": "2026-10-26",
-    "notes": [
-      "[정리·build] 파생물 일괄 재생성 — docs_md·TRACE_MATRIX·test_stats",
-      "[리팩터링·quiz] 오답 노트 뷰를 quiz-review.js로 분리 — 배럴 패턴",
-      "[리팩터링·infra] 스탬프 머지 드라이버 + study-tracker 분리 + P2 게이트 효용 감사",
-      "[문서·exam] 공인중개사 문형 감사 결과 기록 — 구조 정합·보정 과제 정리",
-      "[정리·release] v20261026-1f88495 스탬프 확정 [no-docs]",
-      "[정리·release] v20261024-980ef49 스탬프 확정 [no-docs]"
     ]
   }
 ]
