@@ -8380,3 +8380,10 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 - skincare `practical/피부미용실무.md` Ch06 — 피부분석·상담·평가·클렌징·마무리·소독 원문 용어
 - indsafe `practical/산업안전관리_실무.md` Ch06 — 인간공학·산업심리·보호구·공정 분석 수행준거 원문 용어
 - 감사 미반영 대폭 감소 — 잔여는 라인랩 절단 용어·과목명 수준 범용 행 등 한계 케이스
+
+## 2026-10-28 feat: CI 진단·재실행 도구 + e2e quarantine 노브
+
+- `tools/ci/ci_diagnose.js` (`npm run ci:diagnose [sha] [--specs]`) — 커밋의 ci.yml run을 GitHub REST로 조회해 실패 잡·스텝 나열, `--specs`는 실패 e2e 샤드의 스펙 파일 목록 출력. 공개 리포 무인증 조회 (로그 본문은 403)
+- `tools/ci/ci_retrigger.js` (`npm run ci:retrigger`) — 플레이크 판정 시 빈 커밋 push → ci.yml 완료 폴링·결과 보고 (로컬 재현 통과 전제)
+- `playwright.config.js` — `PW_QUARANTINE` env로 만성 플레이크 스펙 임시 제외 (testIgnore 연동)
+- 실측: mobile 샤드 2/2 로컬 재현 52/52 통과 — CI 실패는 공유 러너 플레이크로 확인

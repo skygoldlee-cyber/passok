@@ -6,6 +6,10 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
     testDir: 'tests/e2e',
     timeout: 30_000,
+    // 플레이크 quarantine — PW_QUARANTINE="visual.spec,theme.spec" 로 특정 스펙을 임시 제외
+    // (만성 플레이크 원인 분리용 — 해소 후 env 제거, 근본 수정이 우선)
+    testIgnore: (process.env.PW_QUARANTINE || '').split(',').filter(Boolean)
+        .map(p => new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))),
     // CI는 공유 러너 부하로 간헐 플레이크(스크롤·타이밍)가 발생해 1회 재시도로 흡수.
     // 로컬은 0 유지 — 만성 플레이크를 숨기지 않도록 로컬에서 먼저 드러나게 한다.
     retries: process.env.CI ? 1 : 0,

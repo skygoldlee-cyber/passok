@@ -61,6 +61,12 @@ npm.cmd run deploy                     # 배포 가드(clean tree + origin/main 
 # ※ 사용자가 "배포"라고 요청하면 이 명령 하나로 전체 단계 수행
 # ※ `vercel --prod` 직접 실행 금지 — 미푸시 커밋/미커밋 변경이 프로덕션에 올라감
 
+# CI 진단·재실행
+npm.cmd run ci:diagnose                # CI 실패 위치 진단 — 커밋의 ci.yml 실패 잡·스텝 나열 (기본 HEAD, 인자 sha 지정 가능 · --specs=실패 e2e 샤드 스펙 목록)
+npm.cmd run ci:retrigger               # CI 플레이크 재실행 — 빈 커밋 push → ci.yml 완료 폴링·결과 보고 (로컬 재현 통과 확인 후 사용 — 동일 스텝 재실패는 회귀로 간주)
+# ※ CI 실패 시 절차: ci:diagnose → 실패 스텝 로컬 재현 → 통과하면 ci:retrigger, 실패하면 수정
+# ※ 만성 플레이크 스펙 임시 제외: PW_QUARANTINE="visual.spec" npm run test:e2e (playwright.config.js testIgnore)
+
 # 감사
 npm.cmd run audit:cards                 # 카드 품질 자동 감사 (짧은 설명, 중복, 참조 링크 유효성)
 npm.cmd run sbom                        # SPDX 형식 SBOM 생성 → sbom.spdx.json (CI 아티팩트, gitignore 대상)
@@ -445,6 +451,7 @@ tools/                  # 빌드·검증 스크립트
   state/                # 게이트 기준선·스탬프 (*_baseline.json·test_stats.json — 추적) + 로컬 산출물 (리포트·검수 큐·대시보드 — gitignore)
   sync/                 # 콘텐츠 동기화 (sync_citation_lines·sync_textbook_files)
   deploy/               # 배포 가드 (deploy.js)
+  ci/                   # CI 진단·재실행 도구 (ci_diagnose.js 실패 잡·스텝 조회 + --specs 샤드 스펙 나열 · ci_retrigger.js 빈 커밋 재트리거 + 완료 폴링)
   merge/                # git 머지 드라이버 (merge_stamps.js — 배포 스탬프 파일 자동 병합, .gitattributes merge=stamps)
   lib/                  # 공용 스캔·파싱 라이브러리 (trace_scan.js)
   ai/                   # AI 제작 지원 도구 (llm_client + 초안 생성·검수 9종, lib/ 공용 파서 — AI-01~13)

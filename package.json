@@ -113,6 +113,8 @@
     "check:onboard": "node tools/check/check_exam_onboard.js",
     "doctor": "node tools/check/env_doctor.js",
     "deploy": "node tools/deploy/deploy.js",
+    "ci:diagnose": "node tools/ci/ci_diagnose.js",
+    "ci:retrigger": "node tools/ci/ci_retrigger.js",
     "audit:combo": "node tools/check/audit_combo.js",
     "audit:study": "node tools/check/audit_study_quality.js",
     "audit:tools": "node tools/check/audit_tool_usage.js",
