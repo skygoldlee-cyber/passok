@@ -8342,3 +8342,8 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 - admagent(행정사)·appraisal(감정평가사)·broker(공인중개사)·insadj(손해사정사)·labor(공인노무사)·lossadj(손해평가사) — 각 시행령 별표·시행계획 공고·보험개발원 안내 기반 `ref_md/과목1/` 출제기준 md 신규 편입
 - audit:syllabus 감사 대상이 전 17개 시험으로 확장 (문서부재 0)
 - 실공백 발견: broker 4항목(부동산감정평가론·민사특별법·부동산거래신고법×2), admagent 1항목 — 나머지 팩은 실질 커버 또는 교재 형식 상이(appraisal·insadj·hairdresser·skincare·indsafe 계열)
+
+## 2026-10-28 feat: broker 민사특별법 챕터 보강 (audit:syllabus 실공백 해소)
+
+- `content/exams/broker/교재/civil_broker/2과목_민법_표준형.md` Chapter 12 신설 — 주택임대차보호법·상가건물임대차보호법·집합건물법·가등기담보법·부동산실명법 (1차 과목2의 15% 영역)
+- 감사상 민법 과목 미반영 1→0 — 나머지 미반영 표기(감정평가론·거래신고법·admagent 민법)는 본문 커버 확인된 오탐
