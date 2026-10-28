@@ -125,6 +125,11 @@ for (const examId of fs.readdirSync(EXAMS_DIR)) {
         if (g) g.rows.push(r); else groups.push({ name: r.subject, rows: [r] });
     }
 
+    // 시험 전체 교재 코퍼스 — 타 과목 커버 폴백 (과목 귀속 오류 오탐 소거)
+    const examBody = subjects.flatMap(s => (s.chapters || []).map(c => path.join(dir, s.dir || '', c.file)))
+        .filter(f => fs.existsSync(f)).map(f => norm(fs.readFileSync(f, 'utf8'))).join(' ');
+    const examBodyHas = d => { const n = norm(d); return n.length >= 4 && examBody.includes(n); };
+
     subjects.forEach((subj, i) => {
         grandSubjects++;
         const chapFiles = (subj.chapters || []).map(c => path.join(dir, subj.dir || '', c.file));
@@ -146,7 +151,9 @@ for (const examId of fs.readdirSync(EXAMS_DIR)) {
         const unref = rows.filter(r =>
             !units.some(u => similar(u.title, r.item) || r.details.some(d => similar(u.title, d)))
             && !bodyHas(r.item)
-            && r.details.filter(bodyHas).length < Math.ceil(r.details.length * 0.5));
+            && r.details.filter(bodyHas).length < Math.ceil(r.details.length * 0.5)
+            && !examBodyHas(r.item)
+            && r.details.filter(examBodyHas).length < Math.ceil(r.details.length * 0.5));
         grandUnmatched += unmatched.length;
         report.push(`- ${subj.name}: 챕터 ${units.length} · 기준 항목 ${rows.length}` +
             ` | 미매칭 ${unmatched.length}${unmatched.length ? ': ' + unmatched.slice(0, 4).map(u => u.title).join(' | ') : ''}` +
