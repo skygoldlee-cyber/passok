@@ -382,8 +382,13 @@ const MD_ASSETS = [
   './content/exams/compapp1/교재/computer/1과목_컴퓨터 일반.md',
   './content/exams/compapp1/교재/spreadsheet/2과목_스프레드시트 일반.md',
   './content/exams/compapp1/교재/database/3과목_데이터베이스 일반.md',
+  './content/exams/compapp1/문제은행/과목1_문제은행.md',
+  './content/exams/compapp1/문제은행/과목2_문제은행.md',
+  './content/exams/compapp1/문제은행/과목3_문제은행.md',
   './content/exams/compapp2/교재/computer/1과목_컴퓨터 일반.md',
   './content/exams/compapp2/교재/spreadsheet/2과목_스프레드시트 일반.md',
+  './content/exams/compapp2/문제은행/과목1_문제은행.md',
+  './content/exams/compapp2/문제은행/과목2_문제은행.md',
   // MD_ASSETS:END
 ];
 
