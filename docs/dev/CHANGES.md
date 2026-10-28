@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-28 fix: stamps 머지 드라이버 same-date 정렬 — theirs 우선으로 APP_VERSION 정합
+
+- `tools/merge/merge_stamps.js` mergeNotes — 같은 날짜 항목을 버전 해시 내림차로 정렬해 배포 연대기가 뒤섞이고 최신 노트가 APP_VERSION과 어긋나던 문제(check_release_notes 게이트 실패) 수정: theirs 파일 순서 우선 — `newerVersion`의 same-date theirs 채택 규칙과 일치 — ours 전용 항목은 뒤에 배치
+- `data/release-notes.json` — 양 머신 배포 스탬프 병합으로 뒤섞인 항목을 실제 배포 시각순으로 재정렬 + `release-notes.js` 재생성
+
 ## 2026-10-28 chore: 교재↔출제기준 정합 감사 audit:syllabus 추가 + 본문 대조 정제
 
 - `tools/audit/audit_syllabus_alignment.js` — 시험 팩 manifest 과목·챕터 구조와 ref_md 출제기준 문서(표·Q-net 텍스트 형식) 비교, 과목별 커버리지·미반영 항목 리포트 (advisory)

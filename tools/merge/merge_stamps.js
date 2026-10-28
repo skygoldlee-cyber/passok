@@ -47,22 +47,30 @@ function newerVersion(a, b) {
 /** 릴리스 노트 항목 병합 — version 키 합집합, pending 항목은 최대 1개 (ours 우선) */
 function mergeNotes(oursEntries, theirsEntries) {
     const byVersion = new Map();
+    const rank = new Map(); // 같은 날짜 내 순서 — 각 파일의 기존 항목 순서 보존
     let pending = null;
-    const push = (e, preferExisting) => {
+    const push = (e, seq) => {
         if (!e || typeof e !== 'object') return;
         if (e.pending === true || !e.version) {
             if (!pending) pending = e;
             return;
         }
-        if (!byVersion.has(e.version) || !preferExisting) byVersion.set(e.version, e);
+        if (!byVersion.has(e.version)) {
+            byVersion.set(e.version, e);
+            rank.set(e.version, seq);
+        }
     };
-    for (const e of oursEntries || []) push(e, true);
-    for (const e of theirsEntries || []) push(e, true);
+    // theirs를 먼저 심는다 — 같은 날짜에서는 theirs 파일 순서가 우선.
+    // APP_VERSION을 고르는 newerVersion의 same-date theirs 우선 규칙과
+    // 맞춰야 check_release_notes의 "최신 노트 == APP_VERSION" 게이트가 정합한다.
+    // (버전 해시는 시각 정보가 없어 같은 날짜의 진짜 순서를 알 수 없다)
+    for (const e of theirsEntries || []) push(e, rank.size);
+    for (const e of oursEntries || []) push(e, rank.size);
     // JSON(진실 소스)은 합집합을 보존한다 — 20건 트림은 표시용 .js 출력에만
     // 적용한다. writeNotes도 같은 규약이라 다음 배포 스탬프가 자연스럽게 정리.
     const stamped = [...byVersion.values()].sort((x, y) => {
         if (x.date !== y.date) return (y.date || '').localeCompare(x.date || '');
-        return (y.version || '').localeCompare(x.version || '');
+        return rank.get(x.version) - rank.get(y.version);
     });
     return pending ? [pending, ...stamped] : stamped;
 }
