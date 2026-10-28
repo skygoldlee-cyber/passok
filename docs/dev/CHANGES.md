@@ -3,6 +3,7 @@
 ## 2026-10-28 fix: 시험 선택 인트로 매뉴얼 링크 높이 — 텍스트 링크 모양으로 중화
 
 - `css/exam.css` — `.exam-select-intro .exam-btn-link` 오버라이드: 카드용 패딩·보더·인라인플렉스 제거, `서비스 소개` 앵커와 동일한 인라인 밑줄 링크로 정렬
+- `tests/e2e/baselines/touch-targets.json` — 의도된 인라인 링크로 `exam-select-view|button.exam-btn-link` 등록 (터치 타깃 44px 스윕 예외 — WCAG 인라인 링크 예외와 동일 취지)
 
 ## 2026-10-28 feat: 시험 선택 인트로에 매뉴얼 링크 추가
 

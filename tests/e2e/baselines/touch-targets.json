@@ -7,6 +7,7 @@
   "exam-view|button.exam-btn-sim",
   "textbook-reader-view|button#reader-toolbar-toggle.reader-toolbar-toggle",
   "textbook-reader-view|button#reader-toc-mobile-btn.reader-tool-btn",
+  "exam-select-view|button.exam-btn-link",
   "dictionary-view|button#dict-db-version.dict-db-version",
   "formula-view|button.comp-ref-link",
   "formula-view|button.notice-banner-link",
