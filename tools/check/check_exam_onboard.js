@@ -56,10 +56,10 @@ function hasSyllabusTable(file) {
     return /\|\s*과목\s*\|/m.test(fs.readFileSync(file, 'utf8'));
 }
 
-/** 챕터 파일 존재 + 번호 챕터 헤딩 (## N. 또는 ## Chapter NN. — 표준 규약은 Chapter NN.) */
+/** 챕터 파일 존재 + 번호 챕터 헤딩 (## N. 또는 ## Chapter NN. — 표준 규약은 Chapter NN., 이모지 접두 허용) */
 function isStandardChapter(file) {
     if (!fs.existsSync(file)) return false;
-    return /^##\s+(?:Chapter\s+)?\d+\./m.test(fs.readFileSync(file, 'utf8').slice(0, 20000));
+    return /^##\s+(?:\S+\s+)*(?:Chapter\s+)?\d+\./m.test(fs.readFileSync(file, 'utf8').slice(0, 20000));
 }
 
 const errors = [];

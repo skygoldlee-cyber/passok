@@ -260,7 +260,7 @@
       "features": {},
       "comingSoon": true,
       "group": "법무·노무",
-      "tier": "draft"
+      "tier": "pilot"
     },
     {
       "id": "indsafe",
@@ -423,7 +423,7 @@
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
       "group": "정보처리",
-      "tier": "draft"
+      "tier": "pilot"
     },
     {
       "id": "compapp2",
@@ -450,7 +450,7 @@
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
       "group": "정보처리",
-      "tier": "draft"
+      "tier": "pilot"
     }
   ]
 }

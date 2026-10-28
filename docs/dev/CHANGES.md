@@ -8394,3 +8394,7 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 - `check_exam_onboard.js` — 티어별 요건 차단: pilot+=출제기준 문서(`ref_md/**/출제기준*.md`)+전 과목 `## Chapter NN.`/`## N.` 챕터, active=+과목당 ≥20문. 비표형식 출제기준은 표 변환 권장 경고(5팩 노출)
 - 표준형 챕터 규약: `## Chapter NN.` 유일 권장 형식 — 법조문 원문은 챕터가 아니라 ref_md로 분리 (labor 민법 케이스)
 - tier 미선언 시 comingSoon→pilot·정식→active 추정 + 명시 권장 INFO
+
+## 2026-10-28 fix: 온보딩 챕터 정규식 이모지 접두 허용
+
+- `## 📚 Chapter NN.` 형식을 인식 못해 labor·compapp1·compapp2가 표준형 챕터 미달 오탐 → 정규식에 임의 접두 토큰 허용, 3팩 pilot 복원
