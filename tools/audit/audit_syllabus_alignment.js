@@ -126,8 +126,8 @@ for (const examId of fs.readdirSync(EXAMS_DIR)) {
 
     subjects.forEach((subj, i) => {
         grandSubjects++;
-        const units = (subj.chapters || [])
-            .flatMap(c => extractUnits(path.join(dir, subj.dir || '', c.file)));
+        const chapFiles = (subj.chapters || []).map(c => path.join(dir, subj.dir || '', c.file));
+        const units = chapFiles.flatMap(extractUnits);
         grandUnits += units.length;
         if (!units.length) {
             report.push(`- ${subj.name}: ⚠ 교재 챕터 부재 또는 헤딩 형식 다름`);
@@ -136,8 +136,16 @@ for (const examId of fs.readdirSync(EXAMS_DIR)) {
         const grp = groups.find(g => similar(g.name, subj.name)) || groups[i];
         const rows = grp ? grp.rows : [];
 
+        // 교재 본문 전체 텍스트 (세부내용 커버리지 판정용)
+        const body = chapFiles.filter(f => fs.existsSync(f)).map(f => norm(fs.readFileSync(f, 'utf8'))).join(' ');
+        const bodyHas = d => { const n = norm(d); return n.length >= 4 && body.includes(n); };
+
         const unmatched = units.filter(u => !rows.some(r => similar(u.title, r.item) || r.details.some(d => similar(u.title, d))));
-        const unref = rows.filter(r => !units.some(u => similar(u.title, r.item) || r.details.some(d => similar(u.title, d))));
+        // 미반영 = 항목명도 세부내용도 교재 본문에서 발견되지 않는 출제기준 항목 (실질 공백)
+        const unref = rows.filter(r =>
+            !units.some(u => similar(u.title, r.item) || r.details.some(d => similar(u.title, d)))
+            && !bodyHas(r.item)
+            && r.details.filter(bodyHas).length < Math.ceil(r.details.length * 0.5));
         grandUnmatched += unmatched.length;
         report.push(`- ${subj.name}: 챕터 ${units.length} · 기준 항목 ${rows.length}` +
             ` | 미매칭 ${unmatched.length}${unmatched.length ? ': ' + unmatched.slice(0, 4).map(u => u.title).join(' | ') : ''}` +

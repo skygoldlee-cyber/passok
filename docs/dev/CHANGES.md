@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-28 chore: 교재↔출제기준 정합 감사 audit:syllabus 추가 + 본문 대조 정제
+
+- `tools/audit/audit_syllabus_alignment.js` — 시험 팩 manifest 과목·챕터 구조와 ref_md 출제기준 문서(표·Q-net 텍스트 형식) 비교, 과목별 커버리지·미반영 항목 리포트 (advisory)
+- 미반영 판정은 출제기준 세부내용을 교재 본문과 대조 — 교육적 재구성 챕터 오인 방지 (cosmetic 8→경계 2건으로 정제)
+- 감사 결과: cosmetic은 출제기준을 실질 충족 — 6개 팩(admagent·appraisal·broker·insadj·labor·lossadj)은 출제기준 문서 부재 (Q-net UBI 캡처 필요)
+
 ## 2026-10-28 feat: PS-08 행동 신호 계측 + 피팅 효과 계측
 
 - `changed`: 시뮬레이터 `saveSimAnswer`에서 응답 변경 추적(`simState.answerChanges`, 세션 리셋) → 채점 시 리뷰 로그 `chg` 필드 기록; `confidence`: 퀴즈 아레나에 "확신함" 토글 → 오답 원인 추정에 확신 신호 반영
