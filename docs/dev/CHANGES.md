@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-28 fix: hardReload 직후 새로운 소식 모달 미표시 — INBOUND 플래그 오발화
+
+- `src/pwa/pwa-install-capture.js` — `__SW_UPDATE_INBOUND`를 `hadController`일 때만 설정: 버전 프롬프트의 새로고침(`hardReload` = 캐시 삭제 + SW unregister + reload) 직후엔 페이지가 이미 최신본인데 같은 세대 SW의 신규 설치(`reg.installing`)를 업데이트 도래로 오인해 플래그가 세워지고, controllerchange도 `hadController=false`라 자동 리로드가 없어 whats-new 모달이 그 세션 내내 억제되던 문제
+- `tests/unit/app/pwa-sw.test.js` — INBOUND 설정 3곳(updatefound·waiting·installing)의 hadController 게이트 + controllerchange 조기 반환 불변식 추가
+
 ## 2026-10-28 fix: stamps 머지 드라이버 same-date 정렬 — theirs 우선으로 APP_VERSION 정합
 
 - `tools/merge/merge_stamps.js` mergeNotes — 같은 날짜 항목을 버전 해시 내림차로 정렬해 배포 연대기가 뒤섞이고 최신 노트가 APP_VERSION과 어긋나던 문제(check_release_notes 게이트 실패) 수정: theirs 파일 순서 우선 — `newerVersion`의 same-date theirs 채택 규칙과 일치 — ours 전용 항목은 뒤에 배치

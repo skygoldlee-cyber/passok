@@ -38,10 +38,15 @@
           });
         }
 
+        // __SW_UPDATE_INBOUND("이 페이지보다 새 세대 도래")는 기존 컨트롤러가
+        // 있을 때만 세운다. controller가 없는 로드(최초 설치·hardReload의
+        // unregister 직후)는 페이지 자체가 네트워크의 최신본 — 같은 세대 SW의
+        // 신규 설치를 업데이트로 오인해 세우면 whats-new 모달이 그 세션 내내
+        // 억제된다 (controllerchange도 hadController=false라 자동 리로드 없음).
         reg.addEventListener('updatefound', function () {
           const newWorker = reg.installing;
           if (!newWorker) return;
-          window.__SW_UPDATE_INBOUND = true;
+          if (hadController) window.__SW_UPDATE_INBOUND = true;
           showSWUpdateToast('새 버전 확인 중...');
           trackWorkerState(newWorker);
         });
@@ -50,10 +55,10 @@
         // reg.waiting = 설치 완료·대기 중 (skipWaiting으로 곧 activate)
         // reg.installing = 다운로드/설치 진행 중
         if (reg.waiting) {
-          window.__SW_UPDATE_INBOUND = true;
+          if (hadController) window.__SW_UPDATE_INBOUND = true;
           showSWUpdateToast('새 버전 적용 준비 중...');
         } else if (reg.installing) {
-          window.__SW_UPDATE_INBOUND = true;
+          if (hadController) window.__SW_UPDATE_INBOUND = true;
           showSWUpdateToast('새 버전 확인 중...');
           trackWorkerState(reg.installing);
         }

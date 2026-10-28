@@ -74,6 +74,23 @@ test('P-04a: SW 업데이트 토스트가 다운로드→설치→완료 단계�
   assert.ok(/다운로드|설치|완료|준비/.test(capture), '단계 메시지');
 });
 
+test('P-04a: __SW_UPDATE_INBOUND는 기존 컨트롤러가 있을 때만 설정된다', () => {
+  // hardReload(unregister+reload)·최초 설치 직후엔 페이지가 이미 최신본.
+  // 같은 세대 SW의 신규 설치를 "업데이트 도래"로 오인해 세우면 whats-new
+  // 모달이 그 세션 내내 억제된다 → hadController 게이트 필수.
+  const gated = capture.match(/if \(hadController\)\s*window\.__SW_UPDATE_INBOUND\s*=\s*true/g) || [];
+  assert.ok(gated.length >= 3, `updatefound·waiting·installing 게이트 (실제 ${gated.length}곳)`);
+  const ungated = [...capture.matchAll(/(?<!if \(hadController\) )window\.__SW_UPDATE_INBOUND\s*=\s*true/g)];
+  const ccIdx = capture.indexOf("addEventListener('controllerchange'");
+  // controllerchange 경로만 예외 — 바로 위에 !hadController 조기 반환이 있다
+  for (const m of ungated) {
+    const near = capture.slice(Math.max(0, m.index - 300), m.index);
+    assert.ok(near.includes('!hadController'), `게이트 없는 INBOUND 설정: …${near.slice(-80)}`);
+  }
+  assert.ok(ccIdx >= 0 && capture.slice(ccIdx, ccIdx + 500).includes('!hadController'),
+    'controllerchange 리스너의 hadController 조기 반환');
+});
+
 // ---------- P-05: CACHE_VERSION ----------
 
 test('P-05: CACHE_VERSION이 스탬프 형식으로 선언되고 데이터 캐시와 분리된다', () => {
