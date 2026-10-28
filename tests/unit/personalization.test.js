@@ -1,5 +1,5 @@
 // tests/unit/personalization.test.js
-// @spec PS-01~PS-11
+// @spec PS-01,PS-02,PS-03,PS-04,PS-05,PS-06,PS-07,PS-08,PS-09,PS-10,PS-11
 // personalization.js 개인 맞춤형 학습 고도화 순수 로직 검증 (합성 데이터).
 
 import { test } from 'node:test';
