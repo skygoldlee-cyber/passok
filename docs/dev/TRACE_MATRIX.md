@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: fc1a53b440c1ba5d
+> 입력 해시: 7a74eea14fcd901a
 > 생성: 2026-10-28 · 원천: SPEC.md(619개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 619개 — 문서 연결 442 · 소스 연결 553 · 테스트 연결 579 · 보고서 연결 109
+**커버리지 요약**: 요구사항 619개 — 문서 연결 442 · 소스 연결 553 · 테스트 연결 590 · 보고서 연결 109
 
 ---
 
@@ -570,17 +570,17 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| PS-01 | ✅ | 구현 (테스트 갭) | — | src/personalization.js | — | — | — |
-| PS-02 | ✅ | 구현 (테스트 갭) | — | src/personalization.js | — | — | — |
-| PS-03 | ✅ | 구현 (테스트 갭) | — | src/personalization.js | — | — | — |
-| PS-04 | ✅ | 구현 (테스트 갭) | — | src/personalization.js | — | — | — |
-| PS-05 | ✅ | 구현 (테스트 갭) | — | src/personalization.js | — | — | — |
-| PS-06 | ✅ | 구현 (테스트 갭) | — | src/personalization.js | — | — | — |
-| PS-07 | ✅ | 구현 (테스트 갭) | — | src/personalization.js | — | — | — |
-| PS-08 | ✅ | 구현 (테스트 갭) | — | src/personalization.js | — | — | — |
-| PS-09 | ✅ | 구현 (테스트 갭) | — | src/personalization.js | — | — | — |
-| PS-10 | ✅ v1 | 구현 (테스트 갭) | — | src/personalization.js | — | — | — |
-| PS-11 | ✅ | 구현 (테스트 갭) | — | src/personalization.js | — | — | — |
+| PS-01 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
+| PS-02 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
+| PS-03 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
+| PS-04 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
+| PS-05 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
+| PS-06 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
+| PS-07 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
+| PS-08 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
+| PS-09 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
+| PS-10 | ✅ v1 | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
+| PS-11 | ✅ | 테스트 | — | src/personalization.js | tests/unit/personalization.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
@@ -1019,21 +1019,7 @@
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
-소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 11개 — 테스트 백로그 후보.
-
-| ID | 절 | 구현 소스 |
-|----|-----|-----------|
-| PS-01 | 3.30 개인 맞춤 고도화 | src/personalization.js |
-| PS-02 | 3.30 개인 맞춤 고도화 | src/personalization.js |
-| PS-03 | 3.30 개인 맞춤 고도화 | src/personalization.js |
-| PS-04 | 3.30 개인 맞춤 고도화 | src/personalization.js |
-| PS-05 | 3.30 개인 맞춤 고도화 | src/personalization.js |
-| PS-06 | 3.30 개인 맞춤 고도화 | src/personalization.js |
-| PS-07 | 3.30 개인 맞춤 고도화 | src/personalization.js |
-| PS-08 | 3.30 개인 맞춤 고도화 | src/personalization.js |
-| PS-09 | 3.30 개인 맞춤 고도화 | src/personalization.js |
-| PS-10 | 3.30 개인 맞춤 고도화 | src/personalization.js |
-| PS-11 | 3.30 개인 맞춤 고도화 | src/personalization.js |
+없음 — 소스 연결된 모든 요구사항에 테스트 참조가 있음.
 
 ## 부록 C — 관련 SPEC ID 헤더 누락 문서
 
