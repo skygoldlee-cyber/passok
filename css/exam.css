@@ -159,6 +159,25 @@
     line-height: 1.3;
 }
 
+/* 시험 선택 인트로의 인라인 매뉴얼 링크 — 카드용 버튼 스타일을 텍스트 링크 모양으로 중화 */
+.exam-select-intro .exam-btn-link {
+    display: inline;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+    color: var(--color-primary);
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    text-decoration: underline;
+    vertical-align: baseline;
+}
+
+.exam-select-intro .exam-btn-link:hover {
+    color: var(--color-primary-dark);
+}
+
 .exam-card-item:not(.highlight-card) .exam-btn-link {
     background-color: var(--primary-tint-10);
     color: var(--color-primary);
