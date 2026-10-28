@@ -1,12 +1,20 @@
 {
-  "schemaVersion": 1,
-  "_comment": "참조자료 매핑 설정. lawRefs: content/lawdb.json의 법령 id 목록 (나열 순서 = 매칭 우선순위). noticeCore: 고시 감시 배너의 기준 문서명. 자세한 구조는 design/MULTI_EXAM_DB_DESIGN.md §4",
-  "lawRefs": [],
-  "noticeCore": null,
-  "subjectDefaultRefdoc": {},
-  "subjectDirMap": {},
-  "docSubjectRules": [],
-  "multiSubjectDocs": [],
-  "refDirs": [],
-  "referenceLaw": []
+ "schemaVersion": 1,
+ "_comment": "참조자료 매핑 설정. lawRefs: content/lawdb.json의 법령 id 목록 (나열 순서 = 매칭 우선순위). noticeCore: 고시 감시 배너의 기준 문서명. 자세한 구조는 design/MULTI_EXAM_DB_DESIGN.md §4",
+ "lawRefs": [],
+ "noticeCore": null,
+ "subjectDefaultRefdoc": {},
+ "subjectDirMap": {},
+ "docSubjectRules": [
+  [
+   "출제기준|시험제도|시행계획",
+   1,
+   "출제기준·시행제도 문서 → 과목1 귀속 (multiSubjectDocs 공동 인용)"
+  ]
+ ],
+ "multiSubjectDocs": [
+  "전기기사 출제기준(한국산업인력공단)(2027)"
+ ],
+ "refDirs": [],
+ "referenceLaw": []
 }

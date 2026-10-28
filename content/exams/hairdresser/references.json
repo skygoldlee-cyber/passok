@@ -27,6 +27,11 @@
  "docSubjectRulesComment": "ref_md 디렉터리명 → 과목 번호 귀속. 첫 매칭 우선.",
  "docSubjectRules": [
   [
+   "출제기준|시험제도|시행계획",
+   1,
+   "출제기준·시행제도 문서 → 과목1 귀속 (multiSubjectDocs 공동 인용)"
+  ],
+  [
    "공중위생관리법|이용·미용기구별 소독",
    4,
    "공중위생관리법 체계 → 과목4(공중위생관리학)"
@@ -42,7 +47,9 @@
    "화장품법 체계 → 과목3(화장품학)"
   ]
  ],
- "multiSubjectDocs": [],
+ "multiSubjectDocs": [
+  "미용사(일반) 출제기준(한국산업인력공단)(2027)"
+ ],
  "refDirs": [],
  "refDirsComment": "파일럿: 물리 PDF 미확보 — ref_md 발췌본(law.go.kr 텍스트 기반)만 존재. PDF 확보 시 ref-pipeline 변환 절차로 전환.",
  "sourceRefMap": [

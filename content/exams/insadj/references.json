@@ -42,6 +42,11 @@
  "docSubjectRulesComment": "ref_md 디렉터리명 → 과목 번호 귀속. 첫 매칭 우선.",
  "docSubjectRules": [
   [
+   "출제기준|시험제도|시행계획",
+   1,
+   "출제기준·시행제도 문서 → 과목1 귀속 (multiSubjectDocs 공동 인용)"
+  ],
+  [
    "상법",
    1,
    "상법 보험편·해상편 → 과목1(보험계약법)"
@@ -62,7 +67,9 @@
    "2차 공통(재물·차량·신체) 법령·약관·기준 → 과목4(2차 준비)"
   ]
  ],
- "multiSubjectDocs": [],
+ "multiSubjectDocs": [
+  "손해사정사 시험제도(보험개발원)(2026)"
+ ],
  "refDirs": [],
  "refDirsComment": "파일럿: 물리 PDF 미확보 — ref_md 발췌본(law.go.kr DRF 원문 기반)만 존재. PDF 확보 시 ref-pipeline 변환 절차로 전환.",
  "sourceRefMap": [
