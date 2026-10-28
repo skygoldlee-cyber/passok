@@ -183,6 +183,7 @@ const AUDIT_STEPS = [
   pickContent('content:cards'),
   REFS_STEPS.find((s) => s.id === 'refs:merge'),
   npmStep('audit:combo', 'audit:combo', '감사', '복수정답형 품질 감사 (정답 유일성·중복 진술집합·모순쌍·위치편향)', { prio: 'p2' }),
+  npmStep('audit:syllabus', 'audit:syllabus', '감사', '출제기준 정합 감사 — 교재 과목·챕터 ↔ 출제기준 문서 대조 (문서부재·미반영 리포트)', { prio: 'p2' }),
   npmStep('audit:adlint', 'check:adlint', '감사', '광고 문구 사전 커버리지 감사 (FO-68)', { prio: 'p2' }),
   npmStep('audit:lawurls', 'check:lawurls', '감사', 'law.go.kr 라이브 링크 검증 (외부 드리프트 — 네트워크 필요)', { prio: 'p2' }),
   nodeStep('audit:onboard', 'tools/check/check_exam_onboard.js', '감사', '시험 팩 온보딩·승격 진단 (comingSoon↔콘텐츠 정합·필수 선언·선택 자산)', { prio: 'p2' }),
