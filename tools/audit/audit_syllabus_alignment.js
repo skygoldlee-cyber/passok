@@ -38,7 +38,7 @@ function extractUnits(file) {
     if (!fs.existsSync(file)) return [];
     const units = [];
     for (const line of fs.readFileSync(file, 'utf8').split(/\r?\n/)) {
-        const m = line.match(/^(#{2,3})\s+(\d+)\.?\s+(.+)$/);
+        const m = line.match(/^(#{2,3})\s+(?:Chapter\s+)?(\d+)\.?\s+(.+)$/i);
         if (m && !m[3].includes('Chapter')) units.push({ lvl: m[1].length, title: m[3].replace(/[#*_`🎯].*$/, '').trim() });
     }
     const lvl2 = units.filter(u => u.lvl === 2);

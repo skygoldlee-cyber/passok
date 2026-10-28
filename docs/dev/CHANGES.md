@@ -8347,3 +8347,8 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 
 - `content/exams/broker/교재/civil_broker/2과목_민법_표준형.md` Chapter 12 신설 — 주택임대차보호법·상가건물임대차보호법·집합건물법·가등기담보법·부동산실명법 (1차 과목2의 15% 영역)
 - 감사상 민법 과목 미반영 1→0 — 나머지 미반영 표기(감정평가론·거래신고법·admagent 민법)는 본문 커버 확인된 오탐
+
+## 2026-10-28 fix: audit_syllabus — ## Chapter NN. 헤딩 파싱
+
+- extractUnits 정규식에 `Chapter` 접두사 허용 — appraisal·insadj·hairdresser·indsafe·skincare 등 비활성 팩 챕터 파싱 활성화 (형식 상이 → 파싱 성공)
+- hairdresser 실공백 다수 노출(NCS 수행준거 기반 항목 30+) — 후속 콘텐츠 보강 대상으로 기록
