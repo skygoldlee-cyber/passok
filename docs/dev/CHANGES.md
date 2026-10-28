@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-28 feat: 개인 맞춤형 학습 고도화 — PS-01~11 신규 SPEC + personalization.js
+
+- `src/personalization.js` 신설 — 기존 자산(FSRS 리뷰 로그·statement_stats·EMB_NEIGHBORS·BKT·study alloc) 조합 계층: 약점 개념 클러스터(PS-01)·취약 자동편성 모의고사(PS-02)·통합 학습 큐(PS-03)·합격 확률 추정(PS-04)·취약→교재 딥링크(PS-05)·FSRS 개인 w20 피팅(PS-06)·입문 진단 P0(PS-07)·오답 원인 자동 추론(PS-08)·주간 리포트(PS-09)·오개념 클리닉 v1 규칙 기반(PS-10)·BKT 과목별 전이율 피팅(PS-11)
+- SPEC.md §3.30 등록 (요약 표 + 요구사양 표) · 유닛 테스트 12건
+
 ## 2026-10-28 fix: 시험 선택 카드 아이콘 고유화 + 중복 차단 게이트
 
 - `exams[].icon` fa-book 6곳·fa-scale-balanced 2곳 중복 해소 — 시험별 의미 아이콘 배정 (labor→briefcase, indsafeind→industry, iteng→laptop-code, itindeng→server, eleceng→bolt, elecindeng→plug-circle-bolt, appraisal→building)
