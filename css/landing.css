@@ -23,6 +23,7 @@ body {
     text-align: center;
     padding: var(--space-7, 2rem) 0 var(--space-6, 1.5rem);
 }
+.landing-logo-icon { width: 40px; height: 40px; border-radius: 9px; }
 .landing-logo {
     display: inline-flex;
     align-items: center;

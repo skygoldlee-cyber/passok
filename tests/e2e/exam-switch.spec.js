@@ -27,7 +27,7 @@ test.describe('비기본 시험(lossadj) 부팅 — 도메인 격리', () => {
         await expect(page).toHaveTitle('PassOK — 농어업재해보험 손해평가사 (Passess)');
         await expect(page.locator('.logo-text h1')).toHaveText('PassOK');
         await expect(page.locator('.logo-text span')).toHaveText('손해평가사 · Passess');
-        await expect(page.locator('.logo-icon')).toHaveAttribute('src', /icons\/icon-192\.png/);
+        await expect(page.locator('.logo-icon')).toHaveAttribute('src', /icons\/passok-icon-192\.png/);
         // 저작권 표기는 플랫폼 귀속 — 시험과 무관하게 '© PassOK' 고정
         await expect(page.locator('.sidebar-footer-meta p').first()).toHaveText('© PassOK');
         // pwa-manifest.js가 실제 파일로 링크 교체 (단일 앱 id='passok' — 시험별 shortcuts·desc만 교체)

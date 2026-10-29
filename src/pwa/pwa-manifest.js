@@ -40,7 +40,7 @@
         const v = typeof window !== 'undefined' && window.APP_VERSION ? `?v=${window.APP_VERSION}` : '';
         for (const sel of ['link[rel="icon"]', 'link[rel="apple-touch-icon"]']) {
             const el = /** @type {HTMLLinkElement|null} */ (document.querySelector(sel));
-            if (el) el.href = `icons/icon-192.png${v}`;
+            if (el) el.href = `icons/passok-icon-192.png${v}`;
         }
 
         // 문서 제목/설명도 활성 시험 기준으로 갱신
