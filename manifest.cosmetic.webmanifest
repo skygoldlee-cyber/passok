@@ -16,19 +16,19 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icons/icon-192.png?v=a037e474",
+      "src": "icons/passok-icon-192.png?v=a037e474",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/icon-512.png?v=27818831",
+      "src": "icons/passok-icon-512.png?v=27818831",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/icon-maskable-512.png?v=27818831",
+      "src": "icons/passok-icon-maskable-512.png?v=27818831",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -42,7 +42,7 @@
       "url": "./index.html#/formula",
       "icons": [
         {
-          "src": "icons/icon-192.png",
+          "src": "icons/passok-icon-192.png",
           "sizes": "192x192",
           "type": "image/png"
         }

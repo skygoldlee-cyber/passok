@@ -132,8 +132,8 @@ function setupMediaSession(audio, subjId, chapterIdx, chapterTitle) {
         artist: getExamAppName(),
         album: subjTitle,
         artwork: [
-            { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-            { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' }
+            { src: '/icons/passok-icon-192.png', sizes: '192x192', type: 'image/png' },
+            { src: '/icons/passok-icon-512.png', sizes: '512x512', type: 'image/png' }
         ]
     });
 

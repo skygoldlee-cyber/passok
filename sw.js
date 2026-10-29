@@ -150,9 +150,9 @@ const SHELL_ASSETS = [
   './src/reader/html-viewer.js',
   './src/pdf-registry.js',
   './src/study-aids.js',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/icon-maskable-512.png',
+  './icons/passok-icon-192.png',
+  './icons/passok-icon-512.png',
+  './icons/passok-icon-maskable-512.png',
   './icons/bg-landscape.webp',
   // FontAwesome 자체 호스팅 (오프라인/모바일에서도 아이콘 확실히 표시)
   './vendor/supabase/supabase.js',
