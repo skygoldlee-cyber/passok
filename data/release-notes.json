@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261030-b3b35f7",
+    "date": "2026-10-30",
+    "notes": [
+      "[수정·P-14] 팩 다운로드 완료 토스트 메시지 명확화 + 5초 노출 — 순간 완료도 인지 가능 [no-test]",
+      "[수정·P-14] 팩 다운로드 토스트 복구 — 시험 전환 리로드로 사라지던 진행 표시를 부팅 시 재표시 [no-test]",
+      "[정리·release] v20261029-e03622a 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261029-e03622a",
     "date": "2026-10-29",
     "notes": [
@@ -196,22 +205,6 @@
       "[수정·content] broker 출제기준 공고 원문 1:1 교정 — 농지법·출제비율 구조 반영 [no-docs]",
       "[문서·content] broker 출제기준 세부내역 검증 주석 [no-docs]",
       "[기능·content] broker 민사특별법 챕터 추가 (syllabus 갭 해소)"
-    ]
-  },
-  {
-    "version": "v20261028-43ba33f",
-    "date": "2026-10-28",
-    "notes": [
-      "[수정·exams] 시험 선택 카드 아이콘 고유화 + 중복 차단 게이트",
-      "[리팩터링·ref_md] 표시 형식 정리 — 추출 잔재 정제·평탄화 재분할·형식 게이트 [no-docs]",
-      "[수정·cosmetic] 출제기준·시행계획공고 ref_md를 selfAuthoredDocs에 등록 [no-docs]",
-      "[수정·cosmetic] 출제기준 ref_md NUL 바이트·추출 잔재 정제 [no-docs]",
-      "[수정·compapp] 문제은행 인용문 형식 교정 — 따옴표 래퍼 제거로 인용 동기화 해석 [no-docs]",
-      "[정리·compapp] 문제은행 MD_ASSETS 동기화 [no-docs]",
-      "[기능·compapp1,compapp2] 문제은행 exams[] 과목당 20문 자체 제작 [no-docs]",
-      "[기능·labor,broker] 시험과목 시행령 법령 referenceLaw·lawdb 편입 [no-docs]",
-      "[기능·exams] 출제기준·시행제도 ref_md 참조자료 일괄 편입 [no-docs]",
-      "[기능·compapp1,compapp2] 출제기준 ref_md 참조자료 편입 [no-docs]"
     ]
   }
 ]
