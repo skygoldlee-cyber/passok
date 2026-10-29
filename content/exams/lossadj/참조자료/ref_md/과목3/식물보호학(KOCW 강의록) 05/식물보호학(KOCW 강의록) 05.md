@@ -5,43 +5,32 @@
 
 ![이미지](images/page000_img02.png)
 
-![이미지](images/page000_img00.png)
 
-![이미지](images/page000_img01.png)
 
-![이미지](images/page000_img05.png)
 
 | 2021년도 2학기 - 식물보호학 |
 | --- |
 | 농림해충 - 1 (외/내부 구조 및 기능) |
 
-![이미지](images/page000_img04.png)
 
-![이미지](images/page000_img03.png)
 
 ![이미지](images/page001_img00.png)
 
 강의 내용
 
-![이미지](images/page001_img01.png)
 
-![이미지](images/page001_img02.png)
 
 ▸ 농업 곤충
 ▸ 곤충의 생태
 ▸ 곤충의 형태와 구조
 
-![이미지](images/page001_img04.png)
 
-![이미지](images/page001_img03.png)
 
 ![이미지](images/page002_img00.png)
 
 I. 농업 곤충(Agricultural insect)
 
-![이미지](images/page002_img01.png)
 
-![이미지](images/page002_img02.png)
 
 1. 곤충의특징과분류
 
@@ -61,17 +50,13 @@ I. 농업 곤충(Agricultural insect)
 ✓ 가슴: 3쌍의다리, 2쌍의날개
 ✓ 배: 다수의마디
 
-![이미지](images/page002_img04.png)
 
-![이미지](images/page002_img03.png)
 
 ![이미지](images/page003_img00.png)
 
 I. 농업 곤충(Agricultural insect)
 
-![이미지](images/page003_img01.png)
 
-![이미지](images/page003_img02.png)
 
 2. 곤충의분류
 ▸ 곤충분류의기본단위
@@ -81,17 +66,13 @@ I. 농업 곤충(Agricultural insect)
 
 ![이미지](images/page003_img05.jpeg)
 
-![이미지](images/page003_img04.png)
 
-![이미지](images/page003_img03.png)
 
 ![이미지](images/page004_img00.png)
 
 I. 농업 곤충(Agricultural insect)
 
-![이미지](images/page004_img01.png)
 
-![이미지](images/page004_img02.png)
 
 2. 곤충의분류
 ▸ 곤충의분류요소: 날개유무, 변태형태, 날개접기여부등
@@ -108,31 +89,23 @@ I. 농업 곤충(Agricultural insect)
 • 고시류(paleoptera) : 날개를접을수없음
 • 신시류(neoptera) : 날개를접을수있음
 
-![이미지](images/page004_img04.png)
 
-![이미지](images/page004_img03.png)
 
 ![이미지](images/page005_img00.png)
 
 I. 농업 곤충(Agricultural insect)
 
-![이미지](images/page005_img01.png)
 
-![이미지](images/page005_img02.png)
 
 ![이미지](images/page005_img05.png)
 
-![이미지](images/page005_img04.png)
 
-![이미지](images/page005_img03.png)
 
 ![이미지](images/page006_img00.png)
 
 I. 농업 곤충(Agricultural insect)
 
-![이미지](images/page006_img01.png)
 
-![이미지](images/page006_img02.png)
 
 ![이미지](images/page006_img05.png)
 
@@ -140,17 +113,13 @@ I. 농업 곤충(Agricultural insect)
 
 ![이미지](images/page006_img06.jpeg)
 
-![이미지](images/page006_img04.png)
 
-![이미지](images/page006_img03.png)
 
 ![이미지](images/page007_img00.png)
 
 II. 곤충의 생태
 
-![이미지](images/page007_img01.png)
 
-![이미지](images/page007_img02.png)
 
 1. 곤충의생활사
 ▸ 곤충의일생
@@ -168,17 +137,13 @@ II. 곤충의 생태
 Chu, 1949
 (How to know the immature insects)
 
-![이미지](images/page007_img04.png)
 
-![이미지](images/page007_img03.png)
 
 ![이미지](images/page008_img00.png)
 
 II. 곤충의 생태
 
-![이미지](images/page008_img01.png)
 
-![이미지](images/page008_img02.png)
 
 1. 곤충의생활사
 ▸ 곤충의발생경과
@@ -195,17 +160,13 @@ II. 곤충의 생태
 Chu, 1949
 (How to know the immature insects)
 
-![이미지](images/page008_img04.png)
 
-![이미지](images/page008_img03.png)
 
 ![이미지](images/page009_img00.png)
 
 II. 곤충의 생태
 
-![이미지](images/page009_img01.png)
 
-![이미지](images/page009_img02.png)
 
 ![이미지](images/page009_img05.png)
 
@@ -221,17 +182,13 @@ II. 곤충의 생태
 
 ![이미지](images/page009_img09.jpeg)
 
-![이미지](images/page009_img04.png)
 
-![이미지](images/page009_img03.png)
 
 ![이미지](images/page010_img00.png)
 
 II. 곤충의 생태
 
-![이미지](images/page010_img01.png)
 
-![이미지](images/page010_img02.png)
 
 1. 곤충의생활사
 
@@ -250,17 +207,13 @@ II. 곤충의 생태
 
 ![이미지](images/page010_img06.png)
 
-![이미지](images/page010_img04.png)
 
-![이미지](images/page010_img03.png)
 
 ![이미지](images/page011_img00.png)
 
 II. 곤충의 생태
 
-![이미지](images/page011_img01.png)
 
-![이미지](images/page011_img02.png)
 
 1. 곤충의생활사
 ▸ 변태(metamorphosis)
@@ -276,17 +229,13 @@ II. 곤충의 생태
 하늘소과의
 비저작형나용
 
-![이미지](images/page011_img04.png)
 
-![이미지](images/page011_img03.png)
 
 ![이미지](images/page012_img00.png)
 
 II. 곤충의 생태
 
-![이미지](images/page012_img01.png)
 
-![이미지](images/page012_img02.png)
 
 2. 곤충의행동습성: 서식장소에따라, 육서/수서로구분
 ▸ 곤충의식성
@@ -306,17 +255,13 @@ II. 곤충의 생태
 
 ![이미지](images/page012_img10.jpeg)
 
-![이미지](images/page012_img04.png)
 
-![이미지](images/page012_img03.png)
 
 ![이미지](images/page013_img00.png)
 
 II. 곤충의 생태
 
-![이미지](images/page013_img01.png)
 
-![이미지](images/page013_img02.png)
 
 2. 곤충의행동습성: 서식장소에따라, 육서/수서로구분
 ▸ 주성과일주활동
@@ -336,17 +281,13 @@ II. 곤충의 생태
 ✓ 주성(taxis) : 동물이어떤자극을받고몸을자극이미치는방향으로움직이거나물러나는성질
 • 주광성, 주화성, 주수성, 주촉성, 주류성, 주풍성, 주지성, 주열성등으로분류
 
-![이미지](images/page013_img04.png)
 
-![이미지](images/page013_img03.png)
 
 ![이미지](images/page014_img00.png)
 
 II. 곤충의 생태
 
-![이미지](images/page014_img01.png)
 
-![이미지](images/page014_img02.png)
 
 2. 곤충의행동습성: 서식장소에따라, 육서/수서로구분
 
@@ -362,17 +303,13 @@ II. 곤충의 생태
 
 Berlese funnel trap
 
-![이미지](images/page014_img04.png)
 
-![이미지](images/page014_img03.png)
 
 ![이미지](images/page015_img00.png)
 
 II. 곤충의 생태
 
-![이미지](images/page015_img01.png)
 
-![이미지](images/page015_img02.png)
 
 ![이미지](images/page015_img05.jpeg)
 
@@ -396,17 +333,13 @@ II. 곤충의 생태
 * 배추흰나비는봄~초여름번식왕성→그이후기생벌등의천적의영향으로죽고또기온도높으므로줄어들며가을에다시약간많아짐
 * 멸구류는매년많이발생. 이와같은해충에서는발생의동태에따라서특히주의해야함
 
-![이미지](images/page015_img04.png)
 
-![이미지](images/page015_img03.png)
 
 ![이미지](images/page016_img00.png)
 
 II. 곤충의 생태
 
-![이미지](images/page016_img01.png)
 
-![이미지](images/page016_img02.png)
 
 2. 곤충의행동습성: 서식장소에따라, 육서/수서로구분
 ▸ 해충의발생예찰
@@ -424,15 +357,11 @@ II. 곤충의 생태
 황색수반(yellow sticky)트랩
 과수해충예찰
 
-![이미지](images/page016_img04.png)
 
-![이미지](images/page016_img03.png)
 
 ![이미지](images/page017_img00.png)
 
-![이미지](images/page017_img01.png)
 
-![이미지](images/page017_img02.png)
 
 1. 곤충의형태
 ▸ 곤충의일반적특성: 머리, 가슴, 배로되어있고, 각기관에따른특수한부속기관보유
@@ -447,15 +376,11 @@ II. 곤충의 생태
 
 ![이미지](images/page017_img06.jpeg)
 
-![이미지](images/page017_img04.png)
 
-![이미지](images/page017_img03.png)
 
 ![이미지](images/page018_img00.png)
 
-![이미지](images/page018_img01.png)
 
-![이미지](images/page018_img02.png)
 
 1. 곤충의형태
 ▸ 곤충의일반구조
@@ -476,15 +401,11 @@ II. 곤충의 생태
 • 생식에서수컷은부속지가파악기와삽입기. 암컷은산란관으로변형
 • 배끝에는소화기관의끝인항문위치
 
-![이미지](images/page018_img04.png)
 
-![이미지](images/page018_img03.png)
 
 ![이미지](images/page019_img00.png)
 
-![이미지](images/page019_img01.png)
 
-![이미지](images/page019_img02.png)
 
 ![이미지](images/page019_img06.png)
 
@@ -495,15 +416,11 @@ II. 곤충의 생태
 
 ![이미지](images/page019_img07.jpeg)
 
-![이미지](images/page019_img04.png)
 
-![이미지](images/page019_img03.png)
 
 ![이미지](images/page020_img00.png)
 
-![이미지](images/page020_img01.png)
 
-![이미지](images/page020_img02.png)
 
 2. 곤충의외부구조
 ▸ 피부의형태와기능
@@ -514,17 +431,12 @@ II. 곤충의 생태
 • 이피부가외부의힘인증산작용과병원균으로부터보호
 ▸ 외부구조: 크기/모양매우다양. 기본형(일반적인씹는입, 두쌍의날개, 축소되지않은배마디등)
 
-![이미지](images/page020_img05.png)
 
-![이미지](images/page020_img04.png)
 
-![이미지](images/page020_img03.png)
 
 ![이미지](images/page021_img00.png)
 
-![이미지](images/page021_img01.png)
 
-![이미지](images/page021_img02.png)
 
 2. 곤충의외부구조
 ▸ 곤충의체벽구조
@@ -538,15 +450,11 @@ II. 곤충의 생태
 -유연한움직임: 단단한부분과부드러운부분을모두가지고있음
 -자극전달: 체벽에있는강모등을통해외부로부터의자극을내부로전달
 
-![이미지](images/page021_img04.png)
 
-![이미지](images/page021_img03.png)
 
 ![이미지](images/page022_img00.png)
 
-![이미지](images/page022_img01.png)
 
-![이미지](images/page022_img02.png)
 
 2. 곤충의외부구조
 ▸ 곤충의피부(integument)
@@ -560,15 +468,11 @@ II. 곤충의 생태
 
 ![이미지](images/page022_img05.png)
 
-![이미지](images/page022_img04.png)
 
-![이미지](images/page022_img03.png)
 
 ![이미지](images/page023_img00.png)
 
-![이미지](images/page023_img01.png)
 
-![이미지](images/page023_img02.png)
 
 2. 곤충의외부구조
 ▸ 곤충의피부(integument)
@@ -581,19 +485,14 @@ II. 곤충의 생태
 • 상표피를통해보호색이나의태가능하여적을피하는데도움을줌
 • 상표피는해로운자외선을반사, 종특이적후각신호를보내는통로역할
 
-![이미지](images/page023_img06.png)
 
 ![이미지](images/page023_img05.jpeg)
 
-![이미지](images/page023_img04.png)
 
-![이미지](images/page023_img03.png)
 
 ![이미지](images/page024_img00.png)
 
-![이미지](images/page024_img01.png)
 
-![이미지](images/page024_img02.png)
 
 2. 곤충의외부구조
 ▸ 곤충의피부(integument)
@@ -607,15 +506,11 @@ II. 곤충의 생태
 
 ![이미지](images/page024_img06.png)
 
-![이미지](images/page024_img04.png)
 
-![이미지](images/page024_img03.png)
 
 ![이미지](images/page025_img00.png)
 
-![이미지](images/page025_img01.png)
 
-![이미지](images/page025_img02.png)
 
 ![이미지](images/page025_img07.jpeg)
 
@@ -634,17 +529,12 @@ II. 곤충의 생태
 
 ![이미지](images/page025_img05.jpeg)
 
-![이미지](images/page025_img06.png)
 
-![이미지](images/page025_img04.png)
 
-![이미지](images/page025_img03.png)
 
 ![이미지](images/page026_img00.png)
 
-![이미지](images/page026_img01.png)
 
-![이미지](images/page026_img02.png)
 
 2. 곤충의외부구조
 ▸ 곤충의피부(integument)
@@ -655,17 +545,12 @@ II. 곤충의 생태
 
 ![이미지](images/page026_img05.jpeg)
 
-![이미지](images/page026_img06.png)
 
-![이미지](images/page026_img04.png)
 
-![이미지](images/page026_img03.png)
 
 ![이미지](images/page027_img00.png)
 
-![이미지](images/page027_img01.png)
 
-![이미지](images/page027_img02.png)
 
 2. 곤충의외부구조
 ▸ 곤충의피부(integument)
@@ -679,15 +564,11 @@ II. 곤충의 생태
 
 ![이미지](images/page027_img05.jpeg)
 
-![이미지](images/page027_img04.png)
 
-![이미지](images/page027_img03.png)
 
 ![이미지](images/page028_img00.png)
 
-![이미지](images/page028_img01.png)
 
-![이미지](images/page028_img02.png)
 
 2. 곤충의외부구조
 
@@ -713,17 +594,13 @@ II. 곤충의 생태
 (반대로, 체색을통하여자신을강렬하게드러냄으로써경고신호)
 식물체와상반되는색을띤진딧물의모습
 
-![이미지](images/page028_img04.png)
 
-![이미지](images/page028_img03.png)
 
 ![이미지](images/page029_img00.png)
 
 ![이미지](images/page029_img05.png)
 
-![이미지](images/page029_img01.png)
 
-![이미지](images/page029_img02.png)
 
 2. 곤충의외부구조
 ▸ 형태적구성요소
@@ -746,15 +623,11 @@ II. 곤충의 생태
 • 가시: 체벽자체가바깥으로가시모양으로자란단단한구조(유연성이없이고정된형태)
 • 강모: 센털(사람피부의털, 머리카락과유사). 신경이연결되어있어감각이가능
 
-![이미지](images/page029_img04.png)
 
-![이미지](images/page029_img03.png)
 
 ![이미지](images/page030_img00.png)
 
-![이미지](images/page030_img01.png)
 
-![이미지](images/page030_img02.png)
 
 2. 곤충의외부구조
 
@@ -770,15 +643,11 @@ Schroeder and Houghtaling, 2018
 
 Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 
-![이미지](images/page030_img04.png)
 
-![이미지](images/page030_img03.png)
 
 ![이미지](images/page031_img00.png)
 
-![이미지](images/page031_img01.png)
 
-![이미지](images/page031_img02.png)
 
 ![이미지](images/page031_img05.jpeg)
 
@@ -788,15 +657,11 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 
 ![이미지](images/page031_img08.jpeg)
 
-![이미지](images/page031_img04.png)
 
-![이미지](images/page031_img03.png)
 
 ![이미지](images/page032_img00.png)
 
-![이미지](images/page032_img01.png)
 
-![이미지](images/page032_img02.png)
 
 2. 곤충의외부구조
 ▸ 머리의기본구조
@@ -813,15 +678,11 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 
 ![이미지](images/page032_img06.jpeg)
 
-![이미지](images/page032_img04.png)
 
-![이미지](images/page032_img03.png)
 
 ![이미지](images/page033_img00.png)
 
-![이미지](images/page033_img01.png)
 
-![이미지](images/page033_img02.png)
 
 2. 곤충의외부구조
 ▸ 더듬이
@@ -852,15 +713,11 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 -침상(stylate): 파리매등
 -슬상(geniculate): 개미, 바구미등
 
-![이미지](images/page033_img04.png)
 
-![이미지](images/page033_img03.png)
 
 ![이미지](images/page034_img00.png)
 
-![이미지](images/page034_img01.png)
 
-![이미지](images/page034_img02.png)
 
 ![이미지](images/page034_img09.jpeg)
 
@@ -878,15 +735,11 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 
 ![이미지](images/page034_img12.jpeg)
 
-![이미지](images/page034_img04.png)
 
-![이미지](images/page034_img03.png)
 
 ![이미지](images/page035_img00.png)
 
-![이미지](images/page035_img01.png)
 
-![이미지](images/page035_img02.png)
 
 2. 곤충의외부구조
 ▸ 입(mouthparts)
@@ -900,7 +753,6 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 •흡관형입(siphoning) : 나비목의대표적인입의형태. 작은턱은긴관으로된빨대주둥이(코일주둥이, proboscis)를이룸
 -나비, 나방등
 
-![이미지](images/page035_img08.png)
 
 ![이미지](images/page035_img07.jpeg)
 
@@ -917,15 +769,11 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 파리
 나비, 나방 모기 말벌
 
-![이미지](images/page035_img04.png)
 
-![이미지](images/page035_img03.png)
 
 ![이미지](images/page036_img00.png)
 
-![이미지](images/page036_img01.png)
 
-![이미지](images/page036_img02.png)
 
 ![이미지](images/page036_img06.jpeg)
 
@@ -939,15 +787,11 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 = 뚫어빠는입
 (노린재류)
 
-![이미지](images/page036_img04.png)
 
-![이미지](images/page036_img03.png)
 
 ![이미지](images/page037_img00.png)
 
-![이미지](images/page037_img01.png)
 
-![이미지](images/page037_img02.png)
 
 2. 곤충의외부구조
 ▸ 가슴의기본구조
@@ -968,15 +812,11 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 
 ![이미지](images/page037_img05.jpeg)
 
-![이미지](images/page037_img04.png)
 
-![이미지](images/page037_img03.png)
 
 ![이미지](images/page038_img00.png)
 
-![이미지](images/page038_img01.png)
 
-![이미지](images/page038_img02.png)
 
 2. 곤충의외부구조
 ▸ 다리(legs)
@@ -1007,15 +847,11 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 꿀벌의뒷다리
 물방개다리
 
-![이미지](images/page038_img04.png)
 
-![이미지](images/page038_img03.png)
 
 ![이미지](images/page039_img00.png)
 
-![이미지](images/page039_img01.png)
 
-![이미지](images/page039_img02.png)
 
 2. 곤충의외부구조
 ▸ 날개(wings)
@@ -1036,15 +872,11 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 
 ![이미지](images/page039_img06.png)
 
-![이미지](images/page039_img04.png)
 
-![이미지](images/page039_img03.png)
 
 ![이미지](images/page040_img00.png)
 
-![이미지](images/page040_img01.png)
 
-![이미지](images/page040_img02.png)
 
 2. 곤충의외부구조
 ▸ 날개(wings)
@@ -1053,15 +885,11 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 
 ![이미지](images/page040_img06.jpeg)
 
-![이미지](images/page040_img04.png)
 
-![이미지](images/page040_img03.png)
 
 ![이미지](images/page041_img00.png)
 
-![이미지](images/page041_img01.png)
 
-![이미지](images/page041_img02.png)
 
 2. 곤충의외부구조
 ▸ 날개(wings)
@@ -1076,19 +904,13 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 
 ![이미지](images/page041_img24.jpeg)
 
-![이미지](images/page041_img13.png)
 
-![이미지](images/page041_img15.png)
 
-![이미지](images/page041_img14.png)
 
-![이미지](images/page041_img16.png)
 
-![이미지](images/page041_img11.png)
 
 잠자리 파리
 
-![이미지](images/page041_img12.png)
 
 나비
 4장의날개를따로움직여서비행(정 2장의앞날개밖에없다.
@@ -1106,20 +928,14 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 
 ![이미지](images/page041_img25.jpeg)
 
-![이미지](images/page041_img19.png)
 
-![이미지](images/page041_img17.png)
 
-![이미지](images/page041_img20.png)
 
-![이미지](images/page041_img18.png)
 
 딱정벌레
 노린재
 
-![이미지](images/page041_img21.png)
 
-![이미지](images/page041_img22.png)
 
 앞날개는펼친채움직이지않는다. 뒷
 앞날개와뒷날개를1개의날개처럼
@@ -1128,15 +944,11 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 하여비행 앞날개와뒷날개가가시로연결되
 어1개의날개처럼비행
 
-![이미지](images/page041_img04.png)
 
-![이미지](images/page041_img03.png)
 
 ![이미지](images/page042_img00.png)
 
-![이미지](images/page042_img01.png)
 
-![이미지](images/page042_img02.png)
 
 2. 곤충의외부구조
 
@@ -1153,17 +965,13 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 
 ![이미지](images/page042_img06.jpeg)
 
-![이미지](images/page042_img04.png)
 
-![이미지](images/page042_img03.png)
 
 ![이미지](images/page043_img00.png)
 
 ![이미지](images/page043_img06.jpeg)
 
-![이미지](images/page043_img01.png)
 
-![이미지](images/page043_img02.png)
 
 ![이미지](images/page043_img05.jpeg)
 
@@ -1190,15 +998,11 @@ Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 3개의관련된세포들의배열을보이는
 털감각기종단면
 
-![이미지](images/page043_img04.png)
 
-![이미지](images/page043_img03.png)
 
 ![이미지](images/page044_img00.png)
 
-![이미지](images/page044_img01.png)
 
-![이미지](images/page044_img02.png)
 
 ▸감각계
 
@@ -1222,15 +1026,11 @@ Rhodniusprolixus
 샤가스병원균매개
 Ngongoloand Nyundo, 2015
 
-![이미지](images/page044_img04.png)
 
-![이미지](images/page044_img03.png)
 
 ![이미지](images/page045_img00.png)
 
-![이미지](images/page045_img01.png)
 
-![이미지](images/page045_img02.png)
 
 ▸감각계
 ✓화학적감각
@@ -1252,15 +1052,11 @@ Ngongoloand Nyundo, 2015
 낱눈의구조
 백두산북방잠자리의겹눈(정광수)
 
-![이미지](images/page045_img04.png)
 
-![이미지](images/page045_img03.png)
 
 ![이미지](images/page046_img00.png)
 
-![이미지](images/page046_img01.png)
 
-![이미지](images/page046_img02.png)
 
 ![이미지](images/page046_img06.png)
 
@@ -1277,15 +1073,11 @@ Ngongoloand Nyundo, 2015
 말피기소관(Malpigiantubule): 끝이막힌가는관모양으로, 기부는장과통해있고,
 몸에서발생한함질소노폐물등을체액으로부터걸러주는역할
 
-![이미지](images/page046_img04.png)
 
-![이미지](images/page046_img03.png)
 
 ![이미지](images/page047_img00.png)
 
-![이미지](images/page047_img01.png)
 
-![이미지](images/page047_img02.png)
 
 ▸생식계
 ✓곤충은대부분암수교미에의하여알을낳는유성생식(예외: 단위생식, 유생생식)
@@ -1305,15 +1097,11 @@ Ngongoloand Nyundo, 2015
 교미중인Oncopeltusfasciatus(Hemiptera)
 (Gullanand Cranston, 2005)
 
-![이미지](images/page047_img04.png)
 
-![이미지](images/page047_img03.png)
 
 ![이미지](images/page048_img00.png)
 
-![이미지](images/page048_img01.png)
 
-![이미지](images/page048_img02.png)
 
 ▸순환계(circulatory system)
 ✓체강(body cavity) 내체액과함께섞여순환되는개방순환계→곤충의체강을'혈강(haemocoel)이라고함.
@@ -1336,15 +1124,11 @@ Ngongoloand Nyundo, 2015
 -기능: 호르몬/영양분전달/교환, 노폐물배출, 산소운반, 공기순환조절,
 체온조절과탈피시탈피및팽창도움등
 
-![이미지](images/page048_img04.png)
 
-![이미지](images/page048_img03.png)
 
 ![이미지](images/page049_img00.png)
 
-![이미지](images/page049_img01.png)
 
-![이미지](images/page049_img02.png)
 
 ▸기관계(respiratory system)
 ✓수동적기작
@@ -1359,15 +1143,11 @@ Ngongoloand Nyundo, 2015
 
 ![이미지](images/page049_img06.jpeg)
 
-![이미지](images/page049_img04.png)
 
-![이미지](images/page049_img03.png)
 
 ![이미지](images/page050_img00.png)
 
-![이미지](images/page050_img01.png)
 
-![이미지](images/page050_img02.png)
 
 ▸외분비계(respiratory system)
 ✓신호물질(화학통신물질, semiochemical) : 몸밖으로분비되어종내또는종간에신호를보내는물질
@@ -1397,15 +1177,11 @@ Ngongoloand Nyundo, 2015
 | 분산페로몬(Dispersal pherom | one) |  |
 | --- | --- | --- |
 
-![이미지](images/page050_img04.png)
 
-![이미지](images/page050_img03.png)
 
 ![이미지](images/page051_img00.png)
 
-![이미지](images/page051_img01.png)
 
-![이미지](images/page051_img02.png)
 
 ▸외분비계(respiratory system)
 ✓신호물질(화학통신물질, semiochemical) : 몸밖으로분비되어종내또는종간에신호를보내는물질
@@ -1429,6 +1205,4 @@ Ngongoloand Nyundo, 2015
 
 ![이미지](images/page051_img05.png)
 
-![이미지](images/page051_img04.png)
 
-![이미지](images/page051_img03.png)

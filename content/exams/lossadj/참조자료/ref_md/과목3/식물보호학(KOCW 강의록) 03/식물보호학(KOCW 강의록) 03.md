@@ -5,42 +5,31 @@
 
 ![이미지](images/page000_img02.png)
 
-![이미지](images/page000_img00.png)
 
-![이미지](images/page000_img01.png)
 
-![이미지](images/page000_img05.png)
 
 | 2021년도 2학기 - 식물보호학 |
 | --- |
 | 잡초 방제 - II |
 | 임 종 옥농식품융합대학 생물환경화학과(063-850-6396, limento21@wku.ac.kr) |
 
-![이미지](images/page000_img04.png)
 
-![이미지](images/page000_img03.png)
 
 ![이미지](images/page001_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page001_img01.png)
 
-![이미지](images/page001_img02.png)
 
 ![이미지](images/page001_img05.png)
 
-![이미지](images/page001_img04.png)
 
-![이미지](images/page001_img03.png)
 
 ![이미지](images/page002_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page002_img01.png)
 
-![이미지](images/page002_img02.png)
 
 ![이미지](images/page002_img08.jpeg)
 
@@ -63,17 +52,13 @@ I. 잡초의 특성과 분류
 
 논피(벼과) 바람하늘지기(방동사니과)
 
-![이미지](images/page002_img04.png)
 
-![이미지](images/page002_img03.png)
 
 ![이미지](images/page003_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page003_img01.png)
 
-![이미지](images/page003_img02.png)
 
 ![이미지](images/page003_img05.png)
 
@@ -81,17 +66,13 @@ I. 잡초의 특성과 분류
 
 ![이미지](images/page003_img07.png)
 
-![이미지](images/page003_img04.png)
 
-![이미지](images/page003_img03.png)
 
 ![이미지](images/page004_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page004_img01.png)
 
-![이미지](images/page004_img02.png)
 
 ![이미지](images/page004_img05.jpeg)
 
@@ -117,17 +98,13 @@ I. 잡초의 특성과 분류
 
 (다년생-질경이) (다년생-애기수영)
 
-![이미지](images/page004_img04.png)
 
-![이미지](images/page004_img03.png)
 
 ![이미지](images/page005_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page005_img01.png)
 
-![이미지](images/page005_img02.png)
 
 3. 잡초의분류
 ▸ 생리생태적분류
@@ -147,17 +124,13 @@ I. 잡초의 특성과 분류
 
 수생잡초 습생잡초 건생잡초
 
-![이미지](images/page005_img04.png)
 
-![이미지](images/page005_img03.png)
 
 ![이미지](images/page006_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page006_img01.png)
 
-![이미지](images/page006_img02.png)
 
 * 다년생잡초의종류
 
@@ -167,19 +140,14 @@ I. 잡초의 특성과 분류
 | 구근형다년생잡초 | • 덩이줄기(괴경), 땅속줄기(근경), 알줄기(구경), 기는줄기(포복경), 기는뿌리(포복근), 종자로번식하는잡초 |
 | 포복형다년생잡초 | • 괴경, 근경: 너도방동사니, 올방개, 매자기• 구경: 반하, 올챙이고랭이• 포복경: 선피막이, 사상자, 미나리, 병풀• 포복근: 쇠뜨기, 메꽃, 엉겅퀴, 겨풀 |
 
-![이미지](images/page006_img04.png)
 
-![이미지](images/page006_img03.png)
 
 ![이미지](images/page007_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page007_img01.png)
 
-![이미지](images/page007_img02.png)
 
-![이미지](images/page007_img05.png)
 
 | Q) 잡초를 형태적특성에따라 분류할때 속하지않는 것은? |  |
 | --- | --- |
@@ -199,19 +167,14 @@ I. 잡초의 특성과 분류
 3. 생육기간이길다.
 4. 방제하기어렵다.
 
-![이미지](images/page007_img04.png)
 
-![이미지](images/page007_img03.png)
 
 ![이미지](images/page008_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page008_img01.png)
 
-![이미지](images/page008_img02.png)
 
-![이미지](images/page008_img05.png)
 
 | Q) 다음 중 괴경(덩이줄기)으로번식하는다년생잡초는? |  |
 | --- | --- |
@@ -231,17 +194,13 @@ I. 잡초의 특성과 분류
 3. 너도방동사니, 개구리밥
 4. 가래, 벗풀
 
-![이미지](images/page008_img04.png)
 
-![이미지](images/page008_img03.png)
 
 ![이미지](images/page009_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page009_img01.png)
 
-![이미지](images/page009_img02.png)
 
 4. 잡초의분포
 ▸ 논과밭의잡초
@@ -252,17 +211,13 @@ I. 잡초의 특성과 분류
 
 ![이미지](images/page009_img06.png)
 
-![이미지](images/page009_img04.png)
 
-![이미지](images/page009_img03.png)
 
 ![이미지](images/page010_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page010_img01.png)
 
-![이미지](images/page010_img02.png)
 
 ![이미지](images/page010_img06.jpeg)
 
@@ -284,17 +239,13 @@ I. 잡초의 특성과 분류
 
 골프장내잡초 운동장내잡초
 
-![이미지](images/page010_img04.png)
 
-![이미지](images/page010_img03.png)
 
 ![이미지](images/page011_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page011_img01.png)
 
-![이미지](images/page011_img02.png)
 
 ![이미지](images/page011_img06.png)
 
@@ -312,17 +263,13 @@ I. 잡초의 특성과 분류
 이등(2017) 한국잡초학회
 -우리나라농경지에발생하는잡초현황
 
-![이미지](images/page011_img04.png)
 
-![이미지](images/page011_img03.png)
 
 ![이미지](images/page012_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page012_img01.png)
 
-![이미지](images/page012_img02.png)
 
 5. 주요우점잡초들
 ▸ 논잡초
@@ -341,17 +288,13 @@ I. 잡초의 특성과 분류
 
 ![이미지](images/page012_img05.jpeg)
 
-![이미지](images/page012_img04.png)
 
-![이미지](images/page012_img03.png)
 
 ![이미지](images/page013_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page013_img01.png)
 
-![이미지](images/page013_img02.png)
 
 5. 주요우점잡초들
 ▸ 밭잡초
@@ -370,17 +313,13 @@ I. 잡초의 특성과 분류
 
 ![이미지](images/page013_img05.jpeg)
 
-![이미지](images/page013_img04.png)
 
-![이미지](images/page013_img03.png)
 
 ![이미지](images/page014_img00.png)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page014_img01.png)
 
-![이미지](images/page014_img02.png)
 
 6. 잡초의잡초성
 ▸ 잡초의종자는땅속에서오래생존할수있다.
@@ -395,17 +334,13 @@ I. 잡초의 특성과 분류
 ▸ 경합기능이특이하다.
 ▸ 발취저항성이있다.
 
-![이미지](images/page014_img04.png)
 
-![이미지](images/page014_img03.png)
 
 ![이미지](images/page015_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page015_img01.png)
 
-![이미지](images/page015_img02.png)
 
 * 잡초종자발아5단계
 
@@ -417,17 +352,13 @@ II. 잡초의 생리 생태
 | 4 | • 유아의출현 |
 | 5 | • 발생후부터이유기까지 |
 
-![이미지](images/page015_img04.png)
 
-![이미지](images/page015_img03.png)
 
 ![이미지](images/page016_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page016_img01.png)
 
-![이미지](images/page016_img02.png)
 
 ![이미지](images/page016_img05.jpeg)
 
@@ -451,17 +382,13 @@ II. 잡초의 생리 생태
 •겉흙에서광을받은후발아
 •광발아졸아, 암발아종자, 광과상관없이발아하는종자로구분
 
-![이미지](images/page016_img04.png)
 
-![이미지](images/page016_img03.png)
 
 ![이미지](images/page017_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page017_img01.png)
 
-![이미지](images/page017_img02.png)
 
 1. 잡초의발아및출현특성
 ▸ 발아에관여하는환경요인
@@ -480,17 +407,13 @@ II. 잡초의 생리 생태
 | 호기성잡초 | • 너도방동사니, 바랭이, 향부자 |
 | 혐기성잡초 | • 돌피, 올챙이고랭이, 가래, 물달개비, 올미 |
 
-![이미지](images/page017_img04.png)
 
-![이미지](images/page017_img03.png)
 
 ![이미지](images/page018_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page018_img01.png)
 
-![이미지](images/page018_img02.png)
 
 1. 잡초의발아및출현특성
 ▸ 잡초종자의발아특성
@@ -503,17 +426,13 @@ II. 잡초의 생리 생태
 • 동시성발아: 일정한기간이내에대부분종자가발아를마치는집중발아형
 • 연속성발아: 발아조건을주어도오랜기간에걸쳐지속해서발아하는유형
 
-![이미지](images/page018_img04.png)
 
-![이미지](images/page018_img03.png)
 
 ![이미지](images/page019_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page019_img01.png)
 
-![이미지](images/page019_img02.png)
 
 1. 잡초의발아및출현특성
 ▸ 종자수명
@@ -538,17 +457,13 @@ Seed Vault
 Svalbard Global Seed Vault
 (노르웨이령스발바르제도내)
 
-![이미지](images/page019_img04.png)
 
-![이미지](images/page019_img03.png)
 
 ![이미지](images/page020_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page020_img01.png)
 
-![이미지](images/page020_img02.png)
 
 1. 잡초의발아및출현특성
 ▸ 유묘출현에관여하는요인
@@ -557,9 +472,7 @@ II. 잡초의 생리 생태
 
 ![이미지](images/page020_img05.jpeg)
 
-![이미지](images/page020_img04.png)
 
-![이미지](images/page020_img03.png)
 
 ![이미지](images/page021_img00.png)
 
@@ -567,9 +480,7 @@ II. 잡초의 생리 생태
 
 II. 잡초의 생리 생태
 
-![이미지](images/page021_img01.png)
 
-![이미지](images/page021_img02.png)
 
 2. 잡초의번식, 전파, 휴면
 ▸ 잡초의번식(유성생식, 영양생식)
@@ -588,17 +499,13 @@ II. 잡초의 생리 생태
 
 →번식력과적응력모두향상
 
-![이미지](images/page021_img04.png)
 
-![이미지](images/page021_img03.png)
 
 ![이미지](images/page022_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page022_img01.png)
 
-![이미지](images/page022_img02.png)
 
 2. 잡초의번식, 전파, 휴면
 ▸ 잡초의번식(유성생식, 영양생식)
@@ -612,17 +519,13 @@ II. 잡초의 생리 생태
 
 참조: 방송통신대학교농학과자료
 
-![이미지](images/page022_img04.png)
 
-![이미지](images/page022_img03.png)
 
 ![이미지](images/page023_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page023_img01.png)
 
-![이미지](images/page023_img02.png)
 
 ![이미지](images/page023_img06.jpeg)
 
@@ -645,17 +548,13 @@ II. 잡초의 생리 생태
 동물에의한전파
 바람에의한전파
 
-![이미지](images/page023_img04.png)
 
-![이미지](images/page023_img03.png)
 
 ![이미지](images/page024_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page024_img01.png)
 
-![이미지](images/page024_img02.png)
 
 3. 잡초의군락과천이
 ▸ 식생의천이
@@ -675,17 +574,13 @@ II. 잡초의 생리 생태
 2차천이
 1차천이
 
-![이미지](images/page024_img04.png)
 
-![이미지](images/page024_img03.png)
 
 ![이미지](images/page025_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page025_img01.png)
 
-![이미지](images/page025_img02.png)
 
 3. 잡초의군락과천이
 ▸ 잡초군락의천이
@@ -698,17 +593,13 @@ II. 잡초의 생리 생태
 | 경종조건(seeding condition)의변화 | • 본답시기, 물관리, 경운, 시비, 수확방법및시기→잡초종자의오염기회증대 |
 | 제초방법의변화 | • 손제초및기계적잡초방제의감소, 선택성제초제의사용증가, 제초방법개선 |
 
-![이미지](images/page025_img04.png)
 
-![이미지](images/page025_img03.png)
 
 ![이미지](images/page026_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page026_img01.png)
 
-![이미지](images/page026_img02.png)
 
 2. 잡초의번식, 전파, 휴면
 ▸ 잡초의휴면
@@ -722,68 +613,48 @@ II. 잡초의 생리 생태
 - 자발휴면과타발휴면을합쳐 '1차 휴면'
 - 성숙한 종자가불리한환경조건에장기간보존되어휴면이새로 생기는것을 '2차 휴면'
 
-![이미지](images/page026_img04.png)
 
-![이미지](images/page026_img03.png)
 
 ![이미지](images/page027_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page027_img01.png)
 
-![이미지](images/page027_img02.png)
 
 ![이미지](images/page027_img06.jpeg)
 
 ![이미지](images/page027_img05.jpeg)
 
-![이미지](images/page027_img04.png)
 
-![이미지](images/page027_img03.png)
 
 ![이미지](images/page028_img00.png)
 
 II. 잡초의 생리 생태
 
-![이미지](images/page028_img01.png)
 
-![이미지](images/page028_img02.png)
 
-![이미지](images/page028_img05.png)
 
-![이미지](images/page028_img08.png)
 
-![이미지](images/page028_img06.png)
 
-![이미지](images/page028_img07.png)
 
-![이미지](images/page028_img04.png)
 
-![이미지](images/page028_img03.png)
 
 ![이미지](images/page029_img00.png)
 
 강의 내용
 
-![이미지](images/page029_img01.png)
 
-![이미지](images/page029_img02.png)
 
 ▸ 잡초의 해와 방제
 ▸ 제초제의 작용기작
 
-![이미지](images/page029_img04.png)
 
-![이미지](images/page029_img03.png)
 
 ![이미지](images/page030_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page030_img01.png)
 
-![이미지](images/page030_img02.png)
 
 1. 잡초의생육및경합특성
 
@@ -804,17 +675,13 @@ CO2가부족한환경에서도광합성의
 암반응(광비의존성반응)을계속할
 수있는식물
 
-![이미지](images/page030_img04.png)
 
-![이미지](images/page030_img03.png)
 
 ![이미지](images/page031_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page031_img01.png)
 
-![이미지](images/page031_img02.png)
 
 1. 잡초의생육및경합특성
 ▸ 경합의정의
@@ -835,17 +702,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 • 토양비옥도: 높은비옥도/시비→제초작업증가.
 -조파작물/산파작물, 추파작물/춘파작물, 초형이서로다른작물을전작/후작으로선택→잡초발생과경합피해감소효과
 
-![이미지](images/page031_img04.png)
 
-![이미지](images/page031_img03.png)
 
 ![이미지](images/page032_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page032_img01.png)
 
-![이미지](images/page032_img02.png)
 
 ![이미지](images/page032_img05.jpeg)
 
@@ -865,17 +728,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 • 잡초와의경합력에도차이가있어초종조성에도변화초래
 • 작물의재배시기(조기, 만기, 보통재배), 재배양식(이앙재배, 직파재배)도잡초의초종조성을바꾸는데영향미침
 
-![이미지](images/page032_img04.png)
 
-![이미지](images/page032_img03.png)
 
 ![이미지](images/page033_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page033_img01.png)
 
-![이미지](images/page033_img02.png)
 
 ![이미지](images/page033_img05.jpeg)
 
@@ -897,17 +756,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 제초제를바꾸어사용하거나사용을중단하면저항성제어가능.
 농기자재신문(2018.4.17.)
 
-![이미지](images/page033_img04.png)
 
-![이미지](images/page033_img03.png)
 
 ![이미지](images/page034_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page034_img01.png)
 
-![이미지](images/page034_img02.png)
 
 3. 잡초경합의생태적원리
 ▸ 잡초와작물과의경합: 제한된공통자원에대하여근연관계를가지는생물간에나타나는자연현상
@@ -924,17 +779,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 ✓ 환경(불량) 적응성이강하여지속적인경합대상
 ✓ 광합성능력이높은C4 식물이많음.
 
-![이미지](images/page034_img04.png)
 
-![이미지](images/page034_img03.png)
 
 ![이미지](images/page035_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page035_img01.png)
 
-![이미지](images/page035_img02.png)
 
 4. 잡초경합의한계기간과허용한계밀도
 ▸ 작물의수량감소방지위해잡초방제한계기간(critical period) 동안잡초방제
@@ -947,17 +798,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 
 ![이미지](images/page035_img05.png)
 
-![이미지](images/page035_img04.png)
 
-![이미지](images/page035_img03.png)
 
 ![이미지](images/page036_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page036_img01.png)
 
-![이미지](images/page036_img02.png)
 
 5. 잡초의방제와농업
 ▸ 농업생태계의특성
@@ -975,17 +822,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 
 ![이미지](images/page036_img08.jpeg)
 
-![이미지](images/page036_img04.png)
 
-![이미지](images/page036_img03.png)
 
 ![이미지](images/page037_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page037_img01.png)
 
-![이미지](images/page037_img02.png)
 
 5. 잡초의방제와농업
 ▸ 잡초방제의역사
@@ -1004,17 +847,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 | 방제개념 | 방제 | 박멸/근절 |
 | 방제기술 | 작물의경합특성이용 | 유해생물의가해특성이용 |
 
-![이미지](images/page037_img04.png)
 
-![이미지](images/page037_img03.png)
 
 ![이미지](images/page038_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page038_img01.png)
 
-![이미지](images/page038_img02.png)
 
 5. 잡초의방제와농업
 ▸ 작물의방제원칙
@@ -1027,17 +866,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 
 ![이미지](images/page038_img05.png)
 
-![이미지](images/page038_img04.png)
 
-![이미지](images/page038_img03.png)
 
 ![이미지](images/page039_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page039_img01.png)
 
-![이미지](images/page039_img02.png)
 
 6. 잡초방제방법
 ▸ 예방적방제(preventive control)
@@ -1051,17 +886,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 -관개수로나운반토양관리
 ✓ 법적방제: 국가/지역간의종묘유통과정에서검역및검사제도를두어문제성잡초로오염된종묘의유통통제
 
-![이미지](images/page039_img04.png)
 
-![이미지](images/page039_img03.png)
 
 ![이미지](images/page040_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page040_img01.png)
 
-![이미지](images/page040_img02.png)
 
 6. 잡초방제방법
 ▸ 주요방제방법
@@ -1086,17 +917,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 
 ![이미지](images/page040_img05.jpeg)
 
-![이미지](images/page040_img04.png)
 
-![이미지](images/page040_img03.png)
 
 ![이미지](images/page041_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page041_img01.png)
 
-![이미지](images/page041_img02.png)
 
 ![이미지](images/page041_img08.jpeg)
 
@@ -1117,17 +944,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 
 ![이미지](images/page041_img07.jpeg)
 
-![이미지](images/page041_img04.png)
 
-![이미지](images/page041_img03.png)
 
 ![이미지](images/page042_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page042_img01.png)
 
-![이미지](images/page042_img02.png)
 
 6. 잡초방제방법
 ▸ 주요방제방법
@@ -1145,17 +968,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 -묘포장, 통로, 주차장, 정원저수지, 관배수로등에콘크리트나방제용천과같은시설설치
 -포장청결: 전염원제거/확산방지, 전작물전사물수거/소각, 포장전염원/월동처제거, 인근서식처방제, 묘목의상처나전정가위등소독
 
-![이미지](images/page042_img04.png)
 
-![이미지](images/page042_img03.png)
 
 ![이미지](images/page043_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page043_img01.png)
 
-![이미지](images/page043_img02.png)
 
 ![이미지](images/page043_img05.png)
 
@@ -1179,17 +998,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 -천적의천적이없어야하고, 환경과다른생물에대한적응성, 공존성및저항성이있어야함.
 -식물은문제잡초보다신축성있게빠른번식특성을지니고있어야함.
 
-![이미지](images/page043_img04.png)
 
-![이미지](images/page043_img03.png)
 
 ![이미지](images/page044_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page044_img01.png)
 
-![이미지](images/page044_img02.png)
 
 ![이미지](images/page044_img06.jpeg)
 
@@ -1211,17 +1026,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 
 ![이미지](images/page044_img08.jpeg)
 
-![이미지](images/page044_img04.png)
 
-![이미지](images/page044_img03.png)
 
 ![이미지](images/page045_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page045_img01.png)
 
-![이미지](images/page045_img02.png)
 
 6. 잡초방제방법
 ▸ 주요방제방법
@@ -1235,17 +1046,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 
 ![이미지](images/page045_img05.png)
 
-![이미지](images/page045_img04.png)
 
-![이미지](images/page045_img03.png)
 
 ![이미지](images/page046_img00.png)
 
 I. 잡초의 해와 방제(Weed damage and control)
 
-![이미지](images/page046_img01.png)
 
-![이미지](images/page046_img02.png)
 
 ![이미지](images/page046_img05.png)
 
@@ -1253,17 +1060,13 @@ I. 잡초의 해와 방제(Weed damage and control)
 
 ![이미지](images/page046_img07.png)
 
-![이미지](images/page046_img04.png)
 
-![이미지](images/page046_img03.png)
 
 ![이미지](images/page047_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page047_img01.png)
 
-![이미지](images/page047_img02.png)
 
 1. 제초제의흡수및이행
 ▸ 제초제흡수: 식물형태/내부구조, 환경조건등에의해영향을받음
@@ -1273,17 +1076,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 
 ![이미지](images/page047_img05.png)
 
-![이미지](images/page047_img04.png)
 
-![이미지](images/page047_img03.png)
 
 ![이미지](images/page048_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page048_img01.png)
 
-![이미지](images/page048_img02.png)
 
 1. 제초제의흡수및이행
 
@@ -1291,17 +1090,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 
 ![이미지](images/page048_img06.png)
 
-![이미지](images/page048_img04.png)
 
-![이미지](images/page048_img03.png)
 
 ![이미지](images/page049_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page049_img01.png)
 
-![이미지](images/page049_img02.png)
 
 1. 제초제의흡수및이행
 ▸ 제초제의흡수
@@ -1317,17 +1112,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 
 물관으로들어감
 
-![이미지](images/page049_img04.png)
 
-![이미지](images/page049_img03.png)
 
 ![이미지](images/page050_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page050_img01.png)
 
-![이미지](images/page050_img02.png)
 
 1. 제초제의흡수및이행
 ▸ 제초제의흡수
@@ -1343,17 +1134,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 • 잎을 통하여 흡수한 심플라스트 이행 제초제는 광합성 산물과 함께 같은 경로를 통해 이행(잎→체관→뿌리, 눈, 발육 중인 과실, 생장점
 등과 같은 광합성 산물 수용기관으로 이행)
 
-![이미지](images/page050_img04.png)
 
-![이미지](images/page050_img03.png)
 
 ![이미지](images/page051_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page051_img01.png)
 
-![이미지](images/page051_img02.png)
 
 2. 제초제에대한식물의반응
 ▸ 많은제초제는세포와조직의파괴, 세포의분열, 신장/분화변화
@@ -1366,17 +1153,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 ✓ 백화현상: 아미트롤처리시새로발생한잎에서나타남(엽록체발달이되지않기때문)
 ✓ 잎의괴사: 다이콰트계등의접촉형제초제. 일반적으로세포막의파괴와관련
 
-![이미지](images/page051_img04.png)
 
-![이미지](images/page051_img03.png)
 
 ![이미지](images/page052_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page052_img01.png)
 
-![이미지](images/page052_img02.png)
 
 3. 토양에서제초제동태
 ▸ 토양중잔류성
@@ -1388,17 +1171,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 
 ![이미지](images/page052_img06.png)
 
-![이미지](images/page052_img04.png)
 
-![이미지](images/page052_img03.png)
 
 ![이미지](images/page053_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page053_img01.png)
 
-![이미지](images/page053_img02.png)
 
 < 표면이동>
 < 휘발> 물, 바람에의한유실.
@@ -1419,17 +1198,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 토양중물에의한제초제의
 하방이동
 
-![이미지](images/page053_img04.png)
 
-![이미지](images/page053_img03.png)
 
 ![이미지](images/page054_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page054_img01.png)
 
-![이미지](images/page054_img02.png)
 
 4. 제초제의선택성
 ▸ 선택성(selectivity)
@@ -1446,17 +1221,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 
 ![이미지](images/page054_img06.png)
 
-![이미지](images/page054_img04.png)
 
-![이미지](images/page054_img03.png)
 
 ![이미지](images/page055_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page055_img01.png)
 
-![이미지](images/page055_img02.png)
 
 4. 제초제의선택성
 ▸ 선택성의유형
@@ -1465,17 +1236,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 
 ![이미지](images/page055_img05.png)
 
-![이미지](images/page055_img04.png)
 
-![이미지](images/page055_img03.png)
 
 ![이미지](images/page056_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page056_img01.png)
 
-![이미지](images/page056_img02.png)
 
 4. 제초제의선택성
 ▸ 선택성의유형
@@ -1490,17 +1257,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 | 세포분열저해 | • 디니트로아닐린계 trifluralin• 카바메이트계 chlorpropham |
 | 아미노산생합성저해 | • 설포닐우레아계• 이미다졸리논계• 유기인계 glyphosate |
 
-![이미지](images/page056_img04.png)
 
-![이미지](images/page056_img03.png)
 
 ![이미지](images/page057_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page057_img01.png)
 
-![이미지](images/page057_img02.png)
 
 ![이미지](images/page057_img05.jpeg)
 
@@ -1522,17 +1285,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 | 액상수화제(flowable,FL) | • 아주미분화된고체입자가액상내에현탁되어있는제재로입자크기가수화제보다작음.• 희석없이제품그대로수로의입구에처리, 물로희석하여사용 |
 | 입제(granule, GR) | • 건조한상태의고체제형• 희석함이없이곧바로처리 |
 
-![이미지](images/page057_img04.png)
 
-![이미지](images/page057_img03.png)
 
 ![이미지](images/page058_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page058_img01.png)
 
-![이미지](images/page058_img02.png)
 
 5. 제초제의사용
 ▸ 제형(formulation)
@@ -1541,17 +1300,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 
 한국작물보호협회
 
-![이미지](images/page058_img04.png)
 
-![이미지](images/page058_img03.png)
 
 ![이미지](images/page059_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page059_img01.png)
 
-![이미지](images/page059_img02.png)
 
 5. 제초제의사용
 ▸ 보조제(adjuvant) : 제초효과의증진, 제초제의취급을용이하게하기위하여사용하는물질
@@ -1561,17 +1316,13 @@ II. 제초제의 작용기작(mechanism of herbicide)
 표면에쉽게접촉할수있게함.
 •전착제(sticker) : 식물체의경엽에제초제가부착되도록하는보조제. 강우로주성분이씻겨내려가는것감소
 
-![이미지](images/page059_img04.png)
 
-![이미지](images/page059_img03.png)
 
 ![이미지](images/page060_img00.png)
 
 II. 제초제의 작용기작(mechanism of herbicide)
 
-![이미지](images/page060_img01.png)
 
-![이미지](images/page060_img02.png)
 
 5. 제초제의사용
 ▸ 제초제의효과평가: 약해, 제초효과의2가지측면실시
@@ -1586,6 +1337,4 @@ II. 제초제의 작용기작(mechanism of herbicide)
 
 ![이미지](images/page060_img06.jpeg)
 
-![이미지](images/page060_img04.png)
 
-![이미지](images/page060_img03.png)

@@ -49,7 +49,6 @@ mol/L 과염소산 50 mL를 정확하게 넣어 녹인 다음 환류냉각기를
 비오틴
 Biotin
 
-![이미지](images/page001_img00.jpeg)
 
 C H N O S：244.3
 10 16 2 3

@@ -943,7 +943,6 @@ S
 알파-비사보롤
 (-)-alpha-bisabolol
 
-![이미지](images/page022_img00.png)
 
 (-)-6-메칠-2-(4-메칠-3-싸이클로헥센-1-일)-5-헵텐-2-올
 (-)-6-Methyl-2-(4-methyl-3-cyclohexen-1-yl)-5-hepten-2-ol C H O :

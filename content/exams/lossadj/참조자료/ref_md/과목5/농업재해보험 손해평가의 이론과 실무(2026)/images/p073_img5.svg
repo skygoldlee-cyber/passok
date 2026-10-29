@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 410" width="530" height="410" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR','Noto Sans CJK KR',sans-serif">
-  <title>그림 2-3 (A) 수요와 공급이 만나는 경우</title>
-  <rect width="530" height="410" fill="#fff"/>
-  <g stroke="#111" stroke-width="3"><line x1="76" y1="18" x2="76" y2="370"/><line x1="76" y1="370" x2="500" y2="370"/></g>
-  <g stroke="#111" stroke-width="1.6" stroke-dasharray="6 5"><line x1="272" y1="18" x2="272" y2="370"/><line x1="76" y1="201" x2="512" y2="201"/></g>
-  <g stroke="#111" stroke-width="1.6"><line x1="98" y1="94" x2="418" y2="294"/><line x1="100" y1="304" x2="432" y2="100"/></g>
-  <g font-size="26" fill="#111"><text x="6" y="66">가격</text><text x="88" y="118">D</text><text x="88" y="296">S</text><text x="44" y="208">P</text><text x="42" y="400">0</text><text x="262" y="400">Q</text><text x="446" y="400">수량</text></g>
-</svg>

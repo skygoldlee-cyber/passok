@@ -5,27 +5,20 @@
 
 ![이미지](images/page000_img02.png)
 
-![이미지](images/page000_img00.png)
 
-![이미지](images/page000_img01.png)
 
-![이미지](images/page000_img05.png)
 
 | 2021년도 2학기 - 식물보호학 |
 | --- |
 | 식물의 재배(재배학 원론) |
 
-![이미지](images/page000_img04.png)
 
-![이미지](images/page000_img03.png)
 
 ![이미지](images/page001_img00.png)
 
 강의 내용
 
-![이미지](images/page001_img01.png)
 
-![이미지](images/page001_img02.png)
 
 ▸ 서론(작물보호의 개념, 작물의 피해와 원인, 작물의 피해대책)
 ▸ 재배학 원론
@@ -35,17 +28,13 @@
 ✓ 작물의 재배기술
 ✓ 작물의 기상재해
 
-![이미지](images/page001_img04.png)
 
-![이미지](images/page001_img03.png)
 
 ![이미지](images/page002_img00.png)
 
 서론
 
-![이미지](images/page002_img01.png)
 
-![이미지](images/page002_img02.png)
 
 ▸ 작물보호의 개념
 ✓ 인류 초기 : 단순채집 + 사냥 → 의식주 해결
@@ -57,23 +46,17 @@
 
 ![이미지](images/page002_img07.jpeg)
 
-![이미지](images/page002_img08.png)
 
-![이미지](images/page002_img09.png)
 
 작물 재배를 통한 수량의 안정화 공급
 
-![이미지](images/page002_img04.png)
 
-![이미지](images/page002_img03.png)
 
 ![이미지](images/page003_img00.png)
 
 서론
 
-![이미지](images/page003_img01.png)
 
-![이미지](images/page003_img02.png)
 
 ▸ 작물보호의 개념
 ✓ 작물(재배식물)의 최대 수량 확보를 위해, 다양한 재배기술 적용 필요
@@ -84,17 +67,13 @@
 
 ![이미지](images/page003_img06.jpeg)
 
-![이미지](images/page003_img04.png)
 
-![이미지](images/page003_img03.png)
 
 ![이미지](images/page004_img00.png)
 
 서론
 
-![이미지](images/page004_img01.png)
 
-![이미지](images/page004_img02.png)
 
 ▸ 현대 농업의 특징
 ✓ 높은 생산성 달성 : 첨단 시설, 관리, 극대화된 환경제어(스마트팜), 비배관리(비료나 재배법), 획일화된 단일작물 재배 등
@@ -117,17 +96,13 @@
 → 이를 위해, 재배와 병해충, 잡초, 작물보호제의 구조와 특성 이해, 생물적 방제에 이르는 폭넓은 지식과
 새로운농자재,품종의개발로조화롭고효율적으로제반 문제를해결해야함.
 
-![이미지](images/page004_img04.png)
 
-![이미지](images/page004_img03.png)
 
 ![이미지](images/page005_img00.png)
 
 서론
 
-![이미지](images/page005_img01.png)
 
-![이미지](images/page005_img02.png)
 
 ![이미지](images/page005_img05.jpeg)
 
@@ -145,31 +120,23 @@
 - 충해 : 해충과 야생동물에 의한 피해
 - 잡초 및 기생식물에 의한 피해
 
-![이미지](images/page005_img04.png)
 
-![이미지](images/page005_img03.png)
 
 ![이미지](images/page006_img00.png)
 
 서론
 
-![이미지](images/page006_img01.png)
 
-![이미지](images/page006_img02.png)
 
 ![이미지](images/page006_img05.png)
 
-![이미지](images/page006_img04.png)
 
-![이미지](images/page006_img03.png)
 
 ![이미지](images/page007_img00.png)
 
 서론
 
-![이미지](images/page007_img01.png)
 
-![이미지](images/page007_img02.png)
 
 ▸ 작물의 피해 대책
 ✓ 식물 피해 관리 : 경제적 피해 수준(economic injury level)(손실액과 방제비용 동일)을 설정 → 최소한의 방제
@@ -183,17 +150,13 @@
 • 일반적인환경조건에서약제방제등 해충방제의일시적인간섭으로부터영향을받지 않는장기간에걸쳐
 형성된해충 개체군의평균밀도
 
-![이미지](images/page007_img04.png)
 
-![이미지](images/page007_img03.png)
 
 ![이미지](images/page008_img00.png)
 
 서론
 
-![이미지](images/page008_img01.png)
 
-![이미지](images/page008_img02.png)
 
 ![이미지](images/page008_img05.jpeg)
 
@@ -208,17 +171,13 @@
 • 국가적인 예찰과 예방 : 농촌진흥청 및 각 도 농업기술원 / 산림청 및 각도 산림환경연구소 에서 병해충 발생 예찰
 • 종합적 방제와 작물 보호 : 종합적 방제와 농자재의 효율화, 작물의 품종개량, 합리적 재배
 
-![이미지](images/page008_img04.png)
 
-![이미지](images/page008_img03.png)
 
 ![이미지](images/page009_img00.png)
 
 서론
 
-![이미지](images/page009_img01.png)
 
-![이미지](images/page009_img02.png)
 
 ▸ 법적 방제 : 법령에 의한 방제로서, "식물검역"을 의미함.
 ✓ 식물검역 : 식물에 피해를 주는 외국의 병해충이 국내로 들어오는 것을 방지하여 위하여 수입되는 식물과 그
@@ -229,34 +188,26 @@
 
 ![이미지](images/page009_img06.jpeg)
 
-![이미지](images/page009_img04.png)
 
-![이미지](images/page009_img03.png)
 
 ![이미지](images/page010_img00.png)
 
 서론
 
-![이미지](images/page010_img01.png)
 
-![이미지](images/page010_img02.png)
 
 ![이미지](images/page010_img05.png)
 
 ![이미지](images/page010_img06.jpeg)
 
-![이미지](images/page010_img04.png)
 
-![이미지](images/page010_img03.png)
 
 ![이미지](images/page011_img00.png)
 
 재배학 원론 - 1장. 작물과 원산지
 _재배학의 개념
 
-![이미지](images/page011_img01.png)
 
-![이미지](images/page011_img02.png)
 
 ![이미지](images/page011_img06.jpeg)
 
@@ -275,18 +226,14 @@ _재배학의 개념
 
 ▸ 작물의 이용 부위 : 주로 종자나 영양체
 
-![이미지](images/page011_img04.png)
 
-![이미지](images/page011_img03.png)
 
 ![이미지](images/page012_img00.png)
 
 재배학 원론 - 1장. 작물과 원산지
 _작물의 원산지(native habital)
 
-![이미지](images/page012_img01.png)
 
-![이미지](images/page012_img02.png)
 
 ▸ 작물의 원산지 : 작물이 최초로 발생된 지역
 ✓ 원산지를 알면, 육종 및 재배, 관리에 많은 정보 확보 가능
@@ -302,18 +249,14 @@ _작물의 원산지(native habital)
 Augustin P. de Candolle Nikolai Vavilov
 (스위스식물학자) (러시아식물육종학자)
 
-![이미지](images/page012_img04.png)
 
-![이미지](images/page012_img03.png)
 
 ![이미지](images/page013_img00.png)
 
 재배학 원론 - 1장. 작물과 원산지
 _작물의 원산지(native habital)
 
-![이미지](images/page013_img01.png)
 
-![이미지](images/page013_img02.png)
 
 표 1.1. 바빌로프의재배식물의 기원중심지(World centers of origin of cultivated plants)
 
@@ -323,18 +266,14 @@ _작물의 원산지(native habital)
 
 ![이미지](images/page013_img07.png)
 
-![이미지](images/page013_img04.png)
 
-![이미지](images/page013_img03.png)
 
 ![이미지](images/page014_img00.png)
 
 재배학 원론 - 1장. 작물과 원산지
 _작물의 분류
 
-![이미지](images/page014_img01.png)
 
-![이미지](images/page014_img02.png)
 
 ▸ 작물 vs. 잡초
 
@@ -364,18 +303,14 @@ _작물의 분류
 ✓ 화훼류 : 꽃과 잎을 관상하는 작물 지칭. 난과 잔디, 다육식물, 관상
 수목 포함
 
-![이미지](images/page014_img04.png)
 
-![이미지](images/page014_img03.png)
 
 ![이미지](images/page015_img00.png)
 
 재배학 원론 - 1장. 작물과 원산지
 _작물의 분류
 
-![이미지](images/page015_img01.png)
 
-![이미지](images/page015_img02.png)
 
 ▸ 농작물(Agricultural crop)
 ✓ 식량작물(Food crop)
@@ -392,18 +327,14 @@ _작물의 분류
 
 ![이미지](images/page015_img07.jpeg)
 
-![이미지](images/page015_img04.png)
 
-![이미지](images/page015_img03.png)
 
 ![이미지](images/page016_img00.png)
 
 재배학 원론 - 1장. 작물과 원산지
 _작물의 분류
 
-![이미지](images/page016_img01.png)
 
-![이미지](images/page016_img02.png)
 
 ![이미지](images/page016_img06.jpeg)
 
@@ -415,18 +346,14 @@ _작물의 분류
 
 ![이미지](images/page016_img05.png)
 
-![이미지](images/page016_img04.png)
 
-![이미지](images/page016_img03.png)
 
 ![이미지](images/page017_img00.png)
 
 재배학 원론 - 1장. 작물과 원산지
 _작물의 분류
 
-![이미지](images/page017_img01.png)
 
-![이미지](images/page017_img02.png)
 
 ![이미지](images/page017_img05.jpeg)
 
@@ -442,18 +369,14 @@ _작물의 분류
 | --- | --- | --- | --- | --- |
 | • 과육이 꽃받침에서 발달• 씨방은 과심부를 이룸• 사과, 배, 모과, 비파 등 | • 식용부위 : 과육(씨방이 발육)• 꽃받침은 꽃자루와 같은 방향• 감, 감귤 | • 과실속에 단단한 핵 존재• 그 속에 종자인 인이 있음• 복숭아, 살구, 자두, 앵두 등 | • 겉껍질이 얇고 먹는 부분인 과육은 중과피와 내과피가 발육• 포도, 무화과, 나무딸기, 구스베리, 블루베리 등 | • 먹는 부분은 종실 속에 있는떡잎• 종실은 굳은 껍질로 둘러싸임• 밤, 호두, 개암 등 |
 
-![이미지](images/page017_img04.png)
 
-![이미지](images/page017_img03.png)
 
 ![이미지](images/page018_img00.png)
 
 재배학 원론 - 1장. 작물과 원산지
 _작물의 분류
 
-![이미지](images/page018_img01.png)
 
-![이미지](images/page018_img02.png)
 
 ![이미지](images/page018_img06.png)
 
@@ -464,18 +387,14 @@ _작물의 분류
 
 ![이미지](images/page018_img05.png)
 
-![이미지](images/page018_img04.png)
 
-![이미지](images/page018_img03.png)
 
 ![이미지](images/page019_img00.png)
 
 재배학 원론 - 1장. 작물과 원산지
 _작물의 분류
 
-![이미지](images/page019_img01.png)
 
-![이미지](images/page019_img02.png)
 
 ▸ 농작물(Agricultural crop)
 ✓ 관상 수목류의 분류(Grouping of ornamental tree)
@@ -493,18 +412,14 @@ _작물의 분류
 
 ![이미지](images/page019_img06.jpeg)
 
-![이미지](images/page019_img04.png)
 
-![이미지](images/page019_img03.png)
 
 ![이미지](images/page020_img00.png)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
-![이미지](images/page020_img01.png)
 
-![이미지](images/page020_img02.png)
 
 ▸ 재배의 개념
 ✓ 재배의 기본
@@ -520,18 +435,14 @@ _재배의 개념
 
 ![이미지](images/page020_img07.jpeg)
 
-![이미지](images/page020_img04.png)
 
-![이미지](images/page020_img03.png)
 
 ![이미지](images/page021_img00.png)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
-![이미지](images/page021_img01.png)
 
-![이미지](images/page021_img02.png)
 
 ![이미지](images/page021_img05.png)
 
@@ -544,18 +455,14 @@ _재배의 개념
 • 감온성(感溫性, thermosensitivity) : 온도에 의해 사육이 달라지는 특성
 • 기본영양생장성(基本營養生長性, basic vegetative growth): 작물 고유의 기본 생장을 하면 생식 생장으로 넘어가는 특성
 
-![이미지](images/page021_img04.png)
 
-![이미지](images/page021_img03.png)
 
 ![이미지](images/page022_img00.png)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
-![이미지](images/page022_img01.png)
 
-![이미지](images/page022_img02.png)
 
 ▸ 환경의 의미와 종류
 1) 온도환경
@@ -575,18 +482,14 @@ _재배의 개념
 
 사과(250~1,700h), 복숭아(50~400h) →사과는복숭아보다북쪽지방적합
 
-![이미지](images/page022_img04.png)
 
-![이미지](images/page022_img03.png)
 
 ![이미지](images/page023_img00.png)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
-![이미지](images/page023_img01.png)
 
-![이미지](images/page023_img02.png)
 
 ![이미지](images/page023_img08.png)
 
@@ -603,18 +506,14 @@ _재배의 개념
 
 ![이미지](images/page023_img07.png)
 
-![이미지](images/page023_img04.png)
 
-![이미지](images/page023_img03.png)
 
 ![이미지](images/page024_img00.png)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
-![이미지](images/page024_img01.png)
 
-![이미지](images/page024_img02.png)
 
 ▸ 환경의 의미와 종류
 3) 수분(water)환경(국내연평균강수량은1,500mm내외→세계평균보다50% 정도높음)
@@ -632,18 +531,14 @@ _재배의 개념
 
 ![이미지](images/page024_img05.jpeg)
 
-![이미지](images/page024_img04.png)
 
-![이미지](images/page024_img03.png)
 
 ![이미지](images/page025_img00.png)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
-![이미지](images/page025_img01.png)
 
-![이미지](images/page025_img02.png)
 
 ▸ 환경의 의미와 종류
 3) 수분(water)환경(국내연평균강수량은1,500mm내외→세계평균보다50% 정도높음)
@@ -662,18 +557,14 @@ _재배의 개념
 
 ![이미지](images/page025_img05.png)
 
-![이미지](images/page025_img04.png)
 
-![이미지](images/page025_img03.png)
 
 ![이미지](images/page026_img00.png)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
-![이미지](images/page026_img01.png)
 
-![이미지](images/page026_img02.png)
 
 ▸ 환경의 의미와 종류
 3) 수분(water)환경(국내연평균강수량은1,500mm내외→세계평균보다50% 정도높음)
@@ -688,18 +579,14 @@ _재배의 개념
 
 ![이미지](images/page026_img07.png)
 
-![이미지](images/page026_img04.png)
 
-![이미지](images/page026_img03.png)
 
 ![이미지](images/page027_img00.png)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
-![이미지](images/page027_img01.png)
 
-![이미지](images/page027_img02.png)
 
 ▸ 환경의 의미와 종류
 4) 대기(atmosphere)환경
@@ -713,18 +600,14 @@ _재배의 개념
 
 ![이미지](images/page027_img06.jpeg)
 
-![이미지](images/page027_img04.png)
 
-![이미지](images/page027_img03.png)
 
 ![이미지](images/page028_img00.png)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
-![이미지](images/page028_img01.png)
 
-![이미지](images/page028_img02.png)
 
 ![이미지](images/page028_img06.png)
 
@@ -744,18 +627,14 @@ _재배의 개념
 ✓ 점토(clay) : 0.002 mm이하. 찰흙또는식토. 작물영양분흡착. 보수령/보비력양호, 배수/통기성불량
 ✓ 양토(loam) : 모래와점토가절반정도혼합. 보수령/보비력/배수/통기성양호
 
-![이미지](images/page028_img04.png)
 
-![이미지](images/page028_img03.png)
 
 ![이미지](images/page029_img00.png)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
-![이미지](images/page029_img01.png)
 
-![이미지](images/page029_img02.png)
 
 ![이미지](images/page029_img05.png)
 
@@ -771,18 +650,14 @@ _재배의 개념
 
 ![이미지](images/page029_img07.png)
 
-![이미지](images/page029_img04.png)
 
-![이미지](images/page029_img03.png)
 
 ![이미지](images/page030_img00.png)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
-![이미지](images/page030_img01.png)
 
-![이미지](images/page030_img02.png)
 
 ▸ 환경의 의미와 종류
 6) 토양(soil) 환경
@@ -794,17 +669,13 @@ _재배의 개념
 
 ![이미지](images/page030_img06.png)
 
-![이미지](images/page030_img04.png)
 
-![이미지](images/page030_img03.png)
 
 ![이미지](images/page031_img00.png)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
-![이미지](images/page031_img01.png)
 
-![이미지](images/page031_img02.png)
 
 ![이미지](images/page031_img05.jpeg)
 
@@ -821,17 +692,13 @@ _재배의 개념
 ④계통유전형질이균일한품종이라도돌연변이, 교잡등에의해유전형질이다른개체가생겨나기도함. 이들을다시분리하고유지하는
 것을계통이라함.
 
-![이미지](images/page031_img04.png)
 
-![이미지](images/page031_img03.png)
 
 ![이미지](images/page032_img00.png)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
-![이미지](images/page032_img01.png)
 
-![이미지](images/page032_img02.png)
 
 (2) 품종(cultivar)의분류
 ①품종: 재배하는종. 재배와이용에서동일하고균일한특성을보이는유전적으로안정되고영속적인개체들의집단
@@ -843,17 +710,13 @@ _재배의 개념
 
 ![이미지](images/page032_img07.jpeg)
 
-![이미지](images/page032_img04.png)
 
-![이미지](images/page032_img03.png)
 
 ![이미지](images/page033_img00.png)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
-![이미지](images/page033_img01.png)
 
-![이미지](images/page033_img02.png)
 
 ![이미지](images/page033_img05.png)
 
@@ -869,33 +732,25 @@ _재배의 개념
 ③ 작부체계에 따른 분류 : 조기재배, 조식재배, 만식적응품종, 추파품종 등
 ④이용성에따른분류: 일반품종과맥주용보리, 고구마의식용, 사료용, 공업용등
 
-![이미지](images/page033_img04.png)
 
-![이미지](images/page033_img03.png)
 
 ![이미지](images/page034_img00.png)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
-![이미지](images/page034_img01.png)
 
-![이미지](images/page034_img02.png)
 
 ![이미지](images/page034_img05.png)
 
 ![이미지](images/page034_img06.png)
 
-![이미지](images/page034_img04.png)
 
-![이미지](images/page034_img03.png)
 
 ![이미지](images/page035_img00.png)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
-![이미지](images/page035_img01.png)
 
-![이미지](images/page035_img02.png)
 
 ![이미지](images/page035_img05.png)
 
@@ -914,17 +769,13 @@ _재배의 개념
 ▸돌연변이육종법: 방사선또는콜히친(colchicine, 씨앗이나구근에포함된알칼로이드식물독성성분)등으로아예새로운유전자를
 창출하여육종
 
-![이미지](images/page035_img04.png)
 
-![이미지](images/page035_img03.png)
 
 ![이미지](images/page036_img00.png)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
-![이미지](images/page036_img01.png)
 
-![이미지](images/page036_img02.png)
 
 2. 품종보호제도(variety protection system)
 ▸ 육성자의권리를법적으로보호하여주는제도
@@ -939,17 +790,13 @@ _재배의 개념
 
 국립종자원
 
-![이미지](images/page036_img04.png)
 
-![이미지](images/page036_img03.png)
 
 ![이미지](images/page037_img00.png)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
-![이미지](images/page037_img01.png)
 
-![이미지](images/page037_img02.png)
 
 3. 유전자변형 농산물(Genetically modified organism, GMO) (=LMO)
 ▸ GMO와LMO
@@ -962,17 +809,13 @@ _재배의 개념
 
 ![이미지](images/page037_img05.jpeg)
 
-![이미지](images/page037_img04.png)
 
-![이미지](images/page037_img03.png)
 
 ![이미지](images/page038_img00.png)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
-![이미지](images/page038_img01.png)
 
-![이미지](images/page038_img02.png)
 
 1. 작부체계(cropping system)
 (1) 연작
@@ -990,17 +833,13 @@ _재배의 개념
 -노퍽식윤작법: 지력유지, 잡초방제, 토지이용도, 생산물등종합적으로고려한윤작방식
 ③윤작효과: 지력유지및증진, 토양보호와기지경감, 병충해나잡초경감, 수량증대와토지이용도제고, 노력배분합리화와경영안정성증대
 
-![이미지](images/page038_img04.png)
 
-![이미지](images/page038_img03.png)
 
 ![이미지](images/page039_img00.png)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
-![이미지](images/page039_img01.png)
 
-![이미지](images/page039_img02.png)
 
 1. 작부체계(cropping system)
 (3) 간작과혼작
@@ -1013,17 +852,13 @@ _재배의 개념
 
 ![이미지](images/page039_img05.jpeg)
 
-![이미지](images/page039_img04.png)
 
-![이미지](images/page039_img03.png)
 
 ![이미지](images/page040_img00.png)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
-![이미지](images/page040_img01.png)
 
-![이미지](images/page040_img02.png)
 
 1. 작부체계(cropping system)
 (4) 교호작과주위작
@@ -1038,17 +873,13 @@ _재배의 개념
 
 ![이미지](images/page040_img06.jpeg)
 
-![이미지](images/page040_img04.png)
 
-![이미지](images/page040_img03.png)
 
 ![이미지](images/page041_img00.png)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
-![이미지](images/page041_img01.png)
 
-![이미지](images/page041_img02.png)
 
 2. 작물의 번식과 육묘
 1) 원예작물의번식(propagation) : 종자번식(주로식량작물), 영양번식(주로원예작물: 유전성유지목적)
@@ -1058,17 +889,13 @@ _재배의 개념
 
 ![이미지](images/page041_img05.png)
 
-![이미지](images/page041_img04.png)
 
-![이미지](images/page041_img03.png)
 
 ![이미지](images/page042_img00.png)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
-![이미지](images/page042_img01.png)
 
-![이미지](images/page042_img02.png)
 
 2. 작물의 번식과 육묘
 1) 원예작물의번식(propagation) : 종자번식(주로식량작물), 영양번식(주로원예작물: 유전성유지목적)
@@ -1085,17 +912,13 @@ _재배의 개념
 • 휴면지삽: 늦가을또는초봄에휴면체로있을때의가지를이용하는방법(찔레, 능소화, 딱총나무, 클레마티스, 무화과, 등나무, 모과등)
 • 뿌리삽: 3월하~4월중. 모주의뿌리를두께1 cm 내외, 10 cm 길이로절단→흙속에경사로심음(명자나무, 등나무, 찔레, 라일락등)
 
-![이미지](images/page042_img04.png)
 
-![이미지](images/page042_img03.png)
 
 ![이미지](images/page043_img00.png)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
-![이미지](images/page043_img01.png)
 
-![이미지](images/page043_img02.png)
 
 ![이미지](images/page043_img05.png)
 
@@ -1107,17 +930,13 @@ _재배의 개념
 
 ![이미지](images/page043_img08.jpeg)
 
-![이미지](images/page043_img04.png)
 
-![이미지](images/page043_img03.png)
 
 ![이미지](images/page044_img00.png)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
-![이미지](images/page044_img01.png)
 
-![이미지](images/page044_img02.png)
 
 2. 작물의 번식과 육묘
 1) 원예작물의번식(propagation) : 종자번식(주로식량작물), 영양번식(주로원예작물: 유전성유지목적)
@@ -1134,17 +953,13 @@ _재배의 개념
 • 근두접: 뿌리바로윗부분에접하는방법
 • 눈접: 눈을채취하여대목일부를'T'자로절개후, 접목하고비닐등으로묶는방법(장미)
 
-![이미지](images/page044_img04.png)
 
-![이미지](images/page044_img03.png)
 
 ![이미지](images/page045_img00.png)
 
 재배학 원론 - 5장. 작물의 기상재해(climate damage)
 
-![이미지](images/page045_img01.png)
 
-![이미지](images/page045_img02.png)
 
 1. 건조해(drought injury)
 2. 온도 장해(temperature injury)
@@ -1153,17 +968,13 @@ _재배의 개념
 5. 풍해(wind injury)
 6. 환경오염 장해(environmental pollution injury)
 
-![이미지](images/page045_img04.png)
 
-![이미지](images/page045_img03.png)
 
 ![이미지](images/page046_img00.png)
 
 재배학 원론 - 5장. 작물의 기상재해(climate damage)
 
-![이미지](images/page046_img01.png)
 
-![이미지](images/page046_img02.png)
 
 ![이미지](images/page046_img05.jpeg)
 
@@ -1183,17 +994,13 @@ _재배의 개념
 -토양수분의보유력증대와증발억제: 토양입단을조성, 피복하여수분증발사전방지. 증발억제제살포
 -내건성품종선택
 
-![이미지](images/page046_img04.png)
 
-![이미지](images/page046_img03.png)
 
 ![이미지](images/page047_img00.png)
 
 재배학 원론 - 5장. 작물의 기상재해(climate damage)
 
-![이미지](images/page047_img01.png)
 
-![이미지](images/page047_img02.png)
 
 ![이미지](images/page047_img05.jpeg)
 
@@ -1219,17 +1026,13 @@ _재배의 개념
 -토양의정지와개량: 모래토양객토, 부식과토양개량제사용→입단조성및이랑재배
 -작물과품종의선택
 
-![이미지](images/page047_img04.png)
 
-![이미지](images/page047_img03.png)
 
 ![이미지](images/page048_img00.png)
 
 재배학 원론 - 5장. 작물의 기상재해(climate damage)
 
-![이미지](images/page048_img01.png)
 
-![이미지](images/page048_img02.png)
 
 3. 온도 장해(Temperature injury)
 
@@ -1243,6 +1046,4 @@ _재배의 개념
 | 풍해(Wind injury) | 바람으로인한작물의피해 | 도복유발, 과수가지손상, 낙과발생등 |  |
 | 환경오염장해(Environmentalpollution injury) | 대기, 수질, 토양등에장해 | -대기오염: 함황물질, 옥시던트(산화물),산성비, 미세먼지-토양오염-수질오염 |  |
 
-![이미지](images/page048_img04.png)
 
-![이미지](images/page048_img03.png)

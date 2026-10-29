@@ -316,7 +316,6 @@ mL로 하고 이것을 검액으로 하여 시험한다. 비교액에는 0.01 mo
 α-나프톨
 α-Naphthol
 
-![이미지](images/page009_img00.jpeg)
 
 1-나프톨
 α-히드록시나프탈렌
@@ -480,7 +479,6 @@ f
 2, 6-디아미노피리딘
 2,6-Diaminopyridine
 
-![이미지](images/page014_img00.jpeg)
 
 C H N : 109.13
 5 7 3
@@ -529,7 +527,6 @@ C H N : 109.13
 1,5-디히드록시나프탈렌
 1,5-Dihydoxynaphthalene
 
-![이미지](images/page015_img00.jpeg)
 
 1,5-나프탈렌디올 C H O : 160.17
 10 8 2
@@ -568,7 +565,6 @@ C H N : 109.13
 레조시놀
 Resorcinol
 
-![이미지](images/page016_img00.jpeg)
 
 레소르시놀
 레소르신 C H O : 110.11l
@@ -607,7 +603,6 @@ mL를 가할 때, 액은 혼탁하지 않는다.
 2-메칠레조시놀
 2-Methylresorcinol
 
-![이미지](images/page017_img00.jpeg)
 
 2-메틸레소르시놀 C H O : 124.14
 7 8 2
@@ -654,7 +649,6 @@ mol/L 치오황산나트륨액으로 적정한다(지시약 : 전분시액 1 mL)
 2-메칠-5-히드록시에칠아미노페놀
 2-Methyl-5-Hydroxyethylaminophenol
 
-![이미지](images/page019_img01.jpeg)
 
 5-(2-히드록시에칠아미노)-2-메칠페놀
 2-메틸-5-히드록시에틸아미노페놀 C H NO : 167.21
@@ -822,7 +816,6 @@ mL를 넣고 다시 잘 흔들어 섞으면서 정확하게 0.05 mol/L 페리시
 2-아미노-4-니트로페놀
 2-Amino-4-nitrophenol
 
-![이미지](images/page023_img00.jpeg)
 
 4-니트로-o-아미노페놀, 2-아미노-p-니트로페놀
 o-아미노-p-니트로페놀, 4-니트로-2-아미노페놀
@@ -876,7 +869,6 @@ p-니트로-o-아미노페놀 C H N O : 154.12
 2-아미노-5-니트로페놀
 2-Amino-5-nitrophenol
 
-![이미지](images/page025_img00.jpeg)
 
 5-니트로-o-아미노페놀, 5-니트로-2-아미노페놀 C H N O : 154.13
 6 6 2 3
@@ -930,7 +922,6 @@ ppm 이하).
 2-아미노-3-히드록시피리딘
 2-Amino-3-hydroxypyridine
 
-![이미지](images/page027_img00.png)
 
 C H N O : 110.12
 5 6 2
@@ -967,7 +958,6 @@ C H N O : 110.12
 5-아미노-o-크레솔
 5-Amino-o-Cresol
 
-![이미지](images/page028_img00.jpeg)
 
 4-아미노-2-히드록시톨루엔 C H NO : 123.15
 7 9
@@ -1020,7 +1010,6 @@ C H N O : 110.12
 m-아미노페놀
 m-Aminophenol
 
-![이미지](images/page029_img00.jpeg)
 
 3-아미노페놀 C H NO : 109.13
 6 7
@@ -1073,7 +1062,6 @@ ppm 이하).
 o-아미노페놀
 o-Aminophenol
 
-![이미지](images/page031_img00.jpeg)
 
 2-아미노페놀 C H NO : 109.13
 6 7
@@ -1125,7 +1113,6 @@ ppm 이하).
 p-아미노페놀
 p-Aminophenol
 
-![이미지](images/page032_img00.jpeg)
 
 4-아미노페놀 C H NO : 109.13
 6 7
@@ -1338,7 +1325,6 @@ f
 염산 p-페닐렌디아민
 p-Phenylenediamine Hydrochloride
 
-![이미지](images/page038_img00.jpeg)
 
 p-페닐렌디아민염산염
 염산 1,4-페닐렌디아민 C H N 2HCl :
@@ -1461,7 +1447,6 @@ Toluene-2, 5-diamine Hydrochloride
 Hydroxypropyl bis(N-hydroxyethyl-p-phenylenediamine)
 Hydrochloride
 
-![이미지](images/page042_img00.png)
 
 히드록시프로필비스(N-히드록시에틸-p-페닐렌디아민염산염
 C H N O 4HCl : 506.30
@@ -1581,7 +1566,6 @@ S
 카테콜
 Catechol
 
-![이미지](images/page045_img00.jpeg)
 
 피로카테콜
 피로카테킨
@@ -1629,7 +1613,6 @@ ppm 이하).
 톨루엔-2, 5-디아민
 Toluene-2,5-diamine
 
-![이미지](images/page046_img00.jpeg)
 
 p-톨루이렌디아민
 2,5-톨루이렌디아민
@@ -1685,7 +1668,6 @@ p-톨루엔디아민
 m-페닐렌디아민
 m-Phenylenediamine
 
-![이미지](images/page048_img00.jpeg)
 
 1, 3-페닐렌디아민 C H N : 108.14
 6 8 2
@@ -1740,7 +1722,6 @@ mL로 한다. 이 액을 검액으로 하여 시험한다. 비교액에는 납�
 N-페닐-p-페닐렌디아민
 N-Phenyl-p-Phenylenediamine
 
-![이미지](images/page049_img00.png)
 
 p－아미노디페닐아민 C H N : 184.24
 12 12 2
@@ -1792,7 +1773,6 @@ p－아미노디페닐아민 C H N : 184.24
 p-페닐렌디아민
 p-Phenylenediamine
 
-![이미지](images/page051_img00.jpeg)
 
 1,4-페닐렌디아민 C H N : 108.14
 6 8 2
@@ -1844,7 +1824,6 @@ f
 페닐메칠피라졸론
 Phenyl Methyl Pyrazolone
 
-![이미지](images/page052_img00.jpeg)
 
 C H N O : 174.20
 10 10 2
@@ -1887,7 +1866,6 @@ f
 피로갈롤
 Pyrogallol
 
-![이미지](images/page053_img00.jpeg)
 
 피로갈릭산
 피로몰식자산
@@ -2195,7 +2173,6 @@ cm-1, 1380 cm-1, 1300 cm-1, 1040 cm-1 부근에서 흡수극대를 나타낸다.
 황산 5-아미노-o-크레솔
 5-Amino-o-Cresol Sulfate
 
-![이미지](images/page062_img00.jpeg)
 
 5-아미노-o-크레솔황산염 C H NO ㆍ 1/2H SO :
 7 9 2 4
@@ -2251,7 +2228,6 @@ cm-1, 1380 cm-1, 1300 cm-1, 1040 cm-1 부근에서 흡수극대를 나타낸다.
 황산 m-아미노페놀
 m-Aminophenol Sulfate
 
-![이미지](images/page064_img00.jpeg)
 
 m-아미노페놀황산염
 황산 3-아미노페놀 C H NOㆍ1/2H SO :
@@ -2431,7 +2407,6 @@ f
 황산 m-페닐렌디아민
 m-Pheylenediamine sulfate
 
-![이미지](images/page069_img00.jpeg)
 
 m-페닐렌디아민황산염
 황산 1,3-페닐렌디아민 C H N H SO :

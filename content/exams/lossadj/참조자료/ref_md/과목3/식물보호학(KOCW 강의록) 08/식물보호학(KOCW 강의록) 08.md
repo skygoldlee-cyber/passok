@@ -5,27 +5,20 @@
 
 ![이미지](images/page000_img02.png)
 
-![이미지](images/page000_img00.png)
 
-![이미지](images/page000_img01.png)
 
-![이미지](images/page000_img05.png)
 
 | 2021년도 2학기 - 식물보호학 |
 | --- |
 | 식물병리 - 1(식물병 발생요인, 병원 종류, 진단 등) |
 
-![이미지](images/page000_img04.png)
 
-![이미지](images/page000_img03.png)
 
 ![이미지](images/page001_img00.png)
 
 식물 병해와 작물보호
 
-![이미지](images/page001_img01.png)
 
-![이미지](images/page001_img02.png)
 
 작물재배 • 과다하고부적절한시비 생리적병
 다수확, 고품질, • 부적당한기상조건(과습,저온, 고온) (작물의면역약화되어병이발생하게되므로
@@ -41,17 +34,13 @@
 ▸ 진균/세균: 살균제로큰문제없이 방제가능
 ▸ 바이러스: 한번 감염되면방제할 수 없으므로, 소각/토양매립
 
-![이미지](images/page001_img04.png)
 
-![이미지](images/page001_img03.png)
 
 ![이미지](images/page002_img00.png)
 
 식물 병해와 작물보호 - 병 발생 요인
 
-![이미지](images/page002_img01.png)
 
-![이미지](images/page002_img02.png)
 
 ▸ 식물병 일반
 ✓ 식물병
@@ -66,17 +55,13 @@
 
 고추잿빛곰팡이병
 
-![이미지](images/page002_img04.png)
 
-![이미지](images/page002_img03.png)
 
 ![이미지](images/page003_img00.png)
 
 식물 병해와 작물보호 - 병 발생 요인
 
-![이미지](images/page003_img01.png)
 
-![이미지](images/page003_img02.png)
 
 ![이미지](images/page003_img05.png)
 
@@ -95,17 +80,13 @@
 ▸ 진균/세균: 살균제로큰 문제없이 방제 가능
 ▸ 바이러스 : 한번 감염되면방제할 수 없으므로, 소각/토양매립
 
-![이미지](images/page003_img04.png)
 
-![이미지](images/page003_img03.png)
 
 ![이미지](images/page004_img00.png)
 
 식물 병해와 작물보호 - 병 발생 요인
 
-![이미지](images/page004_img01.png)
 
-![이미지](images/page004_img02.png)
 
 ▸ 병 발생요인대처 방법
 ✓ 병원균(주인) : 병원균을자체를 제어하거나농약을사용한화학적방제, 생물적방제, 물리적방제종합적적용
@@ -114,17 +95,13 @@
 
 ![이미지](images/page004_img05.png)
 
-![이미지](images/page004_img04.png)
 
-![이미지](images/page004_img03.png)
 
 ![이미지](images/page005_img00.png)
 
 식물 병해와 작물보호 - 식물 병 역사
 
-![이미지](images/page005_img01.png)
 
-![이미지](images/page005_img02.png)
 
 ![이미지](images/page005_img05.jpeg)
 
@@ -145,15 +122,11 @@
 
 벼의깨씨무늬병 커피녹병 수박의덩굴쪼김병
 
-![이미지](images/page005_img04.png)
 
-![이미지](images/page005_img03.png)
 
 ![이미지](images/page006_img00.png)
 
-![이미지](images/page006_img01.png)
 
-![이미지](images/page006_img02.png)
 
 ![이미지](images/page006_img06.jpeg)
 
@@ -177,17 +150,13 @@
 • 불완전균류(유성포자가없음) : '분생자'라는무성포자형성, 번식
 곰팡이의무성/유성생식
 
-![이미지](images/page006_img04.png)
 
-![이미지](images/page006_img03.png)
 
 ![이미지](images/page007_img00.png)
 
 ![이미지](images/page007_img07.jpeg)
 
-![이미지](images/page007_img01.png)
 
-![이미지](images/page007_img02.png)
 
 ▸ 진균(= 사상균, 곰팡이)의특징
 ✓ 실 모양균사체를가짐(균사에는격막이있는 것/ 없는 것)
@@ -204,15 +173,11 @@
 
 ![이미지](images/page007_img09.png)
 
-![이미지](images/page007_img04.png)
 
-![이미지](images/page007_img03.png)
 
 ![이미지](images/page008_img00.png)
 
-![이미지](images/page008_img01.png)
 
-![이미지](images/page008_img02.png)
 
 ▸ 진균의 분류
 1. 난균류(유주자균류)(oomycetes)
@@ -228,15 +193,11 @@
 
 ![이미지](images/page008_img05.png)
 
-![이미지](images/page008_img04.png)
 
-![이미지](images/page008_img03.png)
 
 ![이미지](images/page009_img00.png)
 
-![이미지](images/page009_img01.png)
 
-![이미지](images/page009_img02.png)
 
 ▸ 진균의 분류
 1. 난균류(유주자균류)(oomycetes)
@@ -252,15 +213,11 @@
 
 ![이미지](images/page009_img05.png)
 
-![이미지](images/page009_img04.png)
 
-![이미지](images/page009_img03.png)
 
 ![이미지](images/page010_img00.png)
 
-![이미지](images/page010_img01.png)
 
-![이미지](images/page010_img02.png)
 
 ▸ 진균의 분류
 2. 자낭균류(Ascomycetes)
@@ -274,15 +231,11 @@
 
 자낭포자
 
-![이미지](images/page010_img04.png)
 
-![이미지](images/page010_img03.png)
 
 ![이미지](images/page011_img00.png)
 
-![이미지](images/page011_img01.png)
 
-![이미지](images/page011_img02.png)
 
 ![이미지](images/page011_img05.jpeg)
 
@@ -295,15 +248,11 @@
 
 ![이미지](images/page011_img07.jpeg)
 
-![이미지](images/page011_img04.png)
 
-![이미지](images/page011_img03.png)
 
 ![이미지](images/page012_img00.png)
 
-![이미지](images/page012_img01.png)
 
-![이미지](images/page012_img02.png)
 
 ![이미지](images/page012_img05.jpeg)
 
@@ -323,15 +272,11 @@
 • 세포벽: 키틴과키토신능 가지고 있음
 • 고구마무름병유발
 
-![이미지](images/page012_img04.png)
 
-![이미지](images/page012_img03.png)
 
 ![이미지](images/page013_img00.png)
 
-![이미지](images/page013_img01.png)
 
-![이미지](images/page013_img02.png)
 
 ▸ 진균의 분류
 6. 점균류
@@ -345,15 +290,11 @@
 
 황색점균류
 
-![이미지](images/page013_img04.png)
 
-![이미지](images/page013_img03.png)
 
 ![이미지](images/page014_img00.png)
 
-![이미지](images/page014_img01.png)
 
-![이미지](images/page014_img02.png)
 
 ![이미지](images/page014_img05.jpeg)
 
@@ -370,15 +311,11 @@ Streptomyces
 • 전반은물, 곤충, 기타동물및 인축에의해이루어지며, 항상 점질물에의해 집단을이루고 있으므로, 바람에의한 이동은 없음
 • 침입: 주로 식물의상처 또는 자연개구부를통해이루어짐
 
-![이미지](images/page014_img04.png)
 
-![이미지](images/page014_img03.png)
 
 ![이미지](images/page015_img00.png)
 
-![이미지](images/page015_img01.png)
 
-![이미지](images/page015_img02.png)
 
 ▸ 바이러스 병(virus)
 ✓ Virus : '독'이라는 뜻
@@ -394,15 +331,11 @@ Streptomyces
 • 특정생물체에 침입하여 병을 일으키는 감염성(발병력) 있음
 • 전신병징. 온도에 영향 많이 받고, 세포 내에서 봉입체 형성 → 세포 및 조직 변화 유발
 
-![이미지](images/page015_img04.png)
 
-![이미지](images/page015_img03.png)
 
 ![이미지](images/page016_img00.png)
 
-![이미지](images/page016_img01.png)
 
-![이미지](images/page016_img02.png)
 
 ![이미지](images/page016_img07.jpeg)
 
@@ -418,15 +351,11 @@ Streptomyces
 
 ![이미지](images/page016_img06.jpeg)
 
-![이미지](images/page016_img04.png)
 
-![이미지](images/page016_img03.png)
 
 ![이미지](images/page017_img00.png)
 
-![이미지](images/page017_img01.png)
 
-![이미지](images/page017_img02.png)
 
 ![이미지](images/page017_img05.jpeg)
 
@@ -453,29 +382,21 @@ Streptomyces
 • 테트라사이클린(tetracycline)계 항생물질로치료 가능
 • 주요병으로대추나무, 오동나무 빗자루병, 과꽃, 뽕나무 오갈병발병
 
-![이미지](images/page017_img04.png)
 
-![이미지](images/page017_img03.png)
 
 ![이미지](images/page018_img00.png)
 
-![이미지](images/page018_img01.png)
 
-![이미지](images/page018_img02.png)
 
 ▸ 작물에 병을 일으키는병원균
 
 ![이미지](images/page018_img05.png)
 
-![이미지](images/page018_img04.png)
 
-![이미지](images/page018_img03.png)
 
 ![이미지](images/page019_img00.png)
 
-![이미지](images/page019_img01.png)
 
-![이미지](images/page019_img02.png)
 
 ▸ 비생물성 병원
 ✓ 주로양분/수분의결핍, 과잉장해, 온도/광, 대기모염등으로인한부적절한환경요인등포함
@@ -491,15 +412,11 @@ Streptomyces
 • 붕소(소량필요한 필수성분) : 십자화과채소 부족증. (부족 시) 무/배추속썩음병, 사과축과병등
 • 망간: 과잉과 결핍 시, 여러 병리현상동반. 사과적진병(망간과잉), 감귤류위황병(망간결핍) 등
 
-![이미지](images/page019_img04.png)
 
-![이미지](images/page019_img03.png)
 
 ![이미지](images/page020_img00.png)
 
-![이미지](images/page020_img01.png)
 
-![이미지](images/page020_img02.png)
 
 ▸ 비생물성 병원의종류
 2. 부적당한토양 조건
@@ -513,29 +430,21 @@ Streptomyces
 • 수분: 식물의70% 정도구성. (부족 시) 한발(가뭄)이들고, 강수량이몰리거나지나치게많으면수해/습해발생
 • 바람: 미풍으로적절하면이산화탄소 공급/증발산용이.
 
-![이미지](images/page020_img04.png)
 
-![이미지](images/page020_img03.png)
 
 ![이미지](images/page021_img00.png)
 
-![이미지](images/page021_img01.png)
 
-![이미지](images/page021_img02.png)
 
 ![이미지](images/page021_img06.jpeg)
 
 ![이미지](images/page021_img05.jpeg)
 
-![이미지](images/page021_img04.png)
 
-![이미지](images/page021_img03.png)
 
 ![이미지](images/page022_img00.png)
 
-![이미지](images/page022_img01.png)
 
-![이미지](images/page022_img02.png)
 
 ▸ 비생물성 병원의종류
 
@@ -552,29 +461,21 @@ Streptomyces
 
 ![이미지](images/page022_img05.png)
 
-![이미지](images/page022_img04.png)
 
-![이미지](images/page022_img03.png)
 
 ![이미지](images/page023_img00.png)
 
-![이미지](images/page023_img01.png)
 
-![이미지](images/page023_img02.png)
 
 ▸ 식물에 병을 유발하는각종 식물 병원(pathogen)의 종류
 
 ![이미지](images/page023_img05.png)
 
-![이미지](images/page023_img04.png)
 
-![이미지](images/page023_img03.png)
 
 ![이미지](images/page024_img00.png)
 
-![이미지](images/page024_img01.png)
 
-![이미지](images/page024_img02.png)
 
 ▸ 식물병 발생 기작
 1. 식물병일생(disease cycle, 병환) : 식물에서병이발생하여되풀이되는과정(병환). 병원의생활사와기주사이에밀접한 관계
@@ -588,15 +489,11 @@ Streptomyces
 병의지속기
 병사 병징 및 표징
 
-![이미지](images/page024_img04.png)
 
-![이미지](images/page024_img03.png)
 
 ![이미지](images/page025_img00.png)
 
-![이미지](images/page025_img01.png)
 
-![이미지](images/page025_img02.png)
 
 ▸ 식물병 발생 기작
 2. 발병환경: (예) 저온, 다습, 저광도, 많은 질소질비료시용 등→ 벼 도열병발생조건
@@ -618,15 +515,11 @@ Streptomyces
 
 ![이미지](images/page025_img05.png)
 
-![이미지](images/page025_img04.png)
 
-![이미지](images/page025_img03.png)
 
 ![이미지](images/page026_img00.png)
 
-![이미지](images/page026_img01.png)
 
-![이미지](images/page026_img02.png)
 
 ![이미지](images/page026_img05.jpeg)
 
@@ -634,15 +527,11 @@ Streptomyces
 
 고추탄저병
 
-![이미지](images/page026_img04.png)
 
-![이미지](images/page026_img03.png)
 
 ![이미지](images/page027_img00.png)
 
-![이미지](images/page027_img01.png)
 
-![이미지](images/page027_img02.png)
 
 ▸ 식물병 발생 기작
 3. 병원성(pathogenicity)
@@ -656,15 +545,11 @@ Streptomyces
 
 ![이미지](images/page027_img05.png)
 
-![이미지](images/page027_img04.png)
 
-![이미지](images/page027_img03.png)
 
 ![이미지](images/page028_img00.png)
 
-![이미지](images/page028_img01.png)
 
-![이미지](images/page028_img02.png)
 
 ▸ 식물병 발생 기작
 3. 병원성(pathogenicity)
@@ -681,15 +566,11 @@ Streptomyces
 
 마늘흑색썩음균핵병 양파흑색썩음균핵병
 
-![이미지](images/page028_img04.png)
 
-![이미지](images/page028_img03.png)
 
 ![이미지](images/page029_img00.png)
 
-![이미지](images/page029_img01.png)
 
-![이미지](images/page029_img02.png)
 
 ▸ 식물병 발생 기작
 4. 병원균침입과감염
@@ -707,15 +588,11 @@ Streptomyces
 
 ![이미지](images/page029_img05.png)
 
-![이미지](images/page029_img04.png)
 
-![이미지](images/page029_img03.png)
 
 ![이미지](images/page030_img00.png)
 
-![이미지](images/page030_img01.png)
 
-![이미지](images/page030_img02.png)
 
 ▸ 식물병 발생 기작
 
@@ -730,15 +607,11 @@ Streptomyces
 (진균, 세균, 바이러스등)
 ✓부생체(saprophyte) : 죽은조직/유기물에서영양을섭취하고 살아가는것
 
-![이미지](images/page030_img04.png)
 
-![이미지](images/page030_img03.png)
 
 ![이미지](images/page031_img00.png)
 
-![이미지](images/page031_img01.png)
 
-![이미지](images/page031_img02.png)
 
 ![이미지](images/page031_img05.png)
 
@@ -757,41 +630,29 @@ Streptomyces
 
 배나무적성병 모과나무근두암종병
 
-![이미지](images/page031_img04.png)
 
-![이미지](images/page031_img03.png)
 
 ![이미지](images/page032_img00.png)
 
-![이미지](images/page032_img01.png)
 
-![이미지](images/page032_img02.png)
 
 ![이미지](images/page032_img06.png)
 
 ![이미지](images/page032_img05.png)
 
-![이미지](images/page032_img04.png)
 
-![이미지](images/page032_img03.png)
 
 ![이미지](images/page033_img00.png)
 
-![이미지](images/page033_img01.png)
 
-![이미지](images/page033_img02.png)
 
 ![이미지](images/page033_img05.png)
 
-![이미지](images/page033_img04.png)
 
-![이미지](images/page033_img03.png)
 
 ![이미지](images/page034_img00.png)
 
-![이미지](images/page034_img01.png)
 
-![이미지](images/page034_img02.png)
 
 ▸ 식물병 진단
 1. 병징(disease symptom)
@@ -813,15 +674,11 @@ Streptomyces
 
 전신병징(무시들음병) 국부병징(복숭아가지마름병) 외형이상(양파묘잘록병) 색변화(벼줄무늬잎마름병)
 
-![이미지](images/page034_img04.png)
 
-![이미지](images/page034_img03.png)
 
 ![이미지](images/page035_img00.png)
 
-![이미지](images/page035_img01.png)
 
-![이미지](images/page035_img02.png)
 
 * 세균병의 병징
 
@@ -833,15 +690,11 @@ Streptomyces
 | 시들음병 | • 침입한세균이물관에서증식하여수분의상승을저해• 토마토풋마름병 |
 | 세균성혹병 | • 세균이기주세포를자극하여병환부를이상증식• 사과근두암종병 |
 
-![이미지](images/page035_img04.png)
 
-![이미지](images/page035_img03.png)
 
 ![이미지](images/page036_img00.png)
 
-![이미지](images/page036_img01.png)
 
-![이미지](images/page036_img02.png)
 
 * 병징의 종류
 
@@ -849,15 +702,11 @@ Streptomyces
 
 ![이미지](images/page036_img05.jpeg)
 
-![이미지](images/page036_img04.png)
 
-![이미지](images/page036_img03.png)
 
 ![이미지](images/page037_img00.png)
 
-![이미지](images/page037_img01.png)
 
-![이미지](images/page037_img02.png)
 
 ▸ 식물병 진단
 2. 표징(disease sign)
@@ -872,15 +721,11 @@ Streptomyces
 
 흰가루병 돌기(더뎅이병)
 
-![이미지](images/page037_img04.png)
 
-![이미지](images/page037_img03.png)
 
 ![이미지](images/page038_img00.png)
 
-![이미지](images/page038_img01.png)
 
-![이미지](images/page038_img02.png)
 
 ▸ 식물병 진단
 3. 동정(identification)
@@ -892,15 +737,11 @@ Streptomyces
 
 ![이미지](images/page038_img07.jpeg)
 
-![이미지](images/page038_img04.png)
 
-![이미지](images/page038_img03.png)
 
 ![이미지](images/page039_img00.png)
 
-![이미지](images/page039_img01.png)
 
-![이미지](images/page039_img02.png)
 
 ▸ 해부 및 현미경적진단
 1. 해부학적진단
@@ -915,6 +756,4 @@ Streptomyces
 • 병원체를순수 배양하여접종하면 같은병을일으킨다.
 • 접종한식물로부터같은 병원체를 다시분리할수 있다.
 
-![이미지](images/page039_img04.png)
 
-![이미지](images/page039_img03.png)

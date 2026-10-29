@@ -5,27 +5,20 @@
 
 ![이미지](images/page000_img02.png)
 
-![이미지](images/page000_img00.png)
 
-![이미지](images/page000_img01.png)
 
-![이미지](images/page000_img05.png)
 
 | 2021년도 2학기 - 식물보호학 |
 | --- |
 | 식물병리 - 2(식물병 방제 및 작물 발생 주요 병들) |
 
-![이미지](images/page000_img04.png)
 
-![이미지](images/page000_img03.png)
 
 ![이미지](images/page001_img00.png)
 
 식물병의 방제
 
-![이미지](images/page001_img01.png)
 
-![이미지](images/page001_img02.png)
 
 ▸ 식물병의 방제원리
 ✓ 합리적방제를위해 사전파악 사항
@@ -42,17 +35,13 @@
 • 법적방제(legal control) : 병충해의 유입을차단하도록식물검역이나국제적인유통을제어하여 방제
 • 재배적방제(cultural control)
 
-![이미지](images/page001_img04.png)
 
-![이미지](images/page001_img03.png)
 
 ![이미지](images/page002_img00.png)
 
 식물병의 방제
 
-![이미지](images/page002_img01.png)
 
-![이미지](images/page002_img02.png)
 
 ![이미지](images/page002_img09.jpeg)
 
@@ -70,17 +59,13 @@
 
 ![이미지](images/page002_img06.jpeg)
 
-![이미지](images/page002_img04.png)
 
-![이미지](images/page002_img03.png)
 
 ![이미지](images/page003_img00.png)
 
 식물병의 방제
 
-![이미지](images/page003_img01.png)
 
-![이미지](images/page003_img02.png)
 
 ▸ 식물병의 방제방법
 2) 생물적방제(biological control) : 병원균에의한식물의 저항성을유도해병해를방제하는 방법
@@ -97,17 +82,13 @@
 • 세균: Agrobacterium, Bacillus, Pseudomonas, Streptomyces 등
 • 진균: Ampelomyces, Candida 등
 
-![이미지](images/page003_img04.png)
 
-![이미지](images/page003_img03.png)
 
 ![이미지](images/page004_img00.png)
 
 식물병의 방제
 
-![이미지](images/page004_img01.png)
 
-![이미지](images/page004_img02.png)
 
 ![이미지](images/page004_img05.jpeg)
 
@@ -131,35 +112,26 @@
 ▸ 토양소독
 ▸ 해충→ 포살, 유살, 차단 등
 
-![이미지](images/page004_img04.png)
 
-![이미지](images/page004_img03.png)
 
 ![이미지](images/page005_img00.png)
 
 작물에 발생하는 주요 병들(각론)
 
-![이미지](images/page005_img01.png)
 
-![이미지](images/page005_img02.png)
 
 ▸ 벼 병(rice disease)의 종류
 
 ![이미지](images/page005_img05.png)
 
-![이미지](images/page005_img04.png)
 
-![이미지](images/page005_img03.png)
 
 ![이미지](images/page006_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
-![이미지](images/page006_img01.png)
 
-![이미지](images/page006_img02.png)
 
-![이미지](images/page006_img05.png)
 
 | 1. 벼 깨씨무늬병(Brown spot, 호마엽고병) |  |
 | --- | --- |
@@ -184,19 +156,14 @@
 ✓ 적절한 비료 공급
 Cochliobolusmiyabeanus
 
-![이미지](images/page006_img04.png)
 
-![이미지](images/page006_img03.png)
 
 ![이미지](images/page007_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
-![이미지](images/page007_img01.png)
 
-![이미지](images/page007_img02.png)
 
-![이미지](images/page007_img05.png)
 
 | 2. 벼 키다리병(Bakanae Disease) |  |
 | --- | --- |
@@ -224,19 +191,14 @@ Gibberellafujikuroi
 • 저항성 품종 선택, 건전한 종자 사용, 종자소독
 • 못자리나 본답 초기 이병주 제거
 
-![이미지](images/page007_img04.png)
 
-![이미지](images/page007_img03.png)
 
 ![이미지](images/page008_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
-![이미지](images/page008_img01.png)
 
-![이미지](images/page008_img02.png)
 
-![이미지](images/page008_img05.png)
 
 | 3. 벼 도열병(Blast) : 국내, 동남아 각지 가장 큰 피해 |  |
 | --- | --- |
@@ -261,19 +223,14 @@ Gibberellafujikuroi
 • 표토가 앝고 비료의 흡수가 급격할 때
 Pyriculariaoryzae
 
-![이미지](images/page008_img04.png)
 
-![이미지](images/page008_img03.png)
 
 ![이미지](images/page009_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
-![이미지](images/page009_img01.png)
 
-![이미지](images/page009_img02.png)
 
-![이미지](images/page009_img05.png)
 
 | 3. 벼 도열병(Blast) : 국내 뿐 아니라 동남아 각지 가장 큰 피해 |  |
 | --- | --- |
@@ -297,19 +254,14 @@ Pyriculariaoryzae
 • 질소질 비료의 과잉공급을 금지
 • 규소(Si)를 포함한 균형시비
 
-![이미지](images/page009_img04.png)
 
-![이미지](images/page009_img03.png)
 
 ![이미지](images/page010_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
-![이미지](images/page010_img01.png)
 
-![이미지](images/page010_img02.png)
 
-![이미지](images/page010_img05.png)
 
 | 4. 벼 잎집무늬마름병(문고병, Sheath Blight) |  |
 | --- | --- |
@@ -327,19 +279,14 @@ Pyriculariaoryzae
 • 모내기전 써래질 후 균핵제거, 밀식 및 질소질 과잉을 금하고, 칼륨질 비료 증시
 • 장마 후(더운 여름 날씨지속) 전용 약제 처리
 
-![이미지](images/page010_img04.png)
 
-![이미지](images/page010_img03.png)
 
 ![이미지](images/page011_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
-![이미지](images/page011_img01.png)
 
-![이미지](images/page011_img02.png)
 
-![이미지](images/page011_img05.png)
 
 | 5. 벼 잘록병(Seeding Damping off) |  |
 | --- | --- |
@@ -363,19 +310,14 @@ Pyriculariaoryzae
 • pH는 4.5~5.5 정도의 무병 상토 사용
 • 전문 약제살포
 
-![이미지](images/page011_img04.png)
 
-![이미지](images/page011_img03.png)
 
 ![이미지](images/page012_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
-![이미지](images/page012_img01.png)
 
-![이미지](images/page012_img02.png)
 
-![이미지](images/page012_img05.png)
 
 | 6. 벼알마름병 |  |
 | --- | --- |
@@ -399,19 +341,14 @@ Pyriculariaoryzae
 • 육묘 시,고온 다습, 많은 질소질 비료 사용 지양
 • 발병 포장은 수확후 볏짚 소각 및제거
 
-![이미지](images/page012_img04.png)
 
-![이미지](images/page012_img03.png)
 
 ![이미지](images/page013_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
-![이미지](images/page013_img01.png)
 
-![이미지](images/page013_img02.png)
 
-![이미지](images/page013_img05.png)
 
 | 7. 벼 흰잎마름병(백엽고병, Bacterial Leaf Blight) |  |
 | --- | --- |
@@ -436,19 +373,14 @@ Pyriculariaoryzae
 • 저항성 품종 재배
 • 장마 기간중 침관수 피해 시 전용약제 처리
 
-![이미지](images/page013_img04.png)
 
-![이미지](images/page013_img03.png)
 
 ![이미지](images/page014_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
-![이미지](images/page014_img01.png)
 
-![이미지](images/page014_img02.png)
 
-![이미지](images/page014_img05.png)
 
 | 8. 벼 검은줄오갈병(Rice Black Streaked Dwarf) |  |
 | --- | --- |
@@ -467,19 +399,14 @@ Pyriculariaoryzae
 • 저항성 품종 재배, 병든 식물체 발견 즉시 제거
 • 매개 곤충구제, 논잡초 제거
 
-![이미지](images/page014_img04.png)
 
-![이미지](images/page014_img03.png)
 
 ![이미지](images/page015_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
-![이미지](images/page015_img01.png)
 
-![이미지](images/page015_img02.png)
 
-![이미지](images/page015_img05.png)
 
 | 9. 벼 오갈병(Rice Dwaft) |  |
 | --- | --- |
@@ -499,19 +426,14 @@ Pyriculariaoryzae
 • 매개 곤충구제
 • 논두렁 잡초 제거, 질소질 비료 과용 지양
 
-![이미지](images/page015_img04.png)
 
-![이미지](images/page015_img03.png)
 
 ![이미지](images/page016_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
-![이미지](images/page016_img01.png)
 
-![이미지](images/page016_img02.png)
 
-![이미지](images/page016_img05.png)
 
 | 10. 벼 줄무늬잎마름병(호엽고병, Stripe Virus) |  |
 | --- | --- |
@@ -535,51 +457,38 @@ Pyriculariaoryzae
 • 매개충 방제
 • 병든 개체제거
 
-![이미지](images/page016_img04.png)
 
-![이미지](images/page016_img03.png)
 
 ![이미지](images/page017_img00.png)
 
 작물에 발생하는 주요 병들(각론)
 
-![이미지](images/page017_img01.png)
 
-![이미지](images/page017_img02.png)
 
 ▸ 맥류 병(Barley disease)의 종류
 
 ![이미지](images/page017_img05.png)
 
-![이미지](images/page017_img04.png)
 
-![이미지](images/page017_img03.png)
 
 ![이미지](images/page018_img00.png)
 
 작물에 발생하는 주요 병들(각론)
 
-![이미지](images/page018_img01.png)
 
-![이미지](images/page018_img02.png)
 
 ▸ 맥류 병(Barley disease)의 종류
 
 ![이미지](images/page018_img05.png)
 
-![이미지](images/page018_img04.png)
 
-![이미지](images/page018_img03.png)
 
 ![이미지](images/page019_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 맥류 병(Barley Disease)
 
-![이미지](images/page019_img01.png)
 
-![이미지](images/page019_img02.png)
 
-![이미지](images/page019_img05.png)
 
 | 1. 맥류 속깜부기병(Coverd Smut) |  |
 | --- | --- |
@@ -600,19 +509,14 @@ Pyriculariaoryzae
 • 저항성 품종 재배
 • 병든 이삭제거(묻거나 태움), 탈곡 시병든 이삭이 섞이지 않도록 주의
 
-![이미지](images/page019_img04.png)
 
-![이미지](images/page019_img03.png)
 
 ![이미지](images/page020_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 맥류 병(Barley Disease)
 
-![이미지](images/page020_img01.png)
 
-![이미지](images/page020_img02.png)
 
-![이미지](images/page020_img05.png)
 
 | 2. 맥류 줄기녹병(흑수병, Black Stem Rust) |  |
 | --- | --- |
@@ -631,19 +535,14 @@ Pyriculariaoryzae
 ✓ 방제
 • 저항성 품종을 재배
 
-![이미지](images/page020_img04.png)
 
-![이미지](images/page020_img03.png)
 
 ![이미지](images/page021_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 맥류 병(Barley Disease)
 
-![이미지](images/page021_img01.png)
 
-![이미지](images/page021_img02.png)
 
-![이미지](images/page021_img05.png)
 
 | 3. 보리 겉깜부기병(Smut) |  |
 | --- | --- |
@@ -666,19 +565,14 @@ Pyriculariaoryzae
 • 종자소독
 • 건실한 종자 파종
 
-![이미지](images/page021_img04.png)
 
-![이미지](images/page021_img03.png)
 
 ![이미지](images/page022_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 맥류 병(Barley Disease)
 
-![이미지](images/page022_img01.png)
 
-![이미지](images/page022_img02.png)
 
-![이미지](images/page022_img05.png)
 
 | 4. 맥류 붉은곰팡이병(적미병, Scab) |  |
 | --- | --- |
@@ -702,19 +596,14 @@ Pyriculariaoryzae
 • 이병 식물제거
 • 비가 계속오면, 출수 후14일까지 석회유황합제를 등살포
 
-![이미지](images/page022_img04.png)
 
-![이미지](images/page022_img03.png)
 
 ![이미지](images/page023_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 맥류 병(Barley Disease)
 
-![이미지](images/page023_img01.png)
 
-![이미지](images/page023_img02.png)
 
-![이미지](images/page023_img05.png)
 
 | 5. 맥류 흰가루병(백분병, Powdery Mildew) |  |
 | --- | --- |
@@ -736,35 +625,26 @@ Pyriculariaoryzae
 • 질소질 비료를 삼가고 3요소를 균형시비
 • 저항성 품종 재배
 
-![이미지](images/page023_img04.png)
 
-![이미지](images/page023_img03.png)
 
 ![이미지](images/page024_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 두류와 담배작물 병(Legume & Tabacco Disease)
 
-![이미지](images/page024_img01.png)
 
-![이미지](images/page024_img02.png)
 
 ▸ 담배와 콩에 발생하는병
 
 ![이미지](images/page024_img05.png)
 
-![이미지](images/page024_img04.png)
 
-![이미지](images/page024_img03.png)
 
 ![이미지](images/page025_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 두류와 담배작물 병(Legume & Tabacco Disease)
 
-![이미지](images/page025_img01.png)
 
-![이미지](images/page025_img02.png)
 
-![이미지](images/page025_img05.png)
 
 | 1. 담배 역병(Black shank) |  |
 | --- | --- |
@@ -780,19 +660,14 @@ Pyriculariaoryzae
 • 철저한 토양소독
 • 주변 전염원 차단
 
-![이미지](images/page025_img04.png)
 
-![이미지](images/page025_img03.png)
 
 ![이미지](images/page026_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 두류와 담배작물 병(Legume & Tabacco Disease)
 
-![이미지](images/page026_img01.png)
 
-![이미지](images/page026_img02.png)
 
-![이미지](images/page026_img05.png)
 
 | 2. 담배 불마름병(야화병, Wild Fire) |  |
 | --- | --- |
@@ -811,19 +686,14 @@ Pyriculariaoryzae
 • 돌려짓기
 • 주변 전염원 차단
 
-![이미지](images/page026_img04.png)
 
-![이미지](images/page026_img03.png)
 
 ![이미지](images/page027_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 두류와 담배작물 병(Legume & Tabacco Disease)
 
-![이미지](images/page027_img01.png)
 
-![이미지](images/page027_img02.png)
 
-![이미지](images/page027_img05.png)
 
 | 3. 콩 자주빛무늬병(Purple Speck) |  |
 | --- | --- |
@@ -848,19 +718,14 @@ Pyriculariaoryzae
 • 무병지에서 채종재배
 • 이병 잔재물 제거, 발병이 심한 곳에서는 연작을 피함
 
-![이미지](images/page027_img04.png)
 
-![이미지](images/page027_img03.png)
 
 ![이미지](images/page028_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 두류와 담배작물 병(Legume & Tabacco Disease)
 
-![이미지](images/page028_img01.png)
 
-![이미지](images/page028_img02.png)
 
-![이미지](images/page028_img05.png)
 
 | 4. 콩 탄저병(Anthracnose) |  |
 | --- | --- |
@@ -884,35 +749,26 @@ Pyriculariaoryzae
 • 이병 잔재물 제거
 • 발병이 심한 곳에서는 연작을 피함
 
-![이미지](images/page028_img04.png)
 
-![이미지](images/page028_img03.png)
 
 ![이미지](images/page029_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 서류 병(Potato Disease)
 
-![이미지](images/page029_img01.png)
 
-![이미지](images/page029_img02.png)
 
 ▸ 감자와 고구마에발생하는병
 
 ![이미지](images/page029_img05.png)
 
-![이미지](images/page029_img04.png)
 
-![이미지](images/page029_img03.png)
 
 ![이미지](images/page030_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 서류 병(Potato Disease)
 
-![이미지](images/page030_img01.png)
 
-![이미지](images/page030_img02.png)
 
-![이미지](images/page030_img05.png)
 
 | 1. 고구마 무름병(Soft Rot) |  |
 | --- | --- |
@@ -932,19 +788,14 @@ Pyriculariaoryzae
 • 적기 수확, 수확 중에 상처가 나지않도록 주의
 • 12~14℃ 정도 저장고 보관
 
-![이미지](images/page030_img04.png)
 
-![이미지](images/page030_img03.png)
 
 ![이미지](images/page031_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 서류 병(Potato Disease)
 
-![이미지](images/page031_img01.png)
 
-![이미지](images/page031_img02.png)
 
-![이미지](images/page031_img05.png)
 
 | 2. 고구마 검은무늬병 |  |
 | --- | --- |
@@ -969,19 +820,14 @@ Pyriculariaoryzae
 • 건전한 씨고구마 사용, 저항성 품종 재배
 • 윤작, 매개곤충 구제
 
-![이미지](images/page031_img04.png)
 
-![이미지](images/page031_img03.png)
 
 ![이미지](images/page032_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 서류 병(Potato Disease)
 
-![이미지](images/page032_img01.png)
 
-![이미지](images/page032_img02.png)
 
-![이미지](images/page032_img05.png)
 
 | 3. 감자 역병(Late Blight) |  |
 | --- | --- |
@@ -1005,19 +851,14 @@ Pyriculariaoryzae
 • 침수되지 않도록 배수 철저, 발병지는 돌려짓기
 • 개화기에 약제 살포, 수확 시 괴경에 상처가 나지 않도록 주의
 
-![이미지](images/page032_img04.png)
 
-![이미지](images/page032_img03.png)
 
 ![이미지](images/page033_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 서류 병(Potato Disease)
 
-![이미지](images/page033_img01.png)
 
-![이미지](images/page033_img02.png)
 
-![이미지](images/page033_img05.png)
 
 | 4. 감자 더뎅이병(Common Scab) |  |
 | --- | --- |
@@ -1041,19 +882,14 @@ Pyriculariaoryzae
 • 토양을 산성으로 개량, 윤작
 • 수확 후이병토양에 남은잔재물 제거
 
-![이미지](images/page033_img04.png)
 
-![이미지](images/page033_img03.png)
 
 ![이미지](images/page034_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 서류 병(Potato Disease)
 
-![이미지](images/page034_img01.png)
 
-![이미지](images/page034_img02.png)
 
-![이미지](images/page034_img05.png)
 
 | 5. 감자 검은무늬썩음병(Black Scurf, Damping off, Stem Canker) |  |
 | --- | --- |
@@ -1076,35 +912,26 @@ Pyriculariaoryzae
 • 토양이 다습하지 않도록 관리, 윤작
 • 수확 후이병토양에 남은잔재물 제거
 
-![이미지](images/page034_img04.png)
 
-![이미지](images/page034_img03.png)
 
 ![이미지](images/page035_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
-![이미지](images/page035_img01.png)
 
-![이미지](images/page035_img02.png)
 
 ▸ 채소에 발병하는병
 
 ![이미지](images/page035_img05.png)
 
-![이미지](images/page035_img04.png)
 
-![이미지](images/page035_img03.png)
 
 ![이미지](images/page036_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
-![이미지](images/page036_img01.png)
 
-![이미지](images/page036_img02.png)
 
-![이미지](images/page036_img05.png)
 
 | 1. 고추 역병(Phytophthora Blight) |  |
 | --- | --- |
@@ -1129,19 +956,14 @@ Pyriculariaoryzae
 • 토양 소독, 병든 포기는 조기 제거
 • 예방 위주전용 약제 살포
 
-![이미지](images/page036_img04.png)
 
-![이미지](images/page036_img03.png)
 
 ![이미지](images/page037_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
-![이미지](images/page037_img01.png)
 
-![이미지](images/page037_img02.png)
 
-![이미지](images/page037_img05.png)
 
 | 2. 고추 탄저병(Blitter Rot) |  |
 | --- | --- |
@@ -1166,19 +988,14 @@ Pyriculariaoryzae
 • 예방 위주전용 약제 살포
 • 비바람이 전파하므로 태풍 후에 약제를 처리
 
-![이미지](images/page037_img04.png)
 
-![이미지](images/page037_img03.png)
 
 ![이미지](images/page038_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
-![이미지](images/page038_img01.png)
 
-![이미지](images/page038_img02.png)
 
-![이미지](images/page038_img05.png)
 
 | 3. 수박 탄저병(Anthracnose) |  |
 | --- | --- |
@@ -1200,19 +1017,14 @@ Pyriculariaoryzae
 • 이병원균은 고온다습 조건에서 많이 발생, 종자에서 월동 → 건전한 종자 채종및 소독
 • 이병주 소각, 가을에 표토 경운
 
-![이미지](images/page038_img04.png)
 
-![이미지](images/page038_img03.png)
 
 ![이미지](images/page039_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
-![이미지](images/page039_img01.png)
 
-![이미지](images/page039_img02.png)
 
-![이미지](images/page039_img05.png)
 
 | 4. 오이 노균병(Downy Mildew) |  |
 | --- | --- |
@@ -1236,19 +1048,14 @@ Pyriculariaoryzae
 • 습하지 않게 관리, 저항성 품종 재배
 • 다습조건에서 잘 발생 → 통풍에 유의. 영양을 잘 공급, 윤작, 주변 전염원 차단
 
-![이미지](images/page039_img04.png)
 
-![이미지](images/page039_img03.png)
 
 ![이미지](images/page040_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
-![이미지](images/page040_img01.png)
 
-![이미지](images/page040_img02.png)
 
-![이미지](images/page040_img05.png)
 
 | 5. 배추 무름병(Bacterial Soft Rot) |  |
 | --- | --- |
@@ -1273,19 +1080,14 @@ Pyriculariaoryzae
 • 토양소독, 윤작, 잔재물 제거, 세균을 옮기는 해충 구제
 • 예방 위주 전용 약제 살포
 
-![이미지](images/page040_img04.png)
 
-![이미지](images/page040_img03.png)
 
 ![이미지](images/page041_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
-![이미지](images/page041_img01.png)
 
-![이미지](images/page041_img02.png)
 
-![이미지](images/page041_img05.png)
 
 | 6. 토마토 풋마름병(Bacterial Wilt) |  |
 | --- | --- |
@@ -1312,19 +1114,14 @@ Pyriculariaoryzae
 • 윤작. 저항성 품종재배, 토양소독
 • 배수에 힘쓰고 토양 산도조절, 접목묘 재배 및 유기물 증시
 
-![이미지](images/page041_img04.png)
 
-![이미지](images/page041_img03.png)
 
 ![이미지](images/page042_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
-![이미지](images/page042_img01.png)
 
-![이미지](images/page042_img02.png)
 
-![이미지](images/page042_img05.png)
 
 | 7. 배추 무사마귀병(Club Root) |  |
 | --- | --- |
@@ -1349,35 +1146,26 @@ Pyriculariaoryzae
 • 저항성 품종 재배, 윤작(6~7년 이상)을 십자화과 이외 작물로 실시
 • 병에 걸린뿌리 제거 또는 소각
 
-![이미지](images/page042_img04.png)
 
-![이미지](images/page042_img03.png)
 
 ![이미지](images/page043_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
-![이미지](images/page043_img01.png)
 
-![이미지](images/page043_img02.png)
 
 ![이미지](images/page043_img05.png)
 
 ▸ 과수에 발생하는병
 
-![이미지](images/page043_img04.png)
 
-![이미지](images/page043_img03.png)
 
 ![이미지](images/page044_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
-![이미지](images/page044_img01.png)
 
-![이미지](images/page044_img02.png)
 
-![이미지](images/page044_img05.png)
 
 | 1. 배나무 검은무늬병(Black Spot) |  |
 | --- | --- |
@@ -1399,19 +1187,14 @@ Pyriculariaoryzae
 • 병든 가지/잎제거
 • 저항성 품종 재배
 
-![이미지](images/page044_img04.png)
 
-![이미지](images/page044_img03.png)
 
 ![이미지](images/page045_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
-![이미지](images/page045_img01.png)
 
-![이미지](images/page045_img02.png)
 
-![이미지](images/page045_img05.png)
 
 | 2. 배나무 붉은별무늬병(Rust) |  |
 | --- | --- |
@@ -1435,19 +1218,14 @@ Pyriculariaoryzae
 • 배과수원 주변에 기주식물(향나무) 제거
 • 배나무, 향나무에 전문 약제 살포
 
-![이미지](images/page045_img04.png)
 
-![이미지](images/page045_img03.png)
 
 ![이미지](images/page046_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
-![이미지](images/page046_img01.png)
 
-![이미지](images/page046_img02.png)
 
-![이미지](images/page046_img05.png)
 
 | 3. 배나무, 사과나무 화상병(Fire Blight) |  |
 | --- | --- |
@@ -1469,9 +1247,7 @@ Pyriculariaoryzae
 • 농작업 도구(장갑, 작업복 등)를 작업 중 수시 소독[알코올 70%, 차아염소산나트륨 200ppm 이상
 • 사과, 배나무 개화기(4월 상순)에 수분용 방화 곤충 이동 제한
 
-![이미지](images/page046_img04.png)
 
-![이미지](images/page046_img03.png)
 
 ![이미지](images/page047_img00.png)
 
@@ -1479,11 +1255,8 @@ Pyriculariaoryzae
 
 ![이미지](images/page047_img07.jpeg)
 
-![이미지](images/page047_img01.png)
 
-![이미지](images/page047_img02.png)
 
-![이미지](images/page047_img05.png)
 
 | 3. 배나무, 사과나무 화상병(Fire Blight) |  |
 | --- | --- |
@@ -1496,19 +1269,14 @@ Pyriculariaoryzae
 
 ![이미지](images/page047_img08.jpeg)
 
-![이미지](images/page047_img04.png)
 
-![이미지](images/page047_img03.png)
 
 ![이미지](images/page048_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
-![이미지](images/page048_img01.png)
 
-![이미지](images/page048_img02.png)
 
-![이미지](images/page048_img05.png)
 
 | 4. 복숭아 세균성 구멍병(Leaf Curl) |  |
 | --- | --- |
@@ -1534,19 +1302,14 @@ Pyriculariaoryzae
 • 전염된 가지 제거
 • 전용 약제(항생제 계통) 살포
 
-![이미지](images/page048_img04.png)
 
-![이미지](images/page048_img03.png)
 
 ![이미지](images/page049_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
-![이미지](images/page049_img01.png)
 
-![이미지](images/page049_img02.png)
 
-![이미지](images/page049_img05.png)
 
 | 5. 복숭아 잎오갈병(Leaf Curl) |  |
 | --- | --- |
@@ -1572,19 +1335,14 @@ Pyriculariaoryzae
 • 병든 잎조기 제거
 • 과습하지 않고 동해 받지않도록 관리
 
-![이미지](images/page049_img04.png)
 
-![이미지](images/page049_img03.png)
 
 ![이미지](images/page050_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
-![이미지](images/page050_img01.png)
 
-![이미지](images/page050_img02.png)
 
-![이미지](images/page050_img05.png)
 
 | 6. 사과나무 갈색무늬병(Blotch) |  |
 | --- | --- |
@@ -1605,19 +1363,14 @@ Pyriculariaoryzae
 • 양호한 비배 관리.수세가 좋게 하고, 밀식을 삼가고 6~7월에 예방 위주전용 약제 살포
 • 수확 후병든 잎조기 제거
 
-![이미지](images/page050_img04.png)
 
-![이미지](images/page050_img03.png)
 
 ![이미지](images/page051_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
-![이미지](images/page051_img01.png)
 
-![이미지](images/page051_img02.png)
 
-![이미지](images/page051_img05.png)
 
 | 7. 사과나무 검은별무늬병(Scab) |  |
 | --- | --- |
@@ -1643,19 +1396,14 @@ Pyriculariaoryzae
 • 수세를 튼튼하게 하고 병든 가지/낙엽 조기 제거
 • 4~5월 전문 약제살포. 점무늬낙엽병, 붉은별무늬병, 그을음병 동시 방제 가능
 
-![이미지](images/page051_img04.png)
 
-![이미지](images/page051_img03.png)
 
 ![이미지](images/page052_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
-![이미지](images/page052_img01.png)
 
-![이미지](images/page052_img02.png)
 
-![이미지](images/page052_img05.png)
 
 | 8. 사과 부란병(Canker) |  |
 | --- | --- |
@@ -1680,19 +1428,14 @@ Pyriculariaoryzae
 • 상처 난부위/병에 걸린 부위를 깎아 내고 도포제 처리
 • 수세를 튼튼하게 하고 상처를 입지 않도록 주의
 
-![이미지](images/page052_img04.png)
 
-![이미지](images/page052_img03.png)
 
 ![이미지](images/page053_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
-![이미지](images/page053_img01.png)
 
-![이미지](images/page053_img02.png)
 
-![이미지](images/page053_img05.png)
 
 | 9. 대추나무 빗자루병(Witches Bloom) |  |
 | --- | --- |
@@ -1713,35 +1456,26 @@ Pyriculariaoryzae
 ✓ 방제
 • 수간주사(Oxyteracline HCL)나 살충제로 매개충 구제
 
-![이미지](images/page053_img04.png)
 
-![이미지](images/page053_img03.png)
 
 ![이미지](images/page054_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 화훼류(장미) 병(Rose Disease)
 
-![이미지](images/page054_img01.png)
 
-![이미지](images/page054_img02.png)
 
 ▸ 장미에 발생하는병
 
 ![이미지](images/page054_img05.png)
 
-![이미지](images/page054_img04.png)
 
-![이미지](images/page054_img03.png)
 
 ![이미지](images/page055_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 화훼류(장미) 병(Rose Disease)
 
-![이미지](images/page055_img01.png)
 
-![이미지](images/page055_img02.png)
 
-![이미지](images/page055_img05.png)
 
 | 1. 장미 노균병(Downy Mildew) |  |
 | --- | --- |
@@ -1761,19 +1495,14 @@ Pyriculariaoryzae
 • 병든 잔가지 제거
 • 예방 위주약제 살포
 
-![이미지](images/page055_img04.png)
 
-![이미지](images/page055_img03.png)
 
 ![이미지](images/page056_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 화훼류(장미) 병(Rose Disease)
 
-![이미지](images/page056_img01.png)
 
-![이미지](images/page056_img02.png)
 
-![이미지](images/page056_img05.png)
 
 | 2. 장미 흰가루병(Powdery Mildew) |  |
 | --- | --- |
@@ -1799,19 +1528,14 @@ Pyriculariaoryzae
 • 병든 잔가지 제거, 내성 강한 품종재배
 • 예방 위주적용약제 살포
 
-![이미지](images/page056_img04.png)
 
-![이미지](images/page056_img03.png)
 
 ![이미지](images/page057_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 화훼류(장미) 병(Rose Disease)
 
-![이미지](images/page057_img01.png)
 
-![이미지](images/page057_img02.png)
 
-![이미지](images/page057_img05.png)
 
 | 3. 장미 잿빛곰팡이병(Botrytis Blight) |  |
 | --- | --- |
@@ -1836,19 +1560,14 @@ Pyriculariaoryzae
 • 양호한 환기, 난방방법 개선 → 낮은 습도 유지
 • 병든 가지/꽃조기 제거
 
-![이미지](images/page057_img04.png)
 
-![이미지](images/page057_img03.png)
 
 ![이미지](images/page058_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 수목류 병(Tree Disease)
 
-![이미지](images/page058_img01.png)
 
-![이미지](images/page058_img02.png)
 
-![이미지](images/page058_img05.png)
 
 | 1. 소나무재선충병(Pine Wilt Disease) |  |
 | --- | --- |
@@ -1873,19 +1592,14 @@ Pyriculariaoryzae
 • 지상 방제: 매개충 우화 시기(5~8월)에
 티아클로프리드(thiacloprid) 10%액(1,000배액) 살포
 
-![이미지](images/page058_img04.png)
 
-![이미지](images/page058_img03.png)
 
 ![이미지](images/page059_img00.png)
 
 작물에 발생하는 주요 병들(각론) - 수목류 병(Tree Disease)
 
-![이미지](images/page059_img01.png)
 
-![이미지](images/page059_img02.png)
 
-![이미지](images/page059_img05.png)
 
 | 2. 참나무시들음병 |  |
 | --- | --- |
@@ -1907,6 +1621,4 @@ Pyriculariaoryzae
 • 끈끈이 롤트랩/약제 훈증방법 사용,방제 작업 실시
 • 노숙 유충으로 월동하나 일부는 성충과 번데기로도 월동 → 이 단계에 방제 실시
 
-![이미지](images/page059_img04.png)
 
-![이미지](images/page059_img03.png)

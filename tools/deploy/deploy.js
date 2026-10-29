@@ -88,7 +88,7 @@ async function notifyCommunity(version, url) {
 // 하므로(.tmp_*/audiobook mp3 등 비배포 자산이 Vercel 서버로 업로드됨), 업로드
 // 단계부터 배포 집합을 물리적으로 한정한다. 스탬프된 작업 트리 파일(sw.js 등)
 // 도 그대로 반영된다.
-function makeStagingDir() {
+async function makeStagingDir() {
     const ig = ignore().add(fs.readFileSync('.vercelignore', 'utf8'));
     const deployFiles = [];
     // .git은 vercelignore 무관하게 항상 제외 — 나머지는 규칙으로 프루닝
@@ -105,11 +105,16 @@ function makeStagingDir() {
     };
     walk('.');
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'passok-deploy-'));
-    for (const f of deployFiles) {
-        const dest = path.join(dir, f);
-        fs.mkdirSync(path.dirname(dest), { recursive: true });
-        fs.copyFileSync(f, dest);
-    }
+    // 대형 트리(수십만 파일) 대비 — 직렬 copyFileSync 대신 비동기 풀로 복사
+    const dirs = new Set(deployFiles.map((f) => path.dirname(path.join(dir, f))));
+    for (const d of dirs) fs.mkdirSync(d, { recursive: true });
+    let i = 0;
+    await Promise.all(Array.from({ length: 64 }, async () => {
+        while (i < deployFiles.length) {
+            const f = deployFiles[i++];
+            await fs.promises.copyFile(f, path.join(dir, f));
+        }
+    }));
     // vercel CLI가 요구하는 프로젝트 링크 — .vercel/은 .vercelignore로 비배포
     const projectJson = path.join('.vercel', 'project.json');
     if (fs.existsSync(projectJson)) {
@@ -379,7 +384,7 @@ async function main() {
     // 필요하므로 직접 인용한 단일 명령 문자열로 전달한다.
     // 스테이징 디렉터리에서 실행해 .vercelignore 외 자산(mp3·.tmp 등)이
     // 아카이브에도 포함되지 않도록 한다.
-    const staging = makeStagingDir();
+    const staging = await makeStagingDir();
     console.log(`📦 배포 스테이징 — ${staging.fileCount}파일 → ${staging.dir}`);
     let result;
     try {
