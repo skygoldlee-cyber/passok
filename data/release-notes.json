@@ -1,5 +1,18 @@
 [
   {
+    "version": "v20261030-b329ed0",
+    "date": "2026-10-30",
+    "notes": [
+      "[정리] TRACE MATRIX 재생성 — check:webp 게이트 등록 [no-test]",
+      "[정리] check:webp 스크립트 등록 — check_npm_commands 게이트 정합 [no-test]",
+      "[기능] 배포 이미지 webp 강제 게이트 — ref_md·기출 원본 삭제 + steps.js 등록 [no-test]",
+      "[정리] webp_refmd_images.py @spec none 주석 — SPEC refs 게이트 정합 [no-test]",
+      "[정리] ref_md 원본 jpeg/png 삭제 — webp 참조 전환으로 고아화, git 이력 보존 [no-test]",
+      "[성능] ref_md 이미지 webp 재인코딩 — 6,687개 원본 jpeg/png → webp(160MB), 배포 ~238MB 절감 [no-test]",
+      "[정리·release] v20261030-1583667 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261030-1583667",
     "date": "2026-10-30",
     "notes": [
@@ -185,14 +198,6 @@
       "[테스트·e2e] 인라인 매뉴얼 링크를 터치 타깃 기준선에 등록",
       "[수정·exam-select] 인트로 매뉴얼 링크 높이 — 텍스트 링크 모양으로 중화",
       "[정리·release] v20261028-7f572ea 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261028-7f572ea",
-    "date": "2026-10-28",
-    "notes": [
-      "[기능·exam-select] 인트로에 매뉴얼 링크 추가 — 상세설명 안내",
-      "[정리·release] v20261028-5399835 스탬프 확정 [no-docs]"
     ]
   }
 ]
