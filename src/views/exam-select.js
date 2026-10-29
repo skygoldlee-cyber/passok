@@ -218,7 +218,7 @@ function _showPackDownloadStatus(examId) {
         el = document.createElement('p');
         el.id = 'pack-dl-status';
         el.className = 'exam-select-stats';
-        container.parentElement.appendChild(el);
+        container.parentElement?.appendChild(el);
     }
     el.textContent = '오프라인 학습 자료를 내려받는 중…';
     if (_packDlListener) navigator.serviceWorker.removeEventListener('message', _packDlListener);
