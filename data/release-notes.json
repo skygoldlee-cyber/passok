@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261029-9967e24",
+    "date": "2026-10-29",
+    "notes": [
+      "[수정] logo-icon overflow:visible — img UA overflow:clip이 drop-shadow를 클립 플래그로 보고 (UX-NAV-10) [no-test]",
+      "[수정] 아이콘 파일명 passok-icon-*로 변경 — OS 설치 아이콘 캐시 완전 무효화 [no-test]",
+      "[정리·release] v20261029-24b8d49 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261029-24b8d49",
     "date": "2026-10-29",
     "notes": [
@@ -209,16 +218,6 @@
       "[정리] version-watch.js 도메인 맵 분류 등록 [no-docs]",
       "[기능·pwa] 배포 버전 감시 → 새 버전 프롬프트로 수동 버튼 대체 + 게이트 대응 가이드 [no-docs]",
       "[정리·release] v20261028-74a8f29 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261028-74a8f29",
-    "date": "2026-10-28",
-    "notes": [
-      "[정리] 그룹 순서 변경 후 생성물 재빌드 [no-docs]",
-      "[수정·exam-select] 산업안전 그룹을 법무·노무 아래로 이동 [no-docs]",
-      "[기능·header] 새로고침 버튼을 통합검색 우측으로 이동 [no-docs]",
-      "[정리·release] v20261028-a674c79 스탬프 확정 [no-docs]"
     ]
   }
 ]
