@@ -108,6 +108,7 @@
     "check:all": "node tools/check/run.js --preset all",
     "check:all:quick": "node tools/check/run.js --preset all --quick",
     "check:all:e2e": "node tools/check/run.js --preset all && npm run test:e2e",
+    "ci:watch": "node tools/check/ci_watch.js",
     "check:ci": "node tools/check/run.js --preset ci",
     "check:audit": "node tools/check/run.js --preset audit",
     "check:onboard": "node tools/check/check_exam_onboard.js",
