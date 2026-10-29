@@ -187,7 +187,7 @@ async function main() {
     }
 
     const lines = assembleDraftLines({ target, doc, chunks, results });
-    const out = writeDraft(`textbook_${doc.docName.replace(/[\\/:*?"<>|]/g, '_')}.md`, lines, { model: llm.modelName() });
+    const out = writeDraft(`${target.id}/textbook_${doc.docName.replace(/[\\/:*?"<>|]/g, '_')}.md`, lines, { model: llm.modelName() });
     console.log(`${doc.docName} (${doc.subjectDir}): 청크 ${chunks.length}개 → ${path.relative(ROOT, out)}`);
 }
 

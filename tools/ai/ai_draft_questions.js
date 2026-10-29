@@ -96,7 +96,7 @@ async function main() {
                 n++;
             }
         }
-        const out = writeDraft(`draft_${book.subjectKey}.md`, lines, { model: llm.modelName() });
+        const out = writeDraft(`${target.id}/draft_${book.subjectKey}.md`, lines, { model: llm.modelName() });
         console.log(`${book.file}: 청크 ${chunks.length}개 → ${path.relative(ROOT, out)}`);
     }
 }

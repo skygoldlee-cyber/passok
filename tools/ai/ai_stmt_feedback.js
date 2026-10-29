@@ -140,7 +140,7 @@ async function generate(flags, opts) {
             if (ungroundedList.length) {
                 lines.push('## ⚠️ 근거 부재 — 피드백 미생성 (모문항 해설 보강 후 재실행)', '', ...ungroundedList, '');
             }
-            const out = writeDraft(`stmtfb_${target.id}_${key}.md`, lines, { model: llm.modelName() });
+            const out = writeDraft(`${target.id}/stmtfb_${target.id}_${key}.md`, lines, { model: llm.modelName() });
             console.log(`${key}: 진술 ${entries.length}개 (근거 부재 ${ungroundedList.length}개 제외) → ${out}`);
         }
     }

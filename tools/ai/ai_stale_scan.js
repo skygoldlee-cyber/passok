@@ -84,7 +84,7 @@ async function main() {
         }
         lines.push(`- **${h.exam} Q${h.q.num}** — ${h.q.stem.slice(0, 60)}… · 정답 ${h.ans.answer} · 인용 ${h.cit.label}${verdict}`);
     }
-    const out = writeDraft(`stale_${new Date().toISOString().slice(0, 10)}.md`, lines, { model: useLlm ? llm.modelName() : 'scan' });
+    const out = writeDraft(`misc/stale_${new Date().toISOString().slice(0, 10)}.md`, lines, { model: useLlm ? llm.modelName() : 'scan' });
     console.log(`\n재검증 대기 ${hits.length}문 → ${out}`);
 }
 

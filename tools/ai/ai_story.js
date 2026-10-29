@@ -172,7 +172,7 @@ async function generate(opts, flags) {
                 }
                 drafted++;
             }
-            const out = writeDraft(`story_${target.id}_${book.subjectKey}.md`, lines, { model: llm.modelName() });
+            const out = writeDraft(`${target.id}/story_${target.id}_${book.subjectKey}.md`, lines, { model: llm.modelName() });
             console.log(`${book.subjectKey}: 미작성 슬롯 ${open.length}개 → ${out}`);
         }
     }

@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-29 chore(ai): 초안 출력을 시험별 폴더로 — writeDraft가 `<exam>/` 접두 지원, 전 도구 호출 지점에 시험 id 적용 + 기존 초안 150건을 `tmp/ai_drafts/<exam>/`으로 이동 (읽기 스캔은 listDraftFiles 재귀로 갱신)
+
+## 2026-10-29 fix: 도움말 "변경 이력" 아이콘 미표시 — fa-sparkles(FA 6.5+)를 지원되는 fa-wand-magic-sparkles로 교체 (index.template + whats-new.js)
+
 ## 2026-10-28 feat(content): iteng 과목2 교재 본문 편입 — ai:textbook 초안 211청크
 
 - `교재/db/2과목_데이터베이스 구축.md` — 16개 작성 슬롯을 NCS 학습모듈 초안으로 채움 (SQL응용 132·데이터전환 28·SQL활용 19·물리DB 17·논리DB 15청크 분 → 슬롯-섹션 유사도 매칭 + 잔여 누적)

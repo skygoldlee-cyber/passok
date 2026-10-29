@@ -144,7 +144,7 @@ async function generate(opts, flags) {
             if (ungroundedList.length) {
                 lines.push('## ⚠️ 근거 부재 — 정의 미생성', '', ...ungroundedList, '');
             }
-            const out = writeDraft(`glossary_${target.id}_${gf.file.replace('.json', '')}.md`, lines, { model: llm.modelName() });
+            const out = writeDraft(`${target.id}/glossary_${target.id}_${gf.file.replace('.json', '')}.md`, lines, { model: llm.modelName() });
             console.log(`${gf.file}: 부실 정의 ${thin.length}항목 (근거 부재 ${ungroundedList.length}개 제외) → ${out}`);
         }
     }

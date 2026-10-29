@@ -28,7 +28,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { parseArgs, getTargets, listQbanks, DRAFT_DIR, ROOT,
+const { parseArgs, getTargets, listQbanks, DRAFT_DIR, ROOT, listDraftFiles,
     draftBodyHash, parseDraftMeta, logAdoption } = require('./lib/ai_common');
 const { listTextbooks } = require('./lib/textbook');
 
@@ -117,7 +117,7 @@ function batchMeta(f) {
 function applyDrafts(flags, opts) {
     const write = flags.has('write');
     const drafts = fs.existsSync(DRAFT_DIR)
-        ? fs.readdirSync(DRAFT_DIR).filter(f => /^draft_.+\.md$/.test(f)
+        ? listDraftFiles().filter(f => /^draft_.+\.md$/.test(path.basename(f))
             && (!opts.file || f === `draft_${opts.file.replace(/^draft_/, '').replace(/\.md$/, '')}.md`))
         : [];
     if (!drafts.length) { console.log('draft_* 초안 없음 — ai:draft를 먼저 실행하세요'); return; }
@@ -129,7 +129,7 @@ function applyDrafts(flags, opts) {
             const exam = (target.manifest.exams || []).find(e => e.subject === subjKey);
             const book = listTextbooks(target).find(b => b.subjectKey === subjKey);
             if (!exam || !book) continue;
-            const qs = parseQuestionDraft(path.join(DRAFT_DIR, f));
+            const qs = parseQuestionDraft(f);
             if (!qs.length) { console.log(`${f}: 편입 가능 문항 0건`); continue; }
 
             const bankAbs = path.join(ROOT, target.contentRoot, '문제은행', exam.file);
@@ -214,7 +214,7 @@ function main() {
 
     // 초안 파일 ↔ 문제은행 매칭 — explain_<examKey>.md 규약
     const drafts = fs.existsSync(DRAFT_DIR)
-        ? fs.readdirSync(DRAFT_DIR).filter(f => /^explain_.+\.md$/.test(f)
+        ? listDraftFiles().filter(f => /^explain_.+\.md$/.test(path.basename(f))
             && (!opts.file || f === `explain_${opts.file.replace(/^explain_/, '').replace(/\.md$/, '')}.md`))
         : [];
     if (!drafts.length) { console.log('explain_* 초안 없음 — ai:explain을 먼저 실행하세요'); return; }
@@ -226,7 +226,7 @@ function main() {
         for (const { exam, absPath } of listQbanks(target)) {
             const draft = drafts.find(d => d === `explain_${target.id}_${exam.key}.md`);
             if (!draft) continue;
-            const entries = parseExplainDraft(path.join(DRAFT_DIR, draft));
+            const entries = parseExplainDraft(draft);
             if (!entries.size) { console.log(`${draft}: 편입 가능한 해설 0건`); continue; }
 
             let src = fs.readFileSync(absPath, 'utf-8');

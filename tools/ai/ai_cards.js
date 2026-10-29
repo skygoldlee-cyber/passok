@@ -22,7 +22,7 @@
 const fs = require('fs');
 const path = require('path');
 const { createRequire } = require('module');
-const { parseArgs, getTargets, writeDraft, loadEnv, DRAFT_DIR, ROOT } = require('./lib/ai_common');
+const { parseArgs, getTargets, writeDraft, loadEnv, DRAFT_DIR, ROOT, listDraftFiles } = require('./lib/ai_common');
 const llm = require('./llm_client');
 
 const esmRequire = createRequire(path.join(ROOT, 'tools', 'build', 'plugins', 'textbook.plugin.js'));
@@ -75,9 +75,9 @@ function buildPrompt(card, context) {
 function parseCardDrafts() {
     const byExam = new Map();
     if (!fs.existsSync(DRAFT_DIR)) return byExam;
-    for (const f of fs.readdirSync(DRAFT_DIR).filter(f => /^cardtip_.+\.md$/.test(f))) {
-        const examId = f.replace(/^cardtip_/, '').replace(/_[^_]+\.md$/, '');
-        const md = fs.readFileSync(path.join(DRAFT_DIR, f), 'utf-8');
+    for (const f of listDraftFiles().filter(f => /^cardtip_.+\.md$/.test(path.basename(f)))) {
+        const examId = path.basename(f).replace(/^cardtip_/, '').replace(/_[^_]+\.md$/, '');
+        const md = fs.readFileSync(f, 'utf-8');
         const map = byExam.get(examId) || new Map();
         for (const m of md.matchAll(/## card (\S+)\s*\n[\s\S]*?^> \*\*카드팁\*\*:\s*(.+)$/gm)) {
             const text = m[2].trim();
@@ -141,7 +141,7 @@ async function generate(opts, flags) {
             if (ungroundedList.length) {
                 lines.push('## ⚠️ 근거 부재 — 팁 미생성', '', ...ungroundedList, '');
             }
-            const out = writeDraft(`cardtip_${target.id}_${s.key}.md`, lines, { model: llm.modelName() });
+            const out = writeDraft(`${target.id}/cardtip_${target.id}_${s.key}.md`, lines, { model: llm.modelName() });
             console.log(`${s.key}: 대상 카드 ${cards.length}개 (근거 부재 ${ungroundedList.length}개 제외) → ${out}`);
         }
     }

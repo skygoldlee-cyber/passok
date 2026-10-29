@@ -100,7 +100,7 @@ async function main() {
             }
             flagged += fileFlagged;
             if (fileFlagged) {
-                const out = writeDraft(`lint_${exam.key}.md`, lines, { model: 'rules' });
+                const out = writeDraft(`${target.id}/lint_${exam.key}.md`, lines, { model: 'rules' });
                 console.log(`${exam.file}: ${fileFlagged}문 지적 → ${out}`);
             } else console.log(`${exam.file}: 지적 없음`);
         }

@@ -81,7 +81,8 @@ function parseDraftMeta(text) {
     return Object.fromEntries(m[1].trim().split(/\s+/).map(kv => kv.split('=')));
 }
 
-/** 초안 파일 작성 — 상단에 ai-draft 메타 주석 부착 (설계 §4: reviewed=no 추적, 편입 시 제거) */
+/** 초안 파일 작성 — 상단에 ai-draft 메타 주석 부착 (설계 §4: reviewed=no 추적, 편입 시 제거).
+ * name에 'examId/' 접두를 포함하면 시험별 하위 폴더로 저장한다 (tmp/ai_drafts/<exam>/). */
 function writeDraft(name, bodyLines, meta = {}) {
     const sha = draftBodyHash(bodyLines.join('\n'));
     const header = [
@@ -89,7 +90,22 @@ function writeDraft(name, bodyLines, meta = {}) {
         '',
     ];
     const out = draftPath(name);
+    fs.mkdirSync(path.dirname(out), { recursive: true });
     fs.writeFileSync(out, header.concat(bodyLines).join('\n'), 'utf-8');
+    return out;
+}
+
+/** tmp/ai_drafts 전체 .md 경로 재귀 수집 — 시험별 하위 폴더 포함 (프리픽스 필터용) */
+function listDraftFiles() {
+    const out = [];
+    if (!fs.existsSync(DRAFT_DIR)) return out;
+    (function walk(d) {
+        for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+            const p = path.join(d, e.name);
+            if (e.isDirectory()) walk(p);
+            else if (e.name.endsWith('.md')) out.push(p);
+        }
+    })(DRAFT_DIR);
     return out;
 }
 
@@ -104,5 +120,5 @@ function logAdoption(rec) {
 module.exports = {
     ROOT, DRAFT_DIR, ADOPTION_LOG,
     loadEnv, parseArgs, getTargets, listQbanks, draftPath, writeDraft,
-    draftBodyHash, parseDraftMeta, logAdoption,
+    draftBodyHash, parseDraftMeta, logAdoption, listDraftFiles,
 };

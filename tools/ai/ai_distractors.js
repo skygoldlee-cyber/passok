@@ -73,7 +73,7 @@ async function main() {
                     `- 기존 허용: ${ans.accepts.join(', ') || '(없음)'}`,
                     `- 제안 추가: ${all.join(', ')}`, '');
             }
-            const out = writeDraft(`distractors_${exam.key}.md`, lines, { model: llm.modelName() });
+            const out = writeDraft(`${target.id}/distractors_${exam.key}.md`, lines, { model: llm.modelName() });
             console.log(`${exam.file}: 변형 제안 ${count}문 → ${out}`);
         }
     }

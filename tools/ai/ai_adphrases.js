@@ -116,7 +116,7 @@ async function main() {
                 lines.push('```js', res.dryRun ? '// (미생성 — DRY RUN)' : res.text.trim(), '```', '');
             }
         }
-        const out = writeDraft(`adphrases_${target.id}.md`, lines, { model: llm.modelName() });
+        const out = writeDraft(`${target.id}/adphrases_${target.id}.md`, lines, { model: llm.modelName() });
         console.log(`${target.id}: → ${out} (리뷰 후 ad-lint.js 수동 편입, check:adlint 회귀 확인)`);
     }
 }

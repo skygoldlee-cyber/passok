@@ -92,7 +92,7 @@ async function main() {
                 lines.push('## ⚠️ 근거 미해석 — 해설 미생성 (인용 보강 후 재실행)', '', ...ungroundedList, '');
             }
             // 파일명에 시험 id 포함 — 동일 examKey를 쓰는 다른 시험과 충돌 방지
-            const out = writeDraft(`explain_${target.id}_${exam.key}.md`, lines, { model: llm.modelName() });
+            const out = writeDraft(`${target.id}/explain_${target.id}_${exam.key}.md`, lines, { model: llm.modelName() });
             console.log(`${exam.file}: 해설 누락 ${missing.length}문 (근거 미해석 ${ungroundedList.length}문 제외) → ${out}`);
         }
     }

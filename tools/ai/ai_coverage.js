@@ -62,7 +62,7 @@ function main() {
             }
             lines.push('');
         }
-        const out = writeDraft(`coverage_${target.id}.md`, lines, { model: 'analysis' });
+        const out = writeDraft(`${target.id}/coverage_${target.id}.md`, lines, { model: 'analysis' });
         console.log(`${target.id}: 커버리지 리포트 → ${out}`);
     }
 }

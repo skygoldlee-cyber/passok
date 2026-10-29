@@ -46,7 +46,7 @@ function main() {
                 const cit = primaryCitation(ans);
                 lines.push(`| Q${q.num} | ${q.type} | ${inferTags(questionText(q)).join(', ') || '(없음)'} | ${estimateDifficulty(q, ans)} | ${cit ? `L${cit.lineNo}` : '—'} |`);
             }
-            const out = writeDraft(`tags_${exam.key}.md`, lines, { model: 'rules' });
+            const out = writeDraft(`${target.id}/tags_${exam.key}.md`, lines, { model: 'rules' });
             console.log(`${exam.file}: ${Math.min(limit, questions.length)}문 제안 → ${out}`);
         }
     }

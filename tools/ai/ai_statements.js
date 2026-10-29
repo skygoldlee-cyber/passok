@@ -117,7 +117,7 @@ async function main() {
             }
         }
 
-        const out = writeDraft(`statements_${target.id}.md`, lines, { model: llm.modelName() });
+        const out = writeDraft(`${target.id}/statements_${target.id}.md`, lines, { model: llm.modelName() });
         console.log(`${target.id}: 변형 제안 ${count}진술 · 재조합 후보 ${groups.length}개념 → ${out}`);
     }
 }
