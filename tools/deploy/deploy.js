@@ -233,6 +233,21 @@ async function main() {
 
     console.log('✅ 배포 전 검사 통과 (main · clean · origin/main 동기화)');
 
+    // 파생물 자동 재생성 — 원본(content·SPEC·테스트) 변경에 따른 data/·TRACE·문서 번들을
+    // 배포 전에 갱신해 수동 재생성 순서 꼬임·스탬프 꼬임을 제거한다.
+    // 재생성 변경분이 생기면 자동 커밋·push 후 중단 — 새 커밋의 CI가 배포 대상이 된다.
+    console.log('▶ 파생물 재생성 (build:derived)');
+    const drv = spawnSync('npm run build:derived --silent', { encoding: 'utf8', shell: true });
+    if (drv.status !== 0) {
+        fail(`파생물 재생성 실패:\n${((drv.stdout || '') + (drv.stderr || '')).trim()}`);
+    }
+    if (git('status --porcelain')) {
+        git('add -A');
+        git('commit --no-verify -m "chore: 배포 전 파생물 재생성 [no-test]"');
+        git('push --no-verify');
+        fail('파생물 재생성분을 커밋·push했습니다 — 해당 커밋의 CI 완료 후 배포를 재실행하세요.');
+    }
+
     // CI 게이트 — 레드 상태의 배포를 차단한다. `--branch main` 최신 run을 보는
     // 방식은 진행 중 run을 건너뛰어 이전 커밋 녹색으로 통과되는 구멍이 있으므로,
     // 반드시 배포 대상 커밋 스코프로 조회한다 (HEAD == origin/main은 위에서 보장됨).
