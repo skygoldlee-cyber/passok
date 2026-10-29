@@ -207,29 +207,20 @@ export async function hardReloadApp() {
 }
 
 /** 시험 카드 선택 — 준비중 시험은 알림만, 다른 시험이면 selectExam이 리로드, 같으면 대시보드로 복귀 */
-// P-14 — 선택 팩 다운로드 진행 표시: cachePack 요청 후 packCached 응답까지
-// 선택 영역 하단에 소형 상태줄을 표시한다 (토스트 대신 인라인 — 리로드가 곧 발생하므로 비차단).
+// P-14 — 선택 팩 다운로드 진행 표시: cachePack 요청 후 packCached 응답까지 토스트로 안내
 let _packDlListener = null;
 function _showPackDownloadStatus(examId) {
-    const container = document.getElementById('exam-select-list');
-    if (!container) return;
-    let el = document.getElementById('pack-dl-status');
-    if (!el) {
-        el = document.createElement('p');
-        el.id = 'pack-dl-status';
-        el.className = 'exam-select-stats';
-        container.parentElement?.appendChild(el);
-    }
-    el.textContent = '오프라인 학습 자료를 내려받는 중…';
+    showToast('오프라인 학습 자료를 내려받는 중…', 'info');
     if (_packDlListener) navigator.serviceWorker.removeEventListener('message', _packDlListener);
     _packDlListener = (e) => {
         if (e.data?.type === 'passok:packCached' && e.data.examId === examId) {
-            el.textContent = e.data.failed === 0
-                ? `오프라인 자료 준비 완료 (${e.data.total}파일)`
-                : `오프라인 자료 일부 다운로드 실패 (${e.data.total - e.data.failed}/${e.data.total})`;
+            if (e.data.failed === 0) {
+                showToast(`오프라인 자료 준비 완료 (${e.data.total}파일)`, 'success');
+            } else {
+                showToast(`오프라인 자료 일부 다운로드 실패 (${e.data.total - e.data.failed}/${e.data.total})`, 'warning');
+            }
             navigator.serviceWorker.removeEventListener('message', _packDlListener);
             _packDlListener = null;
-            setTimeout(() => { if (el.parentElement) el.textContent = ''; }, 5000);
         }
     };
     navigator.serviceWorker.addEventListener('message', _packDlListener);
