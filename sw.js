@@ -461,16 +461,45 @@ async function precacheResilient(cacheName, assets) {
   return failed;
 }
 
+// @spec P-14 — 팩별 지연 다운로드: 시험별 자산은 install 전체 프리캐시에서 제외하고
+// 선택 시 cachePack 메시지로 해당 팩만 캐시한다 (설치 부하를 선택 팩으로 국한).
+function packAssets(examId) {
+  return MD_ASSETS.filter((a) => a.includes(`/exams/${examId}/`));
+}
+function sharedDocAssets() {
+  return MD_ASSETS.filter((a) => !a.includes('/exams/'));
+}
+const PACK_MESSAGE_TYPE = 'passok:cachePack';
+
 self.addEventListener('install', (event) => {
   // 프리캐시는 관용적(resilient)으로 수행한다 — 이유는 precacheResilient 주석 참고.
   // 개별 실패를 허용하되 skipWaiting 은 절대 건너뛰지 않아 업데이트 경로가 브릭되지 않는다.
+  // P-14: 시험별 MD(교재·문제은행)는 프리캐시하지 않고 선택 시 cachePack으로 지연 다운로드.
+  // 데이터 번들은 소형이라 전 팩 유지 — registry 해석이 팩 선택 전에 필요하기 때문.
   event.waitUntil(
     Promise.all([
       precacheResilient(SHELL_CACHE, SHELL_ASSETS),
       precacheResilient(DATA_CACHE, DATA_ASSETS),
-      precacheResilient(SHELL_CACHE, MD_ASSETS),
+      precacheResilient(SHELL_CACHE, sharedDocAssets()),
       precacheResilient(SHELL_CACHE, EXAM_MEDIA_ASSETS)
     ]).then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('message', (event) => {
+  if (!event.data || event.data.type !== PACK_MESSAGE_TYPE || !event.data.examId) return;
+  const assets = packAssets(event.data.examId);
+  event.waitUntil(
+    precacheResilient(SHELL_CACHE, assets).then((failed) => {
+      if (event.source && event.source.postMessage) {
+        event.source.postMessage({
+          type: 'passok:packCached',
+          examId: event.data.examId,
+          total: assets.length,
+          failed: failed.length
+        });
+      }
+    })
   );
 });
 

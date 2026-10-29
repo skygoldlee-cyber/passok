@@ -1,5 +1,7 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-29 feat(pwa): 팩별 지연 다운로드 (P-14) — install은 쉘+공용 자산만 프리캐시하고 시험별 교재·문제은행 MD는 시험 선택 시 `passok:cachePack` 메시지로 해당 팩만 캐시
+
 ## 2026-10-29 perf(deploy): 배포 스테이징 가속 3종 — ① .vercelignore에 ref_md images 제외(프로덕션 원문 보기는 텍스트 전용) ② ref_md 추출 조각 이미지(<3KB) 235,668건 삭제 + md 참조 정리(저장소 242K→7.1K 이미지) ③ deploy.js 스테이징 복사를 64-풀 비동기로 병렬화
 
 ## 2026-10-29 perf(ci): 대형 트리(245K) 병목 게이트 가속 — U+FFFD 스캔 병렬 I/O+`--ref` diff-scope(diffScoped 등록·CI `--ref origin/main --jobs 4`), 고아 자산 스캔을 자산베이스명 토큰 인덱스 방식으로 재설계(O(코퍼스) 1패스, 잔여 후보만 includes() 재검증)

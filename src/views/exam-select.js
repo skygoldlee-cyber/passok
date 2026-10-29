@@ -214,6 +214,10 @@ export function selectExamAction(id) {
         return;
     }
     if (def && def.contentStamp) _markStampSeen(id, def.contentStamp); // ES-07 — 방문 시 갱신 배지 해소
+    // P-14 — 선택 팩 자산 지연 다운로드 요청 (백그라운드 캐시, 진입 차단 없음)
+    if (navigator.serviceWorker?.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: 'passok:cachePack', examId: id });
+    }
     if (selectExam(id)) return; // 다른 시험: 페이지 리로드 발생
     switchView('dashboard-view');
 }
