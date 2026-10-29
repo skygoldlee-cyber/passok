@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261029-24b8d49",
+    "date": "2026-10-29",
+    "notes": [
+      "[기능·pwa] manifest 아이콘에 콘텐츠 해시 스탬프 — OS 설치 아이콘 캐시 무효화 [no-test]",
+      "[정리·release] v20261029-c48092a 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261029-c48092a",
     "date": "2026-10-29",
     "notes": [
@@ -211,14 +219,6 @@
       "[수정·exam-select] 산업안전 그룹을 법무·노무 아래로 이동 [no-docs]",
       "[기능·header] 새로고침 버튼을 통합검색 우측으로 이동 [no-docs]",
       "[정리·release] v20261028-a674c79 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261028-a674c79",
-    "date": "2026-10-28",
-    "notes": [
-      "[기능·exam-select] 강제 새로고침 버튼 추가 (SW 캐시 우회) [no-docs]",
-      "[정리·release] v20261028-b511561 스탬프 확정 [no-docs]"
     ]
   }
 ]
