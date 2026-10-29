@@ -124,10 +124,13 @@ export function applyExamBranding() {
     const printTitle = document.getElementById('review-print-title');
     if (printTitle && exam.name) printTitle.textContent = `${exam.name} 오답 복습노트`;
 
-    // P-14 — 팩 지연 다운로드 진행 복구: 선택 시 리로드로 사라진 토스트를 부팅 시 재표시
+    // P-14 — 팩 지연 다운로드 진행 복구: 선택 시 리로드로 사라진 토스트를 부팅 시 1회만 재표시.
+    // packCached는 SW가 요청 클라이언트(사라진 이전 페이지)에만 보내므로, 여기선 타임아웃으로
+    // 플래그를 정리한다 — 이미 캐시된 경우 토스트가 영구 반복되지 않도록.
     try {
         const pendingPack = safeGetItem('pack_dl_pending');
         if (pendingPack && navigator.serviceWorker) {
+            safeRemoveItem('pack_dl_pending'); // 1회성 소비 — 재부팅마다 재표시 차단
             showToast('오프라인 학습 자료를 내려받는 중…', 'info');
             const onPackMsg = (e) => {
                 if (e.data?.type === 'passok:packCached' && e.data.examId === pendingPack) {
@@ -135,11 +138,11 @@ export function applyExamBranding() {
                         ? `시험 팩 다운로드 완료 (${e.data.total}파일) — 오프라인에서도 학습할 수 있습니다`
                         : `시험 팩 일부 다운로드 실패 (${e.data.total - e.data.failed}/${e.data.total}) — 온라인 재시도 필요`,
                         e.data.failed === 0 ? 'success' : 'warning', 5000);
-                    safeRemoveItem('pack_dl_pending');
                     navigator.serviceWorker.removeEventListener('message', onPackMsg);
                 }
             };
             navigator.serviceWorker.addEventListener('message', onPackMsg);
+            setTimeout(() => navigator.serviceWorker.removeEventListener('message', onPackMsg), 15000);
         }
     } catch { /* 무시 */ }
     const printSub = document.getElementById('review-print-sub');
