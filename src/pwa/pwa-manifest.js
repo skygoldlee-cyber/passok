@@ -34,6 +34,14 @@
         // check:datafresh가 파일 존재·신선도를 보장한다 (manifest.webmanifest 자체는 부팅 전까지의 폴백).
         link.href = 'manifest.' + encodeURIComponent(exam.id) + '.webmanifest';
 
+        // 파비콘도 활성 시험 전용 아이콘으로 전환 — icons/<exam>/ 세트가 전 팩 존재한다.
+        // 미설치 환경(탭)과 iOS 홈 화면 추가 모두 활성 시험 아이콘을 노출해야 한다.
+        const favHref = 'icons/' + encodeURIComponent(exam.id) + '/icon-192.png';
+        const fav = /** @type {HTMLLinkElement|null} */ (document.querySelector('link[rel="icon"]'));
+        if (fav) fav.href = favHref;
+        const appleIcon = /** @type {HTMLLinkElement|null} */ (document.querySelector('link[rel="apple-touch-icon"]'));
+        if (appleIcon) appleIcon.href = favHref;
+
         // 문서 제목/설명도 활성 시험 기준으로 갱신
         if (exam.title) document.title = exam.title;
         const metaDesc = document.querySelector('meta[name="description"]');
