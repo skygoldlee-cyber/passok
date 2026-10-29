@@ -477,7 +477,7 @@ const EVICT_MESSAGE_TYPE = 'passok:evictPack';
 async function evictPackAssets(examId) {
   const cache = await caches.open(SHELL_CACHE);
   const assets = packAssets(examId);
-  const results = await Promise.allSettled(assets.map((a) => cache.delete(a)));
+  await Promise.allSettled(assets.map((a) => cache.delete(a)));
   return assets.length;
 }
 
