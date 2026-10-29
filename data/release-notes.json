@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261030-820df14",
+    "date": "2026-10-30",
+    "notes": [
+      "[정리] 패딩 아이콘 해시 반영 — manifest ?v= 스탬프 재생성 [no-test]",
+      "[수정] maskable 아이콘 세이프존 패딩 18% — 모바일 설치 아이콘 하단 잘림 해소 [no-test]",
+      "[정리·release] v20261030-b3b35f7 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261030-b3b35f7",
     "date": "2026-10-30",
     "notes": [
@@ -189,22 +198,6 @@
       "[기능·content] 비표형식 출제기준 5팩 과목 대조표 추가",
       "[수정·gate] 온보딩 챕터 정규식 이모지 접두 허용 — labor·compapp pilot 복원",
       "[기능·gate] 시험 팩 성숙도 티어 제도 — exams.json tier + check:onboard 요건 강제"
-    ]
-  },
-  {
-    "version": "v20261028-6e06420",
-    "date": "2026-10-28",
-    "notes": [
-      "[CI] CI 재실행 트리거 [no-docs]",
-      "[기능·content] 3개 팩 출제기준 수행준거 용어 정리 절 추가",
-      "[수정·content] 출제기준 항목명·세부내용 정교화 — 경계 오탐 소거 [no-docs]",
-      "[수정·audit] 타과목 커버 폴백 — syllabus 항목 귀속 오류 오탐 소거",
-      "[기능·audit] audit:syllabus를 check:audit 프리셋에 등록",
-      "[기능·content] hairdresser 미용실무 NCS 수행준거 챕터 추가",
-      "[수정·audit] ## Chapter NN. 헤딩 인식 — 비활성 팩 챕터 파싱 활성화",
-      "[수정·content] broker 출제기준 공고 원문 1:1 교정 — 농지법·출제비율 구조 반영 [no-docs]",
-      "[문서·content] broker 출제기준 세부내역 검증 주석 [no-docs]",
-      "[기능·content] broker 민사특별법 챕터 추가 (syllabus 갭 해소)"
     ]
   }
 ]
