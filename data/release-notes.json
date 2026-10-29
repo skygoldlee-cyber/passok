@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261029-023be2d",
+    "date": "2026-10-29",
+    "notes": [
+      "[수정·pwa] 파비콘도 활성 시험 아이콘으로 전환 — 브랜드 아이콘 고정 문제 [no-test]",
+      "[정리·release] v20261029-a6affe9 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261029-a6affe9",
     "date": "2026-10-29",
     "notes": [
@@ -225,15 +233,6 @@
       "[빌드] 시험 배치 재정렬분 생성물 재생성",
       "[content] 시험 배치 재정렬 — 정식·승격 준비순 (cosmetic→skincare→insadj→lossadj→broker→indsafe→admagent→appraisal)",
       "[정리·release] v20261026-6a8d21c 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-6a8d21c",
-    "date": "2026-10-26",
-    "notes": [
-      "[빌드] exams.json 순서 변경분 생성물 재생성",
-      "[content] 손해평가사·손해사정사·감정평가사 연속 배치 — appraisal를 insadj 직후로 이동",
-      "[정리·release] v20261026-3c26bfe 스탬프 확정 [no-docs]"
     ]
   }
 ]
