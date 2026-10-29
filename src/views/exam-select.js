@@ -207,10 +207,14 @@ export async function hardReloadApp() {
 }
 
 /** 시험 카드 선택 — 준비중 시험은 알림만, 다른 시험이면 selectExam이 리로드, 같으면 대시보드로 복귀 */
-// P-14 — 선택 팩 다운로드 진행 표시: cachePack 요청 후 packCached 응답까지 토스트로 안내
+// P-14 — 선택 팩 다운로드 진행 표시: cachePack 요청 후 packCached 응답까지 토스트로 안내.
+// 다른 시험 선택 시 selectExam이 즉시 리로드하므로 플래그를 localStorage에 남겨
+// 부팅(app-shell)에서 복구 표시한다 — 완료 시 제거.
+export const PACK_DL_FLAG = 'pack_dl_pending';
 let _packDlListener = null;
 function _showPackDownloadStatus(examId) {
     showToast('오프라인 학습 자료를 내려받는 중…', 'info');
+    try { setItem(PACK_DL_FLAG, examId); } catch { /* 무시 */ }
     if (_packDlListener) navigator.serviceWorker.removeEventListener('message', _packDlListener);
     _packDlListener = (e) => {
         if (e.data?.type === 'passok:packCached' && e.data.examId === examId) {
@@ -219,6 +223,7 @@ function _showPackDownloadStatus(examId) {
             } else {
                 showToast(`오프라인 자료 일부 다운로드 실패 (${e.data.total - e.data.failed}/${e.data.total})`, 'warning');
             }
+            try { setItem(PACK_DL_FLAG, ''); } catch { /* 무시 */ }
             navigator.serviceWorker.removeEventListener('message', _packDlListener);
             _packDlListener = null;
         }

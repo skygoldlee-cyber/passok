@@ -123,6 +123,25 @@ export function applyExamBranding() {
     // 인쇄 전용 헤더·퀴즈 빈 상태 등 시험명이 들어가는 정적 영역
     const printTitle = document.getElementById('review-print-title');
     if (printTitle && exam.name) printTitle.textContent = `${exam.name} 오답 복습노트`;
+
+    // P-14 — 팩 지연 다운로드 진행 복구: 선택 시 리로드로 사라진 토스트를 부팅 시 재표시
+    try {
+        const pendingPack = safeGetItem('pack_dl_pending');
+        if (pendingPack && navigator.serviceWorker) {
+            showToast('오프라인 학습 자료를 내려받는 중…', 'info');
+            const onPackMsg = (e) => {
+                if (e.data?.type === 'passok:packCached' && e.data.examId === pendingPack) {
+                    showToast(e.data.failed === 0
+                        ? `오프라인 자료 준비 완료 (${e.data.total}파일)`
+                        : `오프라인 자료 일부 다운로드 실패 (${e.data.total - e.data.failed}/${e.data.total})`,
+                        e.data.failed === 0 ? 'success' : 'warning');
+                    safeRemoveItem('pack_dl_pending');
+                    navigator.serviceWorker.removeEventListener('message', onPackMsg);
+                }
+            };
+            navigator.serviceWorker.addEventListener('message', onPackMsg);
+        }
+    } catch { /* 무시 */ }
     const printSub = document.getElementById('review-print-sub');
     if (printSub && exam.title) printSub.textContent = exam.title;
     const quizEmpty = document.getElementById('quiz-empty-title');
