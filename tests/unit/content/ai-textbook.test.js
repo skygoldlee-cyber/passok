@@ -115,7 +115,7 @@ function runTool(args = []) {
 
 test('AI-24/AI-02: 무키 dry-run으로 lossadj 참조자료 초안 골격을 생성한다', () => {
     const out = runTool(['--exam', 'lossadj', '--doc', '상법', '--dry-run']);
-    assert.match(out, /청크 \d+개 → tmp[/\\]ai_drafts[/\\]textbook_/, '초안 산출 출력');
+    assert.match(out, /청크 \d+개 → tmp[/\\]ai_drafts[/\\][^/\\]+[/\\]textbook_/, '초안 산출 출력');
 });
 
 test('AI-24: 미존재 문서는 사용 가능 목록과 함께 실패한다', () => {
