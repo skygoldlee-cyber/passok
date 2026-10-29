@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261030-2ba9355",
+    "date": "2026-10-30",
+    "notes": [
+      "[수정] maskable을 로고 풀블리드로 — 합성 배경 제거, 로고 자체가 아이콘 [no-test]",
+      "[수정] maskable 배경을 로고 그래디언트 블러로 — 단색 배경 밋밋함 해소, 정사각 마스터 기반 [no-test]",
+      "[수정] passok-logo 마스터 정사각형화 — 파생 아이콘 대칭 생성, 비대칭 잘림·고스트 해소 [no-test]",
+      "[수정] 아이콘 검은 테두리 해소 — 비마스커블 투명 유지, 마스커블은 단색 배경 [no-test]",
+      "[정리·release] v20261030-501fcd9 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261030-501fcd9",
     "date": "2026-10-30",
     "notes": [
@@ -183,15 +194,6 @@
       "[수정·pwa] whats-new 모달 webdriver 가드 — e2e 합성 이력 시드의 returning-user 오발화 차단",
       "[수정·pwa] hardReload 직후 새로운 소식 모달 미표시 — INBOUND 플래그를 hadController 게이트로",
       "[정리·release] v20261028-6dfadb5 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261028-6dfadb5",
-    "date": "2026-10-28",
-    "notes": [
-      "[수정·merge] stamps 드라이버 same-date 정렬 — theirs 우선으로 연대기·APP_VERSION 정합",
-      "[정리·release] v20261028-4cd7f38 스탬프 확정 [no-docs]",
-      "[정리·release] v20261028-c2e1bf2 스탬프 확정 [no-docs]"
     ]
   }
 ]
