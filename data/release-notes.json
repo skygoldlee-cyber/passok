@@ -1,5 +1,18 @@
 [
   {
+    "version": "v20261029-31d0738",
+    "date": "2026-10-29",
+    "notes": [
+      "[성능·ci] 대형 트리 병목 게이트 가속 — FFFD 병렬I/O+diff-scope, 고아자산 토큰 인덱스화 [no-test]",
+      "[테스트] ai-textbook 출력 경로 검증을 시험별 초안 폴더 구조에 맞춰 갱신 [no-docs]",
+      "[수정] 도움말 변경 이력 아이콘 미표시 — fa-sparkles를 fa-wand-magic-sparkles로 [no-test]",
+      "[정리] pdf-registry 재생성 — iteng references.json subjectDirMap 반영",
+      "[기능·content] iteng 과목2 교재 본문 편입 — ai:textbook 초안 211청크",
+      "[기능·content] iteng NCS 학습모듈 55건 ref_md 편입 + 게이트 수정",
+      "[정리·release] v20261028-9780300 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261028-9780300",
     "date": "2026-10-28",
     "notes": [
@@ -214,16 +227,6 @@
       "[스타일] 데스크탑 배경화 전체 노출 — cover→contain 전환",
       "[스타일] 시험 선택 화면 모바일 컴팩트 그리드 — 카드 전체 스크롤 없이 노출",
       "[정리·release] v20261026-9119580 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-9119580",
-    "date": "2026-10-26",
-    "notes": [
-      "[수정] generated_files.js @spec 태그 추가 + TRACE_MATRIX 재생성",
-      "[정리] TRACE_MATRIX 재생성 — 게이트 변경 반영",
-      "[리팩터링·gates] src/ 빌드 생성물을 게이트 트리거에서 면제 + scaffold baseline 자동 등록",
-      "[정리·release] v20261026-a24dd73 스탬프 확정 [no-docs]"
     ]
   }
 ]
