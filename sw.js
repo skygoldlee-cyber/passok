@@ -470,6 +470,16 @@ function sharedDocAssets() {
   return MD_ASSETS.filter((a) => !a.includes('/exams/'));
 }
 const PACK_MESSAGE_TYPE = 'passok:cachePack';
+const EVICT_MESSAGE_TYPE = 'passok:evictPack';
+
+// @spec P-14 — 팩 전환 시 구 팩 캐시 정리: 이전 시험의 지연 다운로드분을 해제한다.
+// 프리캐시(공용·셸·데이터)에는 영향 없음 — packAssets 범위만 삭제.
+async function evictPackAssets(examId) {
+  const cache = await caches.open(SHELL_CACHE);
+  const assets = packAssets(examId);
+  const results = await Promise.allSettled(assets.map((a) => cache.delete(a)));
+  return assets.length;
+}
 
 self.addEventListener('install', (event) => {
   // 프리캐시는 관용적(resilient)으로 수행한다 — 이유는 precacheResilient 주석 참고.
@@ -487,6 +497,20 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === EVICT_MESSAGE_TYPE && event.data.examId) {
+    event.waitUntil(
+      evictPackAssets(event.data.examId).then((removed) => {
+        if (event.source && event.source.postMessage) {
+          event.source.postMessage({
+            type: 'passok:packEvicted',
+            examId: event.data.examId,
+            removed
+          });
+        }
+      })
+    );
+    return;
+  }
   if (!event.data || event.data.type !== PACK_MESSAGE_TYPE || !event.data.examId) return;
   const assets = packAssets(event.data.examId);
   event.waitUntil(
