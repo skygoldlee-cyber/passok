@@ -87,7 +87,7 @@ test.describe('PWA 자산·서비스 워커', () => {
     });
 
     test('App Shell 핵심 자산(style.css·data/version.js·아이콘)이 200이다', async ({ request }) => {
-        for (const url of ['/style.css', '/data/version.js', '/icons/passok.png']) {
+        for (const url of ['/style.css', '/data/version.js', '/icons/icon-192.png']) {
             const resp = await request.get(url);
             expect(resp.ok(), `${url} 응답 실패`).toBe(true);
         }

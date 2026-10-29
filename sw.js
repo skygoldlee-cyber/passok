@@ -150,7 +150,7 @@ const SHELL_ASSETS = [
   './src/reader/html-viewer.js',
   './src/pdf-registry.js',
   './src/study-aids.js',
-  './icons/passok.png',
+  './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-maskable-512.png',
   './icons/bg-landscape.webp',
