@@ -132,9 +132,9 @@ export function applyExamBranding() {
             const onPackMsg = (e) => {
                 if (e.data?.type === 'passok:packCached' && e.data.examId === pendingPack) {
                     showToast(e.data.failed === 0
-                        ? `오프라인 자료 준비 완료 (${e.data.total}파일)`
-                        : `오프라인 자료 일부 다운로드 실패 (${e.data.total - e.data.failed}/${e.data.total})`,
-                        e.data.failed === 0 ? 'success' : 'warning');
+                        ? `시험 팩 다운로드 완료 (${e.data.total}파일) — 오프라인에서도 학습할 수 있습니다`
+                        : `시험 팩 일부 다운로드 실패 (${e.data.total - e.data.failed}/${e.data.total}) — 온라인 재시도 필요`,
+                        e.data.failed === 0 ? 'success' : 'warning', 5000);
                     safeRemoveItem('pack_dl_pending');
                     navigator.serviceWorker.removeEventListener('message', onPackMsg);
                 }

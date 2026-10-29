@@ -219,9 +219,9 @@ function _showPackDownloadStatus(examId) {
     _packDlListener = (e) => {
         if (e.data?.type === 'passok:packCached' && e.data.examId === examId) {
             if (e.data.failed === 0) {
-                showToast(`오프라인 자료 준비 완료 (${e.data.total}파일)`, 'success');
+                showToast(`시험 팩 다운로드 완료 (${e.data.total}파일) — 오프라인에서도 학습할 수 있습니다`, 'success', 5000);
             } else {
-                showToast(`오프라인 자료 일부 다운로드 실패 (${e.data.total - e.data.failed}/${e.data.total})`, 'warning');
+                showToast(`시험 팩 일부 다운로드 실패 (${e.data.total - e.data.failed}/${e.data.total}) — 온라인 재시도 필요`, 'warning', 5000);
             }
             try { setItem(PACK_DL_FLAG, ''); } catch { /* 무시 */ }
             navigator.serviceWorker.removeEventListener('message', _packDlListener);
