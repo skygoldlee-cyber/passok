@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261029-a6affe9",
+    "date": "2026-10-29",
+    "notes": [
+      "[정리] 임베딩 재생성 — derived 이후 순서 정합 [no-docs]",
+      "[정리] 파생물 일괄 재생성 — 인용·데이터 신선도 복구 [no-docs]",
+      "[정리] TRACE_MATRIX 재생성 — ci:watch 등록 [no-docs]",
+      "[수정] ci:watch 워크플로 필터 + AGENTS.md 스크립트 기재 — check_npm_commands 게이트 [no-test]",
+      "[정리] 임베딩 재생성 (cosmetic) + ci:watch 스크립트 추가 — embfresh 게이트 복구 [no-docs]",
+      "[정리] TRACE_MATRIX 재생성 — P-14 등록 [no-docs]",
+      "[수정] pack-dl-status 부모 요소 null 가드 — tsc 오류 [no-test]",
+      "[수정] evictPackAssets 미사용 변수 제거 — ESLint 오류 [no-test]",
+      "[기능·pwa] P-14 후속 — 팩 전환 시 구 팩 캐시 해제 + 다운로드 진행 표시 + 필터 테스트",
+      "[기능·pwa] 팩별 지연 다운로드 (P-14) — 선택한 시험만 캐시 [no-test]"
+    ]
+  },
+  {
     "version": "v20261029-31d0738",
     "date": "2026-10-29",
     "notes": [
@@ -218,15 +234,6 @@
       "[빌드] exams.json 순서 변경분 생성물 재생성",
       "[content] 손해평가사·손해사정사·감정평가사 연속 배치 — appraisal를 insadj 직후로 이동",
       "[정리·release] v20261026-3c26bfe 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-3c26bfe",
-    "date": "2026-10-26",
-    "notes": [
-      "[스타일] 데스크탑 배경화 전체 노출 — cover→contain 전환",
-      "[스타일] 시험 선택 화면 모바일 컴팩트 그리드 — 카드 전체 스크롤 없이 노출",
-      "[정리·release] v20261026-9119580 스탬프 확정 [no-docs]"
     ]
   }
 ]
