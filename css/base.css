@@ -689,6 +689,7 @@ html {
     width: 34px;
     height: 34px;
     border-radius: 8px;
+    overflow: visible; /* UA clips img overflow; drop-shadow paints outside box and trips UX-NAV-10 */
     filter: drop-shadow(0 2px 8px var(--primary-tint-40));
 }
 
