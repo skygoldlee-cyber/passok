@@ -17,7 +17,8 @@
  *     · 기준선 미달 감소 → 통과 + 하향 안내 (단조 감소 — check:escape 관례)
  *
  * 사용법:
- *   node tools/check/check_replacement_char.js            # 검증
+ *   node tools/check/check_replacement_char.js            # 검증 (전수)
+ *   node tools/check/check_replacement_char.js --ref <ref>  # 변경 파일만 스캔 (CI diff-scope)
  *   node tools/check/check_replacement_char.js --update   # 잔재 정리 후 기준선 재작성
  */
 
@@ -40,21 +41,42 @@ function trackedTextFiles() {
   return out.split('\n').map((s) => s.trim()).filter((f) => f && !EXCLUDE_RE.test(f));
 }
 
-function scan() {
-  const counts = {};
-  for (const f of trackedTextFiles()) {
-    let buf;
-    try {
-      buf = fs.readFileSync(path.join(ROOT, f));
-    } catch {
-      continue; // 읽기 실패(삭제 예정 등)는 건너뜀
-    }
-    // 바이너리 판별: NUL 바이트가 있으면 텍스트가 아님 — 확장자 목록 대신
-    // 내용 기준이라 .gitignore·.githooks 같은 무확장자 텍스트도 놓치지 않는다
-    if (buf.includes(0x00)) continue;
-    const n = (buf.toString('utf8').match(new RegExp(FFFD, 'g')) || []).length;
-    if (n > 0) counts[f] = n;
+// 변경분만 스캔 — 파일이 안 바뀌면 FFFD가 새로 생길 수 없으므로 diff 대상으로 충분하다
+function changedFiles(ref) {
+  const lf = path.join(os.tmpdir(), 'gate-diff-' + process.pid + '.txt');
+  const ls = path.join(os.tmpdir(), 'gate-status-' + process.pid + '.txt');
+  try {
+    execSync(`git -c core.quotepath=false diff --name-only ${ref}...HEAD > "${lf}"`, { cwd: ROOT, shell: true });
+    execSync(`git -c core.quotepath=false status --porcelain > "${ls}"`, { cwd: ROOT, shell: true });
+    const diff = fs.readFileSync(lf, 'utf8').split('\n').map(s => s.trim()).filter(Boolean);
+    const unstaged = fs.readFileSync(ls, 'utf8').split('\n').map(s => s.slice(3).trim()).filter(Boolean);
+    return [...new Set([...diff, ...unstaged])].filter(f => !EXCLUDE_RE.test(f));
+  } finally {
+    try { fs.unlinkSync(lf); } catch {}
+    try { fs.unlinkSync(ls); } catch {}
   }
+}
+
+const POOL = 48; // 대형 트리 직렬 readFileSync 회피 — 동시 I/O 풀
+
+async function scanFiles(files) {
+  const counts = {};
+  let i = 0;
+  async function worker() {
+    while (i < files.length) {
+      const f = files[i++];
+      let buf;
+      try {
+        buf = await fs.promises.readFile(path.join(ROOT, f));
+      } catch {
+        continue;
+      }
+      if (buf.includes(0x00)) continue;
+      const n = (buf.toString('utf8').match(new RegExp(FFFD, 'g')) || []).length;
+      if (n > 0) counts[f] = n;
+    }
+  }
+  await Promise.all(Array.from({ length: POOL }, worker));
   return counts;
 }
 
@@ -78,8 +100,9 @@ function writeBaseline(counts) {
   fs.writeFileSync(BASELINE_PATH, JSON.stringify(doc, null, 2) + '\n', 'utf8');
 }
 
-/** 실측 잔재 ↔ 기준선 비교 — 순수 로직 (테스트용 export) */
-function compareCounts(counts, baseline) {
+/** 실측 잔재 ↔ 기준선 비교 — 순수 로직 (테스트용 export).
+ * scoped=true(diff 모드)면 counts에 없는 기준선 파일은 "무변경"으로 간주 — decreased 평가 생략 */
+function compareCounts(counts, baseline, scoped = false) {
   const violations = [];
   const decreased = [];
   for (const [f, n] of Object.entries(counts)) {
@@ -88,15 +111,21 @@ function compareCounts(counts, baseline) {
     else if (n > limit) violations.push(`기준선 초과: ${f} (${n} > ${limit})`);
     else if (n < limit) decreased.push(`${f}: ${limit} → ${n}`);
   }
-  for (const f of Object.keys(baseline)) {
-    if (!(f in counts)) decreased.push(`${f}: ${baseline[f]} → 0 (깨끗해짐)`);
+  if (!scoped) {
+    for (const f of Object.keys(baseline)) {
+      if (!(f in counts)) decreased.push(`${f}: ${baseline[f]} → 0 (깨끗해짐)`);
+    }
   }
   return { violations, decreased };
 }
 
-function main() {
+async function main() {
   const update = process.argv.includes('--update');
-  const counts = scan();
+  const refIdx = process.argv.indexOf('--ref');
+  const ref = refIdx >= 0 ? process.argv[refIdx + 1] : null;
+  const files = ref ? changedFiles(ref) : trackedTextFiles();
+  if (ref) console.log(`  --ref ${ref} — 변경 ${files.length}개 파일만 스캔`);
+  const counts = await scanFiles(files);
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
 
   if (update) {
@@ -106,7 +135,7 @@ function main() {
   }
 
   const baseline = loadBaseline();
-  const { violations, decreased } = compareCounts(counts, baseline);
+  const { violations, decreased } = compareCounts(counts, baseline, !!ref);
 
   if (violations.length) {
     console.error(`✗ U+FFFD 치환 문자 탐지 — 인코딩 깨짐 유입 ${violations.length}건`);

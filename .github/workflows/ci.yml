@@ -114,7 +114,7 @@ jobs:
         run: npm run check:contentind
 
       - name: Docs path + document ID check
-        run: npm run check:docs
+        run: npm run check:docs -- --ref origin/main --jobs 4
 
       - name: Domain map (파일 계층 분류)
         run: npm run check:domainmap
@@ -156,7 +156,7 @@ jobs:
         run: npm run check:html
 
       - name: Content traceability (교재/문제은행 변경 게이트)
-        run: node tools/check/check_content.js --content-only --quick
+        run: node tools/check/check_content.js --content-only --quick --jobs 4
 
       # plain `npm test`는 coverage:unit과 동일 스위트의 중복 실행 — CI는 c8 실행으로 대체
       - name: Run DOM tests with coverage

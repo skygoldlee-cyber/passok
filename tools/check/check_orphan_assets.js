@@ -65,15 +65,42 @@ function collectOrphans(assets, corpus) {
   return orphans;
 }
 
-function findOrphans() {
+const POOL = 48;
+// 텍스트에서 자산 파일명 형태의 토큰 추출 — 한글·공백 미포함 토큰이 대부분이라
+// 1차 스캔으로 대다수 참조를 찾고, 잔여 후보만 원래 includes() 의미론으로 재검증한다
+const TOKEN_RE = /[\p{L}\p{N}_\-.()[\]@~+']+\.(?:png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|eot|mp3|wav|ogg|mp4|webm|pdf)/giu;
+
+async function findOrphans() {
   const files = trackedFiles();
   const assets = files.filter((f) => ASSET_RE.test(f) && !EXEMPT_RE.test(f));
-  // 코퍼스 = 텍스트로 읽히는 추적 파일 전체 (svg 같은 텍스트 자산도 참조 주체가 될 수 있다)
+  const byBase = new Map();
+  for (const a of assets) {
+    const b = a.split('/').pop();
+    if (!byBase.has(b)) byBase.set(b, []);
+    byBase.get(b).push(a);
+  }
+  const referenced = new Set();
+  let i = 0;
+  await Promise.all(Array.from({ length: POOL }, async () => {
+    while (i < files.length) {
+      const f = files[i++];
+      let buf;
+      try { buf = await fs.promises.readFile(path.join(ROOT, f)); } catch { continue; }
+      if (buf.includes(0x00)) continue;
+      for (const m of buf.toString('utf8').matchAll(TOKEN_RE)) {
+        const b = m[0].split('/').pop();
+        if (byBase.has(b)) referenced.add(b);
+      }
+    }
+  }));
+  const candidates = assets.filter((a) => !referenced.has(a.split('/').pop()));
+  if (!candidates.length) return { orphans: [], assetCount: assets.length };
+  // 잔여 후보만 정밀 재검증 — includes() 의미론(부분 문자열 일치) 그대로 유지
   const corpus = new Map();
   for (const f of files) {
     if (isText(f)) corpus.set(f, fs.readFileSync(path.join(ROOT, f), 'utf8'));
   }
-  return { orphans: collectOrphans(assets, corpus), assetCount: assets.length };
+  return { orphans: collectOrphans(candidates, corpus), assetCount: assets.length };
 }
 
 function loadBaseline() {
@@ -107,9 +134,9 @@ function compareOrphans(orphans, baseline) {
   return { violations, resolved };
 }
 
-function main() {
+async function main() {
   const update = process.argv.includes('--update');
-  const { orphans, assetCount } = findOrphans();
+  const { orphans, assetCount } = await findOrphans();
 
   if (update) {
     writeBaseline(orphans);

@@ -59,7 +59,7 @@ const DOCS_STEPS = [
   nodeStep('docs:seedkeys', 'tools/check/check_seed_keys.js', '문서', '테스트 시드 키 ↔ GLOBAL_KEYS 스코프 정합 (스코프 시드 무력화 차단)'),
   nodeStep('docs:notes', 'tools/check/check_release_notes.js', '문서', '릴리스 노트 스키마·버전 해시·APP_VERSION 정합'),
   nodeStep('docs:teststats', 'tools/check/check_test_stats.js', '문서', '문서 테스트 수치 ↔ test_stats.json 실측 정합 (스테일 수치 차단 — stats:stamp으로 갱신)'),
-  nodeStep('docs:enc', 'tools/check/check_replacement_char.js', '인코딩', 'U+FFFD 치환 문자 잔존 — 저장 시 이모지 변조 유입 차단 (replacement_char_baseline.json 단조 감소)'),
+  nodeStep('docs:enc', 'tools/check/check_replacement_char.js', '인코딩', 'U+FFFD 치환 문자 잔존 — 저장 시 이모지 변조 유입 차단 (replacement_char_baseline.json 단조 감소)', { diffScoped: true }),
   nodeStep('docs:orphans', 'tools/check/check_orphan_assets.js', '자산', '미참조 자산(고아 자산) 유입 차단 — orphan_assets_baseline.json 예외 명단'),
   nodeStep('docs:ciparity', 'tools/check/check_ci_parity.js', '문서', 'ci.yml 워크플로 ↔ check:ci 프리셋 양방향 정합'),
   nodeStep('docs:runbooks', 'tools/check/check_runbook_links.js', '문서', '런북 링크·앵커 정본 도달 검증 + WHEN_THINGS_BREAK 증상 행 커버리지'),

@@ -1,5 +1,7 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-29 perf(ci): 대형 트리(245K) 병목 게이트 가속 — U+FFFD 스캔 병렬 I/O+`--ref` diff-scope(diffScoped 등록·CI `--ref origin/main --jobs 4`), 고아 자산 스캔을 자산베이스명 토큰 인덱스 방식으로 재설계(O(코퍼스) 1패스, 잔여 후보만 includes() 재검증)
+
 ## 2026-10-29 chore(ai): 초안 출력을 시험별 폴더로 — writeDraft가 `<exam>/` 접두 지원, 전 도구 호출 지점에 시험 id 적용 + 기존 초안 150건을 `tmp/ai_drafts/<exam>/`으로 이동 (읽기 스캔은 listDraftFiles 재귀로 갱신)
 
 ## 2026-10-29 fix: 도움말 "변경 이력" 아이콘 미표시 — fa-sparkles(FA 6.5+)를 지원되는 fa-wand-magic-sparkles로 교체 (index.template + whats-new.js)
