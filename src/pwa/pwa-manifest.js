@@ -33,14 +33,8 @@
         // 생성물이 누락되면 링크가 404가 되어 설치가 깨질 수 있으므로, build:data 산출물 검증과
         // check:datafresh가 파일 존재·신선도를 보장한다 (manifest.webmanifest 자체는 부팅 전까지의 폴백).
         link.href = 'manifest.' + encodeURIComponent(exam.id) + '.webmanifest';
-
-        // 파비콘도 활성 시험 전용 아이콘으로 전환 — icons/<exam>/ 세트가 전 팩 존재한다.
-        // 미설치 환경(탭)과 iOS 홈 화면 추가 모두 활성 시험 아이콘을 노출해야 한다.
-        const favHref = 'icons/' + encodeURIComponent(exam.id) + '/icon-192.png';
-        const fav = /** @type {HTMLLinkElement|null} */ (document.querySelector('link[rel="icon"]'));
-        if (fav) fav.href = favHref;
-        const appleIcon = /** @type {HTMLLinkElement|null} */ (document.querySelector('link[rel="apple-touch-icon"]'));
-        if (appleIcon) appleIcon.href = favHref;
+        // 파비콘(탭/홈 브랜드 아이콘)은 시험 아이콘으로 전환하지 않는다 —
+        // PassOK 브랜드 아이콘은 시험 무관 독립 정체성이어야 한다 (팩별 아이콘은 카드·manifest에만).
 
         // 문서 제목/설명도 활성 시험 기준으로 갱신
         if (exam.title) document.title = exam.title;
