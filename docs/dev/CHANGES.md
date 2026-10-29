@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-29 — 브랜드 아이콘 체계 정리
+
+- 브랜드 마스터 icons/passok-logo.png(배포 제외) → 서빙 passok-icon-192/512·maskable 재생성
+- 헤더·랜딩 로고를 FA 글리프에서 브랜드 PNG <img>로 교체 (시험 아이콘과 독립)
+- manifest 아이콘 src에 콘텐츠 해시 ?v= 스탬프 (build_exams_list.js) — OS 설치 캐시 무효화
+- 파비콘에 APP_VERSION ?v= 스탬프 (pwa-manifest.js) — SW/브라우저 캐시 무효화
+- 시험 카드 아이콘은 FA 심볼 유지 (조제관리사=fa-flask)
+
 ## 2026-10-29 feat(pwa): 팩별 지연 다운로드 (P-14) — install은 쉘+공용 자산만 프리캐시하고 시험별 교재·문제은행 MD는 시험 선택 시 `passok:cachePack` 메시지로 해당 팩만 캐시
 
 ## 2026-10-29 perf(deploy): 배포 스테이징 가속 3종 — ① .vercelignore에 ref_md images 제외(프로덕션 원문 보기는 텍스트 전용) ② ref_md 추출 조각 이미지(<3KB) 235,668건 삭제 + md 참조 정리(저장소 242K→7.1K 이미지) ③ deploy.js 스테이징 복사를 64-풀 비동기로 병렬화
