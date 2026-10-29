@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: f7d1778d568f812b
-> 생성: 2026-10-28 · 원천: SPEC.md(619개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: a9d31892be07afd9
+> 생성: 2026-10-29 · 원천: SPEC.md(619개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -600,7 +600,7 @@
 | P-11 | ✅ | E2E 테스트 | DOC-RBK-01<br>DOC-RBK-04 | src/app-fallback.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
 | P-12 | ✅ | 테스트 | DOC-RBK-01<br>DOC-RBK-04 | tools/check/verify_shell_assets.js | tests/unit/app/pwa-sw.test.js | — | — |
 | P-13 | ✅ | 테스트 | DOC-ADR-13<br>DOC-RBK-01<br>DOC-RBK-04<br>DOC-RBK-09 | src/app-version.js<br>src/whats-new.js<br>tools/build/stamp_release_notes.js | tests/dom/misc/whats-new.dom.test.js<br>tests/unit/app/whats-new.test.js | — | — |
-| P-14 | ✅ | 테스트 | DOC-RBK-01<br>DOC-RBK-08 | html/views/dashboard.html<br>index.html<br>src/reader/textbook-edition.js | tests/dom/reader/textbook-edition.dom.test.js<br>tests/unit/content/textbook-edition.test.js | — | — |
+| P-14 | ✅ | 테스트 | DOC-RBK-01<br>DOC-RBK-08 | html/views/dashboard.html<br>index.html<br>src/reader/textbook-edition.js<br>sw.js | tests/dom/reader/textbook-edition.dom.test.js<br>tests/unit/app/pack-assets.test.js<br>tests/unit/content/textbook-edition.test.js | — | — |
 
 ## 4.2 오프라인 감지
 
