@@ -5,7 +5,7 @@
 const { execSync, spawnSync } = require('child_process');
 
 const runId = execSync(
-  'gh run list --branch main --limit 1 --json databaseId -q ".[0].databaseId"',
+  'gh run list --workflow=ci.yml --branch main --limit 1 --json databaseId -q ".[0].databaseId"',
   { encoding: 'utf8', shell: true }
 ).trim();
 if (!runId) { console.error('✗ 최신 CI run을 찾지 못함'); process.exit(1); }

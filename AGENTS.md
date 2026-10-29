@@ -100,6 +100,7 @@ npm.cmd run check:all                    # 저장소 전체 검증 일괄 실행
 npm.cmd run check:all:quick              # DOM 테스트 생략 빠른 점검 (= run.js --preset all --quick)
 npm.cmd run check:all:e2e                # 전체 점검 + E2E 실브라우저 (배포 전 완전 검증 — serve 자동 기동, 시간 소요)
 npm.cmd run check:ci                     # CI 게이트 로컬 재현 (= run.js --preset ci — coverage·E2E·audit는 CI 전용). `-- --affected`는 유닛을 영향 테스트 권장 세트로 치환하는 빠른 로컬 재현
+npm.cmd run ci:watch                     # 최신 CI run 감시 — 실패 시 실패 잡 로그 즉시 출력 (--deploy=통과 시 배포 체인)
 npm.cmd run check -- --preset <all|ci|content|docs|refs|freshness|audit> [--quick|--content-only|--build]  # 통합 실행기 직접 호출
 npm.cmd run check -- --step <id>         # 단일 단계만 실행 (예: --step manifest, --list로 id 조회 — 출력의 [P0|P1|P2]는 단계 우선순위 티어)
 npm.cmd run check:audit                  # 감시·감사 묶음 (= run.js --preset audit — P2 단계 advisory 실행, 실패해도 종료 0·차단 없음. 카드/콤보/학습품질·용어집 저신호·refmerge·adlint·lawurls·onboard)
