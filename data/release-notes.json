@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261029-28f1186",
+    "date": "2026-10-29",
+    "notes": [
+      "[수정·pwa] 파비콘 URL에 APP_VERSION 스탬프 — SW 캐시가 구 아이콘을 서빙하는 문제 해소 [no-test]",
+      "[정리·release] v20261029-1db8199 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261029-1db8199",
     "date": "2026-10-29",
     "notes": [
@@ -210,22 +218,6 @@
       "[수정·exam-select] 보험·평가·부동산 그룹 내 공인중개사 순서 조정 [no-docs]",
       "[수정·exam-select] 공인중개사를 법무·노무 → 보험·평가·부동산 그룹으로 이동 [no-docs]",
       "[정리·release] v20261028-a9998aa 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261028-a9998aa",
-    "date": "2026-10-28",
-    "notes": [
-      "[정리] TRACE_MATRIX 재생성 — 테스트 @spec 반영 [no-docs]",
-      "[테스트·exam-select] 그룹핑 테스트 @spec 헤더 추가 [no-docs]",
-      "[정리] ES-08 임의 라벨 제거 — 스펙 참조 게이트 정합 [no-docs]",
-      "[정리] TRACE_MATRIX 재생성 — ES-08 참조 반영 [no-docs]",
-      "[기능·exam-select] 유사 시험 그룹핑 + 신규 팩 comingSoon 표기 [no-docs]",
-      "[정리] 과목 키 변경 후 생성 데이터 재빌드 [no-docs]",
-      "[수정·eleceng,elecindeng] 과목 키 code→regs — DA-15 콘텐츠 독립 게이트 충돌 해소 [no-docs]",
-      "[기능·itindeng,indsafeind] 실제 출제기준 과목 구조로 교정 + 출제 포인트 골격 [no-docs]",
-      "[기능·eleceng,elecindeng] 출제기준 챕터 골격 + KOCW 전기기기·설비 소재 [no-docs]",
-      "[기능·eleceng,elecindeng] 전기기사·전기산업기사 시험 팩 골격 + 출제기준 수집 [no-docs]"
     ]
   }
 ]
