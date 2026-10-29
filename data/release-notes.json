@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261029-e03622a",
+    "date": "2026-10-29",
+    "notes": [
+      "[기능] 변경이력 아이콘 fa-wand-magic-sparkles → fa-clock-rotate-left — 브랜드 글리프와 분리 [no-test]",
+      "[기능·P-14] 팩 다운로드 진행을 인라인 상태줄 → 토스트로 변경 [no-test]",
+      "[문서] 브랜드 아이콘 체계 정리 기록 [no-test]",
+      "[정리·release] v20261029-d195903 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261029-d195903",
     "date": "2026-10-29",
     "notes": [
@@ -202,21 +212,6 @@
       "[기능·labor,broker] 시험과목 시행령 법령 referenceLaw·lawdb 편입 [no-docs]",
       "[기능·exams] 출제기준·시행제도 ref_md 참조자료 일괄 편입 [no-docs]",
       "[기능·compapp1,compapp2] 출제기준 ref_md 참조자료 편입 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261028-c2e1bf2",
-    "date": "2026-10-28",
-    "notes": [
-      "[수정·cosmetic] 출제기준 ref_md NUL 바이트·추출 잔재 정제 [no-docs]",
-      "[수정·compapp] 문제은행 인용문 형식 교정 — 따옴표 래퍼 제거로 인용 동기화 해석 [no-docs]",
-      "[정리·compapp] 문제은행 MD_ASSETS 동기화 [no-docs]",
-      "[기능·compapp1,compapp2] 문제은행 exams[] 과목당 20문 자체 제작 [no-docs]",
-      "[기능·labor,broker] 시험과목 시행령 법령 referenceLaw·lawdb 편입 [no-docs]",
-      "[기능·exams] 출제기준·시행제도 ref_md 참조자료 일괄 편입 [no-docs]",
-      "[기능·compapp1,compapp2] 출제기준 ref_md 참조자료 편입 [no-docs]",
-      "[기능·compapp1,compapp2] 컴퓨터활용능력 1·2급 시험 팩 골격 [no-docs]",
-      "[정리·release] v20261028-b7ead45 스탬프 확정 [no-docs]"
     ]
   }
 ]
