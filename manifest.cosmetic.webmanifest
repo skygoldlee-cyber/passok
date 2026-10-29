@@ -16,7 +16,7 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "icons/passok.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
@@ -42,7 +42,7 @@
       "url": "./index.html#/formula",
       "icons": [
         {
-          "src": "icons/icon-192.png",
+          "src": "icons/passok.png",
           "sizes": "192x192",
           "type": "image/png"
         }
