@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261029-b4bf115",
+    "date": "2026-10-29",
+    "notes": [
+      "[수정·pwa] 파비콘 전환 롤백 — 브랜드 아이콘은 시험 무관 독립 유지 [no-test]",
+      "[정리·release] v20261029-4f1c6b2 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261029-4f1c6b2",
     "date": "2026-10-29",
     "notes": [
@@ -218,20 +226,6 @@
     "notes": [
       "[스타일] 데스크탑 배경 레터박스 개선 — contain 전체 그림 + cover 뒤레이어로 여백 채움",
       "[정리·release] v20261026-01f33dd 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-01f33dd",
-    "date": "2026-10-26",
-    "notes": [
-      "[content] hairdresser 배치 이동 — skincare 뒤 뷰티 3연속 구성 (3번째)",
-      "[수정] hairdresser docs ID 중복 선언 제거",
-      "[수정] hairdresser docs 헤더 규약 교정 — blockquote 문서ID·범위 형식",
-      "[content] hairdresser 승격 자산 — 과목당 20문·docs 2종·synonyms·용어집·number-drills",
-      "[빌드] hairdresser data 번들 + references.json 스키마 정합",
-      "[content] hairdresser manifest 스키마 정합 + desc 수치 교정",
-      "[content] hairdresser(미용사/일반) 시험 파일럿 골격 추가",
-      "[정리·release] v20261026-dd4548d 스탬프 확정 [no-docs]"
     ]
   }
 ]
