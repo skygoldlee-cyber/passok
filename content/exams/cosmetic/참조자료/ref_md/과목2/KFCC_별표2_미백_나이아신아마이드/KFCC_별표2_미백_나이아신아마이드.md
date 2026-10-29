@@ -257,7 +257,7 @@ C : 색보정액에서 얻은 흡광도
 아스코빌글루코사이드
 Ascobyl Glucoside
 
-![이미지](images/page006_img00.png)
+![이미지](images/page006_img00.webp)
 
 아스코빅애씨드 2-글루코사이드
 (Ascorbic Acid 2-Glucoside) C H O :
@@ -731,7 +731,7 @@ S
 알 부 틴
 Arbutin
 
-![이미지](images/page017_img00.jpeg)
+![이미지](images/page017_img00.webp)
 
 4-하이드록시페닐-β-D-글루코피라노사이드
 4-hydroxyphenyl-β-D-glucopyranoside C H O : 272.25
@@ -1148,7 +1148,7 @@ S
 에칠아스코빌에텔
 Ethyl Ascorbyl Ether
 
-![이미지](images/page027_img00.jpeg)
+![이미지](images/page027_img00.webp)
 
 3-O-에칠아스코베이트
 3-O-Ethyl Ascorbate C H O : 204.18

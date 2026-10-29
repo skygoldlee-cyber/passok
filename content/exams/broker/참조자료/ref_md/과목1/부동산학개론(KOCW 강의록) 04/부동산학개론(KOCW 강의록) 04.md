@@ -4,7 +4,7 @@
 (4주)
 부동산 법의 법원(法源)
 
-![이미지](images/page001_img00.jpeg)
+![이미지](images/page001_img00.webp)
 
 부동산 법의 법원( 法原 )
 • 이번 시간에는 “무엇이 법인가?” “법은 구체적으로 어떻게
@@ -22,37 +22,37 @@
 | 자치법규 | 조리 |
 | 자치법규 | 조리 |
 
-![이미지](images/page002_img01.jpeg)
+![이미지](images/page002_img01.webp)
 
 부동산 법의 법원( 法原 )
 
-![이미지](images/page002_img00.png)
+![이미지](images/page002_img00.webp)
 
-![이미지](images/page003_img01.jpeg)
-
-부동산 법의 법원( 法原 )
-
-![이미지](images/page003_img00.png)
-
-![이미지](images/page004_img01.jpeg)
+![이미지](images/page003_img01.webp)
 
 부동산 법의 법원( 法原 )
 
-![이미지](images/page004_img00.png)
+![이미지](images/page003_img00.webp)
 
-![이미지](images/page005_img01.jpeg)
-
-부동산 법의 법원( 法原 )
-
-![이미지](images/page005_img00.png)
-
-![이미지](images/page006_img01.jpeg)
+![이미지](images/page004_img01.webp)
 
 부동산 법의 법원( 法原 )
 
-![이미지](images/page006_img00.png)
+![이미지](images/page004_img00.webp)
 
-![이미지](images/page007_img00.jpeg)
+![이미지](images/page005_img01.webp)
+
+부동산 법의 법원( 法原 )
+
+![이미지](images/page005_img00.webp)
+
+![이미지](images/page006_img01.webp)
+
+부동산 법의 법원( 法原 )
+
+![이미지](images/page006_img00.webp)
+
+![이미지](images/page007_img00.webp)
 
 부동산 법의 법원( 法原 )
 • 행정규칙의 문제:
@@ -64,51 +64,51 @@
 칙은 법적인 역할을 하는 경우가 있다.
 • 판례는 시행규칙도 행정규칙으로 보는 경우가 있다.
 
-![이미지](images/page008_img01.jpeg)
+![이미지](images/page008_img01.webp)
 
 부동산 법의 법원( 法原 )
 
-![이미지](images/page008_img00.png)
+![이미지](images/page008_img00.webp)
 
-![이미지](images/page009_img02.jpeg)
-
-부동산 법의 법원( 法原 )
-
-![이미지](images/page009_img00.png)
-
-![이미지](images/page009_img01.png)
-
-![이미지](images/page010_img02.jpeg)
+![이미지](images/page009_img02.webp)
 
 부동산 법의 법원( 法原 )
 
-![이미지](images/page010_img00.png)
+![이미지](images/page009_img00.webp)
 
-![이미지](images/page010_img01.png)
+![이미지](images/page009_img01.webp)
 
-![이미지](images/page011_img02.jpeg)
-
-부동산 법의 법원( 法原 )
-
-![이미지](images/page011_img00.png)
-
-![이미지](images/page011_img01.png)
-
-![이미지](images/page012_img01.jpeg)
+![이미지](images/page010_img02.webp)
 
 부동산 법의 법원( 法原 )
 
-![이미지](images/page012_img00.png)
+![이미지](images/page010_img00.webp)
 
-![이미지](images/page013_img01.jpeg)
+![이미지](images/page010_img01.webp)
+
+![이미지](images/page011_img02.webp)
 
 부동산 법의 법원( 法原 )
 
-![이미지](images/page013_img00.png)
+![이미지](images/page011_img00.webp)
+
+![이미지](images/page011_img01.webp)
+
+![이미지](images/page012_img01.webp)
+
+부동산 법의 법원( 法原 )
+
+![이미지](images/page012_img00.webp)
+
+![이미지](images/page013_img01.webp)
+
+부동산 법의 법원( 法原 )
+
+![이미지](images/page013_img00.webp)
 
 출처: 부동산공법론(민태욱 저)
 
-![이미지](images/page014_img00.jpeg)
+![이미지](images/page014_img00.webp)
 
 OX 학습내용 정리문제
 • 조례는 시행령보다 우위에 있다.

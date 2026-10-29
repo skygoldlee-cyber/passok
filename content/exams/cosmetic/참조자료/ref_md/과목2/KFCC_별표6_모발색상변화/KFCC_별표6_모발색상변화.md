@@ -373,7 +373,7 @@ mL). 같은 방법으로 공시험을 하여 보정한다.
 니트로-p-페닐렌디아민
 Nitro-p-Phenylenediamine
 
-![이미지](images/page011_img00.jpeg)
+![이미지](images/page011_img00.webp)
 
 o-니트로-p-페닐렌디아민
 2-니트로-p-페닐렌디아민
@@ -428,7 +428,7 @@ o-니트로-1,4-페닐렌디아민
 p-니트로-o-페닐렌디아민
 p-Nitro-o-Phenylenediamine
 
-![이미지](images/page012_img00.jpeg)
+![이미지](images/page012_img00.webp)
 
 4-니트로-o-페닐렌디아민
 4-니트로-1,2-페닐렌디아민 C H N O : 153.14
@@ -688,7 +688,7 @@ mol/L 치오황산나트륨액으로 적정한다(지시약 : 전분시액 1 mL)
 모노에탄올아민
 Monoethanolamine
 
-![이미지](images/page020_img00.jpeg)
+![이미지](images/page020_img00.webp)
 
 2-아미노에탄올 C H NO 61.08
 2 7
@@ -708,7 +708,7 @@ Monoethanolamine
 몰식자산
 Gallic Acid
 
-![이미지](images/page020_img01.jpeg)
+![이미지](images/page020_img01.webp)
 
 갈르산
 3,4,5-트리히드록시안식향산
@@ -1166,7 +1166,7 @@ ppm 이하).
 염산 2,4-디아미노페녹시에탄올
 2,4-Diaminophenoxyethanol Hydrochloride
 
-![이미지](images/page034_img00.jpeg)
+![이미지](images/page034_img00.webp)
 
 2,4-디아미노페녹시에탄올염산염 C H N O 2HCl : 241.12
 8 12 2 2ㆍ
@@ -1212,7 +1212,7 @@ mL로 한다. 이 액을 가지고 자외가시부흡광광도법에 따라 흡�
 염산 2,4-디아미노페놀
 2,4-Diaminophenol Hydrochloride
 
-![이미지](images/page035_img00.jpeg)
+![이미지](images/page035_img00.webp)
 
 2,4-디아미노페놀염산염
 염산 4-히드록시-m-페닐렌디아민 C H N Oㆍ2HCl :
@@ -1266,7 +1266,7 @@ ppm 이하).
 염산 m-페닐렌디아민
 1,3-Benzenediamine Hydrochloride
 
-![이미지](images/page036_img00.jpeg)
+![이미지](images/page036_img00.webp)
 
 m-페닐렌디아민염산염
 염산 1,3-페닐렌디아민 C H N 2HCl :
@@ -1384,7 +1384,7 @@ f
 염산 톨루엔-2,5-디아민
 Toluene-2, 5-diamine Hydrochloride
 
-![이미지](images/page040_img00.jpeg)
+![이미지](images/page040_img00.webp)
 
 톨루엔-2,5-디아민염산염
 염산 p-톨루엔디아민
@@ -1901,7 +1901,7 @@ Pyrogallol
 피크라민산
 Picramic Acid
 
-![이미지](images/page055_img00.jpeg)
+![이미지](images/page055_img00.webp)
 
 2-아미노 4,6-디니트로페놀
 2,4-디니트로 6-아미노페놀
@@ -1947,7 +1947,7 @@ mL 및 염산 15 mL에 넣어 조심하면서 증발건고한 다음 식혀 질�
 피크라민산나트륨
 Sodium Picramate
 
-![이미지](images/page056_img00.jpeg)
+![이미지](images/page056_img00.webp)
 
 2-아미노 4,6-디니트로페놀나트륨
 4,6-디니트로 2-아미노페놀나트륨
@@ -2003,7 +2003,7 @@ Sodium Picramate
 헤마테인
 Hematein
 
-![이미지](images/page057_img00.jpeg)
+![이미지](images/page057_img00.webp)
 
 히드록시브라실레인 C H O : 300.26
 16 12 6
@@ -2091,7 +2091,7 @@ S
 황산 1-히드록시에칠-4,5-디아미노피라졸
 1-Hydroxyethyl-4,5-Diaminopyrazole Sulfate
 
-![이미지](images/page060_img00.jpeg)
+![이미지](images/page060_img00.webp)
 
 1-히드록시에틸-4,5-디아미노피라졸황산염 C H N OㆍH SO : 240.24
 5 10 4 2 4
@@ -2120,7 +2120,7 @@ cm-1, 1380 cm-1, 1300 cm-1, 1040 cm-1 부근에서 흡수극대를 나타낸다.
 황산 2-아미노-5-니트로페놀
 2-Amino-5-nitrophenol Sulfate
 
-![이미지](images/page061_img00.jpeg)
+![이미지](images/page061_img00.webp)
 
 2-아미노-5-니트로페놀황산염
 황산 5-니트로-o-아미노페놀
@@ -2286,7 +2286,7 @@ f
 황산 o-아미노페놀
 o-Aminophenol Sulfate
 
-![이미지](images/page065_img00.jpeg)
+![이미지](images/page065_img00.webp)
 
 o-아미노페놀황산염
 황산 2-아미노페놀 C H NOㆍ1/2H SO :
@@ -2345,7 +2345,7 @@ o-아미노페놀황산염
 황산 p-아미노페놀
 p-Aminophenol Sulfate
 
-![이미지](images/page067_img00.jpeg)
+![이미지](images/page067_img00.webp)
 
 p-아미노페놀황산염
 황산 4-아미노페놀 C H NO ㆍ 1/2H SO :
@@ -2464,7 +2464,7 @@ f
 황산 N,N-비스(2-히드록시에칠)-p-페닐렌디아민
 N,N-Bis(2-hydroxyethyl)-p-phenylenediamine Sulfate
 
-![이미지](images/page070_img00.jpeg)
+![이미지](images/page070_img00.webp)
 
 N,N-비스(2-히드록시에틸)-p-페닐렌디아민황산염
 N,N-비스(2-히드록시에칠)-p-페닐렌디아민설페이트
@@ -2513,7 +2513,7 @@ f
 황산 o-클로로-p-페닐렌디아민
 o-Chloro-p-pheylenediamine Sulfate
 
-![이미지](images/page072_img00.jpeg)
+![이미지](images/page072_img00.webp)
 
 o-클로로-p-페닐렌디아민황산염
 황산 2-클로로-p-페닐렌디아민
@@ -2570,7 +2570,7 @@ o-클로로-p-페닐렌디아민황산염
 황산 p-니트로-o-페닐렌디아민
 p-Nitro-o-Phenylenediamine Sulfate
 
-![이미지](images/page074_img00.jpeg)
+![이미지](images/page074_img00.webp)
 
 p-니트로-o-페닐렌디아민황산염
 황산 4-니트로-o-페닐렌디아민
@@ -2627,7 +2627,7 @@ mL 및 염산 15 mL에 넣고 조심하면서 증발건고한다. 식힌 다음 
 황산 p-메칠아미노페놀
 p-Methylaminophenol Sulfate
 
-![이미지](images/page075_img00.jpeg)
+![이미지](images/page075_img00.webp)
 
 p-메틸아미노페놀황산염
 황산 4-메칠아미노페놀 C H NO ㆍ 1/2H SO :
@@ -2685,7 +2685,7 @@ f
 황산 p-페닐렌디아민
 p-Phenylenediamine Sulfate
 
-![이미지](images/page077_img00.jpeg)
+![이미지](images/page077_img00.webp)
 
 p-페닐렌디아민황산염
 황산 1,4-페닐렌디아민 C H N H SO :
@@ -2804,7 +2804,7 @@ mL로 희석한다.
 황산 톨루엔-2, 5-디아민
 Toluene-2,5-diamine Sulfate
 
-![이미지](images/page080_img00.jpeg)
+![이미지](images/page080_img00.webp)
 
 톨루엔-2, 5-디아민황산염
 황산 메칠-2,5-페닐렌디아민, 황산 o-메칠-p-페닐렌디아민,
@@ -2866,7 +2866,7 @@ Toluene-2,5-diamine Sulfate
 히드록시벤조모르포린
 Hydroxybenzomorpholine
 
-![이미지](images/page082_img00.png)
+![이미지](images/page082_img00.webp)
 
 3,4-dyhydro-2H-1,4-benzoxazin-6-ol C H NO : 151.16
 8 9 2
@@ -2906,7 +2906,7 @@ ppm 이하).
 N-(2-히드록시에칠)-2-니트로-p-페닐렌디아민
 N-(2-hydroxyethyl)-2-nitro-p-phenylenediamine
 
-![이미지](images/page083_img00.jpeg)
+![이미지](images/page083_img00.webp)
 
 C H N O : 197.1
 8 11 3 3
@@ -2950,7 +2950,7 @@ f
 6-히드록시인돌
 6-Hydroxyindole
 
-![이미지](images/page084_img00.png)
+![이미지](images/page084_img00.webp)
 
 C H NO : 133.15
 8 7

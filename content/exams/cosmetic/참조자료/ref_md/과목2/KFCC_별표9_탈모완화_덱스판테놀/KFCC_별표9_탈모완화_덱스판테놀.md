@@ -6,7 +6,7 @@
 덱스판테놀
 Dexpanthenol
 
-![이미지](images/page000_img00.jpeg)
+![이미지](images/page000_img00.webp)
 
 C H NO ：205.25
 9 19 4

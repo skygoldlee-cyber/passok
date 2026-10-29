@@ -3,7 +3,7 @@
 |  | 2021년도 2학기 - 식물보호학잡초 방제 - I |
 | --- | --- |
 
-![이미지](images/page000_img02.png)
+![이미지](images/page000_img02.webp)
 
 
 
@@ -14,25 +14,25 @@
 
 
 
-![이미지](images/page001_img00.png)
+![이미지](images/page001_img00.webp)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
 
 
-![이미지](images/page001_img06.png)
+![이미지](images/page001_img06.webp)
 
 ▸ 환경의 의미와 종류
 6) 토양(soil) 환경
 (1) 토양의물리적성질(soil physical properties)
 • 토양의3상(soil phases) : 토양의물리성을좌우하는구성요소
 
-![이미지](images/page001_img05.png)
+![이미지](images/page001_img05.webp)
 
 • 토성(soil texture)
 
-![이미지](images/page001_img07.png)
+![이미지](images/page001_img07.webp)
 
 ✓ 모래(sand) : 지름0.02~2.0 mm, 양분거의함유안함. 보수령/보비력낮음. 배수/통기성양호
 ✓ 미사(silt) : 0.002~0.02 mm. 가는모래. 모래와점토의중간적성질
@@ -41,14 +41,14 @@ _재배의 개념
 
 
 
-![이미지](images/page002_img00.png)
+![이미지](images/page002_img00.webp)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
 
 
 
-![이미지](images/page002_img05.png)
+![이미지](images/page002_img05.webp)
 
 ▸ 환경의 의미와 종류
 6) 토양(soil) 환경
@@ -58,13 +58,13 @@ _재배의 개념
 ✓ 다량원소(8): 탄소(C), 산소(O), 수소(H), 질소(N), 인(P), 칼륨(K), 칼슘(Ca), 마그네슘(Mg)
 ✓ 미량원소(8) : 황(S), 철(F), 망간(Mn), 구리(Cu), 아연(Zn), 붕소(B), 몰리브덴(Mo), 염소(Cl)
 
-![이미지](images/page002_img06.png)
+![이미지](images/page002_img06.webp)
 
-![이미지](images/page002_img07.png)
+![이미지](images/page002_img07.webp)
 
 
 
-![이미지](images/page003_img00.png)
+![이미지](images/page003_img00.webp)
 
 재배학 원론 - 2장. 작물의 재배환경(Cultivation environment)
 _재배의 개념
@@ -75,21 +75,21 @@ _재배의 개념
 6) 토양(soil) 환경
 (3) 필수원소의과잉과결핍증상(deficiency symptom)
 
-![이미지](images/page003_img05.png)
+![이미지](images/page003_img05.webp)
 
-![이미지](images/page003_img07.png)
+![이미지](images/page003_img07.webp)
 
-![이미지](images/page003_img06.png)
+![이미지](images/page003_img06.webp)
 
 
 
-![이미지](images/page004_img00.png)
+![이미지](images/page004_img00.webp)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
 
 
-![이미지](images/page004_img05.jpeg)
+![이미지](images/page004_img05.webp)
 
 1. 멘델의 유전법칙(Mendelism)
 ▸ 1856~1863 (7년), 29,000포기완두재배를통해3가지법칙발견
@@ -106,7 +106,7 @@ _재배의 개념
 
 
 
-![이미지](images/page005_img00.png)
+![이미지](images/page005_img00.webp)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
@@ -116,21 +116,21 @@ _재배의 개념
 ①품종: 재배하는종. 재배와이용에서동일하고균일한특성을보이는유전적으로안정되고영속적인개체들의집단
 ② 초장, 형태, 생리적 특성에 따라 기상재해를 견디는 성질이 달라짐(내냉성, 내한성, 내병성, 내충성 등)
 
-![이미지](images/page005_img06.jpeg)
+![이미지](images/page005_img06.webp)
 
-![이미지](images/page005_img05.png)
+![이미지](images/page005_img05.webp)
 
-![이미지](images/page005_img07.jpeg)
+![이미지](images/page005_img07.webp)
 
 
 
-![이미지](images/page006_img00.png)
+![이미지](images/page006_img00.webp)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
 
 
-![이미지](images/page006_img05.png)
+![이미지](images/page006_img05.webp)
 
 2) 품종육종론
 (1) 품종개량의이점
@@ -146,25 +146,25 @@ _재배의 개념
 
 
 
-![이미지](images/page007_img00.png)
+![이미지](images/page007_img00.webp)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
 
 
-![이미지](images/page007_img05.png)
+![이미지](images/page007_img05.webp)
 
-![이미지](images/page007_img06.png)
+![이미지](images/page007_img06.webp)
 
 
 
-![이미지](images/page008_img00.png)
+![이미지](images/page008_img00.webp)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
 
 
-![이미지](images/page008_img05.png)
+![이미지](images/page008_img05.webp)
 
 (3) 우량품종의육성및보존
 ①우량품종의요건: 균등성, 우수성, 영속성, 광지역적응성이높으면우수함.
@@ -183,7 +183,7 @@ _재배의 개념
 
 
 
-![이미지](images/page009_img00.png)
+![이미지](images/page009_img00.webp)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
@@ -196,15 +196,15 @@ _재배의 개념
 ①육성자에게품종육성에따른노력의대가와연구개발비용회수보장→우수품종개발및육종투자확대촉진
 ②외국의우수품종도입촉진→농업인에게이들품종재배→농업생산성증대및품질/가격경쟁력제고→농업소득향상
 
-![이미지](images/page009_img05.png)
+![이미지](images/page009_img05.webp)
 
-![이미지](images/page009_img06.jpeg)
+![이미지](images/page009_img06.webp)
 
 국립종자원
 
 
 
-![이미지](images/page010_img00.png)
+![이미지](images/page010_img00.webp)
 
 재배학 원론 - 3장. 작물의 유전과 육종(genetics and breeding)
 
@@ -219,11 +219,11 @@ _재배의 개념
 ▸ 유전자재조합: 특정DNA 염기서열을다른부위로옮김→현저한작물육종범위확장
 ▸ 유전자도입: rDNA 기술의결과만들어진생물체
 
-![이미지](images/page010_img05.jpeg)
+![이미지](images/page010_img05.webp)
 
 
 
-![이미지](images/page011_img00.png)
+![이미지](images/page011_img00.webp)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
@@ -234,7 +234,7 @@ _재배의 개념
 ①매년계속해서재배하는방식(식용작물또는연작장해가있어도수익성이높은경우채택)
 ②연작피해: 기지현상(원인: 양분고갈, 병원미생물이나독소축적, 불량한토양반응, 토양물리성의악화등)
 
-![이미지](images/page011_img05.jpeg)
+![이미지](images/page011_img05.webp)
 
 ③기지현상대책: 윤작, 저항성품종재배, 토양소독및객토, 유독물질제거및지력보강등
 (2) 윤작
@@ -247,7 +247,7 @@ _재배의 개념
 
 
 
-![이미지](images/page012_img00.png)
+![이미지](images/page012_img00.webp)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
@@ -262,11 +262,11 @@ _재배의 개념
 -간작: 전작물에큰피해가없이간작물의생육기간을연장하여증수를꾀하는경우, 토지이용률증진
 -혼작: 두작물이생리생태적으로협력적으로작용하여합계수량이많을때효과
 
-![이미지](images/page012_img05.jpeg)
+![이미지](images/page012_img05.webp)
 
 
 
-![이미지](images/page013_img00.png)
+![이미지](images/page013_img00.webp)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
@@ -277,17 +277,17 @@ _재배의 개념
 ①교호작: 두종류이상의작물을한이랑씩교호로재배(경사지토양대상재배)
 주위작: 포장주위의공지를활용하는혼작일종(논두렁에콩을재배하는것등)
 
-![이미지](images/page013_img05.jpeg)
+![이미지](images/page013_img05.webp)
 
 (5) 답전윤환재배
 ①답(沓)/전(田)을교호적순환재배
 ②효과: 지력증진, 기지현상의회피, 잡초발생억제, 수량증가와노동력절감(감자, 수박등)
 
-![이미지](images/page013_img06.jpeg)
+![이미지](images/page013_img06.webp)
 
 
 
-![이미지](images/page014_img00.png)
+![이미지](images/page014_img00.webp)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
@@ -299,11 +299,11 @@ _재배의 개념
 ✓ 종자내, 생명원형인뿌리와새순이될원기가이미분화되어포함
 ✓ (대표) 채소류(토마토, 오이등), 일년초(팬지, 금잔화, 채송화등), 다년초(시클라멘, 베고니아등)
 
-![이미지](images/page014_img05.png)
+![이미지](images/page014_img05.webp)
 
 
 
-![이미지](images/page015_img00.png)
+![이미지](images/page015_img00.webp)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
@@ -326,25 +326,25 @@ _재배의 개념
 
 
 
-![이미지](images/page016_img00.png)
+![이미지](images/page016_img00.webp)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
 
 
-![이미지](images/page016_img05.png)
+![이미지](images/page016_img05.webp)
 
-![이미지](images/page016_img07.png)
+![이미지](images/page016_img07.webp)
 
-![이미지](images/page016_img06.png)
+![이미지](images/page016_img06.webp)
 
-![이미지](images/page016_img09.jpeg)
+![이미지](images/page016_img09.webp)
 
-![이미지](images/page016_img08.jpeg)
+![이미지](images/page016_img08.webp)
 
 
 
-![이미지](images/page017_img00.png)
+![이미지](images/page017_img00.webp)
 
 재배학 원론 - 4장. 작물의 재배기술(Cultivation Technique)
 
@@ -358,7 +358,7 @@ _재배의 개념
 • 할접: 대목의중앙을쪼개어쐐기꼴로만든접수결속(동백, 달리아등)
 • 호접: 뿌리가있는두그루를서로결속(단풍나무)
 
-![이미지](images/page017_img05.jpeg)
+![이미지](images/page017_img05.webp)
 
 • 안장접: 대목위에접수를올려놓아실이나밴드로결속(선인장등)
 • 근접: 뿌리가쇠약해진나무에뿌리를붙여결속
@@ -367,7 +367,7 @@ _재배의 개념
 
 
 
-![이미지](images/page018_img00.png)
+![이미지](images/page018_img00.webp)
 
 재배학 원론 - 5장. 작물의 기상재해(climate damage)
 
@@ -382,13 +382,13 @@ _재배의 개념
 
 
 
-![이미지](images/page019_img00.png)
+![이미지](images/page019_img00.webp)
 
 재배학 원론 - 5장. 작물의 기상재해(climate damage)
 
 
 
-![이미지](images/page019_img05.jpeg)
+![이미지](images/page019_img05.webp)
 
 1. 건조해(drought injury)
 ✓ 토양, 대기건조→작물체내수분함량감소→생육저하, 위조, 고사(건조장해)
@@ -408,13 +408,13 @@ _재배의 개념
 
 
 
-![이미지](images/page020_img00.png)
+![이미지](images/page020_img00.webp)
 
 재배학 원론 - 5장. 작물의 기상재해(climate damage)
 
 
 
-![이미지](images/page020_img05.jpeg)
+![이미지](images/page020_img05.webp)
 
 2. 습해 및 침수해(moisture and flooding injury)
 ✓ 습해(excessive water injury): 지속적인토양과습상태→작물의뿌리부패, 황화, 위조, 고사하게되는산소부족장해
@@ -422,7 +422,7 @@ _재배의 개념
 1) 내습성과내침수성
 (1) 내습성: 작물이물리적, 화학적인방법으로산소부족으로오는장해를극복하는능력
 
-![이미지](images/page020_img06.jpeg)
+![이미지](images/page020_img06.webp)
 
 -통기조직의발달: 근권주위에기공이나지상부조직에뿌리로산소를보낼수있는통기조직(aerenchyma)발달
 -세포벽의코르크화및목질화: 통기조직을통하여공급된산소가뿌리밖으로의확산방지, 생장점공급
@@ -431,7 +431,7 @@ _재배의 개념
 -발근력의강화: 뿌리가표토에얕게발달, 부정근발생력이큼
 (2) 습해및침수해에대한대책
 
-![이미지](images/page020_img07.jpeg)
+![이미지](images/page020_img07.webp)
 
 -신속한배수처리
 -적합한시비: 뿌리를지표면으로유도, 엽면시비. 과산화석회를종자분의(코팅)하면습해경감
@@ -440,7 +440,7 @@ _재배의 개념
 
 
 
-![이미지](images/page021_img00.png)
+![이미지](images/page021_img00.webp)
 
 재배학 원론 - 5장. 작물의 기상재해(climate damage)
 
@@ -460,22 +460,22 @@ _재배의 개념
 
 
 
-![이미지](images/page022_img00.png)
+![이미지](images/page022_img00.webp)
 
 강의 내용
 
 
 
-![이미지](images/page022_img05.jpeg)
+![이미지](images/page022_img05.webp)
 
-![이미지](images/page022_img06.jpeg)
+![이미지](images/page022_img06.webp)
 
 ▸ 잡초의 특성과 분류
 ▸ 잡초의 생리와 생태
 
 
 
-![이미지](images/page023_img00.png)
+![이미지](images/page023_img00.webp)
 
 I. 잡초의 특성과 분류
 
@@ -493,27 +493,27 @@ I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page024_img00.png)
+![이미지](images/page024_img00.webp)
 
 I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page024_img05.png)
+![이미지](images/page024_img05.webp)
 
 
 
-![이미지](images/page025_img00.png)
+![이미지](images/page025_img00.webp)
 
 I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page025_img05.png)
+![이미지](images/page025_img05.webp)
 
-![이미지](images/page025_img06.png)
+![이미지](images/page025_img06.webp)
 
-![이미지](images/page025_img07.png)
+![이미지](images/page025_img07.webp)
 
 Bridges (1994)
 McLeod (2018)
@@ -521,22 +521,22 @@ McLeod (2018)
 
 
 
-![이미지](images/page026_img00.png)
+![이미지](images/page026_img00.webp)
 
 I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page026_img08.jpeg)
+![이미지](images/page026_img08.webp)
 
 2. 잡초의피해와유용성: 잡초는원하지않는식물, 하지만유용한측면이있으므로양면성존재
 ▸잡초로인한피해
 ✓ 양분이나수분의경합해로수량감소
 ✓ 광을차단하거나외관을나쁘게함
 
-![이미지](images/page026_img05.jpeg)
+![이미지](images/page026_img05.webp)
 
-![이미지](images/page026_img07.jpeg)
+![이미지](images/page026_img07.webp)
 
 ✓ 병해충매개
 ✓ 물관리나조경, 도로관리등작업환경악화
@@ -545,7 +545,7 @@ I. 잡초의 특성과 분류
 ▸ 잡초의 이용성
 ✓ 침식 방지 등 자연 보존 기여
 
-![이미지](images/page026_img06.jpeg)
+![이미지](images/page026_img06.webp)
 
 ✓ 유기물 생산, 공해 저감
 ✓ 희귀 물질, 유용 성분 생산 및 유전자 보존 기능
@@ -554,26 +554,26 @@ I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page027_img00.png)
+![이미지](images/page027_img00.webp)
 
 I. 잡초의 특성과 분류
 
-![이미지](images/page027_img06.jpeg)
+![이미지](images/page027_img06.webp)
 
 
 
-![이미지](images/page027_img05.png)
+![이미지](images/page027_img05.webp)
 
-![이미지](images/page027_img07.jpeg)
+![이미지](images/page027_img07.webp)
 
 민들레세밀화
 (이소영작가)
 
-![이미지](images/page027_img08.jpeg)
+![이미지](images/page027_img08.webp)
 
 
 
-![이미지](images/page028_img00.png)
+![이미지](images/page028_img00.webp)
 
 I. 잡초의 특성과 분류
 
@@ -601,23 +601,23 @@ I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page029_img00.png)
+![이미지](images/page029_img00.webp)
 
 I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page029_img05.png)
+![이미지](images/page029_img05.webp)
 
 
 
-![이미지](images/page030_img00.png)
+![이미지](images/page030_img00.webp)
 
 I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page030_img08.jpeg)
+![이미지](images/page030_img08.webp)
 
 3. 잡초의분류
 ▸ 식물학적분류: 현재까지알려진식물종(약20만종) 중, 약0.1%의200여종식물이잡초로분류
@@ -630,39 +630,39 @@ I. 잡초의 특성과 분류
 ✓방동사니과잡초(사초과, sedge weed) : 줄기횡단면이삼각형, 잎은좁고능선이있으며끝이뾰족하고소수에작은꽃.
 ✓광엽잡초(broad-leaf weed) : 잎이넓은잡초. 잎은주로타원형, 난형, 피침형. 잎맥이그물처럼얽혀있는것이특징
 
-![이미지](images/page030_img05.png)
+![이미지](images/page030_img05.webp)
 
-![이미지](images/page030_img06.jpeg)
+![이미지](images/page030_img06.webp)
 
-![이미지](images/page030_img07.jpeg)
+![이미지](images/page030_img07.webp)
 
 논피(벼과) 바람하늘지기(방동사니과)
 
 
 
-![이미지](images/page031_img00.png)
+![이미지](images/page031_img00.webp)
 
 I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page031_img05.png)
+![이미지](images/page031_img05.webp)
 
-![이미지](images/page031_img06.png)
+![이미지](images/page031_img06.webp)
 
-![이미지](images/page031_img07.png)
+![이미지](images/page031_img07.webp)
 
 
 
-![이미지](images/page032_img00.png)
+![이미지](images/page032_img00.webp)
 
 I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page032_img05.jpeg)
+![이미지](images/page032_img05.webp)
 
-![이미지](images/page032_img06.jpeg)
+![이미지](images/page032_img06.webp)
 
 3. 잡초의분류
 ▸ 생리생태적분류
@@ -678,15 +678,15 @@ I. 잡초의 특성과 분류
 •이년생(biennial weed) : 1~2년이내에개화, 결실, 고사
 •다년생(perennial weed) : 2년이상생존하는잡초. 종자번식가능하나, 대부분영양기관에의한번식(민들레, 질경이, 갈대, 쑥, 애기수영, 올방개, 가래등)
 
-![이미지](images/page032_img08.jpeg)
+![이미지](images/page032_img08.webp)
 
-![이미지](images/page032_img07.jpeg)
+![이미지](images/page032_img07.webp)
 
 (다년생-질경이) (다년생-애기수영)
 
 
 
-![이미지](images/page033_img00.png)
+![이미지](images/page033_img00.webp)
 
 I. 잡초의 특성과 분류
 
@@ -702,17 +702,17 @@ I. 잡초의 특성과 분류
 토양수분함량
 •부유잡초: 물에뜨는수생잡초(생이가래, 개구리밥, 좀개구리밥, 부레옥잠등)
 
-![이미지](images/page033_img05.jpeg)
+![이미지](images/page033_img05.webp)
 
-![이미지](images/page033_img06.jpeg)
+![이미지](images/page033_img06.webp)
 
-![이미지](images/page033_img07.jpeg)
+![이미지](images/page033_img07.webp)
 
 수생잡초 습생잡초 건생잡초
 
 
 
-![이미지](images/page034_img00.png)
+![이미지](images/page034_img00.webp)
 
 I. 잡초의 특성과 분류
 
@@ -728,7 +728,7 @@ I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page035_img00.png)
+![이미지](images/page035_img00.webp)
 
 I. 잡초의 특성과 분류
 
@@ -755,7 +755,7 @@ I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page036_img00.png)
+![이미지](images/page036_img00.webp)
 
 I. 잡초의 특성과 분류
 
@@ -782,7 +782,7 @@ I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page037_img00.png)
+![이미지](images/page037_img00.webp)
 
 I. 잡초의 특성과 분류
 
@@ -793,19 +793,19 @@ I. 잡초의 특성과 분류
 ✓밭토양1 m2(깊이2 cm) 당6~10만개잡초종자매립→실제발생하는개체수는1~5천개정도(약6%가여름작물포장내발생)
 ✓여름철고운다습하기때문에6~8월이잡초발생과생육의최성기(→잡초방제최적시기)
 
-![이미지](images/page037_img05.png)
+![이미지](images/page037_img05.webp)
 
-![이미지](images/page037_img06.png)
+![이미지](images/page037_img06.webp)
 
 
 
-![이미지](images/page038_img00.png)
+![이미지](images/page038_img00.webp)
 
 I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page038_img06.jpeg)
+![이미지](images/page038_img06.webp)
 
 4. 잡초의분포
 ▸ 과수원과비경지잡초
@@ -815,43 +815,43 @@ I. 잡초의 특성과 분류
 •초기에는호광성잡초(바랭이등) 우점, 과수성목기간에는음지선호성잡초(포아풀류등) 우점
 ✓잔디밭의잡초
 
-![이미지](images/page038_img05.png)
+![이미지](images/page038_img05.webp)
 
 과수원내잡초
 
-![이미지](images/page038_img07.jpeg)
+![이미지](images/page038_img07.webp)
 
-![이미지](images/page038_img08.jpeg)
+![이미지](images/page038_img08.webp)
 
 골프장내잡초 운동장내잡초
 
 
 
-![이미지](images/page039_img00.png)
+![이미지](images/page039_img00.webp)
 
 I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page039_img06.png)
+![이미지](images/page039_img06.webp)
 
 이등(2016) 한국잡초학회(초록집)
 -우리나라농경지에발생하는잡초현황
 
-![이미지](images/page039_img05.png)
+![이미지](images/page039_img05.webp)
 
-![이미지](images/page039_img07.png)
+![이미지](images/page039_img07.webp)
 
-![이미지](images/page039_img08.png)
+![이미지](images/page039_img08.webp)
 
-![이미지](images/page039_img09.jpeg)
+![이미지](images/page039_img09.webp)
 
 이등(2017) 한국잡초학회
 -우리나라농경지에발생하는잡초현황
 
 
 
-![이미지](images/page040_img00.png)
+![이미지](images/page040_img00.webp)
 
 I. 잡초의 특성과 분류
 
@@ -864,19 +864,19 @@ I. 잡초의 특성과 분류
 | --- | --- | --- | --- | --- |
 | • 화본과• 전국논발생• 하계일년생잡초• 줄기높이50~110 cm• 벼처럼모여발생 | • 물옥잠과• 전국분포(특히서해안논지역)• 줄기높이20~40 cm | • 자귀풀(콩과)• 전국논발생, 하계일년생잡초• 줄기높이50~200 cm• 잎은어긋나게달림 | • 바늘꽃과• 전국논발생, 하계일년생잡초• 줄기높이30~100 cm | • 가래과• 논, 도랑, 얕은습지등지발생• 여러해살이잡초• 뿌리줄기는물밑의흙속에서옆으로여러갈래로길게뻗어번식 |
 
-![이미지](images/page040_img06.jpeg)
+![이미지](images/page040_img06.webp)
 
-![이미지](images/page040_img07.jpeg)
+![이미지](images/page040_img07.webp)
 
-![이미지](images/page040_img08.jpeg)
+![이미지](images/page040_img08.webp)
 
-![이미지](images/page040_img09.jpeg)
+![이미지](images/page040_img09.webp)
 
-![이미지](images/page040_img05.jpeg)
+![이미지](images/page040_img05.webp)
 
 
 
-![이미지](images/page041_img00.png)
+![이미지](images/page041_img00.webp)
 
 I. 잡초의 특성과 분류
 
@@ -889,19 +889,19 @@ I. 잡초의 특성과 분류
 | --- | --- | --- | --- | --- |
 | • 쇠비름과• 건조에강한다육식물• 전국밭, 과수원발생• 하계일년생잡초 | • 명아주과• 전국밭,과수원발생• 하계일년생잡초 | • 국화과• 봄에이른여름발생• 미대륙원산• 종자의전파는주로바람에의함• 한해동안3~4세대• 종자생산량이많은잡초 | • 국화과• 미대륙원산귀화식물• 전국들, 길가분포• 두해살이풀 | • 삼과• 훼손된들에흔하게발생• 덩굴성한해살이풀• 우리나라전역자생• 동아시아지역분포 |
 
-![이미지](images/page041_img08.jpeg)
+![이미지](images/page041_img08.webp)
 
-![이미지](images/page041_img07.jpeg)
+![이미지](images/page041_img07.webp)
 
-![이미지](images/page041_img06.jpeg)
+![이미지](images/page041_img06.webp)
 
-![이미지](images/page041_img09.jpeg)
+![이미지](images/page041_img09.webp)
 
-![이미지](images/page041_img05.jpeg)
+![이미지](images/page041_img05.webp)
 
 
 
-![이미지](images/page042_img00.png)
+![이미지](images/page042_img00.webp)
 
 I. 잡초의 특성과 분류
 
@@ -922,7 +922,7 @@ I. 잡초의 특성과 분류
 
 
 
-![이미지](images/page043_img00.png)
+![이미지](images/page043_img00.webp)
 
 II. 잡초의 생리 생태
 
@@ -940,13 +940,13 @@ II. 잡초의 생리 생태
 
 
 
-![이미지](images/page044_img00.png)
+![이미지](images/page044_img00.webp)
 
 II. 잡초의 생리 생태
 
 
 
-![이미지](images/page044_img05.jpeg)
+![이미지](images/page044_img05.webp)
 
 1. 잡초의발아및출현특성
 ▸ 발아에관여하는환경요인
@@ -956,7 +956,7 @@ II. 잡초의 생리 생태
 •단백질, 점액물질, 펙틴은전분보다교질성과친수성이커서더많은수분흡수가능
 ✓온도(temperature)
 
-![이미지](images/page044_img06.jpeg)
+![이미지](images/page044_img06.webp)
 
 • 잡초종자의발아적온일정치않으며, 대체로15~30도범위
 떡잎
@@ -970,7 +970,7 @@ II. 잡초의 생리 생태
 
 
 
-![이미지](images/page045_img00.png)
+![이미지](images/page045_img00.webp)
 
 II. 잡초의 생리 생태
 
@@ -995,7 +995,7 @@ II. 잡초의 생리 생태
 
 
 
-![이미지](images/page046_img00.png)
+![이미지](images/page046_img00.webp)
 
 II. 잡초의 생리 생태
 
@@ -1014,7 +1014,7 @@ II. 잡초의 생리 생태
 
 
 
-![이미지](images/page047_img00.png)
+![이미지](images/page047_img00.webp)
 
 II. 잡초의 생리 생태
 
@@ -1024,7 +1024,7 @@ II. 잡초의 생리 생태
 ▸ 종자수명
 ✓종자의활력과수명은'유전형', '휴면기작', '저장환경'에따라상이함.
 
-![이미지](images/page047_img08.jpeg)
+![이미지](images/page047_img08.webp)
 
 •(캐나다)추운지대에서발견된루핀(Lupinusarticus) 경우, 10,000년이지난후발아성공(Harrington, 1967)
 •(중국) 추운만주호수에서발견된연꽃종자경우, 1,000년이후발아성공(Copeland, 1967)
@@ -1032,11 +1032,11 @@ II. 잡초의 생리 생태
 ✓양호한저장조건(낮은온도, 낮은습도(수분), 낮은산소)에서긴종자수명확인
 • 일부사료작물의종자: 38도고온에서저장(수분함량6% 이하) →6년후발아양호확인
 
-![이미지](images/page047_img05.png)
+![이미지](images/page047_img05.webp)
 
-![이미지](images/page047_img07.jpeg)
+![이미지](images/page047_img07.webp)
 
-![이미지](images/page047_img06.jpeg)
+![이미지](images/page047_img06.webp)
 
 Seed Vault
 (국립백두대간수목원, 경북봉화)
@@ -1045,7 +1045,7 @@ Svalbard Global Seed Vault
 
 
 
-![이미지](images/page048_img00.png)
+![이미지](images/page048_img00.webp)
 
 II. 잡초의 생리 생태
 
@@ -1056,13 +1056,13 @@ II. 잡초의 생리 생태
 ✓잡초는발아한후, 토양층을통과하여지표면위로출현하므로여러토양조건의영향을받음.
 ✓유묘의출현에관여하는요인으로는토양심도, 토양온도, 토양수분, 토양산소, 토양산도, 토양비옥도, 토양염도등이있음.
 
-![이미지](images/page048_img05.jpeg)
+![이미지](images/page048_img05.webp)
 
 
 
-![이미지](images/page049_img00.png)
+![이미지](images/page049_img00.webp)
 
-![이미지](images/page049_img05.jpeg)
+![이미지](images/page049_img05.webp)
 
 II. 잡초의 생리 생태
 
@@ -1079,15 +1079,15 @@ II. 잡초의 생리 생태
 -영양체번식을하면서도종자인유성생식방법을동반
 →유전적으로다양한종자를생산
 
-![이미지](images/page049_img07.jpeg)
+![이미지](images/page049_img07.webp)
 
-![이미지](images/page049_img06.png)
+![이미지](images/page049_img06.webp)
 
 →번식력과적응력모두향상
 
 
 
-![이미지](images/page050_img00.png)
+![이미지](images/page050_img00.webp)
 
 II. 잡초의 생리 생태
 
@@ -1101,19 +1101,19 @@ II. 잡초의 생리 생태
 •영양번식으로생산된개체는종자로부터생산된개체보다강하며, 적당한경운조건및제초제에강하다.
 •영양번식으로생산된개체는종자로부터생산된개체보다양이적고, 환경이더욱불량해지면영양체로만번식한다.
 
-![이미지](images/page050_img05.jpeg)
+![이미지](images/page050_img05.webp)
 
 참조: 방송통신대학교농학과자료
 
 
 
-![이미지](images/page051_img00.png)
+![이미지](images/page051_img00.webp)
 
 II. 잡초의 생리 생태
 
 
 
-![이미지](images/page051_img06.jpeg)
+![이미지](images/page051_img06.webp)
 
 2. 잡초의번식, 전파, 휴면
 ▸ 잡초의전파
@@ -1121,22 +1121,22 @@ II. 잡초의 생리 생태
 ✓동물에의한전파: 종자에갈고리나가시가돋친종자는동물에의한전파용이
 ✓사람에의한전파: 농작물의종자나퇴구비, 가축의분뇨, 농기구등에의한전파
 
-![이미지](images/page051_img09.jpeg)
+![이미지](images/page051_img09.webp)
 
-![이미지](images/page051_img05.jpeg)
+![이미지](images/page051_img05.webp)
 
 사람에의한전파
 
-![이미지](images/page051_img07.jpeg)
+![이미지](images/page051_img07.webp)
 
-![이미지](images/page051_img08.jpeg)
+![이미지](images/page051_img08.webp)
 
 동물에의한전파
 바람에의한전파
 
 
 
-![이미지](images/page052_img00.png)
+![이미지](images/page052_img00.webp)
 
 II. 잡초의 생리 생태
 
@@ -1153,16 +1153,16 @@ II. 잡초의 생리 생태
 | 1차천이 | • 식물이전혀없는곳에서부터시작되는천이• 첫식물이들어와비교적안정된식생으로변화하는과정 |
 | 2차천이(갱신천이) | • 원래의식생이화재, 태풍, 병충해, 벌채등과같은자연적, 인위적피해를받은다음성숙된식생으로회복되는과정 |
 
-![이미지](images/page052_img06.jpeg)
+![이미지](images/page052_img06.webp)
 
-![이미지](images/page052_img05.jpeg)
+![이미지](images/page052_img05.webp)
 
 2차천이
 1차천이
 
 
 
-![이미지](images/page053_img00.png)
+![이미지](images/page053_img00.webp)
 
 II. 잡초의 생리 생태
 
@@ -1181,7 +1181,7 @@ II. 잡초의 생리 생태
 
 
 
-![이미지](images/page054_img00.png)
+![이미지](images/page054_img00.webp)
 
 II. 잡초의 생리 생태
 
@@ -1201,19 +1201,19 @@ II. 잡초의 생리 생태
 
 
 
-![이미지](images/page055_img00.png)
+![이미지](images/page055_img00.webp)
 
 II. 잡초의 생리 생태
 
 
 
-![이미지](images/page055_img06.jpeg)
+![이미지](images/page055_img06.webp)
 
-![이미지](images/page055_img05.jpeg)
+![이미지](images/page055_img05.webp)
 
 
 
-![이미지](images/page056_img00.png)
+![이미지](images/page056_img00.webp)
 
 II. 잡초의 생리 생태
 

@@ -4,7 +4,7 @@
 (12주)
 부동산 투자론
 
-![이미지](images/page001_img00.jpeg)
+![이미지](images/page001_img00.webp)
 
 부동산 투자론
 • 강의내용
@@ -15,7 +15,7 @@
 • NPV
 • IRR
 
-![이미지](images/page002_img00.jpeg)
+![이미지](images/page002_img00.webp)
 
 부동산 투자론
 • 투자란 장래의 이익을 위해서 현재의 소비를 희생하는 것.
@@ -25,16 +25,16 @@
 • 레버리지 효과는 프로젝트 파이낸싱(project financing)과도
 관련이 있다.
 
-![이미지](images/page003_img01.jpeg)
+![이미지](images/page003_img01.webp)
 
 순운영소득(NOI)
 • 순운영소득(NOI)은 가능 총소득에서 공실액과 운영경비를
 제한 것으로 부채와 지분 투자자에게 배분이 기대되는 수
 입의 양을 측정한 숫자로 볼 수 있다.
 
-![이미지](images/page003_img00.png)
+![이미지](images/page003_img00.webp)
 
-![이미지](images/page004_img00.jpeg)
+![이미지](images/page004_img00.webp)
 
 레버리지 효과
 • 레버리지 효과란 차입금 등 타인 자본을 지렛대로 삼아 자기자본
@@ -48,7 +48,7 @@
 • 그러나 과도하게 타인자본을 도입하면, 불황 시에 금리 부담으로
 저항력이 약해진다. (출처: 네이버 금융사전)
 
-![이미지](images/page005_img00.jpeg)
+![이미지](images/page005_img00.webp)
 
 레버리지 효과
 • ◎ 부채를 이용할 경우의 장점
@@ -61,7 +61,7 @@
 • ④ 제한된 자원을 분산 투자하여 이익을 확대 할 수 있을 뿐
 ·아니라 위험을 분산할 수 있다.
 
-![이미지](images/page006_img00.jpeg)
+![이미지](images/page006_img00.webp)
 
 레버리지 효과
 • ◎ 부채를 이용한 경우의 단점(비용)
@@ -79,7 +79,7 @@
 인의 수수료 등 모든 비용을 감안하면 수익보다 부채비율
 이 더 많이 늘어 날 수 있다.
 
-![이미지](images/page007_img00.jpeg)
+![이미지](images/page007_img00.webp)
 
 프로젝트 금융
 • 프로젝트금융(P/F: Project Financing)이란 사업주와 법적으
@@ -93,35 +93,35 @@ flow)을 담보로 하여 해당 프로젝트의 자금을 조달하는 기
 생하는 수익이 구분·관리되어야 한다.
 • 프로젝트금융과 기업금융을 비교해 보면 다음과 같다.
 
-![이미지](images/page008_img01.jpeg)
+![이미지](images/page008_img01.webp)
 
-![이미지](images/page008_img00.png)
+![이미지](images/page008_img00.webp)
 
-![이미지](images/page009_img01.jpeg)
+![이미지](images/page009_img01.webp)
 
-![이미지](images/page009_img00.jpeg)
+![이미지](images/page009_img00.webp)
 
-![이미지](images/page010_img01.jpeg)
+![이미지](images/page010_img01.webp)
 
-![이미지](images/page010_img00.jpeg)
+![이미지](images/page010_img00.webp)
 
-![이미지](images/page011_img01.jpeg)
+![이미지](images/page011_img01.webp)
 
-![이미지](images/page011_img00.jpeg)
+![이미지](images/page011_img00.webp)
 
-![이미지](images/page012_img01.jpeg)
+![이미지](images/page012_img01.webp)
 
-![이미지](images/page012_img00.jpeg)
+![이미지](images/page012_img00.webp)
 
-![이미지](images/page013_img01.jpeg)
+![이미지](images/page013_img01.webp)
 
-![이미지](images/page013_img00.jpeg)
+![이미지](images/page013_img00.webp)
 
-![이미지](images/page014_img01.jpeg)
+![이미지](images/page014_img01.webp)
 
-![이미지](images/page014_img00.jpeg)
+![이미지](images/page014_img00.webp)
 
-![이미지](images/page015_img00.jpeg)
+![이미지](images/page015_img00.webp)
 
 OX 학습내용 정리문제
 • 타인으로부터 빌린 차입금이 작을 수록 이자부담이 작아지

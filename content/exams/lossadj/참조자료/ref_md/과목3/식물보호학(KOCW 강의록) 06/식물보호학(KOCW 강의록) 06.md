@@ -3,7 +3,7 @@
 |  | 2021년도 2학기 - 식물보호학농림해충 - 2 (해충의 피해와 방제) |
 | --- | --- |
 
-![이미지](images/page000_img02.png)
+![이미지](images/page000_img02.webp)
 
 
 
@@ -14,7 +14,7 @@
 
 
 
-![이미지](images/page001_img00.png)
+![이미지](images/page001_img00.webp)
 
 중간(수시) 평가 안내
 
@@ -30,7 +30,7 @@
 
 
 
-![이미지](images/page002_img00.png)
+![이미지](images/page002_img00.webp)
 
 주제 발표 안내
 
@@ -52,7 +52,7 @@
 
 
 
-![이미지](images/page003_img00.png)
+![이미지](images/page003_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -66,13 +66,13 @@ III. 곤충의 형태와 구조
 • 표피는날개를포함한체벽을구성하는주요요소
 • 내돌기, 기관지, 소화계의전/후장, 일부분비샘구성
 
-![이미지](images/page003_img06.jpeg)
+![이미지](images/page003_img06.webp)
 
-![이미지](images/page003_img05.png)
+![이미지](images/page003_img05.webp)
 
 
 
-![이미지](images/page004_img00.png)
+![이미지](images/page004_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -90,11 +90,11 @@ III. 곤충의 형태와 구조
 • 상표피는해로운자외선을반사, 종특이적후각신호를보내는통로역할
 
 
-![이미지](images/page004_img05.jpeg)
+![이미지](images/page004_img05.webp)
 
 
 
-![이미지](images/page005_img00.png)
+![이미지](images/page005_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -108,21 +108,21 @@ III. 곤충의 형태와 구조
 • 바깥쪽부분의경화된원표피를외원표피(외큐티클, exocuticle)
 • 외원표피는색소침착치일어나진한색을띠게하며, 비수용성
 
-![이미지](images/page005_img05.jpeg)
+![이미지](images/page005_img05.webp)
 
-![이미지](images/page005_img06.png)
+![이미지](images/page005_img06.webp)
 
 
 
-![이미지](images/page006_img00.png)
+![이미지](images/page006_img00.webp)
 
 III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page006_img07.jpeg)
+![이미지](images/page006_img07.webp)
 
-![이미지](images/page006_img08.jpeg)
+![이미지](images/page006_img08.webp)
 
 2. 곤충의외부구조
 ▸ 곤충의피부(integument)
@@ -135,12 +135,12 @@ III. 곤충의 형태와 구조
 -탈피후원표피를형성하는과정에서, 원표피를지나밖으로나가는가는관형성(왁스분비)
 (예: 깍지벌레류에서볼수있는왁스등은진피층에발달한피부샘으로부터분비됨)
 
-![이미지](images/page006_img05.jpeg)
+![이미지](images/page006_img05.webp)
 
 
 
 
-![이미지](images/page007_img00.png)
+![이미지](images/page007_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -153,12 +153,12 @@ III. 곤충의 형태와 구조
 • 체벽이놓이는기반. 외골격과체강(body cavity)을구분지어줌
 • 물질의투과는관여하지않음. 주로결합조직에서볼수있는점액다당류와콜라겐등구성
 
-![이미지](images/page007_img05.jpeg)
+![이미지](images/page007_img05.webp)
 
 
 
 
-![이미지](images/page008_img00.png)
+![이미지](images/page008_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -174,11 +174,11 @@ III. 곤충의 형태와 구조
 • 경화과정: 흔히멜라닌등의색소침전이동반. 외원표피에주로갈색의짙은색부여. 이처럼단단해지면서색이짙어지는것을일반적으로
 경화, 흑화(hardendingand darkening)이라함.
 
-![이미지](images/page008_img05.jpeg)
+![이미지](images/page008_img05.webp)
 
 
 
-![이미지](images/page009_img00.png)
+![이미지](images/page009_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -186,7 +186,7 @@ III. 곤충의 형태와 구조
 
 2. 곤충의외부구조
 
-![이미지](images/page009_img05.jpeg)
+![이미지](images/page009_img05.webp)
 
 ▸ 곤충의피부(integument)
 ✓ 체색(body color)
@@ -197,7 +197,7 @@ III. 곤충의 형태와 구조
 식물체와비슷한색을띤진딧물의모습
 • 큐티클표피의구조가매우복잡하게되어있어빛이분산되거나간섭, 굴절이일어나면서발생
 
-![이미지](images/page009_img06.jpeg)
+![이미지](images/page009_img06.webp)
 
 • 금속광택으로보이는푸른색, 녹색등(딱정벌레, 나비등)
 ✓ 색소색(pigmentalcolor)
@@ -210,9 +210,9 @@ III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page010_img00.png)
+![이미지](images/page010_img00.webp)
 
-![이미지](images/page010_img05.png)
+![이미지](images/page010_img05.webp)
 
 III. 곤충의 형태와 구조
 
@@ -230,7 +230,7 @@ III. 곤충의 형태와 구조
 ✓ 봉합선(suture)
 • 내돌기나격막처럼안으로깊게들어간것이아니고, 약간의홈이나파인듯하거나경판을구분지어주는경계구조
 
-![이미지](images/page010_img06.jpeg)
+![이미지](images/page010_img06.webp)
 
 • 몸안쪽으로살짝내려선듯한선을겉으로는'봉합선', 안으로는'내융기선(internal ridge)'라고함
 • 탈피할때갈라지는부분을'탈피선(ecdysialline)'
@@ -241,7 +241,7 @@ III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page011_img00.png)
+![이미지](images/page011_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -249,37 +249,37 @@ III. 곤충의 형태와 구조
 
 2. 곤충의외부구조
 
-![이미지](images/page011_img06.jpeg)
+![이미지](images/page011_img06.webp)
 
 ▸ 가시(spine)와강모(seta)
 
-![이미지](images/page011_img05.jpeg)
+![이미지](images/page011_img05.webp)
 
 Schroeder and Houghtaling, 2018
 
-![이미지](images/page011_img07.jpeg)
+![이미지](images/page011_img07.webp)
 
 Sofraneet al., 2015 기생파리과(파리목)종별머리강모특징
 
 
 
-![이미지](images/page012_img00.png)
+![이미지](images/page012_img00.webp)
 
 III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page012_img05.jpeg)
+![이미지](images/page012_img05.webp)
 
-![이미지](images/page012_img06.jpeg)
+![이미지](images/page012_img06.webp)
 
-![이미지](images/page012_img07.jpeg)
+![이미지](images/page012_img07.webp)
 
-![이미지](images/page012_img08.jpeg)
+![이미지](images/page012_img08.webp)
 
 
 
-![이미지](images/page013_img00.png)
+![이미지](images/page013_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -296,13 +296,13 @@ III. 곤충의 형태와 구조
 • 하구식(hypognathous) : 소화관이놓인몸의방향과대체로직각인방향으로놓이게된구조(메뚜기등)
 • 후구식(opisthognathous) : 소화관이놓인몸의방향과예각인방향으로놓이게된구조(노린재등)
 
-![이미지](images/page013_img05.png)
+![이미지](images/page013_img05.webp)
 
-![이미지](images/page013_img06.jpeg)
+![이미지](images/page013_img06.webp)
 
 
 
-![이미지](images/page014_img00.png)
+![이미지](images/page014_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -314,7 +314,7 @@ III. 곤충의 형태와 구조
 •직접더듬이를갖다대어감각하는것, 감각모등의기능을통해냄새, 페로몬, 습도, 진동, 풍속, 풍향등감지
 •구성(몸쪽으로부터)
 
-![이미지](images/page014_img05.jpeg)
+![이미지](images/page014_img05.webp)
 
 -밑마디(scape) : 더듬이를머리외피에연결해주는첫마디
 -흔들마디(pedicel) : 주로소리를감지하는존스턴기관(Johnston's organ) 내부에가짐
@@ -324,7 +324,7 @@ III. 곤충의 형태와 구조
 -강모상(setaceous), 사상(filiform): 실베짱이, 하늘소등
 -염주상(moniliform): 흰개미등
 
-![이미지](images/page014_img06.jpeg)
+![이미지](images/page014_img06.webp)
 
 -곤봉상(clavate): 무당벌레등
 -구간상(capitate): 밑빠진벌레등
@@ -339,31 +339,31 @@ III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page015_img00.png)
+![이미지](images/page015_img00.webp)
 
 III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page015_img09.jpeg)
+![이미지](images/page015_img09.webp)
 
-![이미지](images/page015_img10.jpeg)
+![이미지](images/page015_img10.webp)
 
-![이미지](images/page015_img05.jpeg)
+![이미지](images/page015_img05.webp)
 
-![이미지](images/page015_img08.jpeg)
+![이미지](images/page015_img08.webp)
 
-![이미지](images/page015_img06.jpeg)
+![이미지](images/page015_img06.webp)
 
-![이미지](images/page015_img07.jpeg)
+![이미지](images/page015_img07.webp)
 
-![이미지](images/page015_img11.jpeg)
+![이미지](images/page015_img11.webp)
 
-![이미지](images/page015_img12.jpeg)
+![이미지](images/page015_img12.webp)
 
 
 
-![이미지](images/page016_img00.png)
+![이미지](images/page016_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -382,44 +382,44 @@ III. 곤충의 형태와 구조
 -나비, 나방등
 
 
-![이미지](images/page016_img07.jpeg)
+![이미지](images/page016_img07.webp)
 
 •저작형입(chewing): 큰턱을이용해씹어먹는입구조
 
-![이미지](images/page016_img09.jpeg)
+![이미지](images/page016_img09.webp)
 
 -말벌, 딱정벌레등등
 
-![이미지](images/page016_img05.jpeg)
+![이미지](images/page016_img05.webp)
 
-![이미지](images/page016_img06.jpeg)
+![이미지](images/page016_img06.webp)
 
 파리
 나비, 나방 모기 말벌
 
 
 
-![이미지](images/page017_img00.png)
+![이미지](images/page017_img00.webp)
 
 III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page017_img06.jpeg)
+![이미지](images/page017_img06.webp)
 
 2. 곤충의외부구조
 ▸ 입(mouthparts)
 
-![이미지](images/page017_img05.jpeg)
+![이미지](images/page017_img05.webp)
 
-![이미지](images/page017_img07.jpeg)
+![이미지](images/page017_img07.webp)
 
 = 뚫어빠는입
 (노린재류)
 
 
 
-![이미지](images/page018_img00.png)
+![이미지](images/page018_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -435,18 +435,18 @@ III. 곤충의 형태와 구조
 -밑마디(기절, coxa) : 다리를몸에이어주는기부위치. 보통짧고굵은편
 -도래마디(전절, trochanter) : 보통넓적다리마디와결합되어따로관절운동가능
 
-![이미지](images/page018_img06.png)
+![이미지](images/page018_img06.webp)
 
 -넓적다리마디(퇴절, femur) : 보통가장크고긴마디. 메뚜기처럼점프를많이하는경우에발달
 -종아리마디(tibia) : 넓적다리마디만큼긴경우가많음. 근육량은적은편
 -발목마디(tarsus) : 대개여러개의발목소마디구성
 -앞발목마디(pretrsus)
 
-![이미지](images/page018_img05.jpeg)
+![이미지](images/page018_img05.webp)
 
 
 
-![이미지](images/page019_img00.png)
+![이미지](images/page019_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -464,26 +464,26 @@ III. 곤충의 형태와 구조
 ✓ 흡반형(sectorial, suctioning) : 물방개수컷의앞다리에서발견되는형태. 마치동그란고무판들이여러개붙어있는것과같음. 교미시활용포함.
 ✓ 화분수집형(pollen-collecting) : 꿀벌의뒷다리에서발견. 뒷다리에는꽃가루주머니라는센털이많아난특수구조가짐.
 
-![이미지](images/page019_img05.jpeg)
+![이미지](images/page019_img05.webp)
 
-![이미지](images/page019_img07.jpeg)
+![이미지](images/page019_img07.webp)
 
-![이미지](images/page019_img09.jpeg)
+![이미지](images/page019_img09.webp)
 
 메뚜기뒷다리
 
-![이미지](images/page019_img06.jpeg)
+![이미지](images/page019_img06.webp)
 
 땅강아지앞다리
 
-![이미지](images/page019_img08.jpeg)
+![이미지](images/page019_img08.webp)
 
 꿀벌의뒷다리
 물방개다리
 
 
 
-![이미지](images/page020_img00.png)
+![이미지](images/page020_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -494,38 +494,23 @@ III. 곤충의 형태와 구조
 ✓ 날개= 외피가옆으로늘어나추가된부속지
 ✓ 날개에는시맥(wing vein) 존재→날개의골격구조유지
 
-![이미지](images/page020_img07.png)
+![이미지](images/page020_img07.webp)
 
-![이미지](images/page020_img11.png)
+![이미지](images/page020_img11.webp)
 
-![이미지](images/page020_img05.jpeg)
+![이미지](images/page020_img05.webp)
 
-![이미지](images/page020_img10.png)
+![이미지](images/page020_img10.webp)
 
-![이미지](images/page020_img09.jpeg)
+![이미지](images/page020_img09.webp)
 
-![이미지](images/page020_img08.png)
+![이미지](images/page020_img08.webp)
 
-![이미지](images/page020_img06.png)
-
-
-
-![이미지](images/page021_img00.png)
-
-III. 곤충의 형태와 구조
+![이미지](images/page020_img06.webp)
 
 
 
-2. 곤충의외부구조
-▸ 날개(wings)
-
-![이미지](images/page021_img05.jpeg)
-
-![이미지](images/page021_img06.jpeg)
-
-
-
-![이미지](images/page022_img00.png)
+![이미지](images/page021_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -534,15 +519,30 @@ III. 곤충의 형태와 구조
 2. 곤충의외부구조
 ▸ 날개(wings)
 
-![이미지](images/page022_img08.jpeg)
+![이미지](images/page021_img05.webp)
 
-![이미지](images/page022_img09.jpeg)
+![이미지](images/page021_img06.webp)
 
-![이미지](images/page022_img05.jpeg)
 
-![이미지](images/page022_img23.jpeg)
 
-![이미지](images/page022_img24.jpeg)
+![이미지](images/page022_img00.webp)
+
+III. 곤충의 형태와 구조
+
+
+
+2. 곤충의외부구조
+▸ 날개(wings)
+
+![이미지](images/page022_img08.webp)
+
+![이미지](images/page022_img09.webp)
+
+![이미지](images/page022_img05.webp)
+
+![이미지](images/page022_img23.webp)
+
+![이미지](images/page022_img24.webp)
 
 
 
@@ -558,15 +558,15 @@ III. 곤충의 형태와 구조
 지비행가능) 매우재빠르게움직여서비행
 개처럼비행
 
-![이미지](images/page022_img10.jpeg)
+![이미지](images/page022_img10.webp)
 
-![이미지](images/page022_img06.jpeg)
+![이미지](images/page022_img06.webp)
 
-![이미지](images/page022_img07.jpeg)
+![이미지](images/page022_img07.webp)
 
-![이미지](images/page022_img26.jpeg)
+![이미지](images/page022_img26.webp)
 
-![이미지](images/page022_img25.jpeg)
+![이미지](images/page022_img25.webp)
 
 
 
@@ -586,7 +586,7 @@ III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page023_img00.png)
+![이미지](images/page023_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -594,7 +594,7 @@ III. 곤충의 형태와 구조
 
 2. 곤충의외부구조
 
-![이미지](images/page023_img05.jpeg)
+![이미지](images/page023_img05.webp)
 
 ▸ 배(abdomen)
 ✓ 7마디~11마디구성
@@ -603,21 +603,21 @@ III. 곤충의 형태와 구조
 ✓ 가슴마디와같이경판이위판(상판) 또는아래판(하판)으로구성
 ✓ 옆만이위치하는쪽으로마디의대부분에서기문(숨구멍, spiracle) 존재.
 
-![이미지](images/page023_img07.jpeg)
+![이미지](images/page023_img07.webp)
 
-![이미지](images/page023_img06.jpeg)
+![이미지](images/page023_img06.webp)
 
 
 
-![이미지](images/page024_img00.png)
+![이미지](images/page024_img00.webp)
 
-![이미지](images/page024_img06.jpeg)
+![이미지](images/page024_img06.webp)
 
 III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page024_img05.jpeg)
+![이미지](images/page024_img05.webp)
 
 3. 곤충의내부구조
 ▸ 배(abdomen)
@@ -644,7 +644,7 @@ III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page025_img00.png)
+![이미지](images/page025_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -652,7 +652,7 @@ III. 곤충의 형태와 구조
 
 ▸감각계
 
-![이미지](images/page025_img05.jpeg)
+![이미지](images/page025_img05.webp)
 
 ✓열감각
 •열감각(thermoreception) : 적외선(infrared, IR) 즉, 열이발생하는파장을감지할수있다는뜻.
@@ -660,11 +660,11 @@ III. 곤충의 형태와 구조
 -(예) 흡혈성노린재: 적외선감지및신호→온혈동물을찾는능력
 -(예) 비단벌레류와같은딱정벌레는산불에의한적외선감지를통해세가약해지거나산란조건이좋은나무탐색가능
 
-![이미지](images/page025_img07.jpeg)
+![이미지](images/page025_img07.webp)
 
-![이미지](images/page025_img08.jpeg)
+![이미지](images/page025_img08.webp)
 
-![이미지](images/page025_img06.png)
+![이미지](images/page025_img06.webp)
 
 Rhodniusprolixus
 (kissing bug)
@@ -674,7 +674,7 @@ Ngongoloand Nyundo, 2015
 
 
 
-![이미지](images/page026_img00.png)
+![이미지](images/page026_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -691,24 +691,24 @@ III. 곤충의 형태와 구조
 •시각적인자극과수용은눈에서담당, 때론시세포가산란기에위치하기도함.
 •낱눈(겹눈의최소단위)를보면색소세포(pigment cell), 광수용기(photoreceptor), 간상체(rhabdom)등이역할분담하여상을구성→신경을통해전대뇌전달
 
-![이미지](images/page026_img07.jpeg)
+![이미지](images/page026_img07.webp)
 
-![이미지](images/page026_img06.jpeg)
+![이미지](images/page026_img06.webp)
 
-![이미지](images/page026_img05.jpeg)
+![이미지](images/page026_img05.webp)
 
 낱눈의구조
 백두산북방잠자리의겹눈(정광수)
 
 
 
-![이미지](images/page027_img00.png)
+![이미지](images/page027_img00.webp)
 
 III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page027_img06.png)
+![이미지](images/page027_img06.webp)
 
 ▸소화계
 ✓곤충의소화를담당하는장: 전장(앞창자), 중장(가운데창자), 후장(뒷창자), '밸브'에의해구분
@@ -716,16 +716,16 @@ III. 곤충의 형태와 구조
 •중장(midgut) : 소화액을통한소화및흡수역할
 •후장(hindgut) : 음식찌꺼기와말피기소관을통해흡수된오줌을배설하는동안재활용할수있는것을재흡수하는역할
 
-![이미지](images/page027_img07.jpeg)
+![이미지](images/page027_img07.webp)
 
-![이미지](images/page027_img05.jpeg)
+![이미지](images/page027_img05.webp)
 
 말피기소관(Malpigiantubule): 끝이막힌가는관모양으로, 기부는장과통해있고,
 몸에서발생한함질소노폐물등을체액으로부터걸러주는역할
 
 
 
-![이미지](images/page028_img00.png)
+![이미지](images/page028_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -734,7 +734,7 @@ III. 곤충의 형태와 구조
 ▸생식계
 ✓곤충은대부분암수교미에의하여알을낳는유성생식(예외: 단위생식, 유생생식)
 
-![이미지](images/page028_img06.jpeg)
+![이미지](images/page028_img06.webp)
 
 •단위생식(parthenogenesis) : 암컷이교미와수정없이새끼를낳음(예: 진딧물류)
 •유생생식(pseudogenesis) : 애벌레상태에서도생식기관의조숙한발달을통해알을낳음(예: 혹파리류→빠른진화)
@@ -742,16 +742,16 @@ III. 곤충의 형태와 구조
 •수컷생식계: 정자를생산하여암컷에게전달할수있도록준비시키는기능
 •암커생식계: 수컷의정자를들여와이를산란직전까지보관하고알을생산하여산란을준비하는일담당
 
-![이미지](images/page028_img05.jpeg)
+![이미지](images/page028_img05.webp)
 
-![이미지](images/page028_img07.jpeg)
+![이미지](images/page028_img07.webp)
 
 교미중인Oncopeltusfasciatus(Hemiptera)
 (Gullanand Cranston, 2005)
 
 
 
-![이미지](images/page029_img00.png)
+![이미지](images/page029_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -761,11 +761,11 @@ III. 곤충의 형태와 구조
 ✓체강(body cavity) 내체액과함께섞여순환되는개방순환계→곤충의체강을'혈강(haemocoel)이라고함.
 ✓혈액이세포와직접닿는것이아니며, 기관이나진피는얇은기저막(basement membrance)으로싸여있고이는혈액과의물질교환도움.
 
-![이미지](images/page029_img05.jpeg)
+![이미지](images/page029_img05.webp)
 
 ✓혈관은한개의굵고긴빨대같은혈관이몸안위쪽에존재(등혈관)
 
-![이미지](images/page029_img06.png)
+![이미지](images/page029_img06.webp)
 
 ✓등혈관은뒤쪽이심장, 앞쪽이대혈관
 ✓심장에는심문(ostium)이라는작은구멍들이좌우로존재→이를통해혈액이
@@ -780,7 +780,7 @@ III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page030_img00.png)
+![이미지](images/page030_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -792,16 +792,16 @@ III. 곤충의 형태와 구조
 ✓기관지를거쳐기관소지를통해세포나조직으로전달된공기에서산소와이산화탄소의가스교환은농도차에이루어짐(=세포내호흡)
 ✓개방기관계: 기문이몸바깥쪽으로나있어외부공기가기관지와연결
 
-![이미지](images/page030_img05.jpeg)
+![이미지](images/page030_img05.webp)
 
 ✓대부분여러쌍의기문보유(최대10쌍)
 ✓기생성인경우, 폐쇄기관계
 
-![이미지](images/page030_img06.jpeg)
+![이미지](images/page030_img06.webp)
 
 
 
-![이미지](images/page031_img00.png)
+![이미지](images/page031_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -814,9 +814,9 @@ III. 곤충의 형태와 구조
 •타감물질(allelochemical): 카이로몬, 알로몬, 시노몬
 곤충의 페로몬
 
-![이미지](images/page031_img05.jpeg)
+![이미지](images/page031_img05.webp)
 
-![이미지](images/page031_img07.jpeg)
+![이미지](images/page031_img07.webp)
 
 | 성페로몬(Sex pheromone | ) |  |
 | --- | --- | --- |
@@ -824,7 +824,7 @@ III. 곤충의 형태와 구조
 | 집합페로몬(Aggregation phero | mone) |  |
 | --- | --- | --- |
 
-![이미지](images/page031_img06.jpeg)
+![이미지](images/page031_img06.webp)
 
 | 경보페로몬(Alarm pheromo | ne) |  |
 | --- | --- | --- |
@@ -837,7 +837,7 @@ III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page032_img00.png)
+![이미지](images/page032_img00.webp)
 
 III. 곤충의 형태와 구조
 
@@ -850,7 +850,7 @@ III. 곤충의 형태와 구조
 •타감물질(allelochemical): 카이로몬, 알로몬, 시노몬
 * 타감작용(allelopathy) : 어떤개체가하나이상의생화학적물질을내어다른종의개체의성장, 생존, 번식등에영향을주는생물학적현상
 
-![이미지](images/page032_img06.jpeg)
+![이미지](images/page032_img06.webp)
 
 곤충의 타감물질
 
@@ -863,11 +863,11 @@ III. 곤충의 형태와 구조
 | 시노몬(synomone) |  | •분비자와감지자모두에게도움이되는결과를낳는물질•어떤식물이식식성곤충에저항하기위한방법으로식식성곤충에기생하는포식기생충을유인하는타감물질을분비하였다면, 이는분비자인식물과감지자인포식기생충에게모두도움 |
 | --- | --- | --- |
 
-![이미지](images/page032_img05.png)
+![이미지](images/page032_img05.webp)
 
 
 
-![이미지](images/page033_img00.png)
+![이미지](images/page033_img00.webp)
 
 강의 내용
 
@@ -879,7 +879,7 @@ III. 곤충의 형태와 구조
 
 
 
-![이미지](images/page034_img00.png)
+![이미지](images/page034_img00.webp)
 
 I. 해충의 피해
 
@@ -915,7 +915,7 @@ I. 해충의 피해
 
 
 
-![이미지](images/page035_img00.png)
+![이미지](images/page035_img00.webp)
 
 I. 해충의 피해
 
@@ -923,7 +923,7 @@ I. 해충의 피해
 
 1. 해충피해
 
-![이미지](images/page035_img05.jpeg)
+![이미지](images/page035_img05.webp)
 
 ▸ 해충의생태학적분류
 ✓ 주요해충(= 관건해충)(major or key pests)
@@ -940,7 +940,7 @@ I. 해충의 피해
 
 
 
-![이미지](images/page036_img00.png)
+![이미지](images/page036_img00.webp)
 
 I. 해충의 피해
 
@@ -949,19 +949,19 @@ I. 해충의 피해
 1. 해충피해
 ▸ 주요해충분류군
 
-![이미지](images/page036_img06.jpeg)
+![이미지](images/page036_img06.webp)
 
-![이미지](images/page036_img05.jpeg)
+![이미지](images/page036_img05.webp)
 
 
 
-![이미지](images/page037_img00.png)
+![이미지](images/page037_img00.webp)
 
 I. 해충의 피해
 
 
 
-![이미지](images/page037_img05.png)
+![이미지](images/page037_img05.webp)
 
 1. 해충피해
 ▸ 피해정도의결정
@@ -976,7 +976,7 @@ I. 해충의 피해
 
 
 
-![이미지](images/page038_img00.png)
+![이미지](images/page038_img00.webp)
 
 I. 해충의 피해
 
@@ -990,13 +990,13 @@ I. 해충의 피해
 ✓경제적피해허용수준(economic threshold, ET) : 경제적가해수준에도달하는것을억제하기위하여직접방제수단을써야하는밀도
 ✓일반평형밀도(general equilibrium position, GEP) : 일반적인환경조건에서평균밀도
 
-![이미지](images/page038_img05.png)
+![이미지](images/page038_img05.webp)
 
 
 
-![이미지](images/page039_img00.png)
+![이미지](images/page039_img00.webp)
 
-![이미지](images/page039_img06.jpeg)
+![이미지](images/page039_img06.webp)
 
 I. 해충의 피해
 
@@ -1005,7 +1005,7 @@ I. 해충의 피해
 3. 농업생태계와해충발생예찰
 ▸ 농업생태계의특성
 
-![이미지](images/page039_img05.jpeg)
+![이미지](images/page039_img05.webp)
 
 ✓영속성으로자연생태계의생물들에비해수명이짧다.
 ✓식물군은환경에대한저항성이약하다.
@@ -1022,7 +1022,7 @@ I. 해충의 피해
 
 
 
-![이미지](images/page040_img00.png)
+![이미지](images/page040_img00.webp)
 
 I. 해충의 피해
 
@@ -1037,7 +1037,7 @@ I. 해충의 피해
 
 
 
-![이미지](images/page040_img05.jpeg)
+![이미지](images/page040_img05.webp)
 
 
 
@@ -1056,7 +1056,7 @@ I. 해충의 피해
 
 
 
-![이미지](images/page041_img00.png)
+![이미지](images/page041_img00.webp)
 
 I. 해충의 피해
 
@@ -1077,7 +1077,7 @@ I. 해충의 피해
 
 
 
-![이미지](images/page042_img00.png)
+![이미지](images/page042_img00.webp)
 
 I. 해충의 피해
 
@@ -1097,7 +1097,7 @@ I. 해충의 피해
 
 
 
-![이미지](images/page043_img00.png)
+![이미지](images/page043_img00.webp)
 
 I. 해충의 피해
 
@@ -1127,11 +1127,11 @@ I. 해충의 피해
 
 4. 해충의식성
 
-![이미지](images/page043_img05.png)
+![이미지](images/page043_img05.webp)
 
 
 
-![이미지](images/page044_img00.png)
+![이미지](images/page044_img00.webp)
 
 I. 해충의 피해
 
@@ -1139,22 +1139,22 @@ I. 해충의 피해
 
 4. 해충의식성(초식성의종류)
 
-![이미지](images/page044_img10.jpeg)
+![이미지](images/page044_img10.webp)
 
 단식성(monophagous)
 
-![이미지](images/page044_img07.png)
+![이미지](images/page044_img07.webp)
 
 • 기주식물한종(species)에국한적으로섭식활동
 협식성(oligophagous)
 
-![이미지](images/page044_img06.png)
+![이미지](images/page044_img06.webp)
 
 • 기주식물:계통적으로근연한다수의속(genus)또는한과의종들섭식
 
-![이미지](images/page044_img09.jpeg)
+![이미지](images/page044_img09.webp)
 
-![이미지](images/page044_img08.jpeg)
+![이미지](images/page044_img08.webp)
 
 
 광식성(polyphagous)
@@ -1162,9 +1162,9 @@ I. 해충의 피해
 
 
 
-![이미지](images/page045_img00.png)
+![이미지](images/page045_img00.webp)
 
-![이미지](images/page045_img07.jpeg)
+![이미지](images/page045_img07.webp)
 
 I. 해충의 피해
 
@@ -1172,16 +1172,16 @@ I. 해충의 피해
 
 4. 해충의식성(초식성의종류)
 
-![이미지](images/page045_img05.jpeg)
+![이미지](images/page045_img05.webp)
 
-![이미지](images/page045_img06.jpeg)
+![이미지](images/page045_img06.webp)
 
 현재까지미국선녀벌레의 기주식물은"52과110종" 기록
 (2014년기준)
 
 
 
-![이미지](images/page046_img00.png)
+![이미지](images/page046_img00.webp)
 
 I. 해충의 피해
 
@@ -1191,70 +1191,70 @@ I. 해충의 피해
 • 식량을생산할수있는작물
 • 식량은영양공급면에서인간과동물의생존에필수적인칼로리, 지방질, 단백질, 탄수화물, 비타민과기타무기질등공급
 
-![이미지](images/page046_img11.jpeg)
+![이미지](images/page046_img11.webp)
 
-![이미지](images/page046_img10.jpeg)
+![이미지](images/page046_img10.webp)
 
 | 식량작물의 종류 | ✓ 쌀, 보리, 밀등✓ 옥수수, 콩, 팥, 조, 수수등✓ 고구마, 감자등 |
 | --- | --- |
 
-![이미지](images/page046_img08.jpeg)
+![이미지](images/page046_img08.webp)
 
-![이미지](images/page046_img09.jpeg)
+![이미지](images/page046_img09.webp)
 
 | 식량작물해충종류 | ✓ 섭식방법에따른구분: 저작형, 흡즙형✓ 가해령기에따른구분: 유충기, 성충기✓ 가해부위에따른구분: 뿌리, 줄기, 잎, 꽃또는열매 |
 | --- | --- |
 
-![이미지](images/page046_img05.jpeg)
+![이미지](images/page046_img05.webp)
 
-![이미지](images/page046_img06.jpeg)
+![이미지](images/page046_img06.webp)
 
-![이미지](images/page046_img07.jpeg)
+![이미지](images/page046_img07.webp)
 
 벼메뚜기 벼총채벌레
 
 
 
-![이미지](images/page047_img00.png)
+![이미지](images/page047_img00.webp)
 
 I. 해충의 피해
 
 
 
-![이미지](images/page047_img05.jpeg)
+![이미지](images/page047_img05.webp)
 
-![이미지](images/page047_img06.jpeg)
+![이미지](images/page047_img06.webp)
 
-![이미지](images/page047_img07.jpeg)
+![이미지](images/page047_img07.webp)
 
 4. 해충의종류(식량작물해충)
 -벼
 벼메뚜기 벼총채벌레
 
-![이미지](images/page047_img09.jpeg)
+![이미지](images/page047_img09.webp)
 
-![이미지](images/page047_img08.jpeg)
+![이미지](images/page047_img08.webp)
 
-![이미지](images/page047_img11.jpeg)
+![이미지](images/page047_img11.webp)
 
-![이미지](images/page047_img10.jpeg)
+![이미지](images/page047_img10.webp)
 
-![이미지](images/page047_img14.jpeg)
+![이미지](images/page047_img14.webp)
 
-![이미지](images/page047_img15.jpeg)
+![이미지](images/page047_img15.webp)
 
 끝동매미충 번개매미충
 
-![이미지](images/page047_img12.jpeg)
+![이미지](images/page047_img12.webp)
 
-![이미지](images/page047_img13.jpeg)
+![이미지](images/page047_img13.webp)
 
 벼물바구미
 이화명나방 벼밤나방 벼잎벌레
 
 
 
-![이미지](images/page048_img00.png)
+![이미지](images/page048_img00.webp)
 
 I. 해충의 피해
 
@@ -1262,54 +1262,54 @@ I. 해충의 피해
 
 4. 해충의종류(식량작물해충)
 
-![이미지](images/page048_img05.jpeg)
+![이미지](images/page048_img05.webp)
 
-![이미지](images/page048_img06.jpeg)
+![이미지](images/page048_img06.webp)
 
 -보리/조
 조명나방 멸강나방
 
-![이미지](images/page048_img08.png)
+![이미지](images/page048_img08.webp)
 
-![이미지](images/page048_img07.jpeg)
+![이미지](images/page048_img07.webp)
 
 보리굴파리 보리잎벌
 
 
 
-![이미지](images/page049_img00.png)
+![이미지](images/page049_img00.webp)
 
 I. 해충의 피해
 
 
 
-![이미지](images/page049_img05.jpeg)
+![이미지](images/page049_img05.webp)
 
-![이미지](images/page049_img06.jpeg)
+![이미지](images/page049_img06.webp)
 
-![이미지](images/page049_img08.jpeg)
+![이미지](images/page049_img08.webp)
 
 4. 해충의종류(식량작물해충)
 -콩, 팥
 콩잎말이명나방
 아카시아진딧물 콩진딧물
 
-![이미지](images/page049_img09.jpeg)
+![이미지](images/page049_img09.webp)
 
-![이미지](images/page049_img07.jpeg)
+![이미지](images/page049_img07.webp)
 
 콩은무늬밤나방
 콩나방
 
-![이미지](images/page049_img10.jpeg)
+![이미지](images/page049_img10.webp)
 
-![이미지](images/page049_img11.jpeg)
+![이미지](images/page049_img11.webp)
 
 완두굴파리
 
 
 
-![이미지](images/page050_img00.png)
+![이미지](images/page050_img00.webp)
 
 I. 해충의 피해
 
@@ -1331,7 +1331,7 @@ I. 해충의 피해
 
 
 
-![이미지](images/page051_img00.png)
+![이미지](images/page051_img00.webp)
 
 I. 해충의 피해
 
@@ -1339,55 +1339,55 @@ I. 해충의 피해
 
 4. 해충의종류(시설특용작물해충)
 
-![이미지](images/page051_img05.jpeg)
+![이미지](images/page051_img05.webp)
 
-![이미지](images/page051_img06.jpeg)
+![이미지](images/page051_img06.webp)
 
-![이미지](images/page051_img07.jpeg)
+![이미지](images/page051_img07.webp)
 
-![이미지](images/page051_img08.jpeg)
+![이미지](images/page051_img08.webp)
 
 오이총채벌레
 땅강아지
 파총채벌레
 
-![이미지](images/page051_img09.jpeg)
+![이미지](images/page051_img09.webp)
 
-![이미지](images/page051_img10.jpeg)
+![이미지](images/page051_img10.webp)
 
-![이미지](images/page051_img11.jpeg)
+![이미지](images/page051_img11.webp)
 
 배추흰나비
 배추좀나방
 
 
 
-![이미지](images/page052_img00.png)
+![이미지](images/page052_img00.webp)
 
 I. 해충의 피해
 
 
 
-![이미지](images/page052_img07.jpeg)
+![이미지](images/page052_img07.webp)
 
-![이미지](images/page052_img05.jpeg)
+![이미지](images/page052_img05.webp)
 
-![이미지](images/page052_img06.jpeg)
+![이미지](images/page052_img06.webp)
 
 4. 해충의종류(과수산림해충)
 샌호제깍지벌레 배나무흰깍지벌레
 
-![이미지](images/page052_img08.jpeg)
+![이미지](images/page052_img08.webp)
 
-![이미지](images/page052_img09.jpeg)
+![이미지](images/page052_img09.webp)
 
 긴솜깍지벌레붙이 가루깍지벌레
 
-![이미지](images/page052_img10.jpeg)
+![이미지](images/page052_img10.webp)
 
-![이미지](images/page052_img11.jpeg)
+![이미지](images/page052_img11.webp)
 
-![이미지](images/page052_img12.jpeg)
+![이미지](images/page052_img12.webp)
 
 이세리아깍지벌레 루비깍지벌레
 
@@ -1395,43 +1395,43 @@ I. 해충의 피해
 
 뽕나무깍지벌레
 
-![이미지](images/page053_img00.png)
+![이미지](images/page053_img00.webp)
 
 I. 해충의 피해
 
 
 
-![이미지](images/page053_img07.jpeg)
+![이미지](images/page053_img07.webp)
 
-![이미지](images/page053_img08.jpeg)
+![이미지](images/page053_img08.webp)
 
-![이미지](images/page053_img06.jpeg)
+![이미지](images/page053_img06.webp)
 
-![이미지](images/page053_img05.jpeg)
+![이미지](images/page053_img05.webp)
 
 4. 해충의종류(과수산림해충)
 솔나방 매미나방 미국흰불나방
 
-![이미지](images/page053_img13.jpeg)
+![이미지](images/page053_img13.webp)
 
-![이미지](images/page053_img09.jpeg)
+![이미지](images/page053_img09.webp)
 
-![이미지](images/page053_img12.jpeg)
+![이미지](images/page053_img12.webp)
 
 광릉긴나무좀
 밤바구미
 
-![이미지](images/page053_img14.jpeg)
+![이미지](images/page053_img14.webp)
 
-![이미지](images/page053_img10.jpeg)
+![이미지](images/page053_img10.webp)
 
-![이미지](images/page053_img11.jpeg)
+![이미지](images/page053_img11.webp)
 
 
 
 오리나무잎벌레 도토리거위벌레
 
-![이미지](images/page054_img00.png)
+![이미지](images/page054_img00.webp)
 
 I. 해충의 피해
 
@@ -1452,7 +1452,7 @@ I. 해충의 피해
 
 
 
-![이미지](images/page055_img00.png)
+![이미지](images/page055_img00.webp)
 
 I. 해충의 피해
 
@@ -1460,23 +1460,23 @@ I. 해충의 피해
 
 5. 작물별주요농업해충
 
-![이미지](images/page055_img06.jpeg)
+![이미지](images/page055_img06.webp)
 
-![이미지](images/page055_img05.jpeg)
+![이미지](images/page055_img05.webp)
 
 벼물바구미
 
-![이미지](images/page055_img07.jpeg)
+![이미지](images/page055_img07.webp)
 
 애멸구
 
-![이미지](images/page055_img08.jpeg)
+![이미지](images/page055_img08.webp)
 
 흰들명구
 
 
 
-![이미지](images/page056_img00.png)
+![이미지](images/page056_img00.webp)
 
 I. 해충의 피해
 
@@ -1484,11 +1484,11 @@ I. 해충의 피해
 
 5. 작물별주요농업해충
 
-![이미지](images/page056_img05.jpeg)
+![이미지](images/page056_img05.webp)
 
 
 
-![이미지](images/page057_img00.png)
+![이미지](images/page057_img00.webp)
 
 I. 해충의 피해
 
@@ -1496,11 +1496,11 @@ I. 해충의 피해
 
 5. 작물별주요농업해충
 
-![이미지](images/page057_img05.jpeg)
+![이미지](images/page057_img05.webp)
 
 
 
-![이미지](images/page058_img00.png)
+![이미지](images/page058_img00.webp)
 
 II. 해충의 방제
 
@@ -1514,11 +1514,11 @@ II. 해충의 방제
 ▸ 법적방제: 국가의명령(법등)에따른방제로국가나지역간검역법등으로방제하는방법
 ▸ 종합적방제: 모든방법을같이쓰는것보다는여러방법중에서가장적절하고가장효율적이며환경에피해가적도록방제하는방법
 
-![이미지](images/page058_img05.jpeg)
+![이미지](images/page058_img05.webp)
 
 
 
-![이미지](images/page059_img00.png)
+![이미지](images/page059_img00.webp)
 
 II. 해충의 방제
 
@@ -1536,7 +1536,7 @@ II. 해충의 방제
 
 
 
-![이미지](images/page060_img00.png)
+![이미지](images/page060_img00.webp)
 
 II. 해충의 방제
 
@@ -1561,7 +1561,7 @@ II. 해충의 방제
 
 
 
-![이미지](images/page061_img00.png)
+![이미지](images/page061_img00.webp)
 
 II. 해충의 방제
 
@@ -1573,7 +1573,7 @@ II. 해충의 방제
 • 유살(insect slaughter) : 해충의특이한행동습성을이용해서유인하여사멸시키는방법(예: 주광성곤충→유아등)
 • 포살(insect shot)
 
-![이미지](images/page061_img05.jpeg)
+![이미지](images/page061_img05.webp)
 
 -직접법: 포살, 척살, 압살, 궤살, 타살등
 -간접법: 타락, 흔들기, 갉아내리기, 긁기, 피해부의제거, 선별, 끈끈이포충망의이용등
@@ -1582,7 +1582,7 @@ II. 해충의 방제
 • 온도처리: 고운/저온의장기적처리
 -고온처리: 60~66도의고온에서짧은시간에사멸(태양열, 온수, 증기, 불등)
 
-![이미지](images/page061_img06.jpeg)
+![이미지](images/page061_img06.webp)
 
 -저온처리: 5~15도에서활동중지. -27~0도에서사멸(저온→고온→저온처리)
 • 수분처리: 곡물저장시, 함수량이12% 이하에서는해충발육거의불가능
@@ -1590,7 +1590,7 @@ II. 해충의 방제
 
 
 
-![이미지](images/page062_img00.png)
+![이미지](images/page062_img00.webp)
 
 II. 해충의 방제
 
@@ -1607,39 +1607,39 @@ II. 해충의 방제
 • 약제살포의농도와살포량: 무리하게높은농도로뿌리는것지양.
 • 살포시기와횟수: 살포적기는해충의발생상황/작물의상태/약제의종류등에의해결정→초기에구제
 
-![이미지](images/page062_img05.png)
+![이미지](images/page062_img05.webp)
 
 
 
-![이미지](images/page063_img00.png)
+![이미지](images/page063_img00.webp)
 
 II. 해충의 방제
 
 
 
-![이미지](images/page063_img06.jpeg)
+![이미지](images/page063_img06.webp)
 
 3. 해충의방제법
 
-![이미지](images/page063_img05.jpeg)
+![이미지](images/page063_img05.webp)
 
 ▸ 화학적방제의역사
 제충국
 (Tanacetumcinerariifolium, 국화과)
 
-![이미지](images/page063_img07.jpeg)
+![이미지](images/page063_img07.webp)
 
 DDT(Dichlorodiphenyltrichloroethane) 살포
 
-![이미지](images/page063_img08.jpeg)
+![이미지](images/page063_img08.webp)
 
 BT제
 
 
 
-![이미지](images/page064_img00.png)
+![이미지](images/page064_img00.webp)
 
-![이미지](images/page064_img05.jpeg)
+![이미지](images/page064_img05.webp)
 
 II. 해충의 방제
 
@@ -1662,7 +1662,7 @@ II. 해충의 방제
 
 
 
-![이미지](images/page065_img00.png)
+![이미지](images/page065_img00.webp)
 
 II. 해충의 방제
 
@@ -1683,7 +1683,7 @@ II. 해충의 방제
 
 
 
-![이미지](images/page066_img00.png)
+![이미지](images/page066_img00.webp)
 
 II. 해충의 방제
 
@@ -1699,14 +1699,14 @@ II. 해충의 방제
 • (예) 칠레이리응애, 무당벌레, 칠성품잠자리, 어리줄품잠자리, 오이이리응애, 애꽃노린재, 진디혹파리등
 • 저작형입틀(무당벌레, 사마귀등), 흡즙형입틀(침노린재, 풀잠자리유충, 꽃등에유충등)
 
-![이미지](images/page066_img05.jpeg)
+![이미지](images/page066_img05.webp)
 
 ✓ 기생성천적: 콜레마니진디벌, 온실가루이좀벌, 굴파리좀벌, 잎굴파리고치벌등
 ✓ 천적유지식물(banker plant) : 천적을유지증식시킬수있는식물
 
 
 
-![이미지](images/page067_img00.png)
+![이미지](images/page067_img00.webp)
 
 II. 해충의 방제
 
@@ -1715,27 +1715,27 @@ II. 해충의 방제
 3. 해충의방제법
 ▸천적의종류
 
-![이미지](images/page067_img05.jpeg)
+![이미지](images/page067_img05.webp)
 
-![이미지](images/page067_img07.jpeg)
+![이미지](images/page067_img07.webp)
 
-![이미지](images/page067_img08.jpeg)
+![이미지](images/page067_img08.webp)
 
-![이미지](images/page067_img09.jpeg)
+![이미지](images/page067_img09.webp)
 
-![이미지](images/page067_img06.jpeg)
+![이미지](images/page067_img06.webp)
 
 애꽃노린재 콜레마니진딧벌 칠리이리응애 온실가루이좀벌
 
 
 
-![이미지](images/page068_img00.png)
+![이미지](images/page068_img00.webp)
 
 II. 해충의 방제
 
 
 
-![이미지](images/page068_img05.jpeg)
+![이미지](images/page068_img05.webp)
 
 3. 해충의방제법
 ▸ 미생물살충제의 장/단점
@@ -1748,13 +1748,13 @@ II. 해충의 방제
 | 화학적방제와천적과같이사용가능 | 화학적살충제와같이특허를가질수없어비전매품 |
 | 일부바이러스는자연자원으로부터수집이용가능 | 자외선, pH, 열등과같은물리적요소에민감한반응 |
 
-![이미지](images/page068_img06.jpeg)
+![이미지](images/page068_img06.webp)
 
 
 
-![이미지](images/page069_img00.png)
+![이미지](images/page069_img00.webp)
 
-![이미지](images/page069_img10.jpeg)
+![이미지](images/page069_img10.webp)
 
 II. 해충의 방제
 
@@ -1766,19 +1766,19 @@ II. 해충의 방제
 ✓ 특정한생물적기능을저해, 자극시킬수있는물질
 ✓ 개체들사이의생리적/행동적활동조절, 개체에서발산되는단일또는혼합화합물로같은종의다른개체가반응
 
-![이미지](images/page069_img08.jpeg)
+![이미지](images/page069_img08.webp)
 
-![이미지](images/page069_img06.jpeg)
+![이미지](images/page069_img06.webp)
 
-![이미지](images/page069_img05.png)
+![이미지](images/page069_img05.webp)
 
-![이미지](images/page069_img07.jpeg)
+![이미지](images/page069_img07.webp)
 
-![이미지](images/page069_img09.jpeg)
+![이미지](images/page069_img09.webp)
 
 
 
-![이미지](images/page070_img00.png)
+![이미지](images/page070_img00.webp)
 
 II. 해충의 방제
 
@@ -1789,61 +1789,61 @@ II. 해충의 방제
 ▸ 식물검역: 외지로부터새로운해충의침입을막기위해병해충이붙어있을가능성이있는단체물건조사, 제거를위한여러가지조치를
 취하는것(수출입식물검역, 국내식물검역)
 
-![이미지](images/page070_img06.png)
+![이미지](images/page070_img06.webp)
 
 ▸ 방제명령: 침입해충의구제/저지를위한재배, 이동제한/금지명령, 소독/폐기등의조치명령
 
-![이미지](images/page070_img05.png)
+![이미지](images/page070_img05.webp)
 
 
 
-![이미지](images/page071_img00.png)
+![이미지](images/page071_img00.webp)
 
-![이미지](images/page071_img05.jpeg)
-
-II. 해충의 방제
-
-
-
-![이미지](images/page071_img06.jpeg)
-
-
-
-![이미지](images/page072_img00.png)
+![이미지](images/page071_img05.webp)
 
 II. 해충의 방제
 
 
 
-![이미지](images/page072_img05.jpeg)
-
-![이미지](images/page072_img06.jpeg)
+![이미지](images/page071_img06.webp)
 
 
 
-![이미지](images/page073_img00.png)
+![이미지](images/page072_img00.webp)
 
 II. 해충의 방제
 
-![이미지](images/page073_img06.jpeg)
+
+
+![이미지](images/page072_img05.webp)
+
+![이미지](images/page072_img06.webp)
 
 
 
-![이미지](images/page073_img05.jpeg)
+![이미지](images/page073_img00.webp)
 
-![이미지](images/page073_img08.jpeg)
+II. 해충의 방제
 
-![이미지](images/page073_img10.jpeg)
-
-![이미지](images/page073_img07.jpeg)
-
-![이미지](images/page073_img11.jpeg)
-
-![이미지](images/page073_img09.jpeg)
+![이미지](images/page073_img06.webp)
 
 
 
-![이미지](images/page074_img00.png)
+![이미지](images/page073_img05.webp)
+
+![이미지](images/page073_img08.webp)
+
+![이미지](images/page073_img10.webp)
+
+![이미지](images/page073_img07.webp)
+
+![이미지](images/page073_img11.webp)
+
+![이미지](images/page073_img09.webp)
+
+
+
+![이미지](images/page074_img00.webp)
 
 II. 해충의 방제
 
@@ -1852,7 +1852,7 @@ II. 해충의 방제
 3. 해충의방제법
 ▸ 법적방제: 외국으로부터새로운해충침입을방지, 국내해충이크게발생할경우법령에의하여조치하는것(식물방역법)
 
-![이미지](images/page074_img05.jpeg)
+![이미지](images/page074_img05.webp)
 
 ✓ 생물적경로(Animate pathway)
 ▸재식용수입식물검역해충연구
@@ -1865,13 +1865,13 @@ II. 해충의 방제
 •목재(포장재)–유리알락하늘소
 •군수물자–버즘나무방패벌레
 
-![이미지](images/page074_img06.jpeg)
+![이미지](images/page074_img06.webp)
 
-![이미지](images/page074_img07.jpeg)
+![이미지](images/page074_img07.webp)
 
 
 
-![이미지](images/page075_img00.png)
+![이미지](images/page075_img00.webp)
 
 II. 해충의 방제
 
@@ -1879,7 +1879,7 @@ II. 해충의 방제
 
 3. 해충의방제법
 
-![이미지](images/page075_img05.jpeg)
+![이미지](images/page075_img05.webp)
 
 ▸ 종합적방제
 해충종합관리(IPM, Integrated pest management)
@@ -1887,7 +1887,7 @@ Integration : 여러 가지 다른 유해
 생물에 대한 영향을 감안하여 어떤
 유해생물의방제에복수의방제수단을
 
-![이미지](images/page075_img06.jpeg)
+![이미지](images/page075_img06.webp)
 
 상호모순없이조화롭게사용하는것
 Management : 생태학적
@@ -1898,7 +1898,7 @@ Pest : 인간에게 유해한 무척추동물,
 
 
 
-![이미지](images/page076_img00.png)
+![이미지](images/page076_img00.webp)
 
 II. 해충의 방제
 
@@ -1911,7 +1911,7 @@ II. 해충의 방제
 ▸ 종합적방제필요성
 ✓살충제에대한저항상계통해충출현
 
-![이미지](images/page076_img05.png)
+![이미지](images/page076_img05.webp)
 
 ✓방제후해충밀도의조속한회복
 ✓2차해충의발생량증가
@@ -1924,7 +1924,7 @@ II. 해충의 방제
 
 
 
-![이미지](images/page077_img00.png)
+![이미지](images/page077_img00.webp)
 
 II. 해충의 방제
 
@@ -1944,15 +1944,15 @@ II. 해충의 방제
 
 
 
-![이미지](images/page078_img00.png)
+![이미지](images/page078_img00.webp)
 
 III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 
 
 
-![이미지](images/page078_img06.png)
+![이미지](images/page078_img06.webp)
 
-![이미지](images/page078_img05.jpeg)
+![이미지](images/page078_img05.webp)
 
 Insecta(곤충강) (30목)
 Apterygota(무시아강, 無翅亞綱)
@@ -1967,18 +1967,18 @@ Endopterygota(내시류)
 
 
 
-![이미지](images/page079_img00.png)
+![이미지](images/page079_img00.webp)
 
 III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 
 
 
-![이미지](images/page079_img05.jpeg)
+![이미지](images/page079_img05.webp)
 
 딱정벌레목(Coleoptera)의 주요 형태 및 생태
 (세계약40만종, 국내3,700여종)
 
-![이미지](images/page079_img17.jpeg)
+![이미지](images/page079_img17.webp)
 
 
 |  | 진단학적형태형질(특징) |
@@ -1987,16 +1987,16 @@ III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 |  | ✓ 날개(Wings): 앞날개(elytra) 는두껍고가죽질화, 뒷날개는막질형✓ 구기(Mouthpart) : 씹는입틀또는빠는입틀✓ 더듬이(Antenna) : 매우다양(무릎형, 실형, 곤봉형등) |
 |  | 생태학적특성✓ 완전변태(Holometmorphosis)✓ 대부분식식성(Phytophagous), 포식성(Predaceous), 균식성(Fungivorous)-일부시식성(Scavengers), 기생성(Parasitic)✓ 목재, 과실, 뿌리내부섭식또는잠엽성✓ 저장농작물가해(쌀바구미,팥바구미등)✓ 식물병원체매개(소나무재선충, 참나무시들음병원균등)✓ 자원화가능한다수포함: 장수풍뎅이, 사슴벌레, 비단벌레등애완(정서)곤충✓ 지표성곤충연구분류군: 딱정벌레과, 수서성딱정벌레등 |
 
-![이미지](images/page079_img16.jpeg)
+![이미지](images/page079_img16.webp)
 
-![이미지](images/page079_img06.png)
+![이미지](images/page079_img06.webp)
 
 그림. 생물분류군별기록종수
 (Bouchard, 2014)
 
-![이미지](images/page079_img10.jpeg)
+![이미지](images/page079_img10.webp)
 
-![이미지](images/page079_img11.jpeg)
+![이미지](images/page079_img11.webp)
 
 |  | 구분 | 대표해충 |
 | --- | --- | --- |
@@ -2004,21 +2004,21 @@ III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 |  | 과수 | 포도호랑하늘소,복숭아거위벌레등 |
 |  | 산림 | 솔수염하늘소,밤바구미등 |
 
-![이미지](images/page079_img12.jpeg)
+![이미지](images/page079_img12.webp)
 
-![이미지](images/page079_img14.jpeg)
+![이미지](images/page079_img14.webp)
 
-![이미지](images/page079_img13.jpeg)
+![이미지](images/page079_img13.webp)
 
-![이미지](images/page079_img09.jpeg)
+![이미지](images/page079_img09.webp)
 
-![이미지](images/page079_img07.jpeg)
+![이미지](images/page079_img07.webp)
 
-![이미지](images/page079_img08.jpeg)
+![이미지](images/page079_img08.webp)
 
 
 
-![이미지](images/page080_img00.png)
+![이미지](images/page080_img00.webp)
 
 III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 
@@ -2034,29 +2034,29 @@ III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 |  | ✓ 잎벌아목(Symphyta)과벌아목(Apocrita)구분(전신복절의유무차이)✓ 날개(Wings): 앞, 뒷날개모두투명또는약간불투명한막질형✓ 더듬이(Antenna) : 가늘고김(감각기발달) |
 |  | 생태학적특성✓ 완전변태(Holometmorphosis)✓ 대부분잎벌아목식식성(Phytophagous), 벌아목포식성(Predaceous), 기생성✓ 주로식식성인잎벌아목의종, 위생곤충(독함유종: 말벌등)들이해충으로포함✓ 유용곤충: 해충의기생성천적(청벌상과등다수상과), 화분매개충(꿀벌상과) 등✓ 주요연구분류군: 지표성(개미과), 해충천적분류군, 화분매개곤충분류군, 독물질 |
 
-![이미지](images/page080_img12.jpeg)
+![이미지](images/page080_img12.webp)
 
-![이미지](images/page080_img20.jpeg)
+![이미지](images/page080_img20.webp)
 
-![이미지](images/page080_img08.jpeg)
+![이미지](images/page080_img08.webp)
 
-![이미지](images/page080_img11.jpeg)
+![이미지](images/page080_img11.webp)
 
-![이미지](images/page080_img13.jpeg)
+![이미지](images/page080_img13.webp)
 
-![이미지](images/page080_img14.jpeg)
+![이미지](images/page080_img14.webp)
 
-![이미지](images/page080_img17.jpeg)
+![이미지](images/page080_img17.webp)
 
-![이미지](images/page080_img19.jpeg)
+![이미지](images/page080_img19.webp)
 
-![이미지](images/page080_img18.jpeg)
+![이미지](images/page080_img18.webp)
 
-![이미지](images/page080_img10.jpeg)
+![이미지](images/page080_img10.webp)
 
-![이미지](images/page080_img07.jpeg)
+![이미지](images/page080_img07.webp)
 
-![이미지](images/page080_img09.jpeg)
+![이미지](images/page080_img09.webp)
 
 잎벌아목 벌아목
 (Symphyta) (Apocrita)
@@ -2067,14 +2067,14 @@ III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 |  | 과수 | 배나무줄기벌 |  |
 |  | 산림 | 밤나무순혹벌,잣나무넓적잎벌등 |  |
 
-![이미지](images/page080_img05.jpeg)
+![이미지](images/page080_img05.webp)
 
 
-![이미지](images/page080_img15.jpeg)
+![이미지](images/page080_img15.webp)
 
 
 
-![이미지](images/page081_img00.png)
+![이미지](images/page081_img00.webp)
 
 III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 
@@ -2084,9 +2084,9 @@ III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 (세계 약 16만종, 국내 3,800여종)
 
 
-![이미지](images/page081_img09.jpeg)
+![이미지](images/page081_img09.webp)
 
-![이미지](images/page081_img10.jpeg)
+![이미지](images/page081_img10.webp)
 
 |  | 진단학적형태형질(특징) |
 | --- | --- |
@@ -2094,15 +2094,15 @@ III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 |  | ✓ 나비류(Butterflies)와나방류(Moths)구분(더듬이, 날개시맥등차이)✓ 날개(Wings): 인편(Scales)으로덮혀있음.✓ 더듬이(Antenna) : 나비류(곤봉형),나방류(빗살무늬형, 실형등다양)✓ 구기(Mouthparts) : 빨대형(Sucking type) |
 |  | 생태학적특성✓ 완전변태(Holometmorphosis)✓ 유충식식성(Phytophagous) → 작물에큰경제적피해야기분류군✓ 식물섭식부위(생태적지위): 가장자리, 잎중앙, 잠엽성(굴형성) 등✓ 일부분류군(독나방, 쐐기나방등)은알러지(Allergy) 반응유발 |
 
-![이미지](images/page081_img08.jpeg)
+![이미지](images/page081_img08.webp)
 
-![이미지](images/page081_img11.jpeg)
+![이미지](images/page081_img11.webp)
 
-![이미지](images/page081_img17.jpeg)
+![이미지](images/page081_img17.webp)
 
-![이미지](images/page081_img12.jpeg)
+![이미지](images/page081_img12.webp)
 
-![이미지](images/page081_img13.jpeg)
+![이미지](images/page081_img13.webp)
 
 |  | 구분 | 대표해충 |  |
 | --- | --- | --- | --- |
@@ -2111,21 +2111,21 @@ III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 |  | 과수 | 사과굴나방,복숭아유리나방,포도유리나방등 |  |
 |  | 산림 | 솔나방,매미나방,미국흰불나방등 |  |
 
-![이미지](images/page081_img18.jpeg)
+![이미지](images/page081_img18.webp)
 
-![이미지](images/page081_img07.jpeg)
+![이미지](images/page081_img07.webp)
 
-![이미지](images/page081_img06.jpeg)
+![이미지](images/page081_img06.webp)
 
-![이미지](images/page081_img14.jpeg)
+![이미지](images/page081_img14.webp)
 
-![이미지](images/page081_img15.jpeg)
+![이미지](images/page081_img15.webp)
 
-![이미지](images/page081_img16.jpeg)
+![이미지](images/page081_img16.webp)
 
 
 
-![이미지](images/page082_img00.png)
+![이미지](images/page082_img00.webp)
 
 III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 
@@ -2135,7 +2135,7 @@ III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 (세계 약 16만종, 국내 1,400여종)
 
 
-![이미지](images/page082_img14.jpeg)
+![이미지](images/page082_img14.webp)
 
 |  | 진단학적 형태형질(특징) |
 | --- | --- |
@@ -2143,24 +2143,24 @@ III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 |  | ✓ 등에아목(Brachycera),모기아목(Nematocera)구분(더듬이, 평균곤차이등)✓ 날개(Wings): 앞날개1쌍발달, 뒷날개1쌍퇴화(평균곤, halteres진화)✓ 구기(Mouthparts) : 빨대형(Sucking), 스폰지형(Sponge), 찌르기형(Piercing) |
 |  | 생태학적 특성✓ 완전변태(Holometmorphosis)✓ 유충식식성, 흡혈성, 질병매개성종다수, 포식성종포함✓ 동물흡혈, 바이러스매개등많은종이위생곤충에포함✓ 다른해충을포식하는종(파리매, 광릉왕모기등)포함, 수분함량을높은서식처선호 |
 
-![이미지](images/page082_img12.jpeg)
+![이미지](images/page082_img12.webp)
 
-![이미지](images/page082_img11.jpeg)
+![이미지](images/page082_img11.webp)
 
-![이미지](images/page082_img06.jpeg)
+![이미지](images/page082_img06.webp)
 
-![이미지](images/page082_img08.jpeg)
+![이미지](images/page082_img08.webp)
 
-![이미지](images/page082_img07.jpeg)
+![이미지](images/page082_img07.webp)
 
-![이미지](images/page082_img09.jpeg)
+![이미지](images/page082_img09.webp)
 
-![이미지](images/page082_img13.jpeg)
+![이미지](images/page082_img13.webp)
 
 등에아목 모기아목
 (Brachycera) (Nematocera)
 
-![이미지](images/page082_img10.jpeg)
+![이미지](images/page082_img10.webp)
 
 |  | 구분 | 대표해충 |  |
 | --- | --- | --- | --- |
@@ -2182,12 +2182,12 @@ III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 | 과수 깍지벌레류,진딧물류등 |  | 과수 | 깍지벌레류,진딧물류등 |  |
 | 산림 솔껍질깍지벌레등 |  | 산림 | 솔껍질깍지벌레등 |  |
 
-![이미지](images/page083_img00.png)
+![이미지](images/page083_img00.webp)
 
 
 
 
-![이미지](images/page083_img13.jpeg)
+![이미지](images/page083_img13.webp)
 
 |  | 진단학적형태형질(특징) |
 | --- | --- |
@@ -2195,34 +2195,34 @@ III. 주요 해충 분류군(5대 목)의 형태 및 생태 특성
 |  | ✓ 노린재아목(Heteroptera), 매미아목(Auchenorrhyncha), 진딧물아목(Sternorrhyncha)✓ 소순판(Pronotum) : 역삼각형✓ 날개(Wings): 앞쪽2/3 혁질형, 뒤쪽1/3 막질형 |
 |  | 생태학적특성✓ 불완전변태(Hemi-metamorphosis)✓ 식물병원균매개, 식물생장초기피해생육저해✓ 약충, 성충모두식식성또는포식성✓ 수서성(물장군, 게아재비등), 반수서성(소금쟁이), 육서성(대부분의종)✓ 군집생활, 짧은세대기간, 빠른진화력, 다수의토착해충, 외래해충포함 |
 
-![이미지](images/page083_img08.jpeg)
+![이미지](images/page083_img08.webp)
 
-![이미지](images/page083_img11.jpeg)
+![이미지](images/page083_img11.webp)
 
-![이미지](images/page083_img22.jpeg)
+![이미지](images/page083_img22.webp)
 
-![이미지](images/page083_img09.jpeg)
+![이미지](images/page083_img09.webp)
 
-![이미지](images/page083_img17.jpeg)
+![이미지](images/page083_img17.webp)
 
-![이미지](images/page083_img18.jpeg)
+![이미지](images/page083_img18.webp)
 
-![이미지](images/page083_img19.jpeg)
+![이미지](images/page083_img19.webp)
 
-![이미지](images/page083_img12.jpeg)
+![이미지](images/page083_img12.webp)
 
-![이미지](images/page083_img14.jpeg)
+![이미지](images/page083_img14.webp)
 
-![이미지](images/page083_img16.jpeg)
+![이미지](images/page083_img16.webp)
 
-![이미지](images/page083_img07.jpeg)
+![이미지](images/page083_img07.webp)
 
-![이미지](images/page083_img05.jpeg)
+![이미지](images/page083_img05.webp)
 
 
-![이미지](images/page083_img10.jpeg)
+![이미지](images/page083_img10.webp)
 
-![이미지](images/page083_img15.jpeg)
+![이미지](images/page083_img15.webp)
 
 
 

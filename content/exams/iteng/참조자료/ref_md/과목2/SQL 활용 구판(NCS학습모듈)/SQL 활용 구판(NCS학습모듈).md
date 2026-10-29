@@ -1,146 +1,146 @@
 # DB엔지니어링_10_SQL활용
 
-![이미지](images/page000_img00.jpeg)
+![이미지](images/page000_img00.webp)
 
-![이미지](images/page000_img01.jpeg)
+![이미지](images/page000_img01.webp)
 
-![이미지](images/page000_img02.png)
+![이미지](images/page000_img02.webp)
 
-![이미지](images/page000_img03.jpeg)
+![이미지](images/page000_img03.webp)
 
-![이미지](images/page001_img00.jpeg)
+![이미지](images/page001_img00.webp)
 
-![이미지](images/page001_img01.jpeg)
+![이미지](images/page001_img01.webp)
 
-![이미지](images/page001_img02.jpeg)
+![이미지](images/page001_img02.webp)
 
-![이미지](images/page001_img03.jpeg)
+![이미지](images/page001_img03.webp)
 
-![이미지](images/page002_img00.jpeg)
+![이미지](images/page002_img00.webp)
 
-![이미지](images/page002_img01.jpeg)
+![이미지](images/page002_img01.webp)
 
-![이미지](images/page002_img02.jpeg)
+![이미지](images/page002_img02.webp)
 
-![이미지](images/page002_img03.jpeg)
+![이미지](images/page002_img03.webp)
 
-![이미지](images/page002_img04.jpeg)
+![이미지](images/page002_img04.webp)
 
-![이미지](images/page002_img05.jpeg)
+![이미지](images/page002_img05.webp)
 
-![이미지](images/page002_img06.jpeg)
+![이미지](images/page002_img06.webp)
 
-![이미지](images/page002_img07.jpeg)
+![이미지](images/page002_img07.webp)
 
-![이미지](images/page002_img08.jpeg)
+![이미지](images/page002_img08.webp)
 
-![이미지](images/page003_img00.png)
+![이미지](images/page003_img00.webp)
 
-![이미지](images/page003_img01.jpeg)
+![이미지](images/page003_img01.webp)
 
-![이미지](images/page003_img02.jpeg)
+![이미지](images/page003_img02.webp)
 
-![이미지](images/page003_img03.jpeg)
+![이미지](images/page003_img03.webp)
 
-![이미지](images/page003_img04.jpeg)
+![이미지](images/page003_img04.webp)
 
-![이미지](images/page003_img05.jpeg)
+![이미지](images/page003_img05.webp)
 
-![이미지](images/page003_img06.jpeg)
+![이미지](images/page003_img06.webp)
 
-![이미지](images/page003_img07.jpeg)
+![이미지](images/page003_img07.webp)
 
-![이미지](images/page003_img08.jpeg)
+![이미지](images/page003_img08.webp)
 
-![이미지](images/page004_img08.jpeg)
+![이미지](images/page004_img08.webp)
 
-![이미지](images/page004_img00.jpeg)
+![이미지](images/page004_img00.webp)
 
-![이미지](images/page004_img01.jpeg)
+![이미지](images/page004_img01.webp)
 
-![이미지](images/page004_img02.jpeg)
+![이미지](images/page004_img02.webp)
 
-![이미지](images/page004_img03.jpeg)
+![이미지](images/page004_img03.webp)
 
-![이미지](images/page004_img04.jpeg)
+![이미지](images/page004_img04.webp)
 
-![이미지](images/page004_img05.jpeg)
+![이미지](images/page004_img05.webp)
 
-![이미지](images/page004_img06.jpeg)
+![이미지](images/page004_img06.webp)
 
-![이미지](images/page004_img07.png)
+![이미지](images/page004_img07.webp)
 
-![이미지](images/page005_img08.png)
+![이미지](images/page005_img08.webp)
 
-![이미지](images/page005_img00.jpeg)
+![이미지](images/page005_img00.webp)
 
-![이미지](images/page005_img01.jpeg)
+![이미지](images/page005_img01.webp)
 
-![이미지](images/page005_img02.jpeg)
+![이미지](images/page005_img02.webp)
 
-![이미지](images/page005_img03.jpeg)
+![이미지](images/page005_img03.webp)
 
-![이미지](images/page005_img04.jpeg)
+![이미지](images/page005_img04.webp)
 
-![이미지](images/page005_img05.jpeg)
+![이미지](images/page005_img05.webp)
 
-![이미지](images/page005_img06.jpeg)
+![이미지](images/page005_img06.webp)
 
-![이미지](images/page005_img07.jpeg)
+![이미지](images/page005_img07.webp)
 
-![이미지](images/page006_img08.jpeg)
+![이미지](images/page006_img08.webp)
 
-![이미지](images/page006_img00.jpeg)
+![이미지](images/page006_img00.webp)
 
-![이미지](images/page006_img01.jpeg)
+![이미지](images/page006_img01.webp)
 
-![이미지](images/page006_img02.jpeg)
+![이미지](images/page006_img02.webp)
 
-![이미지](images/page006_img03.jpeg)
+![이미지](images/page006_img03.webp)
 
-![이미지](images/page006_img04.jpeg)
+![이미지](images/page006_img04.webp)
 
-![이미지](images/page006_img05.jpeg)
+![이미지](images/page006_img05.webp)
 
-![이미지](images/page006_img06.jpeg)
+![이미지](images/page006_img06.webp)
 
-![이미지](images/page006_img07.jpeg)
+![이미지](images/page006_img07.webp)
 
-![이미지](images/page007_img08.png)
+![이미지](images/page007_img08.webp)
 
-![이미지](images/page007_img00.jpeg)
+![이미지](images/page007_img00.webp)
 
-![이미지](images/page007_img01.jpeg)
+![이미지](images/page007_img01.webp)
 
-![이미지](images/page007_img02.jpeg)
+![이미지](images/page007_img02.webp)
 
-![이미지](images/page007_img03.jpeg)
+![이미지](images/page007_img03.webp)
 
-![이미지](images/page007_img04.jpeg)
+![이미지](images/page007_img04.webp)
 
-![이미지](images/page007_img05.jpeg)
+![이미지](images/page007_img05.webp)
 
-![이미지](images/page007_img06.jpeg)
+![이미지](images/page007_img06.webp)
 
-![이미지](images/page007_img07.jpeg)
+![이미지](images/page007_img07.webp)
 
-![이미지](images/page008_img08.jpeg)
+![이미지](images/page008_img08.webp)
 
-![이미지](images/page008_img00.jpeg)
+![이미지](images/page008_img00.webp)
 
-![이미지](images/page008_img01.jpeg)
+![이미지](images/page008_img01.webp)
 
-![이미지](images/page008_img02.jpeg)
+![이미지](images/page008_img02.webp)
 
-![이미지](images/page008_img03.jpeg)
+![이미지](images/page008_img03.webp)
 
-![이미지](images/page008_img04.jpeg)
+![이미지](images/page008_img04.webp)
 
-![이미지](images/page008_img05.jpeg)
+![이미지](images/page008_img05.webp)
 
-![이미지](images/page008_img06.jpeg)
+![이미지](images/page008_img06.webp)
 
-![이미지](images/page008_img07.jpeg)
+![이미지](images/page008_img07.webp)
 
 [NCS-학습모듈의 위치]
 
@@ -513,20 +513,20 @@ DROP CONSTRAINT emp_deptno_fk;
 (3) 테이블 생성 시 테이블간 참조 관계와 입력 데이터의 특성을 고려하여 칼럼별
 제약 조건 설정
 
-![이미지](images/page021_img00.jpeg)
+![이미지](images/page021_img00.webp)
 
 [그림 1-1] 테이블 생성 및 제약 조건 부여 예시(SQL 실행 예시)
 2. 기존 테이블을 활용한 테이블 생성하기
 (1) 생성하고자 하는 테이블의 구조가 기존 테이블과 동일하거나 유사한 경우 기존
 테이블을 활용하여 새로운 테이블을 생성
 
-![이미지](images/page022_img00.jpeg)
+![이미지](images/page022_img00.webp)
 
 [그림 1-2] 기존 테이블 기반 테이블 생성 및 선택적
 데이터 복사(SQL 실행 예시)
 (2) 테이블간의 관계를 비롯한 제약 조건을 ALTER TABLE을 사용하여 추가
 
-![이미지](images/page022_img01.jpeg)
+![이미지](images/page022_img01.webp)
 
 [그림 1-3] ALTER TABLE를 활용한 제약 조건의 추가(SQL 실행 예시)
 • 생성 결과(테이블 구조)를 확인한다.
@@ -743,7 +743,7 @@ WHERE DNAME = 'SALES')
 4. 데이터를 조회하여 입력 결과 확인하기
 5. 추가 작업 결정하기
 
-![이미지](images/page030_img00.jpeg)
+![이미지](images/page030_img00.webp)
 
 [그림 1-4] 테이블 정보 조회 및 데이터 입력 예시, NULL 포함(SQL 실행 결과)
 • 데이터를 수정한다.
@@ -751,7 +751,7 @@ WHERE DNAME = 'SALES')
 2. 수정된 데이터 결과 조회하기
 3. 추가작업 결정하기
 
-![이미지](images/page030_img01.jpeg)
+![이미지](images/page030_img01.webp)
 
 [그림 1-5] 특정 대상에 대한 데이터 갱신 예시(SQL 실행 결과)
 • 데이터를 삭제한다.
@@ -759,7 +759,7 @@ WHERE DNAME = 'SALES')
 2. 데이터를 조회하여 삭제 결과 확인하기
 3. 추가 작업 결정하기
 
-![이미지](images/page031_img00.jpeg)
+![이미지](images/page031_img00.webp)
 
 [그림 1-6] 특정 대상에 대한 데이터 삭제 예시(SQL 실행 결과)
 • 데이터를 조회한다.
@@ -840,7 +840,7 @@ COMMIT 명령은 올바르게 변경한 데이터를 데이터베이스에 반�
 임의의 저장점 설정(SAVEPOINT) 명령은 데이터 변경을 사전에 지정한 임의의 저장점
 (SAVEPOINT)까지만 변경사항을 취소(ROLLBACK)하라는 의미이다.
 
-![이미지](images/page034_img00.jpeg)
+![이미지](images/page034_img00.webp)
 
 [그림 1-7] ROLLBACK과 SAVEPOINT
 (1) ex: SAVEPOINT SVPT1 ;
@@ -889,7 +889,7 @@ ROLLBACK to SAVEPOINT b;
 3. 문제 없는 데이터 작업(데이터의 입력, 수정, 삭제 등) 후 트랜잭션 완료하기
 4. 작업된 자료에 문제가 있는 경우 변경사항 취소하기
 
-![이미지](images/page036_img00.jpeg)
+![이미지](images/page036_img00.webp)
 
 [그림 1-8] ROLLBACK과 SAVEPOINT 예시(SQL 실행 결과)
 수행 tip
@@ -959,11 +959,11 @@ ROLLBACK to SAVEPOINT b;
 6. 사용자에 권한있는 인덱스 정보 조회하기
 7. 인덱스 칼럼의 관련 정보 조회하기
 
-![이미지](images/page039_img00.jpeg)
+![이미지](images/page039_img00.webp)
 
 [그림 1-9] 해당 세션 사용자의 객체 정보 조회 예시(SQL 실행 결과)
 
-![이미지](images/page040_img00.jpeg)
+![이미지](images/page040_img00.webp)
 
 [그림 1-10] 해당 세션 사용자가 소유한 테이블관련 정보를 조회하는 예시
 (SQL 실행 결과)
@@ -1218,7 +1218,7 @@ FROM emp;
 | 2. 불필요한 | 인덱스 삭제하기 |  |  |  |
 | (1) | 인덱스가 불필요하거나 | 수정해야 하는 경우 | 인덱스 삭제 |  |
 
-![이미지](images/page048_img00.jpeg)
+![이미지](images/page048_img00.webp)
 
 | 인덱스 | 형식 | 예시 | 설명 | 표현 |
 | --- | --- | --- | --- | --- |
@@ -1231,7 +1231,7 @@ FROM emp;
 | 4. 필요에 | 따라 기존 생성된 뷰의 | 정의 변경하기 |  |  |
 | 5. 불필요한 | 뷰 삭제하기 | 수행 tip Ÿ SQL 관련 수행은따라 조금씩터베이스 및 SQLŸ 인덱스 작업효과적인 작업이 | 데이터베이스/SQL달라질 수 있다.언어를 고려하여과정에서 뷰를 가능하다. | 언어의 종류에사용자가 보유한 데이수행해야 한다. 효과적으로 활용할수록 |
 
-![이미지](images/page049_img00.jpeg)
+![이미지](images/page049_img00.webp)
 
 2-2.
 조인 및 서브 쿼리문 작성
@@ -1422,9 +1422,9 @@ EXCEPT 앞선 SQL 문에서 뒤의 SQL 문의 결과에 대한 차집합
 (1) UNION을 사용, 중복값을 제외하여 모든값을 조회
 (2) UNION ALL을 사용, 중복값을 포함하여 모든값을 조회
 
-![이미지](images/page055_img00.jpeg)
+![이미지](images/page055_img00.webp)
 
-![이미지](images/page055_img01.jpeg)
+![이미지](images/page055_img01.webp)
 
 [그림 2-3] UNION & UNION ALL
 2. 차집합 연산자
@@ -1433,9 +1433,9 @@ EXCEPT 앞선 SQL 문에서 뒤의 SQL 문의 결과에 대한 차집합
 3. 교집합 연산자
 (1) INTERSECT를 사용하여 교집합 조회
 
-![이미지](images/page056_img00.jpeg)
+![이미지](images/page056_img00.webp)
 
-![이미지](images/page056_img01.jpeg)
+![이미지](images/page056_img01.webp)
 
 [그림 2-4] INTERSECT & ECEPT(MINUS)
 수행 내용 / 복수 테이블 조회(JOIN, 서브쿼리, 집합연산자)하기
@@ -1642,7 +1642,7 @@ DCL(Data Control Language)은 유저를 생성하고 권한을 제어할 수 있
 - SQL 인증을 사용할 때는 강력한 암호(숫자+문자+특수문자 등을 혼합하여
 사용)를 사용해야함.
 
-![이미지](images/page065_img00.jpeg)
+![이미지](images/page065_img00.webp)
 
 [그림 2-5] 사용자 권한부여와 ROLE의 활용
 수행 내용 / 사용자 생성과 권한 부여하기
@@ -1828,7 +1828,7 @@ Oracle의 PL/SQL은 Block 구조로 되어있고 Block 내에는 DML 문장과 Q
 | (3) PL/SQL 기본앞으로 살펴볼지만 기본적인에 대한 기본적인 | 문법(Syntax) User Defined Function이나 Trigger의 생성 방법이나문법은 비슷하기 때문에 여기에서는 Stored Procedure를문법을 정리한다. | 사용 | 목적은통해서 | 다르PL/SQL |
 | (가) DROP- CREATE내에- 생성- 프로시저는-‘OR존의 | Procedure TABLE 명령어로 테이블을 생성하듯 CREATE 명령어로프로시저를 생성할 수 있음. 프로시저는 데이터베이스 내에 저장 개발자가 필요할 때 호출하여 실행할 수 있음. REPLACE’절은 데이터베이스 내에 같은 이름의 프로시저가프로시저를 무시하고 새로운 내용으로 덮어쓰기 하겠다는 | 의미 | 데이터베이스있을 | 경우, 기 |
 
-![이미지](images/page072_img00.jpeg)
+![이미지](images/page072_img00.webp)
 
 | 학습 내용 | 평가 항목 | 성취수준 |  |  |
 | --- | --- | --- | --- | --- |
@@ -1943,7 +1943,7 @@ Oracle의 PL/SQL은 Block 구조로 되어있고 Block 내에는 DML 문장과 Q
 | 1. 포트폴리오 - 반복적으로고 실행결과를- 목표한 연산처리와과를 확인한다.- 복수의 연관고 실행결과를 | 사용하는 특정 기능을 수행하기 위한 프로시저 및 프로시저확인한다. 결과값을 반환하는 사용자 정의 함수 및 호출문을테이블 간에 연속적인 데이터 삽입, 삭제, 수정 기능의 확인한다. | 호출문을작성하고트리거 | 등을 작성하실행결작성하 |
 | 2. 평가자 체크리스트- 반복적으로여 실행결과를- 목표한 연산처리와과를 도출할- 복수의 연관여 실행결과를 | 사용하는 특정 기능을 수행하기 위한 프로시저 및 프로시저도출할 수 있는지 확인하고 부족한 부분을 보완하도록결과값을 반환하는 사용자 정의 함수 및 호출문을수 있는지 확인하고 부족한 부분을 보완하도록 한다. 테이블 간에 연속적인 데이터 삽입, 삭제, 수정 기능의 도출할 수 있는지 확인하고 부족한 부분을 보완하도록 | 호출문을한다. 작성하여트리거한다. | 등을 작성하실행결작성하 |
 
-![이미지](images/page081_img00.jpeg)
+![이미지](images/page081_img00.webp)
 
 ∙정원혁(2007).『Microsoft SQL Server 2000(전문가로 가는 지름길 1,개발자용)』.대림.
 ∙주종면(2003).『열혈강의 오라클 데이터베이스 모델링』.프리렉.
@@ -1969,12 +1969,12 @@ NCS 학습모듈 개발진
 저작권법 25조에 따라 관리됩니다.
 ※ 본 학습모듈은 http://www.ncs.go.kr에서 확인 및 다운로드할 수 있습니다.
 
-![이미지](images/page083_img00.png)
+![이미지](images/page083_img00.webp)
 
-![이미지](images/page083_img01.jpeg)
+![이미지](images/page083_img01.webp)
 
-![이미지](images/page083_img02.jpeg)
+![이미지](images/page083_img02.webp)
 
-![이미지](images/page083_img03.jpeg)
+![이미지](images/page083_img03.webp)
 
-![이미지](images/page083_img04.png)
+![이미지](images/page083_img04.webp)

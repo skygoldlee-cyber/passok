@@ -4,39 +4,39 @@
 (15주)
 기말고사(보충심화학습)
 
-![이미지](images/page001_img00.jpeg)
+![이미지](images/page001_img00.webp)
 
-![이미지](images/page001_img01.jpeg)
-
-부동산가격과 이자율
-
-![이미지](images/page002_img01.jpeg)
-
-![이미지](images/page002_img00.jpeg)
+![이미지](images/page001_img01.webp)
 
 부동산가격과 이자율
 
-![이미지](images/page003_img01.jpeg)
+![이미지](images/page002_img01.webp)
 
-![이미지](images/page003_img00.jpeg)
-
-부동산가격과 이자율
-
-![이미지](images/page004_img01.jpeg)
-
-![이미지](images/page004_img00.jpeg)
+![이미지](images/page002_img00.webp)
 
 부동산가격과 이자율
 
-![이미지](images/page005_img01.jpeg)
+![이미지](images/page003_img01.webp)
 
-![이미지](images/page005_img00.jpeg)
+![이미지](images/page003_img00.webp)
 
 부동산가격과 이자율
 
-![이미지](images/page006_img01.jpeg)
+![이미지](images/page004_img01.webp)
 
-![이미지](images/page006_img00.jpeg)
+![이미지](images/page004_img00.webp)
+
+부동산가격과 이자율
+
+![이미지](images/page005_img01.webp)
+
+![이미지](images/page005_img00.webp)
+
+부동산가격과 이자율
+
+![이미지](images/page006_img01.webp)
+
+![이미지](images/page006_img00.webp)
 
 부동산 투자론
 • 투자란 장래의 이익을 위해서 현재의 소비를 희생하는 것

@@ -3,7 +3,7 @@
 |  | 2021년도 2학기 - 식물보호학농림해충 - 3 (수목해충 및 토양곤충) |
 | --- | --- |
 
-![이미지](images/page000_img02.png)
+![이미지](images/page000_img02.webp)
 
 
 
@@ -14,7 +14,7 @@
 
 
 
-![이미지](images/page001_img00.png)
+![이미지](images/page001_img00.webp)
 
 강의 내용
 
@@ -27,7 +27,7 @@
 
 
 
-![이미지](images/page002_img00.png)
+![이미지](images/page002_img00.webp)
 
 생태계와 생물다양성(산림의 중요성)
 
@@ -35,9 +35,9 @@
 
 
 
-![이미지](images/page002_img08.jpeg)
+![이미지](images/page002_img08.webp)
 
-![이미지](images/page002_img06.jpeg)
+![이미지](images/page002_img06.webp)
 
 
 
@@ -47,7 +47,7 @@
 
 
 
-![이미지](images/page003_img00.png)
+![이미지](images/page003_img00.webp)
 
 수목해충 일반(수목해충이란?)
 
@@ -61,21 +61,21 @@
 ▸ 산림해충 : 산림생태계의한 구성요소인 수많은 곤충 중에서 인간이 산림에서 기대하는 역할을 직접 또는 간접적으로 저해하는 특정 종 → 이러한
 해충이 목재생산기능과 조경수의 건강을 해치게 될 때 "수목해충"으로 인식될 수 있음.
 
-![이미지](images/page003_img05.jpeg)
+![이미지](images/page003_img05.webp)
 
-![이미지](images/page003_img06.jpeg)
+![이미지](images/page003_img06.webp)
 
-![이미지](images/page003_img10.jpeg)
+![이미지](images/page003_img10.webp)
 
-![이미지](images/page003_img09.jpeg)
+![이미지](images/page003_img09.webp)
 
-![이미지](images/page003_img08.jpeg)
+![이미지](images/page003_img08.webp)
 
-![이미지](images/page003_img07.jpeg)
+![이미지](images/page003_img07.webp)
 
 
 
-![이미지](images/page004_img00.png)
+![이미지](images/page004_img00.webp)
 
 수목해충 일반(수목해충이란?)
 
@@ -94,25 +94,25 @@
 있음.
 
 
-![이미지](images/page004_img13.jpeg)
+![이미지](images/page004_img13.webp)
 
-![이미지](images/page004_img12.jpeg)
+![이미지](images/page004_img12.webp)
 
-![이미지](images/page004_img07.jpeg)
+![이미지](images/page004_img07.webp)
 
-![이미지](images/page004_img15.jpeg)
+![이미지](images/page004_img15.webp)
 
-![이미지](images/page004_img09.jpeg)
+![이미지](images/page004_img09.webp)
 
-![이미지](images/page004_img10.jpeg)
+![이미지](images/page004_img10.webp)
 
-![이미지](images/page004_img11.jpeg)
+![이미지](images/page004_img11.webp)
 
-![이미지](images/page004_img08.jpeg)
+![이미지](images/page004_img08.webp)
 
 
 
-![이미지](images/page005_img00.png)
+![이미지](images/page005_img00.webp)
 
 수목해충 일반(수목해충이란?)
 
@@ -130,17 +130,17 @@
 솔나방의폐사육이증가하며피해가감소한 경우
 ▸ (사례3) 최근기후변화등으로인하여봄철 고온건조한기후조건과살충제오남용으로인한 천적상의파괴로관상수목에서응애류피해증가
 
-![이미지](images/page005_img07.jpeg)
+![이미지](images/page005_img07.webp)
 
-![이미지](images/page005_img08.jpeg)
+![이미지](images/page005_img08.webp)
 
-![이미지](images/page005_img09.jpeg)
+![이미지](images/page005_img09.webp)
 
 오리나무잎벌레의 피해 솔나방(유충)의피해 사과응애피해
 
 
 
-![이미지](images/page006_img00.png)
+![이미지](images/page006_img00.webp)
 
 수목해충 일반(수목해충이란?)
 
@@ -156,15 +156,15 @@
 혐오감을줄경우해충이되어방제의대상이 될수있음.
 ▸ 진딧물류, 깍지벌레류, 매미충류의해충은수목을흡즙 가해하면서감로를 분비하는데도심지조경수의경우감로가자동차나공작물에떨어져 더럽히는경우문제가됨.
 
-![이미지](images/page006_img07.jpeg)
+![이미지](images/page006_img07.webp)
 
-![이미지](images/page006_img08.jpeg)
+![이미지](images/page006_img08.webp)
 
-![이미지](images/page006_img09.jpeg)
+![이미지](images/page006_img09.webp)
 
 
 
-![이미지](images/page007_img00.png)
+![이미지](images/page007_img00.webp)
 
 수목해충 일반(수목해충이란?)
 
@@ -181,13 +181,13 @@
 ▸ (예시) 밤나무혹벌은1958년우리나라에서피해발생이 확인된이후재래종 밤나무에막대한피해가발생하였으나, 1960년대내충성품종을도입하여대대적으로
 보급하자방제가성공하는듯했으나, 밤나무혹벌이내충성품종에적응하면서피해가다시 증가하고있는것 = 생물의유전적특성변화등으로가해정도가커지는경우
 
-![이미지](images/page007_img07.jpeg)
+![이미지](images/page007_img07.webp)
 
-![이미지](images/page007_img08.jpeg)
+![이미지](images/page007_img08.webp)
 
 
 
-![이미지](images/page008_img00.png)
+![이미지](images/page008_img00.webp)
 
 국내 수목해충의 발생 연혁
 
@@ -203,17 +203,17 @@
 ▸ 수목해충에대한관심은대부분 소나무속(Pinus)을가해하는해충에집중.
 ▸ 최근수목해충의문제는국제교역량의증가로인한 외래해충의피해증가로집중되고있음.
 
-![이미지](images/page008_img07.png)
+![이미지](images/page008_img07.webp)
 
-![이미지](images/page008_img05.jpeg)
+![이미지](images/page008_img05.webp)
 
-![이미지](images/page008_img06.jpeg)
+![이미지](images/page008_img06.webp)
 
 솔껍질깍지벌레 잣나무별납작잎벌
 
 
 
-![이미지](images/page009_img00.png)
+![이미지](images/page009_img00.webp)
 
 수목해충의 구분
 
@@ -241,7 +241,7 @@
 
 
 
-![이미지](images/page010_img00.png)
+![이미지](images/page010_img00.webp)
 
 수목해충의 구분
 
@@ -251,19 +251,19 @@
 ▸ 응애류의몸은전체부(두흉부, 머리가슴)와후체부(몸통부, 배) 두 부분으로구분되고, 더듬이가없음.
 ▸ 겹눈은없고홑눈만있으며, 다리는4쌍, 날개가없음.
 
-![이미지](images/page010_img06.jpeg)
+![이미지](images/page010_img06.webp)
 
-![이미지](images/page010_img05.jpeg)
+![이미지](images/page010_img05.webp)
 
 사과응애
 
-![이미지](images/page010_img07.jpeg)
+![이미지](images/page010_img07.webp)
 
 혹응애류
 
 
 
-![이미지](images/page011_img00.png)
+![이미지](images/page011_img00.webp)
 
 수목해충의 구분
 
@@ -276,18 +276,18 @@
 
 ▸ 곤충간의유사한정도와진화계통에따라 분류하는학문적인구분방법
 
-![이미지](images/page011_img08.png)
+![이미지](images/page011_img08.webp)
 
 ▸ 크게곤충의목(order)을중심으로구분함.
 ▸ 응애류의경우, 거미강응애목에속하므로별도로분류
 
-![이미지](images/page011_img07.png)
+![이미지](images/page011_img07.webp)
 
-![이미지](images/page011_img09.jpeg)
+![이미지](images/page011_img09.webp)
 
 
 
-![이미지](images/page012_img00.png)
+![이미지](images/page012_img00.webp)
 
 수목해충의 구분
 
@@ -309,7 +309,7 @@
 
 
 
-![이미지](images/page013_img00.png)
+![이미지](images/page013_img00.webp)
 
 수목해충의 구분
 
@@ -325,15 +325,15 @@
 ▸ 밀도를조절할수 있는효과적인천적이없어 인위적인방제가실행되지않으면심각한손실을가져올수 있음.
 ▸ 솔잎혹파리, 솔껍질깍지벌레와같이피해가 매년지속적이고심한해충
 
-![이미지](images/page013_img08.jpeg)
+![이미지](images/page013_img08.webp)
 
-![이미지](images/page013_img07.jpeg)
+![이미지](images/page013_img07.webp)
 
-![이미지](images/page013_img09.jpeg)
+![이미지](images/page013_img09.webp)
 
 
 
-![이미지](images/page014_img00.png)
+![이미지](images/page014_img00.webp)
 
 수목해충의 구분
 
@@ -344,20 +344,20 @@
 | --- | --- |
 
 
-![이미지](images/page014_img08.jpeg)
+![이미지](images/page014_img08.webp)
 
 ▸ 평상시에는일반평형밀도(GEP)가경제적피해수준(EIL) 이하로문제가되지 않던해충이 환경조건의변화 등으로
 인하여해충의밀도억제요인들이변화되고대발생하여경제적피해수준을넘는 경우
 ▸ 매미나방류, 잎벌류, 대벌레나외래종으로국내에침입하여문제가되고 있는꽃매미, 미국선녀벌레,
 갈색날개매미충등
 
-![이미지](images/page014_img07.jpeg)
+![이미지](images/page014_img07.webp)
 
 강원도의예
 
 
 
-![이미지](images/page015_img00.png)
+![이미지](images/page015_img00.webp)
 
 수목해충의 구분
 
@@ -372,15 +372,15 @@
 ▸ 조경수해충방제를위한살충제사용이증가하면서밀도를억제하는천적이감소하여피해가크게증가하는응애류, 동일 계통약제의지속적인사용으로이에대한
 저항성을획득하여문제가되는응애류, 진딧물류와같은미소해충의예
 
-![이미지](images/page015_img08.jpeg)
+![이미지](images/page015_img08.webp)
 
-![이미지](images/page015_img07.jpeg)
+![이미지](images/page015_img07.webp)
 
-![이미지](images/page015_img09.jpeg)
+![이미지](images/page015_img09.webp)
 
 
 
-![이미지](images/page016_img00.png)
+![이미지](images/page016_img00.webp)
 
 수목해충의 구분
 
@@ -399,7 +399,7 @@
 
 
 
-![이미지](images/page017_img00.png)
+![이미지](images/page017_img00.webp)
 
 수목해충의 구분
 
@@ -417,26 +417,26 @@
 ▸ 대부분의나비목유충, 잎벌류와같이유충시기에만가해하거나풍뎅이류와같이성충시기에만가해하는경우, 잎벌레류,
 대벌레류와같이성충과유충(약충)이동시에가해하는등매우다양한생활습관을가지고 있음.
 
-![이미지](images/page017_img07.jpeg)
+![이미지](images/page017_img07.webp)
 
-![이미지](images/page017_img08.jpeg)
+![이미지](images/page017_img08.webp)
 
 금테비단벌레성충의구기
 식엽성곤충의피해(참나무류의잎)
 
 
 
-![이미지](images/page018_img00.png)
+![이미지](images/page018_img00.webp)
 
 수목해충의 구분
 
-![이미지](images/page018_img05.jpeg)
+![이미지](images/page018_img05.webp)
 
 
 
 
 
-![이미지](images/page019_img00.png)
+![이미지](images/page019_img00.webp)
 
 수목해충의 구분
 
@@ -453,13 +453,13 @@
 ▸ 최근에는거미강(Arachnida)에 속하는응애류도수목을가해하는대표적인흡즙성해충이며, 적정한환경조건에서응애류 밀도가급격하게늘어나서수액을
 빨아먹으면잎이변색되면서새잎과가지의성장을억제, 조기낙엽유발
 
-![이미지](images/page019_img07.jpeg)
+![이미지](images/page019_img07.webp)
 
 큰허리노린재
 
 
 
-![이미지](images/page020_img00.png)
+![이미지](images/page020_img00.webp)
 
 주제 발표 안내
 
@@ -484,7 +484,7 @@
 
 
 
-![이미지](images/page021_img00.png)
+![이미지](images/page021_img00.webp)
 
 수목해충의 구분
 
@@ -499,31 +499,31 @@
 ▸ 생활권수목이나산림수종은유실수에비해열매의경제적인가치가적기 때문에종실, 구과해충의발생이큰문제가되지 않지만, 경제적으로중요한밤나무나잣나무
 등을가해하는해충이나종자생산을위한채종원의종실, 구과를 가해하는해충은방제가필요함
 
-![이미지](images/page021_img07.png)
+![이미지](images/page021_img07.webp)
 
-![이미지](images/page021_img09.png)
+![이미지](images/page021_img09.webp)
 
-![이미지](images/page021_img10.jpeg)
+![이미지](images/page021_img10.webp)
 
-![이미지](images/page021_img08.jpeg)
+![이미지](images/page021_img08.webp)
 
 
 
-![이미지](images/page022_img00.png)
+![이미지](images/page022_img00.webp)
 
 수목해충의 구분
 
 
 
-![이미지](images/page022_img05.jpeg)
+![이미지](images/page022_img05.webp)
 
-![이미지](images/page022_img06.png)
+![이미지](images/page022_img06.webp)
 
-![이미지](images/page022_img07.jpeg)
+![이미지](images/page022_img07.webp)
 
 
 
-![이미지](images/page023_img00.png)
+![이미지](images/page023_img00.webp)
 
 수목해충의 구분
 
@@ -538,15 +538,15 @@
 ▸ 진딧물류가원인인경우가많지만, 최근에는혹응애류에의한피해가많이 발생함.
 ▸ 이외에솔잎혹파리와같은혹파리류나밤나무혹벌과같은혹벌류등이있으며, 이부류는벌레혹에의해 충체가노출되지않아방제가어려운해충군에속함.
 
-![이미지](images/page023_img08.jpeg)
+![이미지](images/page023_img08.webp)
 
-![이미지](images/page023_img07.jpeg)
+![이미지](images/page023_img07.webp)
 
 참나무잎붉은혹벌충영 붉나무혹응애
 
 
 
-![이미지](images/page024_img00.png)
+![이미지](images/page024_img00.webp)
 
 수목해충의 구분
 
@@ -566,17 +566,17 @@ boring pests)
 ▸ 딱정벌레목의나무좀류, 하늘소류, 바구미류, 비단벌레류해충은 주로수세가쇠약한 나무를가해하여피해를줌.
 ▸ 나비목의유리나방류, 박쥐나방류의일부명나무류는건전한나무의줄기나가지에 구멍을뚫고가해하여피해부위에부후균이침입.
 
-![이미지](images/page024_img07.jpeg)
+![이미지](images/page024_img07.webp)
 
-![이미지](images/page024_img08.jpeg)
+![이미지](images/page024_img08.webp)
 
-![이미지](images/page024_img09.jpeg)
+![이미지](images/page024_img09.webp)
 
 참나무하늘소의유충 호두나무피해흔적 북방수염하늘소유충(잣나무)
 
 
 
-![이미지](images/page025_img00.png)
+![이미지](images/page025_img00.webp)
 
 수목해충의 구분
 
@@ -598,7 +598,7 @@ boring pests)
 
 
 
-![이미지](images/page026_img00.png)
+![이미지](images/page026_img00.webp)
 
 수목해충의 구분
 
@@ -618,17 +618,17 @@ boring pests)
 • 소나무, 곰솔에피해를주는솔껍질깍지벌레, 소나무가루깍지벌레, 소나무왕진딧물등
 ▸ 단식성해충의경우, 피해수종에서피해흔적만으로도가해해충을추정하기용이하며, 단식성이므로특정기주식물만관리하면방제가용이한장점을가짐.
 
-![이미지](images/page026_img07.jpeg)
+![이미지](images/page026_img07.webp)
 
-![이미지](images/page026_img08.jpeg)
+![이미지](images/page026_img08.webp)
 
-![이미지](images/page026_img09.jpeg)
+![이미지](images/page026_img09.webp)
 
 회양목명나방유충의피해 자귀뭉뚝날개나방(성충) 소나무왕딘딧물(약충)
 
 
 
-![이미지](images/page027_img00.png)
+![이미지](images/page027_img00.webp)
 
 수목해충의 구분
 
@@ -645,15 +645,15 @@ boring pests)
 ▸ 흡즙성해충인깍지벌레류에서도벚나무깍지벌레, 쥐똥밑깍지벌레, 왕공깍지벌레등협식성이많으며,
 방패벌레류의대부분도기주범위가한정적인협식성 해충
 
-![이미지](images/page027_img07.jpeg)
+![이미지](images/page027_img07.webp)
 
-![이미지](images/page027_img08.jpeg)
+![이미지](images/page027_img08.webp)
 
 광릉긴나무좀
 
 
 
-![이미지](images/page028_img00.png)
+![이미지](images/page028_img00.webp)
 
 수목해충의 구분
 
@@ -672,23 +672,23 @@ boring pests)
 ▸ 잎응애류(전나무잎응애, 점박이응애, 차응애등)
 ▸ 천공성해충(오리나무좀, 알락하늘소, 왕바구미, 가문비왕바구미, 붉은목나무좀등)
 
-![이미지](images/page028_img07.jpeg)
+![이미지](images/page028_img07.webp)
 
-![이미지](images/page028_img08.jpeg)
+![이미지](images/page028_img08.webp)
 
-![이미지](images/page028_img09.jpeg)
+![이미지](images/page028_img09.webp)
 
 미국흰불나방(유충) 독나방(유충) 알락하늘소(성충)
 
 
 
-![이미지](images/page029_img00.png)
+![이미지](images/page029_img00.webp)
 
 수목해충의 구분
 
 
 
-![이미지](images/page029_img05.jpeg)
+![이미지](images/page029_img05.webp)
 
 ▸ 주요한 수목해충의 과 일람표
 ✓메뚜기목(3과)
@@ -704,27 +704,27 @@ boring pests)
 
 
 
-![이미지](images/page030_img00.png)
+![이미지](images/page030_img00.webp)
 
 수목해충의 구분
 
 
 
-![이미지](images/page030_img05.jpeg)
+![이미지](images/page030_img05.webp)
 
 ▸ 피해흔적을 통한 해충의 구분
 
-![이미지](images/page030_img07.jpeg)
+![이미지](images/page030_img07.webp)
 
-![이미지](images/page030_img06.jpeg)
+![이미지](images/page030_img06.webp)
 
-![이미지](images/page030_img08.jpeg)
+![이미지](images/page030_img08.webp)
 
 
 
-![이미지](images/page031_img00.png)
+![이미지](images/page031_img00.webp)
 
-![이미지](images/page031_img05.jpeg)
+![이미지](images/page031_img05.webp)
 
 수목해충의 구분
 
@@ -732,19 +732,19 @@ boring pests)
 
 ▸ 수목의 부위별 해충 피해
 
-![이미지](images/page031_img06.jpeg)
+![이미지](images/page031_img06.webp)
 
-![이미지](images/page031_img07.jpeg)
+![이미지](images/page031_img07.webp)
 
-![이미지](images/page031_img08.jpeg)
+![이미지](images/page031_img08.webp)
 
-![이미지](images/page031_img09.jpeg)
+![이미지](images/page031_img09.webp)
 
-![이미지](images/page031_img10.jpeg)
+![이미지](images/page031_img10.webp)
 
 
 
-![이미지](images/page032_img00.png)
+![이미지](images/page032_img00.webp)
 
 수목해충의 방제(법적 방제)
 
@@ -754,11 +754,11 @@ boring pests)
 ▸ 대부분의침입종은변화된환경조건에적응하지못하고폐사하는경우가많으나일부환경에적응하여번식이이루어지면초기에는효과적인천적이없거나수목자체도새로운
 침입해충에대한방어력이발달되지않아빠른속도로확산됨.
 
-![이미지](images/page032_img06.jpeg)
+![이미지](images/page032_img06.webp)
 
-![이미지](images/page032_img07.jpeg)
+![이미지](images/page032_img07.webp)
 
-![이미지](images/page032_img05.jpeg)
+![이미지](images/page032_img05.webp)
 
 ▸ 소나무재선충병(Pine Wilt Disease)의 경우, 「소나무재선충병방제특별법(2019.7.16.)」에
 따라발생지역로부터2 km의행정동, 리단위로소나무류반출금지구역을지정하고,
@@ -767,7 +767,7 @@ boring pests)
 
 
 
-![이미지](images/page033_img00.png)
+![이미지](images/page033_img00.webp)
 
 수목해충의 방제(물리적 방제)
 
@@ -797,7 +797,7 @@ boring pests)
 
 
 
-![이미지](images/page034_img00.png)
+![이미지](images/page034_img00.webp)
 
 수목해충의 방제(물리적 방제)
 
@@ -810,7 +810,7 @@ boring pests)
 | --- | --- |
 
 
-![이미지](images/page034_img09.jpeg)
+![이미지](images/page034_img09.webp)
 
 ▸ 곤충은눈을통해들어오는특정한파장에반응하여, 유인되기도하고기피하기도함.
 ▸ 야행성(밤)해충은주광성이있으나, 주행성(낮)해충인진딧물류나멸구류는
@@ -822,7 +822,7 @@ boring pests)
 | --- | --- |
 
 
-![이미지](images/page034_img08.jpeg)
+![이미지](images/page034_img08.webp)
 
 ▸ 감마선이나X-선, 전자빔과같은이온화에너지를일정량 이상조사하면해충을
 죽이거나불임화시킬수있고, 조사후잔류가전혀남지 않아이를해충방제에적용할수있음.
@@ -833,7 +833,7 @@ boring pests)
 
 
 
-![이미지](images/page035_img00.png)
+![이미지](images/page035_img00.webp)
 
 수목해충의 방제(기계적 방제)
 
@@ -858,7 +858,7 @@ boring pests)
 
 
 
-![이미지](images/page036_img00.png)
+![이미지](images/page036_img00.webp)
 
 수목해충의 방제(기계적 방제)
 
@@ -880,13 +880,13 @@ boring pests)
 ✓등화유살법: 주광성이강한해충중에서나방류와같이날개가있어이동력이있는 성충을유인하여방제
 ✓페로몬유살법: 페로몬을이용하여해충을유인하여방제하는방법
 
-![이미지](images/page036_img07.jpeg)
+![이미지](images/page036_img07.webp)
 
-![이미지](images/page036_img08.jpeg)
+![이미지](images/page036_img08.webp)
 
 
 
-![이미지](images/page037_img00.png)
+![이미지](images/page037_img00.webp)
 
 수목해충의 방제(기계적 방제)
 
@@ -904,11 +904,11 @@ boring pests)
 ▸ 해충의피해확산을방지하기위하여해충자체나해충이들어가있는수목조직을소각하여방제하는방법
 ▸ (예) 도토리거위벌레가산란한도토리, 소나무재선충병의매개충이월동중인벌채목소각등
 
-![이미지](images/page037_img07.jpeg)
+![이미지](images/page037_img07.webp)
 
-![이미지](images/page037_img08.jpeg)
+![이미지](images/page037_img08.webp)
 
-![이미지](images/page037_img09.jpeg)
+![이미지](images/page037_img09.webp)
 
 |  | 3. 기계적 방제(매몰법) |
 | --- | --- |
@@ -919,7 +919,7 @@ boring pests)
 
 
 
-![이미지](images/page038_img00.png)
+![이미지](images/page038_img00.webp)
 
 수목해충의 방제(기계적 방제)
 
@@ -936,22 +936,22 @@ boring pests)
 ▸ 목재의수피를제거하여목재에산란하는해충의산란을저지하거나수피아래에서서식하는해충을노출시켜해충을방제하는방법
 ▸ 살아있는수목의수피는제거가불가능하므로벌채된목재에서만활용가능한방법
 
-![이미지](images/page038_img10.jpeg)
+![이미지](images/page038_img10.webp)
 
-![이미지](images/page038_img09.jpeg)
+![이미지](images/page038_img09.webp)
 
 |  | 3. 기계적 방제(파쇄, 제재법) |
 | --- | --- |
 
 
-![이미지](images/page038_img11.jpeg)
+![이미지](images/page038_img11.webp)
 
 ▸ 피해목을두께1.5 cm 이하로파쇄, 제재하여매개충이살지못하도록하는 방법
 ▸ 파쇄산물은 산업용이나농업용등으로이용가능
 
 
 
-![이미지](images/page039_img00.png)
+![이미지](images/page039_img00.webp)
 
 수목해충의 방제(기계적 방제)
 
@@ -969,19 +969,19 @@ boring pests)
 ▸ 소나무재선충병의매개충인하늘소류가피해목에서우화하여주변으로확산되는것을저지하기위하여하늘소류가훼손하기어려운재질의 그물망을피복하여탈출을
 방지하기위한그물망피복법을적용
 
-![이미지](images/page039_img07.jpeg)
+![이미지](images/page039_img07.webp)
 
-![이미지](images/page039_img08.jpeg)
+![이미지](images/page039_img08.webp)
 
-![이미지](images/page039_img09.jpeg)
+![이미지](images/page039_img09.webp)
 
-![이미지](images/page039_img10.jpeg)
+![이미지](images/page039_img10.webp)
 
-![이미지](images/page039_img11.jpeg)
+![이미지](images/page039_img11.webp)
 
 
 
-![이미지](images/page040_img00.png)
+![이미지](images/page040_img00.webp)
 
 수목해충의 방제(생태적 방제)
 
@@ -1006,7 +1006,7 @@ boring pests)
 
 
 
-![이미지](images/page041_img00.png)
+![이미지](images/page041_img00.webp)
 
 수목해충의 방제(생태적 방제)
 
@@ -1025,13 +1025,13 @@ boring pests)
 ▸ 조경수의경우, 생육공간이협소하고양분이부족하여수세가좋지않은경우가많으므로생육환경을개선하고적정한양분공급을실시하면수세가호전되어
 해충피해에대한내성이증가함.
 
-![이미지](images/page041_img07.jpeg)
+![이미지](images/page041_img07.webp)
 
-![이미지](images/page041_img08.jpeg)
+![이미지](images/page041_img08.webp)
 
 
 
-![이미지](images/page042_img00.png)
+![이미지](images/page042_img00.webp)
 
 수목해충의 방제(생태적 방제)
 
@@ -1049,15 +1049,15 @@ boring pests)
 살수있는여건이만들어져생태적으로좀더풍요로워짐.
 ▸ 임목이건강하게자라해충피해에대한내성이증가하고다양한천적자원이형성되어건강한숲조성가능
 
-![이미지](images/page042_img08.jpeg)
+![이미지](images/page042_img08.webp)
 
-![이미지](images/page042_img07.png)
+![이미지](images/page042_img07.webp)
 
-![이미지](images/page042_img09.jpeg)
+![이미지](images/page042_img09.webp)
 
 
 
-![이미지](images/page043_img00.png)
+![이미지](images/page043_img00.webp)
 
 수목해충의 방제(생물적 방제)
 
@@ -1080,47 +1080,47 @@ boring pests)
 
 
 
-![이미지](images/page044_img00.png)
+![이미지](images/page044_img00.webp)
 
 수목해충의 방제(생물적 방제)
 
 
 
-![이미지](images/page044_img05.jpeg)
+![이미지](images/page044_img05.webp)
 
-![이미지](images/page044_img06.jpeg)
+![이미지](images/page044_img06.webp)
 
-![이미지](images/page044_img07.jpeg)
+![이미지](images/page044_img07.webp)
 
-![이미지](images/page044_img08.jpeg)
+![이미지](images/page044_img08.webp)
 
-![이미지](images/page044_img09.jpeg)
+![이미지](images/page044_img09.webp)
 
 나방살이머리침벌(OdontepyristelortisLim and Lee, 2009)
 
 
 
-![이미지](images/page045_img00.png)
+![이미지](images/page045_img00.webp)
 
 수목해충의 방제(생물적 방제)
 
 
 
-![이미지](images/page045_img05.jpeg)
+![이미지](images/page045_img05.webp)
 
-![이미지](images/page045_img06.jpeg)
+![이미지](images/page045_img06.webp)
 
-![이미지](images/page045_img09.jpeg)
+![이미지](images/page045_img09.webp)
 
-![이미지](images/page045_img07.jpeg)
+![이미지](images/page045_img07.webp)
 
-![이미지](images/page045_img08.jpeg)
+![이미지](images/page045_img08.webp)
 
 개미침벌(Sclerodermusharmandi(Buysson, 1903))
 
 
 
-![이미지](images/page046_img00.png)
+![이미지](images/page046_img00.webp)
 
 수목해충의 방제(생물적 방제)
 
@@ -1134,11 +1134,11 @@ boring pests)
 | --- | --- |
 
 
-![이미지](images/page046_img07.jpeg)
+![이미지](images/page046_img07.webp)
 
 ▸ 해충을먹이로하는생물종
 
-![이미지](images/page046_img08.jpeg)
+![이미지](images/page046_img08.webp)
 
 ✓씹는형구기: 무당벌레, 사마귀, 풀잠자리, 말벌류등
 ✓빠는형구기: 꽃등에유충, 풀잠자리유충, 침노린재, 애꽃노린재등
@@ -1147,14 +1147,14 @@ boring pests)
 | --- | --- |
 
 
-![이미지](images/page046_img11.jpeg)
+![이미지](images/page046_img11.webp)
 
 ▸ 천적의밀도가지속적으로유지될수있도록심는천적유지식물(banker plants)을
 이용하여천적방사의효과가지속될수 있음.
 
 
 
-![이미지](images/page047_img00.png)
+![이미지](images/page047_img00.webp)
 
 수목해충의 방제(생물적 방제)
 
@@ -1180,25 +1180,25 @@ boring pests)
 
 
 
-![이미지](images/page048_img00.png)
+![이미지](images/page048_img00.webp)
 
 수목해충의 방제(생물적 방제)
 
 
 
-![이미지](images/page048_img05.jpeg)
+![이미지](images/page048_img05.webp)
 
-![이미지](images/page048_img06.jpeg)
+![이미지](images/page048_img06.webp)
 
 백강균(Beauveriabassiana) 녹강균(Metarhiziumanisopliae)
 
-![이미지](images/page048_img07.jpeg)
+![이미지](images/page048_img07.webp)
 
-![이미지](images/page048_img08.jpeg)
+![이미지](images/page048_img08.webp)
 
 
 
-![이미지](images/page049_img00.png)
+![이미지](images/page049_img00.webp)
 
 가해형태에 따른 해충(종)
 
@@ -1220,7 +1220,7 @@ boring pests)
 
 
 
-![이미지](images/page050_img00.png)
+![이미지](images/page050_img00.webp)
 
 가해형태에 따른 해충(종)
 
@@ -1243,7 +1243,7 @@ boring pests)
 
 
 
-![이미지](images/page051_img00.png)
+![이미지](images/page051_img00.webp)
 
 가해형태에 따른 해충(종)
 
@@ -1254,7 +1254,7 @@ boring pests)
 | --- | --- |
 
 
-![이미지](images/page051_img09.jpeg)
+![이미지](images/page051_img09.webp)
 
 ▸ 딱정벌레목: 도토리거위벌레, 밤바구미
 ▸ 나비목: 대추애기잎말이나방, 복숭아명나방
@@ -1266,7 +1266,7 @@ boring pests)
 ▸ 노린재목: 큰팽나무이, 사사키잎혹진딧물, 때죽납작진딧물, 조록나무혹진딧물, 외줄면충
 ▸ 벌목: 밤나무혹벌
 
-![이미지](images/page051_img10.jpeg)
+![이미지](images/page051_img10.webp)
 
 ▸ 파리목: 솔잎혹파리, 아까시잎혹파리, 사철나무혹파리
 
@@ -1279,7 +1279,7 @@ boring pests)
 
 
 
-![이미지](images/page052_img00.png)
+![이미지](images/page052_img00.webp)
 
 지표성 곤충
 
@@ -1294,18 +1294,18 @@ boring pests)
 • (예 2) 톡토기목 Hypogastrura 속 : 홑눈과 몸 길이의 반보다 더 짧은 도약기 보유
 • (예 3) 반면, 표면의 잎 부식토 서식하는 Orchesella 속 : 큰 눈, 긴 부속 기관, 긴 도약기 보유
 
-![이미지](images/page052_img05.jpeg)
+![이미지](images/page052_img05.webp)
 
-![이미지](images/page052_img06.jpeg)
+![이미지](images/page052_img06.webp)
 
-![이미지](images/page052_img07.jpeg)
+![이미지](images/page052_img07.webp)
 
 Onychiurinae일종 Hypogastrura속일종 Orchesella속일종
 (www.collebola.org) (flickr) (Alchetron.com)
 
 
 
-![이미지](images/page053_img00.png)
+![이미지](images/page053_img00.webp)
 
 지표성 곤충(부식토 및 토양 곤충)
 
@@ -1329,21 +1329,21 @@ Onychiurinae일종 Hypogastrura속일종 Orchesella속일종
 
 
 
-![이미지](images/page054_img00.png)
+![이미지](images/page054_img00.webp)
 
-![이미지](images/page054_img08.jpeg)
+![이미지](images/page054_img08.webp)
 
 지표성 곤충(부식토 및 토양 곤충)
 
 
 
-![이미지](images/page054_img05.jpeg)
+![이미지](images/page054_img05.webp)
 
-![이미지](images/page054_img06.jpeg)
+![이미지](images/page054_img06.webp)
 
 
 
-![이미지](images/page055_img00.png)
+![이미지](images/page055_img00.webp)
 
 지표성 곤충(부식토 및 토양 곤충)
 
@@ -1356,15 +1356,15 @@ Onychiurinae일종 Hypogastrura속일종 Orchesella속일종
 유충이 고밀도인 곳에서 식물 뿌리 손상
 ✓ 잘 관리된 방목지, 골프장 및 잔디를 생산하는 농장에서 피해 다수 보고
 
-![이미지](images/page055_img06.jpeg)
+![이미지](images/page055_img06.webp)
 
-![이미지](images/page055_img05.jpeg)
+![이미지](images/page055_img05.webp)
 
 골프경제(2020.5.12.)
 
 
 
-![이미지](images/page056_img00.png)
+![이미지](images/page056_img00.webp)
 
 지표성 곤충(곤충과 죽은 나무 또는 부식된 숲)
 
@@ -1377,20 +1377,20 @@ Onychiurinae일종 Hypogastrura속일종 Orchesella속일종
 ✓ 암브로시아 나무좀(ambrosia beetle) : 성충은 살아 있는 나무도 공격하지만, 죽은 나무에 갱도
 (갤러리, gallery) 형성. 균낭(mycangia)라 불리는 표피 주머니에 옮겨서 나무에 서식하는 외부공생 암브로시아 곰팡이 감염
 
-![이미지](images/page056_img05.jpeg)
+![이미지](images/page056_img05.webp)
 
-![이미지](images/page056_img06.jpeg)
+![이미지](images/page056_img06.webp)
 
-![이미지](images/page056_img07.jpeg)
+![이미지](images/page056_img07.webp)
 
-![이미지](images/page056_img08.jpeg)
+![이미지](images/page056_img08.webp)
 
 광릉긴나무좀의균낭
 (Mun et al., 2012)
 
 
 
-![이미지](images/page057_img00.png)
+![이미지](images/page057_img00.webp)
 
 지표성 곤충(곤충과 죽은 나무 또는 부식된 숲)
 
@@ -1401,18 +1401,18 @@ Onychiurinae일종 Hypogastrura속일종 Orchesella속일종
 유인되는 것으로 알려짐.
 ✓ 비단벌레과(Melanophila, Merimna)종은 산림불에의해생성된적외선의방사선을감지함으로써불탄숲을탐색
 
-![이미지](images/page057_img06.jpeg)
+![이미지](images/page057_img06.webp)
 
-![이미지](images/page057_img07.jpeg)
+![이미지](images/page057_img07.webp)
 
-![이미지](images/page057_img05.jpeg)
+![이미지](images/page057_img05.webp)
 
 Melanophila acuminate 최근에불탄숲에새로운기질을접종하는곰팡이물질을옮기기위해서
 (insect.pro) 균사라고불리는함몰된것을보여주는딱정벌레(Henoticusserratus) 가슴아래쪽
 
 
 
-![이미지](images/page058_img00.png)
+![이미지](images/page058_img00.webp)
 
 지표성 곤충(곤충과 배설물)
 
@@ -1420,20 +1420,20 @@ Melanophila acuminate 최근에불탄숲에새로운기질을접종하는곰팡�
 
 ▸ 척추동물의 배설물은 영양원의 풍부한 자원
 
-![이미지](images/page058_img07.jpeg)
+![이미지](images/page058_img07.webp)
 
 ▸ 북미, 아프리카 초원, 방목지의 상당한 배설은 섬유질과 질소원이 풍부함
 ✓ 똥파리과, 집파리과, 딸집파리와 검정파리과 등 : 신선한 똥에 알 또는 유충을 산란
 ▸ 똥을 어지럽혀 배설물에서 파리 번식을 제한하는 곤충은 "소똥구리"
 ✓ 대부분의 소똥구리는 패드의 아래쪽이나 옆쪽에 그물모양의 터널을 파고 똥 펠렛을 끌어 내림
 
-![이미지](images/page058_img05.jpeg)
+![이미지](images/page058_img05.webp)
 
-![이미지](images/page058_img06.jpeg)
+![이미지](images/page058_img06.webp)
 
 
 
-![이미지](images/page059_img00.png)
+![이미지](images/page059_img00.webp)
 
 지표성 곤충(곤충과 배설물)
 
@@ -1450,11 +1450,11 @@ Melanophila acuminate 최근에불탄숲에새로운기질을접종하는곰팡�
 
 
 
-![이미지](images/page060_img00.png)
+![이미지](images/page060_img00.webp)
 
 지표성 곤충(곤충과 곰팡이의 상호작용)
 
-![이미지](images/page060_img07.jpeg)
+![이미지](images/page060_img07.webp)
 
 
 
@@ -1467,15 +1467,15 @@ Melanophila acuminate 최근에불탄숲에새로운기질을접종하는곰팡�
 ✓leaf-cutter ants : 큰턱을 가지고 살아있는 식물 부분을 잘라서 서식지로 옮김. 도착하면, 잎으로부터 어떤 밀랍의 표피층을 핥아서 큰턱으로
 식물조각을 부드럽게 함. 분쇄된 잎은 후장으로부터 나온 효소의 배설 혼합물과 접종
 
-![이미지](images/page060_img05.jpeg)
+![이미지](images/page060_img05.webp)
 
-![이미지](images/page060_img06.jpeg)
+![이미지](images/page060_img06.webp)
 
 Leaf Cutter Ant (Attasp.)
 
 
 
-![이미지](images/page061_img00.png)
+![이미지](images/page061_img00.webp)
 
 지표성 곤충(곤충과 곰팡이의 상호작용)
 
@@ -1486,16 +1486,16 @@ Leaf Cutter Ant (Attasp.)
 • 부엽토에서 유래된 먹이자원은 소화는 되지만 흰매기메 의해서 소화는 되지 않음.
 • 곰팡이는 큰흰개미류의 서식지에 제한되거나 흰개미 체내 발생
 
-![이미지](images/page061_img06.jpeg)
+![이미지](images/page061_img06.webp)
 
-![이미지](images/page061_img05.jpeg)
+![이미지](images/page061_img05.webp)
 
 Kanzaki et al., 2019
 Yang et al., 2020
 
 
 
-![이미지](images/page062_img00.png)
+![이미지](images/page062_img00.webp)
 
 지표성 곤충(동굴에 서식하는 곤충)
 
@@ -1506,30 +1506,30 @@ Yang et al., 2020
 ▸ 동굴에 서식하는 (cavernicolous) 곤충 = 불리한 외부환경으로부터 피난처를 찾는 곤충
 ▸ 진동혈성동물(troglobiont) 또는 진동혈성곤충(troglobite insect)은 동굴로 한정되어지고, 계통발생적으로 토양에 서식하는 곤충과 관련됨.
 
-![이미지](images/page062_img05.jpeg)
+![이미지](images/page062_img05.webp)
 
 
 
-![이미지](images/page063_img00.png)
-
-지표성 곤충(땅에 서식하는 육각류를 이용한 환경 모니터링)
-
-
-
-![이미지](images/page063_img05.jpeg)
-
-![이미지](images/page063_img06.jpeg)
-
-
-
-![이미지](images/page064_img00.png)
+![이미지](images/page063_img00.webp)
 
 지표성 곤충(땅에 서식하는 육각류를 이용한 환경 모니터링)
 
 
 
-![이미지](images/page064_img06.jpeg)
+![이미지](images/page063_img05.webp)
 
-![이미지](images/page064_img05.jpeg)
+![이미지](images/page063_img06.webp)
+
+
+
+![이미지](images/page064_img00.webp)
+
+지표성 곤충(땅에 서식하는 육각류를 이용한 환경 모니터링)
+
+
+
+![이미지](images/page064_img06.webp)
+
+![이미지](images/page064_img05.webp)
 
 

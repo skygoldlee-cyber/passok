@@ -356,7 +356,7 @@ S
 아데노신
 Adenosine
 
-![이미지](images/page009_img00.jpeg)
+![이미지](images/page009_img00.webp)
 
 아데닌 리보사이드
 Adenine Riboside C H N O : 267.24

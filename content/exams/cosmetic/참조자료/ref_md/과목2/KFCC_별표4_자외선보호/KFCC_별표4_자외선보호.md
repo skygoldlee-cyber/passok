@@ -277,7 +277,7 @@ H O : 304.4)
 디에칠아미노하이드록시벤조일헥실 벤조에이트
 Diethylamino Hydroxybenzoyl Hexyl Benzoate
 
-![이미지](images/page008_img00.png)
+![이미지](images/page008_img00.webp)
 
 벤조익애씨드, 2-[4-(디에칠아미노)-2-하이드록시벤조일]-,헥실 에스터 C H NO : 397.52
 24 31 4
@@ -422,7 +422,7 @@ S
 디소듐페닐디벤즈이미다졸테트라설포네이트
 Disodium phenyl dibenzimidazole tetrasulfonate
 
-![이미지](images/page012_img00.jpeg)
+![이미지](images/page012_img00.webp)
 
 C H N O S 2Na : 674.55
 20 12 4 12 4ㆍ
@@ -549,7 +549,7 @@ S
 4-메칠벤질리덴캠퍼
 4-Methylbenzylidene Camphor
 
-![이미지](images/page017_img00.jpeg)
+![이미지](images/page017_img00.webp)
 
 3-(4-메칠벤질리덴)-dl-캠퍼
 3-(4-Methylbenzylidene)-dl-Camphor C H O : 254.37
@@ -604,7 +604,7 @@ S
 멘틸안트라닐레이트
 Menthyl Anthranilate
 
-![이미지](images/page018_img00.jpeg)
+![이미지](images/page018_img00.webp)
 
 멘틸-o-아미노벤조에이트
 Menthyl-o-aminobenzoate
@@ -644,7 +644,7 @@ S
 벤조페논-3
 Benzophenone-3
 
-![이미지](images/page019_img00.jpeg)
+![이미지](images/page019_img00.webp)
 
 옥시벤존, 2-히드록시-4-메톡시벤조페논
 Oxybenzone, 2-hydroxy-4-methoxybenzophenone
@@ -687,7 +687,7 @@ S
 벤조페논-4
 Benzophenone-4
 
-![이미지](images/page021_img00.jpeg)
+![이미지](images/page021_img00.webp)
 
 설리소벤존
 Sulisobenzone C H O S：362.26
@@ -731,7 +731,7 @@ S
 벤조페논-8
 Benzophenone-8
 
-![이미지](images/page023_img00.jpeg)
+![이미지](images/page023_img00.webp)
 
 디옥시벤존
 Dioxybenzone
@@ -766,7 +766,7 @@ S
 부틸메톡시디벤조일메탄
 Butyl Methoxydibenzoylmethane
 
-![이미지](images/page024_img00.png)
+![이미지](images/page024_img00.webp)
 
 아보벤존
 Avobenzone C H O ：310.39
@@ -832,7 +832,7 @@ S
 비스-에칠헥실옥시페놀메톡시페닐트리아진
 Bis-Ethylhexyloxyphenol Methoxyphenyl Triazine
 
-![이미지](images/page026_img00.png)
+![이미지](images/page026_img00.webp)
 
 C H N O : 627.90
 38 49 3 5
@@ -881,7 +881,7 @@ S
 시녹세이트
 Cinoxate
 
-![이미지](images/page028_img00.png)
+![이미지](images/page028_img00.webp)
 
 2-에톡시에칠-p-메톡시신나메이트
 2-Ethoxyethyl-p-Methoxycinnamate C H O ：250.29
@@ -915,7 +915,7 @@ A
 옥토크릴렌
 Octocrylene
 
-![이미지](images/page029_img00.png)
+![이미지](images/page029_img00.webp)
 
 2-에칠헥실 2-시아노-3-페닐신나메이트
 2-Ethylhexyl 2-Cyano-3-Phenylcinnamate C H NO : 361.48
@@ -952,7 +952,7 @@ S
 에칠헥실디메칠파바
 Ethylhexyl Dimethyl PABA
 
-![이미지](images/page030_img00.png)
+![이미지](images/page030_img00.webp)
 
 옥틸디메칠파라아미노벤조익애씨드, 옥틸디메칠파바
 Octyl Dimethyl p-Aminobenzoic Acid C H NO ：277.41
@@ -987,7 +987,7 @@ D
 에칠헥실메톡시신나메이트
 Ethylhexyl Methoxycinnamate
 
-![이미지](images/page031_img00.png)
+![이미지](images/page031_img00.webp)
 
 옥틸메톡시신나메이트
 Octyl methoxy cinnamate C H O ：290.40
@@ -1036,7 +1036,7 @@ S
 에칠헥실살리실레이트
 Ethylhexyl Salicylate
 
-![이미지](images/page032_img00.png)
+![이미지](images/page032_img00.webp)
 
 옥틸살리실레이트
 Octyl Salicylate C H O : 250.33
@@ -1121,7 +1121,7 @@ S
 이소아밀 p-메톡시신나메이트
 Isoamyl p-Methoxycinnamate
 
-![이미지](images/page034_img00.png)
+![이미지](images/page034_img00.webp)
 
 C H O : 248.35
 15 20 3
@@ -1195,7 +1195,7 @@ mL를 넣는다.
 황색으로 될 때까지 적정한다(지시약：크실레놀오렌지시액 0.5 mL).
 0.05 M 에칠렌디아민테트라초산디나트륨액 1 mL = 4.069 ㎎ ZnO
 
-![이미지](images/page037_img00.jpeg)
+![이미지](images/page037_img00.webp)
 
 테레프탈릴리덴디캠퍼설포닉애씨드액(33%)
 Terephthalylidene Dicamphor Sulfonic Acid Solution(33%)
@@ -1333,7 +1333,7 @@ ppm 이하).
 페닐벤즈이미다졸설포닉애씨드
 Phenylbenzimidazole Sulfonic Acid
 
-![이미지](images/page040_img00.png)
+![이미지](images/page040_img00.webp)
 
 C H N O S:274.30
 13 10 2 3
@@ -1367,7 +1367,7 @@ S
 호모살레이트
 Homosalate
 
-![이미지](images/page042_img00.png)
+![이미지](images/page042_img00.webp)
 
 호모멘틸산살리실레이트
 Homomenthyl Salicylate C H O ：262.35

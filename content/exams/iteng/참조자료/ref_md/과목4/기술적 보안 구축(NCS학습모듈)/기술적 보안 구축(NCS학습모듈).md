@@ -1,164 +1,164 @@
 # 06.기술적보안구축
 
-![이미지](images/page000_img00.jpeg)
+![이미지](images/page000_img00.webp)
 
-![이미지](images/page000_img01.jpeg)
+![이미지](images/page000_img01.webp)
 
-![이미지](images/page000_img02.png)
+![이미지](images/page000_img02.webp)
 
-![이미지](images/page000_img03.jpeg)
+![이미지](images/page000_img03.webp)
 
-![이미지](images/page000_img04.jpeg)
+![이미지](images/page000_img04.webp)
 
-![이미지](images/page000_img05.png)
+![이미지](images/page000_img05.webp)
 
-![이미지](images/page000_img06.jpeg)
+![이미지](images/page000_img06.webp)
 
-![이미지](images/page000_img07.jpeg)
+![이미지](images/page000_img07.webp)
 
-![이미지](images/page001_img00.jpeg)
+![이미지](images/page001_img00.webp)
 
-![이미지](images/page001_img01.jpeg)
+![이미지](images/page001_img01.webp)
 
-![이미지](images/page001_img02.jpeg)
+![이미지](images/page001_img02.webp)
 
-![이미지](images/page001_img03.jpeg)
+![이미지](images/page001_img03.webp)
 
-![이미지](images/page001_img04.jpeg)
+![이미지](images/page001_img04.webp)
 
-![이미지](images/page001_img05.jpeg)
+![이미지](images/page001_img05.webp)
 
-![이미지](images/page001_img06.jpeg)
+![이미지](images/page001_img06.webp)
 
-![이미지](images/page001_img08.png)
+![이미지](images/page001_img08.webp)
 
-![이미지](images/page001_img07.jpeg)
+![이미지](images/page001_img07.webp)
 
-![이미지](images/page002_img00.jpeg)
+![이미지](images/page002_img00.webp)
 
-![이미지](images/page002_img01.jpeg)
+![이미지](images/page002_img01.webp)
 
-![이미지](images/page002_img02.jpeg)
+![이미지](images/page002_img02.webp)
 
-![이미지](images/page002_img03.jpeg)
+![이미지](images/page002_img03.webp)
 
-![이미지](images/page002_img04.jpeg)
+![이미지](images/page002_img04.webp)
 
-![이미지](images/page002_img05.jpeg)
+![이미지](images/page002_img05.webp)
 
-![이미지](images/page002_img06.jpeg)
+![이미지](images/page002_img06.webp)
 
-![이미지](images/page002_img07.jpeg)
+![이미지](images/page002_img07.webp)
 
-![이미지](images/page002_img08.jpeg)
+![이미지](images/page002_img08.webp)
 
-![이미지](images/page003_img08.png)
+![이미지](images/page003_img08.webp)
 
-![이미지](images/page003_img00.jpeg)
+![이미지](images/page003_img00.webp)
 
-![이미지](images/page003_img01.jpeg)
+![이미지](images/page003_img01.webp)
 
-![이미지](images/page003_img02.jpeg)
+![이미지](images/page003_img02.webp)
 
-![이미지](images/page003_img03.jpeg)
+![이미지](images/page003_img03.webp)
 
-![이미지](images/page003_img04.jpeg)
+![이미지](images/page003_img04.webp)
 
-![이미지](images/page003_img05.jpeg)
+![이미지](images/page003_img05.webp)
 
-![이미지](images/page003_img06.jpeg)
+![이미지](images/page003_img06.webp)
 
-![이미지](images/page003_img07.jpeg)
+![이미지](images/page003_img07.webp)
 
-![이미지](images/page004_img08.jpeg)
+![이미지](images/page004_img08.webp)
 
-![이미지](images/page004_img00.jpeg)
+![이미지](images/page004_img00.webp)
 
-![이미지](images/page004_img01.jpeg)
+![이미지](images/page004_img01.webp)
 
-![이미지](images/page004_img02.jpeg)
+![이미지](images/page004_img02.webp)
 
-![이미지](images/page004_img03.jpeg)
+![이미지](images/page004_img03.webp)
 
-![이미지](images/page004_img04.jpeg)
+![이미지](images/page004_img04.webp)
 
-![이미지](images/page004_img05.jpeg)
+![이미지](images/page004_img05.webp)
 
-![이미지](images/page004_img06.jpeg)
+![이미지](images/page004_img06.webp)
 
-![이미지](images/page004_img07.jpeg)
+![이미지](images/page004_img07.webp)
 
-![이미지](images/page005_img08.png)
+![이미지](images/page005_img08.webp)
 
-![이미지](images/page005_img00.jpeg)
+![이미지](images/page005_img00.webp)
 
-![이미지](images/page005_img01.jpeg)
+![이미지](images/page005_img01.webp)
 
-![이미지](images/page005_img02.jpeg)
+![이미지](images/page005_img02.webp)
 
-![이미지](images/page005_img03.jpeg)
+![이미지](images/page005_img03.webp)
 
-![이미지](images/page005_img04.jpeg)
+![이미지](images/page005_img04.webp)
 
-![이미지](images/page005_img05.jpeg)
+![이미지](images/page005_img05.webp)
 
-![이미지](images/page005_img06.jpeg)
+![이미지](images/page005_img06.webp)
 
-![이미지](images/page005_img07.jpeg)
+![이미지](images/page005_img07.webp)
 
-![이미지](images/page006_img08.jpeg)
+![이미지](images/page006_img08.webp)
 
-![이미지](images/page006_img00.jpeg)
+![이미지](images/page006_img00.webp)
 
-![이미지](images/page006_img01.jpeg)
+![이미지](images/page006_img01.webp)
 
-![이미지](images/page006_img02.jpeg)
+![이미지](images/page006_img02.webp)
 
-![이미지](images/page006_img03.jpeg)
+![이미지](images/page006_img03.webp)
 
-![이미지](images/page006_img04.jpeg)
+![이미지](images/page006_img04.webp)
 
-![이미지](images/page006_img05.jpeg)
+![이미지](images/page006_img05.webp)
 
-![이미지](images/page006_img06.jpeg)
+![이미지](images/page006_img06.webp)
 
-![이미지](images/page006_img07.jpeg)
+![이미지](images/page006_img07.webp)
 
-![이미지](images/page007_img08.png)
+![이미지](images/page007_img08.webp)
 
-![이미지](images/page007_img00.jpeg)
+![이미지](images/page007_img00.webp)
 
-![이미지](images/page007_img01.jpeg)
+![이미지](images/page007_img01.webp)
 
-![이미지](images/page007_img02.jpeg)
+![이미지](images/page007_img02.webp)
 
-![이미지](images/page007_img03.jpeg)
+![이미지](images/page007_img03.webp)
 
-![이미지](images/page007_img04.jpeg)
+![이미지](images/page007_img04.webp)
 
-![이미지](images/page007_img05.jpeg)
+![이미지](images/page007_img05.webp)
 
-![이미지](images/page007_img06.jpeg)
+![이미지](images/page007_img06.webp)
 
-![이미지](images/page007_img07.jpeg)
+![이미지](images/page007_img07.webp)
 
-![이미지](images/page008_img08.jpeg)
+![이미지](images/page008_img08.webp)
 
-![이미지](images/page008_img00.jpeg)
+![이미지](images/page008_img00.webp)
 
-![이미지](images/page008_img01.jpeg)
+![이미지](images/page008_img01.webp)
 
-![이미지](images/page008_img02.jpeg)
+![이미지](images/page008_img02.webp)
 
-![이미지](images/page008_img03.jpeg)
+![이미지](images/page008_img03.webp)
 
-![이미지](images/page008_img04.jpeg)
+![이미지](images/page008_img04.webp)
 
-![이미지](images/page008_img05.jpeg)
+![이미지](images/page008_img05.webp)
 
-![이미지](images/page008_img06.jpeg)
+![이미지](images/page008_img06.webp)
 
-![이미지](images/page008_img07.jpeg)
+![이미지](images/page008_img07.webp)
 
 [NCS-학습모듈의 위치]
 
@@ -250,7 +250,7 @@ ISO 27001은 ‘정보보안경영시스템(ISMS : Information Security Manageme
 결성, 가용성을 실현하기 위하여 관련 프로세스를 체계적으로 수립, 문서화하고 이를 지속
 적으로 운영, 관리하여 이의 적합성을 제3자 인증기관에 의해 인증받는 것이다.
 
-![이미지](images/page014_img00.jpeg)
+![이미지](images/page014_img00.webp)
 
 출처: ISO27001 가이드
 [그림 1-1] ISO27001 인증의 필요성
@@ -263,13 +263,13 @@ ISO 27001은 ‘정보보안경영시스템(ISMS : Information Security Manageme
 3. ISO27001 구성도메인
 도입부와 8개의 조항을 포함하며 8개 조항의 일부는 하부 조항으로 분류된다.
 
-![이미지](images/page015_img00.jpeg)
+![이미지](images/page015_img00.webp)
 
 출처: ISO27001 가이드
 [그림 1-2] ISO27001 구성도메인
 4. ISO27001 인증 추진 절차
 
-![이미지](images/page016_img00.jpeg)
+![이미지](images/page016_img00.webp)
 
 - 문서 심사 .... 자료/분석
 [그림 1-3] ISO27001 인증 추진 절차
@@ -341,7 +341,7 @@ ISO 27001은 ‘정보보안경영시스템(ISMS : Information Security Manageme
 4. ISMS 인증절차
 [그림 1-4] ISMS 인증절차
 
-![이미지](images/page018_img00.jpeg)
+![이미지](images/page018_img00.webp)
 
 • 개인정보보호관리체계(PIMS)
 1. PIMS(Personal Information Management System)의 정의
@@ -385,7 +385,7 @@ ISO 27001은 ‘정보보안경영시스템(ISMS : Information Security Manageme
 3. PIMS 인증절차
 인증을 받기 위해서는 그림과 같은 관리과정을 수행하여 PIMS를 수립하고 운영한다.
 
-![이미지](images/page020_img00.jpeg)
+![이미지](images/page020_img00.webp)
 
 출처: PIMS 인증 가이드
 [그림 1-5] PIMS 인증절차
@@ -427,7 +427,7 @@ Development Lifecycle) 적용 시 보안 취약성이 50 ~ 60% 정도 감소한�
 설계서, 상세설계서)를 작성하여 응용프로그램 보안설계에 반영하고 이를 바탕으로
 구현 계획을 수립한다.
 
-![이미지](images/page022_img00.jpeg)
+![이미지](images/page022_img00.webp)
 
 출처:한국정보보호진흥원. 안전한 소프트웨어 개발‧도입을 위한 보안 가이드 V1.0
 [그림 1-6] 설계단계의 보안 프로세스
@@ -603,7 +603,7 @@ C++, C#, Object C 등을 선정한다.
 (라) 실행 결과의 예외 처리
 예기치 않은 입력 값에 대한 정확한 예외상황을 처리한다.
 
-![이미지](images/page029_img00.jpeg)
+![이미지](images/page029_img00.webp)
 
 출처: 한국정보보호진흥원. 안전한 소프트웨어 개발‧도입을 위한 보안 가이드 V1.0
 [그림 1-7] 구현단계의 보안 프로세스
@@ -706,7 +706,7 @@ C++, C#, Object C 등을 선정한다.
 명세서, 기본설계서, 상세설계서에 반영된 보안사항을 시험하는 것으로, 시험계획 수
 립 시에 설계단계의 보안사항을 점검할 수 있도록 수행되어야 한다.
 
-![이미지](images/page032_img00.jpeg)
+![이미지](images/page032_img00.webp)
 
 출처: 한국정보보호진흥원. 안전한 소프트웨어 개발‧도입을 위한 보안 가이드 V1.0
 [그림 1-8] 시험단계의 보안 프로세스
@@ -964,7 +964,7 @@ C++, C#, Object C 등을 선정한다.
 | 1. 서버 보안설계 | 필요성 및 전제 조건을 이해한다. |  |  |  |
 | (1) 보안 | 서버의 필요성 |  |  |  |
 
-![이미지](images/page045_img00.jpeg)
+![이미지](images/page045_img00.webp)
 
 출처: 미래창조과학부. 보안서버 구축 가이드
 [그림 2-1] 보안서버 구축의 필요성
@@ -1080,14 +1080,14 @@ SSL은 Secure Sockets Later의 약자이며, 1994년 Netscape에 의해 개발�
 인증서를 발급받아 웹 서버에 설치하게 되면 웹사이트 이용자들의 거래, ID/패스
 워드, 개인정보 등을 암호화하여 송수신할 수 있다.
 
-![이미지](images/page048_img00.jpeg)
+![이미지](images/page048_img00.webp)
 
 출처: 미래창조과학부. 보안서버 구축 가이드
 [그림 2-2] SSL 방식의 보안서버 개념도
 (2) SSL 보안서버 구축 절차 설계
 SSL 방식의 보안서버 구축 절차 설계는 다음과 같다.
 
-![이미지](images/page049_img00.jpeg)
+![이미지](images/page049_img00.webp)
 
 출처:미래창조과학부. 보안서버 구축 가이드
 [그림 2-3] SSL 방식 보안서버 구축 절차
@@ -1437,7 +1437,7 @@ Middle) 공격을 할 경우, 임의로 발급한 SSL 인증서를 사용함으�
 사용할 경우 보안경고창이 발생하여 사용자들이 해커의 공격을 받은 웹사이트로 오
 인하게 될 소지가 크다.
 
-![이미지](images/page060_img00.jpeg)
+![이미지](images/page060_img00.webp)
 
 출처:미래창조과학부. 보안서버 구축 가이드
 [그림 2-4] ARP 스푸핑을 이용한 MITM 공격
@@ -1679,7 +1679,7 @@ Process, Port Kernel Module 등과 같은 사항은 한눈에 보기 편하도�
 | (7) LAND 패킷을 전송할 | 때, 송신지 IP와 수신지 IP 주소 값을 똑같이 만들어 | 대상 | 컴퓨터에 | 전 |
 | 송한다. 수신지로 나가지시스템은 루프 | 주소를 참조할 때 자신이 소속된 네트워크의 IP이므로않고 자신에게 다시 돌아오게 된다. SYN 플러딩(flooding)처럼상태에 빠지며 시스템의 IP스택에 심각한 장애를 | 초래하게 | 네트워크패킷을된다. | 밖으받은 |
 
-![이미지](images/page070_img00.jpeg)
+![이미지](images/page070_img00.webp)
 
 | 학습 내용 | 평가항목 | 성취수준 |  |  |
 | --- | --- | --- | --- | --- |
@@ -2012,7 +2012,7 @@ SA를 결정한다. IPSec VPN 게이트웨이를 이용하여 통신하는 경�
 스로의 트래픽은 모두 허용하고 레벨이 낮은 인터페이스에서 높은 인터페이스로의
 트래픽은 모두 차단한다.
 
-![이미지](images/page084_img00.jpeg)
+![이미지](images/page084_img00.webp)
 
 출처: 논문. 시스템 아키텍처 네트워크 보안 감리 지침 개선 연구
 [그림 3-2] 방화벽 프로세스
@@ -2025,7 +2025,7 @@ DMZ는 방화벽 내부와 외부에서 접근할 수 있다. 그러나 DMZ 안�
 단에 의해 폐쇄될 수 있다. DMZ에 대한 서비스가 필요할 때 만 허용되도록 방화
 벽의 규칙을 설정한다.
 
-![이미지](images/page085_img00.jpeg)
+![이미지](images/page085_img00.webp)
 
 출처: 황응주(2014). 시스템 아키텍처 네트워크 보안 감리 지침 개선 연구
 [그림 3-3] DMZ 프로세스
@@ -2080,7 +2080,7 @@ PAT(Port Address Translation)는 Private VS Public 주소변환 테이블을 만
 이 가능하다는 장점이 있는 반면 완전히 새로운 공격 방식에 대한 감지가 불가능한
 단점이 있다.
 
-![이미지](images/page087_img00.jpeg)
+![이미지](images/page087_img00.webp)
 
 출처: 황응주(2014). 시스템 아키텍처 네트워크 보안 감리 지침 개선 연구
 [그림 3-4] 방화벽과 IDS 프로세스
@@ -2408,7 +2408,7 @@ SNMP의 Public, Private와 같은 Default Community String이 변경되지 않�
 스에 저장된 데이터를 보호하여 기밀성, 무결성, 가용성을 잘 유지하고 확보하는
 것이라고 할 수 있다.
 
-![이미지](images/page100_img00.jpeg)
+![이미지](images/page100_img00.webp)
 
 [그림 4-1] 데이터베이스 보안 기본 요소
 (가) 기밀성(Confidentiality)
@@ -2417,7 +2417,7 @@ SNMP의 Public, Private와 같은 Default Community String이 변경되지 않�
 개인 정보를 저장하고 있는 사람들의 사생활을 유지하는데 필요한 최소한의
 필수 조건이며 접근제어와 암호화는 기밀성 유지를 위한 대표적인 방안이다.
 
-![이미지](images/page100_img01.jpeg)
+![이미지](images/page100_img01.webp)
 
 [그림 4-2] 기밀성 분류 사례
 (나) 무결성 (Integrity)
@@ -2447,7 +2447,7 @@ SNMP의 Public, Private와 같은 Default Community String이 변경되지 않�
 (사) 상용 DBMS의 보안 취약성
 (아) 어플리케이션 구축 및 운영 시의 보안 허점
 
-![이미지](images/page102_img00.jpeg)
+![이미지](images/page102_img00.webp)
 
 출처:한국데이터베이스진흥원. 데이터베이스 보안 가이드라인
 [그림 4-3] 데이터베이스 보안의 필요성
@@ -2517,7 +2517,7 @@ Primary Key, Foreign Key, Unique, Check, Not Null Constraint 등이 해당된다
 들을 구축하는데 있어서 단계적으로 수행해야 할 중요한 사항들의 선후관계를 식별
 하고 누락되지 않도록 체계적으로 수행해 나갈 수 있는 가이드라인의 의미를 갖는다.
 
-![이미지](images/page104_img00.jpeg)
+![이미지](images/page104_img00.webp)
 
 출처:한국데이터베이스진흥원. 데이터베이스 보안 가이드라인
 [그림 4-4] 데이터베이스 보안 프레임워크 구성
@@ -2685,7 +2685,7 @@ DB에 접속하여 반복적인 SQL 작업을 수행하는 것을 의미하며, 
 의 데이터를 조작할 권한은 없기 때문에 DB 관리자에 의한 DB 접속도 비정형
 작업에 해당하므로， 정확한 권한 분리(Separation of Duty)를 진행한다.
 
-![이미지](images/page109_img00.jpeg)
+![이미지](images/page109_img00.webp)
 
 출처:한국데이터베이스진흥원. 데이터베이스 보안 가이드라인
 [그림 4-5] 정형적 DB접근과 비정형적 DB접근
@@ -2710,7 +2710,7 @@ DB 계정은 여러 사용자에 의해 공유될 수 있고，이에 따라 테
 전송하지만, 비인가 사용자에게는 암호화된 데이터나 일부 암호화(사용자 입장
 에서는 Masking으로 보일 수 있음) 데이터를 전송한다.
 
-![이미지](images/page110_img00.jpeg)
+![이미지](images/page110_img00.webp)
 
 출처:한국데이터베이스진흥원. 데이터베이스 보안 가이드라인
 [그림 4-6] 비인가 사용자 복호화 정의
@@ -2722,7 +2722,7 @@ Key)의 조합이다. 암호화 방식은 대칭형(Symmetric)과 비대칭형(A
 DES, 3-DES, AES, SEED, ARIA, MASK가 있고, 비대칭형 알고리즘은 RSA, DSA가
 있다. 프로젝트 및 데이터 성격에 따라 알고리즘을 선택하여 적용한다.
 
-![이미지](images/page111_img00.jpeg)
+![이미지](images/page111_img00.webp)
 
 출처:한국데이터베이스진흥원. 데이터베이스 보안 가이드라인
 [그림 4-7] 대칭형 알고리즘과 비대칭형 알고리즘
@@ -2764,7 +2764,7 @@ GRANT 등의 권한 설정에 중대한 영향을 미치는 SQL에 대해서만 
 한다. 일반적으로 3단계 이내로 구성하지만 조직 체계가 복잡하거나 감시부서를
 결재경로에 포함할 경우 그 이상의 단계로도 구성한다.
 
-![이미지](images/page112_img00.jpeg)
+![이미지](images/page112_img00.webp)
 
 출처:한국데이터베이스진흥원. 데이터베이스 보안 가이드라인
 [그림 4-8] 결재선 구성 사례
@@ -2776,7 +2776,7 @@ DB의 취약점을 보안 관리자 또는 DBA가 일일이 찾아낼 수도 있
 초 자료를 제공한다. 또한, 보안 관리자 및 DBA에게 현재 운영 중이거나 향후 구축
 될 DB의 취약점을 미연에 방지하도록 사전 가이드성의 정보를 제공한다.
 
-![이미지](images/page113_img00.jpeg)
+![이미지](images/page113_img00.webp)
 
 출처:한국데이터베이스진흥원. 데이터베이스 보안 가이드라인
 [그림 4-9] DB 취약점 분석 절차
@@ -2900,7 +2900,7 @@ DB 접근제어를 아무리 체계적으로 갖추어도 해당 서버를 경�
 거나, 접속 정보가 저장된 파일(Oracle의 경우 tnsnames.ora)을 수정하여 프록시
 서버를 경유하도록 설정한다.
 
-![이미지](images/page118_img00.jpeg)
+![이미지](images/page118_img00.webp)
 
 출처:한국데이터베이스진흥원. 데이터베이스 보안 가이드라인
 [그림 4-10] 직접 접속에 의한 우회 사례
@@ -2926,7 +2926,7 @@ DBMS에 대한 접근은 DB 리스너(Listener)가 대기하고 있는 포트에
 패킷을 보내 접속을 시도하게 되는데 이때, 서버 보안은 접속을 요청하는 쪽의
 신원을 파악하여 권한이 있는 경우에만 접속을 허용하도록 설정한다.
 
-![이미지](images/page119_img00.jpeg)
+![이미지](images/page119_img00.webp)
 
 출처:한국데이터베이스진흥원. 데이터베이스 보안 가이드라인
 [그림 4-11] 서버 보안에 의한 우회 차단
@@ -2938,7 +2938,7 @@ DBMS에 대한 접근은 DB 리스너(Listener)가 대기하고 있는 포트에
 록시 게이트웨이 서버를 경유하지 않고 DB서버에 로그인 한 것에 대해 차단하
 도록 설정을 하면 우회하여 로그인한 세션을 차단할 수 있다.
 
-![이미지](images/page119_img01.jpeg)
+![이미지](images/page119_img01.webp)
 
 출처:한국데이터베이스진흥원. 데이터베이스 보안 가이드라인
 [그림 4-12] 스니핑 서버에 의한 우회 차단
@@ -3072,7 +3072,7 @@ DB 접근제어 솔루션을 구축한 후에 각각의 기능들이 제대로 �
 DB 접근제어가 구축된 경우에는 해당 환경에서 시험을 실시한다. 시험의 결과는
 ‘시험결과서’로 관리한다.
 
-![이미지](images/page124_img00.jpeg)
+![이미지](images/page124_img00.webp)
 
 출처:한국데이터베이스진흥원. 데이터베이스 보안 가이드라인
 [그림 4-13] 시험 환경 사례
@@ -3604,12 +3604,12 @@ Procedure)를 사용하여 데이터베이스(DB) 보안을 구
 | (대표집필자) 조준범(백석문화대학교)* | (집필진) (검토진) 이창근(KB데이타시스템)* 김영기(한국IT감리컨설팅) 이봉호(갭컨설팅)한성화(에스지에이)* 정순철((주)에이치엠에스)이용희(동서대학교) 장지호(펜도메이트)이은진(트리니티소프트)* 임태호(헬쓰커넥트)최홍선(큐브컨설팅(주)) | 송경희(양영디지털고등학교) |  |  |
 | (공동개발기관) 김제호(밸류원컨설팅) 학습모듈은 자격기본법저작권법 25조에 따라학습모듈은 | (연구기관) 옥준필(한국직업능력개발원) 김상진(한국직업능력개발원) 김성남(한국직업능력개발원) 김지영(한국직업능력개발원) 문한나(한국직업능력개발원) 김나래(한국직업능력개발원) *표시는시행령 제8조 국가직무능력표준의 활용에 의거하여관리됩니다. http://www.ncs.go.kr에서 확인 및 다운로드할 수 있습니다. | NCS | 개발진임개발하였으며 |  |
 
-![이미지](images/page142_img04.png)
+![이미지](images/page142_img04.webp)
 
-![이미지](images/page142_img00.jpeg)
+![이미지](images/page142_img00.webp)
 
-![이미지](images/page142_img01.jpeg)
+![이미지](images/page142_img01.webp)
 
-![이미지](images/page142_img02.jpeg)
+![이미지](images/page142_img02.webp)
 
-![이미지](images/page142_img03.png)
+![이미지](images/page142_img03.webp)

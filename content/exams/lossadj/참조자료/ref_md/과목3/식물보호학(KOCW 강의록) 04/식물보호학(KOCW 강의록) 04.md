@@ -3,7 +3,7 @@
 |  | 2021년도 2학기 - 식물보호학식물(작물)보호제 (농약) |
 | --- | --- |
 
-![이미지](images/page000_img02.png)
+![이미지](images/page000_img02.webp)
 
 
 
@@ -14,7 +14,7 @@
 
 
 
-![이미지](images/page001_img00.png)
+![이미지](images/page001_img00.webp)
 
 강의 내용
 
@@ -26,7 +26,7 @@
 
 
 
-![이미지](images/page002_img00.png)
+![이미지](images/page002_img00.webp)
 
 I. 작물보호제(농약) 개관
 
@@ -44,13 +44,13 @@ I. 작물보호제(농약) 개관
 
 
 
-![이미지](images/page003_img00.png)
+![이미지](images/page003_img00.webp)
 
 I. 작물보호제(농약) 개관
 
 
 
-![이미지](images/page003_img07.png)
+![이미지](images/page003_img07.webp)
 
 작물보호제의 필요성
 
@@ -60,7 +60,7 @@ I. 작물보호제(농약) 개관
 ▸ 농촌의일손을획기적으로덜어주고, 농작업을편리하게함
 (10a (300평) 잡초 제거: 1949년 50.56년 → (2006) 95% 감소)
 
-![이미지](images/page003_img09.png)
+![이미지](images/page003_img09.webp)
 
 농작물에 발생하는 병해충/잡초 종류/피해
 
@@ -71,22 +71,22 @@ I. 작물보호제(농약) 개관
 
 
 
-![이미지](images/page004_img00.png)
+![이미지](images/page004_img00.webp)
 
 I. 작물보호제(농약) 개관
 
 
 
-![이미지](images/page004_img06.jpeg)
+![이미지](images/page004_img06.webp)
 
 1. 작물보호제정의및구비조건
 ▸ 작물보호제구비조건
 
-![이미지](images/page004_img05.png)
+![이미지](images/page004_img05.webp)
 
 
 
-![이미지](images/page005_img00.png)
+![이미지](images/page005_img00.webp)
 
 I. 작물보호제(농약) 개관
 
@@ -96,7 +96,7 @@ I. 작물보호제(농약) 개관
 ▸ 작물보호제는개발당시의이름에서판매될때상품명까지여러가지이름으로명명
 ▸ 논문이나공식적인서류에서는가급적상품명보다는'일반명'이나'품목명'을사용하는것이바람직
 
-![이미지](images/page005_img05.jpeg)
+![이미지](images/page005_img05.webp)
 
 ▸ 구매시확인사항
 ✓ 품목등록번호
@@ -111,21 +111,21 @@ I. 작물보호제(농약) 개관
 
 
 
-![이미지](images/page006_img00.png)
+![이미지](images/page006_img00.webp)
 
 I. 작물보호제(농약) 개관
 
 
 
-![이미지](images/page006_img05.png)
+![이미지](images/page006_img05.webp)
 
 2. 작물보호제(농약) 명칭
 
-![이미지](images/page006_img06.jpeg)
+![이미지](images/page006_img06.webp)
 
 
 
-![이미지](images/page007_img00.png)
+![이미지](images/page007_img00.webp)
 
 I. 작물보호제(농약) 개관
 
@@ -149,7 +149,7 @@ I. 작물보호제(농약) 개관
 
 
 
-![이미지](images/page008_img00.png)
+![이미지](images/page008_img00.webp)
 
 I. 작물보호제(농약) 개관
 
@@ -165,7 +165,7 @@ I. 작물보호제(농약) 개관
 
 
 
-![이미지](images/page009_img00.png)
+![이미지](images/page009_img00.webp)
 
 I. 작물보호제(농약) 개관
 
@@ -174,16 +174,16 @@ I. 작물보호제(농약) 개관
 4. 작물보호제의유통(circulation of pesticide)
 ▸ 생산과출하현황
 
-![이미지](images/page009_img06.png)
+![이미지](images/page009_img06.webp)
 
-![이미지](images/page009_img05.png)
+![이미지](images/page009_img05.webp)
 
 ▸ 제형별생산
 • 유(액)제40.0% / 수화제32.6% / 입제21.0%, 수용제1.7%, 분제0.6%
 
 
 
-![이미지](images/page010_img00.png)
+![이미지](images/page010_img00.webp)
 
 I. 작물보호제(농약) 개관
 
@@ -191,7 +191,7 @@ I. 작물보호제(농약) 개관
 
 5. 작물보호제(농약)의중요성
 
-![이미지](images/page010_img05.jpeg)
+![이미지](images/page010_img05.webp)
 
 ▸ 작물의수확확보, 품질향상기여
 ▸ 작물종류/재배시기에선택의폭확대
@@ -202,7 +202,7 @@ I. 작물보호제(농약) 개관
 
 
 
-![이미지](images/page011_img00.png)
+![이미지](images/page011_img00.webp)
 
 I. 작물보호제(농약) 개관
 
@@ -216,21 +216,21 @@ I. 작물보호제(농약) 개관
 행동발육, 생육탈피등조절), 해충호르몬교란제, 성페로몬제, 화학불임제, 항탈피제, 키틴생합성저해제등연구
 ✓ 생물농약(천적곤충, 천적미생물, 길항미생물등)을이용하여병해충, 잡초방제하는경향발전
 
-![이미지](images/page011_img05.jpeg)
+![이미지](images/page011_img05.webp)
 
-![이미지](images/page011_img06.jpeg)
+![이미지](images/page011_img06.webp)
 
 (참고: 농업축산신문, 2012.11.5.)
 
 
 
-![이미지](images/page012_img00.png)
+![이미지](images/page012_img00.webp)
 
 I. 작물보호제(농약) 개관
 
 
 
-![이미지](images/page012_img07.jpeg)
+![이미지](images/page012_img07.webp)
 
 6. 작물보호제(농약)의발달사
 ▸ 작물보호제(농약) 발달사
@@ -242,21 +242,21 @@ I. 작물보호제(농약) 개관
 ✓ 19세기~ : 식물성살충제(2가지) 발견-제충국(피레트린, pyrethrin), 뉴기니콩과식물(데리스)(로테논, rotenone)
 ✓ 1941년: 선택성제초제(옥신호르몬페녹시계2,4-D개발)
 
-![이미지](images/page012_img05.png)
+![이미지](images/page012_img05.webp)
 
 ✓ 1944년: 유기인계살충제(파라티온parathion) 개발등
 
-![이미지](images/page012_img06.jpeg)
+![이미지](images/page012_img06.webp)
 
 
 
-![이미지](images/page013_img00.png)
+![이미지](images/page013_img00.webp)
 
 I. 작물보호제(농약) 개관
 
 
 
-![이미지](images/page013_img07.png)
+![이미지](images/page013_img07.webp)
 
 6. 작물보호제(농약)의발달사
 ▸ 작물보호제(농약) 발달사
@@ -266,13 +266,13 @@ I. 작물보호제(농약) 개관
 -(예) 제초제PCP에의한어패류의피해, 현미속유기수은의잔류, BHC의우유속잔류등
 • 미국: 유독성농약(DDT 등) 금지
 
-![이미지](images/page013_img05.jpeg)
+![이미지](images/page013_img05.webp)
 
-![이미지](images/page013_img06.jpeg)
+![이미지](images/page013_img06.webp)
 
 
 
-![이미지](images/page014_img00.png)
+![이미지](images/page014_img00.webp)
 
 I. 작물보호제(농약) 개관
 
@@ -287,14 +287,14 @@ I. 작물보호제(농약) 개관
 ✓ 간접적이익
 • 사회적: 이익증가, 영양/건강상태양호해지며, 안정적인식량확보가능
 
-![이미지](images/page014_img05.jpeg)
+![이미지](images/page014_img05.webp)
 
 • 국가적: 일자리창출, 수출입관련문제해결(검역-훈증제등)되며, 농업경쟁력향상
 • 전세계적: 안정적식량공급, 온실가스저감, 인류불편함감소등
 
 
 
-![이미지](images/page015_img00.png)
+![이미지](images/page015_img00.webp)
 
 I. 작물보호제(농약) 개관
 
@@ -313,7 +313,7 @@ I. 작물보호제(농약) 개관
 
 
 
-![이미지](images/page016_img00.png)
+![이미지](images/page016_img00.webp)
 
 I. 작물보호제(농약) 개관
 
@@ -325,13 +325,13 @@ I. 작물보호제(농약) 개관
 ✓ 생물적방제: 천적, 경쟁종, 페로몬, 미생물(진균, 세균/바이러스), 잡초등사용
 ✓ 물리적방제: 식물/토양에뜨거운증기/화염이용방법, 빛을이용하는방법등
 
-![이미지](images/page016_img05.jpeg)
+![이미지](images/page016_img05.webp)
 
 (참고: 김, 2011. 가지과작물대상의친환경농자재개발동향)
 
 
 
-![이미지](images/page017_img00.png)
+![이미지](images/page017_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
@@ -352,7 +352,7 @@ II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page018_img00.png)
+![이미지](images/page018_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
@@ -376,7 +376,7 @@ II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page019_img00.png)
+![이미지](images/page019_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
@@ -400,25 +400,25 @@ II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page020_img00.png)
+![이미지](images/page020_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page020_img05.png)
+![이미지](images/page020_img05.webp)
 
 * 작물보호제시장
 
-![이미지](images/page020_img07.png)
+![이미지](images/page020_img07.webp)
 
-![이미지](images/page020_img06.png)
+![이미지](images/page020_img06.webp)
 
 (참고: 정과명. 2012. 세계작물보호제시장의현황과전망)
 
 
 
-![이미지](images/page021_img00.png)
+![이미지](images/page021_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
@@ -426,15 +426,15 @@ II. 작물보호제(농약)의 분류
 
 * 작물보호제시장
 
-![이미지](images/page021_img05.png)
+![이미지](images/page021_img05.webp)
 
-![이미지](images/page021_img06.jpeg)
+![이미지](images/page021_img06.webp)
 
 (참고: 농진청(농사로))
 
 
 
-![이미지](images/page022_img00.png)
+![이미지](images/page022_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
@@ -454,13 +454,13 @@ II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page023_img00.png)
+![이미지](images/page023_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page023_img05.jpeg)
+![이미지](images/page023_img05.webp)
 
 2. 사용형태별종류: 기상/환경/작물에따라다양한형태로처리할수있도록제형이만들어져있음.
 ▸액제(Liquid) : 용제, 유제, 수화제등
@@ -471,7 +471,7 @@ II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page024_img00.png)
+![이미지](images/page024_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
@@ -491,7 +491,7 @@ II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page025_img00.png)
+![이미지](images/page025_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
@@ -514,19 +514,19 @@ II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page026_img00.png)
+![이미지](images/page026_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page026_img05.png)
+![이미지](images/page026_img05.webp)
 
 5. 작물보호제제형분류
 
 
 
-![이미지](images/page027_img00.png)
+![이미지](images/page027_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
@@ -542,9 +542,9 @@ II. 작물보호제(농약)의 분류
 ✓유탁제(Emulsion water, EW) : 유제에사용된유기용제를줄이기위해, 소량의소수성용매에원제를용해시키고유화제를사용하여물을유화시켜만든제형
 ✓미량살포제(Ultra Low Volume Spray, ULV) : 유효성분을용제에녹여서(60% 이상) 만든제제. 현재공중살포용으로사용
 
-![이미지](images/page027_img06.png)
+![이미지](images/page027_img06.webp)
 
-![이미지](images/page027_img05.png)
+![이미지](images/page027_img05.webp)
 
 | 제형 | 문제점 | 개선방향 | 가능한제형 |
 | --- | --- | --- | --- |
@@ -554,7 +554,7 @@ II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page028_img00.png)
+![이미지](images/page028_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
@@ -568,16 +568,16 @@ II. 작물보호제(농약)의 분류
 ✓입제(Granule, GR): 유효성분을고체중량제와혼합분쇄하고보조제로서고결제, 안정제, 계면활성제를가하여입상으로성형하거나입상으로담배에유효성분을
 피복시킨것
 
-![이미지](images/page028_img05.png)
+![이미지](images/page028_img05.webp)
 
 ✓미립제(Micro-Granule (MG), Fine Granule (FG)): 분제의결점인표류비산을적게할목적으로개발된것(입경62~210 um)
 ✓캡슐제(Encapsulate Granule, CG): 농약원제를고분자물질로피복하여고형으로만들거나캡슐에넣어만든제형. 가격이비쌈.
 
-![이미지](images/page028_img06.png)
+![이미지](images/page028_img06.webp)
 
 
 
-![이미지](images/page029_img00.png)
+![이미지](images/page029_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
@@ -590,25 +590,25 @@ II. 작물보호제(농약)의 분류
 ✓연무제(Aerosol) : 유효성분을용제, 분사제등과봄베(bombe)에충진시킨것. 압력을가하여공기중에분출시켜서사용하기위한제제
 ✓도포제(Paste) : 작물보호제를호상으로한제제. 살서제, 훈연제나수목의수간등에바름.
 
-![이미지](images/page029_img07.jpeg)
+![이미지](images/page029_img07.webp)
 
-![이미지](images/page029_img09.jpeg)
+![이미지](images/page029_img09.webp)
 
-![이미지](images/page029_img08.jpeg)
+![이미지](images/page029_img08.webp)
 
-![이미지](images/page029_img05.png)
+![이미지](images/page029_img05.webp)
 
 훈증제의예 훈연제의예
 
-![이미지](images/page029_img10.jpeg)
+![이미지](images/page029_img10.webp)
 
-![이미지](images/page029_img06.png)
+![이미지](images/page029_img06.webp)
 
 도포제의예
 
 
 
-![이미지](images/page030_img00.png)
+![이미지](images/page030_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
@@ -620,9 +620,9 @@ II. 작물보호제(농약)의 분류
 ▸표면장력(Surface tension) : 공기가접하는계면에서계면장력(적당량의계면활성제를첨가하여표면장력을낮춤)
 ▸접촉각(Angle of contact) : 정지액체의자유표면이고체와접하는부분에서액면과고체면이이루는각도. 계면활성제를첨가하여접촉각이작아짐→약제흡수증가
 
-![이미지](images/page030_img06.jpeg)
+![이미지](images/page030_img06.webp)
 
-![이미지](images/page030_img05.png)
+![이미지](images/page030_img05.webp)
 
 참고: 장가등(2018)
 ▸현수성(Suspensibility) : 수화제의현탁액에서고체입자가균일하게분산부유하는성질과그안정성의미
@@ -632,7 +632,7 @@ II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page031_img00.png)
+![이미지](images/page031_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
@@ -646,23 +646,23 @@ II. 작물보호제(농약)의 분류
 | 살포목적별 | • 경엽처리,토양처리,수면처리 |
 | 살포형태별 | • 분무법,미스트법,스프링쿨러법,폼스프레이법,살분법,살립법,공중살포법,수면시용법,훈연법,훈증법,관주법,침지법,도말벌,도포법,독이법 |
 
-![이미지](images/page031_img06.png)
+![이미지](images/page031_img06.webp)
 
-![이미지](images/page031_img05.jpeg)
+![이미지](images/page031_img05.webp)
 
-![이미지](images/page031_img07.jpeg)
+![이미지](images/page031_img07.webp)
 
 참고: 농진청(농약안전정보시스템)
 
 
 
-![이미지](images/page032_img00.png)
+![이미지](images/page032_img00.webp)
 
 II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page032_img05.jpeg)
+![이미지](images/page032_img05.webp)
 
 * 농약의살포기구
 ▸살포기의구비요건
@@ -672,7 +672,7 @@ II. 작물보호제(농약)의 분류
 ✓경제성: 방제가효과적이며약액및동력의손실이없어야함.
 ▸살포입자의크기
 
-![이미지](images/page032_img06.jpeg)
+![이미지](images/page032_img06.webp)
 
 ✓입자가작을수록, 같은양으로넓은면적을살포할수있음.
 ✓입자가작을수록, 부착이잘됨.
@@ -681,7 +681,7 @@ II. 작물보호제(농약)의 분류
 
 
 
-![이미지](images/page033_img00.png)
+![이미지](images/page033_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
@@ -701,7 +701,7 @@ III. 작물보호제(농약)의 독성과 안전사용
 
 
 
-![이미지](images/page034_img00.png)
+![이미지](images/page034_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
@@ -715,7 +715,7 @@ III. 작물보호제(농약)의 독성과 안전사용
 •낙엽및기형잎: 낙엽은잎이붙어있는부분의이층세포가박리되거나세포의붕괴로발생. 기형잎은잎이오그라지는등부분적인생장정지에따라발생
 ✓꽃및과실에나타나는증상
 
-![이미지](images/page034_img05.png)
+![이미지](images/page034_img05.webp)
 
 •꽃/과실은대부분그자체가상품→약해로인한경미한증상이라도문제가될수있음.
 클로로시스: 황화
@@ -729,7 +729,7 @@ III. 작물보호제(농약)의 독성과 안전사용
 
 
 
-![이미지](images/page035_img00.png)
+![이미지](images/page035_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
@@ -752,7 +752,7 @@ III. 작물보호제(농약)의 독성과 안전사용
 
 
 
-![이미지](images/page036_img00.png)
+![이미지](images/page036_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
@@ -767,13 +767,13 @@ III. 작물보호제(농약)의 독성과 안전사용
 ▸만성독성(Chronic Toxicity) : 쥐나생쥐등의소동물은전생애에걸쳐실시. 개/원숭이등의대동물은수명의1/10 정도의장기간에걸쳐실시하여기타
 발암성(carcinogencity) 등시험
 
-![이미지](images/page036_img05.png)
+![이미지](images/page036_img05.webp)
 
 참고: 농진청(농약안전정보시스템)
 
 
 
-![이미지](images/page037_img00.png)
+![이미지](images/page037_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
@@ -803,11 +803,11 @@ III. 작물보호제(농약)의 독성과 안전사용
 | • ED (EffectiveDose50)50 | • 반수영향약량• 그 50%의 동물에 유효하다고 추정되는용량 |
 | • EC (EffectiveConcentration50)50 | • 반수영향농도 |
 
-![이미지](images/page037_img05.png)
+![이미지](images/page037_img05.webp)
 
 
 
-![이미지](images/page038_img00.png)
+![이미지](images/page038_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
@@ -815,13 +815,13 @@ III. 작물보호제(농약)의 독성과 안전사용
 
 * 농약안전성평가항목및검토사항
 
-![이미지](images/page038_img05.png)
+![이미지](images/page038_img05.webp)
 
 참고: 농진청(농약안전정보시스템)
 
 
 
-![이미지](images/page039_img00.png)
+![이미지](images/page039_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
@@ -840,7 +840,7 @@ III. 작물보호제(농약)의 독성과 안전사용
 
 
 
-![이미지](images/page040_img00.png)
+![이미지](images/page040_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
@@ -861,7 +861,7 @@ III. 작물보호제(농약)의 독성과 안전사용
 
 
 
-![이미지](images/page041_img00.png)
+![이미지](images/page041_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
@@ -877,7 +877,7 @@ III. 작물보호제(농약)의 독성과 안전사용
 
 
 
-![이미지](images/page042_img00.png)
+![이미지](images/page042_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
@@ -890,11 +890,11 @@ III. 작물보호제(농약)의 독성과 안전사용
 ✓사람이어떤약물을평생걸쳐서섭취해도현재의독물학적으로장해를받지않는1일당최대량
 ▸잔류허용한계(Maximum Residue Limit, MRL)
 
-![이미지](images/page042_img05.png)
+![이미지](images/page042_img05.webp)
 
 
 
-![이미지](images/page043_img00.png)
+![이미지](images/page043_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
@@ -913,19 +913,19 @@ III. 작물보호제(농약)의 독성과 안전사용
 
 
 
-![이미지](images/page044_img00.png)
+![이미지](images/page044_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
 
 
-![이미지](images/page044_img05.jpeg)
+![이미지](images/page044_img05.webp)
 
 * 작물보호제안전사용기준설정체계(팜한농참조)
 
 
 
-![이미지](images/page045_img00.png)
+![이미지](images/page045_img00.webp)
 
 III. 작물보호제(농약)의 독성과 안전사용
 
@@ -938,7 +938,7 @@ III. 작물보호제(농약)의 독성과 안전사용
 →(PLS) 잠정기준을없애고, 기준이없을경우일률기준인0.01 ppm 을적용하는것, 잔류허용기준이설정된작물보호제외에는사용을금지하는제도
 * 0.01 ppm : 국제대회가열리는큰규모의수영장에물을가득채우고, 작물보호제한숟가락반정도넣었을때의농도
 
-![이미지](images/page045_img05.png)
+![이미지](images/page045_img05.webp)
 
 참고: 농진청(농사로)
 

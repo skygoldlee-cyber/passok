@@ -3,7 +3,7 @@
 |  | 2021년도 2학기 - 식물보호학식물병리 - 2(식물병 방제 및 작물 발생 주요 병들) |
 | --- | --- |
 
-![이미지](images/page000_img02.png)
+![이미지](images/page000_img02.webp)
 
 
 
@@ -14,7 +14,7 @@
 
 
 
-![이미지](images/page001_img00.png)
+![이미지](images/page001_img00.webp)
 
 식물병의 방제
 
@@ -37,31 +37,31 @@
 
 
 
-![이미지](images/page002_img00.png)
+![이미지](images/page002_img00.webp)
 
 식물병의 방제
 
 
 
-![이미지](images/page002_img09.jpeg)
+![이미지](images/page002_img09.webp)
 
-![이미지](images/page002_img08.jpeg)
+![이미지](images/page002_img08.webp)
 
 ▸ 식물병의 방제방법
 1) 법적방제(legal control)
 ▸ 식물검역
 
-![이미지](images/page002_img05.jpeg)
+![이미지](images/page002_img05.webp)
 
-![이미지](images/page002_img07.jpeg)
+![이미지](images/page002_img07.webp)
 
-![이미지](images/page002_img10.jpeg)
+![이미지](images/page002_img10.webp)
 
-![이미지](images/page002_img06.jpeg)
+![이미지](images/page002_img06.webp)
 
 
 
-![이미지](images/page003_img00.png)
+![이미지](images/page003_img00.webp)
 
 식물병의 방제
 
@@ -74,7 +74,7 @@
 ✓ 근권진균 : Trichodermin, Gliotoxin등
 ✓ 근권세균 : Bacillus, Pseudomonas 등
 
-![이미지](images/page003_img05.jpeg)
+![이미지](images/page003_img05.webp)
 
 ▸ 길항미생물이용
 ✓ 길항미생물: 병원균의생육을 억제/저지시키는능력을 갖는미생물
@@ -84,13 +84,13 @@
 
 
 
-![이미지](images/page004_img00.png)
+![이미지](images/page004_img00.webp)
 
 식물병의 방제
 
 
 
-![이미지](images/page004_img05.jpeg)
+![이미지](images/page004_img05.webp)
 
 ▸ 식물병의 방제방법
 3) 경종적방제(cultural control)
@@ -102,7 +102,7 @@
 ▸ 저항성품종 재배
 ▸ 접목
 
-![이미지](images/page004_img06.jpeg)
+![이미지](images/page004_img06.webp)
 
 ▸ 조직배양으로딸기나 감자증식
 ▸ 고랭지재배 → 바이러스 매개 진딧물감소(대관령감자등)
@@ -114,7 +114,7 @@
 
 
 
-![이미지](images/page005_img00.png)
+![이미지](images/page005_img00.webp)
 
 작물에 발생하는 주요 병들(각론)
 
@@ -122,11 +122,11 @@
 
 ▸ 벼 병(rice disease)의 종류
 
-![이미지](images/page005_img05.png)
+![이미지](images/page005_img05.webp)
 
 
 
-![이미지](images/page006_img00.png)
+![이미지](images/page006_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
@@ -137,7 +137,7 @@
 | --- | --- |
 |  | 1. 벼 깨씨무늬병(Brown spot, 호마엽고병) |
 
-![이미지](images/page006_img06.jpeg)
+![이미지](images/page006_img06.webp)
 
 ▸ 병원균 : Cochliobolusmiyabeanus(진균)
 ▸ 병 특성과 발병
@@ -145,9 +145,9 @@
 ✓ 잎에 타원형 암갈색 반점형성. 이삭목/가지 볍씨 등암갈색 변화
 ✓ 발병원인 : 고온다습 조건, 사질토양 → 산성 토양 → 영양 부족 시 발생
 
-![이미지](images/page006_img07.jpeg)
+![이미지](images/page006_img07.webp)
 
-![이미지](images/page006_img08.jpeg)
+![이미지](images/page006_img08.webp)
 
 ▸ 병징과 방제
 ✓ 저항성 품종 재배
@@ -158,7 +158,7 @@ Cochliobolusmiyabeanus
 
 
 
-![이미지](images/page007_img00.png)
+![이미지](images/page007_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
@@ -169,7 +169,7 @@ Cochliobolusmiyabeanus
 | --- | --- |
 |  | 2. 벼 키다리병(Bakanae Disease) |
 
-![이미지](images/page007_img06.jpeg)
+![이미지](images/page007_img06.webp)
 
 ▸ 병원균 : Gibberellafujikuroi, 진균(자낭균류)
 ▸ 병 특성과 발병
@@ -178,9 +178,9 @@ Cochliobolusmiyabeanus
 ✓ 산성토양에서 심하게 발생
 ✓ 종자 통해감염
 
-![이미지](images/page007_img07.jpeg)
+![이미지](images/page007_img07.webp)
 
-![이미지](images/page007_img08.jpeg)
+![이미지](images/page007_img08.webp)
 
 ✓ 지베렐린(Gibberellin)*의 작용 → 키가커지는 도장 현상
 *고등식물의식물생장조절제→줄기성장, 발아, 휴면, 개화, 성결정, 노화등영향호르몬
@@ -193,7 +193,7 @@ Gibberellafujikuroi
 
 
 
-![이미지](images/page008_img00.png)
+![이미지](images/page008_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
@@ -204,9 +204,9 @@ Gibberellafujikuroi
 | --- | --- |
 |  | 3. 벼 도열병(Blast) : 국내, 동남아 각지 가장 큰 피해 |
 
-![이미지](images/page008_img07.jpeg)
+![이미지](images/page008_img07.webp)
 
-![이미지](images/page008_img06.jpeg)
+![이미지](images/page008_img06.webp)
 
 ▸ 병원균 : Pyriculariaoryzae, 진균(불완전균류)
 ▸ 병 특성과 발병
@@ -215,7 +215,7 @@ Gibberellafujikuroi
 ✓ 발병 원인: 공기 중분생포자 침입. 25~28℃ 정도 다소 저온, 100%에 가까운 다습 조건
 ✓ 발생 조건
 
-![이미지](images/page008_img08.jpeg)
+![이미지](images/page008_img08.webp)
 
 • 저온다우상태에서 기온이 급격히 올라갈 때
 • 이앙이 늦고 질소가 많으며 다습조건일 때
@@ -225,7 +225,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page009_img00.png)
+![이미지](images/page009_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
@@ -236,7 +236,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 3. 벼 도열병(Blast) : 국내 뿐 아니라 동남아 각지 가장 큰 피해 |
 
-![이미지](images/page009_img06.jpeg)
+![이미지](images/page009_img06.webp)
 
 ▸ 병징과 방제
 ✓ 병징
@@ -256,7 +256,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page010_img00.png)
+![이미지](images/page010_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
@@ -267,7 +267,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 4. 벼 잎집무늬마름병(문고병, Sheath Blight) |
 
-![이미지](images/page010_img06.jpeg)
+![이미지](images/page010_img06.webp)
 
 ▸ 병원균 : Pelliculariasasakii, 진균(담낭균류)
 ▸ 병 특성과 발병
@@ -281,7 +281,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page011_img00.png)
+![이미지](images/page011_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
@@ -292,7 +292,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 5. 벼 잘록병(Seeding Damping off) |
 
-![이미지](images/page011_img06.jpeg)
+![이미지](images/page011_img06.webp)
 
 ▸ 병원균 : Pythium debaryanum, Rhizoctoniasolani, Fusariumspp., 진균
 ▸ 병 특성과 발병
@@ -302,7 +302,7 @@ Pyriculariaoryzae
 ▸ 병징과 방제
 ✓ 병징 : 종자가 발아하지 않거나 발아해도 올라오지 못하고 고사
 
-![이미지](images/page011_img07.jpeg)
+![이미지](images/page011_img07.webp)
 
 ✓ 방제
 • 못자리 관리 : 주간30℃ 이하, 야간 10℃ 이상 유지
@@ -312,7 +312,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page012_img00.png)
+![이미지](images/page012_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
@@ -323,13 +323,13 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 6. 벼알마름병 |
 
-![이미지](images/page012_img06.jpeg)
+![이미지](images/page012_img06.webp)
 
 ▸ 병원균 : Burkholderiaglumae, 세균
 ▸ 병 특성과 발병
 ✓ 병원균은 호기성 그람음성 간균, 생육 적온 30℃에 잘 발생
 
-![이미지](images/page012_img07.jpeg)
+![이미지](images/page012_img07.webp)
 
 ✓ 침종 시이병 종자에서 건전 종자로 전염, 벼 출수 후 1주간 고온(30~35℃), 다습환경에 발병
 ▸ 병징과 방제
@@ -343,7 +343,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page013_img00.png)
+![이미지](images/page013_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
@@ -354,14 +354,14 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 7. 벼 흰잎마름병(백엽고병, Bacterial Leaf Blight) |
 
-![이미지](images/page013_img06.jpeg)
+![이미지](images/page013_img06.webp)
 
 ▸ 병원균 : Xantomonasoryza, 세균
 ▸ 병 특성과 발병
 ✓ 26~30℃ 정도에서 잘 발생. 강한 바람으로 잎에 상처가 생기면 세균 침입(태풍/홍수가 겹칠 때 많이 발생)
 ✓ 월동 잡초/벼그루터기에서 월동. 태풍/침수 발생시 또는 질소 과용→병 진전촉진
 
-![이미지](images/page013_img07.jpeg)
+![이미지](images/page013_img07.webp)
 
 ▸ 병징과 방제
 ✓ 병징
@@ -375,7 +375,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page014_img00.png)
+![이미지](images/page014_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
@@ -386,7 +386,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 8. 벼 검은줄오갈병(Rice Black Streaked Dwarf) |
 
-![이미지](images/page014_img06.jpeg)
+![이미지](images/page014_img06.webp)
 
 ▸ 병원균 : Rice black streaked dwarf virus, 바이러스
 ▸ 병 특성과 발병
@@ -401,7 +401,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page015_img00.png)
+![이미지](images/page015_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
@@ -428,7 +428,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page016_img00.png)
+![이미지](images/page016_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 벼 병(rice disease)
 
@@ -439,7 +439,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 10. 벼 줄무늬잎마름병(호엽고병, Stripe Virus) |
 
-![이미지](images/page016_img06.jpeg)
+![이미지](images/page016_img06.webp)
 
 ▸ 병원균 : Rice stripe virus, 바이러스
 ▸ 병 특성과 발병
@@ -448,7 +448,7 @@ Pyriculariaoryzae
 ✓ 발병원인: 이앙 후분얼기에 보독충(애멸구)의 양에 의해발병 결정
 ▸ 병징과 방제
 
-![이미지](images/page016_img07.jpeg)
+![이미지](images/page016_img07.webp)
 
 ✓ 병징
 • 어린 벼는속잎이 노랗게 되고 말림
@@ -459,7 +459,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page017_img00.png)
+![이미지](images/page017_img00.webp)
 
 작물에 발생하는 주요 병들(각론)
 
@@ -467,11 +467,11 @@ Pyriculariaoryzae
 
 ▸ 맥류 병(Barley disease)의 종류
 
-![이미지](images/page017_img05.png)
+![이미지](images/page017_img05.webp)
 
 
 
-![이미지](images/page018_img00.png)
+![이미지](images/page018_img00.webp)
 
 작물에 발생하는 주요 병들(각론)
 
@@ -479,11 +479,11 @@ Pyriculariaoryzae
 
 ▸ 맥류 병(Barley disease)의 종류
 
-![이미지](images/page018_img05.png)
+![이미지](images/page018_img05.webp)
 
 
 
-![이미지](images/page019_img00.png)
+![이미지](images/page019_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 맥류 병(Barley Disease)
 
@@ -494,7 +494,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 1. 맥류 속깜부기병(Coverd Smut) |
 
-![이미지](images/page019_img06.jpeg)
+![이미지](images/page019_img06.webp)
 
 ▸ 병원균 : Ustilagohordei (보리), U. tritici (밀); 진균(담자균류)
 ▸ 병 특성과 발병
@@ -511,7 +511,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page020_img00.png)
+![이미지](images/page020_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 맥류 병(Barley Disease)
 
@@ -522,11 +522,11 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 2. 맥류 줄기녹병(흑수병, Black Stem Rust) |
 
-![이미지](images/page020_img06.jpeg)
+![이미지](images/page020_img06.webp)
 
 ▸ 병원균 : Pucciniagraminis,진균
 
-![이미지](images/page020_img07.jpeg)
+![이미지](images/page020_img07.webp)
 
 ▸ 병 특성과 발병
 ✓ 잎과 줄기에 약간 튀어나오는 듯한 병반 형성
@@ -537,7 +537,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page021_img00.png)
+![이미지](images/page021_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 맥류 병(Barley Disease)
 
@@ -548,7 +548,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 3. 보리 겉깜부기병(Smut) |
 
-![이미지](images/page021_img06.jpeg)
+![이미지](images/page021_img06.webp)
 
 ▸ 병원균 : Ustilagomuda(보리); 진균(담자균류)
 ▸ 병 특성과 발병
@@ -556,9 +556,9 @@ Pyriculariaoryzae
 ✓ 보리 종자에 발생. 흑색 가루 비산
 ✓ 발병원인: 개화기 중다습 조건, 종자에서부터 전염 발생 많아짐
 
-![이미지](images/page021_img07.jpeg)
+![이미지](images/page021_img07.webp)
 
-![이미지](images/page021_img08.jpeg)
+![이미지](images/page021_img08.webp)
 
 ▸ 병징과 방제
 ✓ 방제
@@ -567,7 +567,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page022_img00.png)
+![이미지](images/page022_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 맥류 병(Barley Disease)
 
@@ -578,7 +578,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 4. 맥류 붉은곰팡이병(적미병, Scab) |
 
-![이미지](images/page022_img06.jpeg)
+![이미지](images/page022_img06.webp)
 
 ▸ 병원균 : Gibberellazeae; 진균(자낭균류)
 ▸ 병 특성과 발병
@@ -587,7 +587,7 @@ Pyriculariaoryzae
 ✓ 발병원인 : 토양온도 15℃ 정도, 강우로 다습조건일 때 많이 발생
 ✓ 온난하고 습기가 많은 지대, 출수 시 평균기온 18~20℃, 습도 95% 이상, 연속 3일이상 강우 시많이 발생
 
-![이미지](images/page022_img07.jpeg)
+![이미지](images/page022_img07.webp)
 
 ▸ 병징과 방제
 ✓ 병징 : 이삭초기 껍질이 포함된 홍색 곰팡이 관찰
@@ -598,7 +598,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page023_img00.png)
+![이미지](images/page023_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 맥류 병(Barley Disease)
 
@@ -609,7 +609,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 5. 맥류 흰가루병(백분병, Powdery Mildew) |
 
-![이미지](images/page023_img06.jpeg)
+![이미지](images/page023_img06.webp)
 
 ▸ 병원균 : Erysiphe graminis; 진균
 ▸ 병 특성과 발병
@@ -617,7 +617,7 @@ Pyriculariaoryzae
 ✓초기에 잎에 밀가루를 뿌려 놓은 것 같이 보이다가 나중에 담갈색, 검은색 자낭각 형성
 ✓발병 : 다습조건, 통풍이 불량할 때 발생
 
-![이미지](images/page023_img07.jpeg)
+![이미지](images/page023_img07.webp)
 
 ▸ 병징과 방제
 ✓ 방제
@@ -627,7 +627,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page024_img00.png)
+![이미지](images/page024_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 두류와 담배작물 병(Legume & Tabacco Disease)
 
@@ -635,11 +635,11 @@ Pyriculariaoryzae
 
 ▸ 담배와 콩에 발생하는병
 
-![이미지](images/page024_img05.png)
+![이미지](images/page024_img05.webp)
 
 
 
-![이미지](images/page025_img00.png)
+![이미지](images/page025_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 두류와 담배작물 병(Legume & Tabacco Disease)
 
@@ -662,7 +662,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page026_img00.png)
+![이미지](images/page026_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 두류와 담배작물 병(Legume & Tabacco Disease)
 
@@ -688,7 +688,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page027_img00.png)
+![이미지](images/page027_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 두류와 담배작물 병(Legume & Tabacco Disease)
 
@@ -701,7 +701,7 @@ Pyriculariaoryzae
 
 ▸ 병원균 : Cercospora kikuchii; 진균(불완전균류)
 
-![이미지](images/page027_img06.jpeg)
+![이미지](images/page027_img06.webp)
 
 ▸ 병 특성과 발병
 ✓균사 형태로 병든 종자, 병든 식물에서 월동
@@ -709,7 +709,7 @@ Pyriculariaoryzae
 ▸ 병징과 방제
 ✓ 병징
 
-![이미지](images/page027_img07.jpeg)
+![이미지](images/page027_img07.webp)
 
 • 종피에 자줏빛 병반 형성
 • 쭈글쭈글 해지는 등 외관이 나빠짐
@@ -720,7 +720,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page028_img00.png)
+![이미지](images/page028_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 두류와 담배작물 병(Legume & Tabacco Disease)
 
@@ -733,7 +733,7 @@ Pyriculariaoryzae
 
 ▸ 병원균 : Colletotrichum truncatum; 진균(자낭균류)
 
-![이미지](images/page028_img06.jpeg)
+![이미지](images/page028_img06.webp)
 
 ▸ 병 특성과 발병
 ✓균사 형태로 병든 종자에서 월동
@@ -742,7 +742,7 @@ Pyriculariaoryzae
 ✓ 병징
 • 줄기, 꼬투리, 잎자루 및잎 : 불규칙한 갈색 병반 진전 → 감염조직에 흑색 소립(분생자층)으로 덮임
 
-![이미지](images/page028_img07.jpeg)
+![이미지](images/page028_img07.webp)
 
 ✓ 방제
 • 무병지에서 채종재배
@@ -751,7 +751,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page029_img00.png)
+![이미지](images/page029_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 서류 병(Potato Disease)
 
@@ -759,11 +759,11 @@ Pyriculariaoryzae
 
 ▸ 감자와 고구마에발생하는병
 
-![이미지](images/page029_img05.png)
+![이미지](images/page029_img05.webp)
 
 
 
-![이미지](images/page030_img00.png)
+![이미지](images/page030_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 서류 병(Potato Disease)
 
@@ -774,7 +774,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 1. 고구마 무름병(Soft Rot) |
 
-![이미지](images/page030_img06.jpeg)
+![이미지](images/page030_img06.webp)
 
 ▸ 병원균 : Rhizopusstolonifer; 진균(조균류)
 ▸ 병 특성과 발병
@@ -790,7 +790,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page031_img00.png)
+![이미지](images/page031_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 서류 병(Potato Disease)
 
@@ -801,13 +801,13 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 2. 고구마 검은무늬병 |
 
-![이미지](images/page031_img06.jpeg)
+![이미지](images/page031_img06.webp)
 
 ▸ 병원균 : Ceratostomella funbriata; 진균(자낭균류)
 ▸ 병 특성과 발병
 ✓묘상 때~ 저장 덩이뿌리가 될 때까지 발병
 
-![이미지](images/page031_img07.jpeg)
+![이미지](images/page031_img07.webp)
 
 ✓병원균 : 균사 형태로 병든 괴근, 땅 속 월동, 주로 분생포자만 형성
 ✓잎 가장자리에 병반 형성 → 암갈색, 뒷면에 서리 모양 곰팡이 발생 → 잎이 위로 말리면서 고사
@@ -822,7 +822,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page032_img00.png)
+![이미지](images/page032_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 서류 병(Potato Disease)
 
@@ -833,7 +833,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 3. 감자 역병(Late Blight) |
 
-![이미지](images/page032_img06.jpeg)
+![이미지](images/page032_img06.webp)
 
 ▸ 병원균 : Phytophthorainfestans; 진균(조균류)
 ▸ 병 특성과 발병
@@ -844,7 +844,7 @@ Pyriculariaoryzae
 • 지표면에 수침상의 부정형 병반 확대 → 암갈색 병반의 뒷면에 서리 모양의 곰팡이, 병든 잎은 위로 말리면서 고사, 덩이줄기에는
 담갈색의 병반이 커지며 썩음
 
-![이미지](images/page032_img07.jpeg)
+![이미지](images/page032_img07.webp)
 
 ✓ 방제
 • 건전한 씨감자 선별 소독, 재배. 저항성 품종 재배
@@ -853,7 +853,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page033_img00.png)
+![이미지](images/page033_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 서류 병(Potato Disease)
 
@@ -864,7 +864,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 4. 감자 더뎅이병(Common Scab) |
 
-![이미지](images/page033_img06.jpeg)
+![이미지](images/page033_img06.webp)
 
 ▸ 병원균 : Streptomyces scabies; 세균
 ▸ 병 특성과 발병
@@ -872,7 +872,7 @@ Pyriculariaoryzae
 ✓토양온도가 25℃ 전후, 건조하고 자갈이 섞인 알칼리 토양에서 발생
 ▸ 병징과 방제
 
-![이미지](images/page033_img07.jpeg)
+![이미지](images/page033_img07.webp)
 
 ✓ 병징
 • 괴경에 발생. 외관을 나쁘게 함
@@ -884,7 +884,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page034_img00.png)
+![이미지](images/page034_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 서류 병(Potato Disease)
 
@@ -895,14 +895,14 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 5. 감자 검은무늬썩음병(Black Scurf, Damping off, Stem Canker) |
 
-![이미지](images/page034_img06.jpeg)
+![이미지](images/page034_img06.webp)
 
 ▸ 병원균 : Rhizoctoniasolani; 진균(담자균류)
 ▸ 병 특성과 발병
 ✓매우 여러 그룹의 균사 융합 군과 배양형 존재
 ✓균사 생육 적온 : 23~29℃ 정도
 
-![이미지](images/page034_img07.jpeg)
+![이미지](images/page034_img07.webp)
 
 ▸ 병징과 방제
 ✓ 병징
@@ -914,7 +914,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page035_img00.png)
+![이미지](images/page035_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
@@ -922,11 +922,11 @@ Pyriculariaoryzae
 
 ▸ 채소에 발병하는병
 
-![이미지](images/page035_img05.png)
+![이미지](images/page035_img05.webp)
 
 
 
-![이미지](images/page036_img00.png)
+![이미지](images/page036_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
@@ -937,7 +937,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 1. 고추 역병(Phytophthora Blight) |
 
-![이미지](images/page036_img06.jpeg)
+![이미지](images/page036_img06.webp)
 
 ▸ 병원균 : Phytophthoracapsici; 진균(조균류)
 ▸ 병 특성과 발병
@@ -946,7 +946,7 @@ Pyriculariaoryzae
 ✓토양 전염성 병해. 기온이 낮고 습도가 높은 여름 장마철에 물을 통해 전염
 ✓연작지와 배수(물 빠짐)가 나쁜 밭에서 많이 발생
 
-![이미지](images/page036_img07.jpeg)
+![이미지](images/page036_img07.webp)
 
 ▸ 병징과 방제
 ✓ 병징
@@ -958,7 +958,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page037_img00.png)
+![이미지](images/page037_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
@@ -969,7 +969,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 2. 고추 탄저병(Blitter Rot) |
 
-![이미지](images/page037_img06.jpeg)
+![이미지](images/page037_img06.webp)
 
 ▸ 병원균 : Glomerella cingulata; 진균(자낭균류)
 ▸ 병 특성과 발병
@@ -977,7 +977,7 @@ Pyriculariaoryzae
 ✓기주 : 고추, 사과, 포도 등
 ✓비가 많이 오고 30℃ 정도의 고온과 다습한 성숙기에 많이 발생
 
-![이미지](images/page037_img07.jpeg)
+![이미지](images/page037_img07.webp)
 
 ✓비·바람의해 전파
 ▸ 병징과 방제
@@ -990,7 +990,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page038_img00.png)
+![이미지](images/page038_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
@@ -1001,7 +1001,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 3. 수박 탄저병(Anthracnose) |
 
-![이미지](images/page038_img06.jpeg)
+![이미지](images/page038_img06.webp)
 
 ▸ 병원균 : Colletotrichum nigrum; 진균
 ▸ 병 특성과 발병
@@ -1010,7 +1010,7 @@ Pyriculariaoryzae
 ✓진전되면 중심부는 회색으로 변하고 그 뒤에 흑색 소립 밀생
 ✓기주식물 : 고추
 
-![이미지](images/page038_img07.jpeg)
+![이미지](images/page038_img07.webp)
 
 ▸ 병징과 방제
 ✓ 방제
@@ -1019,7 +1019,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page039_img00.png)
+![이미지](images/page039_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
@@ -1030,7 +1030,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 4. 오이 노균병(Downy Mildew) |
 
-![이미지](images/page039_img06.jpeg)
+![이미지](images/page039_img06.webp)
 
 ▸ 병원균 : Pseudoperopnosporacubensis; 진균(조균류)
 ▸ 병 특성과 발병
@@ -1038,7 +1038,7 @@ Pyriculariaoryzae
 ✓잎이 젖어 있거나 높은 습도(95%) 또는 낮은 온도(15~22℃) 조건인 7월 장마기 많이 발생
 ✓기주식물 : 박과 작물(오이, 참외, 수박, 호박 등) 많이 발생
 
-![이미지](images/page039_img07.jpeg)
+![이미지](images/page039_img07.webp)
 
 ▸ 병징과 방제
 ✓ 병징
@@ -1050,7 +1050,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page040_img00.png)
+![이미지](images/page040_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
@@ -1061,7 +1061,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 5. 배추 무름병(Bacterial Soft Rot) |
 
-![이미지](images/page040_img06.jpeg)
+![이미지](images/page040_img06.webp)
 
 ▸ 병원균 : Erwiniacarotovora; 세균
 ▸ 병 특성과 발병
@@ -1070,7 +1070,7 @@ Pyriculariaoryzae
 ✓비가 자주 오고 온도와 습도가 높은 여름철에 많이 발생
 ✓기주식물 : 고추, 무, 배추, 토마토, 마늘, 참외 등
 
-![이미지](images/page040_img07.jpeg)
+![이미지](images/page040_img07.webp)
 
 ▸ 병징과 방제
 ✓ 병징
@@ -1082,7 +1082,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page041_img00.png)
+![이미지](images/page041_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
@@ -1093,7 +1093,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 6. 토마토 풋마름병(Bacterial Wilt) |
 
-![이미지](images/page041_img06.jpeg)
+![이미지](images/page041_img06.webp)
 
 ▸ 병원균 : Ralstoniasolanacearum; 세균
 ▸ 병 특성과 발병
@@ -1102,9 +1102,9 @@ Pyriculariaoryzae
 ✓고온 다습한 산성토양에서 발생하는 토양 전염성 병
 ✓기주식물 : 가지과(토마토, 감자, 가지, 고추 등) 비롯 28과 150여종
 
-![이미지](images/page041_img07.jpeg)
+![이미지](images/page041_img07.webp)
 
-![이미지](images/page041_img08.jpeg)
+![이미지](images/page041_img08.webp)
 
 ▸ 병징과 방제
 ✓ 병징
@@ -1116,7 +1116,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page042_img00.png)
+![이미지](images/page042_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 채소류 병(Vegetable Disease)
 
@@ -1127,7 +1127,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 7. 배추 무사마귀병(Club Root) |
 
-![이미지](images/page042_img06.jpeg)
+![이미지](images/page042_img06.webp)
 
 ▸ 병원균 : Plasmodiophorabrassicae; 점균(끈적균)
 ▸ 병 특성과 발병
@@ -1136,7 +1136,7 @@ Pyriculariaoryzae
 ✓다습, 산성 토양, 저온(16~21℃)에서 번식 (보수력 45% 이하 / 알칼리 토양에서 억제)
 ✓기주식물 : 무, 배추, 양배추 등
 
-![이미지](images/page042_img07.jpeg)
+![이미지](images/page042_img07.webp)
 
 ▸ 병징과 방제
 ✓ 병징
@@ -1148,19 +1148,19 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page043_img00.png)
+![이미지](images/page043_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
 
 
-![이미지](images/page043_img05.png)
+![이미지](images/page043_img05.webp)
 
 ▸ 과수에 발생하는병
 
 
 
-![이미지](images/page044_img00.png)
+![이미지](images/page044_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
@@ -1171,9 +1171,9 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 1. 배나무 검은무늬병(Black Spot) |
 
-![이미지](images/page044_img07.jpeg)
+![이미지](images/page044_img07.webp)
 
-![이미지](images/page044_img06.jpeg)
+![이미지](images/page044_img06.webp)
 
 ▸ 병원균 : Alternaria kikuchiana; 진균(불완전균류)
 ▸ 병 특성과 발병
@@ -1189,7 +1189,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page045_img00.png)
+![이미지](images/page045_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
@@ -1200,7 +1200,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 2. 배나무 붉은별무늬병(Rust) |
 
-![이미지](images/page045_img06.jpeg)
+![이미지](images/page045_img06.webp)
 
 ▸ 병원균 : Gymnosporangiumharaeanum; 진균(담자균류)
 ▸ 병 특성과 발병
@@ -1208,7 +1208,7 @@ Pyriculariaoryzae
 ✓녹포자는 5말~7월 향나무로 전반
 ✓향나무에서 겨울을 난포자퇴는 반드시 비가 와야 발생(6~8시간 이상, 13~20℃)
 
-![이미지](images/page045_img07.jpeg)
+![이미지](images/page045_img07.webp)
 
 ▸ 병징과 방제
 ✓ 병징
@@ -1220,7 +1220,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page046_img00.png)
+![이미지](images/page046_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
@@ -1231,7 +1231,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 3. 배나무, 사과나무 화상병(Fire Blight) |
 
-![이미지](images/page046_img06.jpeg)
+![이미지](images/page046_img06.webp)
 
 ▸ 병원균 : Glomerella cingulata; 세균
 ▸ 병 특성과 발병
@@ -1249,11 +1249,11 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page047_img00.png)
+![이미지](images/page047_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
-![이미지](images/page047_img07.jpeg)
+![이미지](images/page047_img07.webp)
 
 
 
@@ -1265,13 +1265,13 @@ Pyriculariaoryzae
 ✓ 방제 시기
 • 화상병은 방제가 어렵고 최근 들어 전국적 많이 발생
 
-![이미지](images/page047_img06.png)
+![이미지](images/page047_img06.webp)
 
-![이미지](images/page047_img08.jpeg)
+![이미지](images/page047_img08.webp)
 
 
 
-![이미지](images/page048_img00.png)
+![이미지](images/page048_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
@@ -1282,9 +1282,9 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 4. 복숭아 세균성 구멍병(Leaf Curl) |
 
-![이미지](images/page048_img06.jpeg)
+![이미지](images/page048_img06.webp)
 
-![이미지](images/page048_img08.jpeg)
+![이미지](images/page048_img08.webp)
 
 ▸ 병원균 : Xanthomonascampestris; 세균
 ▸ 병 특성과 발병
@@ -1292,7 +1292,7 @@ Pyriculariaoryzae
 ✓4월 말부터 강한 바람이나 폭풍우 후 발병 시작, 6~7월에 가장 심각
 ✓기주식물 : 복숭아, 자두, 살구 등
 
-![이미지](images/page048_img07.jpeg)
+![이미지](images/page048_img07.webp)
 
 ▸ 병징과 방제
 ✓ 병징
@@ -1304,7 +1304,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page049_img00.png)
+![이미지](images/page049_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
@@ -1315,16 +1315,16 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 5. 복숭아 잎오갈병(Leaf Curl) |
 
-![이미지](images/page049_img07.jpeg)
+![이미지](images/page049_img07.webp)
 
-![이미지](images/page049_img06.jpeg)
+![이미지](images/page049_img06.webp)
 
 ▸ 병원균 : Taphrinadeformans; 진균(자낭균류)
 ▸ 병 특성과 발병
 ✓분생포자 형태로 나무줄기/눈 위 월동. 빗물에 의해 전반
 ✓이른 봄에 한랭하고 비가 자주 오는 시기에 발생
 
-![이미지](images/page049_img08.jpeg)
+![이미지](images/page049_img08.webp)
 
 ✓주 발생기 : 잎이 나오기 시작~5월 상순
 ▸ 병징과 방제
@@ -1337,7 +1337,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page050_img00.png)
+![이미지](images/page050_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
@@ -1348,7 +1348,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 6. 사과나무 갈색무늬병(Blotch) |
 
-![이미지](images/page050_img06.jpeg)
+![이미지](images/page050_img06.webp)
 
 ▸ 병원균 : Diplocarponmali; 진균(자낭균류)
 ▸ 병 특성과 발병
@@ -1365,7 +1365,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page051_img00.png)
+![이미지](images/page051_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
@@ -1378,7 +1378,7 @@ Pyriculariaoryzae
 
 ▸ 병원균 : Venturiainaequalis(사과), V. nashicola(배); 진균(자낭균류) 발병조건
 
-![이미지](images/page051_img06.jpeg)
+![이미지](images/page051_img06.webp)
 
 ▸ 병 특성과 발병
 ✓균사/분생포자 형태로 병든 잎/가지에서 월동, 발병 적온 20℃ 정도
@@ -1386,7 +1386,7 @@ Pyriculariaoryzae
 ✓기주 식물 : 사과나무, 배나무
 ▸ 병징과 방제
 
-![이미지](images/page051_img07.jpeg)
+![이미지](images/page051_img07.webp)
 
 ✓ 병징
 • 잎, 햇가지, 열매꼭지(그을음 모양의 병무늬), 열매(검은색의 부정형 병반) 발병
@@ -1398,7 +1398,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page052_img00.png)
+![이미지](images/page052_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
@@ -1409,9 +1409,9 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 8. 사과 부란병(Canker) |
 
-![이미지](images/page052_img06.jpeg)
+![이미지](images/page052_img06.webp)
 
-![이미지](images/page052_img07.jpeg)
+![이미지](images/page052_img07.webp)
 
 ▸ 병원균 : Valsaceratosperma; 진균(자낭균류) 발병조건
 ▸ 병 특성과 발병
@@ -1419,7 +1419,7 @@ Pyriculariaoryzae
 ✓동해를 입거나 나무 세력이 약할 때 발생
 ✓전정/일소 등으로 입은 상처를 통해 전염
 
-![이미지](images/page052_img08.jpeg)
+![이미지](images/page052_img08.webp)
 
 ▸ 병징과 방제
 ✓ 병징
@@ -1430,7 +1430,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page053_img00.png)
+![이미지](images/page053_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 과수류 병(Fruit Disease)
 
@@ -1441,16 +1441,16 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 9. 대추나무 빗자루병(Witches Bloom) |
 
-![이미지](images/page053_img08.jpeg)
+![이미지](images/page053_img08.webp)
 
-![이미지](images/page053_img06.jpeg)
+![이미지](images/page053_img06.webp)
 
 ▸ 병원균 : Mycoplasma like organism (MLO)
 ▸ 병 특성과 발병
 ✓기주식물 : 대추나무(매개충 마름무늬매미충)
 ✓'천구소병' 이라 함.
 
-![이미지](images/page053_img07.jpeg)
+![이미지](images/page053_img07.webp)
 
 ▸ 병징과 방제
 ✓ 방제
@@ -1458,7 +1458,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page054_img00.png)
+![이미지](images/page054_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 화훼류(장미) 병(Rose Disease)
 
@@ -1466,11 +1466,11 @@ Pyriculariaoryzae
 
 ▸ 장미에 발생하는병
 
-![이미지](images/page054_img05.png)
+![이미지](images/page054_img05.webp)
 
 
 
-![이미지](images/page055_img00.png)
+![이미지](images/page055_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 화훼류(장미) 병(Rose Disease)
 
@@ -1481,7 +1481,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 1. 장미 노균병(Downy Mildew) |
 
-![이미지](images/page055_img06.jpeg)
+![이미지](images/page055_img06.webp)
 
 ▸ 병원균 : Peronosporasparsa; 진균
 ▸ 병 특성과 발병
@@ -1497,7 +1497,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page056_img00.png)
+![이미지](images/page056_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 화훼류(장미) 병(Rose Disease)
 
@@ -1508,9 +1508,9 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 2. 장미 흰가루병(Powdery Mildew) |
 
-![이미지](images/page056_img06.jpeg)
+![이미지](images/page056_img06.webp)
 
-![이미지](images/page056_img07.jpeg)
+![이미지](images/page056_img07.webp)
 
 ▸ 병원균 : Sphaerothecapannosa; 진균
 ▸ 병 특성과 발병
@@ -1520,7 +1520,7 @@ Pyriculariaoryzae
 ✓발병 적온 18~25℃, 습도 97~99% 일 때 발아가 가장 잘 됨
 ✓과다 질소 또는 적은 칼륨 비료 → 큰 피해 야기
 
-![이미지](images/page056_img08.jpeg)
+![이미지](images/page056_img08.webp)
 
 ▸ 병징과 방제
 ✓ 방제
@@ -1530,7 +1530,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page057_img00.png)
+![이미지](images/page057_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 화훼류(장미) 병(Rose Disease)
 
@@ -1541,9 +1541,9 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 3. 장미 잿빛곰팡이병(Botrytis Blight) |
 
-![이미지](images/page057_img06.jpeg)
+![이미지](images/page057_img06.webp)
 
-![이미지](images/page057_img07.jpeg)
+![이미지](images/page057_img07.webp)
 
 ▸ 병원균 : Botrytis cinorea; 진균
 ▸ 병 특성과 발병
@@ -1552,7 +1552,7 @@ Pyriculariaoryzae
 ✓잎 가장자리/끝에 데친 것 같은 변색된 병반이 오그라들며 잿빛곰팡이 밀생
 ✓병든 식물체에서 균사/균핵 상태 월동
 
-![이미지](images/page057_img08.jpeg)
+![이미지](images/page057_img08.webp)
 
 ✓다습한 환경 발생
 ▸ 병징과 방제
@@ -1562,7 +1562,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page058_img00.png)
+![이미지](images/page058_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 수목류 병(Tree Disease)
 
@@ -1573,19 +1573,19 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 1. 소나무재선충병(Pine Wilt Disease) |
 
-![이미지](images/page058_img06.jpeg)
+![이미지](images/page058_img06.webp)
 
 ▸ 병원균 : Bursaphelenchusxylophilus; 선충(nematode)
 ▸ 병 특성과 발병
 ✓기주 식물 : 소나무, 잣나무, 해송, 히말리아시다, 독일가문비, 젓나무, 낙엽송 등
 ✓매개충(vector) : 솔수염하늘소, 북방수염하늘소 등
 
-![이미지](images/page058_img08.jpeg)
+![이미지](images/page058_img08.webp)
 
 ▸ 병징과 방제
 ✓ 방제
 
-![이미지](images/page058_img07.jpeg)
+![이미지](images/page058_img07.webp)
 
 • 소나무 수간주사 : 에마멕틴 1.8% 유제(원액),
 에마멕틴벤조에이트(emamectin benzoate) 2.15%(원액) 방제
@@ -1594,7 +1594,7 @@ Pyriculariaoryzae
 
 
 
-![이미지](images/page059_img00.png)
+![이미지](images/page059_img00.webp)
 
 작물에 발생하는 주요 병들(각론) - 수목류 병(Tree Disease)
 
@@ -1605,7 +1605,7 @@ Pyriculariaoryzae
 | --- | --- |
 |  | 2. 참나무시들음병 |
 
-![이미지](images/page059_img06.jpeg)
+![이미지](images/page059_img06.webp)
 
 ▸ 병원균 : Raffaeleaquercusmangolicae; 진균
 ▸ 병 특성과 발병
@@ -1613,7 +1613,7 @@ Pyriculariaoryzae
 ✓참나무류로 신갈나무에서 피해가 가장 큼
 ✓광릉긴나무좀 암컷만이 참나무시들음병을 매개
 
-![이미지](images/page059_img07.jpeg)
+![이미지](images/page059_img07.webp)
 
 ▸ 병징과 방제
 ✓ 방제
