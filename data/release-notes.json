@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261029-4f1c6b2",
+    "date": "2026-10-29",
+    "notes": [
+      "[수정] 조제관리사 카드 아이콘 — 브랜드 로고와 동일한 wand-magic-sparkles → fa-flask [no-test]",
+      "[정리·release] v20261029-023be2d 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261029-023be2d",
     "date": "2026-10-29",
     "notes": [
@@ -224,15 +232,6 @@
       "[content] hairdresser manifest 스키마 정합 + desc 수치 교정",
       "[content] hairdresser(미용사/일반) 시험 파일럿 골격 추가",
       "[정리·release] v20261026-dd4548d 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261026-dd4548d",
-    "date": "2026-10-26",
-    "notes": [
-      "[빌드] 시험 배치 재정렬분 생성물 재생성",
-      "[content] 시험 배치 재정렬 — 정식·승격 준비순 (cosmetic→skincare→insadj→lossadj→broker→indsafe→admagent→appraisal)",
-      "[정리·release] v20261026-6a8d21c 스탬프 확정 [no-docs]"
     ]
   }
 ]
