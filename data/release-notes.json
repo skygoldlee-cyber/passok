@@ -1,5 +1,17 @@
 [
   {
+    "version": "v20261029-1db8199",
+    "date": "2026-10-29",
+    "notes": [
+      "[수정] passok-logo.png kebab-case — check:filenames 규약 정합 [no-test]",
+      "[기능] passok_logo.png 마스터 기준 브랜드 아이콘 재생성 — icon-192/512·maskable + 마스터 배포 제외 [no-test]",
+      "[되돌림] 브랜드 아이콘 파일명 icon-192.png 복원 — passok.png 명명 롤백, 풀컬러 192px 유지 [no-test]",
+      "[수정] passok.png 풀컬러 복구 — 팔레트 양자화 색 왜곡 제거, RGBA 리사이즈만 적용 [no-test]",
+      "[수정] 미디어 세션 아트워크도 passok.png — icon-192 잔존 참조 제거 [no-test]",
+      "[정리·release] v20261029-d57bcf9 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261029-d57bcf9",
     "date": "2026-10-29",
     "notes": [
@@ -214,22 +226,6 @@
       "[기능·itindeng,indsafeind] 실제 출제기준 과목 구조로 교정 + 출제 포인트 골격 [no-docs]",
       "[기능·eleceng,elecindeng] 출제기준 챕터 골격 + KOCW 전기기기·설비 소재 [no-docs]",
       "[기능·eleceng,elecindeng] 전기기사·전기산업기사 시험 팩 골격 + 출제기준 수집 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261027-8cbe760",
-    "date": "2026-10-27",
-    "notes": [
-      "[빌드] labor 팩 생성물 — registry·sw·webmanifest·인덱스",
-      "[정리] binary_allowlist tools/state 정위치 — 이론서 이미지 13건",
-      "[정리] 손해평가 이론서 대형 이미지 13건 binary_allowlist 등록",
-      "[기능·labor] 공인노무사 시험팩 온보딩 — 골격 + 1차 법령 ref_md 23건",
-      "[수정·broker] 교재 링크·번호체계 게이트 정합화",
-      "[content·broker] 과목2 민법 물권 조문 심화 장 추가 — 채권 장 11로 재번호",
-      "[content·broker] 과목4 국토이용법 계획체계·용도지역 지정 심화 — 초안 전반부 편입",
-      "[content·broker] 과목2 민법 채권·계약법 장 신설 — 시험범위 공백 해소",
-      "[content·broker] 과목4 국토이용법 개발행위허가 심화 — ai 초안 선별 편입",
-      "[content·broker] 과목7 중개실무 표준형 — Phase B 전과목 완료"
     ]
   }
 ]
