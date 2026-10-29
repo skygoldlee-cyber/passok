@@ -160,3 +160,7 @@ combo_baseline.json
 # ref_md 원문 보기의 이미지는 배포 대상에서 제외한다 (iteng 23.6만개·97%가 <3KB
 # 추출 조각). 프로덕션 원문 보기는 텍스트 기준으로 동작하고 이미지 링크는 404.
 content/exams/*/참조자료/ref_md/*/images/
+
+# ---------- 🖼️ 브랜드 로고 원본 마스터 (배포 제외 — icon-*.png만 서빙) ----------
+# icons/passok_logo.png(1254px)는 icon-192/512·maskable 생성용 마스터 — 배포 미포함
+icons/passok_logo.png
