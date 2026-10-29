@@ -113,7 +113,9 @@ export function applyExamBranding() {
     const logoIcon = document.querySelector('.logo-icon');
     if (logoMain) logoMain.textContent = (chosen && typeof exam.logoMain === 'string') ? exam.logoMain : 'PassOK';
     if (logoSub) logoSub.textContent = (chosen && typeof exam.logoSub === 'string') ? exam.logoSub : '';
-    if (logoIcon && exam.icon) logoIcon.className = `${exam.icon} logo-icon`;
+    // 로고 아이콘은 시험 icon으로 교체하지 않는다 — PassOK 브랜드 아이콘(wand-magic-sparkles)은
+    // 시험 무관 독립 정체성이어야 한다. 팩별 아이콘은 카드·manifest에만 적용.
+    if (logoIcon) logoIcon.className = 'fa-solid fa-wand-magic-sparkles logo-icon';
 
     // iOS 홈 화면 라벨 — 단일 앱 정책으로 'PassOK' 고정 (webmanifest name과 동일 정체성)
     const appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
