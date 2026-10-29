@@ -1,4 +1,5 @@
 """ref_md 이미지 jpeg/png → webp 재인코딩 + md/html 참조 갱신.
+@spec none (ref_md 이미지 webp 재인코딩 — 1회성 마이그레이션 도구)
 원본은 마스터로 저장소에 두고 .vercelignore로 배포 제외 (교재 webp 규약 동일)."""
 import os, sys
 from PIL import Image
