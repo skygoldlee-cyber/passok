@@ -80,6 +80,22 @@ function buildExamManifest(base, e) {
 }
 
 /**
+ * manifest icons src에 파일 콘텐츠 해시 `?v=` 스탬프 부여 — 아이콘 이미지가
+ * 바뀌면 URL이 갱신되어 OS 설치 아이콘 캐시·SW 캐시·브라우저 캐시를 전부 무효화.
+ * 배포 버전이 아닌 "이미지 내용" 해시라 불필요한 재설치 유도도 없다.
+ */
+function stampManifestIcons(manifest) {
+    if (!Array.isArray(manifest.icons)) return;
+    for (const icon of manifest.icons) {
+        const clean = String(icon.src).split('?')[0];
+        const p = path.join(ROOT, clean);
+        if (!fs.existsSync(p)) continue;
+        const h = crypto.createHash('md5').update(fs.readFileSync(p)).digest('hex').slice(0, 8);
+        icon.src = `${clean}?v=${h}`;
+    }
+}
+
+/**
  * 시험 콘텐츠 스탬프 (ES-07) — manifest.json 본문 sha1 단축.
  * 콘텐츠(과목·문항 선언·메타)가 바뀌면 스탬프가 바뀌어 런타임의
  * "콘텐츠 갱신" 배지 트리거로 쓰인다. 번들 생성 시 결정론적으로 계산.
@@ -127,6 +143,7 @@ function main() {
     // blob:/data: URL은 Chrome 설치 요건에서 유효하지 않은 스킴으로 판정되어
     // beforeinstallprompt가 발생하지 않으므로 반드시 실제 파일이어야 한다.
     const base = JSON.parse(fs.readFileSync(MANIFEST_TEMPLATE, 'utf-8'));
+    stampManifestIcons(base); // icons 배열은 시험별 manifest로 얕은 복사 — 1회 스탬프로 전부 반영
     const emitted = new Set();
     exams.exams.forEach(e => {
         const manifest = buildExamManifest(base, e);
