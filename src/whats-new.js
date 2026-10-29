@@ -63,7 +63,7 @@ export function showReleaseNotesModal(entries, title = '새로운 소식') {
     overlay.id = 'whats-new-overlay';
     overlay.innerHTML = `
         <div class="app-confirm-dialog dialog-card whats-new-dialog" role="dialog" aria-modal="true" aria-label="${esc(title)}">
-            <h3><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> ${esc(title)}</h3>
+            <h3><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> ${esc(title)}</h3>
             <div class="whats-new-body">${sectionsHtml}</div>
             <div class="app-confirm-actions">
                 <button class="app-confirm-ok">확인</button>
