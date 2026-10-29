@@ -1,5 +1,17 @@
 [
   {
+    "version": "v20261029-d57bcf9",
+    "date": "2026-10-29",
+    "notes": [
+      "[테스트·e2e] passok.png 전환·로고 브랜드 고정에 맞춰 기대치 갱신 [no-docs]",
+      "[정리] passok.png 최적화 — 1254px/1.3MB → 192px/5.9KB 팔레트 양자화 [no-test]",
+      "[리팩터링] 브랜드 아이콘 파일을 icons/passok.png로 명명 — 로고·브랜드 아이콘 전용 [no-test]",
+      "[수정] manifest 아이콘을 브랜드로 통일 — 팩별 PNG 세트 제거 [no-test]",
+      "[수정] 헤더 로고를 exam.icon 치환에서 분리 — 브랜드 아이콘 독립 유지 [no-test]",
+      "[정리·release] v20261029-b4bf115 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261029-b4bf115",
     "date": "2026-10-29",
     "notes": [
@@ -218,14 +230,6 @@
       "[content·broker] 과목2 민법 채권·계약법 장 신설 — 시험범위 공백 해소",
       "[content·broker] 과목4 국토이용법 개발행위허가 심화 — ai 초안 선별 편입",
       "[content·broker] 과목7 중개실무 표준형 — Phase B 전과목 완료"
-    ]
-  },
-  {
-    "version": "v20261026-7b7d26e",
-    "date": "2026-10-26",
-    "notes": [
-      "[스타일] 데스크탑 배경 레터박스 개선 — contain 전체 그림 + cover 뒤레이어로 여백 채움",
-      "[정리·release] v20261026-01f33dd 스탬프 확정 [no-docs]"
     ]
   }
 ]
