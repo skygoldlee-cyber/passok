@@ -35,6 +35,13 @@
         link.href = 'manifest.' + encodeURIComponent(exam.id) + '.webmanifest';
         // 파비콘(탭/홈 브랜드 아이콘)은 시험 아이콘으로 전환하지 않는다 —
         // PassOK 브랜드 아이콘은 시험 무관 독립 정체성이어야 한다 (팩별 아이콘은 카드·manifest에만).
+        // 다만 URL에 APP_VERSION 스탬프를 붙여 SW 프리캐시 키와 분리한다 —
+        // 구 SW 캐시가 하드 리프레시 후에도 구 아이콘을 서빙하는 문제를 배포마다 무효화.
+        const v = typeof window !== 'undefined' && window.APP_VERSION ? `?v=${window.APP_VERSION}` : '';
+        for (const sel of ['link[rel="icon"]', 'link[rel="apple-touch-icon"]']) {
+            const el = /** @type {HTMLLinkElement|null} */ (document.querySelector(sel));
+            if (el) el.href = `icons/icon-192.png${v}`;
+        }
 
         // 문서 제목/설명도 활성 시험 기준으로 갱신
         if (exam.title) document.title = exam.title;
