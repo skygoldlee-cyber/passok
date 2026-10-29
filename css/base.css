@@ -686,11 +686,9 @@ html {
 }
 
 .logo-icon {
-    font-size: 1.8rem;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
     filter: drop-shadow(0 2px 8px var(--primary-tint-40));
 }
 
