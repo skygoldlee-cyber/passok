@@ -130,6 +130,7 @@ npm.cmd run check:metasections         # 메타 섹션 규약 기준선 — 교�
 npm.cmd run check:glossarysignal       # 용어집 저신호 감시 기준선 — 자동 추출된 2~4자 일반명사 키워드의 통합검색 정의 카드 노출 감시 (BP-14, check:content 포함, --update=검토 후 기준선 갱신)
 npm.cmd run check:datafresh            # data/·생성물 ↔ 원본 신선도 — 빌드 체인 실행 후 git diff 비교·자동 원복 (생성물 경로가 clean이어야 실행 가능)
 npm.cmd run check:docs                  # README·AGENTS·docs/*.md 내 경로 참조 존재 검증 + 문서 ID 누락·중복 검증 + 디렉토리 구조 정합 (check_inventory) + npm 명령 정합 (check_npm_commands) + 플랜 키 정합 (check_plan_features) + 도메인 기능 플래그 정합 (check_feature_flags) + 저장소 접근 탐지 (check_storage_access) + 릴리스 노트 정합 (check_release_notes) + CI 패리티 (check_ci_parity) + 런북 정본 도달 (check_runbook_links)
+npm.cmd run check:webp                  # 배포 이미지 webp 강제 — 서빙 이미지는 .webp만 (png/jpg는 .vercelignore 마스터 또는 icons/tests/vendor 예외만, CI check:docs 포함)
 npm.cmd run check:inventory             # AGENTS.md 디렉토리 구조 트리 ↔ 실제 파일시스템 정합 (전 트리 존재성 + src/ 전수·css 목록 양방향 + N개 개수 표기) + ARCHITECTURE.md box 트리(├──/└──) 존재성
 npm.cmd run check:commands              # 문서의 npm 명령 인용 ↔ package.json 스크립트 양방향 정합
 npm.cmd run check:plan                  # feature-plan.json 키 ↔ 코드 사용(isProFeature·data-pro-feature·proFeatureNotice) ↔ 로드맵 문서 정합

@@ -64,6 +64,7 @@ const DOCS_STEPS = [
   nodeStep('docs:ciparity', 'tools/check/check_ci_parity.js', '문서', 'ci.yml 워크플로 ↔ check:ci 프리셋 양방향 정합'),
   nodeStep('docs:runbooks', 'tools/check/check_runbook_links.js', '문서', '런북 링크·앵커 정본 도달 검증 + WHEN_THINGS_BREAK 증상 행 커버리지'),
   nodeStep('docs:binary', 'tools/check/check_binary.js', '자산', '대형·외부화 대상 바이너리 신규 유입 차단 (참조자료 PDF·500KB+ 바이너리 — DOC-RBK-12 정착 가드)', { diffScoped: true, prio: 'p0' }),
+  nodeStep('docs:webp', 'tools/check/check_webp_only.js', '자산', '배포 이미지 webp 강제 — 서빙 이미지는 .webp만, png/jpg는 마스터(vercelignore)·예외만'),
 ];
 
 // ── 콘텐츠 의존성 단계 (check:content → content 프리셋) ────────────────
