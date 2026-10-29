@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261029-d195903",
+    "date": "2026-10-29",
+    "notes": [
+      "[기능] 랜딩 로고 PNG 교체 + pwa-manifest·테스트 icon-192 잔존 참조 정리 [no-test]",
+      "[수정] 로고 src passok-icon-192 — 리네임 누락으로 빈 이미지 [no-test]",
+      "[정리·release] v20261029-9967e24 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261029-9967e24",
     "date": "2026-10-29",
     "notes": [
@@ -208,16 +217,6 @@
       "[기능·compapp1,compapp2] 출제기준 ref_md 참조자료 편입 [no-docs]",
       "[기능·compapp1,compapp2] 컴퓨터활용능력 1·2급 시험 팩 골격 [no-docs]",
       "[정리·release] v20261028-b7ead45 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261028-b7ead45",
-    "date": "2026-10-28",
-    "notes": [
-      "[수정·pwa] 버전 프롬프트 innerHTML 이스케이프 — esc 싱크 게이트 [no-docs]",
-      "[정리] version-watch.js 도메인 맵 분류 등록 [no-docs]",
-      "[기능·pwa] 배포 버전 감시 → 새 버전 프롬프트로 수동 버튼 대체 + 게이트 대응 가이드 [no-docs]",
-      "[정리·release] v20261028-74a8f29 스탬프 확정 [no-docs]"
     ]
   }
 ]
