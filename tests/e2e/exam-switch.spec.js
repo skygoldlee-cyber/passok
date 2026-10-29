@@ -22,11 +22,12 @@ test.describe('비기본 시험(lossadj) 부팅 — 도메인 격리', () => {
     test('시험별 브랜딩 — 타이틀·로고·앱명이 손해평가사로 렌더된다', async ({ page }) => {
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
-        // applyExamBranding: title·로고가 exams.json lossadj 엔트리로 치환
+        // applyExamBranding: title·로고 텍스트가 exams.json lossadj 엔트리로 치환
+        // 로고 아이콘은 PassOK 브랜드 고정 (시험 icon 치환 제거 — 시험 무관 독립 정체성)
         await expect(page).toHaveTitle('PassOK — 농어업재해보험 손해평가사 (Passess)');
         await expect(page.locator('.logo-text h1')).toHaveText('PassOK');
         await expect(page.locator('.logo-text span')).toHaveText('손해평가사 · Passess');
-        await expect(page.locator('.logo-icon')).toHaveClass(/fa-tractor/);
+        await expect(page.locator('.logo-icon')).toHaveClass(/fa-wand-magic-sparkles/);
         // 저작권 표기는 플랫폼 귀속 — 시험과 무관하게 '© PassOK' 고정
         await expect(page.locator('.sidebar-footer-meta p').first()).toHaveText('© PassOK');
         // pwa-manifest.js가 실제 파일로 링크 교체 (단일 앱 id='passok' — 시험별 shortcuts·desc만 교체)
