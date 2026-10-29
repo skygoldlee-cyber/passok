@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261030-1583667",
+    "date": "2026-10-30",
+    "notes": [
+      "[수정] maskable 로고 110% — 캔버스 풀블리드로 흰 여백 제거 [no-test]",
+      "[정리·release] v20261030-2ba9355 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261030-2ba9355",
     "date": "2026-10-30",
     "notes": [
@@ -185,15 +193,6 @@
     "notes": [
       "[기능·exam-select] 인트로에 매뉴얼 링크 추가 — 상세설명 안내",
       "[정리·release] v20261028-5399835 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261028-5399835",
-    "date": "2026-10-28",
-    "notes": [
-      "[수정·pwa] whats-new 모달 webdriver 가드 — e2e 합성 이력 시드의 returning-user 오발화 차단",
-      "[수정·pwa] hardReload 직후 새로운 소식 모달 미표시 — INBOUND 플래그를 hadController 게이트로",
-      "[정리·release] v20261028-6dfadb5 스탬프 확정 [no-docs]"
     ]
   }
 ]
