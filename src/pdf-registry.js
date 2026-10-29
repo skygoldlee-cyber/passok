@@ -902,7 +902,7 @@ const _EXAM_TABLES = {
     "iteng": {
         contentRoot: "content/exams/iteng",
         SUBJECT_DIR_MAP: {
-
+        "정보처리기사 출제기준(한국산업인력공단)(2027)": "과목1"
         },
         REF_MD_SUBJECTS: {
 
