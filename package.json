@@ -59,6 +59,7 @@
     "check:docsync": "node tools/check/check_doc_sync.js",
     "check:testfirst": "node tools/check/check_test_first.js",
     "check:webp": "node tools/check/check_webp_only.js",
+    "check:navicons": "node tools/check/check_nav_icons.js",
     "check:inventory": "node tools/check/check_inventory.js",
     "check:commands": "node tools/check/check_npm_commands.js",
     "check:plan": "node tools/check/check_plan_features.js",
