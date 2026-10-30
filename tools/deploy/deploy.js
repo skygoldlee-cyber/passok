@@ -253,7 +253,7 @@ async function main() {
         const noiseFiles = changed().filter(p => {
             const stat = execFileSync('git', ['status', '--porcelain', '--', p], { encoding: 'utf8' }).trim();
             if (stat.startsWith('??')) return false;           // 신규 파일은 노이즈 아님
-            const diff = execFileSync('git', ['diff', '--', p], { encoding: 'utf8' });
+            const diff = execFileSync('git', ['diff', 'HEAD', '--', p], { encoding: 'utf8' });
             return isNoiseOnlyDiff(diff);
         });
         if (noiseFiles.length) git(`checkout -- ${noiseFiles.map(f => `"${f}"`).join(' ')}`);
