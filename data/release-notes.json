@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261030-1135269",
+    "date": "2026-10-30",
+    "notes": [
+      "[수정] 스탬프 3파일 재생성 후 무조건 되돌림 — HEAD 해시 내장으로 발생하는 영구 diff 루프 해소 [no-test]",
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[수정] 파생물 노이즈 판정 diff HEAD — 인덱스 대비 누락으로 스탬프 라인 재커밋되던 루프 해소 [no-test]",
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[테스트] DOM 기대치 갱신 — 사이드바 라벨 간결화 반영 [no-test]",
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[기능] 메뉴 아이콘 고유성 게이트 + 성분사전/백업 아이콘 중복 해소 — 설정·도움말 영역 포함 [no-test]",
+      "[기능] 퀴즈 아이콘 fa-clipboard-question — 도움말·매뉴얼 원형 마크와 구분 [no-test]",
+      "[기능] 사이드바 메뉴 라벨 간결화 — 개념 플래시카드→플래시카드, 기출 및 핵심 퀴즈→퀴즈 [no-test]",
+      "[리팩터링] deploy 파생물 노이즈 판정을 lib/git_status로 공유 — 하드코딩 목록 제거, check:datafresh와 단일 정본 [no-test]"
+    ]
+  },
+  {
     "version": "v20261030-a01cca4",
     "date": "2026-10-30",
     "notes": [
@@ -187,19 +203,6 @@
       "[수정] evictPackAssets 미사용 변수 제거 — ESLint 오류 [no-test]",
       "[기능·pwa] P-14 후속 — 팩 전환 시 구 팩 캐시 해제 + 다운로드 진행 표시 + 필터 테스트",
       "[기능·pwa] 팩별 지연 다운로드 (P-14) — 선택한 시험만 캐시 [no-test]"
-    ]
-  },
-  {
-    "version": "v20261029-31d0738",
-    "date": "2026-10-29",
-    "notes": [
-      "[성능·ci] 대형 트리 병목 게이트 가속 — FFFD 병렬I/O+diff-scope, 고아자산 토큰 인덱스화 [no-test]",
-      "[테스트] ai-textbook 출력 경로 검증을 시험별 초안 폴더 구조에 맞춰 갱신 [no-docs]",
-      "[수정] 도움말 변경 이력 아이콘 미표시 — fa-sparkles를 fa-wand-magic-sparkles로 [no-test]",
-      "[정리] pdf-registry 재생성 — iteng references.json subjectDirMap 반영",
-      "[기능·content] iteng 과목2 교재 본문 편입 — ai:textbook 초안 211청크",
-      "[기능·content] iteng NCS 학습모듈 55건 ref_md 편입 + 게이트 수정",
-      "[정리·release] v20261028-9780300 스탬프 확정 [no-docs]"
     ]
   }
 ]
