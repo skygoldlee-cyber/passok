@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 docs(landing): 히어로 차별점 스트립에 AI 학습 코치 추가
+
+- landing.template.html — 상단 요약 불릿(.landing-diff-strip)에 5번째 항목 "AI 학습 코치 — 오답 해설·주간 진단·계획 조언·교재 질의응답 (인용 근거 필수)" 추가 · landing.html 재조립
+
 ## 2026-10-30 test(ai): 학습 진단 AI 코칭 DOM 테스트 (AI-33/35/36)
 
 - tests/dom/study/study-aicoach.dom.test.js — 리듬 카드 AI 버튼 세션 게이트·주간 코칭·플랜 조정(여유 선택지 전송)·교재 질의(근거+인용·부재 조기 종료) 5건
