@@ -25,6 +25,16 @@ const EXAM_TARGET_R = 0.95;         // 시험일 목표 기억률 미달 판정
 export const EXAM_R_WINDOW_DAYS = 14;   // 최종 인출 큐 표시 D-day 윈도
 export const EXAM_R_SESSION_CAP = 60;   // 1회 세션 상한 — 크램 벽 방지
 
+// @spec AI-32
+// 콜드스타트 난이도 시딩 (휴면 훅) — window.DIFFICULTY_SEED[cardId]=1~10 시드 맵이 있으면
+// 신규 카드의 초기 난이도 D0를 시드값으로 대체한다. 시드 번들은 오프라인
+// `ai:seedcheck` valid 판정 후에만 제공되므로, 미제공 시 기존 D0(rating) 경로와 동일 (무영향).
+function _seedD0(cardId) {
+    const m = typeof window !== 'undefined' ? window.DIFFICULTY_SEED : null;
+    const v = m ? Number(m[cardId]) : NaN;
+    return Number.isFinite(v) ? Math.min(Math.max(1, v), 10) : null;
+}
+
 /** 구 SM-2 레코드를 FSRS v2로 지연 변환 (이미 v2면 그대로) */
 function _ensureV2(rec, todayStr) {
     if (!rec) return null;
@@ -66,6 +76,8 @@ export function updateCardSchedule(cardId, knew) {
     const rating = typeof knew === 'number' ? knew : (knew ? Rating.GOOD : Rating.AGAIN);
     const elapsed = current && current.lastReview ? Math.max(0, _daysBetween(todayStr, current.lastReview)) : 0;
     const next = fsrsReview(current, rating, elapsed);
+    const seedD = !current ? _seedD0(cardId) : null;
+    if (seedD !== null) next.d = seedD;
     const interval = nextInterval(next.s);
 
     const nextDate = new Date(today);

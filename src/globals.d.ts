@@ -81,6 +81,8 @@ declare global {
     supabase?: any;
     /** reader-audio.js 가 노출하는 재생 정지 함수 */
     stopReaderAudio?: () => void;
+    /** 콜드스타트 난이도 시드 맵 (AI-32 — cardId→D0 1~10, ai:seedcheck valid 후 제공, 휴면 훅) */
+    DIFFICULTY_SEED?: Record<string, number>;
   }
 
   /** data/id_migration.js 가 정의하는 전역(클래식 스크립트). state.js 가 typeof 가드로 참조. */

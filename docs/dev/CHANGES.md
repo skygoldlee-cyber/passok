@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(study): 난이도 시딩 런타임 훅 + conceptId 공유 설계 (AI-32)
+
+- spaced-repetition.js _seedD0 — window.DIFFICULTY_SEED[cardId](1~10) 제공 시 신규 카드의 D0만 대체 (기존 이력 카드·미제공 시 무영향 휴면 훅 — ai:seedcheck valid 판정 후 시드 번들 제공)
+- LEARNING_ALGORITHM_DESIGN §8 — conceptId 스케줄 공유(FSRS 큐 동적 변형) 설계 추가: 풀 d 시딩·s 문항별 유지·불변식 명시
+- SPEC AI-32 런타임 훅 문구 반영 · 유닛 테스트(시드 적용·미재적용·클램프)
+
 ## 2026-10-30 feat(ai): AI 코치 단계 5 — 난이도 시딩 오프라인 검증 하네스 (AI-32)
 
 - tools/ai/lib/difficulty.js 신설 — estimateDifficulty(ai_tag 정본 추출) + evaluateSeedAccuracy 순수 평가기 (버킷별 실측 오답률 단조성: valid/borderline/invalid/insufficient)

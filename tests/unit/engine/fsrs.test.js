@@ -189,6 +189,22 @@ test('ROAD-L7: updateCardSchedule은 4버튼 등급(1~4)을 직접 수용하고 
     assert.equal(updateCardSchedule('b2', false).r, Rating.AGAIN);
 });
 
+test('AI-32: DIFFICULTY_SEED 제공 시 신규 카드 D0만 시드값으로 대체 (휴면 훅)', () => {
+    // 시드 없음 → 기존 D0(G) 경로 그대로
+    assert.equal(updateCardSchedule('noseed', Rating.GOOD).d, initDifficulty(Rating.GOOD));
+    window.DIFFICULTY_SEED = { seeded_card: 8.5 };
+    const rec = updateCardSchedule('seeded_card', Rating.GOOD);
+    assert.equal(rec.d, 8.5);                    // 신규 카드 — 시드 적용
+    assert.notEqual(updateCardSchedule('seeded_card', Rating.GOOD).d, 8.5); // 기존 이력 카드는 미재적용
+    assert.equal(updateCardSchedule('unseeded', Rating.GOOD).d, initDifficulty(Rating.GOOD));
+    delete window.DIFFICULTY_SEED;
+    assert.equal(updateCardSchedule('after_seed', Rating.GOOD).d, initDifficulty(Rating.GOOD));
+    // 경계 클램프 — 범위 밖 시드는 1~10으로 제한
+    window.DIFFICULTY_SEED = { over: 99 };
+    assert.equal(updateCardSchedule('over', Rating.GOOD).d, 10);
+    delete window.DIFFICULTY_SEED;
+});
+
 test('ROAD-L7: previewCardReview가 4등급 예상 간격과 마지막 등급을 반환한다', () => {
     updateCardSchedule('prev', Rating.HARD);
     const { intervals, lastRating } = previewCardReview('prev');
