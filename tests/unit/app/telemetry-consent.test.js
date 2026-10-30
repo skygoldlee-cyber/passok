@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 import {
     isTelemetryAllowed, setTelemetryAllowed,
     isTelemetryNoticeShown, markTelemetryNoticeShown, getInstallId,
+    isAutomatedRuntime,
 } from '../../../src/telemetry/telemetry-consent.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 import { safeGetItem, safeSetItem } from '../../../src/state.js';
@@ -72,4 +73,10 @@ test('getInstallId: 기존 DEVICE_ID가 있으면 그대로 반환', () => {
     // sync.js·usage-stats가 먼저 만든 ID를 그대로 사용해야 한다
     safeSetItem(STORAGE_KEYS.DEVICE_ID, 'dev-existing');
     assert.equal(getInstallId(), 'dev-existing');
+});
+
+// ── 자동화 런타임 판정 (프로덕션 지표 오염 차단) ──────────────
+
+test('isAutomatedRuntime: Node 환경(navigator.webdriver·location 없음)은 false', () => {
+    assert.equal(isAutomatedRuntime(), false);
 });
