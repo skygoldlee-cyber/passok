@@ -34,7 +34,9 @@
     "tools/supabase/functions/feedback-notify/deno.d.ts",
     "tools/supabase/functions/feedback-notify/index.ts",
     "tools/supabase/functions/admin-bot/deno.d.ts",
-    "tools/supabase/functions/admin-bot/index.ts"
+    "tools/supabase/functions/admin-bot/index.ts",
+    "tools/supabase/functions/ai-proxy/deno.d.ts",
+    "tools/supabase/functions/ai-proxy/index.ts"
   ],
   "exclude": [
     "node_modules",

@@ -190,20 +190,17 @@ export function applyGrading(rubricItems, grading) {
    ========================================================= */
 
 /**
- * 답안 AI 채점 — 네트워크·키·파싱 오류를 code로 분기 (product-vision 패턴).
- * @param {object} q - WrittenQuestion
- * @param {string} answer - 수험생 답안
- * @param {object} [opts] - {signal?, fetchImpl?}
- * @returns {Promise<{ok:boolean, grading?:object, met?:boolean[], score?:number,
- *   model?:string, error?:string, code?:string}>}
+ * BYOK 공급자 직접 호출 — 등록된 키·공급자·모델로 LLM 텍스트 응답을 받는다.
+ * gradeAnswer의 호출부를 추출한 공용 경로 — ai-proxy 폴백(src/ai/ai-client.js)도
+ * 같은 공급자 계약으로 직접 호출한다 (AI-29). 응답 텍스트 해석은 호출부 몫.
+ * @param {string} system - 시스템 프롬프트
+ * @param {string} prompt - 사용자 프롬프트
+ * @param {object} [opts] - {signal?, fetchImpl?, maxTokens?}
+ * @returns {Promise<{ok:boolean, text?:string, model?:string, error?:string, code?:string}>}
  */
-export async function gradeAnswer(q, answer, opts = {}) {
+export async function callProviderLLM(system, prompt, opts = {}) {
     const key = getAiKey();
-    if (!key) return { ok: false, code: 'nokey', error: 'AI API 키가 설정되지 않았습니다 — 상단 "AI 채점 설정"에서 키를 등록하세요.' };
-    if (!answer || !answer.trim()) return { ok: false, code: 'noanswer', error: '채점할 답안을 먼저 작성하세요.' };
-    if (!q.rubricItems || !q.rubricItems.length) {
-        return { ok: false, code: 'norubric', error: '채점기준(rubric)이 없는 문항은 AI 채점을 지원하지 않습니다.' };
-    }
+    if (!key) return { ok: false, code: 'nokey', error: 'AI API 키가 설정되지 않았습니다.' };
     const prov = PROVIDERS[getAiProvider()];
     const model = getAiModel();
     const fetchImpl = opts.fetchImpl || (typeof fetch !== 'undefined' ? fetch : null);
@@ -215,12 +212,12 @@ export async function gradeAnswer(q, answer, opts = {}) {
         res = await fetchImpl(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', ...prov.headers(key) },
-            body: JSON.stringify(prov.buildBody(model, SYSTEM_PROMPT, buildGradingPrompt(q, answer), 1500)),
+            body: JSON.stringify(prov.buildBody(model, system, prompt, opts.maxTokens || 1500)),
             signal: opts.signal,
         });
     } catch (e) {
-        if (e instanceof Error && e.name === 'AbortError') return { ok: false, code: 'aborted', error: '채점이 취소되었습니다.' };
-        return { ok: false, code: 'network', error: '네트워크 연결을 확인하세요 — AI 채점에는 온라인이 필요합니다.' };
+        if (e instanceof Error && e.name === 'AbortError') return { ok: false, code: 'aborted', error: '요청이 취소되었습니다.' };
+        return { ok: false, code: 'network', error: '네트워크 연결을 확인하세요 — AI 호출에는 온라인이 필요합니다.' };
     }
     if (res.status === 400 || res.status === 401 || res.status === 403) {
         return { ok: false, code: 'key', error: 'API 키가 유효하지 않습니다 — 키를 다시 확인하거나 새로 발급하세요.' };
@@ -229,13 +226,32 @@ export async function gradeAnswer(q, answer, opts = {}) {
         return { ok: false, code: 'quota', error: '사용량 한도를 초과했습니다 — 잠시 후 다시 시도하세요.' };
     }
     if (!res.ok) {
-        return { ok: false, code: 'http', error: `채점 요청이 실패했습니다 (HTTP ${res.status}).` };
+        return { ok: false, code: 'http', error: `AI 요청이 실패했습니다 (HTTP ${res.status}).` };
     }
     let json;
     try { json = await res.json(); }
-    catch (e) { return { ok: false, code: 'unreadable', error: '채점 응답을 해석하지 못했습니다.' }; }
-    const grading = parseGradingResponse(prov.extract(json), q.rubricItems.length);
+    catch (e) { return { ok: false, code: 'unreadable', error: 'AI 응답을 해석하지 못했습니다.' }; }
+    return { ok: true, text: prov.extract(json), model };
+}
+
+/**
+ * 답안 AI 채점 — 네트워크·키·파싱 오류를 code로 분기 (product-vision 패턴).
+ * @param {object} q - WrittenQuestion
+ * @param {string} answer - 수험생 답안
+ * @param {object} [opts] - {signal?, fetchImpl?}
+ * @returns {Promise<{ok:boolean, grading?:object, met?:boolean[], score?:number,
+ *   model?:string, error?:string, code?:string}>}
+ */
+export async function gradeAnswer(q, answer, opts = {}) {
+    if (!getAiKey()) return { ok: false, code: 'nokey', error: 'AI API 키가 설정되지 않았습니다 — 상단 "AI 채점 설정"에서 키를 등록하세요.' };
+    if (!answer || !answer.trim()) return { ok: false, code: 'noanswer', error: '채점할 답안을 먼저 작성하세요.' };
+    if (!q.rubricItems || !q.rubricItems.length) {
+        return { ok: false, code: 'norubric', error: '채점기준(rubric)이 없는 문항은 AI 채점을 지원하지 않습니다.' };
+    }
+    const res = await callProviderLLM(SYSTEM_PROMPT, buildGradingPrompt(q, answer), opts);
+    if (!res.ok) return res;
+    const grading = parseGradingResponse(res.text ?? '', q.rubricItems.length);
     if (!grading) return { ok: false, code: 'unreadable', error: '채점 결과를 해석하지 못했습니다 — 다시 시도해 보세요.' };
     const { met, score } = applyGrading(q.rubricItems, grading);
-    return { ok: true, grading, met, score, model };
+    return { ok: true, grading, met, score, model: res.model };
 }

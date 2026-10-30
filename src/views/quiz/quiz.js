@@ -20,6 +20,7 @@ import { apportionByWeight, examWeightBySubject } from '../../study/study-tracke
 import { shuffle } from '../../utils.js';
 import { showToast, vibrate, HAPTIC } from '../../ui-utils.js';
 import { suggestWrongCauseKey, recordDiagnosticP0 } from '../personalization-view.js';
+import { aiFeedbackAvailable, requestWrongFeedback } from '../../ai/ai-client.js';
 
 /**
  * 퀴즈 오답 후 피드백 패널에 "틀린 이유" 자가 태깅 버튼을 표시한다.
@@ -485,6 +486,7 @@ export function renderQuizResult() {
                 const cite = _citationForQuiz(s.quizId);
                 const item = document.createElement('div');
                 item.className = 'quiz-review-item';
+                item.dataset.aiItem = s.quizId;
                 item.innerHTML = `
                     <div style="font-size:0.85rem; color:var(--color-text-muted); margin-bottom:0.3rem;">Q${idx + 1}</div>
                     <p style="font-size:0.9rem; margin-bottom:0.4rem;">${safeTextWithBreaks(s.question)}</p>
@@ -503,16 +505,61 @@ export function renderQuizResult() {
                         <button type="button" class="wrong-relearn-btn" data-click="wrongActionCard" data-args='["${esc(itemId)}"]'><i class="fa-solid fa-note-sticky"></i> 복습 노트</button>
                         <button type="button" class="wrong-relearn-btn" data-click="wrongActionTextbook" data-args='["${esc(subjectForWeakItem(itemId, state.quiz.subject))}"]'><i class="fa-solid fa-book-open"></i> 교재 보기</button>
                         <button type="button" class="wrong-relearn-btn" data-click="wrongActionSimilar" data-args='["${esc(s.quizId)}"]'><i class="fa-solid fa-layer-group"></i> 유사 문제</button>
+                        <button type="button" class="wrong-relearn-btn ai-feedback-btn is-hidden" data-click="requestAiFeedback" data-args='["${esc(s.quizId)}"]'><i class="fa-solid fa-wand-magic-sparkles"></i> AI 해설</button>
                     </div>
+                    <div class="ai-feedback-slot"></div>
                 `;
                 reviewListEl.appendChild(item);
             });
+            // AI 해설 버튼은 로그인 세션 또는 BYOK 키가 있을 때만 노출 (AI-27/29 — 미로그인 은닉)
+            void aiFeedbackAvailable().then(ok => {
+                if (!ok) return;
+                reviewListEl.querySelectorAll('.ai-feedback-btn')
+                    .forEach(b => b.classList.remove('is-hidden'));
+            }).catch(() => {});
         }
     }
 
     // 진단 평가 모드 — 과목별 약점 프로파일을 오답 리뷰 위에 삽입
     if (quizState.diagnostic) {
         _renderDiagnosticProfile(reviewListEl);
+    }
+}
+
+/**
+ * 오답 항목 "AI 해설" 요청 (AI-27) — 문항·오답·정답·교재 근거를 구조화 인자로
+ * 보내 1~2문장 해설을 인라인 표시한다. 결과는 `AI 생성` 배지를 단다.
+ */
+export async function requestAiFeedback(quizId) {
+    const solved = (state.quiz.solvedList || []).find(x => x.quizId === quizId);
+    const slot = document.querySelector(`#quiz-review-list [data-ai-item="${CSS.escape(quizId)}"] .ai-feedback-slot`);
+    if (!solved || !slot) return;
+    const itemEl = slot.closest('.quiz-review-item');
+    const btn = /** @type {HTMLButtonElement|null} */ (itemEl?.querySelector('.ai-feedback-btn'));
+    if (btn) btn.disabled = true;
+
+    const q = (state.quiz.data || []).find(x => x.id === quizId);
+    const cite = _citationForQuiz(quizId);
+    const input = {
+        question: solved.question,
+        selected: solved.selected,
+        correct: solved.correctAnswer,
+        ...(Array.isArray(q?.options) && q.options.length ? { options: q.options } : {}),
+        ...(cite ? { citation: cite.source ? `${cite.source} (${cite.section})` : cite.section } : {}),
+    };
+
+    slot.innerHTML = '<p class="ai-feedback-loading"><i class="fa-solid fa-spinner fa-spin"></i> AI가 오답을 분석하고 있습니다…</p>';
+    const res = await requestWrongFeedback(input);
+    if (res.ok) {
+        slot.innerHTML = `<div class="ai-feedback">
+            <p class="ai-feedback-text">${safeTextWithBreaks(res.explain)}</p>
+            ${res.confused ? `<p class="ai-feedback-confused">혼동 개념: <strong>${esc(res.confused)}</strong></p>` : ''}
+            <span class="ai-badge" title="AI가 생성한 해설입니다 — 오류가 있을 수 있습니다">AI 생성</span>
+        </div>`;
+    } else {
+        slot.innerHTML = `<p class="ai-feedback-error">${esc(res.error || 'AI 해설을 불러오지 못했습니다.')}</p>`;
+        // 쿼터 소진은 재시도가 무의미 — 나머지 실패는 재시도 허용
+        if (btn && res.code !== 'quota') btn.disabled = false;
     }
 }
 

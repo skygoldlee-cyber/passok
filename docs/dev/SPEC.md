@@ -648,12 +648,12 @@
 | AI-22 | 카드 제외 정본 `content/exams/<id>/피드백/card_exclude.json`(cardId→사유) — 추출 오염·근거 부재 카드를 `DataLoader.loadSubject`가 파싱 후 목록에서 제거. `ai:cards`도 동일 목록을 대상에서 제외 (AI-19와 동형 오버레이). 정본 없으면 제외 없음 | ✅ |
 | AI-23 | 배치 채택률 계측 — `writeDraft`가 초안 본문 해시(`sha=`)를 메타에 기록, `ai:apply --write`가 초안 파일 단위 {생성·편입·스킵·리뷰수정 여부·모델·생성일}을 추적 파일 `tools/ai/adoption_log.jsonl`에 append. `ai:adoption`이 배치별·누적 채택률 리포트 (설계 §3.1 L1 승격 판단 데이터) | ✅ |
 | AI-24 | `ai:textbook` — 참조자료 ref_md 청크(조문 경계 `^제N조` 분할, 조문 없는 문서는 고정폭 창) → 교재 본문 섹션 초안. `scaffold:chapter`(BP-15)의 `<!-- 작성: 본문 -->` 슬롯 채우기용 — 📌출처·원문 보기 블록은 LLM이 아니라 도구가 결정론 생성해 "편입용 블록"으로 첨부 (CS-11 형식). 자기검증: 생성 본문의 제N조 언급이 청크 원문에 없으면 [폐기 후보] 표시 | ✅ |
-| AI-25 | `ai-proxy` Supabase Edge Function — 로그인 JWT 검증 + kind별 고정 프롬프트 라우팅 + 서버측 `GOOGLE_API_KEY`(Function 시크릿)로 Gemini 호출 프록시. 런타임 AI의 서버 진입점 (설계: AI_COACH_DESIGN.md §3) | 미구현 |
-| AI-26 | `ai_usage` 일일 쿼터 — 로그인 사용자×kind별 일일 호출 카운터 테이블. RLS 전면 차단·service-role만 기록, Free는 일일 한도·Pro(`pro_codes` 자격)는 무제한, 초과 시 429+잔여 안내 | 미구현 |
-| AI-27 | 오답 맞춤 피드백 — 퀴즈 오답 항목에 "AI 해설 보기" 버튼, 오판 진술·정답·인용 근거를 서버 템플릿으로 보내 1~2문장 해설을 결과 화면에 인라인 표시 + `AI 생성` 배지 | 미구현 |
-| AI-28 | `ai_feature` 사용 계측 — 기능 종류·성공/실패·캐시 히트만 usage_events로 집계(내용 미수집), allowlist 확장 필요. 서버키/BYOK 도달률 실측 근거 | 미구현 |
-| AI-29 | 서버 키 폴백 정책 — ai-proxy 실패·미로그인 시 기존 BYOK(`written-grading.js` 패턴) 경로로 순차 폴백, 둘 다 불가 시 해당 기능 무표시 | 미구현 |
-| AI-30 | 프롬프트 고정 템플릿 — v1 런타임 AI는 자유 사용자 입력 채널 없이 고정 템플릿+구조화 인자만 허용 (인젝션·남용 구조적 차단), JSON 스키마 강제 출력 | 미구현 |
+| AI-25 | `ai-proxy` Supabase Edge Function — 로그인 JWT 검증 + kind별 고정 프롬프트 라우팅 + 서버측 `GOOGLE_API_KEY`(Function 시크릿)로 Gemini 호출 프록시. 런타임 AI의 서버 진입점 (설계: AI_COACH_DESIGN.md §3) | ✅ |
+| AI-26 | `ai_usage` 일일 쿼터 — 로그인 사용자×kind별 일일 호출 카운터 테이블. RLS 전면 차단·service-role만 기록(`ai_usage_consume` RPC 원자 증가), Free는 `AI_FREE_DAILY`(기본 10)·Pro(profiles.plan 자격)는 무제한, 초과 시 429+잔여 안내 | ✅ |
+| AI-27 | 오답 맞춤 피드백 — 퀴즈 오답 항목에 "AI 해설" 버튼, 오답·정답·선지·교재 근거를 서버 템플릿으로 보내 1~2문장 해설을 결과 화면에 인라인 표시 + `AI 생성` 배지 | ✅ |
+| AI-28 | `ai_feature` 사용 계측 — 기능 종류·성공/실패·캐시 히트·경로(server/byok)만 usage_events로 집계(내용 미수집). 서버키/BYOK 도달률 실측 근거 | ✅ |
+| AI-29 | 서버 키 폴백 정책 — ai-proxy 실패·미로그인 시 기존 BYOK(`written-grading.js`의 `callProviderLLM`) 경로로 순차 폴백, 둘 다 불가 시 해당 기능 무표시. 쿼터(429)는 폴백 대상 아님 | ✅ |
+| AI-30 | 프롬프트 고정 템플릿 — v1 런타임 AI는 자유 사용자 입력 채널 없이 고정 템플릿+구조화 인자만 허용 (인젝션·남용 구조적 차단), JSON 스키마 강제 출력 | ✅ |
 
 ### 3.28 주관식 연습 자기채점 (Written Practice)
 

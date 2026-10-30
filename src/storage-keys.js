@@ -191,6 +191,9 @@ export const STORAGE_KEYS = {
 
   // 세션 (sessionStorage)
   INAPP_GUIDE_SHOWN: '__inappGuideShown',
+
+  // 런타임 AI 응답 캐시 접두사 (ai-client.js) — 콘텐츠 해시별 캐시, 백업·동기 제외
+  AI_CACHE_PREFIX: 'ai_cache_',
 };
 
 // 백업/복원 대상 정적 키 목록 (동적 키는 DAILY_COMPLETED_PREFIX로 별도 처리)

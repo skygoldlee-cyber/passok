@@ -1,5 +1,15 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(ai): AI 코치 단계 1 — 서버 경유 오답 AI 해설 (AI-25~30)
+
+- tools/supabase/functions/ai-proxy 신설 — 로그인 JWT 수동 검증(--no-verify-jwt, 게이트웨이 선검증만 해제) → ai_usage_consume RPC 원자 쿼터(Free AI_FREE_DAILY 기본 10/Pro 무제한·초과 429+잔여) → kind별 고정 템플릿(AI-30) → Gemini generateContent(JSON 스키마 강제) 프록시. 프롬프트·응답 본문 미로깅
+- tools/supabase/schema.sql — ai_usage(user_id·day·kind·count) 테이블: RLS 정책 부재 = 클라이언트 전면 차단·service-role 전용 RPC + day 인덱스. check:rls 프로브(select·insert 차단) 추가
+- src/ai/ai-client.js — 세션 JWT·kind·구조화 인자 전송, 10s 타임아웃, 콘텐츠 해시 응답 캐시(ai_cache_, 30일·100키 상한·초기화 시 정리), 서버 실패·미로그인 시 BYOK(callProviderLLM) 폴백(429 쿼터는 폴백 제외), ai_feature 계측(종류·성공/실패·캐시·경로만)
+- src/written/written-grading.js — 공급자 직접 호출부를 callProviderLLM으로 추출해 ai-client 폴백과 계약 공유 (gradeAnswer는 위임 래퍼로 축소)
+- src/views/quiz/quiz.js — 오답 항목 "AI 해설" 버튼 + 인라인 해설·혼동 개념·AI 생성 배지 (로그인 세션 또는 BYOK 키 있을 때만 노출) + css/study.css 스타일 + sw.js 프리캐시 등록
+- usage-telemetry.js ai_feature allowlist · PRIVACY_POLICY §1.2·§5 서버 경유 명시 개정 · SPEC AI-25~30 ✅ 전환
+- 테스트: tests/dom/study/ai-feedback.dom.test.js(쿼터 초과·미로그인·성공 3분기) + tests/unit/engine/ai-client.test.js
+
 ## 2026-10-30 feat(sec): DA-17 신설 — 콘텐츠 워터마크 파이프라인
 
 - tools/lib/watermark.js: 콘텐츠 해시+경로 sha256 지문을 HTML 주석으로 본문 말미에 삽입 (결정적 — 신선도 게이트 정합) — encodeFiles/encodeText 경로 인자로 전 생성기 적용

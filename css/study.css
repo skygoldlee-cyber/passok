@@ -576,6 +576,46 @@
     border: 1px solid var(--warning-tint-20);
 }
 
+/* AI 오답 해설 (AI-27 — quiz.js 결과 패널의 .ai-feedback-slot에 인라인 렌더) */
+.ai-feedback-loading,
+.ai-feedback-error {
+    margin-top: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+}
+
+.ai-feedback {
+    margin-top: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    background: var(--bg-muted);
+}
+
+.ai-feedback-text {
+    font-size: 0.85rem;
+    color: var(--color-text-main);
+    line-height: 1.5;
+}
+
+.ai-feedback-confused {
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}
+
+.ai-badge {
+    display: inline-block;
+    margin-top: 0.4rem;
+    padding: 0.1rem 0.45rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    border-radius: var(--radius-pill);
+    background: var(--color-primary);
+    color: var(--color-on-brand);
+}
+
 /* 오답 패턴 요약 (복습 노트 상단) */
 .wrong-cause-summary {
     grid-column: 1 / -1;

@@ -4,7 +4,7 @@
 > **문서 ID**: DOC-DSN-40
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: `AI-25~30`(신규 제안 — 본 문서 §2) · `PAY-03~07`(Pro 게이트) · `AU-08`(로그인 세션) · `UX-MET-05~08`(계측)
-> **상태**: 📋 설계 확정 대기 — §5 단계 1만 초기 구현 범위
+> **상태**: ✅ 단계 1 구현 완료 (2026-10-30) — ai-proxy 배포·ai_usage 프로덕션 적용·클라이언트/계측/방침 반영. 단계 2부터는 §5 배치 참조
 
 ## 1. 배경·결정 요약
 
@@ -30,7 +30,7 @@
 
 ```
 src/views/quiz 결과 화면
-  └─ src/ai/ai-client.js (신규) — 세션 JWT + kind + 인자 전송
+  └─ src/ai/ai-client.js — 세션 JWT + kind + 인자 전송
        └─ POST {SUPABASE_URL}/functions/v1/ai-proxy
             ├─ Authorization: <user JWT> 검증 (미로그인 401)
             ├─ ai_usage 쿼터 확인·증가 (service-role, Free N/일 · Pro 무제한)
@@ -42,8 +42,8 @@ src/views/quiz 결과 화면
 
 | 컴포넌트 | 위치 | 역할 |
 |---|---|---|
-| `ai-client.js` | `src/ai/` 신규 | 프록시 호출 래퍼 — 세션 토큰 첨부·타임아웃(10s)·콘텐츠 해시 캐시(localStorage)·폴백 분기 |
-| `ai-proxy` Edge Function | `supabase/functions/ai-proxy/` | JWT 검증 → 쿼터 → kind 라우팅 → Gemini `generateContent` → JSON 응답. 자유 텍스트 인자는 길이 제한(문항 본문만 허용) |
+| `ai-client.js` | `src/ai/` | 프록시 호출 래퍼 — 세션 토큰 첨부·타임아웃(10s)·콘텐츠 해시 캐시(localStorage)·폴백 분기 |
+| `ai-proxy` Edge Function | `tools/supabase/functions/ai-proxy/` | JWT 검증 → 쿼터 → kind 라우팅 → Gemini `generateContent` → JSON 응답. 자유 텍스트 인자는 길이 제한(문항 본문만 허용) |
 | `ai_usage` 테이블 | `schema.sql` 추가 | `(user_id, day, kind, count)` — upsert 증가, SELECT/INSERT/UPDATE 모두 RLS 차단(service-role만), `day` 인덱스 |
 | 피드백 표시부 | `src/views/quiz/quiz.js` 결과 패널 | 오답 항목에 "AI 해설 보기" 버튼 → 생성 결과 인라인 + `AI 생성` 배지 |
 
@@ -101,19 +101,19 @@ v1의 `kind`는 `wrong_feedback` 하나. 서버가 조립하는 입력:
 
 신규 SPEC 후보 (구현 착수 시 등록): AI-31 변형 문항 · AI-32 난이도 시딩 · AI-33 자연어 진단 · AI-34 약점 미니퀴즈 · AI-35 플랜 조정 · AI-36 교재 질의응답
 
-### 구현 체크리스트 (단계 1)
+### 구현 체크리스트 (단계 1 — 2026-10-30 완료)
 
-1. `schema.sql`: `ai_usage` 테이블 + RLS 정책 + `day` 인덱스 → 프로덕션 적용 후 `check:rls` 프로브 추가
-2. `supabase/functions/ai-proxy/index.ts` — JWT 검증·쿼터·템플릿·Gemini 호출
-3. `src/ai/ai-client.js` — 호출 래퍼 + 캐시 + `AI 생성` 배지 렌더
-4. `src/views/quiz/quiz.js` — 오답 항목 "AI 해설 보기" 버튼 (로그인+기능 사용 가능 시에만 표시)
-5. `usage-telemetry.js` — `ai_feature` 이벤트 allowlist 추가
-6. `PRIVACY_POLICY.md` — §1.2·§5 개정 + 문서 번들 재생성
-7. DOM 테스트 — 쿼터 초과·미로그인·성공 경로 3분기
+1. ✅ `schema.sql`: `ai_usage` 테이블 + RLS 정책 + `day` 인덱스 + `ai_usage_consume` RPC → 프로덕션 적용·`check:rls` 프로브 추가 완료
+2. ✅ `tools/supabase/functions/ai-proxy/index.ts` — JWT 검증·쿼터·템플릿·Gemini 호출
+3. ✅ `src/ai/ai-client.js` — 호출 래퍼 + 캐시 + 서버→BYOK 폴백 분기
+4. ✅ `src/views/quiz/quiz.js` — 오답 항목 "AI 해설" 버튼 + 결과 인라인 표시·`AI 생성` 배지 (로그인+기능 사용 가능 시에만 표시)
+5. ✅ `usage-telemetry.js` — `ai_feature` 이벤트 allowlist 추가
+6. ✅ `PRIVACY_POLICY.md` — §1.2·§5 개정 + 문서 번들 재생성
+7. ✅ 테스트 — `tests/dom/study/ai-feedback.dom.test.js` (쿼터 초과·미로그인·성공 경로) + `tests/unit/engine/ai-client.test.js`
 
 ## 6. 미결정·리스크
 
-- **Pro 자격 조회 경로**: `pro_codes` 테이블 직접 조회 vs `hasProEntitlement` 동등 서버 로직 — Edge Function은 서비스 키로 `pro_codes` 조회가 정합
-- **비용 누적 상한**: 일일 총 호출 상한(전 사용자 합) — 운영 측 예산 알림 외에 Function 내 글로벌 일일 상한을 둘지 (초기엔 모니터링만)
-- **폴백 UX**: 미로그인 시 "로그인하면 AI 해설" 유도 버튼 vs 완전 은닉 — 초기는 은닉 (광고성 UI 지양)
-- **모델 버전**: `gemini-flash` 계열 고정 — 모델명은 Function env로 관리해 앱 배포 없이 교체 가능하게
+- ~~**Pro 자격 조회 경로**~~ → 확정: `profiles.plan`+`pro_expires_at`을 service-role로 조회 (redeem_code RPC가 갱신하는 정본 — SPEC AI-26)
+- **비용 누적 상한**: 일일 총 호출 상한(전 사용자 합) — 운영 측 예산 알림 외에 Function 내 글로벌 일일 상한을 둘지 (초기엔 모니터링만 — 출력 토큰 상한 MAX_OUTPUT_TOKENS=400과 사용자별 쿼터만 적용됨)
+- ~~**폴백 UX**~~ → 확정: 은닉 — 버튼은 로그인 세션 또는 BYOK 키가 있을 때만 노출(`aiFeedbackAvailable`), 로그인 유도 UI 없음
+- ~~**모델 버전**~~ → 확정: `GEMINI_MODEL` Function env로 관리 (기본 `gemini-3.8-flash`) — 앱 재배포 없이 시크릿 교체로 모델 변경

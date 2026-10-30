@@ -312,6 +312,7 @@ passok/
 │   ├── auth-sync/supabase-client.js  #   Supabase lazy init — vendor UMD 동적 로드
 │   ├── auth-sync/auth-view.js        #   계정/로그인 모달 (이메일+PW·회원가입·매직링크 OTP)
 │   ├── auth-sync/sync.js             #   클라우드 스냅샷 동기화 (sync_snapshots push/pull, Pro entitlement 게이트 — canCloudSync)
+│   ├── ai/ai-client.js               #   ai-proxy Edge Function 호출 래퍼 — 세션 JWT·타임아웃·해시 캐시·BYOK 폴백 (AI-25~30)
 │   ├── content/csv-utils.js            #   CSV 파서·EUC-KR 폴백·BOM 직렬화 (공용)
 │   ├── content/unpack.js               #   pk1 번들 디코더 (DA-16 콘텐츠 비평문화)
 │   ├── exams/                  #   시험 도메인 모듈 격리 (DA-13) — 시험 전용 실행 코드
@@ -474,6 +475,7 @@ passok/
 │   │   ├── verify_shell_assets.js  #   프리캐시 파일 존재 CI 검증
 │   │   └── audit_card_quality.js   #   카드 품질 자동 감사 (npm run audit:cards)
 │   ├── sync/                   #   콘텐츠 동기화 (sync_citation_lines·sync_textbook_files — build:data에 통합)
+│   ├── supabase/               #   DB 스키마·프로비저닝 SQL (schema.sql — check:supabase·check:rls 대상) + functions/ Edge Function 정본 (admin-bot·feedback-notify·ai-proxy)
 │   └── deploy/                 #   배포 가드 (deploy.js — npm run deploy)
 │
 ├── ref-pipeline/               # 교재·참조자료 생성/변환 독립 도구함 (Python — 저장소와 무관하게 실행)
@@ -605,6 +607,7 @@ passok/
 | [`src/reader/exam-viewer.js`](../../src/reader/exam-viewer.js) | 문제집(MD) 런타임 뷰어. `content/exams/cosmetic/문제은행/*.md` fetch → 자체 MD→HTML 변환 → 인앱 전체화면 오버레이 렌더링. TOC 생성·인쇄·sessionStorage 캐시(24h)·`file://` 번들 폴리백(`data/exams/cosmetic/exams_md/*.js`) 지원. **시험 제목은 registry에서 동적 조회** (하드코딩 없음) |
 | [`src/pro/pro-upgrade.js`](../../src/pro/pro-upgrade.js) | Pro 안내·entitlement 계층. 루트 `feature-plan.json`을 `loadFeaturePlan()`으로 로드 → 기능별 `pro`/`free` 판정(`isProFeature`). `pro` 기능은 진입 시 1회 정보 모달(`proFeatureNotice`, 기능별 seen 플래그) + `.pro-badge[data-pro-feature]` 배지 표시, `free`는 배지·안내 제거. 스토어 한도 오류(`Free 플랜` 접두사)는 `showStoreError` → `showUpgradeNotice` 업그레이드 모달로 분기. **entitlement**: `hasProEntitlement()`는 `pro_entitled` 로컬 플래그 참조(ROAD-P1 서버 검증 전 임시 시임), `canCloudSync()` = 플랜 free면 전원·pro면 entitlement 필요 — sync.js가 호출 |
 | [`src/telemetry/usage-stats.js`](../../src/telemetry/usage-stats.js) | 로컬 사용 카운터 (ROAD-L5 — 유료가치 판정 데이터). `switchView`의 `trackView(viewId)`로 화면별 진입·`trackAction(key)`로 기능 액션 횟수를 `usage_stats` **GLOBAL 키**에 누적 — `days` 맵은 90일 상한. **유저 단위**: `owner`에 익명 `device_id` 기록 — 로그인 없는 프로모션 기간에는 기기=유저로 근사, 시험 전환해도 누적 유지. **로컬 전용**: 백업·클라우드 동기화 제외(`RESET_KEYS`에는 포함 — 전체 초기화 시 삭제). **판정**: `VALUE_ACTIONS`(오답→교재/노트/유사문제·진단 평가·이야기형·맞춤 리포트·실제 결과 보고) 합계 ≥ `PRO_VALUE_THRESHOLD=20`이면 `isValueThresholdMet()` — ROAD-P1 착수 근거. `command_palette`·`plan_compare` 등 편의 액션은 표시만 하고 판정 제외. 설정 '내 사용 통계'(`showUsageStats`)에서 첫/최근 사용일·활동 일수·화면별/기능별 횟수·판정 진행 표 + 초기화 버튼 |
+| [`src/ai/ai-client.js`](../../src/ai/ai-client.js) | 런타임 AI 호출 래퍼 (AI-25~30 — AI_COACH_DESIGN.md). `tools/supabase/functions/ai-proxy` Edge Function에 세션 JWT·kind·구조화 인자 전송(자유 입력 없음 — 고정 템플릿 계약, AI-30), 타임아웃(10s)·콘텐츠 해시 응답 캐시(localStorage). 실패·미로그인 시 BYOK(`written-grading.js`의 `callProviderLLM`) 경로로 순차 폴백(AI-29 — 429 쿼터 초과는 폴백 제외), `ai_feature` 계측 발행(AI-28). 결과 표시·`AI 생성` 배지는 `src/views/quiz/quiz.js` 결과 패널이 담당 |
 
 ### 3. Data Layer (데이터 계층)
 

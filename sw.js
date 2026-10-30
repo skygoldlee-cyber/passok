@@ -113,6 +113,7 @@ const SHELL_ASSETS = [
   './src/views/score-estimate.js',
   './src/views/subject-stats.js',
   './src/views/flashcard.js',
+  './src/ai/ai-client.js',
   './src/views/quiz/quiz.js',
   './src/views/trainer.js',
   './src/views/trainer-drills.js',

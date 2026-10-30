@@ -116,7 +116,7 @@ async function main() {
     };
 
     // 1) select 차단 — 보호 테이블 전수 (행 유출 = 실패)
-    for (const t of ['profiles', 'sync_snapshots', 'pro_codes', 'feedback', 'client_errors', 'usage_events']) {
+    for (const t of ['profiles', 'sync_snapshots', 'pro_codes', 'feedback', 'client_errors', 'usage_events', 'ai_usage']) {
         check(`select ${t}`, await probeSelectDenied(url, key, t));
     }
 
@@ -128,6 +128,8 @@ async function main() {
         { user_id: fakeId, data: {} }, '익명 insert'));
     check('insert pro_codes', await probeWriteDenied(url, key, 'pro_codes',
         { code: 'RLS_PROBE', valid_days: 1 }, '익명 insert'));
+    check('insert ai_usage', await probeWriteDenied(url, key, 'ai_usage',
+        { user_id: fakeId, day: '2026-01-01', kind: 'probe', count: 1 }, '익명 insert'));
 
     // 3) 스푸핑 차단 — insert 허용 테이블의 with check 우회 시도
     check('feedback 타인 user_id 스푸핑', await probeWriteDenied(url, key, 'feedback',

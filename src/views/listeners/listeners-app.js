@@ -3,7 +3,7 @@
 // 진도 초기화·변경 이력·온보딩·피드백 버튼, 설정·도움말 메뉴, OMR·대시보드 접이식.
 import { state, saveProgress, safeGetItem, safeSetItem, safeRemoveItem, listScopedKeys } from '../../state.js';
 import { removeItemRaw } from '../../storage.js';
-import { RESET_KEYS, isDailyCompletedKey } from '../../storage-keys.js';
+import { RESET_KEYS, STORAGE_KEYS, isDailyCompletedKey } from '../../storage-keys.js';
 import { renderDashboard } from '../dashboard.js';
 import { loadFlashcards } from '../flashcard.js';
 import { renderReviewList } from '../quiz/quiz.js';
@@ -31,6 +31,8 @@ export function bindAppListeners() {
 
         // 날짜 기반 동적 키(daily_completed_*) 일괄 제거
         listScopedKeys(isDailyCompletedKey).forEach(k => removeItemRaw(k));
+        // AI 응답 캐시(ai_cache_*)도 함께 제거
+        listScopedKeys(k => k.startsWith(STORAGE_KEYS.AI_CACHE_PREFIX)).forEach(k => removeItemRaw(k));
 
         saveProgress();
 

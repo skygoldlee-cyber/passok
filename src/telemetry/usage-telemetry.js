@@ -45,6 +45,8 @@ export const ALLOWED_EVENTS = new Set([
     'pro_expire_notice',
     // 로그인 수단 분포 (AU-09) — 소셜 OAuth 시작 (provider 메타만, 계정 식별자 없음)
     'oauth_login_start',
+    // 런타임 AI 기능 사용 계측 (AI-28) — 기능 종류·성공/실패·캐시 히트·경로만, 내용 미수집
+    'ai_feature',
 ]);
 
 /**

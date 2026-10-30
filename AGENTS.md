@@ -329,6 +329,8 @@ src/                    # ES Modules
     supabase-client.js    # Supabase lazy init — vendor/supabase UMD 동적 로드
     auth-view.js          # 계정/로그인 모달 (이메일+PW·회원가입·매직링크)
     sync.js               # 클라우드 스냅샷 동기화 (sync_snapshots push/pull, dirty 훅·디바운스·충돌 확인, 고객 키 제외, Pro entitlement 게이트)
+  ai/                   # 런타임 AI 클라이언트 — 서버 프록시 경유 기능 (AI-25~30, AI_COACH_DESIGN.md)
+    ai-client.js        # ai-proxy Edge Function 호출 래퍼 — 세션 JWT 첨부·타임아웃·콘텐츠 해시 캐시·BYOK 폴백 분기 (AI-27~29)
   globals.d.ts          # 전역 타입 선언 (jsconfig checkJs용)
   package.json          # {"type":"module"} — src/ ESM 선언
   config/
@@ -465,6 +467,7 @@ tools/                  # 빌드·검증 스크립트
   merge/                # git 머지 드라이버 (merge_stamps.js — 배포 스탬프 파일 자동 병합, .gitattributes merge=stamps)
   lib/                  # 공용 스캔·파싱 라이브러리 (trace_scan.js)
   ai/                   # AI 제작 지원 도구 (llm_client + 초안 생성·검수 9종, lib/ 공용 파서 — AI-01~13)
+  supabase/             # Supabase 서버측 자산 — schema.sql 프로비저닝(check:supabase·check:rls 대상) + functions/ Edge Function 정본 (admin-bot·feedback-notify·ai-proxy, AI-25~26)
 ref-pipeline/           # 교재·참조자료 생성/변환 독립 도구함 (PDF→MD, MD→HTML, 오디오북 TTS, 법령 검증) — 사용 절차는 ref-pipeline/README.md 참조
 vendor/                 # 자체 호스팅 자산 (fonts/, fontawesome/)
 tests/                  # 테스트

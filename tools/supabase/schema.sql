@@ -232,6 +232,48 @@ create policy "public insert" on public.usage_events
   for insert to anon, authenticated with check (true);
 
 -- ============================================================
+-- ai_usage: AI 기능 일일 쿼터 (AI-26 — AI_COACH_DESIGN.md §3.3)
+--   - (user_id, day, kind) 일일 호출 카운터 — ai-proxy Edge Function이
+--     service-role로만 기록 (익명·인증 클라이언트 직접 접근 없음)
+--   - 정책 없음 = 클라이언트 select/insert/update/delete 전면 차단
+--     (service_role은 RLS를 우회하므로 Function 기록 경로는 유지)
+--   - Pro도 카운터는 증가 — ai_usage가 종류별 호출 수의 정본(비용 계측)
+-- ============================================================
+create table if not exists public.ai_usage (
+  user_id     uuid not null references auth.users(id) on delete cascade,
+  day         date not null,
+  kind        text not null check (char_length(kind) between 1 and 40),
+  count       int not null default 0 check (count >= 0),
+  primary key (user_id, day, kind)
+);
+
+alter table public.ai_usage enable row level security;
+-- 의도적으로 정책을 만들지 않는다 — RLS 활성 + 정책 부재 = 클라이언트 전면 차단
+
+-- 일일 카운터 원자 증가 — service_role 전용 RPC.
+-- 단일 insert…on conflict 문이라 동시 호출 레이스에서도 정확히 1씩 증가한다
+-- (PostgREST upsert는 절대값 쓰기라 읽기-수정-쓰기 레이스가 생기므로 RPC로 원자화).
+-- 반환값은 증가 후 누적 count — 호출부가 Free 한도와 비교해 허용 여부를 판정.
+create or replace function public.ai_usage_consume(p_user_id uuid, p_kind text)
+returns integer
+language plpgsql security definer set search_path = ''
+as $$
+declare
+  v_count int;
+begin
+  insert into public.ai_usage (user_id, day, kind, count)
+    values (p_user_id, current_date, left(p_kind, 40), 1)
+    on conflict (user_id, day, kind)
+    do update set count = public.ai_usage.count + 1
+    returning count into v_count;
+  return v_count;
+end;
+$$;
+-- 클라이언트(anon·authenticated) 직접 호출 차단 — Edge Function(service_role)만
+revoke execute on function public.ai_usage_consume(uuid, text) from anon, public, authenticated;
+grant execute on function public.ai_usage_consume(uuid, text) to service_role;
+
+-- ============================================================
 -- 조회 인덱스 — 관리자 리포트·시간순 조회의 seq scan 방지
 --   report:user(pro_codes.redeemed_by·feedback.user_id)
 --   report:pro(profiles.pro_expires_at 버킷)
@@ -247,9 +289,11 @@ create index if not exists usage_events_event_created_idx
   on public.usage_events (event, created_at);
 create index if not exists client_errors_created_idx
   on public.client_errors (created_at);
+create index if not exists ai_usage_day_idx
+  on public.ai_usage (day);                        -- 일일 쿼터·비용 리포트 (AI-26)
 
 -- ============================================================
--- 확인 쿼리 (선택): 실행 후 테이블 5개·정책 4개·함수 2개가 보이면 성공
+-- 확인 쿼리 (선택): 실행 후 테이블 6개·정책 4개·함수 3개가 보이면 성공
 --   select table_name from information_schema.tables where table_schema='public';
 --   select polname, polrelid::regclass from pg_policy;
 -- ============================================================
