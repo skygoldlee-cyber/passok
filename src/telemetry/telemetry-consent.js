@@ -16,6 +16,24 @@ export function isTelemetryAllowed() {
     catch { return true; } // 스토리지 실패 시 수집은 시도 — 전송 실패는 usage-telemetry가 처리
 }
 
+/**
+ * 자동화·로컬 런타임 여부 — CI E2E(navigator.webdriver)·file:·localhost 계열
+ * 호스트에서는 텔레메트리를 보내지 않는다. 프로덕션 지표가 테스트·개발 트래픽으로
+ * 오염되는 것을 차단한다 (EVAL_2026-10-30: quiz_complete 전량이 Playwright UA로 확인).
+ * 테스트에서 전송 경로를 검증하려면 호출부 deps.automated=false로 우회한다.
+ */
+export function isAutomatedRuntime() {
+    try {
+        if (typeof navigator !== 'undefined' && navigator.webdriver) return true;
+        if (typeof location !== 'undefined') {
+            if (location.protocol === 'file:') return true;
+            const h = location.hostname;
+            if (h === '' || h === 'localhost' || h === '127.0.0.1' || h === '[::1]') return true;
+        }
+    } catch { /* 판정 실패 시 자동화로 보지 않음 — 수집 유지 */ }
+    return false;
+}
+
 /** 텔레메트리 동의 토글 — 거부 시 '1' 저장, 허용 시 제거 */
 export function setTelemetryAllowed(allowed) {
     try {

@@ -14,6 +14,12 @@
 import { getSupabase } from '../auth-sync/supabase-client.js';
 import { getActiveExamId } from '../exam-context.js';
 import { getTelemetrySessionId } from './telemetry-session.js';
+import { isTelemetryAllowed, isAutomatedRuntime } from './telemetry-consent.js';
+
+/** 자동화·로컬 런타임 판정 — deps.automated 주입 우선, 미지정 시 환경 감지 */
+function _isAutomated(deps) {
+    return deps.automated !== undefined ? deps.automated : isAutomatedRuntime();
+}
 
 const MAX_PER_SESSION = 10;   // 세션당 전송 상한
 const STACK_MAX = 4000;       // 스택 잘라내기
@@ -59,11 +65,14 @@ async function defaultInsert(rows) {
 
 /**
  * 오류 전송 — 중복·상한·미설정 환경을 내부에서 처리. 절대 throw하지 않는다.
- * @param {Object} [deps] 테스트 주입용 { insert }
- * @returns {Promise<'sent'|'dup'|'capped'|'disabled'|'failed'>}
+ * opt-out·자동화 런타임은 전송하지 않는다 (usage-telemetry와 동일 동의·환경 규약).
+ * @param {Object} [deps] 테스트 주입용 { insert, automated }
+ * @returns {Promise<'sent'|'dup'|'capped'|'consent_denied'|'automated'|'disabled'|'failed'>}
  */
 export async function reportClientError(kind, err, meta = {}, deps = {}) {
     try {
+        if (_isAutomated(deps)) return 'automated';
+        if (!isTelemetryAllowed()) return 'consent_denied';
         const key = kind + '|' + String((err && err.message) || err);
         if (_seen.has(key)) return 'dup';
         if (_sent >= MAX_PER_SESSION) return 'capped';
@@ -83,10 +92,12 @@ export async function reportClientError(kind, err, meta = {}, deps = {}) {
 /**
  * 세션 핑 — 페이지 로드당 1건, 오류율의 분모. 중복 억제·상한 카운터와 분리
  * (세션 자체는 항상 유효 — 억제 대상이 아니다). 절대 throw하지 않는다.
- * @param {Object} [deps] 테스트 주입용 { insert }
+ * @param {Object} [deps] 테스트 주입용 { insert, automated }
  */
 export async function reportSessionPing(deps = {}) {
     try {
+        if (_isAutomated(deps)) return 'automated';
+        if (!isTelemetryAllowed()) return 'consent_denied';
         const insert = deps.insert || defaultInsert;
         const res = await insert([buildErrorPayload('session', 'session', {})]);
         if (res.disabled) return 'disabled';

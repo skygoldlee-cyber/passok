@@ -60,7 +60,7 @@ const FALLBACK_SQL = `\
 -- Supabase 대시보드 → SQL Editor
 select kind, count(*) n, round(avg(rating), 2) rating_avg
 from feedback
-where created_at > now() - interval '30 days'
+where created_at > now() - interval '7 days'
 group by kind order by n desc;
 
 select created_at, kind, rating, left(body, 120) body, view, app_version,
@@ -70,7 +70,7 @@ from feedback order by created_at desc limit 50;`;
 function main(argv) {
     const args = argv || process.argv.slice(2);
     const di = args.indexOf('--days');
-    const days = di >= 0 ? parseInt(args[di + 1], 10) : 30;
+    const days = di >= 0 ? parseInt(args[di + 1], 10) : 7;
     const ki = args.indexOf('--kind');
     const kind = ki >= 0 ? args[ki + 1] : null;
     const li = args.indexOf('--limit');

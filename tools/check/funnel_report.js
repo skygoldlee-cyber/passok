@@ -107,7 +107,7 @@ function summarize(rows) {
 const FALLBACK_SQL = `\
 -- Supabase 대시보드 → SQL Editor (기간에 맞게 interval 조정)
 select event, count(*) n from usage_events
-where created_at > now() - interval '30 days'
+where created_at > now() - interval '7 days'
 group by event order by n desc;
 
 -- 세션 쌍 완주율 (quiz 예시 — daily는 event명 치환)
@@ -116,7 +116,7 @@ with s as (
          bool_or(event='quiz_start') started,
          bool_or(event='quiz_complete') done
   from usage_events
-  where created_at > now() - interval '30 days'
+  where created_at > now() - interval '7 days'
   group by session_id
 )
 select count(*) filter (where started) started,
@@ -131,7 +131,7 @@ async function main() {
     loadEnv();
     const args = process.argv.slice(2);
     const di = args.indexOf('--days');
-    const days = di >= 0 ? parseInt(args[di + 1], 10) : 30;
+    const days = di >= 0 ? parseInt(args[di + 1], 10) : 7;
     if (!Number.isFinite(days) || days < 1) {
         console.error('사용법: node tools/check/funnel_report.js [--days N]');
         process.exit(2);

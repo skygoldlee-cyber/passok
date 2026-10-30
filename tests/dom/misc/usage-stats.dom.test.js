@@ -293,6 +293,7 @@ describe('사용 스냅샷 텔레메트리 (UX-MET-05)', () => {
         const res = await maybeReportUsageSnapshot({
             insert: async (r) => { rows.push(...r); return {}; },
             today: '2026-01-10',
+            automated: false, // jsdom은 localhost → 전송 경로 검증을 위해 자동화 판정 우회
         });
         expect(res).toBe('sent');
         expect(rows[0].event).toBe('usage_snapshot');

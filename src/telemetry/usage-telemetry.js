@@ -18,7 +18,7 @@
 import { getSupabase } from '../auth-sync/supabase-client.js';
 import { getActiveExamId } from '../exam-context.js';
 import { getTelemetrySessionId } from './telemetry-session.js';
-import { isTelemetryAllowed, getInstallId } from './telemetry-consent.js';
+import { isTelemetryAllowed, getInstallId, isAutomatedRuntime } from './telemetry-consent.js';
 import { safeGetItem, safeSetItem } from '../state.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
 import { todayKey } from '../utils.js';
@@ -121,11 +121,13 @@ export async function flushTelemetryQueue(deps = {}) {
  * 절대 throw하지 않는다. 오프라인이면 큐에 보관하고 'queued' 반환.
  * @param {string} event 이벤트명
  * @param {Object} [meta] 집계용 부가 수치
- * @param {Object} [deps] 테스트 주입용 { insert, online }
- * @returns {Promise<'sent'|'skipped'|'consent_denied'|'queued'|'capped'|'disabled'|'failed'>}
+ * @param {Object} [deps] 테스트 주입용 { insert, online, automated }
+ * @returns {Promise<'sent'|'skipped'|'consent_denied'|'automated'|'queued'|'capped'|'disabled'|'failed'>}
  */
 export async function reportEvent(event, meta = {}, deps = {}) {
     try {
+        const automated = deps.automated !== undefined ? deps.automated : isAutomatedRuntime();
+        if (automated) return 'automated';
         if (!isTelemetryAllowed()) return 'consent_denied';
         if (!ALLOWED_EVENTS.has(event)) return 'skipped';
         if (_sent >= MAX_EVENTS_PER_SESSION) return 'capped';

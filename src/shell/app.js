@@ -294,6 +294,11 @@ function initApp() {
     step('refreshDashboardStatsInBackground', refreshDashboardStatsInBackground);
     step('checkExamDraft', checkExamDraft);
     step('checkTextbookEditionBanner', checkTextbookEditionBanner);
+    // 문서 딥링크 — ?doc=<key> (랜딩 푸터의 개인정보 처리방침 등 외부 진입 수신)
+    step('openDocParam', () => {
+        const docKey = new URLSearchParams(location.search).get('doc');
+        if (docKey) void ManualViewer.openDocument(docKey);
+    });
     // app-fallback.js가 정상 초기화를 감지할 수 있도록 마커 설정
     // setupNavigation이 실패하면 마커를 설정하지 않아 폴백이 복구를 시도하게 함
     if (navOk) {

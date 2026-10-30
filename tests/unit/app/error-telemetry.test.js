@@ -81,6 +81,44 @@ test('reportSessionPing: disabled·실패·예외도 상태 반환', async () =>
   assert.equal(await reportSessionPing({ insert: async () => { throw new Error('net'); } }), 'failed');
 });
 
+// ── 환경·동의 게이트 — 프로덕션 지표 오염 차단 ───────────────
+
+test('reportClientError·reportSessionPing: 자동화 런타임은 automated — 전송 차단', async () => {
+  const rows = [];
+  const insert = async (r) => { rows.push(...r); return {}; };
+  assert.equal(await reportClientError('error', new Error('x'), {}, { insert, automated: true }), 'automated');
+  assert.equal(await reportSessionPing({ insert, automated: true }), 'automated');
+  assert.equal(rows.length, 0);
+  // automated:false 우회 시 전송 경로 그대로
+  assert.equal(await reportSessionPing({ insert, automated: false }), 'sent');
+});
+
+test('reportClientError·reportSessionPing: opt-out 시 consent_denied', async () => {
+  const store = {};
+  const orig = global.localStorage;
+  Object.defineProperty(global, 'localStorage', {
+    value: {
+      getItem: (k) => (k in store ? store[k] : null),
+      setItem: (k, v) => { store[k] = String(v); },
+      removeItem: (k) => { delete store[k]; },
+      clear: () => Object.keys(store).forEach((k) => delete store[k]),
+      key: (i) => Object.keys(store)[i] ?? null,
+      get length() { return Object.keys(store).length; },
+    },
+    writable: true, configurable: true,
+  });
+  try {
+    const { setTelemetryAllowed } = await import('../../../src/telemetry/telemetry-consent.js');
+    setTelemetryAllowed(false);
+    assert.equal(await reportClientError('error', new Error('x'), {}, { insert: async () => ({}) }), 'consent_denied');
+    assert.equal(await reportSessionPing({ insert: async () => ({}) }), 'consent_denied');
+    setTelemetryAllowed(true);
+    assert.equal(await reportSessionPing({ insert: async () => ({}) }), 'sent');
+  } finally {
+    Object.defineProperty(global, 'localStorage', { value: orig, writable: true, configurable: true });
+  }
+});
+
 test('buildErrorPayload: kind=session 정규화', () => {
   assert.equal(buildErrorPayload('session', 'session').kind, 'session');
   assert.equal(buildErrorPayload('bogus', 'x').kind, 'error');

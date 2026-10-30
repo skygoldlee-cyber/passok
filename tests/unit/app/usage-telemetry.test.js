@@ -103,6 +103,17 @@ test('reportEvent: 화이트리스트 외 이벤트는 skipped', async () => {
     }
 });
 
+// ── 자동화 런타임 게이트 — 지표 오염 차단 ────────────────────
+
+test('reportEvent: 자동화 런타임은 automated — 전송 차단, false 우회 시 전송', async () => {
+    const rows = [];
+    const insert = async (r) => { rows.push(...r); return {}; };
+    assert.equal(await reportEvent('quiz_start', {}, { insert, automated: true }), 'automated');
+    assert.equal(rows.length, 0);
+    assert.equal(await reportEvent('quiz_start', {}, { insert, automated: false }), 'sent');
+    assert.equal(rows.length, 1);
+});
+
 // ── 전환 퍼널 (PAY-04) ─────────────────────────────────────
 
 test('PAY-04: 결제 전환 이벤트 5종이 화이트리스트에 등록·전송 가능', async () => {

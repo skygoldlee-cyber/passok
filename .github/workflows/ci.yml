@@ -107,6 +107,9 @@ jobs:
       - name: Supabase schema applied probe (선언 테이블 프로덕션 존재)
         run: npm run check:supabase
 
+      - name: RLS anonymous penetration probe (익명 유출·쓰기·스푸핑·RPC 차단)
+        run: npm run check:rls
+
       - name: Position-independence gate (교재 좌표 비의존 식별자·저장 키)
         run: npm run check:posind
 

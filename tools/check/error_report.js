@@ -75,10 +75,10 @@ select
   round(100.0 * count(*) filter (where kind <> 'session')
         / nullif(count(*) filter (where kind = 'session'), 0), 2) as error_rate_pct
 from client_errors
-where created_at > now() - interval '30 days';
+where created_at > now() - interval '7 days';
 
 select message, count(*) n from client_errors
-where created_at > now() - interval '30 days' and kind <> 'session'
+where created_at > now() - interval '7 days' and kind <> 'session'
 group by message order by n desc limit 10;`;
 
 const SESSION_SQL = `\
@@ -97,7 +97,7 @@ async function main() {
     loadEnv();
     const args = process.argv.slice(2);
     const di = args.indexOf('--days');
-    const days = di >= 0 ? parseInt(args[di + 1], 10) : 30;
+    const days = di >= 0 ? parseInt(args[di + 1], 10) : 7;
     const si = args.indexOf('--session');
     const session = si >= 0 ? args[si + 1] : null;
     if (!Number.isFinite(days) || days < 1 || (si >= 0 && !session)) {

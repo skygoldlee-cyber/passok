@@ -148,15 +148,15 @@ select created_at::date d,
 from client_errors group by 1 order by 1;
 
 select event, count(*) n from usage_events
-where created_at > now() - interval '30 days' group by event order by n desc;
+where created_at > now() - interval '7 days' group by event order by n desc;
 
 select kind, count(*) n, round(avg(rating),2) rating_avg
-from feedback where created_at > now() - interval '30 days' group by kind;`;
+from feedback where created_at > now() - interval '7 days' group by kind;`;
 
 async function main(argv) {
     const args = argv || process.argv.slice(2);
     const di = args.indexOf('--days');
-    const days = di >= 0 ? parseInt(args[di + 1], 10) : 30;
+    const days = di >= 0 ? parseInt(args[di + 1], 10) : 7;
     const oi = args.indexOf('--out');
     const out = oi >= 0 ? args[oi + 1] : DEFAULT_OUT;
     if (!Number.isFinite(days) || days < 1 || !out) {
