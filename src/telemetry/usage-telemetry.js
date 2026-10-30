@@ -174,7 +174,7 @@ export function initTelemetryQueueFlush() {
  * DEVICE_ID 값을 install_id 키로 싣는다).
  * Supabase 미설정 환경은 조용히 no-op. 절대 throw하지 않는다.
  * @param {Object} [deps] 테스트 주입용 { insert, load, today }
- * @returns {Promise<'sent'|'skipped'|'consent_denied'|'queued'|'capped'|'disabled'|'failed'>}
+ * @returns {Promise<'sent'|'skipped'|'consent_denied'|'automated'|'queued'|'capped'|'disabled'|'failed'>}
  */
 export async function maybeReportUsageSnapshot(deps = {}) {
     try {
