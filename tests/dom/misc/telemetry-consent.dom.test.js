@@ -12,7 +12,7 @@ vi.mock('../../../src/ui-utils.js', async (importOriginal) => ({
 }));
 
 import { loadIndexHtml } from '../helpers.js';
-import { isTelemetryAllowed, setTelemetryAllowed } from '../../../src/telemetry/telemetry-consent.js';
+import { isTelemetryAllowed, setTelemetryAllowed, isAutomatedRuntime } from '../../../src/telemetry/telemetry-consent.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 
 beforeEach(() => {
@@ -42,5 +42,12 @@ describe('텔레메트리 동의 UX (UX-MET-06)', () => {
         const btn = document.querySelector('[data-click="toggleTelemetry"]');
         // title 속성에 "기능 제한 없음" 안내가 포함되어야 한다
         expect(btn.title).toContain('기능 제한 없음');
+    });
+});
+
+describe('자동화 런타임 판정 (프로덕션 지표 오염 차단)', () => {
+    it('jsdom localhost 환경은 자동화로 판정한다', () => {
+        // jsdom hostname=localhost → 프로덕션이 아니므로 true
+        expect(isAutomatedRuntime()).toBe(true);
     });
 });
