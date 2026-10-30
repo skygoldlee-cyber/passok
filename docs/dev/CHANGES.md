@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(icons): og-image에 AI 코치 반영
+
+- build_og_image.js — 칩 행에 "AI 학습 코치" 추가 + sub 문구에 로그인 조건 명시 · og-image.png 재생성
+
 ## 2026-10-30 fix(icons): og-image 아이콘 깨짐 수정
 
 - build_og_image.js — `file:///…` 아이콘 src가 about:blank 페이지에서 서브리소스 차단돼 깨진 이미지로 렌더되던 문제 → data: URL 인라인 임베드로 교체 · og-image.png 재생성
