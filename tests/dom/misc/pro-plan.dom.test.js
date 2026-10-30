@@ -81,6 +81,12 @@ describe('플랜 안내 모달 (showPlanCompare)', () => {
         expect(btn.textContent).toContain('플랜 안내');
     });
 
+    it('설정 메뉴에 라이선스 코드 입력 진입점이 있다', () => {
+        const btn = document.querySelector('#settings-panel [data-click="showRedeemCode"]');
+        expect(btn).not.toBeNull();
+        expect(btn.textContent).toContain('라이선스 코드');
+    });
+
     it('클라우드 동기화 행이 feature-plan.json의 cloud_sync 값을 반영한다', async () => {
         await stubPlan({ cloud_sync: 'pro' });
         await showPlanCompare();

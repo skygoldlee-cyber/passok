@@ -150,6 +150,10 @@
                             <button type="button" class="settings-item" data-click="openAuthModal">
                                 <i class="fa-solid fa-user" aria-hidden="true"></i> <span id="auth-menu-label">계정 / 로그인</span>
                             </button>
+                            <!-- Pro 활성화 코드 입력 — 계정 관련 동작이므로 설정 소속 (플랜 비교 안내는 도움말) -->
+                            <button type="button" class="settings-item" data-click="showRedeemCode" title="구매한 Pro 라이선스 코드를 입력해 활성화 — 로그인 필요">
+                                <i class="fa-solid fa-key" aria-hidden="true"></i> 라이선스 코드 입력
+                            </button>
                             <!-- 텔레메트리 opt-out (UX-MET-06, ADR-0019) — 거부 시 전송만 차단, 기능 제한 없음 -->
                             <button type="button" class="settings-item" data-click="toggleTelemetry" title="익명 사용 통계 수집 허용 여부 — 끄면 이 기기에서 통계 전송이 중단됩니다 (기능 제한 없음)">
                                 <i class="fa-solid fa-chart-line" aria-hidden="true"></i> 사용 통계 전송: <span id="telemetry-toggle-label">켜짐</span>
@@ -207,9 +211,9 @@
                             <button id="whats-new-btn" class="settings-item" title="최근 업데이트 변경 내용 보기">
                                 <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> 변경 이력
                             </button>
-                            <!-- 플랜 안내 + 라이선스 코드 입력은 플랜 비교 모달에서 함께 제공 (PAY-01) — 도움말·정보 패널 소속 (설정 패널에서 이동) -->
+                            <!-- 플랜 비교 안내 (PAY-01) — 도움말·정보 패널 소속 (설정 패널에서 이동) · 모달 내 라이선스 코드 입력 링크 유지 -->
                             <button type="button" class="settings-item" data-click="showPlanCompare" title="Free와 Pro의 기능 차이·혜택 비교 보기 — 모달에서 라이선스 코드 입력 가능">
-                                <i class="fa-solid fa-gem" aria-hidden="true"></i> 플랜 안내 · 라이선스 코드
+                                <i class="fa-solid fa-gem" aria-hidden="true"></i> 플랜 안내
                             </button>
                             <button type="button" class="settings-item" data-click="ManualViewer.openPrivacyPolicy" title="수집하는 정보와 이용자 권리 안내">
                                 <i class="fa-solid fa-user-shield" aria-hidden="true"></i> 개인정보 처리방침
