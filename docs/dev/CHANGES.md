@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 test(ai): 학습 진단 AI 코칭 DOM 테스트 (AI-33/35/36)
+
+- tests/dom/study/study-aicoach.dom.test.js — 리듬 카드 AI 버튼 세션 게이트·주간 코칭·플랜 조정(여유 선택지 전송)·교재 질의(근거+인용·부재 조기 종료) 5건
+- CI 커버리지 임계값 미달 회복 (분석 뷰 신규 핸들러 커버) + filename_baseline .dom.test 등록 + TESTING.md §3 표
+
 ## 2026-10-30 fix(domainmap): src/ai/ 계층 분류 추가
 
 - tools/config/domain-map.json — platform 규칙에 `src/ai/**` 패턴 등록 (신규 ai-client·gen-gate 미분류로 check:domainmap 실패 → 배포 게이트 차단 해소)

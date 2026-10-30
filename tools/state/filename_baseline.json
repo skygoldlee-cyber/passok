@@ -66,6 +66,7 @@
   "tests/dom/reader/story-search.dom.test.js — tests 코드 파일명은 kebab-case (story-search.dom.test.js)",
   "tests/dom/reader/textbook-edition.dom.test.js — tests 코드 파일명은 kebab-case (textbook-edition.dom.test.js)",
   "tests/dom/study/ai-feedback.dom.test.js — tests 코드 파일명은 kebab-case (ai-feedback.dom.test.js)",
+  "tests/dom/study/study-aicoach.dom.test.js — tests 코드 파일명은 kebab-case (study-aicoach.dom.test.js)",
   "tests/dom/study/study-calendar.dom.test.js — tests 코드 파일명은 kebab-case (study-calendar.dom.test.js)",
   "tests/dom/study/study-challenge.dom.test.js — tests 코드 파일명은 kebab-case (study-challenge.dom.test.js)",
   "tests/dom/study/study-commandpalette.dom.test.js — tests 코드 파일명은 kebab-case (study-commandpalette.dom.test.js)",

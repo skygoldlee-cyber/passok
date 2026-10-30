@@ -343,6 +343,7 @@ npm run hooks:install
 | 55 | `reader-keyboard.dom.test.js` | 10 | 리더 키보드 내비 (TR-24) | | |
 | 56 | `story-search.dom.test.js` | 4 | 이야기형 서사 검색 (TS-10) | 서사 블록 인덱싱·배지·중복 제목 챕터 병기·메타 블록 제외 | |
 | 57 | `ui-structure.dom.test.js` | 19 | UI 구조 불변식 — index.html 실마크업 | | |
+| 58 | `study-aicoach.dom.test.js` | 5 | 학습 진단 AI 코칭 (AI-33·35·36) | 리듬 카드 버튼 노출(세션 게이트)·주간 코칭 성공 렌더·플랜 조정 여유 선택지 전송·교재 질의 근거+인용 표시·근거 부재 조기 종료 | fetch·SemanticIndex 스텁, 2026-10-30 추가 |
 | 58 | `zoom-gestures.dom.test.js` | 8 | 줌 제스처 (TR-26) | | |
 | 59 | `textbook-edition.dom.test.js` | 5 | 교재 개정 배너 (P-14) | 표시·판본 문구·확인 시 기록/재억제·동일 판본·미선언·중복 처리 억제 | 2026-10-13 추가 |
 | 60 | `exam-sim-review.dom.test.js` | 11 | 시뮬레이터 결과 리뷰·분석 (E-04·E-06·E-07) | 만점·오답 카드·combo 정오표 오판·패널 토글·chapterForQuestion·과락/합격/미달 피드백 | 2026-10-13 추가 |
