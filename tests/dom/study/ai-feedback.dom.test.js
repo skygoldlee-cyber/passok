@@ -88,7 +88,7 @@ describe('AI 오답 해설 (AI-27/29)', () => {
         await requestAiFeedback('subj1_quiz_1');
         const slot = el('quiz-review-list').querySelector('.ai-feedback-slot');
         expect(slot.querySelector('.ai-feedback-error')).not.toBeNull();
-        expect(slot.textContent).toContain('무료 AI 해설 횟수');
+        expect(slot.textContent).toContain('무료 AI 사용 횟수');
         expect(btn.disabled).toBe(true); // 쿼터 소진은 재시도 불가
         vi.unstubAllGlobals();
     });
