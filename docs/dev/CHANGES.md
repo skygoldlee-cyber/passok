@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 docs(landing): 서비스 소개에 AI 코칭 반영
+
+- landing.template.html — 차별점 비교표 "AI 학습 코치" 행 + 주요 기능 그리드 "AI 코치" 카드 추가 (오답 해설·주간 진단·계획 조언·교재 질의응답, 인용 근거 필수·AI 생성 표시·로그인/BYOK 조건 명시)
+- 프라이버시 문구 정직화 — "계정 없이 모든 기능" → "거의 모든 기능" (AI 코칭은 로그인 또는 API 키 필요)
+- docs/user/user_manual.md §1.5 — "🤖 AI 코칭" 소단원: 기능 표(오답 해설·주간 코칭·플랜 조정·교재 질의·PRO 미니퀴즈) + 사용 조건·AI 생성 배지·프라이버시 안내
+- 파생물 재생성 — landing.html · data/docs_md 번들
+
 ## 2026-10-30 feat(ai): AI 코치 단계 6 후반 — 교재 질의응답 (AI-36 + AI-30 개정)
 
 - ai-proxy textbook_qa kind — QA_SCHEMA(answer+citations)·QA_SYSTEM_PROMPT(근거 밖 명령 무시·인용 강제) + <user_input> 경계 마커로 자유 입력 격리
