@@ -75,8 +75,8 @@ describe('플랜 안내 모달 (showPlanCompare)', () => {
         expect(items.some(t => t.includes('이야기형') && t.includes('무료 제공'))).toBe(true);
     });
 
-    it('설정 메뉴에 플랜 안내 진입점이 있다', () => {
-        const btn = document.querySelector('[data-click="showPlanCompare"]');
+    it('도움말 메뉴에 플랜 안내 진입점이 있다', () => {
+        const btn = document.querySelector('#help-panel [data-click="showPlanCompare"]');
         expect(btn).not.toBeNull();
         expect(btn.textContent).toContain('플랜 안내');
     });
