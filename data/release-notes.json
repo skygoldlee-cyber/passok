@@ -1,5 +1,19 @@
 [
   {
+    "version": "v20261030-fa2003b",
+    "date": "2026-10-30",
+    "notes": [
+      "[CI] retrigger — DOM coverage 스텝 플레이크 의심 (로컬 npm run coverage 통과)",
+      "[기능·landing] LP-13 차별점 스트립·비교표에 법령·고시 갱신 확인 항목 추가",
+      "[문서] AGENTS.md 명령어 표에 build:ogimage 기재 (npm 명령 정합 게이트)",
+      "[테스트·landing] LP-13 단언 수정 — 스킵링크 #landing-main 선행 매칭 우회",
+      "[기능·landing] LP-13 — 히어로 차별점 스트립으로 기존 수단 대비 우위를 첫 화면 노출",
+      "[기능·landing] LP-11·LP-12 — 체험 섹션 경험 명시 + OG 공유 이미지",
+      "[정리] 구조 고정 + 게이트 정비 — srcRootAllow·미사용 export·E2E 갭 트리아지 [no-test]",
+      "[정리·release] v20261030-ff72904 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261030-ff72904",
     "date": "2026-10-30",
     "notes": [
@@ -187,22 +201,6 @@
     "notes": [
       "[수정·pwa] 파비콘도 활성 시험 아이콘으로 전환 — 브랜드 아이콘 고정 문제 [no-test]",
       "[정리·release] v20261029-a6affe9 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261029-a6affe9",
-    "date": "2026-10-29",
-    "notes": [
-      "[정리] 임베딩 재생성 — derived 이후 순서 정합 [no-docs]",
-      "[정리] 파생물 일괄 재생성 — 인용·데이터 신선도 복구 [no-docs]",
-      "[정리] TRACE_MATRIX 재생성 — ci:watch 등록 [no-docs]",
-      "[수정] ci:watch 워크플로 필터 + AGENTS.md 스크립트 기재 — check_npm_commands 게이트 [no-test]",
-      "[정리] 임베딩 재생성 (cosmetic) + ci:watch 스크립트 추가 — embfresh 게이트 복구 [no-docs]",
-      "[정리] TRACE_MATRIX 재생성 — P-14 등록 [no-docs]",
-      "[수정] pack-dl-status 부모 요소 null 가드 — tsc 오류 [no-test]",
-      "[수정] evictPackAssets 미사용 변수 제거 — ESLint 오류 [no-test]",
-      "[기능·pwa] P-14 후속 — 팩 전환 시 구 팩 캐시 해제 + 다운로드 진행 표시 + 필터 테스트",
-      "[기능·pwa] 팩별 지연 다운로드 (P-14) — 선택한 시험만 캐시 [no-test]"
     ]
   }
 ]
