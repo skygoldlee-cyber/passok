@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261030-f3cadb1",
+    "date": "2026-10-30",
+    "notes": [
+      "[정리] filename_baseline에 unpack.dom.test.js 예외 등록 — .dom.test.js 명명 패턴 승계 [no-docs]",
+      "[테스트·dom] DA-16 unpack 디코더 DOM 테스트 — 커버리지 임계치 회복",
+      "[수정·sec] DA-16 재적용 — 번들 배포 포함 + 폴백 경로 e2e 실측 게이트",
+      "[정리·release] v20261030-65fc6e2 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261030-65fc6e2",
     "date": "2026-10-30",
     "notes": [
@@ -192,18 +202,6 @@
       "[수정] passok.png 풀컬러 복구 — 팔레트 양자화 색 왜곡 제거, RGBA 리사이즈만 적용 [no-test]",
       "[수정] 미디어 세션 아트워크도 passok.png — icon-192 잔존 참조 제거 [no-test]",
       "[정리·release] v20261029-d57bcf9 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261029-d57bcf9",
-    "date": "2026-10-29",
-    "notes": [
-      "[테스트·e2e] passok.png 전환·로고 브랜드 고정에 맞춰 기대치 갱신 [no-docs]",
-      "[정리] passok.png 최적화 — 1254px/1.3MB → 192px/5.9KB 팔레트 양자화 [no-test]",
-      "[리팩터링] 브랜드 아이콘 파일을 icons/passok.png로 명명 — 로고·브랜드 아이콘 전용 [no-test]",
-      "[수정] manifest 아이콘을 브랜드로 통일 — 팩별 PNG 세트 제거 [no-test]",
-      "[수정] 헤더 로고를 exam.icon 치환에서 분리 — 브랜드 아이콘 독립 유지 [no-test]",
-      "[정리·release] v20261029-b4bf115 스탬프 확정 [no-docs]"
     ]
   }
 ]
