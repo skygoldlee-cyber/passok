@@ -24,7 +24,7 @@ import {
     loadIndexHtml, el, resetStudyState, flushAsync,
 } from '../helpers.js';
 import { state } from '../../../src/state.js';
-import { simState } from '../../../src/views/exam-sim-state.js';
+import { simState } from '../../../src/views/exam-sim/exam-sim-state.js';
 import { setupEventListeners } from '../../../src/views/event-listeners.js';
 
 const CARDS = [

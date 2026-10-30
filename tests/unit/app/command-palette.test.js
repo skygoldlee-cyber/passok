@@ -18,7 +18,7 @@ before(async () => {
         querySelector: () => null,
         addEventListener: () => {}
     };
-    ({ searchAll } = await import('../../../src/command-palette.js'));
+    ({ searchAll } = await import('../../../src/shell/command-palette.js'));
 });
 
 const sources = {

@@ -4,7 +4,7 @@
 > **목적**: 유튜브 홍보 영상을 보고 유입된 사용자의 의견·오류 신고·기능 제안을 앱 안에서 수집하는 기능 설계
 > **관련 문서**: [SUPABASE_DESIGN.md](SUPABASE_DESIGN.md) (계정·동기화 인프라), 독자 피드백 공유 설계(수신된 피드백의 큐레이션·공유)는 본 문서 하단 절로 통합 — 구 `USER_FEEDBACK_DESIGN.md`·DOC-DSN-05, [유튜브_홍보동영상_제작의뢰서](../../exams/cosmetic/business/유튜브_홍보동영상_제작의뢰서.md)
 > **관련 SPEC ID**: `FB-01~08` (SPEC §3.23) · `AU-01~08` (인증 기반) · `S-01` (CSP `connect-src`)
-> **상태**: **구현됨** (2026-09-26) — `src/feedback.js`, 설정 메뉴 "의견 보내기". `feedback` 테이블은 `tools/supabase/schema.sql`에 정의됐으나 실제 적용은 Supabase SQL Editor 수동 실행 필요
+> **상태**: **구현됨** (2026-09-26) — `src/shell/feedback.js`, 설정 메뉴 "의견 보내기". `feedback` 테이블은 `tools/supabase/schema.sql`에 정의됐으나 실제 적용은 Supabase SQL Editor 수동 실행 필요
 > **문서 ID**: DOC-DSN-09
 > **범위**: platform · 판본: none
 
@@ -78,7 +78,7 @@ flowchart TB
 | 피드백 완료 후 | 토스트 + "불편한 화면" 컨텍스트 힌트 | — |
 | (확장) 각 뷰 상단바 | 작은 💬 아이콘 | MVP 이후 — 화면 점유 vs 수집률 트레이드오프 |
 
-### 4-2. 모달 구성 (`src/feedback.js` 신규 모듈)
+### 4-2. 모달 구성 (`src/shell/feedback.js` 신규 모듈)
 
 ```
 ┌─────────────────────────────┐
@@ -233,7 +233,7 @@ Supabase 대시보드 → **Database → Webhooks → Create a new hook**:
 
 | 작업 | 파일 | 규모 |
 |------|------|------|
-| 피드백 모듈 (모달·제출·큐) | `src/feedback.js` 신규 | ~200줄 |
+| 피드백 모듈 (모달·제출·큐) | `src/shell/feedback.js` 신규 | ~200줄 |
 | 설정 메뉴 버튼 | `index.html` + `event-listeners.js` | ~15줄 |
 | 유입 파라미터 캡처 | `app.js` boot | ~20줄 |
 | 스키마 | `tools/supabase/schema.sql` | ~25줄 |
@@ -466,7 +466,7 @@ submittedAt: 2026-09-01
 
 | 파일 | 역할 |
 |------|------|
-| `src/feedback.js` | 피드백 뷰 컨트롤러 (탭 전환, 렌더링) |
+| `src/shell/feedback.js` | 피드백 뷰 컨트롤러 (탭 전환, 렌더링) |
 | `index.html` | 사이드바 메뉴 + `<section id="feedback-view">` 추가 |
 | `css/feedback.css` | 피드백 페이지 전용 스타일 |
 
@@ -512,7 +512,7 @@ submittedAt: 2026-09-01
 기존 `DataLoader` 패턴 재사용:
 
 ```javascript
-// src/feedback.js
+// src/shell/feedback.js
 import { esc } from '../sanitize.js';
 import { switchView } from './navigation.js';
 
@@ -803,7 +803,7 @@ Phase 2에서 Supabase SDK 로드를 위해 `vercel.json` CSP 헤더에 추가:
 
 | 규칙 | 준수 방안 |
 |------|----------|
-| Vanilla ES Modules | `src/feedback.js` ESM 모듈 |
+| Vanilla ES Modules | `src/shell/feedback.js` ESM 모듈 |
 | `data-click` 이벤트 위임 | 탭 전환, 제출 버튼 모두 `data-click` 사용 |
 | CSP `script-src 'self'` | Phase 1: 영향 없음. Phase 2: `connect-src`만 추가, 인라인 스크립트 없음 |
 | Service Worker 캐시 | `content/피드백/*.md` 및 `data/feedback.js`를 DATA_CACHE에 추가 |
@@ -852,7 +852,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
 #### 7.1 Phase 1 검증
 
-- [ ] `node --check src/feedback.js` — 문법 검증
+- [ ] `node --check src/shell/feedback.js` — 문법 검증
 - [ ] `npm.cmd run build:data` — 피드백 번들 생성 확인
 - [ ] `npm.cmd test` — 유닛 테스트 통과
 - [ ] `npm.cmd run check:parser` — 파서 등가성 검증

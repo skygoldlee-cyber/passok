@@ -112,7 +112,7 @@ beforeEach(async () => {
     configurable: true, writable: true,
   });
   global.window = { EXAMS_LIST: { exams: JSON.parse(JSON.stringify(examsRegistry.exams)) } };
-  ctx = await import(`../../../src/exam-context.js?t=${Date.now()}-${Math.random()}`);
+  ctx = await import(`../../../src/exam-context.js?t=/${Date.now()}-${Math.random()}`);
 });
 
 afterEach(() => {

@@ -10,10 +10,10 @@
  * 추상화 계층 사용이 불가능한 경우에 한정:
  *   - src/storage.js              — 추상화 계층 본체
  *   - src/exam-context.js         — scopedKey·마이그레이션 스윕 자체가 인프라
- *   - src/theme-init.js           — 모듈 로드 전 FOUC 방지 부트 스크립트
+ *   - src/shell/theme-init.js           — 모듈 로드 전 FOUC 방지 부트 스크립트
  *   - src/pwa/pwa-manifest.js         — 클래식 스크립트(ESM 아님), 모듈 로딩 불가
  *   - src/pwa/pwa-install-capture.js  — 설치 프롬프트 캡처의 원샷 플래그
- *   - src/exam-data-boot.js       — 클래식 부트 스크립트(ESM 아님), 활성 시험
+ *   - src/shell/exam-data-boot.js       — 클래식 부트 스크립트(ESM 아님), 활성 시험
  *                                   dataRoot의 registry·id_migration을 파싱 중
  *                                   동기 삽입 — 모듈 로딩·storage 추상화 불가
  *
@@ -21,7 +21,7 @@
  *   npm.cmd run check:storage   # 단독 실행
  */
 
-// @spec none (인프라 검증)
+// @spec DA-09 (저장소 단일 퍼널 — localStorage 직접 접근 우회 차단)
 const fs = require('fs');
 const path = require('path');
 const { ROOT, refFromArgs, changedFiles } = require('./changed_files.js');

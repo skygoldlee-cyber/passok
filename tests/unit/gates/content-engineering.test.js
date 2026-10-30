@@ -84,7 +84,7 @@ test('CE-05: 챕터별 용어 정리 섹션 + 용어|정의 표가 있다', () =
 
 test('TR-16a: 아래 스크롤 시 크롬 숨김·위 스크롤 시 복귀가 구현된다', () => {
   const reader = readFileSync(join(ROOT, 'src', 'views', 'textbook-reader.js'), 'utf-8')
-    + readFileSync(join(ROOT, 'src', 'views', 'reader-toolbar.js'), 'utf-8');
+    + readFileSync(join(ROOT, 'src', 'views', 'reader', 'reader-toolbar.js'), 'utf-8');
   assert.ok(reader.includes('reader-toolbar'), '툴바 요소 참조');
   // TR-22/23: 툴바 개별이 아니라 크롬 전체(컨트롤+툴바+오디오) 오버레이 숨김
   assert.ok(reader.includes('reader-chrome-hidden'), '크롬 자동 숨김 클래스');

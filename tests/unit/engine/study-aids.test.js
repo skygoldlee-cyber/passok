@@ -10,7 +10,7 @@ import {
     loadNumberDrills,
     detectProcedureFlow,
     detectAdminPenalty,
-} from '../../../src/study-aids.js';
+} from '../../../src/study/study-aids.js';
 
 // --- 합성 챕터 데이터 ---
 

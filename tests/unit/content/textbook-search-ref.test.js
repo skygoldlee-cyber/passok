@@ -6,8 +6,8 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { _matchSnippet } from '../../../src/search-index.js';
-import { _listRefDocs } from '../../../src/search-sources.js';
+import { _matchSnippet } from '../../../src/search/search-index.js';
+import { _listRefDocs } from '../../../src/search/search-sources.js';
 
 const TABLES = {
     contentRoot: 'content/exams/cosmetic',

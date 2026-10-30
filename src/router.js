@@ -3,7 +3,7 @@
 import { state } from './state.js';
 import { saveScrollPosition, restoreScrollPosition, registerViewNavigator, bumpViewGen } from './views/navigation.js';
 import { showToast, hideGlobalLoading } from './ui-utils.js';
-import { isAnyModalOpen, consumedModalPop } from './modal-back.js';
+import { isAnyModalOpen, consumedModalPop } from './shell/modal-back.js';
 import { getPracticeViewTitles, getPracticeHashSlugs } from './practice-registry.js';
 import { getCurrentExamId, getExamAppName } from './exam-context.js';
 

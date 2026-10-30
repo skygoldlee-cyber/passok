@@ -20,7 +20,7 @@
 // @spec CS-01
 const fs = require('fs');
 const path = require('path');
-const { getExamTargets } = require('../build/exam_targets');
+const { getExamTargets } = require('../build/exam_targets.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 

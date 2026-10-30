@@ -6,13 +6,13 @@ import { escapeHTML, esc, html, raw } from '../sanitize.js';
 import { renderMermaidIn } from '../reader/mermaid-render.js';
 import { attachImageZoomIn } from '../reader/image-zoom.js';
 import { TIMING } from '../config/timing.js';
-import { DataLoader } from '../data-loader.js';
+import { DataLoader } from '../content/data-loader.js';
 import { getRefTables, mapSourceToRef, resolveRefPath, refDocDisplayName } from '../pdf-registry.js';
 import { formatSectionContentForReader } from '../reader/reader-format.js';
 import { escapeRegExp, debounce } from '../utils.js';
-import { ensureLazyIndexes, runUnifiedSearch, _matchSnippet } from '../search-index.js';
+import { ensureLazyIndexes, runUnifiedSearch, _matchSnippet } from '../search/search-index.js';
 import { glossarySubjectKey } from '../reader/glossary-query.js';
-import { initSearchSources, matchGlossaryDefs } from '../search-sources.js';
+import { initSearchSources, matchGlossaryDefs } from '../search/search-sources.js';
 
 const textbookState = {
     filter: 'all',

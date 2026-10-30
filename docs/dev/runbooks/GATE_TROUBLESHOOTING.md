@@ -37,7 +37,7 @@ node tools/check/run.js --preset freshness --quick   # 생성물 신선도 묶�
 |---|---|
 | `content/exams/<id>/*.md`, manifest, exams.json | `npm.cmd run build:data` + `node tools/sync/sync_textbook_files.js` |
 | `html/views/*.html`, `index.template.html` | `npm.cmd run build:html` |
-| 새 `src/*.js` 파일 | `sw.js` SHELL_ASSETS 등록 + `// @spec` 헤더 + `npm.cmd run build:trace` |
+| 새 `src/**/*.js` 파일 | 도메인 디렉터리 배정(shell·study·search·pro·telemetry·written·content·reader·views 하위 그룹 — 루트 직속은 `srcRootAllow` 차단) + `sw.js` SHELL_ASSETS 등록 + `// @spec` 헤더 + `npm.cmd run build:trace` |
 | `@spec` 태그·문서 헤더 | `npm.cmd run build:trace` |
 | 문제은행 인용 | `npm.cmd run sync:citations` |
 
@@ -46,6 +46,20 @@ node tools/check/run.js --preset freshness --quick   # 생성물 신선도 묶�
 - `SKIP_DOCSYNC=1` — 문서 동기화는 교재 대량 변경 시 의도적 지연에 사용
 - `SKIP_TESTFIRST=1` — 긴급 핫픽스 후 테스트 보강 예정일 때. **기본값 아님**
 - `SKIP_PREPUSH=1` — pre-push 전체 우회. CI가 재검사하므로 로컬 환경 이슈 한정
+
+## 분기 게이트 정비 (audit:gates 리뷰)
+
+게이트 생태계도 코드 — 쌓이기만 하면 유지비가 신호를 잠식한다. 분기 1회:
+
+```powershell
+npm.cmd run audit:gates    # 미발화(silent)·미실행(dormant)·고빈도(noisy) 단계 리포트
+```
+
+- **dormant** — 프리셋 소속 확인 후 실효 없으면 단계 제거 또는 프리셋 조정 (로컬 미실행이어도 CI 실행이면 정상)
+- **silent** — 기준선 게이트면 정상, 차단 게이트가 장기 0실패면 탐지 공백 의심
+- **noisy** — 실패율 높은 단계는 탐지 기준 완화 또는 대상 축소 검토
+
+판정 기준과 해석은 `tools/check/audit_gate_utility.js` 헤더.
 
 ## 설계 의도
 

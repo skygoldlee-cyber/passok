@@ -15,7 +15,7 @@
 
 import { esc } from '../../../sanitize.js';
 import { showToast, showConfirm } from '../../../ui-utils.js';
-import { showStoreError } from '../../../pro-upgrade.js';
+import { showStoreError } from '../../../pro/pro-upgrade.js';
 import { switchView } from '../../../views/navigation.js';
 import { todayKey, normalizeEntityName } from '../../../utils.js';
 import {

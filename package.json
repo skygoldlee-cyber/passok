@@ -163,7 +163,8 @@
     "ai:adoption": "node tools/ai/ai_adoption.js",
     "mutate": "stryker run",
     "report:pro": "node tools/check/pro_report.js",
-    "check:filenames": "node tools/check/check_filenames.js"
+    "check:filenames": "node tools/check/check_filenames.js",
+    "build:ogimage": "node tools/build/build_og_image.js"
   },
   "keywords": [
     "cosmetics",

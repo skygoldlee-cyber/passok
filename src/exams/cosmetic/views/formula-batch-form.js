@@ -8,7 +8,7 @@
 
 import { esc } from '../../../sanitize.js';
 import { showToast } from '../../../ui-utils.js';
-import { showUpgradeNotice } from '../../../pro-upgrade.js';
+import { showUpgradeNotice } from '../../../pro/pro-upgrade.js';
 import { showPanel, getEl } from './formula.js';
 import { listFormulas, getFormula } from '../formula-store.js';
 import { listCustomers, getCustomer } from '../customer-store.js';
@@ -19,7 +19,7 @@ import {
   QC_FIELDS, QC_VALUES, HYGIENE_FIELDS,
 } from '../batch-store.js';
 import { localDateTimeNow } from '../store-utils.js';
-import { DataLoader } from '../../../data-loader.js';
+import { DataLoader } from '../../../content/data-loader.js';
 import { daysUntilExpiry, findMaterialsByName, stockStatus } from '../material-ledger.js';
 import { isPreservative } from '../formula-stability.js';
 import { localDateKey } from '../../../utils.js';

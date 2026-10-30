@@ -9,7 +9,7 @@ import {
     AI_PROVIDERS, getAiProvider, saveAiProvider, getAiModel, saveAiModel,
     getAiKey, saveAiKey, clearAiKey, maskAiKey,
     buildGradingPrompt, parseGradingResponse, applyGrading, gradeAnswer
-} from '../../../src/written-grading.js';
+} from '../../../src/written/written-grading.js';
 import { STORAGE_KEYS, BACKUP_KEYS } from '../../../src/storage-keys.js';
 
 function createMockStorage() {

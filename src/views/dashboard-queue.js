@@ -8,19 +8,19 @@
 import { state } from '../state.js';
 import { esc } from '../sanitize.js';
 import { safeGetItem } from '../state.js';
-import { DataLoader } from '../data-loader.js';
-import { getDueCards, getExamRiskCards, EXAM_R_WINDOW_DAYS, EXAM_R_SESSION_CAP } from '../spaced-repetition.js';
-import { getWeakStatements } from '../statement-tracker.js';
+import { DataLoader } from '../content/data-loader.js';
+import { getDueCards, getExamRiskCards, EXAM_R_WINDOW_DAYS, EXAM_R_SESSION_CAP } from '../study/spaced-repetition.js';
+import { getWeakStatements } from '../study/statement-tracker.js';
 import {
     getStudyCalendar, computeStudyPlan, computeSubjectAllocation,
     computeSubjectAllocInputs, sumRecentCardsBySubject, sumRecentQuizzesBySubject,
     getDDay, getStudyGoals, examWeightBySubject, selectExamRiskSession
-} from '../study-tracker.js';
-import { computeRecommendations, snapshotRecommendations, evaluateRecommendationEffect } from '../recommendations.js';
-import { buildTodayQueue as buildPersonalQueue } from '../personalization.js';
+} from '../study/study-tracker.js';
+import { computeRecommendations, snapshotRecommendations, evaluateRecommendationEffect } from '../study/recommendations.js';
+import { buildTodayQueue as buildPersonalQueue } from '../study/personalization.js';
 import { weakClusters } from './personalization-view.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
-import { subjectKeyFromItemId } from '../weak-items.js';
+import { subjectKeyFromItemId } from '../study/weak-items.js';
 import { todayKey } from '../utils.js';
 import { dailyCompletedKey } from '../storage-keys.js';
 

@@ -43,7 +43,7 @@
 | `src/pdf-registry.js` | 생성물이지만 **단일 공유 출력**이 기본 시험에 바인딩 | ARCHITECTURE §9에 후속 과제로 이미 명시 |
 | `src/keyword-index.js` | 동일 | 교재 셀→참조자료 키워드 매핑이 단일 시험용 |
 | `src/law-links.js` | `LAW_DOC_URLS` 상수 | 화장품법 계열 한글주소 매핑이 하드코딩 |
-| `src/notice-check.js` | `RULE_NAME`·`LAW_SEARCH_URL`·repo URL 상수 | 특정 고시·특정 저장소 고정 (`statusUrl`만 examId 인지) |
+| `src/shell/notice-check.js` | `RULE_NAME`·`LAW_SEARCH_URL`·repo URL 상수 | 특정 고시·특정 저장소 고정 (`statusUrl`만 examId 인지) |
 | `ref-pipeline/check_mfds_notice.py` | `STATUS_FILE`/`REFS_FILE` 경로 고정 | `content/exams/cosmetic/` 하드코딩 |
 | `ref-pipeline/check_laws.py` | `LAWS` 상수 | cosmetic 전용 8개 법령 (SUBSCRIPTION_ROADMAP 선결 과제) |
 | `src/views/dictionary.js` | 성분 전용 UI | 필드 라벨·검색·배지가 "성분" 도메인에 고정 |
@@ -135,7 +135,7 @@ const _EXAM_LAW_URLS = {
 | `ref-pipeline/_exam_root.py` | 신규 공유 헬퍼 — 시험 해석 순서(CLI `--exam` > `EXAM_CONTENT_ROOT` env > exams.json default)를 한곳에 (SUBSCRIPTION_ROADMAP 선결 과제 이관) |
 | `ref-pipeline/check_mfds_notice.py` | `STATUS_FILE`/`REFS_FILE`을 `_exam_root.py` 해석 결과로 대체 + `--exam` 인자. 감시 대상은 기존처럼 `references.json.referenceLaw`에서 자동 유도, 기준 문서는 `references.json.noticeCore`에서 읽음 |
 | `ref-pipeline/check_laws.py` | `LAWS` 상수 → 활성 시험의 `referenceLaw` 파일명에서 목록 자동 유도, 수동검증값은 `{시험 루트}/law_verified.json`으로 이관 |
-| `src/notice-check.js` | `RULE_NAME`·`LAW_SEARCH_URL` 상수 → `notice_status.json`의 `docs[]`+`latest.ruleName`으로 일반화, repo URL은 `STATUS_REPO` 상수로 분리 (`statusUrl(examId)`는 기존 구현 유지). Formula OS 배너는 `features.formula` 게이트 유지 |
+| `src/shell/notice-check.js` | `RULE_NAME`·`LAW_SEARCH_URL` 상수 → `notice_status.json`의 `docs[]`+`latest.ruleName`으로 일반화, repo URL은 `STATUS_REPO` 상수로 분리 (`statusUrl(examId)`는 기존 구현 유지). Formula OS 배너는 `features.formula` 게이트 유지 |
 | GitHub Actions 워크플로 | `matrix: exam` 추가 또는 시험 목록 조회 후 순회 — 크론 1회 실행으로 모든 시험 감시 |
 
 **레거시 필드 호환**: `notice_status.json`의 top-level `baseline/latest`는 cosmetic 원료 DB 대조용. 새 시험은 `docs[]`만 사용하므로 스키마 변경 없이 공존한다.
@@ -287,7 +287,7 @@ const _EXAM_LAW_URLS = {
 | `src/{batch-store,customer-store,material-ledger,usage-guide,store-utils,formula-store,formula-check,formula-rules,formula-stability}.js` | `src/exams/cosmetic/` | 스토어·도메인 로직 9개 |
 | `src/views/formula{,-batch,-compliance,-customer,-fields,-material,-print,-recommend}.js` | `src/exams/cosmetic/views/` | Formula OS 뷰 8개 |
 | `src/exams/cosmetic/views/trainer-ingredients.js` | `src/exams/cosmetic/views/` | 화장품 원료 도메인 문구 포함 (feature:ingredients → domain:cosmetic) |
-| `src/csv-utils.js` | **이동 안 함 — platform 재분류** | `toCsv`/`downloadCsv`는 범용이며 feature:dictionary(`views/dictionary.js`)가 정적 import — cosmetic 하위로 내리면 feature:dictionary → domain:cosmetic 역방향 의존이 생긴다 |
+| `src/content/csv-utils.js` | **이동 안 함 — platform 재분류** | `toCsv`/`downloadCsv`는 범용이며 feature:dictionary(`views/dictionary.js`)가 정적 import — cosmetic 하위로 내리면 feature:dictionary → domain:cosmetic 역방향 의존이 생긴다 |
 | `css/exams/cosmetic/formula.css`, `html/exams/cosmetic/formula.html` | **물리 이동 완료** (Phase E 보완) | 초기에는 재분류만이었으나 2차 보완에서 `css/exams/<id>/`·`html/exams/<id>/`로 이동 — `style.css` @import·`data-lazy-view` 스텁·`practice-registry.markup`·sw.js SHELL_ASSETS 경로를 함께 갱신. 도메인 테스트도 `tests/{unit,dom}/exams/cosmetic/`로 이동 |
 
 **플랫폼→도메인 참조는 지연 import 문자열만 허용**: `practice-registry.js`(`./exams/cosmetic/views/…`)·`pro-upgrade.js`·`app.js`가 동적 `import()`로 진입한다 — 정적 import가 없어 기능 플래그 off 시험에서는 모듈이 로드 자체가 안 된다(기존과 동일한 게이팅).
@@ -329,7 +329,7 @@ const _EXAM_LAW_URLS = {
 - `delegation-guard`·`security` 테스트의 파셜 스캔을 `html/views/` 단층 → 재귀(`html/exams/` 포함)로 확장 — 지연 주입 파셜의 위임 핸들러·CSP 커버리지 복구
 - 유닛 `practice-registry.test.js`에 규약 검증 추가 — feature 선언 시험마다 `src/exams/<id>/`·`html/exams/<id>/` 자산 실존 확인
 - E2E `exam-switch.spec.js`에 규약 경로 검증 추가 — cosmetic 부팅 시 `/html/exams/cosmetic/formula.html` 요청 발생 + 네비 클릭으로 실제 뷰 주입(온보딩 오버레이는 `onboarding_seen_v1` 시드로 우회)
-- **네트워크 격리 결함 수정 (E2E 신규 단언이 발견)**: food 부팅이 `data/exams/cosmetic/{registry,id_migration}.js`·`css/exams/cosmetic/formula.css`를 요청하던 결합 해소 — ① 셸의 `__EXAM_DATA_ROOT__` 정적 태그를 `src/exam-data-boot.js`(클래식 부트가 활성 시험 dataRoot를 파싱 중 동기 삽입)로 대체 ② 도메인 CSS를 `styles` 필드 + `<link>` 지연 주입으로 전환(style.css @import 제거). food 부팅 시 `exams/cosmetic/` 요청 0건을 E2E가 단언
+- **네트워크 격리 결함 수정 (E2E 신규 단언이 발견)**: food 부팅이 `data/exams/cosmetic/{registry,id_migration}.js`·`css/exams/cosmetic/formula.css`를 요청하던 결합 해소 — ① 셸의 `__EXAM_DATA_ROOT__` 정적 태그를 `src/shell/exam-data-boot.js`(클래식 부트가 활성 시험 dataRoot를 파싱 중 동기 삽입)로 대체 ② 도메인 CSS를 `styles` 필드 + `<link>` 지연 주입으로 전환(style.css @import 제거). food 부팅 시 `exams/cosmetic/` 요청 0건을 E2E가 단언
 
 ### Phase C 파일럿 결과 (food, 2026-09-30) — 팩 자체는 2026-10 제거, 이력으로 유지
 

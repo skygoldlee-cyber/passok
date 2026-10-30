@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 
 let importSeq = 0;
 async function freshModule() {
-  return import(`../../../src/auth-sync/supabase-client.js?case=${importSeq++}`);
+  return import(`../../../src/auth-sync/supabase-client.js?case=/${importSeq++}`);
 }
 
 // loadVendor가 만드는 <script> 스텁 — appendChild 시점에 캡처해 onload/onerror를 수동 발화

@@ -12,7 +12,7 @@ const require = createRequire(import.meta.url);
 const {
   buildComboItems, _setSubjectMaps, comboStem, topicContext,
 } = require('../../../tools/build/build_combo_drills.js');
-const { generateComboOptions, deriveComboAnswer } = await import('../../../src/questions.js');
+const { generateComboOptions, deriveComboAnswer } = await import('../../../src/content/questions.js');
 
 // buildComboItems가 읽는 과목 매핑 — cosmetic manifest 구조와 동일 형태
 _setSubjectMaps({

@@ -8,7 +8,7 @@ const { isTrigger, isDoc, analyze, parseStatusLine } = checker;
 
 test('소스 경로는 문서 갱신 트리거다', () => {
     for (const f of [
-        'src/views/quiz.js', 'tools/build/index.js', 'tests/unit/x.test.js',
+        'src/views/quiz/quiz.js', 'tools/build/index.js', 'tests/unit/x.test.js',
         'css/base.css', 'index.html', 'package.json', 'playwright.config.js',
         '.github/workflows/ci.yml', 'manifest.webmanifest', 'vercel.json',
     ]) {
@@ -33,19 +33,19 @@ test('문서 경로는 갱신으로 인정된다', () => {
     for (const f of ['docs/dev/TESTING.md', 'AGENTS.md', 'README.md', 'ref-pipeline/README.md']) {
         assert.ok(isDoc(f), f);
     }
-    assert.ok(!isDoc('src/app.js'));
+    assert.ok(!isDoc('src/shell/app.js'));
     assert.ok(!isDoc('index.html'));
 });
 
 test('analyze: 소스만 변경 → 위반', () => {
-    const r = analyze(['src/app.js', 'tests/unit/x.test.js']);
+    const r = analyze(['src/shell/app.js', 'tests/unit/x.test.js']);
     assert.equal(r.violated, true);
-    assert.deepEqual(r.triggers, ['src/app.js', 'tests/unit/x.test.js']);
+    assert.deepEqual(r.triggers, ['src/shell/app.js', 'tests/unit/x.test.js']);
     assert.deepEqual(r.docs, []);
 });
 
 test('analyze: 소스 + 문서 동반 변경 → 통과', () => {
-    const r = analyze(['src/app.js', 'docs/dev/CHANGES.md']);
+    const r = analyze(['src/shell/app.js', 'docs/dev/CHANGES.md']);
     assert.equal(r.violated, false);
 });
 

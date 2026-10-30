@@ -15,7 +15,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const { splitArticles, normalizeArticle, diffDocs, parseDocName, buildExamDiff }
     = require(join(ROOT, 'tools/build/build_notice_diff.js'));
 
-const { unseenRevisions, diffSummary } = await import('../../../src/notice-check.js');
+const { unseenRevisions, diffSummary } = await import('../../../src/shell/notice-check.js');
 
 describe('splitArticles', () => {
     test('조문 단위로 분할하고 목차 중복은 긴 본문을 채택한다', () => {

@@ -8,36 +8,36 @@
 
 import { state } from '../state.js';
 import { esc } from '../sanitize.js';
-import { DataLoader } from '../data-loader.js';
+import { DataLoader } from '../content/data-loader.js';
 import { switchView } from './navigation.js';
-import { getDueCount, getDueCards, getExamRiskCards, EXAM_R_SESSION_CAP, getReviewLog } from '../spaced-repetition.js';
-import { computeWrongCauseSummary, getWrongCauseLabels, getSimHistory, evaluateRecommendationEffect, computeCalibrationBias, getActualResult } from '../recommendations.js';
+import { getDueCount, getDueCards, getExamRiskCards, EXAM_R_SESSION_CAP, getReviewLog } from '../study/spaced-repetition.js';
+import { computeWrongCauseSummary, getWrongCauseLabels, getSimHistory, evaluateRecommendationEffect, computeCalibrationBias, getActualResult } from '../study/recommendations.js';
 import {
     getDDay, getStudyGoals, getTodayGoalProgress, getWeeklyGoalProgress,
     getStudyCalendar, computeStudyPlan, computePlanAdherence,
     computeSubjectAllocation, computeSubjectAllocInputs,
     sumRecentCardsBySubject, sumRecentQuizzesBySubject,
     examWeightBySubject, selectExamRiskSession
-} from '../study-tracker.js';
-import { getWeakStatements, getDueStatementSids, getAnomalousStatements, getAllStatementStats } from '../statement-tracker.js';
+} from '../study/study-tracker.js';
+import { getWeakStatements, getDueStatementSids, getAnomalousStatements, getAllStatementStats } from '../study/statement-tracker.js';
 import {
     computeSubjectWeakChapters, computeWeeklyGrowth, computePassGap,
     computeWeakConceptClusters, computePaceProjection, estimateUntaggedCauses,
     computeStudyPattern, buildWeeklyReportText, computeMasteryLevels, normalizeCidAnchor, subjectFromSid
-} from '../analysis-engine.js';
-import { SemanticIndex } from '../semantic-index.js';
-import { generateClinic, estimatePassProb, weeklyReport, weakRefLink } from '../personalization.js';
+} from '../study/analysis-engine.js';
+import { SemanticIndex } from '../search/semantic-index.js';
+import { generateClinic, estimatePassProb, weeklyReport, weakRefLink } from '../study/personalization.js';
 import {
     personalKtParams, weakClusters, resolveCidChapter, refitPersonalModels, getPersonalFit
 } from './personalization-view.js';
-import { resolveWrongQuiz } from '../weak-items.js';
+import { resolveWrongQuiz } from '../study/weak-items.js';
 import { showToast, showGlobalLoading, hideGlobalLoading } from '../ui-utils.js';
 import { getExamRules, getExamAppName } from '../exam-context.js';
-import { trackAction } from '../usage-stats.js';
+import { trackAction } from '../telemetry/usage-stats.js';
 import { renderDashboard, onAnalysisRefresh } from './dashboard.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { compositeEstimate } from './score-estimate.js';
-import { mountProMoment } from '../pro-upgrade.js';
+import { mountProMoment } from '../pro/pro-upgrade.js';
 
 /**
  * 학습 진단 뷰 렌더링 — renderDashboard()가 과목 카드·히트맵·차트를

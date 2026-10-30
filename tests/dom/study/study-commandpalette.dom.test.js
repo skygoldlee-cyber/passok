@@ -3,8 +3,8 @@
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 import {
     initCommandPalette, openCommandPalette, executePaletteResult
-} from '../../../src/command-palette.js';
-import { DataLoader } from '../../../src/data-loader.js';
+} from '../../../src/shell/command-palette.js';
+import { DataLoader } from '../../../src/content/data-loader.js';
 
 function seedDom() {
     document.body.innerHTML = `

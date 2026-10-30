@@ -116,7 +116,7 @@ test.describe('접근성 상호작용', () => {
         await boot(page);
         // 재방문(플래그 보유) — 자동 표시 없음
         await page.evaluate(async () => {
-            const m = await import('./src/onboarding.js');
+            const m = await import('./src/shell/onboarding.js');
             m.maybeShowOnboarding();
         });
         await page.waitForTimeout(300);
@@ -125,7 +125,7 @@ test.describe('접근성 상호작용', () => {
         await page.evaluate(async () => {
             ['onboarding_seen_v1', 'cosmetic:onboarding_seen_v1', 'quiz_results', 'fc_memorized', 'study_streak', 'sim_results_history']
                 .forEach(k => localStorage.removeItem(k));
-            const m = await import('./src/onboarding.js');
+            const m = await import('./src/shell/onboarding.js');
             m.maybeShowOnboarding();
         });
         const overlay = page.locator('#onboarding-overlay');
@@ -137,7 +137,7 @@ test.describe('접근성 상호작용', () => {
         const closeBtn = overlay.locator('button').first();
         if (await closeBtn.isVisible()) await closeBtn.click();
         await page.evaluate(async () => {
-            const m = await import('./src/onboarding.js');
+            const m = await import('./src/shell/onboarding.js');
             m.maybeShowOnboarding();
         });
         await page.waitForTimeout(300);

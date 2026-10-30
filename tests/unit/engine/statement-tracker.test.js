@@ -4,8 +4,8 @@ import assert from 'node:assert/strict';
 import {
     recordStatementJudgments, getStatementStat, getWeakStatements, getDueStatementSids,
     getAllStatementStats, getAnomalousStatements
-} from '../../../src/statement-tracker.js';
-import { gradeAnswer } from '../../../src/questions.js';
+} from '../../../src/study/statement-tracker.js';
+import { gradeAnswer } from '../../../src/content/questions.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 import { scopedKey } from '../../../src/exam-context.js';
 
@@ -164,7 +164,7 @@ test('getAllStatementStats: 저장 통계를 그대로 반환하고 손상 시 �
 });
 
 test('getDueStatementSids: due==오늘인 진술은 복습 대기에 포함 (<= 경계)', async () => {
-    const { getDueStatementSids } = await import('../../../src/statement-tracker.js');
+    const { getDueStatementSids } = await import('../../../src/study/statement-tracker.js');
     const { todayKey } = await import('../../../src/utils.js');
     const statsKey = scopedKey(STORAGE_KEYS.STATEMENT_STATS);
     const srKey = scopedKey(STORAGE_KEYS.FC_SPACED_REPETITION);
@@ -204,7 +204,7 @@ test('recordStatementJudgments: 정답 선택은 오판 누적 없이 SM-2만 �
 });
 
 test('getAnomalousStatements: 오판율 극단 진술만 플래그 (j≥5·w/j≥0.8)', async () => {
-    const { getAnomalousStatements } = await import('../../../src/statement-tracker.js');
+    const { getAnomalousStatements } = await import('../../../src/study/statement-tracker.js');
     const judge = (sid, n, wrongs) => {
         for (let i = 0; i < n; i++)
             recordStatementJudgments([{ sid, judgedCorrect: i >= wrongs }]);

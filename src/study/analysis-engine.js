@@ -1,0 +1,688 @@
+// src/analysis-engine.js — 학습 진단(analysis-view) 심층 분석 순수 로직
+// @spec AN-01,AN-02,AN-07,AN-08,AN-09,D-16,D-21,D-22,SC-15
+//
+// 모든 함수는 DOM 비의존·과목 무관 — 데이터를 주입받아 계산만 한다.
+// 과목 키/단원명은 manifest·question_chapters·statement_stats에서 동적으로 해석하므로
+// 과목 구성이 바뀌어도 코드 수정이 필요 없다.
+//
+// 데이터 소스:
+//   quizResults      { quizId: {solved, correct} }
+//   wrongCauses      { itemId: {cause, ts, subjectId} }  (사용자 태깅)
+//   statementStats   { sid: {j,w,lw,t,truth,cid,last,streak} }  (드릴 판정 누적)
+//   weakCards        Set<itemId>  (weak_sim_<exam>_qN / weak_quiz_<id> / <subj>_card_N)
+//   questionChapters { "subjectN_qM": "단원명" }  (question_chapters.js)
+//   chapterRanges    { subjKey: [[라인, "단원명"], ...] }  (CHAPTER_RANGES)
+//   reviewLog        [{c,k?,r?,ok?,t}]  (D-18 리뷰 로그 — BKT 관측 시퀀스, D-22)
+
+import { parseWeakSimId, subjectKeyFromItemId, WEAK_QUIZ_PREFIX } from './weak-items.js';
+import { resolveLegacySubjectKey, examIdToSubjectId } from '../exam-context.js';
+import { Rating } from './fsrs.js';
+import { computeUnitMastery, KT_DEFAULTS } from './knowledge-tracing.js';
+import { localDateKey } from '../utils.js';
+import { WEAK_GRADUATE_STREAK } from './statement-tracker.js';
+import { getWrongCauseLabels, getWrongCauseTaxonomy } from './recommendations.js';
+import { getRemainingStudyDays, getStudyGoals } from './study-tracker.js';
+
+/**
+ * manifest analysis.wrongCauses[].autoPattern → 컴파일된 자동 분류 패턴 목록.
+ * 잘못된 정규식은 건너뛰고, 패턴은 분류표 선언 순서를 따른다 (AN-07).
+ * @returns {Array<{key:string, re:RegExp}>}
+ */
+function _autoPatterns() {
+    /** @type {Array<{key:string, re:RegExp}>} */
+    const out = [];
+    getWrongCauseTaxonomy().forEach(c => {
+        if (typeof c.autoPattern !== 'string' || !c.autoPattern) return;
+        try { out.push({ key: c.key, re: new RegExp(c.autoPattern) }); } catch (e) { /* noop */ }
+    });
+    return out;
+}
+
+/**
+ * sid("law_st_ab12cd") → 과목 키 ("law").
+ * 진술 sid는 `${subjKey}_st_${hash}` 형식 (build_combo_drills.js stableId).
+ * @param {string} sid
+ * @returns {string|null}
+ */
+export function subjectFromSid(sid) {
+    const m = String(sid || '').match(/^(.+?)_st_[0-9a-f]+$/);
+    return m ? m[1] : null;
+}
+
+/**
+ * 저장 cid를 개념 앵커로 정규화한다 (AN-10).
+ *   §N.M        신형 — 그대로
+ *   L####       레거시 라인 좌표 — CID_SECTION[과목][라인]으로 §앵커 환산
+ *               (교재 편집으로 라인이 밀려도 같은 절이면 같은 앵커로 병합된다)
+ *   q:…         폴백(교재 근거 없음) → null — 클러스터 대상 아님
+ *   그 외       참조자료 등 비-라인 개념 키 — 이미 라인 독립이라 원형 유지
+ * @param {string|null|undefined} cid
+ * @param {string|null} subjKey
+ * @param {Object<string,Object<string,string>>} [cidSection] 과목→{"라인":"N.M"}
+ * @returns {string|null}
+ */
+export function normalizeCidAnchor(cid, subjKey, cidSection) {
+    const s = String(cid || '');
+    if (!s || s.startsWith('q:')) return null;
+    if (s.startsWith('§')) return s;
+    const m = s.match(/^L(\d+)$/);
+    if (m && subjKey && cidSection && cidSection[subjKey]) {
+        const a = cidSection[subjKey][m[1]];
+        if (a) return `§${a}`;
+    }
+    return s; // 해석 불가 라인·비-라인 키 모두 원형 유지 — 맵 부재 시 기존 동작 보존
+}
+
+/**
+ * 진술 cid → 단원명 해석. §N.M 앵커는 CHAPTER_TITLES로, 레거시 L####는
+ * CID_SECTION 환산(앵커 경로) 우선·chapterRanges 라인 경계 폴백 순으로 해석한다.
+ * @param {string|null} cid
+ * @param {string|null} subjKey
+ * @param {Object<string,Array<[number,string]>>} chapterRanges
+ * @param {{chapterTitles?:Object<string,Object<string,string>>, cidSection?:Object<string,Object<string,string>>}} [maps]
+ * @returns {string|null}
+ */
+export function chapterFromCid(cid, subjKey, chapterRanges, maps) {
+    const s = String(cid || '');
+    const titles = subjKey && maps && maps.chapterTitles && maps.chapterTitles[subjKey];
+    const titleOfAnchor = (anchor) => {
+        const n = String(anchor || '').split('.')[0];
+        return (titles && n !== '' && titles[n]) || null;
+    };
+    if (s.startsWith('§')) return titleOfAnchor(s.slice(1));
+    const m = s.match(/^L(\d+)$/);
+    if (!m || !subjKey) return null;
+    const sec = maps && maps.cidSection && maps.cidSection[subjKey];
+    if (sec && sec[m[1]]) {
+        const t = titleOfAnchor(sec[m[1]]);
+        if (t) return t;
+    }
+    const ranges = chapterRanges && chapterRanges[subjKey];
+    if (!Array.isArray(ranges) || !ranges.length) return null;
+    const line = parseInt(m[1], 10);
+    let cur = null;
+    for (const [ln, title] of ranges) {
+        if (line >= ln) cur = title; else break;
+    }
+    return cur;
+}
+
+/* =======================================================
+   1) 단원별 취약 집계
+   ======================================================= */
+
+// @spec D-21
+/** Beta 사전 — 합격선 근처 약한 사전 (α=4, β=3, ~7회 증거분 무게, LEARNING_ALGORITHM_DESIGN §3.1) */
+const KT_PRIOR_A = 4, KT_PRIOR_B = 3;
+
+/**
+ * 단원 숙달률 Beta 사후평균 — 소표본은 사전으로 수축, 대표본은 실측 수렴 (D-21)
+ * @param {number} corrects 정답 판정 수
+ * @param {number} wrongs 오답·오판 수
+ * @returns {number} 0~1 숙달 추정치
+ */
+export function betaPosteriorMean(corrects, wrongs) {
+    return (KT_PRIOR_A + corrects) / (KT_PRIOR_A + KT_PRIOR_B + corrects + wrongs);
+}
+
+/**
+ * 정오 항목을 교재 단원별로 집계한다 (내부 버킷 — 오답뿐 아니라 정답 증거 포함, D-21).
+ * 해석 경로 (모두 실패 시 '기타' 묶음 없이 버림):
+ *   - weak_sim_<exam>_q<N>  → questionChapters["<exam>_q<N>"]
+ *   - weak_quiz_<id>·일반 퀴즈 id → resolveQuiz(id).quiz.category (로드된 과목만)
+ *   - 진술 sid → cid(§앵커·레거시 L####는 CID_SECTION 환산) → 단원명
+ * 졸업 진술(streak≥3)은 회복된 숙달 증거 — 누적 w가 아닌 연속 정답 streak만 정답으로 반영.
+ */
+function _aggregateChapterEvidence(p) {
+    const buckets = new Map(); // `${subj}|${chapter}` → {subject, chapter, attempts, corrects, wrongs}
+    const bump = (subj, chapter, correct) => {
+        if (!chapter) return;
+        const key = `${subj || ''}|${chapter}`;
+        const cur = buckets.get(key) || { subject: subj || '', chapter, attempts: 0, corrects: 0, wrongs: 0 };
+        cur.attempts++;
+        if (correct) cur.corrects++; else cur.wrongs++;
+        buckets.set(key, cur);
+    };
+
+    // (a) 퀴즈 정오 전건 → quiz.category (정답도 숙달 증거 — D-21)
+    const results = p.quizResults || {};
+    Object.keys(results).forEach(id => {
+        if (!results[id]) return;
+        const resolved = p.resolveQuiz ? p.resolveQuiz(id) : null;
+        const subj = (resolved && resolved.subjectId) || subjectKeyFromItemId(id) || '';
+        const chapter = (resolved && resolved.quiz && resolved.quiz.category)
+            || (p.questionChapters && p.questionChapters[id]);
+        bump(subj, chapter, !!results[id].correct);
+    });
+
+    // (b) 약점 카드 — weak_sim_* 은 문제은행 문항 오답 → questionChapters
+    (p.weakCards ? [...p.weakCards] : []).forEach(id => {
+        const sim = parseWeakSimId(id);
+        if (!sim) return;
+        const chapter = p.questionChapters && p.questionChapters[`${sim.examId}_q${sim.qNum}`];
+        bump(examIdToSubjectId(sim.examId) || '', chapter, false);
+    });
+
+    // (c) 진술 판정 → cid(§앵커/레거시 L#### 환산) → 챕터
+    Object.entries(p.statementStats || {}).forEach(([sid, v]) => {
+        if (!v || !(v.j > 0)) return;
+        const subj = subjectFromSid(sid);
+        const chapter = chapterFromCid(v.cid, subj, p.chapterRanges,
+            { chapterTitles: p.chapterTitles, cidSection: p.cidSection });
+        if (!chapter) return;
+        const key = `${subj || ''}|${chapter}`;
+        const cur = buckets.get(key) || { subject: subj || '', chapter, attempts: 0, corrects: 0, wrongs: 0 };
+        if ((v.streak || 0) >= WEAK_GRADUATE_STREAK) {
+            // 졸업 진술 — 회복된 숙달: 연속 정답 streak만 정답 증거로 반영 (누적 w는 과거 상태라 제외)
+            cur.attempts += v.streak;
+            cur.corrects += v.streak;
+        } else {
+            cur.attempts += v.j;
+            cur.corrects += Math.max(0, v.j - (v.w || 0));
+            cur.wrongs += v.w || 0;
+        }
+        buckets.set(key, cur);
+    });
+    return buckets;
+}
+
+/** 공통 파라미터 — computeChapterWeakness/computeSubjectWeakChapters 공용
+ * @param {Object} p
+ * @param {Object} p.quizResults state.quizResults (정오 전건 집계 — D-21)
+ * @param {Set<string>} p.weakCards state.weakCards
+ * @param {Object} p.statementStats getAllStatementStats() 결과
+ * @param {Object} p.questionChapters QUESTION_CHAPTERS 맵
+ * @param {Object} p.chapterRanges CHAPTER_RANGES 맵
+ * @param {Object} [p.chapterTitles] CHAPTER_TITLES 맵 — §앵커 챕터 표시명 (AN-10)
+ * @param {Object} [p.cidSection] CID_SECTION 맵 — 레거시 L#### cid → §앵커 환산 (AN-10)
+ * @param {(id:string)=>{quiz:object,subjectId:string}|null} p.resolveQuiz weak-items.resolveWrongQuiz
+ * @param {(key:string)=>string} [p.subjectName] 과목키→표시명 (없으면 키 그대로)
+ * @param {Array} [p.reviewLog] D-18 리뷰 로그 — 있으면 BKT 관측 시퀀스 구성 (D-22)
+ * @param {Object} [p.ktParams] resolveKtParams 결과 — 생략 시 기본값
+ */
+
+// @spec D-22
+/**
+ * 단원별 BKT 관측 시퀀스 — 리뷰 로그의 시간순 정오를 단원으로 귀속 (D-22).
+ *   - {k:'q'} 퀴즈 판정 → 문항id→단원 (resolveQuiz·questionChapters), kind 'mcq'
+ *   - {r} 스케줄 이벤트 중 진술 sid → 단원(cid→§앵커 환산), kind 'ox', r===3 정판
+ *   - 카드 자기평가는 제외 — 채점 증거만 사용 (설계 §2.1)
+ * @param {Object} p 공통 파라미터 + p.reviewLog (getReviewLog 결과)
+ * @returns {Map<string, Array<{correct:boolean, kind:string}>>} `${subj}|${chapter}` → 시간순 관측
+ */
+function _unitObservationSeqs(p) {
+    const seqs = new Map();
+    const push = (subj, chapter, correct, kind) => {
+        if (!chapter) return;
+        const key = `${subj || ''}|${chapter}`;
+        const cur = seqs.get(key) || [];
+        cur.push({ correct, kind });
+        seqs.set(key, cur);
+    };
+    for (const e of (p.reviewLog || [])) {
+        if (!e || !e.c) continue;
+        if (e.k === 'q') {
+            // 약점 복습 세션의 weak_quiz_/weak_exam_ 접두사 정규화 — 재판정도 원문항으로 귀속
+            const qid = e.c.replace(/^weak_(quiz|exam)_/, '');
+            const simM = qid.match(/^(.+)_q\d+$/); // 시뮬 문항 id <examId>_q<N> → exams 매핑
+            const resolved = p.resolveQuiz ? p.resolveQuiz(qid) : null;
+            const subj = (resolved && resolved.subjectId) || subjectKeyFromItemId(qid)
+                || (simM && examIdToSubjectId(simM[1])) || '';
+            const chapter = (resolved && resolved.quiz && resolved.quiz.category)
+                || (p.questionChapters && p.questionChapters[qid]);
+            push(subj, chapter, e.ok === 1, 'mcq');
+        } else {
+            const st = p.statementStats && p.statementStats[e.c];
+            if (!st) continue; // 카드 자기평가·미추적 id — 제외
+            const subj = subjectFromSid(e.c);
+            const chapter = chapterFromCid(st.cid, subj, p.chapterRanges,
+                { chapterTitles: p.chapterTitles, cidSection: p.cidSection });
+            push(subj, chapter, e.r === Rating.GOOD, 'ox');
+        }
+    }
+    return seqs;
+}
+
+/**
+ * 단원 숙달 추정 — 시퀀스가 있으면 BKT P(L), 없으면 Beta 사후평균 폴백 (D-22).
+ * 카운트 증거는 BKT 초기 P(L) 사전으로 승계 — v1 증거를 버리지 않는다 (설계 §3.2).
+ */
+function _unitMastery(bucket, seqs, ktParams) {
+    const seq = seqs.get(`${bucket.subject}|${bucket.chapter}`);
+    // @spec PS-07,PS-11 — 과목별 개인 피팅 파라미터(ktParams.bySubject)가 있으면
+    // 해당 과목 버킷의 BKT P0·T를 개인값으로 오버라이드 (콜드스타트·학습 속도 차이 반영)
+    const kp = (ktParams && ktParams.bySubject && ktParams.bySubject[bucket.subject]) || ktParams;
+    const prior = bucket.attempts > 0 ? betaPosteriorMean(bucket.corrects, bucket.wrongs) : undefined;
+    if (!seq || !seq.length) return betaPosteriorMean(bucket.corrects, bucket.wrongs);
+    return computeUnitMastery(seq, kp || KT_DEFAULTS, prior);
+}
+
+/**
+ * 취약 단원 단일 랭킹 (전 과목 혼합) — 오답 증거가 있는 단원을 숙달률 오름차순으로.
+ * @param {Object} p 공통 파라미터 + p.limit + p.reviewLog·p.ktParams (D-22, 생략 시 Beta 폴백)
+ * @returns {Array<{subject:string, chapter:string, wrongs:number, mastery:number}>}
+ *   mastery는 BKT P(L) (시퀀스 없으면 Beta 사후평균, D-21·D-22) — 오답 빈도가 아닌 추정 숙달 정도로 정렬
+ */
+export function computeChapterWeakness(p) {
+    const name = p.subjectName || ((k) => k);
+    const seqs = p.reviewLog ? _unitObservationSeqs(p) : new Map();
+    const out = [..._aggregateChapterEvidence(p).values()]
+        .filter(b => b.wrongs > 0)
+        .map(b => ({ ...b, mastery: _unitMastery(b, seqs, p.ktParams) }))
+        .sort((a, b) => (a.mastery - b.mastery) || (b.wrongs - a.wrongs));
+    out.forEach(b => { b.subject = name(b.subject); });
+    return typeof p.limit === 'number' ? out.slice(0, p.limit) : out;
+}
+
+/**
+ * 취약 단원을 **과목별로 그룹화**해 반환 — 과락 평가가 과목 단위이므로
+ * 각 과목의 최약 단원을 과목별로 보여준다 (어떤 과목이든 같은 구조).
+ * @param {Object} p 공통 파라미터 + p.chaptersPerSubject(기본 2)
+ * @returns {Array<{subject:string, subjectKey:string, totalWrongs:number, minMastery:number,
+ *   chapters:Array<{chapter:string, wrongs:number, mastery:number}>}>}
+ *   과목 정렬은 최약 단원 숙달률 오름차순 (D-21), totalWrongs는 표시용 합계
+ */
+export function computeSubjectWeakChapters(p) {
+    const name = p.subjectName || ((k) => k);
+    const perSubj = p.chaptersPerSubject || 2;
+    const bySubj = new Map(); // subjKey → {subject, subjectKey, totalWrongs, minMastery, chapters}
+    const seqs = p.reviewLog ? _unitObservationSeqs(p) : new Map();
+    for (const b of _aggregateChapterEvidence(p).values()) {
+        if (b.wrongs <= 0) continue; // 오답 증거 없는 단원은 취약 랭킹 대상 아님
+        const cur = bySubj.get(b.subject) || { subject: name(b.subject), subjectKey: b.subject, totalWrongs: 0, minMastery: Infinity, chapters: [] };
+        const mastery = _unitMastery(b, seqs, p.ktParams);
+        cur.totalWrongs += b.wrongs;
+        cur.minMastery = Math.min(cur.minMastery, mastery);
+        cur.chapters.push({ chapter: b.chapter, wrongs: b.wrongs, mastery });
+        bySubj.set(b.subject, cur);
+    }
+    const out = [...bySubj.values()];
+    out.forEach(g => {
+        g.chapters.sort((a, b) => (a.mastery - b.mastery) || (b.wrongs - a.wrongs));
+        g.chapters.length = Math.min(g.chapters.length, perSubj);
+    });
+    return out.sort((a, b) => a.minMastery - b.minMastery);
+}
+
+/* =======================================================
+   2) 주간 성장 지표
+   ======================================================= */
+
+function _rangeStats(calendar, fromOffset, toOffset) {
+    let quizzes = 0, correct = 0, cards = 0, days = 0;
+    for (let i = fromOffset; i <= toOffset; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const key = localDateKey(d);
+        const e = calendar[key];
+        if (!e) continue;
+        if (e.cards > 0 || e.quizzes > 0 || (e.readMin || 0) > 0) days++;
+        quizzes += e.quizzes || 0;
+        correct += e.correct || 0;
+        cards += e.cards || 0;
+    }
+    return { quizzes, correct, cards, days, rate: quizzes > 0 ? Math.round((correct / quizzes) * 100) : null };
+}
+
+/**
+ * 최근 7일 vs 그 이전 7일 학습량·정답률 비교.
+ * @param {Object} calendar getStudyCalendar() 결과
+ * @returns {{thisWeek:object, lastWeek:object, rateDelta:number|null, cardDelta:number}}
+ *   rateDelta는 양쪽 모두 표본 있을 때만 (없으면 null)
+ */
+export function computeWeeklyGrowth(calendar) {
+    const thisWeek = _rangeStats(calendar || {}, 0, 6);
+    const lastWeek = _rangeStats(calendar || {}, 7, 13);
+    return {
+        thisWeek,
+        lastWeek,
+        rateDelta: (thisWeek.rate !== null && lastWeek.rate !== null) ? thisWeek.rate - lastWeek.rate : null,
+        cardDelta: thisWeek.cards - lastWeek.cards
+    };
+}
+
+/* =======================================================
+   3) 합격 갭 분석
+   ======================================================= */
+
+/**
+ * 예상 점수 → 합격선까지의 갭 + 최우선 보강 과목.
+ * 우선순위: 최근 모의고사 subjectRates (과락선 미만 → 최저순) → 퀴즈 정답률 최저 과목.
+ * @param {Object} p
+ * @param {{expected:number}|null} p.estimate estimateExpectedScore 결과 (없으면 갭 계산 생략)
+ * @param {Array} p.simHistory 모의고사 이력 (subjectRates 보유)
+ * @param {Array<{key:string,name:string}>} p.subjects 과목 메타
+ * @param {Object} p.counts 과목별 학습 카운트 (getSubjCounts 결과)
+ * @param {{passAverage:number,subjectFailBelow:number}} p.rules getExamRules()
+ * @returns {{gap:number|null, passLine:number, weakest:{key:string,name:string,rate:number,reason:string}|null, ranking:Array<{key:string,name:string,rate:number}>}|null}
+ */
+export function computePassGap(p) {
+    const rules = p.rules || { passAverage: 60, subjectFailBelow: 40 };
+    /** @type {{gap:number|null, passLine:number, weakest:{key:string,name:string,rate:number,reason:string}|null, ranking:Array<{key:string,name:string,rate:number}>}} */
+    const result = { gap: null, passLine: rules.passAverage, weakest: null, ranking: [] };
+    if (p.estimate && typeof p.estimate.expected === 'number') {
+        result.gap = Math.max(0, rules.passAverage - p.estimate.expected);
+    }
+
+    // 최근 모의고사 과락·최저 과목 (레거시 subjectN 키는 현재 과목 키로 환산)
+    const hist = Array.isArray(p.simHistory) ? p.simHistory : [];
+    const last = hist.length ? hist[hist.length - 1] : null;
+    if (last && last.subjectRates) {
+        const ranking = [];
+        for (const [k, rate] of Object.entries(last.subjectRates)) {
+            if (rate === null || rate === undefined) continue;
+            const key = resolveLegacySubjectKey(k);
+            const subj = (p.subjects || []).find(s => s.key === key);
+            ranking.push({ key, name: subj ? subj.name : key, rate });
+        }
+        ranking.sort((a, b) => a.rate - b.rate);
+        if (ranking.length) {
+            result.ranking = ranking;
+            const worst = ranking[0];
+            result.weakest = {
+                key: worst.key, name: worst.name, rate: worst.rate,
+                reason: worst.rate < rules.subjectFailBelow
+                    ? `과락선 ${rules.subjectFailBelow}점 미만`
+                    : '최근 모의고사 최저 과목'
+            };
+            return result;
+        }
+        // subjectRates가 비어 있으면 퀴즈 정답률 폴백으로 계속 진행
+    }
+
+    // 모의고사 없음 → 퀴즈 정답률 순위 (3문 이상 푼 과목만)
+    result.ranking = (p.subjects || [])
+        .filter(s => {
+            const sc = (p.counts || {})[s.key];
+            return sc && sc.quizSolved >= 3;
+        })
+        .map(s => {
+            const sc = p.counts[s.key];
+            return { key: s.key, name: s.name, rate: Math.round((sc.quizCorrect / sc.quizSolved) * 100) };
+        })
+        .sort((a, b) => a.rate - b.rate);
+    if (result.ranking.length) {
+        result.weakest = { ...result.ranking[0], reason: '퀴즈 정답률 최저 과목' };
+    }
+    return result;
+}
+
+/* =======================================================
+   4) 개념 클러스터 — 같은 교재 구간의 반복 오판
+   ======================================================= */
+
+/**
+ * 취약 진술을 개념 앵커(§챕터.절)로 묶어 "같은 개념 구간" 오판 집중을 찾는다.
+ * 저장 cid는 normalizeCidAnchor로 정규화 — 레거시 L####와 신형 §N.M이
+ * 같은 절이면 동일 클러스터로 병합된다 (AN-10).
+ * @param {Object} statementStats getAllStatementStats() 결과
+ * @param {Object} chapterRanges CHAPTER_RANGES 맵 (단원명 표시용)
+ * @param {number} [minSize] 클러스터로 볼 최소 오판 진술 수 (기본 2)
+ * @param {{chapterTitles?:Object, cidSection?:Object}} [maps] 섹션 앵커 해석 맵
+ * @returns {Array<{cid:string, subj:string, chapter:string|null, count:number, wrongs:number, sample:string}>}
+ */
+export function computeWeakConceptClusters(statementStats, chapterRanges, minSize = 2, maps) {
+    const cidSection = maps && maps.cidSection;
+    const groups = new Map(); // `${subj}|${anchor}` → agg
+    Object.entries(statementStats || {}).forEach(([sid, v]) => {
+        if (!v || !(v.w > 0) || (v.streak || 0) >= WEAK_GRADUATE_STREAK) return;
+        const subj = subjectFromSid(sid) || '';
+        const anchor = normalizeCidAnchor(v.cid, subj, cidSection);
+        if (!anchor) return; // q: 폴백·빈 cid — 개념 귀속 불가
+        const key = `${subj}|${anchor}`;
+        const cur = groups.get(key) || { cid: anchor, subj, count: 0, wrongs: 0, sample: '' };
+        cur.count++;
+        cur.wrongs += v.w;
+        if (!cur.sample && v.t) cur.sample = v.t;
+        groups.set(key, cur);
+    });
+    return [...groups.values()]
+        .filter(g => g.count >= minSize)
+        .map(g => ({ ...g, chapter: chapterFromCid(g.cid, g.subj, chapterRanges, maps) }))
+        .sort((a, b) => (b.wrongs - a.wrongs) || (b.count - a.count));
+}
+
+/* =======================================================
+   5) D-day 페이스 판정
+   ======================================================= */
+
+/**
+ * 최근 학습 페이스로 시험일까지 예상 커버율을 계산한다.
+ * 모든 기간 환산은 학습일 기준 — 페이스는 "최근 구간의 학습일당 카드"로 측정하고
+ * 잔여 기간은 getRemainingStudyDays(주간 학습일·통독 차감)로 환산한다.
+ * @param {Object} p
+ * @param {Object} p.calendar getStudyCalendar() 결과
+ * @param {number} p.totalCards 전체 카드 수
+ * @param {number} p.memorized 암기 완료 카드 수
+ * @param {number|null} p.dday 시험까지 남은 일수
+ * @param {number} [p.paceDays] 페이스 산정 기간 (달력일, 기본 최근 14일)
+ * @returns {{pacePerDay:number, projectedCoverage:number, neededPerDay:number|null, verdict:'ahead'|'behind'|'ontrack'}|null}
+ *   pacePerDay·neededPerDay는 모두 "학습일당" 카드 수
+ */
+export function computePaceProjection(p) {
+    const { calendar, totalCards, memorized, dday } = p;
+    if (dday === null || dday === undefined || dday <= 0 || !(totalCards > 0)) return null;
+    const remaining = Math.max(0, totalCards - memorized);
+    if (remaining === 0) {
+        return { pacePerDay: 0, projectedCoverage: 100, neededPerDay: 0, verdict: 'ahead' };
+    }
+    const days = p.paceDays || 14;
+    const weekly = getStudyGoals().weeklyStudyDays || 5;
+    // 산정 구간의 학습일 — 주간 학습일 기준으로 달력 구간을 환산
+    const elapsedStudyDays = Math.max(1, Math.floor(days * weekly / 7));
+    const stats = _rangeStats(calendar || {}, 0, days - 1);
+    const pacePerDay = stats.cards / elapsedStudyDays;
+    const studyDaysLeft = getRemainingStudyDays(dday);
+    const projected = memorized + pacePerDay * studyDaysLeft;
+    const projectedCoverage = Math.min(100, Math.round((projected / totalCards) * 100));
+    const neededPerDay = Math.ceil(remaining / studyDaysLeft);
+    const verdict = projectedCoverage >= 100 ? 'ahead'
+        : (pacePerDay >= neededPerDay * 0.7 ? 'ontrack' : 'behind');
+    return { pacePerDay: Math.round(pacePerDay * 10) / 10, projectedCoverage, neededPerDay, verdict };
+}
+
+/* =======================================================
+   6) 오답 원인 자동 추정 (미태깅 오답 휴리스틱)
+   ======================================================= */
+
+/**
+ * 태깅되지 않은 오답에 원인 추정값을 부여한다 (자가 태깅 보완용, 확정값 아님).
+ * 휴리스틱:
+ *   - 정답이 숫자/단위 → 'calc' (수치 문제)
+ *   - 문항이 '아닌/않는/잘못된' 부정형 → 'concept' (개념 구별 요구)
+ *   - 그 외 → 'memorize' (단순 기억)
+ * @param {Object} p
+ * @param {Object} p.quizResults state.quizResults
+ * @param {Object} p.wrongCauses state.wrongCauses (태깅된 항목 제외용)
+ * @param {(id:string)=>{quiz:object,subjectId:string}|null} p.resolveQuiz
+ * @returns {{counts:Object, estimated:number}} 추정 건수 (활성 분류표 키 기준)
+ */
+export function estimateUntaggedCauses(p) {
+    const labels = getWrongCauseLabels();
+    const counts = {};
+    Object.keys(labels).forEach(k => { counts[k] = 0; });
+    let estimated = 0;
+    const tagged = new Set(Object.keys(p.wrongCauses || {}));
+    const patterns = _autoPatterns(); // 루프 밖에서 1회 컴파일
+    Object.entries(p.quizResults || {}).forEach(([id, r]) => {
+        if (!r || r.correct) return;
+        const weakKey = id.startsWith(WEAK_QUIZ_PREFIX) || id.includes('_card_') ? id : WEAK_QUIZ_PREFIX + id;
+        if (tagged.has(id) || tagged.has(weakKey)) return; // 사용자 태깅 존중
+        const resolved = p.resolveQuiz ? p.resolveQuiz(id) : null;
+        const q = resolved && resolved.quiz;
+        if (!q) return;
+        estimated++;
+        const ans = String(q.answer ?? '').trim();
+        const text = String(q.question || '') + String(q.context || '');
+        const numeric = /^\d+(\.\d+)?\s*(%|ml|g|mg|배|회|일|개월|년|도|만원|원)?$/.test(ans);
+        // 시험별 확장 분류 — manifest autoPattern 정규식을 선언된 키에만 적용 (미선언 시 내장 규칙으로 귀속)
+        const hit = patterns.find(pt => counts[pt.key] !== undefined && pt.re.test(text));
+        if (hit) counts[hit.key]++;
+        else if (numeric && counts.numeric !== undefined && !/(계산|구하|얼마|몇)/.test(text)) counts.numeric++;
+        else if (numeric) counts.calc++;
+        else if (/(아닌|않는|틀린|잘못된|옳지)\s*(것|항목|설명)?/.test(text)) counts.concept++;
+        else counts.memorize++;
+    });
+    return { counts, estimated };
+}
+
+/**
+ * 과목별 마스터리 레벨 (D-16) — 판정된 진술 중 졸업(연속 정답
+ * WEAK_GRADUATE_STREAK회) 비율을 과목별로 집계해 Lv.1~5(20% 단위)로 환산한다.
+ * "본 적 있는 진술 중 얼마나 확실히 정답을 유지하는가"의 지표.
+ * @param {Object} statementStats getAllStatementStats() 결과
+ * @returns {Object<string, {total: number, graduated: number, percent: number, level: number}>} 과목키 → 마스터리
+ */
+export function computeMasteryLevels(statementStats) {
+    /** @type {Object<string, {total: number, graduated: number}>} */
+    const acc = {};
+    Object.entries(statementStats || {}).forEach(([sid, v]) => {
+        const subj = subjectFromSid(sid);
+        if (!subj || !v || !(v.j > 0)) return;
+        const m = acc[subj] || (acc[subj] = { total: 0, graduated: 0 });
+        m.total++;
+        if ((v.streak || 0) >= WEAK_GRADUATE_STREAK) m.graduated++;
+    });
+    /** @type {Object<string, {total: number, graduated: number, percent: number, level: number}>} */
+    const map = {};
+    Object.entries(acc).forEach(([subj, m]) => {
+        const percent = Math.round((m.graduated / m.total) * 100);
+        map[subj] = { ...m, percent, level: Math.min(5, Math.floor(percent / 20) + 1) };
+    });
+    return map;
+}
+
+/* =======================================================
+   7) 학습 패턴 분석 — 시간대·요일별 집중도
+   캘린더 엔트리의 시간대 버킷(h) + 날짜의 요일로 집계한다.
+   ======================================================= */
+
+const _DOW_LABELS = ['일', '월', '화', '수', '목', '금', '토'];
+const _HOUR_BANDS = [
+    { key: 'dawn', label: '새벽 (0~4시)', test: (h) => h >= 0 && h < 5 },
+    { key: 'morning', label: '오전 (5~11시)', test: (h) => h >= 5 && h < 12 },
+    { key: 'afternoon', label: '오후 (12~17시)', test: (h) => h >= 12 && h < 18 },
+    { key: 'evening', label: '저녁 (18~22시)', test: (h) => h >= 18 && h < 23 },
+    { key: 'night', label: '밤 (23시~)', test: (h) => h >= 23 }
+];
+
+/**
+ * 학습 패턴 인사이트 — 최다 활동 시간대·요일·주말 비중.
+ * @param {Object} calendar getStudyCalendar() 결과
+ * @returns {{activeDays:number, events:number,
+ *   topBand:{key:string,label:string,count:number,pct:number}|null,
+ *   topDow:{dow:number,label:string,count:number,pct:number}|null,
+ *   weekendShare:number}|null} 표본 부족(활동 4일·8회 미만)이면 null
+ */
+export function computeStudyPattern(calendar) {
+    const bandCnt = new Array(_HOUR_BANDS.length).fill(0);
+    const dowCnt = new Array(7).fill(0);
+    let activeDays = 0, actEvents = 0, hourEvents = 0, weekendEvents = 0;
+    Object.entries(calendar || {}).forEach(([dateStr, e]) => {
+        if (!e || !(e.cards > 0 || e.quizzes > 0 || (e.readMin || 0) > 0)) return;
+        activeDays++;
+        const d = new Date(dateStr + 'T00:00:00');
+        if (isNaN(d.getTime())) return;
+        const dow = d.getDay();
+        // 읽기 전용일도 학습 세션 1건으로 집계 — SC-15에서 읽기는 학습 활동으로 인정되므로
+        // 요일·주말 집중도와 표본 게이트(actEvents)에서 배제되지 않아야 한다.
+        const dayEvents = (e.cards || 0) + (e.quizzes || 0) + ((e.readMin || 0) > 0 ? 1 : 0);
+        dowCnt[dow] += dayEvents;
+        actEvents += dayEvents;
+        if (dow === 0 || dow === 6) weekendEvents += dayEvents;
+        if (e.h) {
+            Object.entries(e.h).forEach(([h, c]) => {
+                const bi = _HOUR_BANDS.findIndex(b => b.test(parseInt(h, 10)));
+                if (bi >= 0) { bandCnt[bi] += c; hourEvents += c; }
+            });
+        }
+    });
+    if (actEvents < 8 || activeDays < 4) return null;
+    const topBandIdx = bandCnt.indexOf(Math.max(...bandCnt));
+    const topDowIdx = dowCnt.indexOf(Math.max(...dowCnt));
+    return {
+        activeDays,
+        events: actEvents,
+        topBand: bandCnt[topBandIdx] > 0
+            ? { key: _HOUR_BANDS[topBandIdx].key, label: _HOUR_BANDS[topBandIdx].label, count: bandCnt[topBandIdx], pct: Math.round((bandCnt[topBandIdx] / hourEvents) * 100) }
+            : null,
+        topDow: dowCnt[topDowIdx] > 0
+            ? { dow: topDowIdx, label: _DOW_LABELS[topDowIdx] + '요일', count: dowCnt[topDowIdx], pct: Math.round((dowCnt[topDowIdx] / actEvents) * 100) }
+            : null,
+        weekendShare: Math.round((weekendEvents / actEvents) * 100)
+    };
+}
+
+/* =======================================================
+   8) 주간 리포트 — 공유용 텍스트 생성
+   ======================================================= */
+
+/**
+ * 주간 학습 리포트 텍스트 생성 (공유/클립보드용 — 마크다운 없는 평문).
+ * @param {Object} p
+ * @param {string} [p.appName] 앱명 (getExamAppName())
+ * @param {Object} [p.growth] computeWeeklyGrowth 결과
+ * @param {Object} [p.estimate] estimateCompositeScore 결과
+ * @param {Object} [p.gap] computePassGap 결과
+ * @param {Array} [p.weakChapters] computeSubjectWeakChapters 결과
+ * @param {Object} [p.pattern] computeStudyPattern 결과
+ * @param {Object} [p.plan] SC-06 계획 준수 요약 {weekActual, weekTarget, percent, statusLabel}
+ * @param {Array} [p.planBySubject] SC-11 과목별 준수 행 [{name, done, cards, quizDone, quizzes}] — 주간 배분 대비 실적
+ * @param {Object|null} [p.recEffect] AN-06 evaluateRecommendationEffect 결과 — 지난 추천 대상 과목의 정답률 변화
+ * @param {Object|null} [p.actual] AN-05 getActualResult 결과 — 실제 시험 자가 보고 {passed, score}
+ * @param {number} [p.bias] AN-05 computeCalibrationBias 결과 — 0이면 보정 표기 생략
+ * @param {string|null} [p.ddayLabel] D-day 표기
+ * @returns {string}
+ */
+export function buildWeeklyReportText(p) {
+    const now = new Date();
+    const weekAgo = new Date(now); weekAgo.setDate(now.getDate() - 6);
+    const fmt = (d) => `${d.getMonth() + 1}/${d.getDate()}`;
+    const lines = [`📋 ${p.appName || 'PassOK'} 주간 학습 리포트 (${fmt(weekAgo)}~${fmt(now)})`, ''];
+
+    const g = p.growth;
+    if (g) {
+        lines.push(`■ 이번 주: 퀴즈 ${g.thisWeek.quizzes}문 · 정답률 ${g.thisWeek.rate !== null ? g.thisWeek.rate + '%' : '—'} · 카드 ${g.thisWeek.cards}장 · 학습 ${g.thisWeek.days}일`);
+        if (g.rateDelta !== null) lines.push(`  정답률 전주 대비 ${g.rateDelta >= 0 ? '▲' : '▼'}${Math.abs(g.rateDelta)}%p`);
+    }
+    if (p.estimate) {
+        const src = p.estimate.source === 'sim' ? `모의고사 ${p.estimate.n}회 기준` : '학습 지표 복합 추정';
+        lines.push(`■ 예상 점수: ${p.estimate.lo}~${p.estimate.hi}점 (${src})`);
+    }
+    if (p.gap) {
+        if (p.gap.gap !== null) lines.push(`■ 합격선(평균 ${p.gap.passLine}점)까지: ${p.gap.gap === 0 ? '도달' : '+' + p.gap.gap + '점'}`);
+        if (p.gap.weakest) lines.push(`■ 최우선 보강: ${p.gap.weakest.name} ${p.gap.weakest.rate}%`);
+    }
+    const wc = (p.weakChapters || []).slice(0, 3);
+    if (wc.length) {
+        lines.push('■ 취약 단원:');
+        wc.forEach(w => {
+            const ch = (w.chapters || [])[0];
+            lines.push(`  - ${w.subject}${ch ? ' > ' + ch.chapter : ''} (오답 ${w.totalWrongs}건)`);
+        });
+    }
+    if (p.pattern) {
+        const bits = [];
+        if (p.pattern.topBand) bits.push(`집중 시간대 ${p.pattern.topBand.label}`);
+        if (p.pattern.topDow) bits.push(`최다 요일 ${p.pattern.topDow.label}`);
+        if (bits.length) lines.push(`■ 학습 패턴: ${bits.join(' · ')}`);
+    }
+    if (p.plan) {
+        lines.push(`■ 주간 계획 대비: 카드 ${p.plan.weekActual}/${p.plan.weekTarget}장 (${p.plan.percent}%) — ${p.plan.statusLabel}`);
+    }
+    (p.planBySubject || []).forEach(s => {
+        lines.push(`  - ${s.name}: ${s.done}/${s.cards}장${s.quizzes > 0 ? ` · 퀴즈 ${s.quizDone || 0}/${s.quizzes}문` : ''}`);
+    });
+    if (p.recEffect && p.recEffect.items && p.recEffect.items.length) {
+        const parts = p.recEffect.items.map(i =>
+            `${i.name} ${i.fromRate}%→${i.toRate}% (${i.delta >= 0 ? '▲' : '▼'}${Math.abs(i.delta)}%p)`);
+        lines.push(`■ 추천 효과: ${parts.join(' · ')}`);
+    }
+    if (p.actual && typeof p.actual.score === 'number') {
+        const biasNote = p.bias ? ` · 예측 대비 ${p.bias > 0 ? '+' : ''}${p.bias}점 보정 반영 중` : '';
+        lines.push(`■ 실제 시험: ${p.actual.passed ? '합격' : '불합격'} ${p.actual.score}점${biasNote}`);
+    }
+    if (p.ddayLabel) lines.push(`■ 시험일: ${p.ddayLabel}`);
+    lines.push('', '— PassOK 학습 진단 리포트');
+    return lines.join('\n');
+}

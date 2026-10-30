@@ -7,7 +7,7 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
 import {
     makeSessionCache, injectBundleScript, fetchMd,
     buildTocHtml, mountToc, createDocOverlay,
-} from '../../../src/doc-overlay.js';
+} from '../../../src/shell/doc-overlay.js';
 
 describe('makeSessionCache — TTL 세션 캐시', () => {
     beforeEach(() => { sessionStorage.clear(); });

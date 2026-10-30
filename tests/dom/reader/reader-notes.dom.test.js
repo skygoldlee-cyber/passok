@@ -6,8 +6,8 @@
 import { describe, it, beforeEach, expect } from 'vitest';
 import {
     getReaderNotes, getReaderNote, setReaderNote, deleteReaderNote, readerNoteCount,
-} from '../../../src/reader-notes.js';
-import { bindReaderNotes } from '../../../src/views/reader-render.js';
+} from '../../../src/study/reader-notes.js';
+import { bindReaderNotes } from '../../../src/views/reader/reader-render.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 
 const KEY = 'law|ch01|1.1 화장품 정의';

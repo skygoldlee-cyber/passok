@@ -84,7 +84,7 @@
   - `tools/build/index.js` → `data/exams/<id>/registry.js` + `data/exams/<id>/exams/*.hash.js` + `data/exams/<id>/ingredients_data.*.js` (시험별 루트, `exams.json`의 모든 시험 순회)
   - `tools/build/build_exam_bundles.js` → `data/exams/cosmetic/exams_md/*.js` (문제은행 MD file:// 폴리백 번들)
   - `tools/build/build_study_md_bundle.js` → `data/exams/cosmetic/study_md/` (교재 MD file:// 폴백, 과목별 분할)
-  - 런타임: `src/data-loader.js`가 registry를 보고 필요한 과목/시험만 온디맨드 로드
+  - 런타임: `src/content/data-loader.js`가 registry를 보고 필요한 과목/시험만 온디맨드 로드
 
 **오디오북 파이프라인** (`content/exams/cosmetic/audiobook/`)
 - Python: 마크다운 청크 분할 → TTS(Google gTTS / ElevenLabs) → MP3 병합

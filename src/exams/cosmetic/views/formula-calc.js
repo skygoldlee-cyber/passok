@@ -7,7 +7,7 @@
 
 import { esc, raw } from '../../../sanitize.js';
 import { showToast } from '../../../ui-utils.js';
-import { showStoreError } from '../../../pro-upgrade.js';
+import { showStoreError } from '../../../pro/pro-upgrade.js';
 import { switchView } from '../../../views/navigation.js';
 import { getJSON, setJSON } from '../../../storage.js';
 import { STORAGE_KEYS } from '../../../storage-keys.js';

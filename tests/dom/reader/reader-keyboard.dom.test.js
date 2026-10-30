@@ -1,7 +1,7 @@
 // @spec TR-24,TR-25
 // reader-toolbar.js — 키보드 내비(←/→·Home/End·/·b·ESC) + TOC 활성 항목 자동 스크롤
 import { describe, it, beforeEach, expect, vi } from 'vitest';
-import { bindReaderKeyboard, syncActiveTocItem } from '../../../src/views/reader-toolbar.js';
+import { bindReaderKeyboard, syncActiveTocItem } from '../../../src/views/reader/reader-toolbar.js';
 
 const READER_DOM = `
 <div id="textbook-reader-view" class="view-section active">

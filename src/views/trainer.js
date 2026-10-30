@@ -5,7 +5,7 @@ import { esc } from '../sanitize.js';
 import { shuffle } from '../utils.js';
 import { vibrate, HAPTIC, showToast, markChoiceButtons, wrongReviewHtml, trainerResultHtml, showAnswerFeedback } from '../ui-utils.js';
 import { PATHS } from '../paths.js';
-import { DataLoader } from '../data-loader.js';
+import { DataLoader } from '../content/data-loader.js';
 import { updateDueBadges, gotoWeakReview } from './trainer-drills.js';
 import { resetMainScroll } from './navigation.js';
 

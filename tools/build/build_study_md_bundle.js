@@ -19,10 +19,11 @@
  * 로컬 파일(file://) 실행 시에는 fetch가 차단되어 이 폴백이 사용된다.
  */
 
-// @spec BP-01,DA-04,CS-01,CS-08
+// @spec BP-01,DA-04,CS-01,CS-08,DA-16
 const fs = require('fs');
 const path = require('path');
 const { getExamTargets } = require('./exam_targets.js');
+const { encodeFiles } = require('../lib/content_pack.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 
@@ -65,7 +66,7 @@ window.__STUDY_MD_MANIFEST__ = ${JSON.stringify(manifest)};
         const subjOut = `// 자동 생성된 file:// 폴백 번들 (${subj.key})입니다. 수정하지 마십시오.
 // 생성: tools/build/build_study_md_bundle.js  |  ${new Date().toISOString()}
 window.__STUDY_MD_FILES__ = window.__STUDY_MD_FILES__ || {};
-window.__STUDY_MD_FILES__['${subj.key}'] = ${JSON.stringify(files)};
+window.__STUDY_MD_FILES__['${subj.key}'] = ${JSON.stringify(encodeFiles(files))};
 `;
         const subjPath = path.join(outDir, `${subj.key}.js`);
         fs.writeFileSync(subjPath, subjOut, 'utf-8');

@@ -23,7 +23,7 @@ import { buildAuditReportHtml, printHtml, batchQcSummary } from './formula-print
 import { showToast } from '../../../ui-utils.js';
 import { localDateTime, fmtLocalDateTime } from '../store-utils.js';
 import { fnv1aHex, deviceLabel } from '../../../utils.js';
-import { ensureNoticeStatus, getNoticeStamp } from '../../../notice-check.js';
+import { ensureNoticeStatus, getNoticeStamp } from '../../../shell/notice-check.js';
 
 const RECENT_BATCH_MAX = 10;   // 최근 배치 목록 상한 — 판매내역 증적
 const CONSULT_RECENT_MAX = 3;  // 고객별 최근 상담 이력 상한 (설계 §9-4)

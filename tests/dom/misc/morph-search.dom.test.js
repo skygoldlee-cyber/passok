@@ -21,7 +21,7 @@ import {
 import {
     renderTextbookSearch, setTextbookFilter,
 } from '../../../src/views/textbook-search.js';
-import { DataLoader } from '../../../src/data-loader.js';
+import { DataLoader } from '../../../src/content/data-loader.js';
 
 // '보조유화제'는 '보조|유화|제'로 분해되는 복합어 — 보조가 다른 어절의 두어로도
 // 재사용되므로(보조성분·보조제) 형태소 경계 어휘에 채택되어 본매치가 된다.

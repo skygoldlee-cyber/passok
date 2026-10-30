@@ -21,7 +21,7 @@ import {
 import {
     renderTextbookSearch, setTextbookFilter,
 } from '../../../src/views/textbook-search.js';
-import { DataLoader } from '../../../src/data-loader.js';
+import { DataLoader } from '../../../src/content/data-loader.js';
 
 const SUBJ_A = {
     key: 'subja',

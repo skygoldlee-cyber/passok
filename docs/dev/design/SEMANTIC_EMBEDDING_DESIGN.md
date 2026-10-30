@@ -2,7 +2,7 @@
 
 > 상위 문서: [SPEC](../SPEC.md) §3.1.5(AN-10), §3.9(TS-08~11), §3.11(DR-05)
 > **범위**: platform · 판본: none
-> **상태**: 임베딩 인프라 구현됨 (`npm run build:embeddings` → `{dataRoot}/embeddings/` 벡터·이웃 인덱스 번들, `check:embfresh` 신선도 게이트, `src/semantic-index.js`) · 의미 소비 표면 일부와 오답 원인 자동 분류(하단 절 — 구 `SEMANTIC_EMBEDDING_DESIGN.md`)는 미구현
+> **상태**: 임베딩 인프라 구현됨 (`npm run build:embeddings` → `{dataRoot}/embeddings/` 벡터·이웃 인덱스 번들, `check:embfresh` 신선도 게이트, `src/search/semantic-index.js`) · 의미 소비 표면 일부와 오답 원인 자동 분류(하단 절 — 구 `SEMANTIC_EMBEDDING_DESIGN.md`)는 미구현
 > **관련 SPEC ID**: `AN-10`(개념 앵커) · `AN-02`(진단 요약) · `AN-07`(오답 원인 분류) · `AN-09`(주간 리포트) · `TS-08`(역색인) · `TS-09`(인덱스 캐싱) · `TS-10`(서사 검색) · `TS-11`(참조자료 검색) · `DR-05`(취약 진술 리뷰) · `DA-02`(빌드 번들) · `DA-05`(로컬 저장) · `DA-06`(멀티시험) · `DA-08`(피처 플래그) · `PF-02`(온디맨드 로딩) · `SEM-05`(임베딩 신선도)
 > **문서 ID**: DOC-DSN-18
 
@@ -102,7 +102,7 @@ window.EMB_NEIGHBORS = {
 
 ## 6. 런타임 모듈·소비 지점
 
-### 6.1 `src/semantic-index.js` (제안, 신규 플랫폼 모듈)
+### 6.1 `src/search/semantic-index.js` (제안, 신규 플랫폼 모듈)
 
 ```ts
 await SemanticIndex.ensureNeighbors();                    // EMB_NEIGHBORS 지연 로드
@@ -168,7 +168,7 @@ SemanticIndex.topK(queryVec, {type?, subject?, k})        // 전수 스캔 (벡�
 - **수치 검증(빌드 시 자동)**: ids 중복 0, 차원 일치, NaN/Inf 0, ‖v‖≈1(양자화 전), 왕복 복원 코사인 오차 보고.
 - **검색 품질(수동 샘플 게이트)**: 과목당 임의 20개 시드 항목의 top-8 이웃을 사람이 "유사/비유사" 판정 → precision@8 ≥ 0.7 목표, 미달 시 모델 격상(§3) 또는 τ 조정.
 - **알려진 혼동쌍 recall**: 도메인적으로 혼동이 확실한 쌍 세트(예: 보존제 계열 비교, 알레르기 표 항목, 한도 수치 쌍 — 콘텐츠 검수자가 30~50쌍 큐레이션)를 회귀 평가셋으로 고정해 recall@k 추적.
-- **기존 게이트 호환**: `check:datafresh` 계열(§7-2 sourceHash), `check:manifest`(features.semantic 선언), `check:domainmap`(신규 파일 layer 선언 — `src/semantic-index.js`는 platform, `ref-pipeline/embeddings/`는 도메인-무관 도구), `check:storage`(신규 저장 키 없음 — v1은 읽기 전용 자산), `verify:assets`(번들 파일 존재 — 매니페스트 선언 기준).
+- **기존 게이트 호환**: `check:datafresh` 계열(§7-2 sourceHash), `check:manifest`(features.semantic 선언), `check:domainmap`(신규 파일 layer 선언 — `src/search/semantic-index.js`는 platform, `ref-pipeline/embeddings/`는 도메인-무관 도구), `check:storage`(신규 저장 키 없음 — v1은 읽기 전용 자산), `verify:assets`(번들 파일 존재 — 매니페스트 선언 기준).
 - **테스트**: 단위 테스트는 결정적 합성 벡터로 topK/cosine/margin 검증(`tests/unit/`); DOM 테스트는 "유사 진술" 표시·게이트 비활성 경로.
 
 ## 10. 프라이버시·라이선스
@@ -181,7 +181,7 @@ SemanticIndex.topK(queryVec, {type?, subject?, k})        // 전수 스캔 (벡�
 
 1. **SPEC**: §3.9 검색 또는 신규 절에 SEM-xx ID 등록 (제안: SEM-01 유사도 자산 스키마, SEM-02 이웃 인덱스, SEM-03 유사 문항 추천, SEM-04 혼동쌍 탐지, SEM-05 피처 게이트) → 코드에 `@spec` 태그.
 2. **exams.json**: `features.semantic` 선언(cosmetic 먼저, food는 데이터 검증 후).
-3. **domain-map**: `src/semantic-index.js` → platform; `ref-pipeline/embeddings/**` → 도구 layer; `data/exams/*/embeddings/` → 시험 데이터 규약(자동 주입되는지 확인 — 미주입 시 규칙 추가).
+3. **domain-map**: `src/search/semantic-index.js` → platform; `ref-pipeline/embeddings/**` → 도구 layer; `data/exams/*/embeddings/` → 시험 데이터 규약(자동 주입되는지 확인 — 미주입 시 규칙 추가).
 4. **storage**: v1은 신규 키 없음. 개인화(선택 시)는 `storage.js` 경유 스코프드 키로 추가.
 
 ## 12. 관련 설계
@@ -202,7 +202,7 @@ SemanticIndex.topK(queryVec, {type?, subject?, k})        // 전수 스캔 (벡�
 
 ### 1. 배경·목적
 
-`estimateUntaggedCauses`(src/analysis-engine.js)는 사용자가 원인을 태그하지 않은 오답에 정규식 기반으로 원인을 귀속한다:
+`estimateUntaggedCauses`(src/study/analysis-engine.js)는 사용자가 원인을 태그하지 않은 오답에 정규식 기반으로 원인을 귀속한다:
 
 1. manifest `wrongCauses[].autoPattern` 정규식 히트 → 선언된 확장 키
 2. 정답이 수치 → `numeric`(선언 시) 또는 `calc`
@@ -293,7 +293,7 @@ SemanticIndex.topK(queryVec, {type?, subject?, k})        // 전수 스캔 (벡�
 
 ### 8. 구현 시 필요한 선행 등록
 
-1. **DOC-DSN-18 선행** — `question` 벡터 번들 + `src/semantic-index.js` API 확보.
+1. **DOC-DSN-18 선행** — `question` 벡터 번들 + `src/search/semantic-index.js` API 확보.
 2. **SPEC**: AN-07 확장 또는 신규 WC-xx ID 등록 (제안: WC-01 센트로이드 추정기, WC-02 확신도 게이트, WC-03 제안 UI, WC-04 수용률 지표) → `@spec` 태그.
 3. **exams.json**: `features.semantic` 게이트와 동일 플래그 공유 가능 — 별도 `features.causeClassifier`(제안)로 분리하면 D18 없이 규칙만 쓰는 시험과 공존 용이.
 4. **domain-map**: `src/wrong-cause-classifier.js`(제안) → platform layer 선언.

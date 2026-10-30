@@ -12,7 +12,7 @@
 //   - 조문이 없는 비정형 문서는 전체 본문 비교로 폴백 (unstructured 표시)
 const fs = require('fs');
 const path = require('path');
-const { getExamTargets } = require('./exam_targets');
+const { getExamTargets } = require('./exam_targets.js');
 
 const ROOT = path.join(__dirname, '..', '..');
 

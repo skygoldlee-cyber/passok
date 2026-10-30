@@ -1,0 +1,45 @@
+// src/theme-toggle.js — 테마 토글 로직 (app.js에서 추출)
+// @spec TH-01~05
+import { STORAGE_KEYS } from '../storage-keys.js';
+import { safeGetItem, safeSetItem } from '../state.js';
+
+/**
+ * 헤더 테마 토글 버튼을 초기화하고 전역 테마 API를 노출합니다.
+ */
+export function setupThemeToggle() {
+    const root = document.documentElement;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    function isLight() { return root.classList.contains('light-theme'); }
+    function apply(light) {
+        root.classList.toggle('light-theme', light);
+        if (meta) meta.setAttribute('content', light ? '#dde3ec' : '#0b0f19');
+        safeSetItem(STORAGE_KEYS.APP_THEME, light ? 'light' : 'dark');
+        // 리더 등 다른 모듈이 동일한 테마 상태를 공유하도록 이벤트 브로드캐스트
+        document.dispatchEvent(new CustomEvent('themechange', { detail: { light: light } }));
+    }
+    function toggle() { apply(!isLight()); }
+    // 전역 테마 API 노출 (단일 소스 오브 트루스)
+    window.AppTheme = { isLight: isLight, apply: apply, toggle: toggle };
+
+    const btn = document.getElementById('theme-toggle-btn');
+    function syncHeaderBtn() {
+        if (!btn) return;
+        const i = btn.querySelector('i');
+        if (i) i.className = isLight() ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        btn.title = isLight() ? '다크 모드로 전환' : '라이트 모드로 전환';
+    }
+    syncHeaderBtn();
+    document.addEventListener('themechange', syncHeaderBtn);
+    if (btn) btn.addEventListener('click', toggle);
+
+    // 사용자가 수동 선택하지 않았을 때만 시스템 테마 변경을 따라감
+    if (window.matchMedia) {
+        const mq = window.matchMedia('(prefers-color-scheme: light)');
+        const onChange = function (e) {
+            if (safeGetItem(STORAGE_KEYS.APP_THEME)) return;
+            apply(e.matches);
+        };
+        if (mq.addEventListener) mq.addEventListener('change', onChange);
+        else if (mq.addListener) mq.addListener(onChange);
+    }
+}

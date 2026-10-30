@@ -22,9 +22,9 @@
 
 'use strict';
 
-const { parseArgs, getTargets, listQbanks, writeDraft, loadEnv } = require('./lib/ai_common');
-const { parseQuestionBank } = require('./lib/qbank');
-const llm = require('./llm_client');
+const { parseArgs, getTargets, listQbanks, writeDraft, loadEnv } = require('./lib/ai_common.js');
+const { parseQuestionBank } = require('./lib/qbank.js');
+const llm = require('./llm_client.js');
 
 function lintQuestion(q, ans) {
     const issues = [];

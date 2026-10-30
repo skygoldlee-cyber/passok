@@ -9,7 +9,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { loadEnv } = require('./env');
+const { loadEnv } = require('./env.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 

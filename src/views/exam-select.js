@@ -210,7 +210,7 @@ export async function hardReloadApp() {
 // P-14 — 선택 팩 다운로드 진행 표시: cachePack 요청 후 packCached 응답까지 토스트로 안내.
 // 다른 시험 선택 시 selectExam이 즉시 리로드하므로 플래그를 localStorage에 남겨
 // 부팅(app-shell)에서 복구 표시한다 — 완료 시 제거.
-export const PACK_DL_FLAG = 'pack_dl_pending';
+const PACK_DL_FLAG = 'pack_dl_pending';
 let _packDlListener = null;
 function _showPackDownloadStatus(examId) {
     showToast('오프라인 학습 자료를 내려받는 중…', 'info');

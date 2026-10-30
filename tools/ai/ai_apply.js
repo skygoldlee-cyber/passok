@@ -29,8 +29,8 @@
 const fs = require('fs');
 const path = require('path');
 const { parseArgs, getTargets, listQbanks, DRAFT_DIR, ROOT, listDraftFiles,
-    draftBodyHash, parseDraftMeta, logAdoption } = require('./lib/ai_common');
-const { listTextbooks } = require('./lib/textbook');
+    draftBodyHash, parseDraftMeta, logAdoption } = require('./lib/ai_common.js');
+const { listTextbooks } = require('./lib/textbook.js');
 
 /** 초안 md에서 {qnum → 해설 텍스트} 추출 */
 function parseExplainDraft(draftPath) {

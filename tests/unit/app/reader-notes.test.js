@@ -36,7 +36,7 @@ beforeEach(async () => {
     originalWindow = global.window;
     Object.defineProperty(global, 'localStorage', { value: mockStorage, writable: true, configurable: true });
     Object.defineProperty(global, 'window', { value: { EXAMS_LIST: EXAMS }, writable: true, configurable: true });
-    notes = await import(`../../../src/reader-notes.js?case=${Date.now()}_${Math.random()}`);
+    notes = await import(`../../../src/study/reader-notes.js?case=/${Date.now()}_${Math.random()}`);
 });
 
 afterEach(() => {

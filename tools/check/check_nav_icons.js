@@ -5,7 +5,7 @@
  * 서로 다른 FA 아이콘을 쓰도록 강제한다.
  * 기능 식별은 data-uitext 키·data-target·data-click 기준 — 사이드바와
  * 모바일 탭의 동일 기능 반복(반응형)은 허용, 다른 기능의 재사용만 차단.
- * @spec none (메뉴 아이콘 고유성 규약 — 기능별 시각 구분 보장)
+ * @spec UX-VFY-07 (메뉴 아이콘 고유성 규약 — 기능별 시각 구분 보장)
  */
 const fs = require('fs');
 const path = require('path');

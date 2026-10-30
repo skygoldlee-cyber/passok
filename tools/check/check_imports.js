@@ -28,11 +28,11 @@ const SRC_DIR = path.join(ROOT, 'src');
 // 계층 방향 규칙 — 뷰 컨트롤러(views/)를 import할 수 있는 앱 셸 모듈 명단.
 // 코어 라이브러리가 뷰를 역참조하면 순환·결합이 생기므로 이 명단 외는 오류.
 const SHELL_MODULES = new Set([
-    'src/app.js',
+    'src/shell/app.js',
     'src/router.js',
-    'src/command-palette.js',
+    'src/shell/command-palette.js',
     'src/reader/manual-viewer.js',
-    'src/ui-mode.js'
+    'src/shell/ui-mode.js'
 ]);
 
 // --- 파일 수집 ---

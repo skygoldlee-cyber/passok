@@ -3,7 +3,7 @@
 // ============================================================
 // 입력 : {contentRoot}/문제은행/<manifest.json의 exams[].file>
 //        (manifest 미등록 MD — 설계 문서 등 — 은 번들하지 않음)
-//        복수정답형 문제집은 과목N_복수정답형.md 산출물 없이 드릴 번들을 런타임 렌더링한다 (src/combo-doc.js)
+//        복수정답형 문제집은 과목N_복수정답형.md 산출물 없이 드릴 번들을 런타임 렌더링한다 (src/content/combo-doc.js)
 // 출력 : {dataRoot}/exams_md/<stem>.js  (window.__EXAM_MD__["<contentRoot>/문제은행/<file>"] = "...")
 //
 // [멀티시험] content/exams.json의 모든 시험을 순회한다.
@@ -15,7 +15,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { getExamTargets } = require('./exam_targets');
+const { getExamTargets } = require('./exam_targets.js');
+const { encodeText } = require('../lib/content_pack.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const AUTOGEN_HEADER = '// 자동 생성된 문제집 번들입니다. 수정하지 마십시오. (tools/build/build_exam_bundles.js)';
@@ -71,7 +72,7 @@ function buildForExam(target) {
             AUTOGEN_HEADER + '\n' +
             `// 원본: ${key}\n` +
             '(window.__EXAM_MD__ = window.__EXAM_MD__ || {})[' +
-            JSON.stringify(key) + '] = ' + JSON.stringify(md) + ';\n';
+            JSON.stringify(key) + '] = ' + JSON.stringify(encodeText(md, key)) + ';\n';
 
         const stem = file.replace(/\.md$/i, '');
         const outPath = path.join(OUT_DIR, stem + '.js');

@@ -20,6 +20,7 @@
 //   번들이 없으면 `node tools/build/build_exam_bundles.js` 를 실행하라는 안내를 띄웁니다.
 //   오버레이 셸·캐시·TOC·번들 주입은 src/doc-overlay.js 공용 베이스 사용
 //
+import { pkDecode } from '../content/unpack.js';
 import { escapeHTML } from '../sanitize.js';
 import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
 import { resolveRefPath, refDocDisplayName } from '../pdf-registry.js';
@@ -27,11 +28,11 @@ import { contentPath, dataPath, getActiveRegistry } from '../exam-context.js';
 import { getJSON, setJSON } from '../storage.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
 import { CACHE } from '../config/cache.js';
-import { proFeatureNotice } from '../pro-upgrade.js';
+import { proFeatureNotice } from '../pro/pro-upgrade.js';
 import { renderMermaidIn } from './mermaid-render.js';
-import { DataLoader } from '../data-loader.js';
-import { buildComboSubjectMd } from '../combo-doc.js';
-import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay, scrollToHeadingSlug } from '../doc-overlay.js';
+import { DataLoader } from '../content/data-loader.js';
+import { buildComboSubjectMd } from '../content/combo-doc.js';
+import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay, scrollToHeadingSlug } from '../shell/doc-overlay.js';
 
 export const ExamViewer = (() => {
     // 캐시 포맷 변경: v7 — allowMermaid 활성화 (참조자료 md의 ```mermaid 블록 렌더링)
@@ -427,16 +428,16 @@ body.exam-open{overflow:hidden;}
 
     // 번들(전역 __EXAM_MD__)에서 마크다운 조회 — 없으면 해당 번들 스크립트를 주입 후 재조회
     async function _loadFromBundle(mdPath) {
-        if (window.__EXAM_MD__ && typeof window.__EXAM_MD__[mdPath] === 'string') {
-            return window.__EXAM_MD__[mdPath];
+        if (window.__EXAM_MD__ && typeof pkDecode(window.__EXAM_MD__[mdPath]) === 'string') {
+            return pkDecode(window.__EXAM_MD__[mdPath]);
         }
         try {
             await injectBundleScript(_bundlePathFor(mdPath), 'data-exam-bundle');
         } catch (e) {
             throw new Error('문제집 번들을 찾을 수 없습니다. 터미널에서 `node tools/build/build_exam_bundles.js` 를 실행해 번들을 생성하세요.');
         }
-        if (window.__EXAM_MD__ && typeof window.__EXAM_MD__[mdPath] === 'string') {
-            return window.__EXAM_MD__[mdPath];
+        if (window.__EXAM_MD__ && typeof pkDecode(window.__EXAM_MD__[mdPath]) === 'string') {
+            return pkDecode(window.__EXAM_MD__[mdPath]);
         }
         throw new Error('문제집 번들에 해당 문항이 없습니다. `node tools/build/build_exam_bundles.js` 로 다시 빌드하세요.');
     }

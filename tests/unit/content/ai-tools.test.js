@@ -388,14 +388,14 @@ test('AI-19: 카드팁 오버레이 계약 — flashcard.html 표시 요소·Car
     assert.ok(html.includes('id="card-back-tip"') && html.includes('id="card-tip-container"'), 'tip 표시 요소');
     const types = fs.readFileSync(path.join(process.cwd(), 'src/types.js'), 'utf8');
     assert.ok(types.includes('[tip]'), 'Card typedef에 tip 필드');
-    const loader = fs.readFileSync(path.join(process.cwd(), 'src/data-loader.js'), 'utf8');
+    const loader = fs.readFileSync(path.join(process.cwd(), 'src/content/data-loader.js'), 'utf8');
     assert.ok(loader.includes('_getCardTips') && loader.includes('피드백/card_tip.json'), 'DataLoader 오버레이 병합');
 });
 
 test('AI-22: 카드 제외 목록 — card_exclude.json의 ID가 실제 파싱 카드에 존재하고 로더·도구가 적용', () => {
     const fs = require('fs'), path = require('path');
     const root = process.cwd();
-    const loader = fs.readFileSync(path.join(root, 'src/data-loader.js'), 'utf8');
+    const loader = fs.readFileSync(path.join(root, 'src/content/data-loader.js'), 'utf8');
     assert.ok(loader.includes('_getCardExcludes') && loader.includes('피드백/card_exclude.json'), 'DataLoader 제외 목록 로드');
     assert.ok(loader.includes('data.cards = data.cards.filter'), 'DataLoader 카드 필터 적용');
     const aiCards = fs.readFileSync(path.join(root, 'tools/ai/ai_cards.js'), 'utf8');

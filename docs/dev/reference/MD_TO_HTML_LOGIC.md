@@ -347,7 +347,7 @@ async function openDocument(sourceKey) {
 ### 5.5 이벤트 위임 연동
 
 - `index.html`에서 `data-click="ManualViewer.openManual"` / `data-click="ManualViewer.openSummary"` 속성으로 버튼 연결
-- `src/app.js`의 `document.body.addEventListener('click', ...)`에서 위임 처리
+- `src/shell/app.js`의 `document.body.addEventListener('click', ...)`에서 위임 처리
 - 안드로이드 Chrome `Text` 노드 대응: `e.target instanceof Element ? e.target : e.target.parentElement`
 
 ---
@@ -441,7 +441,7 @@ document.addEventListener('themechange', () => {
 
 ### 7.3 안드로이드 Chrome Text 노드 대응
 
-`@/src/app.js:948-954`
+`@/src/shell/app.js:948-954`
 
 ```javascript
 document.body.addEventListener('click', (e) => {
@@ -520,7 +520,7 @@ flowchart TD
 | 예상문제집 뷰어 | `src/reader/exam-viewer.js` |
 | Service Worker | `sw.js` |
 | 번들 빌더 | `tools/build/build_doc_bundles.js` |
-| 이벤트 위임 | `src/app.js` |
+| 이벤트 위임 | `src/shell/app.js` |
 | Python 변환기 | `ref-pipeline/md2doc.py` |
 | 배치 변환 스크립트 | `ref-pipeline/batch_convert.py` |
 

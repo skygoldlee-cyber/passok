@@ -26,7 +26,7 @@
  *       예: --rename-batch tmp/renames.json  (형식: [{"from":"문제은행/구.md","to":"문제은행/신.md"}, ...])
  */
 
-// @spec none (콘텐츠 구조 동기화 도구)
+// @spec CS-01,CS-02 (교재/문제은행 파일 구조 ↔ manifest·sw.js 정합)
 const fs = require('fs');
 const path = require('path');
 const { getExamTargets, getPrecacheMdAssets, getPrecacheMediaAssets } = require('../build/exam_targets.js');

@@ -8,7 +8,7 @@ import { isSupabaseConfigured } from './supabase-config.js';
 import { safeGetItem, safeSetItem, listScopedKeys, setDataWriteHook } from '../state.js';
 import { STORAGE_KEYS, BACKUP_KEYS, isDailyCompletedKey } from '../storage-keys.js';
 import { unscopedKey, getActiveExamId } from '../exam-context.js';
-import { canCloudSync } from '../pro-upgrade.js';
+import { canCloudSync } from '../pro/pro-upgrade.js';
 import { showToast, showConfirm } from '../ui-utils.js';
 
 // @spec AU-07,DA-10

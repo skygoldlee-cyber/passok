@@ -5,7 +5,7 @@
 // 기존 SW controllerchange 자동 리로드와 보완 관계: 장시간 열린 탭에서
 // 브라우저가 SW 업데이트를 확인하기 전에도 배포를 감지할 수 있다.
 
-import { appVersion } from '../app-version.js';
+import { appVersion } from '../shell/app-version.js';
 import { esc } from '../sanitize.js';
 
 const POLL_INTERVAL_MS = 5 * 60 * 1000; // 5분
@@ -19,7 +19,7 @@ export function parseDeployedVersion(text) {
 }
 
 /** 배포본 버전 조회 — 캐시 우회 (오프라인·실패 시 null) */
-export async function fetchDeployedVersion() {
+async function fetchDeployedVersion() {
     try {
         const res = await fetch(`data/version.js?v=${Date.now()}`, { cache: 'no-store' });
         if (!res.ok) return null;
@@ -45,7 +45,7 @@ export async function hardReload() {
 }
 
 /** 새 버전 프롬프트 배너 표시 — "새로고침" 버튼으로 사용자 확인 후 적용 */
-export function showNewVersionPrompt(deployed) {
+function showNewVersionPrompt(deployed) {
     if (_promptShown || typeof document === 'undefined' || !document.body) return;
     _promptShown = true;
     const banner = document.createElement('div');

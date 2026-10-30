@@ -11,7 +11,7 @@
 // 실행: node tools/build/build_audio_manifest.js
 const fs = require('fs');
 const path = require('path');
-const { getExamTargets } = require('./exam_targets');
+const { getExamTargets } = require('./exam_targets.js');
 
 const WORKSPACE_DIR = path.resolve(__dirname, '..', '..');
 const OUT_PATH = path.join(WORKSPACE_DIR, 'data', 'audio_manifest.js');

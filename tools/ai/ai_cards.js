@@ -22,8 +22,8 @@
 const fs = require('fs');
 const path = require('path');
 const { createRequire } = require('module');
-const { parseArgs, getTargets, writeDraft, loadEnv, DRAFT_DIR, ROOT, listDraftFiles } = require('./lib/ai_common');
-const llm = require('./llm_client');
+const { parseArgs, getTargets, writeDraft, loadEnv, DRAFT_DIR, ROOT, listDraftFiles } = require('./lib/ai_common.js');
+const llm = require('./llm_client.js');
 
 const esmRequire = createRequire(path.join(ROOT, 'tools', 'build', 'plugins', 'textbook.plugin.js'));
 const { buildSubjectData } = esmRequire('../../../src/reader/textbook-core.js');

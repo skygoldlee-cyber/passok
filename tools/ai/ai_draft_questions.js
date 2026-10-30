@@ -16,10 +16,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const { parseArgs, getTargets, writeDraft, loadEnv, ROOT } = require('./lib/ai_common');
-const { listTextbooks, chunkTextbook } = require('./lib/textbook');
-const { citationValid } = require('./lib/citations');
-const llm = require('./llm_client');
+const { parseArgs, getTargets, writeDraft, loadEnv, ROOT } = require('./lib/ai_common.js');
+const { listTextbooks, chunkTextbook } = require('./lib/textbook.js');
+const { citationValid } = require('./lib/citations.js');
+const llm = require('./llm_client.js');
 
 const SYSTEM = `당신은 자격시험 출제 보조입니다. 제공된 교재 청크만을 근거로 문제 초안을 만든다.
 출력 형식(각 문항):

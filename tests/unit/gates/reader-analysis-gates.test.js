@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const READER = readFileSync(join(ROOT, 'src/views/textbook-reader.js'), 'utf-8');
 const DASHBOARD = readFileSync(join(ROOT, 'src/views/analysis-view.js'), 'utf-8');
-const APP = readFileSync(join(ROOT, 'src/app.js'), 'utf-8');
+const APP = readFileSync(join(ROOT, 'src/shell/app.js'), 'utf-8');
 const BUILDER = readFileSync(join(ROOT, 'tools/build/build_story_textbooks.js'), 'utf-8');
 
 // ---------- TR-19: 이야기형 모드 전환 위치 보존 ----------

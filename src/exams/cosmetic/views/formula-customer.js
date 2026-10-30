@@ -10,7 +10,7 @@
 import { esc } from '../../../sanitize.js';
 import { todayKey } from '../../../utils.js';
 import { showToast, showConfirm } from '../../../ui-utils.js';
-import { showStoreError, showUpgradeNotice } from '../../../pro-upgrade.js';
+import { showStoreError, showUpgradeNotice } from '../../../pro/pro-upgrade.js';
 import { showPanel, formulaSubNav } from './formula.js';
 import { listFormulas } from '../formula-store.js';
 import { setJSONMany } from '../../../storage.js';
@@ -28,7 +28,7 @@ import { buildConsentHtml, printHtml } from './formula-print.js';
 
 import {
   parseCsv, csvToObjects, readCsvFile, toCsv, downloadCsv,
-} from '../../../csv-utils.js';
+} from '../../../content/csv-utils.js';
 
 // 폼 상태 — editingId + 알레르기 칩 목록 (포뮬러 폼과 동일 패턴)
 const cust = /** @type {{editingId: string|null, allergies: string[]}} */ ({ editingId: null, allergies: [] });

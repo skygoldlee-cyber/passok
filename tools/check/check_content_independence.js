@@ -39,11 +39,11 @@ const GENERATED_HEADER_RE = /자동 생성|직접 수정하지 마시고/;
  */
 const ALLOWED = [
     {
-        file: 'src/notice-check.js', contains: "'law'",
+        file: 'src/shell/notice-check.js', contains: "'law'",
         reason: "law.go.kr API target 구분자(법령 vs admrul 행정규칙) — 과목 키 'law'와 무관한 외부 API 상수"
     },
     {
-        file: 'src/data-loader.js', contains: 'window.DATA_REGISTRY',
+        file: 'src/content/data-loader.js', contains: 'window.DATA_REGISTRY',
         reason: '레지스트리 로딩 경로 소유처 — registryGlobal 해석·기본 시험 정적 전역 확보·비기본 번들 누락 가드. 다른 모듈은 exam-context.getActiveRegistry()로만 접근'
     },
     {

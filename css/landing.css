@@ -49,6 +49,30 @@ body {
     justify-content: center;
     flex-wrap: wrap;
 }
+.landing-diff-strip {
+    list-style: none;
+    display: flex;
+    gap: var(--space-3, 0.75rem);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: var(--space-5, 1.25rem) auto 0;
+    padding: 0;
+    max-width: 46rem;
+}
+.landing-diff-strip li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+    text-align: left;
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    border: 1px solid var(--color-border, rgba(255,255,255,.12));
+    border-radius: var(--radius-md, 10px);
+    background: var(--color-surface-2, rgba(255,255,255,.04));
+    flex: 1 1 12rem;
+}
+.landing-diff-strip i { font-size: 1.15rem; color: var(--color-primary); }
+.landing-diff-strip strong { display: block; font-size: var(--text-sm-md, 0.85rem); }
+.landing-diff-strip span { font-size: var(--text-xs, 0.72rem); color: var(--color-text-muted); }
 
 /* ── 섹션 공통 ── */
 .landing-section { margin-top: var(--space-8, 2rem); }
@@ -312,3 +336,8 @@ body {
     .landing-logo { font-size: 1.8rem; }
     .landing-tagline { font-size: 1.25rem; }
 }
+
+.landing-exam-group { margin-bottom: var(--space-5, 1.25rem); }
+.landing-exam-group-head { display: flex; align-items: baseline; gap: var(--space-2, 0.5rem); margin-bottom: var(--space-3, 0.75rem); }
+.landing-exam-group-name { font-weight: 700; font-size: var(--text-md, 1rem); color: var(--color-primary); }
+.landing-exam-group-count { font-size: var(--text-xs, 0.72rem); color: var(--color-text-muted); }

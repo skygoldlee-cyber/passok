@@ -5,7 +5,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-const ENGINE = '../../../src/analysis-engine.js';
+const ENGINE = '../../../src/study/analysis-engine.js';
 
 test('subjectFromSid: sid에서 과목 키 추출', async () => {
     const { subjectFromSid } = await import(ENGINE);

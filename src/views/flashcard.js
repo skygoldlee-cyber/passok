@@ -3,7 +3,7 @@
 import { state } from '../state.js';
 import { safeTextWithBreaks } from '../sanitize.js';
 import { shuffle } from '../utils.js';
-import { getDueCards } from '../spaced-repetition.js';
+import { getDueCards } from '../study/spaced-repetition.js';
 
 const CARD_TYPE_LABELS = {
     penalty: '처벌',

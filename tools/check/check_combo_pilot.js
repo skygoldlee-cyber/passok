@@ -13,7 +13,7 @@ import vm from 'node:vm';
 const root = path.dirname(fileURLToPath(import.meta.url));
 const src = path.join(root, '..', '..');
 const { validateQuestion, deriveComboAnswer, gradeAnswer } = await import(
-  pathToFileURL(path.join(src, 'src', 'questions.js')).href
+  pathToFileURL(path.join(src, 'src', 'content', 'questions.js')).href
 );
 
 const { getDefaultExamRoots } = (await import(

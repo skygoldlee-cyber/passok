@@ -8,9 +8,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { runUnifiedSearch, lazyIndexesPending, registerSearchSource, ensureLazyIndexes }
-    from '../../../src/search-index.js';
-import { initSearchSources } from '../../../src/search-sources.js';
-import { DataLoader } from '../../../src/data-loader.js';
+    from '../../../src/search/search-index.js';
+import { initSearchSources } from '../../../src/search/search-sources.js';
+import { DataLoader } from '../../../src/content/data-loader.js';
 
 initSearchSources(); // TS-18 — 프로바이더 등록 (idempotent)
 
@@ -205,7 +205,7 @@ test('ensureLazyIndexes — lazy 소스 완료 후 엔트리가 인덱스에 병
 });
 
 test('_loadExamDocEntries — manifest.searchDocs 선언 문서를 doc 엔트리로 로드한다', async () => {
-    const { _loadExamDocEntries } = await import('../../../src/search-sources.js');
+    const { _loadExamDocEntries } = await import('../../../src/search/search-sources.js');
     const { contentPath } = await import('../../../src/exam-context.js');
     const prevManifest = DataLoader._manifest;
     DataLoader._manifest = {

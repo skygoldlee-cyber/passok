@@ -54,6 +54,7 @@
   "tests/dom/misc/shortcut-help.dom.test.js — tests 코드 파일명은 kebab-case (shortcut-help.dom.test.js)",
   "tests/dom/misc/telemetry-consent.dom.test.js — tests 코드 파일명은 kebab-case (telemetry-consent.dom.test.js)",
   "tests/dom/misc/ui-structure.dom.test.js — tests 코드 파일명은 kebab-case (ui-structure.dom.test.js)",
+  "tests/dom/misc/unpack.dom.test.js — tests 코드 파일명은 kebab-case (unpack.dom.test.js)",
   "tests/dom/misc/usage-stats.dom.test.js — tests 코드 파일명은 kebab-case (usage-stats.dom.test.js)",
   "tests/dom/misc/whats-new.dom.test.js — tests 코드 파일명은 kebab-case (whats-new.dom.test.js)",
   "tests/dom/misc/zoom-gestures.dom.test.js — tests 코드 파일명은 kebab-case (zoom-gestures.dom.test.js)",

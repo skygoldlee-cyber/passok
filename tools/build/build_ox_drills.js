@@ -6,7 +6,7 @@
  * docs/dev/reference/COMBO_STUDY_STRATEGY.md §4-①: combo의 진술·single의 보기를 참/거짓 원자로 변환해
  * 진술 정확도(p)를 직접 훈련하는 문항을 자동 생성한다.
  *
- * 출력 형식 (src/questions.js 스키마, type:'ox'):
+ * 출력 형식 (src/content/questions.js 스키마, type:'ox'):
  *   mode 'fact'   — "이 보기의 내용이 옳은가?"  명제형 선지(문장형)
  *                   truth = 설명형 부정 발문이면 !isAnswer, 아니면 isAnswer
  *   mode 'answer' — "이 보기가 발문의 정답인가?" 회상형·분류형(고유명사·수치 선지)
@@ -168,7 +168,7 @@ async function buildForExam(target) {
 
   // 스키마 검증용 (ESM 모듈을 CJS에서 동적 import — Windows 절대경로는 file:// URL 필요)
   const { pathToFileURL } = require('url');
-  const { validateQuestion } = await import(pathToFileURL(path.join(ROOT, 'src', 'questions.js')).href);
+  const { validateQuestion } = await import(pathToFileURL(path.join(ROOT, 'src', 'content', 'questions.js')).href);
 
   let totalItems = 0;
   let totalErrors = 0;

@@ -60,7 +60,7 @@
 - 데이터: `{contentRoot}/manifest.json`의 `subjects`(과목명)·`exams`(문항 수 → 비중)·`study.minExamLeadDays`(권장 리드타임) — 빌드가 주입하므로 별도 콘텐츠 파일 불요. 권장 리드타임 미만 입력 시 "압축 플랜" 안내
 - 플랜 알고리즘은 데모용 단순화 — 실제 앱은 FSRS·약점 가중으로 개인화된다는 점을 카피로 명시
 
-**공통**: 데모 데이터는 `<script type="application/json">` 블록으로 페이지에 내장 — fetch 없이 즉시 동작·오프라인 친화, `src/landing.js`가 파싱해 위젯 렌더. 데모 자산이 하나도 없으면 섹션 자체 미렌더. 다중 시험은 세로 나열 (탭 UI는 후속)
+**공통**: 데모 데이터는 `<script type="application/json">` 블록으로 페이지에 내장 — fetch 없이 즉시 동작·오프라인 친화, `src/shell/landing.js`가 파싱해 위젯 렌더. 데모 자산이 하나도 없으면 섹션 자체 미렌더. 다중 시험은 세로 나열 (탭 UI는 후속)
 
 ### 4-2. 차별점 비교표 — 교재·CBT·인강이 못 하는 것
 
@@ -105,7 +105,7 @@ landing.template.html + content/exams.json + content/exams/<id>/landing_demo.jso
 ## 7. 스타일·스크립트
 
 - **CSS**: `style.css` (디자인 토큰·vendor 폰트·`btn`·`glass-card` 재사용 — SW 프리캐시 공유) + `css/landing.css` 신규 (섹션 레이아웃·히어로·카드 그리드·모바일 대응)
-- **JS**: `src/theme-init.js` (FOUC 방지 — 그대로 링크) + `src/pwa/pwa-install-capture.js` (SW 조기 등록·`__deferredPrompt` 캡처 — 그대로 링크) + `src/landing.js` 신규:
+- **JS**: `src/shell/theme-init.js` (FOUC 방지 — 그대로 링크) + `src/pwa/pwa-install-capture.js` (SW 조기 등록·`__deferredPrompt` 캡처 — 그대로 링크) + `src/shell/landing.js` 신규:
   - 설치 버튼 — `pwa-install-available` 이벤트/`__deferredPrompt`로 프롬프트, standalone 감지 시 CTA를 "앱 열기"로 전환
   - 체험 데모 위젯 — 내장 JSON(`#landing-demo-data`) 파싱 → 선지 클릭 피드백·해설/인용 노출·진행/결과 CTA 렌더
   - 버전 표기 — `data/version.js` 읽어 푸터에 주입
@@ -134,7 +134,7 @@ landing.template.html + content/exams.json + content/exams/<id>/landing_demo.jso
 
 - **test-first 게이트**: `build_landing.js`의 순수 함수(카드 렌더·데모 JSON 수집·마커 주입·comingSoon 처리·데모 스키마 검증) 유닛 테스트 필수
 - **`check:landing`**: 생성물 신선도 (check:html 동형)
-- **`check:orphans`**: `css/landing.css`·`src/landing.js`가 `landing.template.html`에서 참조되는지 — 미참조 오탐 방지 확인
+- **`check:orphans`**: `css/landing.css`·`src/shell/landing.js`가 `landing.template.html`에서 참조되는지 — 미참조 오탐 방지 확인
 - **불변 테스트**: 도움말 패널 진입 링크 존재·템플릿 마커 존재 (ux-invariants 확장 또는 LP 전용)
 - **E2E (선택)**: `landing.html` 200 + 시험 카드 수 = `exams.json` 엔트리 수 스모크. 시각 회귀 기준선은 미채택
 - **`check:contentind`**: 빌드 스크립트에 시험 id·경로 리터럴 없음 (`exams.json` 순회만)
@@ -142,7 +142,7 @@ landing.template.html + content/exams.json + content/exams/<id>/landing_demo.jso
 ## 12. 구현 순서
 
 1. SPEC.md §3.29 LP-01~08 등록 + `content/exams/cosmetic/landing_demo.json` 큐레이션 (실제 문제은행 대표 문항 3개)
-2. `landing.template.html` + `css/landing.css` + `src/landing.js` (섹션 골격·스타일·CTA·데모 위젯)
+2. `landing.template.html` + `css/landing.css` + `src/shell/landing.js` (섹션 골격·스타일·CTA·데모 위젯)
 3. `tools/build/build_landing.js` + package.json 스크립트 + `.gitignore` 확인
 4. `check:landing` 단계 등록 (`tools/check/steps.js` → `check:fresh` 편입)
 5. 도움말 패널·시험 선택 뷰 링크 + 관련 테스트 갱신

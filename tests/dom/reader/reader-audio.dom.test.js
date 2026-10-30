@@ -19,7 +19,7 @@ import { resetStudyState } from '../helpers.js';
 import {
     readerAudioState, getAudioPathForChapter, toggleReaderAudio,
     toggleReaderPlayPause, cycleReaderAudioRate, seekReaderAudio, stopReaderAudio,
-} from '../../../src/views/reader-audio.js';
+} from '../../../src/views/reader/reader-audio.js';
 
 function mountAudioUI() {
     document.body.innerHTML = `

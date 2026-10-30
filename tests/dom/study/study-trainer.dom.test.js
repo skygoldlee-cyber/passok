@@ -16,7 +16,7 @@ vi.mock('../../../src/ui-utils.js', async (importOriginal) => ({
     vibrate: vi.fn(),
     HAPTIC: { correct: 30, wrong: [40, 30, 40], tap: 10 },
 }));
-vi.mock('../../../src/scratchpad.js', () => ({
+vi.mock('../../../src/study/scratchpad.js', () => ({
     clearScratchpad: vi.fn(),
     initScratchpad: vi.fn(),
     toggleCalcScratchpad: vi.fn(),
@@ -35,7 +35,7 @@ import {
 } from '../../../src/views/trainer.js';
 import { startCalcPractice, submitCalcAnswer } from '../../../src/views/trainer-calc-practice.js';
 import { startIngredientsChallenge } from '../../../src/exams/cosmetic/views/trainer-ingredients.js';
-import { DataLoader } from '../../../src/data-loader.js';
+import { DataLoader } from '../../../src/content/data-loader.js';
 import { openOxDrillSetup } from '../../../src/views/trainer-drills.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 

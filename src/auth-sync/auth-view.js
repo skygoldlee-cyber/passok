@@ -4,8 +4,8 @@
 import { getSupabase, onAuthChange } from './supabase-client.js';
 import { showToast, showConfirm, trapFocus } from '../ui-utils.js';
 import { safeGetItem, safeSetItem, safeRemoveItem } from '../state.js';
-import { hasProEntitlement } from '../pro-upgrade.js';
-import { reportEvent } from '../usage-telemetry.js';
+import { hasProEntitlement } from '../pro/pro-upgrade.js';
+import { reportEvent } from '../telemetry/usage-telemetry.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
 
 const el = id => /** @type {HTMLInputElement|null} */ (document.getElementById(id));

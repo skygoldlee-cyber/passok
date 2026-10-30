@@ -2,7 +2,7 @@
 // @spec EV-01
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildComboSubjectMd } from '../../../src/combo-doc.js';
+import { buildComboSubjectMd } from '../../../src/content/combo-doc.js';
 
 const Q1 = {
     id: 'c1_s1_001',

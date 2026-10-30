@@ -31,7 +31,7 @@ const ROOT = path.resolve(__dirname, '..', '..', '..');
 const SRC_DIR = path.join(ROOT, 'src');
 const HTML_DIR = path.join(ROOT, 'html');
 const INDEX_HTML = path.join(ROOT, 'index.html');
-const APP_JS = path.join(SRC_DIR, 'app.js');
+const APP_JS = path.join(SRC_DIR, 'shell', 'app.js');
 
 /** src 아래 모든 .js 파일을 재귀 수집 */
 function collectJsFiles(dir) {

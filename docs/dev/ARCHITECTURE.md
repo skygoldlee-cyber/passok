@@ -168,7 +168,7 @@
 | `style.css` | CSS 진입점 (`@import` 어그리게이터, `css/*.css` 12개 로드) | `index.html`에서 참조 |
 | `sw.js` | Service Worker | SW 스코프이 루트(또는 명시적 `Scope`)에서만 전역 캐싱 |
 | `manifest.webmanifest` | PWA 웹 앱 매니페스트 | `index.html`에서 참조 |
-| `feature-plan.json` | 기능별 무료/Pro 전환 설정 (`pro`/`free`) | `src/pro-upgrade.js`가 런타임 fetch |
+| `feature-plan.json` | 기능별 무료/Pro 전환 설정 (`pro`/`free`) | `src/pro/pro-upgrade.js`가 런타임 fetch |
 | `ping.txt` | 오프라인 감지용 same-origin 프로브 (내용 `1`) | `app.js`/`sw.js`에서 same-origin fetch |
 | `vercel.json` | Vercel 배포 설정 (CSP, 보안 헤더, 캐시 정책) | Vercel CLI 요구 |
 | `.vercelignore` | Vercel 배포 제외 목록 | Vercel CLI 요구 |
@@ -250,16 +250,16 @@ passok/
 │       └── formula.css         #   Formula OS (계산기·배치·고객·장부·체크리스트) — domain:cosmetic
 │
 ├── src/                        # 애플리케이션 소스 (ESM)
-│   ├── app.js                  #   오케스트레이터 (초기화, 이벤트 위임, 라우터 연결)
-│   ├── app-dashboard.js        #   대시보드 셀렉트·시험/리소스 카드·스토리지 경고 (app.js 분리)
-│   ├── app-shell.js            #   뷰포트·가로세로·data-click 접근성·브랜딩·기능 플래그
+│   ├── shell/app.js                  #   오케스트레이터 (초기화, 이벤트 위임, 라우터 연결)
+│   ├── shell/app-dashboard.js        #   대시보드 셀렉트·시험/리소스 카드·스토리지 경고 (app.js 분리)
+│   ├── shell/app-shell.js            #   뷰포트·가로세로·data-click 접근성·브랜딩·기능 플래그
 │   ├── router.js               #   SPA 라우터 (뷰 타이틀 맵, 네비게이션 디스패치)
-│   ├── app-fallback.js         #   ESM 로드 실패 시 자가 복구
+│   ├── shell/app-fallback.js         #   ESM 로드 실패 시 자가 복구
 │   ├── pwa/pwa-install-capture.js  #   beforeinstallprompt 조기 캡처 + SW 등록
-│   ├── theme-init.js           #   FOUC 방지 (페인트 전 테마 적용)
+│   ├── shell/theme-init.js           #   FOUC 방지 (페인트 전 테마 적용)
 │   ├── state.js                #   전역 상태 + 진행 영속성 (저장은 storage.js 위임)
 │   ├── storage.js              #   저장소 추상화 계층 (교체 가능 백엔드, 동기·Async 이중 API)
-│   ├── data-loader.js          #   온디맨드 과목/시험 로딩
+│   ├── content/data-loader.js          #   온디맨드 과목/시험 로딩
 │   ├── reader/textbook-parser.js   #   런타임 MD 파서 진입점 (contentPath 주입 어댑터)
 │   ├── reader/textbook-core.js     #   MD → 카드/퀴즈/챕터 파싱 공통 코어 (빌드 플러그인과 공유)
 │   ├── reader/reader-format.js     #   MD→HTML 변환, 링크 재작성, 키워드 자동링크
@@ -273,46 +273,47 @@ passok/
 │   ├── pwa/pwa-manifest.js         #   활성 시험 기준 PWA 매니페스트 링크 교체 (단일 앱 id='passok' · 클래식)
 │   ├── reader/html-viewer.js       #   참조자료 fetch+DOM 뷰어, 검색, 하이라이트
 │   ├── reader/exam-viewer.js       #   문제은행 MD 런타임 뷰어 (인용 링크 네비게이션, 라인 하이라이트)
-│   ├── combo-doc.js            #   복수정답형 드릴 번들 → 문제집 MD 런타임 직렬화 (openCombo 경유)
+│   ├── content/combo-doc.js            #   복수정답형 드릴 번들 → 문제집 MD 런타임 직렬화 (openCombo 경유)
 │   ├── reader/manual-viewer.js     #   학습안내서/매뉴얼 뷰어
 │   ├── reader/glossary-query.js    #   용어집 조회 API
 │   ├── reader/textbook-edition.js  #   교재 개정 감지 배너 (P-14)
 │   ├── keyword-index.js        #   교재 셀→참조자료 키워드 매핑 (자동 생성)
 │   ├── paths.js                #   파일 경로 상수 중앙 관리
 │   ├── storage-keys.js         #   localStorage 키 중앙 관리
-│   ├── study-aids.js           #   기출 필터, 숫자 암기표
-│   ├── study-tracker.js        #   학습 캘린더/목표 추적 (recordStudyActivity, getStudyGoals)
-│   ├── spaced-repetition.js    #   FSRS-6 간격 반복 알고리즘(fsrs.js), 복습 스케줄링·리뷰 로그(D-18)·시험일 R 위험 카드 선별(D-19)
-│   ├── recommendations.js      #   "오늘의 합격 전략" 추천 엔진 + 예상 점수 추정 + 실제 결과 보고 (순수 로직)
-│   ├── command-palette.js      #   통합 검색 팔레트 (Ctrl+K) — 뷰/교재/카드/퀴즈/성분/문제집 통합 검색·실행
-│   ├── weak-items.js           #   약점(오답) 항목 ID 문법·해석 + 퀴즈·카드 인덱스 캐시 (DOM 비의존)
-│   ├── questions.js            #   문항 스키마·채점 유틸 (single/combo/short/ox)
-│   ├── statement-tracker.js    #   진술 원자(sid) 단위 오판 통계 + 졸업 추적
+│   ├── study/study-aids.js           #   기출 필터, 숫자 암기표
+│   ├── study/study-tracker.js        #   학습 캘린더/목표 추적 (recordStudyActivity, getStudyGoals)
+│   ├── study/spaced-repetition.js    #   FSRS-6 간격 반복 알고리즘(fsrs.js), 복습 스케줄링·리뷰 로그(D-18)·시험일 R 위험 카드 선별(D-19)
+│   ├── study/recommendations.js      #   "오늘의 합격 전략" 추천 엔진 + 예상 점수 추정 + 실제 결과 보고 (순수 로직)
+│   ├── shell/command-palette.js      #   통합 검색 팔레트 (Ctrl+K) — 뷰/교재/카드/퀴즈/성분/문제집 통합 검색·실행
+│   ├── study/weak-items.js           #   약점(오답) 항목 ID 문법·해석 + 퀴즈·카드 인덱스 캐시 (DOM 비의존)
+│   ├── content/questions.js            #   문항 스키마·채점 유틸 (single/combo/short/ox)
+│   ├── study/statement-tracker.js    #   진술 원자(sid) 단위 오판 통계 + 졸업 추적
 │   ├── charts.js               #   SVG 레이더/꺾은선 차트 + 툴팁
 │   ├── sanitize.js             #   XSS 방어
-│   ├── search-index.js         #   통합검색 인덱스 코어 — 소스 레지스트리·역색인·지연 소스 상태머신·랭킹 (TS-08~09,TS-13~18)
-│   ├── search-morpheme.js      #   검색 형태소 경계 판정·동의어 확장 순수 로직 (TS-13/TS-14)
-│   ├── search-sources.js       #   통합검색 콘텐츠 소스 프로바이더 — 교재/서사/참조자료/문제은행/manifest.searchDocs (TS-10~12,TS-18)
+│   ├── search/search-index.js         #   통합검색 인덱스 코어 — 소스 레지스트리·역색인·지연 소스 상태머신·랭킹 (TS-08~09,TS-13~18)
+│   ├── search/search-morpheme.js      #   검색 형태소 경계 판정·동의어 확장 순수 로직 (TS-13/TS-14)
+│   ├── search/search-sources.js       #   통합검색 콘텐츠 소스 프로바이더 — 교재/서사/참조자료/문제은행/manifest.searchDocs (TS-10~12,TS-18)
 │   ├── sha256.js               #   안정적 ID 해시
-│   ├── web-vitals.js           #   Core Web Vitals (LCP/CLS/INP) 모니터링
-│   ├── trainer-calc.js         #   계산 훈련 문제 생성 (순수 로직)
-│   ├── scratchpad.js           #   손글씨 Canvas
+│   ├── telemetry/web-vitals.js           #   Core Web Vitals (LCP/CLS/INP) 모니터링
+│   ├── study/trainer-calc.js         #   계산 훈련 문제 생성 (순수 로직)
+│   ├── study/scratchpad.js           #   손글씨 Canvas
 │   ├── types.js                #   JSDoc @typedef 타입 정의
 │   ├── ui-utils.js             #   로딩 UI, 커스텀 토스트/컨펌 모달 (showToast/showConfirm)
 │   ├── utils.js                #   초성 추출, Fisher-Yates 셔플
 │   ├── globals.d.ts            #   전역 타입 선언
 │   ├── exam-context.js         #   활성 시험 해석/전환, scopedKey 네임스페이스, hasFeature (리프 모듈)
-│   ├── ui-mode.js              #   학습/실무 UI 모드 전환
+│   ├── shell/ui-mode.js              #   학습/실무 UI 모드 전환
 │   ├── practice-registry.js    #   실무작업실 피처 레지스트리 (features 키 → 뷰·랜딩·로더·핸들러) — 도메인 자산은 `exams/${getActiveExamId()}/…` 규약 경로로 해석 (check:imports가 시험별 확장 정적 검증)
-│   ├── whats-new.js            #   새 버전 변경 이력 알림 (APP_VERSION 비교 → 모달, 전용 whats-new-overlay)
-│   ├── feedback.js             #   의견 수신 — 설정 "의견 보내기" 모달, ?src= 유입 추적, 익명 insert, 오프라인 큐(pending_feedback), 신기능 힌트(⚙️ 점+NEW 배지)
-│   ├── pro-upgrade.js          #   Pro 안내 — feature-plan.json 무료/Pro 로드, PRO 배지(data-pro-feature) 표시 제어, 진입 1회 안내·한도 초과 업그레이드 모달
-│   ├── usage-stats.js          #   로컬 사용 카운터 (ROAD-L5) — 뷰·액션 카운트를 시험 스코프 usage_stats 키에 로컬 전용 누적, '내 사용 통계' 모달
+│   ├── shell/whats-new.js            #   새 버전 변경 이력 알림 (APP_VERSION 비교 → 모달, 전용 whats-new-overlay)
+│   ├── shell/feedback.js             #   의견 수신 — 설정 "의견 보내기" 모달, ?src= 유입 추적, 익명 insert, 오프라인 큐(pending_feedback), 신기능 힌트(⚙️ 점+NEW 배지)
+│   ├── pro/pro-upgrade.js          #   Pro 안내 — feature-plan.json 무료/Pro 로드, PRO 배지(data-pro-feature) 표시 제어, 진입 1회 안내·한도 초과 업그레이드 모달
+│   ├── telemetry/usage-stats.js          #   로컬 사용 카운터 (ROAD-L5) — 뷰·액션 카운트를 시험 스코프 usage_stats 키에 로컬 전용 누적, '내 사용 통계' 모달
 │   ├── auth-sync/supabase-config.js  #   Supabase URL·Publishable key (공개 설계상 키)
 │   ├── auth-sync/supabase-client.js  #   Supabase lazy init — vendor UMD 동적 로드
 │   ├── auth-sync/auth-view.js        #   계정/로그인 모달 (이메일+PW·회원가입·매직링크 OTP)
 │   ├── auth-sync/sync.js             #   클라우드 스냅샷 동기화 (sync_snapshots push/pull, Pro entitlement 게이트 — canCloudSync)
-│   ├── csv-utils.js            #   CSV 파서·EUC-KR 폴백·BOM 직렬화 (공용)
+│   ├── content/csv-utils.js            #   CSV 파서·EUC-KR 폴백·BOM 직렬화 (공용)
+│   ├── content/unpack.js               #   pk1 번들 디코더 (DA-16 콘텐츠 비평문화)
 │   ├── exams/                  #   시험 도메인 모듈 격리 (DA-13) — 시험 전용 실행 코드
 │   │   └── cosmetic/           #     맞춤형화장품 조제관리사 도메인 (domain:cosmetic)
 │   │       ├── formula-store.js    #   포뮬러 CRUD·한도(5)·스키마 정제·전성분 생성
@@ -354,27 +355,27 @@ passok/
 │   └── views/                  #   뷰 컨트롤러 모듈
 │       ├── dashboard.js        #     대시보드 통계 + 맞춤학습 뷰(analysis-view) 렌더
 │       ├── flashcard.js        #     3D 플래시카드
-│       ├── quiz.js             #     퀴즈 + 복습
-│       ├── quiz-wrong-cause.js #     오답 원인 태깅·재학습 액션 (quiz.js에서 분리)
+│       ├── views/quiz/quiz.js             #     퀴즈 + 복습
+│       ├── views/quiz/quiz-wrong-cause.js #     오답 원인 태깅·재학습 액션 (quiz.js에서 분리)
 │       ├── daily-challenge.js  #     데일리 챌린지 (quiz.js에서 분리)
 │       ├── trainer.js          #     훈련소 허브 (재수출)
 │       ├── trainer-calc-practice.js  # 계산 연습기
 │       ├── trainer-drills.js   #     O/X 드릴 + 드릴 공통 오케스트레이션
 │       ├── trainer-drill-combo.js #  복수정답형(combo) 드릴 (trainer-drills.js에서 분리)
 │       ├── pomodoro.js         #     뽀모도로 타이머 (trainer.js에서 분리)
-│       ├── exam-simulator.js   #     모의고사 파사드 (session/arena/draft 재수출 + 이력 저장)
-│       ├── exam-sim-session.js #     모의고사 세션 수명주기 (시험 구성·시작·복구·나가기)
-│       ├── exam-sim-arena.js   #     모의고사 아레나 (타이머·OMR·렌더·응답·채점)
-│       ├── exam-sim-draft.js   #     모의고사 드래프트 저장·복구 배너
-│       ├── exam-sim-state.js   #     시뮬레이터 상태
-│       ├── exam-sim-review.js  #     시뮬레이터 결과 리뷰
-│       ├── exam-sim-weak.js    #     오답 모의고사 (exam-simulator.js에서 분리)
+│       ├── views/exam-sim/exam-simulator.js   #     모의고사 파사드 (session/arena/draft 재수출 + 이력 저장)
+│       ├── views/exam-sim/exam-sim-session.js #     모의고사 세션 수명주기 (시험 구성·시작·복구·나가기)
+│       ├── views/exam-sim/exam-sim-arena.js   #     모의고사 아레나 (타이머·OMR·렌더·응답·채점)
+│       ├── views/exam-sim/exam-sim-draft.js   #     모의고사 드래프트 저장·복구 배너
+│       ├── views/exam-sim/exam-sim-state.js   #     시뮬레이터 상태
+│       ├── views/exam-sim/exam-sim-review.js  #     시뮬레이터 결과 리뷰
+│       ├── views/exam-sim/exam-sim-weak.js    #     오답 모의고사 (exam-simulator.js에서 분리)
 │       ├── exam-select.js      #     시험 선택/전환 뷰
 │       ├── textbook-reader.js  #     교재 리더 코어 (렌더링·TOC·포지션)
-│       ├── reader-toolbar.js   #     리더 툴바·스크롤스파이·표 모달
-│       ├── reader-ref-links.js #     참조자료 링크 생성·프리뷰·클릭 위임
-│       ├── reader-audio.js    #     오디오북 플레이어
-│       ├── textbook-search.js  #     교재 본문 검색 뷰 (렌더·이벤트 — 코어는 src/search-index.js)
+│       ├── views/reader/reader-toolbar.js   #     리더 툴바·스크롤스파이·표 모달
+│       ├── views/reader/reader-ref-links.js #     참조자료 링크 생성·프리뷰·클릭 위임
+│       ├── views/reader/reader-audio.js    #     오디오북 플레이어
+│       ├── textbook-search.js  #     교재 본문 검색 뷰 (렌더·이벤트 — 코어는 src/search/search-index.js)
 │       ├── dictionary.js       #     지식DB 사전 (스키마 드리븐 — manifest.knowledge)
 │       ├── study-calendar.js   #     학습 캘린더/목표 뷰
 │       ├── backup.js           #     데이터 백업/복원
@@ -580,30 +581,30 @@ passok/
 
 | 모듈 | 책임 |
 |------|------|
-| [`src/app.js`](../../src/app.js) | **메인 오케스트레이터**. 초기화(`initApp`/`initExamContext`), **이벤트 위임 바인딩**(`data-click`/`data-input`/`data-args` + `resolveDelegatedHandler`/`parseDelegatedArgs`), `startFocusSubjectStudy` 등 뷰 간 브릿지 함수. 라우팅은 `router.js`에 위임. 대시보드 카드 생성은 `app-dashboard.js`, 뷰포트·가로세로·브랜딩·기능플래그는 `app-shell.js`로 분리됨 |
+| [`src/shell/app.js`](../../src/shell/app.js) | **메인 오케스트레이터**. 초기화(`initApp`/`initExamContext`), **이벤트 위임 바인딩**(`data-click`/`data-input`/`data-args` + `resolveDelegatedHandler`/`parseDelegatedArgs`), `startFocusSubjectStudy` 등 뷰 간 브릿지 함수. 라우팅은 `router.js`에 위임. 대시보드 카드 생성은 `app-dashboard.js`, 뷰포트·가로세로·브랜딩·기능플래그는 `app-shell.js`로 분리됨 |
 | [`src/router.js`](../../src/router.js) | **SPA 라우터**. `getViewTitles()`로 뷰 타이틀/서브타이틀 맵 생성, `navigateToView()`로 뷰 전환 디스패치 (active 클래스 토글, 헤더 갱신, 뷰 렌더러 호출, 오디오 정지, 포커스 모드 해제), `#/slug` 해시 라우팅 + **뒤로가기 종료 가드** (루트 뷰에서 보초 엔트리 소비 시 '한 번 더 누르면 종료' 토스트, 2.5초 내 반복 시 종료 허용 — 모달 열림 시 modal-back 우선. 뷰 간 뒤로가기는 `hashchange`를 동반하므로 판정을 `setTimeout`으로 지연해 동반 해시 변경이 있으면 발동하지 않음 — popstate/hashchange 도착 순서는 브라우저별 상이) |
 | [`src/charts.js`](../../src/charts.js) | SVG 기반 차트 생성 (레이더 차트, 성적 꺾은선 그래프). **인터랙티브 툴팁**(hover/touch) 지원. 외부 차트 라이브러리 미사용 |
-| [`src/scratchpad.js`](../../src/scratchpad.js) | HTML5 Canvas 손글씨 연습장 (계산 문제 풀이용) |
-| [`src/trainer-calc.js`](../../src/trainer-calc.js) | 계산 훈련 문제 생성기. **순수 로직** — DOM 의존 없이 문제 데이터 객첼만 반환 |
+| [`src/study/scratchpad.js`](../../src/study/scratchpad.js) | HTML5 Canvas 손글씨 연습장 (계산 문제 풀이용) |
+| [`src/study/trainer-calc.js`](../../src/study/trainer-calc.js) | 계산 훈련 문제 생성기. **순수 로직** — DOM 의존 없이 문제 데이터 객첼만 반환 |
 | [`src/state.js`](../../src/state.js) | 전역 상태 객체(`state`) 정의 + 진행 영속성(`loadProgress`/`saveProgress`). 기본 과목은 `null`이며 `initApp()`에서 registry 첫 과목으로 설정. `saveProgress()`에서 학습 활동 증분을 `study-tracker.js`로 자동 기록. `safeGetItem`/`safeSetItem` 등은 `storage.js` 위임 (하위호환 유지) |
 | [`src/storage.js`](../../src/storage.js) | **저장소 추상화 계층** — 앱의 모든 영속 읽기·쓰기의 단일 퍼널. 논리 키 → `scopedKey` 시험 네임스페이스 적용, 백엔드는 `setStorageBackend()`로 교체 가능(기본 localStorage). 동기 API(`getItem`/`setItem`/`removeItem`/`listKeys`/`getJSON`/`setJSON`)와 비동기 API(`*Async`) 이중 제공 — IndexedDB/SQLite 등 비동기 백엔드는 Async 메서드만 구현하면 되고, sync:false 백엔드에서 동기 API는 null/false+경고. sync dirty 쓰기 훅·쿼터 불가 플래그(`isStorageUnavailable`) 중앙화 |
-| [`src/study-tracker.js`](../../src/study-tracker.js) | 학습 캘린더/목표 추적 헬퍼. 날짜별 학습 활동 기록(`recordStudyActivity`), 학습 목표 조회/저장(`getStudyGoals`/`setStudyGoals`), 오늘/이번주/이번달 달성률 계산, 시험일 D-day·계획 등급·리드타임 권고(`getDDay`/`getExamPlanStatus`/`getExamLeadStatus`), 주간 계획 역산(`computeStudyPlan`·잔여 학습일 단일 분모 `getRemainingStudyDays` — 역산·페이스 전 로직 학습일 기준)·계획 대비 주간 진행률(`computePlanAdherence`, SC-06)·1회성 마일스톤 안내(`evalStudyMilestones`/`checkStudyMilestones`, SC-07 — seen 세트 `study_milestones_seen`)·과목별 가중 배분(`computeSubjectAllocation`, SC-08 — 잔여×출제 비중×약점 가중 워터필링, `study_plan_pro` 표기)·스마트학습 보강(SC-09 — 캘린더 `bySubj` 과목별 실적·칩 바로가기·약점/비중 배지·최근 표본+취약 카드 약점 확장)·맞춤학습 연계(SC-11 — 분석 뷰 스마트학습 카드·배정 근거 딥링크 `gotoSubjectAnalysis`)·약점 신호 통합(SC-12 — 오답 원인·취약 단원 `diagBySubject` 가산, 공용 입력 `computeSubjectAllocInputs`)·퀴즈 배분+복습 대기(SC-13 — 과목별 퀴즈 잔여 주차 배분·`quizBySubj` 실적·FSRS 기한초과 `dueBySubject` 가산)·합격 갭→목표 상향 권고(SC-14)·교재 일독 반영(SC-15 — `readMin` 학습일 인정·`reader_progress` 진척률·남은 통독일 주차 차감) |
-| [`src/recommendations.js`](../../src/recommendations.js) | "오늘의 합격 전략" 추천 엔진 (Learning Pro). FSRS 복습 대기 → 과락 → 정답률 최저 → 헷갈린 카드 → 미학습 우선순위(`computeRecommendations`), 오답 원인 패턴 집계(`computeWrongCauseSummary`), 모의고사 이력 기반 예상 점수 추정(`estimateExpectedScore` — 합격 확률 아닌 점수 추정치), 실제 결과 자가 보고(`actual_exam_result`). DOM 비의존 순수 로직 |
-| [`src/command-palette.js`](../../src/command-palette.js) | 통합 검색 팔레트 (Ctrl/Cmd+K). `searchAll()` 순수 함수가 뷰(nav-item 스캔 → feature 게이팅 반영)/교재 섹션/카드/퀴즈/성분(초성)/문제집을 통합 검색, 팔레트 UI는 ↑↓·Enter·ESC 키보드 내비. 실행은 기존 경로 재사용(nav 클릭 시뮬레이션, `startSubjectStudy/Quiz`, `openSubjectChapter`, `ExamViewer.openExam`). 전 소스 로컬 데이터로 오프라인 동작 |
-| [`src/weak-items.js`](../../src/weak-items.js) | 약점(오답) 항목 ID 문법의 단일 소스 — `weak_quiz_`/`weak_sim_` 접두사 상수, `weakItemKey`/`parseWeakSimId`/`subjectKeyFromItemId`, 오답 해석(`resolveWrongQuiz`/`resolveCard`/`subjectForWeakItem`). **인덱스 캐시**: 퀴즈·카드를 `id → {항목, subjectId}` Map으로 인덱싱하고 STUDY_DATA·과목 키·배열 참조/길이 비교로 무효화 — `DataLoader.loadSubject()` 점진 로드 시 자동 재구축. DOM 비의존(`window` 가드) |
+| [`src/study/study-tracker.js`](../../src/study/study-tracker.js) | 학습 캘린더/목표 추적 헬퍼. 날짜별 학습 활동 기록(`recordStudyActivity`), 학습 목표 조회/저장(`getStudyGoals`/`setStudyGoals`), 오늘/이번주/이번달 달성률 계산, 시험일 D-day·계획 등급·리드타임 권고(`getDDay`/`getExamPlanStatus`/`getExamLeadStatus`), 주간 계획 역산(`computeStudyPlan`·잔여 학습일 단일 분모 `getRemainingStudyDays` — 역산·페이스 전 로직 학습일 기준)·계획 대비 주간 진행률(`computePlanAdherence`, SC-06)·1회성 마일스톤 안내(`evalStudyMilestones`/`checkStudyMilestones`, SC-07 — seen 세트 `study_milestones_seen`)·과목별 가중 배분(`computeSubjectAllocation`, SC-08 — 잔여×출제 비중×약점 가중 워터필링, `study_plan_pro` 표기)·스마트학습 보강(SC-09 — 캘린더 `bySubj` 과목별 실적·칩 바로가기·약점/비중 배지·최근 표본+취약 카드 약점 확장)·맞춤학습 연계(SC-11 — 분석 뷰 스마트학습 카드·배정 근거 딥링크 `gotoSubjectAnalysis`)·약점 신호 통합(SC-12 — 오답 원인·취약 단원 `diagBySubject` 가산, 공용 입력 `computeSubjectAllocInputs`)·퀴즈 배분+복습 대기(SC-13 — 과목별 퀴즈 잔여 주차 배분·`quizBySubj` 실적·FSRS 기한초과 `dueBySubject` 가산)·합격 갭→목표 상향 권고(SC-14)·교재 일독 반영(SC-15 — `readMin` 학습일 인정·`reader_progress` 진척률·남은 통독일 주차 차감) |
+| [`src/study/recommendations.js`](../../src/study/recommendations.js) | "오늘의 합격 전략" 추천 엔진 (Learning Pro). FSRS 복습 대기 → 과락 → 정답률 최저 → 헷갈린 카드 → 미학습 우선순위(`computeRecommendations`), 오답 원인 패턴 집계(`computeWrongCauseSummary`), 모의고사 이력 기반 예상 점수 추정(`estimateExpectedScore` — 합격 확률 아닌 점수 추정치), 실제 결과 자가 보고(`actual_exam_result`). DOM 비의존 순수 로직 |
+| [`src/shell/command-palette.js`](../../src/shell/command-palette.js) | 통합 검색 팔레트 (Ctrl/Cmd+K). `searchAll()` 순수 함수가 뷰(nav-item 스캔 → feature 게이팅 반영)/교재 섹션/카드/퀴즈/성분(초성)/문제집을 통합 검색, 팔레트 UI는 ↑↓·Enter·ESC 키보드 내비. 실행은 기존 경로 재사용(nav 클릭 시뮬레이션, `startSubjectStudy/Quiz`, `openSubjectChapter`, `ExamViewer.openExam`). 전 소스 로컬 데이터로 오프라인 동작 |
+| [`src/study/weak-items.js`](../../src/study/weak-items.js) | 약점(오답) 항목 ID 문법의 단일 소스 — `weak_quiz_`/`weak_sim_` 접두사 상수, `weakItemKey`/`parseWeakSimId`/`subjectKeyFromItemId`, 오답 해석(`resolveWrongQuiz`/`resolveCard`/`subjectForWeakItem`). **인덱스 캐시**: 퀴즈·카드를 `id → {항목, subjectId}` Map으로 인덱싱하고 STUDY_DATA·과목 키·배열 참조/길이 비교로 무효화 — `DataLoader.loadSubject()` 점진 로드 시 자동 재구축. DOM 비의존(`window` 가드) |
 | [`src/utils.js`](../../src/utils.js) | 의존성 없는 범용 헬퍼 (한글 초성 추출 `getChosung()` 등) |
 | [`src/sanitize.js`](../../src/sanitize.js) | HTML/XSS 방어 및 텍스트 정제 유틸리티 |
-| [`src/search-index.js`](../../src/search-index.js) | 통합검색 인덱스 코어 순수 로직 (TS-08~09,TS-13~18). `runUnifiedSearch`가 쿼리를 동의어 그룹(그룹 내 OR·그룹 간 AND)으로 확장 → 어절 역색인(`_tokenIndex`) 후보 교집합(빈 그룹은 `failedTerms` 보고) → `termHitQuality` 품질로 kind 버킷+부분 일치 티어 분류·`_score` 부여(빈도×idf+제목/구문 가산). 인덱스는 활성 시험+소스 `rev()` 신호로 캐시·시험 전환 시 지연 병합분 일괄 폐기. 소스 프로바이더 레지스트리(`registerSearchSource`) — 코어는 콘텐츠 종류를 모르고 lazy 소스의 시험 가드·실패 재시도 억제를 일원 관리. DOM·콘텐츠 종류 비의존 |
-| [`src/search-sources.js`](../../src/search-sources.js) | 통합검색 콘텐츠 소스 프로바이더 (TS-10~12,TS-18). 교재 섹션(`collectTextbookSections` — STUDY_DATA→SearchDoc, 리더 표시 제목·챕터 앵커 해석)·서사 storyFile·참조자료·문제은행·시험 선언 문서(`manifest.searchDocs` → `__DOC_MD__` 번들/fetch 로드, feature 게이트 지원) 로더가 범용 엔트리 `{kind,title,crumb,subjId,text,nav,_searchText}`를 생산하고 `initSearchSources()`로 코어에 등록한다. `command-palette.js`도 같은 수집 함수를 재사용해 리더 규약 해석 중복을 소거 |
-| [`src/search-morpheme.js`](../../src/search-morpheme.js) | 통합검색 형태소 경계 판정·동의어 확장 순수 로직 (TS-13/TS-14). `buildBoundaryVocab`이 인덱스 어절에서 독립 어절+재사용 접두를 형태소 어휘로 마이닝하고, `isCoverable`(DP 완전분해)로 매치 직전 접두의 형태소 경계를 판정 — `termHitQuality`가 본매치(2)/부분(1)/없음(0)을 반환해 '보조유화제'는 본매치·'석유화학'은 부분 일치로 분류. `expandSynonyms`는 `registry.synonyms` 정·역방향으로 쿼리 어절을 동의 개념군(그룹 내 OR·그룹 간 AND)으로 확장. DOM 비의존·외부 형태소 분석기 없는 결정론적 구현 |
+| [`src/search/search-index.js`](../../src/search/search-index.js) | 통합검색 인덱스 코어 순수 로직 (TS-08~09,TS-13~18). `runUnifiedSearch`가 쿼리를 동의어 그룹(그룹 내 OR·그룹 간 AND)으로 확장 → 어절 역색인(`_tokenIndex`) 후보 교집합(빈 그룹은 `failedTerms` 보고) → `termHitQuality` 품질로 kind 버킷+부분 일치 티어 분류·`_score` 부여(빈도×idf+제목/구문 가산). 인덱스는 활성 시험+소스 `rev()` 신호로 캐시·시험 전환 시 지연 병합분 일괄 폐기. 소스 프로바이더 레지스트리(`registerSearchSource`) — 코어는 콘텐츠 종류를 모르고 lazy 소스의 시험 가드·실패 재시도 억제를 일원 관리. DOM·콘텐츠 종류 비의존 |
+| [`src/search/search-sources.js`](../../src/search/search-sources.js) | 통합검색 콘텐츠 소스 프로바이더 (TS-10~12,TS-18). 교재 섹션(`collectTextbookSections` — STUDY_DATA→SearchDoc, 리더 표시 제목·챕터 앵커 해석)·서사 storyFile·참조자료·문제은행·시험 선언 문서(`manifest.searchDocs` → `__DOC_MD__` 번들/fetch 로드, feature 게이트 지원) 로더가 범용 엔트리 `{kind,title,crumb,subjId,text,nav,_searchText}`를 생산하고 `initSearchSources()`로 코어에 등록한다. `command-palette.js`도 같은 수집 함수를 재사용해 리더 규약 해석 중복을 소거 |
+| [`src/search/search-morpheme.js`](../../src/search/search-morpheme.js) | 통합검색 형태소 경계 판정·동의어 확장 순수 로직 (TS-13/TS-14). `buildBoundaryVocab`이 인덱스 어절에서 독립 어절+재사용 접두를 형태소 어휘로 마이닝하고, `isCoverable`(DP 완전분해)로 매치 직전 접두의 형태소 경계를 판정 — `termHitQuality`가 본매치(2)/부분(1)/없음(0)을 반환해 '보조유화제'는 본매치·'석유화학'은 부분 일치로 분류. `expandSynonyms`는 `registry.synonyms` 정·역방향으로 쿼리 어절을 동의 개념군(그룹 내 OR·그룹 간 AND)으로 확장. DOM 비의존·외부 형태소 분석기 없는 결정론적 구현 |
 | [`src/pdf-registry.js`](../../src/pdf-registry.js) | 참조자료 중앙 설정 모듈. 과목별 참조자료 매핑, 출처→PDF 파일명 매핑, MD 변환본 경로 자동 생성 (`REF_DIRS`, `resolveRefPath`, `mapSourceToRef`). 원본 PDF는 `.vercelignore`로 배포 제외, `ref_md/과목N/*/*.md` 변환본(3.7MB)으로 인앱 뷰어+PDF 저장 지원 |
 | [`src/reader/html-viewer.js`](../../src/reader/html-viewer.js) | 앱 내 HTML/MD 참조자료 뷰어. `fetch()`+`DOMParser`(HTML) 또는 `parseMarkdown()`(MD)로 로드 후 DOM 직접 주입 (iframe 없음). **키워드 기반 스크롤**: `KEYWORD_INDEX`에서 추출한 셀 텍스트 키워드로 검색→첫 번째 하이라이트로 스크롤 (L###은 스크롤에 사용하지 않음). **성능 최적화**: sessionStorage 캐싱(24h TTL)으로 재방문 시 즉시 렌더링, span 일괄 제거(normalize 호출 최소화), 검색 조기 종료(첫 매치 즉시 스크롤 + 나머지 `requestIdleCallback` 지연 하이라이트). 텍스트 노드 순회 검색 + `<mark>` 하이라이트, 검색 결과 내비게이션(이전/다음), 인쇄 지원. **PDF 저장** (v210 도입): 인쇄 전용 CSS로 오버레이 제약 없이 전체 문서를 브라우저 인쇄 다이얼로그로 출력 → "PDF로 저장" 선택 가능 |
 | [`src/reader/reader-format.js`](../../src/reader/reader-format.js) | 교재 리더 본문 포맷터. `parseMarkdown()` + HTML 참조 링크 변환 (`data-ref-html`, `data-ref-search`) + 참조자료 인라인 렌더링. **참조자료 인라인 프리뷰 툴팁** (데스크톱 hover 400ms / 모바일 롱프레스 600ms, 200자 스니펫). 본문 "📚 참조 자료" 섹션의 `ref_md` 링크는 내부 뷰어 + `↗원문`(law.go.kr) 병기 + 스냅샷 배지(제N호·시행일) + 동일 링크 중복 제거. 이야기형 서사 범위 태깅(`markStoryNarrative` — `📖 ┈ 이야기 ┈`/`┈ 본문 ┈ 📘` 명시 마커 우선. 마커 문단은 파서가 `.story-boundary`(+start/end) 부여 → 모든 뷰어 경로에서 숨김, 범위 내 요소에 `.story-narrative` + 서사 시작부 `.story-toggle` 접기 칩 + 구간 양끝 `.sr-only` 라벨(스크린리더) 삽입, 미표시 문서는 📖 장면·💭 에필로그·프롤로그/등장인물 카드 휴리스틱 폴백 → 명조체+골드 색상 구분. `<!-- story:start/end -->` 주석은 `markdown-parser.js`가 렌더에서 제거). **이미지 src 해석** — `images/x.png` 상대 경로는 `filePath` 디렉터리 기준으로, 구형 절대 경로(시험 루트 누락본)는 `contentPath()` 기준으로 재작성 (교재 `images/` 자산) |
 | [`src/law-links.js`](../../src/law-links.js) | 참조 문서 → law.go.kr 공식 원문 매퍼 (`lawUrlFor`, `LAW_DOC_URLS`). **생성물** — `build_pdf_registry.js`가 `content/lawdb.json`(법령 메타 SSOT) + 각 시험 `references.json.lawRefs`에서 시험별 `_EXAM_LAW_URLS` 테이블을 합성, 활성 시험 해석은 `getActiveExamId()`. 한글주소 규약: 법령=`/법령/`, 고시·기준·규정=`/행정규칙/`, 별표 파편→모법, 원료 DB→근거 고시('근거 고시' 라벨), 내부 정리 문서→null. `tools/check/check_law_urls.js`(check:lawurls)가 매핑 전수를 실호출 검증(한글주소 오류 페이지 본문 판별), notice-check 크론에 통합 |
-| [`src/notice-check.js`](../../src/notice-check.js) | 시험별 법령·고시 다문서 감시 — references.json referenceLaw 자동 유도 문서의 baseline↔latest 비교(`notice_status.json` docs[]), 기준 문서는 `references.json.noticeCore`/`latest.ruleName`로 해석(시험 비종속). 원격 상태 위치는 `STATUS_REPO` 상수 + `statusUrl(examId)`. Formula OS 진입 배너(24h 스로틀·시행일 억제) + '식약처 고시 확인' 버튼(law.go.kr 병렬 실시간) + '고시 정보 보기' 패널(문서별 기준→최신 행). `markStaleRefLinks`는 `[data-law-url]` 링크의 href를 현행본 시리얼 URL(`currentUrl`)로 보정 — 한글주소가 시행 예정 개정본으로 연결되는 사례 방지 — '⚠ 갱신 필요'/'⏳ 시행 예정' 배지 삽입 |
+| [`src/shell/notice-check.js`](../../src/shell/notice-check.js) | 시험별 법령·고시 다문서 감시 — references.json referenceLaw 자동 유도 문서의 baseline↔latest 비교(`notice_status.json` docs[]), 기준 문서는 `references.json.noticeCore`/`latest.ruleName`로 해석(시험 비종속). 원격 상태 위치는 `STATUS_REPO` 상수 + `statusUrl(examId)`. Formula OS 진입 배너(24h 스로틀·시행일 억제) + '식약처 고시 확인' 버튼(law.go.kr 병렬 실시간) + '고시 정보 보기' 패널(문서별 기준→최신 행). `markStaleRefLinks`는 `[data-law-url]` 링크의 href를 현행본 시리얼 URL(`currentUrl`)로 보정 — 한글주소가 시행 예정 개정본으로 연결되는 사례 방지 — '⚠ 갱신 필요'/'⏳ 시행 예정' 배지 삽입 |
 | [`src/reader/exam-viewer.js`](../../src/reader/exam-viewer.js) | 문제집(MD) 런타임 뷰어. `content/exams/cosmetic/문제은행/*.md` fetch → 자체 MD→HTML 변환 → 인앱 전체화면 오버레이 렌더링. TOC 생성·인쇄·sessionStorage 캐시(24h)·`file://` 번들 폴리백(`data/exams/cosmetic/exams_md/*.js`) 지원. **시험 제목은 registry에서 동적 조회** (하드코딩 없음) |
-| [`src/pro-upgrade.js`](../../src/pro-upgrade.js) | Pro 안내·entitlement 계층. 루트 `feature-plan.json`을 `loadFeaturePlan()`으로 로드 → 기능별 `pro`/`free` 판정(`isProFeature`). `pro` 기능은 진입 시 1회 정보 모달(`proFeatureNotice`, 기능별 seen 플래그) + `.pro-badge[data-pro-feature]` 배지 표시, `free`는 배지·안내 제거. 스토어 한도 오류(`Free 플랜` 접두사)는 `showStoreError` → `showUpgradeNotice` 업그레이드 모달로 분기. **entitlement**: `hasProEntitlement()`는 `pro_entitled` 로컬 플래그 참조(ROAD-P1 서버 검증 전 임시 시임), `canCloudSync()` = 플랜 free면 전원·pro면 entitlement 필요 — sync.js가 호출 |
-| [`src/usage-stats.js`](../../src/usage-stats.js) | 로컬 사용 카운터 (ROAD-L5 — 유료가치 판정 데이터). `switchView`의 `trackView(viewId)`로 화면별 진입·`trackAction(key)`로 기능 액션 횟수를 `usage_stats` **GLOBAL 키**에 누적 — `days` 맵은 90일 상한. **유저 단위**: `owner`에 익명 `device_id` 기록 — 로그인 없는 프로모션 기간에는 기기=유저로 근사, 시험 전환해도 누적 유지. **로컬 전용**: 백업·클라우드 동기화 제외(`RESET_KEYS`에는 포함 — 전체 초기화 시 삭제). **판정**: `VALUE_ACTIONS`(오답→교재/노트/유사문제·진단 평가·이야기형·맞춤 리포트·실제 결과 보고) 합계 ≥ `PRO_VALUE_THRESHOLD=20`이면 `isValueThresholdMet()` — ROAD-P1 착수 근거. `command_palette`·`plan_compare` 등 편의 액션은 표시만 하고 판정 제외. 설정 '내 사용 통계'(`showUsageStats`)에서 첫/최근 사용일·활동 일수·화면별/기능별 횟수·판정 진행 표 + 초기화 버튼 |
+| [`src/pro/pro-upgrade.js`](../../src/pro/pro-upgrade.js) | Pro 안내·entitlement 계층. 루트 `feature-plan.json`을 `loadFeaturePlan()`으로 로드 → 기능별 `pro`/`free` 판정(`isProFeature`). `pro` 기능은 진입 시 1회 정보 모달(`proFeatureNotice`, 기능별 seen 플래그) + `.pro-badge[data-pro-feature]` 배지 표시, `free`는 배지·안내 제거. 스토어 한도 오류(`Free 플랜` 접두사)는 `showStoreError` → `showUpgradeNotice` 업그레이드 모달로 분기. **entitlement**: `hasProEntitlement()`는 `pro_entitled` 로컬 플래그 참조(ROAD-P1 서버 검증 전 임시 시임), `canCloudSync()` = 플랜 free면 전원·pro면 entitlement 필요 — sync.js가 호출 |
+| [`src/telemetry/usage-stats.js`](../../src/telemetry/usage-stats.js) | 로컬 사용 카운터 (ROAD-L5 — 유료가치 판정 데이터). `switchView`의 `trackView(viewId)`로 화면별 진입·`trackAction(key)`로 기능 액션 횟수를 `usage_stats` **GLOBAL 키**에 누적 — `days` 맵은 90일 상한. **유저 단위**: `owner`에 익명 `device_id` 기록 — 로그인 없는 프로모션 기간에는 기기=유저로 근사, 시험 전환해도 누적 유지. **로컬 전용**: 백업·클라우드 동기화 제외(`RESET_KEYS`에는 포함 — 전체 초기화 시 삭제). **판정**: `VALUE_ACTIONS`(오답→교재/노트/유사문제·진단 평가·이야기형·맞춤 리포트·실제 결과 보고) 합계 ≥ `PRO_VALUE_THRESHOLD=20`이면 `isValueThresholdMet()` — ROAD-P1 착수 근거. `command_palette`·`plan_compare` 등 편의 액션은 표시만 하고 판정 제외. 설정 '내 사용 통계'(`showUsageStats`)에서 첫/최근 사용일·활동 일수·화면별/기능별 횟수·판정 진행 표 + 초기화 버튼 |
 
 ### 3. Data Layer (데이터 계층)
 
@@ -617,7 +618,7 @@ passok/
 | `data/exams/<id>/<key>_data.<hash>.js` | 범용 지식DB 번들 (cosmetic 예: `ingredients_data` — 성분 사전). `content/exams/cosmetic/knowledge/ingredients.json`처럼 시험 콘텐츠 루트의 `knowledge/` 원본 → `<KEY>_DATA` 전역 + `registry[key]` 메타(version·updatedAt·stats) — `DataLoader.loadDictionary()`가 `registry.knowledge.registryKey`로 온디맨드 로드 | `tools/build/index.js` (knowledge plugin) |
 | `registry.js` → `ingredients` 메타 | 원료 DB `version`·`updatedAt`·`notice`·`history`(개정 이력 누적)·`contentHash`(내용 지문) — `content/…/knowledge/ingredients.json`의 `meta`에서 병합. 사전 버전 배지·갱신 알림·Formula OS 검증 기준이 여기서 나옴 | `tools/build/index.js` |
 | `src/exams/cosmetic/formula-store.js` · `src/exams/cosmetic/formula-rules.js` · `src/exams/cosmetic/formula-check.js` · `src/exams/cosmetic/formula-stability.js` | Formula OS 도메인 레이어 — 포뮬러 CRUD/한도(5개)·고객·안정성 스키마·전성분 표시 순서, 추천 규칙(BASE_TEMPLATES·고민/피부 매핑·맞춤 규칙 병합), 고시 한도 검증 엔진, 제형 안정성 체크(상 비율·상호작용·투입 단계·pH) | 수동 관리 |
-| `src/exams/cosmetic/batch-store.js` · `src/exams/cosmetic/customer-store.js` · `src/exams/cosmetic/material-ledger.js` · `src/exams/cosmetic/adverse-store.js` · `src/exams/cosmetic/usage-guide.js` · `src/exams/cosmetic/store-utils.js` · `src/csv-utils.js` | Formula OS 업무 레이어 — 배치(조제 기록) 채번·QC·위생·스냅샷, 고객 카드·상담 이력, 원료 입고·기한·재고·차감, 이상사례 기록(FO-59), 사용 안내문 생성기, 스토어 공통 헬퍼, CSV 파서·인코딩(EUC-KR 폴백)·직렬화 (FORMULA_OS_WORKFLOW_DESIGN.md) | 수동 관리 |
+| `src/exams/cosmetic/batch-store.js` · `src/exams/cosmetic/customer-store.js` · `src/exams/cosmetic/material-ledger.js` · `src/exams/cosmetic/adverse-store.js` · `src/exams/cosmetic/usage-guide.js` · `src/exams/cosmetic/store-utils.js` · `src/content/csv-utils.js` | Formula OS 업무 레이어 — 배치(조제 기록) 채번·QC·위생·스냅샷, 고객 카드·상담 이력, 원료 입고·기한·재고·차감, 이상사례 기록(FO-59), 사용 안내문 생성기, 스토어 공통 헬퍼, CSV 파서·인코딩(EUC-KR 폴백)·직렬화 (FORMULA_OS_WORKFLOW_DESIGN.md) | 수동 관리 |
 | `src/exams/cosmetic/views/formula.js` + `formula-core.js` · `formula-hub.js` · `formula-list.js` · `formula-calc.js` · `formula-weigh.js` · `formula-ing-modal.js` · `formula-io.js` | Formula OS 뷰 — `formula.js`는 named export 재수출 파사드(app.js 디스패치·테스트 호환). 구현은 역할별 모듈: core(공용 상태·패널·서브내비·성분 인덱스), hub(허브·사업 유형·리마인더·고대비), list(My 포뮬러), calc(배합 계산기·드래프트·저장), weigh(계량 모드), ing-modal(자가 성분 등록), io(인쇄·JSON 공유) | 수동 관리 |
 | `src/exams/cosmetic/views/formula-batch.js` · `formula-customer.js` · `formula-material.js` · `formula-compliance.js` · `formula-adverse.js` · `formula-audit.js` · `formula-print.js` | Formula OS 패널 뷰 — 조제 기록(목록·폼·상세), 고객 관리, 원료 장부(LOT 추적), 법규 준수 체크리스트(법령 MD 링크·체크 영속), 이상사례 기록(FO-59), 종합 점검 보고서 수집(FO-56), 인쇄 빌더(기록지·라벨·안내문·종합 보고서·추적·판매내역·동의서) | 수동 관리 |
 | [`data/exams/cosmetic/id_migration.js`](../../data/exams/cosmetic/id_migration.js) | 레거시 ID → 안정 ID 일회성 매핑 | `tools/build/index.js` (id_factory) |
@@ -648,18 +649,18 @@ passok/
 
 ```
 <head> (페인트 전 — FOUC 방지)
-  1. src/theme-init.js     (클래식 — 페인트 전 테마 클래스 적용)
+  1. src/shell/theme-init.js     (클래식 — 페인트 전 테마 클래스 적용)
   2. src/pwa/pwa-install-capture.js (클래식 — beforeinstallprompt 조기 캡처 + SW 등록)
 
 <body> 하단
   3. data/exams.js                    (클래식 — window.EXAMS_LIST 시험 레지스트리, file:// 호환)
-  4. src/exam-data-boot.js            (클래식 — 활성 시험 해석 후 {dataRoot}/id_migration.js +
+  4. src/shell/exam-data-boot.js            (클래식 — 활성 시험 해석 후 {dataRoot}/id_migration.js +
                                       {dataRoot}/registry.js를 파서 위치에 동기 삽입. 비활성 시험
                                       데이터 번들은 요청하지 않는다 — 도메인 네트워크 격리)
   5. src/pwa/pwa-manifest.js              (클래식 — 활성 시험 기준 동적 manifest 링크 교체)
   6. data/audio_manifest.js           (type=module — 오디오 경로, window.AUDIO_MANIFEST 할당)
-  7. src/app.js                       (type=module — ESM 진입점, 모든 src/ 모듈을 내부 import)
-  8. src/app-fallback.js              (defer — ESM 로드 실패 시 자동 복구, app.js와 독립 실행)
+  7. src/shell/app.js                       (type=module — ESM 진입점, 모든 src/ 모듈을 내부 import)
+  8. src/shell/app-fallback.js              (defer — ESM 로드 실패 시 자동 복구, app.js와 독립 실행)
 
 지연 로드 (초기 로드에서 제외):
   - vendor/mermaid/mermaid.min.js (3.3MB) — mermaid 블록이 있는 문서를 열 때만 주입
@@ -856,7 +857,7 @@ const state = {
 - `selectExam()`은 활성 시험과 같은 id 선택 시 리로드를 생략하되 **`current_exam` 저장은 항상 수행** — 미선택 상태의 기본 시험 선택도 저장되어야 다음 진입에서 피커가 다시 뜨지 않는다 (저장 생략 시 매번 피커 표시 회귀)
 
 ### 레지스트리 로딩
-- 부트: `src/exam-data-boot.js`(클래식)가 활성 시험을 해석해 `{dataRoot}/registry.js` + `id_migration.js`를 파서 위치에 동기 삽입 — 활성 시험 번들만 로드된다 (도메인 격리; 기본 시험은 `window.DATA_REGISTRY`)
+- 부트: `src/shell/exam-data-boot.js`(클래식)가 활성 시험을 해석해 `{dataRoot}/registry.js` + `id_migration.js`를 파서 위치에 동기 삽입 — 활성 시험 번들만 로드된다 (도메인 격리; 기본 시험은 `window.DATA_REGISTRY`)
 - 폴백·재진입: `DataLoader.ensureRegistry()`가 누락 시 `{dataRoot}/registry.js`를 클래식 스크립트로 동적 주입 (`DATA_REGISTRY_<examId>` 전역 — ESM export 불가라 `var` + `window` 할당 형태로 생성). 비기본 시험에서 레지스트리 확보 실패 시 기본 레지스트리를 명시적으로 비워 콘텐츠 혼선을 차단
 
 ### 빌드 순회
@@ -914,7 +915,7 @@ const state = {
 |------|------|------|
 | 뷰 계층 | `src/views/` · `src/exams/<id>/views/` | 코어 라이브러리·다른 뷰를 import 가능. 뷰 계층 내부 상호 참조 허용 |
 | 코어 라이브러리 | `src/` 루트 · `src/config/` 등 뷰 계층 외 | **`src/views/` import 금지** — 위반 시 check:imports 오류 |
-| 앱 셸 | `src/app.js` · `router.js` · `command-palette.js` · `manual-viewer.js` · `ui-mode.js` | 뷰 합성(뷰 모듈 import·화면 전환)이 허용되는 유일한 비-뷰 계층 |
+| 앱 셸 | `src/shell/app.js` · `router.js` · `command-palette.js` · `manual-viewer.js` · `ui-mode.js` | 뷰 합성(뷰 모듈 import·화면 전환)이 허용되는 유일한 비-뷰 계층 |
 
 - 코어가 뷰를 역참조하면 뷰→코어→뷰 순환이 생겨 초기화 순서·테스트 격리가 깨진다 — 의존 역전(이벤트·콜백·해시 라우팅)으로 우회할 것
 - 셸 명단은 `check_imports.js`의 `SHELL_MODULES` — 신규 셸 모듈 추가 시 이 표와 함께 갱신
@@ -1007,7 +1008,7 @@ pullSync() (로그인 시 / "지금 동기화" 버튼)
 
 ## 🎚️ UI 모드 (학습 ↔ 실무)
 
-합격 후 실무 중심 사용자를 위한 네비게이션 모드 전환입니다 ([`src/ui-mode.js`](../../src/ui-mode.js)).
+합격 후 실무 중심 사용자를 위한 네비게이션 모드 전환입니다 ([`src/shell/ui-mode.js`](../../src/shell/ui-mode.js)).
 
 - **키**: `ui_mode` = `'study' | 'practice'` (GLOBAL_KEYS — 시험 무관 기기 설정)
 - **게이팅**: `body.ui-mode-practice` 클래스 + `.nav-study-only`(실무에서 숨김) / `.nav-practice-only`(학습에서 숨김) 클래스로 CSS 제어
@@ -1130,7 +1131,7 @@ localStorage('appTheme')  >  prefers-color-scheme: light  >  다크(기본)
 ### 모듈 간 테마 동기화
 
 - 테마 변경 시 `document.dispatchEvent(new CustomEvent('themechange'))`로 브로드캐스트
-- 교재 리더([`src/app.js`](../../src/app.js) `applyReaderThemeClass()`)는 `themechange` 이벤트를 구독하여 `.reader-light-theme` 클래스를 즉시 동기화
+- 교재 리더([`src/shell/app.js`](../../src/shell/app.js) `applyReaderThemeClass()`)는 `themechange` 이벤트를 구독하여 `.reader-light-theme` 클래스를 즉시 동기화
 - **설계 결정**: 과거 리더 전용 `readerLightTheme` 로컬 상태를 제거하고 전역 테마로 통합 → 두 테마가 어긋나는 버그 원천 차단
 
 ---
@@ -1156,9 +1157,9 @@ localStorage('appTheme')  >  prefers-color-scheme: light  >  다크(기본)
 ### 캐시 버전 관리
 - `CACHE_VERSION` 상수로 캐시 네임스페이스 관리 (빌드 시 자동 갱신)
 - **빌드 타임 자동 치환**: `tools/build/stamp_sw_version.js`가 빌드 완료 시 `CACHE_VERSION`을 `v${YYYYMMDD}-${gitShort}` 형태로 자동 갱신 → 수동 관리 불필요. 날짜는 **HEAD 커밋 날짜**(`%cd`) 기준 — 배포 머신 시각이 아니므로 이력과 일치 (git 미가용 시 로컬 시각 폴백)
-- **버전 3계층**: 기계 ID(`v20261016-fd06122` — 캐시 키·버전 비교) / 표시용(`v2026.10.16 · fd06122` — `src/app-version.js`의 `formatAppVersion`, 사이드바·설정·변경이력 모달) / 콘텐츠(원료 DB `2026.09.6` CalVer). `package.json`의 `version`은 배포 스탬프가 `YYYY.M.D`로 자동 동기화
+- **버전 3계층**: 기계 ID(`v20261016-fd06122` — 캐시 키·버전 비교) / 표시용(`v2026.10.16 · fd06122` — `src/shell/app-version.js`의 `formatAppVersion`, 사이드바·설정·변경이력 모달) / 콘텐츠(원료 DB `2026.09.6` CalVer). `package.json`의 `version`은 배포 스탬프가 `YYYY.M.D`로 자동 동기화
 - **배포 시 버전을 올리면 구 캐시 자동 정리** → 모바일 구버전 고착(Stale Cache) 문제 방지
-- `SHELL_ASSETS`에는 [`src/utils.js`](../../src/utils.js), [`src/trainer-calc.js`](../../src/trainer-calc.js) 등 분리된 모듈이 모두 프리캐시에 포함됨 — 단 실무 피처 모듈(`src/exams/cosmetic/views/formula*.js`, `formula-store` 등)은 제외. 활성 시험만 사용하므로 시험 간 프리캐시 비대화를 막기 위해 지연 import + `warmPracticeFeatures()` 유휴 예열로 런타임 캐시(cacheFirst)에 적재한다 (formula 스토어는 `pro-upgrade.js`도 `hasFeature` 게이트 아래 지연 import하므로 부트 그래프에 없음)
+- `SHELL_ASSETS`에는 [`src/utils.js`](../../src/utils.js), [`src/study/trainer-calc.js`](../../src/study/trainer-calc.js) 등 분리된 모듈이 모두 프리캐시에 포함됨 — 단 실무 피처 모듈(`src/exams/cosmetic/views/formula*.js`, `formula-store` 등)은 제외. 활성 시험만 사용하므로 시험 간 프리캐시 비대화를 막기 위해 지연 import + `warmPracticeFeatures()` 유휴 예열로 런타임 캐시(cacheFirst)에 적재한다 (formula 스토어는 `pro-upgrade.js`도 `hasFeature` 게이트 아래 지연 import하므로 부트 그래프에 없음)
 - 콘텐츠 문서(`MD_ASSETS`)는 코드와 달리 전 시험 공유 프리캐시가 정책 — 원본 MD는 시험 간 소용량 텍스트이고 오프라인 최초 열람 보장이 우선이다 (시험별 격리는 코드 자산에만 적용)
 - `data/exams/cosmetic/registry.js`, `data/audio_manifest.js`도 프리캐시에 포함 (2026-08-25, window 전역 참조 방식 전환으로 모듈 그래프에서 분리되어 별도 캐싱 필요)
 
@@ -1211,9 +1212,9 @@ localStorage('appTheme')  >  prefers-color-scheme: light  >  다크(기본)
 | **설치 버튼 UI** | `#pwa-install-btn` (`index.html`) | `beforeinstallprompt` 캡처 시 표시. 클릭 시 `deferredPrompt.prompt()` 호출 |
 | **설치 안내 모달** | `#pwa-install-modal` (`index.html`) | `deferredPrompt`가 null일 때 플랫폼별 수동 설치 안내 (Android/iOS/generic/inapp 분기) |
 | **진단 패널** | `#pwa-diagnostics` (`index.html`) | `beforeinstallprompt` 미발생 시 원인 진단 정보 화면 표시 (SW 상태, display-mode, manifest 검증 등) |
-| **인앱 브라우저 감지** | `detectPlatform()` ([`src/app.js`](../../src/app.js)) | UA 기반 WebView/인앱 브라우저 감지 (`wv)` 플래그, KakaoTalk, Instagram, Facebook, LINE, Twitter, Snapchat). 감지 시 "Chrome으로 열기" 안내 모달 자동 표시 |
-| **변경 이력 알림** | [`src/whats-new.js`](../../src/whats-new.js) | `window.APP_VERSION`(data/version.js 배포 스탬프) vs `last_seen_version` 비교 → 업데이트 후 첫 부팅에 "새로운 소식" 모달. 전용 `#whats-new-overlay`로 다른 모달(showConfirm/showAlert의 `#app-confirm-overlay`)과 공존 — 후속 모달이 떠도 제거되지 않음. `last_seen_version` 부재 시 학습 데이터 키로 복귀 사용자 판별(데뷔 배포 대응). 설정 메뉴 "변경 이력"으로 재열람 |
-| **의견 수신** | [`src/feedback.js`](../../src/feedback.js) | 설정 메뉴 "의견 보내기" 모달 — 유형(칭찬/개선/오류/제안)·별점(선택)·본문 → Supabase `feedback` 테이블 익명 insert (RLS insert-only). `?src=` 유입 채널을 `entry_source`에 최초 1회 보존 후 URL 제거. 실패·오프라인 시 `pending_feedback` 큐에 쌓아 온라인 복귀(`online` 이벤트) 시 플러시. 스팸: 허니팝 + 60초 쿨다운(`feedback_last_ts`) + 개인정보 패턴 경고. 설계: USER_FEEDBACK_DESIGN.md |
+| **인앱 브라우저 감지** | `detectPlatform()` ([`src/shell/app.js`](../../src/shell/app.js)) | UA 기반 WebView/인앱 브라우저 감지 (`wv)` 플래그, KakaoTalk, Instagram, Facebook, LINE, Twitter, Snapchat). 감지 시 "Chrome으로 열기" 안내 모달 자동 표시 |
+| **변경 이력 알림** | [`src/shell/whats-new.js`](../../src/shell/whats-new.js) | `window.APP_VERSION`(data/version.js 배포 스탬프) vs `last_seen_version` 비교 → 업데이트 후 첫 부팅에 "새로운 소식" 모달. 전용 `#whats-new-overlay`로 다른 모달(showConfirm/showAlert의 `#app-confirm-overlay`)과 공존 — 후속 모달이 떠도 제거되지 않음. `last_seen_version` 부재 시 학습 데이터 키로 복귀 사용자 판별(데뷔 배포 대응). 설정 메뉴 "변경 이력"으로 재열람 |
+| **의견 수신** | [`src/shell/feedback.js`](../../src/shell/feedback.js) | 설정 메뉴 "의견 보내기" 모달 — 유형(칭찬/개선/오류/제안)·별점(선택)·본문 → Supabase `feedback` 테이블 익명 insert (RLS insert-only). `?src=` 유입 채널을 `entry_source`에 최초 1회 보존 후 URL 제거. 실패·오프라인 시 `pending_feedback` 큐에 쌓아 온라인 복귀(`online` 이벤트) 시 플러시. 스팸: 허니팝 + 60초 쿨다운(`feedback_last_ts`) + 개인정보 패턴 경고. 설계: USER_FEEDBACK_DESIGN.md |
 
 **설계 결정사항**:
 - SW 등록을 `app.js`(deferred module)가 아닌 `pwa-install-capture.js`(클래직 스크립트, `<head>`)에서 수행 → Android Chrome이 SW 활성화 상태를 빨리 인식하여 `beforeinstallprompt` 발생 조건 충족
@@ -1320,7 +1321,7 @@ Service Worker(`sw.js`)는 본 애플리케이션의 오프라인 지원과 캐�
 구 SW(v38) 활성 중, 신버전 배포 후 사용자 방문
   │
   ├─ index.html 요청 → Network First → 네트워크에서 신버전 HTML 획득
-  ├─ src/app.js 요청 → Cache First → 구 캐시(v38)에서 구버전 JS 서빙
+  ├─ src/shell/app.js 요청 → Cache First → 구 캐시(v38)에서 구버전 JS 서빙
   │
   └─ 신버전 HTML + 구버전 JS = 캐시 스큐
        └─ ESM import 그래프 붕괴 → 앱 초기화 실패 (Chrome에서만 발생)
@@ -1332,7 +1333,7 @@ Service Worker(`sw.js`)는 본 애플리케이션의 오프라인 지원과 캐�
 구 SW(v38) 활성 중, 신버전 배포 후 사용자 방문
   │
   ├─ index.html 요청 → Cache First → 구 캐시(v38)에서 구버전 HTML 서빙
-  ├─ src/app.js 요청 → Cache First → 구 캐시(v38)에서 구버전 JS 서빙
+  ├─ src/shell/app.js 요청 → Cache First → 구 캐시(v38)에서 구버전 JS 서빙
   │
   └─ 구버전 HTML + 구버전 JS = 동일 세대 → 구버전 앱 정상 작동 ✅
 
@@ -1341,7 +1342,7 @@ Service Worker(`sw.js`)는 본 애플리케이션의 오프라인 지원과 캐�
   ├─ controllerchange → 페이지 리로드
   │
   ├─ index.html 요청 → Cache First → 신 캐시(v39)에서 신버전 HTML 서빙
-  ├─ src/app.js 요청 → Cache First → 신 캐시(v39)에서 신버전 JS 서빙
+  ├─ src/shell/app.js 요청 → Cache First → 신 캐시(v39)에서 신버전 JS 서빙
   │
   └─ 신버전 HTML + 신버전 JS = 동일 세대 → 신버전 앱 정상 작동 ✅
 ```
@@ -1489,8 +1490,8 @@ app-fallback.js 폴링 시작 (400ms 간격, 15s 데드라인)
 
 | 파일 | 사유 |
 |------|------|
-| `src/app-fallback.js` | 초기 로드 시 DOM 미구성 상태에서 실행 — `getComputedStyle` 호출 불가 |
-| `src/theme-init.js`, `src/theme-toggle.js` | 테마 초기화 자체 — CSS 변수 정의 전 실행 |
+| `src/shell/app-fallback.js` | 초기 로드 시 DOM 미구성 상태에서 실행 — `getComputedStyle` 호출 불가 |
+| `src/shell/theme-init.js`, `src/shell/theme-toggle.js` | 테마 초기화 자체 — CSS 변수 정의 전 실행 |
 | `src/reader/mermaid-utils.js` | Mermaid 테마 정의 자체 — Mermaid 라이브러리에 색상값 전달 |
 | `src/reader/html-viewer.js` | 외부 콘텐츠 격리 스타일링 — 독립적인 색상 체계 |
 | `src/reader/reader-format.js` | GitHub 스타일 코드 블록 테마 — 고정 스타일 매칭 필요 |
@@ -1521,7 +1522,7 @@ app-fallback.js 폴링 시작 (400ms 간격, 15s 데드라인)
 - **`script-src 'self'` (inline script 차단)**: 인라인 `onclick`/`oninput` 속성은 CSP에 의해 브라우저에서 실행 차단됨. 이를 우회하기 위해 **이벤트 위임 패턴** 사용:
   - `data-click="핸들러명"` + `data-arg="단일인자"` 또는 `data-args='["인자1", 인자2]'` (JSON 배열, 다중/타입 인자)
   - `data-input="핸들러명"` (range 슬라이더 등 input 이벤트용, `el.value`를 인자로 전달)
-  - [`src/app.js`](../../src/app.js)의 `resolveDelegatedHandler()`가 `window`에서 점 표기 네임스페이스(`ManualViewer.openManual` 등)로 함수를 찾아 실행
+  - [`src/shell/app.js`](../../src/shell/app.js)의 `resolveDelegatedHandler()`가 `window`에서 점 표기 네임스페이스(`ManualViewer.openManual` 등)로 함수를 찾아 실행
   - 위임 참조되는 모든 핸들러는 `app.js` 하단에서 `window.<name> = <name>;`로 브리지 노출 필수 (ESM 모듈 스코프 격리 해결)
   - **도메인 모듈 지연 로딩**: `features` 게이트 대상 기능(Formula OS 뷰·계산/원료 챌린지 등)은 `app.js`의 `LAZY_MODULE_HANDLERS`에 `핸들러명: ['./모듈.js', 'export명']`으로 등록 — 첫 `data-click` 호출 시점에만 `import()`되므로 미보유 시험은 모듈을 파싱·평가하지 않음. 이때 `window.<name>` 브리지는 프록시 함수(`_lazyFn`)가 대신한다
   - **회귀 가드**: [`tests/unit/app/delegation-guard.test.js`](../../tests/unit/app/delegation-guard.test.js)가 인라인 `on*=` 속성 잔존 및 `window` 브리지 누락을 자동 검출 (지연 테이블은 문자열 항목까지 스캔)
@@ -1575,24 +1576,24 @@ content/exams/**/*.md       ──► (exams plugin)             ──► data/
 content/exams/cosmetic/knowledge/ingredients.json ──► (knowledge plugin) ──► data/exams/cosmetic/ingredients_data.<hash>.js (bundleFields 투영)
                                                             └──► 참조자료/원료/*.md의 GENERATED-TABLE 표 재생성 + registry.js의 ingredients 메타 (meta → version·history·contentHash)
 
-content/**/*.md ───(런타임 fetch)──► src/data-loader.js + src/reader/textbook-parser.js ──► STUDY_DATA (카드/퀴즈/챕터)
+content/**/*.md ───(런타임 fetch)──► src/content/data-loader.js + src/reader/textbook-parser.js ──► STUDY_DATA (카드/퀴즈/챕터)
 content/**/*.md ───(file:// 폴백)──► tools/build/build_study_md_bundle.js ──► data/exams/cosmetic/study_md/ (과목별 분할)
 
 data/exams/<id>/exams/*.js ──► tools/build/build_ox_drills.js    ──► data/exams/<id>/drills/ox_subject*.js   (O/X 8,200+문)
 data/exams/<id>/exams/*.js ──► tools/build/build_combo_drills.js ──► data/exams/<id>/drills/combo_subject*.js (복수정답형 1,934문)
-                                                                                └──(src/combo-doc.js 런타임 직렬화)──► 뷰어 "복수정답형 문제집" 문서
+                                                                                └──(src/content/combo-doc.js 런타임 직렬화)──► 뷰어 "복수정답형 문제집" 문서
 ```
 
 **특징**:
 - **SSOT**: `content/exams/cosmetic/manifest.json` + `content/**/*.md`가 교재/카드/퀴즈의 단일 진실 원천
 - **런타임 파싱**: `src/reader/textbook-parser.js`가 브라우저에서 카드/퀴즈/챕터를 조립. 카드/퀴즈 안정 ID는 `src/sha256.js`(Node `crypto`와 동일)로 재현되어 진도 보존
 - **재빌드 불필요**: `content/*.md` 수정 시 http 배포는 즉시 반영. `file://` 지원이 필요할 때만 `npm run build:study-md` 실행 (과목별 분할 번들 생성)
-- **온디맨드 로딩**: `src/data-loader.js`가 필요한 과목/시험만 로드하고, 로드 후 registry stats를 실제 개수로 갱신
+- **온디맨드 로딩**: `src/content/data-loader.js`가 필요한 과목/시험만 로드하고, 로드 후 registry stats를 실제 개수로 갱신
 - **해시 파일명(시험/성분)**: 번들 내용이 바뀌면 파일명도 바뀌어 캐시 무효화가 자연스럽게 이루어짐
 
 ### 🧩 문항 드릴 파이프라인 (O/X·복수정답형)
 
-시험 문항 스키마·채점 유틸([`src/questions.js`](../../src/questions.js))을 중심으로, `data/exams` 번들에서 학습 드릴을 파생 생성합니다.
+시험 문항 스키마·채점 유틸([`src/content/questions.js`](../../src/content/questions.js))을 중심으로, `data/exams` 번들에서 학습 드릴을 파생 생성합니다.
 
 ```
 data/exams/subjectN.*.js ──► build_ox_drills.js    ──► data/exams/cosmetic/drills/ox_subject*.js   (type:'ox')
@@ -1601,7 +1602,7 @@ data/exams/subjectN.*.js ──► build_ox_drills.js    ──► data/exams/co
 
 - **스키마**: `single`/`combo`/`short`/`ox` 4유형. combo는 진술 `truth`에서 정답 조합을 **도출**(`deriveComboAnswer`)하고 `validateQuestion`으로 유일성을 검증 — 정답 오타를 구조적으로 차단.
 - **복수정답형 변환**(상세: [`QUESTION_SCHEMA_DESIGN.md`](design/QUESTION_SCHEMA_DESIGN.md) §6): 객관식은 선지를 `fact`(명제 진위)/`answer`(정답 여부) 모드로 진술화, 같은 교재 구간(conceptId)의 fact 진술은 재조합해 복수정답 문항을 추가 생성. 단답형은 빈칸 정답이 하나뿐이라 100% 단일정답이 되므로 제외 — 원본 문제은행의 단답형으로 출제. 과목당 277/375/491/791 = 1,934문.
-- **진술 원자 추적**: 진술의 `sid`(`stableId`)를 O/X·복수정답형이 공유 → [`src/statement-tracker.js`](../../src/statement-tracker.js)가 `perStatement.judgedCorrect` 판정을 `sid` 단위로 `statement_stats` `{j, w, lw, t, truth, cid, last, streak}` + FSRS 큐(`spaced-repetition.js`)에 누적. **연속 정답 3회(`WEAK_GRADUATE_STREAK`) 시 취약 목록 졸업**, 재오판 시 복귀. 드릴 편성은 **FSRS 기한 도래(`getDueStatementSids`) → 오판 진술 → 임의** 순.
+- **진술 원자 추적**: 진술의 `sid`(`stableId`)를 O/X·복수정답형이 공유 → [`src/study/statement-tracker.js`](../../src/study/statement-tracker.js)가 `perStatement.judgedCorrect` 판정을 `sid` 단위로 `statement_stats` `{j, w, lw, t, truth, cid, last, streak}` + FSRS 큐(`spaced-repetition.js`)에 누적. **연속 정답 3회(`WEAK_GRADUATE_STREAK`) 시 취약 목록 졸업**, 재오판 시 복귀. 드릴 편성은 **FSRS 기한 도래(`getDueStatementSids`) → 오판 진술 → 임의** 순.
 - **드릴 모드**: 과목별(1~4) 외에 전 과목 특수 모드 `weak`(취약·복습 진술 필터)·`num`(수치·한도·기한 태그 필터 — `inferTags` 부여분) 지원, 출제 수 10/20/전체 선택. 복수정답형은 진술별 O/X 토글 2단계 응시 + 판정과 모순되는 선지 실시간 소거 표시(시험장 소거 전술 훈련).
 - **취약 진술 리뷰 패널**: 누적 통계 열람 — conceptId 개념 그룹핑(참/거짓 혼동쌍 2단 대조), 복습 대상 필터, 최근 판정 배지, 졸업 수 표시, 바로 드릴 진입.
 - **런타임**: `DataLoader.loadOxDrills(N)`/`loadComboDrills(N)`가 `data/exams/cosmetic/drills/` 번들을 클래식 `<script>` 주입으로 로드(`file://` 호환). 복수정답형은 수작업 파일럿(`combo_pilot.js`)과 자동 번들을 병합. UI는 `views/trainer-drills.js` + 트레이너 패널(`index.html`).
@@ -1823,7 +1824,7 @@ npm run deploy
    - **남은 과제**: 서버 기반 Pro entitlement(플랜 검증·한도 해제), 시험별 데이터 테이블 분리 — SUPABASE_DESIGN.md §10 결정 사항 참조
 
 6. **성능 계측** ✅ (2026-09-03)
-   - `src/web-vitals.js`: PerformanceObserver API로 LCP/CLS/INP 측정 (zero-dependency)
+   - `src/telemetry/web-vitals.js`: PerformanceObserver API로 LCP/CLS/INP 측정 (zero-dependency)
    - `app.js` 시작 시 `initWebVitals()` 호출, `pagehide` 시점에 `console.debug`로 최종 값 출력
    - 대용량 데이터 지연 로딩은 기존 온디맨드 로딩(`DataLoader`)으로 이미 구현됨
 
@@ -1866,7 +1867,7 @@ npm run deploy
    - `textbook-reader.js`에서 개념 맵 컨테이너 HTML, `renderConceptMap` 호출, 토글 이벤트는 이미 제거됨
 
 15. **교재 리더 학습 보조 도구** ✅ (2026-09-01 축소)
-   - `src/study-aids.js`: 2가지 학습 보조 기능 (CSP-safe, 의존성 제로)
+   - `src/study/study-aids.js`: 2가지 학습 보조 기능 (CSP-safe, 의존성 제로)
    - ① 기출 필터 & 요약: 🔖기출 마커 섹션 하이라이트 + 토글 버튼로 비기출 섹션 디밍, 핵심 요약 카드 표시
    - ② 숫자·기한 빈칸 카드: 정규식으로 숫자/기한/횟수 자동 추출 → 챕터별 암기표 생성
    - ~~③ 절차 플로우~~ (삭제 — Mermaid flowchart가 콘텐츠에 직접 내장됨)
@@ -2017,7 +2018,7 @@ npm.cmd run deploy
 | `sw.js` | `MD_ASSETS` 하드코딩 | 프리캐시 대상 MD 파일 경로 |
 | `src/reader/manual-viewer.js` | `MD_SOURCES` 객체 | 학습안내서, 사용자매뉴얼 경로 |
 | `src/pdf-registry.js` | `SUBJECT_DIR_MAP`, `REF_DIRS`, `REFERENCE_FILES`, `MD_CONVERSION_TARGETS` | 참조자료 중앙 설정 (자동 생성 파일 — `references.json` 수정 후 리빌드) |
-| `src/data-loader.js` | `manifest.subjects[].dir` 동적 참조 | 런타임 MD 로드 (`contentPath()` 경유) |
+| `src/content/data-loader.js` | `manifest.subjects[].dir` 동적 참조 | 런타임 MD 로드 (`contentPath()` 경유) |
 | `src/reader/textbook-parser.js` | `manifest.subjects[].dir` 동적 참조 | 런타임 MD 파싱 |
 | `tools/build/manifest_loader.js` | `manifest.json` 검증 | 빌드 시 파일 존재 확인 |
 | `tools/build/plugins/textbook.plugin.js` | `subject.dir` 동적 참조 | 빌드 시 MD 파싱 |
@@ -2084,7 +2085,7 @@ npm.cmd run deploy
 
 > ~~**개선 가능**: 기출문제 파일명을 `manifest.json`의 `exams[].file`에서 동적 참조하면 하드코딩 제거 가능~~ ✅ **완료** (2026-09-03)
 
-### 3순위: `src/app.js` — **조건부** → ✅ **개선 완료** (2026-09-03)
+### 3순위: `src/shell/app.js` — **조건부** → ✅ **개선 완료** (2026-09-03)
 
 | 하드코딩 대상 | 위치 | 수정 조건 |
 |---------------|------|----------|
@@ -2102,7 +2103,7 @@ npm.cmd run deploy
 | `2026 맞춤형화장품 조제관리사 시험` | `index.html:8` | 연도/자격증명 변경 시 |
 | `화장품법, 제조/품질관리, 안전관리, 맞춤형화장품 이해` | `index.html:830` | 과목명 변경 시 |
 
-### 5순위: `src/study-aids.js` — **조건부** (단위/키워드 리스트)
+### 5순위: `src/study/study-aids.js` — **조건부** (단위/키워드 리스트)
 
 | 하드코딩 대상 | 위치 | 수정 조건 |
 |---------------|------|----------|
@@ -2112,7 +2113,7 @@ npm.cmd run deploy
 
 > 같은 화장품 분야 내에서 교재 버전이 바뀌는 경우 수정 불필요
 
-### 6순위: `src/trainer-calc.js` — **조건부** (계산 문제 유형)
+### 6순위: `src/study/trainer-calc.js` — **조건부** (계산 문제 유형)
 
 | 하드코딩 대상 | 위치 | 수정 조건 |
 |---------------|------|----------|
@@ -2161,16 +2162,16 @@ SPEC.md의 기능/비기능 ID와 이 문서의 설명 위치·구현 모듈 대
 | `D-01~15` | §3.1 대시보드 | `src/views/dashboard.js` — Application Layer |
 | `AN-01~09` | §3.1.5 맞춤학습 | `analysis-view` — 분석 뷰: 진단 카드·온보딩·단원 딥링크·복합 추정·추천 효과·패턴 분석·리포트 공유 |
 | `F-01~10` | §3.2 플래시카드 | `src/views/flashcard.js` |
-| `Q-01~11` | §3.3 퀴즈 | `src/views/quiz.js` |
+| `Q-01~11` | §3.3 퀴즈 | `src/views/quiz/quiz.js` |
 | `E-01~07` | §3.4 모의고사 | `src/views/exam-simulator*.js` |
 | `TR-01~18` | §3.5 교재 리더 | `src/views/textbook-reader.js` — 별도 스크롤 복원 |
-| `SA-01~05` | §3.6 학습 보조 도구 | `src/study-aids.js` |
+| `SA-01~05` | §3.6 학습 보조 도구 | `src/study/study-aids.js` |
 | `G-01~09` | §3.7 용어집 | `src/reader/glossary-query.js` + `views/glossary-renderer.js` |
 | `RR-01~16` | §3.8 참조자료 연결 | `src/reader/html-viewer.js` + `reader-format.js` + `pdf-registry.js` |
 | `TS-01~09` | §3.9 교재 검색 | `src/views/textbook-search.js` |
 | `DI-01~03` | §3.10 성분 사전 | `src/views/dictionary.js` |
 | `T-01~05` | §3.11 훈련소 | `src/views/trainer*.js` |
-| `AO-01~05` | §3.12 오디오북 | `src/views/reader-audio.js` — Media Session |
+| `AO-01~05` | §3.12 오디오북 | `src/views/reader/reader-audio.js` — Media Session |
 | `B-01~04` | §3.13 백업/복원 | `src/views/backup.js` — ALLOWED_KEYS 화이트리스트 |
 | `EV-01~08` | §3.14 문제집 뷰어 | `src/reader/exam-viewer.js` |
 | `MV-01~04` | §3.15 매뉴얼 뷰어 | `src/reader/manual-viewer.js` |
@@ -2182,9 +2183,9 @@ SPEC.md의 기능/비기능 ID와 이 문서의 설명 위치·구현 모듈 대
 | `RV-01` | §3.20 복습 뷰 | `review-view` (quiz.js 렌더) |
 | `ND-01` | §3.20 숫자 드릴 | `content/…/number-drills/` + 훈련소 수치 훈련 |
 | `DR-01~07` | §3.20 드릴 | `src/views/trainer-drills.js` |
-| `UM-01~05` | §3.21 UI 모드 | `src/ui-mode.js` — UI 모드 절 |
+| `UM-01~05` | §3.21 UI 모드 | `src/shell/ui-mode.js` — UI 모드 절 |
 | `ES-01~05` | §3.22 시험 선택 | `src/views/exam-select.js` — 멀티시험 플랫폼 절 |
-| `FB-01~08` | §3.23 의견 수신 | `src/feedback.js` + `tools/supabase/functions/feedback-notify` — USER_FEEDBACK_DESIGN.md |
+| `FB-01~08` | §3.23 의견 수신 | `src/shell/feedback.js` + `tools/supabase/functions/feedback-notify` — USER_FEEDBACK_DESIGN.md |
 
 ### 비기능 요구사양 (SPEC §4)
 

@@ -1,7 +1,7 @@
 // tests/fixtures/sample-questions.js
 // @spec DR-07
 // 문항 스키마 검증용 샘플 문항 — 화장품 시험 도메인 내용을 담고 있어
-// 플랫폼 모듈(src/questions.js)이 아닌 테스트 픽스처로 분리됨.
+// 플랫폼 모듈(src/content/questions.js)이 아닌 테스트 픽스처로 분리됨.
 // (내용/수치는 예시 — 식약처 가이드로 검증된 실제 문항이 아님)
 
 export const SAMPLE_QUESTIONS = [

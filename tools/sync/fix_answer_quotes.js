@@ -20,8 +20,8 @@
 // @spec CQ-06
 const fs = require('fs');
 const path = require('path');
-const { getExamTargets } = require('../build/exam_targets');
-const { parseQuestionBank, isSupported, sourceContext, compact, NEGATIVE_STEM_RE } = require('../check/check_answer_overlap');
+const { getExamTargets } = require('../build/exam_targets.js');
+const { parseQuestionBank, isSupported, sourceContext, compact, NEGATIVE_STEM_RE } = require('../check/check_answer_overlap.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const CHECK = process.argv.includes('--check');

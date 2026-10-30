@@ -20,11 +20,11 @@
 
 const fs = require('fs');
 const path = require('path');
-const { getExamTargets } = require('./exam_targets');
+const { getExamTargets } = require('./exam_targets.js');
 const {
     parsePatch, applyPatch, norm, GEN_BANNER, splitStoryBlocks,
     findStoryInconsistencies, extractRecallItems, buildRecallSection,
-} = require('./story_merge');
+} = require('./story_merge.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const CHECK = process.argv.includes('--check');

@@ -12,7 +12,7 @@
  */
 
 // @spec none (추적 조회 도구)
-const T = require('../lib/trace_scan');
+const T = require('../lib/trace_scan.js');
 
 function showSpec(id, data) {
   const { specIds, src, tst, docs, reports } = data;

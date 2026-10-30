@@ -34,9 +34,11 @@ function esc(s) {
     .replace(/"/g, '&quot;');
 }
 
-/** 시험 카드 그리드 HTML — comingSoon은 링크 없이 배지만 (LP-03) */
+/** 시험 카드 그리드 HTML — comingSoon은 링크 없이 배지만 (LP-03)
+ *  LP-14: exams.json group 필드로 시험 선택 뷰 동형 그룹 섹션 렌더 — group 미지정만이면 평면 그리드 폴백 */
 function renderExamCards(exams) {
-  const cards = exams.map((e) => {
+  const hasGroups = exams.some((e) => e.group);
+  const renderCard = (e) => {
     const icon = esc(e.icon || 'fa-solid fa-clipboard-list');
     const title = esc(e.appName || e.name || e.id);
     const desc = esc(e.desc || '');
@@ -59,8 +61,18 @@ function renderExamCards(exams) {
       + `                    <p>${desc}</p>\n`
       + `                    <div class="landing-exam-meta">${year}${discord}</div>\n`
       + `                </a>`;
-  });
-  return `                <div class="landing-exam-grid">\n${cards.join('\n')}\n                </div>`;
+  };
+  if (!hasGroups) {
+    return `                <div class="landing-exam-grid">\n${exams.map(renderCard).join('\n')}\n                </div>`;
+  }
+  const order = [...new Set(exams.map((e) => e.group || '기타'))];
+  return order.map((g) => {
+    const members = exams.filter((e) => (e.group || '기타') === g);
+    return `                <div class="landing-exam-group">\n`
+      + `                    <div class="landing-exam-group-head"><span class="landing-exam-group-name">${esc(g)}</span><span class="landing-exam-group-count">${members.length}개</span></div>\n`
+      + `                    <div class="landing-exam-grid">\n${members.map(renderCard).join('\n')}\n                    </div>\n`
+      + `                </div>`;
+  }).join('\n');
 }
 
 /** landing_demo.json 스키마 검증 — 위반 시 예외 */

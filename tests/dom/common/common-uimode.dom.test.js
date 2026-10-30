@@ -22,7 +22,7 @@ import { state } from '../../../src/state.js';
 import {
     getUiMode, isPracticeMode, applyUiMode, initUiMode,
     toggleUiMode, toggleStudyTools,
-} from '../../../src/ui-mode.js';
+} from '../../../src/shell/ui-mode.js';
 
 const STUDY_ONLY = [
     'dashboard-view', 'flashcard-view', 'quiz-view',

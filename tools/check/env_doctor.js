@@ -20,7 +20,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { ROOT } = require('../lib/env');
+const { ROOT } = require('../lib/env.js');
 
 // package.json engines.node (>=24)와 정합 — 버전 상향 시 함께 갱신
 const MIN_NODE_MAJOR = 24;

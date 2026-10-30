@@ -2,16 +2,16 @@
 // @spec D-01~17,PF-07,SC-04,SC-06,SC-07,SC-10,SC-16,TQ-01,PAY-07
 import { state } from '../state.js';
 import { esc } from '../sanitize.js';
-import { DataLoader } from '../data-loader.js';
+import { DataLoader } from '../content/data-loader.js';
 import { renderPerformanceChart, renderPassFailDiagnosis, renderRadarChart } from '../charts.js';
 import { updateStreakAndDailyUI } from './daily-challenge.js';
 import { updatePomodoroUI } from './pomodoro.js';
-import { getDueCount } from '../spaced-repetition.js';
+import { getDueCount } from '../study/spaced-repetition.js';
 import { renderTodayQueue } from './dashboard-queue.js';
-import { refreshProExpiryBanner } from '../pro-expiry.js';
-import { getDDay, getExamPlanStatus, checkStudyMilestones, tierStudyHint } from '../study-tracker.js';
-import { getAllStatementStats } from '../statement-tracker.js';
-import { computeMasteryLevels } from '../analysis-engine.js';
+import { refreshProExpiryBanner } from '../pro/pro-expiry.js';
+import { getDDay, getExamPlanStatus, checkStudyMilestones, tierStudyHint } from '../study/study-tracker.js';
+import { getAllStatementStats } from '../study/statement-tracker.js';
+import { computeMasteryLevels } from '../study/analysis-engine.js';
 import { showToast } from '../ui-utils.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { renderExpectedScore } from './score-estimate.js';

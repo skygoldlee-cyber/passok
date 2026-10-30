@@ -16,7 +16,7 @@
  * 면제: 라인에 seedkey-ok 토큰 포함 시 해당 라인 스킵.
  */
 
-// @spec none (정합 체커)
+// @spec DA-07 (시드 키 ↔ GLOBAL_KEYS 스코프 정합 — 스코프드 진도 키 계약 보호)
 const fs = require('fs');
 const path = require('path');
 

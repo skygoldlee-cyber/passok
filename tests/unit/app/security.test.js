@@ -21,7 +21,7 @@ const collectHtmlFiles = (dir) => readdirSync(dir, { withFileTypes: true })
 const allMarkup = indexHtml + '\n' + collectHtmlFiles(join(ROOT, 'html'))
     .map(f => readFileSync(f, 'utf-8'))
     .join('\n');
-const appJs = readFileSync(join(ROOT, 'src', 'app.js'), 'utf-8');
+const appJs = readFileSync(join(ROOT, 'src', 'shell', 'app.js'), 'utf-8');
 // 실무 피처 지연 핸들러명은 practice-registry.js가 선언 소유 — 브리지 탐색 범위에 포함
 const handlerSources = appJs + readFileSync(join(ROOT, 'src', 'practice-registry.js'), 'utf-8');
 

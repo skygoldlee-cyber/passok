@@ -1,6 +1,6 @@
 // @spec LP-04,LP-05,LP-09
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { parseDemoData, daysUntil, computePlanPreview, subjectShares } from '../../../src/landing.js';
+import { parseDemoData, daysUntil, computePlanPreview, subjectShares } from '../../../src/shell/landing.js';
 
 const DEMO = {
     exams: [{
@@ -47,7 +47,7 @@ describe('landing.js — DOM 위젯', () => {
     it('import 시 init이 데모 렌더 + 섹션 표시 + 버전 표기', async () => {
         vi.resetModules();
         window.APP_VERSION = 'v-test';
-        await import('../../../src/landing.js');
+        await import('../../../src/shell/landing.js');
         expect(document.getElementById('landing-demo-section').classList.contains('is-hidden')).toBe(false);
         expect(document.querySelectorAll('.demo-choice').length).toBe(2);
         expect(document.getElementById('landing-version').textContent).toBe('v-test');
@@ -55,7 +55,7 @@ describe('landing.js — DOM 위젯', () => {
 
     it('퀴즈 — 오답 선택 → 정답 표시·해설·인용, 완료 시 결과 CTA', async () => {
         vi.resetModules();
-        await import('../../../src/landing.js');
+        await import('../../../src/shell/landing.js');
         // Q1: 오답(선지 b) 선택
         const wrong = document.querySelectorAll('.demo-choice')[1];
         wrong.click();
@@ -72,7 +72,7 @@ describe('landing.js — DOM 위젯', () => {
 
     it('계획 — 시험일 입력 → D-day·단계·과목 비중·CTA', async () => {
         vi.resetModules();
-        await import('../../../src/landing.js');
+        await import('../../../src/shell/landing.js');
         const input = document.querySelector('.demo-plan-form input[type=date]');
         const future = new Date(Date.now() + 200 * 86400000).toISOString().slice(0, 10);
         input.value = future;
@@ -93,7 +93,7 @@ describe('landing.js — DOM 위젯', () => {
 
     it('설치 CTA — deferred prompt 없으면 앱으로 이동 / 있으면 prompt()', async () => {
         vi.resetModules();
-        await import('../../../src/landing.js');
+        await import('../../../src/shell/landing.js');
         const btn = document.getElementById('landing-install-btn');
         window.__deferredPrompt = { prompt: vi.fn(), userChoice: Promise.resolve({ outcome: 'accepted' }) };
         btn.click();

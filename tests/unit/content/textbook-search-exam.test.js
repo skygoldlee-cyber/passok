@@ -5,7 +5,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { _loadExamMdText } from '../../../src/search-sources.js';
+import { _loadExamMdText } from '../../../src/search/search-sources.js';
 
 test('_loadExamMdText — 주입된 __EXAM_MD__ 번들을 우선 조회', async () => {
     globalThis.window = { __EXAM_MD__: { 'content/exams/t/문제은행/x.md': '# 번들본문' } };

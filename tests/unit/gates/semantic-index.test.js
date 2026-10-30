@@ -5,8 +5,8 @@
 
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { SemanticIndex, decodeVectorBundle, cosineSimilarity } from '../../../src/semantic-index.js';
-import { DataLoader } from '../../../src/data-loader.js';
+import { SemanticIndex, decodeVectorBundle, cosineSimilarity } from '../../../src/search/semantic-index.js';
+import { DataLoader } from '../../../src/content/data-loader.js';
 
 const EXAMS = {
     exams: [
@@ -155,7 +155,7 @@ test('cosineSimilarity: 영벡터는 0 반환 (나눗셈 안전)', () => {
 // ==================== searchByText / findAnchorKey (SEM-08 앵커 프록시) ====================
 
 test('findAnchorKey: 토큰 커버율 최고 항목 선택 — 순수 함수', async () => {
-    const { findAnchorKey } = await import('../../../src/semantic-index.js');
+    const { findAnchorKey } = await import('../../../src/search/semantic-index.js');
     const texts = { 'stmt:a': '화장품 제조업 등록 요건', 'stmt:b': '위생 관리 기준', 'q:q1': '화장품 제조 시설 기준' };
     const a = findAnchorKey('제조업 등록', texts);
     assert.equal(a.key, 'stmt:a');

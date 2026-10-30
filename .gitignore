@@ -150,3 +150,6 @@ data/exams/*/exams_md/
 data/exams/*/study_md/
 data/exams/*/subjects/
 data/exams/*/supplements/
+
+# Windows 예약 디바이스명 — 리다이렉트 부산물 유입 차단
+nul

@@ -5,7 +5,7 @@
 // formula.js에서 import한다 (런타임 호출 전용 순환 — formula-recommend.js와 동일 패턴).
 import { esc } from '../../../sanitize.js';
 import { showToast } from '../../../ui-utils.js';
-import { showStoreError } from '../../../pro-upgrade.js';
+import { showStoreError } from '../../../pro/pro-upgrade.js';
 import {
   CUSTOMER_OPTIONS, STABILITY_METHODS, STABILITY_RESULTS,
 } from '../formula-store.js';

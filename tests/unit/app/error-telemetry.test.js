@@ -1,13 +1,13 @@
 // tests/unit/error-telemetry.test.js
 // @spec none (텔레메트리 자체 검증 — 관측성 인프라)
-// src/error-telemetry.js — 페이로드 구성·중복 억제·세션 상한·미설정/실패 경로
+// src/telemetry/error-telemetry.js — 페이로드 구성·중복 억제·세션 상한·미설정/실패 경로
 
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
   buildErrorPayload, reportClientError, reportSessionPing, initErrorTelemetry, _resetTelemetryForTest,
-} from '../../../src/error-telemetry.js';
+} from '../../../src/telemetry/error-telemetry.js';
 
 beforeEach(() => _resetTelemetryForTest());
 
@@ -111,7 +111,7 @@ test('initErrorTelemetry: error/unhandledrejection 리스너 등록 + 이중 설
 });
 
 test('buildErrorPayload: session_id가 텔레메트리 공유 세션과 일치 — bug 신고 join 키', async () => {
-  const { getTelemetrySessionId } = await import('../../../src/telemetry-session.js');
+  const { getTelemetrySessionId } = await import('../../../src/telemetry/telemetry-session.js');
   const p = buildErrorPayload('error', new Error('x'));
   assert.equal(p.session_id, getTelemetrySessionId());
   // 세션 핑도 같은 키 — 오류율 분모 행이 오류 행과 같은 세션으로 묶인다

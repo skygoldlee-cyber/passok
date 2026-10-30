@@ -7,7 +7,7 @@
 
 import { describe, it, beforeEach, expect } from 'vitest';
 
-import { initViewportHeight } from '../../../src/app-shell.js';
+import { initViewportHeight } from '../../../src/shell/app-shell.js';
 
 const appHeight = () => document.documentElement.style.getPropertyValue('--app-height');
 

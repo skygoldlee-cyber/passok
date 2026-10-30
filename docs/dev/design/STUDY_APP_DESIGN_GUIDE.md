@@ -462,8 +462,8 @@ content/
 
 | 파일 | 수정 내용 | 조건 |
 |------|-----------|------|
-| `src/study-aids.js` | 단위 목록(`%`, `g`, `ml` 등), 키워드 리스트 | 완전히 다른 분야 교재로 변경 시 |
-| `src/trainer-calc.js` | 계산 문제 유형 | 계산 문제가 있는 시험인 경우 |
+| `src/study/study-aids.js` | 단위 목록(`%`, `g`, `ml` 등), 키워드 리스트 | 완전히 다른 분야 교재로 변경 시 |
+| `src/study/trainer-calc.js` | 계산 문제 유형 | 계산 문제가 있는 시험인 경우 |
 | `src/reader/reader-format.js` | 참조자료 폴더명 패턴 | 폴더 구조 변경 시 |
 | `content/exams/cosmetic/참조자료/원료/` | 성분 데이터 | 화학/식약 분야인 경우 |
 
@@ -472,7 +472,7 @@ content/
 | 파일 | 이유 |
 |------|------|
 | `src/keyword-index.js` | 빌드 도구가 자동 생성 |
-| `src/app.js` | `manifest.json` `uiText`에서 동적 조회 |
+| `src/shell/app.js` | `manifest.json` `uiText`에서 동적 조회 |
 | `data/exams/cosmetic/registry.js` | 빌드 시 자동 생성 |
 | `sw.js` | 빌드 시 `CACHE_VERSION` 자동 스탬프 |
 

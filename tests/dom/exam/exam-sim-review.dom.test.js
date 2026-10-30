@@ -5,11 +5,11 @@
 //       (점수·과락 배지·단원 취약 정렬·합격/과락/평균미달 피드백 박스)
 
 import { describe, it, beforeEach, expect } from 'vitest';
-import { simState } from '../../../src/views/exam-sim-state.js';
+import { simState } from '../../../src/views/exam-sim/exam-sim-state.js';
 import {
     showSimAnswerReview, showSimResultsSummary,
     chapterForQuestion, renderSimResultBreakdown,
-} from '../../../src/views/exam-sim-review.js';
+} from '../../../src/views/exam-sim/exam-sim-review.js';
 
 const HTML = `
 <div class="main-content"></div>

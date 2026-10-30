@@ -20,7 +20,7 @@ vi.mock('../../../src/views/navigation.js', async (importOriginal) => {
     return { ...actual, switchView: vi.fn() };
 });
 
-vi.mock('../../../src/pro-upgrade.js', () => ({
+vi.mock('../../../src/pro/pro-upgrade.js', () => ({
     proFeatureNotice: vi.fn(),
     refreshProBadges: vi.fn(),
 }));
@@ -34,8 +34,8 @@ import {
     renderStudyCalendar, prevCalendarMonth, nextCalendarMonth,
     openGoalSettings, saveGoalSettings, closeGoalSettings,
 } from '../../../src/views/study-calendar.js';
-import { recordStudyActivity, getTodayStr, setExamDate, setStudyGoals } from '../../../src/study-tracker.js';
-import { DataLoader } from '../../../src/data-loader.js';
+import { recordStudyActivity, getTodayStr, setExamDate, setStudyGoals } from '../../../src/study/study-tracker.js';
+import { DataLoader } from '../../../src/content/data-loader.js';
 import { safeSetItem, state } from '../../../src/state.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 

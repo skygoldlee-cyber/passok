@@ -446,7 +446,7 @@ describe('router.js — DOM 테스트', () => {
         });
 
         it('모달 마커가 소비한 popstate는 종료 가드를 발동시키지 않는다 (이미지 확대 닫기 회귀)', async () => {
-            const { setupModalBackHandler, resetModalBackState } = await import('../../../src/modal-back.js');
+            const { setupModalBackHandler, resetModalBackState } = await import('../../../src/shell/modal-back.js');
             setupModalBackHandler();
             initViewHashRouting(ctx());
             // 모달 표시 → MutationObserver → modalBack 마커 push (속성 변경만 감시하므로 class 토글로 트리거)

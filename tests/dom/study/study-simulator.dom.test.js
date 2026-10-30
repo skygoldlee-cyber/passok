@@ -23,14 +23,14 @@ import {
     stubRegistry, flushAsync,
 } from '../helpers.js';
 import { state } from '../../../src/state.js';
-import { simState } from '../../../src/views/exam-sim-state.js';
+import { simState } from '../../../src/views/exam-sim/exam-sim-state.js';
 import {
     startSimSession, saveSimAnswer, jumpToSimQuestion,
     submitExam, exitSimArena, checkExamDraft, resumeSimDraft,
     startWeakExam,
-} from '../../../src/views/exam-simulator.js';
-import { DataLoader } from '../../../src/data-loader.js';
-import { showSimAnswerReview } from '../../../src/views/exam-sim-review.js';
+} from '../../../src/views/exam-sim/exam-simulator.js';
+import { DataLoader } from '../../../src/content/data-loader.js';
+import { showSimAnswerReview } from '../../../src/views/exam-sim/exam-sim-review.js';
 import { setupEventListeners } from '../../../src/views/event-listeners.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 

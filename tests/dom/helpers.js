@@ -13,7 +13,7 @@ import { vi } from 'vitest';
 import { showToast } from '../../src/ui-utils.js';
 import { state, loadProgress, safeSetItem, safeGetItem } from '../../src/state.js';
 import { STORAGE_KEYS } from '../../src/storage-keys.js';
-import { DataLoader } from '../../src/data-loader.js';
+import { DataLoader } from '../../src/content/data-loader.js';
 import { getActiveExamId } from '../../src/exam-context.js';
 import { PATHS } from '../../src/paths.js';
 import { TIMING } from '../../src/config/timing.js';

@@ -8,13 +8,13 @@ import { state } from '../state.js';
 import { esc } from '../sanitize.js';
 import { getChosung, todayKey, normalizeEntityName } from '../utils.js';
 import { hasFeature } from '../exam-context.js';
-import { toCsv, downloadCsv } from '../csv-utils.js';
+import { toCsv, downloadCsv } from '../content/csv-utils.js';
 import { showToast } from '../ui-utils.js';
-import { DataLoader } from '../data-loader.js';
+import { DataLoader } from '../content/data-loader.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
 import { getJSON } from '../storage.js';
 import { switchView } from './navigation.js';
-import { dictNoticeDocs } from '../notice-check.js';
+import { dictNoticeDocs } from '../shell/notice-check.js';
 
 /**
  * 지식DB 엔티티 스키마 기본값 — 시험 무관 중립 표기.

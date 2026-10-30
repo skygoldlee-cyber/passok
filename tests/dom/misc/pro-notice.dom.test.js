@@ -16,7 +16,7 @@ vi.mock('../../../src/ui-utils.js', () => ({
 }));
 
 import { loadIndexHtml } from '../helpers.js';
-import { loadFeaturePlan, proFeatureNotice, refreshProBadges, mountProMoment, shouldShowProMoment, showStoreError } from '../../../src/pro-upgrade.js';
+import { loadFeaturePlan, proFeatureNotice, refreshProBadges, mountProMoment, shouldShowProMoment, showStoreError } from '../../../src/pro/pro-upgrade.js';
 import { safeGetItem, safeSetItem } from '../../../src/state.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 

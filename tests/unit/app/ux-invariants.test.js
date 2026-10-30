@@ -1,10 +1,10 @@
 // tests/unit/ux-invariants.test.js — UI/UX 설계 요구사항 (정적 검증)
-// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,LP-06,LP-10
+// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,LP-06,LP-10,LP-11,LP-12,LP-13,LP-14
 // CSS 규칙·마크업 구조·JS 구현 패턴이 설계 요구사항을 유지하는지 고정한다.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -16,15 +16,15 @@ const overlayCss = read('css/ui-overlay.css');
 const allCss = readdirSync(join(ROOT, 'css'))
   .filter(f => f.endsWith('.css'))
   .map(f => read(`css/${f}`)).join('\n');
-const appJs = ['src/app.js', 'src/app-shell.js', 'src/app-dashboard.js'].map(read).join('\n');
+const appJs = ['src/shell/app.js', 'src/shell/app-shell.js', 'src/shell/app-dashboard.js'].map(read).join('\n');
 const uiUtils = read('src/ui-utils.js');
 const pwaInstall = read('src/pwa/pwa-install.js');
 const capture = read('src/pwa/pwa-install-capture.js');
-const readerJs = ['src/views/textbook-reader.js', 'src/views/reader-toolbar.js', 'src/views/reader-ref-links.js'].map(read).join('\n');
+const readerJs = ['src/views/textbook-reader.js', 'src/views/reader/reader-toolbar.js', 'src/views/reader/reader-ref-links.js'].map(read).join('\n');
 const listeners = ['src/views/event-listeners.js',
-  ...readdirSync(join(ROOT, 'src/views'))
+  ...readdirSync(join(ROOT, 'src/views/listeners'))
     .filter(f => f.startsWith('listeners-') && f.endsWith('.js'))
-    .map(f => `src/views/${f}`)].map(read).join('\n');
+    .map(f => `src/views/listeners/${f}`)].map(read).join('\n');
 
 // ---------- UX-SCR: 스크롤바 전략 ----------
 
@@ -119,9 +119,44 @@ test('진도 데이터 스키마 버전 마커가 saveProgress에서 기록된�
   assert.ok(read('src/state.js').includes("STORAGE_KEYS.SCHEMA_VERSION"), 'saveProgress 기록');
 });
 
+test('LP-11: 체험 섹션이 제공 경험을 구체 명기한다', () => {
+  const tpl = read('landing.template.html');
+  assert.ok(tpl.includes('실제 시험 문항 퀴즈'), '섹션 부제에 퀴즈 체험 명시');
+  assert.ok(tpl.includes('주차별 학습계획'), '섹션 부제에 계획 미리보기 명시');
+  const landingJs = read('src/shell/landing.js');
+  assert.ok(landingJs.includes('실제 문항 퀴즈 체험'), '퀴즈 카드 레이블 명시');
+  assert.ok(landingJs.includes('시험일 기준 주차별 계획 미리보기'), '계획 카드 레이블 명시');
+});
+
+test('LP-13: 히어로 차별점 스트립이 기존 수단 대비 우위를 첫 화면에 노출한다', () => {
+  const tpl = read('landing.template.html');
+  const stripIdx = tpl.indexOf('landing-diff-strip');
+  assert.ok(stripIdx > -1 && stripIdx < tpl.indexOf('<main'), 'CTA 직하·본문 이전 배치');
+  for (const kw of ['인용 링크','FSRS','약점','고시']) assert.ok(tpl.includes(kw), '차별점 키워드: '+kw);
+  const css = read('css/landing.css');
+  assert.ok(css.includes('.landing-diff-strip'), '스트립 스타일 존재');
+});
+
+test('LP-14: 지원 시험 카드가 group 필드로 그룹 섹션 렌더된다', () => {
+  const html = read('landing.html');
+  assert.ok(html.includes('landing-exam-group'), '그룹 래퍼 존재');
+  for (const g of ['미용·화장품', '산업안전', '정보처리']) {
+    assert.ok(html.includes(`landing-exam-group-name">${g}`), `그룹 헤더: ${g}`);
+  }
+  assert.ok(html.includes('landing-exam-group-count'), '그룹 개수 표기');
+});
+
+test('LP-12: OG 공유 미리보기 이미지가 브랜드 카드로 연결된다', () => {
+  const tpl = read('landing.template.html');
+  assert.ok(tpl.includes('og:image" content="https://passok.vercel.app/icons/og-image.png"'), 'og:image 브랜드 카드');
+  assert.ok(tpl.includes('og:image:width" content="1200"') && tpl.includes('og:image:height" content="630"'), 'OG 규격 1200x630');
+  assert.ok(tpl.includes('twitter:card" content="summary_large_image"'), 'summary_large_image');
+  assert.ok(existsSync(join(ROOT, 'icons', 'og-image.png')), 'og-image.png 자산 존재');
+});
+
 test('LP-10: 신규 방문자 리다이렉트 스크립트가 index.html에 로드되고 조건을 갖는다', () => {
-  const redirect = read('src/landing-redirect.js');
-  assert.ok(indexHtml.includes('src="src/landing-redirect.js"'), '템플릿 로드');
+  const redirect = read('src/shell/landing-redirect.js');
+  assert.ok(indexHtml.includes('src="src/shell/landing-redirect.js"'), '템플릿 로드');
   for (const cond of ['localStorage.length', 'standalone', 'navigator.webdriver', 'location.hash', 'location.replace']) {
     assert.ok(redirect.includes(cond), `리다이렉트 조건: ${cond}`);
   }

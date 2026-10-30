@@ -10,7 +10,7 @@
 // 호출합니다. 전역 함수 참조이므로 모듈 분리 후에도 동작은 동일합니다.
 
 import { STORAGE_KEYS } from './storage-keys.js';
-import { WEAK_QUIZ_PREFIX, subjectKeyFromItemId } from './weak-items.js';
+import { WEAK_QUIZ_PREFIX, subjectKeyFromItemId } from './study/weak-items.js';
 import { todayKey } from './utils.js';
 import {
     getItem as storageGetItem,
@@ -281,7 +281,7 @@ export function saveProgress() {
         state._prevQuizBySubj = quizBySubjAll;
         try {
             // 동적 import로 순환 참조 방지
-            import('./study-tracker.js').then(({ recordStudyActivity }) => {
+            import('./study/study-tracker.js').then(({ recordStudyActivity }) => {
                 const correctDelta = quizDelta > 0
                     ? Object.values(state.quizResults).slice(-quizDelta).filter(r => r && r.correct).length
                     : 0;

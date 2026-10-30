@@ -20,7 +20,7 @@
  *   npm.cmd run check:featflags   # 단독 실행
  */
 
-// @spec none (인프라 검증)
+// @spec DA-08 (features 플래그 ↔ hasFeature/data-feature 소비처 정합)
 const fs = require('fs');
 const path = require('path');
 

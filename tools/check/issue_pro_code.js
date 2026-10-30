@@ -17,7 +17,7 @@
  */
 'use strict';
 const crypto = require('crypto');
-const { loadEnv } = require('../lib/env');
+const { loadEnv } = require('../lib/env.js');
 const { requireSecret, restPost } = require('../lib/supabase_ops.js');
 
 const CODE_BODY = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // 혼동 문자 제외 (0/O·1/I·L)

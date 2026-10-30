@@ -19,9 +19,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const { parseArgs, getTargets, writeDraft, loadEnv, ROOT } = require('./lib/ai_common');
-const { loadJsBundle } = require('./lib/similarity');
-const llm = require('./llm_client');
+const { parseArgs, getTargets, writeDraft, loadEnv, ROOT } = require('./lib/ai_common.js');
+const { loadJsBundle } = require('./lib/similarity.js');
+const llm = require('./llm_client.js');
 
 const SYSTEM = '당신은 복수정답형(ㄱㄴㄷ 진술 조합) 문항의 진술 설계 보조입니다. 참인 진술을 받아 수험상 혼동을 유도하는 거짓 변형을 제안하라. 단, 실제 법령과 모순되는 참 진술을 만들면 안 된다 — 변형은 반드시 거짓이어야 한다.';
 

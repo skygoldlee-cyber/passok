@@ -16,7 +16,7 @@ vi.mock('../../../src/ui-utils.js', () => ({
 vi.mock('../../../src/reader/html-viewer.js', () => ({ openHtmlViewer: vi.fn() }));
 vi.mock('../../../src/views/glossary-renderer.js', () => ({ scrollToGlossary: vi.fn() }));
 vi.mock('../../../src/views/textbook-reader.js', () => ({ openSubjectChapter: vi.fn() }));
-vi.mock('../../../src/notice-check.js', () => ({
+vi.mock('../../../src/shell/notice-check.js', () => ({
     ensureNoticeStatus: vi.fn(() => Promise.resolve({})),
     markStaleRefLinks: vi.fn(),
 }));
@@ -25,8 +25,8 @@ import { showToast } from '../../../src/ui-utils.js';
 import { openHtmlViewer } from '../../../src/reader/html-viewer.js';
 import { scrollToGlossary } from '../../../src/views/glossary-renderer.js';
 import { openSubjectChapter } from '../../../src/views/textbook-reader.js';
-import { ensureNoticeStatus, markStaleRefLinks } from '../../../src/notice-check.js';
-import { refreshRefLinkNotices, bindReferenceLinks } from '../../../src/views/reader-ref-links.js';
+import { ensureNoticeStatus, markStaleRefLinks } from '../../../src/shell/notice-check.js';
+import { refreshRefLinkNotices, bindReferenceLinks } from '../../../src/views/reader/reader-ref-links.js';
 
 const click = (el) => el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
 

@@ -20,9 +20,9 @@
 
 const path = require('path');
 const fs = require('fs');
-const { parseArgs, getTargets, writeDraft, loadEnv, ROOT } = require('./lib/ai_common');
+const { parseArgs, getTargets, writeDraft, loadEnv, ROOT } = require('./lib/ai_common.js');
 const { refLink } = require('../build/scaffold_chapter.js');
-const llm = require('./llm_client');
+const llm = require('./llm_client.js');
 
 const SYSTEM = `당신은 자격시험 교재 집필 보조입니다. 제공된 참조자료 원문 청크만을 근거로 교재 본문 초안을 작성한다.
 출력 형식(섹션마다):

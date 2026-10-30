@@ -15,7 +15,7 @@
  *   npm.cmd run check:numbering
  */
 
-// @spec none (검증 스크립트)
+// @spec CS-12 (교재 십진법 번호체계 — 구식 잔재·연속성·계층·중복)
 const fs = require('fs');
 const path = require('path');
 

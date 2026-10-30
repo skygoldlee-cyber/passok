@@ -31,7 +31,7 @@
 | 18 | **ADR (아키텍처 결정 기록)** | `docs/dev/adr/` | 문서 규약 |
 | 19 | Docs-as-Code | 문서도 검증 대상 — 경로·DOC ID 게이트 | `check:docs` |
 | 20 | 저장소 추상화 | `storage.js` — localStorage/Supabase 동일 API | `check:storage` |
-| 21 | **오류 텔레메트리** | 런타임 오류 → client_errors 익명 insert | `src/error-telemetry.js` |
+| 21 | **오류 텔레메트리** | 런타임 오류 → client_errors 익명 insert | `src/telemetry/error-telemetry.js` |
 | 22 | 배포 단일 진입점 + 스탬프 | 가드→게이트→버전 스탬프→배포 | `npm run deploy` |
 | 23 | 공급망 보안 | SBOM·npm audit·Dependabot·시크릿 스캔 | `sbom`·`check:secrets`·CI audit |
 | 24 | CalVer 버저닝 | `v<날짜>-<커밋해시>` 스탬프 | `stamp:sw`·deploy.js |
@@ -78,7 +78,7 @@
 ### 21. 오류 텔레메트리 (Error Telemetry)
 
 - **개념**: 배포 후 사용자 환경의 런타임 오류를 관측 — 테스트가 통과한 코드도 실기기에서 깨질 수 있는 블라인드 존 해소
-- **구현물**: `src/error-telemetry.js` — `error`/`unhandledrejection` 리스너 → Supabase `client_errors` 익명 insert
+- **구현물**: `src/telemetry/error-telemetry.js` — `error`/`unhandledrejection` 리스너 → Supabase `client_errors` 익명 insert
 - **안전장치**: Supabase 미설정 시 완전 no-op · 세션 10건 상한 · 메시지 중복 억제(오류 루프→네트워크 폭주 방지) · 개인정보 최소화(입력 데이터 미포함)
 - **배선**: `initApp` 최초 단계 — 이후 초기화 실패도 수집. 스키마 `tools/supabase/schema.sql` §5 (RLS insert-only)
 
@@ -264,7 +264,7 @@ SPEC.md(ID) ──→ 소스 @spec ──→ tests @spec ──→ docs 헤더 �
 
 - **배포 단일 진입점**: `deploy.js` — clean tree·origin 동기화 가드 → 품질 게이트 재실행 → `v<날짜>-<해시>` 스탬프 → vercel --prod → 배포 후 스모크
 - **오류 텔레메트리**: client_errors (익명 insert, RLS 조회 차단)
-- **웹바이탈**: `src/web-vitals.js` 측정 + `check:perf` 예산
+- **웹바이탈**: `src/telemetry/web-vitals.js` 측정 + `check:perf` 예산
 - **오프라인 감지**: 프로브 실패 누적 → 배너 (DOM 테스트가 모킹으로 검증)
 
 ### F. 보안

@@ -16,7 +16,7 @@ function tmpDir(prefix) { const d = mkdtempSync(join(tmpdir(), prefix)); _tmpDir
 import { ExamViewer } from '../../../src/reader/exam-viewer.js';
 import { refDocDisplayName } from '../../../src/pdf-registry.js';
 import { formatSectionContentForReader } from '../../../src/reader/reader-format.js';
-import { slugifyHeading, scrollToHeadingSlug } from '../../../src/doc-overlay.js';
+import { slugifyHeading, scrollToHeadingSlug } from '../../../src/shell/doc-overlay.js';
 
 const require = createRequire(import.meta.url);
 const examsPlugin = require('../../../tools/build/plugins/exams.plugin.js');

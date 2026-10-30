@@ -19,9 +19,9 @@
 
 const path = require('path');
 const { execFileSync } = require('child_process');
-const { parseArgs, getTargets, listQbanks, writeDraft, loadEnv, ROOT } = require('./lib/ai_common');
-const { parseQuestionBank } = require('./lib/qbank');
-const llm = require('./llm_client');
+const { parseArgs, getTargets, listQbanks, writeDraft, loadEnv, ROOT } = require('./lib/ai_common.js');
+const { parseQuestionBank } = require('./lib/qbank.js');
+const llm = require('./llm_client.js');
 
 const SYSTEM = '당신은 법령 개정 영향 분석 보조입니다. 변경된 법령 diff와 해당 법령을 근거로 한 문항의 정답을 대조해, 개정으로 정답이 무효·변경되는지 판정하라. "영향 있음/없음/불명" + 한 줄 근거로 답할 것.';
 

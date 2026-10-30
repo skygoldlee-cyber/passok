@@ -21,12 +21,12 @@ import {
     seedStudyData, seedProgress, resetStudyState, storedJson, stubRegistry,
 } from '../helpers.js';
 import { state } from '../../../src/state.js';
-import { DataLoader } from '../../../src/data-loader.js';
+import { DataLoader } from '../../../src/content/data-loader.js';
 import {
     startQuiz, renderQuizQuestion, submitQuizAnswer, nextQuizQuestion,
     renderReviewList, removeWeakCard, setReviewFilter, startWeakFocusQuiz,
     startDiagnosticQuiz,
-} from '../../../src/views/quiz.js';
+} from '../../../src/views/quiz/quiz.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 
 const QUIZZES = [

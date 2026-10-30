@@ -3,9 +3,9 @@ import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { scopedKey } from '../../../src/exam-context.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
-import { getExamDate, setExamDate, getDDay, getExamPlanStatus } from '../../../src/study-tracker.js';
-import { getDueCards } from '../../../src/spaced-repetition.js';
-import { computeRecommendations, computeWrongCauseSummary, getSimHistory } from '../../../src/recommendations.js';
+import { getExamDate, setExamDate, getDDay, getExamPlanStatus } from '../../../src/study/study-tracker.js';
+import { getDueCards } from '../../../src/study/spaced-repetition.js';
+import { computeRecommendations, computeWrongCauseSummary, getSimHistory } from '../../../src/study/recommendations.js';
 
 // --- localStorage 모킹 (state.test.js와 동일 패턴) ---
 
@@ -194,7 +194,7 @@ test('getSimHistory — 저장된 이력 파싱/비정상 값 방어', () => {
 
 // --- C1: 예상 점수 추정 + 실제 결과 자가 보고 ---
 
-import { estimateExpectedScore, getActualResult, saveActualResult, clearActualResult } from '../../../src/recommendations.js';
+import { estimateExpectedScore, getActualResult, saveActualResult, clearActualResult } from '../../../src/study/recommendations.js';
 
 test('estimateExpectedScore — 이력 없으면 null', () => {
     assert.equal(estimateExpectedScore([]), null);

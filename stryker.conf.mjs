@@ -6,10 +6,10 @@
 /** @type {import('@stryker-mutator/api/core').PartialStrykerOptions} */
 export default {
   mutate: [
-    'src/questions.js',
-    'src/spaced-repetition.js',
-    'src/weak-items.js',
-    'src/statement-tracker.js',
+    'src/content/questions.js',
+    'src/study/spaced-repetition.js',
+    'src/study/weak-items.js',
+    'src/study/statement-tracker.js',
   ],
   testRunner: 'command',
   commandRunner: {

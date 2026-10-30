@@ -10,7 +10,7 @@
 import { esc } from '../../../sanitize.js';
 import { todayKey } from '../../../utils.js';
 import { showToast, showConfirm } from '../../../ui-utils.js';
-import { showStoreError } from '../../../pro-upgrade.js';
+import { showStoreError } from '../../../pro/pro-upgrade.js';
 import { showPanel, formulaSubNav, getEl } from './formula.js';
 import { listCustomers } from '../customer-store.js';
 import {
