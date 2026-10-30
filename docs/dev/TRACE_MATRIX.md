@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 9e96bda2ed34487f
+> 입력 해시: a185e29db73d3768
 > 생성: 2026-10-30 · 원천: SPEC.md(628개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -1027,7 +1027,7 @@
 | DOC-USR-05 | docs/exams/cosmetic/user/subject3_numbers.md | ND-01 |
 | DOC-USR-06 | docs/exams/cosmetic/user/subject4_numbers.md | ND-01 |
 | DOC-USR-07 | docs/user/user_manual.md | MV-01, MV-02, MV-03, MV-04 |
-| DOC-USR-18 | docs/user/privacy_policy.md | AU-08, AU-09, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08 |
+| DOC-USR-18 | docs/user/PRIVACY_POLICY.md | AU-08, AU-09, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08 |
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
