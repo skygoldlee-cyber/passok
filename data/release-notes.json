@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261031-273b412",
+    "date": "2026-10-31",
+    "notes": [
+      "[기능·landing] 시험 카드에 1·2차 시험 내용 표시",
+      "[문서·overview] 17개 시험 1·2차 구성 표 추가",
+      "[정리·release] v20261031-d1ea5af 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261031-d1ea5af",
     "date": "2026-10-31",
     "notes": [
@@ -200,14 +209,6 @@
       "[정리] ref_md 원본 jpeg/png 삭제 — webp 참조 전환으로 고아화, git 이력 보존 [no-test]",
       "[성능] ref_md 이미지 webp 재인코딩 — 6,687개 원본 jpeg/png → webp(160MB), 배포 ~238MB 절감 [no-test]",
       "[정리·release] v20261030-1583667 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261030-1583667",
-    "date": "2026-10-30",
-    "notes": [
-      "[수정] maskable 로고 110% — 캔버스 풀블리드로 흰 여백 제거 [no-test]",
-      "[정리·release] v20261030-2ba9355 스탬프 확정 [no-docs]"
     ]
   }
 ]
