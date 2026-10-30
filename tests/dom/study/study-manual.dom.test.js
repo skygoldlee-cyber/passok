@@ -48,6 +48,16 @@ describe('매뉴얼 뷰어 — 문서 열기·TOC·전환', () => {
         expect(toc.querySelectorAll('[data-manual-jump]').length).toBe(2);
     });
 
+    it('openPrivacyPolicy → 개인정보 처리방침 문서 렌더 (H)', async () => {
+        window.__DOC_MD__[PATHS.PRIVACY_POLICY] = '# 개인정보 처리방침\n\n수집하는 정보 안내.\n';
+        await ManualViewer.openPrivacyPolicy();
+        await flushAsync(30);
+
+        expect(ManualViewer.isOpen()).toBe(true);
+        expect(el('manual-ov-title').textContent).toBe('개인정보 처리방침');
+        expect(el('manual-article').textContent).toContain('수집하는 정보 안내');
+    });
+
     it('doc: 링크 클릭 → 같은 오버레이에서 실무 매뉴얼로 전환 (H)', async () => {
         await ManualViewer.openManual();
         await flushAsync(30);
