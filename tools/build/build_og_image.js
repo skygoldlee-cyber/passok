@@ -40,7 +40,7 @@ h1 em { font-style:normal; color:#6fb1ff }
 </style></head><body><div class="card">
   <div class="brand"><img src="${ICON_DATA_URL}"><span>PassOK</span></div>
   <h1>자격시험 합격을 위한<br><em>스마트 학습 플랫폼</em></h1>
-  <p class="sub">계정 없이 바로 시작 · 설치하면 완전 오프라인 · AI 코치는 로그인으로</p>
+  <p class="sub">계정 없이 바로 시작 · 설치하면 완전 오프라인 · AI 코치는 로그인 필요</p>
   <div class="chips"><span class="chip">무료로 시작</span><span class="chip">교재 + 퀴즈 + 모의고사</span><span class="chip">FSRS 스마트 복습</span><span class="chip">AI 학습 코치</span></div>
 </div></body></html>`;
 
