@@ -49,6 +49,7 @@
         "src/shell/app-shell.js",
         "src/shell/app-version.js",
         "src/shell/app.js",
+        "src/ai/**",
         "src/auth-sync/auth-view.js",
         "src/auth-sync/supabase-client.js",
         "src/auth-sync/supabase-config.js",

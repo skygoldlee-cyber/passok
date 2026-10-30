@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 fix(domainmap): src/ai/ 계층 분류 추가
+
+- tools/config/domain-map.json — platform 규칙에 `src/ai/**` 패턴 등록 (신규 ai-client·gen-gate 미분류로 check:domainmap 실패 → 배포 게이트 차단 해소)
+
 ## 2026-10-30 feat(ui): 시험 선택 뷰(앱 랜딩)에 AI 코칭 안내 추가
 
 - html/views/exam-select.html — 인트로 아래 AI 코치 안내 행: 오답 해설·주간 진단·계획 조언·교재 질의응답 요약 + 로그인/BYOK 조건·인용 근거·AI 생성 표시 명시
