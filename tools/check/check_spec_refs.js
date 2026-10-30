@@ -50,7 +50,7 @@ const TEST_GAP_BASELINE = 5; // UX-FB-07(리더 스켈레톤)·UX-FB-08(큐 완�
 // 기존 백로그(규약·리뷰형 다수)를 승계하되, 신규 UI/UX 요구사항이 갭을 늘리면 실패한다.
 // e2e @spec을 추가해 갭을 줄였다면 이 수치를 함께 낮춘다.
 const UIUX_PREFIX_RE = /^(?:UX-|TR-|R-|TH-|A-)/;
-const UIUX_E2E_GAP_BASELINE = 8; // UX-VFY-06/07/08 (정적 체커 규약형 — e2e 실측 대상 아님) + UX-FB-07/08 (마이크로 피드백 — e2e 실측 후행 과제)
+const UIUX_E2E_GAP_BASELINE = 8; // UX-VFY-06/07/08 (정적 체커 규약형 — e2e 실측 대상 아님) + UX-MET-05/07/08 (텔레메트리 배선 — Supabase 미설정 시 no-op이라 e2e 실측 불가, 순수 로직은 유닛 커버) + UX-FB-07/08 (미세 전이 피드백 — 스켈레톤/큐완료 펄스, 클래스 부착 로직만 유닛 커버)
 //   UX-MET-05/07/08 (텔레메트리 인프라 — 기하 UI 요소 없음, unit/dom 커버 + ADR-0019 설계 정본)
 
 // 폐기·통합 ID의 코드 @spec 잔존 참조 기준선 — 폐기된 요구사항을 참조하는 허용

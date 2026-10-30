@@ -19,6 +19,8 @@
  *   - 매칭 결과가 없는(=삭제·이동된 파일의) 스테일 패턴은 오류
  *   - platform 계층 src 하위 .js 에 시험 식별 리터럴 금지 (id·name·appName·shortName·title)
  *     (불가피한 폴백은 map.examLiteralAllow에 사유를 명시해 면제)
+ *   - src/ 루트 직속 .js 는 map.srcRootAllow 화이트리스트만 허용 — 신규 모듈은
+ *     도메인 디렉터리(shell·study·search·pro·telemetry·written·content·reader·views…) 배정 강제
  *
  * 자동 도메인 규칙:
  *   exams.json에 등록된 각 시험의 contentRoot/dataRoot는 자동으로
@@ -251,6 +253,21 @@ function main() {
                     );
                 }
             }
+        }
+    }
+
+    // --- src/ 루트 직속 파일 화이트리스트 ---
+    // 2026-10 소스 재편으로 루트 플랫 적재를 해소 — 코어 싱글턴·공용 유틸·생성물만
+    // 루트에 두고, 신규 모듈은 도메인 디렉터리 소속을 강제해 재퇴보를 차단한다.
+    {
+        const rootAllow = new Set(Object.keys(map.srcRootAllow || {}));
+        for (const file of files) {
+            if (!/^src\/[^/]+\.js$/.test(file)) continue;
+            if (rootAllow.has(file)) continue;
+            errors.push(
+                `${file}: src/ 루트 신규 파일 — 도메인 디렉터리(shell·study·search·pro·telemetry·written·content·reader)로 배치하세요 ` +
+                `(코어 싱글턴·생성물이면 domain-map.json srcRootAllow에 사유 명시)`
+            );
         }
     }
 

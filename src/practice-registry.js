@@ -29,7 +29,7 @@ const _lazyImport = (load) => { let p = null; return () => (p ??= load()); };
  * @returns {(() => Promise<any>) & { rel: string }}
  */
 const _domainImport = (rel) => Object.assign(
-    _lazyImport(() => import(`./exams/${getActiveExamId()}/${rel}`)),
+    _lazyImport(() => import(/* @vite-ignore */ `./exams/${getActiveExamId()}/${rel}`)),
     { rel }
 );
 const _domainMarkup = (rel) => `./html/exams/${getActiveExamId()}/${rel}`;

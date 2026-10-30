@@ -308,5 +308,23 @@
         "tests/**"
       ]
     }
-  ]
+  ],
+  "srcRootAllow": {
+    "src/storage.js": "저장소 추상화 단일 퍼널 (DA-09) — 전 모듈이 참조하는 코어",
+    "src/storage-keys.js": "localStorage 키 중앙 레지스트리",
+    "src/state.js": "전역 상태 + 진행 영속성 코어",
+    "src/exam-context.js": "활성 시험 해석·hasFeature 코어",
+    "src/paths.js": "경로 상수 중앙 관리",
+    "src/router.js": "SPA 라우터 코어",
+    "src/sanitize.js": "XSS 방어 공용 (escapeHTML)",
+    "src/sha256.js": "안정 ID 해시 유틸",
+    "src/types.js": "중앙 JSDoc 타입 정의",
+    "src/utils.js": "공통 유틸 (shuffle·날짜·초성 등)",
+    "src/ui-utils.js": "공용 UI 헬퍼 (토스트·모달·마크업)",
+    "src/charts.js": "SVG 차트 공용",
+    "src/practice-registry.js": "시험 도메인 레지스트리 선언 로더 — 지연 import 경로 기준점",
+    "src/keyword-index.js": "빌드 생성물 — 생성 경로가 파이프라인 계약",
+    "src/law-links.js": "빌드 생성물 — 생성 경로가 파이프라인 계약",
+    "src/pdf-registry.js": "빌드 생성물 — 생성 경로가 파이프라인 계약"
+  }
 }

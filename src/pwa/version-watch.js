@@ -19,7 +19,7 @@ export function parseDeployedVersion(text) {
 }
 
 /** 배포본 버전 조회 — 캐시 우회 (오프라인·실패 시 null) */
-export async function fetchDeployedVersion() {
+async function fetchDeployedVersion() {
     try {
         const res = await fetch(`data/version.js?v=${Date.now()}`, { cache: 'no-store' });
         if (!res.ok) return null;
@@ -45,7 +45,7 @@ export async function hardReload() {
 }
 
 /** 새 버전 프롬프트 배너 표시 — "새로고침" 버튼으로 사용자 확인 후 적용 */
-export function showNewVersionPrompt(deployed) {
+function showNewVersionPrompt(deployed) {
     if (_promptShown || typeof document === 'undefined' || !document.body) return;
     _promptShown = true;
     const banner = document.createElement('div');
