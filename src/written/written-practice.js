@@ -9,6 +9,7 @@
 // 자기채점: 답안 서술 → 모범답안·rubric 대조 → 항목 체크 → 자기평가 완료.
 // 진행은 STORAGE_KEYS.WRITTEN_PRACTICE(시험 스코프)에 문항 id(S번호) 기준 저장.
 // ============================================================
+import { pkDecode } from '../content/unpack.js';
 import { escapeHTML } from '../sanitize.js';
 import { parseMarkdown } from '../reader/markdown-parser.js';
 import { dataPath } from '../exam-context.js';
@@ -552,8 +553,8 @@ async function _loadMd(mdPath) {
     if (location.protocol === 'file:') {
         const stem = mdPath.split('/').pop().replace(/\.md$/i, '');
         await injectBundleScript(dataPath('exams_md/') + stem + '.js', 'data-exam-bundle');
-        if (window.__EXAM_MD__ && typeof window.__EXAM_MD__[mdPath] === 'string') {
-            return window.__EXAM_MD__[mdPath];
+        if (window.__EXAM_MD__ && typeof pkDecode(window.__EXAM_MD__[mdPath]) === 'string') {
+            return pkDecode(window.__EXAM_MD__[mdPath]);
         }
         throw new Error('주관식 번들을 찾을 수 없습니다. `node tools/build/build_exam_bundles.js` 를 실행하세요.');
     }
@@ -563,8 +564,8 @@ async function _loadMd(mdPath) {
         const stem = mdPath.split('/').pop().replace(/\.md$/i, '');
         try {
             await injectBundleScript(dataPath('exams_md/') + stem + '.js', 'data-exam-bundle');
-            if (window.__EXAM_MD__ && typeof window.__EXAM_MD__[mdPath] === 'string') {
-                return window.__EXAM_MD__[mdPath];
+            if (window.__EXAM_MD__ && typeof pkDecode(window.__EXAM_MD__[mdPath]) === 'string') {
+                return pkDecode(window.__EXAM_MD__[mdPath]);
             }
         } catch (e) { /* noop — 원래 오류 노출 */ }
         throw err;

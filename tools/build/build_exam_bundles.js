@@ -16,6 +16,7 @@
 const fs = require('fs');
 const path = require('path');
 const { getExamTargets } = require('./exam_targets.js');
+const { encodeText } = require('../lib/content_pack.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const AUTOGEN_HEADER = '// 자동 생성된 문제집 번들입니다. 수정하지 마십시오. (tools/build/build_exam_bundles.js)';
@@ -71,7 +72,7 @@ function buildForExam(target) {
             AUTOGEN_HEADER + '\n' +
             `// 원본: ${key}\n` +
             '(window.__EXAM_MD__ = window.__EXAM_MD__ || {})[' +
-            JSON.stringify(key) + '] = ' + JSON.stringify(md) + ';\n';
+            JSON.stringify(key) + '] = ' + JSON.stringify(encodeText(md)) + ';\n';
 
         const stem = file.replace(/\.md$/i, '');
         const outPath = path.join(OUT_DIR, stem + '.js');

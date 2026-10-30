@@ -18,3 +18,11 @@ test('DA-16: 평문 값은 디코더가 그대로 통과시킨다', () => {
   assert.equal(decodeText('plain text'), 'plain text');
   assert.equal(decodeText(12345), 12345);
 });
+
+import { pkDecode } from '../../src/content/unpack.js';
+
+test('DA-16: 브라우저 pkDecode가 Node 인코딩과 호환된다 (번들 소비 경로)', () => {
+  const src = '### Q12. 화장품법 제3조에 따른 …\n- 선지①\n- 선지②';
+  assert.equal(pkDecode(encodeText(src)), src);
+  assert.equal(pkDecode('plain'), 'plain');
+});

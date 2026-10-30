@@ -10,6 +10,7 @@
 //   - 전역 테마(--bg-app, --color-text-main 등)를 자동으로 따라감
 //   - 오버레이 셸·캐시·TOC·번들 주입은 src/doc-overlay.js 공용 베이스 사용
 //
+import { pkDecode } from '../content/unpack.js';
 import { escapeHTML } from '../sanitize.js';
 import { renderMermaidIn } from './mermaid-render.js';
 import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
@@ -309,16 +310,16 @@ body.manual-open{overflow:hidden;}
     async function _loadFromBundle(sourceKey) {
         const src = MD_SOURCES[sourceKey];
         if (!src) throw new Error('알 수 없는 문서 소스: ' + sourceKey);
-        if (window.__DOC_MD__ && typeof window.__DOC_MD__[src.path] === 'string') {
-            return window.__DOC_MD__[src.path];
+        if (window.__DOC_MD__ && typeof pkDecode(window.__DOC_MD__[src.path]) === 'string') {
+            return pkDecode(window.__DOC_MD__[src.path]);
         }
         try {
             await injectBundleScript(/** @type {string} */ (_bundlePathFor(sourceKey)), 'data-doc-bundle');
         } catch (e) {
             throw new Error('문서 번들을 찾을 수 없습니다. 터미널에서 `node tools/build/build_doc_bundles.js` 를 실행해 번들을 생성하세요.');
         }
-        if (window.__DOC_MD__ && typeof window.__DOC_MD__[src.path] === 'string') {
-            return window.__DOC_MD__[src.path];
+        if (window.__DOC_MD__ && typeof pkDecode(window.__DOC_MD__[src.path]) === 'string') {
+            return pkDecode(window.__DOC_MD__[src.path]);
         }
         throw new Error('문서 번들에 해당 문서가 없습니다. `node tools/build/build_doc_bundles.js` 로 다시 빌드하세요.');
     }

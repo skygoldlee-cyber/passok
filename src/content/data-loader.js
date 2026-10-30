@@ -5,6 +5,7 @@
 //        - http(s): content/manifest.json + content/**/*.md 라이브 fetch (항상 최신, 재빌드 불필요)
 //        - file://: fetch 차단되므로 data/study_md/ 분할 폴백 번들에서 원문/매니페스트 조회
 
+import { pkDecodeFiles } from './unpack.js';
 import { TIMING } from '../config/timing.js';
 import { PATHS } from '../paths.js';
 //        exam/ingredients 는 기존 레지스트리 번들 방식을 그대로 유지한다.
@@ -16,20 +17,6 @@ import { getActiveExam, contentPath, dataPath } from '../exam-context.js';
 
 const IS_FILE = (typeof location !== 'undefined' && location.protocol === 'file:');
 
-/** DA-16 — pk1 인코딩 번들 값을 런타임 디코드 (평문 통과) */
-function _pkDecode(v) {
-    if (typeof v !== 'string' || !v.startsWith('pk1:')) return v;
-    const KEY = 'passok-pk1-5f3a';
-    const bin = atob(v.slice(4));
-    const bytes = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i) ^ KEY.charCodeAt(i % KEY.length);
-    return new TextDecoder().decode(bytes);
-}
-function _pkDecodeFiles(files) {
-    const out = {};
-    for (const k of Object.keys(files)) out[k] = _pkDecode(files[k]);
-    return out;
-}
 
 export const DataLoader = {
     /** @type {import('../types.js').DataRegistry|null} */
@@ -202,7 +189,7 @@ export const DataLoader = {
         if (!files) {
             throw new Error(`폴백 과목 번들을 찾을 수 없습니다: ${subjectKey}`);
         }
-        return _pkDecodeFiles(files);
+        return pkDecodeFiles(files);
     },
 
     /** content/manifest.json 확보 (http: fetch, file://: 폴백 manifest) */

@@ -13,6 +13,7 @@
 //   filePath    원본 파일 경로 (참조 링크 해석 컨텍스트)
 //   nav         이동 페이로드 — {goto:[subjId,표시제목,챕터앵커,모드]} 또는 {mdPath}
 //   _searchText 소문자·공백 정규화된 검색 텍스트 (코어가 인덱싱)
+import { pkDecode } from '../content/unpack.js';
 import { DataLoader } from '../content/data-loader.js';
 import { hasFeature, contentPath, dataPath, getActiveExamId } from '../exam-context.js';
 import { injectBundleScript, fetchMd } from '../shell/doc-overlay.js';
@@ -301,7 +302,7 @@ async function loadRefEntries() {
 async function _loadMdText(mdPath, globalKey, bundleDir, bundleAttr) {
     const bundled = () => (
         typeof window !== 'undefined' && window[globalKey] && typeof window[globalKey][mdPath] === 'string'
-    ) ? window[globalKey][mdPath] : null;
+    ) ? pkDecode(window[globalKey][mdPath]) : null;
     const cached = bundled();
     if (cached !== null) return cached;
     if (typeof location === 'undefined' || location.protocol !== 'file:') {
