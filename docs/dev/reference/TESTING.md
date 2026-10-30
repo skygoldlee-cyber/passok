@@ -235,7 +235,7 @@ npm run hooks:install
 | 52 | `pwa-sw.test.js` | 17 | P-01~12 — SW 캐시 분기·프리캐시·스큐 방지·업데이트·CACHE_VERSION·설치 캡처·manifest Content-Type·app-fallback·verify:assets | 정적 검증 + subprocess, 2026-10-14 추가 |
 | 53 | `security.test.js` | 6 | S-01/07/08 — CSP·인라인 핸들러 부재·보안 헤더·Permissions-Policy·위임 브리지 | vercel.json·index.html 정적 검증, 2026-10-14 추가 |
 | 54 | `perf-invariants.test.js` | 18 | PF-01~16 — 런타임 MD 파싱·과목별 로딩·캐시 TTL·지연 하이라이트·normalize·디바운스·console.log 금지·ref_md·Mermaid 지연·법령 정본 | 소스 패턴 정적 검증, 2026-10-14 추가 |
-| 55 | `ux-invariants.test.js` | 20 | UX-FB/FORM/PWA/SCR/SET — 스크롤바·CSS 변수·설정 패널·44px·버전·토스트·모달·펄스·standalone·app-height·폼 16px·터치 피드백 | CSS·HTML·JS 정적 검증, 2026-10-14 추가 |
+| 55 | `ux-invariants.test.js` | 28 | UX-FB/FORM/PWA/SCR/SET + LP-06/10/11/12/13 — 스크롤바·CSS 변수·설정 패널·44px·버전·토스트·모달·펄스·standalone·app-height·폼 16px·터치 피드백·랜딩 규약 | CSS·HTML·JS 정적 검증, 2026-10-14 추가 |
 | 56 | `content-engineering.test.js` | 6 | CE-01~05 + TR-16a — 학습 가이드·한 줄 요약·비교표·확인문제·용어 표·툴바 자동 숨김 | 콘텐츠·소스 정적 검증, 2026-10-14 추가 |
 | 57 | `doc-sync.test.js` | 7 | `tools/check/check_doc_sync.js` — 트리거/면제/문서 경로 분류, analyze 위반 판정, porcelain 파서 | 정적 패턴 검증, 2026-10-14 추가 |
 | 58 | `test-first.test.js` | 7 | `tools/check/check_test_first.js` — 로직 트리거/테스트 경로 분류, analyze 위반 판정 | 정적 패턴 검증, 2026-11-02 추가 |

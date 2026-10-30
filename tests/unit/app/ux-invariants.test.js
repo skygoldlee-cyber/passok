@@ -131,7 +131,7 @@ test('LP-11: 체험 섹션이 제공 경험을 구체 명기한다', () => {
 test('LP-13: 히어로 차별점 스트립이 기존 수단 대비 우위를 첫 화면에 노출한다', () => {
   const tpl = read('landing.template.html');
   const stripIdx = tpl.indexOf('landing-diff-strip');
-  assert.ok(stripIdx > -1 && stripIdx < tpl.indexOf('landing-main'), 'CTA 직하·본문 이전 배치');
+  assert.ok(stripIdx > -1 && stripIdx < tpl.indexOf('<main'), 'CTA 직하·본문 이전 배치');
   for (const kw of ['인용 링크','FSRS','약점']) assert.ok(tpl.includes(kw), '차별점 키워드: '+kw);
   const css = read('css/landing.css');
   assert.ok(css.includes('.landing-diff-strip'), '스트립 스타일 존재');
