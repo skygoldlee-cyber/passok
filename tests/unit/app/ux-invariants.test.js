@@ -16,15 +16,15 @@ const overlayCss = read('css/ui-overlay.css');
 const allCss = readdirSync(join(ROOT, 'css'))
   .filter(f => f.endsWith('.css'))
   .map(f => read(`css/${f}`)).join('\n');
-const appJs = ['src/app.js', 'src/app-shell.js', 'src/app-dashboard.js'].map(read).join('\n');
+const appJs = ['src/shell/app.js', 'src/shell/app-shell.js', 'src/shell/app-dashboard.js'].map(read).join('\n');
 const uiUtils = read('src/ui-utils.js');
 const pwaInstall = read('src/pwa/pwa-install.js');
 const capture = read('src/pwa/pwa-install-capture.js');
-const readerJs = ['src/views/textbook-reader.js', 'src/views/reader-toolbar.js', 'src/views/reader-ref-links.js'].map(read).join('\n');
+const readerJs = ['src/views/textbook-reader.js', 'src/views/reader/reader-toolbar.js', 'src/views/reader/reader-ref-links.js'].map(read).join('\n');
 const listeners = ['src/views/event-listeners.js',
-  ...readdirSync(join(ROOT, 'src/views'))
+  ...readdirSync(join(ROOT, 'src/views/listeners'))
     .filter(f => f.startsWith('listeners-') && f.endsWith('.js'))
-    .map(f => `src/views/${f}`)].map(read).join('\n');
+    .map(f => `src/views/listeners/${f}`)].map(read).join('\n');
 
 // ---------- UX-SCR: 스크롤바 전략 ----------
 
@@ -120,8 +120,8 @@ test('진도 데이터 스키마 버전 마커가 saveProgress에서 기록된�
 });
 
 test('LP-10: 신규 방문자 리다이렉트 스크립트가 index.html에 로드되고 조건을 갖는다', () => {
-  const redirect = read('src/landing-redirect.js');
-  assert.ok(indexHtml.includes('src="src/landing-redirect.js"'), '템플릿 로드');
+  const redirect = read('src/shell/landing-redirect.js');
+  assert.ok(indexHtml.includes('src="src/shell/landing-redirect.js"'), '템플릿 로드');
   for (const cond of ['localStorage.length', 'standalone', 'navigator.webdriver', 'location.hash', 'location.replace']) {
     assert.ok(redirect.includes(cond), `리다이렉트 조건: ${cond}`);
   }

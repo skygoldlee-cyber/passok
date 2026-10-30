@@ -3,7 +3,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { isNewerNotice, normalizeNotice, findNoticeNumber, statusRows, parseRefDoc,
-         filterIngredientDocs, dictNoticeDocs, dictNoticeRow } from '../../../src/notice-check.js';
+         filterIngredientDocs, dictNoticeDocs, dictNoticeRow } from '../../../src/shell/notice-check.js';
 
 const base = { notice: '제2026-19호', effectiveDate: '2026-03-18' };
 const status = (latest, baseline = base) => ({ baseline, latest });

@@ -9,20 +9,20 @@
 
 import { safeGetItem, safeSetItem } from '../state.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
-import { DataLoader } from '../data-loader.js';
-import { getReviewLog } from '../spaced-repetition.js';
-import { setPersonalDecay } from '../fsrs.js';
-import { getAllStatementStats } from '../statement-tracker.js';
-import { resolveKtParams } from '../knowledge-tracing.js';
+import { DataLoader } from '../content/data-loader.js';
+import { getReviewLog } from '../study/spaced-repetition.js';
+import { setPersonalDecay } from '../study/fsrs.js';
+import { getAllStatementStats } from '../study/statement-tracker.js';
+import { resolveKtParams } from '../study/knowledge-tracing.js';
 import {
     normalizeCidAnchor, chapterFromCid
-} from '../analysis-engine.js';
-import { resolveWrongQuiz, subjectKeyFromItemId } from '../weak-items.js';
+} from '../study/analysis-engine.js';
+import { resolveWrongQuiz, subjectKeyFromItemId } from '../study/weak-items.js';
 import { examIdToSubjectId } from '../exam-context.js';
-import { getWrongCauseLabels } from '../recommendations.js';
+import { getWrongCauseLabels } from '../study/recommendations.js';
 import {
     clusterWeakConcepts, fitFsrsParams, fitKT, inferP0, inferCause
-} from '../personalization.js';
+} from '../study/personalization.js';
 
 /** 피팅 재계산 최소 간격 — 로그 한 건으로 매번 재피팅하지 않도록 12시간 스로틀 */
 const FIT_THROTTLE_MS = 12 * 3600 * 1000;

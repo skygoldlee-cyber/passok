@@ -3,10 +3,10 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const { loadAndValidateManifest } = require('./manifest_loader');
-const { validateSubjectData, validateExamData, validateIngredientsData } = require('./schema');
-const { checkStatsAnomaly, printMarkerWarnings } = require('./report');
-const idFactory = require('./id_factory');
+const { loadAndValidateManifest } = require('./manifest_loader.js');
+const { validateSubjectData, validateExamData, validateIngredientsData } = require('./schema.js');
+const { checkStatsAnomaly, printMarkerWarnings } = require('./report.js');
+const idFactory = require('./id_factory.js');
 
 const WORKSPACE_DIR = path.resolve(__dirname, '../..');
 // [멀티시험] 비기본 시험 빌드:
@@ -15,7 +15,7 @@ const WORKSPACE_DIR = path.resolve(__dirname, '../..');
 // [멀티시험] 루트 기본값: EXAM_CONTENT_ROOT/EXAM_DATA_ROOT env → 없으면
 // exams.json의 default 시험(또는 첫 항목)으로 해석. IS_DEFAULT_EXAM은 경로
 // 문자열이 아니라 default 플래그로 판정한다 (시험 이동/이름변경과 무관).
-const { getExamTargets, removeOrphanBundles } = require('./exam_targets');
+const { getExamTargets, removeOrphanBundles } = require('./exam_targets.js');
 const EXAM_TARGETS = getExamTargets(WORKSPACE_DIR);
 const examsDoc = JSON.parse(fs.readFileSync(path.join(WORKSPACE_DIR, 'content', 'exams.json'), 'utf-8'));
 
@@ -206,7 +206,7 @@ function main() {
   const allMarkerWarnings = [];
 
   // 2. Subjects (manifest 순서 유지, 미대상은 이전 레지스트리 항목 재사용)
-  const textbookPlugin = require('./plugins/textbook.plugin');
+  const textbookPlugin = require('./plugins/textbook.plugin.js');
   manifest.subjects.forEach(subj => {
     if (!shouldBuildSubject(subj.key)) {
       const prior = priorSubjectByKey[subj.key];
@@ -232,7 +232,7 @@ function main() {
       const hash = getContentHash(data);
 
       // [정합성] 교재/카드/퀴즈는 런타임에 content/*.md 를 파싱해 로드한다
-      // (src/data-loader.js loadSubject → buildSubjectData). 따라서 사전 빌드된
+      // (src/content/data-loader.js loadSubject → buildSubjectData). 따라서 사전 빌드된
       // data/subjects/*.js 번들은 더 이상 어디에서도 로드되지 않는다.
       //  - 번들 파일 생성을 중단하고(불필요한 ~1MB 산출물 제거),
       //  - 남아있을 수 있는 구 번들만 정리하며,
@@ -275,7 +275,7 @@ function main() {
     .forEach(f => console.log(`- 고아 과목 번들 삭제: ${f}`));
 
   // 3. Exams (과목이 대상일 때만 재빌드, 나머지는 이전 항목 재사용)
-  const examsPlugin = require('./plugins/exams.plugin');
+  const examsPlugin = require('./plugins/exams.plugin.js');
   manifest.exams.forEach(exam => {
     if (!shouldBuildExam(exam)) {
       const prior = priorExamByKey[exam.key];
@@ -332,7 +332,7 @@ function main() {
     .forEach(f => console.log(`- 고아 시험 번들 삭제: ${f}`));
 
   // 3.4 Written (주관식 연습 문항 — manifest.written 선언 시에만 registry에 기록)
-  //   자기채점 런타임(src/written-practice.js)이 읽는 목록. ### S 헤딩 수를 집계한다.
+  //   자기채점 런타임(src/written/written-practice.js)이 읽는 목록. ### S 헤딩 수를 집계한다.
   registry.written = (manifest.written || []).map(w => {
     const fp = path.join(WORKSPACE_DIR, EXAM_CONTENT_ROOT, '문제은행', w.file || '');
     let count = 0;
@@ -363,7 +363,7 @@ function main() {
   // (교재 파생 수량이 문제은행 비율과 괴리되므로, 부족분은 문제은행 문항을 카드/퀴즈로 변환해
   //  data/supplements/ 번들로 채우고, 초과분은 stats.targetCards/Quizzes 표시 상한으로 조정)
   {
-    const { buildSupplements } = require('./supplements');
+    const { buildSupplements } = require('./supplements.js');
     console.log('Building Study Supplements (문제은행 비율 기반 목표치)...');
     try {
       const rawCounts = {};
@@ -407,7 +407,7 @@ function main() {
   const kSchema = manifest.knowledge;
   const kKey = kSchema && kSchema.registryKey;
   if (kKey) {
-    const knowledgePlugin = require('./plugins/knowledge.plugin');
+    const knowledgePlugin = require('./plugins/knowledge.plugin.js');
     if (knowledgePlugin.RESERVED_REGISTRY_KEYS.includes(kKey)) {
       console.error(`manifest.knowledge.registryKey "${kKey}"는 registry 최상위 키(${knowledgePlugin.RESERVED_REGISTRY_KEYS.join(', ')})와 충돌합니다 — registry["${kKey}"] 메타가 registry 자체를 덮어씁니다. 다른 이름을 사용하세요.`);
       process.exit(1);
@@ -549,7 +549,7 @@ if (typeof window !== 'undefined') {
     let swContent = fs.readFileSync(swPath, 'utf-8');
 
     // 모든 시험의 자산을 집계 (프리캐시는 앱 셸 차원이므로 전 시험 포함)
-    const { getExamTargets, getPrecacheMdAssets, getPrecacheMediaAssets } = require('./exam_targets');
+    const { getExamTargets, getPrecacheMdAssets, getPrecacheMediaAssets } = require('./exam_targets.js');
     const allTargets = getExamTargets(WORKSPACE_DIR);
 
     const assetsToCache = [];
@@ -585,7 +585,7 @@ if (typeof window !== 'undefined') {
     
     // 자동화된 서비스 워커 버전 관리 (stampSwVersion) 연동
     try {
-      const { stampSwVersion } = require('./stamp_sw_version');
+      const { stampSwVersion } = require('./stamp_sw_version.js');
       stampSwVersion({ swPath: swPath });
     } catch (err) {
       console.warn('Warning: Failed to stamp sw version:', err.message);

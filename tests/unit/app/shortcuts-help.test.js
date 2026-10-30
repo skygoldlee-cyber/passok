@@ -4,7 +4,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { SHORTCUT_GROUPS, renderShortcutHelpHtml } from '../../../src/shortcuts-help.js';
+import { SHORTCUT_GROUPS, renderShortcutHelpHtml } from '../../../src/shell/shortcuts-help.js';
 
 test('SHORTCUT_GROUPS 정본: 그룹·항목 필수 필드와 중복 없음', () => {
     assert.ok(SHORTCUT_GROUPS.length >= 2, '전역+뷰 한정 그룹 존재');

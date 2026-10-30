@@ -3,8 +3,8 @@
 //   (챕터 렌더 → reader-render.js · 이야기형 로드 → reader-loader.js ·
 //    위치/진척 → reader-progress.js · 참조 링크 → reader-ref-links.js ·
 //    툴바·스크롤스파이·표 모달 → reader-toolbar.js)
-import { proFeatureNotice } from '../pro-upgrade.js';
-import { trackAction } from '../usage-stats.js';
+import { proFeatureNotice } from '../pro/pro-upgrade.js';
+import { trackAction } from '../telemetry/usage-stats.js';
 import { filterMetaSections, buildSectionDisplayTitles } from '../reader/reader-toc.js';
 import {
     readerAudioState,
@@ -15,7 +15,7 @@ import {
     cycleReaderAudioRate,
     seekReaderAudio,
     toggleReaderAutoScroll
-} from './reader-audio.js';
+} from './reader/reader-audio.js';
 
 export {
     stopReaderAudio,
@@ -26,18 +26,18 @@ export {
     toggleReaderAutoScroll
 };
 // [모바일 PWA 견고성] 오디오 매니페스트는 window 전역(가드)에서 읽는다(정적 import 하드 의존 지양).
-import { DataLoader } from '../data-loader.js';
+import { DataLoader } from '../content/data-loader.js';
 import {
     readerChapterContext, initReaderToolbar
-} from './reader-toolbar.js';
+} from './reader/reader-toolbar.js';
 import {
     textbookReaderState, saveReaderPosition, loadReaderPosition, startReadingSession
-} from './reader-progress.js';
-import { loadStoryChapter } from './reader-loader.js';
-import { renderChapterContentInternal } from './reader-render.js';
+} from './reader/reader-progress.js';
+import { loadStoryChapter } from './reader/reader-loader.js';
+import { renderChapterContentInternal } from './reader/reader-render.js';
 import { escapeRegExp } from '../utils.js';
 
-export { textbookReaderState, startReadingSession, stopReadingSession } from './reader-progress.js';
+export { textbookReaderState, startReadingSession, stopReadingSession } from './reader/reader-progress.js';
 
 /** 렌더된 섹션 카드 중 제목 매칭 탐색 — 정확 매칭 우선, 없으면 첫 부분 매칭 */
 function _findSectionCardByTitle(container, sectionTitle) {

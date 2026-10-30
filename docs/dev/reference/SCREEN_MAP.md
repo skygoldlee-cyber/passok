@@ -30,7 +30,7 @@
 | 시험 선택 | `exam-select-view` | exam-select.html | `#/exams` | nav 없음 — 설정 패널(전 대역) '시험 전환' (`data-feature="examSwitch"`, 등록 시험 ≥2개일 때만 표시) | §3.22 | 공통 |
 
 - **모바일 탭바 순서**: 대시보드 · 플래시카드 · 퀴즈 · Formula OS(실무 피처 보유 시) · 사전 · **더보기**(시트에 나머지 뷰 전부 + 사용자 매뉴얼·실무 모드 시 실무막얼/학습도구 — 테마·시험 전환 등 기능 버튼 정본은 헤더·설정 패널)
-- **`nav-study-only`**: 실무 모드(`ui_mode=practice`)에서 숨김. 현재 뷰가 학습 전용이면 실무 전환 시 `formula-view`로 자동 랜딩 (`src/ui-mode.js`)
+- **`nav-study-only`**: 실무 모드(`ui_mode=practice`)에서 숨김. 현재 뷰가 학습 전용이면 실무 전환 시 `formula-view`로 자동 랜딩 (`src/shell/ui-mode.js`)
 - **`data-feature`**: 시험별 `features` 플래그(`content/exams.json`)로 기능 자체를 숨김 — 뷰가 없는 게 아니라 기능 게이팅
 
 ## 2. 비뷰 화면 (오버레이·드로어·모달)
@@ -45,12 +45,12 @@
 | 시작 안내 모달 | `#onboarding-overlay` | 최초 방문 1회 / 설정 재열람 | 3단계 안내 | UX-FB-05 |
 | 계정/로그인 모달 | `#auth-modal` | 설정 패널 '계정/로그인' | 이메일+비밀번호 · 로그인 메일(매직링크+OTP) — 미설정 시 안내 문구 | §3.19 (AU-01~08) |
 | 의견 보내기 모달 | `#feedback-overlay` | 설정 패널 '의견 보내기' | 유형 4종·별점·본문 — 오프라인 큐 | §3.23 (FB-01~07) |
-| 새 소식/변경 이력 | `#whats-new-overlay` | 버전 갱신 감지 / 설정 재열람 | 릴리스 노트 모달 | `src/whats-new.js` |
+| 새 소식/변경 이력 | `#whats-new-overlay` | 버전 갱신 감지 / 설정 재열람 | 릴리스 노트 모달 | `src/shell/whats-new.js` |
 | Pro 안내·플랜 비교 | `#pro-upgrade-overlay` | 무료 한도 도달·Pro 안내·설정 '플랜 안내' | 정보성 모달 공유 셸 (결제 경로 없음) | ROAD-P0/P1 |
 | PWA 설치 안내 | `#pwa-install-modal` | 설치 프롬프트 캡처 / 설정 | 브라우저별 안내 4종 + 진단 | UX-PWA-04 |
 | 일일 챌린지 | `#daily-challenge-modal` | 대시보드 데일리 카드 | 단계형 미니 퀴즈 모달 | §3.20 (SC-04) |
 | 목표 설정 모달 | `#goal-settings-modal` | 캘린더 뷰 | 일일 목표·주간 학습 일수 | §3.20 (SC-02) |
-| 내 사용 통계 | `#usage-stats-overlay` | 설정 패널 | 로컬 사용 카운터 표 (전송 없음) | `src/usage-stats.js` |
+| 내 사용 통계 | `#usage-stats-overlay` | 설정 패널 | 로컬 사용 카운터 표 (전송 없음) | `src/telemetry/usage-stats.js` |
 | 커스텀 확인 모달 | `#app-confirm-overlay` | `showConfirm`/`showAlert` | 네이티브 alert 대체 | UX-FB-02 |
 | 전역 로딩 | `#global-loading-overlay` | `showGlobalLoading()` | 데이터 fetch 시 전체 오버레이 (동적 생성) | UX-FB-04 |
 | 문제집/참조자료 뷰어 | `#exam-overlay` | 과목 카드·리더 기출 링크·대시보드 | MD 뷰어, 자체 뒤로가기 마커 | §3.14, TR-10 |
@@ -65,7 +65,7 @@
 | 식약처 고시 배너 | `#formula-notice-banner` | formula-view 진입 | 고시 확인·원문 링크 | §3.18 |
 | SW 업데이트 토스트 | `#sw-update-toast` | Service Worker 새 버전 | 하단 토스트 + 새로고침 유도 | UX-PWA-03 |
 | 앱 토스트 | `#app-toast` | `showToast()` | 하단 단기 알림 (error/success/info) | UX-FB-01 |
-| ESM 로드 폴백 | `#app-fallback-overlay` | 모듈 로드 실패 감지 | 복구 안내 오버레이 | `src/app-fallback.js` |
+| ESM 로드 폴백 | `#app-fallback-overlay` | 모듈 로드 실패 감지 | 복구 안내 오버레이 | `src/shell/app-fallback.js` |
 | 종료 안내 화면 | `.app-exit-screen` | 앱 종료 시도 차단 시 | PWA 종료 폴백 | UX-PWA-01 |
 
 ## 3. 뷰별 상태 분기 (전역 규약 외 화면 고유 상태)

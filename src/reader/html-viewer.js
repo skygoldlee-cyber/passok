@@ -5,7 +5,7 @@ import { parseMarkdown } from './markdown-parser.js';
 import { esc } from '../sanitize.js';
 import { CACHE } from '../config/cache.js';
 import { renderMermaidIn } from './mermaid-render.js';
-import { makeSessionCache } from '../doc-overlay.js';
+import { makeSessionCache } from '../shell/doc-overlay.js';
 
 let _overlayEl = null;
 let _contentEl = null;

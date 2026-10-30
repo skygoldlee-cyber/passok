@@ -12,7 +12,7 @@ vi.mock('../../../src/ui-utils.js', async (importOriginal) => ({
 }));
 
 import { loadIndexHtml } from '../helpers.js';
-import { isTelemetryAllowed, setTelemetryAllowed } from '../../../src/telemetry-consent.js';
+import { isTelemetryAllowed, setTelemetryAllowed } from '../../../src/telemetry/telemetry-consent.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 
 beforeEach(() => {

@@ -1,4 +1,4 @@
-// tests/unit/usage-metrics.test.js — Phase 2 표면 진입 계측 (src/usage-stats.js)
+// tests/unit/usage-metrics.test.js — Phase 2 표면 진입 계측 (src/telemetry/usage-stats.js)
 // @spec UX-MET-01,UX-MET-04
 // 검증: 신규 계측 키가 actions에 기록되되 유료가치 판정(VALUE_ACTIONS)과
 //       스토리지 스키마를 오염하지 않음 — 데이터 없는 구조 결정 차단의 계측 기반.
@@ -25,7 +25,7 @@ let trackAction, isValueThresholdMet, actionLabel, buildUsageExport, getUsageSta
 beforeEach(async () => {
     global.localStorage = createMockStorage();
     global.window = {};
-    const m = await import('../../../src/usage-stats.js');
+    const m = await import('../../../src/telemetry/usage-stats.js');
     ({ trackAction, isValueThresholdMet, actionLabel, buildUsageExport, getUsageStats } = m);
 });
 

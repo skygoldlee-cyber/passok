@@ -12,7 +12,7 @@
 ## FSRS 간격 반복 전환 설계 — SM-2 → FSRS-4.5
 
 > 상위 문서: [`SPEC.md`](../SPEC.md) §3.2 (F-07~F-09) · §3.24 (SQ-01~04 감사)
-> 범위: 플래시카드·진술 공용 간격 반복 엔진 `src/spaced-repetition.js`의 스케줄 알고리즘을 SM-2에서 FSRS-4.5로 교체
+> 범위: 플래시카드·진술 공용 간격 반복 엔진 `src/study/spaced-repetition.js`의 스케줄 알고리즘을 SM-2에서 FSRS-4.5로 교체
 > 상태: ✅ 구현됨 (2026-10-12) — §7-1~3 적용 완료, §8 후속(4버튼·파라미터 개인화)은 별도 범위
 > ⚠️ **버전 노트**: 엔진은 2026-10-13 FSRS-6으로 승계 — 수식·파라미터 정본은 [LEARNING_ALGORITHM_DESIGN.md](LEARNING_ALGORITHM_DESIGN.md) (DOC-DSN-27), 본 문서의 §2 모델 명세는 SM-2→4.5 전환 당시 기록으로 보존
 > **관련 SPEC ID**: `F-07`(간격 반복 스케줄링) · `F-08`(복습 메타데이터 영속화) · `F-09`(진도 초기화) · `SC-13`(dueBoost 수요) · `DR-03`(진술 SM-2 큐) · `SQ-03`(T3 시뮬)
@@ -69,7 +69,7 @@ I(r, s) = s · FACTOR⁻¹ · (r^(1/DECAY) - 1)    # 목표 기억률 r=0.9 해�
 - **실패 (Again)**: `s' = w11·d^{-w12}·((s+1)^{w13}-1)·e^{w14·(1-R)}`, `d` 상승 갱신 후 절단
 - **난이도 갱신**: `d' = w7·initD(4) + (1-w7)·(d - w6·(rating-3))`, 1~10 절단
 
-기본 파라미터(FSRS-4.5, 17개 w0~w16)는 `src/fsrs.js`에 상수로 내장한다 — 개인 최적화는 후속 단계 (§8). w17~18(FSRS-5의 당일 복습 스텝)은 현행 이진 UI에 불필요해 미포함.
+기본 파라미터(FSRS-4.5, 17개 w0~w16)는 `src/study/fsrs.js`에 상수로 내장한다 — 개인 최적화는 후속 단계 (§8). w17~18(FSRS-5의 당일 복습 스텝)은 현행 이진 UI에 불필요해 미포함.
 
 #### 2.4 레이팅 매핑 (1차 — 이진 입력 유지)
 
@@ -162,7 +162,7 @@ getDueCount()
 
 | 단계 | 내용 | 산출물 |
 |---|---|---|
-| 1 | `fsrs.js` 신설 — 상태·갱신·간격 순수 함수 + `migrateSm2Record` | `src/fsrs.js` + 단위 테스트 |
+| 1 | `fsrs.js` 신설 — 상태·갱신·간격 순수 함수 + `migrateSm2Record` | `src/study/fsrs.js` + 단위 테스트 |
 | 2 | `spaced-repetition.js` 어댑터 — 저장 스키마·지연 변환·API 위임 | 동일 파일 내부 교체 |
 | 3 | `audit_study_quality.js` T3 이중 계측 + T4 추가 | 시나리오 +2~3, 기준선 갱신 |
 | 4 | SPEC(F-07~09 기술 갱신·SQ-03 시나리오 명세)·CHANGES·TRACE | 문서 정합 |
@@ -243,7 +243,7 @@ FSRS는 **파라메트릭 기억 모델**(상수 파라미터 수식 기반)이�
 ## FSRS-4.5 → FSRS-6 엔진 업그레이드 설계 — F-11
 
 > 상위 문서: [`SPEC.md`](../SPEC.md) F-07~F-09 · [`LEARNING_ALGORITHM_DESIGN.md`](LEARNING_ALGORITHM_DESIGN.md) (DOC-DSN-17) · [`LEARNING_ALGORITHM_DESIGN.md`](LEARNING_ALGORITHM_DESIGN.md) (DOC-DSN-26)
-> 범위: `src/fsrs.js` 수식·파라미터를 FSRS-6(21 파라미터)으로 포팅 — 어댑터·레코드·UI 무수정
+> 범위: `src/study/fsrs.js` 수식·파라미터를 FSRS-6(21 파라미터)으로 포팅 — 어댑터·레코드·UI 무수정
 > 상태: ⏳ 설계 확정 (2026-10-13) — 구현 착수 전
 > **관련 SPEC ID**: `F-11`(FSRS-6 엔진) · `F-07`(스케줄링) · `D-18`(리뷰 로그 — w20 피팅 입력) · `D-19`(R_exam — 신곡선 적용)
 > 원본 문서: `FSRS6_UPGRADE_DESIGN.md` — 구 DOC-DSN-27 (2026-10-17 본 문서로 통합)
@@ -594,7 +594,7 @@ if (examStr && examStr > todayStr && due > examStr) {
 
 > 상위 문서: [`SPEC.md`](../SPEC.md) D-21·D-22 · [`LEARNING_ALGORITHM_DESIGN.md`](LEARNING_ALGORITHM_DESIGN.md) (D-18 리뷰 로그) · [`LEARNING_ALGORITHM_DESIGN.md`](LEARNING_ALGORITHM_DESIGN.md)
 > 범위: 카드 스케줄링(FSRS)과 분리된 **단원·개념 숙달도 추정 계층** — 진단 카드(단원 취약·합격 갭)의 추정 품질 개선
-> 상태: ✅ v1(D-21) 구현됨 · ✅ v2(D-22) 구현됨 (2026-10-13) — `src/knowledge-tracing.js` + 소비자 연결 완료, 감사 시나리오는 §4.2④ 잔여
+> 상태: ✅ v1(D-21) 구현됨 · ✅ v2(D-22) 구현됨 (2026-10-13) — `src/study/knowledge-tracing.js` + 소비자 연결 완료, 감사 시나리오는 §4.2④ 잔여
 > **관련 SPEC ID**: `D-21`(단원 숙달 베이지안 추정) · `D-22`(BKT 지식 추적) · `D-18`(리뷰 로그) · `SC-14`(합격 갭 분석) · `D-15`(취약 단원 분석)
 > 원본 문서: `KNOWLEDGE_TRACING_DESIGN.md` — 구 DOC-DSN-29 (2026-10-17 본 문서로 통합)
 > **범위**: platform · 판본: none

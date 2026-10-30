@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseWrittenBank, WrittenPractice } from '../../../src/written-practice.js';
+import { parseWrittenBank, WrittenPractice } from '../../../src/written/written-practice.js';
 import { STORAGE_KEYS, BACKUP_KEYS } from '../../../src/storage-keys.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');

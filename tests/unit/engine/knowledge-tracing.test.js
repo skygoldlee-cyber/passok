@@ -7,7 +7,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
     KT_DEFAULTS, KT_GRADUATE_PL, bktUpdate, computeUnitMastery, resolveKtParams
-} from '../../../src/knowledge-tracing.js';
+} from '../../../src/study/knowledge-tracing.js';
 
 const MCQ = { T: KT_DEFAULTS.T, G: KT_DEFAULTS.G.mcq, S: KT_DEFAULTS.S };
 const OX = { T: KT_DEFAULTS.T, G: KT_DEFAULTS.G.ox, S: KT_DEFAULTS.S };

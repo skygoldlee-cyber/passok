@@ -35,7 +35,7 @@ npm.cmd run serve        # http://localhost:3000 — vercel.json 헤더(CSP·캐
 ```mermaid
 sequenceDiagram
     participant HTML as index.html (앱 셸)
-    participant APP as src/app.js
+    participant APP as src/shell/app.js
     participant CTX as initExamContext()
     participant DL as DataLoader
     participant VIEW as views/*.js
@@ -51,7 +51,7 @@ sequenceDiagram
     APP->>VIEW: switchView('dashboard-view') → renderDashboard()
 ```
 
-**읽기 포인트**: `src/app.js` 맨 아래 `startAppInit()`부터 거꾸로 올라가면 전체 초기화 경로가 보입니다. 시험이 2개 이상이고 미선택이면 대시보드 대신 시험 선택 화면(`showExamSelect`)이 홈이 됩니다.
+**읽기 포인트**: `src/shell/app.js` 맨 아래 `startAppInit()`부터 거꾸로 올라가면 전체 초기화 경로가 보입니다. 시험이 2개 이상이고 미선택이면 대시보드 대신 시험 선택 화면(`showExamSelect`)이 홈이 됩니다.
 
 ## 3. 화면이 만들어지는 방식 — 파셜 조립
 
@@ -88,7 +88,7 @@ sequenceDiagram
 **새 버튼을 추가할 때 절차**:
 1. `html/views/xxx.html`에 `data-click="myHandler"` 속성 부여
 2. 핸들러 함수 작성 (보통 해당 뷰 컨트롤러에 `export function`)
-3. `src/app.js`의 `DELEGATED_HANDLERS`에 등록 — 등록 안 하면 콘솔에 `Handler not found` 오류
+3. `src/shell/app.js`의 `DELEGATED_HANDLERS`에 등록 — 등록 안 하면 콘솔에 `Handler not found` 오류
 
 ## 5. 데이터가 흐르는 경로 — 두 개의 "저장소"를 구분
 
@@ -138,11 +138,11 @@ flowchart LR
 
 | 순서 | 파일 | 볼 것 |
 |------|------|-------|
-| 1 | `src/app.js` (맨 아래) | 부팅 시퀀스·`DELEGATED_HANDLERS` 등록 |
-| 2 | `src/views/listeners-delegation.js` | data-click 해석 규칙 (100줄 미만) |
+| 1 | `src/shell/app.js` (맨 아래) | 부팅 시퀀스·`DELEGATED_HANDLERS` 등록 |
+| 2 | `src/views/listeners/listeners-delegation.js` | data-click 해석 규칙 (100줄 미만) |
 | 3 | `src/state.js` | 인메모리 상태 + `saveProgress()` 구조 |
 | 4 | `src/storage.js` → `src/storage-keys.js` | localStorage 추상화·시험별 키 규칙 |
-| 5 | `src/data-loader.js` | 번들 fetch·캐시·레지스트리 해석 |
+| 5 | `src/content/data-loader.js` | 번들 fetch·캐시·레지스트리 해석 |
 | 6 | `src/views/dashboard.js` | 뷰 컨트롤러 표준 패턴 |
 | 7 | `src/views/analysis-view.js` | dashboard에서 분리된 모듈 경계 실례 |
 | 8 | `src/exams/cosmetic/` 한 파일 | 시험 도메인 격리 예시 |
@@ -185,13 +185,13 @@ TypeScript가 아니라 `jsconfig.json`의 `checkJs` + JSDoc 주석으로 `tsc -
 |------|-----|----------------|
 | ES Module (ESM) | `import`/`export`를 파일 단위로 쓰는 표준 모듈 방식. 이 프로젝트는 번들러 없이 브라우저가 `.js`를 그대로 로드 | `src/` 전체 |
 | CSP | Content Security Policy — 인라인 스크립트를 금지하는 보안 헤더. `data-click` 위임 패턴이 필요한 이유 | `index.template.html` |
-| 위임 (delegation) | 요소마다 리스너를 달지 않고 상위 리스너 하나가 `closest('[data-click]')`로 일괄 해석하는 방식 | `src/views/listeners-delegation.js` |
-| DELEGATED_HANDLERS | `data-click` 이름 → 실제 함수 매핑표. `app.js`가 `Object.assign(window, …)`로 등록 | `src/app.js` |
+| 위임 (delegation) | 요소마다 리스너를 달지 않고 상위 리스너 하나가 `closest('[data-click]')`로 일괄 해석하는 방식 | `src/views/listeners/listeners-delegation.js` |
+| DELEGATED_HANDLERS | `data-click` 이름 → 실제 함수 매핑표. `app.js`가 `Object.assign(window, …)`로 등록 | `src/shell/app.js` |
 | 지연 로딩 (lazy import) | `import()`로 모듈을 첫 사용 시점에 로드 — 초기 로딩을 가볍게 유지 | `practice-registry.js`, `LAZY_MODULE_HANDLERS` |
 | 생성물 | 기계가 빌드로 만든 파일 — 손으로 고치면 덮어씌워짐 | `index.html`, `data/`, `sw.js` 스탬프 |
 | SSOT | Single Source of Truth — 원본은 `content/` 하나, `data/`는 파생물 | `content/` ↔ `data/` |
 | 번들 | 빌드(`build:data`)로 생성된 시험별 JSON/JS 데이터 묶음 | `data/exams/<id>/` |
-| DataLoader | 번들 fetch·메모리 캐시·레지스트리 해석을 담당하는 중앙 로더 | `src/data-loader.js` |
+| DataLoader | 번들 fetch·메모리 캐시·레지스트리 해석을 담당하는 중앙 로더 | `src/content/data-loader.js` |
 | 레지스트리 | 시험 목록·과목 메타의 런타임 진입점 (`exams.json` 빌드 산출) | `data/exams.js`, `DataLoader.registry` |
 | 시험 팩 | `content/exams/<id>/` 구조의 콘텐츠 단위 — manifest·교재·문제은행·docs | `content/exams/` |
 | features 플래그 | 시험 팩별 기능 on/off 선언 — `hasFeature('x')`로 게이트 | `content/exams.json` |

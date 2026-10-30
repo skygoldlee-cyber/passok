@@ -19,7 +19,7 @@ vi.mock('../../../src/ui-utils.js', async (importOriginal) => {
         trapFocus: vi.fn(() => () => {}),
     };
 });
-vi.mock('../../../src/scratchpad.js', () => ({
+vi.mock('../../../src/study/scratchpad.js', () => ({
     clearScratchpad: vi.fn(),
     initScratchpad: vi.fn(),
     toggleCalcScratchpad: vi.fn(),
@@ -47,14 +47,14 @@ import {
     loadIndexHtml, el, isVisible, resetStudyState, flushAsync,
 } from '../helpers.js';
 import { state } from '../../../src/state.js';
-import { DataLoader } from '../../../src/data-loader.js';
+import { DataLoader } from '../../../src/content/data-loader.js';
 import {
     openWeakReview, gotoWeakReview, gotoOxDrill, renderWeakReview,
     setWeakFilter, toggleSimilarStmts,
 } from '../../../src/views/trainer-drills.js';
 import { initTrainer } from '../../../src/views/trainer.js';
-import { SemanticIndex } from '../../../src/semantic-index.js';
-import { recordStatementJudgments } from '../../../src/statement-tracker.js';
+import { SemanticIndex } from '../../../src/search/semantic-index.js';
+import { recordStatementJudgments } from '../../../src/study/statement-tracker.js';
 import { safeSetItem } from '../../../src/state.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 

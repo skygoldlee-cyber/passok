@@ -23,7 +23,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { parseEnvFile, ROOT } = require('../lib/env');
+const { parseEnvFile, ROOT } = require('../lib/env.js');
 
 const ENV_PATH = path.join(ROOT, '.env');
 const EXAMPLE_PATH = path.join(ROOT, '.env.example');

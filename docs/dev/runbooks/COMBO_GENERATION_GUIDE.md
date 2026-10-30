@@ -27,7 +27,7 @@
         data/exams/cosmetic/drills/combo_index.js       (var COMBO_INDEX — 과목별 문항 수)
 
         ※ 문제집 문서는 더 이상 MD 산출물이 아니다 — 앱의 "복수정답형 문제집"이
-          src/combo-doc.js로 드릴 번들을 런타임 직렬화해 렌더링한다.
+          src/content/combo-doc.js로 드릴 번들을 런타임 직렬화해 렌더링한다.
 ```
 
 실행:
@@ -198,7 +198,7 @@ ref_md는 `ref_md/과목N/{문서}/{문서}.md` 과목 폴더 구조이며, `ext
 
 ### 5-1. 문항 검증
 
-모든 생성 문항은 `src/questions.js`의 `validateQuestion` + `deriveComboAnswer`를
+모든 생성 문항은 `src/content/questions.js`의 `validateQuestion` + `deriveComboAnswer`를
 통과해야 합니다: 참 진술 ≥2, 진술 ≥4, 조합 선지 일관성. 실패 문항은 제외하고
 오류로 집계·출력됩니다.
 
@@ -206,7 +206,7 @@ ref_md는 `ref_md/과목N/{문서}/{문서}.md` 과목 폴더 구조이며, `ext
 
 - `data/exams/cosmetic/drills/combo_subjectN.js` — `var COMBO_DRILLS_subjectN = [...]`
 - `data/exams/cosmetic/drills/combo_index.js` — 과목별 문항 수(`combo_pilot.js` 수작업 문항 합산)
-- 문제집 문서(뷰어 "복수정답형 문제집")는 산출물이 아니라 `src/combo-doc.js`가
+- 문제집 문서(뷰어 "복수정답형 문제집")는 산출물이 아니라 `src/content/combo-doc.js`가
   `loadComboDrills` 결과(자동 변환 + 파일럿 병합)를 런타임 직렬화 —
   문제부(### Qn. 발문/인용/진술/조합 선지) + 정답부(정답 조합·진술별 O/X 판정표·해설) 형식.
 

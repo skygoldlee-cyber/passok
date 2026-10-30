@@ -9,9 +9,9 @@ import {
     estimateCompositeScore, computeCalibrationBias, saveActualResult,
     getActualResult, clearActualResult, snapshotRecommendations,
     evaluateRecommendationEffect, getWrongCauseTaxonomy, getWrongCauseLabels
-} from '../../../src/recommendations.js';
-import { computeStudyPattern, buildWeeklyReportText, estimateUntaggedCauses } from '../../../src/analysis-engine.js';
-import { recordStudyActivity, getStudyCalendar } from '../../../src/study-tracker.js';
+} from '../../../src/study/recommendations.js';
+import { computeStudyPattern, buildWeeklyReportText, estimateUntaggedCauses } from '../../../src/study/analysis-engine.js';
+import { recordStudyActivity, getStudyCalendar } from '../../../src/study/study-tracker.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 
 // --- localStorage·window.DATA_REGISTRY 모킹 (learning-pro.test.js와 동일 패턴) ---

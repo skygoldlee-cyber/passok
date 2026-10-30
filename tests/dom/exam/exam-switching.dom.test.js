@@ -10,7 +10,7 @@ import { loadIndexHtml } from '../helpers.js';
 import {
     getActiveExam, getActiveExamId, hasFeature, getExamAppName, scopedKey, unscopedKey,
 } from '../../../src/exam-context.js';
-import { applyFeatureFlags, applyExamBranding } from '../../../src/app-shell.js';
+import { applyFeatureFlags, applyExamBranding } from '../../../src/shell/app-shell.js';
 
 const EXAMS = {
     exams: [

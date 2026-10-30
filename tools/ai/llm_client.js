@@ -15,7 +15,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { DRAFT_DIR } = require('./lib/ai_common');
+const { DRAFT_DIR } = require('./lib/ai_common.js');
 
 const PROVIDERS = {
     openai: {

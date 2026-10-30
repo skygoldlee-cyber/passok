@@ -1,13 +1,13 @@
 // tests/unit/app/telemetry-consent.test.js
 // @spec UX-MET-06, UX-MET-07
-// src/telemetry-consent.js — opt-out 플래그·고지 마커·익명 설치 ID
+// src/telemetry/telemetry-consent.js — opt-out 플래그·고지 마커·익명 설치 ID
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
     isTelemetryAllowed, setTelemetryAllowed,
     isTelemetryNoticeShown, markTelemetryNoticeShown, getInstallId,
-} from '../../../src/telemetry-consent.js';
+} from '../../../src/telemetry/telemetry-consent.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 import { safeGetItem, safeSetItem } from '../../../src/state.js';
 

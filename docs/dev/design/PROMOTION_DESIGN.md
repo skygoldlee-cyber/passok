@@ -14,12 +14,12 @@
 | 표면 | 상태 | 위치 |
 |------|------|------|
 | 주간 학습 리포트 공유 (`navigator.share`) | ✅ 구현 — 공유 경로 1곳뿐 | `src/views/analysis-view.js` |
-| Discord 커뮤니티 초대 버튼 (ES-08) | ✅ 구현 — `discordInvite` **미선언**으로 미노출 | `content/exams.json` · `src/views/listeners-app.js` |
+| Discord 커뮤니티 초대 버튼 (ES-08) | ✅ 구현 — `discordInvite` **미선언**으로 미노출 | `content/exams.json` · `src/views/listeners/listeners-app.js` |
 | Discord 릴리스 공지 fan-out (AD-12) | ✅ 구현 — `.env`의 `DISCORD_ANNOUNCE*`가 **플레이스홀더**라 발송 스킵 (2026-10-24 배포에서 확인) | `tools/lib/discord.js` |
-| 오픈채팅 결제 문의 | ✅ 운용 중 | `src/pro-upgrade.js` (`contactUrl`) |
-| redeem_code | ✅ 구현 — 추천 프로그램으로 재활용 가능한 원자적 소비 구조 | `src/pro-redeem.js` · Supabase RPC |
+| 오픈채팅 결제 문의 | ✅ 운용 중 | `src/pro/pro-upgrade.js` (`contactUrl`) |
+| redeem_code | ✅ 구현 — 추천 프로그램으로 재활용 가능한 원자적 소비 구조 | `src/pro/pro-redeem.js` · Supabase RPC |
 | OG·Twitter 메타 태그 | ❌ 없음 — 링크 공유 시 미리보기 카드 미표시 | `index.template.html` |
-| UTM·referrer 유입 계측 | ❌ 없음 — 채널별 전환 측정 불가 | `src/usage-telemetry.js` |
+| UTM·referrer 유입 계측 | ❌ 없음 — 채널별 전환 측정 불가 | `src/telemetry/usage-telemetry.js` |
 | sitemap·검색 노출면 | ❌ 없음 — SPA 단일 페이지라 검색 유입면이 좁음 | — |
 
 > **범위 밖**: 채널 운영 실행(어느 카페·커뮤니티에 게시할지, 홍보 소재 문구·이미지 제작)은 본 문서가 다루지 않는다 — 유입을 만드는 **기능 표면**의 백로그다. 실행 계획은 사업 문서(`docs/exams/cosmetic/business/`) 측 과제.

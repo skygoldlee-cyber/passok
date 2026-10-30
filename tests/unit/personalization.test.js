@@ -8,7 +8,7 @@ import {
     clusterWeakConcepts, buildWeakMock, buildTodayQueue, estimatePassProb,
     weakRefLink, fitFsrsParams, inferP0, inferCause, weeklyReport,
     generateClinic, fitKT,
-} from '../../src/personalization.js';
+} from '../../src/study/personalization.js';
 
 const stats = {
     s1: { w: 5, j: 1, t: '별표5 원료A', truth: 'X', cid: 'c1' },

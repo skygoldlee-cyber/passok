@@ -8,10 +8,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fc from 'fast-check';
 
-import { deriveComboAnswer, generateComboOptions } from '../../../src/questions.js';
+import { deriveComboAnswer, generateComboOptions } from '../../../src/content/questions.js';
 import {
   weakItemKey, parseWeakSimId, subjectKeyFromItemId, WEAK_QUIZ_PREFIX,
-} from '../../../src/weak-items.js';
+} from '../../../src/study/weak-items.js';
 
 // ── 공용 생성기 ─────────────────────────────────────────────
 
@@ -156,7 +156,7 @@ test('PBT FSRS: reps 단조 증가·lapses=오답 누적·d 1~10·s>0·due>오�
   const orig = globalThis.localStorage;
   Object.defineProperty(globalThis, 'localStorage', { value: localStorageStub(store), configurable: true });
   try {
-    const { updateCardSchedule } = await import('../../../src/spaced-repetition.js');
+    const { updateCardSchedule } = await import('../../../src/study/spaced-repetition.js');
     const { todayKey } = await import('../../../src/utils.js');
     fc.assert(fc.property(
       fc.array(fc.boolean(), { minLength: 1, maxLength: 10 }),

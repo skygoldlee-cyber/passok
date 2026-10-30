@@ -6,7 +6,7 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
 
 import { loadIndexHtml, el } from '../helpers.js';
-import { bindAppListeners } from '../../../src/views/listeners-app.js';
+import { bindAppListeners } from '../../../src/views/listeners/listeners-app.js';
 
 const INVITE = 'https://discord.gg/test-invite';
 

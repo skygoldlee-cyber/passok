@@ -3,7 +3,7 @@
 
 import { esc } from '../../../sanitize.js';
 import { showToast } from '../../../ui-utils.js';
-import { showStoreError } from '../../../pro-upgrade.js';
+import { showStoreError } from '../../../pro/pro-upgrade.js';
 import { todayKey } from '../../../utils.js';
 import {
   CHECK, checkFormulaItems,

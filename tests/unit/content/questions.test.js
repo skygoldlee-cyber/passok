@@ -1,6 +1,6 @@
 // tests/unit/questions.test.js
 // @spec DR-07
-// src/questions.js — 문항 스키마·채점 유틸 검증
+// src/content/questions.js — 문항 스키마·채점 유틸 검증
 // (single/combo/short/ox 유형, truth 도출, 진술 단위 오판 피드백)
 
 import { test } from 'node:test';
@@ -12,7 +12,7 @@ import {
   validateQuestion,
   gradeAnswer,
   scoreExam,
-} from '../../../src/questions.js';
+} from '../../../src/content/questions.js';
 import { SAMPLE_QUESTIONS } from '../../fixtures/sample-questions.js';
 
 const combo = {

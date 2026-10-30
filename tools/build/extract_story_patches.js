@@ -13,8 +13,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { getExamTargets } = require('./exam_targets');
-const { extractPatch, formatPatch } = require('./story_merge');
+const { getExamTargets } = require('./exam_targets.js');
+const { extractPatch, formatPatch } = require('./story_merge.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const DRY = process.argv.includes('--dry');

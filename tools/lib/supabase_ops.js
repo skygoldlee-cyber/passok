@@ -9,7 +9,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { loadEnv } = require('./env');
+const { loadEnv } = require('./env.js');
 
 /** SUPABASE_URL env 우선, 미설정 시 src/auth-sync/supabase-config.js에서 읽음 */
 function supabaseUrl() {

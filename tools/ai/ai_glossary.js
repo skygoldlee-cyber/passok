@@ -19,8 +19,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { parseArgs, getTargets, writeDraft, loadEnv, DRAFT_DIR, ROOT } = require('./lib/ai_common');
-const llm = require('./llm_client');
+const { parseArgs, getTargets, writeDraft, loadEnv, DRAFT_DIR, ROOT } = require('./lib/ai_common.js');
+const llm = require('./llm_client.js');
 
 const SYSTEM = '당신은 자격시험 용어집의 정의 작성 보조입니다. 제공된 원문 근거만을 바탕으로 용어 정의를 한국어 1~2문장으로 다듬어라. 근거에 없는 사실을 추가하지 말 것.';
 

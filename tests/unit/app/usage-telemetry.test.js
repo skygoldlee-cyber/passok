@@ -1,6 +1,6 @@
 // tests/unit/usage-telemetry.test.js
 // @spec UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08, PAY-04
-// src/usage-telemetry.js — 페이로드 구성·세션 상한·미설정/실패 경로·동의·화이트리스트·큐
+// src/telemetry/usage-telemetry.js — 페이로드 구성·세션 상한·미설정/실패 경로·동의·화이트리스트·큐
 
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
@@ -8,8 +8,8 @@ import assert from 'node:assert/strict';
 import {
   buildEventPayload, reportEvent, maybeReportUsageSnapshot, flushTelemetryQueue,
   reportSessionStart, ALLOWED_EVENTS, _resetUsageTelemetryForTest,
-} from '../../../src/usage-telemetry.js';
-import { setTelemetryAllowed, getInstallId } from '../../../src/telemetry-consent.js';
+} from '../../../src/telemetry/usage-telemetry.js';
+import { setTelemetryAllowed, getInstallId } from '../../../src/telemetry/telemetry-consent.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 import { safeGetItem } from '../../../src/state.js';
 

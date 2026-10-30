@@ -21,8 +21,8 @@
 const fs = require('fs');
 const path = require('path');
 const { createRequire } = require('module');
-const { parseArgs, getTargets, writeDraft, loadEnv, ROOT } = require('./lib/ai_common');
-const llm = require('./llm_client');
+const { parseArgs, getTargets, writeDraft, loadEnv, ROOT } = require('./lib/ai_common.js');
+const llm = require('./llm_client.js');
 
 const SYSTEM = '당신은 화장품 광고 규정 준수 점검 사전의 항목 작성 보조입니다. 제공된 법문과 기존 사전 항목을 근거로, 해당 조항이 금지하는 표현의 구체적 예시를 제안하라. 법문의 취지를 벗어나는 표현은 제안하지 말 것.';
 

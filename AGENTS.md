@@ -230,48 +230,48 @@ feature-plan.json       # 기능별 무료/Pro 전환 설정 (pro = 배지+안�
 .env.example            # 루트 .env 스키마 정본 — 선언 키 목록·용도 (check:env 대조 기준, 시크릿 값 기재 금지)
 serve.js                # 로컬 개발 서버
 src/                    # ES Modules
-  app.js                # 메인 애플리케이션 로직 (초기화, 이벤트 위임, 라우팅)
-  app-dashboard.js      # 대시보드 셀렉트·시험/리소스 카드·스토리지 경고 (app.js 분리)
-  app-shell.js          # 뷰포트·가로세로·data-click 접근성·시험 브랜딩(타이틀·로고·아이콘·앱명)·기능 플래그 (app.js 분리)
-  app-fallback.js       # ESM 로드 실패 시 자동 복구 (모바일 PWA 대응)
+  shell/app.js                # 메인 애플리케이션 로직 (초기화, 이벤트 위임, 라우팅)
+  shell/app-dashboard.js      # 대시보드 셀렉트·시험/리소스 카드·스토리지 경고 (app.js 분리)
+  shell/app-shell.js          # 뷰포트·가로세로·data-click 접근성·시험 브랜딩(타이틀·로고·아이콘·앱명)·기능 플래그 (app.js 분리)
+  shell/app-fallback.js       # ESM 로드 실패 시 자동 복구 (모바일 PWA 대응)
   router.js             # 뷰 라우터 (navigateToView, getViewTitles, initViewHashRouting — #/슬러그 딥링크·뒤로가기)
   state.js              # 전역 상태 + 진행 영속성 (saveProgress — 저장은 storage.js 위임)
   storage.js            # 저장소 추상화 계층 — 백엔드 교체 가능(getItem/setItem 동기·Async 이중 API), 스코프·쓰기훅·쿼터 감지 중앙화
   ui-utils.js           # showToast, showConfirm, trapFocus + 훈련 공용 마크업(markChoiceButtons·wrongReviewHtml·trainerResultHtml·showAnswerFeedback)
   sanitize.js           # XSS 방어 (escapeHTML, safeTextWithBreaks, esc, stripTags)
-  search-index.js       # 통합검색 인덱스 코어 순수 로직 (소스 레지스트리·시험 스코프 무효화·지연 소드 상태머신·어절 역색인·티어 랭킹 — TS-08~09,TS-13~18)
-  search-sources.js     # 통합검색 콘텐츠 소스 프로바이더 (교재 섹션 수집·서사/참조/문제은행 로더·리더 이동 페이로드 해석 — TS-10~12,TS-18)
-  search-morpheme.js    # 검색 형태소 경계 판정·동의어 확장 순수 로직 (어휘 마이닝·DP 커버·termHitQuality·expandSynonyms — TS-13/TS-14)
-  data-loader.js        # 온디맨드 콘텐츠 로더 (DataLoader)
-  scratchpad.js          # 스크래치패드 캔버스 (계산 연습용)
-  trainer-calc.js       # 계산 트레이너 문제 생성기 (순수 로직, 전역 스코프 실행)
-  fsrs.js               # FSRS-6 기억 모델 순수 함수 (DSR 상태 전이·간격 산출·SM-2 지연 변환)
-  knowledge-tracing.js  # BKT 단원 숙달 추정 순수 함수 (관측 시퀀스 → P(L), D-22)
-  spaced-repetition.js  # FSRS 간격 반복 저장 어댑터 (스케줄 수학은 fsrs.js 위임, 공용 API)
-  study-aids.js         # 학습 보조 (기출·중요 마커 추출 카드, 숫자 암기표)
-  study-tracker.js      # 학습 캘린더/목표 추적 배럴 (re-export — 분리: -activity 캘린더·목표, -plan D-day·역산, -adherence 준수율·마일스톤, -alloc 과목별 가중 배분)
-  study-tracker-activity.js    # 학습 캘린더 기록 + 일일/주간 목표 (recordStudyActivity, getStudyGoals)
-  study-tracker-plan.js        # 시험일·D-day·역산 학습 계획 (computeStudyPlan, getDDay, getExamLeadStatus)
-  study-tracker-adherence.js   # 계획 준수율·학습 마일스톤 (computePlanAdherence, evalStudyMilestones)
-  study-tracker-alloc.js       # 과목별 가중 배분 순수 로직 (computeSubjectAllocation, apportionByWeight, selectExamRiskSession)
-  statement-tracker.js  # 진술 원자(sid) 단위 오판 통계·졸업 추적 (FSRS 연동)
-  semantic-index.js     # 의미 유사도 이웃 인덱스 조회 — 사전계산 임베딩 번들 지연 로드 (SEM-02~04, features.semantic) + 앵커 프록시 자유 검색 searchByText (SEM-08 v1)
-  reader-notes.js       # 리더 섹션 메모 스토어 — 북마크 키(subj|chapterKey|title) 매핑 scoped 저장 (TR-30)
-  shortcuts-help.js     # 키보드 단축키 도움말 — SHORTCUT_GROUPS 정본 + `?` 키 오버레이 (UX-HELP-01)
-  recommendations.js    # 합격 전략 추천 엔진 + 예상 점수 추정 + 실제 결과 보고 (순수 로직)
-  analysis-engine.js    # 학습 진단 심층 분석 순수 로직 (AN-01~09 — 예측 점수·취약 단원·주간 리포트)
-  command-palette.js    # 통합 검색 팔레트 (Ctrl+K) — 뷰/교재/카드/퀴즈/성분/문제집 검색·실행
-  weak-items.js         # 약점(오답) 항목 ID 문법·해석 공용 모듈 (weak_quiz_/weak_sim_ 접두사, 퀴즈·카드 인덱스 캐시, DOM 비의존)
-  questions.js          # 문항 스키마 (single/combo/short/ox), deriveComboAnswer, validateQuestion (샘플 문항은 tests/fixtures/sample-questions.js)
-  written-practice.js   # 주관식 연습 자기채점 런타임 — ###S 파서 + 답안 서술·rubric 체크 오버레이 (WP-01~06, manifest.written + features.writtenPractice)
-  written-grading.js    # 주관식 AI 보조 채점 — 공급자(openai·anthropic·gemini) 직접 호출 + rubric 항목 판정 파싱 (WP-07~08, 키 디바이스 로컬)
-  combo-doc.js          # 복수정답형 드릴 → 문제집 MD 런타임 직렬화 (과목N_복수정답형.md 산출물 대체)
-  doc-overlay.js        # MD 문서 오버레이 공용 베이스 — 세션 캐시·번들 주입·TOC·셸 수명주기 (exam/manual 뷰어 공용)
-  modal-back.js         # 모달/오버레이 뒤로가기 닫기 — is-hidden 토글 감시 + 동일 URL 마커 pushState/popstate
+  search/search-index.js       # 통합검색 인덱스 코어 순수 로직 (소스 레지스트리·시험 스코프 무효화·지연 소드 상태머신·어절 역색인·티어 랭킹 — TS-08~09,TS-13~18)
+  search/search-sources.js     # 통합검색 콘텐츠 소스 프로바이더 (교재 섹션 수집·서사/참조/문제은행 로더·리더 이동 페이로드 해석 — TS-10~12,TS-18)
+  search/search-morpheme.js    # 검색 형태소 경계 판정·동의어 확장 순수 로직 (어휘 마이닝·DP 커버·termHitQuality·expandSynonyms — TS-13/TS-14)
+  content/data-loader.js        # 온디맨드 콘텐츠 로더 (DataLoader)
+  study/scratchpad.js          # 스크래치패드 캔버스 (계산 연습용)
+  study/trainer-calc.js       # 계산 트레이너 문제 생성기 (순수 로직, 전역 스코프 실행)
+  study/fsrs.js               # FSRS-6 기억 모델 순수 함수 (DSR 상태 전이·간격 산출·SM-2 지연 변환)
+  study/knowledge-tracing.js  # BKT 단원 숙달 추정 순수 함수 (관측 시퀀스 → P(L), D-22)
+  study/spaced-repetition.js  # FSRS 간격 반복 저장 어댑터 (스케줄 수학은 fsrs.js 위임, 공용 API)
+  study/study-aids.js         # 학습 보조 (기출·중요 마커 추출 카드, 숫자 암기표)
+  study/study-tracker.js      # 학습 캘린더/목표 추적 배럴 (re-export — 분리: -activity 캘린더·목표, -plan D-day·역산, -adherence 준수율·마일스톤, -alloc 과목별 가중 배분)
+  study/study-tracker-activity.js    # 학습 캘린더 기록 + 일일/주간 목표 (recordStudyActivity, getStudyGoals)
+  study/study-tracker-plan.js        # 시험일·D-day·역산 학습 계획 (computeStudyPlan, getDDay, getExamLeadStatus)
+  study/study-tracker-adherence.js   # 계획 준수율·학습 마일스톤 (computePlanAdherence, evalStudyMilestones)
+  study/study-tracker-alloc.js       # 과목별 가중 배분 순수 로직 (computeSubjectAllocation, apportionByWeight, selectExamRiskSession)
+  study/statement-tracker.js  # 진술 원자(sid) 단위 오판 통계·졸업 추적 (FSRS 연동)
+  search/semantic-index.js     # 의미 유사도 이웃 인덱스 조회 — 사전계산 임베딩 번들 지연 로드 (SEM-02~04, features.semantic) + 앵커 프록시 자유 검색 searchByText (SEM-08 v1)
+  study/reader-notes.js       # 리더 섹션 메모 스토어 — 북마크 키(subj|chapterKey|title) 매핑 scoped 저장 (TR-30)
+  shell/shortcuts-help.js     # 키보드 단축키 도움말 — SHORTCUT_GROUPS 정본 + `?` 키 오버레이 (UX-HELP-01)
+  study/recommendations.js    # 합격 전략 추천 엔진 + 예상 점수 추정 + 실제 결과 보고 (순수 로직)
+  study/analysis-engine.js    # 학습 진단 심층 분석 순수 로직 (AN-01~09 — 예측 점수·취약 단원·주간 리포트)
+  shell/command-palette.js    # 통합 검색 팔레트 (Ctrl+K) — 뷰/교재/카드/퀴즈/성분/문제집 검색·실행
+  study/weak-items.js         # 약점(오답) 항목 ID 문법·해석 공용 모듈 (weak_quiz_/weak_sim_ 접두사, 퀴즈·카드 인덱스 캐시, DOM 비의존)
+  content/questions.js          # 문항 스키마 (single/combo/short/ox), deriveComboAnswer, validateQuestion (샘플 문항은 tests/fixtures/sample-questions.js)
+  written/written-practice.js   # 주관식 연습 자기채점 런타임 — ###S 파서 + 답안 서술·rubric 체크 오버레이 (WP-01~06, manifest.written + features.writtenPractice)
+  written/written-grading.js    # 주관식 AI 보조 채점 — 공급자(openai·anthropic·gemini) 직접 호출 + rubric 항목 판정 파싱 (WP-07~08, 키 디바이스 로컬)
+  content/combo-doc.js          # 복수정답형 드릴 → 문제집 MD 런타임 직렬화 (과목N_복수정답형.md 산출물 대체)
+  shell/doc-overlay.js        # MD 문서 오버레이 공용 베이스 — 세션 캐시·번들 주입·TOC·셸 수명주기 (exam/manual 뷰어 공용)
+  shell/modal-back.js         # 모달/오버레이 뒤로가기 닫기 — is-hidden 토글 감시 + 동일 URL 마커 pushState/popstate
   charts.js             # SVG 레이더/꺾은선 차트
   pdf-registry.js       # 참조자료 경로 매핑 (생성물 — 시험별 테이블, getRefTables())
   law-links.js          # 참조 문서 → law.go.kr 원문 링크 매퍼 (생성물 — content/lawdb.json + references.json lawRefs → build:pdf-registry)
-  notice-check.js       # 식약처 고시 감시 — 다문서 배너·실시간 확인 버튼·상태 패널·참조 링크 현행본 보정
+  shell/notice-check.js       # 식약처 고시 감시 — 다문서 배너·실시간 확인 버튼·상태 패널·참조 링크 현행본 보정
   reader/               # 교재·문서 읽기/표시 모듈 (뷰어·파서·TOC·줌·Mermaid)
     exam-viewer.js        # 문제집/참조자료 MD 뷰어
     manual-viewer.js      # 학습안내서/매뉴얼 MD 뷰어
@@ -288,38 +288,38 @@ src/                    # ES Modules
     image-zoom.js          # 교재 본문 이미지(.reader-img) 라이트박스 확대 모달 — 모바일도 바인딩, 모달 내 핀치 제스처 (TR-26)
     zoom-gestures.js       # 줌 모달 공용 핀치·패닝·더블탭 제스처 (Pointer Events, touch-action:none 표면, 이미지·머메이드 모달 공용 — TR-26)
   keyword-index.js      # 교재 셀→참조자료 키워드 매핑 (시험별 — 자동 생성)
-  web-vitals.js         # Core Web Vitals 모니터링
+  telemetry/web-vitals.js         # Core Web Vitals 모니터링
   sha256.js             # 안정적 ID 해시
   utils.js              # 공통 유틸리티 (shuffle·todayKey/localDateKey·getChosung·escapeRegExp·debounce·fmtClock/fmtMMSS)
   types.js              # 중앙 JSDoc 타입 정의 모듈 (@spec none)
   storage-keys.js       # localStorage 키 중앙 관리
   paths.js              # 파일 경로 상수 중앙 관리 (시험 루트 인지형)
-  personalization.js    # 개인 맞춤 고도화 순수 로직 (PS-01~11 — 약점 개념 클러스터·취약 자동편성·통합 큐·합격 확률·딥링크·FSRS/BKT 피팅·원인 추론·주간 리포트·클리닉)
-  error-telemetry.js    # 런타임 오류 텔레메트리 — error/unhandledrejection 수집 + 세션 핑(kind=session, 오류율 분모) → client_errors 익명 insert (미설정 시 no-op, 오류 세션 상한·중복 억제)
-  usage-telemetry.js    # 과업 퍼널 텔레메트리 — quiz/daily start↔complete 이벤트 → usage_events 익명 insert (세션당 랜덤 UUID 쌍 묶기·이벤트 상한, 미설정 시 no-op)
-  telemetry-session.js  # 텔레메트리 공유 세션 ID — 페이지 로드당 랜덤 UUID 1개를 client_errors·usage_events·bug 피드백(meta.session_id)이 공유하는 join 키 (사용자 식별 아님)
-  telemetry-consent.js  # 텔레메트리 동의·익명 설치 ID — opt-out 플래그(telemetry_opt_out)+최초 고지 마커+getInstallId(DEVICE_ID 재사용) (UX-MET-06/07, ADR-0019)
+  study/personalization.js    # 개인 맞춤 고도화 순수 로직 (PS-01~11 — 약점 개념 클러스터·취약 자동편성·통합 큐·합격 확률·딥링크·FSRS/BKT 피팅·원인 추론·주간 리포트·클리닉)
+  telemetry/error-telemetry.js    # 런타임 오류 텔레메트리 — error/unhandledrejection 수집 + 세션 핑(kind=session, 오류율 분모) → client_errors 익명 insert (미설정 시 no-op, 오류 세션 상한·중복 억제)
+  telemetry/usage-telemetry.js    # 과업 퍼널 텔레메트리 — quiz/daily start↔complete 이벤트 → usage_events 익명 insert (세션당 랜덤 UUID 쌍 묶기·이벤트 상한, 미설정 시 no-op)
+  telemetry/telemetry-session.js  # 텔레메트리 공유 세션 ID — 페이지 로드당 랜덤 UUID 1개를 client_errors·usage_events·bug 피드백(meta.session_id)이 공유하는 join 키 (사용자 식별 아님)
+  telemetry/telemetry-consent.js  # 텔레메트리 동의·익명 설치 ID — opt-out 플래그(telemetry_opt_out)+최초 고지 마커+getInstallId(DEVICE_ID 재사용) (UX-MET-06/07, ADR-0019)
   exam-context.js       # 활성 시험 해석/전환, scopedKey 네임스페이스, hasFeature, getExamAppName(시험별 앱 이름 — exams.json appName)
-  exam-data-boot.js     # 활성 시험 데이터 번들 부트 (클래식) — 파싱 중 {dataRoot}/registry.js·id_migration.js 동기 삽입, 비활성 시험 번들 미로드
-  csv-utils.js          # CSV 파서·EUC-KR 폴백 디코딩·BOM 직렬화 (사전 내보내기 등 공용)
+  shell/exam-data-boot.js     # 활성 시험 데이터 번들 부트 (클래식) — 파싱 중 {dataRoot}/registry.js·id_migration.js 동기 삽입, 비활성 시험 번들 미로드
+  content/csv-utils.js          # CSV 파서·EUC-KR 폴백 디코딩·BOM 직렬화 (사전 내보내기 등 공용)
   pwa/                  # PWA 부트·설치·매니페스트 모듈
     pwa-install.js        # PWA 설치 프롬프트 설정
     pwa-install-capture.js # beforeinstallprompt 조기 캡처 + SW 조기 등록 (<head> 즉시 실행, 클래식 스크립트)
     pwa-manifest.js       # 시험별 동적 PWA 매니페스트 (클래식 스크립트 — 빌드 산출물 manifest.<id>.webmanifest 실제 파일로 링크 교체 + 문서 제목·설명·apple-mobile-web-app-title 갱신, blob: 금지)
     version-watch.js       # 배포 버전 감시 — data/version.js 무캐시 폴링(5분+탭 복귀)으로 APP_VERSION 불일치 시 새 버전 프롬프트 배너 → 확인 시 SW 캐시 우회 리로드
-  app-version.js        # 앱 버전 접근·표시 포맷터 (window.APP_VERSION → formatAppVersion)
-  whats-new.js          # 새 버전 변경 이력 알림 (APP_VERSION 비교 → 모달, 설정 "변경 이력" 재열람)
-  onboarding.js         # 첫 방문 시작 안내 모달 (학습 데이터 없는 최초 방문 1회, 설정에서 재열람)
-  feedback.js           # 의견 수신 — 설정 "의견 보내기" 모달, ?src= 유입 추적, 익명 insert, 오프라인 큐
-  pro-upgrade.js        # Pro 안내 — feature-plan.json 로드, PRO 배지(data-pro-feature) 제어, 한도 초과 업그레이드 모달, Free/Pro 플랜 비교 모달 (showPlanCompare — 설정 '플랜 안내'), PAYMENT_NOTICE 결제 안내 (PAY-02)
-  pro-redeem.js         # 라이선스 코드 활성화 — 설정 '라이선스 코드' 입력 다이얼로그 → redeem_code RPC → pro_entitled (PAY-01) + profiles.plan 서버 동기화 initPlanSync (PAY-03)
-  pro-expiry.js         # Pro 만료 상태 판정 + 대시보드 만료 임박·만료·연장 배너 (PAY-07) — 만료일 tombstone·시험일-만료 괴리 경고
-  usage-stats.js        # 로컬 사용 카운터 (ROAD-L5) — 뷰·액션 횟수를 기기 단위(익명 device_id) localStorage에 누적, Pro 후보 액션 20회 판정, 설정 '내 사용 통계' 모달
-  theme-init.js         # 테마 초기화 (즉시 실행)
-  theme-toggle.js       # 테마 토글 UI
-  landing.js            # 서비스 소개 랜딩 스크립트 — 체험 데모(퀴즈·학습계획)·설치 CTA·버전 (LP-04/05/09)
-  landing-redirect.js   # 신규 방문자 '/' → landing.html 안내 (LP-10 — 부트 이전 동기 판정, index.html에서 로드)
-  ui-mode.js            # 학습/실무 UI 모드 전환 (ui_mode 전역 키, 학습 도구 접이식)
+  shell/app-version.js        # 앱 버전 접근·표시 포맷터 (window.APP_VERSION → formatAppVersion)
+  shell/whats-new.js          # 새 버전 변경 이력 알림 (APP_VERSION 비교 → 모달, 설정 "변경 이력" 재열람)
+  shell/onboarding.js         # 첫 방문 시작 안내 모달 (학습 데이터 없는 최초 방문 1회, 설정에서 재열람)
+  shell/feedback.js           # 의견 수신 — 설정 "의견 보내기" 모달, ?src= 유입 추적, 익명 insert, 오프라인 큐
+  pro/pro-upgrade.js        # Pro 안내 — feature-plan.json 로드, PRO 배지(data-pro-feature) 제어, 한도 초과 업그레이드 모달, Free/Pro 플랜 비교 모달 (showPlanCompare — 설정 '플랜 안내'), PAYMENT_NOTICE 결제 안내 (PAY-02)
+  pro/pro-redeem.js         # 라이선스 코드 활성화 — 설정 '라이선스 코드' 입력 다이얼로그 → redeem_code RPC → pro_entitled (PAY-01) + profiles.plan 서버 동기화 initPlanSync (PAY-03)
+  pro/pro-expiry.js         # Pro 만료 상태 판정 + 대시보드 만료 임박·만료·연장 배너 (PAY-07) — 만료일 tombstone·시험일-만료 괴리 경고
+  telemetry/usage-stats.js        # 로컬 사용 카운터 (ROAD-L5) — 뷰·액션 횟수를 기기 단위(익명 device_id) localStorage에 누적, Pro 후보 액션 20회 판정, 설정 '내 사용 통계' 모달
+  shell/theme-init.js         # 테마 초기화 (즉시 실행)
+  shell/theme-toggle.js       # 테마 토글 UI
+  shell/landing.js            # 서비스 소개 랜딩 스크립트 — 체험 데모(퀴즈·학습계획)·설치 CTA·버전 (LP-04/05/09)
+  shell/landing-redirect.js   # 신규 방문자 '/' → landing.html 안내 (LP-10 — 부트 이전 동기 판정, index.html에서 로드)
+  shell/ui-mode.js            # 학습/실무 UI 모드 전환 (ui_mode 전역 키, 학습 도구 접이식)
   practice-registry.js  # 실무작업실 피처 레지스트리 — 시험 features 키 → 뷰/랜딩/지연로더/핸들러 정의 (신규 실무 피처는 여기 엔트리 추가)
   auth-sync/            # 계정·인증·클라우드 동기화 모듈
     supabase-config.js    # Supabase 프로젝트 URL·Publishable key (공개 설계상 키)
@@ -373,19 +373,36 @@ src/                    # ES Modules
         formula-audit.js    # 종합 규정 점검 보고서 수집기 (FO-56, 유형별 게이트)
         formula-print.js    # 인쇄 빌더 (조제 기록지·라벨·안내문·종합 보고서)
         trainer-ingredients.js # 원료 배합 챌린지 (features.ingredients)
-  views/                # 뷰 컨트롤러 (45개)
+  views/                # 뷰 컨트롤러 (직속 23개 + 하위 4그룹 22개)
+    exam-sim/           # 모의고사 클러스터 (파사드·세션·아레나·드래프트·상태·리뷰·오답)
+      exam-simulator.js           # 실전 모의고사 파사드 — 분리 모듈 재수출 + 성적 이력 저장
+      exam-sim-session.js         # 모의고사 세션 수명주기 (시험 구성·시작·드래프트 복구·나가기)
+      exam-sim-arena.js           # 모의고사 아레나 (타이머·OMR·문항 렌더·응답·채점 제출)
+      exam-sim-draft.js           # 모의고사 임시 세션(드래프트) 저장·복구 배너
+      exam-sim-state.js           # 시뮬레이터 상태
+      exam-sim-review.js          # 시뮬레이터 결과 리뷰
+      exam-sim-weak.js            # 오답 모의고사 (exam-simulator.js에서 분리)
+    listeners/           # 이벤트 위임 클러스터 (앱·위임·사전·플래시카드·퀴즈·시뮬레이터)
+      listeners-app.js            # 앱 셸 공통 (진도 초기화·설정 메뉴·접이식)
+      listeners-delegation.js     # data-click/data-input 위임 (CSP 대응)
+      listeners-dictionary.js     # 성분 사전 검색 디바운스
+      listeners-flashcard.js      # 플래시카드 (플립·스와이프·단축키)
+      listeners-quiz.js           # 퀴즈·훈련소 (제출·숫자/OX 단축키)
+      listeners-simulator.js      # 모의고사 (OMR 이동·제출·단축키)
+    reader/           # 리더 뷰 컨트롤러 (오디오·로더·진행·참조링크·렌더·툴바)
+      reader-audio.js             # 오디오북 플레이어
+      reader-loader.js            # 이야기형 챕터 로딩 + LRU 캐시 (textbook-reader.js에서 분리)
+      reader-progress.js          # 리더 세션 상태 + 읽기 위치·진척 영속화 (textbook-reader.js에서 분리)
+      reader-ref-links.js         # 참조자료 링크 생성·프리뷰·클릭 위임 (textbook-reader.js에서 분리)
+      reader-render.js            # 챕터 본문 렌더 — TOC·섹션 카드·바인딩 (textbook-reader.js에서 분리)
+      reader-toolbar.js           # 교재 리더 툴바·독서 설정·스크롤 이벤트 (textbook-reader.js에서 분리)
+    quiz/           # 퀴즈 클러스터 (퀴즈·리뷰·오답원인)
+      quiz.js                     # 기출 퀴즈
+      quiz-review.js              # 오답 노트(복습) 목록·필터·약점 집중 퀴즈 (quiz.js에서 분리)
+      quiz-wrong-cause.js         # 오답 원인 태깅·재학습 액션 (quiz.js에서 분리)
     navigation.js       # 뷰 전환 유틸 (switchView)
     textbook-reader.js  # 교재 리더 오케스트레이터 (과목·챕터 선택·진입점)
-    reader-render.js    # 챕터 본문 렌더 — TOC·섹션 카드·바인딩 (textbook-reader.js에서 분리)
-    reader-loader.js    # 이야기형 챕터 로딩 + LRU 캐시 (textbook-reader.js에서 분리)
-    reader-progress.js  # 리더 세션 상태 + 읽기 위치·진척 영속화 (textbook-reader.js에서 분리)
-    reader-ref-links.js # 참조자료 링크 생성·프리뷰·클릭 위임 (textbook-reader.js에서 분리)
-    reader-toolbar.js   # 교재 리더 툴바·독서 설정·스크롤 이벤트 (textbook-reader.js에서 분리)
-    reader-audio.js     # 오디오북 플레이어
     textbook-search.js # 교재 검색 (역색인)
-    quiz.js             # 기출 퀴즈
-    quiz-wrong-cause.js # 오답 원인 태깅·재학습 액션 (quiz.js에서 분리)
-    quiz-review.js      # 오답 노트(복습) 목록·필터·약점 집중 퀴즈 (quiz.js에서 분리)
     flashcard.js        # 3D 플래시카드
     daily-challenge.js  # 데일리 챌린지
     dashboard.js        # 대시보드 뷰 (과목 카드·통계·히트맵)
@@ -399,24 +416,11 @@ src/                    # ES Modules
     trainer-drills.js   # O/X 드릴 + 드릴 공통 오케스트레이션
     trainer-drill-combo.js # 복수정답형(combo) 드릴 (trainer-drills.js에서 분리)
     pomodoro.js         # 뽀모도로 타이머
-    exam-simulator.js   # 실전 모의고사 파사드 — 분리 모듈 재수출 + 성적 이력 저장
-    exam-sim-session.js # 모의고사 세션 수명주기 (시험 구성·시작·드래프트 복구·나가기)
-    exam-sim-arena.js   # 모의고사 아레나 (타이머·OMR·문항 렌더·응답·채점 제출)
-    exam-sim-draft.js   # 모의고사 임시 세션(드래프트) 저장·복구 배너
-    exam-sim-state.js   # 시뮬레이터 상태
-    exam-sim-review.js  # 시뮬레이터 결과 리뷰
-    exam-sim-weak.js    # 오답 모의고사 (exam-simulator.js에서 분리)
     exam-select.js      # 시험 선택/전환 뷰
     dictionary.js       # 지식DB 사전 (스키마 드리븐 — manifest.knowledge → registry.knowledge)
     study-calendar.js    # 학습 캘린더/목표 뷰
     glossary-renderer.js # 용어집 렌더링
     event-listeners.js  # 이벤트 리스너 진입점 — 도메인 바인딩 합성 (listeners-*.js)
-    listeners-app.js    #   앱 셸 공통 (진도 초기화·설정 메뉴·접이식)
-    listeners-flashcard.js # 플래시카드 (플립·스와이프·단축키)
-    listeners-quiz.js   #   퀴즈·훈련소 (제출·숫자/OX 단축키)
-    listeners-simulator.js # 모의고사 (OMR 이동·제출·단축키)
-    listeners-dictionary.js # 성분 사전 검색 디바운스
-    listeners-delegation.js # data-click/data-input 위임 (CSP 대응)
     backup.js           # 백업/복원
     offline-detection.js # 오프라인 감지 (app.js에서 분리)
 css/                    # 스타일시트 모듈 (base.css, reader.css, app-responsive.css, reader-extras.css, reader-mermaid.css, trainer.css, exam.css, dashboard.css, study.css, study-calendar.css, print.css, ui-overlay.css, html-viewer.css, landing.css — @import 순서가 캐스케이드, style.css 참조. landing.css만 랜딩 전용 별도 링크로 @import 예외)

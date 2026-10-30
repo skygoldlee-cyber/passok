@@ -25,7 +25,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const T = require('../lib/trace_scan');
+const T = require('../lib/trace_scan.js');
 
 const OUT_FILE = path.join(T.ROOT, 'docs', 'dev', 'TRACE_MATRIX.md');
 const HASH_RE = /> 입력 해시: ([0-9a-f]+)/;

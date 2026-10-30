@@ -2,13 +2,13 @@
 // @spec D-07,Q-06,SC-04
 import { state, saveProgress, safeGetItem, safeSetItem } from '../state.js';
 import { safeTextWithBreaks, esc } from '../sanitize.js';
-import { DataLoader } from '../data-loader.js';
+import { DataLoader } from '../content/data-loader.js';
 import { checkShortAnswer } from './trainer.js';
 import { shuffle, todayKey } from '../utils.js';
 import { showToast, showConfirm, markChoiceButtons, showAnswerFeedback } from '../ui-utils.js';
 import { STORAGE_KEYS, dailyCompletedKey } from '../storage-keys.js';
-import { reportEvent } from '../usage-telemetry.js';
-import { getWeeklyGoalProgress } from '../study-tracker.js';
+import { reportEvent } from '../telemetry/usage-telemetry.js';
+import { getWeeklyGoalProgress } from '../study/study-tracker.js';
 import { hasFeature } from '../exam-context.js';
 
 /* =======================================================

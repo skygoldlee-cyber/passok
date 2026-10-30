@@ -16,7 +16,7 @@ vi.mock('../../../src/ui-utils.js', () => ({
 }));
 
 import { loadIndexHtml, el, resetStudyState } from '../helpers.js';
-import { DataLoader } from '../../../src/data-loader.js';
+import { DataLoader } from '../../../src/content/data-loader.js';
 import {
     renderDictionary, setDictFilter, dictState,
 } from '../../../src/views/dictionary.js';

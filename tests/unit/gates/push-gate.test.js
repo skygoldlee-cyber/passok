@@ -20,7 +20,7 @@ test('파일 분류 — docs·content·logic', () => {
     assert.equal(classifyFile('docs/dev/TRACE_MATRIX.md'), 'docs');
     assert.equal(classifyFile('content/exams/cosmetic/textbook/law.md'), 'content');
     assert.equal(classifyFile('data/exams/cosmetic/questions.js'), 'content');
-    assert.equal(classifyFile('src/app.js'), 'logic');
+    assert.equal(classifyFile('src/shell/app.js'), 'logic');
     assert.equal(classifyFile('tools/check/push_gate.js'), 'logic');
     assert.equal(classifyFile('tests/e2e/app.spec.js'), 'logic');
     assert.equal(classifyFile('sw.js'), 'logic');
@@ -30,7 +30,7 @@ test('파일 분류 — docs·content·logic', () => {
 
 test('파일 태그 — 경로 유형 분류, 미분류는 unknown', () => {
     assert.deepEqual(fileTags('docs/dev/SPEC.md'), ['docs']);
-    assert.deepEqual(fileTags('src/app.js'), ['src']);
+    assert.deepEqual(fileTags('src/shell/app.js'), ['src']);
     assert.deepEqual(fileTags('sw.js'), ['src']);
     assert.deepEqual(fileTags('tools/check/run.js'), ['tools']);
     assert.deepEqual(fileTags('tests/unit/x.test.js'), ['tests']);
@@ -62,7 +62,7 @@ test('docs+content 혼합 → 동일 태그 집합', () => {
 
 test('src 변경 → html·신선도 제외 전 단계', () => {
     // index.html 신선도는 html/·템플릿 변경에만, 파생물 신선도는 content/에만 의미가 있다
-    const ids = planSteps(['docs/dev/SPEC.md', 'src/app.js']).ids;
+    const ids = planSteps(['docs/dev/SPEC.md', 'src/shell/app.js']).ids;
     assert.deepEqual(ids, FULL.filter((id) => id !== 'html' && !FRESH.includes(id)));
     assert.ok(ids.includes('posind') && ids.includes('testfirst'));
 });
@@ -81,7 +81,7 @@ test('tools/tests 변경 → html·신선도 제외 로직 단계', () => {
 
 test('미분류 파일 → 전체 게이트 폴백', () => {
     assert.deepEqual(planSteps(['weird_file.xyz']).ids, FULL);
-    assert.deepEqual(planSteps(['src/app.js', 'weird_file.xyz']).ids, FULL);
+    assert.deepEqual(planSteps(['src/shell/app.js', 'weird_file.xyz']).ids, FULL);
 });
 
 test('diff 실패(null)·빈 목록도 안전한 계획', () => {

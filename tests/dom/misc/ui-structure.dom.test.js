@@ -24,7 +24,7 @@ vi.mock('../../../src/state.js', () => ({
     getSimResultsHistory: vi.fn(() => []),
     setDataWriteHook: vi.fn()
 }));
-vi.mock('../../../src/usage-stats.js', () => ({
+vi.mock('../../../src/telemetry/usage-stats.js', () => ({
     trackView: vi.fn(), trackAction: vi.fn(),
     showUsageStats: vi.fn(), getActionCount: vi.fn(() => 0)
 }));
@@ -43,7 +43,7 @@ const {
     getViewTitles, navigateToView, initViewHashRouting, VIEW_HASH_SLUGS
 } = await import('../../../src/router.js');
 const { switchView } = await import('../../../src/views/navigation.js');
-const { setupModalBackHandler, resetModalBackState } = await import('../../../src/modal-back.js');
+const { setupModalBackHandler, resetModalBackState } = await import('../../../src/shell/modal-back.js');
 
 const ctx = () => ({
     titlesMap: getViewTitles(null),

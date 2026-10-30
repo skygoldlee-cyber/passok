@@ -8,7 +8,7 @@
 import { esc } from '../../../sanitize.js';
 import { todayKey } from '../../../utils.js';
 import { showToast, showConfirm } from '../../../ui-utils.js';
-import { showStoreError, showUpgradeNotice } from '../../../pro-upgrade.js';
+import { showStoreError, showUpgradeNotice } from '../../../pro/pro-upgrade.js';
 import { showPanel, formulaSubNav } from './formula.js';
 import { findBatchesByMaterial } from '../batch-store.js';
 import { buildRecallListHtml, printHtml } from './formula-print.js';
@@ -19,7 +19,7 @@ import {
 } from '../material-ledger.js';
 import {
   parseCsv, csvToObjects, readCsvFile, toCsv, downloadCsv,
-} from '../../../csv-utils.js';
+} from '../../../content/csv-utils.js';
 
 const mat = { editingId: null };
 

@@ -6,7 +6,7 @@ import { describe, it, beforeEach, expect } from 'vitest';
 import {
     initShortcutHelp, openShortcutHelp, closeShortcutHelp, isShortcutHelpOpen,
     SHORTCUT_GROUPS,
-} from '../../../src/shortcuts-help.js';
+} from '../../../src/shell/shortcuts-help.js';
 
 function pressKey(key, target) {
     document.dispatchEvent(new KeyboardEvent('keydown', {

@@ -15,10 +15,10 @@
 
 'use strict';
 
-const { parseArgs, getTargets, listQbanks, writeDraft, loadEnv } = require('./lib/ai_common');
-const { parseQuestionBank, primaryCitation, resolveCitation } = require('./lib/qbank');
-const { readContext } = require('./lib/citations');
-const llm = require('./llm_client');
+const { parseArgs, getTargets, listQbanks, writeDraft, loadEnv } = require('./lib/ai_common.js');
+const { parseQuestionBank, primaryCitation, resolveCitation } = require('./lib/qbank.js');
+const { readContext } = require('./lib/citations.js');
+const llm = require('./llm_client.js');
 
 const SYSTEM = '당신은 자격시험 문제은행의 해설 작성 보조입니다. 제공된 정답과 근거 구절만을 근거로, 수험생이 이해하기 쉬운 1~3문장의 해설을 한국어로 작성하라. 근거에 없는 주장은 하지 말 것.';
 

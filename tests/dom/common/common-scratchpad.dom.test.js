@@ -24,7 +24,7 @@ describe('스크래치패드 — 캔버스 토글·그리기·지우기', () => 
     beforeEach(async () => {
         localStorage.clear();
         vi.resetModules();
-        mod = await import('../../../src/scratchpad.js');
+        mod = await import('../../../src/study/scratchpad.js');
         loadIndexHtml();
         ctx = stubCanvasCtx();
         vi.clearAllMocks();

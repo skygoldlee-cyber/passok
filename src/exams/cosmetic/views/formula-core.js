@@ -6,7 +6,7 @@
 // 상위 모듈 간 직접 import는 core → (hub|calc) → (list|io) 단방향을 유지한다.
 
 import { esc } from '../../../sanitize.js';
-import { DataLoader } from '../../../data-loader.js';
+import { DataLoader } from '../../../content/data-loader.js';
 import { resetMainScroll } from '../../../views/navigation.js';
 import { CHECK, buildIngredientIndex } from '../formula-check.js';
 import { annotateCustomItems } from '../custom-ingredient-store.js';

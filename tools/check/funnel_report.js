@@ -3,7 +3,7 @@
  * funnel_report.js — usage_events 과업 완주율 리포트 (PROJECT_METRICS §2.6 측정 경로)
  * @spec none (관측성 인프라)
  *
- * src/usage-telemetry.js가 수집한 usage_events 행을 Supabase PostgREST로 조회해
+ * src/telemetry/usage-telemetry.js가 수집한 usage_events 행을 Supabase PostgREST로 조회해
  * `<prefix>_start ↔ <prefix>_complete` 쌍의 완주율·이탈·평균 점수를 출력한다.
  *
  * 완주율은 두 가지로 표시:
@@ -16,7 +16,7 @@
  *   node tools/check/funnel_report.js --days 7
  */
 'use strict';
-const { loadEnv } = require('../lib/env');
+const { loadEnv } = require('../lib/env.js');
 const { restGetAll } = require('../lib/supabase_ops.js');
 
 // ── 순수 집계 (테스트 대상) ──────────────────────────────────

@@ -34,7 +34,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const T = require('../lib/trace_scan');
+const T = require('../lib/trace_scan.js');
 
 const ROOT = T.ROOT;
 

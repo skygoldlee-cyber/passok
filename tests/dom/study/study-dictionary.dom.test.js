@@ -16,12 +16,12 @@ vi.mock('../../../src/ui-utils.js', () => ({
 }));
 
 import { loadIndexHtml, el, resetStudyState, spyAnchorDownload, lastToast } from '../helpers.js';
-import { DataLoader } from '../../../src/data-loader.js';
+import { DataLoader } from '../../../src/content/data-loader.js';
 import {
     renderDictionary, filterDictionary, setDictFilter, clearDictSearch, dictState,
     dictExportCsv,
 } from '../../../src/views/dictionary.js';
-import { checkDictNoticeNow } from '../../../src/notice-check.js';
+import { checkDictNoticeNow } from '../../../src/shell/notice-check.js';
 import { showToast } from '../../../src/ui-utils.js';
 
 // cosmetic/manifest.json의 knowledge 스키마를 반영한 축소본

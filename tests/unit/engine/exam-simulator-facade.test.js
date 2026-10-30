@@ -11,7 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
-const SIM_FACADE = path.join(ROOT, 'src', 'views', 'exam-simulator.js');
+const SIM_FACADE = path.join(ROOT, 'src', 'views', 'exam-sim', 'exam-simulator.js');
 
 /** 모듈의 export 이름 수집 — `export { x } from './y'` 재수출 체인 추적 */
 function collectExports(absPath, seen = new Set()) {
@@ -48,9 +48,9 @@ function collectNamedImports(absPath) {
 }
 
 const CONSUMERS = [
-    path.join(ROOT, 'src', 'app.js'),
-    path.join(ROOT, 'src', 'views', 'listeners-simulator.js'),
-    path.join(ROOT, 'src', 'views', 'exam-sim-weak.js'),
+    path.join(ROOT, 'src', 'shell', 'app.js'),
+    path.join(ROOT, 'src', 'views', 'listeners', 'listeners-simulator.js'),
+    path.join(ROOT, 'src', 'views', 'exam-sim', 'exam-sim-weak.js'),
 ];
 
 test('exam-simulator 파사드 — 소비자가 import하는 이름 전부 export된다 (재수출 체인 추적)', () => {

@@ -314,7 +314,7 @@ async function auditExam(target, validateQuestion, deriveComboAnswer) {
 
 async function main() {
   const { validateQuestion, deriveComboAnswer } =
-    await import(pathToFileURL(path.join(ROOT, 'src', 'questions.js')).href);
+    await import(pathToFileURL(path.join(ROOT, 'src', 'content', 'questions.js')).href);
 
   for (const target of getExamTargets(ROOT)) {
     await auditExam(target, validateQuestion, deriveComboAnswer);

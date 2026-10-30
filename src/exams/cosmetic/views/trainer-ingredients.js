@@ -7,7 +7,7 @@ import { state } from '../../../state.js';
 import { esc, safeTextWithBreaks, stripTags } from '../../../sanitize.js';
 import { shuffle } from '../../../utils.js';
 import { showToast, vibrate, HAPTIC, markChoiceButtons, wrongReviewHtml, trainerResultHtml, showAnswerFeedback } from '../../../ui-utils.js';
-import { DataLoader } from '../../../data-loader.js';
+import { DataLoader } from '../../../content/data-loader.js';
 import { checkShortAnswer } from '../../../views/trainer.js';
 import { resetMainScroll } from '../../../views/navigation.js';
 

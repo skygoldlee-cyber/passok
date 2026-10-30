@@ -24,9 +24,9 @@
 |------|------|------|
 | `pro_codes` 테이블 + `redeem_code()` RPC | `tools/supabase/schema.sql` §3 | 1회용 코드 → `profiles.plan='pro'` 갱신 (security definer — 클라이언트 직접 접근 차단, RPC만) |
 | `admin:grant-pro` | `tools/check/grant_pro.js` | 수동 plan 부여·회수(`--revoke`) — 환불 처리 경로로 재사용 |
-| `feature-plan.json` + `pro_entitled` | `src/pro-upgrade.js`·`feature-plan` 게이트 | Free/Pro 기능 경계 (UX 게이팅 — ROAD-P0) |
-| `entry_source` | `src/feedback.js` | `?src=` 유입 채널 캡처 — 현재 feedback에만 첨부 |
-| `pro_badge_click`·`plan_compare` | `src/usage-stats.js` 액션 키 | 플랜 비교 진입 계측 (UX-MET-02) |
+| `feature-plan.json` + `pro_entitled` | `src/pro/pro-upgrade.js`·`feature-plan` 게이트 | Free/Pro 기능 경계 (UX 게이팅 — ROAD-P0) |
+| `entry_source` | `src/shell/feedback.js` | `?src=` 유입 채널 캡처 — 현재 feedback에만 첨부 |
+| `pro_badge_click`·`plan_compare` | `src/telemetry/usage-stats.js` 액션 키 | 플랜 비교 진입 계측 (UX-MET-02) |
 | 설정 토글·고지 패턴 | UX-MET-06 구현물 | 동의 UX 설계 선례 — 코드 입력 UI 배치 기준 |
 
 **갭**: ① 앱 내 코드 입력 UI 부재 (`redeem_code` RPC를 호출하는 경로가 없음) ② `pro_codes` 발급 도구 부재 ③ 결제 안내가 "준비 중" (`showUpgradeNotice`) ④ `entry_source`가 `usage_events`에 미탑재.
@@ -70,10 +70,10 @@
 
 | # | 항목 | 설계 | 영향 파일 |
 |---|------|------|-----------|
-| P-UI-1 | **라이선스 코드 입력** | 설정 메뉴 '플랜 안내 · 라이선스 코드' → 플랜 비교 모달의 '라이선스 코드 입력' 버튼 → 입력 다이얼로그 → `redeem_code()` RPC → 성공 시 `profiles.plan` 재조회 → `pro_entitled` 갱신 + 확인 토스트 · 비로그인 시 로그인 유도 | 신규 `src/pro-redeem.js` + `index.template.html` + `app.js` 핸들러 |
-| P-UI-2 | **결제 안내 모달** | `showUpgradeNotice`의 "Pro 플랜(준비 중)" → 실제 결제 안내로 교체: 결제 방법(계좌이체/토스 송금)·가격·환불 고지·문의 채널 링크. 게이트는 `PAYMENT_NOTICE.enabled` 설정 플래그로 제어 — 실험 전까지 표시 비활성 가능 *(구현: feature-plan 플래그 대신 모듈 상수 — plan 키 정합 게이트 오염 회피)* | `src/pro-upgrade.js` |
+| P-UI-1 | **라이선스 코드 입력** | 설정 메뉴 '플랜 안내 · 라이선스 코드' → 플랜 비교 모달의 '라이선스 코드 입력' 버튼 → 입력 다이얼로그 → `redeem_code()` RPC → 성공 시 `profiles.plan` 재조회 → `pro_entitled` 갱신 + 확인 토스트 · 비로그인 시 로그인 유도 | 신규 `src/pro/pro-redeem.js` + `index.template.html` + `app.js` 핸들러 |
+| P-UI-2 | **결제 안내 모달** | `showUpgradeNotice`의 "Pro 플랜(준비 중)" → 실제 결제 안내로 교체: 결제 방법(계좌이체/토스 송금)·가격·환불 고지·문의 채널 링크. 게이트는 `PAYMENT_NOTICE.enabled` 설정 플래그로 제어 — 실험 전까지 표시 비활성 가능 *(구현: feature-plan 플래그 대신 모듈 상수 — plan 키 정합 게이트 오염 회피)* | `src/pro/pro-upgrade.js` |
 | P-OPS-1 | **`admin:issue-code`** | 코드 생성 CLI — `--channel <name> --count N` → `pro_codes` insert (service role) + 생성 목록 출력(발급 대장 = 콘솔 캡처) | `tools/check/issue_pro_code.js` |
-| P-TEL-1 | **전환 텔레메트리** | 화이트리스트에 `plan_compare_view`·`payment_notice_view`·`payment_link_click`·`code_redeem_attempt`·`code_redeem_success` 추가 + `session_start.meta.entry_src` 탑재(`entry_source` 재사용) | `src/usage-telemetry.js`·`usage-stats.js`·`storage-keys.js` |
+| P-TEL-1 | **전환 텔레메트리** | 화이트리스트에 `plan_compare_view`·`payment_notice_view`·`payment_link_click`·`code_redeem_attempt`·`code_redeem_success` 추가 + `session_start.meta.entry_src` 탑재(`entry_source` 재사용) | `src/telemetry/usage-telemetry.js`·`usage-stats.js`·`storage-keys.js` |
 | P-SYNC-1 | **plan 동기화 확인** | 로그인/동기화 시 `profiles.plan` → `pro_entitled` 반영 경로 검증 — 현행은 로컬 플래그만 참조 (redeem 후 타 기기 반영 포함) | `src/auth-sync/sync.js` 검토 |
 
 ### 데이터 흐름 (entitlement)

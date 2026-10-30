@@ -19,7 +19,7 @@ import { dataPath, getCurrentExamId } from '../exam-context.js';
 import { showToast } from '../ui-utils.js';
 import { CACHE } from '../config/cache.js';
 import { attachImageZoomIn } from './image-zoom.js';
-import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay, scrollToHeadingSlug } from '../doc-overlay.js';
+import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay, scrollToHeadingSlug } from '../shell/doc-overlay.js';
 
 export const ManualViewer = (() => {
     // 지원하는 마크다운 소스 정의

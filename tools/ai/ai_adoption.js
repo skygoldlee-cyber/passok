@@ -19,7 +19,7 @@
 'use strict';
 
 const fs = require('fs');
-const { ADOPTION_LOG, parseArgs } = require('./lib/ai_common');
+const { ADOPTION_LOG, parseArgs } = require('./lib/ai_common.js');
 
 /** 로그 레코드 → 배치 단위 집계. 같은 초안 파일의 재생성(genDate 상이)은 별개 배치. */
 function summarize(records) {

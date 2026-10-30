@@ -30,7 +30,7 @@ flowchart TD
 | 초기 뷰 | 해시(`#/slug`) 딥링크 우선 → 없으면 모드별 랜딩 (UX-NAV-08) |
 | 시험 선택 분기 | `current_exam` 미설정 + 등록 시험 ≥2개 → exam-select-view 우선 (단일 시험 시 피커 생략, ES-01) |
 | 실무 모드 발화 조건 | `ui_mode=practice` **+ 현재 시험 `features.formula`** — formula 미보유 시험에서는 study로 강제 간주 (`isPracticeMode`, UM-01) |
-| 첫 방문 판정 | `quiz_results`/`fc_memorized`/`study_streak`/`sim_results_history` 중 하나라도 존재 → 재방문 (`src/onboarding.js`) |
+| 첫 방문 판정 | `quiz_results`/`fc_memorized`/`study_streak`/`sim_results_history` 중 하나라도 존재 → 재방문 (`src/shell/onboarding.js`) |
 | 온보딩 | 3단계 안내(문제집·모의고사·복습 루프) — 확인/ESC/백드롭 닫기, 설정 메뉴로 재열람 가능 |
 
 ## 2. 핵심 학습 루프

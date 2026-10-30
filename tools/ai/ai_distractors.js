@@ -15,9 +15,9 @@
 
 'use strict';
 
-const { parseArgs, getTargets, listQbanks, writeDraft, loadEnv } = require('./lib/ai_common');
-const { parseQuestionBank } = require('./lib/qbank');
-const llm = require('./llm_client');
+const { parseArgs, getTargets, listQbanks, writeDraft, loadEnv } = require('./lib/ai_common.js');
+const { parseQuestionBank } = require('./lib/qbank.js');
+const llm = require('./llm_client.js');
 
 const SYSTEM = '당신은 수험 문제은행의 정답 표기 다양성 보조입니다. 단답형 정답의 허용 표기 변형(약어·한자 병기·순서 바꿈·동의어)을 제안하라. 오답을 허용 정답으로 만들면 안 되므로 보수적으로 제안할 것.';
 

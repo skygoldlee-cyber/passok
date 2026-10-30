@@ -734,7 +734,7 @@ async function buildForExam(target) {
   // 스키마 검증·옵션 생성 (ESM 모듈을 CJS에서 동적 import — Windows 절대경로는 file:// URL 필요)
   const { pathToFileURL } = require('url');
   const { validateQuestion, deriveComboAnswer, generateComboOptions } =
-    await import(pathToFileURL(path.join(ROOT, 'src', 'questions.js')).href);
+    await import(pathToFileURL(path.join(ROOT, 'src', 'content', 'questions.js')).href);
 
   // 단답형 오답 선지 풀: 전체 번들을 먼저 로드해 과목별+전체 풀 구축
   const examDataMap = {};
@@ -808,7 +808,7 @@ async function buildForExam(target) {
         `// 원본: ${target.dataRoot}/exams/${file} — mode: fact(명제 조합) ${stats.fact}문 / answer(정답 조합) ${stats.answer}문\n` +
         `var COMBO_DRILLS_${key} = ` + JSON.stringify(valid, null, 1) + ';\n';
       fs.writeFileSync(path.join(OUT_DIR, `combo_${key}.js`), body, 'utf8');
-      // 뷰어용 문제집 문서는 src/combo-doc.js가 이 번들(COMBO_DRILLS_*)을 런타임 직렬화 —
+      // 뷰어용 문제집 문서는 src/content/combo-doc.js가 이 번들(COMBO_DRILLS_*)을 런타임 직렬화 —
       // 별도 과목N_복수정답형.md 산출물은 두지 않는다.
     }
 

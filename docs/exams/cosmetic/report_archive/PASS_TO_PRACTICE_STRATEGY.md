@@ -409,7 +409,7 @@ flowchart TD
 | `content/exams/cosmetic/참조자료/ref_md/` | 시험용 법령 원문 | 실무용 법령 참조 |
 | `src/views/dictionary.js` | 성분 검색 (시험용) | 성분 검색 (실무용) |
 | `src/views/trainer.js` | 배합 계산 연습 | 배합 계산 (실무) |
-| `src/trainer-calc.js` | 계산 문제 생성 | 실무 배합량 계산 |
+| `src/study/trainer-calc.js` | 계산 문제 생성 | 실무 배합량 계산 |
 
 ---
 

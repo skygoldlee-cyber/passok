@@ -26,12 +26,12 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { ROOT } = require('../lib/env');
-const { getExamTargets } = require('../build/exam_targets');
+const { ROOT } = require('../lib/env.js');
+const { getExamTargets } = require('../build/exam_targets.js');
 const {
     textNormKey, quantizeInt8, dequantizeNorm, dotVec, loadVarBundle,
     EMB_MODEL, EMB_MODEL_REVISION,
-} = require('../lib/emb_math');
+} = require('../lib/emb_math.js');
 
 const E5_DOC_PREFIX = 'passage: ';
 const TOP_K = 8;

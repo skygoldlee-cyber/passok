@@ -8,7 +8,7 @@ const { isTrigger, isTest, analyze, parseStatusLine } = checker;
 
 test('실행 로직 경로는 테스트 동반 트리거다', () => {
     for (const f of [
-        'src/app.js', 'src/views/quiz.js', 'src/router.js',
+        'src/shell/app.js', 'src/views/quiz/quiz.js', 'src/router.js',
         'ref-pipeline/pdf2md.py', 'ref-pipeline/convert.py',
     ]) {
         assert.ok(isTrigger(f), f);
@@ -46,14 +46,14 @@ test('테스트 경로는 인정된다', () => {
 });
 
 test('analyze: 로직만 변경 → 위반', () => {
-    const r = analyze(['src/app.js', 'docs/dev/CHANGES.md']);
+    const r = analyze(['src/shell/app.js', 'docs/dev/CHANGES.md']);
     assert.equal(r.violated, true);
-    assert.deepEqual(r.triggers, ['src/app.js']);
+    assert.deepEqual(r.triggers, ['src/shell/app.js']);
     assert.deepEqual(r.tests, []);
 });
 
 test('analyze: 로직 + 테스트 동반 → 통과', () => {
-    assert.equal(analyze(['src/app.js', 'tests/dom/app.dom.test.js']).violated, false);
+    assert.equal(analyze(['src/shell/app.js', 'tests/dom/app.dom.test.js']).violated, false);
     assert.equal(analyze(['ref-pipeline/pdf2md.py', 'ref-pipeline/tests/test_pdf2md.py']).violated, false);
 });
 
@@ -64,7 +64,7 @@ test('analyze: 문서만 변경 → 트리거 없음', () => {
 });
 
 test('parseStatusLine: porcelain 상태 열 처리', () => {
-    assert.equal(parseStatusLine(' M src/app.js'), 'src/app.js');
+    assert.equal(parseStatusLine(' M src/shell/app.js'), 'src/shell/app.js');
     assert.equal(parseStatusLine('?? tools/check/new.js'), 'tools/check/new.js');
     assert.equal(parseStatusLine('R  old.py -> ref-pipeline/new.py'), 'ref-pipeline/new.py');
 });

@@ -5,7 +5,7 @@
 // 모달은 런타임 DOM 생성 — 플랫폼 마크업을 건드리지 않고 어느 뷰에서도 띄울 수 있다.
 
 import { showToast, showConfirm } from '../../../ui-utils.js';
-import { DataLoader } from '../../../data-loader.js';
+import { DataLoader } from '../../../content/data-loader.js';
 import { getActiveExamId } from '../../../exam-context.js';
 import { renderDictionary } from '../../../views/dictionary.js';
 import { buildIngredientIndex } from '../formula-check.js';

@@ -91,7 +91,7 @@ Phase 0의 목표는 **추천 발언권을 대시보드 "오늘 할 일" 큐 하
 | 순서 | 작업 | 주요 파일 |
 |------|------|-----------|
 | 1 | `buildTodayQueue()` 순수 로직 + 큐 카드 렌더 | `src/views/dashboard-queue.js`(신규) · `src/views/dashboard.js` |
-| 2 | 기존 D-10·D-11 카드의 큐 흡수 + 타 뷰 중복 카피 정리 | `src/recommendations.js` · `src/views/analysis-view.js` · `src/views/study-calendar.js` |
+| 2 | 기존 D-10·D-11 카드의 큐 흡수 + 타 뷰 중복 카피 정리 | `src/study/recommendations.js` · `src/views/analysis-view.js` · `src/views/study-calendar.js` |
 | 3 | 라벨 정리 (진단/주간 배분/훈련소) | `src/views/navigation.js` · `index.template.html` · `content/exams/cosmetic/manifest.json`(uiText) · `content/exams/cosmetic/docs/학습안내서.md` |
 | 4 | 사이드바 그룹 라벨 + CSS | `index.template.html` · `css/components.css` |
 | 5 | 테스트 | `tests/unit/engine/today-queue.test.js` (큐 병합·우선순위·빈 상태 @spec TQ-01~05) · DOM 테스트 1건 |
@@ -202,7 +202,7 @@ Phase 1 목표: **"틀린 것·약한 것을 다시 보는" 활동은 복습 뷰
 |------|------|-----------|
 | 1 | `#trainer-weak-panel` 마크업 → `html/views/review.html`로 이동·개명, details 섹션화 | `html/views/review.html` · `html/views/trainer.html` |
 | 2 | `openWeakReview`/`gotoWeakReview`·`initTrainer`·해시 슬러그·레거시 리다이렉트 | `src/views/trainer-drills.js` · `src/views/trainer.js` · `src/views/navigation.js` |
-| 3 | 복습 헤더에 weak 드릴 버튼 + 배지 타깃 이동 | `html/views/review.html` · `src/views/quiz.js`(renderReviewList) · `src/views/trainer-drills.js` |
+| 3 | 복습 헤더에 weak 드릴 버튼 + 배지 타깃 이동 | `html/views/review.html` · `src/views/quiz/quiz.js`(renderReviewList) · `src/views/trainer-drills.js` |
 | 4 | 4개 뷰 목적 문구 | `html/views/quiz.html` · `exam.html` · `trainer.html` · `review.html` |
 | 5 | 테스트 — weak 블록 DOM 테스트 재배치 + 진입점·리다이렉트 케이스 (@spec RV-02~04, UX-NAV-13) | `tests/dom/study/study-review.dom.test.js` · `study-trainer*.dom.test.js` |
 | 6 | SPEC `RV-02~04`·`UX-NAV-13` 행 + SCREEN_MAP(복습 뷰 상태·취약 패널 행 갱신) + 사용자 매뉴얼 §복습/§훈련소 + `build:html`·`build:trace` | 문서·생성물 |
@@ -309,7 +309,7 @@ Phase 1 이후 메뉴 카드는 5장으로 정리됐으나, 성격이 다른 두
 | 순서 | 작업 | 주요 파일 |
 |------|------|-----------|
 | 1 | 훈련소 메뉴 2그룹 마크업 + 그룹 라벨 스타일 | `html/views/trainer.html` · `css/study.css` |
-| 2 | `proFeatureNotice` 전역 seen 수렴 + 배지 클릭 → `openPlanCompare` | `src/pro-upgrade.js` · `src/app.js`(data-click 등록) |
+| 2 | `proFeatureNotice` 전역 seen 수렴 + 배지 클릭 → `openPlanCompare` | `src/pro/pro-upgrade.js` · `src/shell/app.js`(data-click 등록) |
 | 3 | 테스트 — 메뉴 그룹 구조 DOM 단언 + notice 전역 seen·배지 클릭 단언 (@spec UX-NAV-14, ROAD-P5) | `tests/dom/study/study-trainer.dom.test.js` · 신규 `tests/dom/misc/pro-notice.dom.test.js` |
 | 4 | SPEC `UX-NAV-14`·`ROAD-P5` 행 + SCREEN_MAP + 사용자 매뉴얼 §훈련소 + CHANGES + `build:html`·`build:trace` | 문서·생성물 |
 
@@ -399,7 +399,7 @@ Phase 2의 목표는 **축소 결과가 아니라 "축소를 결정할 수 있�
 로컬 전용 계측의 구조적 한계: 데이터는 각 기기에만 있어 개발자가 볼 수 없다. 유일한 회수 경로로 내보내기를 둔다:
 
 - '내 사용 통계' 모달(`showUsageStats`) 하단에 **"통계 복사"** 버튼 추가 — `getUsageStats()` 결과 JSON을 `navigator.clipboard.writeText`로 복사, 실패 시 `<textarea>` 선택 폴백 (AN-09 주간 리포트 클립보드 폴백 패턴 재사용)
-- 파일럿·베타 사용자가 복사한 JSON을 피드백 채널로 전달하는 절차 — `src/feedback.js` 의견 제출 경로에 첨부 문구 안내로 연결 가능 (통계 자체를 서버로 보내지는 않음 — 개인정보 원칙 ROAD-L5 유지)
+- 파일럿·베타 사용자가 복사한 JSON을 피드백 채널로 전달하는 절차 — `src/shell/feedback.js` 의견 제출 경로에 첨부 문구 안내로 연결 가능 (통계 자체를 서버로 보내지는 않음 — 개인정보 원칙 ROAD-L5 유지)
 - 회수된 JSON들은 `tools/check/aggregate_usage.js`(신규)로 병합 — owner별 키 합산·뷰 분포·드릴 진입 비율을 출력하는 오프라인 집계기
 
 #### 3.4 계측 정합 규약 (UX-MET-04)
@@ -435,9 +435,9 @@ Phase 2의 목표는 **축소 결과가 아니라 "축소를 결정할 수 있�
 
 | 순서 | 작업 | 주요 파일 (구현 결과) |
 |------|------|-----------|
-| 1 | `ACTION_LABELS` 확장 + `actionLabel()` 접두사 폴백 + `initUsageMetrics()` 위임 리스너 — 큐·details toggle·메뉴 카드·배지를 단일 리스너로 통합 | `src/usage-stats.js` · `src/views/event-listeners.js` |
+| 1 | `ACTION_LABELS` 확장 + `actionLabel()` 접두사 폴백 + `initUsageMetrics()` 위임 리스너 — 큐·details toggle·메뉴 카드·배지를 단일 리스너로 통합 | `src/telemetry/usage-stats.js` · `src/views/event-listeners.js` |
 | 2 | 드릴 진입 계측 — `startDrill` 공통 경로(ox·combo 양쪽 커버) + `gotoOxDrill` 복습 발 | `src/views/trainer-drills.js` (`trainer-drill-combo.js` 변경 불필요 — combo도 `startDrill` 경유) |
-| 3 | 통계 복사 버튼 + 클립보드 폴백 | `src/usage-stats.js` |
+| 3 | 통계 복사 버튼 + 클립보드 폴백 | `src/telemetry/usage-stats.js` |
 | 4 | 회수 집계 도구 — owner 병합·액션/뷰 합계·UX-GATE 판정 입력 출력 | `tools/check/aggregate_usage.js` (신규) |
 | 5 | 테스트 — 신규 키 기록·details toggle·배지 계측·내보내기 단언 (@spec UX-MET-01~04) | `tests/unit/app/usage-metrics.test.js` (신규) · `tests/dom/misc/usage-stats.dom.test.js` · `tests/e2e/usage-metrics.spec.js` (신규) |
 | 6 | SPEC §7.6 상태 갱신 + TRACE_MATRIX 재생성 + CHANGES 기록 | 문서·생성물 |

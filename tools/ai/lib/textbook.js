@@ -11,7 +11,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { ROOT } = require('./ai_common');
+const { ROOT } = require('./ai_common.js');
 
 /** 시험 대상의 표준형 교재 목록 → [{subjectKey, subjectName, file, absPath}] */
 function listTextbooks(target) {

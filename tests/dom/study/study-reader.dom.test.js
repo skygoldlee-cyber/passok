@@ -23,7 +23,7 @@ import {
 import { renderTextbookReader, textbookReaderState, startReadingSession, stopReadingSession, openSubjectSection } from '../../../src/views/textbook-reader.js';
 import { safeGetItem, safeSetItem } from '../../../src/state.js';
 import { showAlert } from '../../../src/ui-utils.js';
-import { getTodayStr } from '../../../src/study-tracker.js';
+import { getTodayStr } from '../../../src/study/study-tracker.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 
 const SUBJ = {

@@ -22,7 +22,7 @@ vi.mock('../../../src/auth-sync/supabase-client.js', () => ({
 vi.mock('../../../src/auth-sync/auth-view.js', () => ({
     openAuthModal: mockOpenAuthModal,
 }));
-vi.mock('../../../src/usage-telemetry.js', () => ({
+vi.mock('../../../src/telemetry/usage-telemetry.js', () => ({
     reportEvent: mockReportEvent,
 }));
 vi.mock('../../../src/ui-utils.js', () => ({
@@ -31,8 +31,8 @@ vi.mock('../../../src/ui-utils.js', () => ({
 }));
 
 import { showToast } from '../../../src/ui-utils.js';
-import { showRedeemDialog, syncPlanFromProfile, normalizeCode } from '../../../src/pro-redeem.js';
-import { showUpgradeNotice } from '../../../src/pro-upgrade.js';
+import { showRedeemDialog, syncPlanFromProfile, normalizeCode } from '../../../src/pro/pro-redeem.js';
+import { showUpgradeNotice } from '../../../src/pro/pro-upgrade.js';
 import { safeGetItem, safeSetItem } from '../../../src/state.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 

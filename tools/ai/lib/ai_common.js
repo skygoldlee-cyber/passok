@@ -14,8 +14,8 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { getExamTargets } = require('../../build/exam_targets');
-const { loadEnv } = require('../../lib/env');
+const { getExamTargets } = require('../../build/exam_targets.js');
+const { loadEnv } = require('../../lib/env.js');
 
 const ROOT = path.resolve(__dirname, '..', '..', '..');
 const DRAFT_DIR = path.join(ROOT, 'tmp', 'ai_drafts');

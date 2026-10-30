@@ -2,8 +2,8 @@
 // @spec T-01,T-05
 import { state, safeGetItem, safeSetItem } from '../state.js';
 import { esc, safeTextWithBreaks, stripTags } from '../sanitize.js';
-import { buildCalcQuestion } from '../trainer-calc.js';
-import { clearScratchpad } from '../scratchpad.js';
+import { buildCalcQuestion } from '../study/trainer-calc.js';
+import { clearScratchpad } from '../study/scratchpad.js';
 import { showToast, vibrate, HAPTIC, showAnswerFeedback } from '../ui-utils.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
 import { localDateTimeNow, fmtLocalDateTime } from '../utils.js';

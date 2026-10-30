@@ -1,20 +1,20 @@
 // src/views/study-calendar.js — 학습 캘린더/목표 뷰
 // @spec SC-01,SC-02,SC-05,SC-06,SC-07,SC-08,SC-09,SC-16,D-17
-import { getStudyCalendar, getStudyGoals, setStudyGoals, getTodayGoalProgress, getWeeklyGoalProgress, getMonthlyStudyDays, getTodayStr, getExamDate, setExamDate, getDDay, getExamLeadStatus, computeStudyPlan, computePlanAdherence, checkStudyMilestones, computeSubjectAllocation, computeSubjectAllocInputs, sumRecentCardsBySubject, sumRecentQuizzesBySubject, tierStudyHint } from '../study-tracker.js';
+import { getStudyCalendar, getStudyGoals, setStudyGoals, getTodayGoalProgress, getWeeklyGoalProgress, getMonthlyStudyDays, getTodayStr, getExamDate, setExamDate, getDDay, getExamLeadStatus, computeStudyPlan, computePlanAdherence, checkStudyMilestones, computeSubjectAllocation, computeSubjectAllocInputs, sumRecentCardsBySubject, sumRecentQuizzesBySubject, tierStudyHint } from '../study/study-tracker.js';
 import { getMinExamLeadDays } from '../exam-context.js';
-import { computeSubjectWeakChapters } from '../analysis-engine.js';
-import { getAllStatementStats } from '../statement-tracker.js';
-import { proFeatureNotice, refreshProBadges } from '../pro-upgrade.js';
-import { trackAction } from '../usage-stats.js';
+import { computeSubjectWeakChapters } from '../study/analysis-engine.js';
+import { getAllStatementStats } from '../study/statement-tracker.js';
+import { proFeatureNotice, refreshProBadges } from '../pro/pro-upgrade.js';
+import { trackAction } from '../telemetry/usage-stats.js';
 import { localDateKey } from '../utils.js';
 import { showToast } from '../ui-utils.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
 import { safeGetItem, state } from '../state.js';
-import { DataLoader } from '../data-loader.js';
+import { DataLoader } from '../content/data-loader.js';
 import { switchView } from './navigation.js';
 import { esc, raw } from '../sanitize.js';
-import { resolveWrongQuiz } from '../weak-items.js';
-import { getDueCards, getReviewLog } from '../spaced-repetition.js';
+import { resolveWrongQuiz } from '../study/weak-items.js';
+import { getDueCards, getReviewLog } from '../study/spaced-repetition.js';
 import { personalKtParams } from './personalization-view.js';
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];

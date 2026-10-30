@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import { safeSetItem } from '../../../src/state.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 
-const TRACKER = '../../../src/study-tracker.js';
+const TRACKER = '../../../src/study/study-tracker.js';
 
 function createMockStorage() {
   const store = {};

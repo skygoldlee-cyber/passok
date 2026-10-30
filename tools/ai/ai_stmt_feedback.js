@@ -26,9 +26,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const { parseArgs, getTargets, writeDraft, loadEnv, DRAFT_DIR, ROOT } = require('./lib/ai_common');
-const { loadJsBundle } = require('./lib/similarity');
-const llm = require('./llm_client');
+const { parseArgs, getTargets, writeDraft, loadEnv, DRAFT_DIR, ROOT } = require('./lib/ai_common.js');
+const { loadJsBundle } = require('./lib/similarity.js');
+const llm = require('./llm_client.js');
 
 const SYSTEM = '당신은 자격시험 문제은행의 진술 피드백 작성 보조입니다. 제공된 모문항의 정답·해설만을 근거로, 해당 진술이 왜 참/거짓인지를 수험생이 이해하기 쉬운 1~2문장으로 한국어로 작성하라. 거짓 진술이면 어떤 혼동(수치 바꿈·주체 바꿈·극성 반전)을 노린 함정인지 짚어라. 근거에 없는 주장은 하지 말 것.';
 

@@ -19,10 +19,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const { parseArgs, getTargets, DRAFT_DIR, ROOT, listDraftFiles } = require('./lib/ai_common');
-const { parseQuestionBank, questionText } = require('./lib/qbank');
-const { listQbanks } = require('./lib/ai_common');
-const { loadJsBundle, lexSim } = require('./lib/similarity');
+const { parseArgs, getTargets, DRAFT_DIR, ROOT, listDraftFiles } = require('./lib/ai_common.js');
+const { parseQuestionBank, questionText } = require('./lib/qbank.js');
+const { listQbanks } = require('./lib/ai_common.js');
+const { loadJsBundle, lexSim } = require('./lib/similarity.js');
 
 const DEFAULT_THRESHOLD = 0.55; // bigram Jaccard — 어휘 겹침 기준 보수적 상한
 

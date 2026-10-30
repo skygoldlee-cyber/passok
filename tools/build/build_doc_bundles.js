@@ -31,7 +31,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { getExamTargets } = require('./exam_targets');
+const { getExamTargets } = require('./exam_targets.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 

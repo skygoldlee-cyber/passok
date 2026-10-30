@@ -4,7 +4,7 @@
 // 데이터 구조가 변경되어도 이 파일만 수정하면 됩니다.
 import { getGlossaryIndex } from '../keyword-index.js';
 import { getRefTables } from '../pdf-registry.js';
-import { DataLoader } from '../data-loader.js';
+import { DataLoader } from '../content/data-loader.js';
 
 /**
  * 특정 참조문서 파일명에 해당하는 용어집 항목들을 반환합니다.

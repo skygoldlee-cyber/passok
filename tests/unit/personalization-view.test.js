@@ -10,7 +10,7 @@ import {
     personalKtParams, weakClusters, resolveCidChapter, suggestWrongCauseKey,
     recordDiagnosticP0
 } from '../../src/views/personalization-view.js';
-import { setPersonalDecay, currentDecayW20 } from '../../src/fsrs.js';
+import { setPersonalDecay, currentDecayW20 } from '../../src/study/fsrs.js';
 
 // ── PS-08 원인 자동 추정 → 분류표 키 매핑 ────────────────────────
 test('PS-08: 즉답 오답은 실수(calc), 장고·망설임은 개념(concept)으로 제안', () => {

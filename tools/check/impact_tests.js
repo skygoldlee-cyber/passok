@@ -16,7 +16,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync, spawnSync } = require('child_process');
-const T = require('../lib/trace_scan');
+const T = require('../lib/trace_scan.js');
 
 const REF_RE = /^(?!-)[A-Za-z0-9][A-Za-z0-9._~/-]*$/; // git ref 형식 — 플래그·셸 인젝션 차단 (^는 cmd 이스케이프 충돌로 제외, HEAD~N 지원)
 

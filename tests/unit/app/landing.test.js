@@ -4,7 +4,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { computePlanPreview, subjectShares, daysUntil } from '../../../src/landing.js';
+import { computePlanPreview, subjectShares, daysUntil } from '../../../src/shell/landing.js';
 
 test('LP-09: daysUntil — 자정 기준 잔여 일수', () => {
     const now = new Date(2026, 9, 25, 15, 30); // 2026-10-25 15:30

@@ -7,8 +7,8 @@ import assert from 'node:assert/strict';
 import {
     Rating, initDifficulty, initStability, retrievability, nextInterval,
     nextDifficulty, recallStability, forgetStability, sameDayStability, fsrsReview, migrateSm2Record
-} from '../../../src/fsrs.js';
-import { updateCardSchedule, getDueCards, getDueCount, getReviewLog, getExamRiskCards } from '../../../src/spaced-repetition.js';
+} from '../../../src/study/fsrs.js';
+import { updateCardSchedule, getDueCards, getDueCount, getReviewLog, getExamRiskCards } from '../../../src/study/spaced-repetition.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 import { todayKey } from '../../../src/utils.js';
 
@@ -435,7 +435,7 @@ test('D-20: 클램프된 카드는 D-19 위험 집합에서 제외된다 (due≤
 // ---------- D-22 선행: 퀴즈 판정 시퀀스 로그 ----------
 
 test('D-22: recordQuizJudgment가 {c,k:q,ok,t} 레코드를 로그에 append한다', async () => {
-    const { recordQuizJudgment } = await import('../../../src/spaced-repetition.js');
+    const { recordQuizJudgment } = await import('../../../src/study/spaced-repetition.js');
     recordQuizJudgment('subject1_q21', true);
     recordQuizJudgment('subject2_q5', false);
     updateCardSchedule('card_x', true);  // 스케줄 이벤트와 혼합
@@ -448,7 +448,7 @@ test('D-22: recordQuizJudgment가 {c,k:q,ok,t} 레코드를 로그에 append한�
 });
 
 test('D-22: 퀴즈·스케줄 레코드가 단일 시계열 링버퍼를 공유한다', async () => {
-    const { recordQuizJudgment } = await import('../../../src/spaced-repetition.js');
+    const { recordQuizJudgment } = await import('../../../src/study/spaced-repetition.js');
     const logKey = 'simexam:' + STORAGE_KEYS.FC_REVIEW_LOG;
     const seed = Array.from({ length: 2000 }, (_, i) => ({ c: `old_${i}`, r: 3, e: 0, t: i }));
     mockStorage._store[logKey] = JSON.stringify(seed);

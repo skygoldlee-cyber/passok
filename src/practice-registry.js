@@ -69,7 +69,7 @@ const formula = {
         adverse: _domainImport('views/formula-adverse.js'),
         sales: _domainImport('views/formula-sales.js'),
         products: _domainImport('views/formula-products.js'),
-        notice: _lazyImport(() => import('./notice-check.js')),
+        notice: _lazyImport(() => import('./shell/notice-check.js')),
     },
     // [loaderKey, data-click 핸들러명 목록] — app.js 위임 디스패치에 브리지된다
     /** @type {Array<[string, string[]]>} */
@@ -142,7 +142,7 @@ const formula = {
     async enter(gen) {
         const [{ DataLoader }, { checkMfdsNotice }, { showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([
-                import('./data-loader.js'),
+                import('./content/data-loader.js'),
                 formula.loaders.notice(),
                 import('./ui-utils.js'),
                 import('./views/navigation.js'),

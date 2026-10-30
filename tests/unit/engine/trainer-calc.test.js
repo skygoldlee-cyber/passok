@@ -1,7 +1,7 @@
 // @spec T-01
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildCalcQuestion } from '../../../src/trainer-calc.js';
+import { buildCalcQuestion } from '../../../src/study/trainer-calc.js';
 
 // buildCalcQuestion은 Math.random 기반이므로, 여러 번 호출하여
 // 반환 구조와 정답 계산 로직을 검증한다.

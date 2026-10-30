@@ -62,7 +62,7 @@ AI 학습 경로 추천 ──────── ❌ 10%   (과목 추천만, "�
 | 오답 분석 | 30% | ⚠️ 부분 | 오답 수집만, 원인 진단 없음 | 원인 3종 분류 0/3 + 재학습 연결 0/3 = 0/6 |
 | 취약 개념 발견 | 40% | ⚠️ 부분 | 과목 단위만, 개념 단위 아님 | 과목 단위 분석 1/2 + 개념 단위 0/2 = 1/4 |
 | AI 학습 경로 추천 | 10% | ❌ 미구현 | 과목 추천만, "왜" 없음 | 이유 설명 0/1 + SM-2 통합 0/1 + 다단계 0/1 + 미학습 감지 0/1 = 0/4 |
-| 반복 복습 (SM-2) | 100% | ✅ 완전 | `src/spaced-repetition.js` | SM-2 알고리즘 + getDueCards ✓ |
+| 반복 복습 (SM-2) | 100% | ✅ 완전 | `src/study/spaced-repetition.js` | SM-2 알고리즘 + getDueCards ✓ |
 | 모의고사 | 100% | ✅ 완전 | `src/views/exam-simulator.js` (36KB) | 통합 100제 + 과락 판정 ✓ |
 | 합격 예측 | 80% | ✅ 달성 (확률 모델은 향후) | 3단계 판정 완성, 종합 지표 미반영 | 3단계 판정 1/1 + 종합 지표 0/1 + 추천 연결 0/1 = 1/3 |
 | 시험 직전 집중 학습 | 0% | ❌ 미구현 | D-Day, 학습 목표 없음 | D-Day 0/1 + 목표 0/1 + 요약 노트 0/1 = 0/3 |
@@ -205,7 +205,7 @@ state.weakCards.add(fakeCardId);
 
 ### 2.6 반복 복습 (SM-2): ✅ 완전 구현 (100%)
 
-**구현 파일**: `src/spaced-repetition.js` (150 lines)
+**구현 파일**: `src/study/spaced-repetition.js` (150 lines)
 
 SM-2 알고리즘이 완전히 구현되어 있습니다:
 
@@ -214,7 +214,7 @@ SM-2 알고리즘이 완전히 구현되어 있습니다:
 - `getDueCards()`: 오늘 복습 대기 카드 목록 반환
 - `getDueCount()`: 대시보드에 표시되는 복습 대기 수
 
-> 참조: `src/spaced-repetition.js` lines 20-40 (sm2), lines 58-84 (updateCardSchedule), lines 90-94 (getDueCards)
+> 참조: `src/study/spaced-repetition.js` lines 20-40 (sm2), lines 58-84 (updateCardSchedule), lines 90-94 (getDueCards)
 
 **연결 상태**: 대시보드에 `getDueCount()`가 표시되지만, **AI 추천 로직에 통합되어 있지 않습니다**.
 

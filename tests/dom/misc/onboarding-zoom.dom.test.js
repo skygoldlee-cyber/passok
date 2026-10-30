@@ -24,7 +24,7 @@ vi.mock('../../../src/state.js', () => ({
     safeSetItem: (k, v) => localStorage.setItem(k, v),
 }));
 
-import { showOnboardingModal, maybeShowOnboarding } from '../../../src/onboarding.js';
+import { showOnboardingModal, maybeShowOnboarding } from '../../../src/shell/onboarding.js';
 import { openImageZoom, closeImageZoom, attachImageZoomIn } from '../../../src/reader/image-zoom.js';
 
 beforeEach(() => {

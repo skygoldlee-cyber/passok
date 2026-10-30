@@ -101,7 +101,7 @@
 
 ## 10. 테마·시각 규약 (TH-01~06)
 
-- FOUC 방지: 페인트 전 `src/theme-init.js`가 `<html>` 클래스·`theme-color`를 적용 — 인라인 스크립트 금지(CSP), 외부 파일 선로드.
+- FOUC 방지: 페인트 전 `src/shell/theme-init.js`가 `<html>` 클래스·`theme-color`를 적용 — 인라인 스크립트 금지(CSP), 외부 파일 선로드.
 - 테마 결정 우선순위: `localStorage` > `prefers-color-scheme` > 다크. 수동 선택 후 시스템 추종 중단 (TH-03).
 - 신규 컴포넌트는 디자인 토큰(`--color-*`·`--bg-*`)만 사용 — 하드코딩 색 금지, 라이트 오버라이드는 `.light-theme` 하위.
 - 테마 전환은 헤더 단일 버튼 (§4 정본) — `themechange` 이벤트로 전 모듈 동기화.

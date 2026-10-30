@@ -334,7 +334,7 @@ describe('검색 소스 확장 — 미매핑 kind 폴백 티어 (TS-18)', () => 
     });
 
     it('RESULT_TIERS에 없는 kind도 기타 티어 카드로 렌더된다', async () => {
-        const { registerSearchSource } = await import('../../../src/search-index.js');
+        const { registerSearchSource } = await import('../../../src/search/search-index.js');
         registerSearchSource({
             id: 'test-xdoc', kind: 'xdoc',
             load: () => [{

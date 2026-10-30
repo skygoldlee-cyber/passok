@@ -21,7 +21,7 @@
 
 ## 결정 (Decision)
 
-`src/exam-data-boot.js` 클래식 부트 스크립트를 두고, 문서 파싱 중(`readyState === 'loading'`)
+`src/shell/exam-data-boot.js` 클래식 부트 스크립트를 두고, 문서 파싱 중(`readyState === 'loading'`)
 활성 시험을 해석해 `document.write`로 `{dataRoot}/id_migration.js`·`registry.js`를 동기 삽입한다.
 
 ## 대안 (Alternatives considered)

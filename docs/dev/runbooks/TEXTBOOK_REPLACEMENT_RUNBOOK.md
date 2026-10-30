@@ -416,7 +416,7 @@ npm.cmd run build:keyword-index   # src/keyword-index.js 재생성 (build:data�
 | 새 뷰·기능 추가 (교재 포맷이 아닌 기능) | 해당 view + `manifest.uiText` + `router.js` 폴백 |
 | 마크다운에 새 문법 도입 | `src/reader/markdown-parser.js`·`textbook-parser.js` + `check:parser` 통과 확인 |
 | 시험 추가 | `content/exams.json` 엔트리 + `features` 플래그 (AGENTS.md "새 시험 추가 절차") |
-| 교재 **구조** 변경 (chapters→sections 계약 변경 — 내용 교체가 아님) | `src/search-sources.js`의 `collectTextbookSections()` 하나만 — 검색 코어(`search-index.js`)는 콘텐츠 종류를 모르므로 무수정 (TS-18) |
+| 교재 **구조** 변경 (chapters→sections 계약 변경 — 내용 교체가 아님) | `src/search/search-sources.js`의 `collectTextbookSections()` 하나만 — 검색 코어(`search-index.js`)는 콘텐츠 종류를 모르므로 무수정 (TS-18) |
 
 > 통합검색 인덱스는 번들에서 **런타임에 재구축**된다 — 교재 교체 시 검색용 별도 빌드·재생성은 없다. 서사·참조자료·문제은행·`searchDocs` 문서는 첫 검색 시 지연 로드된다.
 

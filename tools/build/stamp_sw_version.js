@@ -18,7 +18,7 @@
  *   git 을 못 쓰는 환경(비-git/CI 캐시아웃 등)에서는 해시 대신
  *   타임스탬프(HHmmss)로 대체해 항상 고유성을 보장한다.
  *
- * 표시용 변환은 src/app-version.js 의 formatAppVersion()이 담당한다 —
+ * 표시용 변환은 src/shell/app-version.js 의 formatAppVersion()이 담당한다 —
  * 이 파일의 문자열은 캐시 키·버전 비교에 쓰이는 기계 ID다.
  *
  * 왜 이렇게?

@@ -117,7 +117,7 @@
 
 > **무료 티어 게이팅 주의**: 위 "제1과목만" 제한은 클라이언트에서만 거르면 우회된다. 무료 대상이 아닌 과목의 `content/*.md`는 **인증 없이는 서버에서 서빙되지 않아야** 한다 (§5).
 
-> **현재 구현 상태 (결제 인프라 도입 전)**: Pro 예정 기능에는 앱 내 "PRO" 배지 + 진입 시 1회 안내 모달(`src/pro-upgrade.js`의 `proFeatureNotice`)만 표시하고 접근은 차단하지 않는다 — 무료 회수 반발 없이 유료 경계를 사전 인지시키는 단계. 대상: `feature-plan.json`에서 `pro`로 표기된 기능(현재 `story_textbook` 이야기형 교재·`personal_analysis` 맞춤학습·`audiobook` 오디오북·`cloud_sync` 클라우드 동기화·`study_plan_pro` 스마트학습·과목별 가중 배분 계획(SC-08)) + Formula OS 저장 한도(포뮬러 5·고객 20·배치 50·원료 30) 도달 시 업그레이드 안내 모달(`showUpgradeNotice`). `audiobook`은 리더 오디오 버튼 배지 + 최초 재생 시 안내로 표기되며 시험별 `features.audiobook` 보유 시에만 노출된다.
+> **현재 구현 상태 (결제 인프라 도입 전)**: Pro 예정 기능에는 앱 내 "PRO" 배지 + 진입 시 1회 안내 모달(`src/pro/pro-upgrade.js`의 `proFeatureNotice`)만 표시하고 접근은 차단하지 않는다 — 무료 회수 반발 없이 유료 경계를 사전 인지시키는 단계. 대상: `feature-plan.json`에서 `pro`로 표기된 기능(현재 `story_textbook` 이야기형 교재·`personal_analysis` 맞춤학습·`audiobook` 오디오북·`cloud_sync` 클라우드 동기화·`study_plan_pro` 스마트학습·과목별 가중 배분 계획(SC-08)) + Formula OS 저장 한도(포뮬러 5·고객 20·배치 50·원료 30) 도달 시 업그레이드 안내 모달(`showUpgradeNotice`). `audiobook`은 리더 오디오 버튼 배지 + 최초 재생 시 안내로 표기되며 시험별 `features.audiobook` 보유 시에만 노출된다.
 >
 > **무료/Pro 전환 설정**: 루트 `feature-plan.json`의 `features` 맵에서 기능별 `"pro"`/`"free"`를 선택한다. `pro` = PRO 배지 + 진입 안내, `free` = 배지·안내 제거(완전 무료). 키: `mock_exam`(실전·집중 모의고사), `combo_mock`(복수정답형 모의고사), `combo_set`(복수정답형 문제집), `combo_drill`(복수정답형 훈련), `story_textbook`(이야기형 교재), `personal_analysis`(맞춤학습 뷰), `cloud_sync`(클라우드 동기화), `audiobook`(오디오북 — 시험별 `features.audiobook` 보유 시에만 노출), `study_plan_pro`(스마트학습 — 과목별 가중 배분 계획, SC-08, [`STUDY_PLAN_PRO_DESIGN.md`](STUDY_PLAN_PRO_DESIGN.md)). 배지는 `data-pro-feature` 속성으로 연결.
 
@@ -484,7 +484,7 @@ flowchart LR
 
 | # | 기능 | 상태 | 구현 내용 |
 |---|---|---|---|
-| B1 | 개인 학습 데이터 기반 우선순위 추천 ("오늘의 합격 전략") | ✅ 구현 (`5e3954a`) | `src/recommendations.js` — SM-2 대기 → 과락 → 정답률 최저 → 헷갈린 카드 → 미학습 우선순위 + 이유 표시 + 즉시 실행 버튼 (대시보드 연동). **규칙 기반 추천 — "AI" 표기 금지** (데이터 축적 후 보정 시 2단계) |
+| B1 | 개인 학습 데이터 기반 우선순위 추천 ("오늘의 합격 전략") | ✅ 구현 (`5e3954a`) | `src/study/recommendations.js` — SM-2 대기 → 과락 → 정답률 최저 → 헷갈린 카드 → 미학습 우선순위 + 이유 표시 + 즉시 실행 버튼 (대시보드 연동). **규칙 기반 추천 — "AI" 표기 금지** (데이터 축적 후 보정 시 2단계) |
 | B2 | 진단 평가 | ✅ 구현 (`5e3954a`) | 퀴즈 뷰 "진단 평가" — 전 과목 균등 샘플링 → 과목별 약점 프로파일. 오답은 weakCards/원인 태깅으로 자동 연결 |
 | B3 | 학습 목표 / D-Day | ✅ 구현 (`5e3954a`) | 시험일 설정·D-day 카드(대시보드)·역산 일일 권장량·캘린더 D-day 칩 — 목표 설정 모달에 시험일 입력 통합 |
 | B4 | 오답 패턴 분석 | ✅ 구현 (`5e3954a`) | `computeWrongCauseSummary` — 최근 7일 원인 분포·최다 원인/과목·권장 학습법 (복습 노트 상단 표시) |
@@ -494,7 +494,7 @@ flowchart LR
 | # | 기능 | 비고 |
 |---|---|---|
 | C1 | 합격 예측 점수 | 🟡 부분 구현 | 정직한 범위로 구현: `estimateExpectedScore`(최근 5회 평균 ±1σ + 선형회귀 추세) + `actual_exam_result` 자가 보고(합격/불합격·점수, D-day 경과 시 진단 카드에 입력 폼). 보정된 합격 "확률"은 실제 결과 데이터 축적 후 2단계 — 현재 표기는 "예상 점수"로 한정 |
-| C2 | 통합 검색 (Ctrl+K 팔레트) | ✅ 구현 — ★★ 유료 근거로는 약함 | `src/command-palette.js` — 뷰/교재 섹션/카드/퀴즈/성분(초성)/문제집 통합 검색 + 본문검색 브리지 + 키보드 내비. UX 강화이지만 지불 동기로는 보조 (리뷰 평가 반영) |
+| C2 | 통합 검색 (Ctrl+K 팔레트) | ✅ 구현 — ★★ 유료 근거로는 약함 | `src/shell/command-palette.js` — 뷰/교재 섹션/카드/퀴즈/성분(초성)/문제집 통합 검색 + 본문검색 브리지 + 키보드 내비. UX 강화이지만 지불 동기로는 보조 (리뷰 평가 반영) |
 | C3 | 출제 패턴 분석·코칭 리포트·지식 맵·요약 노트 | FEATURE_PROPOSALS Phase 2 |
 
 ### 기능 검증 상태 (개발 ≠ 사업 검증)

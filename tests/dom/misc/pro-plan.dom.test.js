@@ -16,7 +16,7 @@ vi.mock('../../../src/ui-utils.js', () => ({
 }));
 
 import { loadIndexHtml } from '../helpers.js';
-import { loadFeaturePlan, showPlanCompare, showUpgradeNotice, proFeatureNotice, canCloudSync, hasProEntitlement } from '../../../src/pro-upgrade.js';
+import { loadFeaturePlan, showPlanCompare, showUpgradeNotice, proFeatureNotice, canCloudSync, hasProEntitlement } from '../../../src/pro/pro-upgrade.js';
 
 function stubPlan(features) {
     vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({
@@ -38,7 +38,7 @@ beforeEach(async () => {
         features: { formula: true },
     }] };
     // 한도 행의 엔티티 라벨은 manifest uiText.planLimits 소유 — 미선언 시험은 행 생략
-    const { DataLoader } = await import('../../../src/data-loader.js');
+    const { DataLoader } = await import('../../../src/content/data-loader.js');
     DataLoader.registry = {
         uiText: {
             planLimits: {

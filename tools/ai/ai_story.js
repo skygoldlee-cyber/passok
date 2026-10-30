@@ -19,9 +19,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const { parseArgs, getTargets, writeDraft, loadEnv, DRAFT_DIR } = require('./lib/ai_common');
-const { listTextbooks } = require('./lib/textbook');
-const llm = require('./llm_client');
+const { parseArgs, getTargets, writeDraft, loadEnv, DRAFT_DIR } = require('./lib/ai_common.js');
+const { listTextbooks } = require('./lib/textbook.js');
+const llm = require('./llm_client.js');
 
 const SYSTEM = '당신은 자격시험 이야기형 학습교재의 서사 작성 보조입니다. 제공된 본문 내용만을 소재로, 기존 서사와 같은 등장인물·문체로 상황극을 한국어로 작성하라. 본문에 없는 사실·수치·법령 내용을 만들어 내지 말 것.';
 

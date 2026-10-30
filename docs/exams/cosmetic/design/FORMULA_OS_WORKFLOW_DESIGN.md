@@ -62,7 +62,7 @@
 | `src/exams/cosmetic/views/formula-customer.js` | 고객 목록·폼·상세(상담 이력·역참조) 패널 | 1 | ✅ Phase B |
 | `src/exams/cosmetic/views/formula-material.js` | 원료 장부 목록·폼 패널 | 4 | ✅ Phase C |
 | `src/exams/cosmetic/views/formula-compliance.js` | 법규 준수 체크리스트 — 6개 카테고리 27항목 + 법령 원문 링크 + 체크 상태 영속 | 9 | ✅ Phase D |
-| `src/csv-utils.js` | CSV 파서·인코딩(EUC-KR 폴백)·직렬화 — 고객·원료 가져오기/보내기 공용 | 1·4 | ✅ |
+| `src/content/csv-utils.js` | CSV 파서·인코딩(EUC-KR 폴백)·직렬화 — 고객·원료 가져오기/보내기 공용 | 1·4 | ✅ |
 
 ### CSV 상호운용 (고객·원료)
 

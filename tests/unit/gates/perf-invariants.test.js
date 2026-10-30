@@ -16,7 +16,7 @@ const srcFiles = ['src', 'src/views', 'src/config', 'src/pwa', 'src/auth-sync', 
 // ---------- PF-01: 런타임 MD 파싱 ----------
 
 test('PF-01: DataLoader가 content/*.md를 런타임 fetch+파싱한다', () => {
-  const dl = read('src/data-loader.js');
+  const dl = read('src/content/data-loader.js');
   assert.ok(dl.includes('fetch'), 'fetch 사용');
   assert.ok(/\.md/.test(dl), 'MD 대상');
   const tp = read('src/reader/textbook-parser.js');
@@ -26,7 +26,7 @@ test('PF-01: DataLoader가 content/*.md를 런타임 fetch+파싱한다', () => 
 // ---------- PF-02: 온디맨드 과목 로딩 ----------
 
 test('PF-02: 과목 데이터가 전체 일괄이 아닌 과목 단위로 로드된다', () => {
-  const dl = read('src/data-loader.js');
+  const dl = read('src/content/data-loader.js');
   assert.ok(/async loadSubject\(key\)/.test(dl), '과목 단위 로딩 API');
   assert.ok(/this\._loaded\[key\]/.test(dl), '과목별 로드 캐시');
   // file:// 경로도 과목별 분할 번들을 개별 주입
@@ -85,8 +85,8 @@ test('PF-07: 대시보드가 과목 카운트 맵을 캐시해 과목당 O(1) �
 // ---------- PF-08: 검색 인덱스 사전 구축 ----------
 
 test('PF-08: 교재 검색이 인덱스를 사전 구축하고 키 변경 시에만 재구축한다', () => {
-  // 인덱스 캐시·무효화는 순수 코어 src/search-index.js에 격리 (뷰는 렌더만)
-  const ts = read('src/search-index.js');
+  // 인덱스 캐시·무효화는 순수 코어 src/search/search-index.js에 격리 (뷰는 렌더만)
+  const ts = read('src/search/search-index.js');
   assert.ok(/_searchIndex/.test(ts), '검색 인덱스 캐시');
   assert.ok(/_searchIndexKeys/.test(ts), '인덱스 키 비교로 재구축 방지');
   // TS-13 — 역색인은 어절 단위(_tokenIndex)로 전환 (2-gram 인덱스는 폐기)

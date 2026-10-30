@@ -15,9 +15,9 @@
 
 'use strict';
 
-const { parseArgs, getTargets, listQbanks, writeDraft } = require('./lib/ai_common');
-const { parseQuestionBank, questionText, primaryCitation } = require('./lib/qbank');
-const { inferTags } = require('../build/drill-utils');
+const { parseArgs, getTargets, listQbanks, writeDraft } = require('./lib/ai_common.js');
+const { parseQuestionBank, questionText, primaryCitation } = require('./lib/qbank.js');
+const { inferTags } = require('../build/drill-utils.js');
 
 /** 난이도 휴리스틱 1~5 — 수치·부정 발문·단답형·장문 선지가 가중 */
 function estimateDifficulty(q, ans) {

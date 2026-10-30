@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 import {
     weakItemKey, resolveWrongQuiz, resolveCard, cardSubjectOf,
     parseWeakSimId, subjectForWeakItem, subjectKeyFromItemId,
-} from '../../../src/weak-items.js';
+} from '../../../src/study/weak-items.js';
 
 // STUDY_DATA/DATA_REGISTRY를 매 테스트 새 객체로 교체 — 인덱스가 과목 객체 참조로
 // 무효화되므로 새 객체는 재색인·구 항목 정리 경로를 함께 검증한다.

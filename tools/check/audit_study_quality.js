@@ -168,11 +168,11 @@ function _resetClock() { globalThis.Date = _RealDate; }
 async function main() {
     _installStubs();
     const imp = rel => import(pathToFileURL(path.join(ROOT, rel)).href);
-    const tracker = await imp('src/study-tracker.js');
-    const analysis = await imp('src/analysis-engine.js');
-    const recs = await imp('src/recommendations.js');
-    const sr = await imp('src/spaced-repetition.js');
-    const fsrsMod = await imp('src/fsrs.js');
+    const tracker = await imp('src/study/study-tracker.js');
+    const analysis = await imp('src/study/analysis-engine.js');
+    const recs = await imp('src/study/recommendations.js');
+    const sr = await imp('src/study/spaced-repetition.js');
+    const fsrsMod = await imp('src/study/fsrs.js');
     const { safeSetItem, safeGetItem } = await imp('src/state.js');
     const { STORAGE_KEYS } = await imp('src/storage-keys.js');
 

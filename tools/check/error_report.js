@@ -3,7 +3,7 @@
  * error_report.js — client_errors 오류율 리포트 (PROJECT_METRICS §2.6 측정 경로)
  * @spec none (관측성 인프라)
  *
- * src/error-telemetry.js가 수집한 client_errors 행을 Supabase PostgREST로 조회해
+ * src/telemetry/error-telemetry.js가 수집한 client_errors 행을 Supabase PostgREST로 조회해
  * 오류율(오류/세션)·일별 추이·상위 메시지·버전/뷰 분포를 출력한다.
  *
  * 세션 핑(kind='session')이 분모 — 세션 핑 도입 이전 기간은 오류만 나오고
@@ -23,7 +23,7 @@
  * Secret 키가 없으면 Supabase 대시보드 SQL 에디터용 동등 쿼리를 출력한다.
  */
 'use strict';
-const { loadEnv } = require('../lib/env');
+const { loadEnv } = require('../lib/env.js');
 const { restGetAll } = require('../lib/supabase_ops.js');
 
 // ── 순수 집계 (테스트 대상) ──────────────────────────────────

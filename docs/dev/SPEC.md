@@ -122,7 +122,7 @@
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
 | 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇·커뮤니티 공지 | AD-01~AD-12 (12) |
 | 3.29 | **서비스 소개 (랜딩)** | `/landing.html` 정적 소개 페이지 — 시험 카드·체험 데모(퀴즈·학습계획)·설치 CTA·SEO/OG·프로모션 진입점 | LP-01~LP-10 (10) |
-| 3.30 | **개인 맞춤 고도화** | 개념 단위 약점 진단·개인화 스케줄·합격 예측 — 기존 자산(FSRS·BKT·진술 추적·임베딩)의 조합 계층 `src/personalization.js` | PS-01~PS-11 (11) |
+| 3.30 | **개인 맞춤 고도화** | 개념 단위 약점 진단·개인화 스케줄·합격 예측 — 기존 자산(FSRS·BKT·진술 추적·임베딩)의 조합 계층 `src/study/personalization.js` | PS-01~PS-11 (11) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -591,7 +591,7 @@
 | ID | 요구사양 | 구현 상태 |
 |----|---------|-----------|
 | SEM-01 | 임베딩 자산 스키마 — `{dataRoot}/embeddings/` 하에 `manifest.js`(EMB_MANIFEST: 모델·차원·files·inputs)·`neighbors.js`(EMB_NEIGHBORS: adj·texts·sameText)·과목별 `vectors_stmt_subjectN.js`·`vectors_question.js` (int8 대칭 양자화, `var` 전역 JS 번들 — file:// 호환). 생성은 `tools/build/build_embeddings.js` (`npm run build:embeddings` — Node-only, ONNX fp32) | ✅ |
-| SEM-02 | 런타임 조회 모듈 `src/semantic-index.js` — 이웃 인덱스 지연 로드(최초 사용 시), sid→유사 진술 조회, 동일 정규화 텍스트 중복 제거, 자산 부재 시 기능 비활성화(에러 무전파) | ✅ |
+| SEM-02 | 런타임 조회 모듈 `src/search/semantic-index.js` — 이웃 인덱스 지연 로드(최초 사용 시), sid→유사 진술 조회, 동일 정규화 텍스트 중복 제거, 자산 부재 시 기능 비활성화(에러 무전파) | ✅ |
 | SEM-03 | 취약 진술 유사 항목 표시 — 취약 진술 리뷰 행의 "유사" 토글이 같은 진술·단문을 제외한 의미 유사 진술을 유사도와 함께 나열, 진술별 재시도 드릴 연결 | ✅ |
 | SEM-04 | 피처 게이트 — `features.semantic` 시험별 선언, 미선언/자산 부재 시 UI 미노출 | ✅ |
 | SEM-05 | 신선도 게이트 — manifest.inputs(소비 번들 sha1)↔현재 파일 비교 `check:embfresh`, sourceHash는 텍스트 집합 결정 해시 (check:fresh·check:content 포함) | ✅ |
@@ -679,11 +679,11 @@
 | LP-07 | SW 정책 — `SHELL_ASSETS` 프리캐시 미포함 (쉘 경량화). 오프라인 요청은 기존 네비게이션 폴백이 캐시된 `index.html` 서빙 | ✅ |
 | LP-08 | SEO·공유 메타 — description·canonical·OG(website)·twitter:card·JSON-LD(SoftwareApplication) | ✅ |
 | LP-09 | 학습계획 미리보기 — 시험일 입력 → 잔여 주수·단계별 로드맵(통독→문풀·복습→모의고사)·과목별 문항 비중 바 시연. 데이터는 `{contentRoot}/manifest.json`의 subjects·exams 문항 수·study.minExamLeadDays 빌드타임 주입, 권장 리드타임 미만 시 압축 플랜 안내 | ✅ |
-| LP-10 | 프로모션 진입점 — 신규 방문자(저장 키 없음·비 standalone·딥링크/`?app=1` 아님)는 `/` 접속 시 `landing.html`로 안내 (`src/landing-redirect.js`, 앱 부트 이전 동기 판정). 랜딩 방문 시 `passok_landing_seen` 기록 → 이후 `/`는 앱으로 직행. `landing-qr.svg` QR 자산으로 홍보 유입 지원 | ✅ |
+| LP-10 | 프로모션 진입점 — 신규 방문자(저장 키 없음·비 standalone·딥링크/`?app=1` 아님)는 `/` 접속 시 `landing.html`로 안내 (`src/shell/landing-redirect.js`, 앱 부트 이전 동기 판정). 랜딩 방문 시 `passok_landing_seen` 기록 → 이후 `/`는 앱으로 직행. `landing-qr.svg` QR 자산으로 홍보 유입 지원 | ✅ |
 
 ### 3.30 개인 맞춤 고도화 (Personalization)
 
-> 기존 자산의 조합 계층 — FSRS 리뷰 로그·statement_stats·EMB_NEIGHBORS·BKT·study alloc를 묶어 교재/CBT/인강이 구조적으로 제공 불가한 개인화를 구현. 순수 로직은 `src/personalization.js` (DOM·저장 비의존, 데이터 주입형).
+> 기존 자산의 조합 계층 — FSRS 리뷰 로그·statement_stats·EMB_NEIGHBORS·BKT·study alloc를 묶어 교재/CBT/인강이 구조적으로 제공 불가한 개인화를 구현. 순수 로직은 `src/study/personalization.js` (DOM·저장 비의존, 데이터 주입형).
 
 | ID | 요구사양 | 구현 상태 |
 |----|---------|-----------|
@@ -720,7 +720,7 @@
 | P-10 | `manifest.webmanifest` Content-Type 명시 (`application/manifest+json`) | ✅ |
 | P-11 | 자가 복구 메커니즘 (`app-fallback.js`, 단계적 복구: SW update → 하드 리셋 → 수동 복구) | ✅ |
 | P-12 | CI 검증 (`verify_shell_assets.js`, 배포 전 프리캐시 파일 존재 확인) | ✅ |
-| P-13 | **새 버전 변경 이력 알림** (`src/whats-new.js`) — `APP_VERSION`(data/version.js, 배포 스탬프) vs `last_seen_version` 비교 → 업데이트 후 첫 부팅에 변경 이력 모달 + 설정 메뉴 "변경 이력" 재열람. 전용 `whats-new-overlay`로 다른 모달과 공존, 복귀 사용자는 학습 데이터 키로 판별, 노트 소스는 `data/release-notes.json`(진실 소스, 커밋 subject 자동 초안 → 수동 편집, 파싱 오류 시 배포 차단) → `release-notes.js` 래퍼 자동 생성 | ✅ |
+| P-13 | **새 버전 변경 이력 알림** (`src/shell/whats-new.js`) — `APP_VERSION`(data/version.js, 배포 스탬프) vs `last_seen_version` 비교 → 업데이트 후 첫 부팅에 변경 이력 모달 + 설정 메뉴 "변경 이력" 재열람. 전용 `whats-new-overlay`로 다른 모달과 공존, 복귀 사용자는 학습 데이터 키로 판별, 노트 소스는 `data/release-notes.json`(진실 소스, 커밋 subject 자동 초안 → 수동 편집, 파싱 오류 시 배포 차단) → `release-notes.js` 래퍼 자동 생성 | ✅ |
 | P-14 | **교재 개정 안내 배너** (`src/reader/textbook-edition.js`) — `manifest.textbookEdition`(check:manifest 필수 선언)이 `registry.textbookEdition`으로 전파, 기기 로컬 `textbook_edition_seen`(scopedKey 시험별 격리·백업 제외)과 비교 → 개정 후 첫 부팅에 대시보드 배너 표시, '확인' 시 현 판본 기록으로 억제 | ✅ |
 
 ### 4.2 오프라인 감지
@@ -825,15 +825,15 @@
 | UX-NAV-03 | **`overflow: hidden` 금지 on 헤더**: sticky 헤더에 `overflow:hidden`을 주면 헤더 아래로 펼쳐지는 드롭다운이 잘림 | 드롭다운은 절대위치로 헤더 경계를 넘어야 함. 넘침 제어는 `min-width:0`+말줄임과 `flex-shrink:0`으로 처리 |
 | UX-NAV-04 | **`100vw` 대신 `100%`**: 뷰포트 기준 너비는 수직 스크롤바 폭을 포함해 가로 오버플로를 유발할 수 있음 | `.app-container { width: 100% }`. 특히 클래식 스크롤바가 상시 표시되는 데스크톱에서 차이 발생 |
 | UX-NAV-05 | **하단 `position:fixed` 요소는 탭 바 위로**: 모바일에서 `bottom` 고정 요소는 `calc(70px + safe-area)` 이상으로 배치 | back-to-top(`bottom:1.25rem`)이 탭 바(z 1400)에 완전히 가려진 실제 사례. 배너·토스트·플로팅 버튼 신규 추가 시에도 동일 규칙 적용. `.main-content`는 `padding-bottom: calc(80px + safe)` + `scroll-padding-bottom`으로 콘텐츠·포커스 요소 보호 |
-| UX-NAV-06 | **통합 검색 팔레트 (Ctrl/Cmd+K)**: `src/command-palette.js` — 뷰/교재 섹션/카드/퀴즈/성분/문제집을 한 검색창에서 찾아 실행. `↑↓` 이동·`Enter` 실행·`ESC`/배경 클릭 닫기, 헤더 돋보기 버튼(모바일 진입점) | `searchAll()`은 소스 주입 가능한 순수 함수로 분리해 테스트 가능. 실행은 기존 경로 재사용(nav 클릭 시뮬레이션, `startSubjectStudy/Quiz`, `openSubjectChapter`, `ExamViewer.openExam`) — 네비게이션 분기 신설 금지. 뷰 목록은 nav-item DOM 스캔이라 feature 게이팅(`is-hidden`)을 자동 반영. z-index 2500 (탭 바·모달 위). 전 소스 로컬 데이터로 오프라인 동작 |
+| UX-NAV-06 | **통합 검색 팔레트 (Ctrl/Cmd+K)**: `src/shell/command-palette.js` — 뷰/교재 섹션/카드/퀴즈/성분/문제집을 한 검색창에서 찾아 실행. `↑↓` 이동·`Enter` 실행·`ESC`/배경 클릭 닫기, 헤더 돋보기 버튼(모바일 진입점) | `searchAll()`은 소스 주입 가능한 순수 함수로 분리해 테스트 가능. 실행은 기존 경로 재사용(nav 클릭 시뮬레이션, `startSubjectStudy/Quiz`, `openSubjectChapter`, `ExamViewer.openExam`) — 네비게이션 분기 신설 금지. 뷰 목록은 nav-item DOM 스캔이라 feature 게이팅(`is-hidden`)을 자동 반영. z-index 2500 (탭 바·모달 위). 전 소스 로컬 데이터로 오프라인 동작 |
 | UX-NAV-07 | **뷰 전환 스크롤 규칙**: 내비/복귀는 `scrollTop` 복원, **액션 딥링크는 맨 위 오픈** — `switchView(target, { scrollTop: true })`. **인트라뷰 전환**(같은 뷰 안에서 `is-hidden` 토글로 화면 교체 — 서브패널·문항 진행·innerHTML 교체)은 `resetMainScroll()`로 맨 위 리셋 | 내비게이션(사이드바·탭 바·뒤로가기)은 사용자의 이전 위치를 보존하는 게 기대 동작이지만, "맞춤 리포트 보기"·"퀴즈 풀기" 같은 액션 버튼이 이전 스크롤을 복원하면 중간에서 열려 맥락을 잃는다. `restoreScrollPosition`의 `pendingTop` 플래그가 복원 시점에 소비되어 `saveScrollPosition` 덮어쓰기와 무관하게 동작. 새 액션 딥링크 추가 시 `scrollTop: true` 필수 — `data-args='["view-id", {"scrollTop": true}]'` 또는 직접 호출 모두 지원. `.main-content`는 전 뷰 공유 스크롤 컨테이너라 인트라뷰 패널 전환 시 scrollTop이 잔류해 새 화면 상단이 잘림 — `navigation.js`의 `resetMainScroll()`을 각 전환 지점(훈련소 서브패널·드릴/퀴즈/모의고사 문항·결과 전이, Formula OS showPanel, 자체 스크롤 오버레이는 해당 컨테이너 scrollTop)에 호출 |
-| UX-NAV-08 | **뷰 해시 라우팅**: 뷰 전환 시 `#/슬러그`를 `pushState`, `initViewHashRouting()`이 초기 해시 딥링크 해석 + `hashchange` 구독. 훈련소 서브패널은 `#/trainer/<slug>` 깊이 해시(`src/views/trainer.js` — 열림 시 push, `#/trainer` 복귀 시 메뉴 복귀). 모달 뒤로가기는 `src/modal-back.js`가 `is-hidden` 토글을 감시해 동일 URL 마커(`{modalBack}`)를 쌓고 `popstate`로 최상위 모달을 닫음 — 매뉴얼·문제집 뷰어의 자체 마커(`manualOverlay`/`examOverlay`)와는 `history.state`로 구분해 공존 | SPA에서 뒤로가기가 없으면 Android/PWA 뒤로가기 시 앱이 종료됨. 해시는 공유 가능한 딥링크도 제공. `navigateToView` 재진입은 `_hashNavigating` 플래그로 pushState를 생략해 무한 루프 방지. nav-item 없는 뷰(exam-select)는 `registerViewNavigator`로 등록된 라우터 경로가 `switchView` 폴백을 대신해 제목·해시·렌더를 동일하게 동기화 |
+| UX-NAV-08 | **뷰 해시 라우팅**: 뷰 전환 시 `#/슬러그`를 `pushState`, `initViewHashRouting()`이 초기 해시 딥링크 해석 + `hashchange` 구독. 훈련소 서브패널은 `#/trainer/<slug>` 깊이 해시(`src/views/trainer.js` — 열림 시 push, `#/trainer` 복귀 시 메뉴 복귀). 모달 뒤로가기는 `src/shell/modal-back.js`가 `is-hidden` 토글을 감시해 동일 URL 마커(`{modalBack}`)를 쌓고 `popstate`로 최상위 모달을 닫음 — 매뉴얼·문제집 뷰어의 자체 마커(`manualOverlay`/`examOverlay`)와는 `history.state`로 구분해 공존 | SPA에서 뒤로가기가 없으면 Android/PWA 뒤로가기 시 앱이 종료됨. 해시는 공유 가능한 딥링크도 제공. `navigateToView` 재진입은 `_hashNavigating` 플래그로 pushState를 생략해 무한 루프 방지. nav-item 없는 뷰(exam-select)는 `registerViewNavigator`로 등록된 라우터 경로가 `switchView` 폴백을 대신해 제목·해시·렌더를 동일하게 동기화 |
 | UX-NAV-11 | **상호작용 요소는 다른 요소에 가려져 클릭 불가하면 안 됨**: 버튼·링크·`data-click`·입력 요소가 스크롤로 화면 안에 들어온 위치에서 `elementFromPoint`가 그 요소(또는 자식)를 반환해야 함 — 탭 바·고정 오버레이·이웃 카드에 덮인 "보이는데 못 누르는" 상태 금지 | UX-NAV-05의 실측 확장 — 탭 바 위치 계약을 요소 단위로 검증. 스크롤 컨테이너 가장자리 클립은 스크롤로 도달 가능하므로 예외, 일시 오버레이(토스트·오프라인 배너)는 소멸성이라 예외. E2E(`mobile-overflow.spec.js`)가 전 뷰의 상호작용 요소를 `scrollIntoView`+히트 테스트로 순회 |
 | UX-NAV-10 | **페이지 수평 오버플로 금지**: 모든 뷰에서 `documentElement.scrollWidth ≤ 뷰포트 너비`. 버튼이 나열된 행은 `flex-wrap`, flex 자식은 `min-width:0`, 깨지지 않는 긴 문자열은 `overflow-wrap:anywhere`로 처리. 스크롤 경로 없는 내부 클립(`overflow-x:hidden` + `scrollWidth>clientWidth`)도 동일하게 금지 | 성분사전 검색 행이 버튼 4개(초기화·CSV·전체 CSV·성분 추가)를 nowrap으로 나열해 모바일에서 '성분 추가'가 잘린 실사례. `text-overflow:ellipsis` 말줄임과 가로 스크롤 컨테이너(표 wrapper 등)는 의도된 클립이라 예외. E2E 스윕(`mobile-overflow.spec.js`)이 전 뷰를 프로젝트 뷰포트별로 실측 |
 | UX-NAV-12 | **내비게이션 3그룹 분류**: 사이드바·모바일 더보기 시트가 동일한 그룹 라벨로 항목을 분류 — `학습`(대시보드·학습 진단·플래시카드·기출 퀴즈) / `훈련 · 평가`(훈련소·복습·실전 모의고사) / `자료 · 도구`(교재·사전·실무·캘린더·문서). 기능 표시명은 manifest `uiText`를 원본으로 유지하며 코드 폴백·문서·테스트가 동일 용어 사용 (학습 진단·주간 배분·훈련소) | 그룹 라벨은 `index.template.html`의 `.nav-group-label` 정적 마크업 — 모바일 시트는 동일 DOM 슬롯을 공유해 분류가 대역 간 자동 일치. 표시명만 바뀌고 `data-target`·라우트 ID는 불변 |
 | UX-NAV-13 | **뷰 목적·경계 문구**: 학습 4축 뷰(퀴즈·모의고사·훈련소·복습) 상단에 한 줄 `.view-purpose` 문구로 역할 경계를 명시 — 퀴즈=단원별 연습 / 모의고사=실전 평가 / 훈련소=반복 훈련 / 복습=틀린·약한 것 재확인 | `html/views/{quiz,exam,trainer,review}.html` 정적 문구 — manifest `uiText` subtitle과 별도 본문 표기라 `check:uitext` 비대상 |
 | UX-NAV-14 | **훈련소 메뉴 2그룹 분류**: `trainer-menu-grid`를 `.trainer-menu-group` 2개로 분할 — `기출 드릴`(O/X 판정·ㄱㄴㄷ 조합, 기출 문항 분해·변환) 상단 + `암기 · 실무 훈련`(수치 암기·원료 챌린지·배합 계산, 생성형) 하단. 각 그룹에 `.trainer-group-label`(제목+설명) 정적 마크업 — UX-NAV-12 내비 그룹 라벨과 동일 패턴 | `html/views/trainer.html` 정적 구조 — 카드 DOM·`data-click`·`data-feature`·배지 id 불변, 그룹 이동만. 라벨은 본문 텍스트라 `check:uitext` 비대상 |
-| UX-HELP-01 | **단축키 도움말 오버레이 (`?` 키)**: `src/shortcuts-help.js` — `?`(Shift+/)로 전체 단축키 시트를 `role="dialog"` 오버레이로 표시. 목록 정본은 `SHORTCUT_GROUPS` 선언 — 신규 단축키는 여기에 등록해 도움말·실바인딩 불일치 방지 | 입력 필드·수식키 조합에서는 미동작. `Esc`·`?`·배경 클릭 닫기, 포커스 트랩 적용. 단축키 조합표는 모듈 상수로 분리해 단위 테스트 가능 |
+| UX-HELP-01 | **단축키 도움말 오버레이 (`?` 키)**: `src/shell/shortcuts-help.js` — `?`(Shift+/)로 전체 단축키 시트를 `role="dialog"` 오버레이로 표시. 목록 정본은 `SHORTCUT_GROUPS` 선언 — 신규 단축키는 여기에 등록해 도움말·실바인딩 불일치 방지 | 입력 필드·수식키 조합에서는 미동작. `Esc`·`?`·배경 클릭 닫기, 포커스 트랩 적용. 단축키 조합표는 모듈 상수로 분리해 단위 테스트 가능 |
 | UX-NAV-09 | **콘텐츠 중심 뷰의 상단 크롬은 오버레이 + 방향 자동 숨김**: 읽기·뷰어처럼 본문이 목적인 화면에서 툴바·필터 등 크롬은 인플로우 배치 금지 → `position:absolute` 오버레이로 올리고, 스크롤 다운 시 `translateY+opacity`로 숨겨 본문이 뷰포트를 전부 차지하게 한다. 복귀는 스크롤 업 — 제스처 없이도 발견 가능. 진행바 등 수px 상태 표시만 상시 노출 | 인플로우 크롬은 본문 높이를 영구 잠식하고, transform만 적용한 숨김은 공간을 회수하지 못함(실측: 본문 63%→89% vh). 오버레이 시 콘텐츠 스크롤 컨테이너에 `padding-top`=크롬 높이를 줘 첫 화면이 크롬 아래 묻히지 않게 함 — 패딩은 스크롤과 함께 밀려나므로 읽는 중 잠식 0. 크롬 아래를 지나는 다른 오버레이(섹션 표시줄 등)는 `~` 시빌링 셀렉터로 숨김 상태와 위치를 연동할 것 |
 
 #### 4.8.2 스크롤바 전략
@@ -1240,7 +1240,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | ROAD-P2 | **결제·구독 관리**: 토스/Stripe 연동, 웹훅 처리, 구독 상태 머신 | SUBSCRIPTION_ROADMAP §3 | 미구현 |
 | ROAD-P3 | **콘텐츠 게이팅 + CSP/SW 재작업**: 콘텐츠 접근 제어 시 Cache First SW와 인증 토큰의 충돌 해소, 해지·다운그레이드 시 캐시 purge, CSP `connect-src` 확장 | SUBSCRIPTION_ROADMAP §4~§6 | 미구현 |
 | ROAD-P4 | **무료 티어 축소·그랜드파더링 정책**: 클라우드 동기화를 Pro 전용으로 전환, 무료 티어 로그인은 비강제 유지 | `feature-plan.json` `cloud_sync: "pro"` + `canCloudSync()`/`pro_entitled` 게이트 (sync.js push·pull·syncNow 차단) | ✅ 결정·게이트 구현 |
-| ROAD-P0 | **Pro 안내 계층**: `feature-plan.json` 기능별 `pro`/`free` 전환 + `src/pro-upgrade.js` (PRO 배지 `data-pro-feature` 제어, 진입 1회 안내 `proFeatureNotice`, Formula OS 한도 초과 업그레이드 모달 `showUpgradeNotice`) — 접근 차단 없이 유료 경계만 인지. soft→hard 전환·grandfathering 정책은 §3.7에 확정. 플랜 비교 모달의 "Pro 전용 혜택"은 플래그·플랜에서 유도한 실제 기능 목록(학습 진단 리포트·이야기형·오디오북·클라우드 동기화·한도 무제한)으로 렌더링 | `SUBSCRIPTION_ROADMAP.md` §3.4 구현 상태 주석·§3.7 전환 정책 | ✅ |
+| ROAD-P0 | **Pro 안내 계층**: `feature-plan.json` 기능별 `pro`/`free` 전환 + `src/pro/pro-upgrade.js` (PRO 배지 `data-pro-feature` 제어, 진입 1회 안내 `proFeatureNotice`, Formula OS 한도 초과 업그레이드 모달 `showUpgradeNotice`) — 접근 차단 없이 유료 경계만 인지. soft→hard 전환·grandfathering 정책은 §3.7에 확정. 플랜 비교 모달의 "Pro 전용 혜택"은 플래그·플랜에서 유도한 실제 기능 목록(학습 진단 리포트·이야기형·오디오북·클라우드 동기화·한도 무제한)으로 렌더링 | `SUBSCRIPTION_ROADMAP.md` §3.4 구현 상태 주석·§3.7 전환 정책 | ✅ |
 | ROAD-P5 | **Pro 안내 수렴**: `proFeatureNotice`의 기능별 첫 진입 모달을 **전역 1회**로 수렴 — seen 키는 `pro_notice_seen` 맵의 `_global` 단일 키이며 `GLOBAL_KEYS` 승격으로 시험 전환에도 유지. 레거시 시험 스코프 seen은 고아화되어 기존 사용자도 최대 1회의 전역 안내 후 영구 비노출. PRO 배지는 `refreshProBadges`가 `data-click="showPlanCompare"`·`role="button"`·`tabindex`를 부여해 클릭/Enter 시 플랜 비교로 연결되는 단일 진입점 — `closest` 위임 해석이 배지 자신을 먼저 잡아 부모 카드 액션과 충돌하지 않음 | DOC-DSN-23 §4 | ✅ |
 | ROAD-P6 | **Pro 전환 모멘트 넛지**: 고가치 순간(모의고사 분석 결과·학습 진단 뷰)에 결과 패널 상단 `.pro-moment-card` 인라인 카드로 플랜 비교를 제안 — 모달 대신 비차단 카드로 학습 흐름 유지. `PRO_MOMENTS` 매핑(moment→feature key) + `shouldShowProMoment` 순수 판정(플랜 pro·미entitled·14일 쿨다운) + `mountProMoment` 삽입. 표시 계측 `pro_moment_<moment>` 액션 | `pro_moment_seen` scoped 키로 모멘트별 쿨다운. UX-MET-05 스냅샷이 넛지→plan_compare 전환율 회수 경로 | ✅ |
 
@@ -1253,7 +1253,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | ROAD-L3 | **오답 체인 잔여**: `핵심 문장(ref_md 조문 원문 인라인)` → 관련 카드 → 유사문제 → 재시험 추적 | A3 출처 근거의 후속 체인 | 미구현 |
 | ROAD-L4 | **Phase 2 차별화**: 출제 패턴 분석·코칭 리포트·지식 맵·요약 노트 | FEATURE_PROPOSALS Phase 2 (`docs/exams/cosmetic/report_archive/`) | 미구현 |
 | ROAD-L5 | **기능 검증 측정**: 개발 완료 기능(오답 루프·합격 전략·진단 평가)의 사용률·만족도 로컬 측정 → 유료가치 판정 데이터 확보 | `usage-stats.js` 뷰·액션 카운터 + 설정 '내 사용 통계' (로컬 전용, 백업·동기화 제외). **유저 단위 = 기기별 익명 `owner`(device_id) — 로그인 없는 프로모션 기간 대응, GLOBAL 키라 시험 전환해도 누적 유지**. **판정 기준: Pro 후보 액션(`VALUE_ACTIONS` — 오답 루프·진단 평가·이야기형·맞춤 리포트·실제 결과 보고) 합계 20회** (`PRO_VALUE_THRESHOLD`) — 편의/UI 액션(검색·플랜 비교)은 제외. 도달 시 유료가치 인정, ROAD-P1 착수 근거 | ✅ 카운터 구현 (판정 데이터 수집 중) |
-| ROAD-L6 | **ML 기술 로드맵 — 스마트·학습 진단 고도화 기법 검토**: ① FSRS 간격 반복 ✅ 적용 완료(F-07~F-11, `src/fsrs.js` — FSRS-6 승계·T3 시뮬 복습량 −17% 계측, LEARNING_ALGORITHM_DESIGN·LEARNING_ALGORITHM_DESIGN.md) ② 빌드타임 콘텐츠 임베딩(중복·개념 클러스터링) — transformers.js 빌드 의존성, 중기 후보 ③ 컨텍스추얼 밴딧(LinUCB — 추천 순위 학습, `REC_SNAPSHOT`·`evaluateRecommendationEffect` 보상 신호 기존) — Supabase 집단 데이터 수집 선행 조건 ④ 지식 추적 ✅ 단원 BKT 적용(D-22, `knowledge-tracing.js` — DKT 계열·LoReKT급 저자원은 집단 데이터+추론 최적화 전제로 장기 유지) ⑤ **강화학습(복습 시점·추천 순서 정책) — 검토 완료·보류 판정**: 사용자당 데이터 규모·희소 지연 보상(합격 = 사용자당 1회)·결정론 감사(SQ)와의 충돌로 비현실적 — 재검토 조건: Supabase 집단 수집 + 밴딧 수익 검증 후. FSRS가 스케줄링 문제를 수식으로 해결해 RL 이점 소멸 | LEARNING_ALGORITHM_DESIGN.md · 검토 산출 본 행 | ①④완료 ⑤보류, 나머지 미구현 |
+| ROAD-L6 | **ML 기술 로드맵 — 스마트·학습 진단 고도화 기법 검토**: ① FSRS 간격 반복 ✅ 적용 완료(F-07~F-11, `src/study/fsrs.js` — FSRS-6 승계·T3 시뮬 복습량 −17% 계측, LEARNING_ALGORITHM_DESIGN·LEARNING_ALGORITHM_DESIGN.md) ② 빌드타임 콘텐츠 임베딩(중복·개념 클러스터링) — transformers.js 빌드 의존성, 중기 후보 ③ 컨텍스추얼 밴딧(LinUCB — 추천 순위 학습, `REC_SNAPSHOT`·`evaluateRecommendationEffect` 보상 신호 기존) — Supabase 집단 데이터 수집 선행 조건 ④ 지식 추적 ✅ 단원 BKT 적용(D-22, `knowledge-tracing.js` — DKT 계열·LoReKT급 저자원은 집단 데이터+추론 최적화 전제로 장기 유지) ⑤ **강화학습(복습 시점·추천 순서 정책) — 검토 완료·보류 판정**: 사용자당 데이터 규모·희소 지연 보상(합격 = 사용자당 1회)·결정론 감사(SQ)와의 충돌로 비현실적 — 재검토 조건: Supabase 집단 수집 + 밴딧 수익 검증 후. FSRS가 스케줄링 문제를 수식으로 해결해 RL 이점 소멸 | LEARNING_ALGORITHM_DESIGN.md · 검토 산출 본 행 | ①④완료 ⑤보류, 나머지 미구현 |
 | ROAD-L7 | **4버튼 레이팅 UI**: `fc-easy/hard` 2버튼 → Again/Hard/Good/Easy — FSRS 모델 해상도 회복의 최대 항목이나 UI·핸들러·툴팁·모바일 배치 재설계가 별도 범위 | **게이트**: D-18 리뷰 로그로 이진 입력의 실측 손실(Again 과다/Good 남발 분포) 정량화 후 도입 판정 (LEARNING_ALGORITHM_DESIGN §8 · EXAM_R_SCHEDULING §4) | 미구현 |
 | ROAD-L8 | **개인 FSRS 파라미터 피팅**: 사용자별 `w` 추정 — FSRS-6의 학습 가능 망각 곡선 지수 `w20`이 첫 대상, `fc_review_log` `{c,r,e,t}`가 optimizer 입력과 동형 | **게이트**: 로그 ~1,000 리뷰 축적(Anki 최적화기 실질 하한 — 일 60~80장 기준 4~6주, LEARNING_ALGORITHM_DESIGN §9.3) | 미구현 |
 | ROAD-L9 | **실측 기억률 분석**: 로그의 경과일 `e`·레이팅 `r`로 "예측 R vs 실제 응답" 버킷 대조 — FSRS 효능 검증 + `EXAM_TARGET_R 0.95`·D-19 창(14일) 튜닝 근거 | **게이트**: 로그 축적(경과일 버킷별 표본 확보) — 로그가 차면 다음 자연 단계 (EXAM_R_SCHEDULING §4) | 미구현 |
@@ -1330,14 +1330,14 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 
 | ID | 요구사항 | 주요 작업 | 상태 |
 |----|---------|----------|------|
-| PAY-01 | **라이선스 코드 활성화**: 설정 '라이선스 코드' → 입력 다이얼로그 → `redeem_code` RPC → `profiles.plan='pro'` + 로컬 `pro_entitled` 갱신 — 비로그인은 로그인 유도, 실패는 무효/사용됨 구분 없이 동일 안내 (오라클 최소화). 계측 `code_redeem_attempt`/`code_redeem_success` | `src/pro-redeem.js` + 설정 메뉴 항목 + `showRedeemCode` 핸들러 | 구현 (2026-10-22) |
-| PAY-02 | **결제 안내 모달**: `PAYMENT_NOTICE` 설정 객체 — `enabled` 플래그로 '준비 중'↔실결제 안내(가격·수동 결제 방법·환불 고지·문의 링크) 전환. 계측 `payment_notice_view`/`payment_link_click` | `src/pro-upgrade.js` `showUpgradeNotice` 확장 — DOC-DSN-35 §8 결정 반영(기간권 3티어 — PAY-06·오픈채팅 문의) | 구현 (활성) |
+| PAY-01 | **라이선스 코드 활성화**: 설정 '라이선스 코드' → 입력 다이얼로그 → `redeem_code` RPC → `profiles.plan='pro'` + 로컬 `pro_entitled` 갱신 — 비로그인은 로그인 유도, 실패는 무효/사용됨 구분 없이 동일 안내 (오라클 최소화). 계측 `code_redeem_attempt`/`code_redeem_success` | `src/pro/pro-redeem.js` + 설정 메뉴 항목 + `showRedeemCode` 핸들러 | 구현 (2026-10-22) |
+| PAY-02 | **결제 안내 모달**: `PAYMENT_NOTICE` 설정 객체 — `enabled` 플래그로 '준비 중'↔실결제 안내(가격·수동 결제 방법·환불 고지·문의 링크) 전환. 계측 `payment_notice_view`/`payment_link_click` | `src/pro/pro-upgrade.js` `showUpgradeNotice` 확장 — DOC-DSN-35 §8 결정 반영(기간권 3티어 — PAY-06·오픈채팅 문의) | 구현 (활성) |
 | PAY-03 | **plan 서버 동기화**: 로그인 시 `profiles.plan` → `pro_entitled` 반영 — 코드 활성화의 타 기기 전파 + 회수(`grant-pro --revoke`) 반영. 비로그인 로컬 플래그는 유지 | `pro-redeem.js` `syncPlanFromProfile` — app 부팅 step 연결 | 구현 (2026-10-22) |
 | PAY-04 | **전환 퍼널 이벤트 확장**: 화이트리스트에 `plan_compare_view`·`payment_notice_view`·`payment_link_click`·`code_redeem_attempt`·`code_redeem_success` 추가 + `session_start.meta.entry_src` 탑재 (`?src=` 캡처를 전송 전으로 이동) | `usage-telemetry.js` + `pro-upgrade.js` emit + app.js 부팅 순서 | 구현 (2026-10-22) |
 | PAY-05 | **라이선스 코드 발급 CLI**: `admin:issue-code --channel <채널> --count N` — `<CHANNEL>-XXXX-XXXX` 코드 생성·`pro_codes` insert (service role) — 채널 프리픽스로 유입별 전환 추적 | `tools/check/issue_pro_code.js` + `restPost` 헬퍼 | 구현 (2026-10-22) |
 | PAY-06 | **기간권 3티어 + 만료 entitlement**: 시험 공지 주기 정합 티어 — 스프린트 9,900/30일 · 스탠다드 14,900/60일 · 풀코스 19,900/90일(월환산 할인 + 다음 회차 특전, 연 단위). `pro_codes.valid_days`·`profiles.pro_expires_at` 추가, `redeem_code`가 활성권은 만료일 위에 연장·만료권은 재기산(무기한 관리자 부여 유지). `syncPlanFromProfile`이 만료 경과 시 pro 해제 + 만료일 표시(`pro_expires_at` 키·계정 모달). 발급 `--days`(기본 90)·`grant-pro --days`·결제 안내 3티어 표. **스키마 재배포 필요** (schema.sql alter 문 주석 참조 — 미배포 시 plan-only 폴백으로 기존 동작 유지) | `tools/supabase/schema.sql` + `issue_pro_code.js --days` + `grant_pro.js --days` + `pro-redeem.js isEntitledToPro` + `pro-upgrade.js PAYMENT_NOTICE.plans` | 구현 (2026-10-23) |
 | PAY-07 | **기간권 만료 UX — 로컬 즉시성·임박 안내·연장 유도**: ① `hasProEntitlement()`가 로컬 `pro_expires_at`을 현재 시각과 비교해 앱 열람 중 만료 경과 시 다음 판정부터 해제 — 서버 재확인은 `syncPlanFromProfile`이 담당, 무기한(null)·비로그인 로컬 부여는 유지 ② 대시보드 상단 만료 배너 — 임박(만료까지 7일 이내)·만료 후 분기, '학습 데이터는 보존·연장 시 이어서 사용' 안내 + 연장 CTA(결제 안내 모달→오픈채팅). `pro_expires_at` 잔재로 만료자↔미구매자 분기 — 만료 해제 시 만료일 키는 유지(tombstone), 회수 시에만 제거 ③ 만료일 < 활성 시험일이면 '시험 전 만료' 경고 병기 (SC-16 학습법 안내와 별개 — entitlement 신호) ④ 계측 `pro_expire_notice` 화이트리스트 추가 — 만료→연장 전환 퍼널 관측 ⑤ 정책: 만료 후에도 기존 리포트·주간 배분 열람은 유지(§3.7 읽기 Free 원칙), 신규 Pro 판정만 잠금 — soft gate 기간에는 PRO 배지 유지 | `pro-upgrade.js hasProEntitlement` + `pro-expiry.js proExpiryStatus` + 대시보드 배너 + `syncPlanFromProfile` tombstone + `usage-telemetry.js` 화이트리스트 | 구현 (2026-10-23) |
-| PAY-08 | **시험일 최소 보장**: `redeem_code(p_code, p_exam_date date)` — 만료일 = greatest(기존 연장·재기산 규칙, 시험일+3일)로 시험 직전 entitlement 절벽 방지. 클라이언트가 활성 시험의 `exam_date` 전달(미설정 null → 기존 동작), 구 서명 스키마 미배포 시 `p_code` 단독 호출로 폴백. `exam_date`는 시험 네임스페이스 키라 활성 시험 기준으로 전달 — entitlement 자체는 전역. **스키마 재배포 필요** | `tools/supabase/schema.sql` + `src/pro-redeem.js` | 구현 (2026-10-23) |
+| PAY-08 | **시험일 최소 보장**: `redeem_code(p_code, p_exam_date date)` — 만료일 = greatest(기존 연장·재기산 규칙, 시험일+3일)로 시험 직전 entitlement 절벽 방지. 클라이언트가 활성 시험의 `exam_date` 전달(미설정 null → 기존 동작), 구 서명 스키마 미배포 시 `p_code` 단독 호출로 폴백. `exam_date`는 시험 네임스페이스 키라 활성 시험 기준으로 전달 — entitlement 자체는 전역. **스키마 재배포 필요** | `tools/supabase/schema.sql` + `src/pro/pro-redeem.js` | 구현 (2026-10-23) |
 
 ---
 
@@ -1347,13 +1347,13 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 
 | 모듈 | 파일 | 책임 |
 |------|------|------|
-| 오케스트레이터 | `src/app.js` | 초기화, SPA 라우팅, 이벤트 위임, 뷰 간 브릿지 |
+| 오케스트레이터 | `src/shell/app.js` | 초기화, SPA 라우팅, 이벤트 위임, 뷰 간 브릿지 |
 | 상태 관리 | `src/state.js` | 전역 상태 객체, 진행 영속성 (저장은 storage.js 위임) |
 | 저장소 추상화 | `src/storage.js` | 영속 읽기·쓰기 단일 퍼널 — 교체 가능 백엔드(기본 localStorage), 동기·Async 이중 API, `setMany`/`setJSONMany` 롤백 다중 쓰기, 쓰기 훅·쿼터 감지 |
-| 약점 항목 | `src/weak-items.js` | 약점(오답) ID 문법 단일 소스(`weak_quiz_`/`weak_sim_`), 퀴즈·카드 인덱스 캐시, DOM 비의존 |
-| 합격 전략 | `src/recommendations.js` | "오늘의 합격 전략" 추천·오답 원인 집계·예상 점수 추정·실제 결과 보고 (DOM 비의존 순수 로직) |
-| 통합 검색 | `src/command-palette.js` | Ctrl/Cmd+K 통합 검색 팔레트 — `searchAll()` 순수 함수 + UI 지연 생성 |
-| 데이터 로더 | `src/data-loader.js` | 온디맨드 과목/시험 로딩 |
+| 약점 항목 | `src/study/weak-items.js` | 약점(오답) ID 문법 단일 소스(`weak_quiz_`/`weak_sim_`), 퀴즈·카드 인덱스 캐시, DOM 비의존 |
+| 합격 전략 | `src/study/recommendations.js` | "오늘의 합격 전략" 추천·오답 원인 집계·예상 점수 추정·실제 결과 보고 (DOM 비의존 순수 로직) |
+| 통합 검색 | `src/shell/command-palette.js` | Ctrl/Cmd+K 통합 검색 팔레트 — `searchAll()` 순수 함수 + UI 지연 생성 |
+| 데이터 로더 | `src/content/data-loader.js` | 온디맨드 과목/시험 로딩 |
 | 교재 파서 | `src/reader/textbook-parser.js` | 런타임 MD → 카드/퀴즈/챕터 조립 |
 | 리더 포맷터 | `src/reader/reader-format.js` | MD→HTML 변환, 링크 재작성, 키워드 자동 링크 |
 | 마크다운 파서 | `src/reader/markdown-parser.js` | MD→HTML 범용 파서 |
@@ -1366,11 +1366,11 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | 유틸 | `src/utils.js` | 초성 추출, Fisher-Yates 셔플 |
 | 키워드 인덱스 | `src/keyword-index.js` | 교재 셀→참조자료 키워드 매핑 (자동 생성) |
 | 용어집 렌더러 | `src/views/glossary-renderer.js` | 용어집 테이블 렌더링, `scrollToGlossary()` 공유 함수 |
-| 학습 보조 | `src/study-aids.js` | 기출 필터, 숫자 암기표 |
-| 간격 반복 | `src/spaced-repetition.js` | FSRS-6 알고리즘(fsrs.js), 복습 스케줄링, 오늘 복습 카드 수 |
-| 문항 스키마 | `src/questions.js` | single/combo/short/ox 스키마, `deriveComboAnswer`, `validateQuestion` |
-| 진술 추적 | `src/statement-tracker.js` | 진술 원자(sid) 단위 오판 통계, 졸업 추적, FSRS 연동 |
-| 학습 추적 | `src/study-tracker.js` | 캘린더 활동 기록·목표 달성률 (`recordStudyActivity`, `getStudyGoals`) |
+| 학습 보조 | `src/study/study-aids.js` | 기출 필터, 숫자 암기표 |
+| 간격 반복 | `src/study/spaced-repetition.js` | FSRS-6 알고리즘(fsrs.js), 복습 스케줄링, 오늘 복습 카드 수 |
+| 문항 스키마 | `src/content/questions.js` | single/combo/short/ox 스키마, `deriveComboAnswer`, `validateQuestion` |
+| 진술 추적 | `src/study/statement-tracker.js` | 진술 원자(sid) 단위 오판 통계, 졸업 추적, FSRS 연동 |
+| 학습 추적 | `src/study/study-tracker.js` | 캘린더 활동 기록·목표 달성률 (`recordStudyActivity`, `getStudyGoals`) |
 | 동적 매니페스트 | `src/pwa/pwa-manifest.js` | 활성 시험 기준 PWA manifest 링크 교체 (클래식 스크립트) |
 | 설정 상수 | `src/config/timing.js` · `cache.js` | 타이밍·캐시 상수 중앙 관리 |
 | 콘텐츠 감사 | `tools/check/audit_card_quality.js` | 카드 품질 자동 감사, 참조자료 링크 유효성 검사 |
@@ -1430,7 +1430,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | `src/exams/cosmetic/material-ledger.js` | 원료 입고·사용기한·재고, 기한 경고 (한도 30종) |
 | `src/exams/cosmetic/usage-guide.js` | 사용 안내문 생성기 (제형 템플릿+원료 주의 규칙) |
 | `src/exams/cosmetic/store-utils.js` | 스토어 공통 헬퍼 (loadItems/newId/clamp…) |
-| `src/csv-utils.js` | CSV 파서·EUC-KR 폴백 디코딩·BOM 직렬화 |
+| `src/content/csv-utils.js` | CSV 파서·EUC-KR 폴백 디코딩·BOM 직렬화 |
 
 ### 계정·동기화·시험 컨텍스트
 
@@ -1440,7 +1440,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | `src/auth-sync/sync.js` | 클라우드 스냅샷 동기화 (sync_snapshots push/pull, dirty 훅·디바운스·충돌 확인, 고객 키 제외) |
 | `src/auth-sync/supabase-client.js` | Supabase lazy init — vendor UMD 동적 로드 |
 | `src/exam-context.js` | 활성 시험 해석/전환, `scopedKey` 네임스페이스, `hasFeature` |
-| `src/ui-mode.js` | 학습/실무 UI 모드 전환 (`ui_mode` 키, 학습 도구 접이식) |
+| `src/shell/ui-mode.js` | 학습/실무 UI 모드 전환 (`ui_mode` 키, 학습 도구 접이식) |
 | `src/storage-keys.js` | localStorage 키 중앙 관리 |
 | `src/paths.js` | 파일 경로 상수 (시험 루트 인지형) |
 
@@ -1448,9 +1448,9 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 
 | 모듈 | 책임 |
 |------|------|
-| `src/app-fallback.js` | ESM 로드 실패 시 단계적 복구 (SW update → 하드 리셋 → 수동) |
+| `src/shell/app-fallback.js` | ESM 로드 실패 시 단계적 복구 (SW update → 하드 리셋 → 수동) |
 | `src/pwa/pwa-install-capture.js` | `beforeinstallprompt` 조기 캡처 + SW 조기 등록 + 업데이트 토스트 |
-| `src/theme-init.js` | FOUC 방지 (페인트 전 테마 적용) |
+| `src/shell/theme-init.js` | FOUC 방지 (페인트 전 테마 적용) |
 
 ### Service Worker
 

@@ -217,7 +217,7 @@ create policy "own snapshots" on sync_snapshots
   for all using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
 
--- 런타임 오류 텔레메트리 — src/error-telemetry.js, feedback과 같은 익명 insert 패턴
+-- 런타임 오류 텔레메트리 — src/telemetry/error-telemetry.js, feedback과 같은 익명 insert 패턴
 -- kind 'session': 페이지 로드당 1건 세션 핑 → 오류율(오류/세션)의 분모 (집계: npm run report:errors)
 -- session_id: 페이지 로드당 랜덤 UUID(telemetry-session.js 공유) — 사용자 식별 아님.
 --   bug 피드백의 meta.session_id와 join해 "신고 시점 페이지 로드의 오류 이력" 조회
@@ -236,7 +236,7 @@ create policy "public insert" on client_errors
   for insert to anon, authenticated with check (true);
 -- 조회 정책 없음 = 클라이언트 읽기 차단, 대시보드(service role)·report:errors(Secret 키 env)에서만 확인
 
--- 과업 퍼널 텔레메트리 — src/usage-telemetry.js (집계: npm run report:funnel)
+-- 과업 퍼널 텔레메트리 — src/telemetry/usage-telemetry.js (집계: npm run report:funnel)
 -- session_id는 페이지 로드당 랜덤 UUID — start↔complete 쌍 묶기 전용, 사용자 식별 아님
 create table if not exists usage_events (
   id uuid primary key default gen_random_uuid(),
@@ -800,7 +800,7 @@ SUPABASE_DESIGN §1의 원칙을 그대로 계승하고, Firebase 특유의 차�
 | `src/firebase-client.js` | `getFirebaseAuth()`·`getFirestoreDb()` lazy init, `onAuthChange` (supabase-client.js 대응) |
 | `src/auth-sync/sync.js` | `sb.from().upsert` → `setDoc`/`getDoc` 호출부만 교체 (§6) |
 | `src/auth-sync/auth-view.js` | 인증 호출부 교체 + OTP 코드 UI 제거·이메일 링크 랜딩(`isSignInWithEmailLink`) 처리 (§5) |
-| `src/feedback.js`·`error-telemetry.js`·`usage-telemetry.js` | `insert` → `addDoc`/`writeBatch` 호출부 교체 |
+| `src/shell/feedback.js`·`error-telemetry.js`·`usage-telemetry.js` | `insert` → `addDoc`/`writeBatch` 호출부 교체 |
 | `tools/lib/firebase_ops.js` | Admin SDK 공용 헬퍼 (supabase_ops.js 대응, §9) |
 | `tools/firebase/firestore.rules` | Security Rules 정본 + `firebase.json` |
 | `tools/firebase/functions/` | `redeemCode` callable + `feedback-notify` 트리거 (Blaze 채택 시) |

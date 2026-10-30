@@ -4,7 +4,7 @@
  * @spec AI-07
  *
  * - SEM-05 산출물({dataRoot}/embeddings/)의 int8 양자화 벡터를 디코딩
- *   (src/semantic-index.js decodeVectorBundle과 동일 스펙 — b*scale/127 근사로
+ *   (src/search/semantic-index.js decodeVectorBundle과 동일 스펙 — b*scale/127 근사로
  *    코사인 유사도에는 스칼라 상수가 상쇄되므로 q*scale로 충분)
  * - 신규 초안 텍스트는 임베딩이 없으므로 문자 n-gram 어휘 유사도 폴백 제공
  */

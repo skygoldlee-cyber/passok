@@ -384,7 +384,7 @@ python ref-pipeline/convert.py 별표1          # 이름 필터 부분 변환
 | 산출물 | 경로 | 용도 |
 |---|---|---|
 | 런타임 번들 | `data/exams/cosmetic/drills/combo_subjectN.js` → `var COMBO_DRILLS_subjectN` | `DataLoader.loadComboDrills(N)`이 로드 — 파일럿(`combo_pilot.js`, cb- 접두)과 병합 |
-| 문제집 문서 | 런타임 직렬화 (`src/combo-doc.js` → `ExamViewer.openCombo(N)`) | 대시보드 "복수정답형 문제집" — 번들을 문제은행 MD와 동일 구조(문제부/정답부 분리)로 런타임 렌더링. 별도 MD 산출물 없음 |
+| 문제집 문서 | 런타임 직렬화 (`src/content/combo-doc.js` → `ExamViewer.openCombo(N)`) | 대시보드 "복수정답형 문제집" — 번들을 문제은행 MD와 동일 구조(문제부/정답부 분리)로 런타임 렌더링. 별도 MD 산출물 없음 |
 
 재생성: `npm run build:drills` (O/X + 복수정답형 번들 일괄).
 
@@ -393,7 +393,7 @@ python ref-pipeline/convert.py 별표1          # 이름 필터 부분 변환
 ## 7. 사용 예
 
 ```js
-import { gradeAnswer, scoreExam, validateQuestion } from './src/questions.js';
+import { gradeAnswer, scoreExam, validateQuestion } from './src/content/questions.js';
 
 // 출제/임포트 검증
 const problems = validateQuestion(q);
@@ -412,7 +412,7 @@ if (result.passed) { /* 합격 */ }
 
 ## 8. 유의점
 
-- **모듈은 순수 로직**(렌더링 없음). ES 모듈로 `src/questions.js`에 두고 `app.js`에서 `import`.
+- **모듈은 순수 로직**(렌더링 없음). ES 모듈로 `src/content/questions.js`에 두고 `app.js`에서 `import`.
 - `scoreExam`은 일부 과목만 있는 소규모 세트에선 빈 과목이 과락 처리되어 `passed:false`가 나온다. 100문항 정식 세트에서 정상 동작.
 - **예시 문항의 내용·수치는 자리표시자**다. 실제 진술의 O/X 근거는 식약처 교수학습 가이드(개정판)로 검증해 채워야 한다.
 

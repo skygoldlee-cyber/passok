@@ -194,14 +194,14 @@ test('UX-PWA-06: 생성된 manifest.cosmetic.webmanifest가 배합 계산기 sho
 // ---------- P-11: 자가 복구 (app-fallback.js) ----------
 
 test('P-11: app-fallback.js가 SW update→하드 리셋→수동 복구 단계로 복구한다', () => {
-  const fb = readFileSync(join(ROOT, 'src', 'app-fallback.js'), 'utf-8');
+  const fb = readFileSync(join(ROOT, 'src', 'shell', 'app-fallback.js'), 'utf-8');
   assert.ok(fb.includes('__APP_INITIALIZED'), '정상 초기화 감지 플래그');
   assert.ok(fb.includes('softUpdateThenReload'), '1차: SW update + reload');
   assert.ok(fb.includes('hardReset'), '2차: 캐시/SW 하드 리셋');
   assert.ok(fb.includes('showManualRecovery'), '3차: 수동 복구 화면');
   assert.ok(fb.includes('MAX_RELOADS'), '반복 실패 상한');
   // index.html에서 ESM 로더와 병행 로드
-  assert.ok(indexHtml.includes('src/app-fallback.js'), 'index.html 병행 로드');
+  assert.ok(indexHtml.includes('src/shell/app-fallback.js'), 'index.html 병행 로드');
 });
 
 // ---------- P-12: 프리캐시 자산 CI 검증 ----------

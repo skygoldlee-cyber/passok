@@ -3,7 +3,7 @@
 
 import { esc } from '../../../sanitize.js';
 import { showToast, showConfirm } from '../../../ui-utils.js';
-import { showStoreError } from '../../../pro-upgrade.js';
+import { showStoreError } from '../../../pro/pro-upgrade.js';
 import { checkFormulaItems, countChangedStandards } from '../formula-check.js';
 import { STAB, evaluateStability } from '../formula-stability.js';
 import {

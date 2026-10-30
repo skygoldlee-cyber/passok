@@ -3,10 +3,10 @@
 import { state } from '../state.js';
 import { esc, safeTextWithBreaks } from '../sanitize.js';
 import { vibrate, showToast, HAPTIC } from '../ui-utils.js';
-import { gradeAnswer } from '../questions.js';
-import { recordStatementJudgments, getWeakStatements } from '../statement-tracker.js';
-import { recordStudyActivity } from '../study-tracker.js';
-import { proFeatureNotice } from '../pro-upgrade.js';
+import { gradeAnswer } from '../content/questions.js';
+import { recordStatementJudgments, getWeakStatements } from '../study/statement-tracker.js';
+import { recordStudyActivity } from '../study/study-tracker.js';
+import { proFeatureNotice } from '../pro/pro-upgrade.js';
 import { OPTION_INDICATORS, openDrillSetup, startDrill, nextDrill, renderDrillResult } from './trainer-drills.js';
 import { resetMainScroll } from './navigation.js';
 

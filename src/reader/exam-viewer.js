@@ -27,11 +27,11 @@ import { contentPath, dataPath, getActiveRegistry } from '../exam-context.js';
 import { getJSON, setJSON } from '../storage.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
 import { CACHE } from '../config/cache.js';
-import { proFeatureNotice } from '../pro-upgrade.js';
+import { proFeatureNotice } from '../pro/pro-upgrade.js';
 import { renderMermaidIn } from './mermaid-render.js';
-import { DataLoader } from '../data-loader.js';
-import { buildComboSubjectMd } from '../combo-doc.js';
-import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay, scrollToHeadingSlug } from '../doc-overlay.js';
+import { DataLoader } from '../content/data-loader.js';
+import { buildComboSubjectMd } from '../content/combo-doc.js';
+import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay, scrollToHeadingSlug } from '../shell/doc-overlay.js';
 
 export const ExamViewer = (() => {
     // 캐시 포맷 변경: v7 — allowMermaid 활성화 (참조자료 md의 ```mermaid 블록 렌더링)

@@ -199,11 +199,11 @@ npm run hooks:install
 | 16 | `glossary-query.test.js` | 13 | `getGlossaryByRefFile()`, `getGlossaryByRefFiles()`, `getGlossaryEntry()`, `getAllGlossaryKeywords()` | 합성 데이터, 교재 무관 |
 | 17 | `markdown-parser-general.test.js` | 49 | 헤더, 표, 리스트, 인용문, 특수 토큰, 빈 입력 + `joinWraps`(ref_md 시각적 줄 병합, 러닝헤더 스킵) | 합성 데이터, 교재 무관 |
 | 18 | `reader-format-general.test.js` | 23 | 페이지 참조 제거, 기출문제/참조자료/출처 링크 변환, 용어집 자동 링크, Mermaid 보호 | 합성 데이터, 교재 무관 |
-| 19 | `combo-transform.test.js` | 7 | 복수정답형(ⓐⓑⓒ) 문항 변환 — 진술 추출, 정답 조합, 변형 ID | `src/questions.js` (`generateComboOptions`, `deriveComboAnswer`) |
+| 19 | `combo-transform.test.js` | 7 | 복수정답형(ⓐⓑⓒ) 문항 변환 — 진술 추출, 정답 조합, 변형 ID | `src/content/questions.js` (`generateComboOptions`, `deriveComboAnswer`) |
 | 20 | `combo-doc.test.js` | 4 | `buildComboSubjectMd()` — combo 문항 → 문제집 MD 직렬화 (문제부·정답 도출·해설 필터·파일럿) | EV-01 |
-| 21 | `statement-tracker.test.js` | 9 | 복수정답형 진술별 정답 추적·통계 | `src/questions.js` (`gradeAnswer`) + `src/statement-tracker.js` |
-| 22 | `questions.test.js` | 17 | `src/questions.js` — 문제 필터·출제 로직 | 합성 데이터 |
-| 23 | `data-loader.test.js` | 7 | `src/data-loader.js` — 데이터 번들 로딩, 캐시 동작 | `window` 글로벌 모킹 |
+| 21 | `statement-tracker.test.js` | 9 | 복수정답형 진술별 정답 추적·통계 | `src/content/questions.js` (`gradeAnswer`) + `src/study/statement-tracker.js` |
+| 22 | `questions.test.js` | 17 | `src/content/questions.js` — 문제 필터·출제 로직 | 합성 데이터 |
+| 23 | `data-loader.test.js` | 7 | `src/content/data-loader.js` — 데이터 번들 로딩, 캐시 동작 | `window` 글로벌 모킹 |
 | 24 | `exam-context.test.js` | 16 | `src/exam-context.js` — 시험 해석, `scopedKey` 네임스페이스, 기능 플래그 | 합성 데이터 |
 | 25 | `exam-simulator-facade.test.js` | 1 | exam-simulator 파사드 재수출 정합 — 소비자 import 이름 ↔ export 체인 | 파사드 분해 회귀 가드 |
 | 26 | `storage-key-sync.test.js` | 2 | `src/storage-keys.js` 선언 키 ↔ 실제 사용 키 동기화 | 키 누락 회귀 가드 |
@@ -216,16 +216,16 @@ npm run hooks:install
 | 33 | `customer-store.test.js` | 9 | `src/exams/cosmetic/customer-store.js` — 고객 CRUD, 상담 이력 append-only, `unlinkCustomerFromFormulas`, 20명 한도 | Formula OS Phase B |
 | 34 | `material-ledger.test.js` | 9 | `src/exams/cosmetic/material-ledger.js` — 원료 CRUD, 기한 상태 파생(expired/soon/ok/none), `daysUntilExpiry` 자정 기준 | Formula OS Phase C |
 | 35 | `formula-compliance.test.js` | 4 | `src/exams/cosmetic/views/formula-compliance.js` — 항목 id 고유성, refs 유효성, 법령 파일 실존, 필수 섹션 커버리지 | Formula OS Phase D |
-| 36 | `csv-import.test.js` | 17 | `src/csv-utils.js` 파서·EUC-KR 디코딩 + `importCustomers`/`importMaterials` 중복·한도·sanitize | Formula OS CSV |
+| 36 | `csv-import.test.js` | 17 | `src/content/csv-utils.js` 파서·EUC-KR 디코딩 + `importCustomers`/`importMaterials` 중복·한도·sanitize | Formula OS CSV |
 | 37 | `supabase-client.test.js` | 6 | `src/auth-sync/supabase-client.js` — lazy init, UMD 동적 로드, 미설정 폴백 | window 스텁 |
 | 38 | `sw-prune.test.js` | 5 | `sw.js` 캐시 프루닝 — 한글 경로 인코딩 오삭제 회귀 가드 | 서비스워커 로직 |
 | 39 | `mermaid/mermaid-utils.test.js` | 8 | `src/reader/mermaid-utils.js` — 다이어그램 타입 감지, CSS 클래스, init 옵션(테마 분기) | 순수 함수 |
-| 40 | `command-palette.test.js` | 11 | `src/command-palette.js` — `searchAll()` 통합 검색 순수 로직 | 2026-09-26 추가 |
-| 41 | `learning-pro.test.js` | 20 | `src/recommendations.js` — 추천·오답 원인·예상 점수 순수 로직 | 2026-09-26 추가 |
+| 40 | `command-palette.test.js` | 11 | `src/shell/command-palette.js` — `searchAll()` 통합 검색 순수 로직 | 2026-09-26 추가 |
+| 41 | `learning-pro.test.js` | 20 | `src/study/recommendations.js` — 추천·오답 원인·예상 점수 순수 로직 | 2026-09-26 추가 |
 | 42 | `storage.test.js` | 12 | `src/storage.js` — 스코프·JSON 헬퍼·쓰기 훅·백엔드 교체·`setMany` 롤백 | 저장소 추상화 |
-| 43 | `whats-new.test.js` | 7 | `src/whats-new.js` — `collectNewEntries` 버전 비교·집계·상한·폴백 | 순수 함수 |
-| 44 | `feedback.test.js` | 13 | `src/feedback.js` — `?src=` 캡처·sanitize, 페이로드 빌드/검증, 쿨다운, 큐·플러시 | window/localStorage 스텁 |
-| 45 | `study-tracker.test.js` | 41 | `src/study-tracker.js` — SC-03 활동 기록·월별 학습일·목표 진행 | localStorage 모킹, 2026-10-14 추가 |
+| 43 | `whats-new.test.js` | 7 | `src/shell/whats-new.js` — `collectNewEntries` 버전 비교·집계·상한·폴백 | 순수 함수 |
+| 44 | `feedback.test.js` | 13 | `src/shell/feedback.js` — `?src=` 캡처·sanitize, 페이로드 빌드/검증, 쿨다운, 큐·플러시 | window/localStorage 스텁 |
+| 45 | `study-tracker.test.js` | 41 | `src/study/study-tracker.js` — SC-03 활동 기록·월별 학습일·목표 진행 | localStorage 모킹, 2026-10-14 추가 |
 | 46 | `build-pipeline.test.js` | 19 | BP-01~08 — manifest 스키마·안정 ID·빌드 검증·파서 정합·용어집 인덱스·SW 스탬프·카드 감사·고아 번들 스윕 | tools/build 모듈 + subprocess, 2026-10-14 추가 |
 | 47 | `content-structure.test.js` | 13 | CS-01~10 — manifest↔파일·교재 8종·문제은행·ref_md 레이아웃·원료 메타·오디오북·슬러그·참조 이미지 | 파일시스템 정적 검증, 2026-10-14 추가 |
 | 48 | `audit-quality.test.js` | 6 | CQ-01~05 — 카드 감사·참조 링크·심각도·콤보 감사·베이스라인 카운트 | subprocess 실행, 2026-10-14 추가 |
@@ -240,7 +240,7 @@ npm run hooks:install
 | 57 | `doc-sync.test.js` | 7 | `tools/check/check_doc_sync.js` — 트리거/면제/문서 경로 분류, analyze 위반 판정, porcelain 파서 | 정적 패턴 검증, 2026-10-14 추가 |
 | 58 | `test-first.test.js` | 7 | `tools/check/check_test_first.js` — 로직 트리거/테스트 경로 분류, analyze 위반 판정 | 정적 패턴 검증, 2026-11-02 추가 |
 | 59 | `property-based.test.js` | 8 | `deriveComboAnswer`·`generateComboOptions`·`weak-items` ID 문법·SM-2 불변식 | fast-check 속성 기반 테스트 (PBT), 2026-10-04 추가 |
-| 60 | `error-telemetry.test.js` | 6 | `src/error-telemetry.js` — 페이로드·중복 억제·세션 상한·disabled/failed 경로·리스너 | insert 주입식, 2026-10-04 추가 |
+| 60 | `error-telemetry.test.js` | 6 | `src/telemetry/error-telemetry.js` — 페이로드·중복 억제·세션 상한·disabled/failed 경로·리스너 | insert 주입식, 2026-10-04 추가 |
 | 61 | `exams/cosmetic/formula-audit.test.js` | 37 | `src/exams/cosmetic/views/formula-audit.js` — 유형별 섹션 게이트·수집기·빌더 마크업·출력 이력·문서 식별자·고시 스탬프·점검자 성명 + print.css fp-doc 여백 규약 | 2026-10-06 추가 |
 | 62 | `analysis-deepening.test.js` | 19 | 맞춤학습 심화 — 결함 클러스터·심화 추천 경로 | |
 | 63 | `analysis-engine.test.js` | 22 | 맞춤학습 분석 엔진 순수 로직 | |
@@ -277,7 +277,7 @@ npm run hooks:install
 | 94 | `search-morpheme.test.js` | 8 | 형태소 경계 판정·동의어 확장 (TS-13/TS-14) | |
 | 95 | `textbook-search-exam.test.js` | 2 | `search-sources.js` `_loadExamMdText` — 문제은행 MD 로드 규약 (TS-12) | |
 | 96 | `pro-report.test.js` | 5 | `tools/check/pro_report.js` `summarize()` — 채널·티어 발급/사용률·만료 버킷·가입 수단 분포 (AD-09) | 2026-10-23 추가 |
-| 97 | `landing.test.js` | 3 | `src/landing.js` 순수 함수 — `daysUntil`·`computePlanPreview`·`subjectShares` (LP-09) | 2026-10-25 추가 |
+| 97 | `landing.test.js` | 3 | `src/shell/landing.js` 순수 함수 — `daysUntil`·`computePlanPreview`·`subjectShares` (LP-09) | 2026-10-25 추가 |
 | 98 | `gates/build-landing.test.js` | 8 | `build_landing.js` — 카드 렌더·이스케이프·마커 주입·데모 수집·스키마·manifest 비중·SW 미포함·OG 메타 (LP-01~04,07~09) | 2026-10-25 추가 |
 | | **합계** | **1571** | | |
 
@@ -544,11 +544,11 @@ npm run hooks:install
 ### 4.12 복수정답형 파이프라인
 
 #### `combo-transform.test.js` (7개)
-- `src/questions.js`: 단일정답 문항 → 복수정답형(ⓐⓑⓒ 선택) 변환 (`generateComboOptions`)
+- `src/content/questions.js`: 단일정답 문항 → 복수정답형(ⓐⓑⓒ 선택) 변환 (`generateComboOptions`)
 - 진술 추출, 정답 조합 매칭, 변형 문항 ID 생성
 
 #### `statement-tracker.test.js` (9개)
-- `src/statement-tracker.js`: 진술별 정답률 추적·통계 집계
+- `src/study/statement-tracker.js`: 진술별 정답률 추적·통계 집계
 
 ### 4.10b DOM — Formula OS UI 시나리오 (2026-09-23, 설계: DOM_TEST_DESIGN.md)
 
@@ -614,16 +614,16 @@ export 함수를 직접 호출하고 DOM 반영을 검증한다. `data-click` �
 - 27항목 id 고유성, `refs` 구조 유효성, **법령 MD 파일 실존 검증**(ref_md 경로), 6개 필수 섹션 커버리지
 
 #### `csv-import.test.js` (17개)
-- `src/csv-utils.js`: 따옴표 필드(쉼표·개행·`""`), 구분자 `,`/`;`/탭 감지, UTF-8 BOM·EUC-KR 폴백, 헤더 정규화 매핑, `toCsv` BOM+이스케이프
+- `src/content/csv-utils.js`: 따옴표 필드(쉼표·개행·`""`), 구분자 `,`/`;`/탭 감지, UTF-8 BOM·EUC-KR 폴백, 헤더 정규화 매핑, `toCsv` BOM+이스케이프
 - `importCustomers`/`importMaterials`: 중복 건너뜀(고객=이름, 원료=이름+LOT), 이름 없음 제외, 한도 초과 집계, sanitize 경유, CSV 왕복
 
 ### 4.13 기타 신규 분류
 
 #### `questions.test.js` (17개)
-- `src/questions.js`: 과목/유형 필터, 출제 순서·개수 로직
+- `src/content/questions.js`: 과목/유형 필터, 출제 순서·개수 로직
 
 #### `data-loader.test.js` (7개)
-- `src/data-loader.js`: 번들 fetch·캐시, `window` 글로벌 주입 검증
+- `src/content/data-loader.js`: 번들 fetch·캐시, `window` 글로벌 주입 검증
 
 #### `exam-context.test.js` (12개)
 - `src/exam-context.js`: 시험 해석, `scopedKey()` 네임스페이스, `hasFeature()` 기능 게이팅

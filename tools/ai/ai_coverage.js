@@ -16,10 +16,10 @@
 'use strict';
 
 const path = require('path');
-const { parseArgs, getTargets, listQbanks, writeDraft } = require('./lib/ai_common');
-const { parseQuestionBank } = require('./lib/qbank');
-const { listTextbooks, chunkTextbook } = require('./lib/textbook');
-const { readLines } = require('./lib/citations');
+const { parseArgs, getTargets, listQbanks, writeDraft } = require('./lib/ai_common.js');
+const { parseQuestionBank } = require('./lib/qbank.js');
+const { listTextbooks, chunkTextbook } = require('./lib/textbook.js');
+const { readLines } = require('./lib/citations.js');
 
 function main() {
     const { opts } = parseArgs();

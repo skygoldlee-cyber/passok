@@ -1,4 +1,4 @@
-// tests/unit/feedback.test.js — 의견 수신 모듈 (src/feedback.js) 검증
+// tests/unit/feedback.test.js — 의견 수신 모듈 (src/shell/feedback.js) 검증
 // @spec FB-01~08
 // 설계: docs/dev/design/USER_FEEDBACK_DESIGN.md
 // node:test 환경 — window/document/localStorage를 스텁하고,
@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 
 let importSeq = 0;
 async function freshModule() {
-  return import(`../../../src/feedback.js?case=${importSeq++}`);
+  return import(`../../../src/shell/feedback.js?case=/${importSeq++}`);
 }
 
 function createMockStorage() {
@@ -207,7 +207,7 @@ test('submitFeedback: 선행 큐와 함께 한 번에 전송', async () => {
 
 test('buildFeedbackPayload: kind=bug만 meta.session_id 연결키 첨부 — 신고 기반 오류 조회', async () => {
   const { buildFeedbackPayload } = await freshModule();
-  const { getTelemetrySessionId } = await import('../../../src/telemetry-session.js');
+  const { getTelemetrySessionId } = await import('../../../src/telemetry/telemetry-session.js');
   const bug = buildFeedbackPayload({ kind: 'bug', body: '오류입니다' });
   assert.equal(bug.meta.session_id, getTelemetrySessionId());
   for (const k of ['improve', 'praise', 'idea']) {

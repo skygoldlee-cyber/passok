@@ -15,7 +15,7 @@ import {
   calc, getEl, getIndex,
   renderCalcRows, renderStability, updateFoldSummaries, readCustomerInputs,
 } from './formula.js';
-import { DataLoader } from '../../../data-loader.js';
+import { DataLoader } from '../../../content/data-loader.js';
 import { todayKey } from '../../../utils.js';
 /* =======================================================
    추천 베이스 · 원료 패널 (규칙 기반 — 이름만 제안, 농도 미제안)

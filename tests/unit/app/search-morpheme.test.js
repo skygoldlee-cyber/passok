@@ -9,7 +9,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
     buildBoundaryVocab, isCoverable, termHitQuality, expandSynonyms,
-} from '../../../src/search-morpheme.js';
+} from '../../../src/search/search-morpheme.js';
 
 // 실제 코퍼스 형태를 모사한 어절 집합 — 보조·유화·세정·석유·화학 등이
 // 복합어를 이루는 형태소로 반복 두어( prefix )됨을 반영

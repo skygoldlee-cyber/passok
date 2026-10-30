@@ -32,12 +32,12 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { ROOT } = require('../lib/env');
-const { getExamTargets } = require('./exam_targets');
+const { ROOT } = require('../lib/env.js');
+const { getExamTargets } = require('./exam_targets.js');
 const {
     textNormKey, quantizeInt8, dequantizeNorm, dotVec, fileSha1, loadVarBundle,
     EMB_MODEL, EMB_MODEL_REVISION, EMB_MODEL_LOGICAL,
-} = require('../lib/emb_math');
+} = require('../lib/emb_math.js');
 
 const E5_DOC_PREFIX = 'passage: ';   // e5 계열은 저장 문서에 passage:, 질의에 query: 접두사 요구
 const TOP_K = 8;                     // 이웃 인덱스 항목당 이웃 수 (설계 §5.2)

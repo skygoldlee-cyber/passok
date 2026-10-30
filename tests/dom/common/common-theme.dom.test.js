@@ -7,7 +7,7 @@
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 import { loadIndexHtml, el } from '../helpers.js';
-import { setupThemeToggle } from '../../../src/theme-toggle.js';
+import { setupThemeToggle } from '../../../src/shell/theme-toggle.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 
 describe('테마 — 토글·영속·시스템 연동', () => {

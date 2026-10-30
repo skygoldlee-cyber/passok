@@ -23,7 +23,7 @@ import { createFormula } from '../../../../src/exams/cosmetic/formula-store.js';
 import { createCustomer } from '../../../../src/exams/cosmetic/customer-store.js';
 import { listBatches, getBatch, createBatch, QC_FIELDS, HYGIENE_FIELDS } from '../../../../src/exams/cosmetic/batch-store.js';
 import { createMaterial } from '../../../../src/exams/cosmetic/material-ledger.js';
-import { DataLoader } from '../../../../src/data-loader.js';
+import { DataLoader } from '../../../../src/content/data-loader.js';
 
 const INGREDIENTS_STUB = [
     { name: '정제수', engName: 'Water', type: 'approved', category: '용제', description: '', limit: '' },

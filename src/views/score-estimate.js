@@ -6,15 +6,15 @@
 // 점수 "추정치"만 제시한다 — 보정된 합격 확률은 실제 결과 데이터 축적 후 가능.
 
 import { esc } from '../sanitize.js';
-import { getDDay } from '../study-tracker.js';
+import { getDDay } from '../study/study-tracker.js';
 import { showToast } from '../ui-utils.js';
 import { getExamRules } from '../exam-context.js';
 import {
     estimateCompositeScore, computeCalibrationBias,
     getActualResult, saveActualResult, clearActualResult, getSimHistory
-} from '../recommendations.js';
-import { computeMasteryLevels } from '../analysis-engine.js';
-import { getAllStatementStats } from '../statement-tracker.js';
+} from '../study/recommendations.js';
+import { computeMasteryLevels } from '../study/analysis-engine.js';
+import { getAllStatementStats } from '../study/statement-tracker.js';
 import { getSubjCounts } from './subject-stats.js';
 
 /**

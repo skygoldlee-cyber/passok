@@ -10,7 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { parseExamFile } = require('./plugins/exams.plugin');
+const { parseExamFile } = require('./plugins/exams.plugin.js');
 const { removeOrphanBundles } = require('./exam_targets.js');
 const { createRequire } = require('module');
 const { OPTION_INDICATORS } = createRequire(__filename)('../../src/utils.js');

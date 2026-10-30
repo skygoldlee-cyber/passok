@@ -30,7 +30,7 @@ window.supabase = {
     })),
 };
 
-import { showFeedbackModal, flushPendingFeedback, initFeedbackHint, dismissFeedbackHint, dismissFeedbackDot } from '../../../src/feedback.js';
+import { showFeedbackModal, flushPendingFeedback, initFeedbackHint, dismissFeedbackHint, dismissFeedbackDot } from '../../../src/shell/feedback.js';
 
 function openModal() {
     showFeedbackModal('dashboard');

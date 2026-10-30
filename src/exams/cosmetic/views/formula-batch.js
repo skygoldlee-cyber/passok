@@ -11,7 +11,7 @@
 
 import { esc } from '../../../sanitize.js';
 import { showToast, showConfirm } from '../../../ui-utils.js';
-import { showStoreError } from '../../../pro-upgrade.js';
+import { showStoreError } from '../../../pro/pro-upgrade.js';
 import { showPanel, formulaSubNav, getEl } from './formula.js';
 import { getFormula } from '../formula-store.js';
 import {
@@ -27,7 +27,7 @@ import {
 import {
   draft, readBatchForm, currentAllergyConflicts, buildCheckSnapshot,
 } from './formula-batch-form.js';
-import { toCsv, downloadCsv } from '../../../csv-utils.js';
+import { toCsv, downloadCsv } from '../../../content/csv-utils.js';
 import { todayKey } from '../../../utils.js';
 
 // 분리 모듈 재수출 — data-click 핸들러 조회 경로 유지 (practice-registry)

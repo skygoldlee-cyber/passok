@@ -46,7 +46,7 @@ docs/
 | `report_archive/` | 시점 스냅샷 보고서·대체된 전략/설계 원전 — **앱 런타임·콘텐츠 의존 금지** |
 | `<id>/` 루트 | 분류 예외 — 하위 버킷에 넣을 수 없는 특수 문서 (현재 1건: `ingredients_audit_제2026-19호.md` — 앱 콘텐츠가 인용하는 refmat 스냅샷이라 아카이브 불가, 교재 비종속이라 reference 부적합) |
 
-- **report_archive 계약**: 앱 런타임이 fetch하거나 `content/`·`data/` 번들(UI 표시 대상)이 경로를 인용하는 문서는 아카이브 금지. 소스 주석의 출처(provenance) 인용은 허용한다 — 아카이브 문서는 재이동하지 않아 경로가 고정되므로 설계 근거 추적에 유효 (선례: `src/recommendations.js`·`src/views/quiz-wrong-cause.js`의 FEATURE_PROPOSALS §4 인용, `src/exams/cosmetic/formula-rules.js`의 FORMULA_OS_DESIGN §9.3 인용). 대체된 설계 원전(`FORMULA_OS_DESIGN.md` 등)은 여기가 정위치다 — 명칭이 `*_DESIGN`이어도 배치가 우선
+- **report_archive 계약**: 앱 런타임이 fetch하거나 `content/`·`data/` 번들(UI 표시 대상)이 경로를 인용하는 문서는 아카이브 금지. 소스 주석의 출처(provenance) 인용은 허용한다 — 아카이브 문서는 재이동하지 않아 경로가 고정되므로 설계 근거 추적에 유효 (선례: `src/study/recommendations.js`·`src/views/quiz/quiz-wrong-cause.js`의 FEATURE_PROPOSALS §4 인용, `src/exams/cosmetic/formula-rules.js`의 FORMULA_OS_DESIGN §9.3 인용). 대체된 설계 원전(`FORMULA_OS_DESIGN.md` 등)은 여기가 정위치다 — 명칭이 `*_DESIGN`이어도 배치가 우선
 - 시험별 인덱스(`docs/exams/<id>/README.md`)는 본 규약의 시험 범위 파생본 — 규약 본문은 복제하지 않는다
 
 ## 4. 배치 판정 순서

@@ -118,7 +118,7 @@ revoke execute on function public.redeem_code(text, date) from anon, public;
 grant execute on function public.redeem_code(text, date) to authenticated;
 -- 기존 배포에 적용 (구 서명 함수 교체):
 --   위 drop + create or replace 블록 전체를 SQL Editor에 실행하면 p_exam_date 인자가 추가된다.
---   앱은 미배포 스키마 감지 시 p_code 단독 호출로 폴백한다 (src/pro-redeem.js callRedeemRpc).
+--   앱은 미배포 스키마 감지 시 p_code 단독 호출로 폴백한다 (src/pro/pro-redeem.js callRedeemRpc).
 
 -- ============================================================
 -- 4) Row Level Security — 모든 테이블에서 자기 데이터만 접근
@@ -170,7 +170,7 @@ create policy "public insert" on public.feedback
   with check (user_id is null or user_id = auth.uid());
 
 -- ============================================================
--- client_errors: 런타임 오류 텔레메트리 (src/error-telemetry.js)
+-- client_errors: 런타임 오류 텔레메트리 (src/telemetry/error-telemetry.js)
 --   - 익명 insert 허용 (비로그인도 전송 — 관측성 목적)
 --   - select/update/delete 정책 없음 = 클라이언트 조회 전면 차단
 --   - 앱 측에서 세션당 상한·메시지 중복 억제로 폭주 방지
@@ -206,7 +206,7 @@ create policy "public insert" on public.client_errors
   for insert to anon, authenticated with check (true);
 
 -- ============================================================
--- usage_events: 과업 퍼널 이벤트 (src/usage-telemetry.js)
+-- usage_events: 과업 퍼널 이벤트 (src/telemetry/usage-telemetry.js)
 --   - 익명 insert 허용 (비로그인도 전송 — 관측성 목적)
 --   - select/update/delete 정책 없음 = 클라이언트 조회 전면 차단
 --   - session_id는 페이지 로드당 생성되는 랜덤 UUID — start↔complete

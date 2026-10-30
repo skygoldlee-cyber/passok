@@ -5,7 +5,7 @@
 // 기존 SW controllerchange 자동 리로드와 보완 관계: 장시간 열린 탭에서
 // 브라우저가 SW 업데이트를 확인하기 전에도 배포를 감지할 수 있다.
 
-import { appVersion } from '../app-version.js';
+import { appVersion } from '../shell/app-version.js';
 import { esc } from '../sanitize.js';
 
 const POLL_INTERVAL_MS = 5 * 60 * 1000; // 5분

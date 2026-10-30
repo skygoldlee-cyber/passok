@@ -17,7 +17,7 @@
  * 셋업 전체 절차: docs/dev/runbooks/DISCORD_ADMIN.md
  */
 'use strict';
-const { loadEnv } = require('../lib/env');
+const { loadEnv } = require('../lib/env.js');
 
 // index.ts의 switch 분기와 1:1 대응 — 명령 추가·변경 시 양쪽을 함께 수정
 const COMMANDS = [
