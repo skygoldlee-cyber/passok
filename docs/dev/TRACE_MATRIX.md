@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: a185e29db73d3768
-> 생성: 2026-10-30 · 원천: SPEC.md(628개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: b4f86be6b2830a25
+> 생성: 2026-10-30 · 원천: SPEC.md(634개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 628개 — 문서 연결 448 · 소스 연결 564 · 테스트 연결 597 · 보고서 연결 109
+**커버리지 요약**: 요구사항 634개 — 문서 연결 454 · 소스 연결 564 · 테스트 연결 597 · 보고서 연결 109
 
 ---
 
@@ -395,7 +395,7 @@
 | AU-05 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 2개 | src/auth-sync/sync.js | tests/dom/common/common-sync.dom.test.js | — | — |
 | AU-06 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 2개 | src/auth-sync/sync.js | tests/dom/common/common-sync.dom.test.js | — | — |
 | AU-07 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 2개 | src/auth-sync/sync.js | tests/dom/common/common-sync.dom.test.js<br>tests/unit/gates/storage-key-sync.test.js | — | 개인정보보호법 — 타인(고객) PII의 서버 저장 제한 원칙 |
-| AU-08 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 3개 | src/auth-sync/auth-view.js<br>src/auth-sync/supabase-client.js<br>src/auth-sync/supabase-config.js<br>src/auth-sync/sync.js | tests/dom/common/common-auth.dom.test.js<br>tests/dom/common/common-sync.dom.test.js<br>tests/unit/app/supabase-client.test.js | — | — |
+| AU-08 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 4개 | src/auth-sync/auth-view.js<br>src/auth-sync/supabase-client.js<br>src/auth-sync/supabase-config.js<br>src/auth-sync/sync.js | tests/dom/common/common-auth.dom.test.js<br>tests/dom/common/common-sync.dom.test.js<br>tests/unit/app/supabase-client.test.js | — | — |
 | AU-09 | ✅ | 테스트 | DOC-DSN-37<br>DOC-USR-18 | index.html<br>src/auth-sync/auth-view.js | tests/dom/common/common-auth.dom.test.js | — | — |
 
 ## 3.20 학습 캘린더·복습·드릴
@@ -537,6 +537,12 @@
 | AI-22 | ✅ | 테스트 | DOC-RBK-16 | src/content/data-loader.js<br>tools/ai/ai_cards.js | tests/unit/content/ai-tools.test.js | — | — |
 | AI-23 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_adoption.js | tests/unit/content/ai-tools.test.js | — | — |
 | AI-24 | ✅ | 테스트 | — | tools/ai/ai_textbook.js | tests/unit/content/ai-textbook.test.js | — | — |
+| AI-25 | 미구현 | 문서 검토 | DOC-DSN-40 | — | — | — | — |
+| AI-26 | 미구현 | 문서 검토 | DOC-DSN-40 | — | — | — | — |
+| AI-27 | 미구현 | 문서 검토 | DOC-DSN-40 | — | — | — | — |
+| AI-28 | 미구현 | 문서 검토 | DOC-DSN-40 | — | — | — | — |
+| AI-29 | 미구현 | 문서 검토 | DOC-DSN-40 | — | — | — | — |
+| AI-30 | 미구현 | 문서 검토 | DOC-DSN-40 | — | — | — | — |
 
 ## 3.28 주관식 연습 자기채점
 
@@ -876,10 +882,10 @@
 | UX-MET-02 | 구현 (2026-10-13) | E2E 테스트 | DOC-DSN-21<br>DOC-DSN-35 | src/telemetry/usage-stats.js | tests/dom/misc/usage-stats.dom.test.js<br>tests/e2e/usage-metrics.spec.js | — | — |
 | UX-MET-03 | 구현 (2026-10-13) | E2E 테스트 | DOC-DSN-21 | src/telemetry/usage-stats.js<br>tools/check/aggregate_usage.js | tests/dom/misc/usage-stats.dom.test.js<br>tests/e2e/usage-metrics.spec.js | — | — |
 | UX-MET-04 | 구현 (2026-10-13) | E2E 테스트 | DOC-DSN-21 | src/telemetry/usage-stats.js | tests/dom/misc/usage-stats.dom.test.js<br>tests/e2e/usage-metrics.spec.js<br>tests/unit/app/usage-metrics.test.js | — | — |
-| UX-MET-05 | 익명 insert 정책 재사용, session_id만 포함(영속 식별자 미전송), `usage_snapshot_sent` 하루 1회 상한. Supabase 미설정 환경 no-op. 학습 내용 미포함 — 카운터 수치만 | 테스트 | DOC-ADR-19<br>DOC-DSN-35<br>DOC-USR-18 | src/telemetry/usage-telemetry.js | tests/unit/app/usage-telemetry.test.js | — | — |
-| UX-MET-06 | 구현 (2026-10-22) | E2E 테스트 | DOC-ADR-19<br>DOC-DSN-35<br>DOC-USR-18 | src/telemetry/telemetry-consent.js<br>src/telemetry/usage-telemetry.js | tests/dom/misc/telemetry-consent.dom.test.js<br>tests/e2e/usage-metrics.spec.js<br>tests/unit/app/telemetry-consent.test.js<br>tests/unit/app/usage-telemetry.test.js | — | — |
-| UX-MET-07 | 구현 (2026-10-22) | 테스트 | DOC-ADR-19<br>DOC-DSN-35<br>DOC-USR-18 | src/telemetry/telemetry-consent.js<br>src/telemetry/usage-telemetry.js | tests/unit/app/telemetry-consent.test.js<br>tests/unit/app/usage-telemetry.test.js | — | — |
-| UX-MET-08 | 구현 (2026-10-22) | 테스트 | DOC-ADR-19<br>DOC-DSN-35<br>DOC-USR-18 | src/telemetry/usage-telemetry.js | tests/unit/app/usage-telemetry.test.js | — | — |
+| UX-MET-05 | 익명 insert 정책 재사용, session_id만 포함(영속 식별자 미전송), `usage_snapshot_sent` 하루 1회 상한. Supabase 미설정 환경 no-op. 학습 내용 미포함 — 카운터 수치만 | 테스트 | DOC-ADR-19<br>DOC-DSN-35<br>DOC-DSN-40<br>DOC-USR-18 | src/telemetry/usage-telemetry.js | tests/unit/app/usage-telemetry.test.js | — | — |
+| UX-MET-06 | 구현 (2026-10-22) | E2E 테스트 | DOC-ADR-19<br>DOC-DSN-35<br>DOC-DSN-40<br>DOC-USR-18 | src/telemetry/telemetry-consent.js<br>src/telemetry/usage-telemetry.js | tests/dom/misc/telemetry-consent.dom.test.js<br>tests/e2e/usage-metrics.spec.js<br>tests/unit/app/telemetry-consent.test.js<br>tests/unit/app/usage-telemetry.test.js | — | — |
+| UX-MET-07 | 구현 (2026-10-22) | 테스트 | DOC-ADR-19<br>DOC-DSN-35<br>DOC-DSN-40<br>DOC-USR-18 | src/telemetry/telemetry-consent.js<br>src/telemetry/usage-telemetry.js | tests/unit/app/telemetry-consent.test.js<br>tests/unit/app/usage-telemetry.test.js | — | — |
+| UX-MET-08 | 구현 (2026-10-22) | 테스트 | DOC-ADR-19<br>DOC-DSN-35<br>DOC-DSN-40<br>DOC-USR-18 | src/telemetry/usage-telemetry.js | tests/unit/app/usage-telemetry.test.js | — | — |
 
 ## 7.8 P2 유료 수요 검증 — 결제·라이선스 코드
 
@@ -887,11 +893,11 @@
 |----|------|-----------|------|------|--------|--------|------|
 | PAY-01 | 구현 (2026-10-22) | 테스트 | — | src/pro/pro-redeem.js | tests/dom/misc/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
 | PAY-02 | 구현 (활성) | 테스트 | — | src/pro/pro-upgrade.js | tests/dom/misc/pro-redeem.dom.test.js | — | — |
-| PAY-03 | 구현 (2026-10-22) | 테스트 | DOC-USR-18 | src/pro/pro-redeem.js | tests/dom/misc/pro-redeem.dom.test.js | — | — |
-| PAY-04 | 구현 (2026-10-22) | 테스트 | DOC-USR-18 | src/pro/pro-upgrade.js | tests/unit/app/usage-telemetry.test.js | — | — |
-| PAY-05 | 구현 (2026-10-22) | 테스트 | DOC-USR-18 | tools/check/issue_pro_code.js | tests/unit/app/pro-redeem.test.js | — | — |
-| PAY-06 | 구현 (2026-10-23) | 테스트 | DOC-USR-18 | src/pro/pro-redeem.js<br>src/pro/pro-upgrade.js | tests/dom/misc/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
-| PAY-07 | 구현 (2026-10-23) | 테스트 | DOC-USR-18 | html/views/dashboard.html<br>index.html<br>src/pro/pro-expiry.js<br>src/pro/pro-redeem.js<br>…외 2개 | tests/dom/misc/pro-plan.dom.test.js<br>tests/dom/misc/pro-redeem.dom.test.js<br>tests/unit/app/pro-expiry.test.js | — | — |
+| PAY-03 | 구현 (2026-10-22) | 테스트 | DOC-DSN-40<br>DOC-USR-18 | src/pro/pro-redeem.js | tests/dom/misc/pro-redeem.dom.test.js | — | — |
+| PAY-04 | 구현 (2026-10-22) | 테스트 | DOC-DSN-40<br>DOC-USR-18 | src/pro/pro-upgrade.js | tests/unit/app/usage-telemetry.test.js | — | — |
+| PAY-05 | 구현 (2026-10-22) | 테스트 | DOC-DSN-40<br>DOC-USR-18 | tools/check/issue_pro_code.js | tests/unit/app/pro-redeem.test.js | — | — |
+| PAY-06 | 구현 (2026-10-23) | 테스트 | DOC-DSN-40<br>DOC-USR-18 | src/pro/pro-redeem.js<br>src/pro/pro-upgrade.js | tests/dom/misc/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
+| PAY-07 | 구현 (2026-10-23) | 테스트 | DOC-DSN-40<br>DOC-USR-18 | html/views/dashboard.html<br>index.html<br>src/pro/pro-expiry.js<br>src/pro/pro-redeem.js<br>…외 2개 | tests/dom/misc/pro-plan.dom.test.js<br>tests/dom/misc/pro-redeem.dom.test.js<br>tests/unit/app/pro-expiry.test.js | — | — |
 | PAY-08 | 구현 (2026-10-23) | 테스트 | — | src/pro/pro-redeem.js | tests/dom/misc/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
 
 ---
@@ -977,6 +983,7 @@
 | DOC-DSN-37 | docs/dev/design/PROMOTION_DESIGN.md | AD-10, AD-11, AD-12, AU-09, DA-15, ES-08 |
 | DOC-DSN-38 | docs/dev/design/LANDING_PAGE_DESIGN.md | DA-15, ES-01, ES-02, ES-03, ES-04, ES-05, ES-06, ES-07, ES-08, LP-01, LP-02, LP-03, LP-04, LP-05, LP-06, LP-07, LP-08, LP-09, P-07 |
 | DOC-DSN-39 | docs/dev/design/NATIVE_APP_STRATEGY.md | LP-01, LP-02, LP-03, LP-04, LP-05, LP-06, LP-07, LP-08, LP-09, LP-10, P-01, P-02, P-03, P-04, P-05, P-06, P-07 |
+| DOC-DSN-40 | docs/dev/design/AI_COACH_DESIGN.md | AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AU-08, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |
