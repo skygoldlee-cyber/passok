@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 revert(ui): 시험 선택 뷰 AI 코치 안내 행 제거
+
+- html/views/exam-select.html — 인트로 아래 AI 코치 안내 행 삭제 (랜딩 페이지·매뉴얼에 이미 소개되어 있어 앱 첫 화면 중복 제거) · index.html 재조립
+
 ## 2026-10-30 docs(landing): 히어로 차별점 스트립에 AI 학습 코치 추가
 
 - landing.template.html — 상단 요약 불릿(.landing-diff-strip)에 5번째 항목 "AI 학습 코치 — 오답 해설·주간 진단·계획 조언·교재 질의응답 (인용 근거 필수)" 추가 · landing.html 재조립
