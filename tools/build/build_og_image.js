@@ -9,11 +9,15 @@
  *
  * 사용: node tools/build/build_og_image.js · npm run build:ogimage
  */
+const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const OUT = path.join(ROOT, 'icons', 'og-image.png');
+// about:blank 페이지는 file:// 서브리소스 로드를 차단 — 아이콘은 data: URL로 인라인
+const ICON_DATA_URL = 'data:image/png;base64,' +
+    fs.readFileSync(path.join(ROOT, 'icons', 'passok-icon-192.png')).toString('base64');
 
 const HTML = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
 * { margin:0; padding:0; box-sizing:border-box }
@@ -34,7 +38,7 @@ h1 em { font-style:normal; color:#6fb1ff }
 .chip { font-size:21px; color:#d5e4ff; background:rgba(111,177,255,.14);
   border:1px solid rgba(111,177,255,.35); border-radius:999px; padding:10px 22px }
 </style></head><body><div class="card">
-  <div class="brand"><img src="file:///${path.posix.join(ROOT.split(path.sep).join(String.fromCharCode(47)), 'icons/passok-icon-192.png')}"><span>PassOK</span></div>
+  <div class="brand"><img src="${ICON_DATA_URL}"><span>PassOK</span></div>
   <h1>자격시험 합격을 위한<br><em>스마트 학습 플랫폼</em></h1>
   <p class="sub">계정 없이 바로 시작 · 설치하면 완전 오프라인</p>
   <div class="chips"><span class="chip">교재 + 퀴즈 + 모의고사</span><span class="chip">FSRS 스마트 복습</span><span class="chip">무료</span></div>

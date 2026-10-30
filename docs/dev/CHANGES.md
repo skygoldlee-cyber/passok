@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 fix(icons): og-image 아이콘 깨짐 수정
+
+- build_og_image.js — `file:///…` 아이콘 src가 about:blank 페이지에서 서브리소스 차단돼 깨진 이미지로 렌더되던 문제 → data: URL 인라인 임베드로 교체 · og-image.png 재생성
+
 ## 2026-10-30 feat(icons): 아이콘 생성 파이프라인 + 선언·배치 보강
 
 - tools/build/build_icons.js 신설 (build:icons / check:icons) — 정본 512 → 파생(apple-touch 180·favicon 32·16) Playwright 고품질 렌더, maskable 세이프존 75%·풀블리드 재생성(기존 파일 코너 투명 발견·수정), root manifest ?v= 해시 스탬프(시험별 manifest와 정합), icons_stamp.json 신선도 스탬프
