@@ -1,7 +1,7 @@
 # 📋 요구사양 명세서 (Software Requirements Specification)
 
 > **프로젝트**: PassOK — 멀티시험 스마트 학습 플랫폼 (첫 콘텐츠 팩: 맞춤형화장품 조제관리사 = 앱명 Passmula)
-> **버전**: 1.19 (2026-10-30 기준 — UX-VFY-08(마크업 선언 규약 체커)·CS-12(교재 십진법 번호체계) 신설 + 게이트 @spec 태그 정합 일괄 정리)
+> **버전**: 1.20 (2026-10-30 기준 — LP-11(체험 섹션 경험 명시)·LP-12(OG 공유 이미지) 신설)
 > **버전 규약**: 본문 요구사항의 추가·변경·제거 시 마이너 버전을 갱신하고 변경 내역은 `CHANGES.md`에 기록한다 — 기준선은 커밋 해시로 확정한다
 > **상태 수명 주기 규약**: 요구사항 표의 마지막 셀(상태)은 아래 값 중 하나를 사용한다. 폐기·통합된 ID는 **영구 소각** — 같은 접두사 시퀀스에서 번호를 재사용하지 않는다 (역사적 참조·git 이력이 ID를 가리키므로).
 >
@@ -680,6 +680,8 @@
 | LP-08 | SEO·공유 메타 — description·canonical·OG(website)·twitter:card·JSON-LD(SoftwareApplication) | ✅ |
 | LP-09 | 학습계획 미리보기 — 시험일 입력 → 잔여 주수·단계별 로드맵(통독→문풀·복습→모의고사)·과목별 문항 비중 바 시연. 데이터는 `{contentRoot}/manifest.json`의 subjects·exams 문항 수·study.minExamLeadDays 빌드타임 주입, 권장 리드타임 미만 시 압축 플랜 안내 | ✅ |
 | LP-10 | 프로모션 진입점 — 신규 방문자(저장 키 없음·비 standalone·딥링크/`?app=1` 아님)는 `/` 접속 시 `landing.html`로 안내 (`src/shell/landing-redirect.js`, 앱 부트 이전 동기 판정). 랜딩 방문 시 `passok_landing_seen` 기록 → 이후 `/`는 앱으로 직행. `landing-qr.svg` QR 자산으로 홍보 유입 지원 | ✅ |
+| LP-11 | 체험 섹션 경험 명시 — "지금 바로 체험"이 제공하는 내용을 섹션 부제·카드 레이블에 구체 표기 (실제 시험 문항 퀴즈·시험일 기준 주차별 계획 미리보기) — 무엇을 체험하는지 모호하지 않도록 | ✅ |
+| LP-12 | 공유 미리보기 이미지 — 1200×630 브랜드 OG 이미지(`icons/og-image.png`, `tools/build/build_og_image.js`로 재생성)를 `og:image`에 연결 + `og:image:width/height`·`twitter:card=summary_large_image` | ✅ |
 
 ### 3.30 개인 맞춤 고도화 (Personalization)
 

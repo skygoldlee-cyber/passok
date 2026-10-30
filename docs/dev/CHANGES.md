@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(landing): LP-11·LP-12 신설 — 체험 섹션 경험 명시 + OG 공유 이미지
+
+- `docs/dev/SPEC.md` §3.29 — LP-11(체험 섹션 제공 경험 명시)·LP-12(1200×630 OG 이미지 + summary_large_image) 추가. 버전 1.20
+- `landing.template.html` — 체험 섹션 부제를 제공 경험 구체 명기로 교체 + `og:image`를 브랜드 이미지로 교체·width/height·twitter:card 갱신
+- `tools/build/build_og_image.js` 신설 — Playwright로 1200×630 브랜드 카드 렌더 → `icons/og-image.png` 생성
+
 ## 2026-10-30 docs(spec): 게이트 @spec 태그 정합 전수조사 — 기존 ID 6건 연결 + UX-VFY-08·CS-12 신설
 
 - 기존 SPEC 요구사항을 강제하면서 `@spec none`이던 게이트 연결 — check_storage_access→DA-09, check_seed_keys→DA-07, check_feature_flags→DA-08, build_embeddings→SEM-01, sync_textbook_files→CS-01/02, check_ui_style→UX-FB-02(④ 네이티브 다이얼로그)

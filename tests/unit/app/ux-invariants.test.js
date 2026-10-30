@@ -1,10 +1,10 @@
 // tests/unit/ux-invariants.test.js — UI/UX 설계 요구사항 (정적 검증)
-// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,LP-06,LP-10
+// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,LP-06,LP-10,LP-11,LP-12
 // CSS 규칙·마크업 구조·JS 구현 패턴이 설계 요구사항을 유지하는지 고정한다.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -117,6 +117,23 @@ test('진도 데이터 스키마 버전 마커가 saveProgress에서 기록된�
   const keys = read('src/storage-keys.js');
   assert.ok(/SCHEMA_VERSION:\s*'progress_schema_version'/.test(keys), '키 등록');
   assert.ok(read('src/state.js').includes("STORAGE_KEYS.SCHEMA_VERSION"), 'saveProgress 기록');
+});
+
+test('LP-11: 체험 섹션이 제공 경험을 구체 명기한다', () => {
+  const tpl = read('landing.template.html');
+  assert.ok(tpl.includes('실제 시험 문항 퀴즈'), '섹션 부제에 퀴즈 체험 명시');
+  assert.ok(tpl.includes('주차별 학습계획'), '섹션 부제에 계획 미리보기 명시');
+  const landingJs = read('src/shell/landing.js');
+  assert.ok(landingJs.includes('실제 문항 퀴즈 체험'), '퀴즈 카드 레이블 명시');
+  assert.ok(landingJs.includes('시험일 기준 주차별 계획 미리보기'), '계획 카드 레이블 명시');
+});
+
+test('LP-12: OG 공유 미리보기 이미지가 브랜드 카드로 연결된다', () => {
+  const tpl = read('landing.template.html');
+  assert.ok(tpl.includes('og:image" content="https://passok.vercel.app/icons/og-image.png"'), 'og:image 브랜드 카드');
+  assert.ok(tpl.includes('og:image:width" content="1200"') && tpl.includes('og:image:height" content="630"'), 'OG 규격 1200x630');
+  assert.ok(tpl.includes('twitter:card" content="summary_large_image"'), 'summary_large_image');
+  assert.ok(existsSync(join(ROOT, 'icons', 'og-image.png')), 'og-image.png 자산 존재');
 });
 
 test('LP-10: 신규 방문자 리다이렉트 스크립트가 index.html에 로드되고 조건을 갖는다', () => {

@@ -1,5 +1,5 @@
 // src/landing.js — 서비스 소개 랜딩 페이지 스크립트
-// @spec LP-04,LP-05,LP-09
+// @spec LP-04,LP-05,LP-09,LP-11
 // 체험 데모 위젯(미니 퀴즈·학습계획 미리보기), 설치 CTA, 버전 표기.
 // ES 모듈 — 순수 함수는 export해 단위 테스트에서 직접 검증한다.
 // DOM 진입은 #landing-main 존재 시에만 (테스트 임포트 안전).
@@ -88,7 +88,7 @@ function renderQuiz(host, examData) {
     if (!Array.isArray(items) || !items.length) return;
     let idx = 0, score = 0;
     const head = el('div', 'demo-head');
-    head.append(el('h3', null, '미니 퀴즈 체험'), el('span', 'demo-exam-tag', examData.appName || examData.name || ''));
+    head.append(el('h3', null, '실제 문항 퀴즈 체험'), el('span', 'demo-exam-tag', examData.appName || examData.name || ''));
     const body = el('div');
     host.append(head, body);
 
@@ -141,7 +141,7 @@ function renderPlan(host, examData) {
     const plan = examData.plan;
     if (!plan || !Array.isArray(plan.subjects) || !plan.subjects.length) return;
     const head = el('div', 'demo-head');
-    head.append(el('h3', null, '학습계획 미리보기'), el('span', 'demo-exam-tag', examData.appName || examData.name || ''));
+    head.append(el('h3', null, '시험일 기준 주차별 계획 미리보기'), el('span', 'demo-exam-tag', examData.appName || examData.name || ''));
     const form = el('div', 'demo-plan-form');
     const label = el('label', null, '시험일을 입력하세요');
     const input = document.createElement('input');
