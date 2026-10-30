@@ -65,6 +65,7 @@
   "tests/dom/reader/reader-ref-links.dom.test.js — tests 코드 파일명은 kebab-case (reader-ref-links.dom.test.js)",
   "tests/dom/reader/story-search.dom.test.js — tests 코드 파일명은 kebab-case (story-search.dom.test.js)",
   "tests/dom/reader/textbook-edition.dom.test.js — tests 코드 파일명은 kebab-case (textbook-edition.dom.test.js)",
+  "tests/dom/study/ai-feedback.dom.test.js — tests 코드 파일명은 kebab-case (ai-feedback.dom.test.js)",
   "tests/dom/study/study-calendar.dom.test.js — tests 코드 파일명은 kebab-case (study-calendar.dom.test.js)",
   "tests/dom/study/study-challenge.dom.test.js — tests 코드 파일명은 kebab-case (study-challenge.dom.test.js)",
   "tests/dom/study/study-commandpalette.dom.test.js — tests 코드 파일명은 kebab-case (study-commandpalette.dom.test.js)",
@@ -104,5 +105,6 @@
   "tools/build/plugins/knowledge.plugin.js — tools 파일명은 snake_case (knowledge.plugin.js)",
   "tools/build/plugins/textbook.plugin.js — tools 파일명은 snake_case (textbook.plugin.js)",
   "tools/supabase/functions/admin-bot/deno.d.ts — tools 파일명은 snake_case (deno.d.ts)",
+  "tools/supabase/functions/ai-proxy/deno.d.ts — tools 파일명은 snake_case (deno.d.ts)",
   "tools/supabase/functions/feedback-notify/deno.d.ts — tools 파일명은 snake_case (deno.d.ts)"
 ]
