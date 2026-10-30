@@ -1,5 +1,5 @@
 // tests/dom/study/ai-feedback.dom.test.js — 퀴즈 오답 AI 해설 시나리오
-// @spec AI-27, AI-29
+// @spec AI-26, AI-27, AI-29
 // 설계: docs/dev/design/AI_COACH_DESIGN.md §3·§5 단계 1
 // 검증: 미로그인 시 버튼 은닉(E), 쿼터 초과 시 에러 표시(E),
 //       성공 시 해설+AI 생성 배지 인라인 렌더(H), BYOK 폴백 경로(H)

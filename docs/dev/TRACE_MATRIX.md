@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 93eb23f33bf094d4
+> 입력 해시: 1621445e6059922f
 > 생성: 2026-10-30 · 원천: SPEC.md(634개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 634개 — 문서 연결 454 · 소스 연결 564 · 테스트 연결 600 · 보고서 연결 109
+**커버리지 요약**: 요구사항 634개 — 문서 연결 454 · 소스 연결 570 · 테스트 연결 603 · 보고서 연결 109
 
 ---
 
@@ -537,12 +537,12 @@
 | AI-22 | ✅ | 테스트 | DOC-RBK-16 | src/content/data-loader.js<br>tools/ai/ai_cards.js | tests/unit/content/ai-tools.test.js | — | — |
 | AI-23 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_adoption.js | tests/unit/content/ai-tools.test.js | — | — |
 | AI-24 | ✅ | 테스트 | — | tools/ai/ai_textbook.js | tests/unit/content/ai-textbook.test.js | — | — |
-| AI-25 | ✅ | 문서 검토 | DOC-DSN-40<br>DOC-USR-18 | — | — | — | — |
-| AI-26 | ✅ | 문서 검토 | DOC-DSN-40<br>DOC-USR-18 | — | — | — | — |
-| AI-27 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | — | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
-| AI-28 | ✅ | 문서 검토 | DOC-DSN-40<br>DOC-USR-18 | — | — | — | — |
-| AI-29 | ✅ | 테스트 | DOC-DSN-40 | — | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
-| AI-30 | ✅ | 테스트 | DOC-DSN-40 | — | tests/unit/engine/ai-client.test.js | — | — |
+| AI-25 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | tools/supabase/functions/ai-proxy/index.ts | tests/unit/engine/ai-client.test.js | — | — |
+| AI-26 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | tools/supabase/functions/ai-proxy/index.ts | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
+| AI-27 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
+| AI-28 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | src/ai/ai-client.js<br>src/telemetry/usage-telemetry.js | tests/unit/engine/ai-client.test.js | — | — |
+| AI-29 | ✅ | 테스트 | DOC-DSN-40 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
+| AI-30 | ✅ | 테스트 | DOC-DSN-40 | src/ai/ai-client.js<br>tools/supabase/functions/ai-proxy/index.ts | tests/unit/engine/ai-client.test.js | — | — |
 
 ## 3.28 주관식 연습 자기채점
 

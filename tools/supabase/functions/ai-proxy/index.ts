@@ -1,4 +1,5 @@
 // tools/supabase/functions/ai-proxy/index.ts — 런타임 AI 프록시 (AI-25~30)
+// @spec AI-25, AI-26, AI-30
 // 설계: docs/dev/design/AI_COACH_DESIGN.md §3
 //
 // 흐름: 로그인 JWT 검증(미로그인 401) → ai_usage 일일 쿼터(Free 한도·Pro 무제한,

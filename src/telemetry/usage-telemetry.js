@@ -1,5 +1,5 @@
 // src/usage-telemetry.js — 과업 퍼널 이벤트 텔레메트리
-// @spec UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08
+// @spec UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08, AI-28
 // ------------------------------------------------------------
 // 핵심 과업의 시작·완주 이벤트를 익명 insert가 허용된 usage_events
 // 테이블로 보낸다 (error-telemetry.js와 같은 전송 패턴).

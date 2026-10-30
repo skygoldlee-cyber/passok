@@ -1,4 +1,5 @@
 // src/ai/ai-client.js — 런타임 AI 호출 래퍼 (AI-25~30)
+// @spec AI-27~30
 // 설계: docs/dev/design/AI_COACH_DESIGN.md §3
 // ------------------------------------------------------------
 // 서버 프록시(ai-proxy Edge Function)를 우선 쓰고, 실패·미로그인 시 기존

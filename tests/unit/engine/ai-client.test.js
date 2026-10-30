@@ -1,5 +1,5 @@
 // tests/unit/ai-client.test.js — 런타임 AI 클라이언트 유닛 테스트
-// @spec AI-27, AI-29, AI-30
+// @spec AI-25, AI-26, AI-27, AI-28, AI-29, AI-30
 // 고정 프롬프트 계약(구조화 인자·길이 제한), 응답 파싱,
 // 캐시 히트·서버→BYOK 폴백·쿼터 분기를 고정한다.
 
@@ -10,6 +10,7 @@ import {
     aiFeedbackAvailable, requestWrongFeedback,
 } from '../../../src/ai/ai-client.js';
 import { saveAiKey } from '../../../src/written/written-grading.js';
+import { ALLOWED_EVENTS } from '../../../src/telemetry/usage-telemetry.js';
 
 function createMockStorage() {
     const store = {};
@@ -109,6 +110,10 @@ test('AI-27: 서버 성공 — 세션 토큰 첨부, 결과·잔여 반환, 캐�
     assert.equal(res2.ok, true);
     assert.equal(res2.route, 'cache');
     assert.equal(res2.explain, '서버 해설');
+});
+
+test('AI-28: ai_feature 이벤트가 텔레메트리 전송 allowlist에 등록돼 있다', () => {
+    assert.ok(ALLOWED_EVENTS.has('ai_feature'));
 });
 
 test('AI-26: 쿼터 초과(429)는 폴백하지 않고 quota로 반환', async () => {
