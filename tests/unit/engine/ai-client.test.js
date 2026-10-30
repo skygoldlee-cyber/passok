@@ -1,5 +1,5 @@
 // tests/unit/ai-client.test.js — 런타임 AI 클라이언트 유닛 테스트
-// @spec AI-25, AI-26, AI-27, AI-28, AI-29, AI-30
+// @spec AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AI-33
 // 고정 프롬프트 계약(구조화 인자·길이 제한), 응답 파싱,
 // 캐시 히트·서버→BYOK 폴백·쿼터 분기를 고정한다.
 
@@ -8,6 +8,7 @@ import assert from 'node:assert/strict';
 import {
     buildWrongFeedbackPrompt, parseFeedbackResponse,
     aiFeedbackAvailable, requestWrongFeedback,
+    buildWeeklyDiagnosisPrompt, requestWeeklyDiagnosis,
 } from '../../../src/ai/ai-client.js';
 import { saveAiKey } from '../../../src/written/written-grading.js';
 import { ALLOWED_EVENTS } from '../../../src/telemetry/usage-telemetry.js';
@@ -162,4 +163,44 @@ test('AI-29: 미로그인+키 없음 → unauthorized (호출부는 기능 은�
     const res = await requestWrongFeedback(INPUT, { session: null });
     assert.equal(res.ok, false);
     assert.equal(res.code, 'unauthorized');
+});
+
+/* ---------- AI-33: 자연어 주간 진단 ---------- */
+
+const DIAG = {
+    solvedWeek: 42, planWeek: 60, wrongWeek: 15, weekRate: 64, rateDelta: -5,
+    dday: 73, projectedCoverage: 71, neededPerDay: 42,
+    topCluster: '조제관리사 배치 의무', weakestSubject: '화장품법의 이해',
+};
+
+test('AI-33: weekly_diagnosis 프롬프트는 집계 수치·라벨만 구조화한다', () => {
+    const p = buildWeeklyDiagnosisPrompt(DIAG);
+    for (const s of ['42문', '계획 60문', '오답: 15문', '64%', 'D-73', '71%', '조제관리사 배치 의무', '화장품법의 이해']) {
+        assert.ok(p.includes(s), `프롬프트 누락: ${s}`);
+    }
+    assert.ok(p.includes('"confused_concept"'));
+    // 핵심 수치가 하나도 없으면 null (라벨만으로는 호출 불가)
+    assert.equal(buildWeeklyDiagnosisPrompt({ topCluster: 'x' }), null);
+    // 부분 수치만 있어도 조립됨
+    assert.ok(buildWeeklyDiagnosisPrompt({ dday: 30 }).includes('D-30'));
+});
+
+test('AI-33: 서버 경로 — kind=weekly_diagnosis 전송, 응답 정규화', async () => {
+    let sent;
+    const res = await requestWeeklyDiagnosis(DIAG, {
+        session: { access_token: 'tok' },
+        fetchImpl: async (u, init) => {
+            sent = { url: u, body: JSON.parse(init.body) };
+            return { ok: true, status: 200, json: async () => ({ ok: true, explain: '오답률이 높습니다 — 취약 과목 복습을 늘리세요.', confused_concept: '취약 과목', remaining: 7 }) };
+        },
+    });
+    assert.equal(res.ok, true);
+    assert.equal(res.route, 'server');
+    assert.equal(res.explain, '오답률이 높습니다 — 취약 과목 복습을 늘리세요.');
+    assert.equal(sent.body.kind, 'weekly_diagnosis');
+    assert.equal(sent.body.input.solvedWeek, 42);
+    // 캐시 — 입력 수치가 같으면 재호출 없음
+    const res2 = await requestWeeklyDiagnosis(DIAG, { session: { access_token: 't' },
+        fetchImpl: async () => { throw new Error('should not fetch'); } });
+    assert.equal(res2.route, 'cache');
 });

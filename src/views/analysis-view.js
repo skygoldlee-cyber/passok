@@ -38,6 +38,7 @@ import { renderDashboard, onAnalysisRefresh } from './dashboard.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { compositeEstimate } from './score-estimate.js';
 import { mountProMoment } from '../pro/pro-upgrade.js';
+import { aiFeedbackAvailable, requestWeeklyDiagnosis } from '../ai/ai-client.js';
 
 /**
  * 학습 진단 뷰 렌더링 — renderDashboard()가 과목 카드·히트맵·차트를
@@ -330,7 +331,67 @@ function _renderStudyRhythmInsight() {
         <div class="wc-row"><span>이번 주 학습일</span><strong>${esc(week.studyDays)}/${esc(week.goalDays)}일</strong></div>
         <div class="wc-row"><span>시험일</span><strong>${esc(ddayLabel)}</strong></div>
         ${growthRowHtml}${patternRowHtml}${paceNoteHtml}${fitNoteHtml}
-        <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="calendar-view"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> 캘린더 보기</button>`;
+        <div class="ai-coach-slot"></div>
+        <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="calendar-view"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> 캘린더 보기</button>
+        <button class="btn btn-secondary btn-sm analysis-card-btn ai-coach-btn is-hidden" data-click="requestAiCoach"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI 주간 코칭</button>`;
+
+    // AI-33 — AI 주간 코칭 버튼은 로그인 세션 또는 BYOK 키가 있을 때만 노출
+    void aiFeedbackAvailable().then(ok => {
+        if (ok) el.querySelector('.ai-coach-btn')?.classList.remove('is-hidden');
+    }).catch(() => {});
+}
+
+/**
+ * AI 주간 코칭 (AI-33) — analysis-engine 집계 수치만 전송해 코칭 문장을 받는다.
+ * 문항 내용·학습 원문은 보내지 않는다 (AI-30 계약).
+ */
+export async function requestAiCoach() {
+    const slot = document.querySelector('#analysis-study-rhythm .ai-coach-slot');
+    const btn = /** @type {HTMLButtonElement|null} */ (document.querySelector('#analysis-study-rhythm .ai-coach-btn'));
+    if (!slot || !btn) return;
+    btn.disabled = true;
+
+    const subjects = (typeof DataLoader !== 'undefined' && DataLoader.registry)
+        ? DataLoader.getSubjectList() : [];
+    const growth = computeWeeklyGrowth(getStudyCalendar());
+    const dday = getDDay();
+    const totalCards = subjects.reduce((s, m) => s + displayCounts(m).cards, 0);
+    const pace = computePaceProjection({
+        calendar: getStudyCalendar(), totalCards,
+        memorized: state.memorizedCards.size, dday
+    });
+    const weekPlan = computeStudyPlan(Math.max(0, totalCards - state.memorizedCards.size));
+    const weekAlloc = weekPlan && weekPlan.tier !== 'done'
+        ? computeSubjectAllocation(weekPlan, subjects, _allocInputs()) : null;
+    const gap = computePassGap({
+        estimate: compositeEstimate(), simHistory: getSimHistory(), subjects,
+        counts: getSubjCounts(), rules: getExamRules()
+    });
+
+    const input = {
+        solvedWeek: growth.thisWeek.quizzes,
+        planWeek: weekAlloc ? weekAlloc.thisWeek.alloc.reduce((s, a) => s + (a.quizzes || 0), 0) : null,
+        wrongWeek: Math.max(0, growth.thisWeek.quizzes - growth.thisWeek.correct),
+        weekRate: growth.thisWeek.rate,
+        rateDelta: growth.rateDelta,
+        dday,
+        projectedCoverage: pace ? pace.projectedCoverage : null,
+        neededPerDay: pace ? pace.neededPerDay : null,
+        topCluster: (weakClusters()[0] || {}).label || null,
+        weakestSubject: (gap && gap.weakest && gap.weakest.name) || null,
+    };
+
+    slot.innerHTML = '<p class="ai-feedback-loading"><i class="fa-solid fa-spinner fa-spin"></i> AI가 이번 주 학습을 분석하고 있습니다…</p>';
+    const res = await requestWeeklyDiagnosis(input);
+    if (res.ok) {
+        slot.innerHTML = `<div class="ai-feedback">
+            <p class="ai-feedback-text">${esc(res.explain || '')}</p>
+            <span class="ai-badge" title="AI가 생성한 코칭입니다 — 오류가 있을 수 있습니다">AI 생성</span>
+        </div>`;
+    } else {
+        slot.innerHTML = `<p class="ai-feedback-error">${esc(res.error || 'AI 코칭을 불러오지 못했습니다.')}</p>`;
+        if (res.code !== 'quota') btn.disabled = false;
+    }
 }
 
 /** 단원별 취약 분석 카드 — 과목별 그룹화 (과락이 과목 단위 평가이므로) */

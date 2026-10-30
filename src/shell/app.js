@@ -35,7 +35,8 @@ import {
     startDueReview,
     startExamRiskReview,
     exportAnalysisReport,
-    gotoSubjectAnalysis
+    gotoSubjectAnalysis,
+    requestAiCoach
 } from '../views/analysis-view.js';
 import {
     saveActualExamResult,
@@ -606,7 +607,7 @@ const DELEGATED_HANDLERS = {
     requestAiFeedback,
     startDiagnosticQuiz,
     // 실제 시험 결과 자가 보고 (C1)
-    saveActualExamResult, editActualExamResult, exportAnalysisReport,
+    saveActualExamResult, editActualExamResult, exportAnalysisReport, requestAiCoach,
     // 통합 검색 팔레트
     openCommandPalette, closeCommandPalette, executePaletteResult,
     exportData, triggerImport, checkStorageWarning,

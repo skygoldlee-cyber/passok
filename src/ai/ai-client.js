@@ -88,8 +88,12 @@ export function parseFeedbackResponse(text) {
    ========================================================= */
 
 function _cacheKey(kind, input) {
-    const canon = JSON.stringify([kind, _clip(input?.question, 3000),
-        _clip(input?.selected, 600), _clip(input?.correct, 600)]);
+    // kind별 입력 전 필드를 정규화 — 문자열은 서버 상한으로 잘라 결정적 키 생성
+    const canon = JSON.stringify([kind, input && typeof input === 'object'
+        ? Object.keys(input).sort().map(k => [k,
+            typeof input[k] === 'string' ? input[k].slice(0, 3000)
+                : Array.isArray(input[k]) ? input[k].slice(0, 8) : input[k]])
+        : input]);
     return STORAGE_KEYS.AI_CACHE_PREFIX + sha256hex(canon);
 }
 
@@ -135,30 +139,38 @@ export async function aiFeedbackAvailable(deps = {}) {
 }
 
 function _featureEvent(result, extra = {}) {
-    void reportEvent('ai_feature', { feature: 'wrong_feedback', result, ...extra })
+    const { feature = 'wrong_feedback', ...rest } = extra;
+    void reportEvent('ai_feature', { feature, result, ...rest })
         .catch(() => {});
 }
 
 /**
- * 오답 맞춤 피드백 요청 — 서버 프록시 우선, BYOK 순차 폴백 (AI-27/29).
- * @param {object} input - buildWrongFeedbackPrompt 인자 계약
+ * 런타임 AI 공용 호출 — 서버 프록시 우선, BYOK 순차 폴백 (AI-29).
+ * @param {object} spec {kind, feature, buildPrompt, system, featureLabel}
+ *   - kind: ai-proxy kind (서버 템플릿 라우팅 키)
+ *   - feature: ai_feature 계측용 기능명
+ *   - buildPrompt: BYOK 미러 템플릿 (서버 정본과 동형 유지)
+ *   - system: BYOK 폴백용 시스템 프롬프트 (서버 KINDS[kind].system 미러)
+ *   - featureLabel: 사용자 오류 문구용 기능명
+ * @param {object} input - 구조화 인자 (AI-30 — 자유 입력 없음)
  * @param {object} [deps] 테스트 주입용 { fetchImpl, session }
  * @returns {Promise<{ok:boolean, explain?:string, confused?:string,
  *   remaining?:number|null, route?:'server'|'byok'|'cache', cached?:boolean,
  *   code?:string, error?:string}>}
  */
-export async function requestWrongFeedback(input, deps = {}) {
+async function _requestAi(spec, input, deps = {}) {
+    const { kind, feature, buildPrompt, system, featureLabel } = spec;
     // 필수 인자 검증 — 부족하면 서버·BYOK 어느 경로도 성립하지 않으므로 호출 전에 차단.
     // 조립된 프롬프트는 BYOK 폴백에서 재사용한다 (서버는 인자를 받아 자체 템플릿으로 조립).
-    const byokPrompt = buildWrongFeedbackPrompt(input);
+    const byokPrompt = buildPrompt(input);
     if (!byokPrompt) {
-        _featureEvent('error', { route: 'none', code: 'invalid' });
-        return { ok: false, code: 'invalid', error: 'AI 해설을 만들 정보가 부족합니다.' };
+        _featureEvent('error', { feature, route: 'none', code: 'invalid' });
+        return { ok: false, code: 'invalid', error: `${featureLabel}에 필요한 정보가 부족합니다.` };
     }
-    const cacheKey = _cacheKey('wrong_feedback', input);
+    const cacheKey = _cacheKey(kind, input);
     const hit = _cacheGet(cacheKey);
     if (hit) {
-        _featureEvent('cache_hit');
+        _featureEvent('cache_hit', { feature });
         return { ok: true, ...hit, route: 'cache', cached: true };
     }
 
@@ -177,7 +189,7 @@ export async function requestWrongFeedback(input, deps = {}) {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session.access_token}`,
                 },
-                body: JSON.stringify({ kind: 'wrong_feedback', input }),
+                body: JSON.stringify({ kind, input }),
                 signal: ctrl?.signal,
             });
             let body = null;
@@ -185,15 +197,15 @@ export async function requestWrongFeedback(input, deps = {}) {
             if (res.ok && body?.ok && body.explain) {
                 const result = { explain: String(body.explain), confused: String(body.confused || '') };
                 _cacheSet(cacheKey, result);
-                _featureEvent('success', { route: 'server' });
+                _featureEvent('success', { feature, route: 'server' });
                 return { ok: true, ...result, route: 'server', remaining: body.remaining ?? null };
             }
             if (res.status === 429 || body?.code === 'quota') {
                 // 서버 일일 쿼터 소진 — 기능적 응답이므로 폴백하지 않는다 (AI-26)
-                _featureEvent('quota', { route: 'server' });
+                _featureEvent('quota', { feature, route: 'server' });
                 return {
                     ok: false, code: 'quota',
-                    error: '오늘 무료 AI 해설 횟수를 모두 사용했습니다 — 내일 다시 시도하거나 Pro를 이용하세요.',
+                    error: '오늘 무료 AI 사용 횟수를 모두 사용했습니다 — 내일 다시 시도하거나 Pro를 이용하세요.',
                     remaining: body?.remaining ?? 0,
                 };
             }
@@ -212,29 +224,103 @@ export async function requestWrongFeedback(input, deps = {}) {
 
     // ── 2차: BYOK 폴백 — 사용자 본인 키가 있으면 같은 템플릿으로 직접 호출 ──
     if (getAiKey()) {
-        const res = await callProviderLLM(BYOK_SYSTEM, byokPrompt, {
+        const res = await callProviderLLM(system, byokPrompt, {
             fetchImpl: deps.fetchImpl, maxTokens: 400,
         });
         if (res.ok) {
             const parsed = parseFeedbackResponse(res.text);
             if (parsed) {
                 _cacheSet(cacheKey, parsed);
-                _featureEvent('success', { route: 'byok' });
+                _featureEvent('success', { feature, route: 'byok' });
                 return { ok: true, ...parsed, route: 'byok' };
             }
-            _featureEvent('error', { route: 'byok', code: 'unreadable' });
-            return { ok: false, code: 'unreadable', error: 'AI 해설을 해석하지 못했습니다 — 다시 시도해 보세요.' };
+            _featureEvent('error', { feature, route: 'byok', code: 'unreadable' });
+            return { ok: false, code: 'unreadable', error: `${featureLabel} 결과를 해석하지 못했습니다 — 다시 시도해 보세요.` };
         }
-        _featureEvent('error', { route: 'byok', code: res.code || 'http' });
-        return { ok: false, code: res.code || 'http', error: res.error || 'AI 해설을 불러오지 못했습니다.' };
+        _featureEvent('error', { feature, route: 'byok', code: res.code || 'http' });
+        return { ok: false, code: res.code || 'http', error: res.error || `${featureLabel}을 불러오지 못했습니다.` };
     }
 
     // ── 둘 다 불가 → 무표시 계약 (호출부는 기능을 숨긴다) ──
-    _featureEvent('error', { route: 'none', code: serverFail.code });
+    _featureEvent('error', { feature, route: 'none', code: serverFail.code });
     return {
         ok: false, code: serverFail.code,
         error: serverFail.code === 'unauthorized'
-            ? 'AI 해설은 로그인 후 이용할 수 있습니다.'
-            : 'AI 해설을 불러오지 못했습니다 — 잠시 후 다시 시도하세요.',
+            ? `${featureLabel}은 로그인 후 이용할 수 있습니다.`
+            : `${featureLabel}을 불러오지 못했습니다 — 잠시 후 다시 시도하세요.`,
     };
+}
+
+/**
+ * 오답 맞춤 피드백 요청 — 서버 프록시 우선, BYOK 순차 폴백 (AI-27/29).
+ * @param {object} input - buildWrongFeedbackPrompt 인자 계약
+ * @param {object} [deps] 테스트 주입용 { fetchImpl, session }
+ * @returns {Promise<{ok:boolean, explain?:string, confused?:string,
+ *   remaining?:number|null, route?:'server'|'byok'|'cache', cached?:boolean,
+ *   code?:string, error?:string}>}
+ */
+export function requestWrongFeedback(input, deps = {}) {
+    return _requestAi({
+        kind: 'wrong_feedback', feature: 'wrong_feedback', featureLabel: 'AI 해설',
+        buildPrompt: buildWrongFeedbackPrompt, system: BYOK_SYSTEM,
+    }, input, deps);
+}
+
+/* =========================================================
+   weekly_diagnosis — 자연어 주간 진단 (AI-33)
+   집계 수치·라벨만 입력 — 문항 내용·학습 원문 미포함 (AI-30 계약)
+   ========================================================= */
+
+const BYOK_DIAG_SYSTEM = `당신은 자격시험 학습 코치입니다. 수험생의 주간 학습 수치를 보내면 이번 주 평가와 다음 주 행동을 조언합니다.
+- 평가 1문장 + 다음 주 행동 제안 1~2문장, 총 2~3문장으로 짧게.
+- 수치에 없는 사실은 단정하지 않고, 과목·개념 라벨이 주어지면 그 이름으로만 언급합니다.
+- JSON만 응답합니다.`;
+
+const _diagNum = (v, lo, hi) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? Math.min(Math.max(lo, Math.round(n)), hi) : null;
+};
+
+/**
+ * weekly_diagnosis 프롬프트 조립 (서버 미러) — 집계 수치+라벨 → 고정 템플릿.
+ * @param {object} input {solvedWeek?, planWeek?, wrongWeek?, weekRate?, rateDelta?,
+ *   dday?, projectedCoverage?, neededPerDay?, topCluster?, weakestSubject?}
+ * @returns {string|null} 핵심 수치가 하나도 없으면 null
+ */
+export function buildWeeklyDiagnosisPrompt(input) {
+    const lines = [];
+    const solved = _diagNum(input?.solvedWeek, 0, 9999);
+    const plan = _diagNum(input?.planWeek, 0, 9999);
+    const wrong = _diagNum(input?.wrongWeek, 0, 9999);
+    const rate = _diagNum(input?.weekRate, 0, 100);
+    const delta = _diagNum(input?.rateDelta, -100, 100);
+    const dday = _diagNum(input?.dday, -999, 999);
+    const cover = _diagNum(input?.projectedCoverage, 0, 100);
+    const needed = _diagNum(input?.neededPerDay, 0, 999);
+    const cluster = _clip(input?.topCluster, 60);
+    const weakSubj = _clip(input?.weakestSubject, 60);
+    const hasNum = [solved, plan, wrong, rate, dday, cover, needed].some(v => v !== null);
+    if (solved !== null) lines.push(`- 이번 주 풀이: ${solved}문${plan !== null ? ` (계획 ${plan}문)` : ''}`);
+    else if (plan !== null) lines.push(`- 주간 계획: ${plan}문`);
+    if (wrong !== null) lines.push(`- 이번 주 오답: ${wrong}문`);
+    if (rate !== null) lines.push(`- 주간 정답률: ${rate}%${delta !== null ? ` (전주 대비 ${delta > 0 ? '+' : ''}${delta}%p)` : ''}`);
+    if (dday !== null) lines.push(dday >= 0 ? `- 시험까지: D-${dday}` : `- 시험 경과: D+${-dday}`);
+    if (cover !== null) lines.push(`- 현재 페이스 커버 예상: ${cover}%${needed !== null ? ` (필요 페이스 학습일당 ${needed}장)` : ''}`);
+    if (cluster) lines.push(`- 최다 오개념: ${cluster}`);
+    if (weakSubj) lines.push(`- 취약 과목: ${weakSubj}`);
+    if (!hasNum) return null;  // 라벨만으로는 진단 불가 — 수치가 최소 1개 필요
+    return `## 이번 주 학습 수치\n${lines.join('\n')}
+응답 형식(JSON만): {"explain":"평가+다음 주 행동 제안 2~3문장","confused_concept":"핵심 키워드 1어절"}`;
+}
+
+/**
+ * 자연어 주간 진단 요청 (AI-33) — analysis-engine 집계 수치 → 코칭 문장.
+ * @param {object} input - buildWeeklyDiagnosisPrompt 인자 계약
+ * @param {object} [deps] 테스트 주입용 { fetchImpl, session }
+ */
+export function requestWeeklyDiagnosis(input, deps = {}) {
+    return _requestAi({
+        kind: 'weekly_diagnosis', feature: 'weekly_diagnosis', featureLabel: 'AI 주간 코칭',
+        buildPrompt: buildWeeklyDiagnosisPrompt, system: BYOK_DIAG_SYSTEM,
+    }, input, deps);
 }

@@ -107,8 +107,54 @@ ${misjudged.length ? `\n## 수험생이 오판한 진술\n${misjudged.map((s) =>
 응답 형식(JSON만): {"explain":"오답 원인 해설 1~2문장","confused_concept":"혼동 개념 1어절"}`;
 }
 
-const KIND_BUILDERS: Record<string, (i: WrongFeedbackInput) => string | null> = {
-    wrong_feedback: buildWrongFeedbackPrompt,
+const DIAG_SYSTEM_PROMPT = `당신은 자격시험 학습 코치입니다. 수험생의 주간 학습 수치를 보내면 이번 주 평가와 다음 주 행동을 조언합니다.
+- 평가 1문장 + 다음 주 행동 제안 1~2문장, 총 2~3문장으로 짧게.
+- 수치에 없는 사실은 단정하지 않고, 과목·개념 라벨이 주어지면 그 이름으로만 언급합니다.
+- 출력은 지정된 JSON 스키마만 따릅니다.`;
+
+type DiagnosisInput = {
+    solvedWeek?: unknown; planWeek?: unknown; wrongWeek?: unknown;
+    weekRate?: unknown; rateDelta?: unknown; dday?: unknown;
+    projectedCoverage?: unknown; neededPerDay?: unknown;
+    topCluster?: unknown; weakestSubject?: unknown;
+};
+
+const diagNum = (v: unknown, lo: number, hi: number): number | null => {
+    const n = Number(v);
+    return Number.isFinite(n) ? Math.min(Math.max(lo, Math.round(n)), hi) : null;
+};
+
+/** 집계 수치+라벨 → 주간 진단 프롬프트 — 문항 내용·학습 원문은 받지 않는다 (AI-30/33) */
+function buildWeeklyDiagnosisPrompt(input: DiagnosisInput): string | null {
+    const lines: string[] = [];
+    const solved = diagNum(input?.solvedWeek, 0, 9999);
+    const plan = diagNum(input?.planWeek, 0, 9999);
+    const wrong = diagNum(input?.wrongWeek, 0, 9999);
+    const rate = diagNum(input?.weekRate, 0, 100);
+    const delta = diagNum(input?.rateDelta, -100, 100);
+    const dday = diagNum(input?.dday, -999, 999);
+    const cover = diagNum(input?.projectedCoverage, 0, 100);
+    const needed = diagNum(input?.neededPerDay, 0, 999);
+    const cluster = clip(input?.topCluster, 60);
+    const weakSubj = clip(input?.weakestSubject, 60);
+    const hasNum = [solved, plan, wrong, rate, dday, cover, needed].some((v) => v !== null);
+    if (solved !== null) lines.push(`- 이번 주 풀이: ${solved}문${plan !== null ? ` (계획 ${plan}문)` : ""}`);
+    else if (plan !== null) lines.push(`- 주간 계획: ${plan}문`);
+    if (wrong !== null) lines.push(`- 이번 주 오답: ${wrong}문`);
+    if (rate !== null) lines.push(`- 주간 정답률: ${rate}%${delta !== null ? ` (전주 대비 ${delta > 0 ? "+" : ""}${delta}%p)` : ""}`);
+    if (dday !== null) lines.push(dday >= 0 ? `- 시험까지: D-${dday}` : `- 시험 경과: D+${-dday}`);
+    if (cover !== null) lines.push(`- 현재 페이스 커버 예상: ${cover}%${needed !== null ? ` (필요 페이스 학습일당 ${needed}장)` : ""}`);
+    if (cluster) lines.push(`- 최다 오개념: ${cluster}`);
+    if (weakSubj) lines.push(`- 취약 과목: ${weakSubj}`);
+    if (!hasNum) return null;  // 라벨만으로는 진단 불가 — 수치가 최소 1개 필요
+    return `## 이번 주 학습 수치\n${lines.join("\n")}
+응답 형식(JSON만): {"explain":"평가+다음 주 행동 제안 2~3문장","confused_concept":"핵심 키워드 1어절"}`;
+}
+
+// deno-lint-ignore no-explicit-any — kind별 입력 타입이 다름
+const KINDS: Record<string, { system: string; build: (i: any) => string | null }> = {
+    wrong_feedback: { system: SYSTEM_PROMPT, build: buildWrongFeedbackPrompt },
+    weekly_diagnosis: { system: DIAG_SYSTEM_PROMPT, build: buildWeeklyDiagnosisPrompt },
 };
 
 /* ============================================================
@@ -124,13 +170,13 @@ const OUTPUT_SCHEMA = {
     required: ["explain", "confused_concept"],
 };
 
-async function callGemini(prompt: string): Promise<{ explain: string; confused: string } | null> {
+async function callGemini(prompt: string, system: string): Promise<{ explain: string; confused: string } | null> {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
     const res = await fetch(url, {
         method: "POST",
         headers: { "x-goog-api-key": GOOGLE_API_KEY, "Content-Type": "application/json" },
         body: JSON.stringify({
-            systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+            systemInstruction: { parts: [{ text: system }] },
             contents: [{ role: "user", parts: [{ text: prompt }] }],
             generationConfig: {
                 responseMimeType: "application/json",
@@ -177,9 +223,9 @@ Deno.serve(async (req: Request) => {
     let body: { kind?: unknown; input?: unknown };
     try { body = await req.json(); } catch { return json({ ok: false, code: "invalid" }, 400); }
     const kind = typeof body?.kind === "string" ? body.kind.slice(0, 40) : "";
-    const build = KIND_BUILDERS[kind];
-    if (!build) return json({ ok: false, code: "unknown_kind" }, 400);
-    const prompt = build((body.input ?? {}) as WrongFeedbackInput);
+    const k = KINDS[kind];
+    if (!k) return json({ ok: false, code: "unknown_kind" }, 400);
+    const prompt = k.build((body.input ?? {}) as WrongFeedbackInput);
     if (!prompt) return json({ ok: false, code: "invalid" }, 400);
 
     // 3) Pro 자격 — profiles.plan이 정본 (redeem_code RPC가 기간권까지 반영해 갱신)
@@ -204,7 +250,7 @@ Deno.serve(async (req: Request) => {
     }
 
     // 5) Gemini 호출 → 정규화 응답
-    const result = await callGemini(prompt);
+    const result = await callGemini(prompt, k.system);
     if (!result) return json({ ok: false, code: "upstream" }, 502);
     return json({ ok: true, ...result, remaining: isPro ? null : remaining });
 });

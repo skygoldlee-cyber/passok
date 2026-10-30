@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(ai): AI 코치 단계 3 — 자연어 주간 진단 (AI-33)
+
+- ai-proxy weekly_diagnosis kind 신설 — kind별 시스템 프롬프트 라우팅(KINDS) + 집계 수치 전용 템플릿(문항 내용 미포함, AI-30)
+- ai-client 공용화 — _requestAi(kind·feature·템플릿·시스템) 추출, wrong_feedback는 래퍼로 축소 + 캐시 키를 입력 전 필드 정규화로 일반화 + requestWeeklyDiagnosis/buildWeeklyDiagnosisPrompt(BYOK 미러)
+- analysis-view 학습 리듬 카드 "AI 주간 코칭" 버튼 — 집계 수치만 전송, 결과 인라인 + AI 생성 배지
+- SPEC AI-33 등록 · PRIVACY_POLICY AI 행에 주간 코칭 수집 범위 명시
+
 ## 2026-10-30 feat(card): ROAD-L7 — 4버튼 등급 UI (다시/어려움/좋음/쉬움)
 
 - html/views/flashcard.html: fc-easy/hard 2버튼 → 4버튼 + 버튼별 예상 복습 간격 라벨 (previewCardReview)
