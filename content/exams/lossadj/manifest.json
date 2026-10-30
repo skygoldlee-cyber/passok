@@ -154,11 +154,11 @@
    "nav": "학습진단"
   },
   "flashcard": {
-   "title": "개념 플래시카드",
+   "title": "플래시카드",
    "nav": "카드"
   },
   "quiz": {
-   "title": "기출 및 핵심 퀴즈",
+   "title": "퀴즈",
    "nav": "퀴즈"
   },
   "trainer": {
