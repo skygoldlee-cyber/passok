@@ -3,7 +3,7 @@
 import { state } from '../state.js';
 import { safeTextWithBreaks } from '../sanitize.js';
 import { shuffle } from '../utils.js';
-import { getDueCards } from '../study/spaced-repetition.js';
+import { getDueCards, previewCardReview } from '../study/spaced-repetition.js';
 
 const CARD_TYPE_LABELS = {
     penalty: '처벌',
@@ -172,27 +172,18 @@ export function renderFlashcard() {
     if (weakBadge) { weakBadge.classList.toggle('is-hidden', weakCount === 0); }
     if (weakCountEl) weakCountEl.textContent = String(weakCount);
 
-    // 진도 버튼들 스타일 동적 제어
-    const easyBtn = document.getElementById('fc-easy-btn');
-    const hardBtn = document.getElementById('fc-hard-btn');
-
-    if (easyBtn) {
-        if (state.memorizedCards.has(card.id)) {
-            easyBtn.style.opacity = '1';
-            easyBtn.style.boxShadow = '0 0 10px var(--success-tint-40)';
-        } else {
-            easyBtn.style.opacity = '0.7';
-            easyBtn.style.boxShadow = 'none';
-        }
-    }
-
-    if (hardBtn) {
-        if (state.weakCards.has(card.id)) {
-            hardBtn.style.opacity = '1';
-            hardBtn.style.boxShadow = '0 0 10px var(--danger-tint-40)';
-        } else {
-            hardBtn.style.opacity = '0.7';
-            hardBtn.style.boxShadow = 'none';
-        }
-    }
+    // 진도 버튼들 스타일 동적 제어 (ROAD-L7 — 4버튼: 마지막 등급 강조, 레거시 상태는 약점→다시·외움→쉬움에 매핑)
+    const RATE_BTNS = ['fc-again-btn', 'fc-hard-btn', 'fc-good-btn', 'fc-easy-btn'];
+    const { intervals, lastRating } = previewCardReview(card.id);
+    RATE_BTNS.forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const ivEl = document.getElementById(`${id.slice(0, -4)}-interval`);
+        if (ivEl) ivEl.textContent = `${intervals[i]}일`;
+        const active = lastRating ? lastRating === i + 1
+            : (state.weakCards.has(card.id) ? i === 0
+                : state.memorizedCards.has(card.id) ? i === 3 : false);
+        el.style.opacity = active ? '1' : '0.75';
+        el.style.boxShadow = active ? '0 0 10px var(--success-tint-40)' : 'none';
+    });
 }

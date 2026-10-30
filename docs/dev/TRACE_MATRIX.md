@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 1621445e6059922f
+> 입력 해시: e58588f1098832c7
 > 생성: 2026-10-30 · 원천: SPEC.md(634개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 634개 — 문서 연결 454 · 소스 연결 570 · 테스트 연결 603 · 보고서 연결 109
+**커버리지 요약**: 요구사항 634개 — 문서 연결 454 · 소스 연결 571 · 테스트 연결 604 · 보고서 연결 109
 
 ---
 
@@ -867,7 +867,7 @@
 | ROAD-L4 | 미구현 | — | — | — | — | — | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
 | ROAD-L5 | ✅ 카운터 구현 (판정 데이터 수집 중) | 테스트 | DOC-DSN-21<br>DOC-DSN-35 | src/telemetry/usage-stats.js | tests/dom/misc/usage-stats.dom.test.js | — | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
 | ROAD-L6 | ①④완료 ⑤보류, 나머지 미구현 | — | — | — | — | — | ML 기법 검토 산출 — LEARNING_ALGORITHM_DESIGN.md (FSRS 적용·RL 보류 판정 근거) |
-| ROAD-L7 | 미구현 | — | — | — | — | — | — |
+| ROAD-L7 | ✅ | 테스트 | — | src/study/spaced-repetition.js | tests/dom/common/common-eventlisteners.dom.test.js<br>tests/dom/study/study-flashcard.dom.test.js<br>tests/unit/engine/fsrs.test.js | — | — |
 | ROAD-L8 | 미구현 | — | — | — | — | — | — |
 | ROAD-L9 | 미구현 | — | — | — | — | — | — |
 

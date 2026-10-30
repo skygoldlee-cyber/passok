@@ -1,5 +1,5 @@
 // tests/dom/common-eventlisteners.dom.test.js — 이벤트 위임·리스너 디스패치 경로
-// @spec S-02,S-03
+// @spec S-02,S-03,ROAD-L7
 // 커버리지 갭 보강: src/views/event-listeners.js
 //   data-click/data-args/data-input 위임, Enter/Space 키보드 접근성,
 //   설정 메뉴·플래시카드 버튼·시뮬레이터 이동·단축키 핸들러 본문
@@ -259,6 +259,26 @@ describe('플래시카드·시뮬레이터 리스너', () => {
         el('fc-hard-btn').click();
         expect(state.weakCards.has('c1')).toBe(true);
         expect(state.memorizedCards.has('c1')).toBe(false);
+    });
+
+    it('fc-again → 약점 등록 + memorized 해제 (ROAD-L7 4버튼)', () => {
+        state.flashcards.data = CARDS;
+        state.flashcards.currentIndex = 0;
+        state.memorizedCards.add('c1');
+
+        el('fc-again-btn').click();
+        expect(state.weakCards.has('c1')).toBe(true);
+        expect(state.memorizedCards.has('c1')).toBe(false);
+    });
+
+    it('fc-good → 외움 등록 + weakCards 해제 (ROAD-L7 4버튼)', () => {
+        state.flashcards.data = CARDS;
+        state.flashcards.currentIndex = 0;
+        state.weakCards.add('c1');
+
+        el('fc-good-btn').click();
+        expect(state.memorizedCards.has('c1')).toBe(true);
+        expect(state.weakCards.has('c1')).toBe(false);
     });
 
     it('sim-prev/next → 문항 인덱스 이동 + 경계 가드', () => {

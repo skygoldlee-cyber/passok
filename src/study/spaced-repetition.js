@@ -49,12 +49,13 @@ function _examDateStr() {
     return typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
 }
 
-// @spec F-07~09
-// FSRS 스케줄 갱신 — d/s/due 상태 전이 (레이팅: 외움=Good, 헷갈림=Again)
+// @spec F-07~09,ROAD-L7
+// FSRS 스케줄 갱신 — d/s/due 상태 전이 (레이팅: 외움=Good, 헷갈림=Again / 4버튼은 등급 직접 전달)
 /**
  * 카드의 복습 스케줄 업데이트
  * @param {string} cardId - 카드 ID
- * @param {boolean} knew - 외웠는지 여부 (true=외움→Good, false=헷갈림→Again)
+ * @param {boolean|number} knew - true=외움→Good, false=헷갈림→Again (이진 하위호환)
+ *   또는 Rating.AGAIN~EASY(1~4) 직접 전달 — 4버튼 레이팅 UI (ROAD-L7)
  */
 export function updateCardSchedule(cardId, knew) {
     const schedules = loadSchedules();
@@ -62,7 +63,7 @@ export function updateCardSchedule(cardId, knew) {
     const todayStr = todayKey(today);
 
     const current = _ensureV2(schedules[cardId], todayStr);
-    const rating = knew ? Rating.GOOD : Rating.AGAIN;
+    const rating = typeof knew === 'number' ? knew : (knew ? Rating.GOOD : Rating.AGAIN);
     const elapsed = current && current.lastReview ? Math.max(0, _daysBetween(todayStr, current.lastReview)) : 0;
     const next = fsrsReview(current, rating, elapsed);
     const interval = nextInterval(next.s);
@@ -81,7 +82,8 @@ export function updateCardSchedule(cardId, knew) {
     schedules[cardId] = {
         ...next,
         due,
-        lastReview: todayStr
+        lastReview: todayStr,
+        r: rating  // @spec ROAD-L7 — 마지막 등급 (4버튼 UI의 카드 상태 표시용)
     };
 
     saveSchedules(schedules);
@@ -89,6 +91,24 @@ export function updateCardSchedule(cardId, knew) {
     // @spec PS-06 — s: 복습 전 안정도를 함께 기록해 개인 w20 피팅 입력으로 사용
     appendReviewLog({ c: cardId, r: rating, e: elapsed, s: (current && current.s) || 0, t: today.getTime() });
     return schedules[cardId];
+}
+
+// @spec ROAD-L7
+/**
+ * 4버튼 레이팅의 다음 간격 프리뷰 + 마지막 등급 조회 (저장소 읽기 전용 — 부수효과 없음).
+ * 반환 intervals는 [AGAIN, HARD, GOOD, EASY] 순의 예상 간격(일, 정수·하한 1).
+ * 시험일 클램프(D-20)는 실제 반영 시점에 적용되므로 프리뷰에는 미반영.
+ * @param {string} cardId
+ * @returns {{ intervals: number[], lastRating: number|null }}
+ */
+export function previewCardReview(cardId) {
+    const schedules = loadSchedules();
+    const todayStr = todayKey();
+    const current = _ensureV2(schedules[cardId], todayStr);
+    const elapsed = current && current.lastReview ? Math.max(0, _daysBetween(todayStr, current.lastReview)) : 0;
+    const intervals = [Rating.AGAIN, Rating.HARD, Rating.GOOD, Rating.EASY]
+        .map(r => nextInterval(fsrsReview(current, r, elapsed).s));
+    return { intervals, lastRating: (current && current.r) || null };
 }
 
 /**

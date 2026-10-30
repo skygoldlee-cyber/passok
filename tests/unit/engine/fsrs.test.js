@@ -1,5 +1,5 @@
 // tests/unit/fsrs.test.js — FSRS-6 순수 함수 + 어댑터 검증
-// @spec F-07,F-08,F-09,F-11,D-18,D-19,D-20,D-22
+// @spec F-07,F-08,F-09,F-11,D-18,D-19,D-20,D-22,ROAD-L7
 // DSR 상태 전이·망각 곡선·SM-2 지연 마이그레이션을 결정론적으로 검증한다.
 
 import { test, beforeEach, afterEach } from 'node:test';
@@ -8,7 +8,7 @@ import {
     Rating, initDifficulty, initStability, retrievability, nextInterval,
     nextDifficulty, recallStability, forgetStability, sameDayStability, fsrsReview, migrateSm2Record
 } from '../../../src/study/fsrs.js';
-import { updateCardSchedule, getDueCards, getDueCount, getReviewLog, getExamRiskCards } from '../../../src/study/spaced-repetition.js';
+import { updateCardSchedule, getDueCards, getDueCount, getReviewLog, getExamRiskCards, previewCardReview } from '../../../src/study/spaced-repetition.js';
 import { STORAGE_KEYS } from '../../../src/storage-keys.js';
 import { todayKey } from '../../../src/utils.js';
 
@@ -174,6 +174,31 @@ test('F-07/F-09: updateCardSchedule이 v2 레코드를 저장하고 due가 전�
     assert.ok(rec.due > rec.lastReview, `due=${rec.due} last=${rec.lastReview}`);
     const stored = JSON.parse(mockStorage._store['simexam:' + STORAGE_KEYS.FC_SPACED_REPETITION] || '{}');
     assert.ok(stored.suba_card_1 && stored.suba_card_1.v === 2);
+});
+
+test('ROAD-L7: updateCardSchedule은 4버튼 등급(1~4)을 직접 수용하고 r을 기록한다', () => {
+    // 등급별 안정도 단조 — Again < Hard < Good < Easy (신규 카드)
+    const s = r => updateCardSchedule(`m${r}`, r).s;
+    assert.ok(s(Rating.AGAIN) < s(Rating.HARD) && s(Rating.HARD) < s(Rating.GOOD) && s(Rating.GOOD) < s(Rating.EASY));
+    // 숫자 등급이 로그·레코드에 그대로 반영
+    const rec = updateCardSchedule('rated', Rating.HARD);
+    assert.equal(rec.r, Rating.HARD);
+    assert.equal(getReviewLog().at(-1).r, Rating.HARD);
+    // boolean 경로는 하위호환 (true→GOOD, false→AGAIN)
+    assert.equal(updateCardSchedule('b1', true).r, Rating.GOOD);
+    assert.equal(updateCardSchedule('b2', false).r, Rating.AGAIN);
+});
+
+test('ROAD-L7: previewCardReview가 4등급 예상 간격과 마지막 등급을 반환한다', () => {
+    updateCardSchedule('prev', Rating.HARD);
+    const { intervals, lastRating } = previewCardReview('prev');
+    assert.equal(intervals.length, 4);
+    assert.ok(intervals[0] <= intervals[1] && intervals[1] <= intervals[2] && intervals[2] <= intervals[3],
+        `간격 비단조: ${intervals}`);
+    intervals.forEach(d => assert.ok(d >= 1));
+    assert.equal(lastRating, Rating.HARD);
+    // 신규 카드 — lastRating 없음
+    assert.equal(previewCardReview('never_seen').lastRating, null);
 });
 
 test('F-07: 구 SM-2 레코드도 읽기·갱신 호환 (지연 변환)', () => {

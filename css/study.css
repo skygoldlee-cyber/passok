@@ -209,15 +209,31 @@
 .flashcard-actions {
     display: flex;
     justify-content: center;
-    gap: var(--space-5);
+    gap: var(--space-3);
     margin-top: var(--space-4);
 }
 
 .flashcard-actions button {
-    padding: 0.85rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0.7rem 1.4rem;
     font-size: var(--text-1rem);
     font-weight: 600;
     border-radius: var(--radius-md);
+}
+
+.flashcard-actions button i {
+    font-size: var(--text-sm-md);
+}
+
+/* ROAD-L7: 4버튼 예상 복습 간격 라벨 */
+.fc-rate-interval {
+    font-size: 0.68rem;
+    font-weight: 400;
+    opacity: 0.85;
+    min-height: 0.8rem;
 }
 
 /* U3: 모바일 플래시카드 빠른 평가 — 하단 고정 + 컨트롤 통합 */
@@ -257,13 +273,13 @@
         font-size: var(--text-md-sm);
     }
     .flashcard-actions {
-        gap: var(--space-3);
+        gap: var(--space-2);
         margin-top: var(--space-2);
     }
     .flashcard-actions button {
         flex: 1;
-        padding: 0.7rem 0.5rem;
-        font-size: var(--text-sm-md);
+        padding: 0.6rem 0.25rem;
+        font-size: var(--text-sm);
         min-height: 48px;
     }
 }

@@ -4,6 +4,7 @@
 import { state, saveProgress } from '../../state.js';
 import { DataLoader } from '../../content/data-loader.js';
 import { updateCardSchedule } from '../../study/spaced-repetition.js';
+import { Rating } from '../../study/fsrs.js';
 import { TIMING } from '../../config/timing.js';
 import { loadFlashcards, renderFlashcard } from '../flashcard.js';
 
@@ -124,40 +125,41 @@ export function bindFlashcardListeners() {
         renderFlashcard();
     });
 
-    document.getElementById('fc-easy-btn')?.addEventListener('click', () => {
+    // ROAD-L7: 4버튼 등급 평가 — Again/Hard는 약점 유지, Good/Easy는 외움 등록
+    /** @type {[string, number][]} */
+    const RATE_BTNS = [
+        ['fc-again-btn', Rating.AGAIN], ['fc-hard-btn', Rating.HARD],
+        ['fc-good-btn', Rating.GOOD], ['fc-easy-btn', Rating.EASY],
+    ];
+    const rateCard = (rating, btnId) => {
         const fc = state.flashcards;
         if (fc.data.length === 0) return;
         const currentCard = fc.data[fc.currentIndex];
 
-        state.memorizedCards.add(currentCard.id);
-        state.weakCards.delete(currentCard.id);
-        updateCardSchedule(currentCard.id, true); // 2. 간격 반복 (FSRS)
+        if (rating >= Rating.GOOD) {
+            state.memorizedCards.add(currentCard.id);
+            state.weakCards.delete(currentCard.id);
+        } else {
+            state.weakCards.add(currentCard.id);
+            state.memorizedCards.delete(currentCard.id);
+        }
+        updateCardSchedule(currentCard.id, rating); // 2. 간격 반복 (FSRS)
         saveProgress();
 
         // 시각 효과 피드백 후 다음 카드로
-        /** @type {HTMLElement} */ (document.getElementById('fc-easy-btn')).style.transform = 'scale(1.05)';
-        setTimeout(() => {
-            /** @type {HTMLElement} */ (document.getElementById('fc-easy-btn')).style.transform = 'scale(1)';
+        const btn = /** @type {HTMLElement|null} */ (document.getElementById(btnId));
+        if (btn) {
+            btn.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                btn.style.transform = 'scale(1)';
+                /** @type {HTMLElement} */ (document.getElementById('fc-next-btn')).click();
+            }, 150);
+        } else {
             /** @type {HTMLElement} */ (document.getElementById('fc-next-btn')).click();
-        }, 150);
-    });
-
-    document.getElementById('fc-hard-btn')?.addEventListener('click', () => {
-        const fc = state.flashcards;
-        if (fc.data.length === 0) return;
-        const currentCard = fc.data[fc.currentIndex];
-
-        state.weakCards.add(currentCard.id);
-        state.memorizedCards.delete(currentCard.id);
-        updateCardSchedule(currentCard.id, false); // 2. 간격 반복 (FSRS)
-        saveProgress();
-
-        // 시각 효과 피드백 후 다음 카드로
-        /** @type {HTMLElement} */ (document.getElementById('fc-hard-btn')).style.transform = 'scale(1.05)';
-        setTimeout(() => {
-            /** @type {HTMLElement} */ (document.getElementById('fc-hard-btn')).style.transform = 'scale(1)';
-            /** @type {HTMLElement} */ (document.getElementById('fc-next-btn')).click();
-        }, 150);
+        }
+    };
+    RATE_BTNS.forEach(([id, rating]) => {
+        document.getElementById(id)?.addEventListener('click', () => rateCard(rating, id));
     });
 
     // 플래시카드 키보드 단축키 (flashcard-view 활성 시에만 동작)
@@ -183,15 +185,29 @@ export function bindFlashcardListeners() {
                 e.preventDefault();
                 cardEl.classList.toggle('flipped');
                 break;
-            case 'e':
-            case 'E':
+            case '1':
+            case 'a':
+            case 'A':
                 e.preventDefault();
-                /** @type {HTMLElement} */ (document.getElementById('fc-easy-btn')).click();
+                /** @type {HTMLElement} */ (document.getElementById('fc-again-btn')).click();
                 break;
+            case '2':
             case 'h':
             case 'H':
                 e.preventDefault();
                 /** @type {HTMLElement} */ (document.getElementById('fc-hard-btn')).click();
+                break;
+            case '3':
+            case 'g':
+            case 'G':
+                e.preventDefault();
+                /** @type {HTMLElement} */ (document.getElementById('fc-good-btn')).click();
+                break;
+            case '4':
+            case 'e':
+            case 'E':
+                e.preventDefault();
+                /** @type {HTMLElement} */ (document.getElementById('fc-easy-btn')).click();
                 break;
         }
     });

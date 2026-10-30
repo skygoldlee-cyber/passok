@@ -170,7 +170,7 @@ getDueCount()
 
 ### 8. 후속 단계 (범위 외 명시)
 
-- **4단계 레이팅 UI**: `fc-easy/hard` 2버튼 → Again/Hard/Good/Easy 4버튼. FSRS-4.5의 효과 극대화에는 필수적이나 키보드 단축키·접근성·모바일 배치 재설계 필요.
+- **4단계 레이팅 UI**: ~~`fc-easy/hard` 2버튼 → Again/Hard/Good/Easy 4버튼~~ ✅ 구현됨 (2026-10-30, ROAD-L7) — 다시/어려움/좋음/쉬움 + 예상 간격 표시, `updateCardSchedule`이 Rating 1~4 직접 수용.
 - **개인 파라미터 최적화**: 리뷰 로그(`{cardId, rating, elapsedDays}` 링버퍼) 영속화 선행 → 사용자별 `w` 피팅. FSRS-rs/optimizer 포팅 또는 요약 통계 근사.
 - **R 기반 dueBoost 정교화** (§5 후속).
 - **FSRS-6+ 검토**: 당일 복습·소수 간격 — 도입 근거 데이터 축적 후 재평가.

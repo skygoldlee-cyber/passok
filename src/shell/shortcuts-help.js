@@ -24,8 +24,8 @@ export const SHORTCUT_GROUPS = [
         items: [
             { keys: '← →', desc: '이전 · 다음 카드' },
             { keys: 'Space', desc: '카드 뒤집기' },
-            { keys: 'E', desc: '쉬움 (기억함)' },
-            { keys: 'H', desc: '어려움 (복습 필요)' },
+            { keys: '1~4', desc: '등급 평가 — 다시 · 어려움 · 좋음 · 쉬움' },
+            { keys: 'A H G E', desc: '등급 평가 (영문키)' },
         ],
     },
     {

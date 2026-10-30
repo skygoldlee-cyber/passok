@@ -77,7 +77,9 @@
                 </div>
 
                 <div class="flashcard-actions">
-                    <button id="fc-easy-btn" class="btn btn-success" title="다음 복습까지 간격이 길어집니다"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> 완벽히 외움 (쉽다)</button>
-                    <button id="fc-hard-btn" class="btn btn-danger" title="가까운 시점에 다시 복습합니다"><i class="fa-solid fa-circle-xmark" aria-hidden="true"></i> 아직 헷갈림 (어렵다)</button>
+                    <button id="fc-again-btn" class="btn btn-danger" title="몰랐음 — 곧 다시 복습합니다 (키: 1)"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i><span class="fc-rate-label">다시</span><span class="fc-rate-interval" id="fc-again-interval"></span></button>
+                    <button id="fc-hard-btn" class="btn btn-warning" title="겨우 기억남 — 짧은 간격으로 복습합니다 (키: 2)"><i class="fa-solid fa-circle-xmark" aria-hidden="true"></i><span class="fc-rate-label">어려움</span><span class="fc-rate-interval" id="fc-hard-interval"></span></button>
+                    <button id="fc-good-btn" class="btn btn-success" title="기억함 — 표준 간격으로 복습합니다 (키: 3)"><i class="fa-solid fa-circle-check" aria-hidden="true"></i><span class="fc-rate-label">좋음</span><span class="fc-rate-interval" id="fc-good-interval"></span></button>
+                    <button id="fc-easy-btn" class="btn btn-primary" title="완벽히 외움 — 긴 간격으로 복습합니다 (키: 4)"><i class="fa-solid fa-bolt" aria-hidden="true"></i><span class="fc-rate-label">쉬움</span><span class="fc-rate-interval" id="fc-easy-interval"></span></button>
                 </div>
             </section>

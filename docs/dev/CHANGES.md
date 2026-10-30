@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(card): ROAD-L7 — 4버튼 등급 UI (다시/어려움/좋음/쉬움)
+
+- html/views/flashcard.html: fc-easy/hard 2버튼 → 4버튼 + 버튼별 예상 복습 간격 라벨 (previewCardReview)
+- src/study/spaced-repetition.js: updateCardSchedule이 Rating 1~4 직접 수용 (boolean 하위호환 GOOD/AGAIN — statement-tracker 무수정), 레코드 `r` 필드로 마지막 등급 보존 + previewCardReview 신설
+- src/views/listeners-flashcard.js: 공용 rateCard(rating) — Again/Hard→약점·Good/Easy→외움 매핑, 키보드 1~4 + A·H·G·E
+- flashcard.js: 마지막 등급 버튼 강조 (레거시 상태는 약점→다시·외움→쉬움 매핑) + css/study.css 4버튼·모바일 배치
+- shortcuts-help: 카드 학습 단축키 갱신 · SPEC ROAD-L7 ✅
+
 ## 2026-10-30 feat(ai): AI 코치 단계 1 — 서버 경유 오답 AI 해설 (AI-25~30)
 
 - tools/supabase/functions/ai-proxy 신설 — 로그인 JWT 수동 검증(--no-verify-jwt, 게이트웨이 선검증만 해제) → ai_usage_consume RPC 원자 쿼터(Free AI_FREE_DAILY 기본 10/Pro 무제한·초과 429+잔여) → kind별 고정 템플릿(AI-30) → Gemini generateContent(JSON 스키마 강제) 프록시. 프롬프트·응답 본문 미로깅
