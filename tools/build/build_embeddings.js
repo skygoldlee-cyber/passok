@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * build_embeddings.js — 콘텐츠 문장 임베딩 사전 계산 (DOC-DSN-18 PoC)
- * @spec none (빌드 도구)
+ * @spec SEM-01 (임베딩 자산 번들 생성 — manifest·neighbors·vectors)
  *
  * ref-pipeline/embeddings/build_embeddings.py 의 Node 포팅 — 동일 모델의
  * ONNX export(Xenova/multilingual-e5-small, fp32)를 @huggingface/transformers로

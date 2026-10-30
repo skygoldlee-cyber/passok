@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: b1fd87ff55345448
-> 생성: 2026-10-30 · 원천: SPEC.md(620개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 8ef7bcb284a2f445
+> 생성: 2026-10-30 · 원천: SPEC.md(622개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 620개 — 문서 연결 442 · 소스 연결 557 · 테스트 연결 591 · 보고서 연결 109
+**커버리지 요약**: 요구사항 622개 — 문서 연결 443 · 소스 연결 560 · 테스트 연결 591 · 보고서 연결 109
 
 ---
 
@@ -483,7 +483,7 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| SEM-01 | ✅ | 테스트 | — | — | tests/unit/gates/emb-builder.test.js<br>tests/unit/gates/emb-manifest.test.js | — | — |
+| SEM-01 | ✅ | 테스트 | — | tools/build/build_embeddings.js | tests/unit/gates/emb-builder.test.js<br>tests/unit/gates/emb-manifest.test.js | — | — |
 | SEM-02 | ✅ | 테스트 | — | src/semantic-index.js | tests/unit/gates/semantic-index.test.js | — | — |
 | SEM-03 | ✅ | 테스트 | — | — | tests/unit/gates/semantic-index.test.js | — | — |
 | SEM-04 | ✅ | 테스트 | — | src/semantic-index.js | tests/unit/gates/semantic-index.test.js | — | — |
@@ -693,7 +693,7 @@
 |----|------|-----------|------|------|--------|--------|------|
 | OB-01 | `onboarding.js` — 단계 진행 도트·건너뛰기·이전 지원, 목표 검증 실패 시 진행 차단. 학습 실행은 `data-click` 위임(모듈 import 없이 기존 액션 재사용). UX-FB-05의 1회성·재열람 계약은 불변 | 테스트 | — | src/onboarding.js | tests/dom/misc/onboarding-zoom.dom.test.js | — | — |
 | UX-FB-01 | `@media (max-width: 768px) { #app-toast { top:auto; bottom: calc(80px + safe-area) } }` — 하단 탭 바 위 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/a11y-interaction.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
-| UX-FB-02 | 네이티브 대화상자는 PWA 설치 흐름을 깨고 스타일 제어 불가. 커스텀 모달은 포커스 트랩 + Escape + 배경 클릭 닫기 포함 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
+| UX-FB-02 | 네이티브 대화상자는 PWA 설치 흐름을 깨고 스타일 제어 불가. 커스텀 모달은 포커스 트랩 + Escape + 배경 클릭 닫기 포함 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js<br>tools/check/check_ui_style.js | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FB-03 | `animationend` 리스너로 클래스 해제 — `display:none` 상태에서는 애니메이션이 안 돌아 첫 실제 표시에 실행됨. `prefers-reduced-motion`에서는 자동으로 0.01ms 처리됨 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/reader-markers.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FB-04 | 부분 스켈레톤보다 구현 비용이 낮고 일관됨 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/app.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FB-05 | 기존 사용자는 플래그만 기록해 방해하지 않음 — 재방문 강제 안내 금지 | E2E 테스트 | DOC-DSN-11<br>DOC-DSN-25 | src/onboarding.js | tests/dom/misc/onboarding-zoom.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
@@ -740,6 +740,7 @@
 | UX-VFY-05 | SW Cache First로 즉시 반영되지 않고(UX-PWA-03), 기기별 뷰포트·safe-area는 로컬 에뮬레이션과 다를 수 있음 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
 | UX-VFY-06 | E2E 스윕이 런타임 실측이라면 체커는 패턴 기반 조기 차단 — 마크업만 봐도 새 다이얼로그·버튼 행의 잘림 위험을 알 수 있음. 자체 스크롤 계약(more-sheet·리더 표 모달 등)은 예외 목록에 사유와 함께 선언, 의도된 nowrap은 `data-msafe-ok`로 명시적 면제 | 테스트 | DOC-DEV-09<br>DOC-DSN-25 | tools/check/check_mobile_safe.js | tests/dom/common/common-a11y.dom.test.js | — | — |
 | UX-VFY-07 | UX-VFY-06과 동형 — 정적 마크업만으로 위반 식별이 가능해 e2e 실측 없이 커밋 전 차단이 유효. 기능 식별은 `data-uitext` 키·`data-target`·`data-click` 기준이며, 동일 기능이 사이드바와 모바일 탭에 반복되는 반응형 배치는 허용하고 *다른 기능*의 아이콘 재사용만 차단 | 도구 검증 | — | tools/check/check_nav_icons.js | — | — | — |
+| UX-VFY-08 | UX-VFY-06/07과 동형 — 마크업·소스 패턴만으로 위반 식별이 가능해 정적 차단이 유효. 기존 잔여 위반은 `JS_STYLE_BASELINE` 래칫으로 동결하고 신규 유입만 차단하는 점진 축소 모델 | 도구 검증 | — | tools/check/check_ui_style.js | — | — | — |
 
 ## 5.1 데이터 아키텍처
 
@@ -751,9 +752,9 @@
 | DA-04 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | tools/build/build_study_md_bundle.js | tests/unit/app/data-architecture.test.js | — | — |
 | DA-05 | ✅ | 테스트 | DOC-DEV-09<br>DOC-DSN-18<br>DOC-RBK-03<br>DOC-REF-08 | src/state.js<br>src/storage.js | tests/unit/app/state.test.js | — | — |
 | DA-06 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-18<br>DOC-RBK-03<br>DOC-REF-08 | src/exam-context.js<br>src/paths.js<br>src/pwa/pwa-manifest.js<br>tools/build/exam_targets.js<br>…외 2개 | tests/unit/app/data-architecture.test.js<br>tests/unit/gates/exam-onboard.test.js | — | — |
-| DA-07 | ✅ | 테스트 | DOC-DEV-09<br>DOC-DSN-10<br>DOC-RBK-03<br>DOC-REF-08 | src/exam-context.js<br>src/storage-keys.js<br>src/storage.js | tests/unit/gates/storage-key-sync.test.js | — | — |
-| DA-08 | ✅ | 테스트 | DOC-ADR-16<br>DOC-DSN-08<br>DOC-DSN-10<br>DOC-DSN-18<br>…외 2개 | src/exam-context.js | tests/unit/app/data-architecture.test.js | — | — |
-| DA-09 | ✅ | 테스트 | DOC-ADR-06<br>DOC-DEV-09<br>DOC-RBK-03<br>DOC-REF-08 | src/storage.js | tests/unit/app/storage.test.js | — | — |
+| DA-07 | ✅ | 테스트 | DOC-DEV-09<br>DOC-DSN-10<br>DOC-RBK-03<br>DOC-REF-08 | src/exam-context.js<br>src/storage-keys.js<br>src/storage.js<br>tools/check/check_seed_keys.js | tests/unit/gates/storage-key-sync.test.js | — | — |
+| DA-08 | ✅ | 테스트 | DOC-ADR-16<br>DOC-DSN-08<br>DOC-DSN-10<br>DOC-DSN-18<br>…외 2개 | src/exam-context.js<br>tools/check/check_feature_flags.js | tests/unit/app/data-architecture.test.js | — | — |
+| DA-09 | ✅ | 테스트 | DOC-ADR-06<br>DOC-DEV-09<br>DOC-RBK-03<br>DOC-REF-08 | src/storage.js<br>tools/check/check_storage_access.js | tests/unit/app/storage.test.js | — | — |
 | DA-10 | ✅ | 테스트 | — | src/auth-sync/sync.js<br>src/exams/cosmetic/customer-store.js | tests/unit/exams/cosmetic/customer-store.test.js | — | 개인정보보호법 — 상동 (조제관리사가 고객 개인정보를 클라우드에 올리지 않는 설계) |
 | DA-11 | ✅ | 테스트 | DOC-RBK-10 | tools/check/check_domain_map.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
 | DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | tools/check/check_uitext.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
@@ -795,8 +796,8 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| CS-01 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/batch_convert.py<br>ref-pipeline/md2doc.py<br>src/reader/textbook-core.js<br>tools/build/build_study_md_bundle.js<br>…외 2개 | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
-| CS-02 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | tools/build/index.js<br>tools/build/plugins/exams.plugin.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
+| CS-01 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/batch_convert.py<br>ref-pipeline/md2doc.py<br>src/reader/textbook-core.js<br>tools/build/build_study_md_bundle.js<br>…외 3개 | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
+| CS-02 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | tools/build/index.js<br>tools/build/plugins/exams.plugin.js<br>tools/sync/sync_textbook_files.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-03 | ✅ | 테스트 | DOC-ADR-12<br>DOC-DSN-19<br>DOC-PPL-01<br>DOC-RBK-03<br>…외 4개 | ref-pipeline/check_laws.py<br>ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py<br>tools/check/check_ref_freshness.js<br>…외 2개 | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-04 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | tools/build/index.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-05 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/batch_convert.py<br>ref-pipeline/md2doc.py | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
@@ -806,6 +807,7 @@
 | CS-09 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/convert.py<br>tools/check/check_ref_subjects.js<br>tools/check/check_reflayout.js<br>tools/check/check_refmerge.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-10 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-11 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-07 | tools/ai/ai_textbook.js | tests/unit/content/ai-textbook.test.js<br>tests/unit/content/scaffold-chapter.test.js | — | — |
+| CS-12 | ✅ | 도구 검증 | DOC-REF-07 | tools/check/check_numbering.js | — | — | — |
 
 ## 5.5 교재 콘텐츠 학습 보조 요소
 
@@ -999,7 +1001,7 @@
 | DOC-REF-04 | docs/dev/reference/MD_TO_HTML_LOGIC.md | EV-01, EV-02, EV-03, EV-04, EV-05, EV-06, EV-07, EV-08, MV-01, MV-02, MV-03, MV-04, RR-01, RR-02, RR-03, RR-04, RR-05, RR-06, RR-07, RR-08, RR-09, RR-10, RR-11, RR-12, RR-13, RR-14, RR-15, RR-16, TR-01 |
 | DOC-REF-05 | docs/exams/cosmetic/reference/NUMBERING_SYSTEM.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, ID-01, ID-02, ID-03, ID-04, TR-01, TR-02, TR-03, TR-04, TR-05, TR-06, TR-07, TR-08, TR-09, TR-10, TR-11, TR-12, TR-13, TR-14, TR-15, TR-16, TR-16a, TR-17, TR-18, TR-19, TR-20, TR-21, TR-22, TR-23, TR-24, TR-25, TR-26, TR-27, TR-28, TR-30 |
 | DOC-REF-06 | docs/dev/reference/TESTING.md | — |
-| DOC-REF-07 | docs/exams/cosmetic/reference/TEXTBOOK_REFERENCE_MAPPING.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, CS-11, RR-01, RR-02, RR-03, RR-04, RR-05, RR-06, RR-07, RR-08, RR-09, RR-10, RR-11, RR-12, RR-13, RR-14, RR-15, RR-16 |
+| DOC-REF-07 | docs/exams/cosmetic/reference/TEXTBOOK_REFERENCE_MAPPING.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, CS-11, CS-12, RR-01, RR-02, RR-03, RR-04, RR-05, RR-06, RR-07, RR-08, RR-09, RR-10, RR-11, RR-12, RR-13, RR-14, RR-15, RR-16 |
 | DOC-REF-08 | docs/dev/reference/ENGINEERING_PRACTICES.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, DA-01, DA-02, DA-03, DA-04, DA-05, DA-06, DA-07, DA-08, DA-09 |
 | DOC-REF-09 | docs/dev/reference/SCREEN_MAP.md | UM-01, UM-02, UM-03, UM-04, UM-05, UX-NAV-01, UX-NAV-08 |
 | DOC-REF-10 | docs/dev/reference/SOFTWARE_ENGINEERING_TECHNIQUES.md | — |
@@ -1020,13 +1022,15 @@
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
-소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 3개 — 테스트 백로그 후보.
+소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 5개 — 테스트 백로그 후보.
 
 | ID | 절 | 구현 소스 |
 |----|-----|-----------|
+| CS-12 | 5.4 콘텐츠 구조 | tools/check/check_numbering.js |
 | UX-FB-07 | 4.8 UI/UX 설계 요구사양 | src/views/textbook-reader.js |
 | UX-FB-08 | 4.8 UI/UX 설계 요구사양 | src/views/dashboard-queue.js |
 | UX-VFY-07 | 4.8 UI/UX 설계 요구사양 | tools/check/check_nav_icons.js |
+| UX-VFY-08 | 4.8 UI/UX 설계 요구사양 | tools/check/check_ui_style.js |
 
 ## 부록 C — 관련 SPEC ID 헤더 누락 문서
 

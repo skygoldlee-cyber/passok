@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 docs(spec): 게이트 @spec 태그 정합 전수조사 — 기존 ID 6건 연결 + UX-VFY-08·CS-12 신설
+
+- 기존 SPEC 요구사항을 강제하면서 `@spec none`이던 게이트 연결 — check_storage_access→DA-09, check_seed_keys→DA-07, check_feature_flags→DA-08, build_embeddings→SEM-01, sync_textbook_files→CS-01/02, check_ui_style→UX-FB-02(④ 네이티브 다이얼로그)
+- `docs/dev/SPEC.md` 신규 2행 — UX-VFY-08(§4.8.8, 마크업 선언 규약 정적 체커 — 인라인 style·JS display·인라인 핸들러 금지) + CS-12(§5.4, 교재 십진법 번호체계). 버전 1.19
+- `tools/check/check_spec_refs.js` — 기준선 승계: TEST_GAP 3→5 · UIUX_E2E_GAP 7→8 (정적 체커 규약형, e2e 실측 대상 아님)
+
 ## 2026-10-30 docs(spec): UX-VFY-07 신설 — 메뉴 아이콘 고유성 게이트 요구사항 ID 부여
 
 - `docs/dev/SPEC.md` §4.8.8 — UX-VFY-07 추가 (`check_nav_icons.js` 정적 체커 강제, UX-VFY-06과 동형) + §4.9.7 아이콘 규약에 고유성 항목 연결. 버전 1.18

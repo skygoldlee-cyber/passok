@@ -21,7 +21,7 @@
  *   npm.cmd run check:storage   # 단독 실행
  */
 
-// @spec none (인프라 검증)
+// @spec DA-09 (저장소 단일 퍼널 — localStorage 직접 접근 우회 차단)
 const fs = require('fs');
 const path = require('path');
 const { ROOT, refFromArgs, changedFiles } = require('./changed_files.js');

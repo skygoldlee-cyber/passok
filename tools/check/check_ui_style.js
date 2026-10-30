@@ -26,7 +26,7 @@
  *   npm.cmd run check:uistyle   # 단독 실행
  */
 
-// @spec none (UI 스타일 규약 게이트)
+// @spec UX-VFY-08,UX-FB-02 (마크업 선언 규약 정적 강제 + 네이티브 다이얼로그 금지)
 const fs = require('fs');
 const path = require('path');
 
