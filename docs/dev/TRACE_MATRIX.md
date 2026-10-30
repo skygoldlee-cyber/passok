@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 975ddce3124b511b
-> 생성: 2026-10-30 · 원천: SPEC.md(619개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: b1fd87ff55345448
+> 생성: 2026-10-30 · 원천: SPEC.md(620개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 619개 — 문서 연결 442 · 소스 연결 556 · 테스트 연결 591 · 보고서 연결 109
+**커버리지 요약**: 요구사항 620개 — 문서 연결 442 · 소스 연결 557 · 테스트 연결 591 · 보고서 연결 109
 
 ---
 
@@ -739,6 +739,7 @@
 | UX-VFY-04 | 선언이 아닌 계측으로 증명 — 리더 개선(349→527→652px)처럼 전후 수치를 이력에 남김 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
 | UX-VFY-05 | SW Cache First로 즉시 반영되지 않고(UX-PWA-03), 기기별 뷰포트·safe-area는 로컬 에뮬레이션과 다를 수 있음 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
 | UX-VFY-06 | E2E 스윕이 런타임 실측이라면 체커는 패턴 기반 조기 차단 — 마크업만 봐도 새 다이얼로그·버튼 행의 잘림 위험을 알 수 있음. 자체 스크롤 계약(more-sheet·리더 표 모달 등)은 예외 목록에 사유와 함께 선언, 의도된 nowrap은 `data-msafe-ok`로 명시적 면제 | 테스트 | DOC-DEV-09<br>DOC-DSN-25 | tools/check/check_mobile_safe.js | tests/dom/common/common-a11y.dom.test.js | — | — |
+| UX-VFY-07 | UX-VFY-06과 동형 — 정적 마크업만으로 위반 식별이 가능해 e2e 실측 없이 커밋 전 차단이 유효. 기능 식별은 `data-uitext` 키·`data-target`·`data-click` 기준이며, 동일 기능이 사이드바와 모바일 탭에 반복되는 반응형 배치는 허용하고 *다른 기능*의 아이콘 재사용만 차단 | 도구 검증 | — | tools/check/check_nav_icons.js | — | — | — |
 
 ## 5.1 데이터 아키텍처
 
@@ -1019,12 +1020,13 @@
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
-소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 2개 — 테스트 백로그 후보.
+소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 3개 — 테스트 백로그 후보.
 
 | ID | 절 | 구현 소스 |
 |----|-----|-----------|
 | UX-FB-07 | 4.8 UI/UX 설계 요구사양 | src/views/textbook-reader.js |
 | UX-FB-08 | 4.8 UI/UX 설계 요구사양 | src/views/dashboard-queue.js |
+| UX-VFY-07 | 4.8 UI/UX 설계 요구사양 | tools/check/check_nav_icons.js |
 
 ## 부록 C — 관련 SPEC ID 헤더 누락 문서
 

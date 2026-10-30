@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 docs(spec): UX-VFY-07 신설 — 메뉴 아이콘 고유성 게이트 요구사항 ID 부여
+
+- `docs/dev/SPEC.md` §4.8.8 — UX-VFY-07 추가 (`check_nav_icons.js` 정적 체커 강제, UX-VFY-06과 동형) + §4.9.7 아이콘 규약에 고유성 항목 연결. 버전 1.18
+- `tools/check/check_nav_icons.js` — `@spec none` → `@spec UX-VFY-07` (UX-VFY-01 "UI/UX 변경은 SPEC 선행" 정합)
+- `tools/check/check_spec_refs.js` — 기준선 승계: TEST_GAP 2→3 · UIUX_E2E_GAP 6→7 (정적 체커 규약형 — e2e 실측 대상 아님)
+
 ## 2026-10-29 — 브랜드 아이콘 체계 정리
 
 - 브랜드 마스터 icons/passok-logo.png(배포 제외) → 서빙 passok-icon-192/512·maskable 재생성
