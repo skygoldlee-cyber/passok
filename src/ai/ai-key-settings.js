@@ -16,11 +16,16 @@ import {
 } from '../written/written-grading.js';
 
 const CSS = `
-#aikey-overlay .ak-bar{display:flex;align-items:center;gap:.6rem;padding:.7rem .9rem;border-bottom:1px solid var(--color-border);font-weight:600}
-#aikey-overlay .ak-wrap{padding:1.2rem 1rem;max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:.8rem}
+#aikey-overlay{position:fixed;inset:0;z-index:var(--z-modal-overlay);display:none;flex-direction:column;
+  background:var(--bg-app);color:var(--color-text-main);}
+#aikey-overlay.open{display:flex;}
+#aikey-overlay .ak-bar{display:flex;align-items:center;gap:12px;flex:0 0 auto;
+  padding:10px 16px;border-bottom:1px solid var(--border-color);background:var(--bg-card);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-weight:700;}
+#aikey-overlay .ak-wrap{padding:1.2rem 1rem;max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:.8rem;overflow-y:auto;}
 #aikey-overlay .ak-row{display:flex;flex-direction:column;gap:.3rem}
 #aikey-overlay .ak-row label{font-size:.8rem;color:var(--color-text-muted)}
-#aikey-overlay .ak-row input,#aikey-overlay .ak-row select{padding:.55rem .7rem;border:1px solid var(--color-border);border-radius:8px;background:var(--color-surface);color:var(--color-text)}
+#aikey-overlay .ak-row input,#aikey-overlay .ak-row select{padding:.55rem .7rem;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-card);color:var(--color-text-main);font-family:inherit;}
 #aikey-overlay .ak-actions{display:flex;gap:.6rem}
 #aikey-overlay .ak-note{font-size:.78rem;color:var(--color-text-muted);line-height:1.5}
 `;
@@ -30,7 +35,7 @@ const _overlay = createDocOverlay({
     styleId: 'aikey-overlay-style',
     css: CSS,
     innerHTML: `<div class="ak-bar">
-      <button class="wp-btn btn btn-secondary btn-sm" data-ak-close aria-label="닫기"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> 설정으로</button>
+      <button class="btn btn-secondary btn-sm" data-ak-close aria-label="닫기"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> 설정으로</button>
       <div class="ak-title">AI API 키 (BYOK)</div></div>
     <div class="ak-wrap">
       <div class="ak-row"><label for="ak-provider">공급자</label>
