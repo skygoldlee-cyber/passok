@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(ai): AI 코치 단계 6 후반 — 교재 질의응답 (AI-36 + AI-30 개정)
+
+- ai-proxy textbook_qa kind — QA_SCHEMA(answer+citations)·QA_SYSTEM_PROMPT(근거 밖 명령 무시·인용 강제) + <user_input> 경계 마커로 자유 입력 격리
+- ai-client requestTextbookQA + buildTextbookQaPrompt·parseQaResponse(BYOK 미러)
+- analysis-view "교재에 물어보기" — SemanticIndex.searchByText 임베딩 근거 top-5 스니펫 + 질문 전송 → 답변+인용 스니펫 인라인 + AI 생성 배지
+- SPEC AI-30 개정 — textbook_qa 한정 경계형 자유 입력 허용(≤200자·경계 마커·인용 강제) + AI-36 등록 · ai-qa-input 스타일
+
 ## 2026-10-30 feat(ai): AI 코치 단계 6 전반 — 주간 플랜 조정 (AI-35)
 
 - ai-proxy plan_adjust kind — 주간 수치 + 여유 선택지(부족/보통/넉넉, 구조화) → 배분·우선순위 조언 (PLAN_SYSTEM_PROMPT, OUTPUT_SCHEMA 재사용)

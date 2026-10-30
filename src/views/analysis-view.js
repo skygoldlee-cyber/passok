@@ -38,7 +38,7 @@ import { renderDashboard, onAnalysisRefresh } from './dashboard.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { compositeEstimate } from './score-estimate.js';
 import { mountProMoment } from '../pro/pro-upgrade.js';
-import { aiFeedbackAvailable, requestWeeklyDiagnosis, requestPlanAdjust } from '../ai/ai-client.js';
+import { aiFeedbackAvailable, requestWeeklyDiagnosis, requestPlanAdjust, requestTextbookQA } from '../ai/ai-client.js';
 
 /**
  * 학습 진단 뷰 렌더링 — renderDashboard()가 과목 카드·히트맵·차트를
@@ -338,14 +338,57 @@ function _renderStudyRhythmInsight() {
             <option value="보통">여유 보통</option>
             <option value="부족">시간 부족</option>
             <option value="넉넉">시간 넉넉</option>
-        </select><button class="btn btn-secondary btn-sm analysis-card-btn ai-plan-btn" data-click="requestAiPlanAdjust"><i class="fa-solid fa-sliders" aria-hidden="true"></i> AI 플랜 조정</button></span>`;
+        </select><button class="btn btn-secondary btn-sm analysis-card-btn ai-plan-btn" data-click="requestAiPlanAdjust"><i class="fa-solid fa-sliders" aria-hidden="true"></i> AI 플랜 조정</button></span>
+        <span class="ai-qa-wrap is-hidden"><input id="ai-qa-input" type="text" maxlength="200" placeholder="교재에 물어보기 — 근거 스니펫 안에서만 답변" aria-label="교재 질문 입력" class="ai-qa-input"/><button class="btn btn-secondary btn-sm analysis-card-btn ai-qa-btn" data-click="askTextbookQA"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> 질문</button></span>
+        <div class="ai-qa-slot"></div>`;
 
     // AI-33/35 — AI 버튼은 로그인 세션 또는 BYOK 키가 있을 때만 노출
     void aiFeedbackAvailable().then(ok => {
         if (!ok) return;
         el.querySelector('.ai-coach-btn')?.classList.remove('is-hidden');
         el.querySelector('.ai-plan-adjust')?.classList.remove('is-hidden');
+        if (SemanticIndex.isEnabled()) el.querySelector('.ai-qa-wrap')?.classList.remove('is-hidden');
     }).catch(() => {});
+}
+
+/**
+ * 교재 질의응답 (AI-36) — 임베딩 검색 근거 스니펫 + 자유 질문(≤200자) → 답변+인용.
+ * AI-30 개정 경계형 자유 입력 — 질문만 자유, 근거는 검색 결과로 강제.
+ */
+export async function askTextbookQA() {
+    const slot = document.querySelector('#analysis-study-rhythm .ai-qa-slot');
+    const inp = /** @type {HTMLInputElement|null} */ (document.getElementById('ai-qa-input'));
+    const btn = /** @type {HTMLButtonElement|null} */ (document.querySelector('#analysis-study-rhythm .ai-qa-btn'));
+    const question = (inp && inp.value || '').trim();
+    if (!slot || !btn || !question) return;
+    btn.disabled = true;
+
+    // 임베딩 검색 근거 (SEM-08 앵커 프록시 — 사전계산 이웃, 모델 추론 없음)
+    const loaded = await SemanticIndex.ensureLoaded().catch(() => false);
+    const hits = loaded ? SemanticIndex.searchByText(question, 5) : [];
+    const evidence = hits.map(h => h.text).filter(Boolean).slice(0, 5);
+    if (!evidence.length) {
+        slot.innerHTML = '<p class="ai-feedback-error">검색 근거를 찾지 못했습니다 — 질문을 더 구체적으로 바꿔 보세요.</p>';
+        btn.disabled = false;
+        return;
+    }
+
+    slot.innerHTML = '<p class="ai-feedback-loading"><i class="fa-solid fa-spinner fa-spin"></i> AI가 근거 스니펫을 검토하고 있습니다…</p>';
+    const res = await requestTextbookQA({ question, evidence });
+    if (res.ok) {
+        const cites = (res.citations || [])
+            .map(c => evidence[Number(c) - 1])
+            .filter(Boolean)
+            .map(e => `<li class="ai-qa-cite">${esc(e)}</li>`).join('');
+        slot.innerHTML = `<div class="ai-feedback">
+            <p class="ai-feedback-text">${esc(res.answer || '')}</p>
+            ${cites ? `<ul class="ai-qa-cites">${cites}</ul>` : ''}
+            <span class="ai-badge" title="AI가 생성한 답변입니다 — 반드시 인용 근거를 확인하세요">AI 생성</span>
+        </div>`;
+    } else {
+        slot.innerHTML = `<p class="ai-feedback-error">${esc(res.error || 'AI 질의를 불러오지 못했습니다.')}</p>`;
+        if (res.code !== 'quota') btn.disabled = false;
+    }
 }
 
 /**

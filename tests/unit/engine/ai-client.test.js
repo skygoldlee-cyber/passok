@@ -1,5 +1,5 @@
 // tests/unit/ai-client.test.js — 런타임 AI 클라이언트 유닛 테스트
-// @spec AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AI-33, AI-35, AI-38
+// @spec AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AI-33, AI-35, AI-36, AI-38
 // 고정 프롬프트 계약(구조화 인자·길이 제한), 응답 파싱,
 // 캐시 히트·서버→BYOK 폴백·쿼터 분기를 고정한다.
 
@@ -239,4 +239,29 @@ test('AI-35: requestPlanAdjust — kind=plan_adjust + 여유 선택지 구조화
     assert.equal(res.ok, true);
     assert.equal(sent.kind, 'plan_adjust');
     assert.equal(sent.input.bandwidth, '넉넉');
+});
+
+test('AI-36: requestTextbookQA — 경계형 질문+근거 스니펫, answer/citations 정규화', async () => {
+    const { requestTextbookQA, buildTextbookQaPrompt, parseQaResponse } = await import('../../../src/ai/ai-client.js');
+    const p = buildTextbookQaPrompt({ question: '합성계면활성제란?', evidence: ['계면활성제는 두 가지 기원으로…', '합성계면활성제의 정의는…'] });
+    assert.ok(p.includes('<user_input>합성계면활성제란?</user_input>'));
+    assert.ok(p.includes('[1] 계면활성제'));
+    assert.equal(buildTextbookQaPrompt({ question: 'x', evidence: [] }), null);  // 근거 없으면 null
+    assert.equal(buildTextbookQaPrompt({ question: 'x'.repeat(300), evidence: ['e'] }).includes('x'.repeat(250)), false); // 200자 절단
+    // 서버 경로
+    let sent;
+    const res = await requestTextbookQA({ question: '정의?', evidence: ['근거1'] }, {
+        session: { access_token: 'tok' },
+        fetchImpl: async (u, init) => {
+            sent = JSON.parse(init.body);
+            return { ok: true, status: 200, json: async () => ({ ok: true, answer: '근거에 따르면…', citations: ['1'], remaining: 3 }) };
+        },
+    });
+    assert.equal(res.ok, true);
+    assert.equal(res.answer, '근거에 따르면…');
+    assert.deepEqual(res.citations, ['1']);
+    assert.equal(sent.kind, 'textbook_qa');
+    // BYOK 파서
+    assert.deepEqual(parseQaResponse('{"answer":"a","citations":["1","3"]}'), { answer: 'a', citations: ['1', '3'] });
+    assert.equal(parseQaResponse('{}'), null);
 });

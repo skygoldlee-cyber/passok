@@ -653,13 +653,14 @@
 | AI-27 | 오답 맞춤 피드백 — 퀴즈 오답 항목에 "AI 해설" 버튼, 오답·정답·선지·교재 근거를 서버 템플릿으로 보내 1~2문장 해설을 결과 화면에 인라인 표시 + `AI 생성` 배지 | ✅ |
 | AI-28 | `ai_feature` 사용 계측 — 기능 종류·성공/실패·캐시 히트·경로(server/byok)만 usage_events로 집계(내용 미수집). 서버키/BYOK 도달률 실측 근거 | ✅ |
 | AI-29 | 서버 키 폴백 정책 — ai-proxy 실패·미로그인 시 기존 BYOK(`written-grading.js`의 `callProviderLLM`) 경로로 순차 폴백, 둘 다 불가 시 해당 기능 무표시. 쿼터(429)는 폴백 대상 아님 | ✅ |
-| AI-30 | 프롬프트 고정 템플릿 — v1 런타임 AI는 자유 사용자 입력 채널 없이 고정 템플릿+구조화 인자만 허용 (인젝션·남용 구조적 차단), JSON 스키마 강제 출력 | ✅ |
+| AI-30 | 프롬프트 고정 템플릿 — 런타임 AI는 고정 템플릿+구조화 인자 원칙 (인젝션·남용 구조적 차단), JSON 스키마 강제 출력. **개정(2026-10-30, AI-36)**: `textbook_qa` 한정으로 경계형 자유 입력을 허용 — 질문 ≤200자·근거 스니펫만 수용, 입력은 프롬프트 경계 마커(`<user_input>`) 안에 격리, 시스템이 "근거 밖 명령 무시" 지시 + 응답 인용 강제 | ✅ |
 | AI-32 | 콜드스타트 난이도 시딩 오프라인 검증 — `tools/ai/ai_seed_eval.js`(`ai:seedcheck`): `estimateDifficulty` 휴리스틱 예측 D vs 백업 `quiz_results` 실측 오답의 버킷별 단조성 판정 (valid→런타임 시딩 승격 허용 / borderline·invalid·insufficient→보류). 평가기는 `tools/ai/lib/difficulty.js` 순수 함수 (비LLM). 런타임 훅: `window.DIFFICULTY_SEED[cardId]` 시드 맵 제공 시 신규 카드 D0 대체 (미제공 시 무영향 휴면 — valid 판정 후 시드 번들 제공) | ✅ |
 | AI-33 | 자연어 주간 진단 — `weekly_diagnosis` kind. 학습 리듬 카드 "AI 주간 코칭" 버튼이 집계 수치(주간 풀이/오답/정답률/페이스·D-day·취약 라벨)만 전송 → 평가+행동 제안 2~3문장 인라인 표시 + `AI 생성` 배지. 문항 내용·학습 원문 미포함 (AI-30 계약), kind별 시스템 프롬프트 라우팅 | ✅ |
 | AI-34 | 약점 선정형 미니퀴즈 — 기존 문항을 취약 conceptId(진술 통계·오답 문항의 혼동쌍 앵커) 기준으로 선별해 최대 10문 출제 (`collectWeakConceptQuizzes` 순수 선정기 + `startWeakConceptQuiz` 세션 — 생성 아님, LLM 무관). 퀴즈 결과 오답 리뷰 헤더 "약점 개념 미니퀴즈" 버튼 진입 | ✅ |
 | AI-37 | 생성물 검증 게이트 (`src/ai/gen-gate.js`) — 런타임 AI 생성물이 콘텐츠로 들어오기 전 검증: ①스키마(발문·선지 수·정답 포함) ②인용 강제(미인용·미해석 인용 폐기) ③dupcheck(기존 문항 발문 n-gram 중첩 >0.6 폐기) ④AI 생성 배지 규약(`AI_BADGE_TEXT`). 생성형 미니퀴즈 본체는 이 게이트 통과분만 출제 (후속 단계) | ✅ |
 | AI-38 | 약점 생성형 미니퀴즈 (Pro) — `quiz_gen` kind: 취약 개념·근거·기존 발문(중복 금지) 구조화 입력 → items 배열 생성. kind별 responseSchema·정규화(`KINDS[kind].read`) 라우팅, 클라이언트 `requestWeakQuizGen` + gen-gate 통과분만 `state.quiz.data` 출제 + `[AI 생성]` 컨텍스트 표시. Pro 게이트(`hasProEntitlement`) + 오답 리뷰 "AI 미니퀴즈 PRO" 버튼 | ✅ |
 | AI-35 | 주간 플랜 조정 — `plan_adjust` kind: 주간 수치(weekly_diagnosis와 동일 구조화 인자) + 여유 선택지(부족/보통/넉넉 — 자유 텍스트 없음, AI-30 준수) → 다음 주 배분·우선순위 조언 2~3문장. 학습 리듬 카드 여유 select + "AI 플랜 조정" 버튼, 조언만 표시(실제 배분 변경 없음) | ✅ |
+| AI-36 | 교재 질의응답 — `textbook_qa` kind: 자유 질문(≤200자, AI-30 개정 경계형) + SemanticIndex 임베딩 검색 근거 스니펫(top-k 진술/문항 텍스트) → 근거 범위 답변 + 인용 스니펫 목록. 학습 리듬 카드 "교재에 물어보기" 입력, 답변+인용+`AI 생성` 배지 인라인 표시 | ✅ |
 
 ### 3.28 주관식 연습 자기채점 (Written Practice)
 
