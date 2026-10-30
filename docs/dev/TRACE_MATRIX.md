@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 4dd5896fd0f07ff5
-> 생성: 2026-10-30 · 원천: SPEC.md(638개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 809b87119ca97081
+> 생성: 2026-10-30 · 원천: SPEC.md(639개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 638개 — 문서 연결 454 · 소스 연결 573 · 테스트 연결 608 · 보고서 연결 109
+**커버리지 요약**: 요구사항 639개 — 문서 연결 454 · 소스 연결 574 · 테스트 연결 609 · 보고서 연결 109
 
 ---
 
@@ -543,6 +543,7 @@
 | AI-28 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | src/ai/ai-client.js<br>src/telemetry/usage-telemetry.js | tests/unit/engine/ai-client.test.js | — | — |
 | AI-29 | ✅ | 테스트 | DOC-DSN-40 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-30 | ✅ | 테스트 | DOC-DSN-40 | src/ai/ai-client.js<br>src/ai/gen-gate.js<br>tools/supabase/functions/ai-proxy/index.ts | tests/unit/engine/ai-client.test.js<br>tests/unit/engine/gen-gate.test.js | — | — |
+| AI-32 | ✅ | 테스트 | — | tools/ai/ai_seed_eval.js<br>tools/ai/lib/difficulty.js | tests/unit/engine/seed-eval.test.js | — | — |
 | AI-33 | ✅ | 테스트 | — | — | tests/unit/engine/ai-client.test.js | — | — |
 | AI-34 | ✅ | 테스트 | — | src/study/weak-items.js | tests/unit/engine/weak-items.test.js | — | — |
 | AI-37 | ✅ | 테스트 | — | src/ai/gen-gate.js | tests/unit/engine/gen-gate.test.js | — | — |

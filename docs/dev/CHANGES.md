@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(ai): AI 코치 단계 5 — 난이도 시딩 오프라인 검증 하네스 (AI-32)
+
+- tools/ai/lib/difficulty.js 신설 — estimateDifficulty(ai_tag 정본 추출) + evaluateSeedAccuracy 순수 평가기 (버킷별 실측 오답률 단조성: valid/borderline/invalid/insufficient)
+- tools/ai/ai_seed_eval.js + `ai:seedcheck` — 백업 quiz_results 실측과 예측 D 조인 → 판정 리포트, valid 시에만 런타임 시딩 승격 (exit 1 on invalid)
+- ai_tag.js는 lib 추출본으로 재배선 (동작 동일) · SPEC AI-32 등록
+- 런타임 시딩 본체·FSRS 큐 동적 변형은 검증 valid 후 후속 — 설계 §5.2 단계 5 부분 완료
+
 ## 2026-10-30 feat(ai): 약점 생성형 미니퀴즈 — quiz_gen kind + Pro 게이트 (AI-38)
 
 - ai-proxy quiz_gen kind — kind별 responseSchema·정규화(read) 라우팅으로 items 배열 출력, 취약 개념+근거+기존 발문(중복 금지) 고정 템플릿

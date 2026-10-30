@@ -156,6 +156,7 @@
     "ai:stale": "node tools/ai/ai_stale_scan.js",
     "ai:apply": "node tools/ai/ai_apply.js",
     "ai:stmtfb": "node tools/ai/ai_stmt_feedback.js",
+    "ai:seedcheck": "node tools/ai/ai_seed_eval.js",
     "ai:textbook": "node tools/ai/ai_textbook.js",
     "ai:story": "node tools/ai/ai_story.js",
     "ai:cards": "node tools/ai/ai_cards.js",

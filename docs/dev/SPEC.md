@@ -654,6 +654,7 @@
 | AI-28 | `ai_feature` 사용 계측 — 기능 종류·성공/실패·캐시 히트·경로(server/byok)만 usage_events로 집계(내용 미수집). 서버키/BYOK 도달률 실측 근거 | ✅ |
 | AI-29 | 서버 키 폴백 정책 — ai-proxy 실패·미로그인 시 기존 BYOK(`written-grading.js`의 `callProviderLLM`) 경로로 순차 폴백, 둘 다 불가 시 해당 기능 무표시. 쿼터(429)는 폴백 대상 아님 | ✅ |
 | AI-30 | 프롬프트 고정 템플릿 — v1 런타임 AI는 자유 사용자 입력 채널 없이 고정 템플릿+구조화 인자만 허용 (인젝션·남용 구조적 차단), JSON 스키마 강제 출력 | ✅ |
+| AI-32 | 콜드스타트 난이도 시딩 오프라인 검증 — `tools/ai/ai_seed_eval.js`(`ai:seedcheck`): `estimateDifficulty` 휴리스틱 예측 D vs 백업 `quiz_results` 실측 오답의 버킷별 단조성 판정 (valid→런타임 시딩 승격 허용 / borderline·invalid·insufficient→보류). 평가기는 `tools/ai/lib/difficulty.js` 순수 함수 (비LLM) | ✅ |
 | AI-33 | 자연어 주간 진단 — `weekly_diagnosis` kind. 학습 리듬 카드 "AI 주간 코칭" 버튼이 집계 수치(주간 풀이/오답/정답률/페이스·D-day·취약 라벨)만 전송 → 평가+행동 제안 2~3문장 인라인 표시 + `AI 생성` 배지. 문항 내용·학습 원문 미포함 (AI-30 계약), kind별 시스템 프롬프트 라우팅 | ✅ |
 | AI-34 | 약점 선정형 미니퀴즈 — 기존 문항을 취약 conceptId(진술 통계·오답 문항의 혼동쌍 앵커) 기준으로 선별해 최대 10문 출제 (`collectWeakConceptQuizzes` 순수 선정기 + `startWeakConceptQuiz` 세션 — 생성 아님, LLM 무관). 퀴즈 결과 오답 리뷰 헤더 "약점 개념 미니퀴즈" 버튼 진입 | ✅ |
 | AI-37 | 생성물 검증 게이트 (`src/ai/gen-gate.js`) — 런타임 AI 생성물이 콘텐츠로 들어오기 전 검증: ①스키마(발문·선지 수·정답 포함) ②인용 강제(미인용·미해석 인용 폐기) ③dupcheck(기존 문항 발문 n-gram 중첩 >0.6 폐기) ④AI 생성 배지 규약(`AI_BADGE_TEXT`). 생성형 미니퀴즈 본체는 이 게이트 통과분만 출제 (후속 단계) | ✅ |

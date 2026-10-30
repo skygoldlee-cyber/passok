@@ -93,6 +93,7 @@ npm.cmd run ai:apply                     # 리뷰된 해설 초안을 문제은�
 npm.cmd run ai:stmtfb                    # combo 진술별 오답 피드백 초안 (기본 거짓 진술, --all=전체). --stats <백업JSON>=오판 통계로 대상 선정(오판수순, --min-wrong N). --apply [--write]=리뷰본을 피드백/stmt_explain.json 정본 편입 → build:drills가 진술 explain 병합
 npm.cmd run ai:textbook                  # ref_md 조문 청크 → 교재 본문 초안 (scaffold:chapter 작성 슬롯 채우기 — 출처/원문 블록은 도구가 결정론 생성, --doc <문서명> --lines A-B)
 npm.cmd run ai:adoption                  # AI 배치 채택률 리포트 — ai_apply --write가 기록한 adoption_log.jsonl의 배치별·누적 채택률·리뷰수정률 (AI-23, 설계 §3.1 L1 승격 판단 데이터)
+npm.cmd run ai:seedcheck                 # 콜드스타트 난이도 시딩 오프라인 검증 — --stats <백업JSON>으로 예측 D(휴리스틱) vs 실측 오답률 단조성 판정, valid 시에만 런타임 시딩 승격 (AI-32)
 
 # 전체 점검 (단일 진입점 — tools/check/run.js 실행기 + steps.js 단계 레지스트리로 구동
 #   비-serial 단계는 워커풀 병렬 실행(--jobs N, 기본 3 · serial 단계는 배치 사이 단독),

@@ -18,19 +18,7 @@
 const { parseArgs, getTargets, listQbanks, writeDraft } = require('./lib/ai_common.js');
 const { parseQuestionBank, questionText, primaryCitation } = require('./lib/qbank.js');
 const { inferTags } = require('../build/drill-utils.js');
-
-/** 난이도 휴리스틱 1~5 — 수치·부정 발문·단답형·장문 선지가 가중 */
-function estimateDifficulty(q, ans) {
-    let score = 2;
-    const text = questionText(q);
-    const digits = (text.match(/\d+/g) || []).length;
-    if (digits >= 3) score += 1;                       // 수치 다수
-    if (/않은|아닌|틀린/.test(q.stem)) score += 1;      // 부정·역발문
-    if (q.type === 'short') score += 1;                // 단답형
-    if (q.options.some(o => o.text.length > 60)) score += 1; // 장문 선지
-    if (ans && ans.accepts.length > 3) score -= 1;     // 허용 정답 넓음 = 관대
-    return Math.max(1, Math.min(5, score));
-}
+const { estimateDifficulty } = require('./lib/difficulty.js');
 
 function main() {
     const { opts } = parseArgs();
