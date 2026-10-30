@@ -56,8 +56,8 @@ describe('router.js — DOM 테스트', () => {
         it('기본 타이틀 맵을 반환 (registry 없음)', () => {
             const titles = getViewTitles(null);
             expect(titles['dashboard-view'].title).toBe('학습 대시보드');
-            expect(titles['flashcard-view'].title).toBe('개념 플래시카드');
-            expect(titles['quiz-view'].title).toBe('기출 및 핵심 퀴즈');
+            expect(titles['flashcard-view'].title).toBe('플래시카드');
+            expect(titles['quiz-view'].title).toBe('퀴즈');
             expect(titles['trainer-view'].title).toBe('훈련소');
             expect(titles['textbook-reader-view'].title).toBe('교재리더');
             expect(titles['dictionary-view'].title).toBe('사전');
@@ -81,7 +81,7 @@ describe('router.js — DOM 테스트', () => {
             expect(titles['dashboard-view'].title).toBe('커스텀 대시보드');
             expect(titles['dashboard-view'].subtitle).toBe('커스텀 부제');
             // 미정의 뷰는 기본값
-            expect(titles['flashcard-view'].title).toBe('개념 플래시카드');
+            expect(titles['flashcard-view'].title).toBe('플래시카드');
         });
 
         it('대시보드 타이틀 — 시험 목록 없으면 폴백, 있으면 브랜드명 대시보드', () => {
@@ -135,7 +135,7 @@ describe('router.js — DOM 테스트', () => {
             };
             navigateToView('quiz-view', ctx);
 
-            expect(document.getElementById('view-title').textContent).toBe('기출 및 핵심 퀴즈');
+            expect(document.getElementById('view-title').textContent).toBe('퀴즈');
             expect(document.getElementById('view-subtitle').textContent).toBe('빈칸 채우기형 퀴즈로 실전 완벽 대비');
         });
 

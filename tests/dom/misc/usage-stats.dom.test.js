@@ -88,7 +88,7 @@ describe('내 사용 통계 모달 (showUsageStats)', () => {
         await showUsageStats();
         const el = overlay();
         expect(el).not.toBeNull();
-        expect(el.textContent).toContain('기출 및 핵심 퀴즈');
+        expect(el.textContent).toContain('퀴즈');
         expect(el.textContent).toContain('오답 → 교재 근거 보기');
         expect(el.textContent).toContain('진단 평가');
         expect(el.textContent).toContain('기능 사용 합계');
