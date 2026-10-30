@@ -241,6 +241,13 @@ async function main() {
     if (drv.status !== 0) {
         fail(`파생물 재생성 실패:\n${((drv.stdout || '') + (drv.stderr || '')).trim()}`);
     }
+    // 스탬프 의존 파일(sw.js CACHE_VERSION·test_stats·TRACE 매트릭스)은 커밋 해시를
+    // 내장해 재생성마다 diff가 생긴다 — 이것만 달라진 경우 되돌리고 계속 진행.
+    // 그 외 파생물 변경은 커밋·push 후 중단 (신규 커밋의 CI가 배포 대상).
+    const VOLATILE = ['sw.js', 'tools/state/test_stats.json', 'docs/dev/TRACE_MATRIX.md'];
+    if (git('status --porcelain')) {
+        git(`checkout -- ${VOLATILE.map(f => `"${f}"`).join(' ')}`);
+    }
     if (git('status --porcelain')) {
         git('add -A');
         git('commit --no-verify -m "chore: 배포 전 파생물 재생성 [no-test]"');
