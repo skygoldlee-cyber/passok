@@ -59,6 +59,7 @@
         "src/config/**",
         "src/content/csv-utils.js",
         "src/content/data-loader.js",
+        "src/content/unpack.js",
         "src/shell/doc-overlay.js",
         "src/telemetry/error-telemetry.js",
         "src/exam-context.js",
