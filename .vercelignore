@@ -25,12 +25,9 @@ content/exams/*/html/
 data/study_data.js
 data/exam_data.js
 
-# ---------- 🗑️ file:// 전용 폴백 번들 (배포 제외) ----------
-# data/exams_md/, data/study_md/는 file:// 프로토콜(로컬 직접 열기) 전용 폴백이다.
-# http(s) 배포에서는 content/*.md를 직접 fetch하므로 불필요하여 배포에서 제외한다.
-# (data/docs_md/는 PWA 오프라인 fetch 실패 시 폴백으로도 사용되므로 배포에 포함 = 제외 규칙 없음)
-data/exams/*/exams_md/
-data/exams/*/study_md/
+# ---------- 📦 콘텐츠 번들 (배포 포함 — DA-16) ----------
+# data/exams_md/, data/study_md/는 과거 file:// 전용이었으나 DA-16 이후 프로덕션
+# 콘텐츠 서빙 경로가 되었다 — pk1 인코딩 상태로 배포에 포함한다 (docs_md와 동일).
 
 # ---------- ⏳ ID 마이그레이션 맵 (배포 포함) ----------
 # data/id_migration.js는 교재 교체 시 구ID→신ID 이관 맵으로,
@@ -172,4 +169,10 @@ content/exams/*/참조자료/ref_md/*/images/*.jpg
 content/exams/*/참조자료/ref_md/*/images/*.png
 
 # ---------- DA-16 컨텐츠 비평문화 ----------
-# 교재·문제은행·docs 평문 배포 제외는 SW 프리캐시 목록 정합 후 재적용 예정 (DA-16)
+# 교재·문제은행·docs 평문 MD는 배포 제외 — 프로덕션은 pk1 인코딩 번들(data/)만 서빙
+# 선행 조건 충족: 폴백 번들 배포 포함(위 섹션) + e2e 폴백 경로 실측(tests/e2e/content-pack.spec.js)
+content/exams/*/교재/*.md
+content/exams/*/교재/**/*.md
+content/exams/*/문제은행/*.md
+content/exams/*/문제은행/**/*.md
+content/exams/*/docs/*.md

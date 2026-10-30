@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 fix(sec): DA-16 재적용 — 번들 배포 포함 + 폴백 e2e 실측
+
+- 장애 원인: study_md·exams_md 번들이 file:// 전용 .vercelignore 대상이라 프로덕션에 평문·번들 모두 부재
+- .vercelignore: 번들 2디렉터리 배포 포함 전환 + 교재·문제은행·docs 평문 재제외
+- tests/e2e/content-pack.spec.js: content 평문 404 시뮬레이션 → 번들 폴백 렌더 회귀 게이트
+
 ## 2026-10-30 feat(sec): DA-16 신설 — 콘텐츠 비평문화 (Phase 1)
 
 - tools/lib/content_pack.js pk1 인코딩 → study_md·exams_md(문제은행)·docs_md 번들 텍스트 패킹 — 공용 디코더 src/content/unpack.js, 소비 지점 전수 디코드 (ref_md는 후속 Phase) + data-loader 런타임 디코드

@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: aec522edd51c4e3a
+> 입력 해시: baf1f21070be3598
 > 생성: 2026-10-30 · 원천: SPEC.md(627개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -765,7 +765,7 @@
 | DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-DEV-08<br>DOC-DEV-09<br>DOC-DSN-33 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/pwa/pwa-manifest.js<br>src/shell/app-shell.js | tests/unit/app/exam-context.test.js | — | — |
 | DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-38<br>DOC-RBK-16<br>…외 1개 | src/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
-| DA-16 | ✅ | 테스트 | — | src/content/data-loader.js<br>src/content/unpack.js<br>tools/build/build_study_md_bundle.js<br>tools/lib/content_pack.js | tests/unit/content-pack.test.js | — | — |
+| DA-16 | ✅ | E2E 테스트 | — | src/content/data-loader.js<br>src/content/unpack.js<br>tools/build/build_study_md_bundle.js<br>tools/lib/content_pack.js | tests/e2e/content-pack.spec.js<br>tests/unit/content-pack.test.js | — | — |
 
 ## 5.2 안정적 ID 체계
 
