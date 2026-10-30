@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-31 chore(gates): 파일명 기준선에 신규 dom 테스트 2건 등록
+
+- filename_baseline.json — study-spacedrep.dom.test.js·written-grading.dom.test.js 추가 (기존 *.dom.test.js 77건과 동일 컨벤션 — kebab 검사가 .dom.test 이중 확장자를 단일 접미로만 해석해 신규 위반으로 잡힘 → 기준선 정합)
+
 ## 2026-10-31 feat(gates): test-first 캘리브레이션 — 주석 전용 diff 면제 + 우회 빈도 추적
 
 - check_test_first.js — 구버전↔신버전을 주석 제거 후 비교해 주석·공백만 다른 파일을 트리거에서 자동 면제 (JS/Python 스트리퍼, 코드 주석 처리·문자열 변경은 여전히 트리거). SKIP_TESTFIRST·[no-test] 사용을 tools/state/gate_bypasses.jsonl에 누적 — audit_gate_utility "게이트 우회 이력" 섹션이 게이트별·수단별 빈도 보고 (우회 잦음 = 정밀도 검토 신호)
