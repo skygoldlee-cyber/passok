@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(landing): LP-13 신설 — 히어로 차별점 스트립
+
+- `docs/dev/SPEC.md` §3.29 — LP-13(히어로 CTA 직하 핵심 차별점 스트립) 추가. 버전 1.21
+- `landing.template.html`·`css/landing.css` — 근거 인용·FSRS 복습·약점 진단 3종 스트립
+
 ## 2026-10-30 feat(landing): LP-11·LP-12 신설 — 체험 섹션 경험 명시 + OG 공유 이미지
 
 - `docs/dev/SPEC.md` §3.29 — LP-11(체험 섹션 제공 경험 명시)·LP-12(1200×630 OG 이미지 + summary_large_image) 추가. 버전 1.20
