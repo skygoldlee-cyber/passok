@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261030-2459547",
+    "date": "2026-10-30",
+    "notes": [
+      "[문서] unpack.js 디렉토리 트리·domain-map 분류 등록 (DA-16 후속 정합)",
+      "[문서] TRACE_MATRIX 재생성 — DA-16 Phase 2 소스 태그 반영",
+      "[기능·sec] DA-16 Phase 2 — 문제은행·docs_md 번들 인코딩 확장",
+      "[기능·sec] DA-16 Phase 1 — 콘텐츠 비평문화로 교재 평문 스크레이핑 차단",
+      "[정리·release] v20261030-df07e0e 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261030-df07e0e",
     "date": "2026-10-30",
     "notes": [
@@ -193,14 +204,6 @@
     "notes": [
       "[수정·pwa] 파비콘 전환 롤백 — 브랜드 아이콘은 시험 무관 독립 유지 [no-test]",
       "[정리·release] v20261029-4f1c6b2 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261029-4f1c6b2",
-    "date": "2026-10-29",
-    "notes": [
-      "[수정] 조제관리사 카드 아이콘 — 브랜드 로고와 동일한 wand-magic-sparkles → fa-flask [no-test]",
-      "[정리·release] v20261029-023be2d 스탬프 확정 [no-docs]"
     ]
   }
 ]
