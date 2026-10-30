@@ -40,7 +40,7 @@ const ROOT = path.resolve(__dirname, '..', '..');
 // key는 src/reader/manual-viewer.js 의 MD_SOURCES[].path 와 정확히 일치해야 한다.
 const GLOBAL_DOCS = [
     { dir: 'docs/user', file: 'user_manual.md', key: 'docs/user/user_manual.md' },
-    { dir: 'docs/user', file: 'privacy_policy.md', key: 'docs/user/privacy_policy.md' },
+    { dir: 'docs/user', file: 'PRIVACY_POLICY.md', key: 'docs/user/PRIVACY_POLICY.md' },
 ];
 
 // 기능 플래그 → 필수 문서 불변식.

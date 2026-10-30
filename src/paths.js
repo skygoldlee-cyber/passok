@@ -53,7 +53,7 @@ export const PATHS = {
 
   // 문서 — 사용자 매뉴얼·개인정보 처리방침은 앱 공용(docs/user/, 시험 무관), 실무 매뉴얼은 시험별
   USER_MANUAL: 'docs/user/user_manual.md',
-  PRIVACY_POLICY: 'docs/user/privacy_policy.md',
+  PRIVACY_POLICY: 'docs/user/PRIVACY_POLICY.md',
   get FORMULA_MANUAL() { return contentPath('docs/formula_manual.md'); },
 };
 

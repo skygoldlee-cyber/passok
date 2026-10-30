@@ -232,7 +232,7 @@ const DATA_ASSETS = [
  *  manifest 선언 기준으로 재생성 — 마커 사이만 자동 갱신된다. */
 const MD_ASSETS = [
   // MD_ASSETS:BEGIN
-  './docs/user/privacy_policy.md',
+  './docs/user/PRIVACY_POLICY.md',
   './docs/user/user_manual.md',
   './content/exams/cosmetic/docs/formula_manual.md',
   './content/exams/cosmetic/docs/두음법_암기_총정리.md',
