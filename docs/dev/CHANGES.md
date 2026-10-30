@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-31 docs(manual): BYOK 등록 안내 추가
+
+- user_manual.md AI 코칭 절에 "본인 API 키(BYOK) 등록" 소절 — 등록 경로(설정→AI API 키 / 주관식 AI 채점 패널)·로컬 저장 범위·효과·삭제 안내 · docs_md 번들 재생성
+
 ## 2026-10-30 feat(ai): 설정 메뉴 "AI API 키" BYOK 등록 진입점
 
 - src/ai/ai-key-settings.js 신설 — 주관식 패널(wp-aicfg)과 동일 저장 계약(WRITTEN_AI_KEY 로컬 전용)의 설정 오버레이 (공급자·키·모델 + 저장/삭제)
