@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261031-a4438bb",
+    "date": "2026-10-31",
+    "notes": [
+      "[정리·gates] 파일명 기준선에 신규 dom 테스트 2건 등록",
+      "[기능·gates] test-first 주석 전용 diff 면제 + 우회 빈도 추적",
+      "[정리·release] v20261031-273b412 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261031-273b412",
     "date": "2026-10-31",
     "notes": [
@@ -196,19 +205,6 @@
       "[정리] 배포 전 파생물 재생성 [no-test]",
       "[기능] deploy 가드 파생물 자동 재생성 — build:derived 선실행으로 수동 순서 꼬임 제거 [no-test]",
       "[정리·release] v20261030-b329ed0 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261030-b329ed0",
-    "date": "2026-10-30",
-    "notes": [
-      "[정리] TRACE MATRIX 재생성 — check:webp 게이트 등록 [no-test]",
-      "[정리] check:webp 스크립트 등록 — check_npm_commands 게이트 정합 [no-test]",
-      "[기능] 배포 이미지 webp 강제 게이트 — ref_md·기출 원본 삭제 + steps.js 등록 [no-test]",
-      "[정리] webp_refmd_images.py @spec none 주석 — SPEC refs 게이트 정합 [no-test]",
-      "[정리] ref_md 원본 jpeg/png 삭제 — webp 참조 전환으로 고아화, git 이력 보존 [no-test]",
-      "[성능] ref_md 이미지 webp 재인코딩 — 6,687개 원본 jpeg/png → webp(160MB), 배포 ~238MB 절감 [no-test]",
-      "[정리·release] v20261030-1583667 스탬프 확정 [no-docs]"
     ]
   }
 ]
