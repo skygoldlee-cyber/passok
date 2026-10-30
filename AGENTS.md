@@ -33,6 +33,7 @@ node tools/build/build_doc_bundles.js        # docs/user/*.md(앱 공용 매뉴�
 npm.cmd run build:html                # index.template.html + html/views/*.html → index.html 조립 (뷰 마크업 변경 시 필수)
 npm.cmd run check:html                # index.html이 파셜 조립 결과와 일치하는지 비교 (개행 정규화 — pre-push·CI 게이트)
 npm.cmd run build:landing             # landing.template.html + exams.json + 시험별 landing_demo.json/manifest → landing.html 조립 (LP-02)
+npm.cmd run build:ogimage            # 1200×630 브랜드 OG 카드 → icons/og-image.png (Playwright 렌더, LP-12)
 npm.cmd run check:landing             # landing.html 조립 신선도 (check:fresh·check:all 게이트)
 npm.cmd run check:parser               # 빌드 파서 ↔ 런타임 파서 등가성 검증
 npm.cmd run check:imports              # src/ 내 ES 모듈 import/export 교차 검증
