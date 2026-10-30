@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(landing): LP-13 스트립 4번째 항목 — 법령·고시 갱신 확인
+
+- SPEC 버전 1.22 — notice-check(feature 게이트, 시험별 references.json 유도)를 차별점 스트립·비교표에 반영
+
 ## 2026-10-30 feat(landing): LP-13 신설 — 히어로 차별점 스트립
 
 - `docs/dev/SPEC.md` §3.29 — LP-13(히어로 CTA 직하 핵심 차별점 스트립) 추가. 버전 1.21
