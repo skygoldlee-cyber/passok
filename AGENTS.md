@@ -332,6 +332,7 @@ src/                    # ES Modules
     sync.js               # 클라우드 스냅샷 동기화 (sync_snapshots push/pull, dirty 훅·디바운스·충돌 확인, 고객 키 제외, Pro entitlement 게이트)
   ai/                   # 런타임 AI 클라이언트 — 서버 프록시 경유 기능 (AI-25~30, AI_COACH_DESIGN.md)
     ai-client.js        # ai-proxy Edge Function 호출 래퍼 — 세션 JWT 첨부·타임아웃·콘텐츠 해시 캐시·BYOK 폴백 분기 (AI-27~29)
+    ai-key-settings.js  # AI API 키(BYOK) 설정 오버레이 — 설정 메뉴 진입점, 주관식 패널과 동일 저장 계약(로컬 전용)
     gen-gate.js         # 런타임 AI 생성물 검증 게이트 — 스키마·인용 강제·n-gram dupcheck·AI 배지 규약 (AI-37)
   globals.d.ts          # 전역 타입 선언 (jsconfig checkJs용)
   package.json          # {"type":"module"} — src/ ESM 선언

@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(ai): 설정 메뉴 "AI API 키" BYOK 등록 진입점
+
+- src/ai/ai-key-settings.js 신설 — 주관식 패널(wp-aicfg)과 동일 저장 계약(WRITTEN_AI_KEY 로컬 전용)의 설정 오버레이 (공급자·키·모델 + 저장/삭제)
+- index.template.html 계정 그룹에 "AI API 키" 항목 추가 — 미로그인 사용자도 키 등록으로 AI 해설·코칭·질의 활성화 가능 (기존 갭: 진입점이 주관식 패널 하나뿐이었음)
+
 ## 2026-10-30 feat(icons): og-image에 AI 코치 반영
 
 - build_og_image.js — 칩 행에 "AI 학습 코치" 추가 + sub 문구에 로그인 조건 명시 · og-image.png 재생성

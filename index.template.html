@@ -156,6 +156,10 @@
                             <button type="button" class="settings-item" data-click="showRedeemCode" title="구매한 Pro 라이선스 코드를 입력해 활성화 — 로그인 필요">
                                 <i class="fa-solid fa-key" aria-hidden="true"></i> 라이선스 코드 입력
                             </button>
+                            <!-- BYOK — 로그인 없이 AI 코치를 쓰려는 사용자의 본인 API 키 등록 (디바이스 로컬 전용) -->
+                            <button type="button" class="settings-item" data-click="openAiKeySettings" title="본인 AI API 키 등록 — 로그인 없이 AI 해설·코칭 사용, 키는 이 기기에만 저장">
+                                <i class="fa-solid fa-robot" aria-hidden="true"></i> AI API 키
+                            </button>
                             <!-- 텔레메트리 opt-out (UX-MET-06, ADR-0019) — 거부 시 전송만 차단, 기능 제한 없음 -->
                             <button type="button" class="settings-item" data-click="toggleTelemetry" title="익명 사용 통계 수집 허용 여부 — 끄면 이 기기에서 통계 전송이 중단됩니다 (기능 제한 없음)">
                                 <i class="fa-solid fa-chart-line" aria-hidden="true"></i> 사용 통계 전송: <span id="telemetry-toggle-label">켜짐</span>
