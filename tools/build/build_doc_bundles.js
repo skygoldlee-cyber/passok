@@ -63,7 +63,7 @@ function bundleBody(srcPath, key) {
     return AUTOGEN_HEADER + '\n' +
         `// 원본: ${key}\n` +
         '(window.__DOC_MD__ = window.__DOC_MD__ || {})[' +
-        JSON.stringify(key) + '] = ' + JSON.stringify(encodeText(md)) + ';\n';
+        JSON.stringify(key) + '] = ' + JSON.stringify(encodeText(md, key)) + ';\n';
 }
 
 function emitBundle(outDir, srcPath, key, file, generated, stale) {

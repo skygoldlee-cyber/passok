@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(sec): DA-17 신설 — 콘텐츠 워터마크 파이프라인
+
+- tools/lib/watermark.js: 콘텐츠 해시+경로 sha256 지문을 HTML 주석으로 본문 말미에 삽입 (결정적 — 신선도 게이트 정합) — encodeFiles/encodeText 경로 인자로 전 생성기 적용
+- 유출 감정: 번들 pk1 디코드 → extract로 provenance 역추적. 렌더·검색 인덱스 무영향
+
 ## 2026-10-30 fix(sec): DA-16 재적용 — 번들 배포 포함 + 폴백 e2e 실측
 
 - 장애 원인: study_md·exams_md 번들이 file:// 전용 .vercelignore 대상이라 프로덕션에 평문·번들 모두 부재

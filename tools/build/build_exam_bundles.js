@@ -72,7 +72,7 @@ function buildForExam(target) {
             AUTOGEN_HEADER + '\n' +
             `// 원본: ${key}\n` +
             '(window.__EXAM_MD__ = window.__EXAM_MD__ || {})[' +
-            JSON.stringify(key) + '] = ' + JSON.stringify(encodeText(md)) + ';\n';
+            JSON.stringify(key) + '] = ' + JSON.stringify(encodeText(md, key)) + ';\n';
 
         const stem = file.replace(/\.md$/i, '');
         const outPath = path.join(OUT_DIR, stem + '.js');

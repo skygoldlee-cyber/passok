@@ -8,6 +8,7 @@
  *
  * 포맷: "pk1:<base64>" — 값이 pk1 접두로 시작하면 XOR-디코드, 아니면 평문 통과.
  */
+const { embed: _wmEmbed } = require('./watermark.js');
 const PK_KEY = 'passok-pk1-5f3a';
 const PREFIX = 'pk1:';
 
@@ -17,8 +18,9 @@ function xor(buf, key) {
   return out;
 }
 
-/** 평문 문자열 → pk1 인코딩 문자열 (Node 빌드용) */
-function encodeText(text) {
+/** 평문 문자열 → pk1 인코딩 문자열 (Node 빌드용). filePath 전달 시 DA-17 지문 삽입 */
+function encodeText(text, filePath) {
+  if (filePath) text = _wmEmbed(text, filePath);
   return PREFIX + xor(Buffer.from(text, 'utf8'), PK_KEY).toString('base64');
 }
 
@@ -28,10 +30,10 @@ function decodeText(value) {
   return xor(Buffer.from(value.slice(PREFIX.length), 'base64'), PK_KEY).toString('utf8');
 }
 
-/** 번들 내 {path: text} 맵의 값 전체 인코딩 */
+/** 번들 내 {path: text} 맵의 값 전체 인코딩 — 경로가 지문 seed가 된다 (DA-17) */
 function encodeFiles(files) {
   const out = {};
-  for (const [k, v] of Object.entries(files)) out[k] = typeof v === 'string' ? encodeText(v) : v;
+  for (const [k, v] of Object.entries(files)) out[k] = typeof v === 'string' ? encodeText(v, k) : v;
   return out;
 }
 
