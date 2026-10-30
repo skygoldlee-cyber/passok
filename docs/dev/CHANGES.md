@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(ai): AI 코치 생성형 선행 — 생성물 검증 게이트 (AI-37)
+
+- src/ai/gen-gate.js 신설 — 런타임 AI 생성물 검증 순수 게이트: 스키마·인용 강제·n-gram dupcheck(>0.6 폐기)·AI_BADGE_TEXT 배지 규약
+- validateGeneratedItem(건당) + filterGeneratedItems(일괄 분리) + maxPoolOverlap(중첩률)
+- SPEC AI-37 등록 — 생성형 미니퀴즈 본체(kind·UI·Pro 게이트)는 게이트 통과분만 출제하는 후속 단계
+
 ## 2026-10-30 feat(quiz): AI 코치 단계 4 — 약점 선정형 미니퀴즈 (AI-34)
 
 - weak-items.js collectWeakConceptQuizzes 신설 — 취약 conceptId(진술 통계 cid + 오답 문항 혼동쌍) 기준으로 기존 문항 선별, 오답 우선 최대 10문 (생성 아닌 선정형 — LLM 무관)

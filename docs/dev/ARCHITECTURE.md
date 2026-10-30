@@ -313,6 +313,7 @@ passok/
 │   ├── auth-sync/auth-view.js        #   계정/로그인 모달 (이메일+PW·회원가입·매직링크 OTP)
 │   ├── auth-sync/sync.js             #   클라우드 스냅샷 동기화 (sync_snapshots push/pull, Pro entitlement 게이트 — canCloudSync)
 │   ├── ai/ai-client.js               #   ai-proxy Edge Function 호출 래퍼 — 세션 JWT·타임아웃·해시 캐시·BYOK 폴백 (AI-25~30)
+│   ├── ai/gen-gate.js                #   런타임 AI 생성물 검증 게이트 — 스키마·인용 강제·dupcheck·AI 배지 (AI-37)
 │   ├── content/csv-utils.js            #   CSV 파서·EUC-KR 폴백·BOM 직렬화 (공용)
 │   ├── content/unpack.js               #   pk1 번들 디코더 (DA-16 콘텐츠 비평문화)
 │   ├── exams/                  #   시험 도메인 모듈 격리 (DA-13) — 시험 전용 실행 코드
