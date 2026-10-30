@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(landing): LP-14 신설 — 지원 시험 그룹 배치
+
+- exams.json `group` 필드로 시험 선택 뷰와 동형의 그룹 섹션 렌더. 버전 1.23
+
 ## 2026-10-30 feat(landing): LP-13 스트립 4번째 항목 — 법령·고시 갱신 확인
 
 - SPEC 버전 1.22 — notice-check(feature 게이트, 시험별 references.json 유도)를 차별점 스트립·비교표에 반영

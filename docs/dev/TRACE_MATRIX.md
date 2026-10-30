@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 6a24bed745ace868
-> 생성: 2026-10-30 · 원천: SPEC.md(625개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: e4cca89bbf44362c
+> 생성: 2026-10-30 · 원천: SPEC.md(626개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 625개 — 문서 연결 443 · 소스 연결 562 · 테스트 연결 594 · 보고서 연결 109
+**커버리지 요약**: 요구사항 626개 — 문서 연결 443 · 소스 연결 562 · 테스트 연결 595 · 보고서 연결 109
 
 ---
 
@@ -568,6 +568,7 @@
 | LP-11 | ✅ | 테스트 | — | src/shell/landing.js | tests/unit/app/ux-invariants.test.js | — | — |
 | LP-12 | ✅ | 테스트 | — | tools/build/build_og_image.js | tests/unit/app/ux-invariants.test.js | — | — |
 | LP-13 | ✅ | 테스트 | — | — | tests/unit/app/ux-invariants.test.js | — | — |
+| LP-14 | ✅ | 테스트 | — | — | tests/unit/app/ux-invariants.test.js | — | — |
 
 ## 3.30 개인 맞춤 고도화
 

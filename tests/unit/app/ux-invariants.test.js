@@ -1,5 +1,5 @@
 // tests/unit/ux-invariants.test.js — UI/UX 설계 요구사항 (정적 검증)
-// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,LP-06,LP-10,LP-11,LP-12,LP-13
+// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,LP-06,LP-10,LP-11,LP-12,LP-13,LP-14
 // CSS 규칙·마크업 구조·JS 구현 패턴이 설계 요구사항을 유지하는지 고정한다.
 
 import { test } from 'node:test';
@@ -135,6 +135,15 @@ test('LP-13: 히어로 차별점 스트립이 기존 수단 대비 우위를 첫
   for (const kw of ['인용 링크','FSRS','약점','고시']) assert.ok(tpl.includes(kw), '차별점 키워드: '+kw);
   const css = read('css/landing.css');
   assert.ok(css.includes('.landing-diff-strip'), '스트립 스타일 존재');
+});
+
+test('LP-14: 지원 시험 카드가 group 필드로 그룹 섹션 렌더된다', () => {
+  const html = read('landing.html');
+  assert.ok(html.includes('landing-exam-group'), '그룹 래퍼 존재');
+  for (const g of ['미용·화장품', '산업안전', '정보처리']) {
+    assert.ok(html.includes(`landing-exam-group-name">${g}`), `그룹 헤더: ${g}`);
+  }
+  assert.ok(html.includes('landing-exam-group-count'), '그룹 개수 표기');
 });
 
 test('LP-12: OG 공유 미리보기 이미지가 브랜드 카드로 연결된다', () => {
