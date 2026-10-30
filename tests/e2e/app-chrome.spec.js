@@ -79,7 +79,7 @@ test.describe('설정 메뉴', () => {
         // 4) 재오픈 → 항목 선택 → 닫힘 (항목의 부수 동작과 무관하게 패널은 닫혀야 함)
         await toggle.click();
         await expect(panel).not.toHaveClass(/is-hidden/);
-        await page.locator('#settings-panel [data-click="showPlanCompare"]').click();
+        await page.locator('#settings-panel [data-click="toggleTelemetry"]').click();
         await expect(panel).toHaveClass(/is-hidden/);
         await page.evaluate(() => {
             document.querySelectorAll('#pro-upgrade-overlay, #app-confirm-overlay, .modal-overlay, [role="dialog"]').forEach(el => {
