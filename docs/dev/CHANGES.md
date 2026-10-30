@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(icons): 아이콘 생성 파이프라인 + 선언·배치 보강
+
+- tools/build/build_icons.js 신설 (build:icons / check:icons) — 정본 512 → 파생(apple-touch 180·favicon 32·16) Playwright 고품질 렌더, maskable 세이프존 75%·풀블리드 재생성(기존 파일 코너 투명 발견·수정), root manifest ?v= 해시 스탬프(시험별 manifest와 정합), icons_stamp.json 신선도 스탬프
+- index/landing 템플릿 — favicon 32·16 링크 + apple-touch-icon 180 전용 파일
+- sw.js 프리캐시에 신규 아이콘 3종 추가 · 유닛 테스트(stampManifestIcons 계약)
+
 ## 2026-10-30 revert(ui): 시험 선택 뷰 AI 코치 안내 행 제거
 
 - html/views/exam-select.html — 인트로 아래 AI 코치 안내 행 삭제 (랜딩 페이지·매뉴얼에 이미 소개되어 있어 앱 첫 화면 중복 제거) · index.html 재조립
