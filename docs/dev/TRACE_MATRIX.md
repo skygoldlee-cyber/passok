@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: e4d9d47268912c27
+> 입력 해시: 1b7937f0cf064215
 > 생성: 2026-10-30 · 원천: SPEC.md(641개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -42,9 +42,9 @@
 | D-15 | ✅ | 테스트 | DOC-DSN-32 | src/views/dashboard.js<br>src/views/subject-stats.js | tests/dom/study/study-dashboard.dom.test.js | DOC-ARC-05<br>DOC-ARC-10 | — |
 | D-16 | ✅ | 테스트 | — | html/views/dashboard.html<br>index.html<br>src/study/analysis-engine.js<br>src/views/dashboard.js<br>…외 1개 | tests/unit/engine/analysis-engine.test.js | — | — |
 | D-17 | ✅ | 테스트 | DOC-DSN-16 | src/study/study-tracker-plan.js<br>src/study/study-tracker.js<br>src/views/dashboard.js<br>src/views/study-calendar.js<br>…외 1개 | tests/dom/study/study-calendar.dom.test.js<br>tests/dom/study/study-dashboard.dom.test.js<br>tests/unit/engine/study-tracker.test.js | — | — |
-| D-18 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32 | src/study/spaced-repetition.js | tests/unit/engine/fsrs.test.js | — | — |
-| D-19 | ✅ | E2E 테스트 | DOC-DSN-32 | src/study/spaced-repetition.js | tests/e2e/exam-risk.spec.js<br>tests/unit/engine/fsrs.test.js<br>tests/unit/engine/today-queue.test.js | — | — |
-| D-20 | ✅ | E2E 테스트 | DOC-DSN-32 | src/study/spaced-repetition.js | tests/e2e/exam-risk.spec.js<br>tests/unit/engine/fsrs.test.js | — | — |
+| D-18 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32 | src/study/spaced-repetition.js | tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/engine/fsrs.test.js | — | — |
+| D-19 | ✅ | E2E 테스트 | DOC-DSN-32 | src/study/spaced-repetition.js | tests/dom/study/study-spacedrep.dom.test.js<br>tests/e2e/exam-risk.spec.js<br>tests/unit/engine/fsrs.test.js<br>tests/unit/engine/today-queue.test.js | — | — |
+| D-20 | ✅ | E2E 테스트 | DOC-DSN-32 | src/study/spaced-repetition.js | tests/dom/study/study-spacedrep.dom.test.js<br>tests/e2e/exam-risk.spec.js<br>tests/unit/engine/fsrs.test.js | — | — |
 | D-21 | ✅ | 테스트 | DOC-DSN-32 | src/study/analysis-engine.js | tests/unit/engine/analysis-engine.test.js | — | — |
 | D-22 | ✅ | E2E 테스트 | DOC-ADR-18<br>DOC-DSN-32 | src/study/analysis-engine.js<br>src/study/knowledge-tracing.js<br>src/study/spaced-repetition.js<br>src/views/exam-sim/exam-sim-arena.js<br>…외 1개 | tests/e2e/analysis-view.spec.js<br>tests/unit/engine/analysis-engine.test.js<br>tests/unit/engine/fsrs.test.js<br>tests/unit/engine/knowledge-tracing.test.js | — | — |
 | D-23 | ✅ | 테스트 | — | src/study/study-tracker-alloc.js<br>src/study/study-tracker.js<br>src/views/analysis-view.js<br>src/views/dashboard-queue.js | tests/unit/engine/study-tracker.test.js | — | — |
@@ -79,9 +79,9 @@
 | F-04 | ✅ | 테스트 | DOC-REF-03 | src/views/flashcard.js<br>src/views/listeners/listeners-flashcard.js | tests/dom/study/study-flashcard.dom.test.js | DOC-ARC-05 | — |
 | F-05 | ✅ | 테스트 | DOC-REF-03 | src/utils.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js | DOC-ARC-05 | — |
 | F-06 | ✅ | 테스트 | DOC-REF-03 | src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js | DOC-ARC-05 | — |
-| F-07 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32<br>DOC-REF-03 | src/study/fsrs.js<br>src/study/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js<br>tests/unit/app/property-based.test.js<br>tests/unit/engine/fsrs.test.js | DOC-ARC-05 | — |
-| F-08 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32<br>DOC-REF-03 | src/study/fsrs.js<br>src/study/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js<br>tests/unit/app/property-based.test.js<br>tests/unit/engine/fsrs.test.js | DOC-ARC-05 | — |
-| F-09 | ✅ | 테스트 | DOC-DSN-32<br>DOC-REF-03 | src/study/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js<br>tests/unit/app/property-based.test.js<br>tests/unit/engine/fsrs.test.js | DOC-ARC-05 | — |
+| F-07 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32<br>DOC-REF-03 | src/study/fsrs.js<br>src/study/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js<br>tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/app/property-based.test.js<br>tests/unit/engine/fsrs.test.js | DOC-ARC-05 | — |
+| F-08 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32<br>DOC-REF-03 | src/study/fsrs.js<br>src/study/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js<br>tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/app/property-based.test.js<br>tests/unit/engine/fsrs.test.js | DOC-ARC-05 | — |
+| F-09 | ✅ | 테스트 | DOC-DSN-32<br>DOC-REF-03 | src/study/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js<br>tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/app/property-based.test.js<br>tests/unit/engine/fsrs.test.js | DOC-ARC-05 | — |
 | F-10 | ✅ | 테스트 | DOC-REF-03 | src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js | DOC-ARC-05 | — |
 | F-11 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32 | src/study/fsrs.js | tests/unit/engine/fsrs.test.js | — | — |
 
@@ -543,7 +543,7 @@
 | AI-28 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | src/ai/ai-client.js<br>src/telemetry/usage-telemetry.js | tests/unit/engine/ai-client.test.js | — | — |
 | AI-29 | ✅ | 테스트 | DOC-DSN-40 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-30 | ✅ | 테스트 | DOC-DSN-40 | src/ai/ai-client.js<br>src/ai/gen-gate.js<br>tools/supabase/functions/ai-proxy/index.ts | tests/unit/engine/ai-client.test.js<br>tests/unit/engine/gen-gate.test.js | — | — |
-| AI-32 | ✅ | 테스트 | — | src/study/spaced-repetition.js<br>tools/ai/ai_seed_eval.js<br>tools/ai/lib/difficulty.js | tests/unit/engine/seed-eval.test.js | — | — |
+| AI-32 | ✅ | 테스트 | — | src/study/spaced-repetition.js<br>tools/ai/ai_seed_eval.js<br>tools/ai/lib/difficulty.js | tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/engine/seed-eval.test.js | — | — |
 | AI-33 | ✅ | 테스트 | — | — | tests/dom/study/study-aicoach.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-34 | ✅ | 테스트 | — | src/study/weak-items.js | tests/unit/engine/weak-items.test.js | — | — |
 | AI-35 | ✅ | 테스트 | — | — | tests/dom/study/study-aicoach.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
@@ -561,8 +561,8 @@
 | WP-04 | ✅ | 테스트 | — | src/written/written-practice.js | tests/unit/engine/written-practice.test.js | — | — |
 | WP-05 | ✅ | 테스트 | — | src/written/written-practice.js | tests/unit/engine/written-practice.test.js | — | — |
 | WP-06 | ✅ | 테스트 | — | src/written/written-practice.js | tests/unit/engine/written-practice.test.js | — | — |
-| WP-07 | ✅ | 테스트 | — | src/written/written-grading.js | tests/unit/engine/written-grading.test.js | — | — |
-| WP-08 | ✅ | 테스트 | — | src/written/written-grading.js | tests/unit/engine/written-grading.test.js | — | — |
+| WP-07 | ✅ | 테스트 | — | src/written/written-grading.js | tests/dom/study/written-grading.dom.test.js<br>tests/unit/engine/written-grading.test.js | — | — |
+| WP-08 | ✅ | 테스트 | — | src/written/written-grading.js | tests/dom/study/written-grading.dom.test.js<br>tests/unit/engine/written-grading.test.js | — | — |
 
 ## 3.29 서비스 소개 랜딩 페이지
 
@@ -874,7 +874,7 @@
 | ROAD-L4 | 미구현 | — | — | — | — | — | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
 | ROAD-L5 | ✅ 카운터 구현 (판정 데이터 수집 중) | 테스트 | DOC-DSN-21<br>DOC-DSN-35 | src/telemetry/usage-stats.js | tests/dom/misc/usage-stats.dom.test.js | — | 사업 문서 — docs/exams/cosmetic/report_archive/PRO_MULTI_EXAM_EVALUATION.md · FEATURE_PROPOSALS.md |
 | ROAD-L6 | ①④완료 ⑤보류, 나머지 미구현 | — | — | — | — | — | ML 기법 검토 산출 — LEARNING_ALGORITHM_DESIGN.md (FSRS 적용·RL 보류 판정 근거) |
-| ROAD-L7 | ✅ | 테스트 | — | src/study/spaced-repetition.js | tests/dom/common/common-eventlisteners.dom.test.js<br>tests/dom/study/study-flashcard.dom.test.js<br>tests/unit/engine/fsrs.test.js | — | — |
+| ROAD-L7 | ✅ | 테스트 | — | src/study/spaced-repetition.js | tests/dom/common/common-eventlisteners.dom.test.js<br>tests/dom/study/study-flashcard.dom.test.js<br>tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/engine/fsrs.test.js | — | — |
 | ROAD-L8 | 미구현 | — | — | — | — | — | — |
 | ROAD-L9 | 미구현 | — | — | — | — | — | — |
 

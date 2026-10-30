@@ -11,6 +11,8 @@
  *      로컬 전용 — CI 실행은 기록되지 않아 로컬 관측치로만 해석)
  *   2) 단계 스크립트가 참조하는 tools/state/*.json 기준선 파일의 git 이력 —
  *      마지막 갱신일·윈도우 내 갱신 커밋 수 (발화→기준선 재스탬프의 흔적)
+ *   3) tools/state/gate_bypasses.jsonl — 게이트 우회 이력 (SKIP_* env·[no-*]
+ *      커밋 마크 사용 기록, 게이트별 집계 — 우회가 잦으면 정밀도 검토 신호)
  *
  * 판정 (verdict — 참고용 휴리스틱, 차단 없음):
  *   dormant   — 윈도우 내 실행 0회 (로그 부재 시 전원 해당 가능 — 해석 주의)
@@ -28,6 +30,7 @@ const { execFileSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const LOG = path.join(ROOT, 'tools', 'state', 'step_runs.jsonl');
+const BYPASS_LOG = path.join(ROOT, 'tools', 'state', 'gate_bypasses.jsonl');
 const DAYS = (() => {
     const i = process.argv.indexOf('--days');
     const n = i >= 0 ? parseInt(process.argv[i + 1], 10) : 90;
@@ -76,6 +79,29 @@ function collectStepStats({ steps, runLines, now = Date.now(), days = DAYS,
             stateFiles: files, lastBaselineTs: lastBaseline, baselineUpdates, verdict,
         };
     });
+}
+
+/** 게이트 우회 이벤트 집계 — 순수 함수(테스트용). {gate, mechanism, ts} 레코드를
+ * 게이트별 윈도우 내 수·수단별 분해·누적으로 환산한다. */
+function collectBypassStats({ lines, now = Date.now(), days = DAYS }) {
+    const cutoff = now - days * 86400e3;
+    const stats = new Map();
+    for (const l of lines) {
+        if (!l.trim()) continue;
+        let r;
+        try { r = JSON.parse(l); } catch { continue; }
+        if (!r.gate) continue;
+        const s = stats.get(r.gate) || { total: 0, window: 0, mech: {} };
+        s.total++;
+        const t = new Date(r.ts).getTime();
+        if (Number.isFinite(t) && t >= cutoff) {
+            s.window++;
+            const m = r.mechanism || '?';
+            s.mech[m] = (s.mech[m] || 0) + 1;
+        }
+        stats.set(r.gate, s);
+    }
+    return [...stats.entries()].map(([gate, s]) => ({ gate, ...s }));
 }
 
 function fmtDate(ts) {
@@ -154,10 +180,22 @@ function cliMain() {
         console.log(`\n${LABEL[k]} — ${groups[k].length}개`);
         for (const r of groups[k].sort((a, b) => (order[a.verdict] - order[b.verdict]) || a.id.localeCompare(b.id))) printRow(r);
     }
+
+    // 게이트 우회 이력 — SKIP_*·[no-*] 사용 빈도 (우회 잦음 = 게이트 정밀도 검토 신호)
+    const bypassLines = fs.existsSync(BYPASS_LOG) ? fs.readFileSync(BYPASS_LOG, 'utf8').split('\n') : [];
+    const bypass = collectBypassStats({ lines: bypassLines, now, days: DAYS });
+    console.log('\n■ 게이트 우회 이력 — gate_bypasses.jsonl (SKIP_* env·[no-*] 커밋 마크)');
+    if (!bypass.length) {
+        console.log('   기록 없음 — 우회 사용 시 게이트 스크립트가 누적 기록');
+    }
+    for (const b of bypass) {
+        const mechs = Object.entries(b.mech).map(([m, c]) => `${m} ${c}회`).join(' · ') || '—';
+        console.log(`   ${b.gate.padEnd(16)} 최근 ${DAYS}일 ${b.window}회 (${mechs}) · 누적 ${b.total}회`);
+    }
     console.log('\nℹ️ advisory 리포트 — 차단 없음 (종료 0). 판정 휴리스틱은 참고용.');
     process.exit(0);
 }
 
-module.exports = { collectStepStats };
+module.exports = { collectStepStats, collectBypassStats };
 
 if (require.main === module) cliMain();

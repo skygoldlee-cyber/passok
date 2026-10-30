@@ -181,7 +181,7 @@ npm.cmd run admin:discord               # Discord 조회 봇 슬래시 명령 �
 npm.cmd run report:dashboard            # 로컬 HTML 운영 대시보드 — 오류율·활성화율(세션/설치)·퍼널·피드백 조감을 단일 HTML로 생성 (동일 키 요건 · -- --days N · --out <path> · 산출물 gitignore — 조회 후 삭제, AD-07)
 npm.cmd run report:glossary             # 용어 후보 추출 리포트 — 참조자료 ref_md + 교재 표준형의 정의 조항·약칭·영문 병기를 스캔해 용어설명집 대비 신규/기존 분류 (BP-14 · 도구 직접 실행 `--apply`=신규 정의→glossary subjectN.json, `--apply-synonyms`=약칭·영문→manifest.synonyms, `--patterns`로 범위 조정)
 npm.cmd run check:docsync               # 소스 변경 시 문서 갱신 강제 — src/tools/tests/설정 변경에 docs/·AGENTS·README 갱신 동반 필수. 우회: SKIP_DOCSYNC=1 (모든 단계) · 커밋 메시지 행 끝의 [no-docs] (pre-push --ref 단계에서만 인식 — 마크된 커밋의 파일만 면제되며 다른 커밋은 계속 검사. pre-commit은 메시지 미존재로 불가)
-npm.cmd run check:testfirst             # 로직(src/*.js·ref-pipeline/*.py) 변경 시 테스트(tests/·ref-pipeline/tests/) 동반 강제 — Docs-First 기계화. 우회: SKIP_TESTFIRST=1 · 커밋 메시지 행 끝 [no-test] (--ref 모드, 그 커밋만 면제)
+npm.cmd run check:testfirst             # 로직(src/*.js·ref-pipeline/*.py) 변경 시 테스트(tests/·ref-pipeline/tests/) 동반 강제 — Docs-First 기계화. 주석·공백 전용 diff는 트리거 면제 (구버전↔신버전 주석 제거 비교 — 코드 주석 처리·문자열 변경은 여전히 트리거). 우회: SKIP_TESTFIRST=1 · 커밋 메시지 행 끝 [no-test] (--ref 모드, 그 커밋만 면제) — 우회 사용은 gate_bypasses.jsonl에 누적, audit:gates가 빈도 보고
 npm.cmd run check:trace                 # TRACE_MATRIX 입력 해시 신선도
 npm.cmd run check:lawurls               # law.go.kr 한글주소 유효성 전수 검증 (law-links.js 매핑 실호출, 오류 페이지 본문 판별)
 npm.cmd run check:linklint              # 렌더 출력 링크 린트 — 콘텐츠 md를 표면별 렌더러(교재→reader-format, 문서·생성 번들→exam-viewer 경로) 통과 후 원시 경로 href·절단 URL·좌표/파일명 라벨·미승인 외부 링크·본문 경로 누출·QA 스탬프 잔존·위험 스킴 탐지 (check:content·check:ci 게이트, LL-01~08)
@@ -512,7 +512,7 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
   2. **테스트 선행** — 버그 수정은 재현 테스트(실패하는 테스트)를 먼저 작성하고, 기능 변경은 기대 동작을 테스트로 고정한 뒤 구현한다.
   3. 그 다음 소스를 구현하고, 완료 시 문서↔코드 정합은 기존 게이트(`check:docs`, `check:docsync`, `build:trace`)가 검증한다.
 - 사후 문서화(check:docsync)는 최소 안전망일 뿐이며, 이 규칙의 선행 절차를 대체하지 않는다.
-- **기계적 강제**: `check:testfirst`가 실행 로직(`src/*.js`·`ref-pipeline/*.py`) 변경에 테스트(`tests/`·`ref-pipeline/tests/`) 변경 동반을 요구한다 — pre-commit(`--staged`)·pre-push/CI(`--ref origin/main`)·`check:ci` 3층에서 작동하므로 머신과 무관하게 강제된다. 브랜치에 커밋된 테스트 변경도 인정돼 "테스트→구현" 커밋 분할이 가능하다. 기존 테스트로 충분한 변경은 `[no-test]` 또는 `SKIP_TESTFIRST=1`로 면제.
+- **기계적 강제**: `check:testfirst`가 실행 로직(`src/*.js`·`ref-pipeline/*.py`) 변경에 테스트(`tests/`·`ref-pipeline/tests/`) 변경 동반을 요구한다 — pre-commit(`--staged`)·pre-push/CI(`--ref origin/main`)·`check:ci` 3층에서 작동하므로 머신과 무관하게 강제된다. 브랜치에 커밋된 테스트 변경도 인정돼 "테스트→구현" 커밋 분할이 가능하다. 주석·공백 전용 diff는 로직 변경으로 보지 않아 트리거에서 자동 면제된다. 기존 테스트로 충분한 변경은 `[no-test]` 또는 `SKIP_TESTFIRST=1`로 면제 — 우회 사용은 `tools/state/gate_bypasses.jsonl`에 누적돼 `audit:gates` "게이트 우회 이력"이 빈도를 보고한다 (우회 잦음 = 게이트 정밀도 검토 신호).
 
 ## 구조 변경 시 문서 갱신 규칙
 

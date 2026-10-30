@@ -66,6 +66,8 @@ tools/state/combo_review_queue.md
 tools/state/dashboard_report.html
 # 검증 단계 실행 이력 (run.js 텔레메트리 — audit:tools 미실행 감사 입력, 로컬 전용)
 tools/state/step_runs.jsonl
+# 게이트 우회 이력 (SKIP_*·[no-*] 사용 기록 — audit:gates 우회 빈도 입력, 로컬 전용)
+tools/state/gate_bypasses.jsonl
 # ref_md 변환 진단 리포트 (ref-pipeline 산출물 — 런타임 미사용)
 _report.json
 # Mermaid 사전렌더 SVG 캐시 (md2doc.py — 재생성 가능)

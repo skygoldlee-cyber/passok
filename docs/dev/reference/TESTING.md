@@ -27,10 +27,10 @@
 
 | 구분 | 프레임워크 | 환경 | 파일 위치 | 테스트 수 |
 |------|-----------|------|-----------|-----------|
-| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1,650+ |
-| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 850+ |
+| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1,700+ |
+| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 870+ |
 | **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 110+ |
-| **합계** | | | | **2,650+** |
+| **합계** | | | | **2,700+** |
 
 > 수치는 `check:teststats`(docs 단계)이 `tools/state/test_stats.json` 실측 SSOT와 정합 검증한다 —
 > 스테일 시 `npm run stats:stamp`으로 재측정·재기록 (인용은 `N+` 바닥 표기 유지).
@@ -110,7 +110,7 @@ npm run check:types       # tsc --noEmit (jsconfig.json의 checkJs — src 전�
 npm run check:imports     # src/ import↔export 교차 검증 (경고도 0)
 npm run check:docs        # 문서 경로 참조 + DOC ID 정합
 npm run check:docsync     # 소스 변경 시 문서 갱신 강제 (작업 트리 기준 — pre-commit은 --staged, pre-push/CI는 --ref origin/main)
-npm run check:testfirst   # 로직(src/*.js·ref-pipeline/*.py) 변경 시 테스트 동반 강제 — Docs-First 게이트 (pre-commit은 --staged+기커밋 인정, pre-push/CI는 --ref origin/main, 우회: [no-test]·SKIP_TESTFIRST=1)
+npm run check:testfirst   # 로직(src/*.js·ref-pipeline/*.py) 변경 시 테스트 동반 강제 — Docs-First 게이트 (pre-commit은 --staged+기커밋 인정, pre-push/CI는 --ref origin/main, 주석·공백 전용 diff는 자동 면제, 우회: [no-test]·SKIP_TESTFIRST=1 — 우회는 gate_bypasses.jsonl에 누적, audit:gates가 빈도 보고)
 npm run check:specrefs    # SPEC↔@spec 양방향 + 테스트 갭 기준선(기준선 0 — 신규 갭 즉시 실패)
 npm run check:trace       # TRACE_MATRIX 신선도 (입력 해시 — 미재생성 시 실패)
 npm run check:perf        # 성능 예산 — SHELL_ASSETS 크기 상한 (check:ci·CI 게이트)

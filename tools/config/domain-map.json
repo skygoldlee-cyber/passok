@@ -280,7 +280,8 @@
         "src/written/written-practice.js",
         "src/written/written-grading.js",
         "tests/unit/**/written-practice.test.js",
-        "tests/unit/**/written-grading.test.js"
+        "tests/unit/**/written-grading.test.js",
+        "tests/dom/**/written-grading.dom.test.js"
       ]
     },
     {

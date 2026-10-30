@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-31 feat(gates): test-first 캘리브레이션 — 주석 전용 diff 면제 + 우회 빈도 추적
+
+- check_test_first.js — 구버전↔신버전을 주석 제거 후 비교해 주석·공백만 다른 파일을 트리거에서 자동 면제 (JS/Python 스트리퍼, 코드 주석 처리·문자열 변경은 여전히 트리거). SKIP_TESTFIRST·[no-test] 사용을 tools/state/gate_bypasses.jsonl에 누적 — audit_gate_utility "게이트 우회 이력" 섹션이 게이트별·수단별 빈도 보고 (우회 잦음 = 정밀도 검토 신호)
+- 학습 엔진 분기 커버리지 보강 — fsrs.test.js·written-grading.test.js 미커버 분기 추가 (s≤0 가드·Hard/Easy 보정·migrate 경계·공급자 extract 엣지·callProviderLLM 오류 분기), vitest 측은 study-spacedrep.dom.test.js·written-grading.dom.test.js 신설로 spaced-repetition·fsrs·written-grading vitest 좌표 분기 커버
+
 ## 2026-10-31 feat(landing): 시험 카드에 1·2차 시험 내용 표시
 
 - exams.json — 전 시험 `syllabus{primary,secondary}` 필드 추가 (1차/2차 내용)

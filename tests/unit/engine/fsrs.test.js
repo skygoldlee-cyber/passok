@@ -440,6 +440,37 @@ test('F-09: 스케줄 저장소 JSON 손상 시 빈 상태로 복구된다', () 
     assert.equal(rec.v, 2);
 });
 
+test('F-07: retrievability — s≤0이면 0 (분모 보호)', () => {
+    assert.equal(retrievability(0, 0), 0);
+    assert.equal(retrievability(10, 0), 0);
+    assert.equal(retrievability(10, -1), 0);
+});
+
+test('F-11: 성공 복습 안정도 — Hard 페널티·Easy 보너스가 Good과 갈린다', () => {
+    const s0 = { v: 2, d: 5, s: 5, reps: 3, lapses: 0, lastInterval: 5 };
+    const hard = fsrsReview(s0, Rating.HARD, 5);
+    const good = fsrsReview(s0, Rating.GOOD, 5);
+    const easy = fsrsReview(s0, Rating.EASY, 5);
+    assert.ok(hard.s < good.s && good.s < easy.s,
+        `HARD ${hard.s} < GOOD ${good.s} < EASY ${easy.s}`);
+});
+
+test('F-07: reps·lapses 필드 부재 레코드는 0 기본값으로 갱신된다', () => {
+    const r = fsrsReview({ v: 2, d: 5, s: 5 }, Rating.GOOD, 3);
+    assert.equal(r.reps, 1);
+    assert.equal(r.lapses, 0);
+});
+
+test('F-08: migrateSm2Record — nextReview 비문자열이면 due=null·s 하한 0.4', () => {
+    const m = migrateSm2Record({ repetition: 1, easiness: 2.5 });
+    assert.equal(m.due, null);
+    assert.equal(m.lastReview, null);
+    assert.equal(m.s, 0.4);           // 간격 근사 0 → 하한
+    assert.equal(m.lapses, 0);
+    // 비객체 입력은 null
+    assert.equal(migrateSm2Record(42), null);
+});
+
 test('F-09: getDueCount는 getDueCards 길이와 일치한다', () => {
     seedCard('due1', { v: 2, d: 5, s: 2, reps: 1, lapses: 0, lastInterval: 1, due: dstr(0), lastReview: dstr(-1) });
     seedCard('due2', { v: 2, d: 5, s: 2, reps: 1, lapses: 0, lastInterval: 1, due: dstr(-1), lastReview: dstr(-2) });

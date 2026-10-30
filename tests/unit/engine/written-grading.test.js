@@ -8,9 +8,11 @@ import assert from 'node:assert/strict';
 import {
     AI_PROVIDERS, getAiProvider, saveAiProvider, getAiModel, saveAiModel,
     getAiKey, saveAiKey, clearAiKey, maskAiKey,
-    buildGradingPrompt, parseGradingResponse, applyGrading, gradeAnswer
+    buildGradingPrompt, parseGradingResponse, applyGrading, gradeAnswer,
+    callProviderLLM
 } from '../../../src/written/written-grading.js';
 import { STORAGE_KEYS, BACKUP_KEYS } from '../../../src/storage-keys.js';
+import { setItem } from '../../../src/storage.js';
 
 function createMockStorage() {
     const store = {};
@@ -85,7 +87,33 @@ test('WP-07: 공급자·모델·키 저장 계약', () => {
     assert.ok(AI_PROVIDERS.length === 3);
 });
 
+test('WP-07: 저장소의 비정형 공급자·falsy 입력은 안전 폴백', () => {
+    // 스코프 저장소에 직접 비정형 값 주입 → 공급자 폴백
+    setItem(STORAGE_KEYS.WRITTEN_AI_PROVIDER, 'bogus');
+    assert.equal(getAiProvider(), 'gemini');
+    saveAiProvider(null);                               // falsy → 무시·현행 유지
+    assert.equal(getAiProvider(), 'gemini');
+    saveAiModel(null);                                  // falsy → 비움 → 기본 모델
+    assert.equal(getAiModel(), 'gemini-3.8-flash');
+    assert.equal(saveAiKey(null), false);
+    assert.equal(maskAiKey(null), '');                  // 비문자열
+    assert.equal(maskAiKey('   '), '');                 // 공백만
+    assert.equal(maskAiKey('abcd'), '••••');            // 4자리 이하 전면 마스킹
+});
+
 /* ---------- WP-08: 프롬프트·파싱·합산 ---------- */
+
+test('WP-08: 프롬프트 폴백 — rubric·모범답안·type·points·finalAnswer 부재', () => {
+    const bare = { id: 'X1', problem: '서술 문제', rubricText: '자유 채점 기준' };
+    const p = buildGradingPrompt(bare, 'ans');
+    assert.ok(p.includes('X1 · 주관식 · 배점 ?점'), `폴백 라벨: ${p.split('\n')[0]}`);
+    assert.ok(p.includes('(없음)'));
+    assert.ok(p.includes('(체크리스트 없음) 자유 채점 기준'));
+    assert.ok(!p.includes('## 최종 답'));
+    // rubricText도 없으면 빈 문자열 폴백
+    const p2 = buildGradingPrompt({ id: 'X2', problem: 'P' }, 'a');
+    assert.ok(p2.includes('(체크리스트 없음)'));
+});
 
 test('WP-08: 프롬프트에 문제·모범답안·rubric·답안 포함', () => {
     const p = buildGradingPrompt(Q, '내 답안 텍스트');
@@ -108,11 +136,29 @@ test('WP-08: 응답 파싱 — 코드펜스·잡음 허용, 범위 외 항목 �
     assert.equal(parseGradingResponse('{"items":[]}', 3), null);
 });
 
+test('WP-08: 파싱 엣지 — 깨진 JSON·비배열 items·비문자열·범위 외 i 필터', () => {
+    assert.equal(parseGradingResponse('{items:[}', 3), null);       // JSON.parse 예외 경로
+    assert.equal(parseGradingResponse('{"items":"x"}', 3), null);   // items 비배열
+    assert.equal(parseGradingResponse(123, 3), null);               // 비문자열 입력
+    // i 비정수·음수도 필터 — 유효 항목만 남는다
+    const g = parseGradingResponse('{"items":[{"i":-1,"met":true},{"i":0.5,"met":true},{"i":1,"met":true,"feedback":"ok"}]}', 3);
+    assert.equal(g.items.length, 1);
+    assert.equal(g.items[0].i, 1);
+});
+
 test('WP-08: 점수는 LLM 산출이 아닌 클라이언트 합산', () => {
     const g = parseGradingResponse('{"items":[{"i":0,"met":true,"feedback":""},{"i":2,"met":true,"feedback":""}],"summary":""}', 3);
     const { met, score } = applyGrading(Q.rubricItems, g);
     assert.deepEqual(met, [true, false, true]);
     assert.equal(score, 10);                     // 5+5 — LLM score 필드 신뢰하지 않음
+});
+
+test('WP-08: applyGrading — 범위 외 i 무시·points 부재는 0점 합산', () => {
+    const { met, score } = applyGrading(
+        [{ text: 'a' }, { text: 'b', points: 4 }],
+        { items: [{ i: 0, met: true }, { i: 9, met: true }, { i: -1, met: true }] });
+    assert.deepEqual(met, [true, false]);
+    assert.equal(score, 0);                      // points 부재 → (r.points||0)
 });
 
 /* ---------- WP-08: gradeAnswer 오류 분기 (fetch 목업) ---------- */
@@ -184,4 +230,81 @@ test('WP-08: gradeAnswer — openai·anthropic 요청 형식', async () => {
     });
     assert.equal(res2.ok, true);
     assert.deepEqual(res2.met, [false, true, false]);
+});
+
+test('WP-08: callProviderLLM — 키·fetch 부재 조기 반환', async () => {
+    assert.equal((await callProviderLLM('sys', 'p')).code, 'nokey');
+    saveAiKey('sk-x');
+    const origFetch = globalThis.fetch;
+    try {
+        globalThis.fetch = undefined;                   // fetchImpl 부재 경로
+        const res = await callProviderLLM('sys', 'p');
+        assert.equal(res.code, 'network');
+        // fetchImpl 미지정 시 글로벌 fetch 사용 경로 (스텁으로 대체해 실호출 차단)
+        globalThis.fetch = async () => ({
+            ok: true, status: 200,
+            async json() { return { candidates: [{ content: { parts: [{ text: 'ok' }] } }] }; }
+        });
+        const res2 = await callProviderLLM('sys', 'p');
+        assert.equal(res2.ok, true);
+        assert.equal(res2.text, 'ok');
+    } finally { globalThis.fetch = origFetch; }
+});
+
+test('WP-08: callProviderLLM — AbortError는 aborted, 그 외 HTTP 오류 분기', async () => {
+    saveAiKey('sk-x');
+    const abort = Object.assign(new Error('aborted'), { name: 'AbortError' });
+    assert.equal((await callProviderLLM('s', 'p', { fetchImpl: async () => { throw abort; } })).code, 'aborted');
+    assert.equal((await callProviderLLM('s', 'p', { fetchImpl: async () => ({ ok: false, status: 400 }) })).code, 'key');
+    assert.equal((await callProviderLLM('s', 'p', { fetchImpl: async () => ({ ok: false, status: 403 }) })).code, 'key');
+    const res500 = await callProviderLLM('s', 'p', { fetchImpl: async () => ({ ok: false, status: 500 }) });
+    assert.equal(res500.code, 'http');
+    assert.match(res500.error, /500/);
+    const resBad = await callProviderLLM('s', 'p', {
+        fetchImpl: async () => ({ ok: true, status: 200, async json() { throw new Error('bad'); } })
+    });
+    assert.equal(resBad.code, 'unreadable');
+});
+
+test('WP-08: 공급자 계약 — system 미지정 생략·extract 엣지 빈 문자열', async () => {
+    saveAiKey('sk-x');
+    // openai — system 없으면 messages 1개, choices 부재 → ''
+    saveAiProvider('openai');
+    let body;
+    const r1 = await callProviderLLM(null, 'p', {
+        fetchImpl: async (u, i) => { body = JSON.parse(i.body); return { ok: true, status: 200, async json() { return { choices: [] }; } }; }
+    });
+    assert.equal(body.messages.length, 1);
+    assert.equal(r1.ok, true);
+    assert.equal(r1.text, '');
+    // anthropic — system 키 생략, content 비배열·text 부재 → ''
+    saveAiProvider('anthropic');
+    const r2 = await callProviderLLM(null, 'p', {
+        fetchImpl: async (u, i) => { body = JSON.parse(i.body); return { ok: true, status: 200, async json() { return {}; } }; }
+    });
+    assert.ok(!('system' in body));
+    assert.equal(r2.text, '');
+    const r3 = await callProviderLLM('sys', 'p', {
+        fetchImpl: async () => ({ ok: true, status: 200, async json() { return { content: [{ no_text: 1 }] }; } })
+    });
+    assert.equal(r3.text, '');
+    // gemini — candidates·parts 부재 → ''
+    saveAiProvider('gemini');
+    const r4 = await callProviderLLM(null, 'p', {
+        fetchImpl: async (u, i) => { body = JSON.parse(i.body); return { ok: true, status: 200, async json() { return {}; } }; }
+    });
+    assert.ok(!('systemInstruction' in body));
+    assert.equal(r4.text, '');
+    const r5 = await callProviderLLM('sys', 'p', {
+        fetchImpl: async () => ({ ok: true, status: 200, async json() { return { candidates: [{}] }; } })
+    });
+    assert.equal(r5.text, '');
+    const r6 = await callProviderLLM('sys', 'p', {
+        fetchImpl: async () => ({ ok: true, status: 200, async json() { return { candidates: [{ content: {} }] }; } })
+    });
+    assert.equal(r6.text, '');                          // content 부재 시 parts 체인 단절 → ''
+    const r7 = await callProviderLLM('sys', 'p', {
+        fetchImpl: async () => ({ ok: true, status: 200, async json() { return { candidates: [{ content: { parts: [{ no_text: 1 }] } }] }; } })
+    });
+    assert.equal(r7.text, '');                          // parts 존재·text 부재 → ''
 });
