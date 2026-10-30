@@ -249,6 +249,10 @@ async function main() {
     const gitOut = (args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
     const changed = () => gitOut(['status', '--porcelain'])
         .split('\n').filter(Boolean).map(l => l.slice(3).trim());
+    // 커밋 해시 의존 스탬프(sw.js CACHE_VERSION·test_stats·TRACE 매트릭스)는 재생성마다
+    // 새 HEAD 해시를 내장해 diff가 영구 발생한다 — deploy 후반 스탬프 단계가 재적용하므로
+    // 재생성 직후 무조건 되돌린다. 그 외 변경만 노이즈 판정 후 커밋.
+    git('checkout -- sw.js tools/state/test_stats.json docs/dev/TRACE_MATRIX.md');
     if (changed().length) {
         const noiseFiles = changed().filter(p => {
             const stat = execFileSync('git', ['status', '--porcelain', '--', p], { encoding: 'utf8' }).trim();
