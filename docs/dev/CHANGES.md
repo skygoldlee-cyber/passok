@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(sec): DA-16 신설 — 콘텐츠 비평문화 (Phase 1)
+
+- tools/lib/content_pack.js pk1 인코딩 → study_md 번들 텍스트 패킹 (docs_md·exams_md·문제은행은 후속 Phase) + data-loader 런타임 디코드
+- `.vercelignore`에 `content/exams/*/교재/` 추가 — 프로덕션 평문 MD 차단 (로컬 serve는 유지). 문제은행·ref_md 평문은 후속 Phase
+
 ## 2026-10-30 feat(landing): LP-14 신설 — 지원 시험 그룹 배치
 
 - exams.json `group` 필드로 시험 선택 뷰와 동형의 그룹 섹션 렌더. 버전 1.23

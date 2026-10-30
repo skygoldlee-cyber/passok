@@ -170,3 +170,8 @@ icons/passok-logo.png
 content/exams/*/참조자료/ref_md/*/images/*.jpeg
 content/exams/*/참조자료/ref_md/*/images/*.jpg
 content/exams/*/참조자료/ref_md/*/images/*.png
+
+# ---------- DA-16 컨텐츠 비평문화 ----------
+# 교재 평문 MD는 배포 제외 — 프로덕션은 pk1 인코딩 번들(data/)만 서빙
+content/exams/*/교재/*.md
+content/exams/*/교재/**/*.md

@@ -1,5 +1,5 @@
 // src/data-loader.js — 학습 데이터 로더
-// @spec DA-03,PF-01,PF-02,PF-03,PF-07,DA-02,AI-22
+// @spec DA-03,PF-01,PF-02,PF-03,PF-07,DA-02,AI-22,DA-16
 // [변경] 교재/카드/퀴즈(STUDY_DATA)는 더 이상 사전 빌드된 data/subjects/*.js 번들을 쓰지 않고,
 //        content/*.md 를 런타임에 fetch → src/reader/textbook-parser.js 로 파싱하여 조립한다.
 //        - http(s): content/manifest.json + content/**/*.md 라이브 fetch (항상 최신, 재빌드 불필요)
@@ -15,6 +15,21 @@ import { getActiveExam, contentPath, dataPath } from '../exam-context.js';
 // 레지스트리 로드 실패 시 app.js 모듈 그래프 전체가 죽어 흰 화면이 되므로 지양.
 
 const IS_FILE = (typeof location !== 'undefined' && location.protocol === 'file:');
+
+/** DA-16 — pk1 인코딩 번들 값을 런타임 디코드 (평문 통과) */
+function _pkDecode(v) {
+    if (typeof v !== 'string' || !v.startsWith('pk1:')) return v;
+    const KEY = 'passok-pk1-5f3a';
+    const bin = atob(v.slice(4));
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i) ^ KEY.charCodeAt(i % KEY.length);
+    return new TextDecoder().decode(bytes);
+}
+function _pkDecodeFiles(files) {
+    const out = {};
+    for (const k of Object.keys(files)) out[k] = _pkDecode(files[k]);
+    return out;
+}
 
 export const DataLoader = {
     /** @type {import('../types.js').DataRegistry|null} */
@@ -171,6 +186,7 @@ export const DataLoader = {
         return window.__STUDY_MD_MANIFEST__;
     },
 
+    
     /** file:// 폴백 과목별 MD 파일 번들을 온디맨드 주입 */
     async _ensureFallbackSubjectFiles(subjectKey) {
         if (this._fallbackSubjectInjected[subjectKey]) {
@@ -186,7 +202,7 @@ export const DataLoader = {
         if (!files) {
             throw new Error(`폴백 과목 번들을 찾을 수 없습니다: ${subjectKey}`);
         }
-        return files;
+        return _pkDecodeFiles(files);
     },
 
     /** content/manifest.json 확보 (http: fetch, file://: 폴백 manifest) */
