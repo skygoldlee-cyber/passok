@@ -1,5 +1,5 @@
 // tests/unit/weak-items.test.js — 약점 항목 ID 문법 + STUDY_DATA 해석 경로
-// @spec Q-08,DR-04
+// @spec Q-08,DR-04,AI-34
 // property-based.test.js가 순수 함수(weakItemKey·parseWeakSimId·subjectKeyFromItemId)의
 // 불변식을 커버하고, 이 파일은 window.STUDY_DATA 인덱스 기반 해석 경로
 // (resolveWrongQuiz·resolveCard·cardSubjectOf·subjectForWeakItem)와
@@ -10,6 +10,7 @@ import assert from 'node:assert/strict';
 import {
     weakItemKey, resolveWrongQuiz, resolveCard, cardSubjectOf,
     parseWeakSimId, subjectForWeakItem, subjectKeyFromItemId,
+    collectWeakConceptQuizzes,
 } from '../../../src/study/weak-items.js';
 
 // STUDY_DATA/DATA_REGISTRY를 매 테스트 새 객체로 교체 — 인덱스가 과목 객체 참조로
@@ -149,4 +150,21 @@ test('subjectKeyFromItemId: 접두사 제거 후 꼬리 패턴에서 과목 키 
     assert.equal(subjectKeyFromItemId('plain_id'), null);
     // ^ 앵커 변이 가드 — ID 중간의 'weak_quiz_'를 벗기면 과목 키가 달라진다
     assert.equal(subjectKeyFromItemId('xweak_quiz_subja_card_1'), 'xweak_quiz_subja');
+});
+
+test('AI-34: collectWeakConceptQuizzes — 오답 우선·취약 conceptId 선정·cap', () => {
+    const q1 = { id: 's1_quiz_1', conceptId: 'c1' };
+    const q2 = { id: 's1_quiz_2', conceptId: 'c1' };   // 오답 q1과 같은 혼동쌍
+    const q3 = { id: 's1_quiz_3', conceptId: 'c9' };   // 무관
+    const q4 = { id: 's2_quiz_1', conceptId: 'c2' };   // 약점 conceptId
+    const studyData = { s1: { quizzes: [q1, q2, q3] }, s2: { quizzes: [q4] } };
+    // 호출부(startWeakConceptQuiz)는 오답 문항의 conceptId도 weakCids에 포함시킨다
+    const picked = collectWeakConceptQuizzes(studyData, new Set(['c1', 'c2']), new Set(['s1_quiz_1']), 10);
+    assert.equal(picked.length, 3);
+    assert.equal(picked[0].id, 's1_quiz_1');          // 오답 선두
+    assert.deepEqual(picked.slice(1).map(q => q.id).sort(), ['s1_quiz_2', 's2_quiz_1']);
+    // cap — 오답+약점이 cap 초과면 절단
+    assert.equal(collectWeakConceptQuizzes(studyData, new Set(['c1', 'c2']), new Set(), 2).length, 2);
+    // 약점 없으면 공집합
+    assert.deepEqual(collectWeakConceptQuizzes(studyData, new Set(), new Set(), 10), []);
 });

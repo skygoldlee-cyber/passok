@@ -6,8 +6,10 @@ import { switchView } from '../navigation.js';
 import { examIdToSubjectId } from '../../exam-context.js';
 import {
     WEAK_QUIZ_PREFIX, WEAK_SIM_PREFIX,
-    resolveWrongQuiz, resolveCard, parseWeakSimId
+    resolveWrongQuiz, resolveCard, parseWeakSimId, collectWeakConceptQuizzes
 } from '../../study/weak-items.js';
+import { getAllStatementStats } from '../../study/statement-tracker.js';
+import { showToast } from '../../ui-utils.js';
 import { computeWrongCauseSummary, getWrongCauseLabels } from '../../study/recommendations.js';
 import { shuffle } from '../../utils.js';
 import { updateGlobalStats } from '../dashboard.js';
@@ -209,6 +211,33 @@ export function setReviewFilter(filterType) {
 /**
  * 헷갈린 카드로 즉시 기출 퀴즈를 출제하는 퀴즈 모드
  */
+/**
+ * 약점 선정형 미니퀴즈 (AI-34) — 취약 conceptId를 가진 기존 문항을 모아 출제.
+ * 생성형이 아닌 선정형: 오답 문항 + 같은 conceptId(혼동쌍·관련 진술)의 문항을 우선 추출.
+ */
+export function startWeakConceptQuiz() {
+    const weakCids = new Set();
+    const stats = getAllStatementStats();
+    for (const st of Object.values(stats)) {
+        if (st && st.w > 0 && st.cid) weakCids.add(st.cid);
+    }
+    const wrongIds = new Set(
+        Object.keys(state.quizResults || {}).filter(id => !state.quizResults[id].correct));
+    // 오답 문항 자체의 conceptId도 약점으로 간주 — 혼동쌍 선정 범위 확장
+    for (const d of Object.values(window.STUDY_DATA || {})) {
+        for (const q of (d && d.quizzes) || []) {
+            if (wrongIds.has(q.id) && q.conceptId) weakCids.add(q.conceptId);
+        }
+    }
+    const items = collectWeakConceptQuizzes(window.STUDY_DATA || {}, weakCids, wrongIds, 10);
+    if (!items.length) {
+        showToast('약점 개념 문항이 아직 없습니다 — 오답이 쌓이면 생성됩니다.', 'info');
+        return;
+    }
+    state.quiz.data = shuffle(items);
+    _beginQuizRun();
+}
+
 export function startWeakFocusQuiz() {
     let weakCards = getWeakCardsList();
     if (weakCards.length === 0) return;

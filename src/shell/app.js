@@ -56,7 +56,8 @@ import {
     wrongActionTextbook,
     wrongActionSimilar,
     startDiagnosticQuiz,
-    requestAiFeedback
+    requestAiFeedback,
+    startWeakConceptQuiz
 } from '../views/quiz/quiz.js';
 import {
     startDailyChallenge,
@@ -605,6 +606,7 @@ const DELEGATED_HANDLERS = {
     removeWeakCard, setReviewFilter, printReviewNotes,
     tagWrongCause, tagWrongCauseAt, wrongActionCard, wrongActionTextbook, wrongActionSimilar,
     requestAiFeedback,
+    startWeakConceptQuiz,
     startDiagnosticQuiz,
     // 실제 시험 결과 자가 보고 (C1)
     saveActualExamResult, editActualExamResult, exportAnalysisReport, requestAiCoach,

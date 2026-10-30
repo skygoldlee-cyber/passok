@@ -124,3 +124,24 @@ export function subjectKeyFromItemId(id) {
     const m = clean.match(/^(.+)_(?:card|quiz)_/);
     return m ? m[1] : null;
 }
+
+// @spec AI-34
+/**
+ * 약점 선정형 미니퀴즈 문항 추출 — 기존 문항을 취약 conceptId·오답 기준으로 선별.
+ * 순수 함수 (DOM·저장소 비의존). 오답 문항 우선, 그 다음 약점 conceptId 문항 순으로 cap까지.
+ * @param {Object} studyData - { subj: { quizzes: [...] } } 형태 (window.STUDY_DATA)
+ * @param {Set<string>} weakCids - 취약 conceptId 집합 (진술 통계 st.cid, 오답 문항의 conceptId)
+ * @param {Set<string>} wrongQuizIds - 오답 처리된 문항 id 집합
+ * @param {number} [cap] 최대 문항 수 (기본 10)
+ * @returns {object[]} 선정 문항 배열 (원본 객체 참조 — 셔플·슬라이스는 호출부)
+ */
+export function collectWeakConceptQuizzes(studyData, weakCids, wrongQuizIds, cap = 10) {
+    const wrong = [], weak = [];
+    for (const d of Object.values(studyData || {})) {
+        for (const q of (d && d.quizzes) || []) {
+            if (wrongQuizIds.has(q.id)) wrong.push(q);
+            else if (q.conceptId && weakCids.has(q.conceptId)) weak.push(q);
+        }
+    }
+    return wrong.concat(weak).slice(0, cap);
+}

@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(quiz): AI 코치 단계 4 — 약점 선정형 미니퀴즈 (AI-34)
+
+- weak-items.js collectWeakConceptQuizzes 신설 — 취약 conceptId(진술 통계 cid + 오답 문항 혼동쌍) 기준으로 기존 문항 선별, 오답 우선 최대 10문 (생성 아닌 선정형 — LLM 무관)
+- quiz-review.js startWeakConceptQuiz — 선정 문항으로 퀴즈 세션 기동 (_beginQuizRun 재사용), 대상 없으면 안내 토스트
+- 퀴즈 결과 오답 리뷰 헤더 "약점 개념 미니퀴즈" 버튼 진입 · SPEC AI-34 등록
+- 생성물 검증 게이트(인용 강제·dupcheck 런타임·AI 배지 규약)는 생성형(AI-31) 착수 전 선행으로 이연 — 설계 §5.2
+
 ## 2026-10-30 feat(ai): AI 코치 단계 3 — 자연어 주간 진단 (AI-33)
 
 - ai-proxy weekly_diagnosis kind 신설 — kind별 시스템 프롬프트 라우팅(KINDS) + 집계 수치 전용 템플릿(문항 내용 미포함, AI-30)
