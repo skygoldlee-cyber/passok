@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261030-3d464f0",
+    "date": "2026-10-30",
+    "notes": [
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[테스트·telemetry] error-telemetry 게이트 DOM 커버 — lines/statements 임계 회복 [no-docs]",
+      "[테스트·manual] openPrivacyPolicy DOM 커버 — functions 임계 회복 [no-docs]",
+      "[테스트·telemetry] isAutomatedRuntime DOM 커버리지 — functions 임계 회복 [no-docs]",
+      "[테스트·telemetry] isAutomatedRuntime 커버리지 — functions 임계 회복 [no-docs]",
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[정리] TRACE_MATRIX 재생성 — PRIVACY_POLICY 경로 반영 [no-docs]",
+      "[수정] 개인정보 처리방침 파일명 규약 정합 — privacy_policy.md → PRIVACY_POLICY.md",
+      "[정리] TRACE_MATRIX 재생성 — 신규 문서 SPEC 참조 반영 [no-docs]",
+      "[수정·telemetry] maybeReportUsageSnapshot JSDoc에 automated 상태 추가 — tsc 정합"
+    ]
+  },
+  {
     "version": "v20261030-f3cadb1",
     "date": "2026-10-30",
     "notes": [
@@ -198,78 +214,6 @@
       "[정리] 진단용 prod-icon-check.png 제거 [no-test]",
       "[기능] 헤더 로고를 FA 글리프 → 브랜드 PNG 교체 — icon-192.png 이미지로 표시 [no-test]",
       "[정리·release] v20261029-28f1186 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261029-28f1186",
-    "date": "2026-10-29",
-    "notes": [
-      "[수정·pwa] 파비콘 URL에 APP_VERSION 스탬프 — SW 캐시가 구 아이콘을 서빙하는 문제 해소 [no-test]",
-      "[정리·release] v20261029-1db8199 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261029-1db8199",
-    "date": "2026-10-29",
-    "notes": [
-      "[수정] passok-logo.png kebab-case — check:filenames 규약 정합 [no-test]",
-      "[기능] passok_logo.png 마스터 기준 브랜드 아이콘 재생성 — icon-192/512·maskable + 마스터 배포 제외 [no-test]",
-      "[되돌림] 브랜드 아이콘 파일명 icon-192.png 복원 — passok.png 명명 롤백, 풀컬러 192px 유지 [no-test]",
-      "[수정] passok.png 풀컬러 복구 — 팔레트 양자화 색 왜곡 제거, RGBA 리사이즈만 적용 [no-test]",
-      "[수정] 미디어 세션 아트워크도 passok.png — icon-192 잔존 참조 제거 [no-test]",
-      "[정리·release] v20261029-d57bcf9 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261029-d57bcf9",
-    "date": "2026-10-29",
-    "notes": [
-      "[테스트·e2e] passok.png 전환·로고 브랜드 고정에 맞춰 기대치 갱신 [no-docs]",
-      "[정리] passok.png 최적화 — 1254px/1.3MB → 192px/5.9KB 팔레트 양자화 [no-test]",
-      "[리팩터링] 브랜드 아이콘 파일을 icons/passok.png로 명명 — 로고·브랜드 아이콘 전용 [no-test]",
-      "[수정] manifest 아이콘을 브랜드로 통일 — 팩별 PNG 세트 제거 [no-test]",
-      "[수정] 헤더 로고를 exam.icon 치환에서 분리 — 브랜드 아이콘 독립 유지 [no-test]",
-      "[정리·release] v20261029-b4bf115 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261029-b4bf115",
-    "date": "2026-10-29",
-    "notes": [
-      "[수정·pwa] 파비콘 전환 롤백 — 브랜드 아이콘은 시험 무관 독립 유지 [no-test]",
-      "[정리·release] v20261029-4f1c6b2 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261029-4f1c6b2",
-    "date": "2026-10-29",
-    "notes": [
-      "[수정] 조제관리사 카드 아이콘 — 브랜드 로고와 동일한 wand-magic-sparkles → fa-flask [no-test]",
-      "[정리·release] v20261029-023be2d 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261029-023be2d",
-    "date": "2026-10-29",
-    "notes": [
-      "[수정·pwa] 파비콘도 활성 시험 아이콘으로 전환 — 브랜드 아이콘 고정 문제 [no-test]",
-      "[정리·release] v20261029-a6affe9 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261029-a6affe9",
-    "date": "2026-10-29",
-    "notes": [
-      "[정리] 임베딩 재생성 — derived 이후 순서 정합 [no-docs]",
-      "[정리] 파생물 일괄 재생성 — 인용·데이터 신선도 복구 [no-docs]",
-      "[정리] TRACE_MATRIX 재생성 — ci:watch 등록 [no-docs]",
-      "[수정] ci:watch 워크플로 필터 + AGENTS.md 스크립트 기재 — check_npm_commands 게이트 [no-test]",
-      "[정리] 임베딩 재생성 (cosmetic) + ci:watch 스크립트 추가 — embfresh 게이트 복구 [no-docs]",
-      "[정리] TRACE_MATRIX 재생성 — P-14 등록 [no-docs]",
-      "[수정] pack-dl-status 부모 요소 null 가드 — tsc 오류 [no-test]",
-      "[수정] evictPackAssets 미사용 변수 제거 — ESLint 오류 [no-test]",
-      "[기능·pwa] P-14 후속 — 팩 전환 시 구 팩 캐시 해제 + 다운로드 진행 표시 + 필터 테스트",
-      "[기능·pwa] 팩별 지연 다운로드 (P-14) — 선택한 시험만 캐시 [no-test]"
     ]
   }
 ]
