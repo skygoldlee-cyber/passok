@@ -354,6 +354,7 @@ npm run hooks:install
 | 66 | `glossary-search.dom.test.js` | 5 | 용어 정의 카드 그룹 (TS-15/TS-16) | 정의 카드 노출·과목 배지·출처 링크 | |
 | 67 | `exam-index-scope.dom.test.js` | 1 | 검색 인덱스 시험 스코프 (TS-17) | 시험 전환 시 동일 과목 키 인덱스 재구축 | |
 | 68 | `landing.dom.test.js` | 6 | 랜딩 위젯 (LP-04/05/09) | parseDemoData·init 렌더·퀴즈 피드백→결과·계획 D-day/압축/과거 날짜·설치 CTA | 2026-10-25 추가 |
+| 69 | `unpack.dom.test.js` | 3 | pk1 디코더 (DA-16) | pkDecode 라운드트립·평문 통과·pkDecodeFiles | 2026-10-30 추가 |
 | | **합계** | **763** | | |
 
 ---
