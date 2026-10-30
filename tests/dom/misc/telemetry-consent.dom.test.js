@@ -51,3 +51,21 @@ describe('자동화 런타임 판정 (프로덕션 지표 오염 차단)', () =>
         expect(isAutomatedRuntime()).toBe(true);
     });
 });
+
+describe('error 텔레메트리 — 자동화·동의 게이트', () => {
+    it('자동화 런타임(jsdom)은 automated를 반환한다', async () => {
+        const { reportClientError, reportSessionPing } = await import('../../../src/telemetry/error-telemetry.js');
+        expect(await reportClientError('error', new Error('x'), {}, {})).toBe('automated');
+        expect(await reportSessionPing({})).toBe('automated');
+    });
+
+    it('동의 거부 시 consent_denied를 반환한다', async () => {
+        const { reportSessionPing } = await import('../../../src/telemetry/error-telemetry.js');
+        setTelemetryAllowed(false);
+        try {
+            expect(await reportSessionPing({ automated: false })).toBe('consent_denied');
+        } finally {
+            setTelemetryAllowed(true);
+        }
+    });
+});
