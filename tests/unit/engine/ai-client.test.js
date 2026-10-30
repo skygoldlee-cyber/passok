@@ -1,5 +1,5 @@
 // tests/unit/ai-client.test.js — 런타임 AI 클라이언트 유닛 테스트
-// @spec AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AI-33, AI-38
+// @spec AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AI-33, AI-35, AI-38
 // 고정 프롬프트 계약(구조화 인자·길이 제한), 응답 파싱,
 // 캐시 히트·서버→BYOK 폴백·쿼터 분기를 고정한다.
 
@@ -220,4 +220,23 @@ test('AI-38: requestWeakQuizGen — kind=quiz_gen 전송 + items 응답 정규�
     assert.equal(res.items.length, 1);
     assert.equal(res.items[0].citation, '제3조');
     assert.equal(sent.kind, 'quiz_gen');
+});
+
+test('AI-35: requestPlanAdjust — kind=plan_adjust + 여유 선택지 구조화 전송', async () => {
+    const { requestPlanAdjust, buildPlanAdjustPrompt } = await import('../../../src/ai/ai-client.js');
+    const p = buildPlanAdjustPrompt({ solvedWeek: 10, bandwidth: '부족' });
+    assert.ok(p.includes('시간 부족(줄여야 함)'));
+    assert.ok(p.includes('조정 지시'));
+    assert.equal(buildPlanAdjustPrompt({ bandwidth: '넉넉' }), null); // 수치 없으면 null
+    let sent;
+    const res = await requestPlanAdjust({ solvedWeek: 10, bandwidth: '넉넉' }, {
+        session: { access_token: 'tok' },
+        fetchImpl: async (u, init) => {
+            sent = JSON.parse(init.body);
+            return { ok: true, status: 200, json: async () => ({ ok: true, explain: '여유가 있으니 취약 과목 배분을 늘리세요.', remaining: 4 }) };
+        },
+    });
+    assert.equal(res.ok, true);
+    assert.equal(sent.kind, 'plan_adjust');
+    assert.equal(sent.input.bandwidth, '넉넉');
 });

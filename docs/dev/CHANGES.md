@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(ai): AI 코치 단계 6 전반 — 주간 플랜 조정 (AI-35)
+
+- ai-proxy plan_adjust kind — 주간 수치 + 여유 선택지(부족/보통/넉넉, 구조화) → 배분·우선순위 조언 (PLAN_SYSTEM_PROMPT, OUTPUT_SCHEMA 재사용)
+- ai-client requestPlanAdjust + buildPlanAdjustPrompt(BYOK 미러 — weekly_diagnosis 프롬프트 재사용 + 조정 지시 행)
+- analysis-view — _weeklyMetrics 공용 추출(주간 코칭·플랜 조정 공유), 리듬 카드 여유 select + "AI 플랜 조정" 버튼, 조언만 표시(실제 배분 미변경)
+- SPEC AI-35 등록 — 자유 텍스트 없이 구조화 입력이라 AI-30 정책 개정 불요 (교재 QA는 개정 선행)
+
 ## 2026-10-30 feat(study): 난이도 시딩 런타임 훅 + conceptId 공유 설계 (AI-32)
 
 - spaced-repetition.js _seedD0 — window.DIFFICULTY_SEED[cardId](1~10) 제공 시 신규 카드의 D0만 대체 (기존 이력 카드·미제공 시 무영향 휴면 훅 — ai:seedcheck valid 판정 후 시드 번들 제공)

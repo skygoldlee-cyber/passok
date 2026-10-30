@@ -225,6 +225,27 @@ function readItems(p: any): { items: unknown[] } | null {
 }
 
 /* ============ kind 라우팅 — 템플릿·시스템 프롬프트·스키마·정규화 ============ */
+const PLAN_SYSTEM_PROMPT = `당신은 자격시험 학습 코치입니다. 수험생의 주간 수치와 이번 주 여유 선택을 보내면 계획 조정을 조언합니다.
+- 조정 방향 1문장 + 구체 배분 제안 1~2문장, 총 2~3문장으로 짧게.
+- 수치에 없는 사실은 단정하지 않고, 과목·개념 라벨은 주어진 이름으로만 언급합니다.
+- 출력은 지정된 JSON 스키마만 따릅니다.`;
+
+const PLAN_BANDWIDTH_LABEL: Record<string, string> = {
+    부족: "시간 부족(줄여야 함)",
+    보통: "보통(현행 유지)",
+    넉넉: "넉넉(늘릴 수 있음)",
+};
+
+/** 주간 수치 + 여유 선택지 → 계획 조정 프롬프트 (AI-35 — 구조화 입력 전용, AI-30) */
+function buildPlanAdjustPrompt(input: DiagnosisInput & { bandwidth?: unknown }): string | null {
+    const base = buildWeeklyDiagnosisPrompt(input);
+    if (!base) return null;
+    const bw = clip(input?.bandwidth, 10);
+    const label = (bw && PLAN_BANDWIDTH_LABEL[bw]) || PLAN_BANDWIDTH_LABEL["보통"];
+    return `${base}\n- 이번 주 학습 여유: ${label}
+조정 지시: 여유에 맞춰 다음 주 배분·우선순위를 조언 (수치 목표는 바꾸지 말고 배분만)`;
+}
+
 // deno-lint-ignore no-explicit-any — kind별 입력 타입·출력 정규화가 다름
 const KINDS: Record<string, {
     system: string;
@@ -235,6 +256,7 @@ const KINDS: Record<string, {
     wrong_feedback: { system: SYSTEM_PROMPT, build: buildWrongFeedbackPrompt, schema: OUTPUT_SCHEMA, read: readExplain },
     weekly_diagnosis: { system: DIAG_SYSTEM_PROMPT, build: buildWeeklyDiagnosisPrompt, schema: OUTPUT_SCHEMA, read: readExplain },
     quiz_gen: { system: QUIZ_GEN_SYSTEM_PROMPT, build: buildQuizGenPrompt, schema: QUIZ_ITEMS_SCHEMA, read: readItems },
+    plan_adjust: { system: PLAN_SYSTEM_PROMPT, build: buildPlanAdjustPrompt, schema: OUTPUT_SCHEMA, read: readExplain },
 };
 
 async function callGemini(prompt: string, system: string, schema: object): Promise<unknown | null> {

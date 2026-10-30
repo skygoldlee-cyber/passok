@@ -659,6 +659,7 @@
 | AI-34 | 약점 선정형 미니퀴즈 — 기존 문항을 취약 conceptId(진술 통계·오답 문항의 혼동쌍 앵커) 기준으로 선별해 최대 10문 출제 (`collectWeakConceptQuizzes` 순수 선정기 + `startWeakConceptQuiz` 세션 — 생성 아님, LLM 무관). 퀴즈 결과 오답 리뷰 헤더 "약점 개념 미니퀴즈" 버튼 진입 | ✅ |
 | AI-37 | 생성물 검증 게이트 (`src/ai/gen-gate.js`) — 런타임 AI 생성물이 콘텐츠로 들어오기 전 검증: ①스키마(발문·선지 수·정답 포함) ②인용 강제(미인용·미해석 인용 폐기) ③dupcheck(기존 문항 발문 n-gram 중첩 >0.6 폐기) ④AI 생성 배지 규약(`AI_BADGE_TEXT`). 생성형 미니퀴즈 본체는 이 게이트 통과분만 출제 (후속 단계) | ✅ |
 | AI-38 | 약점 생성형 미니퀴즈 (Pro) — `quiz_gen` kind: 취약 개념·근거·기존 발문(중복 금지) 구조화 입력 → items 배열 생성. kind별 responseSchema·정규화(`KINDS[kind].read`) 라우팅, 클라이언트 `requestWeakQuizGen` + gen-gate 통과분만 `state.quiz.data` 출제 + `[AI 생성]` 컨텍스트 표시. Pro 게이트(`hasProEntitlement`) + 오답 리뷰 "AI 미니퀴즈 PRO" 버튼 | ✅ |
+| AI-35 | 주간 플랜 조정 — `plan_adjust` kind: 주간 수치(weekly_diagnosis와 동일 구조화 인자) + 여유 선택지(부족/보통/넉넉 — 자유 텍스트 없음, AI-30 준수) → 다음 주 배분·우선순위 조언 2~3문장. 학습 리듬 카드 여유 select + "AI 플랜 조정" 버튼, 조언만 표시(실제 배분 변경 없음) | ✅ |
 
 ### 3.28 주관식 연습 자기채점 (Written Practice)
 

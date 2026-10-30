@@ -332,6 +332,44 @@ export function requestWeeklyDiagnosis(input, deps = {}) {
 }
 
 /* =========================================================
+   plan_adjust — 주간 계획 조정 조언 (AI-35)
+   구조화 입력(여유 선택지)만 — 자유 텍스트 없음 (AI-30 준수)
+   ========================================================= */
+
+const BYOK_PLAN_SYSTEM = `당신은 자격시험 학습 코치입니다. 수험생의 주간 수치와 이번 주 여유 선택을 보내면 계획 조정을 조언합니다.
+- 조정 방향 1문장 + 구체 배분 제안 1~2문장, 총 2~3문장으로 짧게.
+- 수치에 없는 사실은 단정하지 않고, 과목·개념 라벨은 주어진 이름으로만 언급합니다.
+- JSON만 응답합니다.`;
+
+const PLAN_BANDWIDTH_LABEL = { 부족: '시간 부족(줄여야 함)', 보통: '보통(현행 유지)', 넉넉: '넉넉(늘릴 수 있음)' };
+
+/**
+ * plan_adjust 프롬프트 조립 (서버 미러) — 주간 수치 + 여유 선택지 → 조정 조언.
+ * @param {object} input - buildWeeklyDiagnosisPrompt 인자 + {bandwidth: '부족'|'보통'|'넉넉'}
+ * @returns {string|null}
+ */
+export function buildPlanAdjustPrompt(input) {
+    const base = buildWeeklyDiagnosisPrompt(input);
+    if (!base) return null;
+    const bw = _clip(input?.bandwidth, 10);
+    const label = PLAN_BANDWIDTH_LABEL[bw] || PLAN_BANDWIDTH_LABEL.보통;
+    return `${base}\n- 이번 주 학습 여유: ${label}
+조정 지시: 여유에 맞춰 다음 주 배분·우선순위를 조언 (수치 목표는 바꾸지 말고 배분만)`;
+}
+
+/**
+ * 주간 계획 조정 요청 (AI-35) — 구조화 입력 전용, 실제 배분 변경 없음(조언만).
+ * @param {object} input - buildPlanAdjustPrompt 인자 계약
+ * @param {object} [deps]
+ */
+export function requestPlanAdjust(input, deps = {}) {
+    return _requestAi({
+        kind: 'plan_adjust', feature: 'plan_adjust', featureLabel: 'AI 플랜 조정',
+        buildPrompt: buildPlanAdjustPrompt, system: BYOK_PLAN_SYSTEM,
+    }, input, deps);
+}
+
+/* =========================================================
    quiz_gen — 약점 생성형 미니퀴즈 (AI-38)
    출력은 gen-gate(AI-37) 통과분만 출제 — 호출부 책임
    ========================================================= */

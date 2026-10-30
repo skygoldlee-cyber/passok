@@ -38,7 +38,7 @@ import { renderDashboard, onAnalysisRefresh } from './dashboard.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { compositeEstimate } from './score-estimate.js';
 import { mountProMoment } from '../pro/pro-upgrade.js';
-import { aiFeedbackAvailable, requestWeeklyDiagnosis } from '../ai/ai-client.js';
+import { aiFeedbackAvailable, requestWeeklyDiagnosis, requestPlanAdjust } from '../ai/ai-client.js';
 
 /**
  * 학습 진단 뷰 렌더링 — renderDashboard()가 과목 카드·히트맵·차트를
@@ -333,24 +333,26 @@ function _renderStudyRhythmInsight() {
         ${growthRowHtml}${patternRowHtml}${paceNoteHtml}${fitNoteHtml}
         <div class="ai-coach-slot"></div>
         <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="calendar-view"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> 캘린더 보기</button>
-        <button class="btn btn-secondary btn-sm analysis-card-btn ai-coach-btn is-hidden" data-click="requestAiCoach"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI 주간 코칭</button>`;
+        <button class="btn btn-secondary btn-sm analysis-card-btn ai-coach-btn is-hidden" data-click="requestAiCoach"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI 주간 코칭</button>
+        <span class="ai-plan-adjust is-hidden"><select id="ai-bandwidth-sel" aria-label="이번 주 학습 여유" class="ai-bandwidth-sel">
+            <option value="보통">여유 보통</option>
+            <option value="부족">시간 부족</option>
+            <option value="넉넉">시간 넉넉</option>
+        </select><button class="btn btn-secondary btn-sm analysis-card-btn ai-plan-btn" data-click="requestAiPlanAdjust"><i class="fa-solid fa-sliders" aria-hidden="true"></i> AI 플랜 조정</button></span>`;
 
-    // AI-33 — AI 주간 코칭 버튼은 로그인 세션 또는 BYOK 키가 있을 때만 노출
+    // AI-33/35 — AI 버튼은 로그인 세션 또는 BYOK 키가 있을 때만 노출
     void aiFeedbackAvailable().then(ok => {
-        if (ok) el.querySelector('.ai-coach-btn')?.classList.remove('is-hidden');
+        if (!ok) return;
+        el.querySelector('.ai-coach-btn')?.classList.remove('is-hidden');
+        el.querySelector('.ai-plan-adjust')?.classList.remove('is-hidden');
     }).catch(() => {});
 }
 
 /**
- * AI 주간 코칭 (AI-33) — analysis-engine 집계 수치만 전송해 코칭 문장을 받는다.
- * 문항 내용·학습 원문은 보내지 않는다 (AI-30 계약).
+ * 주간 AI 입력 공용 집계 — analysis-engine 집계 수치만 반환 (문항 내용·원문 없음, AI-30).
+ * @returns {object} weekly_diagnosis·plan_adjust 공용 구조화 인자
  */
-export async function requestAiCoach() {
-    const slot = document.querySelector('#analysis-study-rhythm .ai-coach-slot');
-    const btn = /** @type {HTMLButtonElement|null} */ (document.querySelector('#analysis-study-rhythm .ai-coach-btn'));
-    if (!slot || !btn) return;
-    btn.disabled = true;
-
+function _weeklyMetrics() {
     const subjects = (typeof DataLoader !== 'undefined' && DataLoader.registry)
         ? DataLoader.getSubjectList() : [];
     const growth = computeWeeklyGrowth(getStudyCalendar());
@@ -367,8 +369,7 @@ export async function requestAiCoach() {
         estimate: compositeEstimate(), simHistory: getSimHistory(), subjects,
         counts: getSubjCounts(), rules: getExamRules()
     });
-
-    const input = {
+    return {
         solvedWeek: growth.thisWeek.quizzes,
         planWeek: weekAlloc ? weekAlloc.thisWeek.alloc.reduce((s, a) => s + (a.quizzes || 0), 0) : null,
         wrongWeek: Math.max(0, growth.thisWeek.quizzes - growth.thisWeek.correct),
@@ -380,9 +381,20 @@ export async function requestAiCoach() {
         topCluster: (weakClusters()[0] || {}).label || null,
         weakestSubject: (gap && gap.weakest && gap.weakest.name) || null,
     };
+}
+
+/**
+ * AI 주간 코칭 (AI-33) — analysis-engine 집계 수치만 전송해 코칭 문장을 받는다.
+ * 문항 내용·학습 원문은 보내지 않는다 (AI-30 계약).
+ */
+export async function requestAiCoach() {
+    const slot = document.querySelector('#analysis-study-rhythm .ai-coach-slot');
+    const btn = /** @type {HTMLButtonElement|null} */ (document.querySelector('#analysis-study-rhythm .ai-coach-btn'));
+    if (!slot || !btn) return;
+    btn.disabled = true;
 
     slot.innerHTML = '<p class="ai-feedback-loading"><i class="fa-solid fa-spinner fa-spin"></i> AI가 이번 주 학습을 분석하고 있습니다…</p>';
-    const res = await requestWeeklyDiagnosis(input);
+    const res = await requestWeeklyDiagnosis(_weeklyMetrics());
     if (res.ok) {
         slot.innerHTML = `<div class="ai-feedback">
             <p class="ai-feedback-text">${esc(res.explain || '')}</p>
@@ -390,6 +402,31 @@ export async function requestAiCoach() {
         </div>`;
     } else {
         slot.innerHTML = `<p class="ai-feedback-error">${esc(res.error || 'AI 코칭을 불러오지 못했습니다.')}</p>`;
+        if (res.code !== 'quota') btn.disabled = false;
+    }
+}
+
+/**
+ * AI 플랜 조정 (AI-35) — 여유 선택(구조화 입력) + 주간 수치로 다음 주 배분 조언.
+ * 자유 텍스트는 받지 않는다 — select 값은 고정 선택지(부족/보통/넉넉).
+ */
+export async function requestAiPlanAdjust() {
+    const slot = document.querySelector('#analysis-study-rhythm .ai-coach-slot');
+    const btn = /** @type {HTMLButtonElement|null} */ (document.querySelector('#analysis-study-rhythm .ai-plan-btn'));
+    const sel = /** @type {HTMLSelectElement|null} */ (document.getElementById('ai-bandwidth-sel'));
+    if (!slot || !btn) return;
+    btn.disabled = true;
+
+    const input = { ..._weeklyMetrics(), bandwidth: sel ? sel.value : '보통' };
+    slot.innerHTML = '<p class="ai-feedback-loading"><i class="fa-solid fa-spinner fa-spin"></i> AI가 다음 주 계획을 조정하고 있습니다…</p>';
+    const res = await requestPlanAdjust(input);
+    if (res.ok) {
+        slot.innerHTML = `<div class="ai-feedback">
+            <p class="ai-feedback-text">${esc(res.explain || '')}</p>
+            <span class="ai-badge" title="AI가 생성한 계획 조정 제안입니다 — 실제 배분 변경은 되지 않습니다">AI 생성</span>
+        </div>`;
+    } else {
+        slot.innerHTML = `<p class="ai-feedback-error">${esc(res.error || 'AI 플랜 조정을 불러오지 못했습니다.')}</p>`;
         if (res.code !== 'quota') btn.disabled = false;
     }
 }
