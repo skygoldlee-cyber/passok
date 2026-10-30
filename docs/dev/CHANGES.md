@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-31 docs(landing): AI 코치 소개에 주관식 채점 선두 추가
+
+- landing.template.html — 히어로 스트립·비교표·기능 카드의 AI 코치 기능 목록에 "주관식 (답안) 채점" 선두 추가 — 2차 서술형 시험 대상 AI 핵심 가치 강조 · landing.html 재조립
+
 ## 2026-10-31 docs(manual): BYOK 등록 안내 추가
 
 - user_manual.md AI 코칭 절에 "본인 API 키(BYOK) 등록" 소절 — 등록 경로(설정→AI API 키 / 주관식 AI 채점 패널)·로컬 저장 범위·효과·삭제 안내 · docs_md 번들 재생성
