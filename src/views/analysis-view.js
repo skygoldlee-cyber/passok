@@ -382,7 +382,7 @@ export async function askTextbookQA() {
             .map(e => `<li class="ai-qa-cite">${esc(e)}</li>`).join('');
         slot.innerHTML = `<div class="ai-feedback">
             <p class="ai-feedback-text">${esc(res.answer || '')}</p>
-            ${cites ? `<ul class="ai-qa-cites">${cites}</ul>` : ''}
+            ${cites ? `<ul class="ai-qa-cites">${cites /*esc-ok — esc(e) 래핑된 li 항목의 join*/}</ul>` : ''}
             <span class="ai-badge" title="AI가 생성한 답변입니다 — 반드시 인용 근거를 확인하세요">AI 생성</span>
         </div>`;
     } else {
