@@ -10,6 +10,9 @@ import {
 } from '../../study/weak-items.js';
 import { getAllStatementStats } from '../../study/statement-tracker.js';
 import { showToast } from '../../ui-utils.js';
+import { hasProEntitlement, proFeatureNotice } from '../../pro/pro-upgrade.js';
+import { requestWeakQuizGen } from '../../ai/ai-client.js';
+import { filterGeneratedItems } from '../../ai/gen-gate.js';
 import { computeWrongCauseSummary, getWrongCauseLabels } from '../../study/recommendations.js';
 import { shuffle } from '../../utils.js';
 import { updateGlobalStats } from '../dashboard.js';
@@ -235,6 +238,54 @@ export function startWeakConceptQuiz() {
         return;
     }
     state.quiz.data = shuffle(items);
+    _beginQuizRun();
+}
+
+/**
+ * 약점 생성형 미니퀴즈 (AI-38, Pro) — 취약 개념으로 새 문항을 생성해 출제.
+ * 생성물은 gen-gate(AI-37) 통과분만 출제 — 인용 없는 문항·기존 문항 중복은 폐기.
+ */
+export async function startWeakGenQuiz() {
+    if (!hasProEntitlement()) {
+        proFeatureNotice('mock_exam', 'AI 약점 미니퀴즈');
+        return;
+    }
+    const wrongIds = new Set(
+        Object.keys(state.quizResults || {}).filter(id => !state.quizResults[id].correct));
+    const poolTexts = [], wrongTexts = [];
+    for (const d of Object.values(window.STUDY_DATA || {})) {
+        for (const q of (d && d.quizzes) || []) {
+            if (q.question) poolTexts.push(q.question);
+            if (wrongIds.has(q.id)) wrongTexts.push(q.question);
+        }
+    }
+    if (!wrongTexts.length) {
+        showToast('오답이 없습니다 — 먼저 퀴즈를 풀어 약점을 쌓아 주세요.', 'info');
+        return;
+    }
+    showToast('AI가 약점 문항을 생성하고 있습니다…', 'info');
+    const res = await requestWeakQuizGen({
+        cluster: '약점 개념 복습', existing: wrongTexts.slice(0, 8), count: 3,
+    });
+    if (!res.ok) {
+        showToast(res.error || 'AI 미니퀴즈 생성에 실패했습니다.', 'error');
+        return;
+    }
+    const { passed, rejected } = filterGeneratedItems(res.items || [], { poolTexts });
+    if (!passed.length) {
+        showToast('생성된 문항이 검증을 통과하지 못했습니다 — 다시 시도해 보세요.', 'warning');
+        return;
+    }
+    if (rejected.length) {
+        showToast(`검증 미통과 ${rejected.length}문항 제외`, 'info');
+    }
+    state.quiz.data = passed.map((g, i) => ({
+        id: `ai_gen_${Date.now()}_${i}`,
+        category: 'AI 생성',
+        context: '[AI 생성 — 오류가 있을 수 있습니다 · 인용 근거 확인 권장]',
+        question: g.question, answer: g.answer,
+        options: g.options, type: 'single',
+    }));
     _beginQuizRun();
 }
 

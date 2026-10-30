@@ -1,5 +1,5 @@
 // tests/unit/ai-client.test.js — 런타임 AI 클라이언트 유닛 테스트
-// @spec AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AI-33
+// @spec AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AI-33, AI-38
 // 고정 프롬프트 계약(구조화 인자·길이 제한), 응답 파싱,
 // 캐시 히트·서버→BYOK 폴백·쿼터 분기를 고정한다.
 
@@ -203,4 +203,21 @@ test('AI-33: 서버 경로 — kind=weekly_diagnosis 전송, 응답 정규화', 
     const res2 = await requestWeeklyDiagnosis(DIAG, { session: { access_token: 't' },
         fetchImpl: async () => { throw new Error('should not fetch'); } });
     assert.equal(res2.route, 'cache');
+});
+
+test('AI-38: requestWeakQuizGen — kind=quiz_gen 전송 + items 응답 정규화', async () => {
+    const { requestWeakQuizGen } = await import('../../../src/ai/ai-client.js');
+    let sent;
+    const res = await requestWeakQuizGen({ cluster: '약점', existing: ['q1'], count: 2 }, {
+        session: { access_token: 'tok' },
+        fetchImpl: async (u, init) => {
+            sent = JSON.parse(init.body);
+            return { ok: true, status: 200, json: async () => ({ ok: true, items: [{ question: 'Q?', options: ['a', 'b', 'c', 'd'], answer: 'a', citation: '제3조' }], remaining: 5 }) };
+        },
+    });
+    assert.equal(res.ok, true);
+    assert.equal(res.route, 'server');
+    assert.equal(res.items.length, 1);
+    assert.equal(res.items[0].citation, '제3조');
+    assert.equal(sent.kind, 'quiz_gen');
 });

@@ -151,11 +151,30 @@ function buildWeeklyDiagnosisPrompt(input: DiagnosisInput): string | null {
 응답 형식(JSON만): {"explain":"평가+다음 주 행동 제안 2~3문장","confused_concept":"핵심 키워드 1어절"}`;
 }
 
-// deno-lint-ignore no-explicit-any — kind별 입력 타입이 다름
-const KINDS: Record<string, { system: string; build: (i: any) => string | null }> = {
-    wrong_feedback: { system: SYSTEM_PROMPT, build: buildWrongFeedbackPrompt },
-    weekly_diagnosis: { system: DIAG_SYSTEM_PROMPT, build: buildWeeklyDiagnosisPrompt },
-};
+const QUIZ_GEN_SYSTEM_PROMPT = `당신은 자격시험 출제자입니다. 주어진 근거 범위 내에서만 객관식 문항을 만듭니다.
+- 근거에 없는 사실은 출제하지 않고, 모든 문항에 인용(citation)을 답니다.
+- 기존 문항이 주어지면 중복되지 않는 문항을 만듭니다.
+- 정답은 선지 중 하나와 완전히 동일해야 합니다.
+- 출력은 지정된 JSON 스키마만 따릅니다.`;
+
+type QuizGenInput = { cluster?: unknown; evidence?: unknown; existing?: unknown; count?: unknown };
+
+/** 취약 개념 + 교재 근거 → 생성형 미니퀴즈 프롬프트 (AI-38 — AI-30 고정 템플릿 계약) */
+function buildQuizGenPrompt(input: QuizGenInput): string | null {
+    const cluster = clip(input?.cluster, 80);
+    const evidence = clip(input?.evidence, 1200);
+    if (!cluster && !evidence) return null;
+    const existing = clipList(input?.existing).slice(0, 8);
+    const count = diagNum(input?.count, 1, 3) ?? 2;
+    return `## 출제 대상 개념
+${cluster ?? "약점 복습"}
+${evidence ? `\n## 교재 근거 (반드시 이 범위에서 출제)\n${evidence}\n` : ""}
+${existing.length ? `\n## 기존 문항 (중복 금지)\n${existing.map((q, i) => `${i + 1}. ${q}`).join("\n")}\n` : ""}
+위 근거로 객관식 문항 ${count}개 생성 — 각 문항은 인용 근거(citation)와 4개 선지 필수.
+응답 형식(JSON만): {"items":[{"question":"...","options":["...","...","...","..."],"answer":"선지 중 하나와 동일","citation":"근거 조문·구절","explain":"1문장 해설"}]}`;
+}
+
+// KINDS 정의는 OUTPUT_SCHEMA·read 계열 선언 이후로 — 아래 "kind 라우팅" 절 참조
 
 /* ============================================================
    Gemini 호출 — responseSchema로 JSON 출력 강제
@@ -170,7 +189,55 @@ const OUTPUT_SCHEMA = {
     required: ["explain", "confused_concept"],
 };
 
-async function callGemini(prompt: string, system: string): Promise<{ explain: string; confused: string } | null> {
+// AI-38 — 생성형 미니퀴즈 출력 스키마 (게이트 통과분만 출제 — src/ai/gen-gate.js)
+const QUIZ_ITEMS_SCHEMA = {
+    type: "OBJECT",
+    properties: {
+        items: {
+            type: "ARRAY",
+            items: {
+                type: "OBJECT",
+                properties: {
+                    question: { type: "STRING" },
+                    options: { type: "ARRAY", items: { type: "STRING" } },
+                    answer: { type: "STRING" },
+                    citation: { type: "STRING" },
+                    explain: { type: "STRING" },
+                },
+                required: ["question", "options", "answer", "citation"],
+            },
+        },
+    },
+    required: ["items"],
+};
+
+// deno-lint-ignore no-explicit-any — LLM JSON 출력 정규화
+function readExplain(p: any): { explain: string; confused: string } | null {
+    const explain = String(p?.explain ?? "").trim().slice(0, 500);
+    const confused = String(p?.confused_concept ?? "").trim().slice(0, 60);
+    return explain ? { explain, confused } : null;
+}
+
+// deno-lint-ignore no-explicit-any — LLM JSON 출력 정규화
+function readItems(p: any): { items: unknown[] } | null {
+    const items = Array.isArray(p?.items) ? p.items : [];
+    return items.length ? { items: items.slice(0, 5) } : null;
+}
+
+/* ============ kind 라우팅 — 템플릿·시스템 프롬프트·스키마·정규화 ============ */
+// deno-lint-ignore no-explicit-any — kind별 입력 타입·출력 정규화가 다름
+const KINDS: Record<string, {
+    system: string;
+    build: (i: any) => string | null;
+    schema: object;
+    read: (p: any) => object | null;
+}> = {
+    wrong_feedback: { system: SYSTEM_PROMPT, build: buildWrongFeedbackPrompt, schema: OUTPUT_SCHEMA, read: readExplain },
+    weekly_diagnosis: { system: DIAG_SYSTEM_PROMPT, build: buildWeeklyDiagnosisPrompt, schema: OUTPUT_SCHEMA, read: readExplain },
+    quiz_gen: { system: QUIZ_GEN_SYSTEM_PROMPT, build: buildQuizGenPrompt, schema: QUIZ_ITEMS_SCHEMA, read: readItems },
+};
+
+async function callGemini(prompt: string, system: string, schema: object): Promise<unknown | null> {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
     const res = await fetch(url, {
         method: "POST",
@@ -180,7 +247,7 @@ async function callGemini(prompt: string, system: string): Promise<{ explain: st
             contents: [{ role: "user", parts: [{ text: prompt }] }],
             generationConfig: {
                 responseMimeType: "application/json",
-                responseSchema: OUTPUT_SCHEMA,
+                responseSchema: schema,
                 maxOutputTokens: MAX_OUTPUT_TOKENS,
                 temperature: 0.2,
             },
@@ -191,11 +258,7 @@ async function callGemini(prompt: string, system: string): Promise<{ explain: st
     const text = ((data?.candidates?.[0]?.content?.parts) ?? [])
         .map((p: { text?: string }) => p.text ?? "").join("");
     try {
-        const parsed = JSON.parse(text);
-        const explain = String(parsed?.explain ?? "").trim().slice(0, 500);
-        const confused = String(parsed?.confused_concept ?? "").trim().slice(0, 60);
-        if (!explain) return null;
-        return { explain, confused };
+        return JSON.parse(text);
     } catch {
         return null;
     }
@@ -250,7 +313,8 @@ Deno.serve(async (req: Request) => {
     }
 
     // 5) Gemini 호출 → 정규화 응답
-    const result = await callGemini(prompt, k.system);
+    const raw = await callGemini(prompt, k.system, k.schema);
+    const result = raw && k.read(raw);
     if (!result) return json({ ok: false, code: "upstream" }, 502);
     return json({ ok: true, ...result, remaining: isPro ? null : remaining });
 });

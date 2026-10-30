@@ -1,7 +1,7 @@
 // src/views/quiz.js - 기출 퀴즈 및 오답 복습 뷰 로직 (데일리 챌린지는 daily-challenge.js, 오답 노트는 quiz-review.js로 분리)
 // @spec Q-01~12,RV-01,PS-07,PS-08
 export { tagWrongCause, tagWrongCauseAt, wrongActionCard, wrongActionTextbook, wrongActionSimilar } from './quiz-wrong-cause.js';
-export { renderReviewList, removeWeakCard, setReviewFilter, startWeakFocusQuiz, startWeakConceptQuiz } from './quiz-review.js';
+export { renderReviewList, removeWeakCard, setReviewFilter, startWeakFocusQuiz, startWeakConceptQuiz, startWeakGenQuiz } from './quiz-review.js';
 
 import { state, saveProgress } from '../../state.js';
 import { safeTextWithBreaks, esc } from '../../sanitize.js';
@@ -479,7 +479,7 @@ export function renderQuizResult() {
         if (wrongAnswers.length === 0) {
             reviewListEl.innerHTML = '<p style="text-align:center; color:var(--color-success); font-weight:600;"><i class="fa-solid fa-circle-check"></i> 모든 문제를 맞혔습니다!</p>';
         } else {
-            reviewListEl.innerHTML = `<h3 style="margin-bottom:0.75rem; font-size:1.1rem;"><i class="fa-solid fa-triangle-exclamation"></i> 오답 리뷰 (${wrongAnswers.length}문제)</h3><button class="btn btn-secondary btn-sm" data-click="startWeakConceptQuiz" style="margin-bottom:0.75rem;"><i class="fa-solid fa-bullseye" aria-hidden="true"></i> 약점 개념 미니퀴즈</button>`;
+            reviewListEl.innerHTML = `<h3 style="margin-bottom:0.75rem; font-size:1.1rem;"><i class="fa-solid fa-triangle-exclamation"></i> 오답 리뷰 (${wrongAnswers.length}문제)</h3><button class="btn btn-secondary btn-sm" data-click="startWeakConceptQuiz" style="margin-bottom:0.75rem;"><i class="fa-solid fa-bullseye" aria-hidden="true"></i> 약점 개념 미니퀴즈</button><button class="btn btn-secondary btn-sm" data-click="startWeakGenQuiz" style="margin-bottom:0.75rem;"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI 미니퀴즈 <span class="pro-badge">PRO</span></button>`;
             wrongAnswers.forEach((s, idx) => {
                 const itemId = weakItemKey(s.quizId);
                 const causeInfo = state.wrongCauses[itemId];

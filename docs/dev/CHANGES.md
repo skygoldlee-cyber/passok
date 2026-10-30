@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-30 feat(ai): 약점 생성형 미니퀴즈 — quiz_gen kind + Pro 게이트 (AI-38)
+
+- ai-proxy quiz_gen kind — kind별 responseSchema·정규화(read) 라우팅으로 items 배열 출력, 취약 개념+근거+기존 발문(중복 금지) 고정 템플릿
+- ai-client _requestAi 일반화 — extractBody/parseText 훅으로 kind별 출력 계약 지원 + requestWeakQuizGen·buildQuizGenPrompt·parseItemsResponse(BYOK 미러)
+- quiz-review startWeakGenQuiz (Pro 게이트) — 생성분을 gen-gate(AI-37) 통과문항만 출제, [AI 생성] 컨텍스트 표시, 오답 리뷰 "AI 미니퀴즈 PRO" 버튼
+- SPEC AI-38 등록
+
 ## 2026-10-30 feat(ai): AI 코치 생성형 선행 — 생성물 검증 게이트 (AI-37)
 
 - src/ai/gen-gate.js 신설 — 런타임 AI 생성물 검증 순수 게이트: 스키마·인용 강제·n-gram dupcheck(>0.6 폐기)·AI_BADGE_TEXT 배지 규약

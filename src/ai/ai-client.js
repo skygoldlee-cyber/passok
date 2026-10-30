@@ -152,9 +152,11 @@ function _featureEvent(result, extra = {}) {
  *   - buildPrompt: BYOK 미러 템플릿 (서버 정본과 동형 유지)
  *   - system: BYOK 폴백용 시스템 프롬프트 (서버 KINDS[kind].system 미러)
  *   - featureLabel: 사용자 오류 문구용 기능명
+ *   - extractBody?: 서버 JSON 응답 → 결과 객체|null (기본 explain/confused 추출)
+ *   - parseText?: BYOK 원문 → 결과 객체|null (기본 parseFeedbackResponse)
  * @param {object} input - 구조화 인자 (AI-30 — 자유 입력 없음)
  * @param {object} [deps] 테스트 주입용 { fetchImpl, session }
- * @returns {Promise<{ok:boolean, explain?:string, confused?:string,
+ * @returns {Promise<{ok:boolean, explain?:string, confused?:string, items?:object[],
  *   remaining?:number|null, route?:'server'|'byok'|'cache', cached?:boolean,
  *   code?:string, error?:string}>}
  */
@@ -194,8 +196,12 @@ async function _requestAi(spec, input, deps = {}) {
             });
             let body = null;
             try { body = await res.json(); } catch { /* 비-JSON */ }
-            if (res.ok && body?.ok && body.explain) {
-                const result = { explain: String(body.explain), confused: String(body.confused || '') };
+            const extracted = body?.ok
+                ? (spec.extractBody ? spec.extractBody(body)
+                    : (body.explain ? { explain: String(body.explain), confused: String(body.confused || '') } : null))
+                : null;
+            if (res.ok && extracted) {
+                const result = extracted;
                 _cacheSet(cacheKey, result);
                 _featureEvent('success', { feature, route: 'server' });
                 return { ok: true, ...result, route: 'server', remaining: body.remaining ?? null };
@@ -228,7 +234,7 @@ async function _requestAi(spec, input, deps = {}) {
             fetchImpl: deps.fetchImpl, maxTokens: 400,
         });
         if (res.ok) {
-            const parsed = parseFeedbackResponse(res.text);
+            const parsed = (spec.parseText || parseFeedbackResponse)(res.text);
             if (parsed) {
                 _cacheSet(cacheKey, parsed);
                 _featureEvent('success', { feature, route: 'byok' });
@@ -322,5 +328,71 @@ export function requestWeeklyDiagnosis(input, deps = {}) {
     return _requestAi({
         kind: 'weekly_diagnosis', feature: 'weekly_diagnosis', featureLabel: 'AI 주간 코칭',
         buildPrompt: buildWeeklyDiagnosisPrompt, system: BYOK_DIAG_SYSTEM,
+    }, input, deps);
+}
+
+/* =========================================================
+   quiz_gen — 약점 생성형 미니퀴즈 (AI-38)
+   출력은 gen-gate(AI-37) 통과분만 출제 — 호출부 책임
+   ========================================================= */
+
+const BYOK_QUIZ_SYSTEM = `당신은 자격시험 출제자입니다. 주어진 근거 범위 내에서만 객관식 문항을 만듭니다.
+- 근거에 없는 사실은 출제하지 않고, 모든 문항에 인용(citation)을 답니다.
+- 기존 문항이 주어지면 중복되지 않는 문항을 만듭니다.
+- 정답은 선지 중 하나와 완전히 동일해야 합니다.
+- JSON만 응답합니다.`;
+
+/**
+ * quiz_gen 프롬프트 조립 (서버 미러) — 취약 개념+교재 근거 → 문항 생성.
+ * @param {object} input {cluster?, evidence?, existing?[], count?}
+ * @returns {string|null}
+ */
+export function buildQuizGenPrompt(input) {
+    const cluster = _clip(input?.cluster, 80);
+    const evidence = _clip(input?.evidence, 1200);
+    if (!cluster && !evidence) return null;
+    const existing = (Array.isArray(input?.existing) ? input.existing : [])
+        .slice(0, 8).map(q => _clip(q, 300)).filter(Boolean);
+    const n = _diagNum(input?.count, 1, 3) ?? 2;
+    return `## 출제 대상 개념\n${cluster ?? '약점 복습'}
+${evidence ? `\n## 교재 근거 (반드시 이 범위에서 출제)\n${evidence}\n` : ''}
+${existing.length ? `\n## 기존 문항 (중복 금지)\n${existing.map((q, i) => `${i + 1}. ${q}`).join('\n')}\n` : ''}
+위 근거로 객관식 문항 ${n}개 생성 — 각 문항은 인용 근거(citation)와 4개 선지 필수.
+응답 형식(JSON만): {"items":[{"question":"...","options":["...","...","...","..."],"answer":"선지 중 하나와 동일","citation":"근거 조문·구절","explain":"1문장 해설"}]}`;
+}
+
+/**
+ * BYOK 응답 원문 → items 배열 파싱 — 배열 본문·{items:[...]} 모두 수용.
+ * @param {string} rawText
+ * @returns {{items:object[]}|null}
+ */
+export function parseItemsResponse(rawText) {
+    const t = String(rawText || '').trim();
+    if (!t) return null;
+    const start = t.search(/[[{]/);
+    if (start < 0) return null;
+    const end = Math.max(t.lastIndexOf(']'), t.lastIndexOf('}'));
+    if (end < start) return null;
+    try {
+        const parsed = JSON.parse(t.slice(start, end + 1));
+        const items = Array.isArray(parsed) ? parsed
+            : Array.isArray(parsed?.items) ? parsed.items : [];
+        return items.length ? { items: items.slice(0, 5) } : null;
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * 약점 생성형 미니퀴즈 요청 (AI-38) — 결과는 반드시 gen-gate로 걸러 출제.
+ * @param {object} input - buildQuizGenPrompt 인자 계약
+ * @param {object} [deps]
+ */
+export function requestWeakQuizGen(input, deps = {}) {
+    return _requestAi({
+        kind: 'quiz_gen', feature: 'weak_quiz_gen', featureLabel: 'AI 미니퀴즈',
+        buildPrompt: buildQuizGenPrompt, system: BYOK_QUIZ_SYSTEM,
+        extractBody: b => (Array.isArray(b.items) && b.items.length ? { items: b.items } : null),
+        parseText: parseItemsResponse,
     }, input, deps);
 }
