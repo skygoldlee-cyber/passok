@@ -104,7 +104,10 @@ body {
     border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.08));
     text-align: center;
 }
-.landing-diff-table th[scope="row"] { text-align: left; font-weight: 600; }
+.landing-diff-table th[scope="row"] { text-align: left; font-weight: 600; white-space: nowrap; }
+/* 경쟁사 셀(✗/—)·행 라벨은 한 줄로 고정하고 PassOK 열에 폭 배분 — 긴 문구 줄바꿈 정돈 */
+.landing-diff-table tbody td { white-space: nowrap; }
+.landing-diff-table td.diff-passok { white-space: normal; text-align: left; }
 .landing-diff-table thead th {
     color: var(--color-text-muted);
     font-size: var(--text-sm, 0.8rem);
@@ -114,6 +117,7 @@ body {
     color: var(--color-primary);
     font-weight: 600;
     background: var(--primary-tint-10, rgba(6,182,212,0.08));
+    width: 38%;
 }
 .landing-diff-table thead .diff-passok { color: var(--color-primary); }
 
