@@ -322,5 +322,25 @@
     "file": "docs/dev/design/LANDING_PAGE_DESIGN.md",
     "ref": "content/exams/<id>/landing_demo.json",
     "reason": "설계안 제안 경로 — 시험별 랜딩 체험 데모 자산 (<id> 플레이스홀더, 실물은 exams/cosmetic에 존재)"
+  },
+  {
+    "file": "docs/dev/design/AI_COACH_DESIGN.md",
+    "ref": "src/ai/",
+    "reason": "설계안 제안 경로 — AI 호출 래퍼 네임스페이스 (DOC-DSN-40 단계 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/AI_COACH_DESIGN.md",
+    "ref": "src/ai/ai-client.js",
+    "reason": "설계안 제안 경로 — ai-proxy 호출 래퍼 모듈 (DOC-DSN-40 단계 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/AI_COACH_DESIGN.md",
+    "ref": "supabase/functions/ai-proxy/",
+    "reason": "설계안 제안 경로 — Gemini 프록시 Edge Function (DOC-DSN-40 단계 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/AI_COACH_DESIGN.md",
+    "ref": "supabase/functions/ai-proxy/index.ts",
+    "reason": "설계안 제안 경로 — Edge Function 구현체 (DOC-DSN-40 단계 1 미구현)"
   }
 ]
