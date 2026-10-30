@@ -47,11 +47,15 @@ function renderExamCards(exams) {
     const year = e.year ? `<span>${esc(e.year)} 시험 대비</span>` : '';
     const discord = e.discordInvite
       ? `<a class="landing-exam-discord" href="${esc(e.discordInvite)}" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-discord" aria-hidden="true"></i> 커뮤니티</a>` : '';
+    const syll = e.syllabus && e.syllabus.primary
+      ? `                    <p class="landing-exam-syllabus">1차 — ${esc(e.syllabus.primary)}${e.syllabus.secondary ? ` · 2차 — ${esc(e.syllabus.secondary)}` : ''}</p>\n`
+      : '';
     if (e.comingSoon) {
       return `                <div class="landing-exam-card coming-soon"${style}>\n`
         + `                    <i class="${icon} landing-exam-icon" aria-hidden="true"></i>\n`
         + `                    <h3>${title}</h3>\n`
         + `                    <p>${desc}</p>\n`
+        + syll
         + `                    <div class="landing-exam-meta"><span class="landing-exam-coming">준비 중</span>${year}${discord}</div>\n`
         + `                </div>`;
     }
@@ -59,6 +63,7 @@ function renderExamCards(exams) {
       + `                    <i class="${icon} landing-exam-icon" aria-hidden="true"></i>\n`
       + `                    <h3>${title}</h3>\n`
       + `                    <p>${desc}</p>\n`
+      + syll
       + `                    <div class="landing-exam-meta">${year}${discord}</div>\n`
       + `                </a>`;
   };

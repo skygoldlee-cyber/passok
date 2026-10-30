@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-31 feat(landing): 시험 카드에 1·2차 시험 내용 표시
+
+- exams.json — 전 시험 `syllabus{primary,secondary}` 필드 추가 (1차/2차 내용)
+- build_landing.js — 카드 렌더에 `.landing-exam-syllabus` 줄 주입 (있을 때만) · landing.css 스타일 · landing.html 재조립 (17개 카드)
+
 ## 2026-10-31 docs(overview): 17개 시험 1·2차 구성 표 추가
 
 - PROJECT_OVERVIEW.md 멀티시험 구조 절 — 구식 "5개 팩" 표를 17개 전체 표로 교체 (1차/2차 시험 내용 + 주관식 콘텐츠 편입 현황)

@@ -55,7 +55,10 @@
       "practiceName": "Formula OS",
       "discordInvite": "https://discord.gg/eHerSQG9hj",
       "group": "미용·화장품",
-      "tier": "active"
+      "tier": "active",
+      "syllabus": {
+        "primary": "맞춤형화장품법령, 화장품 제조·품질관리, 유통·안전관리, 맞춤형화장품의 이해"
+      }
     },
     {
       "id": "skincare",
@@ -85,7 +88,11 @@
       "appNameEn": "Passkin",
       "practiceName": "Skin OS",
       "group": "미용·화장품",
-      "tier": "pilot"
+      "tier": "pilot",
+      "syllabus": {
+        "primary": "피부미용학, 피부학·해부생리학, 피부미용기기학, 화장품학, 공중위생관리학",
+        "secondary": "피부미용실무 (작업형)"
+      }
     },
     {
       "id": "hairdresser",
@@ -111,7 +118,11 @@
       "practiceName": "Hair OS",
       "comingSoon": true,
       "group": "미용·화장품",
-      "tier": "pilot"
+      "tier": "pilot",
+      "syllabus": {
+        "primary": "헤어스타일 연출 및 두피·모발 관리, 공중위생 관련 지식",
+        "secondary": "헤어미용실무 (작업형)"
+      }
     },
     {
       "id": "insadj",
@@ -139,7 +150,11 @@
       "appNameEn": "Passure",
       "practiceName": "Adjust OS",
       "group": "보험·평가·부동산",
-      "tier": "pilot"
+      "tier": "pilot",
+      "syllabus": {
+        "primary": "보험업법, 보험계약법, 손해사정이론 등 객관식",
+        "secondary": "종목별 논술·주관식 — 신체·차량·재물 손해사정 실무"
+      }
     },
     {
       "id": "lossadj",
@@ -168,7 +183,11 @@
       "appNameEn": "Passess",
       "practiceName": "Assess OS",
       "group": "보험·평가·부동산",
-      "tier": "pilot"
+      "tier": "pilot",
+      "syllabus": {
+        "primary": "상법(보험편), 농어업재해보험법령, 농학개론(재배학·원예작물학)",
+        "secondary": "농작물재해·가축재해보험 및 손해평가 이론과 실무"
+      }
     },
     {
       "id": "admagent",
@@ -194,7 +213,11 @@
       "appNameEn": "Passmin",
       "practiceName": "Docs OS",
       "group": "법무·노무",
-      "tier": "pilot"
+      "tier": "pilot",
+      "syllabus": {
+        "primary": "민법(총칙), 행정법, 행정학개론",
+        "secondary": "민법(계약), 행정절차론, 사무관리론, 행정사실무법"
+      }
     },
     {
       "id": "appraisal",
@@ -217,7 +240,11 @@
       "appNameEn": "Passpraisal",
       "practiceName": "Appraisal OS",
       "group": "보험·평가·부동산",
-      "tier": "pilot"
+      "tier": "pilot",
+      "syllabus": {
+        "primary": "민법, 경제학원론, 부동산학원론, 감정평가관계법규, 회계학",
+        "secondary": "감정평가실무, 감정평가이론, 감정평가 및 보상법규"
+      }
     },
     {
       "id": "broker",
@@ -238,7 +265,11 @@
       "registryGlobal": "DATA_REGISTRY_BROKER",
       "comingSoon": true,
       "group": "보험·평가·부동산",
-      "tier": "pilot"
+      "tier": "pilot",
+      "syllabus": {
+        "primary": "부동산학개론, 민법 및 민사특별법",
+        "secondary": "공인중개사법령 및 중개실무, 부동산공법, 부동산공시법령 및 세법 (객관식)"
+      }
     },
     {
       "id": "labor",
@@ -260,7 +291,11 @@
       "features": {},
       "comingSoon": true,
       "group": "법무·노무",
-      "tier": "pilot"
+      "tier": "pilot",
+      "syllabus": {
+        "primary": "노동법, 민법, 사회보험법, 경제학원론·경영학개론 등 객관식",
+        "secondary": "노동법, 인사노무관리론, 행정쟁송법, 선택과목 논문형"
+      }
     },
     {
       "id": "indsafe",
@@ -286,7 +321,11 @@
       "appNameEn": "Passafe",
       "practiceName": "Safety OS",
       "group": "산업안전",
-      "tier": "pilot"
+      "tier": "pilot",
+      "syllabus": {
+        "primary": "산업재해 예방, 인간공학, 기계·전기·화학·건설 안전관리",
+        "secondary": "산업안전관리 실무 (필답형+작업형)"
+      }
     },
     {
       "id": "indsafeind",
@@ -308,7 +347,11 @@
       "features": {},
       "group": "산업안전",
       "comingSoon": true,
-      "tier": "draft"
+      "tier": "draft",
+      "syllabus": {
+        "primary": "산업재해 예방, 인간공학, 기계·전기·화학·건설 안전관리",
+        "secondary": "산업안전 실무 (필답형+작업형)"
+      }
     },
     {
       "id": "iteng",
@@ -330,7 +373,11 @@
       "features": {},
       "group": "정보처리",
       "comingSoon": true,
-      "tier": "draft"
+      "tier": "draft",
+      "syllabus": {
+        "primary": "소프트웨어 설계·개발, 데이터베이스 구축, 프로그래밍 언어 활용, 정보시스템 구축관리",
+        "secondary": "정보처리 실무 (필답형)"
+      }
     },
     {
       "id": "itindeng",
@@ -352,7 +399,11 @@
       "features": {},
       "group": "정보처리",
       "comingSoon": true,
-      "tier": "draft"
+      "tier": "draft",
+      "syllabus": {
+        "primary": "정보시스템 기반 기술, 프로그래밍 언어 활용, 데이터베이스 활용",
+        "secondary": "정보처리 실무 (필답형)"
+      }
     },
     {
       "id": "eleceng",
@@ -374,7 +425,11 @@
       "features": {},
       "group": "전기",
       "comingSoon": true,
-      "tier": "draft"
+      "tier": "draft",
+      "syllabus": {
+        "primary": "전기자기학, 전력공학, 전기기기, 회로이론 및 제어공학, 전기설비기술기준",
+        "secondary": "전기설비설계·관리 (필답형)"
+      }
     },
     {
       "id": "elecindeng",
@@ -396,7 +451,11 @@
       "features": {},
       "group": "전기",
       "comingSoon": true,
-      "tier": "draft"
+      "tier": "draft",
+      "syllabus": {
+        "primary": "전기자기학, 전력공학, 전기기기, 회로이론, 전기설비기술기준",
+        "secondary": "전기설비설계·관리 (필답형)"
+      }
     },
     {
       "id": "compapp1",
@@ -423,7 +482,11 @@
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
       "group": "정보처리",
-      "tier": "pilot"
+      "tier": "pilot",
+      "syllabus": {
+        "primary": "컴퓨터 일반, 스프레드시트 일반, 데이터베이스 일반",
+        "secondary": "스프레드시트 실무, 데이터베이스 실무"
+      }
     },
     {
       "id": "compapp2",
@@ -450,7 +513,11 @@
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
       "group": "정보처리",
-      "tier": "pilot"
+      "tier": "pilot",
+      "syllabus": {
+        "primary": "컴퓨터 일반, 스프레드시트 일반",
+        "secondary": "스프레드시트 실무"
+      }
     }
   ]
 }

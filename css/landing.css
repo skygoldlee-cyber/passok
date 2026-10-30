@@ -145,6 +145,7 @@ body {
 .landing-exam-icon { font-size: 1.6rem; color: var(--exam-accent, var(--color-primary)); }
 .landing-exam-card h3 { margin: var(--space-3, 0.75rem) 0 var(--space-2, 0.5rem); font-size: var(--text-lg, 1.05rem); }
 .landing-exam-card p { margin: 0 0 var(--space-3, 0.75rem); color: var(--color-text-muted); font-size: var(--text-sm-md, 0.85rem); line-height: 1.55; }
+.landing-exam-card .landing-exam-syllabus { font-size: var(--text-sm, 0.78rem); color: var(--color-text-dim, var(--color-text-muted)); opacity: .9; }
 .landing-exam-meta {
     display: flex;
     gap: var(--space-3, 0.75rem);
