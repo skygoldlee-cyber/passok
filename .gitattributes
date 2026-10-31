@@ -14,6 +14,13 @@
 *.ttf binary
 *.woff binary
 *.woff2 binary
+# Git LFS — 콘텐츠 이미지는 LFS로 추적 (저장소 비대 방지)
+# 범위: content/ 하위만 — icons/·vendor/·tests/ 스냅샷은 소형 필수 자산이라 일반 git 유지.
+# 주의: 이 선언은 "신규·수정" 파일부터 LFS로 보낸다(전향 적용). 기존 추적 blob은
+#   유지되며, 이력 재작성으로 소급 이전하려면 git lfs migrate import가 필요
+#   (전 커밋 해시 변경 → force-push — 실행 절차는 docs/dev/runbooks/LFS_MIGRATION.md).
+content/**/*.webp filter=lfs diff=lfs merge=lfs -text
+content/**/*.png filter=lfs diff=lfs merge=lfs -text
 # 배포 스탬프 파일 — 전용 머지 드라이버 (tools/merge/merge_stamps.js)
 # 양 머신 pull 시 같은 라인에 반복 충돌하는 것을 자동 병합으로 제거
 #   (버전 큰 값 채택 / 릴리스 노트 version 키 합집합+20건 트림)
@@ -23,5 +30,3 @@ data/release-notes.json merge=stamps
 data/release-notes.js merge=stamps
 sw.js merge=stamps
 package.json merge=stamps
-content/**/*.webp filter=lfs diff=lfs merge=lfs -text
-content/**/*.png filter=lfs diff=lfs merge=lfs -text

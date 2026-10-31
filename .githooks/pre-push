@@ -1,4 +1,10 @@
 #!/bin/sh
+# Git LFS — LFS 객체 업로드는 게이트 스킵(SKIP_PREPUSH)과 무관하게 항상 필요
+# (포인터만 push되고 객체가 누락되면 원격이 깨진다). git lfs install은 기존
+# 품질 게이트 훅을 덮지 않도록 수동 병합 (git lfs update --manual 지시문).
+command -v git-lfs >/dev/null 2>&1 || { printf >&2 "\n%s\n\n" "This repository is configured for Git LFS but 'git-lfs' was not found on your path."; exit 2; }
+git lfs pre-push "$@"
+
 # pre-push — push 전 품질 게이트 (opt-in: npm run hooks:install)
 #
 # 적응형 실행 (tools/check/push_gate.js): origin/main..HEAD diff를 분류해
