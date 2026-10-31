@@ -1,0 +1,76 @@
+{
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
+ "_pilot": "유통관리사 2급 파일럿 — 대한상공회의소 국가자격. 필기 4과목 객관식 90문/100분(과목당 40점·평균 60점). 출제기준 2024~2026(license.korcham.net). 기출 CBT 비공개 — ai:draft 자체 제작 (승격 기준 과목당 ≥20문).",
+ "subjects": [
+  {
+   "key": "distlog",
+   "order": 1,
+   "name": "유통물류일반관리",
+   "shortName": "유통물류일반관리",
+   "dir": "교재/distlog",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "유통물류일반관리 (전체)",
+     "file": "1과목_유통물류일반관리.md"
+    }
+   ]
+  },
+  {
+   "key": "district",
+   "order": 2,
+   "name": "상권분석",
+   "shortName": "상권분석",
+   "dir": "교재/district",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "상권분석 (전체)",
+     "file": "2과목_상권분석.md"
+    }
+   ]
+  },
+  {
+   "key": "marketing",
+   "order": 3,
+   "name": "유통마케팅",
+   "shortName": "유통마케팅",
+   "dir": "교재/marketing",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "유통마케팅 (전체)",
+     "file": "3과목_유통마케팅.md"
+    }
+   ]
+  },
+  {
+   "key": "distinfo",
+   "order": 4,
+   "name": "유통정보",
+   "shortName": "유통정보",
+   "dir": "교재/distinfo",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "유통정보 (전체)",
+     "file": "4과목_유통정보.md"
+    }
+   ]
+  }
+ ],
+ "exams": [],
+ "integratedExam": {
+  "questionsPerSubject": {
+   "distlog": 25,
+   "district": 20,
+   "marketing": 23,
+   "distinfo": 22
+  },
+  "examTimeMin": 100,
+  "passAverage": 60,
+  "subjectFailBelow": 40
+ }
+}

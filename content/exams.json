@@ -546,6 +546,34 @@
       "syllabus": {
         "primary": "유통상식, 판매 및 고객관리"
       }
+    },
+    {
+      "id": "distmgr2",
+      "name": "유통관리사 2급",
+      "shortName": "유통관리2급",
+      "appName": "PassOK 유통관리사 2급",
+      "title": "PassOK — 유통관리사 2급",
+      "logoMain": "PassOK",
+      "logoSub": "유통관리2급",
+      "desc": "유통관리사 2급 — 필기 4과목(유통물류일반관리·상권분석·유통마케팅·유통정보) 객관식 90문/100분 · 대한상공회의소 · 출제기준 2024~2026 기준 자체 제작",
+      "icon": "fa-solid fa-store",
+      "year": "2027",
+      "theme": {
+        "--color-primary": "#ea580c",
+        "--color-secondary": "#f59e0b"
+      },
+      "contentRoot": "content/exams/distmgr2",
+      "dataRoot": "data/exams/distmgr2",
+      "manifestPath": "content/exams/distmgr2/manifest.json",
+      "registryBundle": "data/exams/distmgr2/registry.js",
+      "registryGlobal": "DATA_REGISTRY_DISTMGR2",
+      "features": {},
+      "comingSoon": true,
+      "group": "유통·물류",
+      "tier": "draft",
+      "syllabus": {
+        "primary": "유통물류일반관리, 상권분석, 유통마케팅, 유통정보"
+      }
     }
   ]
 }
