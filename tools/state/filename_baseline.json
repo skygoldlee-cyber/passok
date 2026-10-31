@@ -112,5 +112,6 @@
   "tools/supabase/functions/ai-proxy/deno.d.ts — tools 파일명은 snake_case (deno.d.ts)",
   "tools/supabase/functions/feedback-notify/deno.d.ts — tools 파일명은 snake_case (deno.d.ts)",
   "tools/build/.last-stats.distmgr2.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.distmgr2)",
-  "tools/build/.last-stats.distmgr3.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.distmgr3)"
+  "tools/build/.last-stats.distmgr3.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.distmgr3)",
+  "tests/dom/misc/nonexam-pack.dom.test.js — tests 코드 파일명은 kebab-case (nonexam-pack.dom.test.js)"
 ]
