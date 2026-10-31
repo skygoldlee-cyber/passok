@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261031-531388d",
+    "date": "2026-10-31",
+    "notes": [
+      "[수정·exam-select] 인트로 매뉴얼 문구를 nowrap 단위로 — 모바일 중간 줄바꿈 방지 [no-test]",
+      "[정리·release] v20261031-c1776da 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261031-c1776da",
     "date": "2026-10-31",
     "notes": [
@@ -181,20 +189,6 @@
     "notes": [
       "[기능·landing] LP-14 — 지원 시험 카드를 group 필드로 그룹 섹션 배치",
       "[정리·release] v20261030-fa2003b 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261030-fa2003b",
-    "date": "2026-10-30",
-    "notes": [
-      "[CI] retrigger — DOM coverage 스텝 플레이크 의심 (로컬 npm run coverage 통과)",
-      "[기능·landing] LP-13 차별점 스트립·비교표에 법령·고시 갱신 확인 항목 추가",
-      "[문서] AGENTS.md 명령어 표에 build:ogimage 기재 (npm 명령 정합 게이트)",
-      "[테스트·landing] LP-13 단언 수정 — 스킵링크 #landing-main 선행 매칭 우회",
-      "[기능·landing] LP-13 — 히어로 차별점 스트립으로 기존 수단 대비 우위를 첫 화면 노출",
-      "[기능·landing] LP-11·LP-12 — 체험 섹션 경험 명시 + OG 공유 이미지",
-      "[정리] 구조 고정 + 게이트 정비 — srcRootAllow·미사용 export·E2E 갭 트리아지 [no-test]",
-      "[정리·release] v20261030-ff72904 스탬프 확정 [no-docs]"
     ]
   }
 ]
