@@ -137,7 +137,7 @@ PassOK의 이야기형은 **주 유형(드라마 또는 탐정) + 캐릭터 성�
 2. **캐릭터 시트** — 주인공(독자 대리인)·멘토·세계관 1페이지. 기존 시험과 세계관을 공유할지 독립할지 결정 (같은 자격군이면 공유 권장).
 3. **골격 생성** — `npm.cmd run build:story -- --scaffold <subjectKey>`로 패치 골격 생성.
 4. **서사 배치** — 챕터 도입 슬롯에 성장 단계에 맞는 서사 배치. 프롤로그(`at="start"`)·에필로그(`at="end"`)·챕터 부제(`@suffix`) 활용.
-5. **빌드·검증** — `npm.cmd run build:story` → `npm.cmd run check:story`(있으면) 또는 `check:fresh` — 서사 커버리지 리포트 확인.
+5. **빌드·검증** — `npm.cmd run build:story -- --check` (생성물 일치 + 서사 커버리지 리포트) → `npm.cmd run check:fresh`.
 6. **정합 자가점검** — 서사에 쓴 조문·수치가 본문에 실재하는지 BP-11 경고 확인. 경고는 오탈자·모순 신호.
 
 ## 7. 품질 체크리스트
