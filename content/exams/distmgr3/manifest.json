@@ -19,11 +19,11 @@
    ]
   },
   {
-   "key": "sales",
+   "key": "salesmgmt",
    "order": 2,
    "name": "판매 및 고객관리",
    "shortName": "판매·고객관리",
-   "dir": "교재/sales",
+   "dir": "교재/salesmgmt",
    "chapters": [
     {
      "key": "full",
@@ -37,7 +37,7 @@
  "integratedExam": {
   "questionsPerSubject": {
    "distsense": 23,
-   "sales": 22
+   "salesmgmt": 22
   },
   "examTimeMin": 45,
   "passAverage": 60,
