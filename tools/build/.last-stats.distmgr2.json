@@ -1,0 +1,45 @@
+{
+  "subjects": {
+    "distlog": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/distlog/1과목_유통물류일반관리.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "district": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/district/2과목_상권분석.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "marketing": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/marketing/3과목_유통마케팅.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "distinfo": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/distinfo/4과목_유통정보.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {}
+}

@@ -1,0 +1,25 @@
+{
+  "subjects": {
+    "distsense": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/distsense/1과목_유통상식.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "salesmgmt": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/salesmgmt/2과목_판매 및 고객관리.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {}
+}
