@@ -3,7 +3,7 @@
 > **문서 ID**: DOC-RBK-21
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (저장소 위생 절차)
-> **상태**: 전향 적용 완료(2026-10-31) / 이력 소급 이전 **미실행 — 실행 시 이 문서 갱신**
+> **상태**: 전향 적용 완료(2026-10-31) / 이력 재작성 **로컬 완료** — push 미완(업로드 대역 부족으로 중단, §현재 상태)
 
 ## 배경·현재 상태
 
@@ -52,6 +52,23 @@ git push --force-with-lease origin main --tags
 - **force-push**: `.github` 브랜치 보호 규칙이 force-push를 막으면 일시 해제 후 복원.
 - **푸시 후 LFS 객체 업로드**: migrate import 직후 첫 push는 수백 MB LFS 업로드 — 시간 소요.
 - **선택적 범위**: `--everything` 대신 `--include-ref=refs/heads/main`으로 main만 재작성하면 태그는 보존되나 과거 이력의 blob은 남는다(축소 효과 반감).
+
+## 현재 상태 (2026-10-31 실측)
+
+- `git lfs migrate import --include="content/**/*.webp,content/**/*.png" --everything` **로컬 완료** — 3,710 커밋 재작성, `git lfs ls-files` 7,100개 확인
+- 체크아웃 후 작업트리가 포인터 텍스트로 남는 문제 발생 → `git lfs checkout`으로 7,100개 실바이너리 복원 완료 (189MB)
+- 로컬 백업 미러: `C:\Project\PassOK-backup-pre-lfs.git` (재작성 전 전체 refs 보존)
+- **push 중단** — 업로드 실측 ~66KB/s로 장시간 소요 → 취소. 원격(origin/main)은 구 이력 그대로 **미변경**
+
+### 재시도 절차 (빠른 네트워크에서)
+
+```powershell
+# 이미 업로드된 LFS 객체는 재전송되지 않음 — 이어서 진행됨
+SKIP_PREPUSH=1 git push --force-with-lease origin main --tags
+# --force-with-lease가 거부되면(원격 ref가 부분 갱신된 드문 경우) --force 사용
+```
+
+재시도 후 확인: `gh api repos/{owner}/{repo}/lfs/objects` 대신 `git lfs ls-remote origin`이 없으므로, `git ls-remote`로 main 해시 일치 + `git lfs pull`로 다른 클론에서 실파일 내려오는지 확인.
 
 ## 롤백
 
