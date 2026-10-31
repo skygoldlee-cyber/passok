@@ -1,0 +1,37 @@
+{
+  "id": "passok",
+  "name": "PassOK",
+  "short_name": "PassOK",
+  "description": "유통관리사 2급 — 필기 4과목(유통물류일반관리·상권분석·유통마케팅·유통정보) 객관식 90문/100분 · 대한상공회의소 · 출제기준 2024~2026 기준 자체 제작",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0f19",
+  "theme_color": "#0b0f19",
+  "lang": "ko",
+  "categories": [
+    "education"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icons/passok-icon-192.png?v=77cc57f9",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/passok-icon-512.png?v=33f403d1",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/passok-icon-maskable-512.png?v=b1b5a549",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

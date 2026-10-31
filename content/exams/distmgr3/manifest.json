@@ -42,5 +42,7 @@
   "examTimeMin": 45,
   "passAverage": 60,
   "subjectFailBelow": 40
- }
+ },
+ "written": [],
+ "pastExams": []
 }

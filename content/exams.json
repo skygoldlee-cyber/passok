@@ -528,7 +528,7 @@
       "logoMain": "PassOK",
       "logoSub": "유통관리3급",
       "desc": "유통관리사 3급 — 필기 2과목(유통상식·판매 및 고객관리) 객관식 45문/45분 · 대한상공회의소 · 출제기준 2024~2026 기준 자체 제작",
-      "icon": "fa-solid fa-store",
+      "icon": "fa-solid fa-basket-shopping",
       "year": "2027",
       "theme": {
         "--color-primary": "#f97316",
@@ -556,7 +556,7 @@
       "logoMain": "PassOK",
       "logoSub": "유통관리2급",
       "desc": "유통관리사 2급 — 필기 4과목(유통물류일반관리·상권분석·유통마케팅·유통정보) 객관식 90문/100분 · 대한상공회의소 · 출제기준 2024~2026 기준 자체 제작",
-      "icon": "fa-solid fa-store",
+      "icon": "fa-solid fa-truck-ramp-box",
       "year": "2027",
       "theme": {
         "--color-primary": "#ea580c",

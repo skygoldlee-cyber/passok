@@ -200,6 +200,12 @@ const _EXAM_LAW_URLS = {
     ],
     "compapp2": [
 
+    ],
+    "distmgr3": [
+
+    ],
+    "distmgr2": [
+
     ]
 };
 
