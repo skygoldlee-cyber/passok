@@ -1,5 +1,19 @@
 [
   {
+    "version": "v20261101-2400bea",
+    "date": "2026-11-01",
+    "notes": [
+      "[문서·exams] carework 설계 초안 — 현장 보조 기능 챕터 추가 [no-test] [no-docs]",
+      "[문서·exams] carework 실무도구 설계 — 음성 입력 경로(온디바이스 STT) 명세 추가 [no-test] [no-docs]",
+      "[리팩터링·exams] carework 실무도구 설계 초안을 docs/로 이동 — careguide 과목 제거 [no-test] [no-docs]",
+      "[리팩터링·exams] carework 실무가이드를 실무도구 설계 초안(draft-spec)으로 재정의 [no-test] [no-docs]",
+      "[기능·exams] carework 실무 가이드 과목 추가 + lawdb 5종 등록 [no-test] [no-docs]",
+      "[기능·exams] carework 출제범위 ref 편입 + 실기 3영역 정정 [no-test] [no-docs]",
+      "[기능·exams] 요양보호사 draft 팩 등록 — 필기·실기 2과목 챕터 골격 + 법령 5건 [no-test] [no-docs]",
+      "[정리·release] v20261031-05e15ac 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261031-05e15ac",
     "date": "2026-10-31",
     "notes": [
@@ -182,17 +196,6 @@
     "notes": [
       "[되돌림] DA-16 평문 배포 제외 롤백 — SW 프리캐시 404로 교재 미표시",
       "[정리·release] v20261030-2459547 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261030-2459547",
-    "date": "2026-10-30",
-    "notes": [
-      "[문서] unpack.js 디렉토리 트리·domain-map 분류 등록 (DA-16 후속 정합)",
-      "[문서] TRACE_MATRIX 재생성 — DA-16 Phase 2 소스 태그 반영",
-      "[기능·sec] DA-16 Phase 2 — 문제은행·docs_md 번들 인코딩 확장",
-      "[기능·sec] DA-16 Phase 1 — 콘텐츠 비평문화로 교재 평문 스크레이핑 차단",
-      "[정리·release] v20261030-df07e0e 스탬프 확정 [no-docs]"
     ]
   }
 ]
