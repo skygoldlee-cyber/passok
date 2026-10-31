@@ -175,7 +175,12 @@ const _EXAM_LAW_URLS = {
     ["공인노무사법", "https://www.law.go.kr/법령/공인노무사법"],
     ["감정평가및감정평가사에관한법률시행령", "https://www.law.go.kr/법령/감정평가및감정평가사에관한법률시행령"],
     ["감정평가사법시행령", "https://www.law.go.kr/법령/감정평가및감정평가사에관한법률시행령"],
-    ["공인중개사법시행령", "https://www.law.go.kr/법령/공인중개사법시행령"]
+    ["공인중개사법시행령", "https://www.law.go.kr/법령/공인중개사법시행령"],
+    ["노인복지법", "https://www.law.go.kr/법령/노인복지법"],
+    ["노인복지법시행령", "https://www.law.go.kr/법령/노인복지법시행령"],
+    ["노인복지법시행규칙", "https://www.law.go.kr/법령/노인복지법시행규칙"],
+    ["노인장기요양보험법", "https://www.law.go.kr/법령/노인장기요양보험법"],
+    ["노인장기요양보험법시행령", "https://www.law.go.kr/법령/노인장기요양보험법시행령"]
     ],
     "indsafe": [
     ["산업재해보상보험법", "https://www.law.go.kr/법령/산업재해보상보험법"]
@@ -208,7 +213,11 @@ const _EXAM_LAW_URLS = {
 
     ],
     "carework": [
-
+    ["노인복지법", "https://www.law.go.kr/법령/노인복지법"],
+    ["노인복지법시행령", "https://www.law.go.kr/법령/노인복지법시행령"],
+    ["노인복지법시행규칙", "https://www.law.go.kr/법령/노인복지법시행규칙"],
+    ["노인장기요양보험법", "https://www.law.go.kr/법령/노인장기요양보험법"],
+    ["노인장기요양보험법시행령", "https://www.law.go.kr/법령/노인장기요양보험법시행령"]
     ]
 };
 

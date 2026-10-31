@@ -2,27 +2,18 @@
  "schemaVersion": 1,
  "_comment": "참조자료 매핑 설정. lawRefs: content/lawdb.json의 법령 id 목록 (나열 순서 = 매칭 우선순위). noticeCore: 고시 감시 배너의 기준 문서명. 자세한 구조는 design/MULTI_EXAM_DB_DESIGN.md §4",
  "lawRefs": [
-  {
-   "name": "노인복지법"
-  },
-  {
-   "name": "노인복지법 시행령"
-  },
-  {
-   "name": "노인복지법 시행규칙"
-  },
-  {
-   "name": "노인장기요양보험법"
-  },
-  {
-   "name": "노인장기요양보험법 시행령"
-  }
+  "elderly-welfare-act",
+  "elderly-welfare-act-enforcement-decree",
+  "elderly-welfare-act-enforcement-rule",
+  "ltc-insurance-act",
+  "ltc-insurance-act-enforcement-decree"
  ],
  "noticeCore": null,
  "subjectDefaultRefdoc": {},
  "subjectDirMap": {
   "caretheory": "과목1",
-  "careprac": "과목2"
+  "careprac": "과목2",
+  "careguide": "과목3"
  },
  "docSubjectRules": [],
  "multiSubjectDocs": [

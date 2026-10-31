@@ -1187,7 +1187,8 @@ const _EXAM_TABLES = {
         contentRoot: "content/exams/carework",
         SUBJECT_DIR_MAP: {
         "caretheory": "과목1",
-        "careprac": "과목2"
+        "careprac": "과목2",
+        "careguide": "과목3"
         },
         REF_MD_SUBJECTS: {
 

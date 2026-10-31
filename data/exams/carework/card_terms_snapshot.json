@@ -6,5 +6,9 @@
  "careprac": {
   "cards": {},
   "quizzes": {}
+ },
+ "careguide": {
+  "cards": {},
+  "quizzes": {}
  }
 }

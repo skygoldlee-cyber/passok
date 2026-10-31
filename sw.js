@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03,LP-07
 
-const CACHE_VERSION = 'v20261031-1dd6dbc';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261101-c06315a';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passok) — 시험 무관 공유 캐시.
 // 구 접두사(passory-*·cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -407,14 +407,9 @@ const MD_ASSETS = [
   './content/exams/distmgr2/교재/distinfo/4과목_유통정보.md',
   './content/exams/distmgr3/교재/distsense/1과목_유통상식.md',
   './content/exams/distmgr3/교재/salesmgmt/2과목_판매 및 고객관리.md',
-  './content/exams/carework/교재/caretheory/1영역_요양보호와인권.md',
-  './content/exams/carework/교재/caretheory/2영역_노화와건강증진.md',
-  './content/exams/carework/교재/caretheory/3영역_요양보호와생활지원.md',
-  './content/exams/carework/교재/caretheory/4영역_상황별요양보호기술.md',
-  './content/exams/carework/교재/careprac/1영역_신체활동지원.md',
-  './content/exams/carework/교재/careprac/2영역_일상생활지원.md',
-  './content/exams/carework/교재/careprac/3영역_인지활동지원.md',
-  './content/exams/carework/교재/careprac/4영역_돌봄기록및상황대응.md',
+  './content/exams/carework/교재/caretheory/1과목_요양보호론.md',
+  './content/exams/carework/교재/careprac/2과목_요양보호관련.md',
+  './content/exams/carework/교재/careguide/3과목_실무가이드.md',
   // MD_ASSETS:END
 ];
 

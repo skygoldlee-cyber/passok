@@ -2,7 +2,7 @@
   "id": "passok",
   "name": "PassOK",
   "short_name": "PassOK",
-  "description": "요양보호사 — 필기(요양보호론) 35문·실기 45문 객관식 90분 · 국시원 · 교육과정 이수자 대상",
+  "description": "요양보호사 — 필기(요양보호론) 35문·실기 45문 객관식 90분 · 국시원 · 합격 후 현장 활용 실무 가이드 포함",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
