@@ -1097,13 +1097,13 @@ const _EXAM_TABLES = {
 
         ]
     },
-    "distmgr3": {
-        contentRoot: "content/exams/distmgr3",
+    "distmgr2": {
+        contentRoot: "content/exams/distmgr2",
         SUBJECT_DIR_MAP: {
         "유통관리사 출제기준(대한상공회의소)(2024)": "과목1",
         "유통산업발전법": "과목1",
         "소비자기본법": "과목1",
-        "청소년 보호법": "과목1",
+        "전자문서 및 전자거래 기본법": "과목1",
         "대규모유통업에서의 거래 공정화에 관한 법률": "과목1",
         "제조물 책임법": "과목1",
         "방문판매 등에 관한 법률": "과목1",
@@ -1140,13 +1140,13 @@ const _EXAM_TABLES = {
 
         ]
     },
-    "distmgr2": {
-        contentRoot: "content/exams/distmgr2",
+    "distmgr3": {
+        contentRoot: "content/exams/distmgr3",
         SUBJECT_DIR_MAP: {
         "유통관리사 출제기준(대한상공회의소)(2024)": "과목1",
         "유통산업발전법": "과목1",
         "소비자기본법": "과목1",
-        "전자문서 및 전자거래 기본법": "과목1",
+        "청소년 보호법": "과목1",
         "대규모유통업에서의 거래 공정화에 관한 법률": "과목1",
         "제조물 책임법": "과목1",
         "방문판매 등에 관한 법률": "과목1",
