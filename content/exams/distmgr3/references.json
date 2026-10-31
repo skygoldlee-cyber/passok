@@ -1,21 +1,27 @@
 {
- "schemaVersion": 1,
- "_comment": "참조자료 매핑 설정 (design/MULTI_EXAM_DB_DESIGN.md §4)",
- "lawRefs": [],
- "noticeCore": null,
- "subjectDirMap": {
-  "유통관리사 출제기준(대한상공회의소)(2024)": "과목1"
- },
- "docSubjectRules": [
-  [
-   "출제기준",
-   1,
-   "출제기준 통합 문서 → 과목1 귀속 (multiSubjectDocs로 전 과목 공동 인용)"
-  ]
- ],
- "multiSubjectDocs": [
-  "유통관리사 출제기준(대한상공회의소)(2024)"
- ],
- "refDirs": [],
- "referenceLaw": []
+  "schemaVersion": 1,
+  "_comment": "참조자료 매핑 설정 (design/MULTI_EXAM_DB_DESIGN.md §4)",
+  "lawRefs": [],
+  "noticeCore": null,
+  "subjectDirMap": {
+    "유통관리사 출제기준(대한상공회의소)(2024)": "과목1",
+    "유통산업발전법": "과목1",
+    "소비자기본법": "과목1",
+    "청소년 보호법": "과목1"
+  },
+  "docSubjectRules": [
+    [
+      "출제기준",
+      1,
+      "출제기준 통합 문서 → 과목1 귀속 (multiSubjectDocs로 전 과목 공동 인용)"
+    ]
+  ],
+  "multiSubjectDocs": [
+    "유통관리사 출제기준(대한상공회의소)(2024)",
+    "유통산업발전법",
+    "소비자기본법",
+    "청소년 보호법"
+  ],
+  "refDirs": [],
+  "referenceLaw": []
 }
