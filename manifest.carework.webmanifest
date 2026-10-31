@@ -1,0 +1,37 @@
+{
+  "id": "passok",
+  "name": "PassOK",
+  "short_name": "PassOK",
+  "description": "요양보호사 — 필기(요양보호론) 35문·실기 45문 객관식 90분 · 국시원 · 교육과정 이수자 대상",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0f19",
+  "theme_color": "#0b0f19",
+  "lang": "ko",
+  "categories": [
+    "education"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icons/passok-icon-192.png?v=77cc57f9",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/passok-icon-512.png?v=33f403d1",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/passok-icon-maskable-512.png?v=b1b5a549",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

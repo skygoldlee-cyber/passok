@@ -1182,6 +1182,42 @@ const _EXAM_TABLES = {
         NOTICE_INGREDIENT_DOCS: [
 
         ]
+    },
+    "carework": {
+        contentRoot: "content/exams/carework",
+        SUBJECT_DIR_MAP: {
+        "caretheory": "과목1",
+        "careprac": "과목2"
+        },
+        REF_MD_SUBJECTS: {
+
+        },
+        REF_DIRS: {
+        "ref_md": [
+            "과목1"
+        ]
+        },
+        SOURCE_REF_MAP: [
+
+        ],
+        KEYWORD_REF_MAP: [
+
+        ],
+        REFERENCE_FILES: {
+
+        },
+        REFERENCE_COMMON: [
+
+        ],
+        REFERENCE_INGREDIENTS: [
+
+        ],
+        REFERENCE_LAW: [
+
+        ],
+        NOTICE_INGREDIENT_DOCS: [
+
+        ]
     }
 };
 

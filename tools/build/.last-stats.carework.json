@@ -1,0 +1,49 @@
+{
+  "subjects": {
+    "caretheory": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/caretheory/1영역_요양보호와인권.md": {
+          "cards": 0,
+          "quizzes": 0
+        },
+        "교재/caretheory/2영역_노화와건강증진.md": {
+          "cards": 0,
+          "quizzes": 0
+        },
+        "교재/caretheory/3영역_요양보호와생활지원.md": {
+          "cards": 0,
+          "quizzes": 0
+        },
+        "교재/caretheory/4영역_상황별요양보호기술.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "careprac": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/careprac/1영역_신체활동지원.md": {
+          "cards": 0,
+          "quizzes": 0
+        },
+        "교재/careprac/2영역_일상생활지원.md": {
+          "cards": 0,
+          "quizzes": 0
+        },
+        "교재/careprac/3영역_인지활동지원.md": {
+          "cards": 0,
+          "quizzes": 0
+        },
+        "교재/careprac/4영역_돌봄기록및상황대응.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {}
+}

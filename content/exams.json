@@ -574,6 +574,28 @@
       "syllabus": {
         "primary": "유통상식, 판매 및 고객관리"
       }
+    },
+    {
+      "id": "carework",
+      "name": "요양보호사",
+      "shortName": "요양보호사",
+      "appName": "요양보호사",
+      "title": "요양보호사",
+      "logoMain": "요양보호사",
+      "logoSub": "",
+      "desc": "요양보호사 — 필기(요양보호론) 35문·실기 45문 객관식 90분 · 국시원 · 교육과정 이수자 대상",
+      "icon": "fa-solid fa-hand-holding-heart",
+      "year": "2027",
+      "theme": {},
+      "contentRoot": "content/exams/carework",
+      "dataRoot": "data/exams/carework",
+      "manifestPath": "content/exams/carework/manifest.json",
+      "registryBundle": "data/exams/carework/registry.js",
+      "registryGlobal": "DATA_REGISTRY_CAREWORK",
+      "features": {},
+      "group": "보건·복지",
+      "tier": "draft",
+      "comingSoon": true
     }
   ]
 }
