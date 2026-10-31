@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-31 docs(overview): 시험 팩 수 17→19 갱신 — 유통관리사 2·3급 반영
+
+- `docs/dev/reference/PROJECT_OVERVIEW.md` — 멀티시험 구조 헤더 17→19개 (실측 active 1·pilot 11·draft 7로 분포도 정정), 구성 표에 distmgr2(유통물류일반관리·상권분석·유통마케팅·유통정보)·distmgr3(유통상식·판매 및 고객관리) 행 추가, "나머지 4개는 파일럿" 스테일 문구 → 18개 pilot/draft로 정정
+
 ## 2026-10-31 fix(exam-select): 인트로 매뉴얼 문구를 nowrap 단위로 — 모바일 중간 줄바꿈 방지
 
 - `html/views/exam-select.html`·`css/exam.css` — "상세설명은 매뉴얼을 참조하세요."를 `.exam-select-manual-note`(inline-block+nowrap)로 묶어, 좁은 화면에서 문구 중간이 끊기지 않고 한 단위로 줄바꿈되게
