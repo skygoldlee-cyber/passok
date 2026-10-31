@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 1b7937f0cf064215
-> 생성: 2026-10-30 · 원천: SPEC.md(641개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 108325c863d2f196
+> 생성: 2026-10-31 · 원천: SPEC.md(641개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -804,9 +804,9 @@
 | BP-07 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/build/stamp_release_notes.js<br>tools/build/stamp_sw_version.js<br>tools/deploy/cleanup_staging.js<br>tools/deploy/deploy.js | tests/unit/gates/build-pipeline.test.js | — | — |
 | BP-08 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/check/audit_card_quality.js | tests/unit/gates/build-pipeline.test.js | — | — |
 | BP-09 | ✅ | 테스트 | DOC-ADR-12<br>DOC-RBK-02<br>DOC-RBK-10 | tools/build/build_doc_bundles.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
-| BP-10 | ✅ | 테스트 | DOC-ADR-12<br>DOC-RBK-02<br>DOC-RBK-13 | tools/build/build_story_textbooks.js | tests/unit/gates/reader-analysis-gates.test.js | — | — |
-| BP-11 | ✅ | 테스트 | DOC-ADR-12<br>DOC-RBK-02<br>DOC-RBK-13 | tools/build/build_story_textbooks.js | tests/unit/content/story-merge.test.js | — | — |
-| BP-12 | ✅ | 테스트 | DOC-ADR-12<br>DOC-RBK-02<br>DOC-RBK-13 | tools/build/build_story_textbooks.js | tests/unit/content/story-merge.test.js | — | — |
+| BP-10 | ✅ | 테스트 | DOC-ADR-12<br>DOC-RBK-02<br>DOC-RBK-13<br>DOC-RBK-22 | tools/build/build_story_textbooks.js | tests/unit/gates/reader-analysis-gates.test.js | — | — |
+| BP-11 | ✅ | 테스트 | DOC-ADR-12<br>DOC-RBK-02<br>DOC-RBK-13<br>DOC-RBK-22 | tools/build/build_story_textbooks.js | tests/unit/content/story-merge.test.js | — | — |
+| BP-12 | ✅ | 테스트 | DOC-ADR-12<br>DOC-RBK-02<br>DOC-RBK-13<br>DOC-RBK-22 | tools/build/build_story_textbooks.js | tests/unit/content/story-merge.test.js | — | — |
 | BP-13 | ✅ | 테스트 | DOC-ADR-12<br>DOC-ADR-17<br>DOC-DSN-20<br>DOC-RBK-02 | tools/check/check_vendor.js<br>tools/sync/sync_vendor.js | tests/unit/gates/vendor-manifest.test.js | — | — |
 | BP-14 | ✅ | 테스트 | DOC-RBK-02 | tools/build/extract_glossary_candidates.js<br>tools/check/check_glossary_signal.js | tests/unit/content/glossary-extract.test.js<br>tests/unit/gates/check-glossary-signal.test.js | — | — |
 | BP-15 | ✅ | 테스트 | DOC-RBK-02<br>DOC-RBK-07 | tools/build/scaffold_chapter.js | tests/unit/content/scaffold-chapter.test.js | — | — |
@@ -842,13 +842,13 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| ST-01 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13 | src/views/reader/reader-loader.js<br>src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-02 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-03 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-04 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-05 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-06 | ✅ | 테스트 | DOC-RBK-07<br>DOC-RBK-13 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-07 | ✅ | 테스트 | DOC-RBK-07<br>DOC-RBK-13 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-01 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/reader/reader-loader.js<br>src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-02 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-03 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-04 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-05 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-06 | ✅ | 테스트 | DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-07 | ✅ | 테스트 | DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
 
 ## 7.2 유료화 인프라
 
@@ -1017,6 +1017,8 @@
 | DOC-RBK-18 | docs/dev/runbooks/DISCORD_COMMUNITY_SETUP.md | AD-10, ES-08 |
 | DOC-RBK-19 | docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md | — |
 | DOC-RBK-20 | docs/dev/runbooks/GATE_TROUBLESHOOTING.md | DA-15, ID-05, P-07 |
+| DOC-RBK-21 | docs/dev/runbooks/LFS_MIGRATION.md | — |
+| DOC-RBK-22 | docs/dev/runbooks/STORY_TYPE_DESIGN_GUIDE.md | BP-10, BP-11, BP-12, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07 |
 | DOC-REF-01 | docs/dev/reference/COMBO_STUDY_STRATEGY.md | DR-02, DR-03, DR-04, DR-05, DR-06, DR-07, Q-01, Q-02, Q-03, Q-04, Q-05, Q-06, Q-07, Q-08, Q-09, Q-10, Q-11, Q-12 |
 | DOC-REF-02 | docs/dev/reference/DEV_ENVIRONMENT.md | — |
 | DOC-REF-03 | docs/dev/reference/FLASHCARD_LOGIC.md | F-01, F-02, F-03, F-04, F-05, F-06, F-07, F-08, F-09, F-10, ID-01, ID-02, ID-03, ID-04, TR-01 |
