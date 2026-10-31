@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-10-31 fix(exam-select): 인트로 매뉴얼 문구를 nowrap 단위로 — 모바일 중간 줄바꿈 방지
+
+- `html/views/exam-select.html`·`css/exam.css` — "상세설명은 매뉴얼을 참조하세요."를 `.exam-select-manual-note`(inline-block+nowrap)로 묶어, 좁은 화면에서 문구 중간이 끊기지 않고 한 단위로 줄바꿈되게
+
 ## 2026-10-31 chore(gates): 파일명 기준선에 신규 dom 테스트 2건 등록
 
 - filename_baseline.json — study-spacedrep.dom.test.js·written-grading.dom.test.js 추가 (기존 *.dom.test.js 77건과 동일 컨벤션 — kebab 검사가 .dom.test 이중 확장자를 단일 접미로만 해석해 신규 위반으로 잡힘 → 기준선 정합)
