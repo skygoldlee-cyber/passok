@@ -330,6 +330,129 @@ export function formulaSortPhase() {
   renderCalcRows();
 }
 
+/** 계산기 스칼라 필드 id ↔ 소스 속성 매핑 (필드 초기화·드래프트 복원 공용) */
+const CALC_FIELD_MAP = [
+  ['formula-target-volume', 'targetVolume'],
+  ['formula-unit', 'unit'],
+  ['formula-ph-target', 'phTarget'],
+  ['formula-ph-actual', 'phActual'],
+  ['formula-name-input', 'name'],
+  ['formula-notes-input', 'notes'],
+];
+
+function _calcFieldEls() {
+  const els = {};
+  for (const [id, prop] of CALC_FIELD_MAP) els[prop] = getEl(id);
+  return els;
+}
+
+/** 기존 포뮬러 수정 진입 — 소스 객체 값으로 필드 채우기 */
+function _writeCalcSourceFields(els, f) {
+  for (const [, prop] of CALC_FIELD_MAP) {
+    const el = els[prop];
+    if (el) el.value = f[prop] != null ? f[prop] : '';
+  }
+  if (els.unit && !f.unit) els.unit.value = 'g';
+}
+
+/** 신규 진입 — 기본값 리셋 후 자동 저장 드래프트 복원 (FO-30) */
+function _initCalcFields(els) {
+  if (els.targetVolume && !els.targetVolume.value) els.targetVolume.value = '100';
+  if (els.unit) els.unit.value = 'g';
+  for (const prop of ['phTarget', 'phActual', 'name', 'notes']) {
+    if (els[prop]) els[prop].value = '';
+  }
+  _restoreCalcDraft(els);
+}
+
+function _draftRows(draft) {
+  const rows = draft.rows.map(r => ({
+    name: (r && r.name) || '',
+    concentration: r && r.concentration != null ? r.concentration : null,
+    phase: (r && r.phase) || '',
+  }));
+  return rows.length ? rows : [{ name: '', concentration: null, phase: '' }];
+}
+
+function _hasDraftContent(draft) {
+  return draft.rows.some(r => r && r.name)
+    || draft.name || (draft.steps || []).length;
+}
+
+/** 작업 드래프트 복원 — 현장 중단 후 재진입 시 자동 저장분 이어쓰기 */
+function _restoreCalcDraft(els) {
+  const draft = getJSON(STORAGE_KEYS.FORMULA_CALC_DRAFT);
+  if (!draft || !Array.isArray(draft.rows) || !_hasDraftContent(draft)) return;
+  calc.rows = _draftRows(draft);
+  calc.steps = Array.isArray(draft.steps) ? draft.steps.slice() : [];
+  for (const [, prop] of CALC_FIELD_MAP) {
+    const el = els[prop];
+    if (el && draft[prop] != null && draft[prop] !== '') el.value = String(draft[prop]);
+  }
+  showDraftStatus(draft.savedAt, '임시 저장 복원');
+}
+
+/** 총량/단위·pH·메모·안정성 필드 변경 리스너 1회 바인딩 */
+function _bindCalcFieldListeners(els) {
+  const bindOnce = (el, flag, ev, fn) => {
+    if (el && !el.dataset[flag]) {
+      el.dataset[flag] = '1';
+      el.addEventListener(ev, fn);
+    }
+  };
+  // 총량/단위 변경 시 재계산
+  bindOnce(els.targetVolume, 'bound', 'input', updateCalcComputed);
+  bindOnce(els.unit, 'bound', 'change', updateCalcComputed);
+  // pH·메모·안정성 확인 필드 변경 → 제조 정보 접이식 요약 + 안정성 평가 갱신
+  ['formula-ph-target', 'formula-ph-actual', 'formula-notes-input', 'formula-name-input',
+    'formula-stab-method', 'formula-stab-result', 'formula-stab-note'].forEach(id => {
+    bindOnce(getEl(id), 'foldBound', 'input',
+      () => { updateFoldSummaries(); renderStability(); scheduleDraftSave(); });
+  });
+}
+
+/** 고시 개정 감지 — 저장된 스냅샷 기준과 현재 DB가 다른 원료가 있으면 배너 표시 */
+function _updateStdWarnBanner(sourceFormula) {
+  const stdWarnEl = getEl('formula-std-warn');
+  if (!stdWarnEl) return;
+  const changed = sourceFormula ? countChangedStandards(sourceFormula, getIndex()) : 0;
+  if (!changed) {
+    stdWarnEl.classList.add('is-hidden');
+    stdWarnEl.innerHTML = '';
+    return;
+  }
+  stdWarnEl.classList.remove('is-hidden');
+  stdWarnEl.innerHTML = `<div class="f-check f-check-warn batch-allergy-warn-box">`
+    + `<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> `
+    + `저장 후 고시 기준이 변경된 원료가 ${changed}종 있습니다 — 한도를 재검증하고 다시 저장하면 스냅샷이 갱신됩니다.</div>`;
+}
+
+function _hasCustomerInfo(f) {
+  const c = f.customer || {};
+  return c.name || c.skinType || c.formulation || c.products || c.age != null
+    || _hasCustomerConcerns(c);
+}
+
+function _hasCustomerConcerns(c) {
+  return (c.concerns && c.concerns.length) || c.pregnancy
+    || (c.allergies && c.allergies.length);
+}
+
+function _hasProcessInfo(f) {
+  return f.phTarget != null || f.phActual != null
+    || (f.steps && f.steps.length) || f.notes || f.stability;
+}
+
+/** 내용이 있는 접이식 섹션은 자동 펼침 (기존 포뮬러 수정 진입 시) */
+function _autoOpenFolds(sourceFormula) {
+  const custFold = /** @type {HTMLDetailsElement} */ (document.getElementById('formula-fold-customer'));
+  const procFold = /** @type {HTMLDetailsElement} */ (document.getElementById('formula-fold-process'));
+  const hasCust = sourceFormula ? _hasCustomerInfo(sourceFormula) : false;
+  const hasProc = sourceFormula ? _hasProcessInfo(sourceFormula) : false;
+  if (custFold) custFold.open = !!hasCust;
+  if (procFold) procFold.open = !!hasProc;
+}
+
 export function openFormulaCalc(sourceFormula) {
   showPanel('formula-calc-panel');
   const subnav = getEl('formula-calc-subnav');
@@ -341,105 +464,20 @@ export function openFormulaCalc(sourceFormula) {
   const title = getEl('formula-calc-title');
   if (title) title.textContent = calc.editingId ? '포뮬러 수정' : '배합 계산기';
 
-  const volEl = getEl('formula-target-volume');
-  const unitEl = getEl('formula-unit');
-  const phTEl = getEl('formula-ph-target');
-  const phAEl = getEl('formula-ph-actual');
-  const nameEl = getEl('formula-name-input');
-  const notesEl = getEl('formula-notes-input');
-  if (sourceFormula) {
-    if (volEl) volEl.value = sourceFormula.targetVolume != null ? sourceFormula.targetVolume : '';
-    if (unitEl) unitEl.value = sourceFormula.unit || 'g';
-    if (phTEl) phTEl.value = sourceFormula.phTarget != null ? sourceFormula.phTarget : '';
-    if (phAEl) phAEl.value = sourceFormula.phActual != null ? sourceFormula.phActual : '';
-    if (nameEl) nameEl.value = sourceFormula.name || '';
-    if (notesEl) notesEl.value = sourceFormula.notes || '';
-  } else {
-    if (volEl && !volEl.value) volEl.value = '100';
-    if (unitEl) unitEl.value = 'g';
-    if (phTEl) phTEl.value = '';
-    if (phAEl) phAEl.value = '';
-    if (nameEl) nameEl.value = '';
-    if (notesEl) notesEl.value = '';
-    // 작업 드래프트 복원 (FO-30) — 현장 중단 후 재진입 시 자동 저장분 이어쓰기
-    const draft = getJSON(STORAGE_KEYS.FORMULA_CALC_DRAFT);
-    if (draft && Array.isArray(draft.rows)
-        && (draft.rows.some(r => r && r.name) || draft.name || (draft.steps || []).length)) {
-      calc.rows = draft.rows.map(r => ({
-        name: (r && r.name) || '',
-        concentration: r && r.concentration != null ? r.concentration : null,
-        phase: (r && r.phase) || '',
-      }));
-      if (!calc.rows.length) calc.rows = [{ name: '', concentration: null, phase: '' }];
-      calc.steps = Array.isArray(draft.steps) ? draft.steps.slice() : [];
-      if (volEl && draft.targetVolume != null) volEl.value = String(draft.targetVolume);
-      if (unitEl && draft.unit) unitEl.value = draft.unit;
-      if (phTEl && draft.phTarget != null) phTEl.value = String(draft.phTarget);
-      if (phAEl && draft.phActual != null) phAEl.value = String(draft.phActual);
-      if (nameEl && draft.name) nameEl.value = draft.name;
-      if (notesEl && draft.notes) notesEl.value = draft.notes;
-      showDraftStatus(draft.savedAt, '임시 저장 복원');
-    }
-  }
+  const els = _calcFieldEls();
+  if (sourceFormula) _writeCalcSourceFields(els, sourceFormula);
+  else _initCalcFields(els);
+
   renderSteps();
   writeCustomerInputs(sourceFormula ? sourceFormula.customer : null,
     sourceFormula ? sourceFormula.customerId : '');
   writeStabilityInputs(sourceFormula ? sourceFormula.stability : null);
   renderRecommend();
   renderCustomRules();
-
-  // 총량/단위 변경 시 재계산
-  if (volEl && !volEl.dataset.bound) {
-    volEl.dataset.bound = '1';
-    volEl.addEventListener('input', updateCalcComputed);
-  }
-  if (unitEl && !unitEl.dataset.bound) {
-    unitEl.dataset.bound = '1';
-    unitEl.addEventListener('change', updateCalcComputed);
-  }
-  // pH·메모·안정성 확인 필드 변경 → 제조 정보 접이식 요약 + 안정성 평가 갱신
-  ['formula-ph-target', 'formula-ph-actual', 'formula-notes-input', 'formula-name-input',
-    'formula-stab-method', 'formula-stab-result', 'formula-stab-note'].forEach(id => {
-    const el = getEl(id);
-    if (el && !el.dataset.foldBound) {
-      el.dataset.foldBound = '1';
-      el.addEventListener('input', () => { updateFoldSummaries(); renderStability(); scheduleDraftSave(); });
-    }
-  });
-
-  // 고시 개정 감지 — 저장된 스냅샷 기준과 현재 DB가 다른 원료가 있으면 배너 표시
-  const stdWarnEl = getEl('formula-std-warn');
-  if (stdWarnEl) {
-    const changed = sourceFormula ? countChangedStandards(sourceFormula, getIndex()) : 0;
-    if (changed) {
-      stdWarnEl.classList.remove('is-hidden');
-      stdWarnEl.innerHTML = `<div class="f-check f-check-warn batch-allergy-warn-box">`
-        + `<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> `
-        + `저장 후 고시 기준이 변경된 원료가 ${changed}종 있습니다 — 한도를 재검증하고 다시 저장하면 스냅샷이 갱신됩니다.</div>`;
-    } else {
-      stdWarnEl.classList.add('is-hidden');
-      stdWarnEl.innerHTML = '';
-    }
-  }
-
-  // 내용이 있는 접이식 섹션은 자동 펼침 (기존 포뮬러 수정 진입 시)
-  const custFold = /** @type {HTMLDetailsElement} */ (document.getElementById('formula-fold-customer'));
-  const procFold = /** @type {HTMLDetailsElement} */ (document.getElementById('formula-fold-process'));
-  if (sourceFormula) {
-    const c = sourceFormula.customer || {};
-    const hasCust = c.name || c.skinType || c.formulation || (c.concerns && c.concerns.length)
-      || c.pregnancy || (c.allergies && c.allergies.length) || c.products || c.age != null;
-    if (custFold) custFold.open = !!hasCust;
-    const hasProc = sourceFormula.phTarget != null || sourceFormula.phActual != null
-      || (sourceFormula.steps && sourceFormula.steps.length) || sourceFormula.notes
-      || sourceFormula.stability;
-    if (procFold) procFold.open = !!hasProc;
-  } else {
-    if (custFold) custFold.open = false;
-    if (procFold) procFold.open = false;
-  }
+  _bindCalcFieldListeners(els);
+  _updateStdWarnBanner(sourceFormula);
+  _autoOpenFolds(sourceFormula);
   updateFoldSummaries();
-
   renderCalcRows();
 }
 

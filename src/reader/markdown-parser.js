@@ -365,172 +365,184 @@ export function parseMarkdown(mdText, options = {}) {
         }
     }
 
-    lines.forEach(line => {
-        _lineNo++;
-        const trimmed = line.trim();
+    // 라인 분류기 — 순차 매처 체인. 각 try* 함수는 라인을 소비했으면 true를
+    // 반환하고, 아니면 false를 반환해 다음 매처로 넘긴다. 비소비 라인에서도
+    // 진행 중 블록(표·인용·목록)의 플러시 부수효과는 원래 else 분기와 동일하다.
+    let _jwForce = false;
+    const GT_ENTITY = '&' + 'gt;';
 
-        // joinWraps: olMatch(`N.`/`N)`)에 걸리지만 실제로는 연속줄인 패턴 판정
-        //  - 날짜 꼬리: "2018. 3. 13.>" (<개정|<신설이 줄넘김된 개정일 나열)
-        //  - 화학식 꼬리: "113)", "1000)" (Freon 113, 1→1000 희석배수 절단)
-        //  - 연속부호 종료 prev + 3자리 이상 숫자 시작
-        //  - 미닫힘 꺾쇠 prev: "…<개정" (&lt;개정)
-        const _jwForce = joinWraps && _jwPrev != null
-            && /^\d+[.)]\s/.test(trimmed)
-            && !_JW_CLOSED.test(_jwPrev)
-            && (/^\d{4}\.\s*\d{1,2}\./.test(trimmed)
-                || /^\d{3,}\)\s/.test(trimmed)
-                || (/^\d{3,}[.)]/.test(trimmed)
-                    && /[,，、ㆍ·(〈「『(\-–—→\/=＝]\s*$/.test(_jwPrev))
-                || /&lt;[가-힣\s:]*$/.test(_jwPrev));
+    // joinWraps: olMatch(`N.`/`N)`)에 걸리지만 실제로는 연속줄인 꼬리 패턴
+    //  - 날짜 꼬리: "2018. 3. 13.>" (<개정|<신설이 줄넘김된 개정일 나열)
+    //  - 화학식 꼬리: "113)", "1000)" (Freon 113, 1→1000 희석배수 절단)
+    //  - 연속부호 종료 prev + 3자리 이상 숫자 시작
+    //  - 미닫힘 꺾쇠 prev: "…<개정" (&lt;개정)
+    function _jwForceTail(t) {
+        if (_jwPrev == null) return false; // 호출부에서 보장 — 타입 추론용 가드
+        return /^\d{4}\.\s*\d{1,2}\./.test(t)
+            || /^\d{3,}\)\s/.test(t)
+            || (/^\d{3,}[.)]/.test(t)
+                && /[,，、ㆍ·(〈「『(\-–—→\/=＝]\s*$/.test(_jwPrev))
+            || /&lt;[가-힣\s:]*$/.test(_jwPrev);
+    }
 
-        // 6-1. 코드블록 시작/끝 감지
-        if (trimmed.startsWith('```')) {
-            if (inCodeBlock) {
-                flushCode();
-                inCodeBlock = false;
-            } else {
-                flushTable(); flushQuote(); flushList();
-                inCodeBlock = true;
-                codeLang = trimmed.slice(3).trim().toLowerCase();
-            }
-            _jwPrev = null;
-            return;
-        }
-        if (inCodeBlock) {
+    // 6-1. 코드블록 시작/끝 감지 + 코드블록 내부 라인 소비
+    function tryCodeBlock(line, trimmed) {
+        if (!trimmed.startsWith('```')) {
+            if (!inCodeBlock) return false;
             if (codeLines.length === 0) _codeStartLine = _lineNo;
             codeLines.push(line);
             _jwPrev = null;
-            return;
+            return true;
         }
-
-        // HTML 주석 라인 (<!-- story:start --> 같은 구조 마커) — 이스케이프되어
-        // 텍스트로 노출되므로 렌더하지 않는다. 코드블록 내부는 위에서 이미 소비됨.
-        // 빈 줄과 동일하게 진행 중 블록(표·인용·목록)은 플러시한다.
-        if (/^&lt;!--[\s\S]*?--&gt;$/.test(trimmed)) {
+        if (inCodeBlock) {
+            flushCode();
+            inCodeBlock = false;
+        } else {
             flushTable(); flushQuote(); flushList();
-            _jwPrev = null;
-            return;
+            inCodeBlock = true;
+            codeLang = trimmed.slice(3).trim().toLowerCase();
         }
+        _jwPrev = null;
+        return true;
+    }
 
-        // joinWraps: 러닝헤더 스킵 — 문서 제목과 동일한 반복 단독줄.
-        // 첫 등장(문서 표제)은 유지하고 이후 반복만 투명하게 건너뛴다.
-        if (_jwTitle && trimmed === _jwTitle) {
-            if (_jwTitleSeen) return;
-            _jwTitleSeen = true;
-        }
+    // HTML 주석 라인 (<!-- story:start --> 같은 구조 마커) — 이스케이프되어
+    // 텍스트로 노출되므로 렌더하지 않는다. 코드블록 내부는 tryCodeBlock에서
+    // 이미 소비됨. 빈 줄과 동일하게 진행 중 블록(표·인용·목록)은 플러시한다.
+    function tryHtmlComment(line, trimmed) {
+        if (!/^&lt;!--[\s\S]*?--&gt;$/.test(trimmed)) return false;
+        flushTable(); flushQuote(); flushList();
+        _jwPrev = null;
+        return true;
+    }
 
-        // 6-2. 테이블 파싱
-        if (trimmed.startsWith('|')) {
-            flushQuote(); flushList();
-            tableRows.push(line);
-            _lastTableLine = _lineNo;
-            _jwPrev = null;
-            return;
-        } else {
+    // joinWraps: 러닝헤더 스킵 — 문서 제목과 동일한 반복 단독줄.
+    // 첫 등장(문서 표제)은 유지하고 이후 반복만 투명하게 건너뛴다.
+    function tryRunningHeader(line, trimmed) {
+        if (!_jwTitle || trimmed !== _jwTitle) return false;
+        if (_jwTitleSeen) return true;
+        _jwTitleSeen = true;
+        return false;
+    }
+
+    // 6-2. 테이블 파싱
+    function tryTable(line, trimmed) {
+        if (!trimmed.startsWith('|')) {
             flushTable();
+            return false;
         }
+        flushQuote(); flushList();
+        tableRows.push(line);
+        _lastTableLine = _lineNo;
+        _jwPrev = null;
+        return true;
+    }
 
-        // 6-3. 인용문 파싱
-        const GT_ENTITY = '&' + 'gt;';
-        if (trimmed.startsWith(GT_ENTITY) || trimmed.startsWith('>')) {
-            flushList();
-            if (quoteLines.length === 0) _quoteStartLine = _lineNo;
-            let qText = trimmed;
-            if (qText.startsWith(GT_ENTITY)) qText = qText.slice(4);
-            else qText = qText.slice(1);
-            qText = qText.trim();
-            if (qText) quoteLines.push(qText);
-            _jwPrev = null;
-            return;
-        } else {
+    // 6-3. 인용문 파싱
+    function tryQuote(line, trimmed) {
+        if (!trimmed.startsWith(GT_ENTITY) && !trimmed.startsWith('>')) {
             flushQuote();
+            return false;
         }
+        flushList();
+        if (quoteLines.length === 0) _quoteStartLine = _lineNo;
+        const qText = trimmed.slice(trimmed.startsWith(GT_ENTITY) ? 4 : 1).trim();
+        if (qText) quoteLines.push(qText);
+        _jwPrev = null;
+        return true;
+    }
 
-        // 6-4. 목록 파싱 (ul / ol)
+    // 6-4. 목록 파싱 (ul / ol)
+    function tryList(line, trimmed) {
         if (useCustomListDiv) {
             const listMatch = line.match(/^(\s*)[-*]\s+(.*)$/);
-            if (listMatch) {
-                const indentLevel = Math.floor(listMatch[1].length / 2);
-                output.push(`<div class="md-list-item" style="padding-left: ${0.5 + indentLevel * 1.25}rem;"><span class="md-bullet">•</span> <span>${listMatch[2]}</span></div>`);
-                _jwPrev = null;
-                return;
-            }
-        } else {
-            const ulMatch = trimmed.match(/^[-*]\s+(.+)$/);
-            const olMatch = trimmed.match(/^\d+[.)]\s+(.+)$/);
-            if (ulMatch) {
-                if (listType !== 'ul') { flushList(); listType = 'ul'; _listStartLine = _lineNo; }
-                listItems.push(ulMatch[1]);
-                _jwPrev = ulMatch[1];
-                return;
-            } else if (olMatch && !_jwForce) {
-                if (listType !== 'ol') { flushList(); listType = 'ol'; _listStartLine = _lineNo; }
-                listItems.push(olMatch[1]);
-                _jwPrev = olMatch[1];
-                return;
-            } else {
-                flushList();
-            }
+            if (!listMatch) return false;
+            const indentLevel = Math.floor(listMatch[1].length / 2);
+            output.push(`<div class="md-list-item" style="padding-left: ${0.5 + indentLevel * 1.25}rem;"><span class="md-bullet">•</span> <span>${listMatch[2]}</span></div>`);
+            _jwPrev = null;
+            return true;
         }
+        const ulMatch = trimmed.match(/^[-*]\s+(.+)$/);
+        const olMatch = trimmed.match(/^\d+[.)]\s+(.+)$/);
+        if (ulMatch) {
+            if (listType !== 'ul') { flushList(); listType = 'ul'; _listStartLine = _lineNo; }
+            listItems.push(ulMatch[1]);
+            _jwPrev = ulMatch[1];
+            return true;
+        }
+        if (olMatch && !_jwForce) {
+            if (listType !== 'ol') { flushList(); listType = 'ol'; _listStartLine = _lineNo; }
+            listItems.push(olMatch[1]);
+            _jwPrev = olMatch[1];
+            return true;
+        }
+        flushList();
+        return false;
+    }
 
-        // 6-5. 헤더 파싱
+    // 6-5. 헤더 파싱
+    function tryHeader(line, trimmed) {
         if (useReaderStyles) {
             if (trimmed.startsWith('##### ')) {
                 output.push(_wrapWithLine(`<h5 class="md-h5">${line.replace(/^#####\s+/, '')}</h5>`, _lineNo));
-                _jwPrev = null;
-                return;
-            }
-            if (trimmed.startsWith('#### ')) {
+            } else if (trimmed.startsWith('#### ')) {
                 output.push(_wrapWithLine(`<h4 class="md-h4">${line.replace(/^####\s+/, '')}</h4>`, _lineNo));
-                _jwPrev = null;
-                return;
-            }
-            if (trimmed.startsWith('### ')) {
+            } else if (trimmed.startsWith('### ')) {
                 output.push(_wrapWithLine(`<h3 class="md-h3">${line.replace(/^###\s+/, '')}</h3>`, _lineNo));
-                _jwPrev = null;
-                return;
-            }
-        } else {
-            if (trimmed.startsWith('### ')) { output.push(_wrapWithLine(`<h3>${trimmed.slice(4)}</h3>`, _lineNo)); _jwPrev = null; return; }
-            if (trimmed.startsWith('## ')) { output.push(_wrapWithLine(`<h2>${trimmed.slice(3)}</h2>`, _lineNo)); _jwPrev = null; return; }
-            if (trimmed.startsWith('# ')) { output.push(_wrapWithLine(`<h1>${trimmed.slice(2)}</h1>`, _lineNo)); _jwPrev = null; return; }
-        }
-
-        // 6-6. 구분선 파싱
-        if (useReaderStyles) {
-            if (trimmed === '---') {
-                output.push('<hr class="reader-hr">');
-                _jwPrev = null;
-                return;
-            }
-        } else {
-            if (/^-{3,}$/.test(trimmed) || /^\*{3,}$/.test(trimmed)) { output.push('<hr>'); _jwPrev = null; return; }
-        }
-
-        // 6-7. 빈 줄 파싱
-        if (trimmed === '') {
-            if (customSpacing) {
-                output.push('<div style="height: 0.5rem;"></div>');
+            } else {
+                return false;
             }
             _jwPrev = null;
-            return;
+            return true;
         }
+        if (trimmed.startsWith('### ')) { output.push(_wrapWithLine(`<h3>${trimmed.slice(4)}</h3>`, _lineNo)); }
+        else if (trimmed.startsWith('## ')) { output.push(_wrapWithLine(`<h2>${trimmed.slice(3)}</h2>`, _lineNo)); }
+        else if (trimmed.startsWith('# ')) { output.push(_wrapWithLine(`<h1>${trimmed.slice(2)}</h1>`, _lineNo)); }
+        else return false;
+        _jwPrev = null;
+        return true;
+    }
 
-        // 6-7-2. 이야기 경계 마커 — '📖 ┈ **이야기** ┈' / '┈ **본문** ┈ 📘'
-        // story-boundary 클래스를 파서가 직접 부여해 모든 렌더 경로(리더·검색 등)에서
-        // 동일하게 숨김되고, markStoryNarrative는 이 클래스를 서사 범위 앵커로 쓴다.
-        const _storyBoundaryCls = /^📖\s*┈+\s*<strong>이야기<\/strong>\s*┈+$/.test(trimmed)
+    // 6-6. 구분선 파싱
+    function tryHr(line, trimmed) {
+        if (useReaderStyles) {
+            if (trimmed !== '---') return false;
+            output.push('<hr class="reader-hr">');
+        } else {
+            if (!/^-{3,}$/.test(trimmed) && !/^\*{3,}$/.test(trimmed)) return false;
+            output.push('<hr>');
+        }
+        _jwPrev = null;
+        return true;
+    }
+
+    // 6-7. 빈 줄 파싱
+    function tryBlank(line, trimmed) {
+        if (trimmed !== '') return false;
+        if (customSpacing) {
+            output.push('<div style="height: 0.5rem;"></div>');
+        }
+        _jwPrev = null;
+        return true;
+    }
+
+    // 6-7-2. 이야기 경계 마커 — '📖 ┈ **이야기** ┈' / '┈ **본문** ┈ 📘'
+    // story-boundary 클래스를 파서가 직접 부여해 모든 렌더 경로(리더·검색 등)에서
+    // 동일하게 숨김되고, markStoryNarrative는 이 클래스를 서사 범위 앵커로 쓴다.
+    function tryStoryBoundary(line, trimmed) {
+        const cls = /^📖\s*┈+\s*<strong>이야기<\/strong>\s*┈+$/.test(trimmed)
             ? 'story-boundary story-boundary-start'
             : /^┈+\s*<strong>본문<\/strong>\s*┈+\s*📘$/.test(trimmed)
                 ? 'story-boundary story-boundary-end' : null;
-        if (_storyBoundaryCls) {
-            output.push(_wrapWithLine(`<p class="${useReaderStyles ? 'md-para ' : ''}${_storyBoundaryCls}">${line}</p>`, _lineNo));
-            _jwPrev = null;
-            return;
-        }
+        if (!cls) return false;
+        output.push(_wrapWithLine(`<p class="${useReaderStyles ? 'md-para ' : ''}${cls}">${line}</p>`, _lineNo));
+        _jwPrev = null;
+        return true;
+    }
 
-        // 6-8. 일반 문단 파싱
-        // joinWraps: 이전 평문/항목이 미종결 + 현재 줄이 구조 마커가 아니면 병합
+    // 6-8. 일반 문단 파싱
+    // joinWraps: 이전 평문/항목이 미종결 + 현재 줄이 구조 마커가 아니면 병합
+    function pushParagraph(line, trimmed) {
         if (joinWraps && _jwPrev != null
             && !_JW_CLOSED.test(_jwPrev)
             && (_jwForce || !_JW_STRUCT.test(trimmed))) {
@@ -546,6 +558,22 @@ export function parseMarkdown(mdText, options = {}) {
         }
         // 이미지 단독 줄은 연속 대상이 아님 (다음 텍스트가 사진 캡션으로 붙는 것 방지)
         _jwPrev = /^<img/.test(trimmed) ? null : line;
+    }
+
+    const LINE_MATCHERS = [tryCodeBlock, tryHtmlComment, tryRunningHeader,
+        tryTable, tryQuote, tryList, tryHeader, tryHr, tryBlank, tryStoryBoundary];
+
+    lines.forEach(line => {
+        _lineNo++;
+        const trimmed = line.trim();
+        _jwForce = joinWraps && _jwPrev != null
+            && /^\d+[.)]\s/.test(trimmed)
+            && !_JW_CLOSED.test(_jwPrev)
+            && _jwForceTail(trimmed);
+        for (const matchLine of LINE_MATCHERS) {
+            if (matchLine(line, trimmed)) return;
+        }
+        pushParagraph(line, trimmed);
     });
 
     // 최종 블록 플러시
