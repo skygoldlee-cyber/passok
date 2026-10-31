@@ -518,6 +518,34 @@
         "primary": "컴퓨터 일반, 스프레드시트 일반",
         "secondary": "스프레드시트 실무"
       }
+    },
+    {
+      "id": "distmgr3",
+      "name": "유통관리사 3급",
+      "shortName": "유통관리3급",
+      "appName": "PassOK 유통관리사 3급",
+      "title": "PassOK — 유통관리사 3급",
+      "logoMain": "PassOK",
+      "logoSub": "유통관리3급",
+      "desc": "유통관리사 3급 — 필기 2과목(유통상식·판매 및 고객관리) 객관식 45문/45분 · 대한상공회의소 · 출제기준 2024~2026 기준 자체 제작",
+      "icon": "fa-solid fa-store",
+      "year": "2027",
+      "theme": {
+        "--color-primary": "#f97316",
+        "--color-secondary": "#f59e0b"
+      },
+      "contentRoot": "content/exams/distmgr3",
+      "dataRoot": "data/exams/distmgr3",
+      "manifestPath": "content/exams/distmgr3/manifest.json",
+      "registryBundle": "data/exams/distmgr3/registry.js",
+      "registryGlobal": "DATA_REGISTRY_DISTMGR3",
+      "features": {},
+      "comingSoon": true,
+      "group": "유통·물류",
+      "tier": "draft",
+      "syllabus": {
+        "primary": "유통상식, 판매 및 고객관리"
+      }
     }
   ]
 }

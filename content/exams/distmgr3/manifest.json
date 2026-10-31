@@ -1,0 +1,46 @@
+{
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
+ "_pilot": "유통관리사 3급 파일럿 — 대한상공회의소 국가자격. 필기 2과목 객관식 45문/45분(과목당 40점·평균 60점). 출제기준 2024~2026 적용(license.korcham.net 공개 PDF 확보). 기출은 CBT 비공개 — 출제기준+법령 근거의 ai:draft 자체 제작으로 증산 (승격 기준 과목당 ≥20문).",
+ "subjects": [
+  {
+   "key": "distsense",
+   "order": 1,
+   "name": "유통상식",
+   "shortName": "유통상식",
+   "dir": "교재/distsense",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "유통상식 (전체)",
+     "file": "1과목_유통상식.md"
+    }
+   ]
+  },
+  {
+   "key": "sales",
+   "order": 2,
+   "name": "판매 및 고객관리",
+   "shortName": "판매·고객관리",
+   "dir": "교재/sales",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "판매 및 고객관리 (전체)",
+     "file": "2과목_판매 및 고객관리.md"
+    }
+   ]
+  }
+ ],
+ "exams": [],
+ "integratedExam": {
+  "questionsPerSubject": {
+   "distsense": 23,
+   "sales": 22
+  },
+  "examTimeMin": 45,
+  "passAverage": 60,
+  "subjectFailBelow": 40
+ }
+}
