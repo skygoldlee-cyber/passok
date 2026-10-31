@@ -24,7 +24,7 @@
 | 계정 | 선택적 Supabase 동기화 — 미로그인도 localStorage로 전 기능 사용 가능 |
 | PWA | 오프라인 캐시·홈화면 설치·시험별 독립 manifest·업데이트 배너 |
 
-## 멀티시험 구조 (현재 19개 팩 — active 1 · pilot 11 · draft 7)
+## 멀티시험 구조 (현재 20개 팩 — active 1 · pilot 11 · draft 8)
 
 ```
 content/exams/<id>/   ← 콘텐츠 팩 (교재·문제은행·참조자료·manifest.json)
@@ -54,6 +54,7 @@ data/exams/<id>/      ← 빌드 산출 번들 (build:data)
 | 컴퓨터활용능력 2급 (compapp2) | 컴퓨터 일반, 스프레드시트 일반 | 스프레드시트 실무 | — |
 | 유통관리사 2급 (distmgr2) | 유통물류일반관리, 상권분석, 유통마케팅, 유통정보 (CBT 90문/100분) | 별도 2차 없음 | — (draft) |
 | 유통관리사 3급 (distmgr3) | 유통상식, 판매 및 고객관리 (CBT 45문/45분) | 별도 2차 없음 | — (draft) |
+| 요양보호사 (carework) | 요양보호론(필기), 요양보호관련(실기) (객관식 80문/90분) | 실기시험(필답형) 동일 세션 | — (draft) |
 
 파일럿 승격 기준·잔여 작업은 `runbooks/PILOT_EXAM_PROMOTION.md`(DOC-RBK-16). 신규 시험 추가는 `runbooks/NEW_EXAM_RUNBOOK.md`(DOC-RBK-10) + `npm run scaffold:exam`.
 
@@ -98,7 +99,7 @@ data/exams/<id>/      ← 빌드 산출 번들 (build:data)
 - **설명의 깊이** — 인강 강사의 직관적 비유·맥락 설명은 텍스트+카드가 대체 못 함. 이 플랫폼은 "개념 이해" 단계가 아니라 "기억·적용" 단계에 강함
 - **동기부여 구조** — 인강의 진도율·학습 조언 같은 강제력 있는 커리큘럼은 없음. 자기주도 학습 의존
 - **콘텐츠 신뢰** — 기존 교재는 출판 검증 프로세스가 있고, AI 생성 문항은 리뷰 게이트가 있으나 검증 이력이 얕음
-- **완성 시험 1개** — cosmetic만 성숙(active), 나머지 18개는 pilot/draft. 멀티시험 가치는 아직 구조 수준
+- **완성 시험 1개** — cosmetic만 성숙(active), 나머지 19개는 pilot/draft. 멀티시험 가치는 아직 구조 수준
 
 ### 실질 포지셔닝
 
