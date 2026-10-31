@@ -1,6 +1,0 @@
-{
-  "_comment": "참조자료 PDF 외부 호스팅 선언 (DOC-RBK-12). 이 파일이 있으면 PDF는 git이 아니라 GitHub Releases 에셋(파일명=sha256)에서 복원한다. 복원: node tools/sync/fetch_ref_pdfs.js (npm run fetch:refpdfs)",
-  "assetBase": "https://github.com/skygoldlee-cyber/passok/releases/download/ref-pdf-distmgr",
-  "mirrors": ["https://github.com/skygoldlee-cyber/passok/releases/download/ref-assets-mirror"],
-  "manifests": ["pdf_hashes.json"]
-}
