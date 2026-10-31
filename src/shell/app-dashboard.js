@@ -269,7 +269,7 @@ ${btnsHtml}
         const examTimeMin = (registry.integratedExam && registry.integratedExam.examTimeMin) || integratedTotal;
         const intUi = (registry.uiText && registry.uiText.integrated) || {};
         const titleEl = document.getElementById('integrated-exam-title');
-        if (titleEl) titleEl.innerHTML = `${esc(intUi.title || `통합 실전 모의고사`)} (${integratedTotal}제)`;
+        if (titleEl) titleEl.innerHTML = `${esc(intUi.title || `통합 실전 모의고사`)} (${esc(integratedTotal)}제)`;
         const descEl = integratedCard && integratedCard.querySelector('.highlight-card-desc');
         if (descEl && intUi.desc) descEl.textContent = intUi.desc;
         const btnEl = document.getElementById('integrated-exam-btn');
