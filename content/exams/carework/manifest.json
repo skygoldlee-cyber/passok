@@ -30,20 +30,6 @@
      "file": "2과목_요양보호관련.md"
     }
    ]
-  },
-  {
-   "key": "careguide",
-   "order": 3,
-   "name": "요양 실무 가이드",
-   "shortName": "실무",
-   "dir": "교재/careguide",
-   "chapters": [
-    {
-     "key": "full",
-     "title": "요양 실무 가이드 (전체)",
-     "file": "3과목_실무가이드.md"
-    }
-   ]
   }
  ],
  "exams": [],

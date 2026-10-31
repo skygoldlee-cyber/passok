@@ -19,16 +19,6 @@
           "quizzes": 0
         }
       }
-    },
-    "careguide": {
-      "cards": 0,
-      "quizzes": 0,
-      "files": {
-        "교재/careguide/3과목_실무가이드.md": {
-          "cards": 0,
-          "quizzes": 0
-        }
-      }
     }
   },
   "exams": {}
