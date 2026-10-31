@@ -254,20 +254,26 @@ ${btnsHtml}
         return count;
     });
     const subtitleEl = document.getElementById('exam-view-subtitle');
-    if (subtitleEl && totalAllQuestions > 0) {
+    const purposeOverride = (registry.uiText && registry.uiText.exam && registry.uiText.exam.purpose) || null;
+    if (subtitleEl && (totalAllQuestions > 0 || purposeOverride)) {
         const countStr = subjCounts.join('·');
-        subtitleEl.textContent = `교재 인용 기반 ${totalAllQuestions}제 문제은행(과목별 ${countStr}제)으로 과목별 모의고사를 보고, 학습안내서로 핵심을 요약할 수 있습니다.`;
+        subtitleEl.textContent = purposeOverride || `교재 인용 기반 ${totalAllQuestions}제 문제은행(과목별 ${countStr}제)으로 과목별 모의고사를 보고, 학습안내서로 핵심을 요약할 수 있습니다.`;
     }
 
-    // 통합 모의고사 제목/버튼 동적 치환
+    // 통합 모의고사 제목/버튼 동적 치환 — 비시험 팩(integratedExam 미선언)은 카드 자체를 숨긴다
     const integratedConfig = registry.integratedExam ? registry.integratedExam.questionsPerSubject : null;
+    const integratedCard = document.getElementById('integrated-exam-card');
+    if (integratedCard) integratedCard.classList.toggle('is-hidden', !integratedConfig);
     if (integratedConfig) {
         const integratedTotal = Object.values(integratedConfig).reduce((a, b) => a + b, 0);
         const examTimeMin = (registry.integratedExam && registry.integratedExam.examTimeMin) || integratedTotal;
+        const intUi = (registry.uiText && registry.uiText.integrated) || {};
         const titleEl = document.getElementById('integrated-exam-title');
-        if (titleEl) titleEl.textContent = `통합 실전 모의고사 (${integratedTotal}제)`;
+        if (titleEl) titleEl.innerHTML = `${esc(intUi.title || `통합 실전 모의고사`)} (${integratedTotal}제)`;
+        const descEl = integratedCard && integratedCard.querySelector('.highlight-card-desc');
+        if (descEl && intUi.desc) descEl.textContent = intUi.desc;
         const btnEl = document.getElementById('integrated-exam-btn');
-        if (btnEl) btnEl.innerHTML = `<i class="fa-solid fa-clock" aria-hidden="true"></i> 통합 모의고사 시작 (${esc(examTimeMin)}분)`;
+        if (btnEl) btnEl.innerHTML = `<i class="fa-solid fa-clock" aria-hidden="true"></i> ${esc(intUi.btn || '통합 모의고사 시작')} (${esc(examTimeMin)}분)`;
         // 응시 요약 — 최근/최고 정답률 + 이어풀기 가능 여부 표시
         const statsEl = document.getElementById('integrated-exam-stats');
         if (statsEl) {

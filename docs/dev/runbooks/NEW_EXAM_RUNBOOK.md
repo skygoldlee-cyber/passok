@@ -71,6 +71,7 @@ content/exams/<id>/
 - `manifest.json` — `subjects`·`exams`·`integratedExam`을 실제 과목 구성으로. 선택 선언: `uiText`(뷰 라벨)·`synonyms`(주관식 유사어)·`analysis.wrongCauses`(오답 원인 분류 확장 — `key`·`label`·`advice` 배열, 미선언 시 기본 3종)·`searchDocs`(통합검색 대상 문서 — `[{file:'docs/x.md', title, subject?, kind?, feature?}]`, 미선언 시 교재·참조자료·문제은행·서사만 검색 — SPEC TS-18)
   - **표시 수치 정합**: `exams[].title`의 "N제"·`desc`의 "N과목/N문"은 `check:manifest`가 문제은행 `### Q` 실측과 대조 — 실제 수치로 갱신하거나 수치 표기를 생략 (scaffold 기본 문구는 샘플)
   - **uiText**: 플랫폼 마크업의 `data-uitext` 키 전수를 채워야 도메인 라벨이 cosmetic 전용 문구로 새지 않는다 — cosmetic `manifest.uiText` 블록을 복사해 문구만 교체하는 것이 키 목록 확보의 실질 경로 (`npm run check:uitext`가 누락 경고)
+  - **비시험 팩(과정·교육)**: 시험이 아닌 팩은 `exams:[]`·`pastExams:[]`·`written:[]`·`integratedExam` 미선언으로 둔다 — 통합 모의고사 카드는 `integratedExam` 부재 시 자동 숨김, `uiText.exam.purpose`로 뷰 용도 문구·`uiText.integrated.{title,desc,btn}`으로 카드 카피·`uiText.<view>`로 내비 라벨을 "과정/모듈" 어휘로 덮어쓴다. 판별용 `kind` 필드는 선택(미선언=exam과 동일 취급 — 현재 UI 분기는 선언 유무로 결정)
   - **문서 헤더**: `docs/*.md` 파일 상단에 `> **문서 ID**: DOC-XX-NN` + `> **범위**: exam:<id> · 판본: …` 헤더가 필수 (`check:docs` 강제 — 발번은 `docs/README.md` ID 레지스트리)
 - `교재/`·`문제은행/` — 샘플 파일을 실제 MD로 교체. 작성 규약·참조자료 도출 방법론은 `TEXTBOOK_AUTHORING_GUIDE.md`가 정본 (§6 참조자료 기반 도출 — `scaffold:chapter`로 챕터 골격 생성 가능)
   - **문제은행 파일 분류** — 파일 포맷과 선언 위치는 쌍으로 강제된다 (`check:manifest` 게이트):
