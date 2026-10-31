@@ -1,5 +1,17 @@
 [
   {
+    "version": "v20261031-05e15ac",
+    "date": "2026-10-31",
+    "notes": [
+      "[정리·docs] TRACE_MATRIX 재생성 — nonexam-pack 테스트 반영 [no-test] [no-docs]",
+      "[정리·gate] nonexam-pack.dom.test.js 파일명 예외 기준선 등록 [no-test] [no-docs]",
+      "[수정·esc] integratedTotal 보간 esc 누락 — ROAD-Q5 싱크 규약 위반 해소 [no-test] [no-docs]",
+      "[기능·exams] 비시험 팩 지원 — integratedExam 미선언 시 통합 카드 숨김 + uiText 오버라이드 확장",
+      "[문서·overview] 시험 팩 수 17→19 갱신 — 유통관리사 2·3급 + 티어 분포·파일럿 문구 정정 [no-test]",
+      "[정리·release] v20261031-531388d 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261031-531388d",
     "date": "2026-10-31",
     "notes": [
@@ -181,14 +193,6 @@
       "[기능·sec] DA-16 Phase 2 — 문제은행·docs_md 번들 인코딩 확장",
       "[기능·sec] DA-16 Phase 1 — 콘텐츠 비평문화로 교재 평문 스크레이핑 차단",
       "[정리·release] v20261030-df07e0e 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261030-df07e0e",
-    "date": "2026-10-30",
-    "notes": [
-      "[기능·landing] LP-14 — 지원 시험 카드를 group 필드로 그룹 섹션 배치",
-      "[정리·release] v20261030-fa2003b 스탬프 확정 [no-docs]"
     ]
   }
 ]
