@@ -3,6 +3,7 @@
 import { buildHandover, SHIFTS } from '../care-handover.js';
 import { listCareLogs, FREE_LIMIT } from '../care-log-store.js';
 import { saveHandover, listHandovers, deleteHandover } from '../handover-store.js';
+import { myMembership, submitHandover, listHandovers as listFacilityHandovers, ackHandover } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
 
@@ -10,6 +11,8 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let _lastText = null;
 let _lastSaved = false;
+let _facility = null;
+let _fhList = [];
 const _val = (id, fb) => {
     const el = /** @type {HTMLSelectElement|HTMLInputElement|HTMLTextAreaElement|null} */ ($(id));
     return el && el.value ? el.value : fb;
@@ -104,6 +107,47 @@ export function careHandoverPrint() {
     window.print();
 }
 
+async function renderFacility() {
+    const host = $('ho-facility');
+    if (!host) return;
+    _facility = _facility === undefined ? null : _facility;
+    if (!_facility) {
+        try { _facility = (await myMembership())?.facilities || null; } catch (e) { _facility = null; }
+    }
+    if (!_facility) return;
+    try { _fhList = await listFacilityHandovers(_facility.id, { limit: 10 }); } catch (e) { _fhList = []; }
+    host.innerHTML = `
+        <div class="care-audit-sec">
+            <h3>기관 인계 — ${esc(_facility.name)}</h3>
+            <button data-click="careFacilityHandoverSubmit">기관에 인계</button>
+            ${_fhList.map(h => `
+                <div class="care-log-saved-item">
+                    <span>${esc(h.shift_date)} · ${esc(h.client)} — ${esc(h.memo || '')}</span>
+                    <em>${h.handover_acks?.length || 0}명 인수</em>
+                    <button data-click="careHandoverAck" data-arg="${esc(h.id)}" class="secondary">인수 확인</button>
+                </div>`).join('')}
+        </div>`;
+}
+
+export async function careFacilityHandoverSubmit() {
+    if (!_facility) return;
+    proFeatureNotice('care_handover_save', '기관 인계');
+    const r = await submitHandover({
+        facilityId: _facility.id,
+        client: _val('ho-clients', ''),
+        shiftDate: _val('ho-date', new Date().toISOString().slice(0, 10)),
+        memo: `${_val('ho-status', '')} ${_val('ho-tasks', '')} ${_val('ho-caution', '')}`.trim(),
+    });
+    'error' in r ? showToast('인계 실패: ' + r.error, 'error') : showToast('기관에 인계했습니다.');
+    renderFacility();
+}
+
+export async function careHandoverAck(handoverId) {
+    const r = await ackHandover(handoverId);
+    r.error ? showToast('인수 확인 실패: ' + r.error, 'error') : showToast('인수 확인했습니다.');
+    renderFacility();
+}
+
 export function initCareHandoverView() {
     const d = /** @type {HTMLInputElement|null} */ ($('ho-date'));
     if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
@@ -113,4 +157,5 @@ export function initCareHandoverView() {
     const n = $('ho-logcount');
     if (n) n.textContent = `오늘 저장된 일지 ${todayLogs().length}건 · 무료 저장 ${FREE_LIMIT}건 한도`;
     renderSaved();
+    void renderFacility();
 }

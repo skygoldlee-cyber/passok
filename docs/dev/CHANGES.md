@@ -10,6 +10,11 @@
 
 ## 2026-11-01 test: uimode DOM 갱신 — 삭제된 시트 버튼 단언 제거·기관가입·인수인계로 대표 검증
 
+## 2026-11-02 feat(carework): DSN-43 6b 교대 인수 확인 — shift_handovers·handover_acks
+
+- 스키마: shift_handovers(인계: author 소유·전망 메모)+handover_acks(인수 서명 — 작성자 자기 서명 불가 RLS)
+- facility.js: submitHandover·listHandovers·ackHandover + 인수인계 뷰 기관 인계 섹션(멤버십 시 표시)
+
 ## 2026-11-02 content(carework): 과목2 콘텐츠 보강 — ref_md 2건·용어집·number-drills
 
 - ref_md/과목2: 안전·인권 기준(발췌)+기관 평가 대비 실무 기준(발췌) — selfAuthoredDocs 등록
@@ -26,6 +31,11 @@
 ## 2026-11-02 fix(carework): 대처카드·삭제 버튼 클릭 무응답 — data-id→data-arg 인자 규약 정정
 
 - 위임 디스패치는 data-arg/data-args만 전달하고 이벤트 객체는 미전달 — evt.currentTarget.dataset.id 핸들러는 항상 빈 id를 받아 무동작 (careCardOpen·careLogDelete·careHandoverDelete)
+
+## 2026-11-02 feat(carework): DSN-43 6b 교대 인수 확인 — shift_handovers·handover_acks
+
+- 스키마: shift_handovers(인계: author 소유·전망 메모)+handover_acks(인수 서명 — 작성자 자기 서명 불가 RLS)
+- facility.js: submitHandover·listHandovers·ackHandover + 인수인계 뷰 기관 인계 섹션(멤버십 시 표시)
 
 ## 2026-11-02 content(carework): 과목2 콘텐츠 보강 — ref_md 2건·용어집·number-drills
 

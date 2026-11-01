@@ -62,3 +62,38 @@ export function syncFacilityNav(m) {
     for (const el of document.querySelectorAll('[data-target="facility-admin-view"]'))
         el.classList.toggle('is-hidden', !show);
 }
+
+// — DSN-43 6b: 교대 인수 확인 —
+
+/** 교대 인수인계 등록 — 이력 요약(payload)+전망 메모 @returns {Promise<{id:string}|{error:string}>} */
+export async function submitHandover({ facilityId, client, shiftDate, memo, payload = null }) {
+    const sb = await getSupabase();
+    const { data, error } = await sb
+        .from('shift_handovers')
+        .insert({ facility_id: facilityId, client, shift_date: shiftDate, memo, payload })
+        .select('id')
+        .single();
+    if (error) return { error: error.message };
+    return { id: data.id };
+}
+
+/** 시설 인수인계 목록 + 서명 수 — @returns {Promise<Array>} */
+export async function listHandovers(facilityId, { limit = 20 } = {}) {
+    const sb = await getSupabase();
+    const { data, error } = await sb
+        .from('shift_handovers')
+        .select('id,client,shift_date,memo,created_at,author_id,handover_acks(user_id,acked_at)')
+        .eq('facility_id', facilityId)
+        .order('shift_date', { ascending: false })
+        .limit(limit);
+    if (error) throw new Error(`handovers: ${error.message}`);
+    return data || [];
+}
+
+/** 인수 확인 서명 — 작성자는 자기 인수인계 서명 불가 (RLS 차단) @returns {Promise<{ok?:boolean,error?:string}>} */
+export async function ackHandover(handoverId) {
+    const sb = await getSupabase();
+    const { error } = await sb.from('handover_acks').insert({ handover_id: handoverId });
+    if (error) return { error: error.message };
+    return { ok: true };
+}

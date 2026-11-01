@@ -379,7 +379,7 @@ const careHandover = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-handover.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careHandoverGenerate', 'careHandoverSave', 'careHandoverDelete', 'careHandoverShare', 'careHandoverCopy', 'careHandoverPrint']]],
+    handlers: [['main', ['careHandoverGenerate', 'careHandoverSave', 'careHandoverDelete', 'careHandoverShare', 'careHandoverCopy', 'careHandoverPrint', 'careFacilityHandoverSubmit', 'careHandoverAck']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);

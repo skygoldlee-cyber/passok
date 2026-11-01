@@ -27,6 +27,7 @@ vi.mock('../../../../src/pro/pro-upgrade.js', () => ({
 import { careCalcRun, careCalcReset } from '../../../../src/exams/carework/views/care-calc.js';
 import { careCardOpen, careCardClose, initCareCardView } from '../../../../src/exams/carework/views/care-card.js';
 import { careLogGenerate, careLogCopy, initCareLogView } from '../../../../src/exams/carework/views/care-log.js';
+import { careFacilityHandoverSubmit, careHandoverAck } from '../../../../src/exams/carework/views/care-handover.js';
 import { careAuditReset, careAuditCopy, careAuditPrint, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
 import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
@@ -86,6 +87,11 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careAuditCopy();
         careAuditPrint();
         expect(document.getElementById('audit-list')).toBeTruthy();
+    });
+
+    it('careHandover — 기관 인계·인수 확인 핸들러 노출 (DSN-43 6b)', () => {
+        expect(typeof careFacilityHandoverSubmit).toBe('function');
+        expect(typeof careHandoverAck).toBe('function');
     });
 
     it('careHandover — 생성·복사·공유 핸들러', () => {

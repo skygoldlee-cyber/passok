@@ -90,3 +90,59 @@ revoke execute on function public.create_facility(text, text) from anon, public;
 grant execute on function public.create_facility(text, text) to authenticated;
 revoke execute on function public.join_facility(text) from anon, public;
 grant execute on function public.join_facility(text) to authenticated;
+
+-- DSN-43 6b — 교대 인수 확인: shift_handovers + handover_acks
+-- 인수인계는 별도 문서가 아닌 "교대 경계 이벤트": 이력 자동 요약(참조) + 전망 인계 메모 + 인수 서명
+
+create table if not exists public.shift_handovers (
+  id uuid primary key default gen_random_uuid(),
+  facility_id uuid not null references public.facilities(id) on delete cascade,
+  author_id uuid not null references auth.users(id),      -- 인계자 (소유권=author)
+  client text not null,                                  -- 대상자 식별 (최소 단위)
+  shift_date date not null,                              -- 교대 일자
+  memo text not null default '',                         -- 전망 인계 메모 (미완료·주의만)
+  payload jsonb,                                         -- 이력 요약 파생 (참조용 — 권한 표면 최소화)
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.handover_acks (
+  id uuid primary key default gen_random_uuid(),
+  handover_id uuid not null references public.shift_handovers(id) on delete cascade,
+  user_id uuid not null references auth.users(id),       -- 인수자
+  acked_at timestamptz not null default now(),
+  unique (handover_id, user_id)                          -- 인수자별 1회 서명
+);
+
+alter table public.shift_handovers enable row level security;
+alter table public.handover_acks enable row level security;
+
+-- shift_handovers: 같은 시설 멤버만 열람·작성 (익명·비멤버 차단)
+drop policy if exists "handover member read" on public.shift_handovers;
+create policy "handover member read" on public.shift_handovers for select
+  using (public.is_facility_member(facility_id, auth.uid()));
+
+drop policy if exists "handover member write" on public.shift_handovers;
+create policy "handover member write" on public.shift_handovers for insert
+  with check (public.is_facility_member(facility_id, auth.uid()) and author_id = auth.uid());
+
+-- handover_acks: 같은 시설 멤버만 서명·열람 — 작성자는 자기 인수인계에 서명 불가
+drop function if exists public.handover_facility(uuid);
+create or replace function public.handover_facility(p_handover_id uuid)
+returns uuid
+language sql security definer stable set search_path = ''
+as $$
+  select facility_id from public.shift_handovers where id = p_handover_id;
+$$;
+
+drop policy if exists "ack member read" on public.handover_acks;
+create policy "ack member read" on public.handover_acks for select
+  using (public.is_facility_member(public.handover_facility(handover_id), auth.uid()));
+
+drop policy if exists "ack member write" on public.handover_acks;
+create policy "ack member write" on public.handover_acks for insert
+  with check (
+    user_id = auth.uid()
+    and public.is_facility_member(public.handover_facility(handover_id), auth.uid())
+    and exists (select 1 from public.shift_handovers h
+                where h.id = handover_id and h.author_id <> auth.uid())
+  );
