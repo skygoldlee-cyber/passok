@@ -27,17 +27,28 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..', '..');
-const SCHEMA_PATH = path.join(ROOT, 'tools', 'supabase', 'schema.sql');
+const SCHEMA_DIR = path.join(ROOT, 'tools', 'supabase');
 const CONFIG_PATH = path.join(ROOT, 'src', 'auth-sync', 'supabase-config.js');
 const PROBE_TIMEOUT_MS = 10_000;
 
-/** schema.sql에서 `create table if not exists public.<name>` 추출 */
+/** 플랫폼 + 시험별 스키마 파일 수집 — tools/supabase/schema.sql + exams/<id>/schema.sql (DA-13) */
+function schemaFiles() {
+    const files = [path.join(SCHEMA_DIR, 'schema.sql')].filter(f => fs.existsSync(f));
+    const examsDir = path.join(SCHEMA_DIR, 'exams');
+    if (fs.existsSync(examsDir))
+        for (const d of fs.readdirSync(examsDir)) {
+            const f = path.join(examsDir, d, 'schema.sql');
+            if (fs.existsSync(f)) files.push(f);
+        }
+    return files;
+}
+
+/** 스키마 파일들에서 `create table if not exists public.<name>` 추출 */
 function declaredTables() {
-    const sql = fs.readFileSync(SCHEMA_PATH, 'utf8');
     const out = new Set();
-    for (const m of sql.matchAll(/create\s+table\s+if\s+not\s+exists\s+public\.(\w+)/gi)) {
-        out.add(m[1]);
-    }
+    for (const f of schemaFiles())
+        for (const m of fs.readFileSync(f, 'utf8').matchAll(/create\s+table\s+if\s+not\s+exists\s+public\.(\w+)/gi))
+            out.add(m[1]);
     return [...out];
 }
 
@@ -77,8 +88,8 @@ async function probeTable(baseUrl, key, table) {
 
 async function main() {
     console.log('▶ Supabase 스키마 적용 상태 프로브');
-    if (!fs.existsSync(SCHEMA_PATH)) {
-        console.error(`✗ schema.sql 부재: ${SCHEMA_PATH}`);
+    if (!schemaFiles().length) {
+        console.error(`✗ 스키마 파일 부재: ${SCHEMA_DIR}`);
         process.exit(1);
     }
     const { url, key } = readConfig();
@@ -99,7 +110,7 @@ async function main() {
 
     if (missing.length) {
         console.error(`\n✗ 스키마 미적용 테이블 ${missing.length}개: ${missing.join(', ')}`);
-        console.error('  → Supabase 대시보드 → SQL Editor에서 tools/supabase/schema.sql 실행 (멱등 — 전체 재실행 가능)');
+        console.error('  → Supabase 대시보드 → SQL Editor에서 해당 스키마 파일 실행 (tools/supabase/schema.sql·exams/<id>/schema.sql, 멱등)');
         process.exit(1);
     }
     if (unreachable.length) {

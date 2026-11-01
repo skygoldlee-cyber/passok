@@ -71,7 +71,7 @@ handover_acks (handover_id, reader_id, read_at — 인수 확인: 책임 이관 
 |---|---|---|
 | 6a | facility·membership 스키마 + manager 초대 | Supabase 테이블·RLS + 가입/기관 연결 뷰 |
 
-### 6a-1. DDL 스펙 (`tools/supabase/schema.sql` §6 추가 — 재실행 안전)
+### 6a-1. DDL 스펙 (`tools/supabase/exams/carework/schema.sql` — 시험별 분리, 재실행 안전)
 
 ```sql
 create table if not exists public.facilities (
