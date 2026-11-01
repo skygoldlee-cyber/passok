@@ -322,5 +322,20 @@
     "file": "docs/dev/design/LANDING_PAGE_DESIGN.md",
     "ref": "content/exams/<id>/landing_demo.json",
     "reason": "설계안 제안 경로 — 시험별 랜딩 체험 데모 자산 (<id> 플레이스홀더, 실물은 exams/cosmetic에 존재)"
+  },
+  {
+    "file": "docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md",
+    "ref": "src/exams/carework/",
+    "reason": "설계안 제안 경로 — carework 실무 모듈 디렉터리 (Phase 1~3 미구현)"
+  },
+  {
+    "file": "docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md",
+    "ref": "src/exams/carework/care-log-store.js",
+    "reason": "설계안 제안 경로 — 일지 저장 모듈 (Phase 3 미구현)"
+  },
+  {
+    "file": "docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md",
+    "ref": "content/exams/carework/실무/care_cards.json",
+    "reason": "설계안 제안 경로 — 대처카드 데이터 (Phase 2 미구현)"
   }
 ]

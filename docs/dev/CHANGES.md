@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-01 fix(config): docs_paths_allowlist에 설계안 미래 경로 3건 등록
+
+- `tools/config/docs_paths_allowlist.json` — DOC-DSN-42 설계 문서의 Phase 1~3 미구현 경로(src/exams/carework/·care-log-store.js·care_cards.json)를 의도된 참조로 등록 — docs 경로 게이트 스테일 오인 해소
+
 ## 2026-11-01 feat(market): Q-Net 통계 수집 스크립트 — 시장분석용 응시자 DB
 
 - `tools/market/fetch_qnet_stats.py` — 20종 후보 시험(jmCd·Passok팩 매핑·주기·응시료·기출공개 여부) × 5개년 응시·합격 DB 생성. 시드 우선 적재 후 Q-Net cst006 POST·HRD 오픈API로 실측 덮어쓰기 시도 — 현재 공식 통계는 세션 폼 구조로 실측 0건. 라이브 수집은 DATA_GO_KR_SERVICE_KEY(설정됨) 시도 + HRD-Net 전용 authKey/authKeySeqNo(hrd.go.kr 별도 발급 필요 — data.go.kr 키와 다른 체계) 지원
