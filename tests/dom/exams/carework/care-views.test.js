@@ -114,4 +114,14 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         syncFacilityNav(null);
         expect(document.querySelector('button').classList.contains('is-hidden')).toBe(true);
     });
+
+    // @spec DA-21 — select option 테마 강제: carework 폼의 option에도 다크 토큰 규칙 존재
+    it('select option 다크 규칙 — .care-calc-form select option 테마 토큰 적용 (DA-21)', async () => {
+        const { readFileSync } = await import('node:fs');
+        const css = readFileSync('css/exams/carework/care-tools.css', 'utf-8');
+        expect(css).toContain('.care-calc-form select option');
+        expect(css).toContain('--bg-sidebar');
+        expect(css).toContain('--color-text-main');
+    });
+
 });
