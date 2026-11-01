@@ -10,6 +10,8 @@
 
 ## 2026-11-01 test: uimode DOM 갱신 — 삭제된 시트 버튼 단언 제거·기관가입·인수인계로 대표 검증
 
+## 2026-11-02 test: DA-21 연결 — carework option 다크 규칙 존재 검증
+
 ## 2026-11-02 spec: DA-21 select option 테마 강제 명문화
 
 - 커스텀 select의 option·optgroup에 테마 토큰 지정 의무 — care-tools.css·dashboard.css에 @spec 인용
