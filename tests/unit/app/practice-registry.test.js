@@ -41,6 +41,7 @@ test('실무 피처 보유 시험 — isPracticeCapable true, 랜딩은 formula-
     assert.equal(getEnabledPracticeFeatures().length, 1);
 });
 
+// @spec DA-22 — 시험별 priority 선언이 첫 실무 뷰를 결정
 test('carework 실무 시험 — 랜딩은 현장도구(care-calc-view, priority 0)', () => {
     setExams([
         { id: 'carework', default: true, features: { careCalc: true, careCard: true, careLog: true, careAudit: true, careHandover: true, careFacilityJoin: true, careFacilityAdmin: true } },

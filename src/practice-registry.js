@@ -482,7 +482,7 @@ export function getEnabledPracticeFeatures() {
 }
 
 /**
- * 실무 모드 랜딩 뷰 — 유효 피처 중 `priority`가 가장 작은 뷰.
+ * 실무 모드 랜딩 뷰 — 유효 피처 중 `priority`가 가장 작은 뷰 (@spec DA-22).
  * priority 미지정은 0으로 간주하고, 동률은 레지스트리 선언 순서가 이긴다
  * (안정 정렬). 복수 실무 피처를 보유한 시험에서도 랜딩을 선언으로 제어할 수 있다.
  */

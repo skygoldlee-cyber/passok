@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 693a5033296340d6
-> 생성: 2026-11-01 · 원천: SPEC.md(645개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 0f0c0b74b0e509d4
+> 생성: 2026-11-01 · 원천: SPEC.md(646개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 645개 — 문서 연결 457 · 소스 연결 576 · 테스트 연결 613 · 보고서 연결 109
+**커버리지 요약**: 요구사항 646개 — 문서 연결 457 · 소스 연결 577 · 테스트 연결 614 · 보고서 연결 109
 
 ---
 
@@ -784,6 +784,7 @@
 | DA-19 | ✅ | — | — | — | — | — | — |
 | DA-20 | ✅ | — | — | — | — | — | — |
 | DA-21 | ✅ | 테스트 | — | css/dashboard.css<br>css/exams/carework/care-tools.css | tests/dom/exams/carework/care-views.test.js | — | — |
+| DA-22 | ✅ | 테스트 | — | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | — | — |
 
 ## 5.2 안정적 ID 체계
 

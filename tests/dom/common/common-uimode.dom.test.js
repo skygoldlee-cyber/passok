@@ -104,13 +104,15 @@ describe('UI 모드 — 학습/실무 전환', () => {
         expect(lastToast()[0]).toContain('실무 모드');
     });
 
+    // @spec DA-22 — 학습 전용 뷰에서 실무 전환 시 시험별 첫 실무 뷰 랜딩
     it('실무 모드 전환 — 학습 전용 뷰에 있으면 formula-view로 이동 (H)', () => {
         state.currentView = 'dashboard-view';
         toggleUiMode();
         expect(switchView).toHaveBeenCalledWith('formula-view', { scrollTop: true });
     });
 
-    it('학습 모드 복귀 — 실무 뷰에 있으면 dashboard-view로 랜딩 (DA-20 대칭)', () => {
+    // @spec DA-22 — 모드 전환 랜딩: 실무→학습은 dashboard, 학습→실무는 시험별 첫 실무 뷰
+    it('학습 모드 복귀 — 실무 뷰에 있으면 dashboard-view로 랜딩 (DA-22)', () => {
         toggleUiMode(); // 실무 모드 진입
         switchView.mockClear();
         state.currentView = 'formula-view';

@@ -10,6 +10,10 @@
 
 ## 2026-11-01 test: uimode DOM 갱신 — 삭제된 시트 버튼 단언 제거·기관가입·인수인계로 대표 검증
 
+## 2026-11-02 spec: DA-22 모드 전환 랜딩 규칙 명문화
+
+- 학습→실무는 getPracticeLanding(priority 최소 뷰)·실무→학습은 dashboard — ui-mode.js·practice-registry.js·테스트 @spec 연결
+
 ## 2026-11-02 fix: carework 실무 랜딩을 현장도구로 교정 — careCalc priority 0 승격
 
 - careCalc 1→0·careLog 0→1 — 기존엔 요양일지(priority 0)가 랜딩이던 것을 현장도구로 교정 + carework 랜딩 단위 테스트 추가

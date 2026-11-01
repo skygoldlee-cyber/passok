@@ -68,7 +68,7 @@ export function toggleUiMode() {
     if (next === 'practice' && STUDY_ONLY_VIEWS.has(state.currentView)) {
         switchView(getPracticeLanding(), { scrollTop: true });
     } else if (next === 'study' && getEnabledPracticeFeatures().some(f => f.viewId === state.currentView)) {
-        switchView('dashboard-view', { scrollTop: true }); // 실무→학습은 대시보드 랜딩 (DA-20 대칭 규칙)
+        switchView('dashboard-view', { scrollTop: true }); // 실무→학습은 대시보드 랜딩 (@spec DA-22 모드 전환 랜딩)
     }
     showToast(next === 'practice'
         ? '실무 모드로 전환했습니다. 학습 기능은 "학습 도구"에서 열 수 있습니다.'
