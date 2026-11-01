@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-01 fix(carework): care-log.html 잘림 복구 + 뷰 DOM 테스트
+
+- `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.dom.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지)
+
 ## 2026-11-01 feat(carework): Phase 5 인수인계서 (careHandover) — 교대근무 공유
 
 - `src/exams/carework/care-handover.js` — 인수인계 표준 포맷(일시·근무조·인계→인수·상태·당일 일지·미완료·주의) + `views/care-handover.js` + `html/exams/carework/care-handover.html` — 당일 저장 일지 자동 병합 체크박스 + navigator.share 공유(미지원 시 복사 폴백)
