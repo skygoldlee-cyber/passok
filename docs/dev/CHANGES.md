@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-01 fix(gates): docsync 우회 안내를 모드별로 정정 — [no-docs]는 --ref 전용
+
+- `tools/check/check_doc_sync.js` — pre-commit(--staged) 실패 메시지가 `[no-docs]`를 우회 수단으로 안내했으나, 마크는 커밋 메시지를 읽는 --ref 모드에서만 유효해 staged에서는 원천 적용 불가 → 오인 유도. 실패 안내를 모드 분기로 정정 (ref: 행 끝 `[no-docs]`·SKIP_DOCSYNC=1 / staged·worktree: SKIP_DOCSYNC=1 + 마크 적용 불가 명시)
+
 ## 2026-10-31 docs(overview): 시험 팩 수 17→19 갱신 — 유통관리사 2·3급 반영
 
 - `docs/dev/reference/PROJECT_OVERVIEW.md` — 멀티시험 구조 헤더 17→19개 (실측 active 1·pilot 11·draft 7로 분포도 정정), 구성 표에 distmgr2(유통물류일반관리·상권분석·유통마케팅·유통정보)·distmgr3(유통상식·판매 및 고객관리) 행 추가, "나머지 4개는 파일럿" 스테일 문구 → 18개 pilot/draft로 정정

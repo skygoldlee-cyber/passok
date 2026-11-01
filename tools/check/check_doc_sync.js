@@ -189,7 +189,12 @@ function run(mode, ref) {
     if (triggers.length > 15) console.error(`   … 외 ${triggers.length - 15}개`);
     console.error('\n   갱신 후보 문서:');
     for (const h of suggestDocs(triggers)) console.error(`   - ${h}`);
-    console.error(`\n   문서 변경이 불필요하면 커밋 메시지에 ${BYPASS_MARK} 를 넣거나 SKIP_DOCSYNC=1로 우회하세요.`);
+    if (mode === 'ref') {
+        console.error(`\n   문서 변경이 불필요하면 해당 커밋 메시지 행 끝에 ${BYPASS_MARK} 를 넣거나 SKIP_DOCSYNC=1로 우회하세요.`);
+    } else {
+        console.error('\n   문서 변경이 불필요하면 SKIP_DOCSYNC=1로 우회하세요.');
+        console.error(`   (${BYPASS_MARK} 는 --ref 모드 전용 — pre-commit 단계에는 커밋 메시지가 없어 적용 불가)`);
+    }
     console.error('   (커밋 단계라면 git commit --no-verify 도 가능)\n');
     return 1;
 }
