@@ -232,7 +232,7 @@ export function warmPracticeFeatures() {
 const careCalc = {
     viewId: 'care-calc-view',
     slug: 'care-calc',
-    priority: 1,
+    priority: 0,
     uiTextKey: 'careCalc',
     title: '현장도구',
     subtitle: '장기요양 비용 계산',
@@ -300,7 +300,7 @@ const careCard = {
 const careLog = {
     viewId: 'care-log-view',
     slug: 'care-log',
-    priority: 0,
+    priority: 1,
     uiTextKey: 'careLog',
     title: '요양일지',
     subtitle: '서비스 기록 자동 작성',
