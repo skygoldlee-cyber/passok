@@ -29,7 +29,7 @@ import { careCardOpen, careCardClose, initCareCardView } from '../../../../src/e
 import { careLogGenerate, careLogCopy, initCareLogView } from '../../../../src/exams/carework/views/care-log.js';
 import { careAuditReset, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
 import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
-import { initFacilityView } from '../../../../src/exams/carework/views/facility-setup.js';
+import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const loadPartial = (rel) => {
@@ -92,9 +92,9 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
     });
 
     it('careFacility — 미로그인 시 로그인 안내 렌더', async () => {
-        loadPartial('facility-setup.html');
-        initFacilityView();
+        loadPartial('facility-join.html');
+        initFacilityJoinView();
         await new Promise(r => setTimeout(r, 0));
-        expect(document.getElementById('facility-body')?.textContent).toMatch(/로그인/);
+        expect(document.getElementById('facility-join-body')?.textContent).toMatch(/로그인/);
     });
 });

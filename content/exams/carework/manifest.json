@@ -102,10 +102,18 @@
       "error": "인수인계서를 불러오지 못했습니다.",
       "dataError": "데이터를 불러오지 못했습니다."
     },
-    "careFacility": {
-      "title": "기관 워크스페이스",
-      "subtitle": "기관 기록 서버 — 등록·멤버 관리",
-      "nav": "기관설정",
+    "careFacilityJoin": {
+      "title": "기관 가입",
+      "subtitle": "초대 코드로 소속 기관에 연결",
+      "nav": "기관가입",
+      "loading": "기관 정보를 불러오는 중입니다...",
+      "error": "기관 정보를 불러오지 못했습니다.",
+      "dataError": "데이터를 불러오지 못했습니다."
+    },
+    "careFacilityAdmin": {
+      "title": "기관 관리",
+      "subtitle": "관리책임자 — 멤버·초대 관리",
+      "nav": "기관관리",
       "loading": "기관 정보를 불러오는 중입니다...",
       "error": "기관 정보를 불러오지 못했습니다.",
       "dataError": "데이터를 불러오지 못했습니다."

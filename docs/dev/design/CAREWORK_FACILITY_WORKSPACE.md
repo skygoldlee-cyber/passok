@@ -112,17 +112,24 @@ create policy "members read own facility" on public.facility_members for select
 
 ### 6a-3. 멤버십 흐름 — manager 생성 / worker 코드 가입
 
+**뷰 분리 원칙**: 클라이언트 뷰(worker)와 어드민 뷰(manager)는 별도 뷰로 분리 — 한 뷰 내 역할 전환형 금지 (권한 표면 노출·감사 추적 분리·nav 독립 진입)
+
+| 뷰 | 대상 | 내용 |
+|---|---|---|
+| `facility-join` (클라이언트) | worker | 초대 코드 가입 + 내 소속 기관·역할 표시 — 등록·멤버관리 없음 |
+| `facility-admin` (어드민) | manager | 기관 등록 + 초대 코드 관리·재발급 + 멤버 목록·역할 관리 — worker 접근 시 "관리책임자 전용" 안내 |
+
 | 흐름 | 진입 | 동작 |
 |---|---|---|
-| manager | "새 기관 등록" | `create_facility(name)` → invite_code 발급 → 멤버 관리 화면 |
-| worker | "기관 코드로 가입" | `join_facility(code)` → membership worker 삽입 → 기관 연결됨 |
-| 열람 | 멤버십 있음 | `my_membership()` → 시설 정보·멤버 목록·본인 role |
+| manager | "기관관리" 어드민 뷰 | `create_facility(name)` → invite_code 발급 → 멤버·코드 관리 |
+| worker | "기관가입" 클라이언트 뷰 | `join_facility(code)` → membership worker 삽입 → 소속 표시 |
 
 ### 6a-4. 구현 위치
 
-- `src/exams/carework/facility.js` — 도메인 API 호출 (getSupabase 래퍼 경유, RPC 호출만 — 도메인 로직은 클라이언트 무관 순수 함수 유지)
-- `src/exams/carework/views/facility-setup.js` + `html/exams/carework/facility-setup.html` — 기관 연결/관리 뷰 (미로그인→로그인 안내, 미가입→생성/가입, 가입됨→멤버·코드 표시)
-- registry `careFacility` (priority 5) + features.careFacility + `data-pro-feature="facility_workspace"` — 기관 워크스페이스는 Pro 계층 |
+- `src/exams/carework/facility.js` — 도메인 API 호출 (getSupabase 래퍼 경유, RPC 호출만)
+- `views/facility-join.js` + `html/exams/carework/facility-join.html` — **클라이언트 뷰**: 코드 가입 + 내 소속 표시 (registry `careFacilityJoin`, priority 5)
+- `views/facility-admin.js` + `html/exams/carework/facility-admin.html` — **어드민 뷰**: 기관 등록 + 멤버·초대코드 관리 (registry `careFacilityAdmin`, priority 6, manager 전용)
+- `data-pro-feature="facility_workspace"` — 기관 워크스페이스는 Pro 계층 |
 | 6b | 교대 인수 확인 — 이력 자동 요약 + 인계 메모(전망만) + 인수 서명 | shift_handovers + handover_acks — 별도 문서 아닌 교대 경계 이벤트 |
 | 6c | 요양일지 기관 보존 + manager 열람 | carelog_records + 기록 보존 뷰 (평가 대비) |
 | 6d | 기관 플랜 결제·수출 어댑터 | 구독 과금 계층 + 기존 전자기록 연동 검토 |

@@ -231,7 +231,8 @@ html/exams/<id>/        # 시험 도메인 뷰 파셜 (지연 주입 — formula
   carework/care-log.html  # carework 요양일지 생성기 뷰 파셜 (Phase 3)
   carework/care-audit.html # carework 기관 평가 체크리스트 뷰 파셜 (Phase 4)
   carework/care-handover.html # carework 인수인계서 뷰 파셜 (Phase 5)
-  carework/facility-setup.html # carework 기관 워크스페이스 뷰 파셜 (Phase 6a)
+  carework/facility-join.html # carework 기관 가입 클라이언트 뷰 파셜 (Phase 6a)
+  carework/facility-admin.html # carework 기관 관리 어드민 뷰 파셜 (Phase 6a)
 style.css               # CSS 진입점 (@import로 모듈 로드)
 sw.js                   # Service Worker
 manifest.webmanifest    # PWA 매니페스트
@@ -403,7 +404,8 @@ src/                    # ES Modules
         care-log.js       # 요양일지 생성기 뷰 모듈 (Phase 3)
         care-audit.js     # 평가 체크리스트 뷰 모듈 (Phase 4)
         care-handover.js  # 인수인계서 뷰 모듈 — navigator.share 공유 (Phase 5)
-        facility-setup.js # 기관 연결·관리 뷰 — 등록/코드가입/멤버 목록 (Phase 6a)
+        facility-join.js  # 기관 가입 클라이언트 뷰 — 초대 코드 가입·소속 표시 (Phase 6a)
+        facility-admin.js # 기관 어드민 뷰 — 등록·초대코드·멤버 관리 manager 전용 (Phase 6a)
   views/                # 뷰 컨트롤러 (직속 23개 + 하위 4그룹 22개)
     exam-sim/           # 모의고사 클러스터 (파사드·세션·아레나·드래프트·상태·리뷰·오답)
       exam-simulator.js           # 실전 모의고사 파사드 — 분리 모듈 재수출 + 성적 이력 저장

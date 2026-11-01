@@ -4,6 +4,11 @@
 
 - `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지 · 파일명 규약 정정: .dom.test.js 접미사 중복 → .test.js)
 
+## 2026-11-01 refactor(carework): 기관 뷰 클라이언트·어드민 분리
+
+- facility-setup 단일 뷰를 역할별 2개로 분리 (DSN-43 뷰 분리 원칙) — `facility-join`(worker: 초대 코드 가입·소속 표시) + `facility-admin`(manager: 등록·초대코드·멤버 관리)
+- registry careFacilityJoin(priority 5)·careFacilityAdmin(6) + nav·시트 2항목 + features 선언
+
 ## 2026-11-01 refactor(db): 스키마 시험별 분리 — tools/supabase/exams/carework/schema.sql
 
 - DA-13 도메인 격리를 DB 스키마에도 적용 — §6 기관 테이블을 플랫폼 schema.sql에서 `tools/supabase/exams/carework/schema.sql`로 분리 (시험별 `exams/<id>/schema.sql` 규약)
