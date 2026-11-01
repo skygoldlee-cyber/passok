@@ -138,10 +138,17 @@ test('지연 핸들러 — 등록 이름 전부가 대상 뷰 모듈에서 expor
         }
         return names;
     };
+    // 도메인 경로는 활성 시험으로 해석 — 시험별 존재 파일만 대상으로
+    // 모든 시험 디렉터리의 export 합집합과 대조한다 (미존재=0 엔트리).
+    const examDirs = fs.readdirSync(path.join(ROOT, 'src', 'exams'), { withFileTypes: true })
+        .filter(d => d.isDirectory()).map(d => d.name);
     for (const [load, names] of getPracticeLazyHandlers()) {
         const rel = /** @type {any} */ (load).rel;
         if (!rel) continue; // 도메인 무관 플랫폼 모듈(notice)은 규약 경로 없음
-        const exported = collectExports(path.join(ROOT, 'src', 'exams', 'cosmetic', rel));
+        const exported = new Set();
+        for (const id of examDirs) {
+            for (const n of collectExports(path.join(ROOT, 'src', 'exams', id, rel))) exported.add(n);
+        }
         for (const name of names) {
             assert.ok(exported.has(name), `${rel}: 핸들러 '${name}' 미export — 파사드 재수출 누락 추정`);
         }
