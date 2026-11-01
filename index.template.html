@@ -322,9 +322,14 @@
 
         <!-- Mobile Bottom Tab Bar (모바일 하단 네비게이션 — 핵심 탭 + 더보기 시트) -->
         <nav class="mobile-tab-bar" id="mobile-tab-bar" aria-label="하단 탭 메뉴">
-            <button class="mobile-tab-item" data-click="ManualViewer.openManual">
+            <button class="mobile-tab-item nav-study-only" data-click="ManualViewer.openManual">
                 <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
                 <span data-uitext="manual">매뉴얼</span>
+            </button>
+            <!-- 실무 모드에서는 시험별 실무막뉴얼이 플랫폼 매뉴얼을 대체 (DA-19) -->
+            <button class="mobile-tab-item mobile-tab-practice" data-click="ManualViewer.openPracticeManual" data-feature="practiceManual">
+                <i class="fa-solid fa-book-medical" aria-hidden="true"></i>
+                <span>실무막뉴얼</span>
             </button>
             <button class="mobile-tab-item nav-study-only active" data-target="dashboard-view">
                 <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>

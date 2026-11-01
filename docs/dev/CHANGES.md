@@ -4,6 +4,10 @@
 
 - `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지 · 파일명 규약 정정: .dom.test.js 접미사 중복 → .test.js)
 
+## 2026-11-01 fix(ui): 모바일 탭바 — 실무 모드에서 매뉴얼 탭을 실무막뉴얼로 교체
+
+- 플랫폼 매뉴얼 탭을 nav-study-only로 변경 + 실무 모드 탭바에 `features.practiceManual` 게이트 실무막뉴얼 탭 추가 — 실무 맥락에서 플랫폼 설명 대신 시험별 실무막뉴얼 노출
+
 ## 2026-11-01 fix: 메뉴얼→매뉴얼 오탈자 전수 정정
 
 - `index.template.html` 실무메뉴얼→실무매뉴얼 (formula 매뉴얼 버튼) + `iteng/ref_md` 운영자 메뉴얼→매뉴얼 — 전수조사 2건
