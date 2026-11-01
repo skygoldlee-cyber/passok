@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261102-47dd341",
+    "date": "2026-11-02",
+    "notes": [
+      "[기능·ui] 탭바 실무·기관 구분선 분리 — 시트 중복 제거",
+      "[수정·ui] 탭바를 사이드바 실무 구역과 일치 — 기관은 더보기로 복원",
+      "[정리·release] v20261102-89bf357 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-89bf357",
     "date": "2026-11-02",
     "notes": [
@@ -183,17 +192,6 @@
       "[정리·trace] TRACE_MATRIX 재생성",
       "[기능·carework] 실무도구 도메인 CSS — 4피처 공용 스타일 + 인쇄 격리",
       "[정리·release] v20261101-39e18f8 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-39e18f8",
-    "date": "2026-11-01",
-    "notes": [
-      "[수정·carework] 진행률 바 innerHTML 보간 esc() — esc-sink 게이트",
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[정리·trace] TRACE_MATRIX 재생성 — careAudit 반영",
-      "[기능·carework] Phase 4 — 평가 체크리스트 + 일지 인쇄 + 용어집·드릴·과목2 ref_md + 일지 동기화",
-      "[정리·release] v20261101-abe2e1f 스탬프 확정 [no-docs]"
     ]
   }
 ]
