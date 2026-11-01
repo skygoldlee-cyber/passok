@@ -263,9 +263,8 @@
       "manifestPath": "content/exams/broker/manifest.json",
       "registryBundle": "data/exams/broker/registry.js",
       "registryGlobal": "DATA_REGISTRY_BROKER",
-      "comingSoon": true,
       "group": "보험·평가·부동산",
-      "tier": "pilot",
+      "tier": "active",
       "syllabus": {
         "primary": "부동산학개론, 민법 및 민사특별법",
         "secondary": "공인중개사법령 및 중개실무, 부동산공법, 부동산공시법령 및 세법 (객관식)"
@@ -317,11 +316,10 @@
       "features": {
         "writtenPractice": true
       },
-      "comingSoon": true,
       "appNameEn": "Passafe",
       "practiceName": "Safety OS",
       "group": "산업안전",
-      "tier": "pilot",
+      "tier": "active",
       "syllabus": {
         "primary": "산업재해 예방, 인간공학, 기계·전기·화학·건설 안전관리",
         "secondary": "산업안전관리 실무 (필답형+작업형)"
@@ -509,11 +507,10 @@
       "registryBundle": "data/exams/compapp2/registry.js",
       "registryGlobal": "DATA_REGISTRY_COMPAPP2",
       "features": {},
-      "comingSoon": true,
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
       "group": "정보처리",
-      "tier": "pilot",
+      "tier": "active",
       "syllabus": {
         "primary": "컴퓨터 일반, 스프레드시트 일반",
         "secondary": "스프레드시트 실무"
