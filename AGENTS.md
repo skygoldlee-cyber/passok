@@ -449,6 +449,7 @@ src/                    # ES Modules
     offline-detection.js # 오프라인 감지 (app.js에서 분리)
 css/                    # 스타일시트 모듈 (base.css, reader.css, app-responsive.css, reader-extras.css, reader-mermaid.css, trainer.css, exam.css, dashboard.css, study.css, study-calendar.css, print.css, ui-overlay.css, html-viewer.css, landing.css — @import 순서가 캐스케이드, style.css 참조. landing.css만 랜딩 전용 별도 링크로 @import 예외)
   exams/<id>/           # 시험 도메인 스타일 (cosmetic/formula.css 등) — 피처 진입 시 practice-registry가 <link> 지연 주입 (style.css @import 아님 — 비활성 시험 미로드)
+    carework/care-tools.css # carework 실무도구 공용 스타일 — 4피처 카드·폼·진행률·인쇄 격리 (DOC-DSN-42)
 content/                # 시험 콘텐츠 컨테이너
   exams.json            # 시험 레지스트리 (멀티시험 엔트리 — 멀티시험 구조 섹션 참조)
   lawdb.json            # 공용 법령DB — law.go.kr 메타데이터 SSOT (id·slug·type·matchKeys·watch). 시험별 사용 목록은 references.json.lawRefs가 지정 → build:pdf-registry가 src/law-links.js 생성

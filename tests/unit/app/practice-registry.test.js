@@ -205,3 +205,10 @@ test('도메인 경로 규약 — feature를 켠 시험마다 뷰 모듈·마크
         }
     }
 });
+
+test('도메인 스타일 선언 — carework 피처는 공용 care-tools.css를 선언한다', () => {
+    const spec = getPracticeDomainSpec();
+    for (const k of ['careCalc', 'careCard', 'careLog', 'careAudit']) {
+        assert.equal(spec[k]?.styles, 'care-tools.css', `${k}: styles 미선언`);
+    }
+});

@@ -1,0 +1,140 @@
+/* css/exams/carework/care-tools.css — carework 실무도구 공용 스타일
+   @spec none — 시험 전용 도메인 스타일 (DA-13, practice-registry styles 지연 주입)
+   대상: care-calc-view · care-card-view · care-log-view · care-audit-view */
+
+/* ── 공통 카드형 폼 ─────────────────────────────── */
+.care-calc-form {
+    display: grid; gap: 12px; margin: 16px 0;
+    background: var(--surface-2, #f7f8fa); border-radius: 12px; padding: 16px;
+}
+.care-calc-form label {
+    display: flex; flex-direction: column; gap: 4px;
+    font-size: 13px; font-weight: 600; color: var(--text-2, #555);
+}
+.care-calc-form select, .care-calc-form input {
+    font-size: 16px; padding: 10px 12px; border-radius: 8px;
+    border: 1px solid var(--border, #d8dce2); background: #fff;
+    min-height: 44px;
+}
+.care-calc-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.care-calc-actions button {
+    min-height: 44px; padding: 0 18px; border-radius: 8px; font-weight: 600;
+}
+.care-calc-err { color: var(--error, #c0392b); font-size: 14px; }
+
+/* 결과 카드 — 영수증형 */
+.care-calc-result, .care-calc-row {
+    border-radius: 12px;
+}
+.care-calc-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 10px 14px; border-bottom: 1px dashed var(--border, #e2e5ea);
+    background: #fff;
+}
+.care-calc-row strong { font-size: 18px; color: var(--primary, #2f6fed); }
+.care-calc-row:nth-of-type(3) strong { font-size: 22px; }
+.care-calc-src { font-size: 12px; color: var(--text-3, #888); padding: 8px 14px; }
+.care-calc-result .care-calc-row:first-child { border-radius: 12px 12px 0 0; }
+.care-calc-result .care-calc-row:last-of-type { border-radius: 0 0 12px 12px; border-bottom: 0; }
+
+/* ── 대처카드 ─────────────────────────────────── */
+.care-card-list {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px; margin: 16px 0;
+}
+.care-card-item {
+    display: flex; flex-direction: column; gap: 6px; text-align: left;
+    padding: 14px; border-radius: 12px; border: 1px solid var(--border, #e0e3e8);
+    background: #fff; min-height: 44px; cursor: pointer;
+}
+.care-card-item:hover { border-color: var(--primary, #2f6fed); }
+.care-card-cat { font-size: 11px; color: var(--primary, #2f6fed); font-weight: 700; }
+.care-card-item strong { font-size: 15px; }
+.care-card-trig { font-size: 12px; color: var(--text-3, #777); }
+.care-card-detail { margin: 12px 0; }
+.care-card-head h3 { margin: 4px 0; }
+.care-card-step {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 12px 14px; margin: 8px 0; border-radius: 10px; background: #fff;
+    border-left: 4px solid var(--border, #ddd);
+}
+.care-card-step:nth-of-type(2) { border-left-color: #e74c3c; } /* 즉시 조치 */
+.care-card-step:nth-of-type(3) { border-left-color: #f0a020; } /* 보고 */
+.care-card-step:nth-of-type(4) { border-left-color: #8a97a8; } /* 기록 */
+.care-card-stepno {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--primary, #2f6fed); color: #fff;
+    display: grid; place-items: center; font-size: 13px; font-weight: 700;
+}
+.care-card-step p { margin: 4px 0 0; font-size: 14px; line-height: 1.5; }
+
+/* ── 요양일지 ─────────────────────────────────── */
+.care-log-activities {
+    display: grid; gap: 10px; margin: 8px 0 16px;
+}
+.care-log-group {
+    background: var(--surface-2, #f7f8fa); border-radius: 12px; padding: 12px 14px;
+}
+.care-log-group strong { display: block; font-size: 13px; margin-bottom: 8px; }
+.care-log-group label {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #fff; border: 1px solid var(--border, #dfe3e8);
+    border-radius: 999px; padding: 8px 14px; margin: 0 6px 6px 0;
+    font-size: 13px; cursor: pointer; min-height: 36px;
+}
+.care-log-group input[type="checkbox"] { accent-color: var(--primary, #2f6fed); }
+.care-log-text {
+    font-family: inherit; font-size: 15px; line-height: 1.7; white-space: pre-wrap;
+    background: #fff; border: 1px solid var(--border, #dfe3e8);
+    border-radius: 12px; padding: 18px; margin: 0;
+}
+.care-log-saved { margin-top: 16px; }
+.care-log-saved-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 14px; background: #fff; border-radius: 8px; margin-bottom: 6px;
+    font-size: 14px;
+}
+.care-log-empty { font-size: 13px; color: var(--text-3, #999); }
+
+/* ── 평가 체크리스트 ───────────────────────────── */
+.care-audit-progress {
+    margin: 12px 0; padding: 12px 14px; background: var(--surface-2, #f7f8fa);
+    border-radius: 12px;
+}
+.care-audit-bar {
+    height: 10px; background: var(--border, #e2e5ea); border-radius: 999px;
+    overflow: hidden; margin-top: 8px;
+}
+.care-audit-bar span {
+    display: block; height: 100%; border-radius: 999px;
+    background: var(--primary, #2f6fed); transition: width .25s ease;
+}
+.care-audit-sec {
+    background: #fff; border: 1px solid var(--border, #e4e7ec);
+    border-radius: 12px; padding: 14px; margin-bottom: 10px;
+}
+.care-audit-sec h3 { font-size: 15px; margin: 0 0 10px; }
+.care-audit-item {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 0; border-top: 1px dashed var(--border, #eef0f3);
+    cursor: pointer; min-height: 44px;
+}
+.care-audit-item input[type="checkbox"] {
+    width: 20px; height: 20px; margin-top: 2px; accent-color: var(--primary, #2f6fed);
+}
+.care-audit-item span { flex: 1; font-size: 14px; line-height: 1.5; }
+.care-audit-item em {
+    flex: none; font-style: normal; font-size: 11px; color: var(--primary, #2f6fed);
+    background: rgba(47,111,237,.08); border-radius: 6px; padding: 2px 8px;
+}
+
+/* ── 인쇄 — 일지·결과만 문서형으로 ────────────── */
+@media print {
+    body * { visibility: hidden; }
+    #log-preview, #log-preview *,
+    #care-result, #care-result * { visibility: visible; }
+    #log-preview, #care-result {
+        position: absolute; inset: 0 auto auto 0; width: 100%;
+    }
+    .care-log-text { border: 0; font-size: 13pt; }
+}

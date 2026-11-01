@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-01 feat(carework): 실무도구 UI/UX — 도메인 CSS 도입 + 인쇄 격리
+
+- `css/exams/carework/care-tools.css` 신규 — 4피처 공용 스타일 (카드형 폼·영수증형 결과·대처카드 그리드+단계 색상·체크박스 칩·진행률 바) + registry `styles: 'care-tools.css'` 지연 주입 (careCalc·careCard·careLog·careAudit)
+- `@media print` — 네비·버튼 숨기고 `#log-preview`·`#care-result`만 문서형 출력 (인쇄·PDF가 앱 프레임까지 출력되던 결함 수정)
+
 ## 2026-11-01 feat(carework): Phase 4 확장 — 평가 체크리스트 + 일지 인쇄 + 콘텐츠 보강 + 동기화
 
 - `content/exams/carework/실무/audit_checklist.json` + `src/exams/carework/care-audit.js` + `views/care-audit.js` + `html/exams/carework/care-audit.html` — 평가방법 고시 기반 4영역(인권·기록·감염·안전) 20항목 체크리스트, 체크 상태 로컬 저장·진행률 표시 — registry careAudit (priority 3)

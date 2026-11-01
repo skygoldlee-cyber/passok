@@ -240,6 +240,7 @@ const careCalc = {
     loadErrorText: '현장도구를 불러오지 못했습니다.',
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-calc.html',
+    styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-calc.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careCalcRun', 'careCalcReset', 'careCalcPrint']]],
@@ -273,6 +274,7 @@ const careCard = {
     loadErrorText: '대처카드를 불러오지 못했습니다.',
     dataErrorText: '카드 데이터를 불러오지 못했습니다.',
     markup: 'care-card.html',
+    styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-card.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careCardOpen', 'careCardClose']]],
@@ -306,6 +308,7 @@ const careLog = {
     loadErrorText: '요양일지를 불러오지 못했습니다.',
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-log.html',
+    styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-log.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careLogGenerate', 'careLogSave', 'careLogCopy', 'careLogDelete', 'careLogPrint']]],
@@ -339,6 +342,7 @@ const careAudit = {
     loadErrorText: '체크리스트를 불러오지 못했습니다.',
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-audit.html',
+    styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-audit.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careAuditReset']]],
