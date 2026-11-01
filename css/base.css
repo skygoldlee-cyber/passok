@@ -586,6 +586,14 @@ body {
 @media (max-width: 900px) {
     :root { --bg-wallpaper-dim: rgba(11, 15, 25, 0.78); }
     .light-theme { --bg-wallpaper-dim: rgba(233, 228, 212, 0.82); }
+    /* 모바일 — 정선「금강전도」(1734, 퍼블릭 도메인) 세로형 작품으로 별도 배경 */
+    body {
+        background-image:
+            linear-gradient(var(--bg-wallpaper-dim), var(--bg-wallpaper-dim)),
+            url('../icons/bg-portrait.webp');
+        background-position: center top;
+        background-size: cover;
+    }
 }
 
 /* A1: 키보드 접근성 — :focus-visible로 마우스 클릭 시 포커스 링 숨김, 키보드 탐색 시 표시 */

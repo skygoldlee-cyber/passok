@@ -10,6 +10,10 @@
 
 ## 2026-11-01 test: uimode DOM 갱신 — 삭제된 시트 버튼 단언 제거·기관가입·인수인계로 대표 검증
 
+## 2026-11-02 feat(ui): 모바일 배경 금강전도 분리 — icons/bg-portrait.webp 추가
+
+- ≤900px 뷰포트는 정선「금강전도」세로형 배경 (center top·cover) · ≥901px는 기존 인왕제색도 유지 + sw.js SHELL_ASSETS 등록
+
 ## 2026-11-02 chore: SPEC.md DA 표 오름차순 정렬 (DA-01~22)
 
 ## 2026-11-02 spec: DA-22 모드 전환 랜딩 규칙 명문화
