@@ -591,7 +591,8 @@
       "registryGlobal": "DATA_REGISTRY_CAREWORK",
       "features": {
         "careCalc": true,
-        "careCard": true
+        "careCard": true,
+        "careLog": true
       },
       "group": "보건·복지",
       "tier": "active"

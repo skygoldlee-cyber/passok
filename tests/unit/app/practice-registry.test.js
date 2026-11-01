@@ -96,13 +96,13 @@ test('실무 피처 카피 계약 — formula 보유 시험은 uiText에 카피 
 
 test('해시 슬러그 — formula-view → formula', () => {
     setExams([]);
-    assert.deepEqual(getPracticeHashSlugs(), { 'formula-view': 'formula', 'care-calc-view': 'care-calc', 'care-card-view': 'care-card' });
+    assert.deepEqual(getPracticeHashSlugs(), { 'formula-view': 'formula', 'care-calc-view': 'care-calc', 'care-card-view': 'care-card', 'care-log-view': 'care-log' });
 });
 
 test('지연 핸들러 — 로더 함수 + 이름 배열 쌍, 이름은 전체 유니크', () => {
     setExams([]);
     const handlers = getPracticeLazyHandlers();
-    assert.equal(handlers.length, 12); // main·batch·customer·material·compliance·sales·products·notice·audit·adverse + careCalc·careCard main
+    assert.equal(handlers.length, 13); // main·batch·customer·material·compliance·sales·products·notice·audit·adverse + careCalc·careCard·careLog main
     const names = [];
     for (const [load, list] of handlers) {
         assert.equal(typeof load, 'function');

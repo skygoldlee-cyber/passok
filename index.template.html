@@ -112,6 +112,9 @@
                 <button class="nav-item nav-item-practice" data-target="care-card-view" data-feature="careCard">
                     <i class="fa-solid fa-list-check" aria-hidden="true"></i> <span data-uitext="careCard:nav">대처카드</span>
                 </button>
+                <button class="nav-item nav-item-practice" data-target="care-log-view" data-feature="careLog">
+                    <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i> <span data-uitext="careLog:nav">요양일지</span>
+                </button>
             </nav>
             <div class="sidebar-footer">
                 <button type="button" id="ui-mode-toggle" class="ui-mode-toggle" data-click="toggleUiMode" data-feature="practiceMode" aria-pressed="false" title="학습/실무 모드 전환 — 합격 후 실무 중심 사용자는 실무 모드를 추천합니다">
@@ -288,6 +291,7 @@
             <section id="formula-view" class="view-section" data-feature="formula" data-lazy-view="formula.html"></section>
             <section id="care-calc-view" class="view-section" data-feature="careCalc" data-lazy-view="care-calc.html"></section>
             <section id="care-card-view" class="view-section" data-feature="careCard" data-lazy-view="care-card.html"></section>
+            <section id="care-log-view" class="view-section" data-feature="careLog" data-lazy-view="care-log.html"></section>
 
             <!-- 시험 선택 (멀티시험 플랫폼 홈) -->
             <!-- @include html/views/exam-select.html -->
@@ -388,6 +392,10 @@
                         <button class="mobile-tab-item nav-practice-only" data-target="care-card-view" data-feature="careCard">
                             <i class="fa-solid fa-list-check" aria-hidden="true"></i>
                             <span data-uitext="careCard:nav">대처카드</span>
+                        </button>
+                        <button class="mobile-tab-item nav-practice-only" data-target="care-log-view" data-feature="careLog">
+                            <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                            <span data-uitext="careLog:nav">요양일지</span>
                         </button>
                         <!-- 실무 모드 전용 — 실무 매뉴얼 바로가기 -->
                         <button type="button" data-click="ManualViewer.openFormulaManual" class="mobile-tab-item nav-practice-only" data-feature="formula">

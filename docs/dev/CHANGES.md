@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-01 feat(carework): Phase 3 요양일지 생성기 (careLog) — 구독 핵심, DOC-DSN-42
+
+- `src/exams/carework/care-log.js` — 표준 일지 텍스트 조립 (일시·대상자·급여종류·3그룹 활동·특이사항) · `care-log-store.js` — localStorage 저장, 무료 10건 한도 → 한도 초과 시 업그레이드 안내(showStoreError) · `views/care-log.js` + `html/exams/carework/care-log.html`
+- registry careLog 등록 (priority 0 — 실무 모드 랜딩) + nav/스텁/더보기시트 + features.careLog + manifest uiText + `care_log_save`·`care_log_export` → feature-plan pro + SUBSCRIPTION_ROADMAP 대상 목록 등록
+- tests/unit/exams/carework/care-log.test.js — 생성 로직 5케이스
+
 ## 2026-11-01 feat(carework): Phase 2 상황별 대처카드 (careCard) — DOC-DSN-42
 
 - `content/exams/carework/실무/care_cards.json` — BPSD 3종·낙상·욕창·응급·감염·학대 의심 8카드 (상황인식→즉시조치→보고→기록 플로우, 자체 저작)

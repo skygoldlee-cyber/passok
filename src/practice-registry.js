@@ -295,7 +295,40 @@ const careCard = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careCalc, careCard };
+const careLog = {
+    viewId: 'care-log-view',
+    slug: 'care-log',
+    priority: 0,
+    uiTextKey: 'careLog',
+    title: '요양일지',
+    subtitle: '서비스 기록 자동 작성',
+    loadingText: '요양일지를 불러오는 중입니다...',
+    loadErrorText: '요양일지를 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-log.html',
+    loaders: { main: _domainImport('views/care-log.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['careLogGenerate', 'careLogSave', 'careLogCopy', 'careLogDelete']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careLog.loadingText);
+        try {
+            await ensureViewMarkup(careLog);
+            if (stale()) return;
+            const m = await careLog.loaders.main();
+            if (stale()) return;
+            m.initCareLogView();
+        } catch (e) {
+            if (!stale()) showToast(careLog.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
+const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {

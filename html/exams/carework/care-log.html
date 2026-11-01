@@ -1,0 +1,19 @@
+<!-- @spec none — carework 실무 뷰 마크업 (DA-13) -->
+<section id="care-log-view" class="view-section" data-feature="careLog">
+    <div class="view-header">
+        <h2>요양일지 생성기</h2>
+        <p class="view-subtitle">서비스 수행 내용 → 표준 기록 자동 작성 — 제공기준 고시 기록 항목 기반</p>
+    </div>
+    <div class="care-calc-form">
+        <label>일시 <input id="log-date" type="date"></label>
+        <label>대상자 성명 <input id="log-client" type="text" placeholder="예: 김○○"></label>
+        <label>급여 종류 <select id="log-service"></select></label>
+        <label>시작 <input id="log-start" type="time"></label>
+        <label>종료 <input id="log-end" type="time"></label>
+    </div>
+    <div id="log-activities" class="care-log-activities"></div>
+    <div class="care-calc-form">
+        <label>특이사항 <input id="log-note" type="text" placeholder="대상자 상태 변화·전달 사항"></label>
+        <div class="care-calc-actions">
+            <button data-click="careLogGenerate">일지 생성</button>
+            <button data-click="careLogSave" class="secondary">저장 <span class="pro-badge" data-pro-feature="care_log_save">PRO</span></button>
