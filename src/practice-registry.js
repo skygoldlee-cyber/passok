@@ -399,7 +399,41 @@ const careHandover = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit, careHandover };
+const careFacility = {
+    viewId: 'facility-setup-view',
+    slug: 'facility-setup',
+    priority: 5,
+    uiTextKey: 'careFacility',
+    title: '기관 워크스페이스',
+    subtitle: '요양원 기록 서버 연결',
+    loadingText: '기관 정보를 불러오는 중입니다...',
+    loadErrorText: '기관 정보를 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'facility-setup.html',
+    styles: 'care-tools.css',
+    loaders: { main: _domainImport('views/facility-setup.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['facilityCreate', 'facilityJoin']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careFacility.loadingText);
+        try {
+            await ensureViewMarkup(careFacility);
+            if (stale()) return;
+            const m = await careFacility.loaders.main();
+            if (stale()) return;
+            m.initFacilityView();
+        } catch (e) {
+            if (!stale()) showToast(careFacility.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
+const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit, careHandover, careFacility };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {

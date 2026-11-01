@@ -70,6 +70,59 @@ handover_acks (handover_id, reader_id, read_at — 인수 확인: 책임 이관 
 | Phase | 범위 | 비고 |
 |---|---|---|
 | 6a | facility·membership 스키마 + manager 초대 | Supabase 테이블·RLS + 가입/기관 연결 뷰 |
+
+### 6a-1. DDL 스펙 (`tools/supabase/schema.sql` §6 추가 — 재실행 안전)
+
+```sql
+create table if not exists public.facilities (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  biz_no text,                              -- 사업자/기관코드 (선택)
+  invite_code text not null unique,          -- 멤버 초대 코드 (서버 생성)
+  created_by uuid not null references auth.users(id),
+  created_at timestamptz not null default now()
+);
+create table if not exists public.facility_members (
+  facility_id uuid not null references public.facilities(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
+  role text not null default 'worker' check (role in ('worker','manager')),
+  joined_at timestamptz not null default now(),
+  primary key (facility_id, user_id)
+);
+```
+
+- `invite_code`는 `join_facility(code)` SECURITY DEFINER 함수로만 소비 — 코드 열거 방지 (직접 select 불가)
+- `create_facility(name, biz_no)` 함수 — 시설 생성 + 생성자를 role=manager로 자동 삽입 (원자적)
+- 기존 패턴 동일: IF NOT EXISTS·SECURITY DEFINER·RLS enable + 익명 침투 프로브 대상
+
+### 6a-2. RLS 정책
+
+```sql
+alter table public.facilities enable row level security;
+alter table public.facility_members enable row level security;
+-- facilities: 멤버만 열람 (익명 차단)
+create policy "facility member read" on public.facilities for select
+  using (exists (select 1 from public.facility_members m
+                 where m.facility_id = id and m.user_id = auth.uid()));
+-- facility_members: 같은 시설 멤버만 열람
+create policy "members read own facility" on public.facility_members for select
+  using (exists (select 1 from public.facility_members m
+                 where m.facility_id = facility_id and m.user_id = auth.uid()));
+```
+
+### 6a-3. 멤버십 흐름 — manager 생성 / worker 코드 가입
+
+| 흐름 | 진입 | 동작 |
+|---|---|---|
+| manager | "새 기관 등록" | `create_facility(name)` → invite_code 발급 → 멤버 관리 화면 |
+| worker | "기관 코드로 가입" | `join_facility(code)` → membership worker 삽입 → 기관 연결됨 |
+| 열람 | 멤버십 있음 | `my_membership()` → 시설 정보·멤버 목록·본인 role |
+
+### 6a-4. 구현 위치
+
+- `src/exams/carework/facility.js` — 도메인 API 호출 (getSupabase 래퍼 경유, RPC 호출만 — 도메인 로직은 클라이언트 무관 순수 함수 유지)
+- `src/exams/carework/views/facility-setup.js` + `html/exams/carework/facility-setup.html` — 기관 연결/관리 뷰 (미로그인→로그인 안내, 미가입→생성/가입, 가입됨→멤버·코드 표시)
+- registry `careFacility` (priority 5) + features.careFacility + `data-pro-feature="facility_workspace"` — 기관 워크스페이스는 Pro 계층 |
 | 6b | 교대 인수 확인 — 이력 자동 요약 + 인계 메모(전망만) + 인수 서명 | shift_handovers + handover_acks — 별도 문서 아닌 교대 경계 이벤트 |
 | 6c | 요양일지 기관 보존 + manager 열람 | carelog_records + 기록 보존 뷰 (평가 대비) |
 | 6d | 기관 플랜 결제·수출 어댑터 | 구독 과금 계층 + 기존 전자기록 연동 검토 |
