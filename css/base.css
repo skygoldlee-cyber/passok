@@ -1273,3 +1273,6 @@ body:not(.ui-mode-practice) .nav-group-label-practice,
 body:not(.ui-mode-practice) .tab-group-practice {
     display: none;
 }
+
+/* 탭바 그룹 구분선 — 실무·기관 시각 분리 (DA-20 사이드바 라벨 구조 대응) */
+.tab-group-divider { align-self: center; width: 1px; height: 60%; flex: 0 0 auto; margin: 0 4px; background: var(--border-color, rgba(255,255,255,0.15)); }
