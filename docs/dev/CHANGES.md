@@ -2,7 +2,7 @@
 
 ## 2026-11-01 feat(market): Q-Net 통계 수집 스크립트 — 시장분석용 응시자 DB
 
-- `tools/market/fetch_qnet_stats.py` — 20종 후보 시험(jmCd·Passok팩 매핑·주기·응시료·기출공개 여부) × 5개년 응시·합격 DB 생성. 시드 우선 적재 후 Q-Net cst006 POST·HRD 오픈API로 실측 덮어쓰기 시도 — 현재 공식 통계는 세션 폼 구조로 실측 0건, HRD_OC_KEY 설정 시 라이브 수집 활성화
+- `tools/market/fetch_qnet_stats.py` — 20종 후보 시험(jmCd·Passok팩 매핑·주기·응시료·기출공개 여부) × 5개년 응시·합격 DB 생성. 시드 우선 적재 후 Q-Net cst006 POST·HRD 오픈API로 실측 덮어쓰기 시도 — 현재 공식 통계는 세션 폼 구조로 실측 0건. 라이브 수집은 DATA_GO_KR_SERVICE_KEY(설정됨) 시도 + HRD-Net 전용 authKey/authKeySeqNo(hrd.go.kr 별도 발급 필요 — data.go.kr 키와 다른 체계) 지원
 
 ## 2026-11-01 fix(gates): docsync 우회 안내를 모드별로 정정 — [no-docs]는 --ref 전용
 

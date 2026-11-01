@@ -4,7 +4,7 @@
 전략:
  1) 종목별 시드(분석 보고서 검증치 + 공개 통계)를 먼저 적재
  2) Q-Net cst006 POST(jmCd·implYY)로 연도별 응시·합격 실측 시도 — 실패 시 시드 유지
- 3) openapi.hrdkorea.or.kr 종목통계 API 키(env HRD_OC_KEY)가 있으면 라이브 덮어쓰기
+ 3) 라이브: data.go.kr 키(env DATA_GO_KR_SERVICE_KEY — 이미 설정됨)로 자격통계 API 시도; HRD-Net 전용(authKey·authKeySeqNo, hrd.go.kr 별도 발급 — env HRD_OC_KEY·HRD_OC_SEQNO)과 구분
 산출: qnet_stats.csv · qnet_stats.json (시험×연도×구분: 응시·합격·합격률·주기·응시료·공개문제)
 """
 import os,sys,csv,json,urllib.request,urllib.parse,re,time
@@ -32,6 +32,18 @@ EXAMS=[
  ("전기산업기사","1431","elecindeng","연4회",20800,"비공개",{"2025":(25000,None)}),
  ("공인노무사","9260","labor","연1회",25000,"공개",{"2025":(8000,None)}),
 ]
+
+import json as _json
+HRD_KEY=os.getenv('HRD_OC_KEY') or _load_env('HRD_OC_KEY')
+HRD_SEQ=os.getenv('HRD_OC_SEQNO') or _load_env('HRD_OC_SEQNO')
+DG_KEY=os.getenv('DATA_GO_KR_SERVICE_KEY') or _load_env('DATA_GO_KR_SERVICE_KEY')
+
+def _load_env(k):
+    try:
+        for l in open('.env',encoding='utf-8'):
+            if l.startswith(k+'='): return l.split('=',1)[1].strip()
+    except Exception: pass
+    return None
 
 def fetch_qnet(jmcd,year):
     try:
