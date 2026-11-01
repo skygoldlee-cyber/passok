@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261101-eab1dd5",
+    "date": "2026-11-01",
+    "notes": [
+      "[리팩터링·db] 스키마 시험별 분리 — tools/supabase/exams/carework/schema.sql",
+      "[수정·carework] facility-setup 에러 경계 + 뷰 커버리지",
+      "[정리·release] v20261101-3900c79 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-3900c79",
     "date": "2026-11-01",
     "notes": [
@@ -194,15 +203,6 @@
     "date": "2026-10-31",
     "notes": [
       "내부 개선 및 안정성 향상"
-    ]
-  },
-  {
-    "version": "v20261031-a4438bb",
-    "date": "2026-10-31",
-    "notes": [
-      "[정리·gates] 파일명 기준선에 신규 dom 테스트 2건 등록",
-      "[기능·gates] test-first 주석 전용 diff 면제 + 우회 빈도 추적",
-      "[정리·release] v20261031-273b412 스탬프 확정 [no-docs]"
     ]
   }
 ]
