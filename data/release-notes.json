@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261102-0803b0d",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정] 릴리스 노트 메타 텍스트의 오탈자 문자 정리 — 앱 내 표시 문자열",
+      "[기능·ui] 모바일 배경 금강전도 분리 — bg-portrait.webp 추가",
+      "[정리·release] v20261102-11ab2db 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-11ab2db",
     "date": "2026-11-02",
     "notes": [
@@ -181,17 +190,6 @@
       "[리팩터링·db] 스키마 시험별 분리 — tools/supabase/exams/carework/schema.sql",
       "[수정·carework] facility-setup 에러 경계 + 뷰 커버리지",
       "[정리·release] v20261101-3900c79 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-3900c79",
-    "date": "2026-11-01",
-    "notes": [
-      "[수정·db] RLS 무한 재귀 수정 — is_facility_member SECURITY DEFINER 분리",
-      "[문서] facility_workspace 로드맵 등록",
-      "[문서] facility_workspace 로드맵 등록 + TRACE_MATRIX 재생성",
-      "[기능·carework] Phase 6a 기관 워크스페이스 — 시설·멤버십 스키마 + 연결 뷰",
-      "[정리·release] v20261101-3347f31 스탬프 확정 [no-docs]"
     ]
   }
 ]
