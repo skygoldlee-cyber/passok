@@ -38,8 +38,11 @@ HRD_KEY=os.getenv('HRD_OC_KEY') or _load_env('HRD_OC_KEY')
 HRD_SEQ=os.getenv('HRD_OC_SEQNO') or _load_env('HRD_OC_SEQNO')
 DG_KEY=os.getenv('DATA_GO_KR_SERVICE_KEY') or _load_env('DATA_GO_KR_SERVICE_KEY')
 KOSIS_KEY=os.getenv('KOSIS_API_KEY') or _load_env('KOSIS_API_KEY')
-# KOSIS 통계표(orgId/tblId) — kosis.kr에서 '국가기술자격' 검색 시 URL 파라미터로 확정 필요
-KOSIS_TBLS={}  # 예: {'국가기술자격시험 종목별 실시현황':('118','TBL_ID')}
+# KOSIS 통계표 — 확정: 성별/종목별 시험현황 (orgId=387 한국산업인력공단)
+#   조회: itmId=1~8(필기접수·응시·합격·합격률·실기동일), objL1=ALL(종목), objL2=1(전체), PRD=2021~2025
+#   미포함 기관 시험: 요양보호사(국시원)·공인중개사·사회복지사·공인노무사·맞춤형화장품 — 별도 시드 유지
+KOSIS_TBL=('387','DT_38701_N002_1')
+KOSIS_TBLS={'성별/종목별 시험현황':KOSIS_TBL}
 KOSIS_EP='https://kosis.kr/openapi/Param/statisticsParameterData.do'
 
 def fetch_kosis(org,tbl,itm='T1',obj='ALL',start=2021,end=2025):

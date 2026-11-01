@@ -1836,7 +1836,7 @@
 ## 2026-10-18 AI 제작 지원 확장 + keep-alive 운영 문서화 — 해설 외 AI 활용 5종
 
 - **배경**: 해설 생성 외에 AI가 보조할 수 있는 문제 제작 영역을 검토 — 기존 게이트(audit:combo·check:reffresh·SEM-05 인덱스)가 그대로 검증선으로 재사용되는 영역 위주로 선별
-- **추가**: AI_AUTHORING_DESIGN §4 도구 표 — `ai:statements`(진술 반전·재조합)·`ai:stale`(법령 개정 영향 분석)·`ai:coverage`(출제 갭 분석)·`ai:tag`(태그·난이도·conceptId)·`ai:lint`(발문 검수) / §9 Phase B2(우선순위·유지보수 지원) + KOSIS_API_KEY(설정됨) 연결 골격 — orgId/tblId는 kosis.kr 통계표 URL로 확정 후 실측 활성화 신설 / §10 미결에 법령 개정 시 stale 자동 실행 여부
+- **추가**: AI_AUTHORING_DESIGN §4 도구 표 — `ai:statements`(진술 반전·재조합)·`ai:stale`(법령 개정 영향 분석)·`ai:coverage`(출제 갭 분석)·`ai:tag`(태그·난이도·conceptId)·`ai:lint`(발문 검수) / §9 Phase B2(우선순위·유지보수 지원) + KOSIS_API_KEY(설정됨) 연결 골격 — orgId/tblId 확정 완료 — DT_38701_N002_1(성별/종목별 시험현황, 한국산업인력공단 orgId=387)으로 14종 × 5개년 필기·실기 접수·응시·합격·합격률 실측 확보 신설 / §10 미결에 법령 개정 시 stale 자동 실행 여부
 - **문서**: SUPABASE_DESIGN §12.4 — keep-alive 스케줄 실행 조건(GitHub 서버 실행·기본 브랜치 필수·지연·60일 비활성화) + 실행 이력 확인 절차(Actions 탭·gh CLI) 명시
 - **등록**: docs_paths_allowlist.json — 설계안 미구현 경로 5건(tools/ai/ai_statements·ai_stale_scan·ai_coverage·ai_tag·ai_lint)
 
@@ -3923,7 +3923,7 @@
 
 ## 2026-09-28 요구사항 출처(source) 추적 추가 — ISO 29148 잔여 갭 해소
 
-- **`SPEC.md`**: 말미에 `부록: 요구사항 출처` 추가 — `| ID | 출처 |` 표로 법령·고시·시험 규정·사업 문서 기원을 기록 (ID 범위·나열 지원) + KOSIS_API_KEY(설정됨) 연결 골격 — orgId/tblId는 kosis.kr 통계표 URL로 확정 후 실측 활성화. 대상 14행: E-01·E-07(시험 형식·과락 규정), FO-02·14·16·19·21(화장품법·시행규칙·안전기준 고시), DR-04(법령 수치), AU-07·DA-10·ROAD-M3(개인정보보호법), FO-23·FB-01~08·ROAD-P1~P4·ROAD-L1~L5(사업 문서). 헤더에 출처 기록 규약 추가 — 부록에 없으면 출처는 내부 설계 판단
+- **`SPEC.md`**: 말미에 `부록: 요구사항 출처` 추가 — `| ID | 출처 |` 표로 법령·고시·시험 규정·사업 문서 기원을 기록 (ID 범위·나열 지원) + KOSIS_API_KEY(설정됨) 연결 골격 — orgId/tblId 확정 완료 — DT_38701_N002_1(성별/종목별 시험현황, 한국산업인력공단 orgId=387)으로 14종 × 5개년 필기·실기 접수·응시·합격·합격률 실측 확보. 대상 14행: E-01·E-07(시험 형식·과락 규정), FO-02·14·16·19·21(화장품법·시행규칙·안전기준 고시), DR-04(법령 수치), AU-07·DA-10·ROAD-M3(개인정보보호법), FO-23·FB-01~08·ROAD-P1~P4·ROAD-L1~L5(사업 문서). 헤더에 출처 기록 규약 추가 — 부록에 없으면 출처는 내부 설계 판단
 - **`trace_scan.js`**: `extractSpecSources()` 추가 — 부록 표를 `Map(id → 출처)`로 추출, `expandIds`로 범위 확장
 - **`build_trace_matrix.js`**: `출처` 열 추가 — SPEC 부록을 미러 (수동 이중 기록 없이 단일 진실 소스 유지)
 - **`content-structure.test.js` CS-07**: `audiobook/mp3` 부재 시 조건부 skip — gitignore 산출물이라 클린 체크아웃(CI 포함)에서는 존재할 수 없어 무조건 실패하던 것을 산출물 존재 시에만 검증하도록 수정
@@ -4233,14 +4233,14 @@
 ## 2026-10-13 TRACE MATRIX 활용 도구 — 영향도·도시어·갭 리포트·신선도 체크
 
 - **`tools/lib/trace_scan.js`**: SPEC·@spec·문서 헤더 스캔 로직을 공용 모듈로 추출 — build_trace_matrix·impact_tests·trace가 동일 원천 공유
-- **`tools/trace.js`**: 요구사항 도시어 CLI — `node tools/trace.js Q-05`로 문서·소스·테스트·보고서 즉시 조회 (DOC-XX 조회도 지원) + KOSIS_API_KEY(설정됨) 연결 골격 — orgId/tblId는 kosis.kr 통계표 URL로 확정 후 실측 활성화
+- **`tools/trace.js`**: 요구사항 도시어 CLI — `node tools/trace.js Q-05`로 문서·소스·테스트·보고서 즉시 조회 (DOC-XX 조회도 지원) + KOSIS_API_KEY(설정됨) 연결 골격 — orgId/tblId 확정 완료 — DT_38701_N002_1(성별/종목별 시험현황, 한국산업인력공단 orgId=387)으로 14종 × 5개년 필기·실기 접수·응시·합격·합격률 실측 확보
 - **`tools/impact_tests.js`**: 변경 파일 → 영향 SPEC ID·권장 테스트 역산 — 인자 없으면 미커밋 변경 자동 분석, `--ref`로 브랜치 diff 지원
 - **테스트 갭 리포트**: TRACE_MATRIX 부록 B에 "소스 연결 있으나 테스트 미연결" 요구사항 자동 집계 (도입 당시 103개 — 2026-10-14 전량 소진, 기준선 0)
 - **신선도 체크**: TRACE_MATRIX에 입력 해시 스탬프 — `npm run check:trace`(build_trace_matrix --check)로 검증, `check:content`에 통합. SPEC·@spec·문서 헤더 변경 시 재생성 강제
 
 ## 2026-10-13 TRACE MATRIX 구축 — 문서·소스·테스트·보고서 유기 추적
 
-- **문서→요구사항 링크 완성**: 모든 문서(56개) 헤더에 `관련 SPEC ID` 부여 — dev 문서는 구체 ID(`FO-01~23` 등·범위·와일드카드 지원) + KOSIS_API_KEY(설정됨) 연결 골격 — orgId/tblId는 kosis.kr 통계표 URL로 확정 후 실측 활성화, 비해당 문서는 "해당 없음 (사유)" 명시
+- **문서→요구사항 링크 완성**: 모든 문서(56개) 헤더에 `관련 SPEC ID` 부여 — dev 문서는 구체 ID(`FO-01~23` 등·범위·와일드카드 지원) + KOSIS_API_KEY(설정됨) 연결 골격 — orgId/tblId 확정 완료 — DT_38701_N002_1(성별/종목별 시험현황, 한국산업인력공단 orgId=387)으로 14종 × 5개년 필기·실기 접수·응시·합격·합격률 실측 확보, 비해당 문서는 "해당 없음 (사유)" 명시
 - **보고서 규약**: report_archive 11개에 `성격|결과` 행 추가 — "아카이브 (대체 문서/흡수처 명시)"
 - **`tools/build_trace_matrix.js` 신설**: SPEC ID 축으로 문서·소스·테스트·보고서 4열 매트릭스 자동 생성 → `docs/dev/TRACE_MATRIX.md`(DOC-DEV-04). 절별 그룹핑 + 커버리지 요약 + 부록(문서→요구사항 역방향·헤더 누락 목록). `npm run build:trace`
 - **`check_spec_refs.js` 확장**: 문서 헤더 "관련 SPEC ID"도 스캔해 SPEC에 없는 ID를 스테일로 실패 처리 — 토큰 파싱에 백틱·`·` 구분·`P` 범위(ROAD-P0~P4)·와일드카드(`Q-*`)·"전 영역/해당 없음" 지원 추가
@@ -5593,7 +5593,7 @@ check_combo_pilot 전 과목 무결성.
 - "토클레이브" → "오토클레이브" 오타
 - HLB 표에 `8~18 O/W 유화제` 행 추가 + 마인드맵·암기 팁 동기화
 - 팁의 "레티놀 2500=1.0%" 삭제 (2500 IU/g ≈ 0.075%로 등식 부정확)
-- 🔗 두음법↔숫자 교차 연결표 신설 (§텍스트 참조 — 앱 파서가 앵커 미지원) + KOSIS_API_KEY(설정됨) 연결 골격 — orgId/tblId는 kosis.kr 통계표 URL로 확정 후 실측 활성화
+- 🔗 두음법↔숫자 교차 연결표 신설 (§텍스트 참조 — 앱 파서가 앵커 미지원) + KOSIS_API_KEY(설정됨) 연결 골격 — orgId/tblId 확정 완료 — DT_38701_N002_1(성별/종목별 시험현황, 한국산업인력공단 orgId=387)으로 14종 × 5개년 필기·실기 접수·응시·합격·합격률 실측 확보
 
 ### 리뷰 정정
 
