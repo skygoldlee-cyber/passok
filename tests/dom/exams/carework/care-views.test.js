@@ -1,4 +1,4 @@
-// tests/dom/exams/carework/care-views.dom.test.js — carework 실무 뷰 커버리지
+// tests/dom/exams/carework/care-views.test.js — carework 실무 뷰 커버리지
 // @spec none — 시험 전용 실무 뷰 DOM 계약 (DA-13)
 // 목적: carework 5개 실무 뷰의 핵심 핸들러를 jsdom에서 실행해 DOM 반영과
 //       커버리지 임계(함수·라인)를 고정한다 — 실마크업 파셜을 주입해 사용한다.
