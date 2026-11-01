@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261102-e3e71de",
+    "date": "2026-11-02",
+    "notes": [
+      "[정리] build:derived 파생물 — 아이콘 정본 교체 반영 매니페스트",
+      "[수정·icon] maskable 아이콘 정본 교체 — 풀블리드·별 안전 원 안(451/502px)",
+      "[정리·release] v20261102-a44edcc 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-a44edcc",
     "date": "2026-11-02",
     "notes": [
@@ -183,17 +192,6 @@
     "notes": [
       "[수정·ui] 기관 메뉴를 별도 구역으로 분리 — 실무도구와 혼재 해소",
       "[정리·release] v20261101-18bec0c 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-18bec0c",
-    "date": "2026-11-01",
-    "notes": [
-      "[테스트] DA-18을 care-views DOM 테스트에 연결",
-      "[spec] DA-18 권한 뷰 분리 원칙 명기 + @spec 태그 연결",
-      "[정리] TRACE_MATRIX 재생성",
-      "[리팩터링·carework] 기관 뷰 클라이언트·어드민 분리 — facility-join + facility-admin",
-      "[정리·release] v20261101-eab1dd5 스탬프 확정 [no-docs]"
     ]
   }
 ]
