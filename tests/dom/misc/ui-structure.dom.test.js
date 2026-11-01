@@ -97,9 +97,11 @@ describe('UI 구조 불변식 — index.html 실마크업', () => {
         });
     });
 
-    it('모바일 탭 바는 5+N 패턴 — 탭 바 직접 항목이 과밀하지 않다', () => {
+    it('모바일 탭 바 그룹 구조 — 학습 그룹은 소수 유지, 실무 그룹은 사이드바 동기화 스크롤형', () => {
+        // DA-20 모드 분리 + 탭바=사이드바 구성 — 실무 그룹은 전체 항목을 가로 스크롤로 수용
+        const studyTabs = document.querySelectorAll('#mobile-tab-bar .tab-group-study .mobile-tab-item[data-target]');
+        expect(studyTabs.length).toBeLessThanOrEqual(5);
         const barTabs = document.querySelectorAll('#mobile-tab-bar .mobile-tab-item[data-target]');
-        expect(barTabs.length).toBeLessThanOrEqual(5);
         // 더보기 시트에 나머지 뷰가 있어야 함
         const sheetTargets = new Set(
             [...document.querySelectorAll('#mobile-more-sheet .mobile-tab-item[data-target]')]
