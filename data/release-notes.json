@@ -1,5 +1,18 @@
 [
   {
+    "version": "v20261101-10b1621",
+    "date": "2026-11-01",
+    "notes": [
+      "[정리] build:data 파생물 반영 — 실무막뉴얼 MD_ASSETS",
+      "[문서] DA-19 경로 참조를 베이스명으로 정리",
+      "[문서] DA-19 템플릿 경로 제거 — 실존 경로만 참조",
+      "[수정] 실무막뉴얼→실무막뉴얼 오탈자 정정 + 경로 참조 정합",
+      "[spec] DA-19 실무막뉴얼 시험별 자체 작성 원칙 명기",
+      "[기능·carework] 요양보호사 실무막뉴얼 — ManualViewer practice_manual 연결",
+      "[정리·release] v20261101-cbe7378 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-cbe7378",
     "date": "2026-11-01",
     "notes": [
@@ -194,18 +207,6 @@
       "[기능·exams] carework 출제범위 ref 편입 + 실기 3영역 정정 [no-test] [no-docs]",
       "[기능·exams] 요양보호사 draft 팩 등록 — 필기·실기 2과목 챕터 골격 + 법령 5건 [no-test] [no-docs]",
       "[정리·release] v20261031-05e15ac 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261031-05e15ac",
-    "date": "2026-10-31",
-    "notes": [
-      "[정리·docs] TRACE_MATRIX 재생성 — nonexam-pack 테스트 반영 [no-test] [no-docs]",
-      "[정리·gate] nonexam-pack.dom.test.js 파일명 예외 기준선 등록 [no-test] [no-docs]",
-      "[수정·esc] integratedTotal 보간 esc 누락 — ROAD-Q5 싱크 규약 위반 해소 [no-test] [no-docs]",
-      "[기능·exams] 비시험 팩 지원 — integratedExam 미선언 시 통합 카드 숨김 + uiText 오버라이드 확장",
-      "[문서·overview] 시험 팩 수 17→19 갱신 — 유통관리사 2·3급 + 티어 분포·파일럿 문구 정정 [no-test]",
-      "[정리·release] v20261031-531388d 스탬프 확정 [no-docs]"
     ]
   }
 ]
