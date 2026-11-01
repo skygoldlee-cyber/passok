@@ -1,5 +1,18 @@
 [
   {
+    "version": "v20261101-c5aae1e",
+    "date": "2026-11-01",
+    "notes": [
+      "[정리·trace] TRACE_MATRIX 재생성",
+      "[테스트·registry] export 체인 검증을 시험 디렉터리 합집합으로 수정 — carework 피처 대응",
+      "[문서·agents] carework 모듈 트리 반영 + HTML @spec 태그·feature-plan 정리",
+      "[기능·carework] Phase 1 장기요양 비용 계산기 — 현장도구 첫 실무 피처",
+      "[수정·config] docs_paths_allowlist에 DOC-DSN-42 미래 경로 3건 등록",
+      "[문서·design] carework 현장도구 설계 — 시험→실무 구독 전환 (DOC-DSN-42)",
+      "[정리·release] v20261101-f781004 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-f781004",
     "date": "2026-11-01",
     "notes": [
@@ -191,14 +204,6 @@
     "notes": [
       "[기능·ui] 도움말 플랜 안내를 서비스 소개 바로 아래로 이동",
       "[정리·release] v20261030-65a4b5e 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261030-65a4b5e",
-    "date": "2026-10-30",
-    "notes": [
-      "[기능·ui] 플랜 안내·라이선스 코드 진입점 분리 — 안내는 도움말, 코드 입력은 설정",
-      "[정리·release] v20261030-2a1d020 스탬프 확정 [no-docs]"
     ]
   }
 ]
