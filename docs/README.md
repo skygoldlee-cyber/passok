@@ -229,6 +229,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [PROMOTION_DESIGN.md](dev/design/PROMOTION_DESIGN.md) | 홍보·유입 기능 보완 — 현황 인벤토리 + OG 태그·성과 공유 카드·다중 커뮤니티 링크·추천 코드·SEO·UTM 계측 백로그 (DOC-DSN-37, 설계안) |
 | [LANDING_PAGE_DESIGN.md](dev/design/LANDING_PAGE_DESIGN.md) | 서비스 소개 랜딩 페이지 — `/landing.html` 별도 정적 페이지, exams.json 구동 시험 카드·빌드 체인·SW/진입점 정책 (DOC-DSN-38, 설계안) |
 | [NATIVE_APP_STRATEGY.md](dev/design/NATIVE_APP_STRATEGY.md) | 네이티브 앱 전환 전략 검토 — TWA→Capacitor→Flutter 단계 권고·이주 대비 (DOC-DSN-39, 검토 메모) |
+| [PASSOK_시장분석.md](dev/design/PASSOK_시장분석.md) | 국가자격 시장분석 실측 갱신 — KOSIS 5개년 응시자 반영·우선순위 재조정 (DOC-DSN-40) |
 | [STUDY_PLAN_PRO_DESIGN.md](dev/design/STUDY_PLAN_PRO_DESIGN.md) | 스마트학습 과목별 가중 계획 — 출제 비중·약점 정답률 가중 주차별 배분표 (SC-08, 구현 완료) |
 | [STUDY_APP_DESIGN_GUIDE.md](dev/design/STUDY_APP_DESIGN_GUIDE.md) | 학습 앱 재사용 설계 가이드 — 다른 자격시험/교재 적용 템플릿 |
 
