@@ -21,7 +21,7 @@ import { switchView } from '../../../src/views/navigation.js';
 import { state } from '../../../src/state.js';
 import {
     getUiMode, isPracticeMode, applyUiMode, initUiMode,
-    toggleUiMode, toggleStudyTools,
+    toggleUiMode
 } from '../../../src/shell/ui-mode.js';
 
 const STUDY_ONLY = [
@@ -61,7 +61,7 @@ describe('UI 모드 — 학습/실무 전환', () => {
         expect(getUiMode()).toBe('study');
         expect(document.body.classList.contains('ui-mode-practice')).toBe(false);
         STUDY_ONLY.forEach(v => expect(visibleNavTargets()).toContain(v));
-        expect(getComputedStyle(document.querySelector('.nav-study-tools-label')).display).toBe('none');
+        expect(document.querySelector('.nav-study-tools-label'), '학습도구 토글 제거됨').toBeNull();
         // 토글 2곳(푸터·설정) 라벨·aria 동기화
         document.querySelectorAll('.ui-mode-label').forEach(l => expect(l.textContent).toBe('학습 모드'));
         document.querySelectorAll('[data-click="toggleUiMode"]').forEach(b => expect(b.getAttribute('aria-pressed')).toBe('false'));
@@ -80,9 +80,9 @@ describe('UI 모드 — 학습/실무 전환', () => {
         STUDY_ONLY.forEach(v => expect(targets).not.toContain(v));
         // 실무에서도 필요한 항목만 표시 — 실무 작업실 + 성분 사전
         expect(targets).toContain('formula-view');
-        expect(targets).toContain('dictionary-view');
+        expect(targets).not.toContain('dictionary-view');
         // 학습 도구 라벨은 실무 모드에서 표시
-        expect(getComputedStyle(document.querySelector('.nav-study-tools-label')).display).not.toBe('none');
+        expect(document.querySelector('.nav-study-tools-label'), '학습도구 토글 제거됨').toBeNull();
         // 학습 매뉴얼 숨김 — 실무매뉴얼은 더보기 시트로 이동 (탭바 노출 금지)
         expect(getComputedStyle(document.querySelector('.manual-nav-link.nav-study-only')).display).toBe('none');
         // 탭바 실무막뉴얼은 실무 전용 — 실무 모드에서 표시 (학습 모드엔 CSS로 숨김)
@@ -116,21 +116,10 @@ describe('UI 모드 — 학습/실무 전환', () => {
         expect(switchView).not.toHaveBeenCalled();
     });
 
-    it('학습 도구 펼침 — 숨겨진 항목 재표시 + aria-expanded·영속 (H/P)', () => {
+    it('실무 모드 — 학습 항목 탈출 경로 없이 무조건 숨김 (DA-20)', () => {
         toggleUiMode(); // 실무 모드 진입
-        toggleStudyTools();
-        expect(document.body.classList.contains('study-tools-open')).toBe(true);
-        expect(localStorage.getItem('ui_study_tools_open')).toBe('1');
-        // 펼침 토글 2곳(사이드바 라벨·모바일 탭) aria 동기화
-        document.querySelectorAll('[data-click="toggleStudyTools"]').forEach(b => {
-            expect(b.getAttribute('aria-expanded')).toBe('true');
-        });
-        // 펼치면 학습 항목이 실제로 다시 표시됨
-        STUDY_ONLY.forEach(v => expect(visibleNavTargets()).toContain(v));
-        toggleStudyTools();
-        expect(document.body.classList.contains('study-tools-open')).toBe(false);
-        expect(localStorage.getItem('ui_study_tools_open')).toBe('0');
         STUDY_ONLY.forEach(v => expect(visibleNavTargets()).not.toContain(v));
+        expect(document.querySelector('[data-click="toggleStudyTools"]'), '학습도구 토글 부재').toBeNull();
     });
 
     it('저장된 실무 모드 복원 — initUiMode 시 formula-view 랜딩 (P/R)', () => {

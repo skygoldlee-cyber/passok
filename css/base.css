@@ -782,7 +782,7 @@ body.ui-mode-practice.study-tools-open .nav-study-tools-label i {
 }
 
 /* 실무 모드: 학습 전용 항목 숨김 (학습 도구 펼침 시 표시) — 사이드바·모바일 탭바 공통 */
-body.ui-mode-practice:not(.study-tools-open) .nav-study-only {
+body.ui-mode-practice .nav-study-only {
     display: none;
 }
 
@@ -1260,7 +1260,7 @@ table {
 /* 모바일 탭바 그룹 분리 — 학습·실무 모드별 그룹 토글 */
 /* 탭바 그룹은 평탄화 — 버튼이 nav의 직접 flex 항목처럼 균등 배분되게 (더보기 폭 유지) */
 .mobile-tab-bar .tab-group { display: contents; }
-body.ui-mode-practice:not(.study-tools-open) .tab-group-study { display: none; }
+body.ui-mode-practice .tab-group-study { display: none; }
 /* 실무 그룹은 항상 표시 — mobile-tab-practice 항목은 모드 무관 진입 가능 (실무도구·현장도구 탭 관례) */
 
 /* 실무 탭바 전체 항목 — 수가 많으면 최소폭 유지하며 가로 스크롤 (사이드바 구성과 동기화) */
