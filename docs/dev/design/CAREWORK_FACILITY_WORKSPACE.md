@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **작성일**: 2026-11-01
 > **전제**: DOC-DSN-42 실무도구 + Phase 5 인수인계(기록 우선 플로우) 반영 이후
-> **관련 SPEC**: DA-13(도메인 격리) · ROAD-P5(Pro 게이팅) · SUBSCRIPTION_ROADMAP
+> **관련 SPEC**: DA-13(도메인 격리) · DA-18(권한 뷰 분리) · ROAD-P5(Pro 게이팅) · SUBSCRIPTION_ROADMAP
 
 ## 1. 배경 — 왜 기관 서버가 필요한가
 
@@ -112,7 +112,7 @@ create policy "members read own facility" on public.facility_members for select
 
 ### 6a-3. 멤버십 흐름 — manager 생성 / worker 코드 가입
 
-**뷰 분리 원칙**: 클라이언트 뷰(worker)와 어드민 뷰(manager)는 별도 뷰로 분리 — 한 뷰 내 역할 전환형 금지 (권한 표면 노출·감사 추적 분리·nav 독립 진입)
+**뷰 분리 원칙 (DA-18)**: 클라이언트 뷰(worker)와 어드민 뷰(manager)는 별도 뷰로 분리 — 한 뷰 내 역할 전환형 금지 (권한 표면 노출·감사 추적 분리·nav 독립 진입)
 
 | 뷰 | 대상 | 내용 |
 |---|---|---|

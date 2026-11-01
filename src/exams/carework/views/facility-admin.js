@@ -1,5 +1,5 @@
 // src/exams/carework/views/facility-admin.js — 기관 어드민 뷰 (DOC-DSN-43 6a, DA-13)
-// @spec none — 시험 전용 실무 뷰
+// @spec DA-18 — 권한 뷰 분리 (어드민·클라이언트 별도 뷰)
 import { myMembership, createFacility, listMembers, ROLES } from '../facility.js';
 import { getAuthSession } from '../../../auth-sync/supabase-client.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';

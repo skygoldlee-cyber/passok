@@ -4,6 +4,11 @@
 
 - `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지 · 파일명 규약 정정: .dom.test.js 접미사 중복 → .test.js)
 
+## 2026-11-01 spec: DA-18 권한 뷰 분리 원칙 명기
+
+- SPEC.md DA-18 — 클라이언트·어드민 뷰를 별도 뷰/모듈/마크업/registry 피처로 물리 분리, 어드민 뷰는 역할 검증 후 비권한자에게 전용 안내만 렌더
+- DSN-43 §6a-3 원칙에 SPEC ID 부여 + 뷰·마크업 @spec 태그 연결
+
 ## 2026-11-01 refactor(carework): 기관 뷰 클라이언트·어드민 분리
 
 - facility-setup 단일 뷰를 역할별 2개로 분리 (DSN-43 뷰 분리 원칙) — `facility-join`(worker: 초대 코드 가입·소속 표시) + `facility-admin`(manager: 등록·초대코드·멤버 관리)
