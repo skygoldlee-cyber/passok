@@ -106,6 +106,9 @@
                 <button class="nav-item nav-item-practice" data-target="formula-view" data-feature="formula">
                     <i class="fa-solid fa-flask-vial" aria-hidden="true"></i> <span data-uitext="formula:nav">실무도구</span>
                 </button>
+                <button class="nav-item nav-item-practice" data-target="care-calc-view" data-feature="careCalc">
+                    <i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i> <span data-uitext="careCalc:nav">현장도구</span>
+                </button>
             </nav>
             <div class="sidebar-footer">
                 <button type="button" id="ui-mode-toggle" class="ui-mode-toggle" data-click="toggleUiMode" data-feature="practiceMode" aria-pressed="false" title="학습/실무 모드 전환 — 합격 후 실무 중심 사용자는 실무 모드를 추천합니다">
@@ -280,6 +283,7 @@
                  (시험별 실무 피처의 마크업이 셸을 비대화시키는 것을 방지.
                   속성값은 규약 파일명 — 시험 디렉터리는 활성 시험 id로 해석) -->
             <section id="formula-view" class="view-section" data-feature="formula" data-lazy-view="formula.html"></section>
+            <section id="care-calc-view" class="view-section" data-feature="careCalc" data-lazy-view="care-calc.html"></section>
 
             <!-- 시험 선택 (멀티시험 플랫폼 홈) -->
             <!-- @include html/views/exam-select.html -->
@@ -309,6 +313,10 @@
             <button class="mobile-tab-item mobile-tab-practice" data-target="formula-view" data-feature="formula">
                 <i class="fa-solid fa-flask-vial" aria-hidden="true"></i>
                 <span data-uitext="formula:nav">실무도구</span>
+            </button>
+            <button class="mobile-tab-item mobile-tab-practice" data-target="care-calc-view" data-feature="careCalc">
+                <i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i>
+                <span data-uitext="careCalc:nav">현장도구</span>
             </button>
             <button class="mobile-tab-item mobile-tab-more" id="mobile-more-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="mobile-more-sheet" title="전체 메뉴 보기">
                 <i class="fa-solid fa-ellipsis" aria-hidden="true"></i>

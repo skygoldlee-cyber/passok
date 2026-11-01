@@ -589,7 +589,9 @@
       "manifestPath": "content/exams/carework/manifest.json",
       "registryBundle": "data/exams/carework/registry.js",
       "registryGlobal": "DATA_REGISTRY_CAREWORK",
-      "features": {},
+      "features": {
+        "careCalc": true
+      },
       "group": "보건·복지",
       "tier": "active"
     }

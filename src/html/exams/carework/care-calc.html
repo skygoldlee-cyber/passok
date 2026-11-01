@@ -1,0 +1,20 @@
+<section id="care-calc-view" class="view-section" data-feature="careCalc">
+    <div class="view-header">
+        <h2>장기요양 비용 계산기</h2>
+        <p class="view-subtitle">재가·시설급여 본인부담금 계산 — 등급별 월 한도·감경 적용</p>
+    </div>
+    <div class="care-calc-form">
+        <label>급여 유형
+            <select id="care-type"><option value="home">재가급여</option><option value="facility">시설급여</option></select>
+        </label>
+        <label>장기요양등급 <select id="care-grade"></select></label>
+        <label>월 예상 이용액 (원) <input id="care-use" type="number" min="0" placeholder="예: 1000000"></label>
+        <label>본인부담 감경 <select id="care-reduction"></select></label>
+        <div class="care-calc-actions">
+            <button data-click="careCalcRun">계산</button>
+            <button data-click="careCalcReset" class="secondary">초기화</button>
+            <button data-click="careCalcPrint" class="secondary">인쇄</button>
+        </div>
+    </div>
+    <div id="care-result" class="care-calc-result"></div>
+</section>

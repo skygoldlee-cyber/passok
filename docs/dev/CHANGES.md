@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-01 feat(carework): Phase 1 장기요양 비용 계산기 (careCalc) — DOC-DSN-42
+
+- `src/exams/carework/care-calc{,-data}.js` + `views/care-calc.js` + `src/html/exams/carework/care-calc.html` — 재가 15%·시설 20%·감경 60/40%·등급 월한도 계산 뷰
+- `practice-registry.js` — careCalc 엔트리 (priority 1) · `index.template.html` nav/스텁/mobile · exams features.careCalc · manifest uiText.careCalc · feature-plan care_calc:free
+- tests/unit/exams/carework/care-calc.test.js — 계산 5케이스
+
 ## 2026-11-01 fix(config): docs_paths_allowlist에 설계안 미래 경로 3건 등록
 
 - `tools/config/docs_paths_allowlist.json` — DOC-DSN-42 설계 문서의 Phase 1~3 미구현 경로(src/exams/carework/·care-log-store.js·care_cards.json)를 의도된 참조로 등록 — docs 경로 게이트 스테일 오인 해소

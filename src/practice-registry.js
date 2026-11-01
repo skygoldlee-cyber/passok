@@ -229,7 +229,40 @@ export function warmPracticeFeatures() {
 }
 
 /** 실무 피처 정의 — 키는 exams.json의 features 키와 1:1 대응한다 */
-const PRACTICE_FEATURES = { formula };
+const careCalc = {
+    viewId: 'care-calc-view',
+    slug: 'care-calc',
+    priority: 1,
+    uiTextKey: 'careCalc',
+    title: '현장도구',
+    subtitle: '장기요양 비용 계산',
+    loadingText: '현장도구를 불러오는 중입니다...',
+    loadErrorText: '현장도구를 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-calc.html',
+    loaders: { main: _domainImport('views/care-calc.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['careCalcRun', 'careCalcReset', 'careCalcPrint']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careCalc.loadingText);
+        try {
+            await ensureViewMarkup(careCalc);
+            if (stale()) return;
+            const m = await careCalc.loaders.main();
+            if (stale()) return;
+            m.initCareCalcView();
+        } catch (e) {
+            if (!stale()) showToast(careCalc.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
+const PRACTICE_FEATURES = { formula, careCalc };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {
