@@ -226,6 +226,7 @@ landing.template.html   # 서비스 소개 랜딩 템플릿 — <!-- @landing-ex
 landing.html            # 서비스 소개 페이지 (생성물·git 미추적 — npm run build:landing 산출)
 html/views/             # 뷰 마크업 파셜 12개 — 뷰 HTML 편집은 여기서, build:html로 재생성
 html/exams/<id>/        # 시험 도메인 뷰 파셜 (지연 주입 — formula.html 등, data-lazy-view)
+  carework/care-calc.html # carework 장기요양 비용 계산기 뷰 파셜 (Phase 1, DOC-DSN-42)
 style.css               # CSS 진입점 (@import로 모듈 로드)
 sw.js                   # Service Worker
 manifest.webmanifest    # PWA 매니페스트
@@ -381,6 +382,11 @@ src/                    # ES Modules
         formula-audit.js    # 종합 규정 점검 보고서 수집기 (FO-56, 유형별 게이트)
         formula-print.js    # 인쇄 빌더 (조제 기록지·라벨·안내문·종합 보고서)
         trainer-ingredients.js # 원료 배합 챌린지 (features.ingredients)
+    carework/           # 요양보호사 도메인 (domain:carework) — 현장도구 Phase 1 (DOC-DSN-42)
+      care-calc.js        # 장기요양 비용 계산 로직 — 재가 15%·시설 20%·감경·등급 한도
+      care-calc-data.js   # 계산 상수 — 등급 월한도·부담률·감경률 (ref_md 법령 출처 주석)
+      views/
+        care-calc.js      # 계산기 뷰 모듈 (practice-registry 지연 로드)
   views/                # 뷰 컨트롤러 (직속 23개 + 하위 4그룹 22개)
     exam-sim/           # 모의고사 클러스터 (파사드·세션·아레나·드래프트·상태·리뷰·오답)
       exam-simulator.js           # 실전 모의고사 파사드 — 분리 모듈 재수출 + 성적 이력 저장

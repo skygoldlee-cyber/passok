@@ -4,7 +4,7 @@
 
 - `src/exams/carework/care-calc{,-data}.js` + `views/care-calc.js` + `src/html/exams/carework/care-calc.html` — 재가 15%·시설 20%·감경 60/40%·등급 월한도 계산 뷰
 - `practice-registry.js` — careCalc 엔트리 (priority 1) · `index.template.html` nav/스텁/mobile · exams features.careCalc · manifest uiText.careCalc · feature-plan care_calc:free
-- tests/unit/exams/carework/care-calc.test.js — 계산 5케이스
+- tests/unit/exams/carework/care-calc.test.js — 계산 5케이스 · practice-registry.test 해시슬러그·핸들러수 기댓값에 care-calc 반영 · 마크업은 html/exams/carework/(루트) 규약 정정 + HTML @spec 태그 + AGENTS 트리 반영
 
 ## 2026-11-01 fix(config): docs_paths_allowlist에 설계안 미래 경로 3건 등록
 
