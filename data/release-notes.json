@@ -1,5 +1,19 @@
 [
   {
+    "version": "v20261101-67dff82",
+    "date": "2026-11-01",
+    "notes": [
+      "[수정·ui] 실무 탭바 그룹 상시 표시 — 학습 모드 숨김 회귀 수정",
+      "[수정] 막뉴얼→매뉴얼 오탈자 전수 정정 (잔여 4파일)",
+      "[리팩터링·ui] 모바일 탭바를 학습·실무 그룹으로 물리 분리",
+      "[수정·ui] 실무 모드 탭바 매뉴얼 → 실무막뉴얼 교체",
+      "[수정] 실무막뉴얼→실무막뉴얼 오탈자 정정 + 메뉴얼→매뉴얼 전수 정정",
+      "[수정] 메뉴얼→매뉴얼 오탈자 전수 정정 (2건)",
+      "[수정·ui] 모바일 시트 기관 라벨을 그리드 밖으로 분리",
+      "[정리·release] v20261101-10b1621 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-10b1621",
     "date": "2026-11-01",
     "notes": [
@@ -193,20 +207,6 @@
       "[문서·overview] 시험팩 수 19→20 — 요양보호사(carework) 행 추가 [no-test] [no-docs]",
       "[수정·exams] appName의 'PassOK ' 접두 제거 — 랜딩 카드 명칭 통일 [no-test] [no-docs]",
       "[정리·release] v20261101-2400bea 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-2400bea",
-    "date": "2026-11-01",
-    "notes": [
-      "[문서·exams] carework 설계 초안 — 현장 보조 기능 챕터 추가 [no-test] [no-docs]",
-      "[문서·exams] carework 실무도구 설계 — 음성 입력 경로(온디바이스 STT) 명세 추가 [no-test] [no-docs]",
-      "[리팩터링·exams] carework 실무도구 설계 초안을 docs/로 이동 — careguide 과목 제거 [no-test] [no-docs]",
-      "[리팩터링·exams] carework 실무가이드를 실무도구 설계 초안(draft-spec)으로 재정의 [no-test] [no-docs]",
-      "[기능·exams] carework 실무 가이드 과목 추가 + lawdb 5종 등록 [no-test] [no-docs]",
-      "[기능·exams] carework 출제범위 ref 편입 + 실기 3영역 정정 [no-test] [no-docs]",
-      "[기능·exams] 요양보호사 draft 팩 등록 — 필기·실기 2과목 챕터 골격 + 법령 5건 [no-test] [no-docs]",
-      "[정리·release] v20261031-05e15ac 스탬프 확정 [no-docs]"
     ]
   }
 ]
