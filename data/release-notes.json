@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261101-9bb729a",
+    "date": "2026-11-01",
+    "notes": [
+      "[수정·ui] 더보기 시트 기관 구역의 실무막뉴얼 버튼 제거",
+      "[정리·release] v20261101-b1d69bb 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-b1d69bb",
     "date": "2026-11-01",
     "notes": [
@@ -187,14 +195,6 @@
       "[수정·config] docs_paths_allowlist에 DOC-DSN-42 미래 경로 3건 등록",
       "[문서·design] carework 현장도구 설계 — 시험→실무 구독 전환 (DOC-DSN-42)",
       "[정리·release] v20261101-f781004 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-f781004",
-    "date": "2026-11-01",
-    "notes": [
-      "[기능·exams] compapp2·indsafe·broker active 승격 — 시장분석 우선순위 2~4순위",
-      "[정리·release] v20261101-57eb10e 스탬프 확정 [no-docs]"
     ]
   }
 ]
