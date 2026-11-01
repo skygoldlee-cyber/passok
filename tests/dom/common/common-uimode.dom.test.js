@@ -87,11 +87,13 @@ describe('UI 모드 — 학습/실무 전환', () => {
         expect(getComputedStyle(document.querySelector('.manual-nav-link.nav-study-only')).display).toBe('none');
         // 탭바에는 실무 전용 항목이 없어야 함 — 실무매뉴얼·학습도구는 더보기 시트 소속
         expect(document.querySelectorAll('#mobile-tab-bar .nav-practice-only')).toHaveLength(0);
-        // 실무 전용 버튼 2개(실무매뉴얼·학습도구 — 모두 시트 내) 모두 표시
-        expect(document.querySelectorAll('button.nav-practice-only')).toHaveLength(2);
-        document.querySelectorAll('button.nav-practice-only').forEach(t => {
+        // 실무 전용 버튼(실무매뉴얼·학습도구 — 모두 시트 내) 표시 — feature 게이트 항목(대처카드 등)은 활성 시험에 따라 숨을 수 있어 대표 버튼만 고정 검증
+        expect(document.querySelectorAll('button.nav-practice-only').length).toBeGreaterThanOrEqual(2);
+        for (const sel of ['button.nav-practice-only[data-click="ManualViewer.openFormulaManual"]', 'button.nav-practice-only[data-click="toggleStudyTools"]']) {
+            const t = document.querySelector(sel);
+            expect(t, `${sel} 부재`).not.toBeNull();
             expect(getComputedStyle(t).display).not.toBe('none');
-        });
+        }
         // 모바일 학습도구 탭 존재 — 사이드바 없는 환경의 학습 항목 펼침 경로
         const mobileToolsTab = document.querySelector('.mobile-tab-item[data-click="toggleStudyTools"]');
         expect(mobileToolsTab).not.toBeNull();

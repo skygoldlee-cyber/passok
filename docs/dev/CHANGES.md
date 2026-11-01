@@ -3,7 +3,7 @@
 ## 2026-11-01 feat(carework): Phase 2 상황별 대처카드 (careCard) — DOC-DSN-42
 
 - `content/exams/carework/실무/care_cards.json` — BPSD 3종·낙상·욕창·응급·감염·학대 의심 8카드 (상황인식→즉시조치→보고→기록 플로우, 자체 저작)
-- `src/exams/carework/care-card.js` + `views/care-card.js` + `html/exams/carework/care-card.html` — practice-registry careCard 엔트리 (priority 2) + nav/스텁/mobile + features.careCard + manifest uiText
+- `src/exams/carework/care-card.js` + `views/care-card.js` + `html/exams/carework/care-card.html` — practice-registry careCard 엔트리 (priority 2) + nav/스텁 (모바일은 탭 상한으로 더보기 시트 배치) · uimode DOM 테스트를 대표버튼 고정 검증으로 완화 + features.careCard + manifest uiText
 - tests/unit/exams/carework/care-card.test.js — 데이터 구조·시나리오 커버·조회 3케이스
 
 ## 2026-11-01 feat(carework): Phase 1 장기요양 비용 계산기 (careCalc) — DOC-DSN-42
