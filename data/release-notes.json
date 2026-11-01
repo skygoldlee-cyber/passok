@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261102-0058969",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정·ui] 학습도구 고아 잔재 제거 — 버튼 내용물만 남아 모드 무관 표시",
+      "[정리·release] v20261102-27dd053 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-27dd053",
     "date": "2026-11-02",
     "notes": [
@@ -183,14 +191,6 @@
       "[정리·trace] TRACE_MATRIX 재생성 — careHandover 반영",
       "[기능·carework] Phase 5 인수인계서 (careHandover) — 교대근무 공유",
       "[정리·release] v20261101-a13b7eb 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-a13b7eb",
-    "date": "2026-11-01",
-    "notes": [
-      "[수정·carework] 실무도구 CSS를 앱 다크 테마 토큰으로 교체 — 대비 불량 수정",
-      "[정리·release] v20261101-e2862da 스탬프 확정 [no-docs]"
     ]
   }
 ]
