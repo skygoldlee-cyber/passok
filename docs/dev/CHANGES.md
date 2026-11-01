@@ -10,6 +10,10 @@
 
 ## 2026-11-01 test: uimode DOM 갱신 — 삭제된 시트 버튼 단언 제거·기관가입·인수인계로 대표 검증
 
+## 2026-11-02 chore: build:derived 파생물 — 아이콘 교체 반영 매니페스트 재생성
+
+- manifest.*.webmanifest 15개 — 아이콘 스탬프 변경으로 PWA 매니페스트 일괄 재생성
+
 ## 2026-11-02 fix(carework): 대처카드·삭제 버튼 클릭 무응답 — data-id→data-arg 인자 규약 정정
 
 - 위임 디스패치는 data-arg/data-args만 전달하고 이벤트 객체는 미전달 — evt.currentTarget.dataset.id 핸들러는 항상 빈 id를 받아 무동작 (careCardOpen·careLogDelete·careHandoverDelete)
