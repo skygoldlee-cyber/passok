@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-01 feat(market): Q-Net 통계 수집 스크립트 — 시장분석용 응시자 DB
+
+- `tools/market/fetch_qnet_stats.py` — 20종 후보 시험(jmCd·Passok팩 매핑·주기·응시료·기출공개 여부) × 5개년 응시·합격 DB 생성. 시드 우선 적재 후 Q-Net cst006 POST·HRD 오픈API로 실측 덮어쓰기 시도 — 현재 공식 통계는 세션 폼 구조로 실측 0건, HRD_OC_KEY 설정 시 라이브 수집 활성화
+
 ## 2026-11-01 fix(gates): docsync 우회 안내를 모드별로 정정 — [no-docs]는 --ref 전용
 
 - `tools/check/check_doc_sync.js` — pre-commit(--staged) 실패 메시지가 `[no-docs]`를 우회 수단으로 안내했으나, 마크는 커밋 메시지를 읽는 --ref 모드에서만 유효해 staged에서는 원천 적용 불가 → 오인 유도. 실패 안내를 모드 분기로 정정 (ref: 행 끝 `[no-docs]`·SKIP_DOCSYNC=1 / staged·worktree: SKIP_DOCSYNC=1 + 마크 적용 불가 명시)
