@@ -1,123 +1,215 @@
 [
- {
-  "numbers": [
-   {
-    "number": "2",
-    "unit": "시간"
-   }
-  ],
-  "context": "욕창 예방 체위 변경 기본 간격 — 와상 대상자",
-  "isKey": true,
-  "category": "🛏️ 신체지원"
- },
- {
-  "numbers": [
-   {
-    "number": "9",
-    "unit": "일"
-   }
-  ],
-  "context": "단기보호 1회 이용 기간 — 9일 이내 (연 4회)",
-  "isKey": true,
-  "category": "🏠 급여 종류"
- },
- {
-  "numbers": [
-   {
-    "number": "4",
-    "unit": "회"
-   }
-  ],
-  "context": "단기보호 연간 이용 횟수 — 1년 4회 이내",
-  "isKey": true,
-  "category": "🏠 급여 종류"
- },
- {
-  "numbers": [
-   {
-    "number": "12",
-    "unit": "일"
-   }
-  ],
-  "context": "장기요양 가족휴가제 연간 한도 — 1·2등급·치매 가족",
-  "isKey": true,
-  "category": "🏠 급여 종류"
- },
- {
-  "numbers": [
-   {
-    "number": "15",
-    "unit": "일"
-   }
-  ],
-  "context": "주야간보호 치매전담실 추가한도 기준 — 월 15일(1일 8시간) 이상 이용 시 한도 50% 추가",
-  "isKey": false,
-  "category": "🏠 급여 종류"
- },
- {
-  "numbers": [
-   {
-    "number": "30",
-    "unit": "초"
-   }
-  ],
-  "context": "감염관리 손위생 — 비누와 흐르는 물로 30초 이상",
-  "isKey": true,
-  "category": "🧼 감염관리"
- },
- {
-  "numbers": [
-   {
-    "number": "80",
-    "unit": "%"
-   }
-  ],
-  "context": "통합재가 추가한도 이용 기준 — 동일 기관 월 한도 80% 이상 이용 시 10% 추가",
-  "isKey": false,
-  "category": "🏠 급여 종류"
- },
- {
-  "numbers": [
-   {
-    "number": "8",
-    "unit": "시간"
-   }
-  ],
-  "context": "주야간보호 1일 서비스 시간 기준 — 하루 8시간 단위 이용 산정",
-  "isKey": true,
-  "category": "🏠 급여 종류"
- },
- {
-  "numbers": [
-   {
-    "number": "120",
-    "unit": "mmHg"
-   }
-  ],
-  "context": "정상 수축기 혈압 기준 — 고혈압 평가 시 관찰 수치",
-  "isKey": false,
-  "category": "🩺 건강 관찰"
- },
- {
-  "numbers": [
-   {
-    "number": "29690",
-    "unit": "원"
-   }
-  ],
-  "context": "의사소견서 발급비용 — 의료기관 29,690원·보건소 27,230원 (제공기준 고시)",
-  "isKey": false,
-  "category": "💰 비용"
- },
- {
-  "numbers": [
-   {
-    "number": "5",
-    "unit": "년"
-   }
-  ],
-  "context": "서비스기록·요양 관련 기록 보존 기간 — 기관 평가 대비",
-  "isKey": true,
-  "category": "📋 기록·관리"
- }
+  {
+    "numbers": [
+      {
+        "number": "2",
+        "unit": "시간"
+      }
+    ],
+    "context": "욕창 예방 체위 변경 기본 간격 — 와상 대상자",
+    "isKey": true,
+    "category": "🛏️ 신체지원"
+  },
+  {
+    "numbers": [
+      {
+        "number": "9",
+        "unit": "일"
+      }
+    ],
+    "context": "단기보호 1회 이용 기간 — 9일 이내 (연 4회)",
+    "isKey": true,
+    "category": "🏠 급여 종류"
+  },
+  {
+    "numbers": [
+      {
+        "number": "4",
+        "unit": "회"
+      }
+    ],
+    "context": "단기보호 연간 이용 횟수 — 1년 4회 이내",
+    "isKey": true,
+    "category": "🏠 급여 종류"
+  },
+  {
+    "numbers": [
+      {
+        "number": "12",
+        "unit": "일"
+      }
+    ],
+    "context": "장기요양 가족휴가제 연간 한도 — 1·2등급·치매 가족",
+    "isKey": true,
+    "category": "🏠 급여 종류"
+  },
+  {
+    "numbers": [
+      {
+        "number": "15",
+        "unit": "일"
+      }
+    ],
+    "context": "주야간보호 치매전담실 추가한도 기준 — 월 15일(1일 8시간) 이상 이용 시 한도 50% 추가",
+    "isKey": false,
+    "category": "🏠 급여 종류"
+  },
+  {
+    "numbers": [
+      {
+        "number": "30",
+        "unit": "초"
+      }
+    ],
+    "context": "감염관리 손위생 — 비누와 흐르는 물로 30초 이상",
+    "isKey": true,
+    "category": "🧼 감염관리"
+  },
+  {
+    "numbers": [
+      {
+        "number": "80",
+        "unit": "%"
+      }
+    ],
+    "context": "통합재가 추가한도 이용 기준 — 동일 기관 월 한도 80% 이상 이용 시 10% 추가",
+    "isKey": false,
+    "category": "🏠 급여 종류"
+  },
+  {
+    "numbers": [
+      {
+        "number": "8",
+        "unit": "시간"
+      }
+    ],
+    "context": "주야간보호 1일 서비스 시간 기준 — 하루 8시간 단위 이용 산정",
+    "isKey": true,
+    "category": "🏠 급여 종류"
+  },
+  {
+    "numbers": [
+      {
+        "number": "120",
+        "unit": "mmHg"
+      }
+    ],
+    "context": "정상 수축기 혈압 기준 — 고혈압 평가 시 관찰 수치",
+    "isKey": false,
+    "category": "🩺 건강 관찰"
+  },
+  {
+    "numbers": [
+      {
+        "number": "29690",
+        "unit": "원"
+      }
+    ],
+    "context": "의사소견서 발급비용 — 의료기관 29,690원·보건소 27,230원 (제공기준 고시)",
+    "isKey": false,
+    "category": "💰 비용"
+  },
+  {
+    "numbers": [
+      {
+        "number": "5",
+        "unit": "년"
+      }
+    ],
+    "context": "서비스기록·요양 관련 기록 보존 기간 — 기관 평가 대비",
+    "isKey": true,
+    "category": "📋 기록·관리"
+  },
+  {
+    "numbers": [
+      {
+        "number": "30",
+        "unit": "분"
+      }
+    ],
+    "context": "방문요양 1회 서비스 최소 제공 시간 — 제공기준 고시",
+    "isKey": true,
+    "category": "📋 제공기준"
+  },
+  {
+    "numbers": [
+      {
+        "number": "8",
+        "unit": "시간"
+      }
+    ],
+    "context": "주야간보호 1일 이용 기본 단위",
+    "isKey": true,
+    "category": "📋 제공기준"
+  },
+  {
+    "numbers": [
+      {
+        "number": "9",
+        "unit": "일"
+      },
+      {
+        "number": "4",
+        "unit": "회"
+      }
+    ],
+    "context": "단기보호 — 1회 9일 이내·연 4회 이용",
+    "isKey": true,
+    "category": "📋 제공기준"
+  },
+  {
+    "numbers": [
+      {
+        "number": "12",
+        "unit": "일"
+      }
+    ],
+    "context": "가족휴가제 연 이용일 — 월 한도 무관(1·2등급·치매)",
+    "isKey": true,
+    "category": "📋 제공기준"
+  },
+  {
+    "numbers": [
+      {
+        "number": "15",
+        "unit": "일"
+      }
+    ],
+    "context": "주야간보호 치매전담실 월 15일 이상 — 한도 50% 추가",
+    "isKey": true,
+    "category": "📋 제공기준"
+  },
+  {
+    "numbers": [
+      {
+        "number": "1",
+        "unit": "회"
+      }
+    ],
+    "context": "인권교육 연 1회 이상 — 대상자·종사자 모두",
+    "isKey": true,
+    "category": "🛡️ 인권"
+  },
+  {
+    "numbers": [
+      {
+        "number": "130",
+        "unit": "만 화소"
+      }
+    ],
+    "context": "장기요양기관 CCTV 최소 해상도",
+    "isKey": true,
+    "category": "🛡️ 인권"
+  },
+  {
+    "numbers": [
+      {
+        "number": "5",
+        "unit": "분"
+      }
+    ],
+    "context": "손 씻기 등 손위생 기본 권장 시간(감염관리)",
+    "isKey": true,
+    "category": "🧼 감염"
+  }
 ]

@@ -10,6 +10,11 @@
 
 ## 2026-11-01 test: uimode DOM 갱신 — 삭제된 시트 버튼 단언 제거·기관가입·인수인계로 대표 검증
 
+## 2026-11-02 content(carework): 과목2 콘텐츠 보강 — ref_md 2건·용어집·number-drills
+
+- ref_md/과목2: 안전·인권 기준(발췌)+기관 평가 대비 실무 기준(발췌) — selfAuthoredDocs 등록
+- glossary subject2 15→31항·number-drills careprac+8·caretheory+4
+
 ## 2026-11-02 feat(carework): careAudit 점검표 내보내기 — 복사·인쇄/PDF 버튼
 
 - careAuditCopy(섹션별 ✔/□ 요약 텍스트 클립보드)·careAuditPrint — Pro 게이트 (care_audit_export)
@@ -21,6 +26,11 @@
 ## 2026-11-02 fix(carework): 대처카드·삭제 버튼 클릭 무응답 — data-id→data-arg 인자 규약 정정
 
 - 위임 디스패치는 data-arg/data-args만 전달하고 이벤트 객체는 미전달 — evt.currentTarget.dataset.id 핸들러는 항상 빈 id를 받아 무동작 (careCardOpen·careLogDelete·careHandoverDelete)
+
+## 2026-11-02 content(carework): 과목2 콘텐츠 보강 — ref_md 2건·용어집·number-drills
+
+- ref_md/과목2: 안전·인권 기준(발췌)+기관 평가 대비 실무 기준(발췌) — selfAuthoredDocs 등록
+- glossary subject2 15→31항·number-drills careprac+8·caretheory+4
 
 ## 2026-11-02 feat(carework): careAudit 점검표 내보내기 — 복사·인쇄/PDF 버튼
 

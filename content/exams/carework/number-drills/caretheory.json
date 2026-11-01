@@ -1,134 +1,178 @@
 [
- {
-  "numbers": [
-   {
-    "number": "80",
-    "unit": "문제"
-   }
-  ],
-  "context": "요양보호사 시험 문항 수 — 객관식 5지선다 80문항",
-  "isKey": true,
-  "category": "📋 시험 구성"
- },
- {
-  "numbers": [
-   {
-    "number": "90",
-    "unit": "분"
-   }
-  ],
-  "context": "요양보호사 시험 시간 — 90분",
-  "isKey": true,
-  "category": "📋 시험 구성"
- },
- {
-  "numbers": [
-   {
-    "number": "60",
-    "unit": "점"
-   }
-  ],
-  "context": "합격 기준 — 만점의 60% 이상",
-  "isKey": true,
-  "category": "📋 시험 구성"
- },
- {
-  "numbers": [
-   {
-    "number": "15",
-    "unit": "%"
-   }
-  ],
-  "context": "재가급여 본인부담률 (노인장기요양보험법 §40)",
-  "isKey": true,
-  "category": "💰 비용"
- },
- {
-  "numbers": [
-   {
-    "number": "20",
-    "unit": "%"
-   }
-  ],
-  "context": "시설급여 본인부담률 (노인장기요양보험법 §40)",
-  "isKey": true,
-  "category": "💰 비용"
- },
- {
-  "numbers": [
-   {
-    "number": "60",
-    "unit": "%"
-   }
-  ],
-  "context": "본인부담금 감경 1단계 — 기초생계수급자 등 60% 경감",
-  "isKey": true,
-  "category": "💰 비용"
- },
- {
-  "numbers": [
-   {
-    "number": "40",
-    "unit": "%"
-   }
-  ],
-  "context": "본인부담금 감경 2단계 — 의료급여수급권자 등 40% 경감",
-  "isKey": false,
-  "category": "💰 비용"
- },
- {
-  "numbers": [
-   {
-    "number": "5",
-    "unit": "등급"
-   }
-  ],
-  "context": "장기요양등급 수 — 1~5등급 (+인지지원등급)",
-  "isKey": true,
-  "category": "🏅 등급·판정"
- },
- {
-  "numbers": [
-   {
-    "number": "4",
-    "unit": "년"
-   }
-  ],
-  "context": "장기요양등급 유효기간 — 재판정 갱신 주기",
-  "isKey": true,
-  "category": "🏅 등급·판정"
- },
- {
-  "numbers": [
-   {
-    "number": "65",
-    "unit": "세"
-   }
-  ],
-  "context": "장기요양보험 대상 연령 기준 — 65세 이상 또는 노인성 질병",
-  "isKey": true,
-  "category": "🏅 등급·판정"
- },
- {
-  "numbers": [
-   {
-    "number": "8",
-    "unit": "시간"
-   }
-  ],
-  "context": "장기요양기관 인권교육 의무 — 연간 교육 시간",
-  "isKey": true,
-  "category": "⚖️ 법정 의무"
- },
- {
-  "numbers": [
-   {
-    "number": "15771389",
-    "unit": ""
-   }
-  ],
-  "context": "노인학대 신고 번호 — 노인보호전문기관 1577-1389",
-  "isKey": true,
-  "category": "⚖️ 법정 의무"
- }
+  {
+    "numbers": [
+      {
+        "number": "80",
+        "unit": "문제"
+      }
+    ],
+    "context": "요양보호사 시험 문항 수 — 객관식 5지선다 80문항",
+    "isKey": true,
+    "category": "📋 시험 구성"
+  },
+  {
+    "numbers": [
+      {
+        "number": "90",
+        "unit": "분"
+      }
+    ],
+    "context": "요양보호사 시험 시간 — 90분",
+    "isKey": true,
+    "category": "📋 시험 구성"
+  },
+  {
+    "numbers": [
+      {
+        "number": "60",
+        "unit": "점"
+      }
+    ],
+    "context": "합격 기준 — 만점의 60% 이상",
+    "isKey": true,
+    "category": "📋 시험 구성"
+  },
+  {
+    "numbers": [
+      {
+        "number": "15",
+        "unit": "%"
+      }
+    ],
+    "context": "재가급여 본인부담률 (노인장기요양보험법 §40)",
+    "isKey": true,
+    "category": "💰 비용"
+  },
+  {
+    "numbers": [
+      {
+        "number": "20",
+        "unit": "%"
+      }
+    ],
+    "context": "시설급여 본인부담률 (노인장기요양보험법 §40)",
+    "isKey": true,
+    "category": "💰 비용"
+  },
+  {
+    "numbers": [
+      {
+        "number": "60",
+        "unit": "%"
+      }
+    ],
+    "context": "본인부담금 감경 1단계 — 기초생계수급자 등 60% 경감",
+    "isKey": true,
+    "category": "💰 비용"
+  },
+  {
+    "numbers": [
+      {
+        "number": "40",
+        "unit": "%"
+      }
+    ],
+    "context": "본인부담금 감경 2단계 — 의료급여수급권자 등 40% 경감",
+    "isKey": false,
+    "category": "💰 비용"
+  },
+  {
+    "numbers": [
+      {
+        "number": "5",
+        "unit": "등급"
+      }
+    ],
+    "context": "장기요양등급 수 — 1~5등급 (+인지지원등급)",
+    "isKey": true,
+    "category": "🏅 등급·판정"
+  },
+  {
+    "numbers": [
+      {
+        "number": "4",
+        "unit": "년"
+      }
+    ],
+    "context": "장기요양등급 유효기간 — 재판정 갱신 주기",
+    "isKey": true,
+    "category": "🏅 등급·판정"
+  },
+  {
+    "numbers": [
+      {
+        "number": "65",
+        "unit": "세"
+      }
+    ],
+    "context": "장기요양보험 대상 연령 기준 — 65세 이상 또는 노인성 질병",
+    "isKey": true,
+    "category": "🏅 등급·판정"
+  },
+  {
+    "numbers": [
+      {
+        "number": "8",
+        "unit": "시간"
+      }
+    ],
+    "context": "장기요양기관 인권교육 의무 — 연간 교육 시간",
+    "isKey": true,
+    "category": "⚖️ 법정 의무"
+  },
+  {
+    "numbers": [
+      {
+        "number": "15771389",
+        "unit": ""
+      }
+    ],
+    "context": "노인학대 신고 번호 — 노인보호전문기관 1577-1389",
+    "isKey": true,
+    "category": "⚖️ 법정 의무"
+  },
+  {
+    "numbers": [
+      {
+        "number": "80",
+        "unit": "시간"
+      }
+    ],
+    "context": "요양보호사 양성교육 총 교육시간(신규자)",
+    "isKey": true,
+    "category": "🎓 교육"
+  },
+  {
+    "numbers": [
+      {
+        "number": "6",
+        "unit": "년"
+      }
+    ],
+    "context": "장기요양 갱신조사 주기 대상 등급 유효기간 상한",
+    "isKey": true,
+    "category": "📋 등급"
+  },
+  {
+    "numbers": [
+      {
+        "number": "15",
+        "unit": "일"
+      }
+    ],
+    "context": "처분전 행정처분 사전통지 의견제출 기간",
+    "isKey": true,
+    "category": "⚖️ 법령"
+  },
+  {
+    "numbers": [
+      {
+        "number": "65",
+        "unit": "세"
+      }
+    ],
+    "context": "노인장기요양보험 적용 대상 기본 연령",
+    "isKey": true,
+    "category": "⚖️ 법령"
+  }
 ]
