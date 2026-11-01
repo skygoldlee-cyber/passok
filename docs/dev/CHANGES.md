@@ -10,6 +10,10 @@
 
 ## 2026-11-01 test: uimode DOM 갱신 — 삭제된 시트 버튼 단언 제거·기관가입·인수인계로 대표 검증
 
+## 2026-11-02 fix(icon): maskable 아이콘 교체 — 별 안전 원 안 버전
+
+- icons/passok-icon-maskable-512.png 교체 (별 최외각점 169px < 안전 원 205px — adaptive icon 마스크 잘림 해소)
+
 ## 2026-11-02 feat(ui): 모바일 배경 금강전도 분리 — icons/bg-portrait.webp 추가
 
 - ≤900px 뷰포트는 정선「금강전도」세로형 배경 (center top·cover) · ≥901px는 기존 인왕제색도 유지 + sw.js SHELL_ASSETS 등록
