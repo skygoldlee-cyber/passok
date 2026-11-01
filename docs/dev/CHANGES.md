@@ -8,6 +8,11 @@
 
 - 실무 그룹을 학습 모드에서 숨기던 CSS 제거 — 실무도구·현장도구 탭은 모드 무관 항상 표시가 원래 관례 (exam-switch E2E 회귀 수정, 로컬 7/7 통과)
 
+## 2026-11-01 fix(ui): 사이드바 실무막뉴얼도 실무 모드 전용으로 숨김 + cosmetic 실무막뉴얼 추가
+
+- 사이드바 manual-nav-link에 nav-practice-only 누락으로 학습 모드 노출 — 적용
+- `content/exams/cosmetic/docs/실무막뉴얼.md` (DOC-USR-21) — Formula OS 작업 흐름 안내 + `features.practiceManual` 선언 (DA-19 시험별 자체 작성)
+
 ## 2026-11-01 fix(ui): 더보기 시트 실무막뉴얼 실제 제거 — 잔여 버튼·고아 span 정리 + 라벨 오탈자 정정
 
 ## 2026-11-01 fix(ui): 더보기 시트 기관 구역의 실무막뉴얼 제거 — 탭바와 중복
