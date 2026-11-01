@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261101-39e18f8",
+    "date": "2026-11-01",
+    "notes": [
+      "[수정·carework] 진행률 바 innerHTML 보간 esc() — esc-sink 게이트",
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[정리·trace] TRACE_MATRIX 재생성 — careAudit 반영",
+      "[기능·carework] Phase 4 — 평가 체크리스트 + 일지 인쇄 + 용어집·드릴·과목2 ref_md + 일지 동기화",
+      "[정리·release] v20261101-abe2e1f 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-abe2e1f",
     "date": "2026-11-01",
     "notes": [
@@ -190,14 +201,6 @@
     "notes": [
       "[되돌림·ui] 시험 선택 뷰 AI 코치 안내 행 제거 — 랜딩과 중복",
       "[정리·release] v20261030-cdde72f 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261030-cdde72f",
-    "date": "2026-10-30",
-    "notes": [
-      "[문서·landing] 히어로 차별점 스트립에 AI 학습 코치 추가",
-      "[정리·release] v20261030-7a39333 스탬프 확정 [no-docs]"
     ]
   }
 ]
