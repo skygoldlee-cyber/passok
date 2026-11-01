@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261101-a1fc83a",
+    "date": "2026-11-01",
+    "notes": [
+      "[수정·ui] 탭바 더보기 폭 회귀 — tab-group을 display:contents로 평탄화",
+      "[수정·ui] 모바일 더보기 표기 전체 메뉴 → 전체 매뉴",
+      "[정리·release] v20261101-67dff82 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-67dff82",
     "date": "2026-11-01",
     "notes": [
@@ -198,15 +207,6 @@
       "[수정·gates] docsync 우회 안내를 모드별로 정정 — [no-docs]는 --ref 전용",
       "[content] carework 참조자료 13건·교재·문제은행 40문 편입",
       "[정리·release] v20261101-d05782d 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-d05782d",
-    "date": "2026-11-01",
-    "notes": [
-      "[문서·overview] 시험팩 수 19→20 — 요양보호사(carework) 행 추가 [no-test] [no-docs]",
-      "[수정·exams] appName의 'PassOK ' 접두 제거 — 랜딩 카드 명칭 통일 [no-test] [no-docs]",
-      "[정리·release] v20261101-2400bea 스탬프 확정 [no-docs]"
     ]
   }
 ]
