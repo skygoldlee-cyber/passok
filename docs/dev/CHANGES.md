@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-01 fix(carework): 실무도구 CSS 다크 테마 토큰 교체 — 대비 불량 수정
+
+- `css/exams/carework/care-tools.css` — 하드코딩 `#fff` 배경·암색 글자 → 앱 다크 테마 토큰(`--bg-card`·`--bg-muted`·`--color-text-main/muted`·`--border-*`·`--color-primary`)으로 전면 교체 — 카드 대비 불량 해소, 인쇄 시에만 백지 명문 유지
+
 ## 2026-11-01 feat(carework): 실무도구 UI/UX — 도메인 CSS 도입 + 인쇄 격리
 
 - `css/exams/carework/care-tools.css` 신규 — 4피처 공용 스타일 (카드형 폼·영수증형 결과·대처카드 그리드+단계 색상·체크박스 칩·진행률 바) + registry `styles: 'care-tools.css'` 지연 주입 (careCalc·careCard·careLog·careAudit)
