@@ -1256,3 +1256,9 @@ table {
 .exam-unselected #exam-select-clear {
     opacity: 1;
 }
+
+/* 모바일 탭바 그룹 분리 — 학습·실무 모드별 그룹 토글 */
+.mobile-tab-bar .tab-group { display: flex; flex: 1; align-items: stretch; min-width: 0; }
+.mobile-tab-bar .tab-group .mobile-tab-item { flex: 1; }
+body.ui-mode-practice .tab-group-study { display: none; }
+body:not(.ui-mode-practice) .tab-group-practice { display: none; }

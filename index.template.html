@@ -322,14 +322,11 @@
 
         <!-- Mobile Bottom Tab Bar (모바일 하단 네비게이션 — 핵심 탭 + 더보기 시트) -->
         <nav class="mobile-tab-bar" id="mobile-tab-bar" aria-label="하단 탭 메뉴">
+            <!-- 학습 탭바 — 학습 모드 전용 그룹 -->
+            <div class="tab-group tab-group-study">
             <button class="mobile-tab-item nav-study-only" data-click="ManualViewer.openManual">
                 <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
                 <span data-uitext="manual">매뉴얼</span>
-            </button>
-            <!-- 실무 모드에서는 시험별 실무막뉴얼이 플랫폼 매뉴얼을 대체 (DA-19) -->
-            <button class="mobile-tab-item mobile-tab-practice" data-click="ManualViewer.openPracticeManual" data-feature="practiceManual">
-                <i class="fa-solid fa-book-medical" aria-hidden="true"></i>
-                <span>실무막뉴얼</span>
             </button>
             <button class="mobile-tab-item nav-study-only active" data-target="dashboard-view">
                 <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
@@ -343,6 +340,13 @@
                 <i class="fa-solid fa-clipboard-question" aria-hidden="true"></i>
                 <span data-uitext="quiz:nav">퀴즈</span>
             </button>
+            </div>
+            <!-- 실무 탭바 — 실무 모드 전용 그룹 (실무막뉴얼 + 시험별 실무 도구) -->
+            <div class="tab-group tab-group-practice">
+            <button class="mobile-tab-item mobile-tab-practice" data-click="ManualViewer.openPracticeManual" data-feature="practiceManual">
+                <i class="fa-solid fa-book-medical" aria-hidden="true"></i>
+                <span>실무막뉴얼</span>
+            </button>
             <button class="mobile-tab-item mobile-tab-practice" data-target="formula-view" data-feature="formula">
                 <i class="fa-solid fa-flask-vial" aria-hidden="true"></i>
                 <span data-uitext="formula:nav">실무도구</span>
@@ -351,6 +355,7 @@
                 <i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i>
                 <span data-uitext="careCalc:nav">현장도구</span>
             </button>
+            </div>
             <button class="mobile-tab-item mobile-tab-more" id="mobile-more-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="mobile-more-sheet" title="전체 메뉴 보기">
                 <i class="fa-solid fa-ellipsis" aria-hidden="true"></i>
                 <span>더보기</span>
