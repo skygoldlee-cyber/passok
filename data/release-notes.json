@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261101-b1d69bb",
+    "date": "2026-11-01",
+    "notes": [
+      "[테스트] uimode DOM 테스트 갱신 — 탭바 실무막뉴얼 실무 모드 표시 검증",
+      "[수정·ui] 탭바 실무막뉴얼 nav-practice-only 적용 + 문서 동기화",
+      "[정리·release] v20261101-c12a43c 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-c12a43c",
     "date": "2026-11-01",
     "notes": [
@@ -186,22 +195,6 @@
     "notes": [
       "[기능·exams] compapp2·indsafe·broker active 승격 — 시장분석 우선순위 2~4순위",
       "[정리·release] v20261101-57eb10e 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-57eb10e",
-    "date": "2026-11-01",
-    "notes": [
-      "[수정·carework] 출제기준 문서명 정합 — active 티어 게이트 통과",
-      "[기능·carework] 요양보호사 active 승격 — comingSoon 해제",
-      "[정리] TRACE_MATRIX 재생성 — market @spec·DSN-41 반영",
-      "[수정·market] @spec 태그 추가 + DSN-41 재부여 — spec 파싱 오류·ID 중복 해소",
-      "[문서·market] 시장분석을 design/로 이동 + DOC-DSN-40 부여·레지스트리 등록·trace 재생성",
-      "[문서·market] 시장분석 실측 갱신본 — KOSIS 5개년 응시자 반영",
-      "[기능·market] KOSIS 통계표 확정 — DT_38701_N002_1 성별/종목별 시험현황",
-      "[기능·market] KOSIS API 연결 골격 — 키 유효성 확인, tblId 확정 대기",
-      "[수정·market] HRD 키 요구사항 정정 — authKey는 hrd.go.kr 별도 발급",
-      "[기능·market] Q-Net 통계 수집 스크립트 — 20종 후보 응시자 DB 골격"
     ]
   }
 ]
