@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261102-8b49cf4",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정] 막뉴얼 오탈자 전수 재정정 — cosmetic 매뉴얼 파일명 정정",
+      "[정리·release] v20261102-0058969 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-0058969",
     "date": "2026-11-02",
     "notes": [
@@ -176,21 +184,6 @@
     "notes": [
       "[기능·carework] 인수인계 기록 우선 + 기관 워크스페이스 설계 (DOC-DSN-43)",
       "[정리·release] v20261101-e999e28 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-e999e28",
-    "date": "2026-11-01",
-    "notes": [
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[정리·trace] TRACE_MATRIX 재생성",
-      "[정리·carework] DOM 테스트 파일명 규약 정정 — 접미사 중복 제거",
-      "[정리·trace] TRACE_MATRIX 재생성",
-      "[수정·carework] care-log.html 잘림 복구 + 뷰 DOM 테스트 추가",
-      "[CI] CI 재실행 트리거 [no-docs]",
-      "[정리·trace] TRACE_MATRIX 재생성 — careHandover 반영",
-      "[기능·carework] Phase 5 인수인계서 (careHandover) — 교대근무 공유",
-      "[정리·release] v20261101-a13b7eb 스탬프 확정 [no-docs]"
     ]
   }
 ]
