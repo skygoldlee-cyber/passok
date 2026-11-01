@@ -1194,7 +1194,8 @@ const _EXAM_TABLES = {
         },
         REF_DIRS: {
         "ref_md": [
-            "과목1"
+            "과목1",
+            "과목2"
         ]
         },
         SOURCE_REF_MAP: [
