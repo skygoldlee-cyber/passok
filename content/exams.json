@@ -590,7 +590,8 @@
       "registryBundle": "data/exams/carework/registry.js",
       "registryGlobal": "DATA_REGISTRY_CAREWORK",
       "features": {
-        "careCalc": true
+        "careCalc": true,
+        "careCard": true
       },
       "group": "보건·복지",
       "tier": "active"

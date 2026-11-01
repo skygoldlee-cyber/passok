@@ -262,7 +262,40 @@ const careCalc = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careCalc };
+const careCard = {
+    viewId: 'care-card-view',
+    slug: 'care-card',
+    priority: 2,
+    uiTextKey: 'careCard',
+    title: '대처카드',
+    subtitle: '상황별 현장 판단 플로우',
+    loadingText: '대처카드를 불러오는 중입니다...',
+    loadErrorText: '대처카드를 불러오지 못했습니다.',
+    dataErrorText: '카드 데이터를 불러오지 못했습니다.',
+    markup: 'care-card.html',
+    loaders: { main: _domainImport('views/care-card.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['careCardOpen', 'careCardClose']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careCard.loadingText);
+        try {
+            await ensureViewMarkup(careCard);
+            if (stale()) return;
+            const m = await careCard.loaders.main();
+            if (stale()) return;
+            await m.initCareCardView();
+        } catch (e) {
+            if (!stale()) showToast(careCard.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
+const PRACTICE_FEATURES = { formula, careCalc, careCard };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {
