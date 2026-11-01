@@ -45,7 +45,7 @@ function renderSaved() {
     if (!host) return;
     const items = listHandovers();
     host.innerHTML = items.length
-        ? items.map(x => `<div class="care-log-saved-item"><span>${esc(x.savedAt)} · ${esc(x.from || '')} → ${esc(x.to || '')}</span><button data-click="careHandoverDelete" data-id="${esc(x.id)}" class="secondary">삭제</button></div>`).join('')
+        ? items.map(x => `<div class="care-log-saved-item"><span>${esc(x.savedAt)} · ${esc(x.from || '')} → ${esc(x.to || '')}</span><button data-click="careHandoverDelete" data-arg="${esc(x.id)}" class="secondary">삭제</button></div>`).join('')
         : '<p class="care-log-empty">저장된 인수인계 없음 — 공유 전 저장이 필요합니다.</p>';
 }
 
@@ -61,8 +61,7 @@ export function careHandoverSave() {
     renderSaved();
 }
 
-export function careHandoverDelete(evt) {
-    const id = evt?.currentTarget?.dataset?.id;
+export function careHandoverDelete(id) {
     if (!id) return;
     deleteHandover(id);
     renderSaved();

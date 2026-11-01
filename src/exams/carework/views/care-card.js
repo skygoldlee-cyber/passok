@@ -11,7 +11,7 @@ function renderList() {
     const host = $('care-card-list');
     if (!host) return;
     host.innerHTML = _cards.map(c => `
-        <button class="care-card-item" data-click="careCardOpen" data-id="${esc(c.id)}">
+        <button class="care-card-item" data-click="careCardOpen" data-arg="${esc(c.id)}">
             <span class="care-card-cat">${esc(c.category)}</span>
             <strong>${esc(c.title)}</strong>
             <span class="care-card-trig">${esc(c.trigger)}</span>
@@ -37,8 +37,8 @@ function renderDetail() {
         <button data-click="careCardClose" class="secondary">목록으로</button>`;
 }
 
-export function careCardOpen(evt) {
-    _open = evt?.currentTarget?.dataset?.id || _open;
+export function careCardOpen(id) {
+    _open = id || _open;
     renderDetail();
     const d = $('care-card-detail'); if (d) d.scrollIntoView?.({ behavior: 'smooth' });
 }

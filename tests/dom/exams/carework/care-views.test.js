@@ -55,7 +55,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         loadPartial('care-card.html');
         await initCareCardView();
         const btn = document.querySelector('.care-card-item');
-        if (btn) careCardOpen({ currentTarget: btn });
+        if (btn) careCardOpen(btn.getAttribute('data-arg'));
         careCardClose();
         expect(document.getElementById('care-card-list')).toBeTruthy();
     });
