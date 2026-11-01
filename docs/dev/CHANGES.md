@@ -4,6 +4,10 @@
 
 - `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지 · 파일명 규약 정정: .dom.test.js 접미사 중복 → .test.js)
 
+## 2026-11-01 fix(db): RLS 무한 재귀 수정 — SECURITY DEFINER 함수로 멤버십 검사 분리
+
+- `tools/supabase/schema.sql` §6 — `facility member read`·`members read own facility` 정책의 자기참조 재귀를 `is_facility_member(uuid,uuid)` SECURITY DEFINER 함수로 분리 — 프로덕션 적용 완료 (프로브 9/9 통과)
+
 ## 2026-11-01 feat(carework): Phase 6a 기관 워크스페이스 — 시설·멤버십 스키마 + 연결 뷰
 
 - `tools/supabase/schema.sql` §6 — `facilities`·`facility_members`(worker/manager)·`create_facility`·`join_facility` RPC + RLS (멤버 전용 열람·코드 소비는 함수만 — **프로덕션 적용 필요**)

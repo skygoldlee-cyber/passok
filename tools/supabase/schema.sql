@@ -322,17 +322,26 @@ create table if not exists public.facility_members (
 alter table public.facilities enable row level security;
 alter table public.facility_members enable row level security;
 
+-- RLS 재귀 차단 — 정책의 facility_members 자기참조를 SECURITY DEFINER 함수로 분리
+-- (정책이 자기 테이블을 참조하면 무한 재귀 — definer 함수는 RLS를 우회해 판정)
+drop function if exists public.is_facility_member(uuid, uuid);
+create or replace function public.is_facility_member(p_facility_id uuid, p_user_id uuid)
+returns boolean
+language sql security definer stable set search_path = ''
+as $$
+  select exists (select 1 from public.facility_members
+                 where facility_id = p_facility_id and user_id = p_user_id);
+$$;
+
 -- facilities: 멤버만 열람 (익명·비멤버 차단)
 drop policy if exists "facility member read" on public.facilities;
 create policy "facility member read" on public.facilities for select
-  using (exists (select 1 from public.facility_members m
-                 where m.facility_id = id and m.user_id = auth.uid()));
+  using (public.is_facility_member(id, auth.uid()));
 
 -- facility_members: 같은 시설 멤버만 열람
 drop policy if exists "members read own facility" on public.facility_members;
 create policy "members read own facility" on public.facility_members for select
-  using (exists (select 1 from public.facility_members m
-                 where m.facility_id = facility_id and m.user_id = auth.uid()));
+  using (public.is_facility_member(facility_id, auth.uid()));
 
 -- 시설 생성 — 생성자가 role=manager로 자동 삽입 (원자적)
 drop function if exists public.create_facility(text, text);
