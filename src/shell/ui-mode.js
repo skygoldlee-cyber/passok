@@ -4,7 +4,7 @@
 // 모드는 시험과 무관한 기기 설정(GLOBAL_KEYS) — 'ui_mode': 'study' | 'practice'.
 import { state, safeGetItem, safeSetItem } from '../state.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
-import { isPracticeCapable, getPracticeLanding } from '../practice-registry.js';
+import { isPracticeCapable, getPracticeLanding, getEnabledPracticeFeatures } from '../practice-registry.js';
 import { getCurrentExamId } from '../exam-context.js';
 import { switchView } from '../views/navigation.js';
 import { showToast } from '../ui-utils.js';
@@ -67,6 +67,8 @@ export function toggleUiMode() {
     applyUiMode();
     if (next === 'practice' && STUDY_ONLY_VIEWS.has(state.currentView)) {
         switchView(getPracticeLanding(), { scrollTop: true });
+    } else if (next === 'study' && getEnabledPracticeFeatures().some(f => f.viewId === state.currentView)) {
+        switchView('dashboard-view', { scrollTop: true }); // 실무→학습은 대시보드 랜딩 (DA-20 대칭 규칙)
     }
     showToast(next === 'practice'
         ? '실무 모드로 전환했습니다. 학습 기능은 "학습 도구"에서 열 수 있습니다.'

@@ -10,6 +10,10 @@
 
 ## 2026-11-01 test: uimode DOM 갱신 — 삭제된 시트 버튼 단언 제거·기관가입·인수인계로 대표 검증
 
+## 2026-11-02 feat(ui): 모드 전환 대칭 랜딩 — 실무→학습은 dashboard-view, 학습→실무는 시험별 priority 랜딩
+
+- getEnabledPracticeFeatures 역산으로 실무 뷰 판정 + 학습 복귀 시 dashboard-view 랜딩 (getPracticeLanding는 priority 선언으로 시험별 일반화 — carework는 현장도구, cosmetic은 실무도구)
+
 ## 2026-11-02 test: DA-21 연결 — carework option 다크 규칙 존재 검증
 
 ## 2026-11-02 spec: DA-21 select option 테마 강제 명문화

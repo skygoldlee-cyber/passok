@@ -110,6 +110,14 @@ describe('UI 모드 — 학습/실무 전환', () => {
         expect(switchView).toHaveBeenCalledWith('formula-view', { scrollTop: true });
     });
 
+    it('학습 모드 복귀 — 실무 뷰에 있으면 dashboard-view로 랜딩 (DA-20 대칭)', () => {
+        toggleUiMode(); // 실무 모드 진입
+        switchView.mockClear();
+        state.currentView = 'formula-view';
+        toggleUiMode(); // 학습 모드 복귀
+        expect(switchView).toHaveBeenCalledWith('dashboard-view', { scrollTop: true });
+    });
+
     it('실무 모드 전환 — 실무 뷰에 있으면 이동하지 않음 (B)', () => {
         state.currentView = 'formula-view';
         toggleUiMode();
