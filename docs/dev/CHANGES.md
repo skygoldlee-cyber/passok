@@ -4,6 +4,15 @@
 
 - `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지 · 파일명 규약 정정: .dom.test.js 접미사 중복 → .test.js)
 
+## 2026-11-01 docs(design): 기관 워크스페이스 설계 (DOC-DSN-43)
+
+- `docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md` — PassOK가 기관 기록 서버가 되는 구독 확장 설계: facility·membership(role worker/manager)·handover_records·reads·carelog_records 스키마, RLS 접근 제어, 기관 플랜 과금 계층, 6a~6d 단계
+
+## 2026-11-01 feat(carework): 인수인계 기록 우선 — 저장 후 공유 게이트 + 보관함
+
+- `src/exams/carework/handover-store.js` — 인수인계 로컬 기록 보관 (무료 10건·`Free 플랜` 한도·STORAGE_KEYS.HANDOVER_ITEMS 동기화 대상) + 기관 기록 보관함 UI
+- 게이트 순서: 생성 → **저장(기록) 필수** → 공유·인쇄 — 미저장 공유 차단 토스트 + 저장 후 활성화 (`care_handover_save`·`care_handover_share` pro 선언)
+
 ## 2026-11-01 feat(carework): Phase 5 인수인계서 (careHandover) — 교대근무 공유
 
 - `src/exams/carework/care-handover.js` — 인수인계 표준 포맷(일시·근무조·인계→인수·상태·당일 일지·미완료·주의) + `views/care-handover.js` + `html/exams/carework/care-handover.html` — 당일 저장 일지 자동 병합 체크박스 + navigator.share 공유(미지원 시 복사 폴백)

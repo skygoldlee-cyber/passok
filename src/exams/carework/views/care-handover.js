@@ -2,11 +2,14 @@
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { buildHandover, SHIFTS } from '../care-handover.js';
 import { listCareLogs, FREE_LIMIT } from '../care-log-store.js';
+import { saveHandover, listHandovers, deleteHandover } from '../handover-store.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let _lastText = null;
+let _lastSaved = false;
 const _val = (id, fb) => {
     const el = /** @type {HTMLSelectElement|HTMLInputElement|HTMLTextAreaElement|null} */ ($(id));
     return el && el.value ? el.value : fb;
@@ -32,7 +35,43 @@ export function careHandoverGenerate() {
     const out = $('ho-preview');
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·인계자·인수자를 입력하세요.</p>'; return; }
+    _lastText = t; _lastSaved = false;
     out.innerHTML = `<pre class="care-log-text">${esc(t)}</pre>`;
+    renderSaved();
+}
+
+function renderSaved() {
+    const host = $('ho-saved');
+    if (!host) return;
+    const items = listHandovers();
+    host.innerHTML = items.length
+        ? items.map(x => `<div class="care-log-saved-item"><span>${esc(x.savedAt)} · ${esc(x.from || '')} → ${esc(x.to || '')}</span><button data-click="careHandoverDelete" data-id="${esc(x.id)}" class="secondary">삭제</button></div>`).join('')
+        : '<p class="care-log-empty">저장된 인수인계 없음 — 공유 전 저장이 필요합니다.</p>';
+}
+
+export function careHandoverSave() {
+    careHandoverGenerate();
+    if (!_lastText) { showToast('먼저 인수인계서를 생성하세요.', 'error'); return; }
+    const r = saveHandover(_lastText, {
+        from: _val('ho-from', ''), to: _val('ho-to', ''), date: _val('ho-date', ''),
+    });
+    if (r.error) { showToast(r.error, 'error'); proFeatureNotice('care_handover_save', '인수인계 저장'); return; }
+    _lastSaved = true;
+    showToast('기록에 저장했습니다 — 공유가 활성화됩니다.');
+    renderSaved();
+}
+
+export function careHandoverDelete(evt) {
+    const id = evt?.currentTarget?.dataset?.id;
+    if (!id) return;
+    deleteHandover(id);
+    renderSaved();
+}
+
+function canShare() {
+    if (_lastText && _lastSaved) return true;
+    showToast('공유 전에 기록으로 먼저 저장하세요.', 'error');
+    return false;
 }
 
 export function careHandoverCopy() {
@@ -48,6 +87,7 @@ export function careHandoverShare() {
     careHandoverGenerate();
     const pre = document.querySelector('#ho-preview pre');
     if (!pre) { showToast('먼저 인수인계서를 생성하세요.', 'error'); return; }
+    if (!canShare()) return;
     proFeatureNotice('care_handover_share', '인수인계 공유');
     const text = pre.textContent || '';
     if (navigator.share) {
@@ -60,6 +100,7 @@ export function careHandoverShare() {
 export function careHandoverPrint() {
     careHandoverGenerate();
     if (!document.querySelector('#ho-preview pre')) { showToast('먼저 생성하세요.', 'error'); return; }
+    if (!canShare()) return;
     proFeatureNotice('care_handover_share', '인수인계 인쇄');
     window.print();
 }
@@ -72,4 +113,5 @@ export function initCareHandoverView() {
         s.innerHTML = SHIFTS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
     const n = $('ho-logcount');
     if (n) n.textContent = `오늘 저장된 일지 ${todayLogs().length}건 · 무료 저장 ${FREE_LIMIT}건 한도`;
+    renderSaved();
 }

@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 650d1f68fe2c1c8d
+> 입력 해시: d312e7bd5dcc4570
 > 생성: 2026-11-01 · 원천: SPEC.md(641개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -993,6 +993,7 @@
 | DOC-DSN-40 | docs/dev/design/AI_COACH_DESIGN.md | AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AU-08, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08 |
 | DOC-DSN-41 | docs/dev/design/PASSOK_시장분석.md | — |
 | DOC-DSN-42 | docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md | DA-13, DA-15, PAY-01, PAY-02, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, PAY-08, UM-01, UM-02, UM-03, UM-04 |
+| DOC-DSN-43 | docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md | — |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |
@@ -1062,4 +1063,5 @@
 ## 부록 C — 관련 SPEC ID 헤더 누락 문서
 
 - docs/assets/README.md
+- docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md
 - docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md

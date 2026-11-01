@@ -23,7 +23,7 @@ import { careCalcRun, careCalcReset } from '../../../../src/exams/carework/views
 import { careCardOpen, careCardClose, initCareCardView } from '../../../../src/exams/carework/views/care-card.js';
 import { careLogGenerate, careLogCopy, initCareLogView } from '../../../../src/exams/carework/views/care-log.js';
 import { careAuditReset, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
-import { careHandoverGenerate, careHandoverCopy, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
+import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const loadPartial = (rel) => {
@@ -78,6 +78,10 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('ho-to').value = '박○○';
         careHandoverGenerate();
         expect(document.querySelector('#ho-preview pre')?.textContent).toMatch(/인수인계서/);
+        careHandoverShare(); // 미저장 상태 — 차단 토스트 (기록 우선 규칙)
+        careHandoverSave();
+        expect(document.getElementById('ho-saved')?.textContent).toMatch(/김○○/);
         careHandoverCopy();
+        careHandoverShare(); // 저장 후 — 공유 진행
     });
 });

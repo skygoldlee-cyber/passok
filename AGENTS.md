@@ -394,6 +394,7 @@ src/                    # ES Modules
       care-log-store.js   # 일지 로컬 저장 — 무료 10건 한도·Pro 안내 (Phase 3, 구독 핵심)
       care-audit.js       # 기관 평가 체크리스트 — audit_checklist.json + 체크 상태 로컬 저장 (Phase 4)
       care-handover.js    # 인수인계서 생성 로직 — 교대근무 표준 포맷 + 일지 병합 (Phase 5)
+      handover-store.js   # 인수인계 기록 저장 — 공유 전 저장 의무 플로우 (기관 기록 준법)
       views/
         care-calc.js      # 계산기 뷰 모듈 (practice-registry 지연 로드)
         care-card.js      # 대처카드 뷰 모듈 (Phase 2)

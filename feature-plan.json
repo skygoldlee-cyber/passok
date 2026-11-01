@@ -13,6 +13,7 @@
     "study_plan_pro": "pro",
     "care_log_save": "pro",
     "care_log_export": "pro",
-    "care_handover_share": "pro"
+    "care_handover_share": "pro",
+    "care_handover_save": "pro"
   }
 }
