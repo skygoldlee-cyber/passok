@@ -37,6 +37,20 @@ import json as _json
 HRD_KEY=os.getenv('HRD_OC_KEY') or _load_env('HRD_OC_KEY')
 HRD_SEQ=os.getenv('HRD_OC_SEQNO') or _load_env('HRD_OC_SEQNO')
 DG_KEY=os.getenv('DATA_GO_KR_SERVICE_KEY') or _load_env('DATA_GO_KR_SERVICE_KEY')
+KOSIS_KEY=os.getenv('KOSIS_API_KEY') or _load_env('KOSIS_API_KEY')
+# KOSIS 통계표(orgId/tblId) — kosis.kr에서 '국가기술자격' 검색 시 URL 파라미터로 확정 필요
+KOSIS_TBLS={}  # 예: {'국가기술자격시험 종목별 실시현황':('118','TBL_ID')}
+KOSIS_EP='https://kosis.kr/openapi/Param/statisticsParameterData.do'
+
+def fetch_kosis(org,tbl,itm='T1',obj='ALL',start=2021,end=2025):
+    if not KOSIS_KEY: return None
+    q={'method':'getList','apiKey':KOSIS_KEY,'itmId':itm,'objL1':obj,'format':'json','jsonVD':'Y',
+       'prdSe':'Y','startPrdDe':str(start),'endPrdDe':str(end),'orgId':org,'tblId':tbl}
+    try:
+        t=urllib.request.urlopen(KOSIS_EP+'?'+urllib.parse.urlencode(q),timeout=15).read().decode('utf-8','ignore')
+        d=json.loads(t)
+        return d if isinstance(d,list) else None
+    except Exception: return None
 
 def _load_env(k):
     try:
