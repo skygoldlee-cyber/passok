@@ -10,6 +10,10 @@
 
 ## 2026-11-01 fix(ui): 모바일 더보기 표기 전체 메뉴 → 전체 매뉴
 
+## 2026-11-01 fix(ui): 탭바 더보기 폭 회귀 수정 — tab-group을 display:contents로 평탄화
+
+- tab-group flex:1이 더보기에도 큰 폭을 준 회귀 — display:contents로 버튼 균등 배분 복구
+
 ## 2026-11-01 refactor(ui): 모바일 탭바를 학습·실무 그룹으로 물리 분리
 
 - 단일 nav 안의 버튼별 클래스 토글을 tab-group-study/tab-group-practice 컨테이너 분리로 변경 — CSS로 그룹 단위 모드 토글 (구조적 관리 가능)
