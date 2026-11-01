@@ -25,3 +25,10 @@ test('필수 영역 — 인권·기록·감염·안전', () => {
     for (const req of ['rights', 'records', 'infection', 'safety'])
         assert.ok(ids.includes(req), `${req} 누락`);
 });
+
+test('항목 텍스트 — innerHTML 렌더용 HTML 특수문자 미포함', () => {
+    for (const s of data.sections) for (const i of s.items) {
+        assert.ok(!/[<>"]/.test(i.text), `${i.id}: 텍스트에 HTML 특수문자`);
+        assert.ok(!/[<>"]/.test(i.ref), `${i.id}: ref에 HTML 특수문자`);
+    }
+});

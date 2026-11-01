@@ -5,7 +5,7 @@
 - `content/exams/carework/실무/audit_checklist.json` + `src/exams/carework/care-audit.js` + `views/care-audit.js` + `html/exams/carework/care-audit.html` — 평가방법 고시 기반 4영역(인권·기록·감염·안전) 20항목 체크리스트, 체크 상태 로컬 저장·진행률 표시 — registry careAudit (priority 3)
 - `care-log` 인쇄·PDF 버튼 (careLogPrint, proFeatureNotice 게이트) · `STORAGE_KEYS.CARE_LOG_ITEMS` 등록 → 백업·클라우드 동기화 대상
 - 콘텐츠 보강: `교재/glossary/subject1·2.json` 30용어 · `number-drills/caretheory·careprac.json` 23수치 · `ref_md/과목2/요양보호 실기 서비스 제공기준(발췌)` — 온보딩 경고 해소
-- tests/unit/exams/carework/care-audit.test.js 3케이스 · registry 테스트 기댓값 갱신 (4피처·14핸들러)
+- tests/unit/exams/carework/care-audit.test.js 3케이스 · registry 테스트 기댓값 갱신 (4피처·14핸들러) · 진행률 바 innerHTML 보간 esc() 보강 (esc-sink 게이트)
 
 ## 2026-11-01 feat(carework): Phase 3 요양일지 생성기 (careLog) — 구독 핵심, DOC-DSN-42
 

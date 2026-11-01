@@ -22,7 +22,7 @@ function render() {
         </div>`).join('');
     const p = auditProgress(_sections);
     const bar = $('audit-progress');
-    if (bar) bar.innerHTML = `<strong>점검 진행 ${p.done}/${p.total}</strong><div class="care-audit-bar"><span style="width:${p.total ? Math.round(p.done / p.total * 100) : 0}%"></span></div>`;
+    if (bar) bar.innerHTML = `<strong>점검 진행 ${esc(p.done)}/${esc(p.total)}</strong><div class="care-audit-bar"><span style="width:${esc(p.total ? Math.round(p.done / p.total * 100) : 0)}%"></span></div>`;
 }
 
 export function careAuditReset() {
