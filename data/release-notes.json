@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261101-51df8cb",
+    "date": "2026-11-01",
+    "notes": [
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[수정·ui] 더보기 시트 실무막뉴얼 실제 제거 + 라벨 오탈자 정정",
+      "[정리·release] v20261101-9bb729a 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-9bb729a",
     "date": "2026-11-01",
     "notes": [
@@ -182,19 +191,6 @@
       "[정리·trace] TRACE_MATRIX 재생성 — careCard 반영",
       "[기능·carework] Phase 2 상황별 대처카드 — BPSD·사고·응급·감염·학대 8카드",
       "[정리·release] v20261101-c5aae1e 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-c5aae1e",
-    "date": "2026-11-01",
-    "notes": [
-      "[정리·trace] TRACE_MATRIX 재생성",
-      "[테스트·registry] export 체인 검증을 시험 디렉터리 합집합으로 수정 — carework 피처 대응",
-      "[문서·agents] carework 모듈 트리 반영 + HTML @spec 태그·feature-plan 정리",
-      "[기능·carework] Phase 1 장기요양 비용 계산기 — 현장도구 첫 실무 피처",
-      "[수정·config] docs_paths_allowlist에 DOC-DSN-42 미래 경로 3건 등록",
-      "[문서·design] carework 현장도구 설계 — 시험→실무 구독 전환 (DOC-DSN-42)",
-      "[정리·release] v20261101-f781004 스탬프 확정 [no-docs]"
     ]
   }
 ]
