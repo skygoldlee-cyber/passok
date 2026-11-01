@@ -3,12 +3,12 @@
     "version": "v20261101-10b1621",
     "date": "2026-11-01",
     "notes": [
-      "[정리] build:data 파생물 반영 — 실무막뉴얼 MD_ASSETS",
+      "[정리] build:data 파생물 반영 — 실무매뉴얼 MD_ASSETS",
       "[문서] DA-19 경로 참조를 베이스명으로 정리",
       "[문서] DA-19 템플릿 경로 제거 — 실존 경로만 참조",
-      "[수정] 실무막뉴얼→실무막뉴얼 오탈자 정정 + 경로 참조 정합",
-      "[spec] DA-19 실무막뉴얼 시험별 자체 작성 원칙 명기",
-      "[기능·carework] 요양보호사 실무막뉴얼 — ManualViewer practice_manual 연결",
+      "[수정] 실무매뉴얼→실무매뉴얼 오탈자 정정 + 경로 참조 정합",
+      "[spec] DA-19 실무매뉴얼 시험별 자체 작성 원칙 명기",
+      "[기능·carework] 요양보호사 실무매뉴얼 — ManualViewer practice_manual 연결",
       "[정리·release] v20261101-cbe7378 스탬프 확정 [no-docs]"
     ]
   },
