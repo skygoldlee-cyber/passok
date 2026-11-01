@@ -101,7 +101,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.getElementById('facility-join-body')?.textContent).toMatch(/로그인/);
     });
 
-    it('실무막뉴얼 — ManualViewer.openPracticeManual 뷰어 연결', () => {
+    it('실무매뉴얼 — ManualViewer.openPracticeManual 뷰어 연결', () => {
         expect(typeof ManualViewer.openPracticeManual).toBe('function');
     });
 

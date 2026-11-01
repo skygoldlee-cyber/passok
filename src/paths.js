@@ -55,7 +55,7 @@ export const PATHS = {
   USER_MANUAL: 'docs/user/user_manual.md',
   PRIVACY_POLICY: 'docs/user/PRIVACY_POLICY.md',
   get FORMULA_MANUAL() { return contentPath('docs/formula_manual.md'); },
-  get PRACTICE_MANUAL() { return contentPath('docs/실무막뉴얼.md'); },
+  get PRACTICE_MANUAL() { return contentPath('docs/실무매뉴얼.md'); },
 };
 
 // 참조자료 경로 상대 경로를 절대 경로로 정규화
