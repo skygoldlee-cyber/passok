@@ -28,6 +28,7 @@ export const ManualViewer = (() => {
         'user_manual': { path: PATHS.USER_MANUAL, title: '사용자 매뉴얼' },
         'privacy_policy': { path: PATHS.PRIVACY_POLICY, title: '개인정보 처리방침' },
         'formula_manual': { path: PATHS.FORMULA_MANUAL, title: '실무 매뉴얼 (Formula OS)' },
+        'practice_manual': { path: PATHS.PRACTICE_MANUAL, title: '실무막뉴얼' },
         'study_summary': { path: PATHS.STUDY_GUIDE, title: '학습 안내서' },
         'mnemonic_guide': { path: PATHS.MNEMONIC_GUIDE, title: '두음법·숫자 암기 총정리' }
     };
@@ -382,6 +383,7 @@ body.manual-open{overflow:hidden;}
     function openManual() { return openDocument('user_manual'); }
     function openPrivacyPolicy() { return openDocument('privacy_policy'); }
     function openFormulaManual() { if (_requireExamSelection()) return openDocument('formula_manual'); }
+    function openPracticeManual() { if (_requireExamSelection()) return openDocument('practice_manual'); }
     function openSummary() { return openDocument('study_summary'); }
     function openMnemonicGuide() { return openDocument('mnemonic_guide'); }
 
@@ -401,6 +403,7 @@ body.manual-open{overflow:hidden;}
         openManual,
         openPrivacyPolicy,
         openFormulaManual,
+        openPracticeManual,
         openSummary,
         openMnemonicGuide,
         close,

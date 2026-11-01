@@ -596,7 +596,8 @@
         "careAudit": true,
         "careHandover": true,
         "careFacilityJoin": true,
-        "careFacilityAdmin": true
+        "careFacilityAdmin": true,
+        "practiceManual": true
       },
       "group": "보건·복지",
       "tier": "active"

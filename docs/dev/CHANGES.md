@@ -4,6 +4,11 @@
 
 - `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지 · 파일명 규약 정정: .dom.test.js 접미사 중복 → .test.js)
 
+## 2026-11-01 feat(carework): 요양보호사 실무막뉴얼 — ManualViewer practice_manual 연결
+
+- `content/exams/carework/docs/실무막뉴얼.md` — 도구 소개·일지·인수인계(저장 후 공유)·기관 워크스페이스·계산·대처카드·평가점검·Pro 경계 사용 안내
+- `paths.js PRACTICE_MANUAL` + `manual-viewer openPracticeManual` (시험별 contentPath 해석 — 어떤 시험이든 docs/실무막뉴얼.md가 있으면 동작) + `features.practiceManual` 게이트 nav·시트 버튼
+
 ## 2026-11-01 security: 기관관리 메뉴 기본 숨김 — manager 멤버십 확인 후 표시 (DA-18)
 
 - 기관관리 nav·시트 항목을 `is-hidden` 기본값으로 마크업 — `facility.js syncFacilityNav()`가 멤버십 role=manager 확인 시에만 해제, 비권한자에게 권한 표면 미노출
