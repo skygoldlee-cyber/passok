@@ -18,6 +18,8 @@
 
 - 위임 디스패치는 data-arg/data-args만 전달하고 이벤트 객체는 미전달 — evt.currentTarget.dataset.id 핸들러는 항상 빈 id를 받아 무동작 (careCardOpen·careLogDelete·careHandoverDelete)
 
+## 2026-11-02 chore: build:derived — 아이콘 정본 교체 반영 매니페스트 재생성 (2차)
+
 ## 2026-11-02 fix(icon): maskable 아이콘 교체 — 별 안전 원 안 버전
 
 - icons/passok-icon-maskable-512.png 교체 (별 최외각점 169px < 안전 원 205px — adaptive icon 마스크 잘림 해소)
