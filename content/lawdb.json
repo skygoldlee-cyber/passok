@@ -593,6 +593,42 @@
    "watch": {
     "target": "law"
    }
+  },
+  {
+   "id": "ltc-insurance-act-enforcement-rule",
+   "name": "노인장기요양보험법 시행규칙",
+   "type": "law",
+   "slug": "노인장기요양보험법시행규칙",
+   "matchKeys": [
+    "노인장기요양보험법시행규칙"
+   ],
+   "watch": {
+    "target": "law"
+   }
+  },
+  {
+   "id": "dementia-act",
+   "name": "치매관리법",
+   "type": "law",
+   "slug": "치매관리법",
+   "matchKeys": [
+    "치매관리법"
+   ],
+   "watch": {
+    "target": "law"
+   }
+  },
+  {
+   "id": "dementia-act-enforcement-decree",
+   "name": "치매관리법 시행령",
+   "type": "law",
+   "slug": "치매관리법시행령",
+   "matchKeys": [
+    "치매관리법시행령"
+   ],
+   "watch": {
+    "target": "law"
+   }
   }
  ]
 }

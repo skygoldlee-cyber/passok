@@ -32,7 +32,22 @@
    ]
   }
  ],
- "exams": [],
+ "exams": [
+  {
+   "key": "subject1",
+   "subject": "caretheory",
+   "part": 1,
+   "title": "요양보호론 문제은행 20제",
+   "file": "과목1_요양보호론_문제은행.md"
+  },
+  {
+   "key": "subject2",
+   "subject": "careprac",
+   "part": 2,
+   "title": "요양보호 관련 문제은행 20제",
+   "file": "과목2_요양보호관련_문제은행.md"
+  }
+ ],
  "integratedExam": {
   "questionsPerSubject": {
    "caretheory": 35,
