@@ -593,7 +593,8 @@
         "careCalc": true,
         "careCard": true,
         "careLog": true,
-        "careAudit": true
+        "careAudit": true,
+        "careHandover": true
       },
       "group": "보건·복지",
       "tier": "active"

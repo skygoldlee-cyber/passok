@@ -365,7 +365,41 @@ const careAudit = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit };
+const careHandover = {
+    viewId: 'care-handover-view',
+    slug: 'care-handover',
+    priority: 4,
+    uiTextKey: 'careHandover',
+    title: '인수인계서',
+    subtitle: '교대근무 인수인계 작성',
+    loadingText: '인수인계서를 불러오는 중입니다...',
+    loadErrorText: '인수인계서를 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-handover.html',
+    styles: 'care-tools.css',
+    loaders: { main: _domainImport('views/care-handover.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['careHandoverGenerate', 'careHandoverShare', 'careHandoverCopy', 'careHandoverPrint']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careHandover.loadingText);
+        try {
+            await ensureViewMarkup(careHandover);
+            if (stale()) return;
+            const m = await careHandover.loaders.main();
+            if (stale()) return;
+            m.initCareHandoverView();
+        } catch (e) {
+            if (!stale()) showToast(careHandover.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
+const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit, careHandover };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {

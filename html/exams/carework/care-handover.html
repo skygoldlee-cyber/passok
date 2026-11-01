@@ -1,0 +1,27 @@
+<!-- @spec none — carework 실무 뷰 마크업 (DA-13) -->
+<section id="care-handover-view" class="view-section" data-feature="careHandover">
+    <div class="view-header">
+        <h2>인수인계서</h2>
+        <p class="view-subtitle">교대근무 인수인계 자동 작성 — 당일 일지 병합 가능</p>
+    </div>
+    <div class="care-calc-form">
+        <label>일시 <input id="ho-date" type="date"></label>
+        <label>근무조 <select id="ho-shift"></select></label>
+        <label>인계자 <input id="ho-from" type="text" placeholder="예: 김○○"></label>
+        <label>인수자 <input id="ho-to" type="text" placeholder="예: 박○○"></label>
+        <label>대상자 <input id="ho-clients" type="text" placeholder="예: 302호 김○○, 305호 이○○"></label>
+    </div>
+    <div class="care-calc-form">
+        <label>대상자 상태 <input id="ho-status" type="text" placeholder="식사·배변·컨디션 요약"></label>
+        <label>미완료·인계 작업 <input id="ho-tasks" type="text" placeholder="남은 작업·예약"></label>
+        <label>특이 주의사항 <input id="ho-caution" type="text" placeholder="낙상 주의·약물·가족 연락"></label>
+        <label class="care-log-merge"><input id="ho-merge" type="checkbox" checked> 당일 저장 일지 병합 <span id="ho-logcount"></span></label>
+        <div class="care-calc-actions">
+            <button data-click="careHandoverGenerate">인수인계 생성</button>
+            <button data-click="careHandoverShare" class="secondary">공유 <span class="pro-badge" data-pro-feature="care_handover_share">PRO</span></button>
+            <button data-click="careHandoverCopy" class="secondary">복사</button>
+            <button data-click="careHandoverPrint" class="secondary">인쇄·PDF <span class="pro-badge" data-pro-feature="care_handover_share">PRO</span></button>
+        </div>
+    </div>
+    <div id="ho-preview" class="care-calc-result"></div>
+</section>

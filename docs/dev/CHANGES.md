@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-01 feat(carework): Phase 5 인수인계서 (careHandover) — 교대근무 공유
+
+- `src/exams/carework/care-handover.js` — 인수인계 표준 포맷(일시·근무조·인계→인수·상태·당일 일지·미완료·주의) + `views/care-handover.js` + `html/exams/carework/care-handover.html` — 당일 저장 일지 자동 병합 체크박스 + navigator.share 공유(미지원 시 복사 폴백)
+- registry careHandover (priority 4) + nav/스텁/더보기시트 + features.careHandover + manifest uiText + `care_handover_share` → feature-plan pro + 로드맵 등록
+- tests/unit/exams/carework/care-handover.test.js — 생성 로직 4케이스
+
 ## 2026-11-01 fix(carework): 실무도구 CSS 다크 테마 토큰 교체 — 대비 불량 수정
 
 - `css/exams/carework/care-tools.css` — 하드코딩 `#fff` 배경·암색 글자 → 앱 다크 테마 토큰(`--bg-card`·`--bg-muted`·`--color-text-main/muted`·`--border-*`·`--color-primary`)으로 전면 교체 — 카드 대비 불량 해소, 인쇄 시에만 백지 명문 유지

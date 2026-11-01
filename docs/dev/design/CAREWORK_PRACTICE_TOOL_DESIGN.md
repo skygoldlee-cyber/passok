@@ -47,13 +47,33 @@
 - 저장: `adverse-store.js`(cosmetic 유해사례 기록) 패턴 — `src/exams/carework/care-log-store.js`에서 로컬 저장 + Pro는 클라우드 동기화
 - Pro 게이팅: **저장·내보내기만 Pro**, 생성 미리보기는 무료 — 시험→실무 전환 유도점
 
+### 3.4 Phase 4 — 기관 평가 체크리스트 (`careAudit`)
+
+**평가 대비 점검 도구** — 기관 평가 시즌 수요.
+
+- 데이터: `content/exams/carework/실무/audit_checklist.json` — 평가방법 고시 기반 4영역(인권보장·기록관리·감염관리·안전응급) 20항목, 자체 저작
+- 기능: 체크/해제·영역별 묶음·진행률 바·초기화 — 체크 상태 로컬 저장
+- 게이팅: 무료 (현장 접근성 우선)
+
+### 3.5 Phase 5 — 인수인계서 (`careHandover`)
+
+**교대근무 핵심** — 주간·저녁·야간 조 간 정보 공유가 일상 업무.
+
+- 입력: 일시·근무조·인계자·인수자·대상자·상태·미완료 작업·주의사항
+- 생성: 표준 인수인계 포맷 자동 조립 + **당일 저장 일지 자동 병합** (수기 부담 제거)
+- 공유: `navigator.share`(모바일 카톡 등) + 복사·인쇄·PDF — 기록 생성→전달 완결
+- Pro 게이팅: 생성은 무료, **공유·인쇄만 Pro** — 공유 시점에서 업그레이드 안내
+- 다기관 공유(L3)는 별도 — 계정·그룹·권한이 필요한 백엔드 작업, 본 설계 범위 외
+
 ## 4. 아키텍처 — 기존 패턴 그대로
 
 ```
 exams.json carework.features:
-  careCalc: true   # Phase 1
-  careCard: true   # Phase 2
-  careLog: true    # Phase 3 — Pro 게이팅
+  careCalc: true    # Phase 1
+  careCard: true    # Phase 2
+  careLog: true     # Phase 3 — Pro 게이팅
+  careAudit: true   # Phase 4 — 평가 체크리스트
+  careHandover: true # Phase 5 — 인수인계 (공유 Pro)
 
 src/exams/carework/           # 도메인 모듈 (DA-13 격리)
   care-calc.js        # 급여 계산 로직 — ref_md 수치는 데이터 파일로
@@ -61,13 +81,17 @@ src/exams/carework/           # 도메인 모듈 (DA-13 격리)
   care-card.js        # 대처카드 렌더 데이터
   care-log.js         # 일지 생성 로직
   care-log-store.js   # 로컬·클라우드 저장 (adverse-store 패턴)
+  care-audit.js       # 평가 체크리스트 데이터·상태
+  care-handover.js    # 인수인계서 생성 로직
 
 src/html/exams/carework/      # 뷰 마크업 (도메인 경로 규약)
-  care-calc-view.html
-  care-card-view.html
-  care-log-view.html
+  care-calc.html
+  care-card.html
+  care-log.html
+  care-audit.html
+  care-handover.html
 
-practice-registry.js          # 1:1 엔트리 등록 — getPracticeLanding priority: careLog(0)<careCalc(1)<careCard(2)
+practice-registry.js          # 1:1 엔트리 등록 — getPracticeLanding priority: careLog(0) 최상위
 registry.uiText               # 카피 슬롯 — 타이틀 맵으로 중립 기본값 덮어씀
 feature-plan.json             # careLog.save/pdf → pro 게이팅, 나머지 free
 ```
@@ -79,6 +103,8 @@ feature-plan.json             # careLog.save/pdf → pro 게이팅, 나머지 fr
 | careCalc | 노인장기요양보험법 §40 · 시행령 §27 · 본인부담금 감경 고시 · 등급판정 고시(월한도) |
 | careCard | 교재 Ch12~15(치매·임종·응급·감염) + 노인복지법 §39의2(학대 신고 의무) |
 | careLog | 장기요양급여 제공기준 고시 — 기록 항목·주기·서식 요건 |
+| careAudit | 장기요양기관 평가방법 등에 관한 고시 — 평가 기준·인권교육·CCTV·기록 관리 |
+| careHandover | 제공기준 고시 기록 항목 — 인수인계 표준 포맷 (자체 저작) |
 
 **법령 변경 추적**: `ai:stale` 패턴 — ref_md 갱신 시 계산 상수 영향 문항처럼 스모크 항목 나열
 
@@ -89,6 +115,8 @@ feature-plan.json             # careLog.save/pdf → pro 게이팅, 나머지 fr
 | careCalc | 계산·조문 링크 | — |
 | careCard | 카드 열람 | — |
 | careLog | 일지 생성·미리보기 | **저장·PDF·내보내기·클라우드 동기화** |
+| careAudit | 전체 점검 | — |
+| careHandover | 인수인계 생성 | **공유·인쇄·PDF** |
 
 - 시험학습은 전부 무료 유지 — 학습→실무 전환 자체가 결제 유도
 - `feature-plan.json` 신규 키: `care_log_save`, `care_log_export` → `pro` 선언 → `canCloudSync()`·`pro_entitled` 기존 계약 사용
@@ -100,7 +128,8 @@ feature-plan.json             # careLog.save/pdf → pro 게이팅, 나머지 fr
 | 1 | careCalc 모듈 + 뷰 + registry + feature 키 | 단위 테스트(계산 케이스) + UI 커버리지 |
 | 2 | careCard JSON 데이터 + 뷰 | 컨텐츠 게이트(형식·귀속) |
 | 3 | careLog 생성 + 로컬 저장 + Pro 게이트 | 저장 경계 테스트 + e2e 플로우 |
-| 4 | 클라우드 동기화 + 스모크 | 실서버 Supabase (스키마 필요 시 별도) |
+| 4 | careAudit 체크리스트 + 일지 인쇄 + 용어집·드릴 보강 | 데이터 계약 테스트 + 도메인 CSS |
+| 5 | careHandover 인수인계 + 공유 | 생성 로직 테스트 + navigator.share 폴백 |
 
 ## 8. 원칙·제약
 
