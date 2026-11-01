@@ -4,6 +4,10 @@
 
 - `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지 · 파일명 규약 정정: .dom.test.js 접미사 중복 → .test.js)
 
+## 2026-11-01 docs(design): DSN-43 수정 — 인수인계를 교대 경계 이벤트로 재정의
+
+- 이력 누적 시 인수인계의 정보 전달 기능은 소멸 — 별도 문서 대신 이력 자동 요약 + 전망 인계 메모 + 인수 확인(ack)으로 재설계. 스키마 handover_records→shift_handovers(전망 메모)+handover_acks로 축소, carelog_records가 정보 본체
+
 ## 2026-11-01 docs(design): 기관 워크스페이스 설계 (DOC-DSN-43)
 
 - `docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md` — PassOK가 기관 기록 서버가 되는 구독 확장 설계: facility·membership(role worker/manager)·handover_records·reads·carelog_records 스키마, RLS 접근 제어, 기관 플랜 과금 계층, 6a~6d 단계

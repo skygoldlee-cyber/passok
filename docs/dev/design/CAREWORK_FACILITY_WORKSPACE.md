@@ -8,9 +8,22 @@
 
 ## 1. 배경 — 왜 기관 서버가 필요한가
 
-- 인수인계서·요양일지는 **기관의 기록 문서** — 평가방법 고시·청구기준의 보존 대상. 개인 폰의 카톡 공유는 기관 기록을 대체하지 못함
+- 요양일지 등 돌봄 기록은 **기관의 기록 문서** — 평가방법 고시·청구기준의 보존 대상. 개인 폰의 카톡 공유는 기관 기록을 대체하지 못함
 - 현재 구현(Phase 5)은 "공유 전 로컬 저장"까지 — 기기 보존은 준법적 근사치일 뿐 **기관 서버는 아님**
-- 교대근무 구조상 인수인계는 같은 기관의 여러 요양보호사가 열람·서명해야 함 — 개인 계정 저장만으로는 조 단위 공유 불가
+- 교대근무 구조상 돌봄 이력은 같은 기관의 여러 요양보호사가 열람해야 함 — 개인 계정 저장만으로는 조 단위 공유 불가
+
+## 1-1. 핵심 판단 — 인수인계는 "문서"가 아니라 "교대 경계 이벤트"
+
+돌봄 이력이 기관 서버에 누적되면 인수인계의 **정보 전달 기능은 소멸**한다 — 다음 근무자가 이력 타임라인을 직접 열람하면 된다. 그러나 두 기능은 이력으로 대체 불가하다:
+
+| 인수인계의 기능 | 서버 누적 후 |
+|---|---|
+| 정보 전달(무슨 일이 있었나) | ✅ 대체 — 이력 타임라인 직접 열람 |
+| 미완료·예정 작업(전망 정보) | ❌ 이력에 없음 — 별도 인계 메모 필요 |
+| 특이 주의사항 | ❌ 부분 — 이력에 흩어진 것을 자동 요약 + 명시 인계 보완 |
+| 책임 이관 확인(인수 서명) | ❌ 없음 — "읽고 인수함" 확인 기록 필요 |
+
+따라서 기관 워크스페이스에서 인수인계는 **누적 이력 위의 교대 경계 이벤트**로 정의한다 — 별도 문서 작성이 아니라 (a) 이력 자동 요약 열람, (b) 전망 인계 메모(미완료·주의만), (c) 인수 확인 마킹의 조합. 생성 문서는 보존·인쇄용 파생물로 격하한다.
 
 ## 2. 목표와 비목표
 
@@ -30,17 +43,18 @@
 account (Supabase auth 사용자)
 facility (요양원 — name, 사업자번호 또는 공단 코드, 관리자)
 membership (account ↔ facility — role: worker | manager)
-handover_records (facility_id, author_id, created_at, payload(text), log_refs)
-handover_reads (handover_id, reader_id, read_at — 인수 확인)
-carelog_records (facility_id, author_id, created_at, payload — 일지 기관 보존)
+carelog_records (facility_id, author_id, client, created_at, payload — 돌봄 이력: 인수인계의 기반)
+shift_handovers (facility_id, from_worker, to_worker, shift, forward_note(미완료·주의만), log_refs, created_at)
+handover_acks (handover_id, reader_id, read_at — 인수 확인: 책임 이관 지점)
 ```
 
-- `worker`: 기록 작성·열람·본인 기록 삭제 요청 / `manager`: 기관 전체 열람·기록 보존 관리·멤버 초대
-- 인수인계 생성 → **기관 스코프 저장(필수)** → 같은 조 멤버 열람 → 인수자 `read` 마크 → 완료
+- `carelog_records`가 정보 전달의 본체 — `shift_handovers`는 전망 메모 + 인계 경계 이벤트로 축소 (전체 일지 재기입 금지)
+- 인수인계 화면 = 해당 대상자의 최근 carelog 자동 요약 + forward_note 작성 + `handover_acks` 인수 확인
+- `worker`: 기록 작성·열람·인수 확인 / `manager`: 기관 전체 열람·기록 보존 관리·멤버 초대
 
 ## 4. 접근 제어 (RLS)
 
-- `handover_records`·`carelog_records`: `facility_id`가 멤버십과 일치하는 멤버만 select/insert
+- `shift_handovers`·`handover_acks`·`carelog_records`: `facility_id`가 멤버십과 일치하는 멤버만 select/insert
 - `manager`만 facility 설정·멤버 초대 가능 — worker 초대는 manager 승인 흐름
 - RLS 익명 침투 프로브(CI 기존 검사)에 신규 테이블 포함 — 익명 select/insert 차단을 스키마 선언과 함께 검증
 
@@ -56,7 +70,7 @@ carelog_records (facility_id, author_id, created_at, payload — 일지 기관 �
 | Phase | 범위 | 비고 |
 |---|---|---|
 | 6a | facility·membership 스키마 + manager 초대 | Supabase 테이블·RLS + 가입/기관 연결 뷰 |
-| 6b | 인수인계 기관 저장 + 열람·읽음 확인 | handover_records + handover_reads + 인수 확인 UI |
+| 6b | 교대 인수 확인 — 이력 자동 요약 + 인계 메모(전망만) + 인수 서명 | shift_handovers + handover_acks — 별도 문서 아닌 교대 경계 이벤트 |
 | 6c | 요양일지 기관 보존 + manager 열람 | carelog_records + 기록 보존 뷰 (평가 대비) |
 | 6d | 기관 플랜 결제·수출 어댑터 | 구독 과금 계층 + 기존 전자기록 연동 검토 |
 
