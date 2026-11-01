@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# @spec none — 시장분석용 통계 수집 도구 (코어 SPEC 무관)
 """Q-Net 국가기술자격 통계 수집 — 시장분석용 응시자 DB
 사용: python tools/market/fetch_qnet_stats.py [--years 2021-2025] [--out tmp/market]
 전략:
