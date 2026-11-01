@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261101-ad5b8fa",
+    "date": "2026-11-01",
+    "notes": [
+      "[테스트] uimode DOM 갱신 — 삭제된 더보기 버튼 단언 제거",
+      "[수정·ui] 더보기 시트 실무막뉴얼·학습도구 제거 — 사이드바 유지",
+      "[기능·cosmetic] 실무막뉴얼 추가 (DOC-USR-21) + 사이드바 실무막뉴얼 실무 모드 숨김",
+      "[정리·release] v20261101-51df8cb 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-51df8cb",
     "date": "2026-11-01",
     "notes": [
@@ -182,15 +192,6 @@
       "[정리·trace] TRACE_MATRIX 재생성 — careLog 반영",
       "[기능·carework] Phase 3 요양일지 생성기 — 구독 핵심 실무 피처",
       "[정리·release] v20261101-11f32cc 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-11f32cc",
-    "date": "2026-11-01",
-    "notes": [
-      "[정리·trace] TRACE_MATRIX 재생성 — careCard 반영",
-      "[기능·carework] Phase 2 상황별 대처카드 — BPSD·사고·응급·감염·학대 8카드",
-      "[정리·release] v20261101-c5aae1e 스탬프 확정 [no-docs]"
     ]
   }
 ]
