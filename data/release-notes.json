@@ -1,5 +1,18 @@
 [
   {
+    "version": "v20261102-ba0df29",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정] carework 실무 랜딩을 현장도구로 — careCalc priority 0",
+      "[기능·ui] 모드 전환 대칭 랜딩 — 실무→학습은 dashboard, 학습→실무는 시험별 랜딩",
+      "[테스트] DA-21 연결 — carework option 다크 규칙 존재 검증",
+      "[테스트] DA-21 연결 — carework option 다크 규칙 존재 검증",
+      "[spec] DA-21 select option 테마 강제 — 다크모드 가시성 규약 명문화",
+      "[수정·ui] carework select option 다크 토큰 적용 — 다크모드 가시성",
+      "[정리·release] v20261102-8b49cf4 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-8b49cf4",
     "date": "2026-11-02",
     "notes": [
@@ -176,14 +189,6 @@
     "date": "2026-11-01",
     "notes": [
       "[정리·release] v20261101-0c3e351 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-0c3e351",
-    "date": "2026-11-01",
-    "notes": [
-      "[기능·carework] 인수인계 기록 우선 + 기관 워크스페이스 설계 (DOC-DSN-43)",
-      "[정리·release] v20261101-e999e28 스탬프 확정 [no-docs]"
     ]
   }
 ]
