@@ -85,9 +85,9 @@ describe('UI 모드 — 학습/실무 전환', () => {
         expect(document.querySelector('.nav-study-tools-label'), '학습도구 토글 제거됨').toBeNull();
         // 학습 매뉴얼 숨김 — 실무매뉴얼은 더보기 시트로 이동 (탭바 노출 금지)
         expect(getComputedStyle(document.querySelector('.manual-nav-link.nav-study-only')).display).toBe('none');
-        // 탭바 실무막뉴얼은 실무 전용 — 실무 모드에서 표시 (학습 모드엔 CSS로 숨김)
+        // 탭바 실무매뉴얼은 실무 전용 — 실무 모드에서 표시 (학습 모드엔 CSS로 숨김)
         const pmTab = document.querySelector('#mobile-tab-bar .nav-practice-only[data-click="ManualViewer.openPracticeManual"]');
-        expect(pmTab, '탭바 실무막뉴얼 부재').not.toBeNull();
+        expect(pmTab, '탭바 실무매뉴얼 부재').not.toBeNull();
         expect(getComputedStyle(pmTab).display).not.toBe('none');
         // 실무 전용 버튼(실무매뉴얼·학습도구 — 모두 시트 내) 표시 — feature 게이트 항목(대처카드 등)은 활성 시험에 따라 숨을 수 있어 대표 버튼만 고정 검증
         expect(document.querySelectorAll('button.nav-practice-only').length).toBeGreaterThanOrEqual(2);
