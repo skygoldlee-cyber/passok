@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261101-18bec0c",
+    "date": "2026-11-01",
+    "notes": [
+      "[테스트] DA-18을 care-views DOM 테스트에 연결",
+      "[spec] DA-18 권한 뷰 분리 원칙 명기 + @spec 태그 연결",
+      "[정리] TRACE_MATRIX 재생성",
+      "[리팩터링·carework] 기관 뷰 클라이언트·어드민 분리 — facility-join + facility-admin",
+      "[정리·release] v20261101-eab1dd5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-eab1dd5",
     "date": "2026-11-01",
     "notes": [
@@ -196,13 +207,6 @@
       "[정리] 배포 전 파생물 재생성 [no-test]",
       "[정리·exams] 유통관리사 표시 순서 스왑 — 2급·3급 배치 교체 [no-test] [no-docs]",
       "[정리·release] v20261031-e044a1e 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261031-e044a1e",
-    "date": "2026-10-31",
-    "notes": [
-      "내부 개선 및 안정성 향상"
     ]
   }
 ]
