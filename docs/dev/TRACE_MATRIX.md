@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: d1493d46a392a24d
-> 생성: 2026-11-01 · 원천: SPEC.md(643개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: e8e165f6ee013c47
+> 생성: 2026-11-01 · 원천: SPEC.md(644개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 643개 — 문서 연결 457 · 소스 연결 575 · 테스트 연결 612 · 보고서 연결 109
+**커버리지 요약**: 요구사항 644개 — 문서 연결 457 · 소스 연결 575 · 테스트 연결 612 · 보고서 연결 109
 
 ---
 
@@ -782,6 +782,7 @@
 | DA-17 | ✅ | 테스트 | — | tools/lib/watermark.js | tests/unit/content-pack.test.js | — | — |
 | DA-18 | ✅ | 테스트 | — | html/exams/carework/facility-admin.html<br>html/exams/carework/facility-join.html<br>src/exams/carework/views/facility-admin.js<br>src/exams/carework/views/facility-join.js | tests/dom/exams/carework/care-views.test.js | — | — |
 | DA-19 | ✅ | — | — | — | — | — | — |
+| DA-20 | ✅ | — | — | — | — | — | — |
 
 ## 5.2 안정적 ID 체계
 

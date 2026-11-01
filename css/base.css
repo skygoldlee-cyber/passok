@@ -1266,3 +1266,10 @@ body.ui-mode-practice:not(.study-tools-open) .tab-group-study { display: none; }
 /* 실무 탭바 전체 항목 — 수가 많으면 최소폭 유지하며 가로 스크롤 (사이드바 구성과 동기화) */
 .mobile-tab-bar { overflow-x: auto; }
 .mobile-tab-bar .mobile-tab-item { min-width: 64px; }
+
+/* 모드 분리 원칙 (DA-20) — 학습 모드에서 실무·기관 메뉴 전면 숨김 */
+body:not(.ui-mode-practice) .nav-item-practice,
+body:not(.ui-mode-practice) .nav-group-label-practice,
+body:not(.ui-mode-practice) .tab-group-practice {
+    display: none;
+}

@@ -10,6 +10,10 @@
 
 ## 2026-11-01 test: uimode DOM 갱신 — 삭제된 시트 버튼 단언 제거·기관가입·인수인계로 대표 검증
 
+## 2026-11-01 spec+fix: DA-20 모드 메뉴 분리 원칙 — 학습 모드에서 실무·기관 메뉴 전면 숨김
+
+- CSS `body:not(.ui-mode-practice)`에서 nav-item-practice·nav-group-label-practice·tab-group-practice 숨김 + 사이드바 실무 매뉴얼에 nav-practice-only 추가 + exam-switch E2E를 실무 모드 진입 후 검증으로 갱신
+
 ## 2026-11-01 fix(ui): 시트 실무 항목을 탭바로 이동 — 중복 금지 규약 유지 + 더보기 학습 전용
 
 - 더보기 시트의 기타·기관 구역 제거 (탭바 실무 그룹과 중복) + 더보기 버튼을 nav-study-only로 (실무 시트 빈 상태 제거)

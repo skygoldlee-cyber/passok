@@ -142,6 +142,10 @@ test.describe('도메인 경로 규약 — 활성 시험 id로 뷰 모듈·마�
         });
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
+        // 실무 메뉴는 실무 모드에서만 표시 (DA-20) — 저장키로 모드 설정 후 재로드
+        await page.evaluate(() => localStorage.setItem('ui_mode', 'practice'));
+        await page.goto('/index.html');
+        await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
         // 예열이 안 탔을 수 있으니 뷰 진입으로 주입을 확정한다
         await page.locator('[data-target="formula-view"]:visible').first().click();
         await page.waitForFunction(() => {
