@@ -13,6 +13,11 @@ vi.mock('../../../../src/ui-utils.js', () => ({
     showGlobalLoading: vi.fn(),
     hideGlobalLoading: vi.fn(),
 }));
+vi.mock('../../../../src/auth-sync/supabase-client.js', () => ({
+    getAuthSession: vi.fn(() => Promise.resolve({ session: null })),
+    getSupabase: vi.fn(() => Promise.resolve({})),
+    onAuthChange: vi.fn(),
+}));
 vi.mock('../../../../src/pro/pro-upgrade.js', () => ({
     proFeatureNotice: vi.fn(() => false),
     hasProEntitlement: vi.fn(() => false),
@@ -24,6 +29,7 @@ import { careCardOpen, careCardClose, initCareCardView } from '../../../../src/e
 import { careLogGenerate, careLogCopy, initCareLogView } from '../../../../src/exams/carework/views/care-log.js';
 import { careAuditReset, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
 import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
+import { initFacilityView } from '../../../../src/exams/carework/views/facility-setup.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const loadPartial = (rel) => {
@@ -83,5 +89,12 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.getElementById('ho-saved')?.textContent).toMatch(/김○○/);
         careHandoverCopy();
         careHandoverShare(); // 저장 후 — 공유 진행
+    });
+
+    it('careFacility — 미로그인 시 로그인 안내 렌더', async () => {
+        loadPartial('facility-setup.html');
+        initFacilityView();
+        await new Promise(r => setTimeout(r, 0));
+        expect(document.getElementById('facility-body')?.textContent).toMatch(/로그인/);
     });
 });

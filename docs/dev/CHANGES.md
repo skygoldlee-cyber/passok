@@ -4,6 +4,10 @@
 
 - `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지 · 파일명 규약 정정: .dom.test.js 접미사 중복 → .test.js)
 
+## 2026-11-01 fix(carework): facility-setup 에러 경계 — 미대기 render()의 unhandledrejection 차단
+
+- `views/facility-setup.js` — `initFacilityView`가 render()를 floating Promise로 호출해 내부 오류가 앱 전체 "처리 중 오류" 토스트로 숨겨지던 것을 catch 경계로 뷰 내 에러 표시 + console.error로 진단 가능하게
+
 ## 2026-11-01 fix(db): RLS 무한 재귀 수정 — SECURITY DEFINER 함수로 멤버십 검사 분리
 
 - `tools/supabase/schema.sql` §6 — `facility member read`·`members read own facility` 정책의 자기참조 재귀를 `is_facility_member(uuid,uuid)` SECURITY DEFINER 함수로 분리 — 프로덕션 적용 완료 (프로브 9/9 통과)

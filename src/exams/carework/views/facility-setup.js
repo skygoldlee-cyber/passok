@@ -66,4 +66,10 @@ export async function facilityJoin() {
     render();
 }
 
-export function initFacilityView() { render(); }
+export function initFacilityView() {
+    render().catch(e => {
+        console.error('[facility-setup]', e);
+        const host = $('facility-body');
+        if (host) host.innerHTML = `<p class="care-calc-err">기관 정보를 불러오지 못했습니다 — ${esc(e instanceof Error ? e.message : String(e))}</p>`;
+    });
+}
