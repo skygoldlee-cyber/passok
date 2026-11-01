@@ -91,6 +91,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careHandoverShare(); // 저장 후 — 공유 진행
     });
 
+    // @spec DA-18 — 권한 뷰 분리: facility-join은 클라이언트 뷰로 비로그인/비권한 시 안내만 표시
     it('careFacility — 미로그인 시 로그인 안내 렌더', async () => {
         loadPartial('facility-join.html');
         initFacilityJoinView();
