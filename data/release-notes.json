@@ -1,5 +1,20 @@
 [
   {
+    "version": "v20261101-e999e28",
+    "date": "2026-11-01",
+    "notes": [
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[정리·trace] TRACE_MATRIX 재생성",
+      "[정리·carework] DOM 테스트 파일명 규약 정정 — 접미사 중복 제거",
+      "[정리·trace] TRACE_MATRIX 재생성",
+      "[수정·carework] care-log.html 잘림 복구 + 뷰 DOM 테스트 추가",
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[정리·trace] TRACE_MATRIX 재생성 — careHandover 반영",
+      "[기능·carework] Phase 5 인수인계서 (careHandover) — 교대근무 공유",
+      "[정리·release] v20261101-a13b7eb 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-a13b7eb",
     "date": "2026-11-01",
     "notes": [
@@ -188,13 +203,6 @@
       "[문서·landing] AI 코치 소개에 주관식 채점 선두 추가",
       "[문서·manual] BYOK 등록 안내 추가",
       "[정리·release] v20261031-6b7abc8 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261031-6b7abc8",
-    "date": "2026-10-31",
-    "notes": [
-      "[정리·release] v20261031-34c79a3 스탬프 확정 [no-docs]"
     ]
   }
 ]
