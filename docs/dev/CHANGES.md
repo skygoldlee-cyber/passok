@@ -4,6 +4,10 @@
 
 - `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지 · 파일명 규약 정정: .dom.test.js 접미사 중복 → .test.js)
 
+## 2026-11-01 fix(ui): 실무 탭바 그룹 상시 표시 — mobile-tab-practice 관례 복구 (E2E 회귀 수정)
+
+- 실무 그룹을 학습 모드에서 숨기던 CSS 제거 — 실무도구·현장도구 탭은 모드 무관 항상 표시가 원래 관례 (exam-switch E2E 회귀 수정, 로컬 7/7 통과)
+
 ## 2026-11-01 refactor(ui): 모바일 탭바를 학습·실무 그룹으로 물리 분리
 
 - 단일 nav 안의 버튼별 클래스 토글을 tab-group-study/tab-group-practice 컨테이너 분리로 변경 — CSS로 그룹 단위 모드 토글 (구조적 관리 가능)

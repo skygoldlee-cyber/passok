@@ -1260,5 +1260,5 @@ table {
 /* 모바일 탭바 그룹 분리 — 학습·실무 모드별 그룹 토글 */
 .mobile-tab-bar .tab-group { display: flex; flex: 1; align-items: stretch; min-width: 0; }
 .mobile-tab-bar .tab-group .mobile-tab-item { flex: 1; }
-body.ui-mode-practice .tab-group-study { display: none; }
-body:not(.ui-mode-practice) .tab-group-practice { display: none; }
+body.ui-mode-practice:not(.study-tools-open) .tab-group-study { display: none; }
+/* 실무 그룹은 항상 표시 — mobile-tab-practice 항목은 모드 무관 진입 가능 (실무도구·현장도구 탭 관례) */
