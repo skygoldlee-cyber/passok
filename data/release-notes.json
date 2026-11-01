@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261102-11ab2db",
+    "date": "2026-11-02",
+    "notes": [
+      "[정리] TRACE_MATRIX 재생성 — DA 정렬 반영",
+      "[정리·release] v20261102-36502a3 스탬프 확정 [no-docs]",
+      "[spec] DA-22 모드 전환 랜딩 규칙 — 학습→실무는 시험별 첫 실무 뷰",
+      "[정리] build:derived 파생물 반영 — release-notes·version"
+    ]
+  },
+  {
     "version": "v20261102-ba0df29",
     "date": "2026-11-02",
     "notes": [
@@ -182,13 +192,6 @@
       "[문서] facility_workspace 로드맵 등록 + TRACE_MATRIX 재생성",
       "[기능·carework] Phase 6a 기관 워크스페이스 — 시설·멤버십 스키마 + 연결 뷰",
       "[정리·release] v20261101-3347f31 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-3347f31",
-    "date": "2026-11-01",
-    "notes": [
-      "[정리·release] v20261101-0c3e351 스탬프 확정 [no-docs]"
     ]
   }
 ]
