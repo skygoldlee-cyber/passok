@@ -594,8 +594,7 @@
       "registryGlobal": "DATA_REGISTRY_CAREWORK",
       "features": {},
       "group": "보건·복지",
-      "tier": "draft",
-      "comingSoon": true
+      "tier": "active"
     }
   ]
 }
