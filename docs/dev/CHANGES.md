@@ -10,6 +10,10 @@
 
 ## 2026-11-01 test: uimode DOM 갱신 — 삭제된 시트 버튼 단언 제거·기관가입·인수인계로 대표 검증
 
+## 2026-11-02 spec: DA-21 select option 테마 강제 명문화
+
+- 커스텀 select의 option·optgroup에 테마 토큰 지정 의무 — care-tools.css·dashboard.css에 @spec 인용
+
 ## 2026-11-02 fix(ui): carework select option 다크 토큰 적용 — 다크모드 가시성
 
 - .care-calc-form select option에 --bg-sidebar·--color-text-main 적용 (cosmetic의 .form-select option과 동일 규칙 — 누락으로 팝업이 OS 기본색이던 문제)

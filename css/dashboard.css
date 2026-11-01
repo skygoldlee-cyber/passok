@@ -474,6 +474,7 @@
     transition: border-color var(--transition-base);
 }
 
+/* @spec DA-21 — option은 브라우저 기본색이므로 테마 토큰 강제 필수 */
 .form-select option {
     background-color: var(--bg-sidebar);
     color: var(--color-text-main);
@@ -493,7 +494,8 @@
     border-color: var(--border-color);
 }
 
-.light-theme .form-select option {
+.light-theme /* @spec DA-21 — option은 브라우저 기본색이므로 테마 토큰 강제 필수 */
+.form-select option {
     background-color: var(--bg-input);
     color: var(--color-text-main);
 }

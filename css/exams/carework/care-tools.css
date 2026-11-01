@@ -1,5 +1,5 @@
 /* css/exams/carework/care-tools.css — carework 실무도구 공용 스타일
-   @spec none — 시험 전용 도메인 스타일 (DA-13, practice-registry styles 지연 주입)
+   @spec DA-21 — option 테마 강제 (DA-13, practice-registry styles 지연 주입)
    대상: care-calc-view · care-card-view · care-log-view · care-audit-view
    앱 다크 테마 토큰(--bg-*, --color-text-*, --border-*) 사용 — 하드코딩 배경 금지 */
 
