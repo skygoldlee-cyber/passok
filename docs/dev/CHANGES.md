@@ -4,6 +4,10 @@
 
 - `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지 · 파일명 규약 정정: .dom.test.js 접미사 중복 → .test.js)
 
+## 2026-11-01 spec: DA-19 실무막뉴얼 시험별 자체 작성 원칙 명기
+
+- SPEC.md DA-19 — 실무 매뉴얼은 공용 재사용 금지, 시험 팩별 `docs/실무막뉴얼.md` 별도 작성 + 플랫폼은 파일명 규약·뷰어 진입·기능 게이트만 제공 (본문은 도메인 소유)
+
 ## 2026-11-01 feat(carework): 요양보호사 실무막뉴얼 — ManualViewer practice_manual 연결
 
 - `content/exams/carework/docs/실무막뉴얼.md` — 도구 소개·일지·인수인계(저장 후 공유)·기관 워크스페이스·계산·대처카드·평가점검·Pro 경계 사용 안내
