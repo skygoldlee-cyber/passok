@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261101-3900c79",
+    "date": "2026-11-01",
+    "notes": [
+      "[수정·db] RLS 무한 재귀 수정 — is_facility_member SECURITY DEFINER 분리",
+      "[문서] facility_workspace 로드맵 등록",
+      "[문서] facility_workspace 로드맵 등록 + TRACE_MATRIX 재생성",
+      "[기능·carework] Phase 6a 기관 워크스페이스 — 시설·멤버십 스키마 + 연결 뷰",
+      "[정리·release] v20261101-3347f31 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-3347f31",
     "date": "2026-11-01",
     "notes": [
@@ -192,15 +203,6 @@
       "[정리·gates] 파일명 기준선에 신규 dom 테스트 2건 등록",
       "[기능·gates] test-first 주석 전용 diff 면제 + 우회 빈도 추적",
       "[정리·release] v20261031-273b412 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261031-273b412",
-    "date": "2026-10-31",
-    "notes": [
-      "[기능·landing] 시험 카드에 1·2차 시험 내용 표시",
-      "[문서·overview] 17개 시험 1·2차 구성 표 추가",
-      "[정리·release] v20261031-d1ea5af 스탬프 확정 [no-docs]"
     ]
   }
 ]
