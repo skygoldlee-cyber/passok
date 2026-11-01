@@ -1262,3 +1262,7 @@ table {
 .mobile-tab-bar .tab-group { display: contents; }
 body.ui-mode-practice:not(.study-tools-open) .tab-group-study { display: none; }
 /* 실무 그룹은 항상 표시 — mobile-tab-practice 항목은 모드 무관 진입 가능 (실무도구·현장도구 탭 관례) */
+
+/* 실무 탭바 전체 항목 — 수가 많으면 최소폭 유지하며 가로 스크롤 (사이드바 구성과 동기화) */
+.mobile-tab-bar { overflow-x: auto; }
+.mobile-tab-bar .mobile-tab-item { min-width: 64px; }
