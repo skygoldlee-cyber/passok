@@ -229,6 +229,7 @@ html/exams/<id>/        # 시험 도메인 뷰 파셜 (지연 주입 — formula
   carework/care-calc.html # carework 장기요양 비용 계산기 뷰 파셜 (Phase 1, DOC-DSN-42)
   carework/care-card.html # carework 상황별 대처카드 뷰 파셜 (Phase 2)
   carework/care-log.html  # carework 요양일지 생성기 뷰 파셜 (Phase 3)
+  carework/care-audit.html # carework 기관 평가 체크리스트 뷰 파셜 (Phase 4)
 style.css               # CSS 진입점 (@import로 모듈 로드)
 sw.js                   # Service Worker
 manifest.webmanifest    # PWA 매니페스트
@@ -390,10 +391,12 @@ src/                    # ES Modules
       care-card.js        # 대처카드 데이터 로더 — care_cards.json fetch·조회
       care-log.js         # 요양일지 생성 로직 — 제공기준 고시 기록 항목 기반 텍스트 조립
       care-log-store.js   # 일지 로컬 저장 — 무료 10건 한도·Pro 안내 (Phase 3, 구독 핵심)
+      care-audit.js       # 기관 평가 체크리스트 — audit_checklist.json + 체크 상태 로컬 저장 (Phase 4)
       views/
         care-calc.js      # 계산기 뷰 모듈 (practice-registry 지연 로드)
         care-card.js      # 대처카드 뷰 모듈 (Phase 2)
         care-log.js       # 요양일지 생성기 뷰 모듈 (Phase 3)
+        care-audit.js     # 평가 체크리스트 뷰 모듈 (Phase 4)
   views/                # 뷰 컨트롤러 (직속 23개 + 하위 4그룹 22개)
     exam-sim/           # 모의고사 클러스터 (파사드·세션·아레나·드래프트·상태·리뷰·오답)
       exam-simulator.js           # 실전 모의고사 파사드 — 분리 모듈 재수출 + 성적 이력 저장

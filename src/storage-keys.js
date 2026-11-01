@@ -130,6 +130,7 @@ export const STORAGE_KEYS = {
   // Formula OS — 소비자 이상사례(부작용) 기록 (FO-59)
   // [{id:'adv_…', occurredAt, customerId, customerName, product, symptoms, action, reportedAt, notes}]
   ADVERSE_ITEMS: 'formula_adverse_items',
+  CARE_LOG_ITEMS: 'carework_care_logs',
 
   // Formula OS — 종합 보고서 출력 이력 (FO-63) — 최근 20건
   // [{at, bizId, bizLabel, setLabel, done, total, sections, id, hash, fresh}]
@@ -233,6 +234,7 @@ export const BACKUP_KEYS = [
   STORAGE_KEYS.COMPLIANCE_CHECKS_SALES, // 유형별 체크리스트 세트 — 책임판매업 (FO-34)
   STORAGE_KEYS.CUSTOM_INGREDIENTS,  // 자가 등록 성분 — 백업·동기 대상 (DI-06)
   STORAGE_KEYS.FORMULA_LABEL_DRAFT, // 표시사항 검토 폼 — 작업 데이터 (FO-35)
+  STORAGE_KEYS.CARE_LOG_ITEMS,    // 요양일지 — 백업·동기화 대상 (DOC-DSN-42)
   STORAGE_KEYS.PRODUCT_ITEMS,     // 기성품 전성분 DB — 백업·동기 대상 (FO-37)
   STORAGE_KEYS.FORMULA_GEMINI_MODEL, // 사진 인식 모델명 설정 — 환경설정 (FO-46)
   STORAGE_KEYS.FORMULA_VISION_HIRES, // 사진 고해상도 모드 — 환경설정 (FO-54)

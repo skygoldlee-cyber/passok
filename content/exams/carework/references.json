@@ -1,69 +1,70 @@
 {
- "schemaVersion": 1,
- "_comment": "참조자료 매핑 설정. lawRefs: content/lawdb.json의 법령 id 목록 (나열 순서 = 매칭 우선순위). noticeCore: 고시 감시 배너의 기준 문서명. 자세한 구조는 design/MULTI_EXAM_DB_DESIGN.md §4",
- "lawRefs": [
-  "elderly-welfare-act",
-  "elderly-welfare-act-enforcement-decree",
-  "elderly-welfare-act-enforcement-rule",
-  "ltc-insurance-act",
-  "ltc-insurance-act-enforcement-decree",
-  "ltc-insurance-act-enforcement-rule",
-  "dementia-act",
-  "dementia-act-enforcement-decree"
- ],
- "noticeCore": null,
- "subjectDefaultRefdoc": {},
- "subjectDirMap": {
-  "caretheory": "과목1",
-  "careprac": "과목2"
- },
- "docSubjectRules": [],
- "multiSubjectDocs": [
-  "요양보호사 출제기준(국시원)(2024)",
-  "노인복지법",
-  "노인복지법 시행령",
-  "노인복지법 시행규칙",
-  "노인장기요양보험법",
-  "노인장기요양보험법 시행령",
-  "노인장기요양보험법 시행규칙",
-  "치매관리법",
-  "치매관리법 시행령",
-  "장기요양급여 제공기준 및 급여비용 산정방법 등에 관한 고시",
-  "장기요양등급판정기준에 관한 고시",
-  "장기요양기관 평가방법 등에 관한 고시",
-  "장기요양 본인부담금 감경에 관한 고시",
-  "장기요양보험료 경감고시",
-  "장기요양기관 폐쇄회로 텔레비전의 해상도 등 고시",
-  "장기요양기관 대상 인권교육 운영 및 교육기관 지정 등에 관한 고시",
-  "노인학대 신고의 접수 및 상담방법 등 운영기준에 관한 고시",
-  "요양보호사 실무경력자의 재가장기요양기관 관리책임자 양성 교육과정",
-  "장기요양급여비용 청구 및 심사·지급업무 처리기준"
- ],
- "refDirs": {
-  "ref_md": [
-   "과목1"
+  "schemaVersion": 1,
+  "_comment": "참조자료 매핑 설정. lawRefs: content/lawdb.json의 법령 id 목록 (나열 순서 = 매칭 우선순위). noticeCore: 고시 감시 배너의 기준 문서명. 자세한 구조는 design/MULTI_EXAM_DB_DESIGN.md §4",
+  "lawRefs": [
+    "elderly-welfare-act",
+    "elderly-welfare-act-enforcement-decree",
+    "elderly-welfare-act-enforcement-rule",
+    "ltc-insurance-act",
+    "ltc-insurance-act-enforcement-decree",
+    "ltc-insurance-act-enforcement-rule",
+    "dementia-act",
+    "dementia-act-enforcement-decree"
+  ],
+  "noticeCore": null,
+  "subjectDefaultRefdoc": {},
+  "subjectDirMap": {
+    "caretheory": "과목1",
+    "careprac": "과목2"
+  },
+  "docSubjectRules": [],
+  "multiSubjectDocs": [
+    "요양보호사 출제기준(국시원)(2024)",
+    "노인복지법",
+    "노인복지법 시행령",
+    "노인복지법 시행규칙",
+    "노인장기요양보험법",
+    "노인장기요양보험법 시행령",
+    "노인장기요양보험법 시행규칙",
+    "치매관리법",
+    "치매관리법 시행령",
+    "장기요양급여 제공기준 및 급여비용 산정방법 등에 관한 고시",
+    "장기요양등급판정기준에 관한 고시",
+    "장기요양기관 평가방법 등에 관한 고시",
+    "장기요양 본인부담금 감경에 관한 고시",
+    "장기요양보험료 경감고시",
+    "장기요양기관 폐쇄회로 텔레비전의 해상도 등 고시",
+    "장기요양기관 대상 인권교육 운영 및 교육기관 지정 등에 관한 고시",
+    "노인학대 신고의 접수 및 상담방법 등 운영기준에 관한 고시",
+    "요양보호사 실무경력자의 재가장기요양기관 관리책임자 양성 교육과정",
+    "장기요양급여비용 청구 및 심사·지급업무 처리기준"
+  ],
+  "refDirs": {
+    "ref_md": [
+      "과목1",
+      "과목2"
+    ]
+  },
+  "referenceLaw": [],
+  "selfAuthoredDocs": [
+    "노인복지법",
+    "노인복지법 시행령",
+    "노인복지법 시행규칙",
+    "노인장기요양보험법",
+    "노인장기요양보험법 시행령",
+    "요양보호사 출제기준(국시원)(2024)",
+    "노인장기요양보험법 시행규칙",
+    "치매관리법",
+    "치매관리법 시행령",
+    "장기요양급여 제공기준 및 급여비용 산정방법 등에 관한 고시",
+    "장기요양등급판정기준에 관한 고시",
+    "장기요양기관 평가방법 등에 관한 고시",
+    "장기요양 본인부담금 감경에 관한 고시",
+    "장기요양보험료 경감고시",
+    "장기요양기관 폐쇄회로 텔레비전의 해상도 등 고시",
+    "장기요양기관 대상 인권교육 운영 및 교육기관 지정 등에 관한 고시",
+    "노인학대 신고의 접수 및 상담방법 등 운영기준에 관한 고시",
+    "요양보호사 실무경력자의 재가장기요양기관 관리책임자 양성 교육과정",
+    "장기요양급여비용 청구 및 심사·지급업무 처리기준"
   ]
- },
- "referenceLaw": [],
- "selfAuthoredDocs": [
-  "노인복지법",
-  "노인복지법 시행령",
-  "노인복지법 시행규칙",
-  "노인장기요양보험법",
-  "노인장기요양보험법 시행령",
-  "요양보호사 출제기준(국시원)(2024)",
-  "노인장기요양보험법 시행규칙",
-  "치매관리법",
-  "치매관리법 시행령",
-  "장기요양급여 제공기준 및 급여비용 산정방법 등에 관한 고시",
-  "장기요양등급판정기준에 관한 고시",
-  "장기요양기관 평가방법 등에 관한 고시",
-  "장기요양 본인부담금 감경에 관한 고시",
-  "장기요양보험료 경감고시",
-  "장기요양기관 폐쇄회로 텔레비전의 해상도 등 고시",
-  "장기요양기관 대상 인권교육 운영 및 교육기관 지정 등에 관한 고시",
-  "노인학대 신고의 접수 및 상담방법 등 운영기준에 관한 고시",
-  "요양보호사 실무경력자의 재가장기요양기관 관리책임자 양성 교육과정",
-  "장기요양급여비용 청구 및 심사·지급업무 처리기준"
- ]
 }

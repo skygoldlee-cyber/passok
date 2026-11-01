@@ -3,11 +3,12 @@
 // localStorage `carework_care_logs` (safeGetItem/safeSetItem → 시험 네임스페이스)
 // 무료 한도: FREE_LIMIT건 — 초과 시 free-limit 오류 → 상위에서 업그레이드 안내
 import { getJSON, setJSON } from '../../storage.js';
+import { STORAGE_KEYS } from '../../storage-keys.js';
 import { localDateTime } from '../../utils.js';
 import { showStoreError, proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { showToast } from '../../ui-utils.js';
 
-const KEY = 'carework_care_logs';
+const KEY = STORAGE_KEYS.CARE_LOG_ITEMS;
 export const FREE_LIMIT = 10;
 
 export function listCareLogs() {

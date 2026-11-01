@@ -308,7 +308,7 @@ const careLog = {
     markup: 'care-log.html',
     loaders: { main: _domainImport('views/care-log.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careLogGenerate', 'careLogSave', 'careLogCopy', 'careLogDelete']]],
+    handlers: [['main', ['careLogGenerate', 'careLogSave', 'careLogCopy', 'careLogDelete', 'careLogPrint']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
@@ -328,7 +328,40 @@ const careLog = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog };
+const careAudit = {
+    viewId: 'care-audit-view',
+    slug: 'care-audit',
+    priority: 3,
+    uiTextKey: 'careAudit',
+    title: '평가 체크리스트',
+    subtitle: '기관 평가 대비 점검',
+    loadingText: '체크리스트를 불러오는 중입니다...',
+    loadErrorText: '체크리스트를 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-audit.html',
+    loaders: { main: _domainImport('views/care-audit.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['careAuditReset']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careAudit.loadingText);
+        try {
+            await ensureViewMarkup(careAudit);
+            if (stale()) return;
+            const m = await careAudit.loaders.main();
+            if (stale()) return;
+            await m.initCareAuditView();
+        } catch (e) {
+            if (!stale()) showToast(careAudit.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
+const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {

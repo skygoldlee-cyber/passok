@@ -57,6 +57,13 @@ export function careLogSave() {
     if (r.ok) { showToast('일지를 저장했습니다.'); renderSaved(); }
 }
 
+export function careLogPrint() {
+    careLogGenerate();
+    if (!document.querySelector('#log-preview pre')) { showToast('먼저 일지를 생성하세요.', 'error'); return; }
+    proFeatureNotice('care_log_export', '일지 인쇄·PDF');
+    window.print();
+}
+
 export function careLogDelete(evt) {
     const id = evt?.currentTarget?.dataset?.id;
     if (id) { removeCareLog(id); renderSaved(); }
