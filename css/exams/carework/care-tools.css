@@ -18,6 +18,8 @@
     border: 1px solid var(--border-color); background: var(--bg-input);
     color: var(--color-text-main); min-height: 44px;
 }
+.care-calc-form select option { background-color: var(--bg-sidebar); color: var(--color-text-main); }
+.light-theme .care-calc-form select option { background-color: var(--bg-input); }
 .care-calc-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .care-calc-actions button { min-height: 44px; padding: 0 18px; border-radius: 8px; font-weight: 600; }
 .care-calc-err { color: var(--color-danger, #f87171); font-size: 14px; }

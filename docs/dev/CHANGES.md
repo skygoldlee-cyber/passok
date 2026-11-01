@@ -10,6 +10,10 @@
 
 ## 2026-11-01 test: uimode DOM 갱신 — 삭제된 시트 버튼 단언 제거·기관가입·인수인계로 대표 검증
 
+## 2026-11-02 fix(ui): carework select option 다크 토큰 적용 — 다크모드 가시성
+
+- .care-calc-form select option에 --bg-sidebar·--color-text-main 적용 (cosmetic의 .form-select option과 동일 규칙 — 누락으로 팝업이 OS 기본색이던 문제)
+
 ## 2026-11-02 fix: 막뉴얼 오탈자 전수 재정정 — cosmetic 매뉴얼 파일명 정정 (경로 해석 실패 수정)
 
 - content/exams/cosmetic/docs/실무막뉴얼.md → 실무매뉴얼.md 개명 (PATHS.PRACTICE_MANUAL 해석 불일치로 로드 불가였던 실버그) + 탭바 라벨·테스트·릴리스 노트 등 콘텐츠 오탈자 전수 정정 — 코드포인트 0xb9c9 잔여 0
