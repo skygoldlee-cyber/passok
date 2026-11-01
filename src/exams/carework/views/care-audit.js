@@ -1,6 +1,8 @@
 // src/exams/carework/views/care-audit.js — 기관 평가 체크리스트 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { loadAuditSections, loadChecks, toggleCheck, clearChecks, auditProgress } from '../care-audit.js';
+import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
+import { showToast } from '../../../ui-utils.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -23,6 +25,32 @@ function render() {
     const p = auditProgress(_sections);
     const bar = $('audit-progress');
     if (bar) bar.innerHTML = `<strong>점검 진행 ${esc(p.done)}/${esc(p.total)}</strong><div class="care-audit-bar"><span style="width:${esc(p.total ? Math.round(p.done / p.total * 100) : 0)}%"></span></div>`;
+}
+
+function buildSummary() {
+    const c = loadChecks();
+    const lines = ['[기관 평가 체크리스트 점검표]'];
+    for (const s of _sections) {
+        lines.push('', '■ ' + s.title);
+        for (const i of s.items) lines.push(`  ${c[i.id] ? '✔' : '□'} ${i.text} (${i.ref})`);
+    }
+    const p = auditProgress(_sections);
+    lines.push('', `점검 진행: ${p.done}/${p.total} 항목`);
+    return lines.join('\n');
+
+}
+
+export function careAuditCopy() {
+    if (!_sections.length) { showToast('체크리스트를 불러오는 중입니다.', 'error'); return; }
+    proFeatureNotice('care_audit_export', '점검표 복사·내보내기');
+    navigator.clipboard?.writeText(buildSummary()).then(
+        () => showToast('점검표를 복사했습니다.'),
+        () => showToast('복사에 실패했습니다.', 'error'));
+}
+
+export function careAuditPrint() {
+    proFeatureNotice('care_audit_export', '점검표 인쇄·PDF');
+    window.print();
 }
 
 export function careAuditReset() {

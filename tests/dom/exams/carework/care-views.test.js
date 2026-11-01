@@ -27,7 +27,7 @@ vi.mock('../../../../src/pro/pro-upgrade.js', () => ({
 import { careCalcRun, careCalcReset } from '../../../../src/exams/carework/views/care-calc.js';
 import { careCardOpen, careCardClose, initCareCardView } from '../../../../src/exams/carework/views/care-card.js';
 import { careLogGenerate, careLogCopy, initCareLogView } from '../../../../src/exams/carework/views/care-log.js';
-import { careAuditReset, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
+import { careAuditReset, careAuditCopy, careAuditPrint, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
 import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
 import { syncFacilityNav } from '../../../../src/exams/carework/facility.js';
@@ -75,6 +75,16 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         loadPartial('care-audit.html');
         await initCareAuditView();
         careAuditReset();
+        expect(document.getElementById('audit-list')).toBeTruthy();
+    });
+
+    it('careAudit — 점검표 복사·인쇄 핸들러 실행', async () => {
+        loadPartial('care-audit.html');
+        await initCareAuditView();
+        Object.defineProperty(navigator, 'clipboard', { value: { writeText: () => Promise.resolve() }, configurable: true });
+        window.print = () => {};
+        careAuditCopy();
+        careAuditPrint();
         expect(document.getElementById('audit-list')).toBeTruthy();
     });
 
