@@ -10,6 +10,8 @@
 
 ## 2026-11-01 test: uimode DOM 갱신 — 삭제된 시트 버튼 단언 제거·기관가입·인수인계로 대표 검증
 
+## 2026-11-02 chore: SPEC.md DA 표 오름차순 정렬 (DA-01~22)
+
 ## 2026-11-02 spec: DA-22 모드 전환 랜딩 규칙 명문화
 
 - 학습→실무는 getPracticeLanding(priority 최소 뷰)·실무→학습은 dashboard — ui-mode.js·practice-registry.js·테스트 @spec 연결
