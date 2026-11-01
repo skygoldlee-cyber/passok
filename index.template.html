@@ -60,9 +60,6 @@
                     <i class="fa-solid fa-circle-info" aria-hidden="true"></i> 사용자 매뉴얼
                 </button>
                 <!-- 실무 모드에서만 표시되는 접이식 라벨 — 클릭 시 학습 항목 펼침/접힘 -->
-                <button type="button" class="nav-group-label nav-study-tools-label" data-click="toggleStudyTools" aria-expanded="false">
-                    학습 도구 <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-                </button>
                 <div class="nav-group-label nav-study-only">학습</div>
                 <button class="nav-item nav-study-only active" data-target="dashboard-view">
                     <i class="fa-solid fa-chart-pie" aria-hidden="true"></i> <span data-uitext="dashboard">대시보드</span>
@@ -98,6 +95,10 @@
                 </button>
                 <button class="nav-item nav-study-only" data-target="calendar-view">
                     <i class="fa-solid fa-calendar-check" aria-hidden="true"></i> 학습 캘린더
+                </button>
+                <!-- 실무 모드에서만 표시되는 접이식 라벨 — 클릭 시 학습 항목 펼침/접힘 -->
+                <button type="button" class="nav-group-label nav-study-tools-label" data-click="toggleStudyTools" aria-expanded="false">
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i> 학습 도구
                 </button>
                 <div class="nav-group-label nav-group-label-practice" data-feature="practiceMode">실무</div>
                 <button type="button" data-click="ManualViewer.openFormulaManual" class="manual-nav-link" data-feature="formula">
@@ -445,15 +446,6 @@
                         <button class="mobile-tab-item nav-practice-only is-hidden" data-target="facility-admin-view" data-feature="careFacilityAdmin">
                             <i class="fa-solid fa-building-user" aria-hidden="true"></i>
                             <span data-uitext="careFacilityAdmin:nav">기관관리</span>
-                        </button>
-                        <button type="button" data-click="ManualViewer.openFormulaManual" class="mobile-tab-item nav-practice-only" data-feature="formula">
-                            <i class="fa-solid fa-flask" aria-hidden="true"></i>
-                            <span data-uitext="formula-manual">실무매뉴얼</span>
-                        </button>
-                        <!-- 실무 모드 전용 — 숨겨진 학습 항목 펼침 (사이드바 '학습 도구' 라벨의 모바일 대응) -->
-                        <button type="button" data-click="toggleStudyTools" class="mobile-tab-item nav-practice-only" aria-expanded="false" title="숨겨진 학습 메뉴 펼치기/접기">
-                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
-                            <span data-uitext="studyTools">학습도구</span>
                         </button>
                     </div>
                 </div>
