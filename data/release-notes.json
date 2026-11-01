@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261102-27dd053",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정·ui] DA-20 엄격 분리 — 무클래스 학습 항목·학습도구 탈출 경로 제거",
+      "[정리] build:derived 파생물 반영 — release-notes·version"
+    ]
+  },
+  {
     "version": "v20261102-47dd341",
     "date": "2026-11-02",
     "notes": [
@@ -183,15 +191,6 @@
     "notes": [
       "[수정·carework] 실무도구 CSS를 앱 다크 테마 토큰으로 교체 — 대비 불량 수정",
       "[정리·release] v20261101-e2862da 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-e2862da",
-    "date": "2026-11-01",
-    "notes": [
-      "[정리·trace] TRACE_MATRIX 재생성",
-      "[기능·carework] 실무도구 도메인 CSS — 4피처 공용 스타일 + 인쇄 격리",
-      "[정리·release] v20261101-39e18f8 스탬프 확정 [no-docs]"
     ]
   }
 ]
