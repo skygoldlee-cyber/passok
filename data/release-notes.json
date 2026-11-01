@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261101-cbe7378",
+    "date": "2026-11-01",
+    "notes": [
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[security] 기관관리 메뉴 기본 숨김 — manager 멤버십 확인 후 표시 (DA-18)",
+      "[정리·release] v20261101-559f974 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261101-559f974",
     "date": "2026-11-01",
     "notes": [
@@ -197,14 +206,6 @@
       "[기능·exams] 비시험 팩 지원 — integratedExam 미선언 시 통합 카드 숨김 + uiText 오버라이드 확장",
       "[문서·overview] 시험 팩 수 17→19 갱신 — 유통관리사 2·3급 + 티어 분포·파일럿 문구 정정 [no-test]",
       "[정리·release] v20261031-531388d 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261031-531388d",
-    "date": "2026-10-31",
-    "notes": [
-      "[수정·exam-select] 인트로 매뉴얼 문구를 nowrap 단위로 — 모바일 중간 줄바꿈 방지 [no-test]",
-      "[정리·release] v20261031-c1776da 스탬프 확정 [no-docs]"
     ]
   }
 ]
