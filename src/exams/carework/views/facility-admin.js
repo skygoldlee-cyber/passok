@@ -1,6 +1,6 @@
 // src/exams/carework/views/facility-admin.js — 기관 어드민 뷰 (DOC-DSN-43 6a, DA-13)
 // @spec DA-18 — 권한 뷰 분리 (어드민·클라이언트 별도 뷰)
-import { myMembership, createFacility, listMembers, ROLES } from '../facility.js';
+import { myMembership, syncFacilityNav, createFacility, listMembers, ROLES } from '../facility.js';
 import { getAuthSession } from '../../../auth-sync/supabase-client.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
@@ -13,10 +13,12 @@ async function render() {
     if (!host) return;
     const { session } = await getAuthSession().catch(() => ({ session: null }));
     if (!session) {
+        syncFacilityNav(null);
         host.innerHTML = '<p class="care-calc-err">기관 관리는 로그인이 필요합니다 — 사이드바 로그인 후 이용하세요.</p>';
         return;
     }
     const m = await myMembership();
+    syncFacilityNav(m);
     if (!m) {
         host.innerHTML = `
             <div class="care-calc-form">

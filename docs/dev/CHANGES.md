@@ -4,6 +4,11 @@
 
 - `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지 · 파일명 규약 정정: .dom.test.js 접미사 중복 → .test.js)
 
+## 2026-11-01 security: 기관관리 메뉴 기본 숨김 — manager 멤버십 확인 후 표시 (DA-18)
+
+- 기관관리 nav·시트 항목을 `is-hidden` 기본값으로 마크업 — `facility.js syncFacilityNav()`가 멤버십 role=manager 확인 시에만 해제, 비권한자에게 권한 표면 미노출
+- SPEC DA-18에 "어드민 메뉴 기본 숨김" 명기 추가 + 양쪽 뷰의 render에서 멤버십 로드 후 nav 동기화
+
 ## 2026-11-01 fix(ui): 기관 메뉴를 실무도구 구역에서 분리
 
 - 기관가입·기관관리가 실무도구(일지·계산·카드 등)와 같은 "실무" 구역에 섞여 표시되던 것을 별도 "기관" 구역 라벨로 분리 — 사이드바 nav-group-label + 모바일 시트 more-sheet-label 양쪽 적용

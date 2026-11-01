@@ -117,7 +117,7 @@ create policy "members read own facility" on public.facility_members for select
 | 뷰 | 대상 | 내용 |
 |---|---|---|
 | `facility-join` (클라이언트) | worker | 초대 코드 가입 + 내 소속 기관·역할 표시 — 등록·멤버관리 없음 |
-| `facility-admin` (어드민) | manager | 기관 등록 + 초대 코드 관리·재발급 + 멤버 목록·역할 관리 — worker 접근 시 "관리책임자 전용" 안내 |
+| `facility-admin` (어드민) | manager | 기관 등록 + 초대 코드 관리·재발급 + 멤버 목록·역할 관리 — **nav 항목은 기본 숨김, manager 확인 후 해제** + worker 접근 시 "관리책임자 전용" 안내 |
 
 | 흐름 | 진입 | 동작 |
 |---|---|---|

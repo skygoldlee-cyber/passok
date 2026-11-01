@@ -53,3 +53,12 @@ export async function listMembers(facilityId) {
     if (error) return [];
     return data || [];
 }
+
+/** 기관관리 nav 표시 — manager만 (보안 기본값 숨김, 멤버십 확인 후 해제 — DA-18)
+ * @param {object|null} m myMembership() 결과
+ */
+export function syncFacilityNav(m) {
+    const show = !!m && m.role === 'manager';
+    for (const el of document.querySelectorAll('[data-target="facility-admin-view"]'))
+        el.classList.toggle('is-hidden', !show);
+}

@@ -30,6 +30,7 @@ import { careLogGenerate, careLogCopy, initCareLogView } from '../../../../src/e
 import { careAuditReset, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
 import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
+import { syncFacilityNav } from '../../../../src/exams/carework/facility.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const loadPartial = (rel) => {
@@ -97,5 +98,15 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         initFacilityJoinView();
         await new Promise(r => setTimeout(r, 0));
         expect(document.getElementById('facility-join-body')?.textContent).toMatch(/로그인/);
+    });
+
+    it('syncFacilityNav — manager만 기관관리 메뉴 표시 (DA-18 보안 기본값)', () => {
+        document.body.innerHTML = '<button data-target="facility-admin-view" class="is-hidden"></button>';
+        syncFacilityNav({ role: 'manager' });
+        expect(document.querySelector('button').classList.contains('is-hidden')).toBe(false);
+        syncFacilityNav({ role: 'worker' });
+        expect(document.querySelector('button').classList.contains('is-hidden')).toBe(true);
+        syncFacilityNav(null);
+        expect(document.querySelector('button').classList.contains('is-hidden')).toBe(true);
     });
 });
