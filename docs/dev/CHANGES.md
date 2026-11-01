@@ -6,7 +6,7 @@
 
 ## 2026-11-01 fix: 메뉴얼→매뉴얼 오탈자 전수 정정
 
-- `index.template.html` 실무메뉴얼→실무막뉴얼 (formula 매뉴얼 버튼) + `iteng/ref_md` 운영자 메뉴얼→매뉴얼 — 전수조사 2건
+- `index.template.html` 실무메뉴얼→실무매뉴얼 (formula 매뉴얼 버튼) + `iteng/ref_md` 운영자 메뉴얼→매뉴얼 — 전수조사 2건
 
 ## 2026-11-01 fix(ui): 모바일 시트 기관 라벨 그리드 밖으로 분리 — 셀 렌더 결함 수정
 
