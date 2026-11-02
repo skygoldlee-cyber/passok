@@ -31,7 +31,7 @@ vi.mock('../../../../src/exams/carework/facility.js', async (importOriginal) => 
     ackHandover: vi.fn(() => Promise.resolve({})),
 }));
 
-import { careCalcRun, careCalcReset } from '../../../../src/exams/carework/views/care-calc.js';
+import { careCalcRun, careCalcReset, initCareCalcView } from '../../../../src/exams/carework/views/care-calc.js';
 import { careCardOpen, careCardClose, initCareCardView } from '../../../../src/exams/carework/views/care-card.js';
 import { careLogGenerate, careLogCopy, initCareLogView } from '../../../../src/exams/carework/views/care-log.js';
 import { careFacilityHandoverSubmit, careHandoverAck } from '../../../../src/exams/carework/views/care-handover.js';
@@ -56,6 +56,30 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('care-use').value = '20';
         careCalcRun();
         expect(document.querySelector('#care-result')?.textContent).toMatch(/원/);
+        careCalcReset();
+    });
+
+    it('careCalc — 비급여 항목별 합산 + 상급침실료 시설 전용 토글', () => {
+        loadPartial('care-calc.html');
+        initCareCalcView();
+        const type = /** @type {HTMLSelectElement} */ (document.getElementById('care-type'));
+        const roomWrap = /** @type {HTMLElement} */ (document.getElementById('care-nc-room-wrap'));
+        // 재가 선택 시 상급침실료 비노출
+        type.value = 'home';
+        type.dispatchEvent(new Event('change'));
+        expect(roomWrap.hidden).toBe(true);
+        // 시설 전환 시 노출 + 항목별 합산이 납부액에 반영
+        type.value = 'facility';
+        type.dispatchEvent(new Event('change'));
+        expect(roomWrap.hidden).toBe(false);
+        document.getElementById('care-use').value = '2000000';
+        document.getElementById('care-nc-meal').value = '450000';
+        document.getElementById('care-nc-room').value = '100000';
+        document.getElementById('care-nc-groom').value = '10000';
+        careCalcRun();
+        const txt = document.querySelector('#care-result')?.textContent || '';
+        expect(txt).toContain('비급여 자부담');
+        expect(txt).toContain('960,000원'); // 급여 20% 400,000 + 비급여 560,000
         careCalcReset();
     });
 

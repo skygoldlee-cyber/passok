@@ -2,15 +2,22 @@
 <section id="care-calc-view" class="view-section" data-feature="careCalc">
     <div class="view-header">
         <h2>장기요양 비용 계산기</h2>
-        <p class="view-subtitle">재가·시설급여 본인부담금 계산 — 등급별 월 한도·감경·비급여 적용 (2026년 기준)</p>
+        <p class="view-subtitle">재가·시설급여 본인부담금 + 비급여 계산 — 등급별 월 한도·감경 적용 (2026년 기준)</p>
     </div>
     <div class="care-calc-form">
         <label>급여 유형
             <select id="care-type"><option value="home">재가급여</option><option value="facility">시설급여</option></select>
         </label>
         <label>장기요양등급 <select id="care-grade"></select></label>
-        <label>월 예상 이용액 (원) <input id="care-use" type="number" min="0" placeholder="예: 1000000"></label>
-        <label>비급여 월 예상액 (원) <input id="care-noncovered" type="number" min="0" placeholder="시설: 식재료비·상급침실료 등"></label>
+        <label>월 예상 급여 이용액 (원) <input id="care-use" type="number" min="0" placeholder="예: 1000000"></label>
+        <fieldset class="care-calc-nc">
+            <legend>비급여 월 예상액 (원) — 기관·계약별 상이</legend>
+            <label>식재료비 <input id="care-nc-meal" type="number" min="0" placeholder="예: 450000"></label>
+            <label>간식비 <input id="care-nc-snack" type="number" min="0" placeholder="예: 60000"></label>
+            <label id="care-nc-room-wrap">상급침실료 <input id="care-nc-room" type="number" min="0" placeholder="시설만 해당"></label>
+            <label>이미용비 <input id="care-nc-groom" type="number" min="0" placeholder="예: 10000"></label>
+            <label>기타 비급여 <input id="care-nc-other" type="number" min="0" placeholder="예: 80000"></label>
+        </fieldset>
         <label>본인부담 감경 <select id="care-reduction"></select></label>
         <div class="care-calc-actions">
             <button data-click="careCalcRun">계산</button>

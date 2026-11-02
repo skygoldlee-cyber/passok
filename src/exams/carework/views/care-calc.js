@@ -10,12 +10,18 @@ const _val = (id, fallback) => {
     return el && el.value ? el.value : fallback;
 };
 
+const NC_FIELDS = { meal: 'care-nc-meal', snack: 'care-nc-snack', room: 'care-nc-room', groom: 'care-nc-groom', other: 'care-nc-other' };
+const NC_HOME_KEYS = ['meal', 'snack', 'groom', 'other']; // 상급침실료는 시설만
+
 function readForm() {
+    const type = _val('care-type', 'home');
+    const ncKeys = type === 'facility' ? Object.keys(NC_FIELDS) : NC_HOME_KEYS;
+    const nonCovered = ncKeys.reduce((s, k) => s + (Number(_val(NC_FIELDS[k], '0')) || 0), 0);
     return {
-        type: _val('care-type', 'home'),
+        type,
         grade: _val('care-grade', 'g1'),
         monthlyUse: Number(_val('care-use', '0')) || 0,
-        nonCovered: Number(_val('care-noncovered', '0')) || 0,
+        nonCovered,
         reduction: _val('care-reduction', 'none'),
     };
 }
@@ -39,7 +45,7 @@ export function careCalcRun() {
 }
 
 export function careCalcReset() {
-    ['care-use', 'care-noncovered'].forEach(id => {
+    ['care-use', ...Object.values(NC_FIELDS)].forEach(id => {
         const e = /** @type {HTMLInputElement|null} */ ($(id));
         if (e) e.value = '';
     });
@@ -55,4 +61,12 @@ export function initCareCalcView() {
     const r = $('care-reduction');
     if (r && !r.children.length)
         r.innerHTML = REDUCTIONS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+    // 상급침실료는 시설급여만 해당 — 재가 선택 시 항목 비노출
+    const t = /** @type {HTMLSelectElement|null} */ ($('care-type'));
+    const roomWrap = $('care-nc-room-wrap');
+    if (t && roomWrap) {
+        const syncRoom = () => { roomWrap.hidden = t.value !== 'facility'; };
+        t.addEventListener('change', syncRoom);
+        syncRoom();
+    }
 }
