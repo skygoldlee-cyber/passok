@@ -1,5 +1,15 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 content(carework): 문제은행 정답 파싱 복구 + 과목당 20→80문 확충 + 브랜딩
+
+- **치명 결함**: carework 문제은행 2개 파일에 `## 🔑 정답 및 교재 근거` 섹션 마커가 없어 파서가 정답 블록을 인식하지 못함 — 번들의 `answer` 전량 공란으로 앱 내 채점 불가 상태였음 (check:manifest·check:parser는 ###Q 개수만 검증해 미검출)
+- 마커 추가로 정답 파싱 복구 → bank 콤보 드릴 0→생성 (과목1 54 + 과목2 20, 총 74→확충 후 193)
+- **ai-draft 배치 편입**: gemini 초안 과목당 108/84문 생성 → 메타 문항(교재 서두·목차 기반 8문)·중복 필터 후 과목당 60문 채택 편입 (Q21~Q80) — 인용은 교재 L번호, 해설 포함. manifest 타이틀 20제→80제, desc 160문
+- **브랜딩**: exams.json에 appNameEn `PassCare`·practiceName `Care OS`·테마(emerald/amber)·요양일지 PWA shortcut 추가, logoMain/Sub 정리
+- **landing_demo.json** 신규 — 문제은행 3문 큐레이션 (재가급여·등급체계·연하곤란)
+- **정리**: 실무도구_설계초안.md 삭제 — 구현 완료된 DSN-42 초안이 사용자 문서 번들에 잔류 (실무매뉴얼로 대체) + sw.js MD_ASSETS 동기화
+- 검증: lint 지적 28건은 L1 부정 발문(정보성) 중심 — 실기 출제 스타일이라 수용 · check:reflines·manifest·answers 통과
+
 ## 2026-11-02 fix(exam-sim)+chore(carework): 통합 모의고사 풀 부족 정합 + uiText.dictionary 정리
 
 - `integratedExam.questionsPerSubject` 선언 배정보다 문제은행 풀이 부족한 시험(carework 40/80·skincare 필기 20/31)에서 무고지 잘림 + 선언 시간 그대로 출제되던 결함 수정 — 과목별 `풀/배정` 안내 토스트(warning) + 실제 출제 수 비례 시간 축소로 문항당 배정 시간 유지 (풀 확충 후 배정만 맞추면 자연 복원)
