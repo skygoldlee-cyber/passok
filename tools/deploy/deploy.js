@@ -263,10 +263,19 @@ async function main() {
         if (noiseFiles.length) git(`checkout -- ${noiseFiles.map(f => `"${f}"`).join(' ')}`);
     }
     if (changed().length) {
-        git('add -A');
-        git('commit --no-verify -m "chore: 배포 전 파생물 재생성 [no-test]"');
-        git('push --no-verify');
-        fail('파생물 재생성분을 커밋·push했습니다 — 해당 커밋의 CI 완료 후 배포를 재실행하세요.');
+        // 파생물 경로만 스테이징 — build:derived 동안 사용자가 병행 편집한 비관련
+        // 변경(src·css·tests 등)이 생성물 커밋에 흡수되지 않도록 add 범위 한정.
+        // (사고 이력: add -A가 실무 뷰 편집분까지 chore 커밋에 삼킴)
+        git('add -- data docs index.html');
+        if (gitOut(['diff', '--cached', '--name-only']).trim()) {
+            git('commit --no-verify -m "chore: 배포 전 파생물 재생성 [no-test]"');
+            git('push --no-verify');
+            fail('파생물 재생성분을 커밋·push했습니다 — 해당 커밋의 CI 완료 후 배포를 재실행하세요.');
+        }
+        const leftover = changed().filter(p => !/^(data|docs)\//.test(p) && p !== 'index.html');
+        if (leftover.length) {
+            fail(`파생물이 아닌 미커밋 변경이 있습니다 — 커밋 후 배포하세요:\n  ${leftover.join('\n  ')}`);
+        }
     }
 
     // CI 게이트 — 레드 상태의 배포를 차단한다. `--branch main` 최신 run을 보는

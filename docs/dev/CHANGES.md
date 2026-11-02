@@ -44,6 +44,12 @@
 - 인쇄 뒷장 빈 페이지 수정 — `visibility:hidden`은 레이아웃을 유지해 숨은 폼 높이가 빈 페이지로 밀림, 활성 뷰의 출력물 외 형제를 `display:none`으로 제거
 - 인쇄 본문 소실 수정 — 출력물의 `position:absolute`가 페이지 경계에서 본문을 잘라 제목만 보이던 문제, 일반 흐름으로 전환해 활성 뷰 패딩(10mm/8mm)이 여백 역할 + 정상 페이지 분할
 
+## 2026-11-03 fix(deploy): 파생물 커밋 `add -A` 경로 한정 — 병행 편집 흡수 차단
+
+- 배포의 `build:derived`(수십 초) 중 사용자가 병행 편집한 비관련 변경(src·css·tests)이 `git add -A`로 "배포 전 파생물 재생성" chore 커밋에 흡수되던 TOCTOU 갭 (실발: 서명란 편집분이 `2b2de34885`에 흡수)
+- `git add -- data docs index.html`로 파생물 루트만 스테이징 — 비파생물 잔여는 "커밋 후 배포" 실패로 전환해 사용자 변경 보존
+- 스탬프 확정 커밋은 이미 `add <stampedFiles>` 경로 한정이라 변경 없음
+
 ## 2026-11-02 fix(docs): '실무막*' 오탈자(U+B9C9) 전수 정정 — 잔여 0
 
 - 전수 스캔으로 U+B9C9 잔재 정리: CHANGES 14건·SPEC 1건·SCREEN_MAP 2건·release-notes.json 1건·study-manual 테스트 픽스처 1건 (모두 문서·히스토리 계열 — 실행 코드·파일명·내비 라벨은 정본 '실무막뉴얼' 확인됨)
