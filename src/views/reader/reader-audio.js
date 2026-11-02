@@ -1,5 +1,5 @@
 // views/reader-audio.js — 오디오북 플레이어 (textbook-reader.js에서 추출)
-// @spec AO-01~05
+// @spec AO-01~05,A-09 — 음원은 교재 원문 낭독, 리더 원문이 동등 대체재 (WCAG 1.2.1)
 import { showToast } from '../../ui-utils.js';
 import { safeGetItem, safeSetItem, safeRemoveItem } from '../../state.js';
 import { TIMING } from '../../config/timing.js';

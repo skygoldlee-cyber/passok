@@ -1,5 +1,5 @@
 // tests/e2e/a11y.spec.js — 접근성 자동 스캔 (axe-core, 실브라우저)
-// @spec A-01,A-03,A-04,UX-NAV-04
+// @spec A-01,A-03,A-04,A-08,A-11,A-12,UX-NAV-04
 // ARIA·대비·터치 타겟은 실제 렌더링 DOM에서만 검증 가능 — jsdom 불가.
 // 심각(critical/serious) 위반 0건을 게이트로 고정한다.
 // moderate/minor는 보고만 — 기존 백로그가 있을 수 있어 점진 정리 대상.
@@ -24,7 +24,7 @@ function isFp(v, node) {
 
 async function scan(page, label) {
     const results = await new AxeBuilder({ page })
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
         .analyze();
     // 오탐 노드를 제거하고 남은 노드가 없으면 위반 자체를 제외
     const real = results.violations

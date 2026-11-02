@@ -1,5 +1,5 @@
 // tests/dom/reader-audio.dom.test.js — 오디오북 플레이어 시나리오
-// @spec AO-01,AO-02,AO-03,AO-04,AO-05
+// @spec AO-01,AO-02,AO-03,AO-04,AO-05,A-09
 // 단원별 오디오 경로 해석, 플레이어 UI 표시, Media Session 메타데이터·액션 핸들러,
 // 재생 속도 순환, 시크/정지를 고정한다.
 

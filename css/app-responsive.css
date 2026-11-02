@@ -56,7 +56,18 @@
         border-left: none;
         border-bottom: 3px solid var(--color-primary);
     }
+    /* @spec UX-NAV-15 — 사이드바 푸터: 메타 정보만 숨기고 모드 토글은 상단 바 우측에 배치
+       (PC 사이드바 푸터 ↔ 모바일 탭바 우측과 배치 일관성 — 모든 폼팩터에서 직접 전환 경로 유지) */
     .sidebar-footer {
+        display: block;
+        position: absolute;
+        top: 0.9rem;
+        right: 1rem;
+        padding-top: 0;
+        border-top: none;
+        z-index: 2;
+    }
+    .sidebar-footer-meta {
         display: none;
     }
 

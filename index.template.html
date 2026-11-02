@@ -38,6 +38,7 @@
 </head>
 <body class="dark-theme">
     <!-- 본문 바로가기 (키보드·스크린리더 접근성 — 첫 Tab 정지점) -->
+    <!-- @spec A-08 — 블록 우회 스킵 링크 (WCAG 2.4.1) -->
     <a href="#main-content" class="skip-link">본문으로 바로가기</a>
 
     <!-- Offline Banner (오프라인 상태 표시) -->
@@ -385,6 +386,11 @@
             <button class="mobile-tab-item mobile-tab-more nav-study-only" id="mobile-more-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="mobile-more-sheet" title="전체 매뉴 보기">
                 <i class="fa-solid fa-ellipsis" aria-hidden="true"></i>
                 <span>더보기</span>
+            </button>
+            <!-- @spec UX-NAV-15 — 모드 전환 3대역 동등 배치: 사이드바 푸터↔상단 바 우측↔탭바 우측 끝. 양 모드 공통 노출을 위해 nav-study/practice-only 미부착 -->
+            <button type="button" class="mobile-tab-item mobile-tab-mode" data-click="toggleUiMode" data-feature="practiceMode" aria-pressed="false" title="학습/실무 모드 전환 — 합격 후 실무 중심 사용자는 실무 모드를 추천합니다">
+                <i class="fa-solid fa-repeat" aria-hidden="true"></i>
+                <span class="ui-mode-label">학습 모드</span>
             </button>
         </nav>
 

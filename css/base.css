@@ -805,7 +805,7 @@ body.ui-mode-practice.study-tools-open .mobile-tab-item[data-click="toggleStudyT
 }
 
 /* 데스크톱(>900px): 사이드바 푸터에 모드 토글이 있으므로 설정 패널 항목은 중복 숨김.
-   ≤900px(태블릿 상단 바·모바일)는 푸터가 없어 설정 항목이 유일 경로 */
+   ≤900px는 푸터 없음 — 모바일은 탭바 우측 모드 탭이 주 경로, 태블릿·발견용으로 설정 항목 병존 */
 @media (min-width: 901px) {
     .settings-item[data-click="toggleUiMode"] {
         display: none;
@@ -1284,3 +1284,18 @@ body:not(.ui-mode-practice) .tab-group-practice {
 
 /* 탭바 그룹 구분선 — 실무·기관 시각 분리 (DA-20 사이드바 라벨 구조 대응) */
 .tab-group-divider { align-self: center; width: 1px; height: 60%; flex: 0 0 auto; margin: 0 4px; background: var(--border-color, rgba(255,255,255,0.15)); }
+
+/* @spec UX-NAV-15 — 탭바 모드 전환: 양 모드 공통 노출, 가로 스크롤해도 우측 끝 고정 (사이드바 푸터 토글 대응) */
+.mobile-tab-bar .mobile-tab-mode {
+    flex: 0 0 auto;
+    min-width: 60px;
+    position: sticky;
+    right: 0;
+    background: var(--bg-sidebar);
+    border-left: 1px solid var(--border-color);
+    white-space: nowrap;
+    z-index: 1;
+}
+body.ui-mode-practice .mobile-tab-bar .mobile-tab-mode {
+    color: var(--color-secondary);
+}

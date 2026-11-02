@@ -1,5 +1,5 @@
 // tests/e2e/responsive-flow.spec.js — 반응형·내비·폼·PWA 게이팅 실측
-// @spec R-02,R-04,R-05,R-08,UX-NAV-06,UX-NAV-07,UX-SCR-01,UX-FORM-01,UX-FORM-02,UX-PWA-01,UX-PWA-02,UX-PWA-05
+// @spec R-02,R-04,R-05,R-08,UX-NAV-06,UX-NAV-07,UX-NAV-15,UX-SCR-01,UX-FORM-01,UX-FORM-02,UX-PWA-01,UX-PWA-02,UX-PWA-05
 // 스크롤 복원·그리드 종열·회전·커맨드 팔레트·스크롤바 이원화·입력 폰트·
 // 터치 피드백·standalone 게이팅·--app-height 실측 — 모두 레이아웃/입력 의존이라 e2e만 유효.
 
@@ -93,6 +93,21 @@ test.describe('반응형·내비게이션 실측', () => {
         });
         expect(r.mid).toBe(!r.before);
         expect(r.after).toBe(r.before);
+    });
+
+    test('모드 전환은 전 대역 내비 크롬 끝단에 직접 배치된다 (UX-NAV-15)', async ({ page }) => {
+        await boot(page);
+        const vw = await page.evaluate(() => window.innerWidth);
+        // 대역별 동등 위치 — 모바일: 탭바 우측 끝 탭 / 태블릿·PC: 사이드바 푸터(태블릿은 상단 바 우측)
+        const toggle = vw <= 768
+            ? page.locator('#mobile-tab-bar .mobile-tab-mode')
+            : page.locator('.sidebar-footer #ui-mode-toggle');
+        await expect(toggle).toBeVisible();
+        // 직접 동작 검증 — 크롬 배치가 dead 버튼이 아니어야 원칙 충족
+        await toggle.click();
+        await expect(page.locator('body')).toHaveClass(/ui-mode-practice/);
+        await toggle.click(); // 복귀 — 양 모드에서 노출되는지도 함께 확인
+        await expect(page.locator('body')).not.toHaveClass(/ui-mode-practice/);
     });
 
     test('통합 검색 팔레트가 Ctrl+K로 열리고 검색·실행된다 (UX-NAV-06)', async ({ page }) => {

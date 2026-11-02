@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 03cde945ed38a3e0
-> 생성: 2026-11-02 · 원천: SPEC.md(646개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 09d7eb0e64ca1270
+> 생성: 2026-11-02 · 원천: SPEC.md(652개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 646개 — 문서 연결 457 · 소스 연결 577 · 테스트 연결 614 · 보고서 연결 109
+**커버리지 요약**: 요구사항 652개 — 문서 연결 457 · 소스 연결 581 · 테스트 연결 620 · 보고서 연결 109
 
 ---
 
@@ -677,6 +677,11 @@
 | A-05 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css<br>css/ui-overlay.css | tests/dom/common/common-a11y.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
 | A-06 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | css/base.css<br>css/study.css | tests/dom/common/common-a11y.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
 | A-07 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | src/ui-utils.js | tests/dom/common/common-a11y.dom.test.js<br>tests/e2e/a11y-interaction.spec.js | — | — |
+| A-08 | ✅ | E2E 테스트 | — | index.html | tests/e2e/a11y.spec.js | — | — |
+| A-09 | ✅ | 테스트 | — | src/views/reader/reader-audio.js | tests/dom/reader/reader-audio.dom.test.js | — | — |
+| A-10 | ✅ | 테스트 | — | src/ui-utils.js | tests/dom/common/common-a11y.dom.test.js | — | — |
+| A-11 | ✅ | E2E 테스트 | — | — | tests/dom/common/common-a11y.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
+| A-12 | ✅ | E2E 테스트 | — | — | tests/e2e/a11y.spec.js | — | — |
 
 ## 4.6 반응형 & 모바일
 
@@ -734,6 +739,7 @@
 | UX-NAV-12 | 그룹 라벨은 `index.template.html`의 `.nav-group-label` 정적 마크업 — 모바일 시트는 동일 DOM 슬롯을 공유해 분류가 대역 간 자동 일치. 표시명만 바뀌고 `data-target`·라우트 ID는 불변 | 테스트 | DOC-DSN-21<br>DOC-DSN-25 | — | tests/dom/common/common-navigation.dom.test.js | — | — |
 | UX-NAV-13 | `html/views/{quiz,exam,trainer,review}.html` 정적 문구 — manifest `uiText` subtitle과 별도 본문 표기라 `check:uitext` 비대상 | 테스트 | DOC-DSN-21<br>DOC-DSN-25 | — | tests/dom/study/study-review.dom.test.js | — | — |
 | UX-NAV-14 | `html/views/trainer.html` 정적 구조 — 카드 DOM·`data-click`·`data-feature`·배지 id 불변, 그룹 이동만. 라벨은 본문 텍스트라 `check:uitext` 비대상 | E2E 테스트 | DOC-DSN-21<br>DOC-DSN-25 | css/trainer.css<br>html/views/trainer.html<br>index.html | tests/dom/study/study-trainer.dom.test.js<br>tests/e2e/app.spec.js | — | — |
+| UX-NAV-15 | 3대역 네비게이션은 같은 표면의 3형태(UX-NAV-01) — 한 대역의 크롬 배치가 빠지면 대역 전환 시 학습된 위치가 소실되고, 모드별 메뉴 스왑(DA-20) 구조에서는 복귀 경로 자체가 끊긴다 (모드 토글 실사례: 모바일·태블릿은 설정이 유일 경로 + 실무 모드에서 더보기도 `nav-study-only`로 소실 → 탭바 우측 `.mobile-tab-mode` sticky 탭·태블릿 상단 바 우측 푸터 토글로 확장, UM-05). 신규 전역·크롬 기능은 3대역 배치를 함께 설계할 것 | E2E 테스트 | — | css/app-responsive.css<br>css/base.css<br>index.html | tests/dom/common/common-uimode.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
 | UX-PWA-01 | 모바일 OS(Android/iOS)는 웹의 자체 종료를 차단 — 프로그래밍으로 완전 종료 불가. 데스크톱 설치 PWA는 `close()`가 동작하므로 모바일 안내는 불필요. 차단되면 "최근 앱 목록에서 밀어 닫으세요"(터치)/"창을 닫아주세요"(데스크톱) 안내 화면으로 대체하는 것이 최선 | E2E 테스트 | DOC-DSN-25 | src/shell/app.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-PWA-02 | 브라우저 탭에서 의미 없는 버튼(앱 종료 등)을 숨겨 혼란 방지. iOS는 `navigator.standalone`만 지원하므로 둘 다 확인 필수 | E2E 테스트 | DOC-DSN-25 | src/pwa/pwa-install.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-PWA-03 | "배포했는데 안 바뀐다" 보고의 대부분이 이 패턴. 사용자 안내 문구와 업데이트 토스트 필수 | E2E 테스트 | DOC-DSN-25 | sw.js<br>tools/check/check_perf_budget.js | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |

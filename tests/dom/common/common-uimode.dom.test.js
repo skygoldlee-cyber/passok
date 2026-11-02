@@ -150,6 +150,19 @@ describe('UI 모드 — 학습/실무 전환', () => {
         STUDY_ONLY.forEach(v => expect(visibleNavTargets()).toContain(v));
         expect(lastToast()[0]).toContain('학습 모드');
     });
+
+    // @spec UX-NAV-15 — 폼팩터 배치 일관성: 모바일은 탭바 우측 끝이 모드 전환 주 경로
+    it('모바일 탭바 모드 탭 — 양 모드 공통 노출·게이트·라벨/aria 동기화 (H)', () => {
+        const tab = document.querySelector('#mobile-tab-bar .mobile-tab-mode[data-click="toggleUiMode"]');
+        expect(tab, '탭바 모드 전환 버튼 부재').not.toBeNull();
+        expect(tab.dataset.feature).toBe('practiceMode');
+        // 모드 전환 진입점은 양 모드 노출이어야 함 — 한쪽 모드에만 붙으면 복귀 경로 소실
+        expect(tab.classList.contains('nav-study-only')).toBe(false);
+        expect(tab.classList.contains('nav-practice-only')).toBe(false);
+        toggleUiMode(); // 실무 진입 — 라벨·aria 전수 동기화에 탭바 버튼도 편입됐는지
+        expect(tab.querySelector('.ui-mode-label').textContent).toBe('실무 모드');
+        expect(tab.getAttribute('aria-pressed')).toBe('true');
+    });
 });
 
 describe('UI 모드 — formula 미보유 시험', () => {

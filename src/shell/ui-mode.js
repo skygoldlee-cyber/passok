@@ -38,7 +38,7 @@ export function applyUiMode() {
     const open = safeGetItem(STORAGE_KEYS.UI_STUDY_TOOLS_OPEN) === '1';
     document.body.classList.toggle('ui-mode-practice', practice);
     document.body.classList.toggle('study-tools-open', open);
-    // 토글이 두 곳(사이드바 푸터·설정 패널)에 있으므로 라벨/aria를 일괄 동기화
+    // 토글이 세 곳(사이드바 푸터/태블릿 상단 바·모바일 탭바·설정 패널 — UX-NAV-15)에 있으므로 라벨/aria를 일괄 동기화
     document.querySelectorAll('.ui-mode-label').forEach(el => {
         el.textContent = practice ? '실무 모드' : '학습 모드';
     });
