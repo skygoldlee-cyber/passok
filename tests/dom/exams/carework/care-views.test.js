@@ -236,6 +236,10 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const printCss = readFileSync('css/print.css', 'utf-8');
         expect(printCss).toContain('.view-section.active');
         expect(printCss).not.toMatch(/#review-view\.view-section\s*\{/);
+        // 윤곽 테이블 — 격자 테두리(외곽선+셀)가 화면·인쇄 모두 적용
+        expect(css).toMatch(/\.care-doc \{[^}]*border: 1px solid/);
+        expect(css).toMatch(/\.care-doc td \{[^}]*border: 1px solid/);
+        expect(printBlock).toContain('--print-border-strong');
     });
 
 });
