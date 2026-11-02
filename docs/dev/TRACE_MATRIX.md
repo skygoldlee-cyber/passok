@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: e80257b058e551d2
-> 생성: 2026-11-02 · 원천: SPEC.md(657개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 3562dd87f66d9c3d
+> 생성: 2026-11-02 · 원천: SPEC.md(658개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 657개 — 문서 연결 457 · 소스 연결 584 · 테스트 연결 624 · 보고서 연결 109
+**커버리지 요약**: 요구사항 658개 — 문서 연결 457 · 소스 연결 584 · 테스트 연결 624 · 보고서 연결 109
 
 ---
 
@@ -442,6 +442,7 @@
 | UM-03 | — | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-04 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/router.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/dom/misc/router.dom.test.js<br>tests/dom/misc/ui-structure.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-05 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 1개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
+| UM-06 | ✅ | — | — | — | — | — | — |
 
 ## 3.22 시험 선택·전환
 
