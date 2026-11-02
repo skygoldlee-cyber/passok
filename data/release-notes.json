@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261102-9f7a27e",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정·ui] 실무 매뉴얼 기본 제목 공유 규약 — '실무 매뉴얼 (X OS)' 통일",
+      "[정리·release] v20261102-94ec047 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-94ec047",
     "date": "2026-11-02",
     "notes": [
@@ -171,14 +179,6 @@
       "[수정·carework] subjectDefaultRefdoc 선언 — 큐레이션 용어집 30항목 인덱스 활성화",
       "[CI] retrigger — install/e2e flake 재확인 [no-test]",
       "[기능·law] RR-20 기동 시 법령 최신성 자동 확인 + Formula 훅 정리"
-    ]
-  },
-  {
-    "version": "v20261102-3e9b172",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정·tools] 배포 디스코드 알림 실패 시 로그 출력 (AD-10)",
-      "[정리·release] v20261102-9a4cea7 스탬프 확정 [no-docs]"
     ]
   }
 ]
