@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261102-2a7d3ee",
+    "date": "2026-11-02",
+    "notes": [
+      "[테스트·discord] DISCORD_NOTIFY_MENTION env 격리 + 멘션 페이로드 커버",
+      "[수정·discord] DISCORD_NOTIFY_MENTION 숫자-only 값 수용",
+      "[기능·discord] 모바일 푸시용 DISCORD_NOTIFY_MENTION 지원",
+      "[정리·release] v20261102-8345de5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-8345de5",
     "date": "2026-11-02",
     "notes": [
@@ -184,16 +194,6 @@
       "[수정·ui] 시트 실무 항목을 탭바로 이동 — 더보기는 학습 전용",
       "[기능·ui] 실무 탭바를 사이드바 실무 구성과 동기화",
       "[정리·release] v20261101-ad5b8fa 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-ad5b8fa",
-    "date": "2026-11-01",
-    "notes": [
-      "[테스트] uimode DOM 갱신 — 삭제된 더보기 버튼 단언 제거",
-      "[수정·ui] 더보기 시트 실무매뉴얼·학습도구 제거 — 사이드바 유지",
-      "[기능·cosmetic] 실무매뉴얼 추가 (DOC-USR-21) + 사이드바 실무매뉴얼 실무 모드 숨김",
-      "[정리·release] v20261101-51df8cb 스탬프 확정 [no-docs]"
     ]
   }
 ]
