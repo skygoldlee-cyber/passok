@@ -97,6 +97,12 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(txt).toContain('558,420원'); // 급여 본인부담금 — 비급여 미포함
         expect(txt).toContain('1,118,420원'); // 실납부 = 급여부담 558,420 + 비급여 560,000
         expect(txt).toContain('93,070원/일');
+        // 입력 조건 병기 — 인쇄 결과물이 조건 없이 결과만 나오던 결함 회귀 방지
+        expect(txt).toContain('입력 조건');
+        expect(txt).toContain('시설급여');
+        expect(txt).toContain('30일');
+        expect(txt).toContain('비급여·식재료비');
+        expect(txt).toContain('450,000원');
         // 강조는 '실제 월 납부액' 행 — 위치 선택자 회귀 방지
         const totalRow = document.querySelector('#care-result .care-calc-total');
         expect(totalRow?.textContent).toContain('실제 월 납부액');

@@ -11,7 +11,14 @@ const _val = (id, fallback) => {
 };
 
 const NC_FIELDS = { meal: 'care-nc-meal', snack: 'care-nc-snack', room: 'care-nc-room', groom: 'care-nc-groom', other: 'care-nc-other' };
+const NC_LABELS = { meal: '식재료비', snack: '간식비', room: '상급침실료', groom: '이미용비', other: '기타 비급여' };
 const NC_HOME_KEYS = ['meal', 'snack', 'groom', 'other']; // 상급침실료는 시설만
+
+const _selLabel = (id) => {
+    const el = /** @type {HTMLSelectElement|null} */ ($(id));
+    const opt = el && el.options ? el.options[el.selectedIndex] : null;
+    return opt ? opt.textContent : '';
+};
 
 /** 시설급여 이용액 자동 산정 — 등급별 1일당 수가 × 입소 일수 (고시 정량값) */
 function facilityUse(facTypeKey, gradeKey, days) {
@@ -46,6 +53,21 @@ export function careCalcRun() {
     const out = $('care-result');
     if (!out) return;
     if (!r) { out.innerHTML = '<p class="care-calc-err">입력을 확인하세요.</p>'; return; }
+    // 입력 조건 — 인쇄·PDF 출력물이 결과만 보이지 않도록 조건을 결과물 상단에 병기
+    const ncKeys = in_.type === 'facility' ? Object.keys(NC_FIELDS) : NC_HOME_KEYS;
+    const cond = [
+        ['급여 유형', in_.type === 'facility' ? '시설급여' : '재가급여'],
+        ['장기요양등급', _selLabel('care-grade')],
+        ...(in_.type === 'facility'
+            ? [['시설 유형', _selLabel('care-fac-type')], ['월 입소 일수', `${_val('care-fac-days', '0')}일`]]
+            : [['월 예상 급여 이용액', formatWon(in_.monthlyUse)]]),
+        ...ncKeys.map(k => /** @type {[string, number]} */ ([k, Number(_val(NC_FIELDS[k], '0')) || 0]))
+            .filter(([, v]) => v > 0)
+            .map(([k, v]) => [`비급여·${NC_LABELS[k]}`, formatWon(v)]),
+        ['본인부담 감경', _selLabel('care-reduction')],
+    ];
+    const condHtml = `<div class="care-calc-cond"><strong class="care-calc-cond-title">입력 조건</strong>${
+        cond.map(([k, v]) => `<div class="care-calc-cond-row"><span>${k}</span><span>${v}</span></div>`).join('')}</div>`;
     const rows = [
         ['총 이용액', formatWon(r.covered + r.overLimit)],
         ['공단 부담', formatWon(r.publicPay)],
@@ -56,7 +78,8 @@ export function careCalcRun() {
         ['실제 월 납부액', formatWon(r.selfPay), 'care-calc-total'],
         ...(in_._basis ? [[`급여비용 산정 — ${formatWon(in_._basis.rate)}/일 × ${in_._basis.days}일`, '']] : []),
     ];
-    out.innerHTML = rows.map(([k, v, c]) => `<div class="care-calc-row${c ? ' ' + c : ''}"><span>${k}</span><strong>${v}</strong></div>`).join('')
+    out.innerHTML = condHtml
+        + rows.map(([k, v, c]) => `<div class="care-calc-row${c ? ' ' + c : ''}"><span>${k}</span><strong>${v}</strong></div>`).join('')
         + `<p class="care-calc-src">근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>`;
 }
 
