@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(discord): 커뮤니티 공지 채널 멘션 제외 — postAnnounce noMention
+
+- DISCORD_NOTIFY_MENTION이 postDiscord 공통 경로라 공지 채널 발송에도 멘션이 붙던 것을 분리 — postDiscord에 noMention 옵션 추가하고 postAnnounce가 사용 (운영 알림만 멘션, 공지 채널은 멘션 없음)
+
 ## 2026-11-02 test(discord): DISCORD_NOTIFY_MENTION 테스트 격리 + 멘션 페이로드 커버
 
 - .env에 신규 env가 loadEnv로 유출돼 allowed_mentions 단언 실패 → withMentionEnv 격리 추가 + 유저·역할·숫자-only·@everyone 페이로드 케이스 (9/9)

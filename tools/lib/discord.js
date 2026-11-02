@@ -42,7 +42,9 @@ function mentionPayload() {
  * 멘션 해석을 차단한다 (알림 채널이어도 멘션 폭발 방지 — 방어적 기본값).
  * DISCORD_NOTIFY_MENTION 설정 시 그 대상만 예외적으로 멘션한다 (모바일 푸시용).
  * @param {object} embed Discord embed 객체 (title·description·color·fields…)
- * @param {{webhookUrl?: string, timeoutMs?: number}} [opts]
+ * @param {{webhookUrl?: string, timeoutMs?: number, noMention?: boolean}} [opts]
+ *   noMention: DISCORD_NOTIFY_MENTION 설정을 무시하고 멘션 없이 발송 —
+ *   커뮤니티 공지 채널처럼 불특정 다수 대상 발송에서 특정인 멘션을 막을 때 사용
  * @returns {Promise<{sent: boolean, reason?: string, status?: number}>}
  */
 async function postDiscord(embed, opts = {}) {
@@ -54,7 +56,7 @@ async function postDiscord(embed, opts = {}) {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
-                ...mentionPayload(),
+                ...(opts.noMention ? { allowed_mentions: { parse: [] } } : mentionPayload()),
                 embeds: [embed],
             }),
             signal: AbortSignal.timeout(opts.timeoutMs ?? 10000),
@@ -131,7 +133,7 @@ async function postAnnounce(embed, opts = {}) {
     const { targets, unknown } = announceTargets();
     const results = [];
     for (const t of targets) {
-        const r = await postDiscord(embed, { webhookUrl: t.url, timeoutMs: opts.timeoutMs });
+        const r = await postDiscord(embed, { webhookUrl: t.url, timeoutMs: opts.timeoutMs, noMention: true });
         results.push({ key: t.key, label: t.label, ...r });
     }
     return {
