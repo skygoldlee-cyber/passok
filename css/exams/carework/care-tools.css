@@ -150,4 +150,4 @@
 
 .care-calc-nc { margin: 12px 0 16px; padding: 12px 14px 10px; border: 1px solid var(--border); border-radius: 8px; }
 .care-calc-nc legend { padding: 0 6px; font-weight: 600; font-size: 0.9rem; }
-.care-calc-nc label { display: block; margin: 6px 0; }
+.care-calc-nc label { margin: 6px 0; }

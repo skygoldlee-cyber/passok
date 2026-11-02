@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(carework): 비급여 필드셋 세로 정렬 복구
+
+- .care-calc-nc label의 display:block 덮어쓰기가 폼 기본 flex-column 세로 스택을 깨뜨린 문제 — 오버라이드 제거로 라벨·입력 세로 정렬 복구
+
 ## 2026-11-02 fix(carework): 한도표 연도 보간 이스케이프 규약 교정
 
 - innerHTML 템플릿의  보간이 HTML escape sink 게이트에 차단 → 문자열 연결로 교정 (CI 복구)
