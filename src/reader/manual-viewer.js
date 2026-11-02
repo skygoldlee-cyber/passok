@@ -23,13 +23,17 @@ import { attachImageZoomIn } from './image-zoom.js';
 import { makeSessionCache, injectBundleScript, fetchMd, buildTocHtml, mountToc, createDocOverlay, scrollToHeadingSlug } from '../shell/doc-overlay.js';
 
 export const ManualViewer = (() => {
+    // 실무 매뉴얼 기본 제목 규약 — 모든 실무 매뉴얼(formula_manual·practice_manual)은
+    // 공통 기본 제목을 공유하고, 시험별 브랜드는 practiceBrand로 practiceName을 병기해
+    // '실무 매뉴얼 (X OS)' 형식으로 통일한다 (시험별 별개 기본 제목 금지).
+    const PRACTICE_MANUAL_TITLE = '실무 매뉴얼';
     // 지원하는 마크다운 소스 정의
     const MD_SOURCES = {
         'user_manual': { path: PATHS.USER_MANUAL, title: '사용자 매뉴얼' },
         'privacy_policy': { path: PATHS.PRIVACY_POLICY, title: '개인정보 처리방침' },
         // practiceBrand: 활성 시험의 practiceName(exams.json 실무 브랜드)을 제목에 병기
-        'formula_manual': { path: PATHS.FORMULA_MANUAL, title: '실무 매뉴얼', practiceBrand: true },
-        'practice_manual': { path: PATHS.PRACTICE_MANUAL, title: '실무매뉴얼', practiceBrand: true },
+        'formula_manual': { path: PATHS.FORMULA_MANUAL, title: PRACTICE_MANUAL_TITLE, practiceBrand: true },
+        'practice_manual': { path: PATHS.PRACTICE_MANUAL, title: PRACTICE_MANUAL_TITLE, practiceBrand: true },
         'study_summary': { path: PATHS.STUDY_GUIDE, title: '학습 안내서' },
         'mnemonic_guide': { path: PATHS.MNEMONIC_GUIDE, title: '두음법·숫자 암기 총정리' }
     };

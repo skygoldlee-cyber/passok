@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(ui): 실무 매뉴얼 기본 제목 공유 규약 — '실무 매뉴얼 (X OS)' 통일
+
+- 실무막뉴얼(practice_manual) 기본 제목이 '실무막뉴얼'로 formula의 '실무 매뉴얼'과 불일치 → 공통 상수 `PRACTICE_MANUAL_TITLE='실무 매뉴얼'`로 두 소스 공유 + 규약 주석 (시험별 별개 기본 제목 금지, 브랜드는 practiceBrand로 '실무 매뉴얼 (Care OS)' 형식)
+- 내비 라벨도 동일 형식으로 통일 — carework 실무막뉴얼 버튼 '실무막뉴얼' → '실무 매뉴얼' (사이드바·모바일 탭)
+
 ## 2026-11-02 feat(ui): 모바일 실무 탭바에 practiceName 브랜드 라벨 — Care OS 표면
 
 - 모바일은 `.app-header .header-title p`(view-subtitle)가 공간상 숨겨져 있어 서브타이틀 병기 브랜드가 닿지 않음 → 탭바 실무 그룹 선두에 `.practice-brand-label` 추가, applyUiMode가 활성 시험 practiceName을 실무 모드일 때만 채움 (`:empty` 숨김 — 미선언·학습 모드에서는 무노출)
