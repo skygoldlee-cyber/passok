@@ -20,6 +20,15 @@
             <label>기타 비급여 <input id="care-nc-other" type="number" min="0" placeholder="기관 고지 기타 항목 예: 80000"></label>
         </fieldset>
         <label>본인부담 감경 <select id="care-reduction"></select></label>
+        <table class="care-calc-rates" aria-label="감경 유형별 실효 본인부담률">
+            <thead><tr><th>구분</th><th>재가 본인부담률</th><th>시설 본인부담률</th></tr></thead>
+            <tbody>
+                <tr><td>일반</td><td>15%</td><td>20%</td></tr>
+                <tr><td>40% 감경</td><td>9%</td><td>12%</td></tr>
+                <tr><td>60% 감경</td><td>6%</td><td>8%</td></tr>
+                <tr><td>기초생활수급자</td><td>0%</td><td>0%</td></tr>
+            </tbody>
+        </table>
         <div class="care-calc-actions">
             <button data-click="careCalcRun">계산</button>
             <button data-click="careCalcReset" class="btn btn-secondary">초기화</button>

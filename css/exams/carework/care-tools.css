@@ -141,3 +141,9 @@
     .care-calc-row { background: #fff; color: #000; border-color: #ccc; }
     .care-calc-row strong { color: #000; }
 }
+
+.care-calc-rates { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 4px 0 8px; }
+.care-calc-rates th, .care-calc-rates td { padding: 6px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+.care-calc-rates th { color: var(--color-text-sub); font-weight: 600; }
+.care-calc-rates td:last-child, .care-calc-rates th:last-child { text-align: right; }
+.care-calc-nc-note { font-size: 0.85rem; color: var(--color-text-sub); margin: 0 0 8px; }
