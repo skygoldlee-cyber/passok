@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261103-8edec2f",
+    "date": "2026-11-03",
+    "notes": [
+      "[수정·carework] 실무도구 인쇄 출력 백지 결함 — print 허용 목록 확장",
+      "[정리·release] v20261103-5428c4f 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261103-5428c4f",
     "date": "2026-11-03",
     "notes": [
@@ -170,14 +178,6 @@
       "[수정·discord] DISCORD_NOTIFY_MENTION 숫자-only 값 수용",
       "[기능·discord] 모바일 푸시용 DISCORD_NOTIFY_MENTION 지원",
       "[정리·release] v20261102-8345de5 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-8345de5",
-    "date": "2026-11-02",
-    "notes": [
-      "[문서·spec] UM-06 모드별 top-level 메뉴 구성 불변식 명문화",
-      "[정리·release] v20261102-f5f1b2d 스탬프 확정 [no-docs]"
     ]
   }
 ]
