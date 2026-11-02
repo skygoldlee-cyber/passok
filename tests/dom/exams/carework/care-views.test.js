@@ -72,14 +72,22 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         type.value = 'facility';
         type.dispatchEvent(new Event('change'));
         expect(roomWrap.hidden).toBe(false);
-        document.getElementById('care-use').value = '2000000';
+        // 시설 전환 시 수동 이용액 랩 비노출 + 수가×일수 자동 산정
+        expect(/** @type {HTMLElement} */ (document.getElementById('care-use-wrap')).hidden).toBe(true);
+        expect(/** @type {HTMLElement} */ (document.getElementById('care-fac-wrap')).hidden).toBe(false);
+        const facSel = /** @type {HTMLSelectElement} */ (document.getElementById('care-fac-type'));
+        facSel.value = 'nursing';
+        document.getElementById('care-grade').value = 'g1';
+        document.getElementById('care-fac-days').value = '30';
+        document.getElementById('care-use').value = '2000000'; // 자동 산정으로 덮임 (93,070×30=2,792,100)
         document.getElementById('care-nc-meal').value = '450000';
         document.getElementById('care-nc-room').value = '100000';
         document.getElementById('care-nc-groom').value = '10000';
         careCalcRun();
         const txt = document.querySelector('#care-result')?.textContent || '';
         expect(txt).toContain('비급여 자부담');
-        expect(txt).toContain('960,000원'); // 급여 20% 400,000 + 비급여 560,000
+        expect(txt).toContain('1,118,420원'); // 급여 20% 558,420(자동 2,792,100) + 비급여 560,000
+        expect(txt).toContain('93,070원/일');
         careCalcReset();
     });
 

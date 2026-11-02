@@ -147,3 +147,7 @@
 .care-calc-rates th { color: var(--color-text-sub); font-weight: 600; }
 .care-calc-rates td:last-child, .care-calc-rates th:last-child { text-align: right; }
 .care-calc-nc-note { font-size: 0.85rem; color: var(--color-text-sub); margin: 0 0 8px; }
+
+.care-calc-nc { margin: 12px 0 16px; padding: 12px 14px 10px; border: 1px solid var(--border); border-radius: 8px; }
+.care-calc-nc legend { padding: 0 6px; font-weight: 600; font-size: 0.9rem; }
+.care-calc-nc label { display: block; margin: 6px 0; }

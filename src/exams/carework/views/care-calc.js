@@ -1,7 +1,7 @@
 // src/exams/carework/views/care-calc.js — 장기요양 비용 계산 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { computeCareCost, formatWon } from '../care-calc.js';
-import { GRADE_LIMITS, REDUCTIONS, EFFECTIVE_YEAR } from '../care-calc-data.js';
+import { GRADE_LIMITS, REDUCTIONS, EFFECTIVE_YEAR, FACILITY_TYPES } from '../care-calc-data.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -13,21 +13,36 @@ const _val = (id, fallback) => {
 const NC_FIELDS = { meal: 'care-nc-meal', snack: 'care-nc-snack', room: 'care-nc-room', groom: 'care-nc-groom', other: 'care-nc-other' };
 const NC_HOME_KEYS = ['meal', 'snack', 'groom', 'other']; // 상급침실료는 시설만
 
+/** 시설급여 이용액 자동 산정 — 등급별 1일당 수가 × 입소 일수 (고시 정량값) */
+function facilityUse(facTypeKey, gradeKey, days) {
+    const f = FACILITY_TYPES.find(x => x.key === facTypeKey);
+    const rate = f && f.rates[gradeKey];
+    return rate && days > 0 ? { use: rate * days, rate, days } : null;
+}
+
 function readForm() {
     const type = _val('care-type', 'home');
     const ncKeys = type === 'facility' ? Object.keys(NC_FIELDS) : NC_HOME_KEYS;
     const nonCovered = ncKeys.reduce((s, k) => s + (Number(_val(NC_FIELDS[k], '0')) || 0), 0);
+    let monthlyUse = Number(_val('care-use', '0')) || 0, basis = null;
+    if (type === 'facility') {
+        const days = Number(_val('care-fac-days', '0')) || 0;
+        const f = facilityUse(_val('care-fac-type', ''), _val('care-grade', 'g1'), days);
+        if (f) { monthlyUse = f.use; basis = f; }
+    }
     return {
         type,
         grade: _val('care-grade', 'g1'),
-        monthlyUse: Number(_val('care-use', '0')) || 0,
+        monthlyUse,
         nonCovered,
         reduction: _val('care-reduction', 'none'),
+        _basis: basis,
     };
 }
 
 export function careCalcRun() {
-    const r = computeCareCost(readForm());
+    const in_ = readForm();
+    const r = computeCareCost(in_);
     const out = $('care-result');
     if (!out) return;
     if (!r) { out.innerHTML = '<p class="care-calc-err">입력을 확인하세요.</p>'; return; }
@@ -39,6 +54,7 @@ export function careCalcRun() {
         ...(r.nonCovered ? [['비급여 자부담 (식재료비 등)', formatWon(r.nonCovered)]] : []),
         ...(r.limit ? [['등급 월 한도', formatWon(r.limit)]] : []),
         ['실제 월 납부액', formatWon(r.selfPay)],
+        ...(in_._basis ? [[`급여비용 산정 — ${formatWon(in_._basis.rate)}/일 × ${in_._basis.days}일`, '']] : []),
     ];
     out.innerHTML = rows.map(([k, v]) => `<div class="care-calc-row"><span>${k}</span><strong>${v}</strong></div>`).join('')
         + `<p class="care-calc-src">근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>`;
@@ -61,12 +77,22 @@ export function initCareCalcView() {
     const r = $('care-reduction');
     if (r && !r.children.length)
         r.innerHTML = REDUCTIONS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
-    // 상급침실료는 시설급여만 해당 — 재가 선택 시 항목 비노출
+    const ft = $('care-fac-type');
+    if (ft && !ft.children.length)
+        ft.innerHTML = FACILITY_TYPES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+    // 상급침실료·이용액 입력은 급여 유형별로 토글 — 시설은 수가×일수 자동 산정
     const t = /** @type {HTMLSelectElement|null} */ ($('care-type'));
     const roomWrap = $('care-nc-room-wrap');
-    if (t && roomWrap) {
-        const syncRoom = () => { roomWrap.hidden = t.value !== 'facility'; };
-        t.addEventListener('change', syncRoom);
-        syncRoom();
+    const useWrap = $('care-use-wrap');
+    const facWrap = $('care-fac-wrap');
+    if (t && roomWrap && useWrap && facWrap) {
+        const syncType = () => {
+            const fac = t.value === 'facility';
+            roomWrap.hidden = !fac;
+            useWrap.hidden = fac;
+            facWrap.hidden = !fac;
+        };
+        t.addEventListener('change', syncType);
+        syncType();
     }
 }

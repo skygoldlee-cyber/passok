@@ -16,6 +16,11 @@ export const GRADE_LIMITS = [
     { key: 'gc', label: '인지지원등급', home: 676320 },
 ];
 export const SELF_PAY_RATE = { home: 0.15, facility: 0.20 };
+// 시설급여 1일당 수가 (2026 — 요양보호사 배치기준별, 인지지원등급은 재가 전용이라 시설 수가 없음)
+export const FACILITY_TYPES = [
+    { key: 'nursing', label: '노인요양시설 (요양보호사 2.1:1)', rates: { g1: 93070, g2: 86340, g3: 81540, g4: 81540, g5: 81540 } },
+    { key: 'shared', label: '노인요양공동생활가정 (3:1)', rates: { g1: 74590, g2: 69210, g3: 63800, g4: 63800, g5: 63800 } },
+];
 export const REDUCTIONS = [
     { key: 'none', label: '일반', rate: 0 },
     { key: 'r60', label: '감경 60%', rate: 0.60 },
