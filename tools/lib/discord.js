@@ -27,7 +27,9 @@ function mentionPayload() {
     if (raw === '@everyone' || raw === '@here') {
         return { content: raw, allowed_mentions: { parse: ['everyone'] } };
     }
-    const m = raw.match(/^<@(&?)(\d+)>$/);
+    // 숫자만 적어도 유저 멘션으로 간주 — "사용자 ID 복사"가 숫자를 클립보드에 두기
+    // 때문에 `<@>` 래퍼 없이 붙여넣는 실수를 흡수한다
+    const m = raw.match(/^(?:<@(&?))?(\d+)>?$/);
     if (!m) return { allowed_mentions: { parse: [] } };
     const [, role, id] = m;
     return role

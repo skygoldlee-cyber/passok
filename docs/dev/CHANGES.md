@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(discord): DISCORD_NOTIFY_MENTION 숫자-only 값 수용
+
+- "사용자 ID 복사"가 숫자만 클립보드에 두어 <@> 래퍼 없이 붙여넣는 실수로 멘션 미부착 → 파서를 숫자-only도 유저 멘션으로 간주하도록 관대화 (실측: content <@ID> + users 화이트리스트)
+
 ## 2026-11-02 feat(discord): 모바일 푸시용 DISCORD_NOTIFY_MENTION 지원 — tools/lib/discord.js
 
 - 배경: postDiscord가 allowed_mentions:{parse:[]}로 전멘션 차단 — 데스크톱은 안읽음 배지로 보이나 모바일 푸시는 멘션 없이는 침묵 (디스코드 채널 기본 "멘션만" 정책)
