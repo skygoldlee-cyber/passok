@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261102-f5f1b2d",
+    "date": "2026-11-02",
+    "notes": [
+      "[기능·check] 매뉴얼 내비 항목 중복 선언 게이트 — check_feature_flags",
+      "[수정·cosmetic] 실무 매뉴얼 내비 중복 노출 해소 — practiceManual 스텁 제거",
+      "[정리·release] v20261102-6df7f56 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-6df7f56",
     "date": "2026-11-02",
     "notes": [
@@ -186,14 +195,6 @@
       "[CI] CI 재실행 트리거 [no-docs]",
       "[수정·ui] 더보기 시트 실무매뉴얼 실제 제거 + 라벨 오탈자 정정",
       "[정리·release] v20261101-9bb729a 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-9bb729a",
-    "date": "2026-11-01",
-    "notes": [
-      "[수정·ui] 더보기 시트 기관 구역의 실무매뉴얼 버튼 제거",
-      "[정리·release] v20261101-b1d69bb 스탬프 확정 [no-docs]"
     ]
   }
 ]
