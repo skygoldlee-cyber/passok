@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261102-e5bdd38",
+    "date": "2026-11-02",
+    "notes": [
+      "[기능·carework] 급여 이용액 입력 설명 추가 [no-test]",
+      "[기능·carework] 감경 유형별 실효 본인부담률 표 + 비급여 안내 스타일 [no-test]",
+      "[기능·carework] 장기요양 비급여 항목 안내 문구 추가 [no-test]",
+      "[기능·carework] 장기요양 비용 계산 기준(2026) 참조자료 등록 [no-test]",
+      "[정리·release] v20261102-c5eaf93 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-c5eaf93",
     "date": "2026-11-02",
     "notes": [
@@ -184,14 +195,6 @@
       "[spec] DA-21 select option 테마 강제 — 다크모드 가시성 규약 명문화",
       "[수정·ui] carework select option 다크 토큰 적용 — 다크모드 가시성",
       "[정리·release] v20261102-8b49cf4 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-8b49cf4",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정] 실무매뉴얼 오탈자 전수 재정정 — cosmetic 매뉴얼 파일명 정정",
-      "[정리·release] v20261102-0058969 스탬프 확정 [no-docs]"
     ]
   }
 ]
