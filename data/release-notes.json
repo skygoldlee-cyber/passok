@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261103-33ebd65",
+    "date": "2026-11-03",
+    "notes": [
+      "[수정·carework] 인쇄 뒷장 빈 페이지 — 출력물 외 형제 display:none",
+      "[정리·release] v20261103-346abf7 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261103-346abf7",
     "date": "2026-11-03",
     "notes": [
@@ -168,17 +176,6 @@
       "[기능·carework] 재가 이용액 산식 설명 보강 [no-test]",
       "[기능·carework] 시설급여 이용액 자동 산정 + 비급여 필드셋 여백",
       "[정리·release] v20261102-e5bdd38 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-e5bdd38",
-    "date": "2026-11-02",
-    "notes": [
-      "[기능·carework] 급여 이용액 입력 설명 추가 [no-test]",
-      "[기능·carework] 감경 유형별 실효 본인부담률 표 + 비급여 안내 스타일 [no-test]",
-      "[기능·carework] 장기요양 비급여 항목 안내 문구 추가 [no-test]",
-      "[기능·carework] 장기요양 비용 계산 기준(2026) 참조자료 등록 [no-test]",
-      "[정리·release] v20261102-c5eaf93 스탬프 확정 [no-docs]"
     ]
   }
 ]
