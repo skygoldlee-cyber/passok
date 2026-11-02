@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261102-62fd57d",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정·ui] z-index 원시 숫자 → --z-raised 토큰 (계층 계약 UX-SET-06)",
+      "[기능·ui] 모드 전환 3대역 배치 + UX-NAV-15·A-08~A-12 요구사항 등록",
+      "[정리] 파생물 재생성 — 전체점검 신선도 복구 [no-test]",
+      "[정리·release] v20261102-c27eea9 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-c27eea9",
     "date": "2026-11-02",
     "notes": [
@@ -188,15 +198,6 @@
       "[spec] DA-19 실무매뉴얼 시험별 자체 작성 원칙 명기",
       "[기능·carework] 요양보호사 실무매뉴얼 — ManualViewer practice_manual 연결",
       "[정리·release] v20261101-cbe7378 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-cbe7378",
-    "date": "2026-11-01",
-    "notes": [
-      "[CI] CI 재실행 트리거 [no-docs]",
-      "[security] 기관관리 메뉴 기본 숨김 — manager 멤버십 확인 후 표시 (DA-18)",
-      "[정리·release] v20261101-559f974 스탬프 확정 [no-docs]"
     ]
   }
 ]
