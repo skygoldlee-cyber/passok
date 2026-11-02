@@ -185,7 +185,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
-    "@huggingface/transformers": "^4.2.0",
+    "@huggingface/transformers": "^4.3.2",
     "@playwright/test": "^1.63.0",
     "@stryker-mutator/core": "^10.0.0",
     "@vitest/coverage-v8": "^5.0.3",
