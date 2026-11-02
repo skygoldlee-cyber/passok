@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261102-15609f7",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정·carework] 비급여 필드셋 세로 정렬 복구 [no-test]",
+      "[정리·release] v20261102-dad51a7 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-dad51a7",
     "date": "2026-11-02",
     "notes": [
@@ -183,16 +191,6 @@
       "[수정] 릴리스 노트 메타 텍스트의 오탈자 문자 정리 — 앱 내 표시 문자열",
       "[기능·ui] 모바일 배경 금강전도 분리 — bg-portrait.webp 추가",
       "[정리·release] v20261102-11ab2db 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-11ab2db",
-    "date": "2026-11-02",
-    "notes": [
-      "[정리] TRACE_MATRIX 재생성 — DA 정렬 반영",
-      "[정리·release] v20261102-36502a3 스탬프 확정 [no-docs]",
-      "[spec] DA-22 모드 전환 랜딩 규칙 — 학습→실무는 시험별 첫 실무 뷰",
-      "[정리] build:derived 파생물 반영 — release-notes·version"
     ]
   }
 ]
