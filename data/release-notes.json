@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261103-d60b4f6",
+    "date": "2026-11-03",
+    "notes": [
+      "[수정·print] 전 뷰 인쇄 백지 결함 — 활성 뷰 표시로 일반화",
+      "[정리·release] v20261103-8edec2f 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261103-8edec2f",
     "date": "2026-11-03",
     "notes": [
@@ -168,16 +176,6 @@
     "notes": [
       "[수정·discord] 커뮤니티 공지 채널 멘션 제외 — postAnnounce noMention",
       "[정리·release] v20261102-2a7d3ee 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-2a7d3ee",
-    "date": "2026-11-02",
-    "notes": [
-      "[테스트·discord] DISCORD_NOTIFY_MENTION env 격리 + 멘션 페이로드 커버",
-      "[수정·discord] DISCORD_NOTIFY_MENTION 숫자-only 값 수용",
-      "[기능·discord] 모바일 푸시용 DISCORD_NOTIFY_MENTION 지원",
-      "[정리·release] v20261102-8345de5 스탬프 확정 [no-docs]"
     ]
   }
 ]
