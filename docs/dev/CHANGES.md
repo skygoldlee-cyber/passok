@@ -24,12 +24,12 @@
 - 15장 상황별 사례 검토 — 실기 사례토의 형식으로 교재 병합 없이 Ch3 커버로 종료
 - 문제은행 인용 재지정 32건 — sync:citations 미발견 0건. 1과목 + 2과목 표준교재 보강 완료
 
-## 2026-11-03 fix(carework): 실무도구 인쇄 출력 백지 결함 — 결과 요소 print 허용 목록 확장
+## 2026-11-03 fix(print): 전 뷰 인쇄 백지 결함 — print.css 활성 뷰 표시로 일반화
 
-- `@media print`에서 `body *{visibility:hidden}` 예외가 `#log-preview`·`#care-result`뿐이라 인수인계(`#ho-preview`)·평가점검(`#audit-list`/`#audit-progress`)·대처카드(`#care-card-detail`) 인쇄·PDF가 백지 출력되던 결함
-- 허용 목록에 4개 요소 추가 + 절대배치 규칙 병기 — 인쇄 시 내비/버튼 숨기고 결과물만 문서형 출력
-- 회귀 방지: care-views.test.js에 print 허용 목록 정적 검사 추가 (14/14)
-- headless 검증: print 미디어 에뮬레이션에서 전 출력 요소 `visible` 확인
+- **원인 2중**: ① `print.css`가 `.view-section{display:none!important}` + `#review-view`만 `display:block` — visibility 예외로는 display:none 조상을 되살릴 수 없어 **계산·일지·카드·인수인계·점검 등 모든 비-복습 뷰 인쇄가 백지**였음. cosmetic만 `#formula-print-area`(뷰 밖 전용 영역)로 정상 출력 ② `care-tools.css`의 `body *{visibility:hidden}` 예외 목록에 인수인계·점검·카드 결과 요소 누락 + 학습 모드 다른 뷰 인쇄까지 오염 가능
+- 수정: `print.css` → `.view-section.active` 표시로 일반화 / `care-tools.css` → `body.ui-mode-practice *` 스코프로 학습 모드 오염 차단 + 결과 요소 4종 허용 목록 추가
+- 회귀 방지: care-views.test.js에 print 허용 목록·활성 뷰 규칙 정적 검사 (14/14)
+- headless 검증: print 미디어 에뮬레이션에서 활성 뷰 `display:block` + 결과물 `visible` + 실제 내용 출력 확인
 
 ## 2026-11-02 fix(docs): '실무막*' 오탈자(U+B9C9) 전수 정정 — 잔여 0
 

@@ -130,8 +130,10 @@
 }
 
 /* ── 인쇄 — 일지·결과만 문서형으로 ────────────── */
+/* ui-mode-practice 스코프 — 지연 로드된 이 규칙이 학습 모드의 다른 뷰(오답 복습 등)
+   인쇄를 가리지 않도록 실무 모드일 때만 전체 숨김을 적용한다. */
 @media print {
-    body * { visibility: hidden; }
+    body.ui-mode-practice * { visibility: hidden; }
     #log-preview, #log-preview *,
     #care-result, #care-result *,
     #ho-preview, #ho-preview *,

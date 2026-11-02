@@ -206,14 +206,20 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
     });
 
     // @spec none — 인쇄 허용 목록 회귀: 출력·인쇄 대상인 각 도구의 결과 요소가
-    // @media print의 body *{hidden} 예외에 모두 포함돼야 한다 (누락 시 백지 출력)
-    it('@media print — 모든 결과물 요소가 인쇄 허용 목록에 포함 (백지 출력 회귀)', async () => {
+    // @media print의 body.ui-mode-practice *{hidden} 예외에 모두 포함돼야 하고,
+    // print.css는 활성 뷰를 표시해야 한다 (둘 중 하나라도 깨지면 백지 출력)
+    it('@media print — 결과물 요소 허용 목록 + 활성 뷰 표시 규칙 (백지 출력 회귀)', async () => {
         const { readFileSync } = await import('node:fs');
         const css = readFileSync('css/exams/carework/care-tools.css', 'utf-8');
         const printBlock = css.slice(css.indexOf('@media print'));
+        expect(printBlock).toContain('body.ui-mode-practice *');
         for (const id of ['#log-preview', '#care-result', '#ho-preview', '#audit-list', '#audit-progress', '#care-card-detail']) {
             expect(printBlock).toContain(`${id}, ${id} *`);
         }
+        // print.css — 활성 뷰만 표시. 특정 뷰 id 하드코딩 시 다른 뷰 인쇄가 깨짐
+        const printCss = readFileSync('css/print.css', 'utf-8');
+        expect(printCss).toContain('.view-section.active');
+        expect(printCss).not.toMatch(/#review-view\.view-section\s*\{/);
     });
 
 });
