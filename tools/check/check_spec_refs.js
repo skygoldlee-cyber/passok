@@ -65,8 +65,8 @@ const RETIRED_REF_BASELINE = 2; // SA-01·RR-07 — tests/e2e 제거 확인 테�
 //                             (자기 스캔 제외 EXCLUDE_FILES — 태그 스캔은 불가)
 //   UX-VFY-04 (실측 기록)   — UIUX_VERIFY_RUNBOOK 절차 + CHANGES.md 기록 관행
 //   UX-VFY-05 (실기기 확인) — UIUX_VERIFY_RUNBOOK·배포 절차로 강제
-//   PF-17 (CWV 목표)        — 랩 측정(Lighthouse) 목표·조건 선언 — 코드 게이트 아님
-const PROCESS_ONLY_IDS = new Set(['UX-VFY-01', 'UX-VFY-03', 'UX-VFY-04', 'UX-VFY-05', 'PF-17']);
+//   PF-18 (CWV 목표)        — 랩 측정(Lighthouse) 목표·조건 선언 — 코드 게이트 아님
+const PROCESS_ONLY_IDS = new Set(['UX-VFY-01', 'UX-VFY-03', 'UX-VFY-04', 'UX-VFY-05', 'PF-18']);
 
 // @spec 태그 강제 디렉터리 — 이 아래 모든 스캔 대상 파일에 최소 1개 @spec 태그 필요
 // (`@spec none`으로 의도적 미커버 명시 가능). tools/_archive·ref-pipeline은

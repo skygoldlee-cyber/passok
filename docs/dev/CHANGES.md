@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(spec): PF-17 ID 실중복 해소 — CWV 행을 PF-18로 재번호
+
+- SPEC의 PF-17이 이모지 폰트 서브셋과 Core Web Vitals 목표 두 요구사항에 중복 부여돼 있던 결함 수정 — 폰트 서브셋(테스트 연결)은 PF-17 유지, CWV 행은 PF-18로 재번호
+- `PROCESS_ONLY_IDS` 'PF-17' → 'PF-18' (CWV는 랩 측정 선언형 — 코드 게이트 대상 아님)
+
 ## 2026-11-02 feat+chore(ui): UI/UX 잔재 정리 + 백로그 승격 (SPEC v1.28 — UM-03 폐기, E-08·A-13·R-11)
 
 - **UM-03 폐기**: 학습도구 접이식 기능 제거 정식화 — `toggleStudyTools`·`UI_STUDY_TOOLS_OPEN`·관련 CSS 정리, 모드 전환 토스트가 삭제된 기능을 안내하던 문구 수정
