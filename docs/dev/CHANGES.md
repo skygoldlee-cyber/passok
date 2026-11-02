@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 feat(ui): 모바일 실무 탭바에 practiceName 브랜드 라벨 — Care OS 표면
+
+- 모바일은 `.app-header .header-title p`(view-subtitle)가 공간상 숨겨져 있어 서브타이틀 병기 브랜드가 닿지 않음 → 탭바 실무 그룹 선두에 `.practice-brand-label` 추가, applyUiMode가 활성 시험 practiceName을 실무 모드일 때만 채움 (`:empty` 숨김 — 미선언·학습 모드에서는 무노출)
+- DOM 테스트 추가: 라벨 노출·학습 복귀 비움 (common-uimode 12/12)
+
 ## 2026-11-02 feat(ui): exams.json practiceName 소비 구조화 — 실무 뷰 브랜드 자동 병기
 
 - `practiceName`(Care OS·Formula OS 등 10개 시험 선언)이 소비처 없던 선언 필드였던 것을 `getPracticeViewTitles`가 읽어 모든 실무 뷰 서브타이틀에 `<브랜드> —` 자동 접두 — 신규 실무 시험도 exams.json 선언만으로 브랜드 노출

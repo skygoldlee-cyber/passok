@@ -1263,6 +1263,10 @@ body:not(.ui-mode-practice) .tab-group-practice {
 /* 탭바 그룹 구분선 — 실무·기관 시각 분리 (DA-20 사이드바 라벨 구조 대응) */
 .tab-group-divider { align-self: center; width: 1px; height: 60%; flex: 0 0 auto; margin: 0 4px; background: var(--border-color, rgba(255,255,255,0.15)); }
 
+/* 실무 브랜드 라벨 — 모바일 탭바 실무 그룹의 practiceName 표시 (모바일은 #view-subtitle이 숨겨져 브랜드 표면이 없음) */
+.practice-brand-label { align-self: center; flex: 0 0 auto; padding: 0 6px; font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.04em; color: var(--color-text-muted); white-space: nowrap; pointer-events: none; }
+.practice-brand-label:empty { display: none; }
+
 /* @spec UX-NAV-15 — 탭바 모드 전환: 양 모드 공통 노출, 가로 스크롤해도 우측 끝 고정 (사이드바 푸터 토글 대응) */
 .mobile-tab-bar .mobile-tab-mode {
     flex: 0 0 auto;

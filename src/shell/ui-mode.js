@@ -5,7 +5,7 @@
 import { state, safeGetItem, safeSetItem } from '../state.js';
 import { STORAGE_KEYS } from '../storage-keys.js';
 import { isPracticeCapable, getPracticeLanding, getEnabledPracticeFeatures } from '../practice-registry.js';
-import { getCurrentExamId } from '../exam-context.js';
+import { getCurrentExamId, getActiveExam } from '../exam-context.js';
 import { switchView } from '../views/navigation.js';
 import { showToast } from '../ui-utils.js';
 
@@ -42,6 +42,12 @@ export function applyUiMode() {
     });
     document.querySelectorAll('[data-click="toggleUiMode"]').forEach(btn => {
         btn.setAttribute('aria-pressed', String(practice));
+    });
+    // 실무 브랜드 라벨 — 모바일 탭바 실무 그룹에 practiceName(exams.json 선언) 노출.
+    // 모바일은 #view-subtitle가 숨겨져 있어 서브타이틀 병기가 닿지 않는 표면이다.
+    const practiceName = getActiveExam()?.practiceName || '';
+    document.querySelectorAll('.practice-brand-label').forEach(el => {
+        el.textContent = practice ? practiceName : '';
     });
 }
 
