@@ -53,10 +53,10 @@ export function careCalcRun() {
         ...(r.overLimit ? [['한도 초과 자부담', formatWon(r.overLimit)]] : []),
         ...(r.nonCovered ? [['비급여 자부담', formatWon(r.nonCovered)]] : []),
         ...(r.limit ? [['등급 월 한도', formatWon(r.limit)]] : []),
-        ['실제 월 납부액', formatWon(r.selfPay)],
+        ['실제 월 납부액', formatWon(r.selfPay), 'care-calc-total'],
         ...(in_._basis ? [[`급여비용 산정 — ${formatWon(in_._basis.rate)}/일 × ${in_._basis.days}일`, '']] : []),
     ];
-    out.innerHTML = rows.map(([k, v]) => `<div class="care-calc-row"><span>${k}</span><strong>${v}</strong></div>`).join('')
+    out.innerHTML = rows.map(([k, v, c]) => `<div class="care-calc-row${c ? ' ' + c : ''}"><span>${k}</span><strong>${v}</strong></div>`).join('')
         + `<p class="care-calc-src">근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>`;
 }
 
