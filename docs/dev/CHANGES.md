@@ -50,6 +50,11 @@
 - `git add -- data docs index.html`로 파생물 루트만 스테이징 — 비파생물 잔여는 "커밋 후 배포" 실패로 전환해 사용자 변경 보존
 - 스탬프 확정 커밋은 이미 `add <stampedFiles>` 경로 한정이라 변경 없음
 
+## 2026-11-03 fix(carework): 피드백 JSON 슬롯 생성 — 카드 로더 404 해소
+
+- `content/exams/carework/피드백/card_tip.json`·`card_exclude.json`을 빈 맵(`{}`)으로 생성 — 로더가 lazy fetch하는 선택 자산의 404 노이즈 제거 (부재는 정상 처리되지만 요청 자체가 404를 찍었음)
+- cosmetic과 동일 스키마(카드ID→문자열 맵), 오버레이·제외 목록은 추후 채우는 선언적 슬롯
+
 ## 2026-11-02 fix(docs): '실무막*' 오탈자(U+B9C9) 전수 정정 — 잔여 0
 
 - 전수 스캔으로 U+B9C9 잔재 정리: CHANGES 14건·SPEC 1건·SCREEN_MAP 2건·release-notes.json 1건·study-manual 테스트 픽스처 1건 (모두 문서·히스토리 계열 — 실행 코드·파일명·내비 라벨은 정본 '실무막뉴얼' 확인됨)
