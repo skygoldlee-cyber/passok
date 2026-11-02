@@ -1,9 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
-## 2026-11-02 feat(carework): 실무 도구 브랜드 'Care OS' 서브타이틀 노출
+## 2026-11-02 feat(ui): exams.json practiceName 소비 구조화 — 실무 뷰 브랜드 자동 병기
 
-- exams.json의 `practiceName: "Care OS"`가 선언만 있고 소비처가 없던 것을 uiText 경로로 표면화 — carework/manifest.json 7개 실무 도구 subtitle에 `Care OS —` 접두 병기 (Formula OS처럼 단일 허브가 없는 구조라 subtitle 병기)
-- `practiceName` 필드를 읽는 코드 소비점(자동 프리픽스·manual-viewer 일반화)은 별도 과제 — 현재는 cosmetic과 동일한 수동 uiText 방식으로 일관 유지
+- `practiceName`(Care OS·Formula OS 등 10개 시험 선언)이 소비처 없던 선언 필드였던 것을 `getPracticeViewTitles`가 읽어 모든 실무 뷰 서브타이틀에 `<브랜드> —` 자동 접두 — 신규 실무 시험도 exams.json 선언만으로 브랜드 노출
+- 중복 방지: 뷰 타이틀이 이미 브랜드명(cosmetic의 title='Formula OS')이거나 서브타이틀 수동 병기 시 스킵 — 초기 수동 병기(manifest uiText)는 되돌려 선언 단일 소스화
+- manual-viewer의 '실무 매뉴얼 (Formula OS)' 하드코딩도 `practiceBrand` 플래그로 일반화 — formula_manual·practice_manual 모두 활성 시험 브랜드 병기
+- 테스트: practice-registry 유닛 3건 추가 (병기·타이틀=브랜드 스킵·미선언 패스스루) + study-manual DOM 픽스처에 practiceName 실린 EXAMS_LIST 시딩 (구 하드코딩 제목 단언을 브랜드 병기 정본 동작으로 갱신)
 
 ## 2026-11-02 docs(tools): 도구 계층 지도·규약 치트시트 신규 + 분기 게이트 리뷰 결과 기록
 

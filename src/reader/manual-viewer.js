@@ -16,7 +16,7 @@ import { renderMermaidIn } from './mermaid-render.js';
 import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
 import { openSubjectChapter } from '../views/textbook-reader.js';
 import { PATHS } from '../paths.js';
-import { dataPath, getCurrentExamId } from '../exam-context.js';
+import { dataPath, getCurrentExamId, getActiveExam } from '../exam-context.js';
 import { showToast } from '../ui-utils.js';
 import { CACHE } from '../config/cache.js';
 import { attachImageZoomIn } from './image-zoom.js';
@@ -27,8 +27,9 @@ export const ManualViewer = (() => {
     const MD_SOURCES = {
         'user_manual': { path: PATHS.USER_MANUAL, title: '사용자 매뉴얼' },
         'privacy_policy': { path: PATHS.PRIVACY_POLICY, title: '개인정보 처리방침' },
-        'formula_manual': { path: PATHS.FORMULA_MANUAL, title: '실무 매뉴얼 (Formula OS)' },
-        'practice_manual': { path: PATHS.PRACTICE_MANUAL, title: '실무매뉴얼' },
+        // practiceBrand: 활성 시험의 practiceName(exams.json 실무 브랜드)을 제목에 병기
+        'formula_manual': { path: PATHS.FORMULA_MANUAL, title: '실무 매뉴얼', practiceBrand: true },
+        'practice_manual': { path: PATHS.PRACTICE_MANUAL, title: '실무매뉴얼', practiceBrand: true },
         'study_summary': { path: PATHS.STUDY_GUIDE, title: '학습 안내서' },
         'mnemonic_guide': { path: PATHS.MNEMONIC_GUIDE, title: '두음법·숫자 암기 총정리' }
     };
@@ -355,7 +356,8 @@ body.manual-open{overflow:hidden;}
             _showError('문서 오류', '알 수 없는 문서 소스입니다: ' + sourceKey);
             return;
         }
-        const title = src.title;
+        const brand = src.practiceBrand && getActiveExam()?.practiceName;
+        const title = brand ? `${src.title} (${brand})` : src.title;
 
         const cached = _cache.get(src.path);
         if (cached) { _renderBody(title, cached.html, src.path); _open(); return; }

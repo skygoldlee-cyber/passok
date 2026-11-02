@@ -84,6 +84,35 @@ test('타이틀 맵 — registry.uiText[uiTextKey]가 중립 기본값을 덮어
     assert.equal(none['formula-view'].title, '실습');
 });
 
+test('타이틀 맵 — exams.json practiceName은 서브타이틀에 자동 병기한다', () => {
+    setExams([
+        { id: 'carework', default: true, practiceName: 'Care OS', features: { careCalc: true } },
+    ]);
+    const titles = getPracticeViewTitles({ uiText: { careCalc: { title: '요양 현장도구', subtitle: '장기요양 급여 비용 계산' } } });
+    assert.equal(titles['care-calc-view'].title, '요양 현장도구');
+    assert.equal(titles['care-calc-view'].subtitle, 'Care OS — 장기요양 급여 비용 계산');
+});
+
+test('타이틀 맵 — 뷰 타이틀이 이미 브랜드명이면 병기 스킵 (Formula OS 중복 방지)', () => {
+    setExams([
+        { id: 'cosmetic', default: true, practiceName: 'Formula OS', features: { formula: true } },
+    ]);
+    const titles = getPracticeViewTitles({ uiText: { formula: { title: 'Formula OS', subtitle: '원료 조회 · 배합 계산' } } });
+    assert.equal(titles['formula-view'].title, 'Formula OS');
+    assert.equal(titles['formula-view'].subtitle, '원료 조회 · 배합 계산');
+    // 서브타이틀에 수동 병기된 경우에도 이중 접두 없음
+    const manual = getPracticeViewTitles({ uiText: { formula: { title: 'X', subtitle: 'Formula OS — S' } } });
+    assert.equal(manual['formula-view'].subtitle, 'Formula OS — S');
+});
+
+test('타이틀 맵 — practiceName 미선언 시험은 서브타이틀 원문 그대로', () => {
+    setExams([
+        { id: 'x', default: true, features: { formula: true } },
+    ]);
+    const titles = getPracticeViewTitles({ uiText: { formula: { title: 'T', subtitle: 'S' } } });
+    assert.equal(titles['formula-view'].subtitle, 'S');
+});
+
 test('실무 피처 카피 계약 — formula 보유 시험은 uiText에 카피 슬롯을 선언한다', () => {
     // 플랫폼 기본값은 도메인 중립 — 도메인 카피(Formula OS·원료·포뮬러 등)는
     // 시험 manifest uiText.formula/planLimits가 소유해야 실무 뷰·플랜 비교에서

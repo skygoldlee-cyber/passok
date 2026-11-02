@@ -20,6 +20,8 @@ describe('매뉴얼 뷰어 — 문서 열기·TOC·전환', () => {
     beforeEach(async () => {
         localStorage.clear();
         localStorage.setItem('current_exam', 'cosmetic'); // 미선택 진입 가드 — 매뉴얼도 선택 후 컨텍스트
+        // 활성 시험 컨텍스트 — practiceBrand 소스(formula_manual 등)가 제목에 practiceName을 병기
+        window.EXAMS_LIST = { exams: [{ id: 'cosmetic', default: true, practiceName: 'Formula OS' }] };
         sessionStorage.clear();
         vi.resetModules();
         ({ ManualViewer } = await import('../../../src/reader/manual-viewer.js'));
