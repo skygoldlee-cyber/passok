@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(cosmetic): 실무 매뉴얼 내비 중복 노출 해소 — practiceManual 스텁 제거
+
+- 결함: cosmetic 내비·모바일 탭에 '실무 매뉴얼'(formula_manual 381행 본진)과 '실무막뉴얼'(practiceManual 43행 스텁)이 나란히 노출 — 스텁은 "상세는 formula_manual 참조" 안내뿐인 이중 문서. 피처별 버튼 렌더 규약상 중복 금지 규칙 없음 — 선언 정합으로 해소
+- cosmetic features.practiceManual 해제 + docs/실무막뉴얼.md 제거 (formula_manual이 실무 매뉴얼 본진, carework는 실무막뉴얼.md가 본진이라 유지) + sw.js·docs_md·exams-list 재생성
+
 ## 2026-11-02 test(e2e): 배너 인플로우 실측 정합 — toc-sidebar·responsive-flow 스펙
 
 - 레이아웃 수정의 후속 정합: 배너 margin-bottom(12px)까지 인플로우 점유로 실측 — responsive-flow의 containerH 기대치를 (뷰포트−배너 점유)로 교정. toc-sidebar·responsive-flow 로컬 45/45 통과

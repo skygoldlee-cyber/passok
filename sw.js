@@ -247,7 +247,6 @@ const MD_ASSETS = [
   './docs/user/user_manual.md',
   './content/exams/cosmetic/docs/formula_manual.md',
   './content/exams/cosmetic/docs/두음법_암기_총정리.md',
-  './content/exams/cosmetic/docs/실무매뉴얼.md',
   './content/exams/cosmetic/docs/학습안내서.md',
   './content/exams/cosmetic/교재/law/1과목_화장품법의이해_표준형.md',
   './content/exams/cosmetic/교재/law/1과목_화장품법의이해_이야기형.md',

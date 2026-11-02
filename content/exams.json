@@ -49,8 +49,7 @@
         "limitsTrainer": true,
         "studyGuide": true,
         "story_textbook": true,
-        "semantic": true,
-        "practiceManual": true
+        "semantic": true
       },
       "appNameEn": "Passmula",
       "practiceName": "Formula OS",
