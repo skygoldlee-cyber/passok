@@ -133,6 +133,8 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         // 문서형 헤더 — 모든 결과물이 제목+출력일 템플릿 공유 (가독성 출력 회귀 방지)
         expect(document.querySelector('#log-preview .care-doc-head strong')?.textContent).toBe('요양보호 서비스 기록');
         expect(document.querySelector('#log-preview .care-doc-head span')?.textContent).toContain('출력');
+        // esc() 래핑된 출력일이 이스케이프 없이 정상 렌더 (싱크 규약 적용 후에도 값 표시)
+        expect(document.querySelector('#log-preview .care-doc-head span')?.textContent).toMatch(/\d{4}-\d{2}-\d{2}/);
         careLogCopy();
     });
 

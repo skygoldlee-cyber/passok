@@ -12,7 +12,7 @@ function render() {
     const host = $('audit-list');
     if (!host) return;
     const c = loadChecks();
-    host.innerHTML = `<div class="care-doc-head"><strong>기관 평가 체크리스트</strong><span>${new Date().toISOString().slice(0, 10)} 출력</span></div>` + _sections.map(s => `
+    host.innerHTML = `<div class="care-doc-head"><strong>기관 평가 체크리스트</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div>` + _sections.map(s => `
         <div class="care-audit-sec">
             <h3>${esc(s.title)}</h3>
             ${s.items.map(i => `

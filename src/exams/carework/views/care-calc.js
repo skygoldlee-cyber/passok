@@ -4,6 +4,7 @@ import { computeCareCost, formatWon } from '../care-calc.js';
 import { GRADE_LIMITS, REDUCTIONS, EFFECTIVE_YEAR, FACILITY_TYPES } from '../care-calc-data.js';
 
 const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 const _val = (id, fallback) => {
     const el = /** @type {HTMLSelectElement|HTMLInputElement|null} */ ($(id));
@@ -78,7 +79,7 @@ export function careCalcRun() {
         ...(in_._basis ? [[`급여비용 산정 — ${formatWon(in_._basis.rate)}/일 × ${in_._basis.days}일`, '']] : []),
     ];
     out.innerHTML =
-        `<div class="care-doc-head"><strong>장기요양 비용 계산 결과</strong><span>${new Date().toISOString().slice(0, 10)} 출력</span></div>`
+        `<div class="care-doc-head"><strong>장기요양 비용 계산 결과</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div>`
         + `<table class="care-doc"><caption>입력 조건</caption><tbody>${cond.map(docRow).join('')}</tbody></table>`
         + `<table class="care-doc"><caption>계산 결과</caption><tbody>${rows.map(docRow).join('')}</tbody></table>`
         + `<p class="care-calc-src">근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>`;
