@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261102-6df7f56",
+    "date": "2026-11-02",
+    "notes": [
+      "[테스트·e2e] 배너 인플로우 실측 정합 — containerH·가독 면적 기대치 교정",
+      "[수정·layout] 인플로우 알림 배너 표시 시 앱 컨테이너 뷰포트 오버플로 수정",
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[정리·stamp] sw 캐시 버전·테스트 실측치 스탬프 갱신 [no-test]",
+      "[content·carework] 교재 본문 확충 — 법령·고시 해설 챕터 추가 (ai:textbook)",
+      "[content·carework] 문제은행 정답 파싱 복구 + 과목당 80문 확충 + 브랜딩 (ai-draft)",
+      "fix(exam-sim)+chore(carework): 통합 모의고사 풀 부족 정합 + uiText.dictionary 정리",
+      "[수정·carework] subjectDefaultRefdoc 선언 — 큐레이션 용어집 30항목 인덱스 활성화",
+      "[CI] retrigger — install/e2e flake 재확인 [no-test]",
+      "[기능·law] RR-20 기동 시 법령 최신성 자동 확인 + Formula 훅 정리"
+    ]
+  },
+  {
     "version": "v20261102-3e9b172",
     "date": "2026-11-02",
     "notes": [
@@ -178,15 +194,6 @@
     "notes": [
       "[수정·ui] 더보기 시트 기관 구역의 실무매뉴얼 버튼 제거",
       "[정리·release] v20261101-b1d69bb 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-b1d69bb",
-    "date": "2026-11-01",
-    "notes": [
-      "[테스트] uimode DOM 테스트 갱신 — 탭바 실무매뉴얼 실무 모드 표시 검증",
-      "[수정·ui] 탭바 실무매뉴얼 nav-practice-only 적용 + 문서 동기화",
-      "[정리·release] v20261101-c12a43c 스탬프 확정 [no-docs]"
     ]
   }
 ]
