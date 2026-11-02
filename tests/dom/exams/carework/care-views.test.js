@@ -130,14 +130,18 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('log-service').value = 'visit-care';
         careLogGenerate();
         expect(document.querySelector('#log-preview pre')?.textContent).toMatch(/김○○/);
+        // 문서형 헤더 — 모든 결과물이 제목+출력일 템플릿 공유 (가독성 출력 회귀 방지)
+        expect(document.querySelector('#log-preview .care-doc-head strong')?.textContent).toBe('요양보호 서비스 기록');
+        expect(document.querySelector('#log-preview .care-doc-head span')?.textContent).toContain('출력');
         careLogCopy();
     });
 
-    it('careAudit — 로드 후 점검 초기화', async () => {
+    it('careAudit — 로드 후 점검 초기화 + 문서 헤더', async () => {
         loadPartial('care-audit.html');
         await initCareAuditView();
         careAuditReset();
         expect(document.getElementById('audit-list')).toBeTruthy();
+        expect(document.querySelector('#audit-list .care-doc-head strong')?.textContent).toBe('기관 평가 체크리스트');
     });
 
     it('careAudit — 점검표 복사·인쇄 핸들러 실행', async () => {
