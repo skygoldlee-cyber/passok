@@ -1,5 +1,18 @@
 [
   {
+    "version": "v20261102-c27eea9",
+    "date": "2026-11-02",
+    "notes": [
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[수정·carework] 인수 수 보간 esc() 래핑 — check:escape 게이트 통과",
+      "[기능·carework] DSN-43 6b 교대 인수 확인 — shift_handovers·handover_acks + 기관 인계 뷰",
+      "[content·carework] 과목2 보강 — ref_md 2건·용어집·number-drills",
+      "[문서] care_audit_export 키 로드맵·feature-plan 선언",
+      "[기능·carework] careAudit 점검표 내보내기 — 복사·인쇄/PDF",
+      "[정리·release] v20261102-e3e71de 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-e3e71de",
     "date": "2026-11-02",
     "notes": [
@@ -184,14 +197,6 @@
       "[CI] CI 재실행 트리거 [no-docs]",
       "[security] 기관관리 메뉴 기본 숨김 — manager 멤버십 확인 후 표시 (DA-18)",
       "[정리·release] v20261101-559f974 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-559f974",
-    "date": "2026-11-01",
-    "notes": [
-      "[수정·ui] 기관 메뉴를 별도 구역으로 분리 — 실무도구와 혼재 해소",
-      "[정리·release] v20261101-18bec0c 스탬프 확정 [no-docs]"
     ]
   }
 ]
