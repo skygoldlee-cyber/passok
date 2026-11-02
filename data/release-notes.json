@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261102-d9044ce",
+    "date": "2026-11-02",
+    "notes": [
+      "[CI] retrigger — install/e2e flake 재확인 [no-test]",
+      "[기능·law] RR-20 기동 시 법령 최신성 자동 확인 + Formula 훅 정리",
+      "[정리·release] v20261102-3e9b172 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-3e9b172",
     "date": "2026-11-02",
     "notes": [
@@ -178,15 +187,6 @@
     "notes": [
       "[수정·ui] 더보기 시트 기관 구역의 실무매뉴얼 버튼 제거",
       "[정리·release] v20261101-b1d69bb 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261101-b1d69bb",
-    "date": "2026-11-01",
-    "notes": [
-      "[테스트] uimode DOM 테스트 갱신 — 탭바 실무매뉴얼 실무 모드 표시 검증",
-      "[수정·ui] 탭바 실무매뉴얼 nav-practice-only 적용 + 문서 동기화",
-      "[정리·release] v20261101-c12a43c 스탬프 확정 [no-docs]"
     ]
   }
 ]
