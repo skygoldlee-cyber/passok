@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261102-5c65eed",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정·carework] 결과 금액 우측 정렬·라벨 축약 [no-test]",
+      "[정리·release] v20261102-0be9166 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-0be9166",
     "date": "2026-11-02",
     "notes": [
@@ -171,19 +179,6 @@
       "[기능·ui] 모드 전환 3대역 배치 + UX-NAV-15·A-08~A-12 요구사항 등록",
       "[정리] 파생물 재생성 — 전체점검 신선도 복구 [no-test]",
       "[정리·release] v20261102-c27eea9 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-c27eea9",
-    "date": "2026-11-02",
-    "notes": [
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[수정·carework] 인수 수 보간 esc() 래핑 — check:escape 게이트 통과",
-      "[기능·carework] DSN-43 6b 교대 인수 확인 — shift_handovers·handover_acks + 기관 인계 뷰",
-      "[content·carework] 과목2 보강 — ref_md 2건·용어집·number-drills",
-      "[문서] care_audit_export 키 로드맵·feature-plan 선언",
-      "[기능·carework] careAudit 점검표 내보내기 — 복사·인쇄/PDF",
-      "[정리·release] v20261102-e3e71de 스탬프 확정 [no-docs]"
     ]
   }
 ]
