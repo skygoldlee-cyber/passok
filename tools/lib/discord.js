@@ -14,8 +14,31 @@ const { loadEnv } = require('./env.js');
 const ROOT = path.resolve(__dirname, '..', '..');
 
 /**
+ * DISCORD_NOTIFY_MENTION env를 파싱해 푸시용 멘션 페이로드를 만든다.
+ * 모바일 Discord 푸시는 멘션(또는 수신자의 채널 "모든 메시지" 설정)이 있어야
+ * 발화한다 — allowed_mentions를 비우는 현재 구현은 데스크톱 안읽음 배지만
+ * 남기고 모바일은 침묵한다. 환경변수로 명시된 대상만 정확히 멘션한다.
+ *   값 형식: <@123456789> (유저) | <@&123456789> (역할) | @everyone
+ * @returns {{content?: string, allowed_mentions: object}}
+ */
+function mentionPayload() {
+    const raw = (process.env.DISCORD_NOTIFY_MENTION || '').trim();
+    if (!raw) return { allowed_mentions: { parse: [] } };
+    if (raw === '@everyone' || raw === '@here') {
+        return { content: raw, allowed_mentions: { parse: ['everyone'] } };
+    }
+    const m = raw.match(/^<@(&?)(\d+)>$/);
+    if (!m) return { allowed_mentions: { parse: [] } };
+    const [, role, id] = m;
+    return role
+        ? { content: `<@&${id}>`, allowed_mentions: { roles: [id] } }
+        : { content: `<@${id}>`, allowed_mentions: { users: [id] } };
+}
+
+/**
  * Discord webhook POST. allowed_mentions를 비워 임베드의 @everyone·유저
  * 멘션 해석을 차단한다 (알림 채널이어도 멘션 폭발 방지 — 방어적 기본값).
+ * DISCORD_NOTIFY_MENTION 설정 시 그 대상만 예외적으로 멘션한다 (모바일 푸시용).
  * @param {object} embed Discord embed 객체 (title·description·color·fields…)
  * @param {{webhookUrl?: string, timeoutMs?: number}} [opts]
  * @returns {Promise<{sent: boolean, reason?: string, status?: number}>}
@@ -29,7 +52,7 @@ async function postDiscord(embed, opts = {}) {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
-                allowed_mentions: { parse: [] },
+                ...mentionPayload(),
                 embeds: [embed],
             }),
             signal: AbortSignal.timeout(opts.timeoutMs ?? 10000),

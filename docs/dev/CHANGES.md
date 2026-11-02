@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 feat(discord): 모바일 푸시용 DISCORD_NOTIFY_MENTION 지원 — tools/lib/discord.js
+
+- 배경: postDiscord가 allowed_mentions:{parse:[]}로 전멘션 차단 — 데스크톱은 안읽음 배지로 보이나 모바일 푸시는 멘션 없이는 침묵 (디스코드 채널 기본 "멘션만" 정책)
+- DISCORD_NOTIFY_MENTION=<@유저ID>|<@&역할ID>|@everyone 설정 시 postDiscord 페이로드에 해당 대상만 정확히 멘션 (users/roles 화이트리스트 — 멘션 폭발 방지 기본값 유지)
+- .env에  추가로 활성화 (개발자 모드 → 프로필 우클릭 → 사용자 ID 복사)
+
 ## 2026-11-02 feat(check): 매뉴얼 내비 항목 중복 선언 게이트 — check_feature_flags ③
 
 - index.template의 .manual-nav-link 버튼 data-feature 키를 실측 수집해, 시험이 해당 피처를 2개 이상 선언하면 오류 — practiceManual 스텁이 formula_manual과 나란히 노출됐던 사례의 재발 차단 (피처 키 {formula, practiceManual} 감지 확인)
