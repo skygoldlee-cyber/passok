@@ -1,5 +1,5 @@
-// notice-check.js — 참조 법령·고시 감지 배너 (Formula OS 최초 진입 시)
-// @spec FO-24,RR-19,DI-11
+// notice-check.js — 참조 법령·고시 감지 배너 (앱 기동 + Formula OS 최초 진입 시)
+// @spec FO-24,RR-19,RR-20,DI-11
 //
 // 감시 대상은 시험별 references.json의 referenceLaw/noticeCore에서 유도된다
 // (cosmetic은 식약처 고시). GitHub Actions(주1회)가 law.go.kr 오픈API로
@@ -253,6 +253,12 @@ export function markStaleRefLinks(root = document) {
         ' <span class="ref-pending-badge" title="개정본이 공포됐지만 아직 시행일 전입니다 — 원문 링크는 현행본으로 열립니다">⏳ 시행 예정 개정본</span>');
     }
   });
+}
+
+/** RR-20 — 시험 활성화·앱 기동 시 법령 최신성 자동 확인. 감시 문서(REFERENCE_LAW) 없으면 스킵, 비차단·실패 무시 */
+export function bootLawNotice() {
+    if (!watchDocs().length) return;
+    void checkMfdsNotice();
 }
 
 /** Formula OS 첫 표시 시 호출 — 실패해도 조용히 무시 */

@@ -140,12 +140,12 @@ const formula = {
     // 쓰기를 차단한다. 스테일이면 로딩 해제도 건너뛴다 — navigateToView가
     // 전환 시점에 전역 로딩을 이미 내렸고 새 뷰의 스피너를 지우면 안 된다.
     async enter(gen) {
-        const [{ DataLoader }, { checkMfdsNotice }, { showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+        const [{ DataLoader }, { showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([
                 import('./content/data-loader.js'),
-                formula.loaders.notice(),
                 import('./ui-utils.js'),
                 import('./views/navigation.js'),
+                formula.loaders.notice(), // 모듈 선로딩 유지 — 허브 버튼 핸들러용
             ]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
         if (stale()) return;
@@ -156,7 +156,7 @@ const formula = {
             // 배너·허브 버튼이 뷰 마크업에 의존하므로 주입을 선행한다
             await ensureViewMarkup(formula);
             if (stale()) return;
-            checkMfdsNotice(); // 식약처 신규 고시 감지 배너 — 도메인 훅 (비차단, 실패 무시)
+            // 고시 감지 배너 확인은 부팅 경로로 이전됨 (RR-20 bootLawNotice — 시험 활성화 시 1회)
             const m = await formula.loaders.main();
             if (stale()) return;
             try {

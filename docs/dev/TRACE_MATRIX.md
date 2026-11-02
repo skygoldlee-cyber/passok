@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 5384d691437629c9
-> 생성: 2026-11-02 · 원천: SPEC.md(656개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: e80257b058e551d2
+> 생성: 2026-11-02 · 원천: SPEC.md(657개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 656개 — 문서 연결 457 · 소스 연결 583 · 테스트 연결 623 · 보고서 연결 109
+**커버리지 요약**: 요구사항 657개 — 문서 연결 457 · 소스 연결 584 · 테스트 연결 624 · 보고서 연결 109
 
 ---
 
@@ -197,6 +197,7 @@
 | RR-17 | ✅ | 테스트 | DOC-DSN-10 | src/law-links.js<br>src/views/reader/reader-ref-links.js<br>tools/build/build_pdf_registry.js<br>tools/check/check_law_urls.js | tests/dom/reader/reader-ref-links.dom.test.js<br>tests/unit/gates/law-links.test.js | — | 국가법령정보센터(law.go.kr) 한글주소 — 공식 최신 통합본 링크 규약 |
 | RR-18 | ✅ | 테스트 | — | src/reader/reader-format.js | tests/unit/content/reader-format-general.test.js | — | — |
 | RR-19 | ✅ | 테스트 | DOC-DEV-05<br>DOC-DSN-10 | src/shell/notice-check.js<br>src/views/reader/reader-ref-links.js | tests/dom/reader/reader-ref-links.dom.test.js<br>tests/unit/gates/notice-check.test.js | — | 식약처 고시 개정 감지 — 시행 예정본(현행 아님) 구분, `notice_status.json` |
+| RR-20 | ✅ | 테스트 | — | index.html<br>src/shell/notice-check.js | tests/unit/gates/notice-check.test.js | — | — |
 
 ## 3.9 교재 검색
 

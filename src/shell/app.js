@@ -103,7 +103,7 @@ import {
     dictExportCsv,
     dictOpenByName
 } from '../views/dictionary.js';
-import { checkDictNoticeNow } from './notice-check.js';
+import { checkDictNoticeNow, bootLawNotice } from './notice-check.js';
 import {
     renderStudyCalendar,
     prevCalendarMonth,
@@ -721,6 +721,8 @@ async function startAppInit() {
         console.error('[init] 시험 컨텍스트 초기화 실패 — 기본 시험으로 계속:', e);
     }
     initApp();
+    // 기동 시 법령 최신성 자동 확인 (RR-20) — 감시 문서 있는 시험만, 비차단·실패 무시
+    void bootLawNotice();
     // 시험 미선택 상태이고 선택지가 2개 이상일 때만 시험 선택 화면을 홈으로 표시
     // (시험이 1개뿐이면 선택 의미가 없으므로 기본 시험으로 바로 진입)
     if (!getCurrentExamId() && getExamList().length > 1) {

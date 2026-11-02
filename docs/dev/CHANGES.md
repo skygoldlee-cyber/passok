@@ -1,5 +1,22 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 refactor(law): 법령 배너 표시 조건 명문화 — 법령 관련 신규 이벤트 전용
+
+- 배너 표시는 2개 경로로 확정: ① 신규 공포 감지(`isNewerNotice`·docs.newer — 앱 문서가 구 스냅샷인 상태, ⚠) ② 판본 반영(`notice_diff` 미확인 개정이 번들에 반영됨, ℹ) — 둘 다 법령 신규 이벤트의 후속 표시
+- 미감지·스로틀·실패·해제된 고시는 무표시 — 비법령 이벤트로는 절대 표시 안 함
+
+## 2026-11-02 refactor(law): 수동 고시 확인 정리 — Formula 진입 훅 제거 + 역할 명문화
+
+- `practice-registry` enter()의 `checkMfdsNotice()` 호출 제거 — 부팅 확인(RR-20)이 시험 전환 리로드까지 커버해 중복 (`formula.loaders.notice`는 버튼 핸들러용으로 유지)
+- "식약처 고시 확인" 버튼에 실시간 조회임을 명시하는 title 추가 — 자동(주간 스냅샷) vs 수동(실시간) 계층 구분
+- RR-20 문구 갱신: 훅 제거 사실 + 수동 버튼과의 `NOTICE_CHECKED_AT` 스로틀 공유 명문화
+
+## 2026-11-02 feat(law): RR-20 기동 시 법령 최신성 자동 확인 — 트리거를 시험 활성화로 확장
+
+- 기존 `checkMfdsNotice`는 cosmetic Formula OS 진입 시에만 발화 — `bootLawNotice()`를 `startAppInit`에 배선해 감시 문서(`REFERENCE_LAW`)가 선언된 모든 시험에서 앱 기동 시 비차단 확인
+- `#formula-notice-banner`를 index.template.html 전역 요소로 승격 (기존 cosmetic 전용 마크업 — 학습 모드·비cosmetic 시험에서도 배너 표시 가능)
+- 감시 문서 미선언 시험은 조용히 스킵 · 기존 스로틀(24h)·시행일 단위 해제·오프라인 무시 정책 그대로
+
 ## 2026-11-02 fix(tools): 배포 디스코드 알림 실패 시 로그 출력 (AD-10)
 
 - `deploy.js`의 운영 알림(`postDiscord`)이 성공·실패 무관하게 조용히 넘어가는 구조 — 죽은 웹훅으로 인한 무음 누락 재발 방지 목적으로 발송 실패 시 `⚠️ 운영 알림 발송 실패: <사유>` 경고 출력 추가 (성공·실패 경로 모두)
