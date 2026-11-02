@@ -337,5 +337,10 @@
     "file": "docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md",
     "ref": "content/exams/carework/실무/care_cards.json",
     "reason": "설계안 제안 경로 — 대처카드 데이터 (Phase 2 미구현)"
+  },
+  {
+    "file": "docs/dev/reference/TOOLS_MAP.md",
+    "ref": "tools/_archive/",
+    "reason": "도구 은퇴 규약의 대상 디렉터리 — 수명 끝난 도구 이동 시 생성되는 컨벤션 경로 (현재 미존재 정상)"
   }
 ]

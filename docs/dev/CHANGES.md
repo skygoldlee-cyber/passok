@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 docs(tools): 도구 계층 지도·규약 치트시트 신규 + 분기 게이트 리뷰 결과 기록
+
+- 신규 `docs/dev/reference/TOOLS_MAP.md` (DOC-REF-17) — tools/ 디렉터리별 역할·진입점 3종(npm 스크립트·steps.js·문서 생명줄)·새 게이트 추가 절차·분기 감사 규약. 앱 소스보다 큰 도구 계층(6.5만 LOC)의 첫 지도 문서
+- 신규 `docs/dev/reference/CONVENTIONS_CHEATSHEET.md` (DOC-REF-18) — 기여자·에이전트용 10분 규약 요약 (AGENTS.md 압축본: 불변식 8·명령 최소 세트·커밋 마크·우회 목록)
+- audit:gates·audit:tools 분기 리뷰 결과를 GATE_TROUBLESHOOTING.md §리뷰 이력에 기록 — dormant `refs:subjects`(content 트윈과 중복·스코프 프리셋 설계상 정상), silent 6개는 p2 감시 특성상 정상, 제거 대상 없음
+- `reflow_flat_lines.js`가 audit:tools 사망 후보로 보고(복구 전용 도구·문서 미기재) → GATE_TROUBLESHOOTING 차단 패턴 표에 refs:format 복구 행 추가로 문서 생명줄 확보
+
 ## 2026-11-02 fix(ui): 사이드바 '기관' 라벨 비기관 시험 노출 — practiceMode → careFacilityJoin 게이트
 
 - 그룹 라벨이 가상 키 practiceMode(실무 피처 1개 이상)로 게이트돼 cosmetic 등에서 기관 항목은 모두 숨겨지는데 라벨만 노출 → careFacilityJoin 피처로 교정 (라벨=그룹 진입 항목과 동일 게이트)
