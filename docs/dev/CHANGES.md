@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(carework): 비급여 legend 좌측 정렬
+
+- legend padding 0 6px → 0 — 아래 항목(감경·한도표·버튼)과 좌측 세로 정렬
+
 ## 2026-11-02 fix(carework): 비급여 필드셋 세로 정렬 복구
 
 - .care-calc-nc label의 display:block 덮어쓰기가 폼 기본 flex-column 세로 스택을 깨뜨린 문제 — 오버라이드 제거로 라벨·입력 세로 정렬 복구
