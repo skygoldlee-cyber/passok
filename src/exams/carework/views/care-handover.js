@@ -123,7 +123,7 @@ async function renderFacility() {
             ${_fhList.map(h => `
                 <div class="care-log-saved-item">
                     <span>${esc(h.shift_date)} · ${esc(h.client)} — ${esc(h.memo || '')}</span>
-                    <em>${h.handover_acks?.length || 0}명 인수</em>
+                    <em>${esc(h.handover_acks?.length || 0)}명 인수</em>
                     <button data-click="careHandoverAck" data-arg="${esc(h.id)}" class="secondary">인수 확인</button>
                 </div>`).join('')}
         </div>`;

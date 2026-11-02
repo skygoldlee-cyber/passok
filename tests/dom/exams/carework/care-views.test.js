@@ -23,6 +23,13 @@ vi.mock('../../../../src/pro/pro-upgrade.js', () => ({
     hasProEntitlement: vi.fn(() => false),
     refreshProBadges: vi.fn(),
 }));
+vi.mock('../../../../src/exams/carework/facility.js', async (importOriginal) => ({
+    ...await importOriginal(),
+    myMembership: vi.fn(() => Promise.resolve(null)),
+    listHandovers: vi.fn(() => Promise.resolve([])),
+    submitHandover: vi.fn(() => Promise.resolve({})),
+    ackHandover: vi.fn(() => Promise.resolve({})),
+}));
 
 import { careCalcRun, careCalcReset } from '../../../../src/exams/carework/views/care-calc.js';
 import { careCardOpen, careCardClose, initCareCardView } from '../../../../src/exams/carework/views/care-card.js';
@@ -31,7 +38,7 @@ import { careFacilityHandoverSubmit, careHandoverAck } from '../../../../src/exa
 import { careAuditReset, careAuditCopy, careAuditPrint, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
 import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
-import { syncFacilityNav } from '../../../../src/exams/carework/facility.js';
+import { syncFacilityNav, myMembership, listHandovers } from '../../../../src/exams/carework/facility.js';
 import { ManualViewer } from '../../../../src/reader/manual-viewer.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
@@ -92,6 +99,20 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
     it('careHandover — 기관 인계·인수 확인 핸들러 노출 (DSN-43 6b)', () => {
         expect(typeof careFacilityHandoverSubmit).toBe('function');
         expect(typeof careHandoverAck).toBe('function');
+    });
+
+    it('careHandover — 기관 인계 목록 렌더: 서버 필드 esc 처리·인수 수 표시 (DSN-43 6b)', async () => {
+        vi.mocked(myMembership).mockResolvedValueOnce({ facilities: { id: 'f1', name: '<b>시설</b>' } });
+        vi.mocked(listHandovers).mockResolvedValueOnce([
+            { id: 'h1', shift_date: '2026-11-02', client: '<img src=x>', memo: 'm', handover_acks: [{}, {}] },
+        ]);
+        loadPartial('care-handover.html');
+        initCareHandoverView();
+        await new Promise(r => setTimeout(r, 0));
+        const host = document.getElementById('ho-facility');
+        expect(host.innerHTML).toContain('&lt;img');
+        expect(host.innerHTML).not.toContain('<img src=x>');
+        expect(host.textContent).toContain('2명 인수');
     });
 
     it('careHandover — 생성·복사·공유 핸들러', () => {

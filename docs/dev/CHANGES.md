@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(carework): 인수 수 보간 esc() 래핑 — check:escape 게이트 통과
+
+- `care-handover.js` 기관 인계 목록의 `${h.handover_acks?.length}` 보간을 `esc()`로 래핑 — 미이스케이프 후보 차단 + `care-views.test.js` 기관 인계 목록 esc·인수 수 렌더 검증 추가 (프로덕션 스키마 shift_handovers·handover_acks 적용 완료)
+
 ## 2026-11-01 fix(carework): care-log.html 잘림 복구 + 뷰 DOM 테스트
 
 - `html/exams/carework/care-log.html` — `log-preview`·`log-saved`·복사·인쇄 버튼이 생성 시 잘려 누락 → 프로덕션에서 일지 생성이 미리보기 미표시였던 결함 복구 (tests/dom/exams/carework/care-views.test.js 추가로 재발 차단 — 5개 뷰 핸들러 커버리지 · 파일명 규약 정정: .dom.test.js 접미사 중복 → .test.js)
