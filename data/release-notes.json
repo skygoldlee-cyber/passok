@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261102-09d0fcb",
+    "date": "2026-11-02",
+    "notes": [
+      "[기능·carework] 시설급여 1일 수가표 표시",
+      "[정리·release] v20261102-d196c3c 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-d196c3c",
     "date": "2026-11-02",
     "notes": [
@@ -177,19 +185,6 @@
       "[정리] build:derived 파생물 — 아이콘 정본 교체 반영 매니페스트",
       "[수정·icon] maskable 아이콘 정본 교체 — 풀블리드·별 안전 원 안(451/502px)",
       "[정리·release] v20261102-a44edcc 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-a44edcc",
-    "date": "2026-11-02",
-    "notes": [
-      "[정리] build:derived 파생물 — 아이콘 교체 반영 매니페스트 재생성",
-      "[수정·carework] 대처카드·삭제 버튼 data-id→data-arg — 위임 디스패치 인자 규약 정정",
-      "[수정·icon] maskable 아이콘 교체 — 별이 안전 원 안(169px)",
-      "[되돌림·icon] maskable 아이콘을 원본으로 롤백 — 합성 시도 폐기",
-      "[수정·icon] maskable 아이콘 재합성 — 배경 꽉 채움 + 전경만 안전 원 안으로 축소",
-      "[수정·icon] maskable 아이콘 콘텐츠 축소 — 별이 안전 원을 벗어나 잘리던 문제",
-      "[정리·release] v20261102-0803b0d 스탬프 확정 [no-docs]"
     ]
   }
 ]
