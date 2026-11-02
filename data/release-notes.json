@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261102-94ec047",
+    "date": "2026-11-02",
+    "notes": [
+      "[기능·ui] 모바일 실무 탭바에 practiceName 브랜드 라벨 표시",
+      "[정리·release] v20261102-dad4fe5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-dad4fe5",
     "date": "2026-11-02",
     "notes": [
@@ -171,14 +179,6 @@
     "notes": [
       "[수정·tools] 배포 디스코드 알림 실패 시 로그 출력 (AD-10)",
       "[정리·release] v20261102-9a4cea7 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-9a4cea7",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정·spec] PF-17 ID 실중복 해소 — CWV 행을 PF-18로 재번호",
-      "[정리·release] v20261102-58f9ec6 스탬프 확정 [no-docs]"
     ]
   }
 ]
