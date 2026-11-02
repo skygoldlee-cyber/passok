@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261103-60c6d80",
+    "date": "2026-11-03",
+    "notes": [
+      "[기능·carework] 현장도구 계산 결과물에 입력 조건 병기",
+      "[정리·release] v20261103-d60b4f6 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261103-d60b4f6",
     "date": "2026-11-03",
     "notes": [
@@ -168,14 +176,6 @@
     "notes": [
       "[수정·carework] 실무 뷰 버튼 베이스 클래스 누락 — bare secondary → btn btn-secondary [no-test]",
       "[정리·release] v20261102-4135845 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-4135845",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정·discord] 커뮤니티 공지 채널 멘션 제외 — postAnnounce noMention",
-      "[정리·release] v20261102-2a7d3ee 스탬프 확정 [no-docs]"
     ]
   }
 ]
