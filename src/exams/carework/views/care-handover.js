@@ -48,7 +48,7 @@ function renderSaved() {
     if (!host) return;
     const items = listHandovers();
     host.innerHTML = items.length
-        ? items.map(x => `<div class="care-log-saved-item"><span>${esc(x.savedAt)} · ${esc(x.from || '')} → ${esc(x.to || '')}</span><button data-click="careHandoverDelete" data-arg="${esc(x.id)}" class="secondary">삭제</button></div>`).join('')
+        ? items.map(x => `<div class="care-log-saved-item"><span>${esc(x.savedAt)} · ${esc(x.from || '')} → ${esc(x.to || '')}</span><button data-click="careHandoverDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button></div>`).join('')
         : '<p class="care-log-empty">저장된 인수인계 없음 — 공유 전 저장이 필요합니다.</p>';
 }
 
@@ -124,7 +124,7 @@ async function renderFacility() {
                 <div class="care-log-saved-item">
                     <span>${esc(h.shift_date)} · ${esc(h.client)} — ${esc(h.memo || '')}</span>
                     <em>${esc(h.handover_acks?.length || 0)}명 인수</em>
-                    <button data-click="careHandoverAck" data-arg="${esc(h.id)}" class="secondary">인수 확인</button>
+                    <button data-click="careHandoverAck" data-arg="${esc(h.id)}" class="btn btn-secondary">인수 확인</button>
                 </div>`).join('')}
         </div>`;
 }

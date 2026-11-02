@@ -75,7 +75,7 @@ function renderSaved() {
     host.innerHTML = items.length
         ? items.map(x => `<div class="care-log-saved-item">
             <span>${esc(x.date)} · ${esc(x.client)} · ${esc(x.service)}</span>
-            <button data-click="careLogDelete" data-arg="${esc(x.id)}" class="secondary">삭제</button>
+            <button data-click="careLogDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button>
           </div>`).join('')
         : '<p class="care-log-empty">저장된 일지가 없습니다.</p>';
 }
