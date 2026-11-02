@@ -71,6 +71,13 @@ export function careCalcReset() {
 export function careCalcPrint() { careCalcRun(); window.print(); }
 
 export function initCareCalcView() {
+    // 등급별 재가 월 한도표 — 당해연도(EFFECTIVE_YEAR) 기준만 표시
+    const lt = $('care-limit-table');
+    if (lt && !lt.children.length) {
+        const won = (n) => n.toLocaleString('ko-KR');
+        lt.innerHTML = `<thead><tr><th>등급</th><th>월 한도액 (${EFFECTIVE_YEAR}년)</th></tr></thead>`
+            + `<tbody>${GRADE_LIMITS.map(g => `<tr><td>${g.label}</td><td>${won(g.home)}원</td></tr>`).join('')}</tbody>`;
+    }
     const g = $('care-grade');
     if (g && !g.children.length)
         g.innerHTML = GRADE_LIMITS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');

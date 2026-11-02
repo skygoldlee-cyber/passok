@@ -62,6 +62,10 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
     it('careCalc — 비급여 항목별 합산 + 상급침실료 시설 전용 토글', () => {
         loadPartial('care-calc.html');
         initCareCalcView();
+        // 당해연도 한도표 렌더 — 등급 6행 + 연도 헤더
+        const lt = document.getElementById('care-limit-table');
+        expect(lt?.querySelectorAll('tbody tr').length).toBe(6);
+        expect(lt?.querySelector('thead')?.textContent).toContain('2026');
         const type = /** @type {HTMLSelectElement} */ (document.getElementById('care-type'));
         const roomWrap = /** @type {HTMLElement} */ (document.getElementById('care-nc-room-wrap'));
         // 재가 선택 시 상급침실료 비노출

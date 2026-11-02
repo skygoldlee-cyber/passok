@@ -9,6 +9,10 @@
             <select id="care-type"><option value="home">재가급여</option><option value="facility">시설급여</option></select>
         </label>
         <label>장기요양등급 <select id="care-grade"></select></label>
+        <details class="care-calc-limits">
+            <summary>등급별 재가 월 한도액</summary>
+            <table class="care-calc-rates" id="care-limit-table" aria-label="등급별 재가 월 한도액"></table>
+        </details>
         <div id="care-use-wrap">
             <label>월 예상 급여 이용액 (원) <input id="care-use" type="number" min="0" placeholder="예: 1000000"></label>
             <p class="care-calc-nc-note">공단이 인정하는 급여비용 합계입니다 — 표준이용계획서상 <strong>Σ(서비스별 단가 × 이용 횟수)</strong>의 월 합계이며 등급 월 한도까지 인정됩니다. 이용 조합은 개인별로 달라 수동 입력이 필요하고, 식비·간식 등은 아래 비급여에 입력하세요.</p>
