@@ -2,7 +2,7 @@
 <section id="care-calc-view" class="view-section" data-feature="careCalc">
     <div class="view-header">
         <h2>장기요양 비용 계산기</h2>
-        <p class="view-subtitle">재가·시설급여 본인부담금 계산 — 등급별 월 한도·감경 적용</p>
+        <p class="view-subtitle">재가·시설급여 본인부담금 계산 — 등급별 월 한도·감경·비급여 적용 (2026년 기준)</p>
     </div>
     <div class="care-calc-form">
         <label>급여 유형
@@ -10,11 +10,12 @@
         </label>
         <label>장기요양등급 <select id="care-grade"></select></label>
         <label>월 예상 이용액 (원) <input id="care-use" type="number" min="0" placeholder="예: 1000000"></label>
+        <label>비급여 월 예상액 (원) <input id="care-noncovered" type="number" min="0" placeholder="시설: 식재료비·상급침실료 등"></label>
         <label>본인부담 감경 <select id="care-reduction"></select></label>
         <div class="care-calc-actions">
             <button data-click="careCalcRun">계산</button>
-            <button data-click="careCalcReset" class="secondary">초기화</button>
-            <button data-click="careCalcPrint" class="secondary">인쇄</button>
+            <button data-click="careCalcReset" class="btn btn-secondary">초기화</button>
+            <button data-click="careCalcPrint" class="btn btn-secondary">인쇄</button>
         </div>
     </div>
     <div id="care-result" class="care-calc-result"></div>

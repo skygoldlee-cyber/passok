@@ -1,7 +1,7 @@
 // src/exams/carework/views/care-calc.js — 장기요양 비용 계산 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { computeCareCost, formatWon } from '../care-calc.js';
-import { GRADE_LIMITS, REDUCTIONS } from '../care-calc-data.js';
+import { GRADE_LIMITS, REDUCTIONS, EFFECTIVE_YEAR } from '../care-calc-data.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -15,6 +15,7 @@ function readForm() {
         type: _val('care-type', 'home'),
         grade: _val('care-grade', 'g1'),
         monthlyUse: Number(_val('care-use', '0')) || 0,
+        nonCovered: Number(_val('care-noncovered', '0')) || 0,
         reduction: _val('care-reduction', 'none'),
     };
 }
@@ -29,14 +30,16 @@ export function careCalcRun() {
         ['공단 부담', formatWon(r.publicPay)],
         ['본인부담금', formatWon(r.selfPay)],
         ...(r.overLimit ? [['한도 초과 자부담', formatWon(r.overLimit)]] : []),
+        ...(r.nonCovered ? [['비급여 자부담 (식재료비 등)', formatWon(r.nonCovered)]] : []),
         ...(r.limit ? [['등급 월 한도', formatWon(r.limit)]] : []),
+        ['실제 월 납부액', formatWon(r.selfPay)],
     ];
     out.innerHTML = rows.map(([k, v]) => `<div class="care-calc-row"><span>${k}</span><strong>${v}</strong></div>`).join('')
-        + '<p class="care-calc-src">근거: 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>';
+        + `<p class="care-calc-src">근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>`;
 }
 
 export function careCalcReset() {
-    ['care-use'].forEach(id => {
+    ['care-use', 'care-noncovered'].forEach(id => {
         const e = /** @type {HTMLInputElement|null} */ ($(id));
         if (e) e.value = '';
     });

@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 feat(carework): 장기요양 계산기 2026 기준 갱신 + 시설 비급여·수급자·실납부액
+
+- GRADE_LIMITS 2025→2026년 고지값 (1등급 2,512,900 ~ 인지지원 676,320) + EFFECTIVE_YEAR 표기
+- 시설급여 비급여 입력 추가 — 식재료비·상급침실료 등 전액 자부담으로 본인부담에 가산, 결과에 "비급여 자부담"·"실제 월 납부액" 구분 표시
+- REDUCTIONS에 기초생활수급자(rate 1) 추가 — 급여 본인부담 0원, 비급여만 납부
+- care-calc.html의 bare secondary 버튼 2곳도 btn btn-secondary 교정
+
 ## 2026-11-02 fix(check): nav 아이콘 고유성 — manual-nav-link 슬롯 예외
 
 - UX-VFY-07 게이트가 팩별 상호배타 매뉴얼 항목(ManualViewer.open*Manual 핸들러)의 동일 아이콘을 중복으로 차단 → 해당 핸들러를 동일 슬롯으로 정규화 (동시 노출은 check_feature_flags ③이 별도 차단)
