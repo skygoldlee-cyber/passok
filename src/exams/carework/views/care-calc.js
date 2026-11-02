@@ -51,7 +51,7 @@ export function careCalcRun() {
         ['공단 부담', formatWon(r.publicPay)],
         ['급여 본인부담금', formatWon(r.selfCovered)],
         ...(r.overLimit ? [['한도 초과 자부담', formatWon(r.overLimit)]] : []),
-        ...(r.nonCovered ? [['비급여 자부담 (식재료비 등)', formatWon(r.nonCovered)]] : []),
+        ...(r.nonCovered ? [['비급여 자부담', formatWon(r.nonCovered)]] : []),
         ...(r.limit ? [['등급 월 한도', formatWon(r.limit)]] : []),
         ['실제 월 납부액', formatWon(r.selfPay)],
         ...(in_._basis ? [[`급여비용 산정 — ${formatWon(in_._basis.rate)}/일 × ${in_._basis.days}일`, '']] : []),
