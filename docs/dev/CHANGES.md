@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(check): nav 아이콘 고유성 — manual-nav-link 슬롯 예외
+
+- UX-VFY-07 게이트가 팩별 상호배타 매뉴얼 항목(ManualViewer.open*Manual 핸들러)의 동일 아이콘을 중복으로 차단 → 해당 핸들러를 동일 슬롯으로 정규화 (동시 노출은 check_feature_flags ③이 별도 차단)
+
 ## 2026-11-02 fix(ui): 실무막뉴얼 내비 아이콘 통일 — fa-book-medical
 
 - formula 매뉴얼만 fa-flask를 쓰던 것을 practiceManual과 동일한 fa-book-medical로 통일 (데스크톱+모바일 탭) — 공유 템플릿 경로라 향후 시험팩에도 동일 규칙 자동 적용
