@@ -23,6 +23,17 @@ function withAnnounceEnv(map, fn) {
     });
 }
 
+// DISCORD_NOTIFY_MENTION 격리 — 실제 .env에 설정돼 있어도 멘션 경로를 분리
+function withMentionEnv(map, fn) {
+    const saved = process.env.DISCORD_NOTIFY_MENTION;
+    process.env.DISCORD_NOTIFY_MENTION = '';
+    Object.assign(process.env, map);
+    return Promise.resolve().then(fn).finally(() => {
+        if (saved === undefined) delete process.env.DISCORD_NOTIFY_MENTION;
+        else process.env.DISCORD_NOTIFY_MENTION = saved;
+    });
+}
+
 // fetch 목 — 호출 인자를 기록하고 제어 응답을 반환
 function stubFetch(fn) {
     const orig = globalThis.fetch;
@@ -52,15 +63,39 @@ test('webhook 미설정 시 조용히 skip — 발신 없이 false 반환', asyn
 test('성공 경로 — embeds·allowed_mentions 차단 계약을 지켜 POST', async () => {
     const { calls, restore } = stubFetch(async () => new Response('ok', { status: 200 }));
     try {
-        const r = await postDiscord(eventEmbed('배포 완료', true), { webhookUrl: 'https://discord.test/wh' });
-        assert.equal(r.sent, true);
-        assert.equal(calls.length, 1);
-        const [url, init] = calls[0];
-        assert.equal(url, 'https://discord.test/wh');
-        const body = JSON.parse(init.body);
-        assert.deepEqual(body.allowed_mentions, { parse: [] });   // 멘션 해석 비활성화
-        assert.equal(body.embeds.length, 1);
-        assert.equal(body.embeds[0].title, '배포 완료');
+        await withMentionEnv({}, async () => {
+            const r = await postDiscord(eventEmbed('배포 완료', true), { webhookUrl: 'https://discord.test/wh' });
+            assert.equal(r.sent, true);
+            assert.equal(calls.length, 1);
+            const [url, init] = calls[0];
+            assert.equal(url, 'https://discord.test/wh');
+            const body = JSON.parse(init.body);
+            assert.deepEqual(body.allowed_mentions, { parse: [] });   // 멘션 해석 비활성화
+            assert.equal(body.embeds.length, 1);
+            assert.equal(body.embeds[0].title, '배포 완료');
+        });
+    } finally { restore(); }
+});
+
+test('DISCORD_NOTIFY_MENTION — 유저·역할·숫자-only·@everyone 멘션 페이로드', async () => {
+    const { calls, restore } = stubFetch(async () => new Response('ok', { status: 200 }));
+    try {
+        const cases = [
+            ['<@123456789>', '<@123456789>', { users: ['123456789'] }],
+            ['<@&987>', '<@&987>', { roles: ['987'] }],
+            ['123456789', '<@123456789>', { users: ['123456789'] }],
+            ['@everyone', '@everyone', { parse: ['everyone'] }],
+        ];
+        for (const [input, content, allowed] of cases) {
+            calls.length = 0;
+            await withMentionEnv({ DISCORD_NOTIFY_MENTION: input }, async () => {
+                const r = await postDiscord({ title: 't' }, { webhookUrl: 'https://discord.test/wh' });
+                assert.equal(r.sent, true);
+                const body = JSON.parse(calls[0][1].body);
+                assert.equal(body.content, content);
+                assert.deepEqual(body.allowed_mentions, allowed);
+            });
+        }
     } finally { restore(); }
 });
 
@@ -102,7 +137,7 @@ test('postAnnounce — 공지 env 미설정 시 발신 없이 sent 0 (AD-12)', a
 test('postAnnounce — 전체-공지 + 등록 시험 채널 fan-out, 미등록 suffix는 스킵+보고 (AD-12)', async () => {
     const { calls, restore } = stubFetch(async () => new Response('ok', { status: 200 }));
     try {
-        await withAnnounceEnv({
+        await withMentionEnv({}, () => withAnnounceEnv({
             DISCORD_ANNOUNCE: 'https://discord.test/all',
             DISCORD_ANNOUNCE_COSMETIC: 'https://discord.test/cos',
             DISCORD_ANNOUNCE_UNKNOWN: 'https://discord.test/unknown',
@@ -113,7 +148,7 @@ test('postAnnounce — 전체-공지 + 등록 시험 채널 fan-out, 미등록 s
             assert.deepEqual(calls.map(c => c[0]).sort(), ['https://discord.test/all', 'https://discord.test/cos']);
             const body = JSON.parse(calls[0][1].body);
             assert.deepEqual(body.allowed_mentions, { parse: [] });
-        });
+        }));
     } finally { restore(); }
 });
 

@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 test(discord): DISCORD_NOTIFY_MENTION 테스트 격리 + 멘션 페이로드 커버
+
+- .env에 신규 env가 loadEnv로 유출돼 allowed_mentions 단언 실패 → withMentionEnv 격리 추가 + 유저·역할·숫자-only·@everyone 페이로드 케이스 (9/9)
+
 ## 2026-11-02 fix(discord): DISCORD_NOTIFY_MENTION 숫자-only 값 수용
 
 - "사용자 ID 복사"가 숫자만 클립보드에 두어 <@> 래퍼 없이 붙여넣는 실수로 멘션 미부착 → 파서를 숫자-only도 유저 멘션으로 간주하도록 관대화 (실측: content <@ID> + users 화이트리스트)
