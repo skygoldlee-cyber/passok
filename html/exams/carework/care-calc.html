@@ -21,6 +21,10 @@
             <label>시설 유형 <select id="care-fac-type"></select></label>
             <label>월 입소 일수 <input id="care-fac-days" type="number" min="1" max="31" value="30"></label>
             <p class="care-calc-nc-note">시설급여는 등급별 1일당 수가×입소 일수로 자동 산정됩니다 — 별도 이용액 입력이 필요 없습니다.</p>
+            <details class="care-calc-limits">
+                <summary>시설급여 1일 수가 (2026년)</summary>
+                <table class="care-calc-rates" id="care-fac-rate-table" aria-label="시설급여 등급별 1일 수가"></table>
+            </details>
         </div>
         <fieldset class="care-calc-nc">
             <legend>비급여 월 예상액 (원) — 기관·계약별 상이</legend>

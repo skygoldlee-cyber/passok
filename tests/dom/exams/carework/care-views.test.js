@@ -66,6 +66,10 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const lt = document.getElementById('care-limit-table');
         expect(lt?.querySelectorAll('tbody tr').length).toBe(6);
         expect(lt?.querySelector('thead')?.textContent).toContain('2026');
+        // 시설 수가표 — 요양시설 5등급 행 + 20% 본인부담 병기
+        const rt = document.getElementById('care-fac-rate-table');
+        expect(rt?.querySelectorAll('tbody tr').length).toBe(5);
+        expect(rt?.textContent).toContain('93,070원');
         const type = /** @type {HTMLSelectElement} */ (document.getElementById('care-type'));
         const roomWrap = /** @type {HTMLElement} */ (document.getElementById('care-nc-room-wrap'));
         // 재가 선택 시 상급침실료 비노출

@@ -84,9 +84,21 @@ export function initCareCalcView() {
     const r = $('care-reduction');
     if (r && !r.children.length)
         r.innerHTML = REDUCTIONS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
-    const ft = $('care-fac-type');
+    const ft = /** @type {HTMLSelectElement|null} */ ($('care-fac-type'));
     if (ft && !ft.children.length)
         ft.innerHTML = FACILITY_TYPES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+    // 시설 일당 수가표 — 시설 유형 선택에 따라 해당 수가 렌더 (1일 수가·20% 본인부담 병기)
+    const rt = $('care-fac-rate-table');
+    if (ft && rt) {
+        const won = (n) => n.toLocaleString('ko-KR');
+        const renderRates = () => {
+            const f = FACILITY_TYPES.find(x => x.key === ft.value) || FACILITY_TYPES[0];
+            rt.innerHTML = '<thead><tr><th>등급</th><th>1일 수가</th><th>본인부담 20%</th></tr></thead>'
+                + `<tbody>${GRADE_LIMITS.filter(g => f.rates[g.key]).map(g => `<tr><td>${g.label}</td><td>${won(f.rates[g.key])}원</td><td>${won(Math.round(f.rates[g.key] * 0.2))}원</td></tr>`).join('')}</tbody>`;
+        };
+        ft.addEventListener('change', renderRates);
+        renderRates();
+    }
     // 상급침실료·이용액 입력은 급여 유형별로 토글 — 시설은 수가×일수 자동 산정
     const t = /** @type {HTMLSelectElement|null} */ ($('care-type'));
     const roomWrap = $('care-nc-room-wrap');
