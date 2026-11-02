@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 feat(carework): 실무 도구 브랜드 'Care OS' 서브타이틀 노출
+
+- exams.json의 `practiceName: "Care OS"`가 선언만 있고 소비처가 없던 것을 uiText 경로로 표면화 — carework/manifest.json 7개 실무 도구 subtitle에 `Care OS —` 접두 병기 (Formula OS처럼 단일 허브가 없는 구조라 subtitle 병기)
+- `practiceName` 필드를 읽는 코드 소비점(자동 프리픽스·manual-viewer 일반화)은 별도 과제 — 현재는 cosmetic과 동일한 수동 uiText 방식으로 일관 유지
+
 ## 2026-11-02 docs(tools): 도구 계층 지도·규약 치트시트 신규 + 분기 게이트 리뷰 결과 기록
 
 - 신규 `docs/dev/reference/TOOLS_MAP.md` (DOC-REF-17) — tools/ 디렉터리별 역할·진입점 3종(npm 스크립트·steps.js·문서 생명줄)·새 게이트 추가 절차·분기 감사 규약. 앱 소스보다 큰 도구 계층(6.5만 LOC)의 첫 지도 문서

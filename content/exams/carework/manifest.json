@@ -60,7 +60,7 @@
   "uiText": {
     "careCalc": {
       "title": "요양 현장도구",
-      "subtitle": "장기요양 급여 비용 계산",
+      "subtitle": "Care OS — 장기요양 급여 비용 계산",
       "nav": "현장도구",
       "loading": "현장도구를 불러오는 중입니다...",
       "error": "현장도구를 불러오지 못했습니다.",
@@ -68,7 +68,7 @@
     },
     "careCard": {
       "title": "상황별 대처카드",
-      "subtitle": "현장 판단 플로우 — BPSD·사고·응급·감염",
+      "subtitle": "Care OS — 현장 판단 플로우 — BPSD·사고·응급·감염",
       "nav": "대처카드",
       "loading": "대처카드를 불러오는 중입니다...",
       "error": "대처카드를 불러오지 못했습니다.",
@@ -76,7 +76,7 @@
     },
     "careLog": {
       "title": "요양일지",
-      "subtitle": "서비스 기록 자동 작성 — 저장·내보내기 Pro",
+      "subtitle": "Care OS — 서비스 기록 자동 작성 — 저장·내보내기 Pro",
       "nav": "요양일지",
       "loading": "요양일지를 불러오는 중입니다...",
       "error": "요양일지를 불러오지 못했습니다.",
@@ -84,7 +84,7 @@
     },
     "careAudit": {
       "title": "기관 평가 체크리스트",
-      "subtitle": "평가방법 고시 기반 점검",
+      "subtitle": "Care OS — 평가방법 고시 기반 점검",
       "nav": "평가점검",
       "loading": "체크리스트를 불러오는 중입니다...",
       "error": "체크리스트를 불러오지 못했습니다.",
@@ -92,7 +92,7 @@
     },
     "careHandover": {
       "title": "인수인계서",
-      "subtitle": "교대근무 인수인계 작성 — 공유·인쇄 Pro",
+      "subtitle": "Care OS — 교대근무 인수인계 작성 — 공유·인쇄 Pro",
       "nav": "인수인계",
       "loading": "인수인계서를 불러오는 중입니다...",
       "error": "인수인계서를 불러오지 못했습니다.",
@@ -100,7 +100,7 @@
     },
     "careFacilityJoin": {
       "title": "기관 가입",
-      "subtitle": "초대 코드로 소속 기관에 연결",
+      "subtitle": "Care OS — 초대 코드로 소속 기관에 연결",
       "nav": "기관가입",
       "loading": "기관 정보를 불러오는 중입니다...",
       "error": "기관 정보를 불러오지 못했습니다.",
@@ -108,7 +108,7 @@
     },
     "careFacilityAdmin": {
       "title": "기관 관리",
-      "subtitle": "관리책임자 — 멤버·초대 관리",
+      "subtitle": "Care OS — 관리책임자 — 멤버·초대 관리",
       "nav": "기관관리",
       "loading": "기관 정보를 불러오는 중입니다...",
       "error": "기관 정보를 불러오지 못했습니다.",
