@@ -133,8 +133,11 @@
 @media print {
     body * { visibility: hidden; }
     #log-preview, #log-preview *,
-    #care-result, #care-result * { visibility: visible; }
-    #log-preview, #care-result {
+    #care-result, #care-result *,
+    #ho-preview, #ho-preview *,
+    #audit-list, #audit-list *, #audit-progress, #audit-progress *,
+    #care-card-detail, #care-card-detail * { visibility: visible; }
+    #log-preview, #care-result, #ho-preview, #audit-list, #audit-progress, #care-card-detail {
         position: absolute; inset: 0 auto auto 0; width: 100%;
     }
     .care-log-text { border: 0; font-size: 13pt; color: #000; background: #fff; }

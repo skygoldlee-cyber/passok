@@ -205,4 +205,15 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(css).toContain('--color-text-main');
     });
 
+    // @spec none — 인쇄 허용 목록 회귀: 출력·인쇄 대상인 각 도구의 결과 요소가
+    // @media print의 body *{hidden} 예외에 모두 포함돼야 한다 (누락 시 백지 출력)
+    it('@media print — 모든 결과물 요소가 인쇄 허용 목록에 포함 (백지 출력 회귀)', async () => {
+        const { readFileSync } = await import('node:fs');
+        const css = readFileSync('css/exams/carework/care-tools.css', 'utf-8');
+        const printBlock = css.slice(css.indexOf('@media print'));
+        for (const id of ['#log-preview', '#care-result', '#ho-preview', '#audit-list', '#audit-progress', '#care-card-detail']) {
+            expect(printBlock).toContain(`${id}, ${id} *`);
+        }
+    });
+
 });

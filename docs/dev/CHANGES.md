@@ -24,6 +24,13 @@
 - 15장 상황별 사례 검토 — 실기 사례토의 형식으로 교재 병합 없이 Ch3 커버로 종료
 - 문제은행 인용 재지정 32건 — sync:citations 미발견 0건. 1과목 + 2과목 표준교재 보강 완료
 
+## 2026-11-03 fix(carework): 실무도구 인쇄 출력 백지 결함 — 결과 요소 print 허용 목록 확장
+
+- `@media print`에서 `body *{visibility:hidden}` 예외가 `#log-preview`·`#care-result`뿐이라 인수인계(`#ho-preview`)·평가점검(`#audit-list`/`#audit-progress`)·대처카드(`#care-card-detail`) 인쇄·PDF가 백지 출력되던 결함
+- 허용 목록에 4개 요소 추가 + 절대배치 규칙 병기 — 인쇄 시 내비/버튼 숨기고 결과물만 문서형 출력
+- 회귀 방지: care-views.test.js에 print 허용 목록 정적 검사 추가 (14/14)
+- headless 검증: print 미디어 에뮬레이션에서 전 출력 요소 `visible` 확인
+
 ## 2026-11-02 fix(docs): '실무막*' 오탈자(U+B9C9) 전수 정정 — 잔여 0
 
 - 전수 스캔으로 U+B9C9 잔재 정리: CHANGES 14건·SPEC 1건·SCREEN_MAP 2건·release-notes.json 1건·study-manual 테스트 픽스처 1건 (모두 문서·히스토리 계열 — 실행 코드·파일명·내비 라벨은 정본 '실무막뉴얼' 확인됨)
