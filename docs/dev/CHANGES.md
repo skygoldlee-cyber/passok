@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(ui): 실무막뉴얼 내비 아이콘 통일 — fa-book-medical
+
+- formula 매뉴얼만 fa-flask를 쓰던 것을 practiceManual과 동일한 fa-book-medical로 통일 (데스크톱+모바일 탭) — 공유 템플릿 경로라 향후 시험팩에도 동일 규칙 자동 적용
+
 ## 2026-11-02 fix(carework): 실무 뷰 버튼 베이스 클래스 누락 — bare secondary → btn btn-secondary
 
 - 대처카드 상세 "목록으로" 등 4개 버튼이 .btn 베이스 없이 class="secondary"만 선언돼 네이티브 무스타일 노출 → care-card·care-handover·care-log 일괄 교정
