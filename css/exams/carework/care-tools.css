@@ -165,7 +165,8 @@
     #audit-list, #audit-list *, #audit-progress, #audit-progress *,
     #care-card-detail, #care-card-detail * { visibility: visible; }
     #log-preview, #care-result, #ho-preview, #audit-list, #audit-progress, #care-card-detail {
-        position: absolute; inset: 0 auto auto 0; width: 100%;
+        /* @page margin:0 — 문서 자체 여백을 상하 12mm·좌우 10mm로 확보 (출력물이 페이지 모서리에 붙지 않도록) */
+        position: absolute; inset: 12mm 10mm auto 10mm; width: auto;
     }
     .care-log-text { border: 1px solid var(--print-border-strong, #9ca3af); border-radius: 0; font-size: 13pt; color: #000; background: #fff; }
     .care-doc, .care-doc-head { background: #fff; color: #000; }

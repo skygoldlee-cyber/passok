@@ -243,6 +243,8 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(css).toMatch(/\.care-doc \{[^}]*border: 1px solid/);
         expect(css).toMatch(/\.care-doc td \{[^}]*border: 1px solid/);
         expect(printBlock).toContain('--print-border-strong');
+        // 인쇄 여백 — 문서가 페이지 모서리에 붙지 않도록 사방 여백 유지
+        expect(printBlock).toContain('inset: 12mm 10mm auto 10mm');
     });
 
 });
