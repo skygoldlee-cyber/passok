@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261103-5428c4f",
+    "date": "2026-11-03",
+    "notes": [
+      "[content·carework] 2과목 Ch2~3 표준교재(2026) 참조 보강 [no-test]",
+      "[content·carework] 2과목 2.1 식사관리 표준교재(2026) 참조 보강 [no-test]",
+      "[content·carework] 2과목 1.6 복지용구 표준교재(2026) 참조 보강 [no-test]",
+      "[content·carework] 2과목 1.5 체위변경·욕창 표준교재(2026) 참조 보강 [no-test]",
+      "[content·carework] 2과목 1.4 개인위생 표준교재(2026) 참조 보강 [no-test]",
+      "[content·carework] 2과목 요양보호관련 Ch1 일부 표준교재(2026) 참조 보강 [no-test]",
+      "[content·carework] 1과목 요양보호론 Ch2~4 표준교재(2026) 참조 깊이 보강 [no-test]",
+      "[수정·carework] 문제은행 인용 라인·근거문 재지정 — 보강 교재 기준 정합",
+      "[content·carework] 1과목 요양보호론 Ch1 표준교재(2026) 참조 깊이 보강 [no-test]",
+      "[정리·release] v20261102-135377d 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-135377d",
     "date": "2026-11-02",
     "notes": [
@@ -162,15 +178,6 @@
     "notes": [
       "[문서·spec] UM-06 모드별 top-level 메뉴 구성 불변식 명문화",
       "[정리·release] v20261102-f5f1b2d 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-f5f1b2d",
-    "date": "2026-11-02",
-    "notes": [
-      "[기능·check] 매뉴얼 내비 항목 중복 선언 게이트 — check_feature_flags",
-      "[수정·cosmetic] 실무 매뉴얼 내비 중복 노출 해소 — practiceManual 스텁 제거",
-      "[정리·release] v20261102-6df7f56 스탬프 확정 [no-docs]"
     ]
   }
 ]
