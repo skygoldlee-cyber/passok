@@ -65,7 +65,7 @@
         right: 1rem;
         padding-top: 0;
         border-top: none;
-        z-index: 2;
+        z-index: var(--z-raised);
     }
     .sidebar-footer-meta {
         display: none;

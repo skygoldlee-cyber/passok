@@ -7,6 +7,10 @@
 - 정리: §4.8.1 UX-NAV 표를 ID 순으로 재정렬
 - @spec 연결: index.template.html(A-08)·reader-audio.js(A-09)·ui-utils.js(A-10)·a11y.spec.js(A-08,A-11,A-12 + wcag22aa 태그)
 
+## 2026-11-02 fix(ui): z-index 원시 숫자 → --z-raised 토큰 (계층 계약 UX-SET-06)
+
+- `.mobile-tab-mode`·태블릿 `.sidebar-footer`의 `z-index: 1|2`를 `var(--z-raised)`로 교정 — check:zlayer 원시 숫자 금지 위반 (CI test 잡 실패 수정)
+
 ## 2026-11-02 feat(ui): UX-NAV-15 폼팩터 배치 일관성 대원칙 등록 + 모드 전환 3대역 배치
 
 - SPEC v1.26: §4.8.1에 UX-NAV-15(폼팩터 배치 일관성 — 동일 기능은 전 대역 내비 크롬 동등 위치에 직접 배치, 메뉴 내부 유일 경로 금지) 신규 등록. UM-05·§4.10.1 배치 현행화

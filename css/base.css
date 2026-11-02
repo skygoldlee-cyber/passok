@@ -1294,7 +1294,7 @@ body:not(.ui-mode-practice) .tab-group-practice {
     background: var(--bg-sidebar);
     border-left: 1px solid var(--border-color);
     white-space: nowrap;
-    z-index: 1;
+    z-index: var(--z-raised);
 }
 body.ui-mode-practice .mobile-tab-bar .mobile-tab-mode {
     color: var(--color-secondary);
