@@ -64,7 +64,7 @@ describe('매뉴얼 뷰어 — 문서 열기·TOC·전환', () => {
         // formula_manual과 동일 기본 제목('실무 매뉴얼')에 활성 시험 practiceName만 병기 — X OS 형식 통일
         window.EXAMS_LIST = { exams: [{ id: 'carework', default: true, practiceName: 'Care OS' }] };
         localStorage.setItem('current_exam', 'carework');
-        window.__DOC_MD__[PATHS.PRACTICE_MANUAL] = '# 실무막뉴얼\n\n요양 실무 절차.\n';
+        window.__DOC_MD__[PATHS.PRACTICE_MANUAL] = '# 실무매뉴얼\n\n요양 실무 절차.\n';
         await ManualViewer.openPracticeManual();
         await flushAsync(30);
 

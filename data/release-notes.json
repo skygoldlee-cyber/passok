@@ -118,7 +118,7 @@
     "date": "2026-11-02",
     "notes": [
       "[수정·check] nav 아이콘 고유성 — manual-nav-link 슬롯 예외 [no-test]",
-      "[수정·ui] 실무막뉴얼 내비 아이콘 통일 — fa-book-medical [no-test]",
+      "[수정·ui] 실무매뉴얼 내비 아이콘 통일 — fa-book-medical [no-test]",
       "[정리·release] v20261102-a425654 스탬프 확정 [no-docs]"
     ]
   },

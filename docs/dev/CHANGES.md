@@ -1,9 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(docs): '실무막*' 오탈자(U+B9C9) 전수 정정 — 잔여 0
+
+- 전수 스캔으로 U+B9C9 잔재 정리: CHANGES 14건·SPEC 1건·SCREEN_MAP 2건·release-notes.json 1건·study-manual 테스트 픽스처 1건 (모두 문서·히스토리 계열 — 실행 코드·파일명·내비 라벨은 정본 '실무막뉴얼' 확인됨)
+- release-notes.js 번들 재생성
+
 ## 2026-11-02 fix(ui): 실무 매뉴얼 기본 제목 공유 규약 — '실무 매뉴얼 (X OS)' 통일
 
-- 실무막뉴얼(practice_manual) 기본 제목이 '실무막뉴얼'로 formula의 '실무 매뉴얼'과 불일치 → 공통 상수 `PRACTICE_MANUAL_TITLE='실무 매뉴얼'`로 두 소스 공유 + 규약 주석 (시험별 별개 기본 제목 금지, 브랜드는 practiceBrand로 '실무 매뉴얼 (Care OS)' 형식)
-- 내비 라벨도 동일 형식으로 통일 — carework 실무막뉴얼 버튼 '실무막뉴얼' → '실무 매뉴얼' (사이드바·모바일 탭)
+- 실무매뉴얼(practice_manual) 기본 제목이 '실무매뉴얼'로 formula의 '실무 매뉴얼'과 불일치 → 공통 상수 `PRACTICE_MANUAL_TITLE='실무 매뉴얼'`로 두 소스 공유 + 규약 주석 (시험별 별개 기본 제목 금지, 브랜드는 practiceBrand로 '실무 매뉴얼 (Care OS)' 형식)
+- 내비 라벨도 동일 형식으로 통일 — carework 실무매뉴얼 버튼 '실무매뉴얼' → '실무 매뉴얼' (사이드바·모바일 탭)
 
 ## 2026-11-02 feat(ui): 모바일 실무 탭바에 practiceName 브랜드 라벨 — Care OS 표면
 
@@ -103,7 +108,7 @@
 
 - UX-VFY-07 게이트가 팩별 상호배타 매뉴얼 항목(ManualViewer.open*Manual 핸들러)의 동일 아이콘을 중복으로 차단 → 해당 핸들러를 동일 슬롯으로 정규화 (동시 노출은 check_feature_flags ③이 별도 차단)
 
-## 2026-11-02 fix(ui): 실무막뉴얼 내비 아이콘 통일 — fa-book-medical
+## 2026-11-02 fix(ui): 실무매뉴얼 내비 아이콘 통일 — fa-book-medical
 
 - formula 매뉴얼만 fa-flask를 쓰던 것을 practiceManual과 동일한 fa-book-medical로 통일 (데스크톱+모바일 탭) — 공유 템플릿 경로라 향후 시험팩에도 동일 규칙 자동 적용
 
@@ -135,8 +140,8 @@
 
 ## 2026-11-02 fix(cosmetic): 실무 매뉴얼 내비 중복 노출 해소 — practiceManual 스텁 제거
 
-- 결함: cosmetic 내비·모바일 탭에 '실무 매뉴얼'(formula_manual 381행 본진)과 '실무막뉴얼'(practiceManual 43행 스텁)이 나란히 노출 — 스텁은 "상세는 formula_manual 참조" 안내뿐인 이중 문서. 피처별 버튼 렌더 규약상 중복 금지 규칙 없음 — 선언 정합으로 해소
-- cosmetic features.practiceManual 해제 + docs/실무막뉴얼.md 제거 (formula_manual이 실무 매뉴얼 본진, carework는 실무막뉴얼.md가 본진이라 유지) + sw.js·docs_md·exams-list 재생성
+- 결함: cosmetic 내비·모바일 탭에 '실무 매뉴얼'(formula_manual 381행 본진)과 '실무매뉴얼'(practiceManual 43행 스텁)이 나란히 노출 — 스텁은 "상세는 formula_manual 참조" 안내뿐인 이중 문서. 피처별 버튼 렌더 규약상 중복 금지 규칙 없음 — 선언 정합으로 해소
+- cosmetic features.practiceManual 해제 + docs/실무매뉴얼.md 제거 (formula_manual이 실무 매뉴얼 본진, carework는 실무매뉴얼.md가 본진이라 유지) + sw.js·docs_md·exams-list 재생성
 
 ## 2026-11-02 test(e2e): 배너 인플로우 실측 정합 — toc-sidebar·responsive-flow 스펙
 
@@ -316,9 +321,9 @@
 
 - .care-calc-form select option에 --bg-sidebar·--color-text-main 적용 (cosmetic의 .form-select option과 동일 규칙 — 누락으로 팝업이 OS 기본색이던 문제)
 
-## 2026-11-02 fix: 막뉴얼 오탈자 전수 재정정 — cosmetic 매뉴얼 파일명 정정 (경로 해석 실패 수정)
+## 2026-11-02 fix: 매뉴얼 오탈자 전수 재정정 — cosmetic 매뉴얼 파일명 정정 (경로 해석 실패 수정)
 
-- content/exams/cosmetic/docs/실무막뉴얼.md → 실무매뉴얼.md 개명 (PATHS.PRACTICE_MANUAL 해석 불일치로 로드 불가였던 실버그) + 탭바 라벨·테스트·릴리스 노트 등 콘텐츠 오탈자 전수 정정 — 코드포인트 0xb9c9 잔여 0
+- content/exams/cosmetic/docs/실무매뉴얼.md → 실무매뉴얼.md 개명 (PATHS.PRACTICE_MANUAL 해석 불일치로 로드 불가였던 실버그) + 탭바 라벨·테스트·릴리스 노트 등 콘텐츠 오탈자 전수 정정 — 코드포인트 0xb9c9 잔여 0
 
 ## 2026-11-02 fix(ui): 학습도구 고아 잔재 제거 — 버튼 내용물만 남아 모드 무관 표시
 
@@ -2795,14 +2800,14 @@
 - **테마 전환**: 헤더 `#theme-toggle-btn`이 정본 → 더보기 시트의 `mobile-theme-toggle` 버튼 제거 + `theme-toggle.js`의 모바일 동기화 코드 삭제
 - **시험 전환**: 설정 패널이 정본 → 더보기 시트 기타 그룹에서 제거 (e2e 회귀 테스트는 시트 내 뷰 내비 `calendar-view`로 재지정 — modal-back 마커 레이스 커버리지 유지)
 - **모드 전환**: 사이드바 푸터(>900px) ↔ 설정 패널(≤900px) 뷰포트 분담 — 설정 항목을 `@media (min-width:901px)`에서 숨겨 데스크톱 중복 해소 (항목 주석상 태블릿·모바일용 fallback이 원래 의도)
-- **더보기 시트 기타 그룹**: 실무 전용 항목(실무막얼·학습도구)만 남아 라벨에 `nav-practice-only` 부여 — 학습 모드에서 빈 '기타' 헤더 잔존 방지
+- **더보기 시트 기타 그룹**: 실무 전용 항목(실무매뉴얼·학습도구)만 남아 라벨에 `nav-practice-only` 부여 — 학습 모드에서 빈 '기타' 헤더 잔존 방지
 - **문서 정합**: SPEC ES-02·§4.10.1 정본 규칙 명문화, SCREEN_MAP 진입점 표기, ARCHITECTURE 시험 전환/테마 구성요소 표, 사용자 매뉴얼 §11.5·§12·§13 갱신
 
-## 2026-10-13 모바일 탭바 '실무막얼' 탭 제거 — 더보기 시트로 이관
+## 2026-10-13 모바일 탭바 '실무매뉴얼' 탭 제거 — 더보기 시트로 이관
 
 - **배경**: 실무 모드 전용 `nav-practice-only` 탭이 탭바 슬롯을 차지 — 사용자 요구로 탭바 노출 자체를 금지하고 진입 경로는 더보기 시트로 수렴
-- **변경**: `index.template.html` 탭바에서 실무막얼 버튼 제거 → `#mobile-more-sheet` 기타 그룹에 `nav-practice-only`+`data-feature="formula"`로 재배치 (실무 모드에서만 표시, 기능 유지)
-- **탭바 조합**: 실무 모드 최악 조합이 실무·사전·실무막얼+더보기 4버튼 → 실무·사전+더보기 3버튼으로 축소. SPEC §4.10.1 슬롯·조합표 갱신
+- **변경**: `index.template.html` 탭바에서 실무매뉴얼 버튼 제거 → `#mobile-more-sheet` 기타 그룹에 `nav-practice-only`+`data-feature="formula"`로 재배치 (실무 모드에서만 표시, 기능 유지)
+- **탭바 조합**: 실무 모드 최악 조합이 실무·사전·실무매뉴얼+더보기 4버튼 → 실무·사전+더보기 3버튼으로 축소. SPEC §4.10.1 슬롯·조합표 갱신
 - **테스트**: `common-uimode.dom.test.js`에 `#mobile-tab-bar .nav-practice-only === 0` 단언 추가 — 탭바 무실무항목을 회귀 게이트로 고정
 
 ## 2026-10-13 UIUX_VERIFY_RUNBOOK V6 실기기 체크리스트 보강
