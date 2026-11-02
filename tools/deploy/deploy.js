@@ -449,10 +449,11 @@ async function main() {
     if ((result.status ?? 1) !== 0) {
         restoreStamps();
         // 운영 알림 — webhook 미설정이면 내부에서 조용히 skip (AD-10)
-        await postDiscord(eventEmbed('배포 실패 — vercel --prod', false, [
+        const failNotify = await postDiscord(eventEmbed('배포 실패 — vercel --prod', false, [
             { name: '종료 코드', value: String(result.status ?? 1), inline: true },
             { name: '커밋', value: git('rev-parse --short HEAD') || 'unknown', inline: true },
         ]));
+        if (!failNotify.sent) console.warn(`⚠️  운영 알림 발송 실패: ${failNotify.reason}`);
         process.exit(result.status ?? 1);
     }
 
@@ -516,7 +517,8 @@ async function main() {
                 process.exit(1);
             }
             console.log('✅ 프로덕션 스모크 통과');
-            await postDiscord(eventEmbed('배포 완료', true, fields));
+            const notifyRes = await postDiscord(eventEmbed('배포 완료', true, fields));
+            if (!notifyRes.sent) console.warn(`⚠️  운영 알림 발송 실패 (배포는 완료됨): ${notifyRes.reason} — DISCORD_WEBHOOK_URL 확인`);
             await notifyCommunity(stamped, baseUrl);
         });
     } else if (stamped) {
