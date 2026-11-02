@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 feat(check): 매뉴얼 내비 항목 중복 선언 게이트 — check_feature_flags ③
+
+- index.template의 .manual-nav-link 버튼 data-feature 키를 실측 수집해, 시험이 해당 피처를 2개 이상 선언하면 오류 — practiceManual 스텁이 formula_manual과 나란히 노출됐던 사례의 재발 차단 (피처 키 {formula, practiceManual} 감지 확인)
+
 ## 2026-11-02 fix(cosmetic): 실무 매뉴얼 내비 중복 노출 해소 — practiceManual 스텁 제거
 
 - 결함: cosmetic 내비·모바일 탭에 '실무 매뉴얼'(formula_manual 381행 본진)과 '실무막뉴얼'(practiceManual 43행 스텁)이 나란히 노출 — 스텁은 "상세는 formula_manual 참조" 안내뿐인 이중 문서. 피처별 버튼 렌더 규약상 중복 금지 규칙 없음 — 선언 정합으로 해소
