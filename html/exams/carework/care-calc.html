@@ -12,11 +12,12 @@
         <label>월 예상 급여 이용액 (원) <input id="care-use" type="number" min="0" placeholder="예: 1000000"></label>
         <fieldset class="care-calc-nc">
             <legend>비급여 월 예상액 (원) — 기관·계약별 상이</legend>
-            <label>식재료비 <input id="care-nc-meal" type="number" min="0" placeholder="예: 450000"></label>
-            <label>간식비 <input id="care-nc-snack" type="number" min="0" placeholder="예: 60000"></label>
-            <label id="care-nc-room-wrap">상급침실료 <input id="care-nc-room" type="number" min="0" placeholder="시설만 해당"></label>
-            <label>이미용비 <input id="care-nc-groom" type="number" min="0" placeholder="예: 10000"></label>
-            <label>기타 비급여 <input id="care-nc-other" type="number" min="0" placeholder="예: 80000"></label>
+            <p class="care-calc-nc-note">공단이 부담하지 않아 전액 본인부담하는 비용입니다. 감경·수급자 대상도 비급여는 전액 납부하며, 금액은 기관별 계약에 따라 달라집니다 (시행규칙 §14).</p>
+            <label>식재료비 <input id="care-nc-meal" type="number" min="0" placeholder="식사·간식 재료비 예: 450000"></label>
+            <label>간식비 <input id="care-nc-snack" type="number" min="0" placeholder="별도 간식 제공 시 예: 60000"></label>
+            <label id="care-nc-room-wrap">상급침실료 <input id="care-nc-room" type="number" min="0" placeholder="1·2인실 추가비용 — 시설만"></label>
+            <label>이미용비 <input id="care-nc-groom" type="number" min="0" placeholder="이발·미용 서비스 예: 10000"></label>
+            <label>기타 비급여 <input id="care-nc-other" type="number" min="0" placeholder="기관 고지 기타 항목 예: 80000"></label>
         </fieldset>
         <label>본인부담 감경 <select id="care-reduction"></select></label>
         <div class="care-calc-actions">
