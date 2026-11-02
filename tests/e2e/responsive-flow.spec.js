@@ -103,6 +103,8 @@ test.describe('반응형·내비게이션 실측', () => {
             ? page.locator('#mobile-tab-bar .mobile-tab-mode')
             : page.locator('.sidebar-footer #ui-mode-toggle');
         await expect(toggle).toBeVisible();
+        // 설정 패널에는 모드 전환을 두지 않는다 — 내비 크롬이 유일 진입 경로 (UM-05)
+        await expect(page.locator('.settings-item[data-click="toggleUiMode"]')).toHaveCount(0);
         // 직접 동작 검증 — 크롬 배치가 dead 버튼이 아니어야 원칙 충족
         await toggle.click();
         await expect(page.locator('body')).toHaveClass(/ui-mode-practice/);

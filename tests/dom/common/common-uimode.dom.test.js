@@ -62,7 +62,7 @@ describe('UI 모드 — 학습/실무 전환', () => {
         expect(document.body.classList.contains('ui-mode-practice')).toBe(false);
         STUDY_ONLY.forEach(v => expect(visibleNavTargets()).toContain(v));
         expect(document.querySelector('.nav-study-tools-label'), '학습도구 토글 제거됨').toBeNull();
-        // 토글 2곳(푸터·설정) 라벨·aria 동기화
+        // 토글 2곳(사이드바 푸터·모바일 탭바) 라벨·aria 동기화
         document.querySelectorAll('.ui-mode-label').forEach(l => expect(l.textContent).toBe('학습 모드'));
         document.querySelectorAll('[data-click="toggleUiMode"]').forEach(b => expect(b.getAttribute('aria-pressed')).toBe('false'));
         // 학습 매뉴얼 표시·실무 전용 탭 숨김
@@ -196,7 +196,7 @@ describe('UI 모드 — formula 미보유 시험', () => {
         toggleUiMode();
         expect(localStorage.getItem('ui_mode')).not.toBe('practice');
         expect(isPracticeMode()).toBe(false);
-        // 사이드바 푸터·설정 패널 토글 2곳 모두 실무 피처 미보유 시험에서 비노출 대상
+        // 사이드바 푸터·모바일 탭바 토글 2곳 모두 실무 피처 미보유 시험에서 비노출 대상
         document.querySelectorAll('[data-click="toggleUiMode"]').forEach(b => {
             expect(b.dataset.feature).toBe('practiceMode');
         });

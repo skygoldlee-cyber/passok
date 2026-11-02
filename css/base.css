@@ -804,13 +804,7 @@ body.ui-mode-practice.study-tools-open .mobile-tab-item[data-click="toggleStudyT
     color: var(--color-primary);
 }
 
-/* 데스크톱(>900px): 사이드바 푸터에 모드 토글이 있으므로 설정 패널 항목은 중복 숨김.
-   ≤900px는 푸터 없음 — 모바일은 탭바 우측 모드 탭이 주 경로, 태블릿·발견용으로 설정 항목 병존 */
-@media (min-width: 901px) {
-    .settings-item[data-click="toggleUiMode"] {
-        display: none;
-    }
-}
+/* 모드 전환은 내비 크롬 전용 — 설정 패널 항목은 제거됨 (UX-NAV-15) */
 
 /* 사이드바 푸터의 모드 전환 버튼 */
 .ui-mode-toggle {
