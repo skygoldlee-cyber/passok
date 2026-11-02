@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261102-a425654",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정·carework] 실무 뷰 버튼 베이스 클래스 누락 — bare secondary → btn btn-secondary [no-test]",
+      "[정리·release] v20261102-4135845 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-4135845",
     "date": "2026-11-02",
     "notes": [
@@ -182,15 +190,6 @@
     "notes": [
       "[수정·ui] DA-20 엄격 분리 — 무클래스 학습 항목·학습도구 탈출 경로 제거",
       "[정리] build:derived 파생물 반영 — release-notes·version"
-    ]
-  },
-  {
-    "version": "v20261102-47dd341",
-    "date": "2026-11-02",
-    "notes": [
-      "[기능·ui] 탭바 실무·기관 구분선 분리 — 시트 중복 제거",
-      "[수정·ui] 탭바를 사이드바 실무 구역과 일치 — 기관은 더보기로 복원",
-      "[정리·release] v20261102-89bf357 스탬프 확정 [no-docs]"
     ]
   }
 ]
