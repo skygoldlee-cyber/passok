@@ -49,7 +49,7 @@ export function careCalcRun() {
     const rows = [
         ['총 이용액', formatWon(r.covered + r.overLimit)],
         ['공단 부담', formatWon(r.publicPay)],
-        ['본인부담금', formatWon(r.selfPay)],
+        ['급여 본인부담금', formatWon(r.selfCovered)],
         ...(r.overLimit ? [['한도 초과 자부담', formatWon(r.overLimit)]] : []),
         ...(r.nonCovered ? [['비급여 자부담 (식재료비 등)', formatWon(r.nonCovered)]] : []),
         ...(r.limit ? [['등급 월 한도', formatWon(r.limit)]] : []),

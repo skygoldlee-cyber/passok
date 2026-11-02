@@ -10,7 +10,7 @@ function calcHome(gradeKey, monthlyUse, reductionRate) {
     const overLimit = Math.max(0, monthlyUse - g.home);
     const selfCovered = Math.round(covered * SELF_PAY_RATE.home * (1 - reductionRate));
     const selfPay = selfCovered + overLimit;
-    return { covered, overLimit, selfPay, publicPay: covered - selfCovered, limit: g.home, type: 'home' };
+    return { covered, overLimit, selfCovered, selfPay, publicPay: covered - selfCovered, limit: g.home, type: 'home' };
 }
 
 /** 시설급여 — 한도 없이 급여비용의 20% 본인부담 + 비급여(식재료비·상급침실료 등) 전액 자부담 */

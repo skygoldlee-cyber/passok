@@ -94,7 +94,8 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careCalcRun();
         const txt = document.querySelector('#care-result')?.textContent || '';
         expect(txt).toContain('비급여 자부담');
-        expect(txt).toContain('1,118,420원'); // 급여 20% 558,420(자동 2,792,100) + 비급여 560,000
+        expect(txt).toContain('558,420원'); // 급여 본인부담금 — 비급여 미포함
+        expect(txt).toContain('1,118,420원'); // 실납부 = 급여부담 558,420 + 비급여 560,000
         expect(txt).toContain('93,070원/일');
         careCalcReset();
     });
