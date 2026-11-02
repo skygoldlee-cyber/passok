@@ -50,6 +50,7 @@ test.describe('교재리더 TOC 사이드바', () => {
             const items = toc.querySelectorAll('.reader-toc-item, .reader-toc-sub-item');
             const last = items[items.length - 1].getBoundingClientRect();
             const mc = document.querySelector('.main-content');
+            const banner = document.getElementById('formula-notice-banner');
             return {
                 vh: window.innerHeight,
                 tocBottom: tr.bottom,
@@ -58,6 +59,8 @@ test.describe('교재리더 TOC 사이드바', () => {
                 mcCanScroll: mc.scrollHeight > mc.clientHeight + 2,
                 lastItemBottom: last.bottom,
                 lastItemTitle: items[items.length - 1].dataset.tocTitle,
+                bannerH: banner && !banner.classList.contains('is-hidden')
+                    ? banner.getBoundingClientRect().height : 0,
             };
         });
         // TOC aside와 본문 컬럼 모두 뷰포트 안에 완전히 들어와야 함
@@ -69,8 +72,9 @@ test.describe('교재리더 TOC 사이드바', () => {
         // 스크롤바를 끝까지 내린 상태에서 마지막 목차 항목이 보여야 함
         expect(m.lastItemBottom).toBeLessThanOrEqual(m.vh + 1);
         // TR-22/23 + R-10: 크롬이 오버레이로 전환되어 본문이 잔여 높이 전체 차지 —
-        // 뷰포트의 60% 이상 확보해야 실질적 가독 영역 (모바일·데스크톱 공통)
-        expect(m.contentClientH).toBeGreaterThan(m.vh * 0.6);
+        // 이용 가능 높이(뷰포트−인플로우 배너)의 60% 이상이어야 실질적 가독 영역
+        // (RR-20 법령 알림 배너 표시 시 배너 높이만큼 컨테이너가 정당하게 축소됨)
+        expect(m.contentClientH).toBeGreaterThan((m.vh - m.bannerH) * 0.6);
 
         // 본문 스크롤 → sticky-heading 표시돼도 본문 높이는 리플로우되지 않아야 함
         // (오버레이 배치 — 이전에는 인플로우라 표시 시 ~50px 영구 잠식)

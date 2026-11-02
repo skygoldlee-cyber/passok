@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(layout): RR-20 법령 알림 배너 표시 시 뷰포트 오버플로 회귀 수정
+
+- 결함: 전역 공지 배너(#formula-notice-banner) 발화 시 app-container의 height:100dvh가 뷰포트를 넘겨 리더 TOC/본문 하단이 ~35-58px 잘림 — 마지막 목차 항목에 도달 불가 (실사용자 영향)
+- 수정: body를 flex 컬럼 + .app-container flex:1로 전환해 인플로우 배너분을 뺀 잔여 높이를 배분 (태블릿·모바일 미디어쿼리의 100vh 고정·min-height 오버라이드 정합 정리)
+- 스펙 정합: toc-sidebar 가독 면적 기준을 (뷰포트−배너) 이용 가능 높이의 60%로 조정 — 9/9 통과
+
 ## 2026-11-02 chore(stamp): sw 캐시 버전·테스트 실측치 스탬프 갱신
 
 - 배포 전 파생물 스탬프 — CACHE_VERSION v20261102-e41e181, test_stats 실측(dom 893·e2e 120/390)

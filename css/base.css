@@ -667,12 +667,22 @@ html {
 }
 
 /* App Container */
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    height: var(--app-height, 100dvh);
+}
+
 .app-container {
     display: flex;
     width: 100%; /* 100vw는 스크롤바 폭을 포함해 가로 오버플로 유발 가능 */
-    height: 100vh;
-    height: 100dvh; /* iOS Safari 주소창 변동 대응 */
-    height: var(--app-height, 100dvh); /* JS 실측 뷰포트 — PWA 콜드 스타트 dvh 과대측정 대응 */
+    flex: 1; /* 인플로우 배너(notice·offline)가 있으면 그만큼 줄어든 잔여 높이를 차지 */
+    min-height: 0; /* flex 자식의 내부 스크롤을 위해 콘텐츠보다 작게 축소 허용 */
+    /* 인플로우 배너가 뷰포트 밖으로 밀어내지 않도록 height 대신 flex 배분
+       (RR-20 전역 공지 배너 + reader 100dvh 레이아웃 오버플로 회귀 수정) */
+    max-height: 100%;
 }
 
 /* Sidebar Navigation */
