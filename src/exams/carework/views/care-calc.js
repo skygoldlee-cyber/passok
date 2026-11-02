@@ -66,8 +66,7 @@ export function careCalcRun() {
             .map(([k, v]) => [`비급여·${NC_LABELS[k]}`, formatWon(v)]),
         ['본인부담 감경', _selLabel('care-reduction')],
     ];
-    const condHtml = `<div class="care-calc-cond"><strong class="care-calc-cond-title">입력 조건</strong>${
-        cond.map(([k, v]) => `<div class="care-calc-cond-row"><span>${k}</span><span>${v}</span></div>`).join('')}</div>`;
+    const docRow = (/** @type {string[]} */ t) => `<tr${t[2] ? ` class="${t[2]}"` : ''}><td>${t[0]}</td><td class="care-doc-num">${t[1]}</td></tr>`;
     const rows = [
         ['총 이용액', formatWon(r.covered + r.overLimit)],
         ['공단 부담', formatWon(r.publicPay)],
@@ -78,8 +77,10 @@ export function careCalcRun() {
         ['실제 월 납부액', formatWon(r.selfPay), 'care-calc-total'],
         ...(in_._basis ? [[`급여비용 산정 — ${formatWon(in_._basis.rate)}/일 × ${in_._basis.days}일`, '']] : []),
     ];
-    out.innerHTML = condHtml
-        + rows.map(([k, v, c]) => `<div class="care-calc-row${c ? ' ' + c : ''}"><span>${k}</span><strong>${v}</strong></div>`).join('')
+    out.innerHTML =
+        `<div class="care-doc-head"><strong>장기요양 비용 계산 결과</strong><span>${new Date().toISOString().slice(0, 10)} 출력</span></div>`
+        + `<table class="care-doc"><caption>입력 조건</caption><tbody>${cond.map(docRow).join('')}</tbody></table>`
+        + `<table class="care-doc"><caption>계산 결과</caption><tbody>${rows.map(docRow).join('')}</tbody></table>`
         + `<p class="care-calc-src">근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>`;
 }
 
