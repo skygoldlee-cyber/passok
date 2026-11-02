@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261103-896287b",
+    "date": "2026-11-03",
+    "notes": [
+      "[정리] 재현용 임시 파일 제거 (pc*.mjs, calcout.pdf) [no-test]",
+      "[수정·carework] 인쇄 본문 소실 — 출력물 절대 위치 제거",
+      "[정리·release] v20261103-33ebd65 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261103-33ebd65",
     "date": "2026-11-03",
     "notes": [
@@ -165,17 +174,6 @@
     "notes": [
       "[수정·carework] 비급여 필드셋 세로 정렬 복구 [no-test]",
       "[정리·release] v20261102-dad51a7 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-dad51a7",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정·carework] 한도표 연도 보간 이스케이프 규약 교정 [no-test]",
-      "[기능·carework] 등급별 재가 월 한도액 표 추가",
-      "[기능·carework] 재가 이용액 산식 설명 보강 [no-test]",
-      "[기능·carework] 시설급여 이용액 자동 산정 + 비급여 필드셋 여백",
-      "[정리·release] v20261102-e5bdd38 스탬프 확정 [no-docs]"
     ]
   }
 ]
