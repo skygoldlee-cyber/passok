@@ -1,0 +1,23 @@
+import { chromium } from 'playwright';
+const browser = await chromium.launch();
+const page = await browser.newPage();
+await page.addInitScript(() => { localStorage.setItem('current_exam', 'carework'); localStorage.setItem('ui_mode', 'practice'); });
+await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+await page.waitForTimeout(1500);
+await page.evaluate(() => document.getElementById('onboarding-overlay')?.remove());
+const nav = page.locator('.nav-item[data-target="care-calc-view"]');
+await nav.waitFor({ state: 'visible', timeout: 5000 });
+await nav.click();
+await page.waitForTimeout(1200);
+await page.fill('#care-use', '1000000').catch(() => {});
+await page.locator('[data-click="careCalcRun"]').click();
+await page.waitForTimeout(400);
+await page.emulateMedia({ media: 'print' });
+const r = await page.evaluate(() => {
+  const el = document.getElementById('care-result');
+  const c = getComputedStyle(el);
+  const rows = document.querySelectorAll('#care-result .care-doc tr').length;
+  return { pos: c.position, vis: c.visibility, h: Math.round(el.getBoundingClientRect().height), rows, text: el.innerText.slice(0, 80) };
+});
+console.log(JSON.stringify(r));
+await browser.close();

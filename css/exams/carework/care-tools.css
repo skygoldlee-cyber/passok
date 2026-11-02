@@ -171,9 +171,10 @@
     #ho-preview, #ho-preview *,
     #audit-list, #audit-list *, #audit-progress, #audit-progress *,
     #care-card-detail, #care-card-detail * { visibility: visible; }
+    /* 절대 위치 금지 — abs 박스는 페이지 경계에서 본문이 잘리고 동일 위치끼리 겹침.
+       일반 흐름을 유지하면 출력물만 남은 활성 뷰의 패딩(print.css 10mm/8mm)이 여백 역할 */
     #log-preview, #care-result, #ho-preview, #audit-list, #audit-progress, #care-card-detail {
-        /* @page margin:0 — 문서 자체 여백을 상하 12mm·좌우 10mm로 확보 (출력물이 페이지 모서리에 붙지 않도록) */
-        position: absolute; inset: 12mm 10mm auto 10mm; width: auto;
+        visibility: visible;
     }
     .care-log-text { border: 1px solid var(--print-border-strong, #9ca3af); border-radius: 0; font-size: 13pt; color: #000; background: #fff; }
     .care-doc, .care-doc-head { background: #fff; color: #000; }
