@@ -106,7 +106,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         // 문서형 구조 — 헤더 + 입력 조건/계산 결과 2개 표 (가독성 출력 회귀 방지)
         expect(document.querySelectorAll('#care-result table.care-doc').length).toBe(2);
         expect(document.querySelector('#care-result .care-doc-head')?.textContent).toContain('장기요양 비용 계산 결과');
-        expect(document.querySelector('#care-result table.care-doc caption')?.textContent).toBe('입력 조건');
+        expect(document.querySelector('#care-result .care-doc-sec')?.textContent).toBe('입력 조건');
         // 강조는 '실제 월 납부액' 행 — 위치 선택자 회귀 방지
         const totalRow = document.querySelector('#care-result .care-calc-total');
         expect(totalRow?.textContent).toContain('실제 월 납부액');
