@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261102-dad51a7",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정·carework] 한도표 연도 보간 이스케이프 규약 교정 [no-test]",
+      "[기능·carework] 등급별 재가 월 한도액 표 추가",
+      "[기능·carework] 재가 이용액 산식 설명 보강 [no-test]",
+      "[기능·carework] 시설급여 이용액 자동 산정 + 비급여 필드셋 여백",
+      "[정리·release] v20261102-e5bdd38 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-e5bdd38",
     "date": "2026-11-02",
     "notes": [
@@ -182,19 +193,6 @@
       "[정리·release] v20261102-36502a3 스탬프 확정 [no-docs]",
       "[spec] DA-22 모드 전환 랜딩 규칙 — 학습→실무는 시험별 첫 실무 뷰",
       "[정리] build:derived 파생물 반영 — release-notes·version"
-    ]
-  },
-  {
-    "version": "v20261102-ba0df29",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정] carework 실무 랜딩을 현장도구로 — careCalc priority 0",
-      "[기능·ui] 모드 전환 대칭 랜딩 — 실무→학습은 dashboard, 학습→실무는 시험별 랜딩",
-      "[테스트] DA-21 연결 — carework option 다크 규칙 존재 검증",
-      "[테스트] DA-21 연결 — carework option 다크 규칙 존재 검증",
-      "[spec] DA-21 select option 테마 강제 — 다크모드 가시성 규약 명문화",
-      "[수정·ui] carework select option 다크 토큰 적용 — 다크모드 가시성",
-      "[정리·release] v20261102-8b49cf4 스탬프 확정 [no-docs]"
     ]
   }
 ]
