@@ -39,7 +39,7 @@ export function careHandoverGenerate() {
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·인계자·인수자를 입력하세요.</p>'; return; }
     _lastText = t; _lastSaved = false;
-    out.innerHTML = `<div class="care-doc-head"><strong>인수인계서</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div><pre class="care-log-text">${esc(t)}</pre>`;
+    out.innerHTML = `<div class="care-doc-head"><strong>인수인계서</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div><pre class="care-log-text">${esc(t)}</pre><div class="care-doc-sign"><span>인계자(서명): ______________</span><span>인수자(서명): ______________</span><span>확인일: ________</span></div>`;
     renderSaved();
 }
 

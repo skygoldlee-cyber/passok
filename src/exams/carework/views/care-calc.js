@@ -82,7 +82,8 @@ export function careCalcRun() {
         `<div class="care-doc-head"><strong>장기요양 비용 계산 결과</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div>`
         + `<table class="care-doc"><caption>입력 조건</caption><tbody>${cond.map(docRow).join('')}</tbody></table>`
         + `<table class="care-doc"><caption>계산 결과</caption><tbody>${rows.map(docRow).join('')}</tbody></table>`
-        + `<p class="care-calc-src">근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>`;
+        + `<p class="care-calc-src">근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>`
+        + `<p class="care-doc-disclaimer">※ 계산 결과는 참고용 예상액입니다 — 실제 청구액은 공단 심사·기관 계약에 따라 달라질 수 있습니다.</p>`;
 }
 
 export function careCalcReset() {

@@ -35,7 +35,7 @@ export function careLogGenerate() {
     const out = $('log-preview');
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·대상자·급여 종류를 입력하세요.</p>'; return; }
-    out.innerHTML = `<div class="care-doc-head"><strong>요양보호 서비스 기록</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div><pre class="care-log-text">${esc(t)}</pre>`;
+    out.innerHTML = `<div class="care-doc-head"><strong>요양보호 서비스 기록</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div><pre class="care-log-text">${esc(t)}</pre><div class="care-doc-sign"><span>작성자(요양보호사): ______________</span><span>확인자: ______________</span></div>`;
 }
 
 export function careLogCopy() {

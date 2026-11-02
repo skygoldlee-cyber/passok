@@ -21,7 +21,8 @@ function render() {
                     <span>${esc(i.text)}</span>
                     <em>${esc(i.ref)}</em>
                 </label>`).join('')}
-        </div>`).join('');
+        </div>`).join('')
+        + `<div class="care-doc-sign"><span>점검자: ______________</span><span>기관장(확인): ______________</span><span>점검일: ________</span></div>`;
     const p = auditProgress(_sections);
     const bar = $('audit-progress');
     if (bar) bar.innerHTML = `<strong>점검 진행 ${esc(p.done)}/${esc(p.total)}</strong><div class="care-audit-bar"><span style="width:${esc(p.total ? Math.round(p.done / p.total * 100) : 0)}%"></span></div>`;

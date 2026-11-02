@@ -50,6 +50,14 @@
 .care-doc td.care-doc-num { text-align: right; font-weight: 700; color: var(--color-text-main); }
 .care-doc tr.care-calc-total td { font-size: 15px; font-weight: 800; color: var(--color-text-main); }
 .care-doc tr.care-calc-total td.care-doc-num { color: var(--color-primary); font-size: 20px; }
+
+/* 서명란·면책 — 문서형 템플릿 (cosmetic fp-sign-row·fp-disclaimer 대응) */
+.care-doc-sign { display: flex; gap: 18px; margin-top: 20px; }
+.care-doc-sign span {
+    flex: 1; font-size: 13px; color: var(--color-text-muted);
+    border-top: 1px solid var(--border-subtle); padding-top: 8px;
+}
+.care-doc-disclaimer { font-size: 12px; color: var(--color-text-muted); margin: 12px 4px 0; }
 .care-calc-result .care-calc-row:first-child { border-radius: 12px 12px 0 0; }
 .care-calc-result .care-calc-row:last-of-type { border-radius: 0 0 12px 12px; border-bottom: 0; }
 
@@ -169,6 +177,8 @@
     .care-audit-sec { border-color: var(--print-border-strong, #9ca3af); border-radius: 0; background: #fff; color: #000; }
     .care-audit-sec h3, .care-audit-item span, .care-audit-item em { color: #000; }
     .care-audit-progress { border-color: var(--print-border-strong, #9ca3af); background: #fff; color: #000; }
+    .care-doc-sign span { color: #000; border-color: var(--print-border-strong, #9ca3af); }
+    .care-doc-disclaimer { color: var(--print-muted, #555); }
 }
 
 .care-calc-rates { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 4px 0 8px; }
