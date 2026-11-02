@@ -135,6 +135,8 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.querySelector('#log-preview .care-doc-head span')?.textContent).toContain('출력');
         // esc() 래핑된 출력일이 이스케이프 없이 정상 렌더 (싱크 규약 적용 후에도 값 표시)
         expect(document.querySelector('#log-preview .care-doc-head span')?.textContent).toMatch(/\d{4}-\d{2}-\d{2}/);
+        // 문서형 서명란 — cosmetic fp-sign-row 대응 (작성자·확인자)
+        expect(document.querySelector('#log-preview .care-doc-sign')?.textContent).toContain('작성자(요양보호사)');
         careLogCopy();
     });
 
@@ -144,6 +146,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careAuditReset();
         expect(document.getElementById('audit-list')).toBeTruthy();
         expect(document.querySelector('#audit-list .care-doc-head strong')?.textContent).toBe('기관 평가 체크리스트');
+        expect(document.querySelector('#audit-list .care-doc-sign')?.textContent).toContain('점검자');
     });
 
     it('careAudit — 점검표 복사·인쇄 핸들러 실행', async () => {
