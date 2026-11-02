@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(carework): 한도표 연도 보간 이스케이프 규약 교정
+
+- innerHTML 템플릿의  보간이 HTML escape sink 게이트에 차단 → 문자열 연결로 교정 (CI 복구)
+
 ## 2026-11-02 feat(carework): 등급별 재가 월 한도액 표 추가
 
 - 등급 선택 아래 details 접이식 한도표 — 당해연도(EFFECTIVE_YEAR)만 표시, GRADE_LIMITS에서 렌더

@@ -75,7 +75,7 @@ export function initCareCalcView() {
     const lt = $('care-limit-table');
     if (lt && !lt.children.length) {
         const won = (n) => n.toLocaleString('ko-KR');
-        lt.innerHTML = `<thead><tr><th>등급</th><th>월 한도액 (${EFFECTIVE_YEAR}년)</th></tr></thead>`
+        lt.innerHTML = '<thead><tr><th>등급</th><th>월 한도액 (' + EFFECTIVE_YEAR + '년)</th></tr></thead>'
             + `<tbody>${GRADE_LIMITS.map(g => `<tr><td>${g.label}</td><td>${won(g.home)}원</td></tr>`).join('')}</tbody>`;
     }
     const g = $('care-grade');
