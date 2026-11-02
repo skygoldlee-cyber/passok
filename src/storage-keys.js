@@ -178,7 +178,7 @@ export const STORAGE_KEYS = {
   APP_THEME: 'appTheme',
   PREFERRED_ORIENTATION: 'preferredOrientation',
   UI_MODE: 'ui_mode',                      // 'study' | 'practice' (합격 후 실무 모드)
-  UI_STUDY_TOOLS_OPEN: 'ui_study_tools_open',  // 실무 모드 내 학습 도구 펼침 상태
+  // ui_study_tools_open — UM-03 폐기로 삭제됨 (기존 키 잔존 시 무시)
 
   // 클라우드 동기화 (sync.js — Phase 2)
   SYNC_DIRTY: 'sync_dirty',        // 미동기화 로컬 변경 존재 ('1'/'0')

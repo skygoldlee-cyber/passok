@@ -765,31 +765,7 @@ html {
 }
 
 /* ===== 학습/실무 UI 모드 (ui_mode) ===== */
-/* 실무 모드에서만 보이는 접이식 라벨 — 기본은 숨김 */
-.nav-study-tools-label {
-    display: none;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-    text-align: left;
-}
-.nav-study-tools-label i {
-    font-size: var(--text-2xs);
-    transition: transform var(--transition-fast);
-}
-
-body.ui-mode-practice .nav-study-tools-label {
-    display: flex;
-}
-body.ui-mode-practice.study-tools-open .nav-study-tools-label i {
-    transform: rotate(180deg);
-}
-
-/* 실무 모드: 학습 전용 항목 숨김 (학습 도구 펼침 시 표시) — 사이드바·모바일 탭바 공통 */
+/* 실무 모드: 학습 전용 항목 숨김 (DA-20 — 탈출 경로 없이 무조건 숨김) — 사이드바·모바일 탭바 공통 */
 body.ui-mode-practice .nav-study-only {
     display: none;
 }
@@ -799,10 +775,6 @@ body:not(.ui-mode-practice) .nav-practice-only {
     display: none;
 }
 
-/* 모바일 '학습도구' 탭 — 펼침 상태 시각 표시 */
-body.ui-mode-practice.study-tools-open .mobile-tab-item[data-click="toggleStudyTools"] {
-    color: var(--color-primary);
-}
 
 /* 모드 전환은 내비 크롬 전용 — 설정 패널 항목은 제거됨 (UX-NAV-15) */
 
@@ -970,6 +942,8 @@ body.ui-mode-practice .ui-mode-toggle {
     flex-direction: column;
     overflow-y: auto;
     position: relative;
+    /* 상단 sticky 헤더가 포커스 요소를 가리지 않도록 스크롤 패딩 (A-12, SC 2.4.11) */
+    scroll-padding-top: 7.5rem;
     background: radial-gradient(circle at 80% 10%, var(--primary-tint-5), transparent 45%),
                 radial-gradient(circle at 10% 90%, rgba(139, 92, 246, 0.03), transparent 45%);
 }
@@ -1267,7 +1241,7 @@ body.ui-mode-practice .tab-group-study { display: none; }
 
 /* 실무 탭바 전체 항목 — 수가 많으면 최소폭 유지하며 가로 스크롤 (사이드바 구성과 동기화) */
 .mobile-tab-bar { overflow-x: auto; }
-.mobile-tab-bar .mobile-tab-item { min-width: 64px; }
+.mobile-tab-bar .mobile-tab-item { min-width: 60px; } /* 360px 최소폭에서 5탭+더보기+모드 탭(56px) 무스크롤 수용 */
 
 /* 모드 분리 원칙 (DA-20) — 학습 모드에서 실무·기관 메뉴 전면 숨김 */
 body:not(.ui-mode-practice) .nav-item-practice,
@@ -1282,7 +1256,7 @@ body:not(.ui-mode-practice) .tab-group-practice {
 /* @spec UX-NAV-15 — 탭바 모드 전환: 양 모드 공통 노출, 가로 스크롤해도 우측 끝 고정 (사이드바 푸터 토글 대응) */
 .mobile-tab-bar .mobile-tab-mode {
     flex: 0 0 auto;
-    min-width: 60px;
+    min-width: 56px;
     position: sticky;
     right: 0;
     background: var(--bg-sidebar);

@@ -159,7 +159,7 @@ const MAX_TOASTS = 3;
 // @spec A-10 — 비본질 자동 소멸(2–3s)은 확인용 정보만, aria-live 보고 + 중요 알림은 배너·모달 사용 (WCAG 2.2.1)
 export function showToast(message, type = 'info', duration, iconClass = '') {
     // 성공 토스트는 화면 변화와 확인이 중복되므로 기본 노출을 짧게 — 알림 피로 완화
-    if (duration === undefined) duration = type === 'success' ? 2000 : 3000;
+    if (duration === undefined) duration = type === 'success' ? 2000 : (type === 'error' || type === 'warning' ? 4000 : 3000);
     let toast = document.getElementById('app-toast');
     if (!toast) {
         toast = document.createElement('div');

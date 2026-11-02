@@ -1,5 +1,5 @@
 // tests/e2e/responsive-flow.spec.js — 반응형·내비·폼·PWA 게이팅 실측
-// @spec R-02,R-04,R-05,R-08,UX-NAV-06,UX-NAV-07,UX-NAV-15,UX-SCR-01,UX-FORM-01,UX-FORM-02,UX-PWA-01,UX-PWA-02,UX-PWA-05
+// @spec R-02,R-04,R-05,R-08,R-11,A-13,UX-NAV-06,UX-NAV-07,UX-NAV-15,UX-SCR-01,UX-FORM-01,UX-FORM-02,UX-PWA-01,UX-PWA-02,UX-PWA-05
 // 스크롤 복원·그리드 종열·회전·커맨드 팔레트·스크롤바 이원화·입력 폰트·
 // 터치 피드백·standalone 게이팅·--app-height 실측 — 모두 레이아웃/입력 의존이라 e2e만 유효.
 
@@ -110,6 +110,19 @@ test.describe('반응형·내비게이션 실측', () => {
         await expect(page.locator('body')).toHaveClass(/ui-mode-practice/);
         await toggle.click(); // 복귀 — 양 모드에서 노출되는지도 함께 확인
         await expect(page.locator('body')).not.toHaveClass(/ui-mode-practice/);
+    });
+
+    test('200% 확대(실효 폭 절반)에서도 수평 오버플로 없이 사용 가능하다 (A-13)', async ({ page }) => {
+        // 브라우저 200% 확대 ≈ CSS px 뷰포트 절반 — SC 1.4.4/1.4.10 실효 폭 환산
+        const cur = await page.viewportSize();
+        await page.setViewportSize({ width: Math.floor(cur.width / 2), height: cur.height });
+        await boot(page);
+        const overflow = await page.evaluate(() =>
+            document.documentElement.scrollWidth - window.innerWidth);
+        expect(overflow).toBeLessThanOrEqual(1);
+        // 크롬이 실효 폭에서도 노출됨 — 헤더 설정 버튼 도달 가능
+        await expect(page.locator('#settings-toggle-btn')).toBeVisible();
+        await page.setViewportSize(cur);
     });
 
     test('통합 검색 팔레트가 Ctrl+K로 열리고 검색·실행된다 (UX-NAV-06)', async ({ page }) => {

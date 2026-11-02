@@ -1,4 +1,4 @@
-/* @spec UX-NAV-01,O-01,P-04a,P-07
+/* @spec UX-NAV-01,O-01,P-04a,P-07,R-11
  * app-responsive.css — reader.css에서 분리: 태블릿·모바일 앱 레이아웃, 오프라인 배너,
  * PWA 설치 모달, 강제 가로보기, 대시보드 모바일 보정.
  * 캐스케이드 순서 보존을 위해 reader.css 다음에 import된다 (style.css 참조).
@@ -963,6 +963,15 @@ body.landscape-mode .daily-challenge-card #daily-challenge-status {
 body.landscape-mode .daily-challenge-card #start-daily-btn {
     width: auto !important;
     padding: 0.4rem 1rem !important;
+}
+
+/* 초대형 뷰포트 — 본문 최대폭 제한 + 중앙 정렬 (R-11) */
+@media (min-width: 1600px) {
+    .view-section {
+        max-width: 1440px;
+        margin-inline: auto;
+        width: 100%;
+    }
 }
 
 body.landscape-mode .mobile-tab-bar,

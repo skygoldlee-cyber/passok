@@ -1,5 +1,5 @@
 // views/exam-sim-arena.js - 실전 모의고사 아레나 (타이머·OMR·문항 렌더·채점) (E-03~06)
-// @spec E-03,E-04,E-05,E-06,DR-06
+// @spec E-03,E-04,E-05,E-06,E-08,DR-06
 //
 // 시험 진행 중 기계 장치 — 절대 시각 타이머, OMR 시트, 문항 렌더,
 // 응답 저장, 채점·제출. 세션 시작(시험 구성)은 exam-sim-session.js,
@@ -27,8 +27,23 @@ import { saveSimDraft, clearSimDraft } from './exam-sim-draft.js';
     * 기반으로 남은 시간을 계산하여, 백그라운드 탭 전환 시에도 실제 경과 시간이
     * 정확히 반영되도록 합니다. (뽀모도로 타이머와 동일한 방식)
     ======================================================= */
+// @spec E-08 — 응시 중 화면 꺼짐 방지 (미지원·거부 시 무시)
+let _wakeLock = null;
+async function acquireWakeLock() {
+    try { _wakeLock = await navigator.wakeLock?.request('screen') ?? null; } catch { _wakeLock = null; }
+}
+function releaseWakeLock() {
+    try { _wakeLock?.release(); } catch { /* noop */ }
+    _wakeLock = null;
+}
+document.addEventListener('visibilitychange', () => {
+    // 복귀 시 잠금은 자동 해제되므로 응시 중이면 재획득
+    if (document.visibilityState === 'visible' && simState.timerInterval) acquireWakeLock();
+});
+
 export function startSimTimer() {
     if (simState.timerInterval) clearInterval(simState.timerInterval);
+    acquireWakeLock();
     // 현재 남은 시간을 기준으로 종료 시각을 고정
     simState.endTime = Date.now() + (simState.timeLeft * 1000);
     simState.timerInterval = setInterval(tickSimTimer, TIMING.EXAM_TIMER_TICK_MS); // 500ms 간격 갱신
@@ -297,6 +312,7 @@ function deriveComboJudgments(q, userAns) {
  */
 export function submitExam() {
     if (simState.timerInterval) clearInterval(simState.timerInterval);
+    releaseWakeLock();
 
     // 점수 채점 및 틀린 문항 수집
     let score = 0;

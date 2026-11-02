@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 24090c8ae719ff4f
-> 생성: 2026-11-02 · 원천: SPEC.md(652개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 944bc686001218b9
+> 생성: 2026-11-02 · 원천: SPEC.md(655개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 652개 — 문서 연결 457 · 소스 연결 581 · 테스트 연결 620 · 보고서 연결 109
+**커버리지 요약**: 요구사항 655개 — 문서 연결 457 · 소스 연결 583 · 테스트 연결 623 · 보고서 연결 109
 
 ---
 
@@ -113,6 +113,7 @@
 | E-05 | ✅ | 테스트 | — | src/views/exam-sim/exam-sim-arena.js<br>src/views/exam-sim/exam-sim-draft.js<br>src/views/exam-sim/exam-sim-session.js<br>src/views/exam-sim/exam-simulator.js | tests/dom/study/study-simulator.dom.test.js<br>tests/unit/engine/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
 | E-06 | ✅ | 테스트 | — | src/views/exam-sim/exam-sim-arena.js<br>src/views/exam-sim/exam-sim-review.js<br>src/views/exam-sim/exam-simulator.js | tests/dom/exam/exam-sim-review.dom.test.js<br>tests/dom/study/study-simulator.dom.test.js<br>tests/unit/engine/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
 | E-07 | ✅ | 테스트 | — | css/exam.css<br>src/views/exam-sim/exam-sim-review.js<br>src/views/exam-sim/exam-sim-session.js<br>src/views/exam-sim/exam-simulator.js | tests/dom/exam/exam-sim-review.dom.test.js<br>tests/dom/study/study-simulator.dom.test.js<br>tests/unit/engine/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | 시험 합격 기준 — 과목별 40점 미만 과락·전 과목 평균 60점 이상 |
+| E-08 | ✅ | 테스트 | — | src/views/exam-sim/exam-sim-arena.js | tests/dom/study/study-simulator.dom.test.js | — | — |
 
 ## 3.5 교재 리더
 
@@ -437,7 +438,7 @@
 |----|------|-----------|------|------|--------|--------|------|
 | UM-01 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-02 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
-| UM-03 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
+| UM-03 | — | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-04 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/router.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/dom/misc/router.dom.test.js<br>tests/dom/misc/ui-structure.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-05 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 1개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 
@@ -682,6 +683,7 @@
 | A-10 | ✅ | 테스트 | — | src/ui-utils.js | tests/dom/common/common-a11y.dom.test.js | — | — |
 | A-11 | ✅ | E2E 테스트 | — | — | tests/dom/common/common-a11y.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
 | A-12 | ✅ | E2E 테스트 | — | — | tests/e2e/a11y.spec.js | — | — |
+| A-13 | ✅ | E2E 테스트 | — | — | tests/e2e/responsive-flow.spec.js | — | — |
 
 ## 4.6 반응형 & 모바일
 
@@ -697,6 +699,7 @@
 | R-08 | ✅ | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25 | src/shell/app-shell.js | tests/dom/common/common-navigation.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
 | R-09 | ✅ | 테스트 | DOC-DSN-01 | — | tests/dom/common/common-navigation.dom.test.js | — | — |
 | R-10 | ✅ | E2E 테스트 | — | css/reader.css | tests/e2e/toc-sidebar.spec.js | — | — |
+| R-11 | ✅ | E2E 테스트 | — | css/app-responsive.css | tests/e2e/responsive-flow.spec.js | — | — |
 
 ## 4.7 테마 시스템
 

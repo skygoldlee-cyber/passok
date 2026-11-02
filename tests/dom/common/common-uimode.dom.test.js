@@ -134,10 +134,10 @@ describe('UI 모드 — 학습/실무 전환', () => {
 
     it('저장된 실무 모드 복원 — initUiMode 시 formula-view 랜딩 (P/R)', () => {
         localStorage.setItem('ui_mode', 'practice');
-        localStorage.setItem('ui_study_tools_open', '1');
         initUiMode();
         expect(document.body.classList.contains('ui-mode-practice')).toBe(true);
-        expect(document.body.classList.contains('study-tools-open')).toBe(true);
+        // UM-03 폐기 — study-tools-open 클래스는 더 이상 적용되지 않음
+        expect(document.body.classList.contains('study-tools-open')).toBe(false);
         expect(switchView).toHaveBeenCalledWith('formula-view', { scrollTop: true });
         expect(el('ui-mode-label').textContent).toBe('실무 모드');
     });
