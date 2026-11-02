@@ -60,7 +60,8 @@ test.describe('교재리더 TOC 사이드바', () => {
                 lastItemBottom: last.bottom,
                 lastItemTitle: items[items.length - 1].dataset.tocTitle,
                 bannerH: banner && !banner.classList.contains('is-hidden')
-                    ? banner.getBoundingClientRect().height : 0,
+                    ? banner.getBoundingClientRect().height
+                        + parseFloat(getComputedStyle(banner).marginBottom) : 0,
             };
         });
         // TOC aside와 본문 컬럼 모두 뷰포트 안에 완전히 들어와야 함

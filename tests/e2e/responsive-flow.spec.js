@@ -224,19 +224,26 @@ test.describe('반응형·내비게이션 실측', () => {
 
     test('--app-height가 실측 뷰포트와 일치한다 (UX-PWA-05)', async ({ page }) => {
         await boot(page);
-        const r = await page.evaluate(() => ({
-            appH: parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--app-height')),
-            vh: window.innerHeight,
-            containerH: document.querySelector('.app-container').getBoundingClientRect().height,
-        }));
+        const r = await page.evaluate(() => {
+            const banner = document.getElementById('formula-notice-banner');
+            return {
+                appH: parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--app-height')),
+                vh: window.innerHeight,
+                containerH: document.querySelector('.app-container').getBoundingClientRect().height,
+                bannerH: banner && !banner.classList.contains('is-hidden')
+                    ? banner.getBoundingClientRect().height
+                        + parseFloat(getComputedStyle(banner).marginBottom) : 0,
+            };
+        });
         expect(r.appH).toBeGreaterThan(0);
         // JS 실측값은 innerHeight와 일치 (≤1px 오차)
         expect(Math.abs(r.appH - r.vh)).toBeLessThanOrEqual(2);
         // 컨테이너 높이 경계는 높이 고정 대역(데스크톱·≤768px)에서만 — 태블릿(769–900)은
-        // 의도된 페이지 스크롤 구조라 height:auto
+        // 의도된 페이지 스크롤 구조라 height:auto.
+        // 인플로우 공지 배너(RR-20)가 보이면 그 높이만큼 컨테이너가 정당하게 축소된다.
         const vw = await page.evaluate(() => window.innerWidth);
         if (vw > 900 || vw <= 768) {
-            expect(Math.abs(r.containerH - r.vh)).toBeLessThanOrEqual(2);
+            expect(Math.abs(r.containerH - (r.vh - r.bannerH))).toBeLessThanOrEqual(2);
         }
     });
 });

@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 test(e2e): 배너 인플로우 실측 정합 — toc-sidebar·responsive-flow 스펙
+
+- 레이아웃 수정의 후속 정합: 배너 margin-bottom(12px)까지 인플로우 점유로 실측 — responsive-flow의 containerH 기대치를 (뷰포트−배너 점유)로 교정. toc-sidebar·responsive-flow 로컬 45/45 통과
+
 ## 2026-11-02 fix(layout): RR-20 법령 알림 배너 표시 시 뷰포트 오버플로 회귀 수정
 
 - 결함: 전역 공지 배너(#formula-notice-banner) 발화 시 app-container의 height:100dvh가 뷰포트를 넘겨 리더 TOC/본문 하단이 ~35-58px 잘림 — 마지막 목차 항목에 도달 불가 (실사용자 영향)
