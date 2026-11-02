@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261102-1495f37",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정·check] nav 아이콘 고유성 — manual-nav-link 슬롯 예외 [no-test]",
+      "[수정·ui] 실무막뉴얼 내비 아이콘 통일 — fa-book-medical [no-test]",
+      "[정리·release] v20261102-a425654 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-a425654",
     "date": "2026-11-02",
     "notes": [
@@ -182,14 +191,6 @@
     "notes": [
       "[수정·ui] 학습도구 고아 잔재 제거 — 버튼 내용물만 남아 모드 무관 표시",
       "[정리·release] v20261102-27dd053 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-27dd053",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정·ui] DA-20 엄격 분리 — 무클래스 학습 항목·학습도구 탈출 경로 제거",
-      "[정리] build:derived 파생물 반영 — release-notes·version"
     ]
   }
 ]
