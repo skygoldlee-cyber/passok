@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261102-0be9166",
+    "date": "2026-11-02",
+    "notes": [
+      "[수정·carework] 본인부담금 행 비급여 중복 합산 수정",
+      "[정리·release] v20261102-09d0fcb 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261102-09d0fcb",
     "date": "2026-11-02",
     "notes": [
@@ -176,15 +184,6 @@
       "[문서] care_audit_export 키 로드맵·feature-plan 선언",
       "[기능·carework] careAudit 점검표 내보내기 — 복사·인쇄/PDF",
       "[정리·release] v20261102-e3e71de 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-e3e71de",
-    "date": "2026-11-02",
-    "notes": [
-      "[정리] build:derived 파생물 — 아이콘 정본 교체 반영 매니페스트",
-      "[수정·icon] maskable 아이콘 정본 교체 — 풀블리드·별 안전 원 안(451/502px)",
-      "[정리·release] v20261102-a44edcc 스탬프 확정 [no-docs]"
     ]
   }
 ]
