@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 fix(exam-sim)+chore(carework): 통합 모의고사 풀 부족 정합 + uiText.dictionary 정리
+
+- `integratedExam.questionsPerSubject` 선언 배정보다 문제은행 풀이 부족한 시험(carework 40/80·skincare 필기 20/31)에서 무고지 잘림 + 선언 시간 그대로 출제되던 결함 수정 — 과목별 `풀/배정` 안내 토스트(warning) + 실제 출제 수 비례 시간 축소로 문항당 배정 시간 유지 (풀 확충 후 배정만 맞추면 자연 복원)
+- carework `manifest.uiText.dictionary` 제거 — features.dictionary 미선언·`knowledge/` 공란인 사장 선언 (지식DB 활성화 시 재선언 예정)
+- 테스트: study-simulator.dom.test.js에 부족/충족 2케이스 추가 — 토스트 문구·비례 시간·출제 수 단언
+
 ## 2026-11-02 refactor(law): 법령 배너 표시 조건 명문화 — 법령 관련 신규 이벤트 전용
 
 - 배너 표시는 2개 경로로 확정: ① 신규 공포 감지(`isNewerNotice`·docs.newer — 앱 문서가 구 스냅샷인 상태, ⚠) ② 판본 반영(`notice_diff` 미확인 개정이 번들에 반영됨, ℹ) — 둘 다 법령 신규 이벤트의 후속 표시
