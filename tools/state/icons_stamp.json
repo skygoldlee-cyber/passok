@@ -1,9 +1,9 @@
 {
-  "master": "passok-icon-512.png:7001c0ee",
+  "master": "passok-icon-512.png:1790a720",
   "outputs": [
-    "passok-icon-180.png:4497709e",
-    "favicon-32.png:fe518819",
-    "favicon-16.png:eedde02c",
+    "passok-icon-180.png:a6ea1d72",
+    "favicon-32.png:eedbbd7c",
+    "favicon-16.png:84b0ed1a",
     "passok-icon-maskable-512.png:0f859b2e"
   ]
 }
