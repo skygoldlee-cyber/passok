@@ -59,6 +59,27 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careCalcReset();
     });
 
+    it('careCalc — 적용 기준 연도 표기 + 데이터 연도 구버전 시 경고 (고시 연차 갱신)', () => {
+        loadPartial('care-calc.html');
+        initCareCalcView();
+        // 현행 — 적용 연도가 항상 표시되고 경고 없음
+        expect(document.getElementById('care-year-label')?.textContent).toBe('2026');
+        const note = document.getElementById('care-year-note');
+        expect(note?.textContent).toBe('적용 기준: 2026년 고시');
+        expect(note?.classList.contains('care-calc-err')).toBe(false);
+        // 구버전 시뮬레이션 — 데이터 연도 < 현재 연도면 경고 문구·스타일
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date('2027-06-01'));
+        initCareCalcView();
+        expect(note?.textContent).toContain('2027년 고시가 아직 반영되지 않았습니다');
+        expect(note?.classList.contains('care-calc-err')).toBe(true);
+        careCalcRun();
+        const txt = document.querySelector('#care-result')?.textContent || '';
+        expect(txt).toContain('적용 기준');
+        expect(txt).toContain('2026년 고시 기준 — 현재 연도 고시가 아직 반영되지 않았으므로');
+        vi.useRealTimers();
+    });
+
     it('careCalc — 비급여 항목별 합산 + 상급침실료 시설 전용 토글', () => {
         loadPartial('care-calc.html');
         initCareCalcView();

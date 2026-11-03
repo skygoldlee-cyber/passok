@@ -21,6 +21,9 @@ const _selLabel = (id) => {
     return opt ? opt.textContent : '';
 };
 
+/** 공단 책정 기준은 매년 고시 갱신 — 데이터 연도가 현재 연도보다 오래되면 구버전 */
+const rateYearStale = () => new Date().getFullYear() > EFFECTIVE_YEAR;
+
 /** 시설급여 이용액 자동 산정 — 등급별 1일당 수가 × 입소 일수 (고시 정량값) */
 function facilityUse(facTypeKey, gradeKey, days) {
     const f = FACILITY_TYPES.find(x => x.key === facTypeKey);
@@ -66,6 +69,7 @@ export function careCalcRun() {
             .filter(([, v]) => v > 0)
             .map(([k, v]) => [`비급여·${NC_LABELS[k]}`, formatWon(v)]),
         ['본인부담 감경', _selLabel('care-reduction')],
+        ['적용 기준', `${EFFECTIVE_YEAR}년 고시`],
     ];
     // 공단 책정 기준표 — 선택 급여유형의 등급별 고시 금액 (재가=월 한도액, 시설=1일 수가), 선택 등급 강조
     const sel = (k) => k === in_.grade ? ' class="care-doc-sel"' : '';
@@ -97,6 +101,7 @@ export function careCalcRun() {
         + basisHtml
         + `<div class="care-doc-sec">계산 결과</div><table class="care-doc"><tbody>${rows.map(docRow).join('')}</tbody></table>`
         + `<p class="care-calc-src">근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>`
+        + (rateYearStale() ? `<p class="care-calc-err">⚠ ${EFFECTIVE_YEAR}년 고시 기준 — 현재 연도 고시가 아직 반영되지 않았으므로 결과는 참고용입니다.</p>` : '')
         + `<p class="care-doc-disclaimer">※ 계산 결과는 참고용 예상액입니다 — 실제 청구액은 공단 심사·기관 계약에 따라 달라질 수 있습니다.</p>`;
 }
 
@@ -111,6 +116,16 @@ export function careCalcReset() {
 export function careCalcPrint() { careCalcRun(); window.print(); }
 
 export function initCareCalcView() {
+    // 적용 기준 연도 — 공단 고시는 매년 갱신되므로 계산 전 기준 연도를 항상 표시, 미반영 시 경고
+    const yl = $('care-year-label');
+    if (yl) yl.textContent = String(EFFECTIVE_YEAR);
+    const yn = $('care-year-note');
+    if (yn) {
+        yn.textContent = rateYearStale()
+            ? `적용 기준: ${EFFECTIVE_YEAR}년 고시 — ${new Date().getFullYear()}년 고시가 아직 반영되지 않았습니다. 결과는 ${EFFECTIVE_YEAR}년 기준 참고용입니다.`
+            : `적용 기준: ${EFFECTIVE_YEAR}년 고시`;
+        yn.classList.toggle('care-calc-err', rateYearStale());
+    }
     // 등급별 재가 월 한도표 — 당해연도(EFFECTIVE_YEAR) 기준만 표시
     const lt = $('care-limit-table');
     if (lt && !lt.children.length) {

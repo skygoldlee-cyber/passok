@@ -2,9 +2,10 @@
 <section id="care-calc-view" class="view-section" data-feature="careCalc">
     <div class="view-header">
         <h2>장기요양 비용 계산기</h2>
-        <p class="view-subtitle">재가·시설급여 본인부담금 + 비급여 계산 — 등급별 월 한도·감경 적용 (2026년 기준)</p>
+        <p class="view-subtitle">재가·시설급여 본인부담금 + 비급여 계산 — 등급별 월 한도·감경 적용 (<span id="care-year-label">2026</span>년 기준)</p>
     </div>
     <div class="care-calc-form">
+        <p id="care-year-note" class="care-calc-nc-note" role="status">적용 기준: 2026년 고시</p>
         <label>급여 유형
             <select id="care-type"><option value="home">재가급여</option><option value="facility">시설급여</option></select>
         </label>
