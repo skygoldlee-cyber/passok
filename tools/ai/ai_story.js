@@ -97,11 +97,22 @@ function wrapBlock(slotId, body) {
 function parseStoryDrafts() {
     const byExam = new Map(); // examId → Map<subjKey, Map<slotId, block>>
     if (!fs.existsSync(DRAFT_DIR)) return byExam;
-    for (const f of fs.readdirSync(DRAFT_DIR).filter(f => /^story_.+\.md$/.test(f))) {
+    // 초안은 tmp/ai_drafts/<examId>/ 하위에 기록 — 루트 + 1단계 하위까지 스캔
+    const files = [];
+    for (const e of fs.readdirSync(DRAFT_DIR, { withFileTypes: true })) {
+        if (e.isFile() && /^story_.+\.md$/.test(e.name)) files.push(path.join(DRAFT_DIR, e.name));
+        else if (e.isDirectory()) {
+            for (const f2 of fs.readdirSync(path.join(DRAFT_DIR, e.name))) {
+                if (/^story_.+\.md$/.test(f2)) files.push(path.join(DRAFT_DIR, e.name, f2));
+            }
+        }
+    }
+    for (const fp of files) {
+        const f = path.basename(fp);
         const m0 = f.match(/^story_([^_]+)_(.+)\.md$/);
         if (!m0) continue;
         const [, examId, subjKey] = m0;
-        const md = fs.readFileSync(path.join(DRAFT_DIR, f), 'utf-8');
+        const md = fs.readFileSync(fp, 'utf-8');
         const slots = byExam.get(examId) || new Map();
         const map = slots.get(subjKey) || new Map();
         for (const m of md.matchAll(/<!-- @insert slot="(\w[\w-]*)"[^>]*-->([\s\S]*?)<!-- \/\@ -->/g)) {

@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 feat(carework): 1과목 이야기형 학습교재 도입 — 서사 20블록
+
+- carework 표준형 교재에 `story:slot:s01~s20` 배선 + manifest `storyFile` 선언 — build:story로 `1과목_요양보호론_이야기형.md` 생성 (cosmetic 서사 파이프라인과 동일 계약)
+- 등장인물: 김미영(48, 제2커리어 수험생 — 40~50대 독자 동일시) · 박은정 선임(10년차) · 최복순(82, 재가·독거) · 한정수(79, 경도인지장애·부부가구)
+- s01·s02·s14 수작(스타일 앵커·거부 대체), s03~s13·s15~s20 ai:story 초안 → 리뷰 후 --apply 병합 — BP-11 서사-본문 정합 경고 없음
+- fix(ai): `ai_story.js --apply`가 초안을 못 찾던 버그 — 초안이 `tmp/ai_drafts/<examId>/` 하위에 기록되는데 parseStoryDrafts가 루트만 스캔. 1단계 하위 스캔으로 교정 (ai_glossary·ai_stmt_feedback에도 동일 패턴 — 후속 과제)
+
 ## 2026-11-03 fix(build): COMMANDS.md 명령 표기 npm.cmd 정규화 — CI docs:cmdref 실패
 
 - `steps.js`의 `s.bin`이 `win32=npm.cmd` / 그 외=`npm`으로 분기 — Windows에서 생성된 COMMANDS.md를 Linux CI가 재생성하면 전 단계 명령 컬럼이 불일치해 `docs:cmdref` 신선도 게이트가 실패 (배포 체인 CI에서 검출)
