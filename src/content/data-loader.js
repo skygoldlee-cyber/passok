@@ -189,7 +189,10 @@ export const DataLoader = {
         if (!files) {
             throw new Error(`폴백 과목 번들을 찾을 수 없습니다: ${subjectKey}`);
         }
-        return pkDecodeFiles(files);
+        // 디코드 결과를 원본 맵에 덮어캐시 — 재호출(_fallbackSubjectInjected 분기)이
+        // 인코딩 원본(pk1:)을 그대로 반환하던 결함 수정 (이야기형 pk1 노출 사고)
+        window.__STUDY_MD_FILES__[subjectKey] = /** @type {Record<string,string>} */ (pkDecodeFiles(files));
+        return window.__STUDY_MD_FILES__[subjectKey];
     },
 
     /** content/manifest.json 확보 (http: fetch, file://: 폴백 manifest) */
