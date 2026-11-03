@@ -1,7 +1,7 @@
 // src/exams/carework/views/care-finder.js — 요양기관 찾기 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { loadFacilities, searchFacilities } from '../care-finder.js';
-import { setLocalOrgName } from '../facility.js';
+import { setLocalOrgName, getOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 
 const $ = (id) => document.getElementById(id);
@@ -14,10 +14,15 @@ function render() {
     const q = /** @type {HTMLInputElement|null} */ ($('find-q'))?.value || '';
     const region = /** @type {HTMLSelectElement|null} */ ($('find-region'))?.value || '';
     const hits = searchFacilities(_items, { q, region });
+    const cur = getOrgName();
     host.innerHTML = hits.length
-        ? hits.map(f => `<div class="care-log-saved-item">
-            <span><strong>${esc(f.name)}</strong> ${esc(f.region)} · ${esc(f.type || '')}${f.address ? esc(' · ' + f.address) : ''}${f.phone ? esc(' · ' + f.phone) : ''}</span>
-            <button data-click="careFinderUseOrg" data-arg="${esc(f.name)}" class="btn btn-secondary">기관명 설정</button>
+        ? hits.map(f => `<div class="care-finder-item">
+            <strong class="care-finder-name">${esc(f.name)}</strong>
+            <span class="care-finder-meta">${esc(f.region)} · ${esc(f.type || '')}${f.phone ? esc(' · ' + f.phone) : ''}</span>
+            ${f.address ? `<span class="care-finder-addr">${esc(f.address)}</span>` : ''}
+            ${cur === f.name
+                ? '<span class="care-finder-set">✓ 설정됨</span>'
+                : `<button data-click="careFinderUseOrg" data-arg="${esc(f.name)}" class="btn btn-secondary care-finder-btn">이 기관으로 설정</button>`}
           </div>`).join('')
         : '<p class="care-log-empty">검색 결과가 없습니다.</p>';
 }
@@ -28,6 +33,7 @@ export function careFinderUseOrg(name) {
     if (!name) return;
     setLocalOrgName(name);
     showToast(`기관명 "${name}" 설정 — 출력물에 표기됩니다.`);
+    render();
 }
 
 export async function initCareFinderView() {

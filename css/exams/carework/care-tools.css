@@ -221,3 +221,10 @@
 .care-form-table th, .care-form-table td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
 .care-form-table th { background: var(--bg-subtle); }
 .care-forms-period { width: 100%; }
+
+.care-finder-item { display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; }
+.care-finder-name { font-size: 0.95rem; }
+.care-finder-meta { font-size: 0.82rem; color: var(--color-text-sub); }
+.care-finder-addr { font-size: 0.78rem; color: var(--color-text-muted); }
+.care-finder-btn { margin-top: 6px; width: 100%; }
+.care-finder-set { margin-top: 6px; align-self: flex-end; font-size: 0.82rem; font-weight: 600; color: var(--color-success, #2e7d32); }
