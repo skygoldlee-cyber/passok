@@ -1,5 +1,7 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 fix(carework): 서식모음 메뉴 위치 — 기관 그룹 → 실무 그룹(근무표 아래) 이동
+
 ## 2026-11-04 fix(carework): 모바일 탭 순서 — care-forms를 care-finder 뒤로 (사이드바 순서와 일치)
 
 ## 2026-11-04 fix(carework): 서식 뷰 인라인 스타일 규약 위반 — care-forms-period 클래스로 교체
