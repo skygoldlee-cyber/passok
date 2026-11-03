@@ -202,6 +202,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [TESTING.md](dev/reference/TESTING.md) | 테스트 가이드 — 유닛(node:test) + DOM(Vitest/jsdom) 전체 목록·규칙 |
 | [DOM_TEST_DESIGN.md](dev/design/DOM_TEST_DESIGN.md) | DOM 시나리오 테스트 설계 — jsdom 경계, 케이스 유형 매트릭스, Phase 1~6 로드맵 (E2E 포함) |
 | [TOOLS_MAP.md](dev/reference/TOOLS_MAP.md) | 도구 계층 지도 — tools/ 디렉터리별 역할·진입점 3종(스크립트·steps.js·문서 생명줄)·새 게이트 추가 절차·분기 감사 규약 (DOC-REF-17) |
+| [COMMANDS.md](dev/reference/COMMANDS.md) | 명령 카탈로그 — npm 스크립트·검증 단계 전체 표 (⚙️ 생성물: `npm run build:commands`, 정본 package.json·steps.js·도구 헤더) (DOC-REF-19) |
 
 ### 운영·환경
 
@@ -398,6 +399,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-REF-16 | `docs/dev/reference/PROJECT_OVERVIEW.md` |
 | DOC-REF-17 | `docs/dev/reference/TOOLS_MAP.md` |
 | DOC-REF-18 | `docs/dev/reference/CONVENTIONS_CHEATSHEET.md` |
+| DOC-REF-19 | `docs/dev/reference/COMMANDS.md` |
 | DOC-RBK-01 | `docs/dev/runbooks/AUDIO_HOSTING_GUIDE.md` |
 | DOC-RBK-02 | `docs/dev/runbooks/COMBO_GENERATION_GUIDE.md` |
 | DOC-RBK-03 | `docs/dev/runbooks/CONTENT_WORKFLOW.md` |

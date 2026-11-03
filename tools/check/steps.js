@@ -68,6 +68,7 @@ const DOCS_STEPS = [
   nodeStep('docs:webp', 'tools/check/check_webp_only.js', '자산', '배포 이미지 webp 강제 — 서빙 이미지는 .webp만, png/jpg는 마스터(vercelignore)·예외만'),
   nodeStep('docs:navicons', 'tools/check/check_nav_icons.js', '문서', '메뉴 아이콘 고유성 — 사이드바·모바일 탭·설정/도움말 영역 기능별 고유 아이콘 강제'),
   nodeStep('docs:toolslayout', 'tools/check/check_tools_layout.js', '분류', 'tools/ 배치 규약 — 감사 도구 audit_*은 tools/audit/ 전용', { prio: 'p0' }),
+  nodeStep('docs:cmdref', 'tools/build/build_command_reference.js', '문서', 'COMMANDS.md 명령 카탈로그 신선도 (스크립트·단계 변경 시 build:commands 필요)', { args: ['--check'] }),
 ];
 
 // ── 콘텐츠 의존성 단계 (check:content → content 프리셋) ────────────────
@@ -202,6 +203,7 @@ const AUDIT_STEPS = [
 const DERIVED_IDS = new Set([
   'html', 'ci:html', 'landing', 'content:trace', 'ci:trace',
   'content:datafresh', 'content:drillfresh', 'content:docbundles',
+  'docs:cmdref',
 ]);
 // 개별 복구 힌트 — derived 묶음에 속하지 않는 재생성·스탬프 계열
 const REMEDIES = {

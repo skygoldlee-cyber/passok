@@ -18,203 +18,64 @@
 
 > **주의**: Windows PowerShell 환경. `npm`/`npx` 스크립트가 실행 정책으로 차단되므로 `npm.cmd`/`npx.cmd` 사용.
 > **환경 요구사양**(Node/Python 버전, 선택 도구, 최초 설정 절차)은 `docs/dev/reference/DEV_ENVIRONMENT.md` 참조.
+> **전체 명령 카탈로그**: `docs/dev/reference/COMMANDS.md` — npm 스크립트·검증 단계 전체 표 (⚙️ 생성물. 정본: package.json + tools/check/steps.js, 재생성 `npm run build:commands`). 아래는 일상 진입점만 발췌.
 
 ```powershell
 # 테스트
 npm.cmd test                          # 유닛 테스트 (node --test)
 npm.cmd run test:dom                  # DOM 테스트 (Vitest + jsdom)
-npm.cmd run test:e2e                   # E2E 테스트 (Playwright 실브라우저 — 부트스트랩·SW·PWA·네비게이션, serve.js 자동 기동)
-npm.cmd run test:all                   # 전체 테스트 (unit + parser + dom)
+npm.cmd run test:e2e                  # E2E 테스트 (Playwright 실브라우저 — serve.js 자동 기동)
+npm.cmd run test:all                  # 전체 테스트 (unit + parser + dom)
 
-# 빌드
-npm.cmd run build:data                 # content/exams/<id>/*.md → data/exams/<id>/ 번들 생성 (모든 시험 순회)
-npm.cmd run build:derived              # 파생 생성물 일괄 재생성 (build:html + build:data + build:drills + docs_md + build:trace + stats:stamp — Node-only) — 콘텐츠·SPEC·테스트 변경 후 신선도 게이트 복구 명령. 임베딩은 대형 모델 다운로드·연산으로 분리 — `build:derived:full` 또는 `build:embeddings` (stale 시 check:embfresh가 감지)
-node tools/build/build_doc_bundles.js        # docs/user/*.md(앱 공용 매뉴얼) → data/docs_md/ + content/exams/<id>/docs/*.md(시험별 — 학습안내서·실무매뉴얼 등) → {dataRoot}/docs_md/ 번들 (앱 내 문서 갱신 시 필수)
-npm.cmd run build:html                # index.template.html + html/views/*.html → index.html 조립 (뷰 마크업 변경 시 필수)
-npm.cmd run check:html                # index.html이 파셜 조립 결과와 일치하는지 비교 (개행 정규화 — pre-push·CI 게이트)
-npm.cmd run build:landing             # landing.template.html + exams.json + 시험별 landing_demo.json/manifest → landing.html 조립 (LP-02)
-npm.cmd run build:ogimage            # 1200×630 브랜드 OG 카드 → icons/og-image.png (Playwright 렌더, LP-12)
-npm.cmd run check:landing             # landing.html 조립 신선도 (check:fresh·check:all 게이트)
-npm.cmd run check:parser               # 빌드 파서 ↔ 런타임 파서 등가성 검증
-npm.cmd run check:imports              # src/ 내 ES 모듈 import/export 교차 검증
-npm.cmd run check:posind               # 교재 좌표 비의존 게이트 — 위치 좌표(라인·인덱스)를 식별자/영속 키로 쓰는 패턴 차단 (ID-05, check:ci·CI·pre-push 게이트) + 계층 방향 규칙 (코어→views/ 역참조 차단, 셸 명단 SHELL_MODULES)
-npm.cmd run check:contentind           # 로직 콘텐츠 독립 게이트 — 플랫폼·도구 코드의 시험 id·과목 키·시험 경로 리터럴 하드코딩 차단 (DA-15, check:ci·CI·check:all 게이트)
-npm.cmd run stamp:sw                   # sw.js CACHE_VERSION을 커밋 해시로 스탬프
-npm.cmd run notes:draft                # 릴리스 노트 pending 초안 생성 (커밋 subject 기반 → data/release-notes.json 수동 편집 후 배포)
-npm.cmd run verify:assets              # SHELL_ASSETS/DATA_ASSETS 파일 존재 검증
-npm.cmd run check:vendor               # vendor/ 매니페스트(vendor-manifest.json) ↔ 파일 해시·버전 정합 (BP-13 — check:ci·CI·check:all 게이트, --update=해시 재스탬프, -- --latest=레지스트리 최신 비교)
-npm.cmd run sync:vendor                # vendor npm 패키지 갱신 — sync:vendor -- <key>[@버전] (npm pack → syncMap 복사 → 매니페스트 스탬프, fonts 등 versionFree 수동 자산은 거부)
-npm.cmd run build:embeddings           # 문장 임베딩 사전 계산 → {dataRoot}/embeddings/ 정적 번들 (Node-only — @huggingface/transformers + ONNX fp32, 최초 1회 모델 ~470MB 다운로드 — DOC-DSN-18, 의미 유사 진술·이웃 인덱스)
+# 빌드·파생물
+npm.cmd run build:data                # content/exams/<id>/*.md → data/exams/<id>/ 번들 생성 (전 시험 순회)
+npm.cmd run build:derived             # 파생 생성물 일괄 재생성 — 콘텐츠·SPEC·테스트·스크립트 변경 후 신선도 게이트 복구 명령 (임베딩 제외 — build:derived:full)
+npm.cmd run build:html                # index.template.html + html/views·exams → index.html 조립 (뷰 마크업 변경 시 필수)
+npm.cmd run check:html                # index.html 조립 신선도 비교 (pre-push·CI 게이트)
+npm.cmd run build:landing             # landing.template.html + exams.json → landing.html 조립 (LP-02)
+npm.cmd run build:commands            # package.json·steps.js → COMMANDS.md 명령 카탈로그 재생성
 
-npm.cmd run build:story                 # 표준형 + story/*_서사.md 패치 → _이야기형.md 생성 (build:data에 포함, --check=일치 검증 + 서사 커버리지 리포트 — 0블록 패치는 오류, -- --scaffold <subjectKey>=신규 과목 패치 골격)
-#   이야기형 패치 작성법(슬롯 마커·지시어 문법): docs/dev/runbooks/STORY_PATCH_GUIDE.md
-npm.cmd run build:refmap                # TEXTBOOK_REFERENCE_MAPPING.md §2 표를 교재 📌출처 ref_md 링크 실측으로 재생성 (마커 구간만 치환, --check=신선도 — check:fresh 게이트)
-# 콘텐츠 동기화 (build:data에 자동 통합됨)
-npm.cmd run sync:citations              # 문제은행 인용 라인번호 동기화
-node tools/sync/sync_citation_lines.js --check  # 변경사항 확인만 (수정 안 함)
-node tools/sync/sync_textbook_files.js       # 교재/문제은행 파일 ↔ manifest·sw.js MD_ASSETS 구조 동기화 (--check=보고만, --rename <구> <신>=파일명 변경 전파)
+# 콘텐츠 동기화 (교재·문제은행 파일 추가/이름변경/삭제 시 — build:data에 자동 통합)
+node tools/sync/sync_citation_lines.js --check   # 인용 라인번호 동기 상태 확인만
+node tools/sync/sync_textbook_files.js           # 파일 ↔ manifest·sw.js MD_ASSETS 구조 동기화 (--check=보고만, --rename <구> <신>=파일명 변경 전파)
 
 # 로컬 서버 (vercel.json 헤더 미러링 — 프로덕션 CSP·캐시 정책 그대로 적용)
-npm.cmd run serve                      # http://localhost:3000 (index.html·data/ 번들은 git 미추적 — 생성물 없으면 빌드 안내 후 종료)
+npm.cmd run serve                     # http://localhost:3000 (index.html·data/ 번들은 git 미추적 — 생성물 없으면 빌드 안내 후 종료)
 
 # 배포
-npm.cmd run deploy                     # 배포 가드(clean tree + origin/main 동기화 + 파생물 자동 재생성 + 대상 커밋 CI success 확인) → sw/버전 스탬프 → vercel --prod → deploy/<버전> 태그 이력 + 스탬프 확정 커밋(릴리스 기록 보존 — pending 노트 소비·버전 정합)
+npm.cmd run deploy                    # 배포 가드(clean tree + CI success 확인 + 파생물 재생성) → sw/버전 스탬프 → vercel --prod → deploy/<버전> 태그 + 스탬프 확정 커밋
 # ※ 사용자가 "배포"라고 요청하면 이 명령 하나로 전체 단계 수행
 # ※ `vercel --prod` 직접 실행 금지 — 미푸시 커밋/미커밋 변경이 프로덕션에 올라감
 
 # CI 진단·재실행
-npm.cmd run ci:diagnose                # CI 실패 위치 진단 — 커밋의 ci.yml 실패 잡·스텝 나열 (기본 HEAD, 인자 sha 지정 가능 · --specs=실패 e2e 샤드 스펙 목록)
-npm.cmd run ci:retrigger               # CI 플레이크 재실행 — 빈 커밋 push → ci.yml 완료 폴링·결과 보고 (로컬 재현 통과 확인 후 사용 — 동일 스텝 재실패는 회귀로 간주)
+npm.cmd run ci:diagnose               # CI 실패 위치 진단 — 실패 잡·스텝 나열 (기본 HEAD, 인자 sha · --specs=실패 e2e 샤드)
+npm.cmd run ci:watch                  # 최신 CI run 감시 — 실패 잡 로그 출력 (--deploy=통과 시 배포 체인)
+npm.cmd run ci:retrigger              # CI 플레이크 재실행 — 빈 커밋 push → 완료 폴링 (로컬 재현 통과 확인 후 사용)
 # ※ CI 실패 시 절차: ci:diagnose → 실패 스텝 로컬 재현 → 통과하면 ci:retrigger, 실패하면 수정
 # ※ 만성 플레이크 스펙 임시 제외: PW_QUARANTINE="visual.spec" npm run test:e2e (playwright.config.js testIgnore)
 
-# 감사
-npm.cmd run audit:cards                 # 카드 품질 자동 감사 (짧은 설명, 중복, 참조 링크 유효성)
-npm.cmd run sbom                        # SPDX 형식 SBOM 생성 → sbom.spdx.json (CI 아티팩트, gitignore 대상)
-npm.cmd run audit:combo                 # 복수정답형 품질 감사 (정답 유일성·중복 진술집합·모순쌍·위치편향·경로별 통계)
-npm.cmd run audit:study                 # 학습 품질 감사 — 주간 배분·학습 진단 추천 규칙 정합 시나리오 검증 (SQ-01~04, --check=기준선 회귀, --update=기준선 갱신)
-npm.cmd run audit:tools                 # tools/ 사용률 감사 — 진입점→import 그래프 도달 불가 파일(사망 후보)·프리셋 미소속 단계·step_runs.jsonl 미실행 단계 (advisory — check:audit 프리셋, 죽은 게이트 정리용)
-npm.cmd run audit:gates                 # P2 게이트 효용 감사 — step_runs.jsonl 실행·실패 횟수 + tools/state 기준선 git 갱신 이력으로 미발화(silent)·미실행(dormant)·고빈도(noisy) 단계 식별 (advisory — check:audit 프리셋, 분기 리뷰용)
-npm.cmd run audit:syllabus              # 교재 챕터 구조 ↔ 출제기준 문서(ref_md *출제기준*.md) 정합 감사 — 과목별 커버리지·미반영 항목 리포트 (advisory — 표·Q-net 텍스트 형식 파싱)
-npm.cmd run check:adlint                # 광고 문구 사전 커버리지 감사 — 별표5 2항 호별 대표 표현·term 품질·자기 검출 (FO-68)
+# 전체 점검 (단일 진입점 — run.js 실행기 + steps.js 레지스트리 · 비-serial 단계 워커풀 병렬(--jobs N, 기본 3) · --ref로 diffScoped 단계 축소)
+npm.cmd run check:all                 # 저장소 전체 검증 (preset all)
+npm.cmd run check:all:quick           # DOM 테스트 생략 빠른 점검
+npm.cmd run check:all:e2e             # 전체 점검 + E2E 실브라우저 (배포 전 완전 검증 — 시간 소요)
+npm.cmd run check:ci                  # CI 게이트 로컬 재현 (preset ci · `-- --affected`=유닛을 영향 테스트 권장 세트로 치환)
+npm.cmd run check -- --preset <all|ci|content|docs|refs|freshness|audit> [--quick|--content-only|--build]  # 통합 실행기
+npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회 — 출력 [P0|P1|P2]는 우선순위 티어)
+npm.cmd run check:audit               # 감시·감사 묶음 (preset audit — P2 advisory, 실패해도 종료 0·차단 없음)
+npm.cmd run check:onboard             # 시험 팩 온보딩·승격 진단 + 성숙도 티어 게이트 (exams.json tier: draft/pilot/active — 미달 시 차단)
+npm.cmd run check:content             # 콘텐츠 통합 검증 (교재 교체 등 — --build=build:data 선실행 · --quick · --content-only=CI용)
 
-# AI 제작 지원 (초안만 생산 → tmp/ai_drafts/ → 사람 리뷰 후 content/ 편입 — AI_AUTHORING_DESIGN.md, AI-01~23)
-#   키: AI_PROVIDER=openai|anthropic|gemini + AI_API_KEY (또는 공급자별 키) — .env 로컬 전용, --dry-run=무키 검증
-npm.cmd run ai:explain                   # 해설 누락 문항 초안 (정답+인용 근거 컨텍스트)
-npm.cmd run ai:draft                     # 교재 청크 → 문제 초안 (--subject <key> --lines A-B --type choice)
-npm.cmd run ai:distractors               # 단답형 허용 정답 변형·오답 선지 보강 제안
-npm.cmd run ai:dupcheck                  # 초안↔기존 문항 유사도 상한 검사 (--all=기존 상호 감사, --check=게이트)
-npm.cmd run ai:statements                # 복수정답형 진술 반전 변형 + conceptId 재조합 후보
-npm.cmd run ai:tag                       # 태그·난이도·conceptId 자동 제안
-npm.cmd run ai:lint                      # 발문 품질 검수 (이중부정·길이불균형·답노출·인용부재, --check=게이트)
-npm.cmd run ai:coverage                  # 인용 LNN ↔ 교재 커버리지 갭 리포트 (draft 투입 범위 근거)
-npm.cmd run ai:stale                     # ref_md 변경 ↔ 인용 문항 재검증 대기 목록 (--ref <ref>, --llm=영향 판정)
-npm.cmd run ai:apply                     # 리뷰된 해설 초안을 문제은행 정답 블록에 편입 (기본 미리보기, --write=반영)
-npm.cmd run ai:stmtfb                    # combo 진술별 오답 피드백 초안 (기본 거짓 진술, --all=전체). --stats <백업JSON>=오판 통계로 대상 선정(오판수순, --min-wrong N). --apply [--write]=리뷰본을 피드백/stmt_explain.json 정본 편입 → build:drills가 진술 explain 병합
-npm.cmd run ai:textbook                  # ref_md 조문 청크 → 교재 본문 초안 (scaffold:chapter 작성 슬롯 채우기 — 출처/원문 블록은 도구가 결정론 생성, --doc <문서명> --lines A-B)
-npm.cmd run ai:adoption                  # AI 배치 채택률 리포트 — ai_apply --write가 기록한 adoption_log.jsonl의 배치별·누적 채택률·리뷰수정률 (AI-23, 설계 §3.1 L1 승격 판단 데이터)
-npm.cmd run ai:seedcheck                 # 콜드스타트 난이도 시딩 오프라인 검증 — --stats <백업JSON>으로 예측 D(휴리스틱) vs 실측 오답률 단조성 판정, valid 시에만 런타임 시딩 승격 (AI-32)
+# 감사·AI·복구 도구 — 개별 명령은 COMMANDS.md 카탈로그 참조
+#   audit:* (cards·combo·study·tools·gates·syllabus)  # advisory 감사 — tools/audit/
+#   ai:* (18개)  # AI 제작 초안 → tmp/ai_drafts/ → 사람 리뷰 → content/ 편입 (AI_AUTHORING_DESIGN.md)
+#     키: AI_PROVIDER=openai|anthropic|gemini + AI_API_KEY — .env 로컬 전용, --dry-run=무키 검증
+#   fix:·sync:*  # 게이트가 차단한 드리프트의 기계적 복구 — 실패 메시지의 복구 명령을 그대로 실행
 
-# 전체 점검 (단일 진입점 — tools/check/run.js 실행기 + steps.js 단계 레지스트리로 구동
-#   비-serial 단계는 워커풀 병렬 실행(--jobs N, 기본 3 · serial 단계는 배치 사이 단독),
-#   --ref <ref> 지정 시 diffScoped 단계만 ref..HEAD+미커밋 변경 파일 대상으로 축소)
-npm.cmd run check:all                    # 저장소 전체 검증 일괄 실행 (run.js --preset all)
-npm.cmd run check:all:quick              # DOM 테스트 생략 빠른 점검 (= run.js --preset all --quick)
-npm.cmd run check:all:e2e                # 전체 점검 + E2E 실브라우저 (배포 전 완전 검증 — serve 자동 기동, 시간 소요)
-npm.cmd run check:ci                     # CI 게이트 로컬 재현 (= run.js --preset ci — coverage·E2E·audit는 CI 전용). `-- --affected`는 유닛을 영향 테스트 권장 세트로 치환하는 빠른 로컬 재현
-npm.cmd run ci:watch                     # 최신 CI run 감시 — 실패 시 실패 잡 로그 즉시 출력 (--deploy=통과 시 배포 체인)
-npm.cmd run check -- --preset <all|ci|content|docs|refs|freshness|audit> [--quick|--content-only|--build]  # 통합 실행기 직접 호출
-npm.cmd run check -- --step <id>         # 단일 단계만 실행 (예: --step manifest, --list로 id 조회 — 출력의 [P0|P1|P2]는 단계 우선순위 티어)
-npm.cmd run check:audit                  # 감시·감사 묶음 (= run.js --preset audit — P2 단계 advisory 실행, 실패해도 종료 0·차단 없음. 카드/콤보/학습품질·용어집 저신호·refmerge·adlint·lawurls·onboard)
-npm.cmd run check:onboard                # 시험 팩 온보딩·승격 진단 — 시험별 준비도 표 + comingSoon↔콘텐츠 정합·필수 선언 누락·선택 자산 + **성숙도 티어 게이트** (exams.json `tier`: draft=선언만 · pilot=출제기준 문서+`## Chapter NN.` 표준형 챕터 · active=pilot+과목당 ≥20문 — 선언 티어 미달 시 차단, 표 형식 아닌 출제기준은 변환 권장 경고)
-
-# 콘텐츠 통합 검증 (교재 교체 등 대규모 콘텐츠 변경 후)
-npm.cmd run check:content               # 콘텐츠 통합 검증 (= run.js --preset content — 단계 선언은 tools/check/steps.js)
-npm.cmd run check:content -- --build    # build:data 선실행 후 검증 (교재 교체 시 권장)
-npm.cmd run check:content -- --quick    # DOM 테스트 생략
-npm.cmd run check:content -- --content-only  # 콘텐츠 추적 단계만 (CI용 — 파서·임포트·테스트 등 별도 게이트 제외)
-npm.cmd run check:manifest              # manifest 선언 ↔ 파일/과목 자산 정합성 + 미등록 .md 역방향 경고 + study 값 범위·wrongCauses autoPattern 정규식 검증 + 표시 수치 정합 (exams.json desc N과목/N문·exams[].title N제 ↔ 문제은행 ###Q 실측 — 교재 교체 시 stale 문구 차단)
-npm.cmd run check:reflayout             # 참조자료 4계층 정합성 — 전 시험 순회 (PDF 폴더↔ref_md↔references.json↔규칙, 링크 해석 · PDF 미수록 시험은 ref_md 구조·링크만)
-npm.cmd run check:refsubjects           # ref_md 문서의 인용 득표↔과목 귀속 교차 검증
-npm.cmd run check:reffresh              # 참조자료 PDF 해시 ↔ ref_md 신선도 (PDF 교체 감지)
-npm.cmd run check:reflines              # 교재 (LNN)/📌출처 조문 ↔ ref_md 실제 내용 검증
-npm.cmd run check:refs                  # 참조자료 검증 묶음 (= run.js --preset refs — layout·subjects·fresh·lines·merge)
-npm.cmd run check:fresh                 # 생성물 신선도 묶음 (= run.js --preset freshness — html·trace·data·drill·ref·임베딩·문서번들·교재문서)
-npm.cmd run check:numbering             # 교재 십진법 번호체계 — 구식 잔재·연속성·계층·헤더-본문 중복 게이트 (표준↔이야기 동기화 불일치는 경고)
-npm.cmd run check:drillfresh            # 드릴 번들 ↔ 문제은행 번들 신선도 (stale 시 npm run build:drills)
-npm.cmd run check:embfresh              # 임베딩 manifest.inputs(sha1) ↔ 원본 번들 신선도 (stale 시 npm run build:embeddings — SEM-05, features.semantic 시험만)
-npm.cmd run check:answers               # 문제 정답 ↔ 인용 근거 구절 의미적 지지 (내장 인용문→인용 원문 2단계, 정답 미지지 기준선 게이트 — 신규 무근거 인용 차단)
-npm.cmd run fix:quotes                  # 부실 인용문 자동 보강 — 원문이 정답을 지지하는데 내장 구절이 절단된 경우 인용 라인 이후로 확장·블록 내 지지 라인으로 교체 (--check=보고만)
-npm.cmd run fix:citations               # 정답 미지지 문항 인용 위치 자동 교정 — 인용 파일→시험 코퍼스(교재→참조자료) 순으로 실제 지지 위치를 탐색해 링크·인용문 재지정 (--check=보고만, --annotate=미검증 인용에 ⚠️ 마커 표기·해제)
-npm.cmd run check:docbundles           # docs_md 번들 ↔ 원본 문서 신선도 (check:content에 포함)
-npm.cmd run check:textbookdocs         # 교재 갱신 ↔ `판본: textbook` 문서 신선도 — git 이력으로 교재 커밋 이후 미갱신 교재 종속 문서 게이트 (check:docs·check:content에 포함)
-npm.cmd run check:metasections         # 메타 섹션 규약 기준선 — 교재 `##` 헤딩 중 메타 의심 제목이 reader-toc.js 패턴에 미매칭이면 신규 유입 차단 (TS-17, check:content 포함, --update=기준선 갱신)
-npm.cmd run check:glossarysignal       # 용어집 저신호 감시 기준선 — 자동 추출된 2~4자 일반명사 키워드의 통합검색 정의 카드 노출 감시 (BP-14, check:content 포함, --update=검토 후 기준선 갱신)
-npm.cmd run check:datafresh            # data/·생성물 ↔ 원본 신선도 — 빌드 체인 실행 후 git diff 비교·자동 원복 (생성물 경로가 clean이어야 실행 가능)
-npm.cmd run check:docs                  # README·AGENTS·docs/*.md 내 경로 참조 존재 검증 + 문서 ID 누락·중복 검증 + 디렉토리 구조 정합 (check_inventory) + npm 명령 정합 (check_npm_commands) + 플랜 키 정합 (check_plan_features) + 도메인 기능 플래그 정합 (check_feature_flags) + 저장소 접근 탐지 (check_storage_access) + 릴리스 노트 정합 (check_release_notes) + CI 패리티 (check_ci_parity) + 런북 정본 도달 (check_runbook_links)
-npm.cmd run check:navicons              # 메뉴 아이콘 고유성 — 사이드바·모바일 탭·설정/도움말 기능별 고유 아이콘 강제 (CI check:docs 포함)
-npm.cmd run check:webp                  # 배포 이미지 webp 강제 — 서빙 이미지는 .webp만 (png/jpg는 .vercelignore 마스터 또는 icons/tests/vendor 예외만, CI check:docs 포함)
-npm.cmd run check:inventory             # AGENTS.md 디렉토리 구조 트리 ↔ 실제 파일시스템 정합 (전 트리 존재성 + src/ 전수·css 목록 양방향 + N개 개수 표기) + ARCHITECTURE.md box 트리(├──/└──) 존재성
-npm.cmd run check:commands              # 문서의 npm 명령 인용 ↔ package.json 스크립트 양방향 정합
-npm.cmd run check:plan                  # feature-plan.json 키 ↔ 코드 사용(isProFeature·data-pro-feature·proFeatureNotice) ↔ 로드맵 문서 정합
-npm.cmd run check:featflags             # exams.json features 키 ↔ 코드 사용(hasFeature·features.X·data-feature) 양방향 — 미선언 키 사용 = 영구 falsy 죽은 경로로 오류
-npm.cmd run check:storage               # src/ 내 localStorage 직접 접근 탐지 — storage.js 추상화 우회 금지 (부트스크립트·인프라 모듈은 ALLOWED_FILES)
-npm.cmd run check:ciparity              # ci.yml 워크플로 명령 ↔ check:ci 체인 양방향 정합 (비대칭은 CI_ONLY·LOCAL_ONLY 명단에 사유 명시)
-npm.cmd run check:runbooks              # 런북 정본 도달 — docs/dev/runbooks 링크 파일 존재 + #앵커↔헤딩 해석 + WHEN_THINGS_BREAK 증상 행 정본 커버리지 출력 (check:docs 단계)
-npm.cmd run check:secrets               # 추적 파일 시크릿 패턴 스캔 (개인키·service_role·토큰 — 공개키는 ALLOWLIST, pre-commit 게이트)
-npm.cmd run check:env                   # .env 로컬 시크릿 신선도 — 만료 JWT·미선언·빈 키 탐지 (스키마 정본 .env.example, .env 부재 시 스킵 — 로컬 전용, check:ci·check:all 게이트)
-npm.cmd run check:supabase              # Supabase 스키마 적용 상태 — schema.sql 선언 테이블의 프로덕션 존재 프로브 (미적용 시 차단·네트워크 불가 시 경고+통과, check:ci·CI 게이트)
-npm.cmd run check:rls                   # RLS 익명 침투 검증 — 공개 anon 키로 select 유출·insert·타인 user_id 스푸핑·redeem_code RPC 차단 실측 (허용 시 차단·네트워크 불가 시 경고+통과, check:ci·CI 게이트)
-npm.cmd run schema:apply                # schema.sql을 프로덕션에 Management API로 자동 적용 + 검증 (SUPABASE_ACCESS_TOKEN PAT 필요 — scoped: 이 프로젝트 + Database read-write · -- --dry-run=대상 확인만)
-npm.cmd run check:enc                   # U+FFFD 치환 문자 잔존 — 저장 시 이모지 변조 유입 차단 (기준선 단조 감소, --update=잔재 정리 후 하향 — pre-commit·check:docs 게이트)
-npm.cmd run check:orphans               # 미참조 자산(고아 자산) 유입 차단 — 추적 자산 파일의 파일명이 다른 추적 파일에 등장하지 않으면 실패 (_archive/·e2e 스냅샷 규약 제외, 예외는 orphan_assets_baseline.json — pre-commit·check:docs 게이트)
-npm.cmd run check:binary                # 대형·외부화 바이너리 신규 유입 차단 — 참조자료 PDF(외부 호스팅, DOC-RBK-12)·500KB+ 이미지/폰트/미디어 (untracked·--staged·--ref 모드, 예외는 binary_allowlist.json — check:docs 게이트)
-npm.cmd run check:notes                 # release-notes.json 스키마·버전 해시→커밋 해석·최신 항목↔APP_VERSION 정합
-npm.cmd run check:domainmap             # 파일 계층 분류 강제 — src/css/html/data/content/tests 전 파일이 domain-map.json에 선언 필수 (분류 규약: ARCHITECTURE.md "파일 계층 분류")
-npm.cmd run check:uitext                # UI 텍스트 커버리지 — data-uitext↔manifest.uiText 양방향 + platform HTML 시험명 잔존 검사
-npm.cmd run check:mobilesafe            # 모바일 잘림 규약 — role="dialog" 카드의 .dialog-card + 버튼 2+ 나열 행 줄바꿈 정적 검사 (check:ci·CI 게이트, UX-VFY-06)
-npm.cmd run check:escape                # HTML 이스케이프 싱크 규약 — innerHTML/insertAdjacentHTML 직접 대입 템플릿의 미이스케이프 보간 탐지, 기준선 단조 감소 (check:ci·CI 게이트, ROAD-Q5 — 신규 코드는 sanitize.js의 html`` 태그드 템플릿 권장)
-npm.cmd run check:uistyle               # UI 스타일 규약 — 마크업 인라인 style 속성 전면 금지 + JS .style.display 조작·인라인 on* 핸들러·네이티브 alert/confirm/prompt + JS 템플릿 정적 style= 기준선 래칫(display:none 즉시 금지·동적 --var:${x}만 허용) (check:ci·CI 게이트, CODE_CONVENTIONS §4, 명시 면제: 라인에 style-ok 토큰)
-npm.cmd run check:zlayer                # z-index 계층 계약 — 뷰 오버레이 ≤--z-sticky · 앱 크롬 --z-popover 단독(chromePatterns) · takeover ≥--z-drawer · 사이 대역 금지 (check:ci·CI 게이트, UX-SET-06 — 설정 패널 오클루전 재발 차단, 예외는 tools/config/layer_registry.json)
-npm.cmd run check:diffcov               # 변경 라인 차등 커버리지 — git diff 헝크 브랜치 ≥80%·신규 파일 ≥85% (CI 게이트, 커버리지 리포트 부재 시 스킵 — coverage:all 선실행 시 로컬 활성, -- --ref <base>)
-npm.cmd run check:filenames             # 파일명 대소문자 규약 — 영역별 kebab/snake/SCREAMING 패턴, 신규 위반만 차단 (check:ci·CI 게이트, CODE_CONVENTIONS §2.1 — --update=기준선 단조 감소)
-npm.cmd run check:seedkeys              # 테스트 시드 키 스코프 정합 — GLOBAL_KEYS 전환 키의 `examId:` 스코프 시드 차단 (시드 무력화 드리프트, check:docs 단계, 명시 면제: 라인에 seedkey-ok 토큰)
-npm.cmd run check:teststats             # 문서 테스트 수치 ↔ test_stats.json 실측 정합 — README·TESTING의 고정 수치 스테일 차단 (check:docs 단계 — 정적 카운트 드리프트 ±12%·인용 밴드 0.80~1.05×, 갱신은 stats:stamp)
-npm.cmd run stats:stamp                 # 테스트 수치 재스탬프 — unit 실행·vitest list·playwright --list 실측 → test_stats.json + 문서 인용을 `N+` 바닥 표기로 갱신
-npm.cmd run ratchet:coverage            # 병합 커버리지 임계값 래칫 상향 — 실측−0.8%p로 MERGED_THRESHOLDS 인플레이스 갱신 (단조 증가, coverage:all 실행 후 사용 — 주간 coverage-ratchet 워크플로가 상향 여유를 이슈로 알림)
-npm.cmd run coverage:gaps               # 분기 커버리지 하위 파일 리포트 — 유닛+DOM 병합 맵에서 브랜치% 오름차순 순위 (테스트 보강 표적 선정, -- --top N · --dir src/views · --json)
-npm.cmd run scaffold:exam -- <id> --name "시험명"  # 새 시험 스캐폴딩 — exams.json 등록 + manifest/references 골격 + 샘플 교재·문제은행·docs/ 생성 (--dry-run=미리보기, <id> --remove=제거)
-npm.cmd run scaffold:chapter                  # 참조자료→교재 챕터 골격 — --exam <id> --subject N --refs all|doc,... --out 경로 (CS-11 도출 계약 자동 배치, --dry-run=미리보기 — TEXTBOOK_AUTHORING_GUIDE §6)
-npm.cmd run lint                        # ESLint — 에러 0 필수 (--cache 웜 캐시, 기존 경고는 점진 정리 대상)
-npm.cmd run check:types                 # tsc --noEmit (jsconfig checkJs — JSDoc 타입 진단)
-npm.cmd run check:specrefs              # SPEC↔@spec 스테일 참조 + 테스트 갭 기준선(기준선 0 — 신규 갭 즉시 실패)
-npm.cmd run check:perf                  # 성능 예산 — sw.js SHELL_ASSETS 크기 계측 (총량·JS·단일파일·index.html 상한, check:ci/CI 게이트)
-npm.cmd run mutate                      # 변이 테스트 (Stryker, 수동 스팟 체크 — 순수 핵심 모듈 스코프: questions·spaced-repetition·weak-items·statement-tracker)
-npm.cmd run report:errors               # 오류율 리포트 — client_errors 조회 → 오류/세션·일별·상위 메시지 (SUPABASE_SECRET_KEY env 필요, 미설정 시 대시보드용 SQL 출력 · -- --days N · --session <uuid>=bug 신고의 meta.session_id로 해당 페이지 로드 오류+퍼널 이력 조회)
-npm.cmd run report:funnel               # 과업 완주율 + 활성화 퍼널 — usage_events 조회 → quiz/daily start→complete 완주율 + session_start→core_learning_action 세션·설치 전환율 (DOC-DSN-34 §4 P0 KPI · 동일 키 요건 · -- --days N · restGetAll 페이지네이션으로 max-rows 절단 없음)
-npm.cmd run report:feedback             # 피드백 인박스 — feedback 테이블 kind별 건수·평점·일별·최근 본문 (동일 키 요건 · -- --days N · --kind bug · bug의 meta.session_id→report:errors --session 연결, AD-06)
-npm.cmd run report:user                 # 사용자 조회 — npm run report:user -- <email>: GoTrue Admin API 해석 → plan·만료일(D-n/무기한)·사용 코드·sync 메타(payload 미열람)·피드백 이력 (동일 키 요건, AD-06·AD-08)
-npm.cmd run report:pro                  # Pro 현황 리포트 — pro_codes 채널·티어별 발급/사용률·미사용 재고 + pro_expires_at 만료 버킷(D-7 임박·미갱신·활성·무기한) + 가입 수단별 계정 분포 (동일 키 요건, AD-09 · 연장 영업·대사 지표)
-npm.cmd run admin:grant-pro             # Pro 부여/회수 — npm run admin:grant-pro -- <email> [--revoke]: 기본 dry-run, --apply로만 실갱신 (동일 키 요건, AD-06 · 90일 기간권 만료 회수 경로 — DOC-DSN-35 §8)
-npm.cmd run admin:issue-code            # 라이선스 코드 발급 — npm run admin:issue-code -- --channel <채널> [--count N] [--dry-run]: <CHANNEL>-XXXX-XXXX 생성·pro_codes insert (동일 키 요건, PAY-05 · 발급 대장에 입금자↔코드·만료일 수동 기록)
-npm.cmd run admin:discord               # Discord 조회 봇 슬래시 명령 등록 — DISCORD_APP_ID·DISCORD_BOT_TOKEN 필요 (-- --list=등록 상태 조회 · 셋업은 docs/dev/runbooks/DISCORD_ADMIN.md, AD-11)
-npm.cmd run report:dashboard            # 로컬 HTML 운영 대시보드 — 오류율·활성화율(세션/설치)·퍼널·피드백 조감을 단일 HTML로 생성 (동일 키 요건 · -- --days N · --out <path> · 산출물 gitignore — 조회 후 삭제, AD-07)
-npm.cmd run report:glossary             # 용어 후보 추출 리포트 — 참조자료 ref_md + 교재 표준형의 정의 조항·약칭·영문 병기를 스캔해 용어설명집 대비 신규/기존 분류 (BP-14 · 도구 직접 실행 `--apply`=신규 정의→glossary subjectN.json, `--apply-synonyms`=약칭·영문→manifest.synonyms, `--patterns`로 범위 조정)
-npm.cmd run check:docsync               # 소스 변경 시 문서 갱신 강제 — src/tools/tests/설정 변경에 docs/·AGENTS·README 갱신 동반 필수. 우회: SKIP_DOCSYNC=1 (모든 단계) · 커밋 메시지 행 끝의 [no-docs] (pre-push --ref 단계에서만 인식 — 마크된 커밋의 파일만 면제되며 다른 커밋은 계속 검사. pre-commit은 메시지 미존재로 불가)
-npm.cmd run check:testfirst             # 로직(src/*.js·ref-pipeline/*.py) 변경 시 테스트(tests/·ref-pipeline/tests/) 동반 강제 — Docs-First 기계화. 주석·공백 전용 diff는 트리거 면제 (구버전↔신버전 주석 제거 비교 — 코드 주석 처리·문자열 변경은 여전히 트리거). 우회: SKIP_TESTFIRST=1 · 커밋 메시지 행 끝 [no-test] (--ref 모드, 그 커밋만 면제) — 우회 사용은 gate_bypasses.jsonl에 누적, audit:gates가 빈도 보고
-npm.cmd run check:trace                 # TRACE_MATRIX 입력 해시 신선도
-npm.cmd run check:lawurls               # law.go.kr 한글주소 유효성 전수 검증 (law-links.js 매핑 실호출, 오류 페이지 본문 판별)
-npm.cmd run check:linklint              # 렌더 출력 링크 린트 — 콘텐츠 md를 표면별 렌더러(교재→reader-format, 문서·생성 번들→exam-viewer 경로) 통과 후 원시 경로 href·절단 URL·좌표/파일명 라벨·미승인 외부 링크·본문 경로 누출·QA 스탬프 잔존·위험 스킴 탐지 (check:content·check:ci 게이트, LL-01~08)
-node tools/check/impact_tests.js              # 변경 파일 → 영향 요구사항·권장 테스트 (미커밋 변경 자동 분석, --ref <ref>로 diff 분석, --run으로 권장 테스트 실제 실행 — pre-push 게이트)
-npm.cmd run hooks:install               # Git 훅 + merge.stamps 드라이버 활성화 (opt-in, clone마다 1회) — pre-commit: check:types+lint (IDE 오류 시 커밋 차단) / pre-push: tools/check/push_gate.js 적응형 게이트 — 파일 경로 태그(STEP_NEEDS 표)로 필요 단계만 실행, 미분류 파일은 전체 폴백·전체 강제 PUSH_GATE_ALL=1 · 통과 결과 캐시(동일 입력 재실행 생략, --no-cache 우회)·병렬(4)·failFast·diff 스코프 단계는 --ref 대상 (우회 SKIP_PREPUSH=1) / merge.stamps: 배포 스탬프 파일(version.js·sw.js·release-notes.*·package.json) pull 충돌 자동 병합 (.gitattributes merge=stamps → tools/merge/merge_stamps.js — 스탬프 외 양측 변경 시 수동 해결로 폴백)
-npm.cmd run check:hooks                 # 훅 설치 여부 확인 (권고 — 미설치 시 로컬 게이트 우회됨, check:ci 첫 단계)
-npm.cmd run doctor                      # 개발환경 기능별 가용성 진단 — 필수(Node≥24·git·node_modules) vs 선택 도구(playwright·python+pip·ffmpeg·vercel·deno·.env)를 명령 단위로 매핑 리포트 (--json 지원. 필수 미충족만 exit 1 — 루틴 경로 Node-only, 제작 경로만 선택 도구 필요)
-
-# 참조자료 PDF → ref_md 변환 (Python 3 + pdfplumber, 이미지 추출 시 pymupdf 필요)
+# 참조자료 PDF → ref_md 변환·식약처 고시 감지 (ref-pipeline — Python, 별도 작업실)
 # ※ 원본 PDF·교재/*/images/*.png 마스터는 git 추적 해제 — GitHub Releases 에셋 외부 호스팅 (DOC-RBK-12). pdf_hosting.json 선언 시험만 해당
-npm.cmd run fetch:refpdfs               # 외부 호스팅 자산 복원 — pdf_hosting.json 선언 시험의 부재·불일치 PDF(manifests)와 교재 PNG 마스터(masterManifests)를 sha256 검증 다운로드 (선행 조건, --check=상태 보고만, mirrors 폴백 지원)
-npm.cmd run convert:refs                # 참조자료 PDF 전체 → ref_md_v2/ 스테이징 변환 (파일명 필터 인자 가능. PDF 미복원 시 fetch:refpdfs 안내 후 종료)
-npm.cmd run verify:refs                 # ref_md_v2 vs ref_md 골든 비교 (내용 누락 시 exit 1)
-npm.cmd run check:reffresh -- --update  # 승격 완료 후 PDF 해시 매니페스트(pdf_hashes.json) 스탬프
-# ※ PDF 교체/재변환 절차: ⓪ fetch:refpdfs (미복원 시) ① PDF 교체 ② convert:refs ③ verify:refs ④ ref_md_v2 → ref_md/과목N/{문서}/ 수동 승격 ⑤ check:reffresh -- --update
-# ※ 교체된 PDF는 릴리스 에셋에도 올려야 다른 머신이 같은 원본을 받는다 (해시 불일치로 감지됨)
-# ※ ref_md는 `#L####` 라인 인용이 의존하므로 항상 시각적 줄 그대로(segment=False) 변환 — 엔진의 --no-segment 상당
-
-# 식약처 고시 감지 (참조 법령·고시 다문서 추적 — references.json referenceLaw에서 자동 유도)
-python ref-pipeline/check_mfds_notice.py --update   # 키: LAW_OC_KEY — 루트 .env 또는 환경변수 (gitignore 대상)
-# ※ 대상 시험 해석(--exam > EXAM_CONTENT_ROOT > EXAM_ID > exams.json default)은 _exam_root.py 공용.
-#   baseline↔latest 비교를 notice_status.json docs[]에 기록 — 신규 고시 시 Actions 이슈 생성 +
-#   check_law_urls.js 검증. currentUrl=현행본 시리얼 URL — 앱이 ↗원문 링크 보정+'⏳ 시행 예정 개정본'
-#   배지 표시(markStaleRefLinks). 앱은 Formula OS 배너 + 허브 '식약처 고시 확인' 버튼으로 실시간 조회.
-npm.cmd run build:noticediff           # ref_md 현행본 ↔ _archive 구본 조문 단위 diff → data/exams/<id>/notice_diff.json
-#   (build:data 체인에 포함 — 신설·개정·삭제 조문을 개정 배너 + '고시 정보 보기' 패널에 표시)
-
-# 개정 원문 자동 확보 — 감지 다음 단계 (check_mfds_notice의 신규 판정분을 대상으로)
-python ref-pipeline/fetch_revision.py [--doc <이름>] [--apply]
-#   고시(admrul): 전문 PDF 자동 다운로드 + .src.json 출처 병기. --apply: 구본 _archive 이동·references.json 치환
-#   법령(target=law): DRF 파일 미제공 — 다운로드 페이지 URL·파일명·요지 안내만. 이후 승격 절차는 위와 동일
-# ※ Actions 크론은 선택(Settings→Secrets LAW_OC_KEY) — 미등록 시 앱 내 실시간 버튼이 커버.
-#   대조 절차: docs/exams/cosmetic/ingredients_audit_제2026-19호.md
+# ※ PDF 교체/재변환 절차: ⓪ fetch:refpdfs(미복원 시) ① PDF 교체 ② convert:refs ③ verify:refs ④ ref_md_v2 → ref_md/과목N/{문서}/ 승격 ⑤ check:reffresh -- --update — 교체 PDF는 릴리스 에셋에도 업로드 (해시로 감지)
+# ※ ref_md는 `#L####` 라인 인용이 의존 — 항상 시각적 줄 그대로(segment=False) 변환. 대상 시험 해석(--exam > EXAM_CONTENT_ROOT > EXAM_ID > exams.json default)은 _exam_root.py 공용
+# ※ 고시 감지 크론은 선택(Settings→Secrets LAW_OC_KEY) — 개정 원문 자동 확보·대조 절차 상세는 COMMANDS.md convert/fetch 그룹 + docs/dev/runbooks/
 ```
 
 ## 디렉토리 구조

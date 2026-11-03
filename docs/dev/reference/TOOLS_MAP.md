@@ -11,7 +11,7 @@
 
 | 디렉터리 | 규모 | 역할 | 대표 진입점 |
 |---|---|---|---|
-| `tools/check/` | ~87파일 | 검증 게이트(`check_*`) + 감시 감사(`audit_*`) + 실행기(`run.js`)·단계 레지스트리(`steps.js`) | `npm.cmd run check -- --preset <이름>` |
+| `tools/check/` | ~82파일 | 검증 게이트(`check_*`) + 실행기(`run.js`)·단계 레지스트리(`steps.js`) — 감사는 audit/로 분리 (`check_tools_layout` 규약) | `npm.cmd run check -- --preset <이름>` |
 | `tools/build/` | ~40파일 | 콘텐츠→데이터 번들 생성 (`content/` → `data/`), index.html·landing 조립, 임베딩 | `npm.cmd run build:data` · `build:derived` |
 | `tools/sync/` | ~8파일 | 드리프트 복구 도구 — 게이트가 차단한 어긋남을 기계적으로 되맞춤 | 실패 메시지의 복구 명령을 수동 실행 |
 | `tools/ai/` | ~19파일 | AI 제작 파이프라인 — 초안만 생산(`tmp/ai_drafts/`) → 사람 리뷰 → `ai:apply` 편입 | `npm.cmd run ai:explain` 등 ai:* 스크립트 (AI_API_KEY 필요) |
@@ -23,7 +23,7 @@
 | `tools/supabase/` | SQL+TS | 스키마·Edge Functions (Deno 런타임) | `tools/supabase/apply_schema.js` |
 | `tools/market/` | 1파일 | 외부 통계 수집 (큐넷 합격률, Python) | 수동 |
 | `tools/merge/` | 1파일 | 스탬프 병합 보조 | 수동 |
-| `tools/audit/` | 1파일 | 감사 보조 스크립트 | 수동 |
+| `tools/audit/` | 6파일 | 감사 도구(`audit_*` — advisory 리포트·기준선 감사) | `audit:<이름>` 스크립트 · `check:audit` 프리셋 |
 
 ※ `ref-pipeline/`은 tools/ 밖의 별도 작업실 — PDF→ref_md 변환·오디오북·법령 감시 (Python 중심).
 

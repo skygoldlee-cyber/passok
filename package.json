@@ -18,7 +18,7 @@
     "build:audio-manifest": "node tools/build/build_audio_manifest.js",
     "sync:citations": "node tools/sync/sync_citation_lines.js",
     "postbuild:data": "npm run check:parser",
-    "build:derived": "npm run build:html && npm run build:landing && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js && npm run build:trace && npm run stats:stamp",
+    "build:derived": "npm run build:html && npm run build:landing && npm run build:data && npm run build:drills && node tools/build/build_doc_bundles.js && npm run build:trace && npm run stats:stamp && npm run build:commands",
     "build:derived:full": "npm run build:derived && npm run build:embeddings",
     "check:parser": "node tools/check/check_parser_parity.js",
     "check:imports": "node tools/check/check_imports.js",
@@ -168,7 +168,8 @@
     "check:filenames": "node tools/check/check_filenames.js",
     "build:ogimage": "node tools/build/build_og_image.js",
     "build:icons": "node tools/build/build_icons.js",
-    "check:icons": "node tools/build/build_icons.js --check"
+    "check:icons": "node tools/build/build_icons.js --check",
+    "build:commands": "node tools/build/build_command_reference.js"
   },
   "keywords": [
     "cosmetics",
