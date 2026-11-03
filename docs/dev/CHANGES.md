@@ -4,7 +4,7 @@
 
 - `careFinder` — 공공데이터 장기요양기관 목록(`실무/facilities.json`) 시설명·주소·전화번호 키워드 + 지역 필터 검색
 - "기관명 설정" → `setLocalOrgName` — 출력물 기관명 표기(6e)·기관 가입 흐름과 연결
-- 실데이터: 대전 115건 (공공데이터 CSV, `실무/facilities_대전_20251231.csv`) + 세종 54건 (sejong.go.kr XLS→CSV 변환) — 충남 351건도 동일 절차로 추가 예정
+- 실데이터: 대전 115건·충남 351건·세종 54건 + 시드 3건 = 총 523건 5개 지역 (공공데이터 CSV → `tools/import/import_facilities.js` 임포트, `실무/facilities_*_*.csv` 원본 보존)
 
 ## 2026-11-03 feat(carework): 입소 서류 체크리스트 (DSN-43 6f)
 
