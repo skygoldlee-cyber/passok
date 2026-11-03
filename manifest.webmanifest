@@ -16,19 +16,19 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icons/passok-icon-192.png?v=d8a1ffae",
+      "src": "icons/passok-icon-192.png?v=1d675fa4",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/passok-icon-512.png?v=26435fdc",
+      "src": "icons/passok-icon-512.png?v=8893eeae",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/passok-icon-maskable-512.png?v=354ece0e",
+      "src": "icons/passok-icon-maskable-512.png?v=5e6e936a",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
