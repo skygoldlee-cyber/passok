@@ -399,6 +399,39 @@ const careHandover = {
         }
     },
 };
+const careVisit = {
+    viewId: 'care-visit-view',
+    slug: 'care-visit',
+    uiTextKey: 'careVisit',
+    title: '면회·방문 기록',
+    subtitle: '방문 예약·결과 기록 도구',
+    loadingText: '방문 기록을 불러오는 중입니다...',
+    loadErrorText: '방문 기록을 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-visit.html',
+    styles: 'care-tools.css',
+    loaders: { main: _domainImport('views/care-visit.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['careVisitAdd', 'careVisitResultOpen', 'careVisitResultSave', 'careVisitResultClose', 'careVisitCancel', 'careVisitDelete', 'careVisitExport', 'careVisitPrint', 'careVisitFacilitySubmit']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careVisit.loadingText);
+        try {
+            await ensureViewMarkup(careVisit);
+            if (stale()) return;
+            const m = await careVisit.loaders.main();
+            if (stale()) return;
+            m.initCareVisitView();
+        } catch (e) {
+            if (!stale()) showToast(careVisit.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
 const careFacilityJoin = {
     viewId: 'facility-join-view',
     slug: 'facility-join',
@@ -467,7 +500,7 @@ const careFacilityAdmin = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit, careHandover, careFacilityJoin, careFacilityAdmin };
+const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit, careHandover, careVisit, careFacilityJoin, careFacilityAdmin };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {

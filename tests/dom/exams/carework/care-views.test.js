@@ -29,6 +29,9 @@ vi.mock('../../../../src/exams/carework/facility.js', async (importOriginal) => 
     listHandovers: vi.fn(() => Promise.resolve([])),
     submitHandover: vi.fn(() => Promise.resolve({})),
     ackHandover: vi.fn(() => Promise.resolve({})),
+    submitVisit: vi.fn(() => Promise.resolve({})),
+    listVisits: vi.fn(() => Promise.resolve([])),
+    updateVisitResult: vi.fn(() => Promise.resolve({})),
 }));
 
 import { careCalcRun, careCalcReset, initCareCalcView } from '../../../../src/exams/carework/views/care-calc.js';
@@ -38,7 +41,8 @@ import { careFacilityHandoverSubmit, careHandoverAck } from '../../../../src/exa
 import { careAuditReset, careAuditCopy, careAuditPrint, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
 import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
-import { syncFacilityNav, myMembership, listHandovers } from '../../../../src/exams/carework/facility.js';
+import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
+import { syncFacilityNav, myMembership, listHandovers, listVisits as listFacilityVisits } from '../../../../src/exams/carework/facility.js';
 import { ManualViewer } from '../../../../src/reader/manual-viewer.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
@@ -216,6 +220,45 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.getElementById('ho-saved')?.textContent).toMatch(/김○○/);
         careHandoverCopy();
         careHandoverShare(); // 저장 후 — 공유 진행
+    });
+
+    it('careVisit — 예약 등록 → 결과 기록 → 완료 목록 상태 전이 (DSN-43 6c)', async () => {
+        loadPartial('care-visit.html');
+        initCareVisitView();
+        document.getElementById('vis-date').value = '2026-11-05';
+        document.getElementById('vis-time').value = '14:00';
+        document.getElementById('vis-client').value = '김○○';
+        document.getElementById('vis-visitor').value = '홍○○';
+        careVisitAdd();
+        const sched = document.getElementById('vis-scheduled');
+        expect(sched.textContent).toContain('김○○');
+        expect(sched.textContent).toContain('홍○○');
+        // 결과 기록 패널 — loc: 접두 data-arg로 대상 지정 후 저장
+        const arg = sched.querySelector('[data-arg^="loc:"]')?.dataset.arg;
+        careVisitResultOpen(arg);
+        expect(document.getElementById('vis-result-panel').classList.contains('is-hidden')).toBe(false);
+        document.getElementById('vis-result-date').value = '2026-11-05';
+        document.getElementById('vis-result-summary').value = '면회 30분 — 상태 양호';
+        await careVisitResultSave();
+        expect(document.getElementById('vis-done').textContent).toContain('면회 30분');
+        expect(document.getElementById('vis-scheduled').textContent).toContain('등록된 방문예약이 없습니다');
+        careVisitDelete(document.querySelector('#vis-done [data-arg]')?.dataset.arg);
+    });
+
+    it('careVisit — 기관 면회 대장 렌더: 예정 항목만 결과 기록 버튼 노출 (DSN-43 6c)', async () => {
+        vi.mocked(myMembership).mockResolvedValueOnce({ facilities: { id: 'f1', name: '행복요양원' } });
+        vi.mocked(listFacilityVisits).mockResolvedValueOnce([
+            { id: 'v1', visit_date: '2026-11-05', visit_time: '14:00', client: '김○○', visitor_name: '홍○○', status: 'scheduled' },
+            { id: 'v2', visit_date: '2026-11-03', client: '이○○', visitor_name: '박○○', status: 'done', result: { summary: '면회 완료' } },
+        ]);
+        loadPartial('care-visit.html');
+        initCareVisitView();
+        await new Promise(r => setTimeout(r, 0));
+        const host = document.getElementById('vis-facility');
+        expect(host.textContent).toContain('행복요양원');
+        expect(host.textContent).toContain('홍○○');
+        expect(host.innerHTML).toContain('fac:v1');
+        expect(host.innerHTML).not.toContain('fac:v2'); // 완료 건은 결과 기록 버튼 없음
     });
 
     // @spec DA-18 — 권한 뷰 분리: facility-join은 클라이언트 뷰로 비로그인/비권한 시 안내만 표시

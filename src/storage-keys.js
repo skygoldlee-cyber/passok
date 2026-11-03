@@ -132,6 +132,7 @@ export const STORAGE_KEYS = {
   ADVERSE_ITEMS: 'formula_adverse_items',
   CARE_LOG_ITEMS: 'carework_care_logs',
   HANDOVER_ITEMS: 'carework_handovers',
+  CARE_VISIT_ITEMS: 'carework_visits',
 
   // Formula OS — 종합 보고서 출력 이력 (FO-63) — 최근 20건
   // [{at, bizId, bizLabel, setLabel, done, total, sections, id, hash, fresh}]
@@ -237,6 +238,7 @@ export const BACKUP_KEYS = [
   STORAGE_KEYS.FORMULA_LABEL_DRAFT, // 표시사항 검토 폼 — 작업 데이터 (FO-35)
   STORAGE_KEYS.CARE_LOG_ITEMS,    // 요양일지 — 백업·동기화 대상 (DOC-DSN-42)
   STORAGE_KEYS.HANDOVER_ITEMS,    // 인수인계 기록 — 백업·동기화 대상 (DOC-DSN-42)
+  STORAGE_KEYS.CARE_VISIT_ITEMS,  // 면회·방문 기록 — 백업·동기화 대상 (DOC-DSN-43)
   STORAGE_KEYS.PRODUCT_ITEMS,     // 기성품 전성분 DB — 백업·동기 대상 (FO-37)
   STORAGE_KEYS.FORMULA_GEMINI_MODEL, // 사진 인식 모델명 설정 — 환경설정 (FO-46)
   STORAGE_KEYS.FORMULA_VISION_HIRES, // 사진 고해상도 모드 — 환경설정 (FO-54)

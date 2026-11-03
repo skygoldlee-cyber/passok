@@ -97,3 +97,38 @@ export async function ackHandover(handoverId) {
     if (error) return { error: error.message };
     return { ok: true };
 }
+
+// — DSN-43 6c: 면회·방문 기록 —
+
+/** 면회 방문예약 등록 — 기관 면회 대장에 예약(scheduled) 상태로 공유 @returns {Promise<{id:string}|{error:string}>} */
+export async function submitVisit({ facilityId, client, visitor, relation, visitDate, visitTime, purpose }) {
+    const sb = await getSupabase();
+    const { data, error } = await sb
+        .from('family_visits')
+        .insert({ facility_id: facilityId, client, visitor_name: visitor, relation, visit_date: visitDate, visit_time: visitTime || null, purpose })
+        .select('id')
+        .single();
+    if (error) return { error: error.message };
+    return { id: data.id };
+}
+
+/** 시설 면회 대장 목록 @returns {Promise<Array>} */
+export async function listVisits(facilityId, { limit = 20 } = {}) {
+    const sb = await getSupabase();
+    const { data, error } = await sb
+        .from('family_visits')
+        .select('id,client,visitor_name,relation,visit_date,visit_time,purpose,status,result,created_at,author_id')
+        .eq('facility_id', facilityId)
+        .order('visit_date', { ascending: false })
+        .limit(limit);
+    if (error) throw new Error(`family_visits: ${error.message}`);
+    return data || [];
+}
+
+/** 방문 결과·상태 갱신 — 같은 시설 멤버면 기록 가능 (응대 근무자 ≠ 예약 등록자) @returns {Promise<{ok?:boolean,error?:string}>} */
+export async function updateVisitResult(visitId, patch) {
+    const sb = await getSupabase();
+    const { error } = await sb.from('family_visits').update(patch).eq('id', visitId);
+    if (error) return { error: error.message };
+    return { ok: true };
+}

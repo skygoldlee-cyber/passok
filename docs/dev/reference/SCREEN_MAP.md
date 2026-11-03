@@ -23,6 +23,7 @@
 | 오답 및 중요 복습 | `review-view` | review.html | `#/review` | 사이드바 / 더보기 시트 | §3.20 (`RV-01~04`) | 학습 전용 |
 | 실전 모의고사 | `exam-view` | exam.html | `#/exam` | 사이드바 / 더보기 시트 | §3.4·§3.14 | 학습 전용 |
 | Formula OS | `formula-view` | formula.html | `#/formula` | 사이드바 / 탭바 (실무 랜딩) | §3.18 | 실무 (학습 모드에서도 노출) |
+| 면회·방문 기록 (Care OS) | `care-visit-view` | exams/carework/care-visit.html (지연 주입) | `#/care-visit` | 사이드바 / 탭바 (`data-feature="careVisit"`) | — | 실무 |
 | 교재리더 | `textbook-reader-view` | textbook-reader.html | `#/reader` | 사이드바 / 더보기 시트 | §3.5~3.8 | 학습 전용 |
 | 교재검색 | `textbook-view` | textbook.html | `#/textbook` | 사이드바 / 더보기 시트 | §3.9 | 학습 전용 |
 | 사전 | `dictionary-view` | dictionary.html | `#/ingredients` | 사이드바 / 탭바 | §3.10 | 공통 (`data-feature="dictionary"`) |

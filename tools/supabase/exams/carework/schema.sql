@@ -146,3 +146,40 @@ create policy "ack member write" on public.handover_acks for insert
     and exists (select 1 from public.shift_handovers h
                 where h.id = handover_id and h.author_id <> auth.uid())
   );
+
+-- DSN-43 6c — 면회·방문 기록: family_visits
+-- 가족·친지 방문 예약과 방문 결과를 기관 단위로 공유하는 면회 대장.
+-- 예약(scheduled) → 방문완료(done: result jsonb)/취소(canceled) 상태 전이.
+
+create table if not exists public.family_visits (
+  id uuid primary key default gen_random_uuid(),
+  facility_id uuid not null references public.facilities(id) on delete cascade,
+  author_id uuid not null references auth.users(id),       -- 예약 등록자
+  client text not null,                                   -- 대상자 식별 (최소 단위)
+  visitor_name text not null,                             -- 방문객 성명
+  relation text not null default '',                      -- 대상자와의 관계 (배우자·자녀 등)
+  visit_date date not null,                               -- 방문 예정일
+  visit_time text,                                        -- 예정 시간 (선택)
+  purpose text not null default '',                       -- 목적·요청사항
+  status text not null default 'scheduled'
+    check (status in ('scheduled','done','canceled')),
+  result jsonb,                                           -- {date,time,summary} 방문 결과
+  created_at timestamptz not null default now()
+);
+
+alter table public.family_visits enable row level security;
+
+-- family_visits: 같은 시설 멤버만 열람·등록 (익명·비멤버 차단)
+drop policy if exists "visit member read" on public.family_visits;
+create policy "visit member read" on public.family_visits for select
+  using (public.is_facility_member(facility_id, auth.uid()));
+
+drop policy if exists "visit member write" on public.family_visits;
+create policy "visit member write" on public.family_visits for insert
+  with check (public.is_facility_member(facility_id, auth.uid()) and author_id = auth.uid());
+
+-- 결과 기록·취소는 시설 멤버 전원 허용 — 방문 응대 근무자가 예약 등록자와
+-- 다를 수 있어 update를 멤버로 개방 (인수인계와 달리 상태 전이 테이블)
+drop policy if exists "visit member update" on public.family_visits;
+create policy "visit member update" on public.family_visits for update
+  using (public.is_facility_member(facility_id, auth.uid()));

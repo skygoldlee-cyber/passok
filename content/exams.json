@@ -615,6 +615,7 @@
         "careLog": true,
         "careAudit": true,
         "careHandover": true,
+        "careVisit": true,
         "careFacilityJoin": true,
         "careFacilityAdmin": true,
         "practiceManual": true
