@@ -17,7 +17,7 @@ export function listVisits() {
 }
 
 /**
- * @param {{date:string,time?:string,client:string,visitor:string,relation?:string,purpose?:string}} entry
+ * @param {{date:string,time?:string,client:string,visitor:string,phone?:string,relation?:string,purpose?:string}} entry
  * @returns {{ok:boolean, error?:string, id?:string}}
  */
 export function addVisit(entry) {

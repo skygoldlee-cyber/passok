@@ -18,7 +18,7 @@ export function relationLabel(key) {
 
 /**
  * 방문 기록 1건 → 면회 기록 문서 텍스트
- * @param {{date:string,time?:string,client:string,visitor:string,relation?:string,purpose?:string,status:string,result?:{date?:string,time?:string,summary?:string}|null}} v
+ * @param {{date:string,time?:string,client:string,visitor:string,phone?:string,relation?:string,purpose?:string,status:string,result?:{date?:string,time?:string,summary?:string}|null}} v
  */
 export function buildVisitText(v) {
     if (!v || !v.client || !v.visitor || !v.date) return '';
@@ -26,6 +26,7 @@ export function buildVisitText(v) {
     const lines = [
         `대상자: ${v.client}`,
         `방문객: ${v.visitor}${rel ? ` (${rel})` : ''}`,
+        v.phone ? `연락처: ${v.phone}` : '',
         `방문 예정: ${v.date}${v.time ? ' ' + v.time : ''}`,
         v.purpose ? `목적·요청사항: ${v.purpose}` : '',
         `상태: ${VISIT_STATUS[v.status] || v.status}`,

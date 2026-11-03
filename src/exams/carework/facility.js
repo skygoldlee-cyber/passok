@@ -101,11 +101,11 @@ export async function ackHandover(handoverId) {
 // — DSN-43 6c: 면회·방문 기록 —
 
 /** 면회 방문예약 등록 — 기관 면회 대장에 예약(scheduled) 상태로 공유 @returns {Promise<{id:string}|{error:string}>} */
-export async function submitVisit({ facilityId, client, visitor, relation, visitDate, visitTime, purpose }) {
+export async function submitVisit({ facilityId, client, visitor, phone, relation, visitDate, visitTime, purpose }) {
     const sb = await getSupabase();
     const { data, error } = await sb
         .from('family_visits')
-        .insert({ facility_id: facilityId, client, visitor_name: visitor, relation, visit_date: visitDate, visit_time: visitTime || null, purpose })
+        .insert({ facility_id: facilityId, client, visitor_name: visitor, visitor_phone: phone || null, relation, visit_date: visitDate, visit_time: visitTime || null, purpose })
         .select('id')
         .single();
     if (error) return { error: error.message };
@@ -117,7 +117,7 @@ export async function listVisits(facilityId, { limit = 20 } = {}) {
     const sb = await getSupabase();
     const { data, error } = await sb
         .from('family_visits')
-        .select('id,client,visitor_name,relation,visit_date,visit_time,purpose,status,result,created_at,author_id')
+        .select('id,client,visitor_name,visitor_phone,relation,visit_date,visit_time,purpose,status,result,created_at,author_id')
         .eq('facility_id', facilityId)
         .order('visit_date', { ascending: false })
         .limit(limit);

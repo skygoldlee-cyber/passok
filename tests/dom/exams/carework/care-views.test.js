@@ -229,10 +229,12 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('vis-time').value = '14:00';
         document.getElementById('vis-client').value = '김○○';
         document.getElementById('vis-visitor').value = '홍○○';
+        document.getElementById('vis-phone').value = '010-1234-5678';
         careVisitAdd();
         const sched = document.getElementById('vis-scheduled');
         expect(sched.textContent).toContain('김○○');
         expect(sched.textContent).toContain('홍○○');
+        expect(sched.textContent).toContain('010-1234-5678');
         // 결과 기록 패널 — loc: 접두 data-arg로 대상 지정 후 저장
         const arg = sched.querySelector('[data-arg^="loc:"]')?.dataset.arg;
         careVisitResultOpen(arg);
@@ -250,7 +252,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
     it('careVisit — 기관 면회 대장 렌더: 예정 항목만 결과 기록 버튼 노출 (DSN-43 6c)', async () => {
         vi.mocked(myMembership).mockResolvedValueOnce({ facilities: { id: 'f1', name: '행복요양원' } });
         vi.mocked(listFacilityVisits).mockResolvedValueOnce([
-            { id: 'v1', visit_date: '2026-11-05', visit_time: '14:00', client: '김○○', visitor_name: '홍○○', status: 'scheduled' },
+            { id: 'v1', visit_date: '2026-11-05', visit_time: '14:00', client: '김○○', visitor_name: '홍○○', visitor_phone: '010-1111-2222', status: 'scheduled' },
             { id: 'v2', visit_date: '2026-11-03', client: '이○○', visitor_name: '박○○', status: 'done', result: { summary: '면회 완료' } },
         ]);
         loadPartial('care-visit.html');
@@ -259,6 +261,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const host = document.getElementById('vis-facility');
         expect(host.textContent).toContain('행복요양원');
         expect(host.textContent).toContain('홍○○');
+        expect(host.textContent).toContain('010-1111-2222');
         expect(host.innerHTML).toContain('fac:v1');
         expect(host.innerHTML).not.toContain('fac:v2'); // 완료 건은 결과 기록 버튼 없음
     });

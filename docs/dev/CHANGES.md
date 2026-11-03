@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 feat(carework): 면회·방문 기록 — 방문객 연락처 필드
+
+- 예약 폼 `vis-phone`(tel) 추가 → 로컬 기록·면회 문서 텍스트·예정 목록 표기·기관 공유(`family_visits.visitor_phone`) 전 구간 연결
+- 스키마: `add column if not exists visitor_phone` — create table if not exists는 기존 테이블 갱신을 못하므로 컬럼 추가는 alter로 별도 선언 (재실행 안전)
+- 기관 면회 대장 목록에도 연락처 병기 — select 컬럼 추가
+
 ## 2026-11-03 fix(carework): 면회·방문 기록 인쇄 백지 — #vis-preview 허용 목록 누락
 
 - 신규 뷰의 출력물 `#vis-preview`가 care-tools.css @media print 허용 목록 3곳(visible 예외·형제 display:none 제외·일반흐름 유지)에 누락 — `body.ui-mode-practice *{hidden}`이 전부 가려 백지 출력

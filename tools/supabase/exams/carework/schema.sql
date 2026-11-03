@@ -155,6 +155,7 @@ create table if not exists public.family_visits (
   author_id uuid not null references auth.users(id),       -- 예약 등록자
   client text not null,                                   -- 대상자 식별 (최소 단위)
   visitor_name text not null,                             -- 방문객 성명
+  visitor_phone text,                                     -- 방문객 연락처 (선택)
   relation text not null default '',                      -- 대상자와의 관계 (배우자·자녀 등)
   visit_date date not null,                               -- 방문 예정일
   visit_time text,                                        -- 예정 시간 (선택)
@@ -166,6 +167,10 @@ create table if not exists public.family_visits (
 );
 
 alter table public.family_visits enable row level security;
+
+-- 컬럼 추가 — create table if not exists는 기존 테이블을 갱신하지 않으므로
+-- 신규 컬럼은 add column if not exists로 별도 선언한다 (재실행 안전)
+alter table public.family_visits add column if not exists visitor_phone text;
 
 -- family_visits: 같은 시설 멤버만 열람·등록 (익명·비멤버 차단)
 drop policy if exists "visit member read" on public.family_visits;
