@@ -28,7 +28,10 @@ function parseCsvLine(line) {
 
 const raw = readFileSync(file, 'utf8').replace(/^﻿/, '');
 const lines = raw.split(/\r?\n/).filter(l => l.trim());
-const header = parseCsvLine(lines[0]).map(h => h.trim());
+// 헤더 행 탐색 — 첫 행에 출처·메타 행이 있을 수 있으므로 시설명 컬럼이 보이는 행을 헤더로 인식
+let hi = 0;
+while (hi < lines.length && !parseCsvLine(lines[hi]).some(h => ['시설명', '상호', '기관명'].includes(h.trim()))) hi++;
+const header = parseCsvLine(lines[hi]).map(h => h.trim());
 const idx = (names) => header.findIndex(h => names.includes(h));
 const ci = {
     sido: idx(['시도명', '시도']),
@@ -41,7 +44,7 @@ const ci = {
 if (ci.name < 0) { console.error('시설명 컬럼을 찾지 못함 — 헤더:', header.join(',')); process.exit(1); }
 
 const items = [];
-for (const line of lines.slice(1)) {
+for (const line of lines.slice(hi + 1)) {
     const c = parseCsvLine(line).map(s => s.trim());
     const region = regionFlag || c[ci.sido] || '';
     const name = c[ci.name];
