@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 refactor(carework): 입소서류 독립 메뉴 제거 — 수급자 관리로 통합 완료
+
+- 대상자 무관 단일 체크리스트였던 `care-admit` 뷰·내비·모바일탭·매니페스트·feature-plan 항목 제거 — 서류 현황은 수급자 관리(수급자별 13항목 + CSV)에서 관리
+- `src/exams/carework/care-admit.js` 도메인 모듈은 ADMIT_SECTIONS 스키마 정본으로 유지 (care-client-csv.js가 참조)
+
 ## 2026-11-03 fix(carework): 수급자 관리 라벨 잔재 교정 — manifest·레지스트리
 
 - 뷰 제목만 갱신됐던 `대상자 명부` 잔재 — manifest `title/subtitle/nav/loading/error` + `practice-registry` `title/subtitle/loadingText/loadErrorText` 전부 `수급자 관리` 계열로 교정

@@ -47,7 +47,6 @@ import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete
 import { careClientSave, careClientLoad, careClientDelete, initCareClientView } from '../../../../src/exams/carework/views/care-client.js';
 import { careIncidentGenerate, careIncidentSave, careIncidentDelete, initCareIncidentView } from '../../../../src/exams/carework/views/care-incident.js';
 import { careRosterAdd, careRosterDelete, initCareRosterView } from '../../../../src/exams/carework/views/care-roster.js';
-import { careAdmitReset, initCareAdmitView } from '../../../../src/exams/carework/views/care-admit.js';
 import { careFinderUseOrg } from '../../../../src/exams/carework/views/care-finder.js';
 import { getOrgName } from '../../../../src/exams/carework/facility.js';
 import { syncFacilityNav, myMembership, listHandovers, listVisits as listFacilityVisits } from '../../../../src/exams/carework/facility.js';
@@ -323,17 +322,6 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careRosterDelete(list.querySelector('[data-arg]')?.dataset.arg);
     });
 
-    it('careAdmit — 체크 토글 → 수납 현황 갱신', () => {
-        loadPartial('care-admit.html');
-        initCareAdmitView();
-        const box = /** @type {HTMLInputElement|null} */ (document.querySelector('#adm-list input[data-admit]'));
-        expect(box).toBeTruthy();
-        box.checked = true;
-        box.dispatchEvent(new Event('change', { bubbles: true }));
-        expect(document.getElementById('adm-progress').textContent).toContain('1/');
-        careAdmitReset();
-        expect(document.getElementById('adm-progress').textContent).toContain('0/');
-    });
 
     it('careFinder — 시설명으로 출력물 기관명 설정', () => {
         careFinderUseOrg('행복요양원');
