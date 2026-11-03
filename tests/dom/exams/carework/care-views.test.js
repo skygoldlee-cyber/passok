@@ -43,7 +43,7 @@ import { careFacilityHandoverSubmit, careHandoverAck } from '../../../../src/exa
 import { careAuditReset, careAuditCopy, careAuditPrint, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
 import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
-import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
+import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, careVisitExport, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
 import { careClientSave, careClientLoad, careClientDelete, initCareClientView } from '../../../../src/exams/carework/views/care-client.js';
 import { careIncidentGenerate, careIncidentSave, careIncidentDelete, initCareIncidentView } from '../../../../src/exams/carework/views/care-incident.js';
 import { careRosterAdd, careRosterDelete, initCareRosterView } from '../../../../src/exams/carework/views/care-roster.js';
@@ -250,6 +250,12 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.getElementById('vis-done').textContent).toContain('면회 <b>30분</b>');
         // 결과 요약 이스케이프 — 서버·사용자 입력이 마크업으로 주입되지 않음 (ROAD-Q5)
         expect(document.getElementById('vis-done').innerHTML).toContain('&lt;b&gt;30분&lt;/b&gt;');
+        // 출력물 기관명 — 로컬 설정이 문서 헤더에 병기 (DSN-43 6e)
+        const { setLocalOrgName } = await import('../../../../src/exams/carework/facility.js');
+        setLocalOrgName('행복요양원');
+        careVisitExport();
+        expect(document.getElementById('vis-preview').textContent).toContain('행복요양원');
+        setLocalOrgName('');
         expect(document.getElementById('vis-scheduled').textContent).toContain('등록된 방문예약이 없습니다');
         careVisitDelete(document.querySelector('#vis-done [data-arg]')?.dataset.arg);
     });

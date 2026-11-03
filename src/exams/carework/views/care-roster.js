@@ -3,6 +3,7 @@
 import { ROSTER_SHIFTS, shiftLabel, buildRosterText } from '../care-roster.js';
 import { listRoster, saveRoster, removeRoster } from '../roster-store.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
+import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 
 const $ = (id) => document.getElementById(id);
@@ -34,7 +35,7 @@ export function careRosterDelete(id) {
 
 function renderPreview(t) {
     const out = $('ros-preview');
-    if (out) out.innerHTML = `<div class="care-doc-head"><strong>교대 근무표</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div><pre class="care-log-text">${esc(t)}</pre>`;
+    if (out) out.innerHTML = docHeadHtml('교대 근무표') + `<pre class="care-log-text">${esc(t)}</pre>`;
 }
 
 export function careRosterExport() {
@@ -74,4 +75,5 @@ export function initCareRosterView() {
     if (s && !s.children.length)
         s.innerHTML = ROSTER_SHIFTS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
     renderList();
+    void refreshOrgName();
 }

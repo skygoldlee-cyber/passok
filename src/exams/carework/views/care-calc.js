@@ -2,6 +2,7 @@
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { computeCareCost, formatWon } from '../care-calc.js';
 import { GRADE_LIMITS, REDUCTIONS, EFFECTIVE_YEAR, FACILITY_TYPES } from '../care-calc-data.js';
+import { docHeadHtml, refreshOrgName } from '../facility.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -96,7 +97,7 @@ export function careCalcRun() {
         ...(in_._basis ? [[`급여비용 산정 — ${formatWon(in_._basis.rate)}/일 × ${in_._basis.days}일`, '']] : []),
     ];
     out.innerHTML =
-        `<div class="care-doc-head"><strong>장기요양 비용 계산 결과</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div>`
+        docHeadHtml('장기요양 비용 계산 결과')
         + `<div class="care-doc-sec">입력 조건</div><table class="care-doc"><tbody>${cond.map(docRow).join('')}</tbody></table>`
         + basisHtml
         + `<div class="care-doc-sec">계산 결과</div><table class="care-doc"><tbody>${rows.map(docRow).join('')}</tbody></table>`
@@ -116,6 +117,7 @@ export function careCalcReset() {
 export function careCalcPrint() { careCalcRun(); window.print(); }
 
 export function initCareCalcView() {
+    void refreshOrgName();
     // 적용 기준 연도 — 공단 고시는 매년 갱신되므로 계산 전 기준 연도를 항상 표시, 미반영 시 경고
     const yl = $('care-year-label');
     if (yl) yl.textContent = String(EFFECTIVE_YEAR);

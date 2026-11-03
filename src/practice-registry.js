@@ -545,7 +545,7 @@ const careFacilityJoin = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/facility-join.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['facilityJoin']]],
+    handlers: [['main', ['facilityJoin', 'facilityOrgNameSave']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);

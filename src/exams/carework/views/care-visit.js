@@ -2,7 +2,7 @@
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { RELATIONS, VISIT_STATUS, relationLabel, buildVisitText } from '../care-visit.js';
 import { listVisits, saveVisit, updateVisit, removeVisit } from '../care-visit-store.js';
-import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult } from '../facility.js';
+import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, docHeadHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
 
@@ -104,7 +104,7 @@ function buildAllText() {
 
 function renderPreview(t) {
     const out = $('vis-preview');
-    if (out) out.innerHTML = `<div class="care-doc-head"><strong>면회·방문 기록</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div><pre class="care-log-text">${esc(t)}</pre>`;
+    if (out) out.innerHTML = docHeadHtml('면회·방문 기록') + `<pre class="care-log-text">${esc(t)}</pre>`;
 }
 
 export function careVisitExport() {
@@ -198,4 +198,5 @@ export function initCareVisitView() {
         s.innerHTML = RELATIONS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
     renderLists();
     void renderFacility();
+    void refreshOrgName();
 }

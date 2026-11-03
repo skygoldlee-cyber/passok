@@ -2,6 +2,8 @@
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 기관 시설·멤버십 API — getSupabase 래퍼 경유 RPC 호출 (SECURITY DEFINER)
 import { getSupabase, getAuthSession } from '../../auth-sync/supabase-client.js';
+import { getJSON, setJSON } from '../../storage.js';
+import { STORAGE_KEYS } from '../../storage-keys.js';
 
 export const ROLES = { worker: '요양보호사', manager: '관리책임자' };
 
@@ -61,6 +63,31 @@ export function syncFacilityNav(m) {
     const show = !!m && m.role === 'manager';
     for (const el of document.querySelectorAll('[data-target="facility-admin-view"]'))
         el.classList.toggle('is-hidden', !show);
+}
+
+// — 출력물 기관명 표기 (DSN-43 6e) —
+
+let _orgCache;
+const _esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/** 출력물 기관명 — 멤버십 기관명 우선, 미가입·미조회 시 로컬 설정값 */
+export function getOrgName() {
+    return _orgCache ?? (getJSON(STORAGE_KEYS.CARE_ORG_NAME) || '');
+}
+/** 멤버십에서 기관명을 갱신해 캐시 — 뷰 init 시 fire-and-forget */
+export async function refreshOrgName() {
+    try { _orgCache = (await myMembership())?.facilities?.name || undefined; } catch { _orgCache = undefined; }
+    return getOrgName();
+}
+/** 미가입 사용자용 로컬 기관명 설정 (출력물 표기용) */
+export function setLocalOrgName(name) {
+    setJSON(STORAGE_KEYS.CARE_ORG_NAME, String(name || '').trim());
+    _orgCache = undefined;
+}
+/** 출력 문서 헤더 — 제목 + 기관명(있으면 병기) + 출력일 */
+export function docHeadHtml(title) {
+    const org = getOrgName();
+    return `<div class="care-doc-head"><strong>${_esc(title)}</strong><span>${org ? _esc(org) + ' · ' : ''}${new Date().toISOString().slice(0, 10)} 출력</span></div>`;
 }
 
 // — DSN-43 6b: 교대 인수 확인 —

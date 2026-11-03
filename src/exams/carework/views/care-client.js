@@ -2,6 +2,7 @@
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { listClients, addClient, removeClient } from '../care-client-store.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
+import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 
 const $ = (id) => document.getElementById(id);
@@ -71,7 +72,7 @@ function buildListText() {
 
 function renderPreview(t) {
     const out = $('cli-preview');
-    if (out) out.innerHTML = `<div class="care-doc-head"><strong>대상자 명부</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div><pre class="care-log-text">${esc(t)}</pre>`;
+    if (out) out.innerHTML = docHeadHtml('대상자 명부') + `<pre class="care-log-text">${esc(t)}</pre>`;
 }
 
 export function careClientExport() {
@@ -105,4 +106,4 @@ function renderList() {
         : '<p class="care-log-empty">등록된 대상자가 없습니다.</p>';
 }
 
-export function initCareClientView() { renderList(); }
+export function initCareClientView() { renderList(); void refreshOrgName(); }

@@ -2,7 +2,7 @@
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, buildIncidentText } from '../care-incident.js';
 import { listIncidents, saveIncident, removeIncident } from '../incident-store.js';
-import { myMembership, submitIncident, listIncidents as listFacilityIncidents } from '../facility.js';
+import { myMembership, submitIncident, listIncidents as listFacilityIncidents, docHeadHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
 
@@ -37,7 +37,7 @@ export function careIncidentGenerate() {
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·대상자·사고 유형을 입력하세요.</p>'; return; }
     _lastText = t;
-    out.innerHTML = `<div class="care-doc-head"><strong>사고·낙상 보고서</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div><pre class="care-log-text">${esc(t)}</pre><div class="care-doc-sign"><span>보고자: ______________</span><span>확인(시설장): ______________</span></div>`;
+    out.innerHTML = docHeadHtml('사고·낙상 보고서') + `<pre class="care-log-text">${esc(t)}</pre><div class="care-doc-sign"><span>보고자: ______________</span><span>확인(시설장): ______________</span></div>`;
 }
 
 export function careIncidentSave() {
@@ -129,4 +129,5 @@ export function initCareIncidentView() {
         s.innerHTML = SEVERITIES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
     renderSaved();
     void renderFacility();
+    void refreshOrgName();
 }
