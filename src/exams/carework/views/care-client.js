@@ -1,6 +1,7 @@
-// src/exams/carework/views/care-client.js — 대상자 명부 뷰
+// src/exams/carework/views/care-client.js — 수급자 관리 뷰 (서류현황·CSV 왕복)
 // @spec none — 시험 전용 실무 뷰 (DA-13)
-import { listClients, addClient, removeClient } from '../care-client-store.js';
+import { listClients, addClient, removeClient, upsertClients } from '../care-client-store.js';
+import { csvToClients, clientsToCsv, ADMIT_ITEMS } from '../care-client-csv.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
@@ -22,6 +23,8 @@ function readForm() {
         caution: _val('cli-caution', ''),
         phone: _val('cli-phone', ''),
         memo: _val('cli-memo', ''),
+        status: _val('cli-status', '입소대기'),
+        docs: _docValues(),
     };
 }
 
@@ -31,13 +34,17 @@ function clearForm() {
         const el = /** @type {HTMLInputElement|null} */ ($(id));
         if (el) el.value = '';
     }
+    const st = /** @type {HTMLSelectElement|null} */ ($('cli-status'));
+    if (st) st.value = '입소대기';
+    document.querySelectorAll('#cli-docs input[type=checkbox]').forEach(c => { /** @type {HTMLInputElement} */ (c).checked = false; });
+    renderDocCount();
 }
 
 export function careClientSave() {
     const f = readForm();
-    if (!f.name) { showToast('대상자 성명을 입력하세요.', 'error'); return; }
+    if (!f.name) { showToast('수급자 성명을 입력하세요.', 'error'); return; }
     const r = addClient(f, _editId || undefined);
-    if (r.ok) { showToast(_editId ? '대상자 정보를 수정했습니다.' : '대상자를 등록했습니다.'); clearForm(); renderList(); }
+    if (r.ok) { showToast(_editId ? '수급자 정보를 수정했습니다.' : '수급자를 등록했습니다.'); clearForm(); renderList(); }
 }
 
 export function careClientNew() { clearForm(); }
@@ -49,6 +56,13 @@ export function careClientLoad(id) {
     const set = (elId, v) => { const el = /** @type {HTMLInputElement|null} */ ($(elId)); if (el) el.value = v || ''; };
     set('cli-name', c.name); set('cli-room', c.room); set('cli-birth', c.birth);
     set('cli-allergy', c.allergy); set('cli-caution', c.caution); set('cli-phone', c.phone); set('cli-memo', c.memo);
+    const st = /** @type {HTMLSelectElement|null} */ ($('cli-status'));
+    if (st) st.value = c.status || '입소대기';
+    document.querySelectorAll('#cli-docs input[type=checkbox]').forEach(cb => {
+        const el = /** @type {HTMLInputElement} */ (cb);
+        el.checked = !!(c.docs && el.dataset.doc && c.docs[el.dataset.doc]);
+    });
+    renderDocCount();
     showToast('수정 모드 — 저장하면 덮어씁니다.');
 }
 
@@ -72,7 +86,7 @@ function buildListText() {
 
 function renderPreview(t) {
     const out = $('cli-preview');
-    if (out) out.innerHTML = docHeadHtml('대상자 명부') + `<pre class="care-log-text">${esc(t)}</pre>`;
+    if (out) out.innerHTML = docHeadHtml('수급자 명부') + `<pre class="care-log-text">${esc(t)}</pre>`;
 }
 
 export function careClientExport() {
@@ -99,11 +113,74 @@ function renderList() {
     const items = listClients();
     host.innerHTML = items.length
         ? items.map(c => `<div class="care-log-saved-item">
-            <span><strong>${esc(c.name)}</strong>${c.room ? esc(' · ' + c.room) : ''}${c.caution ? esc(' · ⚠ ' + c.caution) : ''}${c.allergy ? esc(' · 알레르기 ' + c.allergy) : ''}</span>
+            <span><strong>${esc(c.name)}</strong>${c.status ? esc(' [' + c.status + ']') : ''}${c.room ? esc(' · ' + c.room) : ''}${_docSummary(c)}${c.caution ? esc(' · ⚠ ' + c.caution) : ''}${c.allergy ? esc(' · 알레르기 ' + c.allergy) : ''}</span>
             <button data-click="careClientLoad" data-arg="${esc(c.id)}" class="btn btn-secondary">수정</button>
             <button data-click="careClientDelete" data-arg="${esc(c.id)}" class="btn btn-secondary">삭제</button>
           </div>`).join('')
         : '<p class="care-log-empty">등록된 대상자가 없습니다.</p>';
 }
 
-export function initCareClientView() { renderList(); void refreshOrgName(); }
+function _docValues() {
+    const docs = {};
+    document.querySelectorAll('#cli-docs input[type=checkbox]').forEach(cb => {
+        const el = /** @type {HTMLInputElement} */ (cb);
+        if (el.checked && el.dataset.doc) docs[el.dataset.doc] = true;
+    });
+    return docs;
+}
+function _docSummary(c) {
+    const n = ADMIT_ITEMS.length;
+    const done = ADMIT_ITEMS.filter(d => c.docs && c.docs[/** @type {string} */ (d.id)]).length;
+    return done ? esc(` · 서류 ${done}/${n}`) : '';
+}
+function renderDocs() {
+    const host = $('cli-docs');
+    if (!host) return;
+    host.innerHTML = ADMIT_ITEMS.map(d =>
+        `<label class="care-audit-item"><input type="checkbox" data-doc="${esc(d.id)}"><span title="${esc(d.label)}">${esc(d.short)}</span></label>`).join('');
+    host.addEventListener('change', renderDocCount);
+    renderDocCount();
+}
+function renderDocCount() {
+    const el = $('cli-docs-count');
+    if (el) el.textContent = `${ADMIT_ITEMS.filter(d => _docValues()[d.id]).length}/${ADMIT_ITEMS.length}`;
+}
+
+export function careClientCsvExport() {
+    const items = listClients();
+    if (!items.length) { showToast('등록된 수급자가 없습니다.', 'error'); return; }
+    proFeatureNotice('care_client_share', 'CSV 내보내기');
+    const blob = new Blob([clientsToCsv(items)], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '수급자명부.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast('CSV를 저장했습니다.');
+}
+
+export function careClientCsvImport() {
+    proFeatureNotice('care_client_share', 'CSV 가져오기');
+    const f = /** @type {HTMLInputElement|null} */ ($('cli-csv-file'));
+    if (f) f.click();
+}
+
+function onCsvFile(e) {
+    const file = /** @type {HTMLInputElement} */ (e.target).files?.[0];
+    if (!file) return;
+    file.text().then(t => {
+        const recs = csvToClients(t);
+        if (!recs.length) { showToast('불러올 수급자 행이 없습니다 (헤더: 성명,상태,호실,…).', 'error'); return; }
+        const r = upsertClients(recs);
+        renderList();
+        showToast(`가져오기 완료 — 신규 ${r.added}·갱신 ${r.updated}${r.skipped ? ` · 한도 초과 ${r.skipped}건 제외` : ''}`);
+    });
+    e.target.value = '';
+}
+
+export function initCareClientView() {
+    renderDocs();
+    const f = $('cli-csv-file');
+    if (f && !f.dataset.wired) { f.dataset.wired = '1'; f.addEventListener('change', onCsvFile); }
+    renderList(); void refreshOrgName();
+}

@@ -47,3 +47,25 @@ export function addClient(entry, id) {
     if (!r.ok) showStoreError(r, '대상자', showToast);
     return r;
 }
+
+/** CSV 병합 — 성명 일치 시 갱신(서류·필드 병합), 없으면 신규 등록.
+ * @returns {{ok:boolean, added:number, updated:number, skipped:number}} */
+export function upsertClients(records) {
+    const items = listClients();
+    let added = 0, updated = 0, skipped = 0;
+    for (const rec of records) {
+        const hit = items.find(x => x.name === rec.name);
+        if (hit) {
+            const idx = items.indexOf(hit);
+            items[idx] = { ...hit, ...rec, docs: { ...(hit.docs || {}), ...(rec.docs || {}) } };
+            updated++;
+        } else if (items.length >= FREE_LIMIT) {
+            skipped++;
+        } else {
+            items.push({ id: `cli_${Date.now().toString(36)}_${added}`, createdAt: localDateTime(), ...rec });
+            added++;
+        }
+    }
+    setJSON(KEY, items);
+    return { ok: true, added, updated, skipped };
+}

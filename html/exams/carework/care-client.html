@@ -1,11 +1,18 @@
 <!-- @spec none — carework 실무 뷰 마크업 (DA-13) -->
 <section id="care-client-view" class="view-section" data-feature="careClients">
     <div class="view-header">
-        <h2>대상자 명부</h2>
-        <p class="view-subtitle">입소·이용 대상자 등록 — 주의사항·알레르기·비상연락처 한곳 관리</p>
+        <h2>수급자 관리</h2>
+        <p class="view-subtitle">수급자·입소대기자 등록 — 입소서류 수납 현황·CSV 명부 왕복</p>
     </div>
     <div class="care-calc-form">
         <label>성명 <input id="cli-name" type="text" placeholder="예: 김○○"></label>
+        <label>상태
+            <select id="cli-status">
+                <option value="입소대기">입소대기</option>
+                <option value="입소중">입소중</option>
+                <option value="재가이용">재가이용</option>
+            </select>
+        </label>
         <label>호실·병상 <input id="cli-room" type="text" placeholder="예: 302호"></label>
         <label>생년월일 <input id="cli-birth" type="date"></label>
         <label>비상연락처 <input id="cli-phone" type="tel" placeholder="예: 010-0000-0000"></label>
@@ -14,14 +21,23 @@
         <label>알레르기 <input id="cli-allergy" type="text" placeholder="예: 페니실린, 땅콩"></label>
         <label>주의사항 <input id="cli-caution" type="text" placeholder="예: 낙상 위험, 연하곤란, 치매"></label>
         <label>메모 <input id="cli-memo" type="text" placeholder="특이사항"></label>
+    </div>
+    <details class="care-calc-form" id="cli-docs-details">
+        <summary>입소 서류 수납 현황 <span id="cli-docs-count"></span></summary>
+        <div id="cli-docs" class="care-audit-list"></div>
+    </details>
+    <div class="care-calc-form">
         <div class="care-calc-actions">
             <button data-click="careClientSave">등록·저장 <span class="pro-badge" data-pro-feature="care_client_save">PRO</span></button>
             <button data-click="careClientNew" class="secondary">새로 작성</button>
             <button data-click="careClientExport" class="secondary">명부 복사 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
             <button data-click="careClientPrint" class="secondary">인쇄·PDF <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
+            <button data-click="careClientCsvExport" class="secondary">CSV 내보내기 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
+            <button data-click="careClientCsvImport" class="secondary">CSV 가져오기 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
+            <input type="file" id="cli-csv-file" accept=".csv,text/csv" class="is-hidden">
         </div>
     </div>
     <div id="cli-preview" class="care-calc-result"></div>
-    <div class="view-header"><h3>등록 대상자</h3></div>
+    <div class="view-header"><h3>등록 수급자</h3></div>
     <div id="cli-list" class="care-log-saved"></div>
 </section>

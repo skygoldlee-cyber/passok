@@ -269,6 +269,7 @@ src/                    # ES Modules
       care-visit.js       # 면회·방문 기록 로직 — 예약→완료/취소 상태 전이 + 기록 문서 조립 (Phase 6c)
       care-visit-store.js # 방문 기록 로컬 저장 — 무료 10건 한도·Pro 안내 (Phase 6c)
       care-client-store.js # 대상자 명부 로컬 저장 — 무료 10건 한도 (Phase 6d)
+      care-client-csv.js   # 수급자 CSV 왕복 (파싱·직렬화 순수 로직)
       care-incident.js    # 사고·낙상 보고서 로직 — 유형·중증도 + 보고서 조립 (Phase 6d)
       incident-store.js   # 사고 보고 로컬 저장 — 무료 10건 한도 (Phase 6d)
       care-roster.js      # 교대 근무표 로직 — 근무조·표 텍스트 조립 (Phase 6d)

@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 feat(carework): 수급자 관리 통합 — 서류현황·입소대기 상태·CSV 왕복
+
+- 대상자 명부 → **수급자 관리** 개편: 상태 필드(입소대기/입소중/재가이용) + 대상자별 입소서류 수납 체크(ADMIT_SECTIONS 스키마 공유)
+- `care-client-csv.js` 신설: `csvToClients`/`clientsToCsv` 순수 함수 — 성명 매칭 upsert(서류 병합), 서류 열은 단명 헤더로 매칭, BOM·따옴표 이스케이프 지원, 유닛 테스트 4건
+
 ## 2026-11-03 fix(landing): 모바일 뷰포트 확장 근본 해결 — .landing 플렉스 아이템 축소
 
 - 근본 원인: `.landing`이 `body{display:flex}`(앱 셸 규약)의 플렉스 아이템이라 `min-width:auto`가 비교표 560px를 강제, 전체가 뷰포트 밖으로 확장 → `width:100% + min-width:0` (이전 min() 그리드 교정만으로는 부모가 이미 592px로 확장돼 해결 안 됨)
