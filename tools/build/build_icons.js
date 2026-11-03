@@ -26,8 +26,8 @@ const DERIVED = [
     { size: 16, out: 'favicon-16.png' },
 ];
 
-// maskable 안전 영역 — 아이콘을 78%로 중앙 축소하고, 여백은 원본 엣지 픽셀을
-// 스트레치해 이음새 없이 그라디언트를 연장한다 (단색/블러 배경은 링처럼 보임).
+// maskable 안전 영역 — 아이콘을 78%로 중앙 축소하고, 배경은 아이콘 테두리 중앙부
+// 불투명 픽셀의 평균색으로 채운다 (알파 코너 원본 대응 — 엣지 스트레치는 투명부를 검정으로 늘림).
 const MASKABLE_SCALE = 0.78;
 
 const sha1 = buf => crypto.createHash('sha1').update(buf).digest('hex').slice(0, 8);
@@ -71,14 +71,24 @@ async function renderMaskable(browser, srcDataUrl) {
         const ctx = /** @type {CanvasRenderingContext2D} */ (document.getElementById('c').getContext('2d'));
         const s = Math.round(512 * scale);
         const m = Math.round((512 - s) / 2);
-        const w = img.naturalWidth || img.width;
-        const h = img.naturalHeight || img.height;
         ctx.imageSmoothingQuality = 'high';
-        // 여백 4변 — 원본의 최외곽 1px 행/열을 늘여 그라디언트 연장
-        ctx.drawImage(img, 0, 0, w, 1, 0, 0, 512, m);                 // 상단
-        ctx.drawImage(img, 0, h - 1, w, 1, 0, 512 - m, 512, m);       // 하단
-        ctx.drawImage(img, 0, 0, 1, h, 0, m, m, s);                   // 좌측
-        ctx.drawImage(img, w - 1, 0, 1, h, 512 - m, m, m, s);         // 우측
+        // 배경색 — 64px 축소본의 4변 중앙 패치에서 불투명 픽셀 평균
+        const sc = document.createElement('canvas');
+        sc.width = sc.height = 64;
+        const sctx = /** @type {CanvasRenderingContext2D} */ (sc.getContext('2d'));
+        sctx.drawImage(img, 0, 0, 64, 64);
+        const patch = (cx, cy) => {
+            let r = 0, g = 0, b = 0, c = 0;
+            for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) {
+                const p = sctx.getImageData(cx + dx, cy + dy, 1, 1).data;
+                if (p[3] > 200) { r += p[0]; g += p[1]; b += p[2]; c++; }
+            }
+            return [r / c, g / c, b / c];
+        };
+        const cols = [patch(32, 1), patch(32, 62), patch(1, 32), patch(62, 32)];
+        const avg = [0, 1, 2].map(i => Math.round(cols.reduce((a, c) => a + c[i], 0) / 4));
+        ctx.fillStyle = `rgb(${avg[0]},${avg[1]},${avg[2]})`;
+        ctx.fillRect(0, 0, 512, 512);
         // 아트워크 본체
         ctx.drawImage(img, m, m, s, s);
         const blob = await new Promise(r => document.getElementById('c').toBlob(r, 'image/png'));
