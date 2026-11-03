@@ -15,6 +15,8 @@ function render() {
     const region = /** @type {HTMLSelectElement|null} */ ($('find-region'))?.value || '';
     const hits = searchFacilities(_items, { q, region });
     const cur = getOrgName();
+    const hint = $('find-hint');
+    if (hint) hint.classList.toggle('is-hidden', !!cur);
     host.innerHTML = hits.length
         ? hits.map(f => `<div class="care-finder-item">
             <strong class="care-finder-name">${esc(f.name)}</strong>
