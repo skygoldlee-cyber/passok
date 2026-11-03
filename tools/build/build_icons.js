@@ -26,9 +26,9 @@ const DERIVED = [
     { size: 16, out: 'favicon-16.png' },
 ];
 
-// maskable 안전 영역 — 원본을 풀블리드 배경으로 사용 + 아이콘을 80%로 중앙 축소 (세이프존 확보)
-// 다크 단색 배경은 어댑티브 마스크에서 검은 링처럼 보이므로 원본 그라디언트를 그대로 쓴다.
-const MASKABLE_SCALE = 1.0;
+// maskable 안전 영역 — 아이콘을 78%로 중앙 축소하고, 여백은 원본 엣지 픽셀을
+// 스트레치해 이음새 없이 그라디언트를 연장한다 (단색/블러 배경은 링처럼 보임).
+const MASKABLE_SCALE = 0.78;
 
 const sha1 = buf => crypto.createHash('sha1').update(buf).digest('hex').slice(0, 8);
 
@@ -69,11 +69,18 @@ async function renderMaskable(browser, srcDataUrl) {
         img.src = dataUrl;
         await img.decode();
         const ctx = /** @type {CanvasRenderingContext2D} */ (document.getElementById('c').getContext('2d'));
-        // 원본을 세이프존 역수(1/scale)로 확대해 중앙 크롭 — 라운드 모서리가
-        // 캔버스 밖으로 밀려나 풀블리드 그라디언트만 남는다 (배경 합성 없음).
-        const s = Math.round(512 / scale);
+        const s = Math.round(512 * scale);
+        const m = Math.round((512 - s) / 2);
+        const w = img.naturalWidth || img.width;
+        const h = img.naturalHeight || img.height;
         ctx.imageSmoothingQuality = 'high';
-        ctx.drawImage(img, (512 - s) / 2, (512 - s) / 2, s, s);
+        // 여백 4변 — 원본의 최외곽 1px 행/열을 늘여 그라디언트 연장
+        ctx.drawImage(img, 0, 0, w, 1, 0, 0, 512, m);                 // 상단
+        ctx.drawImage(img, 0, h - 1, w, 1, 0, 512 - m, 512, m);       // 하단
+        ctx.drawImage(img, 0, 0, 1, h, 0, m, m, s);                   // 좌측
+        ctx.drawImage(img, w - 1, 0, 1, h, 512 - m, m, m, s);         // 우측
+        // 아트워크 본체
+        ctx.drawImage(img, m, m, s, s);
         const blob = await new Promise(r => document.getElementById('c').toBlob(r, 'image/png'));
         return Array.from(new Uint8Array(await blob.arrayBuffer()));
     }, { dataUrl: srcDataUrl, scale: MASKABLE_SCALE });
