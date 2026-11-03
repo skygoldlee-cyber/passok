@@ -888,7 +888,7 @@ body.ui-mode-practice .ui-mode-toggle {
 }
 
 .nav-item-practice i {
-    color: var(--color-secondary);
+    /* 학습 항목과 동일하게 부모 텍스트색 상속 — 세컨더리 고정 해제 */
 }
 
 .nav-item-practice:hover {
@@ -903,7 +903,7 @@ body.ui-mode-practice .ui-mode-toggle {
 }
 
 .nav-item-practice.active i {
-    color: var(--color-secondary);
+    /* 활성 아이콘도 상속 — 배경·보더의 secondary 강조는 유지 */
 }
 
 .sidebar-footer {
