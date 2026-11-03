@@ -22,9 +22,9 @@ import {
 import { updateGlobalStats, renderDashboard } from '../../../src/views/dashboard.js';
 import { renderAnalysisView, gotoSubjectAnalysis } from '../../../src/views/analysis-view.js';
 import { setExamDate, setStudyGoals } from '../../../src/study/study-tracker.js';
-import { state, safeSetItem } from '../../../src/state.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
-import { scopedKey } from '../../../src/exam-context.js';
+import { state, safeSetItem } from '../../../src/core/state.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
+import { scopedKey } from '../../../src/core/exam-context.js';
 
 const todayPlus = (days) => {
     const d = new Date();

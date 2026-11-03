@@ -7,7 +7,7 @@
 // 핵심 원칙: 파싱 실패·모호한 경우는 반드시 'unknown'.
 // 잘못된 ok/warn 판정보다 사람이 원문을 확인하게 하는 미탐이 안전하다.
 
-import { normalizeEntityName } from '../../utils.js';
+import { normalizeEntityName } from '../../core/utils.js';
 
 export const CHECK = Object.freeze({
   OK: 'ok',

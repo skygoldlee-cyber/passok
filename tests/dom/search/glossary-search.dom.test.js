@@ -1,4 +1,4 @@
-// tests/dom/glossary-search.dom.test.js — 용어 정의 검색 그룹 + 용어집 어휘 주입
+// tests/dom/search/glossary-search.dom.test.js — 용어 정의 검색 그룹 + 용어집 어휘 주입
 // @spec TS-15,TS-16
 // 검증: 쿼리(동의어 변형 포함)가 용어집 키워드와 경계 매치되면 '용어 정의' 카드가
 //       본문 결과(교재→참조자료→문제은행)보다 앞에 렌더링되고, 참조문서 출처는

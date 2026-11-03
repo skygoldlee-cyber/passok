@@ -1,8 +1,8 @@
 // src/study-tracker-plan.js — 시험일/D-day·역산 학습 계획 (study-tracker.js 분리)
 // @spec SC-05,SC-15,SC-16,D-17
-import { safeGetItem, safeSetItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { getMinExamLeadDays, getReadThroughDays, getReadDayShare, getActiveSubjectCount } from '../exam-context.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { getMinExamLeadDays, getReadThroughDays, getReadDayShare, getActiveSubjectCount } from '../core/exam-context.js';
 import { getStudyGoals } from './study-tracker-activity.js';
 
 /* =======================================================

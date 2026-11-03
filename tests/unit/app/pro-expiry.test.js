@@ -5,7 +5,7 @@
 
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { createLocalStorageBackend, setStorageBackend, getStorageBackend, setItem, removeItem } from '../../../src/storage.js';
+import { createLocalStorageBackend, setStorageBackend, getStorageBackend, setItem, removeItem } from '../../../src/core/storage.js';
 import { proExpiryStatus } from '../../../src/pro/pro-expiry.js';
 import { applyPlanToLocal } from '../../../src/pro/pro-redeem.js';
 

@@ -7,8 +7,8 @@
 // AI 판정은 "제안" — 체크박스에 반영되지만 사용자가 수정 가능하고,
 // 자기평가 완료(d 플래그)는 여전히 사용자 수동 액션이다.
 // ============================================================
-import { getItem, setItem, removeItem } from '../storage.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { getItem, setItem, removeItem } from '../core/storage.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 
 /* =========================================================
    공급자 계약 (tools/ai/llm_client.js PROVIDERS 미러 — 브라우저용)

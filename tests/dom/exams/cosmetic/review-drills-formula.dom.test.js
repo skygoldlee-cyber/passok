@@ -16,7 +16,7 @@ vi.mock('../../../../src/ui-utils.js', () => ({
 }));
 
 import { loadIndexHtml, el, resetStudyState } from '../../helpers.js';
-import { state } from '../../../../src/state.js';
+import { state } from '../../../../src/core/state.js';
 import { renderReviewList } from '../../../../src/views/quiz/quiz.js';
 import { renderStudyAids, loadNumberDrills } from '../../../../src/study/study-aids.js';
 import { formulaAddIngredient } from '../../../../src/exams/cosmetic/views/formula.js';

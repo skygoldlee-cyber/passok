@@ -1,6 +1,6 @@
 // src/manual-viewer.js - 사용자 매뉴얼 런타임 MD→HTML 변환 뷰어
 // @spec MV-01~04
-// 외부 의존성: escapeHTML (src/sanitize.js — index.html에서 가장 먼저 로드됨)
+// 외부 의존성: escapeHTML (src/core/sanitize.js — index.html에서 가장 먼저 로드됨)
 //
 // [설계] 예상문제집 뷰어(src/exam-viewer.js)와 동일한 패턴을 사용하여
 //   docs/user/user_manual.md(앱 공용)·{contentRoot}/docs/*.md(시험별)를 런타임에
@@ -11,12 +11,12 @@
 //   - 오버레이 셸·캐시·TOC·번들 주입은 src/doc-overlay.js 공용 베이스 사용
 //
 import { pkDecode } from '../content/unpack.js';
-import { escapeHTML } from '../sanitize.js';
+import { escapeHTML } from '../core/sanitize.js';
 import { renderMermaidIn } from './mermaid-render.js';
 import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
 import { openSubjectChapter } from '../views/textbook-reader.js';
-import { PATHS } from '../paths.js';
-import { dataPath, getCurrentExamId, getActiveExam } from '../exam-context.js';
+import { PATHS } from '../core/paths.js';
+import { dataPath, getCurrentExamId, getActiveExam } from '../core/exam-context.js';
 import { showToast } from '../ui-utils.js';
 import { CACHE } from '../config/cache.js';
 import { attachImageZoomIn } from './image-zoom.js';

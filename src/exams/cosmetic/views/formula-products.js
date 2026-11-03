@@ -13,11 +13,11 @@
 // 상세·교차→formula-prod-detail.js. 이 파일은 목록+폼 액션+JSON IO이며
 // 분리 모듈의 핸들러를 재수출한다 (registry·테스트는 이 경로로 조회 — formula.js와 동일 패턴).
 
-import { esc } from '../../../sanitize.js';
+import { esc } from '../../../core/sanitize.js';
 import { showToast, showConfirm } from '../../../ui-utils.js';
 import { showStoreError } from '../../../pro/pro-upgrade.js';
 import { switchView } from '../../../views/navigation.js';
-import { todayKey, normalizeEntityName } from '../../../utils.js';
+import { todayKey, normalizeEntityName } from '../../../core/utils.js';
 import {
   showPanel, formulaSubNav, getEl, getIndex, customIngAdd,
   invalidateIngredientIndex,

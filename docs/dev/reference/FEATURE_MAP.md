@@ -80,20 +80,20 @@
 | 무엇을 바꾸고 싶은가 | 핵심 소스 | 관련 테스트 | SPEC |
 |----------------------|-----------|-------------|------|
 | 부팅·핸들러 등록·라우팅 진입 | `src/shell/app.js` (맨 아래 `startAppInit`) | `app-shell.dom.test.js` | DA-* |
-| 시험 컨텍스트·브랜딩·기능 플래그 | `src/exam-context.js` + `src/shell/exam-data-boot.js` | `exam-switching.dom.test.js` | DA-* |
+| 시험 컨텍스트·브랜딩·기능 플래그 | `src/core/exam-context.js` + `src/shell/exam-data-boot.js` | `exam-switching.dom.test.js` | DA-* |
 | 시험 선택/전환 화면 | `src/views/exam-select.js` | `study-examselect.dom.test.js` | DA-*/CS-* |
 | data-click 위임 규칙 | `src/views/listeners/listeners-delegation.js` | `common-eventlisteners.dom.test.js` | UX-* |
 | 뷰 전환·사이드바 | `src/views/navigation.js` | `common-navigation.dom.test.js` | UX-NAV-* |
 | 계정 로그인·프로필 | `src/auth-sync/auth-view.js` + `src/supabase-*.js` | `common-auth.dom.test.js` | AU-* |
 | 클라우드 동기화·충돌 해결 | `src/auth-sync/sync.js` | `common-sync.dom.test.js` | AU-*/SY-* |
 | 백업/복원 (보내기·가져오기) | `src/views/backup.js` | `backup.dom.test.js` | BK-* |
-| 상태 객체·진도 저장 | `src/state.js` + `src/storage.js` + `src/storage-keys.js` | `tests/unit/app/state.test.js`, `storage.test.js`, `storage-key-sync.test.js` | DA-*/ID-* |
+| 상태 객체·진도 저장 | `src/core/state.js` + `src/core/storage.js` + `src/core/storage-keys.js` | `tests/unit/app/state.test.js`, `storage.test.js`, `storage-key-sync.test.js` | DA-*/ID-* |
 | 오프라인 감지 배너 | `src/views/offline-detection.js` | `common-offline.dom.test.js` | PF-*/P-* |
 | Service Worker·캐시 정책·프리캐시 | `sw.js` | `tests/e2e/sw-*.spec.js`, `verify:assets` | P-* |
 | PWA 설치·매니페스트 | `src/pwa/pwa-install.js`, `pwa-manifest.js` | E2E 전용 | P-* |
 | 테마·UI 모드 | `src/shell/theme-toggle.js`, `src/shell/ui-mode.js`, `src/shell/theme-init.js` | `common-theme.dom.test.js`, `common-uimode.dom.test.js` | TH-*/UM-* |
 | 토스트·모달·로딩 유틸 | `src/ui-utils.js` + `src/shell/modal-back.js` | `common-a11y.dom.test.js` | UX-* |
-| XSS 이스케이프·`html`` ` 템플릿 | `src/sanitize.js` | `tests/unit/app/sanitize.test.js` | SEC-* |
+| XSS 이스케이프·`html`` ` 템플릿 | `src/core/sanitize.js` | `tests/unit/app/sanitize.test.js` | SEC-* |
 | 명령 팔레트 (Ctrl+K) | `src/shell/command-palette.js` | `study-commandpalette.dom.test.js` | UX-*/CQ-* |
 | 차트 렌더링 | `src/charts.js` | `charts.dom.test.js` | D-*/AN-* |
 | 온보딩·신기능 안내·피드백 | `src/shell/onboarding.js`, `whats-new.js`, `feedback.js` | `onboarding-zoom.dom.test.js`, `feedback.dom.test.js` | ON-*/WN-*/FB-* |

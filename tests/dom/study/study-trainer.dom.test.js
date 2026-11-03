@@ -28,7 +28,7 @@ import { showToast } from '../../../src/ui-utils.js';
 import {
     loadIndexHtml, el, isVisible, resetStudyState, storedJson,
 } from '../helpers.js';
-import { state } from '../../../src/state.js';
+import { state } from '../../../src/core/state.js';
 import {
     initTrainer, exitTrainerSubView,
     startLimitsTrainer, nextLimitsQuestion,
@@ -37,7 +37,7 @@ import { startCalcPractice, submitCalcAnswer } from '../../../src/views/trainer-
 import { startIngredientsChallenge } from '../../../src/exams/cosmetic/views/trainer-ingredients.js';
 import { DataLoader } from '../../../src/content/data-loader.js';
 import { openOxDrillSetup } from '../../../src/views/trainer-drills.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 describe('훈련소 — 수치·계산·원료', () => {
     // 선택지 버튼의 표시 문자열("<값><단위> 이하/이상")에서 원본 수치만 추출 —

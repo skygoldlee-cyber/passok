@@ -2,13 +2,13 @@
 // @spec ES-01~03,ES-06
 // 멀티시험 플랫폼의 홈: 등록된 시험 목록을 카드로 표시하고 선택 시 시험을 전환한다.
 // 카드에는 시험별 진도 요약(외운 카드·퀴즈 정답률·최근 학습일·D-day)과 액센트 스왓치를 표시한다.
-/** @typedef {import('../types.js').ExamDef} ExamDef */
+/** @typedef {import('../core/types.js').ExamDef} ExamDef */
 import { hardReload } from '../pwa/version-watch.js';
-import { getExamList, getCurrentExamId, clearCurrentExam, selectExam, peekExamValue, resolveExamThemeTokens } from '../exam-context.js';
-import { getItem, setItem } from '../storage.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { esc } from '../sanitize.js';
-import { todayKey } from '../utils.js';
+import { getExamList, getCurrentExamId, clearCurrentExam, selectExam, peekExamValue, resolveExamThemeTokens } from '../core/exam-context.js';
+import { getItem, setItem } from '../core/storage.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { esc } from '../core/sanitize.js';
+import { todayKey } from '../core/utils.js';
 import { switchView } from './navigation.js';
 import { showAlert, showToast } from '../ui-utils.js';
 

@@ -1,7 +1,7 @@
 // @spec S-05
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { escapeHTML, safeTextWithBreaks, esc, html, raw } from '../../../src/sanitize.js';
+import { escapeHTML, safeTextWithBreaks, esc, html, raw } from '../../../src/core/sanitize.js';
 
 test('escapeHTML: 특수문자 이스케이프', () => {
     assert.equal(escapeHTML('<script>alert(1)</script>'), '&lt;script&gt;alert(1)&lt;/script&gt;');

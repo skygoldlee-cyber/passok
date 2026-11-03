@@ -4,7 +4,7 @@
 // 대시보드(dashboard.js)와 학습 진단(analysis-view.js)·예상 점수(score-estimate.js)가
 // 공유하는 과목 단위 카운트 집계. dashboard.js에서 분리 (모듈 경계 정리).
 
-import { state } from '../state.js';
+import { state } from '../core/state.js';
 
 let _subjCountCache = null;
 let _subjCountCacheKey = '';

@@ -6,12 +6,12 @@
 // 아레나 기계 장치(타이머·OMR·렌더)는 exam-sim-arena.js, 드래프트 저장소는
 // exam-sim-draft.js — session → arena → draft 단방향.
 
-import { state, safeGetItem } from '../../state.js';
+import { state, safeGetItem } from '../../core/state.js';
 import { DataLoader } from '../../content/data-loader.js';
-import { getActiveRegistry } from '../../exam-context.js';
+import { getActiveRegistry } from '../../core/exam-context.js';
 import { showGlobalLoading, hideGlobalLoading, showToast } from '../../ui-utils.js';
-import { shuffle, OPTION_INDICATORS } from '../../utils.js';
-import { STORAGE_KEYS } from '../../storage-keys.js';
+import { shuffle, OPTION_INDICATORS } from '../../core/utils.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { TIMING } from '../../config/timing.js';
 import { simState } from './exam-sim-state.js';
 import { proFeatureNotice } from '../../pro/pro-upgrade.js';

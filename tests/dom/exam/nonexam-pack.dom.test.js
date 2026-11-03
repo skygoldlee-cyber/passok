@@ -1,4 +1,4 @@
-// tests/dom/misc/nonexam-pack.dom.test.js — 비시험 팩(과정·교육) 표면 소거·uiText 오버라이드 검증
+// tests/dom/exam/nonexam-pack.dom.test.js — 비시험 팩(과정·교육) 표면 소거·uiText 오버라이드 검증
 // @spec none
 import { describe, it, expect, beforeEach } from 'vitest';
 import { loadIndexHtml, stubRegistry, resetStudyState, el } from '../helpers.js';

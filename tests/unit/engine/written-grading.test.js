@@ -11,8 +11,8 @@ import {
     buildGradingPrompt, parseGradingResponse, applyGrading, gradeAnswer,
     callProviderLLM
 } from '../../../src/written/written-grading.js';
-import { STORAGE_KEYS, BACKUP_KEYS } from '../../../src/storage-keys.js';
-import { setItem } from '../../../src/storage.js';
+import { STORAGE_KEYS, BACKUP_KEYS } from '../../../src/core/storage-keys.js';
+import { setItem } from '../../../src/core/storage.js';
 
 function createMockStorage() {
     const store = {};

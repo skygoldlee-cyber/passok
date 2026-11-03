@@ -10,11 +10,11 @@
 // 진행은 STORAGE_KEYS.WRITTEN_PRACTICE(시험 스코프)에 문항 id(S번호) 기준 저장.
 // ============================================================
 import { pkDecode } from '../content/unpack.js';
-import { escapeHTML } from '../sanitize.js';
+import { escapeHTML } from '../core/sanitize.js';
 import { parseMarkdown } from '../reader/markdown-parser.js';
-import { dataPath } from '../exam-context.js';
-import { getJSON, setJSON } from '../storage.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { dataPath } from '../core/exam-context.js';
+import { getJSON, setJSON } from '../core/storage.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { fetchMd, injectBundleScript, createDocOverlay } from '../shell/doc-overlay.js';
 import {
     AI_PROVIDERS, getAiProvider, saveAiProvider, getAiModel, saveAiModel,

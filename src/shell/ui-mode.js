@@ -2,10 +2,10 @@
 // @spec UM-01~05
 // 합격 후 실무 중심 사용자를 위해 학습 전용 네비게이션을 접고 실무 작업실을 랜딩으로 둔다.
 // 모드는 시험과 무관한 기기 설정(GLOBAL_KEYS) — 'ui_mode': 'study' | 'practice'.
-import { state, safeGetItem, safeSetItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { state, safeGetItem, safeSetItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { isPracticeCapable, getPracticeLanding, getEnabledPracticeFeatures } from '../practice-registry.js';
-import { getCurrentExamId, getActiveExam } from '../exam-context.js';
+import { getCurrentExamId, getActiveExam } from '../core/exam-context.js';
 import { switchView } from '../views/navigation.js';
 import { showToast } from '../ui-utils.js';
 

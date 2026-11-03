@@ -1,4 +1,4 @@
-// src/storage.js — 저장소 추상화 계층 테스트.
+// src/core/storage.js — 저장소 추상화 계층 테스트.
 // @spec DA-09
 // 스코프 적용·JSON 헬퍼·쓰기 훅·백엔드 교체(비동기 전용 백엔드 포함)의 불변식을 고정한다.
 
@@ -24,7 +24,7 @@ import {
   setMany,
   setJSONMany,
   isStorageUnavailable,
-} from '../../../src/storage.js';
+} from '../../../src/core/storage.js';
 
 function createMockStorage() {
   const store = {};

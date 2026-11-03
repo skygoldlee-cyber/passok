@@ -21,10 +21,10 @@ import {
     loadIndexHtml, el, flushAsync, stubRegistry, resetStudyState, storedJson, waitFor,
 } from '../helpers.js';
 import { renderTextbookReader, textbookReaderState, startReadingSession, stopReadingSession, openSubjectSection } from '../../../src/views/textbook-reader.js';
-import { safeGetItem, safeSetItem } from '../../../src/state.js';
+import { safeGetItem, safeSetItem } from '../../../src/core/state.js';
 import { showAlert } from '../../../src/ui-utils.js';
 import { getTodayStr } from '../../../src/study/study-tracker.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 const SUBJ = {
     key: 'subja',

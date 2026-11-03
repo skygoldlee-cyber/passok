@@ -22,7 +22,7 @@ import {
     loadIndexHtml, el, isVisible, resetStudyState, storedJson,
     stubRegistry, flushAsync,
 } from '../helpers.js';
-import { state } from '../../../src/state.js';
+import { state } from '../../../src/core/state.js';
 import { simState } from '../../../src/views/exam-sim/exam-sim-state.js';
 import {
     startSimSession, saveSimAnswer, jumpToSimQuestion,
@@ -32,7 +32,7 @@ import {
 import { DataLoader } from '../../../src/content/data-loader.js';
 import { showSimAnswerReview } from '../../../src/views/exam-sim/exam-sim-review.js';
 import { setupEventListeners } from '../../../src/views/event-listeners.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 const EXAM = {
     id: 'simt1',

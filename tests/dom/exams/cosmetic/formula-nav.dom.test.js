@@ -11,9 +11,9 @@ vi.mock('../../../../src/ui-utils.js', () => ({
 }));
 
 import { loadIndexHtml, el, isVisible } from '../../helpers.js';
-import { STORAGE_KEYS } from '../../../../src/storage-keys.js';
-import { setJSON, setItem } from '../../../../src/storage.js';
-import { localDateTime } from '../../../../src/utils.js';
+import { STORAGE_KEYS } from '../../../../src/core/storage-keys.js';
+import { setJSON, setItem } from '../../../../src/core/storage.js';
+import { localDateTime } from '../../../../src/core/utils.js';
 import { initFormulaView, exitFormulaSubView, openFormulaCalc } from '../../../../src/exams/cosmetic/views/formula.js';
 import { openCustomerPanel } from '../../../../src/exams/cosmetic/views/formula-customer.js';
 import { openMaterialPanel } from '../../../../src/exams/cosmetic/views/formula-material.js';

@@ -1,6 +1,6 @@
 // src/exam-viewer.js - 실전 예상문제집 런타임 MD→HTML 변환 뷰어
 // @spec EV-01~08
-// 외부 의존성: escapeHTML (src/sanitize.js — index.html에서 가장 먼저 로드됨)
+// 외부 의존성: escapeHTML (src/core/sanitize.js — index.html에서 가장 먼저 로드됨)
 //
 // [변경 요약] 새 창(window.open + about:blank + document.write) 방식을
 //   앱 내부 전체화면 오버레이 렌더링으로 교체했습니다.
@@ -21,12 +21,12 @@
 //   오버레이 셸·캐시·TOC·번들 주입은 src/doc-overlay.js 공용 베이스 사용
 //
 import { pkDecode } from '../content/unpack.js';
-import { escapeHTML } from '../sanitize.js';
+import { escapeHTML } from '../core/sanitize.js';
 import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
 import { resolveRefPath, refDocDisplayName } from '../pdf-registry.js';
-import { contentPath, dataPath, getActiveRegistry } from '../exam-context.js';
-import { getJSON, setJSON } from '../storage.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { contentPath, dataPath, getActiveRegistry } from '../core/exam-context.js';
+import { getJSON, setJSON } from '../core/storage.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { CACHE } from '../config/cache.js';
 import { proFeatureNotice } from '../pro/pro-upgrade.js';
 import { renderMermaidIn } from './mermaid-render.js';

@@ -14,7 +14,7 @@
 //     sameText: key → 동일 텍스트의 다른 key[] (교차 과목 동일 진술 힌트)
 //   vectors_stmt_subjectN.js → window.EMB_VEC_stmt_subjectN (임의 유사도용)
 
-import { dataPath, hasFeature, getActiveExamId } from '../exam-context.js';
+import { dataPath, hasFeature, getActiveExamId } from '../core/exam-context.js';
 import { DataLoader } from '../content/data-loader.js';
 
 /** @typedef {{key:string, score:number, text:string}} SemanticHit */

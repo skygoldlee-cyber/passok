@@ -1,12 +1,12 @@
 // src/exams/cosmetic/views/formula-hub.js — Formula OS 허브(메뉴)·점검 리마인더·고대비 (formula.js에서 분리)
 // @spec FO-31,FO-33,FO-62,FO-65
 
-import { esc } from '../../../sanitize.js';
+import { esc } from '../../../core/sanitize.js';
 import { lawUrlFor } from '../../../law-links.js';
 import { showToast } from '../../../ui-utils.js';
 import { switchView } from '../../../views/navigation.js';
-import { getItem, getJSON, setJSON } from '../../../storage.js';
-import { STORAGE_KEYS } from '../../../storage-keys.js';
+import { getItem, getJSON, setJSON } from '../../../core/storage.js';
+import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { getFormulaUsage } from '../formula-store.js';
 import { getBizType, setBizType, BIZ_TYPES, BIZ_GUIDE } from '../biz-profile.js';
 import { getEl, showPanel } from './formula-core.js';

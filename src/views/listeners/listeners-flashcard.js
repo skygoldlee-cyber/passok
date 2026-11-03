@@ -1,7 +1,7 @@
 // src/views/listeners-flashcard.js — 플래시카드 이벤트 바인딩 (event-listeners.js §2에서 분리)
 // 카드 플립·스와이프·필터·외움 분류·키보드 단축키.
 // @spec F-03,F-04
-import { state, saveProgress } from '../../state.js';
+import { state, saveProgress } from '../../core/state.js';
 import { DataLoader } from '../../content/data-loader.js';
 import { updateCardSchedule } from '../../study/spaced-repetition.js';
 import { Rating } from '../../study/fsrs.js';

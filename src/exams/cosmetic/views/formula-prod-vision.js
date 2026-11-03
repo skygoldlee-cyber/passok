@@ -4,7 +4,7 @@
 // LLM 초안 → 칩 검토 → 기존 저장 경로. 폼 공유 상태(prodForm·renderInciChips)는
 // formula-prod-state.js에서 가져와 이 모듈→products 역참조를 피한다.
 
-import { esc } from '../../../sanitize.js';
+import { esc } from '../../../core/sanitize.js';
 import { showToast } from '../../../ui-utils.js';
 import { getEl, getIndex } from './formula.js';
 import { suspectOcrSubstitutions } from '../formula-check.js';

@@ -13,7 +13,7 @@ ADR-0003으로 localStorage가 1차 저장소로 정해진 뒤에도, 각 모듈
 
 ## 결정 (Decision)
 
-모든 영속 읽기·쓰기는 `src/storage.js`를 경유한다 (단일 퍼널).
+모든 영속 읽기·쓰기는 `src/core/storage.js`를 경유한다 (단일 퍼널).
 `setStorageBackend()`로 백엔드 교체 가능, 동기·Async 이중 API.
 `check:storage` 게이트가 src/ 내 직접 접근을 차단하며, 부트스크립트·
 인프라 예외는 ALLOWED_FILES에 사유를 명시한다.

@@ -14,17 +14,17 @@ export {};
 declare global {
   interface Window {
     /** data/registry.js 가 바인딩하는 전역 레지스트리(클래식 스크립트 호환용) */
-    DATA_REGISTRY?: import('./types.js').DataRegistry;
+    DATA_REGISTRY?: import('./core/types.js').DataRegistry;
     /** data/audio_manifest.js 바인딩 */
     /** 시험 id → 시험별 오디오 매니페스트 */
-    AUDIO_MANIFEST?: Record<string, import('./types.js').AudioManifest>;
+    AUDIO_MANIFEST?: Record<string, import('./core/types.js').AudioManifest>;
     AUDIO_BASE_URL?: string | null;
-    getAudioManifest?: (examId?: string) => import('./types.js').AudioManifest | Record<string, import('./types.js').AudioManifest> | undefined;
+    getAudioManifest?: (examId?: string) => import('./core/types.js').AudioManifest | Record<string, import('./core/types.js').AudioManifest> | undefined;
     getAudioUrl?: (localPath: string | null) => string | null;
     /** data-loader 가 채우는 온디맨드 데이터 캐시 */
     STUDY_DATA?: Record<string, any>;
     EXAM_DATA?: Record<string, any>;
-    INGREDIENTS_DATA?: import('./types.js').Ingredient[];
+    INGREDIENTS_DATA?: import('./core/types.js').Ingredient[];
     /** file:// 폴백 교재 번들 (build_study_md_bundle.js) */
     __STUDY_MD__?: { manifest?: any; files?: Record<string, string> };
     /** file:// 폴백 매니페스트 (data/study_md/manifest.js) */
@@ -52,7 +52,7 @@ declare global {
     /** window.RELEASE_NOTES — data/release-notes.js 번들 */
     RELEASE_NOTES?: any;
     /** 시험 목록 번들 (data/exams.js) */
-    EXAMS_LIST?: { exams?: import('./types.js').ExamDef[] };
+    EXAMS_LIST?: { exams?: import('./core/types.js').ExamDef[] };
     /** html-viewer.js 가 바인딩하는 전역 뷰어 API */
     HtmlViewer?: any;
     /** build_doc_bundles.js 산출 문서 원문 맵 (data/docs_md/*.js) */

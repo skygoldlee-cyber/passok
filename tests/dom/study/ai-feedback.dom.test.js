@@ -27,7 +27,7 @@ import {
     loadIndexHtml, el,
     seedStudyData, resetStudyState, waitFor,
 } from '../helpers.js';
-import { state } from '../../../src/state.js';
+import { state } from '../../../src/core/state.js';
 import {
     startQuiz, renderQuizQuestion, submitQuizAnswer, nextQuizQuestion,
     requestAiFeedback,

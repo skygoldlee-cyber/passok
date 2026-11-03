@@ -10,8 +10,8 @@ import {
   reportSessionStart, ALLOWED_EVENTS, _resetUsageTelemetryForTest,
 } from '../../../src/telemetry/usage-telemetry.js';
 import { setTelemetryAllowed, getInstallId } from '../../../src/telemetry/telemetry-consent.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
-import { safeGetItem } from '../../../src/state.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
+import { safeGetItem } from '../../../src/core/state.js';
 
 // localStorage 모킹 — storage.js 백엔드가 localStorage를 경유
 function _mockStorage() {

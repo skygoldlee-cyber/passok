@@ -18,7 +18,7 @@ export default defineConfig({
             exclude: [
                 'src/auth-sync/supabase-config.js', // 상수 선언만 — 측정 대상 아님
                 // jsdom으로 테스트 불가한 환경 의존 모듈 — 분모에서 제외
-                'src/types.js',               // JSDoc typedef 선언 전용 (런타임 코드 없음)
+                'src/core/types.js',               // JSDoc typedef 선언 전용 (런타임 코드 없음)
                 'src/shell/app-fallback.js',        // ESM 로드 실패 복구 부트스트랩 (window.onerror)
                 'src/pwa/pwa-install.js',         // beforeinstallprompt 브라우저 이벤트
                 'src/pwa/pwa-install-capture.js', // 모듈 로드 즉시 beforeinstallprompt 캡처

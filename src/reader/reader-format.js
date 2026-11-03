@@ -4,9 +4,9 @@
 // (n=HTML 길이, k=정규식 수). 단일 패스 파서 또는 DOM 기반 후처리로 통합하면 성능 개선
 // 가능하나, 현재 측정된 병목이 아니므로 장기 개선으로 보류.
 import { parseMarkdown, stripQaStamps } from './markdown-parser.js';
-import { contentPath, getActiveRegistry } from '../exam-context.js';
-import { PATHS, normalizeRefPath } from '../paths.js';
-import { escapeHTML } from '../sanitize.js';
+import { contentPath, getActiveRegistry } from '../core/exam-context.js';
+import { PATHS, normalizeRefPath } from '../core/paths.js';
+import { escapeHTML } from '../core/sanitize.js';
 import { resolveRefPath, getRefTables, refDocDisplayName } from '../pdf-registry.js';
 import { getGlossaryEntry } from './glossary-query.js';
 import { lawUrlFor } from '../law-links.js';

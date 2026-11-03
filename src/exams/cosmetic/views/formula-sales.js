@@ -5,10 +5,10 @@
 // 제조업·책임판매업 유형에서 서브내비·허브 카드로 노출 (biz-profile BIZ_PANELS).
 // 판정은 자가점검용 참고이며 최종 판단은 법령 원문·광고 심의 기준을 따른다.
 
-import { esc, raw } from '../../../sanitize.js';
+import { esc, raw } from '../../../core/sanitize.js';
 import { showToast } from '../../../ui-utils.js';
-import { getJSON, setJSON, removeItem } from '../../../storage.js';
-import { STORAGE_KEYS } from '../../../storage-keys.js';
+import { getJSON, setJSON, removeItem } from '../../../core/storage.js';
+import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { lawUrlFor } from '../../../law-links.js';
 import { showPanel, formulaSubNav } from './formula.js';
 import { listFormulas } from '../formula-store.js';

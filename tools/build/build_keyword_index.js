@@ -377,7 +377,7 @@ const output = `// src/keyword-index.js — 용어집 인덱스 (참조문서에
 //   1) 기존 자동 등록 항목의 explanation을 덮어쓰고 curated=true 설정
 //   2) 미등록 키워드는 과목별 대표 참조문서를 refDoc으로 하여 추가 등록
 // [멀티시험] 시험별 인덱스는 _EXAM_GLOSSARY_INDEX[examId] — getGlossaryIndex()가 활성 시험을 해석한다.
-import { getActiveExamId } from './exam-context.js';
+import { getActiveExamId } from './core/exam-context.js';
 
 const _EXAM_GLOSSARY_INDEX = ${JSON.stringify(EXAM_INDEXES)};
 

@@ -8,7 +8,7 @@ import {
     getReaderNotes, getReaderNote, setReaderNote, deleteReaderNote, readerNoteCount,
 } from '../../../src/study/reader-notes.js';
 import { bindReaderNotes } from '../../../src/views/reader/reader-render.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 const KEY = 'law|ch01|1.1 화장품 정의';
 

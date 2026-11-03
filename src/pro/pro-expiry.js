@@ -10,12 +10,12 @@
 //   (기간별 학습법 안내 SC-16과 별개 — entitlement 신호)
 // - 계측: pro_expire_notice — 세션당 1회, 만료→연장 전환 퍼널 관측
 // ------------------------------------------------------------
-import { safeGetItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { safeGetItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { getExamDate, getDDay } from '../study/study-tracker.js';
 import { reportEvent } from '../telemetry/usage-telemetry.js';
 import { showUpgradeNotice } from './pro-upgrade.js';
-import { esc } from '../sanitize.js';
+import { esc } from '../core/sanitize.js';
 
 /** 임박 안내 시작 기준 — 만료 N일 전부터 배너 표시 */
 const EXPIRY_NOTICE_DAYS = 7;

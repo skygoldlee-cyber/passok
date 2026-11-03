@@ -35,7 +35,7 @@ import {
 } from './reader/reader-progress.js';
 import { loadStoryChapter } from './reader/reader-loader.js';
 import { renderChapterContentInternal } from './reader/reader-render.js';
-import { escapeRegExp } from '../utils.js';
+import { escapeRegExp } from '../core/utils.js';
 
 export { textbookReaderState, startReadingSession, stopReadingSession } from './reader/reader-progress.js';
 

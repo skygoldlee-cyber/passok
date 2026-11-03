@@ -29,7 +29,7 @@ const SRC_DIR = path.join(ROOT, 'src');
 // 코어 라이브러리가 뷰를 역참조하면 순환·결합이 생기므로 이 명단 외는 오류.
 const SHELL_MODULES = new Set([
     'src/shell/app.js',
-    'src/router.js',
+    'src/shell/router.js',
     'src/shell/command-palette.js',
     'src/reader/manual-viewer.js',
     'src/shell/ui-mode.js'

@@ -1,7 +1,7 @@
 // @spec B-01~04,S-06
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 import { getBackupKeys, exportData, triggerImport, importData } from '../../../src/views/backup.js';
-import { scopedKey } from '../../../src/exam-context.js';
+import { scopedKey } from '../../../src/core/exam-context.js';
 
 // showToast 모킹 — backup.js는 alert 대신 showToast를 사용
 vi.mock('../../../src/ui-utils.js', () => ({

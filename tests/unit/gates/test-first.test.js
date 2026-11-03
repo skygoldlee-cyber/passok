@@ -8,7 +8,7 @@ const { isTrigger, isTest, analyze, parseStatusLine, stripJsComments, stripPyCom
 
 test('실행 로직 경로는 테스트 동반 트리거다', () => {
     for (const f of [
-        'src/shell/app.js', 'src/views/quiz/quiz.js', 'src/router.js',
+        'src/shell/app.js', 'src/views/quiz/quiz.js', 'src/shell/router.js',
         'ref-pipeline/pdf2md.py', 'ref-pipeline/convert.py',
     ]) {
         assert.ok(isTrigger(f), f);
@@ -42,7 +42,7 @@ test('테스트 경로는 인정된다', () => {
     ]) {
         assert.ok(isTest(f), f);
     }
-    assert.ok(!isTest('src/state.js'));
+    assert.ok(!isTest('src/core/state.js'));
 });
 
 test('analyze: 로직만 변경 → 위반', () => {

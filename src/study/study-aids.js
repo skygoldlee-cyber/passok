@@ -2,8 +2,8 @@
 // @spec SA-02~05
 // 순수 함수 기반, CSP-safe, 외부 의존성 없음
 
-import { escapeHTML as esc } from '../sanitize.js';  // escapeHTML을 esc로 alias하여 사용
-import { PATHS } from '../paths.js';
+import { escapeHTML as esc } from '../core/sanitize.js';  // escapeHTML을 esc로 alias하여 사용
+import { PATHS } from '../core/paths.js';
 import { buildSectionDisplayTitles } from '../reader/reader-toc.js';
 
 // --- ② 기출 핵심 요약 ---

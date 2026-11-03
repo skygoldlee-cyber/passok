@@ -11,7 +11,7 @@
 
 ## 1. 뷰 인벤토리
 
-모든 뷰는 `index.html`의 `.view-section` (파셜: `html/views/`) 이고 `navigateToView()`(`src/router.js`)가 `.active` 토글로 전환한다. 해시 슬러그는 `VIEW_HASH_SLUGS`가 소유 — **뷰 추가/이름 변경 시 이 표와 `VIEW_HASH_SLUGS`·SPEC §3.x를 함께 갱신**.
+모든 뷰는 `index.html`의 `.view-section` (파셜: `html/views/`) 이고 `navigateToView()`(`src/shell/router.js`)가 `.active` 토글로 전환한다. 해시 슬러그는 `VIEW_HASH_SLUGS`가 소유 — **뷰 추가/이름 변경 시 이 표와 `VIEW_HASH_SLUGS`·SPEC §3.x를 함께 갱신**.
 
 | 화면 | view id | 파셜 | 해시 | 네비 위치 (데스크톱 / 모바일) | SPEC § | 모드 |
 |------|---------|------|------|------------------------------|--------|------|

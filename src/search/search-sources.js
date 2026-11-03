@@ -15,11 +15,11 @@
 //   _searchText 소문자·공백 정규화된 검색 텍스트 (코어가 인덱싱)
 import { pkDecode } from '../content/unpack.js';
 import { DataLoader } from '../content/data-loader.js';
-import { hasFeature, contentPath, dataPath, getActiveExamId } from '../exam-context.js';
+import { hasFeature, contentPath, dataPath, getActiveExamId } from '../core/exam-context.js';
 import { injectBundleScript, fetchMd } from '../shell/doc-overlay.js';
 import { getRefTables } from '../pdf-registry.js';
 import { buildSectionDisplayTitles, isStoryMetaSection } from '../reader/reader-toc.js';
-import { PATHS } from '../paths.js';
+import { PATHS } from '../core/paths.js';
 import { registerSearchSource, registerVocabContributor, _toSearchable, _getMorphVocab } from './search-index.js';
 import { termHitQuality } from './search-morpheme.js';
 import { getAllGlossaryKeywords, getGlossaryEntry, glossarySubjectKey } from '../reader/glossary-query.js';

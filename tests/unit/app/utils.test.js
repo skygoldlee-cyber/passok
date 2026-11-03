@@ -11,7 +11,7 @@ import { dirname, join } from 'node:path';
 
 const require = createRequire(import.meta.url);
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
-const { todayKey, localDateKey, escapeRegExp, debounce, fmtMMSS, fmtClock } = require(join(ROOT, 'src/utils.js'));
+const { todayKey, localDateKey, escapeRegExp, debounce, fmtMMSS, fmtClock } = require(join(ROOT, 'src/core/utils.js'));
 
 test('localDateKey — 로컬 성분으로 YYYY-MM-DD 조립', () => {
     const d = new Date(2026, 0, 5, 9, 30); // 2026-01-05 09:30 로컬

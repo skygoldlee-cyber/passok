@@ -5,9 +5,9 @@
 // 고객 카드·상담 이력(타인 개인정보)은 동기화에서 제외한다 (설계 §7).
 import { getSupabase, getAuthSession } from './supabase-client.js';
 import { isSupabaseConfigured } from './supabase-config.js';
-import { safeGetItem, safeSetItem, listScopedKeys, setDataWriteHook } from '../state.js';
-import { STORAGE_KEYS, BACKUP_KEYS, isDailyCompletedKey } from '../storage-keys.js';
-import { unscopedKey, getActiveExamId } from '../exam-context.js';
+import { safeGetItem, safeSetItem, listScopedKeys, setDataWriteHook } from '../core/state.js';
+import { STORAGE_KEYS, BACKUP_KEYS, isDailyCompletedKey } from '../core/storage-keys.js';
+import { unscopedKey, getActiveExamId } from '../core/exam-context.js';
 import { canCloudSync } from '../pro/pro-upgrade.js';
 import { showToast, showConfirm } from '../ui-utils.js';
 

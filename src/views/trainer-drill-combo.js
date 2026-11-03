@@ -1,7 +1,7 @@
 // src/views/trainer-drill-combo.js - 복수정답형(combo) 드릴
 // @spec DR-02
-import { state } from '../state.js';
-import { esc, safeTextWithBreaks } from '../sanitize.js';
+import { state } from '../core/state.js';
+import { esc, safeTextWithBreaks } from '../core/sanitize.js';
 import { vibrate, showToast, HAPTIC } from '../ui-utils.js';
 import { gradeAnswer } from '../content/questions.js';
 import { recordStatementJudgments, getWeakStatements } from '../study/statement-tracker.js';

@@ -12,7 +12,7 @@ import {
 } from '../../../src/study/recommendations.js';
 import { computeStudyPattern, buildWeeklyReportText, estimateUntaggedCauses } from '../../../src/study/analysis-engine.js';
 import { recordStudyActivity, getStudyCalendar } from '../../../src/study/study-tracker.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 // --- localStorage·window.DATA_REGISTRY 모킹 (learning-pro.test.js와 동일 패턴) ---
 

@@ -11,8 +11,8 @@
 
 export function buildCalcQuestion() {
     const qType = Math.floor(Math.random() * 4);
-    /** @type {import('../types.js').CalcQuestion} */
-    let qData = /** @type {import('../types.js').CalcQuestion} */ ({});
+    /** @type {import('../core/types.js').CalcQuestion} */
+    let qData = /** @type {import('../core/types.js').CalcQuestion} */ ({});
     
     if (qType === 0) {
         const totalWeights = [100, 150, 200, 300, 500];

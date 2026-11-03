@@ -20,14 +20,14 @@ import {
     loadIndexHtml, el, isVisible,
     seedStudyData, seedProgress, resetStudyState, storedJson, stubRegistry,
 } from '../helpers.js';
-import { state } from '../../../src/state.js';
+import { state } from '../../../src/core/state.js';
 import { DataLoader } from '../../../src/content/data-loader.js';
 import {
     startQuiz, renderQuizQuestion, submitQuizAnswer, nextQuizQuestion,
     renderReviewList, removeWeakCard, setReviewFilter, startWeakFocusQuiz,
     startDiagnosticQuiz,
 } from '../../../src/views/quiz/quiz.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 const QUIZZES = [
     { id: 'subj1_quiz_1', type: 'short', category: '법령', context: '화장품법', question: '맞춤형화장품 [빈칸]를 두어야 한다.', answer: '조제관리사' },

@@ -6,9 +6,9 @@
 // 세션 복구(resumeSimDraft)·나가기(exitSimArena)는 렌더가 필요해
 // exam-sim-session.js에 있다.
 
-import { safeGetItem, safeSetItem, safeRemoveItem } from '../../state.js';
-import { fmtMMSS } from '../../utils.js';
-import { STORAGE_KEYS } from '../../storage-keys.js';
+import { safeGetItem, safeSetItem, safeRemoveItem } from '../../core/state.js';
+import { fmtMMSS } from '../../core/utils.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { simState } from './exam-sim-state.js';
 
 export function saveSimDraft() {

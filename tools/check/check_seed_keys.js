@@ -21,7 +21,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const EXAM_CONTEXT = path.join(ROOT, 'src', 'exam-context.js');
+const EXAM_CONTEXT = path.join(ROOT, 'src', 'core', 'exam-context.js');
 const TESTS_DIR = path.join(ROOT, 'tests');
 
 /** GLOBAL_KEYS 집합 추출 — exam-context.js의 `const GLOBAL_KEYS = new Set([...])` 블록 */

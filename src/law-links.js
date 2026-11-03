@@ -10,7 +10,7 @@
 // 매칭은 위에서 아래로 — 시험별 lawRefs 순서가 곧 우선순위 (구체적인 것을 먼저).
 // [멀티시험] 시험별 매핑은 _EXAM_LAW_URLS[examId] — 활성 시험을 해석한다.
 
-import { getActiveExamId } from './exam-context.js';
+import { getActiveExamId } from './core/exam-context.js';
 
 const _EXAM_LAW_URLS = {
     "cosmetic": [

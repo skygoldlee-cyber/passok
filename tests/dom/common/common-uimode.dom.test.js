@@ -18,7 +18,7 @@ vi.mock('../../../src/views/navigation.js', () => ({
 }));
 
 import { switchView } from '../../../src/views/navigation.js';
-import { state } from '../../../src/state.js';
+import { state } from '../../../src/core/state.js';
 import {
     getUiMode, isPracticeMode, applyUiMode, initUiMode,
     toggleUiMode

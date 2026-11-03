@@ -20,10 +20,10 @@ import { showToast } from '../../../src/ui-utils.js';
 import {
     loadIndexHtml, el, resetStudyState, storedJson,
 } from '../helpers.js';
-import { state, loadProgress, safeSetItem } from '../../../src/state.js';
+import { state, loadProgress, safeSetItem } from '../../../src/core/state.js';
 import { togglePomodoro, resetPomodoro, updatePomodoroUI } from '../../../src/views/pomodoro.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
-import { todayKey } from '../../../src/utils.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
+import { todayKey } from '../../../src/core/utils.js';
 import { TIMING } from '../../../src/config/timing.js';
 
 describe('뽀모도로 — 시작·경과·완주·리셋·날짜 경계', () => {

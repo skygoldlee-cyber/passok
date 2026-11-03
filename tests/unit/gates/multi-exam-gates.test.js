@@ -135,7 +135,7 @@ describe('멀티시험 게이트 — 앱 공용 사용자 매뉴얼', () => {
     });
 
     it('PATHS.USER_MANUAL은 시험 스코프가 아닌 고정 경로다', async () => {
-        const { PATHS } = await import('../../../src/paths.js');
+        const { PATHS } = await import('../../../src/core/paths.js');
         assert.equal(PATHS.USER_MANUAL, COMMON_MANUAL);
         assert.ok(!PATHS.USER_MANUAL.includes('exams/'), '시험별 contentRoot 하위 경로 금지');
     });

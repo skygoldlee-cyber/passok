@@ -1,4 +1,4 @@
-// tests/dom/dictionary-custom.dom.test.js — 자가 등록 성분 사전 병합 검증
+// tests/dom/study/dictionary-custom.dom.test.js — 자가 등록 성분 사전 병합 검증
 // @spec DI-06,DI-08
 // 검증: schema.customKey 선언 시 로컬 등록 항목 병합·'사용자 등록 원료' 배지·필터·
 //       '성분 추가' 버튼 노출·'공식 등록됨' superseded·카드 '수정' 액션,
@@ -20,8 +20,8 @@ import { DataLoader } from '../../../src/content/data-loader.js';
 import {
     renderDictionary, setDictFilter, dictState,
 } from '../../../src/views/dictionary.js';
-import { setJSON } from '../../../src/storage.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { setJSON } from '../../../src/core/storage.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 const COSMETIC_SCHEMA = {
     registryKey: 'ingredients',

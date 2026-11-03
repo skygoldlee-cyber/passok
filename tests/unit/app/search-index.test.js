@@ -206,7 +206,7 @@ test('ensureLazyIndexes — lazy 소스 완료 후 엔트리가 인덱스에 병
 
 test('_loadExamDocEntries — manifest.searchDocs 선언 문서를 doc 엔트리로 로드한다', async () => {
     const { _loadExamDocEntries } = await import('../../../src/search/search-sources.js');
-    const { contentPath } = await import('../../../src/exam-context.js');
+    const { contentPath } = await import('../../../src/core/exam-context.js');
     const prevManifest = DataLoader._manifest;
     DataLoader._manifest = {
         subjects: [{ key: 'paper1', name: '과목일' }],

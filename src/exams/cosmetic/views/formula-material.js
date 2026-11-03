@@ -5,8 +5,8 @@
 // 기한 상태는 저장하지 않고 표시 시 계산한다 — materialStatus/daysUntilExpiry.
 // LOT 역추적(FO-57): 카드의 [추적] 버튼이 해당 원료를 쓴 배치→고객 목록을 표시.
 
-import { esc } from '../../../sanitize.js';
-import { todayKey } from '../../../utils.js';
+import { esc } from '../../../core/sanitize.js';
+import { todayKey } from '../../../core/utils.js';
 import { showToast, showConfirm } from '../../../ui-utils.js';
 import { showStoreError, showUpgradeNotice } from '../../../pro/pro-upgrade.js';
 import { showPanel, formulaSubNav } from './formula.js';

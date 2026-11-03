@@ -1,4 +1,4 @@
-// tests/dom/usage-stats.dom.test.js — 로컬 기능 사용 카운터 (ROAD-L5)
+// tests/dom/common/usage-stats.dom.test.js — 로컬 기능 사용 카운터 (ROAD-L5)
 // @spec ROAD-L5,UX-MET-01,UX-MET-02,UX-MET-03,UX-MET-04
 // 뷰 전환·기능 액션 카운트가 시험 스코프 localStorage 키에 누적되고,
 // 설정의 '내 사용 통계' 모달이 라벨·합계를 렌더링함을 고정한다.
@@ -30,9 +30,9 @@ import { showToast } from '../../../src/ui-utils.js';
 import { gotoOxDrill, startOxDrill } from '../../../src/views/trainer-drills.js';
 import { renderDashboard } from '../../../src/views/dashboard.js';
 import { DataLoader } from '../../../src/content/data-loader.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
-import { scopedKey } from '../../../src/exam-context.js';
-import { todayKey } from '../../../src/utils.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
+import { scopedKey } from '../../../src/core/exam-context.js';
+import { todayKey } from '../../../src/core/utils.js';
 
 function overlay() { return document.getElementById('usage-stats-overlay'); }
 
@@ -299,9 +299,9 @@ describe('사용 스냅샷 텔레메트리 (UX-MET-05)', () => {
         expect(rows[0].event).toBe('usage_snapshot');
         expect(rows[0].meta.views['dashboard-view']).toBeGreaterThan(0);
         // today 주입 시 sent-mark 검사는 건너뜀 — 실제 오늘 날짜로 호출하면 하루 1회 상한이 작동
-        const { STORAGE_KEYS } = await import('../../../src/storage-keys.js');
-        const { todayKey } = await import('../../../src/utils.js');
-        const { safeSetItem } = await import('../../../src/state.js');
+        const { STORAGE_KEYS } = await import('../../../src/core/storage-keys.js');
+        const { todayKey } = await import('../../../src/core/utils.js');
+        const { safeSetItem } = await import('../../../src/core/state.js');
         _resetUsageTelemetryForTest();
         safeSetItem(STORAGE_KEYS.USAGE_SNAPSHOT_SENT, todayKey());
         const res2 = await maybeReportUsageSnapshot({ insert: async () => ({}) });

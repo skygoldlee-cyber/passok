@@ -11,8 +11,8 @@ import {
     buildGradingPrompt, parseGradingResponse, applyGrading,
     callProviderLLM, gradeAnswer,
 } from '../../../src/written/written-grading.js';
-import { setItem } from '../../../src/storage.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { setItem } from '../../../src/core/storage.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 const Q = {
     id: 'S1', type: '계산형', points: 15,

@@ -5,9 +5,9 @@
 // 큐 빌드(buildTodayQueue)는 DOM 비의존 순수 로직 — 렌더는 renderTodayQueue가 담당.
 // 추천·배분 알고리즘 자체는 변경하지 않고 노출 채널만 단일화한다.
 
-import { state } from '../state.js';
-import { esc } from '../sanitize.js';
-import { safeGetItem } from '../state.js';
+import { state } from '../core/state.js';
+import { esc } from '../core/sanitize.js';
+import { safeGetItem } from '../core/state.js';
 import { DataLoader } from '../content/data-loader.js';
 import { getDueCards, getExamRiskCards, EXAM_R_WINDOW_DAYS, EXAM_R_SESSION_CAP } from '../study/spaced-repetition.js';
 import { getWeakStatements } from '../study/statement-tracker.js';
@@ -21,8 +21,8 @@ import { buildTodayQueue as buildPersonalQueue } from '../study/personalization.
 import { weakClusters } from './personalization-view.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { subjectKeyFromItemId } from '../study/weak-items.js';
-import { todayKey } from '../utils.js';
-import { dailyCompletedKey } from '../storage-keys.js';
+import { todayKey } from '../core/utils.js';
+import { dailyCompletedKey } from '../core/storage-keys.js';
 
 const MAX_PLAN_ITEMS = 2; // 주간 배정 큐 항목 상한 — 과목 나열은 최대 2개
 

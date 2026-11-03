@@ -5,9 +5,9 @@
 //  정밀 착지가 불가하므로 검색 범위에서 제외. 본문 커버리지는 하단 전수검색 브리지가 담당)
 // 모든 데이터는 로컬(window.STUDY_DATA/INGREDIENTS_DATA/DataLoader.registry) — 오프라인 완전 동작.
 
-import { esc } from '../sanitize.js';
-import { getChosung } from '../utils.js';
-import { contentPath, hasFeature } from '../exam-context.js';
+import { esc } from '../core/sanitize.js';
+import { getChosung } from '../core/utils.js';
+import { contentPath, hasFeature } from '../core/exam-context.js';
 import { SemanticIndex } from '../search/semantic-index.js';
 import { gotoOxDrill } from '../views/trainer-drills.js';
 import { DataLoader } from '../content/data-loader.js';

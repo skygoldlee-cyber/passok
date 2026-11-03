@@ -6,7 +6,7 @@
 // 상세 패널(batchOpen) 호출이 필요해 formula-batch.js에 남는다 — 이 모듈은
 // 배치 목록·상세를 참조하지 않아 의존 방향은 batch → form 단방향.
 
-import { esc } from '../../../sanitize.js';
+import { esc } from '../../../core/sanitize.js';
 import { showToast } from '../../../ui-utils.js';
 import { showUpgradeNotice } from '../../../pro/pro-upgrade.js';
 import { showPanel, getEl } from './formula.js';
@@ -22,7 +22,7 @@ import { localDateTimeNow } from '../store-utils.js';
 import { DataLoader } from '../../../content/data-loader.js';
 import { daysUntilExpiry, findMaterialsByName, stockStatus } from '../material-ledger.js';
 import { isPreservative } from '../formula-stability.js';
-import { localDateKey } from '../../../utils.js';
+import { localDateKey } from '../../../core/utils.js';
 
 // 폼 상태 — editingId가 있으면 보정 모드(identity 필드 읽기 전용)
 export const draft = { editingId: null };

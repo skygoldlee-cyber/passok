@@ -22,8 +22,8 @@ import {
 import { openCompliancePanel, compToggle } from '../../../../src/exams/cosmetic/views/formula-compliance.js';
 import { setBizType } from '../../../../src/exams/cosmetic/biz-profile.js';
 import { createFormula } from '../../../../src/exams/cosmetic/formula-store.js';
-import { getJSON } from '../../../../src/storage.js';
-import { STORAGE_KEYS } from '../../../../src/storage-keys.js';
+import { getJSON } from '../../../../src/core/storage.js';
+import { STORAGE_KEYS } from '../../../../src/core/storage-keys.js';
 
 const INGREDIENTS_STUB = [
     { name: '정제수', engName: 'Water', type: 'approved', category: '용제', limit: '' },

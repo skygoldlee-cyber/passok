@@ -1,8 +1,8 @@
 // @spec ROAD-P0, ROAD-L1
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { scopedKey } from '../../../src/exam-context.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { scopedKey } from '../../../src/core/exam-context.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 import { getExamDate, setExamDate, getDDay, getExamPlanStatus } from '../../../src/study/study-tracker.js';
 import { getDueCards } from '../../../src/study/spaced-repetition.js';
 import { computeRecommendations, computeWrongCauseSummary, getSimHistory } from '../../../src/study/recommendations.js';
@@ -255,7 +255,7 @@ test('saveActualResult/getActualResult — 영속 + 유효성 검사', () => {
 
 // --- 교재/시험 교체 대비: 매니페스트 선언 합격 규칙 ---
 
-import { getExamRules } from '../../../src/exam-context.js';
+import { getExamRules } from '../../../src/core/exam-context.js';
 
 test('getExamRules — manifest 선언 우선, 미선언 시 60/40 기본값', () => {
     const origWindow = globalThis.window;

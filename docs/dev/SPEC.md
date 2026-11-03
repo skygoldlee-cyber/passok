@@ -1126,7 +1126,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | DA-06 | **멀티시험 대칭 구조**: `content/exams.json` 레지스트리 → 시험별 `content/exams/<id>/`·`data/exams/<id>/` 동일 내부 구조, `exam-context.js`의 `contentPath()`/`dataPath()`/`selectExam()`(전환 = reload) | ✅ |
 | DA-07 | **스코프드 진도 키**: `safeGetItem`/`safeSetItem`이 `<examId>:` 네임스페이스 자동 접두(`scopedKey`) — 시험 간 진도 격리, `GLOBAL_KEYS`(테마 등)만 비네임스페이스. 백업 파일은 비접두사 논리 키로 시험 간 호환 | ✅ |
 | DA-08 | **기능 플래그 게이팅**: exams.json `features` + `hasFeature()` + `data-feature` 속성 — 시험별 도메인 특화 기능(성분사전·오디오북 등) 자동 숨김 | ✅ |
-| DA-09 | **저장소 추상화 계층** (`src/storage.js`): 모든 영속 읽기·쓰기의 단일 퍼널 — `setStorageBackend()`로 백엔드 교체 가능, 동기·Async 이중 API로 IndexedDB/SQLite 이행 경로 확보. 다중 키 쓰기 `setMany`/`setJSONMany`는 중간 실패 시 이전 값으로 롤백 (다중 엔티티 갱신의 중간 상태 방지) | ✅ |
+| DA-09 | **저장소 추상화 계층** (`src/core/storage.js`): 모든 영속 읽기·쓰기의 단일 퍼널 — `setStorageBackend()`로 백엔드 교체 가능, 동기·Async 이중 API로 IndexedDB/SQLite 이행 경로 확보. 다중 키 쓰기 `setMany`/`setJSONMany`는 중간 실패 시 이전 값으로 롤백 (다중 엔티티 갱신의 중간 상태 방지) | ✅ |
 | DA-10 | **고객 PII 로컬 전용**: `customer_items`는 동기화(`SYNC_EXCLUDE`)·Supabase 테이블 모두에서 제외 — 백업/초기화에는 포함. 조제관리사가 타인 개인정보를 서버에 올리지 않는 설계 | ✅ |
 | DA-11 | **파일 계층 분류 강제**: `tools/config/domain-map.json` + `check:domainmap` — src/css/html/data/content/tests 전 파일이 platform/feature:<플래그>/domain:<시험id> 중 하나로 분류 필수(미분류·중복·스테일 = 오류). exams.json 등록 시험의 `contentRoot`/`dataRoot`는 `domain:<id>` 규칙으로 자동 주입, 미등록 시험 디렉터리 감지 | ✅ |
 | DA-12 | **UI 텍스트 커버리지 감사**: `check:uitext` — `data-uitext` 속성 ↔ 시험 `manifest.uiText` 양방향 검증(dead 키·형식 오류) + platform 분류 마크업에 시험명(name/shortName) 잔존 금지 | ✅ |
@@ -1383,8 +1383,8 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | 모듈 | 파일 | 책임 |
 |------|------|------|
 | 오케스트레이터 | `src/shell/app.js` | 초기화, SPA 라우팅, 이벤트 위임, 뷰 간 브릿지 |
-| 상태 관리 | `src/state.js` | 전역 상태 객체, 진행 영속성 (저장은 storage.js 위임) |
-| 저장소 추상화 | `src/storage.js` | 영속 읽기·쓰기 단일 퍼널 — 교체 가능 백엔드(기본 localStorage), 동기·Async 이중 API, `setMany`/`setJSONMany` 롤백 다중 쓰기, 쓰기 훅·쿼터 감지 |
+| 상태 관리 | `src/core/state.js` | 전역 상태 객체, 진행 영속성 (저장은 storage.js 위임) |
+| 저장소 추상화 | `src/core/storage.js` | 영속 읽기·쓰기 단일 퍼널 — 교체 가능 백엔드(기본 localStorage), 동기·Async 이중 API, `setMany`/`setJSONMany` 롤백 다중 쓰기, 쓰기 훅·쿼터 감지 |
 | 약점 항목 | `src/study/weak-items.js` | 약점(오답) ID 문법 단일 소스(`weak_quiz_`/`weak_sim_`), 퀴즈·카드 인덱스 캐시, DOM 비의존 |
 | 합격 전략 | `src/study/recommendations.js` | "오늘의 합격 전략" 추천·오답 원인 집계·예상 점수 추정·실제 결과 보고 (DOM 비의존 순수 로직) |
 | 통합 검색 | `src/shell/command-palette.js` | Ctrl/Cmd+K 통합 검색 팔레트 — `searchAll()` 순수 함수 + UI 지연 생성 |
@@ -1397,8 +1397,8 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | 문제집 뷰어 | `src/reader/exam-viewer.js` | 문제은행 MD 런타임 뷰어 |
 | 매뉴얼 뷰어 | `src/reader/manual-viewer.js` | 학습안내서/사용자매뉴얼 뷰어 |
 | 차트 | `src/charts.js` | SVG 레이더/꺾은선 차트 + 인터랙티브 툴팁 |
-| 보안 | `src/sanitize.js` | XSS 방어, 텍스트 정제 |
-| 유틸 | `src/utils.js` | 초성 추출, Fisher-Yates 셔플 |
+| 보안 | `src/core/sanitize.js` | XSS 방어, 텍스트 정제 |
+| 유틸 | `src/core/utils.js` | 초성 추출, Fisher-Yates 셔플 |
 | 키워드 인덱스 | `src/keyword-index.js` | 교재 셀→참조자료 키워드 매핑 (자동 생성) |
 | 용어집 렌더러 | `src/views/glossary-renderer.js` | 용어집 테이블 렌더링, `scrollToGlossary()` 공유 함수 |
 | 학습 보조 | `src/study/study-aids.js` | 기출 필터, 숫자 암기표 |
@@ -1474,10 +1474,10 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | `src/auth-sync/auth-view.js` | 계정/로그인 모달 (이메일+PW·회원가입·로그인 메일 OTP) |
 | `src/auth-sync/sync.js` | 클라우드 스냅샷 동기화 (sync_snapshots push/pull, dirty 훅·디바운스·충돌 확인, 고객 키 제외) |
 | `src/auth-sync/supabase-client.js` | Supabase lazy init — vendor UMD 동적 로드 |
-| `src/exam-context.js` | 활성 시험 해석/전환, `scopedKey` 네임스페이스, `hasFeature` |
+| `src/core/exam-context.js` | 활성 시험 해석/전환, `scopedKey` 네임스페이스, `hasFeature` |
 | `src/shell/ui-mode.js` | 학습/실무 UI 모드 전환 (`ui_mode` 키, 학습 도구 접이식) |
-| `src/storage-keys.js` | localStorage 키 중앙 관리 |
-| `src/paths.js` | 파일 경로 상수 (시험 루트 인지형) |
+| `src/core/storage-keys.js` | localStorage 키 중앙 관리 |
+| `src/core/paths.js` | 파일 경로 상수 (시험 루트 인지형) |
 
 ### 자가 복구
 

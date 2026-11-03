@@ -1,6 +1,6 @@
 // src/exams/carework/care-audit.js — 기관 평가 체크리스트 데이터
 // @spec none — 시험 전용 도메인 데이터 (DA-13)
-import { getJSON, setJSON } from '../../storage.js';
+import { getJSON, setJSON } from '../../core/storage.js';
 
 const KEY = 'carework_audit_checks';
 let _sections = null;

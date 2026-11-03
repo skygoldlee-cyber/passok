@@ -136,7 +136,7 @@ function buildAudioManifest() {
 /** @type {string|null} */
 export const AUDIO_BASE_URL = ${audioBaseUrl};
 
-/** @type {Object<string, import('../src/types.js').AudioManifest>} */
+/** @type {Object<string, import('../src/core/types.js').AudioManifest>} */
 export const AUDIO_MANIFEST = ${JSON.stringify(manifest, null, 2)};
 
 /**

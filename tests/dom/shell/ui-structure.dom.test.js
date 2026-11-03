@@ -1,4 +1,4 @@
-// tests/dom/ui-structure.dom.test.js — UI/UX 전체 구조 불변식 테스트
+// tests/dom/shell/ui-structure.dom.test.js — UI/UX 전체 구조 불변식 테스트
 // @spec UX-NAV-01,UX-NAV-08,UM-04
 // 라우팅·네비게이션·오버레이·포커스 등 "앱 구조" 계약을 한 파일에서 검증한다.
 // 개별 기능 테스트가 아니라 구조 일관성(모든 뷰가 라우트에 등록됐는가,
@@ -9,7 +9,7 @@ import { loadIndexHtml, el } from '../helpers.js';
 // ---------------------------------------------------------------------------
 // 공용 목 — state는 각 describe에서 필요한 형태로 주입한다
 // ---------------------------------------------------------------------------
-vi.mock('../../../src/state.js', () => ({
+vi.mock('../../../src/core/state.js', () => ({
     state: {
         currentView: 'dashboard-view',
         flashcards: { subject: 'law' },
@@ -38,10 +38,10 @@ vi.mock('../../../src/exams/cosmetic/views/trainer-ingredients.js', () => ({
     startIngredientsChallenge: vi.fn(), submitIngAnswer: vi.fn(), nextIngQuestion: vi.fn()
 }));
 
-const { state } = await import('../../../src/state.js');
+const { state } = await import('../../../src/core/state.js');
 const {
     getViewTitles, navigateToView, initViewHashRouting, VIEW_HASH_SLUGS
-} = await import('../../../src/router.js');
+} = await import('../../../src/shell/router.js');
 const { switchView } = await import('../../../src/views/navigation.js');
 const { setupModalBackHandler, resetModalBackState } = await import('../../../src/shell/modal-back.js');
 

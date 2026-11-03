@@ -14,7 +14,7 @@
 // [멀티시험] 시험별 테이블은 _EXAM_TABLES[examId] — getRefTables()가 활성 시험을 해석한다.
 // ================================================================
 
-import { getActiveExamId } from './exam-context.js';
+import { getActiveExamId } from './core/exam-context.js';
 
 const _EXAM_TABLES = {
     "cosmetic": {

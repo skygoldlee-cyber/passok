@@ -1,13 +1,13 @@
 // views/reader-audio.js — 오디오북 플레이어 (textbook-reader.js에서 추출)
 // @spec AO-01~05,A-09 — 음원은 교재 원문 낭독, 리더 원문이 동등 대체재 (WCAG 1.2.1)
 import { showToast } from '../../ui-utils.js';
-import { safeGetItem, safeSetItem, safeRemoveItem } from '../../state.js';
+import { safeGetItem, safeSetItem, safeRemoveItem } from '../../core/state.js';
 import { TIMING } from '../../config/timing.js';
-import { PATHS } from '../../paths.js';
-import { getActiveExamId, getExamAppName } from '../../exam-context.js';
+import { PATHS } from '../../core/paths.js';
+import { getActiveExamId, getExamAppName } from '../../core/exam-context.js';
 import { refreshProBadges, proFeatureNotice } from '../../pro/pro-upgrade.js';
-import { fmtClock } from '../../utils.js';
-import { raw } from '../../sanitize.js';
+import { fmtClock } from '../../core/utils.js';
+import { raw } from '../../core/sanitize.js';
 
 // --- 오디오북 플레이어 상태 ---
 /** @type {{audio: HTMLAudioElement|null, currentSrc: string, subjId: string, chapterIdx: number, chapterTitle: string, wasPlayingBeforeHidden: boolean, sectionBoundaries: {start:number,end:number}[], lastSectionIdx: number, autoScroll: boolean}} */

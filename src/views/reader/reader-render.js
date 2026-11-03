@@ -3,7 +3,7 @@
 // textbook-reader.js에서 분리 — _renderChapterContentInternal 이관.
 // 파일 로컬 상태를 쓰지 않는 순수 렌더 경로로, 진입·상태·진척은
 // textbook-reader.js / reader-progress.js가 담당한다.
-import { esc } from '../../sanitize.js';
+import { esc } from '../../core/sanitize.js';
 import { refreshProBadges } from '../../pro/pro-upgrade.js';
 import { formatSectionContentForReader, markStoryNarrative } from '../../reader/reader-format.js';
 import { renderStudyAids, bindStudyAidToggles } from '../../study/study-aids.js';
@@ -20,7 +20,7 @@ import {
 import {
     getAudioPathForChapter
 } from './reader-audio.js';
-import { hasFeature } from '../../exam-context.js';
+import { hasFeature } from '../../core/exam-context.js';
 import {
     getReaderBookmarks, toggleReaderBookmark, bookmarkKeyOf,
     applyReaderThemeClass,

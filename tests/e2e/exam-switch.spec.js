@@ -105,7 +105,7 @@ test.describe('시험 전환 실경로 — selectExam → 리로드 → 부팅',
         await Promise.all([
             page.waitForEvent('load', { timeout: 15_000 }),
             swallowNavTeardown(page.evaluate(async () => {
-                const m = await import('./src/exam-context.js');
+                const m = await import('./src/core/exam-context.js');
                 m.selectExam('lossadj');
             })),
         ]);
@@ -118,7 +118,7 @@ test.describe('시험 전환 실경로 — selectExam → 리로드 → 부팅',
         await Promise.all([
             page.waitForEvent('load', { timeout: 15_000 }),
             swallowNavTeardown(page.evaluate(async () => {
-                const m = await import('./src/exam-context.js');
+                const m = await import('./src/core/exam-context.js');
                 m.selectExam('cosmetic');
             })),
         ]);

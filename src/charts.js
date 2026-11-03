@@ -4,10 +4,10 @@
 // 채우는 window 전역을 "가드"해서 읽는다. 정적 import 로 하드 의존하면, 레지스트리 파일
 // 로드가 실패할 때 이 모듈(및 상위 app.js) 전체가 실행되지 않아 흰 화면이 되므로 지양.
 
-import { getSimResultsHistory as getSimResults } from './state.js';
+import { getSimResultsHistory as getSimResults } from './core/state.js';
 import { TIMING } from './config/timing.js';
-import { getExamRules, resolveLegacySubjectKey, getActiveRegistry } from './exam-context.js';
-import { esc } from './sanitize.js';
+import { getExamRules, resolveLegacySubjectKey, getActiveRegistry } from './core/exam-context.js';
+import { esc } from './core/sanitize.js';
 
 // CSS 변수에서 색상 읽기 (하드코딩 대체)
 function cssVar(name, fallback) {

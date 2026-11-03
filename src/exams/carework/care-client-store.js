@@ -2,9 +2,9 @@
 // @spec none — 시험 전용 도메인 스토어 (DA-13)
 // localStorage `carework_clients` — 방문기록·인수인계·일지의 대상자 입력 소스
 // 무료 한도: FREE_LIMIT건 — 초과 시 free-limit 오류 → 상위에서 업그레이드 안내
-import { getJSON, setJSON } from '../../storage.js';
-import { STORAGE_KEYS } from '../../storage-keys.js';
-import { localDateTime } from '../../utils.js';
+import { getJSON, setJSON } from '../../core/storage.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
+import { localDateTime } from '../../core/utils.js';
 import { showStoreError, proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { showToast } from '../../ui-utils.js';
 

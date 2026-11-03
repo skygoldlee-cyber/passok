@@ -9,7 +9,7 @@
 // 접두사 규칙을 이 파일에 모아 quiz.js / exam-simulator.js / recommendations.js /
 // state.js가 같은 문법을 공유한다.
 
-import { examIdToSubjectId } from '../exam-context.js';
+import { examIdToSubjectId } from '../core/exam-context.js';
 
 export const WEAK_QUIZ_PREFIX = 'weak_quiz_';
 export const WEAK_SIM_PREFIX = 'weak_sim_';

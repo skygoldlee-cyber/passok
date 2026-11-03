@@ -7,11 +7,11 @@
 
 import { pkDecodeFiles } from './unpack.js';
 import { TIMING } from '../config/timing.js';
-import { PATHS } from '../paths.js';
+import { PATHS } from '../core/paths.js';
 //        exam/ingredients 는 기존 레지스트리 번들 방식을 그대로 유지한다.
-import { cleanOrphansForSubject } from '../state.js';
+import { cleanOrphansForSubject } from '../core/state.js';
 import { buildSubjectData } from '../reader/textbook-parser.js';
-import { getActiveExam, contentPath, dataPath } from '../exam-context.js';
+import { getActiveExam, contentPath, dataPath } from '../core/exam-context.js';
 // [모바일 PWA 견고성] 레지스트리는 window 전역(가드)에서 읽는다. 정적 import 로 하드 의존하면
 // 레지스트리 로드 실패 시 app.js 모듈 그래프 전체가 죽어 흰 화면이 되므로 지양.
 
@@ -19,9 +19,9 @@ const IS_FILE = (typeof location !== 'undefined' && location.protocol === 'file:
 
 
 export const DataLoader = {
-    /** @type {import('../types.js').DataRegistry|null} */
+    /** @type {import('../core/types.js').DataRegistry|null} */
     registry: null,
-    /** @type {import('../types.js').ExamDef|null} */
+    /** @type {import('../core/types.js').ExamDef|null} */
     exam: null,
     /** @type {Object.<string, any>} */
     _loaded: {},
@@ -29,7 +29,7 @@ export const DataLoader = {
     _loadedExams: {},
     /** @type {Object.<string, any>} */
     _loadedDrills: {},
-    /** @type {import('../types.js').Ingredient[]|null} */
+    /** @type {import('../core/types.js').Ingredient[]|null} */
     _ingredients: null,
     /** @type {any} */
     _manifest: null,
@@ -332,7 +332,7 @@ export const DataLoader = {
 
     /**
      * 과목 목록 (레지스트리 메타: key/order/name/stats).
-     * @returns {import('../types.js').SubjectMeta[]}
+     * @returns {import('../core/types.js').SubjectMeta[]}
      */
     getSubjectList() {
         return (this.registry && this.registry.subjects) || [];
@@ -470,14 +470,14 @@ export const DataLoader = {
     /**
      * Load the ingredients database bundle on demand.
      * (온디맨드 번들은 file:// 호환을 위해 클래식 <script> 주입 방식을 유지한다.)
-     * @returns {Promise<import('../types.js').Ingredient[]>}
+     * @returns {Promise<import('../core/types.js').Ingredient[]>}
      */
     async loadIngredients() {
         if (this._ingredients) return this._ingredients;
         const meta = this.registry && this.registry.ingredients;
         if (!meta) throw new Error(`Ingredients metadata not found`);
         await this._loadScript(meta.bundle);
-        const data = /** @type {import('../types.js').Ingredient[]|undefined} */ (/** @type {any} */ (window)[meta.global]);
+        const data = /** @type {import('../core/types.js').Ingredient[]|undefined} */ (/** @type {any} */ (window)[meta.global]);
         if (!data || (Array.isArray(data) && data.length === 0)) {
             throw new Error(`Ingredients data is empty or invalid: ${meta.global}`);
         }

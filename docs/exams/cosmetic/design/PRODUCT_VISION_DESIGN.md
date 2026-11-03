@@ -143,7 +143,7 @@
 | `src/exams/cosmetic/views/formula-products.js` | 사진 수집 UI·키 관리·프리필 바인딩 |
 | `html/exams/cosmetic/formula.html` | 폼 패널에 사진 인입 섹션 마크업 |
 | `css/exams/cosmetic/formula.css` | 사진 슬롯·썸네일·참조 사진 스타일 |
-| `src/storage-keys.js` | `FORMULA_GEMINI_KEY` — 백업 제외 주석 |
+| `src/core/storage-keys.js` | `FORMULA_GEMINI_KEY` — 백업 제외 주석 |
 | `vercel.json` (+`serve.js` 미러 시) | `connect-src`에 Gemini 도메인 추가 |
 | `tools/config/domain-map.json` | `product-vision.js` 분류 (glob 커버면 불필요) |
 | `AGENTS.md` | 트리에 신규 모듈 등록 |

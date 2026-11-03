@@ -1,4 +1,4 @@
-// tests/dom/misc/telemetry-consent.dom.test.js — 텔레메트리 동의 UX (UX-MET-06)
+// tests/dom/common/telemetry-consent.dom.test.js — 텔레메트리 동의 UX (UX-MET-06)
 // @spec UX-MET-06
 // 설정 패널 '사용 통계 전송' 토글이 opt-out 플래그를 토글하고 라벨을 갱신함을 고정.
 // 거부 시 기능 제한 없이 전송만 차단됨을 검증한다.
@@ -13,7 +13,7 @@ vi.mock('../../../src/ui-utils.js', async (importOriginal) => ({
 
 import { loadIndexHtml } from '../helpers.js';
 import { isTelemetryAllowed, setTelemetryAllowed, isAutomatedRuntime } from '../../../src/telemetry/telemetry-consent.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 beforeEach(() => {
     localStorage.clear();

@@ -6,8 +6,8 @@
 // 단 출력 이력(FO-63)은 점수 요약 메타데이터만 FORMULA_AUDIT_LOG에 남긴다.
 // 섹션 범위는 BIZ_PANELS/bizVisible 게이트 재사용 — 유형에 안 맞는 섹션은 자동 제외.
 
-import { getJSON, setJSON } from '../../../storage.js';
-import { STORAGE_KEYS } from '../../../storage-keys.js';
+import { getJSON, setJSON } from '../../../core/storage.js';
+import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { getBizType, BIZ_TYPES, bizVisible, bizChecklistSet, getInspectorName } from '../biz-profile.js';
 import { CHECKLIST_SETS, LAW_DOCS, loadChecks, refreshAuditLog } from './formula-compliance.js';
 import { summarizeLabelDraft } from './formula-sales.js';
@@ -22,7 +22,7 @@ import { getIndex } from './formula.js';
 import { buildAuditReportHtml, printHtml, batchQcSummary } from './formula-print.js';
 import { showToast } from '../../../ui-utils.js';
 import { localDateTime, fmtLocalDateTime } from '../store-utils.js';
-import { fnv1aHex, deviceLabel } from '../../../utils.js';
+import { fnv1aHex, deviceLabel } from '../../../core/utils.js';
 import { ensureNoticeStatus, getNoticeStamp } from '../../../shell/notice-check.js';
 
 const RECENT_BATCH_MAX = 10;   // 최근 배치 목록 상한 — 판매내역 증적

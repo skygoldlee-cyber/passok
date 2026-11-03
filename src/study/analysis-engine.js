@@ -15,10 +15,10 @@
 //   reviewLog        [{c,k?,r?,ok?,t}]  (D-18 리뷰 로그 — BKT 관측 시퀀스, D-22)
 
 import { parseWeakSimId, subjectKeyFromItemId, WEAK_QUIZ_PREFIX } from './weak-items.js';
-import { resolveLegacySubjectKey, examIdToSubjectId } from '../exam-context.js';
+import { resolveLegacySubjectKey, examIdToSubjectId } from '../core/exam-context.js';
 import { Rating } from './fsrs.js';
 import { computeUnitMastery, KT_DEFAULTS } from './knowledge-tracing.js';
-import { localDateKey } from '../utils.js';
+import { localDateKey } from '../core/utils.js';
 import { WEAK_GRADUATE_STREAK } from './statement-tracker.js';
 import { getWrongCauseLabels, getWrongCauseTaxonomy } from './recommendations.js';
 import { getRemainingStudyDays, getStudyGoals } from './study-tracker.js';

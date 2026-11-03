@@ -1,10 +1,10 @@
 // src/views/exam-sim-weak.js - 오답 모의고사
 // @spec E-04,PS-02
-import { state } from '../../state.js';
+import { state } from '../../core/state.js';
 import { DataLoader } from '../../content/data-loader.js';
-import { shuffle } from '../../utils.js';
+import { shuffle } from '../../core/utils.js';
 import { WEAK_SIM_PREFIX, parseWeakSimId, resolveCard, cardSubjectOf } from '../../study/weak-items.js';
-import { examIdToSubjectId, getActiveRegistry } from '../../exam-context.js';
+import { examIdToSubjectId, getActiveRegistry } from '../../core/exam-context.js';
 import { proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { showToast } from '../../ui-utils.js';
 import { startSimSession, comboToSimQuestion, comboSubjOrder } from './exam-simulator.js';

@@ -1,9 +1,9 @@
 // src/views/pomodoro.js - 뽀모도로 타이머 로직 (trainer.js에서 분리)
 // @spec T-03
-import { state, safeSetItem } from '../state.js';
+import { state, safeSetItem } from '../core/state.js';
 import { showToast } from '../ui-utils.js';
-import { todayKey, fmtMMSS } from '../utils.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { todayKey, fmtMMSS } from '../core/utils.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { TIMING } from '../config/timing.js';
 
 /* =======================================================

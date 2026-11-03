@@ -112,11 +112,18 @@ src/                    # ES Modules
   shell/app-dashboard.js      # 대시보드 셀렉트·시험/리소스 카드·스토리지 경고 (app.js 분리)
   shell/app-shell.js          # 뷰포트·가로세로·data-click 접근성·시험 브랜딩(타이틀·로고·아이콘·앱명)·기능 플래그 (app.js 분리)
   shell/app-fallback.js       # ESM 로드 실패 시 자동 복구 (모바일 PWA 대응)
-  router.js             # 뷰 라우터 (navigateToView, getViewTitles, initViewHashRouting — #/슬러그 딥링크·뒤로가기)
-  state.js              # 전역 상태 + 진행 영속성 (saveProgress — 저장은 storage.js 위임)
-  storage.js            # 저장소 추상화 계층 — 백엔드 교체 가능(getItem/setItem 동기·Async 이중 API), 스코프·쓰기훅·쿼터 감지 중앙화
+  shell/router.js           # 뷰 라우터 (navigateToView, getViewTitles, initViewHashRouting — #/슬러그 딥링크·뒤로가기)
+  core/                # 플랫폼 코어 — 의존성 리프·기반 계층 (전 모듈이 참조)
+    exam-context.js      # 활성 시험 해석/전환, scopedKey 네임스페이스, hasFeature, getExamAppName(시험별 앱 이름 — exams.json appName)
+    paths.js             # 파일 경로 상수 중앙 관리 (시험 루트 인지형)
+    sanitize.js          # XSS 방어 (escapeHTML, safeTextWithBreaks, esc, stripTags)
+    sha256.js            # 안정적 ID 해시
+    state.js             # 전역 상태 + 진행 영속성 (saveProgress — 저장은 storage.js 위임)
+    storage.js           # 저장소 추상화 계층 — 백엔드 교체 가능(getItem/setItem 동기·Async 이중 API), 스코프·쓰기훅·쿼터 감지 중앙화
+    storage-keys.js      # localStorage 키 중앙 관리
+    types.js             # 중앙 JSDoc 타입 정의 모듈 (@spec none)
+    utils.js             # 공통 유틸리티 (shuffle·todayKey/localDateKey·getChosung·escapeRegExp·debounce·fmtClock/fmtMMSS)
   ui-utils.js           # showToast, showConfirm, trapFocus + 훈련 공용 마크업(markChoiceButtons·wrongReviewHtml·trainerResultHtml·showAnswerFeedback)
-  sanitize.js           # XSS 방어 (escapeHTML, safeTextWithBreaks, esc, stripTags)
   search/search-index.js       # 통합검색 인덱스 코어 순수 로직 (소스 레지스트리·시험 스코프 무효화·지연 소드 상태머신·어절 역색인·티어 랭킹 — TS-08~09,TS-13~18)
   search/search-sources.js     # 통합검색 콘텐츠 소스 프로바이더 (교재 섹션 수집·서사/참조/문제은행 로더·리더 이동 페이로드 해석 — TS-10~12,TS-18)
   search/search-morpheme.js    # 검색 형태소 경계 판정·동의어 확장 순수 로직 (어휘 마이닝·DP 커버·termHitQuality·expandSynonyms — TS-13/TS-14)
@@ -168,17 +175,11 @@ src/                    # ES Modules
     zoom-gestures.js       # 줌 모달 공용 핀치·패닝·더블탭 제스처 (Pointer Events, touch-action:none 표면, 이미지·머메이드 모달 공용 — TR-26)
   keyword-index.js      # 교재 셀→참조자료 키워드 매핑 (시험별 — 자동 생성)
   telemetry/web-vitals.js         # Core Web Vitals 모니터링
-  sha256.js             # 안정적 ID 해시
-  utils.js              # 공통 유틸리티 (shuffle·todayKey/localDateKey·getChosung·escapeRegExp·debounce·fmtClock/fmtMMSS)
-  types.js              # 중앙 JSDoc 타입 정의 모듈 (@spec none)
-  storage-keys.js       # localStorage 키 중앙 관리
-  paths.js              # 파일 경로 상수 중앙 관리 (시험 루트 인지형)
   study/personalization.js    # 개인 맞춤 고도화 순수 로직 (PS-01~11 — 약점 개념 클러스터·취약 자동편성·통합 큐·합격 확률·딥링크·FSRS/BKT 피팅·원인 추론·주간 리포트·클리닉)
   telemetry/error-telemetry.js    # 런타임 오류 텔레메트리 — error/unhandledrejection 수집 + 세션 핑(kind=session, 오류율 분모) → client_errors 익명 insert (미설정 시 no-op, 오류 세션 상한·중복 억제)
   telemetry/usage-telemetry.js    # 과업 퍼널 텔레메트리 — quiz/daily start↔complete 이벤트 → usage_events 익명 insert (세션당 랜덤 UUID 쌍 묶기·이벤트 상한, 미설정 시 no-op)
   telemetry/telemetry-session.js  # 텔레메트리 공유 세션 ID — 페이지 로드당 랜덤 UUID 1개를 client_errors·usage_events·bug 피드백(meta.session_id)이 공유하는 join 키 (사용자 식별 아님)
   telemetry/telemetry-consent.js  # 텔레메트리 동의·익명 설치 ID — opt-out 플래그(telemetry_opt_out)+최초 고지 마커+getInstallId(DEVICE_ID 재사용) (UX-MET-06/07, ADR-0019)
-  exam-context.js       # 활성 시험 해석/전환, scopedKey 네임스페이스, hasFeature, getExamAppName(시험별 앱 이름 — exams.json appName)
   shell/exam-data-boot.js     # 활성 시험 데이터 번들 부트 (클래식) — 파싱 중 {dataRoot}/registry.js·id_migration.js 동기 삽입, 비활성 시험 번들 미로드
   content/csv-utils.js          # CSV 파서·EUC-KR 폴백 디코딩·BOM 직렬화 (사전 내보내기 등 공용)
   pwa/                  # PWA 부트·설치·매니페스트 모듈
@@ -386,7 +387,7 @@ ref-pipeline/           # 교재·참조자료 생성/변환 독립 도구함 (P
 vendor/                 # 자체 호스팅 자산 (fonts/, fontawesome/)
 tests/                  # 테스트
   unit/                 # node --test 유닛 테스트 — 주제별 하위 (gates/ 체커·게이트 회귀, engine/ 학습엔진, content/ 파서·콘텐츠, app/ 런타임 인프라, mermaid/ 다이어그램, 도메인 테스트는 unit/exams/<id>/)
-  dom/                  # Vitest + jsdom DOM 테스트 — 주제별 하위 (common/·study/·reader/·exam/·misc/, helpers.js 공용 셋업, 도메인 테스트는 dom/exams/<id>/)
+  dom/                  # Vitest + jsdom DOM 테스트 — 주제별 하위 (common/·study/·reader/·exam/·shell/·pro/·search/, helpers.js 공용 셋업, 도메인 테스트는 dom/exams/<id>/)
   fixtures/             # 테스트 픽스처
   e2e/                  # Playwright 실브라우저 E2E (도메인 테스트는 e2e/exams/<id>/)
 docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: docs/DOC_CONVENTIONS.md=문서 · docs/CODE_CONVENTIONS.md=코드)
@@ -409,7 +410,7 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 
 - **시험 레지스트리**: `content/exams.json` → `data/exams.js` 번들(`window.EXAMS_LIST`, `npm run build:data`에 포함). 각 시험 엔트리: `id`, `name`, `appName`(시험별 앱 이름 — 브랜드면 표기), `title`/`logoMain`/`logoSub`(브랜딩), `desc`, `icon`, `year`, `default`, `contentRoot`, `dataRoot`, `registryBundle`, `registryGlobal`, `features`(기능 플래그). **`year`가 시험 연도의 유일한 진실 소스(SSOT)** — `build:exams-list`가 각 시험의 `manifest.json` `contentYear`와 `index.html`·`manifest.webmanifest`의 연도 텍스트(기본 시험 기준)로 자동 전파하므로, 연도 변경은 `exams.json`만 수정 후 `build:data` 재실행
 - **시험별 루트 (대칭)**: 모든 시험이 `content/exams/<id>/`(manifest.json + references.json + 교재/문제은행/참조자료/audiobook 등)와 `data/exams/<id>/`(registry.js, subjects/, exams/, drills/, embeddings/, study_md/, docs_md/, supplements/, id_migration.js 등 — 전부 빌드 생성물로 git 미추적; embeddings/·id_migration.js·card_terms_snapshot.json·combo_pilot.js만 추적) 구조 — 기본 시험(cosmetic)도 예외 없음. `content/`·`data/` 루트에는 전역 파일만: `exams.json`/`exams.js`, `audio_manifest.js`(시험 id 키 분리), `docs_md/`(앱 공용 문서)
-- **시험 컨텍스트**: `src/exam-context.js` — `contentPath()`/`dataPath()`(경로 해석), `hasFeature()`(기능 게이팅), `selectExam()`(전환 = `location.reload()`로 모듈 상태 리셋), `scopedKey()`(진도 네임스페이스 `<examId>:key`)
+- **시험 컨텍스트**: `src/core/exam-context.js` — `contentPath()`/`dataPath()`(경로 해석), `hasFeature()`(기능 게이팅), `selectExam()`(전환 = `location.reload()`로 모듈 상태 리셋), `scopedKey()`(진도 네임스페이스 `<examId>:key`)
 - **진도 격리**: `safeGetItem`/`safeSetItem` 등이 자동으로 시험 접두사 적용. 테마·리더 설정 등 `GLOBAL_KEYS`만 비네임스페이스. 백업 파일은 비접두사 논리 키(시험 간 호환)
 - **새 시험 추가 절차**: ① `npm.cmd run scaffold:exam -- <id> --name "시험명"`으로 골격 생성(권장 — 수동으로 디렉터리를 먼저 만들면 domainmap 미등록 오류) 후 manifest.json + references.json + 교재/문제은행 배치 — 법령 참조가 있으면 `content/lawdb.json`에 엔트리 + `references.json.lawRefs`·`noticeCore` 설정, 사전이 있으면 `manifest.knowledge` 스키마 선언 ② `content/exams.json`에 엔트리 추가 (`contentRoot`/`dataRoot`/`registryBundle`/`registryGlobal` 지정 — 비기본 시험은 `registryGlobal: "DATA_REGISTRY_<id>"`) ③ `npm.cmd run check:content -- --build` → 끝 (앱 로직 변경 불필요). **도메인 자산 규약**: 시험 전용 코드·마크업·스타일·테스트는 `src/exams/<id>/`·`html/exams/<id>/`·`css/exams/<id>/`·`tests/{unit,dom}/exams/<id>/`에, 시험 종속 문서는 `docs/exams/<id>/`에 배치 — 플랫폼 레지스트리가 `exams/${getActiveExamId()}/` 규약으로 해석하므로 기존 실무 피처 재사용은 파일 배치만으로 동작. 상세: `docs/dev/runbooks/NEW_EXAM_RUNBOOK.md`·`docs/dev/design/MULTI_EXAM_DB_DESIGN.md`
 - **기능 플래그**: `features`에 없는 기능은 `data-feature` 속성/`hasFeature()`로 자동 숨김 — 성분사전·원료배합·계산연습·오디오북·참조자료 등 도메인 특화 기능

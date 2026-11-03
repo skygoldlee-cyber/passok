@@ -8,7 +8,7 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
 
 import { loadIndexHtml, el } from '../helpers.js';
-import { state } from '../../../src/state.js';
+import { state } from '../../../src/core/state.js';
 import { setupOfflineDetection } from '../../../src/views/offline-detection.js';
 import { TIMING } from '../../../src/config/timing.js';
 

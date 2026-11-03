@@ -6,11 +6,11 @@
 // 온라인 복귀 또는 다음 제출 시 플러시한다.
 // 유입 채널은 부팅 시 ?src= 파라미터를 entry_source에 기록해 첨부.
 // ------------------------------------------------------------
-import { getJSON, setJSON, getItem, setItem } from '../storage.js';
-import { getActiveExamId } from '../exam-context.js';
+import { getJSON, setJSON, getItem, setItem } from '../core/storage.js';
+import { getActiveExamId } from '../core/exam-context.js';
 import { getSupabase, getAuthSession } from '../auth-sync/supabase-client.js';
 import { getTelemetrySessionId } from '../telemetry/telemetry-session.js';
-import { esc } from '../sanitize.js';
+import { esc } from '../core/sanitize.js';
 import { trapFocus, showToast } from '../ui-utils.js';
 
 const ENTRY_SRC_KEY = 'entry_source';

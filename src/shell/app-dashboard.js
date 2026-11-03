@@ -1,11 +1,11 @@
 // src/app-dashboard.js — 대시보드 셀렉트·시험 카드·리소스 카드·스토리지 경고 (app.js에서 분리)
 // @spec D-02,D-04,D-05,D-06,ES-01
-import { esc } from "../sanitize.js";
+import { esc } from "../core/sanitize.js";
 import { DataLoader } from "../content/data-loader.js";
-import { contentPath, hasFeature } from "../exam-context.js";
+import { contentPath, hasFeature } from "../core/exam-context.js";
 import { refreshProBadges } from "../pro/pro-upgrade.js";
-import { state, getSimResultsHistory, safeGetItem } from "../state.js";
-import { STORAGE_KEYS } from "../storage-keys.js";
+import { state, getSimResultsHistory, safeGetItem } from "../core/state.js";
+import { STORAGE_KEYS } from "../core/storage-keys.js";
 
 // --- 초기화 및 로컬스토리지 로드 ---
 export function populateSubjectSelects() {

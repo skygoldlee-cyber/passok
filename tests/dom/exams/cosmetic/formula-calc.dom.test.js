@@ -25,8 +25,8 @@ import {
     customIngAdd, customIngEdit, customIngSave, customIngDelete, customIngClose,
 } from '../../../../src/exams/cosmetic/views/formula.js';
 import { createCustomIngredient, listCustomIngredients } from '../../../../src/exams/cosmetic/custom-ingredient-store.js';
-import { getJSON } from '../../../../src/storage.js';
-import { STORAGE_KEYS } from '../../../../src/storage-keys.js';
+import { getJSON } from '../../../../src/core/storage.js';
+import { STORAGE_KEYS } from '../../../../src/core/storage-keys.js';
 import { listFormulas, createFormula, serializeFormula } from '../../../../src/exams/cosmetic/formula-store.js';
 import { createCustomer } from '../../../../src/exams/cosmetic/customer-store.js';
 

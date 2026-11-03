@@ -265,7 +265,7 @@ text.replace(FIELD_LABEL, '\n')   // 라벨 → 구분자로 승격 (괄호 주�
 |---|---|
 | `src/exams/cosmetic/product-store.js` | **신규** — 스토어 + 파싱 + 분류·교차 함수 |
 | `src/exams/cosmetic/views/formula-products.js` | **신규** — 3패널 컨트롤러 |
-| `src/storage-keys.js` | `PRODUCT_ITEMS` 키 + `BACKUP_KEYS` 편입 |
+| `src/core/storage-keys.js` | `PRODUCT_ITEMS` 키 + `BACKUP_KEYS` 편입 |
 | `src/exams/cosmetic/views/formula.js` | `PANELS`·`SUBNAV_ITEMS` 확장 (임포트 없이 id만) |
 | `src/exams/cosmetic/views/formula-customer.js` | 고객 상세에 알레르기 교차 섹션 |
 | `src/views/dictionary.js` (또는 도메인 브리지) | 상세 카드 '함유 기성품' 섹션 |

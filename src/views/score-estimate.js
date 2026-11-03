@@ -5,10 +5,10 @@
 // 기록 UI를 전담. renderDashboard()가 합격 진단 카드 하단을 채울 때 호출한다.
 // 점수 "추정치"만 제시한다 — 보정된 합격 확률은 실제 결과 데이터 축적 후 가능.
 
-import { esc } from '../sanitize.js';
+import { esc } from '../core/sanitize.js';
 import { getDDay } from '../study/study-tracker.js';
 import { showToast } from '../ui-utils.js';
-import { getExamRules } from '../exam-context.js';
+import { getExamRules } from '../core/exam-context.js';
 import {
     estimateCompositeScore, computeCalibrationBias,
     getActualResult, saveActualResult, clearActualResult, getSimHistory

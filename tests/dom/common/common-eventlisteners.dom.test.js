@@ -23,7 +23,7 @@ import { showToast, showConfirm } from '../../../src/ui-utils.js';
 import {
     loadIndexHtml, el, resetStudyState, flushAsync,
 } from '../helpers.js';
-import { state } from '../../../src/state.js';
+import { state } from '../../../src/core/state.js';
 import { simState } from '../../../src/views/exam-sim/exam-sim-state.js';
 import { setupEventListeners } from '../../../src/views/event-listeners.js';
 

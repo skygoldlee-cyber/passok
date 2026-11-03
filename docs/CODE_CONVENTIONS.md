@@ -23,7 +23,7 @@
 |------|--------|------|
 | **계층 분류** — `domain-map.json`의 감시 디렉터리(src·css·html·data·content·tests) 내 모든 파일이 정확히 하나의 layer(`platform` / `feature:<이름>` / `domain:<examId>`)에 분류 | 필수 | `check:domainmap` |
 | **도메인 격리** — 시험 전용 코드·마크업·스타일·테스트는 `src/exams/<id>/`·`html/exams/<id>/`·`css/exams/<id>/`·`tests/{unit,dom,e2e}/exams/<id>/`에 배치 (DA-13) | 필수 | `check:domainmap` |
-| **계층 방향** — `src/views/` 뷰 컨트롤러는 셸 모듈(`SHELL_MODULES`: `app.js`·`router.js`·`command-palette.js`·`manual-viewer.js`·`ui-mode.js`)만 import 가능. 코어→views 역참조 금지 | 금지 | `check:imports` |
+| **계층 방향** — `src/views/` 뷰 컨트롤러는 셸 모듈(`SHELL_MODULES`: `app.js`·`shell/router.js`·`command-palette.js`·`manual-viewer.js`·`ui-mode.js`)만 import 가능. 코어→views 역참조 금지 | 금지 | `check:imports` |
 | **기능 게이트 파일** — `feature:<이름>` layer 파일은 해당 기능 플래그 시험에서만 로드·노출 | 필수 | `check:featflags` |
 | **생성물 직접 편집 금지** — `index.html`·`data/`·`docs_md/`·`*_이야기형.md` 등은 빌드 명령으로만 갱신 | 금지 | 신선도 게이트(`check:html`·`check:datafresh` 등) |
 | **로컬 절대 경로 하드코딩 금지** — 경로는 `import.meta`/`__file__` 기준 상대 해석 | 금지 | 리뷰 |
@@ -76,7 +76,7 @@
 
 ## 5. 상태·저장소·식별자 규약
 
-- **저장소 단일 진입**: `localStorage`는 `src/storage.js`만 접근 — `scopedKey()` 시험 네임스페이스, 키 정의는 `storage-keys.js` (SSOT), 비네임스페이스 예외는 `GLOBAL_KEYS`에만
+- **저장소 단일 진입**: `localStorage`는 `src/core/storage.js`만 접근 — `scopedKey()` 시험 네임스페이스, 키 정의는 `storage-keys.js` (SSOT), 비네임스페이스 예외는 `GLOBAL_KEYS`에만
 - **면제 목록**: `storage.js`·`exam-context.js`·`theme-init.js`·`pwa-manifest.js`·`pwa-install-capture.js`·`exam-data-boot.js` — 부트스트랩 시점 제약으로 추상화 불가 지점만 허용 (`check:storage` ALLOWED_FILES)
 - **식별자는 콘텐츠 앵커**: 개념·진술·북마크는 `conceptId §`·`sid` 등 콘텐츠 기반 키 — 위치 좌표는 표시 전용(`#L`·`(LNN)` 표기)으로만 (ID-05)
 - **강건성**: 배열 접근 bounds 체크 · `window.X` 존재 체크 · `parseInt` 후 `isNaN` · `getElementById` null 체크 · Promise `.catch` — 상세는 ARCHITECTURE 강건성 절

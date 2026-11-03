@@ -16,8 +16,8 @@
 //   - 공식 DB 동명(정규화 비교) 등록은 거부 — 공식 규제 데이터 덮어쓰기 방지.
 //     고시 개정으로 공식 등록되면 _superseded로 표시되고 인덱스는 공식 우선.
 
-import { STORAGE_KEYS } from '../../storage-keys.js';
-import { normalizeEntityName } from '../../utils.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
+import { normalizeEntityName } from '../../core/utils.js';
 import {
   loadItems, saveItems, newId, clampStr,
 } from './store-utils.js';

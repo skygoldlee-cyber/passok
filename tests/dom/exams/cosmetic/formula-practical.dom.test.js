@@ -12,8 +12,8 @@ vi.mock('../../../../src/ui-utils.js', () => ({
 }));
 
 import { loadIndexHtml, el } from '../../helpers.js';
-import { setJSON, getJSON } from '../../../../src/storage.js';
-import { STORAGE_KEYS } from '../../../../src/storage-keys.js';
+import { setJSON, getJSON } from '../../../../src/core/storage.js';
+import { STORAGE_KEYS } from '../../../../src/core/storage-keys.js';
 import { openMaterialPanel, matTrace, matTracePrint } from '../../../../src/exams/cosmetic/views/formula-material.js';
 import { batchPrintSales } from '../../../../src/exams/cosmetic/views/formula-batch.js';
 import { openCustomerPanel, custOpen, custPrintConsent } from '../../../../src/exams/cosmetic/views/formula-customer.js';

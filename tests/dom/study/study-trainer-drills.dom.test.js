@@ -30,7 +30,7 @@ import { showToast } from '../../../src/ui-utils.js';
 import {
     loadIndexHtml, el, isVisible, resetStudyState, flushAsync,
 } from '../helpers.js';
-import { state } from '../../../src/state.js';
+import { state } from '../../../src/core/state.js';
 import { DataLoader } from '../../../src/content/data-loader.js';
 import {
     setDrillCount, updateDueBadges,
@@ -38,8 +38,8 @@ import {
     openComboDrillSetup, startComboDrill, submitComboJudgments, nextComboDrill,
 } from '../../../src/views/trainer-drills.js';
 import { recordStatementJudgments } from '../../../src/study/statement-tracker.js';
-import { safeSetItem } from '../../../src/state.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { safeSetItem } from '../../../src/core/state.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 const OX_ITEMS = [
     { type: 'ox', sid: 'law_1', context: '법규·제3조', stem: '판정하세요', statement: '진술A는 옳다', truth: true, explain: 'A 해설', tags: ['수치'] },

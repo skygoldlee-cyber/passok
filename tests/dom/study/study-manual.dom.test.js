@@ -9,7 +9,7 @@
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 import { loadIndexHtml, el, flushAsync } from '../helpers.js';
-import { PATHS } from '../../../src/paths.js';
+import { PATHS } from '../../../src/core/paths.js';
 
 const MD_USER = '# 사용자 매뉴얼\n\n## 섹션 1\n\n본문 내용입니다.\n\n## 섹션 2\n\n[실무 매뉴얼로](doc:formula_manual)\n';
 const MD_MERMAID = '# 다이어그램 문서\n\n```mermaid\nflowchart LR\n  A --> B\n```\n';

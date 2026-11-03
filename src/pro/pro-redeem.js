@@ -12,8 +12,8 @@
 // ------------------------------------------------------------
 import { getSupabase, getAuthSession, onAuthChange } from '../auth-sync/supabase-client.js';
 import { openAuthModal } from '../auth-sync/auth-view.js';
-import { safeSetItem, safeRemoveItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { safeSetItem, safeRemoveItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { reportEvent } from '../telemetry/usage-telemetry.js';
 import { trapFocus, showToast } from '../ui-utils.js';
 import { getExamDate } from '../study/study-tracker.js';

@@ -7,13 +7,13 @@
 // raw.githubusercontent.com에서 읽어 baseline보다 최신이면 배너로 알림.
 // 하루 1회 스로틀 + 닫은 고시는 같은 시행일까지 억제. 오프라인/실패 시 무시.
 
-import { getItem, setItem } from '../storage.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { getActiveExamId } from '../exam-context.js';
-import { html } from '../sanitize.js';
+import { getItem, setItem } from '../core/storage.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { getActiveExamId } from '../core/exam-context.js';
+import { html } from '../core/sanitize.js';
 import { lawUrlFor } from '../law-links.js';
 import { getRefTables } from '../pdf-registry.js';
-import { todayKey, localDateTime } from '../utils.js';
+import { todayKey, localDateTime } from '../core/utils.js';
 
 const CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000;
 const LAW_BASE = 'https://www.law.go.kr';

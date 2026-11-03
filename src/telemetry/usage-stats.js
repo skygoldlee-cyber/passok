@@ -7,12 +7,12 @@
 // GLOBAL 키(기기 단위)로 저장 — 로그인 없는 프로모션 기간에는 owner의
 // 익명 device_id가 "유저" 단위이며, 시험 전환해도 누적이 유지된다.
 
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { safeGetItem, safeSetItem } from '../state.js';
-import { getActiveRegistry } from '../exam-context.js';
-import { html, raw } from '../sanitize.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
+import { getActiveRegistry } from '../core/exam-context.js';
+import { html, raw } from '../core/sanitize.js';
 import { trapFocus, showToast } from '../ui-utils.js';
-import { todayKey, localDateTime } from '../utils.js';
+import { todayKey, localDateTime } from '../core/utils.js';
 
 const DAYS_KEEP = 90; // days 맵 상한 — 저장량 제한
 
@@ -183,7 +183,7 @@ export async function showUsageStats() {
     const d = _load();
     let titles = {};
     try {
-        const { getViewTitles } = await import('../router.js');
+        const { getViewTitles } = await import('../shell/router.js');
         titles = getViewTitles(getActiveRegistry()) || {};
     } catch (e) { titles = {}; }
 

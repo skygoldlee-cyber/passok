@@ -40,8 +40,8 @@ const sb = {
 window.supabase = { createClient: vi.fn(() => sb) };
 
 import { initSync, markDirty, pushSync, pullSync, syncNow, collectSyncPayload } from '../../../src/auth-sync/sync.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
-import { scopedKey } from '../../../src/exam-context.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
+import { scopedKey } from '../../../src/core/exam-context.js';
 
 const USER = { id: 'u1', email: 'me@test.com' };
 const login = () => { session = { user: USER }; };
@@ -71,14 +71,14 @@ describe('클라우드 동기화 (Phase 2)', () => {
     });
 
     it('쓰기 훅 — 동기화 대상 키 저장 시 dirty 표시, 비로그인은 push 없음', async () => {
-        const { safeSetItem } = await import('../../../src/state.js');
+        const { safeSetItem } = await import('../../../src/core/state.js');
         safeSetItem(STORAGE_KEYS.FC_MEMORIZED, '[]');
         expect(dirty()).toBe(true);
         expect(sb.from).not.toHaveBeenCalled(); // 비로그인 → push 안 함
     });
 
     it('쓰기 훅 — 비대상 키·동기화 메타 키는 dirty를 세우지 않음', async () => {
-        const { safeSetItem } = await import('../../../src/state.js');
+        const { safeSetItem } = await import('../../../src/core/state.js');
         safeSetItem(STORAGE_KEYS.SYNC_DIRTY, '0');
         safeSetItem('readerBookmarks', '[]'); // 백업 대상 아님
         expect(dirty()).toBe(false);

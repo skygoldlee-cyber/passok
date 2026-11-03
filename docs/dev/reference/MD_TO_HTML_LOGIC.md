@@ -90,7 +90,7 @@
 | 파일 | 역할 |
 |------|------|
 | `src/reader/markdown-parser.js` | 공통 마크다운 → HTML 변환 함수 (순수 함수, ESM) |
-| `src/sanitize.js` | XSS 방어 — `escapeHTML()`, `safeTextWithBreaks()` |
+| `src/core/sanitize.js` | XSS 방어 — `escapeHTML()`, `safeTextWithBreaks()` |
 | `src/reader/manual-viewer.js` | 매뉴얼/학습안내서 런타임 뷰어 (fetch → 파싱 → 오버레이 표시) |
 | `src/reader/reader-format.js` | 교재 리더용 포맷터 (`parseMarkdown`에 reader 옵션 적용) |
 | `src/reader/exam-viewer.js` | 예상문제집 뷰어 (`parseMarkdown` 사용, Mermaid 비활성) |
@@ -514,7 +514,7 @@ flowchart TD
 | 파일 | 경로 |
 |------|------|
 | 마크다운 파서 (JS) | `src/reader/markdown-parser.js` |
-| XSS 방어 | `src/sanitize.js` |
+| XSS 방어 | `src/core/sanitize.js` |
 | 매뉴얼 뷰어 | `src/reader/manual-viewer.js` |
 | 교재 리더 포맷터 | `src/reader/reader-format.js` |
 | 예상문제집 뷰어 | `src/reader/exam-viewer.js` |

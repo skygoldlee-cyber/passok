@@ -1,4 +1,4 @@
-// tests/dom/dictionary-schema.dom.test.js — 비기본 시험 지식DB 스키마 드리븐 렌더 검증
+// tests/dom/study/dictionary-schema.dom.test.js — 비기본 시험 지식DB 스키마 드리븐 렌더 검증
 // @spec DI-01~03
 // 검증: manifest.knowledge → registry.knowledge 스키마로 선언된 임의 지식DB가
 //       카드·배지·필터·헤더·CSV를 렌더하는지 확인 (Phase D — 스키마 드리븐 사전)

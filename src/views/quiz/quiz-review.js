@@ -1,9 +1,9 @@
 // src/views/quiz-review.js - 오답 노트(복습) 뷰 로직 (quiz.js 분리 — 배럴 re-export)
 // @spec RV-01
-import { state, saveProgress } from '../../state.js';
-import { safeTextWithBreaks, esc } from '../../sanitize.js';
+import { state, saveProgress } from '../../core/state.js';
+import { safeTextWithBreaks, esc } from '../../core/sanitize.js';
 import { switchView } from '../navigation.js';
-import { examIdToSubjectId } from '../../exam-context.js';
+import { examIdToSubjectId } from '../../core/exam-context.js';
 import {
     WEAK_QUIZ_PREFIX, WEAK_SIM_PREFIX,
     resolveWrongQuiz, resolveCard, parseWeakSimId, collectWeakConceptQuizzes
@@ -14,7 +14,7 @@ import { hasProEntitlement, proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { requestWeakQuizGen } from '../../ai/ai-client.js';
 import { filterGeneratedItems } from '../../ai/gen-gate.js';
 import { computeWrongCauseSummary, getWrongCauseLabels } from '../../study/recommendations.js';
-import { shuffle } from '../../utils.js';
+import { shuffle } from '../../core/utils.js';
 import { updateGlobalStats } from '../dashboard.js';
 import { _beginQuizRun } from './quiz.js';
 

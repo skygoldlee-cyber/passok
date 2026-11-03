@@ -1,9 +1,9 @@
 // src/views/listeners-app.js — 앱 셸 공통 이벤트 바인딩 (event-listeners.js §1에서 분리)
 // @spec UX-SET-05,ES-08,LP-06
 // 진도 초기화·변경 이력·온보딩·피드백 버튼, 설정·도움말 메뉴, OMR·대시보드 접이식.
-import { state, saveProgress, safeGetItem, safeSetItem, safeRemoveItem, listScopedKeys } from '../../state.js';
-import { removeItemRaw } from '../../storage.js';
-import { RESET_KEYS, STORAGE_KEYS, isDailyCompletedKey } from '../../storage-keys.js';
+import { state, saveProgress, safeGetItem, safeSetItem, safeRemoveItem, listScopedKeys } from '../../core/state.js';
+import { removeItemRaw } from '../../core/storage.js';
+import { RESET_KEYS, STORAGE_KEYS, isDailyCompletedKey } from '../../core/storage-keys.js';
 import { renderDashboard } from '../dashboard.js';
 import { loadFlashcards } from '../flashcard.js';
 import { renderReviewList } from '../quiz/quiz.js';
@@ -12,7 +12,7 @@ import { showReleaseNotesModal, releaseNotes } from '../../shell/whats-new.js';
 import { showOnboardingModal } from '../../shell/onboarding.js';
 import { openShortcutHelp } from '../../shell/shortcuts-help.js';
 import { showFeedbackModal, dismissFeedbackHint, dismissFeedbackDot } from '../../shell/feedback.js';
-import { getActiveExam } from '../../exam-context.js';
+import { getActiveExam } from '../../core/exam-context.js';
 
 export function bindAppListeners() {
     // 진도 초기화 버튼

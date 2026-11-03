@@ -7,9 +7,9 @@
 // 본문 구간 드래그 하이라이트는 의도적으로 지원하지 않는다 — 판본 갱신 시
 // 위치 드리프트가 불가피하기 때문에 섹션 단위 메모·하이라이트로 수렴한다.
 // ------------------------------------------------------------
-import { safeGetItem, safeSetItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { localDateTime } from '../utils.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { localDateTime } from '../core/utils.js';
 
 /** 메모 맵 조회 — {bookmarkKey: {note, subject, title, updated}} */
 export function getReaderNotes() {

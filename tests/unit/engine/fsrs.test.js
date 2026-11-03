@@ -9,8 +9,8 @@ import {
     nextDifficulty, recallStability, forgetStability, sameDayStability, fsrsReview, migrateSm2Record
 } from '../../../src/study/fsrs.js';
 import { updateCardSchedule, getDueCards, getDueCount, getReviewLog, getExamRiskCards, previewCardReview } from '../../../src/study/spaced-repetition.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
-import { todayKey } from '../../../src/utils.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
+import { todayKey } from '../../../src/core/utils.js';
 
 /** 오늘 기준 offset일 뒤/전의 'YYYY-MM-DD' */
 function dstr(offset) {

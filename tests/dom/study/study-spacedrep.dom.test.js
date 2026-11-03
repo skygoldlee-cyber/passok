@@ -13,9 +13,9 @@ import {
     Rating, initDifficulty, setPersonalDecay, currentDecayW20,
     retrievability, fsrsReview, migrateSm2Record,
 } from '../../../src/study/fsrs.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
-import { scopedKey } from '../../../src/exam-context.js';
-import { todayKey } from '../../../src/utils.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
+import { scopedKey } from '../../../src/core/exam-context.js';
+import { todayKey } from '../../../src/core/utils.js';
 
 function dstr(offset) {
     const d = new Date();

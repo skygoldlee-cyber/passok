@@ -1,15 +1,15 @@
 // src/views/daily-challenge.js - 일일 5분 데일리 챌린지 & Streak 로직 (quiz.js에서 분리)
 // @spec D-07,Q-06,SC-04
-import { state, saveProgress, safeGetItem, safeSetItem } from '../state.js';
-import { safeTextWithBreaks, esc } from '../sanitize.js';
+import { state, saveProgress, safeGetItem, safeSetItem } from '../core/state.js';
+import { safeTextWithBreaks, esc } from '../core/sanitize.js';
 import { DataLoader } from '../content/data-loader.js';
 import { checkShortAnswer } from './trainer.js';
-import { shuffle, todayKey } from '../utils.js';
+import { shuffle, todayKey } from '../core/utils.js';
 import { showToast, showConfirm, markChoiceButtons, showAnswerFeedback } from '../ui-utils.js';
-import { STORAGE_KEYS, dailyCompletedKey } from '../storage-keys.js';
+import { STORAGE_KEYS, dailyCompletedKey } from '../core/storage-keys.js';
 import { reportEvent } from '../telemetry/usage-telemetry.js';
 import { getWeeklyGoalProgress } from '../study/study-tracker.js';
-import { hasFeature } from '../exam-context.js';
+import { hasFeature } from '../core/exam-context.js';
 
 /* =======================================================
    🧩 일일 5분 데일리 챌린지 (Daily 5-Min Challenge) & Streak

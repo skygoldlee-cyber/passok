@@ -6,10 +6,10 @@
 //   - 가져오기: 논리 키를 현재 시험 네임스페이스에 기록
 //   → 시험이 달라도 같은 백업 포맷이며, 복원은 항상 "현재 활성 시험"에 귀속된다.
 import { showToast } from '../ui-utils.js';
-import { todayKey, localDateTimeNow } from '../utils.js';
-import { BACKUP_KEYS, STORAGE_KEYS, isDailyCompletedKey } from '../storage-keys.js';
-import { safeGetItem, safeSetItem, listScopedKeys } from '../state.js';
-import { unscopedKey, getActiveExamId } from '../exam-context.js';
+import { todayKey, localDateTimeNow } from '../core/utils.js';
+import { BACKUP_KEYS, STORAGE_KEYS, isDailyCompletedKey } from '../core/storage-keys.js';
+import { safeGetItem, safeSetItem, listScopedKeys } from '../core/state.js';
+import { unscopedKey, getActiveExamId } from '../core/exam-context.js';
 
 export function getBackupKeys() {
     // 정적 키 목록 + 날짜 기반 동적 키(daily_completed_YYYY-MM-DD)를 모두 수집

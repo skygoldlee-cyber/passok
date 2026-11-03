@@ -1,9 +1,9 @@
 // src/exams/carework/handover-store.js — 인수인계 로컬 기록 저장
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 공유 이전 기록 저장 의무 플로우 — STORAGE_KEYS.HANDOVER_ITEMS 동기화 대상
-import { getJSON, setJSON } from '../../storage.js';
-import { STORAGE_KEYS } from '../../storage-keys.js';
-import { localDateTime } from '../../utils.js';
+import { getJSON, setJSON } from '../../core/storage.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
+import { localDateTime } from '../../core/utils.js';
 
 const KEY = STORAGE_KEYS.HANDOVER_ITEMS;
 export const FREE_LIMIT = 10;

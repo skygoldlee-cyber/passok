@@ -1,7 +1,7 @@
 // src/theme-toggle.js — 테마 토글 로직 (app.js에서 추출)
 // @spec TH-01~05
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { safeGetItem, safeSetItem } from '../state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
 
 /**
  * 헤더 테마 토글 버튼을 초기화하고 전역 테마 API를 노출합니다.

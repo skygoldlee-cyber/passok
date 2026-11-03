@@ -1,10 +1,10 @@
 // src/views/trainer.js - 훈련소, 계산 연습기, 배합한도 수치 훈련 로직 (뽀모도로는 pomodoro.js로 분리)
 // @spec T-01~05,ND-01,RV-01
-import { state } from '../state.js';
-import { esc } from '../sanitize.js';
-import { shuffle } from '../utils.js';
+import { state } from '../core/state.js';
+import { esc } from '../core/sanitize.js';
+import { shuffle } from '../core/utils.js';
 import { vibrate, HAPTIC, showToast, markChoiceButtons, wrongReviewHtml, trainerResultHtml, showAnswerFeedback } from '../ui-utils.js';
-import { PATHS } from '../paths.js';
+import { PATHS } from '../core/paths.js';
 import { DataLoader } from '../content/data-loader.js';
 import { updateDueBadges, gotoWeakReview } from './trainer-drills.js';
 import { resetMainScroll } from './navigation.js';

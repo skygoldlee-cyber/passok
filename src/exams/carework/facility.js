@@ -2,8 +2,8 @@
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 기관 시설·멤버십 API — getSupabase 래퍼 경유 RPC 호출 (SECURITY DEFINER)
 import { getSupabase, getAuthSession } from '../../auth-sync/supabase-client.js';
-import { getJSON, setJSON } from '../../storage.js';
-import { STORAGE_KEYS } from '../../storage-keys.js';
+import { getJSON, setJSON } from '../../core/storage.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
 
 export const ROLES = { worker: '요양보호사', manager: '관리책임자' };
 

@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
-import { sha256hex, stableId } from '../../../src/sha256.js';
+import { sha256hex, stableId } from '../../../src/core/sha256.js';
 
 // Node crypto.createHash('sha256')와 순수 JS 구현이 동일한지 크로스 검증
 function nodeSha256(str) {

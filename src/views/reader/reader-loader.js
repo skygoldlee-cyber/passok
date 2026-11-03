@@ -4,7 +4,7 @@
 // chapter 객체로 변환한다 — 캐시 키는 `${subjId}:${chapterIdx}` (세션 전용,
 // 영속 저장 아님).
 import { DataLoader } from '../../content/data-loader.js';
-import { PATHS } from '../../paths.js';
+import { PATHS } from '../../core/paths.js';
 import { CACHE } from '../../config/cache.js';
 import { parseTextbookContent } from '../../reader/textbook-parser.js';
 import { isStoryMetaSection } from '../../reader/reader-toc.js';

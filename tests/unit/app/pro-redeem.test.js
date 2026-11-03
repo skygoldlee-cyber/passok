@@ -6,7 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { normalizeCode, isEntitledToPro, callRedeemRpc } from '../../../src/pro/pro-redeem.js';
-import { setItem, removeItem } from '../../../src/storage.js';
+import { setItem, removeItem } from '../../../src/core/storage.js';
 
 const require = createRequire(import.meta.url);
 const { normalizeChannel, genCode, parseDays, TIER_LABELS, CODE_BODY } = require('../../../tools/check/issue_pro_code.js');

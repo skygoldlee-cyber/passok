@@ -54,7 +54,7 @@
 |---|---|---|
 | `check:html` | 파셜(html/views·template) 편집 후 조립 안 함 | `npm run build:html` |
 | `check:datafresh`/`drillfresh`/`embfresh`/`docbundles` | 원본 편집 후 빌드 산출물 미재생 | `npm run build:data` (emb는 `build:embeddings`, 문서는 `node tools/build/build_doc_bundles.js` — build:data 체인 미포함). **순서 주의**: datafresh는 생성물 경로에 미커밋·미추적 변경이 있으면 즉시 중단 — 빌드 → 생성물 커밋 → 재검증 순서 |
-| `check:storage` | src/에서 localStorage 직접 접근 | `src/storage.js`의 get/set 경유로 수정 |
+| `check:storage` | src/에서 localStorage 직접 접근 | `src/core/storage.js`의 get/set 경유로 수정 |
 | `check:docsync` | 코드만 바꾸고 문서 갱신 없음 | docs/ 또는 CHANGES.md 갱신 (면제는 `[no-docs]`) |
 | `check:testfirst` | 로직 변경에 테스트 미동반 | 관련 테스트 추가 (주석·공백 전용 diff는 자동 면제, 기타 면제는 `[no-test]` — 우회는 gate_bypasses.jsonl에 누적) |
 | `check:domainmap` | watchedDirs 내 파일이 미분류 | domain-map.json 패턴에 신규 파일 선언 |

@@ -9,7 +9,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
-const { STORAGE_KEYS } = await import(pathToFileURL(join(ROOT, 'src/storage-keys.js')).href);
+const { STORAGE_KEYS } = await import(pathToFileURL(join(ROOT, 'src/core/storage-keys.js')).href);
 
 test('theme-init.js의 appTheme 리터럴이 STORAGE_KEYS.APP_THEME와 일치', () => {
     const src = readFileSync(join(ROOT, 'src/shell/theme-init.js'), 'utf8');
@@ -20,7 +20,7 @@ test('theme-init.js의 appTheme 리터럴이 STORAGE_KEYS.APP_THEME와 일치', 
 });
 
 test('exam-context.js GLOBAL_KEYS가 STORAGE_KEYS/실제 사용 키와 일치', () => {
-    const src = readFileSync(join(ROOT, 'src/exam-context.js'), 'utf8');
+    const src = readFileSync(join(ROOT, 'src/core/exam-context.js'), 'utf8');
     // GLOBAL_KEYS에 포함되어야 할 전역 키들 (테마·방향·리더 설정 등 시험 무관 키)
     for (const key of [STORAGE_KEYS.APP_THEME, STORAGE_KEYS.PREFERRED_ORIENTATION]) {
         assert.ok(src.includes(`'${key}'`),

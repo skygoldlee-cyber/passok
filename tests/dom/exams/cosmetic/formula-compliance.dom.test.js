@@ -13,7 +13,7 @@ vi.mock('../../../../src/ui-utils.js', () => ({
 
 import { showToast, showConfirm } from '../../../../src/ui-utils.js';
 import { loadIndexHtml, el, isVisible, flushAsync, lastToast } from '../../helpers.js';
-import { scopedKey } from '../../../../src/exam-context.js';
+import { scopedKey } from '../../../../src/core/exam-context.js';
 import {
     openCompliancePanel, compToggle, compReset, compOpenLaw,
     COMPLIANCE_SECTIONS,

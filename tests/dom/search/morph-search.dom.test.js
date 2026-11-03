@@ -1,4 +1,4 @@
-// tests/dom/morph-search.dom.test.js — 형태소 경계 매칭·동의어 확장 시나리오
+// tests/dom/search/morph-search.dom.test.js — 형태소 경계 매칭·동의어 확장 시나리오
 // @spec TS-13,TS-14
 // 검증: '유화' 검색 시 복합어 '보조유화제'는 형태소 경계 매치(본매치)로,
 //       우연한 음절열 '석유화학'은 부분 일치 티어로 분류되는지 고정한다.

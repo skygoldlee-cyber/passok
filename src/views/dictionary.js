@@ -4,15 +4,15 @@
 // registry.knowledge 미선언 시험은 사전 뷰가 "데이터셋 미설정" 안내로 처리된다 (화장품 폴백 없음).
 // 자가 등록: schema.customKey(STORAGE_KEYS 멤버명) 선언 시 로컬 등록 항목을 병합한다 —
 // 저장소 키 계약 레지스트리 경유라 platform → domain import 없이 격리가 유지된다.
-import { state } from '../state.js';
-import { esc } from '../sanitize.js';
-import { getChosung, todayKey, normalizeEntityName } from '../utils.js';
-import { hasFeature } from '../exam-context.js';
+import { state } from '../core/state.js';
+import { esc } from '../core/sanitize.js';
+import { getChosung, todayKey, normalizeEntityName } from '../core/utils.js';
+import { hasFeature } from '../core/exam-context.js';
 import { toCsv, downloadCsv } from '../content/csv-utils.js';
 import { showToast } from '../ui-utils.js';
 import { DataLoader } from '../content/data-loader.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { getJSON } from '../storage.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { getJSON } from '../core/storage.js';
 import { switchView } from './navigation.js';
 import { dictNoticeDocs } from '../shell/notice-check.js';
 

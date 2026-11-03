@@ -1,10 +1,10 @@
 // src/exams/cosmetic/views/formula-io.js — 조제 기록지 인쇄·JSON 보내기/가져오기 (formula.js에서 분리)
 // @spec FO-29
 
-import { esc } from '../../../sanitize.js';
+import { esc } from '../../../core/sanitize.js';
 import { showToast } from '../../../ui-utils.js';
 import { showStoreError } from '../../../pro/pro-upgrade.js';
-import { todayKey } from '../../../utils.js';
+import { todayKey } from '../../../core/utils.js';
 import {
   CHECK, checkFormulaItems,
 } from '../formula-check.js';

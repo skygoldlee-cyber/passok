@@ -321,7 +321,7 @@ async function main() {
             if (impact.status === 0 && out && !out.includes('분석할 파일이 없습니다')) {
                 const m = out.match(/영향 요구사항 (\d+)개/);
                 const count = m ? parseInt(m[1], 10) : 0;
-                const HIGH_IMPACT = ['src/shell/app.js', 'src/state.js', 'src/storage.js', 'src/content/data-loader.js', 'sw.js'];
+                const HIGH_IMPACT = ['src/shell/app.js', 'src/core/state.js', 'src/core/storage.js', 'src/content/data-loader.js', 'sw.js'];
                 const changed = git(`diff --name-only ${lastDeploy}..HEAD`).split('\n');
                 const hitCore = changed.filter(f => HIGH_IMPACT.includes(f));
                 if (hitCore.length || count >= 10) {

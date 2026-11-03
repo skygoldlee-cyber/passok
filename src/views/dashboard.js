@@ -1,7 +1,7 @@
 // src/views/dashboard.js - 대시보드 뷰 로직 및 전역 통계 관리
 // @spec D-01~17,PF-07,SC-04,SC-06,SC-07,SC-10,SC-16,TQ-01,PAY-07
-import { state } from '../state.js';
-import { esc } from '../sanitize.js';
+import { state } from '../core/state.js';
+import { esc } from '../core/sanitize.js';
 import { DataLoader } from '../content/data-loader.js';
 import { renderPerformanceChart, renderPassFailDiagnosis, renderRadarChart } from '../charts.js';
 import { updateStreakAndDailyUI } from './daily-challenge.js';

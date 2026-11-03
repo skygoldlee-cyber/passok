@@ -5,10 +5,10 @@
 // 우선순위가 정해진 추천 항목을 생성한다.
 // DOM 비의존 순수 로직 — 렌더링은 dashboard.js가 담당.
 
-import { safeGetItem, safeSetItem, getSimResultsHistory } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { safeGetItem, safeSetItem, getSimResultsHistory } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { getDueCards } from './spaced-repetition.js';
-import { getCurrentExamId, getExamRules, resolveLegacySubjectKey, getActiveRegistry } from '../exam-context.js';
+import { getCurrentExamId, getExamRules, resolveLegacySubjectKey, getActiveRegistry } from '../core/exam-context.js';
 import { trackAction } from '../telemetry/usage-stats.js';
 
 /**
@@ -20,7 +20,7 @@ export function getSimHistory() {
 }
 
 import { subjectKeyFromItemId } from './weak-items.js';
-import { localDateTime } from '../utils.js';
+import { localDateTime } from '../core/utils.js';
 const subjectKeyOf = subjectKeyFromItemId;
 
 /**

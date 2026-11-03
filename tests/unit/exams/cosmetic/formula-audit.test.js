@@ -11,8 +11,8 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { collectAuditReportData, recordAuditLog } from '../../../../src/exams/cosmetic/views/formula-audit.js';
 import { buildAuditReportHtml, buildRecallListHtml, buildSalesRecordHtml, buildConsentHtml, buildLabelHtml } from '../../../../src/exams/cosmetic/views/formula-print.js';
-import { STORAGE_KEYS } from '../../../../src/storage-keys.js';
-import { getJSON, setJSON } from '../../../../src/storage.js';
+import { STORAGE_KEYS } from '../../../../src/core/storage-keys.js';
+import { getJSON, setJSON } from '../../../../src/core/storage.js';
 import { setBizType, setInspectorName } from '../../../../src/exams/cosmetic/biz-profile.js';
 import { createCustomer } from '../../../../src/exams/cosmetic/customer-store.js';
 import { createMaterial } from '../../../../src/exams/cosmetic/material-ledger.js';
@@ -20,7 +20,7 @@ import { createBatch } from '../../../../src/exams/cosmetic/batch-store.js';
 import { createFormula } from '../../../../src/exams/cosmetic/formula-store.js';
 import { COMPLIANCE_SECTIONS } from '../../../../src/exams/cosmetic/views/formula-compliance.js';
 import { fmtLocalDateTime, localDateTime } from '../../../../src/exams/cosmetic/store-utils.js';
-import { fnv1aHex, deviceLabel } from '../../../../src/utils.js';
+import { fnv1aHex, deviceLabel } from '../../../../src/core/utils.js';
 
 function createMockStorage() {
   const store = {};

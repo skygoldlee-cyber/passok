@@ -5,7 +5,7 @@
 // 프로바이더가 갖고, 코어는 범용 SearchDoc 엔트리(kind·subjId·_searchText·nav)만 다룬다.
 // 뷰 계층은 이 모듈의 runUnifiedSearch 결과를 렌더만 한다.
 import { DataLoader } from '../content/data-loader.js';
-import { getActiveExamId } from '../exam-context.js';
+import { getActiveExamId } from '../core/exam-context.js';
 import { termHitQuality, expandSynonyms } from './search-morpheme.js';
 
 let _searchIndex = null;

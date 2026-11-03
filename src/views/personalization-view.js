@@ -7,8 +7,8 @@
 // - statement_stats + EMB_NEIGHBORS → 약점 개념 클러스터
 // - cid → 교재 단원명 해석 (취약→교재 딥링크)
 
-import { safeGetItem, safeSetItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { DataLoader } from '../content/data-loader.js';
 import { getReviewLog } from '../study/spaced-repetition.js';
 import { setPersonalDecay } from '../study/fsrs.js';
@@ -18,7 +18,7 @@ import {
     normalizeCidAnchor, chapterFromCid
 } from '../study/analysis-engine.js';
 import { resolveWrongQuiz, subjectKeyFromItemId } from '../study/weak-items.js';
-import { examIdToSubjectId } from '../exam-context.js';
+import { examIdToSubjectId } from '../core/exam-context.js';
 import { getWrongCauseLabels } from '../study/recommendations.js';
 import {
     clusterWeakConcepts, fitFsrsParams, fitKT, inferP0, inferCause

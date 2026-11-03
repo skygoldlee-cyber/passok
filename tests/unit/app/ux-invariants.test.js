@@ -114,9 +114,9 @@ test('LP-06: 랜딩 페이지 진입점이 도움말 패널과 시험 선택 뷰
 });
 
 test('진도 데이터 스키마 버전 마커가 saveProgress에서 기록된다 (DOC-DSN-39)', () => {
-  const keys = read('src/storage-keys.js');
+  const keys = read('src/core/storage-keys.js');
   assert.ok(/SCHEMA_VERSION:\s*'progress_schema_version'/.test(keys), '키 등록');
-  assert.ok(read('src/state.js').includes("STORAGE_KEYS.SCHEMA_VERSION"), 'saveProgress 기록');
+  assert.ok(read('src/core/state.js').includes("STORAGE_KEYS.SCHEMA_VERSION"), 'saveProgress 기록');
 });
 
 test('LP-11: 체험 섹션이 제공 경험을 구체 명기한다', () => {

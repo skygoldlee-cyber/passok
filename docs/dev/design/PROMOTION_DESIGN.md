@@ -57,7 +57,7 @@ DOC-DSN-36 §3 메모의 확정안: 한국 수험생 커뮤니티는 오픈채�
 
 - `exams.json.discordInvite` → `communityLinks: [{ type: "discord" | "kakao" | "naver-cafe", url, label? }]`로 일반화 (기존 `discordInvite`는 마이그레이션으로 흡수)
 - 설정 메뉴에 선언된 링크만큼 버튼 노출 — 현재 1버튼 규약(`community-btn`)을 목록으로 확장
-- **선행 작업(소규모 구조 변경)**: `src/types.js` ExamDef 필드 + `check:manifest` 스키마 + ES-08 DOM 테스트(`community-invite.dom.test.js`) 마이그레이션 — "선언만 바꾸면 끝"이 아니라 타입·게이트·테스트가 함께 간다
+- **선행 작업(소규모 구조 변경)**: `src/core/types.js` ExamDef 필드 + `check:manifest` 스키마 + ES-08 DOM 테스트(`community-invite.dom.test.js`) 마이그레이션 — "선언만 바꾸면 끝"이 아니라 타입·게이트·테스트가 함께 간다
 - 결제 문의 오픈채팅(`pro-upgrade.js`의 `contactUrl`)과 커뮤니티 채널은 **목적이 다르다** — 같은 채널 재사용은 지양
 
 ## 5. P4 — 추천 코드 (기존 인프라 재활용)

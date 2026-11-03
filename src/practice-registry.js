@@ -15,7 +15,7 @@
 // 의존성 규칙: 이 모듈의 정적 import는 exam-context 하나로 제한한다.
 // 피처 뷰 모듈·DataLoader·ui-utils·도메인 훅은 전부 enter() 내부의
 // 지연 import()로 참조해, import 시점의 모듈 그래프 팽창·순환을 막는다.
-import { hasFeature, getActiveExamId, getActiveExam } from './exam-context.js';
+import { hasFeature, getActiveExamId, getActiveExam } from './core/exam-context.js';
 
 const _lazyImport = (load) => { let p = null; return () => (p ??= load()); };
 

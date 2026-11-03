@@ -13,10 +13,10 @@
 import { SUPABASE_URL, isSupabaseConfigured } from '../auth-sync/supabase-config.js';
 import { getAuthSession } from '../auth-sync/supabase-client.js';
 import { reportEvent } from '../telemetry/usage-telemetry.js';
-import { getItem, setItem, listKeys, removeItemRaw } from '../storage.js';
-import { unscopedKey } from '../exam-context.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { sha256hex } from '../sha256.js';
+import { getItem, setItem, listKeys, removeItemRaw } from '../core/storage.js';
+import { unscopedKey } from '../core/exam-context.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { sha256hex } from '../core/sha256.js';
 import { getAiKey, callProviderLLM } from '../written/written-grading.js';
 
 const PROXY_TIMEOUT_MS = 10_000;

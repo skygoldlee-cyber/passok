@@ -13,7 +13,7 @@ const crypto = require('crypto');
 const { parseExamFile } = require('./plugins/exams.plugin.js');
 const { removeOrphanBundles } = require('./exam_targets.js');
 const { createRequire } = require('module');
-const { OPTION_INDICATORS } = createRequire(__filename)('../../src/utils.js');
+const { OPTION_INDICATORS } = createRequire(__filename)('../../src/core/utils.js');
 
 function sha6(s) {
   return crypto.createHash('sha256').update(s, 'utf8').digest('hex').substring(0, 6);

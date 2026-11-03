@@ -3,8 +3,8 @@
 export { tagWrongCause, tagWrongCauseAt, wrongActionCard, wrongActionTextbook, wrongActionSimilar } from './quiz-wrong-cause.js';
 export { renderReviewList, removeWeakCard, setReviewFilter, startWeakFocusQuiz, startWeakConceptQuiz, startWeakGenQuiz } from './quiz-review.js';
 
-import { state, saveProgress } from '../../state.js';
-import { safeTextWithBreaks, esc } from '../../sanitize.js';
+import { state, saveProgress } from '../../core/state.js';
+import { safeTextWithBreaks, esc } from '../../core/sanitize.js';
 import { switchView, resetMainScroll } from '../navigation.js';
 import { DataLoader } from '../../content/data-loader.js';
 import { getWrongCauseLabels } from '../../study/recommendations.js';
@@ -17,7 +17,7 @@ import { trackAction } from '../../telemetry/usage-stats.js';
 import { reportEvent } from '../../telemetry/usage-telemetry.js';
 import { recordQuizJudgment } from '../../study/spaced-repetition.js';
 import { apportionByWeight, examWeightBySubject } from '../../study/study-tracker.js';
-import { shuffle } from '../../utils.js';
+import { shuffle } from '../../core/utils.js';
 import { showToast, vibrate, HAPTIC } from '../../ui-utils.js';
 import { suggestWrongCauseKey, recordDiagnosticP0 } from '../personalization-view.js';
 import { aiFeedbackAvailable, requestWrongFeedback } from '../../ai/ai-client.js';

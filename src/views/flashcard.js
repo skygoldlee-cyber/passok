@@ -1,8 +1,8 @@
 // src/views/flashcard.js - 플래시카드 뷰 로직
 // @spec F-01~10,A-02
-import { state } from '../state.js';
-import { safeTextWithBreaks } from '../sanitize.js';
-import { shuffle } from '../utils.js';
+import { state } from '../core/state.js';
+import { safeTextWithBreaks } from '../core/sanitize.js';
+import { shuffle } from '../core/utils.js';
 import { getDueCards, previewCardReview } from '../study/spaced-repetition.js';
 
 const CARD_TYPE_LABELS = {

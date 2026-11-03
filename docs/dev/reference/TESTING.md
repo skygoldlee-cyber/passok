@@ -204,9 +204,9 @@ npm run hooks:install
 | 21 | `statement-tracker.test.js` | 9 | 복수정답형 진술별 정답 추적·통계 | `src/content/questions.js` (`gradeAnswer`) + `src/study/statement-tracker.js` |
 | 22 | `questions.test.js` | 17 | `src/content/questions.js` — 문제 필터·출제 로직 | 합성 데이터 |
 | 23 | `data-loader.test.js` | 7 | `src/content/data-loader.js` — 데이터 번들 로딩, 캐시 동작 | `window` 글로벌 모킹 |
-| 24 | `exam-context.test.js` | 16 | `src/exam-context.js` — 시험 해석, `scopedKey` 네임스페이스, 기능 플래그 | 합성 데이터 |
+| 24 | `exam-context.test.js` | 16 | `src/core/exam-context.js` — 시험 해석, `scopedKey` 네임스페이스, 기능 플래그 | 합성 데이터 |
 | 25 | `exam-simulator-facade.test.js` | 1 | exam-simulator 파사드 재수출 정합 — 소비자 import 이름 ↔ export 체인 | 파사드 분해 회귀 가드 |
-| 26 | `storage-key-sync.test.js` | 2 | `src/storage-keys.js` 선언 키 ↔ 실제 사용 키 동기화 | 키 누락 회귀 가드 |
+| 26 | `storage-key-sync.test.js` | 2 | `src/core/storage-keys.js` 선언 키 ↔ 실제 사용 키 동기화 | 키 누락 회귀 가드 |
 | 27 | `formula-store.test.js` | 31 | `src/exams/cosmetic/formula-store.js` — 포뮬러 CRUD·저장 한도(5), 고객·원료·안정성 스키마 정제, 전성분 표시 순서 | Formula OS, localStorage 모킹 |
 | 28 | `formula-rules.test.js` | 23 | `src/exams/cosmetic/formula-rules.js` — 추천 규칙, 안전 필터(금지·알레르기·임신수유), 맞춤 규칙 병합·직렬화 | Formula OS, 합성 데이터 |
 | 29 | `formula-check.test.js` | 22 | `src/exams/cosmetic/formula-check.js` — 원료 인덱스, 배합 검증(한도이내/초과/금지/확인필요), 고시 출처 | Formula OS, 합성 데이터 |
@@ -222,7 +222,7 @@ npm run hooks:install
 | 39 | `mermaid/mermaid-utils.test.js` | 8 | `src/reader/mermaid-utils.js` — 다이어그램 타입 감지, CSS 클래스, init 옵션(테마 분기) | 순수 함수 |
 | 40 | `command-palette.test.js` | 11 | `src/shell/command-palette.js` — `searchAll()` 통합 검색 순수 로직 | 2026-09-26 추가 |
 | 41 | `learning-pro.test.js` | 20 | `src/study/recommendations.js` — 추천·오답 원인·예상 점수 순수 로직 | 2026-09-26 추가 |
-| 42 | `storage.test.js` | 12 | `src/storage.js` — 스코프·JSON 헬퍼·쓰기 훅·백엔드 교체·`setMany` 롤백 | 저장소 추상화 |
+| 42 | `storage.test.js` | 12 | `src/core/storage.js` — 스코프·JSON 헬퍼·쓰기 훅·백엔드 교체·`setMany` 롤백 | 저장소 추상화 |
 | 43 | `whats-new.test.js` | 7 | `src/shell/whats-new.js` — `collectNewEntries` 버전 비교·집계·상한·폴백 | 순수 함수 |
 | 44 | `feedback.test.js` | 13 | `src/shell/feedback.js` — `?src=` 캡처·sanitize, 페이로드 빌드/검증, 쿨다운, 큐·플러시 | window/localStorage 스텁 |
 | 45 | `study-tracker.test.js` | 41 | `src/study/study-tracker.js` — SC-03 활동 기록·월별 학습일·목표 진행 | localStorage 모킹, 2026-10-14 추가 |
@@ -629,10 +629,10 @@ export 함수를 직접 호출하고 DOM 반영을 검증한다. `data-click` �
 - `src/content/data-loader.js`: 번들 fetch·캐시, `window` 글로벌 주입 검증
 
 #### `exam-context.test.js` (12개)
-- `src/exam-context.js`: 시험 해석, `scopedKey()` 네임스페이스, `hasFeature()` 기능 게이팅
+- `src/core/exam-context.js`: 시험 해석, `scopedKey()` 네임스페이스, `hasFeature()` 기능 게이팅
 
 #### `storage-key-sync.test.js` (2개)
-- `src/storage-keys.js`에 선언된 키 ↔ `src/`에서 실제 사용하는 `localStorage` 키 일치
+- `src/core/storage-keys.js`에 선언된 키 ↔ `src/`에서 실제 사용하는 `localStorage` 키 일치
 - 미등록 키 회귀 가드
 
 ### 4.14 E2E (Playwright 실브라우저) — 2026-10-14 추가

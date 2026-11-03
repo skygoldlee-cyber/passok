@@ -1,8 +1,8 @@
 // src/study-tracker-adherence.js — 계획 준수율·마일스톤 (study-tracker.js 분리)
 // @spec SC-06,SC-07,SC-09
-import { safeGetItem, safeSetItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { localDateKey } from '../utils.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { localDateKey } from '../core/utils.js';
 import { getStudyCalendar } from './study-tracker-activity.js';
 import { computeStudyPlan, getDDay } from './study-tracker-plan.js';
 

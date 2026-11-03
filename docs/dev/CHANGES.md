@@ -1,5 +1,23 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 refactor(src): src/core/ 분리 + router → shell/ (P2-4)
+
+- `src/core/` 신설 — utils·sanitize·sha256·paths·types·exam-context·storage-keys·storage·state 9개 이동 (순수 리프 + 기반 계층)
+- `src/router.js` → `src/shell/router.js` — 셸 계층 일치 (check_imports SHELL_MODULES 갱신)
+- 잔존 루트 파일: ui-utils·charts(DOM 의존 공용) + practice-registry(지연 import 경로 기준점) + 생성물 3종(keyword-index·law-links·pdf-registry — 생성 경로가 파이프라인 계약)
+- 함정: `exam-context.js`의 `new URL('../content/exams.json', import.meta.url)` — 한 단계 깊어져 `'../../content/exams.json'`으로 교정 (cwd 폴백이 결함을 가려 단위 테스트로만 검출)
+- 생성기 템플릿 동기화: build_keyword_index·build_pdf_registry의 출력 import 경로 → `./core/` (재생성 결과 sed 치환분과 동일 확인)
+- 계약 갱신: domain-map 패턴·srcRootAllow(루트 잔존 6개만), sw.js precache, vitest coverage exclude, docs 경로·트리
+- 검증: unit 1,741 + DOM 908 전부 통과 · check:imports 0 오류 · domainmap·filenames·docs_paths 통과
+
+## 2026-11-03 refactor(tests): tests/dom/misc 해체 — 주제별 재분류 (P2-5)
+
+- `misc/` 22개 파일을 주제 카테고리로 배분 — `shell/`(router·ui-structure·shortcut-help·whats-new·landing·feedback·onboarding-zoom), `pro/`(pro-notice·pro-plan·pro-redeem) 신설, `search/`(glossary-search·morph-search) 신설
+- 기존 디렉터리 흡수: `common/`(backup·unpack·telemetry-consent·usage-stats), `study/`(charts·dictionary-schema·dictionary-custom), `reader/`(doc-overlay·zoom-gestures), `exam/`(nonexam-pack)
+- domain-map `feature:dictionary` 패턴에 `dictionary-custom.dom.test.js` 추가 — exams/cosmetic 미배치(도메인 자동 규칙 오분류 방지), 스키마 customKey는 플랫폼 피처
+- 생성물 동기화: filename_baseline `check_filenames --update` + TRACE_MATRIX `build:trace` 재생성 — ARCHITECTURE 트리·설계 문서 3곳 경로 갱신
+- 검증: vitest 908개 통과 · check:domainmap · check:filenames · check:teststats 통과
+
 ## 2026-11-03 feat(carework): 요양기관 찾기 (DSN-43 6g)
 
 - `careFinder` — 공공데이터 장기요양기관 목록(`실무/facilities.json`) 시설명·주소·전화번호 키워드 + 지역 필터 검색

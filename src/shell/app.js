@@ -1,15 +1,15 @@
 // app.js - PassOK 멀티시험 학습 플랫폼 애플리케이션 로직
 // @spec S-02,S-03,S-08,UX-NAV-01,UX-PWA-01,UX-PWA-05,PF-10
-import { state, loadProgress } from '../state.js';
-import { esc } from '../sanitize.js';
-import { shuffle } from '../utils.js';
+import { state, loadProgress } from '../core/state.js';
+import { esc } from '../core/sanitize.js';
+import { shuffle } from '../core/utils.js';
 import { clearScratchpad, toggleCalcScratchpad, toggleScratchpadEraser } from '../study/scratchpad.js';
 import { DataLoader } from '../content/data-loader.js';
 import { ExamViewer } from '../reader/exam-viewer.js';
 import { WrittenPractice } from '../written/written-practice.js';
 import { ManualViewer } from '../reader/manual-viewer.js';
 import { initWebVitals } from '../telemetry/web-vitals.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { setupPWAInstall } from '../pwa/pwa-install.js';
 import { setupThemeToggle } from './theme-toggle.js';
 import { maybeShowWhatsNew } from './whats-new.js';
@@ -191,8 +191,8 @@ import {
 import { switchView, isStaleViewGen } from '../views/navigation.js';
 import { setupOfflineDetection } from '../views/offline-detection.js';
 import { setupEventListeners } from '../views/event-listeners.js';
-import { getViewTitles, navigateToView, initViewHashRouting } from '../router.js';
-import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage, getActiveRegistry } from '../exam-context.js';
+import { getViewTitles, navigateToView, initViewHashRouting } from './router.js';
+import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage, getActiveRegistry } from '../core/exam-context.js';
 import { renderExamSelect, showExamSelect, selectExamAction, resetExamSelection, hardReloadApp } from '../views/exam-select.js';
 import { startVersionWatch } from '../pwa/version-watch.js';
 import { initUiMode, toggleUiMode } from './ui-mode.js';

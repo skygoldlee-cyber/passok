@@ -1,4 +1,4 @@
-// tests/dom/misc/shortcut-help.dom.test.js — 키보드 단축키 도움말 오버레이
+// tests/dom/shell/shortcut-help.dom.test.js — 키보드 단축키 도움말 오버레이
 // @spec UX-HELP-01
 // 검증: '?' 키로 열기·토글(H) · Esc/배경/닫기 버튼으로 닫기 · 입력 필드에서는 무시(E)
 

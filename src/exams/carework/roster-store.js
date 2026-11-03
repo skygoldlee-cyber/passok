@@ -1,9 +1,9 @@
 // src/exams/carework/roster-store.js — 교대 근무표 로컬 저장소
 // @spec none — 시험 전용 도메인 스토어 (DA-13)
 // localStorage `carework_roster` — 근무 배정 {id,date,shift,worker,note}
-import { getJSON, setJSON } from '../../storage.js';
-import { STORAGE_KEYS } from '../../storage-keys.js';
-import { localDateTime } from '../../utils.js';
+import { getJSON, setJSON } from '../../core/storage.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
+import { localDateTime } from '../../core/utils.js';
 import { showStoreError, proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { showToast } from '../../ui-utils.js';
 

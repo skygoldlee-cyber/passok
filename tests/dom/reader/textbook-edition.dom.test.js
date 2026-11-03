@@ -5,8 +5,8 @@
 
 import { describe, it, beforeEach, expect } from 'vitest';
 import { checkTextbookEditionBanner } from '../../../src/reader/textbook-edition.js';
-import { getItem, setItem } from '../../../src/storage.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { getItem, setItem } from '../../../src/core/storage.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 const BANNER_HTML = `
 <div id="textbook-edition-banner" class="is-hidden">

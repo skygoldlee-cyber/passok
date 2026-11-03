@@ -1,7 +1,7 @@
 // ui-utils.js - 로딩 오버레이 및 스피너 UI 유틸리티 (공통 모듈)
 // @spec A-07,UX-FB-01~04
 
-import { escapeHTML, safeTextWithBreaks } from './sanitize.js';
+import { escapeHTML, safeTextWithBreaks } from './core/sanitize.js';
 
 export function showGlobalLoading(message = '로딩 중...') {
     let overlay = document.getElementById('global-loading-overlay');

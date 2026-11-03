@@ -173,8 +173,8 @@ async function main() {
     const recs = await imp('src/study/recommendations.js');
     const sr = await imp('src/study/spaced-repetition.js');
     const fsrsMod = await imp('src/study/fsrs.js');
-    const { safeSetItem, safeGetItem } = await imp('src/state.js');
-    const { STORAGE_KEYS } = await imp('src/storage-keys.js');
+    const { safeSetItem, safeGetItem } = await imp('src/core/state.js');
+    const { STORAGE_KEYS } = await imp('src/core/storage-keys.js');
 
     const seed = (k, v) => safeSetItem(k, typeof v === 'string' ? v : JSON.stringify(v));
     const seedBase = (dday, opts = {}) => {

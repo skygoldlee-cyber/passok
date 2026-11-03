@@ -1,4 +1,4 @@
-// src/sanitize.js — XSS 방어 유틸리티 모듈 (글로벌 스코프 실행)
+// src/core/sanitize.js — XSS 방어 유틸리티 모듈 (글로벌 스코프 실행)
 // @spec S-05
 //
 // v2 리뷰 권고 #3 (XSS 잠재 경로 — innerHTML 직접 주입) 대응.

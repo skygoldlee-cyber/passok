@@ -16,7 +16,7 @@ vi.mock('../../../src/ui-utils.js', () => ({
 import {
     loadIndexHtml, resetStudyState, flushAsync,
 } from '../helpers.js';
-import { state } from '../../../src/state.js';
+import { state } from '../../../src/core/state.js';
 import {
     saveScrollPosition, restoreScrollPosition, switchView,
 } from '../../../src/views/navigation.js';

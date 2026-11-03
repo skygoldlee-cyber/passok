@@ -5,18 +5,18 @@
 // 응답 저장, 채점·제출. 세션 시작(시험 구성)은 exam-sim-session.js,
 // 드래프트 저장소는 exam-sim-draft.js — arena → draft 단방향.
 
-import { state, saveProgress } from '../../state.js';
-import { esc, safeTextWithBreaks } from '../../sanitize.js';
+import { state, saveProgress } from '../../core/state.js';
+import { esc, safeTextWithBreaks } from '../../core/sanitize.js';
 import { checkShortAnswer } from '../trainer.js';
 import { DataLoader } from '../../content/data-loader.js';
 import { showToast, vibrate, HAPTIC } from '../../ui-utils.js';
-import { fmtMMSS, OPTION_INDICATORS } from '../../utils.js';
+import { fmtMMSS, OPTION_INDICATORS } from '../../core/utils.js';
 import { TIMING } from '../../config/timing.js';
 import { simState } from './exam-sim-state.js';
 import { chapterForQuestion, renderSimResultBreakdown } from './exam-sim-review.js';
 import { recordStatementJudgments } from '../../study/statement-tracker.js';
 import { recordQuizJudgment } from '../../study/spaced-repetition.js';
-import { examIdToSubjectId, getActiveRegistry } from '../../exam-context.js';
+import { examIdToSubjectId, getActiveRegistry } from '../../core/exam-context.js';
 import { resetMainScroll } from '../navigation.js';
 import { WEAK_SIM_PREFIX } from '../../study/weak-items.js';
 import { saveSimDraft, clearSimDraft } from './exam-sim-draft.js';

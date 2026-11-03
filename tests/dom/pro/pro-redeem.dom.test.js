@@ -1,4 +1,4 @@
-// tests/dom/pro-redeem.dom.test.js — 라이선스 코드 활성화 + plan 서버 동기화 + 결제 안내 게이트
+// tests/dom/pro/pro-redeem.dom.test.js — 라이선스 코드 활성화 + plan 서버 동기화 + 결제 안내 게이트
 // @spec PAY-01, PAY-02, PAY-03, PAY-06, PAY-07, PAY-08
 // 설정의 '라이선스 코드' 다이얼로그가 redeem_code RPC를 호출해 Pro를 활성화하고,
 // 로그인 시 profiles.plan → pro_entitled 동기화로 회수·타 기기 전파를 반영한다.
@@ -33,8 +33,8 @@ vi.mock('../../../src/ui-utils.js', () => ({
 import { showToast } from '../../../src/ui-utils.js';
 import { showRedeemDialog, syncPlanFromProfile, normalizeCode } from '../../../src/pro/pro-redeem.js';
 import { showUpgradeNotice } from '../../../src/pro/pro-upgrade.js';
-import { safeGetItem, safeSetItem } from '../../../src/state.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { safeGetItem, safeSetItem } from '../../../src/core/state.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 const SESSION = { user: { id: 'user-1' } };
 

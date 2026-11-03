@@ -1,12 +1,12 @@
 // views/exam-sim-review.js — 시뮬레이터 결과 리뷰/요약 (exam-simulator.js에서 추출)
 // @spec E-04,E-06,E-07
 import { simState } from './exam-sim-state.js';
-import { esc, safeTextWithBreaks } from '../../sanitize.js';
+import { esc, safeTextWithBreaks } from '../../core/sanitize.js';
 import { DataLoader } from '../../content/data-loader.js';
-import { getExamRules } from '../../exam-context.js';
+import { getExamRules } from '../../core/exam-context.js';
 import { resetMainScroll } from '../navigation.js';
 import { mountProMoment } from '../../pro/pro-upgrade.js';
-import { OPTION_INDICATORS } from '../../utils.js';
+import { OPTION_INDICATORS } from '../../core/utils.js';
 
 /**
  * 복수정답형 진술 정오표 — 실제 O/X vs 내 선택 선지의 포함 여부로 오판 진술을 표시

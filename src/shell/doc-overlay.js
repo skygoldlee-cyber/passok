@@ -4,7 +4,7 @@
 //   - 세션 캐시(TTL·LRU 옵션) · 번들 <script> 주입 · TOC 생성/마운트 · 오버레이 셸 수명주기
 // html-viewer.js는 셸·검색 모델이 달라 오버레이 베이스 대상이 아니지만,
 // 세션 캐시는 makeSessionCache의 maxEntries(LRU) 옵션을 공유한다.
-import { escapeHTML } from '../sanitize.js';
+import { escapeHTML } from '../core/sanitize.js';
 
 /**
  * sessionStorage TTL 캐시. payload는 호출자가 결정 ({ html, mdText? } 등).

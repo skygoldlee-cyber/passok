@@ -9,14 +9,14 @@
 
 // @spec ROAD-P0, PAY-02, PAY-04, PAY-06, PAY-07
 
-import { esc } from '../sanitize.js';
+import { esc } from '../core/sanitize.js';
 import { trapFocus } from '../ui-utils.js';
-import { safeGetItem, safeSetItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { trackAction } from '../telemetry/usage-stats.js';
 import { reportEvent } from '../telemetry/usage-telemetry.js';
-import { hasFeature, getActiveExamId } from '../exam-context.js';
-import { localDateTime } from '../utils.js';
+import { hasFeature, getActiveExamId } from '../core/exam-context.js';
+import { localDateTime } from '../core/utils.js';
 
 /** 스토어 오류가 무료 한도 초과인지 판별 */
 function isFreeLimitError(error) {

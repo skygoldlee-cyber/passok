@@ -16,12 +16,12 @@
 // - 개인정보 최소화: 이벤트명·문항 수·점수 등 집계용 수치만, 학습 내용 미포함
 // ------------------------------------------------------------
 import { getSupabase } from '../auth-sync/supabase-client.js';
-import { getActiveExamId } from '../exam-context.js';
+import { getActiveExamId } from '../core/exam-context.js';
 import { getTelemetrySessionId } from './telemetry-session.js';
 import { isTelemetryAllowed, getInstallId, isAutomatedRuntime } from './telemetry-consent.js';
-import { safeGetItem, safeSetItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { todayKey } from '../utils.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { todayKey } from '../core/utils.js';
 
 const MAX_EVENTS_PER_SESSION = 60;   // 세션당 전송 상한
 const EVENT_MAX = 60;                // 이벤트명 길이 상한 (스키마 check와 일치)

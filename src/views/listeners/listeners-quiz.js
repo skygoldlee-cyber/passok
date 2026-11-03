@@ -1,6 +1,6 @@
 // src/views/listeners-quiz.js — 퀴즈·훈련소 이벤트 바인딩 (event-listeners.js §3~4 + 숫자/OX 단축키에서 분리)
 // @spec Q-02,Q-04
-import { state } from '../../state.js';
+import { state } from '../../core/state.js';
 import { DataLoader } from '../../content/data-loader.js';
 import { startQuiz, submitQuizAnswer, nextQuizQuestion, startWeakFocusQuiz } from '../quiz/quiz.js';
 import { showGlobalLoading, hideGlobalLoading, showToast } from '../../ui-utils.js';

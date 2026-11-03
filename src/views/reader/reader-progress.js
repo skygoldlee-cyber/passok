@@ -4,8 +4,8 @@
 // (선택 과목·챕터·이야기형 모드)로, 진척 추적이 같은 상태를 참조하므로
 // 이 모듈에 함께 둔다 — reader-toolbar가 진척만 필요로 할 때 뷰 모듈을
 // 역참조하지 않도록 하는 의도적 배치 (순환 import 해소).
-import { safeGetItem, safeSetItem } from '../../state.js';
-import { STORAGE_KEYS } from '../../storage-keys.js';
+import { safeGetItem, safeSetItem } from '../../core/state.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { getDDay, getTextbookReadProgress, recordStudyActivity } from '../../study/study-tracker.js';
 import { showAlert } from '../../ui-utils.js';
 

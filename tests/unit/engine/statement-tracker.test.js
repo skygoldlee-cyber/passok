@@ -6,8 +6,8 @@ import {
     getAllStatementStats, getAnomalousStatements
 } from '../../../src/study/statement-tracker.js';
 import { gradeAnswer } from '../../../src/content/questions.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
-import { scopedKey } from '../../../src/exam-context.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
+import { scopedKey } from '../../../src/core/exam-context.js';
 
 // --- localStorage 모킹 (state.test.js와 동일 패턴) ---
 
@@ -165,7 +165,7 @@ test('getAllStatementStats: 저장 통계를 그대로 반환하고 손상 시 �
 
 test('getDueStatementSids: due==오늘인 진술은 복습 대기에 포함 (<= 경계)', async () => {
     const { getDueStatementSids } = await import('../../../src/study/statement-tracker.js');
-    const { todayKey } = await import('../../../src/utils.js');
+    const { todayKey } = await import('../../../src/core/utils.js');
     const statsKey = scopedKey(STORAGE_KEYS.STATEMENT_STATS);
     const srKey = scopedKey(STORAGE_KEYS.FC_SPACED_REPETITION);
     mockStorage.setItem(statsKey, JSON.stringify({ s1: { j: 1, w: 1 }, s2: { j: 1, w: 1 } }));

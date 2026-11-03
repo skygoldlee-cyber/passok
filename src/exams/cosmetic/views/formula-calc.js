@@ -5,12 +5,12 @@
 // 안전 원칙: 배합량을 "제안"하지 않고 사용자가 입력한 값을 고시 데이터로
 // "검증"만 한다. 검증 결과는 법정 한도 기준이며 제품 안전성·안정성·품질 보장이 아니다.
 
-import { esc, raw } from '../../../sanitize.js';
+import { esc, raw } from '../../../core/sanitize.js';
 import { showToast } from '../../../ui-utils.js';
 import { showStoreError } from '../../../pro/pro-upgrade.js';
 import { switchView } from '../../../views/navigation.js';
-import { getJSON, setJSON } from '../../../storage.js';
-import { STORAGE_KEYS } from '../../../storage-keys.js';
+import { getJSON, setJSON } from '../../../core/storage.js';
+import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import {
   CHECK, checkFormulaItems, countChangedStandards,
 } from '../formula-check.js';

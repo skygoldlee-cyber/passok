@@ -12,10 +12,10 @@
 //
 // CSP: vercel.json connect-src에 generativelanguage.googleapis.com 등록됨.
 
-import { STORAGE_KEYS } from '../../storage-keys.js';
-import { getItem, setItem, removeItem } from '../../storage.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
+import { getItem, setItem, removeItem } from '../../core/storage.js';
 import { clampStr } from './store-utils.js';
-import { normalizeEntityName } from '../../utils.js';
+import { normalizeEntityName } from '../../core/utils.js';
 
 /** 기본 모델 — 미설정 시 사용되는 폴백 */
 const GEMINI_MODEL = 'gemini-2.0-flash';

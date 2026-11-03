@@ -36,8 +36,8 @@ import {
 } from '../../../src/views/study-calendar.js';
 import { recordStudyActivity, getTodayStr, setExamDate, setStudyGoals } from '../../../src/study/study-tracker.js';
 import { DataLoader } from '../../../src/content/data-loader.js';
-import { safeSetItem, state } from '../../../src/state.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { safeSetItem, state } from '../../../src/core/state.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 describe('학습 캘린더 — 렌더·기록·목표', () => {
     beforeEach(() => {

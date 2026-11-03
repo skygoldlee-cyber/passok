@@ -3,10 +3,10 @@
 // 이메일+비밀번호 로그인·회원가입·매직링크·소셜 로그인(Google·Kakao). 세션은 supabase-js가 localStorage에 자동 보관.
 import { getSupabase, onAuthChange } from './supabase-client.js';
 import { showToast, showConfirm, trapFocus } from '../ui-utils.js';
-import { safeGetItem, safeSetItem, safeRemoveItem } from '../state.js';
+import { safeGetItem, safeSetItem, safeRemoveItem } from '../core/state.js';
 import { hasProEntitlement } from '../pro/pro-upgrade.js';
 import { reportEvent } from '../telemetry/usage-telemetry.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 
 const el = id => /** @type {HTMLInputElement|null} */ (document.getElementById(id));
 const show = n => n && n.classList.remove('is-hidden');

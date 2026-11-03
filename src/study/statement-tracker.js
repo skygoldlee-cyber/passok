@@ -8,10 +8,10 @@
 //
 // sid(진술 전역 안정 ID)가 없는 진술은 문항 안에서만 유효하므로 추적하지 않는다.
 
-import { safeGetItem, safeSetItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { updateCardSchedule } from './spaced-repetition.js';
-import { todayKey } from '../utils.js';
+import { todayKey } from '../core/utils.js';
 
 const STATS_KEY = STORAGE_KEYS.STATEMENT_STATS;
 

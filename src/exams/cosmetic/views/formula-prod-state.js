@@ -5,7 +5,7 @@
 // 사진 인식(formula-prod-vision.js)이 함께 쓰는 상태·렌더를 한 곳에 둬
 // 양쪽 모듈 간 직접 참조(순환)를 피한다.
 
-import { esc } from '../../../sanitize.js';
+import { esc } from '../../../core/sanitize.js';
 import { getEl, getIndex } from './formula.js';
 import { findIngredient } from '../formula-check.js';
 

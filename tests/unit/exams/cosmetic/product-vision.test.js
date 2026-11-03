@@ -14,7 +14,7 @@ import {
   buildExtractionPrompt, buildRequestBody, parseExtractionResponse,
   extractProductFromImages, fileToBase64Jpeg,
 } from '../../../../src/exams/cosmetic/product-vision.js';
-import { STORAGE_KEYS, BACKUP_KEYS } from '../../../../src/storage-keys.js';
+import { STORAGE_KEYS, BACKUP_KEYS } from '../../../../src/core/storage-keys.js';
 
 function createMockStorage() {
   const store = {};

@@ -9,7 +9,7 @@
 // 배치는 회차 기록: 생성 시 처방의 검증 결과·전성분·제형을 스냅샷으로 저장해
 // 처방이 수정·삭제돼도 당시 기록이 보존된다 (batch-store.js 주석 참조).
 
-import { esc } from '../../../sanitize.js';
+import { esc } from '../../../core/sanitize.js';
 import { showToast, showConfirm } from '../../../ui-utils.js';
 import { showStoreError } from '../../../pro/pro-upgrade.js';
 import { showPanel, formulaSubNav, getEl } from './formula.js';
@@ -28,7 +28,7 @@ import {
   draft, readBatchForm, currentAllergyConflicts, buildCheckSnapshot,
 } from './formula-batch-form.js';
 import { toCsv, downloadCsv } from '../../../content/csv-utils.js';
-import { todayKey } from '../../../utils.js';
+import { todayKey } from '../../../core/utils.js';
 
 // 분리 모듈 재수출 — data-click 핸들러 조회 경로 유지 (practice-registry)
 export {

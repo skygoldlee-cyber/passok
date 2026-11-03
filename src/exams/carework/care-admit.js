@@ -1,8 +1,8 @@
 // src/exams/carework/care-admit.js — 입소 서류 체크리스트 도메인
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 노인복지법·장기요양보험법 시행규칙 근거의 구비서류 목록 + 체크 상태 로컬 저장
-import { getJSON, setJSON } from '../../storage.js';
-import { STORAGE_KEYS } from '../../storage-keys.js';
+import { getJSON, setJSON } from '../../core/storage.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
 
 export const ADMIT_SECTIONS = [
     { title: '공단 발급 서류', items: [

@@ -1,4 +1,4 @@
-// src/state.js — 전역 상태(State) 및 로컬스토리지 영속성 레이어 모듈 (글로벌 스코프 실행)
+// src/core/state.js — 전역 상태(State) 및 로컬스토리지 영속성 레이어 모듈 (글로벌 스코프 실행)
 // @spec DA-05
 //
 // v2 리뷰 권고 #1 (거대한 단일 자바스크립트 파일 — 점진적 모듈화) 대응.
@@ -10,7 +10,7 @@
 // 호출합니다. 전역 함수 참조이므로 모듈 분리 후에도 동작은 동일합니다.
 
 import { STORAGE_KEYS } from './storage-keys.js';
-import { WEAK_QUIZ_PREFIX, subjectKeyFromItemId } from './study/weak-items.js';
+import { WEAK_QUIZ_PREFIX, subjectKeyFromItemId } from '../study/weak-items.js';
 import { todayKey } from './utils.js';
 import {
     getItem as storageGetItem,
@@ -118,7 +118,7 @@ export const state = {
    💾 상태 영속성 (localStorage Load / Save)
    ======================================================= */
 
-// 로컬스토리지 안전 접근 래퍼 — 실제 구현은 저장소 추상화 계층(src/storage.js)에 위임.
+// 로컬스토리지 안전 접근 래퍼 — 실제 구현은 저장소 추상화 계층(src/core/storage.js)에 위임.
 // Safari 프라이빗 모드/용량 초과(QuotaExceededError)/스토리지 비활성 환경에서
 // localStorage 접근 자체가 예외를 던질 수 있으므로, 앱 흐름이 중단되지 않도록 감싼다.
 // - 읽기 실패: null 반환(값 없음과 동일 취급)
@@ -281,7 +281,7 @@ export function saveProgress() {
         state._prevQuizBySubj = quizBySubjAll;
         try {
             // 동적 import로 순환 참조 방지
-            import('./study/study-tracker.js').then(({ recordStudyActivity }) => {
+            import('../study/study-tracker.js').then(({ recordStudyActivity }) => {
                 const correctDelta = quizDelta > 0
                     ? Object.values(state.quizResults).slice(-quizDelta).filter(r => r && r.correct).length
                     : 0;

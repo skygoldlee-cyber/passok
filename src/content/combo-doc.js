@@ -7,7 +7,7 @@
 // 문항을 런타임에 직렬화해 동일 포맷으로 렌더링한다.
 // → 생성물 이중 관리(원본 md + exams_md 번들) 제거, 파일럿 문항도 문서에 포함.
 
-import { getActiveExam } from '../exam-context.js';
+import { getActiveExam } from '../core/exam-context.js';
 
 const STMT_LABELS = ['ㄱ', 'ㄴ', 'ㄷ', 'ㄹ', 'ㅁ', 'ㅂ'];
 const OPT_INDICATORS = ['①', '②', '③', '④', '⑤', '⑥'];

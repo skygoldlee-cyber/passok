@@ -25,14 +25,14 @@ import {
     loadIndexHtml, el, isVisible, flushAsync,
     stubRegistry, resetStudyState, storedJson,
 } from '../helpers.js';
-import { state, safeSetItem, safeGetItem } from '../../../src/state.js';
+import { state, safeSetItem, safeGetItem } from '../../../src/core/state.js';
 import { DataLoader } from '../../../src/content/data-loader.js';
 import {
     updateStreakAndDailyUI, startDailyChallenge, submitDailyCardAnswer,
     submitDailyShortAnswer, nextDailyStep, closeDailyModal,
 } from '../../../src/views/daily-challenge.js';
-import { STORAGE_KEYS, dailyCompletedKey } from '../../../src/storage-keys.js';
-import { todayKey } from '../../../src/utils.js';
+import { STORAGE_KEYS, dailyCompletedKey } from '../../../src/core/storage-keys.js';
+import { todayKey } from '../../../src/core/utils.js';
 
 // 앱의 날짜 키는 로컬 날짜(localDateKey) — toISOString(UTC)은 KST 00~09시에
 // 하루 전으로 어긋나 그 시간대에 테스트가 깨진다

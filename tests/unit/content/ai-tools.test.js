@@ -386,7 +386,7 @@ test('AI-19: 카드팁 오버레이 계약 — flashcard.html 표시 요소·Car
     const fs = require('fs'), path = require('path');
     const html = fs.readFileSync(path.join(process.cwd(), 'html/views/flashcard.html'), 'utf8');
     assert.ok(html.includes('id="card-back-tip"') && html.includes('id="card-tip-container"'), 'tip 표시 요소');
-    const types = fs.readFileSync(path.join(process.cwd(), 'src/types.js'), 'utf8');
+    const types = fs.readFileSync(path.join(process.cwd(), 'src/core/types.js'), 'utf8');
     assert.ok(types.includes('[tip]'), 'Card typedef에 tip 필드');
     const loader = fs.readFileSync(path.join(process.cwd(), 'src/content/data-loader.js'), 'utf8');
     assert.ok(loader.includes('_getCardTips') && loader.includes('피드백/card_tip.json'), 'DataLoader 오버레이 병합');

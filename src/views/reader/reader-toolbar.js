@@ -2,8 +2,8 @@
 // @spec TR-15,TR-16,TR-16a,TR-18,TR-21~23,TR-27,UX-SCR-01
 // 역할: 북마크 토글, 테마 클래스 적용, 스크롤 스파이(rAF 디바운스),
 //       툴바 버튼 바인딩, 표 전체화면 모달. 렌더링 로직은 textbook-reader.js에 남음.
-import { safeGetItem, safeSetItem } from '../../state.js';
-import { STORAGE_KEYS } from '../../storage-keys.js';
+import { safeGetItem, safeSetItem } from '../../core/state.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { scheduleSaveReaderPosition } from './reader-progress.js';
 export const readerChapterContext = { subjId: '', chapterIdx: 0 };
 let readerScrollBound = false;

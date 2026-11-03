@@ -1,7 +1,7 @@
 // src/exams/cosmetic/views/formula-list.js — My 포뮬러 목록·CRUD (formula.js에서 분리)
 // @spec FO-01
 
-import { esc } from '../../../sanitize.js';
+import { esc } from '../../../core/sanitize.js';
 import { showToast, showConfirm } from '../../../ui-utils.js';
 import { showStoreError } from '../../../pro/pro-upgrade.js';
 import { checkFormulaItems, countChangedStandards } from '../formula-check.js';

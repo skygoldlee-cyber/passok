@@ -7,8 +7,8 @@
 // 이력 소스: window.RELEASE_NOTES (data/release-notes.js — 배포 시 커밋
 // subject로 자동 초안 생성, 수동 편집 권장).
 // ------------------------------------------------------------
-import { safeGetItem, safeSetItem, safeRemoveItem } from '../state.js';
-import { esc } from '../sanitize.js';
+import { safeGetItem, safeSetItem, safeRemoveItem } from '../core/state.js';
+import { esc } from '../core/sanitize.js';
 import { trapFocus } from '../ui-utils.js';
 import { formatAppVersion } from './app-version.js';
 

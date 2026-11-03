@@ -157,7 +157,7 @@ test('PBT FSRS: reps 단조 증가·lapses=오답 누적·d 1~10·s>0·due>오�
   Object.defineProperty(globalThis, 'localStorage', { value: localStorageStub(store), configurable: true });
   try {
     const { updateCardSchedule } = await import('../../../src/study/spaced-repetition.js');
-    const { todayKey } = await import('../../../src/utils.js');
+    const { todayKey } = await import('../../../src/core/utils.js');
     fc.assert(fc.property(
       fc.array(fc.boolean(), { minLength: 1, maxLength: 10 }),
       fc.integer({ min: 1, max: 99 }),

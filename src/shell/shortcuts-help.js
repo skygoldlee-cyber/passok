@@ -2,7 +2,7 @@
 // @spec UX-HELP-01
 // '?' 키로 전체 단축키 시트를 연다. 목록은 아래 SHORTCUTS 선언이 정본 —
 // 신규 단축키 추가 시 여기에 등록해 도움말과 실제 바인딩의 불일치를 방지한다.
-import { esc } from '../sanitize.js';
+import { esc } from '../core/sanitize.js';
 import { trapFocus } from '../ui-utils.js';
 
 /**

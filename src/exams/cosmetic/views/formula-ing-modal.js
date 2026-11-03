@@ -6,7 +6,7 @@
 
 import { showToast, showConfirm } from '../../../ui-utils.js';
 import { DataLoader } from '../../../content/data-loader.js';
-import { getActiveExamId } from '../../../exam-context.js';
+import { getActiveExamId } from '../../../core/exam-context.js';
 import { renderDictionary } from '../../../views/dictionary.js';
 import { buildIngredientIndex } from '../formula-check.js';
 import {

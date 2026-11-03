@@ -1,12 +1,12 @@
 // @spec UX-NAV-01,UX-NAV-08,UM-04,ES-09
 import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
-import { getViewTitles, navigateToView, initViewHashRouting, resetExitGuardState } from '../../../src/router.js';
+import { getViewTitles, navigateToView, initViewHashRouting, resetExitGuardState } from '../../../src/shell/router.js';
 import { isStaleViewGen } from '../../../src/views/navigation.js';
 import { showGlobalLoading } from '../../../src/ui-utils.js';
-import { state } from '../../../src/state.js';
+import { state } from '../../../src/core/state.js';
 
 // navigation.js의 DOM 의존성 모킹
-vi.mock('../../../src/state.js', () => ({
+vi.mock('../../../src/core/state.js', () => ({
     state: { currentView: 'dashboard-view', flashcards: { subject: 'law' } }
 }));
 

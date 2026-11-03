@@ -1,4 +1,4 @@
-// tests/dom/onboarding-zoom.dom.test.js — 첫 방문 시작 안내 + 이미지 라이트박스
+// tests/dom/shell/onboarding-zoom.dom.test.js — 첫 방문 시작 안내 + 이미지 라이트박스
 // @spec UX-FB-05, TR-20, OB-01
 // UX-FB-05: 학습 데이터 없는 최초 방문 1회만 표시 — 재방문 사용자는 방해 금지
 // TR-20: .reader-img 클릭 → 전체화면 확대 모달, 닫기 시 상태 정리 (데스크탑 전용)
@@ -10,7 +10,7 @@ vi.mock('../../../src/ui-utils.js', () => ({
     showToast: vi.fn(),
 }));
 
-vi.mock('../../../src/exam-context.js', () => ({
+vi.mock('../../../src/core/exam-context.js', () => ({
     getExamAppName: () => 'Passmula',
     getMinExamLeadDays: () => 90,
     getReadThroughDays: () => 30,
@@ -19,7 +19,7 @@ vi.mock('../../../src/exam-context.js', () => ({
 }));
 
 // state.js의 safeGetItem/safeSetItem을 localStorage 위임으로 대체
-vi.mock('../../../src/state.js', () => ({
+vi.mock('../../../src/core/state.js', () => ({
     safeGetItem: (k) => localStorage.getItem(k),
     safeSetItem: (k, v) => localStorage.setItem(k, v),
 }));

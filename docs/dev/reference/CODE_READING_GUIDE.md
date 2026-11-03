@@ -140,8 +140,8 @@ flowchart LR
 |------|------|-------|
 | 1 | `src/shell/app.js` (맨 아래) | 부팅 시퀀스·`DELEGATED_HANDLERS` 등록 |
 | 2 | `src/views/listeners/listeners-delegation.js` | data-click 해석 규칙 (100줄 미만) |
-| 3 | `src/state.js` | 인메모리 상태 + `saveProgress()` 구조 |
-| 4 | `src/storage.js` → `src/storage-keys.js` | localStorage 추상화·시험별 키 규칙 |
+| 3 | `src/core/state.js` | 인메모리 상태 + `saveProgress()` 구조 |
+| 4 | `src/core/storage.js` → `src/core/storage-keys.js` | localStorage 추상화·시험별 키 규칙 |
 | 5 | `src/content/data-loader.js` | 번들 fetch·캐시·레지스트리 해석 |
 | 6 | `src/views/dashboard.js` | 뷰 컨트롤러 표준 패턴 |
 | 7 | `src/views/analysis-view.js` | dashboard에서 분리된 모듈 경계 실례 |
@@ -195,13 +195,13 @@ TypeScript가 아니라 `jsconfig.json`의 `checkJs` + JSDoc 주석으로 `tsc -
 | 레지스트리 | 시험 목록·과목 메타의 런타임 진입점 (`exams.json` 빌드 산출) | `data/exams.js`, `DataLoader.registry` |
 | 시험 팩 | `content/exams/<id>/` 구조의 콘텐츠 단위 — manifest·교재·문제은행·docs | `content/exams/` |
 | features 플래그 | 시험 팩별 기능 on/off 선언 — `hasFeature('x')`로 게이트 | `content/exams.json` |
-| state | 인메모리 전역 상태 객체 (진도·뷰·시험 컨텍스트) | `src/state.js` |
-| storage.js | localStorage 안전 래퍼 — 시험별 키 네임스페이스·용량 예외 처리. 직접 접근은 `check:storage`가 차단 | `src/storage.js` |
+| state | 인메모리 전역 상태 객체 (진도·뷰·시험 컨텍스트) | `src/core/state.js` |
+| storage.js | localStorage 안전 래퍼 — 시험별 키 네임스페이스·용량 예외 처리. 직접 접근은 `check:storage`가 차단 | `src/core/storage.js` |
 | localStorage | 브라우저 내장 키-값 저장소 — 이 앱의 1차 진도 보관소 | `storage.js` 경유만 허용 |
 | Service Worker | 네트워크를 가로채는 백그라운드 스크립트 — 오프라인 캐시의 핵심 | `sw.js` |
 | 프리캐시 | 설치 시점에 미리 저장하는 파일 목록 (`SHELL_ASSETS`) | `sw.js` |
 | innerHTML | 문자열로 DOM 내용을 교체하는 API — 미이스케이프 값이 섞이면 XSS 위험 | 뷰 컨트롤러 전반 |
-| `esc()` / `html`` ` | XSS 방지 이스케이프 헬퍼·태그드 템플릿 — 보간 문자열을 자동 이스케이프 | `src/sanitize.js` |
+| `esc()` / `html`` ` | XSS 방지 이스케이프 헬퍼·태그드 템플릿 — 보간 문자열을 자동 이스케이프 | `src/core/sanitize.js` |
 | SPEC ID / `@spec` | 요구사항 식별자와 코드 추적 태그 — `check:specrefs`가 양방향 검증 | `SPEC.md` ↔ 소스 주석 |
 | 게이트 | 커밋·푸시·배포를 차단하는 자동 검사 단계 (`check:*` 스크립트) | `tools/check/` |
 | jsdom | Node.js에서 브라우저 DOM을 흉내 내는 테스트 환경 | `tests/dom/` (Vitest) |

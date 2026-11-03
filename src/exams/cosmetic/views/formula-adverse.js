@@ -7,8 +7,8 @@
 //
 // 패널: formula-adverse-panel — 기록 폼(details 접이식) + 발생일 역순 목록.
 
-import { esc } from '../../../sanitize.js';
-import { todayKey } from '../../../utils.js';
+import { esc } from '../../../core/sanitize.js';
+import { todayKey } from '../../../core/utils.js';
 import { showToast, showConfirm } from '../../../ui-utils.js';
 import { showStoreError } from '../../../pro/pro-upgrade.js';
 import { showPanel, formulaSubNav, getEl } from './formula.js';

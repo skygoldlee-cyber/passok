@@ -5,7 +5,7 @@
 // 모든 서브모듈(hub·list·calc·weigh·ing-modal·io)이 여기서 가져가므로
 // 상위 모듈 간 직접 import는 core → (hub|calc) → (list|io) 단방향을 유지한다.
 
-import { esc } from '../../../sanitize.js';
+import { esc } from '../../../core/sanitize.js';
 import { DataLoader } from '../../../content/data-loader.js';
 import { resetMainScroll } from '../../../views/navigation.js';
 import { CHECK, buildIngredientIndex } from '../formula-check.js';

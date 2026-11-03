@@ -1,13 +1,13 @@
 // src/views/quiz-wrong-cause.js - 오답 원인 태깅·재학습 액션
 // @spec AN-02
-import { state, saveProgress } from '../../state.js';
-import { esc } from '../../sanitize.js';
+import { state, saveProgress } from '../../core/state.js';
+import { esc } from '../../core/sanitize.js';
 import { switchView } from '../navigation.js';
 import { getWrongCauseLabels, getWrongCauseAdvice } from '../../study/recommendations.js';
 import { weakItemKey, resolveWrongQuiz, subjectForWeakItem } from '../../study/weak-items.js';
 import { trackAction } from '../../telemetry/usage-stats.js';
 import { startSubjectReader } from '../analysis-view.js';
-import { shuffle } from '../../utils.js';
+import { shuffle } from '../../core/utils.js';
 import { showToast } from '../../ui-utils.js';
 import { _beginQuizRun, renderQuizResult } from './quiz.js';
 

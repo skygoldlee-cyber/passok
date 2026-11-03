@@ -1,4 +1,4 @@
-// tests/dom/pro-plan.dom.test.js — 플랜 안내 모달 (Free/Pro 비교)
+// tests/dom/pro/pro-plan.dom.test.js — 플랜 안내 모달 (Free/Pro 비교)
 // @spec ROAD-P0, PAY-07
 // feature-plan.json의 현재 값을 반영해 기능별 PRO/무료 태그를 렌더링한다 —
 // 플랜 전환 시 고객이 보는 비교 표가 설정과 어긋나지 않음을 고정한다.

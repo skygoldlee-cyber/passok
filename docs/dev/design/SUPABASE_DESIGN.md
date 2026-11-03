@@ -179,7 +179,7 @@ sequenceDiagram
 | `src/auth-sync/sync.js` | push/pull, dirty flag + 2~3s 디바운스, `updated_at` 충돌 비교, 확인 모달 |
 | `src/auth-sync/auth-view.js` | 로그인 모달 (이메일+PW / 매직링크 / OAuth), 계정 상태 패널 |
 | `index.html` | 로그인 모달 마크업, 설정 메뉴 `계정` 항목 |
-| `src/state.js` | `saveProgress` 등 쓰기 경로에 `sync.markDirty()` 훅 |
+| `src/core/state.js` | `saveProgress` 등 쓰기 경로에 `sync.markDirty()` 훅 |
 | `vercel.json` | `connect-src` 확장 |
 | `sw.js` | 외부 오리진 network-only 분기 + vendor 자산 등록 |
 | `tests/dom/common/common-auth.dom.test.js` 등 | 로그인·동기화·충돌 시나리오 (supabase client는 vi.mock) |

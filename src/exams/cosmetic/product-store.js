@@ -18,8 +18,8 @@
 //   - 금지 매칭은 '제품이 불법' 판정이 아니라 동명이인·개정 시차 가능성을
 //     포함한 매칭 경고다 — 배지 문구가 '원문 확인'을 안내한다 (DI-07 계승).
 
-import { STORAGE_KEYS } from '../../storage-keys.js';
-import { normalizeEntityName, localDateTime } from '../../utils.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
+import { normalizeEntityName, localDateTime } from '../../core/utils.js';
 import { BAN_TEXT_RE, findIngredient, ingredientMatchKey, INGREDIENT_ALIASES } from './formula-check.js';
 import {
   loadItems, saveItems, newId, clampStr, pickEnum,

@@ -1,7 +1,7 @@
 // src/views/navigation.js - 뷰 전환 유틸리티 (순환 import 해결용)
 // @spec UX-NAV-07,R-04
 // app.js ↔ quiz.js/dashboard.js 순환 의존성을 끊기 위해 별도 모듈로 추출.
-import { state } from '../state.js';
+import { state } from '../core/state.js';
 import { trackView } from '../telemetry/usage-stats.js';
 
 const scrollPositions = {};

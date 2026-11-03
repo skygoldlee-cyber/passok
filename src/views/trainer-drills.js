@@ -10,9 +10,9 @@
 export { openComboDrillSetup, startComboDrill, submitComboJudgments, nextComboDrill } from './trainer-drill-combo.js';
 import { renderComboQuestion, renderComboResult } from './trainer-drill-combo.js';
 
-import { state } from '../state.js';
-import { esc, safeTextWithBreaks } from '../sanitize.js';
-import { shuffle, OPTION_INDICATORS } from '../utils.js';
+import { state } from '../core/state.js';
+import { esc, safeTextWithBreaks } from '../core/sanitize.js';
+import { shuffle, OPTION_INDICATORS } from '../core/utils.js';
 import { vibrate, showToast, HAPTIC, wrongReviewHtml, trainerResultHtml } from '../ui-utils.js';
 import { DataLoader } from '../content/data-loader.js';
 import { gradeAnswer } from '../content/questions.js';

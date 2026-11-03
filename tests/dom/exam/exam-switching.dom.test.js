@@ -9,7 +9,7 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
 import { loadIndexHtml } from '../helpers.js';
 import {
     getActiveExam, getActiveExamId, hasFeature, getExamAppName, scopedKey, unscopedKey,
-} from '../../../src/exam-context.js';
+} from '../../../src/core/exam-context.js';
 import { applyFeatureFlags, applyExamBranding } from '../../../src/shell/app-shell.js';
 
 const EXAMS = {

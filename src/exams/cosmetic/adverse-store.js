@@ -16,7 +16,7 @@
 // 기록 원칙: 이상사례는 법적 증적이므로 삭제는 사용자 명시 액션에서만 허용하고,
 // 보정(update)은 필드 전체 재정제로 이력 무결성을 유지한다.
 
-import { STORAGE_KEYS } from '../../storage-keys.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import {
   loadItems, saveItems, newId, clampStr, clampDate,
 } from './store-utils.js';

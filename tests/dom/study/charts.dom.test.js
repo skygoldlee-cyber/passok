@@ -1,4 +1,4 @@
-// tests/dom/charts.dom.test.js — 분석 차트 시나리오
+// tests/dom/study/charts.dom.test.js — 분석 차트 시나리오
 // @spec C-01,C-02,C-03,C-04,C-05
 // 성적 추이 라인차트, 합격/과락 진단, 레이더 차트, 과목별 점수행, 툴팁을 고정한다.
 
@@ -18,8 +18,8 @@ import { resetStudyState } from '../helpers.js';
 import {
     renderPerformanceChart, renderPassFailDiagnosis, renderRadarChart,
 } from '../../../src/charts.js';
-import { safeSetItem } from '../../../src/state.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { safeSetItem } from '../../../src/core/state.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 function mountDom() {
     document.body.innerHTML = `

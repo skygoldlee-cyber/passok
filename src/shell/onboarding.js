@@ -10,12 +10,12 @@
 //   ② 일일·주간 목표 입력 → 즉시 저장
 //   ③ 요약 + 첫 카드 학습 버튼 (data-click 위임 — startSubjectStudy)
 // ------------------------------------------------------------
-import { safeGetItem, safeSetItem } from '../state.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
 import { trapFocus, showToast } from '../ui-utils.js';
-import { getExamAppName, getMinExamLeadDays } from '../exam-context.js';
-import { esc } from '../sanitize.js';
+import { getExamAppName, getMinExamLeadDays } from '../core/exam-context.js';
+import { esc } from '../core/sanitize.js';
 import { getStudyGoals, setStudyGoals, getExamDate, setExamDate, getExamLeadStatus } from '../study/study-tracker.js';
-import { todayKey } from '../utils.js';
+import { todayKey } from '../core/utils.js';
 
 const SEEN_KEY = 'onboarding_seen_v1';
 // whats-new.js와 동일 기준 — 이 중 하나라도 있으면 신규 사용자가 아님

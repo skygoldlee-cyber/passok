@@ -6,9 +6,9 @@
 // - 구 SM-2 레코드({repetition, easiness, nextReview})는 접근 시 지연 변환 (LEARNING_ALGORITHM_DESIGN §3.2)
 // - 공용 API 시그니처(updateCardSchedule·getDueCards·getDueCount)는 무수정 유지
 
-import { safeGetItem, safeSetItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { todayKey } from '../utils.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { todayKey } from '../core/utils.js';
 import { Rating, fsrsReview, migrateSm2Record, nextInterval, retrievability } from './fsrs.js';
 
 const SR_KEY = STORAGE_KEYS.FC_SPACED_REPETITION;

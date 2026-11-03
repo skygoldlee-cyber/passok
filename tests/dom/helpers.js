@@ -11,11 +11,11 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { vi } from 'vitest';
 import { showToast } from '../../src/ui-utils.js';
-import { state, loadProgress, safeSetItem, safeGetItem } from '../../src/state.js';
-import { STORAGE_KEYS } from '../../src/storage-keys.js';
+import { state, loadProgress, safeSetItem, safeGetItem } from '../../src/core/state.js';
+import { STORAGE_KEYS } from '../../src/core/storage-keys.js';
 import { DataLoader } from '../../src/content/data-loader.js';
-import { getActiveExamId } from '../../src/exam-context.js';
-import { PATHS } from '../../src/paths.js';
+import { getActiveExamId } from '../../src/core/exam-context.js';
+import { PATHS } from '../../src/core/paths.js';
 import { TIMING } from '../../src/config/timing.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');

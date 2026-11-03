@@ -144,7 +144,7 @@ DOM 비의존 순수 함수 — 모든 소스를 읽기 전용으로 호출하�
 | `src/exams/cosmetic/views/formula-print.js` | `buildAuditReportHtml()` 추가 (fp-doc 패턴) |
 | `src/exams/cosmetic/views/formula-sales.js` | `summarizeLabelDraft()` 추출·export, `adlintRun`에 결과 영속, `adlintClear`에 영속 삭제 |
 | `src/exams/cosmetic/views/formula-compliance.js` | `loadChecks` export 승격 — 수집기가 같은 파싱을 공유 |
-| `src/storage-keys.js` | `FORMULA_ADLINT_STATE` + `BACKUP_KEYS` 등록 |
+| `src/core/storage-keys.js` | `FORMULA_ADLINT_STATE` + `BACKUP_KEYS` 등록 |
 | `html/exams/cosmetic/formula.html` | compliance 패널 헤더에 '종합 보고서' 버튼 → `build:html` 재생성 |
 | `src/practice-registry.js` | `audit` 로더 + `auditPrintReport` 핸들러 등록 |
 | `domain-map.json` | glob 규칙(`src/exams/cosmetic/views/*.js`·`tests/*/exams/cosmetic/`)으로 자동 커버 — 별도 선언 불필요 |

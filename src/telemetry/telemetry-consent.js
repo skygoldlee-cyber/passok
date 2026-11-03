@@ -7,8 +7,8 @@
 // 중복 식별자는 혼란만 키운다). 고유 사용자는 install_id(기기) 단위로
 // 추정한다 — 브라우저 데이터 삭제 시 신규 카운트되는 한계는 알려진 오차.
 // ------------------------------------------------------------
-import { safeGetItem, safeSetItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
 
 /** 텔레메트리 전송 허용 여부 — opt-out 플래그가 없으면 허용 (기본 활성) */
 export function isTelemetryAllowed() {

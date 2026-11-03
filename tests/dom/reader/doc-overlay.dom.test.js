@@ -1,4 +1,4 @@
-// tests/dom/doc-overlay.dom.test.js — MD 문서 오버레이 공용 베이스
+// tests/dom/reader/doc-overlay.dom.test.js — MD 문서 오버레이 공용 베이스
 // @spec EV-01~08, MV-01~04
 // exam-viewer·manual-viewer에서 추출된 공통부의 계약을 고정한다:
 //   세션 캐시 TTL/프리픽스 · 번들 스크립트 주입 재사용 · TOC 생성/점프 · 오버레이 셸 수명주기

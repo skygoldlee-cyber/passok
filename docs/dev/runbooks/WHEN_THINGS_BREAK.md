@@ -35,7 +35,7 @@
 | 로그인·동기화 전면 실패 + `*.supabase.co`가 DNS 조회 실패 (NXDOMAIN·`ERR_NAME_NOT_RESOLVED`) | Free 프로젝트 7일 무활동 **일시정지** — 정지 시 서비스만이 아니라 DNS 레코드 자체가 제거되어 삭제와 증상 동일 | `nslookup <프로젝트ref>.supabase.co 8.8.8.8` — 여러 공용 리졸버(8.8.8.8·1.1.1.1)에서 모두 NXDOMAIN이면 정지 또는 삭제. **구분은 대시보드에서만 가능** | 대시보드 → 프로젝트 선택 → **Resume project** (데이터 유지, DNS 재전파 수 분~수 시간). 프로젝트가 목록에 없으면 삭제 — 스키마 재실행 필요. 예방·감지: [supabase-keepalive.yml](../../../.github/workflows/supabase-keepalive.yml) (핑 실패 = 정지 알림) — 정본: [SUPABASE_DESIGN.md §12](../design/SUPABASE_DESIGN.md#12-비시즌-비용-평가-supabase-free-keep-alive-채택-2026-10-17) |
 | 배포는 됐는데 특정 기능만 죽음 | CSP 차단(인라인 스크립트/핸들러) 또는 런타임 오류 | 브라우저 콘솔 CSP 위반 로그 · `client_errors` 텔레메트리(`src/telemetry/error-telemetry.js`) | `check:uistyle`·`check:escape` 규약 위반 여부 확인 — [CODE_CONVENTIONS.md](../../CODE_CONVENTIONS.md) |
 | 사용자 데이터(프로필·동기화·코드) 보호 경계가 의심됨 | Supabase RLS 정책 미적용·드리프트 | `npm.cmd run check:rls` — 공개 anon 키로 select 유출·insert·타인 user_id 스푸핑·redeem_code RPC 차단을 실측 (check:ci·CI 상시 게이트) | 정책 원본: `tools/supabase/schema.sql` §4 — 미적용 시 `npm.cmd run schema:apply` 또는 SQL Editor 재실행. 설계: [SUPABASE_DESIGN.md §3](../design/SUPABASE_DESIGN.md) |
-| 데이터(진행률)가 사라짐 | localStorage 키 변경 또는 시험 전환 스코프 오인 | `src/storage-keys.js`의 `examId:` 스코프 규약 확인 | 백업/복원 경로: `src/views/backup.js` |
+| 데이터(진행률)가 사라짐 | localStorage 키 변경 또는 시험 전환 스코프 오인 | `src/core/storage-keys.js`의 `examId:` 스코프 규약 확인 | 백업/복원 경로: `src/views/backup.js` |
 | 롤백이 필요함 | — | `git tag -l "deploy/*"`로 이전 배포 태그 조회 | Vercel 대시보드에서 이전 배포 promote 또는 태그 시점 재배포 — [DEPLOYMENT_GUIDE.md §5-3](DEPLOYMENT_GUIDE.md#5-3-롤백-절차-프로덕션을-이전-버전으로-복귀) |
 
 ## 2. 로컬 개발 — 커밋·푸시·도구 증상

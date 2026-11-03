@@ -9,8 +9,8 @@ import {
     isTelemetryNoticeShown, markTelemetryNoticeShown, getInstallId,
     isAutomatedRuntime,
 } from '../../../src/telemetry/telemetry-consent.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
-import { safeGetItem, safeSetItem } from '../../../src/state.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
+import { safeGetItem, safeSetItem } from '../../../src/core/state.js';
 
 // localStorage 모킹 — storage.js 백엔드가 localStorage를 경유
 function _mockStorage() {

@@ -5,7 +5,7 @@
 // 표시 순서 힌트, 내 포뮬러·다른 기성품 비교. formula-products.js의 폼·목록과
 // 무관하게 스토어에서 직접 조회한다.
 
-import { esc, raw } from '../../../sanitize.js';
+import { esc, raw } from '../../../core/sanitize.js';
 import { showToast } from '../../../ui-utils.js';
 import { showPanel, formulaSubNav, getEl, getIndex } from './formula.js';
 import {

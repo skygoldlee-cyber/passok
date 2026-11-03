@@ -1,12 +1,12 @@
 // views/trainer-calc-practice.js — 원료 배합 계산 연습기 (trainer.js에서 추출)
 // @spec T-01,T-05
-import { state, safeGetItem, safeSetItem } from '../state.js';
-import { esc, safeTextWithBreaks, stripTags } from '../sanitize.js';
+import { state, safeGetItem, safeSetItem } from '../core/state.js';
+import { esc, safeTextWithBreaks, stripTags } from '../core/sanitize.js';
 import { buildCalcQuestion } from '../study/trainer-calc.js';
 import { clearScratchpad } from '../study/scratchpad.js';
 import { showToast, vibrate, HAPTIC, showAnswerFeedback } from '../ui-utils.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { localDateTimeNow, fmtLocalDateTime } from '../utils.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { localDateTimeNow, fmtLocalDateTime } from '../core/utils.js';
 import { resetMainScroll } from './navigation.js';
 
 /* =======================================================

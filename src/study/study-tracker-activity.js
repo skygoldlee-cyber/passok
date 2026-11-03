@@ -1,8 +1,8 @@
 // src/study-tracker-activity.js — 학습 캘린더 기록 + 학습 목표 (study-tracker.js 분리)
 // @spec SC-03,SC-09,SC-13,SC-15
-import { safeGetItem, safeSetItem } from '../state.js';
-import { STORAGE_KEYS } from '../storage-keys.js';
-import { localDateKey } from '../utils.js';
+import { safeGetItem, safeSetItem } from '../core/state.js';
+import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { localDateKey } from '../core/utils.js';
 
 /* =======================================================
    📅 학습 캘린더 (날짜별 학습 기록)

@@ -1,4 +1,4 @@
-// src/exam-context.js — 멀티시험 컨텍스트 (활성 시험 해석 + 경로/기능 해결)
+// src/core/exam-context.js — 멀티시험 컨텍스트 (활성 시험 해석 + 경로/기능 해결)
 // @spec ES-01~05,DA-06~08,DA-15
 //
 // 시험 목록: data/exams.js 클래식 번들이 window.EXAMS_LIST를 채운다
@@ -29,7 +29,7 @@ function resolveDefaultExamId() {
                 const { fileURLToPath } = proc.getBuiltinModule('url');
                 // import.meta.url이 file: 스킴이 아닌 변환 환경(vitest SSR 등)은 cwd에서 해석
                 let file = pathMod.resolve(proc.cwd(), 'content', 'exams.json');
-                try { file = fileURLToPath(new URL('../content/exams.json', import.meta.url)); } catch { /* cwd 경로 사용 */ }
+                try { file = fileURLToPath(new URL('../../content/exams.json', import.meta.url)); } catch { /* cwd 경로 사용 */ }
                 const raw = fs.readFileSync(file, 'utf-8');
                 const exams = JSON.parse(raw).exams || [];
                 const d = exams.find(e => e && e.default) || exams[0];

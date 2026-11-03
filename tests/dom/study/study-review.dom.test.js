@@ -39,14 +39,14 @@ vi.mock('../../../src/views/navigation.js', async (importOriginal) => {
 });
 // vi.mock 팩토리는 import보다 먼저 평가되므로 state 참조는 호출 시점의 동적 import로 지연 해석
 function applyCurrentView(target) {
-    import('../../../src/state.js').then(m => { m.state.currentView = target; });
+    import('../../../src/core/state.js').then(m => { m.state.currentView = target; });
 }
 
 import { switchView } from '../../../src/views/navigation.js';
 import {
     loadIndexHtml, el, isVisible, resetStudyState, flushAsync,
 } from '../helpers.js';
-import { state } from '../../../src/state.js';
+import { state } from '../../../src/core/state.js';
 import { DataLoader } from '../../../src/content/data-loader.js';
 import {
     openWeakReview, gotoWeakReview, gotoOxDrill, renderWeakReview,
@@ -55,8 +55,8 @@ import {
 import { initTrainer } from '../../../src/views/trainer.js';
 import { SemanticIndex } from '../../../src/search/semantic-index.js';
 import { recordStatementJudgments } from '../../../src/study/statement-tracker.js';
-import { safeSetItem } from '../../../src/state.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { safeSetItem } from '../../../src/core/state.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 const OX_ITEMS = [
     { type: 'ox', sid: 'law_1', context: '법규·제3조', stem: '판정하세요', statement: '진술A는 옳다', truth: true, explain: 'A 해설' },

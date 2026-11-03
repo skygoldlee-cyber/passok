@@ -189,7 +189,7 @@
 ### 20. 저장소 추상화 계층 (Storage Abstraction)
 
 - **개념**: 영속성 접근을 단일 모듈로 수렴시켜 백엔드 교체·스코프·쿼터 정책을 중앙화
-- **구현물**: `src/storage.js` — localStorage(1차)/Supabase(선택 동기화) 동일 API, 동기 getItem/setItem + Async 이중 인터페이스, 쓰기 훅·쿼터 감지 중앙화
+- **구현물**: `src/core/storage.js` — localStorage(1차)/Supabase(선택 동기화) 동일 API, 동기 getItem/setItem + Async 이중 인터페이스, 쓰기 훅·쿼터 감지 중앙화
 - **강제**: `check:storage`(#8)가 우회를 차단 — 부트 스크립트 등 예외는 ALLOWED_FILES에 사유 명시 필수 (ADR-0003)
 
 ### 22. 배포 단일 진입점 + 스탬프 (Single-Entry Deploy)

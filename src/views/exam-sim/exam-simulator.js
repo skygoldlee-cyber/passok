@@ -19,9 +19,9 @@ export {
 } from './exam-sim-arena.js';
 export { clearSimDraft, checkExamDraft } from './exam-sim-draft.js';
 
-import { safeGetItem, safeSetItem } from '../../state.js';
-import { todayKey } from '../../utils.js';
-import { STORAGE_KEYS } from '../../storage-keys.js';
+import { safeGetItem, safeSetItem } from '../../core/state.js';
+import { todayKey } from '../../core/utils.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
 
 /**
  * 모의고사 결과를 성적 이력(sim_results_history)에 저장한다.

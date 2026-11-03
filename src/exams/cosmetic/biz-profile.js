@@ -4,8 +4,8 @@
 // 허브 카드·서브내비·체크리스트 세트의 가시 범위를 여기서 한 곳에 선언한다.
 // 유형별 UI 게이트는 "숨김"일 뿐 저장 데이터(포뮬러·배치·체크 상태)는 공유·보존된다.
 
-import { getJSON, setJSON, removeItem } from '../../storage.js';
-import { STORAGE_KEYS } from '../../storage-keys.js';
+import { getJSON, setJSON, removeItem } from '../../core/storage.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
 
 /** 사업 유형 정의 — id는 FORMULA_BIZ_TYPE 저장값으로 영구 안정 */
 export const BIZ_TYPES = {

@@ -19,10 +19,10 @@ import {
     loadIndexHtml, el, flushAsync,
     seedStudyData, seedProgress, resetStudyState, storedJson,
 } from '../helpers.js';
-import { state } from '../../../src/state.js';
+import { state } from '../../../src/core/state.js';
 import { loadFlashcards } from '../../../src/views/flashcard.js';
 import { setupEventListeners } from '../../../src/views/event-listeners.js';
-import { STORAGE_KEYS } from '../../../src/storage-keys.js';
+import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 
 const CARDS = [
     { id: 'subj1_card_1', term: '화장품법', definition: '화장품의 안전성 확보를 목적으로 하는 법률', category: '법령', cardType: 'definition', isKey: true, difficulty: 'easy', importance: 5 },

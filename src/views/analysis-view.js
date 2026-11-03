@@ -6,8 +6,8 @@
 // 과목 카드·히트맵·모의고사 차트의 DOM 요소는 대시보드 뷰와 공유한다
 // (renderDashboard가 ID 기준으로 채우므로 그대로 재사용).
 
-import { state } from '../state.js';
-import { esc } from '../sanitize.js';
+import { state } from '../core/state.js';
+import { esc } from '../core/sanitize.js';
 import { DataLoader } from '../content/data-loader.js';
 import { switchView } from './navigation.js';
 import { getDueCount, getDueCards, getExamRiskCards, EXAM_R_SESSION_CAP, getReviewLog } from '../study/spaced-repetition.js';
@@ -32,7 +32,7 @@ import {
 } from './personalization-view.js';
 import { resolveWrongQuiz } from '../study/weak-items.js';
 import { showToast, showGlobalLoading, hideGlobalLoading } from '../ui-utils.js';
-import { getExamRules, getExamAppName } from '../exam-context.js';
+import { getExamRules, getExamAppName } from '../core/exam-context.js';
 import { trackAction } from '../telemetry/usage-stats.js';
 import { renderDashboard, onAnalysisRefresh } from './dashboard.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';

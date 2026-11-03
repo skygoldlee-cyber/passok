@@ -3,7 +3,7 @@
 // 역할: 호버/롱프레스 프리뷰 툴팁, data-ref-*/data-exam-md/data-glossary 클릭 위임(document 단일 리스너),
 //       인라인 참조 링크의 law.go.kr 현행본 배지 갱신(refreshRefLinkNotices, RR-19).
 //       (툴바 "참조자료" 드롭다운 패널은 2026-10 제거 — SPEC RR-07)
-import { esc } from '../../sanitize.js';
+import { esc } from '../../core/sanitize.js';
 import { showToast } from '../../ui-utils.js';
 import { openHtmlViewer } from '../../reader/html-viewer.js';
 import { scrollToGlossary } from '../glossary-renderer.js';

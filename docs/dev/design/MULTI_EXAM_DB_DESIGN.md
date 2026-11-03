@@ -28,8 +28,8 @@
 
 | 영역 | 자산 | 비고 |
 |------|------|------|
-| 시험 레지스트리 | `content/exams.json` + `src/exam-context.js` | 활성 시험 해석·`scopedKey` 진도 격리·`hasFeature` 게이팅 |
-| 경로 계층 | `src/paths.js` (`contentPath`/`dataPath`) | 모든 콘텐츠 경로가 활성 시험 루트 기준 |
+| 시험 레지스트리 | `content/exams.json` + `src/core/exam-context.js` | 활성 시험 해석·`scopedKey` 진도 격리·`hasFeature` 게이팅 |
+| 경로 계층 | `src/core/paths.js` (`contentPath`/`dataPath`) | 모든 콘텐츠 경로가 활성 시험 루트 기준 |
 | 교재·문제은행 | `manifest.json` → `tools/build/exam_targets.js` 순회 빌드 | `build:data` 전 단계가 이미 시험 순회형 |
 | 학습 엔진 | SM-2·진술 트래커·모의고사·OX/combo 드릴·카드/퀴즈 파서 | 콘텐츠 무관 |
 | PDF→MD | `ref-pipeline/` (pdf2md·batch_convert·verify) | 도메인 무관 — `EXAM_CONTENT_ROOT` 계약 일부 존재 |
@@ -299,7 +299,7 @@ const _EXAM_LAW_URLS = {
 - `index.template.html` 정적 `<title>`·`apple-mobile-web-app-title` → PassOK (부팅 전 플레이스홀더 — 부팅 후 `pwa-manifest.js`가 시험별 타이틀로 덮어씀)
 - 문서 헤더(README·SPEC·ARCHITECTURE·AGENTS) → 플랫폼 서술
 
-**회귀 방지 게이트**: `check:domainmap`에 platform 레이어 파일의 시험 id 리터럴 탐지 추가 — platform 분류 `src/` 파일이 `exams.json` 등록 id(`cosmetic` 등)를 문자열 리터럴로 포함하면 오류. 예외는 `domain-map.json`의 `examLiteralAllow`에 파일→사유로 명시 (현재 `src/exam-context.js`의 DEFAULT_EXAM_ID 최후 폴백 1건 — `law-links.js`/`pdf-registry.js`/`keyword-index.js`의 `_DEFAULT_EXAM_ID`·`_EXAM_*` 테이블은 feature:refDocs 생성물이라 platform 검사 대상이 아님). + `tests/e2e/exam-switch.spec.js`가 food 부팅(타이틀·로고·manifest.food 링크)·기능 게이팅(formula·practiceMode is-hidden)·도메인 뷰 미로드를 증명.
+**회귀 방지 게이트**: `check:domainmap`에 platform 레이어 파일의 시험 id 리터럴 탐지 추가 — platform 분류 `src/` 파일이 `exams.json` 등록 id(`cosmetic` 등)를 문자열 리터럴로 포함하면 오류. 예외는 `domain-map.json`의 `examLiteralAllow`에 파일→사유로 명시 (현재 `src/core/exam-context.js`의 DEFAULT_EXAM_ID 최후 폴백 1건 — `law-links.js`/`pdf-registry.js`/`keyword-index.js`의 `_DEFAULT_EXAM_ID`·`_EXAM_*` 테이블은 feature:refDocs 생성물이라 platform 검사 대상이 아님). + `tests/e2e/exam-switch.spec.js`가 food 부팅(타이틀·로고·manifest.food 링크)·기능 게이팅(formula·practiceMode is-hidden)·도메인 뷰 미로드를 증명.
 
 **Phase E 결과 (2026-10-03)**
 
@@ -336,7 +336,7 @@ const _EXAM_LAW_URLS = {
 - **스코프**: 식품기사 필기의 1과목(식품위생학) 축소본 — 교재 1챕터 + 문항 8제 + ref_md 발췌본 3종(식품위생법 제21065호 / 식품공전 제2026-55호 / 표시기준 제2026-37호). `manifest._pilot` 주석으로 부분 콘텐츠임을 명시.
 - **검증된 체인**: lawdb 5종 추가 → `law-links.js`의 `_EXAM_LAW_URLS.food` 생성 · `check:lawurls` 실검증 15종 통과 · `pdf-registry`/`keyword-index` 시험별 테이블 생성 · 인용 동기화(8개 링크, 미발견 0) · `check_mfds_notice.py`가 `EXAM_ID=food`로 감시 대상 3종(law/admrul target 구분 + baseline 제호·시행일)을 references.json에서 자동 유도.
 - **파일럿에서 발견·수정된 버그**: ① `build_pdf_registry.js`의 `docSubject()` 호출이 `contentRoot`를 전달하지 않아 비기본 시험의 `REF_MD_SUBJECTS`가 기본 시험 규칙으로 계산되던 문제 수정 ② 스캐폴드 `references.json`의 결손 키는 빈 값으로 관대 처리, `lawRefs: []`는 "법령 없음"으로 구분.
-- **Phase D 연결 (2026-09-30)**: `knowledge/additives.json`(식품첨가물 12종) + `manifest.knowledge` 스키마 + `features.dictionary` 활성화 → `{dataRoot}/additives_data.<hash>.js` + `ADDITIVES_DATA` 전역. `tests/dom/misc/dictionary-schema.dom.test.js`가 비-cosmetic 스키마(배지·필터·상세·CSV·빈 상태·토스트 문구)를 검증한다. 첨가물공전(lawdb `food-additives-std`) → `lawRef` 필드로 법령DB↔지식DB 연결점도 검증됨.
+- **Phase D 연결 (2026-09-30)**: `knowledge/additives.json`(식품첨가물 12종) + `manifest.knowledge` 스키마 + `features.dictionary` 활성화 → `{dataRoot}/additives_data.<hash>.js` + `ADDITIVES_DATA` 전역. `tests/dom/study/dictionary-schema.dom.test.js`가 비-cosmetic 스키마(배지·필터·상세·CSV·빈 상태·토스트 문구)를 검증한다. 첨가물공전(lawdb `food-additives-std`) → `lawRef` 필드로 법령DB↔지식DB 연결점도 검증됨.
 - **남은 파일럿 갭**: 물리 PDF 미확보(ref_md 수기 발췌로 대체 — PDF 확보 시 ref-pipeline 변환 절차로 전환), `notice_status.json`은 첫 `--update` 실행 시 생성(현재 시드 없음 — 앱은 미존재 파일을 정상 처리), 문제은행 챕터 매핑 4건 미해석(단일 챕터 구조상 무해).
 
 ---

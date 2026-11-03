@@ -1,9 +1,9 @@
 // @spec DA-05
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { state, loadProgress, saveProgress, cleanOrphansForSubject } from '../../../src/state.js';
-import { scopedKey } from '../../../src/exam-context.js';
-import { todayKey } from '../../../src/utils.js';
+import { state, loadProgress, saveProgress, cleanOrphansForSubject } from '../../../src/core/state.js';
+import { scopedKey } from '../../../src/core/exam-context.js';
+import { todayKey } from '../../../src/core/utils.js';
 
 // --- localStorage 모킹 ---
 
