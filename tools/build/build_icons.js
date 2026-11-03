@@ -26,9 +26,9 @@ const DERIVED = [
     { size: 16, out: 'favicon-16.png' },
 ];
 
-// maskable 안전 영역 — 배경(#0b0f19) 풀블리드 + 아이콘을 75%로 중앙 축소 (80% 세이프존 내)
-const MASKABLE_BG = '#0b0f19';
-const MASKABLE_SCALE = 0.75;
+// maskable 안전 영역 — 원본을 풀블리드 배경으로 사용 + 아이콘을 80%로 중앙 축소 (세이프존 확보)
+// 다크 단색 배경은 어댑티브 마스크에서 검은 링처럼 보이므로 원본 그라디언트를 그대로 쓴다.
+const MASKABLE_SCALE = 1.0;
 
 const sha1 = buf => crypto.createHash('sha1').update(buf).digest('hex').slice(0, 8);
 
@@ -64,19 +64,19 @@ async function renderSize(browser, srcDataUrl, size) {
 async function renderMaskable(browser, srcDataUrl) {
     const page = await browser.newPage();
     await page.setContent('<canvas id="c" width="512" height="512"></canvas>');
-    const bytes = await page.evaluate(async ({ dataUrl, bg, scale }) => {
+    const bytes = await page.evaluate(async ({ dataUrl, scale }) => {
         const img = new Image();
         img.src = dataUrl;
         await img.decode();
         const ctx = /** @type {CanvasRenderingContext2D} */ (document.getElementById('c').getContext('2d'));
-        ctx.fillStyle = bg;
-        ctx.fillRect(0, 0, 512, 512);
-        const s = Math.round(512 * scale);
+        // 원본을 세이프존 역수(1/scale)로 확대해 중앙 크롭 — 라운드 모서리가
+        // 캔버스 밖으로 밀려나 풀블리드 그라디언트만 남는다 (배경 합성 없음).
+        const s = Math.round(512 / scale);
         ctx.imageSmoothingQuality = 'high';
         ctx.drawImage(img, (512 - s) / 2, (512 - s) / 2, s, s);
         const blob = await new Promise(r => document.getElementById('c').toBlob(r, 'image/png'));
         return Array.from(new Uint8Array(await blob.arrayBuffer()));
-    }, { dataUrl: srcDataUrl, bg: MASKABLE_BG, scale: MASKABLE_SCALE });
+    }, { dataUrl: srcDataUrl, scale: MASKABLE_SCALE });
     await page.close();
     return Buffer.from(bytes);
 }
