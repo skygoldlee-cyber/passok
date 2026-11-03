@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261104-24245f1",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] 현장도구 → 본인부담금 계산 명칭 교정 [no-test]",
+      "[문서·carework] 실무매뉴얼 절 순서 — 사이드바 메뉴 순서와 일치 [no-test]",
+      "[정리·release] v20261104-c1dbb77 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-c1dbb77",
     "date": "2026-11-04",
     "notes": [
@@ -183,18 +192,6 @@
       "[data·carework] 세종 시설 원본 CSV 보존 — facilities_세종_20230331.csv (DSN-43 6g)",
       "[data·carework] 충남 노인의료복지시설 351건 임포트 — 총 523건 5개 지역 (DSN-43 6g)",
       "[정리] 잔재 파일 제거 — 대전 포털 응답 캡처 djb.html"
-    ]
-  },
-  {
-    "version": "v20261103-34c293a",
-    "date": "2026-11-03",
-    "notes": [
-      "[기능·carework] 요양기관 찾기 — 장기요양기관 검색·기관명 연결 (DSN-43 6g)",
-      "[수정·carework] 입소서류 내비 아이콘 고유성 — fa-folder-open (DSN-43 6f)",
-      "[기능·carework] 입소 서류 체크리스트 — 요양원 입소 구비서류 수납 추적 (DSN-43 6f)",
-      "[기능·carework] 출력물 기관명 표기 — 전 실무 출력물 헤더 통일 (DSN-43 6e)",
-      "[기능·carework] 실무도구 3종 — 대상자 명부·사고 보고서·교대 근무표 (DSN-43 6d)",
-      "[정리·release] v20261103-87f1232 스탬프 확정 [no-docs]"
     ]
   }
 ]
