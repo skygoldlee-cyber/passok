@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261103-7f81037",
+    "date": "2026-11-03",
+    "notes": [
+      "[정리·assets] maskable 재생성에 따른 시험별 manifest ?v= 재스탬프",
+      "[수정·assets] maskable 아이콘 다크 링 제거 — 원본 풀블리드 복원",
+      "[정리·release] v20261103-76ec5ba 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261103-76ec5ba",
     "date": "2026-11-03",
     "notes": [
@@ -199,14 +208,6 @@
       "[수정·deploy] 파생물 스테이징 경로 정정 — gitignore 파일·README 누락",
       "[기능·carework] 공단 책정 기준 연도 구조화 + 구버전 경고",
       "[정리·release] v20261103-63e717e 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-135377d",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정·docs] '실무막*' 오탈자(U+B9C9) 전수 정정",
-      "[정리·release] v20261102-9f7a27e 스탬프 확정 [no-docs]"
     ]
   }
 ]
