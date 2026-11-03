@@ -220,3 +220,4 @@
 .care-form-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
 .care-form-table th, .care-form-table td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
 .care-form-table th { background: var(--bg-subtle); }
+.care-forms-period { width: 100%; }
