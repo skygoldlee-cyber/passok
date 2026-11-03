@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261103-f2b82e7",
+    "date": "2026-11-03",
+    "notes": [
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[수정·deploy] 파생물 스테이징 경로 정정 — gitignore 파일·README 누락",
+      "[기능·carework] 공단 책정 기준 연도 구조화 + 구버전 경고",
+      "[정리·release] v20261103-63e717e 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261103-63e717e",
     "date": "2026-11-03",
     "notes": [
@@ -167,14 +177,6 @@
     "notes": [
       "[수정·carework] 본인부담금 행 비급여 중복 합산 수정",
       "[정리·release] v20261102-09d0fcb 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-09d0fcb",
-    "date": "2026-11-02",
-    "notes": [
-      "[기능·carework] 시설급여 1일 수가표 표시",
-      "[정리·release] v20261102-d196c3c 스탬프 확정 [no-docs]"
     ]
   }
 ]
