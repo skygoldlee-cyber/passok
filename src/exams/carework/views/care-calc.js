@@ -67,6 +67,19 @@ export function careCalcRun() {
             .map(([k, v]) => [`비급여·${NC_LABELS[k]}`, formatWon(v)]),
         ['본인부담 감경', _selLabel('care-reduction')],
     ];
+    // 공단 책정 기준표 — 선택 급여유형의 등급별 고시 금액 (재가=월 한도액, 시설=1일 수가), 선택 등급 강조
+    const sel = (k) => k === in_.grade ? ' class="care-doc-sel"' : '';
+    let basisHtml;
+    if (in_.type === 'facility') {
+        const f = FACILITY_TYPES.find(x => x.key === _val('care-fac-type', '')) || FACILITY_TYPES[0];
+        basisHtml = `<div class="care-doc-sec">공단 책정 기준 — ${esc(f.label)} 1일 수가 (${EFFECTIVE_YEAR}년)</div>`
+            + `<table class="care-doc"><tbody>${GRADE_LIMITS.filter(g => f.rates[g.key])
+                .map(g => `<tr${sel(g.key)}><td>${g.label}</td><td class="care-doc-num">${formatWon(f.rates[g.key])}/일</td></tr>`).join('')}</tbody></table>`;
+    } else {
+        basisHtml = `<div class="care-doc-sec">공단 책정 기준 — 재가 등급별 월 한도액 (${EFFECTIVE_YEAR}년)</div>`
+            + `<table class="care-doc"><tbody>${GRADE_LIMITS
+                .map(g => `<tr${sel(g.key)}><td>${g.label}</td><td class="care-doc-num">${formatWon(g.home)}</td></tr>`).join('')}</tbody></table>`;
+    }
     const docRow = (/** @type {string[]} */ t) => `<tr${t[2] ? ` class="${t[2]}"` : ''}><td>${t[0]}</td><td class="care-doc-num">${t[1]}</td></tr>`;
     const rows = [
         ['총 이용액', formatWon(r.covered + r.overLimit)],
@@ -81,6 +94,7 @@ export function careCalcRun() {
     out.innerHTML =
         `<div class="care-doc-head"><strong>장기요양 비용 계산 결과</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div>`
         + `<div class="care-doc-sec">입력 조건</div><table class="care-doc"><tbody>${cond.map(docRow).join('')}</tbody></table>`
+        + basisHtml
         + `<div class="care-doc-sec">계산 결과</div><table class="care-doc"><tbody>${rows.map(docRow).join('')}</tbody></table>`
         + `<p class="care-calc-src">근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>`
         + `<p class="care-doc-disclaimer">※ 계산 결과는 참고용 예상액입니다 — 실제 청구액은 공단 심사·기관 계약에 따라 달라질 수 있습니다.</p>`;

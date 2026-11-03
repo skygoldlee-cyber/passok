@@ -103,8 +103,12 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(txt).toContain('30일');
         expect(txt).toContain('비급여·식재료비');
         expect(txt).toContain('450,000원');
-        // 문서형 구조 — 헤더 + 입력 조건/계산 결과 2개 표 (가독성 출력 회귀 방지)
-        expect(document.querySelectorAll('#care-result table.care-doc').length).toBe(2);
+        // 문서형 구조 — 헤더 + 입력 조건/공단 책정 기준/계산 결과 3개 표 (가독성 출력 회귀 방지)
+        expect(document.querySelectorAll('#care-result table.care-doc').length).toBe(3);
+        // 공단 책정 기준표 — 시설 선택 시 등급별 1일 수가, 선택 등급 행 강조
+        expect(txt).toContain('공단 책정 기준');
+        expect(txt).toContain('1일 수가');
+        expect(document.querySelector('#care-result .care-doc-sel')?.textContent).toContain('1등급');
         expect(document.querySelector('#care-result .care-doc-head')?.textContent).toContain('장기요양 비용 계산 결과');
         expect(document.querySelector('#care-result .care-doc-sec')?.textContent).toBe('입력 조건');
         // 강조는 '실제 월 납부액' 행 — 위치 선택자 회귀 방지

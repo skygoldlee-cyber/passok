@@ -23,7 +23,7 @@ export const FACILITY_TYPES = [
 ];
 export const REDUCTIONS = [
     { key: 'none', label: '일반', rate: 0 },
-    { key: 'r60', label: '감경 60%', rate: 0.60 },
     { key: 'r40', label: '감경 40%', rate: 0.40 },
+    { key: 'r60', label: '감경 60%', rate: 0.60 },
     { key: 'basic', label: '기초생활수급자', rate: 1 },
 ];
