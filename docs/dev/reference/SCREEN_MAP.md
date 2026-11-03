@@ -27,6 +27,7 @@
 | 대상자 명부 (Care OS) | `care-client-view` | exams/carework/care-client.html (지연 주입) | `#/care-client` | 사이드바 / 탭바 (`data-feature="careClients"`) | — | 실무 |
 | 사고·낙상 보고서 (Care OS) | `care-incident-view` | exams/carework/care-incident.html (지연 주입) | `#/care-incident` | 사이드바 / 탭바 (`data-feature="careIncident"`) | — | 실무 |
 | 교대 근무표 (Care OS) | `care-roster-view` | exams/carework/care-roster.html (지연 주입) | `#/care-roster` | 사이드바 / 탭바 (`data-feature="careRoster"`) | — | 실무 |
+| 입소 서류 체크리스트 (Care OS) | `care-admit-view` | exams/carework/care-admit.html (지연 주입) | `#/care-admit` | 사이드바 / 탭바 (`data-feature="careAdmit"`) | — | 실무 |
 | 교재리더 | `textbook-reader-view` | textbook-reader.html | `#/reader` | 사이드바 / 더보기 시트 | §3.5~3.8 | 학습 전용 |
 | 교재검색 | `textbook-view` | textbook.html | `#/textbook` | 사이드바 / 더보기 시트 | §3.9 | 학습 전용 |
 | 사전 | `dictionary-view` | dictionary.html | `#/ingredients` | 사이드바 / 탭바 | §3.10 | 공통 (`data-feature="dictionary"`) |

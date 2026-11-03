@@ -235,6 +235,7 @@ html/exams/<id>/        # 시험 도메인 뷰 파셜 (지연 주입 — formula
   carework/care-client.html # carework 대상자 명부 뷰 파셜 (Phase 6d)
   carework/care-incident.html # carework 사고·낙상 보고서 뷰 파셜 (Phase 6d)
   carework/care-roster.html # carework 교대 근무표 뷰 파셜 (Phase 6d)
+  carework/care-admit.html  # carework 입소 서류 체크리스트 뷰 파셜 (Phase 6f)
   carework/facility-join.html # carework 기관 가입 클라이언트 뷰 파셜 (Phase 6a)
   carework/facility-admin.html # carework 기관 관리 어드민 뷰 파셜 (Phase 6a)
 style.css               # CSS 진입점 (@import로 모듈 로드)
@@ -408,6 +409,7 @@ src/                    # ES Modules
       incident-store.js   # 사고 보고 로컬 저장 — 무료 10건 한도 (Phase 6d)
       care-roster.js      # 교대 근무표 로직 — 근무조·표 텍스트 조립 (Phase 6d)
       roster-store.js     # 근무 배정 로컬 저장 — 무료 30건 한도 (Phase 6d)
+      care-admit.js       # 입소 서류 체크리스트 — 법 근거 구비서류·수납 상태 (Phase 6f)
       facility.js         # 기관 워크스페이스 API — create/join/membership RPC (Phase 6a, DOC-DSN-43)
       views/
         care-calc.js      # 계산기 뷰 모듈 (practice-registry 지연 로드)
@@ -419,6 +421,7 @@ src/                    # ES Modules
         care-client.js    # 대상자 명부 뷰 모듈 — 등록·수정·내보내기 (Phase 6d)
         care-incident.js  # 사고·낙상 보고서 뷰 모듈 — 기관 사고 대장 공유 (Phase 6d)
         care-roster.js    # 교대 근무표 뷰 모듈 — 근무조 배정·출력 (Phase 6d)
+        care-admit.js     # 입소 서류 체크리스트 뷰 모듈 (Phase 6f)
         facility-join.js  # 기관 가입 클라이언트 뷰 — 초대 코드 가입·소속 표시 (Phase 6a)
         facility-admin.js # 기관 어드민 뷰 — 등록·초대코드·멤버 관리 manager 전용 (Phase 6a)
   views/                # 뷰 컨트롤러 (직속 23개 + 하위 4그룹 22개)

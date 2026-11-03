@@ -47,6 +47,7 @@ import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete
 import { careClientSave, careClientLoad, careClientDelete, initCareClientView } from '../../../../src/exams/carework/views/care-client.js';
 import { careIncidentGenerate, careIncidentSave, careIncidentDelete, initCareIncidentView } from '../../../../src/exams/carework/views/care-incident.js';
 import { careRosterAdd, careRosterDelete, initCareRosterView } from '../../../../src/exams/carework/views/care-roster.js';
+import { careAdmitReset, initCareAdmitView } from '../../../../src/exams/carework/views/care-admit.js';
 import { syncFacilityNav, myMembership, listHandovers, listVisits as listFacilityVisits } from '../../../../src/exams/carework/facility.js';
 import { ManualViewer } from '../../../../src/reader/manual-viewer.js';
 
@@ -320,6 +321,18 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careRosterDelete(list.querySelector('[data-arg]')?.dataset.arg);
     });
 
+    it('careAdmit — 체크 토글 → 수납 현황 갱신', () => {
+        loadPartial('care-admit.html');
+        initCareAdmitView();
+        const box = /** @type {HTMLInputElement|null} */ (document.querySelector('#adm-list input[data-admit]'));
+        expect(box).toBeTruthy();
+        box.checked = true;
+        box.dispatchEvent(new Event('change', { bubbles: true }));
+        expect(document.getElementById('adm-progress').textContent).toContain('1/');
+        careAdmitReset();
+        expect(document.getElementById('adm-progress').textContent).toContain('0/');
+    });
+
     // @spec DA-18 — 권한 뷰 분리: facility-join은 클라이언트 뷰로 비로그인/비권한 시 안내만 표시
     it('careFacility — 미로그인 시 로그인 안내 렌더', async () => {
         loadPartial('facility-join.html');
@@ -359,7 +372,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const css = readFileSync('css/exams/carework/care-tools.css', 'utf-8');
         const printBlock = css.slice(css.indexOf('@media print'));
         expect(printBlock).toContain('body.ui-mode-practice *');
-        for (const id of ['#log-preview', '#care-result', '#ho-preview', '#audit-list', '#audit-progress', '#care-card-detail', '#vis-preview', '#inc-preview', '#ros-preview', '#cli-preview']) {
+        for (const id of ['#log-preview', '#care-result', '#ho-preview', '#audit-list', '#audit-progress', '#care-card-detail', '#vis-preview', '#inc-preview', '#ros-preview', '#cli-preview', '#adm-preview']) {
             expect(printBlock).toContain(`${id}, ${id} *`);
         }
         // print.css — 활성 뷰만 표시. 특정 뷰 id 하드코딩 시 다른 뷰 인쇄가 깨짐

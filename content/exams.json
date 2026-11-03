@@ -619,6 +619,7 @@
         "careClients": true,
         "careIncident": true,
         "careRoster": true,
+        "careAdmit": true,
         "careFacilityJoin": true,
         "careFacilityAdmin": true,
         "practiceManual": true

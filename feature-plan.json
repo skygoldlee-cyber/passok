@@ -24,6 +24,7 @@
     "care_incident_share": "pro",
     "care_roster_save": "pro",
     "care_roster_share": "pro",
+    "care_admit_export": "pro",
     "facility_workspace": "pro"
   }
 }
