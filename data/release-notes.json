@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261103-87f1232",
+    "date": "2026-11-03",
+    "notes": [
+      "[기능·carework] 면회·방문 기록 — 방문객 연락처 필드",
+      "[수정·carework] 면회·방문 기록 인쇄 백지 — #vis-preview 허용 목록 누락",
+      "[정리·release] v20261103-f3fac35 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261103-f3fac35",
     "date": "2026-11-03",
     "notes": [
@@ -174,14 +183,6 @@
     "notes": [
       "[수정·carework] 결과 금액 우측 정렬·라벨 축약 [no-test]",
       "[정리·release] v20261102-0be9166 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-0be9166",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정·carework] 본인부담금 행 비급여 중복 합산 수정",
-      "[정리·release] v20261102-09d0fcb 스탬프 확정 [no-docs]"
     ]
   }
 ]
