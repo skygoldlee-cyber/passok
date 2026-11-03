@@ -48,6 +48,8 @@ import { careClientSave, careClientLoad, careClientDelete, initCareClientView } 
 import { careIncidentGenerate, careIncidentSave, careIncidentDelete, initCareIncidentView } from '../../../../src/exams/carework/views/care-incident.js';
 import { careRosterAdd, careRosterDelete, initCareRosterView } from '../../../../src/exams/carework/views/care-roster.js';
 import { careAdmitReset, initCareAdmitView } from '../../../../src/exams/carework/views/care-admit.js';
+import { careFinderUseOrg } from '../../../../src/exams/carework/views/care-finder.js';
+import { getOrgName } from '../../../../src/exams/carework/facility.js';
 import { syncFacilityNav, myMembership, listHandovers, listVisits as listFacilityVisits } from '../../../../src/exams/carework/facility.js';
 import { ManualViewer } from '../../../../src/reader/manual-viewer.js';
 
@@ -331,6 +333,11 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.getElementById('adm-progress').textContent).toContain('1/');
         careAdmitReset();
         expect(document.getElementById('adm-progress').textContent).toContain('0/');
+    });
+
+    it('careFinder — 시설명으로 출력물 기관명 설정', () => {
+        careFinderUseOrg('행복요양원');
+        expect(getOrgName()).toBe('행복요양원');
     });
 
     // @spec DA-18 — 권한 뷰 분리: facility-join은 클라이언트 뷰로 비로그인/비권한 시 안내만 표시

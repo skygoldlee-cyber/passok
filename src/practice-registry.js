@@ -564,6 +564,39 @@ const careAdmit = {
         }
     },
 };
+const careFinder = {
+    viewId: 'care-finder-view',
+    slug: 'care-finder',
+    uiTextKey: 'careFinder',
+    title: '요양기관 찾기',
+    subtitle: '장기요양기관 검색',
+    loadingText: '시설 목록을 불러오는 중입니다...',
+    loadErrorText: '시설 목록을 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-finder.html',
+    styles: 'care-tools.css',
+    loaders: { main: _domainImport('views/care-finder.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['careFinderSearch', 'careFinderUseOrg']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careFinder.loadingText);
+        try {
+            await ensureViewMarkup(careFinder);
+            if (stale()) return;
+            const m = await careFinder.loaders.main();
+            if (stale()) return;
+            m.initCareFinderView();
+        } catch (e) {
+            if (!stale()) showToast(careFinder.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
 const careFacilityJoin = {
     viewId: 'facility-join-view',
     slug: 'facility-join',
@@ -632,7 +665,7 @@ const careFacilityAdmin = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careAdmit, careFacilityJoin, careFacilityAdmin };
+const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careAdmit, careFinder, careFacilityJoin, careFacilityAdmin };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {
