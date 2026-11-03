@@ -62,6 +62,10 @@ const ALLOWED = [
         file: 'tools/import/import_facilities.js', contains: 'exams/carework/',
         reason: 'carework 도메인 전용 임포트 유틸 — 공공데이터 요양기관 CSV를 해당 시험의 facilities.json으로 병합하는 단일 목적 도구'
     },
+    {
+        file: 'tools/import/enrich_facility_phones.js', contains: 'exams/carework/',
+        reason: 'carework 도메인 전용 보강 유틸 — 공단 상세조회 API 결과를 해당 시험의 facilities.json에 병기하는 단일 목적 도구'
+    },
 ];
 
 /* ---------- 코드 채널 추출 (주석 제거 — 문자열은 보존) ---------- */

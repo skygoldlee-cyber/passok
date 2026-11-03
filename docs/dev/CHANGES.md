@@ -6,7 +6,7 @@
 - "기관명 설정" → `setLocalOrgName` — 출력물 기관명 표기(6e)·기관 가입 흐름과 연결
 - 시설 CSV에 `출처,URL` 메타 행 추가 — 전국 XLSX 단일소스 확정 후 지역별 CSV 3종 제거(중복 재임포트 방지), `facilities_전국_20260610.csv`만 보존 — 임포터는 헤더 행 자동 탐색으로 메타 행 스킵
 - 전화번호 보강: `tools/import/enrich_facility_phones.js` — 공단 상세조회 API(getGeneralSttusDetailInfoItem02)를 기관코드·유형코드로 조인, 6,059/6,249건 phone 채움 (items에 code·typeCode 필드 추가). 활용신청은 data.go.kr/15058856 자동승인, DATA_GO_KR_SERVICE_KEY 사용
-- fix: check_content_independence ALLOWED에 import_facilities.js 예외 등록 — carework 전용 유틸 사유 명시 (DA-15는 CI 전용 단계라 로컬 pre-push 미발화)
+- fix: check_content_independence ALLOWED에 import_facilities.js·enrich_facility_phones.js 예외 등록 — carework 전용 유틸 사유 명시 (DA-15는 CI 전용 단계라 로컬 pre-push 미발화)
 - 실데이터: **전국 단일소스 전환** — 국민건강보험공단 장기요양기관 시설별 현황_20260610 (https://www.data.go.kr/data/15124763/fileData.do)에서 A계열 시설급여 6,252건 추출(18개 지역). 일반현황↔입소인원 기관코드 조인으로 유형·정원 병기, 전화번호는 원천 미제공. 뷰 출처는 URL 감지 시 클릭 링크로 렌더
 
 ## 2026-11-03 feat(carework): 입소 서류 체크리스트 (DSN-43 6f)
