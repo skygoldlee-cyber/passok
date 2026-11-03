@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261104-4437194",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] 교재 섹션 미표시 — ### N. → ## N. 헤딩 규약 정합",
+      "[정리·release] v20261104-ed6fc64 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-ed6fc64",
     "date": "2026-11-04",
     "notes": [
@@ -193,14 +201,6 @@
       "[정리] 재현용 임시 파일 제거 (pc*.mjs, calcout.pdf) [no-test]",
       "[수정·carework] 인쇄 본문 소실 — 출력물 절대 위치 제거",
       "[정리·release] v20261103-33ebd65 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261103-33ebd65",
-    "date": "2026-11-03",
-    "notes": [
-      "[수정·carework] 인쇄 뒷장 빈 페이지 — 출력물 외 형제 display:none",
-      "[정리·release] v20261103-346abf7 스탬프 확정 [no-docs]"
     ]
   }
 ]
