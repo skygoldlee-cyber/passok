@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 feat(assets): maskable 아이콘을 제공 풀블리드 아트로 교체
+
+- 사용자 제공 `icon-512-maskable.png`(풀블리드 그라디언트)을 정본 `passok-icon-maskable-512.png`로 적용 — 어댑티브 마스크 어디서 잘려도 동일 톤
+
 ## 2026-11-03 fix(assets): 아이콘 원본 파일명 규약 교정 — passok-icon-1024.png
 
 - `passok_icon_1024.png` 언더스코어가 CODE_CONVENTIONS 파일명 규칙 위반으로 CI 차단 — 하이픈 명명으로 개명 + 고아 예외 명단 키 갱신
