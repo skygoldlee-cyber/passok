@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261104-124ee9d",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] 수급자 관리 라벨 잔재 교정 — manifest·레지스트리 [no-test]",
+      "[정리·release] v20261103-7a278e5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261103-7a278e5",
     "date": "2026-11-03",
     "notes": [
@@ -195,16 +203,6 @@
       "[정리] 배포 전 파생물 재생성 [no-test]",
       "[기능·carework] 문서형 출력에 윤곽 테두리 테이블 적용",
       "[정리·release] v20261103-c427c84 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261103-c427c84",
-    "date": "2026-11-03",
-    "notes": [
-      "[수정·carework] innerHTML 날짜 보간 esc() 래핑 — HTML 이스케이프 싱크 규약",
-      "[기능·carework] 모든 실무 결과물에 문서형 템플릿 적용",
-      "[기능·carework] 현장도구 계산 결과물 문서형 출력 — 입력 조건·테이블",
-      "[정리·release] v20261103-60c6d80 스탬프 확정 [no-docs]"
     ]
   }
 ]
