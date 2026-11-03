@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261103-2219f60",
+    "date": "2026-11-03",
+    "notes": [
+      "[수정·tools] enrich 스크립트 DA-15 예외 등록 — 도메인 전용 유틸",
+      "[data·carework] XLSX 원본에 전화번호 컬럼 병기 + TRACE 재생성",
+      "[data·carework] 시설 전화번호 보강 — 공단 상세조회 API 6,059건 (DSN-43 6g)",
+      "[정리·release] v20261103-75de3b1 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261103-75de3b1",
     "date": "2026-11-03",
     "notes": [
@@ -187,14 +197,6 @@
       "[문서·trace] 신규 문서 헤더 반영 TRACE_MATRIX 재생성 [no-test]",
       "[문서·tools] 도구 계층 지도·규약 치트시트 신규 + 분기 게이트 리뷰",
       "[정리·release] v20261102-5bb3297 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-5bb3297",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정·ui] 사이드바 '기관' 그룹 라벨을 careFacilityJoin 피처로 게이트",
-      "[정리·release] v20261102-1e0b8d2 스탬프 확정 [no-docs]"
     ]
   }
 ]
