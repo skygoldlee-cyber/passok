@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 fix(carework): 수급자 관리 라벨 잔재 교정 — manifest·레지스트리
+
+- 뷰 제목만 갱신됐던 `대상자 명부` 잔재 — manifest `title/subtitle/nav/loading/error` + `practice-registry` `title/subtitle/loadingText/loadErrorText` 전부 `수급자 관리` 계열로 교정
+
 ## 2026-11-03 feat(carework): 수급자 관리 통합 — 서류현황·입소대기 상태·CSV 왕복
 
 - 대상자 명부 → **수급자 관리** 개편: 상태 필드(입소대기/입소중/재가이용) + 대상자별 입소서류 수납 체크(ADMIT_SECTIONS 스키마 공유)
