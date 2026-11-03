@@ -1,5 +1,59 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 feat(carework): 요양기관 찾기 (DSN-43 6g)
+
+- `careFinder` — 공공데이터 장기요양기관 목록(`실무/facilities.json`) 시설명·주소·전화번호 키워드 + 지역 필터 검색
+- "기관명 설정" → `setLocalOrgName` — 출력물 기관명 표기(6e)·기관 가입 흐름과 연결
+- 시설 CSV에 `출처,URL` 메타 행 추가 — 전국 XLSX 단일소스 확정 후 지역별 CSV 3종 제거(중복 재임포트 방지), `facilities_전국_20260610.csv`만 보존 — 임포터는 헤더 행 자동 탐색으로 메타 행 스킵
+- 전화번호 보강: `tools/import/enrich_facility_phones.js` — 공단 상세조회 API(getGeneralSttusDetailInfoItem02)를 기관코드·유형코드로 조인, 6,059/6,249건 phone 채움 (items에 code·typeCode 필드 추가). 활용신청은 data.go.kr/15058856 자동승인, DATA_GO_KR_SERVICE_KEY 사용
+- fix: check_content_independence ALLOWED에 import_facilities.js·enrich_facility_phones.js 예외 등록 — carework 전용 유틸 사유 명시 (DA-15는 CI 전용 단계라 로컬 pre-push 미발화)
+- 실데이터: **전국 단일소스 전환** — 국민건강보험공단 장기요양기관 시설별 현황_20260610 (https://www.data.go.kr/data/15124763/fileData.do)에서 A계열 시설급여 6,252건 추출(18개 지역). 일반현황↔입소인원 기관코드 조인으로 유형·정원 병기, 전화번호는 원천 미제공. 뷰 출처는 URL 감지 시 클릭 링크로 렌더
+
+## 2026-11-03 feat(carework): 입소 서류 체크리스트 (DSN-43 6f)
+
+- `careAdmit` — 요양원 입소 구비서류 14항목 5섹션 수납 체크 (공단 발급·건강·신분·의료급여·계약수령), 법 근거(시행규칙 §16①③, §19⑧) 항목 병기
+- 체크 상태 로컬 저장·수납 진행률 표시 — 복사·인쇄 `care_admit_export` Pro
+- 인쇄 허용 목록 `#adm-preview` 추가 — 내비 아이콘 `fa-folder-open` (고유성 게이트)
+
+## 2026-11-03 feat(carework): 출력물 기관명 표기 — 전 실무 출력물 헤더 통일 (DSN-43 6e)
+
+- `getOrgName()` — 멤버십 기관명 우선, 미가입 시 `CARE_ORG_NAME` 로컬 설정 폴백 (기관가입 뷰에 미가입 전용 기관명 입력 필드)
+- `docHeadHtml(title)` 공용 헬퍼로 8개 실무 뷰의 개별 `care-doc-head` 문자열 치환 — 일지·인수인계·방문·사고·명부·근무표·점검·계산 출력물 전부 기관명 병기
+- 각 뷰 init에서 `refreshOrgName()` fire-and-forget — 멤버십 조회는 진입 시 1회 캐시
+
+## 2026-11-03 feat(carework): 실무도구 3종 — 대상자 명부·사고 보고서·교대 근무표 (DSN-43 6d)
+
+- `careClients` 대상자 명부 — 성명·호실·알레르기·주의사항·비상연락처 등록/수정/내보내기, 방문기록·인수인계의 대상자 입력 소스 기반
+- `careIncident` 사고·낙상 보고서 — 발생경위·조치·가족통지 증적 서식 + `incident_reports` 테이블 기관 사고 대장 (등록만, 정정은 신규 기록)
+- `careRoster` 교대 근무표 — 근무일×근무조(주간/저녁/야간) 배정, 무료 한도 30건
+- Pro 키 6개 신설 (각 save/share) — 인쇄 허용 목록에 `#cli/#inc/#ros-preview` 일괄 추가 (vis-preview 누락 재발 차단)
+- DOM +3건 — 등록·수정·상태 전이 스모크
+
+## 2026-11-03 feat(carework): 면회·방문 기록 — 방문객 연락처 필드
+
+- 예약 폼 `vis-phone`(tel) 추가 → 로컬 기록·면회 문서 텍스트·예정 목록 표기·기관 공유(`family_visits.visitor_phone`) 전 구간 연결
+- 스키마: `add column if not exists visitor_phone` — create table if not exists는 기존 테이블 갱신을 못하므로 컬럼 추가는 alter로 별도 선언 (재실행 안전)
+- 기관 면회 대장 목록에도 연락처 병기 — select 컬럼 추가
+
+## 2026-11-03 fix(carework): 면회·방문 기록 인쇄 백지 — #vis-preview 허용 목록 누락
+
+- 신규 뷰의 출력물 `#vis-preview`가 care-tools.css @media print 허용 목록 3곳(visible 예외·형제 display:none 제외·일반흐름 유지)에 누락 — `body.ui-mode-practice *{hidden}`이 전부 가려 백지 출력
+- 인쇄 회귀 테스트의 허용 목록 루프에 `#vis-preview` 추가 — 신규 실무 뷰의 결과물 id가 예외에서 빠지는 패턴 재발 차단
+
+## 2026-11-03 fix(carework): escape 게이트 — `?.` 보간을 `&&`로 교정
+
+- CI "HTML escape sink check" 실패 — `v.result?.summary ? … : ''`의 옵셔널 체이닝 `?`가 체커 삼항 정규식(`^[^?:]+\?`)에 분기점으로 오인돼 미이스케이프 후보 오탐
+- `v.result && v.result.summary ? esc(…)` 형태로 교정 — 로컬 check:all에 이 단계가 없어 CI에서만 발화 (사전 검증 커버리지 갭)
+
+## 2026-11-03 feat(carework): 면회·방문 기록 실무 피처 (DSN-43 6c) + 스키마 CLI 적용
+
+- `careVisit` 실무 피처 신설 — 가족·친지 방문예약 등록 → 방문결과 기록(scheduled→done/canceled) 뷰, 인수인계와 동일한 레지스트리 패턴 (`care-visit.js` 도메인 + `care-visit-store.js` 무료 10건 + `views/care-visit.js` + `care-visit.html` 파셜)
+- 기관 공유: `family_visits` 테이블 (schema.sql 6c) — 멤버 열람·등록, 결과·취소는 시설 멤버 전원 update (응대 근무자 ≠ 예약 등록자)
+- Pro 게이팅: `care_visit_save`(저장) `care_visit_share`(복사·인쇄·기관 공유) — feature-plan.json + 로드맵 등록
+- fix(supabase): schema.sql `drop function` 제거 — RLS 정책이 함수에 의존해 재실행 시 2BP01 실패, `create or replace`만으로 갱신 (재실행 안전성 확보)
+- `apply_schema.js`가 `exams/<id>/schema.sql`도 수집·적용 + `--file=` 필터 — 플랫폼 schema.sql만 대상이던 한계 해소, Management API로 `family_visits` 프로덕션 적용 완료 (전 테이블 12개 프로브 통과)
+- 검증: check:all 59단계 통과 (DOM +2건 — 예약→결과 전이, 기관 면회 대장 렌더)
+
 ## 2026-11-02 content(carework): 1과목 요양보호론 Ch1 표준교재(2026) 참조 깊이 보강 [no-test]
 
 - tmp/materials 소재(요양보호사_2026_표준교재_전체텍스트.md, 공공누리4유형·저작 참조용)를 사실 재작성으로 활용 — 1.1~1.9 전 절에 법조문·정의·수치·분류·절차 보충 (700행 → +약 90행)

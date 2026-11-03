@@ -1,0 +1,32 @@
+<!-- @spec none — carework 실무 뷰 마크업 (DA-13) -->
+<section id="care-incident-view" class="view-section" data-feature="careIncident">
+    <div class="view-header">
+        <h2>사고·낙상 보고서</h2>
+        <p class="view-subtitle">발생 경위 → 조치·가족 통지 기록 — 기관 평가 증적 서식</p>
+    </div>
+    <div class="care-calc-form">
+        <label>발생일 <input id="inc-date" type="date"></label>
+        <label>시간 <input id="inc-time" type="time"></label>
+        <label>대상자 성명 <input id="inc-client" type="text" placeholder="예: 김○○"></label>
+        <label>발생 장소 <input id="inc-place" type="text" placeholder="예: 302호 침실, 공동거실"></label>
+        <label>사고 유형 <select id="inc-type"></select></label>
+        <label>중증도 <select id="inc-severity"></select></label>
+    </div>
+    <div class="care-calc-form">
+        <label>발생 경위 <input id="inc-desc" type="text" placeholder="발견 경위·상황 설명"></label>
+        <label>조치 내용 <input id="inc-action" type="text" placeholder="응급조치·연락·이송 내용"></label>
+        <label>목격자 <input id="inc-witness" type="text" placeholder="선택"></label>
+        <label class="care-log-merge"><input id="inc-family" type="checkbox"> 가족 통지 완료</label>
+        <div class="care-calc-actions">
+            <button data-click="careIncidentGenerate">보고서 생성</button>
+            <button data-click="careIncidentSave" class="secondary">기록 저장 <span class="pro-badge" data-pro-feature="care_incident_save">PRO</span></button>
+            <button data-click="careIncidentFacilitySubmit" class="secondary">기관 등록 <span class="pro-badge" data-pro-feature="care_incident_share">PRO</span></button>
+            <button data-click="careIncidentCopy" class="secondary">복사 <span class="pro-badge" data-pro-feature="care_incident_share">PRO</span></button>
+            <button data-click="careIncidentPrint" class="secondary">인쇄·PDF <span class="pro-badge" data-pro-feature="care_incident_share">PRO</span></button>
+        </div>
+    </div>
+    <div id="inc-preview" class="care-calc-result"></div>
+    <div id="inc-facility" class="care-log-facility"></div>
+    <div class="view-header"><h3>저장된 보고서</h3></div>
+    <div id="inc-saved" class="care-log-saved"></div>
+</section>

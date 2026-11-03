@@ -29,7 +29,8 @@ alter table public.facility_members enable row level security;
 
 -- RLS 재귀 차단 — 정책의 facility_members 자기참조를 SECURITY DEFINER 함수로 분리
 -- (정책이 자기 테이블을 참조하면 무한 재귀 — definer 함수는 RLS를 우회해 판정)
-drop function if exists public.is_facility_member(uuid, uuid);
+-- ※ drop function 금지 — 정책이 함수에 의존해 drop이 2BP01로 실패한다.
+--    create or replace는 시그니처 동일 시 의존 객체를 유지한 채 갱신된다.
 create or replace function public.is_facility_member(p_facility_id uuid, p_user_id uuid)
 returns boolean
 language sql security definer stable set search_path = ''
@@ -49,7 +50,6 @@ create policy "members read own facility" on public.facility_members for select
   using (public.is_facility_member(facility_id, auth.uid()));
 
 -- 시설 생성 — 생성자가 role=manager로 자동 삽입 (원자적)
-drop function if exists public.create_facility(text, text);
 create or replace function public.create_facility(p_name text, p_biz_no text default null)
 returns uuid
 language plpgsql security definer set search_path = ''
@@ -68,7 +68,6 @@ end;
 $$;
 
 -- 초대 코드로 가입 — 코드 검증 후 worker 삽입 (코드 열거 방지: select 불가·함수만)
-drop function if exists public.join_facility(text);
 create or replace function public.join_facility(p_code text)
 returns uuid
 language plpgsql security definer set search_path = ''
@@ -126,7 +125,6 @@ create policy "handover member write" on public.shift_handovers for insert
   with check (public.is_facility_member(facility_id, auth.uid()) and author_id = auth.uid());
 
 -- handover_acks: 같은 시설 멤버만 서명·열람 — 작성자는 자기 인수인계에 서명 불가
-drop function if exists public.handover_facility(uuid);
 create or replace function public.handover_facility(p_handover_id uuid)
 returns uuid
 language sql security definer stable set search_path = ''
@@ -146,3 +144,73 @@ create policy "ack member write" on public.handover_acks for insert
     and exists (select 1 from public.shift_handovers h
                 where h.id = handover_id and h.author_id <> auth.uid())
   );
+
+-- DSN-43 6c — 면회·방문 기록: family_visits
+-- 가족·친지 방문 예약과 방문 결과를 기관 단위로 공유하는 면회 대장.
+-- 예약(scheduled) → 방문완료(done: result jsonb)/취소(canceled) 상태 전이.
+
+create table if not exists public.family_visits (
+  id uuid primary key default gen_random_uuid(),
+  facility_id uuid not null references public.facilities(id) on delete cascade,
+  author_id uuid not null references auth.users(id),       -- 예약 등록자
+  client text not null,                                   -- 대상자 식별 (최소 단위)
+  visitor_name text not null,                             -- 방문객 성명
+  visitor_phone text,                                     -- 방문객 연락처 (선택)
+  relation text not null default '',                      -- 대상자와의 관계 (배우자·자녀 등)
+  visit_date date not null,                               -- 방문 예정일
+  visit_time text,                                        -- 예정 시간 (선택)
+  purpose text not null default '',                       -- 목적·요청사항
+  status text not null default 'scheduled'
+    check (status in ('scheduled','done','canceled')),
+  result jsonb,                                           -- {date,time,summary} 방문 결과
+  created_at timestamptz not null default now()
+);
+
+alter table public.family_visits enable row level security;
+
+-- 컬럼 추가 — create table if not exists는 기존 테이블을 갱신하지 않으므로
+-- 신규 컬럼은 add column if not exists로 별도 선언한다 (재실행 안전)
+alter table public.family_visits add column if not exists visitor_phone text;
+
+-- family_visits: 같은 시설 멤버만 열람·등록 (익명·비멤버 차단)
+drop policy if exists "visit member read" on public.family_visits;
+create policy "visit member read" on public.family_visits for select
+  using (public.is_facility_member(facility_id, auth.uid()));
+
+drop policy if exists "visit member write" on public.family_visits;
+create policy "visit member write" on public.family_visits for insert
+  with check (public.is_facility_member(facility_id, auth.uid()) and author_id = auth.uid());
+
+-- 결과 기록·취소는 시설 멤버 전원 허용 — 방문 응대 근무자가 예약 등록자와
+-- 다를 수 있어 update를 멤버로 개방 (인수인계와 달리 상태 전이 테이블)
+drop policy if exists "visit member update" on public.family_visits;
+create policy "visit member update" on public.family_visits for update
+  using (public.is_facility_member(facility_id, auth.uid()));
+
+-- DSN-43 6d — 사고·낙상 보고서: incident_reports
+-- 기관 평가 증적 — 사고 기록은 법적 문서라 수정·삭제 정책 없음 (등록 후 정정은 신규 기록으로)
+
+create table if not exists public.incident_reports (
+  id uuid primary key default gen_random_uuid(),
+  facility_id uuid not null references public.facilities(id) on delete cascade,
+  author_id uuid not null references auth.users(id),
+  client text not null,
+  occurred_at text not null,                            -- 발생 일시 'YYYY-MM-DD HH:MM'
+  place text not null default '',
+  type text not null,                                   -- 낙상·욕창·약물·외상·배회·기타
+  severity text not null default '',
+  description text not null default '',
+  action text not null default '',
+  family_notified boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+alter table public.incident_reports enable row level security;
+
+drop policy if exists "incident member read" on public.incident_reports;
+create policy "incident member read" on public.incident_reports for select
+  using (public.is_facility_member(facility_id, auth.uid()));
+
+drop policy if exists "incident member write" on public.incident_reports;
+create policy "incident member write" on public.incident_reports for insert
+  with check (public.is_facility_member(facility_id, auth.uid()) and author_id = auth.uid());

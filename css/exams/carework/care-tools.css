@@ -164,17 +164,22 @@
     body.ui-mode-practice * { visibility: hidden; }
     /* 활성 뷰에서 출력물 외 형제는 display:none — visibility:hidden은 레이아웃을 유지해
        숨은 폼의 높이가 뒷장 빈 페이지로 밀리는 문제를 만든다 (출력물만 문서 영역에 남김) */
-    body.ui-mode-practice .view-section.active > :not(#log-preview):not(#care-result):not(#ho-preview):not(#audit-list):not(#audit-progress):not(#care-card-detail) {
+    body.ui-mode-practice .view-section.active > :not(#log-preview):not(#care-result):not(#ho-preview):not(#audit-list):not(#audit-progress):not(#care-card-detail):not(#vis-preview):not(#inc-preview):not(#ros-preview):not(#cli-preview):not(#adm-preview) {
         display: none !important;
     }
     #log-preview, #log-preview *,
     #care-result, #care-result *,
     #ho-preview, #ho-preview *,
     #audit-list, #audit-list *, #audit-progress, #audit-progress *,
-    #care-card-detail, #care-card-detail * { visibility: visible; }
+    #care-card-detail, #care-card-detail *,
+    #vis-preview, #vis-preview *,
+    #inc-preview, #inc-preview *,
+    #ros-preview, #ros-preview *,
+    #cli-preview, #cli-preview *,
+    #adm-preview, #adm-preview * { visibility: visible; }
     /* 절대 위치 금지 — abs 박스는 페이지 경계에서 본문이 잘리고 동일 위치끼리 겹침.
        일반 흐름을 유지하면 출력물만 남은 활성 뷰의 패딩(print.css 10mm/8mm)이 여백 역할 */
-    #log-preview, #care-result, #ho-preview, #audit-list, #audit-progress, #care-card-detail {
+    #log-preview, #care-result, #ho-preview, #audit-list, #audit-progress, #care-card-detail, #vis-preview, #inc-preview, #ros-preview, #cli-preview, #adm-preview {
         visibility: visible;
     }
     .care-log-text { border: 1px solid var(--print-border-strong, #9ca3af); border-radius: 0; font-size: 13pt; color: #000; background: #fff; }

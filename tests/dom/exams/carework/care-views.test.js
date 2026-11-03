@@ -29,6 +29,11 @@ vi.mock('../../../../src/exams/carework/facility.js', async (importOriginal) => 
     listHandovers: vi.fn(() => Promise.resolve([])),
     submitHandover: vi.fn(() => Promise.resolve({})),
     ackHandover: vi.fn(() => Promise.resolve({})),
+    submitVisit: vi.fn(() => Promise.resolve({})),
+    listVisits: vi.fn(() => Promise.resolve([])),
+    updateVisitResult: vi.fn(() => Promise.resolve({})),
+    submitIncident: vi.fn(() => Promise.resolve({})),
+    listIncidents: vi.fn(() => Promise.resolve([])),
 }));
 
 import { careCalcRun, careCalcReset, initCareCalcView } from '../../../../src/exams/carework/views/care-calc.js';
@@ -38,7 +43,14 @@ import { careFacilityHandoverSubmit, careHandoverAck } from '../../../../src/exa
 import { careAuditReset, careAuditCopy, careAuditPrint, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
 import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
-import { syncFacilityNav, myMembership, listHandovers } from '../../../../src/exams/carework/facility.js';
+import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, careVisitExport, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
+import { careClientSave, careClientLoad, careClientDelete, initCareClientView } from '../../../../src/exams/carework/views/care-client.js';
+import { careIncidentGenerate, careIncidentSave, careIncidentDelete, initCareIncidentView } from '../../../../src/exams/carework/views/care-incident.js';
+import { careRosterAdd, careRosterDelete, initCareRosterView } from '../../../../src/exams/carework/views/care-roster.js';
+import { careAdmitReset, initCareAdmitView } from '../../../../src/exams/carework/views/care-admit.js';
+import { careFinderUseOrg } from '../../../../src/exams/carework/views/care-finder.js';
+import { getOrgName } from '../../../../src/exams/carework/facility.js';
+import { syncFacilityNav, myMembership, listHandovers, listVisits as listFacilityVisits } from '../../../../src/exams/carework/facility.js';
 import { ManualViewer } from '../../../../src/reader/manual-viewer.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
@@ -218,6 +230,125 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careHandoverShare(); // 저장 후 — 공유 진행
     });
 
+    it('careVisit — 예약 등록 → 결과 기록 → 완료 목록 상태 전이 (DSN-43 6c)', async () => {
+        loadPartial('care-visit.html');
+        initCareVisitView();
+        document.getElementById('vis-date').value = '2026-11-05';
+        document.getElementById('vis-time').value = '14:00';
+        document.getElementById('vis-client').value = '김○○';
+        document.getElementById('vis-visitor').value = '홍○○';
+        document.getElementById('vis-phone').value = '010-1234-5678';
+        careVisitAdd();
+        const sched = document.getElementById('vis-scheduled');
+        expect(sched.textContent).toContain('김○○');
+        expect(sched.textContent).toContain('홍○○');
+        expect(sched.textContent).toContain('010-1234-5678');
+        // 결과 기록 패널 — loc: 접두 data-arg로 대상 지정 후 저장
+        const arg = sched.querySelector('[data-arg^="loc:"]')?.dataset.arg;
+        careVisitResultOpen(arg);
+        expect(document.getElementById('vis-result-panel').classList.contains('is-hidden')).toBe(false);
+        document.getElementById('vis-result-date').value = '2026-11-05';
+        document.getElementById('vis-result-summary').value = '면회 <b>30분</b> — 상태 양호';
+        await careVisitResultSave();
+        expect(document.getElementById('vis-done').textContent).toContain('면회 <b>30분</b>');
+        // 결과 요약 이스케이프 — 서버·사용자 입력이 마크업으로 주입되지 않음 (ROAD-Q5)
+        expect(document.getElementById('vis-done').innerHTML).toContain('&lt;b&gt;30분&lt;/b&gt;');
+        // 출력물 기관명 — 로컬 설정이 문서 헤더에 병기 (DSN-43 6e)
+        const { setLocalOrgName } = await import('../../../../src/exams/carework/facility.js');
+        setLocalOrgName('행복요양원');
+        careVisitExport();
+        expect(document.getElementById('vis-preview').textContent).toContain('행복요양원');
+        setLocalOrgName('');
+        expect(document.getElementById('vis-scheduled').textContent).toContain('등록된 방문예약이 없습니다');
+        careVisitDelete(document.querySelector('#vis-done [data-arg]')?.dataset.arg);
+    });
+
+    it('careVisit — 기관 면회 대장 렌더: 예정 항목만 결과 기록 버튼 노출 (DSN-43 6c)', async () => {
+        vi.mocked(myMembership).mockResolvedValueOnce({ facilities: { id: 'f1', name: '행복요양원' } });
+        vi.mocked(listFacilityVisits).mockResolvedValueOnce([
+            { id: 'v1', visit_date: '2026-11-05', visit_time: '14:00', client: '김○○', visitor_name: '홍○○', visitor_phone: '010-1111-2222', status: 'scheduled' },
+            { id: 'v2', visit_date: '2026-11-03', client: '이○○', visitor_name: '박○○', status: 'done', result: { summary: '면회 완료' } },
+        ]);
+        loadPartial('care-visit.html');
+        initCareVisitView();
+        await new Promise(r => setTimeout(r, 0));
+        const host = document.getElementById('vis-facility');
+        expect(host.textContent).toContain('행복요양원');
+        expect(host.textContent).toContain('홍○○');
+        expect(host.textContent).toContain('010-1111-2222');
+        expect(host.innerHTML).toContain('fac:v1');
+        expect(host.innerHTML).not.toContain('fac:v2'); // 완료 건은 결과 기록 버튼 없음
+    });
+
+    it('careClients — 대상자 등록 → 수정 불러오기 → 삭제', () => {
+        loadPartial('care-client.html');
+        initCareClientView();
+        document.getElementById('cli-name').value = '김○○';
+        document.getElementById('cli-caution').value = '낙상 위험';
+        careClientSave();
+        const list = document.getElementById('cli-list');
+        expect(list.textContent).toContain('김○○');
+        expect(list.textContent).toContain('낙상 위험');
+        const id = list.querySelector('[data-arg]')?.dataset.arg;
+        careClientLoad(id);
+        expect(document.getElementById('cli-name').value).toBe('김○○');
+        careClientDelete(id);
+        expect(list.textContent).toContain('등록된 대상자가 없습니다');
+    });
+
+    it('careIncident — 보고서 생성 → 저장 목록', () => {
+        loadPartial('care-incident.html');
+        initCareIncidentView();
+        document.getElementById('inc-date').value = '2026-11-03';
+        document.getElementById('inc-client').value = '김○○';
+        document.getElementById('inc-type').value = 'fall';
+        document.getElementById('inc-desc').value = '화장실 앞 미끄러짐';
+        careIncidentGenerate();
+        expect(document.querySelector('#inc-preview pre')?.textContent).toContain('낙상');
+        careIncidentSave();
+        expect(document.getElementById('inc-saved').textContent).toContain('김○○');
+        careIncidentDelete(document.querySelector('#inc-saved [data-arg]')?.dataset.arg);
+    });
+
+    it('careRoster — 근무 배정 등록 → 목록 정렬 표시', () => {
+        loadPartial('care-roster.html');
+        initCareRosterView();
+        document.getElementById('ros-date').value = '2026-11-05';
+        document.getElementById('ros-shift').value = 'night';
+        document.getElementById('ros-worker').value = '김○○';
+        careRosterAdd();
+        const list = document.getElementById('ros-list');
+        expect(list.textContent).toContain('김○○');
+        expect(list.textContent).toContain('야간');
+        careRosterDelete(list.querySelector('[data-arg]')?.dataset.arg);
+    });
+
+    it('careAdmit — 체크 토글 → 수납 현황 갱신', () => {
+        loadPartial('care-admit.html');
+        initCareAdmitView();
+        const box = /** @type {HTMLInputElement|null} */ (document.querySelector('#adm-list input[data-admit]'));
+        expect(box).toBeTruthy();
+        box.checked = true;
+        box.dispatchEvent(new Event('change', { bubbles: true }));
+        expect(document.getElementById('adm-progress').textContent).toContain('1/');
+        careAdmitReset();
+        expect(document.getElementById('adm-progress').textContent).toContain('0/');
+    });
+
+    it('careFinder — 시설명으로 출력물 기관명 설정', () => {
+        careFinderUseOrg('행복요양원');
+        expect(getOrgName()).toBe('행복요양원');
+    });
+
+    it('careFinder — 출처 텍스트의 URL은 링크로 렌더', async () => {
+        vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ source: '공단 현황 — https://www.data.go.kr/x (필터)', regions: [], items: [] }) })));
+        loadPartial('care-finder.html');
+        const { initCareFinderView } = await import('../../../../src/exams/carework/views/care-finder.js');
+        await initCareFinderView();
+        const a = /** @type {HTMLAnchorElement|null} */ (document.querySelector('#find-source a'));
+        expect(a?.href).toContain('data.go.kr');
+    });
+
     // @spec DA-18 — 권한 뷰 분리: facility-join은 클라이언트 뷰로 비로그인/비권한 시 안내만 표시
     it('careFacility — 미로그인 시 로그인 안내 렌더', async () => {
         loadPartial('facility-join.html');
@@ -257,7 +388,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const css = readFileSync('css/exams/carework/care-tools.css', 'utf-8');
         const printBlock = css.slice(css.indexOf('@media print'));
         expect(printBlock).toContain('body.ui-mode-practice *');
-        for (const id of ['#log-preview', '#care-result', '#ho-preview', '#audit-list', '#audit-progress', '#care-card-detail']) {
+        for (const id of ['#log-preview', '#care-result', '#ho-preview', '#audit-list', '#audit-progress', '#care-card-detail', '#vis-preview', '#inc-preview', '#ros-preview', '#cli-preview', '#adm-preview']) {
             expect(printBlock).toContain(`${id}, ${id} *`);
         }
         // print.css — 활성 뷰만 표시. 특정 뷰 id 하드코딩 시 다른 뷰 인쇄가 깨짐

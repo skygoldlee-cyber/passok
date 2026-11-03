@@ -1,0 +1,17 @@
+<!-- @spec none — carework 실무 뷰 마크업 (DA-13) -->
+<section id="care-admit-view" class="view-section" data-feature="careAdmit">
+    <div class="view-header">
+        <h2>입소 서류 체크리스트</h2>
+        <p class="view-subtitle">요양원 입소 구비서류 수납 현황 — 법 근거 항목 포함</p>
+    </div>
+    <div class="care-calc-form">
+        <span id="adm-progress" class="care-audit-progress"></span>
+        <div class="care-calc-actions">
+            <button data-click="careAdmitCopy">복사 <span class="pro-badge" data-pro-feature="care_admit_export">PRO</span></button>
+            <button data-click="careAdmitPrint" class="secondary">인쇄·PDF <span class="pro-badge" data-pro-feature="care_admit_export">PRO</span></button>
+            <button data-click="careAdmitReset" class="secondary">초기화</button>
+        </div>
+    </div>
+    <div id="adm-preview" class="care-calc-result"></div>
+    <div id="adm-list" class="care-audit-list"></div>
+</section>

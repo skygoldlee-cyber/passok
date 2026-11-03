@@ -1,0 +1,40 @@
+<!-- @spec none — carework 실무 뷰 마크업 (DA-13) -->
+<section id="care-visit-view" class="view-section" data-feature="careVisit">
+    <div class="view-header">
+        <h2>면회·방문 기록</h2>
+        <p class="view-subtitle">가족·친지 방문 예약 등록 → 방문 결과 기록 — 기관 면회 대장 공유 가능</p>
+    </div>
+    <div class="care-calc-form">
+        <label>방문 예정일 <input id="vis-date" type="date"></label>
+        <label>시간 <input id="vis-time" type="time"></label>
+        <label>대상자 성명 <input id="vis-client" type="text" placeholder="예: 김○○"></label>
+        <label>방문객 성명 <input id="vis-visitor" type="text" placeholder="예: 홍○○"></label>
+        <label>연락처 <input id="vis-phone" type="tel" placeholder="예: 010-0000-0000"></label>
+        <label>관계 <select id="vis-relation"></select></label>
+    </div>
+    <div class="care-calc-form">
+        <label>목적·요청사항 <input id="vis-purpose" type="text" placeholder="예: 면회, 물품 전달, 상담"></label>
+        <div class="care-calc-actions">
+            <button data-click="careVisitAdd">예약 등록 <span class="pro-badge" data-pro-feature="care_visit_save">PRO</span></button>
+            <button data-click="careVisitFacilitySubmit" class="secondary">기관 공유 <span class="pro-badge" data-pro-feature="care_visit_share">PRO</span></button>
+            <button data-click="careVisitExport" class="secondary">기록 복사 <span class="pro-badge" data-pro-feature="care_visit_share">PRO</span></button>
+            <button data-click="careVisitPrint" class="secondary">인쇄·PDF <span class="pro-badge" data-pro-feature="care_visit_share">PRO</span></button>
+        </div>
+    </div>
+    <div id="vis-result-panel" class="care-calc-form is-hidden">
+        <h3>방문 결과 기록 — <span id="vis-result-for"></span></h3>
+        <label>방문일 <input id="vis-result-date" type="date"></label>
+        <label>시간 <input id="vis-result-time" type="time"></label>
+        <label>결과·특이사항 <input id="vis-result-summary" type="text" placeholder="방문 내용·대상자 반응·전달사항"></label>
+        <div class="care-calc-actions">
+            <button data-click="careVisitResultSave">결과 저장</button>
+            <button data-click="careVisitResultClose" class="secondary">닫기</button>
+        </div>
+    </div>
+    <div id="vis-preview" class="care-calc-result"></div>
+    <div class="view-header"><h3>방문 예정</h3></div>
+    <div id="vis-scheduled" class="care-log-saved"></div>
+    <div class="view-header"><h3>방문 완료·취소</h3></div>
+    <div id="vis-done" class="care-log-saved"></div>
+    <div id="vis-facility" class="care-log-facility"></div>
+</section>

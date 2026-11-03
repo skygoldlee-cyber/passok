@@ -1,0 +1,21 @@
+<!-- @spec none — carework 실무 뷰 마크업 (DA-13) -->
+<section id="care-roster-view" class="view-section" data-feature="careRoster">
+    <div class="view-header">
+        <h2>교대 근무표</h2>
+        <p class="view-subtitle">근무일 × 근무조 배정 — 인수인계와 연결되는 교대 스케줄</p>
+    </div>
+    <div class="care-calc-form">
+        <label>근무일 <input id="ros-date" type="date"></label>
+        <label>근무조 <select id="ros-shift"></select></label>
+        <label>근무자 <input id="ros-worker" type="text" placeholder="예: 김○○"></label>
+        <label>메모 <input id="ros-note" type="text" placeholder="예: 야간 전담, 휴가 대체"></label>
+        <div class="care-calc-actions">
+            <button data-click="careRosterAdd">배정 등록 <span class="pro-badge" data-pro-feature="care_roster_save">PRO</span></button>
+            <button data-click="careRosterExport" class="secondary">근무표 복사 <span class="pro-badge" data-pro-feature="care_roster_share">PRO</span></button>
+            <button data-click="careRosterPrint" class="secondary">인쇄·PDF <span class="pro-badge" data-pro-feature="care_roster_share">PRO</span></button>
+        </div>
+    </div>
+    <div id="ros-preview" class="care-calc-result"></div>
+    <div class="view-header"><h3>근무 배정</h3></div>
+    <div id="ros-list" class="care-log-saved"></div>
+</section>

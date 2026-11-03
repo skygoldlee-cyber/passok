@@ -1,6 +1,7 @@
 // src/exams/carework/views/care-audit.js — 기관 평가 체크리스트 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { loadAuditSections, loadChecks, toggleCheck, clearChecks, auditProgress } from '../care-audit.js';
+import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
 
@@ -12,7 +13,7 @@ function render() {
     const host = $('audit-list');
     if (!host) return;
     const c = loadChecks();
-    host.innerHTML = `<div class="care-doc-head"><strong>기관 평가 체크리스트</strong><span>${esc(new Date().toISOString().slice(0, 10))} 출력</span></div>` + _sections.map(s => `
+    host.innerHTML = docHeadHtml('기관 평가 체크리스트') + _sections.map(s => `
         <div class="care-audit-sec">
             <h3>${esc(s.title)}</h3>
             ${s.items.map(i => `
@@ -60,6 +61,7 @@ export function careAuditReset() {
 }
 
 export async function initCareAuditView() {
+    void refreshOrgName();
     try {
         _sections = await loadAuditSections();
     } catch (e) {

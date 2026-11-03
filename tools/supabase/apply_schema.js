@@ -12,12 +12,14 @@
  *   (이 프로젝트만 + Database read-write — read-only는 SELECT만 되고 DDL 403)
  *
  * 동작:
- *   1. schema.sql 전체를 POST /v1/projects/{ref}/database/query 로 실행 (멱등)
+ *   1. schemaFiles() 수집본 — 플랫폼 schema.sql + exams/<id>/schema.sql (DA-13)을
+ *      순서대로 POST /v1/projects/{ref}/database/query 로 실행 (멱등)
  *   2. check_supabase_schema.js 프로브로 적용 결과 검증
  *
  * 사용법:
- *   node tools/supabase/apply_schema.js            # 적용 + 검증
+ *   node tools/supabase/apply_schema.js            # 전체 스키마 적용 + 검증
  *   node tools/supabase/apply_schema.js --dry-run  # 대상·권한만 확인 (실행 안 함)
+ *   node tools/supabase/apply_schema.js --file=exams/carework/schema.sql  # 특정 파일만
  */
 'use strict';
 const fs = require('fs');
@@ -25,11 +27,23 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 const { loadEnv, ROOT } = require('../lib/env.js');
 
-const SCHEMA_PATH = path.join(ROOT, 'tools', 'supabase', 'schema.sql');
+const SCHEMA_DIR = path.join(ROOT, 'tools', 'supabase');
 const CONFIG_PATH = path.join(ROOT, 'src', 'auth-sync', 'supabase-config.js');
 const CHECK_SCRIPT = path.join(ROOT, 'tools', 'check', 'check_supabase_schema.js');
 const MGMT_API = 'https://api.supabase.com';
 const TIMEOUT_MS = 60_000;
+
+/** 플랫폼 + 시험별 스키마 파일 수집 — schema.sql + exams/<id>/schema.sql (DA-13) */
+function schemaFiles() {
+    const files = [path.join(SCHEMA_DIR, 'schema.sql')].filter(f => fs.existsSync(f));
+    const examsDir = path.join(SCHEMA_DIR, 'exams');
+    if (fs.existsSync(examsDir))
+        for (const d of fs.readdirSync(examsDir)) {
+            const f = path.join(examsDir, d, 'schema.sql');
+            if (fs.existsSync(f)) files.push(f);
+        }
+    return files;
+}
 
 /** 프로젝트 ref — SUPABASE_URL env 우선, 없으면 supabase-config.js에서 추출 */
 function projectRef() {
@@ -88,21 +102,32 @@ async function main() {
     const dryRun = process.argv.includes('--dry-run');
     const token = requireToken();
     const { ref, url } = projectRef();
-    const sql = fs.readFileSync(SCHEMA_PATH, 'utf8');
-    const tableCount = (sql.match(/create\s+table\s+if\s+not\s+exists/gi) || []).length;
+    const files = schemaFiles();
+    const onlyFile = process.argv.find(a => a.startsWith('--file='));
+    const targets = onlyFile
+        ? files.filter(f => path.relative(ROOT, f).replace(/\\/g, '/').endsWith(onlyFile.slice(7)))
+        : files;
 
     console.log(`▶ 대상: ${url} (ref: ${ref})`);
-    console.log(`▶ 스키마: tools/supabase/schema.sql (${sql.length}자 · 선언 테이블 ${tableCount}개)`);
+    for (const f of targets) {
+        const sql = fs.readFileSync(f, 'utf8');
+        const tableCount = (sql.match(/create\s+table\s+if\s+not\s+exists/gi) || []).length;
+        console.log(`▶ 스키마: ${path.relative(ROOT, f)} (${sql.length}자 · 선언 테이블 ${tableCount}개)`);
+    }
+    if (!targets.length) { console.error('✗ 대상 스키마 파일 없음'); process.exit(1); }
 
     if (dryRun) {
         console.log('⊘ --dry-run — 실행하지 않았습니다 (토큰·ref·파일 확인 완료)');
         return;
     }
 
-    console.log('▶ Management API로 스키마 적용 중…');
-    const result = await applySchema(token, ref, sql);
-    const parsed = JSON.parse(result);
-    console.log(`✓ 실행 완료 (반환 행: ${Array.isArray(parsed) ? parsed.length : '-'})`);
+    for (const f of targets) {
+        const rel = path.relative(ROOT, f);
+        console.log(`▶ Management API로 스키마 적용 중… ${rel}`);
+        const result = await applySchema(token, ref, fs.readFileSync(f, 'utf8'));
+        const parsed = JSON.parse(result);
+        console.log(`✓ 실행 완료 — ${rel} (반환 행: ${Array.isArray(parsed) ? parsed.length : '-'})`);
+    }
 
     console.log('\n▶ 적용 검증 (check_supabase_schema.js)…');
     const probe = spawnSync(process.execPath, [CHECK_SCRIPT], { stdio: 'inherit' });

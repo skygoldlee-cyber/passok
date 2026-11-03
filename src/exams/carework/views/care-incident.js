@@ -1,0 +1,133 @@
+// src/exams/carework/views/care-incident.js — 사고·낙상 보고서 뷰
+// @spec none — 시험 전용 실무 뷰 (DA-13)
+import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, buildIncidentText } from '../care-incident.js';
+import { listIncidents, saveIncident, removeIncident } from '../incident-store.js';
+import { myMembership, submitIncident, listIncidents as listFacilityIncidents, docHeadHtml, refreshOrgName } from '../facility.js';
+import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
+import { showToast } from '../../../ui-utils.js';
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const _val = (id, fb) => {
+    const el = /** @type {HTMLSelectElement|HTMLInputElement|null} */ ($(id));
+    return el && el.value ? el.value : fb;
+};
+let _facility = null;
+let _fiList = [];
+let _lastText = null;
+
+function readForm() {
+    return {
+        date: _val('inc-date', ''),
+        time: _val('inc-time', ''),
+        client: _val('inc-client', ''),
+        place: _val('inc-place', ''),
+        type: _val('inc-type', ''),
+        severity: _val('inc-severity', ''),
+        desc: _val('inc-desc', ''),
+        action: _val('inc-action', ''),
+        witness: _val('inc-witness', ''),
+        familyNotified: /** @type {HTMLInputElement|null} */ ($('inc-family'))?.checked || false,
+    };
+}
+
+export function careIncidentGenerate() {
+    const t = buildIncidentText(readForm());
+    const out = $('inc-preview');
+    if (!out) return;
+    if (!t) { out.innerHTML = '<p class="care-calc-err">일시·대상자·사고 유형을 입력하세요.</p>'; return; }
+    _lastText = t;
+    out.innerHTML = docHeadHtml('사고·낙상 보고서') + `<pre class="care-log-text">${esc(t)}</pre><div class="care-doc-sign"><span>보고자: ______________</span><span>확인(시설장): ______________</span></div>`;
+}
+
+export function careIncidentSave() {
+    careIncidentGenerate();
+    if (!_lastText) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
+    const r = saveIncident({ ...readForm(), text: _lastText });
+    if (r.ok) { showToast('보고서를 기록했습니다.'); renderSaved(); }
+}
+
+export function careIncidentCopy() {
+    careIncidentGenerate();
+    const pre = document.querySelector('#inc-preview pre');
+    if (!pre) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
+    proFeatureNotice('care_incident_share', '보고서 복사·내보내기');
+    navigator.clipboard?.writeText(pre.textContent || '').then(
+        () => showToast('보고서를 복사했습니다.'),
+        () => showToast('복사에 실패했습니다.', 'error'));
+}
+
+export function careIncidentPrint() {
+    careIncidentGenerate();
+    if (!document.querySelector('#inc-preview pre')) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
+    proFeatureNotice('care_incident_share', '보고서 인쇄·PDF');
+    window.print();
+}
+
+export function careIncidentDelete(id) {
+    if (id) { removeIncident(id); renderSaved(); }
+}
+
+function renderSaved() {
+    const host = $('inc-saved');
+    if (!host) return;
+    const items = listIncidents();
+    host.innerHTML = items.length
+        ? items.map(x => `<div class="care-log-saved-item">
+            <span>${esc(x.date)} · ${esc(x.client)} — ${esc(incidentTypeLabel(x.type))}</span>
+            <button data-click="careIncidentDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button>
+          </div>`).join('')
+        : '<p class="care-log-empty">저장된 보고서가 없습니다.</p>';
+}
+
+async function renderFacility() {
+    const host = $('inc-facility');
+    if (!host) return;
+    if (!_facility) {
+        try { _facility = (await myMembership())?.facilities || null; } catch (e) { _facility = null; }
+    }
+    if (!_facility) return;
+    try { _fiList = await listFacilityIncidents(_facility.id, { limit: 20 }); } catch (e) { _fiList = []; }
+    host.innerHTML = `
+        <div class="care-audit-sec">
+            <h3>기관 사고 대장 — ${esc(_facility.name)}</h3>
+            ${_fiList.map(v => `
+                <div class="care-log-saved-item">
+                    <span>${esc(v.occurred_at)} · ${esc(v.client)} — ${esc(v.type)}${v.severity ? esc(' · ' + v.severity) : ''}${v.family_notified ? ' · 가족통지' : ''}</span>
+                </div>`).join('')}
+        </div>`;
+}
+
+export async function careIncidentFacilitySubmit() {
+    if (!_facility) { showToast('소속 기관이 없습니다 — 기관 가입 후 이용하세요.', 'error'); return; }
+    const f = readForm();
+    if (!f.date || !f.client || !f.type) { showToast('일시·대상자·사고 유형을 입력하세요.', 'error'); return; }
+    proFeatureNotice('care_incident_share', '기관 사고 대장 등록');
+    const r = await submitIncident({
+        facilityId: _facility.id,
+        client: f.client,
+        occurredAt: `${f.date}${f.time ? ' ' + f.time : ''}`,
+        place: f.place,
+        type: incidentTypeLabel(f.type),
+        severity: f.severity,
+        description: f.desc,
+        action: f.action,
+        familyNotified: f.familyNotified,
+    });
+    'error' in r ? showToast('등록 실패: ' + r.error, 'error') : showToast('기관 사고 대장에 등록했습니다.');
+    void renderFacility();
+}
+
+export function initCareIncidentView() {
+    const d = /** @type {HTMLInputElement|null} */ ($('inc-date'));
+    if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
+    const t = $('inc-type');
+    if (t && !t.children.length)
+        t.innerHTML = INCIDENT_TYPES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+    const s = $('inc-severity');
+    if (s && !s.children.length)
+        s.innerHTML = SEVERITIES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+    renderSaved();
+    void renderFacility();
+    void refreshOrgName();
+}
