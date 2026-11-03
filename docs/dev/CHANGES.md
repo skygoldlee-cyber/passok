@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 fix(carework): 면회·방문 기록 인쇄 백지 — #vis-preview 허용 목록 누락
+
+- 신규 뷰의 출력물 `#vis-preview`가 care-tools.css @media print 허용 목록 3곳(visible 예외·형제 display:none 제외·일반흐름 유지)에 누락 — `body.ui-mode-practice *{hidden}`이 전부 가려 백지 출력
+- 인쇄 회귀 테스트의 허용 목록 루프에 `#vis-preview` 추가 — 신규 실무 뷰의 결과물 id가 예외에서 빠지는 패턴 재발 차단
+
 ## 2026-11-03 fix(carework): escape 게이트 — `?.` 보간을 `&&`로 교정
 
 - CI "HTML escape sink check" 실패 — `v.result?.summary ? … : ''`의 옵셔널 체이닝 `?`가 체커 삼항 정규식(`^[^?:]+\?`)에 분기점으로 오인돼 미이스케이프 후보 오탐

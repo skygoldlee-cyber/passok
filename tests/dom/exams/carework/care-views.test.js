@@ -302,7 +302,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const css = readFileSync('css/exams/carework/care-tools.css', 'utf-8');
         const printBlock = css.slice(css.indexOf('@media print'));
         expect(printBlock).toContain('body.ui-mode-practice *');
-        for (const id of ['#log-preview', '#care-result', '#ho-preview', '#audit-list', '#audit-progress', '#care-card-detail']) {
+        for (const id of ['#log-preview', '#care-result', '#ho-preview', '#audit-list', '#audit-progress', '#care-card-detail', '#vis-preview']) {
             expect(printBlock).toContain(`${id}, ${id} *`);
         }
         // print.css — 활성 뷰만 표시. 특정 뷰 id 하드코딩 시 다른 뷰 인쇄가 깨짐
