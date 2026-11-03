@@ -143,7 +143,7 @@ function renderLists() {
         const rows = items.filter(v => v.status !== 'scheduled');
         done.innerHTML = rows.length
             ? rows.map(v => `<div class="care-log-saved-item">
-                <span>${esc(v.date)} · ${esc(v.client)} ← ${esc(v.visitor)} — ${esc(VISIT_STATUS[v.status] || '')}${v.result?.summary ? ' · ' + esc(v.result.summary) : ''}</span>
+                <span>${esc(v.date)} · ${esc(v.client)} ← ${esc(v.visitor)} — ${esc(VISIT_STATUS[v.status] || '')}${v.result && v.result.summary ? esc(' · ' + v.result.summary) : ''}</span>
                 <button data-click="careVisitDelete" data-arg="${esc(v.id)}" class="btn btn-secondary">삭제</button>
               </div>`).join('')
             : '<p class="care-log-empty">완료·취소된 방문이 없습니다.</p>';
@@ -163,7 +163,7 @@ async function renderFacility() {
             <h3>기관 면회 대장 — ${esc(_facility.name)}</h3>
             ${_fvList.map(v => `
                 <div class="care-log-saved-item">
-                    <span>${esc(v.visit_date)}${v.visit_time ? ' ' + esc(v.visit_time) : ''} · ${esc(v.client)} ← ${esc(v.visitor_name)} — ${esc(VISIT_STATUS[v.status] || v.status)}${v.result?.summary ? ' · ' + esc(v.result.summary) : ''}</span>
+                    <span>${esc(v.visit_date)}${v.visit_time ? ' ' + esc(v.visit_time) : ''} · ${esc(v.client)} ← ${esc(v.visitor_name)} — ${esc(VISIT_STATUS[v.status] || v.status)}${v.result && v.result.summary ? esc(' · ' + v.result.summary) : ''}</span>
                     ${v.status === 'scheduled' ? `<button data-click="careVisitResultOpen" data-arg="fac:${esc(v.id)}" class="btn btn-secondary">결과 기록</button>
                     <button data-click="careVisitCancel" data-arg="fac:${esc(v.id)}" class="btn btn-secondary">취소</button>` : ''}
                 </div>`).join('')}

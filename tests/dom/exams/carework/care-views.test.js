@@ -238,9 +238,11 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careVisitResultOpen(arg);
         expect(document.getElementById('vis-result-panel').classList.contains('is-hidden')).toBe(false);
         document.getElementById('vis-result-date').value = '2026-11-05';
-        document.getElementById('vis-result-summary').value = '면회 30분 — 상태 양호';
+        document.getElementById('vis-result-summary').value = '면회 <b>30분</b> — 상태 양호';
         await careVisitResultSave();
-        expect(document.getElementById('vis-done').textContent).toContain('면회 30분');
+        expect(document.getElementById('vis-done').textContent).toContain('면회 <b>30분</b>');
+        // 결과 요약 이스케이프 — 서버·사용자 입력이 마크업으로 주입되지 않음 (ROAD-Q5)
+        expect(document.getElementById('vis-done').innerHTML).toContain('&lt;b&gt;30분&lt;/b&gt;');
         expect(document.getElementById('vis-scheduled').textContent).toContain('등록된 방문예약이 없습니다');
         careVisitDelete(document.querySelector('#vis-done [data-arg]')?.dataset.arg);
     });

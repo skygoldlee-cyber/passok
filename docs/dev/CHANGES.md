@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 fix(carework): escape 게이트 — `?.` 보간을 `&&`로 교정
+
+- CI "HTML escape sink check" 실패 — `v.result?.summary ? … : ''`의 옵셔널 체이닝 `?`가 체커 삼항 정규식(`^[^?:]+\?`)에 분기점으로 오인돼 미이스케이프 후보 오탐
+- `v.result && v.result.summary ? esc(…)` 형태로 교정 — 로컬 check:all에 이 단계가 없어 CI에서만 발화 (사전 검증 커버리지 갭)
+
 ## 2026-11-03 feat(carework): 면회·방문 기록 실무 피처 (DSN-43 6c) + 스키마 CLI 적용
 
 - `careVisit` 실무 피처 신설 — 가족·친지 방문예약 등록 → 방문결과 기록(scheduled→done/canceled) 뷰, 인수인계와 동일한 레지스트리 패턴 (`care-visit.js` 도메인 + `care-visit-store.js` 무료 10건 + `views/care-visit.js` + `care-visit.html` 파셜)
