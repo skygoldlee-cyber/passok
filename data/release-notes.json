@@ -1,5 +1,19 @@
 [
   {
+    "version": "v20261103-9d7d0ae",
+    "date": "2026-11-03",
+    "notes": [
+      "[수정·build] COMMANDS.md 명령 표기를 npm.cmd로 정규화 — 플랫폼 비의존 재생성",
+      "[리팩터링·structure] src/core 분리 + tests/dom/misc 재분류 (P2-4·P2-5)",
+      "[리팩터링·pwa] 시험별 webmanifest를 manifests/ 디렉터리로 이동",
+      "[문서·commands] COMMANDS.md 명령 카탈로그 생성기 + AGENTS.md 다이어트",
+      "[리팩터링·tools] 감사 도구 tools/audit/ 분리 + 배치 규약 게이트",
+      "[정리] 루트 잔해 파일 정리 — ping.txt 제거",
+      "[정리·release] v20261103-2219f60 스탬프 확정 [no-docs]",
+      "[정리·release] v20261103-f2b82e7 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261103-2219f60",
     "date": "2026-11-03",
     "notes": [
@@ -188,57 +202,6 @@
     "notes": [
       "[수정·ui] 실무 매뉴얼 기본 제목 공유 규약 — '실무 매뉴얼 (X OS)' 통일",
       "[정리·release] v20261102-94ec047 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-94ec047",
-    "date": "2026-11-02",
-    "notes": [
-      "[기능·ui] 모바일 실무 탭바에 practiceName 브랜드 라벨 표시",
-      "[정리·release] v20261102-dad4fe5 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-dad4fe5",
-    "date": "2026-11-02",
-    "notes": [
-      "[기능·ui] exams.json practiceName 소비 구조화 — 실무 뷰 브랜드 자동 병기",
-      "[기능·carework] 실무 도구 브랜드 'Care OS' 서브타이틀 노출",
-      "[문서·trace] 신규 문서 헤더 반영 TRACE_MATRIX 재생성 [no-test]",
-      "[문서·tools] 도구 계층 지도·규약 치트시트 신규 + 분기 게이트 리뷰",
-      "[정리·release] v20261102-5bb3297 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-5bb3297",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정·ui] 사이드바 '기관' 그룹 라벨을 careFacilityJoin 피처로 게이트",
-      "[정리·release] v20261102-1e0b8d2 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-1e0b8d2",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정·carework] 결과 강조 행 위치 선택자→클래스 (정렬 붕괴 수정)",
-      "[정리·release] v20261102-5c65eed 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-5c65eed",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정·carework] 결과 금액 우측 정렬·라벨 축약 [no-test]",
-      "[정리·release] v20261102-0be9166 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261102-0be9166",
-    "date": "2026-11-02",
-    "notes": [
-      "[수정·carework] 본인부담금 행 비급여 중복 합산 수정",
-      "[정리·release] v20261102-09d0fcb 스탬프 확정 [no-docs]"
     ]
   }
 ]
