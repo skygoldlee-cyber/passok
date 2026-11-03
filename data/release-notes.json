@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261104-ed6fc64",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·content] 폴백 MD 번들 pk1 미디코드 캐시 결함 — 이야기형 영어 노출",
+      "[정리·release] v20261104-fe9410f 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-fe9410f",
     "date": "2026-11-04",
     "notes": [
@@ -193,14 +201,6 @@
     "notes": [
       "[수정·carework] 인쇄 뒷장 빈 페이지 — 출력물 외 형제 display:none",
       "[정리·release] v20261103-346abf7 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261103-346abf7",
-    "date": "2026-11-03",
-    "notes": [
-      "[수정·carework] 표 첫행 좌측 윤곽선 소실 — caption을 표 밖 제목으로",
-      "[정리·release] v20261103-6ed449e 스탬프 확정 [no-docs]"
     ]
   }
 ]
