@@ -13,7 +13,9 @@ body {
 }
 
 .landing {
+    width: 100%;
     max-width: 960px;
+    min-width: 0; /* body{flex} 아이템의 min-width:auto가 콘텐츠 폭을 강제 — 축소 허용 필수 */
     margin: 0 auto;
     padding: var(--space-6, 1.5rem) var(--space-4, 1rem) var(--space-8, 2rem);
 }
