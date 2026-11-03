@@ -29,7 +29,8 @@ alter table public.facility_members enable row level security;
 
 -- RLS 재귀 차단 — 정책의 facility_members 자기참조를 SECURITY DEFINER 함수로 분리
 -- (정책이 자기 테이블을 참조하면 무한 재귀 — definer 함수는 RLS를 우회해 판정)
-drop function if exists public.is_facility_member(uuid, uuid);
+-- ※ drop function 금지 — 정책이 함수에 의존해 drop이 2BP01로 실패한다.
+--    create or replace는 시그니처 동일 시 의존 객체를 유지한 채 갱신된다.
 create or replace function public.is_facility_member(p_facility_id uuid, p_user_id uuid)
 returns boolean
 language sql security definer stable set search_path = ''
@@ -49,7 +50,6 @@ create policy "members read own facility" on public.facility_members for select
   using (public.is_facility_member(facility_id, auth.uid()));
 
 -- 시설 생성 — 생성자가 role=manager로 자동 삽입 (원자적)
-drop function if exists public.create_facility(text, text);
 create or replace function public.create_facility(p_name text, p_biz_no text default null)
 returns uuid
 language plpgsql security definer set search_path = ''
@@ -68,7 +68,6 @@ end;
 $$;
 
 -- 초대 코드로 가입 — 코드 검증 후 worker 삽입 (코드 열거 방지: select 불가·함수만)
-drop function if exists public.join_facility(text);
 create or replace function public.join_facility(p_code text)
 returns uuid
 language plpgsql security definer set search_path = ''
@@ -126,7 +125,6 @@ create policy "handover member write" on public.shift_handovers for insert
   with check (public.is_facility_member(facility_id, auth.uid()) and author_id = auth.uid());
 
 -- handover_acks: 같은 시설 멤버만 서명·열람 — 작성자는 자기 인수인계에 서명 불가
-drop function if exists public.handover_facility(uuid);
 create or replace function public.handover_facility(p_handover_id uuid)
 returns uuid
 language sql security definer stable set search_path = ''

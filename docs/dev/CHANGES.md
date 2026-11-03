@@ -1,5 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 feat(carework): 면회·방문 기록 실무 피처 (DSN-43 6c) + 스키마 CLI 적용
+
+- `careVisit` 실무 피처 신설 — 가족·친지 방문예약 등록 → 방문결과 기록(scheduled→done/canceled) 뷰, 인수인계와 동일한 레지스트리 패턴 (`care-visit.js` 도메인 + `care-visit-store.js` 무료 10건 + `views/care-visit.js` + `care-visit.html` 파셜)
+- 기관 공유: `family_visits` 테이블 (schema.sql 6c) — 멤버 열람·등록, 결과·취소는 시설 멤버 전원 update (응대 근무자 ≠ 예약 등록자)
+- Pro 게이팅: `care_visit_save`(저장) `care_visit_share`(복사·인쇄·기관 공유) — feature-plan.json + 로드맵 등록
+- fix(supabase): schema.sql `drop function` 제거 — RLS 정책이 함수에 의존해 재실행 시 2BP01 실패, `create or replace`만으로 갱신 (재실행 안전성 확보)
+- `apply_schema.js`가 `exams/<id>/schema.sql`도 수집·적용 + `--file=` 필터 — 플랫폼 schema.sql만 대상이던 한계 해소, Management API로 `family_visits` 프로덕션 적용 완료 (전 테이블 12개 프로브 통과)
+- 검증: check:all 59단계 통과 (DOM +2건 — 예약→결과 전이, 기관 면회 대장 렌더)
+
 ## 2026-11-02 content(carework): 1과목 요양보호론 Ch1 표준교재(2026) 참조 깊이 보강 [no-test]
 
 - tmp/materials 소재(요양보호사_2026_표준교재_전체텍스트.md, 공공누리4유형·저작 참조용)를 사실 재작성으로 활용 — 1.1~1.9 전 절에 법조문·정의·수치·분류·절차 보충 (700행 → +약 90행)
