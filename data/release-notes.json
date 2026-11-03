@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261104-58c6b32",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] 모바일 탭 순서 — care-forms를 care-finder 뒤로 이동 [no-test]",
+      "[수정·carework] 서식 뷰 인라인 스타일 규약 위반 — 클래스로 교체 [no-test]",
+      "[기능·carework] 보고서·서식 모음 뷰 신설 — 정기 제출 서식 링크 디렉터리",
+      "[정리·release] v20261104-4437194 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-4437194",
     "date": "2026-11-04",
     "notes": [
@@ -192,15 +202,6 @@
       "[수정·carework] 피드백 JSON 슬롯 생성 — 카드 로더 404 해소 [no-test]",
       "[수정·deploy] 파생물 커밋의 add -A를 경로 한정으로 — 병행 편집 흡수 차단",
       "[정리·release] v20261103-896287b 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261103-896287b",
-    "date": "2026-11-03",
-    "notes": [
-      "[정리] 재현용 임시 파일 제거 (pc*.mjs, calcout.pdf) [no-test]",
-      "[수정·carework] 인쇄 본문 소실 — 출력물 절대 위치 제거",
-      "[정리·release] v20261103-33ebd65 스탬프 확정 [no-docs]"
     ]
   }
 ]
