@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 fix(landing): 모바일 뷰포트 오버플로우 — 그리드·폼 고정폭 min() 교정
+
+- `landing.css`의 `minmax(Npx, 1fr)` 3곳(exam 260·feature 200·demo 300)과 `.demo-plan-form label` `min-width: 140px`이 좁은 뷰포트를 강제 확장해 모바일에서 페이지 전체가 축소 표시됨 — `min(Npx, 100%)` 패턴으로 교정해 단일 컬럼 유지
+
 ## 2026-11-03 feat(assets): 앱 아이콘 원본 v4 교체 (네온 그라데이션 P + 별빛)
 
 - 풀블리드 신규 원본으로 마스터 교체 — 512·192·180·favicon·maskable 전부 재생성, 루트+시험별 manifest 재스탬프
