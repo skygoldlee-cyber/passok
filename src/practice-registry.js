@@ -15,7 +15,7 @@
 // 의존성 규칙: 이 모듈의 정적 import는 exam-context 하나로 제한한다.
 // 피처 뷰 모듈·DataLoader·ui-utils·도메인 훅은 전부 enter() 내부의
 // 지연 import()로 참조해, import 시점의 모듈 그래프 팽창·순환을 막는다.
-import { hasFeature, getActiveExamId } from './exam-context.js';
+import { hasFeature, getActiveExamId, getActiveExam } from './exam-context.js';
 
 const _lazyImport = (load) => { let p = null; return () => (p ??= load()); };
 
@@ -494,16 +494,22 @@ export function getPracticeLanding() {
 }
 
 /** router 타이틀 맵용 — 선언된 모든 실무 뷰의 {title, subtitle}.
- * registry.uiText[feature.uiTextKey]가 있으면 정의의 중립 기본값을 덮어쓴다. */
+ * registry.uiText[feature.uiTextKey]가 있으면 정의의 중립 기본값을 덮어쓴다.
+ * exams.json의 `practiceName`(실무 브랜드)은 서브타이틀에 자동 병기한다 —
+ * 뷰 타이틀이 이미 브랜드명이거나(uiText title='Formula OS'처럼 title 자체가
+ * 브랜드) 서브타이틀에 수동 병기된 경우는 중복 없이 스킵한다. */
 export function getPracticeViewTitles(registry) {
     const uiText = (registry && registry.uiText) || {};
+    const practiceName = getActiveExam()?.practiceName;
     const out = {};
     for (const f of Object.values(PRACTICE_FEATURES)) {
         const t = (f.uiTextKey && uiText[f.uiTextKey]) || {};
-        out[f.viewId] = {
-            title: t.title || f.title,
-            subtitle: t.subtitle || f.subtitle,
-        };
+        const title = t.title || f.title;
+        let subtitle = t.subtitle || f.subtitle;
+        if (practiceName && subtitle && !title.includes(practiceName) && !subtitle.includes(practiceName)) {
+            subtitle = `${practiceName} — ${subtitle}`;
+        }
+        out[f.viewId] = { title, subtitle };
     }
     return out;
 }

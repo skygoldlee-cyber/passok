@@ -1,5 +1,257 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-02 content(carework): 1과목 요양보호론 Ch1 표준교재(2026) 참조 깊이 보강 [no-test]
+
+- tmp/materials 소재(요양보호사_2026_표준교재_전체텍스트.md, 공공누리4유형·저작 참조용)를 사실 재작성으로 활용 — 1.1~1.9 전 절에 법조문·정의·수치·분류·절차 보충 (700행 → +약 90행)
+- 정정: 1.4의 '실천 4원칙'을 표준교재 정본(Humanitude — 대면하기·말하기·접촉하기·일어서게 하기)으로 교정 + 악성사회심리 16·억제대 피해·자기관리 지원 원칙 추가
+- 보강 예: 1.1 법적·학술정의+PIE·보상4종, 1.2 심리특성 8종+OECD빈곤율, 1.3 실태조사 수치·치매유병률·4고, 1.6 신청자격·노인성질병목록·국고20%, 1.7 인지지원·준수사항·금지행위
+
+## 2026-11-02 content(carework): 1과목 요양보호론 Ch2~4 표준교재(2026) 참조 깊이 보강 [no-test]
+
+- 소재 전체텍스트(사실 재작성)로 Ch2~4 전 절 보충: 2.1 노인성질환 특성 11개, 2.2 계통별 질환 목록(위염~요실금 4유형·케겔), 2.3 노인병 열탕·근감소증 지표·노쇠 7대수칙, 2.4 치매 진단기준·단계 표·BPSD, 2.5 뇌졸중 후유증 부위별·재활 골든타임, 2.6 운동관리·수면방해요인, 3.1 의사소통 원칙 7·라포·나-전달법, 3.3 관찰법·기록양식 상세·사고보고, 3.4 지원 3단계 원칙, 4.1 BPSD 유형별 대처·인지자극 수준별, 4.2 임종 5단계 상세·사별 돌봄·권리장전, 4.3 감염고리 6·상황별 응급처치·CPR
+- 문제은행 인용 재지정: 라인 이동분 60건 + 미발견 11건 키워드 유사도 재매칭 — sync:citations 미발견 0건
+
+## 2026-11-02 content(carework): 2과목 요양보호관련 Ch1 일부 표준교재(2026) 참조 보강 [no-test]
+
+- 1.1 식사·영양(일반원칙 4·영양부족 위험요인·식사종류 세분), 1.2 투약(원칙 3·약물 형태별 투약법·안약 보관), 1.3 배설(원칙 3·배설 전중후 관찰·휠체어 이용 주의) — 나머지 절은 후속 보강 과제
+- 1.4 개인위생(구강 식전/후 헹구기·의치 관리·손발톱 방향·회음부 전용수건/닦기 순서) 추가 보강
+- 문제은행 인용 재지정 14건 — sync:citations 미발견 0건
+
+## 2026-11-02 content(carework): 2과목 Ch2~3 표준교재(2026) 참조 보강 [no-test]
+
+- Ch2 가사·일상생활 전 절 보강: 2.2 식중독 예방 5수칙·장보기 순서, 2.3 의복/침상 원칙·베개, 2.4 세탁 6원칙·불리기→삶기 절차·건강 확인, 2.5 외출 전후 절차·병원 예약/보충 설명·사적 업무 금지, 2.6 주거환경 생태학적 모델
+- Ch3 상황별 실기 보강: 3.3 임종 징후·사별 1개월 규칙·권리, 3.4 위기 구분·대처 순서·쇼크/심근경색, 3.5 감염고리 6·결핵/코로나, 3.7 기록 목적·관찰 기록·사고보고서
+- 15장 상황별 사례 검토 — 실기 사례토의 형식으로 교재 병합 없이 Ch3 커버로 종료
+- 문제은행 인용 재지정 32건 — sync:citations 미발견 0건. 1과목 + 2과목 표준교재 보강 완료
+
+## 2026-11-03 fix(print): 전 뷰 인쇄 백지 결함 — print.css 활성 뷰 표시로 일반화
+
+- **원인 2중**: ① `print.css`가 `.view-section{display:none!important}` + `#review-view`만 `display:block` — visibility 예외로는 display:none 조상을 되살릴 수 없어 **계산·일지·카드·인수인계·점검 등 모든 비-복습 뷰 인쇄가 백지**였음. cosmetic만 `#formula-print-area`(뷰 밖 전용 영역)로 정상 출력 ② `care-tools.css`의 `body *{visibility:hidden}` 예외 목록에 인수인계·점검·카드 결과 요소 누락 + 학습 모드 다른 뷰 인쇄까지 오염 가능
+- 수정: `print.css` → `.view-section.active` 표시로 일반화 / `care-tools.css` → `body.ui-mode-practice *` 스코프로 학습 모드 오염 차단 + 결과 요소 4종 허용 목록 추가
+- 회귀 방지: care-views.test.js에 print 허용 목록·활성 뷰 규칙 정적 검사 (14/14)
+- headless 검증: print 미디어 에뮬레이션에서 활성 뷰 `display:block` + 결과물 `visible` + 실제 내용 출력 확인
+
+## 2026-11-03 feat(carework): 현장도구 계산 결과물 문서형 출력 — 입력 조건·테이블
+
+- 인쇄·PDF 출력물이 계산 결과만 보여 조건을 알 수 없던 문제 — 결과물을 제목+출력일 헤더와 2개 표(`입력 조건`·`계산 결과`)의 문서형으로 재구성 (급여 유형·등급·이용액 또는 시설 유형×입소 일수·비급여 항목별·감경 → 금액 표·총납부 강조·근거 각주)
+- 화면에도 동일 표시 — `.care-doc` 테이블 스타일 + 인쇄 격자 규칙, 시설 테스트에 조건·합계 단언 (14/14)
+- 문서 헤더(제목+출력일)를 요양일지·인수인계서·평가점검 결과물에도 일괄 적용 — 모든 출력물이 문서형 템플릿 공유
+- 문서 헤더 출력일 보간을 `esc()`로 래핑 — HTML 이스케이프 싱크 규약(ROAD-Q5) 충족
+- 문서형 출력에 윤곽 테두리 적용 — `.care-doc` 외곽선+셀 격자·caption 밴드, 인쇄는 `--print-border-strong` 선명 격자로 점선 대체 (일지·인수인계 본문·점검 섹션도 인쇄 테두리 복원)
+- cosmetic 종합보고서 템플릿(fp-doc) 골격 이식 — `.care-doc-sign` 서명란(일지 작성자·인수인계 인계/인수 서명·점검자) + `.care-doc-disclaimer` 면책(계산 참고용) 추가, 워터마크는 시설 내부 문서 불필요로 생략
+- 인쇄 문서 사방 여백 — 출력물이 `inset:0`으로 페이지 모서리에 붙던 것을 상하 12mm·좌우 10mm 여백으로 교정 (@page margin:0 설계상 문서가 자체 여백 제공)
+- 표 첫행 좌측 윤곽선 소실 수정 — border-collapse 표의 `<caption>`이 외곽 테두리를 덮는 렌더링 문제, 캡션을 표 밖 `.care-doc-sec` 제목으로 이동
+- 인쇄 뒷장 빈 페이지 수정 — `visibility:hidden`은 레이아웃을 유지해 숨은 폼 높이가 빈 페이지로 밀림, 활성 뷰의 출력물 외 형제를 `display:none`으로 제거
+- 인쇄 본문 소실 수정 — 출력물의 `position:absolute`가 페이지 경계에서 본문을 잘라 제목만 보이던 문제, 일반 흐름으로 전환해 활성 뷰 패딩(10mm/8mm)이 여백 역할 + 정상 페이지 분할
+
+## 2026-11-03 fix(deploy): 파생물 커밋 `add -A` 경로 한정 — 병행 편집 흡수 차단
+
+- 배포의 `build:derived`(수십 초) 중 사용자가 병행 편집한 비관련 변경(src·css·tests)이 `git add -A`로 "배포 전 파생물 재생성" chore 커밋에 흡수되던 TOCTOU 갭 (실발: 서명란 편집분이 `2b2de34885`에 흡수)
+- `git add -- data docs index.html`로 파생물 루트만 스테이징 — 비파생물 잔여는 "커밋 후 배포" 실패로 전환해 사용자 변경 보존
+- 스탬프 확정 커밋은 이미 `add <stampedFiles>` 경로 한정이라 변경 없음
+
+## 2026-11-03 fix(carework): 피드백 JSON 슬롯 생성 — 카드 로더 404 해소
+
+- `content/exams/carework/피드백/card_tip.json`·`card_exclude.json`을 빈 맵(`{}`)으로 생성 — 로더가 lazy fetch하는 선택 자산의 404 노이즈 제거 (부재는 정상 처리되지만 요청 자체가 404를 찍었음)
+- cosmetic과 동일 스키마(카드ID→문자열 맵), 오버레이·제외 목록은 추후 채우는 선언적 슬롯
+
+## 2026-11-03 feat(carework): 비용계산 감경 선택지 40% 우선 + 결과물 공단 책정 기준표
+
+- `REDUCTIONS` 배열에서 감경 40%를 60% 앞으로 — 드롭다운 선택지 순서가 일반→40%→60%→수급자 (키 기반 조회라 계산 로직 무영향)
+- 계산 결과물의 입력 조건 아래에 공단 책정 기준표 추가 — 재가는 등급별 월 한도액, 시설은 선택 유형의 등급별 1일 수가를 표로 표시, 선택 등급 행 `.care-doc-sel` 강조
+
+## 2026-11-03 feat(carework): 공단 책정 기준 연도 구조화 + 구버전 경고 — 매년 고시 갱신 대응
+
+- `care-calc-data.js`를 `RATE_SETS` 연도 키 구조로 재구성 — 새 연도 고시는 키 추가만으로 최신 자동 적용 (`EFFECTIVE_YEAR = max(키)`에서 GRADE_LIMITS·SELF_PAY_RATE·FACILITY_TYPES 파생)
+- 계산 폼 상단에 적용 기준 연도 항상 표시 (`#care-year-note`) + 부제 연도를 하드코딩에서 `EFFECTIVE_YEAR` 렌더로 전환 (`#care-year-label`)
+- 데이터 연도 < 현재 연도 시 구버전 경고 — 폼 안내는 `care-calc-err` 스타일로 "N년 고시가 아직 반영되지 않았습니다" 표시, 결과물에도 ⚠ 경고 행 출력 (인쇄물에도 잔존)
+- 입력 조건 표에 '적용 기준' 행 추가 — 출력물이 어느 연도 고시로 계산됐는지 문서상 확인 가능
+- DOM 테스트에 구버전 시뮬레이션(`vi.setSystemTime` 2027) 추가 — 경고 문구·스타일·출력물 경고 단언 (15/15)
+
+## 2026-11-03 fix(deploy): 파생물 스테이징 경로 정정 — gitignore 파일·누락 경로
+
+- `git add -- data docs index.html`이 gitignore 대상 index.html을 명시해 exit 1 — 파생물 재생성분이 실제로 생긴 첫 배포에서 차단 (add 자체가 실패). index.html은 미추적 생성물이라 add·필터 둘 다 무의미
+- stats:stamp 갱신 대상 README.md(루트)가 경로 밖이라 잔여 검사로 오인될 수 있던 갭 — add·leftover 경로를 `data docs README.md`로 정정
+
+## 2026-11-02 fix(docs): '실무막*' 오탈자(U+B9C9) 전수 정정 — 잔여 0
+
+- 전수 스캔으로 U+B9C9 잔재 정리: CHANGES 14건·SPEC 1건·SCREEN_MAP 2건·release-notes.json 1건·study-manual 테스트 픽스처 1건 (모두 문서·히스토리 계열 — 실행 코드·파일명·내비 라벨은 정본 '실무막뉴얼' 확인됨)
+- release-notes.js 번들 재생성
+
+## 2026-11-02 fix(ui): 실무 매뉴얼 기본 제목 공유 규약 — '실무 매뉴얼 (X OS)' 통일
+
+- 실무매뉴얼(practice_manual) 기본 제목이 '실무매뉴얼'로 formula의 '실무 매뉴얼'과 불일치 → 공통 상수 `PRACTICE_MANUAL_TITLE='실무 매뉴얼'`로 두 소스 공유 + 규약 주석 (시험별 별개 기본 제목 금지, 브랜드는 practiceBrand로 '실무 매뉴얼 (Care OS)' 형식)
+- 내비 라벨도 동일 형식으로 통일 — carework 실무매뉴얼 버튼 '실무매뉴얼' → '실무 매뉴얼' (사이드바·모바일 탭)
+
+## 2026-11-02 feat(ui): 모바일 실무 탭바에 practiceName 브랜드 라벨 — Care OS 표면
+
+- 모바일은 `.app-header .header-title p`(view-subtitle)가 공간상 숨겨져 있어 서브타이틀 병기 브랜드가 닿지 않음 → 탭바 실무 그룹 선두에 `.practice-brand-label` 추가, applyUiMode가 활성 시험 practiceName을 실무 모드일 때만 채움 (`:empty` 숨김 — 미선언·학습 모드에서는 무노출)
+- DOM 테스트 추가: 라벨 노출·학습 복귀 비움 (common-uimode 12/12)
+
+## 2026-11-02 feat(ui): exams.json practiceName 소비 구조화 — 실무 뷰 브랜드 자동 병기
+
+- `practiceName`(Care OS·Formula OS 등 10개 시험 선언)이 소비처 없던 선언 필드였던 것을 `getPracticeViewTitles`가 읽어 모든 실무 뷰 서브타이틀에 `<브랜드> —` 자동 접두 — 신규 실무 시험도 exams.json 선언만으로 브랜드 노출
+- 중복 방지: 뷰 타이틀이 이미 브랜드명(cosmetic의 title='Formula OS')이거나 서브타이틀 수동 병기 시 스킵 — 초기 수동 병기(manifest uiText)는 되돌려 선언 단일 소스화
+- manual-viewer의 '실무 매뉴얼 (Formula OS)' 하드코딩도 `practiceBrand` 플래그로 일반화 — formula_manual·practice_manual 모두 활성 시험 브랜드 병기
+- 테스트: practice-registry 유닛 3건 추가 (병기·타이틀=브랜드 스킵·미선언 패스스루) + study-manual DOM 픽스처에 practiceName 실린 EXAMS_LIST 시딩 (구 하드코딩 제목 단언을 브랜드 병기 정본 동작으로 갱신)
+
+## 2026-11-02 docs(tools): 도구 계층 지도·규약 치트시트 신규 + 분기 게이트 리뷰 결과 기록
+
+- 신규 `docs/dev/reference/TOOLS_MAP.md` (DOC-REF-17) — tools/ 디렉터리별 역할·진입점 3종(npm 스크립트·steps.js·문서 생명줄)·새 게이트 추가 절차·분기 감사 규약. 앱 소스보다 큰 도구 계층(6.5만 LOC)의 첫 지도 문서
+- 신규 `docs/dev/reference/CONVENTIONS_CHEATSHEET.md` (DOC-REF-18) — 기여자·에이전트용 10분 규약 요약 (AGENTS.md 압축본: 불변식 8·명령 최소 세트·커밋 마크·우회 목록)
+- audit:gates·audit:tools 분기 리뷰 결과를 GATE_TROUBLESHOOTING.md §리뷰 이력에 기록 — dormant `refs:subjects`(content 트윈과 중복·스코프 프리셋 설계상 정상), silent 6개는 p2 감시 특성상 정상, 제거 대상 없음
+- `reflow_flat_lines.js`가 audit:tools 사망 후보로 보고(복구 전용 도구·문서 미기재) → GATE_TROUBLESHOOTING 차단 패턴 표에 refs:format 복구 행 추가로 문서 생명줄 확보
+
+## 2026-11-02 fix(ui): 사이드바 '기관' 라벨 비기관 시험 노출 — practiceMode → careFacilityJoin 게이트
+
+- 그룹 라벨이 가상 키 practiceMode(실무 피처 1개 이상)로 게이트돼 cosmetic 등에서 기관 항목은 모두 숨겨지는데 라벨만 노출 → careFacilityJoin 피처로 교정 (라벨=그룹 진입 항목과 동일 게이트)
+- 모바일 탭바 tab-group-divider도 동일 원인으로 숨은 기관 항목 앞에 잔존 → 같은 피처 부착. 인근의 잉여 `</button>` 닫힘 태그도 제거
+
+## 2026-11-02 fix(carework): 결과 강조 행 위치 고정 오타 정렬 복구
+
+- :nth-of-type(3) 위치 선택자가 3번째 행(급여 본인부담금)을 22px로 키워 세로 정렬 붕괴 → .care-calc-total 클래스 기반으로 교체, '실제 월 납부액' 행에 부여 (행 순서 변경에도 정렬 유지)
+
+## 2026-11-02 fix(carework): 결과 금액 우측 정렬·라벨 축약
+
+- '비급여 자부담 (식재료비 등)' → '비급여 자부담' — 긴 라벨이 금액을 밀어내던 것 해소 + row 간격·strong 우측정렬/tabular-nums로 자리수 정렬 통일
+
+## 2026-11-02 fix(carework): 본인부담금 행 비급여 중복 합산 수정
+
+- 결과 '본인부담금'이 selfPay(급여부담+비급여)를 표시해 실납부액과 동값 중복 → calcHome이 selfCovered 반환하고 행을 '급여 본인부담금'(selfCovered)으로 교정 — 비급여·실납부 행과 분리
+
+## 2026-11-02 feat(carework): 시설급여 1일 수가표 표시
+
+- 시설 유형 선택에 따라 해당 등급별 1일 수가+본인부담 20% 병기표 렌더 — FACILITY_TYPES 기반, 유형 변경 시 갱신
+
+## 2026-11-02 fix(carework): 비급여 legend 좌측 정렬
+
+- legend padding 0 6px → 0 — 아래 항목(감경·한도표·버튼)과 좌측 세로 정렬
+
+## 2026-11-02 fix(carework): 비급여 필드셋 세로 정렬 복구
+
+- .care-calc-nc label의 display:block 덮어쓰기가 폼 기본 flex-column 세로 스택을 깨뜨린 문제 — 오버라이드 제거로 라벨·입력 세로 정렬 복구
+
+## 2026-11-02 fix(carework): 한도표 연도 보간 이스케이프 규약 교정
+
+- innerHTML 템플릿의  보간이 HTML escape sink 게이트에 차단 → 문자열 연결로 교정 (CI 복구)
+
+## 2026-11-02 feat(carework): 등급별 재가 월 한도액 표 추가
+
+- 등급 선택 아래 details 접이식 한도표 — 당해연도(EFFECTIVE_YEAR)만 표시, GRADE_LIMITS에서 렌더
+
+## 2026-11-02 feat(carework): 재가 이용액 산식 설명 보강
+
+- 월 이용액 안내에 Σ(서비스별 단가 × 이용 횟수) 산식 명시 — 개인별 이용 조합 차이로 수동 입력 필요 이유 설명
+
+## 2026-11-02 feat(carework): 시설급여 이용액 자동 산정 + 비급여 필드셋 여백
+
+- FACILITY_TYPES 일당 수가 상수(2026 — 요양시설·공동생활가정) 추가 — 시설 선택 시 수가×입소일수로 이용액 자동 산정, 수동 입력란 토글·결과에 산정 근거 행 표시
+- .care-calc-nc 필드셋 마진·패딩·테두리 스타일 추가 (앞뒤 여백)
+- DOM 테스트 갱신: 시설 토글 + 자동 산정(2,792,100→납부 1,118,420) 검증 (13/13)
+
+## 2026-11-02 feat(carework): 급여 이용액 입력 설명 추가
+
+- 월 예상 급여 이용액 아래 정의 안내 — 재가(이용계획서 급여비용 월합계·한도까지 인정) vs 시설(일당 수가×일수), 비급여와의 구분 명시
+
+## 2026-11-02 feat(carework): 감경 유형별 실효 본인부담률 표 + 비급여 안내 스타일
+
+- 감경 선택 아래 실효율 표 추가 (일반 15/20%·40%감경 9/12%·60%감경 6/8%·수급자 0%) + .care-calc-rates·.care-calc-nc-note 스타일
+
+## 2026-11-02 feat(carework): 장기요양 비급여 항목 안내 문구 추가
+
+- 필드셋에 비급여 정의·수급자 전액부담 규정(시행규칙 §14) 안내 문단 + 항목별 placeholder에 용도 명시
+
+## 2026-11-02 feat(carework): 장기요양 비용 계산 기준(2026) 참조자료 등록
+
+- 공식 수집 자료(공단 급여비용 안내·고시 2025-247·보도자료·지자체 수가표 검증)를 ref_md/과목1/에 등록 — references.json selfAuthoredDocs 추가로 인용·검색 체계에 편입
+
+## 2026-11-02 feat(carework): 장기요양 계산기 비급여 항목별 입력 세분화
+
+- 비급여 단일 입력 → 식재료비·간식비·상급침실료·이미용비·기타 항목별 필드셋 — 상급침실료는 시설급여 선택 시에만 노출·합산 (재가는 자동 제외)
+- DOM 테스트 추가: 유형 전환 토글 + 항목별 합산 납부액 반영 검증 (13/13)
+
+## 2026-11-02 feat(carework): 장기요양 계산기 2026 기준 갱신 + 시설 비급여·수급자·실납부액
+
+- GRADE_LIMITS 2025→2026년 고지값 (1등급 2,512,900 ~ 인지지원 676,320) + EFFECTIVE_YEAR 표기
+- 시설급여 비급여 입력 추가 — 식재료비·상급침실료 등 전액 자부담으로 본인부담에 가산, 결과에 "비급여 자부담"·"실제 월 납부액" 구분 표시
+- REDUCTIONS에 기초생활수급자(rate 1) 추가 — 급여 본인부담 0원, 비급여만 납부
+- care-calc.html의 bare secondary 버튼 2곳도 btn btn-secondary 교정
+
+## 2026-11-02 fix(check): nav 아이콘 고유성 — manual-nav-link 슬롯 예외
+
+- UX-VFY-07 게이트가 팩별 상호배타 매뉴얼 항목(ManualViewer.open*Manual 핸들러)의 동일 아이콘을 중복으로 차단 → 해당 핸들러를 동일 슬롯으로 정규화 (동시 노출은 check_feature_flags ③이 별도 차단)
+
+## 2026-11-02 fix(ui): 실무매뉴얼 내비 아이콘 통일 — fa-book-medical
+
+- formula 매뉴얼만 fa-flask를 쓰던 것을 practiceManual과 동일한 fa-book-medical로 통일 (데스크톱+모바일 탭) — 공유 템플릿 경로라 향후 시험팩에도 동일 규칙 자동 적용
+
+## 2026-11-02 fix(carework): 실무 뷰 버튼 베이스 클래스 누락 — bare secondary → btn btn-secondary
+
+- 대처카드 상세 "목록으로" 등 4개 버튼이 .btn 베이스 없이 class="secondary"만 선언돼 네이티브 무스타일 노출 → care-card·care-handover·care-log 일괄 교정
+
+## 2026-11-02 fix(discord): 커뮤니티 공지 채널 멘션 제외 — postAnnounce noMention
+
+- DISCORD_NOTIFY_MENTION이 postDiscord 공통 경로라 공지 채널 발송에도 멘션이 붙던 것을 분리 — postDiscord에 noMention 옵션 추가하고 postAnnounce가 사용 (운영 알림만 멘션, 공지 채널은 멘션 없음)
+
+## 2026-11-02 test(discord): DISCORD_NOTIFY_MENTION 테스트 격리 + 멘션 페이로드 커버
+
+- .env에 신규 env가 loadEnv로 유출돼 allowed_mentions 단언 실패 → withMentionEnv 격리 추가 + 유저·역할·숫자-only·@everyone 페이로드 케이스 (9/9)
+
+## 2026-11-02 fix(discord): DISCORD_NOTIFY_MENTION 숫자-only 값 수용
+
+- "사용자 ID 복사"가 숫자만 클립보드에 두어 <@> 래퍼 없이 붙여넣는 실수로 멘션 미부착 → 파서를 숫자-only도 유저 멘션으로 간주하도록 관대화 (실측: content <@ID> + users 화이트리스트)
+
+## 2026-11-02 feat(discord): 모바일 푸시용 DISCORD_NOTIFY_MENTION 지원 — tools/lib/discord.js
+
+- 배경: postDiscord가 allowed_mentions:{parse:[]}로 전멘션 차단 — 데스크톱은 안읽음 배지로 보이나 모바일 푸시는 멘션 없이는 침묵 (디스코드 채널 기본 "멘션만" 정책)
+- DISCORD_NOTIFY_MENTION=<@유저ID>|<@&역할ID>|@everyone 설정 시 postDiscord 페이로드에 해당 대상만 정확히 멘션 (users/roles 화이트리스트 — 멘션 폭발 방지 기본값 유지)
+- .env에  추가로 활성화 (개발자 모드 → 프로필 우클릭 → 사용자 ID 복사)
+
+## 2026-11-02 feat(check): 매뉴얼 내비 항목 중복 선언 게이트 — check_feature_flags ③
+
+- index.template의 .manual-nav-link 버튼 data-feature 키를 실측 수집해, 시험이 해당 피처를 2개 이상 선언하면 오류 — practiceManual 스텁이 formula_manual과 나란히 노출됐던 사례의 재발 차단 (피처 키 {formula, practiceManual} 감지 확인)
+
+## 2026-11-02 fix(cosmetic): 실무 매뉴얼 내비 중복 노출 해소 — practiceManual 스텁 제거
+
+- 결함: cosmetic 내비·모바일 탭에 '실무 매뉴얼'(formula_manual 381행 본진)과 '실무매뉴얼'(practiceManual 43행 스텁)이 나란히 노출 — 스텁은 "상세는 formula_manual 참조" 안내뿐인 이중 문서. 피처별 버튼 렌더 규약상 중복 금지 규칙 없음 — 선언 정합으로 해소
+- cosmetic features.practiceManual 해제 + docs/실무매뉴얼.md 제거 (formula_manual이 실무 매뉴얼 본진, carework는 실무매뉴얼.md가 본진이라 유지) + sw.js·docs_md·exams-list 재생성
+
+## 2026-11-02 test(e2e): 배너 인플로우 실측 정합 — toc-sidebar·responsive-flow 스펙
+
+- 레이아웃 수정의 후속 정합: 배너 margin-bottom(12px)까지 인플로우 점유로 실측 — responsive-flow의 containerH 기대치를 (뷰포트−배너 점유)로 교정. toc-sidebar·responsive-flow 로컬 45/45 통과
+
+## 2026-11-02 fix(layout): RR-20 법령 알림 배너 표시 시 뷰포트 오버플로 회귀 수정
+
+- 결함: 전역 공지 배너(#formula-notice-banner) 발화 시 app-container의 height:100dvh가 뷰포트를 넘겨 리더 TOC/본문 하단이 ~35-58px 잘림 — 마지막 목차 항목에 도달 불가 (실사용자 영향)
+- 수정: body를 flex 컬럼 + .app-container flex:1로 전환해 인플로우 배너분을 뺀 잔여 높이를 배분 (태블릿·모바일 미디어쿼리의 100vh 고정·min-height 오버라이드 정합 정리)
+- 스펙 정합: toc-sidebar 가독 면적 기준을 (뷰포트−배너) 이용 가능 높이의 60%로 조정 — 9/9 통과
+
+## 2026-11-02 chore(stamp): sw 캐시 버전·테스트 실측치 스탬프 갱신
+
+- 배포 전 파생물 스탬프 — CACHE_VERSION v20261102-e41e181, test_stats 실측(dom 893·e2e 120/390)
+
+## 2026-11-02 content(carework): 교재 본문 확충 — 법령·고시 해설 챕터 추가 (ai:textbook)
+
+- 1과목 요약본(278행)·2과목(189행)을 ref_md 원문 기반 해설로 보강 — `ai:textbook` 초안(노인장기요양보험법·노인복지법·제공기준·등급판정 고시)을 Chapter 05/04 '관련 법령·고시 해설'로 편입: 1과목 700행(+134조항)·2과목 458행(+87조항), 조항별 📌출처 ref_md 링크 유지
+- 부수 수정: 신규 문항 인용 링크 이중 경로(`../교재/교재/`) 교정 — sync 160링크 전량 해석, 인용문 이중 대시 정리
+- 번호 체계·참조라인 게이트 통과 (기존 인용 라인 무변경 — 본문 말미 챕터 추가 방식)
+
+## 2026-11-02 content(carework): 문제은행 정답 파싱 복구 + 과목당 20→80문 확충 + 브랜딩
+
+- **치명 결함**: carework 문제은행 2개 파일에 `## 🔑 정답 및 교재 근거` 섹션 마커가 없어 파서가 정답 블록을 인식하지 못함 — 번들의 `answer` 전량 공란으로 앱 내 채점 불가 상태였음 (check:manifest·check:parser는 ###Q 개수만 검증해 미검출)
+- 마커 추가로 정답 파싱 복구 → bank 콤보 드릴 0→생성 (과목1 54 + 과목2 20, 총 74→확충 후 193)
+- **ai-draft 배치 편입**: gemini 초안 과목당 108/84문 생성 → 메타 문항(교재 서두·목차 기반 8문)·중복 필터 후 과목당 60문 채택 편입 (Q21~Q80) — 인용은 교재 L번호, 해설 포함. manifest 타이틀 20제→80제, desc 160문
+- **브랜딩**: exams.json에 appNameEn `PassCare`·practiceName `Care OS`·테마(emerald/amber)·요양일지 PWA shortcut 추가, logoMain/Sub 정리
+- **landing_demo.json** 신규 — 문제은행 3문 큐레이션 (재가급여·등급체계·연하곤란)
+- **정리**: 실무도구_설계초안.md 삭제 — 구현 완료된 DSN-42 초안이 사용자 문서 번들에 잔류 (실무매뉴얼로 대체) + sw.js MD_ASSETS 동기화
+- 검증: lint 지적 28건은 L1 부정 발문(정보성) 중심 — 실기 출제 스타일이라 수용 · check:reflines·manifest·answers 통과
+
+## 2026-11-02 fix(exam-sim)+chore(carework): 통합 모의고사 풀 부족 정합 + uiText.dictionary 정리
+
+- `integratedExam.questionsPerSubject` 선언 배정보다 문제은행 풀이 부족한 시험(carework 40/80·skincare 필기 20/31)에서 무고지 잘림 + 선언 시간 그대로 출제되던 결함 수정 — 과목별 `풀/배정` 안내 토스트(warning) + 실제 출제 수 비례 시간 축소로 문항당 배정 시간 유지 (풀 확충 후 배정만 맞추면 자연 복원)
+- carework `manifest.uiText.dictionary` 제거 — features.dictionary 미선언·`knowledge/` 공란인 사장 선언 (지식DB 활성화 시 재선언 예정)
+- 테스트: study-simulator.dom.test.js에 부족/충족 2케이스 추가 — 토스트 문구·비례 시간·출제 수 단언
+
 ## 2026-11-02 refactor(law): 법령 배너 표시 조건 명문화 — 법령 관련 신규 이벤트 전용
 
 - 배너 표시는 2개 경로로 확정: ① 신규 공포 감지(`isNewerNotice`·docs.newer — 앱 문서가 구 스냅샷인 상태, ⚠) ② 판본 반영(`notice_diff` 미확인 개정이 번들에 반영됨, ℹ) — 둘 다 법령 신규 이벤트의 후속 표시
@@ -142,9 +394,9 @@
 
 - .care-calc-form select option에 --bg-sidebar·--color-text-main 적용 (cosmetic의 .form-select option과 동일 규칙 — 누락으로 팝업이 OS 기본색이던 문제)
 
-## 2026-11-02 fix: 막뉴얼 오탈자 전수 재정정 — cosmetic 매뉴얼 파일명 정정 (경로 해석 실패 수정)
+## 2026-11-02 fix: 매뉴얼 오탈자 전수 재정정 — cosmetic 매뉴얼 파일명 정정 (경로 해석 실패 수정)
 
-- content/exams/cosmetic/docs/실무막뉴얼.md → 실무매뉴얼.md 개명 (PATHS.PRACTICE_MANUAL 해석 불일치로 로드 불가였던 실버그) + 탭바 라벨·테스트·릴리스 노트 등 콘텐츠 오탈자 전수 정정 — 코드포인트 0xb9c9 잔여 0
+- content/exams/cosmetic/docs/실무매뉴얼.md → 실무매뉴얼.md 개명 (PATHS.PRACTICE_MANUAL 해석 불일치로 로드 불가였던 실버그) + 탭바 라벨·테스트·릴리스 노트 등 콘텐츠 오탈자 전수 정정 — 코드포인트 0xb9c9 잔여 0
 
 ## 2026-11-02 fix(ui): 학습도구 고아 잔재 제거 — 버튼 내용물만 남아 모드 무관 표시
 
@@ -2621,14 +2873,14 @@
 - **테마 전환**: 헤더 `#theme-toggle-btn`이 정본 → 더보기 시트의 `mobile-theme-toggle` 버튼 제거 + `theme-toggle.js`의 모바일 동기화 코드 삭제
 - **시험 전환**: 설정 패널이 정본 → 더보기 시트 기타 그룹에서 제거 (e2e 회귀 테스트는 시트 내 뷰 내비 `calendar-view`로 재지정 — modal-back 마커 레이스 커버리지 유지)
 - **모드 전환**: 사이드바 푸터(>900px) ↔ 설정 패널(≤900px) 뷰포트 분담 — 설정 항목을 `@media (min-width:901px)`에서 숨겨 데스크톱 중복 해소 (항목 주석상 태블릿·모바일용 fallback이 원래 의도)
-- **더보기 시트 기타 그룹**: 실무 전용 항목(실무막얼·학습도구)만 남아 라벨에 `nav-practice-only` 부여 — 학습 모드에서 빈 '기타' 헤더 잔존 방지
+- **더보기 시트 기타 그룹**: 실무 전용 항목(실무매뉴얼·학습도구)만 남아 라벨에 `nav-practice-only` 부여 — 학습 모드에서 빈 '기타' 헤더 잔존 방지
 - **문서 정합**: SPEC ES-02·§4.10.1 정본 규칙 명문화, SCREEN_MAP 진입점 표기, ARCHITECTURE 시험 전환/테마 구성요소 표, 사용자 매뉴얼 §11.5·§12·§13 갱신
 
-## 2026-10-13 모바일 탭바 '실무막얼' 탭 제거 — 더보기 시트로 이관
+## 2026-10-13 모바일 탭바 '실무매뉴얼' 탭 제거 — 더보기 시트로 이관
 
 - **배경**: 실무 모드 전용 `nav-practice-only` 탭이 탭바 슬롯을 차지 — 사용자 요구로 탭바 노출 자체를 금지하고 진입 경로는 더보기 시트로 수렴
-- **변경**: `index.template.html` 탭바에서 실무막얼 버튼 제거 → `#mobile-more-sheet` 기타 그룹에 `nav-practice-only`+`data-feature="formula"`로 재배치 (실무 모드에서만 표시, 기능 유지)
-- **탭바 조합**: 실무 모드 최악 조합이 실무·사전·실무막얼+더보기 4버튼 → 실무·사전+더보기 3버튼으로 축소. SPEC §4.10.1 슬롯·조합표 갱신
+- **변경**: `index.template.html` 탭바에서 실무매뉴얼 버튼 제거 → `#mobile-more-sheet` 기타 그룹에 `nav-practice-only`+`data-feature="formula"`로 재배치 (실무 모드에서만 표시, 기능 유지)
+- **탭바 조합**: 실무 모드 최악 조합이 실무·사전·실무매뉴얼+더보기 4버튼 → 실무·사전+더보기 3버튼으로 축소. SPEC §4.10.1 슬롯·조합표 갱신
 - **테스트**: `common-uimode.dom.test.js`에 `#mobile-tab-bar .nav-practice-only === 0` 단언 추가 — 탭바 무실무항목을 회귀 게이트로 고정
 
 ## 2026-10-13 UIUX_VERIFY_RUNBOOK V6 실기기 체크리스트 보강

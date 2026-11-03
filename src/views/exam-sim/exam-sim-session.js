@@ -233,9 +233,15 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
 
     // 과목별 샘플링 (registry에서 동적 조회)
     const selectedBySubject = {};
+    let expectedTotal = 0;
+    const shortageSubjects = [];
     for (const subj of subjects) {
         const count = subjectCounts[subj.key];
         if (count > 0) {
+            expectedTotal += count;
+            if (subjectQuestions[subj.key].length < count) {
+                shortageSubjects.push(`${subj.shortName || subj.name || subj.key} ${subjectQuestions[subj.key].length}/${count}`);
+            }
             const pool = comboPoolBySubject[subj.key] || [];
             const comboCount = Math.min(Math.round(count * 0.2), pool.length);
             const picked = getRandomSample(subjectQuestions[subj.key], count - comboCount, subj.key);
@@ -259,6 +265,15 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
 
     const totalQuestions = combinedQuestions.length;
     const subjectCount = subjects.length;
+
+    // 문항 풀이 선언 배정보다 부족하면 안내 + 시간 비례 축소 (실전 문항당 배정 시간 유지)
+    const declaredTimeMin = (registry && registry.integratedExam && registry.integratedExam.examTimeMin) || 120;
+    let timeLimitSec = declaredTimeMin * 60;
+    if (expectedTotal > 0 && totalQuestions < expectedTotal) {
+        showToast(`문제은행 문항 부족 — ${shortageSubjects.join(' · ')} (총 ${totalQuestions}/${expectedTotal}문 출제)`, 'warning', 5000);
+        timeLimitSec = Math.max(60, Math.round(declaredTimeMin * 60 * totalQuestions / expectedTotal));
+    }
+
     const integratedExam = {
         id: 'integrated',
         title: subjects.length > 0
@@ -266,7 +281,7 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
             : `통합 실전 모의고사 (${totalQuestions}제)`,
         questions: combinedQuestions,
         // 실제 시험 시간: manifest integratedExam.examTimeMin (100문/120분)
-        timeLimitSec: ((registry && registry.integratedExam && registry.integratedExam.examTimeMin) || 120) * 60
+        timeLimitSec
     };
 
     // UI 전환

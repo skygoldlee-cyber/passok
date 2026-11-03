@@ -19,7 +19,7 @@
 
 ```
 1. README.md (루트)          — 프로젝트 소개·기능·기술 스택·폴더 구조
-2. AGENTS.md (루트)          — 명령어·코드 규칙·검증 체크리스트 (작업 전 필수)
+2. AGENTS.md (루트)          — 명령어·코드 규칙·검증 체크리스트 (작업 전 필수 · 10분 요약: reference/CONVENTIONS_CHEATSHEET.md)
 3. docs/dev/reference/CODE_READING_GUIDE.md — 앱이 켜지는 순서·클릭 위임·데이터 흐름·첫 변경 레시피
 4. docs/dev/ARCHITECTURE.md  — Local-First·ESM·DataLoader·SW 캐시·동기화 등 설계 결정
 5. docs/dev/SPEC.md          — 구현 완료된 기능의 요구사양 명세
@@ -138,6 +138,7 @@ docs/
 | [PROJECT_STRUCTURE_TOUR.md](dev/reference/PROJECT_STRUCTURE_TOUR.md) | 프로젝트 구조 투어 — 비개발자·기획자용 그림 중심 입문 (폴더 지도·데이터 파이프라인·멀티시험·품질 관문·용어 풀이) |
 | [CODE_READING_GUIDE.md](dev/reference/CODE_READING_GUIDE.md) | 코드 읽기 가이드 — 초보 개발자용 부팅 시퀀스·data-click 위임·저장소 2계층·첫 변경 레시피·게이트 치트시트 |
 | [FEATURE_MAP.md](dev/reference/FEATURE_MAP.md) | 기능→소스 지도 — "이 기능을 바꾸려면 어느 파일" 조회표 (도메인별 핵심 소스·관련 테스트·SPEC 접두사) |
+| [CONVENTIONS_CHEATSHEET.md](dev/reference/CONVENTIONS_CHEATSHEET.md) | 규약 치트시트 — 기여자·에이전트 10분 요약 (불변식·명령·커밋 규약·우회 — AGENTS.md 압축본) (DOC-REF-18) |
 
 ### UI/UX 명세·검증
 
@@ -200,6 +201,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 |------|------|
 | [TESTING.md](dev/reference/TESTING.md) | 테스트 가이드 — 유닛(node:test) + DOM(Vitest/jsdom) 전체 목록·규칙 |
 | [DOM_TEST_DESIGN.md](dev/design/DOM_TEST_DESIGN.md) | DOM 시나리오 테스트 설계 — jsdom 경계, 케이스 유형 매트릭스, Phase 1~6 로드맵 (E2E 포함) |
+| [TOOLS_MAP.md](dev/reference/TOOLS_MAP.md) | 도구 계층 지도 — tools/ 디렉터리별 역할·진입점 3종(스크립트·steps.js·문서 생명줄)·새 게이트 추가 절차·분기 감사 규약 (DOC-REF-17) |
 
 ### 운영·환경
 
@@ -394,6 +396,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-REF-14 | `docs/dev/reference/GATE_MAP.md` |
 | DOC-REF-15 | `docs/dev/reference/PROJECT_METRICS.md` |
 | DOC-REF-16 | `docs/dev/reference/PROJECT_OVERVIEW.md` |
+| DOC-REF-17 | `docs/dev/reference/TOOLS_MAP.md` |
+| DOC-REF-18 | `docs/dev/reference/CONVENTIONS_CHEATSHEET.md` |
 | DOC-RBK-01 | `docs/dev/runbooks/AUDIO_HOSTING_GUIDE.md` |
 | DOC-RBK-02 | `docs/dev/runbooks/COMBO_GENERATION_GUIDE.md` |
 | DOC-RBK-03 | `docs/dev/runbooks/CONTENT_WORKFLOW.md` |

@@ -60,12 +60,13 @@
         overflow: visible !important;
     }
 
-    /* Toggle only review-view and hide others */
+    /* Hide all views except the active one — 인쇄는 활성 뷰 대상으로 일반화
+       (#review-view 전용이던 기존 규약 — 실무도구 등 다른 뷰의 인쇄가 백지가 되던 결함 수정) */
     .view-section {
         display: none !important;
     }
 
-    #review-view.view-section {
+    .view-section.active {
         display: block !important;
         /* @page margin:0 — 본문 패딩으로 여백 대체 */
         padding: 10mm 8mm !important;

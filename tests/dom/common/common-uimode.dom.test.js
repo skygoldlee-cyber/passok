@@ -163,6 +163,21 @@ describe('UI 모드 — 학습/실무 전환', () => {
         expect(tab.querySelector('.ui-mode-label').textContent).toBe('실무 모드');
         expect(tab.getAttribute('aria-pressed')).toBe('true');
     });
+
+    it('실무 브랜드 라벨 — 실무 모드에서 탭바에 practiceName 노출, 학습 복귀 시 비움 (H)', () => {
+        window.EXAMS_LIST = {
+            exams: [{ id: 'carework', name: '요양보호사', default: true, practiceName: 'Care OS', features: { careCalc: true } }],
+        };
+        localStorage.setItem('current_exam', 'carework');
+        const label = document.querySelector('.practice-brand-label');
+        expect(label, '탭바 실무 그룹의 브랜드 라벨 부재').not.toBeNull();
+        applyUiMode(); // 학습 모드 — 비어 있어야 함 (:empty → display:none)
+        expect(label.textContent).toBe('');
+        toggleUiMode(); // 실무 진입 — exams.json practiceName이 그대로 표기
+        expect(label.textContent).toBe('Care OS');
+        toggleUiMode(); // 학습 복귀 — 다시 비움
+        expect(label.textContent).toBe('');
+    });
 });
 
 describe('UI 모드 — formula 미보유 시험', () => {

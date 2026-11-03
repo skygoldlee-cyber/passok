@@ -27,7 +27,7 @@ import { simState } from '../../../src/views/exam-sim/exam-sim-state.js';
 import {
     startSimSession, saveSimAnswer, jumpToSimQuestion,
     submitExam, exitSimArena, checkExamDraft, resumeSimDraft,
-    startWeakExam,
+    startWeakExam, startIntegratedMockExam,
 } from '../../../src/views/exam-sim/exam-simulator.js';
 import { DataLoader } from '../../../src/content/data-loader.js';
 import { showSimAnswerReview } from '../../../src/views/exam-sim/exam-sim-review.js';
@@ -384,5 +384,71 @@ describe('오답 모의고사 — 헷갈린 카드·오답 퀴즈 재조립', ()
 
         expect(showToast).toHaveBeenCalledWith(expect.stringContaining('1과목 (법규)'), 'info', 4000);
         expect(el('sim-arena-panel').classList.contains('is-hidden')).toBe(true);
+    });
+});
+
+describe('통합 모의고사 — 문항 풀 부족 정합', () => {
+    const mk = (n, prefix) => Array.from({ length: n }, (_, i) => ({
+        id: `${prefix}_q${i + 1}`, num: i + 1, type: 'choice',
+        question: `${prefix} 문제${i + 1}`, options: ['보기1', '보기2', '보기3', '보기4', '보기5'],
+        answer: '①', explanation: '',
+    }));
+
+    const seedIntegrated = ({ theoryPool, pracPool, cfg = { caretheory: 35, careprac: 45 }, timeMin = 90 }) => {
+        const subjects = [
+            { key: 'caretheory', name: '요양보호론 (필기)', shortName: '필기', order: 1 },
+            { key: 'careprac', name: '요양보호 관련 (실기)', shortName: '실기', order: 2 },
+        ];
+        const exams = [
+            { key: 'subject1', subject: 'caretheory', bundle: 'x', global: 'g1' },
+            { key: 'subject2', subject: 'careprac', bundle: 'x', global: 'g2' },
+        ];
+        window.DATA_REGISTRY = { subjects, exams, integratedExam: { questionsPerSubject: cfg, examTimeMin: timeMin } };
+        DataLoader.registry = { subjects, exams };
+        const s1 = { questions: mk(theoryPool, 't') };
+        const s2 = { questions: mk(pracPool, 'p') };
+        DataLoader._loadedExams = { subject1: s1, subject2: s2 };
+        window.EXAM_DATA = { subject1: s1, subject2: s2 };
+    };
+
+    beforeEach(() => {
+        localStorage.clear();
+        resetStudyState();
+        resetSim();
+        loadIndexHtml();
+        vi.clearAllMocks();
+    });
+
+    afterEach(() => {
+        if (simState.timerInterval) clearInterval(simState.timerInterval);
+    });
+
+    it('풀 < 선언 배정 — 부족 과목 안내 토스트 + 시간 비례 축소', async () => {
+        seedIntegrated({ theoryPool: 20, pracPool: 20 });
+
+        startIntegratedMockExam();
+        await flushAsync();
+
+        expect(showToast).toHaveBeenCalledWith(
+            expect.stringContaining('필기 20/35'), 'warning', 5000);
+        expect(showToast).toHaveBeenCalledWith(
+            expect.stringContaining('실기 20/45'), 'warning', 5000);
+        // 90분 × 40/80문 = 45분 — 문항당 배정 시간 유지
+        expect(simState.data.timeLimitSec).toBe(45 * 60);
+        expect(simState.data.questions.length).toBe(40);
+        expect(el('sim-exam-title').textContent).toContain('40제');
+    });
+
+    it('풀 ≥ 선언 배정 — 안내 없음 + 선언 시간 그대로', async () => {
+        seedIntegrated({ theoryPool: 40, pracPool: 50 });
+
+        startIntegratedMockExam();
+        await flushAsync();
+
+        expect(showToast).not.toHaveBeenCalledWith(
+            expect.stringContaining('문항 부족'), 'warning', 5000);
+        expect(simState.data.timeLimitSec).toBe(90 * 60);
+        expect(simState.data.questions.length).toBe(80);
+        expect(el('sim-exam-title').textContent).toContain('80제');
     });
 });

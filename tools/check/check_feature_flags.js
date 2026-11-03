@@ -75,6 +75,25 @@ for (const key of declared) {
   if (!used.has(key)) warnings.push(`features 선언됐으나 코드 미사용: "${key}"`);
 }
 
+// ③ 매뉴얼 내비 항목 중복 금지 — index.template의 .manual-nav-link 버튼은
+//    data-feature 키로 개별 노출된다. 같은 시험이 해당 피처를 2개 이상 선언하면
+//    매뉴얼 버튼이 나란히 중복 표시된다 (cosmetic의 formula+practiceManual 사례 —
+//    스텁 문서가 본진 매뉴얼과 나란히 노출됐던 결함)
+const tpl = fs.readFileSync(path.join(ROOT, 'index.template.html'), 'utf8');
+const manualKeys = new Set();
+for (const m of tpl.matchAll(/class="[^"]*manual-nav-link[^"]*"[^>]*data-feature="([\w-]+)"|data-feature="([\w-]+)"[^>]*class="[^"]*manual-nav-link/g)) {
+  manualKeys.add(m[1] || m[2]);
+}
+if (manualKeys.size > 1) {
+  for (const exam of exams) {
+    const feat = exam.features || {};
+    const hit = [...manualKeys].filter((k) => feat[k]);
+    if (hit.length > 1) {
+      issues.push(`${exam.id}: 매뉴얼 내비 피처 중복 선언 (${hit.join(' + ')}) — manual-nav-link 버튼이 ${hit.length}개 노출됩니다. 본진 매뉴얼 피처 하나만 선언하세요`);
+    }
+  }
+}
+
 for (const w of warnings) console.log(`  ⚠ ${w}`);
 if (!issues.length) {
   console.log(`✅ 기능 플래그 정합 — 선언 ${declared.size}개 ↔ 코드 사용 ${used.size}개 (동적 키 ${DYNAMIC_KEYS.size}개 제외)`);

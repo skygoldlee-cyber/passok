@@ -31,8 +31,36 @@
     background: var(--bg-card); color: var(--color-text-muted);
 }
 .care-calc-row strong { font-size: 18px; color: var(--color-text-main); }
-.care-calc-row:nth-of-type(3) strong { font-size: 22px; color: var(--color-primary); }
+.care-calc-row.care-calc-total strong { font-size: 22px; color: var(--color-primary); }
 .care-calc-src { font-size: 12px; color: var(--color-text-muted); padding: 8px 14px; }
+
+/* 문서형 결과물 — 헤더(제목·출력일) + 표(입력 조건·계산 결과), 인쇄 시 격자 문서 */
+.care-doc-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 10px 14px 4px; color: var(--color-text-main);
+}
+.care-doc-head strong { font-size: 15px; }
+.care-doc-head span { font-size: 12px; color: var(--color-text-muted); }
+.care-doc { width: 100%; border-collapse: collapse; margin: 6px 0 12px; background: var(--bg-card); border: 1px solid var(--border-subtle); }
+/* 표 섹션 제목 — caption은 border-collapse 표의 외곽 테두리를 덮는 렌더링 문제가 있어
+   표 밖 제목으로 둔다 (첫행 좌측 윤곽선 소실 방지) */
+.care-doc-sec {
+    font-size: 12px; font-weight: 700; color: var(--color-text-sub);
+    padding: 8px 2px 6px;
+}
+.care-doc td { padding: 8px 14px; border: 1px solid var(--border-subtle); font-size: 14px; color: var(--color-text-muted); }
+.care-doc td.care-doc-num { text-align: right; font-weight: 700; color: var(--color-text-main); }
+.care-doc tr.care-calc-total td { font-size: 15px; font-weight: 800; color: var(--color-text-main); }
+.care-doc tr.care-calc-total td.care-doc-num { color: var(--color-primary); font-size: 20px; }
+.care-doc tr.care-doc-sel td { font-weight: 700; color: var(--color-primary); }
+
+/* 서명란·면책 — 문서형 템플릿 (cosmetic fp-sign-row·fp-disclaimer 대응) */
+.care-doc-sign { display: flex; gap: 18px; margin-top: 20px; }
+.care-doc-sign span {
+    flex: 1; font-size: 13px; color: var(--color-text-muted);
+    border-top: 1px solid var(--border-subtle); padding-top: 8px;
+}
+.care-doc-disclaimer { font-size: 12px; color: var(--color-text-muted); margin: 12px 4px 0; }
 .care-calc-result .care-calc-row:first-child { border-radius: 12px 12px 0 0; }
 .care-calc-result .care-calc-row:last-of-type { border-radius: 0 0 12px 12px; border-bottom: 0; }
 
@@ -130,14 +158,48 @@
 }
 
 /* ── 인쇄 — 일지·결과만 문서형으로 ────────────── */
+/* ui-mode-practice 스코프 — 지연 로드된 이 규칙이 학습 모드의 다른 뷰(오답 복습 등)
+   인쇄를 가리지 않도록 실무 모드일 때만 전체 숨김을 적용한다. */
 @media print {
-    body * { visibility: hidden; }
-    #log-preview, #log-preview *,
-    #care-result, #care-result * { visibility: visible; }
-    #log-preview, #care-result {
-        position: absolute; inset: 0 auto auto 0; width: 100%;
+    body.ui-mode-practice * { visibility: hidden; }
+    /* 활성 뷰에서 출력물 외 형제는 display:none — visibility:hidden은 레이아웃을 유지해
+       숨은 폼의 높이가 뒷장 빈 페이지로 밀리는 문제를 만든다 (출력물만 문서 영역에 남김) */
+    body.ui-mode-practice .view-section.active > :not(#log-preview):not(#care-result):not(#ho-preview):not(#audit-list):not(#audit-progress):not(#care-card-detail) {
+        display: none !important;
     }
-    .care-log-text { border: 0; font-size: 13pt; color: #000; background: #fff; }
-    .care-calc-row { background: #fff; color: #000; border-color: #ccc; }
-    .care-calc-row strong { color: #000; }
+    #log-preview, #log-preview *,
+    #care-result, #care-result *,
+    #ho-preview, #ho-preview *,
+    #audit-list, #audit-list *, #audit-progress, #audit-progress *,
+    #care-card-detail, #care-card-detail * { visibility: visible; }
+    /* 절대 위치 금지 — abs 박스는 페이지 경계에서 본문이 잘리고 동일 위치끼리 겹침.
+       일반 흐름을 유지하면 출력물만 남은 활성 뷰의 패딩(print.css 10mm/8mm)이 여백 역할 */
+    #log-preview, #care-result, #ho-preview, #audit-list, #audit-progress, #care-card-detail {
+        visibility: visible;
+    }
+    .care-log-text { border: 1px solid var(--print-border-strong, #9ca3af); border-radius: 0; font-size: 13pt; color: #000; background: #fff; }
+    .care-doc, .care-doc-head { background: #fff; color: #000; }
+    .care-doc { border: 1px solid var(--print-border-strong, #9ca3af); }
+    .care-doc td { color: #000; border-color: var(--print-border-strong, #9ca3af); }
+    .care-doc-sec { color: #000; }
+    .care-doc-head span { color: #000; }
+    .care-doc td.care-doc-num, .care-doc tr.care-calc-total td.care-doc-num { color: #000; }
+    .care-audit-sec { border-color: var(--print-border-strong, #9ca3af); border-radius: 0; background: #fff; color: #000; }
+    .care-audit-sec h3, .care-audit-item span, .care-audit-item em { color: #000; }
+    .care-audit-progress { border-color: var(--print-border-strong, #9ca3af); background: #fff; color: #000; }
+    .care-doc-sign span { color: #000; border-color: var(--print-border-strong, #9ca3af); }
+    .care-doc-disclaimer { color: var(--print-muted, #555); }
 }
+
+.care-calc-rates { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 4px 0 8px; }
+.care-calc-rates th, .care-calc-rates td { padding: 6px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+.care-calc-rates th { color: var(--color-text-sub); font-weight: 600; }
+.care-calc-rates td:last-child, .care-calc-rates th:last-child { text-align: right; }
+.care-calc-nc-note { font-size: 0.85rem; color: var(--color-text-sub); margin: 0 0 8px; }
+
+.care-calc-nc { margin: 12px 0 16px; padding: 12px 14px 10px; border: 1px solid var(--border); border-radius: 8px; }
+.care-calc-nc legend { padding: 0; font-weight: 600; font-size: 0.9rem; }
+.care-calc-nc label { margin: 6px 0; }
+
+.care-calc-row { gap: 12px; }
+.care-calc-row strong { flex-shrink: 0; text-align: right; font-variant-numeric: tabular-nums; }

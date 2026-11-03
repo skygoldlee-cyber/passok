@@ -34,7 +34,7 @@ function renderDetail() {
                 <span class="care-card-stepno">${i + 1}</span>
                 <div><strong>${esc(s.phase)}</strong><p>${esc(s.text)}</p></div>
             </div>`).join('')}
-        <button data-click="careCardClose" class="secondary">목록으로</button>`;
+        <button data-click="careCardClose" class="btn btn-secondary">목록으로</button>`;
 }
 
 export function careCardOpen(id) {

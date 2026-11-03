@@ -31,7 +31,7 @@ vi.mock('../../../../src/exams/carework/facility.js', async (importOriginal) => 
     ackHandover: vi.fn(() => Promise.resolve({})),
 }));
 
-import { careCalcRun, careCalcReset } from '../../../../src/exams/carework/views/care-calc.js';
+import { careCalcRun, careCalcReset, initCareCalcView } from '../../../../src/exams/carework/views/care-calc.js';
 import { careCardOpen, careCardClose, initCareCardView } from '../../../../src/exams/carework/views/care-card.js';
 import { careLogGenerate, careLogCopy, initCareLogView } from '../../../../src/exams/carework/views/care-log.js';
 import { careFacilityHandoverSubmit, careHandoverAck } from '../../../../src/exams/carework/views/care-handover.js';
@@ -59,6 +59,85 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careCalcReset();
     });
 
+    it('careCalc — 적용 기준 연도 표기 + 데이터 연도 구버전 시 경고 (고시 연차 갱신)', () => {
+        loadPartial('care-calc.html');
+        initCareCalcView();
+        // 현행 — 적용 연도가 항상 표시되고 경고 없음
+        expect(document.getElementById('care-year-label')?.textContent).toBe('2026');
+        const note = document.getElementById('care-year-note');
+        expect(note?.textContent).toBe('적용 기준: 2026년 고시');
+        expect(note?.classList.contains('care-calc-err')).toBe(false);
+        // 구버전 시뮬레이션 — 데이터 연도 < 현재 연도면 경고 문구·스타일
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date('2027-06-01'));
+        initCareCalcView();
+        expect(note?.textContent).toContain('2027년 고시가 아직 반영되지 않았습니다');
+        expect(note?.classList.contains('care-calc-err')).toBe(true);
+        careCalcRun();
+        const txt = document.querySelector('#care-result')?.textContent || '';
+        expect(txt).toContain('적용 기준');
+        expect(txt).toContain('2026년 고시 기준 — 현재 연도 고시가 아직 반영되지 않았으므로');
+        vi.useRealTimers();
+    });
+
+    it('careCalc — 비급여 항목별 합산 + 상급침실료 시설 전용 토글', () => {
+        loadPartial('care-calc.html');
+        initCareCalcView();
+        // 당해연도 한도표 렌더 — 등급 6행 + 연도 헤더
+        const lt = document.getElementById('care-limit-table');
+        expect(lt?.querySelectorAll('tbody tr').length).toBe(6);
+        expect(lt?.querySelector('thead')?.textContent).toContain('2026');
+        // 시설 수가표 — 요양시설 5등급 행 + 20% 본인부담 병기
+        const rt = document.getElementById('care-fac-rate-table');
+        expect(rt?.querySelectorAll('tbody tr').length).toBe(5);
+        expect(rt?.textContent).toContain('93,070원');
+        const type = /** @type {HTMLSelectElement} */ (document.getElementById('care-type'));
+        const roomWrap = /** @type {HTMLElement} */ (document.getElementById('care-nc-room-wrap'));
+        // 재가 선택 시 상급침실료 비노출
+        type.value = 'home';
+        type.dispatchEvent(new Event('change'));
+        expect(roomWrap.hidden).toBe(true);
+        // 시설 전환 시 노출 + 항목별 합산이 납부액에 반영
+        type.value = 'facility';
+        type.dispatchEvent(new Event('change'));
+        expect(roomWrap.hidden).toBe(false);
+        // 시설 전환 시 수동 이용액 랩 비노출 + 수가×일수 자동 산정
+        expect(/** @type {HTMLElement} */ (document.getElementById('care-use-wrap')).hidden).toBe(true);
+        expect(/** @type {HTMLElement} */ (document.getElementById('care-fac-wrap')).hidden).toBe(false);
+        const facSel = /** @type {HTMLSelectElement} */ (document.getElementById('care-fac-type'));
+        facSel.value = 'nursing';
+        document.getElementById('care-grade').value = 'g1';
+        document.getElementById('care-fac-days').value = '30';
+        document.getElementById('care-use').value = '2000000'; // 자동 산정으로 덮임 (93,070×30=2,792,100)
+        document.getElementById('care-nc-meal').value = '450000';
+        document.getElementById('care-nc-room').value = '100000';
+        document.getElementById('care-nc-groom').value = '10000';
+        careCalcRun();
+        const txt = document.querySelector('#care-result')?.textContent || '';
+        expect(txt).toContain('비급여 자부담');
+        expect(txt).toContain('558,420원'); // 급여 본인부담금 — 비급여 미포함
+        expect(txt).toContain('1,118,420원'); // 실납부 = 급여부담 558,420 + 비급여 560,000
+        expect(txt).toContain('93,070원/일');
+        // 입력 조건 병기 — 인쇄 결과물이 조건 없이 결과만 나오던 결함 회귀 방지
+        expect(txt).toContain('입력 조건');
+        expect(txt).toContain('시설급여');
+        expect(txt).toContain('30일');
+        expect(txt).toContain('비급여·식재료비');
+        expect(txt).toContain('450,000원');
+        // 문서형 구조 — 헤더 + 입력 조건/공단 책정 기준/계산 결과 3개 표 (가독성 출력 회귀 방지)
+        expect(document.querySelectorAll('#care-result table.care-doc').length).toBe(3);
+        // 공단 책정 기준표 — 시설 선택 시 등급별 1일 수가, 선택 등급 행 강조
+        expect(txt).toContain('공단 책정 기준');
+        expect(txt).toContain('1일 수가');
+        expect(document.querySelector('#care-result .care-doc-sel')?.textContent).toContain('1등급');
+        expect(document.querySelector('#care-result .care-doc-head')?.textContent).toContain('장기요양 비용 계산 결과');
+        expect(document.querySelector('#care-result .care-doc-sec')?.textContent).toBe('입력 조건');
+        // 강조는 '실제 월 납부액' 행 — 위치 선택자 회귀 방지
+        const totalRow = document.querySelector('#care-result .care-calc-total');
+        expect(totalRow?.textContent).toContain('실제 월 납부액');
+        careCalcReset();
+    });
+
     it('careCard — 목록→상세→복귀', async () => {
         loadPartial('care-card.html');
         await initCareCardView();
@@ -76,14 +155,23 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('log-service').value = 'visit-care';
         careLogGenerate();
         expect(document.querySelector('#log-preview pre')?.textContent).toMatch(/김○○/);
+        // 문서형 헤더 — 모든 결과물이 제목+출력일 템플릿 공유 (가독성 출력 회귀 방지)
+        expect(document.querySelector('#log-preview .care-doc-head strong')?.textContent).toBe('요양보호 서비스 기록');
+        expect(document.querySelector('#log-preview .care-doc-head span')?.textContent).toContain('출력');
+        // esc() 래핑된 출력일이 이스케이프 없이 정상 렌더 (싱크 규약 적용 후에도 값 표시)
+        expect(document.querySelector('#log-preview .care-doc-head span')?.textContent).toMatch(/\d{4}-\d{2}-\d{2}/);
+        // 문서형 서명란 — cosmetic fp-sign-row 대응 (작성자·확인자)
+        expect(document.querySelector('#log-preview .care-doc-sign')?.textContent).toContain('작성자(요양보호사)');
         careLogCopy();
     });
 
-    it('careAudit — 로드 후 점검 초기화', async () => {
+    it('careAudit — 로드 후 점검 초기화 + 문서 헤더', async () => {
         loadPartial('care-audit.html');
         await initCareAuditView();
         careAuditReset();
         expect(document.getElementById('audit-list')).toBeTruthy();
+        expect(document.querySelector('#audit-list .care-doc-head strong')?.textContent).toBe('기관 평가 체크리스트');
+        expect(document.querySelector('#audit-list .care-doc-sign')?.textContent).toContain('점검자');
     });
 
     it('careAudit — 점검표 복사·인쇄 핸들러 실행', async () => {
@@ -159,6 +247,31 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(css).toContain('.care-calc-form select option');
         expect(css).toContain('--bg-sidebar');
         expect(css).toContain('--color-text-main');
+    });
+
+    // @spec none — 인쇄 허용 목록 회귀: 출력·인쇄 대상인 각 도구의 결과 요소가
+    // @media print의 body.ui-mode-practice *{hidden} 예외에 모두 포함돼야 하고,
+    // print.css는 활성 뷰를 표시해야 한다 (둘 중 하나라도 깨지면 백지 출력)
+    it('@media print — 결과물 요소 허용 목록 + 활성 뷰 표시 규칙 (백지 출력 회귀)', async () => {
+        const { readFileSync } = await import('node:fs');
+        const css = readFileSync('css/exams/carework/care-tools.css', 'utf-8');
+        const printBlock = css.slice(css.indexOf('@media print'));
+        expect(printBlock).toContain('body.ui-mode-practice *');
+        for (const id of ['#log-preview', '#care-result', '#ho-preview', '#audit-list', '#audit-progress', '#care-card-detail']) {
+            expect(printBlock).toContain(`${id}, ${id} *`);
+        }
+        // print.css — 활성 뷰만 표시. 특정 뷰 id 하드코딩 시 다른 뷰 인쇄가 깨짐
+        const printCss = readFileSync('css/print.css', 'utf-8');
+        expect(printCss).toContain('.view-section.active');
+        expect(printCss).not.toMatch(/#review-view\.view-section\s*\{/);
+        // 윤곽 테이블 — 격자 테두리(외곽선+셀)가 화면·인쇄 모두 적용
+        expect(css).toMatch(/\.care-doc \{[^}]*border: 1px solid/);
+        expect(css).toMatch(/\.care-doc td \{[^}]*border: 1px solid/);
+        expect(printBlock).toContain('--print-border-strong');
+        // 인쇄 여백·페이지 분할 — 절대 위치는 본문 잘림·겹침 유발 (일반 흐름 + 뷰 패딩이 여백)
+        expect(printBlock).not.toContain('position: absolute');
+        // 빈 페이지 방지 — 숨은 폼 레이아웃이 뒷장으로 밀리지 않도록 출력물 외 형제 display:none
+        expect(printBlock).toMatch(/\.view-section\.active > :not[\s\S]*?display: none !important/);
     });
 
 });

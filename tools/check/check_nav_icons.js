@@ -5,6 +5,8 @@
  * 서로 다른 FA 아이콘을 쓰도록 강제한다.
  * 기능 식별은 data-uitext 키·data-target·data-click 기준 — 사이드바와
  * 모바일 탭의 동일 기능 반복(반응형)은 허용, 다른 기능의 재사용만 차단.
+ * 예외 — `manual-nav-link` 슬롯: 팩별 상호배타 매뉴얼 항목(formula↔practiceManual)은
+ * 동일 슬롯으로 간주해 같은 아이콘을 허용한다 (UM-06 — 동시 노출은 check_feature_flags ③이 차단).
  * @spec UX-VFY-07 (메뉴 아이콘 고유성 규약 — 기능별 시각 구분 보장)
  */
 const fs = require('fs');
@@ -48,7 +50,8 @@ for (const file of ['index.template.html', 'landing.template.html']) {
             const icon = m[2].match(ICON_RE);
             if (!icon) continue;
             const feat = m[2].match(UITEXT_RE) || m[1].match(TARGET_RE) || m[0].match(CLICK_RE);
-            const key = (feat ? feat[1] : '?').replace(/-view$/, '');
+            const slot = m[0].match(/data-click="ManualViewer\.open[A-Za-z]*Manual"/);
+            const key = slot ? 'manual-nav-link' : (feat ? feat[1] : '?').replace(/-view$/, '');
             if (!byIcon.has(icon[1])) byIcon.set(icon[1], []);
             const list = byIcon.get(icon[1]);
             if (!list.some(k => sameFeature(k, key))) list.push(key);

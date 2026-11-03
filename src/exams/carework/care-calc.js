@@ -10,25 +10,26 @@ function calcHome(gradeKey, monthlyUse, reductionRate) {
     const overLimit = Math.max(0, monthlyUse - g.home);
     const selfCovered = Math.round(covered * SELF_PAY_RATE.home * (1 - reductionRate));
     const selfPay = selfCovered + overLimit;
-    return { covered, overLimit, selfPay, publicPay: covered - selfCovered, limit: g.home, type: 'home' };
+    return { covered, overLimit, selfCovered, selfPay, publicPay: covered - selfCovered, limit: g.home, type: 'home' };
 }
 
-/** 시설급여 — 한도 없이 비용의 20% 본인부담 */
-function calcFacility(monthlyUse, reductionRate) {
-    if (monthlyUse < 0) return null;
-    const selfPay = Math.round(monthlyUse * SELF_PAY_RATE.facility * (1 - reductionRate));
-    return { covered: monthlyUse, overLimit: 0, selfPay, publicPay: monthlyUse - selfPay, limit: null, type: 'facility' };
+/** 시설급여 — 한도 없이 급여비용의 20% 본인부담 + 비급여(식재료비·상급침실료 등) 전액 자부담 */
+function calcFacility(monthlyUse, reductionRate, nonCovered) {
+    if (monthlyUse < 0 || nonCovered < 0) return null;
+    const selfCovered = Math.round(monthlyUse * SELF_PAY_RATE.facility * (1 - reductionRate));
+    const selfPay = selfCovered + nonCovered;
+    return { covered: monthlyUse, overLimit: 0, selfCovered, nonCovered, selfPay, publicPay: monthlyUse - selfCovered, limit: null, type: 'facility' };
 }
 
 /**
- * @param {{type:string, grade:string, monthlyUse:number, reduction:string}} in_
+ * @param {{type:string, grade:string, monthlyUse:number, reduction:string, nonCovered?:number}} in_
  * @returns 계산 결과 또는 null(입력 오류)
  */
-export function computeCareCost({ type, grade, monthlyUse, reduction }) {
+export function computeCareCost({ type, grade, monthlyUse, reduction, nonCovered = 0 }) {
     const r = REDUCTIONS.find(x => x.key === reduction);
     if (!r || typeof monthlyUse !== 'number' || !isFinite(monthlyUse)) return null;
     if (type === 'home') return calcHome(grade, monthlyUse, r.rate);
-    if (type === 'facility') return calcFacility(monthlyUse, r.rate);
+    if (type === 'facility') return calcFacility(monthlyUse, r.rate, nonCovered);
     return null;
 }
 

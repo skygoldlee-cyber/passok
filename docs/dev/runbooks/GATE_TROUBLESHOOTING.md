@@ -22,6 +22,7 @@
 | `시크릿 감지` | `.env` 값이 코드·커밋에 유입 | 파일 제거 후 git history 정리 필요 시 팀 호출. `.env`는 절대 커밋 금지 |
 | `문서 동기화` | 교재 갱신 후 `판본: textbook` 문서 미갱신 | 해당 문서 갱신 또는 `SKIP_DOCSYNC=1` (판단 필요) |
 | `고아 자산` | 파일이 어느 모듈·문서에서도 미참조 | 참조 추가하거나 파일 삭제 |
+| `ref_md 추출 잔재·평탄화 형식 (refs:format)` | ref_md에 lone CR·제어문자·PUA 글리프·초장문 평탄화 줄 | `node tools/sync/fix_refmd_glyphs.js` (글리프 치환) + `node tools/sync/reflow_flat_lines.js` (평탄화 분할) |
 
 ## 커밋 전 빠른 자가진단 (30초)
 
@@ -60,6 +61,10 @@ npm.cmd run audit:gates    # 미발화(silent)·미실행(dormant)·고빈도(no
 - **noisy** — 실패율 높은 단계는 탐지 기준 완화 또는 대상 축소 검토
 
 판정 기준과 해석은 `tools/check/audit_gate_utility.js` 헤더.
+
+### 리뷰 이력
+
+- **2026-11-02** — dormant: `refs:subjects` (`content:refsubjects`와 동일 스크립트의 refs 프리셋 선언 — refs 프리셋 자체가 로컬 전용 스코프 묶음이라 저빈도는 설계상 정상. refs:* 전 단계가 content 트윈을 가지며 고유 커버리지는 `refs:merge`뿐). silent 6개는 전부 p2 감시 단계 — 미발화=정상 상태. `audit:tools`가 `tools/sync/reflow_flat_lines.js`를 사망 후보로 보고 → refs:format 복구 절차를 위 표에 추가해 문서 생명줄 확보. 우회 이력: test-first `[no-test]` 마크 90일 79회 — 콘텐츠·문서 커밋의 설계상 용도, 추이 감시 유지.
 
 ## 설계 의도
 

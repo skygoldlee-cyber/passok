@@ -20,6 +20,8 @@ describe('매뉴얼 뷰어 — 문서 열기·TOC·전환', () => {
     beforeEach(async () => {
         localStorage.clear();
         localStorage.setItem('current_exam', 'cosmetic'); // 미선택 진입 가드 — 매뉴얼도 선택 후 컨텍스트
+        // 활성 시험 컨텍스트 — practiceBrand 소스(formula_manual 등)가 제목에 practiceName을 병기
+        window.EXAMS_LIST = { exams: [{ id: 'cosmetic', default: true, practiceName: 'Formula OS' }] };
         sessionStorage.clear();
         vi.resetModules();
         ({ ManualViewer } = await import('../../../src/reader/manual-viewer.js'));
@@ -56,6 +58,18 @@ describe('매뉴얼 뷰어 — 문서 열기·TOC·전환', () => {
         expect(ManualViewer.isOpen()).toBe(true);
         expect(el('manual-ov-title').textContent).toBe('개인정보 처리방침');
         expect(el('manual-article').textContent).toContain('수집하는 정보 안내');
+    });
+
+    it('openPracticeManual → 기본 제목 공유 규약: 실무 매뉴얼 + 활성 시험 브랜드 병기 (H)', async () => {
+        // formula_manual과 동일 기본 제목('실무 매뉴얼')에 활성 시험 practiceName만 병기 — X OS 형식 통일
+        window.EXAMS_LIST = { exams: [{ id: 'carework', default: true, practiceName: 'Care OS' }] };
+        localStorage.setItem('current_exam', 'carework');
+        window.__DOC_MD__[PATHS.PRACTICE_MANUAL] = '# 실무매뉴얼\n\n요양 실무 절차.\n';
+        await ManualViewer.openPracticeManual();
+        await flushAsync(30);
+
+        expect(el('manual-ov-title').textContent).toBe('실무 매뉴얼 (Care OS)');
+        expect(el('manual-article').textContent).toContain('요양 실무 절차');
     });
 
     it('doc: 링크 클릭 → 같은 오버레이에서 실무 매뉴얼로 전환 (H)', async () => {
