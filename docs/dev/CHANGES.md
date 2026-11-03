@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 fix(build): COMMANDS.md 명령 표기 npm.cmd 정규화 — CI docs:cmdref 실패
+
+- `steps.js`의 `s.bin`이 `win32=npm.cmd` / 그 외=`npm`으로 분기 — Windows에서 생성된 COMMANDS.md를 Linux CI가 재생성하면 전 단계 명령 컬럼이 불일치해 `docs:cmdref` 신선도 게이트가 실패 (배포 체인 CI에서 검출)
+- `build_command_reference.js`의 단계 명령 렌더링에서 `npm` → `npm.cmd`로 정규화 — Windows·Linux 재생성 출력 동일, 저장소 표기 규약(Windows PowerShell)도 유지
+
 ## 2026-11-03 refactor(src): src/core/ 분리 + router → shell/ (P2-4)
 
 - `src/core/` 신설 — utils·sanitize·sha256·paths·types·exam-context·storage-keys·storage·state 9개 이동 (순수 리프 + 기반 계층)

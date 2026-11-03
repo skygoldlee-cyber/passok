@@ -102,7 +102,10 @@ function emit() {
     L.push('| 단계 id | 티어 | 분류 | 명령 | 설명 |');
     L.push('|---|---|---|---|---|');
     for (const s of allSteps()) {
-        const cmd = `${s.bin} ${s.args.join(' ')}`.trim();
+        // s.bin은 플랫폼 분기(win32=npm.cmd / 그 외=npm) — 카탈로그는 Windows 개발
+        // 환경 표기(npm.cmd)로 정규화해 Linux CI에서도 재생성 결과가 동일하도록 한다.
+        const bin = s.bin === 'npm' ? 'npm.cmd' : s.bin;
+        const cmd = `${bin} ${s.args.join(' ')}`.trim();
         L.push(`| \`${s.id}\` | ${(s.prio || 'p1').toUpperCase()} | ${s.layer} | \`${esc(cmd)}\` | ${esc(s.desc)} |`);
     }
     L.push('');
