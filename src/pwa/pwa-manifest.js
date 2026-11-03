@@ -1,9 +1,9 @@
 // src/pwa-manifest.js — 활성 시험 기준 PWA 매니페스트 링크 교체 (클래식 스크립트, 모듈 아님)
 // @spec P-10,DA-06,DA-14,UX-PWA-07
 // 정적 manifest.webmanifest는 부팅 전 플레이스홀더 겸 최후 폴백이고,
-// 활성 시험이 확인되면 빌드가 생성한 실제 파일 manifest.<id>.webmanifest로 링크를 교체한다
+// 활성 시험이 확인되면 빌드가 생성한 실제 파일 manifests/<id>.webmanifest로 링크를 교체한다
 // (기본 시험 포함 — 시험별 pwaShortcuts·description이 실제 설치 매니페스트에 반영되어야 한다).
-// ⚠️ 모든 manifest.<id>.webmanifest는 id='passok'·name='PassOK'로 통일된 단일 앱이다 —
+// ⚠️ 모든 manifests/<id>.webmanifest는 id='passok'·name='PassOK'로 통일된 단일 앱이다 —
 //    어느 시험에서 설치해도 같은 PWA 하나(중복 설치·시험명 고정 아이콘 방지).
 // ⚠️ blob:/data: URL 주입은 금지 — Chrome이 설치 요건에서 유효하지 않은 스킴으로
 //    판정해 beforeinstallprompt가 발생하지 않고, connect-src 'self'가 fetch도 차단한다.
@@ -29,10 +29,10 @@
         const link = /** @type {HTMLLinkElement|null} */ (document.querySelector('link[rel="manifest"]'));
         if (!link) return;
 
-        // 빌드 산출물 manifest.<id>.webmanifest(실제 파일)로 교체 — 시험별 shortcuts·id 반영.
+        // 빌드 산출물 manifests/<id>.webmanifest(실제 파일)로 교체 — 시험별 shortcuts·id 반영.
         // 생성물이 누락되면 링크가 404가 되어 설치가 깨질 수 있으므로, build:data 산출물 검증과
         // check:datafresh가 파일 존재·신선도를 보장한다 (manifest.webmanifest 자체는 부팅 전까지의 폴백).
-        link.href = 'manifest.' + encodeURIComponent(exam.id) + '.webmanifest';
+        link.href = 'manifests/' + encodeURIComponent(exam.id) + '.webmanifest';
         // 파비콘(탭/홈 브랜드 아이콘)은 시험 아이콘으로 전환하지 않는다 —
         // PassOK 브랜드 아이콘은 시험 무관 독립 정체성이어야 한다 (팩별 아이콘은 카드·manifest에만).
         // 다만 URL에 APP_VERSION 스탬프를 붙여 SW 프리캐시 키와 분리한다 —

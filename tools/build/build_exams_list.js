@@ -138,24 +138,26 @@ function main() {
     // exams.json의 year → manifest contentYear/index.html/webmanifest 전파
     syncYearToDerivedFiles(exams.exams);
 
-    // 시험별 정적 PWA 매니페스트 생성 (manifest.<id>.webmanifest)
+    // 시험별 정적 PWA 매니페스트 생성 (manifests/<id>.webmanifest)
     // pwa-manifest.js가 활성 시험에 맞춰 링크를 이 실제 파일로 교체한다.
     // blob:/data: URL은 Chrome 설치 요건에서 유효하지 않은 스킴으로 판정되어
     // beforeinstallprompt가 발생하지 않으므로 반드시 실제 파일이어야 한다.
+    const MANIFEST_DIR = path.join(ROOT, 'manifests');
+    fs.mkdirSync(MANIFEST_DIR, { recursive: true });
     const base = JSON.parse(fs.readFileSync(MANIFEST_TEMPLATE, 'utf-8'));
     stampManifestIcons(base); // icons 배열은 시험별 manifest로 얕은 복사 — 1회 스탬프로 전부 반영
     const emitted = new Set();
     exams.exams.forEach(e => {
         const manifest = buildExamManifest(base, e);
-        const fname = `manifest.${e.id}.webmanifest`;
-        fs.writeFileSync(path.join(ROOT, fname), JSON.stringify(manifest, null, 2) + '\n', 'utf-8');
+        const fname = `${e.id}.webmanifest`;
+        fs.writeFileSync(path.join(MANIFEST_DIR, fname), JSON.stringify(manifest, null, 2) + '\n', 'utf-8');
         emitted.add(fname);
     });
     // exams.json에서 제거된 시험의 stale 매니페스트 정리
-    fs.readdirSync(ROOT).forEach(f => {
-        if (/^manifest\..+\.webmanifest$/.test(f) && !emitted.has(f)) {
-            fs.unlinkSync(path.join(ROOT, f));
-            console.log(`  🗑 stale 매니페스트 제거: ${f}`);
+    fs.readdirSync(MANIFEST_DIR).forEach(f => {
+        if (/^.+\.webmanifest$/.test(f) && !emitted.has(f)) {
+            fs.unlinkSync(path.join(MANIFEST_DIR, f));
+            console.log(`  🗑 stale 매니페스트 제거: manifests/${f}`);
         }
     });
     console.log(`✅ 시험별 매니페스트 생성 — ${emitted.size}개 (${[...emitted].join(', ')})`);

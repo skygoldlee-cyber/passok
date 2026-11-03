@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 6e14e040468296c3
+> 입력 해시: ab2a44278fd282af
 > 생성: 2026-11-03 · 원천: SPEC.md(658개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -1057,6 +1057,7 @@
 | DOC-REF-16 | docs/dev/reference/PROJECT_OVERVIEW.md | — |
 | DOC-REF-17 | docs/dev/reference/TOOLS_MAP.md | — |
 | DOC-REF-18 | docs/dev/reference/CONVENTIONS_CHEATSHEET.md | DA-15, ID-05 |
+| DOC-REF-19 | docs/dev/reference/COMMANDS.md | — |
 | DOC-ROOT-01 | README.md | — |
 | DOC-ROOT-02 | AGENTS.md | — |
 | DOC-USR-01 | docs/exams/cosmetic/user/exam_strategy.md | — |

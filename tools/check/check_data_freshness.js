@@ -50,7 +50,7 @@ function inScope(p) {
         || p === 'sw.js'
         || p === 'index.html'
         || p === 'manifest.webmanifest'
-        || /^manifest\.[^/]*\.webmanifest$/.test(p)
+        || /^manifests\/[^/]*\.webmanifest$/.test(p)
         || (p.startsWith('content/') && p.endsWith('/manifest.json'))
         || (p.startsWith('content/') && p.endsWith('_이야기형.md'))
         || /^tools\/build\/\.last-stats[^/]*\.json$/.test(p);

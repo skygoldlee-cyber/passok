@@ -103,6 +103,7 @@ html/exams/<id>/        # 시험 도메인 뷰 파셜 (지연 주입 — formula
 style.css               # CSS 진입점 (@import로 모듈 로드)
 sw.js                   # Service Worker
 manifest.webmanifest    # PWA 매니페스트
+manifests/              # 시험별 PWA 매니페스트 (<id>.webmanifest — build:exams-list 생성물, pwa-manifest.js가 활성 시험 파일로 링크 교체)
 feature-plan.json       # 기능별 무료/Pro 전환 설정 (pro = 배지+안내, free = 완전 무료)
 .env.example            # 루트 .env 스키마 정본 — 선언 키 목록·용도 (check:env 대조 기준, 시크릿 값 기재 금지)
 serve.js                # 로컬 개발 서버
@@ -183,7 +184,7 @@ src/                    # ES Modules
   pwa/                  # PWA 부트·설치·매니페스트 모듈
     pwa-install.js        # PWA 설치 프롬프트 설정
     pwa-install-capture.js # beforeinstallprompt 조기 캡처 + SW 조기 등록 (<head> 즉시 실행, 클래식 스크립트)
-    pwa-manifest.js       # 시험별 동적 PWA 매니페스트 (클래식 스크립트 — 빌드 산출물 manifest.<id>.webmanifest 실제 파일로 링크 교체 + 문서 제목·설명·apple-mobile-web-app-title 갱신, blob: 금지)
+    pwa-manifest.js       # 시험별 동적 PWA 매니페스트 (클래식 스크립트 — 빌드 산출물 manifests/<id>.webmanifest 실제 파일로 링크 교체 + 문서 제목·설명·apple-mobile-web-app-title 갱신, blob: 금지)
     version-watch.js       # 배포 버전 감시 — data/version.js 무캐시 폴링(5분+탭 복귀)으로 APP_VERSION 불일치 시 새 버전 프롬프트 배너 → 확인 시 SW 캐시 우회 리로드
   shell/app-version.js        # 앱 버전 접근·표시 포맷터 (window.APP_VERSION → formatAppVersion)
   shell/whats-new.js          # 새 버전 변경 이력 알림 (APP_VERSION 비교 → 모달, 설정 "변경 이력" 재열람)

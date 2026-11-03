@@ -174,8 +174,8 @@ test('UX-PWA-07: 모든 시험 manifest는 단일 앱 정체성(id/name/short_na
     }
     // 생성물도 동일 정체성 — 시험별 파일은 shortcuts·description만 다르다
     const ids = new Set();
-    for (const f of readdirSync(ROOT).filter(f => /^manifest\..+\.webmanifest$/.test(f))) {
-        const m = JSON.parse(readFileSync(join(ROOT, f), 'utf-8'));
+    for (const f of readdirSync(join(ROOT, 'manifests')).filter(f => /^.+\.webmanifest$/.test(f))) {
+        const m = JSON.parse(readFileSync(join(ROOT, 'manifests', f), 'utf-8'));
         assert.equal(m.id, 'passok', `${f}: 단일 앱 id`);
         assert.equal(m.name, 'PassOK', `${f}: 플랫폼 name`);
         ids.add(m.id);
@@ -183,8 +183,8 @@ test('UX-PWA-07: 모든 시험 manifest는 단일 앱 정체성(id/name/short_na
     assert.equal(ids.size, 1, 'manifest id는 전 시험 공통 하나');
 });
 
-test('UX-PWA-06: 생성된 manifest.cosmetic.webmanifest가 배합 계산기 shortcut을 보존한다', () => {
-    const m = JSON.parse(readFileSync(join(ROOT, 'manifest.cosmetic.webmanifest'), 'utf-8'));
+test('UX-PWA-06: 생성된 manifests/cosmetic.webmanifest가 배합 계산기 shortcut을 보존한다', () => {
+    const m = JSON.parse(readFileSync(join(ROOT, 'manifests', 'cosmetic.webmanifest'), 'utf-8'));
     const exams = JSON.parse(readFileSync(join(ROOT, 'content', 'exams.json'), 'utf-8'));
     const cosmetic = exams.exams.find(e => e.id === 'cosmetic');
     assert.deepEqual(m.shortcuts, cosmetic.pwaShortcuts, 'exams.json 선언 ↔ 생성물 일치');
