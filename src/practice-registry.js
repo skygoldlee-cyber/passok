@@ -432,6 +432,105 @@ const careVisit = {
         }
     },
 };
+const careClients = {
+    viewId: 'care-client-view',
+    slug: 'care-client',
+    uiTextKey: 'careClients',
+    title: '대상자 명부',
+    subtitle: '대상자 등록·주의사항 관리',
+    loadingText: '대상자 명부를 불러오는 중입니다...',
+    loadErrorText: '대상자 명부를 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-client.html',
+    styles: 'care-tools.css',
+    loaders: { main: _domainImport('views/care-client.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['careClientSave', 'careClientNew', 'careClientLoad', 'careClientDelete', 'careClientExport', 'careClientPrint']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careClients.loadingText);
+        try {
+            await ensureViewMarkup(careClients);
+            if (stale()) return;
+            const m = await careClients.loaders.main();
+            if (stale()) return;
+            m.initCareClientView();
+        } catch (e) {
+            if (!stale()) showToast(careClients.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
+const careIncident = {
+    viewId: 'care-incident-view',
+    slug: 'care-incident',
+    uiTextKey: 'careIncident',
+    title: '사고·낙상 보고서',
+    subtitle: '사고 기록·증적 서식',
+    loadingText: '사고 보고서를 불러오는 중입니다...',
+    loadErrorText: '사고 보고서를 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-incident.html',
+    styles: 'care-tools.css',
+    loaders: { main: _domainImport('views/care-incident.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['careIncidentGenerate', 'careIncidentSave', 'careIncidentCopy', 'careIncidentPrint', 'careIncidentDelete', 'careIncidentFacilitySubmit']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careIncident.loadingText);
+        try {
+            await ensureViewMarkup(careIncident);
+            if (stale()) return;
+            const m = await careIncident.loaders.main();
+            if (stale()) return;
+            m.initCareIncidentView();
+        } catch (e) {
+            if (!stale()) showToast(careIncident.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
+const careRoster = {
+    viewId: 'care-roster-view',
+    slug: 'care-roster',
+    uiTextKey: 'careRoster',
+    title: '교대 근무표',
+    subtitle: '근무일·근무조 배정',
+    loadingText: '근무표를 불러오는 중입니다...',
+    loadErrorText: '근무표를 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-roster.html',
+    styles: 'care-tools.css',
+    loaders: { main: _domainImport('views/care-roster.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['careRosterAdd', 'careRosterDelete', 'careRosterExport', 'careRosterPrint']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careRoster.loadingText);
+        try {
+            await ensureViewMarkup(careRoster);
+            if (stale()) return;
+            const m = await careRoster.loaders.main();
+            if (stale()) return;
+            m.initCareRosterView();
+        } catch (e) {
+            if (!stale()) showToast(careRoster.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
 const careFacilityJoin = {
     viewId: 'facility-join-view',
     slug: 'facility-join',
@@ -500,7 +599,7 @@ const careFacilityAdmin = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit, careHandover, careVisit, careFacilityJoin, careFacilityAdmin };
+const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careFacilityJoin, careFacilityAdmin };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {

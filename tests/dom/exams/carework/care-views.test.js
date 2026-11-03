@@ -32,6 +32,8 @@ vi.mock('../../../../src/exams/carework/facility.js', async (importOriginal) => 
     submitVisit: vi.fn(() => Promise.resolve({})),
     listVisits: vi.fn(() => Promise.resolve([])),
     updateVisitResult: vi.fn(() => Promise.resolve({})),
+    submitIncident: vi.fn(() => Promise.resolve({})),
+    listIncidents: vi.fn(() => Promise.resolve([])),
 }));
 
 import { careCalcRun, careCalcReset, initCareCalcView } from '../../../../src/exams/carework/views/care-calc.js';
@@ -42,6 +44,9 @@ import { careAuditReset, careAuditCopy, careAuditPrint, initCareAuditView } from
 import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
 import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
+import { careClientSave, careClientLoad, careClientDelete, initCareClientView } from '../../../../src/exams/carework/views/care-client.js';
+import { careIncidentGenerate, careIncidentSave, careIncidentDelete, initCareIncidentView } from '../../../../src/exams/carework/views/care-incident.js';
+import { careRosterAdd, careRosterDelete, initCareRosterView } from '../../../../src/exams/carework/views/care-roster.js';
 import { syncFacilityNav, myMembership, listHandovers, listVisits as listFacilityVisits } from '../../../../src/exams/carework/facility.js';
 import { ManualViewer } from '../../../../src/reader/manual-viewer.js';
 
@@ -266,6 +271,49 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(host.innerHTML).not.toContain('fac:v2'); // 완료 건은 결과 기록 버튼 없음
     });
 
+    it('careClients — 대상자 등록 → 수정 불러오기 → 삭제', () => {
+        loadPartial('care-client.html');
+        initCareClientView();
+        document.getElementById('cli-name').value = '김○○';
+        document.getElementById('cli-caution').value = '낙상 위험';
+        careClientSave();
+        const list = document.getElementById('cli-list');
+        expect(list.textContent).toContain('김○○');
+        expect(list.textContent).toContain('낙상 위험');
+        const id = list.querySelector('[data-arg]')?.dataset.arg;
+        careClientLoad(id);
+        expect(document.getElementById('cli-name').value).toBe('김○○');
+        careClientDelete(id);
+        expect(list.textContent).toContain('등록된 대상자가 없습니다');
+    });
+
+    it('careIncident — 보고서 생성 → 저장 목록', () => {
+        loadPartial('care-incident.html');
+        initCareIncidentView();
+        document.getElementById('inc-date').value = '2026-11-03';
+        document.getElementById('inc-client').value = '김○○';
+        document.getElementById('inc-type').value = 'fall';
+        document.getElementById('inc-desc').value = '화장실 앞 미끄러짐';
+        careIncidentGenerate();
+        expect(document.querySelector('#inc-preview pre')?.textContent).toContain('낙상');
+        careIncidentSave();
+        expect(document.getElementById('inc-saved').textContent).toContain('김○○');
+        careIncidentDelete(document.querySelector('#inc-saved [data-arg]')?.dataset.arg);
+    });
+
+    it('careRoster — 근무 배정 등록 → 목록 정렬 표시', () => {
+        loadPartial('care-roster.html');
+        initCareRosterView();
+        document.getElementById('ros-date').value = '2026-11-05';
+        document.getElementById('ros-shift').value = 'night';
+        document.getElementById('ros-worker').value = '김○○';
+        careRosterAdd();
+        const list = document.getElementById('ros-list');
+        expect(list.textContent).toContain('김○○');
+        expect(list.textContent).toContain('야간');
+        careRosterDelete(list.querySelector('[data-arg]')?.dataset.arg);
+    });
+
     // @spec DA-18 — 권한 뷰 분리: facility-join은 클라이언트 뷰로 비로그인/비권한 시 안내만 표시
     it('careFacility — 미로그인 시 로그인 안내 렌더', async () => {
         loadPartial('facility-join.html');
@@ -305,7 +353,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const css = readFileSync('css/exams/carework/care-tools.css', 'utf-8');
         const printBlock = css.slice(css.indexOf('@media print'));
         expect(printBlock).toContain('body.ui-mode-practice *');
-        for (const id of ['#log-preview', '#care-result', '#ho-preview', '#audit-list', '#audit-progress', '#care-card-detail', '#vis-preview']) {
+        for (const id of ['#log-preview', '#care-result', '#ho-preview', '#audit-list', '#audit-progress', '#care-card-detail', '#vis-preview', '#inc-preview', '#ros-preview', '#cli-preview']) {
             expect(printBlock).toContain(`${id}, ${id} *`);
         }
         // print.css — 활성 뷰만 표시. 특정 뷰 id 하드코딩 시 다른 뷰 인쇄가 깨짐

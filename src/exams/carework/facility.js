@@ -132,3 +132,30 @@ export async function updateVisitResult(visitId, patch) {
     if (error) return { error: error.message };
     return { ok: true };
 }
+
+// — DSN-43 6d: 사고·낙상 보고서 —
+
+/** 사고 보고서 등록 — 기관 사고 대장에 증적 기록 @returns {Promise<{id:string}|{error:string}>} */
+export async function submitIncident({ facilityId, client, occurredAt, place, type, severity, description, action, familyNotified }) {
+    const sb = await getSupabase();
+    const { data, error } = await sb
+        .from('incident_reports')
+        .insert({ facility_id: facilityId, client, occurred_at: occurredAt, place, type, severity, description, action, family_notified: familyNotified })
+        .select('id')
+        .single();
+    if (error) return { error: error.message };
+    return { id: data.id };
+}
+
+/** 시설 사고 대장 목록 @returns {Promise<Array>} */
+export async function listIncidents(facilityId, { limit = 20 } = {}) {
+    const sb = await getSupabase();
+    const { data, error } = await sb
+        .from('incident_reports')
+        .select('id,client,occurred_at,place,type,severity,description,action,family_notified,created_at,author_id')
+        .eq('facility_id', facilityId)
+        .order('created_at', { ascending: false })
+        .limit(limit);
+    if (error) throw new Error(`incident_reports: ${error.message}`);
+    return data || [];
+}

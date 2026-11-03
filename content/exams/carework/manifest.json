@@ -106,6 +106,30 @@
       "error": "방문 기록을 불러오지 못했습니다.",
       "dataError": "데이터를 불러오지 못했습니다."
     },
+    "careClients": {
+      "title": "대상자 명부",
+      "subtitle": "대상자 등록·주의사항 관리 — 내보내기 Pro",
+      "nav": "대상자",
+      "loading": "대상자 명부를 불러오는 중입니다...",
+      "error": "대상자 명부를 불러오지 못했습니다.",
+      "dataError": "데이터를 불러오지 못했습니다."
+    },
+    "careIncident": {
+      "title": "사고·낙상 보고서",
+      "subtitle": "사고 기록·증적 서식 — 기관 등록·내보내기 Pro",
+      "nav": "사고보고",
+      "loading": "사고 보고서를 불러오는 중입니다...",
+      "error": "사고 보고서를 불러오지 못했습니다.",
+      "dataError": "데이터를 불러오지 못했습니다."
+    },
+    "careRoster": {
+      "title": "교대 근무표",
+      "subtitle": "근무일·근무조 배정 — 내보내기 Pro",
+      "nav": "근무표",
+      "loading": "근무표를 불러오는 중입니다...",
+      "error": "근무표를 불러오지 못했습니다.",
+      "dataError": "데이터를 불러오지 못했습니다."
+    },
     "careFacilityJoin": {
       "title": "기관 가입",
       "subtitle": "초대 코드로 소속 기관에 연결",

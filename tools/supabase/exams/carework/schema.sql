@@ -186,3 +186,31 @@ create policy "visit member write" on public.family_visits for insert
 drop policy if exists "visit member update" on public.family_visits;
 create policy "visit member update" on public.family_visits for update
   using (public.is_facility_member(facility_id, auth.uid()));
+
+-- DSN-43 6d — 사고·낙상 보고서: incident_reports
+-- 기관 평가 증적 — 사고 기록은 법적 문서라 수정·삭제 정책 없음 (등록 후 정정은 신규 기록으로)
+
+create table if not exists public.incident_reports (
+  id uuid primary key default gen_random_uuid(),
+  facility_id uuid not null references public.facilities(id) on delete cascade,
+  author_id uuid not null references auth.users(id),
+  client text not null,
+  occurred_at text not null,                            -- 발생 일시 'YYYY-MM-DD HH:MM'
+  place text not null default '',
+  type text not null,                                   -- 낙상·욕창·약물·외상·배회·기타
+  severity text not null default '',
+  description text not null default '',
+  action text not null default '',
+  family_notified boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+alter table public.incident_reports enable row level security;
+
+drop policy if exists "incident member read" on public.incident_reports;
+create policy "incident member read" on public.incident_reports for select
+  using (public.is_facility_member(facility_id, auth.uid()));
+
+drop policy if exists "incident member write" on public.incident_reports;
+create policy "incident member write" on public.incident_reports for insert
+  with check (public.is_facility_member(facility_id, auth.uid()) and author_id = auth.uid());

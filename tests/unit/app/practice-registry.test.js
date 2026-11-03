@@ -133,13 +133,13 @@ test('실무 피처 카피 계약 — formula 보유 시험은 uiText에 카피 
 
 test('해시 슬러그 — formula-view → formula', () => {
     setExams([]);
-    assert.deepEqual(getPracticeHashSlugs(), { 'formula-view': 'formula', 'care-calc-view': 'care-calc', 'care-card-view': 'care-card', 'care-log-view': 'care-log', 'care-audit-view': 'care-audit', 'care-handover-view': 'care-handover', 'care-visit-view': 'care-visit', 'facility-join-view': 'facility-join', 'facility-admin-view': 'facility-admin' });
+    assert.deepEqual(getPracticeHashSlugs(), { 'formula-view': 'formula', 'care-calc-view': 'care-calc', 'care-card-view': 'care-card', 'care-log-view': 'care-log', 'care-audit-view': 'care-audit', 'care-handover-view': 'care-handover', 'care-visit-view': 'care-visit', 'care-client-view': 'care-client', 'care-incident-view': 'care-incident', 'care-roster-view': 'care-roster', 'facility-join-view': 'facility-join', 'facility-admin-view': 'facility-admin' });
 });
 
 test('지연 핸들러 — 로더 함수 + 이름 배열 쌍, 이름은 전체 유니크', () => {
     setExams([]);
     const handlers = getPracticeLazyHandlers();
-    assert.equal(handlers.length, 18); // main·batch·customer·material·compliance·sales·products·notice·audit·adverse + careCalc·careCard·careLog·careAudit·careHandover·careVisit·careFacilityJoin·careFacilityAdmin main
+    assert.equal(handlers.length, 21); // main·batch·customer·material·compliance·sales·products·notice·audit·adverse + careCalc·careCard·careLog·careAudit·careHandover·careVisit·careClients·careIncident·careRoster·careFacilityJoin·careFacilityAdmin main
     const names = [];
     for (const [load, list] of handlers) {
         assert.equal(typeof load, 'function');
@@ -245,7 +245,7 @@ test('도메인 경로 규약 — feature를 켠 시험마다 뷰 모듈·마크
 
 test('도메인 스타일 선언 — carework 피처는 공용 care-tools.css를 선언한다', () => {
     const spec = getPracticeDomainSpec();
-    for (const k of ['careCalc', 'careCard', 'careLog', 'careAudit', 'careVisit']) {
+    for (const k of ['careCalc', 'careCard', 'careLog', 'careAudit', 'careVisit', 'careClients', 'careIncident', 'careRoster']) {
         assert.equal(spec[k]?.styles, 'care-tools.css', `${k}: styles 미선언`);
     }
 });

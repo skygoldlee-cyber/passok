@@ -18,6 +18,12 @@
     "care_handover_save": "pro",
     "care_visit_save": "pro",
     "care_visit_share": "pro",
+    "care_client_save": "pro",
+    "care_client_share": "pro",
+    "care_incident_save": "pro",
+    "care_incident_share": "pro",
+    "care_roster_save": "pro",
+    "care_roster_share": "pro",
     "facility_workspace": "pro"
   }
 }
