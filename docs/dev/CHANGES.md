@@ -68,6 +68,11 @@
 - 입력 조건 표에 '적용 기준' 행 추가 — 출력물이 어느 연도 고시로 계산됐는지 문서상 확인 가능
 - DOM 테스트에 구버전 시뮬레이션(`vi.setSystemTime` 2027) 추가 — 경고 문구·스타일·출력물 경고 단언 (15/15)
 
+## 2026-11-03 fix(deploy): 파생물 스테이징 경로 정정 — gitignore 파일·누락 경로
+
+- `git add -- data docs index.html`이 gitignore 대상 index.html을 명시해 exit 1 — 파생물 재생성분이 실제로 생긴 첫 배포에서 차단 (add 자체가 실패). index.html은 미추적 생성물이라 add·필터 둘 다 무의미
+- stats:stamp 갱신 대상 README.md(루트)가 경로 밖이라 잔여 검사로 오인될 수 있던 갭 — add·leftover 경로를 `data docs README.md`로 정정
+
 ## 2026-11-02 fix(docs): '실무막*' 오탈자(U+B9C9) 전수 정정 — 잔여 0
 
 - 전수 스캔으로 U+B9C9 잔재 정리: CHANGES 14건·SPEC 1건·SCREEN_MAP 2건·release-notes.json 1건·study-manual 테스트 픽스처 1건 (모두 문서·히스토리 계열 — 실행 코드·파일명·내비 라벨은 정본 '실무막뉴얼' 확인됨)
