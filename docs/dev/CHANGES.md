@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-03 fix(assets): PC 아이콘 라운드 표시 — 512·192 RGBA 복원 + 파생 컴포지트
+
+- 데스크톱은 마스크 미적용이라 배경 컴포지트본이 각진 사각으로 보임 — 512·192를 투명 코너 RGBA 라운드 타일로 복원
+- iOS 투명→검정 방지: `build_icons.js` 파생 렌더(180·favicon)에 엣지 평균색 배경 + 85% 아트 컴포지트 로직 추가
+
 ## 2026-11-03 feat(assets): 아이콘 세트를 사용자 제공 정본으로 교체
 
 - `icon-1024-master.png` → `passok-icon-master.png` 정본, `icon-512.png`·`icon-192.png` → 동명 파생 교체, 180·favicon 재생성, manifest 재스탬프

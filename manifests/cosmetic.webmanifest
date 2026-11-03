@@ -16,13 +16,13 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icons/passok-icon-192.png?v=20d3295f",
+      "src": "icons/passok-icon-192.png?v=ee92e439",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/passok-icon-512.png?v=77677348",
+      "src": "icons/passok-icon-512.png?v=15c772a2",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

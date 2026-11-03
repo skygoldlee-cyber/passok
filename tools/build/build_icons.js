@@ -52,7 +52,28 @@ async function renderSize(browser, srcDataUrl, size) {
         const ctx = /** @type {CanvasRenderingContext2D} */ (document.getElementById('c').getContext('2d'));
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
-        ctx.drawImage(img, 0, 0, s, s);
+        // 알파 코너 원본 대응 — 4변 중앙 불투명 픽셀 평균색 배경 + 아트 85% 중앙 배치
+        // (iOS apple-touch는 투명 코너를 검정으로 렌더하므로 불투명 컴포지트 필수)
+        const sc = document.createElement('canvas');
+        sc.width = sc.height = 64;
+        const sctx = /** @type {CanvasRenderingContext2D} */ (sc.getContext('2d'));
+        sctx.drawImage(img, 0, 0, 64, 64);
+        const patch = (cx, cy) => {
+            let r = 0, g = 0, b = 0, c = 0;
+            for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) {
+                const px = cx + dx, py = cy + dy;
+                if (px < 0 || px >= 64 || py < 0 || py >= 64) continue;
+                const p = sctx.getImageData(px, py, 1, 1).data;
+                if (p[3] > 200) { r += p[0]; g += p[1]; b += p[2]; c++; }
+            }
+            return [r / c, g / c, b / c];
+        };
+        const cols = [patch(32, 4), patch(32, 59), patch(4, 32), patch(59, 32)];
+        const avg = [0, 1, 2].map(i => Math.round(cols.reduce((a, c) => a + c[i], 0) / 4));
+        ctx.fillStyle = `rgb(${avg[0]},${avg[1]},${avg[2]})`;
+        ctx.fillRect(0, 0, s, s);
+        const art = Math.round(s * 0.85);
+        ctx.drawImage(img, (s - art) / 2, (s - art) / 2, art, art);
         const blob = await new Promise(r => document.getElementById('c').toBlob(r, 'image/png'));
         return Array.from(new Uint8Array(await blob.arrayBuffer()));
     }, { dataUrl: srcDataUrl, s: size });
