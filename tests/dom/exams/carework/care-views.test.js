@@ -340,6 +340,15 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(getOrgName()).toBe('행복요양원');
     });
 
+    it('careFinder — 출처 텍스트의 URL은 링크로 렌더', async () => {
+        vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ source: '공단 현황 — https://www.data.go.kr/x (필터)', regions: [], items: [] }) })));
+        loadPartial('care-finder.html');
+        const { initCareFinderView } = await import('../../../../src/exams/carework/views/care-finder.js');
+        await initCareFinderView();
+        const a = /** @type {HTMLAnchorElement|null} */ (document.querySelector('#find-source a'));
+        expect(a?.href).toContain('data.go.kr');
+    });
+
     // @spec DA-18 — 권한 뷰 분리: facility-join은 클라이언트 뷰로 비로그인/비권한 시 안내만 표시
     it('careFacility — 미로그인 시 로그인 안내 렌더', async () => {
         loadPartial('facility-join.html');

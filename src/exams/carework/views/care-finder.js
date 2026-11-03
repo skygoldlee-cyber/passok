@@ -40,7 +40,12 @@ export async function initCareFinderView() {
             sel.innerHTML = '<option value="">전체 지역</option>' + (d.regions || []).map(r => `<option value="${r}">${r}</option>`).join('');
         render();
         const src = $('find-source');
-        if (src && d.source) src.textContent = '출처: ' + d.source;
+        if (src && d.source) {
+            const [pre, url, post] = d.source.split(/(https?:\/\/\S+)/);
+            src.innerHTML = url
+                ? `출처: ${esc(pre)}<a href="${esc(url)}" target="_blank" rel="noopener">${esc(url)}</a>${esc(post || '')}`
+                : `출처: ${esc(d.source)}`;
+        }
     } catch (e) {
         if (host) host.innerHTML = '<p class="care-calc-err">시설 목록을 불러오지 못했습니다.</p>';
     }
