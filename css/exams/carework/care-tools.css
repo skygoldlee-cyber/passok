@@ -208,3 +208,5 @@
 
 .care-calc-row { gap: 12px; }
 .care-calc-row strong { flex-shrink: 0; text-align: right; font-variant-numeric: tabular-nums; }
+
+.cli-list-head { margin-top: 1.25rem; }
