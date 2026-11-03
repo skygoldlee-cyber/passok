@@ -4,7 +4,7 @@
 // advisory 도구지만 판정 회귀는 리뷰 판단을 오도하므로 테스트로 고정.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import auditMod from '../../../tools/check/audit_gate_utility.js';
+import auditMod from '../../../tools/audit/audit_gate_utility.js';
 
 const { collectStepStats } = auditMod;
 const NOW = Date.parse('2026-10-26T00:00:00Z');

@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 
 function runAudit(script) {
-  return execFileSync('node', [`tools/check/${script}`], {
+  return execFileSync('node', [`tools/audit/${script}`], {
     cwd: ROOT, encoding: 'utf-8', timeout: 120000,
   });
 }

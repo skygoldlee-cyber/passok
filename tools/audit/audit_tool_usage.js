@@ -16,7 +16,7 @@
  *   2) steps.js 등록 단계 중 어느 PRESET에도 속하지 않은 단계 — 죽은 게이트
  *   3) tools/state/step_runs.jsonl 최근 30일 미실행 단계 (로그 존재 시)
  *
- * 사용: node tools/check/audit_tool_usage.js   (npm run audit:tools)
+ * 사용: node tools/audit/audit_tool_usage.js   (npm run audit:tools)
  */
 
 // @spec none (감사)
@@ -45,7 +45,7 @@ for (const cmd of Object.values(pkg.scripts || {})) {
 
 // 2) steps.js 단계 레지스트리 — nodeStep의 첫 인자 스크립트
 let stepsMod = null;
-try { stepsMod = require('./steps.js'); } catch { /* 레지스트리 부재 시 스킵 */ }
+try { stepsMod = require('../check/steps.js'); } catch { /* 레지스트리 부재 시 스킵 */ }
 if (stepsMod) {
     for (const s of stepsMod.allSteps()) {
         for (const a of s.args || []) if (/^tools\/.+\.js$/.test(a)) addEntry(a);

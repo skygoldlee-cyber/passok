@@ -66,5 +66,5 @@ jobs:
           "
 
       - name: 도구 사용률 감사 (advisory)
-        run: node tools/check/audit_tool_usage.js
+        run: node tools/audit/audit_tool_usage.js
         continue-on-error: true

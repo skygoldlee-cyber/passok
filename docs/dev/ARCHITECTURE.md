@@ -467,14 +467,21 @@ passok/
 │   │       ├── textbook.plugin.js
 │   │       ├── exams.plugin.js
 │   │       └── knowledge.plugin.js     #   범용 지식DB 소스 로딩 (knowledge/<key>.json → <key>_data.<hash>.js + emitMd 표 재생성)
-│   ├── config/                 #   도구 설정 데이터 (citation_fingerprints·docs_paths_allowlist)
-│   ├── check/                  #   검증·감사 스크립트 전체 (check_*·audit_*·verify_shell_assets)
+│   ├── config/                 #   도구 설정 데이터 (citation_fingerprints·docs_paths_allowlist·domain-map·layer_registry)
+│   ├── check/                  #   차단 게이트·검증 스크립트 (check_*·verify_shell_assets — 감사 도구는 audit/로 분리, check_tools_layout이 강제)
 │   │   ├── check_combo_pilot.js    #   복수정답형 파일럿 검증 (check:combo)
 │   │   ├── check_parser_parity.js  #   빌드 파서 ↔ 런타임 파서 등가성 검증
 │   │   ├── check_imports.js        #   ES 모듈 import/export 교차 검증
 │   │   ├── check_inventory.js      #   문서 디렉토리 트리 ↔ 실제 파일시스템 정합 (check:inventory)
-│   │   ├── verify_shell_assets.js  #   프리캐시 파일 존재 CI 검증
-│   │   └── audit_card_quality.js   #   카드 품질 자동 감사 (npm run audit:cards)
+│   │   ├── check_tools_layout.js   #   tools/ 배치 규약 — audit_*은 tools/audit/ 전용 (docs:toolslayout)
+│   │   └── verify_shell_assets.js  #   프리캐시 파일 존재 CI 검증
+│   ├── audit/                  #   감사 도구 (audit_* — advisory 리포트·기준선 감사, audit:* 스크립트)
+│   │   ├── audit_card_quality.js   #   카드 품질 자동 감사 (npm run audit:cards)
+│   │   ├── audit_combo.js          #   복수정답형 품질 감사 (npm run audit:combo)
+│   │   ├── audit_study_quality.js  #   학습 품질 감사 (npm run audit:study)
+│   │   ├── audit_tool_usage.js     #   tools/ 도달성·죽은 단계 감사 (npm run audit:tools)
+│   │   ├── audit_gate_utility.js   #   P2 게이트 효용 감사 (npm run audit:gates)
+│   │   └── audit_syllabus_alignment.js # 출제기준 정합 감사 (npm run audit:syllabus)
 │   ├── sync/                   #   콘텐츠 동기화 (sync_citation_lines·sync_textbook_files — build:data에 통합)
 │   ├── supabase/               #   DB 스키마·프로비저닝 SQL (schema.sql — check:supabase·check:rls 대상) + functions/ Edge Function 정본 (admin-bot·feedback-notify·ai-proxy)
 │   └── deploy/                 #   배포 가드 (deploy.js — npm run deploy)

@@ -1,7 +1,7 @@
-// tools/check/audit_study_quality.js — 스마트학습·맞춤학습 품질 감사
+// tools/audit/audit_study_quality.js — 스마트학습·맞춤학습 품질 감사
 // @spec SQ-01,SQ-02,SQ-03,SQ-04
 //
-// 실행: npm run audit:study  (node tools/check/audit_study_quality.js)
+// 실행: npm run audit:study  (node tools/audit/audit_study_quality.js)
 //
 // 합성 사용자 상태를 주입해 학습 계획·과목 배분·진단·추천·점수 추정이
 // "설계된 규칙대로 동작하는가"를 결정론적으로 검증한다 (실효성 자체는

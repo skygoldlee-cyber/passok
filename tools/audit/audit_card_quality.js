@@ -1,7 +1,7 @@
-// tools/check/audit_card_quality.js — 콘텐츠 품질 자동 감사 도구
+// tools/audit/audit_card_quality.js — 콘텐츠 품질 자동 감사 도구
 // @spec CQ-01~04,BP-08
 //
-// 실행: node tools/check/audit_card_quality.js
+// 실행: node tools/audit/audit_card_quality.js
 //
 // 점검 항목:
 // 1. 너무 짧은 설명 (definition length <= 10)

@@ -42,7 +42,7 @@ const STEP_LANDING = nodeStep('landing', 'tools/build/build_landing.js', '빌드
 const STEP_DOMAINMAP = npmStep('domainmap', 'check:domainmap', '분류', '파일 계층 분류 강제 (domain-map.json)', { prio: 'p0' });
 const STEP_VENDOR = npmStep('vendor', 'check:vendor', '자산', 'vendor 매니페스트 ↔ 파일 해시·버전 정합 (BP-13, 무단 교체·미등록 파일 차단)', { prio: 'p0' });
 const STEP_UITEXT = npmStep('uitext', 'check:uitext', '문서', 'UI 텍스트 커버리지 (data-uitext ↔ manifest.uiText)');
-const STEP_STUDYQ = nodeStep('studyq', 'tools/check/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'], prio: 'p2' });
+const STEP_STUDYQ = nodeStep('studyq', 'tools/audit/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'], prio: 'p2' });
 const STEP_ENV = nodeStep('env', 'tools/check/check_env.js', '보안', '.env 시크릿 신선도 — 만료 토큰·미선언·빈 키 탐지 (.env 부재 시 스킵 — CI에는 .env 없음, LOCAL_ONLY)', { prio: 'p2' });
 const STEP_SUPABASE = npmStep('supabase', 'check:supabase', '외부', 'Supabase 스키마 적용 상태 — schema.sql 선언 테이블의 프로덕션 존재 프로브 (미적용 시 차단, 네트워크 불가 시 경고+통과)', { prio: 'p1' });
 const STEP_RLS = npmStep('rls', 'check:rls', '보안', 'RLS 익명 침투 검증 — anon 키로 select 유출·insert·스푸핑·RPC 차단 실측 (허용 시 차단, 네트워크 불가 시 경고+통과)', { prio: 'p1' });
@@ -67,6 +67,7 @@ const DOCS_STEPS = [
   nodeStep('docs:binary', 'tools/check/check_binary.js', '자산', '대형·외부화 대상 바이너리 신규 유입 차단 (참조자료 PDF·500KB+ 바이너리 — DOC-RBK-12 정착 가드)', { diffScoped: true, prio: 'p0' }),
   nodeStep('docs:webp', 'tools/check/check_webp_only.js', '자산', '배포 이미지 webp 강제 — 서빙 이미지는 .webp만, png/jpg는 마스터(vercelignore)·예외만'),
   nodeStep('docs:navicons', 'tools/check/check_nav_icons.js', '문서', '메뉴 아이콘 고유성 — 사이드바·모바일 탭·설정/도움말 영역 기능별 고유 아이콘 강제'),
+  nodeStep('docs:toolslayout', 'tools/check/check_tools_layout.js', '분류', 'tools/ 배치 규약 — 감사 도구 audit_*은 tools/audit/ 전용', { prio: 'p0' }),
 ];
 
 // ── 콘텐츠 의존성 단계 (check:content → content 프리셋) ────────────────
@@ -95,7 +96,7 @@ const CONTENT_STEPS = [
   nodeStep('content:posind', 'tools/check/check_position_independence.js', '규칙', '교재 좌표 비의존 — 위치 기반 식별자·저장 키 정적 탐지 (ID-05)', { diffScoped: true, inProcess: true, prio: 'p0' }),
   nodeStep('content:contentind', 'tools/check/check_content_independence.js', '규칙', '로직 콘텐츠 독립 — 시험 id·과목 키 리터럴 하드코딩 정적 탐지 (DA-15)', { diffScoped: true, inProcess: true, prio: 'p0' }),
   nodeStep('content:assets', 'tools/check/verify_shell_assets.js', '자산', 'sw.js SHELL_ASSETS/DATA_ASSETS 파일 존재', { prio: 'p0' }),
-  nodeStep('content:cards', 'tools/check/audit_card_quality.js', '카드', '카드 품질 감사 (짧은 설명·중복·참조 링크)', { content: true, prio: 'p2' }),
+  nodeStep('content:cards', 'tools/audit/audit_card_quality.js', '카드', '카드 품질 감사 (짧은 설명·중복·참조 링크)', { content: true, prio: 'p2' }),
   nodeStep('content:docbundles', 'tools/build/build_doc_bundles.js', '문서번들', 'docs_md 번들 ↔ 원본 문서 신선도 (build_doc_bundles 필요 감지)', { args: ['--check'], content: true }),
   nodeStep('content:refmap', 'tools/build/build_ref_mapping.js', '문서신선도', 'TEXTBOOK_REFERENCE_MAPPING §2 표 ↔ 교재 📌출처 ref_md 링크 (build:refmap 필요 감지)', { args: ['--check'], content: true }),
   nodeStep('content:textbookdocs', 'tools/check/check_textbook_docs.js', '문서신선도', '교재 갱신 ↔ 판본:textbook 문서 (교재 교체 후 방치 문서 감지)', { content: true }),
@@ -140,7 +141,7 @@ const CI_STEPS = [
   STEP_VENDOR,
   npmStep('ci:parser', 'check:parser', '파서', '빌드 파서 ↔ 런타임 파서 등가성', { prio: 'p0' }),
   npmStep('ci:perf', 'check:perf', '성능', 'SHELL_ASSETS 크기 예산 상한', { prio: 'p0' }),
-  nodeStep('ci:studyq', 'tools/check/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'], prio: 'p2' }),
+  nodeStep('ci:studyq', 'tools/audit/audit_study_quality.js', '품질', '학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트)', { args: ['--check'], prio: 'p2' }),
   nodeStep('ci:diffcov', 'tools/check/check_diff_coverage.js', '테스트', '변경 라인 차등 커버리지 — diff 헝크 브랜치 ≥80%·신규 ≥85% (리포트 부재 시 스킵)', { diffScoped: true, prio: 'p0' }),
 ];
 
@@ -191,8 +192,8 @@ const AUDIT_STEPS = [
   npmStep('audit:adlint', 'check:adlint', '감사', '광고 문구 사전 커버리지 감사 (FO-68)', { prio: 'p2' }),
   npmStep('audit:lawurls', 'check:lawurls', '감사', 'law.go.kr 라이브 링크 검증 (외부 드리프트 — 네트워크 필요)', { prio: 'p2' }),
   nodeStep('audit:onboard', 'tools/check/check_exam_onboard.js', '감사', '시험 팩 온보딩·승격 진단 (comingSoon↔콘텐츠 정합·필수 선언·선택 자산)', { prio: 'p2' }),
-  nodeStep('audit:tools', 'tools/check/audit_tool_usage.js', '감사', 'tools/ 도달성·죽은 단계 감사 — 진입점→import 그래프 도달 불가 파일·프리셋 미소속 단계', { prio: 'p2' }),
-  nodeStep('audit:gateutil', 'tools/check/audit_gate_utility.js', '감사', 'P2 단계 효용 감사 — 실행 텔레메트리·기준선 갱신 이력으로 미발화/고빈도 게이트 식별', { prio: 'p2' }),
+  nodeStep('audit:tools', 'tools/audit/audit_tool_usage.js', '감사', 'tools/ 도달성·죽은 단계 감사 — 진입점→import 그래프 도달 불가 파일·프리셋 미소속 단계', { prio: 'p2' }),
+  nodeStep('audit:gateutil', 'tools/audit/audit_gate_utility.js', '감사', 'P2 단계 효용 감사 — 실행 텔레메트리·기준선 갱신 이력으로 미발화/고빈도 게이트 식별', { prio: 'p2' }),
 ];
 
 // ── 실패 복구 안내 (run.js 요약의 근본원인 그룹핑) ─────────────────────

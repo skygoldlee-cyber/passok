@@ -60,7 +60,7 @@ npm.cmd run audit:gates    # 미발화(silent)·미실행(dormant)·고빈도(no
 - **silent** — 기준선 게이트면 정상, 차단 게이트가 장기 0실패면 탐지 공백 의심
 - **noisy** — 실패율 높은 단계는 탐지 기준 완화 또는 대상 축소 검토
 
-판정 기준과 해석은 `tools/check/audit_gate_utility.js` 헤더.
+판정 기준과 해석은 `tools/audit/audit_gate_utility.js` 헤더.
 
 ### 리뷰 이력
 

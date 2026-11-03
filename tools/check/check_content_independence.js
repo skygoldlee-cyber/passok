@@ -47,7 +47,7 @@ const ALLOWED = [
         reason: '레지스트리 로딩 경로 소유처 — registryGlobal 해석·기본 시험 정적 전역 확보·비기본 번들 누락 가드. 다른 모듈은 exam-context.getActiveRegistry()로만 접근'
     },
     {
-        file: 'tools/check/audit_study_quality.js', contains: 'window.DATA_REGISTRY',
+        file: 'tools/audit/audit_study_quality.js', contains: 'window.DATA_REGISTRY',
         reason: '시뮬레이션 스텁 — 가상 시험(simexam) 레지스트리를 window에 설치하고 스텁 값을 인자로 전달. 기본 시험 전역명 폴백 규약을 검증하는 하네스'
     },
     {

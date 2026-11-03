@@ -409,7 +409,7 @@
 |----|---------|-----------|
 | CQ-01 | 카드 품질 자동 감사 (짧은 설명, 중복, 의미 없음, 긴/짧은 term, 빈 definition, 저품질) | ✅ |
 | CQ-02 | 참조자료 링크 유효성 감사 (`data-ref-html` 파일 존재 여부) | ✅ |
-| CQ-03 | `npm run audit:cards` 스크립트 (`tools/check/audit_card_quality.js`) | ✅ |
+| CQ-03 | `npm run audit:cards` 스크립트 (`tools/audit/audit_card_quality.js`) | ✅ |
 | CQ-04 | 심각도 분류 (ERROR/WARN) 및 요약 리포트 출력 | ✅ |
 | CQ-05 | 복수정답형 품질 감사 (`npm run audit:combo` — 정답 유일성·중복 진술집합·모순쌍·위치편향, 배포 게이트 연동) | ✅ |
 | CQ-06 | **정답↔근거 지지 검증** (`npm run check:answers` — `tools/check/check_answer_overlap.js`): 문제은행 각 문항의 표기 정답이 인용 근거 구절(내장 인용문 → 인용 원문 블록 2단계)에 의해 지지되는지 검사. 4-gram 공통 부분문자열 매칭으로 조사·어미 변형 흡수. 단답형은 정답·허용정답 부분일치, 선다형 긍정형은 정답 지지, 부정형은 해설·오답 지지·정답 언급 중 하나로 판정. [인용문 부실](원문은 지지·내장 구절 미지지 — 보고)과 [정답 미지지](원문도 미지지 — 기준선 게이트)를 구분해 신규 무근거 인용 유입 차단 | ✅ |
@@ -582,7 +582,7 @@
 
 | ID | 요구사양 | 구현 상태 |
 |----|---------|-----------|
-| SQ-01 | 학습 품질 감사 도구 (`tools/check/audit_study_quality.js`, `npm run audit:study`) — 합성 사용자 상태를 주입해 주간 배분·학습 진단 추천의 규칙 정합을 결정론적으로 검증 (실효성이 아닌 규칙 일관성·내부 정합 감사) | ✅ |
+| SQ-01 | 학습 품질 감사 도구 (`tools/audit/audit_study_quality.js`, `npm run audit:study`) — 합성 사용자 상태를 주입해 주간 배분·학습 진단 추천의 규칙 정합을 결정론적으로 검증 (실효성이 아닌 규칙 일관성·내부 정합 감사) | ✅ |
 | SQ-02 | 배분 정합 지표 — coverage(잔여 과목 배정 비율)·consViolations(주차 상한)·overCap(잔여 초과)·reversals(동조건 역전)·weakCorr/boostCorr(약점↔배정 Spearman, 비중 정규화) | ✅ |
 | SQ-03 | 시나리오 스위트 — 콜드스타트(중립 가중)·균등(비례 배분)·약점 편중(배정 증가)·과락 우선(추천 선두)·잔여0(재배분)·임박(triage)·통독 차감(SC-15)·복습 밀림(dueBoost) + 진단·추천·추정·FSRS 불변식 + 시계열 시뮬(계획 준수 D-day 잔여 0·추천 추종 개선 격차·FSRS 30일 분포, 가상 시계 결정론) | ✅ |
 | SQ-04 | 기준선 회귀 게이트 — `--update`로 `study_quality_baseline.json` 갱신, `--check`로 통과→실패 회귀 차단. 산출물 `study_quality_report.json`은 gitignore | ✅ |
@@ -1408,7 +1408,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | 학습 추적 | `src/study/study-tracker.js` | 캘린더 활동 기록·목표 달성률 (`recordStudyActivity`, `getStudyGoals`) |
 | 동적 매니페스트 | `src/pwa/pwa-manifest.js` | 활성 시험 기준 PWA manifest 링크 교체 (클래식 스크립트) |
 | 설정 상수 | `src/config/timing.js` · `cache.js` | 타이밍·캐시 상수 중앙 관리 |
-| 콘텐츠 감사 | `tools/check/audit_card_quality.js` | 카드 품질 자동 감사, 참조자료 링크 유효성 검사 |
+| 콘텐츠 감사 | `tools/audit/audit_card_quality.js` | 카드 품질 자동 감사, 참조자료 링크 유효성 검사 |
 
 ### 뷰 컨트롤러 (`src/views/`)
 

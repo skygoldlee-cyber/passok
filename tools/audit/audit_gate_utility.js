@@ -20,7 +20,7 @@
  *   noisy     — 실패율 높음 또는 기준선 갱신 빈번 → 신호 대비 비용 검토 후보
  *   ok        — 그 외
  *
- * 사용: node tools/check/audit_gate_utility.js [--days N]   (npm run audit:gates)
+ * 사용: node tools/audit/audit_gate_utility.js [--days N]   (npm run audit:gates)
  */
 
 // @spec none (감사)
@@ -110,7 +110,7 @@ function fmtDate(ts) {
 
 function cliMain() {
     let stepsMod;
-    try { stepsMod = require('./steps.js'); } catch (e) {
+    try { stepsMod = require('../check/steps.js'); } catch (e) {
         console.log(`⚠ steps.js 로드 실패 — ${e.message}`);
         process.exit(0);
     }

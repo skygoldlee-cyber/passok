@@ -219,7 +219,7 @@ test('BP-01: removeOrphanBundles가 커스텀 패턴(<key>_data.<hash>.js)에도
 // ---------- BP-08: 콘텐츠 품질 감사 스크립트 ----------
 
 test('BP-08: audit:cards 스크립트가 존재하고 오류 없이 실행된다', () => {
-  const out = execFileSync('node', ['tools/check/audit_card_quality.js'], {
+  const out = execFileSync('node', ['tools/audit/audit_card_quality.js'], {
     cwd: ROOT, encoding: 'utf-8', timeout: 60000,
   });
   assert.ok(/감사|audit|ERROR|WARN/i.test(out), '요약 리포트를 출력해야 함');

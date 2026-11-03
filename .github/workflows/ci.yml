@@ -198,7 +198,7 @@ jobs:
         run: npm run check:perf
 
       - name: Study quality audit (기준선 회귀)
-        run: node tools/check/audit_study_quality.js --check
+        run: node tools/audit/audit_study_quality.js --check
 
       - name: PR impact report
         if: github.event_name == 'pull_request'
