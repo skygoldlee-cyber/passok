@@ -210,3 +210,13 @@
 .care-calc-row strong { flex-shrink: 0; text-align: right; font-variant-numeric: tabular-nums; }
 
 .cli-list-head { margin-top: 1.25rem; }
+
+.care-forms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px,100%), 1fr)); gap: 10px; margin-bottom: 12px; }
+.care-form-card { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: inherit; }
+.care-form-card:hover { border-color: var(--accent, #4a90d9); }
+.care-form-card strong { font-size: 0.95rem; }
+.care-form-card span { font-size: 0.82rem; color: var(--color-text-sub); line-height: 1.45; }
+.care-form-card em { font-size: 0.75rem; color: var(--color-primary); font-style: normal; }
+.care-form-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.care-form-table th, .care-form-table td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
+.care-form-table th { background: var(--bg-subtle); }

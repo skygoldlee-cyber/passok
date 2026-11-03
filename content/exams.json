@@ -620,6 +620,7 @@
         "careIncident": true,
         "careRoster": true,
         "careFinder": true,
+        "careForms": true,
         "careFacilityJoin": true,
         "careFacilityAdmin": true,
         "practiceManual": true

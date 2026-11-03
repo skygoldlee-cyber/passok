@@ -564,6 +564,39 @@ const careFinder = {
         }
     },
 };
+const careForms = {
+    viewId: 'care-forms-view',
+    slug: 'care-forms',
+    uiTextKey: 'careForms',
+    title: '보고서·서식 모음',
+    subtitle: '정기 제출 서식 발급처',
+    loadingText: '서식 모음을 불러오는 중입니다...',
+    loadErrorText: '서식 모음을 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-forms.html',
+    styles: 'care-tools.css',
+    loaders: { main: _domainImport('views/care-forms.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', []]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careForms.loadingText);
+        try {
+            await ensureViewMarkup(careForms);
+            if (stale()) return;
+            const m = await careForms.loaders.main();
+            if (stale()) return;
+            m.initCareFormsView();
+        } catch (e) {
+            if (!stale()) showToast(careForms.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
 const careFacilityJoin = {
     viewId: 'facility-join-view',
     slug: 'facility-join',
@@ -632,7 +665,7 @@ const careFacilityAdmin = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careFinder, careFacilityJoin, careFacilityAdmin };
+const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careFinder, careForms, careFacilityJoin, careFacilityAdmin };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {
@@ -696,7 +729,8 @@ export function getPracticeLazyHandlers() {
     /** @type {Array<[() => Promise<any>, string[]]>} */
     const out = [];
     for (const f of Object.values(PRACTICE_FEATURES)) {
-        for (const [loaderKey, names] of f.handlers) {
+        for (const [loaderKey, names] of f.handlers || []) {
+            if (!names.length) continue; // 핸들러 없는 정적 뷰 허용 (careForms 등)
             out.push([f.loaders[loaderKey], names]);
         }
     }
