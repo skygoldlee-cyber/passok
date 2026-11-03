@@ -512,6 +512,7 @@ tools/                  # 빌드·검증 스크립트
   config/               # 도구 설정 (domain-map.json 파일 계층 분류표·docs_paths_allowlist·citation_fingerprints·layer_registry z-index 대역 예외)
   state/                # 게이트 기준선·스탬프 (*_baseline.json·test_stats.json — 추적) + 로컬 산출물 (리포트·검수 큐·대시보드 — gitignore)
   sync/                 # 콘텐츠 동기화 (sync_citation_lines·sync_textbook_files)
+  import/               # 외부 데이터 임포트 (import_facilities.js — 공공데이터 CSV → 실무 시설 목록, DSN-43 6g)
   deploy/               # 배포 가드 (deploy.js)
   ci/                   # CI 진단·재실행 도구 (ci_diagnose.js 실패 잡·스텝 조회 + --specs 샤드 스펙 나열 · ci_retrigger.js 빈 커밋 재트리거 + 완료 폴링)
   merge/                # git 머지 드라이버 (merge_stamps.js — 배포 스탬프 파일 자동 병합, .gitattributes merge=stamps)

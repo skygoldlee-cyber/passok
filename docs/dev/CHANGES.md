@@ -4,7 +4,7 @@
 
 - `careFinder` — 공공데이터 장기요양기관 목록(`실무/facilities.json`) 시설명·주소·전화번호 키워드 + 지역 필터 검색
 - "기관명 설정" → `setLocalOrgName` — 출력물 기관명 표기(6e)·기관 가입 흐름과 연결
-- 전량 데이터는 공공데이터 XLSX 임포트로 확장 예정 — 시드 구조 선적재
+- 전량 데이터는 공공데이터 XLSX 임포트로 확장 예정 — `tools/import/import_facilities.js` (CSV → facilities.json 병합·지역 자동추출·중복제거)
 
 ## 2026-11-03 feat(carework): 입소 서류 체크리스트 (DSN-43 6f)
 
