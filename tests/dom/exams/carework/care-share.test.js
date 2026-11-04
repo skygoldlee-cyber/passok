@@ -1,11 +1,26 @@
 // tests/dom/exams/carework/care-share.test.js
 // @spec CO-13 — careShare 전체 흐름 시뮬레이션 (폼 폴백·확인·복사)
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const toasts = [];
 vi.mock('../../../../src/ui-utils.js', () => ({
     showToast: (m) => { toasts.push(m); },
     showConfirm: vi.fn().mockResolvedValue(true),
+}));
+vi.mock('../../../../src/auth-sync/supabase-client.js', () => ({
+    getAuthSession: vi.fn(() => Promise.resolve({ session: null })),
+    getSupabase: vi.fn(() => Promise.resolve({})),
+    onAuthChange: vi.fn(),
+}));
+vi.mock('../../../../src/exams/carework/facility.js', async (importOriginal) => ({
+    ...await importOriginal(),
+    docHeadHtml: vi.fn(t => `<div class="doc-head">${t}</div>`),
+    refreshOrgName: vi.fn(),
 }));
 
 const setup = (html) => {
@@ -63,5 +78,47 @@ describe('CO-13 careShare 시뮬레이션', () => {
         await careShare(document.getElementById('share'));
         expect(globalThis.navigator.clipboard.writeText).not.toHaveBeenCalled();
         expect(toasts.find(t => t.includes('공유할 내용이 없습니다'))).toBeTruthy();
+    });
+});
+
+// 실제 본인부담금 계산 뷰 시뮬레이션 — 실마크업 파셜 + 실제 careCalcRun
+describe('CO-13 본인부담금 계산 실제 시뮬레이션', () => {
+    const partial = readFileSync(join(__dirname, '../../../../html/exams/carework/care-calc.html'), 'utf8');
+
+    it('공유 버튼 클릭 → 자동 계산 실행 → 계산 결과 공유', async () => {
+        document.body.innerHTML = partial;
+        globalThis.navigator.clipboard = { writeText: vi.fn().mockResolvedValue() };
+        delete globalThis.navigator.share;
+        const { initCareCalcView, careCalcRun } = await import('../../../../src/exams/carework/views/care-calc.js');
+        await initCareCalcView();
+        // 프로덕션 data-click 위임 shim — jsdom에는 전역 위임이 없으므로 수동 연결
+        document.body.addEventListener('click', e => {
+            const b = e.target.closest('[data-click]');
+            if (b?.dataset.click === 'careCalcRun') careCalcRun();
+        });
+        // 입력 없이도 등급·유형 기본값으로 계산 가능해야 함
+        const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        const btn = document.querySelector('[data-click="careShare"]');
+        await careShare(btn);
+        const call = globalThis.navigator.clipboard.writeText.mock.calls[0];
+        expect(call, '공유가 실행되지 않음 — 미생성 시 자동 계산 실패').toBeTruthy();
+        expect(call[0]).toContain('본인부담금');
+    });
+
+    it('인쇄 후 미리보기 있음 → 공유 버튼으로 같은 내용 공유', async () => {
+        document.body.innerHTML = partial;
+        globalThis.navigator.clipboard = { writeText: vi.fn().mockResolvedValue() };
+        delete globalThis.navigator.share;
+        window.print = vi.fn();
+        const { initCareCalcView, careCalcPrint } = await import('../../../../src/exams/carework/views/care-calc.js');
+        await initCareCalcView();
+        careCalcPrint(); // 인쇄 먼저 → 결과 렌더
+        expect(document.getElementById('care-result').textContent).toContain('본인부담금');
+        const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        const btn = document.querySelector('[data-click="careShare"]');
+        await careShare(btn);
+        const call = globalThis.navigator.clipboard.writeText.mock.calls[0];
+        expect(call).toBeTruthy();
+        expect(call[0]).toBe(document.getElementById('care-result').textContent);
     });
 });
