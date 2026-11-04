@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261104-e8ccfbc",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] 공유 진단 배너 — alert 규약 위반 대신 탭-해제 상시 배너 (CO-13)",
+      "[수정·carework] 공유 진단 alert — 다운로드 창에 가려지던 토스트 대체 (CO-13)",
+      "[정리·release] v20261104-1dbb7ee 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-1dbb7ee",
     "date": "2026-11-04",
     "notes": [
@@ -188,18 +197,6 @@
       "[정리] 배포 전 파생물 재생성 [no-test]",
       "[기능·carework] 인쇄 있는 전 뷰에 공유 버튼 — CO-13 careShare 전면 확장",
       "[정리·release] v20261104-14b902b 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-14b902b",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·carework] careFinder DOM 테스트 — 공단 링크 위치 뷰 상단으로 기대 정정",
-      "[문서·carework] 전략 문서 §6 구현 현황 반영 — CO-01~05·07·12·13 배포 완료 표기",
-      "[기능·carework] CO-13 생성 문서 공유 — Web Share API로 카톡 등 네이티브 공유",
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[수정·carework] 공단 기관검색 링크 카드 반복 제거 — 뷰 상단 단일 링크로",
-      "[정리·release] v20261104-4acfff5 스탬프 확정 [no-docs]"
     ]
   }
 ]
