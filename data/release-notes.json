@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261105-ab3b06f",
+    "date": "2026-11-05",
+    "notes": [
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[수정·carework] 서명란 하단 여백 증가 (16px → 36px)",
+      "[정리·release] v20261105-f2b1c39 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261105-f2b1c39",
     "date": "2026-11-05",
     "notes": [
@@ -173,14 +182,6 @@
       "[문서·agents] pdf-utils.js 디렉토리 구조 등록",
       "[기능·carework] 공유 PDF 파일 — jsPDF+html2canvas 벤더, 미리보기 렌더→PDF 첨부 (CO-13)",
       "[기능·carework] 공유 파일 첨부 — 모바일 공유 시트에 문서 파일, 데스크톱은 다운로드 (CO-13)"
-    ]
-  },
-  {
-    "version": "v20261104-4fcc900",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·carework] careShare 핸들러 시그니처 — 위임은 data-arg 문자열 전달 (CO-13)",
-      "[정리·release] v20261104-52be512 스탬프 확정 [no-docs]"
     ]
   }
 ]
