@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 feat(carework): 실무 뷰 버튼 이모지 — 전 버튼 카테고리별 아이콘 (CO-13)
+
+
 ## 2026-11-04 fix(carework): 공유 감사 로그 storage.js 추상화 경유 — CARE_SHARE_AUDIT 키 등록 (CO-13)
 
 
