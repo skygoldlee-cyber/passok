@@ -25,6 +25,10 @@ function render() {
             ${cur === f.name
                 ? '<span class="care-finder-set">✓ 설정됨</span>'
                 : `<button data-click="careFinderUseOrg" data-arg="${esc(f.name)}" class="btn btn-secondary care-finder-btn">이 기관으로 설정</button>`}
+            <span class="care-finder-links">
+                <a href="https://map.kakao.com/link/search/${encodeURIComponent(f.name + ' ' + (f.address || f.region || ''))}" target="_blank" rel="noopener" class="btn btn-secondary care-finder-btn">카카오맵</a>
+                <a href="https://www.longtermcare.or.kr/npbs/e/e/101/npeE101r01.web" target="_blank" rel="noopener" class="btn btn-secondary care-finder-btn">장기요양보험</a>
+            </span>
           </div>`).join('')
         : '<p class="care-log-empty">검색 결과가 없습니다.</p>';
 }
