@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 fix(carework): pre-push 게이트 — care-home 플레이스홀더·모바일 탭 동기화·아이콘 고유화·print 규칙
+
+- care-home-view data-lazy-view 플레이스홀더 + 모바일 탭 버튼·finder 중복 제거·사이드바 순서 동기·fa-house-medical 고유 아이콘
+- obs-chip position:absolute 제거 (print 허용 목록), 실무매뉴얼 docs_md 번들 재생성
+
+
 ## 2026-11-04 test(carework): CO-07 프리셋·기록지 테스트 + @spec 원복
 
 - care-csv-presets.test.js — alias 정규화·정식 파서 통과·제공기록지 양식 (pre-push 테스트 갭 해소)

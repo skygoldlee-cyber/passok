@@ -232,7 +232,7 @@
 /* CO-03/12 — 현장 입력 UX: obs 세그먼트 칩·홈 카드·확인 권장 배지·온보딩 내비 */
 .obs-chips { display: flex; align-items: center; gap: 6px; margin: 8px 0; flex-wrap: wrap; }
 .obs-label { font-size: 0.9rem; font-weight: 600; min-width: 44px; }
-.obs-chip input { position: absolute; opacity: 0; pointer-events: none; }
+.obs-chip input { width: 0; height: 0; margin: 0; padding: 0; border: 0; opacity: 0; }
 .obs-chip span { display: inline-flex; align-items: center; justify-content: center; min-width: 52px; min-height: 44px; padding: 0 14px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; font-size: 0.95rem; background: var(--color-surface, #fff); }
 .obs-chip input:checked + span { background: var(--color-primary, #4a6fa5); border-color: var(--color-primary, #4a6fa5); color: #fff; font-weight: 600; }
 .obs-chip input:focus-visible + span { outline: 2px solid var(--color-primary, #4a6fa5); outline-offset: 2px; }
