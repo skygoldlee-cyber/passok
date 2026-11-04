@@ -55,12 +55,12 @@ test('CO-13 프라이버시 — 수급자 데이터 공유는 경고+인명 가�
 
 test('CO-13 공유 — 미생성 시 생성 버튼 자동 실행', () => {
     const src = readFileSync('src/exams/carework/care-share.js', 'utf8');
-    assert.match(src, /&& gen\) {/); // data-arg 3~4번째 필드로 미생성 시 자동 실행
+    assert.match(src, /&& gen && !gen\.endsWith/); // data-arg 3~4번째 필드로 미생성 시 자동 실행 (CsvExport는 xlsx 직접 생성)
     assert.match(src, /f3 === 'mask'/); // mask 생략 시 3번째가 생성 핸들러
     assert.match(src, /\[data-click="\$\{gen\}"\]/);
     assert.match(src, /_formText/); // 생성 결과가 없으면 폼 양식 텍스트로 공유
     assert.match(src, /care-calc-err/); // 오류 마커만 있으면 양식으로 폴백
-    for (const [f, g] of [['care-calc', 'careCalcRun'], ['care-log', 'careLogGenerate'], ['care-handover', 'careHandoverGenerate'], ['care-incident', 'careIncidentGenerate'], ['care-client', 'careClientExport'], ['care-visit', 'careVisitExport'], ['care-roster', 'careRosterExport']]) {
+    for (const [f, g] of [['care-calc', 'careCalcRun'], ['care-log', 'careLogGenerate'], ['care-handover', 'careHandoverGenerate'], ['care-incident', 'careIncidentGenerate'], ['care-client', 'careClientCsvExport'], ['care-visit', 'careVisitCsvExport'], ['care-roster', 'careRosterCsvExport']]) {
         assert.match(readFileSync(`html/exams/carework/${f}.html`, 'utf8'), new RegExp(`\\|${g}"`));
     }
 });

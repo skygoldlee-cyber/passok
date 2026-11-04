@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 test(carework): CO-13 생성 핸들러 단언 — CsvExport·xlsx 직접 생성 반영
+
+
 ## 2026-11-04 test(carework): 공유 다운로드 네비게이션 목 — jsdom 게이트 해소 (CO-13)
 
 
