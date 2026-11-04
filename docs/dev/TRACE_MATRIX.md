@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 26ca50464f198fef
+> 입력 해시: 26084d2f1979f4d2
 > 생성: 2026-11-04 · 원천: SPEC.md(671개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 671개 — 문서 연결 463 · 소스 연결 598 · 테스트 연결 638 · 보고서 연결 109
+**커버리지 요약**: 요구사항 671개 — 문서 연결 464 · 소스 연결 598 · 테스트 연결 638 · 보고서 연결 109
 
 ---
 
@@ -618,7 +618,7 @@
 | CO-10 | ✅ lite (기록 유무 커버리지) | 테스트 | — | src/exams/carework/care-coverage.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
 | CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
 | CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
-| CO-13 | care-share.js·출력 뷰 공유 버튼 | 테스트 | — | src/content/pdf-utils.js<br>src/exams/carework/care-share.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
+| CO-13 | care-share.js·출력 뷰 공유 버튼 | 테스트 | DOC-DSN-42 | src/content/pdf-utils.js<br>src/exams/carework/care-share.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
@@ -1029,7 +1029,7 @@
 | DOC-DSN-39 | docs/dev/design/NATIVE_APP_STRATEGY.md | LP-01, LP-02, LP-03, LP-04, LP-05, LP-06, LP-07, LP-08, LP-09, LP-10, P-01, P-02, P-03, P-04, P-05, P-06, P-07 |
 | DOC-DSN-40 | docs/dev/design/AI_COACH_DESIGN.md | AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AU-08, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08 |
 | DOC-DSN-41 | docs/dev/design/PASSOK_시장분석.md | — |
-| DOC-DSN-42 | docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md | DA-13, DA-15, PAY-01, PAY-02, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, PAY-08, UM-01, UM-02, UM-03, UM-04 |
+| DOC-DSN-42 | docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md | CO-13, DA-13, DA-15, PAY-01, PAY-02, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, PAY-08, UM-01, UM-02, UM-03, UM-04 |
 | DOC-DSN-43 | docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md | — |
 | DOC-DSN-44 | docs/exams/carework/design/CARE_OS_DATAHUB_DESIGN.md | CO-01, CO-02, CO-03, CO-04, CO-05, DA-13, DA-18, ROAD-P5 |
 | DOC-IDX-01 | docs/README.md | — |
