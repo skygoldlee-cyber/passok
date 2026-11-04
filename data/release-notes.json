@@ -1,5 +1,17 @@
 [
   {
+    "version": "v20261104-14b902b",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] careFinder DOM 테스트 — 공단 링크 위치 뷰 상단으로 기대 정정",
+      "[문서·carework] 전략 문서 §6 구현 현황 반영 — CO-01~05·07·12·13 배포 완료 표기",
+      "[기능·carework] CO-13 생성 문서 공유 — Web Share API로 카톡 등 네이티브 공유",
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[수정·carework] 공단 기관검색 링크 카드 반복 제거 — 뷰 상단 단일 링크로",
+      "[정리·release] v20261104-4acfff5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-4acfff5",
     "date": "2026-11-04",
     "notes": [
@@ -185,15 +197,6 @@
     "notes": [
       "[기능·assets] 앱 아이콘 v3 교체 + maskable 엣지-스트레치 렌더",
       "[정리·release] v20261103-7f81037 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261103-7f81037",
-    "date": "2026-11-03",
-    "notes": [
-      "[정리·assets] maskable 재생성에 따른 시험별 manifest ?v= 재스탬프",
-      "[수정·assets] maskable 아이콘 다크 링 제거 — 원본 풀블리드 복원",
-      "[정리·release] v20261103-76ec5ba 스탬프 확정 [no-docs]"
     ]
   }
 ]
