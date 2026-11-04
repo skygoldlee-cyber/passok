@@ -58,9 +58,11 @@ export async function careShare(btn) {
             () => showToast('클립보드에 복사했습니다 — 카톡 등에 붙여넣으세요.'),
             () => showToast('복사 실패 — 인쇄·PDF를 이용하세요.', 'error'));
     };
-    if (navigator.share) {
+    // 공유 시트는 터치 기기에서만 — 데스크톱의 navigator.share는 OS 창이 뜨지 않아 무응답으로 보인다
+    const coarse = typeof matchMedia === 'function' && matchMedia('(pointer:coarse)').matches;
+    if (coarse && navigator.share) {
         try { await navigator.share({ title, text }); return; }
-        catch (e) { if (/** @type {Error} */ (e)?.name === 'AbortError') return; /* 사용자 취소는 조용히 종료, 그 외 실패는 복사 폴백 */ }
+        catch (e) { if (/** @type {Error} */ (e)?.name === 'AbortError') return; /* 사용자 취소만 조용히 — 나머지는 복사 폴백 */ }
     }
     copyFallback();
 }

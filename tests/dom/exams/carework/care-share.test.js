@@ -79,6 +79,29 @@ describe('CO-13 careShare 시뮬레이션', () => {
         expect(globalThis.navigator.clipboard.writeText).not.toHaveBeenCalled();
         expect(toasts.find(t => t.includes('공유할 내용이 없습니다'))).toBeTruthy();
     });
+
+    it('데스크톱(pointer:fine) — navigator.share가 있어도 무응답 없이 클립보드로 복사', async () => {
+        setup(`<section class="view-section"><pre id="out">문서 내용</pre>
+            <button id="share" data-arg="#out|문서">공유</button></section>`);
+        // 데스크톱: share 존재하나 실패해도 복사 폴백 — coarse 미매칭(jsdom 기본)
+        globalThis.navigator.share = vi.fn().mockRejectedValue(new Error('no OS share UI'));
+        const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        await careShare(document.getElementById('share'));
+        expect(globalThis.navigator.share).not.toHaveBeenCalled(); // 데스크톱은 호출 자체 생략
+        expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('문서 내용');
+        expect(toasts.find(t => t.includes('클립보드'))).toBeTruthy();
+    });
+
+    it('모바일(pointer:coarse) — 공유 시트 우선, 실패 시 복사 폴백', async () => {
+        setup(`<section class="view-section"><pre id="out">문서 내용</pre>
+            <button id="share" data-arg="#out|문서">공유</button></section>`);
+        globalThis.matchMedia = () => ({ matches: true });
+        globalThis.navigator.share = vi.fn().mockRejectedValue(Object.assign(new Error('x'), { name: 'TypeError' }));
+        const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        await careShare(document.getElementById('share'));
+        expect(globalThis.navigator.share).toHaveBeenCalled();
+        expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('문서 내용');
+    });
 });
 
 // 실제 본인부담금 계산 뷰 시뮬레이션 — 실마크업 파셜 + 실제 careCalcRun
