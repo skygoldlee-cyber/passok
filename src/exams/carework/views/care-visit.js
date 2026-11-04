@@ -1,7 +1,9 @@
 // src/exams/carework/views/care-visit.js — 면회·방문 기록 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { RELATIONS, VISIT_STATUS, relationLabel, buildVisitText, visitsToCsv } from '../care-visit.js';
+import { markFunnel } from '../care-funnel.js';
 import { listVisits, saveVisit, updateVisit, removeVisit } from '../care-visit-store.js';
+import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, docHeadHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
@@ -21,7 +23,7 @@ function readForm() {
     return {
         date: _val('vis-date', ''),
         time: _val('vis-time', ''),
-        client: _val('vis-client', ''),
+        ...clientField('vis-client'),
         visitor: _val('vis-visitor', ''),
         phone: _val('vis-phone', ''),
         relation: _val('vis-relation', ''),
@@ -200,6 +202,8 @@ export async function careVisitFacilitySubmit() {
 }
 
 export function initCareVisitView() {
+    markFunnel('tool:care-visit');
+    attachClientPicker(/** @type {HTMLInputElement|null} */ ($('vis-client')));
     const d = /** @type {HTMLInputElement|null} */ ($('vis-date'));
     if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
     const s = $('vis-relation');

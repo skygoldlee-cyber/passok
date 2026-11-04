@@ -137,6 +137,7 @@ export const STORAGE_KEYS = {
   INCIDENT_ITEMS: 'carework_incidents',
   ROSTER_ITEMS: 'carework_roster',
   CARE_ORG_NAME: 'carework_org_name',
+  CARE_FUNNEL: 'carework_funnel',
   ADMIT_CHECKS: 'carework_admit_checks',
 
   // Formula OS — 종합 보고서 출력 이력 (FO-63) — 최근 20건

@@ -267,10 +267,17 @@ src/                    # ES Modules
       care-audit.js       # 기관 평가 체크리스트 — audit_checklist.json + 체크 상태 로컬 저장 (Phase 4)
       care-handover.js    # 인수인계서 생성 로직 — 교대근무 표준 포맷 + 일지 병합 (Phase 5)
       handover-store.js   # 인수인계 기록 저장 — 공유 전 저장 의무 플로우 (기관 기록 준법)
+      handover-digest.js  # 인수인계 이력 자동 집계 — 근무일 기준 대상자별 일지·사고·방문 수집 순수 로직 (CO-05)
       care-visit.js       # 면회·방문 기록 로직 — 예약→완료/취소 상태 전이 + 기록 문서 조립 (Phase 6c)
       care-visit-store.js # 방문 기록 로컬 저장 — 무료 10건 한도·Pro 안내 (Phase 6c)
       care-client-store.js # 대상자 명부 로컬 저장 — 무료 10건 한도 (Phase 6d)
       care-client-csv.js   # 수급자 CSV 왕복 (파싱·직렬화 순수 로직)
+      care-client-resolve.js # clientId 해석 — 이름→명부 단일 매칭·지연 백필 (CO-01)
+      care-csv-presets.js   # ERP 명부 가져오기 프리셋 — 롱텀·이지케어·케어포 컬럼 alias → 정식 헤더 정규화 (CO-07)
+      care-client-field.js  # 대상자 명부 셀렉트 — datalist 자동완성·미등록 등록 제안·clientField 저장 판독 (CO-01)
+      care-timeline.js      # 대상자 이력 통합 조회 — clientId+스냅샷 근사 매칭·시간순 병합 순수 로직 (CO-02)
+      care-trend.js         # 관찰 추세 확인 — obs 시계열 연속 악화 감지, "기록 요약·확인 권장" 문구 (CO-04)
+      care-funnel.js        # 전환 퍼널 계측 — 실무도구 첫 사용 시점·도구별 횟수 로컬 누적 (CO-12)
       care-incident.js    # 사고·낙상 보고서 로직 — 유형·중증도 + 보고서 조립 (Phase 6d)
       incident-store.js   # 사고 보고 로컬 저장 — 무료 10건 한도 (Phase 6d)
       care-roster.js      # 교대 근무표 로직 — 근무조·표 텍스트 조립 (Phase 6d)
@@ -279,6 +286,7 @@ src/                    # ES Modules
       care-finder.js      # 요양기관 찾기 — 공공데이터 시설 검색·기관명 연결 (Phase 6g)
       facility.js         # 기관 워크스페이스 API — create/join/membership RPC (Phase 6a, DOC-DSN-43)
       views/
+        care-home.js      # Care OS 홈 뷰 — 오늘 요약·추세 배지·빠른 기록 진입점 (CO-12)
         care-calc.js      # 계산기 뷰 모듈 (practice-registry 지연 로드)
         care-card.js      # 대처카드 뷰 모듈 (Phase 2)
         care-log.js       # 요양일지 생성기 뷰 모듈 (Phase 3)
@@ -547,6 +555,7 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 - `docs/dev/design/QUESTION_SCHEMA_DESIGN.md` — 문항 스키마 + 복수정답형 변환 파이프라인 설계
 - `docs/dev/design/AI_AUTHORING_DESIGN.md` — AI 제작 지원 설계안 (문제·해설 초안 자동화 — 미구현, DOC-DSN-33)
 - `docs/exams/cosmetic/design/FORMULA_OS_WORKFLOW_DESIGN.md` — 조제관리사 9개 업무 전체 커버리지 확장 설계안 (고객·배치·원료장부·안내문)
+- `docs/exams/carework/business/CareOS_경쟁전략.md` — Care OS 경쟁전략 — 장기요양 ERP 시장 분석·보완층 전략·P0~P2 개선 로드맵 (DOC-BIZ-06)
 - `docs/dev/runbooks/COMBO_GENERATION_GUIDE.md` — 복수정답형 문항 생성 절차·품질 게이트·수치 조정 가이드
 - `docs/dev/reference/COMBO_STUDY_STRATEGY.md` — 복수정답형 학습 전략 (전략→기능 매핑 포함)
 - `docs/user/user_manual.md` — 사용자 매뉴얼 (앱 공용 — 시험 무관)

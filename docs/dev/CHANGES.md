@@ -1,5 +1,95 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 feat(carework): 현장 입력 UX — obs 세그먼트 칩·홈 미사용 마크·터치 스타일
+
+- 일지 obs를 select → 라디오 칩(전/반/소 등 1탭 입력, min-height 44px) + care-tools.css에 홈 카드·확인 권장 배지·온보딩 내비·타임라인 스타일 추가
+- care-home 빠른 기록 링크에 퍼널 사용 0회 도구 "처음" 배지 — 미발견 도구 유도 (CO-12 연동)
+
+
+## 2026-11-04 feat(carework): 실무 모드 UX 재구성 — Care OS 홈 + 근무 흐름 내비 그룹핑
+
+- care-home 뷰 신규 (priority -1 → 실무 랜딩) — 오늘 일지/방문/사고 건수·추세 확인 배지·6개 도구 빠른 기록 링크. registry 엔트리 + exams.json features.careHome
+- 실무 내비를 작업 단계로 그룹핑 — 홈 / 오늘(일지·방문·사고) / 교대(인수인계·근무표) / 대상자·준비(명부·기관찾기·대처카드) / 기관·출력(평가·서식·계산) / 기관(가입·관리). index.template.html 재배치 + nav-group-label
+
+
+## 2026-11-04 feat(carework): 전환 퍼널 계측 + 실무도구 온보딩 배너 (CO-12-lite)
+
+- care-funnel.js 신규 — 첫 사용 시점·도구별 사용 횟수 로컬 누적 (STORAGE_KEYS.CARE_FUNNEL, carework_funnel). KPI① 데이터 원천
+- 7개 뷰 init에 markFunnel('tool:<slug>') 계측 (calc·client·forms·handover·incident·log·visit — roster·audit·finder는 후속)
+- care-calc 상단에 "현장에서 바로 쓰는 도구" 온보딩 내비 — 6개 도구 #/slug 딥링크
+
+
+## 2026-11-04 feat(carework): 관찰 필드 + 추세 확인 알림 (CO-03·04)
+
+- care-log 폼에 obs 코드화 관찰 추가 — 식사량(전/반/소)·수면(양호/불량/불면)·배변(정상/이상), 저장 레코드 obs {} 필드
+- care-trend.js 신규 — 최신순 obs 시계열 연속 악화(3회+) 감지 → 명부 카드에 "⚠ 최근 N회 기록에서 X 확인 권장" 배지 (의료 판단 표현 금지 원칙)
+- 테스트: care-trend.test.js 4건 (carework 유닛 42건)
+
+
+## 2026-11-04 feat(carework): 이중 입력 해소 — ERP CSV 프리셋 + 제공기록지 양식 복사 (CO-07)
+
+- care-csv-presets.js 신규 — 롱텀·이지케어·케어포 계열 외부 헤더 alias(수급자명·생활실·연락처 등 20+ 변형) → 정식 컬럼 정규화 후 기존 파서 위임. 명부 가져오기에 csvToClientsAny 적용
+- care-log.js buildRecordText — 공단 급여제공기록지 양식 텍스트(대상자·일시·급여종류·서비스 내용·특이사항) → "제공기록지 복사" 버튼으로 ERP·공단 앱 붙여넣기 워크플로
+
+
+## 2026-11-04 feat(carework): 인수인계 자동 채우기 — 근무일 기록 다이제스트 (CO-05)
+
+- handover-digest.js 신규 — 근무 일자의 일지·사고·방문을 대상자별 집계 → clients/status/caution 폼 초안 (사고만 인계 문장, 로컬 전용·작성자 검토 필수)
+- care-handover에 "오늘 기록으로 채우기" 버튼 + careHandoverDigest 핸들러 — index.html 재생성
+- 테스트: handover-digest.test.js 3건 (carework 유닛 38건)
+
+
+## 2026-11-04 feat(carework): 대상자 360° 카드 — 통합 이력 타임라인 (CO-02)
+
+- care-timeline.js 신규 — clientId 우선·client 스냅샷 근사 매칭으로 일지/방문/인수인계/사고 이력 시간순 병합 + 종류별 요약 (순수 로직)
+- care-client 명부 카드에 "이력 N건 (일지 x·사고 y…) · 최근 날짜" details 펼침 타임라인 추가
+- 테스트: care-timeline.test.js 3건
+
+
+## 2026-11-04 feat(carework): 대상자 명부 셀렉트 입력 — datalist·등록 제안·clientId 첨부 (CO-01 단계 2)
+
+- care-client-field.js 신규 — datalist 자동완성 + 미등록 이름 입력 시 "명부에 등록" 제안 버튼(클릭 시 등록→자동 연결) + clientField 저장 판독(단일 매칭 시 clientId 첨부)
+- 일지(log-client)·사고(inc-client)·방문(vis-client)·인수인계(ho-clients) 4개 폼에 부착 — 신규 저장부터 clientId 기록, 명부 미사용 시 기존 자유 입력 그대로
+- 인수인계는 복수 대상자 필드라 단일 이름 입력 시에만 해석 — 미해결은 스냅샷 유지
+
+
+## 2026-11-04 feat(carework): clientId 해석 모듈 + 기록 스토어 지연 백필 (CO-01 단계 1)
+
+- care-client-resolve.js 신규 — 이름→명부 단일 매칭(resolveClientId)·배열 일괄 해석(backfillClientIds). 동명이인·무 매칭은 미해결 유지
+- 일지·방문·사고·인수인계 4개 스토어 list 함수에 지연 백필 — 해석 발생 시 배치 setJSON 1회. roster는 근무자 기준이라 제외
+- 테스트: care-client-resolve.test.js 5건
+
+
+## 2026-11-04 spec(carework): Care OS 고도화 요구사양 CO-01~12 부여 + 데이터 허브 설계 (DOC-DSN-44)
+
+- SPEC.md §3.31 신설 — Care OS 경쟁전략 로드맵을 요구사양 CO-01~12로 등록 (clientId·obs·추세·다이제스트·서버 업로드·CSV 프리셋·BYOK AI·리포트·평가·워크스페이스·퍼널), ERP 제외·법무 조건부 명시
+- CareOS_경쟁전략.md P0~P2 항목에 CO-XX 매핑 병기
+- docs/exams/carework/design/CARE_OS_DATAHUB_DESIGN.md — 1차 배치(CO-01·02·05) 설계: clientId 정규화·백필·명부 셀렉트·타임라인·인수인계 로컬 다이제스트
+
+
+## 2026-11-04 docs(carework): 종사자 인터뷰 스크립트 신설 (DOC-BIZ-07)
+
+- Care OS §6-0 검증 인터뷰 — 시설·방문요양 표본 분리(각 5명)·중단 기준 2개·진행 기준·집계 시트, cosmetic 판매업소 스크립트(DOC-BIZ-05) 형식 준용
+- docs/README.md 인덱스·레지스트리·carework 인덱스 반영
+
+
+## 2026-11-04 chore(carework): facility 공유 기능 비활성화 — 수탁 법무 미비 소급 조치
+
+- DOC-BIZ-06 §3-4-L1 결정 규칙 실행: Supabase facility 테이블(facilities·facility_members·shift_handovers·family_visits·incident_reports·handover_acks) 전수 조회 → 전 행 0건(사용 기관 없음)
+- `exams.json` features `careFacilityJoin`/`careFacilityAdmin` → false. 코드는 유지, 뷰 등록·내비에서 제외 — 0b(위탁 계약·방침 고지·안전성 조치·보호자 정보 검토) 완료 후 재개통
+- data/exams.js·시험별 webmanifest 재생성 (build:exams-list)
+
+
+## 2026-11-04 docs(carework): Care OS 경쟁전략 문서 신설 (DOC-BIZ-06)
+
+- `docs/exams/carework/` 신설 — business/CareOS_경쟁전략.md: 장기요양 ERP 시장 공식 출처 검증 분석(이지케어·케어포·엔젤·케어매니저·하이케어·스마일시니어·공단 스마트장기요양) + 보완층 전략 + P0~P2 개선 로드맵
+- `docs/exams/carework/README.md` 시험 문서 인덱스 신설 (DOC-IDX-04) — docs/README.md 인덱스·레지스트리·디렉터리 트리 반영
+- v2 (내부 리뷰 반영): 재가 종류별 지정 수 중복 표기·연평균 증가율 2.3% 정정·이지케어 점유율 분모 각주·시설/방문요양 세그먼트별 기능 매핑 분리(1차=시설)·민감정보 L0~L2 계층 + BYOK 가명처리 요건·이중 입력 리스크 1순위 상향·공단 앱 경쟁축 추가·P0-1 선행 의존성·수익 가설·인터뷰 검증 단계(0단계)·KPI·출처 열람일
+- v3 (리뷰 2차 반영): 세그먼트별 판매 채널 분리(시설=B2B·방문요양=개인 채널)·수탁 처리 법무 전제(§6-0b, 서버 업로드 선행)·payload 코드화 필드만·원문 제외 누수 규칙·AI 전송 미리보기+키워드 입력 기본값·§5-0 번호 정정·기관 Pro 기준점 논리 정합·합격자 회기 라벨 정정·이지케어 최신 공시 갱신(9,481/53.4%, 2026.10.28)
+- v4 (리뷰 3차 반영): 기존 facility 공유 경로 소급 조치 원칙·L1 작성자 검토 예외(memo 허용·자동 첨부 금지)·P0-3 서버 선행을 0b+P0-2로 재정의·시설 디자인 파트너 파일럿 단계 신설(B2B 채널 앞당김)·이지케어 9,481 본문 반영·잔여 번호·비율 표현 정정
+- v5 (리뷰 4차 반영): 소급 조치를 결정 규칙으로 확정(사용 0 → 즉시 비활성화, 대시보드 facility_members 확인)·L0 '메모'→'명부 메모' 명칭 구분·§7-1 법무 행에 소급 조치 병기·P2-10-lite(온보딩 배너+퍼널 계측) 1b 단계로 앞당김·0b에 보호자 개인정보(family_visits) 검토 추가
+
+
 ## 2026-11-04 fix(carework): 기관찾기 장기요양보험 링크 404 수정
 
 - npeE101r01.web(구 경로, 404) → /npbs/r/a/201/selectLtcoSrch(민원서비스→검색서비스→장기요양기관 찾기 정본 경로) 교체

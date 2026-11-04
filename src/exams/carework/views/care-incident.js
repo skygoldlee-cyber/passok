@@ -1,7 +1,9 @@
 // src/exams/carework/views/care-incident.js — 사고·낙상 보고서 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, buildIncidentText, incidentsToCsv } from '../care-incident.js';
+import { markFunnel } from '../care-funnel.js';
 import { listIncidents, saveIncident, removeIncident } from '../incident-store.js';
+import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { myMembership, submitIncident, listIncidents as listFacilityIncidents, docHeadHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
@@ -21,7 +23,7 @@ function readForm() {
     return {
         date: _val('inc-date', ''),
         time: _val('inc-time', ''),
-        client: _val('inc-client', ''),
+        ...clientField('inc-client'),
         place: _val('inc-place', ''),
         type: _val('inc-type', ''),
         severity: _val('inc-severity', ''),
@@ -128,6 +130,8 @@ export async function careIncidentFacilitySubmit() {
 }
 
 export function initCareIncidentView() {
+    markFunnel('tool:care-incident');
+    attachClientPicker(/** @type {HTMLInputElement|null} */ ($('inc-client')));
     const d = /** @type {HTMLInputElement|null} */ ($('inc-date'));
     if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
     const t = $('inc-type');

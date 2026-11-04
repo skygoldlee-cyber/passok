@@ -229,6 +229,40 @@ export function warmPracticeFeatures() {
 }
 
 /** 실무 피처 정의 — 키는 exams.json의 features 키와 1:1 대응한다 */
+const careHome = {
+    viewId: 'care-home-view',
+    slug: 'care-home',
+    priority: -1,
+    uiTextKey: 'careHome',
+    title: 'Care OS 홈',
+    subtitle: '오늘 근무 요약',
+    loadingText: '홈을 불러오는 중입니다...',
+    loadErrorText: '홈을 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-home.html',
+    styles: 'care-tools.css',
+    loaders: { main: _domainImport('views/care-home.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['initCareHomeView']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careHome.loadingText);
+        try {
+            await ensureViewMarkup(careHome);
+            if (stale()) return;
+            const m = await careHome.loaders.main();
+            if (stale()) return;
+            m.initCareHomeView();
+        } catch (e) {
+            if (!stale()) showToast(careHome.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
 const careCalc = {
     viewId: 'care-calc-view',
     slug: 'care-calc',
@@ -311,7 +345,7 @@ const careLog = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-log.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careLogGenerate', 'careLogSave', 'careLogCopy', 'careLogDelete', 'careLogPrint', 'careLogCsvExport']]],
+    handlers: [['main', ['careLogGenerate', 'careLogSave', 'careLogCopy', 'careLogDelete', 'careLogPrint', 'careLogCsvExport', 'careLogRecordCopy']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
@@ -379,7 +413,7 @@ const careHandover = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-handover.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careHandoverGenerate', 'careHandoverSave', 'careHandoverDelete', 'careHandoverShare', 'careHandoverCopy', 'careHandoverPrint', 'careFacilityHandoverSubmit', 'careHandoverAck']]],
+    handlers: [['main', ['careHandoverGenerate', 'careHandoverSave', 'careHandoverDelete', 'careHandoverShare', 'careHandoverCopy', 'careHandoverPrint', 'careFacilityHandoverSubmit', 'careHandoverAck', 'careHandoverDigest']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
@@ -665,7 +699,7 @@ const careFacilityAdmin = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careCalc, careCard, careLog, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careFinder, careForms, careFacilityJoin, careFacilityAdmin };
+const PRACTICE_FEATURES = { formula, careHome, careCalc, careCard, careLog, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careFinder, careForms, careFacilityJoin, careFacilityAdmin };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {

@@ -1,11 +1,19 @@
 // src/exams/carework/views/care-client.js — 수급자 관리 뷰 (서류현황·CSV 왕복)
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { listClients, addClient, removeClient, upsertClients } from '../care-client-store.js';
-import { csvToClients, clientsToCsv, ADMIT_ITEMS } from '../care-client-csv.js';
+import { markFunnel } from '../care-funnel.js';
+import { clientsToCsv, ADMIT_ITEMS } from '../care-client-csv.js';
+import { csvToClientsAny } from '../care-csv-presets.js';
 import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
+import { clientTimeline, timelineSummary } from '../care-timeline.js';
+import { clientTrends } from '../care-trend.js';
+import { listCareLogs } from '../care-log-store.js';
+import { listVisits } from '../care-visit-store.js';
+import { listHandovers } from '../handover-store.js';
+import { listIncidents } from '../incident-store.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -112,13 +120,27 @@ function renderList() {
     const host = $('cli-list');
     if (!host) return;
     const items = listClients();
+    const stores = { logs: listCareLogs(), visits: listVisits(), handovers: listHandovers(), incidents: listIncidents() };
     host.innerHTML = items.length
         ? items.map(c => `<div class="care-log-saved-item">
-            <span><strong>${esc(c.name)}</strong>${c.status ? esc(' [' + c.status + ']') : ''}${c.room ? esc(' · ' + c.room) : ''}${_docSummary(c)}${c.caution ? esc(' · ⚠ ' + c.caution) : ''}${c.allergy ? esc(' · 알레르기 ' + c.allergy) : ''}</span>
+            <span><strong>${esc(c.name)}</strong>${c.status ? esc(' [' + c.status + ']') : ''}${c.room ? esc(' · ' + c.room) : ''}${_docSummary(c)}${c.caution ? esc(' · ⚠ ' + c.caution) : ''}${c.allergy ? esc(' · 알레르기 ' + c.allergy) : ''}${_timelineHtml(c, stores)}</span>
             <button data-click="careClientLoad" data-arg="${esc(c.id)}" class="btn btn-secondary">수정</button>
             <button data-click="careClientDelete" data-arg="${esc(c.id)}" class="btn btn-secondary">삭제</button>
           </div>`).join('')
         : '<p class="care-log-empty">등록된 대상자가 없습니다.</p>';
+}
+
+/** CO-02 대상자 360° 카드 — 통합 이력 배지 + 펼침 타임라인 */
+function _timelineHtml(c, stores) {
+    const tl = clientTimeline(c.id, c.name, stores);
+    if (!tl.length) return '';
+    const s = timelineSummary(tl);
+    const kinds = Object.entries(s.kinds).map(([k, n]) => `${k} ${n}`).join('·');
+    const warn = clientTrends(stores.logs, { clientId: c.id, name: c.name })
+        .map(t => `<span class="care-trend-warn">⚠ ${esc(t.message)}</span>`).join('');
+    return warn + `<details class="care-client-timeline"><summary>이력 ${s.count}건 (${esc(kinds)}) · 최근 ${esc(s.lastDate)}</summary><ul>` +
+        tl.map(t => `<li><small>${esc(t.date)}</small> <strong>${esc(t.kind)}</strong> ${esc(t.label)}</li>`).join('') +
+        '</ul></details>';
 }
 
 function _docValues() {
@@ -165,7 +187,7 @@ function onCsvFile(e) {
     const file = /** @type {HTMLInputElement} */ (e.target).files?.[0];
     if (!file) return;
     readTableFile(file).then(t => {
-        const recs = csvToClients(t);
+        const recs = csvToClientsAny(t);
         if (!recs.length) { showToast('불러올 수급자 행이 없습니다 (헤더: 성명,상태,호실,…).', 'error'); return; }
         const r = upsertClients(recs);
         renderList();
@@ -175,6 +197,7 @@ function onCsvFile(e) {
 }
 
 export function initCareClientView() {
+    markFunnel('tool:care-client');
     renderDocs();
     const f = $('cli-csv-file');
     if (f && !f.dataset.wired) { f.dataset.wired = '1'; f.addEventListener('change', onCsvFile); }
