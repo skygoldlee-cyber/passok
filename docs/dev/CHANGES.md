@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 fix(carework): 공유 실패 시 "공유하기" 버튼 — 탭 새 제스처로 share() 재시도 (CO-13)
+
+
 ## 2026-11-04 fix(carework): 공유 NotAllowedError — 데스크톱 파일 미첨부 + 거절 학습·제스처 사전검사 (CO-13)
 
 - Windows 등 데스크톱은 canShare가 파일을 통과시켜도 share({files})가 OS 수준에서 거절됨 — 첨부를 터치 기기로 제한

@@ -121,6 +121,7 @@ test('CO-13 공유 — 모바일 파일 첨부 우선·데스크톱 복사+다�
     assert.match(src, /style\.color = '#000'/);
     assert.match(src, /typeof navigator.canShare !== 'function'/); // canShare 미지원 브라우저도 공유 시도
     assert.match(src, /CARE_SHARE_AUDIT/);
+    assert.match(src, /const _shareBtn = /); // share 거절 시 탭-제스처 재시도 버튼
     assert.match(src, /const diag = /); // 진단은 닫을 때까지 남는 배너 (토스트는 다운로드 창에 가려짐, alert는 규약 금지)
     assert.match(src, /공유 시트 열기 실패/); // 거절 사유 진단 표시
     assert.ok(src.indexOf('navigator.share(') < src.indexOf('await pdfFileFromEl'), 'share()를 PDF 생성 전에 호출 — 제스처 만료 방지');

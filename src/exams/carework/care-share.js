@@ -35,6 +35,17 @@ const diag = msg => {
     반환하므로(Chromium), 실제 거절(NotAllowedError)로만 확정하고 이후 클릭은 텍스트만 싣는다. */
 let _filesBlocked = false;
 
+/** 공유 실행 버튼 — share()는 탭이 만든 새 제스처 안에서 호출돼 NotAllowedError를 우회한다.
+    클릭 시 표시 → 탭하면 시트 오픈 (준비된 파일 첨부), 다운로드·복사는 병행 폴백. */
+const _shareBtn = (label, run) => {
+    const b = document.createElement('button');
+    b.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:99999;padding:14px 28px;background:#2563eb;color:#fff;border:0;border-radius:24px;font:600 15px sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.3)';
+    b.textContent = label;
+    b.addEventListener('click', async () => { b.remove(); try { await run(); } catch { /* 폴백은 호출층이 처리 */ } });
+    document.body.appendChild(b);
+    setTimeout(() => b.remove(), 30000);
+};
+
 const _readOut = sel => {
     const el = sel && document.querySelector(sel.trim());
     return el ? ((el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) ? el.value : el.textContent || '') : '';
@@ -114,8 +125,14 @@ export async function careShare(arg) {
             const n = /** @type {Error} */ (e)?.name;
             if (n === 'AbortError') return;
             if (fileOk && n === 'NotAllowedError') _filesBlocked = true; // 제스처가 있었는데도 거절 = 파일 첨부 차단 — 다음 클릭은 텍스트만
-            showToast(`공유 시트 열기 실패(${n || e}) — 복사·다운로드로 대체합니다.`, 'error');
-            diag(`공유 시트를 열지 못했습니다 — 사유: ${n || e} · 파일첨부:${fileOk ? 'Y' : 'N'} · 파일은 다운로드로 대체합니다.`); // 탭할 때까지 표시 — 캡처·진단용
+            showToast(`공유 시트 열기 실패(${n || e}) — 아래 버튼으로 다시 시도하세요.`, 'error');
+            // 제스처 소비가 원인 — 이 버튼의 탭이 새 제스처라 share()가 통과 (파일 생성은 이미 완료)
+            const fs = [...files];
+            _shareBtn(`📤 ${title} 공유하기`, async () => {
+                const ok = fs.length && !_filesBlocked && (typeof navigator.canShare !== 'function' || navigator.canShare({ files: fs }));
+                try { await navigator.share(ok ? { title, text, files: fs } : { title, text }); showToast('공유 시트를 열었습니다.'); }
+                catch (e2) { if (/** @type {Error} */ (e2)?.name !== 'AbortError') diag(`공유 시트를 열지 못했습니다 — 사유: ${/** @type {Error} */ (e2)?.name}`); }
+            });
         }
     } else if (typeof navigator.share === 'function') diag('공유 제스처가 만료되었습니다 — 공유 버튼을 바로 다시 눌러주세요.'); // 제스처 만료 명시 — NotAllowedError 오진 방지
     else diag('이 브라우저는 공유 시트를 지원하지 않습니다 — Chrome으로 열어주세요.'); // 인앱 브라우저 식별
