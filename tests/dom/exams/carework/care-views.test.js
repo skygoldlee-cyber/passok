@@ -412,7 +412,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(getOrgName()).toBe('행복요양원');
     });
 
-    it('careFinder — 출처 링크 + 결과 카드에 카카오맵·장기요양보험 포털 검색 링크', async () => {
+    it('careFinder — 출처 링크 + 결과 카드 카카오맵·뷰 상단 장기요양보험 링크', async () => {
         vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({
             source: '공단 현황 — https://www.data.go.kr/x (필터)', regions: [],
             items: [{ name: '행복요양원', region: '서울', type: '요양원', address: '서울특별시 종로구 비봉길 76', capacity: 38, careWorkers: 18 }],
@@ -424,7 +424,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(a?.href).toContain('data.go.kr');
         const hrefs = [...document.querySelectorAll('#find-list a')].map(x => /** @type {HTMLAnchorElement} */ (x).href);
         expect(hrefs.some(h => h.includes('map.kakao.com'))).toBe(true);
-        expect(hrefs.some(h => h.includes('longtermcare.or.kr/npbs/r/a/201/selectLtcoSrch'))).toBe(true);
+        expect(document.querySelector('a[href*="longtermcare.or.kr/npbs/r/a/201/selectLtcoSrch"]')).toBeTruthy();
         expect(document.querySelector('#find-list .care-finder-meta')?.textContent).toContain('정원 38명');
     });
 

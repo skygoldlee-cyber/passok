@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 fix(carework): careFinder DOM 테스트 공단 링크 위치 정정 + 전략 문서 구현 현황 반영
+
+
 ## 2026-11-04 feat(carework): CO-13 생성 문서 공유 — Web Share API (카톡 등)
 
 - care-share.js: careShare 핸들러 — data-arg="선택자|제목"로 출력 텍스트 공유, 미지원 시 클립보드 폴백
