@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 8af2f0127de0fd46
+> 입력 해시: 9780b064de692300
 > 생성: 2026-11-04 · 원천: SPEC.md(670개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 670개 — 문서 연결 463 · 소스 연결 590 · 테스트 연결 629 · 보고서 연결 109
+**커버리지 요약**: 요구사항 670개 — 문서 연결 463 · 소스 연결 593 · 테스트 연결 630 · 보고서 연결 109
 
 ---
 
@@ -442,7 +442,7 @@
 | UM-03 | — | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-04 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/router.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/dom/shell/router.dom.test.js<br>tests/dom/shell/ui-structure.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-05 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 1개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
-| UM-06 | ✅ | — | — | — | — | — | — |
+| UM-06 | ✅ | 구현 (테스트 갭) | — | src/shell/ui-mode.js | — | — | — |
 
 ## 3.22 시험 선택·전환
 
@@ -612,7 +612,7 @@
 | CO-04 | 미구현 — CO-01·CO-03 선행 | 테스트 | DOC-DSN-44 | src/exams/carework/care-trend.js | tests/unit/exams/carework/care-trend.test.js | — | — |
 | CO-05 | 미구현 — CO-01 선행 | 테스트 | DOC-DSN-44 | src/exams/carework/handover-digest.js | tests/unit/exams/carework/handover-digest.test.js | — | — |
 | CO-06 | 미구현 — 조건부(법무) | — | — | — | — | — | — |
-| CO-07 | 미구현 | 구현 (테스트 갭) | — | src/exams/carework/care-csv-presets.js | — | — | — |
+| CO-07 | 미구현 | 테스트 | — | src/exams/carework/care-csv-presets.js | tests/unit/exams/carework/care-csv-presets.test.js | — | — |
 | CO-08 | 미구현 — 조건부 | — | — | — | — | — | — |
 | CO-09 | 미구현 — CO-01·CO-03 선행, Pro(`care_report_export`) | — | — | — | — | — | — |
 | CO-10 | 미구현 — 조건부(시설 세그먼트) | — | — | — | — | — | — |
@@ -810,8 +810,8 @@
 | DA-16 | ✅ | E2E 테스트 | — | src/content/data-loader.js<br>src/content/unpack.js<br>tools/build/build_study_md_bundle.js<br>tools/lib/content_pack.js | tests/dom/common/unpack.dom.test.js<br>tests/e2e/content-pack.spec.js<br>tests/unit/content-pack.test.js<br>tests/unit/content/data-loader-fallback.test.js | — | — |
 | DA-17 | ✅ | 테스트 | — | tools/lib/watermark.js | tests/unit/content-pack.test.js | — | — |
 | DA-18 | ✅ | 테스트 | DOC-BIZ-06<br>DOC-BIZ-07<br>DOC-DSN-44 | html/exams/carework/facility-admin.html<br>html/exams/carework/facility-join.html<br>src/exams/carework/views/facility-admin.js<br>src/exams/carework/views/facility-join.js | tests/dom/exams/carework/care-views.test.js | — | — |
-| DA-19 | ✅ | — | — | — | — | — | — |
-| DA-20 | ✅ | — | — | — | — | — | — |
+| DA-19 | ✅ | 구현 (테스트 갭) | — | src/reader/manual-viewer.js | — | — | — |
+| DA-20 | ✅ | 구현 (테스트 갭) | — | src/shell/ui-mode.js | — | — | — |
 | DA-21 | ✅ | 테스트 | — | css/dashboard.css<br>css/exams/carework/care-tools.css | tests/dom/exams/carework/care-views.test.js | — | — |
 | DA-22 | ✅ | 테스트 | — | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | — | — |
 
@@ -1091,12 +1091,14 @@
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
-소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 6개 — 테스트 백로그 후보.
+소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 8개 — 테스트 백로그 후보.
 
 | ID | 절 | 구현 소스 |
 |----|-----|-----------|
-| CO-07 | 3.31 Care OS — 요양보호사 실무도구 고도화 | src/exams/carework/care-csv-presets.js |
 | CS-12 | 5.4 콘텐츠 구조 | tools/check/check_numbering.js |
+| DA-19 | 5.1 데이터 아키텍처 | src/reader/manual-viewer.js |
+| DA-20 | 5.1 데이터 아키텍처 | src/shell/ui-mode.js |
+| UM-06 | 3.21 UI 모드 전환 | src/shell/ui-mode.js |
 | UX-FB-07 | 4.8 UI/UX 설계 요구사양 | src/views/textbook-reader.js |
 | UX-FB-08 | 4.8 UI/UX 설계 요구사양 | src/views/dashboard-queue.js |
 | UX-VFY-07 | 4.8 UI/UX 설계 요구사양 | tools/check/check_nav_icons.js |
