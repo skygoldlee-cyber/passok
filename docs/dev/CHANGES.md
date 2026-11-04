@@ -20,6 +20,7 @@
 - 버튼 라벨 'CSV 내보내기/가져오기' → 'Excel 내보내기/가져오기' (carework 5파셜 + formula 고객/원료·배치·사전)
 - 후속: downloadSheet 비동기화에 맞춰 DOM 테스트 4개 스위트 window.XLSX 스텁·waitFor 대기·파일명 .xlsx 기대값 수정
 - 후속: domain-map.json 미분류 오류 — src/content/xlsx-utils.js 등록, AGENTS.md 디렉토리 구조 반영
+- 기관찾기 카드에 카카오맵·장기요양보험 포털 검색 링크 추가 + facilities.json 정원·요양보호사 보강(enrich_facility_stats.js, DA-15 예외 등록)
 
 
 ## 2026-11-04 feat(carework): 실무도구 CSV 확장 — 근무표 왕복 + 방문·사고·일지 내보내기

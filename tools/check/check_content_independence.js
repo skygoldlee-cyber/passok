@@ -66,6 +66,14 @@ const ALLOWED = [
         file: 'tools/import/enrich_facility_phones.js', contains: 'exams/carework/',
         reason: 'carework 도메인 전용 보강 유틸 — 공단 상세조회 API 결과를 해당 시험의 facilities.json에 병기하는 단일 목적 도구'
     },
+    {
+        file: 'tools/import/enrich_facility_stats.js', contains: 'exams/carework/',
+        reason: 'carework 도메인 전용 보강 유틸 — 공단 XLSX 입소인원·인력현황을 해당 시험의 facilities.json에 병기하는 단일 목적 도구'
+    },
+    {
+        file: 'tools/import/enrich_facility_stats.js', contains: '요양보호사',
+        reason: '공단 XLSX 인력현황 시트의 컬럼명 자체가 시험 도메인 콘텐츠 — 원천 데이터 스키마 키'
+    },
 ];
 
 /* ---------- 코드 채널 추출 (주석 제거 — 문자열은 보존) ---------- */
