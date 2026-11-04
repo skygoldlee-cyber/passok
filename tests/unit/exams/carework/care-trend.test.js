@@ -1,5 +1,5 @@
 // tests/unit/exams/carework/care-trend.test.js
-// @spec CO-04 — 관찰 추세 확인 순수 로직
+// @spec CO-03·CO-04 — 관찰 추세 확인 순수 로직
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { clientTrends } from '../../../../src/exams/carework/care-trend.js';
