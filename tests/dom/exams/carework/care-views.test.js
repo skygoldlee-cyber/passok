@@ -45,6 +45,8 @@ import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverS
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
 import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, careVisitExport, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
 import { careClientSave, careClientLoad, careClientDelete, initCareClientView } from '../../../../src/exams/carework/views/care-client.js';
+import { listClients } from '../../../../src/exams/carework/care-client-store.js';
+import { selectFile, waitFor } from '../../helpers.js';
 import { careIncidentGenerate, careIncidentSave, careIncidentDelete, initCareIncidentView } from '../../../../src/exams/carework/views/care-incident.js';
 import { careRosterAdd, careRosterDelete, initCareRosterView } from '../../../../src/exams/carework/views/care-roster.js';
 import { careFinderUseOrg } from '../../../../src/exams/carework/views/care-finder.js';
@@ -293,6 +295,21 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.getElementById('cli-name').value).toBe('김○○');
         careClientDelete(id);
         expect(list.textContent).toContain('등록된 대상자가 없습니다');
+    });
+
+    it('careClients — CSV 가져오기 EUC-KR(CP949) 파일 한글 디코딩', async () => {
+        loadPartial('care-client.html');
+        initCareClientView(); // cli-csv-file change 리스너 바인딩
+        // '성명,주의사항\n김순자,낙상 주의' — EUC-KR(CP949) 인코딩 (UTF-8 해석 불가 → 폴백 경로)
+        const bytes = new Uint8Array([
+            0xBC, 0xBA, 0xB8, 0xED, 0x2C, 0xC1, 0xD6, 0xC0, 0xC7, 0xBB, 0xE7, 0xC7, 0xD7, 0x0A,
+            0xB1, 0xE8, 0xBC, 0xF8, 0xC0, 0xDA, 0x2C, 0xB3, 0xAB, 0xBB, 0xF3, 0x20, 0xC1, 0xD6, 0xC0, 0xC7,
+        ]);
+        selectFile('cli-csv-file', new File([bytes], 'euckr.csv'));
+        await waitFor(() => listClients().length === 1);
+        expect(listClients()[0].name).toBe('김순자');
+        expect(listClients()[0].caution).toBe('낙상 주의');
+        careClientDelete(listClients()[0].id);
     });
 
     it('careIncident — 보고서 생성 → 저장 목록', () => {

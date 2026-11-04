@@ -2,6 +2,7 @@
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { listClients, addClient, removeClient, upsertClients } from '../care-client-store.js';
 import { csvToClients, clientsToCsv, ADMIT_ITEMS } from '../care-client-csv.js';
+import { readCsvFile } from '../../../content/csv-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
@@ -168,7 +169,7 @@ export function careClientCsvImport() {
 function onCsvFile(e) {
     const file = /** @type {HTMLInputElement} */ (e.target).files?.[0];
     if (!file) return;
-    file.text().then(t => {
+    readCsvFile(file).then(t => {
         const recs = csvToClients(t);
         if (!recs.length) { showToast('불러올 수급자 행이 없습니다 (헤더: 성명,상태,호실,…).', 'error'); return; }
         const r = upsertClients(recs);

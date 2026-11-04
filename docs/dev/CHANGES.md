@@ -1,5 +1,15 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 fix(carework): 수급자 CSV 가져오기 CP949 인코딩 지원
+
+- `care-client.js`의 `file.text()`(UTF-8 전용) → 공용 `readCsvFile`로 교체 — Excel에서 CP949(EUC-KR)로 저장한 명부도 한글 깨짐 없이 가져옴 (csv-utils의 UTF-8 strict → EUC-KR 폴백 재사용)
+- 실무막뉴얼 §8에 인코딩 자동 인식(UTF-8·CP949) 안내 추가
+
+## 2026-11-04 feat(ui): 실무 탭바 매뉴얼 라벨 단축 + carework 실무막뉴얼 저장·CSV 문서화
+
+- 실무 탭바 매뉴얼 라벨 '실무 매뉴얼' → '매뉴얼' — formula-manual은 `data-uitext="formula-manual:nav"` 단축 라벨 규약 적용 + 7개 시험 manifest `nav` 선언 (hairdresser '필답 매뉴얼' 고유 명칭 유지), practiceManual 하드코딩 라벨 수정
+- 실무막뉴얼 실측 정합 보강 — §1 메뉴 표 누락 6개(방문기록·수급자·사고보고·근무표·기관찾기·서식모음) 추가, §7~10 저장 한도·복사/인쇄·CSV 절차 기재, 입소서류 13→14항목 정정, §14 무료/Pro 표 한도·Pro 표기 실측 반영
+
 ## 2026-11-04 fix(carework): 현장도구 → 본인부담금 계산 명칭 교정 (nav=본인부담금)
 
 
