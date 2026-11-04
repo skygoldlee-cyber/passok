@@ -15,6 +15,22 @@ const _readOut = sel => {
     return el ? ((el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) ? el.value : el.textContent || '') : '';
 };
 
+/** 생성 결과가 없으면 대상 요소의 뷰 폼 입력 항목·값을 양식 텍스트로 조립 — 양식 자체가 문서 */
+const _formText = sel => {
+    const sec = /** @type {HTMLElement|null} */ (document.querySelector(sel.trim()))?.closest('.view-section') || document;
+    const lines = [...sec.querySelectorAll('input, select, textarea')].flatMap(e0 => {
+        const el = /** @type {HTMLInputElement} */ (e0);
+        if (['button', 'submit', 'file', 'hidden'].includes(el.type) || el.closest('.nav-practice-only')) return [];
+        const lab = el.closest('label') || (el.id && sec.querySelector(`label[for="${el.id}"]`));
+        const name = (lab ? lab.textContent : (el.getAttribute('aria-label') || el.name || el.id || '항목')).replace(/\s+/g, ' ').trim();
+        const val = (el.type === 'checkbox' || el.type === 'radio')
+            ? (el.checked ? (el.type === 'radio' ? `(${el.value})` : '✓') : '')
+            : String(el.value || '').trim();
+        return val ? [`${name}: ${val}`] : [];
+    });
+    return lines.join('\n');
+};
+
 /**
  * 생성된 문서 텍스트를 OS 공유 시트로 전달한다.
  * data-arg="CSS선택자|제목[|mask[|생성핸들러]]" — mask 플래그 시 인명·연락처를 가린 본문으로 공유.
@@ -27,10 +43,15 @@ export async function careShare(arg) {
     const [sel, title = '문서', f3 = '', f4 = '', alt = ''] = String(arg || '').split('|');
     // mask 생략 시 3번째 필드가 생성 핸들러 — "|sel|title|gen" 와 "|sel|title|mask|gen" 모두 지원. 5번째 alt는 보조 생성기.
     const flag = f3 === 'mask' ? 'mask' : '', gen = f4 || (flag ? '' : f3);
-    const raw = _readOut(sel);
-    const err = /** @type {HTMLElement|null} */ (document.querySelector(sel.trim()))?.querySelector('.care-calc-err');
-    // 인쇄·생성 선행 필수 — 생성된 문서만 공유 (자동 생성·폼 폴백 없음)
-    if (!raw.trim() || err) { showToast('먼저 인쇄·PDF로 문서를 생성하세요 — 공유는 생성된 문서를 보냅니다.', 'error'); return; }
+    let raw = _readOut(sel);
+    // 공유 단독 완결 — 미생성 시 생성 핸들러 자동 실행 (CsvExport는 파일 직접 생성이라 클릭 생략)
+    if (!raw.trim() && gen && !gen.endsWith('CsvExport')) {
+        try { /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click(); } catch { /* 계속 */ }
+        raw = _readOut(sel);
+    }
+    if (/** @type {HTMLElement|null} */ (document.querySelector(sel.trim()))?.querySelector('.care-calc-err')) raw = ''; // 오류 마커만 있으면 양식으로
+    if (!raw.trim()) raw = _formText(sel); // 생성 실패해도 양식(입력 항목·값)으로 공유
+    if (!raw.trim()) { showToast('공유할 내용이 없습니다 — 항목을 입력하세요.', 'error'); return; }
     const text = flag === 'mask' ? _mask(raw) : raw;
     // 개인정보 통제는 인명 가림(mask)으로 보장 — 확인 다이얼로그 없이 한 번 클릭으로 공유 (정책 주의는 비차단 안내)
     if (flag === 'mask') showToast('인명·연락처가 가려진 본문으로 공유됩니다 — 기관 정책을 확인하세요.');
