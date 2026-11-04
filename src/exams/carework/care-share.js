@@ -4,6 +4,8 @@ import { showToast } from '../../ui-utils.js';
 import { pdfFileFromEl } from '../../content/pdf-utils.js';
 import { sheetFile } from '../../content/xlsx-utils.js';
 import { docHeadHtml } from './facility.js';
+import { getJSON, setJSON } from '../../core/storage.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
 
 const _NAME_RE = /(김|이|박|최|정|강|조|윤|장|임|한|오|서|신|권|황|안|송|전|홍|고|문|양|손|배|백|허|유|남|심|노|하|곽|성|차|주|우|구|민|류|나|진|엄|채|원|천|방|공|현|함|변|염|추|도|소|석|선|설|마|길|연|위|표|명|기|반|왕|금|옥|육|인|맹|제|모|탁|어|은|편|남궁|독고|제갈|황보|선우)[가-힣]{1,2}(?!\s*(식사|산책|요양|보호|관리|확인|기록|완료|시작|교대))/g;
 const _PHONE_RE = /0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}/g;
@@ -13,9 +15,9 @@ const _mask = t => t.replace(_NAME_RE, m => m.length <= 4 ? '[인명]' : m)
 /** 공유 감사 로그 — 수급자 정보 외부 전송 이력 L0 로컬 기록 (기관 감사 증적, 최근 50건) */
 const _audit = (title, flag, files) => {
     try {
-        const log = JSON.parse(localStorage.getItem('care_share_audit') || '[]');
+        const log = /** @type {any[]} */ (getJSON(STORAGE_KEYS.CARE_SHARE_AUDIT) || []);
         log.push({ ts: Date.now(), title, masked: flag === 'mask', files: files.map(f => f.name) });
-        localStorage.setItem('care_share_audit', JSON.stringify(log.slice(-50)));
+        setJSON(STORAGE_KEYS.CARE_SHARE_AUDIT, log.slice(-50));
     } catch { /* 스토리지 실패는 무시 */ }
 };
 
