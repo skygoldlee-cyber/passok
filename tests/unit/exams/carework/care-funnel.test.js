@@ -111,10 +111,11 @@ test('CO-10 커버리지 배너 — 보간 출력은 esc 적용 (싱크 규약)'
     assert.match(readFileSync('src/exams/carework/views/care-audit.js', 'utf8'), /esc\(cov\.text\)/);
 });
 
-test('CO-13 공유 항상 복사 선행 — 어떤 환경에서든 클릭 즉시 반응·시트는 추가 동작', () => {
+test('CO-13 공유 — 모바일 파일 첨부 우선·데스크톱 복사+다운로드, 항상 반응 보장', () => {
     const src = readFileSync('src/exams/carework/care-share.js', 'utf8');
     assert.match(src, /copyFallback/);
     assert.match(src, /clipboard\?\.writeText|clipboard\.writeText/);
-    assert.ok(src.indexOf('copyFallback()') < src.indexOf('navigator.share')); // 복사 선행 — 클릭 즉시 반응 보장
-    assert.match(src, /pointer:coarse/); // 공유 시트는 터치 기기에서만 추가 동작
+    assert.match(src, /pointer:coarse/); // 터치 기기에서만 파일 공유 시트
+    assert.match(src, /new File\(/); // 모바일 파일 첨부 공유
+    assert.match(src, /a\.download/); // 데스크톱 파일 다운로드
 });

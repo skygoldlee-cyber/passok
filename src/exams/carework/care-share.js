@@ -1,6 +1,7 @@
 // src/exams/carework/care-share.js
 // @spec CO-13 — 생성 문서 Web Share API 공유 (카톡 등 네이티브 공유 시트)
 import { showToast } from '../../ui-utils.js';
+import { pdfFileFromEl } from '../../content/pdf-utils.js';
 
 const _NAME_RE = /([가-힣]{2,4})(님|씨|어르신)?/g;
 const _PHONE_RE = /0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}/g;
@@ -59,8 +60,12 @@ export async function careShare(arg) {
             () => showToast('클립보드에 복사했습니다 — 카톡 등에 붙여넣으세요.'),
             () => showToast('복사 실패 — 인쇄·PDF를 이용하세요.', 'error'));
     };
-    // 파일 공유 — 모바일 공유 시트에 문서 파일 첨부 (카톡 등). 데스크톱은 파일 다운로드.
-    const file = new File([text], `${title}.txt`, { type: 'text/plain;charset=utf-8' });
+    // 파일 공유 — 미리보기 요소가 있으면 PDF로 렌더(한글은 이미지), 없거나 실패 시 txt
+    const outEl = document.querySelector(sel.trim());
+    let file = new File([text], `${title}.txt`, { type: 'text/plain;charset=utf-8' });
+    if (outEl && text.trim()) {
+        try { file = await pdfFileFromEl(/** @type {HTMLElement} */ (outEl), title); } catch { /* 실패 시 txt 유지 */ }
+    }
     const coarse = typeof matchMedia === 'function' && matchMedia('(pointer:coarse)').matches;
     if (coarse && navigator.canShare?.({ files: [file] })) {
         try { await navigator.share({ title, text, files: [file] }); showToast('파일 공유 시트를 열었습니다.'); return; }

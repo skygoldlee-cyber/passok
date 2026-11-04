@@ -17,6 +17,9 @@ vi.mock('../../../../src/auth-sync/supabase-client.js', () => ({
     getSupabase: vi.fn(() => Promise.resolve({})),
     onAuthChange: vi.fn(),
 }));
+vi.mock('../../../../src/content/pdf-utils.js', () => ({
+    pdfFileFromEl: vi.fn().mockRejectedValue(new Error('jsdom — PDF 미지원')), // txt 폴백 검증
+}));
 vi.mock('../../../../src/exams/carework/facility.js', async (importOriginal) => ({
     ...await importOriginal(),
     docHeadHtml: vi.fn(t => `<div class="doc-head">${t}</div>`),
