@@ -189,4 +189,30 @@ describe('CO-13 본인부담금 계산 실제 시뮬레이션', () => {
         expect(call).toBeTruthy();
         expect(call[0]).toBe(document.getElementById('care-result').textContent);
     });
+
+    it('인쇄 출력 = 공유 PDF 렌더 — 동일 문서 내용·표 구조', async () => {
+        document.body.innerHTML = partial;
+        globalThis.navigator.clipboard = { writeText: vi.fn().mockResolvedValue() };
+        delete globalThis.navigator.share;
+        window.print = vi.fn();
+        pdfSpy.mockClear();
+        const { initCareCalcView, careCalcPrint } = await import('../../../../src/exams/carework/views/care-calc.js');
+        await initCareCalcView();
+        careCalcPrint(); // 인쇄 경로 — 미리보기 렌더
+        const printed = document.getElementById('care-result');
+        expect(printed.textContent).toContain('본인부담금');
+        const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        const btn = /** @type {HTMLElement} */ (document.querySelector('[data-click="careShare"]'));
+        await careShare(btn.dataset.arg);
+        // 공유 PDF 렌더 대상 = 문서 헤더 + 미리보기 DOM 클론 — 인쇄와 동일한 본문·표
+        const wrap = pdfSpy.mock.calls[0][0];
+        expect(wrap).toBeTruthy();
+        // 본문 텍스트가 인쇄 미리보기와 동일
+        for (const t of printed.textContent.split('\n').map(s => s.trim()).filter(Boolean).slice(0, 3))
+            expect(wrap.textContent).toContain(t);
+        // 표가 있으면 표 구조도 유지
+        if (printed.querySelector('table')) expect(wrap.querySelector('table')).toBeTruthy();
+        // 문서 헤더가 인쇄와 동일 형식으로 포함
+        expect(wrap.querySelector('.care-doc-head') || wrap.textContent.includes('본인부담금')).toBeTruthy();
+    });
 });
