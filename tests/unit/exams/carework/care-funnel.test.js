@@ -121,7 +121,7 @@ test('CO-13 공유 — 모바일 파일 첨부 우선·데스크톱 복사+다�
     assert.match(src, /style\.color = '#000'/);
     assert.match(src, /typeof navigator.canShare !== 'function'/); // canShare 미지원 브라우저도 공유 시도
     assert.match(src, /CARE_SHARE_AUDIT/);
-    assert.match(src, /alert\(/); // 진단은 닫을 때까지 남는 alert (토스트는 다운로드 창에 가려짐)
+    assert.match(src, /const diag = /); // 진단은 닫을 때까지 남는 배너 (토스트는 다운로드 창에 가려짐, alert는 규약 금지)
     assert.match(src, /공유 시트 열기 실패/); // 거절 사유 진단 표시
     assert.ok(src.indexOf('navigator.share(') < src.indexOf('await pdfFileFromEl'), 'share()를 PDF 생성 전에 호출 — 제스처 만료 방지'); // 감사 로그는 storage.js 추상화 경유 (localStorage 직접 접근 금지) // PDF 가독성 — 회색 계열 제거, 검정 텍스트 // html2canvas는 문서 좌표 렌더 — fixed는 뷰포트에 노출(플래시)이라 문서 하단 absolute
 });

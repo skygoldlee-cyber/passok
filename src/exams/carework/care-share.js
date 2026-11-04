@@ -21,6 +21,16 @@ const _audit = (title, flag, files) => {
     } catch { /* 스토리지 실패는 무시 */ }
 };
 
+/** 진단 배너 — 네이티브 다이얼로그 금지 규약: 탭할 때까지 남는 상시 배너 (캡처 가능) */
+const diag = msg => {
+    const b = document.createElement('div');
+    b.style.cssText = 'position:fixed;top:8px;left:8px;right:8px;z-index:99999;padding:12px 14px;background:#7f1d1d;color:#fff;border-radius:8px;font:14px/1.5 sans-serif';
+    b.textContent = `${msg}  (탭하여 닫기)`;
+    b.addEventListener('click', () => b.remove());
+    document.body.appendChild(b);
+    setTimeout(() => b.remove(), 20000);
+};
+
 const _readOut = sel => {
     const el = sel && document.querySelector(sel.trim());
     return el ? ((el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) ? el.value : el.textContent || '') : '';
@@ -97,9 +107,9 @@ export async function careShare(arg) {
             const n = /** @type {Error} */ (e)?.name;
             if (n === 'AbortError') return;
             showToast(`공유 시트 열기 실패(${n || e}) — 복사·다운로드로 대체합니다.`, 'error');
-            alert(`공유 시트를 열지 못했습니다.\n사유: ${n || e}\n파일은 다운로드로 대체합니다.`); // 닫을 때까지 표시 — 캡처·진단용
+            diag(`공유 시트를 열지 못했습니다 — 사유: ${n || e} · 파일은 다운로드로 대체합니다.`); // 탭할 때까지 표시 — 캡처·진단용
         }
-    } else alert('이 브라우저는 공유 시트를 지원하지 않습니다.\nChrome으로 열어주세요.'); // 인앱 브라우저 식별
+    } else diag('이 브라우저는 공유 시트를 지원하지 않습니다 — Chrome으로 열어주세요.'); // 인앱 브라우저 식별
     if (text.trim()) { // 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
         const wrap = document.createElement('div');
         // html2canvas는 문서 좌표로 렌더 — fixed는 뷰포트에 노출(흰 플래시)되므로 문서 하단 absolute로 배치
