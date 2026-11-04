@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261104-3c14961",
+    "date": "2026-11-04",
+    "notes": [
+      "[정리·trace] 테스트 리네임 참조 반영",
+      "[테스트·carework] care-os-modules.test.js 리네임 — CODE_CONVENTIONS §2.1 파일명 규약",
+      "[정리·trace] CO DOM 테스트 참조 반영",
+      "[테스트·carework] CO-08~13 모듈 DOM 커버리지 — vitest 커버리지 임계 복구",
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[수정·carework] 커버리지 배너 이스케이프 — 싱크 규약 위반 해소",
+      "[수정·carework] CO-13 공유 경고·인명 가림 + 리뷰 5차 문서 정합",
+      "[문서·carework] 외부 리뷰 반영 — 기능별 경쟁표·파일럿 절차·자산 제약·인터뷰 계측",
+      "[기능·carework] 인수인계 AI 초안 — careAiDraft data-arg 범용화 (CO-08)"
+    ]
+  },
+  {
     "version": "v20261104-908fefa",
     "date": "2026-11-04",
     "notes": [
@@ -191,14 +207,6 @@
       "[기능·assets] 앱 아이콘 원본 v5 교체 (passok_icon_1024)",
       "[수정·landing] 모바일 뷰포트 오버플로우 — 고정폭 min() 교정",
       "[정리·release] v20261103-f036602 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261103-f036602",
-    "date": "2026-11-03",
-    "notes": [
-      "[기능·assets] 앱 아이콘 원본 v4 교체 (네온 그라데이션 P + 별빛)",
-      "[정리·release] v20261103-74642a7 스탬프 확정 [no-docs]"
     ]
   }
 ]
