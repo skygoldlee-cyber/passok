@@ -191,7 +191,8 @@
    "placeholder": "검색할 키워드를 입력하세요 (예: 표피, 갈바닉, 소독, 기능성화장품)"
   },
   "formula-manual": {
-   "title": "실무매뉴얼"
+   "title": "실무막뉴얼",
+   "nav": "매뉴얼"
   }
  },
  "synonyms": {
