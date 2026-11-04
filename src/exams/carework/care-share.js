@@ -6,17 +6,26 @@ const _NAME_RE = /([가-힣]{2,4})(님|씨|어르신)?/g;
 const _PHONE_RE = /0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}/g;
 const _mask = t => t.replace(_PHONE_RE, '[연락처]').replace(_NAME_RE, m => /[가-힣]/.test(m) && m.length <= 5 ? '[인명]' : m);
 
+const _readOut = sel => {
+    const el = sel && document.querySelector(sel.trim());
+    return el ? ((el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) ? el.value : el.textContent || '') : '';
+};
+
 /**
  * 생성된 문서 텍스트를 OS 공유 시트로 전달한다.
- * data-arg="CSS선택자|제목[|mask]" — mask 플래그 시 인명·연락처를 가린 본문으로 공유.
+ * data-arg="CSS선택자|제목[|mask[|생성핸들러]]" — mask 플래그 시 인명·연락처를 가린 본문으로 공유.
+ * 생성핸들러 지정 시 결과가 비어있으면 해당 버튼을 먼저 실행해 생성 후 공유한다.
  * 수급자 정보의 외부 전송 경로이므로 공유 전 기관 정책 확인 경고를 표시한다.
  * 미지원 환경(PC 등)은 클립보드 복사로 폴백.
  * @param {HTMLElement} [btn]
  */
 export async function careShare(btn) {
-    const [sel, title = '문서', flag = ''] = String(btn?.dataset?.arg || '').split('|');
-    const el = sel && document.querySelector(sel.trim());
-    const raw = el ? ((el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) ? el.value : el.textContent || '') : '';
+    const [sel, title = '문서', flag = '', gen = ''] = String(btn?.dataset?.arg || '').split('|');
+    let raw = _readOut(sel);
+    if (!raw.trim() && gen) {
+        /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click();
+        raw = _readOut(sel);
+    }
     if (!raw.trim()) { showToast('먼저 문서를 생성하세요.', 'error'); return; }
     const text = flag === 'mask' ? _mask(raw) : raw;
     const ok = await showConfirm(

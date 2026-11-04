@@ -49,7 +49,16 @@ test('CO-13 프라이버시 — 수급자 데이터 공유는 경고+인명 가�
     assert.match(src, /showConfirm/); // 공유 전 기관 정책 확인 경고
     assert.match(src, /flag === 'mask'/);
     for (const f of ['care-log', 'care-handover', 'care-incident', 'care-client', 'care-visit', 'care-roster']) {
-        assert.match(readFileSync(`html/exams/carework/${f}.html`, 'utf8'), /\|mask"/); // 수급자 데이터 출력물 mask 기본
+        assert.match(readFileSync(`html/exams/carework/${f}.html`, 'utf8'), /\|mask/); // 수급자 데이터 출력물 mask 기본
+    }
+});
+
+test('CO-13 공유 — 미생성 시 생성 버튼 자동 실행', () => {
+    const src = readFileSync('src/exams/carework/care-share.js', 'utf8');
+    assert.match(src, /&& gen\) {/); // data-arg 4번째 필드로 미생성 시 자동 실행
+    assert.match(src, /\[data-click="\$\{gen\}"\]/);
+    for (const [f, g] of [['care-calc', 'careCalcRun'], ['care-log', 'careLogGenerate'], ['care-handover', 'careHandoverGenerate'], ['care-incident', 'careIncidentGenerate']]) {
+        assert.match(readFileSync(`html/exams/carework/${f}.html`, 'utf8'), new RegExp(`\\|${g}"`));
     }
 });
 
