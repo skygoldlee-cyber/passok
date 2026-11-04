@@ -1,6 +1,7 @@
 // src/exams/carework/care-visit.js — 면회·방문 기록 도메인 로직
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 방문예약(scheduled) → 방문결과(done)/취소(canceled) 상태 전이와 면회 기록 문서 생성
+import { toCsv } from '../../content/csv-utils.js';
 
 export const RELATIONS = [
     { key: 'spouse', label: '배우자' },
@@ -36,4 +37,13 @@ export function buildVisitText(v) {
         if (v.result.summary) lines.push(`결과·특이사항: ${v.result.summary}`);
     }
     return lines.filter(Boolean).join('\n');
+}
+
+/** 방문 기록 목록 → CSV 텍스트 (UTF-8 BOM — Excel 한글 호환) */
+export function visitsToCsv(items) {
+    return toCsv(['방문일', '시간', '대상자', '방문객', '연락처', '관계', '목적', '상태', '결과'], items, v => [
+        v.date || '', v.time || '', v.client || '', v.visitor || '', v.phone || '',
+        relationLabel(v.relation), v.purpose || '', VISIT_STATUS[v.status] || v.status || '',
+        (v.result && v.result.summary) || '',
+    ]);
 }

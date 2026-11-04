@@ -1,7 +1,8 @@
 // src/exams/carework/views/care-log.js — 요양일지 생성기 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
-import { buildCareLog, SERVICE_TYPES, ACTIVITY_GROUPS } from '../care-log.js';
+import { buildCareLog, SERVICE_TYPES, ACTIVITY_GROUPS, careLogsToCsv } from '../care-log.js';
 import { saveCareLog, listCareLogs, removeCareLog } from '../care-log-store.js';
+import { downloadCsv } from '../../../content/csv-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
@@ -63,6 +64,14 @@ export function careLogPrint() {
     if (!document.querySelector('#log-preview pre')) { showToast('먼저 일지를 생성하세요.', 'error'); return; }
     proFeatureNotice('care_log_export', '일지 인쇄·PDF');
     window.print();
+}
+
+export function careLogCsvExport() {
+    const items = listCareLogs();
+    if (!items.length) { showToast('내보낼 저장된 일지가 없습니다.', 'error'); return; }
+    proFeatureNotice('care_log_export', '일지 CSV 내보내기');
+    downloadCsv(careLogsToCsv(items), '요양일지.csv');
+    showToast('CSV를 저장했습니다.');
 }
 
 export function careLogDelete(id) {

@@ -1,7 +1,8 @@
 // src/exams/carework/views/care-visit.js — 면회·방문 기록 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
-import { RELATIONS, VISIT_STATUS, relationLabel, buildVisitText } from '../care-visit.js';
+import { RELATIONS, VISIT_STATUS, relationLabel, buildVisitText, visitsToCsv } from '../care-visit.js';
 import { listVisits, saveVisit, updateVisit, removeVisit } from '../care-visit-store.js';
+import { downloadCsv } from '../../../content/csv-utils.js';
 import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, docHeadHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
@@ -123,6 +124,14 @@ export function careVisitPrint() {
     renderPreview(t);
     proFeatureNotice('care_visit_share', '방문기록 인쇄·PDF');
     window.print();
+}
+
+export function careVisitCsvExport() {
+    const items = listVisits();
+    if (!items.length) { showToast('내보낼 방문 기록이 없습니다.', 'error'); return; }
+    proFeatureNotice('care_visit_share', '방문기록 CSV 내보내기');
+    downloadCsv(visitsToCsv(items), '면회기록.csv');
+    showToast('CSV를 저장했습니다.');
 }
 
 function renderLists() {

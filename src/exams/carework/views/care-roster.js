@@ -1,7 +1,8 @@
 // src/exams/carework/views/care-roster.js — 교대 근무표 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
-import { ROSTER_SHIFTS, shiftLabel, buildRosterText } from '../care-roster.js';
-import { listRoster, saveRoster, removeRoster } from '../roster-store.js';
+import { ROSTER_SHIFTS, shiftLabel, buildRosterText, rosterToCsv, csvToRoster } from '../care-roster.js';
+import { listRoster, saveRoster, removeRoster, upsertRoster } from '../roster-store.js';
+import { readCsvFile, downloadCsv } from '../../../content/csv-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
@@ -56,6 +57,33 @@ export function careRosterPrint() {
     window.print();
 }
 
+export function careRosterCsvExport() {
+    const items = listRoster();
+    if (!items.length) { showToast('등록된 근무 배정이 없습니다.', 'error'); return; }
+    proFeatureNotice('care_roster_share', '근무표 CSV 내보내기');
+    downloadCsv(rosterToCsv(items), '근무표.csv');
+    showToast('CSV를 저장했습니다.');
+}
+
+export function careRosterCsvImport() {
+    proFeatureNotice('care_roster_share', '근무표 CSV 가져오기');
+    const f = /** @type {HTMLInputElement|null} */ ($('ros-csv-file'));
+    if (f) f.click();
+}
+
+function onCsvFile(e) {
+    const file = /** @type {HTMLInputElement} */ (e.target).files?.[0];
+    if (!file) return;
+    readCsvFile(file).then(t => {
+        const recs = csvToRoster(t);
+        if (!recs.length) { showToast('불러올 근무 배정 행이 없습니다 (헤더: 날짜,근무조,근무자,메모).', 'error'); return; }
+        const r = upsertRoster(recs);
+        renderList();
+        showToast(`가져오기 완료 — 신규 ${r.added}·갱신 ${r.updated}${r.skipped ? ` · 한도 초과 ${r.skipped}건 제외` : ''}`);
+    });
+    e.target.value = '';
+}
+
 function renderList() {
     const host = $('ros-list');
     if (!host) return;
@@ -74,6 +102,8 @@ export function initCareRosterView() {
     const s = $('ros-shift');
     if (s && !s.children.length)
         s.innerHTML = ROSTER_SHIFTS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+    const f = $('ros-csv-file');
+    if (f && !f.dataset.wired) { f.dataset.wired = '1'; f.addEventListener('change', onCsvFile); }
     renderList();
     void refreshOrgName();
 }

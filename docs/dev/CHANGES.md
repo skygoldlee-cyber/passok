@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 feat(carework): 실무도구 CSV 확장 — 근무표 왕복 + 방문·사고·일지 내보내기
+
+- 근무표 CSV 왕복: `csvToRoster`/`rosterToCsv` + `upsertRoster`(날짜+근무조+근무자 병합, 30건 한도 준수) + `ros-csv-file` 입력 — Excel 월간 배정 일괄 등록 지원 (CP949 자동 인식)
+- 방문기록·사고보고·요양일지 CSV 내보내기: `visitsToCsv`/`incidentsToCsv`/`careLogsToCsv` — 목록→Excel 제출·집계용 (각 `*_share`/`care_log_export` PRO 표기 재사용)
+- 공용 `parseCsv`/`toCsv`/`readCsvFile`/`downloadCsv` 재사용 — BOM 포함 Excel 한글 호환
+- 실무막뉴얼 §4·7·9·10 CSV 절 + §14 무료/Pro 표 반영
+
 ## 2026-11-04 fix(carework): 수급자 CSV 가져오기 CP949 인코딩 지원
 
 - `care-client.js`의 `file.text()`(UTF-8 전용) → 공용 `readCsvFile`로 교체 — Excel에서 CP949(EUC-KR)로 저장한 명부도 한글 깨짐 없이 가져옴 (csv-utils의 UTF-8 strict → EUC-KR 폴백 재사용)

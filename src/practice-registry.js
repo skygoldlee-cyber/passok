@@ -311,7 +311,7 @@ const careLog = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-log.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careLogGenerate', 'careLogSave', 'careLogCopy', 'careLogDelete', 'careLogPrint']]],
+    handlers: [['main', ['careLogGenerate', 'careLogSave', 'careLogCopy', 'careLogDelete', 'careLogPrint', 'careLogCsvExport']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
@@ -412,7 +412,7 @@ const careVisit = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-visit.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careVisitAdd', 'careVisitResultOpen', 'careVisitResultSave', 'careVisitResultClose', 'careVisitCancel', 'careVisitDelete', 'careVisitExport', 'careVisitPrint', 'careVisitFacilitySubmit']]],
+    handlers: [['main', ['careVisitAdd', 'careVisitResultOpen', 'careVisitResultSave', 'careVisitResultClose', 'careVisitCancel', 'careVisitDelete', 'careVisitExport', 'careVisitPrint', 'careVisitCsvExport', 'careVisitFacilitySubmit']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
@@ -478,7 +478,7 @@ const careIncident = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-incident.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careIncidentGenerate', 'careIncidentSave', 'careIncidentCopy', 'careIncidentPrint', 'careIncidentDelete', 'careIncidentFacilitySubmit']]],
+    handlers: [['main', ['careIncidentGenerate', 'careIncidentSave', 'careIncidentCopy', 'careIncidentPrint', 'careIncidentCsvExport', 'careIncidentDelete', 'careIncidentFacilitySubmit']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
@@ -511,7 +511,7 @@ const careRoster = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-roster.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careRosterAdd', 'careRosterDelete', 'careRosterExport', 'careRosterPrint']]],
+    handlers: [['main', ['careRosterAdd', 'careRosterDelete', 'careRosterExport', 'careRosterPrint', 'careRosterCsvExport', 'careRosterCsvImport']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);

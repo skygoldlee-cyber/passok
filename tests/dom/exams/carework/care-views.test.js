@@ -46,7 +46,15 @@ import { initFacilityJoinView } from '../../../../src/exams/carework/views/facil
 import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, careVisitExport, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
 import { careClientSave, careClientLoad, careClientDelete, initCareClientView } from '../../../../src/exams/carework/views/care-client.js';
 import { listClients } from '../../../../src/exams/carework/care-client-store.js';
-import { selectFile, waitFor } from '../../helpers.js';
+import { careLogCsvExport } from '../../../../src/exams/carework/views/care-log.js';
+import { addCareLog, removeCareLog } from '../../../../src/exams/carework/care-log-store.js';
+import { careVisitCsvExport } from '../../../../src/exams/carework/views/care-visit.js';
+import { addVisit, removeVisit } from '../../../../src/exams/carework/care-visit-store.js';
+import { careIncidentCsvExport } from '../../../../src/exams/carework/views/care-incident.js';
+import { addIncident, removeIncident } from '../../../../src/exams/carework/incident-store.js';
+import { careRosterCsvExport, careRosterCsvImport } from '../../../../src/exams/carework/views/care-roster.js';
+import { addRoster, listRoster } from '../../../../src/exams/carework/roster-store.js';
+import { selectFile, waitFor, spyAnchorDownload, lastToast } from '../../helpers.js';
 import { careIncidentGenerate, careIncidentSave, careIncidentDelete, initCareIncidentView } from '../../../../src/exams/carework/views/care-incident.js';
 import { careRosterAdd, careRosterDelete, initCareRosterView } from '../../../../src/exams/carework/views/care-roster.js';
 import { careFinderUseOrg } from '../../../../src/exams/carework/views/care-finder.js';
@@ -339,6 +347,60 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careRosterDelete(list.querySelector('[data-arg]')?.dataset.arg);
     });
 
+    it('careRoster — CSV 왕복: 내보내기 다운로드 + 가져오기 병합 (날짜+근무조+근무자 키)', async () => {
+        loadPartial('care-roster.html');
+        initCareRosterView(); // ros-csv-file change 리스너 바인딩
+        addRoster({ date: '2026-11-10', shift: 'night', worker: '김○○', note: '대체' });
+
+        const dl = spyAnchorDownload();
+        careRosterCsvExport();
+        dl.restore();
+        expect(dl.clicks.length).toBe(1);
+        expect(dl.clicks[0].download).toBe('근무표.csv');
+
+        // 근무조 라벨→키 매핑 + 동일 (날짜,근무조,근무자) 행은 갱신 병합
+        careRosterCsvImport(); // proFeatureNotice + 파일 선택 트리거
+        selectFile('ros-csv-file', new File([
+            '날짜,근무조,근무자,메모\n2026-11-11,주간(데이),박○○,\n2026-11-10,야간(나이트),김○○,수정메모',
+        ], 'roster.csv'));
+        await waitFor(() => listRoster().length === 2);
+        expect(listRoster().find(x => x.worker === '박○○').shift).toBe('day');
+        expect(listRoster().find(x => x.worker === '김○○').note).toBe('수정메모');
+        expect(lastToast()[0]).toContain('신규 1·갱신 1');
+    });
+
+    it('careVisit — CSV 내보내기 다운로드 트리거', () => {
+        loadPartial('care-visit.html');
+        const r = addVisit({ date: '2026-11-10', client: '김○○', visitor: '이○○', relation: 'child' });
+        const dl = spyAnchorDownload();
+        careVisitCsvExport();
+        dl.restore();
+        expect(dl.clicks.length).toBe(1);
+        expect(dl.clicks[0].download).toBe('면회기록.csv');
+        removeVisit(r.id);
+    });
+
+    it('careIncident — CSV 내보내기 다운로드 트리거', () => {
+        loadPartial('care-incident.html');
+        const r = addIncident({ date: '2026-11-10', client: '김○○', type: 'fall', desc: '미끄러짐' });
+        const dl = spyAnchorDownload();
+        careIncidentCsvExport();
+        dl.restore();
+        expect(dl.clicks.length).toBe(1);
+        expect(dl.clicks[0].download).toBe('사고보고.csv');
+        removeIncident(r.id);
+    });
+
+    it('careLog — CSV 내보내기 다운로드 트리거', () => {
+        loadPartial('care-log.html');
+        const r = addCareLog({ date: '2026-11-10', client: '김○○', service: 'visit-care', activities: { physical: ['세면·목욕'] }, note: '양호', text: '…' });
+        const dl = spyAnchorDownload();
+        careLogCsvExport();
+        dl.restore();
+        expect(dl.clicks.length).toBe(1);
+        expect(dl.clicks[0].download).toBe('요양일지.csv');
+        removeCareLog(r.id);
+    });
 
     it('careFinder — 시설명으로 출력물 기관명 설정', () => {
         careFinderUseOrg('행복요양원');
