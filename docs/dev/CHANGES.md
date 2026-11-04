@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 feat(carework): 공유 다중 파일 — xlsx·PDF 독립 생성, 실패 파일 생략 후 정상 공유 (CO-13)
+
+
 ## 2026-11-04 feat(carework): 공유 실제 .xlsx — CsvExport 결과 재사용해 SheetJS 파일 첨부 (CO-13)
 
 

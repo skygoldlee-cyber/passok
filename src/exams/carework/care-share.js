@@ -41,18 +41,14 @@ const _formText = sel => {
  * @param {string} arg — data-arg 값 ("선택자|제목[|mask[|생성핸들러]]") — 위임은 요소가 아닌 data-arg 문자열을 전달
  */
 export async function careShare(arg) {
-    const [sel, title = '문서', f3 = '', f4 = ''] = String(arg || '').split('|');
-    // mask 생략 시 3번째 필드가 생성 핸들러 — "|sel|title|gen" 와 "|sel|title|mask|gen" 모두 지원
+    const [sel, title = '문서', f3 = '', f4 = '', alt = ''] = String(arg || '').split('|');
+    // mask 생략 시 3번째 필드가 생성 핸들러 — "|sel|title|gen" 와 "|sel|title|mask|gen" 모두 지원. 5번째 alt는 보조 생성기.
     const flag = f3 === 'mask' ? 'mask' : '', gen = f4 || (flag ? '' : f3);
     let raw = _readOut(sel);
-    /** @type {Promise<any>|null} */
-    let csvPromise = null;
-    if (!raw.trim() && gen) {
-        if (gen.endsWith('CsvExport')) {
-            try { csvPromise = (/** @type {any} */ (window))[gen]?.(); } catch { /* 계속 */ } // 실제 xlsx 생성 — 결과 CSV를 파일 공유에 재사용
-        } else {
-            try { /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click(); } catch { /* 생성 핸들러 예외도 공유는 계속 — 폼 양식으로 진행 */ }
-        }
+    const genCsv = g => g?.endsWith('CsvExport') ? (() => { try { return (/** @type {any} */ (window))[g]?.(); } catch { return null; } })() : null;
+    const csvPromise = genCsv(gen) || genCsv(alt); // 주/보조 중 CsvExport를 찾아 실제 xlsx 생성
+    if (!raw.trim() && gen && !gen.endsWith('CsvExport')) {
+        try { /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click(); } catch { /* 생성 핸들러 예외도 공유는 계속 — 폼 양식으로 진행 */ }
         raw = _readOut(sel);
     }
     // 생성 결과가 오류 마커뿐이면 양식 텍스트로 폴백 — 계산 전이라도 출력 양식은 공유 가능해야 함
@@ -68,11 +64,13 @@ export async function careShare(arg) {
             () => showToast('클립보드에 복사했습니다 — 카톡 등에 붙여넣으세요.'),
             () => showToast('복사 실패 — 인쇄·PDF를 이용하세요.', 'error'));
     };
-    // 파일 공유 — 인쇄 레이아웃(문서 헤더+가림 본문)을 PDF로 렌더, 실패 시 txt
-    let file = new File([text], `${title}.txt`, { type: 'text/plain;charset=utf-8' });
-    if (csvPromise) { // CsvExport 뷰 — 실제 .xlsx 파일로 공유
-        try { const csv = await csvPromise; if (csv) file = await sheetFile(csv, `${title}.xlsx`); } catch { /* 기본 파일 유지 */ }
-    } else if (text.trim()) {
+    // 파일 생성 — 각 소스 독립: 성공한 파일만 첨부, 하나가 없어도 나머지는 정상 공유
+    /** @type {File[]} */
+    const files = [];
+    if (csvPromise) { // CsvExport 지정 시 실제 .xlsx
+        try { const csv = await csvPromise; if (csv) files.push(await sheetFile(csv, `${title}.xlsx`)); } catch { /* 실패 시 생략 */ }
+    }
+    if (text.trim()) { // 인쇄 레이아웃(문서 헤더+가림 본문) PDF — 실패 시 txt로 대체
         const wrap = document.createElement('div');
         wrap.style.cssText = 'position:absolute;left:-9999px;width:700px;padding:24px;background:#fff';
         const pre = document.createElement('pre');
@@ -81,19 +79,21 @@ export async function careShare(arg) {
         wrap.innerHTML = docHeadHtml(title);
         wrap.appendChild(pre);
         document.body.appendChild(wrap);
-        try { file = await pdfFileFromEl(wrap, title); } catch { /* 실패 시 txt 유지 */ } finally { wrap.remove(); }
+        try { files.push(await pdfFileFromEl(wrap, title)); } catch { files.push(new File([text], `${title}.txt`, { type: 'text/plain;charset=utf-8' })); } finally { wrap.remove(); }
     }
     const coarse = typeof matchMedia === 'function' && matchMedia('(pointer:coarse)').matches;
-    if (coarse && navigator.canShare?.({ files: [file] })) {
-        try { await navigator.share({ title, text, files: [file] }); showToast('파일 공유 시트를 열었습니다.'); return; }
+    if (coarse && files.length && navigator.canShare?.({ files })) {
+        try { await navigator.share({ title, text, files }); showToast('파일 공유 시트를 열었습니다.'); return; }
         catch (e) { if (/** @type {Error} */ (e)?.name === 'AbortError') return; }
     }
     copyFallback(); // 항상 복사+토스트 — 어떤 환경에서든 클릭 즉시 반응이 나와야 함
-    // 데스크톱은 파일 다운로드로 제공 — "출력 문서를 파일로 공유" 요구 충족
+    // 데스크톱은 파일 다운로드로 제공 — 생성된 파일을 순차 다운로드
     if (!coarse) {
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(file); a.download = file.name;
-        document.body.appendChild(a); a.click(); a.remove();
-        showToast(`${file.name} 다운로드 — 파일을 공유하세요.`);
+        for (const file of files) {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(file); a.download = file.name;
+            document.body.appendChild(a); a.click(); a.remove();
+        }
+        if (files.length) showToast(`${files.map(f => f.name).join(', ')} 다운로드 — 파일을 공유하세요.`);
     }
 }
