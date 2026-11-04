@@ -97,7 +97,8 @@ describe('CO-13 careShare 시뮬레이션', () => {
             <label>항목 <input id="f" value="값"></label>
             <button data-click="boom">생성</button>
             <button id="share" data-arg="#out|문서|boom">공유</button></section>`);
-        document.querySelector('[data-click="boom"]').addEventListener('click', () => { throw new Error('생성 실패'); });
+        const genBtn = /** @type {HTMLButtonElement} */ (document.querySelector('[data-click="boom"]'));
+        genBtn.click = () => { throw new Error('생성 실패'); }; // 위임 핸들러 예외는 .click() 스로우로 전파됨
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share'));
         expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalled(); // 폼 양식으로 공유 완료
