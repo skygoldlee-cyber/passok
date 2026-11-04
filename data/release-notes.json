@@ -1,5 +1,18 @@
 [
   {
+    "version": "v20261104-524dec6",
+    "date": "2026-11-04",
+    "notes": [
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[기능·carework] 일지·사고 공유 alt — PDF + 실제 .xlsx 다중 첨부 (CO-13)",
+      "[리팩터링·carework] 공유 _formText 제거 — 인쇄 선행 정책으로 미사용 죽은 코드 (CO-13)",
+      "[수정·carework] 공유 인쇄 선행 필수 — 자동 생성·폼 폴백 제거 (CO-13)",
+      "[수정·carework] 공유 PDF 인쇄 미리보기 그대로 렌더 — 이중 헤더 방지 (CO-13)",
+      "[테스트·carework] 인쇄 출력 = 공유 PDF 동일성 시뮬레이션 — 본문·표·헤더 일치 (CO-13)",
+      "[정리·release] v20261104-d77d6b7 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-d77d6b7",
     "date": "2026-11-04",
     "notes": [
@@ -204,16 +217,6 @@
     "notes": [
       "[수정·carework] 기관명 미설정 안내 힌트 — 출력물 표기 안내 [no-test]",
       "[정리·release] v20261104-ee07d7b 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-ee07d7b",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·carework] 기관찾기 결과 카드형 재배치 + 설정됨 배지 [no-test]",
-      "[수정·css] 모바일 실무 탭 활성 색 통일 — secondary → primary [no-test]",
-      "[수정·css] 실무 내비 아이콘 색 통일 — secondary 고정 해제 [no-test]",
-      "[정리·release] v20261104-24bf1de 스탬프 확정 [no-docs]"
     ]
   }
 ]
