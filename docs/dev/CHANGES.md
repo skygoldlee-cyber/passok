@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 test(carework): CO-07 프리셋·기록지 테스트 + @spec 원복
+
+- care-csv-presets.test.js — alias 정규화·정식 파서 통과·제공기록지 양식 (pre-push 테스트 갭 해소)
+- ui-mode.js·manual-viewer.js의 DA-19/20·UM-06 @spec 병기 원복 — 정책형 요구사항 코드 미참조 허용분
+
+
 ## 2026-11-04 feat(carework): 현장 입력 UX — obs 세그먼트 칩·홈 미사용 마크·터치 스타일
 
 - 일지 obs를 select → 라디오 칩(전/반/소 등 1탭 입력, min-height 44px) + care-tools.css에 홈 카드·확인 권장 배지·온보딩 내비·타임라인 스타일 추가
