@@ -3,13 +3,13 @@
 ## 2026-11-04 data(carework): 기관찾기 정원·요양보호사 인력 보강
 
 - tools/import/enrich_facility_stats.js — 공단 XLSX 입소인원·인력현황 시트를 기관코드+유형코드로 매칭해 facilities.json에 capacity·careWorkers 병기 (정원 6,252/6,252 · 요양보호사 6,245)
-- 기관찾기 카드 메타에 '정원 N명 · 요양보호사 N명' 표시, 실무막뉴얼 §12 반영
+- 기관찾기 카드 메타에 '정원 N명 · 요양보호사 N명' 표시, 실무매뉴얼 §12 반영
 
 
 ## 2026-11-04 feat(carework): 기관찾기 카드에 카카오맵·장기요양보험 포털 검색 링크
 
 - 공단 데이터·상세조회 API에 기관 홈페이지 필드가 없어 수집 불가 — 결과 카드에 시설명+주소 기반 카카오맵 검색 링크와 노인장기요양보험 포털 기관찾기 링크 추가 (커버율 100%·약관 이슈 없음)
-- 실무막뉴얼 §12 반영
+- 실무매뉴얼 §12 반영
 
 
 ## 2026-11-04 feat(xlsx): CSV 왕복 도구 Excel(.xlsx) 네이티브 지원 — SheetJS vendor 추가
@@ -28,17 +28,17 @@
 - 근무표 CSV 왕복: `csvToRoster`/`rosterToCsv` + `upsertRoster`(날짜+근무조+근무자 병합, 30건 한도 준수) + `ros-csv-file` 입력 — Excel 월간 배정 일괄 등록 지원 (CP949 자동 인식)
 - 방문기록·사고보고·요양일지 CSV 내보내기: `visitsToCsv`/`incidentsToCsv`/`careLogsToCsv` — 목록→Excel 제출·집계용 (각 `*_share`/`care_log_export` PRO 표기 재사용)
 - 공용 `parseCsv`/`toCsv`/`readCsvFile`/`downloadCsv` 재사용 — BOM 포함 Excel 한글 호환
-- 실무막뉴얼 §4·7·9·10 CSV 절 + §14 무료/Pro 표 반영
+- 실무매뉴얼 §4·7·9·10 CSV 절 + §14 무료/Pro 표 반영
 
 ## 2026-11-04 fix(carework): 수급자 CSV 가져오기 CP949 인코딩 지원
 
 - `care-client.js`의 `file.text()`(UTF-8 전용) → 공용 `readCsvFile`로 교체 — Excel에서 CP949(EUC-KR)로 저장한 명부도 한글 깨짐 없이 가져옴 (csv-utils의 UTF-8 strict → EUC-KR 폴백 재사용)
-- 실무막뉴얼 §8에 인코딩 자동 인식(UTF-8·CP949) 안내 추가
+- 실무매뉴얼 §8에 인코딩 자동 인식(UTF-8·CP949) 안내 추가
 
-## 2026-11-04 feat(ui): 실무 탭바 매뉴얼 라벨 단축 + carework 실무막뉴얼 저장·CSV 문서화
+## 2026-11-04 feat(ui): 실무 탭바 매뉴얼 라벨 단축 + carework 실무매뉴얼 저장·CSV 문서화
 
 - 실무 탭바 매뉴얼 라벨 '실무 매뉴얼' → '매뉴얼' — formula-manual은 `data-uitext="formula-manual:nav"` 단축 라벨 규약 적용 + 7개 시험 manifest `nav` 선언 (hairdresser '필답 매뉴얼' 고유 명칭 유지), practiceManual 하드코딩 라벨 수정
-- 실무막뉴얼 실측 정합 보강 — §1 메뉴 표 누락 6개(방문기록·수급자·사고보고·근무표·기관찾기·서식모음) 추가, §7~10 저장 한도·복사/인쇄·CSV 절차 기재, 입소서류 13→14항목 정정, §14 무료/Pro 표 한도·Pro 표기 실측 반영
+- 실무매뉴얼 실측 정합 보강 — §1 메뉴 표 누락 6개(방문기록·수급자·사고보고·근무표·기관찾기·서식모음) 추가, §7~10 저장 한도·복사/인쇄·CSV 절차 기재, 입소서류 13→14항목 정정, §14 무료/Pro 표 한도·Pro 표기 실측 반영
 
 ## 2026-11-04 fix(carework): 현장도구 → 본인부담금 계산 명칭 교정 (nav=본인부담금)
 
@@ -339,7 +339,7 @@
 
 ## 2026-11-02 fix(docs): '실무막*' 오탈자(U+B9C9) 전수 정정 — 잔여 0
 
-- 전수 스캔으로 U+B9C9 잔재 정리: CHANGES 14건·SPEC 1건·SCREEN_MAP 2건·release-notes.json 1건·study-manual 테스트 픽스처 1건 (모두 문서·히스토리 계열 — 실행 코드·파일명·내비 라벨은 정본 '실무막뉴얼' 확인됨)
+- 전수 스캔으로 U+B9C9 잔재 정리: CHANGES 14건·SPEC 1건·SCREEN_MAP 2건·release-notes.json 1건·study-manual 테스트 픽스처 1건 (모두 문서·히스토리 계열 — 실행 코드·파일명·내비 라벨은 정본 '실무매뉴얼' 확인됨)
 - release-notes.js 번들 재생성
 
 ## 2026-11-02 fix(ui): 실무 매뉴얼 기본 제목 공유 규약 — '실무 매뉴얼 (X OS)' 통일

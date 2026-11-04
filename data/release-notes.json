@@ -8,7 +8,7 @@
       "[테스트·dom] xlsx 비동기 내보내기 대응 — XLSX 스텁 + waitFor 클릭 대기",
       "[문서·agents] xlsx-utils 디렉토리 구조 등록 + TRACE 재생성",
       "[기능·xlsx] CSV 왕복 도구 Excel(.xlsx) 네이티브 지원 — SheetJS vendor 추가",
-      "[문서·carework] 실무막뉴얼 §12 기관찾기 데이터 출처·기준일 명기",
+      "[문서·carework] 실무매뉴얼 §12 기관찾기 데이터 출처·기준일 명기",
       "[기능·carework] 실무도구 CSV 확장 — 근무표 왕복 + 방문·사고·일지 내보내기",
       "[수정·carework] 수급자 CSV 가져오기 CP949 인코딩 지원",
       "[기능·ui] 실무 탭바 매뉴얼 라벨 단축 + carework 실무매뉴얼 저장·CSV 문서화",
