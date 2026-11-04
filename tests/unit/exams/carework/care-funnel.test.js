@@ -117,5 +117,6 @@ test('CO-13 공유 — 모바일 파일 첨부 우선·데스크톱 복사+다�
     assert.match(src, /pointer:coarse/); // 터치 기기에서만 파일 공유 시트
     assert.match(src, /new File\(/); // 모바일 파일 첨부 공유
     assert.match(src, /a\.download/); // 데스크톱 파일 다운로드
-    assert.match(src, /top:100vh/); // html2canvas는 문서 좌표 렌더 — fixed는 뷰포트에 노출(플래시)이라 문서 하단 absolute
+    assert.match(src, /top:100vh/);
+    assert.match(src, /style\.color = '#000'/); // PDF 가독성 — 회색 계열 제거, 검정 텍스트 // html2canvas는 문서 좌표 렌더 — fixed는 뷰포트에 노출(플래시)이라 문서 하단 absolute
 });

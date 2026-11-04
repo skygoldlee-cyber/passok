@@ -77,7 +77,7 @@ export async function careShare(arg) {
     if (text.trim()) { // 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
         const wrap = document.createElement('div');
         // html2canvas는 문서 좌표로 렌더 — fixed는 뷰포트에 노출(흰 플래시)되므로 문서 하단 absolute로 배치
-        wrap.style.cssText = 'position:absolute;left:0;top:100vh;width:700px;padding:24px;background:#fff';
+        wrap.style.cssText = 'position:absolute;left:0;top:100vh;width:700px;padding:24px;background:#fff;color:#000';
         const outEl = document.querySelector(sel.trim());
         if (outEl && outEl.textContent?.trim()) {
             const clone = /** @type {HTMLElement} */ (outEl.cloneNode(true));
@@ -94,6 +94,13 @@ export async function careShare(arg) {
             pre.textContent = text;
             wrap.appendChild(pre);
         }
+        // 인쇄 가독성 — 테마 색상(회색 계열) 제거: 배경 흰색·텍스트 검정으로 강제
+        wrap.querySelectorAll('*').forEach(e2 => {
+            const el2 = /** @type {HTMLElement} */ (e2);
+            el2.style.color = '#000';
+            if (!el2.classList.contains('care-doc-head')) el2.style.background = 'transparent';
+            el2.style.borderColor = '#000';
+        });
         document.body.appendChild(wrap);
         try { files.push(await pdfFileFromEl(wrap, title)); } catch { files.push(new File([text], `${title}.txt`, { type: 'text/plain;charset=utf-8' })); } finally { wrap.remove(); }
     }
