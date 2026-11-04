@@ -12,7 +12,7 @@ vi.mock('../../../../src/ui-utils.js', () => ({
 
 import { showToast, showConfirm } from '../../../../src/ui-utils.js';
 import {
-    loadIndexHtml, el, isVisible, selectFile, flushAsync, lastToast, spyAnchorDownload,
+    loadIndexHtml, el, isVisible, selectFile, flushAsync, waitFor, lastToast, spyAnchorDownload,
 } from '../../helpers.js';
 import {
     openMaterialPanel, matNew, matSave,
@@ -34,6 +34,8 @@ function csvFile(text) {
 
 describe('원료 장부 — CRUD·기한 배지 + CSV 시나리오', () => {
     beforeEach(() => {
+        window.XLSX = { read: () => ({ SheetNames: ['S'], Sheets: { S: {} } }), write: () => new Uint8Array([1]),
+            utils: { sheet_to_csv: () => '', aoa_to_sheet: () => ({}), book_new: () => ({}), book_append_sheet() {} } };
         localStorage.clear();
         loadIndexHtml();
         vi.mocked(showToast).mockClear();
@@ -95,15 +97,14 @@ describe('원료 장부 — CRUD·기한 배지 + CSV 시나리오', () => {
         expect(lastToast()[0]).toContain('중복 1건 건너뜀');
     });
 
-    it('CSV보내기·양식 — 다운로드 트리거', () => {
+    it('CSV보내기·양식 — 다운로드 트리거', async () => {
         createMaterial({ name: '글리세린' });
         const dl = spyAnchorDownload();
         matExportCsv();
         matCsvTemplate();
+        await waitFor(() => dl.clicks.length === 2);
         dl.restore();
-
-        expect(dl.clicks.length).toBe(2);
-        expect(dl.clicks[0].download).toMatch(/^materials_.*\.csv$/);
-        expect(dl.clicks[1].download).toBe('materials_template.csv');
+        expect(dl.clicks[0].download).toMatch(/^materials_.*\.xlsx$/);
+        expect(dl.clicks[1].download).toBe('materials_template.xlsx');
     });
 });

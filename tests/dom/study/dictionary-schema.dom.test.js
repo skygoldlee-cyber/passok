@@ -14,7 +14,7 @@ vi.mock('../../../src/ui-utils.js', () => ({
     HAPTIC: { correct: 30, wrong: [40, 30, 40], tap: 10 },
 }));
 
-import { loadIndexHtml, el, resetStudyState, spyAnchorDownload, lastToast } from '../helpers.js';
+import { loadIndexHtml, el, resetStudyState, spyAnchorDownload, lastToast, waitFor } from '../helpers.js';
 import { DataLoader } from '../../../src/content/data-loader.js';
 import {
     renderDictionary, filterDictionary, setDictFilter, dictState,
@@ -70,6 +70,8 @@ const DB = [
 
 describe('지식DB 사전 — 비기본 스키마(안전용어)', () => {
     beforeEach(() => {
+        window.XLSX = { read: () => ({ SheetNames: ['S'], Sheets: { S: {} } }), write: () => new Uint8Array([1]),
+            utils: { sheet_to_csv: () => '', aoa_to_sheet: () => ({}), book_new: () => ({}), book_append_sheet() {} } };
         localStorage.clear();
         resetStudyState();
         dictState.query = '';
@@ -140,13 +142,12 @@ describe('지식DB 사전 — 비기본 스키마(안전용어)', () => {
         expect(el('dict-db-version').textContent).toContain('3종');
     });
 
-    it('CSV보내기 — 스키마 csv.fields(배지 라벨 치환) + 파일명', () => {
+    it('CSV보내기 — 스키마 csv.fields(배지 라벨 치환) + 파일명', async () => {
         const dl = spyAnchorDownload();
         dictExportCsv();
+        await waitFor(() => dl.clicks.length === 1);
         dl.restore();
-
-        expect(dl.clicks.length).toBe(1);
-        expect(dl.clicks[0].download).toMatch(/^terms_v0\.1\.0_.*\.csv$/);
+        expect(dl.clicks[0].download).toMatch(/^terms_v0\.1\.0_.*\.xlsx$/);
         expect(lastToast()[0]).toContain('용어 3종');
     });
 });
