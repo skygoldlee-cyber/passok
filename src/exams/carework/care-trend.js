@@ -1,5 +1,5 @@
 // src/exams/carework/care-trend.js — 대상자 관찰 추세 확인 (순수 로직, DOM·저장 비의존)
-// @spec CO-04 — 시험 전용 도메인 로직 (DA-13)
+// @spec CO-03·CO-04 — 시험 전용 도메인 로직 (DA-13)
 // 최근 N건 obs 시계열 → 연속 악화 감지. 표현 원칙: 의료적 판단 금지 — "기록 요약·확인 권장" 문구만
 const _ORD = {
     meal: { 전: 3, 반: 2, 소: 1, label: '식사량' },
