@@ -109,6 +109,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
         globalThis.matchMedia = () => ({ matches: true });
         globalThis.navigator.canShare = vi.fn(() => true);
         globalThis.navigator.share = vi.fn().mockResolvedValue();
+        pdfSpy.mockResolvedValue(new File(['%pdf'], '문서.pdf')); // pdf 생성 성공 — 시트에 pdf만 탑재
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
         expect(globalThis.navigator.share).not.toHaveBeenCalled(); // 첫 탭은 생성만 — 시트는 버튼 탭
@@ -116,6 +117,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
         await vi.waitFor(() => expect(globalThis.navigator.share).toHaveBeenCalled());
         const payload = globalThis.navigator.share.mock.calls[0][0];
         expect(payload.files).toHaveLength(1); // 파일 첨부
+        expect(payload.files[0].name).not.toContain('.txt'); // txt는 다운로드 전용 — 카톡 이중 수신 방지
         expect(payload.text).toBeUndefined(); // text 병기 시 카톡이 파일 대신 텍스트만 수신
     });
 
@@ -161,6 +163,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
         globalThis.matchMedia = () => ({ matches: true });
         globalThis.navigator.canShare = vi.fn(() => true);
         globalThis.navigator.share = vi.fn().mockRejectedValue(Object.assign(new Error('x'), { name: 'NotAllowedError' }));
+        pdfSpy.mockResolvedValue(new File(['%pdf'], '문서.pdf')); // 시트에 pdf 첨부 시도 → 거절 학습 대상
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
         tapShareBtn();

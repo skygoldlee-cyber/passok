@@ -125,6 +125,7 @@ test('CO-13 공유 — 모바일 파일 첨부 우선·데스크톱 복사+다�
     assert.match(src, /const diag = /); // 진단은 닫을 때까지 남는 배너 (토스트는 다운로드 창에 가려짐, alert는 규약 금지)
     assert.match(src, /공유 시트를 열지 못했습니다/); // 거절 사유 진단 표시
     assert.match(src, /navigator\.share\(ok \? \{ title, files: fs \}/); // files만 탑재 — text 병기 시 카톡이 텍스트만 수신
+    assert.match(src, /filter\(f => !f\.name\.endsWith\('\.txt'\)\)/); // txt는 다운로드 전용 — 시트에서 제외해 카톡 이중 수신 방지
     assert.ok(!src.includes('title, text, files'), 'text 병기 금지 — 카톡이 파일 대신 텍스트만 수신'); // 감사 로그는 storage.js 추상화 경유 (localStorage 직접 접근 금지) // PDF 가독성 — 회색 계열 제거, 검정 텍스트 // html2canvas는 문서 좌표 렌더 — fixed는 뷰포트에 노출(플래시)이라 문서 하단 absolute
     assert.ok(src.indexOf('await pdfFileFromEl') < src.indexOf('_shareBtn('), '파일 생성 완료 후 공유 버튼 — 시트에 pdf·xlsx 포함');
 });

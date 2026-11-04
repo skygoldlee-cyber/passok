@@ -110,7 +110,7 @@ export async function careShare(arg) {
     const stamp = new Date().toISOString().slice(0, 10);
     const fname = ext => `${title}_${stamp}.${ext}`;
     const csvGen = gen?.endsWith('CsvExport') ? gen : (alt?.endsWith('CsvExport') ? alt : '');
-    files.push(new File([text], fname('txt'), { type: 'text/plain' })); // 검색·선택 가능한 텍스트 — 생성 비용 없음. charset 파라미터는 Chromium 파일 허용 MIME 판정과 충돌 가능
+    files.push(new File([text], fname('txt'), { type: 'text/plain' })); // 다운로드·폴백용 텍스트 — 시트 페이로드에서는 제외 (카톡 이중 수신 방지)
 
     // share()는 제스처 유효 구간(수 초) 안에만 열 수 있어 xlsx·pdf 생성(수 초)과 양립 불가 —
     // 파일을 먼저 전부 만든 뒤 "공유하기" 버튼의 새 탭 제스처로 시트를 연다.
@@ -170,7 +170,7 @@ export async function careShare(arg) {
         showToast('문서를 준비하는 중입니다 — "공유하기" 버튼이 뜨면 눌러주세요.');
         await Promise.allSettled(tasks); // 생성 완료 후 버튼 — 시트에 txt·xlsx·pdf 전부 포함
         _audit(title, flag, files);
-        const fs = files;
+        const fs = files.filter(f => !f.name.endsWith('.txt')); // txt는 다운로드 전용 — 시트에 싣으면 카톡이 본문·파일 이중 수신
         _shareBtn(`📤 ${title} 공유하기`, async () => {
             const ok = !_filesBlocked && fs.length && (typeof navigator.canShare !== 'function' || navigator.canShare({ files: fs }));
             try {
