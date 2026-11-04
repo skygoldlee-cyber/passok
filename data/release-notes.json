@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261104-8a1912b",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] 공유 실패 시 \"공유하기\" 버튼 — 탭 새 제스처로 share() 재시도 (CO-13)",
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[수정·carework] 공유 NotAllowedError — 데스크톱 파일 미첨부 + 거절 학습·제스처 사전검사 (CO-13)",
+      "[정리·release] v20261104-cb0d91e 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-cb0d91e",
     "date": "2026-11-04",
     "notes": [
@@ -179,22 +189,6 @@
     "notes": [
       "[문서·carework] 실무매뉴얼 갱신 — CO-08~13 신규 기능 반영",
       "[정리·release] v20261104-3c14961 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-3c14961",
-    "date": "2026-11-04",
-    "notes": [
-      "[정리·trace] 테스트 리네임 참조 반영",
-      "[테스트·carework] care-os-modules.test.js 리네임 — CODE_CONVENTIONS §2.1 파일명 규약",
-      "[정리·trace] CO DOM 테스트 참조 반영",
-      "[테스트·carework] CO-08~13 모듈 DOM 커버리지 — vitest 커버리지 임계 복구",
-      "[CI] CI 재실행 트리거 [no-docs]",
-      "[CI] CI 재실행 트리거 [no-docs]",
-      "[수정·carework] 커버리지 배너 이스케이프 — 싱크 규약 위반 해소",
-      "[수정·carework] CO-13 공유 경고·인명 가림 + 리뷰 5차 문서 정합",
-      "[문서·carework] 외부 리뷰 반영 — 기능별 경쟁표·파일럿 절차·자산 제약·인터뷰 계측",
-      "[기능·carework] 인수인계 AI 초안 — careAiDraft data-arg 범용화 (CO-08)"
     ]
   }
 ]
