@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261104-908fefa",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] care-ai 타입 정정 — callProviderLLM 반환형 {text}만 사용",
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[기능·carework] 인쇄 있는 전 뷰에 공유 버튼 — CO-13 careShare 전면 확장",
+      "[정리·release] v20261104-14b902b 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-14b902b",
     "date": "2026-11-04",
     "notes": [
@@ -189,14 +199,6 @@
     "notes": [
       "[기능·assets] 앱 아이콘 원본 v4 교체 (네온 그라데이션 P + 별빛)",
       "[정리·release] v20261103-74642a7 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261103-74642a7",
-    "date": "2026-11-03",
-    "notes": [
-      "[기능·assets] 앱 아이콘 v3 교체 + maskable 엣지-스트레치 렌더",
-      "[정리·release] v20261103-7f81037 스탬프 확정 [no-docs]"
     ]
   }
 ]
