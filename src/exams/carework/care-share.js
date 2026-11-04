@@ -70,20 +70,21 @@ export async function careShare(arg) {
     if (csvPromise) { // CsvExport 지정 시 실제 .xlsx
         try { const csv = await csvPromise; if (csv) files.push(await sheetFile(csv, `${title}.xlsx`)); } catch { /* 실패 시 생략 */ }
     }
-    if (text.trim()) { // 인쇄 레이아웃(문서 헤더+본문 DOM) PDF — 표·레이아웃 유지, 텍스트 노드만 가림
+    if (text.trim()) { // 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
         const wrap = document.createElement('div');
         // html2canvas는 화면 밖(left:-9999px) 요소를 빈 캔버스로 렌더 — 뷰포트 안에 두고 뒤로 숨김
         wrap.style.cssText = 'position:fixed;left:0;top:0;z-index:-9999;width:700px;padding:24px;background:#fff';
-        wrap.innerHTML = docHeadHtml(title);
         const outEl = document.querySelector(sel.trim());
-        if (outEl) {
+        if (outEl && outEl.textContent?.trim()) {
             const clone = /** @type {HTMLElement} */ (outEl.cloneNode(true));
             if (flag === 'mask') { // 텍스트 노드만 가림 — 표 구조는 유지
                 const walker = document.createTreeWalker(clone, NodeFilter.SHOW_TEXT);
                 for (let n = walker.nextNode(); n; n = walker.nextNode()) n.nodeValue = _mask(n.nodeValue || '');
             }
+            if (!clone.querySelector('.care-doc-head')) wrap.innerHTML = docHeadHtml(title); // 인쇄와 동일 헤더
             wrap.appendChild(clone);
-        } else {
+        } else { // 미리보기 없음 — 폼 양식은 헤더+텍스트로 구성
+            wrap.innerHTML = docHeadHtml(title);
             const pre = document.createElement('pre');
             pre.style.cssText = 'white-space:pre-wrap;font:13px/1.6 "Malgun Gothic",sans-serif;color:#111';
             pre.textContent = text;
