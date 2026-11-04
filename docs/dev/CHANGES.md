@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 docs(carework): 실무매뉴얼 갱신 — Care OS 홈·obs·다이제스트·명부 연결·워크스페이스 비활성 반영
+
+- 홈 랜딩·그룹 내비·"처음" 배지, obs 칩+추세 확인, 인수인계 자동 채우기, 명부 자동완성·360° 이력·외부 CSV alias, 기관 워크스페이스 비활성 안내
+- 테스트 파일 경로 오타 정정 (실무막뉴얼→실무매뉴얼)
+
+
 ## 2026-11-04 fix(carework): 홈 "처음" 배지 — 중복 append 가드·nowrap 정렬·roster 계측
 
 - initCareHomeView 재실행 시 배지 이중 삽입 방지(querySelector 가드) + 버튼 nowrap·배지 inline-block으로 줄바꿈 불일치 해소

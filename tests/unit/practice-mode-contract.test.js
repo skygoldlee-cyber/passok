@@ -16,6 +16,6 @@ test('실무 피처 레지스트리 — 팩별 구성 선언 (UM-06)', () => {
     assert.match(src, /careCalc/);
 });
 
-test('실무막뉴얼 — 시험 팩 소유 문서 존재 (DA-19)', () => {
+test('실무매뉴얼 — 시험 팩 소유 문서 존재 (DA-19)', () => {
     assert.ok(existsSync('content/exams/carework/docs/실무매뉴얼.md'));
 });
