@@ -94,3 +94,7 @@ test('CO-08 인수인계 가명처리 — 대상자 목록·근무자명·인계
     const { prompt } = buildDraftPrompt({ clients: 'x', date: '2026-11-04', shift: '주간' }, 'ho');
     assert.match(prompt, /인수인계서/);
 });
+
+test('CO-10 커버리지 배너 — 보간 출력은 esc 적용 (싱크 규약)', () => {
+    assert.match(readFileSync('src/exams/carework/views/care-audit.js', 'utf8'), /esc\(cov\.text\)/);
+});

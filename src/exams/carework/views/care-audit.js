@@ -20,7 +20,7 @@ function render() {
     if (!host) return;
     const c = loadChecks();
     const cov = auditCoverage({ clients: listClients(), logs: listCareLogs(), visits: listVisits(), handovers: listHandovers(), incidents: listIncidents() });
-    host.innerHTML = `<p class="care-trend-warn">📋 ${cov.text}</p>` + docHeadHtml('기관 평가 체크리스트') + _sections.map(s => `
+    host.innerHTML = `<p class="care-trend-warn">📋 ${esc(cov.text)}</p>` + docHeadHtml('기관 평가 체크리스트') + _sections.map(s => `
         <div class="care-audit-sec">
             <h3>${esc(s.title)}</h3>
             ${s.items.map(i => `
