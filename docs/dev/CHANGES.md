@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 feat(carework): 공유 PDF 인쇄 레이아웃 — 문서 헤더+가림 본문 오프스크린 렌더 (CO-13)
+
+
 ## 2026-11-04 feat(carework): 공유 PDF 파일 — jsPDF+html2canvas 벤더, 미리보기 렌더→PDF 첨부 (CO-13)
 
 

@@ -2,6 +2,7 @@
 // @spec CO-13 — 생성 문서 Web Share API 공유 (카톡 등 네이티브 공유 시트)
 import { showToast } from '../../ui-utils.js';
 import { pdfFileFromEl } from '../../content/pdf-utils.js';
+import { docHeadHtml } from './facility.js';
 
 const _NAME_RE = /([가-힣]{2,4})(님|씨|어르신)?/g;
 const _PHONE_RE = /0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}/g;
@@ -60,11 +61,18 @@ export async function careShare(arg) {
             () => showToast('클립보드에 복사했습니다 — 카톡 등에 붙여넣으세요.'),
             () => showToast('복사 실패 — 인쇄·PDF를 이용하세요.', 'error'));
     };
-    // 파일 공유 — 미리보기 요소가 있으면 PDF로 렌더(한글은 이미지), 없거나 실패 시 txt
-    const outEl = document.querySelector(sel.trim());
+    // 파일 공유 — 인쇄 레이아웃(문서 헤더+가림 본문)을 PDF로 렌더, 실패 시 txt
     let file = new File([text], `${title}.txt`, { type: 'text/plain;charset=utf-8' });
-    if (outEl && text.trim()) {
-        try { file = await pdfFileFromEl(/** @type {HTMLElement} */ (outEl), title); } catch { /* 실패 시 txt 유지 */ }
+    if (text.trim()) {
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'position:absolute;left:-9999px;width:700px;padding:24px;background:#fff';
+        const pre = document.createElement('pre');
+        pre.style.cssText = 'white-space:pre-wrap;font:13px/1.6 "Malgun Gothic",sans-serif;color:#111';
+        pre.textContent = text; // 가림 적용된 본문 — 원본 요소가 아닌 mask 결과를 렌더
+        wrap.innerHTML = docHeadHtml(title);
+        wrap.appendChild(pre);
+        document.body.appendChild(wrap);
+        try { file = await pdfFileFromEl(wrap, title); } catch { /* 실패 시 txt 유지 */ } finally { wrap.remove(); }
     }
     const coarse = typeof matchMedia === 'function' && matchMedia('(pointer:coarse)').matches;
     if (coarse && navigator.canShare?.({ files: [file] })) {
