@@ -161,6 +161,7 @@ const SHELL_ASSETS = [
   './icons/bg-portrait.webp',
   // FontAwesome 자체 호스팅 (오프라인/모바일에서도 아이콘 확실히 표시)
   './vendor/supabase/supabase.js',
+  './vendor/xlsx/xlsx.full.min.js',
   './vendor/fontawesome/css/all.min.css',
   './vendor/fontawesome/webfonts/fa-solid-900.woff2',
   './vendor/fontawesome/webfonts/fa-brands-400.woff2',

@@ -2,7 +2,7 @@
 <section id="care-client-view" class="view-section" data-feature="careClients">
     <div class="view-header">
         <h2>수급자 관리</h2>
-        <p class="view-subtitle">수급자·입소대기자 등록 — 입소서류 수납 현황·CSV 명부 왕복</p>
+        <p class="view-subtitle">수급자·입소대기자 등록 — 입소서류 수납 현황·Excel 명부 왕복</p>
     </div>
     <div class="care-calc-form">
         <label>성명 <input id="cli-name" type="text" placeholder="예: 김○○"></label>
@@ -32,9 +32,9 @@
             <button data-click="careClientNew" class="secondary">새로 작성</button>
             <button data-click="careClientExport" class="secondary">명부 복사 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
             <button data-click="careClientPrint" class="secondary">인쇄·PDF <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
-            <button data-click="careClientCsvExport" class="secondary">CSV 내보내기 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
-            <button data-click="careClientCsvImport" class="secondary">CSV 가져오기 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
-            <input type="file" id="cli-csv-file" accept=".csv,text/csv" class="is-hidden">
+            <button data-click="careClientCsvExport" class="secondary">Excel 내보내기 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
+            <button data-click="careClientCsvImport" class="secondary">Excel 가져오기 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
+            <input type="file" id="cli-csv-file" accept=".csv,.xlsx,.xls,text/csv" class="is-hidden">
         </div>
     </div>
     <div id="cli-preview" class="care-calc-result"></div>

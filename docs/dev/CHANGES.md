@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 feat(xlsx): CSV 왕복 도구 Excel(.xlsx) 네이티브 지원 — SheetJS vendor 추가
+
+- vendor/xlsx(SheetJS 0.18.5, ~880KB) 신규 등록 — xlsx-utils.js 지연 로드(ensureXlsx, 첫 호출 시에만 로드, sw.js 프리캐시)
+- readTableFile: .xlsx/.xls → sheet_to_csv → 기존 CSV 파서 재사용, .csv는 CP949 인코딩 자동 그대로 — 수급자·근무표·고객·원료 가져오기가 .csv+.xlsx 모두 수용
+- downloadSheet: 내보내기를 .csv → .xlsx로 전환 — 수급자·근무표·방문·사고·일지·고객·원료·배치·지식DB 전부 Excel 네이티브 출력
+- 버튼 라벨 'CSV 내보내기/가져오기' → 'Excel 내보내기/가져오기' (carework 5파셜 + formula 고객/원료·배치·사전)
+
+
 ## 2026-11-04 feat(carework): 실무도구 CSV 확장 — 근무표 왕복 + 방문·사고·일지 내보내기
 
 - 근무표 CSV 왕복: `csvToRoster`/`rosterToCsv` + `upsertRoster`(날짜+근무조+근무자 병합, 30건 한도 준수) + `ros-csv-file` 입력 — Excel 월간 배정 일괄 등록 지원 (CP949 자동 인식)

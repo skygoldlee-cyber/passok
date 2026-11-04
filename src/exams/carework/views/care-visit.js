@@ -2,7 +2,7 @@
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { RELATIONS, VISIT_STATUS, relationLabel, buildVisitText, visitsToCsv } from '../care-visit.js';
 import { listVisits, saveVisit, updateVisit, removeVisit } from '../care-visit-store.js';
-import { downloadCsv } from '../../../content/csv-utils.js';
+import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, docHeadHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
@@ -129,9 +129,9 @@ export function careVisitPrint() {
 export function careVisitCsvExport() {
     const items = listVisits();
     if (!items.length) { showToast('내보낼 방문 기록이 없습니다.', 'error'); return; }
-    proFeatureNotice('care_visit_share', '방문기록 CSV 내보내기');
-    downloadCsv(visitsToCsv(items), '면회기록.csv');
-    showToast('CSV를 저장했습니다.');
+    proFeatureNotice('care_visit_share', '방문기록 Excel 내보내기');
+    void downloadSheet(visitsToCsv(items), '면회기록.xlsx');
+    showToast('Excel 파일을 저장했습니다.');
 }
 
 function renderLists() {

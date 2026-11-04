@@ -68,7 +68,12 @@ const loadPartial = (rel) => {
 };
 
 describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
-    beforeEach(() => { document.body.innerHTML = ''; });
+    beforeEach(() => {
+        document.body.innerHTML = '';
+        // SheetJS 스텁 — vendor 로드 없이 downloadSheet 경로만 통과
+        window.XLSX = { read: () => ({ SheetNames: ['S'], Sheets: { S: {} } }), write: () => new Uint8Array([1]),
+            utils: { sheet_to_csv: () => '', aoa_to_sheet: () => ({}), book_new: () => ({}), book_append_sheet() {} } };
+    });
 
     it('careCalc — 계산 후 결과 카드 렌더', () => {
         loadPartial('care-calc.html');
@@ -354,9 +359,9 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
 
         const dl = spyAnchorDownload();
         careRosterCsvExport();
+        await waitFor(() => dl.clicks.length === 1);
         dl.restore();
-        expect(dl.clicks.length).toBe(1);
-        expect(dl.clicks[0].download).toBe('근무표.csv');
+        expect(dl.clicks[0].download).toBe('근무표.xlsx');
 
         // 근무조 라벨→키 매핑 + 동일 (날짜,근무조,근무자) 행은 갱신 병합
         careRosterCsvImport(); // proFeatureNotice + 파일 선택 트리거
@@ -369,36 +374,36 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(lastToast()[0]).toContain('신규 1·갱신 1');
     });
 
-    it('careVisit — CSV 내보내기 다운로드 트리거', () => {
+    it('careVisit — Excel 내보내기 다운로드 트리거', async () => {
         loadPartial('care-visit.html');
         const r = addVisit({ date: '2026-11-10', client: '김○○', visitor: '이○○', relation: 'child' });
         const dl = spyAnchorDownload();
         careVisitCsvExport();
+        await waitFor(() => dl.clicks.length === 1);
         dl.restore();
-        expect(dl.clicks.length).toBe(1);
-        expect(dl.clicks[0].download).toBe('면회기록.csv');
+        expect(dl.clicks[0].download).toBe('면회기록.xlsx');
         removeVisit(r.id);
     });
 
-    it('careIncident — CSV 내보내기 다운로드 트리거', () => {
+    it('careIncident — Excel 내보내기 다운로드 트리거', async () => {
         loadPartial('care-incident.html');
         const r = addIncident({ date: '2026-11-10', client: '김○○', type: 'fall', desc: '미끄러짐' });
         const dl = spyAnchorDownload();
         careIncidentCsvExport();
+        await waitFor(() => dl.clicks.length === 1);
         dl.restore();
-        expect(dl.clicks.length).toBe(1);
-        expect(dl.clicks[0].download).toBe('사고보고.csv');
+        expect(dl.clicks[0].download).toBe('사고보고.xlsx');
         removeIncident(r.id);
     });
 
-    it('careLog — CSV 내보내기 다운로드 트리거', () => {
+    it('careLog — Excel 내보내기 다운로드 트리거', async () => {
         loadPartial('care-log.html');
         const r = addCareLog({ date: '2026-11-10', client: '김○○', service: 'visit-care', activities: { physical: ['세면·목욕'] }, note: '양호', text: '…' });
         const dl = spyAnchorDownload();
         careLogCsvExport();
+        await waitFor(() => dl.clicks.length === 1);
         dl.restore();
-        expect(dl.clicks.length).toBe(1);
-        expect(dl.clicks[0].download).toBe('요양일지.csv');
+        expect(dl.clicks[0].download).toBe('요양일지.xlsx');
         removeCareLog(r.id);
     });
 

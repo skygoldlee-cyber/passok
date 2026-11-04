@@ -2,7 +2,7 @@
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { buildCareLog, SERVICE_TYPES, ACTIVITY_GROUPS, careLogsToCsv } from '../care-log.js';
 import { saveCareLog, listCareLogs, removeCareLog } from '../care-log-store.js';
-import { downloadCsv } from '../../../content/csv-utils.js';
+import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
@@ -69,9 +69,9 @@ export function careLogPrint() {
 export function careLogCsvExport() {
     const items = listCareLogs();
     if (!items.length) { showToast('내보낼 저장된 일지가 없습니다.', 'error'); return; }
-    proFeatureNotice('care_log_export', '일지 CSV 내보내기');
-    downloadCsv(careLogsToCsv(items), '요양일지.csv');
-    showToast('CSV를 저장했습니다.');
+    proFeatureNotice('care_log_export', '일지 Excel 내보내기');
+    void downloadSheet(careLogsToCsv(items), '요양일지.xlsx');
+    showToast('Excel 파일을 저장했습니다.');
 }
 
 export function careLogDelete(id) {

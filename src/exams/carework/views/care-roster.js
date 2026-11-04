@@ -2,7 +2,7 @@
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { ROSTER_SHIFTS, shiftLabel, buildRosterText, rosterToCsv, csvToRoster } from '../care-roster.js';
 import { listRoster, saveRoster, removeRoster, upsertRoster } from '../roster-store.js';
-import { readCsvFile, downloadCsv } from '../../../content/csv-utils.js';
+import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
@@ -60,13 +60,13 @@ export function careRosterPrint() {
 export function careRosterCsvExport() {
     const items = listRoster();
     if (!items.length) { showToast('등록된 근무 배정이 없습니다.', 'error'); return; }
-    proFeatureNotice('care_roster_share', '근무표 CSV 내보내기');
-    downloadCsv(rosterToCsv(items), '근무표.csv');
+    proFeatureNotice('care_roster_share', '근무표 Excel 내보내기');
+    void downloadSheet(rosterToCsv(items), '근무표.xlsx');
     showToast('CSV를 저장했습니다.');
 }
 
 export function careRosterCsvImport() {
-    proFeatureNotice('care_roster_share', '근무표 CSV 가져오기');
+    proFeatureNotice('care_roster_share', '근무표 Excel 가져오기');
     const f = /** @type {HTMLInputElement|null} */ ($('ros-csv-file'));
     if (f) f.click();
 }
@@ -74,7 +74,7 @@ export function careRosterCsvImport() {
 function onCsvFile(e) {
     const file = /** @type {HTMLInputElement} */ (e.target).files?.[0];
     if (!file) return;
-    readCsvFile(file).then(t => {
+    readTableFile(file).then(t => {
         const recs = csvToRoster(t);
         if (!recs.length) { showToast('불러올 근무 배정 행이 없습니다 (헤더: 날짜,근무조,근무자,메모).', 'error'); return; }
         const r = upsertRoster(recs);
