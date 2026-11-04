@@ -23,9 +23,11 @@ const _formText = sel => {
         if (['button', 'submit', 'file', 'hidden'].includes(el.type) || el.closest('.nav-practice-only')) return [];
         const lab = el.closest('label') || (el.id && sec.querySelector(`label[for="${el.id}"]`));
         const name = (lab ? lab.textContent : (el.getAttribute('aria-label') || el.name || el.id || '항목')).replace(/\s+/g, ' ').trim();
-        const val = (el.type === 'checkbox' || el.type === 'radio')
-            ? (el.checked ? (el.type === 'radio' ? `(${el.value})` : '✓') : '')
-            : String(el.value || '').trim();
+        const selOpt = el.tagName === 'SELECT' ? (/** @type {any} */ (el)).selectedOptions?.[0] : null;
+        const val = selOpt ? (selOpt.textContent || '').trim() // select는 value 속성이 아닌 선택 라벨
+            : (el.type === 'checkbox' || el.type === 'radio')
+                ? (el.checked ? (el.type === 'radio' ? `(${el.value})` : '✓') : '')
+                : String(el.value || '').trim();
         return val ? [`${name}: ${val}`] : [];
     });
     return lines.join('\n');
@@ -44,9 +46,13 @@ export async function careShare(arg) {
     // mask 생략 시 3번째 필드가 생성 핸들러 — "|sel|title|gen" 와 "|sel|title|mask|gen" 모두 지원. 5번째 alt는 보조 생성기.
     const flag = f3 === 'mask' ? 'mask' : '', gen = f4 || (flag ? '' : f3);
     let raw = _readOut(sel);
-    // 공유 단독 완결 — 미생성 시 생성 핸들러 자동 실행 (CsvExport는 파일 직접 생성이라 클릭 생략)
+    // 공유 단독 완결 — 미생성 시 생성 핸들러 실행 (브리지 직접 호출 우선, 없으면 버튼 클릭)
     if (!raw.trim() && gen && !gen.endsWith('CsvExport')) {
-        try { /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click(); } catch { /* 계속 */ }
+        try {
+            const fn = (/** @type {any} */ (window))[gen];
+            if (typeof fn === 'function') await fn();
+            else /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click();
+        } catch { /* 계속 */ }
         raw = _readOut(sel);
     }
     if (/** @type {HTMLElement|null} */ (document.querySelector(sel.trim()))?.querySelector('.care-calc-err')) raw = ''; // 오류 마커만 있으면 양식으로
@@ -70,8 +76,8 @@ export async function careShare(arg) {
     }
     if (text.trim()) { // 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
         const wrap = document.createElement('div');
-        // html2canvas는 화면 밖(left:-9999px) 요소를 빈 캔버스로 렌더 — 뷰포트 안에 두고 뒤로 숨김
-        wrap.style.cssText = 'position:fixed;left:0;top:0;z-index:-9999;width:700px;padding:24px;background:#fff';
+        // html2canvas는 문서 좌표로 렌더 — fixed는 뷰포트에 노출(흰 플래시)되므로 문서 하단 absolute로 배치
+        wrap.style.cssText = 'position:absolute;left:0;top:100vh;width:700px;padding:24px;background:#fff';
         const outEl = document.querySelector(sel.trim());
         if (outEl && outEl.textContent?.trim()) {
             const clone = /** @type {HTMLElement} */ (outEl.cloneNode(true));
