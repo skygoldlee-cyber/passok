@@ -17,8 +17,9 @@ vi.mock('../../../../src/auth-sync/supabase-client.js', () => ({
     getSupabase: vi.fn(() => Promise.resolve({})),
     onAuthChange: vi.fn(),
 }));
+const pdfSpy = vi.fn().mockRejectedValue(new Error('jsdom — PDF 미지원'));
 vi.mock('../../../../src/content/pdf-utils.js', () => ({
-    pdfFileFromEl: vi.fn().mockRejectedValue(new Error('jsdom — PDF 미지원')), // txt 폴백 검증
+    pdfFileFromEl: pdfSpy,
 }));
 vi.mock('../../../../src/exams/carework/facility.js', async (importOriginal) => ({
     ...await importOriginal(),
@@ -108,6 +109,18 @@ describe('CO-13 careShare 시뮬레이션', () => {
         await careShare(document.getElementById('share').dataset.arg);
         expect(globalThis.navigator.share).toHaveBeenCalled();
         expect(globalThis.navigator.share.mock.calls[0][0].files).toHaveLength(1); // 파일 첨부
+    });
+
+    it('PDF 렌더 대상은 미리보기 DOM 클론 — 표 구조 유지 + 텍스트 노드만 가림', async () => {
+        setup(`<section class="view-section"><pre id="out"></pre>
+            <div id="doc"><table><tr><td>김철수</td><td>식사</td></tr></table></div>
+            <button id="share" data-arg="#doc|표 문서|mask">공유</button></section>`);
+        const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        await careShare(document.getElementById('share').dataset.arg);
+        const rendered = pdfSpy.mock.calls[0][0]; // pdfFileFromEl의 첫 인자 = 렌더 컨테이너
+        expect(rendered.querySelector('table')).toBeTruthy(); // 표 구조가 렌더 대상에 유지
+        expect(rendered.textContent).toContain('[인명]'); // 텍스트 노드만 가림
+        expect(rendered.textContent).not.toContain('김철수');
     });
 
     it('생성 핸들러 예외 시에도 공유 중단 없이 폼 폴백으로 진행', async () => {

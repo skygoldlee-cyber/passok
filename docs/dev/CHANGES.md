@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 test(carework): 공유 PDF 표 유지·텍스트 노드 가림 계약 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 PDF 표 유지 — 미리보기 DOM 클론 렌더 + 텍스트 노드만 가림 (CO-13)
+
+
 ## 2026-11-04 chore(carework): jspdf·html2canvas 벤더 매니페스트 + pdf-utils 도메인 맵 등록 (CO-13)
 
 

@@ -70,14 +70,24 @@ export async function careShare(arg) {
     if (csvPromise) { // CsvExport 지정 시 실제 .xlsx
         try { const csv = await csvPromise; if (csv) files.push(await sheetFile(csv, `${title}.xlsx`)); } catch { /* 실패 시 생략 */ }
     }
-    if (text.trim()) { // 인쇄 레이아웃(문서 헤더+가림 본문) PDF — 실패 시 txt로 대체
+    if (text.trim()) { // 인쇄 레이아웃(문서 헤더+본문 DOM) PDF — 표·레이아웃 유지, 텍스트 노드만 가림
         const wrap = document.createElement('div');
         wrap.style.cssText = 'position:absolute;left:-9999px;width:700px;padding:24px;background:#fff';
-        const pre = document.createElement('pre');
-        pre.style.cssText = 'white-space:pre-wrap;font:13px/1.6 "Malgun Gothic",sans-serif;color:#111';
-        pre.textContent = text; // 가림 적용된 본문 — 원본 요소가 아닌 mask 결과를 렌더
         wrap.innerHTML = docHeadHtml(title);
-        wrap.appendChild(pre);
+        const outEl = document.querySelector(sel.trim());
+        if (outEl) {
+            const clone = /** @type {HTMLElement} */ (outEl.cloneNode(true));
+            if (flag === 'mask') { // 텍스트 노드만 가림 — 표 구조는 유지
+                const walker = document.createTreeWalker(clone, NodeFilter.SHOW_TEXT);
+                for (let n = walker.nextNode(); n; n = walker.nextNode()) n.nodeValue = _mask(n.nodeValue || '');
+            }
+            wrap.appendChild(clone);
+        } else {
+            const pre = document.createElement('pre');
+            pre.style.cssText = 'white-space:pre-wrap;font:13px/1.6 "Malgun Gothic",sans-serif;color:#111';
+            pre.textContent = text;
+            wrap.appendChild(pre);
+        }
         document.body.appendChild(wrap);
         try { files.push(await pdfFileFromEl(wrap, title)); } catch { files.push(new File([text], `${title}.txt`, { type: 'text/plain;charset=utf-8' })); } finally { wrap.remove(); }
     }
