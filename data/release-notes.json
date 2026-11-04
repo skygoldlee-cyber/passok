@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261104-d77d6b7",
+    "date": "2026-11-04",
+    "notes": [
+      "[테스트·carework] 공유 PDF 오프스크린 금지 계약 — 빈 캔버스 방지 (CO-13)",
+      "[정리·release] v20261104-8a8be2b 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-8a8be2b",
     "date": "2026-11-04",
     "notes": [
@@ -206,14 +214,6 @@
       "[수정·css] 모바일 실무 탭 활성 색 통일 — secondary → primary [no-test]",
       "[수정·css] 실무 내비 아이콘 색 통일 — secondary 고정 해제 [no-test]",
       "[정리·release] v20261104-24bf1de 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-24bf1de",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·carework] 서식모음 메뉴 위치 — 실무 그룹 근무표 아래로 이동 [no-test]",
-      "[정리·release] v20261104-58c6b32 스탬프 확정 [no-docs]"
     ]
   }
 ]
