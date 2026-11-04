@@ -4,7 +4,8 @@ import { showToast, showConfirm } from '../../ui-utils.js';
 
 const _NAME_RE = /([가-힣]{2,4})(님|씨|어르신)?/g;
 const _PHONE_RE = /0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}/g;
-const _mask = t => t.replace(_PHONE_RE, '[연락처]').replace(_NAME_RE, m => /[가-힣]/.test(m) && m.length <= 5 ? '[인명]' : m);
+const _mask = t => t.replace(_NAME_RE, m => /[가-힣]/.test(m) && m.length <= 5 ? '[인명]' : m)
+    .replace(_PHONE_RE, '[연락처]'); // 인명 먼저 — [연락처]가 인명 정규식에 재마스킹되지 않도록
 
 const _readOut = sel => {
     const el = sel && document.querySelector(sel.trim());
