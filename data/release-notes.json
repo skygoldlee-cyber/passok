@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261104-a988c45",
+    "date": "2026-11-04",
+    "notes": [
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[정리·tools] domain-map에 xlsx-utils 등록",
+      "[테스트·dom] xlsx 비동기 내보내기 대응 — XLSX 스텁 + waitFor 클릭 대기",
+      "[문서·agents] xlsx-utils 디렉토리 구조 등록 + TRACE 재생성",
+      "[기능·xlsx] CSV 왕복 도구 Excel(.xlsx) 네이티브 지원 — SheetJS vendor 추가",
+      "[문서·carework] 실무막뉴얼 §12 기관찾기 데이터 출처·기준일 명기",
+      "[기능·carework] 실무도구 CSV 확장 — 근무표 왕복 + 방문·사고·일지 내보내기",
+      "[수정·carework] 수급자 CSV 가져오기 CP949 인코딩 지원",
+      "[기능·ui] 실무 탭바 매뉴얼 라벨 단축 + carework 실무매뉴얼 저장·CSV 문서화",
+      "[수정·carework] 현장도구 → 본인부담금 계산 명칭 교정 [no-test]"
+    ]
+  },
+  {
     "version": "v20261104-c1dbb77",
     "date": "2026-11-04",
     "notes": [
@@ -183,18 +199,6 @@
       "[data·carework] 세종 시설 원본 CSV 보존 — facilities_세종_20230331.csv (DSN-43 6g)",
       "[data·carework] 충남 노인의료복지시설 351건 임포트 — 총 523건 5개 지역 (DSN-43 6g)",
       "[정리] 잔재 파일 제거 — 대전 포털 응답 캡처 djb.html"
-    ]
-  },
-  {
-    "version": "v20261103-34c293a",
-    "date": "2026-11-03",
-    "notes": [
-      "[기능·carework] 요양기관 찾기 — 장기요양기관 검색·기관명 연결 (DSN-43 6g)",
-      "[수정·carework] 입소서류 내비 아이콘 고유성 — fa-folder-open (DSN-43 6f)",
-      "[기능·carework] 입소 서류 체크리스트 — 요양원 입소 구비서류 수납 추적 (DSN-43 6f)",
-      "[기능·carework] 출력물 기관명 표기 — 전 실무 출력물 헤더 통일 (DSN-43 6e)",
-      "[기능·carework] 실무도구 3종 — 대상자 명부·사고 보고서·교대 근무표 (DSN-43 6d)",
-      "[정리·release] v20261103-87f1232 스탬프 확정 [no-docs]"
     ]
   }
 ]
