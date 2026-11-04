@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: c8511e1f1f0545fe
+> 입력 해시: c2eef5126f6e6366
 > 생성: 2026-11-04 · 원천: SPEC.md(671개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -613,12 +613,12 @@
 | CO-05 | ✅ | 테스트 | DOC-DSN-44 | src/exams/carework/handover-digest.js | tests/unit/exams/carework/handover-digest.test.js | — | — |
 | CO-06 | 미구현 — 조건부(법무) | — | — | — | — | — | — |
 | CO-07 | ✅ | 테스트 | — | src/exams/carework/care-csv-presets.js | tests/unit/exams/carework/care-csv-presets.test.js | — | — |
-| CO-08 | ✅ lite (가명처리·미리보기·BYOK) | 테스트 | — | src/exams/carework/care-ai.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
-| CO-09 | ✅ lite (주간 요약 텍스트·공유) | 테스트 | — | src/exams/carework/care-report.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
-| CO-10 | ✅ lite (기록 유무 커버리지) | 테스트 | — | src/exams/carework/care-coverage.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
+| CO-08 | ✅ lite (가명처리·미리보기·BYOK) | 테스트 | — | src/exams/carework/care-ai.js | tests/dom/exams/carework/care-os-modules.dom.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
+| CO-09 | ✅ lite (주간 요약 텍스트·공유) | 테스트 | — | src/exams/carework/care-report.js | tests/dom/exams/carework/care-os-modules.dom.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
+| CO-10 | ✅ lite (기록 유무 커버리지) | 테스트 | — | src/exams/carework/care-coverage.js | tests/dom/exams/carework/care-os-modules.dom.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
 | CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
 | CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
-| CO-13 | care-share.js·출력 뷰 공유 버튼 | 테스트 | — | src/exams/carework/care-share.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
+| CO-13 | care-share.js·출력 뷰 공유 버튼 | 테스트 | — | src/exams/carework/care-share.js | tests/dom/exams/carework/care-os-modules.dom.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
