@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261104-b81e1e3",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] 공유 조용한 실패 수정 — AbortError 외엔 복사 폴백+토스트 (CO-13)",
+      "[정리·release] v20261104-bad231d 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-bad231d",
     "date": "2026-11-04",
     "notes": [
@@ -193,14 +201,6 @@
       "[수정·carework] 현장도구 → 본인부담금 계산 명칭 교정 [no-test]",
       "[문서·carework] 실무매뉴얼 절 순서 — 사이드바 메뉴 순서와 일치 [no-test]",
       "[정리·release] v20261104-c1dbb77 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261103-7a278e5",
-    "date": "2026-11-03",
-    "notes": [
-      "[기능·carework] 수급자 관리 통합 — 서류현황·입소대기 상태·CSV 왕복",
-      "[정리·release] v20261103-0e90224 스탬프 확정 [no-docs]"
     ]
   }
 ]
