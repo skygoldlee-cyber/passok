@@ -20,7 +20,7 @@ function render() {
     host.innerHTML = hits.length
         ? hits.map(f => `<div class="care-finder-item">
             <strong class="care-finder-name">${esc(f.name)}</strong>
-            <span class="care-finder-meta">${esc(f.region)} · ${esc(f.type || '')}${f.phone ? esc(' · ' + f.phone) : ''}</span>
+            <span class="care-finder-meta">${esc(f.region)} · ${esc(f.type || '')}${f.phone ? esc(' · ' + f.phone) : ''}${f.capacity ? esc(' · 정원 ' + f.capacity + '명') : ''}${f.careWorkers ? esc(' · 요양보호사 ' + f.careWorkers + '명') : ''}</span>
             ${f.address ? `<span class="care-finder-addr">${esc(f.address)}</span>` : ''}
             ${cur === f.name
                 ? '<span class="care-finder-set">✓ 설정됨</span>'
