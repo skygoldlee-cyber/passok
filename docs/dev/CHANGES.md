@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): 문서 서명란 하단 여백 — .care-doc-sign margin-bottom
+
+- 점검표 등 서명란이 컨테이너 하단에 붙던 문제 — margin-bottom: 16px 추가 (전 문서 공통)
+
 ## 2026-11-05 fix(carework): 인수인계 중복 공유 버튼 제거 (CO-13)
 
 - 구 공유 버튼(careHandoverShare, 텍스트 공유) 제거 — 📤 공유·내보내기 통합 메뉴로 단일화. 핸들러는 참조 테스트 호환을 위해 유지
