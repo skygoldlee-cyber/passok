@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 fix(carework): care-home 핸들러·슬러그 테스트 정합 — registry 계약 복구
+
+- initCareHomeView는 enter() 직접 호출이라 data-click handlers에서 제거 (유니크 계약)
+- practice-registry.test.js 슬러그 기대값에 care-home-view 추가
+
+
 ## 2026-11-04 fix(carework): pre-push 게이트 — care-home 플레이스홀더·모바일 탭 동기화·아이콘 고유화·print 규칙
 
 - care-home-view data-lazy-view 플레이스홀더 + 모바일 탭 버튼·finder 중복 제거·사이드바 순서 동기·fa-notes-medical 고유 아이콘
