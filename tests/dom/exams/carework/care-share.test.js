@@ -84,19 +84,26 @@ describe('CO-13 careShare 시뮬레이션', () => {
         expect(toasts.find(t => t.includes('공유할 내용이 없습니다'))).toBeTruthy();
     });
 
-    it('데스크톱(pointer:fine) — navigator.share가 있어도 무응답 없이 클립보드로 복사', async () => {
+    const tapShareBtn = () => { // "공유하기" 플로팅 버튼 탭 — 파일 생성 후 시트 오픈
+        const b = /** @type {HTMLElement|undefined} */ ([...document.querySelectorAll('button')]
+            .find(x => x.textContent?.includes('공유하기')));
+        expect(b, '공유하기 버튼이 표시되지 않음').toBeTruthy();
+        b.click();
+    };
+
+    it('데스크톱(pointer:fine) — 시트 시도 없이 복사+다운로드로 제공', async () => {
         setup(`<section class="view-section"><pre id="out">문서 내용</pre>
             <button id="share" data-arg="#out|문서">공유</button></section>`);
-        // share() 직접 시도 — 데스크톱 거절 시 복사 폴백 (게이트 없음)
+        // Windows는 파일 공유를 OS 수준 차단 + text만 실으면 카톡이 텍스트만 수신 — 시트 자체를 생략
         globalThis.navigator.share = vi.fn().mockRejectedValue(new Error('no OS share UI'));
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
-        expect(globalThis.navigator.share).toHaveBeenCalled(); // 게이트 없이 시도, 실패 시 폴백
+        expect(globalThis.navigator.share).not.toHaveBeenCalled();
         expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('문서 내용');
         expect(toasts.find(t => t.includes('클립보드'))).toBeTruthy();
     });
 
-    it('모바일 + 파일 공유 지원 — 파일 첨부로 공유 시트 발화', async () => {
+    it('모바일 + 파일 공유 지원 — 공유하기 버튼 탭으로 파일 첨부 시트 발화', async () => {
         setup(`<section class="view-section"><pre id="out">문서 내용</pre>
             <button id="share" data-arg="#out|문서">공유</button></section>`);
         globalThis.matchMedia = () => ({ matches: true });
@@ -104,8 +111,12 @@ describe('CO-13 careShare 시뮬레이션', () => {
         globalThis.navigator.share = vi.fn().mockResolvedValue();
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
-        expect(globalThis.navigator.share).toHaveBeenCalled();
-        expect(globalThis.navigator.share.mock.calls[0][0].files).toHaveLength(1); // 파일 첨부
+        expect(globalThis.navigator.share).not.toHaveBeenCalled(); // 첫 탭은 생성만 — 시트는 버튼 탭
+        tapShareBtn();
+        await vi.waitFor(() => expect(globalThis.navigator.share).toHaveBeenCalled());
+        const payload = globalThis.navigator.share.mock.calls[0][0];
+        expect(payload.files).toHaveLength(1); // 파일 첨부
+        expect(payload.text).toBeUndefined(); // text 병기 시 카톡이 파일 대신 텍스트만 수신
     });
 
     it('PDF 렌더 대상은 미리보기 DOM 클론 — 표 구조 유지 + 텍스트 노드만 가림', async () => {
@@ -133,7 +144,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
         expect(sheetSpy).toHaveBeenCalledWith(csv, `방문 기록_${new Date().toISOString().slice(0, 10)}.xlsx`); // 실제 xlsx 생성 확인
     });
 
-    it('데스크톱 — canShare가 파일을 허용해도 텍스트만 시트에 실음 (Windows 파일 차단 회피)', async () => {
+    it('데스크톱 — canShare가 파일을 허용해도 share() 자체를 호출하지 않음 (Windows 차단 회피)', async () => {
         setup(`<section class="view-section"><pre id="out">문서 내용</pre>
             <button id="share" data-arg="#out|문서">공유</button></section>`);
         delete /** @type {any} */ (globalThis).matchMedia; // coarse=false — 이전 테스트의 목 잔류 방지
@@ -141,7 +152,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
         globalThis.navigator.share = vi.fn().mockResolvedValue();
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
-        expect(globalThis.navigator.share.mock.calls[0][0].files).toBeUndefined(); // 데스크톱은 파일 미첨부 — NotAllowedError 회피
+        expect(globalThis.navigator.share).not.toHaveBeenCalled(); // 데스크톱은 시트 생략 — 다운로드로 제공
     });
 
     it('모바일 파일 거절(NotAllowedError) → 다음 공유는 텍스트만 — 차단 학습', async () => {
@@ -152,21 +163,29 @@ describe('CO-13 careShare 시뮬레이션', () => {
         globalThis.navigator.share = vi.fn().mockRejectedValue(Object.assign(new Error('x'), { name: 'NotAllowedError' }));
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
+        tapShareBtn();
+        await vi.waitFor(() => expect(globalThis.navigator.share).toHaveBeenCalled());
         expect(globalThis.navigator.share.mock.calls[0][0].files).toHaveLength(1); // 첫 시도는 파일 첨부
         globalThis.navigator.share.mockResolvedValue();
         await careShare(document.getElementById('share').dataset.arg);
+        tapShareBtn();
+        await vi.waitFor(() => expect(globalThis.navigator.share).toHaveBeenCalledTimes(2));
         expect(globalThis.navigator.share.mock.calls[1][0].files).toBeUndefined(); // 차단 학습 — 재시도는 텍스트만
+        expect(globalThis.navigator.share.mock.calls[1][0].text).toBe('문서 내용');
     });
 
-    it('모바일(pointer:coarse) — 공유 시트 우선, 실패 시 복사 폴백', async () => {
+    it('모바일(pointer:coarse) — 공유하기 버튼 탭, 실패 시 복사+다운로드 폴백', async () => {
         setup(`<section class="view-section"><pre id="out">문서 내용</pre>
             <button id="share" data-arg="#out|문서">공유</button></section>`);
         globalThis.matchMedia = () => ({ matches: true });
         globalThis.navigator.share = vi.fn().mockRejectedValue(Object.assign(new Error('x'), { name: 'TypeError' }));
-        globalThis.navigator.canShare = () => false; // 파일 공유 미지원 → 텍스트 시트 대신 복사 폴백
+        globalThis.navigator.canShare = () => false; // 파일 공유 미지원 → 텍스트 시트, 실패 시 폴백
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
         expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('문서 내용');
+        tapShareBtn();
+        await vi.waitFor(() => expect(globalThis.navigator.share).toHaveBeenCalled()); // canShare false → {title, text} 시도
+        await vi.waitFor(() => expect(toasts.find(t => t.includes('다운로드'))).toBeTruthy()); // 거절 → 파일 다운로드 폴백
     });
 });
 
