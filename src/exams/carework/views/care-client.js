@@ -10,6 +10,7 @@ import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 import { clientTimeline, timelineSummary } from '../care-timeline.js';
 import { clientTrends } from '../care-trend.js';
+import { weeklyReport } from '../care-report.js';
 import { listCareLogs } from '../care-log-store.js';
 import { listVisits } from '../care-visit-store.js';
 import { listHandovers } from '../handover-store.js';
@@ -124,6 +125,7 @@ function renderList() {
     host.innerHTML = items.length
         ? items.map(c => `<div class="care-log-saved-item">
             <span><strong>${esc(c.name)}</strong>${c.status ? esc(' [' + c.status + ']') : ''}${c.room ? esc(' · ' + c.room) : ''}${_docSummary(c)}${c.caution ? esc(' · ⚠ ' + c.caution) : ''}${c.allergy ? esc(' · 알레르기 ' + c.allergy) : ''}${_timelineHtml(c, stores)}</span>
+            <button data-click="careClientReport" data-arg="${esc(c.id)}" class="btn btn-secondary">주간리포트</button>
             <button data-click="careClientLoad" data-arg="${esc(c.id)}" class="btn btn-secondary">수정</button>
             <button data-click="careClientDelete" data-arg="${esc(c.id)}" class="btn btn-secondary">삭제</button>
           </div>`).join('')
@@ -194,6 +196,17 @@ function onCsvFile(e) {
         showToast(`가져오기 완료 — 신규 ${r.added}·갱신 ${r.updated}${r.skipped ? ` · 한도 초과 ${r.skipped}건 제외` : ''}`);
     });
     e.target.value = '';
+}
+
+/** CO-09 보호자 주간 리포트 — 대상자 최근 7일 기록 요약을 결과창에 생성 */
+export function careClientReport(btn) {
+    const id = /** @type {HTMLElement|null} */ (btn)?.dataset?.arg;
+    const c = listClients().find(x => String(x.id) === String(id));
+    if (!c) { showToast('대상자를 찾지 못했습니다.', 'error'); return; }
+    const r = weeklyReport(c.name, { logs: listCareLogs(), visits: listVisits(), incidents: listIncidents() });
+    if (!r.count) { showToast('최근 7일 기록이 없습니다.', 'error'); return; }
+    const out = $('cli-preview');
+    if (out) out.innerHTML = docHeadHtml('보호자 주간 리포트') + `<pre class="care-log-text">${esc(r.text)}</pre>`;
 }
 
 export function initCareClientView() {

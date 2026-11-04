@@ -4,6 +4,12 @@ import { loadAuditSections, loadChecks, toggleCheck, clearChecks, auditProgress 
 import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
+import { auditCoverage } from '../care-coverage.js';
+import { listClients } from '../care-client-store.js';
+import { listCareLogs } from '../care-log-store.js';
+import { listVisits } from '../care-visit-store.js';
+import { listHandovers } from '../handover-store.js';
+import { listIncidents } from '../incident-store.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -13,7 +19,8 @@ function render() {
     const host = $('audit-list');
     if (!host) return;
     const c = loadChecks();
-    host.innerHTML = docHeadHtml('기관 평가 체크리스트') + _sections.map(s => `
+    const cov = auditCoverage({ clients: listClients(), logs: listCareLogs(), visits: listVisits(), handovers: listHandovers(), incidents: listIncidents() });
+    host.innerHTML = `<p class="care-trend-warn">📋 ${cov.text}</p>` + docHeadHtml('기관 평가 체크리스트') + _sections.map(s => `
         <div class="care-audit-sec">
             <h3>${esc(s.title)}</h3>
             ${s.items.map(i => `

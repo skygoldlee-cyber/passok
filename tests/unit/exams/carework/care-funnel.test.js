@@ -1,5 +1,5 @@
 // tests/unit/exams/carework/care-funnel.test.js
-// @spec CO-12·CO-13·CO-08 — 전환 퍼널 계측 순수 로직
+// @spec CO-12·CO-13·CO-08·CO-09·CO-10 — 전환 퍼널 계측 순수 로직
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
@@ -59,4 +59,19 @@ test('CO-08 프롬프트 — 시스템+프롬프트 반환, 가명 데이터만 
     assert.match(system, /보조/);
     assert.match(prompt, /대상자A/);
     assert.ok(!prompt.includes('김철수'));
+});
+
+test('CO-09 주간 리포트 — 최근 7일 대상자 기록 요약', async () => {
+    const { weeklyReport } = await import('../../../../src/exams/carework/care-report.js');
+    const today = new Date().toISOString().slice(0, 10);
+    const r = weeklyReport('김철수', { logs: [{ client: '김철수', date: today, note: '산책', obs: { meal: '반' } }], visits: [], incidents: [] });
+    assert.equal(r.count, 1);
+    assert.match(r.text, /김철수|일지 1건/);
+});
+test('CO-10 증적 커버리지 — 기록 유무 매칭·부족 항목 열거', async () => {
+    const { auditCoverage } = await import('../../../../src/exams/carework/care-coverage.js');
+    const c = auditCoverage({ clients: [{}], logs: [{ obs: { meal: '전' } }], visits: [], incidents: [], handovers: [] });
+    assert.equal(c.total, 6);
+    assert.ok(c.missing.includes('방문·면회'));
+    assert.ok(!c.missing.includes('관찰(obs)'));
 });

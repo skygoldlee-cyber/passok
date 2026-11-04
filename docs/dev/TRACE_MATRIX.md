@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 0babc1f7892f5f1f
+> 입력 해시: c8511e1f1f0545fe
 > 생성: 2026-11-04 · 원천: SPEC.md(671개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 671개 — 문서 연결 463 · 소스 연결 596 · 테스트 연결 636 · 보고서 연결 109
+**커버리지 요약**: 요구사항 671개 — 문서 연결 463 · 소스 연결 598 · 테스트 연결 638 · 보고서 연결 109
 
 ---
 
@@ -614,8 +614,8 @@
 | CO-06 | 미구현 — 조건부(법무) | — | — | — | — | — | — |
 | CO-07 | ✅ | 테스트 | — | src/exams/carework/care-csv-presets.js | tests/unit/exams/carework/care-csv-presets.test.js | — | — |
 | CO-08 | ✅ lite (가명처리·미리보기·BYOK) | 테스트 | — | src/exams/carework/care-ai.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
-| CO-09 | 미구현 — CO-01·CO-03 선행, Pro(`care_report_export`) | — | — | — | — | — | — |
-| CO-10 | 미구현 — 조건부(시설 세그먼트) | — | — | — | — | — | — |
+| CO-09 | ✅ lite (주간 요약 텍스트·공유) | 테스트 | — | src/exams/carework/care-report.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
+| CO-10 | ✅ lite (기록 유무 커버리지) | 테스트 | — | src/exams/carework/care-coverage.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
 | CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
 | CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
 | CO-13 | care-share.js·출력 뷰 공유 버튼 | 테스트 | — | src/exams/carework/care-share.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
