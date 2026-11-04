@@ -59,11 +59,19 @@ export async function careShare(arg) {
             () => showToast('클립보드에 복사했습니다 — 카톡 등에 붙여넣으세요.'),
             () => showToast('복사 실패 — 인쇄·PDF를 이용하세요.', 'error'));
     };
-    // 항상 복사+토스트를 먼저 실행 — 어떤 환경에서든 클릭 즉시 반응이 나와야 함
-    copyFallback();
-    // 공유 시트는 터치 기기에서 추가 동작 — 데스크톱의 navigator.share는 OS 창이 뜨지 않는 경우가 있다
+    // 파일 공유 — 모바일 공유 시트에 문서 파일 첨부 (카톡 등). 데스크톱은 파일 다운로드.
+    const file = new File([text], `${title}.txt`, { type: 'text/plain;charset=utf-8' });
     const coarse = typeof matchMedia === 'function' && matchMedia('(pointer:coarse)').matches;
-    if (coarse && navigator.share) {
-        try { await navigator.share({ title, text }); } catch { /* 시트 실패·취소 무관 — 복사는 이미 완료 */ }
+    if (coarse && navigator.canShare?.({ files: [file] })) {
+        try { await navigator.share({ title, text, files: [file] }); showToast('파일 공유 시트를 열었습니다.'); return; }
+        catch (e) { if (/** @type {Error} */ (e)?.name === 'AbortError') return; }
+    }
+    copyFallback(); // 항상 복사+토스트 — 어떤 환경에서든 클릭 즉시 반응이 나와야 함
+    // 데스크톱은 파일 다운로드로 제공 — "출력 문서를 파일로 공유" 요구 충족
+    if (!coarse) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(file); a.download = file.name;
+        document.body.appendChild(a); a.click(); a.remove();
+        showToast(`${file.name} 다운로드 — 파일을 공유하세요.`);
     }
 }

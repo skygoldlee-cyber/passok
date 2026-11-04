@@ -92,6 +92,18 @@ describe('CO-13 careShare 시뮬레이션', () => {
         expect(toasts.find(t => t.includes('클립보드'))).toBeTruthy();
     });
 
+    it('모바일 + 파일 공유 지원 — 파일 첨부로 공유 시트 발화', async () => {
+        setup(`<section class="view-section"><pre id="out">문서 내용</pre>
+            <button id="share" data-arg="#out|문서">공유</button></section>`);
+        globalThis.matchMedia = () => ({ matches: true });
+        globalThis.navigator.canShare = vi.fn(() => true);
+        globalThis.navigator.share = vi.fn().mockResolvedValue();
+        const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        await careShare(document.getElementById('share').dataset.arg);
+        expect(globalThis.navigator.share).toHaveBeenCalled();
+        expect(globalThis.navigator.share.mock.calls[0][0].files).toHaveLength(1); // 파일 첨부
+    });
+
     it('생성 핸들러 예외 시에도 공유 중단 없이 폼 폴백으로 진행', async () => {
         setup(`<section class="view-section"><pre id="out"></pre>
             <label>항목 <input id="f" value="값"></label>
@@ -111,9 +123,9 @@ describe('CO-13 careShare 시뮬레이션', () => {
             <button id="share" data-arg="#out|문서">공유</button></section>`);
         globalThis.matchMedia = () => ({ matches: true });
         globalThis.navigator.share = vi.fn().mockRejectedValue(Object.assign(new Error('x'), { name: 'TypeError' }));
+        globalThis.navigator.canShare = () => false; // 파일 공유 미지원 → 텍스트 시트 대신 복사 폴백
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
-        expect(globalThis.navigator.share).toHaveBeenCalled();
         expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('문서 내용');
     });
 });
