@@ -40,31 +40,27 @@ const setup = (html) => {
 describe('CO-13 careShare 시뮬레이션', () => {
     beforeEach(() => vi.resetModules());
 
-    it('미생성 + 생성버튼 자동 실행 — 생성되면 그 내용으로 공유', async () => {
+    it('미생성 → "먼저 문서를 생성" 안내 (인쇄 선행 필수)', async () => {
         setup(`<section class="view-section">
             <pre id="out"></pre>
             <button data-click="careCalcRun">계산</button>
             <button id="share" data-click="careShare" data-arg="#out|계산 결과|careCalcRun">공유</button></section>`);
-        // 계산 핸들러 시뮬레이션 — 클릭 시 결과 채움
-        document.querySelector('[data-click="careCalcRun"]').addEventListener('click',
-            () => { document.getElementById('out').textContent = '계산 결과: 123,456원'; });
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
-        expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('계산 결과: 123,456원');
+        expect(globalThis.navigator.clipboard.writeText).not.toHaveBeenCalled();
+        expect(toasts.find(t => t.includes('먼저 인쇄·PDF로 문서를 생성'))).toBeTruthy();
     });
 
-    it('미생성 + 생성도 비어있음 → 폼 입력값이 양식 텍스트로 공유', async () => {
+    it('인쇄 생성 후 → 공유 시 생성된 문서 내용으로 공유', async () => {
         setup(`<section class="view-section">
             <pre id="out"></pre>
-            <label>장기요양등급 <select id="g"><option>1등급</option><option selected>2등급</option></select></label>
-            <label>월 이용액 <input id="u" value="1000000"></label>
+            <button data-click="careCalcRun">계산</button>
             <button id="share" data-arg="#out|본인부담금|careCalcRun">공유</button></section>`);
+        // 인쇄·생성 선행 시뮬레이션
+        document.getElementById('out').textContent = '본인부담금: 123,456원';
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
-        const text = globalThis.navigator.clipboard.writeText.mock.calls[0][0];
-        expect(text).toContain('장기요양등급');
-        expect(text).toContain('1000000');
-        expect(toasts.find(t => t.includes('생성'))).toBeUndefined(); // "먼저 생성" 토스트 없음
+        expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('본인부담금: 123,456원');
     });
 
     it('결과 있음 → 확인 후 그대로 공유 + mask 시 인명·연락처 가림', async () => {
@@ -78,13 +74,13 @@ describe('CO-13 careShare 시뮬레이션', () => {
         expect(text).toContain('[연락처]');
     });
 
-    it('입력도 없는 빈 뷰 → "공유할 내용이 없습니다" 안내', async () => {
+    it('빈 뷰 → "먼저 문서를 생성" 안내', async () => {
         setup(`<section class="view-section"><pre id="out"></pre>
             <button id="share" data-arg="#out|빈 문서">공유</button></section>`);
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
         expect(globalThis.navigator.clipboard.writeText).not.toHaveBeenCalled();
-        expect(toasts.find(t => t.includes('공유할 내용이 없습니다'))).toBeTruthy();
+        expect(toasts.find(t => t.includes('먼저 인쇄·PDF로 문서를 생성'))).toBeTruthy();
     });
 
     it('데스크톱(pointer:fine) — navigator.share가 있어도 무응답 없이 클립보드로 복사', async () => {
@@ -123,18 +119,17 @@ describe('CO-13 careShare 시뮬레이션', () => {
         expect(rendered.textContent).not.toContain('김철수');
     });
 
-    it('생성 핸들러 예외 시에도 공유 중단 없이 폼 폴백으로 진행', async () => {
-        setup(`<section class="view-section"><pre id="out"></pre>
-            <label>항목 <input id="f" value="값"></label>
-            <button data-click="boom">생성</button>
-            <button id="share" data-arg="#out|문서|boom">공유</button></section>`);
-        const genBtn = /** @type {HTMLButtonElement} */ (document.querySelector('[data-click="boom"]'));
-        genBtn.click = () => { throw new Error('생성 실패'); }; // 위임 핸들러 예외는 .click() 스로우로 전파됨
+    it('CsvExport 뷰 — 미리보기 있으면 실제 .xlsx 파일로 공유', async () => {
+        setup(`<section class="view-section"><pre id="out">방문 기록 목록</pre>
+            <button id="share" data-arg="#out|방문 기록|mask|careVisitCsvExport">공유</button></section>`);
+        const csv = '날짜,대상자,내용\n01-01,홍길동,방문';
+        const sheetSpy = vi.fn(async () => new File(['x'], '방문 기록.xlsx'));
+        vi.doMock('../../../../src/content/xlsx-utils.js', () => ({ sheetFile: sheetSpy }));
+        vi.resetModules();
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        (/** @type {any} */ (window)).careVisitCsvExport = () => Promise.resolve(csv);
         await careShare(document.getElementById('share').dataset.arg);
-        expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalled(); // 폼 양식으로 공유 완료
-        const text = globalThis.navigator.clipboard.writeText.mock.calls[0][0];
-        expect(text).toContain('항목');
+        expect(sheetSpy).toHaveBeenCalledWith(csv, '방문 기록.xlsx'); // 실제 xlsx 생성 확인
     });
 
     it('모바일(pointer:coarse) — 공유 시트 우선, 실패 시 복사 폴백', async () => {
@@ -153,24 +148,17 @@ describe('CO-13 careShare 시뮬레이션', () => {
 describe('CO-13 본인부담금 계산 실제 시뮬레이션', () => {
     const partial = readFileSync(join(__dirname, '../../../../html/exams/carework/care-calc.html'), 'utf8');
 
-    it('공유 버튼 클릭 → 자동 계산 실행 → 계산 결과 공유', async () => {
+    it('미생성 공유 클릭 → 안내 토스트 (자동 계산 없음)', async () => {
         document.body.innerHTML = partial;
         globalThis.navigator.clipboard = { writeText: vi.fn().mockResolvedValue() };
         delete globalThis.navigator.share;
-        const { initCareCalcView, careCalcRun } = await import('../../../../src/exams/carework/views/care-calc.js');
+        const { initCareCalcView } = await import('../../../../src/exams/carework/views/care-calc.js');
         await initCareCalcView();
-        // 프로덕션 data-click 위임 shim — jsdom에는 전역 위임이 없으므로 수동 연결
-        document.body.addEventListener('click', e => {
-            const b = e.target.closest('[data-click]');
-            if (b?.dataset.click === 'careCalcRun') careCalcRun();
-        });
-        // 입력 없이도 등급·유형 기본값으로 계산 가능해야 함
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         const btn = /** @type {HTMLElement} */ (document.querySelector('[data-click="careShare"]'));
         await careShare(btn.dataset.arg);
-        const call = globalThis.navigator.clipboard.writeText.mock.calls[0];
-        expect(call, '공유가 실행되지 않음 — 미생성 시 자동 계산 실패').toBeTruthy();
-        expect(call[0]).toContain('본인부담금');
+        expect(globalThis.navigator.clipboard.writeText).not.toHaveBeenCalled();
+        expect(toasts.find(t => t.includes('먼저 인쇄·PDF로 문서를 생성'))).toBeTruthy();
     });
 
     it('인쇄 후 미리보기 있음 → 공유 버튼으로 같은 내용 공유', async () => {

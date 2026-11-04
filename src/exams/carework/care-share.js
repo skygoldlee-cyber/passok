@@ -44,17 +44,10 @@ export async function careShare(arg) {
     const [sel, title = '문서', f3 = '', f4 = '', alt = ''] = String(arg || '').split('|');
     // mask 생략 시 3번째 필드가 생성 핸들러 — "|sel|title|gen" 와 "|sel|title|mask|gen" 모두 지원. 5번째 alt는 보조 생성기.
     const flag = f3 === 'mask' ? 'mask' : '', gen = f4 || (flag ? '' : f3);
-    let raw = _readOut(sel);
-    const genCsv = g => g?.endsWith('CsvExport') ? (() => { try { return (/** @type {any} */ (window))[g]?.(); } catch { return null; } })() : null;
-    const csvPromise = genCsv(gen) || genCsv(alt); // 주/보조 중 CsvExport를 찾아 실제 xlsx 생성
-    if (!raw.trim() && gen && !gen.endsWith('CsvExport')) {
-        try { /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click(); } catch { /* 생성 핸들러 예외도 공유는 계속 — 폼 양식으로 진행 */ }
-        raw = _readOut(sel);
-    }
-    // 생성 결과가 오류 마커뿐이면 양식 텍스트로 폴백 — 계산 전이라도 출력 양식은 공유 가능해야 함
-    if (/** @type {HTMLElement|null} */ (document.querySelector(sel.trim()))?.querySelector('.care-calc-err')) raw = '';
-    if (!raw.trim()) raw = _formText(sel); // 생성 결과가 없어도 양식이 있으면 현재 입력 상태를 공유
-    if (!raw.trim()) { showToast('공유할 내용이 없습니다 — 항목을 입력하세요.', 'error'); return; }
+    const raw = _readOut(sel);
+    const err = /** @type {HTMLElement|null} */ (document.querySelector(sel.trim()))?.querySelector('.care-calc-err');
+    // 인쇄·생성 선행 필수 — 생성된 문서만 공유 (자동 생성·폼 폴백 없음)
+    if (!raw.trim() || err) { showToast('먼저 인쇄·PDF로 문서를 생성하세요 — 공유는 생성된 문서를 보냅니다.', 'error'); return; }
     const text = flag === 'mask' ? _mask(raw) : raw;
     // 개인정보 통제는 인명 가림(mask)으로 보장 — 확인 다이얼로그 없이 한 번 클릭으로 공유 (정책 주의는 비차단 안내)
     if (flag === 'mask') showToast('인명·연락처가 가려진 본문으로 공유됩니다 — 기관 정책을 확인하세요.');
@@ -67,8 +60,9 @@ export async function careShare(arg) {
     // 파일 생성 — 각 소스 독립: 성공한 파일만 첨부, 하나가 없어도 나머지는 정상 공유
     /** @type {File[]} */
     const files = [];
-    if (csvPromise) { // CsvExport 지정 시 실제 .xlsx
-        try { const csv = await csvPromise; if (csv) files.push(await sheetFile(csv, `${title}.xlsx`)); } catch { /* 실패 시 생략 */ }
+    const csvGen = gen?.endsWith('CsvExport') ? gen : (alt?.endsWith('CsvExport') ? alt : '');
+    if (csvGen) { // CsvExport 지정 시 실제 .xlsx
+        try { const csv = await (/** @type {any} */ (window))[csvGen]?.(); if (csv) files.push(await sheetFile(csv, `${title}.xlsx`)); } catch { /* 실패 시 생략 */ }
     }
     if (text.trim()) { // 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
         const wrap = document.createElement('div');
