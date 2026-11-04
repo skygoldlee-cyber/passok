@@ -88,6 +88,32 @@
       "syncMap": {
         "dist/xlsx.full.min.js": "xlsx.full.min.js"
       }
+    },
+    "jspdf": {
+      "npm": "jspdf",
+      "version": "2.5.1",
+      "license": "MIT",
+      "updatedAt": "2026-11-04",
+      "note": "jsPDF — PDF 생성. 공유 PDF 출력 시에만 지연 로드 (script 태그 → window.jspdf)",
+      "files": {
+        "jspdf.umd.min.js": "98ccf17aa10c20bb1301762618fcc9b6ab3a4e7f26b6071d64d0b41154df3875"
+      },
+      "syncMap": {
+        "dist/jspdf.umd.min.js": "jspdf.umd.min.js"
+      }
+    },
+    "html2canvas": {
+      "npm": "html2canvas",
+      "version": "1.4.1",
+      "license": "MIT",
+      "updatedAt": "2026-11-04",
+      "note": "html2canvas — DOM→캔버스 캡처. 공유 PDF 한글 렌더용, 지연 로드 (script 태그 → window.html2canvas)",
+      "files": {
+        "html2canvas.min.js": "e87e550794322e574a1fda0c1549a3c70dae5a93d9113417a429016838eab8cb"
+      },
+      "syncMap": {
+        "dist/html2canvas.min.js": "html2canvas.min.js"
+      }
     }
   }
 }

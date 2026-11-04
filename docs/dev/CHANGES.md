@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 chore(carework): jspdf·html2canvas 벤더 매니페스트 + pdf-utils 도메인 맵 등록 (CO-13)
+
+
 ## 2026-11-04 test(carework): CO-13 생성 핸들러 단언 — CsvExport·xlsx 직접 생성 반영
 
 
