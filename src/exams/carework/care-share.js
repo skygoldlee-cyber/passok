@@ -15,23 +15,6 @@ const _readOut = sel => {
     return el ? ((el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) ? el.value : el.textContent || '') : '';
 };
 
-/** 생성 결과가 없으면 대상 요소의 뷰 폼 입력 항목·값을 양식 텍스트로 조립 */
-const _formText = sel => {
-    const sec = /** @type {HTMLElement|null} */ (document.querySelector(sel.trim()))?.closest('.view-section') || document;
-    const lines = [...sec.querySelectorAll('input, select, textarea')].flatMap(e0 => {
-        const el = /** @type {HTMLInputElement} */ (e0);
-        if (['button', 'submit', 'file', 'hidden'].includes(el.type) || el.closest('.nav-practice-only')) return [];
-        const lab = el.closest('label') || (el.id && sec.querySelector(`label[for="${el.id}"]`));
-        const name = (lab ? lab.textContent : (el.getAttribute('aria-label') || el.name || el.id || '항목')).replace(/\s+/g, ' ').trim();
-        const val = (el.type === 'checkbox' || el.type === 'radio')
-            ? (el.checked ? (el.type === 'radio' ? `(${el.value})` : '✓') : '')
-            : String(el.value || '').trim();
-        if (!val) return [];
-        return [`${name}: ${val}`];
-    });
-    return lines.join('\n');
-};
-
 /**
  * 생성된 문서 텍스트를 OS 공유 시트로 전달한다.
  * data-arg="CSS선택자|제목[|mask[|생성핸들러]]" — mask 플래그 시 인명·연락처를 가린 본문으로 공유.
