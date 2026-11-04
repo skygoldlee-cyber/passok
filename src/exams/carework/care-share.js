@@ -20,7 +20,9 @@ const _readOut = sel => {
  * @param {HTMLElement} [btn]
  */
 export async function careShare(btn) {
-    const [sel, title = '문서', flag = '', gen = ''] = String(btn?.dataset?.arg || '').split('|');
+    const [sel, title = '문서', f3 = '', f4 = ''] = String(btn?.dataset?.arg || '').split('|');
+    // mask 생략 시 3번째 필드가 생성 핸들러 — "|sel|title|gen" 와 "|sel|title|mask|gen" 모두 지원
+    const flag = f3 === 'mask' ? 'mask' : '', gen = f4 || (flag ? '' : f3);
     let raw = _readOut(sel);
     if (!raw.trim() && gen) {
         /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click();
