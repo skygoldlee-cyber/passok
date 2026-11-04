@@ -87,6 +87,14 @@ export async function careShare(arg) {
     if (csvGen) { // CsvExport 지정 시 실제 .xlsx
         try { const csv = await (/** @type {any} */ (window))[csvGen]?.(); if (csv) files.push(await sheetFile(csv, fname('xlsx'))); } catch { showToast('Excel 생성 실패 — 나머지 파일은 정상 공유됩니다.', 'error'); }
     }
+    files.push(new File([text], fname('txt'), { type: 'text/plain;charset=utf-8' })); // 검색·선택 가능한 텍스트 — 생성 비용 없음
+    // 공유 시트는 무거운 PDF 렌더 전에 호출 — 사용자 제스처(수 초) 만료 전에 열려야 시트가 뜸
+    let shared = false;
+    const fileOk = files.length && (typeof navigator.canShare !== 'function' || navigator.canShare({ files }));
+    if (typeof navigator.share === 'function') {
+        try { await navigator.share(fileOk ? { title, text, files } : { title, text }); shared = true; showToast(fileOk ? '파일 공유 시트를 열었습니다.' : '공유 시트를 열었습니다 — 텍스트를 붙여넣으세요.'); }
+        catch (e) { if (/** @type {Error} */ (e)?.name === 'AbortError') return; }
+    }
     if (text.trim()) { // 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
         const wrap = document.createElement('div');
         // html2canvas는 문서 좌표로 렌더 — fixed는 뷰포트에 노출(흰 플래시)되므로 문서 하단 absolute로 배치
@@ -118,30 +126,19 @@ export async function careShare(arg) {
         try { files.push(await pdfFileFromEl(wrap, fname('pdf').replace(/\.pdf$/, ''))); }
         catch { showToast('PDF 생성 실패 — 텍스트 파일로 대체합니다.', 'error'); }
         finally { wrap.remove(); }
-        files.push(new File([text], fname('txt'), { type: 'text/plain;charset=utf-8' })); // 텍스트 추출용 병기 (검색·선택 가능)
-    }
-    // 다중 파일 시 Excel 포함 여부 선택 — 불필요한 파일 생성·다운로드 방지
-    if (files.length > 1) {
-        const { showConfirm } = await import('../../ui-utils.js');
-        if (!await showConfirm('Excel 파일도 함께 보낼까요? (취소 시 문서만 공유)'))
-            files.splice(0, files.length, ...files.filter(f => !f.name.endsWith('.xlsx')));
     }
     _audit(title, flag, files);
-    // 공유 시트 — pointer:coarse 게이트 없이 share() 직접 시도 (일부 기기는 터치 감지 불일치)
-    const fileOk = files.length && (typeof navigator.canShare !== 'function' || navigator.canShare({ files }));
-    if (typeof navigator.share === 'function') {
-        try { await navigator.share(fileOk ? { title, text, files } : { title, text }); showToast(fileOk ? '파일 공유 시트를 열었습니다.' : '공유 시트를 열었습니다 — 텍스트를 붙여넣으세요.'); return; }
-        catch (e) { if (/** @type {Error} */ (e)?.name === 'AbortError') return; /* 실패 시 복사 폴백 */ }
-    }
-    const coarse = typeof matchMedia === 'function' && matchMedia('(pointer:coarse)').matches;
+    if (shared) return; // 시트 이미 열림 — PDF는 시트에 못 실었으므로 아래 다운로드로 보강
     copyFallback(); // 항상 복사+토스트 — 어떤 환경에서든 클릭 즉시 반응이 나와야 함
-    // 데스크톱은 파일 다운로드로 제공 — 생성된 파일을 순차 다운로드
-    if (!coarse) {
-        for (const file of files) {
+    // 파일 다운로드 — 데스크톱은 전부, 모바일은 시트 미개봉 시에만
+    const coarse = typeof matchMedia === 'function' && matchMedia('(pointer:coarse)').matches;
+    const rest = coarse && shared ? files.filter(f => f.name.endsWith('.pdf')) : files; // 모바일 시트 성공 시 미탑재 PDF만 보강
+    if (!coarse || !shared || rest.length) {
+        for (const file of rest) {
             const a = document.createElement('a');
             a.href = URL.createObjectURL(file); a.download = file.name;
             document.body.appendChild(a); a.click(); a.remove();
         }
-        if (files.length) showToast(`${files.map(f => f.name).join(', ')} 다운로드 — 파일을 공유하세요.`);
+        if (rest.length) showToast(`${rest.map(f => f.name).join(', ')} 다운로드 — 파일을 공유하세요.`);
     }
 }
