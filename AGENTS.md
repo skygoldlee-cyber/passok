@@ -129,6 +129,7 @@ src/                    # ES Modules
   search/search-morpheme.js    # 검색 형태소 경계 판정·동의어 확장 순수 로직 (어휘 마이닝·DP 커버·termHitQuality·expandSynonyms — TS-13/TS-14)
   content/data-loader.js        # 온디맨드 콘텐츠 로더 (DataLoader)
   content/unpack.js             # pk1 번들 디코더 (DA-16 — 콘텐츠 비평문화)
+  content/pdf-utils.js         # PDF 생성 지연 로더 — jsPDF+html2canvas 벤더, 미리보기 렌더→PDF File (CO-13)
   study/scratchpad.js          # 스크래치패드 캔버스 (계산 연습용)
   study/trainer-calc.js       # 계산 트레이너 문제 생성기 (순수 로직, 전역 스코프 실행)
   study/fsrs.js               # FSRS-6 기억 모델 순수 함수 (DSR 상태 전이·간격 산출·SM-2 지연 변환)
