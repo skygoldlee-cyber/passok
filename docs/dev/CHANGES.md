@@ -2,7 +2,7 @@
 
 ## 2026-11-04 fix(carework): pre-push 게이트 — care-home 플레이스홀더·모바일 탭 동기화·아이콘 고유화·print 규칙
 
-- care-home-view data-lazy-view 플레이스홀더 + 모바일 탭 버튼·finder 중복 제거·사이드바 순서 동기·fa-house-medical 고유 아이콘
+- care-home-view data-lazy-view 플레이스홀더 + 모바일 탭 버튼·finder 중복 제거·사이드바 순서 동기·fa-notes-medical 고유 아이콘
 - obs-chip position:absolute 제거 (print 허용 목록), 실무매뉴얼 docs_md 번들 재생성
 
 
