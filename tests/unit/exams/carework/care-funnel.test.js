@@ -118,4 +118,5 @@ test('CO-13 공유 — 모바일 파일 첨부 우선·데스크톱 복사+다�
     assert.match(src, /pointer:coarse/); // 터치 기기에서만 파일 공유 시트
     assert.match(src, /new File\(/); // 모바일 파일 첨부 공유
     assert.match(src, /a\.download/); // 데스크톱 파일 다운로드
+    assert.match(src, /z-index:-9999/); // html2canvas 오프스크린(left:-9999px)은 빈 캔버스 — 뷰포트 내 숨김 필수
 });

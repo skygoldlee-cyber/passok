@@ -72,7 +72,8 @@ export async function careShare(arg) {
     }
     if (text.trim()) { // 인쇄 레이아웃(문서 헤더+본문 DOM) PDF — 표·레이아웃 유지, 텍스트 노드만 가림
         const wrap = document.createElement('div');
-        wrap.style.cssText = 'position:absolute;left:-9999px;width:700px;padding:24px;background:#fff';
+        // html2canvas는 화면 밖(left:-9999px) 요소를 빈 캔버스로 렌더 — 뷰포트 안에 두고 뒤로 숨김
+        wrap.style.cssText = 'position:fixed;left:0;top:0;z-index:-9999;width:700px;padding:24px;background:#fff';
         wrap.innerHTML = docHeadHtml(title);
         const outEl = document.querySelector(sel.trim());
         if (outEl) {
