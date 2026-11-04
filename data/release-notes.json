@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261104-d4a9caf",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] data-arg 위치 파싱 — mask 생략 뷰에서 생성 핸들러 미인식 수정 (CO-13)",
+      "[정리·release] v20261104-b81e1e3 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-b81e1e3",
     "date": "2026-11-04",
     "notes": [
@@ -192,15 +200,6 @@
     "notes": [
       "[수정·carework] 수급자 관리 라벨 잔재 교정 — manifest·레지스트리 [no-test]",
       "[정리·release] v20261103-7a278e5 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-24245f1",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·carework] 현장도구 → 본인부담금 계산 명칭 교정 [no-test]",
-      "[문서·carework] 실무매뉴얼 절 순서 — 사이드바 메뉴 순서와 일치 [no-test]",
-      "[정리·release] v20261104-c1dbb77 스탬프 확정 [no-docs]"
     ]
   }
 ]
