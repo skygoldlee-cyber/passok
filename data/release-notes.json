@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261105-0b06d0a",
+    "date": "2026-11-05",
+    "notes": [
+      "[정리·docs] TRACE_MATRIX 재생성 — CO-13 ↔ DSN-42 문서 연결 반영",
+      "[문서·carework] 카톡 공유 로직 명기 — §9 제스처·페이로드 계약 (CO-13)",
+      "[수정·carework] 공유 시트 txt 제외 — 카톡 PDF+텍스트 이중 수신 해소, txt는 다운로드 전용 (CO-13)",
+      "[정리·release] v20261105-40b8f6b 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261105-40b8f6b",
     "date": "2026-11-05",
     "notes": [
@@ -179,14 +189,6 @@
     "notes": [
       "[수정·carework] data-arg 위치 파싱 — mask 생략 뷰에서 생성 핸들러 미인식 수정 (CO-13)",
       "[정리·release] v20261104-b81e1e3 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-b81e1e3",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·carework] 공유 조용한 실패 수정 — AbortError 외엔 복사 폴백+토스트 (CO-13)",
-      "[정리·release] v20261104-bad231d 스탬프 확정 [no-docs]"
     ]
   }
 ]
