@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261104-e8da3d3",
+    "date": "2026-11-04",
+    "notes": [
+      "[기능·carework] 실무 뷰 버튼 이모지 — 전 버튼 카테고리별 아이콘 (CO-13)",
+      "[수정·carework] 공유 감사 로그 storage.js 추상화 — 직접 접근 차단 대응 (CO-13)",
+      "[기능·carework] 공유 개선 7종 — 성씨 가림·감사 로그·날짜 파일명·다중 선택·실패 피드백·txt 병기 (CO-13)",
+      "[수정·carework] 공유 PDF 가독성 — 배경 흰색·텍스트·테두리 검정 (CO-13)",
+      "[정리·release] v20261104-55d4836 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-55d4836",
     "date": "2026-11-04",
     "notes": [
@@ -202,22 +213,6 @@
       "[data·carework] 기관찾기 정원·요양보호사 인력 보강",
       "[기능·carework] 기관찾기 카드에 카카오맵·장기요양보험 포털 검색 링크",
       "[정리·release] v20261104-a988c45 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-a988c45",
-    "date": "2026-11-04",
-    "notes": [
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[정리·tools] domain-map에 xlsx-utils 등록",
-      "[테스트·dom] xlsx 비동기 내보내기 대응 — XLSX 스텁 + waitFor 클릭 대기",
-      "[문서·agents] xlsx-utils 디렉토리 구조 등록 + TRACE 재생성",
-      "[기능·xlsx] CSV 왕복 도구 Excel(.xlsx) 네이티브 지원 — SheetJS vendor 추가",
-      "[문서·carework] 실무매뉴얼 §12 기관찾기 데이터 출처·기준일 명기",
-      "[기능·carework] 실무도구 CSV 확장 — 근무표 왕복 + 방문·사고·일지 내보내기",
-      "[수정·carework] 수급자 CSV 가져오기 CP949 인코딩 지원",
-      "[기능·ui] 실무 탭바 매뉴얼 라벨 단축 + carework 실무매뉴얼 저장·CSV 문서화",
-      "[수정·carework] 현장도구 → 본인부담금 계산 명칭 교정 [no-test]"
     ]
   }
 ]
