@@ -84,8 +84,10 @@ export function careLogCsvExport() {
     const items = listCareLogs();
     if (!items.length) { showToast('내보낼 저장된 일지가 없습니다.', 'error'); return; }
     proFeatureNotice('care_log_export', '일지 Excel 내보내기');
-    void downloadSheet(careLogsToCsv(items), '요양일지.xlsx');
+    const csv = careLogsToCsv(items);
+    void downloadSheet(csv, '요양일지.xlsx');
     showToast('Excel 파일을 저장했습니다.');
+    return csv;
 }
 
 export function careLogDelete(id) {

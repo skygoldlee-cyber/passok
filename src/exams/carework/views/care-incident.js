@@ -72,8 +72,10 @@ export function careIncidentCsvExport() {
     const items = listIncidents();
     if (!items.length) { showToast('내보낼 저장된 보고서가 없습니다.', 'error'); return; }
     proFeatureNotice('care_incident_share', '사고보고 Excel 내보내기');
-    void downloadSheet(incidentsToCsv(items), '사고보고.xlsx');
+    const csv = incidentsToCsv(items);
+    void downloadSheet(csv, '사고보고.xlsx');
     showToast('Excel 파일을 저장했습니다.');
+    return csv;
 }
 
 export function careIncidentDelete(id) {

@@ -59,7 +59,7 @@ test('CO-13 공유 — 인쇄·생성 선행 필수, 미생성 시 안내', () =
     assert.match(src, /f3 === 'mask'/); // mask 생략 시 3번째가 생성 핸들러
     assert.match(src, /care-calc-err/); // 오류 마커도 미생성으로 처리
     for (const [f, g] of [['care-calc', 'careCalcRun'], ['care-log', 'careLogGenerate'], ['care-handover', 'careHandoverGenerate'], ['care-incident', 'careIncidentGenerate'], ['care-client', 'careClientCsvExport'], ['care-visit', 'careVisitCsvExport'], ['care-roster', 'careRosterCsvExport']]) {
-        assert.match(readFileSync(`html/exams/carework/${f}.html`, 'utf8'), new RegExp(`\\|${g}"`));
+        assert.match(readFileSync(`html/exams/carework/${f}.html`, 'utf8'), new RegExp(`\\|${g}[|"]`));
     }
 });
 
