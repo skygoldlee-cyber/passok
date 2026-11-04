@@ -87,11 +87,11 @@ describe('CO-13 careShare 시뮬레이션', () => {
     it('데스크톱(pointer:fine) — navigator.share가 있어도 무응답 없이 클립보드로 복사', async () => {
         setup(`<section class="view-section"><pre id="out">문서 내용</pre>
             <button id="share" data-arg="#out|문서">공유</button></section>`);
-        // 데스크톱: share 존재하나 실패해도 복사 폴백 — coarse 미매칭(jsdom 기본)
+        // share() 직접 시도 — 데스크톱 거절 시 복사 폴백 (게이트 없음)
         globalThis.navigator.share = vi.fn().mockRejectedValue(new Error('no OS share UI'));
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
-        expect(globalThis.navigator.share).not.toHaveBeenCalled(); // 데스크톱은 호출 자체 생략
+        expect(globalThis.navigator.share).toHaveBeenCalled(); // 게이트 없이 시도, 실패 시 폴백
         expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('문서 내용');
         expect(toasts.find(t => t.includes('클립보드'))).toBeTruthy();
     });
