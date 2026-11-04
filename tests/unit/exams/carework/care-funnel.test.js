@@ -1,5 +1,5 @@
 // tests/unit/exams/carework/care-funnel.test.js
-// @spec CO-12 — 전환 퍼널 계측 순수 로직
+// @spec CO-12·CO-13 — 전환 퍼널 계측 순수 로직
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
@@ -36,4 +36,10 @@ test('카카오맵 링크 — 주소만 검색 쿼리로 사용', () => {
 test('공단 검색 링크 — 카드 반복 없이 뷰 상단 단일 위치', () => {
     assert.ok(!/selectLtcoSrch/.test(readFileSync('src/exams/carework/views/care-finder.js', 'utf8')));
     assert.match(readFileSync('html/exams/carework/care-finder.html', 'utf8'), /selectLtcoSrch/);
+});
+
+test('CO-13 공유 — careShare 핸들러 등록 + 뷰 버튼 존재', () => {
+    assert.match(readFileSync('src/practice-registry.js', 'utf8'), /careShare/);
+    assert.match(readFileSync('html/exams/carework/care-handover.html', 'utf8'), /data-click="careShare"/);
+    assert.match(readFileSync('src/exams/carework/care-share.js', 'utf8'), /navigator\.share/);
 });

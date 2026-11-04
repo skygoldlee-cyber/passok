@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 907178572cb2a62b
-> 생성: 2026-11-04 · 원천: SPEC.md(670개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 8458151393c54220
+> 생성: 2026-11-04 · 원천: SPEC.md(671개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 670개 — 문서 연결 463 · 소스 연결 594 · 테스트 연결 634 · 보고서 연결 109
+**커버리지 요약**: 요구사항 671개 — 문서 연결 463 · 소스 연결 595 · 테스트 연결 635 · 보고서 연결 109
 
 ---
 
@@ -618,6 +618,7 @@
 | CO-10 | 미구현 — 조건부(시설 세그먼트) | — | — | — | — | — | — |
 | CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
 | CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
+| CO-13 | care-share.js·출력 뷰 공유 버튼 | 테스트 | — | src/exams/carework/care-share.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 

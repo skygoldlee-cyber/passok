@@ -121,3 +121,5 @@ export function initCareLogView() {
     renderSaved();
     void refreshOrgName();
 }
+
+export { careShare } from '../care-share.js';
