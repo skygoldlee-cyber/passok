@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 fix(carework): 기관찾기 장기요양보험 링크 404 수정
+
+- npeE101r01.web(구 경로, 404) → /npbs/r/a/201/selectLtcoSrch(민원서비스→검색서비스→장기요양기관 찾기 정본 경로) 교체
+
+
 ## 2026-11-04 data(carework): 기관찾기 정원·요양보호사 인력 보강
 
 - tools/import/enrich_facility_stats.js — 공단 XLSX 입소인원·인력현황 시트를 기관코드+유형코드로 매칭해 facilities.json에 capacity·careWorkers 병기 (정원 6,252/6,252 · 요양보호사 6,245)

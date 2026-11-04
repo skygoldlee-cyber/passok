@@ -424,7 +424,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(a?.href).toContain('data.go.kr');
         const hrefs = [...document.querySelectorAll('#find-list a')].map(x => /** @type {HTMLAnchorElement} */ (x).href);
         expect(hrefs.some(h => h.includes('map.kakao.com'))).toBe(true);
-        expect(hrefs.some(h => h.includes('longtermcare.or.kr'))).toBe(true);
+        expect(hrefs.some(h => h.includes('longtermcare.or.kr/npbs/r/a/201/selectLtcoSrch'))).toBe(true);
         expect(document.querySelector('#find-list .care-finder-meta')?.textContent).toContain('정원 38명');
     });
 
