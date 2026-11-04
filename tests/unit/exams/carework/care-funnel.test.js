@@ -52,3 +52,11 @@ test('CO-08 가명처리 — 이름·연락처·호실 제거, 구조화 필드 
     assert.ok(!/010/.test(p.note));
     assert.equal(p.obs.meal, '반');
 });
+
+test('CO-08 프롬프트 — 시스템+프롬프트 반환, 가명 데이터만 포함', async () => {
+    const { buildDraftPrompt } = await import('../../../../src/exams/carework/care-ai.js');
+    const { system, prompt } = buildDraftPrompt({ client: '김철수', obs: { meal: '반' } });
+    assert.match(system, /보조/);
+    assert.match(prompt, /대상자A/);
+    assert.ok(!prompt.includes('김철수'));
+});

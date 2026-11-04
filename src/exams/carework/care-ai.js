@@ -47,7 +47,7 @@ export async function careAiDraft() {
     showToast('AI 초안 생성 중…');
     try {
         const res = await callProviderLLM(system, prompt, { key, provider: getAiProvider() });
-        const text = res?.text || res?.content || '';
+        const text = res?.text || '';
         if (!text) { showToast('응답이 없습니다.', 'error'); return; }
         const pre = document.querySelector('#log-preview pre');
         if (pre) pre.textContent = `[AI 초안 — 검토 후 사용]\n\n${text}`;

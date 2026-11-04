@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 fix(carework): care-ai 타입 정정 — callProviderLLM 반환형 {text}만 사용
+
+
 ## 2026-11-04 feat(carework): CO-08 BYOK AI 초안 — 가명처리·전송 미리보기·일지 버튼
 
 - care-ai.js: pseudonymize(이름→대상자A·연락처·호실 제거) + 전송 내용 showConfirm 미리보기 + BYOK 키(기존 written-grading 인프라) → 초안 결과창 삽입
