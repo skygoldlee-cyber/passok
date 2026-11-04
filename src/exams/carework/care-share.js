@@ -96,9 +96,10 @@ export async function careShare(arg) {
         catch (e) {
             const n = /** @type {Error} */ (e)?.name;
             if (n === 'AbortError') return;
-            showToast(`공유 시트 열기 실패(${n || e}) — 복사·다운로드로 대체합니다.`, 'error'); // 거절 사유 표시 — 진단용
+            showToast(`공유 시트 열기 실패(${n || e}) — 복사·다운로드로 대체합니다.`, 'error');
+            alert(`공유 시트를 열지 못했습니다.\n사유: ${n || e}\n파일은 다운로드로 대체합니다.`); // 닫을 때까지 표시 — 캡처·진단용
         }
-    } else showToast('이 브라우저는 공유 시트를 지원하지 않습니다 — Chrome으로 열어주세요.', 'error'); // 인앱 브라우저 식별
+    } else alert('이 브라우저는 공유 시트를 지원하지 않습니다.\nChrome으로 열어주세요.'); // 인앱 브라우저 식별
     if (text.trim()) { // 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
         const wrap = document.createElement('div');
         // html2canvas는 문서 좌표로 렌더 — fixed는 뷰포트에 노출(흰 플래시)되므로 문서 하단 absolute로 배치
