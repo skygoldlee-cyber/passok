@@ -1,4 +1,4 @@
-// tests/dom/exams/carework/care-os-modules.dom.test.js
+// tests/dom/exams/carework/care-os-modules.test.js
 // @spec CO-08·CO-09·CO-10·CO-13 — Care OS 신규 모듈 커버리지 (DOM 측정 범위 확보)
 import { describe, it, expect, vi } from 'vitest';
 
