@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261105-f2b1c39",
+    "date": "2026-11-05",
+    "notes": [
+      "[수정·carework] 문서 서명란 하단 여백 추가 — .care-doc-sign margin-bottom",
+      "[수정·carework] 인수인계 중복 공유 버튼 제거 — 내보내기 메뉴로 단일화 (CO-13)",
+      "[정리·release] v20261105-79f99a6 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261105-79f99a6",
     "date": "2026-11-05",
     "notes": [
@@ -172,17 +181,6 @@
     "notes": [
       "[수정·carework] careShare 핸들러 시그니처 — 위임은 data-arg 문자열 전달 (CO-13)",
       "[정리·release] v20261104-52be512 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-52be512",
-    "date": "2026-11-04",
-    "notes": [
-      "[테스트·carework] 공유 예외 시뮬레이션 정정 — click 스로우 방식 (CO-13)",
-      "[수정·carework] 공유 생성 핸들러 예외 내성 + 전 경로 DOM 시뮬레이션 (CO-13)",
-      "[수정·carework] 공유 항상 복사 선행 — 클릭 즉시 반응 보장, 공유 시트는 추가 동작 (CO-13)",
-      "[수정·carework] 공유 무응답 수정 — 데스크톱(fine pointer)은 바로 클립보드 복사 (CO-13)",
-      "[정리·release] v20261104-57f50cd 스탬프 확정 [no-docs]"
     ]
   }
 ]
