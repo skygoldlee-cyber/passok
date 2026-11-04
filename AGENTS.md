@@ -182,6 +182,7 @@ src/                    # ES Modules
   telemetry/telemetry-consent.js  # 텔레메트리 동의·익명 설치 ID — opt-out 플래그(telemetry_opt_out)+최초 고지 마커+getInstallId(DEVICE_ID 재사용) (UX-MET-06/07, ADR-0019)
   shell/exam-data-boot.js     # 활성 시험 데이터 번들 부트 (클래식) — 파싱 중 {dataRoot}/registry.js·id_migration.js 동기 삽입, 비활성 시험 번들 미로드
   content/csv-utils.js          # CSV 파서·EUC-KR 폴백 디코딩·BOM 직렬화 (사전 내보내기 등 공용)
+  content/xlsx-utils.js         # Excel(.xlsx/.xls) 읽기·쓰기 — SheetJS 지연 로드 (readTableFile·downloadSheet)
   pwa/                  # PWA 부트·설치·매니페스트 모듈
     pwa-install.js        # PWA 설치 프롬프트 설정
     pwa-install-capture.js # beforeinstallprompt 조기 캡처 + SW 조기 등록 (<head> 즉시 실행, 클래식 스크립트)
