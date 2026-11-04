@@ -43,6 +43,8 @@ import { careFacilityHandoverSubmit, careHandoverAck } from '../../../../src/exa
 import { careAuditReset, careAuditCopy, careAuditPrint, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
 import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
+import { initCareHomeView, careDocSignSave } from '../../../../src/exams/carework/views/care-home.js';
+import { setDocSign } from '../../../../src/exams/carework/facility.js';
 import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, careVisitExport, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
 import { careClientSave, careClientLoad, careClientDelete, initCareClientView } from '../../../../src/exams/carework/views/care-client.js';
 import { listClients } from '../../../../src/exams/carework/care-client-store.js';
@@ -198,6 +200,42 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.getElementById('audit-list')).toBeTruthy();
         expect(document.querySelector('#audit-list .care-doc-head strong')?.textContent).toBe('기관 평가 체크리스트');
         expect(document.querySelector('#audit-list .care-doc-sign')?.textContent).toContain('점검자');
+    });
+
+    it('careHome — 서명 저장이 모든 문서 서명란에 기입 (빈키 슬롯은 공란 유지)', () => {
+        setDocSign('', '', ''); // 이전 테스트 잔류 방지
+        loadPartial('care-home.html');
+        initCareHomeView();
+        const aEl = /** @type {HTMLInputElement} */ (document.getElementById('home-sign-author'));
+        const cEl = /** @type {HTMLInputElement} */ (document.getElementById('home-sign-confirmer'));
+        const rEl = /** @type {HTMLInputElement} */ (document.getElementById('home-sign-receiver'));
+        expect(aEl).toBeTruthy(); // 홈 서명 입력 폼 존재
+        aEl.value = '김요양'; cEl.value = '박시설'; rEl.value = '이인수';
+        careDocSignSave();
+        // 홈 재진입 시 저장값이 폼에 채워짐
+        initCareHomeView();
+        expect(/** @type {HTMLInputElement} */ (document.getElementById('home-sign-author')).value).toBe('김요양');
+        expect(/** @type {HTMLInputElement} */ (document.getElementById('home-sign-receiver')).value).toBe('이인수');
+        // 일지 — 작성자·확인자 모두 기입
+        loadPartial('care-log.html');
+        initCareLogView();
+        document.getElementById('log-date').value = '2026-11-01';
+        document.getElementById('log-client').value = '김○○';
+        careLogGenerate();
+        const sign = document.querySelector('#log-preview .care-doc-sign')?.textContent || '';
+        expect(sign).toContain('작성자(요양보호사): 김요양');
+        expect(sign).toContain('확인자: 박시설');
+        // 인수인계 — 인계자·인수자 기입, 확인일은 수기 공란 유지
+        loadPartial('care-handover.html');
+        /** @type {HTMLInputElement} */ (document.getElementById('ho-date')).value = '2026-11-05';
+        /** @type {HTMLInputElement} */ (document.getElementById('ho-from')).value = '김인계';
+        /** @type {HTMLInputElement} */ (document.getElementById('ho-to')).value = '박인수';
+        careHandoverGenerate();
+        const hoSign = document.querySelector('#ho-preview .care-doc-sign')?.textContent || '';
+        expect(hoSign).toContain('인계자(서명): 김요양');
+        expect(hoSign).toContain('인수자(서명): 이인수');
+        expect(hoSign).toContain('확인일: ______________');
+        setDocSign('', '', ''); // 정리 — 다른 테스트의 빈 서명란 검증에 영향 없도록
     });
 
     it('careAudit — 점검표 복사·인쇄 핸들러 실행', async () => {
@@ -412,7 +450,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(getOrgName()).toBe('행복요양원');
     });
 
-    it('careFinder — 출처 링크 + 결과 카드에 카카오맵·장기요양보험 포털 검색 링크', async () => {
+    it('careFinder — 출처 링크 + 결과 카드 카카오맵·뷰 상단 장기요양보험 링크', async () => {
         vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({
             source: '공단 현황 — https://www.data.go.kr/x (필터)', regions: [],
             items: [{ name: '행복요양원', region: '서울', type: '요양원', address: '서울특별시 종로구 비봉길 76', capacity: 38, careWorkers: 18 }],
@@ -424,7 +462,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(a?.href).toContain('data.go.kr');
         const hrefs = [...document.querySelectorAll('#find-list a')].map(x => /** @type {HTMLAnchorElement} */ (x).href);
         expect(hrefs.some(h => h.includes('map.kakao.com'))).toBe(true);
-        expect(hrefs.some(h => h.includes('longtermcare.or.kr/npbs/r/a/201/selectLtcoSrch'))).toBe(true);
+        expect(document.querySelector('a[href*="longtermcare.or.kr/npbs/r/a/201/selectLtcoSrch"]')).toBeTruthy();
         expect(document.querySelector('#find-list .care-finder-meta')?.textContent).toContain('정원 38명');
     });
 

@@ -1,14 +1,17 @@
 // src/exams/carework/views/care-log.js — 요양일지 생성기 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
-import { buildCareLog, SERVICE_TYPES, ACTIVITY_GROUPS, careLogsToCsv } from '../care-log.js';
+import { buildCareLog, buildRecordText, SERVICE_TYPES, ACTIVITY_GROUPS, careLogsToCsv } from '../care-log.js';
+import { markFunnel } from '../care-funnel.js';
 import { saveCareLog, listCareLogs, removeCareLog } from '../care-log-store.js';
+import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { docHeadHtml, refreshOrgName } from '../facility.js';
+import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const _radio = (name) => /** @type {HTMLInputElement|null} */ (document.querySelector(`input[name="${name}"]:checked`))?.value || '';
 const _val = (id, fb) => {
     const el = /** @type {HTMLSelectElement|HTMLInputElement|null} */ ($(id));
     return el && el.value ? el.value : fb;
@@ -23,12 +26,13 @@ function readForm() {
     }
     return {
         date: _val('log-date', ''),
-        client: _val('log-client', ''),
+        ...clientField('log-client'),
         service: _val('log-service', 'visit-care'),
         start: _val('log-start', ''),
         end: _val('log-end', ''),
         activities,
         note: _val('log-note', ''),
+        obs: { meal: _radio('obs-meal'), sleep: _radio('obs-sleep'), voided: _radio('obs-void') },
     };
 }
 
@@ -37,7 +41,7 @@ export function careLogGenerate() {
     const out = $('log-preview');
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·대상자·급여 종류를 입력하세요.</p>'; return; }
-    out.innerHTML = docHeadHtml('요양보호 서비스 기록') + `<pre class="care-log-text">${esc(t)}</pre><div class="care-doc-sign"><span>작성자(요양보호사): ______________</span><span>확인자: ______________</span></div>`;
+    out.innerHTML = docHeadHtml('요양보호 서비스 기록') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]);
 }
 
 export function careLogCopy() {
@@ -47,6 +51,16 @@ export function careLogCopy() {
     proFeatureNotice('care_log_export', '일지 복사·내보내기');
     navigator.clipboard?.writeText(pre.textContent || '').then(
         () => showToast('일지를 복사했습니다.'),
+        () => showToast('복사에 실패했습니다.', 'error'));
+}
+
+/** CO-07 공단 급여제공기록지 양식 복사 — ERP·공단 앱에 붙여넣기 (이중 입력 해소) */
+export function careLogRecordCopy() {
+    const t = buildRecordText(readForm());
+    if (!t) { showToast('일자·대상자를 입력하세요.', 'error'); return; }
+    proFeatureNotice('care_log_export', '제공기록지 복사');
+    navigator.clipboard?.writeText(t).then(
+        () => showToast('제공기록지 양식을 복사했습니다.'),
         () => showToast('복사에 실패했습니다.', 'error'));
 }
 
@@ -70,8 +84,10 @@ export function careLogCsvExport() {
     const items = listCareLogs();
     if (!items.length) { showToast('내보낼 저장된 일지가 없습니다.', 'error'); return; }
     proFeatureNotice('care_log_export', '일지 Excel 내보내기');
-    void downloadSheet(careLogsToCsv(items), '요양일지.xlsx');
+    const csv = careLogsToCsv(items);
+    void downloadSheet(csv, '요양일지.xlsx');
     showToast('Excel 파일을 저장했습니다.');
+    return csv;
 }
 
 export function careLogDelete(id) {
@@ -91,6 +107,8 @@ function renderSaved() {
 }
 
 export function initCareLogView() {
+    markFunnel('tool:care-log');
+    attachClientPicker(/** @type {HTMLInputElement|null} */ ($('log-client')));
     const d = /** @type {HTMLInputElement|null} */ ($('log-date'));
     if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
     const s = $('log-service');
@@ -105,3 +123,6 @@ export function initCareLogView() {
     renderSaved();
     void refreshOrgName();
 }
+
+export { careShare } from '../care-share.js';
+export { careAiDraft } from '../care-ai.js';

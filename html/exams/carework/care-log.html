@@ -14,13 +14,28 @@
     <div id="log-activities" class="care-log-activities"></div>
     <div class="care-calc-form">
         <label>특이사항 <input id="log-note" type="text" placeholder="대상자 상태 변화·전달 사항"></label>
+        <div class="obs-chips"><span class="obs-label">식사량</span>
+            <label class="obs-chip"><input type="radio" name="obs-meal" value="전"><span>전</span></label>
+            <label class="obs-chip"><input type="radio" name="obs-meal" value="반"><span>반</span></label>
+            <label class="obs-chip"><input type="radio" name="obs-meal" value="소"><span>소</span></label>
+        </div>
+        <div class="obs-chips"><span class="obs-label">수면</span>
+            <label class="obs-chip"><input type="radio" name="obs-sleep" value="양호"><span>양호</span></label>
+            <label class="obs-chip"><input type="radio" name="obs-sleep" value="불량"><span>불량</span></label>
+            <label class="obs-chip"><input type="radio" name="obs-sleep" value="불면"><span>불면</span></label>
+        </div>
+        <div class="obs-chips"><span class="obs-label">배변</span>
+            <label class="obs-chip"><input type="radio" name="obs-void" value="정상"><span>정상</span></label>
+            <label class="obs-chip"><input type="radio" name="obs-void" value="이상"><span>이상</span></label>
+        </div>
         <div class="care-calc-actions">
-            <button data-click="careLogGenerate">일지 생성</button>
-            <button data-click="careLogSave" class="secondary">저장 <span class="pro-badge" data-pro-feature="care_log_save">PRO</span></button>
+            <button data-click="careLogGenerate">📝 일지 생성</button>
+            <button data-click="careAiDraft" class="secondary">✨ AI 초안</button>
+            <button data-click="careLogSave" class="secondary">💾 저장 <span class="pro-badge" data-pro-feature="care_log_save">PRO</span></button>
 
-            <button data-click="careLogCopy" class="secondary">복사 <span class="pro-badge" data-pro-feature="care_log_export">PRO</span></button>
-            <button data-click="careLogPrint" class="secondary">인쇄·PDF <span class="pro-badge" data-pro-feature="care_log_export">PRO</span></button>
-            <button data-click="careLogCsvExport" class="secondary">Excel 내보내기 <span class="pro-badge" data-pro-feature="care_log_export">PRO</span></button>
+            <button data-click="careShare" data-arg="#log-preview pre|요양일지|mask|careLogGenerate|careLogCsvExport|careLogPrint|care_log_export" class="secondary">📤 공유·내보내기</button>
+            <button data-click="careLogCopy" class="secondary">📋 복사 <span class="pro-badge" data-pro-feature="care_log_export">PRO</span></button>
+            <button data-click="careLogRecordCopy" class="secondary">📋 제공기록지 복사 <span class="pro-badge" data-pro-feature="care_log_export">PRO</span></button>
         </div>
     </div>
     <div id="log-preview" class="care-calc-result"></div>

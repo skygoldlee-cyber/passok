@@ -38,6 +38,13 @@ export async function readTableFile(file) {
  * CSV 텍스트 → .xlsx 다운로드 (downloadCsv의 Excel 네이티브 버전 — 동일 호출 형태).
  * CSV 왕복 도구의 내보내기를 그대로 .xlsx로 전환하는 어댑터.
  */
+export async function sheetFile(csvText, filename) {
+    const XLSX = await ensureXlsx();
+    const wb = XLSX.read(String(csvText).replace(/^﻿/, ''), { type: 'string' });
+    const out = XLSX.write(wb, { type: 'array', bookType: 'xlsx' });
+    return new File([out], filename, { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+
 export async function downloadSheet(csvText, filename) {
     const XLSX = await ensureXlsx();
     const wb = XLSX.read(String(csvText).replace(/^﻿/, ''), { type: 'string' });

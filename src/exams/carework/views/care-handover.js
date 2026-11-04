@@ -1,11 +1,17 @@
 // src/exams/carework/views/care-handover.js — 인수인계서 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { buildHandover, SHIFTS } from '../care-handover.js';
+import { markFunnel } from '../care-funnel.js';
 import { listCareLogs, FREE_LIMIT } from '../care-log-store.js';
 import { saveHandover, listHandovers, deleteHandover } from '../handover-store.js';
-import { myMembership, submitHandover, listHandovers as listFacilityHandovers, ackHandover, docHeadHtml, refreshOrgName } from '../facility.js';
+import { attachClientPicker, clientField } from '../care-client-field.js';
+import { buildDigest } from '../handover-digest.js';
+import { listVisits } from '../care-visit-store.js';
+import { listIncidents } from '../incident-store.js';
+import { myMembership, submitHandover, listHandovers as listFacilityHandovers, ackHandover, docHeadHtml, docSignHtml, getDocSign, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
+export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -21,6 +27,18 @@ const _val = (id, fb) => {
 function todayLogs() {
     const today = new Date().toISOString().slice(0, 10);
     return listCareLogs().filter(x => x.date === today).map(x => `${x.client} — ${x.service}`);
+}
+
+/** CO-05 오늘 기록으로 채우기 — 근무 일자의 일지·사고·방문을 대상자별로 집계해 폼 초안 반영 (작성자 검토 후 저장) */
+export function careHandoverDigest() {
+    const date = _val('ho-date', new Date().toISOString().slice(0, 10));
+    const d = buildDigest(date, { logs: listCareLogs(), visits: listVisits(), incidents: listIncidents() });
+    if (!d.count) { showToast(`${date} 집계할 기록이 없습니다.`, 'error'); return; }
+    const set = (id, v) => { const el = /** @type {HTMLInputElement|null} */ ($(id)); if (el && v) el.value = v; };
+    set('ho-clients', d.clients);
+    set('ho-status', d.status);
+    set('ho-caution', d.caution);
+    showToast(`${d.count}명의 기록을 반영했습니다 — 검토 후 생성하세요.`);
 }
 
 export function careHandoverGenerate() {
@@ -39,7 +57,7 @@ export function careHandoverGenerate() {
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·인계자·인수자를 입력하세요.</p>'; return; }
     _lastText = t; _lastSaved = false;
-    out.innerHTML = docHeadHtml('인수인계서') + `<pre class="care-log-text">${esc(t)}</pre><div class="care-doc-sign"><span>인계자(서명): ______________</span><span>인수자(서명): ______________</span><span>확인일: ________</span></div>`;
+    out.innerHTML = docHeadHtml('인수인계서') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver'], ['확인일', '']]);
     renderSaved();
 }
 
@@ -134,7 +152,7 @@ export async function careFacilityHandoverSubmit() {
     proFeatureNotice('care_handover_save', '기관 인계');
     const r = await submitHandover({
         facilityId: _facility.id,
-        client: _val('ho-clients', ''),
+        ...clientField('ho-clients'),
         shiftDate: _val('ho-date', new Date().toISOString().slice(0, 10)),
         memo: `${_val('ho-status', '')} ${_val('ho-tasks', '')} ${_val('ho-caution', '')}`.trim(),
     });
@@ -149,6 +167,8 @@ export async function careHandoverAck(handoverId) {
 }
 
 export function initCareHandoverView() {
+    markFunnel('tool:care-handover');
+    attachClientPicker(/** @type {HTMLInputElement|null} */ ($('ho-clients')));
     const d = /** @type {HTMLInputElement|null} */ ($('ho-date'));
     if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
     const s = $('ho-shift');
@@ -156,6 +176,12 @@ export function initCareHandoverView() {
         s.innerHTML = SHIFTS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
     const n = $('ho-logcount');
     if (n) n.textContent = `오늘 저장된 일지 ${todayLogs().length}건 · 무료 저장 ${FREE_LIMIT}건 한도`;
+    // 홈 서명 설정의 작성자·인수자를 폼 기본값으로 — 문서 서명란과 폼 값 일치
+    const sign = getDocSign();
+    const fromEl = /** @type {HTMLInputElement|null} */ ($('ho-from'));
+    if (fromEl && !fromEl.value) fromEl.value = sign.author;
+    const toEl = /** @type {HTMLInputElement|null} */ ($('ho-to'));
+    if (toEl && !toEl.value) toEl.value = sign.receiver;
     renderSaved();
     void renderFacility();
     void refreshOrgName();

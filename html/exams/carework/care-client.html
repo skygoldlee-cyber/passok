@@ -28,12 +28,11 @@
     </details>
     <div class="care-calc-form">
         <div class="care-calc-actions">
-            <button data-click="careClientSave">등록·저장 <span class="pro-badge" data-pro-feature="care_client_save">PRO</span></button>
-            <button data-click="careClientNew" class="secondary">새로 작성</button>
-            <button data-click="careClientExport" class="secondary">명부 복사 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
-            <button data-click="careClientPrint" class="secondary">인쇄·PDF <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
-            <button data-click="careClientCsvExport" class="secondary">Excel 내보내기 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
-            <button data-click="careClientCsvImport" class="secondary">Excel 가져오기 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
+            <button data-click="careClientSave">💾 등록·저장 <span class="pro-badge" data-pro-feature="care_client_save">PRO</span></button>
+            <button data-click="careClientNew" class="secondary">➕ 새로 작성</button>
+            <button data-click="careClientExport" class="secondary">📋 명부 복사 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
+            <button data-click="careShare" data-arg="#cli-preview|대상자 명부|mask|careClientCsvExport||careClientPrint|care_client_share" class="secondary">📤 공유·내보내기</button>
+            <button data-click="careClientCsvImport" class="secondary">📥 Excel 가져오기 <span class="pro-badge" data-pro-feature="care_client_share">PRO</span></button>
             <input type="file" id="cli-csv-file" accept=".csv,.xlsx,.xls,text/csv" class="is-hidden">
         </div>
     </div>

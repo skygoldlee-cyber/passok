@@ -90,6 +90,27 @@ export function docHeadHtml(title) {
     return `<div class="care-doc-head"><strong>${_esc(title)}</strong><span>${org ? _esc(org) + ' · ' : ''}${new Date().toISOString().slice(0, 10)} 출력</span></div>`;
 }
 
+// — 출력물 서명란 기입 (홈 설정 — 전 문서 공통) —
+
+/** 홈에서 설정한 서명자 — {author: 작성자(요양보호사), confirmer: 확인자(시설장·기관장), receiver: 인수자} */
+export function getDocSign() {
+    const s = /** @type {any} */ (getJSON(STORAGE_KEYS.CARE_DOC_SIGN)) || {};
+    return { author: String(s.author || ''), confirmer: String(s.confirmer || ''), receiver: String(s.receiver || '') };
+}
+/** 서명자 저장 — 홈 설정 카드에서 호출 */
+export function setDocSign(author, confirmer, receiver = '') {
+    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: String(author || '').trim(), confirmer: String(confirmer || '').trim(), receiver: String(receiver || '').trim() });
+}
+/**
+ * 문서 서명란 — items: [[라벨, 'author'|'confirmer'|'receiver'|'']].
+ * 설정된 성명은 인쇄·공유 산출물에 그대로 기입되고, 미설정·빈키 슬롯(날짜)은 수기 서명용 공란 유지.
+ */
+export function docSignHtml(items) {
+    const s = getDocSign();
+    const name = k => (k === 'author' ? s.author : k === 'confirmer' ? s.confirmer : k === 'receiver' ? s.receiver : '');
+    return `<div class="care-doc-sign">${items.map(([label, k]) => `<span>${_esc(label)}: ${name(k) ? _esc(name(k)) : '______________'}</span>`).join('')}</div>`;
+}
+
 // — DSN-43 6b: 교대 인수 확인 —
 
 /** 교대 인수인계 등록 — 이력 요약(payload)+전망 메모 @returns {Promise<{id:string}|{error:string}>} */

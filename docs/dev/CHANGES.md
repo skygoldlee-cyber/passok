@@ -1,5 +1,383 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): 서명란 하단 여백 증가 (16px → 36px)
+
+## 2026-11-05 fix(carework): 문서 서명란 하단 여백 — .care-doc-sign margin-bottom
+
+- 점검표 등 서명란이 컨테이너 하단에 붙던 문제 — margin-bottom: 16px 추가 (전 문서 공통)
+
+## 2026-11-05 fix(carework): 인수인계 중복 공유 버튼 제거 (CO-13)
+
+- 구 공유 버튼(careHandoverShare, 텍스트 공유) 제거 — 📤 공유·내보내기 통합 메뉴로 단일화. 핸들러는 참조 테스트 호환을 위해 유지
+
+## 2026-11-05 docs(carework): 실무매뉴얼 전면갱신 — 사이드바 nav 순서로 재구성
+
+- 매뉴얼 목차를 index.template.html 사이드바 nav 순서로 재배치 — 구역 라벨 구조 반영: 실무(홈) → 오늘(일지·방문·사고) → 교대(인수인계·근무표) → 대상자·준비(대상자·기관찾기·대처카드) → 기관·출력(평가점검·서식모음·본인부담금)
+- 신기능 반영 — 📤 공유·내보내기 통합 메뉴(§1 공통 표), 홈 출력물 서명 설정(작성자·확인자·인수자 → 전 문서 기입)
+- 기관 워크스페이스는 비활성 부록으로 이동, 공유·개인정보 절은 내보내기 메뉴 기준으로 갱신
+
+## 2026-11-05 feat(carework): 홈 서명 설정 — 작성자·확인자 성명 전 문서 기입
+
+- Care OS 홈에 "출력물 서명" 카드 — 작성자·확인자·인수자 성명 입력·저장 (`CARE_DOC_SIGN`, 백업 대상)
+- `facility.js`에 `getDocSign/setDocSign/docSignHtml` — 서명란 슬롯 라벨별 성명 매핑 (author=작성자·보고자·점검자·인계자, confirmer=확인자·시설장·기관장, receiver=인수자)
+- 일지·사고보고·인수인계·점검표 4종 서명란 + 주간 리포트 "기관 검토"에 자동 기입 — 날짜 슬롯은 수기 공란 유지
+- 인수인계 폼 인계자·인수자 입력은 서명 설정 성명으로 기본 채움 (서명란과 폼 값 일치)
+
+## 2026-11-05 feat(carework): 공유·인쇄 버튼 통합 — 📤 공유·내보내기 메뉴 (CO-13)
+
+- 뷰별로 나란하던 `📤 공유` + `🖨️ 인쇄·PDF` 버튼을 `📤 공유·내보내기` 하나로 통합 — 탭하면 내보내기 메뉴 시트(공유·인쇄·복사·PDF·Excel) 표시
+- `data-arg` 스키마 확장: `선택자|제목[|mask][|생성핸들러[|보조생성기[|인쇄핸들러[|pro키]]]]` — 인쇄핸들러는 메뉴의 인쇄 항목이 호출, pro키는 메뉴 항목 배지·안내에 사용
+- 데스크톱은 공유 시트 항목 자체를 숨김 — 카톡 PC판이 Windows 공유 대상 미등록 + `share({files})` OS 수준 거절. 메뉴에서 인쇄·복사·PDF·Excel 선택
+- Excel 내보내기 전용 버튼은 메뉴 항목으로 흡수 (동일 CsvExport 핸들러 호출) — care-log 등 출력 버튼 5→3개로 정리
+- 외부화 액션(공유·복사·다운로드)은 감사 로그 기록, 인쇄는 로컬 출력이라 제외
+- PRO 정책 통일 — pro키 지정 뷰는 공유·복사·PDF·인쇄·Excel 전 항목에 배지 + notice (무료 PDF·복사 우회 해소)
+
+## 2026-11-04 fix(carework): 공유 txt 파일 미생성 — PC 다운로드에 txt 포함 해소, 본문은 클립보드로 (CO-13)
+
+## 2026-11-04 fix(carework): 공유 시트 txt 제외 — 카톡 PDF+텍스트 이중 수신 해소, txt는 다운로드 전용 (CO-13)
+
+## 2026-11-04 fix(carework): 공유 페이로드 파일 전용 — 공유하기 버튼으로 생성 후 시트, 카톡 텍스트 수신 해소 (CO-13)
+
+- 카톡이 text 필드를 수신해 문서 대신 텍스트만 전달되던 문제 — share 페이로드에서 text 제거, files만 탑재
+- txt·xlsx·pdf 생성 완료 후 "📤 공유하기" 버튼(새 탭 제스처)으로 share({files}) — 시트에 PDF 포함
+- 데스크톱은 시트 생략하고 복사+다운로드로 제공 (Windows 파일 공유 OS 차단)
+
+## 2026-11-04 fix(carework): 공유 실패 시 "공유하기" 버튼 — 탭 새 제스처로 share() 재시도 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 NotAllowedError — 데스크톱 파일 미첨부 + 거절 학습·제스처 사전검사 (CO-13)
+
+- Windows 등 데스크톱은 canShare가 파일을 통과시켜도 share({files})가 OS 수준에서 거절됨 — 첨부를 터치 기기로 제한
+- share()는 제스처 소비(재시도 불가) — userActivation.isActive 사전 검사로 만료 시 명시 안내
+- 파일 거절(NotAllowedError) 학습 플래그 — 다음 클릭은 텍스트만 첨부, txt MIME에서 charset 파라미터 제거
+
+## 2026-11-04 fix(carework): 모바일 시트 제스처 — share()를 xlsx·pdf 생성 전으로 이동 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 진단 배너 — alert 규약 위반 대신 탭-해제 상시 배너 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 진단 토스트 12초 — 캡처 가능하게 지속시간 연장 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 실패 사유 표시 — share 미지원·거절 구분 진단 토스트 (CO-13)
+
+
+## 2026-11-04 fix(carework): 모바일 시트 제스처 만료 — share()를 PDF 생성 전으로, PDF는 후속 다운로드 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 시트 게이트 제거 — share() 직접 시도로 모바일 미표시 해소 (CO-13)
+
+
+## 2026-11-04 docs(carework): 경쟁전략 §7-3 — 공단 앱 기준 검증 축 3종 추가 (기록 재사용·인수인계·기관 평가)
+
+
+## 2026-11-04 fix(carework): 모바일 공유 시트 — canShare 미지원·파일 불가 시 텍스트 공유 폴백 (CO-13)
+
+
+## 2026-11-04 feat(carework): 실무 뷰 버튼 이모지 — 전 버튼 카테고리별 아이콘 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 감사 로그 storage.js 추상화 경유 — CARE_SHARE_AUDIT 키 등록 (CO-13)
+
+
+## 2026-11-04 feat(carework): 공유 7개 개선 — 성씨 가림·감사 로그·날짜 파일명·다중 선택·실패 피드백·txt 병기 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 PDF 가독성 — 배경 흰색·텍스트·테두리 검정 강제 (CO-13)
+
+
+## 2026-11-04 feat(carework): 공유 버튼 이모지 — 전 뷰 📤 공유 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 흰 플래시 — PDF 렌더 컨테이너를 문서 하단 absolute로 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 폼 폴백 select 라벨 + 생성 핸들러 브리지 직접 호출 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 단독 완결 복원 — 미생성 시 자동 생성→폼 폴백 (CO-13)
+
+
+## 2026-11-04 feat(carework): 일지·사고 공유 alt — PDF + 실제 .xlsx 다중 첨부 (CO-13)
+
+
+## 2026-11-04 refactor(carework): 공유 죽은 코드 제거 — _formText 폼 폴백 삭제 (인쇄 선행 정책으로 미사용)
+
+
+## 2026-11-04 fix(carework): 공유 인쇄 선행 필수 — 자동 생성·폼 폴백 제거, 미생성 시 안내 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 PDF = 인쇄 미리보기 그대로 — 헤더 이중 병기 방지 (CO-13)
+
+
+## 2026-11-04 test(carework): 인쇄 출력 = 공유 PDF 동일성 시뮬레이션 — 본문·표·헤더 일치 검증 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 PDF 빈 페이지 — 화면 밖 요소는 빈 캔버스, 뷰포트 내 z-index 숨김 (CO-13)
+
+
+## 2026-11-04 test(carework): 공유 PDF 표 유지·텍스트 노드 가림 계약 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 PDF 표 유지 — 미리보기 DOM 클론 렌더 + 텍스트 노드만 가림 (CO-13)
+
+
+## 2026-11-04 chore(carework): jspdf·html2canvas 벤더 매니페스트 + pdf-utils 도메인 맵 등록 (CO-13)
+
+
+## 2026-11-04 test(carework): CO-13 생성 핸들러 단언 — CsvExport·xlsx 직접 생성 반영
+
+
+## 2026-11-04 test(carework): 공유 다운로드 네비게이션 목 — jsdom 게이트 해소 (CO-13)
+
+
+## 2026-11-04 feat(carework): 공유 다중 파일 — xlsx·PDF 독립 생성, 실패 파일 생략 후 정상 공유 (CO-13)
+
+
+## 2026-11-04 feat(carework): 공유 실제 .xlsx — CsvExport 결과 재사용해 SheetJS 파일 첨부 (CO-13)
+
+
+## 2026-11-04 feat(carework): 공유 PDF 인쇄 레이아웃 — 문서 헤더+가림 본문 오프스크린 렌더 (CO-13)
+
+
+## 2026-11-04 feat(carework): 공유 PDF 파일 — jsPDF+html2canvas 벤더, 미리보기 렌더→PDF 첨부 (CO-13)
+
+
+## 2026-11-04 feat(carework): 공유 파일 첨부 — 모바일은 문서 파일로 공유, 데스크톱은 다운로드 (CO-13)
+
+
+## 2026-11-04 fix(carework): careShare 위임 계약 수정 — data-arg는 요소가 아닌 문자열로 전달 (CO-13)
+
+
+## 2026-11-04 test(carework): 공유 예외 시뮬레이션 정정 — click 스로우 방식 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 생성 핸들러 예외 내성 + 전 경로 DOM 시뮬레이션 9케이스 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 항상 복사 선행 — 어떤 환경에서든 클릭 즉시 반응, 시트는 추가 동작 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 무응답 — 데스크톱은 navigator.share 생략·바로 복사 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 오류 마커 폴백 — 생성 실패(입력 확인) 시 폼 양식으로 공유 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 확인 다이얼로그 제거 — 한 번 클릭으로 공유, 경고는 비차단 토스트 (CO-13)
+
+
+## 2026-11-04 test(carework): 본인부담금 실제 뷰 공유 시뮬레이션 — 파셜+실제 핸들러로 자동 계산 검증
+
+
+## 2026-11-04 fix(carework): mask 순서 버그 — [연락처] 플레이스홀더가 인명 정규식에 재마스킹 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 폼 양식 폴백 — 생성 결과 없어도 입력 항목·값 텍스트로 공유 (CO-13)
+
+
+## 2026-11-04 fix(carework): data-arg 위치 파싱 — mask 생략 뷰(계산 등)에서 생성 핸들러 미인식
+
+
+## 2026-11-04 fix(carework): 공유 실패 조용히 삼킴 — share 실패 시 복사 폴백·토스트 (CO-13)
+
+
+## 2026-11-04 fix(carework): 공유 미생성 시 자동 생성 전 뷰 확장 — 명부·방문·근무표
+
+
+## 2026-11-04 fix(carework): 공유 미생성 시 생성 자동 실행 — data-arg 4번째 필드
+
+
+## 2026-11-04 docs(carework): 실무매뉴얼 갱신 — AI 초안·주간리포트·커버리지·공유 개인정보 반영
+
+
+## 2026-11-04 test(carework): care-os-modules.test.js 리네임 — §2.1 파일명 규약
+
+
+## 2026-11-04 test(carework): CO-08~13 DOM 커버리지 테스트 — 커버리지 임계 복구 (67.09%)
+
+
+## 2026-11-04 fix(carework): 커버리지 배너 esc 적용 — 싱크 규약 위반 해소
+
+
+## 2026-11-04 fix(carework): CO-13 공유 프라이버시 보강 + 전략 문서 리뷰 5차 반영
+
+- care-share.js: 공유 전 기관 정책 확인 경고 + `|mask` 플래그로 인명·연락처 가림 — 수급자 데이터 6개 뷰 적용 (audit·calc은 무관)
+- 주간리포트에 기관 검토·발행일·정책 안내 표기 (CO-09 요건 충족)
+- 전략 문서: §2-4 리번호+케어매니저 열·ERP 칸 정정, §4 lite 반영, §6 5a/5b 분할+기능 동결 원칙, §3-4 공유 경로, §7-1 비활성화 완료·개인 자산 행 이동, "연속 악화"→"연속 관찰 변화", CO-12 로컬 한계 명시
+
+
+## 2026-11-04 docs(carework): 외부 리뷰 4건 반영 — 기능별 경쟁표·파일럿 절차·개인 자산 제약·인터뷰 계측
+
+- §2-5 기능별 경쟁 비교표 (경쟁사는 공식 확인 등급만, 미확인 단정 금지)
+- §6 파일럿 실행 절차(10곳 방문→시연→2~4주 적용→사례→확산) + 시간 절감 계측 명시
+- §7 개인 기록 자산 = 개인정보 제거형 한정 리스크 행 추가
+- 인터뷰 스크립트 Q10d·Q10e — 인수인계 소요·평가 준비 시간 계측
+
+
+## 2026-11-04 feat(carework): CO-08 인수인계 AI 초안 — careAiDraft 범용화 (data-arg="ho")
+
+- 대상자 목록·인계/인수자·인계 작업 필드도 가명처리, 인수인계 뷰에 AI 초안 버튼 추가
+
+
+## 2026-11-04 feat(carework): CO-09 주간 리포트 + CO-10 평가 증적 커버리지 (lite)
+
+- care-report.js: 대상자 카드 "주간리포트" → 최근 7일 일지·방문·사고·식사량 추이 요약 텍스트 (공유·복사 연동)
+- care-coverage.js: 점검표 상단에 증적 커버리지 배너 — 6종 기록 유무 매칭, 부족 항목 열거 (품질 판단 아님)
+
+
+## 2026-11-04 fix(carework): care-ai 타입 정정 — callProviderLLM 반환형 {text}만 사용
+
+
+## 2026-11-04 feat(carework): CO-08 BYOK AI 초안 — 가명처리·전송 미리보기·일지 버튼
+
+- care-ai.js: pseudonymize(이름→대상자A·연락처·호실 제거) + 전송 내용 showConfirm 미리보기 + BYOK 키(기존 written-grading 인프라) → 초안 결과창 삽입
+
+
+## 2026-11-04 feat(carework): 인쇄 있는 전 뷰에 공유 버튼 추가 — CO-13 확장
+
+- 계산기·점검표·명부·근무표·방문기록 5개 뷰 추가 (기존 일지·인수인계·사고보고와 합쳐 8개 전체)
+
+
+## 2026-11-04 feat(carework): 본인부담금 계산기에도 공유 버튼 추가 — careShare 재사용
+
+
+## 2026-11-04 fix(carework): careFinder DOM 테스트 공단 링크 위치 정정 + 전략 문서 구현 현황 반영
+
+
+## 2026-11-04 feat(carework): CO-13 생성 문서 공유 — Web Share API (카톡 등)
+
+- care-share.js: careShare 핸들러 — data-arg="선택자|제목"로 출력 텍스트 공유, 미지원 시 클립보드 폴백
+- 일지·인수인계·사고보고 뷰에 "공유" 버튼 추가, SPEC CO-13 등록
+
+
+## 2026-11-04 fix(carework): 기관찾기 공단 검색 링크 카드 반복 제거 — 뷰 상단 단일 링크로 이동
+
+
+## 2026-11-04 fix(carework): 기관찾기 카카오맵 검색어를 주소만 전달 — 기관명+주소 조합 미검색 해소
+
+
+## 2026-11-04 docs(carework): 실무매뉴얼 갱신 — Care OS 홈·obs·다이제스트·명부 연결·워크스페이스 비활성 반영
+
+- 홈 랜딩·그룹 내비·"처음" 배지, obs 칩+추세 확인, 인수인계 자동 채우기, 명부 자동완성·360° 이력·외부 CSV alias, 기관 워크스페이스 비활성 안내
+- 테스트 파일 경로 오타 정정 (실무막뉴얼→실무매뉴얼)
+
+
+## 2026-11-04 fix(carework): 홈 "처음" 배지 — 중복 append 가드·nowrap 정렬·roster 계측
+
+- initCareHomeView 재실행 시 배지 이중 삽입 방지(querySelector 가드) + 버튼 nowrap·배지 inline-block으로 줄바꿈 불일치 해소
+- 미계측이던 care-roster에 markFunnel 추가 — 사용 후에도 "처음"이 남는 오표시 해소
+
+
+## 2026-11-04 fix(carework): care-home 핸들러·슬러그 테스트 정합 — registry 계약 복구
+
+- initCareHomeView는 enter() 직접 호출이라 data-click handlers에서 제거 (유니크 계약)
+- practice-registry.test.js 슬러그 기대값에 care-home-view 추가
+
+
+## 2026-11-04 fix(carework): pre-push 게이트 — care-home 플레이스홀더·모바일 탭 동기화·아이콘 고유화·print 규칙
+
+- care-home-view data-lazy-view 플레이스홀더 + 모바일 탭 버튼·finder 중복 제거·사이드바 순서 동기·fa-notes-medical 고유 아이콘
+- obs-chip position:absolute 제거 (print 허용 목록), 실무매뉴얼 docs_md 번들 재생성
+
+
+## 2026-11-04 test(carework): CO-07 프리셋·기록지 테스트 + @spec 원복
+
+- care-csv-presets.test.js — alias 정규화·정식 파서 통과·제공기록지 양식 (pre-push 테스트 갭 해소)
+- ui-mode.js·manual-viewer.js의 DA-19/20·UM-06 @spec 병기 원복 — 정책형 요구사항 코드 미참조 허용분
+
+
+## 2026-11-04 feat(carework): 현장 입력 UX — obs 세그먼트 칩·홈 미사용 마크·터치 스타일
+
+- 일지 obs를 select → 라디오 칩(전/반/소 등 1탭 입력, min-height 44px) + care-tools.css에 홈 카드·확인 권장 배지·온보딩 내비·타임라인 스타일 추가
+- care-home 빠른 기록 링크에 퍼널 사용 0회 도구 "처음" 배지 — 미발견 도구 유도 (CO-12 연동)
+
+
+## 2026-11-04 feat(carework): 실무 모드 UX 재구성 — Care OS 홈 + 근무 흐름 내비 그룹핑
+
+- care-home 뷰 신규 (priority -1 → 실무 랜딩) — 오늘 일지/방문/사고 건수·추세 확인 배지·6개 도구 빠른 기록 링크. registry 엔트리 + exams.json features.careHome
+- 실무 내비를 작업 단계로 그룹핑 — 홈 / 오늘(일지·방문·사고) / 교대(인수인계·근무표) / 대상자·준비(명부·기관찾기·대처카드) / 기관·출력(평가·서식·계산) / 기관(가입·관리). index.template.html 재배치 + nav-group-label
+
+
+## 2026-11-04 feat(carework): 전환 퍼널 계측 + 실무도구 온보딩 배너 (CO-12-lite)
+
+- care-funnel.js 신규 — 첫 사용 시점·도구별 사용 횟수 로컬 누적 (STORAGE_KEYS.CARE_FUNNEL, carework_funnel). KPI① 데이터 원천
+- 7개 뷰 init에 markFunnel('tool:<slug>') 계측 (calc·client·forms·handover·incident·log·visit — roster·audit·finder는 후속)
+- care-calc 상단에 "현장에서 바로 쓰는 도구" 온보딩 내비 — 6개 도구 #/slug 딥링크
+
+
+## 2026-11-04 feat(carework): 관찰 필드 + 추세 확인 알림 (CO-03·04)
+
+- care-log 폼에 obs 코드화 관찰 추가 — 식사량(전/반/소)·수면(양호/불량/불면)·배변(정상/이상), 저장 레코드 obs {} 필드
+- care-trend.js 신규 — 최신순 obs 시계열 연속 악화(3회+) 감지 → 명부 카드에 "⚠ 최근 N회 기록에서 X 확인 권장" 배지 (의료 판단 표현 금지 원칙)
+- 테스트: care-trend.test.js 4건 (carework 유닛 42건)
+
+
+## 2026-11-04 feat(carework): 이중 입력 해소 — ERP CSV 프리셋 + 제공기록지 양식 복사 (CO-07)
+
+- care-csv-presets.js 신규 — 롱텀·이지케어·케어포 계열 외부 헤더 alias(수급자명·생활실·연락처 등 20+ 변형) → 정식 컬럼 정규화 후 기존 파서 위임. 명부 가져오기에 csvToClientsAny 적용
+- care-log.js buildRecordText — 공단 급여제공기록지 양식 텍스트(대상자·일시·급여종류·서비스 내용·특이사항) → "제공기록지 복사" 버튼으로 ERP·공단 앱 붙여넣기 워크플로
+
+
+## 2026-11-04 feat(carework): 인수인계 자동 채우기 — 근무일 기록 다이제스트 (CO-05)
+
+- handover-digest.js 신규 — 근무 일자의 일지·사고·방문을 대상자별 집계 → clients/status/caution 폼 초안 (사고만 인계 문장, 로컬 전용·작성자 검토 필수)
+- care-handover에 "오늘 기록으로 채우기" 버튼 + careHandoverDigest 핸들러 — index.html 재생성
+- 테스트: handover-digest.test.js 3건 (carework 유닛 38건)
+
+
+## 2026-11-04 feat(carework): 대상자 360° 카드 — 통합 이력 타임라인 (CO-02)
+
+- care-timeline.js 신규 — clientId 우선·client 스냅샷 근사 매칭으로 일지/방문/인수인계/사고 이력 시간순 병합 + 종류별 요약 (순수 로직)
+- care-client 명부 카드에 "이력 N건 (일지 x·사고 y…) · 최근 날짜" details 펼침 타임라인 추가
+- 테스트: care-timeline.test.js 3건
+
+
+## 2026-11-04 feat(carework): 대상자 명부 셀렉트 입력 — datalist·등록 제안·clientId 첨부 (CO-01 단계 2)
+
+- care-client-field.js 신규 — datalist 자동완성 + 미등록 이름 입력 시 "명부에 등록" 제안 버튼(클릭 시 등록→자동 연결) + clientField 저장 판독(단일 매칭 시 clientId 첨부)
+- 일지(log-client)·사고(inc-client)·방문(vis-client)·인수인계(ho-clients) 4개 폼에 부착 — 신규 저장부터 clientId 기록, 명부 미사용 시 기존 자유 입력 그대로
+- 인수인계는 복수 대상자 필드라 단일 이름 입력 시에만 해석 — 미해결은 스냅샷 유지
+
+
+## 2026-11-04 feat(carework): clientId 해석 모듈 + 기록 스토어 지연 백필 (CO-01 단계 1)
+
+- care-client-resolve.js 신규 — 이름→명부 단일 매칭(resolveClientId)·배열 일괄 해석(backfillClientIds). 동명이인·무 매칭은 미해결 유지
+- 일지·방문·사고·인수인계 4개 스토어 list 함수에 지연 백필 — 해석 발생 시 배치 setJSON 1회. roster는 근무자 기준이라 제외
+- 테스트: care-client-resolve.test.js 5건
+
+
+## 2026-11-04 spec(carework): Care OS 고도화 요구사양 CO-01~12 부여 + 데이터 허브 설계 (DOC-DSN-44)
+
+- SPEC.md §3.31 신설 — Care OS 경쟁전략 로드맵을 요구사양 CO-01~12로 등록 (clientId·obs·추세·다이제스트·서버 업로드·CSV 프리셋·BYOK AI·리포트·평가·워크스페이스·퍼널), ERP 제외·법무 조건부 명시
+- CareOS_경쟁전략.md P0~P2 항목에 CO-XX 매핑 병기
+- docs/exams/carework/design/CARE_OS_DATAHUB_DESIGN.md — 1차 배치(CO-01·02·05) 설계: clientId 정규화·백필·명부 셀렉트·타임라인·인수인계 로컬 다이제스트
+
+
+## 2026-11-04 docs(carework): 종사자 인터뷰 스크립트 신설 (DOC-BIZ-07)
+
+- Care OS §6-0 검증 인터뷰 — 시설·방문요양 표본 분리(각 5명)·중단 기준 2개·진행 기준·집계 시트, cosmetic 판매업소 스크립트(DOC-BIZ-05) 형식 준용
+- docs/README.md 인덱스·레지스트리·carework 인덱스 반영
+
+
+## 2026-11-04 chore(carework): facility 공유 기능 비활성화 — 수탁 법무 미비 소급 조치
+
+- DOC-BIZ-06 §3-4-L1 결정 규칙 실행: Supabase facility 테이블(facilities·facility_members·shift_handovers·family_visits·incident_reports·handover_acks) 전수 조회 → 전 행 0건(사용 기관 없음)
+- `exams.json` features `careFacilityJoin`/`careFacilityAdmin` → false. 코드는 유지, 뷰 등록·내비에서 제외 — 0b(위탁 계약·방침 고지·안전성 조치·보호자 정보 검토) 완료 후 재개통
+- data/exams.js·시험별 webmanifest 재생성 (build:exams-list)
+
+
+## 2026-11-04 docs(carework): Care OS 경쟁전략 문서 신설 (DOC-BIZ-06)
+
+- `docs/exams/carework/` 신설 — business/CareOS_경쟁전략.md: 장기요양 ERP 시장 공식 출처 검증 분석(이지케어·케어포·엔젤·케어매니저·하이케어·스마일시니어·공단 스마트장기요양) + 보완층 전략 + P0~P2 개선 로드맵
+- `docs/exams/carework/README.md` 시험 문서 인덱스 신설 (DOC-IDX-04) — docs/README.md 인덱스·레지스트리·디렉터리 트리 반영
+- v2 (내부 리뷰 반영): 재가 종류별 지정 수 중복 표기·연평균 증가율 2.3% 정정·이지케어 점유율 분모 각주·시설/방문요양 세그먼트별 기능 매핑 분리(1차=시설)·민감정보 L0~L2 계층 + BYOK 가명처리 요건·이중 입력 리스크 1순위 상향·공단 앱 경쟁축 추가·P0-1 선행 의존성·수익 가설·인터뷰 검증 단계(0단계)·KPI·출처 열람일
+- v3 (리뷰 2차 반영): 세그먼트별 판매 채널 분리(시설=B2B·방문요양=개인 채널)·수탁 처리 법무 전제(§6-0b, 서버 업로드 선행)·payload 코드화 필드만·원문 제외 누수 규칙·AI 전송 미리보기+키워드 입력 기본값·§5-0 번호 정정·기관 Pro 기준점 논리 정합·합격자 회기 라벨 정정·이지케어 최신 공시 갱신(9,481/53.4%, 2026.10.28)
+- v4 (리뷰 3차 반영): 기존 facility 공유 경로 소급 조치 원칙·L1 작성자 검토 예외(memo 허용·자동 첨부 금지)·P0-3 서버 선행을 0b+P0-2로 재정의·시설 디자인 파트너 파일럿 단계 신설(B2B 채널 앞당김)·이지케어 9,481 본문 반영·잔여 번호·비율 표현 정정
+- v5 (리뷰 4차 반영): 소급 조치를 결정 규칙으로 확정(사용 0 → 즉시 비활성화, 대시보드 facility_members 확인)·L0 '메모'→'명부 메모' 명칭 구분·§7-1 법무 행에 소급 조치 병기·P2-10-lite(온보딩 배너+퍼널 계측) 1b 단계로 앞당김·0b에 보호자 개인정보(family_visits) 검토 추가
+
+
 ## 2026-11-04 fix(carework): 기관찾기 장기요양보험 링크 404 수정
 
 - npeE101r01.web(구 경로, 404) → /npbs/r/a/201/selectLtcoSrch(민원서비스→검색서비스→장기요양기관 찾기 정본 경로) 교체

@@ -1,11 +1,13 @@
 // src/exams/carework/views/care-roster.js — 교대 근무표 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { ROSTER_SHIFTS, shiftLabel, buildRosterText, rosterToCsv, csvToRoster } from '../care-roster.js';
+import { markFunnel } from '../care-funnel.js';
 import { listRoster, saveRoster, removeRoster, upsertRoster } from '../roster-store.js';
 import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
+export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -61,8 +63,10 @@ export function careRosterCsvExport() {
     const items = listRoster();
     if (!items.length) { showToast('등록된 근무 배정이 없습니다.', 'error'); return; }
     proFeatureNotice('care_roster_share', '근무표 Excel 내보내기');
-    void downloadSheet(rosterToCsv(items), '근무표.xlsx');
+    const csv = rosterToCsv(items);
+    void downloadSheet(csv, '근무표.xlsx');
     showToast('CSV를 저장했습니다.');
+    return csv;
 }
 
 export function careRosterCsvImport() {
@@ -97,6 +101,7 @@ function renderList() {
 }
 
 export function initCareRosterView() {
+    markFunnel('tool:care-roster');
     const d = /** @type {HTMLInputElement|null} */ ($('ros-date'));
     if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
     const s = $('ros-shift');

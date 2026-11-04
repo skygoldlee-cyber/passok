@@ -7,13 +7,17 @@ import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { localDateTime } from '../../core/utils.js';
 import { showStoreError, proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { showToast } from '../../ui-utils.js';
+import { listClients } from './care-client-store.js';
+import { backfillClientIds } from './care-client-resolve.js';
 
 const KEY = STORAGE_KEYS.CARE_LOG_ITEMS;
 export const FREE_LIMIT = 10;
 
 export function listCareLogs() {
     const parsed = getJSON(KEY);
-    return Array.isArray(parsed) ? parsed : [];
+    const items = Array.isArray(parsed) ? parsed : [];
+    if (backfillClientIds(items, listClients())) setJSON(KEY, items); // CO-01 지연 백필 — 배치 1회 쓰기
+    return items;
 }
 
 /**

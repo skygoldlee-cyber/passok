@@ -3,6 +3,15 @@
     <div class="view-header">
         <h2>장기요양 비용 계산기</h2>
         <p class="view-subtitle">재가·시설급여 본인부담금 + 비급여 계산 — 등급별 월 한도·감경 적용 (<span id="care-year-label">2026</span>년 기준)</p>
+        <nav class="care-os-onboard" aria-label="실무 도구">
+            <strong>현장에서 바로 쓰는 도구</strong>
+            <a href="#/care-log">요양일지</a> ·
+            <a href="#/care-handover">인수인계</a> ·
+            <a href="#/care-client">대상자 명부</a> ·
+            <a href="#/care-incident">사고보고</a> ·
+            <a href="#/care-roster">근무표</a> ·
+            <a href="#/care-visit">방문기록</a>
+        </nav>
     </div>
     <div class="care-calc-form">
         <p id="care-year-note" class="care-calc-nc-note" role="status">적용 기준: 2026년 고시</p>
@@ -47,9 +56,9 @@
             </tbody>
         </table>
         <div class="care-calc-actions">
-            <button data-click="careCalcRun">계산</button>
-            <button data-click="careCalcReset" class="btn btn-secondary">초기화</button>
-            <button data-click="careCalcPrint" class="btn btn-secondary">인쇄</button>
+            <button data-click="careCalcRun">🧮 계산</button>
+            <button data-click="careCalcReset" class="btn btn-secondary">🔄 초기화</button>
+            <button data-click="careShare" data-arg="#care-result|본인부담금 계산 결과|careCalcRun||careCalcPrint" class="btn btn-secondary">📤 공유·내보내기</button>
         </div>
     </div>
     <div id="care-result" class="care-calc-result"></div>

@@ -101,7 +101,7 @@ docs/
 │   ├── reference/             ← 명세·로직·참조 문서 (14개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (3개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (사용자 매뉴얼 + images/ — 런타임 fetch·배포 대상)
-└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개)
+└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개) · docs/exams/carework/ (2개)
     ├── README.md              ← 시험별 문서 인덱스
     ├── user/                  ← 학습자 문서 (5개)
     ├── business/              ← 사업 기획·시장 조사·마케팅 문서 (5개)
@@ -251,6 +251,19 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 
 > `.html`은 `md2doc.py` 생성물 (gitignore 대상) — `.md`가 원본입니다.
 
+## 💼 사업 문서 (docs/exams/carework/business/)
+
+| 문서 | 설명 |
+|------|------|
+| [CareOS_경쟁전략.md](exams/carework/business/CareOS_경쟁전략.md) | Care OS 경쟁 지도 — 장기요양 ERP 시장 검증 분석·보완층 전략·P0~P2 개선 로드맵 (DOC-BIZ-06, 2026-11 조사) |
+| [종사자_인터뷰_스크립트.md](exams/carework/business/종사자_인터뷰_스크립트.md) | Care OS §6-0 검증 인터뷰 — 시설·방문요양 종사자 표본 설계·중단 기준·집계 시트 (DOC-BIZ-07) |
+
+## 🔧 설계 문서 (docs/exams/carework/design/)
+
+| 문서 | 설명 |
+|------|------|
+| [CARE_OS_DATAHUB_DESIGN.md](exams/carework/design/CARE_OS_DATAHUB_DESIGN.md) | Care OS 데이터 허브 — clientId 정규화·360° 카드·인수인계 로컬 다이제스트 (DOC-DSN-44, CO-01~05) |
+
 ---
 
 ## 👤 사용자 문서 (docs/user/ · docs/exams/cosmetic/user/)
@@ -333,6 +346,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-IDX-01 | `docs/README.md` |
 | DOC-IDX-02 | `docs/exams/cosmetic/README.md` |
 | DOC-IDX-03 | `docs/assets/README.md` |
+| DOC-IDX-04 | `docs/exams/carework/README.md` |
 | DOC-DEV-01 | `docs/dev/SPEC.md` |
 | DOC-DEV-02 | `docs/dev/ARCHITECTURE.md` |
 | DOC-DEV-03 | `docs/dev/CHANGES.md` |
@@ -381,6 +395,12 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-35 | `docs/dev/design/PAYMENT_PILOT_DESIGN.md` |
 | DOC-DSN-36 | `docs/dev/design/DISCORD_COMMUNITY_DESIGN.md` |
 | DOC-DSN-37 | `docs/dev/design/PROMOTION_DESIGN.md` |
+| DOC-DSN-38 | `docs/dev/design/LANDING_PAGE_DESIGN.md` |
+| DOC-DSN-39 | `docs/dev/design/NATIVE_APP_STRATEGY.md` |
+| DOC-DSN-41 | `docs/dev/design/PASSOK_시장분석.md` |
+| DOC-DSN-42 | `docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md` |
+| DOC-DSN-43 | `docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md` |
+| DOC-DSN-44 | `docs/exams/carework/design/CARE_OS_DATAHUB_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |
@@ -456,6 +476,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-BIZ-03 | `docs/exams/cosmetic/business/맞춤형화장품판매업소_조사_2026-09.md` |
 | DOC-BIZ-04 | `docs/exams/cosmetic/business/유튜브_홍보동영상_제작의뢰서.md` |
 | DOC-BIZ-05 | `docs/exams/cosmetic/business/판매업소_인터뷰_스크립트.md` |
+| DOC-BIZ-06 | `docs/exams/carework/business/CareOS_경쟁전략.md` |
+| DOC-BIZ-07 | `docs/exams/carework/business/종사자_인터뷰_스크립트.md` |
 | DOC-ARC-01 | docs/exams/cosmetic/report_archive/Cosmetic Master Business Plan.md |
 | DOC-ARC-02 | `docs/exams/cosmetic/report_archive/EXTERNAL_REVIEW_LEARNING_PRO.md` |
 | DOC-ARC-03 | `docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md` |

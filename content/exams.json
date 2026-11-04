@@ -621,9 +621,10 @@
         "careRoster": true,
         "careFinder": true,
         "careForms": true,
-        "careFacilityJoin": true,
-        "careFacilityAdmin": true,
-        "practiceManual": true
+        "careFacilityJoin": false,
+        "careFacilityAdmin": false,
+        "practiceManual": true,
+        "careHome": true
       },
       "group": "보건·복지",
       "tier": "active"

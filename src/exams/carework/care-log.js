@@ -37,6 +37,21 @@ export function buildCareLog(in_) {
     return lines.join('\n');
 }
 
+/** CO-07 공단 급여제공기록지 양식 — ERP·공단 앱에 붙여넣는 텍스트 (이중 입력 해소) */
+export function buildRecordText(in_) {
+    if (!in_ || !in_.date || !in_.client) return null;
+    const svc = SERVICE_TYPES.find(s => s.key === in_.service)?.label || in_.service;
+    const acts = Object.values(in_.activities || {}).flat().filter(Boolean);
+    return [
+        '급여제공기록지',
+        `대상자: ${in_.client}`,
+        `일시: ${in_.date} ${in_.start || ''}~${in_.end || ''}`,
+        `급여종류: ${svc}`,
+        `서비스 내용: ${acts.length ? acts.join(', ') : '(내용 기록)'}`,
+        `특이사항: ${(in_.note || '').trim() || '없음'}`,
+    ].join('\n');
+}
+
 /** 저장 일지 목록 → CSV 텍스트 (UTF-8 BOM — Excel 한글 호환). 활동은 '그룹: 항목·항목' 병합 */
 export function careLogsToCsv(items) {
     const svcLabel = (k) => SERVICE_TYPES.find(s => s.key === k)?.label || k || '';

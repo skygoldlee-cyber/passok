@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 263c04f8ff732001
-> 생성: 2026-11-04 · 원천: SPEC.md(658개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 20e88df53b71c559
+> 생성: 2026-11-04 · 원천: SPEC.md(671개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 658개 — 문서 연결 457 · 소스 연결 584 · 테스트 연결 624 · 보고서 연결 109
+**커버리지 요약**: 요구사항 671개 — 문서 연결 464 · 소스 연결 598 · 테스트 연결 638 · 보고서 연결 109
 
 ---
 
@@ -442,7 +442,7 @@
 | UM-03 | — | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-04 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/router.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/dom/shell/router.dom.test.js<br>tests/dom/shell/ui-structure.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-05 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 1개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
-| UM-06 | ✅ | — | — | — | — | — | — |
+| UM-06 | ✅ | 테스트 | — | src/practice-registry.js | tests/unit/practice-mode-contract.test.js | — | — |
 
 ## 3.22 시험 선택·전환
 
@@ -601,6 +601,24 @@
 | PS-09 | ✅ | 테스트 | — | src/study/personalization.js<br>src/views/analysis-view.js | tests/unit/personalization.test.js | — | — |
 | PS-10 | ✅ v1 | 테스트 | — | src/study/personalization.js<br>src/views/analysis-view.js<br>src/views/dashboard-queue.js | tests/unit/engine/today-queue.test.js<br>tests/unit/personalization.test.js | — | — |
 | PS-11 | ✅ | 테스트 | — | src/study/analysis-engine.js<br>src/study/personalization.js<br>src/views/personalization-view.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
+
+## 3.31 Care OS — 요양보호사 실무도구 고도화
+
+| ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
+|----|------|-----------|------|------|--------|--------|------|
+| CO-01 | ✅ | 테스트 | DOC-DSN-44 | src/exams/carework/care-client-field.js<br>src/exams/carework/care-client-resolve.js | tests/unit/exams/carework/care-client-resolve.test.js | — | — |
+| CO-02 | ✅ | 테스트 | DOC-DSN-44 | src/exams/carework/care-timeline.js | tests/unit/exams/carework/care-timeline.test.js | — | — |
+| CO-03 | ✅ | 테스트 | DOC-DSN-44 | src/exams/carework/care-trend.js | tests/unit/exams/carework/care-trend.test.js | — | — |
+| CO-04 | ✅ | 테스트 | DOC-DSN-44 | src/exams/carework/care-trend.js | tests/unit/exams/carework/care-trend.test.js | — | — |
+| CO-05 | ✅ | 테스트 | DOC-DSN-44 | src/exams/carework/handover-digest.js | tests/unit/exams/carework/handover-digest.test.js | — | — |
+| CO-06 | 미구현 — 조건부(법무) | — | — | — | — | — | — |
+| CO-07 | ✅ | 테스트 | — | src/exams/carework/care-csv-presets.js | tests/unit/exams/carework/care-csv-presets.test.js | — | — |
+| CO-08 | ✅ lite (가명처리·미리보기·BYOK) | 테스트 | — | src/exams/carework/care-ai.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
+| CO-09 | ✅ lite (주간 요약 텍스트·공유) | 테스트 | — | src/exams/carework/care-report.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
+| CO-10 | ✅ lite (기록 유무 커버리지) | 테스트 | — | src/exams/carework/care-coverage.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
+| CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
+| CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
+| CO-13 | care-share.js·출력 뷰 공유 버튼 | 테스트 | DOC-DSN-42 | src/content/pdf-utils.js<br>src/exams/carework/care-share.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
@@ -787,14 +805,14 @@
 | DA-10 | ✅ | 테스트 | — | src/auth-sync/sync.js<br>src/exams/cosmetic/customer-store.js | tests/unit/exams/cosmetic/customer-store.test.js | — | 개인정보보호법 — 상동 (조제관리사가 고객 개인정보를 클라우드에 올리지 않는 설계) |
 | DA-11 | ✅ | 테스트 | DOC-RBK-10 | tools/check/check_domain_map.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
 | DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | tools/check/check_uitext.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
-| DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-DEV-08<br>DOC-DEV-09<br>DOC-DSN-33<br>…외 1개 | — | tests/e2e/exam-switch.spec.js | — | — |
+| DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-BIZ-06<br>DOC-DEV-08<br>DOC-DEV-09<br>…외 3개 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/pwa/pwa-manifest.js<br>src/shell/app-shell.js | tests/unit/app/exam-context.test.js | — | — |
 | DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-38<br>DOC-DSN-42<br>…외 3개 | src/core/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
 | DA-16 | ✅ | E2E 테스트 | — | src/content/data-loader.js<br>src/content/unpack.js<br>tools/build/build_study_md_bundle.js<br>tools/lib/content_pack.js | tests/dom/common/unpack.dom.test.js<br>tests/e2e/content-pack.spec.js<br>tests/unit/content-pack.test.js<br>tests/unit/content/data-loader-fallback.test.js | — | — |
 | DA-17 | ✅ | 테스트 | — | tools/lib/watermark.js | tests/unit/content-pack.test.js | — | — |
-| DA-18 | ✅ | 테스트 | — | html/exams/carework/facility-admin.html<br>html/exams/carework/facility-join.html<br>src/exams/carework/views/facility-admin.js<br>src/exams/carework/views/facility-join.js | tests/dom/exams/carework/care-views.test.js | — | — |
-| DA-19 | ✅ | — | — | — | — | — | — |
-| DA-20 | ✅ | — | — | — | — | — | — |
+| DA-18 | ✅ | 테스트 | DOC-BIZ-06<br>DOC-BIZ-07<br>DOC-DSN-44 | html/exams/carework/facility-admin.html<br>html/exams/carework/facility-join.html<br>src/exams/carework/views/facility-admin.js<br>src/exams/carework/views/facility-join.js | tests/dom/exams/carework/care-views.test.js | — | — |
+| DA-19 | ✅ | 테스트 | — | src/reader/manual-viewer.js | tests/unit/practice-mode-contract.test.js | — | — |
+| DA-20 | ✅ | 테스트 | — | src/shell/ui-mode.js | tests/unit/practice-mode-contract.test.js | — | — |
 | DA-21 | ✅ | 테스트 | — | css/dashboard.css<br>css/exams/carework/care-tools.css | tests/dom/exams/carework/care-views.test.js | — | — |
 | DA-22 | ✅ | 테스트 | — | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | — | — |
 
@@ -876,7 +894,7 @@
 | ROAD-P2 | 미구현 | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 3개 | — | — | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P3 | 미구현 | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 3개 | — | — | DOC-ARC-01<br>DOC-ARC-02<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P4 | ✅ 결정·게이트 구현 | 테스트 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 3개 | src/auth-sync/sync.js | tests/dom/common/common-sync.dom.test.js | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06<br>DOC-ARC-07 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
-| ROAD-P5 | ✅ | 테스트 | DOC-DSN-21<br>DOC-DSN-35 | — | tests/dom/pro/pro-notice.dom.test.js | — | — |
+| ROAD-P5 | ✅ | 테스트 | DOC-BIZ-06<br>DOC-BIZ-07<br>DOC-DSN-21<br>DOC-DSN-35<br>…외 1개 | — | tests/dom/pro/pro-notice.dom.test.js | — | — |
 | ROAD-P6 | ✅ | 테스트 | DOC-DSN-35 | src/pro/pro-upgrade.js | tests/dom/pro/pro-notice.dom.test.js | — | — |
 
 ## 7.3 Learning Pro 잔여·차별화
@@ -966,6 +984,8 @@
 | DOC-BIZ-03 | docs/exams/cosmetic/business/맞춤형화장품판매업소_조사_2026-09.md | ROAD-P0, ROAD-P1, ROAD-P2, ROAD-P3, ROAD-P4 |
 | DOC-BIZ-04 | docs/exams/cosmetic/business/유튜브_홍보동영상_제작의뢰서.md | ROAD-P0, ROAD-P1, ROAD-P2, ROAD-P3, ROAD-P4 |
 | DOC-BIZ-05 | docs/exams/cosmetic/business/판매업소_인터뷰_스크립트.md | FO-01, FO-02, FO-03, FO-04, FO-05, FO-06, FO-07, FO-08, FO-09, FO-10, FO-11, FO-12, FO-13, FO-14, FO-15, FO-16, FO-17, FO-18, FO-19, FO-20, FO-21, FO-22, FO-23, ROAD-P0, ROAD-P1, ROAD-P2, ROAD-P3, ROAD-P4 |
+| DOC-BIZ-06 | docs/exams/carework/business/CareOS_경쟁전략.md | DA-13, DA-18, ROAD-P5 |
+| DOC-BIZ-07 | docs/exams/carework/business/종사자_인터뷰_스크립트.md | DA-18, ROAD-P5 |
 | DOC-DEV-01 | docs/dev/SPEC.md | — |
 | DOC-DEV-02 | docs/dev/ARCHITECTURE.md | — |
 | DOC-DEV-03 | docs/dev/CHANGES.md | — |
@@ -1009,11 +1029,13 @@
 | DOC-DSN-39 | docs/dev/design/NATIVE_APP_STRATEGY.md | LP-01, LP-02, LP-03, LP-04, LP-05, LP-06, LP-07, LP-08, LP-09, LP-10, P-01, P-02, P-03, P-04, P-05, P-06, P-07 |
 | DOC-DSN-40 | docs/dev/design/AI_COACH_DESIGN.md | AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AU-08, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08 |
 | DOC-DSN-41 | docs/dev/design/PASSOK_시장분석.md | — |
-| DOC-DSN-42 | docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md | DA-13, DA-15, PAY-01, PAY-02, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, PAY-08, UM-01, UM-02, UM-03, UM-04 |
+| DOC-DSN-42 | docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md | CO-13, DA-13, DA-15, PAY-01, PAY-02, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, PAY-08, UM-01, UM-02, UM-03, UM-04 |
 | DOC-DSN-43 | docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md | — |
+| DOC-DSN-44 | docs/exams/carework/design/CARE_OS_DATAHUB_DESIGN.md | CO-01, CO-02, CO-03, CO-04, CO-05, DA-13, DA-18, ROAD-P5 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |
+| DOC-IDX-04 | docs/exams/carework/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |
 | DOC-PPL-02 | ref-pipeline/audiobook/README.md | AO-01, AO-02, AO-03, AO-04, AO-05 |
 | DOC-PPL-03 | ref-pipeline/audiobook/AUDIOBOOK_SUMMARY.md | AO-01, AO-02, AO-03, AO-04, AO-05 |

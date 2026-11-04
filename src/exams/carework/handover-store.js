@@ -4,13 +4,17 @@
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { localDateTime } from '../../core/utils.js';
+import { listClients } from './care-client-store.js';
+import { backfillClientIds } from './care-client-resolve.js';
 
 const KEY = STORAGE_KEYS.HANDOVER_ITEMS;
 export const FREE_LIMIT = 10;
 
 export function listHandovers() {
     const v = getJSON(KEY);
-    return Array.isArray(v) ? v : [];
+    const items = Array.isArray(v) ? v : [];
+    if (backfillClientIds(items, listClients())) setJSON(KEY, items); // CO-01 지연 백필 — 배치 1회 쓰기
+    return items;
 }
 export function saveHandover(text, meta = {}) {
     const items = listHandovers();

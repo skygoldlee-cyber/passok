@@ -1,0 +1,55 @@
+// src/exams/carework/views/care-home.js — Care OS 홈 뷰 (오늘 요약·확인 권장·빠른 기록)
+// @spec CO-12 — 시험 전용 실무 뷰 (DA-13)
+import { listCareLogs } from '../care-log-store.js';
+import { listVisits } from '../care-visit-store.js';
+import { listIncidents } from '../incident-store.js';
+import { listClients } from '../care-client-store.js';
+import { clientTrends } from '../care-trend.js';
+import { markFunnel, funnelStats } from '../care-funnel.js';
+import { escapeHTML as esc } from '../../../core/sanitize.js';
+import { refreshOrgName, getDocSign, setDocSign } from '../facility.js';
+import { showToast } from '../../../ui-utils.js';
+
+const $ = (id) => document.getElementById(id);
+const todayKey = () => new Date().toISOString().slice(0, 10);
+const dayOf = (r) => r.date || r.shift_date || '';
+
+export function initCareHomeView() {
+    markFunnel('tool:care-home');
+    void refreshOrgName();
+    const d = todayKey();
+    const logs = listCareLogs(), visits = listVisits(), incidents = listIncidents();
+    const cnt = (arr) => arr.filter(r => dayOf(r) === d).length;
+    const dateEl = $('home-date');
+    if (dateEl) dateEl.textContent = `${d} (${'일월화수목금토'[new Date().getDay()]})`;
+    const sumEl = $('home-summary');
+    if (sumEl) sumEl.textContent = `일지 ${cnt(logs)}건 · 방문 ${cnt(visits)} · 사고 ${cnt(incidents)}`;
+    const warns = listClients().flatMap(c =>
+        clientTrends(logs, { clientId: c.id, name: c.name }).map(t => `${c.name} — ${t.message}`));
+    const wEl = $('home-warn');
+    if (wEl) wEl.innerHTML = warns.map(w => `<div class="care-trend-warn">⚠ ${esc(w)}</div>`).join('');
+    // 미사용 도구 "처음" 마크 — 퍼널 사용 횟수 0인 도구
+    const used = funnelStats()?.tools || {};
+    document.querySelectorAll('.care-home-nav a[href^="#/"]').forEach(a => {
+        if (a.querySelector('.care-new')) return;
+        const slug = /** @type {HTMLAnchorElement} */ (a).href.split('#/')[1];
+        if (slug && !(used[`tool:${slug}`] > 0)) a.insertAdjacentHTML('beforeend', '<span class="care-new">처음</span>');
+    });
+    // 출력물 서명 설정 — 홈 입력값을 저장값으로 채움
+    const sign = getDocSign();
+    const aEl = /** @type {HTMLInputElement|null} */ ($('home-sign-author'));
+    const cEl = /** @type {HTMLInputElement|null} */ ($('home-sign-confirmer'));
+    const rEl = /** @type {HTMLInputElement|null} */ ($('home-sign-receiver'));
+    if (aEl) aEl.value = sign.author;
+    if (cEl) cEl.value = sign.confirmer;
+    if (rEl) rEl.value = sign.receiver;
+}
+
+/** 출력물 서명 저장 — 작성자·확인자·인수자 성명이 모든 문서 서명란에 기입된다 */
+export function careDocSignSave() {
+    setDocSign(
+        /** @type {HTMLInputElement|null} */ ($('home-sign-author'))?.value,
+        /** @type {HTMLInputElement|null} */ ($('home-sign-confirmer'))?.value,
+        /** @type {HTMLInputElement|null} */ ($('home-sign-receiver'))?.value);
+    showToast('서명을 저장했습니다 — 모든 출력물 서명란에 기입됩니다.');
+}

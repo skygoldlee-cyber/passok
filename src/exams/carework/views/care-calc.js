@@ -1,8 +1,10 @@
 // src/exams/carework/views/care-calc.js — 장기요양 비용 계산 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { computeCareCost, formatWon } from '../care-calc.js';
+import { markFunnel } from '../care-funnel.js';
 import { GRADE_LIMITS, REDUCTIONS, EFFECTIVE_YEAR, FACILITY_TYPES } from '../care-calc-data.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
+export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -117,6 +119,7 @@ export function careCalcReset() {
 export function careCalcPrint() { careCalcRun(); window.print(); }
 
 export function initCareCalcView() {
+    markFunnel('tool:care-calc');
     void refreshOrgName();
     // 적용 기준 연도 — 공단 고시는 매년 갱신되므로 계산 전 기준 연도를 항상 표시, 미반영 시 경고
     const yl = $('care-year-label');
