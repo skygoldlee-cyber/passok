@@ -45,6 +45,8 @@ export async function careShare(btn) {
         /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click();
         raw = _readOut(sel);
     }
+    // 생성 결과가 오류 마커뿐이면 양식 텍스트로 폴백 — 계산 전이라도 출력 양식은 공유 가능해야 함
+    if (/** @type {HTMLElement|null} */ (document.querySelector(sel.trim()))?.querySelector('.care-calc-err')) raw = '';
     if (!raw.trim()) raw = _formText(btn); // 생성 결과가 없어도 양식이 있으면 현재 입력 상태를 공유
     if (!raw.trim()) { showToast('공유할 내용이 없습니다 — 항목을 입력하세요.', 'error'); return; }
     const text = flag === 'mask' ? _mask(raw) : raw;
