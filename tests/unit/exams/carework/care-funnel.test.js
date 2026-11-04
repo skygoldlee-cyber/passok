@@ -57,7 +57,7 @@ test('CO-13 공유 — 미생성 시 생성 버튼 자동 실행', () => {
     const src = readFileSync('src/exams/carework/care-share.js', 'utf8');
     assert.match(src, /&& gen\) {/); // data-arg 4번째 필드로 미생성 시 자동 실행
     assert.match(src, /\[data-click="\$\{gen\}"\]/);
-    for (const [f, g] of [['care-calc', 'careCalcRun'], ['care-log', 'careLogGenerate'], ['care-handover', 'careHandoverGenerate'], ['care-incident', 'careIncidentGenerate']]) {
+    for (const [f, g] of [['care-calc', 'careCalcRun'], ['care-log', 'careLogGenerate'], ['care-handover', 'careHandoverGenerate'], ['care-incident', 'careIncidentGenerate'], ['care-client', 'careClientExport'], ['care-visit', 'careVisitExport'], ['care-roster', 'careRosterExport']]) {
         assert.match(readFileSync(`html/exams/carework/${f}.html`, 'utf8'), new RegExp(`\\|${g}"`));
     }
 });
