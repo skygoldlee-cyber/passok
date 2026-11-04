@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261104-4fcc900",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] careShare 핸들러 시그니처 — 위임은 data-arg 문자열 전달 (CO-13)",
+      "[정리·release] v20261104-52be512 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-52be512",
     "date": "2026-11-04",
     "notes": [
@@ -200,14 +208,6 @@
     "notes": [
       "[수정·carework] 교재 섹션 미표시 — ### N. → ## N. 헤딩 규약 정합",
       "[정리·release] v20261104-ed6fc64 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-ed6fc64",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·content] 폴백 MD 번들 pk1 미디코드 캐시 결함 — 이야기형 영어 노출",
-      "[정리·release] v20261104-fe9410f 스탬프 확정 [no-docs]"
     ]
   }
 ]
