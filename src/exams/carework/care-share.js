@@ -94,11 +94,8 @@ export async function careShare(arg) {
     const stamp = new Date().toISOString().slice(0, 10);
     const fname = ext => `${title}_${stamp}.${ext}`;
     const csvGen = gen?.endsWith('CsvExport') ? gen : (alt?.endsWith('CsvExport') ? alt : '');
-    if (csvGen) { // CsvExport 지정 시 실제 .xlsx
-        try { const csv = await (/** @type {any} */ (window))[csvGen]?.(); if (csv) files.push(await sheetFile(csv, fname('xlsx'))); } catch { showToast('Excel 생성 실패 — 나머지 파일은 정상 공유됩니다.', 'error'); }
-    }
+    // 공유 시트는 즉시 생성 가능한 txt만 실어 제스처 유효 구간에 호출 — xlsx(SheetJS 로드)·pdf(html2canvas)는 수 초라 뒤로 미룸
     files.push(new File([text], fname('txt'), { type: 'text/plain;charset=utf-8' })); // 검색·선택 가능한 텍스트 — 생성 비용 없음
-    // 공유 시트는 무거운 PDF 렌더 전에 호출 — 사용자 제스처(수 초) 만료 전에 열려야 시트가 뜸
     let shared = false;
     const fileOk = files.length && (typeof navigator.canShare !== 'function' || navigator.canShare({ files }));
     if (typeof navigator.share === 'function') {
@@ -110,6 +107,9 @@ export async function careShare(arg) {
             diag(`공유 시트를 열지 못했습니다 — 사유: ${n || e} · 파일은 다운로드로 대체합니다.`); // 탭할 때까지 표시 — 캡처·진단용
         }
     } else diag('이 브라우저는 공유 시트를 지원하지 않습니다 — Chrome으로 열어주세요.'); // 인앱 브라우저 식별
+    if (csvGen) { // CsvExport 지정 시 실제 .xlsx — 시트 이후 생성, 다운로드로 보강
+        try { const csv = await (/** @type {any} */ (window))[csvGen]?.(); if (csv) files.push(await sheetFile(csv, fname('xlsx'))); } catch { showToast('Excel 생성 실패 — 나머지 파일은 정상 공유됩니다.', 'error'); }
+    }
     if (text.trim()) { // 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
         const wrap = document.createElement('div');
         // html2canvas는 문서 좌표로 렌더 — fixed는 뷰포트에 노출(흰 플래시)되므로 문서 하단 absolute로 배치
