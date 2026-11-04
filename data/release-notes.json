@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261104-09054f9",
+    "date": "2026-11-04",
+    "notes": [
+      "[문서·carework] 경쟁전략 §7-3 공단 앱 기준 검증 축 — 기록 재사용·인수인계·기관 평가",
+      "[수정·carework] 모바일 공유 시트 — canShare 미지원·텍스트 폴백 (CO-13)",
+      "[정리·release] v20261104-e8da3d3 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-e8da3d3",
     "date": "2026-11-04",
     "notes": [
@@ -200,19 +209,6 @@
       "[문서·carework] SPEC CO-01~05·07·12 구현 상태 ✅ 정정",
       "[수정·gates] SPEC 커버리지 공백 해소 — DA-19/20·UM-06 코드+테스트 참조",
       "[정리·carework] 정책형 스펙 @spec 원복 + trace·CHANGES 반영"
-    ]
-  },
-  {
-    "version": "v20261104-222f0f2",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·ux] 실무막뉴얼 → 실무매뉴얼 오표기 정정",
-      "[문서·carework] 실무막뉴얼 브랜드명 PassOK → Care OS",
-      "[수정·tools] enrich_facility_stats DA-15 예외 등록",
-      "[문서·trace] TRACE_MATRIX 재생성",
-      "[data·carework] 기관찾기 정원·요양보호사 인력 보강",
-      "[기능·carework] 기관찾기 카드에 카카오맵·장기요양보험 포털 검색 링크",
-      "[정리·release] v20261104-a988c45 스탬프 확정 [no-docs]"
     ]
   }
 ]
