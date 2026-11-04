@@ -42,7 +42,7 @@ export async function careShare(btn) {
     const flag = f3 === 'mask' ? 'mask' : '', gen = f4 || (flag ? '' : f3);
     let raw = _readOut(sel);
     if (!raw.trim() && gen) {
-        /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click();
+        try { /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click(); } catch { /* 생성 핸들러 예외도 공유는 계속 — 폼 양식으로 진행 */ }
         raw = _readOut(sel);
     }
     // 생성 결과가 오류 마커뿐이면 양식 텍스트로 폴백 — 계산 전이라도 출력 양식은 공유 가능해야 함
