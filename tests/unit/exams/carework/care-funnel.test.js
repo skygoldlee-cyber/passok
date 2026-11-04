@@ -107,3 +107,10 @@ test('CO-08 인수인계 가명처리 — 대상자 목록·근무자명·인계
 test('CO-10 커버리지 배너 — 보간 출력은 esc 적용 (싱크 규약)', () => {
     assert.match(readFileSync('src/exams/carework/views/care-audit.js', 'utf8'), /esc\(cov\.text\)/);
 });
+
+test('CO-13 공유 실패 폴백 — AbortError 외 실패 시 복사 폴백·클립보드 미지원 안내', () => {
+    const src = readFileSync('src/exams/carework/care-share.js', 'utf8');
+    assert.match(src, /AbortError/); // 사용자 취소만 조용히
+    assert.match(src, /copyFallback/);
+    assert.match(src, /clipboard\?\.writeText|clipboard\.writeText/);
+});

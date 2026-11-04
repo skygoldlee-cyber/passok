@@ -32,11 +32,15 @@ export async function careShare(btn) {
         `이 문서에는 수급자·근무 정보가 포함될 수 있습니다.\n${flag === 'mask' ? '인명·연락처가 가려진 본문으로 공유합니다.' : '기관의 개인정보 정책을 확인한 후 공유하세요.'}`,
         `${title} 공유`);
     if (!ok) return;
+    const copyFallback = () => {
+        if (!navigator.clipboard?.writeText) { showToast('공유·복사를 지원하지 않는 환경입니다.', 'error'); return; }
+        navigator.clipboard.writeText(text).then(
+            () => showToast('클립보드에 복사했습니다 — 카톡 등에 붙여넣으세요.'),
+            () => showToast('복사 실패 — 인쇄·PDF를 이용하세요.', 'error'));
+    };
     if (navigator.share) {
-        try { await navigator.share({ title, text }); } catch { /* 사용자 취소 */ }
-        return;
+        try { await navigator.share({ title, text }); return; }
+        catch (e) { if (/** @type {Error} */ (e)?.name === 'AbortError') return; /* 사용자 취소는 조용히 종료, 그 외 실패는 복사 폴백 */ }
     }
-    navigator.clipboard?.writeText(text).then(
-        () => showToast('공유 미지원 환경 — 복사했습니다.'),
-        () => showToast('복사 실패', 'error'));
+    copyFallback();
 }
