@@ -7,6 +7,7 @@
 - downloadSheet: 내보내기를 .csv → .xlsx로 전환 — 수급자·근무표·방문·사고·일지·고객·원료·배치·지식DB 전부 Excel 네이티브 출력
 - 버튼 라벨 'CSV 내보내기/가져오기' → 'Excel 내보내기/가져오기' (carework 5파셜 + formula 고객/원료·배치·사전)
 - 후속: downloadSheet 비동기화에 맞춰 DOM 테스트 4개 스위트 window.XLSX 스텁·waitFor 대기·파일명 .xlsx 기대값 수정
+- 후속: domain-map.json 미분류 오류 — src/content/xlsx-utils.js 등록, AGENTS.md 디렉토리 구조 반영
 
 
 ## 2026-11-04 feat(carework): 실무도구 CSV 확장 — 근무표 왕복 + 방문·사고·일지 내보내기
