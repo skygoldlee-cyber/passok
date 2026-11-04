@@ -75,3 +75,13 @@ test('CO-10 증적 커버리지 — 기록 유무 매칭·부족 항목 열거',
     assert.ok(c.missing.includes('방문·면회'));
     assert.ok(!c.missing.includes('관찰(obs)'));
 });
+
+test('CO-08 인수인계 가명처리 — 대상자 목록·근무자명·인계 작업 마스킹', async () => {
+    const { pseudonymize, buildDraftPrompt } = await import('../../../../src/exams/carework/care-ai.js');
+    const p = pseudonymize({ clients: '김철수, 이영희', from: '김요양', to: '박요양', tasks: '홍길동 산책' });
+    assert.equal(p.clients, '[대상자 목록]');
+    assert.equal(p.from, '인계자');
+    assert.equal(p.to, '인수자');
+    const { prompt } = buildDraftPrompt({ clients: 'x', date: '2026-11-04', shift: '주간' }, 'ho');
+    assert.match(prompt, /인수인계서/);
+});
