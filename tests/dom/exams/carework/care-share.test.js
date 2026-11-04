@@ -30,6 +30,9 @@ const setup = (html) => {
     document.body.innerHTML = html;
     globalThis.navigator.clipboard = { writeText: vi.fn().mockResolvedValue() };
     delete globalThis.navigator.share; // 공유 시트 미지원 환경 시뮬레이션
+    // jsdom은 앵커 다운로드 클릭을 네비게이션 오류로 처리 — 테스트에서 무력화
+    /** @type {any} */ (HTMLAnchorElement.prototype).click = () => {};
+    globalThis.URL.createObjectURL = vi.fn(() => 'blob:mock');
     toasts.length = 0;
 };
 
