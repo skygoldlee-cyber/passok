@@ -1,5 +1,5 @@
 // tests/unit/exams/carework/care-funnel.test.js
-// @spec CO-12·CO-13 — 전환 퍼널 계측 순수 로직
+// @spec CO-12·CO-13·CO-08 — 전환 퍼널 계측 순수 로직
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
@@ -42,4 +42,13 @@ test('CO-13 공유 — careShare 핸들러 등록 + 뷰 버튼 존재', () => {
     assert.match(readFileSync('src/practice-registry.js', 'utf8'), /careShare/);
     assert.match(readFileSync('html/exams/carework/care-handover.html', 'utf8'), /data-click="careShare"/);
     assert.match(readFileSync('src/exams/carework/care-share.js', 'utf8'), /navigator\.share/);
+});
+
+test('CO-08 가명처리 — 이름·연락처·호실 제거, 구조화 필드 유지', async () => {
+    const { pseudonymize } = await import('../../../../src/exams/carework/care-ai.js');
+    const p = pseudonymize({ client: '김철수', room: '301호', phone: '010-1234-5678', note: '박영희 방문 010-9876-5432', obs: { meal: '반' } });
+    assert.equal(p.client, '대상자A');
+    assert.ok(!p.room && !p.phone);
+    assert.ok(!/010/.test(p.note));
+    assert.equal(p.obs.meal, '반');
 });

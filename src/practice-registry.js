@@ -343,7 +343,7 @@ const careLog = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-log.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careLogGenerate', 'careLogSave', 'careLogCopy', 'careLogDelete', 'careLogPrint', 'careLogCsvExport', 'careLogRecordCopy', 'careShare']]],
+    handlers: [['main', ['careLogGenerate', 'careLogSave', 'careLogCopy', 'careLogDelete', 'careLogPrint', 'careLogCsvExport', 'careLogRecordCopy', 'careShare', 'careAiDraft']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);

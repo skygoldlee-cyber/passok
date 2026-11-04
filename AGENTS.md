@@ -281,6 +281,7 @@ src/                    # ES Modules
       care-incident.js    # 사고·낙상 보고서 로직 — 유형·중증도 + 보고서 조립 (Phase 6d)
       incident-store.js   # 사고 보고 로컬 저장 — 무료 10건 한도 (Phase 6d)
       care-roster.js      # 교대 근무표 로직 — 근무조·표 텍스트 조립 (Phase 6d)
+      care-ai.js          # BYOK AI 초안 — 가명처리·전송 미리보기·BYOK 키 호출 (CO-08)
       care-share.js       # 생성 문서 공유 — Web Share API 네이티브 공유 시트, 미지원 시 클립보드 폴백 (CO-13)
       roster-store.js     # 근무 배정 로컬 저장 — 무료 30건 한도 (Phase 6d)
       care-admit.js       # 서류체크 스키마 정본 — 수급자 서류현황·CSV (독립 뷰는 통합 폐지)

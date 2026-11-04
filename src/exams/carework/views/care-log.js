@@ -123,3 +123,4 @@ export function initCareLogView() {
 }
 
 export { careShare } from '../care-share.js';
+export { careAiDraft } from '../care-ai.js';
