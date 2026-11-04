@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261104-8a8be2b",
+    "date": "2026-11-04",
+    "notes": [
+      "[테스트·carework] 공유 PDF 표 유지·텍스트 노드 가림 계약 (CO-13)",
+      "[정리·release] v20261104-0f88986 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-0f88986",
     "date": "2026-11-04",
     "notes": [
@@ -206,16 +214,6 @@
     "notes": [
       "[수정·carework] 서식모음 메뉴 위치 — 실무 그룹 근무표 아래로 이동 [no-test]",
       "[정리·release] v20261104-58c6b32 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-58c6b32",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·carework] 모바일 탭 순서 — care-forms를 care-finder 뒤로 이동 [no-test]",
-      "[수정·carework] 서식 뷰 인라인 스타일 규약 위반 — 클래스로 교체 [no-test]",
-      "[기능·carework] 보고서·서식 모음 뷰 신설 — 정기 제출 서식 링크 디렉터리",
-      "[정리·release] v20261104-4437194 스탬프 확정 [no-docs]"
     ]
   }
 ]
