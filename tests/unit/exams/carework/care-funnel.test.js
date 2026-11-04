@@ -44,6 +44,15 @@ test('CO-13 공유 — careShare 핸들러 등록 + 뷰 버튼 존재', () => {
     assert.match(readFileSync('src/exams/carework/care-share.js', 'utf8'), /navigator\.share/);
 });
 
+test('CO-13 프라이버시 — 수급자 데이터 공유는 경고+인명 가림', () => {
+    const src = readFileSync('src/exams/carework/care-share.js', 'utf8');
+    assert.match(src, /showConfirm/); // 공유 전 기관 정책 확인 경고
+    assert.match(src, /flag === 'mask'/);
+    for (const f of ['care-log', 'care-handover', 'care-incident', 'care-client', 'care-visit', 'care-roster']) {
+        assert.match(readFileSync(`html/exams/carework/${f}.html`, 'utf8'), /\|mask"/); // 수급자 데이터 출력물 mask 기본
+    }
+});
+
 test('CO-08 가명처리 — 이름·연락처·호실 제거, 구조화 필드 유지', async () => {
     const { pseudonymize } = await import('../../../../src/exams/carework/care-ai.js');
     const p = pseudonymize({ client: '김철수', room: '301호', phone: '010-1234-5678', note: '박영희 방문 010-9876-5432', obs: { meal: '반' } });

@@ -206,7 +206,7 @@ export function careClientReport(btn) {
     const r = weeklyReport(c.name, { logs: listCareLogs(), visits: listVisits(), incidents: listIncidents() });
     if (!r.count) { showToast('최근 7일 기록이 없습니다.', 'error'); return; }
     const out = $('cli-preview');
-    if (out) out.innerHTML = docHeadHtml('보호자 주간 리포트') + `<pre class="care-log-text">${esc(r.text)}</pre>`;
+    if (out) out.innerHTML = docHeadHtml('보호자 주간 리포트') + `<pre class="care-log-text">${esc(r.text)}</pre><p class="care-log-hint">기관 검토: ____________ &nbsp; 발행일: ${esc(new Date().toISOString().slice(0, 10))} — 수급자 정보 포함, 기관 정책 확인 후 전달</p>`;
 }
 
 export function initCareClientView() {
