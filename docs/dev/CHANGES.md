@@ -1,5 +1,7 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): 서명란 하단 여백 증가 (16px → 36px)
+
 ## 2026-11-05 fix(carework): 문서 서명란 하단 여백 — .care-doc-sign margin-bottom
 
 - 점검표 등 서명란이 컨테이너 하단에 붙던 문제 — margin-bottom: 16px 추가 (전 문서 공통)

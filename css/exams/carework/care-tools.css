@@ -55,7 +55,7 @@
 .care-doc tr.care-doc-sel td { font-weight: 700; color: var(--color-primary); }
 
 /* 서명란·면책 — 문서형 템플릿 (cosmetic fp-sign-row·fp-disclaimer 대응) */
-.care-doc-sign { display: flex; gap: 18px; margin-top: 20px; margin-bottom: 16px; }
+.care-doc-sign { display: flex; gap: 18px; margin-top: 20px; margin-bottom: 36px; }
 .care-doc-sign span {
     flex: 1; font-size: 13px; color: var(--color-text-muted);
     border-top: 1px solid var(--border-subtle); padding-top: 8px;
