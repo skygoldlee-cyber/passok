@@ -133,8 +133,10 @@ export function careVisitCsvExport() {
     const items = listVisits();
     if (!items.length) { showToast('내보낼 방문 기록이 없습니다.', 'error'); return; }
     proFeatureNotice('care_visit_share', '방문기록 Excel 내보내기');
-    void downloadSheet(visitsToCsv(items), '면회기록.xlsx');
+    const csv = visitsToCsv(items);
+    void downloadSheet(csv, '면회기록.xlsx');
     showToast('Excel 파일을 저장했습니다.');
+    return csv;
 }
 
 function renderLists() {

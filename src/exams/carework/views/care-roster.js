@@ -63,8 +63,10 @@ export function careRosterCsvExport() {
     const items = listRoster();
     if (!items.length) { showToast('등록된 근무 배정이 없습니다.', 'error'); return; }
     proFeatureNotice('care_roster_share', '근무표 Excel 내보내기');
-    void downloadSheet(rosterToCsv(items), '근무표.xlsx');
+    const csv = rosterToCsv(items);
+    void downloadSheet(csv, '근무표.xlsx');
     showToast('CSV를 저장했습니다.');
+    return csv;
 }
 
 export function careRosterCsvImport() {

@@ -2,6 +2,7 @@
 // @spec CO-13 — 생성 문서 Web Share API 공유 (카톡 등 네이티브 공유 시트)
 import { showToast } from '../../ui-utils.js';
 import { pdfFileFromEl } from '../../content/pdf-utils.js';
+import { sheetFile } from '../../content/xlsx-utils.js';
 import { docHeadHtml } from './facility.js';
 
 const _NAME_RE = /([가-힣]{2,4})(님|씨|어르신)?/g;
@@ -44,8 +45,14 @@ export async function careShare(arg) {
     // mask 생략 시 3번째 필드가 생성 핸들러 — "|sel|title|gen" 와 "|sel|title|mask|gen" 모두 지원
     const flag = f3 === 'mask' ? 'mask' : '', gen = f4 || (flag ? '' : f3);
     let raw = _readOut(sel);
+    /** @type {Promise<any>|null} */
+    let csvPromise = null;
     if (!raw.trim() && gen) {
-        try { /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click(); } catch { /* 생성 핸들러 예외도 공유는 계속 — 폼 양식으로 진행 */ }
+        if (gen.endsWith('CsvExport')) {
+            try { csvPromise = (/** @type {any} */ (window))[gen]?.(); } catch { /* 계속 */ } // 실제 xlsx 생성 — 결과 CSV를 파일 공유에 재사용
+        } else {
+            try { /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click(); } catch { /* 생성 핸들러 예외도 공유는 계속 — 폼 양식으로 진행 */ }
+        }
         raw = _readOut(sel);
     }
     // 생성 결과가 오류 마커뿐이면 양식 텍스트로 폴백 — 계산 전이라도 출력 양식은 공유 가능해야 함
@@ -63,7 +70,9 @@ export async function careShare(arg) {
     };
     // 파일 공유 — 인쇄 레이아웃(문서 헤더+가림 본문)을 PDF로 렌더, 실패 시 txt
     let file = new File([text], `${title}.txt`, { type: 'text/plain;charset=utf-8' });
-    if (text.trim()) {
+    if (csvPromise) { // CsvExport 뷰 — 실제 .xlsx 파일로 공유
+        try { const csv = await csvPromise; if (csv) file = await sheetFile(csv, `${title}.xlsx`); } catch { /* 기본 파일 유지 */ }
+    } else if (text.trim()) {
         const wrap = document.createElement('div');
         wrap.style.cssText = 'position:absolute;left:-9999px;width:700px;padding:24px;background:#fff';
         const pre = document.createElement('pre');

@@ -176,8 +176,10 @@ export function careClientCsvExport() {
     const items = listClients();
     if (!items.length) { showToast('등록된 수급자가 없습니다.', 'error'); return; }
     proFeatureNotice('care_client_share', 'Excel 내보내기');
-    void downloadSheet(clientsToCsv(items), '수급자명부.xlsx');
+    const csv = clientsToCsv(items);
+    void downloadSheet(csv, '수급자명부.xlsx');
     showToast('Excel 파일을 저장했습니다.');
+    return csv;
 }
 
 export function careClientCsvImport() {
