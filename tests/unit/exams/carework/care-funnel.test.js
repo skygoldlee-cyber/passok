@@ -46,7 +46,7 @@ test('CO-13 공유 — careShare 핸들러 등록 + 뷰 버튼 존재', () => {
 
 test('CO-13 프라이버시 — 수급자 데이터 공유는 경고+인명 가림', () => {
     const src = readFileSync('src/exams/carework/care-share.js', 'utf8');
-    assert.match(src, /showConfirm/); // 공유 전 기관 정책 확인 경고
+    assert.match(src, /기관 정책을 확인하세요/); // 한 번 클릭 공유 — 경고는 비차단 안내
     assert.match(src, /flag === 'mask'/);
     for (const f of ['care-log', 'care-handover', 'care-incident', 'care-client', 'care-visit', 'care-roster']) {
         assert.match(readFileSync(`html/exams/carework/${f}.html`, 'utf8'), /\|mask/); // 수급자 데이터 출력물 mask 기본

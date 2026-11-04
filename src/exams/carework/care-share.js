@@ -1,6 +1,6 @@
 // src/exams/carework/care-share.js
 // @spec CO-13 — 생성 문서 Web Share API 공유 (카톡 등 네이티브 공유 시트)
-import { showToast, showConfirm } from '../../ui-utils.js';
+import { showToast } from '../../ui-utils.js';
 
 const _NAME_RE = /([가-힣]{2,4})(님|씨|어르신)?/g;
 const _PHONE_RE = /0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}/g;
@@ -48,10 +48,8 @@ export async function careShare(btn) {
     if (!raw.trim()) raw = _formText(btn); // 생성 결과가 없어도 양식이 있으면 현재 입력 상태를 공유
     if (!raw.trim()) { showToast('공유할 내용이 없습니다 — 항목을 입력하세요.', 'error'); return; }
     const text = flag === 'mask' ? _mask(raw) : raw;
-    const ok = await showConfirm(
-        `이 문서에는 수급자·근무 정보가 포함될 수 있습니다.\n${flag === 'mask' ? '인명·연락처가 가려진 본문으로 공유합니다.' : '기관의 개인정보 정책을 확인한 후 공유하세요.'}`,
-        `${title} 공유`);
-    if (!ok) return;
+    // 개인정보 통제는 인명 가림(mask)으로 보장 — 확인 다이얼로그 없이 한 번 클릭으로 공유 (정책 주의는 비차단 안내)
+    if (flag === 'mask') showToast('인명·연락처가 가려진 본문으로 공유됩니다 — 기관 정책을 확인하세요.');
     const copyFallback = () => {
         if (!navigator.clipboard?.writeText) { showToast('공유·복사를 지원하지 않는 환경입니다.', 'error'); return; }
         navigator.clipboard.writeText(text).then(
