@@ -128,9 +128,11 @@ export async function careShare(arg) {
     }
     _audit(title, flag, files);
     const coarse = typeof matchMedia === 'function' && matchMedia('(pointer:coarse)').matches;
-    if (coarse && files.length && navigator.canShare?.({ files })) {
-        try { await navigator.share({ title, text, files }); showToast('파일 공유 시트를 열었습니다.'); return; }
-        catch (e) { if (/** @type {Error} */ (e)?.name === 'AbortError') return; }
+    if (coarse && typeof navigator.share === 'function') {
+        // canShare 미지원 브라우저(삼성·구형 안드로이드)는 파일 지원 여부를 시도로 판별 — 텍스트 공유까지 폴백
+        const fileOk = files.length && (typeof navigator.canShare !== 'function' || navigator.canShare({ files }));
+        try { await navigator.share(fileOk ? { title, text, files } : { title, text }); showToast(fileOk ? '파일 공유 시트를 열었습니다.' : '공유 시트를 열었습니다 — 텍스트를 붙여넣으세요.'); return; }
+        catch (e) { if (/** @type {Error} */ (e)?.name === 'AbortError') return; /* 실패 시 복사 폴백 */ }
     }
     copyFallback(); // 항상 복사+토스트 — 어떤 환경에서든 클릭 즉시 반응이 나와야 함
     // 데스크톱은 파일 다운로드로 제공 — 생성된 파일을 순차 다운로드
