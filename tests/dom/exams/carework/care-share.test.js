@@ -130,7 +130,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         (/** @type {any} */ (window)).careVisitCsvExport = () => Promise.resolve(csv);
         await careShare(document.getElementById('share').dataset.arg);
-        expect(sheetSpy).toHaveBeenCalledWith(csv, '방문 기록.xlsx'); // 실제 xlsx 생성 확인
+        expect(sheetSpy).toHaveBeenCalledWith(csv, `방문 기록_${new Date().toISOString().slice(0, 10)}.xlsx`); // 실제 xlsx 생성 확인
     });
 
     it('모바일(pointer:coarse) — 공유 시트 우선, 실패 시 복사 폴백', async () => {

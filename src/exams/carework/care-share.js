@@ -5,10 +5,19 @@ import { pdfFileFromEl } from '../../content/pdf-utils.js';
 import { sheetFile } from '../../content/xlsx-utils.js';
 import { docHeadHtml } from './facility.js';
 
-const _NAME_RE = /([가-힣]{2,4})(님|씨|어르신)?/g;
+const _NAME_RE = /(김|이|박|최|정|강|조|윤|장|임|한|오|서|신|권|황|안|송|전|홍|고|문|양|손|배|백|허|유|남|심|노|하|곽|성|차|주|우|구|민|류|나|진|엄|채|원|천|방|공|현|함|변|염|추|도|소|석|선|설|마|길|연|위|표|명|기|반|왕|금|옥|육|인|맹|제|모|탁|어|은|편|남궁|독고|제갈|황보|선우)[가-힣]{1,2}(?!\s*(식사|산책|요양|보호|관리|확인|기록|완료|시작|교대))/g;
 const _PHONE_RE = /0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}/g;
-const _mask = t => t.replace(_NAME_RE, m => /[가-힣]/.test(m) && m.length <= 5 ? '[인명]' : m)
-    .replace(_PHONE_RE, '[연락처]'); // 인명 먼저 — [연락처]가 인명 정규식에 재마스킹되지 않도록
+const _mask = t => t.replace(_NAME_RE, m => m.length <= 4 ? '[인명]' : m)
+    .replace(_PHONE_RE, '[연락처]'); // 인명 먼저 — [연락처]의 '연'이 성씨 정규식에 재마스킹되지 않도록
+
+/** 공유 감사 로그 — 수급자 정보 외부 전송 이력 L0 로컬 기록 (기관 감사 증적, 최근 50건) */
+const _audit = (title, flag, files) => {
+    try {
+        const log = JSON.parse(localStorage.getItem('care_share_audit') || '[]');
+        log.push({ ts: Date.now(), title, masked: flag === 'mask', files: files.map(f => f.name) });
+        localStorage.setItem('care_share_audit', JSON.stringify(log.slice(-50)));
+    } catch { /* 스토리지 실패는 무시 */ }
+};
 
 const _readOut = sel => {
     const el = sel && document.querySelector(sel.trim());
@@ -70,9 +79,11 @@ export async function careShare(arg) {
     // 파일 생성 — 각 소스 독립: 성공한 파일만 첨부, 하나가 없어도 나머지는 정상 공유
     /** @type {File[]} */
     const files = [];
+    const stamp = new Date().toISOString().slice(0, 10);
+    const fname = ext => `${title}_${stamp}.${ext}`;
     const csvGen = gen?.endsWith('CsvExport') ? gen : (alt?.endsWith('CsvExport') ? alt : '');
     if (csvGen) { // CsvExport 지정 시 실제 .xlsx
-        try { const csv = await (/** @type {any} */ (window))[csvGen]?.(); if (csv) files.push(await sheetFile(csv, `${title}.xlsx`)); } catch { /* 실패 시 생략 */ }
+        try { const csv = await (/** @type {any} */ (window))[csvGen]?.(); if (csv) files.push(await sheetFile(csv, fname('xlsx'))); } catch { showToast('Excel 생성 실패 — 나머지 파일은 정상 공유됩니다.', 'error'); }
     }
     if (text.trim()) { // 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
         const wrap = document.createElement('div');
@@ -102,8 +113,18 @@ export async function careShare(arg) {
             el2.style.borderColor = '#000';
         });
         document.body.appendChild(wrap);
-        try { files.push(await pdfFileFromEl(wrap, title)); } catch { files.push(new File([text], `${title}.txt`, { type: 'text/plain;charset=utf-8' })); } finally { wrap.remove(); }
+        try { files.push(await pdfFileFromEl(wrap, fname('pdf').replace(/\.pdf$/, ''))); }
+        catch { showToast('PDF 생성 실패 — 텍스트 파일로 대체합니다.', 'error'); }
+        finally { wrap.remove(); }
+        files.push(new File([text], fname('txt'), { type: 'text/plain;charset=utf-8' })); // 텍스트 추출용 병기 (검색·선택 가능)
     }
+    // 다중 파일 시 Excel 포함 여부 선택 — 불필요한 파일 생성·다운로드 방지
+    if (files.length > 1) {
+        const { showConfirm } = await import('../../ui-utils.js');
+        if (!await showConfirm('Excel 파일도 함께 보낼까요? (취소 시 문서만 공유)'))
+            files.splice(0, files.length, ...files.filter(f => !f.name.endsWith('.xlsx')));
+    }
+    _audit(title, flag, files);
     const coarse = typeof matchMedia === 'function' && matchMedia('(pointer:coarse)').matches;
     if (coarse && files.length && navigator.canShare?.({ files })) {
         try { await navigator.share({ title, text, files }); showToast('파일 공유 시트를 열었습니다.'); return; }
