@@ -1,6 +1,7 @@
 // src/exams/carework/views/care-roster.js — 교대 근무표 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { ROSTER_SHIFTS, shiftLabel, buildRosterText, rosterToCsv, csvToRoster } from '../care-roster.js';
+import { markFunnel } from '../care-funnel.js';
 import { listRoster, saveRoster, removeRoster, upsertRoster } from '../roster-store.js';
 import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
@@ -97,6 +98,7 @@ function renderList() {
 }
 
 export function initCareRosterView() {
+    markFunnel('tool:care-roster');
     const d = /** @type {HTMLInputElement|null} */ ($('ros-date'));
     if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
     const s = $('ros-shift');

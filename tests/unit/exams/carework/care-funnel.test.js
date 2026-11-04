@@ -20,3 +20,8 @@ test('최초 사용 기록 + 도구별 누적', () => {
     const s = funnelStats();
     assert.equal(s.tools['tool:care-log'], 2);
 });
+
+test('roster 계측 — 신규 도구 키 누적', () => {
+    markFunnel('tool:care-roster');
+    assert.equal(funnelStats().tools['tool:care-roster'], 1);
+});

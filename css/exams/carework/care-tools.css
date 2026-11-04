@@ -242,7 +242,7 @@
 .care-home-summary { margin-top: 6px; font-size: 0.95rem; }
 .care-home-warn { margin-top: 8px; }
 .care-home-nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 12px; }
-.care-home-nav .btn { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; }
+.care-home-nav .btn { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
 
 .care-trend-warn { display: inline-block; margin: 4px 4px 0 0; padding: 3px 10px; border-radius: 999px; background: var(--color-warn-bg, #fff4e0); color: var(--color-warn-text, #8a5a00); font-size: 0.82rem; font-weight: 600; }
 .care-client-timeline summary { cursor: pointer; font-size: 0.85rem; color: var(--color-text-sub); margin-top: 4px; }
@@ -251,4 +251,4 @@
 
 .care-os-onboard { margin: 10px 0; padding: 10px 14px; border: 1px dashed var(--border); border-radius: 8px; font-size: 0.88rem; }
 .care-os-onboard a { font-weight: 600; }
-.care-new { margin-left: 4px; padding: 1px 6px; border-radius: 999px; background: var(--color-primary, #4a6fa5); color: #fff; font-size: 0.68rem; font-weight: 700; }
+.care-new { display: inline-block; margin-left: 4px; padding: 1px 6px; border-radius: 999px; background: var(--color-primary, #4a6fa5); color: #fff; font-size: 0.68rem; font-weight: 700; vertical-align: middle; white-space: nowrap; }

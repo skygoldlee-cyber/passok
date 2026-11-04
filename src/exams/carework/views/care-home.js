@@ -30,6 +30,7 @@ export function initCareHomeView() {
     // 미사용 도구 "처음" 마크 — 퍼널 사용 횟수 0인 도구
     const used = funnelStats()?.tools || {};
     document.querySelectorAll('.care-home-nav a[href^="#/"]').forEach(a => {
+        if (a.querySelector('.care-new')) return;
         const slug = /** @type {HTMLAnchorElement} */ (a).href.split('#/')[1];
         if (slug && !(used[`tool:${slug}`] > 0)) a.insertAdjacentHTML('beforeend', '<span class="care-new">처음</span>');
     });

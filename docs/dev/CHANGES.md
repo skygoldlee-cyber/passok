@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 fix(carework): 홈 "처음" 배지 — 중복 append 가드·nowrap 정렬·roster 계측
+
+- initCareHomeView 재실행 시 배지 이중 삽입 방지(querySelector 가드) + 버튼 nowrap·배지 inline-block으로 줄바꿈 불일치 해소
+- 미계측이던 care-roster에 markFunnel 추가 — 사용 후에도 "처음"이 남는 오표시 해소
+
+
 ## 2026-11-04 fix(carework): care-home 핸들러·슬러그 테스트 정합 — registry 계약 복구
 
 - initCareHomeView는 enter() 직접 호출이라 data-click handlers에서 제거 (유니크 계약)
