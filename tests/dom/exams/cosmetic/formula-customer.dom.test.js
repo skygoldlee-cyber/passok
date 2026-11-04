@@ -13,7 +13,7 @@ vi.mock('../../../../src/ui-utils.js', () => ({
 
 import { showToast, showConfirm } from '../../../../src/ui-utils.js';
 import {
-    loadIndexHtml, el, isVisible, selectFile, flushAsync, lastToast, spyAnchorDownload,
+    loadIndexHtml, el, isVisible, selectFile, flushAsync, waitFor, lastToast, spyAnchorDownload,
 } from '../../helpers.js';
 import {
     openCustomerPanel, custNew, custSave,
@@ -27,6 +27,8 @@ function csvFile(text, name = 'customers.csv') {
 
 describe('고객 관리 — CRUD + CSV 시나리오', () => {
     beforeEach(() => {
+        window.XLSX = { read: () => ({ SheetNames: ['S'], Sheets: { S: {} } }), write: () => new Uint8Array([1]),
+            utils: { sheet_to_csv: () => '', aoa_to_sheet: () => ({}), book_new: () => ({}), book_append_sheet() {} } };
         localStorage.clear();
         loadIndexHtml();
         vi.mocked(showToast).mockClear();
@@ -104,14 +106,15 @@ describe('고객 관리 — CRUD + CSV 시나리오', () => {
         expect(listCustomers().length).toBe(0);
     });
 
-    it('CSV보내기 — 다운로드 트리거 + 건수 토스트', () => {
+    it('Excel보내기 — 다운로드 트리거 + 건수 토스트', async () => {
         createCustomer({ name: '김OO' });
         const dl = spyAnchorDownload();
         custExportCsv();
+        await waitFor(() => dl.clicks.length === 1);
         dl.restore();
 
         expect(dl.clicks.length).toBe(1);
-        expect(dl.clicks[0].download).toMatch(/^customers_.*\.csv$/);
+        expect(dl.clicks[0].download).toMatch(/^customers_.*\.xlsx$/);
         expect(lastToast()[0]).toContain('1명');
     });
 
@@ -124,12 +127,13 @@ describe('고객 관리 — CRUD + CSV 시나리오', () => {
         expect(lastToast()[1]).toBe('info');
     });
 
-    it('양식 다운로드 — 표준 헤더 CSV 트리거', () => {
+    it('양식 다운로드 — 표준 헤더 Excel 트리거', async () => {
         const dl = spyAnchorDownload();
         custCsvTemplate();
+        await waitFor(() => dl.clicks.length === 1);
         dl.restore();
 
         expect(dl.clicks.length).toBe(1);
-        expect(dl.clicks[0].download).toBe('customers_template.csv');
+        expect(dl.clicks[0].download).toBe('customers_template.xlsx');
     });
 });

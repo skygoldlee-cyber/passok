@@ -1,7 +1,8 @@
 // src/exams/carework/views/care-incident.js — 사고·낙상 보고서 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
-import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, buildIncidentText } from '../care-incident.js';
+import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, buildIncidentText, incidentsToCsv } from '../care-incident.js';
 import { listIncidents, saveIncident, removeIncident } from '../incident-store.js';
+import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { myMembership, submitIncident, listIncidents as listFacilityIncidents, docHeadHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
@@ -62,6 +63,14 @@ export function careIncidentPrint() {
     if (!document.querySelector('#inc-preview pre')) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
     proFeatureNotice('care_incident_share', '보고서 인쇄·PDF');
     window.print();
+}
+
+export function careIncidentCsvExport() {
+    const items = listIncidents();
+    if (!items.length) { showToast('내보낼 저장된 보고서가 없습니다.', 'error'); return; }
+    proFeatureNotice('care_incident_share', '사고보고 Excel 내보내기');
+    void downloadSheet(incidentsToCsv(items), '사고보고.xlsx');
+    showToast('Excel 파일을 저장했습니다.');
 }
 
 export function careIncidentDelete(id) {

@@ -27,8 +27,9 @@ import { listProducts, findAllergyHits } from '../product-store.js';
 import { buildConsentHtml, printHtml } from './formula-print.js';
 
 import {
-  parseCsv, csvToObjects, readCsvFile, toCsv, downloadCsv,
+  parseCsv, csvToObjects, toCsv,
 } from '../../../content/csv-utils.js';
+import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 
 // 폼 상태 — editingId + 알레르기 칩 목록 (포뮬러 폼과 동일 패턴)
 const cust = /** @type {{editingId: string|null, allergies: string[]}} */ ({ editingId: null, allergies: [] });
@@ -445,7 +446,7 @@ async function custImportFile(event) {
 
   let text;
   try {
-    text = await readCsvFile(file);
+    text = await readTableFile(file);
   } catch (e) {
     showToast('파일을 읽지 못했습니다.', 'error');
     return;
@@ -474,12 +475,12 @@ async function custImportFile(event) {
 export function custExportCsv() {
   const list = listCustomers();
   if (!list.length) { showToast('보낼 고객이 없습니다.', 'info'); return; }
-  downloadCsv(toCsv([...CUST_CSV_HEADERS], list, custToCsvRow), `customers_${todayKey()}.csv`);
+  void downloadSheet(toCsv([...CUST_CSV_HEADERS], list, custToCsvRow), `customers_${todayKey()}.xlsx`);
   showToast(`${list.length}명의 고객을 CSV로보냈습니다.`, 'success');
 }
 
 /** 빈 CSV 양식 다운로드 — 표준 헤더만 */
 export function custCsvTemplate() {
-  downloadCsv(toCsv([...CUST_CSV_HEADERS], [], () => []), 'customers_template.csv');
+  void downloadSheet(toCsv([...CUST_CSV_HEADERS], [], () => []), 'customers_template.xlsx');
   showToast('고객 CSV 양식을 다운로드했습니다.', 'success');
 }

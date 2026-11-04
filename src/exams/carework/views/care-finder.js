@@ -20,11 +20,15 @@ function render() {
     host.innerHTML = hits.length
         ? hits.map(f => `<div class="care-finder-item">
             <strong class="care-finder-name">${esc(f.name)}</strong>
-            <span class="care-finder-meta">${esc(f.region)} · ${esc(f.type || '')}${f.phone ? esc(' · ' + f.phone) : ''}</span>
+            <span class="care-finder-meta">${esc(f.region)} · ${esc(f.type || '')}${f.phone ? esc(' · ' + f.phone) : ''}${f.capacity ? esc(' · 정원 ' + f.capacity + '명') : ''}${f.careWorkers ? esc(' · 요양보호사 ' + f.careWorkers + '명') : ''}</span>
             ${f.address ? `<span class="care-finder-addr">${esc(f.address)}</span>` : ''}
             ${cur === f.name
                 ? '<span class="care-finder-set">✓ 설정됨</span>'
                 : `<button data-click="careFinderUseOrg" data-arg="${esc(f.name)}" class="btn btn-secondary care-finder-btn">이 기관으로 설정</button>`}
+            <span class="care-finder-links">
+                <a href="https://map.kakao.com/link/search/${encodeURIComponent(f.name + ' ' + (f.address || f.region || ''))}" target="_blank" rel="noopener" class="btn btn-secondary care-finder-btn">카카오맵</a>
+                <a href="https://www.longtermcare.or.kr/npbs/r/a/201/selectLtcoSrch" target="_blank" rel="noopener" class="btn btn-secondary care-finder-btn">장기요양보험</a>
+            </span>
           </div>`).join('')
         : '<p class="care-log-empty">검색 결과가 없습니다.</p>';
 }

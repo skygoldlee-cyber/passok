@@ -34,6 +34,28 @@ export function removeRoster(id) {
     return { ok: true };
 }
 
+/** CSV 병합 — 날짜+근무조+근무자 일치 시 메모 갱신, 없으면 신규 등록. 한도 초과분 제외
+ * @returns {{ok:boolean, added:number, updated:number, skipped:number}} */
+export function upsertRoster(records) {
+    const items = listRoster();
+    let added = 0, updated = 0, skipped = 0;
+    for (const rec of records) {
+        const hit = items.find(x => x.date === rec.date && x.shift === rec.shift && x.worker === rec.worker);
+        if (hit) {
+            const idx = items.indexOf(hit);
+            items[idx] = { ...hit, ...rec };
+            updated++;
+        } else if (items.length >= FREE_LIMIT) {
+            skipped++;
+        } else {
+            items.push({ id: `ros_${Date.now().toString(36)}_${added}`, createdAt: localDateTime(), ...rec });
+            added++;
+        }
+    }
+    setJSON(KEY, items);
+    return { ok: true, added, updated, skipped };
+}
+
 /** 저장 + 오류 표시 — 무료 한도 초과 시 업그레이드 안내 */
 export function saveRoster(entry) {
     proFeatureNotice('care_roster_save', '근무 배정 저장');

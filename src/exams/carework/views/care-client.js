@@ -2,6 +2,7 @@
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { listClients, addClient, removeClient, upsertClients } from '../care-client-store.js';
 import { csvToClients, clientsToCsv, ADMIT_ITEMS } from '../care-client-csv.js';
+import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
@@ -149,18 +150,13 @@ function renderDocCount() {
 export function careClientCsvExport() {
     const items = listClients();
     if (!items.length) { showToast('등록된 수급자가 없습니다.', 'error'); return; }
-    proFeatureNotice('care_client_share', 'CSV 내보내기');
-    const blob = new Blob([clientsToCsv(items)], { type: 'text/csv;charset=utf-8' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = '수급자명부.csv';
-    a.click();
-    URL.revokeObjectURL(a.href);
-    showToast('CSV를 저장했습니다.');
+    proFeatureNotice('care_client_share', 'Excel 내보내기');
+    void downloadSheet(clientsToCsv(items), '수급자명부.xlsx');
+    showToast('Excel 파일을 저장했습니다.');
 }
 
 export function careClientCsvImport() {
-    proFeatureNotice('care_client_share', 'CSV 가져오기');
+    proFeatureNotice('care_client_share', 'Excel 가져오기');
     const f = /** @type {HTMLInputElement|null} */ ($('cli-csv-file'));
     if (f) f.click();
 }
@@ -168,7 +164,7 @@ export function careClientCsvImport() {
 function onCsvFile(e) {
     const file = /** @type {HTMLInputElement} */ (e.target).files?.[0];
     if (!file) return;
-    file.text().then(t => {
+    readTableFile(file).then(t => {
         const recs = csvToClients(t);
         if (!recs.length) { showToast('불러올 수급자 행이 없습니다 (헤더: 성명,상태,호실,…).', 'error'); return; }
         const r = upsertClients(recs);

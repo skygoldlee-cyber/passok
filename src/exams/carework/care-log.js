@@ -1,6 +1,7 @@
 // src/exams/carework/care-log.js — 요양일지·서비스기록지 생성 로직
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 제공기준 고시 기록 항목 기반 표준 일지 텍스트 자동 조립 (DOC-DSN-42 Phase 3)
+import { toCsv } from '../../content/csv-utils.js';
 
 export const SERVICE_TYPES = [
     { key: 'visit-care', label: '방문요양' },
@@ -34,4 +35,16 @@ export function buildCareLog(in_) {
     lines.push(`- ${(in_.note || '').trim() || '특이사항 없음'}`);
     lines.push('', '제공자: 요양보호사 ____________');
     return lines.join('\n');
+}
+
+/** 저장 일지 목록 → CSV 텍스트 (UTF-8 BOM — Excel 한글 호환). 활동은 '그룹: 항목·항목' 병합 */
+export function careLogsToCsv(items) {
+    const svcLabel = (k) => SERVICE_TYPES.find(s => s.key === k)?.label || k || '';
+    const actText = (acts) => ACTIVITY_GROUPS
+        .map(g => (acts && acts[g.key] && acts[g.key].length) ? `${g.label}: ${acts[g.key].join('·')}` : '')
+        .filter(Boolean).join(' | ');
+    return toCsv(['일자', '대상자', '급여종류', '시작', '종료', '활동', '특이사항'], items, x => [
+        x.date || '', x.client || '', svcLabel(x.service), x.start || '', x.end || '',
+        actText(x.activities), x.note || '',
+    ]);
 }

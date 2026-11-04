@@ -15,7 +15,7 @@ vi.mock('../../../src/ui-utils.js', () => ({
     HAPTIC: { correct: 30, wrong: [40, 30, 40], tap: 10 },
 }));
 
-import { loadIndexHtml, el, resetStudyState, spyAnchorDownload, lastToast } from '../helpers.js';
+import { loadIndexHtml, el, resetStudyState, spyAnchorDownload, lastToast, waitFor } from '../helpers.js';
 import { DataLoader } from '../../../src/content/data-loader.js';
 import {
     renderDictionary, filterDictionary, setDictFilter, clearDictSearch, dictState,
@@ -73,6 +73,8 @@ function render() {
 
 describe('성분 사전 — 검색·필터·카드', () => {
     beforeEach(() => {
+        window.XLSX = { read: () => ({ SheetNames: ['S'], Sheets: { S: {} } }), write: () => new Uint8Array([1]),
+            utils: { sheet_to_csv: () => '', aoa_to_sheet: () => ({}), book_new: () => ({}), book_append_sheet() {} } };
         localStorage.clear();
         resetStudyState();
         dictState.query = '';
@@ -163,37 +165,34 @@ describe('성분 사전 — 검색·필터·카드', () => {
         expect(el('dict-results-container').querySelectorAll('.dict-card').length).toBe(3);
     });
 
-    it('CSV보내기 — 전체 목록 다운로드 트리거 + 건수 토스트', () => {
+    it('CSV보내기 — 전체 목록 다운로드 트리거 + 건수 토스트', async () => {
         const dl = spyAnchorDownload();
         dictExportCsv();
+        await waitFor(() => dl.clicks.length === 1);
         dl.restore();
-
-        expect(dl.clicks.length).toBe(1);
-        expect(dl.clicks[0].download).toMatch(/^ingredients.*\.csv$/);
+        expect(dl.clicks[0].download).toMatch(/^ingredients.*\.xlsx$/);
         expect(lastToast()[0]).toContain('3종');
         expect(lastToast()[1]).toBe('success');
     });
 
-    it('CSV보내기 — 필터 적용 시 해당 유형만보내기', () => {
+    it('CSV보내기 — 필터 적용 시 해당 유형만보내기', async () => {
         setDictFilter('banned');
         const dl = spyAnchorDownload();
         dictExportCsv();
+        await waitFor(() => dl.clicks.length === 1);
         dl.restore();
-
-        expect(dl.clicks.length).toBe(1);
         expect(lastToast()[0]).toContain('1종');
     });
 
-    it('전체 CSV보내기 — 검색·필터 적용 중에도 전체 DB 저장 (DI-10)', () => {
+    it('전체 CSV보내기 — 검색·필터 적용 중에도 전체 DB 저장 (DI-10)', async () => {
         setDictFilter('banned');
         el('dict-search-input').value = '살리실산';
         filterDictionary();
         const dl = spyAnchorDownload();
         dictExportCsv('all');
+        await waitFor(() => dl.clicks.length === 1);
         dl.restore();
-
-        expect(dl.clicks.length).toBe(1);
-        expect(dl.clicks[0].download).toMatch(/^ingredients.*_all_.*\.csv$/);
+        expect(dl.clicks[0].download).toMatch(/^ingredients.*_all_.*\.xlsx$/);
         expect(lastToast()[0]).toContain('전체 3종');
     });
 

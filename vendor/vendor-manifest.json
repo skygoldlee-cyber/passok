@@ -75,6 +75,19 @@
         "outfit-600.woff2": "8cfe15c2c6de6ef8efff3eedbd52a383ac9ef23d6c23f6cd9f9b838f5f37dc36",
         "outfit-800.woff2": "eabf8cb2c01d0345e2eb19a49d04e8f8d0d520b74959b173d5ea6c2dcb95e4cd"
       }
+    },
+    "xlsx": {
+      "npm": "xlsx",
+      "version": "0.18.5",
+      "license": "Apache-2.0",
+      "updatedAt": "2026-11-04",
+      "note": "SheetJS Community — Excel(.xlsx/.xls) 읽기·쓰기. xlsx-import/export 시에만 지연 로드 (script 태그 → window.XLSX)",
+      "files": {
+        "xlsx.full.min.js": "c9506197caf809a075b6dee1da0d36fb19da7158ffe8a88e7b0c96c5d8623c99"
+      },
+      "syncMap": {
+        "dist/xlsx.full.min.js": "xlsx.full.min.js"
+      }
     }
   }
 }

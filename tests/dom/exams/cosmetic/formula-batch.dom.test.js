@@ -13,7 +13,7 @@ vi.mock('../../../../src/ui-utils.js', () => ({
 }));
 
 import { showToast, showConfirm } from '../../../../src/ui-utils.js';
-import { loadIndexHtml, el, isVisible, lastToast, spyAnchorDownload } from '../../helpers.js';
+import { loadIndexHtml, el, isVisible, lastToast, spyAnchorDownload, waitFor } from '../../helpers.js';
 import {
     openBatchPanel, batchNew, batchEdit, batchSave,
     batchDelete, batchPrintRecord, batchPrintLabel,
@@ -52,6 +52,8 @@ function checkQc(key, value) {
 
 describe('조제 기록 — 배치 시나리오', () => {
     beforeEach(() => {
+        window.XLSX = { read: () => ({ SheetNames: ['S'], Sheets: { S: {} } }), write: () => new Uint8Array([1]),
+            utils: { sheet_to_csv: () => '', aoa_to_sheet: () => ({}), book_new: () => ({}), book_append_sheet() {} } };
         localStorage.clear();
         loadIndexHtml();
         window.INGREDIENTS_DATA = INGREDIENTS_STUB;
@@ -414,14 +416,14 @@ describe('조제 기록 — 배치 시나리오', () => {
         batchFilterReset(); // 모듈 필터 상태는 테스트 간 유지되므로 정리
     });
 
-    it('CSV보내기 — 필터된 목록 다운로드 트리거 + 건수 토스트', () => {
+    it('CSV보내기 — 필터된 목록 다운로드 트리거 + 건수 토스트', async () => {
         createBatch({ formulaName: '수분 세럼', customerName: '김OO', madeAt: '2026-09-20T10:00' });
         createBatch({ formulaName: '진정 크림', customerName: '이OO', madeAt: '2026-09-21T10:00' });
         const dl = spyAnchorDownload();
         batchExportCsv();
+        await waitFor(() => dl.clicks.length === 1);
         dl.restore();
-        expect(dl.clicks.length).toBe(1);
-        expect(dl.clicks[0].download).toMatch(/^batches_\d{4}-\d{2}-\d{2}\.csv$/);
+        expect(dl.clicks[0].download).toMatch(/^batches_\d{4}-\d{2}-\d{2}\.xlsx$/);
         expect(lastToast()[0]).toContain('2건');
     });
 

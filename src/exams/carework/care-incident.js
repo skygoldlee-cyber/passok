@@ -1,6 +1,7 @@
 // src/exams/carework/care-incident.js — 사고·낙상 보고서 도메인 로직
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 발생경위·조치·가족 통지를 표준 사고보고 문서로 조립 — 기관 평가 증적 서식 기반
+import { toCsv } from '../../content/csv-utils.js';
 
 export const INCIDENT_TYPES = [
     { key: 'fall', label: '낙상' },
@@ -42,4 +43,13 @@ export function buildIncidentText(v) {
         `가족 통지: ${v.familyNotified ? '완료' : '미완료'}`,
     ];
     return lines.filter(Boolean).join('\n');
+}
+
+/** 사고 기록 목록 → CSV 텍스트 (UTF-8 BOM — Excel 한글 호환) */
+export function incidentsToCsv(items) {
+    return toCsv(['발생일', '시각', '장소', '대상자', '유형', '중증도', '경위', '조치', '목격자', '가족통지'], items, v => [
+        v.date || '', v.time || '', v.place || '', v.client || '',
+        incidentTypeLabel(v.type), v.severity ? severityLabel(v.severity) : '',
+        v.desc || '', v.action || '', v.witness || '', v.familyNotified ? '완료' : '미완료',
+    ]);
 }

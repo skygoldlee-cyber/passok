@@ -8,7 +8,8 @@ import { state } from '../core/state.js';
 import { esc } from '../core/sanitize.js';
 import { getChosung, todayKey, normalizeEntityName } from '../core/utils.js';
 import { hasFeature } from '../core/exam-context.js';
-import { toCsv, downloadCsv } from '../content/csv-utils.js';
+import { toCsv } from '../content/csv-utils.js';
+import { downloadSheet } from '../content/xlsx-utils.js';
 import { showToast } from '../ui-utils.js';
 import { DataLoader } from '../content/data-loader.js';
 import { STORAGE_KEYS } from '../core/storage-keys.js';
@@ -507,12 +508,12 @@ export function dictExportCsv(scope) {
     const ver = meta && meta.version ? `_v${meta.version}` : '';
     const csv = schema.csv || {};
     const fields = csv.fields || [];
-    downloadCsv(
+    void downloadSheet(
         toCsv([...(csv.headers || [])], rows, item => fields.map(spec =>
             typeof spec === 'string'
                 ? (item[spec] || '')
                 : (spec && spec.badgeLabel ? badgeLabel(schema, item[spec.badgeLabel]) : ''))),
-        `${csv.filename || 'knowledge'}${ver}${all ? '_all' : ''}_${todayKey()}.csv`
+        `${csv.filename || 'knowledge'}${ver}${all ? '_all' : ''}_${todayKey()}.xlsx`
     );
-    showToast(`${unit} ${all ? '전체 ' : ''}${rows.length}종을 CSV로 저장했습니다.`, 'success');
+    showToast(`${unit} ${all ? '전체 ' : ''}${rows.length}종을 Excel로 저장했습니다.`, 'success');
 }

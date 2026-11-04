@@ -1,11 +1,31 @@
 [
   {
-    "version": "v20261104-24245f1",
+    "version": "v20261104-222f0f2",
     "date": "2026-11-04",
     "notes": [
-      "[수정·carework] 현장도구 → 본인부담금 계산 명칭 교정 [no-test]",
-      "[문서·carework] 실무매뉴얼 절 순서 — 사이드바 메뉴 순서와 일치 [no-test]",
-      "[정리·release] v20261104-c1dbb77 스탬프 확정 [no-docs]"
+      "[수정·ux] 실무막뉴얼 → 실무매뉴얼 오표기 정정",
+      "[문서·carework] 실무막뉴얼 브랜드명 PassOK → Care OS",
+      "[수정·tools] enrich_facility_stats DA-15 예외 등록",
+      "[문서·trace] TRACE_MATRIX 재생성",
+      "[data·carework] 기관찾기 정원·요양보호사 인력 보강",
+      "[기능·carework] 기관찾기 카드에 카카오맵·장기요양보험 포털 검색 링크",
+      "[정리·release] v20261104-a988c45 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261104-a988c45",
+    "date": "2026-11-04",
+    "notes": [
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[정리·tools] domain-map에 xlsx-utils 등록",
+      "[테스트·dom] xlsx 비동기 내보내기 대응 — XLSX 스텁 + waitFor 클릭 대기",
+      "[문서·agents] xlsx-utils 디렉토리 구조 등록 + TRACE 재생성",
+      "[기능·xlsx] CSV 왕복 도구 Excel(.xlsx) 네이티브 지원 — SheetJS vendor 추가",
+      "[문서·carework] 실무매뉴얼 §12 기관찾기 데이터 출처·기준일 명기",
+      "[기능·carework] 실무도구 CSV 확장 — 근무표 왕복 + 방문·사고·일지 내보내기",
+      "[수정·carework] 수급자 CSV 가져오기 CP949 인코딩 지원",
+      "[기능·ui] 실무 탭바 매뉴얼 라벨 단축 + carework 실무매뉴얼 저장·CSV 문서화",
+      "[수정·carework] 현장도구 → 본인부담금 계산 명칭 교정 [no-test]"
     ]
   },
   {
@@ -83,6 +103,15 @@
     "notes": [
       "[수정·carework] 수급자 관리 라벨 잔재 교정 — manifest·레지스트리 [no-test]",
       "[정리·release] v20261103-7a278e5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261104-24245f1",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] 현장도구 → 본인부담금 계산 명칭 교정 [no-test]",
+      "[문서·carework] 실무매뉴얼 절 순서 — 사이드바 메뉴 순서와 일치 [no-test]",
+      "[정리·release] v20261104-c1dbb77 스탬프 확정 [no-docs]"
     ]
   },
   {

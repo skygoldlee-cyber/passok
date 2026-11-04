@@ -27,7 +27,8 @@ import {
 import {
   draft, readBatchForm, currentAllergyConflicts, buildCheckSnapshot,
 } from './formula-batch-form.js';
-import { toCsv, downloadCsv } from '../../../content/csv-utils.js';
+import { toCsv } from '../../../content/csv-utils.js';
+import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { todayKey } from '../../../core/utils.js';
 
 // 분리 모듈 재수출 — data-click 핸들러 조회 경로 유지 (practice-registry)
@@ -90,7 +91,7 @@ function renderFilterBar(batches) {
       <option value="no"${listFilter.delivered === 'no' ? ' selected' : ''}>미인도</option>
     </select>
     <button class="btn btn-secondary btn-sm" data-click="batchExportCsv" title="필터된 목록을 CSV로 저장">
-      <i class="fa-solid fa-file-csv" aria-hidden="true"></i> CSV
+      <i class="fa-solid fa-file-csv" aria-hidden="true"></i> Excel
     </button>
     <button class="btn btn-secondary btn-sm" data-click="batchPrintSales" title="인도 완료 건을 판매내역서로 인쇄 (FO-58)">
       <i class="fa-solid fa-receipt" aria-hidden="true"></i> 판매내역서
@@ -236,9 +237,9 @@ function batchToCsvRow(b) {
 export function batchExportCsv() {
   const rows = applyListFilter(listBatches());
   if (!rows.length) { showToast('보낼 조제 기록이 없습니다.', 'warning'); return; }
-  downloadCsv(
+  void downloadSheet(
     toCsv([...BATCH_CSV_HEADERS], rows, batchToCsvRow),
-    `batches_${todayKey()}.csv`
+    `batches_${todayKey()}.xlsx`
   );
   showToast(`조제 기록 ${rows.length}건을 CSV로 저장했습니다.`, 'success');
 }

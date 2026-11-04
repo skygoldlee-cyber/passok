@@ -18,8 +18,9 @@ import {
   materialStatus, daysUntilExpiry, expiringMaterials, stockStatus, STORAGE_OPTIONS,
 } from '../material-ledger.js';
 import {
-  parseCsv, csvToObjects, readCsvFile, toCsv, downloadCsv,
+  parseCsv, csvToObjects, toCsv,
 } from '../../../content/csv-utils.js';
+import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 
 const mat = { editingId: null };
 
@@ -314,7 +315,7 @@ async function matImportFile(event) {
 
   let text;
   try {
-    text = await readCsvFile(file);
+    text = await readTableFile(file);
   } catch (e) {
     showToast('파일을 읽지 못했습니다.', 'error');
     return;
@@ -343,12 +344,12 @@ async function matImportFile(event) {
 export function matExportCsv() {
   const list = listMaterials();
   if (!list.length) { showToast('보낼 원료가 없습니다.', 'info'); return; }
-  downloadCsv(toCsv([...MAT_CSV_HEADERS], list, matToCsvRow), `materials_${todayKey()}.csv`);
+  void downloadSheet(toCsv([...MAT_CSV_HEADERS], list, matToCsvRow), `materials_${todayKey()}.xlsx`);
   showToast(`${list.length}종의 원료를 CSV로보냈습니다.`, 'success');
 }
 
 /** 빈 CSV 양식 다운로드 — 표준 헤더만 */
 export function matCsvTemplate() {
-  downloadCsv(toCsv([...MAT_CSV_HEADERS], [], () => []), 'materials_template.csv');
+  void downloadSheet(toCsv([...MAT_CSV_HEADERS], [], () => []), 'materials_template.xlsx');
   showToast('원료 CSV 양식을 다운로드했습니다.', 'success');
 }

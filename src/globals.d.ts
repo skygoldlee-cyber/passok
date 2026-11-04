@@ -79,6 +79,8 @@ declare global {
     ID_MIGRATION_MAP?: Record<string, string>;
     /** vendor/supabase UMD 번들 (지연 로드 — supabase-client.js) */
     supabase?: any;
+    /** vendor/xlsx SheetJS UMD 번들 (지연 로드 — xlsx-utils.js) */
+    XLSX?: any;
     /** reader-audio.js 가 노출하는 재생 정지 함수 */
     stopReaderAudio?: () => void;
     /** 콜드스타트 난이도 시드 맵 (AI-32 — cardId→D0 1~10, ai:seedcheck valid 후 제공, 휴면 훅) */

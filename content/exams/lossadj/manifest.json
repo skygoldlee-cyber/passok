@@ -188,7 +188,8 @@
    "title": "학습도구"
   },
   "formula-manual": {
-   "title": "실무매뉴얼"
+   "title": "실무매뉴얼",
+   "nav": "매뉴얼"
   }
  },
  "synonyms": {

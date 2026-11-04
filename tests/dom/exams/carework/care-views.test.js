@@ -45,6 +45,16 @@ import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverS
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
 import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, careVisitExport, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
 import { careClientSave, careClientLoad, careClientDelete, initCareClientView } from '../../../../src/exams/carework/views/care-client.js';
+import { listClients } from '../../../../src/exams/carework/care-client-store.js';
+import { careLogCsvExport } from '../../../../src/exams/carework/views/care-log.js';
+import { addCareLog, removeCareLog } from '../../../../src/exams/carework/care-log-store.js';
+import { careVisitCsvExport } from '../../../../src/exams/carework/views/care-visit.js';
+import { addVisit, removeVisit } from '../../../../src/exams/carework/care-visit-store.js';
+import { careIncidentCsvExport } from '../../../../src/exams/carework/views/care-incident.js';
+import { addIncident, removeIncident } from '../../../../src/exams/carework/incident-store.js';
+import { careRosterCsvExport, careRosterCsvImport } from '../../../../src/exams/carework/views/care-roster.js';
+import { addRoster, listRoster } from '../../../../src/exams/carework/roster-store.js';
+import { selectFile, waitFor, spyAnchorDownload, lastToast } from '../../helpers.js';
 import { careIncidentGenerate, careIncidentSave, careIncidentDelete, initCareIncidentView } from '../../../../src/exams/carework/views/care-incident.js';
 import { careRosterAdd, careRosterDelete, initCareRosterView } from '../../../../src/exams/carework/views/care-roster.js';
 import { careFinderUseOrg } from '../../../../src/exams/carework/views/care-finder.js';
@@ -58,7 +68,12 @@ const loadPartial = (rel) => {
 };
 
 describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
-    beforeEach(() => { document.body.innerHTML = ''; });
+    beforeEach(() => {
+        document.body.innerHTML = '';
+        // SheetJS 스텁 — vendor 로드 없이 downloadSheet 경로만 통과
+        window.XLSX = { read: () => ({ SheetNames: ['S'], Sheets: { S: {} } }), write: () => new Uint8Array([1]),
+            utils: { sheet_to_csv: () => '', aoa_to_sheet: () => ({}), book_new: () => ({}), book_append_sheet() {} } };
+    });
 
     it('careCalc — 계산 후 결과 카드 렌더', () => {
         loadPartial('care-calc.html');
@@ -295,6 +310,21 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(list.textContent).toContain('등록된 대상자가 없습니다');
     });
 
+    it('careClients — CSV 가져오기 EUC-KR(CP949) 파일 한글 디코딩', async () => {
+        loadPartial('care-client.html');
+        initCareClientView(); // cli-csv-file change 리스너 바인딩
+        // '성명,주의사항\n김순자,낙상 주의' — EUC-KR(CP949) 인코딩 (UTF-8 해석 불가 → 폴백 경로)
+        const bytes = new Uint8Array([
+            0xBC, 0xBA, 0xB8, 0xED, 0x2C, 0xC1, 0xD6, 0xC0, 0xC7, 0xBB, 0xE7, 0xC7, 0xD7, 0x0A,
+            0xB1, 0xE8, 0xBC, 0xF8, 0xC0, 0xDA, 0x2C, 0xB3, 0xAB, 0xBB, 0xF3, 0x20, 0xC1, 0xD6, 0xC0, 0xC7,
+        ]);
+        selectFile('cli-csv-file', new File([bytes], 'euckr.csv'));
+        await waitFor(() => listClients().length === 1);
+        expect(listClients()[0].name).toBe('김순자');
+        expect(listClients()[0].caution).toBe('낙상 주의');
+        careClientDelete(listClients()[0].id);
+    });
+
     it('careIncident — 보고서 생성 → 저장 목록', () => {
         loadPartial('care-incident.html');
         initCareIncidentView();
@@ -322,19 +352,80 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careRosterDelete(list.querySelector('[data-arg]')?.dataset.arg);
     });
 
+    it('careRoster — CSV 왕복: 내보내기 다운로드 + 가져오기 병합 (날짜+근무조+근무자 키)', async () => {
+        loadPartial('care-roster.html');
+        initCareRosterView(); // ros-csv-file change 리스너 바인딩
+        addRoster({ date: '2026-11-10', shift: 'night', worker: '김○○', note: '대체' });
+
+        const dl = spyAnchorDownload();
+        careRosterCsvExport();
+        await waitFor(() => dl.clicks.length === 1);
+        dl.restore();
+        expect(dl.clicks[0].download).toBe('근무표.xlsx');
+
+        // 근무조 라벨→키 매핑 + 동일 (날짜,근무조,근무자) 행은 갱신 병합
+        careRosterCsvImport(); // proFeatureNotice + 파일 선택 트리거
+        selectFile('ros-csv-file', new File([
+            '날짜,근무조,근무자,메모\n2026-11-11,주간(데이),박○○,\n2026-11-10,야간(나이트),김○○,수정메모',
+        ], 'roster.csv'));
+        await waitFor(() => listRoster().length === 2);
+        expect(listRoster().find(x => x.worker === '박○○').shift).toBe('day');
+        expect(listRoster().find(x => x.worker === '김○○').note).toBe('수정메모');
+        expect(lastToast()[0]).toContain('신규 1·갱신 1');
+    });
+
+    it('careVisit — Excel 내보내기 다운로드 트리거', async () => {
+        loadPartial('care-visit.html');
+        const r = addVisit({ date: '2026-11-10', client: '김○○', visitor: '이○○', relation: 'child' });
+        const dl = spyAnchorDownload();
+        careVisitCsvExport();
+        await waitFor(() => dl.clicks.length === 1);
+        dl.restore();
+        expect(dl.clicks[0].download).toBe('면회기록.xlsx');
+        removeVisit(r.id);
+    });
+
+    it('careIncident — Excel 내보내기 다운로드 트리거', async () => {
+        loadPartial('care-incident.html');
+        const r = addIncident({ date: '2026-11-10', client: '김○○', type: 'fall', desc: '미끄러짐' });
+        const dl = spyAnchorDownload();
+        careIncidentCsvExport();
+        await waitFor(() => dl.clicks.length === 1);
+        dl.restore();
+        expect(dl.clicks[0].download).toBe('사고보고.xlsx');
+        removeIncident(r.id);
+    });
+
+    it('careLog — Excel 내보내기 다운로드 트리거', async () => {
+        loadPartial('care-log.html');
+        const r = addCareLog({ date: '2026-11-10', client: '김○○', service: 'visit-care', activities: { physical: ['세면·목욕'] }, note: '양호', text: '…' });
+        const dl = spyAnchorDownload();
+        careLogCsvExport();
+        await waitFor(() => dl.clicks.length === 1);
+        dl.restore();
+        expect(dl.clicks[0].download).toBe('요양일지.xlsx');
+        removeCareLog(r.id);
+    });
 
     it('careFinder — 시설명으로 출력물 기관명 설정', () => {
         careFinderUseOrg('행복요양원');
         expect(getOrgName()).toBe('행복요양원');
     });
 
-    it('careFinder — 출처 텍스트의 URL은 링크로 렌더', async () => {
-        vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ source: '공단 현황 — https://www.data.go.kr/x (필터)', regions: [], items: [] }) })));
+    it('careFinder — 출처 링크 + 결과 카드에 카카오맵·장기요양보험 포털 검색 링크', async () => {
+        vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({
+            source: '공단 현황 — https://www.data.go.kr/x (필터)', regions: [],
+            items: [{ name: '행복요양원', region: '서울', type: '요양원', address: '서울특별시 종로구 비봉길 76', capacity: 38, careWorkers: 18 }],
+        }) })));
         loadPartial('care-finder.html');
         const { initCareFinderView } = await import('../../../../src/exams/carework/views/care-finder.js');
         await initCareFinderView();
         const a = /** @type {HTMLAnchorElement|null} */ (document.querySelector('#find-source a'));
         expect(a?.href).toContain('data.go.kr');
+        const hrefs = [...document.querySelectorAll('#find-list a')].map(x => /** @type {HTMLAnchorElement} */ (x).href);
+        expect(hrefs.some(h => h.includes('map.kakao.com'))).toBe(true);
+        expect(hrefs.some(h => h.includes('longtermcare.or.kr/npbs/r/a/201/selectLtcoSrch'))).toBe(true);
+        expect(document.querySelector('#find-list .care-finder-meta')?.textContent).toContain('정원 38명');
     });
 
     // @spec DA-18 — 권한 뷰 분리: facility-join은 클라이언트 뷰로 비로그인/비권한 시 안내만 표시
