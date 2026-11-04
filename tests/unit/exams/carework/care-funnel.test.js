@@ -116,4 +116,5 @@ test('CO-13 공유 실패 폴백 — AbortError 외 실패 시 복사 폴백·�
     assert.match(src, /AbortError/); // 사용자 취소만 조용히
     assert.match(src, /copyFallback/);
     assert.match(src, /clipboard\?\.writeText|clipboard\.writeText/);
+    assert.ok(src.indexOf('copyFallback()') < src.indexOf('navigator.share')); // 복사 선행 — 클릭 즉시 반응 보장
 });

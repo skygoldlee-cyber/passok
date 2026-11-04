@@ -58,11 +58,11 @@ export async function careShare(btn) {
             () => showToast('클립보드에 복사했습니다 — 카톡 등에 붙여넣으세요.'),
             () => showToast('복사 실패 — 인쇄·PDF를 이용하세요.', 'error'));
     };
-    // 공유 시트는 터치 기기에서만 — 데스크톱의 navigator.share는 OS 창이 뜨지 않아 무응답으로 보인다
+    // 항상 복사+토스트를 먼저 실행 — 어떤 환경에서든 클릭 즉시 반응이 나와야 함
+    copyFallback();
+    // 공유 시트는 터치 기기에서 추가 동작 — 데스크톱의 navigator.share는 OS 창이 뜨지 않는 경우가 있다
     const coarse = typeof matchMedia === 'function' && matchMedia('(pointer:coarse)').matches;
     if (coarse && navigator.share) {
-        try { await navigator.share({ title, text }); return; }
-        catch (e) { if (/** @type {Error} */ (e)?.name === 'AbortError') return; /* 사용자 취소만 조용히 — 나머지는 복사 폴백 */ }
+        try { await navigator.share({ title, text }); } catch { /* 시트 실패·취소 무관 — 복사는 이미 완료 */ }
     }
-    copyFallback();
 }
