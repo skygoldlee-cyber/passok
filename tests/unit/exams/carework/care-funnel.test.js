@@ -25,3 +25,10 @@ test('roster 계측 — 신규 도구 키 누적', () => {
     markFunnel('tool:care-roster');
     assert.equal(funnelStats().tools['tool:care-roster'], 1);
 });
+
+// 카카오맵 검색 쿼리 계약 — 주소만 전달 (기관명+주소 조합은 지도 미검색)
+import { readFileSync } from 'node:fs';
+test('카카오맵 링크 — 주소만 검색 쿼리로 사용', () => {
+    const src = readFileSync('src/exams/carework/views/care-finder.js', 'utf8');
+    assert.match(src, /encodeURIComponent\(f\.address \|\| f\.region \|\| f\.name\)/);
+});
