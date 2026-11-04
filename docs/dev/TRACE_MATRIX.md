@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 56b3f0efddd73b16
+> 입력 해시: b55cc1ac68a8dc8b
 > 생성: 2026-11-04 · 원천: SPEC.md(670개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 670개 — 문서 연결 463 · 소스 연결 590 · 테스트 연결 630 · 보고서 연결 109
+**커버리지 요약**: 요구사항 670개 — 문서 연결 463 · 소스 연결 593 · 테스트 연결 633 · 보고서 연결 109
 
 ---
 
@@ -442,7 +442,7 @@
 | UM-03 | — | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-04 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/router.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/dom/shell/router.dom.test.js<br>tests/dom/shell/ui-structure.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-05 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 1개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
-| UM-06 | ✅ | — | — | — | — | — | — |
+| UM-06 | ✅ | 테스트 | — | src/practice-registry.js | tests/unit/practice-mode-contract.test.js | — | — |
 
 ## 3.22 시험 선택·전환
 
@@ -810,8 +810,8 @@
 | DA-16 | ✅ | E2E 테스트 | — | src/content/data-loader.js<br>src/content/unpack.js<br>tools/build/build_study_md_bundle.js<br>tools/lib/content_pack.js | tests/dom/common/unpack.dom.test.js<br>tests/e2e/content-pack.spec.js<br>tests/unit/content-pack.test.js<br>tests/unit/content/data-loader-fallback.test.js | — | — |
 | DA-17 | ✅ | 테스트 | — | tools/lib/watermark.js | tests/unit/content-pack.test.js | — | — |
 | DA-18 | ✅ | 테스트 | DOC-BIZ-06<br>DOC-BIZ-07<br>DOC-DSN-44 | html/exams/carework/facility-admin.html<br>html/exams/carework/facility-join.html<br>src/exams/carework/views/facility-admin.js<br>src/exams/carework/views/facility-join.js | tests/dom/exams/carework/care-views.test.js | — | — |
-| DA-19 | ✅ | — | — | — | — | — | — |
-| DA-20 | ✅ | — | — | — | — | — | — |
+| DA-19 | ✅ | 테스트 | — | src/reader/manual-viewer.js | tests/unit/practice-mode-contract.test.js | — | — |
+| DA-20 | ✅ | 테스트 | — | src/shell/ui-mode.js | tests/unit/practice-mode-contract.test.js | — | — |
 | DA-21 | ✅ | 테스트 | — | css/dashboard.css<br>css/exams/carework/care-tools.css | tests/dom/exams/carework/care-views.test.js | — | — |
 | DA-22 | ✅ | 테스트 | — | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | — | — |
 
