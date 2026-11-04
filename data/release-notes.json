@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261104-e8b05d8",
+    "date": "2026-11-04",
+    "notes": [
+      "[수정·carework] 기관찾기 장기요양보험 링크 404 수정",
+      "[정리·release] v20261104-222f0f2 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261104-222f0f2",
     "date": "2026-11-04",
     "notes": [
@@ -186,16 +194,6 @@
       "[정리] 루트 잔해 파일 정리 — ping.txt 제거",
       "[정리·release] v20261103-2219f60 스탬프 확정 [no-docs]",
       "[정리·release] v20261103-f2b82e7 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261103-2219f60",
-    "date": "2026-11-03",
-    "notes": [
-      "[수정·tools] enrich 스크립트 DA-15 예외 등록 — 도메인 전용 유틸",
-      "[data·carework] XLSX 원본에 전화번호 컬럼 병기 + TRACE 재생성",
-      "[data·carework] 시설 전화번호 보강 — 공단 상세조회 API 6,059건 (DSN-43 6g)",
-      "[정리·release] v20261103-75de3b1 스탬프 확정 [no-docs]"
     ]
   }
 ]
