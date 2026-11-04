@@ -133,6 +133,31 @@ describe('CO-13 careShare 시뮬레이션', () => {
         expect(sheetSpy).toHaveBeenCalledWith(csv, `방문 기록_${new Date().toISOString().slice(0, 10)}.xlsx`); // 실제 xlsx 생성 확인
     });
 
+    it('데스크톱 — canShare가 파일을 허용해도 텍스트만 시트에 실음 (Windows 파일 차단 회피)', async () => {
+        setup(`<section class="view-section"><pre id="out">문서 내용</pre>
+            <button id="share" data-arg="#out|문서">공유</button></section>`);
+        delete /** @type {any} */ (globalThis).matchMedia; // coarse=false — 이전 테스트의 목 잔류 방지
+        globalThis.navigator.canShare = vi.fn(() => true); // Chromium은 파일 지원을 거짓 보고
+        globalThis.navigator.share = vi.fn().mockResolvedValue();
+        const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        await careShare(document.getElementById('share').dataset.arg);
+        expect(globalThis.navigator.share.mock.calls[0][0].files).toBeUndefined(); // 데스크톱은 파일 미첨부 — NotAllowedError 회피
+    });
+
+    it('모바일 파일 거절(NotAllowedError) → 다음 공유는 텍스트만 — 차단 학습', async () => {
+        setup(`<section class="view-section"><pre id="out">문서 내용</pre>
+            <button id="share" data-arg="#out|문서">공유</button></section>`);
+        globalThis.matchMedia = () => ({ matches: true });
+        globalThis.navigator.canShare = vi.fn(() => true);
+        globalThis.navigator.share = vi.fn().mockRejectedValue(Object.assign(new Error('x'), { name: 'NotAllowedError' }));
+        const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        await careShare(document.getElementById('share').dataset.arg);
+        expect(globalThis.navigator.share.mock.calls[0][0].files).toHaveLength(1); // 첫 시도는 파일 첨부
+        globalThis.navigator.share.mockResolvedValue();
+        await careShare(document.getElementById('share').dataset.arg);
+        expect(globalThis.navigator.share.mock.calls[1][0].files).toBeUndefined(); // 차단 학습 — 재시도는 텍스트만
+    });
+
     it('모바일(pointer:coarse) — 공유 시트 우선, 실패 시 복사 폴백', async () => {
         setup(`<section class="view-section"><pre id="out">문서 내용</pre>
             <button id="share" data-arg="#out|문서">공유</button></section>`);

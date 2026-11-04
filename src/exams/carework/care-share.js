@@ -31,6 +31,10 @@ const diag = msg => {
     setTimeout(() => b.remove(), 20000);
 };
 
+/** share({files}) 거절 학습 — canShare는 파일 타입·OS 지원을 검증하지 않아 거짓 true를
+    반환하므로(Chromium), 실제 거절(NotAllowedError)로만 확정하고 이후 클릭은 텍스트만 싣는다. */
+let _filesBlocked = false;
+
 const _readOut = sel => {
     const el = sel && document.querySelector(sel.trim());
     return el ? ((el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) ? el.value : el.textContent || '') : '';
@@ -95,18 +99,26 @@ export async function careShare(arg) {
     const fname = ext => `${title}_${stamp}.${ext}`;
     const csvGen = gen?.endsWith('CsvExport') ? gen : (alt?.endsWith('CsvExport') ? alt : '');
     // 공유 시트는 즉시 생성 가능한 txt만 실어 제스처 유효 구간에 호출 — xlsx(SheetJS 로드)·pdf(html2canvas)는 수 초라 뒤로 미룸
-    files.push(new File([text], fname('txt'), { type: 'text/plain;charset=utf-8' })); // 검색·선택 가능한 텍스트 — 생성 비용 없음
+    files.push(new File([text], fname('txt'), { type: 'text/plain' })); // 검색·선택 가능한 텍스트 — 생성 비용 없음. charset 파라미터는 Chromium 파일 허용 MIME 판정과 충돌 가능
     let shared = false;
-    const fileOk = files.length && (typeof navigator.canShare !== 'function' || navigator.canShare({ files }));
-    if (typeof navigator.share === 'function') {
+    // 파일 첨부는 터치 기기로 제한 — Windows 등 데스크톱은 canShare가 파일을 통과시켜도
+    // share({files})가 OS 수준에서 NotAllowedError로 거부된다. share()는 제스처를 소비해
+    // 같은 클릭에 텍스트 재시도도 불가. 데스크톱 파일은 아래 다운로드 폴백이 제공.
+    const coarse = typeof matchMedia === 'function' && matchMedia('(pointer:coarse)').matches;
+    const fileOk = coarse && !_filesBlocked && files.length && (typeof navigator.canShare !== 'function' || navigator.canShare({ files }));
+    // 제스처 만료가 확실하면 share()를 건너뛴다 — 호출해도 NotAllowedError로 거절될 뿐
+    const gesture = !navigator.userActivation || navigator.userActivation.isActive;
+    if (typeof navigator.share === 'function' && gesture) {
         try { await navigator.share(fileOk ? { title, text, files } : { title, text }); shared = true; showToast(fileOk ? '파일 공유 시트를 열었습니다.' : '공유 시트를 열었습니다 — 텍스트를 붙여넣으세요.'); }
         catch (e) {
             const n = /** @type {Error} */ (e)?.name;
             if (n === 'AbortError') return;
+            if (fileOk && n === 'NotAllowedError') _filesBlocked = true; // 제스처가 있었는데도 거절 = 파일 첨부 차단 — 다음 클릭은 텍스트만
             showToast(`공유 시트 열기 실패(${n || e}) — 복사·다운로드로 대체합니다.`, 'error');
-            diag(`공유 시트를 열지 못했습니다 — 사유: ${n || e} · 파일은 다운로드로 대체합니다.`); // 탭할 때까지 표시 — 캡처·진단용
+            diag(`공유 시트를 열지 못했습니다 — 사유: ${n || e} · 파일첨부:${fileOk ? 'Y' : 'N'} · 파일은 다운로드로 대체합니다.`); // 탭할 때까지 표시 — 캡처·진단용
         }
-    } else diag('이 브라우저는 공유 시트를 지원하지 않습니다 — Chrome으로 열어주세요.'); // 인앱 브라우저 식별
+    } else if (typeof navigator.share === 'function') diag('공유 제스처가 만료되었습니다 — 공유 버튼을 바로 다시 눌러주세요.'); // 제스처 만료 명시 — NotAllowedError 오진 방지
+    else diag('이 브라우저는 공유 시트를 지원하지 않습니다 — Chrome으로 열어주세요.'); // 인앱 브라우저 식별
     if (csvGen) { // CsvExport 지정 시 실제 .xlsx — 시트 이후 생성, 다운로드로 보강
         try { const csv = await (/** @type {any} */ (window))[csvGen]?.(); if (csv) files.push(await sheetFile(csv, fname('xlsx'))); } catch { showToast('Excel 생성 실패 — 나머지 파일은 정상 공유됩니다.', 'error'); }
     }
@@ -146,7 +158,6 @@ export async function careShare(arg) {
     if (shared) return; // 시트 이미 열림 — PDF는 시트에 못 실었으므로 아래 다운로드로 보강
     copyFallback(); // 항상 복사+토스트 — 어떤 환경에서든 클릭 즉시 반응이 나와야 함
     // 파일 다운로드 — 데스크톱은 전부, 모바일은 시트 미개봉 시에만
-    const coarse = typeof matchMedia === 'function' && matchMedia('(pointer:coarse)').matches;
     const rest = coarse && shared ? files.filter(f => f.name.endsWith('.pdf')) : files; // 모바일 시트 성공 시 미탑재 PDF만 보강
     if (!coarse || !shared || rest.length) {
         for (const file of rest) {

@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-04 fix(carework): 공유 NotAllowedError — 데스크톱 파일 미첨부 + 거절 학습·제스처 사전검사 (CO-13)
+
+- Windows 등 데스크톱은 canShare가 파일을 통과시켜도 share({files})가 OS 수준에서 거절됨 — 첨부를 터치 기기로 제한
+- share()는 제스처 소비(재시도 불가) — userActivation.isActive 사전 검사로 만료 시 명시 안내
+- 파일 거절(NotAllowedError) 학습 플래그 — 다음 클릭은 텍스트만 첨부, txt MIME에서 charset 파라미터 제거
+
 ## 2026-11-04 fix(carework): 모바일 시트 제스처 — share()를 xlsx·pdf 생성 전으로 이동 (CO-13)
 
 
