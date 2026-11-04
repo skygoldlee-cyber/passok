@@ -8,6 +8,7 @@ import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, docHeadHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
+export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));

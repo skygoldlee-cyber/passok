@@ -4,6 +4,7 @@ import { computeCareCost, formatWon } from '../care-calc.js';
 import { markFunnel } from '../care-funnel.js';
 import { GRADE_LIMITS, REDUCTIONS, EFFECTIVE_YEAR, FACILITY_TYPES } from '../care-calc-data.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
+export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));

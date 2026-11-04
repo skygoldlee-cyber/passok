@@ -42,7 +42,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
         document.querySelector('[data-click="careCalcRun"]').addEventListener('click',
             () => { document.getElementById('out').textContent = '계산 결과: 123,456원'; });
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
-        await careShare(document.getElementById('share'));
+        await careShare(document.getElementById('share').dataset.arg);
         expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('계산 결과: 123,456원');
     });
 
@@ -53,7 +53,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
             <label>월 이용액 <input id="u" value="1000000"></label>
             <button id="share" data-arg="#out|본인부담금|careCalcRun">공유</button></section>`);
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
-        await careShare(document.getElementById('share'));
+        await careShare(document.getElementById('share').dataset.arg);
         const text = globalThis.navigator.clipboard.writeText.mock.calls[0][0];
         expect(text).toContain('장기요양등급');
         expect(text).toContain('1000000');
@@ -65,7 +65,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
             <pre id="out">김철수 일지 — 010-1234-5678</pre>
             <button id="share" data-arg="#out|요양일지|mask">공유</button></section>`);
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
-        await careShare(document.getElementById('share'));
+        await careShare(document.getElementById('share').dataset.arg);
         const text = globalThis.navigator.clipboard.writeText.mock.calls[0][0];
         expect(text).not.toContain('010-1234-5678');
         expect(text).toContain('[연락처]');
@@ -75,7 +75,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
         setup(`<section class="view-section"><pre id="out"></pre>
             <button id="share" data-arg="#out|빈 문서">공유</button></section>`);
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
-        await careShare(document.getElementById('share'));
+        await careShare(document.getElementById('share').dataset.arg);
         expect(globalThis.navigator.clipboard.writeText).not.toHaveBeenCalled();
         expect(toasts.find(t => t.includes('공유할 내용이 없습니다'))).toBeTruthy();
     });
@@ -86,7 +86,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
         // 데스크톱: share 존재하나 실패해도 복사 폴백 — coarse 미매칭(jsdom 기본)
         globalThis.navigator.share = vi.fn().mockRejectedValue(new Error('no OS share UI'));
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
-        await careShare(document.getElementById('share'));
+        await careShare(document.getElementById('share').dataset.arg);
         expect(globalThis.navigator.share).not.toHaveBeenCalled(); // 데스크톱은 호출 자체 생략
         expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('문서 내용');
         expect(toasts.find(t => t.includes('클립보드'))).toBeTruthy();
@@ -100,7 +100,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
         const genBtn = /** @type {HTMLButtonElement} */ (document.querySelector('[data-click="boom"]'));
         genBtn.click = () => { throw new Error('생성 실패'); }; // 위임 핸들러 예외는 .click() 스로우로 전파됨
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
-        await careShare(document.getElementById('share'));
+        await careShare(document.getElementById('share').dataset.arg);
         expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalled(); // 폼 양식으로 공유 완료
         const text = globalThis.navigator.clipboard.writeText.mock.calls[0][0];
         expect(text).toContain('항목');
@@ -112,7 +112,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
         globalThis.matchMedia = () => ({ matches: true });
         globalThis.navigator.share = vi.fn().mockRejectedValue(Object.assign(new Error('x'), { name: 'TypeError' }));
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
-        await careShare(document.getElementById('share'));
+        await careShare(document.getElementById('share').dataset.arg);
         expect(globalThis.navigator.share).toHaveBeenCalled();
         expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('문서 내용');
     });
@@ -135,8 +135,8 @@ describe('CO-13 본인부담금 계산 실제 시뮬레이션', () => {
         });
         // 입력 없이도 등급·유형 기본값으로 계산 가능해야 함
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
-        const btn = document.querySelector('[data-click="careShare"]');
-        await careShare(btn);
+        const btn = /** @type {HTMLElement} */ (document.querySelector('[data-click="careShare"]'));
+        await careShare(btn.dataset.arg);
         const call = globalThis.navigator.clipboard.writeText.mock.calls[0];
         expect(call, '공유가 실행되지 않음 — 미생성 시 자동 계산 실패').toBeTruthy();
         expect(call[0]).toContain('본인부담금');
@@ -152,8 +152,8 @@ describe('CO-13 본인부담금 계산 실제 시뮬레이션', () => {
         careCalcPrint(); // 인쇄 먼저 → 결과 렌더
         expect(document.getElementById('care-result').textContent).toContain('본인부담금');
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
-        const btn = document.querySelector('[data-click="careShare"]');
-        await careShare(btn);
+        const btn = /** @type {HTMLElement} */ (document.querySelector('[data-click="careShare"]'));
+        await careShare(btn.dataset.arg);
         const call = globalThis.navigator.clipboard.writeText.mock.calls[0];
         expect(call).toBeTruthy();
         expect(call[0]).toBe(document.getElementById('care-result').textContent);

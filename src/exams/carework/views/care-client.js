@@ -15,6 +15,7 @@ import { listCareLogs } from '../care-log-store.js';
 import { listVisits } from '../care-visit-store.js';
 import { listHandovers } from '../handover-store.js';
 import { listIncidents } from '../incident-store.js';
+export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));

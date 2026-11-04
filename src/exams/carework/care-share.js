@@ -12,10 +12,11 @@ const _readOut = sel => {
     return el ? ((el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) ? el.value : el.textContent || '') : '';
 };
 
-/** 생성 결과가 없으면 뷰 폼의 입력 항목·값을 양식 텍스트로 조립 — "문서 형식이 있으면 공유 가능" 원칙 */
-const _formText = btn => {
-    const sec = btn?.closest?.('.view-section') || document;
-    const lines = [...sec.querySelectorAll('input, select, textarea')].flatMap(el => {
+/** 생성 결과가 없으면 대상 요소의 뷰 폼 입력 항목·값을 양식 텍스트로 조립 */
+const _formText = sel => {
+    const sec = /** @type {HTMLElement|null} */ (document.querySelector(sel.trim()))?.closest('.view-section') || document;
+    const lines = [...sec.querySelectorAll('input, select, textarea')].flatMap(e0 => {
+        const el = /** @type {HTMLInputElement} */ (e0);
         if (['button', 'submit', 'file', 'hidden'].includes(el.type) || el.closest('.nav-practice-only')) return [];
         const lab = el.closest('label') || (el.id && sec.querySelector(`label[for="${el.id}"]`));
         const name = (lab ? lab.textContent : (el.getAttribute('aria-label') || el.name || el.id || '항목')).replace(/\s+/g, ' ').trim();
@@ -34,10 +35,10 @@ const _formText = btn => {
  * 생성핸들러 지정 시 결과가 비어있으면 해당 버튼을 먼저 실행해 생성 후 공유한다.
  * 수급자 정보의 외부 전송 경로이므로 공유 전 기관 정책 확인 경고를 표시한다.
  * 미지원 환경(PC 등)은 클립보드 복사로 폴백.
- * @param {HTMLElement} [btn]
+ * @param {string} arg — data-arg 값 ("선택자|제목[|mask[|생성핸들러]]") — 위임은 요소가 아닌 data-arg 문자열을 전달
  */
-export async function careShare(btn) {
-    const [sel, title = '문서', f3 = '', f4 = ''] = String(btn?.dataset?.arg || '').split('|');
+export async function careShare(arg) {
+    const [sel, title = '문서', f3 = '', f4 = ''] = String(arg || '').split('|');
     // mask 생략 시 3번째 필드가 생성 핸들러 — "|sel|title|gen" 와 "|sel|title|mask|gen" 모두 지원
     const flag = f3 === 'mask' ? 'mask' : '', gen = f4 || (flag ? '' : f3);
     let raw = _readOut(sel);
@@ -47,7 +48,7 @@ export async function careShare(btn) {
     }
     // 생성 결과가 오류 마커뿐이면 양식 텍스트로 폴백 — 계산 전이라도 출력 양식은 공유 가능해야 함
     if (/** @type {HTMLElement|null} */ (document.querySelector(sel.trim()))?.querySelector('.care-calc-err')) raw = '';
-    if (!raw.trim()) raw = _formText(btn); // 생성 결과가 없어도 양식이 있으면 현재 입력 상태를 공유
+    if (!raw.trim()) raw = _formText(sel); // 생성 결과가 없어도 양식이 있으면 현재 입력 상태를 공유
     if (!raw.trim()) { showToast('공유할 내용이 없습니다 — 항목을 입력하세요.', 'error'); return; }
     const text = flag === 'mask' ? _mask(raw) : raw;
     // 개인정보 통제는 인명 가림(mask)으로 보장 — 확인 다이얼로그 없이 한 번 클릭으로 공유 (정책 주의는 비차단 안내)
