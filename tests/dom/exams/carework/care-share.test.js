@@ -183,6 +183,7 @@ describe('CO-13 careShare 시뮬레이션', () => {
         globalThis.matchMedia = () => ({ matches: true });
         globalThis.navigator.share = vi.fn().mockRejectedValue(Object.assign(new Error('x'), { name: 'TypeError' }));
         globalThis.navigator.canShare = () => false; // 파일 공유 미지원 → 텍스트 시트, 실패 시 폴백
+        pdfSpy.mockResolvedValue(new File(['%pdf'], '문서.pdf')); // 다운로드 폴백 대상 파일
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
         expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('문서 내용');
