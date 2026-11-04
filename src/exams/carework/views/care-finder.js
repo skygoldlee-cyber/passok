@@ -27,7 +27,6 @@ function render() {
                 : `<button data-click="careFinderUseOrg" data-arg="${esc(f.name)}" class="btn btn-secondary care-finder-btn">이 기관으로 설정</button>`}
             <span class="care-finder-links">
                 <a href="https://map.kakao.com/link/search/${encodeURIComponent(f.address || f.region || f.name)}" target="_blank" rel="noopener" class="btn btn-secondary care-finder-btn">카카오맵</a>
-                <a href="https://www.longtermcare.or.kr/npbs/r/a/201/selectLtcoSrch" target="_blank" rel="noopener" class="btn btn-secondary care-finder-btn">장기요양보험</a>
             </span>
           </div>`).join('')
         : '<p class="care-log-empty">검색 결과가 없습니다.</p>';

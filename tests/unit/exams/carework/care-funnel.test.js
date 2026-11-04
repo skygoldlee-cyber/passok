@@ -32,3 +32,8 @@ test('카카오맵 링크 — 주소만 검색 쿼리로 사용', () => {
     const src = readFileSync('src/exams/carework/views/care-finder.js', 'utf8');
     assert.match(src, /encodeURIComponent\(f\.address \|\| f\.region \|\| f\.name\)/);
 });
+
+test('공단 검색 링크 — 카드 반복 없이 뷰 상단 단일 위치', () => {
+    assert.ok(!/selectLtcoSrch/.test(readFileSync('src/exams/carework/views/care-finder.js', 'utf8')));
+    assert.match(readFileSync('html/exams/carework/care-finder.html', 'utf8'), /selectLtcoSrch/);
+});
