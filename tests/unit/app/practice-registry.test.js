@@ -139,7 +139,7 @@ test('해시 슬러그 — formula-view → formula', () => {
 test('지연 핸들러 — 로더 함수 + 이름 배열 쌍, 이름은 전체 유니크', () => {
     setExams([]);
     const handlers = getPracticeLazyHandlers();
-    assert.equal(handlers.length, 22); // + careFinder main
+    assert.equal(handlers.length, 23); // + careHome main (서명 저장 핸들러)
     const names = [];
     for (const [load, list] of handlers) {
         assert.equal(typeof load, 'function');

@@ -110,9 +110,12 @@ test('CO-10 커버리지 배너 — 보간 출력은 esc 적용 (싱크 규약)'
     assert.match(readFileSync('src/exams/carework/views/care-audit.js', 'utf8'), /esc\(cov\.text\)/);
 });
 
-test('CO-13 공유 — 모바일 파일 첨부 우선·데스크톱 복사+다운로드, 항상 반응 보장', () => {
+test('CO-13 내보내기 메뉴 — 공유·인쇄·복사·PDF·Excel 통합 진입, 항상 반응 보장', () => {
     const src = readFileSync('src/exams/carework/care-share.js', 'utf8');
-    assert.match(src, /copyFallback/);
+    assert.match(src, /_openMenu/); // 인쇄 버튼 통합 — 내보내기 메뉴 시트
+    assert.match(src, /care-export-sheet/);
+    assert.match(src, /data-pro-feature/); // PRO 배지는 메뉴 항목에 표시
+    assert.match(src, /_copyRaw/);
     assert.match(src, /clipboard\?\.writeText|clipboard\.writeText/);
     assert.match(src, /pointer:coarse/); // 터치 기기에서만 파일 공유 시트
     assert.match(src, /a\.download/); // 데스크톱 파일 다운로드

@@ -1,7 +1,7 @@
 // src/exams/carework/views/care-audit.js — 기관 평가 체크리스트 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { loadAuditSections, loadChecks, toggleCheck, clearChecks, auditProgress } from '../care-audit.js';
-import { docHeadHtml, refreshOrgName } from '../facility.js';
+import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
 import { auditCoverage } from '../care-coverage.js';
@@ -31,7 +31,7 @@ function render() {
                     <em>${esc(i.ref)}</em>
                 </label>`).join('')}
         </div>`).join('')
-        + `<div class="care-doc-sign"><span>점검자: ______________</span><span>기관장(확인): ______________</span><span>점검일: ________</span></div>`;
+        + docSignHtml([['점검자', 'author'], ['기관장(확인)', 'confirmer'], ['점검일', '']]);
     const p = auditProgress(_sections);
     const bar = $('audit-progress');
     if (bar) bar.innerHTML = `<strong>점검 진행 ${esc(p.done)}/${esc(p.total)}</strong><div class="care-audit-bar"><span style="width:${esc(p.total ? Math.round(p.done / p.total * 100) : 0)}%"></span></div>`;

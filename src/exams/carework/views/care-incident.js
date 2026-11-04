@@ -5,7 +5,7 @@ import { markFunnel } from '../care-funnel.js';
 import { listIncidents, saveIncident, removeIncident } from '../incident-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
-import { myMembership, submitIncident, listIncidents as listFacilityIncidents, docHeadHtml, refreshOrgName } from '../facility.js';
+import { myMembership, submitIncident, listIncidents as listFacilityIncidents, docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
 export { careShare } from '../care-share.js';
@@ -41,7 +41,7 @@ export function careIncidentGenerate() {
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·대상자·사고 유형을 입력하세요.</p>'; return; }
     _lastText = t;
-    out.innerHTML = docHeadHtml('사고·낙상 보고서') + `<pre class="care-log-text">${esc(t)}</pre><div class="care-doc-sign"><span>보고자: ______________</span><span>확인(시설장): ______________</span></div>`;
+    out.innerHTML = docHeadHtml('사고·낙상 보고서') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['보고자', 'author'], ['확인(시설장)', 'confirmer']]);
 }
 
 export function careIncidentSave() {

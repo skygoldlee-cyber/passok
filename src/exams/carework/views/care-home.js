@@ -7,7 +7,8 @@ import { listClients } from '../care-client-store.js';
 import { clientTrends } from '../care-trend.js';
 import { markFunnel, funnelStats } from '../care-funnel.js';
 import { escapeHTML as esc } from '../../../core/sanitize.js';
-import { refreshOrgName } from '../facility.js';
+import { refreshOrgName, getDocSign, setDocSign } from '../facility.js';
+import { showToast } from '../../../ui-utils.js';
 
 const $ = (id) => document.getElementById(id);
 const todayKey = () => new Date().toISOString().slice(0, 10);
@@ -34,4 +35,21 @@ export function initCareHomeView() {
         const slug = /** @type {HTMLAnchorElement} */ (a).href.split('#/')[1];
         if (slug && !(used[`tool:${slug}`] > 0)) a.insertAdjacentHTML('beforeend', '<span class="care-new">처음</span>');
     });
+    // 출력물 서명 설정 — 홈 입력값을 저장값으로 채움
+    const sign = getDocSign();
+    const aEl = /** @type {HTMLInputElement|null} */ ($('home-sign-author'));
+    const cEl = /** @type {HTMLInputElement|null} */ ($('home-sign-confirmer'));
+    const rEl = /** @type {HTMLInputElement|null} */ ($('home-sign-receiver'));
+    if (aEl) aEl.value = sign.author;
+    if (cEl) cEl.value = sign.confirmer;
+    if (rEl) rEl.value = sign.receiver;
+}
+
+/** 출력물 서명 저장 — 작성자·확인자·인수자 성명이 모든 문서 서명란에 기입된다 */
+export function careDocSignSave() {
+    setDocSign(
+        /** @type {HTMLInputElement|null} */ ($('home-sign-author'))?.value,
+        /** @type {HTMLInputElement|null} */ ($('home-sign-confirmer'))?.value,
+        /** @type {HTMLInputElement|null} */ ($('home-sign-receiver'))?.value);
+    showToast('서명을 저장했습니다 — 모든 출력물 서명란에 기입됩니다.');
 }

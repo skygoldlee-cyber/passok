@@ -9,6 +9,16 @@
         <div id="home-summary" class="care-home-summary"></div>
         <div id="home-warn" class="care-home-warn"></div>
     </div>
+    <div class="care-home-card">
+        <h3 class="care-home-sign-title">출력물 서명</h3>
+        <div class="care-calc-form">
+            <label>작성자(요양보호사) <input id="home-sign-author" type="text" placeholder="예: 김○○" autocomplete="off"></label>
+            <label>확인자(시설장·기관장) <input id="home-sign-confirmer" type="text" placeholder="예: 박○○" autocomplete="off"></label>
+            <label>인수자(다음 근무자) <input id="home-sign-receiver" type="text" placeholder="예: 이○○" autocomplete="off"></label>
+            <div class="care-calc-actions"><button data-click="careDocSignSave" class="secondary">서명 저장</button></div>
+            <p class="care-log-hint">일지·인수인계서·보고서 등 모든 출력물 서명란에 자동 기입됩니다.</p>
+        </div>
+    </div>
     <nav class="care-home-nav" aria-label="빠른 기록">
         <a href="#/care-log" class="btn btn-secondary">요양일지 기록</a>
         <a href="#/care-handover" class="btn btn-secondary">인수인계</a>

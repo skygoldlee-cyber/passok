@@ -242,6 +242,8 @@ const careHome = {
     markup: 'care-home.html',
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-home.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['careDocSignSave']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);

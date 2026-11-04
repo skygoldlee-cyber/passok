@@ -6,7 +6,7 @@ import { saveCareLog, listCareLogs, removeCareLog } from '../care-log-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { docHeadHtml, refreshOrgName } from '../facility.js';
+import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 
 const $ = (id) => document.getElementById(id);
@@ -41,7 +41,7 @@ export function careLogGenerate() {
     const out = $('log-preview');
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·대상자·급여 종류를 입력하세요.</p>'; return; }
-    out.innerHTML = docHeadHtml('요양보호 서비스 기록') + `<pre class="care-log-text">${esc(t)}</pre><div class="care-doc-sign"><span>작성자(요양보호사): ______________</span><span>확인자: ______________</span></div>`;
+    out.innerHTML = docHeadHtml('요양보호 서비스 기록') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]);
 }
 
 export function careLogCopy() {

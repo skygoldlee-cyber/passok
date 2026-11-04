@@ -8,7 +8,7 @@ import { attachClientPicker, clientField } from '../care-client-field.js';
 import { buildDigest } from '../handover-digest.js';
 import { listVisits } from '../care-visit-store.js';
 import { listIncidents } from '../incident-store.js';
-import { myMembership, submitHandover, listHandovers as listFacilityHandovers, ackHandover, docHeadHtml, refreshOrgName } from '../facility.js';
+import { myMembership, submitHandover, listHandovers as listFacilityHandovers, ackHandover, docHeadHtml, docSignHtml, getDocSign, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
 export { careShare } from '../care-share.js';
@@ -57,7 +57,7 @@ export function careHandoverGenerate() {
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·인계자·인수자를 입력하세요.</p>'; return; }
     _lastText = t; _lastSaved = false;
-    out.innerHTML = docHeadHtml('인수인계서') + `<pre class="care-log-text">${esc(t)}</pre><div class="care-doc-sign"><span>인계자(서명): ______________</span><span>인수자(서명): ______________</span><span>확인일: ________</span></div>`;
+    out.innerHTML = docHeadHtml('인수인계서') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver'], ['확인일', '']]);
     renderSaved();
 }
 
@@ -176,6 +176,12 @@ export function initCareHandoverView() {
         s.innerHTML = SHIFTS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
     const n = $('ho-logcount');
     if (n) n.textContent = `오늘 저장된 일지 ${todayLogs().length}건 · 무료 저장 ${FREE_LIMIT}건 한도`;
+    // 홈 서명 설정의 작성자·인수자를 폼 기본값으로 — 문서 서명란과 폼 값 일치
+    const sign = getDocSign();
+    const fromEl = /** @type {HTMLInputElement|null} */ ($('ho-from'));
+    if (fromEl && !fromEl.value) fromEl.value = sign.author;
+    const toEl = /** @type {HTMLInputElement|null} */ ($('ho-to'));
+    if (toEl && !toEl.value) toEl.value = sign.receiver;
     renderSaved();
     void renderFacility();
     void refreshOrgName();

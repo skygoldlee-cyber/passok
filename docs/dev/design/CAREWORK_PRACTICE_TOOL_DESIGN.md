@@ -138,39 +138,47 @@ feature-plan.json             # careLog.save/pdf → pro 게이팅, 나머지 fr
 - **법령 수치는 코드 상수에 두지 않고 데이터로** — ref_md 연동 출처 주석 필수
 - **기존 SPEC 수정 없음** — UM/PAY/DA 계약을 그대로 사용
 
-## 9. 카톡 공유 파이프라인 (CO-13) — Web Share 제스처·페이로드 계약
+## 9. 카톡 공유·내보내기 파이프라인 (CO-13) — 메뉴·제스처·페이로드 계약
 
-구현: `src/exams/carework/care-share.js` — 출력 뷰의 `📤 공유` 버튼(`data-click="careShare"`)이 진입점.
+구현: `src/exams/carework/care-share.js` — 출력 뷰의 `📤 공유·내보내기` 버튼(`data-click="careShare"`)이 진입점. 인쇄 버튼은 이 버튼에 통합되어 뷰당 출력 버튼이 하나다.
 
-### 9-1. 제스처 제약 — 왜 2단계 탭인가
+`data-arg` 스키마: `선택자|제목[|mask][|생성핸들러[|보조생성기[|인쇄핸들러[|pro키]]]]`
+— mask 플래그 시 인명·연락처 가림, 생성핸들러는 미생성 시 자동 실행, 보조생성기(`*CsvExport`)는 Excel 소스, 인쇄핸들러는 메뉴의 인쇄 항목이 호출(미지정 시 생성 후 `window.print()`), pro키는 메뉴 항목 배지·`proFeatureNotice`에 사용.
+
+### 9-1. 제스처 제약 — 왜 메뉴 + 2단계 탭인가
 
 - `navigator.share()`는 **transient activation(수 초)** 안에만 열린다. xlsx(SheetJS 로드)·pdf(html2canvas) 생성은 수 초가 걸려 같은 클릭에서 양립 불가.
 - `share()`는 제스처를 **소비**하므로 실패 후 같은 클릭에서 재시도 불가 — 재시도는 반드시 새 탭이 필요.
-- 따라서 첫 탭에서는 생성만 하고, **`"📤 공유하기" 플로팅 버튼의 새 제스처**로 `share()`를 호출한다 (`_shareBtn` — 탭하면 자기 제거, 30초 자동 소멸).
+- 내보내기 메뉴(`_openMenu` — 하단 시트 + 스크림)의 각 항목 탭이 새 제스처다. 공유 항목은 생성 완료 후 **`"📤 공유하기" 플로팅 버튼의 새 제스처**로 `share()`를 호출한다 (`_shareBtn` — 탭하면 자기 제거, 30초 자동 소멸).
 
 ### 9-2. 플로우
 
 ```
-📤 공유 탭
+📤 공유·내보내기 탭
   ├─ 텍스트 확보: 출력 요소 → 미생성 시 생성 핸들러 자동 실행 → 실패 시 폼 양식 폴백
   ├─ mask 플래그 시 인명·연락처 가림 + 기관 정책 안내 토스트
-  ├─ 클립보드 복사 (즉시 반응 — 제스처 안이라 통과)
-  ├─ 파일 생성 병렬: xlsx(SheetJS) + pdf(html2canvas, 인쇄 미리보기 DOM 클론)
-  └─ "📤 제목 공유하기" 버튼 표시 → 탭 → navigator.share({ title, files })
+  └─ 내보내기 메뉴 시트 (항목은 해당되는 것만)
+      ├─ 📤 카카오톡 등으로 공유 — 모바일 전용: 복사 + xlsx·pdf 생성 → 공유하기 버튼 → share({files})
+      ├─ 🖨️ 인쇄·PDF 저장 — 인쇄핸들러 호출(없으면 생성+print) — 벡터 PDF·용지 출력
+      ├─ 📋 본문 복사 — 클립보드 (mask 시 가림)
+      ├─ 📄 PDF 파일 다운로드 — html2canvas 래스터 (카톡 첨부용)
+      └─ 📊 Excel 내보내기 — CsvExport 핸들러 그대로 호출
 ```
 
 - **페이로드는 `files`만** — `text`를 병기하면 카톡 등 타겟이 파일 대신 텍스트만 수신한다.
 - **txt 파일은 만들지 않는다** — 본문 텍스트는 클립보드 복사로 제공, 카톡·다운로드 이중 수신 방지.
-- 시트 미탑재 시에도 생성된 파일명이 감사 로그(`CARE_SHARE_AUDIT`, 최근 50건)에 기록된다.
+- 외부화 액션(공유·복사·다운로드)은 감사 로그(`CARE_SHARE_AUDIT`, 최근 50건)에 기록된다 — 인쇄는 로컬 출력이라 제외.
+- 텍스트가 없어도 `csvGen`이 있으면 메뉴는 열리고 텍스트 의존 항목만 비활성된다 (저장 목록만 있는 뷰의 Excel 경로 보존).
 
 ### 9-3. 플랫폼 분기·폴백
 
 | 환경 | 동작 |
 |---|---|
-| 모바일(`pointer:coarse`) + share 지원 | 생성 완료 → 공유하기 버튼 → `share({title, files})` — 카톡에 PDF·xlsx 첨부 |
-| 데스크톱(`pointer:fine`) | 시트 생략 — 복사 + 전체 파일 다운로드. Windows는 `canShare`가 파일을 통과시켜도 `share({files})`가 OS 수준 `NotAllowedError` 거절(Chromium `canShare`는 파일 타입·OS 지원을 검증하지 않음) |
-| share 미지원(인앱 WebView 등) | 진단 배너("Chrome으로 열어주세요") + 복사 + 다운로드 |
+| 모바일(`pointer:coarse`) + share 지원 | 공유 항목 탭 → 복사 + 생성 완료 → 공유하기 버튼 → `share({title, files})` — 카톡에 PDF·xlsx 첨부 |
+| 데스크톱(`pointer:fine`) | **공유 항목 숨김** — 카톡 PC판은 Windows 공유 대상에 미등록이고, `canShare`가 파일을 통과시켜도 `share({files})`가 OS 수준 `NotAllowedError` 거절(Chromium `canShare`는 파일 타입·OS 지원을 검증하지 않음). 메뉴에서 인쇄·복사·PDF·Excel 선택 |
+| share 미지원(인앱 WebView 등) | 공유 항목 탭 시 복사 후 진단 배너("Chrome으로 열어주세요") |
 | 시트 거절 | `AbortError`는 사용자 취소로 무시. 그 외는 진단 배너 + `downloadAll()` — `NotAllowedError`+파일 첨부 조합은 `_filesBlocked` 학습으로 이후 탭은 `{title, text}`만 탑재 |
 
 - 진단은 토스트가 아닌 **탭-해제 상시 배너**(`diag`) — 다운로드 창에 가려지지 않고 캡처 가능 (네이티브 다이얼로그 규약 금지).
 - 실패·미지원 경로에서도 항상 복사·다운로드로 결과가 손실되지 않는다 — "클릭 즉시 반응" 계약.
+- PRO 배지는 통합 버튼이 아닌 **메뉴 항목**에 표시 — pro키 지정 뷰는 공유·복사·PDF·인쇄·Excel 전 항목에 배지 + 진입 시 `proFeatureNotice` (무료 경로 우회 없음 — §5 "생성은 무료, 공유·인쇄만 Pro"와 정합). pro키 미지정 뷰(본인부담금)는 배지 없이 무료.
