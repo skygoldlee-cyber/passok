@@ -1,68 +1,25 @@
-// @spec none — ref-pipeline 도구 테스트 (파이프라인 전용)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 
-// ref-pipeline/pdf2md.py --image-format 옵션 존재 검증 (orig|webp|svg)
+const has = (needle) => execFileSync('python', ['-c',
+    `s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print(${JSON.stringify(needle)} in s)`])
+    .toString().trim() === 'True';
+
+// @spec none — ref-pipeline 도구 테스트 (파이프라인 전용)
+
 test('pdf2md --image-format 옵션 — orig|webp|svg 선택지', () => {
-    const src = execFileSync('python', ['-c',
-        "import re; print('image-format' in open('ref-pipeline/pdf2md.py',encoding='utf8').read())"])
-        .toString().trim();
-    assert.equal(src, 'True');
-});
-
-test('pdf2md 페이지 단위 예외 복원 — 중간 페이지 실패가 변환을 중단시키지 않음', () => {
-    const src = execFileSync('python', ['-c',
-        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('페이지 건너뜀' in s and 'except Exception' in s)"])
-        .toString().trim();
-    assert.equal(src, 'True');
-});
-
-test('pdf2md 여백 수집 예외 복원 — 페이지 로드 실패 시 건너뜀', () => {
-    const src = execFileSync('python', ['-c',
-        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('여백 수집 건너뜀' in s)"])
-        .toString().trim();
-    assert.equal(src, 'True');
-});
-
-test('pdf2md Qt 핸들러 stderr None 가드 — pythonw 크래시 방지', () => {
-    const src = execFileSync('python', ['-c',
-        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('if sys.stderr' in s)"])
-        .toString().trim();
-    assert.equal(src, 'True');
-});
-
-test('pdf2md Qt 메시지 핸들러 미사용 — QT_LOGGING_RULES 폴백', () => {
-    const src = execFileSync('python', ['-c',
-        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('QT_LOGGING_RULES' in s and 'qInstallMessageHandler' not in s)"])
-        .toString().trim();
-    assert.equal(src, 'True');
-});
-
-test('pdf2md GUI 크래시 로그 — _crash.log 스택 기록', () => {
-    const src = execFileSync('python', ['-c',
-        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('_crash.log' in s)"])
-        .toString().trim();
-    assert.equal(src, 'True');
-});
-
-test('pdf2md 입력 목록 드래그앤드롭 — setAcceptDrops + eventFilter', () => {
-    const src = execFileSync('python', ['-c',
-        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('setAcceptDrops' in s and 'mimeData' in s)"])
-        .toString().trim();
-    assert.equal(src, 'True');
+    assert.ok(has('image-format') && has("'orig', 'webp', 'svg'"));
 });
 
 test('pdf2md svg — clip 인자 미지원 대응 (show_pdf_page 경유)', () => {
-    const src = execFileSync('python', ['-c',
-        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('show_pdf_page' in s)"])
-        .toString().trim();
-    assert.equal(src, 'True');
+    assert.ok(has('show_pdf_page'));
+});
+
+test('pdf2md 입력 목록 드래그앤드롭 — setAcceptDrops + eventFilter', () => {
+    assert.ok(has('setAcceptDrops') && has('mimeData'));
 });
 
 test('pdf2md QFont 경고 — qInstallMessageHandler로 차단', () => {
-    const src = execFileSync('python', ['-c',
-        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('qInstallMessageHandler' in s)"])
-        .toString().trim();
-    assert.equal(src, 'True');
+    assert.ok(has('qInstallMessageHandler'));
 });

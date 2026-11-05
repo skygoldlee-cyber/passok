@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 test(ref-pipeline): 스테일 테스트 정리 — 롤백된 기능 검증 제거
+
+
 ## 2026-11-05 fix(ref-pipeline): QFont 경고 — qInstallMessageHandler로 C 레벨 차단
 
 
