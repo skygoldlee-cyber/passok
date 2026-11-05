@@ -11,6 +11,7 @@ import { listVisits } from '../care-visit-store.js';
 import { listHandovers } from '../handover-store.js';
 import { listIncidents } from '../incident-store.js';
 import { shareAudit } from '../care-share.js';
+import { docMdHead, mdTable, mdToHtml } from '../doc-md.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -38,7 +39,7 @@ function render() {
     if (bar) bar.innerHTML = `<strong>점검 진행 ${esc(p.done)}/${esc(p.total)}</strong><div class="care-audit-bar"><span style="width:${esc(p.total ? Math.round(p.done / p.total * 100) : 0)}%"></span></div>`;
     // 문서 미리보기 — 본문 복사·PDF의 원본 (체크박스 DOM은 ✔/□ 상태를 텍스트로 담지 못해 요약을 렌더)
     const pv = $('audit-preview');
-    if (pv) pv.innerHTML = `<pre class="care-log-text">${esc(buildSummary())}</pre>`;
+    if (pv) pv.innerHTML = mdToHtml(careAuditDocMd());
 }
 
 function buildSummary() {
@@ -52,6 +53,14 @@ function buildSummary() {
     lines.push('', `점검 진행: ${p.done}/${p.total} 항목`);
     return lines.join('\n');
 
+}
+
+/** 점검표 MD 초안 — 섹션별 항목을 표 구조로 (docx 파생 원본) */
+export function careAuditDocMd() {
+    if (!_sections.length) return '';
+    const c = loadChecks();
+    const rows = _sections.flatMap(s => s.items.map(i => [s.title, c[i.id] ? '✔' : '□', i.text, i.ref]));
+    return docMdHead('기관 평가 점검표') + '\n' + mdTable(['영역', '점검', '항목', '근거'], rows);
 }
 
 export function careAuditCopy() {

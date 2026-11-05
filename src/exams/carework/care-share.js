@@ -4,7 +4,7 @@ import { showToast } from '../../ui-utils.js';
 import { esc } from '../../core/sanitize.js';
 import { pdfFileFromEl } from '../../content/pdf-utils.js';
 import { sheetFile } from '../../content/xlsx-utils.js';
-import { docxFile } from '../../content/docx-utils.js';
+import { docxFile, docxFileMd } from '../../content/docx-utils.js';
 import { docHeadHtml, getOrgName } from './facility.js';
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
@@ -92,10 +92,10 @@ const _arg = arg => {
     const f = String(arg || '').split('|');
     const f3 = f[2] || '';
     const flag = f3 === 'mask' ? 'mask' : '';
-    const [gen = '', alt = '', print = '', proKey = ''] = flag ? f.slice(3) : f.slice(2);
+    const [gen = '', alt = '', print = '', proKey = '', mdgen = ''] = flag ? f.slice(3) : f.slice(2);
     const stamp = todayKey();
     return {
-        sel: f[0] || '', title: f[1] || '문서', flag, gen, print, proKey, text: '',
+        sel: f[0] || '', title: f[1] || '문서', flag, gen, print, proKey, mdgen, text: '', md: '',
         csvGen: gen.endsWith('CsvExport') ? gen : (alt.endsWith('CsvExport') ? alt : ''),
         fname: ext => `${f[1] || '문서'}_${stamp}.${ext}`,
     };
@@ -117,6 +117,13 @@ const _prepare = async ctx => {
     if ((sel.trim() && /** @type {HTMLElement|null} */ (document.querySelector(sel.trim()))?.querySelector('.care-calc-err'))) raw = ''; // 오류 마커만 있으면 양식으로
     if (!raw.trim()) raw = _formText(sel); // 생성 실패해도 양식(입력 항목·값)으로 공유
     ctx.text = raw.trim() ? (ctx.flag === 'mask' ? _mask(raw) : raw) : '';
+    // MD 표준 초안 — 지정 시 docx 등 구조화 형식이 평문 대신 사용 (mask는 본문과 동일 적용)
+    if (ctx.mdgen) {
+        try {
+            const md = await (/** @type {any} */ (window))[ctx.mdgen]?.();
+            ctx.md = md ? (ctx.flag === 'mask' ? _mask(md) : md) : '';
+        } catch { ctx.md = ''; }
+    }
 };
 
 /** 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강 */
@@ -154,7 +161,7 @@ const _pdfFile = async ctx => {
 
 const _copyRaw = ctx => {
     if (!navigator.clipboard?.writeText) { showToast('공유·복사를 지원하지 않는 환경입니다.', 'error'); return; }
-    navigator.clipboard.writeText(ctx.text).then(
+    navigator.clipboard.writeText(ctx.md || ctx.text).then( // MD 초안이 있으면 구조(표) 텍스트로 복사
         () => showToast('클립보드에 복사했습니다 — 카톡 등에 붙여넣으세요.'),
         () => showToast('복사 실패 — 인쇄·PDF를 이용하세요.', 'error'));
 };
@@ -177,8 +184,9 @@ const _actPdf = async ctx => {
     } catch { showToast('PDF 생성 실패 — 인쇄를 이용하세요.', 'error'); }
 };
 
-/** 공유 Word = 인쇄 미리보기와 동일 구성 — 문서 헤더(제목·기관명·출력일) + 본문 단락 */
+/** 공유 Word — MD 초안이 있으면 구조 보존 변환(표·헤딩), 없으면 헤더+본문 단락 폴백 */
 const _docxFile = ctx => {
+    if (ctx.md) return docxFileMd(ctx.md, ctx.fname('docx').replace(/\.docx$/, ''));
     const org = getOrgName();
     const head = `${ctx.title}\n${org ? org + ' · ' : ''}${todayKey()} 출력`;
     return docxFile(`${head}\n\n${ctx.text}`, ctx.fname('docx').replace(/\.docx$/, ''), 2);

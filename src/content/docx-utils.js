@@ -99,3 +99,47 @@ export function docxFile(text, filename, boldLines = 0) {
     ]);
     return new File([blob], `${filename}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 }
+
+// — MD 서브셋 → WordprocessingML (문서 표준 초안: 헤딩·표·목록·구분선·단락) —
+
+const _BORDERS = ['top', 'left', 'bottom', 'right', 'insideH', 'insideV']
+    .map(b => `<w:${b} w:val="single" w:sz="4" w:color="999999"/>`).join('');
+const _cell = (c, head) => `<w:tc><w:p><w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/>${head ? '<w:b/>' : ''}</w:rPr><w:t xml:space="preserve">${esc(c.trim())}</w:t></w:r></w:p></w:tc>`;
+const _tbl = rows => `<w:tbl><w:tblPr><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblW w:w="0" w:type="auto"/></w:tblPr>${rows.map((r, i) => `<w:tr>${r.map(c => _cell(c, i === 0)).join('')}</w:tr>`).join('')}</w:tbl>`;
+const _h = (t, sz) => `<w:p><w:pPr><w:spacing w:before="200" w:after="100"/></w:pPr><w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/><w:b/><w:sz w:val="${sz}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
+const _HR = '<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="999999"/></w:pBdr></w:pPr></w:p>';
+
+const _mdBody = md => {
+    const out = [], lines = String(md || '').split('\n');
+    /** @type {string[][] | null} */
+    let tbl = null;
+    const flush = () => { if (tbl) { out.push(_tbl(tbl)); tbl = null; } };
+    for (const line of lines) {
+        const t = line.trim();
+        if (/^\|[\s:|-]+\|$/.test(t)) continue; // 표 구분행
+        if (t.startsWith('|') && t.endsWith('|')) { (tbl = tbl || []).push(t.slice(1, -1).split('|')); continue; }
+        flush();
+        const h = t.match(/^(#{1,3})\s+(.+)/);
+        if (h) { out.push(_h(h[2], h[1].length === 1 ? 32 : h[1].length === 2 ? 28 : 24)); continue; }
+        if (t === '---') { out.push(_HR); continue; }
+        if (t.startsWith('- ')) { out.push(_P('• ' + t.slice(2), 99, 0)); continue; }
+        out.push(_P(t, 99, 0));
+    }
+    flush();
+    return out.join('');
+};
+
+/**
+ * Markdown 초안 → .docx File — # 헤딩·|표|·- 목록·--- 구분선·단락을 구조 보존 변환.
+ * @param {string} md - 문서 마크다운
+ * @param {string} filename - 확장자 제외 파일명
+ */
+export function docxFileMd(md, filename) {
+    const body = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${_mdBody(md)}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/></w:sectPr></w:body></w:document>`;
+    const blob = _zipStore([
+        ['[Content_Types].xml', _enc.encode(TYPES)],
+        ['_rels/.rels', _enc.encode(RELS)],
+        ['word/document.xml', _enc.encode(body)],
+    ]);
+    return new File([blob], `${filename}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+}

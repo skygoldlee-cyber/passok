@@ -2,7 +2,7 @@
 // @spec CO-13 — 미니멀 docx 생성기: ZIP 구조·엔트리·document.xml 이스케이프 검증
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { docxFile } from '../../../src/content/docx-utils.js';
+import { docxFile, docxFileMd } from '../../../src/content/docx-utils.js';
 
 const dec = new TextDecoder();
 /** zip 구조 판독 — 로컬 헤더 순회 + EOCD 확인 */
@@ -55,4 +55,15 @@ test('빈 본문도 유효 문서 — 최소 구조 유지', async () => {
     const { entries, eocd } = await unzip(docxFile('', 'doc'));
     assert.ok(eocd);
     assert.ok(entries['word/document.xml'].includes('<w:sectPr>'));
+});
+
+test('docxFileMd — 헤딩·표·목록이 구조로 변환된다', async () => {
+    const md = '# 제목\n\n메타 줄\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\n- 항목\n\n---\n\n본문';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    assert.ok(doc.includes('<w:tbl>'), '표 변환 누락');
+    assert.ok(doc.includes('<w:b/>'), '굵기(헤딩·표머리) 누락');
+    assert.ok((doc.match(/<w:tr>/g) || []).length === 2, '표 행 수 불일치');
+    assert.ok(doc.includes('• 항목'), '목록 불릿 누락');
+    assert.ok(doc.includes('<w:pBdr>'), '구분선 누락');
 });

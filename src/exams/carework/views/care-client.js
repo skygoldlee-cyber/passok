@@ -6,6 +6,7 @@ import { clientsToCsv, ADMIT_ITEMS } from '../care-client-csv.js';
 import { csvToClientsAny } from '../care-csv-presets.js';
 import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
+import { docMdHead, csvToMdTable, mdToHtml } from '../doc-md.js';
 import { docHeadHtml, getDocSign, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 import { clientTimeline, timelineSummary } from '../care-timeline.js';
@@ -96,22 +97,29 @@ function buildListText() {
     ].filter(Boolean).join('\n')).join('\n\n────────\n\n');
 }
 
-function renderPreview(t) {
+function renderPreview() {
     const out = $('cli-preview');
-    if (out) out.innerHTML = docHeadHtml('수급자 명부') + `<pre class="care-log-text">${esc(t)}</pre>`;
+    if (out) out.innerHTML = mdToHtml(careClientDocMd());
+}
+
+/** 명부 MD 초안 — 대상자 표 구조 (docx·xlsx 파생 원본) */
+export function careClientDocMd() {
+    const items = listClients();
+    if (!items.length) return '';
+    return docMdHead('수급자 명부') + '\n' + csvToMdTable(clientsToCsv(items));
 }
 
 /** 명부 문서 미리보기 — 저장 명부 전체를 문서로 렌더 (내보내기 메뉴 자동 생성기, 복사·인쇄·PDF 공통 원본) */
 export function careClientPreview() {
     const t = buildListText();
     if (!t) { showToast('등록된 대상자가 없습니다.', 'error'); return; }
-    renderPreview(t);
+    renderPreview();
 }
 
 export function careClientPrint() {
     const t = buildListText();
     if (!t) { showToast('등록된 대상자가 없습니다.', 'error'); return; }
-    renderPreview(t);
+    renderPreview();
     proFeatureNotice('care_client_share', '명부 인쇄·PDF');
     window.print();
 }
