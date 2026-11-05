@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 feat(carework): 서명 이미지 업로드 — 홈 등록 → 출력물 서명란 기입
+
+- 홈 출력물 서명 카드에 이미지 파일 선택 추가 — data URI로 CARE_DOC_SIGN 저장
+- docSignHtml의 author 슬롯에 등록 이미지 기입 (성명 텍스트 대체) — 미리보기·인쇄·PDF 경로
+- setDocSignImage 보조 저장소 + 미리보기·삭제 버튼, .care-doc-signimg 스타일
+
 ## 2026-11-05 feat(carework): 출력 문서 서명 자동기입 — MD 경로까지 서명란 확장
 
 - docMdSign 추가 (doc-md.js) — docSignHtml과 동일 정책(설정 성명 기입·미설정 공란 유지)

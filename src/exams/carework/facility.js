@@ -93,14 +93,20 @@ export function docHeadHtml(title) {
 
 // — 출력물 서명란 기입 (홈 설정 — 전 문서 공통) —
 
-/** 홈에서 설정한 서명자 — {author: 작성자(요양보호사), confirmer: 확인자(시설장·기관장), receiver: 인수자} */
+/** 홈에서 설정한 서명자 — {author: 작성자(요양보호사), confirmer: 확인자(시설장·기관장), receiver: 인수자, signImage: 서명 이미지 data URI} */
 export function getDocSign() {
     const s = /** @type {any} */ (getJSON(STORAGE_KEYS.CARE_DOC_SIGN)) || {};
-    return { author: String(s.author || ''), confirmer: String(s.confirmer || ''), receiver: String(s.receiver || '') };
+    return { author: String(s.author || ''), confirmer: String(s.confirmer || ''), receiver: String(s.receiver || ''), signImage: String(s.signImage || '') };
 }
 /** 서명자 저장 — 홈 설정 카드에서 호출 */
 export function setDocSign(author, confirmer, receiver = '') {
-    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: String(author || '').trim(), confirmer: String(confirmer || '').trim(), receiver: String(receiver || '').trim() });
+    const prev = getDocSign();
+    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: String(author || '').trim(), confirmer: String(confirmer || '').trim(), receiver: String(receiver || '').trim(), signImage: prev.signImage });
+}
+/** 서명 이미지 저장/삭제 — 홈 업로드에서 호출 (기존 성명은 보존) */
+export function setDocSignImage(dataUri) {
+    const s = getDocSign();
+    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: s.author, confirmer: s.confirmer, receiver: s.receiver, signImage: String(dataUri || '') });
 }
 /**
  * 문서 서명란 — items: [[라벨, 'author'|'confirmer'|'receiver'|'']].
@@ -109,7 +115,11 @@ export function setDocSign(author, confirmer, receiver = '') {
 export function docSignHtml(items) {
     const s = getDocSign();
     const name = k => (k === 'author' ? s.author : k === 'confirmer' ? s.confirmer : k === 'receiver' ? s.receiver : '');
-    return `<div class="care-doc-sign">${items.map(([label, k]) => `<span>${_esc(label)}: ${name(k) ? _esc(name(k)) : '______________'}</span>`).join('')}</div>`;
+    return `<div class="care-doc-sign">${items.map(([label, k]) => {
+        // 서명 이미지 등록 시 author 슬롯에 이미지 기입 (성명 텍스트 대체)
+        if (k === 'author' && s.signImage) return `<span>${_esc(label)}: <img class="care-doc-signimg" alt="${_esc(s.author || '서명')}" src="${s.signImage}"></span>`;
+        return `<span>${_esc(label)}: ${name(k) ? _esc(name(k)) : '______________'}</span>`;
+    }).join('')}</div>`;
 }
 
 // — DSN-43 6b: 교대 인수 확인 —

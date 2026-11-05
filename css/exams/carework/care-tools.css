@@ -118,6 +118,8 @@
 .doc-md th { background: var(--bg-muted, rgba(128,128,128,.12)); }
 .doc-md ul { margin: 4px 0 4px 20px; }
 .doc-md hr { border: 0; border-top: 1px solid var(--border-subtle, #d1d5db); margin: 8px 0; }
+.care-doc-signimg { height: 42px; vertical-align: middle; }
+.care-sign-preview { max-height: 64px; display: block; margin: 4px 0; }
 
 .care-log-text {
     font-family: inherit; font-size: 15px; line-height: 1.7; white-space: pre-wrap;

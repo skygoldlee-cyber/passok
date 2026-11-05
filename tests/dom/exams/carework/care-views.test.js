@@ -248,6 +248,15 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(md).toMatch(/점검일: ＿+/); // 미설정 슬롯은 수기 서명용 공란
     });
 
+    it('docSignHtml — 서명 이미지 등록 시 작성자 슬롯에 이미지 기입', async () => {
+        const { setDocSignImage, docSignHtml } = await import('../../../../src/exams/carework/facility.js');
+        setDocSignImage('data:image/svg+xml;base64,AAA');
+        const html = docSignHtml([['작성자', 'author'], ['확인자', 'confirmer']]);
+        expect(html).toContain('care-doc-signimg'); // author 슬롯이 이미지로 기입
+        expect(html).toContain('data:image/svg+xml;base64,AAA');
+        setDocSignImage(''); // 정리 — 이후 테스트에 영향 방지
+    });
+
     it('careAudit — 점검표 인쇄 핸들러 실행', async () => {
         loadPartial('care-audit.html');
         await initCareAuditView();
