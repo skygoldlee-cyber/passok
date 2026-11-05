@@ -1765,6 +1765,15 @@ def run_gui():
                 self.thread.wait(3000)
             super().closeEvent(event)
 
+    from PySide6.QtCore import qInstallMessageHandler
+
+    def _qt_msg_filter(mode, ctx, msg):
+        # 기본 폰트 해석 경고 등 Qt 노이즈 필터 — 실제 오류만 표시
+        if 'QFont::setPointSize' in msg:
+            return
+        sys.stderr.write(msg + '\n')
+
+    qInstallMessageHandler(_qt_msg_filter)
     app = QApplication(sys.argv)
     app.setApplicationName('pdf2md')
     win = MainWindow()

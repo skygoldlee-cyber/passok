@@ -17,3 +17,10 @@ test('pdf2md 페이지 단위 예외 복원 — 중간 페이지 실패가 변�
         .toString().trim();
     assert.equal(src, 'True');
 });
+
+test('pdf2md 여백 수집 예외 복원 — 페이지 로드 실패 시 건너뜀', () => {
+    const src = execFileSync('python', ['-c',
+        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('여백 수집 건너뜀' in s)"])
+        .toString().trim();
+    assert.equal(src, 'True');
+});
