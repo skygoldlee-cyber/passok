@@ -232,6 +232,8 @@ test('BP-12 buildRecallSection + stripGenerated — 생성 구간은 추출에�
     // 문장 끝 인용부호는 래핑 따옴표와 중복되지 않도록 제거
     const quoted = M.buildRecallSection([{ sentence: '필기와 실기 각각 60%라니 외워야겠어요."', token: '60%' }]);
     assert.ok(!quoted.includes('""') && quoted.includes('겠어요." — 정답'), '문장 끝 따옴표 중복');
+    // 시간·분·도 단위 수치도 회상 토큰으로 잡힌다 (실기 서사 수치 복구)
+    assert.ok('2시간마다'.match(M.FACT_TOKEN_RE) && '30도'.match(M.FACT_TOKEN_RE) && '15분'.match(M.FACT_TOKEN_RE), '시간·도 단위 토큰');
     // recall 섹션이 포함된 이야기형에서 패치 추출 시 회상은 authored로 오인되지 않는다
     const story = M.GEN_BANNER + '\n' + STD + '\n\n' + M.STORY_START + '\n수진 서사\n' + M.STORY_END + '\n' + sec;
     const { ops } = M.extractPatch(story, STD);
