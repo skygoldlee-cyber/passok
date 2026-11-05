@@ -31,3 +31,10 @@ test('pdf2md Qt 핸들러 stderr None 가드 — pythonw 크래시 방지', () =
         .toString().trim();
     assert.equal(src, 'True');
 });
+
+test('pdf2md Qt 메시지 핸들러 미사용 — QT_LOGGING_RULES 폴백', () => {
+    const src = execFileSync('python', ['-c',
+        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('QT_LOGGING_RULES' in s and 'qInstallMessageHandler' not in s)"])
+        .toString().trim();
+    assert.equal(src, 'True');
+});

@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(ref-pipeline): Qt 메시지 핸들러 제거 → QT_LOGGING_RULES — GUI 크래시 해소
+
+
 ## 2026-11-05 fix(ref-pipeline): Qt 핸들러 stderr None 가드 — GUI 크래시 해소
 
 
