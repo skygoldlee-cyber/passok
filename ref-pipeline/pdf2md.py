@@ -1558,12 +1558,15 @@ def run_gui():
                     padding: 6px 12px; border: 1px solid #c3c7cd;
                     border-radius: 6px; background: #f5f6f8;
                 }
-                QPushButton:hover { background: #eceef1; }
+                QPushButton:hover { background: #e8eefc; border-color: #7ea3f0; }
+                QPushButton:pressed { background: #d4e1fb; border-color: #2f6feb; }
+                QPushButton:focus { border-color: #2f6feb; }
                 QPushButton:disabled { color: #9aa0a6; background: #f0f0f0; }
                 QPushButton#runBtn {
                     background: #2f6feb; color: white; border: none; font-weight: 600;
                 }
                 QPushButton#runBtn:hover { background: #285fce; }
+                QPushButton#runBtn:pressed { background: #1e4fc0; }
                 QPushButton#runBtn:disabled { background: #a9c0f5; }
                 QLineEdit { padding: 5px; border: 1px solid #c3c7cd; border-radius: 6px; }
                 QProgressBar {
@@ -1573,6 +1576,9 @@ def run_gui():
                 QProgressBar::chunk { background: #2f6feb; border-radius: 5px; }
                 QPlainTextEdit, QListWidget, QTableWidget {
                     border: 1px solid #d0d3d8; border-radius: 6px;
+                }
+                QListWidget[dragOver="true"] {
+                    border: 2px dashed #2f6feb; background: #e8eefc;
                 }
             """)
 
@@ -1602,9 +1608,16 @@ def run_gui():
                 t = event.type()
                 if t in (event.Type.DragEnter, event.Type.DragMove):
                     if event.mimeData().hasUrls():
+                        self.input_list.setProperty('dragOver', True)
+                        self.input_list.style().unpolish(self.input_list)
+                        self.input_list.style().polish(self.input_list)
                         event.acceptProposedAction()
                         return True
-                elif t == event.Type.Drop:
+                elif t in (event.Type.DragLeave, event.Type.Drop):
+                    self.input_list.setProperty('dragOver', False)
+                    self.input_list.style().unpolish(self.input_list)
+                    self.input_list.style().polish(self.input_list)
+                if t == event.Type.Drop:
                     paths = [u.toLocalFile() for u in event.mimeData().urls()]
                     paths = [p for p in paths if p and (p.lower().endswith('.pdf')
                                                       or os.path.isdir(p))]

@@ -23,3 +23,7 @@ test('pdf2md 입력 목록 드래그앤드롭 — setAcceptDrops + eventFilter',
 test('pdf2md QFont 경고 — qInstallMessageHandler로 차단', () => {
     assert.ok(has('qInstallMessageHandler'));
 });
+
+test('pdf2md 버튼 피드백 — pressed·드롭 하이라이트 스타일', () => {
+    assert.ok(has('QPushButton:pressed') && has('dragOver'));
+});
