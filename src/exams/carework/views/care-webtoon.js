@@ -5,13 +5,14 @@
 import { contentPath } from '../../../core/exam-context.js';
 import { parseStorySlots, renderSlotHtml } from '../../../reader/webtoon-render.js';
 
-// 공용 모듈 재수출 — tests/unit/content/care-webtoon.test.js가 _parse/_who를 import
+// 공용 모듈 재수출 — tests/unit/content/care-webtoon.test.js가 _parse/_who/_books를 import
 export { parseStorySlots as _parse, whoSays as _who } from '../../../reader/webtoon-render.js';
 
 const BOOKS = {
-    s2: { label: '2과목 요양보호관련', file: '교재/careprac/2과목_요양보호관련_이야기형.md' },
     s1: { label: '1과목 요양보호론', file: '교재/caretheory/1과목_요양보호론_이야기형.md' },
+    s2: { label: '2과목 요양보호관련', file: '교재/careprac/2과목_요양보호관련_이야기형.md' },
 };
+export { BOOKS as _books };
 const CHARS = {
     miyoung: { name: '미영', img: 'assets/characters/miyoung.svg', side: 'right' },
     mentor: { name: '박은정 선임', img: 'assets/characters/park-eunjung.svg', side: 'left' },

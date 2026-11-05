@@ -36,3 +36,8 @@ test('parseStorySlots: 장식 마커·화자명 줄 정제', async () => {
     assert.equal(s[0].beats[2].text, '미영 씨, 처음이세요?');
     assert.equal(s[0].title, '프롤로그');
 });
+
+test('웹툰 과목 선택은 1과목이 먼저다', async () => {
+    const { _books } = await import('../../../src/exams/carework/views/care-webtoon.js');
+    assert.deepEqual(Object.keys(_books), ['s1', 's2']);
+});
