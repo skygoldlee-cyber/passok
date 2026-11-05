@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 chore: domain-map — webtoon-render.js 등록
+
+
 ## 2026-11-05 feat(carework): 교재리더 웹툰 모드
 
 - reader-webtoon-toggle: 리더 안에서 이야기형 원본을 말풍선 컷으로 렌더 (story 모드와 배타)

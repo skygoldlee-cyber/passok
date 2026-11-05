@@ -98,6 +98,7 @@
         "src/reader/mermaid-render.js",
         "src/reader/mermaid-utils.js",
         "src/reader/reader-format.js",
+        "src/reader/webtoon-render.js",
         "src/reader/reader-toc.js",
         "src/reader/textbook-core.js",
         "src/reader/textbook-edition.js",
