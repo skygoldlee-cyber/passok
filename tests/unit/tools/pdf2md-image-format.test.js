@@ -24,3 +24,10 @@ test('pdf2md 여백 수집 예외 복원 — 페이지 로드 실패 시 건너�
         .toString().trim();
     assert.equal(src, 'True');
 });
+
+test('pdf2md Qt 핸들러 stderr None 가드 — pythonw 크래시 방지', () => {
+    const src = execFileSync('python', ['-c',
+        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('if sys.stderr' in s)"])
+        .toString().trim();
+    assert.equal(src, 'True');
+});
