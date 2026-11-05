@@ -918,3 +918,7 @@ a.glossary-ref-link i {
 .wb-scene { align-self: center; font-size: .82rem; color: var(--color-text-dim); background: var(--bg-elevated); border-radius: 8px; padding: 5px 12px; max-width: 92%; text-align: center; }
 .reader-empty { color: var(--color-text-dim); text-align: center; padding: 40px 0; }
 .wb-scene-title { font-weight: 600; color: var(--color-text-main); }
+
+/* 형식 셀렉트 — 헤더에서 TOC 버튼을 가리지 않게 콤팩트 */
+#reader-format-select { max-width: 110px; min-height: 34px; padding: 2px 6px; font-size: .82rem; flex-shrink: 1; min-width: 0; }
+.reader-mode-checkbox { min-width: 0; flex-shrink: 1; }
