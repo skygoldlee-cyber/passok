@@ -178,10 +178,10 @@ modules:
 
 ## 5. 출처 및 확인 링크
 
-- [예스24 — 2026 요양보호사 양성 표준교재, 목차·ISBN·발행정보](https://m.yes24.com/goods/detail/196596985)
-- [KOBIC — 도서정보 및 목차](https://api.kobic.net/book/bookInfo/view.do?isbn=9791129065544)
-- [영풍문고 — 개정2판 도서정보 및 목차](https://www.ypbooks.co.kr/books/202609163181862088)
-- [2026 개정 표준교재 PDF 안내](https://www.angelsitter.co.kr/board.view.php?board=bbs2&no=648&sort=comment)
+- 예스24 — 2026 요양보호사 양성 표준교재, 목차·ISBN·발행정보
+- KOBIC — 도서정보 및 목차
+- 영풍문고 — 개정2판 도서정보 및 목차
+- 2026 개정 표준교재 PDF 안내
 
 ---
 **주의:** 이 문서는 공개된 서지·목차 정보를 구조화한 학습 설계 초안이다. 원문 PDF의 전체 세부 항목과 페이지를 대조한 최종 검수본은 아니다.
