@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 chore: DA-15 예외 등록 — check_scenario_items.js carework 전용
+
+
 ## 2026-11-05 test(carework): practice-registry 기대값 갱신
 
 - 핸들러 24→25, 슬러그 맵에 care-webtoon 추가 — 영향 테스트 대응

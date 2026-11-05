@@ -39,6 +39,14 @@ const GENERATED_HEADER_RE = /자동 생성|직접 수정하지 마시고/;
  */
 const ALLOWED = [
     {
+        file: 'tools/check/check_scenario_items.js', contains: "'carework'",
+        reason: "carework 전용 시나리오 문항 검증 도구 — 플랫폼 코드가 아닌 시험 콘텐츠 검증 스크립트라 시험 식별자 선언이 예외됨"
+    },
+    {
+        file: 'tools/check/check_scenario_items.js', contains: "'careprac'",
+        reason: "동일 — 표준형 교재 경로의 과목 키(2과목 대상 검증) 명시"
+    },
+    {
         file: 'src/shell/notice-check.js', contains: "'law'",
         reason: "law.go.kr API target 구분자(법령 vs admrul 행정규칙) — 과목 키 'law'와 무관한 외부 API 상수"
     },
