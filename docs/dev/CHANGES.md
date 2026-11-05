@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 test(carework): practice-registry 기대값 갱신
+
+- 핸들러 24→25, 슬러그 맵에 care-webtoon 추가 — 영향 테스트 대응
+
+
 ## 2026-11-05 fix(carework): 웹툰 뷰 모바일 도달성
 
 - index.template.html 모바일 탭에 care-webtoon 항목 추가 — 도달성 불변식 충족
