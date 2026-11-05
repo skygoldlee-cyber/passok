@@ -98,6 +98,12 @@
                 <button class="nav-item nav-study-only" data-target="calendar-view">
                     <i class="fa-solid fa-calendar-check" aria-hidden="true"></i> 학습 캘린더
                 </button>
+                <button class="nav-item nav-study-only" data-target="care-webtoon-view" data-feature="careWebtoon">
+                    <i class="fa-solid fa-images" aria-hidden="true"></i> <span data-uitext="careWebtoon:nav">웹툰</span>
+                </button>
+                <button class="nav-item nav-study-only" data-target="care-flow-view" data-feature="careFlow">
+                    <i class="fa-solid fa-list-ol" aria-hidden="true"></i> <span data-uitext="careFlow:nav">학습 흐름</span>
+                </button>
                 <div class="nav-group-label nav-group-label-practice" data-feature="practiceMode">실무</div>
                 <button type="button" data-click="ManualViewer.openFormulaManual" class="manual-nav-link nav-practice-only" data-feature="formula">
                     <i class="fa-solid fa-book-medical" aria-hidden="true"></i> 실무 매뉴얼
@@ -130,12 +136,6 @@
                 <div class="nav-group-label nav-group-label-practice" data-feature="careClients">대상자·준비</div>
                 <button class="nav-item nav-item-practice" data-target="care-client-view" data-feature="careClients">
                     <i class="fa-solid fa-users" aria-hidden="true"></i> <span data-uitext="careClients:nav">대상자</span>
-                </button>
-                <button class="nav-item nav-item-practice" data-target="care-webtoon-view" data-feature="careWebtoon">
-                    <i class="fa-solid fa-images" aria-hidden="true"></i> <span data-uitext="careWebtoon:nav">웹툰</span>
-                </button>
-                <button class="nav-item nav-item-practice" data-target="care-flow-view" data-feature="careFlow">
-                    <i class="fa-solid fa-list-ol" aria-hidden="true"></i> <span data-uitext="careFlow:nav">학습 흐름</span>
                 </button>
                 <button class="nav-item nav-item-practice" data-target="care-finder-view" data-feature="careFinder">
                     <i class="fa-solid fa-hospital" aria-hidden="true"></i> <span data-uitext="careFinder:nav">기관찾기</span>
@@ -376,6 +376,14 @@
                 <i class="fa-solid fa-clipboard-question" aria-hidden="true"></i>
                 <span data-uitext="quiz:nav">퀴즈</span>
             </button>
+            <button class="mobile-tab-item nav-study-only" data-target="care-webtoon-view" data-feature="careWebtoon">
+                <i class="fa-solid fa-images" aria-hidden="true"></i>
+                <span data-uitext="careWebtoon:nav">웹툰</span>
+            </button>
+            <button class="mobile-tab-item nav-study-only" data-target="care-flow-view" data-feature="careFlow">
+                <i class="fa-solid fa-list-ol" aria-hidden="true"></i>
+                <span data-uitext="careFlow:nav">학습 흐름</span>
+            </button>
             </div>
             <!-- 실무 탭바 — 실무 모드 전용 그룹 (실무매뉴얼 + 시험별 실무 도구) -->
             <div class="tab-group tab-group-practice">
@@ -419,14 +427,6 @@
             <button class="mobile-tab-item mobile-tab-practice nav-practice-only" data-target="care-client-view" data-feature="careClients">
                 <i class="fa-solid fa-users" aria-hidden="true"></i>
                 <span data-uitext="careClients:nav">대상자</span>
-            </button>
-            <button class="mobile-tab-item mobile-tab-practice nav-practice-only" data-target="care-webtoon-view" data-feature="careWebtoon">
-                <i class="fa-solid fa-images" aria-hidden="true"></i>
-                <span data-uitext="careWebtoon:nav">웹툰</span>
-            </button>
-            <button class="mobile-tab-item mobile-tab-practice nav-practice-only" data-target="care-flow-view" data-feature="careFlow">
-                <i class="fa-solid fa-list-ol" aria-hidden="true"></i>
-                <span data-uitext="careFlow:nav">학습 흐름</span>
             </button>
             <button class="mobile-tab-item mobile-tab-practice nav-practice-only" data-target="care-finder-view" data-feature="careFinder">
                 <i class="fa-solid fa-hospital" aria-hidden="true"></i>
