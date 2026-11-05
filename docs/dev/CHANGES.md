@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): 웹툰 뷰 모바일 도달성
+
+- index.template.html 모바일 탭에 care-webtoon 항목 추가 — 도달성 불변식 충족
+
+
 ## 2026-11-05 fix(carework): 웹툰 뷰 지연 뷰 스텁 추가
 
 - index.template.html care-webtoon-view data-lazy-view 스텁 — DOM 불변식 충족
