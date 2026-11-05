@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(test): care-share xlsx 날짜 — UTC→로컬 todayKey 정합
+
+
 ## 2026-11-05 feat(carework): 서명 이미지 피커 — 버튼 스타일 + 숨긴 file input
 
 

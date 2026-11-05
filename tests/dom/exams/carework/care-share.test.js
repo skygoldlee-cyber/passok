@@ -202,7 +202,8 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         await careShare(document.getElementById('share').dataset.arg);
         await tapMenu('카카오톡');
         await tapMenu('Excel로 보내기'); // 형식 선택 — xlsx만 생성
-        await vi.waitFor(() => expect(sheetSpy).toHaveBeenCalledWith(csv, `방문 기록_${new Date().toISOString().slice(0, 10)}.xlsx`)); // 실제 xlsx 생성 확인
+        const localToday = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+        await vi.waitFor(() => expect(sheetSpy).toHaveBeenCalledWith(csv, `방문 기록_${localToday}.xlsx`)); // 실제 xlsx 생성 확인
         expect(pdfSpy).not.toHaveBeenCalled(); // 미선택 형식은 생성하지 않는다
     });
 
