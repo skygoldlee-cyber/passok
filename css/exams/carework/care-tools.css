@@ -269,8 +269,9 @@
 [id^="care-"][id$="-view"] button:hover,
 [id^="care-"][id$="-view"] .btn:hover,
 [id^="care-"][id$="-view"] a.btn:hover {
-    background-color: var(--bg-card-hover, var(--bg-hover, var(--bg-elevated)));
-    border-color: var(--border-color-active, var(--border-color));
+    background-color: var(--primary-tint-20, rgba(74, 108, 168, .25));
+    border-color: var(--border-color-active, var(--color-primary, #4a6fa5));
+    color: var(--color-text-main);
 }
 [id^="care-"][id$="-view"] button:active,
 [id^="care-"][id$="-view"] .btn:active,
@@ -280,7 +281,7 @@
 }
 /* 칩·카드형 클릭 요소 — 라벨 스팬·목록 카드에도 동일 피드백 */
 .obs-chip span { transition: background-color .15s ease, transform .1s ease; }
-.obs-chip span:hover { background: var(--bg-card-hover, var(--bg-hover, var(--bg-elevated))); }
+.obs-chip span:hover { background: var(--primary-tint-20, rgba(74, 108, 168, .25)); color: var(--color-text-main); }
 .obs-chip span:active { transform: translateY(1px) scale(.97); }
 .care-card-item:active, .care-form-card:active { transform: translateY(1px); }
 [id^="care-"][id$="-view"] button:focus-visible,
