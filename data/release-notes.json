@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261105-a703dc3",
+    "date": "2026-11-05",
+    "notes": [
+      "[문서·carework] 교재 챕터 재구성 — 표준교재 개정2판 15장 체계 정합 (DOC-USR-19)",
+      "[기능·carework] 서명 이미지 업로드 — 홈 등록 → 출력물 서명란 기입",
+      "[정리·release] v20261105-80a0f6d 스탬프 확정 [no-docs]",
+      "[정리·release] v20261105-ab3b06f 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261105-80a0f6d",
     "date": "2026-11-05",
     "notes": [
@@ -172,59 +182,6 @@
       "[기능·carework] 공유 버튼 이모지 — 전 뷰 📤 공유 (CO-13)",
       "[테스트·carework] 공유 PDF 렌더 위치 계약 — 문서 하단 absolute (CO-13)",
       "[정리·release] v20261104-42a1547 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-42a1547",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·carework] 공유 단독 완결 — 자동 생성 + 폼 폴백 복원 (CO-13)",
-      "[정리·release] v20261104-524dec6 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-524dec6",
-    "date": "2026-11-04",
-    "notes": [
-      "[CI] CI 재실행 트리거 [no-docs]",
-      "[기능·carework] 일지·사고 공유 alt — PDF + 실제 .xlsx 다중 첨부 (CO-13)",
-      "[리팩터링·carework] 공유 _formText 제거 — 인쇄 선행 정책으로 미사용 죽은 코드 (CO-13)",
-      "[수정·carework] 공유 인쇄 선행 필수 — 자동 생성·폼 폴백 제거 (CO-13)",
-      "[수정·carework] 공유 PDF 인쇄 미리보기 그대로 렌더 — 이중 헤더 방지 (CO-13)",
-      "[테스트·carework] 인쇄 출력 = 공유 PDF 동일성 시뮬레이션 — 본문·표·헤더 일치 (CO-13)",
-      "[정리·release] v20261104-d77d6b7 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-d77d6b7",
-    "date": "2026-11-04",
-    "notes": [
-      "[테스트·carework] 공유 PDF 오프스크린 금지 계약 — 빈 캔버스 방지 (CO-13)",
-      "[정리·release] v20261104-8a8be2b 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-8a8be2b",
-    "date": "2026-11-04",
-    "notes": [
-      "[테스트·carework] 공유 PDF 표 유지·텍스트 노드 가림 계약 (CO-13)",
-      "[정리·release] v20261104-0f88986 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-0f88986",
-    "date": "2026-11-04",
-    "notes": [
-      "[정리·carework] jspdf·html2canvas 벤더 매니페스트 + pdf-utils 도메인 맵 등록 (CO-13)",
-      "[테스트·carework] CO-13 생성 핸들러 단언 — CsvExport·xlsx 직접 생성 반영",
-      "[테스트·carework] 공유 다운로드 네비게이션 목 — jsdom 앵커 클릭 무력화 (CO-13)",
-      "[정리·trace] pdf-utils 참조 반영",
-      "[기능·carework] 공유 다중 파일 — xlsx·PDF 독립 생성, 실패 파일 생략 후 정상 공유 (CO-13)",
-      "[기능·carework] 공유 실제 .xlsx — CsvExport 결과 CSV로 SheetJS 파일 첨부 (CO-13)",
-      "[기능·carework] 공유 PDF 인쇄 레이아웃 — 문서 헤더+가림 본문 렌더 (CO-13)",
-      "[문서·agents] pdf-utils.js 디렉토리 구조 등록",
-      "[기능·carework] 공유 PDF 파일 — jsPDF+html2canvas 벤더, 미리보기 렌더→PDF 첨부 (CO-13)",
-      "[기능·carework] 공유 파일 첨부 — 모바일 공유 시트에 문서 파일, 데스크톱은 다운로드 (CO-13)"
     ]
   }
 ]
