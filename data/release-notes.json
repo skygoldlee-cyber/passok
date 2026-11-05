@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261105-39f777e",
+    "date": "2026-11-05",
+    "notes": [
+      "[수정·carework] 점검표 미리보기 하단 2줄 여백 추가",
+      "[정리·release] v20261105-2ca2fc3 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261105-2ca2fc3",
     "date": "2026-11-05",
     "notes": [
@@ -185,15 +193,6 @@
     "notes": [
       "[수정·carework] 모바일 시트 제스처 — share()를 xlsx·pdf 생성 전으로 이동 (CO-13)",
       "[정리·release] v20261104-e8ccfbc 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-e8ccfbc",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·carework] 공유 진단 배너 — alert 규약 위반 대신 탭-해제 상시 배너 (CO-13)",
-      "[수정·carework] 공유 진단 alert — 다운로드 창에 가려지던 토스트 대체 (CO-13)",
-      "[정리·release] v20261104-1dbb7ee 스탬프 확정 [no-docs]"
     ]
   }
 ]
