@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261105-335fa20",
+    "date": "2026-11-05",
+    "notes": [
+      "[정리] domain-map — webtoon-render.js 리더 도메인 등록",
+      "[기능·carework] 교재리더 웹툰 모드 — 이야기를 말풍선 컷으로",
+      "[정리·release] v20261105-bf79ebd 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261105-bf79ebd",
     "date": "2026-11-05",
     "notes": [
@@ -191,16 +200,6 @@
     "date": "2026-11-04",
     "notes": [
       "[정리·release] v20261104-8a1912b 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-8a1912b",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·carework] 공유 실패 시 \"공유하기\" 버튼 — 탭 새 제스처로 share() 재시도 (CO-13)",
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[수정·carework] 공유 NotAllowedError — 데스크톱 파일 미첨부 + 거절 학습·제스처 사전검사 (CO-13)",
-      "[정리·release] v20261104-cb0d91e 스탬프 확정 [no-docs]"
     ]
   }
 ]
