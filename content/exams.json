@@ -624,7 +624,8 @@
         "careFacilityJoin": false,
         "careFacilityAdmin": false,
         "practiceManual": true,
-        "careHome": true
+        "careHome": true,
+        "careWebtoon": true
       },
       "group": "보건·복지",
       "tier": "active"
