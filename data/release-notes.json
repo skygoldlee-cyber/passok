@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261105-71ec70b",
+    "date": "2026-11-05",
+    "notes": [
+      "[수정·carework] 웹툰·개념학습 fetch → DataLoader._getMd — 프로덕션 한글 경로 404 해소",
+      "[정리·release] v20261105-758a232 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261105-758a232",
     "date": "2026-11-05",
     "notes": [
@@ -203,14 +211,6 @@
       "[수정·carework] 문서 서명란 하단 여백 추가 — .care-doc-sign margin-bottom",
       "[수정·carework] 인수인계 중복 공유 버튼 제거 — 내보내기 메뉴로 단일화 (CO-13)",
       "[정리·release] v20261105-79f99a6 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261105-79f99a6",
-    "date": "2026-11-05",
-    "notes": [
-      "[기능·carework] 공유·내보내기 통합 메뉴 + 홈 서명 설정 (CO-13)",
-      "[정리·release] v20261105-c5a4530 스탬프 확정 [no-docs]"
     ]
   }
 ]
