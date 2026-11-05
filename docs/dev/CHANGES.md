@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(ref-pipeline): svg 추출 — show_pdf_page 클립 렌더 (clip 인자 미지원 해소)
+
+
 ## 2026-11-05 feat(ref-pipeline): 입력 목록 드래그앤드롭 + QListWidget placeholder 오류 수정
 
 

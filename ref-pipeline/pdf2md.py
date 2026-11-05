@@ -697,7 +697,16 @@ def extract_page_images(mupdf_page, page_index, images_dir,
         base = f'{name_prefix}page{page_index:03d}_img{i:02d}'
         if image_format == 'svg':
             try:
-                svg = mupdf_page.get_svg_image(clip=rects[0])
+                # clip 인자 미지원 — 임시 페이지에 이미지 영역만 렌더 후 SVG 변환
+                r = rects[0]
+                tmp = pymupdf.open()
+                try:
+                    tp = tmp.new_page(width=r.width, height=r.height)
+                    tp.show_pdf_page(pymupdf.Rect(0, 0, r.width, r.height),
+                                     mupdf_page.parent, page_index, clip=r)
+                    svg = tp.get_svg_image()
+                finally:
+                    tmp.close()
             except Exception:
                 continue
             name = f'{base}.svg'
