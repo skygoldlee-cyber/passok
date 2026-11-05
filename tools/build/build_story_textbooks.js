@@ -23,12 +23,57 @@ const path = require('path');
 const { getExamTargets } = require('./exam_targets.js');
 const {
     parsePatch, applyPatch, norm, GEN_BANNER, splitStoryBlocks,
-    findStoryInconsistencies, extractRecallItems, buildRecallSection,
+    findStoryInconsistencies, extractRecallItems, buildRecallSection, SLOT_RE,
 } = require('./story_merge.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const CHECK = process.argv.includes('--check');
 const SCAFFOLD_IDX = process.argv.indexOf('--scaffold');
+
+const CHAPTER_RE = /^## 📚 Chapter (\d+)/;
+
+/**
+ * 챕터별 회상 분배 — 각 슬롯의 소속 챕터를 표준형에서 추적하고, 슬롯 서사의
+ * 사실 토큰을 그 챕터 말미의 회상 블록(최대 3문항)으로 산출한다.
+ * 챕터 헤딩이 없는 표준형이면 기존처럼 파일 말미 단일 블록으로 폴백.
+ * @param {string} mergedText 표준형+서사 병합 결과
+ * @param {string} std 표준형 원문 (토큰 검증용)
+ * @param {Array} storyBlocks story 플래그 insert ops
+ * @returns {string}
+ */
+function mergeRecallByChapter(mergedText, std, ops, storyBlocks) {
+    const stdLines = norm(std).split('\n');
+    const ml = norm(mergedText).split('\n');
+    const chIdx = ml.map((l, i) => CHAPTER_RE.test(l) ? i : -1).filter(i => i >= 0);
+    if (!chIdx.length) return mergedText + buildRecallSection(extractRecallItems(storyBlocks.flatMap(o => o.lines), std));
+
+    // 슬롯 ID → 챕터 번호 (첫 헤딩 이전 슬롯은 'pre' → 첫 챕터로 귀속)
+    const slotCh = new Map();
+    let cur = 'pre';
+    for (const l of stdLines) {
+        const cm = l.match(CHAPTER_RE); if (cm) { cur = cm[1]; continue; }
+        const sm = l.match(SLOT_RE); if (sm) slotCh.set(sm[1], cur);
+    }
+    const byCh = new Map();
+    for (const o of storyBlocks) {
+        if (o.where !== 'slot') continue;
+        const k = slotCh.get(o.slot) || 'pre';
+        if (!byCh.has(k)) byCh.set(k, []);
+        byCh.get(k).push(...o.lines);
+    }
+    let out = ml.slice(0, chIdx[0]).join('\n');
+    // 첫 챕터 이전 구간(프롤로그 등)의 서사는 첫 챕터 회상에 합산
+    let preKey = byCh.has('pre') ? 'pre' : null;
+    for (let k = 0; k < chIdx.length; k++) {
+        const chNum = ml[chIdx[k]].match(CHAPTER_RE)[1];
+        const end = k + 1 < chIdx.length ? chIdx[k + 1] : ml.length;
+        out += '\n' + ml.slice(chIdx[k], end).join('\n');
+        const lines = (byCh.get(chNum) || []).concat(preKey ? byCh.get(preKey) : []);
+        out += buildRecallSection(extractRecallItems(lines, std, 3));
+        if (preKey) preKey = null;
+    }
+    return out;
+}
 const SCAFFOLD = SCAFFOLD_IDX >= 0 ? process.argv[SCAFFOLD_IDX + 1] : null;
 
 /** 서사 커버리지 리포트 — 챕터별 서사 블록 수 (생성·--check 공통) */
@@ -174,8 +219,7 @@ function main() {
                 findStoryInconsistencies(std, storyLines)
                     .forEach(w => consistency.push(`${rel}: 서사 인용 '${w}' — 표준형 본문에 없음`));
                 // 이야기 회상: 본문과 일치하는 서사 속 사실 토큰 → 챕터 말미 빈칸형 항목 (BP-12)
-                const recall = buildRecallSection(extractRecallItems(storyLines, std));
-                const text = GEN_BANNER + '\n' + merged.text + recall;
+                const text = GEN_BANNER + '\n' + mergeRecallByChapter(merged.text, std, ops, storyBlocks);
                 if (CHECK) {
                     const cur = fs.existsSync(outAbs) ? norm(fs.readFileSync(outAbs, 'utf8')) : '';
                     if (cur !== text) { drifted++; console.log(`  ✗ 드리프트: ${rel}`); }

@@ -412,6 +412,7 @@ const MD_ASSETS = [
   './content/exams/carework/docs/실무매뉴얼.md',
   './content/exams/carework/docs/요양보호사 4단계 학습 흐름 설계.md',
   './content/exams/carework/docs/요양보호사_표준교재_목차_Passok_학습구조.md',
+  './content/exams/carework/docs/인물 설정표.md',
   './content/exams/carework/교재/caretheory/1과목_요양보호론.md',
   './content/exams/carework/교재/caretheory/1과목_요양보호론_이야기형.md',
   './content/exams/carework/교재/careprac/2과목_요양보호관련.md',
