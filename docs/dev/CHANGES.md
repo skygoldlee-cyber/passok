@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): flow 뷰 innerHTML 보간 이스케이프
+
+
 ## 2026-11-05 feat(carework): 4단계 학습 흐름 뷰 care-flow
 
 - care-flow.html·care-flow.js — 개념 선택 → 미리풀기 → 이야기(웹툰) → 요약 → 시나리오 상태머신

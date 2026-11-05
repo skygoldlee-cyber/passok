@@ -58,7 +58,7 @@ function _render() {
 
     if (step === 'home') {
         const p = _prog()[c.id] || {};
-        st.innerHTML = `<div class="wb-scene wb-scene-title">Ch${c.chapter} · ${esc(c.title)}</div><p class="wb-scene">진행: ${p.stage ? STEP_LABELS[p.stage] || p.stage : '미시작'}${p.mastered ? ' — 마스터' : ''}</p>`;
+        st.innerHTML = `<div class="wb-scene wb-scene-title">Ch${esc(c.chapter)} · ${esc(c.title)}</div><p class="wb-scene">진행: ${esc(p.stage ? STEP_LABELS[p.stage] || p.stage : '미시작')}${p.mastered ? ' — 마스터' : ''}</p>`;
     } else if (step === 'pre') {
         const qs = _conceptItems(c, 'pre').slice(0, 2);
         st.innerHTML = qs.length ? qs.map((q, qi) => _quizHtml(q, 'pre' + qi)).join('') : '<p class="wb-scene">선행 문항이 없습니다 — 이야기로 넘어가세요.</p>';
