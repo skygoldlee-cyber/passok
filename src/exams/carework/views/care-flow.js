@@ -114,19 +114,39 @@ export function flowOpt(idx) {
 }
 
 export async function initCareFlowView() {
+    const subjSel = /** @type {HTMLSelectElement|null} */ (document.getElementById('flow-subject'));
     const sel = /** @type {HTMLSelectElement|null} */ (document.getElementById('flow-concept'));
     const stage = document.getElementById('flow-stage');
-    if (!sel || !stage) return;
+    if (!subjSel || !sel || !stage) return;
     const cs = await _load();
-    if (!sel.options.length) {
-        sel.add(new Option('— 개념을 고르세요 —', ''));
-        cs.forEach(c => sel.add(new Option(`Ch${c.chapter} ${c.title}`, c.id)));
-    }
-    sel.onchange = async () => {
+    const pick = async () => {
         _c = cs.find(x => x.id === sel.value) || null;
         _i = 0; _sel = -1; _answered = false;
         if (_c) { await _storySlots(_c.subject); const p = _prog(); p[_c.id] = p[_c.id] || {}; p[_c.id].stage = 'pre'; _save(p); }
         _render();
     };
+    const refill = () => {
+        sel.innerHTML = '';
+        sel.add(new Option('— 개념을 고르세요 —', ''));
+        cs.filter(c => String(c.subject) === (subjSel.value || '1'))
+            .forEach(c => sel.add(new Option(`Ch${c.chapter} ${c.title}`, c.id)));
+    };
+    if (!subjSel.options.length) {
+        const subs = [...new Set(cs.map(c => c.subject))].sort();
+        if (!subs.length) subs.push(2); // 파일럿 과목만 있어도 셀렉트는 보이게
+        subs.forEach(s => {
+            const op = new Option(s === 1 ? '1과목 요양보호론' : '2과목 요양보호관련', String(s));
+            // 개념이 없는 과목도 표시하되, 파일럿 안내를 위해 라벨에 집계 표기
+            const n = cs.filter(c => c.subject === s).length;
+            sel && (op.textContent += ` (${n})`);
+            subjSel.add(op);
+        });
+        // 개념이 있는 첫 과목을 기본 선택 — 없는 과목이면 목록이 비어 혼란
+        const first = subs.find(s => cs.some(c => c.subject === s));
+        if (first) subjSel.value = String(first);
+    }
+    refill();
+    subjSel.onchange = refill;
+    sel.onchange = pick;
     _render();
 }

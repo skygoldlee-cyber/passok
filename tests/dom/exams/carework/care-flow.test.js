@@ -64,4 +64,13 @@ describe('care-flow 4단계 뷰 상태머신', () => {
         await m.initCareFlowView();
         expect(document.getElementById('flow-stage')?.textContent).toContain('개념을 선택');
     });
+
+    it('과목 필터 — 해당 과목 개념만 셀렉트에 표시', async () => {
+        const m = await import('../../../../src/exams/carework/views/care-flow.js');
+        await m.initCareFlowView();
+        const subjSel = /** @type {HTMLSelectElement} */ (document.getElementById('flow-subject'));
+        const sel = /** @type {HTMLSelectElement} */ (document.getElementById('flow-concept'));
+        expect(subjSel.options.length).toBeGreaterThan(0);
+        expect([...sel.options].filter(o => o.value).every(o => o.value.startsWith('s2'))).toBe(true);
+    });
 });
