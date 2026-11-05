@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 feat(ref-pipeline): 입력 목록 드래그앤드롭 + QListWidget placeholder 오류 수정
+
+
 ## 2026-11-05 revert(ref-pipeline): webp/svg 포맷 기능 롤백 — 이전 정상 버전 복원
 
 

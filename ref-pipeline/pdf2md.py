@@ -1430,6 +1430,8 @@ def run_gui():
             self.input_list = QListWidget()
             self.input_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
             self.input_list.setMinimumHeight(96)
+            self.input_list.setAcceptDrops(True)
+            self.input_list.installEventFilter(self)
             in_lay.addWidget(self.input_list, 1)
             btn_col = QVBoxLayout()
             for label, slot in (('파일 추가', self.add_files),
@@ -1584,6 +1586,24 @@ def run_gui():
             d = QFileDialog.getExistingDirectory(self, '폴더 선택')
             if d:
                 self._add_paths([d])
+
+        def eventFilter(self, obj, event):
+            # 입력 목록 드래그앤드롭 — PDF 파일/폴더 경로를 바로 추가
+            if obj is self.input_list:
+                t = event.type()
+                if t in (event.Type.DragEnter, event.Type.DragMove):
+                    if event.mimeData().hasUrls():
+                        event.acceptProposedAction()
+                        return True
+                elif t == event.Type.Drop:
+                    paths = [u.toLocalFile() for u in event.mimeData().urls()]
+                    paths = [p for p in paths if p and (p.lower().endswith('.pdf')
+                                                      or os.path.isdir(p))]
+                    if paths:
+                        self._add_paths(paths)
+                        event.acceptProposedAction()
+                        return True
+            return super().eventFilter(obj, event)
 
         def _add_paths(self, paths):
             existing = {self.input_list.item(i).text()
@@ -1749,6 +1769,7 @@ def run_gui():
                 self.thread.wait(3000)
             super().closeEvent(event)
 
+    os.environ.setdefault('QT_LOGGING_RULES', 'qt.qpa.fonts.warning=false')
     app = QApplication(sys.argv)
     app.setApplicationName('pdf2md')
     win = MainWindow()

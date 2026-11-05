@@ -45,3 +45,10 @@ test('pdf2md GUI 크래시 로그 — _crash.log 스택 기록', () => {
         .toString().trim();
     assert.equal(src, 'True');
 });
+
+test('pdf2md 입력 목록 드래그앤드롭 — setAcceptDrops + eventFilter', () => {
+    const src = execFileSync('python', ['-c',
+        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('setAcceptDrops' in s and 'mimeData' in s)"])
+        .toString().trim();
+    assert.equal(src, 'True');
+});
