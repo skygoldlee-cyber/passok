@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261105-f1cc69c",
+    "date": "2026-11-05",
+    "notes": [
+      "[수정·carework] 치환 부작용·용어 정정 — 리뷰 5차 반영",
+      "[정리·carework] 4단계 설계 문서 MD_ASSETS 등록 + 생성물 동기화",
+      "[문서·carework] 4단계 학습 흐름 설계 — 리뷰 반영 4건",
+      "[수정·carework] 홈 서명 폼 우측 밀림 — file input 고유폭이 트랙 확장",
+      "[정리·release] v20261105-8bce533 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261105-8bce533",
     "date": "2026-11-05",
     "notes": [
@@ -177,15 +188,6 @@
     "notes": [
       "[수정·carework] 공유 실패 사유 표시 — share 미지원·거절 구분 진단 (CO-13)",
       "[정리·release] v20261104-de83271 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261104-de83271",
-    "date": "2026-11-04",
-    "notes": [
-      "[수정·carework] 모바일 시트 제스처 만료 — share()를 PDF 생성 전으로 이동 (CO-13)",
-      "[수정·carework] 공유 시트 게이트 제거 — share() 직접 시도, 모바일 미표시 해소 (CO-13)",
-      "[정리·release] v20261104-09054f9 스탬프 확정 [no-docs]"
     ]
   }
 ]
