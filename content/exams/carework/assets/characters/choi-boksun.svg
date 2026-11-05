@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="최복순 어르신 — 82세, 무릎 관절염">
+  <!-- 최복순 어르신(82) — 흰머리 똬리, 라벤더 가디건, 온화한 표정 -->
+  <rect width="120" height="120" rx="60" fill="#f3edfa"/>
+  <ellipse cx="60" cy="54" rx="26" ry="30" fill="#f0cdb0"/>
+  <path d="M36 50 Q34 22 60 20 Q86 22 84 50 Q84 36 70 32 Q60 24 48 34 Q38 38 36 50Z" fill="#e8e4e0"/>
+  <ellipse cx="60" cy="20" rx="12" ry="9" fill="#e8e4e0"/>
+  <path d="M46 52 Q50 50 54 52 M66 52 Q70 50 74 52" stroke="#7a5c48" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M48 58 Q50 60 52 58 M68 58 Q70 60 72 58" stroke="#7a5c48" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <path d="M54 66 Q60 70 66 66" stroke="#a06a55" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M44 62 Q46 64 44 66 M76 62 Q78 64 76 66" stroke="#c9a58c" stroke-width="1.2" fill="none"/>
+  <path d="M60 84 Q32 88 28 118 Q60 124 92 118 Q88 88 60 84Z" fill="#a48ac8"/>
+  <path d="M46 90 L60 96 L74 90 L70 104 L50 104Z" fill="#8a6cb4"/>
+  <path d="M52 86 Q60 91 68 86 L64 94 L56 94Z" fill="#f0cdb0"/>
+</svg>

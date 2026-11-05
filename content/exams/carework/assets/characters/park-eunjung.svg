@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="박은정 선임 — 10년차 멘토">
+  <!-- 박은정 선임 — 단정한 포니테일, 네이비 유니폼+명찰 -->
+  <rect width="120" height="120" rx="60" fill="#e9eefb"/>
+  <ellipse cx="60" cy="52" rx="26" ry="30" fill="#f2ceb8"/>
+  <path d="M36 48 Q34 20 60 19 Q86 20 84 48 Q86 34 72 30 Q78 44 76 50 Q60 28 44 44 Q38 42 36 48Z" fill="#3d2e28"/>
+  <ellipse cx="60" cy="18" rx="10" ry="8" fill="#3d2e28"/>
+  <circle cx="50" cy="52" r="2.6" fill="#3a2b23"/>
+  <circle cx="70" cy="52" r="2.6" fill="#3a2b23"/>
+  <path d="M53 64 Q60 70 67 64" stroke="#b06a50" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <path d="M60 82 Q32 86 28 118 Q60 124 92 118 Q88 86 60 82Z" fill="#2f3e5c"/>
+  <path d="M52 84 Q60 90 68 84 L64 92 L56 92Z" fill="#f2ceb8"/>
+  <rect x="70" y="96" width="20" height="12" rx="2" fill="#f5f7ff"/>
+  <rect x="73" y="99" width="10" height="2" rx="1" fill="#8a96b8"/>
+  <rect x="73" y="103" width="14" height="2" rx="1" fill="#c3cbde"/>
+</svg>
