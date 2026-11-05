@@ -10,9 +10,12 @@
     border: 1px solid var(--border-subtle);
 }
 .care-calc-form label {
-    display: flex; flex-direction: column; gap: 4px;
+    display: flex; flex-direction: column; gap: 4px; min-width: 0;
     font-size: 13px; font-weight: 600; color: var(--color-text-muted);
 }
+/* input[type=file]은 '파일 선택·선택된 파일 없음' 고유 폭이 있어 트랙을 강제 확장 —
+   폼 전체를 우측으로 밀지 않도록 축소 허용 */
+.care-calc-form input[type="file"] { width: 100%; max-width: 100%; min-width: 0; }
 .care-calc-form select, .care-calc-form input {
     font-size: 16px; padding: 10px 12px; border-radius: 8px;
     border: 1px solid var(--border-color); background: var(--bg-input);

@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): 홈 서명 폼 우측 밀림 — file input 고유폭 축소
+
+- input[type=file]이 그리드 트랙을 강제 확장해 폼 전체가 우측 넘침 (360px 실측 재현) — min-width:0 + width:100% 적용
+
+
 ## 2026-11-05 fix(carework): 홈 서명 미리보기 이미지 우측 넘침 수정
 
 - .care-sign-preview에 max-width:100%+object-fit:contain 추가 — 넓은 업로드 서명이 카드 우측으로 밀려 짤리던 문제 (근본 원인)
