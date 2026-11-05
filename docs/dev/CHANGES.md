@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): 점검표 미리보기 하단 여백
+
+- .care-doc-preview margin-bottom 2.5em — 미리보기 아래 2줄 여백
+
+
 ## 2026-11-05 feat(carework): 전 버튼 호버·눌림 피드백
 
 - carework 뷰 전체 버튼·칩·카드에 hover 배경색 변화 + active 눌림(translateY·inset shadow) 추가

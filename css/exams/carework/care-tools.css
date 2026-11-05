@@ -286,6 +286,8 @@
 [id^="care-"][id$="-view"] button:focus-visible,
 [id^="care-"][id$="-view"] .btn:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 
+.care-doc-preview { margin-bottom: 2.5em; }
+
 .care-home-card { border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin: 12px 0; }
 .care-home-date { font-size: 1.1rem; font-weight: 700; }
 .care-home-summary { margin-top: 6px; font-size: 0.95rem; }
