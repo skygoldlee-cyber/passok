@@ -1,4 +1,5 @@
 // src/exams/carework/views/care-webtoon.js — 웹툰 버블 뷰 (이야기 슬롯 → 말풍선 패널)
+// @spec none — 뷰 모듈 (실습 도구. 요구사항 ID 미부여)
 // 이야기형 MD의 story:start~end 블록을 씬 단위로 파싱해 대사는 화자별 버블,
 // 지문은 장면 패널로 렌더링. 인물 아바타는 인물 설정표(DOC-USR-23) 고정 아트.
 import { contentPath } from '../../../core/exam-context.js';
