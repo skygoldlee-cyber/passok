@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): 모바일 출력물 서명란 오른쪽 넘침 수정
+
+- .care-doc-sign flex-wrap + span flex-basis 140px·min-width:0·break-word — 긴 라벨·밑줄이 컨테이너 폭 초과 시 줄바꿈
+- .care-doc-signimg max-width 100%·object-fit contain — 업로드 서명 이미지가 스팬 폭 초과 방지
+
 ## 2026-11-05 docs(carework): 교재 챕터 재구성 — 표준교재 개정2판 15장 체계 정합 (DOC-USR-19)
 
 - 출제기준 영역 챕터(필기 4·실기 3)를 표준교재 장 번호와 1:1 대응 구조로 재편 — 필기 Ch01~09·11·12~14 + 실기 Ch09~15
