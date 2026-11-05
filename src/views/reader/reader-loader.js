@@ -68,3 +68,24 @@ export async function loadStoryChapter(subjId, chapterIdx, originalChapter) {
     _evictStoryCacheIfNeeded();
     return storyChapter;
 }
+
+/**
+ * 이야기형 원본 MD 텍스트 로드 — 웹툰 모드 등 비-파싱 소비자용.
+ * storyFile 해석은 loadStoryChapter와 동일 규칙.
+ * @param {string} subjId
+ * @param {Object} originalChapter 표준형 chapter 객체 (chapterKey·fileName 참조용)
+ * @returns {Promise<string>}
+ */
+export async function loadStoryMd(subjId, originalChapter) {
+    const manifest = await DataLoader._getManifest();
+    const subjMeta = manifest.subjects.find(s => s.key === subjId);
+    if (!subjMeta) throw new Error('과목 메타데이터 없음: ' + subjId);
+
+    const chapterMeta = (subjMeta.chapters || []).find(c => c.key === originalChapter.chapterKey);
+    const storyFile = (chapterMeta && chapterMeta.storyFile)
+        ? chapterMeta.storyFile
+        : originalChapter.fileName.replace(/_표준형\.md$/i, '_이야기형.md').replace(/\.md$/i, '_이야기형.md');
+
+    const relPath = PATHS.TEXTBOOK_FILE(subjMeta.dir, storyFile);
+    return DataLoader._getMd(relPath, subjId);
+}

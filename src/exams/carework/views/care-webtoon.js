@@ -3,7 +3,10 @@
 // 이야기형 MD의 story:start~end 블록을 씬 단위로 파싱해 대사는 화자별 버블,
 // 지문은 장면 패널로 렌더링. 인물 아바타는 인물 설정표(DOC-USR-23) 고정 아트.
 import { contentPath } from '../../../core/exam-context.js';
-import { esc } from '../../../core/sanitize.js';
+import { parseStorySlots, renderSlotHtml } from '../../../reader/webtoon-render.js';
+
+// 공용 모듈 재수출 — tests/unit/content/care-webtoon.test.js가 _parse/_who를 import
+export { parseStorySlots as _parse, whoSays as _who } from '../../../reader/webtoon-render.js';
 
 const BOOKS = {
     s2: { label: '2과목 요양보호관련', file: '교재/careprac/2과목_요양보호관련_이야기형.md' },
@@ -20,44 +23,12 @@ let _slots = [];
 let _cur = 0;
 let _bound = false;
 
-/** @param {string} md */
-export function _parse(md) {
-    /** @type {typeof _slots} */
-    const out = [];
-    for (const b of md.split('<!-- story:start -->').slice(1)) {
-        const body = b.split('<!-- story:end -->')[0];
-        const beats = body.split('\n').map(l => l.trim())
-            .filter(l => l && !l.startsWith('<!--'))
-            .map(l => {
-                const m = l.match(/^["“](.+)["”]$/);
-                return m ? { t: 'line', text: m[1] } : { t: 'scene', text: l };
-            });
-        if (beats.length) out.push({ beats, title: beats[0].text.replace(/\*\*/g, '').slice(0, 20) });
-    }
-    return out;
-}
-
-// 화자 추정 — 선임님을 부르면 미영, 미영을 부르면 선임, 표지 없으면 직전 화자와 교대
-/** @param {string} text @param {string|null} prev */
-export function _who(text, prev) {
-    if (/선임님/.test(text)) return 'miyoung';
-    if (/미영|교육생/.test(text)) return 'mentor';
-    if (/어르신|어머니|아버지|할아버지|할머니/.test(text) && /[요야네임][.!?]?$/.test(text)) return 'elder';
-    return prev === 'mentor' ? 'miyoung' : 'mentor';
-}
-
-/** @param {{ beats: Array<{ t: string, text: string }> }} slot */
+/** carework 인물 설정 — 아바타 경로를 contentPath로 해석해 공용 렌더에 주입 */
 function _render(slot) {
-    let prev = null;
-    return slot.beats.map(b => {
-        if (b.t === 'scene') return `<div class="wb-scene">${esc(b.text)}</div>`;
-        const who = _who(b.text, prev);
-        prev = who;
-        const c = CHARS[who];
-        const av = `<img class="wb-avatar" src="${esc(contentPath(c.img))}" alt="${esc(c.name)}">`;
-        const bubble = `<div class="wb-bubble wb-bubble-${who}"><div class="wb-name">${esc(c.name)}</div>${esc(b.text)}</div>`;
-        return `<div class="wb-row wb-${c.side}">${c.side === 'left' ? av + bubble : bubble + av}</div>`;
-    }).join('');
+    /** @type {Record<string, { name: string, side: string, img?: string }>} */
+    const chars = {};
+    for (const [k, c] of Object.entries(CHARS)) chars[k] = { name: c.name, side: c.side, img: contentPath(c.img) };
+    return renderSlotHtml(slot, chars);
 }
 
 /** @param {number} i */
@@ -84,7 +55,7 @@ export async function initCareWebtoonView() {
     }
     const reload = async () => {
         const res = await fetch(contentPath(BOOKS[/** @type {'s1'|'s2'} */ (sel.value || 's2')].file));
-        _slots = _parse(await res.text());
+        _slots = parseStorySlots(await res.text());
         pick.innerHTML = '';
         _slots.forEach((s, i) => pick.add(new Option(`${i + 1}. ${s.title}`, String(i))));
         pick.onchange = () => _show(Number(pick.value));

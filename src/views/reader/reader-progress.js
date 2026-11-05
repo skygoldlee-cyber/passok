@@ -12,7 +12,8 @@ import { showAlert } from '../../ui-utils.js';
 export const textbookReaderState = {
     selectedSubject: '',
     selectedChapter: '',
-    storyMode: false
+    storyMode: false,
+    webtoonMode: false
 };
 
 // 1. 교재 읽기 이어하기 — localStorage 영속화
@@ -28,6 +29,7 @@ export function saveReaderPosition() {
             chapter: textbookReaderState.selectedChapter || '',
             scrollTop: scrollTop,
             storyMode: textbookReaderState.storyMode || false,
+            webtoonMode: textbookReaderState.webtoonMode || false,
             ts: Date.now()
         };
         safeSetItem(READER_POSITION_KEY, JSON.stringify(pos));

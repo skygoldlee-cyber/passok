@@ -1,0 +1,6 @@
+{
+  "_comment": "리더 웹툰 모드 인물 설정 — 화자 키 → 이름·버블 위치·아바타. 인물 설정표(DOC-USR-23) 기반 고정 아트.",
+  "miyoung": { "name": "미영", "side": "right", "img": "assets/characters/miyoung.svg" },
+  "mentor": { "name": "박은정 선임", "side": "left", "img": "assets/characters/park-eunjung.svg" },
+  "elder": { "name": "어르신", "side": "left", "img": "assets/characters/choi-boksun.svg" }
+}

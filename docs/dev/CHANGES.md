@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 feat(carework): 교재리더 웹툰 모드
+
+- reader-webtoon-toggle: 리더 안에서 이야기형 원본을 말풍선 컷으로 렌더 (story 모드와 배타)
+- webtoon-render.js 공용 모듈 — 시험 무관 파서·화자 추정·렌더 + assets/webtoon.json 인물 설정
+- care-webtoon.js가 공용 모듈 재수출 — carework 아바타는 contentPath 주입
+- reader-extras.css에 wb-* 스타일 이동, webtoonMode 상태·영속화
+
+
 ## 2026-11-05 chore: DA-15 예외 등록 — check_scenario_items.js carework 전용
 
 

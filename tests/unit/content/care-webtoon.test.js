@@ -18,3 +18,10 @@ test('_who: 화자 추정 — 선임님 호출=미영, 미영 언급=선임, 무
     assert.equal(_who('그래서 그렇게 해요', 'mentor'), 'miyoung');
     assert.equal(_who('그래서 그렇게 해요', 'miyoung'), 'mentor');
 });
+
+test('parseStorySlots: 챕터 헤딩을 추적해 씬에 소속 챕터 부여', async () => {
+    const { parseStorySlots } = await import('../../../src/reader/webtoon-render.js');
+    const md = '## 📚 Chapter 10\n<!-- story:start -->\n"씬A"\n<!-- story:end -->\n## 📚 Chapter 12\n<!-- story:start -->\n"씬B"\n<!-- story:end -->';
+    const s = parseStorySlots(md);
+    assert.deepEqual(s.map(x => x.chapter), [10, 12]);
+});

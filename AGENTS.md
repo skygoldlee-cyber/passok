@@ -175,6 +175,7 @@ src/                    # ES Modules
     mermaid-utils.js       # Mermaid 다이어그램 설정
     mermaid-render.js      # Mermaid 지연 로딩 + 컨테이너 렌더링 + 다이어그램 확대 모달 (reader/search/manual 공용, 모바일은 모달 내 핀치 제스처 — TR-26)
     image-zoom.js          # 교재 본문 이미지(.reader-img) 라이트박스 확대 모달 — 모바일도 바인딩, 모달 내 핀치 제스처 (TR-26)
+    webtoon-render.js      # 웹툰 버블 렌더 공용 모듈 — story:start 씬 파싱·화자 추정·말풍선 렌더
     zoom-gestures.js       # 줌 모달 공용 핀치·패닝·더블탭 제스처 (Pointer Events, touch-action:none 표면, 이미지·머메이드 모달 공용 — TR-26)
   keyword-index.js      # 교재 셀→참조자료 키워드 매핑 (시험별 — 자동 생성)
   telemetry/web-vitals.js         # Core Web Vitals 모니터링
