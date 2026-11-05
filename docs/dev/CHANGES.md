@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): 점검표 복사 단일화 + 기관 버튼 라벨 통일·mdgen 배선 정정
+
+- 📋 점검표 복사 버튼 제거 — 메뉴 본문 복사(MD 표·감사·PRO)로 단일화, careAuditCopy·buildSummary 삭제
+- 기관 제출 라벨 통일 → 🏥 기관에 공유 (사고·방문·인수인계)
+- 평가·사고·방문 뷰 *DocMd의 data-pro-feature 오첨부·|undefined 잔재 정정
+
 ## 2026-11-05 fix(carework): 텍스트 공유 페이로드도 MD 초안 우선
 
 - share({text}) 폴백·클립보드 복사가 DOM 평문 대신 MD 표준 초안을 사용 (DA-24 — 표 구조 보존)

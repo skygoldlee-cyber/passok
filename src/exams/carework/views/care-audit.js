@@ -3,14 +3,12 @@
 import { loadAuditSections, loadChecks, toggleCheck, clearChecks, auditProgress } from '../care-audit.js';
 import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { showToast } from '../../../ui-utils.js';
 import { auditCoverage } from '../care-coverage.js';
 import { listClients } from '../care-client-store.js';
 import { listCareLogs } from '../care-log-store.js';
 import { listVisits } from '../care-visit-store.js';
 import { listHandovers } from '../handover-store.js';
 import { listIncidents } from '../incident-store.js';
-import { shareAudit } from '../care-share.js';
 import { docMdHead, mdTable, mdToHtml } from '../doc-md.js';
 export { careShare } from '../care-share.js';
 
@@ -42,33 +40,12 @@ function render() {
     if (pv) pv.innerHTML = mdToHtml(careAuditDocMd());
 }
 
-function buildSummary() {
-    const c = loadChecks();
-    const lines = ['[기관 평가 체크리스트 점검표]'];
-    for (const s of _sections) {
-        lines.push('', '■ ' + s.title);
-        for (const i of s.items) lines.push(`  ${c[i.id] ? '✔' : '□'} ${i.text} (${i.ref})`);
-    }
-    const p = auditProgress(_sections);
-    lines.push('', `점검 진행: ${p.done}/${p.total} 항목`);
-    return lines.join('\n');
-
-}
-
-/** 점검표 MD 초안 — 섹션별 항목을 표 구조로 (docx 파생 원본) */
+/** 점검표 MD 초안 — 섹션별 항목을 표 구조로 (docx 파생·미리보기·본문 복사 공통 원본) */
 export function careAuditDocMd() {
     if (!_sections.length) return '';
     const c = loadChecks();
     const rows = _sections.flatMap(s => s.items.map(i => [s.title, c[i.id] ? '✔' : '□', i.text, i.ref]));
     return docMdHead('기관 평가 점검표') + '\n' + mdTable(['영역', '점검', '항목', '근거'], rows);
-}
-
-export function careAuditCopy() {
-    if (!_sections.length) { showToast('체크리스트를 불러오는 중입니다.', 'error'); return; }
-    proFeatureNotice('care_audit_export', '점검표 복사·내보내기');
-    navigator.clipboard?.writeText(buildSummary()).then(
-        () => { shareAudit('기관 평가 점검표', '', ['클립보드']); showToast('점검표를 복사했습니다.'); },
-        () => showToast('복사에 실패했습니다.', 'error'));
 }
 
 export function careAuditPrint() {

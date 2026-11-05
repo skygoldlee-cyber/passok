@@ -379,7 +379,7 @@ const careAudit = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-audit.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careAuditReset', 'careAuditCopy', 'careAuditPrint', 'careAuditDocMd']]],
+    handlers: [['main', ['careAuditReset', 'careAuditPrint', 'careAuditDocMd']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);

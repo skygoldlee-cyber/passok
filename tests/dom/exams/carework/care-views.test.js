@@ -40,7 +40,7 @@ import { careCalcRun, careCalcReset, initCareCalcView } from '../../../../src/ex
 import { careCardOpen, careCardClose, initCareCardView } from '../../../../src/exams/carework/views/care-card.js';
 import { careLogGenerate, careLogRecordCopy, initCareLogView } from '../../../../src/exams/carework/views/care-log.js';
 import { careFacilityHandoverSubmit, careHandoverAck } from '../../../../src/exams/carework/views/care-handover.js';
-import { careAuditReset, careAuditCopy, careAuditPrint, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
+import { careAuditReset, careAuditPrint, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
 import { careHandoverGenerate, careHandoverSave, careHandoverExport, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
 import { initCareHomeView, careDocSignSave } from '../../../../src/exams/carework/views/care-home.js';
@@ -238,12 +238,10 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         setDocSign('', '', ''); // 정리 — 다른 테스트의 빈 서명란 검증에 영향 없도록
     });
 
-    it('careAudit — 점검표 복사·인쇄 핸들러 실행', async () => {
+    it('careAudit — 점검표 인쇄 핸들러 실행', async () => {
         loadPartial('care-audit.html');
         await initCareAuditView();
-        Object.defineProperty(navigator, 'clipboard', { value: { writeText: () => Promise.resolve() }, configurable: true });
         window.print = () => {};
-        careAuditCopy();
         careAuditPrint();
         expect(document.getElementById('audit-list')).toBeTruthy();
     });
