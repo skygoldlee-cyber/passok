@@ -1,5 +1,5 @@
 // tests/unit/content/docx-utils.test.js
-// @spec CO-13 — 미니멀 docx 생성기: ZIP 구조·엔트리·document.xml 이스케이프 검증
+// @spec CO-13,DA-24 — 미니멀 docx 생성기: ZIP 구조·엔트리·document.xml 이스케이프 + MD→표 구조 변환 검증
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { docxFile, docxFileMd } from '../../../src/content/docx-utils.js';

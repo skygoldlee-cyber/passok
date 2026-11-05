@@ -1,5 +1,5 @@
 // src/exams/carework/doc-md.js — 내보내기 문서 마크다운 초안 공용 빌더 (CO-13)
-// @spec CO-13 — 생성 문서는 MD를 표준 초안으로 삼아 docx·xlsx·html을 파생한다
+// @spec CO-13,DA-24 — 생성 문서는 MD를 표준 초안으로 삼아 docx·xlsx·html을 파생한다
 import { getOrgName } from './facility.js';
 import { todayKey } from '../../core/utils.js';
 import { parseCsv } from '../../content/csv-utils.js';

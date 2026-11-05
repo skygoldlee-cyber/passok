@@ -1162,6 +1162,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | DA-21 | **select option 테마 강제**: 커스텀 select 스타일을 쓰는 뷰는 `option`·`optgroup`에도 `background-color: var(--bg-sidebar); color: var(--color-text-main)`(+ `.light-theme` 변형)을 반드시 함께 지정 — option은 브라우저 기본색으로 렌더돼 다크 배경에서 가시성이 무너진다. `.form-select` 재사용 시 dashboard.css 규칙이 자동 적용됨 | ✅ |
 | DA-22 | **모드 전환 랜딩 규칙**: 모드 전환 시 현재 뷰가 전환 대상 모드의 메뉴가 아니면 해당 모드의 첫 메뉴로 랜딩한다 — 학습→실무는 시험이 선언한 첫 실무 뷰(`getPracticeLanding()` = enabled 피처 중 `priority` 최소 뷰, 시험별 선언으로 일반화 — carework는 현장도구, cosmetic은 실무도구), 실무→학습은 `dashboard-view`. 대상 모드의 뷰에 이미 있으면 이동하지 않는다 | ✅ |
 | DA-23 | **시간 표기는 로컬(KST) 기준**: 사용자에게 표시·제공되는 모든 날짜·시각(기록 저장일·문서 출력일·내보내기 파일명 스탬프·저장 버킷 키)은 UTC가 아닌 로컬 시간대 성분으로 산출한다 — `new Date().toISOString().slice(0,10)`은 UTC라 KST 00~09시에 하루 전으로 버킷되는 오류를 내므로 사용자 표기 경로에서 금지하고, `utils.js`의 `todayKey()`(오늘 키)·`localDateKey(d)`(임의 일자 키)·`localDateTime(d)`/`localDateTimeNow()`(시각 문자열) 공용 헬퍼를 사용한다. 저장값은 naive 로컬 형식 유지(타임존 접미사 미부기). 적용: 진도·스트릭·백업 키 + carework 실무 도구 저장일·문서 헤더·내보내기 파일명 | ✅ |
+| DA-24 | **문서 생성은 마크다운 초안에서 시작**: 내보내기·공유 대상의 생성 문서는 Markdown을 표준 초안(정본)으로 삼는다 — docx(`docx-utils.js`의 MD 서브셋 → WordprocessingML)·xlsx(표 파생)·html 미리보기(`doc-md.js`의 `mdToHtml`)·PDF(미리보기 DOM 래스터)가 모두 동일 MD에서 파생되므로 어떤 형식으로 내보내도 같은 문서 구조(제목·표·목록·구분선)를 보장한다. 뷰는 문서별 `*DocMd` 빌더로 초안을 제공하고(`care-share.js`의 `mdgen` 슬롯), 표 데이터는 기존 CSV 직렬화를 `csvToMdTable`로 재사용한다 — 초기 구현은 carework 출력 문서 전면 적용 | ✅ |
 
 ### 5.2 안정적 ID 체계
 

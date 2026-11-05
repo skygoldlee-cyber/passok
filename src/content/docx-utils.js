@@ -1,5 +1,5 @@
 // src/content/docx-utils.js — Word(.docx) 생성 — 미니멀 OOXML, 의존성 없음
-// @spec CO-13 — 출력 문서 Word 파일 공유/다운로드
+// @spec CO-13,DA-24 — 출력 문서 Word 파일 공유/다운로드 (MD 초안 → docx 파생)
 // 문서가 단락 텍스트뿐이라 [Content_Types].xml + _rels/.rels + word/document.xml
 // 3엔트리면 Word·HWP·Google Docs 모두 정상 개방된다 — 라이브러리 벤더 불필요.
 import { esc } from '../core/sanitize.js';
