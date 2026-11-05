@@ -289,9 +289,10 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         expect(globalThis.navigator.share.mock.calls[1][0].text).toBe('문서 내용');
     });
 
-    it('모바일(pointer:coarse) — 시트 거절 시 복사+다운로드 폴백', async () => {
+    it('모바일(pointer:coarse) — 시트 거절 시 복사+다운로드 폴백 (텍스트 페이로드는 MD 초안)', async () => {
         setup(`<section class="view-section"><pre id="out">문서 내용</pre>
-            <button id="share" data-arg="#out|문서">공유</button></section>`);
+            <button id="share" data-arg="#out|문서|||||careDocMd">공유</button></section>`);
+        (/** @type {any} */ (window)).careDocMd = () => '# 문서\n\n마크다운 본문';
         globalThis.matchMedia = () => ({ matches: true });
         globalThis.navigator.share = vi.fn().mockRejectedValue(Object.assign(new Error('x'), { name: 'TypeError' }));
         globalThis.navigator.canShare = () => false; // 파일 공유 미지원 → 텍스트 시트, 실패 시 폴백
@@ -300,9 +301,10 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         await careShare(document.getElementById('share').dataset.arg);
         await tapMenu('카카오톡');
         await tapMenu('전체 파일로 보내기');
-        await vi.waitFor(() => expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('문서 내용'));
+        await vi.waitFor(() => expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('# 문서\n\n마크다운 본문')); // 클립보드도 MD 초안
         await tapShareBtn();
         await vi.waitFor(() => expect(globalThis.navigator.share).toHaveBeenCalled()); // canShare false → {title, text} 시도
+        expect(globalThis.navigator.share.mock.calls[0][0].text).toBe('# 문서\n\n마크다운 본문'); // 텍스트 페이로드는 DOM 평문이 아니라 MD 초안
         await vi.waitFor(() => expect(toasts.find(t => t.includes('다운로드'))).toBeTruthy()); // 거절 → 파일 다운로드 폴백
     });
 });

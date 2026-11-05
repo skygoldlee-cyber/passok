@@ -240,7 +240,7 @@ const _actShare = async (ctx, kind = 'all') => {
     })());
     await Promise.allSettled(tasks); // 생성 완료 후 버튼 — 시트에 선택 파일 첨부
     _audit(ctx.title, ctx.flag, files.map(f => f.name));
-    const fs = files, { title, text } = ctx;
+    const fs = files, { title } = ctx, text = ctx.md || ctx.text; // 텍스트 공유도 MD 초안 기본 (표 구조 보존)
     _shareBtn(`📤 ${title} 공유하기`, async () => {
         const ok = !_filesBlocked && fs.length && (typeof navigator.canShare !== 'function' || navigator.canShare({ files: fs }));
         try {

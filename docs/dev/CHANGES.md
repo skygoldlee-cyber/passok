@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): 텍스트 공유 페이로드도 MD 초안 우선
+
+- share({text}) 폴백·클립보드 복사가 DOM 평문 대신 MD 표준 초안을 사용 (DA-24 — 표 구조 보존)
+
 ## 2026-11-05 fix(carework): 서명란 하단 여백 증가 (16px → 36px)
 
 ## 2026-11-05 fix(carework): 문서 서명란 하단 여백 — .care-doc-sign margin-bottom
