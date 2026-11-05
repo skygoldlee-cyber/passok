@@ -41,3 +41,12 @@ test('웹툰 과목 선택은 1과목이 먼저다', async () => {
     const { _books } = await import('../../../src/exams/carework/views/care-webtoon.js');
     assert.deepEqual(Object.keys(_books), ['s1', 's2']);
 });
+
+test('이야기형 원본 파일은 git 추적 대상이어야 한다', async () => {
+    const { execSync } = await import('node:child_process');
+    for (const f of ['content/exams/carework/교재/careprac/2과목_요양보호관련_이야기형.md',
+        'content/exams/carework/교재/caretheory/1과목_요양보호론_이야기형.md']) {
+        const out = execSync(`git ls-files -- "${f}"`).toString().trim();
+        assert.ok(out.length > 0, `${f} 미추적 — 프로덕션 404 빈 씬 방지`);
+    }
+});

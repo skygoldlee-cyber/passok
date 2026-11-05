@@ -169,11 +169,11 @@
   "pastExams": [],
   "features": {
     "careFlow": {
-      "title": "4단계 학습 흐름",
+      "title": "개념 학습",
       "subtitle": "미리풀기 → 이야기 → 요약 → 시나리오",
-      "nav": "학습 흐름",
-      "loading": "학습 흐름을 불러오는 중입니다...",
-      "error": "학습 흐름을 불러오지 못했습니다."
+      "nav": "개념 학습",
+      "loading": "개념 학습을 불러오는 중입니다...",
+      "error": "개념 학습을 불러오지 못했습니다."
     },
     "careWebtoon": {
       "title": "이야기 웹툰",
