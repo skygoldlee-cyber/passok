@@ -1,5 +1,5 @@
 // tests/unit/utils.test.js — 공용 유틸 검증 (날짜 키·시간 포맷·정규식·디바운스)
-// @spec SC-03,T-03
+// @spec SC-03,T-03,DA-23
 // todayKey/localDateKey는 로컬 시간대 기준이어야 한다 — UTC slice는
 // KST 00~09시에 하루 전으로 버킷되는 회귀를 재발시키므로 고정한다.
 

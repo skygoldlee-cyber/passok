@@ -4,6 +4,7 @@
 import { getSupabase, getAuthSession } from '../../auth-sync/supabase-client.js';
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
+import { todayKey } from '../../core/utils.js';
 
 export const ROLES = { worker: '요양보호사', manager: '관리책임자' };
 
@@ -87,7 +88,7 @@ export function setLocalOrgName(name) {
 /** 출력 문서 헤더 — 제목 + 기관명(있으면 병기) + 출력일 */
 export function docHeadHtml(title) {
     const org = getOrgName();
-    return `<div class="care-doc-head"><strong>${_esc(title)}</strong><span>${org ? _esc(org) + ' · ' : ''}${new Date().toISOString().slice(0, 10)} 출력</span></div>`;
+    return `<div class="care-doc-head"><strong>${_esc(title)}</strong><span>${org ? _esc(org) + ' · ' : ''}${todayKey()} 출력</span></div>`;
 }
 
 // — 출력물 서명란 기입 (홈 설정 — 전 문서 공통) —

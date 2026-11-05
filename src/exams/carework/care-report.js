@@ -1,12 +1,13 @@
 // src/exams/carework/care-report.js
 // @spec CO-09 — 보호자 주간 리포트 (대상자 주간 기록 요약 텍스트)
+import { localDateKey } from '../../core/utils.js';
 /** 최근 7일 기록을 대상자별 요약 텍스트로 — clientId 우선·스냅샷 근사
  * @param {string} name
  * @param {{logs?: any[], visits?: any[], incidents?: any[]}} stores
  * @param {number} [sinceDays]
  */
 export function weeklyReport(name, { logs = [], visits = [], incidents = [] } = {}, sinceDays = 7) {
-    const since = new Date(Date.now() - sinceDays * 864e5).toISOString().slice(0, 10);
+    const since = localDateKey(new Date(Date.now() - sinceDays * 864e5));
     const match = r => (r.date || '') >= since && (r.clientId === name || r.client === name);
     const L = logs.filter(match), V = visits.filter(match), I = incidents.filter(match);
     const meals = L.map(l => l.obs?.meal).filter(Boolean);

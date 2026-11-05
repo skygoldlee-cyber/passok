@@ -158,10 +158,11 @@ feature-plan.json             # careLog.save/pdf → pro 게이팅, 나머지 fr
   ├─ 텍스트 확보: 출력 요소 → 미생성 시 생성 핸들러 자동 실행 → 실패 시 폼 양식 폴백
   ├─ mask 플래그 시 인명·연락처 가림 + 기관 정책 안내 토스트
   └─ 내보내기 메뉴 시트 (항목은 해당되는 것만)
-      ├─ 📤 카카오톡 등으로 공유 — 모바일 전용: 복사 + xlsx·pdf 생성 → 공유하기 버튼 → share({files})
+      ├─ 📤 카카오톡 등으로 공유 — 모바일 전용: 형식 선택 시트(pdf/docx/xlsx/전체) → 선택분만 생성 → 공유하기 버튼 → share({files})
       ├─ 🖨️ 인쇄·PDF 저장 — 인쇄핸들러 호출(없으면 생성+print) — 벡터 PDF·용지 출력
       ├─ 📋 본문 복사 — 클립보드 (mask 시 가림)
       ├─ 📄 PDF 파일 다운로드 — html2canvas 래스터 (카톡 첨부용)
+      ├─ 📝 Word 파일 다운로드 — 미니멀 OOXML 직접 생성 (docx-utils, 편집용)
       └─ 📊 Excel 내보내기 — CsvExport 핸들러 그대로 호출
 ```
 

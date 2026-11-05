@@ -15,6 +15,7 @@ import { listCareLogs } from '../care-log-store.js';
 import { listVisits } from '../care-visit-store.js';
 import { listHandovers } from '../handover-store.js';
 import { listIncidents } from '../incident-store.js';
+import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -100,14 +101,11 @@ function renderPreview(t) {
     if (out) out.innerHTML = docHeadHtml('수급자 명부') + `<pre class="care-log-text">${esc(t)}</pre>`;
 }
 
-export function careClientExport() {
+/** 명부 문서 미리보기 — 저장 명부 전체를 문서로 렌더 (내보내기 메뉴 자동 생성기, 복사·인쇄·PDF 공통 원본) */
+export function careClientPreview() {
     const t = buildListText();
     if (!t) { showToast('등록된 대상자가 없습니다.', 'error'); return; }
-    proFeatureNotice('care_client_share', '명부 복사·내보내기');
     renderPreview(t);
-    navigator.clipboard?.writeText(t).then(
-        () => showToast('명부를 복사했습니다.'),
-        () => showToast('복사에 실패했습니다.', 'error'));
 }
 
 export function careClientPrint() {
@@ -209,7 +207,7 @@ export function careClientReport(btn) {
     const r = weeklyReport(c.name, { logs: listCareLogs(), visits: listVisits(), incidents: listIncidents() });
     if (!r.count) { showToast('최근 7일 기록이 없습니다.', 'error'); return; }
     const out = $('cli-preview');
-    if (out) out.innerHTML = docHeadHtml('보호자 주간 리포트') + `<pre class="care-log-text">${esc(r.text)}</pre><p class="care-log-hint">기관 검토: ${esc(getDocSign().confirmer) || '____________'} &nbsp; 발행일: ${esc(new Date().toISOString().slice(0, 10))} — 수급자 정보 포함, 기관 정책 확인 후 전달</p>`;
+    if (out) out.innerHTML = docHeadHtml('보호자 주간 리포트') + `<pre class="care-log-text">${esc(r.text)}</pre><p class="care-log-hint">기관 검토: ${esc(getDocSign().confirmer) || '____________'} &nbsp; 발행일: ${esc(todayKey())} — 수급자 정보 포함, 기관 정책 확인 후 전달</p>`;
 }
 
 export function initCareClientView() {

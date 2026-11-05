@@ -21,12 +21,11 @@
             <button data-click="careAiDraft" data-arg="ho" class="secondary">✨ AI 초안</button>
             <button data-click="careHandoverGenerate">🤝 인수인계 생성</button>
             <button data-click="careHandoverSave" class="secondary">💾 기록 저장 <span class="pro-badge" data-pro-feature="care_handover_save">PRO</span></button>
-            <button data-click="careShare" data-arg="#ho-preview pre|인수인계서|mask|careHandoverGenerate||careHandoverPrint|care_handover_share" class="secondary">📤 공유·내보내기</button>
-            <button data-click="careHandoverCopy" class="secondary">📋 복사</button>
+            <button data-click="careHandoverExport" data-arg="#ho-preview pre|인수인계서|mask|careHandoverGenerate|careHandoverCsvExport|careHandoverPrint|care_handover_share" class="secondary">📤 공유·내보내기</button>
         </div>
     </div>
     <div id="ho-preview" class="care-calc-result"></div>
     <div id="ho-facility" class="care-log-facility"></div>
-    <div class="view-header"><h3>기관 기록 보관함</h3><p class="view-subtitle">공유 전 저장 필수 — 저장본이 기관 기록이 됩니다</p></div>
+    <div class="view-header"><h3>기관 기록 보관함</h3><p class="view-subtitle">공유·내보내기 시 미저장 문서는 자동 저장 — 저장본이 기관 기록이 됩니다</p></div>
     <div id="ho-saved" class="care-log-saved"></div>
 </section>

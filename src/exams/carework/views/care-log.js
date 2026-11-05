@@ -8,6 +8,8 @@ import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
+import { shareAudit } from '../care-share.js';
+import { todayKey } from '../../../core/utils.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -44,23 +46,13 @@ export function careLogGenerate() {
     out.innerHTML = docHeadHtml('요양보호 서비스 기록') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]);
 }
 
-export function careLogCopy() {
-    careLogGenerate();
-    const pre = document.querySelector('#log-preview pre');
-    if (!pre) { showToast('먼저 일지를 생성하세요.', 'error'); return; }
-    proFeatureNotice('care_log_export', '일지 복사·내보내기');
-    navigator.clipboard?.writeText(pre.textContent || '').then(
-        () => showToast('일지를 복사했습니다.'),
-        () => showToast('복사에 실패했습니다.', 'error'));
-}
-
 /** CO-07 공단 급여제공기록지 양식 복사 — ERP·공단 앱에 붙여넣기 (이중 입력 해소) */
 export function careLogRecordCopy() {
     const t = buildRecordText(readForm());
     if (!t) { showToast('일자·대상자를 입력하세요.', 'error'); return; }
     proFeatureNotice('care_log_export', '제공기록지 복사');
     navigator.clipboard?.writeText(t).then(
-        () => showToast('제공기록지 양식을 복사했습니다.'),
+        () => { shareAudit('급여제공기록지', '', ['클립보드']); showToast('제공기록지 양식을 복사했습니다.'); },
         () => showToast('복사에 실패했습니다.', 'error'));
 }
 
@@ -110,7 +102,7 @@ export function initCareLogView() {
     markFunnel('tool:care-log');
     attachClientPicker(/** @type {HTMLInputElement|null} */ ($('log-client')));
     const d = /** @type {HTMLInputElement|null} */ ($('log-date'));
-    if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
+    if (d && !d.value) d.value = todayKey();
     const s = $('log-service');
     if (s && !s.children.length)
         s.innerHTML = SERVICE_TYPES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');

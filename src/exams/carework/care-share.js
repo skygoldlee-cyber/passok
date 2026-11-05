@@ -4,10 +4,12 @@ import { showToast } from '../../ui-utils.js';
 import { esc } from '../../core/sanitize.js';
 import { pdfFileFromEl } from '../../content/pdf-utils.js';
 import { sheetFile } from '../../content/xlsx-utils.js';
-import { docHeadHtml } from './facility.js';
+import { docxFile } from '../../content/docx-utils.js';
+import { docHeadHtml, getOrgName } from './facility.js';
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { proFeatureNotice, refreshProBadges } from '../../pro/pro-upgrade.js';
+import { todayKey } from '../../core/utils.js';
 
 const _NAME_RE = /(김|이|박|최|정|강|조|윤|장|임|한|오|서|신|권|황|안|송|전|홍|고|문|양|손|배|백|허|유|남|심|노|하|곽|성|차|주|우|구|민|류|나|진|엄|채|원|천|방|공|현|함|변|염|추|도|소|석|선|설|마|길|연|위|표|명|기|반|왕|금|옥|육|인|맹|제|모|탁|어|은|편|남궁|독고|제갈|황보|선우)[가-힣]{1,2}(?!\s*(식사|산책|요양|보호|관리|확인|기록|완료|시작|교대))/g;
 const _PHONE_RE = /0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}/g;
@@ -22,6 +24,9 @@ const _audit = (title, flag, names) => {
         setJSON(STORAGE_KEYS.CARE_SHARE_AUDIT, log.slice(-50));
     } catch { /* 스토리지 실패는 무시 */ }
 };
+
+/** 메뉴 외부의 직접 복사·내보내기도 동일 감사 로그에 기록 (점검표·제공기록지 등 별도 문서 경로) */
+export const shareAudit = _audit;
 
 /** 진단 배너 — 네이티브 다이얼로그 금지 규약: 탭할 때까지 남는 상시 배너 (캡처 가능) */
 const diag = msg => {
@@ -88,7 +93,7 @@ const _arg = arg => {
     const f3 = f[2] || '';
     const flag = f3 === 'mask' ? 'mask' : '';
     const [gen = '', alt = '', print = '', proKey = ''] = flag ? f.slice(3) : f.slice(2);
-    const stamp = new Date().toISOString().slice(0, 10);
+    const stamp = todayKey();
     return {
         sel: f[0] || '', title: f[1] || '문서', flag, gen, print, proKey, text: '',
         csvGen: gen.endsWith('CsvExport') ? gen : (alt.endsWith('CsvExport') ? alt : ''),
@@ -172,6 +177,22 @@ const _actPdf = async ctx => {
     } catch { showToast('PDF 생성 실패 — 인쇄를 이용하세요.', 'error'); }
 };
 
+/** 공유 Word = 인쇄 미리보기와 동일 구성 — 문서 헤더(제목·기관명·출력일) + 본문 단락 */
+const _docxFile = ctx => {
+    const org = getOrgName();
+    const head = `${ctx.title}\n${org ? org + ' · ' : ''}${todayKey()} 출력`;
+    return docxFile(`${head}\n\n${ctx.text}`, ctx.fname('docx').replace(/\.docx$/, ''), 2);
+};
+
+const _actDocx = ctx => {
+    if (ctx.proKey) proFeatureNotice(ctx.proKey, `${ctx.title} Word 다운로드`);
+    try {
+        const file = _docxFile(ctx);
+        _downloadAll([file]);
+        _audit(ctx.title, ctx.flag, [file.name]);
+    } catch { showToast('Word 파일 생성 실패 — 인쇄·PDF를 이용하세요.', 'error'); }
+};
+
 const _actXlsx = async ctx => {
     const fn = (/** @type {any} */ (window))[ctx.csvGen];
     if (typeof fn !== 'function') { showToast('Excel 내보내기를 지원하지 않습니다.', 'error'); return; }
@@ -184,27 +205,32 @@ const _actXlsx = async ctx => {
     파일을 먼저 전부 만든 뒤 "공유하기" 버튼의 새 탭 제스처로 시트를 연다.
     페이로드는 files만 — text를 병기하면 카톡 등 타겟이 파일 대신 텍스트만 수신한다.
     txt 파일은 만들지 않는다 — 본문은 클립보드 복사로 제공하고, 카톡·다운로드 이중 수신 방지. */
-const _actShare = async ctx => {
+const _actShare = async (ctx, kind = 'all') => {
     if (ctx.proKey) proFeatureNotice(ctx.proKey, `${ctx.title} 공유`);
-    _copyRaw(ctx); // 메뉴 항목 탭 즉시 반응 — 제스처 안이라 클립보드도 통과
+    _copyRaw(ctx); // 항목 탭 즉시 반응 — 제스처 안이라 클립보드도 통과
     if (typeof navigator.share !== 'function') { // 인앱 브라우저 식별
         diag('이 브라우저는 공유 시트를 지원하지 않습니다 — Chrome으로 열어주세요.');
         return;
     }
     showToast('문서를 준비하는 중입니다 — "공유하기" 버튼이 뜨면 눌러주세요.');
-    // 파일 생성 — 각 소스 독립: 성공한 파일만 첨부, 하나가 없어도 나머지는 정상 공유
+    // 파일 생성 — 선택한 형식만 (각 소스 독립: 성공한 파일만 첨부)
+    const kinds = kind === 'all' ? ['xlsx', 'pdf', 'docx'] : [kind];
     /** @type {File[]} */
     const files = [];
     /** @type {Promise<void>[]} */
     const tasks = [];
-    if (ctx.csvGen) tasks.push((async () => { // CsvExport 지정 시 실제 .xlsx
+    if (kinds.includes('xlsx') && ctx.csvGen) tasks.push((async () => { // CsvExport 지정 시 실제 .xlsx
         try { const csv = await (/** @type {any} */ (window))[ctx.csvGen]?.(); if (csv) files.push(await sheetFile(csv, ctx.fname('xlsx'))); } catch { showToast('Excel 생성 실패 — 나머지 파일은 정상 공유됩니다.', 'error'); }
     })());
-    tasks.push((async () => {
+    if (kinds.includes('pdf')) tasks.push((async () => {
         try { files.push(await _pdfFile(ctx)); }
         catch { showToast('PDF 생성 실패 — 텍스트만 공유됩니다.', 'error'); }
     })());
-    await Promise.allSettled(tasks); // 생성 완료 후 버튼 — 시트에 xlsx·pdf 전부 포함
+    if (kinds.includes('docx')) tasks.push((async () => { // Word — 편집용 .docx, 동기 생성이라 실패 여지 없음(방어적으로 분리)
+        try { files.push(_docxFile(ctx)); }
+        catch { showToast('Word 생성 실패 — 나머지 파일은 정상 공유됩니다.', 'error'); }
+    })());
+    await Promise.allSettled(tasks); // 생성 완료 후 버튼 — 시트에 선택 파일 첨부
     _audit(ctx.title, ctx.flag, files.map(f => f.name));
     const fs = files, { title, text } = ctx;
     _shareBtn(`📤 ${title} 공유하기`, async () => {
@@ -222,8 +248,8 @@ const _actShare = async ctx => {
     });
 };
 
-/** 내보내기 메뉴 — 하단 시트 + 스크림. 각 항목 탭이 새 제스처라 share()·클립보드 제스처 계약을 만족. */
-const _openMenu = ctx => {
+/** 하단 시트 공용 렌더 — 스크림·헤더·항목 버튼. 각 항목 탭이 새 제스처라 share()·클립보드 제스처 계약을 만족. */
+const _sheet = (ctx, headText, items) => {
     document.querySelector('.care-export-sheet')?.remove();
     document.querySelector('.care-export-scrim')?.remove();
     const scrim = document.createElement('div');
@@ -232,24 +258,15 @@ const _openMenu = ctx => {
     const sheet = document.createElement('div');
     sheet.className = 'care-export-sheet';
     sheet.setAttribute('role', 'dialog');
-    sheet.setAttribute('aria-label', `${ctx.title} 내보내기`);
+    sheet.setAttribute('aria-label', headText);
     sheet.style.cssText = 'position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(92vw,400px);z-index:99999;background:var(--bg-elevated,#1f2937);color:var(--color-text-main,#e5e7eb);border:1px solid var(--border-color,rgba(255,255,255,.12));border-radius:14px;padding:10px;box-shadow:0 8px 30px rgba(0,0,0,.45);font:14px/1.5 sans-serif';
     const close = () => { scrim.remove(); sheet.remove(); document.removeEventListener('keydown', onKey); };
     const onKey = e => { if (e.key === 'Escape') close(); };
     scrim.addEventListener('click', close);
     const head = document.createElement('div');
     head.style.cssText = 'padding:6px 10px 10px;font-weight:600;border-bottom:1px solid var(--border-subtle,rgba(255,255,255,.06))';
-    head.textContent = `${ctx.title} — 내보낼 방식을 선택하세요`;
+    head.textContent = headText;
     sheet.appendChild(head);
-    const masked = ctx.flag === 'mask' ? ' (인명 가림)' : '';
-    const items = [];
-    // 파일 첨부 시트는 터치 기기 전용 — Windows 데스크톱은 canShare 통과 후에도 share({files})가
-    // OS 수준 NotAllowedError로 거절되고 카톡 PC판은 공유 대상 미등록이라 항목 자체를 숨긴다.
-    if (_coarse()) items.push({ label: '📤 카카오톡 등으로 공유', pro: ctx.proKey, disabled: !ctx.text, run: () => _actShare(ctx) });
-    items.push({ label: '🖨️ 인쇄·PDF 저장', pro: ctx.proKey, run: () => _actPrint(ctx) });
-    items.push({ label: `📋 본문 복사${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => { if (ctx.proKey) proFeatureNotice(ctx.proKey, `${ctx.title} 복사`); _copyRaw(ctx); _audit(ctx.title, ctx.flag, ['clipboard']); } });
-    items.push({ label: `📄 PDF 파일 다운로드${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => _actPdf(ctx) });
-    if (ctx.csvGen) items.push({ label: '📊 Excel 내보내기', pro: ctx.proKey, run: () => _actXlsx(ctx) });
     for (const it of items) {
         const b = document.createElement('button');
         b.type = 'button';
@@ -264,6 +281,32 @@ const _openMenu = ctx => {
     document.body.append(scrim, sheet);
     refreshProBadges(sheet);
     /** @type {HTMLElement|null} */ (sheet.querySelector('button:not([disabled])'))?.focus();
+};
+
+/** 공유 형식 선택 — 보낼 파일 종류를 골라 그것만 생성·첨부 (PDF 래스터 렌더 등 미선택 비용 절감) */
+const _pickShareKind = ctx => {
+    const items = [
+        { label: '📄 PDF로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'pdf') },
+        { label: '📝 Word로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'docx') },
+    ];
+    if (ctx.csvGen) items.push({ label: '📊 Excel로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'xlsx') });
+    items.push({ label: '📎 전체 파일로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'all') });
+    _sheet(ctx, `${ctx.title} — 보낼 파일 형식을 선택하세요`, items);
+};
+
+/** 내보내기 메뉴 — 항목 조립 후 _sheet로 렌더 */
+const _openMenu = ctx => {
+    const masked = ctx.flag === 'mask' ? ' (인명 가림)' : '';
+    const items = [];
+    // 파일 첨부 시트는 터치 기기 전용 — Windows 데스크톱은 canShare 통과 후에도 share({files})가
+    // OS 수준 NotAllowedError로 거절되고 카톡 PC판은 공유 대상 미등록이라 항목 자체를 숨긴다.
+    if (_coarse()) items.push({ label: '📤 카카오톡 등으로 공유', pro: ctx.proKey, disabled: !ctx.text, run: () => _pickShareKind(ctx) });
+    items.push({ label: '🖨️ 인쇄·PDF 저장', pro: ctx.proKey, run: () => _actPrint(ctx) });
+    items.push({ label: `📋 본문 복사${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => { if (ctx.proKey) proFeatureNotice(ctx.proKey, `${ctx.title} 복사`); _copyRaw(ctx); _audit(ctx.title, ctx.flag, ['clipboard']); } });
+    items.push({ label: `📄 PDF 파일 다운로드${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => _actPdf(ctx) });
+    items.push({ label: `📝 Word 파일 다운로드${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => _actDocx(ctx) });
+    if (ctx.csvGen) items.push({ label: '📊 Excel 내보내기', pro: ctx.proKey, run: () => _actXlsx(ctx) });
+    _sheet(ctx, `${ctx.title} — 내보낼 방식을 선택하세요`, items);
 };
 
 /**

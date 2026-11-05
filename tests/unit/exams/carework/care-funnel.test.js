@@ -40,7 +40,7 @@ test('공단 검색 링크 — 카드 반복 없이 뷰 상단 단일 위치', (
 
 test('CO-13 공유 — careShare 핸들러 등록 + 뷰 버튼 존재', () => {
     assert.match(readFileSync('src/practice-registry.js', 'utf8'), /careShare/);
-    assert.match(readFileSync('html/exams/carework/care-handover.html', 'utf8'), /data-click="careShare"/);
+    assert.match(readFileSync('html/exams/carework/care-handover.html', 'utf8'), /data-click="careHandoverExport"/); // 기록 우선 게이트 래퍼
     assert.match(readFileSync('src/exams/carework/care-share.js', 'utf8'), /navigator\.share/);
 });
 

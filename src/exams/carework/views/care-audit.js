@@ -10,6 +10,7 @@ import { listCareLogs } from '../care-log-store.js';
 import { listVisits } from '../care-visit-store.js';
 import { listHandovers } from '../handover-store.js';
 import { listIncidents } from '../incident-store.js';
+import { shareAudit } from '../care-share.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -35,6 +36,9 @@ function render() {
     const p = auditProgress(_sections);
     const bar = $('audit-progress');
     if (bar) bar.innerHTML = `<strong>점검 진행 ${esc(p.done)}/${esc(p.total)}</strong><div class="care-audit-bar"><span style="width:${esc(p.total ? Math.round(p.done / p.total * 100) : 0)}%"></span></div>`;
+    // 문서 미리보기 — 본문 복사·PDF의 원본 (체크박스 DOM은 ✔/□ 상태를 텍스트로 담지 못해 요약을 렌더)
+    const pv = $('audit-preview');
+    if (pv) pv.innerHTML = `<pre class="care-log-text">${esc(buildSummary())}</pre>`;
 }
 
 function buildSummary() {
@@ -54,7 +58,7 @@ export function careAuditCopy() {
     if (!_sections.length) { showToast('체크리스트를 불러오는 중입니다.', 'error'); return; }
     proFeatureNotice('care_audit_export', '점검표 복사·내보내기');
     navigator.clipboard?.writeText(buildSummary()).then(
-        () => showToast('점검표를 복사했습니다.'),
+        () => { shareAudit('기관 평가 점검표', '', ['클립보드']); showToast('점검표를 복사했습니다.'); },
         () => showToast('복사에 실패했습니다.', 'error'));
 }
 

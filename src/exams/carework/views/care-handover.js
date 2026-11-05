@@ -3,7 +3,8 @@
 import { buildHandover, SHIFTS } from '../care-handover.js';
 import { markFunnel } from '../care-funnel.js';
 import { listCareLogs, FREE_LIMIT } from '../care-log-store.js';
-import { saveHandover, listHandovers, deleteHandover } from '../handover-store.js';
+import { saveHandover, listHandovers, deleteHandover, handoversToCsv } from '../handover-store.js';
+import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { buildDigest } from '../handover-digest.js';
 import { listVisits } from '../care-visit-store.js';
@@ -11,12 +12,13 @@ import { listIncidents } from '../incident-store.js';
 import { myMembership, submitHandover, listHandovers as listFacilityHandovers, ackHandover, docHeadHtml, docSignHtml, getDocSign, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
-export { careShare } from '../care-share.js';
+import { careShare } from '../care-share.js';
+import { todayKey } from '../../../core/utils.js';
+export { careShare };
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let _lastText = null;
-let _lastSaved = false;
 let _facility = null;
 let _fhList = [];
 const _val = (id, fb) => {
@@ -25,13 +27,13 @@ const _val = (id, fb) => {
 };
 
 function todayLogs() {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = todayKey();
     return listCareLogs().filter(x => x.date === today).map(x => `${x.client} — ${x.service}`);
 }
 
 /** CO-05 오늘 기록으로 채우기 — 근무 일자의 일지·사고·방문을 대상자별로 집계해 폼 초안 반영 (작성자 검토 후 저장) */
 export function careHandoverDigest() {
-    const date = _val('ho-date', new Date().toISOString().slice(0, 10));
+    const date = _val('ho-date', todayKey());
     const d = buildDigest(date, { logs: listCareLogs(), visits: listVisits(), incidents: listIncidents() });
     if (!d.count) { showToast(`${date} 집계할 기록이 없습니다.`, 'error'); return; }
     const set = (id, v) => { const el = /** @type {HTMLInputElement|null} */ ($(id)); if (el && v) el.value = v; };
@@ -56,7 +58,7 @@ export function careHandoverGenerate() {
     const out = $('ho-preview');
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·인계자·인수자를 입력하세요.</p>'; return; }
-    _lastText = t; _lastSaved = false;
+    _lastText = t;
     out.innerHTML = docHeadHtml('인수인계서') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver'], ['확인일', '']]);
     renderSaved();
 }
@@ -67,19 +69,33 @@ function renderSaved() {
     const items = listHandovers();
     host.innerHTML = items.length
         ? items.map(x => `<div class="care-log-saved-item"><span>${esc(x.savedAt)} · ${esc(x.from || '')} → ${esc(x.to || '')}</span><button data-click="careHandoverDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button></div>`).join('')
-        : '<p class="care-log-empty">저장된 인수인계 없음 — 공유 전 저장이 필요합니다.</p>';
+        : '<p class="care-log-empty">저장된 인수인계 없음 — 공유·내보내기 시 자동 저장됩니다.</p>';
+}
+
+/** 현재 생성문이 기록에 저장됐는가 — 텍스트 동일성 기준이라 재생성·액션 재호출로 오염되지 않는다 */
+function isCurrentSaved() {
+    return !!_lastText && listHandovers().some(x => x.text === _lastText);
+}
+
+/** 기록 우선 — 미저장 생성문을 기록에 자동 저장. 공유·내보내기·인쇄 경로의 공통 전제 */
+function ensureSaved() {
+    if (!_lastText) return { error: '먼저 인수인계서를 생성하세요.' };
+    if (isCurrentSaved()) return { auto: false };
+    const r = saveHandover(_lastText, {
+        from: _val('ho-from', ''), to: _val('ho-to', ''), date: _val('ho-date', ''),
+    });
+    if (r.error) return { error: r.error };
+    renderSaved();
+    return { auto: true };
 }
 
 export function careHandoverSave() {
     careHandoverGenerate();
     if (!_lastText) { showToast('먼저 인수인계서를 생성하세요.', 'error'); return; }
-    const r = saveHandover(_lastText, {
-        from: _val('ho-from', ''), to: _val('ho-to', ''), date: _val('ho-date', ''),
-    });
-    if (r.error) { showToast(r.error, 'error'); proFeatureNotice('care_handover_save', '인수인계 저장'); return; }
-    _lastSaved = true;
-    showToast('기록에 저장했습니다 — 공유가 활성화됩니다.');
-    renderSaved();
+    if (isCurrentSaved()) { showToast('이미 기록에 저장된 인수인계입니다.'); return; }
+    const s = ensureSaved();
+    if (s.error) { showToast(s.error, 'error'); proFeatureNotice('care_handover_save', '인수인계 저장'); return; }
+    showToast('기록에 저장했습니다.');
 }
 
 export function careHandoverDelete(id) {
@@ -88,39 +104,31 @@ export function careHandoverDelete(id) {
     renderSaved();
 }
 
-function canShare() {
-    if (_lastText && _lastSaved) return true;
-    showToast('공유 전에 기록으로 먼저 저장하세요.', 'error');
-    return false;
+export function careHandoverCsvExport() {
+    const items = listHandovers();
+    if (!items.length) { showToast('내보낼 인수인계 기록이 없습니다.', 'error'); return; }
+    proFeatureNotice('care_handover_share', '인수인계 Excel 내보내기');
+    const csv = handoversToCsv(items);
+    void downloadSheet(csv, '인수인계기록.xlsx');
+    showToast('Excel 파일을 저장했습니다.');
+    return csv;
 }
 
-export function careHandoverCopy() {
+/** 📤 공유·내보내기 게이트 — 기록 우선: 미저장 생성문은 자동 저장 후 careShare 위임 (저장 실패 시에만 차단) */
+export async function careHandoverExport(arg) {
     careHandoverGenerate();
-    const pre = document.querySelector('#ho-preview pre');
-    if (!pre) { showToast('먼저 인수인계서를 생성하세요.', 'error'); return; }
-    navigator.clipboard?.writeText(pre.textContent || '').then(
-        () => showToast('인수인계서를 복사했습니다.'),
-        () => showToast('복사에 실패했습니다.', 'error'));
-}
-
-export function careHandoverShare() {
-    careHandoverGenerate();
-    const pre = document.querySelector('#ho-preview pre');
-    if (!pre) { showToast('먼저 인수인계서를 생성하세요.', 'error'); return; }
-    if (!canShare()) return;
-    proFeatureNotice('care_handover_share', '인수인계 공유');
-    const text = pre.textContent || '';
-    if (navigator.share) {
-        navigator.share({ title: '요양보호 인수인계서', text }).catch(() => {});
-    } else {
-        navigator.clipboard?.writeText(text).then(() => showToast('공유 미지원 — 복사했습니다.'));
-    }
+    if (!_lastText) { showToast('먼저 인수인계서를 생성하세요.', 'error'); return; }
+    const s = ensureSaved();
+    if (s.error) { showToast(s.error, 'error'); proFeatureNotice('care_handover_save', '인수인계 저장'); return; }
+    if (s.auto) showToast('미저장 문서를 기록에 자동 저장했습니다.');
+    await careShare(arg);
 }
 
 export function careHandoverPrint() {
     careHandoverGenerate();
     if (!document.querySelector('#ho-preview pre')) { showToast('먼저 생성하세요.', 'error'); return; }
-    if (!canShare()) return;
+    const s = ensureSaved();
+    if (s.error) { showToast(s.error, 'error'); proFeatureNotice('care_handover_save', '인수인계 저장'); return; }
     proFeatureNotice('care_handover_share', '인수인계 인쇄');
     window.print();
 }
@@ -137,7 +145,7 @@ async function renderFacility() {
     host.innerHTML = `
         <div class="care-audit-sec">
             <h3>기관 인계 — ${esc(_facility.name)}</h3>
-            <button data-click="careFacilityHandoverSubmit">기관에 인계</button>
+            <button data-click="careFacilityHandoverSubmit">🏥 기관에 인계</button>
             ${_fhList.map(h => `
                 <div class="care-log-saved-item">
                     <span>${esc(h.shift_date)} · ${esc(h.client)} — ${esc(h.memo || '')}</span>
@@ -153,7 +161,7 @@ export async function careFacilityHandoverSubmit() {
     const r = await submitHandover({
         facilityId: _facility.id,
         ...clientField('ho-clients'),
-        shiftDate: _val('ho-date', new Date().toISOString().slice(0, 10)),
+        shiftDate: _val('ho-date', todayKey()),
         memo: `${_val('ho-status', '')} ${_val('ho-tasks', '')} ${_val('ho-caution', '')}`.trim(),
     });
     'error' in r ? showToast('인계 실패: ' + r.error, 'error') : showToast('기관에 인계했습니다.');
@@ -170,7 +178,7 @@ export function initCareHandoverView() {
     markFunnel('tool:care-handover');
     attachClientPicker(/** @type {HTMLInputElement|null} */ ($('ho-clients')));
     const d = /** @type {HTMLInputElement|null} */ ($('ho-date'));
-    if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
+    if (d && !d.value) d.value = todayKey();
     const s = $('ho-shift');
     if (s && !s.children.length)
         s.innerHTML = SHIFTS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');

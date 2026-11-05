@@ -141,12 +141,14 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
         await tapMenu('카카오톡');
+        await tapMenu('전체 파일로 보내기'); // 형식 선택 시트 — 전체 = 기존 동작
         expect(globalThis.navigator.share).not.toHaveBeenCalled(); // 메뉴 탭은 생성만 — 시트는 버튼 탭
         await tapShareBtn();
         await vi.waitFor(() => expect(globalThis.navigator.share).toHaveBeenCalled());
         const payload = globalThis.navigator.share.mock.calls[0][0];
-        expect(payload.files).toHaveLength(1); // 파일 첨부
-        expect(payload.files[0].name).not.toContain('.txt'); // txt는 다운로드 전용 — 카톡 이중 수신 방지
+        expect(payload.files).toHaveLength(2); // pdf + docx 첨부
+        expect(payload.files.map(f => f.name).join()).toContain('.docx');
+        expect(payload.files.every(f => !f.name.includes('.txt'))).toBe(true); // txt는 다운로드 전용 — 카톡 이중 수신 방지
         expect(payload.text).toBeUndefined(); // text 병기 시 카톡이 파일 대신 텍스트만 수신
     });
 
@@ -164,6 +166,26 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         expect(rendered.textContent).not.toContain('김철수');
     });
 
+    it('공유 형식 선택 — Word만 선택 시 docx 하나만 첨부 (PDF 생성 생략)', async () => {
+        setup(`<section class="view-section"><pre id="out">문서 내용</pre>
+            <button id="share" data-arg="#out|문서">공유</button></section>`);
+        globalThis.matchMedia = () => ({ matches: true });
+        globalThis.navigator.canShare = vi.fn(() => true);
+        globalThis.navigator.share = vi.fn().mockResolvedValue();
+        const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        await careShare(document.getElementById('share').dataset.arg);
+        await tapMenu('카카오톡');
+        for (const label of ['PDF로 보내기', 'Word로 보내기', '전체 파일로 보내기']) // 형식 선택 시트 항목
+            expect(menuItem(label), `선택 항목 없음: ${label}`).toBeTruthy();
+        await tapMenu('Word로 보내기');
+        await tapShareBtn();
+        await vi.waitFor(() => expect(globalThis.navigator.share).toHaveBeenCalled());
+        const payload = globalThis.navigator.share.mock.calls[0][0];
+        expect(payload.files).toHaveLength(1);
+        expect(payload.files[0].name).toMatch(/\.docx$/);
+        expect(pdfSpy).not.toHaveBeenCalled(); // 미선택 형식은 생성 비용을 소비하지 않는다
+    });
+
     it('CsvExport 뷰 — 공유 시트에는 실제 .xlsx 파일 첨부', async () => {
         setup(`<section class="view-section"><pre id="out">방문 기록 목록</pre>
             <button id="share" data-arg="#out|방문 기록|mask|careVisitCsvExport">공유</button></section>`);
@@ -179,7 +201,9 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         (/** @type {any} */ (window)).careVisitCsvExport = () => Promise.resolve(csv);
         await careShare(document.getElementById('share').dataset.arg);
         await tapMenu('카카오톡');
+        await tapMenu('Excel로 보내기'); // 형식 선택 — xlsx만 생성
         await vi.waitFor(() => expect(sheetSpy).toHaveBeenCalledWith(csv, `방문 기록_${new Date().toISOString().slice(0, 10)}.xlsx`)); // 실제 xlsx 생성 확인
+        expect(pdfSpy).not.toHaveBeenCalled(); // 미선택 형식은 생성하지 않는다
     });
 
     it('Excel 내보내기 항목 — CsvExport 핸들러 직접 호출', async () => {
@@ -191,6 +215,18 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         await careShare(document.getElementById('share').dataset.arg);
         await tapMenu('Excel 내보내기');
         await vi.waitFor(() => expect(xlsxSpy).toHaveBeenCalled());
+    });
+
+    it('Word 파일 다운로드 항목 — .docx 파일 생성·다운로드', async () => {
+        setup(`<section class="view-section"><pre id="out">문서 내용</pre>
+            <button id="share" data-arg="#out|문서">공유</button></section>`);
+        const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        await careShare(document.getElementById('share').dataset.arg);
+        await tapMenu('Word 파일 다운로드');
+        await vi.waitFor(() => expect(globalThis.URL.createObjectURL).toHaveBeenCalled());
+        const file = globalThis.URL.createObjectURL.mock.calls[0][0];
+        expect(file.name).toMatch(/문서_\d{4}-\d{2}-\d{2}\.docx$/);
+        expect(file.type).toContain('wordprocessingml.document');
     });
 
     it('인쇄 항목 — 인쇄핸들러 지정 시 뷰 전용 핸들러 호출', async () => {
@@ -239,12 +275,14 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
         await tapMenu('카카오톡');
+        await tapMenu('전체 파일로 보내기');
         await tapShareBtn();
         await vi.waitFor(() => expect(globalThis.navigator.share).toHaveBeenCalled());
-        expect(globalThis.navigator.share.mock.calls[0][0].files).toHaveLength(1); // 첫 시도는 파일 첨부
+        expect(globalThis.navigator.share.mock.calls[0][0].files).toHaveLength(2); // 첫 시도는 pdf+docx 첨부
         globalThis.navigator.share.mockResolvedValue();
         await careShare(document.getElementById('share').dataset.arg);
         await tapMenu('카카오톡');
+        await tapMenu('전체 파일로 보내기');
         await tapShareBtn();
         await vi.waitFor(() => expect(globalThis.navigator.share).toHaveBeenCalledTimes(2));
         expect(globalThis.navigator.share.mock.calls[1][0].files).toBeUndefined(); // 차단 학습 — 재시도는 텍스트만
@@ -261,6 +299,7 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
         await tapMenu('카카오톡');
+        await tapMenu('전체 파일로 보내기');
         await vi.waitFor(() => expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('문서 내용'));
         await tapShareBtn();
         await vi.waitFor(() => expect(globalThis.navigator.share).toHaveBeenCalled()); // canShare false → {title, text} 시도

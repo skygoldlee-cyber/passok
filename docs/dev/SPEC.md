@@ -1161,6 +1161,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | DA-20 | **모드 메뉴 분리**: 학습 모드에는 학습 관련 메뉴만, 실무 모드에는 실무·기관 관련 메뉴만 표시한다 — 양쪽이 동시 노출되는 혼재 금지. 실무 항목은 `nav-practice-only`·`nav-item-practice`·`nav-group-label-practice`·`tab-group-practice`로 마크업하고 `body:not(.ui-mode-practice)`에서 전면 숨김; 학습 항목은 `nav-study-only`·`tab-group-study`로 `ui-mode-practice`에서 **무조건** 숨김 — 학습도구 펼침 같은 탈출 경로 금지 (모든 내비 항목은 모드 클래스 필수, 무클래스는 앱 크롬[설정·모드토글·시험전환]만 허용) | ✅ |
 | DA-21 | **select option 테마 강제**: 커스텀 select 스타일을 쓰는 뷰는 `option`·`optgroup`에도 `background-color: var(--bg-sidebar); color: var(--color-text-main)`(+ `.light-theme` 변형)을 반드시 함께 지정 — option은 브라우저 기본색으로 렌더돼 다크 배경에서 가시성이 무너진다. `.form-select` 재사용 시 dashboard.css 규칙이 자동 적용됨 | ✅ |
 | DA-22 | **모드 전환 랜딩 규칙**: 모드 전환 시 현재 뷰가 전환 대상 모드의 메뉴가 아니면 해당 모드의 첫 메뉴로 랜딩한다 — 학습→실무는 시험이 선언한 첫 실무 뷰(`getPracticeLanding()` = enabled 피처 중 `priority` 최소 뷰, 시험별 선언으로 일반화 — carework는 현장도구, cosmetic은 실무도구), 실무→학습은 `dashboard-view`. 대상 모드의 뷰에 이미 있으면 이동하지 않는다 | ✅ |
+| DA-23 | **시간 표기는 로컬(KST) 기준**: 사용자에게 표시·제공되는 모든 날짜·시각(기록 저장일·문서 출력일·내보내기 파일명 스탬프·저장 버킷 키)은 UTC가 아닌 로컬 시간대 성분으로 산출한다 — `new Date().toISOString().slice(0,10)`은 UTC라 KST 00~09시에 하루 전으로 버킷되는 오류를 내므로 사용자 표기 경로에서 금지하고, `utils.js`의 `todayKey()`(오늘 키)·`localDateKey(d)`(임의 일자 키)·`localDateTime(d)`/`localDateTimeNow()`(시각 문자열) 공용 헬퍼를 사용한다. 저장값은 naive 로컬 형식 유지(타임존 접미사 미부기). 적용: 진도·스트릭·백업 키 + carework 실무 도구 저장일·문서 헤더·내보내기 파일명 | ✅ |
 
 ### 5.2 안정적 ID 체계
 

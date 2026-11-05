@@ -9,9 +9,9 @@ import { markFunnel, funnelStats } from '../care-funnel.js';
 import { escapeHTML as esc } from '../../../core/sanitize.js';
 import { refreshOrgName, getDocSign, setDocSign } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
+import { todayKey } from '../../../core/utils.js';
 
 const $ = (id) => document.getElementById(id);
-const todayKey = () => new Date().toISOString().slice(0, 10);
 const dayOf = (r) => r.date || r.shift_date || '';
 
 export function initCareHomeView() {
