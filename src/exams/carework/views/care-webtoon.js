@@ -4,13 +4,14 @@
 // 지문은 장면 패널로 렌더링. 인물 아바타는 인물 설정표(DOC-USR-23) 고정 아트.
 import { contentPath } from '../../../core/exam-context.js';
 import { parseStorySlots, renderSlotHtml } from '../../../reader/webtoon-render.js';
+import { DataLoader } from '../../../content/data-loader.js';
 
 // 공용 모듈 재수출 — tests/unit/content/care-webtoon.test.js가 _parse/_who/_books를 import
 export { parseStorySlots as _parse, whoSays as _who } from '../../../reader/webtoon-render.js';
 
 const BOOKS = {
-    s1: { label: '1과목 요양보호론', file: '교재/caretheory/1과목_요양보호론_이야기형.md' },
-    s2: { label: '2과목 요양보호관련', file: '교재/careprac/2과목_요양보호관련_이야기형.md' },
+    s1: { label: '1과목 요양보호론', file: '교재/caretheory/1과목_요양보호론_이야기형.md', subj: 'caretheory' },
+    s2: { label: '2과목 요양보호관련', file: '교재/careprac/2과목_요양보호관련_이야기형.md', subj: 'careprac' },
 };
 export { BOOKS as _books };
 const CHARS = {
@@ -55,8 +56,9 @@ export async function initCareWebtoonView() {
         for (const [k, b] of Object.entries(BOOKS)) sel.add(new Option(b.label, k));
     }
     const reload = async () => {
-        const res = await fetch(contentPath(BOOKS[/** @type {'s1'|'s2'} */ (sel.value || 's2')].file));
-        _slots = parseStorySlots(await res.text());
+        const b = BOOKS[/** @type {'s1'|'s2'} */ (sel.value || 's1')];
+        // 한글 경로는 프로덕션에서 404 — study_md 번들 폴백이 있는 _getMd로 로드
+        _slots = parseStorySlots(await DataLoader._getMd(contentPath(b.file), b.subj));
         pick.innerHTML = '';
         _slots.forEach((s, i) => pick.add(new Option(`${i + 1}. ${s.title}`, String(i))));
         pick.onchange = () => _show(Number(pick.value));

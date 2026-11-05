@@ -77,4 +77,16 @@ describe('care-flow 4단계 뷰 상태머신', () => {
         expect(subjSel.options.length).toBeGreaterThan(0);
         expect([...sel.options].filter(o => o.value).every(o => o.value.startsWith('s2'))).toBe(true);
     });
+
+    it('로드 경로 — DataLoader._getMd로 이야기·은행을 읽는다', async () => {
+        const m = await import('../../../../src/exams/carework/views/care-flow.js');
+        const { DataLoader } = await import('../../../../src/content/data-loader.js');
+        const spy = vi.spyOn(DataLoader, '_getMd');
+        await m.initCareFlowView();
+        const sel = /** @type {HTMLSelectElement} */ (document.getElementById('flow-concept'));
+        sel.value = 's2-c10-x';
+        await sel.onchange?.(/** @type {any} */ ({}));
+        expect(spy).toHaveBeenCalled(); // fetch(contentPath) 직접 호출이 아닌 _getMd 경유
+        spy.mockRestore();
+    });
 });

@@ -4,6 +4,7 @@ import { contentPath } from '../../../core/exam-context.js';
 import { esc } from '../../../core/sanitize.js';
 import { getItem, setItem } from '../../../core/storage.js';
 import { parseStorySlots, renderSlotHtml } from '../../../reader/webtoon-render.js';
+import { DataLoader } from '../../../content/data-loader.js';
 
 const STEPS = ['home', 'pre', 'story', 'summary', 'scenario', 'result', 'complete'];
 const STEP_LABELS = { home: '개념', pre: '①미리풀기', story: '②이야기', summary: '③요약', scenario: '④시나리오', result: '채점', complete: '완료' };
@@ -40,7 +41,7 @@ async function _load() {
 /** 과목별 문제은행 지연 로드 → { qid: { stem, options, answer } } */
 async function _bankLoad(subject) {
     if (_bank[subject]) return _bank[subject];
-    const md = await (await fetch(contentPath(BANKS[subject]))).text();
+    const md = await DataLoader._getMd(contentPath(BANKS[subject]));
     /** @type {Record<string, { stem: string, options: string[], answer: number }>} */
     const out = {};
     for (const m of md.matchAll(/###\s*Q(\d+)\.\s*([^\n]+)\n([\s\S]*?)(?=\n###\s|\n##\s|$)/g)) {
@@ -63,7 +64,7 @@ function _bankKeys(conceptId) {
 
 async function _storySlots(subject) {
     if (_book !== subject) { _book = subject; _slots = null; }
-    if (!_slots) _slots = parseStorySlots(await (await fetch(contentPath(BOOKS[subject]))).text());
+    if (!_slots) _slots = parseStorySlots(await DataLoader._getMd(contentPath(BOOKS[subject])));
     return _slots;
 }
 
