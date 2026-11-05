@@ -112,6 +112,7 @@
 }
 .care-log-group input[type="checkbox"] { accent-color: var(--color-primary); }
 /* doc-md 미리보기 — md 초안을 표·헤딩 구조로 렌더 */
+.doc-md { overflow-wrap: anywhere; }
 .doc-md h3, .doc-md h4, .doc-md h5 { margin: 8px 0 4px; }
 .doc-md p { margin: 2px 0; }
 .doc-md table { border-collapse: collapse; width: 100%; margin: 6px 0; font-size: .92em; }
@@ -124,6 +125,9 @@
 
 .care-log-text {
     font-family: inherit; font-size: 15px; line-height: 1.7; white-space: pre-wrap;
+    /* ·(가운뎃점) 이음 나열 등 줄바꿈 불가 런이 본문 폭을 초과하면 문서 전체가 가로로 넓어져
+       서명란이 우측 끝에 밀려 보임 — 어디서든 강제 개행 허용 */
+    overflow-wrap: anywhere;
     background: var(--bg-card); border: 1px solid var(--border-subtle);
     color: var(--color-text-main);
     border-radius: 12px; padding: 18px; margin: 0;
