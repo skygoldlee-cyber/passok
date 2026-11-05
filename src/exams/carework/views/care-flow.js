@@ -8,8 +8,8 @@ import { DataLoader } from '../../../content/data-loader.js';
 
 const STEPS = ['home', 'pre', 'story', 'summary', 'scenario', 'result', 'complete'];
 const STEP_LABELS = { home: '개념', pre: '①미리풀기', story: '②이야기', summary: '③요약', scenario: '④시나리오', result: '채점', complete: '완료' };
-const BOOKS = { 1: '교재/caretheory/1과목_요양보호론_이야기형.md', 2: '교재/careprac/2과목_요양보호관련_이야기형.md' };
-const BANKS = { 1: '문제은행/과목1_요양보호론_문제은행.md', 2: '문제은행/과목2_요양보호관련_문제은행.md' };
+const BOOKS = { 1: '교재/caretheory/1과목_요양보호론_이야기형.md', 2: '교재/careprac/2과목_요양보호실기_이야기형.md' };
+const BANKS = { 1: '문제은행/과목1_요양보호론_문제은행.md', 2: '문제은행/과목2_요양보호실기_문제은행.md' };
 const CIRCLED = '①②③④⑤';
 const CHARS = {
     miyoung: { name: '미영', side: 'right', img: 'assets/characters/miyoung.svg' },
@@ -173,7 +173,7 @@ export async function initCareFlowView() {
         const subs = [...new Set(cs.map(c => c.subject))].sort();
         if (!subs.length) subs.push(2); // 파일럿 과목만 있어도 셀렉트는 보이게
         subs.forEach(s => {
-            const op = new Option(s === 1 ? '1과목 요양보호론' : '2과목 요양보호관련', String(s));
+            const op = new Option(s === 1 ? '1과목 요양보호론' : '2과목 요양보호실기', String(s));
             // 개념이 없는 과목도 표시하되, 파일럿 안내를 위해 라벨에 집계 표기
             const n = cs.filter(c => c.subject === s).length;
             sel && (op.textContent += ` (${n})`);

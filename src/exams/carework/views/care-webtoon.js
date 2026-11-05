@@ -11,7 +11,7 @@ export { parseStorySlots as _parse, whoSays as _who } from '../../../reader/webt
 
 const BOOKS = {
     s1: { label: '1과목 요양보호론', file: '교재/caretheory/1과목_요양보호론_이야기형.md', subj: 'caretheory' },
-    s2: { label: '2과목 요양보호관련', file: '교재/careprac/2과목_요양보호관련_이야기형.md', subj: 'careprac' },
+    s2: { label: '2과목 요양보호실기', file: '교재/careprac/2과목_요양보호실기_이야기형.md', subj: 'careprac' },
 };
 export { BOOKS as _books };
 const CHARS = {

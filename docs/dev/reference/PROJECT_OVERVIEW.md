@@ -54,7 +54,7 @@ data/exams/<id>/      ← 빌드 산출 번들 (build:data)
 | 컴퓨터활용능력 2급 (compapp2) | 컴퓨터 일반, 스프레드시트 일반 | 스프레드시트 실무 | — |
 | 유통관리사 2급 (distmgr2) | 유통물류일반관리, 상권분석, 유통마케팅, 유통정보 (CBT 90문/100분) | 별도 2차 없음 | — (draft) |
 | 유통관리사 3급 (distmgr3) | 유통상식, 판매 및 고객관리 (CBT 45문/45분) | 별도 2차 없음 | — (draft) |
-| 요양보호사 (carework) | 요양보호론(필기), 요양보호관련(실기) (객관식 80문/90분) | 실기시험(필답형) 동일 세션 | — (draft) |
+| 요양보호사 (carework) | 요양보호론(필기), 요양보호실기(실기) (객관식 80문/90분) | 실기시험(필답형) 동일 세션 | — (draft) |
 
 파일럿 승격 기준·잔여 작업은 `runbooks/PILOT_EXAM_PROMOTION.md`(DOC-RBK-16). 신규 시험 추가는 `runbooks/NEW_EXAM_RUNBOOK.md`(DOC-RBK-10) + `npm run scaffold:exam`.
 
