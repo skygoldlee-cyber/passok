@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 feat(carework): 4단계 학습 흐름 뷰 care-flow
+
+- care-flow.html·care-flow.js — 개념 선택 → 미리풀기 → 이야기(웹툰) → 요약 → 시나리오 상태머신
+- concepts.json 22개념 + scenario_items 15문 + bank_tags 43문 연동, flow_progress scoped 저장
+- registry·manifest·exams.json·nav(데스크톱+모바일)·domain-map 등록, 설계 정본 DOC-USR-24
+
+
 ## 2026-11-05 fix(reader): PRO 오버레이가 모바일 TOC 버튼 가림 — e2e 완전 숨김
 
 

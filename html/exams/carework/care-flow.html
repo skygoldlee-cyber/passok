@@ -1,0 +1,18 @@
+<!-- @spec none — carework 4단계 학습 흐름 뷰 파셜 (DOC-USR-24) -->
+<section id="care-flow-view" class="view-section" data-feature="careFlow">
+    <div class="view-header">
+        <h2>4단계 학습 흐름</h2>
+        <p class="view-desc">개념 하나를 골라 — 미리풀기 → 이야기 → 요약 → 시나리오 순서로 학습합니다.</p>
+    </div>
+    <div class="care-calc-form">
+        <label>개념 선택
+            <select id="flow-concept"></select>
+        </label>
+    </div>
+    <div id="flow-progress" class="flow-progress" role="status"></div>
+    <div id="flow-stage" class="webtoon-stage" data-step="home" aria-live="polite"></div>
+    <div class="care-calc-actions" id="flow-actions">
+        <button data-click="flowBack" class="secondary" id="flow-back">◀ 이전</button>
+        <button data-click="flowNext" id="flow-next">다음 ▶</button>
+    </div>
+</section>

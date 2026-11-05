@@ -399,6 +399,40 @@ const careWebtoon = {
         }
     },
 };
+const careFlow = {
+    viewId: 'care-flow-view',
+    slug: 'care-flow',
+    priority: 1,
+    uiTextKey: 'careFlow',
+    title: '4단계 학습 흐름',
+    subtitle: '미리풀기 → 이야기 → 요약 → 시나리오',
+    loadingText: '학습 흐름을 불러오는 중입니다...',
+    loadErrorText: '학습 흐름을 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-flow.html',
+    styles: 'care-tools.css',
+    loaders: { main: _domainImport('views/care-flow.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['flowBack', 'flowNext', 'flowOpt']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careFlow.loadingText);
+        try {
+            await ensureViewMarkup(careFlow);
+            if (stale()) return;
+            const m = await careFlow.loaders.main();
+            if (stale()) return;
+            m.initCareFlowView();
+        } catch (e) {
+            if (!stale()) showToast(careFlow.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
 const careAudit = {
     viewId: 'care-audit-view',
     slug: 'care-audit',
@@ -733,7 +767,7 @@ const careFacilityAdmin = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careHome, careCalc, careCard, careLog, careWebtoon, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careFinder, careForms, careFacilityJoin, careFacilityAdmin };
+const PRACTICE_FEATURES = { formula, careHome, careCalc, careCard, careLog, careWebtoon, careFlow, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careFinder, careForms, careFacilityJoin, careFacilityAdmin };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {
