@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): 홈 서명 미리보기 이미지 우측 넘침 수정
+
+- .care-sign-preview에 max-width:100%+object-fit:contain 추가 — 넓은 업로드 서명이 카드 우측으로 밀려 짤리던 문제 (근본 원인)
+
+
 ## 2026-11-05 fix(carework): 출력물 서명 우측 밀림 방어 보강
 
 - 로컬 360px 재현(화면·인쇄·감사 뷰)은 정상 — 잔여 원인군 커버: doc-md 표 내부 스크롤, 서명란 max-width+anywhere 개행, justify-content 명시
