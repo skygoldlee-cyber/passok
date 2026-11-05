@@ -276,7 +276,12 @@ def collect_margin_junk(pdf):
     """
     npages = len(pdf.pages)
     counter = {}
-    for page in pdf.pages:
+    for _pi in range(npages):
+        try:
+            page = pdf.pages[_pi]
+        except Exception:
+            logger.warning('p%d 로드 실패 — 여백 수집 건너뜀', _pi + 1)
+            continue
         h = float(page.height)
         seen = set()
         for ln in _text_lines(page):
@@ -751,14 +756,20 @@ def convert(pdf_path, images_dir=None, image_prefix='', image_format='orig'):
     try:
         with pdfplumber.open(pdf_path) as pdf:
             margin_junk = collect_margin_junk(pdf)
-            for pi, page in enumerate(pdf.pages):
-                image_names = []
-                if mudoc is not None and pi < len(mudoc):
-                    image_names = extract_page_images(
-                        mudoc[pi], pi, images_dir, image_prefix,
-                        image_format)
-                segments.extend(page_to_md(page, image_names, state,
-                                           margin_junk))
+            n_pages = len(pdf.pages)
+            for pi in range(n_pages):
+                try:
+                    page = pdf.pages[pi]  # 지연 로딩 예외도 try 안으로
+                    image_names = []
+                    if mudoc is not None and pi < len(mudoc):
+                        image_names = extract_page_images(
+                            mudoc[pi], pi, images_dir, image_prefix,
+                            image_format)
+                    segments.extend(page_to_md(page, image_names, state,
+                                               margin_junk))
+                except Exception as e:
+                    logger.warning('p%d 변환 실패 — 해당 페이지 건너뜀 (%s)',
+                                   pi + 1, e)
     finally:
         if mudoc is not None:
             mudoc.close()
