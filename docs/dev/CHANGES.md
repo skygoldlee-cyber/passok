@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 revert(ref-pipeline): webp/svg 포맷 기능 롤백 — 이전 정상 버전 복원
+
+
 ## 2026-11-05 fix(ref-pipeline): Qt 메시지 핸들러 제거 → QT_LOGGING_RULES — GUI 크래시 해소
 
 

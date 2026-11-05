@@ -276,12 +276,7 @@ def collect_margin_junk(pdf):
     """
     npages = len(pdf.pages)
     counter = {}
-    for _pi in range(npages):
-        try:
-            page = pdf.pages[_pi]
-        except Exception:
-            logger.warning('p%d 로드 실패 — 여백 수집 건너뜀', _pi + 1)
-            continue
+    for page in pdf.pages:
         h = float(page.height)
         seen = set()
         for ln in _text_lines(page):
@@ -685,16 +680,11 @@ def page_to_md(page, image_names=None, state=None, margin_junk=frozenset()):
 
 
 def extract_page_images(mupdf_page, page_index, images_dir,
-                        name_prefix='', image_format='orig'):
+                        name_prefix=''):
     """페이지 이미지 추출 → (top, 파일명) 리스트. images/{prefix}pageNNN_imgNN.ext
 
     --flat 모드처럼 여러 문서가 images/를 공유할 때는 name_prefix로
     문서명을 붙여 파일명 충돌을 막는다.
-
-    image_format:
-      - 'orig': PDF 임베디드 포맷 그대로 (기본)
-      - 'webp': PIL로 webp 변환 (품질 82)
-      - 'svg':  이미지 영역을 벡터 SVG로 렌더 (get_svg_image)
     """
     out = []
     for i, img in enumerate(mupdf_page.get_images(full=True)):
@@ -702,49 +692,22 @@ def extract_page_images(mupdf_page, page_index, images_dir,
         rects = mupdf_page.get_image_rects(xref)
         if not rects:
             continue
-        base = f'{name_prefix}page{page_index:03d}_img{i:02d}'
-        if image_format == 'svg':
-            # 벡터 렌더 — 텍스트 겹침 방지를 위해 이미지 rect 클립만 추출
-            try:
-                svg = mupdf_page.get_svg_image(clip=rects[0], text_as_path=True)
-            except Exception:
-                continue
-            name = f'{base}.svg'
-            if images_dir:
-                os.makedirs(images_dir, exist_ok=True)
-                with open(os.path.join(images_dir, name), 'w',
-                          encoding='utf-8') as f:
-                    f.write(svg)
-            out.append((rects[0].y0, name))
-            continue
         try:
             data = mupdf_page.parent.extract_image(xref)
         except Exception:
             continue
         ext = data.get('ext', 'png')
-        blob = data['image']
-        if image_format == 'webp':
-            try:
-                from PIL import Image
-                import io
-                buf = io.BytesIO()
-                Image.open(io.BytesIO(blob)).save(buf, 'WEBP', quality=82)
-                blob = buf.getvalue()
-                ext = 'webp'
-            except Exception:
-                pass  # 변환 실패 시 원본 유지
-        name = f'{base}.{ext}'
+        name = f'{name_prefix}page{page_index:03d}_img{i:02d}.{ext}'
         if images_dir:
             os.makedirs(images_dir, exist_ok=True)
             with open(os.path.join(images_dir, name), 'wb') as f:
-                f.write(blob)
+                f.write(data['image'])
         out.append((rects[0].y0, name))
     return out
 
-def convert(pdf_path, images_dir=None, image_prefix='', image_format='orig'):
+def convert(pdf_path, images_dir=None, image_prefix=''):
     """PDF → MD 본문. image_prefix는 --flat 같이 images/를 공유하는
-    출력 모드에서 파일명 충돌 방지용 접두사.
-    image_format: orig|webp|svg — extract_page_images로 전달."""
+    출력 모드에서 파일명 충돌 방지용 접두사."""
     if pdfplumber is None:
         raise RuntimeError('pdfplumber 미설치 — pip install pdfplumber')
     segments = []
@@ -756,20 +719,13 @@ def convert(pdf_path, images_dir=None, image_prefix='', image_format='orig'):
     try:
         with pdfplumber.open(pdf_path) as pdf:
             margin_junk = collect_margin_junk(pdf)
-            n_pages = len(pdf.pages)
-            for pi in range(n_pages):
-                try:
-                    page = pdf.pages[pi]  # 지연 로딩 예외도 try 안으로
-                    image_names = []
-                    if mudoc is not None and pi < len(mudoc):
-                        image_names = extract_page_images(
-                            mudoc[pi], pi, images_dir, image_prefix,
-                            image_format)
-                    segments.extend(page_to_md(page, image_names, state,
-                                               margin_junk))
-                except Exception as e:
-                    logger.warning('p%d 변환 실패 — 해당 페이지 건너뜀 (%s)',
-                                   pi + 1, e)
+            for pi, page in enumerate(pdf.pages):
+                image_names = []
+                if mudoc is not None and pi < len(mudoc):
+                    image_names = extract_page_images(
+                        mudoc[pi], pi, images_dir, image_prefix)
+                segments.extend(page_to_md(page, image_names, state,
+                                           margin_junk))
     finally:
         if mudoc is not None:
             mudoc.close()
@@ -1148,8 +1104,7 @@ def _pool_init(segment, profile_path):
 def _convert_one(job, use_images):
     """워커용 단일 문서 변환 (top-level이어야 ProcessPool이 피클 가능)."""
     images = job['images'] if use_images else None
-    return convert(job['pdf'], images, job['img_prefix'],
-                   job.get('img_fmt', 'orig'))
+    return convert(job['pdf'], images, job['img_prefix'])
 
 
 # ── CLI ───────────────────────────────────────────────────────────────────
@@ -1172,9 +1127,6 @@ def main():
     ap.add_argument('--flat', action='store_true',
                     help='{out}/{name}.md 로 평면 출력 (기본: {out}/{name}/{name}.md)')
     ap.add_argument('--no-images', action='store_true', help='이미지 추출 생략')
-    ap.add_argument('--image-format', choices=['orig', 'webp', 'svg'],
-                    default='orig',
-                    help='추출 이미지 포맷 (기본 orig=PDF 내장 포맷)')
     ap.add_argument('--no-segment', action='store_true',
                     help='문장 단위 병합 없이 PDF 시각적 줄 그대로')
     ap.add_argument('--profile', help='도메인 패턴 오버라이드 JSON')
@@ -1239,8 +1191,6 @@ def main():
                 max_workers=args.jobs,
                 initializer=_pool_init,
                 initargs=(PROFILE['segment'], args.profile)) as pool:
-            for j in jobs:
-                j['img_fmt'] = args.image_format
             fut_map = {
                 pool.submit(_convert_one, j, not args.no_images): i
                 for i, j in enumerate(jobs)
@@ -1254,7 +1204,6 @@ def main():
     else:
         for i, job in enumerate(jobs):
             try:
-                job['img_fmt'] = args.image_format
                 bodies[i] = _convert_one(job, not args.no_images)
             except Exception as e:
                 bodies[i] = e
@@ -1308,7 +1257,7 @@ def run_gui():
         from PySide6.QtGui import QFont, QDesktopServices
         from PySide6.QtWidgets import (
             QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-            QGridLayout, QLabel, QLineEdit, QPushButton, QCheckBox, QComboBox,
+            QGridLayout, QLabel, QLineEdit, QPushButton, QCheckBox,
             QListWidget, QPlainTextEdit, QProgressBar, QFileDialog,
             QGroupBox, QTableWidget, QTableWidgetItem, QAbstractItemView,
             QHeaderView, QMessageBox, QSplitter, QStatusBar,
@@ -1373,8 +1322,7 @@ def run_gui():
                 images_dir = None if o['no_images'] else job['images']
                 try:
                     os.makedirs(job['dir'], exist_ok=True)
-                    body = convert(job['pdf'], images_dir, job['img_prefix'],
-                                   o.get('img_fmt', 'orig'))
+                    body = convert(job['pdf'], images_dir, job['img_prefix'])
                 except Exception as e:
                     fail += 1
                     self.log.emit(f'✗ FAIL  {doc_name}: {e}')
@@ -1491,16 +1439,10 @@ def run_gui():
             self.cb_flat.setToolTip('{out}/{name}.md 로 저장 (기본: {out}/{name}/{name}.md)')
             self.cb_images = QCheckBox('이미지 추출')
             self.cb_images.setChecked(True)
-            self.cmb_img_fmt = QComboBox()
-            self.cmb_img_fmt.addItem('원본 포맷', 'orig')
-            self.cmb_img_fmt.addItem('webp', 'webp')
-            self.cmb_img_fmt.addItem('svg', 'svg')
-            self.cmb_img_fmt.setToolTip('추출 이미지 포맷 — webp는 압축, svg는 벡터 렌더')
             self.cb_doctor = QCheckBox('표 건강 점검')
             self.cb_doctor.setChecked(True)
             for cb in (self.cb_segment, self.cb_flat, self.cb_images, self.cb_doctor):
                 opt_lay.addWidget(cb)
-            opt_lay.addWidget(self.cmb_img_fmt)
             opt_lay.addStretch(1)
             root.addWidget(opt_group)
 
@@ -1645,7 +1587,6 @@ def run_gui():
                 'segment': self.cb_segment.isChecked(),
                 'flat': self.cb_flat.isChecked(),
                 'no_images': not self.cb_images.isChecked(),
-                'img_fmt': self.cmb_img_fmt.currentData(),
                 'doctor': self.cb_doctor.isChecked(),
                 'profile': prof or None,
             }
@@ -1765,7 +1706,6 @@ def run_gui():
                 self.thread.wait(3000)
             super().closeEvent(event)
 
-    os.environ.setdefault('QT_LOGGING_RULES', 'qt.qpa.fonts.warning=false')
     app = QApplication(sys.argv)
     app.setApplicationName('pdf2md')
     win = MainWindow()

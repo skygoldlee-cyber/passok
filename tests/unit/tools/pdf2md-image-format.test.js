@@ -38,3 +38,10 @@ test('pdf2md Qt 메시지 핸들러 미사용 — QT_LOGGING_RULES 폴백', () =
         .toString().trim();
     assert.equal(src, 'True');
 });
+
+test('pdf2md GUI 크래시 로그 — _crash.log 스택 기록', () => {
+    const src = execFileSync('python', ['-c',
+        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('_crash.log' in s)"])
+        .toString().trim();
+    assert.equal(src, 'True');
+});
