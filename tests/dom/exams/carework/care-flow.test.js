@@ -11,6 +11,8 @@ const ITEMS = { items: [
     { conceptId: 's2-c10-x', role: 'scenario', stem: '시나리오 문항', options: ['a', 'b', 'c', 'd', 'e'], answer: 1, rationale: ['p', 'q', 'r', 's', 't'], source: {} },
 ] };
 const STORY_MD = '<!-- story:start -->\n### 장면\n\n"미영 씨, 여기 처음이세요?"\n<!-- story:end -->';
+const TAGS = { tags: { Q9: { conceptId: 's2-c10-x', role: 'review' } } };
+const BANK_MD = '### Q9. 미리풀기 문항?\n① 오답\n② 정답\n\n## 🔑 정답 및 교재 근거\n\n**Q9.**\n> **정답: ②** [교재: L10](<x.md#L10>)';
 
 function _mount() {
     document.body.innerHTML = readFileSync(join(ROOT, 'html/exams/carework/care-flow.html'), 'utf-8')
@@ -24,6 +26,8 @@ beforeEach(() => {
         const u = String(url);
         const body = u.includes('concepts.json') ? JSON.stringify(CONCEPTS)
             : u.includes('scenario_items') ? JSON.stringify(ITEMS)
+            : u.includes('bank_tags') ? JSON.stringify(TAGS)
+            : u.includes('문제은행') ? BANK_MD
             : STORY_MD;
         return { ok: true, json: async () => JSON.parse(body), text: async () => body };
     });

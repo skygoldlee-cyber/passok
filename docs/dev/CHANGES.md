@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 feat(carework): s1 개념·문항 + 문제은행 pre 단계 연결
+
+- concepts.json +8개 s1 개념 (Ch01·02·03·05·06·07·08·11) — 과목 셀렉트에 1과목 표시
+- scenario_items +3문 s1 authored (고령화·학대신고·의심망상)
+- care-flow pre 단계: bank_tags 태깅 은행 문항 지연 로드 + details 정답 보기
+- 정답 인덱스 통일 — authored 원문자(②)/은행 숫자 모두 _ansIdx로 해석
+
+
 ## 2026-11-05 feat(carework): 학습흐름 과목 필터 추가
 
 
