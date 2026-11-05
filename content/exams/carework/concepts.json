@@ -234,12 +234,12 @@
    "storySlot": "s17"
   },
   {
-   "id": "s1-c11-adl",
-   "subject": 1,
+   "id": "s2-c11-adl",
+   "subject": 2,
    "chapter": 11,
    "title": "일상생활 지원 원칙",
    "bodyAnchor": "11-1",
-   "storySlot": "s21"
+   "storySlot": "s31"
   }
  ]
 }
