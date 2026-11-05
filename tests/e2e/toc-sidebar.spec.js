@@ -128,8 +128,12 @@ test.describe('교재리더 TOC 사이드바', () => {
         await page.waitForTimeout(1200);
         await expect(page.locator('#reader-toc-list .reader-toc-item').first()).toBeVisible({ timeout: 30_000 });
 
-        const isDrawer = await page.evaluate(() =>
-            getComputedStyle(document.getElementById('reader-toc')).position === 'fixed');
+        const isDrawer = await page.evaluate(() => {
+            // story_textbook PRO 안내 오버레이가 비동기로 열려 후속 클릭을 가로막으므로 완전히 숨긴다
+            const ov = document.getElementById('pro-upgrade-overlay');
+            if (ov) { ov.classList.remove('is-visible'); ov.style.display = 'none'; }
+            return getComputedStyle(document.getElementById('reader-toc')).position === 'fixed';
+        });
         if (isDrawer) {
             const btn = page.locator('#reader-toc-mobile-btn');
             if (await btn.isVisible()) await btn.click();
