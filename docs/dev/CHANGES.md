@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): 웹툰 뷰 지연 뷰 스텁 추가
+
+- index.template.html care-webtoon-view data-lazy-view 스텁 — DOM 불변식 충족
+
+
 ## 2026-11-05 chore: 웹툰 뷰 spec 태그 + TRACE 동기
 
 
