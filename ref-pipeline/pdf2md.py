@@ -1778,7 +1778,18 @@ def run_gui():
                 self.thread.wait(3000)
             super().closeEvent(event)
 
-    os.environ.setdefault('QT_LOGGING_RULES', 'qt.qpa.fonts.warning=false')
+    # QFont::setPointSize 경고만 삼킴 — 콜백 내 I/O 없이 GC 안전하게 모듈 수명 유지
+    from PySide6.QtCore import qInstallMessageHandler
+
+    def _qt_filter(mode, ctx, msg):
+        if 'QFont::setPointSize' not in msg:
+            try:
+                if sys.stderr:
+                    sys.stderr.write(msg + '\n')
+            except Exception:
+                pass
+
+    qInstallMessageHandler(_qt_filter)
     app = QApplication(sys.argv)
     app.setApplicationName('pdf2md')
     win = MainWindow()

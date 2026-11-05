@@ -59,3 +59,10 @@ test('pdf2md svg — clip 인자 미지원 대응 (show_pdf_page 경유)', () =>
         .toString().trim();
     assert.equal(src, 'True');
 });
+
+test('pdf2md QFont 경고 — qInstallMessageHandler로 차단', () => {
+    const src = execFileSync('python', ['-c',
+        "s=open('ref-pipeline/pdf2md.py',encoding='utf8').read(); print('qInstallMessageHandler' in s)"])
+        .toString().trim();
+    assert.equal(src, 'True');
+});
