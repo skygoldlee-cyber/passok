@@ -166,7 +166,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run postbuild:data` | `npm run check:parser` | 체인: check:parser |
 
-### `check:*` — 71개
+### `check:*` — 72개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -241,6 +241,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run check:runbooks` | `node tools/check/check_runbook_links.js` | 런북 정본 도달 검증 (런북 커버리지 측정, §2.5) |
 | `npm run check:filenames` | `node tools/check/check_filenames.js` | 파일명 대소문자 규약 — 영역별 kebab/snake/SCREAMING 패턴, 신규 위반 차단 (CODE_CONVENTIONS §2.1) |
 | `npm run check:icons` | `node tools/build/build_icons.js --check` | 앱 아이콘 파생 생성·검증 파이프라인 |
+| `npm run check:scenario` | `node tools/check/check_scenario_items.js` | 4단계 선택형 시나리오 문항 검증 |
 
 ### `fix:*` — 2개
 
