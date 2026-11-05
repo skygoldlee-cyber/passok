@@ -122,8 +122,8 @@ test.describe('교재리더 TOC 사이드바', () => {
         });
         await expect(page.locator('#reader-toc-list .reader-toc-item').first()).toBeVisible({ timeout: 30_000 });
         await page.evaluate(() => {
-            const cb = /** @type {HTMLInputElement|null} */ (document.getElementById('reader-story-mode-toggle'));
-            if (cb && !cb.checked) cb.dispatchEvent(new Event('change', { bubbles: true }));
+            const cb = /** @type {HTMLSelectElement|null} */ (document.getElementById('reader-format-select'));
+            if (cb && cb.value !== 'story') { cb.value = 'story'; cb.dispatchEvent(new Event('change', { bubbles: true })); }
         });
         await page.waitForTimeout(1200);
         await expect(page.locator('#reader-toc-list .reader-toc-item').first()).toBeVisible({ timeout: 30_000 });

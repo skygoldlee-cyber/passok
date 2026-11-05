@@ -229,7 +229,7 @@ describe('교재 리더 — 과목 선택·본문·이어하기·북마크', () 
         stubRegistry([SUBJ]);
         renderTextbookReader();
         textbookReaderState.storyMode = true;
-        el('reader-story-mode-toggle').checked = true;
+        el('reader-format-select').value = 'story';
 
         const scrolled = [];
         const origScroll = Element.prototype.scrollIntoView;
@@ -237,7 +237,7 @@ describe('교재 리더 — 과목 선택·본문·이어하기·북마크', () 
         try {
             openSubjectSection('subja', '1. 핵심 개념');
             expect(textbookReaderState.storyMode).toBe(false);
-            expect(el('reader-story-mode-toggle').checked).toBe(false);
+            expect(el('reader-format-select').value).toBe('standard');
             await waitFor(() => scrolled.length > 0, 3000);
         } finally {
             Element.prototype.scrollIntoView = origScroll;

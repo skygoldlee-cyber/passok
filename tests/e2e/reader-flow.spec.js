@@ -122,9 +122,9 @@ test.describe('교재리더 본체', () => {
         await openReader(page);
         const before = await page.evaluate(() =>
             document.getElementById('textbook-reader-container').innerHTML.length);
-        const toggle = page.locator('#reader-story-mode-toggle');
+        const toggle = page.locator('#reader-format-select');
         if (!(await toggle.isVisible())) test.skip();
-        await toggle.check();
+        await toggle.selectOption('story');
         // 재렌더 완료까지 본문 길이 변화 대기
         await page.waitForFunction((len) =>
             document.getElementById('textbook-reader-container').innerHTML.length !== len,
@@ -178,15 +178,15 @@ test.describe('교재리더 본체', () => {
             return parseInt(target.id.replace('reader-section-', ''), 10);
         });
         if (anchor < 0) { test.skip(true, '섹션 수 부족'); return; }
-        const toggle = page.locator('#reader-story-mode-toggle');
+        const toggle = page.locator('#reader-format-select');
         if (!(await toggle.count())) { test.skip(true, '이야기형 토글 없음'); return; }
 
         // 스크롤 다운으로 크롬이 자동 숨김(TR-22)돼 토글이 포인터 이벤트를 받지 못하므로
         // change 이벤트를 직접 dispatch한다. 재렌더 감지는 기존 섹션 카드 노드의 detach로 판정.
         await page.evaluate(() => {
             window.__readerCardBefore = document.querySelector('#textbook-reader-container .reader-section-card');
-            const t = document.getElementById('reader-story-mode-toggle');
-            t.checked = true;
+            const t = document.getElementById('reader-format-select');
+            t.value = 'story';
             t.dispatchEvent(new Event('change', { bubbles: true }));
         });
         await page.waitForFunction(() => !window.__readerCardBefore.isConnected,

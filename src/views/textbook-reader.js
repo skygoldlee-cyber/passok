@@ -246,10 +246,8 @@ export function openSubjectSection(subject, sectionTitle, chapterAnchor = '', op
     const wantStory = !!opts.story;
     if (wantStory !== textbookReaderState.storyMode) {
         textbookReaderState.storyMode = wantStory;
-        const storyToggle = /** @type {HTMLInputElement|null} */ (document.getElementById('reader-story-mode-toggle'));
-        if (storyToggle) storyToggle.checked = wantStory;
-        const wtToggle0 = /** @type {HTMLInputElement|null} */ (document.getElementById('reader-webtoon-toggle'));
-        if (wtToggle0) wtToggle0.checked = false;
+        const fmtSel0 = /** @type {HTMLSelectElement|null} */ (document.getElementById('reader-format-select'));
+        if (fmtSel0) fmtSel0.value = wantStory ? 'story' : 'standard';
         textbookReaderState.webtoonMode = false;
         if (wantStory) {
             trackAction('story_textbook');
@@ -384,22 +382,24 @@ export function renderTextbookReader() {
         });
     }
 
-    // Story mode checkbox binding (bind once)
-    const storyToggle = /** @type {HTMLInputElement|null} */ (document.getElementById('reader-story-mode-toggle'));
-    if (storyToggle && !storyToggle.dataset.bound) {
-        storyToggle.dataset.bound = 'true';
-        storyToggle.checked = textbookReaderState.storyMode;
-        storyToggle.addEventListener('change', (e) => {
-            if ((/** @type {HTMLInputElement} */ (e.target)).checked) {
+    // 교재 형식 셀렉트 binding — 표준형/이야기형/웹툰을 한 컨트롤로 (bind once)
+    const fmtSel = /** @type {HTMLSelectElement|null} */ (document.getElementById('reader-format-select'));
+    if (fmtSel && !fmtSel.dataset.bound) {
+        fmtSel.dataset.bound = 'true';
+        fmtSel.value = textbookReaderState.webtoonMode ? 'webtoon'
+            : (textbookReaderState.storyMode ? 'story' : 'standard');
+        fmtSel.addEventListener('change', (e) => {
+            const fmt = (/** @type {HTMLSelectElement} */ (e.target)).value;
+            if (fmt === 'story') {
                 trackAction('story_textbook');
                 proFeatureNotice('story_textbook', '이야기형 교재 본문 읽기');
             }
-            // 표준형으로 돌아가면 오디오 버튼/플레이어가 숨겨지므로 재생 중인 오디오 정지
-            if (!(/** @type {HTMLInputElement} */ (e.target)).checked && readerAudioState.audio) {
+            // 이야기형 해제로 돌아가면 재생 중인 오디오 정지
+            if (fmt !== 'story' && readerAudioState.audio) {
                 stopReaderAudio();
-                showAudioToast('표준형 모드로 전환되어 오디오 재생이 중지되었습니다.');
+                showAudioToast('표준형/웹툰 모드로 전환되어 오디오 재생이 중지되었습니다.');
             }
-            // 읽던 섹션 위치 보존 — 서사 블록이 본문 사이에 삽입돼 scrollTop 절대값이 어긋나므로
+            // 읽던 섹션 위치 보존 — 서사·버블 삽입으로 scrollTop 절대값이 어긋나므로
             // 현재 보이는 섹션 앵커(reader-section-N)를 기억하고 같은 섹션으로 복원한다.
             const container = document.getElementById('textbook-reader-container');
             let anchorIdx = -1, anchorOffset = 0;
@@ -410,19 +410,13 @@ export function renderTextbookReader() {
                     const relTop = s.getBoundingClientRect().top - cTop;
                     if (relTop <= 40) {
                         anchorIdx = parseInt(s.id.replace('reader-section-', ''), 10);
-                        anchorOffset = -relTop; // 섹션 상단이 뷰포트 위로 얼마나 지났는지
+                        anchorOffset = -relTop;
                     } else break;
                 }
             }
-            textbookReaderState.storyMode = (/** @type {HTMLInputElement} */ (e.target)).checked;
-            // 이야기형 전환 시 웹툰 모드는 해제 — 두 렌더 경로가 충돌하지 않게
-            const wtToggle = /** @type {HTMLInputElement|null} */ (document.getElementById('reader-webtoon-toggle'));
-            if (wtToggle) wtToggle.checked = false;
-            textbookReaderState.webtoonMode = false;
-            // TR-14: storyMode는 readerLastPosition 안에만 영속화되므로 토글 즉시 저장 —
-            // 저장이 다음 스크롤/과목 변경으로 밀리면 "토글만 하고 종료" 시 모드가 유실된다
+            textbookReaderState.storyMode = fmt === 'story';
+            textbookReaderState.webtoonMode = fmt === 'webtoon';
             saveReaderPosition();
-            // Re-render current chapter if one is selected
             if (textbookReaderState.selectedSubject && textbookReaderState.selectedChapter) {
                 _readerRenderPromise = Promise.resolve(renderChapterContent(
                     textbookReaderState.selectedSubject, parseInt(textbookReaderState.selectedChapter)
@@ -435,32 +429,6 @@ export function renderTextbookReader() {
                         cont.scrollTop = Math.max(0, absTop + anchorOffset);
                     }
                 });
-            }
-        });
-    }
-
-    // Webtoon mode checkbox binding (bind once)
-    const webtoonToggle = /** @type {HTMLInputElement|null} */ (document.getElementById('reader-webtoon-toggle'));
-    if (webtoonToggle && !webtoonToggle.dataset.bound) {
-        webtoonToggle.dataset.bound = 'true';
-        webtoonToggle.checked = textbookReaderState.webtoonMode;
-        webtoonToggle.addEventListener('change', (e) => {
-            const on = (/** @type {HTMLInputElement} */ (e.target)).checked;
-            textbookReaderState.webtoonMode = on;
-            if (on) {
-                // 웹툰 전환 시 이야기형·오디오는 해제 — 두 렌더 경로가 충돌하지 않게
-                if (storyToggle) { storyToggle.checked = false; }
-                textbookReaderState.storyMode = false;
-                if (readerAudioState.audio) {
-                    stopReaderAudio();
-                    showAudioToast('웹툰 모드로 전환되어 오디오 재생이 중지되었습니다.');
-                }
-            }
-            saveReaderPosition();
-            if (textbookReaderState.selectedSubject && textbookReaderState.selectedChapter) {
-                _readerRenderPromise = Promise.resolve(renderChapterContent(
-                    textbookReaderState.selectedSubject, parseInt(textbookReaderState.selectedChapter)
-                )).catch(err => console.error('renderChapterContent failed:', err));
             }
         });
     }

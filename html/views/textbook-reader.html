@@ -26,13 +26,14 @@
                                 <option value="">과목을 선택하세요</option>
                             </select>
                         </div>
-                        <label class="reader-mode-checkbox" title="이야기형 교재 + 오디오 제공">
-                            <input type="checkbox" id="reader-story-mode-toggle" >
-                            <i class="fa-solid fa-book-open-reader text-primary" aria-hidden="true"></i> 이야기형 <span class="pro-badge" data-pro-feature="story_textbook">PRO</span>
-                        </label>
-                        <label class="reader-mode-checkbox" title="이야기를 말풍선 컷으로 읽기">
-                            <input type="checkbox" id="reader-webtoon-toggle" >
-                            <i class="fa-solid fa-images text-primary" aria-hidden="true"></i> 웹툰
+                        <label class="reader-mode-checkbox" title="교재 형식 선택">
+                            <i class="fa-solid fa-book-open-reader text-primary" aria-hidden="true"></i>
+                            <select id="reader-format-select" class="form-select reader-mode-btn" title="교재 형식" aria-label="교재 형식">
+                                <option value="standard">표준형</option>
+                                <option value="story">이야기형</option>
+                                <option value="webtoon">웹툰</option>
+                            </select>
+                            <span class="pro-badge" data-pro-feature="story_textbook">PRO</span>
                         </label>
                     </div>
                 </div>
