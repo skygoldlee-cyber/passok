@@ -57,7 +57,7 @@
     },
     "examTimeMin": 90,
     "passAverage": 60,
-    "subjectFailBelow": 40
+    "subjectFailBelow": 60
   },
   "uiText": {
     "careCalc": {
