@@ -21,7 +21,7 @@ const STORY_START = '<!-- story:start -->';
 const STORY_END = '<!-- story:end -->';
 
 // 생성된 이야기형 파일 최상단에 붙는 배너 — 수동 편집 방지
-const GEN_BANNER = '<!-- ⚠️ 자동 생성 파일 — 직접 편집 금지. 본문은 *_표준형.md, 서사는 story/*_서사.md 패치를 편집하고 npm run build:story로 재생성하세요. -->';
+const GEN_BANNER = '<!-- ⚠️ 자동 생성 파일 — 직접 편집 금지. 본문은 manifest 선언 표준형 MD(chapters[].file), 서사는 story/*_서사.md 패치를 편집하고 npm run build:story로 재생성하세요. -->';
 
 // 표준형에 삽입되는 슬롯 마커 — 텍스트 앵커 대신 안정 ID로 서사 삽입 지점을 고정한다
 const SLOT_RE = /^<!-- story:slot:([\w-]+) -->$/;
@@ -114,7 +114,7 @@ function extractRecallItems(storyLines, stdText, maxItems = 3) {
 function buildRecallSection(items) {
     if (!items || !items.length) return '';
     const rows = items.map((it, i) => {
-        const q = it.sentence.replace(it.token, `(____)`);
+        const q = it.sentence.replace(it.token, `(____)`).replace(/^["'“”‘’]+|["'“”‘’]+$/g, '').trim();
         return `- ${i + 1}. "${q}" — 정답: **${it.token}**`;
     });
     return [

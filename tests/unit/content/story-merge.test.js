@@ -229,6 +229,9 @@ test('BP-12 buildRecallSection + stripGenerated — 생성 구간은 추출에�
     assert.ok(sec.includes('## 📝 이야기 회상'));
     assert.ok(sec.includes('(____)') && sec.includes('정답: **제3조**'));
     assert.equal(M.buildRecallSection([]), '');
+    // 문장 끝 인용부호는 래핑 따옴표와 중복되지 않도록 제거
+    const quoted = M.buildRecallSection([{ sentence: '필기와 실기 각각 60%라니 외워야겠어요."', token: '60%' }]);
+    assert.ok(!quoted.includes('""') && quoted.includes('겠어요." — 정답'), '문장 끝 따옴표 중복');
     // recall 섹션이 포함된 이야기형에서 패치 추출 시 회상은 authored로 오인되지 않는다
     const story = M.GEN_BANNER + '\n' + STD + '\n\n' + M.STORY_START + '\n수진 서사\n' + M.STORY_END + '\n' + sec;
     const { ops } = M.extractPatch(story, STD);
