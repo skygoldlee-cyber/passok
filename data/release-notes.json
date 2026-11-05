@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261105-856d76e",
+    "date": "2026-11-05",
+    "notes": [
+      "[수정·carework] 이야기형 MD 추적 + 개념 학습 이름 — 프로덕션 빈 씬 해소",
+      "[정리·release] v20261105-d91aefe 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261105-d91aefe",
     "date": "2026-11-05",
     "notes": [
@@ -203,16 +211,6 @@
     "notes": [
       "[수정·carework] 공유 txt 파일 미생성 — PC 다운로드 txt 포함 해소, 본문은 클립보드로 (CO-13)",
       "[정리·release] v20261105-0b06d0a 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261105-0b06d0a",
-    "date": "2026-11-05",
-    "notes": [
-      "[정리·docs] TRACE_MATRIX 재생성 — CO-13 ↔ DSN-42 문서 연결 반영",
-      "[문서·carework] 카톡 공유 로직 명기 — §9 제스처·페이로드 계약 (CO-13)",
-      "[수정·carework] 공유 시트 txt 제외 — 카톡 PDF+텍스트 이중 수신 해소, txt는 다운로드 전용 (CO-13)",
-      "[정리·release] v20261105-40b8f6b 스탬프 확정 [no-docs]"
     ]
   }
 ]
