@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 feat(carework): 4단계 시나리오 자산 — 개념 레지스트리+파일럿 문항+검증
+
+- concepts.json: 2과목 Ch10·12·14 개념 22개 (bodyAnchor 구조 앵커·storySlot 매핑)
+- items/scenario_items.json: 파일럿 문항 12개 — role·보기별 rationale·함정 오답 스키마
+- check_scenario_items.js: 스키마·개념 해소·본문 수치·인물 설정 검증 (check:scenario)
+
+
 ## 2026-11-05 fix(carework): 점검표 미리보기 하단 여백
 
 - .care-doc-preview margin-bottom 2.5em — 미리보기 아래 2줄 여백

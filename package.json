@@ -169,7 +169,8 @@
     "build:ogimage": "node tools/build/build_og_image.js",
     "build:icons": "node tools/build/build_icons.js",
     "check:icons": "node tools/build/build_icons.js --check",
-    "build:commands": "node tools/build/build_command_reference.js"
+    "build:commands": "node tools/build/build_command_reference.js",
+    "check:scenario": "node tools/check/check_scenario_items.js"
   },
   "keywords": [
     "cosmetics",

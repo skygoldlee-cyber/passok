@@ -1,0 +1,27 @@
+{
+  "_comment": "4단계 학습 흐름(DOC-USR-22) 개념 레지스트리 — 파일럿 대상 2과목 Ch10·12·14. bodyAnchor는 표준형 구조 앵커(장-절), storySlot은 서사 슬롯 id. 인물 설정은 docs/인물 설정표.md(DOC-USR-23) 준수.",
+  "concepts": [
+    { "id": "s2-c10-meal-posture", "subject": 2, "chapter": 10, "title": "연하곤란 식사 자세·식후 관리", "bodyAnchor": "10-1", "storySlot": "s01" },
+    { "id": "s2-c10-tube-feeding", "subject": 2, "chapter": 10, "title": "경관영양 — 튜브 이탈 시 보고(의료행위)", "bodyAnchor": "10-1", "storySlot": "s01" },
+    { "id": "s2-c10-med-help", "subject": 2, "chapter": 10, "title": "투약 돕기 원칙 — 조정·투여 불가(의료행위)", "bodyAnchor": "10-2", "storySlot": "s16" },
+    { "id": "s2-c10-excretion-observe", "subject": 2, "chapter": 10, "title": "배설 관찰 전·중·후 — 이상 시 기록·보고", "bodyAnchor": "10-3", "storySlot": "s02" },
+    { "id": "s2-c10-perineal-nail", "subject": 2, "chapter": 10, "title": "손발톱(손톱 둥글게·발톱 일자)·회음부 순서", "bodyAnchor": "10-4", "storySlot": "s17" },
+    { "id": "s2-c10-position-change", "subject": 2, "chapter": 10, "title": "체위변경 2시간·욕창 4단계·뼈 돌출부", "bodyAnchor": "10-5", "storySlot": "s03" },
+    { "id": "s2-c10-move-principle", "subject": 2, "chapter": 10, "title": "이동 원칙 — 상황별 환측·건측(휠체어 건측 방향)", "bodyAnchor": "10-5", "storySlot": "s03" },
+    { "id": "s2-c10-clothes", "subject": 2, "chapter": 10, "title": "편마비 옷 갈아입기 — 환측 먼저 입고 건측 먼저 벗기", "bodyAnchor": "10-4", "storySlot": "s17" },
+    { "id": "s2-c10-welfare-items", "subject": 2, "chapter": 10, "title": "복지용구 3분류(구입10·대여6·겸용2)·연간 한도", "bodyAnchor": "10-6", "storySlot": "s04" },
+    { "id": "s2-c12-dementia-daily", "subject": 2, "chapter": 12, "title": "치매 일상생활 지원 — 패턴·환경 안정, 강제 금지", "bodyAnchor": "12-1", "storySlot": "s08" },
+    { "id": "s2-c12-bpsd-doubt", "subject": 2, "chapter": 12, "title": "의심·망상·환각 — 논쟁 금지, 감정 수용 후 전환", "bodyAnchor": "12-2", "storySlot": "s09" },
+    { "id": "s2-c12-bpsd-wander", "subject": 2, "chapter": 12, "title": "배회 — 안전 공간 허용·동행·유도", "bodyAnchor": "12-2", "storySlot": "s09" },
+    { "id": "s2-c12-bpsd-sundown", "subject": 2, "chapter": 12, "title": "석양증후군 — 저녁 조명·익숙한 활동·낮 활동", "bodyAnchor": "12-2", "storySlot": "s09" },
+    { "id": "s2-c12-bpsd-repeat", "subject": 2, "chapter": 12, "title": "반복 질문·행동 — 같은 대답으로 안심·관심 전환", "bodyAnchor": "12-2", "storySlot": "s09" },
+    { "id": "s2-c14-emergency-order", "subject": 2, "chapter": 14, "title": "응급 대처 순서 — 판단→살피기→119→처치→보고", "bodyAnchor": "14-1", "storySlot": "s11" },
+    { "id": "s2-c14-choking", "subject": 2, "chapter": 14, "title": "질식 — 의식 있으면 하임리히, 없으면 CPR", "bodyAnchor": "14-1", "storySlot": "s11" },
+    { "id": "s2-c14-seizure", "subject": 2, "chapter": 14, "title": "경련 — 위험물 제거·옆으로, 입에 물건 금지", "bodyAnchor": "14-1", "storySlot": "s11" },
+    { "id": "s2-c14-burn", "subject": 2, "chapter": 14, "title": "화상 — 흐르는 찬물 15분 이상 냉각", "bodyAnchor": "14-1", "storySlot": "s11" },
+    { "id": "s2-c14-hand-hygiene", "subject": 2, "chapter": 14, "title": "손위생 — 30초·6단계, 보이는 오염 시 비누+물", "bodyAnchor": "14-2", "storySlot": "s21" },
+    { "id": "s2-c14-infection-chain", "subject": 2, "chapter": 14, "title": "감염고리 6단계 — 한 고리만 끊어도 전파 불가", "bodyAnchor": "14-2", "storySlot": "s21" },
+    { "id": "s2-c14-cpr-standards", "subject": 2, "chapter": 14, "title": "CPR — 100~120회/분·깊이 5cm·30:2", "bodyAnchor": "14-3", "storySlot": "s12" },
+    { "id": "s2-c14-aed", "subject": 2, "chapter": 14, "title": "AED — 패드 부착·분석 중 접촉 금지·즉시 사용", "bodyAnchor": "14-3", "storySlot": "s12" }
+  ]
+}
