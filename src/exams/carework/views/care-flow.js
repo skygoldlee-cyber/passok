@@ -18,8 +18,8 @@ let _concepts = null, _items = null, _slots = null, _book = null;
 let _c = null, _i = 0, _sel = -1, _answered = false;
 
 const _chars = () => Object.fromEntries(Object.entries(CHARS).map(([k, c]) => [k, { ...c, img: contentPath(c.img) }]));
-const _prog = () => getItem('flow_progress') || {};
-const _save = p => setItem('flow_progress', p);
+const _prog = () => { try { return JSON.parse(getItem('flow_progress') || '{}') || {}; } catch { return {}; } };
+const _save = p => setItem('flow_progress', JSON.stringify(p));
 const _conceptItems = (c, role) => (_items || []).filter(it => it.conceptId === c.id && it.role === role);
 
 async function _load() {

@@ -1,5 +1,8 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): flow 진행 저장 JSON 직렬화 + DOM 커버리지 테스트
+
+
 ## 2026-11-05 chore: care-flow 파생물·MD_ASSETS 동기화
 
 
