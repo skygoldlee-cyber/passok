@@ -67,6 +67,12 @@ export function initCareHomeView() {
     renderImg();
 }
 
+/** 서명 이미지 선택 — 숨긴 file input 트리거 (버튼 스타일 피커) */
+export function careSignImagePick() {
+    const imgEl = /** @type {HTMLInputElement|null} */ ($('home-sign-image'));
+    if (imgEl) imgEl.click();
+}
+
 /** 출력물 서명 저장 — 작성자·확인자·인수자 성명이 모든 문서 서명란에 기입된다 */
 export function careDocSignSave() {
     setDocSign(

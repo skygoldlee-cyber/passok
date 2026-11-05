@@ -1,4 +1,4 @@
-// src/exams/carework/care-client-store.js — 대상자 명부 로컬 저장소
+// src/exams/carework/care-client-store.js — 수급자 명부 로컬 저장소
 // @spec none — 시험 전용 도메인 스토어 (DA-13)
 // localStorage `carework_clients` — 방문기록·인수인계·일지의 대상자 입력 소스
 // 무료 한도: FREE_LIMIT건 — 초과 시 free-limit 오류 → 상위에서 업그레이드 안내

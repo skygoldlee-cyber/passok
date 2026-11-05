@@ -86,7 +86,7 @@ export function careClientDelete(id) {
 function buildListText() {
     const items = listClients();
     if (!items.length) return '';
-    return '대상자 명부\n\n' + items.map(c => [
+    return '수급자 명부\n\n' + items.map(c => [
         `성명: ${c.name}`,
         c.room ? `호실·병상: ${c.room}` : '',
         c.birth ? `생년월일: ${c.birth}` : '',

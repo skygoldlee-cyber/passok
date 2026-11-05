@@ -43,7 +43,7 @@ import { careFacilityHandoverSubmit, careHandoverAck } from '../../../../src/exa
 import { careAuditReset, careAuditPrint, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
 import { careHandoverGenerate, careHandoverSave, careHandoverExport, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
-import { initCareHomeView, careDocSignSave } from '../../../../src/exams/carework/views/care-home.js';
+import { initCareHomeView, careDocSignSave, careSignImagePick } from '../../../../src/exams/carework/views/care-home.js';
 import { setDocSign } from '../../../../src/exams/carework/facility.js';
 import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, careVisitPreview, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
 import { careClientSave, careClientLoad, careClientDelete, initCareClientView } from '../../../../src/exams/carework/views/care-client.js';
@@ -542,6 +542,20 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(printBlock).not.toContain('position: absolute');
         // 빈 페이지 방지 — 숨은 폼 레이아웃이 뒷장으로 밀리지 않도록 출력물 외 형제 display:none
         expect(printBlock).toMatch(/\.view-section\.active > :not[\s\S]*?display: none !important/);
+    });
+
+    it('careHome — 서명 이미지 피커 버튼이 숨긴 file input을 트리거', () => {
+        loadPartial('care-home.html');
+        initCareHomeView();
+        const inp = /** @type {HTMLInputElement} */ (document.getElementById('home-sign-image'));
+        const btn = document.querySelector('[data-click="careSignImagePick"]');
+        expect(inp).toBeTruthy();
+        expect(btn).toBeTruthy(); // 버튼 스타일 피커 — 브라우저 기본 input UI 미사용
+        expect(inp.classList.contains('is-hidden')).toBe(true);
+        let clicked = false;
+        inp.click = () => { clicked = true; };
+        careSignImagePick();
+        expect(clicked).toBe(true);
     });
 
 });

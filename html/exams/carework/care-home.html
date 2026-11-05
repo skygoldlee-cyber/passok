@@ -15,7 +15,8 @@
             <label>작성자(요양보호사) <input id="home-sign-author" type="text" placeholder="예: 김○○" autocomplete="off"></label>
             <label>확인자(시설장·기관장) <input id="home-sign-confirmer" type="text" placeholder="예: 박○○" autocomplete="off"></label>
             <label>인수자(다음 근무자) <input id="home-sign-receiver" type="text" placeholder="예: 이○○" autocomplete="off"></label>
-            <label>서명 이미지 (선택) <input id="home-sign-image" type="file" accept="image/*"></label>
+            <label>서명 이미지 (선택) <input id="home-sign-image" type="file" accept="image/*" class="is-hidden"></label>
+            <button type="button" class="secondary" data-click="careSignImagePick">이미지 파일 선택</button>
             <div id="home-sign-image-preview"></div>
             <div class="care-calc-actions"><button data-click="careDocSignSave" class="secondary">서명 저장</button></div>
             <p class="care-log-hint">일지·인수인계서·보고서 등 모든 출력물 서명란에 자동 기입됩니다.</p>
@@ -24,7 +25,7 @@
     <nav class="care-home-nav" aria-label="빠른 기록">
         <a href="#/care-log" class="btn btn-secondary">요양일지 기록</a>
         <a href="#/care-handover" class="btn btn-secondary">인수인계</a>
-        <a href="#/care-client" class="btn btn-secondary">대상자 명부</a>
+        <a href="#/care-client" class="btn btn-secondary">수급자 명부</a>
         <a href="#/care-incident" class="btn btn-secondary">사고보고</a>
         <a href="#/care-roster" class="btn btn-secondary">근무표</a>
         <a href="#/care-visit" class="btn btn-secondary">방문기록</a>

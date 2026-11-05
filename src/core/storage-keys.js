@@ -248,7 +248,7 @@ export const BACKUP_KEYS = [
   STORAGE_KEYS.CARE_LOG_ITEMS,    // 요양일지 — 백업·동기화 대상 (DOC-DSN-42)
   STORAGE_KEYS.HANDOVER_ITEMS,    // 인수인계 기록 — 백업·동기화 대상 (DOC-DSN-42)
   STORAGE_KEYS.CARE_VISIT_ITEMS,  // 면회·방문 기록 — 백업·동기화 대상 (DOC-DSN-43)
-  STORAGE_KEYS.CARE_CLIENT_ITEMS, // 대상자 명부 — 백업·동기화 대상
+  STORAGE_KEYS.CARE_CLIENT_ITEMS, // 수급자 명부 — 백업·동기화 대상
   STORAGE_KEYS.INCIDENT_ITEMS,    // 사고·낙상 보고서 — 법적 증적, 백업·동기화 대상
   STORAGE_KEYS.ROSTER_ITEMS,      // 교대 근무표 — 백업·동기화 대상
   STORAGE_KEYS.CARE_ORG_NAME,     // 출력물 기관명 (미가입 시 수동 설정) — 환경설정
