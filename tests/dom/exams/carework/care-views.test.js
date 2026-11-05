@@ -38,14 +38,14 @@ vi.mock('../../../../src/exams/carework/facility.js', async (importOriginal) => 
 
 import { careCalcRun, careCalcReset, initCareCalcView } from '../../../../src/exams/carework/views/care-calc.js';
 import { careCardOpen, careCardClose, initCareCardView } from '../../../../src/exams/carework/views/care-card.js';
-import { careLogGenerate, careLogCopy, initCareLogView } from '../../../../src/exams/carework/views/care-log.js';
+import { careLogGenerate, careLogRecordCopy, initCareLogView } from '../../../../src/exams/carework/views/care-log.js';
 import { careFacilityHandoverSubmit, careHandoverAck } from '../../../../src/exams/carework/views/care-handover.js';
-import { careAuditReset, careAuditCopy, careAuditPrint, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
-import { careHandoverGenerate, careHandoverSave, careHandoverCopy, careHandoverShare, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
+import { careAuditReset, careAuditPrint, initCareAuditView } from '../../../../src/exams/carework/views/care-audit.js';
+import { careHandoverGenerate, careHandoverSave, careHandoverExport, initCareHandoverView } from '../../../../src/exams/carework/views/care-handover.js';
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
 import { initCareHomeView, careDocSignSave } from '../../../../src/exams/carework/views/care-home.js';
 import { setDocSign } from '../../../../src/exams/carework/facility.js';
-import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, careVisitExport, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
+import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, careVisitPreview, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
 import { careClientSave, careClientLoad, careClientDelete, initCareClientView } from '../../../../src/exams/carework/views/care-client.js';
 import { listClients } from '../../../../src/exams/carework/care-client-store.js';
 import { careLogCsvExport } from '../../../../src/exams/carework/views/care-log.js';
@@ -190,7 +190,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.querySelector('#log-preview .care-doc-head span')?.textContent).toMatch(/\d{4}-\d{2}-\d{2}/);
         // 문서형 서명란 — cosmetic fp-sign-row 대응 (작성자·확인자)
         expect(document.querySelector('#log-preview .care-doc-sign')?.textContent).toContain('작성자(요양보호사)');
-        careLogCopy();
+        careLogRecordCopy(); // 제공기록지 양식 복사 — 메뉴와 별개 문서라 별도 버튼 유지
     });
 
     it('careAudit — 로드 후 점검 초기화 + 문서 헤더', async () => {
@@ -238,12 +238,29 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         setDocSign('', '', ''); // 정리 — 다른 테스트의 빈 서명란 검증에 영향 없도록
     });
 
-    it('careAudit — 점검표 복사·인쇄 핸들러 실행', async () => {
+    it('docMdSign — 홈 설정 서명이 문서 초안에 자동 기입된다', async () => {
+        const { setDocSign } = await import('../../../../src/exams/carework/facility.js');
+        const { docMdSign } = await import('../../../../src/exams/carework/doc-md.js');
+        setDocSign('김보호', '박기관');
+        const md = docMdSign([['점검자', 'author'], ['기관장(확인)', 'confirmer'], ['점검일', '']]);
+        expect(md).toContain('점검자: 김보호'); // 서명란이 MD 초안에 포함 — 미리보기·docx·복사 공통
+        expect(md).toContain('기관장(확인): 박기관');
+        expect(md).toMatch(/점검일: ＿+/); // 미설정 슬롯은 수기 서명용 공란
+    });
+
+    it('docSignHtml — 서명 이미지 등록 시 작성자 슬롯에 이미지 기입', async () => {
+        const { setDocSignImage, docSignHtml } = await import('../../../../src/exams/carework/facility.js');
+        setDocSignImage('data:image/svg+xml;base64,AAA');
+        const html = docSignHtml([['작성자', 'author'], ['확인자', 'confirmer']]);
+        expect(html).toContain('care-doc-signimg'); // author 슬롯이 이미지로 기입
+        expect(html).toContain('data:image/svg+xml;base64,AAA');
+        setDocSignImage(''); // 정리 — 이후 테스트에 영향 방지
+    });
+
+    it('careAudit — 점검표 인쇄 핸들러 실행', async () => {
         loadPartial('care-audit.html');
         await initCareAuditView();
-        Object.defineProperty(navigator, 'clipboard', { value: { writeText: () => Promise.resolve() }, configurable: true });
         window.print = () => {};
-        careAuditCopy();
         careAuditPrint();
         expect(document.getElementById('audit-list')).toBeTruthy();
     });
@@ -267,7 +284,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(host.textContent).toContain('2명 인수');
     });
 
-    it('careHandover — 생성·복사·공유 핸들러', () => {
+    it('careHandover — 생성·기록 우선 자동저장·내보내기 핸들러', async () => {
         loadPartial('care-handover.html');
         initCareHandoverView();
         document.getElementById('ho-date').value = '2026-11-01';
@@ -275,11 +292,16 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('ho-to').value = '박○○';
         careHandoverGenerate();
         expect(document.querySelector('#ho-preview pre')?.textContent).toMatch(/인수인계서/);
-        careHandoverShare(); // 미저장 상태 — 차단 토스트 (기록 우선 규칙)
-        careHandoverSave();
+        const arg = /** @type {HTMLElement} */ (document.querySelector('[data-click="careHandoverExport"]')).dataset.arg;
+        // 기록 우선 — 미저장 문서의 내보내기는 자동 저장 후 메뉴가 열린다
+        await careHandoverExport(arg);
         expect(document.getElementById('ho-saved')?.textContent).toMatch(/김○○/);
-        careHandoverCopy();
-        careHandoverShare(); // 저장 후 — 공유 진행
+        expect(document.querySelector('.care-export-sheet')).toBeTruthy();
+        const saved = document.querySelectorAll('#ho-saved .care-log-saved-item').length;
+        // 동일 문서 재내보내기·명시 저장 — 중복 기록 없음 (텍스트 동일성 기준)
+        await careHandoverExport(arg);
+        careHandoverSave();
+        expect(document.querySelectorAll('#ho-saved .care-log-saved-item').length).toBe(saved);
     });
 
     it('careVisit — 예약 등록 → 결과 기록 → 완료 목록 상태 전이 (DSN-43 6c)', async () => {
@@ -308,7 +330,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         // 출력물 기관명 — 로컬 설정이 문서 헤더에 병기 (DSN-43 6e)
         const { setLocalOrgName } = await import('../../../../src/exams/carework/facility.js');
         setLocalOrgName('행복요양원');
-        careVisitExport();
+        careVisitPreview();
         expect(document.getElementById('vis-preview').textContent).toContain('행복요양원');
         setLocalOrgName('');
         expect(document.getElementById('vis-scheduled').textContent).toContain('등록된 방문예약이 없습니다');

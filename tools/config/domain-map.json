@@ -61,6 +61,7 @@
         "src/content/csv-utils.js",
         "src/content/xlsx-utils.js",
         "src/content/pdf-utils.js",
+        "src/content/docx-utils.js",
         "src/content/data-loader.js",
         "src/content/unpack.js",
         "src/shell/doc-overlay.js",

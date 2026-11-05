@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 20e88df53b71c559
-> 생성: 2026-11-04 · 원천: SPEC.md(671개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 63ce8719b504e945
+> 생성: 2026-11-05 · 원천: SPEC.md(673개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 671개 — 문서 연결 464 · 소스 연결 598 · 테스트 연결 638 · 보고서 연결 109
+**커버리지 요약**: 요구사항 673개 — 문서 연결 464 · 소스 연결 600 · 테스트 연결 640 · 보고서 연결 109
 
 ---
 
@@ -618,7 +618,7 @@
 | CO-10 | ✅ lite (기록 유무 커버리지) | 테스트 | — | src/exams/carework/care-coverage.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
 | CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
 | CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
-| CO-13 | care-share.js·출력 뷰 공유 버튼 | 테스트 | DOC-DSN-42 | src/content/pdf-utils.js<br>src/exams/carework/care-share.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
+| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42 | src/content/docx-utils.js<br>src/content/pdf-utils.js<br>src/exams/carework/care-share.js<br>src/exams/carework/doc-md.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/docx-utils.test.js<br>…외 1개 | — | — |
 
 ## 4.1 PWA & 오프라인
 
@@ -815,6 +815,8 @@
 | DA-20 | ✅ | 테스트 | — | src/shell/ui-mode.js | tests/unit/practice-mode-contract.test.js | — | — |
 | DA-21 | ✅ | 테스트 | — | css/dashboard.css<br>css/exams/carework/care-tools.css | tests/dom/exams/carework/care-views.test.js | — | — |
 | DA-22 | ✅ | 테스트 | — | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | — | — |
+| DA-23 | ✅ | 테스트 | — | src/core/utils.js | tests/unit/app/utils.test.js | — | — |
+| DA-24 | ✅ | 테스트 | — | src/content/docx-utils.js<br>src/exams/carework/doc-md.js | tests/unit/content/docx-utils.test.js | — | — |
 
 ## 5.2 안정적 ID 체계
 

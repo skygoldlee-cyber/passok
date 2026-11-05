@@ -5,8 +5,10 @@ import { markFunnel } from '../care-funnel.js';
 import { listRoster, saveRoster, removeRoster, upsertRoster } from '../roster-store.js';
 import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { docHeadHtml, refreshOrgName } from '../facility.js';
+import { docMdHead, csvToMdTable, mdToHtml, docMdSign } from '../doc-md.js';
+import { refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
+import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -36,25 +38,29 @@ export function careRosterDelete(id) {
     if (id) { removeRoster(id); renderList(); }
 }
 
-function renderPreview(t) {
+function renderPreview() {
     const out = $('ros-preview');
-    if (out) out.innerHTML = docHeadHtml('교대 근무표') + `<pre class="care-log-text">${esc(t)}</pre>`;
+    if (out) out.innerHTML = mdToHtml(careRosterDocMd());
 }
 
-export function careRosterExport() {
+/** 근무표 MD 초안 — 배정 표 구조 (docx·xlsx 파생 원본) */
+export function careRosterDocMd() {
+    const items = listRoster();
+    if (!items.length) return '';
+    return docMdHead('교대 근무표') + '\n' + csvToMdTable(rosterToCsv(items)) + docMdSign([['작성자', 'author']]);
+}
+
+/** 근무표 문서 미리보기 — 배정 목록을 문서로 렌더 (내보내기 메뉴 자동 생성기, 복사·인쇄·PDF 공통 원본) */
+export function careRosterPreview() {
     const t = buildRosterText(listRoster());
     if (!t) { showToast('등록된 근무 배정이 없습니다.', 'error'); return; }
-    proFeatureNotice('care_roster_share', '근무표 복사·내보내기');
-    renderPreview(t);
-    navigator.clipboard?.writeText(t).then(
-        () => showToast('근무표를 복사했습니다.'),
-        () => showToast('복사에 실패했습니다.', 'error'));
+    renderPreview();
 }
 
 export function careRosterPrint() {
     const t = buildRosterText(listRoster());
     if (!t) { showToast('인쇄할 근무 배정이 없습니다.', 'error'); return; }
-    renderPreview(t);
+    renderPreview();
     proFeatureNotice('care_roster_share', '근무표 인쇄·PDF');
     window.print();
 }
@@ -103,7 +109,7 @@ function renderList() {
 export function initCareRosterView() {
     markFunnel('tool:care-roster');
     const d = /** @type {HTMLInputElement|null} */ ($('ros-date'));
-    if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
+    if (d && !d.value) d.value = todayKey();
     const s = $('ros-shift');
     if (s && !s.children.length)
         s.innerHTML = ROSTER_SHIFTS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');

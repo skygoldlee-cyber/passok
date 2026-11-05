@@ -1,5 +1,4 @@
 {
   "_comment": "미참조 자산 예외 승계 명단 — 여기 없는 고아 자산은 check:orphans 실패. 값은 보존 사유.",
-  "icons/passok-icon-master.png": "아이콘 원본 마스터(1254px) — 파생 세트의 소스, 참조 없는 것이 정상 (build_icons의 정본은 512 PNG)",
-  "icons/passok-icon-1024.png": "아이콘 최신 원본(1024px·RGBA) — 재생성 입력 정본으로 의도 보존"
+  "content/exams/carework/docs/작성자-서명.svg": "작성자 서명 이미지 — 출력 문서 서명란 이미지 기입용으로 보존"
 }

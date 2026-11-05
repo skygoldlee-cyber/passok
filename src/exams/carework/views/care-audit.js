@@ -3,13 +3,13 @@
 import { loadAuditSections, loadChecks, toggleCheck, clearChecks, auditProgress } from '../care-audit.js';
 import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { showToast } from '../../../ui-utils.js';
 import { auditCoverage } from '../care-coverage.js';
 import { listClients } from '../care-client-store.js';
 import { listCareLogs } from '../care-log-store.js';
 import { listVisits } from '../care-visit-store.js';
 import { listHandovers } from '../handover-store.js';
 import { listIncidents } from '../incident-store.js';
+import { docMdHead, mdTable, mdToHtml, docMdSign } from '../doc-md.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -35,27 +35,17 @@ function render() {
     const p = auditProgress(_sections);
     const bar = $('audit-progress');
     if (bar) bar.innerHTML = `<strong>점검 진행 ${esc(p.done)}/${esc(p.total)}</strong><div class="care-audit-bar"><span style="width:${esc(p.total ? Math.round(p.done / p.total * 100) : 0)}%"></span></div>`;
+    // 문서 미리보기 — 본문 복사·PDF의 원본 (체크박스 DOM은 ✔/□ 상태를 텍스트로 담지 못해 요약을 렌더)
+    const pv = $('audit-preview');
+    if (pv) pv.innerHTML = mdToHtml(careAuditDocMd());
 }
 
-function buildSummary() {
+/** 점검표 MD 초안 — 섹션별 항목을 표 구조로 (docx 파생·미리보기·본문 복사 공통 원본) */
+export function careAuditDocMd() {
+    if (!_sections.length) return '';
     const c = loadChecks();
-    const lines = ['[기관 평가 체크리스트 점검표]'];
-    for (const s of _sections) {
-        lines.push('', '■ ' + s.title);
-        for (const i of s.items) lines.push(`  ${c[i.id] ? '✔' : '□'} ${i.text} (${i.ref})`);
-    }
-    const p = auditProgress(_sections);
-    lines.push('', `점검 진행: ${p.done}/${p.total} 항목`);
-    return lines.join('\n');
-
-}
-
-export function careAuditCopy() {
-    if (!_sections.length) { showToast('체크리스트를 불러오는 중입니다.', 'error'); return; }
-    proFeatureNotice('care_audit_export', '점검표 복사·내보내기');
-    navigator.clipboard?.writeText(buildSummary()).then(
-        () => showToast('점검표를 복사했습니다.'),
-        () => showToast('복사에 실패했습니다.', 'error'));
+    const rows = _sections.flatMap(s => s.items.map(i => [s.title, c[i.id] ? '✔' : '□', i.text, i.ref]));
+    return docMdHead('기관 평가 점검표') + '\n' + mdTable(['영역', '점검', '항목', '근거'], rows) + docMdSign([['점검자', 'author'], ['기관장(확인)', 'confirmer']]);
 }
 
 export function careAuditPrint() {

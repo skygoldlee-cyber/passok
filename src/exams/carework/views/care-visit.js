@@ -5,9 +5,11 @@ import { markFunnel } from '../care-funnel.js';
 import { listVisits, saveVisit, updateVisit, removeVisit } from '../care-visit-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
-import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, docHeadHtml, refreshOrgName } from '../facility.js';
+import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
+import { todayKey } from '../../../core/utils.js';
+import { docMdHead, docMdSign, csvToMdTable, mdToHtml } from '../doc-md.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -51,7 +53,7 @@ export function careVisitResultOpen(arg) {
         : listVisits().find(v => v.id === id);
     if (head && src) head.textContent = `${src.client} ← ${src.visitor_name || src.visitor}`;
     const d = /** @type {HTMLInputElement|null} */ ($('vis-result-date'));
-    if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
+    if (d && !d.value) d.value = todayKey();
     panel.classList.remove('is-hidden');
     panel.scrollIntoView?.({ block: 'nearest' });
 }
@@ -106,27 +108,31 @@ function buildAllText() {
     return '면회·방문 기록\n\n' + items.map(buildVisitText).filter(Boolean).join('\n\n────────\n\n');
 }
 
-function renderPreview(t) {
+function renderPreview() {
     const out = $('vis-preview');
-    if (out) out.innerHTML = docHeadHtml('면회·방문 기록') + `<pre class="care-log-text">${esc(t)}</pre>`;
+    if (out) out.innerHTML = mdToHtml(careVisitDocMd());
 }
 
-export function careVisitExport() {
+/** 방문 기록 문서 미리보기 — 저장 기록 전체를 문서로 렌더 (내보내기 메뉴 자동 생성기, 복사·인쇄·PDF 공통 원본) */
+export function careVisitPreview() {
     const t = buildAllText();
     if (!t) { showToast('내보낼 방문 기록이 없습니다.', 'error'); return; }
-    proFeatureNotice('care_visit_share', '방문기록 복사·내보내기');
-    renderPreview(t);
-    navigator.clipboard?.writeText(t).then(
-        () => showToast('기록을 복사했습니다.'),
-        () => showToast('복사에 실패했습니다.', 'error'));
+    renderPreview();
 }
 
 export function careVisitPrint() {
     const t = buildAllText();
     if (!t) { showToast('인쇄할 방문 기록이 없습니다.', 'error'); return; }
-    renderPreview(t);
+    renderPreview();
     proFeatureNotice('care_visit_share', '방문기록 인쇄·PDF');
     window.print();
+}
+
+/** 방문 기록 MD 초안 — 저장 기록 전체를 표 구조로 (docx·xlsx 파생 원본) */
+export function careVisitDocMd() {
+    const items = listVisits();
+    if (!items.length) return '';
+    return docMdHead('면회·방문 기록') + '\n' + csvToMdTable(visitsToCsv(items)) + docMdSign([['작성자', 'author']]);
 }
 
 export function careVisitCsvExport() {
@@ -208,7 +214,7 @@ export function initCareVisitView() {
     markFunnel('tool:care-visit');
     attachClientPicker(/** @type {HTMLInputElement|null} */ ($('vis-client')));
     const d = /** @type {HTMLInputElement|null} */ ($('vis-date'));
-    if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
+    if (d && !d.value) d.value = todayKey();
     const s = $('vis-relation');
     if (s && !s.children.length)
         s.innerHTML = RELATIONS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');

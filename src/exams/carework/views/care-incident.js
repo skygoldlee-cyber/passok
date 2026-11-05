@@ -7,7 +7,9 @@ import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { myMembership, submitIncident, listIncidents as listFacilityIncidents, docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
+import { docMdHead, docMdSign } from '../doc-md.js';
 import { showToast } from '../../../ui-utils.js';
+import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -44,21 +46,17 @@ export function careIncidentGenerate() {
     out.innerHTML = docHeadHtml('사고·낙상 보고서') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['보고자', 'author'], ['확인(시설장)', 'confirmer']]);
 }
 
+/** 보고서 MD 초안 — 헤더 + 폼 생성문 (docx 파생 원본) */
+export function careIncidentDocMd() {
+    const t = buildIncidentText(readForm());
+    return t ? docMdHead('사고·낙상 보고서') + '\n' + t + docMdSign([['보고자', 'author'], ['확인(시설장)', 'confirmer']]) : '';
+}
+
 export function careIncidentSave() {
     careIncidentGenerate();
     if (!_lastText) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
     const r = saveIncident({ ...readForm(), text: _lastText });
     if (r.ok) { showToast('보고서를 기록했습니다.'); renderSaved(); }
-}
-
-export function careIncidentCopy() {
-    careIncidentGenerate();
-    const pre = document.querySelector('#inc-preview pre');
-    if (!pre) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
-    proFeatureNotice('care_incident_share', '보고서 복사·내보내기');
-    navigator.clipboard?.writeText(pre.textContent || '').then(
-        () => showToast('보고서를 복사했습니다.'),
-        () => showToast('복사에 실패했습니다.', 'error'));
 }
 
 export function careIncidentPrint() {
@@ -136,7 +134,7 @@ export function initCareIncidentView() {
     markFunnel('tool:care-incident');
     attachClientPicker(/** @type {HTMLInputElement|null} */ ($('inc-client')));
     const d = /** @type {HTMLInputElement|null} */ ($('inc-date'));
-    if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
+    if (d && !d.value) d.value = todayKey();
     const t = $('inc-type');
     if (t && !t.children.length)
         t.innerHTML = INCIDENT_TYPES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');

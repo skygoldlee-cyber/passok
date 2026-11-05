@@ -1,5 +1,27 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 feat(carework): 서명 이미지 업로드 — 홈 등록 → 출력물 서명란 기입
+
+- 홈 출력물 서명 카드에 이미지 파일 선택 추가 — data URI로 CARE_DOC_SIGN 저장
+- docSignHtml의 author 슬롯에 등록 이미지 기입 (성명 텍스트 대체) — 미리보기·인쇄·PDF 경로
+- setDocSignImage 보조 저장소 + 미리보기·삭제 버튼, .care-doc-signimg 스타일
+
+## 2026-11-05 feat(carework): 출력 문서 서명 자동기입 — MD 경로까지 서명란 확장
+
+- docMdSign 추가 (doc-md.js) — docSignHtml과 동일 정책(설정 성명 기입·미설정 공란 유지)
+- 7개 *DocMd에 서명란 연결 — mdToHtml 미리보기·Word·공유 텍스트에도 서명 노출
+- 작성자-서명.svg 예외 명단 등록 (서명 이미지 기입용 자산 보존)
+
+## 2026-11-05 fix(carework): 점검표 복사 단일화 + 기관 버튼 라벨 통일·mdgen 배선 정정
+
+- 📋 점검표 복사 버튼 제거 — 메뉴 본문 복사(MD 표·감사·PRO)로 단일화, careAuditCopy·buildSummary 삭제
+- 기관 제출 라벨 통일 → 🏥 기관에 공유 (사고·방문·인수인계)
+- 평가·사고·방문 뷰 *DocMd의 data-pro-feature 오첨부·|undefined 잔재 정정
+
+## 2026-11-05 fix(carework): 텍스트 공유 페이로드도 MD 초안 우선
+
+- share({text}) 폴백·클립보드 복사가 DOM 평문 대신 MD 표준 초안을 사용 (DA-24 — 표 구조 보존)
+
 ## 2026-11-05 fix(carework): 서명란 하단 여백 증가 (16px → 36px)
 
 ## 2026-11-05 fix(carework): 문서 서명란 하단 여백 — .care-doc-sign margin-bottom

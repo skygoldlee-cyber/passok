@@ -4,6 +4,7 @@
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { localDateTime } from '../../core/utils.js';
+import { toCsv } from '../../content/csv-utils.js';
 import { listClients } from './care-client-store.js';
 import { backfillClientIds } from './care-client-resolve.js';
 
@@ -27,4 +28,10 @@ export function saveHandover(text, meta = {}) {
 }
 export function deleteHandover(id) {
     setJSON(KEY, listHandovers().filter(x => x.id !== id));
+}
+/** 인수인계 기록 → CSV (Excel 내보내기 공용 — 본문 개행·쉼표는 toCsv 인용) */
+export function handoversToCsv(items) {
+    return toCsv(['저장일시', '근무일자', '인계자', '인수자', '본문'], items, h => [
+        h.savedAt || '', h.date || '', h.from || '', h.to || '', h.text || '',
+    ]);
 }

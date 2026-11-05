@@ -7,11 +7,11 @@ import { listClients } from '../care-client-store.js';
 import { clientTrends } from '../care-trend.js';
 import { markFunnel, funnelStats } from '../care-funnel.js';
 import { escapeHTML as esc } from '../../../core/sanitize.js';
-import { refreshOrgName, getDocSign, setDocSign } from '../facility.js';
+import { refreshOrgName, getDocSign, setDocSign, setDocSignImage } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
+import { todayKey } from '../../../core/utils.js';
 
 const $ = (id) => document.getElementById(id);
-const todayKey = () => new Date().toISOString().slice(0, 10);
 const dayOf = (r) => r.date || r.shift_date || '';
 
 export function initCareHomeView() {
@@ -43,6 +43,28 @@ export function initCareHomeView() {
     if (aEl) aEl.value = sign.author;
     if (cEl) cEl.value = sign.confirmer;
     if (rEl) rEl.value = sign.receiver;
+    // 서명 이미지 — 선택 즉시 data URI로 저장, 미리보기·삭제 버튼 갱신
+    const imgEl = /** @type {HTMLInputElement|null} */ ($('home-sign-image'));
+    const pvEl = $('home-sign-image-preview');
+    const renderImg = () => {
+        if (!pvEl) return;
+        const cur = getDocSign().signImage;
+        pvEl.innerHTML = cur
+            ? `<img class="care-sign-preview" src="${cur}" alt="등록된 서명"> <button type="button" class="secondary" id="home-sign-image-clear">이미지 삭제</button>`
+            : '<span class="care-log-hint">서명 이미지 미등록 — 등록하면 문서 서명란에 이미지가 기입됩니다.</span>';
+        pvEl.querySelector('#home-sign-image-clear')?.addEventListener('click', () => { setDocSignImage(''); renderImg(); showToast('서명 이미지를 삭제했습니다.'); });
+    };
+    if (imgEl && !imgEl.dataset.bound) {
+        imgEl.dataset.bound = '1';
+        imgEl.addEventListener('change', () => {
+            const f = imgEl.files?.[0];
+            if (!f) return;
+            const reader = new FileReader();
+            reader.onload = () => { setDocSignImage(String(reader.result || '')); renderImg(); showToast('서명 이미지를 저장했습니다 — 서명란에 이미지가 기입됩니다.'); };
+            reader.readAsDataURL(f);
+        });
+    }
+    renderImg();
 }
 
 /** 출력물 서명 저장 — 작성자·확인자·인수자 성명이 모든 문서 서명란에 기입된다 */
