@@ -25,3 +25,14 @@ test('parseStorySlots: 챕터 헤딩을 추적해 씬에 소속 챕터 부여', 
     const s = parseStorySlots(md);
     assert.deepEqual(s.map(x => x.chapter), [10, 12]);
 });
+
+test('parseStorySlots: 장식 마커·화자명 줄 정제', async () => {
+    const { parseStorySlots } = await import('../../../src/reader/webtoon-render.js');
+    const md = '<!-- story:start -->\n📖 ┈┈┈┈ **이야기** ┈┈┈┈\n\n### 프롤로그\n\n박은정 선임\n"미영 씨, 처음이세요?"\n\n┈┈ **본문** ┈┈ 📘\n<!-- story:end -->';
+    const s = parseStorySlots(md);
+    assert.equal(s.length, 1);
+    assert.deepEqual(s[0].beats.map(b => b.t), ['title', 'speaker', 'line']);
+    assert.equal(s[0].beats[1].who, 'mentor');
+    assert.equal(s[0].beats[2].text, '미영 씨, 처음이세요?');
+    assert.equal(s[0].title, '프롤로그');
+});

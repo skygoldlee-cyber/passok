@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 fix(carework): 웹툰 파서 보강 + 아바타 경로
+
+- parseStorySlots: ### 헤딩=title, 장식 줄(📖┈·본문 라벨) 스킵, 화자명 단독 줄=speaker 비트
+- _clean: **·>·- 접두 정제 — 형식 문자 미표기
+- _webtoonChars: img에 contentPath prefix — 리더 아바타 404 수정
+
+
 ## 2026-11-05 chore: domain-map — webtoon-render.js 등록
 
 

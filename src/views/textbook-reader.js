@@ -472,7 +472,11 @@ async function _webtoonChars() {
     if (_wtChars !== undefined) return _wtChars || undefined;
     try {
         const r = await fetch(contentPath('assets/webtoon.json'));
-        _wtChars = r.ok ? await r.json() : null;
+        if (r.ok) {
+            const data = await r.json();
+            for (const c of Object.values(data)) if (c && c.img) c.img = contentPath(c.img);
+            _wtChars = data;
+        } else _wtChars = null;
     } catch { _wtChars = null; }
     return _wtChars || undefined;
 }

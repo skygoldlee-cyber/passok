@@ -917,3 +917,4 @@ a.glossary-ref-link i {
 .wb-name { font-size: .72rem; color: var(--color-text-dim); margin-bottom: 3px; }
 .wb-scene { align-self: center; font-size: .82rem; color: var(--color-text-dim); background: var(--bg-elevated); border-radius: 8px; padding: 5px 12px; max-width: 92%; text-align: center; }
 .reader-empty { color: var(--color-text-dim); text-align: center; padding: 40px 0; }
+.wb-scene-title { font-weight: 600; color: var(--color-text-main); }
