@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261106-9285aa5",
+    "date": "2026-11-06",
+    "notes": [
+      "[테스트·ref-pipeline] 스테일 테스트 정리 — 4건으로 축소",
+      "[수정·ref-pipeline] QFont 경고 — qInstallMessageHandler C 레벨 차단 + 테스트",
+      "[수정·ref-pipeline] svg 추출 — show_pdf_page 클립 렌더 + 테스트",
+      "[기능·ref-pipeline] 입력 목록 드래그앤드롭 + placeholder 오류 수정",
+      "[기능·ref-pipeline] 이미지 추출 포맷 선택 — orig/webp/svg (정상 버전 기준 재적용)",
+      "[되돌림·ref-pipeline] webp/svg 포맷 기능 롤백 — 이전 정상 버전 복원",
+      "[수정·ref-pipeline] Qt 메시지 핸들러 제거 → QT_LOGGING_RULES + 테스트",
+      "[수정·ref-pipeline] Qt 핸들러 stderr None 가드 + 가드 테스트",
+      "[수정·ref-pipeline] Qt 폰트 경고 억제 + 페이지 지연로딩·여백 수집 예외 복원",
+      "[수정·ref-pipeline] 페이지 단위 예외 복원력 + 복원 테스트"
+    ]
+  },
+  {
     "version": "v20261105-71ec70b",
     "date": "2026-11-05",
     "notes": [
@@ -202,15 +218,6 @@
       "[수정·carework] 서명란 하단 여백 증가 (16px → 36px)",
       "[정리·release] v20261105-f2b1c39 스탬프 확정 [no-docs]",
       "[정리·release] v20261104-e8b05d8 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261105-f2b1c39",
-    "date": "2026-11-05",
-    "notes": [
-      "[수정·carework] 문서 서명란 하단 여백 추가 — .care-doc-sign margin-bottom",
-      "[수정·carework] 인수인계 중복 공유 버튼 제거 — 내보내기 메뉴로 단일화 (CO-13)",
-      "[정리·release] v20261105-79f99a6 스탬프 확정 [no-docs]"
     ]
   }
 ]
