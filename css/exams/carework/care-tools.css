@@ -260,6 +260,32 @@
 .obs-chip input:checked + span { background: var(--color-primary, #4a6fa5); border-color: var(--color-primary, #4a6fa5); color: #fff; font-weight: 600; }
 .obs-chip input:focus-visible + span { outline: 2px solid var(--color-primary, #4a6fa5); outline-offset: 2px; }
 
+/* ── 호버·눌림 피드백 — carework 뷰 모든 클릭 요소 ── */
+[id^="care-"][id$="-view"] button,
+[id^="care-"][id$="-view"] .btn,
+[id^="care-"][id$="-view"] a.btn {
+    transition: background-color .15s ease, border-color .15s ease, transform .1s ease, box-shadow .15s ease;
+}
+[id^="care-"][id$="-view"] button:hover,
+[id^="care-"][id$="-view"] .btn:hover,
+[id^="care-"][id$="-view"] a.btn:hover {
+    background-color: var(--bg-card-hover, var(--bg-hover, var(--bg-elevated)));
+    border-color: var(--border-color-active, var(--border-color));
+}
+[id^="care-"][id$="-view"] button:active,
+[id^="care-"][id$="-view"] .btn:active,
+[id^="care-"][id$="-view"] a.btn:active {
+    transform: translateY(1px) scale(.98);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, .18);
+}
+/* 칩·카드형 클릭 요소 — 라벨 스팬·목록 카드에도 동일 피드백 */
+.obs-chip span { transition: background-color .15s ease, transform .1s ease; }
+.obs-chip span:hover { background: var(--bg-card-hover, var(--bg-hover, var(--bg-elevated))); }
+.obs-chip span:active { transform: translateY(1px) scale(.97); }
+.care-card-item:active, .care-form-card:active { transform: translateY(1px); }
+[id^="care-"][id$="-view"] button:focus-visible,
+[id^="care-"][id$="-view"] .btn:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+
 .care-home-card { border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin: 12px 0; }
 .care-home-date { font-size: 1.1rem; font-weight: 700; }
 .care-home-summary { margin-top: 6px; font-size: 0.95rem; }
