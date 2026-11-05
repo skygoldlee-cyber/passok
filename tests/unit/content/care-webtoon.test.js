@@ -1,3 +1,4 @@
+// @spec none — 웹툰 버블 뷰 파서 테스트
 // tests/unit/content/care-webtoon.test.js — 웹툰 버블 뷰 파서 단위 테스트
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
