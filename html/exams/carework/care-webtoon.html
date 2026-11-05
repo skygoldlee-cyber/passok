@@ -1,0 +1,21 @@
+<!-- carework 웹툰 버블 뷰 파셜 — 이야기 슬롯 → 말풍선 컷 -->
+<section id="care-webtoon-view" class="view-section is-hidden" data-feature="careWebtoon">
+    <div class="view-header">
+        <h2 data-uitext="careWebtoon:title">이야기 웹툰</h2>
+        <p class="view-subtitle" data-uitext="careWebtoon:subtitle">서사를 말풍선 컷으로 읽습니다 — ◀ ▶ 키로 넘기기</p>
+    </div>
+    <div class="care-calc-form webtoon-controls">
+        <label>과목
+            <select id="webtoon-subject"></select>
+        </label>
+        <label>씬
+            <select id="webtoon-slot"></select>
+        </label>
+    </div>
+    <div id="webtoon-stage" class="webtoon-stage" aria-live="polite"></div>
+    <div class="care-calc-actions webtoon-nav">
+        <button data-click="webtoonPrev" class="secondary">◀ 이전</button>
+        <span id="webtoon-pager" class="webtoon-pager"></span>
+        <button data-click="webtoonNext" class="secondary">다음 ▶</button>
+    </div>
+</section>

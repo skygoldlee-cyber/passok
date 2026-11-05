@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 feat(carework): 웹툰 버블 뷰 (care-webtoon)
+
+- 이야기형 story:start 블록 → 씬 단위 말풍선 패널 (대사=버블·지문=장면 패널)
+- 화자 추정: 선임님=미영(우) / 미영=선임(좌) / 나머지 교대 — 인물 아바타 SVG
+- 신규 뷰 등록: practice-registry careWebtoon + nav-item + features
+
+
 ## 2026-11-05 feat(carework): 시나리오 문항 확충 + 인물 아바타
 
 - bank_tags.json: 문제은행 43문 → 개념 태깅 (복습·재도전 풀 1차 충원)

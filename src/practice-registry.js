@@ -365,6 +365,40 @@ const careLog = {
         }
     },
 };
+const careWebtoon = {
+    viewId: 'care-webtoon-view',
+    slug: 'care-webtoon',
+    priority: 1,
+    uiTextKey: 'careWebtoon',
+    title: '이야기 웹툰',
+    subtitle: '서사를 말풍선 컷으로',
+    loadingText: '웹툰을 불러오는 중입니다...',
+    loadErrorText: '웹툰을 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-webtoon.html',
+    styles: 'care-tools.css',
+    loaders: { main: _domainImport('views/care-webtoon.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['webtoonPrev', 'webtoonNext']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careWebtoon.loadingText);
+        try {
+            await ensureViewMarkup(careWebtoon);
+            if (stale()) return;
+            const m = await careWebtoon.loaders.main();
+            if (stale()) return;
+            m.initCareWebtoonView();
+        } catch (e) {
+            if (!stale()) showToast(careWebtoon.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
 const careAudit = {
     viewId: 'care-audit-view',
     slug: 'care-audit',
@@ -699,7 +733,7 @@ const careFacilityAdmin = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careHome, careCalc, careCard, careLog, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careFinder, careForms, careFacilityJoin, careFacilityAdmin };
+const PRACTICE_FEATURES = { formula, careHome, careCalc, careCard, careLog, careWebtoon, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careFinder, careForms, careFacilityJoin, careFacilityAdmin };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {

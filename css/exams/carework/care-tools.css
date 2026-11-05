@@ -288,6 +288,23 @@
 
 .care-doc-preview { margin-bottom: 2.5em; }
 
+/* ── 웹툰 버블 뷰 (care-webtoon) ── */
+.webtoon-controls { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 4px; }
+.webtoon-controls label { flex: 1 1 160px; min-width: 0; display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--color-text-dim); }
+.webtoon-controls select { min-height: 40px; border: 1px solid var(--border); border-radius: 8px; padding: 0 10px; background: var(--color-surface); color: var(--color-text-main); }
+.webtoon-stage { border: 1px solid var(--border); border-radius: 12px; background: var(--bg-muted); padding: 14px 10px; min-height: 200px; display: flex; flex-direction: column; gap: 10px; }
+.wb-row { display: flex; align-items: flex-end; gap: 8px; }
+.wb-row.wb-right { flex-direction: row-reverse; }
+.wb-avatar { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border); background: var(--color-surface); flex-shrink: 0; }
+.wb-bubble { max-width: min(78%, 460px); border-radius: 14px; padding: 9px 12px; font-size: .95rem; line-height: 1.55; position: relative; border: 1px solid var(--border); }
+.wb-left .wb-bubble { background: var(--color-surface); border-bottom-left-radius: 4px; }
+.wb-right .wb-bubble { background: var(--primary-tint-15, rgba(74,108,168,.15)); border-color: var(--primary-tint-30, rgba(74,108,168,.3)); border-bottom-right-radius: 4px; }
+.wb-bubble-elder { background: var(--success-tint-10, rgba(56,142,60,.1)); border-color: var(--success-tint-30, rgba(56,142,60,.3)); }
+.wb-name { font-size: .72rem; color: var(--color-text-dim); margin-bottom: 3px; }
+.wb-scene { align-self: center; font-size: .82rem; color: var(--color-text-dim); background: var(--bg-elevated); border-radius: 8px; padding: 5px 12px; max-width: 92%; text-align: center; }
+.webtoon-nav { justify-content: center; align-items: center; gap: 14px; margin-top: 10px; }
+.webtoon-pager { font-size: .85rem; color: var(--color-text-dim); }
+
 .care-home-card { border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin: 12px 0; }
 .care-home-date { font-size: 1.1rem; font-weight: 700; }
 .care-home-summary { margin-top: 6px; font-size: 0.95rem; }

@@ -166,5 +166,15 @@
     }
   },
   "written": [],
-  "pastExams": []
+  "pastExams": [],
+  "features": {
+    "careWebtoon": {
+      "title": "이야기 웹툰",
+      "subtitle": "서사를 말풍선 컷으로 읽기",
+      "nav": "웹툰",
+      "loading": "웹툰을 불러오는 중입니다...",
+      "error": "웹툰을 불러오지 못했습니다.",
+      "dataError": "데이터를 불러오지 못했습니다."
+    }
+  }
 }
