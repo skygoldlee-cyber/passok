@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 docs(carework): 4단계 학습 흐름 설계 — 리뷰 반영 4건
+
+- 저장소 localStorage-first + FSRS·BKT 매핑, 웹툰 없는 파일럿 arm, 문제은행 태깅 충원, 웹툰 자산 미존재 선행 명시, 구조 앵커·모의고사 60% 규칙
+
+
 ## 2026-11-05 fix(carework): 홈 서명 폼 우측 밀림 — file input 고유폭 축소
 
 - input[type=file]이 그리드 트랙을 강제 확장해 폼 전체가 우측 넘침 (360px 실측 재현) — min-width:0 + width:100% 적용
