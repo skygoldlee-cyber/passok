@@ -7,7 +7,7 @@ import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { myMembership, submitIncident, listIncidents as listFacilityIncidents, docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { docMdHead } from '../doc-md.js';
+import { docMdHead, docMdSign } from '../doc-md.js';
 import { showToast } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
@@ -49,7 +49,7 @@ export function careIncidentGenerate() {
 /** 보고서 MD 초안 — 헤더 + 폼 생성문 (docx 파생 원본) */
 export function careIncidentDocMd() {
     const t = buildIncidentText(readForm());
-    return t ? docMdHead('사고·낙상 보고서') + '\n' + t : '';
+    return t ? docMdHead('사고·낙상 보고서') + '\n' + t + docMdSign([['보고자', 'author'], ['확인(시설장)', 'confirmer']]) : '';
 }
 
 export function careIncidentSave() {

@@ -9,7 +9,7 @@ import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 import { shareAudit } from '../care-share.js';
-import { docMdHead } from '../doc-md.js';
+import { docMdHead, docMdSign } from '../doc-md.js';
 import { todayKey } from '../../../core/utils.js';
 
 const $ = (id) => document.getElementById(id);
@@ -50,7 +50,7 @@ export function careLogGenerate() {
 /** 일지 MD 초안 — 헤더 + 폼 생성문 (docx 파생 원본) */
 export function careLogDocMd() {
     const t = buildCareLog(readForm());
-    return t ? docMdHead('요양보호 서비스 기록') + '\n' + t : '';
+    return t ? docMdHead('요양보호 서비스 기록') + '\n' + t + docMdSign([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]) : '';
 }
 
 /** CO-07 공단 급여제공기록지 양식 복사 — ERP·공단 앱에 붙여넣기 (이중 입력 해소) */

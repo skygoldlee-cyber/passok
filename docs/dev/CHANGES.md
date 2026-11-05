@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-05 feat(carework): 출력 문서 서명 자동기입 — MD 경로까지 서명란 확장
+
+- docMdSign 추가 (doc-md.js) — docSignHtml과 동일 정책(설정 성명 기입·미설정 공란 유지)
+- 7개 *DocMd에 서명란 연결 — mdToHtml 미리보기·Word·공유 텍스트에도 서명 노출
+- 작성자-서명.svg 예외 명단 등록 (서명 이미지 기입용 자산 보존)
+
 ## 2026-11-05 fix(carework): 점검표 복사 단일화 + 기관 버튼 라벨 통일·mdgen 배선 정정
 
 - 📋 점검표 복사 버튼 제거 — 메뉴 본문 복사(MD 표·감사·PRO)로 단일화, careAuditCopy·buildSummary 삭제

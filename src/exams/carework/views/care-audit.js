@@ -9,7 +9,7 @@ import { listCareLogs } from '../care-log-store.js';
 import { listVisits } from '../care-visit-store.js';
 import { listHandovers } from '../handover-store.js';
 import { listIncidents } from '../incident-store.js';
-import { docMdHead, mdTable, mdToHtml } from '../doc-md.js';
+import { docMdHead, mdTable, mdToHtml, docMdSign } from '../doc-md.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -45,7 +45,7 @@ export function careAuditDocMd() {
     if (!_sections.length) return '';
     const c = loadChecks();
     const rows = _sections.flatMap(s => s.items.map(i => [s.title, c[i.id] ? '✔' : '□', i.text, i.ref]));
-    return docMdHead('기관 평가 점검표') + '\n' + mdTable(['영역', '점검', '항목', '근거'], rows);
+    return docMdHead('기관 평가 점검표') + '\n' + mdTable(['영역', '점검', '항목', '근거'], rows) + docMdSign([['점검자', 'author'], ['기관장(확인)', 'confirmer']]);
 }
 
 export function careAuditPrint() {

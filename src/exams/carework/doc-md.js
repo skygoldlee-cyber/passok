@@ -1,6 +1,6 @@
 // src/exams/carework/doc-md.js — 내보내기 문서 마크다운 초안 공용 빌더 (CO-13)
 // @spec CO-13,DA-24 — 생성 문서는 MD를 표준 초안으로 삼아 docx·xlsx·html을 파생한다
-import { getOrgName } from './facility.js';
+import { getOrgName, getDocSign } from './facility.js';
 import { todayKey } from '../../core/utils.js';
 import { parseCsv } from '../../content/csv-utils.js';
 
@@ -15,6 +15,14 @@ export const mdTable = (headers, rows) =>
     ['| ' + headers.join(' | ') + ' |',
         '|' + headers.map(() => '---').join('|') + '|',
         ...rows.map(r => '| ' + r.map(c => String(c ?? '')).join(' | ') + ' |')].join('\n');
+
+/** 문서 서명란 — items: [[라벨, 'author'|'confirmer'|'receiver'|'']] — docSignHtml의 MD 대응.
+ *  홈 설정 성명은 기입되고, 미설정·빈키(날짜) 슬롯은 수기 서명용 공란 유지 */
+export const docMdSign = items => {
+    const s = getDocSign();
+    const nm = k => (k === 'author' ? s.author : k === 'confirmer' ? s.confirmer : k === 'receiver' ? s.receiver : '');
+    return '\n\n---\n\n' + items.map(([label, k]) => `${label}: ${nm(k) || '＿＿＿＿＿＿＿＿'}`).join('  ·  ');
+};
 
 /** 기존 CSV 직렬화 재사용 → MD 표 (BOM·인용 처리는 parseCsv 위임) */
 export const csvToMdTable = csv => {

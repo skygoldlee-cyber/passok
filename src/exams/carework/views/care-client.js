@@ -6,7 +6,7 @@ import { clientsToCsv, ADMIT_ITEMS } from '../care-client-csv.js';
 import { csvToClientsAny } from '../care-csv-presets.js';
 import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { docMdHead, csvToMdTable, mdToHtml } from '../doc-md.js';
+import { docMdHead, csvToMdTable, mdToHtml, docMdSign } from '../doc-md.js';
 import { docHeadHtml, getDocSign, refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 import { clientTimeline, timelineSummary } from '../care-timeline.js';
@@ -106,7 +106,7 @@ function renderPreview() {
 export function careClientDocMd() {
     const items = listClients();
     if (!items.length) return '';
-    return docMdHead('수급자 명부') + '\n' + csvToMdTable(clientsToCsv(items));
+    return docMdHead('수급자 명부') + '\n' + csvToMdTable(clientsToCsv(items)) + docMdSign([['작성자', 'author']]);
 }
 
 /** 명부 문서 미리보기 — 저장 명부 전체를 문서로 렌더 (내보내기 메뉴 자동 생성기, 복사·인쇄·PDF 공통 원본) */

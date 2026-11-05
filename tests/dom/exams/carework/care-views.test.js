@@ -238,6 +238,16 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         setDocSign('', '', ''); // 정리 — 다른 테스트의 빈 서명란 검증에 영향 없도록
     });
 
+    it('docMdSign — 홈 설정 서명이 문서 초안에 자동 기입된다', async () => {
+        const { setDocSign } = await import('../../../../src/exams/carework/facility.js');
+        const { docMdSign } = await import('../../../../src/exams/carework/doc-md.js');
+        setDocSign('김보호', '박기관');
+        const md = docMdSign([['점검자', 'author'], ['기관장(확인)', 'confirmer'], ['점검일', '']]);
+        expect(md).toContain('점검자: 김보호'); // 서명란이 MD 초안에 포함 — 미리보기·docx·복사 공통
+        expect(md).toContain('기관장(확인): 박기관');
+        expect(md).toMatch(/점검일: ＿+/); // 미설정 슬롯은 수기 서명용 공란
+    });
+
     it('careAudit — 점검표 인쇄 핸들러 실행', async () => {
         loadPartial('care-audit.html');
         await initCareAuditView();
