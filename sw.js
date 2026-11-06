@@ -431,7 +431,7 @@ const MD_ASSETS = [
  *  build:data(build:index.js)와 sync_textbook_files.js 양쪽에서 갱신. */
 const EXAM_MEDIA_ASSETS = [
   // EXAM_MEDIA:BEGIN
-  './content/exams/carework/docs/carework_4step_flow.svg',
+  './content/exams/carework/docs/images/carework_4step_flow.svg',
   './content/exams/carework/docs/작성자-서명.svg',
   './content/exams/carework/교재/careprac/images/aed.webp',
   './content/exams/carework/교재/careprac/images/bath-chair.webp',
