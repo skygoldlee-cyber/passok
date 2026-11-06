@@ -22,7 +22,13 @@
         "편마비 대상의 측위는 건측이 아래로 가야 한다 — 환측을 아래로 하면 환측 지지가 불안정해진다."
       ],
       "source": "2과목 Ch10 §1 식사 자세",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s01",
+        "2": "s01",
+        "3": "s01",
+        "4": "s01"
+      }
     },
     {
       "id": "it-c10-tube-pre01",
@@ -68,7 +74,13 @@
         "복용 확인·관찰·기록까지가 요양보호사 역할이다."
       ],
       "source": "2과목 Ch10 §2 투약 돕기",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s16",
+        "1": "s16",
+        "3": "s16",
+        "4": "s16"
+      }
     },
     {
       "id": "it-c10-position-pre01",
@@ -114,7 +126,13 @@
         "규칙은 고정돼 있다 — 상황 판단형이 아닌 암기형 포인트다."
       ],
       "source": "2과목 Ch10 §4 옷 갈아입기",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s17",
+        "1": "s17",
+        "3": "s17",
+        "4": "s17"
+      }
     },
     {
       "id": "it-c10-move-sc01",
@@ -137,7 +155,13 @@
         "지팡이 보행은 지팡이→환측→건측, 계단은 올라갈 때 건측·내려갈 때 환측 먼저 — '항상 환측'은 함정이다."
       ],
       "source": "2과목 Ch10 §5 이동 원칙",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s03",
+        "2": "s03",
+        "3": "s03",
+        "4": "s03"
+      }
     },
     {
       "id": "it-c10-welfare-pre01",
@@ -183,7 +207,13 @@
         "약물은 대상자·가족·의료진의 판단이지 요양보호사 제안은 아니다."
       ],
       "source": "2과목 Ch12 §2 BPSD — 의심·망상",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s09",
+        "2": "s09",
+        "3": "s09",
+        "4": "s09"
+      }
     },
     {
       "id": "it-c12-wander-pre01",
@@ -229,7 +259,13 @@
         "경련 중 음식·수분은 흡인으로 직결된다."
       ],
       "source": "2과목 Ch14 §1 경련",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "it-c14-burn-pre01",
@@ -275,7 +311,13 @@
         "8cm는 갈비골절 위험이 있다."
       ],
       "source": "2과목 Ch14 §3 CPR",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s12",
+        "1": "s12",
+        "3": "s12",
+        "4": "s12"
+      }
     },
     {
       "id": "it-c14-choking-sc01",
@@ -298,7 +340,13 @@
         "맹검색은 이물을 더 밀어넣는다 — 보이는 것만 집는다."
       ],
       "source": "2과목 Ch14 §1 질식",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "it-c14-chain-pre01",
@@ -344,7 +392,13 @@
         "연속 제세동은 지시 없이 하지 않는다."
       ],
       "source": "2과목 Ch14 §3 AED",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s12",
+        "2": "s12",
+        "3": "s12",
+        "4": "s12"
+      }
     },
     {
       "id": "it-s1-elderdef-sc01",
@@ -366,7 +420,13 @@
         "28%는 특정 국가 수치일 뿐 기준이 아니다.",
         "30%는 기준으로 쓰이지 않는다."
       ],
-      "source": "1과목 교재 고령화 지표"
+      "source": "1과목 교재 고령화 지표",
+      "cutOnWrong": {
+        "0": "s01",
+        "1": "s01",
+        "3": "s01",
+        "4": "s01"
+      }
     },
     {
       "id": "it-s1-abuse-sc01",
@@ -388,7 +448,13 @@
         "개인정보를 이웃과 공유하면 비밀누설 금지 위반이다.",
         "신고는 신고 의무자의 법적 의무이며 동의가 필요하지 않다."
       ],
-      "source": "1과목 교재 노인학대 신고"
+      "source": "1과목 교재 노인학대 신고",
+      "cutOnWrong": {
+        "0": "s09",
+        "2": "s09",
+        "3": "s09",
+        "4": "s09"
+      }
     },
     {
       "id": "it-s1-dementia-sc01",
@@ -410,7 +476,13 @@
         "약물 조정은 요양보호사 역할 밖이다.",
         "전가·회피는 신뢰를 해치고 대응이 아니다."
       ],
-      "source": "1과목 교재 의심망상 대처"
+      "source": "1과목 교재 의심망상 대처",
+      "cutOnWrong": {
+        "0": "s14",
+        "1": "s14",
+        "3": "s14",
+        "4": "s14"
+      }
     },
     {
       "id": "it-c10-posture-sc02",
@@ -433,7 +505,13 @@
         "공복은 무관"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s01",
+        "2": "s01",
+        "3": "s01",
+        "4": "s01"
+      }
     },
     {
       "id": "it-c10-med-sc02",
@@ -456,7 +534,13 @@
         "비윤리"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s16",
+        "2": "s16",
+        "3": "s16",
+        "4": "s16"
+      }
     },
     {
       "id": "it-c10-move-sc02",
@@ -479,7 +563,13 @@
         "원칙 있음"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s03",
+        "2": "s03",
+        "3": "s03",
+        "4": "s03"
+      }
     },
     {
       "id": "it-c10-clothes-sc02",
@@ -502,7 +592,13 @@
         "비현실"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s17",
+        "2": "s17",
+        "3": "s17",
+        "4": "s17"
+      }
     },
     {
       "id": "it-c10-doubt-sc02",
@@ -525,7 +621,13 @@
         "흥분 유발"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s09",
+        "2": "s09",
+        "3": "s09",
+        "4": "s09"
+      }
     },
     {
       "id": "it-c14-choking-sc02",
@@ -548,7 +650,13 @@
         "방치"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "it-c14-seizure-sc02",
@@ -571,7 +679,13 @@
         "2차 손상"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "it-c14-cpr-sc02",
@@ -594,7 +708,13 @@
         "압박 필수"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s12",
+        "2": "s12",
+        "3": "s12",
+        "4": "s12"
+      }
     },
     {
       "id": "it-c14-aed-sc02",
@@ -617,7 +737,13 @@
         "충격 위험"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s12",
+        "2": "s12",
+        "3": "s12",
+        "4": "s12"
+      }
     },
     {
       "id": "it-c10-tube-sc01",
@@ -640,7 +766,13 @@
         "무의미"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s01",
+        "2": "s01",
+        "3": "s01",
+        "4": "s01"
+      }
     },
     {
       "id": "it-c10-tube-sc02",
@@ -663,7 +795,13 @@
         "과다"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s01",
+        "2": "s01",
+        "3": "s01",
+        "4": "s01"
+      }
     },
     {
       "id": "it-c10-excret-sc01",
@@ -686,7 +824,13 @@
         "기록 필수"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s02",
+        "2": "s02",
+        "3": "s02",
+        "4": "s02"
+      }
     },
     {
       "id": "it-c10-excret-sc02",
@@ -709,7 +853,13 @@
         "무관"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s02",
+        "2": "s02",
+        "3": "s02",
+        "4": "s02"
+      }
     },
     {
       "id": "it-c10-nail-sc01",
@@ -732,7 +882,13 @@
         "관리 필요"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s17",
+        "2": "s17",
+        "3": "s17",
+        "4": "s17"
+      }
     },
     {
       "id": "it-c10-nail-sc02",
@@ -755,7 +911,13 @@
         "불완전"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s17",
+        "2": "s17",
+        "3": "s17",
+        "4": "s17"
+      }
     },
     {
       "id": "it-c10-pos-sc01",
@@ -778,7 +940,13 @@
         "정기 필요"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s03",
+        "1": "s03",
+        "3": "s03",
+        "4": "s03"
+      }
     },
     {
       "id": "it-c10-pos-sc02",
@@ -801,7 +969,13 @@
         "무관"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s03",
+        "2": "s03",
+        "3": "s03",
+        "4": "s03"
+      }
     },
     {
       "id": "it-c10-welfare-sc01",
@@ -824,7 +998,13 @@
         "환급 아님"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s04",
+        "2": "s04",
+        "3": "s04",
+        "4": "s04"
+      }
     },
     {
       "id": "it-c10-welfare-sc02",
@@ -847,7 +1027,13 @@
         "아님"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s04",
+        "2": "s04",
+        "3": "s04",
+        "4": "s04"
+      }
     },
     {
       "id": "it-c12-daily-sc01",
@@ -870,7 +1056,13 @@
         "위험"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s08",
+        "2": "s08",
+        "3": "s08",
+        "4": "s08"
+      }
     },
     {
       "id": "it-c12-daily-sc02",
@@ -893,7 +1085,13 @@
         "포기 금지"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s08",
+        "2": "s08",
+        "3": "s08",
+        "4": "s08"
+      }
     },
     {
       "id": "it-c12-wander-sc01",
@@ -916,7 +1114,13 @@
         "흥분 유발"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s09",
+        "2": "s09",
+        "3": "s09",
+        "4": "s09"
+      }
     },
     {
       "id": "it-c12-wander-sc02",
@@ -939,7 +1143,13 @@
         "비인도적"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s09",
+        "2": "s09",
+        "3": "s09",
+        "4": "s09"
+      }
     },
     {
       "id": "it-c12-sundown-sc01",
@@ -962,7 +1172,13 @@
         "의료행위"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s09",
+        "2": "s09",
+        "3": "s09",
+        "4": "s09"
+      }
     },
     {
       "id": "it-c12-sundown-sc02",
@@ -985,7 +1201,13 @@
         "고립"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s09",
+        "2": "s09",
+        "3": "s09",
+        "4": "s09"
+      }
     },
     {
       "id": "it-c12-repeat-sc01",
@@ -1008,7 +1230,13 @@
         "고립"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s09",
+        "2": "s09",
+        "3": "s09",
+        "4": "s09"
+      }
     },
     {
       "id": "it-c12-repeat-sc02",
@@ -1031,7 +1259,13 @@
         "비인도적"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s09",
+        "2": "s09",
+        "3": "s09",
+        "4": "s09"
+      }
     },
     {
       "id": "it-c14-order-sc01",
@@ -1054,7 +1288,13 @@
         "마지막"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "it-c14-order-sc02",
@@ -1077,7 +1317,13 @@
         "후순위"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "it-c14-burn-sc01",
@@ -1100,7 +1346,13 @@
         "열 유지"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "it-c14-burn-sc02",
@@ -1123,7 +1375,13 @@
         "방치"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "it-c14-hands-sc01",
@@ -1146,7 +1404,13 @@
         "불충분"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s21",
+        "2": "s21",
+        "3": "s21",
+        "4": "s21"
+      }
     },
     {
       "id": "it-c14-hands-sc02",
@@ -1169,7 +1433,13 @@
         "손 위생 범위 아님"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s21",
+        "1": "s21",
+        "2": "s21",
+        "3": "s21"
+      }
     },
     {
       "id": "it-c14-infchain-sc01",
@@ -1192,7 +1462,13 @@
         "악화"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s21",
+        "2": "s21",
+        "3": "s21",
+        "4": "s21"
+      }
     },
     {
       "id": "it-c14-infchain-sc02",
@@ -1215,7 +1491,13 @@
         "노출"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s21",
+        "2": "s21",
+        "3": "s21",
+        "4": "s21"
+      }
     },
     {
       "id": "pre-c10-posture",
@@ -1606,7 +1888,13 @@
         "기준 있음"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s17",
+        "2": "s17",
+        "3": "s17",
+        "4": "s17"
+      }
     },
     {
       "id": "rv-c12-doubt",
@@ -1629,7 +1917,13 @@
         "적절"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s09",
+        "1": "s09",
+        "2": "s09",
+        "4": "s09"
+      }
     },
     {
       "id": "rv-c12-wander",
@@ -1652,7 +1946,13 @@
         "흥분"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s09",
+        "2": "s09",
+        "3": "s09",
+        "4": "s09"
+      }
     },
     {
       "id": "rv-c12-sundown",
@@ -1675,7 +1975,13 @@
         "자극"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s09",
+        "2": "s09",
+        "3": "s09",
+        "4": "s09"
+      }
     },
     {
       "id": "rv-c14-order",
@@ -1698,7 +2004,13 @@
         "후순위"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "rv-c14-hands",
@@ -1721,7 +2033,13 @@
         "불충분"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s21",
+        "2": "s21",
+        "3": "s21",
+        "4": "s21"
+      }
     },
     {
       "id": "rv-c14-cpr",
@@ -1744,7 +2062,13 @@
         "위치 오류"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s12",
+        "2": "s12",
+        "3": "s12",
+        "4": "s12"
+      }
     },
     {
       "id": "rv-c10-tube",
@@ -1767,7 +2091,13 @@
         "감염"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s01",
+        "2": "s01",
+        "3": "s01",
+        "4": "s01"
+      }
     },
     {
       "id": "rv-c14-burn",
@@ -1790,7 +2120,13 @@
         "악화"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "rv-c14-infchain",
@@ -1813,7 +2149,13 @@
         "오염"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s21",
+        "2": "s21",
+        "3": "s21",
+        "4": "s21"
+      }
     },
     {
       "id": "rv-c14-aed",
@@ -1836,7 +2178,13 @@
         "위험"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s12",
+        "2": "s12",
+        "3": "s12",
+        "4": "s12"
+      }
     },
     {
       "id": "rv-c14-choking-a",
@@ -1859,7 +2207,13 @@
         "방치"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "rv-c14-choking-b",
@@ -1882,7 +2236,13 @@
         "위험"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "rv-c14-seizure-a",
@@ -1905,7 +2265,13 @@
         "손상"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     },
     {
       "id": "rv-c14-seizure-b",
@@ -1928,7 +2294,13 @@
         "방치"
       ],
       "source": "신규 작성 2026-11-06",
-      "approved": true
+      "approved": true,
+      "cutOnWrong": {
+        "0": "s11",
+        "2": "s11",
+        "3": "s11",
+        "4": "s11"
+      }
     }
   ]
 }

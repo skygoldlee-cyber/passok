@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 feat(carework): 컷 자산 체계 구축 — cuts[] 선언·cutOnWrong 연결·가이드라인
+
+- concepts.cuts\[\] 30개념 선언(슬롯=컷 주소) + scenario·review 문항 62건에 cutOnWrong 보기별 매핑 — 오답 시 개념 슬롯 컷 표시 가능
+- 「웹툰 컷 가이드라인」(DOC-USR-26) 신설 — 컷 정의·3비트 구조·수치 금지 규칙·검수표·인물 규약 정본화
+
 ## 2026-11-06 feat(carework): 파일럿 문항 충원 완료 + 검증기 경로 수정
 
 - check_scenario_items.js 교재 경로 정정(요양보호관련→실기) + 신규 126문 answer를 ①~⑤ 스키마로 변환 — 검증 통과
