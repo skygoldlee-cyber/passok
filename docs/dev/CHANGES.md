@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 feat(carework): items/eval_pool.json 신설 — 평가 전용 풀 파일 분리 격리
+
+- 적응형 학습 엔진 설계 §6 규격 구현: eval(개념당 2·파일럿 42문 목표)+pretest(개념당 1·21문 목표) 전용 풀, 학습 뷰 미로드 격리
+- 스키마는 scenario_items와 동일 + required 충원 요구량 선언 + seed 2문(eval·pretest 각 1)
+
 ## 2026-11-06 docs(carework): 적응형 학습 엔진 설계 7차 갱신 — 4차 리뷰 반영
 
 - eval·pretest 격리를 items/eval_pool.json 파일 분리로 확정(학습 뷰 미로드, role 필터보다 구조적) + §12에 pretest 행·수량(21개념×1문=21문)
