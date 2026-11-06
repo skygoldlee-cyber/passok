@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 6e53dc9d1866df0e
+> 입력 해시: 297013594ece1f3a
 > 생성: 2026-11-06 · 원천: SPEC.md(682개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 682개 — 문서 연결 464 · 소스 연결 606 · 테스트 연결 646 · 보고서 연결 109
+**커버리지 요약**: 요구사항 682개 — 문서 연결 464 · 소스 연결 606 · 테스트 연결 648 · 보고서 연결 109
 
 ---
 
@@ -619,8 +619,8 @@
 | CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
 | CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
 | CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42 | src/content/docx-utils.js<br>src/content/pdf-utils.js<br>src/exams/carework/care-share.js<br>src/exams/carework/doc-md.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/docx-utils.test.js<br>…외 1개 | — | — |
-| CO-14 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | — | — | — | — | — | — |
-| CO-15 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | — | — | — | — | — | — |
+| CO-14 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
+| CO-15 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-16 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | — | — | — | — | — | — |
 
 ## 4.1 PWA & 오프라인
