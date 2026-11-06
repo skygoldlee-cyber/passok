@@ -75,3 +75,28 @@ test('getSubjectList: registry 없으면 빈 배열', () => {
     DataLoader.registry = null;
     assert.deepEqual(DataLoader.getSubjectList(), []);
 });
+
+// ==================== mergeUiText / getUiText ====================
+
+import { mergeUiText } from '../../../src/content/data-loader.js';
+
+test('mergeUiText: uiText 미선언 시험도 공통 표준 라벨이 나온다', () => {
+    const ui = mergeUiText(undefined);
+    assert.equal(ui.flashcard.nav, '카드');
+    assert.equal(ui.quiz.nav, '퀴즈');
+    assert.equal(ui.review.nav, '복습');
+    assert.equal(ui.exam.nav, '모의고사');
+    assert.equal(ui.calendar.title, '캘린더');
+});
+
+test('mergeUiText: 시험 선언이 공통값을 필드 단위로 덮어쓴다', () => {
+    const ui = mergeUiText({ flashcard: { nav: '단어카드' }, dictionary: { title: '성분사전' } });
+    assert.equal(ui.flashcard.nav, '단어카드');
+    assert.equal(ui.flashcard.title, '플래시카드'); // 미지정 필드는 공통값 유지
+    assert.equal(ui.dictionary.title, '성분사전');
+});
+
+test('mergeUiText: 공통에 없는 시험 전용 키는 그대로 통과', () => {
+    const ui = mergeUiText({ careLog: { title: '요양일지', nav: '요양일지' } });
+    assert.equal(ui.careLog.nav, '요양일지');
+});

@@ -17,6 +17,40 @@ import { getActiveExam, contentPath, dataPath } from '../core/exam-context.js';
 
 const IS_FILE = (typeof location !== 'undefined' && location.protocol === 'file:');
 
+/**
+ * 플랫폼 공통 UI 텍스트 기본값 — manifest.uiText > 공통 > 템플릿 정적 문구 순.
+ * 공통 뷰(대시보드·카드·퀴즈 등) 라벨은 여기 선언으로 전 시험이 정합되고,
+ * 시험 팩은 커스텀이 필요한 키만 manifest.uiText에 둔다 (미선언 시 표준 라벨).
+ * dictionary는 시험별 도메인 명칭이므로 공통은 중립 '사전'만 둔다.
+ */
+const COMMON_UITEXT = {
+    dashboard: { title: '학습 대시보드', nav: '대시보드' },
+    analysis: { title: '학습진단', nav: '학습진단', subtitle: '학습 기록을 바탕으로 약점을 분석하여 학습 우선순위를 진단합니다' },
+    flashcard: { title: '플래시카드', nav: '카드', subtitle: '과목별 핵심 개념을 카드로 뒤집으며 암기' },
+    quiz: { title: '퀴즈', nav: '퀴즈', subtitle: '빈칸 채우기형 퀴즈로 실전 완벽 대비' },
+    review: { title: '오답 및 중요 복습', nav: '복습', subtitle: '헷갈리거나 어려운 약점 카드 집중 복습' },
+    trainer: { title: '훈련소', subtitle: '수치 암기·판정·실전 연습 트레이닝 센터' },
+    exam: { title: '실전 모의고사', nav: '모의고사', subtitle: '문제은행으로 과목별 모의고사 및 학습안내서 열람' },
+    textbook: { title: '교재검색', subtitle: '교재 본문과 참조자료를 실시간 키워드로 검색' },
+    'textbook-reader': { title: '교재리더', subtitle: '과목을 선택하여 교재 본문을 읽기' },
+    dictionary: { title: '사전', subtitle: '지식DB 항목 검색' },
+    calendar: { title: '캘린더' },
+    manual: { title: '매뉴얼' },
+};
+
+/**
+ * manifest.uiText를 플랫폼 공통 기본값 위에 키·필드 단위로 병합 (순수 함수).
+ * @param {Object.<string, Object.<string, string>>|null|undefined} examUi
+ * @returns {Object.<string, Object.<string, string>>}
+ */
+export function mergeUiText(examUi) {
+    /** @type {Object.<string, Object.<string, string>>} */
+    const out = {};
+    for (const k of Object.keys(COMMON_UITEXT)) out[k] = { ...COMMON_UITEXT[k] };
+    for (const [k, v] of Object.entries(examUi || {})) out[k] = { ...(out[k] || {}), ...v };
+    return out;
+}
+
 
 export const DataLoader = {
     /** @type {import('../core/types.js').DataRegistry|null} */
@@ -92,6 +126,15 @@ export const DataLoader = {
     /** 활성 시험의 기능 플래그 */
     getFeatures() {
         return (this.exam && this.exam.features) || {};
+    },
+
+    /**
+     * uiText 해석 — manifest.uiText를 플랫폼 공통 기본값 위에 키·필드 단위로 병합.
+     * 공통 뷰 라벨은 미선언 시험에서도 표준 라벨이 나오고, 시험 선언이 우선한다.
+     * @returns {Object.<string, Object.<string, string>>}
+     */
+    getUiText() {
+        return mergeUiText(this.registry && this.registry.uiText);
     },
 
     /** 과목 번호 목록 (드릴/시뮬레이터의 subjectN 번호 = manifest order) */

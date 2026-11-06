@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 feat(shell): uiText 플랫폼 공통 기본값 — manifest.uiText > 공통 > 템플릿 순 해석
+
+- data-loader에 COMMON_UITEXT(공통 뷰 표준 라벨) + mergeUiText 순수 함수 + getUiText() 추가 — 공통 뷰 라벨은 시험 미선언 시에도 표준 세트(카드·퀴즈·복습·모의고사·캘린더 등)로 해석
+- app-shell data-uitext 해석·router getViewTitles가 병합 맵 사용 — carework·distmgr2·3 등 미선언 팩의 사이드바 장문 폴백(플래시카드·기출 퀴즈·오답/중요 복습·실전 모의고사)을 표준 라벨로 정합
+- 시험별 커스텀(broker·hairdresser 등)은 manifest.uiText 오버라이드로 그대로 유지 — 필드 단위 병합으로 부분 선언도 공통값 보완
+- 사이드바 학습 캘린더 버튼에 data-uitext="calendar" 부여 — 더보기 시트와 라벨 정합
+
 ## 2026-11-06 fix(reader): 웹툰 모드 좌측 목차 미표시 — 씬 목차·보조 UI 렌더 연동
 
 - `renderChapterContent` 웹툰 분기가 `renderChapterContentInternal`을 우회해 `showReaderAuxUi`·`renderToc`가 미호출 — 저장된 webtoonMode 복원 진입 시 좌측 목차 없이 웹툰만 표시되던 결함 수정

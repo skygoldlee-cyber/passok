@@ -6,6 +6,7 @@ import { showToast, hideGlobalLoading } from '../ui-utils.js';
 import { isAnyModalOpen, consumedModalPop } from './modal-back.js';
 import { getPracticeViewTitles, getPracticeHashSlugs } from '../practice-registry.js';
 import { getCurrentExamId, getExamAppName } from '../core/exam-context.js';
+import { mergeUiText } from '../content/data-loader.js';
 
 /**
  * 레지스트리 기반 뷰 타이틀 맵 생성
@@ -13,7 +14,7 @@ import { getCurrentExamId, getExamAppName } from '../core/exam-context.js';
  * @returns {Record<string, {title: string, subtitle: string}>}
  */
 export function getViewTitles(registry) {
-    const uiText = (registry && registry.uiText) || {};
+    const uiText = /** @type {any} */ (mergeUiText(registry && registry.uiText));
     // 명시 선택된 시험의 앱 브랜드명만 타이틀에 반영 — "Passmula 대시보드"
     // 미선택(기본 시험 폴백) 상태에서도 폴백 시험 브랜드가 뜨지 않도록 게이트
     const examName = getCurrentExamId() ? getExamAppName() : '';
