@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261106-096cc92",
+    "date": "2026-11-06",
+    "notes": [
+      "[기능·carework] 학습안내서 신규 — 시험 구조·4단계 경로 안내 + studyGuide 활성화",
+      "[정리·release] v20261106-f61b28a 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261106-f61b28a",
     "date": "2026-11-06",
     "notes": [
@@ -199,14 +207,6 @@
       "[기능·carework] careWebtoon feature 선언 — exams.json",
       "[기능·carework] 웹툰 버블 뷰 — 이야기 슬롯을 말풍선 컷으로 렌더",
       "[기능·carework] 시나리오 문항 확충 + 인물 아바타 SVG"
-    ]
-  },
-  {
-    "version": "v20261105-39f777e",
-    "date": "2026-11-05",
-    "notes": [
-      "[수정·carework] 점검표 미리보기 하단 2줄 여백 추가",
-      "[정리·release] v20261105-2ca2fc3 스탬프 확정 [no-docs]"
     ]
   }
 ]
