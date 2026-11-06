@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 chore(tools): record-webhook deno.d.ts 파일명 예외 등록
+
+- filename_baseline.json에 추가 — 기존 Edge Function들과 동일한 Deno 표준 파일명 (CI 파일명 규약 실패 복구)
+
 ## 2026-11-06 feat(carework): 실무 스토어 전면 기관 동기 + webhook 수출 어댑터 (CO-11/14/15/16, 코드 선구축)
 
 - 상태형 doc_type은 `(facility,author,local_id)` upsert로 최신 상태 공유 — roster 배정·audit 점검 스냅샷·client 명부 / 이벤트형 care_log는 기존 append-only insert 유지. 스키마에 상태형 한정 update 정책 추가 (이벤트형은 append-only 보존)
