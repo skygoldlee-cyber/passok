@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 fix(sw): docs/ 이미지 프리캐시 — getPrecacheMediaAssets 확장
+
+- EXAM_MEDIA_ASSETS 생성기가 교재/*.webp만 스캔 → docs/ 하위 이미지(.svg·.png 등)도 수집하도록 확장
+- carework 4step_flow.svg + cosmetic docs/images 누락분 5건 일괄 등록 — 모바일 학습안내서 도식 표시 복구
+
 ## 2026-11-06 docs(carework): 학습안내서에 적응형 4단계 엔진 설명 추가
 
 - 「개념 학습 — 적응형 4단계 흐름」섹션 신설 — 개념 단위 라우팅(정답 시 이야기·웹툰 건너뜀)·재도전 루프(연결 컷+보기별 해설)·2연속 오답 취약 표시·FSRS 자동 복습을 학습자용으로 설명

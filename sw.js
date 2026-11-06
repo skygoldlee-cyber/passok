@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03,LP-07
 
-const CACHE_VERSION = 'v20261107-bf8ee0c';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261107-8b42217';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passok) — 시험 무관 공유 캐시.
 // 구 접두사(passory-*·cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -416,7 +416,6 @@ const MD_ASSETS = [
   './content/exams/carework/docs/인물 설정표.md',
   './content/exams/carework/docs/적응형 학습 엔진 설계.md',
   './content/exams/carework/docs/학습안내서.md',
-  './content/exams/carework/docs/carework_4step_flow.svg',
   './content/exams/carework/교재/caretheory/1과목_요양보호론.md',
   './content/exams/carework/교재/caretheory/1과목_요양보호론_이야기형.md',
   './content/exams/carework/교재/careprac/2과목_요양보호실기.md',
@@ -432,6 +431,8 @@ const MD_ASSETS = [
  *  build:data(build:index.js)와 sync_textbook_files.js 양쪽에서 갱신. */
 const EXAM_MEDIA_ASSETS = [
   // EXAM_MEDIA:BEGIN
+  './content/exams/carework/docs/carework_4step_flow.svg',
+  './content/exams/carework/docs/작성자-서명.svg',
   './content/exams/carework/교재/careprac/images/aed.webp',
   './content/exams/carework/교재/careprac/images/bath-chair.webp',
   './content/exams/carework/교재/careprac/images/cane.webp',
@@ -460,6 +461,9 @@ const EXAM_MEDIA_ASSETS = [
   './content/exams/carework/교재/caretheory/images/dementia-brain.webp',
   './content/exams/carework/교재/caretheory/images/pressure-relief.webp',
   './content/exams/carework/교재/caretheory/images/stroke-hemiplegia.webp',
+  './content/exams/cosmetic/docs/images/망각곡선_간격반복_가로_각주.svg',
+  './content/exams/cosmetic/docs/images/업무처리흐름_맞춤형조제.svg',
+  './content/exams/cosmetic/docs/images/학습안내서_마인드맵.svg',
   './content/exams/cosmetic/교재/law/images/1과목_삽화.webp',
   './content/exams/cosmetic/교재/law/images/1과목_암기요약.webp',
   './content/exams/cosmetic/교재/law/images/CCTV 설치안내판 예시.webp',
