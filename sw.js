@@ -416,6 +416,7 @@ const MD_ASSETS = [
   './content/exams/carework/docs/인물 설정표.md',
   './content/exams/carework/docs/적응형 학습 엔진 설계.md',
   './content/exams/carework/docs/학습안내서.md',
+  './content/exams/carework/docs/carework_4step_flow.svg',
   './content/exams/carework/교재/caretheory/1과목_요양보호론.md',
   './content/exams/carework/교재/caretheory/1과목_요양보호론_이야기형.md',
   './content/exams/carework/교재/careprac/2과목_요양보호실기.md',
