@@ -129,6 +129,7 @@ const CI_STEPS = [
   npmStep('ci:mobilesafe', 'check:mobilesafe', '규약', '모바일 잘림 규약 (다이얼로그·버튼 행 줄바꿈)', { prio: 'p0' }),
   npmStep('ci:escape', 'check:escape', '규약', 'HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간)', { diffScoped: true, prio: 'p0' }),
   npmStep('ci:uistyle', 'check:uistyle', '규약', 'UI 스타일 규약 — 인라인 style·JS display 조작·인라인 핸들러·네이티브 다이얼로그 금지', { diffScoped: true, prio: 'p0' }),
+  nodeStep('ci:contrast', 'tools/check/check_contrast.js', '규약', '테마 토큰 WCAG 대비 — 텍스트용 시맨틱 색 ↔ 배경 (AA 4.5·의미 전달 3.0)'),
   npmStep('ci:zlayer', 'check:zlayer', '규약', 'z-index 계층 계약 — 앱 크롬 대역 보호·금지 대역 차단 (UX-SET-06)', { diffScoped: true, prio: 'p0' }),
   npmStep('ci:filenames', 'check:filenames', '규약', '파일명 대소문자 규약 — 영역별 kebab/snake/SCREAMING 패턴, 신규 위반 차단 (CODE_CONVENTIONS §2.1)', { prio: 'p0' }),
   nodeStep('ci:docsync', 'tools/check/check_doc_sync.js', '문서', '소스 변경 시 문서 갱신 강제', { args: ['--ref', 'origin/main'] }),

@@ -319,14 +319,21 @@
 
     --color-text-main: #1f2937;
     --color-text-muted: #4b5563;
-    --color-secondary: #8b5cf6;    /* 라이트는 기존 Neon Violet 유지 */
+    /* 텍스트용 시맨틱 색 — 베이지 배경 대비(AA 4.5) 확보를 위해 다크 네온 원색을 어두운 변형으로 재정의.
+       --color-caution/--color-orange는 히트맵 채우기 전용이라 원색 유지. */
+    --color-primary: #164e63;      /* cyan-900 — 활성 탭·버튼·아이콘 */
+    --color-primary-dark: #0c3644; /* cyan-950 계열 — hover */
+    --color-secondary: #5b21b6;    /* violet-800 */
+    --color-success: #065f46;      /* emerald-800 — 정답·완료 */
+    --color-danger: #991b1b;       /* red-800 — 오답·위험 */
+    --color-warning: #78350f;      /* amber-900 — 경고 텍스트 */
     --bg-canvas: #e5e0cd;
-    --color-danger-tint: #dc2626;
-    --color-success-tint: #047857;
-    --color-warning-tint: #92400e;
-    --color-link: #0e7490;         /* primary-light — 베이지 배경 대비 확보 */
-    --color-link-visited: #6d28d9; /* violet-700 */
-    --color-link-hover: #155e75;   /* cyan-800 */
+    --color-danger-tint: #991b1b;
+    --color-success-tint: #065f46;
+    --color-warning-tint: #78350f;
+    --color-link: #164e63;         /* cyan-900 — 베이지 배경 대비 확보 */
+    --color-link-visited: #5b21b6; /* violet-800 */
+    --color-link-hover: #0c3644;   /* cyan-950 계열 */
 
     --shadow-sm: 0 1px 4px rgba(0,0,0,0.15);
     --shadow-md: 0 4px 16px rgba(0,0,0,0.18);

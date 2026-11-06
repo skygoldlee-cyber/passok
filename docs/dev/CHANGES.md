@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 feat(ui): 라이트모드 텍스트 대비 AA 통과 + check:contrast 게이트
+
+- .light-theme 시맨틱 텍스트 색을 다크 네온 원색 → 어두운 변형으로 재정의 (primary cyan-900·success emerald-800·danger red-800·warning amber-900·secondary violet-800) — 베이지 배경 대비 4.5+ 확보
+- tools/check/check_contrast.js 신설 — :root/.light-theme 토큰 파싱 → WCAG 대비비 계산(AA 4.5 경고·3.0 오류), steps.js ci:contrast 등록
+
 ## 2026-11-07 feat(check): 문항 검수 게이트 강화 + collectFilesByExt 공용화
 
 - check_scenario_items: ① 수치 대조를 지문+정답으로 한정(오답 함정값 노이즈 제거 — 경고 11→4건) ② 미검수(approved 미설정) 경고 ③ eval_pool.json 스키마·격리 불변식 검증 추가
