@@ -151,7 +151,7 @@ async function renderFacility() {
     host.innerHTML = `
         <div class="care-audit-sec">
             <h3>기관 인계 — ${esc(_facility.name)}</h3>
-            <button data-click="careFacilityHandoverSubmit">🏥 기관에 공유</button>
+            <button class="btn" data-click="careFacilityHandoverSubmit">🏥 기관에 공유</button>
             ${_fhList.map(h => `
                 <div class="care-log-saved-item">
                     <span>${esc(h.shift_date)} · ${esc(h.client)} — ${esc(h.memo || '')}</span>

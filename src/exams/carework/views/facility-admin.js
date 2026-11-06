@@ -24,7 +24,7 @@ async function render() {
             <div class="care-calc-form">
                 <label>새 기관 등록 <input id="fa-name" type="text" placeholder="예: ○○재가요양센터"></label>
                 <label>사업자번호 (선택) <input id="fa-biz" type="text" placeholder="사업자등록번호"></label>
-                <div class="care-calc-actions"><button data-click="facilityAdminCreate">기관 등록</button></div>
+                <div class="care-calc-actions"><button class="btn" data-click="facilityAdminCreate">기관 등록</button></div>
             </div>`;
         return;
     }

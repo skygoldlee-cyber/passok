@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 fix(ux): carework 베어·사멸 버튼 btn 계열 일괄 정정 + data-click 클래스 게이트
+
+- `class="secondary"` 사멸 클래스 정정 — `.secondary`는 CSS 미정의(html-viewer 스코프에만 존재)라 carework 뷰 버튼들이 브라우저 기본 회색으로 렌더되며 높이 ~20px(<44px) — "이미지 파일 선택"(care-home) 등 27곳을 `btn btn-secondary`로 치환
+- 클래스 없는 `data-click` 베어 버튼 13곳(보고서 생성·저장·계산·가입·다음 등)에 `.btn` 부여
+- `check_mobile_safe.js` 규칙④ 추가 — `data-click` `<button>`의 클래스 토큰이 CSS 선택자에 하나도 없으면(사멸 추정) 위반: html/ + src/ JS 템플릿 스캔, 동적 클래스는 리뷰 영역으로 제외. 검사 351건 통과
+- SPEC UX-CTL-06에 data-click 클래스 계약 명시
+
 ## 2026-11-06 fix(ux): UX-CTL 보완 — 검색입력·셀렉트 줌·규약 정합
 
 - `.search-input` 높이 무정의 → `min-height --control-h-md` + `font-size:1rem` (iOS 줌 방지)

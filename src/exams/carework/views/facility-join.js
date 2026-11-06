@@ -24,13 +24,13 @@ async function render() {
             <div class="care-calc-form">
                 <label>기관 초대 코드 <input id="fj-code" type="text" placeholder="초대 코드 8자리"></label>
                 <p class="care-log-hint">관리책임자에게 받은 초대 코드를 입력하세요.</p>
-                <div class="care-calc-actions"><button data-click="facilityJoin">기관 가입</button></div>
+                <div class="care-calc-actions"><button class="btn" data-click="facilityJoin">기관 가입</button></div>
             </div>
             <div class="care-calc-form">
                 <h3>미가입 — 출력물 기관명</h3>
                 <label>근무 기관명 <input id="fj-orgname" type="text" value="${esc(getOrgName())}" placeholder="예: 행복요양원"></label>
                 <p class="care-log-hint">모든 출력물 헤더에 기관명이 표기됩니다. 기관 가입 후에는 기관 등록명이 자동 표기됩니다.</p>
-                <div class="care-calc-actions"><button data-click="facilityOrgNameSave" class="secondary">기관명 저장</button></div>
+                <div class="care-calc-actions"><button data-click="facilityOrgNameSave" class="btn btn-secondary">기관명 저장</button></div>
             </div>`;
         return;
     }

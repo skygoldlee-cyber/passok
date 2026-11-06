@@ -140,6 +140,34 @@ for (const file of walk(path.join(ROOT, 'html'), ['.html'])) {
 const INTERACTIVE_SEL = ['button', 'select', '.btn', 'chip', '.tab-item', '.nav-item', '.settings-item', 'input', 'app-confirm'];
 const HEIGHT_LITERAL_RE = /(?:min-)?height:\s*(\d+(?:\.\d+)?)px/;
 const GAP_LITERAL_RE = /(?:^|;)\s*gap:\s*\d+(?:\.\d+)?px/;
+
+/* ── ④ data-click 버튼 스타일 계약 (UX-CTL-02/06) — 클릭 액션 <button>은 스타일된 클래스 필수 ──
+   class 부재·사멸 클래스(CSS 미정의, 예: .secondary)는 브라우저 기본 버튼으로 렌더돼
+   높이·시각 규약을 우회한다 (care-home "이미지 파일 선택" 사례). 클래스 토큰 전부가
+   CSS 선택자에 없으면 위반. 동적 클래스(${})는 정적 판정 불가로 스킵. */
+const STYLED_CLASSES = new Set();
+for (const file of walk(path.join(ROOT, 'css'), ['.css'])) {
+  for (const m of fs.readFileSync(file, 'utf8').matchAll(/\.([a-zA-Z_][\w-]*)/g)) STYLED_CLASSES.add(m[1]);
+}
+
+let clickScanned = 0;
+for (const file of [...walk(path.join(ROOT, 'html'), ['.html']), ...walk(path.join(ROOT, 'src'), ['.js'])]) {
+  const rel = path.relative(ROOT, file).replace(/\\/g, '/');
+  const src = fs.readFileSync(file, 'utf8');
+  for (const m of src.matchAll(/<button\b[^>]*>/g)) {
+    const tag = m[0];
+    if (!tag.includes('data-click')) continue;
+    if (/data-msafe-ok/.test(tag)) continue;
+    const cls = tag.match(/class="([^"]*)"/)?.[1] || '';
+    if (cls.includes('${')) continue;
+    clickScanned++;
+    if (!cls.split(/\s+/).some(c => c && STYLED_CLASSES.has(c))) {
+      const line = src.slice(0, m.index).split('\n').length;
+      issues.push(`${rel}:${line} — data-click 버튼에 스타일된 클래스 없음(사멸 추정): ${tag.slice(0, 70)} — class="btn..." 부여 (UX-CTL-02)`);
+    }
+  }
+}
+
 const CTL_HEIGHT_EXEMPT = [
   ['input[type="checkbox"]', '네이티브 체크박스 — 라벨·행이 터치 타겟 (UX-SET-03 면제 유지)'],
   ['input[type="radio"]', '네이티브 라디오 — 라벨이 터치 타겟'],
@@ -175,4 +203,4 @@ if (issues.length) {
   for (const s of issues) console.error('  - ' + s);
   process.exit(1);
 }
-console.log(`✅ 모바일 안전 규약 통과 — 다이얼로그 ${dialogScanned}곳·버튼 행 ${rowScanned}곳·컨트롤 높이 ${ctlScanned}건 검사, 위반 0건`);
+console.log(`✅ 모바일 안전 규약 통과 — 다이얼로그 ${dialogScanned}곳·버튼 행 ${rowScanned}곳·컨트롤 높이 ${ctlScanned}건·클릭 버튼 ${clickScanned}건 검사, 위반 0건`);
