@@ -167,6 +167,13 @@
   },
   "written": [],
   "pastExams": [],
+  "searchDocs": [
+    {
+      "file": "docs/학습안내서.md",
+      "title": "학습 안내서",
+      "feature": "studyGuide"
+    }
+  ],
   "features": {
     "careFlow": {
       "title": "개념 학습",

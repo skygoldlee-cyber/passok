@@ -626,7 +626,8 @@
         "practiceManual": true,
         "careHome": true,
         "careWebtoon": true,
-        "careFlow": true
+        "careFlow": true,
+        "studyGuide": true
       },
       "group": "보건·복지",
       "tier": "active"
