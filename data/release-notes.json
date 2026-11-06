@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261107-dcaa0bd",
+    "date": "2026-11-07",
+    "notes": [
+      "[수정·ui] .btn-icon 아이콘 좌측 치우침 — justify-content: center (모바일 규칙과 정합)",
+      "[정리·release] v20261107-8e60f1e 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-8e60f1e",
     "date": "2026-11-07",
     "notes": [
@@ -190,14 +198,6 @@
       "[수정·test] care-share xlsx 날짜 — UTC→로컬 todayKey 정합",
       "[기능·carework] 서명 이미지 피커 — 버튼 스타일 + 숨긴 file input + 피커 테스트",
       "[정리·release] v20261106-8600a6e 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261105-71ec70b",
-    "date": "2026-11-05",
-    "notes": [
-      "[수정·carework] 웹툰·개념학습 fetch → DataLoader._getMd — 프로덕션 한글 경로 404 해소",
-      "[정리·release] v20261105-758a232 스탬프 확정 [no-docs]"
     ]
   }
 ]
