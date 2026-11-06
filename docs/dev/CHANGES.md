@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 docs(carework): 적응형 학습 엔진 설계 4차 갱신 — 3차 리뷰 충돌 해소
+
+- 문항 규칙 통일(개념당 4문항) + 역할별 문량표(pre1·scenario2·review2~3·eval2 — eval은 학습 경로 격리) + §12를 4문항 기준 재감사(scenario≥2·cutOnWrong 0건 확인, 보완 순서 파일럿 단원 우선)
+- §9 대조군 정의(교재+문제은행, 복습 큐 없음)·라틴 방격 배정·판단 기준 정합 + §6 mastery level을 복습 통과 횟수 기준으로 재정의(FSRS 무관) + 파일럿 데이터 수집 경로(동기화·내보내기·동의)
+- 도식·표기 정리(흐름도 개념 반복 화살표, §10 로드맵 mermaid, 오탈자·수치·과락 표기·dual coding 단서)
+
 ## 2026-11-06 docs(carework): 적응형 학습 엔진 설계 3차 갱신 — 2차 리뷰 필수 항목 반영
 
 - §6 자산 수치 정합(30개념·18문·43태그, 설계/실재/배포 3층 구분) + items 품질 메타 필드(difficulty·discrimination·source_date·reviewer·version·exposure_count)
