@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 fix(ux): "이야기 학습" nav 그룹을 "학습"으로 통합
+
+- 형식 축(서사) 분리는 다른 그룹의 기능 축과 축 혼재 — 개념 학습·웹툰을 학습 그룹으로 편입(학습진단 다음), 라벨 careWebtoon vs 항목 careFlow 게이트 불일치 고아 항목도 해소
+
 ## 2026-11-06 chore(tools): record-webhook deno.d.ts 파일명 예외 등록
 
 - filename_baseline.json에 추가 — 기존 Edge Function들과 동일한 Deno 표준 파일명 (CI 파일명 규약 실패 복구)
