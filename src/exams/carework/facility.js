@@ -21,7 +21,7 @@ export async function myMembership() {
     const sb = await getSupabase();
     const { data, error } = await sb
         .from('facility_members')
-        .select('facility_id,role,facilities(id,name,biz_no,invite_code)')
+        .select('facility_id,role,facilities(id,name,biz_no,invite_code,doc_webhook_url)')
         .eq('user_id', session.user.id)
         .limit(1)
         .maybeSingle();
@@ -217,4 +217,71 @@ export async function listIncidents(facilityId, { limit = 20 } = {}) {
         .limit(limit);
     if (error) throw new Error(`incident_reports: ${error.message}`);
     return data || [];
+}
+
+// — CO-14: 실무 기록 통합 서버 저장 —
+
+/** 실무 기록 서버 저장 — doc_type 유형 + 구조화 payload만 (자유서술 원문은 L0 유지)
+ * local_id 상관키로 재전송 멱등 — 유니크 충돌(23505)은 기동기로 간주해 {id:null} 반환
+ * @returns {Promise<{id:string|null}|{error:string}>} */
+export async function submitRecord({ facilityId, docType, client = '', recordDate, payload = {}, localId = null }) {
+    const sb = await getSupabase();
+    const { data, error } = await sb
+        .from('facility_records')
+        .insert({ facility_id: facilityId, doc_type: docType, client, record_date: recordDate, payload, local_id: localId })
+        .select('id')
+        .single();
+    if (error) return error.code === '23505' ? { id: null } : { error: error.message };
+    return { id: data.id };
+}
+
+/** 시설 기록 목록 — doc_type 필터 (시설 타임라인·manager 열람용)
+ * @param {string} facilityId @param {{docType?:string|null,limit?:number}} [opt] @returns {Promise<Array>} */
+export async function listRecords(facilityId, { docType = null, limit = 50 } = {}) {
+    const sb = await getSupabase();
+    let q = sb.from('facility_records')
+        .select('id,doc_type,client,record_date,payload,local_id,created_at,author_id')
+        .eq('facility_id', facilityId)
+        .order('record_date', { ascending: false })
+        .limit(limit);
+    if (docType) q = q.eq('doc_type', docType);
+    const { data, error } = await q;
+    if (error) throw new Error(`facility_records: ${error.message}`);
+    return data || [];
+}
+
+/** 상태형 기록 upsert — (facility, author, local_id) 충돌 시 payload 갱신.
+ * 이벤트형은 submitRecord(insert·append-only), 최신 상태 공유 문서는 이 경로.
+ * @returns {Promise<{id:string}|{error:string}>} */
+export async function upsertRecord({ facilityId, docType, client = '', recordDate, payload = {}, localId }) {
+    const session = await _session();
+    if (!session) return { error: 'no-session' };
+    const sb = await getSupabase();
+    const { data, error } = await sb
+        .from('facility_records')
+        .upsert({ facility_id: facilityId, author_id: session.user.id, doc_type: docType, client, record_date: recordDate, payload, local_id: localId },
+                { onConflict: 'facility_id,author_id,local_id' })
+        .select('id')
+        .single();
+    if (error) return { error: error.message };
+    return { id: data.id };
+}
+
+/** write-through 공통 — 멤버십 해석 후 upsertRecord. 미가입·미설정은 조용히 스킵 ({skipped:true})
+ * @returns {Promise<{id?:string,skipped?:boolean,error?:string}>} */
+export async function pushState({ docType, client = '', recordDate, payload = {}, localId }) {
+    const m = await myMembership().catch(() => null);
+    if (!m) return { skipped: true };
+    return upsertRecord({ facilityId: m.facility_id, docType, client, recordDate, payload, localId });
+}
+
+/** 시설 문서 webhook URL 설정 — manager 전용 (RLS 검증, CO-16) @returns {Promise<{ok?:boolean,error?:string}>} */
+export async function setDocWebhook(facilityId, url) {
+    const sb = await getSupabase();
+    const { error } = await sb
+        .from('facilities')
+        .update({ doc_webhook_url: String(url || '').trim() || null })
+        .eq('id', facilityId);
+    if (error) return { error: error.message };
+    return { ok: true };
 }

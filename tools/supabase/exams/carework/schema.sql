@@ -214,3 +214,69 @@ create policy "incident member read" on public.incident_reports for select
 drop policy if exists "incident member write" on public.incident_reports;
 create policy "incident member write" on public.incident_reports for insert
   with check (public.is_facility_member(facility_id, auth.uid()) and author_id = auth.uid());
+
+-- CO-14 — 실무 기록 통합 서버 저장: facility_records
+-- 요양일지·근무표·점검표·방문결과 등 실무 산출물을 doc_type 단일 스키마로 기관 스코프 보존.
+-- 개인정보 계층: L1(기관 서버) — payload는 코드화·구조화 필드만 (자유서술 원문·서명 이미지는
+--   L0 로컬 전용 — CO-06 최소화 원칙 계승). L2(외부 전송) 대상 아님.
+-- local_id는 L0 스토어 id 상관키 — (facility, author, local_id) 유니크로 오프라인 재전송 멱등.
+-- 개통 조건: 수탁 처리 법무 준비 완료 전 facility 플래그 비활성 유지 (SPEC §3.31 전제).
+
+create table if not exists public.facility_records (
+  id uuid primary key default gen_random_uuid(),
+  facility_id uuid not null references public.facilities(id) on delete cascade,
+  author_id uuid not null references auth.users(id),       -- 작성 근무자
+  doc_type text not null check (doc_type in (
+    'care_log','roster','audit','visit_result','client','report')),
+  client text not null default '',                         -- 대상자 식별 (최소 단위)
+  record_date date not null default current_date,          -- 기록 기준일 (서비스 제공일)
+  payload jsonb not null default '{}'::jsonb,              -- 구조화 필드만 (자유서술 금지)
+  local_id text,                                           -- L0 스토어 id — 재전송 멱등 상관키
+  created_at timestamptz not null default now()
+);
+
+create index if not exists facility_records_fac_type_date
+  on public.facility_records (facility_id, doc_type, record_date desc);
+-- plain 유니크 — NULL local_id는 충돌 비대상(Postgres 관례), upsert arbiter로 사용
+create unique index if not exists facility_records_local_uidx
+  on public.facility_records (facility_id, author_id, local_id);
+
+alter table public.facility_records enable row level security;
+
+-- facility_records: 같은 시설 멤버만 열람·작성 — append-only (수정·삭제 정책 없음, 보존 원칙)
+drop policy if exists "records member read" on public.facility_records;
+create policy "records member read" on public.facility_records for select
+  using (public.is_facility_member(facility_id, auth.uid()));
+
+drop policy if exists "records member write" on public.facility_records;
+create policy "records member write" on public.facility_records for insert
+  with check (public.is_facility_member(facility_id, auth.uid()) and author_id = auth.uid());
+
+-- 상태형 doc_type만 본인 행 멱등 upsert 허용 — roster·audit·client는 최신 상태 공유 문서.
+-- 이벤트형(care_log·report)은 update 정책 없이 append-only 유지 (보존 원칙)
+drop policy if exists "records member update" on public.facility_records;
+create policy "records member update" on public.facility_records for update
+  using (public.is_facility_member(facility_id, auth.uid())
+         and author_id = auth.uid()
+         and doc_type in ('roster','audit','client','visit_result'))
+  with check (author_id = auth.uid());
+
+-- CO-16 — 외부 수출 webhook 어댑터: facilities.doc_webhook_url
+-- 기관이 자체 서버를 둔 경우 facility_records INSERT를 Edge Function이 이 URL로 POST.
+-- NULL이면 전송 없음 — L2(외부 전송)는 manager가 명시 설정한 경우에만 개통.
+
+alter table public.facilities add column if not exists doc_webhook_url text;
+
+-- manager 판정 헬퍼 — is_facility_member 동형 (정책 자기참조 재귀 회피, SECURITY DEFINER)
+create or replace function public.is_facility_manager(p_facility_id uuid, p_user_id uuid)
+returns boolean
+language sql security definer stable set search_path = ''
+as $$
+  select exists (select 1 from public.facility_members
+                 where facility_id = p_facility_id and user_id = p_user_id and role = 'manager');
+$$;
+
+-- facilities: manager만 설정 변경 (webhook_url·초대코드 회전 등)
+drop policy if exists "facility manager update" on public.facilities;
+create policy "facility manager update" on public.facilities for update
+  using (public.is_facility_manager(id, auth.uid()));

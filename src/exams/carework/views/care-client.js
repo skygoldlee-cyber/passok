@@ -1,6 +1,6 @@
 // src/exams/carework/views/care-client.js — 수급자 관리 뷰 (서류현황·CSV 왕복)
 // @spec none — 시험 전용 실무 뷰 (DA-13)
-import { listClients, addClient, removeClient, upsertClients } from '../care-client-store.js';
+import { listClients, addClient, removeClient, upsertClients, syncFacilityClients } from '../care-client-store.js';
 import { markFunnel } from '../care-funnel.js';
 import { clientsToCsv, ADMIT_ITEMS } from '../care-client-csv.js';
 import { csvToClientsAny } from '../care-csv-presets.js';
@@ -224,4 +224,5 @@ export function initCareClientView() {
     const f = $('cli-csv-file');
     if (f && !f.dataset.wired) { f.dataset.wired = '1'; f.addEventListener('change', onCsvFile); }
     renderList(); void refreshOrgName();
+    void syncFacilityClients();
 }

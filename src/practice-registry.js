@@ -747,7 +747,7 @@ const careFacilityAdmin = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/facility-admin.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['facilityAdminCreate']]],
+    handlers: [['main', ['facilityAdminCreate', 'facilityAdminWebhook']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);

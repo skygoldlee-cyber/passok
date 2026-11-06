@@ -1,5 +1,22 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 feat(carework): 실무 스토어 전면 기관 동기 + webhook 수출 어댑터 (CO-11/14/15/16, 코드 선구축)
+
+- 상태형 doc_type은 `(facility,author,local_id)` upsert로 최신 상태 공유 — roster 배정·audit 점검 스냅샷·client 명부 / 이벤트형 care_log는 기존 append-only insert 유지. 스키마에 상태형 한정 update 정책 추가 (이벤트형은 append-only 보존)
+- roster-store `_pushRoster`+`syncPendingRoster` / care-audit `pushAuditState`(토글 5s 디바운스, 'audit_state' 슬롯) / care-client-store `_pushClient`+`syncFacilityClients` — 서버엔 CO-11 최소 필드(name+room)만, 양방향 머지는 서버 명단 중 로컬 미등재 성명만 추가·가져온 항목 `_sync='done'`으로 재업로드 에코 차단
+- visit은 전용 `family_visits`가 이미 서버 연동이라 facility_records 중복 제외
+- CO-16 webhook 어댑터: `facilities.doc_webhook_url`(manager RLS update·is_facility_manager 함수) + Edge Function `record-webhook`(DB Webhook→INSERT 레코드를 시설 URL로 POST, NULL=미전송) + facility-admin 뷰에 webhook 설정 필드
+- SPEC CO-15 upsert 분기 명시·CO-16 신설 — 개통 게이트 불변(careFacilityJoin/Admin=false)
+
+## 2026-11-06 feat(carework): facility_records 통합 기록 테이블 + 요양일지 write-through (CO-14/15, 코드 선구축)
+
+- SPEC CO-14/15 신설 — 실무 산출물 기관 서버 저장(통합 `facility_records`) + 오프라인 우선 write-through 동기 — 조건부(법무 0b + facility 재개통) 상태로 등록
+- schema.sql: `facility_records`(doc_type·구조화 payload·local_id 멱등 유니크) + RLS 멤버십 정책 + L0/L1/L2 계층 주석 — 자유서술 원문·서명 이미지는 L0 유지
+- facility.js: `submitRecord`(23505 중복=기동기 간주)·`listRecords` 추가
+- care-log-store: 저장 시 localStorage 즉시 + 멤버십 있으면 `facility_records` insert(fire-and-forget), `_sync='done'` 표기 — `syncPendingCareLogs()`가 뷰 init 시 미동기분 재전송
+- care-log 저장 목록에 `☁ 기관` 마커 — rls_probe에 facility_records 등록
+- 개통 게이트 불변: features.careFacilityJoin/Admin=false 유지 — 멤버십 생성 불가라 신규 사용자 경로는 휴면 (CO-06/11 선례 패턴)
+
 ## 2026-11-06 style(ux): 간격 리터럴 토큰화 — UX-CTL-03/04 · §4.9.3 정합
 
 - 15개 CSS 파일의 margin/gap px·rem 리터럴 ~235곳을 `--gap-ctl/group/sec`·`--space-*` 토큰으로 일괄 치환

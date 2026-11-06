@@ -1,12 +1,13 @@
 // src/exams/carework/views/facility-admin.js — 기관 어드민 뷰 (DOC-DSN-43 6a, DA-13)
 // @spec DA-18 — 권한 뷰 분리 (어드민·클라이언트 별도 뷰)
-import { myMembership, syncFacilityNav, createFacility, listMembers, ROLES } from '../facility.js';
+import { myMembership, syncFacilityNav, createFacility, listMembers, setDocWebhook, ROLES } from '../facility.js';
 import { getAuthSession } from '../../../auth-sync/supabase-client.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let _membership = null;
 
 async function render() {
     const host = $('facility-admin-body');
@@ -18,6 +19,7 @@ async function render() {
         return;
     }
     const m = await myMembership();
+    _membership = m;
     syncFacilityNav(m);
     if (!m) {
         host.innerHTML = `
@@ -42,7 +44,20 @@ async function render() {
         </div>
         <div class="care-audit-item"><h3>멤버 ${members.length}명</h3>
             ${members.map(x => `<p>${esc(x.user_id.slice(0,8))}… · ${esc(ROLES[x.role] || x.role)}</p>`).join('')}
+        </div>
+        <div class="care-calc-form">
+            <h3>외부 수출 webhook (선택)</h3>
+            <label>기관 서버 URL <input id="fa-webhook" type="url" placeholder="https://…" value="${esc(f.doc_webhook_url || '')}"></label>
+            <p class="care-log-hint">설정 시 기관 기록(facility_records)이 이 주소로 전송됩니다. 비우면 전송 없음.</p>
+            <div class="care-calc-actions"><button class="btn btn-secondary" data-click="facilityAdminWebhook">webhook 저장</button></div>
         </div>`;
+}
+
+export async function facilityAdminWebhook() {
+    if (!_membership) return;
+    const url = /** @type {HTMLInputElement|null} */ ($('fa-webhook'))?.value || '';
+    const r = await setDocWebhook(_membership.facility_id, url);
+    'error' in r ? showToast('저장 실패: ' + r.error, 'error') : showToast('webhook 설정을 저장했습니다.');
 }
 
 export async function facilityAdminCreate() {

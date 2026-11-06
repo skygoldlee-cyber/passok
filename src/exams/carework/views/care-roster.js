@@ -2,7 +2,7 @@
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { ROSTER_SHIFTS, shiftLabel, buildRosterText, rosterToCsv, csvToRoster } from '../care-roster.js';
 import { markFunnel } from '../care-funnel.js';
-import { listRoster, saveRoster, removeRoster, upsertRoster } from '../roster-store.js';
+import { listRoster, saveRoster, removeRoster, upsertRoster, syncPendingRoster } from '../roster-store.js';
 import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docMdHead, csvToMdTable, mdToHtml, docMdSign } from '../doc-md.js';
@@ -117,4 +117,5 @@ export function initCareRosterView() {
     if (f && !f.dataset.wired) { f.dataset.wired = '1'; f.addEventListener('change', onCsvFile); }
     renderList();
     void refreshOrgName();
+    void syncPendingRoster();
 }

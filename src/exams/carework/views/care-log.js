@@ -2,7 +2,7 @@
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { buildCareLog, buildRecordText, SERVICE_TYPES, ACTIVITY_GROUPS, careLogsToCsv } from '../care-log.js';
 import { markFunnel } from '../care-funnel.js';
-import { saveCareLog, listCareLogs, removeCareLog } from '../care-log-store.js';
+import { saveCareLog, listCareLogs, removeCareLog, syncPendingCareLogs } from '../care-log-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
@@ -100,6 +100,7 @@ function renderSaved() {
     host.innerHTML = items.length
         ? items.map(x => `<div class="care-log-saved-item">
             <span>${esc(x.date)} · ${esc(x.client)} · ${esc(x.service)}</span>
+            ${x._sync === 'done' ? '<em>☁ 기관</em>' : ''}
             <button data-click="careLogDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button>
           </div>`).join('')
         : '<p class="care-log-empty">저장된 일지가 없습니다.</p>';
@@ -121,6 +122,7 @@ export function initCareLogView() {
             </div>`).join('');
     renderSaved();
     void refreshOrgName();
+    void syncPendingCareLogs();
 }
 
 export { careShare } from '../care-share.js';

@@ -1,6 +1,6 @@
 // src/exams/carework/views/care-audit.js — 기관 평가 체크리스트 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
-import { loadAuditSections, loadChecks, toggleCheck, clearChecks, auditProgress } from '../care-audit.js';
+import { loadAuditSections, loadChecks, toggleCheck, clearChecks, auditProgress, pushAuditState } from '../care-audit.js';
 import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { auditCoverage } from '../care-coverage.js';
@@ -59,6 +59,7 @@ export function careAuditReset() {
 }
 
 export async function initCareAuditView() {
+    void pushAuditState();
     void refreshOrgName();
     try {
         _sections = await loadAuditSections();

@@ -3,9 +3,10 @@
 // localStorage `carework_roster` — 근무 배정 {id,date,shift,worker,note}
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
-import { localDateTime } from '../../core/utils.js';
+import { localDateTime, todayKey } from '../../core/utils.js';
 import { showStoreError, proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { showToast } from '../../ui-utils.js';
+import { pushState } from './facility.js';
 
 const KEY = STORAGE_KEYS.ROSTER_ITEMS;
 export const FREE_LIMIT = 30;
@@ -26,7 +27,30 @@ export function addRoster(entry) {
     const it = { id: `ros_${Date.now().toString(36)}`, createdAt: localDateTime(), ...entry };
     items.unshift(it);
     setJSON(KEY, items);
+    void _pushRoster(it).catch(() => {}); // CO-15 write-through
     return { ok: true, id: it.id };
+}
+
+// — CO-14/15: 기관 서버 write-through (상태형 — local_id upsert로 최신 배정 공유) —
+
+async function _pushRoster(item) {
+    const r = await pushState({
+        docType: 'roster', client: '', recordDate: item.date || todayKey(),
+        payload: { date: item.date, shift: item.shift, worker: item.worker, note: item.note || '' },
+        localId: item.id,
+    });
+    if (r.skipped || 'error' in r) return;
+    const items = listRoster();
+    const it = items.find(x => x.id === item.id);
+    if (it && it._sync !== 'done') { it._sync = 'done'; setJSON(KEY, items); }
+}
+
+/** 미동기 배정 재전송 — 뷰 init 시 fire-and-forget 호출 */
+export async function syncPendingRoster() {
+    for (const it of listRoster()) {
+        if (it._sync === 'done') continue;
+        try { await _pushRoster(it); } catch { /* 다음 기회에 */ }
+    }
 }
 
 export function removeRoster(id) {

@@ -739,6 +739,9 @@
 | CO-11 | **기관 워크스페이스 확장** — `facility_templates`(서식·공지), 기관 명부 공유(서버 `name`+`room`만 — 나머지는 멤버 로컬 머지), `shift_rosters` 공유 대장. 스키마 주석에 L0/L1/L2 계층 명문화 | 미구현 — 조건부(법무 0b + facility 재개통) |
 | CO-12 | **수험생→실무 전환 온보딩·퍼널 계측** — 시험 완료·합격 플로우에서 실무도구 온보딩 배너 + 합격→도구 첫 사용 전환율 계측 (KPI①). 본체인 care-card↔서식 딥링크는 후속 | ✅ lite (배너·계측) |
 | CO-13 | 생성 문서 공유 (Web Share API) | ✅ | care-share.js·출력 뷰 공유 버튼 |
+| CO-14 | **실무 기록 통합 서버 저장** — `facility_records`(doc_type + 구조화 payload jsonb + `local_id` 상관키) 단일 테이블에 요양일지·근무표·점검표·방문결과 등 실무 산출물을 기관 스코프로 보존. payload는 코드화·구조화 필드만 — 자유서술 원문·서명 이미지는 L0 로컬 유지 (CO-06 최소화 원칙 계승). `local_id` 유니크로 재전송 멱등. 기존 3개 전용 테이블(shift_handovers·family_visits·incident_reports)은 유지하고 신규 유형은 이 테이블로 수렴 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) |
+| CO-15 | **오프라인 우선 write-through 동기** — `*-store.js` 저장은 localStorage 즉시 기록 후 멤버십 존재 시 `facility_records` insert(fire-and-forget). 실패·오프라인·미가입은 항목의 `_sync` 미표시로 남겨 다음 뷰 init 시 재전송 — 로컬 동작 불변(DA-05). 이벤트형(care_log·report)은 append-only insert, 상태형(roster·audit·client·visit_result)은 `(facility,author,local_id)` upsert로 최신 상태 공유. 로컬 삭제는 서버 미반영(보존 원칙 — 정정은 신규 기록) | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) |
+| CO-16 | **외부 수출 webhook 어댑터** — `facilities.doc_webhook_url`(manager 설정, RLS manager update)이 있으면 `facility_records` INSERT를 Edge Function(`record-webhook`)이 해당 URL로 POST — 기관 자체 서버 수출 경로(L2는 manager 명시 설정 시에만 개통, 기본 NULL=미전송). Database Webhook 등록은 운영 절차 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) |
 
 ---
 

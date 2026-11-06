@@ -116,7 +116,7 @@ async function main() {
     };
 
     // 1) select 차단 — 보호 테이블 전수 (행 유출 = 실패)
-    for (const t of ['profiles', 'sync_snapshots', 'pro_codes', 'feedback', 'client_errors', 'usage_events', 'ai_usage']) {
+    for (const t of ['profiles', 'sync_snapshots', 'pro_codes', 'feedback', 'client_errors', 'usage_events', 'ai_usage', 'facility_records']) {
         check(`select ${t}`, await probeSelectDenied(url, key, t));
     }
 
