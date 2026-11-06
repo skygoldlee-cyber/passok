@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261107-bf733c8",
+    "date": "2026-11-07",
+    "notes": [
+      "[CI] check:contrast npmStep 정합 + COMMANDS 재생성",
+      "[CI] check:contrast 스크립트·ci.yml 단계 등록 + COMMANDS.md 재생성",
+      "[기능·ui] 다크모드 대비 보정 — danger 텍스트/채우기 분리 + elevated 반전 + 감사 표면 확장",
+      "[기능·ui] 라이트모드 텍스트 대비 AA 통과 — 토큰 재정의 + check:contrast 게이트",
+      "[정리·release] v20261107-852bd63 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-852bd63",
     "date": "2026-11-07",
     "notes": [
@@ -187,14 +198,6 @@
     "notes": [
       "[수정·nav] 웹툰·개념학습 「이야기 학습」 그룹 신설 — 자료·도구에서 분리",
       "[정리·release] v20261105-856d76e 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261105-856d76e",
-    "date": "2026-11-05",
-    "notes": [
-      "[수정·carework] 이야기형 MD 추적 + 개념 학습 이름 — 프로덕션 빈 씬 해소",
-      "[정리·release] v20261105-d91aefe 스탬프 확정 [no-docs]"
     ]
   }
 ]
