@@ -17,6 +17,7 @@ import {
     getTocLevel,
     extractSubHeadings, buildSectionDisplayTitles
 } from '../../reader/reader-toc.js';
+import { renderSlotHtml } from '../../reader/webtoon-render.js';
 import {
     getAudioPathForChapter
 } from './reader-audio.js';
@@ -207,6 +208,85 @@ function renderToc(tocList, chapter, displayTitles) {
     bindTocItemClicks(tocList);
     bindTocSubItemClicks(tocList);
     bindTocTooltips(tocList);
+}
+
+// ── 웹툰 모드 ─────────────────────────────────────────────
+// story:start 씬 목록 → Chapter 번호로 그룹핑한 목차. 씬 카드는
+// reader-section-card id/data-section-idx 규약을 재사용해 TOC 클릭
+// 이동·스크롤스파이·크롬 오프셋(scroll-margin-top)을 그대로 얻는다.
+function buildWebtoonTocHtml(slots) {
+    let html = '';
+    let curChapter = null;
+    let chapterOpen = false;
+    slots.forEach((slot, idx) => {
+        if (slot.chapter !== curChapter) {
+            if (chapterOpen) html += `</div>`;
+            curChapter = slot.chapter;
+            chapterOpen = false;
+            if (curChapter != null) {
+                html += `<div class="reader-toc-item toc-chapter" data-section-idx="${idx}" data-toc-title="Chapter ${curChapter}">`;
+                html += `<i class="fa-solid fa-chevron-down toc-toggle-icon"></i>`;
+                html += `<span class="toc-text">Chapter ${curChapter}</span>`;
+                html += `</div>`;
+                html += `<div class="reader-toc-children toc-chapter-children" data-parent-idx="${idx}">`;
+                chapterOpen = true;
+            }
+        }
+        html += `<div class="reader-toc-item toc-level-${curChapter != null ? 1 : 0}" data-section-idx="${idx}" data-toc-title="${esc(slot.title)}">`;
+        html += `<span class="toc-text">${esc(slot.title)}</span>`;
+        html += `</div>`;
+    });
+    if (chapterOpen) html += `</div>`;
+    return html;
+}
+
+/**
+ * 웹툰 모드 챕터 렌더 — 씬 말풍선 + 씬 목차.
+ * renderChapterContentInternal과 동일하게 보조 UI(툴바·TOC·진행바)를 노출해야
+ * 웹툰으로 바로 진입한 경우에도 좌측 목차가 표시된다.
+ * @param {string} subjId @param {number} chapterIdx
+ * @param {Array<{beats: Array, title: string, chapter: number|null}>} slots
+ * @param {Record<string, {name:string, side:string, img?:string}>|undefined} chars
+ */
+export function renderWebtoonContent(subjId, chapterIdx, slots, chars) {
+    const container = document.getElementById('textbook-reader-container');
+    if (!container) return;
+
+    container.classList.remove('story-mode');
+    showReaderAuxUi();
+
+    const tocList = document.getElementById('reader-toc-list');
+    if (tocList) {
+        tocList.innerHTML = buildWebtoonTocHtml(slots);
+        bindTocItemClicks(tocList);
+        bindTocTooltips(tocList);
+    }
+    // 씬이 없는 장은 빈 목차 패널이 남지 않게 다시 숨김
+    const tocAside = document.getElementById('reader-toc');
+    if (tocAside && !slots.length) tocAside.classList.add('is-hidden');
+
+    // 오디오는 이야기형 전용 — 이전 렌더의 플레이어·액션 잔존 방지
+    injectChapterActions(subjId, chapterIdx, false);
+    renderAudioPlayerArea(false);
+
+    let html = `<div class="reader-readable-width"><div class="webtoon-reader">`;
+    if (slots.length) {
+        slots.forEach((slot, idx) => {
+            html += `<div class="reader-section-card webtoon-scene-card" id="reader-section-${idx}" data-section-idx="${idx}">`;
+            html += `<div class="reader-section-body">${renderSlotHtml(slot, chars)}</div>`;
+            html += `</div>`;
+        });
+    } else {
+        html += `<div class="reader-empty">이 장에는 이야기 장면이 없습니다.</div>`;
+    }
+    html += `</div>`;
+    html += `<div class="reader-chapter-end-marker" role="separator" aria-label="단원 끝">— 단원 끝 —</div>`;
+    html += `</div><!-- /reader-readable-width -->`;
+    container.innerHTML = html;
+
+    container.scrollTop = 0;
+    bindReaderScrollEvents();
+    applyReaderThemeClass();
 }
 
 // 챕터 출처 텍스트 → 참조자료 경로 (컨텍스트 사이드바 + L-line PDF 링크용)

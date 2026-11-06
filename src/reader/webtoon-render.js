@@ -46,7 +46,7 @@ export function parseStorySlots(md) {
     const out = [];
     let chapter = null;
     // 챕터 헤딩과 story 블록을 파일 순서대로 순회해 씬의 소속 챕터를 추적
-    const re = /##\s*📚?\s*Chapter\s+(\d+)|<!--\s*story:start\s*-->/g;
+    const re = /##\s*(?:📚\s*)?Chapter\s+(\d+)|<!--\s*story:start\s*-->/g;
     let m;
     while ((m = re.exec(md))) {
         if (m[1]) { chapter = parseInt(m[1], 10); continue; }

@@ -34,9 +34,9 @@ import {
     textbookReaderState, saveReaderPosition, loadReaderPosition, startReadingSession
 } from './reader/reader-progress.js';
 import { loadStoryChapter, loadStoryMd } from './reader/reader-loader.js';
-import { parseStorySlots, renderSlotHtml } from '../reader/webtoon-render.js';
+import { parseStorySlots } from '../reader/webtoon-render.js';
 import { contentPath } from '../core/exam-context.js';
-import { renderChapterContentInternal } from './reader/reader-render.js';
+import { renderChapterContentInternal, renderWebtoonContent } from './reader/reader-render.js';
 import { escapeRegExp } from '../core/utils.js';
 
 export { textbookReaderState, startReadingSession, stopReadingSession } from './reader/reader-progress.js';
@@ -475,9 +475,7 @@ function renderChapterContent(subjId, chapterIdx) {
         return loadStoryMd(subjId, originalChapter).then(md => {
             const slots = parseStorySlots(md);
             return _webtoonChars().then(chars => {
-                container.innerHTML = slots.length
-                    ? `<div class="webtoon-reader">${slots.map(s => renderSlotHtml(s, chars)).join('')}</div>`
-                    : '<div class="reader-empty">이 장에는 이야기 장면이 없습니다.</div>';
+                renderWebtoonContent(subjId, chapterIdx, slots, chars);
             });
         }).catch(err => {
             console.warn('[Webtoon] 이야기형 로드 실패:', err);
