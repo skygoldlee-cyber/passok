@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 docs(carework): 4단계 학습 흐름 설계 2차 갱신 — 리뷰 반영·커버리지 감사 §12
+
+- 실측 자산 수치 정정 (개념 22→30, 시나리오 15→18) + 개념별 3역할(pre·scenario·review) 충족 0/30 감사 결과 §12 신설
+- 실험 설계 정합: 웹툰 없는 판 제거(텍스트 컷 상시 제공) → A/C 2조건 교차 실험 + 난이도·순서 통제 항목, 장면 컷 실험은 도입 시 별도 분리
+- FSRS(언제)·BKT(얼마나 아는가)·mastery level(표시) 역할 분리 명문화, 4단계(콘텐츠) vs 간격 복습(유지) 용어 구분
+
 ## 2026-11-06 refactor(uitext): 공통 기본값 코어 모듈화 + check:uitext 교차 검증·필드 정규화
 
 - src/core/uitext-defaults.js 신설 — COMMON_UITEXT/mergeUiText를 순수 모듈로 분리 (체크 스크립트 동적 import 가능) + dictionary nav·formula-manual·practice-manual 키 추가
