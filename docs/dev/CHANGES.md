@@ -1,5 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 feat(ux): UX-CTL-01~06 컨트롤 높이·간격 토큰 규약 신설
+
+- SPEC §4.8.9 신설 — `--control-h-sm/md/lg`(36/44/48px) 높이 계층 + `--gap-ctl/group/sec`(8/12/16px) 간격 계층 + `.ctl-field` 폼 수직 리듬 + `.btn-row` 액션 행 대역 전환(PC 우측 정렬 ↔ 모바일 세로 전폭·주요 우선)
+- `.btn`·`.form-input`·`.form-select` 기본 높이를 `--control-h-md`(44px)로 통일 — 인풋 ~52px·셀렉트 ~40px·버튼 ~40px이던 행 내 정렬 불일치 해소
+- 시험 CSS 산재 높이 정정: carework(care-chip 36→44, webtoon select 40→44, care-client-reg 32→36, care-home-nav 48→lg), formula(f-del 32→sm, f-prog-step 32→sm, f-reg-btn 36→sm, prod-* 26~28→sm, biz-chip 40→44), reader(mermaid 버튼 28~40→sm, toolbar-toggle 36→sm, back-to-top 46→44)
+- DOM 순서 [보조][주요]로 정정 — pro-upgrade 플랜 비교·reader-note 저장 행
+- `check_mobile_safe.js` 규칙③ 추가 — 인터랙티브 셀렉터의 `<44px` px 리터럴 정적 탐지 (UX-CTL-06 게이트), 면제: 네이티브 checkbox·숨김 입력·칩 내부 ✕
+- 실측 (Playwright mobile 터치 타깃 스윕): reader-format-select 98×36 → 98×44, 신규 <44px 요소 0건 — check:all 61단계 통과
+
 ## 2026-11-05 fix(test): care-share xlsx 날짜 — UTC→로컬 todayKey 정합
 
 
