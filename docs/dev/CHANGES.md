@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 refactor(uitext): 공통 기본값 코어 모듈화 + check:uitext 교차 검증·필드 정규화
+
+- src/core/uitext-defaults.js 신설 — COMMON_UITEXT/mergeUiText를 순수 모듈로 분리 (체크 스크립트 동적 import 가능) + dictionary nav·formula-manual·practice-manual 키 추가
+- check_uitext.js — data-uitext "key:field"를 bare 키로 정규화해 manifest 매칭 (care*/formula-manual dead-config 오경고 16건 해소) + 공통 기본값 교차 검증 (nav 누락 오류·title 최소 형식·dead 공통 경고)
+- 사이드바/탭바 하드코딩 라벨 4곳에 data-uitext 부여 (사용자 매뉴얼→manual, 실무 매뉴얼→formula-manual/practice-manual) — 시험별 오버라이드 가능화
+- carework uiText에 careWebtoon·careFlow·careHome 키 선언 — 템플릿 폴백 의존이던 실무 라벨을 선언식으로 정합
+- applyUiTextLabels() 분리 (app-shell) + 라벨 해석 회귀 DOM 테스트 3건
+
 ## 2026-11-06 feat(shell): uiText 플랫폼 공통 기본값 — manifest.uiText > 공통 > 템플릿 순 해석
 
 - data-loader에 COMMON_UITEXT(공통 뷰 표준 라벨) + mergeUiText 순수 함수 + getUiText() 추가 — 공통 뷰 라벨은 시험 미선언 시에도 표준 세트(카드·퀴즈·복습·모의고사·캘린더 등)로 해석

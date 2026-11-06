@@ -152,6 +152,14 @@ export function applyExamBranding() {
 
     // 도메인 특화 뷰 라벨 — manifest uiText가 있으면 정적 라벨을 덮어쓴다 (data-uitext 속성)
     // "key:field" 문법 — uiText.<key>.<field> 우선, 없으면 .title 폴백 (단축 라벨은 :nav)
+    applyUiTextLabels();
+}
+
+/**
+ * data-uitext 라벨 해석 — 플랫폼 공통 기본값과 시험 manifest.uiText의 병합 맵으로
+ * 정적 라벨을 덮어쓴다. "key:field" 문법 — uiText.<key>.<field> 우선, 없으면 .title 폴백.
+ */
+export function applyUiTextLabels() {
     const uiText = DataLoader.getUiText();
     document.querySelectorAll('[data-uitext]').forEach(node => {
         const el = /** @type {HTMLElement} */ (node);

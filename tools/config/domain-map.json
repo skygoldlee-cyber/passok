@@ -130,6 +130,7 @@
                 "src/shell/theme-toggle.js",
                 "src/core/types.js",
                 "src/shell/ui-mode.js",
+                "src/core/uitext-defaults.js",
                 "src/ui-utils.js",
                 "src/telemetry/usage-stats.js",
                 "src/telemetry/usage-telemetry.js",

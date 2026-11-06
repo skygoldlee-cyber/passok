@@ -48,3 +48,47 @@ describe('initViewportHeight — 핀치 줌 가드', () => {
         expect(appHeight()).toBe('800px');
     });
 });
+
+// ==================== applyUiTextLabels — 플랫폼 공통 라벨 해석 ====================
+
+import { DataLoader } from '../../../src/content/data-loader.js';
+import { applyUiTextLabels } from '../../../src/shell/app-shell.js';
+
+describe('applyUiTextLabels — 공통 기본값 + 시험 오버라이드', () => {
+    beforeEach(() => {
+        document.body.innerHTML = '';
+        DataLoader.registry = null;
+    });
+
+    it('uiText 미선언 시험도 공통 표준 라벨로 해석한다', () => {
+        document.body.innerHTML = `
+            <span data-uitext="quiz">기출 퀴즈</span>
+            <span data-uitext="review">오답/중요 복습</span>
+            <span data-uitext="calendar">학습 캘린더</span>
+            <span data-uitext="practice-manual">실무 매뉴얼</span>`;
+        DataLoader.registry = { uiText: {} };
+        applyUiTextLabels();
+        const labels = [...document.querySelectorAll('[data-uitext]')].map(e => e.textContent);
+        expect(labels).toEqual(['퀴즈', '오답 및 중요 복습', '캘린더', '실무 매뉴얼']);
+    });
+
+    it('시험 manifest.uiText가 공통값보다 우선한다', () => {
+        document.body.innerHTML = `
+            <span data-uitext="flashcard:nav">플래시카드</span>
+            <span data-uitext="dictionary:nav">사전</span>`;
+        DataLoader.registry = { uiText: {
+            flashcard: { nav: '단어카드' },
+            dictionary: { title: '성분사전', nav: '성분사전' },
+        } };
+        applyUiTextLabels();
+        const labels = [...document.querySelectorAll('[data-uitext]')].map(e => e.textContent);
+        expect(labels).toEqual(['단어카드', '성분사전']);
+    });
+
+    it('선언·공통 어느 쪽에도 없는 키는 템플릿 문구를 유지한다', () => {
+        document.body.innerHTML = '<span data-uitext="future-key">미래 라벨</span>';
+        DataLoader.registry = { uiText: {} };
+        applyUiTextLabels();
+        expect(document.querySelector('[data-uitext]').textContent).toBe('미래 라벨');
+    });
+});

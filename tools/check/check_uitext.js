@@ -27,6 +27,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { pathToFileURL } = require('url');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const EXAMS_PATH = path.join(ROOT, 'content', 'exams.json');
@@ -63,7 +64,7 @@ function collectHtml(dir, out) {
     return out;
 }
 
-function main() {
+async function main() {
     const errors = [];
     const warnings = [];
 
@@ -77,15 +78,18 @@ function main() {
     ];
 
     // --- (a) data-uitext ↔ uiText 양방향 감사 ---
-    const templateKeys = new Map(); // key → [file:line]
+    const templateKeys = new Map(); // bareKey → { locs: [file:line], fields: Set }
     const attrRe = /data-uitext="([^"]+)"/g;
     for (const f of htmlFiles) {
         const rel = path.relative(ROOT, f).split(path.sep).join('/');
         fs.readFileSync(f, 'utf8').split('\n').forEach((ln, i) => {
             let m;
             while ((m = attrRe.exec(ln))) {
-                if (!templateKeys.has(m[1])) templateKeys.set(m[1], []);
-                templateKeys.get(m[1]).push(`${rel}:${i + 1}`);
+                const [k, field] = m[1].split(':');
+                if (!templateKeys.has(k)) templateKeys.set(k, { locs: [], fields: new Set() });
+                const info = templateKeys.get(k);
+                info.locs.push(`${rel}:${i + 1}`);
+                if (field) info.fields.add(field);
             }
         });
     }
@@ -121,14 +125,32 @@ function main() {
         while ((m = jsRe.exec(txt))) usedKeys.add(m[2]);
     }
 
-    for (const [k, locs] of templateKeys) {
-        if (!manifestKeys.has(k)) {
-            warnings.push(`data-uitext="${k}" (${locs.join(', ')}): 어떤 시험의 uiText에도 없는 키 — 항상 정적 라벨로 렌더됨`);
+    // 플랫폼 공통 기본값 — manifest 미선언 시험의 라벨 해석원 (src/core/uitext-defaults.js)
+    const { COMMON_UITEXT } = await import(
+        pathToFileURL(path.join(ROOT, 'src', 'core', 'uitext-defaults.js')).href
+    );
+
+    for (const [k, info] of templateKeys) {
+        if (!manifestKeys.has(k) && !COMMON_UITEXT[k]) {
+            warnings.push(`data-uitext="${k}" (${info.locs.join(', ')}): uiText·공통 기본값 양쪽에 없는 키 — 항상 정적 라벨로 렌더됨`);
+        }
+        if (COMMON_UITEXT[k] && info.fields.has('nav') && !COMMON_UITEXT[k].nav) {
+            errors.push(`data-uitext="${k}:nav" (${info.locs.join(', ')}): 공통 uiText에 nav 없음 — 미선언 시험은 title 폴백으로 내비 라벨이 깨짐`);
         }
     }
     for (const [k, ids] of manifestKeys) {
         if (!usedKeys.has(k)) {
             warnings.push(`uiText.${k} (${ids.join(', ')}): 템플릿·소스에서 미사용 키 — dead config`);
+        }
+    }
+    // 공통 기본값 감사 — 최소 형식(title) + 어디에도 안 쓰이는 키 감시
+    for (const [k, v] of Object.entries(COMMON_UITEXT)) {
+        if (!v || !v.title) {
+            errors.push(`COMMON_UITEXT.${k}: title 없음 — 최소 형식 위반`);
+            continue;
+        }
+        if (!usedKeys.has(k) && !manifestKeys.has(k)) {
+            warnings.push(`COMMON_UITEXT.${k}: 템플릿·manifest 양쪽 미사용 — dead 공통 키`);
         }
     }
 
@@ -191,4 +213,4 @@ function main() {
     console.log('\n✅ uiText 커버리지 정합 — platform 마크업에 시험 용어 잔존 없음');
 }
 
-main();
+main().catch((e) => { console.error(e); process.exit(1); });

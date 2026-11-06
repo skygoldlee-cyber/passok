@@ -124,6 +124,7 @@ src/                    # ES Modules
     storage.js           # 저장소 추상화 계층 — 백엔드 교체 가능(getItem/setItem 동기·Async 이중 API), 스코프·쓰기훅·쿼터 감지 중앙화
     storage-keys.js      # localStorage 키 중앙 관리
     types.js             # 중앙 JSDoc 타입 정의 모듈 (@spec none)
+    uitext-defaults.js   # 플랫폼 공통 UI 텍스트 기본값 + mergeUiText (manifest.uiText > 공통 > 템플릿 순, DA-12)
     utils.js             # 공통 유틸리티 (shuffle·todayKey/localDateKey·getChosung·escapeRegExp·debounce·fmtClock/fmtMMSS)
   ui-utils.js           # showToast, showConfirm, trapFocus + 훈련 공용 마크업(markChoiceButtons·wrongReviewHtml·trainerResultHtml·showAnswerFeedback)
   search/search-index.js       # 통합검색 인덱스 코어 순수 로직 (소스 레지스트리·시험 스코프 무효화·지연 소드 상태머신·어절 역색인·티어 랭킹 — TS-08~09,TS-13~18)

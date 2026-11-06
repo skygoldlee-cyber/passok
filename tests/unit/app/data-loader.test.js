@@ -78,7 +78,7 @@ test('getSubjectList: registry 없으면 빈 배열', () => {
 
 // ==================== mergeUiText / getUiText ====================
 
-import { mergeUiText } from '../../../src/content/data-loader.js';
+import { mergeUiText } from '../../../src/core/uitext-defaults.js';
 
 test('mergeUiText: uiText 미선언 시험도 공통 표준 라벨이 나온다', () => {
     const ui = mergeUiText(undefined);

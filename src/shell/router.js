@@ -6,7 +6,7 @@ import { showToast, hideGlobalLoading } from '../ui-utils.js';
 import { isAnyModalOpen, consumedModalPop } from './modal-back.js';
 import { getPracticeViewTitles, getPracticeHashSlugs } from '../practice-registry.js';
 import { getCurrentExamId, getExamAppName } from '../core/exam-context.js';
-import { mergeUiText } from '../content/data-loader.js';
+import { mergeUiText } from '../core/uitext-defaults.js';
 
 /**
  * 레지스트리 기반 뷰 타이틀 맵 생성
