@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261107-aad0bbe",
+    "date": "2026-11-07",
+    "notes": [
+      "[수정·sw] docs/ 이미지를 EXAM_MEDIA_ASSETS 프리캐시에 포함 — 생성기 확장",
+      "[수정·sw] carework_4step_flow.svg 프리캐시 등록 — 모바일 학습안내서 도식 표시",
+      "[정리·release] v20261107-bf8ee0c 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-bf8ee0c",
     "date": "2026-11-07",
     "notes": [
@@ -188,21 +197,6 @@
       "[수정·carework] 웹툰 과목 선택 순서 — 1과목 먼저 + 순서 테스트",
       "[수정·nav] 웹툰·학습흐름 실무모드 → 학습모드 이동 — nav-study-only",
       "[정리·release] v20261105-c31dee7 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261105-c31dee7",
-    "date": "2026-11-05",
-    "notes": [
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[정리] TRACE_MATRIX 재생성 — care-flow dom 테스트 반영",
-      "[수정·carework] flow 진행 저장 JSON 직렬화 — getItem 문자열 미파싱 버그",
-      "[정리] care-flow 콘텐츠 파생물·MD_ASSETS 동기화",
-      "[정리] TRACE_MATRIX 재생성 — care-flow 테스트 반영",
-      "[수정·carework] flow 뷰 innerHTML 보간 이스케이프 + 스모크 테스트",
-      "[문서] 4단계 플로우 정본 헤더·번들 갱신",
-      "[기능·carework] 4단계 학습 흐름 뷰 care-flow — 개념 사이클 상태머신",
-      "[정리·release] v20261105-72246fd 스탬프 확정 [no-docs]"
     ]
   }
 ]
