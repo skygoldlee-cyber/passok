@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 ci: check:contrast 게이트 등록 정합
+
+- package.json check:contrast 스크립트 + ci.yml 「Theme contrast audit」단계 + steps.js ci:contrast(npmStep — ci.yml 명령 문자열 정합) + COMMANDS.md 재생성
+
 ## 2026-11-07 feat(ui): 다크모드 대비 보정 + 감사 표면 확장
 
 - :root --color-danger → #f87171(텍스트) / --color-danger-fill #ef4444(채우기) 분리 — 배너는 fill 토큰 사용

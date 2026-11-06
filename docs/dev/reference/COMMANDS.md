@@ -102,7 +102,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `ci:mobilesafe` | P0 | 규약 | `npm.cmd run check:mobilesafe` | 모바일 잘림 규약 (다이얼로그·버튼 행 줄바꿈) |
 | `ci:escape` | P0 | 규약 | `npm.cmd run check:escape` | HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간) |
 | `ci:uistyle` | P0 | 규약 | `npm.cmd run check:uistyle` | UI 스타일 규약 — 인라인 style·JS display 조작·인라인 핸들러·네이티브 다이얼로그 금지 |
-| `ci:contrast` | P1 | 규약 | `node tools/check/check_contrast.js` | 테마 토큰 WCAG 대비 — 텍스트용 시맨틱 색 ↔ 배경 (AA 4.5·의미 전달 3.0) |
+| `ci:contrast` | P1 | 규약 | `npm.cmd run check:contrast` | 테마 토큰 WCAG 대비 — 텍스트용 시맨틱 색 ↔ 배경 (AA 4.5·의미 전달 3.0) |
 | `ci:zlayer` | P0 | 규약 | `npm.cmd run check:zlayer` | z-index 계층 계약 — 앱 크롬 대역 보호·금지 대역 차단 (UX-SET-06) |
 | `ci:filenames` | P0 | 규약 | `npm.cmd run check:filenames` | 파일명 대소문자 규약 — 영역별 kebab/snake/SCREAMING 패턴, 신규 위반 차단 (CODE_CONVENTIONS §2.1) |
 | `ci:docsync` | P1 | 문서 | `node tools/check/check_doc_sync.js --ref origin/main` | 소스 변경 시 문서 갱신 강제 |
@@ -236,7 +236,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run check:mobilesafe` | `node tools/check/check_mobile_safe.js` | 모바일 잘림 규약 (다이얼로그·버튼 행 줄바꿈) |
 | `npm run check:escape` | `node tools/check/check_html_escape.js` | HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간) |
 | `npm run check:uistyle` | `node tools/check/check_ui_style.js` | UI 스타일 규약 — 인라인 style·JS display 조작·인라인 핸들러·네이티브 다이얼로그 금지 |
-| `npm run check:contrast` | `node tools/check/check_contrast.js` | CSS 테마 토큰 WCAG 대비 감사 |
+| `npm run check:contrast` | `node tools/check/check_contrast.js` | 테마 토큰 WCAG 대비 — 텍스트용 시맨틱 색 ↔ 배경 (AA 4.5·의미 전달 3.0) |
 | `npm run check:zlayer` | `node tools/check/check_zlayer.js` | z-index 계층 계약 — 앱 크롬 대역 보호·금지 대역 차단 (UX-SET-06) |
 | `npm run check:diffcov` | `node tools/check/check_diff_coverage.js` | 변경 라인 차등 커버리지 게이트 (diff coverage) |
 | `npm run check:seedkeys` | `node tools/check/check_seed_keys.js` | 테스트 시드 저장 키 ↔ 스토리지 스코프 정합 정적 검사 |
