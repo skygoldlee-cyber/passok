@@ -1,5 +1,5 @@
 {
- "_comment": "4단계 학습 흐름(DOC-USR-22) 개념 레지스트리 — 파일럿 대상 2과목 Ch10·12·14. bodyAnchor는 표준형 구조 앵커(장-절), storySlot은 서사 슬롯 id. 인물 설정은 docs/인물 설정표.md(DOC-USR-23) 준수.",
+ "_comment": "적응형 학습 엔진 설계(DOC-USR-22) 개념 레지스트리 — 파일럿 대상 2과목 Ch10·12·14. bodyAnchor는 표준형 구조 앵커(장-절), storySlot은 서사 슬롯 id. 인물 설정은 docs/인물 설정표.md(DOC-USR-23) 준수.",
  "concepts": [
   {
    "id": "s2-c10-meal-posture",

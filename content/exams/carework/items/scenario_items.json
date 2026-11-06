@@ -1,5 +1,5 @@
 {
- "_comment": "4단계 학습 흐름(DOC-USR-22) 선택형 시나리오 문항 — 파일럿(2과목 Ch10·12·14) seed. role: pre=미리 풀기 / scenario=시나리오 / review=간격복습. rationale는 options와 같은 순서의 보기별 해설(정답 근거·오답 이유·현장 팁 3문장 이내). 수치·조문은 표준형 본문과 동일해야 함 — check_scenario_items.js가 검증.",
+ "_comment": "적응형 학습 엔진 설계(DOC-USR-22) 선택형 시나리오 문항 — 파일럿(2과목 Ch10·12·14) seed. role: pre=미리 풀기 / scenario=시나리오 / review=간격복습. rationale는 options와 같은 순서의 보기별 해설(정답 근거·오답 이유·현장 팁 3문장 이내). 수치·조문은 표준형 본문과 동일해야 함 — check_scenario_items.js가 검증.",
  "items": [
   {
    "id": "it-c10-posture-sc01",
