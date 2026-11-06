@@ -572,9 +572,23 @@
         flex-direction: column;
         align-items: stretch;
     }
+    .btn-row .btn,
+    .app-confirm-actions button {
+        justify-content: center; /* 전폭 스택 시 내용 중앙 정렬 */
+    }
     .btn-row .btn-primary,
     .app-confirm-actions .app-confirm-ok {
         order: -1;
+    }
+
+    /* 모바일 하단 고정 제출 행 — 탭바+safe-area 위 (@spec UX-CTL-05)
+       사용: 폼 마지막에 .btn-row-sticky (PC·태블릿은 인플로우 유지) */
+    .btn-row-sticky {
+        position: sticky;
+        bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+        z-index: var(--z-sticky);
+        background: var(--bg-app);
+        padding: var(--space-2) 0;
     }
 
     /* 입력 필드 터치 영역 확대 */

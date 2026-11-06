@@ -256,6 +256,12 @@ test('UX-FORM-01: 표준 입력 클래스(.form-input)의 font-size가 16px 이�
       `.form-input font-size 16px 미만: ${val}`
     );
   }
+  const selRules = allCss.match(/\.form-select\s*\{[^}]+\}/g) || [];
+  assert.ok(selRules.length > 0, '.form-select 규칙 존재');
+  for (const rule of selRules.filter(r => /font-size:/.test(r))) {
+    const val = rule.match(/font-size:\s*([^;]+)/)[1].trim();
+    assert.ok(/16px|1rem|--text-1rem|--text-md/.test(val), `.form-select font-size 16px 미만: ${val}`);
+  }
 });
 
 test('UX-FORM-02: 터치 피드백(:active scale)이 인터랙티브 요소에 적용된다', () => {

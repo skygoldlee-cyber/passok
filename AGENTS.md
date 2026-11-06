@@ -102,7 +102,7 @@ html/exams/<id>/        # 시험 도메인 뷰 파셜 (지연 주입 — formula
   carework/facility-admin.html # carework 기관 관리 어드민 뷰 파셜 (Phase 6a)
   carework/care-webtoon.html # carework 웹툰 버블 뷰 파셜 (이야기 슬롯 → 말풍선 컷)
   carework/care-flow.html # carework 4단계 학습 흐름 뷰 파셜 (미리풀기→이야기→요약→시나리오, DOC-USR-24)
-style.css               # CSS 진입점 (@import로 모듈 로드)
+style.css               # CSS 진입점 (@import로 모듈 로드) — 컨트롤 높이 --control-h-sm/md/lg · 행간격 --gap-ctl/group/sec 토큰 규약 (SPEC §4.8.9, UX-CTL)
 sw.js                   # Service Worker
 manifest.webmanifest    # PWA 매니페스트
 manifests/              # 시험별 PWA 매니페스트 (<id>.webmanifest — build:exams-list 생성물, pwa-manifest.js가 활성 시험 파일로 링크 교체)

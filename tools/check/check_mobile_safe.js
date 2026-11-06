@@ -139,6 +139,7 @@ for (const file of walk(path.join(ROOT, 'html'), ['.html'])) {
    예외 셀렉터는 부분 문자열 매칭 — 사유를 함께 선언한다. */
 const INTERACTIVE_SEL = ['button', 'select', '.btn', 'chip', '.tab-item', '.nav-item', '.settings-item', 'input', 'app-confirm'];
 const HEIGHT_LITERAL_RE = /(?:min-)?height:\s*(\d+(?:\.\d+)?)px/;
+const GAP_LITERAL_RE = /(?:^|;)\s*gap:\s*\d+(?:\.\d+)?px/;
 const CTL_HEIGHT_EXEMPT = [
   ['input[type="checkbox"]', '네이티브 체크박스 — 라벨·행이 터치 타겟 (UX-SET-03 면제 유지)'],
   ['input[type="radio"]', '네이티브 라디오 — 라벨이 터치 타겟'],
@@ -156,10 +157,16 @@ for (const file of walk(path.join(ROOT, 'css'), ['.css'])) {
     if (!INTERACTIVE_SEL.some(p => sel.includes(p))) continue;
     ctlScanned++;
     const hm = body.match(HEIGHT_LITERAL_RE);
-    if (!hm || parseFloat(hm[1]) >= 44) continue;
-    if (CTL_HEIGHT_EXEMPT.some(([ex]) => sel.includes(ex))) continue;
     const line = src.slice(0, m.index).split('\n').length;
-    issues.push(`${rel}:${line} — 인터랙티브 요소의 높이 ${hm[1]}px (<44px): ${sel.slice(0, 60)} — --control-h-* 토큰 사용 (UX-CTL-01)`);
+    if (hm && parseFloat(hm[1]) < 44 && !CTL_HEIGHT_EXEMPT.some(([ex]) => sel.includes(ex))) {
+      issues.push(`${rel}:${line} — 인터랙티브 요소의 높이 ${hm[1]}px (<44px): ${sel.slice(0, 60)} — --control-h-* 토큰 사용 (UX-CTL-01)`);
+    }
+    /* gap 리터럴은 "컨트롤 행" 컨테이너만 대상 — 베어 요소로 끝나는 셀렉터는
+       요소 내부(아이콘↔텍스트) 간격이라 규약 비대상 (UX-CTL-03) */
+    if (GAP_LITERAL_RE.test(body) && /chip|btn|action|controls/i.test(sel)
+        && !/(button|a|input|select|textarea|label|span)\s*$/.test(sel)) {
+      issues.push(`${rel}:${line} — 컨트롤 행의 gap px 리터럴: ${sel.slice(0, 60)} — --gap-ctl/group/sec 토큰 사용 (UX-CTL-03)`);
+    }
   }
 }
 

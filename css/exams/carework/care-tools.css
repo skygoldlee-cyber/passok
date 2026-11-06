@@ -107,14 +107,15 @@
 /* ── 요양일지 ─────────────────────────────────── */
 .care-log-activities { display: grid; gap: var(--gap-group); margin: var(--gap-ctl) 0 var(--gap-sec); }
 .care-log-group {
+    display: flex; flex-wrap: wrap; gap: var(--gap-ctl);
     background: var(--bg-muted); border: 1px solid var(--border-subtle);
     border-radius: 12px; padding: 12px 14px;
 }
-.care-log-group strong { display: block; font-size: 13px; margin-bottom: 8px; color: var(--color-text-main); }
+.care-log-group strong { flex: 1 1 100%; font-size: 13px; color: var(--color-text-main); }
 .care-log-group label {
     display: inline-flex; align-items: center; gap: 6px;
     background: var(--bg-elevated); border: 1px solid var(--border-color);
-    border-radius: 999px; padding: 8px 14px; margin: 0 6px 6px 0;
+    border-radius: 999px; padding: 8px 14px;
     font-size: 13px; color: var(--color-text-main); cursor: pointer; min-height: var(--control-h-md);
 }
 .care-log-group input[type="checkbox"] { accent-color: var(--color-primary); }
@@ -292,7 +293,7 @@
 /* ── 웹툰 버블 뷰 (care-webtoon) ── */
 .webtoon-controls { display: flex; gap: var(--gap-group); flex-wrap: wrap; margin: var(--gap-group) 0 var(--space-1); }
 .webtoon-controls label { flex: 1 1 160px; min-width: 0; display: flex; flex-direction: column; gap: var(--space-1); font-size: .85rem; color: var(--color-text-dim); }
-.webtoon-controls select { min-height: var(--control-h-md); border: 1px solid var(--border); border-radius: 8px; padding: 0 10px; background: var(--color-surface); color: var(--color-text-main); }
+.webtoon-controls select { min-height: var(--control-h-md); font-size: 1rem; border: 1px solid var(--border); border-radius: 8px; padding: 0 10px; background: var(--color-surface); color: var(--color-text-main); } /* UX-FORM-01 — 16px 미만이면 iOS 포커스 자동 확대 */
 .webtoon-stage { border: 1px solid var(--border); border-radius: 12px; background: var(--bg-muted); padding: 14px 10px; min-height: 200px; display: flex; flex-direction: column; gap: 10px; }
 .wb-row { display: flex; align-items: flex-end; gap: 8px; }
 .wb-row.wb-right { flex-direction: row-reverse; }

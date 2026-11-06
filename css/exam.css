@@ -281,6 +281,11 @@
 }
 .flex-btns a, .flex-btns button {
     flex: 1;
+    /* 링크형 액션도 버튼과 동일 타겟 계약 (@spec UX-CTL-02) */
+    min-height: var(--control-h-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .grid-btns-3 {
