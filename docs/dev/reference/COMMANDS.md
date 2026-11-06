@@ -21,7 +21,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `content` | 32 | 콘텐츠 통합 검증 — 교재 교체 등 대규모 콘텐츠 변경 후 (--quick, --content-only, --build 옵션) |
 | `docs` | 20 | 문서 정합 묶음 — 경로 참조·문서 ID·트리·명령 정합 등 |
-| `ci` | 31 | CI 게이트 로컬 재현 — ci.yml과 토큰 1:1 대응 |
+| `ci` | 32 | CI 게이트 로컬 재현 — ci.yml과 토큰 1:1 대응 |
 | `all` | 61 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
 | `refs` | 6 | 참조자료 검증 묶음 — 레이아웃·귀속·신선도·인용 라인·병합 품질 |
 | `freshness` | 10 | 생성물 신선도 묶음 — 파생물 미재생성 감지 |
@@ -102,6 +102,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `ci:mobilesafe` | P0 | 규약 | `npm.cmd run check:mobilesafe` | 모바일 잘림 규약 (다이얼로그·버튼 행 줄바꿈) |
 | `ci:escape` | P0 | 규약 | `npm.cmd run check:escape` | HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간) |
 | `ci:uistyle` | P0 | 규약 | `npm.cmd run check:uistyle` | UI 스타일 규약 — 인라인 style·JS display 조작·인라인 핸들러·네이티브 다이얼로그 금지 |
+| `ci:contrast` | P1 | 규약 | `node tools/check/check_contrast.js` | 테마 토큰 WCAG 대비 — 텍스트용 시맨틱 색 ↔ 배경 (AA 4.5·의미 전달 3.0) |
 | `ci:zlayer` | P0 | 규약 | `npm.cmd run check:zlayer` | z-index 계층 계약 — 앱 크롬 대역 보호·금지 대역 차단 (UX-SET-06) |
 | `ci:filenames` | P0 | 규약 | `npm.cmd run check:filenames` | 파일명 대소문자 규약 — 영역별 kebab/snake/SCREAMING 패턴, 신규 위반 차단 (CODE_CONVENTIONS §2.1) |
 | `ci:docsync` | P1 | 문서 | `node tools/check/check_doc_sync.js --ref origin/main` | 소스 변경 시 문서 갱신 강제 |
@@ -166,7 +167,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run postbuild:data` | `npm run check:parser` | 체인: check:parser |
 
-### `check:*` — 72개
+### `check:*` — 73개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -235,6 +236,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run check:mobilesafe` | `node tools/check/check_mobile_safe.js` | 모바일 잘림 규약 (다이얼로그·버튼 행 줄바꿈) |
 | `npm run check:escape` | `node tools/check/check_html_escape.js` | HTML 이스케이프 싱크 규약 (innerHTML 미이스케이프 보간) |
 | `npm run check:uistyle` | `node tools/check/check_ui_style.js` | UI 스타일 규약 — 인라인 style·JS display 조작·인라인 핸들러·네이티브 다이얼로그 금지 |
+| `npm run check:contrast` | `node tools/check/check_contrast.js` | CSS 테마 토큰 WCAG 대비 감사 |
 | `npm run check:zlayer` | `node tools/check/check_zlayer.js` | z-index 계층 계약 — 앱 크롬 대역 보호·금지 대역 차단 (UX-SET-06) |
 | `npm run check:diffcov` | `node tools/check/check_diff_coverage.js` | 변경 라인 차등 커버리지 게이트 (diff coverage) |
 | `npm run check:seedkeys` | `node tools/check/check_seed_keys.js` | 테스트 시드 저장 키 ↔ 스토리지 스코프 정합 정적 검사 |

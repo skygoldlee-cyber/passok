@@ -134,6 +134,9 @@ jobs:
       - name: UI style convention (인라인 스타일·display 조작 규약)
         run: npm run check:uistyle
 
+      - name: Theme contrast audit (텍스트 토큰 WCAG 대비)
+        run: npm run check:contrast
+
       - name: z-index layer contract (앱 크롬 대역 보호, UX-SET-06)
         run: npm run check:zlayer
 
