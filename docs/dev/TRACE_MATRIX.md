@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: b767a349b5177095
-> 생성: 2026-11-06 · 원천: SPEC.md(673개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: e806441680663424
+> 생성: 2026-11-06 · 원천: SPEC.md(679개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 673개 — 문서 연결 464 · 소스 연결 600 · 테스트 연결 640 · 보고서 연결 109
+**커버리지 요약**: 요구사항 679개 — 문서 연결 464 · 소스 연결 606 · 테스트 연결 646 · 보고서 연결 109
 
 ---
 
@@ -738,6 +738,12 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | OB-01 | `onboarding.js` — 단계 진행 도트·건너뛰기·이전 지원, 목표 검증 실패 시 진행 차단. 학습 실행은 `data-click` 위임(모듈 import 없이 기존 액션 재사용). UX-FB-05의 1회성·재열람 계약은 불변 | 테스트 | — | src/shell/onboarding.js | tests/dom/shell/onboarding-zoom.dom.test.js | — | — |
+| UX-CTL-01 | A-04의 44px를 기본값(`md`)으로 둔 역할 계층. `sm`은 아이콘 버튼·밀집 행·가로모드 밀도 예외, `lg`는 주요 CTA·전폭 액션. 비대상: 테이블 셀·본문 링크·아바타·이미지·진행바·데코레이터 배지 | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-02 | 터치 대역(모바일+태블릿)은 물론 PC도 동일 높이를 쓰는 것이 원칙 — 높이는 대역이 아니라 역할로 결정. `.btn` 기본 규칙에 min-height를 두어 모바일 미디어쿼리 `!important` 보정에 의존하지 않는다 | E2E 테스트 | — | css/base.css<br>css/dashboard.css<br>css/study.css | tests/e2e/mobile-overflow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-03 | 기존 `.btn-row`는 `var(--gap-group)`. 태블릿·PC 카드 내부는 `gap-group`→`space-4` 팽창 허용, `gap-ctl`은 대역 무관 고정 | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-04 | 가로 라벨 배치(라벨 좌·컨트롤 우)는 설정 행(`.settings-item` 류)·라벨 자체가 토글 타겟인 칩(`.obs-chip`)에만 허용 — 모바일에서 라벨이 컨트롤 폭을 잠식하고 한국어 라벨 길이 변동에 취약 | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-05 | 모바일 하단 고정 제출 액션은 `position:sticky` + `calc(70px + safe-area)` (UX-NAV-05 일반화). 태블릿·PC는 인플로우 배치만 — 스크롤 없는 화면의 고정바는 무의미 | 테스트 | — | css/app-responsive.css<br>css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-06 | UX-VFY-06과 동형의 조기 차단 — 토큰 미사용 높이는 커밋 전 탐지. E2E 측 실측은 `touch-targets.json` 기준선(UX-SET-03 확장)이 담당 | 테스트 | — | tools/check/check_mobile_safe.js | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FB-01 | `@media (max-width: 768px) { #app-toast { top:auto; bottom: calc(80px + safe-area) } }` — 하단 탭 바 위 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/a11y-interaction.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FB-02 | 네이티브 대화상자는 PWA 설치 흐름을 깨고 스타일 제어 불가. 커스텀 모달은 포커스 트랩 + Escape + 배경 클릭 닫기 포함 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js<br>tools/check/check_ui_style.js | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FB-03 | `animationend` 리스너로 클래스 해제 — `display:none` 상태에서는 애니메이션이 안 돌아 첫 실제 표시에 실행됨. `prefers-reduced-motion`에서는 자동으로 0.01ms 처리됨 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/reader-markers.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |

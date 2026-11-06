@@ -1,5 +1,5 @@
 // tests/unit/ux-invariants.test.js — UI/UX 설계 요구사항 (정적 검증)
-// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,LP-06,LP-10,LP-11,LP-12,LP-13,LP-14
+// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,UX-CTL-01~06,LP-06,LP-10,LP-11,LP-12,LP-13,LP-14
 // CSS 규칙·마크업 구조·JS 구현 패턴이 설계 요구사항을 유지하는지 고정한다.
 
 import { test } from 'node:test';
@@ -72,7 +72,7 @@ test('UX-SET-02: 설정 패널이 max-height + 내부 스크롤을 갖는다', (
 test('UX-SET-03: 설정 항목의 최소 터치 타겟이 44px이다', () => {
   const item = baseCss.match(/\.settings-item\s*\{[\s\S]*?\}/);
   assert.ok(item, '.settings-item 규칙');
-  assert.ok(/min-height:\s*44px/.test(item[0]), 'min-height 44px');
+  assert.ok(/min-height:\s*var\(--control-h-md\)/.test(item[0]), 'min-height --control-h-md (44px) 토큰');
 });
 
 test('UX-SET-04: 버전 표기가 설정 패널 하단에 있다', () => {
@@ -261,4 +261,63 @@ test('UX-FORM-01: 표준 입력 클래스(.form-input)의 font-size가 16px 이�
 test('UX-FORM-02: 터치 피드백(:active scale)이 인터랙티브 요소에 적용된다', () => {
   const scales = allCss.match(/:active[^}]*transform:\s*scale\(0\.9[2-8]/g) || [];
   assert.ok(scales.length >= 2, `:active scale 규칙 부족 (${scales.length})`);
+});
+
+// ---------- UX-CTL: 컨트롤 배치·간격 규약 ----------
+
+test('UX-CTL-01: 컨트롤 높이 3단계 토큰이 :root에 정의된다', () => {
+  for (const t of ['--control-h-sm', '--control-h-md', '--control-h-lg']) {
+    assert.ok(baseCss.includes(`${t}:`), `${t} 토큰 정의 필요`);
+  }
+  assert.match(baseCss, /--control-h-md:\s*2\.75rem/, 'md = 44px(2.75rem) — A-04 계승');
+});
+
+test('UX-CTL-02: .btn·.form-input·.form-select는 --control-h-md 높이를 공유한다', () => {
+  // 기본 규칙이 위치한 파일 기준 — 미디어쿼리 오버라이드 규칙과 혼동 방지
+  const targets = [
+    ['btn', baseCss],
+    ['form-input', read('css/study.css')],
+    ['form-select', read('css/dashboard.css')],
+  ];
+  for (const [cls, css] of targets) {
+    const rule = css.match(new RegExp('\\.' + cls + '\\s*\\{[^}]+\\}'));
+    assert.ok(rule, `.${cls} 규칙 존재`);
+    assert.ok(
+      /min-height:\s*var\(--control-h-md\)/.test(rule[0]),
+      `.${cls} min-height --control-h-md 아님: ${rule[0].match(/min-height:[^;]+/)?.[0] || '없음'}`
+    );
+  }
+});
+
+test('UX-CTL-03: 수평 간격 3단계 토큰이 --space 별칭으로 정의된다', () => {
+  for (const [tok, alias] of [['--gap-ctl', '--space-2'], ['--gap-group', '--space-3'], ['--gap-sec', '--space-4']]) {
+    const def = baseCss.match(new RegExp(tok + ':\\s*var\\(' + alias + '\\)'));
+    assert.ok(def, `${tok} = var(${alias}) 정의 필요`);
+  }
+});
+
+test('UX-CTL-04: .ctl-field는 라벨 위·컨트롤 아래 수직 스택 규약이다', () => {
+  const f = baseCss.match(/\.ctl-field\s*\{[^}]+\}/);
+  assert.ok(f, '.ctl-field 규칙 존재');
+  assert.ok(/flex-direction:\s*column/.test(f[0]), '세로 스택');
+  assert.ok(/gap:\s*var\(--space-1\)/.test(f[0]), '라벨→컨트롤 space-1(4px)');
+});
+
+test('UX-CTL-05: .btn-row는 우측 정렬, 모바일에서 세로 스택+주요 우선이다', () => {
+  const row = baseCss.match(/\.btn-row\s*\{[^}]+\}/);
+  assert.ok(row, '.btn-row 규칙 존재');
+  assert.ok(/justify-content:\s*flex-end/.test(row[0]), 'PC 우측 정렬 (보조→주요)');
+  const resp = read('css/app-responsive.css');
+  assert.ok(
+    /(\.btn-row|\.app-confirm-actions)[^}]*flex-direction:\s*column/.test(resp),
+    '모바일 세로 스택 규칙'
+  );
+  assert.ok(/order:\s*-1/.test(resp), '주요 버튼 order:-1 (모바일 첫째)');
+});
+
+test('UX-CTL-06: 컨트롤 높이 정적 체커가 44px 미만 px 리터럴을 검출한다', () => {
+  const checker = read('tools/check/check_mobile_safe.js');
+  assert.ok(checker.includes('HEIGHT_LITERAL_RE'), '높이 리터럴 정규식 존재');
+  assert.ok(checker.includes('CTL_HEIGHT_EXEMPT'), '면제 셀렉터 목록 존재');
+  assert.ok(checker.includes('UX-CTL-06'), '@spec 태그');
 });

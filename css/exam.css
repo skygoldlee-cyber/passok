@@ -137,7 +137,7 @@
 .grid-btns {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: var(--space-2);
+    gap: var(--gap-ctl);
 }
 
 .exam-btn-link {
@@ -277,7 +277,7 @@
 .flex-btns {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3);
+    gap: var(--gap-group);
 }
 .flex-btns a, .flex-btns button {
     flex: 1;
@@ -286,13 +286,13 @@
 .grid-btns-3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-3);
+    gap: var(--gap-group);
 }
 
 .grid-btns-2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-3);
+    gap: var(--gap-group);
 }
 
 .exam-btn-pair {

@@ -351,8 +351,8 @@ export function mountProMoment(container, momentKey) {
         <i class="fa-solid fa-gem" aria-hidden="true"></i>
         <span class="pro-moment-text"><strong>${esc(def.label)}</strong>은(는) Pro 제공 예정 기능입니다 — 지금은 무료로 이용 중입니다.</span>
         <div class="pro-moment-actions btn-row">
-            <button type="button" class="btn btn-sm btn-primary" data-click="showPlanCompare">플랜 비교</button>
             <button type="button" class="btn btn-sm btn-secondary" data-pro-moment-dismiss aria-label="닫기">닫기</button>
+            <button type="button" class="btn btn-sm btn-primary" data-click="showPlanCompare">플랜 비교</button>
         </div>`;
     card.querySelector('[data-pro-moment-dismiss]')?.addEventListener('click', () => card.remove());
     container.prepend(card);

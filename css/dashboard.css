@@ -127,7 +127,7 @@
 }
 
 /* 내 맞춤 분석 뷰 — 진단 요약 카드 3종 */
-.btn-sm { padding: 0.4rem 0.9rem; font-size: var(--text-sm); min-height: 44px; }
+.btn-sm { padding: 0.4rem 0.9rem; font-size: var(--text-sm); min-height: var(--control-h-md); }
 
 .section-title-row {
     display: flex;
@@ -139,7 +139,7 @@
 
 .analysis-link-btn {
     white-space: nowrap;
-    min-height: 44px;
+    min-height: var(--control-h-md);
 }
 
 .analysis-insight-grid {
@@ -320,7 +320,7 @@
 
 .analysis-card-btn {
     margin-top: var(--space-3);
-    min-height: 44px;
+    min-height: var(--control-h-md);
 }
 
 .subject-card {
@@ -466,6 +466,8 @@
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     color: var(--color-text-main);
+    /* .form-input·.btn과 행 높이 정합 (@spec UX-CTL-02) */
+    min-height: var(--control-h-md);
     padding: 0.5rem 2rem 0.5rem 1rem;
     font-family: var(--font-app);
     font-size: var(--text-1rem); /* iOS 자동 확대 방지 (16px 이상) */
@@ -532,7 +534,7 @@
 .rec-item .rec-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .rec-item .rec-reason { font-size: var(--text-sm); color: var(--color-text-muted); }
 .rec-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
-.rec-item .btn-sm { padding: 0.35rem 0.875rem; font-size: var(--text-sm); min-height: 44px; min-width: 44px; }
+.rec-item .btn-sm { padding: 0.35rem 0.875rem; font-size: var(--text-sm); min-height: var(--control-h-md); min-width: var(--control-h-md); }
 .rec-empty { color: var(--color-text-muted); text-align: center; padding: var(--space-5); font-size: var(--text-md-sm); }
 
 /* 오늘 할 일 큐 (TQ-01) — 번호 매긴 우선순위 리스트 */
@@ -1118,10 +1120,10 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 }
 .daily-short-row .form-input {
     flex: 1;
-    height: 50px;
+    min-height: var(--control-h-lg);
 }
 .daily-short-row .btn {
-    height: 50px;
+    min-height: var(--control-h-lg);
 }
 .daily-status-done {
     color: var(--color-success);

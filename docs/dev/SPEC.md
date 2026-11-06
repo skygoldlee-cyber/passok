@@ -961,6 +961,19 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | UX-VFY-07 | **메뉴 아이콘 고유성 규약은 정적 체커로 강제**: `tools/check/check_nav_icons.js`가 사이드바(`nav-menu`)·모바일 탭 바·설정/도움말 영역(header 내 버튼)의 각 *기능*이 서로 다른 FA 아이콘을 쓰는지 마크업에서 검출 — `check:all`·ci.yml 게이트 편입 (규약 원문 §4.9.7) | UX-VFY-06과 동형 — 정적 마크업만으로 위반 식별이 가능해 e2e 실측 없이 커밋 전 차단이 유효. 기능 식별은 `data-uitext` 키·`data-target`·`data-click` 기준이며, 동일 기능이 사이드바와 모바일 탭에 반복되는 반응형 배치는 허용하고 *다른 기능*의 아이콘 재사용만 차단 |
 | UX-VFY-08 | **마크업 선언 규약은 정적 체커로 강제**: `npm run check:uistyle`(`check_ui_style.js`)이 CODE_CONVENTIONS §4 금지 패턴 중 정적 판정 가능 항목을 커밋 전 검출 — ① 인라인 `style=` 속성 ② JS `.style.display` 조작 ③ 인라인 `on*` 핸들러 ⑤ JS 템플릿 인라인 style (표시 상태는 `is-hidden` 등 클래스로, 이벤트는 `data-click` 위임으로). ④ 네이티브 다이얼로그 금지는 UX-FB-02 요구사항의 게이트 구현체 — `check:ci`·ci.yml 게이트 | UX-VFY-06/07과 동형 — 마크업·소스 패턴만으로 위반 식별이 가능해 정적 차단이 유효. 기존 잔여 위반은 `JS_STYLE_BASELINE` 래칫으로 동결하고 신규 유입만 차단하는 점진 축소 모델 |
 
+#### 4.8.9 컨트롤 배치·간격 규약
+
+> 버튼·인풋·셀렉트·칩 등 인터랙티브 컨트롤의 높이·배치·간격을 토큰으로 통일 — PC·태블릿·모바일 공용. 기존 A-04(44×44px)·UX-SET-03(설정 항목 44px)·UX-FORM-01(입력 16px)은 이 절의 토큰 체계로 수렴된다 (ID 소각 없음 — 하위 사례로 교차 참조).
+
+| ID | 요구사양 | 근거·구현 포인트 |
+|----|---------|------------------|
+| UX-CTL-01 | **컨트롤 높이 3단계 토큰**: `--control-h-sm`(2.25rem/36px) · `--control-h-md`(2.75rem/44px) · `--control-h-lg`(3rem/48px). 인터랙티브 요소의 `height`/`min-height` px 리터럴 금지 — 토큰 사용 | A-04의 44px를 기본값(`md`)으로 둔 역할 계층. `sm`은 아이콘 버튼·밀집 행·가로모드 밀도 예외, `lg`는 주요 CTA·전폭 액션. 비대상: 테이블 셀·본문 링크·아바타·이미지·진행바·데코레이터 배지 |
+| UX-CTL-02 | **기본 컨트롤 높이는 대역 무관 `md`**: `.btn`·`.form-input`·`.form-select`·칩 타겟은 `min-height: var(--control-h-md)` — 같은 행의 인풋·셀렉트·버튼 높이가 일치해 세로 정렬이 맞는다 | 터치 대역(모바일+태블릿)은 물론 PC도 동일 높이를 쓰는 것이 원칙 — 높이는 대역이 아니라 역할로 결정. `.btn` 기본 규칙에 min-height를 두어 모바일 미디어쿼리 `!important` 보정에 의존하지 않는다 |
+| UX-CTL-03 | **수평 간격 3단계 토큰**: `--gap-ctl`(--space-2/8px, 같은 행 컨트롤↔컨트롤) · `--gap-group`(--space-3/12px, 관련 필드 묶음·칩 군·카드 내 리스트) · `--gap-sec`(--space-4/16px, 섹션·카드 간·폼↔액션 행). 컨트롤 행의 `gap: Npx` 리터럴 신규 유입 금지 | 기존 `.btn-row`는 `var(--gap-group)`. 태블릿·PC 카드 내부는 `gap-group`→`space-4` 팽창 허용, `gap-ctl`은 대역 무관 고정 |
+| UX-CTL-04 | **폼 필드 수직 리듬**: 라벨 위·컨트롤 아래 스택(`.ctl-field` = `flex-col` + `gap: var(--space-1)`), 라벨→컨트롤 `space-1`(4px), 필드 간 `gap-group`(12px), 폼 본문→액션 행 `gap-sec`(16px). 형제 여백은 부모 `gap`으로만 — 개별 요소 `margin-top` 금지 | 가로 라벨 배치(라벨 좌·컨트롤 우)는 설정 행(`.settings-item` 류)·라벨 자체가 토글 타겟인 칩(`.obs-chip`)에만 허용 — 모바일에서 라벨이 컨트롤 폭을 잠식하고 한국어 라벨 길이 변동에 취약 |
+| UX-CTL-05 | **액션 행 대역 전환**: `.btn-row`는 PC·태블릿에서 우측 정렬(보조→주요, 주요가 트레일링), 모바일(≤768px)에서 세로 스택 + 주요 버튼이 첫째(`order:-1`) + 전폭. DOM 순서는 [보조][주요]로 고정 — 마크업 1종으로 양 대역 처리. 주요 버튼(`.btn-primary`)은 행당 1개 | 모바일 하단 고정 제출 액션은 `position:sticky` + `calc(70px + safe-area)` (UX-NAV-05 일반화). 태블릿·PC는 인플로우 배치만 — 스크롤 없는 화면의 고정바는 무의미 |
+| UX-CTL-06 | **컨트롤 높이 규약은 정적 체커로 강제**: `npm run check:mobilesafe`가 CSS에서 인터랙티브 셀렉터(`button`·`select`·`.btn`·`.chip` 계열)의 `height`/`min-height` 44px 미만 px 리터럴을 검출 — 예외 셀렉터(밀도·데코레이터·숨김 입력)는 목록에 사유와 함께 선언 | UX-VFY-06과 동형의 조기 차단 — 토큰 미사용 높이는 커밋 전 탐지. E2E 측 실측은 `touch-targets.json` 기준선(UX-SET-03 확장)이 담당 |
+
 ### 4.9 디자인 토큰·상태 규약
 
 > 모든 토큰은 `css/base.css` `:root`에 정의. **하드코딩 색상·px·z-index 금지 — 토큰 우선.**
@@ -1005,6 +1018,8 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 |--------|-----|------|
 | `--space-1` ~ `--space-8` | 0.25rem → 3rem (비선형, `--space-1-5` 등 중간 단계 포함) | margin/padding/gap은 토큰 사용. 유틸리티 `.mt-*`·`.mb-*` 등 존재 |
 | `--radius-2xs` ~ `--radius-full` | 2px → 50% | 카드 `--radius-md`(16px), 칩·배지 `--radius-pill`, 서브 요소 `--radius-sm/xs` |
+| `--control-h-sm/md/lg` | 2.25 / 2.75 / 3rem (36/44/48px) | 인터랙티브 컨트롤 높이 — 역할 계층, 대역 무관 (UX-CTL-01/02) |
+| `--gap-ctl/group/sec` | 8 / 12 / 16px (`--space-2/3/4` 참조) | 컨트롤 행·필드 묶음·섹션 간 수평 간격 (UX-CTL-03) |
 
 #### 4.9.4 z-index 레이어 맵
 
@@ -1110,6 +1125,9 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | 앱 셸 높이는 JS 실측 `--app-height` (태블릿 페이지 플로 대역은 의도적 예외) | UX-PWA-05 |
 | 태블릿 대역은 문서(document)가 스크롤 소유자 — `.app-container{height:auto}` 페이지 플로라 sticky는 문서 스크롤 기준으로 동작 (리더 뷰만 자체 컨테이너 예외) | UX-PWA-05, UX-NAV-02 |
 | 뷰 복귀는 스크롤 복원 · 액션 딥링크는 맨 위 오픈 · 인트라뷰 패널/문항 전환은 `resetMainScroll()` | R-04, UX-NAV-07 |
+| 컨트롤 높이는 역할 계층(`--control-h-*`) — 대역 무관 44px 기본, 밀집 예외만 36px | UX-CTL-01, UX-CTL-02 |
+| 액션 행(`.btn-row`): PC·태블릿 우측 정렬 / 모바일 세로 전폭 스택(주요 우선) | UX-CTL-05 |
+| 폼 필드: 라벨 위 스택·필드 간 `gap-group`·액션 행 위 `gap-sec` | UX-CTL-03, UX-CTL-04 |
 
 #### 4.10.4 미구현 제안 (백로그 — 승격 시 SPEC ID 부여 후 구현)
 

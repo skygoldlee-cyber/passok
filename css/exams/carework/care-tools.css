@@ -5,12 +5,12 @@
 
 /* ── 공통 카드형 폼 ─────────────────────────────── */
 .care-calc-form {
-    display: grid; gap: 12px; margin: 16px 0;
+    display: grid; gap: var(--gap-group); margin: var(--gap-sec) 0;
     background: var(--bg-muted); border-radius: 12px; padding: 16px;
     border: 1px solid var(--border-subtle);
 }
 .care-calc-form label {
-    display: flex; flex-direction: column; gap: 4px; min-width: 0;
+    display: flex; flex-direction: column; gap: var(--space-1); min-width: 0;
     font-size: 13px; font-weight: 600; color: var(--color-text-muted);
 }
 /* input[type=file]은 '파일 선택·선택된 파일 없음' 고유 폭이 있어 트랙을 강제 확장 —
@@ -19,12 +19,12 @@
 .care-calc-form select, .care-calc-form input {
     font-size: 16px; padding: 10px 12px; border-radius: 8px;
     border: 1px solid var(--border-color); background: var(--bg-input);
-    color: var(--color-text-main); min-height: 44px;
+    color: var(--color-text-main); min-height: var(--control-h-md);
 }
 .care-calc-form select option { background-color: var(--bg-sidebar); color: var(--color-text-main); }
 .light-theme .care-calc-form select option { background-color: var(--bg-input); }
-.care-calc-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.care-calc-actions button { min-height: 44px; padding: 0 18px; border-radius: 8px; font-weight: 600; }
+.care-calc-actions { display: flex; gap: var(--gap-ctl); flex-wrap: wrap; }
+.care-calc-actions button { min-height: var(--control-h-md); padding: 0 18px; border-radius: 8px; font-weight: 600; }
 .care-calc-err { color: var(--color-danger, #f87171); font-size: 14px; }
 
 /* 결과 카드 — 영수증형 */
@@ -75,13 +75,13 @@
 /* ── 대처카드 ─────────────────────────────────── */
 .care-card-list {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 10px; margin: 16px 0;
+    gap: var(--gap-group); margin: var(--gap-sec) 0;
 }
 .care-card-item {
     display: flex; flex-direction: column; gap: 6px; text-align: left;
     padding: 14px; border-radius: 12px; border: 1px solid var(--border-subtle);
     background: var(--bg-card); color: var(--color-text-main);
-    min-height: 44px; cursor: pointer;
+    min-height: var(--control-h-md); cursor: pointer;
 }
 .care-card-item:hover { border-color: var(--border-color-active); background: var(--bg-card-hover); }
 .care-card-cat { font-size: 11px; color: var(--color-primary); font-weight: 700; }
@@ -105,7 +105,7 @@
 .care-card-step p { margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: var(--color-text-muted); }
 
 /* ── 요양일지 ─────────────────────────────────── */
-.care-log-activities { display: grid; gap: 10px; margin: 8px 0 16px; }
+.care-log-activities { display: grid; gap: var(--gap-group); margin: var(--gap-ctl) 0 var(--gap-sec); }
 .care-log-group {
     background: var(--bg-muted); border: 1px solid var(--border-subtle);
     border-radius: 12px; padding: 12px 14px;
@@ -115,7 +115,7 @@
     display: inline-flex; align-items: center; gap: 6px;
     background: var(--bg-elevated); border: 1px solid var(--border-color);
     border-radius: 999px; padding: 8px 14px; margin: 0 6px 6px 0;
-    font-size: 13px; color: var(--color-text-main); cursor: pointer; min-height: 36px;
+    font-size: 13px; color: var(--color-text-main); cursor: pointer; min-height: var(--control-h-md);
 }
 .care-log-group input[type="checkbox"] { accent-color: var(--color-primary); }
 /* doc-md 미리보기 — md 초안을 표·헤딩 구조로 렌더 */
@@ -169,7 +169,7 @@
 .care-audit-item {
     display: flex; gap: 10px; align-items: flex-start;
     padding: 10px 0; border-top: 1px dashed var(--border-subtle);
-    cursor: pointer; min-height: 44px; color: var(--color-text-main);
+    cursor: pointer; min-height: var(--control-h-md); color: var(--color-text-main);
 }
 .care-audit-item input[type="checkbox"] {
     width: 20px; height: 20px; margin-top: 2px; accent-color: var(--color-primary);
@@ -253,10 +253,10 @@
 .care-finder-set { margin-top: 6px; align-self: flex-end; font-size: 0.82rem; font-weight: 600; color: var(--color-success, #2e7d32); }
 
 /* CO-03/12 — 현장 입력 UX: obs 세그먼트 칩·홈 카드·확인 권장 배지·온보딩 내비 */
-.obs-chips { display: flex; align-items: center; gap: 6px; margin: 8px 0; flex-wrap: wrap; }
+.obs-chips { display: flex; align-items: center; gap: var(--gap-ctl); margin: var(--gap-ctl) 0; flex-wrap: wrap; }
 .obs-label { font-size: 0.9rem; font-weight: 600; min-width: 44px; }
 .obs-chip input { width: 0; height: 0; margin: 0; padding: 0; border: 0; opacity: 0; }
-.obs-chip span { display: inline-flex; align-items: center; justify-content: center; min-width: 52px; min-height: 44px; padding: 0 14px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; font-size: 0.95rem; background: var(--color-surface, #fff); }
+.obs-chip span { display: inline-flex; align-items: center; justify-content: center; min-width: 52px; min-height: var(--control-h-md); padding: 0 14px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; font-size: 0.95rem; background: var(--color-surface, #fff); }
 .obs-chip input:checked + span { background: var(--color-primary, #4a6fa5); border-color: var(--color-primary, #4a6fa5); color: #fff; font-weight: 600; }
 .obs-chip input:focus-visible + span { outline: 2px solid var(--color-primary, #4a6fa5); outline-offset: 2px; }
 
@@ -290,9 +290,9 @@
 .care-doc-preview { margin-bottom: 2.5em; }
 
 /* ── 웹툰 버블 뷰 (care-webtoon) ── */
-.webtoon-controls { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 4px; }
-.webtoon-controls label { flex: 1 1 160px; min-width: 0; display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--color-text-dim); }
-.webtoon-controls select { min-height: 40px; border: 1px solid var(--border); border-radius: 8px; padding: 0 10px; background: var(--color-surface); color: var(--color-text-main); }
+.webtoon-controls { display: flex; gap: var(--gap-group); flex-wrap: wrap; margin: var(--gap-group) 0 var(--space-1); }
+.webtoon-controls label { flex: 1 1 160px; min-width: 0; display: flex; flex-direction: column; gap: var(--space-1); font-size: .85rem; color: var(--color-text-dim); }
+.webtoon-controls select { min-height: var(--control-h-md); border: 1px solid var(--border); border-radius: 8px; padding: 0 10px; background: var(--color-surface); color: var(--color-text-main); }
 .webtoon-stage { border: 1px solid var(--border); border-radius: 12px; background: var(--bg-muted); padding: 14px 10px; min-height: 200px; display: flex; flex-direction: column; gap: 10px; }
 .wb-row { display: flex; align-items: flex-end; gap: 8px; }
 .wb-row.wb-right { flex-direction: row-reverse; }
@@ -310,13 +310,13 @@
 .care-home-date { font-size: 1.1rem; font-weight: 700; }
 .care-home-summary { margin-top: 6px; font-size: 0.95rem; }
 .care-home-warn { margin-top: 8px; }
-.care-home-nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 12px; }
-.care-home-nav .btn { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
+.care-home-nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--gap-ctl); margin-top: var(--gap-group); }
+.care-home-nav .btn { min-height: var(--control-h-lg); display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
 
 .care-trend-warn { display: inline-block; margin: 4px 4px 0 0; padding: 3px 10px; border-radius: 999px; background: var(--color-warn-bg, #fff4e0); color: var(--color-warn-text, #8a5a00); font-size: 0.82rem; font-weight: 600; }
 .care-client-timeline summary { cursor: pointer; font-size: 0.85rem; color: var(--color-text-sub); margin-top: 4px; }
 .care-client-timeline ul { margin: 6px 0 0; padding-left: 18px; font-size: 0.85rem; }
-.care-client-reg { margin-left: 6px; font-size: 0.8rem; padding: 4px 10px; min-height: 32px; }
+.care-client-reg { margin-left: 6px; font-size: 0.8rem; padding: 4px 10px; min-height: var(--control-h-sm); }
 
 .care-os-onboard { margin: 10px 0; padding: 10px 14px; border: 1px dashed var(--border); border-radius: 8px; font-size: 0.88rem; }
 .care-os-onboard a { font-weight: 600; }

@@ -172,7 +172,7 @@
   font-size: 0.9rem;
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  min-height: 44px;
+  min-height: var(--control-h-md);
   min-width: 80px;
   font-family: inherit;
 }
@@ -283,7 +283,7 @@
 }
 .onboarding-field .form-input {
     width: 100%;
-    min-height: 48px;
+    min-height: var(--control-h-lg);
 }
 .onboarding-hint {
     margin: var(--space-2) 0 0;

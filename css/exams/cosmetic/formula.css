@@ -327,8 +327,8 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 .f-row .f-check-cell { display: flex; justify-content: flex-start; }
 .f-row .f-del {
-    width: 32px;
-    height: 32px;
+    width: var(--control-h-sm);
+    height: var(--control-h-sm);
     border-radius: 50%;
     border: 1px solid var(--border-color);
     background: transparent;
@@ -1402,9 +1402,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
         height: 1.25rem;
     }
     .formula-allergy-input-row .btn,
-    .formula-rules-form .btn { min-height: 44px; }
+    .formula-rules-form .btn { min-height: var(--control-h-md); }
     .f-progress { font-size: 0.9rem; }
-    .f-prog-step { min-height: 32px; padding: 0.35rem 0.9rem; }
+    .f-prog-step { min-height: var(--control-h-sm); padding: 0.35rem 0.9rem; }
 }
 
 /* =========================================================
@@ -1460,7 +1460,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .cing-foot #cing-delete { margin-right: auto; }
 
 @media (max-width: 900px) {
-    .f-reg-btn { min-height: 36px; padding: 0.3rem 0.8rem; font-size: 0.85rem; }
+    .f-reg-btn { min-height: var(--control-h-sm); padding: 0.3rem 0.8rem; font-size: 0.85rem; }
     .cing-body { padding: 1rem; }
 }
 
@@ -1491,7 +1491,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     font-size: 0.85rem;
     font-weight: var(--font-weight-bold);
     cursor: pointer;
-    min-height: 40px;
+    min-height: var(--control-h-md);
     transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 .formula-biz-chip.is-active {
@@ -1609,8 +1609,8 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     color: var(--color-secondary);
     cursor: pointer;
     padding: 0.2rem;
-    min-width: 28px;
-    min-height: 28px;
+    min-width: var(--control-h-sm);
+    min-height: var(--control-h-sm);
 }
 .prod-inci-chips {
     display: flex;
@@ -1663,8 +1663,8 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     color: var(--color-text-muted);
     cursor: pointer;
     padding: 0.15rem;
-    min-width: 26px;
-    min-height: 26px;
+    min-width: var(--control-h-sm);
+    min-height: var(--control-h-sm);
 }
 .prod-ing-list {
     display: flex;
@@ -1804,8 +1804,8 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     color: var(--color-text-muted);
     cursor: pointer;
     padding: 0.2rem;
-    min-width: 28px;
-    min-height: 28px;
+    min-width: var(--control-h-sm);
+    min-height: var(--control-h-sm);
 }
 .prod-photo-actions {
     display: flex;

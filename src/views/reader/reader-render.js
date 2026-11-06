@@ -352,9 +352,9 @@ function _toggleNoteEditor(btn) {
         <textarea class="form-input reader-note-input" rows="3"
             placeholder="이 섹션에 대한 메모를 남기세요…" aria-label="섹션 메모">${esc(getReaderNote(key))}</textarea>
         <div class="btn-row reader-note-actions">
-            <button type="button" class="btn btn-sm btn-primary" data-note-save>저장</button>
             <button type="button" class="btn btn-sm btn-secondary" data-note-delete>삭제</button>
             <button type="button" class="btn btn-sm btn-secondary" data-note-close>닫기</button>
+            <button type="button" class="btn btn-sm btn-primary" data-note-save>저장</button>
         </div>`;
     body.prepend(editor);
     const input = /** @type {HTMLTextAreaElement|null} */ (editor.querySelector('.reader-note-input'));
