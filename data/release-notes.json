@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261106-4184034",
+    "date": "2026-11-06",
+    "notes": [
+      "[content·carework] 이야기형 재생성 — 표준형 도판 반영",
+      "[content·carework] 표준형 교재 실기 절차 도판 28컷 삽입",
+      "[정리·release] v20261106-48c1eae 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261106-48c1eae",
     "date": "2026-11-06",
     "notes": [
@@ -204,15 +213,6 @@
       "[문서·carework] 4단계 학습 흐름 설계 — 리뷰 반영 4건",
       "[수정·carework] 홈 서명 폼 우측 밀림 — file input 고유폭이 트랙 확장",
       "[정리·release] v20261105-8bce533 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261105-8bce533",
-    "date": "2026-11-05",
-    "notes": [
-      "[수정·carework] 홈 서명 미리보기 이미지 우측 넘침 수정 — max-width 누락",
-      "[수정·carework] 출력물 서명 우측 밀림 방어 보강 — 표 스크롤·서명란 폭 한정",
-      "[정리·release] v20261105-f658db3 스탬프 확정 [no-docs]"
     ]
   }
 ]
