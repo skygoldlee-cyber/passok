@@ -1158,6 +1158,7 @@ body.ui-mode-practice .ui-mode-toggle {
     min-width: var(--control-h-md);
     padding: 0.65rem;
     aspect-ratio: 1;
+    justify-content: center; /* .btn inline-flex 기본 정렬이 좌측 — 아이콘 중앙 배치 (모바일 규칙과 동일) */
 }
 
 .btn-secondary:hover {
