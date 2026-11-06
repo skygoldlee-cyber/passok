@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 fix(ui): PC 헤더 아이콘 버튼 과폭 — .btn-icon 규약 추가
+
+- .btn min-width: 5rem(단문 라벨 최소폭)이 아이콘 전용 버튼에도 적용돼 통합검색·테마·설정·도움말 버튼이 텍스트 버튼 폭으로 렌더 — .btn-icon(정사각·min-width 해제) 추가 후 헤더 4버튼에 적용
+
 ## 2026-11-07 ci: check:contrast 게이트 등록 정합
 
 - package.json check:contrast 스크립트 + ci.yml 「Theme contrast audit」단계 + steps.js ci:contrast(npmStep — ci.yml 명령 문자열 정합) + COMMANDS.md 재생성
