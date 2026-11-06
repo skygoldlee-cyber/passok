@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 content(carework): 이야기형 교재 씬 증량 + ai_story lastIndex 버그 수정
+
+- 웹툰 콘텐츠 볼륨 확대 — 시험 비중 큰 긴 절에 제2씬 슬롯 9개 추가(1과목 s26~s29·2과목 s39~s43), ai:story 초안 리뷰·병합 후 build:story 재생성 → 씬 19→23·30→35 (총 비트 486)
+- tools/ai/ai_story.js: `slotContext`의 `SLOT_RE.test()`가 break 시 `lastIndex`를 미리셋 → 후속 과목 `listSlots`의 `matchAll`이 stale 위치부터 스캔해 두 번째 과목 슬롯을 조용히 누락하던 결함 수정 (양쪽 진입점에 lastIndex 리셋) + 회귀 테스트
+- 문제은행 교재 인용 라인 드리프트 20건 — sync:citations 재동기화
+
 ## 2026-11-06 fix(ux): "이야기 학습" nav 그룹을 "학습"으로 통합
 
 - 형식 축(서사) 분리는 다른 그룹의 기능 축과 축 혼재 — 개념 학습·웹툰을 학습 그룹으로 편입(기출 퀴즈 다음 — 모바일 탭 바 부분열 순서 유지), 라벨 careWebtoon vs 항목 careFlow 게이트 불일치 고아 항목도 해소

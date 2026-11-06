@@ -375,6 +375,17 @@ test('AI-17: mergePatch — 빈 @insert 교체·기존 서사 보존·신규 슬
     } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('AI-17 회귀: slotContext 후 listSlots — /g 정규식 lastIndex 오염으로 다음 파일 슬롯 미탐지 금지', () => {
+    const { listSlots, slotContext } = require('../../../tools/ai/ai_story.js');
+    // slotContext가 마커 라인에서 test() true로 break → /g 정규식 lastIndex 잔존 (구 버그)
+    const ctxLines = ['', '<!-- story:slot:s01 -->', '본문 내용 1', '본문 내용 2', '<!-- story:slot:s02 -->', '다음 슬롯 본문'];
+    const ctx = slotContext(ctxLines, 1);
+    assert.ok(ctx.includes('본문 내용 1'), '슬롯 뒤 본문 컨텍스트 수집');
+    // 잔존 lastIndex에도 다음 파일의 슬롯이 전부 탐지돼야 한다
+    const slots = listSlots(['<!-- story:slot:s39 -->', 'x', '<!-- story:slot:s40 -->']);
+    assert.deepEqual(slots.map(s => s.id), ['s39', 's40']);
+});
+
 test('AI-18: termContext — 용어 등장 라인 주변 컨텍스트를 교재에서 추출한다', () => {
     const { termContext } = require('../../../tools/ai/ai_cards.js');
     const ctx = termContext({ 'ch.md': '앞줄\n화장품법이란 법이다\n뒷줄1\n뒷줄2\n' }, '화장품법');

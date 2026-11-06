@@ -32,6 +32,7 @@ const CTX_CHARS = 2800;    // 프롬프트 컨텍스트 최대 길이
 
 /** 표준형 라인 배열 → 슬롯 목록 [{id, lineIdx}] */
 function listSlots(lines) {
+    SLOT_RE.lastIndex = 0; // /g 공유 정규식 — slotContext의 test()가 남긴 lastIndex 오염 방지
     const slots = [];
     lines.forEach((l, i) => {
         for (const m of l.matchAll(SLOT_RE)) slots.push({ id: m[1], lineIdx: i });
@@ -43,7 +44,7 @@ function listSlots(lines) {
 function slotContext(lines, lineIdx) {
     const out = [];
     for (let i = lineIdx + 1; i < lines.length && out.length < CTX_LINES; i++) {
-        if (SLOT_RE.test(lines[i])) break;
+        if (SLOT_RE.test(lines[i])) { SLOT_RE.lastIndex = 0; break; }
         SLOT_RE.lastIndex = 0;
         out.push(lines[i]);
     }
