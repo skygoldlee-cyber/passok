@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 feat(check): 문항 검수 게이트 강화 + collectFilesByExt 공용화
+
+- check_scenario_items: ① 수치 대조를 지문+정답으로 한정(오답 함정값 노이즈 제거 — 경고 11→4건) ② 미검수(approved 미설정) 경고 ③ eval_pool.json 스키마·격리 불변식 검증 추가
+- exam_targets.collectFilesByExt 공용 수집기 — getPrecacheMediaAssets 적용, 확장자 필터 walk 공용화
+
 ## 2026-11-07 fix(sw): docs/ 이미지 프리캐시 — getPrecacheMediaAssets 확장
 
 - EXAM_MEDIA_ASSETS 생성기가 교재/*.webp만 스캔 → docs/ 하위 이미지(.svg·.png 등)도 수집하도록 확장

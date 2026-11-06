@@ -135,28 +135,35 @@ function getPrecacheMdAssets(workspaceDir) {
  * docs/*.svg 등 문서 삽입 이미지는 경량이라 전부 프리캐시한다.
  * 시험이 늘어나도 수동 나열 없이 프리캐시 대칭이 유지된다.
  */
+/**
+ * 디렉터리 재귀 스캔으로 확장자 일치 파일의 './' 접두 상대 경로 목록을 반환.
+ * 생성기·검증기의 확장자 필터 walk를 공용화 — 새 포맷 추가 시 호출부만 고치면 됨.
+ */
+function collectFilesByExt(workspaceDir, dirAbs, exts) {
+    const list = [];
+    if (!fs.existsSync(dirAbs)) return list;
+    const walk = (d) => {
+        for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+            const p = path.join(d, e.name);
+            if (e.isDirectory()) walk(p);
+            else if (exts.has(path.extname(e.name).toLowerCase())) {
+                list.push('./' + path.relative(workspaceDir, p).split(path.sep).join('/'));
+            }
+        }
+    };
+    walk(dirAbs);
+    return list;
+}
+
 function getPrecacheMediaAssets(workspaceDir) {
     const list = [];
     const MEDIA_EXT = new Set(['.webp']);
     const DOC_IMG_EXT = new Set(['.webp', '.svg', '.png', '.jpg', '.jpeg', '.gif']);
-    const collect = (dirAbs, exts) => {
-        if (!fs.existsSync(dirAbs)) return;
-        const walk = (d) => {
-            for (const e of fs.readdirSync(d, { withFileTypes: true })) {
-                const p = path.join(d, e.name);
-                if (e.isDirectory()) walk(p);
-                else if (exts.has(path.extname(e.name).toLowerCase())) {
-                    list.push('./' + path.relative(workspaceDir, p).split(path.sep).join('/'));
-                }
-            }
-        };
-        walk(dirAbs);
-    };
     for (const t of getExamTargets(workspaceDir)) {
-        collect(path.join(workspaceDir, t.contentRoot, '교재'), MEDIA_EXT);
-        collect(path.join(workspaceDir, t.contentRoot, 'docs'), DOC_IMG_EXT);
+        list.push(...collectFilesByExt(workspaceDir, path.join(workspaceDir, t.contentRoot, '교재'), MEDIA_EXT));
+        list.push(...collectFilesByExt(workspaceDir, path.join(workspaceDir, t.contentRoot, 'docs'), DOC_IMG_EXT));
     }
     return list.sort();
 }
 
-module.exports = { getExamTargets, getSubjectMaps, getDefaultExamRoots, getPrecacheMdAssets, getPrecacheMediaAssets, removeOrphanBundles };
+module.exports = { getExamTargets, getSubjectMaps, getDefaultExamRoots, getPrecacheMdAssets, getPrecacheMediaAssets, collectFilesByExt, removeOrphanBundles };
