@@ -41,7 +41,7 @@
         flex-direction: row;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
-        gap: 0.4rem;
+        gap: var(--space-1-5);
         padding-bottom: var(--space-1);
     }
     .nav-menu::-webkit-scrollbar {
@@ -115,7 +115,7 @@
     .daily-challenge-card > div:first-child {
         flex-direction: column !important;
         align-items: flex-start !important;
-        gap: 0.75rem !important;
+        gap: var(--gap-group) !important;
         margin-bottom: 1rem !important;
     }
 
@@ -128,7 +128,7 @@
     .daily-challenge-card > div:last-child {
         flex-direction: column !important;
         align-items: stretch !important;
-        gap: 0.75rem !important;
+        gap: var(--gap-group) !important;
     }
 
     /* 세로 스택에서 배지가 버튼보다 작게 보이는 불균형 해소 —
@@ -466,14 +466,14 @@
     /* 통계 카드 그리드 2열로 변경 */
     .stats-grid {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 0.75rem !important;
+        gap: var(--gap-group) !important;
     }
 
     .stat-card {
         padding: 1rem !important;
         flex-direction: column;
         text-align: center;
-        gap: 0.5rem !important;
+        gap: var(--gap-ctl) !important;
         min-width: 0; /* 그리드 오버플로우 방지 */
     }
 
@@ -501,7 +501,7 @@
     .dashboard-widgets-row {
         margin-top: 1rem !important;
         margin-bottom: 1rem !important;
-        gap: 1rem !important;
+        gap: var(--gap-sec) !important;
     }
 
     /* 유리 카드 패딩 축소 */
@@ -513,7 +513,7 @@
     .filter-bar {
         flex-direction: column;
         align-items: stretch !important;
-        gap: 0.75rem !important;
+        gap: var(--gap-group) !important;
     }
 
     .filter-group {
@@ -779,7 +779,7 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
+    gap: var(--gap-sec);
 }
 
 .pwa-steps li {
@@ -788,7 +788,7 @@
     grid-template-areas:
         "num text"
         "num illust";
-    gap: 0.25rem 0.75rem;
+    gap: var(--space-1) var(--gap-group);
     align-items: start;
 }
 
@@ -916,7 +916,7 @@ body.landscape-mode .view-section {
 
 body.landscape-mode .stats-grid {
     grid-template-columns: repeat(4, 1fr) !important;
-    gap: 0.5rem !important;
+    gap: var(--gap-ctl) !important;
 }
 
 body.landscape-mode .stat-card {
@@ -945,7 +945,7 @@ body.landscape-mode .stat-info p {
 
 body.landscape-mode .dashboard-widgets-row {
     grid-template-columns: 2fr 1fr !important;
-    gap: 1rem !important;
+    gap: var(--gap-sec) !important;
     margin-top: 0.75rem !important;
     margin-bottom: 0.75rem !important;
 }
@@ -1054,7 +1054,7 @@ body.landscape-mode .glass-card {
     .daily-challenge-card > div:first-child {
         flex-direction: column !important;
         align-items: flex-start !important;
-        gap: 0.75rem !important;
+        gap: var(--gap-group) !important;
     }
     /* ìì´ì½+ì ëª© ë¬¶ìì ê°ë¡ ì ì§ */
     .daily-challenge-card > div:first-child > div:first-child {
@@ -1075,7 +1075,7 @@ body.landscape-mode .glass-card {
     .daily-challenge-card > div:last-child {
         flex-direction: column !important;
         align-items: stretch !important;
-        gap: 0.75rem !important;
+        gap: var(--gap-group) !important;
     }
     /* 세로 스택에서 배지가 버튼보다 작게 보이는 불균형 해소 —
        버튼과 동일한 높이감으로 패딩·정렬 */

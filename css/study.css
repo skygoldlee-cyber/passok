@@ -84,7 +84,7 @@
 .card-header-left {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
 }
 
 .card-badge {
@@ -188,7 +188,7 @@
     margin-top: var(--space-5);
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: var(--space-1-5);
 }
 
 /* Flashcard Controls & Actions */
@@ -399,7 +399,7 @@
 .quiz-feedback {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: var(--space-4-5);
     background-color: var(--success-tint-8);
     border: 1px solid var(--success-tint-20);
     border-radius: var(--radius-md);
@@ -520,7 +520,7 @@
 .wrong-relearn-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     align-items: center;
 }
 
@@ -580,7 +580,7 @@
 .quiz-confidence {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: var(--space-1-5);
     margin-bottom: 0.75rem;
     font-size: 0.8rem;
     color: var(--color-text-secondary);
@@ -594,14 +594,14 @@
     color: var(--color-text-main);
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     align-items: center;
 }
 
 .wrong-cause-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: var(--space-1-5);
     padding: 0.25rem 0.65rem;
     font-size: 0.78rem;
     font-weight: 600;
@@ -657,7 +657,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     padding: 0.75rem 1rem;
     margin-bottom: 0.5rem;
     border: 1px solid var(--border-color);
@@ -683,7 +683,7 @@
 .diagnostic-row {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     padding: 0.4rem 0;
     font-size: 0.9rem;
     border-bottom: 1px solid var(--border-color);
@@ -850,7 +850,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
+    gap: var(--gap-group);
     padding: 0.9rem 1.1rem;
     cursor: pointer;
     font-weight: 600;

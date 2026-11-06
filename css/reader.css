@@ -48,7 +48,7 @@
     z-index: var(--z-dropdown);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     padding: 0.5rem 0.9rem;
     background: var(--bg-card);
     backdrop-filter: blur(12px);
@@ -131,7 +131,7 @@
 .reader-search-box {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: var(--space-1);
     position: relative;
 }
 .reader-search-box input {
@@ -182,7 +182,7 @@
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     transition: var(--transition-base);
     white-space: nowrap;
 }
@@ -238,7 +238,7 @@
 /* Reader layout: TOC + content */
 .reader-layout {
     display: flex;
-    gap: 1.75rem;
+    gap: var(--space-6);
     align-items: flex-start;
     flex: 1;
     min-height: 0;
@@ -339,7 +339,7 @@
     display: flex;
     align-items: flex-start;
     flex-wrap: nowrap;
-    gap: 0.35rem;
+    gap: var(--space-1-5);
     padding: 0.4rem 0.65rem;
     border-radius: var(--radius-sm);
     font-size: var(--text-sm-2);
@@ -1290,7 +1290,7 @@
     /* M2: 오디오 플레이어 컨트롤 모바일 2행 분리 (재생/시간/시크바 / 속도/스크롤) */
     #reader-audio-controls {
         flex-wrap: wrap;
-        gap: 0.4rem 0.5rem !important;
+        gap: var(--space-1-5) var(--gap-ctl) !important;
     }
     #reader-audio-controls > #reader-audio-playpause-btn,
     #reader-audio-controls > #reader-audio-current,
@@ -1316,7 +1316,7 @@
     /* M7: 섹션 헤더 패딩 모바일 축소 (1.1rem 1.5rem → 0.9rem 1rem) */
     .reader-section-header {
         padding: 0.9rem 1rem !important;
-        gap: 0.5rem !important;
+        gap: var(--gap-ctl) !important;
     }
     /* M9: 리더 툴바 버튼 터치 영역 44px 보장 */
     .reader-toolbar button {

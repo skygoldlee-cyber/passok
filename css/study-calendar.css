@@ -6,7 +6,7 @@
 .study-goals-summary {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    gap: var(--gap-sec);
     margin-bottom: 1.5rem;
 }
 @media (max-width: 768px) {
@@ -25,7 +25,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     font-size: 0.85rem;
     color: var(--color-text-muted);
     margin-bottom: 0.75rem;
@@ -60,7 +60,7 @@
 .goal-detail {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: var(--space-1-5);
 }
 .goal-detail-row {
     display: flex;
@@ -79,14 +79,14 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--gap-group);
     margin-bottom: 1.5rem;
 }
 
 .dday-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: var(--space-1-5);
     padding: 0.3rem 0.8rem;
     font-size: 0.8rem;
     font-weight: 700;
@@ -118,7 +118,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: var(--gap-sec);
     margin-bottom: 1rem;
 }
 .calendar-title {
@@ -133,7 +133,7 @@
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
+    gap: var(--space-1);
     max-width: 480px;
     margin: 0 auto;
 }
@@ -187,14 +187,14 @@
 .calendar-legend {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
+    gap: var(--space-5);
     margin-top: 1.25rem;
     flex-wrap: wrap;
 }
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     font-size: 0.8rem;
     color: var(--color-text-muted);
 }
@@ -229,7 +229,7 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     margin-bottom: 1rem;
 }
 .plan-header h4 {
@@ -239,7 +239,7 @@
     color: var(--color-text-main);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
 }
 .plan-header h4 i {
     color: var(--color-primary);
@@ -275,7 +275,7 @@
 .plan-summary {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem 1.5rem;
+    gap: var(--gap-ctl) var(--space-5);
     margin-bottom: 0.75rem;
 }
 @media (max-width: 480px) {
@@ -345,7 +345,7 @@
 .plan-alloc-head {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     font-size: 0.85rem;
     font-weight: 700;
     color: var(--color-text-main);
@@ -354,7 +354,7 @@
 .plan-alloc-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
 }
 .alloc-chip {
     font-size: 0.78rem;
@@ -367,7 +367,7 @@
     font-family: inherit;
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: var(--space-1-5);
 }
 button.alloc-chip {
     cursor: pointer;

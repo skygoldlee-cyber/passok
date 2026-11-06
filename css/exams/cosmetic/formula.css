@@ -13,7 +13,7 @@
     font-size: 0.85rem;
     line-height: 1.5;
     display: flex;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     align-items: flex-start;
 }
 .formula-safety-note i { color: var(--color-warning); margin-top: 0.15rem; }
@@ -29,7 +29,7 @@
     font-size: 0.85rem;
     line-height: 1.5;
     display: flex;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     align-items: flex-start;
 }
 .formula-principle-note i { color: var(--color-primary); }
@@ -47,7 +47,7 @@
 .formula-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--gap-sec);
 }
 
 .formula-card {
@@ -57,14 +57,14 @@
     background: var(--bg-muted);
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
 }
 
 .formula-card-head {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 0.5rem 0.9rem;
+    gap: var(--gap-ctl) var(--space-3-5);
 }
 .formula-card-name { margin: 0; font-size: 1.05rem; }
 .formula-card-meta {
@@ -87,12 +87,12 @@
 .formula-card-checks {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
 }
 
 .formula-card-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     flex-wrap: wrap;
 }
 
@@ -142,18 +142,18 @@
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
+    gap: var(--gap-sec);
 }
 
 .formula-field-row {
     display: flex;
-    gap: 0.9rem;
+    gap: var(--space-3-5);
     flex-wrap: wrap;
 }
 .formula-field {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: var(--space-1-5);
     flex: 1;
     min-width: 140px;
 }
@@ -182,7 +182,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     z-index: var(--z-sticky);
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--gap-group);
     flex-wrap: wrap;
     padding: 0.55rem 0.8rem;
     border: 1px solid var(--border-color);
@@ -193,20 +193,20 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 .fcb-top { top: 0.4rem; margin-bottom: 0.75rem; }
 .fcb-bottom { bottom: 0.4rem; margin-top: 0.75rem; }
-.fcb-volume { display: flex; gap: 0.4rem; align-items: center; }
+.fcb-volume { display: flex; gap: var(--space-1-5); align-items: center; }
 .fcb-vol { width: 88px; }
 .fcb-unit { width: auto; min-width: 64px; padding: 0.45rem 0.4rem; }
-.fcb-sum { font-size: 0.9rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 0.35rem; }
+.fcb-sum { font-size: 0.9rem; color: var(--color-text-muted); display: flex; align-items: center; gap: var(--space-1-5); }
 .fcb-sum strong { color: var(--color-text-main); }
 .fcb-amount { font-variant-numeric: tabular-nums; }
-.fcb-checks { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-left: auto; }
+.fcb-checks { display: flex; gap: var(--space-1-5); flex-wrap: wrap; margin-left: auto; }
 .fcb-name { flex: 1; min-width: 150px; }
 
 /* ── 빈 상태 안내 ── */
 .formula-empty-state {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     flex-wrap: wrap;
     padding: 0.7rem 0.9rem;
     margin-bottom: 0.75rem;
@@ -229,7 +229,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     font-size: 0.88rem;
     font-weight: var(--font-weight-bold);
     color: var(--color-text-main);
@@ -258,7 +258,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .fold-body {
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
+    gap: var(--space-3-5);
     padding-top: 0.8rem;
 }
 
@@ -266,16 +266,16 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .f-row {
     display: flex;
     flex-direction: column;
-    gap: 0.45rem;
+    gap: var(--gap-ctl);
     padding: 0.6rem 0.7rem;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     background: var(--bg-subtle);
 }
-.f-row-top { display: flex; align-items: center; gap: 0.5rem; }
+.f-row-top { display: flex; align-items: center; gap: var(--gap-ctl); }
 .f-row-top .f-name { flex: 1; min-width: 0; }
 .f-row-top .f-check-cell { flex-shrink: 0; }
-.f-row-bottom { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.f-row-bottom { display: flex; align-items: center; gap: var(--space-2-5); flex-wrap: wrap; }
 .f-row-bottom .f-conc { width: 90px; }
 .f-row-bottom .f-amount { flex: 1; min-width: 70px; }
 .f-row-bottom .f-phase { width: auto; min-width: 96px; }
@@ -283,7 +283,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .formula-rows {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
 }
 
 .f-row .f-name,
@@ -348,11 +348,11 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: wrap;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
 }
 .formula-foot-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     flex-wrap: wrap;
 }
 .formula-sum-badge {
@@ -381,7 +381,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     color: var(--color-text-main);
     display: flex;
     align-items: baseline;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     flex-wrap: wrap;
     margin-bottom: 0.45rem;
 }
@@ -392,13 +392,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: var(--space-1-5);
 }
 .formula-stab-list li {
     font-size: 0.78rem;
     line-height: 1.45;
     display: flex;
-    gap: 0.45rem;
+    gap: var(--gap-ctl);
     align-items: baseline;
 }
 .formula-stab-list li i { flex: 0 0 auto; }
@@ -411,7 +411,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     font-size: 0.78rem;
     line-height: 1.45;
     display: flex;
-    gap: 0.45rem;
+    gap: var(--gap-ctl);
     align-items: baseline;
     padding: 0.45rem 0.6rem;
     border-radius: var(--radius-sm);
@@ -433,13 +433,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .formula-steps-list {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     margin-bottom: 0.6rem;
 }
 .formula-step-row {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
 }
 .formula-step-no {
     flex: 0 0 24px;
@@ -488,7 +488,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .formula-chip-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem;
+    gap: var(--gap-ctl);
 }
 .formula-chip {
     position: relative;
@@ -526,7 +526,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     padding: 0.9rem 1rem 1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
+    gap: var(--space-3-5);
     background: var(--bg-subtle);
 }
 .formula-rec-head {
@@ -535,7 +535,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     color: var(--color-text-main);
     display: flex;
     align-items: baseline;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     flex-wrap: wrap;
 }
 .formula-rec-note {
@@ -546,7 +546,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .formula-rec-section {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
 }
 .formula-rec-label {
     font-size: 0.78rem;
@@ -556,11 +556,11 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .formula-rec-roles {
     display: flex;
     flex-direction: column;
-    gap: 0.45rem;
+    gap: var(--gap-ctl);
 }
 .formula-rec-role {
     display: flex;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     align-items: baseline;
     flex-wrap: wrap;
 }
@@ -573,7 +573,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .formula-rec-cands {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     flex: 1;
 }
 .formula-rec-nocand {
@@ -584,7 +584,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .formula-rec-chip {
     display: inline-flex;
     align-items: baseline;
-    gap: 0.3rem;
+    gap: var(--space-1-5);
     padding: 0.3rem 0.7rem;
     border-radius: 999px;
     border: 1px solid var(--color-primary);
@@ -608,7 +608,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .formula-rec-cautions {
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: var(--space-1-5);
     font-size: 0.78rem;
     color: var(--color-warning);
     padding: 0.6rem 0.8rem;
@@ -633,7 +633,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .formula-rules-edit summary .formula-rec-note { margin-left: 0.4rem; }
 .formula-rules-form {
     display: flex;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     margin-top: 0.7rem;
     flex-wrap: wrap;
 }
@@ -643,13 +643,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .formula-rule-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem;
+    gap: var(--gap-ctl);
     margin-top: 0.7rem;
 }
 .formula-rule-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: var(--space-1-5);
     padding: 0.28rem 0.5rem;
     border-radius: 999px;
     font-size: 0.8rem;
@@ -679,14 +679,14 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .formula-rules-actions {
     margin-top: 0.7rem;
     display: flex;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     flex-wrap: wrap;
 }
 
 /* 알레르기 이력 입력 */
 .formula-allergy-input-row {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     align-items: center;
     margin-bottom: 0.4rem;
 }
@@ -701,7 +701,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     font-size: 0.82rem;
     color: var(--color-text-muted);
     display: flex;
-    gap: 0.45rem;
+    gap: var(--gap-ctl);
     align-items: center;
 }
 .formula-card-customer i { color: var(--color-text-muted); font-size: 0.75rem; }
@@ -710,7 +710,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 @media (max-width: 768px) {
     .fcb-bottom { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
     .fcb-btn-text { display: none; }
-    .formula-calc-bar { gap: 0.5rem; padding: 0.5rem 0.6rem; }
+    .formula-calc-bar { gap: var(--gap-ctl); padding: 0.5rem 0.6rem; }
     .f-row-bottom .f-phase { flex: 1; }
 }
 
@@ -719,7 +719,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 /* 서브내비 칩 — 서브패널 간 1클릭 이동 */
 .formula-subnav {
     display: flex;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     flex-wrap: wrap;
     margin: 0 0 0.9rem;
 }
@@ -747,7 +747,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 /* 배치 목록 필터 바 */
 .batch-filter-bar {
     display: flex;
-    gap: 0.45rem;
+    gap: var(--gap-ctl);
     flex-wrap: wrap;
     align-items: center;
     margin: 0 0 0.9rem;
@@ -769,12 +769,12 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .batch-qc-form {
     display: flex;
     flex-direction: column;
-    gap: 0.45rem;
+    gap: var(--gap-ctl);
 }
 .batch-qc-row {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--gap-group);
     flex-wrap: wrap;
 }
 .batch-qc-label {
@@ -784,7 +784,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 .batch-qc-opts {
     display: flex;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     flex-wrap: wrap;
 }
 .batch-qc-chip input { margin-right: 0.25rem; }
@@ -806,7 +806,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .batch-qc-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 0.4rem 0.9rem;
+    gap: var(--space-1-5) var(--space-3-5);
     margin: 0.5rem 0 0.3rem;
 }
 
@@ -827,14 +827,14 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .cust-log-list {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: var(--space-1-5);
     margin-bottom: 0.6rem;
     max-height: 240px;
     overflow-y: auto;
 }
 .cust-log-row {
     display: flex;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     font-size: 0.85rem;
     align-items: baseline;
 }
@@ -864,7 +864,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .comp-section-title {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     font-size: 0.95rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
@@ -886,7 +886,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
 }
 .comp-item {
     background: var(--bg-card);
@@ -903,7 +903,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .comp-item-label {
     display: flex;
     align-items: flex-start;
-    gap: 0.55rem;
+    gap: var(--gap-ctl);
     cursor: pointer;
 }
 .comp-check {
@@ -926,7 +926,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .comp-item-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.3rem 0.7rem;
+    gap: var(--space-1-5) var(--gap-group);
     margin-top: 0.35rem;
     padding-left: 1.55rem;
 }
@@ -950,7 +950,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .comp-doc-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
 }
 .comp-doc-link {
     display: flex;
@@ -1000,12 +1000,12 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 /* 식약처 고시 감지 배너 (notice-check.js) */
 .notice-banner {
-    margin: 0 0 12px;
+    margin: 0 0 var(--gap-group);
 }
 .notice-banner-body {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
+    gap: var(--gap-ctl);
     padding: 10px 14px;
     border: 1px solid var(--color-warning, #d29922);
     border-left-width: 4px;
@@ -1041,15 +1041,15 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
-    margin: 0 0 12px;
+    gap: var(--gap-ctl);
+    margin: 0 0 var(--gap-group);
 }
 .notice-check-result {
     font-size: 0.8rem;
     color: var(--color-text-muted);
 }
 .notice-status-view {
-    margin: 0 0 12px;
+    margin: 0 0 var(--gap-group);
     padding: 10px 14px;
     border: 1px solid var(--color-border, #30363d);
     border-radius: var(--radius-md, 8px);
@@ -1058,7 +1058,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 .notice-status-row {
     display: flex;
-    gap: 10px;
+    gap: var(--gap-ctl);
     padding: 3px 0;
     line-height: 1.5;
 }
@@ -1068,9 +1068,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 .notice-status-links {
     display: flex;
-    gap: 14px;
+    gap: var(--gap-sec);
     align-items: center;
-    margin-top: 8px;
+    margin-top: var(--gap-ctl);
     padding-top: 8px;
     border-top: 1px solid var(--color-border, #30363d);
 }
@@ -1156,7 +1156,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 /* 진행 단계 표시 (FO-27) — 원료 입력 → 한도 검증 → 저장 */
 .f-progress {
     display: flex;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     flex-wrap: wrap;
     margin: 0 0 0.75rem;
     font-size: 0.78rem;
@@ -1165,7 +1165,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .f-prog-step {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: var(--space-1-5);
     padding: 0.25rem 0.7rem;
     border-radius: 999px;
     border: 1px solid var(--color-border, var(--primary-tint-25));
@@ -1238,7 +1238,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--gap-sec);
     max-height: calc(var(--app-height, 100dvh) * 0.9);
     /* 가로 모드 등 극단적 높이 부족 시 카드 자체가 스크롤 — 내용 잘림 방지 */
     overflow-y: auto;
@@ -1294,7 +1294,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .f-weigh-amount.is-null { color: var(--color-text-muted); font-size: 1.4rem; font-weight: 400; }
 .f-weigh-foot {
     display: flex;
-    gap: 0.75rem;
+    gap: var(--gap-group);
 }
 .f-weigh-foot .btn { flex: 1; min-height: 52px; font-size: 1.05rem; }
 
@@ -1435,7 +1435,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .cing-body {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--gap-group);
   padding: 1rem 1.25rem;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -1468,7 +1468,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .formula-biz-bar {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     flex-wrap: wrap;
     margin-bottom: 1rem;
     padding: 0.6rem 0.9rem;
@@ -1512,12 +1512,12 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: var(--space-1-5);
 }
 .label-check-item {
     display: flex;
     align-items: baseline;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     font-size: 0.88rem;
     padding: 0.35rem 0.6rem;
     border-radius: var(--radius-sm);
@@ -1540,7 +1540,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 
 /* ── 광고 문구 점검 (FO-36) ───────────────────────── */
-.adlint-summary { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.8rem; }
+.adlint-summary { display: flex; flex-wrap: wrap; gap: var(--gap-ctl); margin-bottom: 0.8rem; }
 .adlint-sum {
     display: inline-flex;
     padding: 0.2rem 0.7rem;
@@ -1565,7 +1565,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .adlint-mark.adlint-medicine { background: color-mix(in srgb, var(--color-danger) 22%, transparent); color: var(--color-danger); }
 .adlint-mark.adlint-overclaim { background: color-mix(in srgb, var(--color-warning) 24%, transparent); color: var(--color-warning); }
 .adlint-mark.adlint-functional { background: color-mix(in srgb, var(--color-secondary) 22%, transparent); color: var(--color-secondary); }
-.adlint-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem; }
+.adlint-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2-5); font-size: 0.85rem; }
 .adlint-ctx { color: var(--color-text-muted); font-size: 0.8rem; }
 .adlint-sug { color: var(--color-success); font-size: 0.8rem; }
 .adlint-note { margin: 0.9rem 0 0; font-size: 0.78rem; color: var(--color-text-muted); }
@@ -1576,7 +1576,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     color: var(--color-success);
     font-size: 0.9rem;
     display: flex;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     align-items: flex-start;
 }
 
@@ -1595,7 +1595,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .prod-filter-active {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     padding: 0.3rem 0.8rem;
     border-radius: 999px;
     border: 1px solid var(--color-secondary);
@@ -1615,13 +1615,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .prod-inci-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     margin-top: 0.6rem;
 }
 .prod-ing-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: var(--space-1-5);
     padding: 0.2rem 0.5rem 0.2rem 0.35rem;
     border-radius: 999px;
     border: 1px solid var(--border-color);
@@ -1669,12 +1669,12 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .prod-ing-list {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: var(--space-1-5);
 }
 .prod-ing-row {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     padding: 0.35rem 0.6rem;
     border-radius: var(--radius-sm);
     background: var(--bg-muted);
@@ -1710,7 +1710,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .prod-allergy-hit {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     flex-wrap: wrap;
     padding: 0.45rem 0.6rem;
     border-radius: var(--radius-sm);
@@ -1736,7 +1736,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     margin-bottom: 0.5rem;
 }
 /* 미등록 일괄 사전 등록 버튼 (FO-47) — 칩 목록 다음 줄 */
@@ -1744,13 +1744,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .prod-compare-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 0.8rem;
+    gap: var(--space-3-5);
     margin-top: 0.6rem;
 }
 .prod-compare-col {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: var(--space-1-5);
     align-items: flex-start;
 }
 .prod-compare-label {
@@ -1782,11 +1782,11 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     color: var(--color-text-muted);
     line-height: 1.5;
 }
-.prod-photo-slots { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+.prod-photo-slots { display: flex; flex-wrap: wrap; gap: var(--space-3-5); }
 .prod-photo-slot {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     flex-wrap: wrap;
 }
 .prod-photo-label { font-size: 0.82rem; font-weight: var(--font-weight-bold); }
@@ -1810,7 +1810,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .prod-photo-actions {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: var(--space-2-5);
     flex-wrap: wrap;
     margin-top: 0.7rem;
 }
@@ -1820,7 +1820,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .prod-key-block summary { cursor: pointer; color: var(--color-text-muted); }
 .prod-key-row {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     align-items: center;
     flex-wrap: wrap;
     margin-top: 0.5rem;
@@ -1828,7 +1828,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .prod-key-row .form-input { flex: 1; min-width: 12rem; }
 .prod-photo-ref {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--gap-ctl);
     margin-top: 0.6rem;
     flex-wrap: wrap;
 }

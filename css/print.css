@@ -105,7 +105,7 @@
     .review-card-list {
         display: flex !important;
         flex-direction: column !important;
-        gap: 1.5rem !important;
+        gap: var(--space-5) !important;
         height: auto !important;
         overflow: visible !important;
     }

@@ -15,7 +15,7 @@
     padding: var(--space-5);
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: var(--space-4-5);
     transition: transform var(--transition-base), border-color var(--transition-base);
 }
 
@@ -330,7 +330,7 @@
     padding: 1.75rem;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: var(--space-4-5);
     position: relative;
     overflow: hidden;
 }
@@ -410,7 +410,7 @@
 .subj-progress-group {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: var(--space-1-5);
 }
 
 .subj-progress-label {
@@ -533,7 +533,7 @@
 .rec-item span { flex: 1; font-size: var(--text-md-sm); }
 .rec-item .rec-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .rec-item .rec-reason { font-size: var(--text-sm); color: var(--color-text-muted); }
-.rec-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+.rec-actions { display: flex; gap: var(--gap-ctl); flex-shrink: 0; }
 .rec-item .btn-sm { padding: 0.35rem 0.875rem; font-size: var(--text-sm); min-height: var(--control-h-md); min-width: var(--control-h-md); }
 .rec-empty { color: var(--color-text-muted); text-align: center; padding: var(--space-5); font-size: var(--text-md-sm); }
 
@@ -674,7 +674,7 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 .streak-badge {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     background: var(--warning-tint-12);
     color: var(--color-warning);
     padding: var(--space-2) var(--space-4);
@@ -1101,7 +1101,7 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 }
 .daily-choice-row {
     display: flex;
-    gap: 1rem;
+    gap: var(--gap-sec);
     width: 100%;
 }
 .daily-choice-row .btn {
@@ -1114,7 +1114,7 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 }
 .daily-short-row {
     display: flex;
-    gap: 1rem;
+    gap: var(--gap-sec);
     align-items: center;
     width: 100%;
 }

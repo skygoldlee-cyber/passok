@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 style(ux): 간격 리터럴 토큰화 — UX-CTL-03/04 · §4.9.3 정합
+
+- 15개 CSS 파일의 margin/gap px·rem 리터럴 ~235곳을 `--gap-ctl/group/sec`·`--space-*` 토큰으로 일괄 치환
+- 정확 일치는 의미 토큰 우선(0.5→`--gap-ctl`, 0.75→`--gap-group`, 1rem→`--gap-sec`), 근사값은 최근 스케일 수렴(드리프트 ≤1.6px), `.reader-layout` 1.75rem→`--space-6` 정규화
+- 점검표 미리보기 하단 여백 2.5em → `var(--gap-sec)` (UX-CTL-04 폼↔액션 행 16px 엄격 적용 — 기존 2줄 여백 의도 폐기)
+- 예외 유지: 스케일 하한 미만(1~3px·0.15/0.2rem) 미세 간격·인쇄 pt·`gap:0`·콘텐츠 타이포그래피 마진(doc-md·표·인용)
+- 게이트 사각지대 해소: 체커는 `chip|btn|action|controls` 셀렉터의 px gap만 검사 — care-doc-sign·wb-row·notice-* 등 비매칭 셀렉터의 px 리터럴 ~20곳과 rem 리터럴 ~150곳(formula.css 집중)을 수동 스윕으로 정리
+
 ## 2026-11-06 fix(ux): carework 베어·사멸 버튼 btn 계열 일괄 정정 + data-click 클래스 게이트
 
 - `class="secondary"` 사멸 클래스 정정 — `.secondary`는 CSS 미정의(html-viewer 스코프에만 존재)라 carework 뷰 버튼들이 브라우저 기본 회색으로 렌더되며 높이 ~20px(<44px) — "이미지 파일 선택"(care-home) 등 27곳을 `btn btn-secondary`로 치환

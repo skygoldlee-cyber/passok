@@ -297,7 +297,7 @@
 .number-drill-values {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.3rem;
+    gap: var(--space-1-5);
 }
 
 .number-drill-item.is-key .number-drill-value {
@@ -564,7 +564,7 @@
 .story-mode .story-toggle {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: var(--space-1-5);
     margin: 0.4rem 0 0.6rem;
     padding: 0.25rem 0.7rem;
     border: 1px solid var(--story-quote-border, #d4a017);
@@ -728,7 +728,7 @@ a.glossary-ref-link i {
     z-index: var(--z-toast);
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     padding: 0.6rem 1.1rem;
     font-size: var(--text-sm-md);
     font-weight: var(--font-weight-semibold);
@@ -815,7 +815,7 @@ a.glossary-ref-link i {
 .reader-mode-checkbox {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: var(--space-1-5);
     cursor: pointer;
     font-size: var(--text-md-sm);
     user-select: none;
@@ -905,8 +905,8 @@ a.glossary-ref-link i {
 }
 
 /* ── 웹툰 모드 (교재 리더) — 말풍선 컷 ── */
-.webtoon-reader { max-width: 720px; margin: 0 auto; padding: 10px 6px; display: flex; flex-direction: column; gap: 10px; }
-.wb-row { display: flex; align-items: flex-end; gap: 8px; }
+.webtoon-reader { max-width: 720px; margin: 0 auto; padding: 10px 6px; display: flex; flex-direction: column; gap: var(--gap-group); }
+.wb-row { display: flex; align-items: flex-end; gap: var(--gap-ctl); }
 .wb-row.wb-right { flex-direction: row-reverse; }
 .wb-avatar { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--color-surface); flex-shrink: 0; }
 .wb-avatar-initial { display: inline-flex; align-items: center; justify-content: center; font-weight: 700; color: var(--color-text-dim); font-size: .85rem; }
