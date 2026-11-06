@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261106-6d4b8de",
+    "date": "2026-11-06",
+    "notes": [
+      "[리팩터링·uitext] 공통 기본값 코어 모듈화 + check:uitext 교차 검증·필드 정규화",
+      "[정리·release] v20261106-95600e6 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261106-95600e6",
     "date": "2026-11-06",
     "notes": [
@@ -190,15 +198,6 @@
       "[기능·reader] 교재형 셀렉트 — 표준형·이야기형·웹툰을 드롭다운으로",
       "[수정·carework] 웹툰 뷰 is-hidden 제거 + 파서 보강",
       "[정리·release] v20261105-335fa20 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261105-335fa20",
-    "date": "2026-11-05",
-    "notes": [
-      "[정리] domain-map — webtoon-render.js 리더 도메인 등록",
-      "[기능·carework] 교재리더 웹툰 모드 — 이야기를 말풍선 컷으로",
-      "[정리·release] v20261105-bf79ebd 스탬프 확정 [no-docs]"
     ]
   }
 ]
