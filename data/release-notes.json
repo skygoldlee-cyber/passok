@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261107-852bd63",
+    "date": "2026-11-07",
+    "notes": [
+      "[기능·check] 문항 검수 게이트 — 정답 수치 대조·미검수 경고·eval_pool 검증 + collectFilesByExt",
+      "[리팩터링·carework] 4step_flow.svg를 docs/images/ 규약으로 이동",
+      "[정리·release] v20261107-aad0bbe 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-aad0bbe",
     "date": "2026-11-07",
     "notes": [
@@ -186,17 +195,6 @@
     "notes": [
       "[수정·carework] 이야기형 MD 추적 + 개념 학습 이름 — 프로덕션 빈 씬 해소",
       "[정리·release] v20261105-d91aefe 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261105-d91aefe",
-    "date": "2026-11-05",
-    "notes": [
-      "[기능·carework] s1 개념·문항 + 문제은행 pre 단계 연결",
-      "[기능·carework] 학습 흐름 뷰 과목 필터 + 필터 테스트",
-      "[수정·carework] 웹툰 과목 선택 순서 — 1과목 먼저 + 순서 테스트",
-      "[수정·nav] 웹툰·학습흐름 실무모드 → 학습모드 이동 — nav-study-only",
-      "[정리·release] v20261105-c31dee7 스탬프 확정 [no-docs]"
     ]
   }
 ]
