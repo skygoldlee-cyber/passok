@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261106-95600e6",
+    "date": "2026-11-06",
+    "notes": [
+      "[기능·shell] uiText 플랫폼 공통 기본값 — 시험 미선언 팩 메뉴 라벨 정합",
+      "[정리·release] v20261106-096cc92 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261106-096cc92",
     "date": "2026-11-06",
     "notes": [
@@ -191,22 +199,6 @@
       "[정리] domain-map — webtoon-render.js 리더 도메인 등록",
       "[기능·carework] 교재리더 웹툰 모드 — 이야기를 말풍선 컷으로",
       "[정리·release] v20261105-bf79ebd 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261105-bf79ebd",
-    "date": "2026-11-05",
-    "notes": [
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[정리] DA-15 예외 — check_scenario_items.js carework 전용 검증 도구",
-      "[테스트·carework] practice-registry 기대값 갱신 — careWebtoon 반영",
-      "[수정·carework] 웹툰 뷰 모바일 탭 항목 추가 — 도달성 불변식 충족",
-      "[수정·carework] 웹툰 뷰 lazy-view 스텁 추가 — DOM 불변식 충족",
-      "[정리] 웹툰 뷰 spec 태그 + TRACE 동기",
-      "[문서] AGENTS 트리 + TRACE 재생성 — care-webtoon 등록",
-      "[기능·carework] careWebtoon feature 선언 — exams.json",
-      "[기능·carework] 웹툰 버블 뷰 — 이야기 슬롯을 말풍선 컷으로 렌더",
-      "[기능·carework] 시나리오 문항 확충 + 인물 아바타 SVG"
     ]
   }
 ]
