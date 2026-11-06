@@ -11,7 +11,7 @@ const ROOT = path.resolve(__dirname, '..', '..');
 const EXAM_ROOT = path.join(ROOT, 'content', 'exams', 'carework');
 const ITEMS = path.join(EXAM_ROOT, 'items', 'scenario_items.json');
 const CONCEPTS = path.join(EXAM_ROOT, 'concepts.json');
-const STD = path.join(EXAM_ROOT, '교재', 'careprac', '2과목_요양보호관련.md');
+const STD = path.join(EXAM_ROOT, '교재', 'careprac', '2과목_요양보호실기.md');
 
 const ROLE_OK = new Set(['pre', 'scenario', 'review']);
 const normToken = s => String(s).replace(/\s+/g, '');
