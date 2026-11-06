@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261106-580d862",
+    "date": "2026-11-06",
+    "notes": [
+      "[수정·ux] carework 베어·사멸 버튼 btn 계열 일괄 정정 + data-click 클래스 게이트 [no-test]",
+      "[정리·release] v20261106-cd20aa1 스탬프 확정 [no-docs]",
+      "[정리·release] v20261106-2d8926b 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261106-cd20aa1",
     "date": "2026-11-06",
     "notes": [
@@ -210,27 +219,6 @@
       "[기능·carework] 서명 이미지 업로드 — 홈 등록 → 출력물 서명란 기입",
       "[정리·release] v20261105-80a0f6d 스탬프 확정 [no-docs]",
       "[정리·release] v20261105-ab3b06f 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261105-80a0f6d",
-    "date": "2026-11-05",
-    "notes": [
-      "[문서·carework] 실무막뉴얼 서명 섹션 갱신 — 작성자 기입 범위·출력 경로 명시",
-      "[기능·carework] 출력 문서 서명 자동기입 — MD 경로까지 서명란 확장",
-      "[정리·release] v20261105-46f4fd7 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261105-46f4fd7",
-    "date": "2026-11-05",
-    "notes": [
-      "[문서·carework] 표준교재 문서 링크 린트 정합 — 출처 평문 전환 + sw.js 자산 갱신",
-      "[문서·carework] 표준교재 목차 문서 ID 헤더 추가 (DOC-USR-19)",
-      "[문서·carework] 표준교재 목차·학습구조 문서 추가",
-      "[수정·carework] 점검표 복사 단일화 + 기관 버튼 라벨 통일·mdgen 배선 정정",
-      "[문서·carework] 실무막뉴얼 갱신 — MD 표준 초안·표 구조 내보내기 반영",
-      "[정리·release] v20261105-337f191 스탬프 확정 [no-docs]"
     ]
   }
 ]
