@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 docs(carework): 적응형 학습 엔진 설계 3차 갱신 — 2차 리뷰 필수 항목 반영
+
+- §6 자산 수치 정합(30개념·18문·43태그, 설계/실재/배포 3층 구분) + items 품질 메타 필드(difficulty·discrimination·source_date·reviewer·version·exposure_count)
+- 개념당 문항 규칙 3→4문항(scenario 2 — 재도전 규칙 충족) + 부족 시 런타임 폴백 명시
+- 고정 1·3·7일 ↔ FSRS 관계 명확화(초기값 vs 재계산, 오답 리셋=FSRS 갱신) + 엔진 규칙/시험별 설정 경계 섹션 + 파일럿 성공 기준 정량화 항목 + 판본 이력 관리 선언
+
 ## 2026-11-06 docs(carework): 적응형 학습 엔진 설계 §3 머메이드 처리흐름도 추가
 
 - embedded content 플레이스홀더를 mermaid flowchart로 교체 — ①~⑤ 단계·정오답 분기·2연속 오답 취약 개념 경로·간격 복습→모의고사 흐름 시각화
