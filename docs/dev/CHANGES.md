@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 fix(reader): 웹툰 모드 좌측 목차 미표시 — 씬 목차·보조 UI 렌더 연동
+
+- `renderChapterContent` 웹툰 분기가 `renderChapterContentInternal`을 우회해 `showReaderAuxUi`·`renderToc`가 미호출 — 저장된 webtoonMode 복원 진입 시 좌측 목차 없이 웹툰만 표시되던 결함 수정
+- `reader-render.js`에 `renderWebtoonContent` 신설 — 씬을 `reader-section-N`/`data-section-idx` 카드로 감싸 TOC 클릭 이동·스크롤스파이·섹션 진행을 기존 경로로 재사용, Chapter 번호로 목차 그룹핑, 오디오 플레이어·story-mode 잔존 정리, 빈 슬롯 시 목차 숨김
+- `webtoon-render.js` 챕터 헤딩 정규식 `📚?` → `(?:📚\s*)?` — u 플래그 부재로 서로게이트 하위 절반만 optional이라 `## Chapter N`(이모지 없음) 헤딩이 조용히 매칭 실패하던 잠재 버그 수정
+- `css/reader-extras.css` — `.webtoon-reader` 내 카드 크롬 제거(기존 연속 스트립 외형 유지) + 씬 내부 행 간격 복원
+- 회귀 테스트 `tests/dom/reader/reader-webtoon.test.js` 4건 추가
+
 ## 2026-11-06 chore(gates): 프로젝트 평가 후속 — 체커 강화·예외 정리·파서 가드
 
 - check_mobile_safe: 컨트롤 행 패턴 한정이던 gap px 탐지를 인터랙티브 셀렉터 전면 `≥4px` 금지로 확장 (토큰 스케일 하한 근거, 0~3px 미세 간격 예외) — 오늘 수작업 스윕분 사각지대 재발 차단
