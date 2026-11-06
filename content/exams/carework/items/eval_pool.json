@@ -32,6 +32,314 @@
         "소화 촉진을 위해"
       ],
       "answer": 1
+    },
+    {
+      "id": "pt-c10-posture",
+      "conceptId": "s2-c10-meal-posture",
+      "role": "pretest",
+      "stem": "연하곤란이 있다는 기록을 확인한 요양보호사가 식사 돕기 전에 가장 먼저 할 일은?",
+      "options": [
+        "상체를 세운 자세로 앉힌다",
+        "머리를 뒤로 젖히게 한다",
+        "빨리 먹이도록 한다",
+        "옆으로 눕힌다",
+        "물부터 많이 마시게 한다"
+      ],
+      "answer": 0
+    },
+    {
+      "id": "pt-c10-tube",
+      "conceptId": "s2-c10-tube-feeding",
+      "role": "pretest",
+      "stem": "경관영양 튜브가 빠진 것을 발견했을 때 요양보호사의 대응은?",
+      "options": [
+        "직접 다시 삽입한다",
+        "즉시 보고하고 지시를 따른다",
+        "테이프로 임시 고정한다",
+        "반나절 지켜본다",
+        "물을 주워 헹군다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c10-med",
+      "conceptId": "s2-c10-med-help",
+      "role": "pretest",
+      "stem": "대상자에게 약을 줄 때 요양보호사가 할 수 없는 일은?",
+      "options": [
+        "복용 시간을 알려준다",
+        "약물을 조정·투여한다",
+        "물을 건네 드린다",
+        "복용 여부를 기록한다",
+        "이상 시 보고한다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c10-excretion",
+      "conceptId": "s2-c10-excretion-observe",
+      "role": "pretest",
+      "stem": "배설물에서 평소와 다른 점(혈액·색 변화 등)을 발견했을 때 해야 할 일은?",
+      "options": [
+        "무시한다",
+        "기록하고 보고한다",
+        "직접 처치한다",
+        "가족에게만 말한다",
+        "다음 근무자에게 구두 전달만 한다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c10-nail",
+      "conceptId": "s2-c10-perineal-nail",
+      "role": "pretest",
+      "stem": "대상자의 발톱을 깎아 줄 때 알맞은 방법은?",
+      "options": [
+        "둥글게 짧게 깎는다",
+        "일자로 깎는다",
+        "깊게 파고들어 깎는다",
+        "뽑는다",
+        "손질하지 않는다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c10-position",
+      "conceptId": "s2-c10-position-change",
+      "role": "pretest",
+      "stem": "혼자 움직이지 못하는 대상자의 체위를 바꿔 주는 일반적인 간격은?",
+      "options": [
+        "30분",
+        "1시간",
+        "2시간",
+        "6시간",
+        "하루 1회"
+      ],
+      "answer": 2
+    },
+    {
+      "id": "pt-c10-move",
+      "conceptId": "s2-c10-move-principle",
+      "role": "pretest",
+      "stem": "한쪽 편마비 대상자가 휠체어로 옮겨 앉을 때 돌아서는 방향은?",
+      "options": [
+        "마비된 쪽 방향",
+        "건강한 쪽 방향",
+        "아무 방향",
+        "뒤로 돌기",
+        "눕힌 채 이동"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c10-clothes",
+      "conceptId": "s2-c10-clothes",
+      "role": "pretest",
+      "stem": "편마비 대상자에게 옷을 입힐 때 올바른 순서는?",
+      "options": [
+        "건강한 쪽부터 입힌다",
+        "마비된 쪽부터 입힌다",
+        "두 팔을 동시에 넣는다",
+        "뒤집어 입힌다",
+        "옷을 입히지 않는다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c10-welfare",
+      "conceptId": "s2-c10-welfare-items",
+      "role": "pretest",
+      "stem": "국가가 지원하는 복지용구에 해당하는 것은?",
+      "options": [
+        "가전제품",
+        "미끄럼방지 매트",
+        "의료기기 전부",
+        "식품",
+        "임의 구매품 전부"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c12-daily",
+      "conceptId": "s2-c12-dementia-daily",
+      "role": "pretest",
+      "stem": "치매 대상자의 일상생활 지원 원칙으로 알맞은 것은?",
+      "options": [
+        "행동을 강제로 막는다",
+        "일정과 환경을 안정적으로 유지한다",
+        "낯선 환경에 자주 데려간다",
+        "혼자 두고 지켜보지 않는다",
+        "모든 일을 대신해 준다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c12-doubt",
+      "conceptId": "s2-c12-bpsd-doubt",
+      "role": "pretest",
+      "stem": "대상자가 「물건을 훔쳐갔다」며 의심할 때 알맞은 대응은?",
+      "options": [
+        "사실을 논쟁해 바로잡는다",
+        "감정을 받아들인 뒤 함께 찾거나 다른 활동으로 전환한다",
+        "무시한다",
+        "야단친다",
+        "약을 먹인다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c12-wander",
+      "conceptId": "s2-c12-bpsd-wander",
+      "role": "pretest",
+      "stem": "치매 대상자가 배회하려 할 때 알맞은 대응은?",
+      "options": [
+        "방에 가둔다",
+        "안전한 공간에서 동행하거나 관심을 다른 곳으로 돌린다",
+        "손을 묶는다",
+        "혼자 나가게 둔다",
+        "소리쳐 제지한다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c12-sundown",
+      "conceptId": "s2-c12-bpsd-sundown",
+      "role": "pretest",
+      "stem": "저녁이 되면 초조해하고 불안해하는 대상자(석양증후군)에게 알맞은 환경은?",
+      "options": [
+        "조명을 끈다",
+        "조명을 밝게 하고 익숙한 활동을 제공한다",
+        "혼자 있게 한다",
+        "낮잠을 오래 재운다",
+        "소리를 지르게 둔다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c12-repeat",
+      "conceptId": "s2-c12-bpsd-repeat",
+      "role": "pretest",
+      "stem": "치매 대상자가 같은 질문을 반복할 때 알맞은 대응은?",
+      "options": [
+        "「아까 답했잖아요」라고 한다",
+        "같은 내용으로 차분히 대답하며 안심시킨다",
+        "대답하지 않는다",
+        "다른 사람에게 떠넘긴다",
+        "혼낸다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c14-order",
+      "conceptId": "s2-c14-emergency-order",
+      "role": "pretest",
+      "stem": "응급 상황이 발생했을 때 요양보호사의 첫 행동은?",
+      "options": [
+        "바로 처치한다",
+        "상태를 판단·살피고 필요시 119에 신고한다",
+        "사진을 찍는다",
+        "가족에게만 연락한다",
+        "퇴근한다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c14-choking",
+      "conceptId": "s2-c14-choking",
+      "role": "pretest",
+      "stem": "의식이 있는 대상자가 음식물로 질식했을 때의 처치는?",
+      "options": [
+        "물을 마시게 한다",
+        "하임리히법(복부 밀어올리기)을 한다",
+        "눕힌다",
+        "손가락을 입에 넣는다",
+        "등을 가볍게 만진다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c14-seizure",
+      "conceptId": "s2-c14-seizure",
+      "role": "pretest",
+      "stem": "대상자가 경련을 일으켰을 때 알맞은 대응은?",
+      "options": [
+        "입에 숟가락을 넣는다",
+        "위험한 물건을 치우고 옆으로 눕힌다",
+        "붙잡아 억누른다",
+        "물을 끼얹는다",
+        "약을 먹인다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c14-burn",
+      "conceptId": "s2-c14-burn",
+      "role": "pretest",
+      "stem": "화상을 입었을 때 1차 처치는?",
+      "options": [
+        "연고를 바로 바른다",
+        "흐르는 찬물로 15분 이상 냉각한다",
+        "물집을 터뜨린다",
+        "붕대로 꽉 감는다",
+        "온찜질한다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c14-hands",
+      "conceptId": "s2-c14-hand-hygiene",
+      "role": "pretest",
+      "stem": "올바른 손 위생의 기본은?",
+      "options": [
+        "물로만 3초",
+        "비누로 30초 이상 6단계",
+        "수건으로만 닦기",
+        "장갑만 착용",
+        "알코올만 뿌리기"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c14-infection",
+      "conceptId": "s2-c14-infection-chain",
+      "role": "pretest",
+      "stem": "감염 전파 예방의 핵심 원리는?",
+      "options": [
+        "모든 환자를 격리한다",
+        "감염고리 중 한 곳만 끊어도 전파가 막힌다",
+        "항생제를 예방 투여한다",
+        "방문을 차단한다",
+        "마스크만 쓴다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c14-cpr",
+      "conceptId": "s2-c14-cpr-standards",
+      "role": "pretest",
+      "stem": "의식·호흡이 없는 대상자 발견 시 119 신고 후 즉시 시작할 것은?",
+      "options": [
+        "물을 마시게 한다",
+        "가슴압박(CPR)을 한다",
+        "따뜻하게 덮어준다",
+        "깨우려 흔든다",
+        "혈압을 잰다"
+      ],
+      "answer": 1
+    },
+    {
+      "id": "pt-c14-aed",
+      "conceptId": "s2-c14-aed",
+      "role": "pretest",
+      "stem": "AED 사용 중 리듬 분석 시 주의할 점은?",
+      "options": [
+        "대상자를 만진다",
+        "대상자와 접촉하지 않는다",
+        "물을 뿌린다",
+        "패드를 뗀다",
+        "소리를 지른다"
+      ],
+      "answer": 1
     }
   ]
 }
