@@ -281,8 +281,8 @@
         margin-bottom: var(--space-3);
     }
     .flashcard-controls .btn {
-        min-width: 44px;
-        min-height: 44px;
+        min-width: var(--control-h-md);
+        min-height: var(--control-h-md);
         padding: 0.5rem 0.75rem;
         font-size: var(--text-sm-md);
     }
@@ -297,7 +297,7 @@
         flex: 1;
         padding: 0.6rem 0.25rem;
         font-size: var(--text-sm);
-        min-height: 48px;
+        min-height: var(--control-h-lg);
     }
 }
 
@@ -375,7 +375,9 @@
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     color: var(--color-text-main);
-    padding: 0.85rem 1.25rem;
+    /* select·버튼과 행 높이 정합 (@spec UX-CTL-02) */
+    min-height: var(--control-h-md);
+    padding: 0.625rem 1rem;
     font-family: var(--font-app);
     font-size: var(--text-1rem);
     outline: none;

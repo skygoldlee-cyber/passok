@@ -248,6 +248,17 @@
     --space-7: 2.5rem;
     --space-8: 3rem;
 
+    /* Control Height — 인터랙티브 컨트롤 높이 역할 계층 (@spec UX-CTL-01)
+       대역 무관 역할 기준: 기본 md(44px)=A-04 터치 타겟, sm=밀집·아이콘 예외, lg=주요 CTA */
+    --control-h-sm: 2.25rem;
+    --control-h-md: 2.75rem;
+    --control-h-lg: 3rem;
+
+    /* Control Gap — 컨트롤 행 수평 간격 3단계 (@spec UX-CTL-03) */
+    --gap-ctl: var(--space-2);
+    --gap-group: var(--space-3);
+    --gap-sec: var(--space-4);
+
     /* Z-index Scale */
     --z-base: 1;
     --z-raised: 5;
@@ -428,11 +439,24 @@ body.no-scroll {
     overflow-y: auto;
 }
 .btn-row {
+    /* 액션 행: PC·태블릿은 우측 정렬(보조→주요), 모바일은 app-responsive에서 세로 스택 (@spec UX-CTL-05) */
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3);
+    gap: var(--gap-group);
+    justify-content: flex-end;
 }
 .flex-1 { flex: 1; }
+
+/* 폼 필드 단위 — 라벨 위·컨트롤 아래 스택 + 필드 내부 4px 리듬 (@spec UX-CTL-04)
+   필드 간 간격은 부모의 `gap: var(--gap-group)`이 담당 — 요소별 margin 금지 */
+.ctl-field { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
+.ctl-field > label {
+    font-size: var(--text-sm-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+}
+.ctl-field > .ctl-hint { font-size: var(--text-sm); color: var(--color-text-muted); }
+
 .justify-center { justify-content: center; }
 .justify-end { justify-content: flex-end; }
 .text-left { text-align: left; }
@@ -479,6 +503,9 @@ a:hover, a:focus-visible { color: var(--color-link-hover, var(--color-link, var(
 .search-input {
     padding-left: var(--space-8);
     width: 100%;
+    /* 폼 입력 계약 — 터치 타깃 + iOS 줌 방지 (@spec UX-CTL-02, UX-FORM-01) */
+    min-height: var(--control-h-md);
+    font-size: var(--text-1rem);
 }
 .progress-bar-fill {
     width: 0%;
@@ -1041,7 +1068,7 @@ body.ui-mode-practice .ui-mode-toggle {
     align-items: center;
     gap: var(--space-3);
     width: 100%;
-    min-height: 44px; /* 터치 타겟 최소 크기 */
+    min-height: var(--control-h-md); /* 터치 타겟 최소 크기 (A-04, UX-CTL-02) */
     padding: var(--space-2) var(--space-3);
     background: transparent;
     border: none;
@@ -1084,7 +1111,10 @@ body.ui-mode-practice .ui-mode-toggle {
 
 /* General Button Styles */
 .btn {
+    /* 대역 무관 기본 터치 타겟 (@spec UX-CTL-02) — 모바일은 app-responsive가 패딩만 조정 */
+    min-height: var(--control-h-md);
     padding: 0.65rem 1.2rem;
+    min-width: 5rem; /* 단문 라벨 최소폭 (UX-CTL-02) — .btn-sm·아이콘 버튼은 개별 폭 허용 */
     border-radius: var(--radius-sm);
     font-family: var(--font-app);
     font-size: var(--text-md-sm);

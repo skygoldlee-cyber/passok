@@ -142,7 +142,7 @@
         justify-content: center !important;
         padding: 0.75rem 1rem !important;
         font-size: 0.9375rem !important;
-        min-height: 44px !important;
+        min-height: var(--control-h-md) !important;
     }
 
     .daily-challenge-card #start-daily-btn {
@@ -251,8 +251,8 @@
     /* 헤더 액션 버튼 터치 영역 확대 — 드롭다운 메뉴 항목(.settings-item)은 제외 (좌측 정렬 유지) */
     .header-actions .btn,
     .header-actions button:not(.settings-item) {
-        min-width: 44px;
-        min-height: 44px;
+        min-width: var(--control-h-md);
+        min-height: var(--control-h-md);
         padding: 0.5rem !important;
         display: inline-flex;
         align-items: center;
@@ -330,7 +330,7 @@
         transition: color var(--transition-base), transform var(--transition-fast);
         flex: 1 1 0;
         min-width: 0;
-        min-height: 48px;
+        min-height: var(--control-h-lg);
     }
 
     .mobile-tab-item i {
@@ -430,8 +430,8 @@
         font-size: var(--text-lg);
         cursor: pointer;
         padding: var(--space-2);
-        min-width: 40px;
-        min-height: 40px;
+        min-width: var(--control-h-sm);
+        min-height: var(--control-h-sm);
     }
     .more-sheet-scroll {
         overflow-y: auto;
@@ -560,15 +560,40 @@
         font-size: 1.1rem !important;
     }
 
-    /* 버튼 터치 영역 확대 */
+    /* 버튼 터치 영역 확대 (높이는 base .btn의 --control-h-md가 보장 — 패딩만 조정, UX-CTL-02) */
     .btn {
         padding: 0.75rem 1rem !important;
-        min-height: 44px;
+    }
+
+    /* 액션 행 — 모바일은 세로 전폭 스택, 주요 버튼이 첫째 (@spec UX-CTL-05)
+       DOM 순서는 [보조][주요] 고정 — order로만 시각 순서를 바꾼다 */
+    .btn-row,
+    .app-confirm-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .btn-row .btn,
+    .app-confirm-actions button {
+        justify-content: center; /* 전폭 스택 시 내용 중앙 정렬 */
+    }
+    .btn-row .btn-primary,
+    .app-confirm-actions .app-confirm-ok {
+        order: -1;
+    }
+
+    /* 모바일 하단 고정 제출 행 — 탭바+safe-area 위 (@spec UX-CTL-05)
+       사용: 폼 마지막에 .btn-row-sticky (PC·태블릿은 인플로우 유지) */
+    .btn-row-sticky {
+        position: sticky;
+        bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+        z-index: var(--z-sticky);
+        background: var(--bg-app);
+        padding: var(--space-2) 0;
     }
 
     /* 입력 필드 터치 영역 확대 */
     input, select, textarea {
-        min-height: 44px;
+        min-height: var(--control-h-md);
         font-size: 16px !important; /* iOS 줌 방지 */
     }
 
@@ -657,7 +682,7 @@
     }
 
     .mobile-tab-item {
-        min-height: 44px;
+        min-height: var(--control-h-md);
         padding: 0.3rem;
     }
 }
@@ -724,8 +749,8 @@
     color: var(--color-text-muted);
     font-size: var(--text-lg-1);
     cursor: pointer;
-    width: 44px;
-    height: 44px;
+    width: var(--control-h-md);
+    height: var(--control-h-md);
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
@@ -836,8 +861,8 @@
 #orientation-toggle-btn {
     display: none; /* 기본적으로 숨김 (데스크톱) */
     padding: 0.5rem !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
+    min-width: var(--control-h-md) !important;
+    min-height: var(--control-h-md) !important;
     border-radius: 8px !important;
     transition: transform 0.3s ease !important;
     position: relative !important;
@@ -879,8 +904,8 @@ body.landscape-mode .app-header p {
 
 body.landscape-mode .header-actions .btn,
 body.landscape-mode .header-actions button:not(.settings-item) {
-    min-width: 36px !important;
-    min-height: 36px !important;
+    min-width: var(--control-h-sm) !important;
+    min-height: var(--control-h-sm) !important;
     padding: 0.25rem 0.5rem !important;
     font-size: 0.8rem !important;
 }
@@ -993,14 +1018,14 @@ body.landscape-mode .modal-content {
 
 body.landscape-mode .btn {
     padding: 0.5rem 0.75rem !important;
-    min-height: 36px !important;
+    min-height: var(--control-h-sm) !important;
     font-size: 0.85rem !important;
 }
 
 body.landscape-mode input,
 body.landscape-mode select,
 body.landscape-mode textarea {
-    min-height: 36px !important;
+    min-height: var(--control-h-sm) !important;
     font-size: 16px !important; /* iOS 자동 확대 방지 (16px 이상) */
 }
 
@@ -1063,7 +1088,7 @@ body.landscape-mode .glass-card {
         justify-content: center !important;
         padding: 0.75rem 1rem !important;
         font-size: 0.9375rem !important;
-        min-height: 44px !important;
+        min-height: var(--control-h-md) !important;
     }
     .daily-challenge-card #start-daily-btn {
         width: 100% !important;

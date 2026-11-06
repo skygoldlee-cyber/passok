@@ -50,7 +50,7 @@ export function initCareHomeView() {
         if (!pvEl) return;
         const cur = getDocSign().signImage;
         pvEl.innerHTML = cur
-            ? `<img class="care-sign-preview" src="${cur}" alt="등록된 서명"> <button type="button" class="secondary" id="home-sign-image-clear">이미지 삭제</button>`
+            ? `<img class="care-sign-preview" src="${cur}" alt="등록된 서명"> <button type="button" class="btn btn-secondary" id="home-sign-image-clear">이미지 삭제</button>`
             : '<span class="care-log-hint">서명 이미지 미등록 — 등록하면 문서 서명란에 이미지가 기입됩니다.</span>';
         pvEl.querySelector('#home-sign-image-clear')?.addEventListener('click', () => { setDocSignImage(''); renderImg(); showToast('서명 이미지를 삭제했습니다.'); });
     };

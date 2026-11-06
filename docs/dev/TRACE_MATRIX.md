@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: b767a349b5177095
-> 생성: 2026-11-05 · 원천: SPEC.md(673개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: c8ecb6b7bced89d3
+> 생성: 2026-11-06 · 원천: SPEC.md(679개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 673개 — 문서 연결 464 · 소스 연결 600 · 테스트 연결 640 · 보고서 연결 109
+**커버리지 요약**: 요구사항 679개 — 문서 연결 464 · 소스 연결 606 · 테스트 연결 646 · 보고서 연결 109
 
 ---
 
@@ -67,7 +67,7 @@
 | AN-07 | ✅ | 테스트 | DOC-DSN-18 | src/study/analysis-engine.js<br>src/study/recommendations.js<br>src/views/analysis-view.js | tests/unit/engine/analysis-deepening.test.js | — | — |
 | AN-08 | ✅ | 테스트 | — | src/study/analysis-engine.js<br>src/views/analysis-view.js | tests/fixtures/analysis-seed.js<br>tests/unit/engine/analysis-deepening.test.js | — | — |
 | AN-09 | ✅ | E2E 테스트 | DOC-DSN-18 | html/views/analysis.html<br>index.html<br>src/study/analysis-engine.js<br>src/views/analysis-view.js | tests/dom/study/study-dashboard.dom.test.js<br>tests/e2e/analysis-view.spec.js<br>tests/unit/engine/analysis-deepening.test.js | — | — |
-| AN-10 | ✅ | E2E 테스트 | DOC-DSN-18<br>DOC-DSN-33 | tools/build/textbook_anchors.js | tests/e2e/analysis-view.spec.js<br>tests/unit/content/textbook-anchors.test.js | — | — |
+| AN-10 | ✅ | E2E 테스트 | DOC-DSN-18<br>DOC-DSN-33 | tools/build/build_question_chapters.js<br>tools/build/textbook_anchors.js | tests/e2e/analysis-view.spec.js<br>tests/unit/content/textbook-anchors.test.js | — | — |
 
 ## 3.2 플래시카드
 
@@ -738,6 +738,12 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | OB-01 | `onboarding.js` — 단계 진행 도트·건너뛰기·이전 지원, 목표 검증 실패 시 진행 차단. 학습 실행은 `data-click` 위임(모듈 import 없이 기존 액션 재사용). UX-FB-05의 1회성·재열람 계약은 불변 | 테스트 | — | src/shell/onboarding.js | tests/dom/shell/onboarding-zoom.dom.test.js | — | — |
+| UX-CTL-01 | A-04의 44px를 기본값(`md`)으로 둔 역할 계층. `sm`은 아이콘 버튼·밀집 행·가로모드 밀도 예외, `lg`는 주요 CTA·전폭 액션. 비대상: 테이블 셀·본문 링크·아바타·이미지·진행바·데코레이터 배지·그리드 타일형 내비 카드(`.more-sheet-grid .mobile-tab-item` 등)의 타일 높이 | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-02 | 터치 대역(모바일+태블릿)은 물론 PC도 동일 높이를 쓰는 것이 원칙 — 높이는 대역이 아니라 역할로 결정. `.btn` 기본 규칙에 min-height를 두어 모바일 미디어쿼리 `!important` 보정에 의존하지 않는다 | E2E 테스트 | — | css/base.css<br>css/dashboard.css<br>css/exam.css<br>css/study.css | tests/e2e/mobile-overflow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-03 | 기존 `.btn-row`는 `var(--gap-group)`. 태블릿·PC 카드 내부는 `gap-group`→`space-4` 팽창 허용, `gap-ctl`은 대역 무관 고정 | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-04 | 가로 라벨 배치(라벨 좌·컨트롤 우)는 설정 행(`.settings-item` 류)·라벨 자체가 토글 타겟인 칩(`.obs-chip`)에만 허용 — 모바일에서 라벨이 컨트롤 폭을 잠식하고 한국어 라벨 길이 변동에 취약. 라벨 요소가 컨트롤을 감싸는 마크업(`<label>텍스트 <input></label>` — `.care-calc-form label` 패턴)은 동일 수직 리듬을 충족하므로 `.ctl-field`와 동형 허용 | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-05 | 모바일 하단 고정 제출 액션은 `.btn-row-sticky` +  `position:sticky` + `calc(70px + safe-area)` (UX-NAV-05 일반화). 태블릿·PC는 인플로우 배치만 — 스크롤 없는 화면의 고정바는 무의미 | 테스트 | — | css/app-responsive.css<br>css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-06 | UX-VFY-06과 동형의 조기 차단 — 토큰 미사용 높이는 커밋 전 탐지. E2E 측 실측은 `touch-targets.json` 기준선(UX-SET-03 확장)이 담당 | 테스트 | — | tools/check/check_mobile_safe.js | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FB-01 | `@media (max-width: 768px) { #app-toast { top:auto; bottom: calc(80px + safe-area) } }` — 하단 탭 바 위 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/a11y-interaction.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FB-02 | 네이티브 대화상자는 PWA 설치 흐름을 깨고 스타일 제어 불가. 커스텀 모달은 포커스 트랩 + Escape + 배경 클릭 닫기 포함 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js<br>tools/check/check_ui_style.js | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FB-03 | `animationend` 리스너로 클래스 해제 — `display:none` 상태에서는 애니메이션이 안 돌아 첫 실제 표시에 실행됨. `prefers-reduced-motion`에서는 자동으로 0.01ms 처리됨 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/reader-markers.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
@@ -746,7 +752,7 @@
 | UX-FB-06 | 자가 등록 모달(`.cing-*`)이 필드 5개로 `90dvh`를 넘겨 등록·취소 버튼이 잘린 실사례. 공용 `.app-confirm-dialog`(컨펌·의견·Pro·온보딩·통계 공유)와 `.auth-modal-card`·`.f-weigh-card`에 적용 — UX-SET-02(설정 패널)의 다이얼로그 일반화. E2E가 세로·가로 뷰포트에서 푸터 버튼 위치를 실측. 신규 카드는 공용 규약 클래스 `.dialog-card`(css/base.css — 90dvh 상한+스크롤) 사용, `check:mobilesafe`가 `role="dialog"` 마크업에 클래스 부재를 정적 검사 | E2E 테스트 | DOC-DSN-25 | — | tests/dom/common/common-a11y.dom.test.js<br>tests/e2e/mobile-overflow.spec.js | — | — |
 | UX-FB-07 | `.skeleton` 유틸은 base.css 공용 — `skeleton-text`/`skeleton-block`·폭 변형(`w-60`/`w-80`). shimmer는 `@media (prefers-reduced-motion)` 전역 무효화에 포함. 전체화면 fetch는 기존 UX-FB-04 오버레이 유지 (혼용 금지 — 부분 본문 교체에만 스켈레톤) | 구현 (테스트 갭) | — | src/views/textbook-reader.js | — | — | — |
 | UX-FB-08 | `_prevQueueLen`(직전 큐 길이)로 전이만 감지. `prefers-reduced-motion`에서는 애니메이션 자동 소거 — 상태 메시지 텍스트 자체가 보조 수단 | 구현 (테스트 갭) | — | src/views/dashboard-queue.js | — | — | — |
-| UX-FORM-01 | 16px 미만이면 iOS Safari가 포커스 시 자동 확대 | E2E 테스트 | DOC-DSN-25 | css/reader.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
+| UX-FORM-01 | 16px 미만이면 iOS Safari가 포커스 시 자동 확대 | E2E 테스트 | DOC-DSN-25 | css/base.css<br>css/reader.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FORM-02 | 모바일에서 물리적 눌림감 제공 | E2E 테스트 | DOC-DSN-25 | css/base.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-HELP-01 | 입력 필드·수식키 조합에서는 미동작. `Esc`·`?`·배경 클릭 닫기, 포커스 트랩 적용. 단축키 조합표는 모듈 상수로 분리해 단위 테스트 가능 | E2E 테스트 | — | src/shell/shortcuts-help.js | tests/dom/shell/shortcut-help.dom.test.js<br>tests/e2e/ux-surfaces.spec.js<br>tests/unit/app/shortcuts-help.test.js | — | — |
 | UX-NAV-01 | 한 번에 하나의 네비게이션만 노출 — 중복 방지. 하단 탭 바는 엄지 도달권, 탭 수가 늘어나면 가로 스크롤보다 핵심 5탭 + `role="dialog"` 시트(`#mobile-more-sheet`)가 발견성·터치 안정성에 유리. 활성 탭은 `scrollIntoView({inline:'center'})`로 가시화 + `aria-current="page"`, 시트 소속 뷰 활성 시 더보기 탭에 활성 표시 | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25<br>DOC-REF-09 | css/app-responsive.css<br>src/shell/app.js<br>src/shell/router.js | tests/dom/common/common-navigation.dom.test.js<br>tests/dom/shell/router.dom.test.js<br>tests/dom/shell/ui-structure.dom.test.js<br>tests/e2e/app.spec.js<br>…외 1개 | — | — |

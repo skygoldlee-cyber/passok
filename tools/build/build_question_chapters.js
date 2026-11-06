@@ -14,7 +14,7 @@
  * 실행: node tools/build/build_question_chapters.js   (build:data 체인에 포함)
  */
 
-// @spec BP-01 AN-10
+// @spec BP-01,AN-10
 
 const fs = require('fs');
 const path = require('path');

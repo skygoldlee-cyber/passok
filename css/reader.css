@@ -87,8 +87,8 @@
     display: none;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: var(--control-h-sm);
+    height: var(--control-h-sm);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     background: var(--bg-input);
@@ -900,8 +900,8 @@
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    width: 46px;
-    height: 46px;
+    width: var(--control-h-md);
+    height: var(--control-h-md);
     border-radius: var(--radius-full);
     background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
     color: var(--color-on-brand);
@@ -1000,8 +1000,8 @@
     background: var(--danger-tint-15);
     border: 1px solid var(--danger-tint-30);
     color: var(--color-danger-light);
-    width: 34px;
-    height: 34px;
+    width: var(--control-h-sm);
+    height: var(--control-h-sm);
     border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: var(--text-1rem);
@@ -1309,8 +1309,8 @@
     }
     /* M5: 확대 모달 닫기 버튼 터치 영역 확대 (34px → 44px) */
     .reader-table-modal-close {
-        width: 44px !important;
-        height: 44px !important;
+        width: var(--control-h-md) !important;
+        height: var(--control-h-md) !important;
         font-size: 1.15rem !important;
     }
     /* M7: 섹션 헤더 패딩 모바일 축소 (1.1rem 1.5rem → 0.9rem 1rem) */
@@ -1320,8 +1320,8 @@
     }
     /* M9: 리더 툴바 버튼 터치 영역 44px 보장 */
     .reader-toolbar button {
-        min-width: 44px;
-        min-height: 44px;
+        min-width: var(--control-h-md);
+        min-height: var(--control-h-md);
         padding: 0.5rem 0.75rem !important;
         display: inline-flex;
         align-items: center;

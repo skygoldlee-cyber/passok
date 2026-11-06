@@ -1181,7 +1181,7 @@ mark.txt-highlight {
     border: none;
     cursor: pointer;
     border-radius: var(--radius-xs);
-    min-height: 44px;
+    min-height: var(--control-h-md);
 }
 .calc-scratchpad-btn-clear {
     background: var(--color-text-muted);
@@ -1372,8 +1372,8 @@ mark.txt-highlight {
     gap: 0.25rem;
 }
 .combo-judge-btn {
-    width: 30px;
-    height: 30px;
+    width: var(--control-h-sm);
+    height: var(--control-h-sm);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     background: var(--bg-card);

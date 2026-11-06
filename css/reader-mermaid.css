@@ -295,8 +295,8 @@ pre.mermaid svg {
     background: var(--drawer-bg);
     border: 1px solid var(--border-color);
     color: var(--color-text-muted);
-    width: 28px;
-    height: 28px;
+    width: var(--control-h-sm);
+    height: var(--control-h-sm);
     border-radius: var(--radius-xs);
     cursor: pointer;
     font-size: var(--text-xs-sm);
@@ -342,8 +342,8 @@ pre.mermaid svg {
     margin: 0 3rem 0.75rem 0;
 }
 .mermaid-zoom-btn {
-    min-width: 34px;
-    min-height: 34px;
+    min-width: var(--control-h-sm);
+    min-height: var(--control-h-sm);
     padding: 0.3rem 0.6rem;
     background: var(--drawer-bg);
     border: 1px solid var(--border-color);
@@ -613,13 +613,13 @@ pre.mermaid-other .labelBkg {
 
     /* 모바일 터치 영역 — 표 확장 버튼과 동일 기준 */
     .mermaid-expand-btn {
-        width: 40px;
-        height: 40px;
+        width: var(--control-h-sm);
+        height: var(--control-h-sm);
         font-size: 0.9rem;
     }
     .mermaid-zoom-btn {
-        min-width: 44px;
-        min-height: 44px;
+        min-width: var(--control-h-md);
+        min-height: var(--control-h-md);
     }
 }
 

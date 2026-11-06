@@ -1,5 +1,31 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-06 fix(ux): carework 베어·사멸 버튼 btn 계열 일괄 정정 + data-click 클래스 게이트
+
+- `class="secondary"` 사멸 클래스 정정 — `.secondary`는 CSS 미정의(html-viewer 스코프에만 존재)라 carework 뷰 버튼들이 브라우저 기본 회색으로 렌더되며 높이 ~20px(<44px) — "이미지 파일 선택"(care-home) 등 27곳을 `btn btn-secondary`로 치환
+- 클래스 없는 `data-click` 베어 버튼 13곳(보고서 생성·저장·계산·가입·다음 등)에 `.btn` 부여
+- `check_mobile_safe.js` 규칙④ 추가 — `data-click` `<button>`의 클래스 토큰이 CSS 선택자에 하나도 없으면(사멸 추정) 위반: html/ + src/ JS 템플릿 스캔, 동적 클래스는 리뷰 영역으로 제외. 검사 351건 통과
+- SPEC UX-CTL-06에 data-click 클래스 계약 명시
+
+## 2026-11-06 fix(ux): UX-CTL 보완 — 검색입력·셀렉트 줌·규약 정합
+
+- `.search-input` 높이 무정의 → `min-height --control-h-md` + `font-size:1rem` (iOS 줌 방지)
+- `.webtoon-controls select` font-size 미선언(~.85rem 상속) → 1rem — UX-FORM-01 위반 해소 + 불변식을 `.form-select`로 확장
+- `.btn` 최소폭 5rem (단문 버튼), `.flex-btns a` 링크형 액션도 44px 타겟
+- `.care-log-group` 칩 형제 마진(margin 0 6px 6px 0) → 부모 flex-wrap gap-ctl 이관
+- 모바일 `.btn-row` 전폭 버튼 내용 중앙정렬 + `.btn-row-sticky` 유틸리티(탭바+safe-area 위 고정 제출 행)
+- SPEC 정합: UX-CTL-01 게이트 범위(44px 미만=강제·그 이상=리뷰·타일 카드 비대상) / UX-CTL-04 라벨-감싸기 동형 허용 / UX-CTL-05 주요버튼 규칙을 확정·취소형 행으로 한정(병렬 CTA 예외)
+- 체커 확장: check_mobile_safe에 컨트롤 행 `gap: Npx` 리터럴 탐지 추가
+
+## 2026-11-06 feat(ux): UX-CTL-01~06 컨트롤 높이·간격 토큰 규약 신설
+
+- SPEC §4.8.9 신설 — `--control-h-sm/md/lg`(36/44/48px) 높이 계층 + `--gap-ctl/group/sec`(8/12/16px) 간격 계층 + `.ctl-field` 폼 수직 리듬 + `.btn-row` 액션 행 대역 전환(PC 우측 정렬 ↔ 모바일 세로 전폭·주요 우선)
+- `.btn`·`.form-input`·`.form-select` 기본 높이를 `--control-h-md`(44px)로 통일 — 인풋 ~52px·셀렉트 ~40px·버튼 ~40px이던 행 내 정렬 불일치 해소
+- 시험 CSS 산재 높이 정정: carework(care-chip 36→44, webtoon select 40→44, care-client-reg 32→36, care-home-nav 48→lg), formula(f-del 32→sm, f-prog-step 32→sm, f-reg-btn 36→sm, prod-* 26~28→sm, biz-chip 40→44), reader(mermaid 버튼 28~40→sm, toolbar-toggle 36→sm, back-to-top 46→44)
+- DOM 순서 [보조][주요]로 정정 — pro-upgrade 플랜 비교·reader-note 저장 행
+- `check_mobile_safe.js` 규칙③ 추가 — 인터랙티브 셀렉터의 `<44px` px 리터럴 정적 탐지 (UX-CTL-06 게이트), 면제: 네이티브 checkbox·숨김 입력·칩 내부 ✕
+- 실측 (Playwright mobile 터치 타깃 스윕): reader-format-select 98×36 → 98×44, 신규 <44px 요소 0건 — check:all 61단계 통과
+
 ## 2026-11-05 fix(test): care-share xlsx 날짜 — UTC→로컬 todayKey 정합
 
 

@@ -11,6 +11,8 @@
  *   ② 버튼 행 줄바꿈 — 컨테이너 div가 flex-row/flex-center로 버튼 2개 이상을
  *      나열하면서 flex-wrap/btn-row 계열이 없으면 위반. 의도된 nowrap은
  *      data-msafe-ok 속성으로 명시적 면제한다.
+ *   ③ 컨트롤 높이 — 인터랙티브 셀렉터의 height/min-height 44px 미만
+ *      px 리터럴 탐지. --control-h-* 토큰 사용이 정답 (UX-CTL-01/06).
  *
  * 허용 목록 — 자체 뷰포트 상한+스크롤 계약이 이미 있는 대화상자 구조:
  *   - .more-sheet-panel        (72vh 상한 + .more-sheet-scroll 본문)
@@ -23,7 +25,7 @@
  *   npm.cmd run check:mobilesafe   # 단독 실행
  */
 
-// @spec UX-VFY-06
+// @spec UX-VFY-06,UX-CTL-06
 const fs = require('fs');
 const path = require('path');
 
@@ -130,9 +132,75 @@ for (const file of walk(path.join(ROOT, 'html'), ['.html'])) {
   }
 }
 
+/* ── ③ 컨트롤 높이 규약 (UX-CTL-06) — 인터랙티브 셀렉터의 44px 미만 px 리터럴 ──
+   CSS 규칙 블록을 스캔해 인터랙티브 패턴 셀렉터의 height/min-height가
+   44px 미만 px 리터럴이면 위반. var(--control-h-*) 토큰 사용은 합격
+   (sm=36px 계층도 토큰으로 표현되므로 리터럴 검사만으로 통과).
+   예외 셀렉터는 부분 문자열 매칭 — 사유를 함께 선언한다. */
+const INTERACTIVE_SEL = ['button', 'select', '.btn', 'chip', '.tab-item', '.nav-item', '.settings-item', 'input', 'app-confirm'];
+const HEIGHT_LITERAL_RE = /(?:min-)?height:\s*(\d+(?:\.\d+)?)px/;
+const GAP_LITERAL_RE = /(?:^|;)\s*gap:\s*\d+(?:\.\d+)?px/;
+
+/* ── ④ data-click 버튼 스타일 계약 (UX-CTL-02/06) — 클릭 액션 <button>은 스타일된 클래스 필수 ──
+   class 부재·사멸 클래스(CSS 미정의, 예: .secondary)는 브라우저 기본 버튼으로 렌더돼
+   높이·시각 규약을 우회한다 (care-home "이미지 파일 선택" 사례). 클래스 토큰 전부가
+   CSS 선택자에 없으면 위반. 동적 클래스(${})는 정적 판정 불가로 스킵. */
+const STYLED_CLASSES = new Set();
+for (const file of walk(path.join(ROOT, 'css'), ['.css'])) {
+  for (const m of fs.readFileSync(file, 'utf8').matchAll(/\.([a-zA-Z_][\w-]*)/g)) STYLED_CLASSES.add(m[1]);
+}
+
+let clickScanned = 0;
+for (const file of [...walk(path.join(ROOT, 'html'), ['.html']), ...walk(path.join(ROOT, 'src'), ['.js'])]) {
+  const rel = path.relative(ROOT, file).replace(/\\/g, '/');
+  const src = fs.readFileSync(file, 'utf8');
+  for (const m of src.matchAll(/<button\b[^>]*>/g)) {
+    const tag = m[0];
+    if (!tag.includes('data-click')) continue;
+    if (/data-msafe-ok/.test(tag)) continue;
+    const cls = tag.match(/class="([^"]*)"/)?.[1] || '';
+    if (cls.includes('${')) continue;
+    clickScanned++;
+    if (!cls.split(/\s+/).some(c => c && STYLED_CLASSES.has(c))) {
+      const line = src.slice(0, m.index).split('\n').length;
+      issues.push(`${rel}:${line} — data-click 버튼에 스타일된 클래스 없음(사멸 추정): ${tag.slice(0, 70)} — class="btn..." 부여 (UX-CTL-02)`);
+    }
+  }
+}
+
+const CTL_HEIGHT_EXEMPT = [
+  ['input[type="checkbox"]', '네이티브 체크박스 — 라벨·행이 터치 타겟 (UX-SET-03 면제 유지)'],
+  ['input[type="radio"]', '네이티브 라디오 — 라벨이 터치 타겟'],
+  ['.obs-chip input', '시각 숨김 입력 — span이 실제 칩 타겟'],
+  ['.formula-rule-chip-x', '칩 내부 제거 ✕ — 칩 자체가 타겟'],
+];
+let ctlScanned = 0;
+
+for (const file of walk(path.join(ROOT, 'css'), ['.css'])) {
+  const rel = path.relative(ROOT, file).replace(/\\/g, '/');
+  const src = fs.readFileSync(file, 'utf8');
+  for (const m of src.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const sel = m[1].trim(), body = m[2];
+    if (sel.startsWith('@')) continue;
+    if (!INTERACTIVE_SEL.some(p => sel.includes(p))) continue;
+    ctlScanned++;
+    const hm = body.match(HEIGHT_LITERAL_RE);
+    const line = src.slice(0, m.index).split('\n').length;
+    if (hm && parseFloat(hm[1]) < 44 && !CTL_HEIGHT_EXEMPT.some(([ex]) => sel.includes(ex))) {
+      issues.push(`${rel}:${line} — 인터랙티브 요소의 높이 ${hm[1]}px (<44px): ${sel.slice(0, 60)} — --control-h-* 토큰 사용 (UX-CTL-01)`);
+    }
+    /* gap 리터럴은 "컨트롤 행" 컨테이너만 대상 — 베어 요소로 끝나는 셀렉터는
+       요소 내부(아이콘↔텍스트) 간격이라 규약 비대상 (UX-CTL-03) */
+    if (GAP_LITERAL_RE.test(body) && /chip|btn|action|controls/i.test(sel)
+        && !/(button|a|input|select|textarea|label|span)\s*$/.test(sel)) {
+      issues.push(`${rel}:${line} — 컨트롤 행의 gap px 리터럴: ${sel.slice(0, 60)} — --gap-ctl/group/sec 토큰 사용 (UX-CTL-03)`);
+    }
+  }
+}
+
 if (issues.length) {
   console.error('✗ 모바일 안전 규약 위반:');
   for (const s of issues) console.error('  - ' + s);
   process.exit(1);
 }
-console.log(`✅ 모바일 안전 규약 통과 — 다이얼로그 ${dialogScanned}곳·버튼 행 ${rowScanned}곳 검사, 위반 0건`);
+console.log(`✅ 모바일 안전 규약 통과 — 다이얼로그 ${dialogScanned}곳·버튼 행 ${rowScanned}곳·컨트롤 높이 ${ctlScanned}건·클릭 버튼 ${clickScanned}건 검사, 위반 0건`);
