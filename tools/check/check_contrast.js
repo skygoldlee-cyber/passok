@@ -17,7 +17,7 @@ const TEXT_TOKENS = [
     '--color-primary', '--color-secondary',
     '--color-success', '--color-danger', '--color-warning',
 ];
-const BG_TOKENS = ['--bg-app', '--bg-card'];
+const BG_TOKENS = ['--bg-app', '--bg-card', '--bg-sidebar', '--bg-input', '--bg-elevated', '--bg-subtle'];
 
 function parseBlock(name) {
     const re = new RegExp(name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*\\{([^}]*)\\}', 'm');

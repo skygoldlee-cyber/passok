@@ -621,7 +621,7 @@
     top: 0;
     left: 0;
     right: 0;
-    background: var(--color-danger);
+    background: var(--color-danger-fill);
     color: white;
     text-align: center;
     padding: var(--space-2);

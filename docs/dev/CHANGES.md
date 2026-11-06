@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 feat(ui): 다크모드 대비 보정 + 감사 표면 확장
+
+- :root --color-danger → #f87171(텍스트) / --color-danger-fill #ef4444(채우기) 분리 — 배너는 fill 토큰 사용
+- 라이트: --bg-elevated를 어두운 오버레이→흰 오버레이로 반전(떠 있는 표면은 더 밝게), --color-text-muted → #374151, --color-success → #064e3b
+- check_contrast BG_TOKENS를 6개 표면(app·card·sidebar·input·elevated·subtle)으로 확장 — 전 항목 통과
+
 ## 2026-11-07 feat(ui): 라이트모드 텍스트 대비 AA 통과 + check:contrast 게이트
 
 - .light-theme 시맨틱 텍스트 색을 다크 네온 원색 → 어두운 변형으로 재정의 (primary cyan-900·success emerald-800·danger red-800·warning amber-900·secondary violet-800) — 베이지 배경 대비 4.5+ 확보
