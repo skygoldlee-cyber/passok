@@ -57,7 +57,7 @@ export function parseStorySlots(md) {
         const beats = [];
         for (const raw of body.split('\n')) {
             const l0 = raw.trim();
-            if (!l0 || l0.startsWith('<!--') || _isDecor(l0)) continue;
+            if (!l0 || l0.startsWith('<!--') || /^!\[/.test(l0) || _isDecor(l0)) continue; // 이미지 라인은 지문 텍스트 깨짐 방지로 스킵
             const isHead = /^#{1,4}\s/.test(l0);
             const l = _clean(l0);
             if (!l) continue;

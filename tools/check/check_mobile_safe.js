@@ -139,7 +139,7 @@ for (const file of walk(path.join(ROOT, 'html'), ['.html'])) {
    예외 셀렉터는 부분 문자열 매칭 — 사유를 함께 선언한다. */
 const INTERACTIVE_SEL = ['button', 'select', '.btn', 'chip', '.tab-item', '.nav-item', '.settings-item', 'input', 'app-confirm'];
 const HEIGHT_LITERAL_RE = /(?:min-)?height:\s*(\d+(?:\.\d+)?)px/;
-const GAP_LITERAL_RE = /(?:^|;)\s*gap:\s*\d+(?:\.\d+)?px/;
+const GAP_LITERAL_RE = /(?:^|;)\s*gap:\s*(\d+(?:\.\d+)?)px/;
 
 /* ── ④ data-click 버튼 스타일 계약 (UX-CTL-02/06) — 클릭 액션 <button>은 스타일된 클래스 필수 ──
    class 부재·사멸 클래스(CSS 미정의, 예: .secondary)는 브라우저 기본 버튼으로 렌더돼
@@ -189,11 +189,12 @@ for (const file of walk(path.join(ROOT, 'css'), ['.css'])) {
     if (hm && parseFloat(hm[1]) < 44 && !CTL_HEIGHT_EXEMPT.some(([ex]) => sel.includes(ex))) {
       issues.push(`${rel}:${line} — 인터랙티브 요소의 높이 ${hm[1]}px (<44px): ${sel.slice(0, 60)} — --control-h-* 토큰 사용 (UX-CTL-01)`);
     }
-    /* gap 리터럴은 "컨트롤 행" 컨테이너만 대상 — 베어 요소로 끝나는 셀렉터는
-       요소 내부(아이콘↔텍스트) 간격이라 규약 비대상 (UX-CTL-03) */
-    if (GAP_LITERAL_RE.test(body) && /chip|btn|action|controls/i.test(sel)
+    /* gap px 리터럴 ≥4px는 토큰 스케일 커버 범위라 전면 금지 — 0~3px 미세 간격만 예외.
+       베어 요소로 끝나는 셀렉터는 요소 내부(아이콘↔텍스트) 간격이라 비대상 (UX-CTL-03) */
+    const gm = body.match(GAP_LITERAL_RE);
+    if (gm && parseFloat(gm[1]) >= 4
         && !/(button|a|input|select|textarea|label|span)\s*$/.test(sel)) {
-      issues.push(`${rel}:${line} — 컨트롤 행의 gap px 리터럴: ${sel.slice(0, 60)} — --gap-ctl/group/sec 토큰 사용 (UX-CTL-03)`);
+      issues.push(`${rel}:${line} — 컨트롤 관련 셀렉터의 gap ${gm[1]}px 리터럴: ${sel.slice(0, 60)} — --gap-ctl/group/sec 토큰 사용 (UX-CTL-03)`);
     }
   }
 }

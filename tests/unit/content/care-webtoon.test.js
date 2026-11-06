@@ -42,6 +42,19 @@ test('웹툰 과목 선택은 1과목이 먼저다', async () => {
     assert.deepEqual(Object.keys(_books), ['s1', 's2']);
 });
 
+test('parseStorySlots: story 블록 내 이미지 라인은 비트로 렌더하지 않는다', async () => {
+    const { _parse } = await import('../../../src/exams/carework/views/care-webtoon.js');
+    const s = _parse([
+        '<!-- story:start -->',
+        '### 컷 제목',
+        '![도판](images/x.webp)',
+        '지문 내용.',
+        '<!-- story:end -->',
+    ].join('\n'));
+    assert.equal(s.length, 1);
+    assert.ok(!s[0].beats.some(b => b.text.includes('![') || b.text.includes('images/')), '이미지 라인이 지문 텍스트로 새면 안 됨');
+});
+
 test('이야기형 원본 파일은 git 추적 대상이어야 한다', async () => {
     const { execSync } = await import('node:child_process');
     for (const f of ['content/exams/carework/교재/careprac/2과목_요양보호실기_이야기형.md',

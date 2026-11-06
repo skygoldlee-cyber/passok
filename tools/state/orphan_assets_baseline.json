@@ -1,37 +1,4 @@
 {
   "_comment": "미참조 자산 예외 승계 명단 — 여기 없는 고아 자산은 check:orphans 실패. 값은 보존 사유.",
-  "content/exams/carework/assets/characters/choi-boksun.svg": "사유를 기입하세요",
-  "content/exams/carework/assets/characters/han-jeongsu.svg": "사유를 기입하세요",
-  "content/exams/carework/assets/characters/miyoung.svg": "사유를 기입하세요",
-  "content/exams/carework/assets/characters/park-eunjung.svg": "사유를 기입하세요",
-  "exceptions": {
-    "content/exams/carework/assets/characters/miyoung.svg": {
-      "reason": "4단계 웹툰 인물 설정표(DOC-USR-23) 기반 고정 아트 — 말풍선 컷 렌더에서 미영 초상으로 사용 예정",
-      "added": "2026-11-05"
-    },
-    "content/exams/carework/assets/characters/park-eunjung.svg": {
-      "reason": "4단계 웹툰 인물 설정표 기반 고정 아트 — 박은정 선임 초상",
-      "added": "2026-11-05"
-    },
-    "content/exams/carework/assets/characters/choi-boksun.svg": {
-      "reason": "4단계 웹툰 인물 설정표 기반 고정 아트 — 최복순 어르신 초상",
-      "added": "2026-11-05"
-    },
-    "content/exams/carework/assets/characters/han-jeongsu.svg": {
-      "reason": "4단계 웹툰 인물 설정표 기반 고정 아트 — 한정수 어르신 초상",
-      "added": "2026-11-05"
-    },
-    "content/exams/carework/items/scenario_items.json": {
-      "reason": "4단계 선택형 시나리오 문항 뱅크(DOC-USR-22) — check_scenario_items.js 검증 대상",
-      "added": "2026-11-05"
-    },
-    "content/exams/carework/items/bank_tags.json": {
-      "reason": "기존 문제은행→개념 태깅 매핑 (복습 풀 1차 충원)",
-      "added": "2026-11-05"
-    },
-    "content/exams/carework/concepts.json": {
-      "reason": "4단계 개념 레지스트리 — 시나리오 문항 conceptId 정본",
-      "added": "2026-11-05"
-    }
-  }
+  "content/exams/carework/assets/characters/han-jeongsu.svg": "웹툰 인물 설정표(DOC-USR-23) 후보 캐릭터 — 향후 서사 등장 예정 보존"
 }
