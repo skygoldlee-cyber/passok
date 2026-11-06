@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: e806441680663424
+> 입력 해시: 2b3ab6f9877a2a9f
 > 생성: 2026-11-06 · 원천: SPEC.md(679개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -67,7 +67,7 @@
 | AN-07 | ✅ | 테스트 | DOC-DSN-18 | src/study/analysis-engine.js<br>src/study/recommendations.js<br>src/views/analysis-view.js | tests/unit/engine/analysis-deepening.test.js | — | — |
 | AN-08 | ✅ | 테스트 | — | src/study/analysis-engine.js<br>src/views/analysis-view.js | tests/fixtures/analysis-seed.js<br>tests/unit/engine/analysis-deepening.test.js | — | — |
 | AN-09 | ✅ | E2E 테스트 | DOC-DSN-18 | html/views/analysis.html<br>index.html<br>src/study/analysis-engine.js<br>src/views/analysis-view.js | tests/dom/study/study-dashboard.dom.test.js<br>tests/e2e/analysis-view.spec.js<br>tests/unit/engine/analysis-deepening.test.js | — | — |
-| AN-10 | ✅ | E2E 테스트 | DOC-DSN-18<br>DOC-DSN-33 | tools/build/textbook_anchors.js | tests/e2e/analysis-view.spec.js<br>tests/unit/content/textbook-anchors.test.js | — | — |
+| AN-10 | ✅ | E2E 테스트 | DOC-DSN-18<br>DOC-DSN-33 | tools/build/build_question_chapters.js<br>tools/build/textbook_anchors.js | tests/e2e/analysis-view.spec.js<br>tests/unit/content/textbook-anchors.test.js | — | — |
 
 ## 3.2 플래시카드
 
