@@ -412,6 +412,7 @@ const MD_ASSETS = [
   './content/exams/carework/docs/4단계 런타임 플로우 설계.md',
   './content/exams/carework/docs/실무매뉴얼.md',
   './content/exams/carework/docs/요양보호사_표준교재_목차_Passok_학습구조.md',
+  './content/exams/carework/docs/웹툰 컷 가이드라인.md',
   './content/exams/carework/docs/인물 설정표.md',
   './content/exams/carework/docs/적응형 학습 엔진 설계.md',
   './content/exams/carework/docs/학습안내서.md',

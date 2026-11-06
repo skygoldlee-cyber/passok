@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 1440" width="1100" height="1440" font-family="'Pretendard','Noto Sans KR','Noto Sans CJK KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8A8A8A"/>
+    </marker>
+    <marker id="arO" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3A78C2"/>
+    </marker>
+  </defs>
+
+  <rect width="1100" height="1440" fill="#FBF8F3"/>
+
+  <!-- Header -->
+  <text x="40" y="78" font-size="34" font-weight="800" fill="#222">요양보호사 시험, 이렇게 공부합니다</text>
+  <text x="40" y="118" font-size="19" fill="#666">4단계 학습 흐름 — 아는 건 짧게, 모르는 건 이야기와 그림으로</text>
+  <line x1="40" y1="145" x2="1060" y2="145" stroke="#E2DCD2" stroke-width="2"/>
+
+  <!-- Section 1 -->
+  <text x="40" y="200" font-size="24" font-weight="700" fill="#222">한 개념을 배우는 순서</text>
+  <text x="300" y="200" font-size="17" fill="#888">개념 하나 3~5분 · 단원 하나 15분 안쪽</text>
+
+  <!-- skip arc: card1 -> card3 -->
+  <path d="M152,298 Q417,195 682,298" fill="none" stroke="#3A78C2" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#arO)"/>
+  <rect x="322" y="224" width="190" height="30" rx="15" fill="#FFFFFF" stroke="#3A78C2" stroke-width="1.5"/>
+  <text x="417" y="245" font-size="15" font-weight="700" fill="#3A78C2" text-anchor="middle">맞히면 ②는 건너뛰어요</text>
+
+  <!-- Card 1 -->
+  <rect x="40" y="300" width="225" height="240" rx="18" fill="#E8F1FB" stroke="#3A78C2" stroke-width="2"/>
+  <circle cx="74" cy="338" r="20" fill="#3A78C2"/>
+  <text x="74" y="345" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">1</text>
+  <text x="104" y="346" font-size="21" font-weight="800" fill="#222">미리 풀기</text>
+  <text x="58" y="400" font-size="16" fill="#333">배우기 전에 1문제</text>
+  <text x="58" y="428" font-size="16" fill="#333">「모르겠어요」도 OK</text>
+  <rect x="58" y="488" width="150" height="30" rx="15" fill="#3A78C2" fill-opacity="0.14"/>
+  <text x="133" y="508" font-size="14" font-weight="700" fill="#2E5F9B" text-anchor="middle">먼저 풀면 오래 남아요</text>
+
+  <!-- Card 2 -->
+  <rect x="305" y="300" width="225" height="240" rx="18" fill="#FDEFE3" stroke="#D9772B" stroke-width="2"/>
+  <circle cx="339" cy="338" r="20" fill="#D9772B"/>
+  <text x="339" y="345" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">2</text>
+  <text x="369" y="346" font-size="21" font-weight="800" fill="#222">이야기 + 웹툰</text>
+  <text x="323" y="400" font-size="16" fill="#333">미영 씨의 현장 이야기</text>
+  <text x="323" y="428" font-size="16" fill="#333">장면으로 기억하기</text>
+  <rect x="323" y="488" width="150" height="30" rx="15" fill="#D9772B" fill-opacity="0.14"/>
+  <text x="398" y="508" font-size="14" font-weight="700" fill="#A85A1E" text-anchor="middle">왜 그런지 이해</text>
+
+  <!-- Card 3 -->
+  <rect x="570" y="300" width="225" height="240" rx="18" fill="#EEF4E6" stroke="#5E8C3A" stroke-width="2"/>
+  <circle cx="604" cy="338" r="20" fill="#5E8C3A"/>
+  <text x="604" y="345" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">3</text>
+  <text x="634" y="346" font-size="21" font-weight="800" fill="#222">핵심 요약</text>
+  <text x="588" y="400" font-size="16" fill="#333">핵심 3줄 + 그림 1장</text>
+  <text x="588" y="428" font-size="16" fill="#333">수치는 교재가 기준</text>
+  <rect x="588" y="488" width="150" height="30" rx="15" fill="#5E8C3A" fill-opacity="0.16"/>
+  <text x="663" y="508" font-size="14" font-weight="700" fill="#466B2B" text-anchor="middle">정확한 지식</text>
+
+  <!-- Card 4 -->
+  <rect x="835" y="300" width="225" height="240" rx="18" fill="#F1ECFA" stroke="#7A5AC8" stroke-width="2"/>
+  <circle cx="869" cy="338" r="20" fill="#7A5AC8"/>
+  <text x="869" y="345" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">4</text>
+  <text x="899" y="346" font-size="21" font-weight="800" fill="#222">상황 문제</text>
+  <text x="853" y="400" font-size="16" fill="#333">현장 상황에서 고르기</text>
+  <text x="853" y="428" font-size="16" fill="#333">시험과 같은 5지선다</text>
+  <rect x="853" y="488" width="150" height="30" rx="15" fill="#7A5AC8" fill-opacity="0.14"/>
+  <text x="928" y="508" font-size="14" font-weight="700" fill="#5A3FA0" text-anchor="middle">꺼내 쓰는 연습</text>
+
+  <!-- arrows between cards -->
+  <line x1="269" y1="420" x2="299" y2="420" stroke="#8A8A8A" stroke-width="2.5" marker-end="url(#ar)"/>
+  <line x1="534" y1="420" x2="564" y2="420" stroke="#8A8A8A" stroke-width="2.5" marker-end="url(#ar)"/>
+  <line x1="799" y1="420" x2="829" y2="420" stroke="#8A8A8A" stroke-width="2.5" marker-end="url(#ar)"/>
+
+  <!-- Panel: when correct -->
+  <rect x="40" y="590" width="490" height="150" rx="16" fill="#FFFFFF" stroke="#D9D2C6" stroke-width="1.5"/>
+  <text x="62" y="628" font-size="18" font-weight="800" fill="#2E7D4F">✓ 맞혔을 때</text>
+  <rect x="62" y="648" width="70" height="28" rx="14" fill="#2E7D4F" fill-opacity="0.12"/>
+  <text x="97" y="667" font-size="14" font-weight="700" fill="#2E7D4F" text-anchor="middle">① 정답</text>
+  <text x="146" y="668" font-size="16" fill="#333">이야기는 건너뛰고 바로 요약으로</text>
+  <rect x="62" y="692" width="70" height="28" rx="14" fill="#2E7D4F" fill-opacity="0.12"/>
+  <text x="97" y="711" font-size="14" font-weight="700" fill="#2E7D4F" text-anchor="middle">④ 정답</text>
+  <text x="146" y="712" font-size="16" fill="#333">다음 개념으로 · 내일 복습 예약</text>
+
+  <!-- Panel: when wrong -->
+  <path d="M947,544 L947,584" stroke="#8A8A8A" stroke-width="2.5" marker-end="url(#ar)"/>
+  <rect x="570" y="590" width="490" height="150" rx="16" fill="#FFFFFF" stroke="#D9D2C6" stroke-width="1.5"/>
+  <text x="592" y="628" font-size="18" font-weight="800" fill="#C0533A">↺ 틀렸을 때</text>
+  <text x="1040" y="628" font-size="14" fill="#888" text-anchor="end">“미영 씨도 처음엔 그랬어요”</text>
+  <rect x="592" y="648" width="80" height="28" rx="14" fill="#C0533A" fill-opacity="0.12"/>
+  <text x="632" y="667" font-size="14" font-weight="700" fill="#C0533A" text-anchor="middle">1번 틀림</text>
+  <text x="686" y="668" font-size="16" fill="#333">웹툰 컷·해설 보고 다른 문제로 재도전</text>
+  <rect x="592" y="692" width="80" height="28" rx="14" fill="#C0533A" fill-opacity="0.12"/>
+  <text x="632" y="711" font-size="14" font-weight="700" fill="#C0533A" text-anchor="middle">2번 틀림</text>
+  <text x="686" y="712" font-size="16" fill="#333">해설 보고 진행 · 내일 복습 맨 앞</text>
+
+  <!-- Section 2 -->
+  <text x="40" y="815" font-size="24" font-weight="700" fill="#222">배운 뒤에는 — 잊을 때쯤 다시 꺼내기</text>
+
+  <line x1="120" y1="885" x2="980" y2="885" stroke="#CFC6B8" stroke-width="4"/>
+  <!-- nodes -->
+  <circle cx="120" cy="885" r="16" fill="#2F3B52"/>
+  <circle cx="400" cy="885" r="16" fill="#D9772B"/>
+  <circle cx="690" cy="885" r="16" fill="#5E8C3A"/>
+  <circle cx="980" cy="885" r="16" fill="#7A5AC8"/>
+  <text x="120" y="860" font-size="18" font-weight="800" fill="#222" text-anchor="middle">오늘</text>
+  <text x="400" y="860" font-size="18" font-weight="800" fill="#222" text-anchor="middle">1일 뒤</text>
+  <text x="690" y="860" font-size="18" font-weight="800" fill="#222" text-anchor="middle">3일 뒤</text>
+  <text x="980" y="860" font-size="18" font-weight="800" fill="#222" text-anchor="middle">7일 뒤</text>
+  <text x="120" y="925" font-size="15" fill="#555" text-anchor="middle">단원 학습</text>
+  <text x="400" y="925" font-size="15" fill="#555" text-anchor="middle">짧은 확인 문제</text>
+  <text x="690" y="925" font-size="15" fill="#555" text-anchor="middle">상황 문제로 다시</text>
+  <text x="980" y="925" font-size="15" fill="#555" text-anchor="middle">처음 보는 문제로 점검</text>
+
+  <rect x="40" y="955" width="1020" height="62" rx="14" fill="#F3EEE6"/>
+  <text x="550" y="993" font-size="16" fill="#444" text-anchor="middle">하루 복습은 <tspan font-weight="800">10문항 · 5분 이내</tspan>  ·  틀리면 컷 1장 + 해설로 다시 떠올리기  ·  기억 상태에 맞춰 간격 자동 조정</text>
+
+  <!-- arrow to mock exam -->
+  <line x1="550" y1="1021" x2="550" y2="1057" stroke="#8A8A8A" stroke-width="2.5" marker-end="url(#ar)"/>
+
+  <!-- Section 3: mock exam -->
+  <rect x="40" y="1062" width="1020" height="150" rx="18" fill="#2F3B52"/>
+  <text x="80" y="1112" font-size="15" font-weight="700" fill="#AFC3E6">실전 점검</text>
+  <text x="80" y="1150" font-size="30" font-weight="800" fill="#FFFFFF">통합 모의고사</text>
+  <text x="80" y="1188" font-size="16" fill="#D6DEEC">틀린 개념은 다음날 복습 맨 앞으로</text>
+  <text x="1020" y="1140" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="end">80문항 · 90분</text>
+  <text x="1020" y="1176" font-size="16" fill="#D6DEEC" text-anchor="end">필기 35 + 실기 45 · 과목별 60% 이상 합격</text>
+
+  <!-- Footer chips -->
+  <rect x="40" y="1250" width="320" height="64" rx="32" fill="#FFFFFF" stroke="#D9D2C6" stroke-width="1.5"/>
+  <text x="200" y="1289" font-size="17" font-weight="700" fill="#333" text-anchor="middle">계정 없이 바로 시작</text>
+  <rect x="390" y="1250" width="320" height="64" rx="32" fill="#FFFFFF" stroke="#D9D2C6" stroke-width="1.5"/>
+  <text x="550" y="1289" font-size="17" font-weight="700" fill="#333" text-anchor="middle">끊겨도 그 자리에서 이어하기</text>
+  <rect x="740" y="1250" width="320" height="64" rx="32" fill="#FFFFFF" stroke="#D9D2C6" stroke-width="1.5"/>
+  <text x="900" y="1289" font-size="17" font-weight="700" fill="#333" text-anchor="middle">큰 글씨 · 큰 버튼</text>
+
+  <text x="550" y="1376" font-size="15" fill="#888" text-anchor="middle">지금은 2과목 식사 · 배설 · 체위 변경 단원에서 학습 효과를 검증하고 있습니다.</text>
+  <text x="550" y="1404" font-size="13" fill="#AAA" text-anchor="middle">CÔTELEAF · 요양보호사 4단계 학습</text>
+</svg>
