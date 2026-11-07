@@ -1,5 +1,7 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 fix(carework): 복지용구 이미지 2장 상하반전 — cushion-pressure·manual-wheelchair
+
 ## 2026-11-07 fix(reader): 모바일 통합 바 한줄 4요소 — 과목 셀렉트를 전폭 2행으로
 
 - `flex-wrap: nowrap`에서 토글·목차·형식·배지가 셀렉트를 잘라먹던 배치를 `flex: 1 1 100%; order: 5`로 2행 분리 — 과목 셀렉트가 전폭으로 표시
