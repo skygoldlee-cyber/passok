@@ -257,6 +257,32 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         setDocSignImage(''); // 정리 — 이후 테스트에 영향 방지
     });
 
+    it('signFileToDataUri — 디코딩 불가 환경은 원본 data URI 폴백으로 등록 유지', async () => {
+        const { signFileToDataUri } = await import('../../../../src/exams/carework/facility.js');
+        // jsdom은 Image 로드 이벤트를 발생시키지 않아 디코딩이 무한 대기 — 디코딩 실패 강제로 폴백 계약 고정
+        const origUrl = URL.createObjectURL;
+        URL.createObjectURL = () => { throw new Error('decode-unavailable'); };
+        try {
+            const uri = await signFileToDataUri(new File([new Uint8Array([1, 2, 3])], 's.png', { type: 'image/png' }));
+            expect(uri).toMatch(/^data:image\/png;base64,/);
+        } finally { URL.createObjectURL = origUrl; }
+    });
+
+    it('careHome — 서명 이미지 업로드가 정규화 경유로 저장·미리보기 갱신', async () => {
+        const { getDocSign, setDocSignImage } = await import('../../../../src/exams/carework/facility.js');
+        setDocSignImage(''); // 이전 테스트 잔류 방지
+        const origUrl = URL.createObjectURL;
+        URL.createObjectURL = () => { throw new Error('decode-unavailable'); };
+        try {
+            loadPartial('care-home.html');
+            initCareHomeView();
+            selectFile('home-sign-image', new File([new Uint8Array([4, 5, 6])], 's.png', { type: 'image/png' }));
+            await waitFor(() => getDocSign().signImage.startsWith('data:'));
+            expect(getDocSign().signImage).toMatch(/^data:/); // jsdom 디코딩 불가 → 원본 폴백 data URI
+            expect(document.getElementById('home-sign-image-preview')?.innerHTML).toContain('care-sign-preview');
+        } finally { URL.createObjectURL = origUrl; setDocSignImage(''); }
+    });
+
     it('careAudit — 점검표 인쇄 핸들러 실행', async () => {
         loadPartial('care-audit.html');
         await initCareAuditView();

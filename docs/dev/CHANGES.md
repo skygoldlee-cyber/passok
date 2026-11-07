@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 feat(carework): 서명 이미지 정규화 — 입력 형식 무관 WebP 변환·서명란 리사이즈
+
+- `signFileToDataUri` (facility.js) — 업로드 파일을 디코딩해 서명란 박스(480×84 = .care-doc-signimg 42px의 2배, 레티나·인쇄 대비)에 맞게 축소 후 WebP data URI로 변환, WebP 미지원 브라우저는 PNG 자동 폴백
+- `createImageBitmap`(EXIF 회전 반영) 우선·HTMLImageElement 폴백, 디코딩 불가(SVG 무치수·손상 파일) 시 원본 data URI로 등록 유지 — 업로드 실패 없음
+- care-home 업로드 핸들러가 비동기 정규화 경유 — PNG·JPEG·GIF·HEIC 등 어떤 형식이든 서명란 규격으로 저장
+
 ## 2026-11-07 fix(carework): 작성자-서명.svg → docs/images/ 이동 + 학습안내서 서명 참조
 
 ## 2026-11-07 fix(carework): 학습안내서 서명 참조 제거 (불필요 — 파일만 images/ 정위치 유지)

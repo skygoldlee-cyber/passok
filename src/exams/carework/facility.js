@@ -108,6 +108,65 @@ export function setDocSignImage(dataUri) {
     const s = getDocSign();
     setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: s.author, confirmer: s.confirmer, receiver: s.receiver, signImage: String(dataUri || '') });
 }
+
+// — 서명 이미지 정규화 —
+
+/** 서명란 박스 (.care-doc-signimg height 42px)의 2배 — 레티나·인쇄 선명도 확보용 저장 해상도 상한 */
+const SIGN_IMG_MAX_W = 480, SIGN_IMG_MAX_H = 84;
+
+/** File → 디코딩 가능한 이미지 소스 — createImageBitmap 우선, HTMLImageElement 폴백 */
+function _signImgSource(file) {
+    const fromBitmap = typeof createImageBitmap === 'function'
+        ? createImageBitmap(file, { imageOrientation: 'from-image' }).then(b => (b.width && b.height)
+            ? { src: b, w: b.width, h: b.height, done: () => b.close() }
+            : (b.close(), Promise.reject(new Error('no-size'))))
+        : Promise.reject(new Error('no-bitmap'));
+    return fromBitmap.catch(() => new Promise((res, rej) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => (img.naturalWidth && img.naturalHeight)
+            ? res({ src: img, w: img.naturalWidth, h: img.naturalHeight, done: () => URL.revokeObjectURL(url) })
+            : (URL.revokeObjectURL(url), rej(new Error('no-size')));
+        img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('decode')); };
+        img.src = url;
+    }));
+}
+
+/** File → 원본 data URI (변환 불가 시 폴백 경로) */
+function _fileDataUri(file) {
+    return new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(String(r.result || ''));
+        r.onerror = () => rej(r.error || new Error('read'));
+        r.readAsDataURL(file);
+    });
+}
+
+/**
+ * 서명 이미지 File → 서명란 규격 data URI — 입력 형식(PNG·JPEG·GIF·HEIC 등) 무관하게
+ * 디코딩 가능하면 서명란 박스에 맞게 축소 후 WebP로 변환 (미지원 브라우저는 PNG로 자동 폴백).
+ * 디코딩 실패(SVG 무치수·손상 파일 등) 시 원본 data URI 반환 — 등록 자체는 항상 성공시킨다.
+ * @param {File|Blob} file @returns {Promise<string>}
+ */
+export async function signFileToDataUri(file) {
+    try {
+        const { src, w, h, done } = await _signImgSource(file);
+        let uri = '';
+        try {
+            const k = Math.min(1, SIGN_IMG_MAX_W / w, SIGN_IMG_MAX_H / h);
+            const cv = document.createElement('canvas');
+            cv.width = Math.max(1, Math.round(w * k));
+            cv.height = Math.max(1, Math.round(h * k));
+            const ctx = cv.getContext('2d');
+            if (ctx) {
+                ctx.drawImage(src, 0, 0, cv.width, cv.height);
+                uri = cv.toDataURL('image/webp', 0.9);
+            }
+        } finally { done(); }
+        if (uri.length > 32) return uri;
+    } catch { /* 디코딩·캔버스 불가 → 원본 폴백 */ }
+    return _fileDataUri(file);
+}
 /**
  * 문서 서명란 — items: [[라벨, 'author'|'confirmer'|'receiver'|'']].
  * 설정된 성명은 인쇄·공유 산출물에 그대로 기입되고, 미설정·빈키 슬롯(날짜)은 수기 서명용 공란 유지.

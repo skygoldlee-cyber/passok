@@ -7,7 +7,7 @@ import { listClients } from '../care-client-store.js';
 import { clientTrends } from '../care-trend.js';
 import { markFunnel, funnelStats } from '../care-funnel.js';
 import { escapeHTML as esc } from '../../../core/sanitize.js';
-import { refreshOrgName, getDocSign, setDocSign, setDocSignImage } from '../facility.js';
+import { refreshOrgName, getDocSign, setDocSign, setDocSignImage, signFileToDataUri } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 
@@ -59,9 +59,10 @@ export function initCareHomeView() {
         imgEl.addEventListener('change', () => {
             const f = imgEl.files?.[0];
             if (!f) return;
-            const reader = new FileReader();
-            reader.onload = () => { setDocSignImage(String(reader.result || '')); renderImg(); showToast('서명 이미지를 저장했습니다 — 서명란에 이미지가 기입됩니다.'); };
-            reader.readAsDataURL(f);
+            // 어떤 형식이든 서명란 규격 WebP로 정규화 후 저장 — 실패 시 원본 data URI 폴백
+            void signFileToDataUri(f)
+                .then(uri => { setDocSignImage(uri); renderImg(); showToast('서명 이미지를 저장했습니다 — 서명란에 이미지가 기입됩니다.'); })
+                .catch(() => showToast('서명 이미지를 읽지 못했습니다.'));
         });
     }
     renderImg();
