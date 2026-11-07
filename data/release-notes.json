@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261107-7231bfd",
+    "date": "2026-11-07",
+    "notes": [
+      "[수정·reader] 과목 셀렉트 옵션 빈 상태 레이스 + 모바일 한줄 배치 [no-test]",
+      "[수정·reader] 과목 셀렉트 옵션 빈 상태 — 레지스트리 레이스 재채움 [no-test]",
+      "[정리·release] v20261107-32e389f 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-32e389f",
     "date": "2026-11-07",
     "notes": [
@@ -179,18 +188,6 @@
     "notes": [
       "[content·carework] 이야기형 교재 씬 증량 + ai_story 슬롯 스캔 버그 수정",
       "[정리·release] v20261106-f2fc8da 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261106-f2fc8da",
-    "date": "2026-11-06",
-    "notes": [
-      "[수정·ux] 사이드바 항목 위치를 모바일 탭 바 순서와 정합",
-      "[수정·ux] \"이야기 학습\" nav 그룹을 \"학습\"으로 통합",
-      "[정리·tools] record-webhook deno.d.ts 파일명 예외 등록 [no-test]",
-      "[문서·trace] CO-14/15 테스트 연결 반영",
-      "[기능·carework] 실무 기록 기관 서버 동기 + webhook 어댑터 (CO-14/15/16, 코드 선구축)",
-      "[정리·release] v20261106-b5adf53 스탬프 확정 [no-docs]"
     ]
   }
 ]
