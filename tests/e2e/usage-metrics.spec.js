@@ -62,8 +62,13 @@ test('취약 진술 리뷰 패널 개방 → review_weak_open 계측 (UX-MET-02)
 
 test('PRO 배지 클릭 → pro_badge_click 계측 (UX-MET-02)', async ({ page }) => {
     // story_textbook은 feature-plan상 pro — 배지가 표시된다 (combo_drill·mock_exam은 free)
+    // 리더 형식 셀렉트의 배지는 서사 형식(이야기형/웹툰형) 선택 시에만 표시 — 표준형 기본값에서는 숨겨짐
     await page.goto('/#/reader');
     await appBooted(page);
+    await page.selectOption('#reader-format-select', 'story');
+    // 서사 진입 안내 모달이 뜨면 먼저 닫는다 (배지 클릭을 가리지 않도록)
+    const noticeOk = page.locator('#pro-upgrade-overlay .app-confirm-ok');
+    if (await noticeOk.isVisible().catch(() => false)) await noticeOk.click();
     const badge = page.locator('[data-pro-feature="story_textbook"]:visible').first();
     await expect(badge).toBeVisible();
     const before = (await readActions(page)).pro_badge_click || 0;
