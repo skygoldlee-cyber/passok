@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 feat(search): 검색 성능 계측 — 인덱스 빌드·쿼리 시간 실측 카운터
+
+- `_buildInvertedIndex`/`runUnifiedSearch`에 `performance.now` 계측 — n/avg/max/last + lastEntries/lastTokens/lastResults 누적
+- `getSearchPerf()` export + `window.__searchPerf` devtools 접근 — 콘솔에서 `__searchPerf()`로 실측 확인 (Rust 검토 전 병목 실측용)
+
 ## 2026-11-07 test(e2e): UX-MET-02 PRO 배지 스펙 — 서사 형식 선택 후 검증으로 갱신 (CI e2e 후속)
 
 ## 2026-11-07 fix(reader): 표준형 선택 시에도 story_textbook PRO 배지가 붙던 표시 오류

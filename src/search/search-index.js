@@ -135,6 +135,25 @@ export function _matchSnippet(text, terms, radius = 160) {
  * @param {SearchSource} src
  * @returns {Promise<number>} 추가된 인덱스 항목 수
  */
+// 성능 계측 — 인덱스 빌드·쿼리 시간 누적 (getSearchPerf로 스냅샷 조회, 병목 실측용)
+const _perf = {
+    build: { n: 0, total: 0, max: 0, last: 0, lastEntries: 0, lastTokens: 0 },
+    query: { n: 0, total: 0, max: 0, last: 0, lastResults: 0 },
+};
+const _mark = (bucket, ms) => {
+    const b = _perf[bucket];
+    b.n++; b.total += ms; b.last = ms;
+    if (ms > b.max) b.max = ms;
+};
+/** 인덱스 빌드·쿼리 시간 스냅샷 — {build:{n,avg,max,last,lastEntries,lastTokens}, query:{n,avg,max,last,lastResults}} */
+export function getSearchPerf() {
+    const r = (b) => ({ n: b.n, avg: b.n ? +(b.total / b.n).toFixed(1) : 0, max: +b.max.toFixed(1), last: +b.last.toFixed(1),
+        lastEntries: b.lastEntries, lastTokens: b.lastTokens, lastResults: b.lastResults });
+    return { build: r(_perf.build), query: r(_perf.query) };
+}
+// devtools 수동 조회 — console에서 __searchPerf() 로 빌드·쿼리 시간 확인
+if (typeof window !== 'undefined') /** @type {any} */ (window).__searchPerf = getSearchPerf;
+
 function _ensureSource(src) {
     if (src.promise) return src.promise;
     const examId = getActiveExamId();
@@ -206,7 +225,11 @@ function _getSearchIndex() {
     for (const src of _SOURCES.values()) {
         if (src.lazy && src.entries && src.entries.length) _searchIndex.push(...src.entries);
     }
+    const _bt = performance.now();
     _buildInvertedIndex();
+    _mark('build', performance.now() - _bt);
+    _perf.build.lastEntries = _searchIndex.length;
+    _perf.build.lastTokens = _tokenIndex ? _tokenIndex.size : 0;
     return _searchIndex;
 }
 
@@ -304,6 +327,7 @@ function _countOccurrences(text, needle) {
  *   failedTerms는 후보가 전혀 없는 쿼리 용어 — AND 불성립 시 안내 표시용.
  */
 export function runUnifiedSearch(query, filter = 'all') {
+    const _qt = performance.now();
     const index = _getSearchIndex();
     const terms = query.split(/\s+/).filter(t => t.length > 0);
     /** @type {Record<string, object[]>} kind별 버킷 + weak (부분 일치 공통 티어) */
@@ -384,6 +408,8 @@ export function runUnifiedSearch(query, filter = 'all') {
         else (buckets[item.kind] = buckets[item.kind] || []).push(item);
     }
 
+    _mark('query', performance.now() - _qt);
+    _perf.query.lastResults = Object.values(buckets).reduce((n, b) => n + b.length, 0);
     return {
         buckets,
         allVariantTerms: termGroups.flat(),
