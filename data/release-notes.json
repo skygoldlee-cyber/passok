@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261107-4074a5a",
+    "date": "2026-11-07",
+    "notes": [
+      "[정리·trace] TRACE_MATRIX 재생성 — UX-NAV-16 반영",
+      "[기능·nav] 학습 내비 4그룹 재편 — 상태·실행 분리, 웹툰 명칭 분리, 빈 메뉴 자동 숨김",
+      "[정리·release] v20261107-dcaa0bd 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-dcaa0bd",
     "date": "2026-11-07",
     "notes": [
@@ -188,16 +197,6 @@
       "[수정·ref-pipeline] Qt 핸들러 stderr None 가드 + 가드 테스트",
       "[수정·ref-pipeline] Qt 폰트 경고 억제 + 페이지 지연로딩·여백 수집 예외 복원",
       "[수정·ref-pipeline] 페이지 단위 예외 복원력 + 복원 테스트"
-    ]
-  },
-  {
-    "version": "v20261106-2d8926b",
-    "date": "2026-11-06",
-    "notes": [
-      "[CI] CI 재실행 트리거 [no-docs]",
-      "[수정·test] care-share xlsx 날짜 — UTC→로컬 todayKey 정합",
-      "[기능·carework] 서명 이미지 피커 — 버튼 스타일 + 숨긴 file input + 피커 테스트",
-      "[정리·release] v20261106-8600a6e 스탬프 확정 [no-docs]"
     ]
   }
 ]
