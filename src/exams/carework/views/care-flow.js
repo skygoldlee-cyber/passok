@@ -3,6 +3,9 @@
 import { contentPath } from '../../../core/exam-context.js';
 import { esc } from '../../../core/sanitize.js';
 import { getItem, setItem } from '../../../core/storage.js';
+import { state, saveProgress } from '../../../core/state.js';
+import { recordQuizJudgment } from '../../../study/spaced-repetition.js';
+import { switchView } from '../../../views/navigation.js';
 import { parseStorySlots, renderSlotHtml } from '../../../reader/webtoon-render.js';
 import { DataLoader } from '../../../content/data-loader.js';
 
@@ -35,19 +38,39 @@ const _prog = () => { try { return JSON.parse(getItem('flow_progress') || '{}') 
 const _save = p => setItem('flow_progress', JSON.stringify(p));
 const _conceptItems = (c, role) => (_items || []).filter(it => it.conceptId === c.id && it.role === role);
 
-/** 응답 기록 — flow_attempts {conceptId, itemId, choice, correct, dontKnow, ts} (분석용, 최근 500건 유지) */
+/** 개념의 과목 키 — 레지스트리 order 우선, 없으면 carework 상수 폴백 */
+const SUBJ_KEY = { 1: 'caretheory', 2: 'careprac' };
+const _subjKey = c => {
+    const subs = (DataLoader.registry && DataLoader.registry.subjects) || [];
+    const s = subs.find(x => x.order === c.subject) || subs[c.subject - 1];
+    return (s && s.key) || SUBJ_KEY[c.subject] || null;
+};
+
+/**
+ * 응답 기록 — ① flow_attempts(개념 단위 원자 로그, 최근 500건) ② 표준 진단 입력 연동.
+ * scenario/pre 정오를 <subj>_quiz_flow_<itemId> 키로 quizResults에 기록하면
+ * 학습진단 표본·과목별 정답률·BKT 시퀀스가 기존 파이프라인 그대로 집계된다.
+ * 「모르겠어요」는 추측 없음 표시 — 오답이 아니므로 quizResults에는 쓰지 않는다.
+ */
 function _rec(itemId, choice, correct, dk) {
     let a;
     try { a = JSON.parse(getItem('flow_attempts') || '[]') || []; } catch { a = []; }
     a.push({ conceptId: _c && _c.id, itemId, choice, correct, dontKnow: !!dk, ts: Date.now() });
     if (a.length > 500) a.splice(0, a.length - 500);
     setItem('flow_attempts', JSON.stringify(a));
+    const subjKey = _c && _subjKey(_c);
+    if (subjKey && itemId && !dk) {
+        const qid = `${subjKey}_quiz_flow_${itemId}`;
+        state.quizResults[qid] = { solved: true, correct };
+        recordQuizJudgment(qid, correct); // BKT 시퀀스 로그 (D-22)
+        saveProgress();
+    }
 }
 
 const _stage = s => {
     const p = _prog();
     const rec = p[_c.id] || {};
-    rec.stage = s; rec.lastSeen = Date.now();
+    rec.stage = s; rec.title = _c.title; rec.lastSeen = Date.now();
     p[_c.id] = rec; _save(p);
 };
 
@@ -192,7 +215,7 @@ function _render() {
         const p2 = _prog();
         if (done) { rec.mastered = true; rec.weak = false; }
         else if (_scWrong >= MAX_WRONG) { rec.weak = true; }
-        rec.stage = 'complete'; rec.lastSeen = Date.now();
+        rec.stage = 'complete'; rec.title = c.title; rec.lastSeen = Date.now();
         p2[c.id] = rec; _save(p2);
         const msg = done ? '정답으로 마쳤어요 — 잘하셨습니다.'
             : _scWrong >= MAX_WRONG ? '이 개념은 다음에 먼저 다시 나와요.'
@@ -269,6 +292,21 @@ export function flowDontKnow() {
     if (next) next.disabled = false;
 }
 
+/** 개념 id로 셀렉트 이동 — 과목 필터 변경 후 개념 선택, pick()까지 트리거 */
+function _selectConcept(id) {
+    const cs = _concepts || [];
+    const c = cs.find(x => x.id === id);
+    const sel = /** @type {HTMLSelectElement|null} */ (document.getElementById('flow-concept'));
+    const subjSel = /** @type {HTMLSelectElement|null} */ (document.getElementById('flow-subject'));
+    if (!c || !sel) return;
+    if (subjSel && String(c.subject) !== subjSel.value) {
+        subjSel.value = String(c.subject);
+        subjSel.dispatchEvent(new Event('change'));
+    }
+    sel.value = id;
+    sel.dispatchEvent(new Event('change'));
+}
+
 /** 완료 후 다음 미완료 개념으로 이동 — 같은 과목 우선, 없으면 전체에서 탐색 */
 export function flowNextConcept() {
     if (!_concepts || !_c) return;
@@ -276,13 +314,20 @@ export function flowNextConcept() {
     const undone = x => !(p[x.id] && p[x.id].mastered);
     const next = _concepts.find(x => x.subject === _c.subject && undone(x))
         || _concepts.find(undone) || _c;
-    const sel = /** @type {HTMLSelectElement|null} */ (document.getElementById('flow-concept'));
-    const subjSel = /** @type {HTMLSelectElement|null} */ (document.getElementById('flow-subject'));
-    if (subjSel && String(next.subject) !== subjSel.value) {
-        subjSel.value = String(next.subject);
-        subjSel.dispatchEvent(new Event('change'));
+    _selectConcept(next.id);
+}
+
+/** 대시보드 큐·진단 온보딩 진입점 — 뷰 전환 후 지정 개념 자동 선택 (이어하기) */
+let _pendingConcept = null;
+export function startConceptFlow(conceptId) {
+    _pendingConcept = conceptId || null;
+    switchView('care-flow-view');
+    // 이미 마운트된 경우 바로 선택 — enter() 재실행 시에는 init이 _pendingConcept을 소비한다
+    if (_pendingConcept && document.getElementById('flow-concept')) {
+        const id = _pendingConcept;
+        _pendingConcept = null;
+        _selectConcept(id);
     }
-    if (sel) { sel.value = next.id; sel.dispatchEvent(new Event('change')); }
 }
 
 export async function initCareFlowView() {
@@ -331,4 +376,10 @@ export async function initCareFlowView() {
     subjSel.onchange = refill;
     sel.onchange = pick;
     _render();
+    // 외부 진입(startConceptFlow)으로 지정된 개념 자동 선택
+    if (_pendingConcept) {
+        const id = _pendingConcept;
+        _pendingConcept = null;
+        _selectConcept(id);
+    }
 }

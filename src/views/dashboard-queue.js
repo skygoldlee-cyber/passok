@@ -8,6 +8,8 @@
 import { state } from '../core/state.js';
 import { esc } from '../core/sanitize.js';
 import { safeGetItem } from '../core/state.js';
+import { hasFeature } from '../core/exam-context.js';
+import { getItem } from '../core/storage.js';
 import { DataLoader } from '../content/data-loader.js';
 import { getDueCards, getExamRiskCards, EXAM_R_WINDOW_DAYS, EXAM_R_SESSION_CAP } from '../study/spaced-repetition.js';
 import { getWeakStatements } from '../study/statement-tracker.js';
@@ -42,6 +44,8 @@ const MAX_PLAN_ITEMS = 2; // 주간 배정 큐 항목 상한 — 과목 나열�
  * @param {Array} [p.behindSubjects] 계획 밀림 과목 [{key,name,daysBehind}] — PS-03 우선순위 입력
  * @param {number} [p.unlearnedCount] 미학습 카드 수 — PS-03 우선순위 입력
  * @param {Object} [p.topCluster] 최다 오개념 클러스터 (weakClusters()[0] — PS-01·PS-10 클리닉 항목)
+ * @param {Object} [p.flowResume] 개념 학습 이어하기 대상 {id,title,weak} — careFlow 시험 전용
+ * @param {boolean} [p.flowCapable] 활성 시험의 개념 학습 플로우 보유 여부 — 첫 학습 제안 분기용
  * @returns {Array<{icon:string, color:string, title:string, reason:string,
  *   actions:Array<{click:string, arg?:string, args?:Array, label:string, icon:string, cls:string}>}>}
  */
@@ -86,6 +90,18 @@ export function buildTodayQueue(p = {}) {
             title: `복습 카드 ${due.length}장`,
             reason: top ? `FSRS 복습 시간 도래 — ${subjName(top[0])} ${top[1]}장 포함` : 'FSRS 복습 시간 도래',
             actions: [{ click: 'startDueReview', label: '지금 복습', icon: 'fa-play', cls: 'btn-primary' }]
+        });
+    }
+
+    // ①+ 개념 학습 이어하기 — 적응형 플로우(careFlow)의 미완료·취약 개념 재진입 (코어 경로 우선)
+    if (p.flowResume) {
+        const r = p.flowResume;
+        push({
+            kind: 'flow',
+            icon: 'fa-book-open-reader', color: 'var(--color-success)',
+            title: `개념 학습 이어하기`,
+            reason: r.weak ? `${r.title} — 취약 표시된 개념입니다` : `${r.title} — 진행 중인 단계부터 이어집니다`,
+            actions: [{ click: 'startConceptFlow', arg: r.id, label: '이어하기', icon: 'fa-play', cls: 'btn-primary' }]
         });
     }
 
@@ -167,7 +183,15 @@ export function buildTodayQueue(p = {}) {
     // goal 항목은 안내성이라 작업 항목 유무 판정에서 제외한다
     if (!items.some(i => i.kind !== 'goal') && !p.hasProgress) {
         const first = (p.subjects || [])[0];
-        if (first) {
+        if (p.flowCapable) {
+            items.push({
+                kind: 'start',
+                icon: 'fa-seedling', color: 'var(--color-success)',
+                title: '첫 학습 시작: 개념 학습',
+                reason: '개념 학습으로 진단 데이터를 쌓으면 맞춤 큐가 정확해집니다',
+                actions: [{ click: 'startConceptFlow', label: '시작', icon: 'fa-seedling', cls: 'btn-secondary' }]
+            });
+        } else if (first) {
             items.push({
                 kind: 'start',
                 icon: 'fa-seedling', color: 'var(--color-success)',
@@ -208,7 +232,7 @@ export function buildTodayQueue(p = {}) {
     });
     // PS-03 미관할 항목의 고정 우선순위 — 기존 상대 순서(due>danger>review>weak>examr>rec>start/daily) 보존
     const FIXED_PRIO = {
-        goal: 1000, danger: 79, review: 70, clinic: 65, examr: 55, rec: 50, daily: 10, start: 5
+        goal: 1000, danger: 79, review: 70, clinic: 65, examr: 55, rec: 50, daily: 10, start: 5, flow: 75
     };
     const prioMap = new Map();
     items.forEach(it => {
@@ -284,6 +308,22 @@ export function renderTodayQueue(subjects) {
         key: a.key, name: a.name,
         daysBehind: Math.ceil((a.cardsLeft + (a.quizzesLeft || 0)) / dailyCards)
     })).filter(s => s.daysBehind >= 2);
+
+    // 개념 학습 이어하기 — careFlow 시험의 미완료·취약 개념 (최근 사용 순)
+    let flowResume = null;
+    if (hasFeature('careFlow')) {
+        try {
+            const fp = JSON.parse(getItem('flow_progress') || '{}') || {};
+            const recs = Object.entries(fp)
+                .filter(([, r]) => r && r.stage && r.stage !== 'complete' && !r.mastered);
+            const weakFirst = recs.filter(([, r]) => r.weak);
+            const pool = weakFirst.length ? weakFirst : recs;
+            pool.sort((a, b) => (b[1].lastSeen || 0) - (a[1].lastSeen || 0));
+            const top = pool[0];
+            if (top) flowResume = { id: top[0], title: top[1].title || top[0], weak: !!top[1].weak };
+        } catch { /* 진행 기록 손상 시 큐 항목 생략 */ }
+    }
+
     const items = buildTodayQueue({
         dueCardIds, subjects, recs, allocRemaining,
         reviewCount: state.weakCards.size,
@@ -294,7 +334,9 @@ export function renderTodayQueue(subjects) {
         hasProgress,
         behindSubjects,
         unlearnedCount: Math.max(0, totalCards - state.memorizedCards.size),
-        topCluster: weakClusters()[0] || null
+        topCluster: weakClusters()[0] || null,
+        flowResume,
+        flowCapable: hasFeature('careFlow')
     });
 
     _prevQueueLen = items.length;

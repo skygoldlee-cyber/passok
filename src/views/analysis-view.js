@@ -32,7 +32,7 @@ import {
 } from './personalization-view.js';
 import { resolveWrongQuiz } from '../study/weak-items.js';
 import { showToast, showGlobalLoading, hideGlobalLoading } from '../ui-utils.js';
-import { getExamRules, getExamAppName } from '../core/exam-context.js';
+import { getExamRules, getExamAppName, hasFeature } from '../core/exam-context.js';
 import { trackAction } from '../telemetry/usage-stats.js';
 import { renderDashboard, onAnalysisRefresh } from './dashboard.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
@@ -175,16 +175,23 @@ function _renderAnalysisOnboarding() {
         if (hint) hint.remove();
         return;
     }
+    // 개념 학습 시험(careFlow) + 퀴즈 0 — 푸는 문제는 개념 학습 응답이므로 진입 버튼을 그쪽으로
+    const totalQuizzes = ((DataLoader.registry && DataLoader.registry.subjects) || [])
+        .reduce((n, s) => n + ((s.stats && s.stats.quizzes) || 0), 0);
+    const flowOnly = hasFeature('careFlow') && totalQuizzes === 0;
     const quizPct = Math.min(100, Math.round((quizSolved / ANALYSIS_MIN_QUIZ) * 100));
     const simPct = Math.min(100, Math.round((simDone / ANALYSIS_MIN_SIM) * 100));
     const meter = (label, cur, min, pct) =>
         `<div class="wc-subrow"><span>${label}</span><strong>${cur}/${min}</strong></div>
          <div class="analysis-meter"><div class="analysis-meter-fill" style="width:${pct}%"></div></div>`;
+    const quizBtn = flowOnly
+        ? `<button class="btn btn-primary btn-sm analysis-card-btn" data-click="startConceptFlow"><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i> 개념 학습 시작</button>`
+        : `<button class="btn btn-primary btn-sm analysis-card-btn" data-click="startSubjectQuiz"><i class="fa-solid fa-play" aria-hidden="true"></i> 지금 퀴즈 풀기</button>`;
     const html = `<h4>🌱 진단 준비 중</h4>
         <p class="analysis-empty">학습 진단은 푼 문제가 쌓일수록 정확해집니다 — 아래 중 하나만 채우면 진단이 시작됩니다.</p>
-        ${meter(`퀴즈 풀이 (최소 ${ANALYSIS_MIN_QUIZ}문)`, quizSolved, ANALYSIS_MIN_QUIZ, quizPct)}
+        ${meter(`${flowOnly ? '개념 학습 문제' : '퀴즈 풀이'} (최소 ${ANALYSIS_MIN_QUIZ}문)`, quizSolved, ANALYSIS_MIN_QUIZ, quizPct)}
         ${meter(`모의고사 (최소 ${ANALYSIS_MIN_SIM}회)`, simDone, ANALYSIS_MIN_SIM, simPct)}
-        <button class="btn btn-primary btn-sm analysis-card-btn" data-click="startSubjectQuiz"><i class="fa-solid fa-play" aria-hidden="true"></i> 지금 퀴즈 풀기</button>
+        ${quizBtn}
         <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="startIntegratedMockExam"><i class="fa-solid fa-clock" aria-hidden="true"></i> 모의고사 시작</button>`;
     if (!hint) {
         hint = document.createElement('div');

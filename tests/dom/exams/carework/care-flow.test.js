@@ -73,6 +73,10 @@ describe('care-flow 4단계 뷰 상태머신', () => {
         const p = progress();
         expect(p['s2-c10-x'].mastered).toBe(true);
         expect(attempts().length).toBe(2); // pre + scenario
+        // 진단 연동 — flow 응답이 표준 quizResults로 집계된다 (<subj>_quiz_flow_ 패턴)
+        const { state } = await import('../../../../src/core/state.js');
+        expect(state.quizResults['careprac_quiz_flow_pre1'].correct).toBe(true);
+        expect(state.quizResults['careprac_quiz_flow_sc1'].correct).toBe(true);
     });
 
     it('pre 모르겠어요 → 이야기 경유 → 시나리오 오답 재도전(다른 문항) → 2연속 오답 weak 표시', async () => {
@@ -97,6 +101,10 @@ describe('care-flow 4단계 뷰 상태머신', () => {
         expect(p['s2-c10-x'].weak).toBe(true);
         expect(p['s2-c10-x'].mastered).toBeUndefined();
         expect(attempts().filter(a => a.dontKnow).length).toBe(1);
+        // 모르겠어요는 quizResults에 쓰지 않고, 오답은 incorrect로 기록
+        const { state } = await import('../../../../src/core/state.js');
+        expect(state.quizResults['careprac_quiz_flow_pre1']).toBeUndefined();
+        expect(state.quizResults['careprac_quiz_flow_sc1'].correct).toBe(false);
     });
 
     it('미완료 개념 재선택 — 저장된 단계로 이어하기', async () => {
