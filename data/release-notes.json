@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261107-dd0f5d3",
+    "date": "2026-11-07",
+    "notes": [
+      "[수정·carework] 과목2 명칭 통일 — 요양보호 실기 (공백 표기) [no-test]",
+      "[정리·release] v20261107-3579e0d 스탬프 확정 [no-docs]",
+      "[수정·carework] 과목2 명칭 통일 — 요양보호 관련 → 요양보호실기 [no-test]",
+      "[정리·release] v20261107-92c0505 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-92c0505",
     "date": "2026-11-07",
     "notes": [
@@ -179,15 +189,6 @@
     "notes": [
       "[스타일·ux] 간격 리터럴 토큰화 — UX-CTL-03/04 · §4.9.3 정합",
       "[정리·release] v20261106-580d862 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261106-580d862",
-    "date": "2026-11-06",
-    "notes": [
-      "[수정·ux] carework 베어·사멸 버튼 btn 계열 일괄 정정 + data-click 클래스 게이트 [no-test]",
-      "[정리·release] v20261106-cd20aa1 스탬프 확정 [no-docs]",
-      "[정리·release] v20261106-2d8926b 스탬프 확정 [no-docs]"
     ]
   }
 ]
