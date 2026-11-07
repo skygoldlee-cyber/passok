@@ -384,7 +384,7 @@ export async function initCareFlowView() {
         const subs = [...new Set(cs.map(c => c.subject))].sort();
         if (!subs.length) subs.push(2); // 파일럿 과목만 있어도 셀렉트는 보이게
         subs.forEach(s => {
-            const op = new Option(s === 1 ? '1과목 요양보호론' : '2과목 요양보호실기', String(s));
+            const op = new Option(s === 1 ? '1과목 요양보호론' : '2과목 요양보호 실기', String(s));
             // 개념이 없는 과목도 표시하되, 파일럿 안내를 위해 라벨에 집계 표기
             const n = cs.filter(c => c.subject === s).length;
             sel && (op.textContent += ` (${n})`);

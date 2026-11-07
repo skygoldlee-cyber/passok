@@ -21,13 +21,13 @@
     {
       "key": "careprac",
       "order": 2,
-      "name": "요양보호실기",
+      "name": "요양보호 실기",
       "shortName": "실기",
       "dir": "교재/careprac",
       "chapters": [
         {
           "key": "full",
-          "title": "요양보호실기 (전체)",
+          "title": "요양보호 실기 (전체)",
           "file": "2과목_요양보호실기.md",
           "storyFile": "2과목_요양보호실기_이야기형.md"
         }
@@ -46,7 +46,7 @@
       "key": "subject2",
       "subject": "careprac",
       "part": 2,
-      "title": "요양보호실기 문제은행 80제",
+      "title": "요양보호 실기 문제은행 80제",
       "file": "과목2_요양보호실기_문제은행.md"
     }
   ],
