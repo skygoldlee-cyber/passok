@@ -314,10 +314,15 @@ export function renderTodayQueue(subjects) {
     if (hasFeature('careFlow')) {
         try {
             const fp = JSON.parse(getItem('flow_progress') || '{}') || {};
+            // 개념 복습 큐(flow_review) 기한 도래분 — 취약·진행 중보다 먼저 (DOC-USR-22 §4)
+            const fr = JSON.parse(getItem('flow_review') || '{}') || {};
+            const t = todayKey();
+            const dueRecs = Object.entries(fp)
+                .filter(([id, r]) => r && fr[id] && fr[id].due <= t);
             const recs = Object.entries(fp)
                 .filter(([, r]) => r && r.stage && r.stage !== 'complete' && !r.mastered);
             const weakFirst = recs.filter(([, r]) => r.weak);
-            const pool = weakFirst.length ? weakFirst : recs;
+            const pool = dueRecs.length ? dueRecs : (weakFirst.length ? weakFirst : recs);
             pool.sort((a, b) => (b[1].lastSeen || 0) - (a[1].lastSeen || 0));
             const top = pool[0];
             if (top) flowResume = { id: top[0], title: top[1].title || top[0], weak: !!top[1].weak };

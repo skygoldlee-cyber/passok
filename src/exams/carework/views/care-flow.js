@@ -8,6 +8,7 @@ import { recordQuizJudgment } from '../../../study/spaced-repetition.js';
 import { switchView } from '../../../views/navigation.js';
 import { parseStorySlots, renderSlotHtml } from '../../../reader/webtoon-render.js';
 import { DataLoader } from '../../../content/data-loader.js';
+import { todayKey } from '../../../core/utils.js';
 
 const STEPS = ['home', 'pre', 'story', 'summary', 'scenario', 'result', 'complete'];
 const STEP_LABELS = { home: '개념', pre: '①미리풀기', story: '②이야기', summary: '③요약', scenario: '④시나리오', result: '해설', complete: '완료' };
@@ -36,6 +37,22 @@ const _chars = () => Object.fromEntries(Object.entries(CHARS).map(([k, c]) => [k
 const _ansIdx = q => typeof q.answer === 'number' ? q.answer : CIRCLED.indexOf(q.answer);
 const _prog = () => { try { return JSON.parse(getItem('flow_progress') || '{}') || {}; } catch { return {}; } };
 const _save = p => setItem('flow_progress', JSON.stringify(p));
+
+// 개념 복습 큐 — DOC-USR-22 §4: 완료한 개념은 1·3·7일 뒤 다시 나온다 (개념 단위 간격)
+const _IVLS = [1, 3, 7];
+const _rv = () => { try { return JSON.parse(getItem('flow_review') || '{}') || {}; } catch { return {}; } };
+function _scheduleReview(id) {
+    const rv = _rv();
+    const step = rv[id] ? Math.min((rv[id].step || 0) + 1, _IVLS.length - 1) : 0;
+    const d = new Date(); d.setDate(d.getDate() + _IVLS[step]);
+    rv[id] = { step, due: todayKey(d) };
+    setItem('flow_review', JSON.stringify(rv));
+}
+/** 복습 기한 도래 개념 id[] — 대시보드 큐가 이어하기 최우선으로 제안한다 */
+export function flowDueReviews() {
+    const rv = _rv(); const t = todayKey();
+    return Object.keys(rv).filter(id => rv[id] && rv[id].due <= t);
+}
 const _conceptItems = (c, role) => (_items || []).filter(it => it.conceptId === c.id && it.role === role);
 
 /** 개념의 과목 키 — 레지스트리 order 우선, 없으면 carework 상수 폴백 */
@@ -154,7 +171,11 @@ function _resultHtml() {
         return `<p class="wb-scene">${mark} ${esc(o)} — ${esc((q.rationale || [])[oi] || '')}</p>`;
     }).join('');
     const canRetry = !ok && _scWrong < MAX_WRONG && !!_scItemFor(_c);
+    // 오답 보기에 연결된 교정 컷 (items.cutOnWrong — 오개념을 고른 장면으로 바로 교정)
+    const cutId = !ok && q.cutOnWrong ? q.cutOnWrong[_sel] : null;
+    const cutSlot = cutId && _slots ? _slots[parseInt(String(cutId).replace(/\D/g, ''), 10) - 1] : null;
     return `<div class="flow-verdict ${ok ? 'ok' : 'no'}">${verdict}</div>` + opts
+        + (cutSlot ? `<div class="webtoon-reader">${renderSlotHtml(cutSlot, _chars())}</div>` : '')
         + (canRetry ? '<p class="flow-hint">「다음」을 누르면 같은 개념의 다른 문항이 나옵니다.</p>' : '');
 }
 
@@ -217,6 +238,7 @@ function _render() {
         else if (_scWrong >= MAX_WRONG) { rec.weak = true; }
         rec.stage = 'complete'; rec.title = c.title; rec.lastSeen = Date.now();
         p2[c.id] = rec; _save(p2);
+        _scheduleReview(c.id); // 개념 완료 → 1·3·7일 복습 큐 등록 (DOC-USR-22 §4)
         const msg = done ? '정답으로 마쳤어요 — 잘하셨습니다.'
             : _scWrong >= MAX_WRONG ? '이 개념은 다음에 먼저 다시 나와요.'
             : '이 개념 학습을 마쳤어요.';

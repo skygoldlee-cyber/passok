@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 feat(carework): 개념 복습 큐(1·3·7일) + 오답 컷 표시 — DOC-USR-22 §4 구현
+
+- `flow_review` 스토어 — 개념 완료 시 1·3·7일 간격 복습 예약, `flowDueReviews()`로 기한 도래분 노출
+- 대시보드 「개념 학습 이어하기」: 복습 기한 도래 → 취약 → 진행 중 우선순위 (기존 취약 우선 위에 복습 큐 배치)
+- 시나리오 오답 시 `items.cutOnWrong` 연결 컷을 해설 아래 표시 — 오개념 장면으로 즉시 교정
+
 ## 2026-11-07 feat(search): 검색 성능 계측 — 인덱스 빌드·쿼리 시간 실측 카운터
 
 - `_buildInvertedIndex`/`runUnifiedSearch`에 `performance.now` 계측 — n/avg/max/last + lastEntries/lastTokens/lastResults 누적
