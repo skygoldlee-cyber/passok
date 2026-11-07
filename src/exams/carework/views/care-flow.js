@@ -289,7 +289,7 @@ function _render() {
         const leftN = Math.max(0, _concepts.length - doneN);
         const dueTxt = rv ? ` · ${rv.due.slice(5).replace('-', '/')}에 다시 나와요` : '';
         st.innerHTML = `<div class="wb-scene wb-scene-title">학습 완료 — ${esc(c.title)}</div><p class="wb-scene">${esc(msg)}</p>
-            <p class="flow-sum">지금까지 ${doneN}개 완료 · 남은 개념 ${leftN}개${dueTxt}</p>
+            <p class="flow-sum">지금까지 ${esc(doneN)}개 완료 · 남은 개념 ${esc(leftN)}개${esc(dueTxt)}</p>
             <button class="btn btn-primary flow-next-concept" data-click="flowNextConcept">다음 개념으로 ▶</button>`;
     }
 }

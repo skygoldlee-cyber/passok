@@ -1,5 +1,7 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 fix(carework): escape-sink — 완료 요약 보간 esc 누락 (CI 후속)
+
 ## 2026-11-07 feat(carework): 개념 학습 UX 5개 보완 — 접근성·진행 체감·피드백·내비·완료 동선
 
 - 글자 크기 기준 상향 (stem 1.15rem·opt 1.25rem·step .9rem) + 「글자 크게」토글(`.flow-lg`, DOC-USR-22 §8) + 선호 저장
