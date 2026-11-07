@@ -11,17 +11,67 @@ import { docHeadHtml, refreshOrgName, myMembership, deleteFacilityFormTemplate }
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import {
     parseFields, fillTemplate, fillTemplateHtml,
-    allFormTemplates, syncFormTemplates, setPendingTplEdit,
+    allFormTemplates, syncFormTemplates,
     listFormDocs, saveFormDoc, removeFormDoc, syncPendingFormDocs,
-    addFormTemplate,
+    addFormTemplate, updateFormTemplate,
 } from '../form-template-store.js';
 import { TOOL_FORM_SEEDS } from '../form-seeds.js';
+import { initTplEditor, fillTplEditor, readTplEditor } from '../form-template-editor.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
 let _membership = null;
 let _activeTpl = null;   // 기입 대상 양식 {id,title,body,scope}
+let _editTplId = null;   // 편집 중인 로컬 양식 id (null = 신규/기관사본)
 let _lastMd = '';        // 마지막 생성 문서 MD (내보내기 원본)
+
+// — 인라인 편집기 (기본 양식 사본·목록 양식 편집이 이 뷰에서 완결 — CO-18) —
+
+function _openEditor(tpl) {
+    _editTplId = tpl.scope === 'fac' ? null : tpl.id; // 기관 양식은 저장 시 로컬 사본이 됨
+    const ed = $('cf-editor');
+    if (ed) ed.classList.remove('is-hidden');
+    const lb = $('cf-tpl-label');
+    if (lb) lb.textContent = tpl.title + (tpl.toolKey ? ` (연동: ${TOOL_FORM_SEEDS[tpl.toolKey]?.title})` : '');
+    fillTplEditor('cf-tpl', tpl.title, tpl.body);
+    ed?.scrollIntoView?.({ block: 'nearest' });
+}
+
+/** 목록 편집 → 인라인 편집기 (홈 이관 대신 이 뷰에서 완결) */
+export function careFormTplEdit(id) {
+    const t = _tplById(id);
+    if (!t) return;
+    _openEditor(t);
+}
+
+export function careFormTplEditClose() {
+    _editTplId = null;
+    $('cf-editor')?.classList.add('is-hidden');
+}
+
+/** 양식 파일 선택 — 편집기의 숨긴 file input 트리거 */
+export function careFormTplPdfPick() {
+    /** @type {HTMLInputElement|null} */ ($('cf-tpl-file'))?.click();
+}
+
+/** 양식 저장 — 편집 중이면 갱신, 기관 양식 편집분은 로컬 사본으로 신규 */
+export function careFormTplSave() {
+    const { title, body } = readTplEditor('cf-tpl');
+    if (!title || !body.trim()) { showToast('양식명과 본문을 입력하세요.', 'error'); return; }
+    if (_editTplId) {
+        const r = updateFormTemplate(_editTplId, { title, body });
+        r.ok ? showToast('양식을 저장했습니다 — 연동 도구 출력에도 반영됩니다.') : showToast(r.error, 'error');
+    } else {
+        const label = $('cf-tpl-label')?.textContent || '';
+        const tk = Object.keys(TOOL_FORM_SEEDS).find(k => label.includes(TOOL_FORM_SEEDS[k].title));
+        const r = addFormTemplate({ title, body, toolKey: tk || undefined });
+        if (!r.ok) { showToast(r.error, 'error'); return; }
+        _editTplId = r.id;
+        showToast('양식을 저장했습니다 — 연동 도구 출력에도 반영됩니다.');
+    }
+    renderTplList();
+    renderSeedList();
+}
 
 const _isManager = () => _membership?.role === 'manager';
 const _tplById = (id) => allFormTemplates().find(t => t.id === id) || null;
@@ -36,23 +86,18 @@ export function careFormTplUse(id) {
     renderFillForm();
 }
 
-/** 편집 — 등록 편집기는 홈에 있으므로 이관 마킹 후 홈으로 이동 */
-export function careFormTplEdit(id) {
-    const t = _tplById(id);
-    if (!t) return;
-    setPendingTplEdit(t);
-    location.hash = '#/care-home';
-}
-
-/** 기본 양식 사본 생성 (CO-18) — 도구 표준 서식을 로컬 템플릿으로 복사, toolKey로 출력 오버라이드 연동 */
+/** 기본 양식 사본 생성·편집 (CO-18) — 사본 생성 후 인라인 편집기를 바로 연다 */
 export function careFormSeedCopy(toolKey) {
     const def = TOOL_FORM_SEEDS[toolKey];
     if (!def) return;
-    const dup = allFormTemplates().find(t => t.toolKey === toolKey);
-    if (dup) { setPendingTplEdit(dup); location.hash = '#/care-home'; return; } // 기존 사본 편집 이관
-    const r = addFormTemplate({ title: def.title, body: def.seed, toolKey });
-    if (!r.ok) { showToast(r.error, 'error'); return; }
-    showToast(`'${def.title}' 사본을 만들었습니다 — 편집하면 해당 도구 출력에도 반영됩니다.`);
+    let tpl = allFormTemplates().find(t => t.toolKey === toolKey);
+    if (!tpl) {
+        const r = addFormTemplate({ title: def.title, body: def.seed, toolKey });
+        if (!r.ok) { showToast(r.error, 'error'); return; }
+        tpl = allFormTemplates().find(t => t.id === r.id);
+        showToast(`'${def.title}' 사본을 만들었습니다 — 수정 후 저장하세요.`);
+    }
+    if (tpl) _openEditor(tpl); // 생성·기존 사본 모두 편집기로 진입
     renderTplList();
     renderSeedList();
 }
@@ -179,6 +224,7 @@ function renderDocList() {
 export function initCareCustomFormView() {
     markFunnel('tool:care-custom-form');
     attachClientPicker(/** @type {HTMLInputElement|null} */ ($('cf-client')));
+    initTplEditor('cf-tpl'); // 인라인 편집기 — 파일 추출·필드 미리보기 바인딩
     renderTplList();
     renderSeedList();
     renderFillForm();

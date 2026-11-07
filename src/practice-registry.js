@@ -713,7 +713,7 @@ const careCustomForm = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-custom-form.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careFormTplUse', 'careFormTplEdit', 'careFormTplDelete', 'careFormSeedCopy', 'careFormDocGenerate', 'careFormDocSave', 'careFormDocDelete', 'careFormDocMd', 'careFormDocPrint']]],
+    handlers: [['main', ['careFormTplUse', 'careFormTplEdit', 'careFormTplDelete', 'careFormSeedCopy', 'careFormTplSave', 'careFormTplEditClose', 'careFormTplPdfPick', 'careFormDocGenerate', 'careFormDocSave', 'careFormDocDelete', 'careFormDocMd', 'careFormDocPrint']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);

@@ -641,27 +641,26 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(listFormTemplates().length).toBe(0);
     });
 
-    it('customForm — 편집은 홈 이관(pending+hash), 홈 편집기에서 저장', async () => {
-        const { addFormTemplate, listFormTemplates, removeFormTemplate, consumePendingTplEdit, setPendingTplEdit } =
+    it('customForm — 편집은 인라인 편집기에서 완결 (열기→수정→저장→닫기)', async () => {
+        const { addFormTemplate, listFormTemplates, removeFormTemplate } =
             await import('../../../../src/exams/carework/form-template-store.js');
-        const { careFormTplEdit } = await import('../../../../src/exams/carework/views/care-custom-form.js');
-        const { careHomeTplSave } = await import('../../../../src/exams/carework/views/care-home.js');
+        const { initCareCustomFormView, careFormTplEdit, careFormTplSave, careFormTplEditClose } =
+            await import('../../../../src/exams/carework/views/care-custom-form.js');
         const { fillTplEditor, readTplEditor } = await import('../../../../src/exams/carework/form-template-editor.js');
         for (const t of listFormTemplates()) removeFormTemplate(t.id);
         loadPartial('care-custom-form.html');
+        initCareCustomFormView();
         const r = addFormTemplate({ title: '서약서', body: '본인: {{본인}}' });
-        careFormTplEdit(r.id);
-        const pending = consumePendingTplEdit();
-        expect(pending.id).toBe(r.id); // 이관 마킹
-        setPendingTplEdit({ id: r.id, title: '서약서', body: '본인: {{본인}}', scope: 'local' }); // 이관 재주입 → 홈에서 소비
-        loadPartial('care-home.html');
-        initCareHomeView(); // pending 소비 → 편집기 채움
-        expect(readTplEditor('home-tpl').title).toBe('서약서');
-        fillTplEditor('home-tpl', '서약서2', '본인: {{본인}} 날짜: {{date}}');
-        expect(document.getElementById('home-tpl-fields').innerHTML).toContain('본인'); // 필드 미리보기 — 시스템 키(date) 제외
-        careHomeTplSave();
+        careFormTplEdit(r.id); // 인라인 편집기 오픈 — 홈 이동 없음
+        expect(document.getElementById('cf-editor').classList.contains('is-hidden')).toBe(false);
+        expect(readTplEditor('cf-tpl').title).toBe('서약서');
+        fillTplEditor('cf-tpl', '서약서2', '본인: {{본인}} 날짜: {{date}}');
+        expect(document.getElementById('cf-tpl-fields').innerHTML).toContain('본인');
+        careFormTplSave();
         const tpl = listFormTemplates().find(t => t.id === r.id);
-        expect(tpl.title).toBe('서약서2'); // 같은 id 갱신 — 수정 저장
+        expect(tpl.title).toBe('서약서2'); // 같은 id 갱신
+        careFormTplEditClose();
+        expect(document.getElementById('cf-editor').classList.contains('is-hidden')).toBe(true);
         removeFormTemplate(r.id);
     });
 
