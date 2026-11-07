@@ -1,5 +1,7 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 fix(carework): 참조자료 이미지 상하반전 수정본 27장 — ref_md/images
+
 ## 2026-11-07 fix(carework): 복지용구 이미지 2장 상하반전 — cushion-pressure·manual-wheelchair
 
 ## 2026-11-07 fix(reader): 모바일 통합 바 한줄 4요소 — 과목 셀렉트를 전폭 2행으로
