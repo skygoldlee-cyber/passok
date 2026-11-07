@@ -729,6 +729,20 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         removeFormTemplate(tpl.id);
     });
 
+    it('customForm — 시드는 실제 필드명 노출 + 오버라이드 시 스칼라 실값 기입', async () => {
+        const { renderToolBody, TOOL_FORM_SEEDS } = await import('../../../../src/exams/carework/form-seeds.js');
+        const { addFormTemplate, listFormTemplates, removeFormTemplate } =
+            await import('../../../../src/exams/carework/form-template-store.js');
+        for (const t of listFormTemplates()) removeFormTemplate(t.id);
+        expect(TOOL_FORM_SEEDS.careIncident.seed).toContain('{{발생일시}}'); // 블록만이 아니라 실제 필드명
+        expect(TOOL_FORM_SEEDS.careHandover.seed).toContain('{{인계자}}');
+        addFormTemplate({ title: '사고보고서 사본', body: TOOL_FORM_SEEDS.careIncident.seed, toolKey: 'careIncident' });
+        const out = renderToolBody('careIncident', { 보고내용: '원문', client: '김철수', 발생일시: '2026-11-08 09:00', 사고유형: '낙상' });
+        expect(out).toContain('발생 일시: 2026-11-08 09:00'); // 생성기 주입 스칼라가 실값으로
+        expect(out).toContain('사고 유형: 낙상');
+        for (const t of listFormTemplates()) removeFormTemplate(t.id);
+    });
+
     it('customForm — textToTemplate이 라벨 패턴을 {{키}}로 변환 (AI 폴백)', async () => {
         const { textToTemplate } = await import('../../../../src/exams/carework/care-form-pdf.js');
         const t = textToTemplate('성명:\n생년월일: ＿＿＿＿', '동의서');

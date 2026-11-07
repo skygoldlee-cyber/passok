@@ -1,6 +1,6 @@
 // src/exams/carework/views/care-incident.js — 사고·낙상 보고서 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
-import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, buildIncidentText, incidentsToCsv } from '../care-incident.js';
+import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, severityLabel, buildIncidentText, incidentsToCsv } from '../care-incident.js';
 import { markFunnel } from '../care-funnel.js';
 import { listIncidents, saveIncident, removeIncident } from '../incident-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
@@ -51,7 +51,14 @@ export function careIncidentGenerate() {
 export function careIncidentDocMd() {
     const f = readForm();
     const t = buildIncidentText(f);
-    return t ? docMdHead('사고·낙상 보고서') + '\n' + renderToolBody('careIncident', { 보고내용: t, client: f.client }) + docMdSign([['보고자', 'author'], ['확인(시설장)', 'confirmer']]) : '';
+    return t ? docMdHead('사고·낙상 보고서') + '\n' + renderToolBody('careIncident', {
+        보고내용: t, client: f.client,
+        발생일시: `${f.date}${f.time ? ' ' + f.time : ''}`,
+        발생장소: f.place, 사고유형: incidentTypeLabel(f.type),
+        중증도: severityLabel(f.severity), 발생경위: f.desc,
+        조치내용: f.action, 목격자: f.witness,
+        가족통지: f.familyNotified ? '완료' : '미완료',
+    }) + docMdSign([['보고자', 'author'], ['확인(시설장)', 'confirmer']]) : '';
 }
 
 export function careIncidentSave() {

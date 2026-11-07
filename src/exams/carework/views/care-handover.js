@@ -45,8 +45,10 @@ export function careHandoverDigest() {
     showToast(`${d.count}명의 기록을 반영했습니다 — 검토 후 생성하세요.`);
 }
 
+let _lastIn = null; // 마지막 생성 입력 — 오버라이드 스칼라 주입용 (CO-18)
+
 export function careHandoverGenerate() {
-    const t = buildHandover({
+    _lastIn = {
         date: _val('ho-date', ''),
         from: _val('ho-from', ''),
         to: _val('ho-to', ''),
@@ -56,7 +58,8 @@ export function careHandoverGenerate() {
         tasks: _val('ho-tasks', ''),
         caution: _val('ho-caution', ''),
         logs: /** @type {HTMLInputElement|null} */ ($('ho-merge'))?.checked ? todayLogs() : [],
-    });
+    };
+    const t = buildHandover(_lastIn);
     const out = $('ho-preview');
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·인계자·인수자를 입력하세요.</p>'; return; }
@@ -118,7 +121,11 @@ export function careHandoverCsvExport() {
 
 /** 인수인계서 MD 초안 — 헤더 + 생성문 (docx 파생 원본) */
 export function careHandoverDocMd() {
-    return _lastText ? docMdHead('인수인계서') + '\n' + renderToolBody('careHandover', { 인계내용: _lastText }) + docMdSign([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver'], ['확인일', '']]) : '';
+    return _lastText ? docMdHead('인수인계서') + '\n' + renderToolBody('careHandover', {
+        인계내용: _lastText,
+        일시: `${_lastIn?.date || ''}${_lastIn?.shift ? ` (${_lastIn.shift} 근무조)` : ''}`,
+        인계자: _lastIn?.from, 인수자: _lastIn?.to, 대상자: _lastIn?.clients,
+    }) + docMdSign([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver'], ['확인일', '']]) : '';
 }
 
 /** 📤 공유·내보내기 게이트 — 기록 우선: 미저장 생성문은 자동 저장 후 careShare 위임 (저장 실패 시에만 차단) */

@@ -52,7 +52,12 @@ export function careLogGenerate() {
 export function careLogDocMd() {
     const f = readForm();
     const t = buildCareLog(f);
-    return t ? docMdHead('요양보호 서비스 기록') + '\n' + renderToolBody('careLog', { 기록내용: t, client: f.client }) + docMdSign([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]) : '';
+    return t ? docMdHead('요양보호 서비스 기록') + '\n' + renderToolBody('careLog', {
+        기록내용: t, client: f.client,
+        일시: `${f.date}${f.start ? ` ${f.start}~${f.end || ''}` : ''}`,
+        급여종류: SERVICE_TYPES.find(s => s.key === f.service)?.label || f.service,
+        특이사항: f.note,
+    }) + docMdSign([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]) : '';
 }
 
 /** CO-07 공단 급여제공기록지 양식 복사 — ERP·공단 앱에 붙여넣기 (이중 입력 해소) */

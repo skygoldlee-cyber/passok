@@ -14,7 +14,8 @@ import { fillTemplate, listFormTemplates } from './form-template-store.js';
 export const TOOL_FORM_SEEDS = {
     careLog: {
         title: '요양보호 서비스 기록', block: '기록내용',
-        seed: '{{기록내용}}\n\n비고: {{비고}}',
+        // 실제 양식의 필드명을 {{키}}로 노출 — 스칼라는 생성기가 주입, 블록은 서비스·특이사항 등 조립 영역
+        seed: '일시: {{일시}}\n대상자: {{client}} 님\n급여 종류: {{급여종류}}\n\n{{기록내용}}\n\n비고: {{비고}}',
     },
     careVisit: {
         title: '면회·방문 기록', block: '기록표',
@@ -22,11 +23,12 @@ export const TOOL_FORM_SEEDS = {
     },
     careHandover: {
         title: '인수인계서', block: '인계내용',
-        seed: '{{인계내용}}\n\n비고: {{비고}}',
+        seed: '일시: {{일시}}\n인계자: {{인계자}}\n인수자: {{인수자}}\n대상자: {{대상자}}\n\n{{인계내용}}\n\n비고: {{비고}}',
     },
     careIncident: {
         title: '사고·낙상 보고서', block: '보고내용',
-        seed: '{{보고내용}}\n\n비고: {{비고}}',
+        // 사고보고서는 전 항목 스칼라 — 필드 전부 세분화 노출
+        seed: '발생 일시: {{발생일시}}\n대상자: {{client}}\n발생 장소: {{발생장소}}\n사고 유형: {{사고유형}}\n중증도: {{중증도}}\n발생 경위: {{발생경위}}\n조치 내용: {{조치내용}}\n목격자: {{목격자}}\n가족 통지: {{가족통지}}\n\n비고: {{비고}}',
     },
     careAudit: {
         title: '기관 평가 점검표', block: '점검표',
