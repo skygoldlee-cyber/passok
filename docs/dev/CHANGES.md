@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-08 docs(SPEC): UX-CTL-07 연속 섹션 간 수직 여백 규약 등록 (v1.32)
+
+- 헤더→안내문·본문 `gap-ctl`(한 묶음) · 섹션↔섹션 `gap-sec`(묶음 구분) — "빈줄 제거"를 위해 한쪽 마진을 0으로 만들면 섹션 경계가 사라지는 실사례를 규약으로 정식화 + care-tools.css에 @spec 주석
+- check_spec_refs.js 베이스라인 갱신 — UX-CTL-07은 토큰·규약형으로 TEST_GAP_BASELINE 5→6·UIUX_E2E_GAP_BASELINE 15→16 (기존 UX-CTL 계열과 동일 처리)
+
 ## 2026-11-08 fix(carework): 기관 양식 뷰 "기본 양식" 안내문 위 빈줄 제거
 
 - 안내문은 유지하고 헤더-안내문 간 이중 여백만 축소 — `.view-header` 하단 gap-group→gap-ctl + 헤더 직후 hint의 margin-top 제거

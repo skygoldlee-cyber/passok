@@ -141,10 +141,11 @@
     border-radius: 12px; padding: 18px; margin: 0;
 }
 .care-log-saved { margin: var(--gap-sec) 0; }
-/* 섹션 헤더 리듬 — 목록·카드 다음의 h3 헤더가 붙지 않도록 (CO-17 기관 양식 가독성) */
+/* @spec UX-CTL-07 — 연속 섹션 간 수직 여백: 헤더→안내문·본문은 gap-ctl(한 묶음),
+   섹션↔섹션은 gap-sec(묶음 간 구분). 헤더-안내문 이중 마진을 한쪽 0으로 만들면
+   빈줄이 사라지는 대신 섹션 경계도 사라지므로, hint 상단 마진만 0으로 정리한다 */
 .view-header { margin: var(--gap-sec) 0 var(--gap-ctl); }
 .view-header h3 { margin: 0; }
-/* 헤더 바로 아래 안내문 — 빈줄처럼 보이는 이중 여백 제거 */
 .view-header + .care-log-hint { margin-top: 0; }
 .care-log-saved-item {
     display: flex; justify-content: space-between; align-items: center;

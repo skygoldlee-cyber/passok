@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 17f24087c0448723
-> 생성: 2026-11-07 · 원천: SPEC.md(685개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: a0cda0da2db2765e
+> 생성: 2026-11-07 · 원천: SPEC.md(686개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 685개 — 문서 연결 464 · 소스 연결 608 · 테스트 연결 650 · 보고서 연결 109
+**커버리지 요약**: 요구사항 686개 — 문서 연결 464 · 소스 연결 609 · 테스트 연결 650 · 보고서 연결 109
 
 ---
 
@@ -749,6 +749,7 @@
 | UX-CTL-04 | 가로 라벨 배치(라벨 좌·컨트롤 우)는 설정 행(`.settings-item` 류)·라벨 자체가 토글 타겟인 칩(`.obs-chip`)에만 허용 — 모바일에서 라벨이 컨트롤 폭을 잠식하고 한국어 라벨 길이 변동에 취약. 라벨 요소가 컨트롤을 감싸는 마크업(`<label>텍스트 <input></label>` — `.care-calc-form label` 패턴)은 동일 수직 리듬을 충족하므로 `.ctl-field`와 동형 허용 | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-CTL-05 | 모바일 하단 고정 제출 액션은 `.btn-row-sticky` +  `position:sticky` + `calc(70px + safe-area)` (UX-NAV-05 일반화). 태블릿·PC는 인플로우 배치만 — 스크롤 없는 화면의 고정바는 무의미 | 테스트 | — | css/app-responsive.css<br>css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-CTL-06 | UX-VFY-06과 동형의 조기 차단 — 토큰 미사용 높이는 커밋 전 탐지. E2E 측 실측은 `touch-targets.json` 기준선(UX-SET-03 확장)이 담당 | 테스트 | — | tools/check/check_mobile_safe.js | tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-07 | 헤더-안내문 이중 마진을 빈줄로 착각해 한쪽을 0으로 만들면 섹션 경계가 사라진다(2026-11-08 기관 양식 뷰 실사례). 시각적으로 "헤더→설명→본문" 한 묶음과 "묶음↔묶음" 구분이 모두 명확해야 함 — `.care-log-saved` 등 목록은 `margin: var(--gap-sec) 0`, 헤더 직후 안내문의 `margin-top`은 0으로 정리 | 구현 (테스트 갭) | — | css/exams/carework/care-tools.css | — | — | — |
 | UX-FB-01 | `@media (max-width: 768px) { #app-toast { top:auto; bottom: calc(80px + safe-area) } }` — 하단 탭 바 위 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/a11y-interaction.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FB-02 | 네이티브 대화상자는 PWA 설치 흐름을 깨고 스타일 제어 불가. 커스텀 모달은 포커스 트랩 + Escape + 배경 클릭 닫기 포함 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js<br>tools/check/check_ui_style.js | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FB-03 | `animationend` 리스너로 클래스 해제 — `display:none` 상태에서는 애니메이션이 안 돌아 첫 실제 표시에 실행됨. `prefers-reduced-motion`에서는 자동으로 0.01ms 처리됨 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/ui-utils.js | tests/e2e/reader-markers.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
@@ -1106,11 +1107,12 @@
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
-소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 5개 — 테스트 백로그 후보.
+소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 6개 — 테스트 백로그 후보.
 
 | ID | 절 | 구현 소스 |
 |----|-----|-----------|
 | CS-12 | 5.4 콘텐츠 구조 | tools/check/check_numbering.js |
+| UX-CTL-07 | 4.8 UI/UX 설계 요구사양 | css/exams/carework/care-tools.css |
 | UX-FB-07 | 4.8 UI/UX 설계 요구사양 | src/views/textbook-reader.js |
 | UX-FB-08 | 4.8 UI/UX 설계 요구사양 | src/views/dashboard-queue.js |
 | UX-VFY-07 | 4.8 UI/UX 설계 요구사양 | tools/check/check_nav_icons.js |
