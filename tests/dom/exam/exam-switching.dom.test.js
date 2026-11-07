@@ -6,7 +6,7 @@
 
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 
-import { loadIndexHtml } from '../helpers.js';
+import { loadIndexHtml, stubRegistry } from '../helpers.js';
 import {
     getActiveExam, getActiveExamId, hasFeature, getExamAppName, scopedKey, unscopedKey,
 } from '../../../src/core/exam-context.js';
@@ -94,6 +94,27 @@ describe('멀티시험 전환 — 비기본 시험 활성화', () => {
         }
         // 시험 전환 버튼은 시험 수(2개) 기반으로 노출
         expect(hidden('examSwitch')).toBe(false);
+    });
+
+    it('applyFeatureFlags — data-needs는 stats 합계 0이면 숨김, 충원 시험은 표시 (UX-NAV-16)', () => {
+        localStorage.setItem('current_exam', 'insadj');
+        const cards = document.querySelectorAll('[data-needs="cards"]');
+        const quizzes = document.querySelectorAll('[data-needs="quizzes"]');
+        expect(cards.length).toBeGreaterThan(0);
+        expect(quizzes.length).toBeGreaterThan(0);
+
+        // 문항 0 시험(carework 형태) — 빈 뷰로 이어지는 카드·퀴즈 메뉴 숨김
+        stubRegistry([{ key: 's1', name: 'S1' }]);
+        applyFeatureFlags();
+        expect([...cards].every(n => n.classList.contains('is-hidden'))).toBe(true);
+        expect([...quizzes].every(n => n.classList.contains('is-hidden'))).toBe(true);
+
+        // 문항 충원 시험 — 표시 유지 (is-hidden은 누적이므로 재부팅 상태를 흉내 내 해제 후 재적용)
+        document.querySelectorAll('.is-hidden').forEach(n => n.classList.remove('is-hidden'));
+        stubRegistry([{ key: 's1', name: 'S1', cards: [{}], quizzes: [{}] }]);
+        applyFeatureFlags();
+        expect([...cards].every(n => n.classList.contains('is-hidden'))).toBe(false);
+        expect([...quizzes].every(n => n.classList.contains('is-hidden'))).toBe(false);
     });
 
     it('applyExamBranding — 미선택이면 시험 브랜드 대신 플랫폼 브랜드', () => {

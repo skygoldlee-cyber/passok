@@ -265,5 +265,15 @@ export function applyFeatureFlags() {
                 : hasFeature(el.dataset.feature));
         if (!on) el.classList.add('is-hidden');
     });
+    // 콘텐츠 의존 내비 — 레지스트리 stats 합계가 0이면 빈 뷰로 이어지는 메뉴 숨김 (UX-NAV-16).
+    // 시험 팩 선언 없이 데이터가 판정 — 문항이 채워지면 자동 재표시. stats 부재 시 미터치(보수적).
+    const subjects = (DataLoader.registry && DataLoader.registry.subjects) || [];
+    if (subjects.some(s => s.stats)) {
+        const statTotal = (key) => subjects.reduce((n, s) => n + ((s.stats && s.stats[key]) || 0), 0);
+        document.querySelectorAll('[data-needs]').forEach(node => {
+            const el = /** @type {HTMLElement} */ (node);
+            if (statTotal(el.dataset.needs) === 0) el.classList.add('is-hidden');
+        });
+    }
 }
 

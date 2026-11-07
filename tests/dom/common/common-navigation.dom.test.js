@@ -159,28 +159,30 @@ describe('사이드바 ↔ 모바일 탭 바 메뉴 일치', () => {
         });
     });
 
-    it('내비게이션 3그룹 분류 — 사이드바·더보기 시트가 동일 그룹 라벨을 사용한다 (UX-NAV-12)', () => {
+    it('내비게이션 4그룹 분류 — 사이드바·더보기 시트가 동일 그룹 라벨을 사용한다 (UX-NAV-12)', () => {
         const labels = (sel) => [...document.querySelectorAll(sel)]
             .map(el => el.textContent.trim());
         const sidebar = labels('.nav-group-label');
         const sheet = labels('#mobile-more-sheet .more-sheet-label');
-        const CORE = ['학습', '훈련 · 평가', '자료 · 도구'];
+        // 내 현황(상태 확인) / 학습(실행) / 훈련 · 평가 / 자료 · 도구 — UX-NAV-12
+        const CORE = ['내 현황', '학습', '훈련 · 평가', '자료 · 도구'];
 
-        // 핵심 3그룹이 양쪽 표면에 존재하고 순서가 동일해야 함
+        // 핵심 4그룹이 사이드바에 존재하고 선언 순서를 지켜야 함
         CORE.forEach(g => {
             expect(sidebar, `사이드바에 '${g}' 그룹 라벨 누락`).toContain(g);
-            expect(sheet, `더보기 시트에 '${g}' 그룹 라벨 누락`).toContain(g);
         });
-        // 상대 순서 동일 — 각 그룹 라벨의 인덱스가 양쪽에서 엄격 증가
-        const isIncreasing = (list) => CORE.map(g => list.indexOf(g))
+        const isIncreasing = (list, order) => order.map(g => list.indexOf(g))
             .every((idx, i, a) => i === 0 || idx > a[i - 1]);
-        expect(isIncreasing(sidebar)).toBe(true);
-        expect(isIncreasing(sheet)).toBe(true);
+        expect(isIncreasing(sidebar, CORE)).toBe(true);
 
-        // 시트의 학습 모드 그룹은 사이드바 라벨 집합에 모두 포함돼야 함
+        // 시트는 멤버가 있는 그룹만 표기 (탭 바로 간 그룹은 생략 가능) —
+        // 시트 라벨은 사이드바 라벨의 부분집합이며 사이드바 순서를 따라야 함
         // ('기타'·'실무'는 모드/기능 게이트 라벨이라 공통 대상 아님)
-        sheet.filter(l => l !== '기타').forEach(l => {
+        const sheetStudy = sheet.filter(l => l !== '기타');
+        sheetStudy.forEach(l => {
             expect(sidebar, `시트 라벨 '${l}'이 사이드바에 없음`).toContain(l);
         });
+        const orderIdx = sheetStudy.map(l => sidebar.indexOf(l));
+        expect(orderIdx).toEqual([...orderIdx].sort((a, b) => a - b));
     });
 });
