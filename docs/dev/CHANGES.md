@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 fix(reader): 표준형 선택 시에도 story_textbook PRO 배지가 붙던 표시 오류
+
+- 형식 셀렉트 옆 배지를 `#reader-format-pro-wrap` 래퍼로 감싸고 선택값에 따라 토글 — 이야기형/웹툰형 선택 시에만 PRO 표시, 표준형은 무료로 표기
+- 플랜 배지의 `is-hidden` 토글과 충돌하지 않도록 래퍼 단위 숨김 (refreshProBadges는 내부 배지만 제어)
+
 ## 2026-11-07 fix(carework): escape-sink 규약 — 완료 메시지 보간 esc 누락 (CI escape-check 후속)
 
 ## 2026-11-07 fix(pro): AI 약점 미니퀴즈 게이트 불일치 — 전용 플랜 키 ai_gen_quiz 부여

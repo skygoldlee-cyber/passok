@@ -388,8 +388,16 @@ export function renderTextbookReader() {
         fmtSel.dataset.bound = 'true';
         fmtSel.value = textbookReaderState.webtoonMode ? 'webtoon'
             : (textbookReaderState.storyMode ? 'story' : 'standard');
+        // PRO 배지는 서사 형식 선택 시에만 표시 — 표준형 선택 상태에서 셀렉트 전체가
+        // 유료처럼 보이는 것을 방지 (래퍼 토글이라 플랜 배지의 is-hidden 토글과 충돌 없음)
+        const fmtProWrap = document.getElementById('reader-format-pro-wrap');
+        const syncFmtPro = () => {
+            if (fmtProWrap) fmtProWrap.classList.toggle('is-hidden', fmtSel.value === 'standard');
+        };
+        syncFmtPro();
         fmtSel.addEventListener('change', (e) => {
             const fmt = (/** @type {HTMLSelectElement} */ (e.target)).value;
+            syncFmtPro();
             if (fmt === 'story') {
                 trackAction('story_textbook');
                 proFeatureNotice('story_textbook', '이야기형 교재 본문 읽기');
