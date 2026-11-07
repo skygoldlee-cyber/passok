@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: e9aa1312409acf12
-> 생성: 2026-11-06 · 원천: SPEC.md(682개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: a70d614fc6d847fe
+> 생성: 2026-11-07 · 원천: SPEC.md(683개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 682개 — 문서 연결 464 · 소스 연결 606 · 테스트 연결 648 · 보고서 연결 109
+**커버리지 요약**: 요구사항 683개 — 문서 연결 464 · 소스 연결 606 · 테스트 연결 648 · 보고서 연결 109
 
 ---
 
@@ -769,10 +769,11 @@
 | UX-NAV-09 | 인플로우 크롬은 본문 높이를 영구 잠식하고, transform만 적용한 숨김은 공간을 회수하지 못함(실측: 본문 63%→89% vh). 오버레이 시 콘텐츠 스크롤 컨테이너에 `padding-top`=크롬 높이를 줘 첫 화면이 크롬 아래 묻히지 않게 함 — 패딩은 스크롤과 함께 밀려나므로 읽는 중 잠식 0. 크롬 아래를 지나는 다른 오버레이(섹션 표시줄 등)는 `~` 시빌링 셀렉터로 숨김 상태와 위치를 연동할 것 | E2E 테스트 | DOC-DSN-25 | css/reader.css | tests/e2e/toc-sidebar.spec.js | — | — |
 | UX-NAV-10 | 성분사전 검색 행이 버튼 4개(초기화·CSV·전체 CSV·성분 추가)를 nowrap으로 나열해 모바일에서 '성분 추가'가 잘린 실사례. `text-overflow:ellipsis` 말줄임과 가로 스크롤 컨테이너(표 wrapper 등)는 의도된 클립이라 예외. E2E 스윕(`mobile-overflow.spec.js`)이 전 뷰를 프로젝트 뷰포트별로 실측 | E2E 테스트 | DOC-DSN-25 | — | tests/e2e/mobile-overflow.spec.js | — | — |
 | UX-NAV-11 | UX-NAV-05의 실측 확장 — 탭 바 위치 계약을 요소 단위로 검증. 스크롤 컨테이너 가장자리 클립은 스크롤로 도달 가능하므로 예외, 일시 오버레이(토스트·오프라인 배너)는 소멸성이라 예외. E2E(`mobile-overflow.spec.js`)가 전 뷰의 상호작용 요소를 `scrollIntoView`+히트 테스트로 순회 | E2E 테스트 | DOC-DSN-25 | — | tests/e2e/mobile-overflow.spec.js | — | — |
-| UX-NAV-12 | 그룹 라벨은 `index.template.html`의 `.nav-group-label` 정적 마크업 — 모바일 시트는 동일 DOM 슬롯을 공유해 분류가 대역 간 자동 일치. 표시명만 바뀌고 `data-target`·라우트 ID는 불변 | 테스트 | DOC-DSN-21<br>DOC-DSN-25 | — | tests/dom/common/common-navigation.dom.test.js | — | — |
+| UX-NAV-12 | 그룹 라벨은 `index.template.html`의 `.nav-group-label` 정적 마크업 — 모바일 시트는 멤버가 있는 그룹만 표기하고 라벨·상대 순서는 사이드바를 따른다. 표시명만 바뀌고 `data-target`·라우트 ID는 불변 | 테스트 | DOC-DSN-21<br>DOC-DSN-25 | — | tests/dom/common/common-navigation.dom.test.js | — | — |
 | UX-NAV-13 | `html/views/{quiz,exam,trainer,review}.html` 정적 문구 — manifest `uiText` subtitle과 별도 본문 표기라 `check:uitext` 비대상 | 테스트 | DOC-DSN-21<br>DOC-DSN-25 | — | tests/dom/study/study-review.dom.test.js | — | — |
 | UX-NAV-14 | `html/views/trainer.html` 정적 구조 — 카드 DOM·`data-click`·`data-feature`·배지 id 불변, 그룹 이동만. 라벨은 본문 텍스트라 `check:uitext` 비대상 | E2E 테스트 | DOC-DSN-21<br>DOC-DSN-25 | css/trainer.css<br>html/views/trainer.html<br>index.html | tests/dom/study/study-trainer.dom.test.js<br>tests/e2e/app.spec.js | — | — |
 | UX-NAV-15 | 3대역 네비게이션은 같은 표면의 3형태(UX-NAV-01) — 한 대역의 크롬 배치가 빠지면 대역 전환 시 학습된 위치가 소실되고, 모드별 메뉴 스왑(DA-20) 구조에서는 복귀 경로 자체가 끊긴다 (모드 토글 실사례: 모바일·태블릿은 설정이 유일 경로 + 실무 모드에서 더보기도 `nav-study-only`로 소실 → 탭바 우측 `.mobile-tab-mode` sticky 탭·태블릿 상단 바 우측 푸터 토글로 확장, UM-05). 신규 전역·크롬 기능은 3대역 배치를 함께 설계할 것 | E2E 테스트 | — | css/app-responsive.css<br>css/base.css<br>index.html | tests/dom/common/common-uimode.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
+| UX-NAV-16 | 레지스트리 stats는 build:data 산출 — 카드·퀴즈 0인 시험(carework)은 해당 메뉴가 내비에서 사라지고 뷰는 직접 라우트로만 진입(빈 상태 표시). 탭바 슬롯이 비어도 나머지 탭 순서는 유지 | — | — | — | — | — | — |
 | UX-PWA-01 | 모바일 OS(Android/iOS)는 웹의 자체 종료를 차단 — 프로그래밍으로 완전 종료 불가. 데스크톱 설치 PWA는 `close()`가 동작하므로 모바일 안내는 불필요. 차단되면 "최근 앱 목록에서 밀어 닫으세요"(터치)/"창을 닫아주세요"(데스크톱) 안내 화면으로 대체하는 것이 최선 | E2E 테스트 | DOC-DSN-25 | src/shell/app.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-PWA-02 | 브라우저 탭에서 의미 없는 버튼(앱 종료 등)을 숨겨 혼란 방지. iOS는 `navigator.standalone`만 지원하므로 둘 다 확인 필수 | E2E 테스트 | DOC-DSN-25 | src/pwa/pwa-install.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-PWA-03 | "배포했는데 안 바뀐다" 보고의 대부분이 이 패턴. 사용자 안내 문구와 업데이트 토스트 필수 | E2E 테스트 | DOC-DSN-25 | sw.js<br>tools/check/check_perf_budget.js | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
