@@ -274,6 +274,7 @@ function _renderWeakStatementInsight() {
             <div class="clinic-actions">
                 ${(subj && chapter) ? `<button class="btn btn-secondary btn-sm" data-click="openSubjectSection" data-args='${esc(JSON.stringify([subj, chapter]))}'><i class="fa-solid fa-book-open" aria-hidden="true"></i> 교재</button>` : ''}
                 ${anchor ? `<button class="btn btn-secondary btn-sm" data-click="gotoOxDrill" data-arg="concept:${esc(anchor)}"><i class="fa-solid fa-bullseye" aria-hidden="true"></i> 이 개념 드릴</button>` : ''}
+                ${hasFeature('careFlow') ? `<button class="btn btn-secondary btn-sm" data-click="startConceptFlow"><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i> 개념 학습으로 보강</button>` : ''}
             </div></div>`;
     }
     const anomalousNoteHtml = anomalous.length > 0

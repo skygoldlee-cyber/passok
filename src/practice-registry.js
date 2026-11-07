@@ -413,7 +413,7 @@ const careFlow = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-flow.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['flowBack', 'flowNext', 'flowOpt', 'flowDontKnow', 'flowNextConcept', 'startConceptFlow']]],
+    handlers: [['main', ['flowBack', 'flowNext', 'flowOpt', 'flowDontKnow', 'flowNextConcept', 'startConceptFlow', 'flowRec', 'flowLgToggle']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);

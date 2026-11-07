@@ -138,6 +138,41 @@ function _slotFor(c) {
     return _slots && _slots[n - 1] ? _slots[n - 1] : null;
 }
 
+/** 글자 크게 토글 — DOC-USR-22 §8 확대 옵션 (시험 스코프 저장) */
+export function flowLgToggle() {
+    _applyLg(getItem('flow_lg') !== '1');
+    setItem('flow_lg', getItem('flow_lg') === '1' ? '0' : '1');
+}
+function _applyLg(on) {
+    const st = document.getElementById('flow-stage');
+    const btn = document.getElementById('flow-lg-btn');
+    if (st) st.classList.toggle('flow-lg', on);
+    if (btn) { btn.textContent = on ? '글자 보통' : '글자 크게'; btn.setAttribute('aria-pressed', String(on)); }
+}
+
+/** 홈 추천 — 개념 미선택 시: 복습 도래 → 취약 → 첫 미완료 순으로 제안 */
+function _homeRecHtml() {
+    if (!_concepts || !_concepts.length) return '<p class="wb-scene">위에서 개념을 선택하세요.</p>';
+    const p = _prog(), rv = _rv(), t = todayKey();
+    const due = _concepts.find(x => rv[x.id] && rv[x.id].due <= t);
+    const weak = _concepts.find(x => p[x.id] && p[x.id].weak && !p[x.id].mastered);
+    const undone = _concepts.find(x => !(p[x.id] && p[x.id].mastered));
+    const rec = due || weak || undone;
+    if (!rec) return '<p class="wb-scene">모든 개념을 완료했습니다 — 훌륭합니다.</p>';
+    const why = rec === due ? '복습할 시간이 된 개념입니다'
+        : rec === weak ? '취약 표시된 개념입니다'
+        : '처음 배울 개념입니다';
+    return `<div class="flow-rec">
+        <p class="wb-scene">어디서부터 시작할지 모르시면 추천 개념부터 해보세요</p>
+        <p class="flow-rec-why">${why}</p>
+        <p class="flow-rec-title">Ch${esc(rec.chapter)} · ${esc(rec.title)}</p>
+        <button class="btn btn-primary" data-click="flowRec" data-arg="${esc(rec.id)}">이 개념부터 시작 ▶</button>
+        <p class="wb-scene">또는 위에서 직접 개념을 골라도 됩니다</p>
+    </div>`;
+}
+/** 추천 카드 진입 — _selectConcept으로 셀렉트 동기화 후 pick */
+export function flowRec(id) { _selectConcept(id); }
+
 /** 미리풀기 문항 — authored pre 우선, 없으면 은행 태그 문항을 인터랙티브로 */
 function _preItemFor(c) {
     const it = _conceptItems(c, 'pre')[0];
@@ -202,7 +237,8 @@ function _render() {
         next.disabled = !c || (step === 'pre' && !!_preItem && !_answered)
             || (step === 'scenario' && !!_scItem && !_answered);
     }
-    if (!c) { st.innerHTML = '<p class="wb-scene">위에서 개념을 선택하세요.</p>'; return; }
+    _applyLg(getItem('flow_lg') === '1');
+    if (!c) { st.innerHTML = _homeRecHtml(); return; }
     const p = _prog()[c.id] || {};
 
     if (step === 'home') {
@@ -218,8 +254,9 @@ function _render() {
             : '<p class="wb-scene">선행 문항이 없습니다 — 이야기로 넘어가세요.</p>';
     } else if (step === 'story') {
         const slot = _slotFor(c);
+        const dkNote = p.preDk ? '<p class="wb-scene">몰라도 괜찮아요 — 이야기로 쉽게 설명해드릴게요.</p>' : '';
         st.innerHTML = slot
-            ? `<div class="webtoon-reader">${renderSlotHtml(slot, _chars())}</div>`
+            ? dkNote + `<div class="webtoon-reader">${renderSlotHtml(slot, _chars())}</div>`
             : `<div class="wb-scene wb-scene-title">${esc(c.title)}</div><p class="wb-scene">이 개념에 연결된 이야기 장면이 없습니다.</p>`;
     } else if (step === 'summary') {
         const key = _conceptItems(c, 'scenario').concat(_conceptItems(c, 'review'))[0];
@@ -227,7 +264,11 @@ function _render() {
         st.innerHTML = `<div class="wb-scene wb-scene-title">핵심 요약</div><div class="wb-scene">${esc(c.title)}</div>` +
             (key ? `<p class="wb-scene">포인트 — ${esc(key.stem.slice(0, 80))}… → <b>${esc(good)}</b></p>` : '');
     } else if (step === 'scenario') {
-        st.innerHTML = _scItem ? _quizHtml(_scItem) : '<p class="wb-scene">시나리오 문항이 없습니다.</p>';
+        // 직전 오답 해설 재확인 — 재도전 문항 위에 접이식으로 노출 (오답 피드백 경로)
+        const lw = p.lastWrong;
+        const again = lw ? `<details class="flow-again"><summary>방금 문제 해설 보기</summary>
+            <p>${esc(lw.stem)}…</p><p class="flow-again-ans">정답 — ${esc(lw.ans)}</p></details>` : '';
+        st.innerHTML = _scItem ? again + _quizHtml(_scItem) : '<p class="wb-scene">시나리오 문항이 없습니다.</p>';
     } else if (step === 'result') {
         st.innerHTML = _resultHtml();
     } else {
@@ -242,7 +283,13 @@ function _render() {
         const msg = done ? '정답으로 마쳤어요 — 잘하셨습니다.'
             : _scWrong >= MAX_WRONG ? '이 개념은 다음에 먼저 다시 나와요.'
             : '이 개념 학습을 마쳤어요.';
+        // 완료 집계 + 다음 복습 예정일 — 효능감(진행 체감) 표시
+        const rv = (_rv() || {})[c.id];
+        const doneN = Object.values(p2).filter(r => r && r.mastered).length;
+        const leftN = Math.max(0, _concepts.length - doneN);
+        const dueTxt = rv ? ` · ${rv.due.slice(5).replace('-', '/')}에 다시 나와요` : '';
         st.innerHTML = `<div class="wb-scene wb-scene-title">학습 완료 — ${esc(c.title)}</div><p class="wb-scene">${esc(msg)}</p>
+            <p class="flow-sum">지금까지 ${doneN}개 완료 · 남은 개념 ${leftN}개${dueTxt}</p>
             <button class="btn btn-primary flow-next-concept" data-click="flowNextConcept">다음 개념으로 ▶</button>`;
     }
 }
@@ -257,7 +304,7 @@ export function flowNext() {
         const correct = !_dk && _sel === _ansIdx(_preItem);
         _rec(_preItem.id || 'pre', _dk ? -1 : _sel, correct, _dk);
         const p = _prog(); const rec = p[_c.id] || {};
-        rec.preOk = correct; rec.lastSeen = Date.now();
+        rec.preOk = correct; rec.preDk = !!_dk; rec.lastSeen = Date.now();
         p[_c.id] = rec; _save(p);
         _stage(correct ? 'summary' : 'story');
         _i = STEPS.indexOf(correct ? 'summary' : 'story');
@@ -271,6 +318,9 @@ export function flowNext() {
         _rec(_scItem.id, _sel, correct, false);
         const p = _prog(); const rec = p[_c.id] || {};
         rec.attempts = (rec.attempts || 0) + 1; rec.lastSeen = Date.now();
+        // 직전 오답 요약 — 재도전 시나리오 상단 재확인용
+        rec.lastWrong = correct ? null
+            : { stem: String(_scItem.stem).slice(0, 100), ans: _scItem.options[_ansIdx(_scItem)] || '' };
         p[_c.id] = rec; _save(p);
         _stage('result');
         _i = STEPS.indexOf('result');
@@ -377,8 +427,14 @@ export async function initCareFlowView() {
     const refill = () => {
         sel.innerHTML = '';
         sel.add(new Option('— 개념을 고르세요 —', ''));
+        // 상태 접두 — 진도가 선택 단계에서도 보이게 (✓ 완료 · ↻ 복습 예정 · ! 취약)
+        const p = _prog(), rv = _rv(), t = todayKey();
         cs.filter(c => String(c.subject) === (subjSel.value || '1'))
-            .forEach(c => sel.add(new Option(`Ch${c.chapter} ${c.title}`, c.id)));
+            .forEach(c => {
+                const r = p[c.id] || {};
+                const mark = r.mastered ? '✓ ' : (rv[c.id] && rv[c.id].due <= t ? '↻ ' : (r.weak ? '! ' : ''));
+                sel.add(new Option(`${mark}Ch${c.chapter} ${c.title}`, c.id));
+            });
     };
     if (!subjSel.options.length) {
         const subs = [...new Set(cs.map(c => c.subject))].sort();

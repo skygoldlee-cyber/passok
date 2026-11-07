@@ -115,10 +115,13 @@ describe('care-flow 4단계 뷰 상태머신', () => {
         expect(stage().innerHTML).toContain('wb-bubble'); // story로 복귀
     });
 
-    it('개념 미선택 상태 — 안내 문구 렌더', async () => {
+    it('개념 미선택 상태 — 추천 개념 카드 렌더 (복습 도래→취약→미완료)', async () => {
         const m = await import('../../../../src/exams/carework/views/care-flow.js');
         await m.initCareFlowView();
-        expect(stage().textContent).toContain('개념을 선택하세요');
+        // 개념 미선택 시 추천 카드 — 첫 미완료 개념을 제안하고 flowRec로 진입
+        expect(stage().textContent).toContain('추천 개념');
+        expect(stage().innerHTML).toContain('data-click="flowRec"');
+        expect(stage().textContent).toContain('처음 배울 개념입니다');
     });
 
     it('과목 필터 — 해당 과목 개념만 셀렉트에 표시', async () => {

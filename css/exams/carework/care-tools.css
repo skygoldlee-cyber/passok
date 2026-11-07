@@ -292,12 +292,12 @@
 
 /* ── 개념 학습 4단계 (care-flow) — 40~50대 터치·가독성 기준 (DOC-USR-22 §8) ── */
 .flow-progress { display: flex; gap: 6px; flex-wrap: wrap; margin: var(--gap-group) 0; }
-.flow-step { font-size: .78rem; padding: 3px 10px; border-radius: 999px; background: var(--bg-elevated); color: var(--color-text-dim); }
+.flow-step { font-size: .9rem; padding: 4px 11px; border-radius: 999px; background: var(--bg-elevated); color: var(--color-text-dim); }
 .flow-step.on { background: var(--primary-tint-20, rgba(74,108,168,.2)); color: var(--color-primary); font-weight: 700; }
 .flow-quiz { display: flex; flex-direction: column; gap: var(--gap-ctl); }
-.flow-stem { font-size: 1.05rem; font-weight: 700; line-height: 1.6; color: var(--color-text-main); background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 14px; }
+.flow-stem { font-size: 1.15rem; font-weight: 700; line-height: 1.6; color: var(--color-text-main); background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 14px; }
 .flow-opt {
-    width: 100%; min-height: 56px; text-align: left; font-size: 1rem; line-height: 1.5;
+    width: 100%; min-height: 56px; text-align: left; font-size: 1.25rem; line-height: 1.4;
     padding: 12px 14px; border: 1.5px solid var(--border-color); border-radius: 10px;
     background: var(--bg-card); color: var(--color-text-main); cursor: pointer;
 }
@@ -309,6 +309,28 @@
 .flow-hint { font-size: .85rem; color: var(--color-text-dim); align-self: center; }
 .flow-next-concept { margin-top: var(--gap-group); align-self: center; min-height: var(--control-h-lg, 56px); padding: 0 22px; font-size: 1rem; }
 #flow-actions .btn { flex: 1; min-height: var(--control-h-lg, 56px); font-size: 1rem; }
+
+/* 글자 크게 토글 — #flow-stage.flow-lg (DOC-USR-22 §8 확대 옵션) */
+#flow-stage.flow-lg .flow-stem { font-size: 1.35rem; }
+#flow-stage.flow-lg .flow-opt { font-size: 1.45rem; min-height: 64px; }
+#flow-stage.flow-lg .flow-verdict { font-size: 1.25rem; }
+#flow-stage.flow-lg .wb-scene { font-size: 1rem; }
+#flow-stage.flow-lg .wb-bubble { font-size: 1.1rem; }
+
+/* 홈 추천 카드 — 개념 미선택 시 진입 안내 */
+.flow-rec { display: flex; flex-direction: column; gap: var(--gap-ctl); align-items: center; }
+.flow-rec-why { font-size: .9rem; color: var(--color-primary); font-weight: 700; }
+.flow-rec-title { font-size: 1.15rem; font-weight: 800; color: var(--color-text-main); }
+.flow-rec .btn { min-height: 56px; padding: 0 24px; font-size: 1.05rem; }
+
+/* 방금 해설 재확인 — 재도전 시나리오 상단 접이식 */
+.flow-again { background: var(--bg-card); border: 1px dashed var(--border-subtle); border-radius: 10px; padding: 10px 14px; font-size: .95rem; color: var(--color-text-main); }
+.flow-again summary { cursor: pointer; font-weight: 700; color: var(--color-primary); min-height: 44px; display: flex; align-items: center; }
+.flow-again .flow-again-ans { color: var(--color-success); font-weight: 700; }
+
+/* 완료 요약·복습 예정 */
+.flow-sum { align-self: center; font-size: .95rem; color: var(--color-text-main); background: var(--bg-elevated); border-radius: 10px; padding: 10px 16px; }
+.flow-due { align-self: center; font-size: .85rem; color: var(--color-text-dim); }
 
 /* ── 웹툰 버블 뷰 (care-webtoon) ── */
 .webtoon-controls { display: flex; gap: var(--gap-group); flex-wrap: wrap; margin: var(--gap-group) 0 var(--space-1); }

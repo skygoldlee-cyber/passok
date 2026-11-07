@@ -99,8 +99,10 @@ export function buildTodayQueue(p = {}) {
         push({
             kind: 'flow',
             icon: 'fa-book-open-reader', color: 'var(--color-success)',
-            title: `개념 학습 이어하기`,
-            reason: r.weak ? `${r.title} — 취약 표시된 개념입니다` : `${r.title} — 진행 중인 단계부터 이어집니다`,
+            title: r.due ? `개념 학습 복습` : `개념 학습 이어하기`,
+            reason: r.due ? `${r.title} — 복습할 시간이 됐습니다`
+                : r.weak ? `${r.title} — 취약 표시된 개념입니다`
+                : `${r.title} — 진행 중인 단계부터 이어집니다`,
             actions: [{ click: 'startConceptFlow', arg: r.id, label: '이어하기', icon: 'fa-play', cls: 'btn-primary' }]
         });
     }
@@ -325,7 +327,10 @@ export function renderTodayQueue(subjects) {
             const pool = dueRecs.length ? dueRecs : (weakFirst.length ? weakFirst : recs);
             pool.sort((a, b) => (b[1].lastSeen || 0) - (a[1].lastSeen || 0));
             const top = pool[0];
-            if (top) flowResume = { id: top[0], title: top[1].title || top[0], weak: !!top[1].weak };
+            if (top) flowResume = {
+                id: top[0], title: top[1].title || top[0], weak: !!top[1].weak,
+                due: !!(fr[top[0]] && fr[top[0]].due <= t)
+            };
         } catch { /* 진행 기록 손상 시 큐 항목 생략 */ }
     }
 
