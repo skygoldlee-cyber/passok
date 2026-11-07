@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261107-2f48d94",
+    "date": "2026-11-07",
+    "notes": [
+      "[테스트·e2e] PRO 배지 계측 스펙 — 서사 형식 선택 후 배지 표시 확인으로 갱신",
+      "[수정·reader] 표준형 선택 시 story_textbook PRO 배지가 붙던 표시 오류 [no-test]",
+      "[정리·release] v20261107-5591cba 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-5591cba",
     "date": "2026-11-07",
     "notes": [
@@ -185,16 +194,6 @@
       "[수정·test] care-share xlsx 날짜 — UTC→로컬 todayKey 정합",
       "[기능·carework] 서명 이미지 피커 — 버튼 스타일 + 숨긴 file input + 피커 테스트",
       "[정리·release] v20261106-8600a6e 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261106-8600a6e",
-    "date": "2026-11-06",
-    "notes": [
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[기능·ref-pipeline] 버튼 호버·프레스드 피드백 + 드롭 하이라이트 + 테스트",
-      "[리팩터링·carework] 2과목 명칭 변경 — 요양보호관련 → 요양보호실기 (파일명·manifest·뷰 일괄)",
-      "[정리·release] v20261106-9285aa5 스탬프 확정 [no-docs]"
     ]
   }
 ]
