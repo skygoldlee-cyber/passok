@@ -10,6 +10,7 @@ import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 import { docMdHead, docMdSign, csvToMdTable, mdToHtml } from '../doc-md.js';
+import { renderToolBody } from '../form-seeds.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -132,7 +133,7 @@ export function careVisitPrint() {
 export function careVisitDocMd() {
     const items = listVisits();
     if (!items.length) return '';
-    return docMdHead('면회·방문 기록') + '\n' + csvToMdTable(visitsToCsv(items)) + docMdSign([['작성자', 'author']]);
+    return docMdHead('면회·방문 기록') + '\n' + renderToolBody('careVisit', { 기록표: csvToMdTable(visitsToCsv(items)) }) + docMdSign([['작성자', 'author']]);
 }
 
 export function careVisitCsvExport() {

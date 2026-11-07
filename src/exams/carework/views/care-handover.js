@@ -14,6 +14,7 @@ import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
 import { careShare } from '../care-share.js';
 import { docMdHead, docMdSign } from '../doc-md.js';
+import { renderToolBody } from '../form-seeds.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare };
 
@@ -117,7 +118,7 @@ export function careHandoverCsvExport() {
 
 /** 인수인계서 MD 초안 — 헤더 + 생성문 (docx 파생 원본) */
 export function careHandoverDocMd() {
-    return _lastText ? docMdHead('인수인계서') + '\n' + _lastText + docMdSign([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver'], ['확인일', '']]) : '';
+    return _lastText ? docMdHead('인수인계서') + '\n' + renderToolBody('careHandover', { 인계내용: _lastText }) + docMdSign([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver'], ['확인일', '']]) : '';
 }
 
 /** 📤 공유·내보내기 게이트 — 기록 우선: 미저장 생성문은 자동 저장 후 careShare 위임 (저장 실패 시에만 차단) */

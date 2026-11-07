@@ -6,6 +6,7 @@ import { listRoster, saveRoster, removeRoster, upsertRoster, syncPendingRoster }
 import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docMdHead, csvToMdTable, mdToHtml, docMdSign } from '../doc-md.js';
+import { renderToolBody } from '../form-seeds.js';
 import { refreshOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
@@ -47,7 +48,7 @@ function renderPreview() {
 export function careRosterDocMd() {
     const items = listRoster();
     if (!items.length) return '';
-    return docMdHead('교대 근무표') + '\n' + csvToMdTable(rosterToCsv(items)) + docMdSign([['작성자', 'author']]);
+    return docMdHead('교대 근무표') + '\n' + renderToolBody('careRoster', { 근무표: csvToMdTable(rosterToCsv(items)) }) + docMdSign([['작성자', 'author']]);
 }
 
 /** 근무표 문서 미리보기 — 배정 목록을 문서로 렌더 (내보내기 메뉴 자동 생성기, 복사·인쇄·PDF 공통 원본) */

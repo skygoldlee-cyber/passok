@@ -296,6 +296,7 @@ src/                    # ES Modules
       form-template-store.js # 기관 자체 양식 템플릿·기입 문서 스토어 — {{키}} 파싱·치환·custom_form write-through (CO-17)
       form-template-editor.js # 양식 등록 편집기 공용 — 파일 추출 파이프라인 (PDF·DOCX·Excel → AI 초안, CO-17)
       care-form-pdf.js    # 양식 파일 추출 — pdf.js 텍스트·AcroForm + DOCX zip/OOXML + Excel SheetJS (CO-17)
+      form-seeds.js       # 내장 도구 표준 양식 시드·본문 오버라이드 — TOOL_FORM_SEEDS·renderToolBody (CO-18)
       roster-store.js     # 근무 배정 로컬 저장 — 무료 30건 한도 (Phase 6d)
       care-admit.js       # 서류체크 스키마 정본 — 수급자 서류현황·CSV (독립 뷰는 통합 폐지)
       care-finder.js      # 요양기관 찾기 — 공공데이터 시설 검색·기관명 연결 (Phase 6g)

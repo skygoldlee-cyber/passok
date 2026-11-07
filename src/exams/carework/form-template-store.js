@@ -56,8 +56,9 @@ const _sysValues = (client) => {
  * signImage는 mode 'html'이고 등록 이미지가 있으면 SIGN_MARK 자리표시 (fillTemplateHtml이 img로 치환),
  * md 경로(docx·복사)는 작성자 성명으로 기입 — docMdSign 정책과 동일.
  * @param {string} body @param {Object<string,string>} values @param {'md'|'html'} [mode]
+ * @param {Set<string>|null} [rawKeys] 정제 없이 통과시킬 블록 키 (CO-18 도구 조립 표·문단)
  */
-export function fillTemplate(body, values = {}, mode = 'md') {
+export function fillTemplate(body, values = {}, mode = 'md', rawKeys = null) {
     const sign = getDocSign();
     const sys = _sysValues(values.client);
     return String(body || '').replace(FIELD_RE, (m, k0) => {
@@ -67,6 +68,8 @@ export function fillTemplate(body, values = {}, mode = 'md') {
             return sign.author || '＿＿＿＿＿＿';
         }
         if (k in sys) return _safe(sys[k]) || '＿＿＿＿＿＿';
+        // rawKeys — 도구 조립 블록(표·문단)은 MD 구조 보존을 위해 정제 없이 통과 (CO-18)
+        if (rawKeys && rawKeys.has(k)) return String(values[k] ?? '');
         return _safe(values[k]) || '＿＿＿＿＿＿';
     });
 }
@@ -87,12 +90,14 @@ export function listFormTemplates() {
     return Array.isArray(v) ? v : [];
 }
 
-/** 로컬 양식 저장 — id 있으면 갱신, 없으면 신규. fields는 저장 시점 재추출 */
-export function addFormTemplate({ title, body }) {
+/** 로컬 양식 저장 — id 있으면 갱신, 없으면 신규. fields는 저장 시점 재추출.
+ * toolKey 지정 시 해당 도구 본문 오버라이드로 연동 (CO-18) */
+export function addFormTemplate({ title, body, toolKey = null }) {
     const items = listFormTemplates();
     if (items.length >= FREE_TPL_LIMIT)
         return { ok: false, error: `무료 양식 등록 한도(${FREE_TPL_LIMIT}건) 도달 — 삭제 후 재시도하세요.` };
     const it = { id: `ftpl_${Date.now().toString(36)}`, title: String(title || '').trim(), body: String(body || ''), scope: 'local', createdAt: localDateTime() };
+    if (toolKey) it.toolKey = toolKey;
     items.unshift(it);
     setJSON(TPL_KEY, items);
     return { ok: true, id: it.id };

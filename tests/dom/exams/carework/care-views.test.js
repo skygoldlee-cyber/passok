@@ -698,6 +698,38 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(parseFormExtractResponse('{"title":""}')).toBeNull();
     });
 
+    // @spec CO-18 — 내장 양식 사본·출력 오버라이드
+    it('customForm — renderToolBody: 기본은 블록 그대로, toolKey 사본은 서식 오버라이드', async () => {
+        const { renderToolBody } = await import('../../../../src/exams/carework/form-seeds.js');
+        const { addFormTemplate, listFormTemplates, removeFormTemplate } =
+            await import('../../../../src/exams/carework/form-template-store.js');
+        for (const t of listFormTemplates()) removeFormTemplate(t.id);
+        // 사본 없음 — 기본: 블록 값 그대로
+        expect(renderToolBody('careVisit', { 기록표: '|날|값|' })).toBe('|날|값|');
+        // 사본 생성 — 도구 본문이 사본 서식으로 렌더
+        addFormTemplate({ title: '방문기록 커스텀', body: '기간: {{기간}}\n{{기록표}}\n메모: {{메모}}', toolKey: 'careVisit' });
+        const out = renderToolBody('careVisit', { 기록표: '|날|값|', 기간: '11월' });
+        expect(out).toContain('기간: 11월');
+        expect(out).toContain('|날|값|');
+        expect(out).toMatch(/메모: ＿+/); // 도구 미지급 키는 수기 공란
+        for (const t of listFormTemplates()) removeFormTemplate(t.id);
+    });
+
+    it('customForm — 기본 양식 사본 생성(연동 배지) + 시드 목록 렌더', async () => {
+        const { initCareCustomFormView, careFormSeedCopy } = await import('../../../../src/exams/carework/views/care-custom-form.js');
+        const { listFormTemplates, removeFormTemplate } = await import('../../../../src/exams/carework/form-template-store.js');
+        for (const t of listFormTemplates()) removeFormTemplate(t.id);
+        loadPartial('care-custom-form.html');
+        initCareCustomFormView();
+        expect(document.querySelectorAll('#cf-seed-list [data-click="careFormSeedCopy"]').length).toBe(6); // 6개 기본 양식
+        careFormSeedCopy('careIncident');
+        const tpl = listFormTemplates().find(t => t.toolKey === 'careIncident');
+        expect(tpl).toBeTruthy();
+        expect(tpl.title).toBe('사고·낙상 보고서');
+        expect(document.getElementById('cf-seed-list').innerHTML).toContain('사본 있음');
+        removeFormTemplate(tpl.id);
+    });
+
     it('customForm — textToTemplate이 라벨 패턴을 {{키}}로 변환 (AI 폴백)', async () => {
         const { textToTemplate } = await import('../../../../src/exams/carework/care-form-pdf.js');
         const t = textToTemplate('성명:\n생년월일: ＿＿＿＿', '동의서');

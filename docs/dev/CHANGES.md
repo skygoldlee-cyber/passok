@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-08 feat(carework): 내장 양식 사본 편집·출력 오버라이드 CO-18
+
+- SPEC CO-18 (v1.31) — 기본 양식 MD 공개·사본 편집·도구 출력 서식 연동
+- form-seeds.js — TOOL_FORM_SEEDS 레지스트리(6개 문서 도구) + renderToolBody 오버라이드 렌더 (toolKey 사본 시 서식 적용, 블록 키는 raw 통과로 MD 표 보존)
+- 6개 생성기(careLog·Visit·Handover·Incident·Audit·Roster DocMd) 본문을 renderToolBody 경유로 교체 — 사본 없으면 기존 출력과 동일
+- 기관 양식 뷰 "기본 양식" 섹션 — 사본 만들기·연동 배지, 사본은 CO-17 편집 이관(홈)으로 편집, 커스텀 기입에도 사용 가능
+- fillTemplate rawKeys 파라미터 — 도구 조립 블록(표·문단)의 파이프·개행 보존
+
 ## 2026-11-08 test(carework): CO-17 기입 플로우·편집 이관·DOCX 추출 테스트 — 커버리지 임계 충족
 
 - 기입 플로우 E2E(목록→선택→필드 렌더→문서 생성→저장→삭제), 편집 이관(커스텀폼→홈 pending 소비), extractFormDocx(stored zip→OOXML 파싱), AI 프롬프트·응답 파싱 계약 — CI 커버리지 임계(67%) 충족을 위한 신규 경로 커버

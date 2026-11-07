@@ -13,7 +13,9 @@ import {
     parseFields, fillTemplate, fillTemplateHtml,
     allFormTemplates, syncFormTemplates, setPendingTplEdit,
     listFormDocs, saveFormDoc, removeFormDoc, syncPendingFormDocs,
+    addFormTemplate,
 } from '../form-template-store.js';
+import { TOOL_FORM_SEEDS } from '../form-seeds.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -42,6 +44,19 @@ export function careFormTplEdit(id) {
     location.hash = '#/care-home';
 }
 
+/** 기본 양식 사본 생성 (CO-18) — 도구 표준 서식을 로컬 템플릿으로 복사, toolKey로 출력 오버라이드 연동 */
+export function careFormSeedCopy(toolKey) {
+    const def = TOOL_FORM_SEEDS[toolKey];
+    if (!def) return;
+    const dup = allFormTemplates().find(t => t.toolKey === toolKey);
+    if (dup) { setPendingTplEdit(dup); location.hash = '#/care-home'; return; } // 기존 사본 편집 이관
+    const r = addFormTemplate({ title: def.title, body: def.seed, toolKey });
+    if (!r.ok) { showToast(r.error, 'error'); return; }
+    showToast(`'${def.title}' 사본을 만들었습니다 — 편집하면 해당 도구 출력에도 반영됩니다.`);
+    renderTplList();
+    renderSeedList();
+}
+
 export async function careFormTplDelete(id) {
     const t = _tplById(id);
     if (!t) return;
@@ -65,12 +80,25 @@ function renderTplList() {
     const items = allFormTemplates();
     host.innerHTML = items.length
         ? items.map(t => `<div class="care-log-saved-item">
-            <span>${t.scope === 'fac' ? '<em class="care-card-cat">기관</em> ' : ''}${esc(t.title)} <small>${parseFields(t.body).length}개 항목</small></span>
+            <span>${t.scope === 'fac' ? '<em class="care-card-cat">기관</em> ' : ''}${t.toolKey ? `<em class="care-card-cat">${esc(TOOL_FORM_SEEDS[t.toolKey]?.title || '연동')}</em> ` : ''}${esc(t.title)} <small>${parseFields(t.body).length}개 항목</small></span>
             <button data-click="careFormTplUse" data-arg="${esc(t.id)}" class="btn">기입</button>
             <button data-click="careFormTplEdit" data-arg="${esc(t.id)}" class="btn btn-secondary">편집</button>
             <button data-click="careFormTplDelete" data-arg="${esc(t.id)}" class="btn btn-secondary">삭제</button>
           </div>`).join('')
         : '<p class="care-log-empty">등록된 양식이 없습니다 — 홈에서 양식 파일을 올리거나 직접 작성해 등록하세요.</p>';
+}
+
+/** 기본 양식(내장 도구 표준 서식) 목록 — 사본 생성 진입점 */
+function renderSeedList() {
+    const host = $('cf-seed-list');
+    if (!host) return;
+    host.innerHTML = Object.entries(TOOL_FORM_SEEDS).map(([key, def]) => {
+        const linked = allFormTemplates().find(t => t.toolKey === key);
+        return `<div class="care-log-saved-item">
+            <span>${esc(def.title)} ${linked ? '<em class="care-card-cat">사본 있음</em>' : '<small>표준 양식</small>'}</span>
+            <button data-click="careFormSeedCopy" data-arg="${esc(key)}" class="btn">${linked ? '사본 편집' : '사본 만들기'}</button>
+          </div>`;
+    }).join('');
 }
 
 function renderFillForm() {
@@ -152,6 +180,7 @@ export function initCareCustomFormView() {
     markFunnel('tool:care-custom-form');
     attachClientPicker(/** @type {HTMLInputElement|null} */ ($('cf-client')));
     renderTplList();
+    renderSeedList();
     renderFillForm();
     renderDocList();
     void refreshOrgName();
