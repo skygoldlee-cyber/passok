@@ -220,7 +220,7 @@ function _render() {
         const msg = done ? '정답으로 마쳤어요 — 잘하셨습니다.'
             : _scWrong >= MAX_WRONG ? '이 개념은 다음에 먼저 다시 나와요.'
             : '이 개념 학습을 마쳤어요.';
-        st.innerHTML = `<div class="wb-scene wb-scene-title">학습 완료 — ${esc(c.title)}</div><p class="wb-scene">${msg}</p>
+        st.innerHTML = `<div class="wb-scene wb-scene-title">학습 완료 — ${esc(c.title)}</div><p class="wb-scene">${esc(msg)}</p>
             <button class="btn btn-primary flow-next-concept" data-click="flowNextConcept">다음 개념으로 ▶</button>`;
     }
 }

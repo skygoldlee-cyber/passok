@@ -1,5 +1,7 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 fix(carework): escape-sink 규약 — 완료 메시지 보간 esc 누락 (CI escape-check 후속)
+
 ## 2026-11-07 fix(pro): AI 약점 미니퀴즈 게이트 불일치 — 전용 플랜 키 ai_gen_quiz 부여
 
 - `startWeakGenQuiz`가 `hasProEntitlement` 직접 검사 + `mock_exam`(free) 키 안내를 쓰던 문제 — 안내가 표시되지 않아 무료 사용자는 조용한 데드엔드였음
