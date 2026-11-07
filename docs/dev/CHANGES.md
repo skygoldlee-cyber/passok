@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 fix(reader): 모바일 과목 셀렉트 옵션 빈 상태 — 레지스트리 지연 로드 레이스
+
+- `renderTextbookReader()`가 `DataLoader.registry`를 동기로 읽어 비기본 시험 번들이 늦게 오면 옵션이 비는 경합 — `ensureRegistry()` 완료 후 재채움 + 선택 복원 (모바일 느린 타이밍 노출)
+
 ## 2026-11-07 fix(carework): 인라인 스타일 규약 — 글자 크게 버튼 align-self를 .flow-lg-btn으로 (CI 후속)
 
 ## 2026-11-07 fix(carework): escape-sink — 완료 요약 보간 esc 누락 (CI 후속)

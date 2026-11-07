@@ -302,16 +302,31 @@ export function renderTextbookReader() {
     subjectSelect.innerHTML = '<option value="">과목을 선택하세요</option>';
 
     // DataLoader를 사용하여 레지스트리 기반으로 과목 목록 구성
-    const subjects = (typeof DataLoader !== 'undefined' && DataLoader.registry)
-        ? DataLoader.getSubjectList()
-        : [];
-
-    subjects.forEach(subj => {
-        const option = document.createElement('option');
-        option.value = subj.key;
-        option.textContent = subj.name;
-        subjectSelect.appendChild(option);
-    });
+    const populateSubjects = () => {
+        subjectSelect.innerHTML = '<option value="">과목을 선택하세요</option>';
+        const subjects = (typeof DataLoader !== 'undefined' && DataLoader.registry)
+            ? DataLoader.getSubjectList()
+            : [];
+        subjects.forEach(subj => {
+            const option = document.createElement('option');
+            option.value = subj.key;
+            option.textContent = subj.name;
+            subjectSelect.appendChild(option);
+        });
+    };
+    populateSubjects();
+    // 레지스트리 지연 로드 레이스 — 비기본 시험 번들이 늦게 오면 옵션이 빈 채로 남는다
+    // (모바일 느린 타이밍). ensureRegistry 완료 후 한 번 재채움하고 이전 선택을 복원한다.
+    if (subjectSelect.options.length <= 1 && typeof DataLoader !== 'undefined' && DataLoader.ensureRegistry) {
+        Promise.resolve(DataLoader.ensureRegistry()).then(() => {
+            if (subjectSelect.options.length > 1) return;
+            populateSubjects();
+            if (textbookReaderState.selectedSubject
+                && subjectSelect.querySelector(`option[value="${textbookReaderState.selectedSubject}"]`)) {
+                subjectSelect.value = textbookReaderState.selectedSubject;
+            }
+        }).catch(() => { /* 레지스트리 실패 — 빈 안내 유지 */ });
+    }
 
     // Restore subject selection
     if (previousValue && subjectSelect.querySelector(`option[value="${previousValue}"]`)) {
