@@ -1,5 +1,16 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-08 feat(carework): 기관 자체 양식(커스텀 폼) CO-17 — 등록·기입·출력·기록 + 양식 파일 AI 추출
+
+- SPEC CO-17 신규 부여 (v1.30) — CO-11의 facility_templates 저장 수단 구현 관계 명문화
+- form-template-store.js — MD+`{{키}}` 템플릿 파싱(parseFields)·치환(fillTemplate/Html, 시스템 키 자동·미기입 공란·signImage→이미지/성명) + 로컬 양식·기입 문서 스토어 + custom_form write-through (CO-15 패턴)
+- facility.js — facility_form_templates CRUD (member read·manager write) + schema.sql 신규 테이블·facility_records doc_type 'custom_form' 확장 + author_id default auth.uid() 잠재 버그 수정
+- 양식 파일 입력: care-form-pdf.js — pdf.js 텍스트·AcroForm 추출 + DOCX(zip+OOXML 네이티브 해제)·Excel(SheetJS) — 자체 AI(ai-proxy form_extract kind, 구독자 고객지원) 템플릿 초안 → 검토 편집 → 저장. AI 불가 시 휴리스틱 폴백
+- ai-proxy form_extract kind + per-kind maxTokens, ai-client requestFormExtract (BYOK 미러 폴백)
+- care-custom-form 뷰 + registry·exams.json·manifest uiText·feature-plan(care_form_save/share/extract: pro) + storage-keys 백업 키
+- 홈 뷰 양식 등록 카드(입력 수용 — 서명 설정과 같은 설정 허브 패턴) + 사이드바·모바일 탭바 네비 통합 + 편집 이관(커스텀폼 → 홈)
+- vendor pdfjs-dist 3.11.174 추가 (UMD 마지막 계열, script 지연 로드)
+
 ## 2026-11-07 feat(carework): 서명 이미지 정규화 — 입력 형식 무관 WebP 변환·서명란 리사이즈
 
 - `signFileToDataUri` (facility.js) — 업로드 파일을 디코딩해 서명란 박스(480×84 = .care-doc-signimg 42px의 2배, 레티나·인쇄 대비)에 맞게 축소 후 WebP data URI로 변환, WebP 미지원 브라우저는 PNG 자동 폴백

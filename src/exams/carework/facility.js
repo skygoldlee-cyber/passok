@@ -344,3 +344,51 @@ export async function setDocWebhook(facilityId, url) {
     if (error) return { error: error.message };
     return { ok: true };
 }
+
+// — CO-17: 기관 자체 양식 템플릿 (facility_form_templates — member read·manager write) —
+
+/** 시설 양식 목록 — 멤버 열람 @returns {Promise<Array>} */
+export async function listFacilityFormTemplates(facilityId) {
+    const sb = await getSupabase();
+    const { data, error } = await sb
+        .from('facility_form_templates')
+        .select('id,title,body,author_id,updated_at')
+        .eq('facility_id', facilityId)
+        .order('updated_at', { ascending: false })
+        .limit(100);
+    if (error) throw new Error(`form_templates: ${error.message}`);
+    return data || [];
+}
+
+/** 기관 양식 등록 — manager 전용 (RLS) @returns {Promise<{id:string}|{error:string}>} */
+export async function submitFormTemplate({ facilityId, title, body }) {
+    const session = await _session();
+    if (!session) return { error: 'no-session' };
+    const sb = await getSupabase();
+    const { data, error } = await sb
+        .from('facility_form_templates')
+        .insert({ facility_id: facilityId, title: String(title || '').trim(), body: String(body || ''), author_id: session.user.id })
+        .select('id')
+        .single();
+    if (error) return { error: error.message };
+    return { id: data.id };
+}
+
+/** 기관 양식 수정 — manager 전용 (RLS) @returns {Promise<{ok?:boolean,error?:string}>} */
+export async function updateFacilityFormTemplate(id, { title, body }) {
+    const sb = await getSupabase();
+    const { error } = await sb
+        .from('facility_form_templates')
+        .update({ title: String(title || '').trim(), body: String(body || ''), updated_at: new Date().toISOString() })
+        .eq('id', id);
+    if (error) return { error: error.message };
+    return { ok: true };
+}
+
+/** 기관 양식 삭제 — manager 전용 (RLS) @returns {Promise<{ok?:boolean,error?:string}>} */
+export async function deleteFacilityFormTemplate(id) {
+    const sb = await getSupabase();
+    const { error } = await sb.from('facility_form_templates').delete().eq('id', id);
+    if (error) return { error: error.message };
+    return { ok: true };
+}

@@ -148,6 +148,14 @@
       "error": "서식 모음을 불러오지 못했습니다.",
       "dataError": "데이터를 불러오지 못했습니다."
     },
+    "careCustomForm": {
+      "title": "기관 양식",
+      "subtitle": "기관 자체 서식 등록·기입·출력 — PDF AI 추출 Pro",
+      "nav": "기관양식",
+      "loading": "양식을 불러오는 중입니다...",
+      "error": "양식을 불러오지 못했습니다.",
+      "dataError": "데이터를 불러오지 못했습니다."
+    },
     "careFacilityJoin": {
       "title": "기관 가입",
       "subtitle": "초대 코드로 소속 기관에 연결",

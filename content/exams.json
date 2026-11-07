@@ -627,7 +627,8 @@
         "careHome": true,
         "careWebtoon": true,
         "careFlow": true,
-        "studyGuide": true
+        "studyGuide": true,
+        "careCustomForm": true
       },
       "group": "보건·복지",
       "tier": "active"

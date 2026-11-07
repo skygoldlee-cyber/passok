@@ -1,0 +1,26 @@
+<!-- @spec none — carework 실무 뷰 마크업 (DA-13) -->
+<section id="care-custom-form-view" class="view-section" data-feature="careCustomForm">
+    <div class="view-header">
+        <h2>기관 양식</h2>
+        <p class="view-subtitle">기관 자체 서식 등록 → {{항목}} 기입 → 출력 — 기본 실무 양식 외 자유 서식</p>
+    </div>
+
+    <div class="view-header"><h3>등록된 양식</h3></div>
+    <p class="care-log-hint">새 양식 등록·편집은 <a href="#/care-home">Care OS 홈</a>에서 합니다.</p>
+    <div id="cf-tpl-list" class="care-log-saved"></div>
+
+    <div id="cf-fill" class="care-calc-form is-hidden">
+        <h3>양식 기입 — <span id="cf-fill-title"></span></h3>
+        <label>대상자 성명 <input id="cf-client" type="text" placeholder="예: 김○○"></label>
+        <div id="cf-fill-fields"></div>
+        <div class="care-calc-actions">
+            <button class="btn" data-click="careFormDocGenerate">📄 문서 생성</button>
+            <button class="btn btn-secondary" data-click="careFormDocSave">💾 문서 저장 <span class="pro-badge" data-pro-feature="care_form_save">PRO</span></button>
+            <button data-click="careShare" data-arg="#cf-preview|양식 문서|mask|careFormDocGenerate||careFormDocPrint|care_form_share|careFormDocMd" class="btn btn-secondary">📤 공유·내보내기</button>
+        </div>
+    </div>
+    <div id="cf-preview" class="care-calc-result"></div>
+
+    <div class="view-header"><h3>기입 문서</h3></div>
+    <div id="cf-doc-list" class="care-log-saved"></div>
+</section>

@@ -133,13 +133,13 @@ test('실무 피처 카피 계약 — formula 보유 시험은 uiText에 카피 
 
 test('해시 슬러그 — formula-view → formula', () => {
     setExams([]);
-    assert.deepEqual(getPracticeHashSlugs(), { 'formula-view': 'formula', 'care-home-view': 'care-home', 'care-calc-view': 'care-calc', 'care-card-view': 'care-card', 'care-log-view': 'care-log', 'care-webtoon-view': 'care-webtoon', 'care-flow-view': 'care-flow', 'care-audit-view': 'care-audit', 'care-handover-view': 'care-handover', 'care-visit-view': 'care-visit', 'care-client-view': 'care-client', 'care-incident-view': 'care-incident', 'care-roster-view': 'care-roster', 'care-finder-view': 'care-finder', 'care-forms-view': 'care-forms', 'facility-join-view': 'facility-join', 'facility-admin-view': 'facility-admin' });
+    assert.deepEqual(getPracticeHashSlugs(), { 'formula-view': 'formula', 'care-home-view': 'care-home', 'care-calc-view': 'care-calc', 'care-card-view': 'care-card', 'care-log-view': 'care-log', 'care-webtoon-view': 'care-webtoon', 'care-flow-view': 'care-flow', 'care-audit-view': 'care-audit', 'care-handover-view': 'care-handover', 'care-visit-view': 'care-visit', 'care-client-view': 'care-client', 'care-incident-view': 'care-incident', 'care-roster-view': 'care-roster', 'care-finder-view': 'care-finder', 'care-forms-view': 'care-forms', 'care-custom-form-view': 'care-custom-form', 'facility-join-view': 'facility-join', 'facility-admin-view': 'facility-admin' });
 });
 
 test('지연 핸들러 — 로더 함수 + 이름 배열 쌍, 이름은 전체 유니크', () => {
     setExams([]);
     const handlers = getPracticeLazyHandlers();
-    assert.equal(handlers.length, 26); // + careWebtoon·careFlow (웹툰·4단계 흐름)
+    assert.equal(handlers.length, 27); // + careWebtoon·careFlow·careCustomForm (웹툰·4단계 흐름·기관 양식 CO-17)
     const names = [];
     for (const [load, list] of handlers) {
         assert.equal(typeof load, 'function');

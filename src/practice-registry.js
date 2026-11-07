@@ -243,7 +243,7 @@ const careHome = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-home.js'), ai: _domainImport('care-ai.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careDocSignSave', 'careSignImagePick']], ['ai', ['careAiDraft']]],
+    handlers: [['main', ['careDocSignSave', 'careSignImagePick', 'careHomeTplPdfPick', 'careHomeTplSave', 'careHomeTplFacSave']], ['ai', ['careAiDraft']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
@@ -699,6 +699,40 @@ const careForms = {
         }
     },
 };
+const careCustomForm = {
+    viewId: 'care-custom-form-view',
+    slug: 'care-custom-form',
+    priority: 7,
+    uiTextKey: 'careCustomForm',
+    title: '기관 양식',
+    subtitle: '기관 자체 서식 등록·기입·출력',
+    loadingText: '양식을 불러오는 중입니다...',
+    loadErrorText: '양식을 불러오지 못했습니다.',
+    dataErrorText: '데이터를 불러오지 못했습니다.',
+    markup: 'care-custom-form.html',
+    styles: 'care-tools.css',
+    loaders: { main: _domainImport('views/care-custom-form.js') },
+    /** @type {Array<[string, string[]]>} */
+    handlers: [['main', ['careFormTplUse', 'careFormTplEdit', 'careFormTplDelete', 'careFormDocGenerate', 'careFormDocSave', 'careFormDocDelete', 'careFormDocMd', 'careFormDocPrint']]],
+    async enter(gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(careCustomForm.loadingText);
+        try {
+            await ensureViewMarkup(careCustomForm);
+            if (stale()) return;
+            const m = await careCustomForm.loaders.main();
+            if (stale()) return;
+            m.initCareCustomFormView();
+        } catch (e) {
+            if (!stale()) showToast(careCustomForm.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    },
+};
 const careFacilityJoin = {
     viewId: 'facility-join-view',
     slug: 'facility-join',
@@ -767,7 +801,7 @@ const careFacilityAdmin = {
         }
     },
 };
-const PRACTICE_FEATURES = { formula, careHome, careCalc, careCard, careLog, careWebtoon, careFlow, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careFinder, careForms, careFacilityJoin, careFacilityAdmin };
+const PRACTICE_FEATURES = { formula, careHome, careCalc, careCard, careLog, careWebtoon, careFlow, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careFinder, careForms, careCustomForm, careFacilityJoin, careFacilityAdmin };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
 export function isPracticeCapable() {

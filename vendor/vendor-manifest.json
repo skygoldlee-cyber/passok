@@ -114,6 +114,25 @@
       "syncMap": {
         "dist/html2canvas.min.js": "html2canvas.min.js"
       }
+    },
+    "pdfjs": {
+      "npm": "pdfjs-dist",
+      "version": "3.11.174",
+      "license": "Apache-2.0",
+      "note": "PDF.js — 기관 양식 PDF 텍스트·AcroForm 필드 추출 (CO-17). 양식 PDF 업로드 시에만 지연 로드 (script 태그 → window.pdfjsLib). 3.11.174는 UMD 빌드 마지막 계열 — 4.x는 ESM 전용이라 script 태그 패턴 미적합",
+      "files": {
+        "pdf.min.js": "5b5799e6f8c680663207ac5b42ee14eed2a406fa7af48f50c154f0c0b1566946",
+        "pdf.worker.min.js": "feabdf309770ed24bba31a5467836cdc8cf639c705af27d52b585b041bb8527b"
+      },
+      "versionProbe": {
+        "file": "pdf.min.js",
+        "pattern": "version=\"([0-9.]+)\""
+      },
+      "syncMap": {
+        "build/pdf.min.js": "pdf.min.js",
+        "build/pdf.worker.min.js": "pdf.worker.min.js"
+      },
+      "updatedAt": "2026-11-07"
     }
   }
 }

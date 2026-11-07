@@ -280,3 +280,48 @@ $$;
 drop policy if exists "facility manager update" on public.facilities;
 create policy "facility manager update" on public.facilities for update
   using (public.is_facility_manager(id, auth.uid()));
+
+-- CO-17 — 기관 자체 양식 템플릿: facility_form_templates
+-- 실무도구 기본 양식 외에 기관 고유 양식을 MD+{{키}} 플레이스홀더로 등록·공유
+-- (CO-11의 facility_templates 저장 수단 구현). 양식 정의는 개인정보가 아니므로
+-- L1 기관 서버 허용. 기입 문서는 facility_records doc_type 'custom_form'으로 기록.
+-- 개통 조건: CO-14와 동일 — 수탁 처리 법무 준비 완료 전 facility 플래그 비활성 유지.
+
+create table if not exists public.facility_form_templates (
+  id uuid primary key default gen_random_uuid(),
+  facility_id uuid not null references public.facilities(id) on delete cascade,
+  title text not null,
+  body text not null,                                    -- MD 양식 본문 ({{키}} 플레이스홀더)
+  author_id uuid not null default auth.uid() references auth.users(id), -- 등록 manager
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists facility_form_templates_fac
+  on public.facility_form_templates (facility_id, updated_at desc);
+
+alter table public.facility_form_templates enable row level security;
+
+-- facility_form_templates: 열람은 같은 시설 멤버 전체, 등록·수정·삭제는 manager만
+drop policy if exists "form_templates member read" on public.facility_form_templates;
+create policy "form_templates member read" on public.facility_form_templates for select
+  using (public.is_facility_member(facility_id, auth.uid()));
+
+drop policy if exists "form_templates manager write" on public.facility_form_templates;
+create policy "form_templates manager write" on public.facility_form_templates for insert
+  with check (public.is_facility_manager(facility_id, auth.uid()) and author_id = auth.uid());
+
+drop policy if exists "form_templates manager update" on public.facility_form_templates;
+create policy "form_templates manager update" on public.facility_form_templates for update
+  using (public.is_facility_manager(facility_id, auth.uid()));
+
+drop policy if exists "form_templates manager delete" on public.facility_form_templates;
+create policy "form_templates manager delete" on public.facility_form_templates for delete
+  using (public.is_facility_manager(facility_id, auth.uid()));
+
+-- CO-17 — 기입 문서 유형 확장: facility_records doc_type 'custom_form' (이벤트형 append-only)
+-- author_id 기본값 부여 — 클라이언트 insert가 author_id를 생략하므로 NOT NULL 위반 방지
+alter table public.facility_records alter column author_id set default auth.uid();
+alter table public.facility_records drop constraint if exists facility_records_doc_type_check;
+alter table public.facility_records add constraint facility_records_doc_type_check
+  check (doc_type in ('care_log','roster','audit','visit_result','client','report','custom_form'));

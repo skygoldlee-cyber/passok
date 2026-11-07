@@ -1,7 +1,7 @@
 # 📋 요구사양 명세서 (Software Requirements Specification)
 
 > **프로젝트**: PassOK — 멀티시험 스마트 학습 플랫폼 (첫 콘텐츠 팩: 맞춤형화장품 조제관리사 = 앱명 Passmula)
-> **버전**: 1.29 (2026-11-02 기준 — RR-20 기동 시 법령 최신성 자동 확인)
+> **버전**: 1.30 (2026-11-08 기준 — CO-17 기관 자체 양식 추가)
 > **버전 규약**: 본문 요구사항의 추가·변경·제거 시 마이너 버전을 갱신하고 변경 내역은 `CHANGES.md`에 기록한다 — 기준선은 커밋 해시로 확정한다
 > **상태 수명 주기 규약**: 요구사항 표의 마지막 셀(상태)은 아래 값 중 하나를 사용한다. 폐기·통합된 ID는 **영구 소각** — 같은 접두사 시퀀스에서 번호를 재사용하지 않는다 (역사적 참조·git 이력이 ID를 가리키므로).
 >
@@ -742,6 +742,7 @@
 | CO-14 | **실무 기록 통합 서버 저장** — `facility_records`(doc_type + 구조화 payload jsonb + `local_id` 상관키) 단일 테이블에 요양일지·근무표·점검표·방문결과 등 실무 산출물을 기관 스코프로 보존. payload는 코드화·구조화 필드만 — 자유서술 원문·서명 이미지는 L0 로컬 유지 (CO-06 최소화 원칙 계승). `local_id` 유니크로 재전송 멱등. 기존 3개 전용 테이블(shift_handovers·family_visits·incident_reports)은 유지하고 신규 유형은 이 테이블로 수렴 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) |
 | CO-15 | **오프라인 우선 write-through 동기** — `*-store.js` 저장은 localStorage 즉시 기록 후 멤버십 존재 시 `facility_records` insert(fire-and-forget). 실패·오프라인·미가입은 항목의 `_sync` 미표시로 남겨 다음 뷰 init 시 재전송 — 로컬 동작 불변(DA-05). 이벤트형(care_log·report)은 append-only insert, 상태형(roster·audit·client·visit_result)은 `(facility,author,local_id)` upsert로 최신 상태 공유. 로컬 삭제는 서버 미반영(보존 원칙 — 정정은 신규 기록) | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) |
 | CO-16 | **외부 수출 webhook 어댑터** — `facilities.doc_webhook_url`(manager 설정, RLS manager update)이 있으면 `facility_records` INSERT를 Edge Function(`record-webhook`)이 해당 URL로 POST — 기관 자체 서버 수출 경로(L2는 manager 명시 설정 시에만 개통, 기본 NULL=미전송). Database Webhook 등록은 운영 절차 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) |
+| CO-17 | **기관 자체 양식(커스텀 폼)** — 실무도구 기본 양식 외에 기관 고유 양식을 MD+`{{키}}` 플레이스홀더로 등록·기입·출력. `facility_form_templates`(CO-11의 facility_templates 저장 수단 구현, member read·manager write)에 manager가 등록하면 멤버가 기입 폼으로 문서 생성 → careShare 파이프라인(인쇄·PDF·Word·공유) 재사용. 시스템 키(`date`·`org`·`author`·`confirmer`·`receiver`·`client`·`signImage`)는 자동 기입, 기타 `{{키}}`는 기입 필드 자동 생성. 등록 경로 2개 — ① MD 직접 붙여넣기 ② 양식 파일 업로드(PDF·DOCX·Excel·CSV) 시 pdf.js 텍스트·AcroForm/OOXML·SheetJS 추출 → 자체 AI(ai-proxy `form_extract` kind, 로그인·쿼터 게이트 — 구독자 고객지원 채널)가 MD 템플릿 초안 생성 → 사용자 검토·편집 후 저장 (스캔 이미지 파일은 텍스트 없어 미지원 명시). 기입 문서는 `facility_records` doc_type `custom_form` 이벤트형 append-only — payload는 `{templateId, fields}` 구조화 맵(CO-06 계승, 서명 이미지는 L0 유지). 기관 미가입 사용자는 로컬 양식으로 동일 기능(오프라인 우선) | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) |
 
 ---
 

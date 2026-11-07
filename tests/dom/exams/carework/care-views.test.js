@@ -570,6 +570,59 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(printBlock).toMatch(/\.view-section\.active > :not[\s\S]*?display: none !important/);
     });
 
+    // @spec CO-17 — 기관 자체 양식: {{키}} 파싱·치환·스토어·뷰 계약
+    it('customForm — parseFields가 커스텀 키만 추출 (시스템 키 제외·중복 제거)', async () => {
+        const { parseFields } = await import('../../../../src/exams/carework/form-template-store.js');
+        const fields = parseFields('성명: {{client}} 보호자: {{보호자}} 연락처: {{연락처}} 보호자: {{보호자}} 서명: {{signImage}} 날짜: {{date}}');
+        expect(fields.map(f => f.key)).toEqual(['보호자', '연락처']); // 시스템 키(client·signImage·date) 제외, 중복 제거
+    });
+
+    it('customForm — fillTemplate이 시스템 키·기입값 치환, 미기입은 공란', async () => {
+        const { fillTemplate } = await import('../../../../src/exams/carework/form-template-store.js');
+        const { setDocSign } = await import('../../../../src/exams/carework/facility.js');
+        setDocSign('김요양', '박시설');
+        const md = fillTemplate('작성자: {{author}} 수급자: {{client}} 비고: {{비고}}', { client: '이대상', 비고: '특이없음' });
+        expect(md).toContain('작성자: 김요양');
+        expect(md).toContain('수급자: 이대상');
+        expect(md).toContain('비고: 특이없음');
+        expect(fillTemplate('미기입: {{메모}}', {})).toMatch(/미기입: ＿+/); // 미기입 필드는 공란 유지
+    });
+
+    it('customForm — 양식 저장·목록·삭제, 기입 문서 저장 한도', async () => {
+        const { addFormTemplate, listFormTemplates, removeFormTemplate, saveFormDoc, listFormDocs } =
+            await import('../../../../src/exams/carework/form-template-store.js');
+        for (const t of listFormTemplates()) removeFormTemplate(t.id); // 정리
+        const r = addFormTemplate({ title: '동의서', body: '성명: {{client}}' });
+        expect(r.ok).toBe(true);
+        expect(listFormTemplates()[0].title).toBe('동의서');
+        const d = saveFormDoc({ tplId: r.id, title: '동의서', client: '김대상', date: '2026-11-08', values: { 비고: 'x' }, md: 'm' });
+        expect(d.ok).toBe(true);
+        expect(listFormDocs()[0].client).toBe('김대상');
+        removeFormTemplate(r.id);
+    });
+
+    it('customForm — 뷰 마크업: 기입 패널 숨김 + 등록은 홈 뷰 수용', async () => {
+        const { initCareCustomFormView } = await import('../../../../src/exams/carework/views/care-custom-form.js');
+        loadPartial('care-custom-form.html');
+        initCareCustomFormView();
+        expect(document.getElementById('cf-fill')?.classList.contains('is-hidden')).toBe(true); // 양식 미선택 시 기입 패널 숨김
+        expect(document.querySelector('a[href="#/care-home"]')).toBeTruthy(); // 등록은 홈으로 안내
+        // 양식 파일 입력은 홈 뷰가 수용 — 다형식(PDF·DOCX·Excel) accept
+        loadPartial('care-home.html');
+        initCareHomeView();
+        const inp = /** @type {HTMLInputElement} */ (document.getElementById('home-tpl-file'));
+        expect(inp).toBeTruthy();
+        expect(inp.accept).toContain('.docx');
+        expect(document.querySelector('[data-click="careHomeTplSave"]')).toBeTruthy();
+    });
+
+    it('customForm — textToTemplate이 라벨 패턴을 {{키}}로 변환 (AI 폴백)', async () => {
+        const { textToTemplate } = await import('../../../../src/exams/carework/care-form-pdf.js');
+        const t = textToTemplate('성명:\n생년월일: ＿＿＿＿', '동의서');
+        expect(t.title).toBe('동의서');
+        expect(t.body).toContain('{{성명}}');
+    });
+
     it('careHome — 서명 이미지 피커 버튼이 숨긴 file input을 트리거', () => {
         loadPartial('care-home.html');
         initCareHomeView();

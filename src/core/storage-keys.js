@@ -142,6 +142,10 @@ export const STORAGE_KEYS = {
   CARE_DOC_SIGN: 'carework_doc_sign',
   CARE_FUNNEL: 'carework_funnel',
   ADMIT_CHECKS: 'carework_admit_checks',
+  // 기관 자체 양식 템플릿 (CO-17) — [{id,title,body,fields,scope,createdAt,updatedAt}] 로컬 양식 + 기관 양식 캐시
+  CARE_FORM_TEMPLATES: 'carework_form_templates',
+  // 기관 양식 기입 문서 로컬 기록 (CO-17) — [{id,tplId,title,client,clientId,date,values,createdAt,_sync}]
+  CARE_FORM_DOCS: 'carework_form_docs',
 
   // Formula OS — 종합 보고서 출력 이력 (FO-63) — 최근 20건
   // [{at, bizId, bizLabel, setLabel, done, total, sections, id, hash, fresh}]
@@ -254,6 +258,8 @@ export const BACKUP_KEYS = [
   STORAGE_KEYS.CARE_ORG_NAME,     // 출력물 기관명 (미가입 시 수동 설정) — 환경설정
   STORAGE_KEYS.CARE_DOC_SIGN,     // 출력물 서명란 작성자·확인자 성명 — 환경설정
   STORAGE_KEYS.ADMIT_CHECKS,      // 입소 서류 체크리스트 수납 상태 — 환경설정
+  STORAGE_KEYS.CARE_FORM_TEMPLATES, // 기관 자체 양식 템플릿 — 백업·동기화 대상 (CO-17)
+  STORAGE_KEYS.CARE_FORM_DOCS,    // 기관 양식 기입 문서 — 백업·동기화 대상 (CO-17)
   STORAGE_KEYS.PRODUCT_ITEMS,     // 기성품 전성분 DB — 백업·동기 대상 (FO-37)
   STORAGE_KEYS.FORMULA_GEMINI_MODEL, // 사진 인식 모델명 설정 — 환경설정 (FO-46)
   STORAGE_KEYS.FORMULA_VISION_HIRES, // 사진 고해상도 모드 — 환경설정 (FO-54)
