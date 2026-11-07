@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261107-c04bec3",
+    "date": "2026-11-07",
+    "notes": [
+      "[수정·carework] 서명 svg 이동에 따른 sw.js·구조 동기화 [no-test]",
+      "[수정·carework] 학습안내서 서명 참조 제거 — svg만 images/ 정위치 유지 [no-test]",
+      "[수정·carework] 작성자-서명.svg images/ 이동 + 학습안내서 서명 참조 [no-test]",
+      "[수정·carework] 참조자료 상하반전 이미지 27장 교체 [no-test]",
+      "[정리·release] v20261107-36f794c 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-36f794c",
     "date": "2026-11-07",
     "notes": [
@@ -179,15 +190,6 @@
     "notes": [
       "[정리·gates] 체커 강화·예외 정리·웹툰 파서 가드",
       "[정리·release] v20261106-4184034 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261106-4184034",
-    "date": "2026-11-06",
-    "notes": [
-      "[content·carework] 이야기형 재생성 — 표준형 도판 반영",
-      "[content·carework] 표준형 교재 실기 절차 도판 28컷 삽입",
-      "[정리·release] v20261106-48c1eae 스탬프 확정 [no-docs]"
     ]
   }
 ]
