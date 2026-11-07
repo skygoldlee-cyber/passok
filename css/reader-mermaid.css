@@ -592,11 +592,13 @@ pre.mermaid-other .labelBkg {
     .textbook-reader-controls > div {
         flex-direction: row;
         align-items: center;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         gap: var(--space-3);
     }
+    /* 과목 셀렉트는 전폭 2행 — 한 줄에 토글·목차·형식·배지 4요소를 채우면 셀렉트가 잘린다 */
     .textbook-reader-controls .filter-group {
-        flex: 1;
+        flex: 1 1 100%;
+        order: 5;
         min-width: 0;
     }
     .textbook-reader-controls .filter-group label {
