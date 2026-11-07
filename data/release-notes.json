@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261107-36f794c",
+    "date": "2026-11-07",
+    "notes": [
+      "[수정·carework] 복지용구 이미지 2장 상하반전 — 방석·수동휠체어 [no-test]",
+      "[정리·release] v20261107-7231bfd 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-7231bfd",
     "date": "2026-11-07",
     "notes": [
@@ -180,14 +188,6 @@
       "[content·carework] 이야기형 재생성 — 표준형 도판 반영",
       "[content·carework] 표준형 교재 실기 절차 도판 28컷 삽입",
       "[정리·release] v20261106-48c1eae 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261106-48c1eae",
-    "date": "2026-11-06",
-    "notes": [
-      "[content·carework] 이야기형 교재 씬 증량 + ai_story 슬롯 스캔 버그 수정",
-      "[정리·release] v20261106-f2fc8da 스탬프 확정 [no-docs]"
     ]
   }
 ]
