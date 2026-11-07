@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03,LP-07
 
-const CACHE_VERSION = 'v20261107-36f794c';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261107-2824a70';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passok) — 시험 무관 공유 캐시.
 // 구 접두사(passory-*·cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -432,7 +432,7 @@ const MD_ASSETS = [
 const EXAM_MEDIA_ASSETS = [
   // EXAM_MEDIA:BEGIN
   './content/exams/carework/docs/images/carework_4step_flow.svg',
-  './content/exams/carework/docs/작성자-서명.svg',
+  './content/exams/carework/docs/images/작성자-서명.svg',
   './content/exams/carework/교재/careprac/images/aed.webp',
   './content/exams/carework/교재/careprac/images/bath-chair.webp',
   './content/exams/carework/교재/careprac/images/cane.webp',
