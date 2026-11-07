@@ -1,5 +1,19 @@
 [
   {
+    "version": "v20261107-5591cba",
+    "date": "2026-11-07",
+    "notes": [
+      "[수정·carework] escape-sink 규약 — 완료 메시지 보간 esc 누락 [no-test]",
+      "[문서·pro] SUBSCRIPTION_ROADMAP 플랜 키 목록에 ai_gen_quiz 추가",
+      "[수정·pro] AI 약점 미니퀴즈 게이트 불일치 — ai_gen_quiz 전용 플랜 키",
+      "[기능·pro] 무료/Pro 정책 정리 — 코어 학습 무료, 서사 콘텐츠 경로 통일 PRO",
+      "[문서·carework] 학습안내서를 실구현 동작으로 갱신 — 이어하기·진단 자동 집계 반영",
+      "[기능·carework] 개념 학습 → 진단 연동 — quizResults 파이프라인 + 대시보드 이어하기",
+      "[기능·carework] 개념 학습 실제 라우팅 — pre 판정·재도전·flow_attempts 기록",
+      "[정리·release] v20261107-4074a5a 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-4074a5a",
     "date": "2026-11-07",
     "notes": [
@@ -181,22 +195,6 @@
       "[기능·ref-pipeline] 버튼 호버·프레스드 피드백 + 드롭 하이라이트 + 테스트",
       "[리팩터링·carework] 2과목 명칭 변경 — 요양보호관련 → 요양보호실기 (파일명·manifest·뷰 일괄)",
       "[정리·release] v20261106-9285aa5 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261106-9285aa5",
-    "date": "2026-11-06",
-    "notes": [
-      "[테스트·ref-pipeline] 스테일 테스트 정리 — 4건으로 축소",
-      "[수정·ref-pipeline] QFont 경고 — qInstallMessageHandler C 레벨 차단 + 테스트",
-      "[수정·ref-pipeline] svg 추출 — show_pdf_page 클립 렌더 + 테스트",
-      "[기능·ref-pipeline] 입력 목록 드래그앤드롭 + placeholder 오류 수정",
-      "[기능·ref-pipeline] 이미지 추출 포맷 선택 — orig/webp/svg (정상 버전 기준 재적용)",
-      "[되돌림·ref-pipeline] webp/svg 포맷 기능 롤백 — 이전 정상 버전 복원",
-      "[수정·ref-pipeline] Qt 메시지 핸들러 제거 → QT_LOGGING_RULES + 테스트",
-      "[수정·ref-pipeline] Qt 핸들러 stderr None 가드 + 가드 테스트",
-      "[수정·ref-pipeline] Qt 폰트 경고 억제 + 페이지 지연로딩·여백 수집 예외 복원",
-      "[수정·ref-pipeline] 페이지 단위 예외 복원력 + 복원 테스트"
     ]
   }
 ]
