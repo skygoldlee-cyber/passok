@@ -247,7 +247,8 @@ export function startWeakConceptQuiz() {
  */
 export async function startWeakGenQuiz() {
     if (!hasProEntitlement()) {
-        proFeatureNotice('mock_exam', 'AI 약점 미니퀴즈');
+        // 전용 플랜 키 — mock_exam(free) 키를 쓰면 안내가 표시되지 않아 조용한 데드엔드가 됨
+        proFeatureNotice('ai_gen_quiz', 'AI 약점 미니퀴즈');
         return;
     }
     const wrongIds = new Set(

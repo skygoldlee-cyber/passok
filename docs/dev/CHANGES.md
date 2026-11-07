@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 fix(pro): AI 약점 미니퀴즈 게이트 불일치 — 전용 플랜 키 ai_gen_quiz 부여
+
+- `startWeakGenQuiz`가 `hasProEntitlement` 직접 검사 + `mock_exam`(free) 키 안내를 쓰던 문제 — 안내가 표시되지 않아 무료 사용자는 조용한 데드엔드였음
+- `ai_gen_quiz: pro` 플랜 키 신설 + `proFeatureNotice` 키 교체 — 무료 사용자에게도 Pro 안내가 정상 표시
+
 ## 2026-11-07 feat(pro): 무료/Pro 정책 정리 — 코어 학습 무료, 서사 콘텐츠 경로 통일 PRO
 
 - 이야기 웹툰 독립 뷰에 `story_textbook` 게이트(내비·시트 PRO 배지 + 진입 안내) — 리더 이야기형/웹툰형과 같은 콘텐츠가 경로별로 무료/PRO 갈리던 모순 해소
