@@ -616,6 +616,88 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.querySelector('[data-click="careHomeTplSave"]')).toBeTruthy();
     });
 
+    it('customForm — 기입 플로우: 양식 선택→필드 렌더→문서 생성→저장→삭제', async () => {
+        const { initCareCustomFormView, careFormTplUse, careFormDocGenerate, careFormDocSave, careFormDocDelete, careFormDocMd, careFormTplDelete } =
+            await import('../../../../src/exams/carework/views/care-custom-form.js');
+        const { addFormTemplate, listFormTemplates, removeFormTemplate, listFormDocs } =
+            await import('../../../../src/exams/carework/form-template-store.js');
+        for (const t of listFormTemplates()) removeFormTemplate(t.id);
+        const r = addFormTemplate({ title: '동의서', body: '대상자: {{client}} 서명: {{signImage}} 비고: {{비고}}' });
+        loadPartial('care-custom-form.html');
+        initCareCustomFormView();
+        expect(document.querySelector('[data-click="careFormTplUse"]')).toBeTruthy(); // 목록 렌더
+        careFormTplUse(r.id);
+        expect(document.getElementById('cf-fill').classList.contains('is-hidden')).toBe(false);
+        expect(document.querySelector('[data-cf-field="비고"]')).toBeTruthy(); // 커스텀 필드 렌더
+        document.querySelector('[data-cf-field="비고"]').value = '없음';
+        careFormDocGenerate();
+        expect(document.getElementById('cf-preview').innerHTML).toContain('동의서');
+        expect(careFormDocMd()).toContain('동의서');
+        const n = listFormDocs().length;
+        careFormDocSave();
+        expect(listFormDocs().length).toBe(n + 1); // 기입 문서 저장
+        careFormDocDelete(listFormDocs()[0].id);
+        await careFormTplDelete(r.id);
+        expect(listFormTemplates().length).toBe(0);
+    });
+
+    it('customForm — 편집은 홈 이관(pending+hash), 홈 편집기에서 저장', async () => {
+        const { addFormTemplate, listFormTemplates, removeFormTemplate, consumePendingTplEdit, setPendingTplEdit } =
+            await import('../../../../src/exams/carework/form-template-store.js');
+        const { careFormTplEdit } = await import('../../../../src/exams/carework/views/care-custom-form.js');
+        const { careHomeTplSave } = await import('../../../../src/exams/carework/views/care-home.js');
+        const { fillTplEditor, readTplEditor } = await import('../../../../src/exams/carework/form-template-editor.js');
+        for (const t of listFormTemplates()) removeFormTemplate(t.id);
+        loadPartial('care-custom-form.html');
+        const r = addFormTemplate({ title: '서약서', body: '본인: {{본인}}' });
+        careFormTplEdit(r.id);
+        const pending = consumePendingTplEdit();
+        expect(pending.id).toBe(r.id); // 이관 마킹
+        setPendingTplEdit({ id: r.id, title: '서약서', body: '본인: {{본인}}', scope: 'local' }); // 이관 재주입 → 홈에서 소비
+        loadPartial('care-home.html');
+        initCareHomeView(); // pending 소비 → 편집기 채움
+        expect(readTplEditor('home-tpl').title).toBe('서약서');
+        fillTplEditor('home-tpl', '서약서2', '본인: {{본인}} 날짜: {{date}}');
+        expect(document.getElementById('home-tpl-fields').innerHTML).toContain('본인'); // 필드 미리보기 — 시스템 키(date) 제외
+        careHomeTplSave();
+        const tpl = listFormTemplates().find(t => t.id === r.id);
+        expect(tpl.title).toBe('서약서2'); // 같은 id 갱신 — 수정 저장
+        removeFormTemplate(r.id);
+    });
+
+    it('customForm — extractFormDocx: stored zip의 word/document.xml 텍스트·표 추출', async () => {
+        const { extractFormDocx } = await import('../../../../src/exams/carework/care-form-pdf.js');
+        const enc = new TextEncoder();
+        const xml = '<?xml version="1.0"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>동의서</w:t></w:r></w:p><w:tbl><w:tr><w:tc><w:p><w:r><w:t>성명</w:t></w:r></w:p></w:tc><w:tc><w:p><w:r><w:t>값</w:t></w:r></w:p></w:tc></w:tr></w:tbl></w:body></w:document>';
+        const data = enc.encode(xml), n = enc.encode('word/document.xml');
+        const lh = new DataView(new ArrayBuffer(30));
+        lh.setUint32(0, 0x04034b50, true); lh.setUint16(18, data.length, true); lh.setUint16(22, data.length, true); lh.setUint16(26, n.length, true);
+        const ch = new DataView(new ArrayBuffer(46));
+        ch.setUint32(0, 0x02014b50, true); ch.setUint16(20, data.length, true); ch.setUint16(24, data.length, true);
+        ch.setUint16(28, n.length, true); ch.setUint32(42, 0, true);
+        const eo = new DataView(new ArrayBuffer(22));
+        eo.setUint32(0, 0x06054b50, true); eo.setUint16(8, 1, true); eo.setUint16(10, 1, true);
+        eo.setUint32(12, 46 + n.length, true); eo.setUint32(16, 30 + n.length + data.length, true);
+        const buf = new Uint8Array(30 + n.length + data.length + 46 + n.length + 22);
+        buf.set([lh.buffer, n, data, ch.buffer, n, eo.buffer].flatMap(u => [...new Uint8Array(u)]));
+        const f = { arrayBuffer: () => Promise.resolve(buf.buffer) };
+        const ex = await extractFormDocx(f);
+        expect(ex.text).toContain('동의서');
+        expect(ex.text).toContain('| 성명 | 값 |'); // 표는 MD 행 복원
+    });
+
+    it('customForm — AI 추출 프롬프트·응답 파싱 계약 (buildFormExtractPrompt/parseFormExtractResponse)', async () => {
+        const { buildFormExtractPrompt, parseFormExtractResponse } = await import('../../../../src/ai/ai-client.js');
+        const p = buildFormExtractPrompt({ text: '급여계획서 본문', hint: '계획서' });
+        expect(p).toContain('<form_text>'); // 경계 태그 — 프롬프트 인젝션 방어
+        expect(p).toContain('계획서');
+        expect(buildFormExtractPrompt({ text: '' })).toBeNull();
+        const parsed = parseFormExtractResponse('{"title":"동의서","body":"성명: {{client}}"}');
+        expect(parsed.title).toBe('동의서');
+        expect(parseFormExtractResponse('not json')).toBeNull();
+        expect(parseFormExtractResponse('{"title":""}')).toBeNull();
+    });
+
     it('customForm — textToTemplate이 라벨 패턴을 {{키}}로 변환 (AI 폴백)', async () => {
         const { textToTemplate } = await import('../../../../src/exams/carework/care-form-pdf.js');
         const t = textToTemplate('성명:\n생년월일: ＿＿＿＿', '동의서');
