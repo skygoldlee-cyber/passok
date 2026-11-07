@@ -2,6 +2,8 @@
 
 ## 2026-11-07 fix(carework): 작성자-서명.svg → docs/images/ 이동 + 학습안내서 서명 참조
 
+## 2026-11-07 fix(carework): 학습안내서 서명 참조 제거 (불필요 — 파일만 images/ 정위치 유지)
+
 ## 2026-11-07 fix(carework): 참조자료 이미지 상하반전 수정본 27장 — ref_md/images
 
 ## 2026-11-07 fix(carework): 복지용구 이미지 2장 상하반전 — cushion-pressure·manual-wheelchair
