@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261107-32e389f",
+    "date": "2026-11-07",
+    "notes": [
+      "[수정·carework] 인라인 스타일 규약 — 글자 크게 버튼 CSS 클래스로 [no-test]",
+      "[수정·carework] escape-sink — 완료 요약 보간 esc 누락 [no-test]",
+      "[기능·carework] 개념 학습 UX 보완 — 글자 크기·추천 카드·피드백·집계",
+      "[정리·release] v20261107-dd0f5d3 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-dd0f5d3",
     "date": "2026-11-07",
     "notes": [
@@ -181,14 +191,6 @@
       "[문서·trace] CO-14/15 테스트 연결 반영",
       "[기능·carework] 실무 기록 기관 서버 동기 + webhook 어댑터 (CO-14/15/16, 코드 선구축)",
       "[정리·release] v20261106-b5adf53 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261106-b5adf53",
-    "date": "2026-11-06",
-    "notes": [
-      "[스타일·ux] 간격 리터럴 토큰화 — UX-CTL-03/04 · §4.9.3 정합",
-      "[정리·release] v20261106-580d862 스탬프 확정 [no-docs]"
     ]
   }
 ]
