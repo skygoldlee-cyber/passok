@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261107-92c0505",
+    "date": "2026-11-07",
+    "notes": [
+      "[기능·carework] 개념 복습 큐 + 오답 컷 — DOC-USR-22 §4 복습 순환 [no-test]",
+      "[기능·search] 검색 성능 계측 — 인덱스 빌드·쿼리 시간 카운터 (__searchPerf) [no-test]",
+      "[정리·release] v20261107-2f48d94 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261107-2f48d94",
     "date": "2026-11-07",
     "notes": [
@@ -179,21 +188,6 @@
       "[수정·ux] carework 베어·사멸 버튼 btn 계열 일괄 정정 + data-click 클래스 게이트 [no-test]",
       "[정리·release] v20261106-cd20aa1 스탬프 확정 [no-docs]",
       "[정리·release] v20261106-2d8926b 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261106-cd20aa1",
-    "date": "2026-11-06",
-    "notes": [
-      "[수정·ux] UX-CTL 보완 — 검색입력·셀렉트 줌·규약 정합",
-      "[수정·trace] build_question_chapters @spec 공백 나열 → 쉼표 구분",
-      "[수정·ux] reader-format-select 높이 sm→md — 터치 타깃 44px 복원",
-      "[기능·ux] UX-CTL-01~06 컨트롤 높이·간격 토큰 규약 신설",
-      "[정리] pull 후 파생물 재생성 — 임베딩·trace·stats·sw 스탬프",
-      "[CI] CI 재실행 트리거 [no-docs]",
-      "[수정·test] care-share xlsx 날짜 — UTC→로컬 todayKey 정합",
-      "[기능·carework] 서명 이미지 피커 — 버튼 스타일 + 숨긴 file input + 피커 테스트",
-      "[정리·release] v20261106-8600a6e 스탬프 확정 [no-docs]"
     ]
   }
 ]
