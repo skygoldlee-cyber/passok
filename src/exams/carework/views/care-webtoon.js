@@ -5,6 +5,7 @@
 import { contentPath } from '../../../core/exam-context.js';
 import { parseStorySlots, renderSlotHtml } from '../../../reader/webtoon-render.js';
 import { DataLoader } from '../../../content/data-loader.js';
+import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 
 // 공용 모듈 재수출 — tests/unit/content/care-webtoon.test.js가 _parse/_who/_books를 import
 export { parseStorySlots as _parse, whoSays as _who } from '../../../reader/webtoon-render.js';
@@ -49,6 +50,8 @@ export function webtoonPrev() { _show(_cur - 1); }
 export function webtoonNext() { _show(_cur + 1); }
 
 export async function initCareWebtoonView() {
+    // 서사 콘텐츠는 리더 이야기형·웹툰형과 동일한 story_textbook 플랜으로 표기 (경로별 무료/PRO 불일치 해소)
+    proFeatureNotice('story_textbook', '이야기 웹툰');
     const sel = /** @type {HTMLSelectElement|null} */ (document.getElementById('webtoon-subject'));
     const pick = /** @type {HTMLSelectElement|null} */ (document.getElementById('webtoon-slot'));
     if (!sel || !pick) return;
