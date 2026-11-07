@@ -310,6 +310,7 @@
 .flow-next-concept { margin-top: var(--gap-group); align-self: center; min-height: var(--control-h-lg, 56px); padding: 0 22px; font-size: 1rem; }
 #flow-actions .btn { flex: 1; min-height: var(--control-h-lg, 56px); font-size: 1rem; }
 
+.flow-lg-btn { align-self: end; }
 /* 글자 크게 토글 — #flow-stage.flow-lg (DOC-USR-22 §8 확대 옵션) */
 #flow-stage.flow-lg .flow-stem { font-size: 1.35rem; }
 #flow-stage.flow-lg .flow-opt { font-size: 1.45rem; min-height: 64px; }

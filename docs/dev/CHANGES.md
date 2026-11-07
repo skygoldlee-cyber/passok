@@ -1,5 +1,7 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-07 fix(carework): 인라인 스타일 규약 — 글자 크게 버튼 align-self를 .flow-lg-btn으로 (CI 후속)
+
 ## 2026-11-07 fix(carework): escape-sink — 완료 요약 보간 esc 누락 (CI 후속)
 
 ## 2026-11-07 feat(carework): 개념 학습 UX 5개 보완 — 접근성·진행 체감·피드백·내비·완료 동선
