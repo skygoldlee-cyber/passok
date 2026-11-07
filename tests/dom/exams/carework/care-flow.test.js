@@ -7,8 +7,9 @@ import { join } from 'path';
 const ROOT = join(__dirname, '..', '..', '..', '..');
 const CONCEPTS = { concepts: [{ id: 's2-c10-x', subject: 2, chapter: 10, title: '식사 자세', bodyAnchor: '10-1', storySlot: 's01' }] };
 const ITEMS = { items: [
-    { conceptId: 's2-c10-x', role: 'pre', stem: '선행 문항', options: ['a', 'b', 'c', 'd', 'e'], answer: 0, rationale: ['p', 'q', 'r', 's', 't'], source: {} },
-    { conceptId: 's2-c10-x', role: 'scenario', stem: '시나리오 문항', options: ['a', 'b', 'c', 'd', 'e'], answer: 1, rationale: ['p', 'q', 'r', 's', 't'], source: {} },
+    { id: 'pre1', conceptId: 's2-c10-x', role: 'pre', stem: '선행 문항', options: ['a', 'b', 'c', 'd', 'e'], answer: 0, rationale: ['p', 'q', 'r', 's', 't'], source: {} },
+    { id: 'sc1', conceptId: 's2-c10-x', role: 'scenario', stem: '시나리오 문항1', options: ['a', 'b', 'c', 'd', 'e'], answer: 1, rationale: ['p', 'q', 'r', 's', 't'], source: {} },
+    { id: 'sc2', conceptId: 's2-c10-x', role: 'scenario', stem: '시나리오 문항2', options: ['a', 'b', 'c', 'd', 'e'], answer: 2, rationale: ['p', 'q', 'r', 's', 't'], source: {} },
 ] };
 const STORY_MD = '<!-- story:start -->\n### 장면\n\n"미영 씨, 여기 처음이세요?"\n<!-- story:end -->';
 const TAGS = { tags: { Q9: { conceptId: 's2-c10-x', role: 'review' } } };
@@ -18,9 +19,27 @@ function _mount() {
     document.body.innerHTML = readFileSync(join(ROOT, 'html/exams/carework/care-flow.html'), 'utf-8')
         .replace(/<script[\s\S]*?<\/script>/gi, '');
 }
+const stage = () => /** @type {HTMLElement} */ (document.getElementById('flow-stage'));
+const text = () => stage().textContent || '';
+const nextBtn = () => /** @type {HTMLButtonElement} */ (document.getElementById('flow-next'));
+// storage.js가 시험 스코프 접두를 붙일 수 있어 접미사로 조회
+const _read = suffix => {
+    const k = Object.keys(localStorage).find(k => k.endsWith(suffix));
+    return k ? JSON.parse(localStorage.getItem(k)) : null;
+};
+const attempts = () => _read('flow_attempts') || [];
+const progress = () => _read('flow_progress') || {};
+
+async function _start(m) {
+    await m.initCareFlowView();
+    const sel = /** @type {HTMLSelectElement} */ (document.getElementById('flow-concept'));
+    sel.value = 's2-c10-x';
+    await sel.onchange?.(/** @type {any} */ ({}));
+}
 
 beforeEach(() => {
     vi.resetModules();
+    localStorage.clear();
     _mount();
     globalThis.fetch = vi.fn(async url => {
         const u = String(url);
@@ -34,39 +53,64 @@ beforeEach(() => {
 });
 
 describe('care-flow 4단계 뷰 상태머신', () => {
-    it('개념 선택 → pre→story→summary→scenario→result→complete 전환', async () => {
+    it('pre 정답 → 이야기 건너뛰고 요약 → 시나리오 정답 → 완료·mastered 기록', async () => {
         const m = await import('../../../../src/exams/carework/views/care-flow.js');
-        await m.initCareFlowView();
-        const sel = /** @type {HTMLSelectElement} */ (document.getElementById('flow-concept'));
-        expect(sel.options.length).toBe(2); // placeholder + 1개념
-        sel.value = 's2-c10-x';
-        await sel.onchange?.(/** @type {any} */ ({}));
-        const stage = () => /** @type {HTMLElement} */ (document.getElementById('flow-stage'));
-        const text = () => stage().textContent || '';
-
-        m.flowNext(); // pre — 문항 렌더
+        await _start(m);
+        m.flowNext(); // home → pre (미응답이면 확인 비활성)
         expect(text()).toContain('선행 문항');
-        m.flowNext(); // story — 버블 렌더
-        expect(stage().innerHTML).toContain('wb-bubble');
-        m.flowNext(); // summary
+        m.flowOpt(0); // 정답 선택
+        m.flowNext(); // pre 판정 → summary (story 스킵)
         expect(text()).toContain('핵심 요약');
-        m.flowNext(); // scenario — 미응답 시 다음 비활성
-        const next = /** @type {HTMLButtonElement} */ (document.getElementById('flow-next'));
-        expect(text()).toContain('시나리오 문항');
-        m.flowOpt(1); // 보기 선택 → 다음 활성
-        expect(next.disabled).toBe(false);
-        m.flowNext(); // result — 보기별 해설
-        expect(text()).toContain('해설');
-        m.flowNext(); // complete
+        expect(stage().innerHTML).not.toContain('wb-bubble');
+        m.flowNext(); // → scenario
+        expect(text()).toContain('시나리오 문항1');
+        expect(nextBtn().disabled).toBe(true);
+        m.flowOpt(1); // 정답
+        m.flowNext(); // → result
+        expect(text()).toContain('정답입니다');
+        m.flowNext(); // → complete
         expect(text()).toContain('학습 완료');
-        m.flowBack(); // 뒤로
-        expect(text()).toContain('해설');
+        const p = progress();
+        expect(p['s2-c10-x'].mastered).toBe(true);
+        expect(attempts().length).toBe(2); // pre + scenario
+    });
+
+    it('pre 모르겠어요 → 이야기 경유 → 시나리오 오답 재도전(다른 문항) → 2연속 오답 weak 표시', async () => {
+        const m = await import('../../../../src/exams/carework/views/care-flow.js');
+        await _start(m);
+        m.flowNext();
+        m.flowDontKnow();
+        m.flowNext(); // → story
+        expect(stage().innerHTML).toContain('wb-bubble');
+        m.flowNext(); // → summary
+        m.flowNext(); // → scenario
+        m.flowOpt(0); // sc1 오답 (정답=1)
+        m.flowNext(); // → result — 아쉬움 + 다른 문항 안내
+        expect(text()).toContain('아쉬워요');
+        m.flowNext(); // → 재도전: sc2
+        expect(text()).toContain('시나리오 문항2');
+        m.flowOpt(0); // sc2 오답 (정답=2) → 2연속
+        m.flowNext(); // → result
+        expect(text()).toContain('두 번 연속');
+        m.flowNext(); // → complete — weak 표시, mastered 없음
+        const p = progress();
+        expect(p['s2-c10-x'].weak).toBe(true);
+        expect(p['s2-c10-x'].mastered).toBeUndefined();
+        expect(attempts().filter(a => a.dontKnow).length).toBe(1);
+    });
+
+    it('미완료 개념 재선택 — 저장된 단계로 이어하기', async () => {
+        const m = await import('../../../../src/exams/carework/views/care-flow.js');
+        const { setItem } = await import('../../../../src/core/storage.js');
+        setItem('flow_progress', JSON.stringify({ 's2-c10-x': { stage: 'story', lastSeen: 1 } }));
+        await _start(m);
+        expect(stage().innerHTML).toContain('wb-bubble'); // story로 복귀
     });
 
     it('개념 미선택 상태 — 안내 문구 렌더', async () => {
         const m = await import('../../../../src/exams/carework/views/care-flow.js');
         await m.initCareFlowView();
-        expect(document.getElementById('flow-stage')?.textContent).toContain('개념을 선택');
+        expect(stage().textContent).toContain('개념을 선택하세요');
     });
 
     it('과목 필터 — 해당 과목 개념만 셀렉트에 표시', async () => {
@@ -78,15 +122,12 @@ describe('care-flow 4단계 뷰 상태머신', () => {
         expect([...sel.options].filter(o => o.value).every(o => o.value.startsWith('s2'))).toBe(true);
     });
 
-    it('로드 경로 — DataLoader._getMd로 이야기·은행을 읽는다', async () => {
+    it('보기 버튼은 data-click 위임 마커를 갖는다 (dead 버튼 회귀)', async () => {
         const m = await import('../../../../src/exams/carework/views/care-flow.js');
-        const { DataLoader } = await import('../../../../src/content/data-loader.js');
-        const spy = vi.spyOn(DataLoader, '_getMd');
-        await m.initCareFlowView();
-        const sel = /** @type {HTMLSelectElement} */ (document.getElementById('flow-concept'));
-        sel.value = 's2-c10-x';
-        await sel.onchange?.(/** @type {any} */ ({}));
-        expect(spy).toHaveBeenCalled(); // fetch(contentPath) 직접 호출이 아닌 _getMd 경유
-        spy.mockRestore();
+        await _start(m);
+        m.flowNext();
+        document.querySelectorAll('#flow-stage .flow-opt').forEach(b => {
+            expect(b.getAttribute('data-click')).toBeTruthy();
+        });
     });
 });

@@ -7,10 +7,12 @@ import { parseStorySlots, renderSlotHtml } from '../../../reader/webtoon-render.
 import { DataLoader } from '../../../content/data-loader.js';
 
 const STEPS = ['home', 'pre', 'story', 'summary', 'scenario', 'result', 'complete'];
-const STEP_LABELS = { home: '개념', pre: '①미리풀기', story: '②이야기', summary: '③요약', scenario: '④시나리오', result: '채점', complete: '완료' };
+const STEP_LABELS = { home: '개념', pre: '①미리풀기', story: '②이야기', summary: '③요약', scenario: '④시나리오', result: '해설', complete: '완료' };
+const NEXT_LABEL = { home: '시작 ▶', pre: '확인', story: '다음 ▶', summary: '문제 풀기 ▶', scenario: '정답 확인', result: '다음 ▶' };
 const BOOKS = { 1: '교재/caretheory/1과목_요양보호론_이야기형.md', 2: '교재/careprac/2과목_요양보호실기_이야기형.md' };
 const BANKS = { 1: '문제은행/과목1_요양보호론_문제은행.md', 2: '문제은행/과목2_요양보호실기_문제은행.md' };
 const CIRCLED = '①②③④⑤';
+const MAX_WRONG = 2; // 시나리오 연속 오답 상한 — 넘으면 해설 후 진행 (DOC-USR-22 §4)
 const CHARS = {
     miyoung: { name: '미영', side: 'right', img: 'assets/characters/miyoung.svg' },
     mentor: { name: '박은정 선임', side: 'left', img: 'assets/characters/park-eunjung.svg' },
@@ -19,7 +21,12 @@ const CHARS = {
 
 let _concepts = null, _items = null, _tags = null, _slots = null, _book = null;
 const _bank = {};
-let _c = null, _i = 0, _sel = -1, _answered = false;
+let _c = null, _i = 0, _sel = -1, _answered = false, _dk = false;
+let _preItem = null;   // 미리풀기 문항 (authored 우선, 없으면 은행 태그 문항)
+let _scItem = null;    // 현재 시나리오 문항
+let _scTried = new Set(); // 이번 개념에서 본 시나리오 id — 재도전은 다른 문항으로
+let _scWrong = 0;      // 시나리오 연속 오답
+let _lastCorrect = null; // result 표시용 마지막 판정
 
 const _chars = () => Object.fromEntries(Object.entries(CHARS).map(([k, c]) => [k, { ...c, img: contentPath(c.img) }]));
 /** 정답 인덱스 — authored는 원문자('②'), 은행 파싱은 숫자 */
@@ -27,6 +34,24 @@ const _ansIdx = q => typeof q.answer === 'number' ? q.answer : CIRCLED.indexOf(q
 const _prog = () => { try { return JSON.parse(getItem('flow_progress') || '{}') || {}; } catch { return {}; } };
 const _save = p => setItem('flow_progress', JSON.stringify(p));
 const _conceptItems = (c, role) => (_items || []).filter(it => it.conceptId === c.id && it.role === role);
+
+/** 응답 기록 — flow_attempts {conceptId, itemId, choice, correct, dontKnow, ts} (분석용, 최근 500건 유지) */
+function _rec(itemId, choice, correct, dk) {
+    let a;
+    try { a = JSON.parse(getItem('flow_attempts') || '[]') || []; } catch { a = []; }
+    a.push({ conceptId: _c && _c.id, itemId, choice, correct, dontKnow: !!dk, ts: Date.now() });
+    if (a.length > 500) a.splice(0, a.length - 500);
+    setItem('flow_attempts', JSON.stringify(a));
+}
+
+const _stage = s => {
+    const p = _prog();
+    const rec = p[_c.id] || {};
+    rec.stage = s; rec.lastSeen = Date.now();
+    p[_c.id] = rec; _save(p);
+};
+
+function _resetQ() { _sel = -1; _answered = false; _dk = false; }
 
 async function _load() {
     if (!_concepts) {
@@ -73,6 +98,43 @@ function _slotFor(c) {
     return _slots && _slots[n - 1] ? _slots[n - 1] : null;
 }
 
+/** 미리풀기 문항 — authored pre 우선, 없으면 은행 태그 문항을 인터랙티브로 */
+function _preItemFor(c) {
+    const it = _conceptItems(c, 'pre')[0];
+    if (it) return it;
+    const key = _bankKeys(c.id)[0];
+    const bq = key && (_bank[c.subject] || {})[key];
+    return bq ? { id: 'bank:' + key, stem: bq.stem, options: bq.options, answer: bq.answer, rationale: [] } : null;
+}
+
+/** 시나리오 문항 — 이번 개념에서 아직 안 본 것 우선 (재도전은 다른 문항) */
+function _scItemFor(c) {
+    const pool = _conceptItems(c, 'scenario').concat(_conceptItems(c, 'review'));
+    return pool.find(q => !_scTried.has(q.id)) || null;
+}
+
+function _quizHtml(q) {
+    return `<div class="flow-quiz"><div class="flow-stem">${esc(q.stem)}</div>` +
+        q.options.map((o, oi) =>
+            `<button class="flow-opt" data-click="flowOpt" data-arg="${oi}">${esc(CIRCLED[oi] || '')} ${esc(o)}</button>`).join('') + '</div>';
+}
+
+function _resultHtml() {
+    const q = _scItem;
+    if (!q) return '<p class="wb-scene">표시할 결과가 없습니다.</p>';
+    const ai = _ansIdx(q);
+    const ok = _lastCorrect === true;
+    const verdict = ok ? '정답입니다!'
+        : (_scWrong >= MAX_WRONG ? '두 번 연속 아쉬웠어요 — 해설을 읽고 넘어갈게요.' : '아쉬워요 — 같은 개념의 다른 문항으로 한 번 더 풀어봐요.');
+    const opts = q.options.map((o, oi) => {
+        const mark = oi === ai ? '✅' : (oi === _sel ? '❌' : '▫️');
+        return `<p class="wb-scene">${mark} ${esc(o)} — ${esc((q.rationale || [])[oi] || '')}</p>`;
+    }).join('');
+    const canRetry = !ok && _scWrong < MAX_WRONG && !!_scItemFor(_c);
+    return `<div class="flow-verdict ${ok ? 'ok' : 'no'}">${verdict}</div>` + opts
+        + (canRetry ? '<p class="flow-hint">「다음」을 누르면 같은 개념의 다른 문항이 나옵니다.</p>' : '');
+}
+
 function _render() {
     const st = document.getElementById('flow-stage');
     const pg = document.getElementById('flow-progress');
@@ -80,26 +142,36 @@ function _render() {
     const next = /** @type {HTMLButtonElement|null} */ (document.getElementById('flow-next'));
     if (!st) return;
     const step = STEPS[_i];
-    st.dataset.step = step;
-    if (pg) pg.textContent = STEPS.map(s => s === step ? `[${STEP_LABELS[s]}]` : STEP_LABELS[s]).join(' · ');
-    if (back) back.disabled = _i === 0;
-    if (next) next.disabled = !_c || (step === 'scenario' && !_answered);
     const c = _c;
+    // 문항은 disabled 계산 전에 확정 — 진입 첫 렌더에서도 미응답 확인이 막히도록
+    if (c && step === 'pre') _preItem = _preItem || _preItemFor(c);
+    if (c && step === 'scenario') {
+        _scItem = _scItem || _scItemFor(c);
+        if (_scItem) _scTried.add(_scItem.id);
+    }
+    st.dataset.step = step;
+    if (pg) pg.innerHTML = STEPS.map(s =>
+        `<span class="flow-step${s === step ? ' on' : ''}">${esc(STEP_LABELS[s])}</span>`).join('');
+    if (back) back.disabled = _i === 0;
+    if (next) {
+        next.textContent = NEXT_LABEL[step] || '다음 ▶';
+        next.disabled = !c || (step === 'pre' && !!_preItem && !_answered)
+            || (step === 'scenario' && !!_scItem && !_answered);
+    }
     if (!c) { st.innerHTML = '<p class="wb-scene">위에서 개념을 선택하세요.</p>'; return; }
+    const p = _prog()[c.id] || {};
 
     if (step === 'home') {
-        const p = _prog()[c.id] || {};
-        st.innerHTML = `<div class="wb-scene wb-scene-title">Ch${esc(c.chapter)} · ${esc(c.title)}</div><p class="wb-scene">진행: ${esc(p.stage ? STEP_LABELS[p.stage] || p.stage : '미시작')}${p.mastered ? ' — 마스터' : ''}</p>`;
+        const status = p.mastered ? '완료 — 정답으로 마쳤어요'
+            : p.weak ? '취약 표시 — 다음에 먼저 다시 나와요'
+            : p.stage ? `진행 중 — ${STEP_LABELS[p.stage] || '미시작'}부터 이어합니다`
+            : '아직 시작 전';
+        st.innerHTML = `<div class="wb-scene wb-scene-title">Ch${esc(c.chapter)} · ${esc(c.title)}</div><p class="wb-scene">${esc(status)}</p>`;
     } else if (step === 'pre') {
-        const qs = _conceptItems(c, 'pre').slice(0, 2);
-        // 문제은행 태깅 문항 — 개념당 최대 2개, 정답은 details로 확인
-        const bank = _bank[c.subject] || {};
-        const bq = _bankKeys(c.id).map(k => bank[k]).filter(Boolean).slice(0, 2);
-        const bHtml = bq.map(q => `<div class="flow-quiz"><div class="wb-scene wb-scene-title">${esc(q.stem)}</div>` +
-            q.options.map(o => `<div class="wb-scene">${esc(o)}</div>`).join('') +
-            `<details class="flow-answer"><summary>정답 보기</summary>정답: ${esc(CIRCLED[q.answer] || '?')}</details></div>`).join('');
-        st.innerHTML = (qs.length ? qs.map((q, qi) => _quizHtml(q, 'pre' + qi)).join('') : '') + bHtml ||
-            '<p class="wb-scene">선행 문항이 없습니다 — 이야기로 넘어가세요.</p>';
+        st.innerHTML = _preItem
+            ? `<div class="wb-scene wb-scene-title">먼저 풀어볼까요 — 모르면 「모르겠어요」를 눌러도 됩니다</div>${_quizHtml(_preItem)}
+               <button class="flow-opt flow-dk" data-click="flowDontKnow">🙋 모르겠어요</button>`
+            : '<p class="wb-scene">선행 문항이 없습니다 — 이야기로 넘어가세요.</p>';
     } else if (step === 'story') {
         const slot = _slotFor(c);
         st.innerHTML = slot
@@ -111,44 +183,106 @@ function _render() {
         st.innerHTML = `<div class="wb-scene wb-scene-title">핵심 요약</div><div class="wb-scene">${esc(c.title)}</div>` +
             (key ? `<p class="wb-scene">포인트 — ${esc(key.stem.slice(0, 80))}… → <b>${esc(good)}</b></p>` : '');
     } else if (step === 'scenario') {
-        const qs = _conceptItems(c, 'scenario').concat(_conceptItems(c, 'review')).slice(0, 3);
-        st.innerHTML = qs.length ? qs.map((q, qi) => _quizHtml(q, 'sc' + qi)).join('') : '<p class="wb-scene">시나리오 문항이 없습니다.</p>';
+        st.innerHTML = _scItem ? _quizHtml(_scItem) : '<p class="wb-scene">시나리오 문항이 없습니다.</p>';
     } else if (step === 'result') {
-        const q = _conceptItems(c, 'scenario').concat(_conceptItems(c, 'review'))[0];
-        st.innerHTML = q ? _resultHtml(q) : '<p class="wb-scene">표시할 결과가 없습니다.</p>';
+        st.innerHTML = _resultHtml();
     } else {
-        const p = _prog(); p[c.id] = { stage: 'complete', mastered: true, lastSeen: Date.now() }; _save(p);
-        st.innerHTML = `<div class="wb-scene wb-scene-title">학습 완료 — ${esc(c.title)}</div><p class="wb-scene">복습 큐에 등록됐습니다. 다른 개념으로 계속하세요.</p>`;
+        const rec = _prog()[c.id] || {};
+        const done = _lastCorrect === true;
+        const p2 = _prog();
+        if (done) { rec.mastered = true; rec.weak = false; }
+        else if (_scWrong >= MAX_WRONG) { rec.weak = true; }
+        rec.stage = 'complete'; rec.lastSeen = Date.now();
+        p2[c.id] = rec; _save(p2);
+        const msg = done ? '정답으로 마쳤어요 — 잘하셨습니다.'
+            : _scWrong >= MAX_WRONG ? '이 개념은 다음에 먼저 다시 나와요.'
+            : '이 개념 학습을 마쳤어요.';
+        st.innerHTML = `<div class="wb-scene wb-scene-title">학습 완료 — ${esc(c.title)}</div><p class="wb-scene">${msg}</p>
+            <button class="btn btn-primary flow-next-concept" data-click="flowNextConcept">다음 개념으로 ▶</button>`;
     }
-}
-
-function _quizHtml(q, id) {
-    return `<div class="flow-quiz" data-q="${esc(id)}"><div class="wb-scene wb-scene-title">${esc(q.stem)}</div>` +
-        q.options.map((o, oi) => `<button class="flow-opt secondary" data-opt="${oi}">${esc(o)}</button>`).join('') + '</div>';
-}
-
-function _resultHtml(q) {
-    return `<div class="wb-scene wb-scene-title">${_answered ? '해설' : '문항 없음'}</div>` +
-        q.options.map((o, oi) => `<p class="wb-scene">${oi === _ansIdx(q) ? '✅' : '▫️'} ${esc(o)} — ${esc(q.rationale[oi] || '')}</p>`).join('');
 }
 
 export function flowBack() { if (_i > 0) { _i--; _render(); } }
 export function flowNext() {
     if (_i >= STEPS.length - 1) return;
-    if (STEPS[_i] === 'scenario') _answered = true;
-    _i++; _render();
+    const step = STEPS[_i];
+
+    if (step === 'pre' && _preItem) {
+        // 미리풀기 판정 — 정답이면 이야기를 건너뛰고 요약으로 (DOC-USR-22 §4 라우팅)
+        const correct = !_dk && _sel === _ansIdx(_preItem);
+        _rec(_preItem.id || 'pre', _dk ? -1 : _sel, correct, _dk);
+        const p = _prog(); const rec = p[_c.id] || {};
+        rec.preOk = correct; rec.lastSeen = Date.now();
+        p[_c.id] = rec; _save(p);
+        _stage(correct ? 'summary' : 'story');
+        _i = STEPS.indexOf(correct ? 'summary' : 'story');
+        _resetQ(); _preItem = null;
+        _render(); return;
+    }
+    if (step === 'scenario' && _scItem) {
+        const correct = _sel === _ansIdx(_scItem);
+        _scWrong = correct ? 0 : _scWrong + 1;
+        _lastCorrect = correct;
+        _rec(_scItem.id, _sel, correct, false);
+        const p = _prog(); const rec = p[_c.id] || {};
+        rec.attempts = (rec.attempts || 0) + 1; rec.lastSeen = Date.now();
+        p[_c.id] = rec; _save(p);
+        _stage('result');
+        _i = STEPS.indexOf('result');
+        _render(); return;
+    }
+    if (step === 'result' && _lastCorrect === false && _scWrong < MAX_WRONG) {
+        // 오답 재도전 — 같은 개념의 다른 문항 (문항 소진 시 진행)
+        const nq = _scItemFor(_c);
+        if (nq) {
+            _scItem = nq; _resetQ();
+            _stage('scenario');
+            _i = STEPS.indexOf('scenario');
+            _render(); return;
+        }
+    }
+    _i++;
+    _render();
 }
 
-/** 시나리오 보기 클릭 — 위임 핸들러 (app.js data-click: flowOpt) */
+/** 시나리오·미리풀기 보기 클릭 — 위임 핸들러 (data-click="flowOpt") */
 export function flowOpt(idx) {
-    if (_i < 0 || STEPS[_i] !== 'scenario') return;
-    _sel = idx; _answered = true;
-    document.querySelectorAll('.flow-opt').forEach(b => {
+    const step = STEPS[_i];
+    if (step !== 'scenario' && step !== 'pre') return;
+    _sel = Number(idx); _answered = true; _dk = false;
+    document.querySelectorAll('#flow-stage .flow-opt[data-arg]').forEach(b => {
         const btn = /** @type {HTMLElement} */ (b);
-        btn.style.borderColor = Number(btn.dataset.opt) === idx ? 'var(--color-primary)' : '';
+        btn.classList.toggle('is-sel', btn.getAttribute('data-arg') === String(idx));
     });
     const next = /** @type {HTMLButtonElement|null} */ (document.getElementById('flow-next'));
     if (next) next.disabled = false;
+}
+
+/** 미리풀기 「모르겠어요」 — 오답과 같은 경로(이야기)로 보내되 추측 없음으로 기록 (DOC-USR-22 §4) */
+export function flowDontKnow() {
+    if (STEPS[_i] !== 'pre' || !_preItem) return;
+    _dk = true; _answered = true; _sel = -1;
+    document.querySelectorAll('#flow-stage .flow-opt[data-arg]').forEach(b => b.classList.remove('is-sel'));
+    const dk = document.querySelector('#flow-stage .flow-dk');
+    if (dk) dk.classList.add('is-sel');
+    const next = /** @type {HTMLButtonElement|null} */ (document.getElementById('flow-next'));
+    if (next) next.disabled = false;
+}
+
+/** 완료 후 다음 미완료 개념으로 이동 — 같은 과목 우선, 없으면 전체에서 탐색 */
+export function flowNextConcept() {
+    if (!_concepts || !_c) return;
+    const p = _prog();
+    const undone = x => !(p[x.id] && p[x.id].mastered);
+    const next = _concepts.find(x => x.subject === _c.subject && undone(x))
+        || _concepts.find(undone) || _c;
+    const sel = /** @type {HTMLSelectElement|null} */ (document.getElementById('flow-concept'));
+    const subjSel = /** @type {HTMLSelectElement|null} */ (document.getElementById('flow-subject'));
+    if (subjSel && String(next.subject) !== subjSel.value) {
+        subjSel.value = String(next.subject);
+        subjSel.dispatchEvent(new Event('change'));
+    }
+    if (sel) { sel.value = next.id; sel.dispatchEvent(new Event('change')); }
 }
 
 export async function initCareFlowView() {
@@ -159,8 +293,18 @@ export async function initCareFlowView() {
     const cs = await _load();
     const pick = async () => {
         _c = cs.find(x => x.id === sel.value) || null;
-        _i = 0; _sel = -1; _answered = false;
-        if (_c) { await Promise.all([_storySlots(_c.subject), _bankLoad(_c.subject)]); const p = _prog(); p[_c.id] = p[_c.id] || {}; p[_c.id].stage = 'pre'; _save(p); }
+        _i = 0; _preItem = null; _scItem = null;
+        _scTried = new Set(); _scWrong = 0; _lastCorrect = null;
+        _resetQ();
+        if (_c) {
+            await Promise.all([_storySlots(_c.subject), _bankLoad(_c.subject)]);
+            const rec = _prog()[_c.id] || {};
+            // 이어하기 — 미완료 단계로 복귀 (result는 scenario부터 다시)
+            if (!rec.mastered && rec.stage && STEPS.indexOf(rec.stage) > 0) {
+                _i = STEPS.indexOf(rec.stage === 'result' ? 'scenario' : rec.stage);
+            }
+            if (!rec.stage) _stage('pre');
+        }
         _render();
     };
     const refill = () => {
