@@ -58,6 +58,7 @@ export const _lum = c => {
  *  오버레이 문서(매뉴얼·시험 문서)처럼 다크 테마 요소를 그대로 넘기면 밝은 글자가 백지처럼 보이므로
  *  클론을 흰 래퍼에 담고 밝은 색만 검정으로 바꾼다 — 나머지 색상은 그대로 유지. */
 export async function pdfFileFromElStyled(el, title) {
+    await ensurePdf(); // 벤더 지연 로드 — 미호출 시 window.jspdf/html2canvas undefined 즉시 실패
     const wrap = document.createElement('div');
     // article 스코프 CSS가 '#manual-overlay #manual-article h2' 형태라 오버레이 조상 id가
     // 없으면 타이포그래피 자체가 미적용 — 원본 오버레이 id를 부여해 선택자 컨텍스트 재현.

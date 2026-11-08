@@ -1,6 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(pdf): pdfFileFromElStyled에 ensurePdf 선행 — 벤더 미로드 즉시 크래시 복구
+
+- 페이지네이션 리라이트가 window.jspdf/html2canvas 직접 사용하며 ensurePdf() 누락 → 클릭 즉시 destructure 크래시 → 인쇄창 폴백(백지 사례)으로 빠짐 — 실무막뉴얼 "아무것도 안 뜸"의 실제 원인
+
 ## 2026-11-09 feat(reader): PDF 클릭 즉시 생성중 토스트 — 장문서 대기 가시화
 
 - 페이지 그룹별 html2canvas 렌더라 긴 문서는 수십초 소요 — 클릭 즉시 "PDF 생성 중" 토스트로 진행 중임을 표시 (무응답 오인 방지 + 경로 진단)

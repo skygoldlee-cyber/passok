@@ -30,6 +30,10 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         assert.match(src, /pg\.id = ovId/);                      // 페이지 컨테이너 컨텍스트
     });
 
+    it('벤더 지연 로드 — ensurePdf() 선행 (미호출 시 즉시 크래시 회귀)', () => {
+        assert.match(src, /pdfFileFromElStyled[\s\S]{0,300}await ensurePdf\(\)/); // 함수 선두에 벤더 로드
+    });
+
     it('요소 실측 높이로 페이지를 채움 — 고정 슬라이스가 아닌 요소 경계', () => {
         assert.match(src, /clone\.children/);                    // article 자식 요소 순회
         assert.match(src, /offsetHeight \+ parseFloat/);         // 실측 높이 + 마진
