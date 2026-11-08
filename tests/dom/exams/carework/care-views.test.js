@@ -354,6 +354,21 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         vi.unstubAllGlobals();
     });
 
+    it('careAudit·careCalc — 빈 콘텐츠 인쇄 차단 (빈 점검표·출력 요소 부재 시 print 미호출)', async () => {
+        vi.resetModules(); // 모듈 상태(_sections) 초기화 — 빈 점검표 경로를 재현
+        const { careAuditPrint } = await import('../../../../src/exams/carework/views/care-audit.js');
+        const { careCalcPrint } = await import('../../../../src/exams/carework/views/care-calc.js');
+        const spy = vi.fn();
+        vi.stubGlobal('print', spy);
+        loadPartial('care-audit.html');
+        careAuditPrint(); // 섹션 미로드(_sections=[]) → 인쇄 차단
+        loadPartial('care-calc.html');
+        document.getElementById('care-result')?.remove(); // 출력 요소 부재 → 인쇄 차단
+        careCalcPrint();
+        expect(spy).not.toHaveBeenCalled();
+        vi.unstubAllGlobals();
+    });
+
     it('careHandover — 기관 인계·인수 확인 핸들러 노출 (DSN-43 6b)', () => {
         expect(typeof careFacilityHandoverSubmit).toBe('function');
         expect(typeof careHandoverAck).toBe('function');

@@ -116,7 +116,12 @@ export function careCalcReset() {
     const out = $('care-result'); if (out) out.innerHTML = '';
 }
 
-export function careCalcPrint() { careCalcRun(); window.print(); }
+export function careCalcPrint() {
+    careCalcRun();
+    const out = $('care-result');
+    if (!out || !out.textContent.trim() || out.querySelector('.care-calc-err')) return; // 오류 상태는 화면에 이미 표시됨 — 백지 인쇄 방지
+    window.print();
+}
 
 export function initCareCalcView() {
     markFunnel('tool:care-calc');

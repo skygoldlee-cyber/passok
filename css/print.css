@@ -439,3 +439,30 @@
 @media print {
     .story-toggle { display: none; }
 }
+
+/* 오버레이 인쇄 — 매뉴얼·시험 문서 오버레이를 인쇄 플로우로 전환 (fixed 클리핑으로 첫 장만 나오던 결함 수정) */
+@media print {
+    #manual-overlay.open, #exam-overlay.open {
+        position: static !important;
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
+        inset: auto !important;
+    }
+    #manual-overlay .manual-ov-scroll,
+    #exam-overlay .exam-ov-scroll {
+        overflow: visible !important;
+        height: auto !important;
+        flex: none !important;
+    }
+    #manual-overlay .manual-ov-bar,
+    #exam-overlay .exam-ov-bar,
+    .manual-ov-btn, .exam-ov-btn {
+        display: none !important;
+    }
+    /* 오버레이 오픈 중엔 뒤의 활성 뷰가 중복 출력되지 않도록 */
+    body:has(#manual-overlay.open) .view-section.active,
+    body:has(#exam-overlay.open) .view-section.active {
+        display: none !important;
+    }
+}

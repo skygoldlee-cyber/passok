@@ -55,6 +55,7 @@ export function careAuditDocMd() {
 }
 
 export function careAuditPrint() {
+    if (!_sections.length) { showToast('인쇄할 점검 항목이 없습니다 — 점검표를 먼저 불러오세요.', 'error'); return; }
     proFeatureNotice('care_audit_export', '점검표 인쇄·PDF');
     window.print();
 }
