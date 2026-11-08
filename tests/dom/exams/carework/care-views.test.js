@@ -822,6 +822,27 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         vi.unstubAllGlobals();
     });
 
+    it('customForm — 기본 양식 파일로 만들기: 기관 양식(.csv) → 연동 사본 저장·도구 서식 적용', async () => {
+        const { initCareCustomFormView, careFormSeedFile, careFormTplSave } = await import('../../../../src/exams/carework/views/care-custom-form.js');
+        const { toolOverride } = await import('../../../../src/exams/carework/form-seeds.js');
+        const { listFormTemplates, removeFormTemplate } = await import('../../../../src/exams/carework/form-template-store.js');
+        const { readTplEditor } = await import('../../../../src/exams/carework/form-template-editor.js');
+        for (const t of listFormTemplates()) removeFormTemplate(t.id);
+        loadPartial('care-custom-form.html');
+        initCareCustomFormView();
+        expect(document.querySelectorAll('[data-click="careFormSeedFile"]').length).toBe(6); // 6개 도구 모두 파일 버튼
+        careFormSeedFile('careHandover');
+        selectFile('cf-seed-file', new File(['구분,항목\n일시,\n인계자,\n인수자,'], '기관양식.csv', { type: 'text/csv' }));
+        await waitFor(() => /** @type {HTMLTextAreaElement} */ (document.getElementById('cf-tpl-body'))?.value.includes('| 일시 |'));
+        expect(readTplEditor('cf-tpl').body).toContain('| 구분 | 항목 |'); // 추출 표가 MD 표로 편집기 로드
+        expect(document.getElementById('cf-tpl-label')?.textContent).toContain('인수인계서'); // 연동 라벨
+        careFormTplSave();
+        const tpl = listFormTemplates().find(t => t.toolKey === 'careHandover');
+        expect(tpl).toBeTruthy(); // toolKey 연동 사본으로 저장
+        expect(toolOverride('careHandover')).toContain('인계자'); // 도구 출력 서식이 기관 양식으로
+        for (const t of listFormTemplates()) removeFormTemplate(t.id);
+    });
+
     it('customForm — 시드는 실제 필드명 노출 + 오버라이드 시 스칼라 실값 기입', async () => {
         const { renderToolBody, TOOL_FORM_SEEDS } = await import('../../../../src/exams/carework/form-seeds.js');
         const { addFormTemplate, listFormTemplates, removeFormTemplate } =

@@ -114,6 +114,53 @@ export function careFormTplUse(id) {
     renderFillForm();
 }
 
+// — 기본 양식을 기관 파일로 생성 — 업로드 파일이 도구 출력 서식(연동 사본)이 됨 —
+
+let _seedFileTool = null; // 파일 대상 도구 키 (change 핸들러 전달용)
+
+/** 기본 양식 "파일로 만들기" — 숨긴 file input 트리거 */
+export function careFormSeedFile(toolKey) {
+    _seedFileTool = toolKey;
+    /** @type {HTMLInputElement|null} */ ($('cf-seed-file'))?.click();
+}
+
+/** 기관 양식 파일(.docx·.xlsx·.csv·.pdf) → 본문 추출 → 연동 사본 편집기에 로드 */
+async function _onSeedFile(input) {
+    const f = input.files?.[0];
+    input.value = '';
+    const toolKey = _seedFileTool;
+    _seedFileTool = null;
+    const def = toolKey && TOOL_FORM_SEEDS[toolKey];
+    if (!f || !def) return;
+    proFeatureNotice('care_form_extract', '기관 양식 파일 추출');
+    showToast('양식 파일을 분석하는 중입니다…');
+    let body = '';
+    try {
+        const n = (f.name || '').toLowerCase();
+        if (/\.(xlsx|xls|csv)$/.test(n)) {
+            const { extractFormXlsx } = await import('../care-form-pdf.js');
+            const { parseCsv } = await import('../../../content/csv-utils.js');
+            body = parseCsv((await extractFormXlsx(f)).text) // 표 구조 보존 — MD 표 행으로
+                .filter(r => r.some(c => String(c || '').trim()))
+                .map(r => '| ' + r.map(c => String(c || '').trim()).join(' | ') + ' |').join('\n');
+        } else {
+            const { extractFormDocx, extractFormPdf } = await import('../care-form-pdf.js');
+            body = (await (n.endsWith('.docx') ? extractFormDocx(f) : extractFormPdf(f))).text;
+        }
+    } catch (e) {
+        showToast(e instanceof Error && e.message ? e.message : '파일을 읽지 못했습니다 — 텍스트 기반 파일인지 확인하세요.', 'error');
+        return;
+    }
+    if (!body.trim()) { showToast('파일에서 양식 내용을 찾지 못했습니다.', 'error'); return; }
+    // 연동 사본이 이미 있으면 갱신 편집으로, 없으면 신규 연동 사본 (저장 시 toolKey 추론)
+    const linked = allFormTemplates().find(t => t.toolKey === toolKey);
+    _openEditor(linked || { id: null, title: def.title, body, scope: 'local', toolKey });
+    if (linked) fillTplEditor('cf-tpl', linked.title, body); // 추출 본문으로 교체
+    showToast(body.includes(`{{${def.block}}}`)
+        ? '기관 양식을 불러왔습니다 — 검토 후 저장하세요.'
+        : `기관 양식을 불러왔습니다 — 출력 데이터가 들어갈 위치에 {{${def.block}}}를 넣어 저장하세요.`);
+}
+
 /** 기본 양식 사본 생성·편집 (CO-18) — 사본 생성 후 인라인 편집기를 바로 연다 */
 export function careFormSeedCopy(toolKey) {
     const def = TOOL_FORM_SEEDS[toolKey];
@@ -171,6 +218,7 @@ function renderSeedList() {
         return `<div class="care-log-saved-item">
             <span>${esc(def.title)} ${linked ? '<em class="care-card-cat">사본 있음</em>' : '<small>표준 양식</small>'}</span>
             <button data-click="careFormSeedCopy" data-arg="${esc(key)}" class="btn">${linked ? '사본 편집' : '사본 만들기'}</button>
+            <button data-click="careFormSeedFile" data-arg="${esc(key)}" class="btn btn-secondary">📄 파일로 만들기</button>
           </div>`;
     }).join('');
 }
@@ -254,6 +302,12 @@ export function initCareCustomFormView() {
     markFunnel('tool:care-custom-form');
     attachClientPicker(/** @type {HTMLInputElement|null} */ ($('cf-client')));
     initTplEditor('cf-tpl'); // 인라인 편집기 — 파일 추출·필드 미리보기 바인딩
+    // 기본 양식 파일 input — change는 직접 바인딩 (data-click은 클릭만)
+    const seedFile = /** @type {HTMLInputElement|null} */ ($('cf-seed-file'));
+    if (seedFile && !seedFile.dataset.bound) {
+        seedFile.dataset.bound = '1';
+        seedFile.addEventListener('change', () => void _onSeedFile(seedFile));
+    }
     renderTplList();
     renderSeedList();
     renderFillForm();
