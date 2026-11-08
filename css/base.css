@@ -1328,3 +1328,7 @@ body:not(.ui-mode-practice) .tab-group-practice {
 body.ui-mode-practice .mobile-tab-bar .mobile-tab-mode {
     color: var(--color-secondary);
 }
+
+/* 글자 크게 보기 — 시니어 읽기 편의 (UI_FONT_SCALE: ''|lg|xl, toggleFontSize) */
+html.font-lg { font-size: 112.5%; }
+html.font-xl { font-size: 125%; }

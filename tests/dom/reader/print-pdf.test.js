@@ -1,4 +1,4 @@
-// tests/dom/reader/print-pdf.dom.test.js — 매뉴얼·시험 뷰어 인쇄/PDF 버튼의 생성 PDF 경로 계약
+// tests/dom/reader/print-pdf.test.js — 매뉴얼·시험 뷰어 인쇄/PDF 버튼의 생성 PDF 경로 계약
 // @spec none — 도구 검증 (뷰어 인쇄 버튼 동작)
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 

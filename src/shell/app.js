@@ -195,7 +195,7 @@ import { getViewTitles, navigateToView, initViewHashRouting } from './router.js'
 import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage, getActiveRegistry } from '../core/exam-context.js';
 import { renderExamSelect, showExamSelect, selectExamAction, resetExamSelection, hardReloadApp } from '../views/exam-select.js';
 import { startVersionWatch } from '../pwa/version-watch.js';
-import { initUiMode, toggleUiMode } from './ui-mode.js';
+import { initUiMode, toggleUiMode, toggleFontSize } from './ui-mode.js';
 import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword, authOAuth } from '../auth-sync/auth-view.js';
 import { showRedeemDialog, initPlanSync } from '../pro/pro-redeem.js';
 import { initSync, syncNow } from '../auth-sync/sync.js';
@@ -627,6 +627,7 @@ const DELEGATED_HANDLERS = {
     showIngredientsChangelog,
     // 학습/실무 UI 모드
     toggleUiMode,
+    toggleFontSize,
     /** 앱 종료 (설치형 PWA) — 확인 후 종료 시도. 모바일 OS가 자체 종료를 막으면 종료 안내 화면으로 전환 */
     quitApp() {
         // 모바일 OS 종료 안내는 터치 환경에서만 — 데스크톱 PWA는 window.close()가 동작하므로 불필요

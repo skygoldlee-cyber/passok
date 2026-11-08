@@ -51,9 +51,33 @@ export function applyUiMode() {
     });
 }
 
+/** 글자 크기 스케일 — 시니어 대응. html 클래스 font-lg/font-xl로 토큰 기반 배율 적용 */
+export function applyFontScale() {
+    const scale = safeGetItem(STORAGE_KEYS.UI_FONT_SCALE) || '';
+    document.documentElement.classList.toggle('font-lg', scale === 'lg');
+    document.documentElement.classList.toggle('font-xl', scale === 'xl');
+    document.querySelectorAll('[data-click="toggleFontSize"]').forEach(el => {
+        const btn = /** @type {HTMLButtonElement} */ (el);
+        const label = btn.querySelector('.font-scale-label') || btn;
+        label.textContent = scale === 'lg' ? '가 글자 크게' : scale === 'xl' ? '가 글자 더 크게' : '가 글자 크게';
+        btn.setAttribute('aria-pressed', String(!!scale));
+        btn.title = scale === 'xl' ? '글자 크기: 최대 — 눌러 원래 크기로' : scale === 'lg' ? '글자 크기: 크게 — 더 크게 누르기' : '글자 크기 키우기 — 시니어 읽기 편의';
+    });
+}
+
+/** 글자 크기 순환: 보통 → 크게 → 더 크게 → 보통 */
+export function toggleFontSize() {
+    const cur = safeGetItem(STORAGE_KEYS.UI_FONT_SCALE) || '';
+    const next = cur === '' ? 'lg' : cur === 'lg' ? 'xl' : '';
+    safeSetItem(STORAGE_KEYS.UI_FONT_SCALE, next);
+    applyFontScale();
+    showToast(next === '' ? '글자 크기를 원래대로 돌렸습니다.' : next === 'lg' ? '글자를 크게 표시합니다.' : '글자를 더 크게 표시합니다.');
+}
+
 /** 앱 초기화 시 호출 — 모드 반영 후 실무 모드면 실무 작업실로 랜딩한다. */
 export function initUiMode() {
     applyUiMode();
+    applyFontScale();
     if (isPracticeMode()) {
         switchView(getPracticeLanding(), { scrollTop: true });
     }
