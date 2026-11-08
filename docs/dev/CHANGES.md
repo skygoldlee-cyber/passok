@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-08 feat(tools): 완성도 조감 리포트 — npm run report:completeness
+
+- 분산 정량 신호를 한 화면으로 합성하는 읽기 전용 리포트 (비차단): SPEC 상태 분포(활성 680개 — 완료 86%·가중 87%) + TRACE_MATRIX 커버리지(소스 89%·테스트 95%) + 시험 티어 + 실측 테스트 규모 + 게이트 우회 텔레메트리
+- 실행마다 tools/state/completeness.jsonl에 스냅샷 append — 직전 대비 증감을 함께 표시해 완성도 추세 확보 (gate_bypasses 패턴)
+- 순수 파서 4개(specStatusDist·traceSummary·examTiers·bypassStats) 분리 + unit 테스트 4건
+
 ## 2026-11-08 feat(carework): 양식·점검표 업로드 보완 4종 — 검토 단계·키 어시스트·기관 공유·게이트 DX
 
 - 파싱 검토 단계: 기관 점검표 파일 적용 전 영역·항목 분할 확인 블록(적용/취소) — 오분할을 확정 전에 포착
