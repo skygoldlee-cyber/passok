@@ -156,6 +156,13 @@ async function _onSeedFile(input) {
     const linked = allFormTemplates().find(t => t.toolKey === toolKey);
     _openEditor(linked || { id: null, title: def.title, body, scope: 'local', toolKey });
     if (linked) fillTplEditor('cf-tpl', linked.title, body); // 추출 본문으로 교체
+    // 도구 키 어시스트 — 추출 양식의 라벨이 도구 주입 키와 일치하면 {{키}} 표기를 안내
+    const found = [...new Set(Array.from(def.seed.matchAll(/\{\{([가-힣a-zA-Z0-9_]{1,40})\}\}/g), m => m[1]))]
+        .filter(k => k !== def.block && new RegExp(`${k}\\s*[:：]|\\|\\s*${k}\\s*\\|`).test(body));
+    const kh = $('cf-tpl-keyhint');
+    if (kh) kh.textContent = found.length
+        ? `양식에서 도구 키 발견: ${found.map(k => `{{${k}}}`).join(' ')} — {{키}}로 표기하면 출력 시 자동 기입됩니다.`
+        : '';
     showToast(body.includes(`{{${def.block}}}`)
         ? '기관 양식을 불러왔습니다 — 검토 후 저장하세요.'
         : `기관 양식을 불러왔습니다 — 출력 데이터가 들어갈 위치에 {{${def.block}}}를 넣어 저장하세요.`);

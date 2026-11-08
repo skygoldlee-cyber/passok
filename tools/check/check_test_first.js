@@ -170,9 +170,8 @@ function showRev(rev, file) {
     try { return git(`show "${rev}:${file}"`); } catch { return null; }
 }
 
-/** 트리거 파일의 diff가 주석·공백 전용인지 — 판정 불가(삭제·읽기 실패)는 트리거 유지. */
-function isCommentOnlyChange(file, mode, ref) {
-    const ext = file.endsWith('.py') ? 'py' : 'js';
+/** rev 대비 파일 내용 쌍 — isCommentOnlyChange·isMarkupOnlyChange 공용 */
+function diffTexts(file, mode, ref) {
     let oldSrc, newSrc;
     if (mode === 'ref') {
         oldSrc = showRev(ref, file);
@@ -184,8 +183,32 @@ function isCommentOnlyChange(file, mode, ref) {
         oldSrc = showRev('HEAD', file);
         try { newSrc = fs.readFileSync(path.resolve(file), 'utf8'); } catch { newSrc = null; }
     }
+    return { oldSrc, newSrc };
+}
+
+/** 트리거 파일의 diff가 주석·공백 전용인지 — 판정 불가(삭제·읽기 실패)는 트리거 유지. */
+function isCommentOnlyChange(file, mode, ref) {
+    const { oldSrc, newSrc } = diffTexts(file, mode, ref);
     if (newSrc === null || newSrc === undefined) return false;  // 삭제·읽기 불가 — 보수적 트리거
-    return isCommentOnlyDiff(oldSrc || '', newSrc, ext);
+    return isCommentOnlyDiff(oldSrc || '', newSrc, file.endsWith('.py') ? 'py' : 'js');
+}
+
+/** 변경 라인이 전부 HTML 태그(`<`·`>`)를 포함 → 마크업·레이아웃 전용 편집으로 본다.
+ *  뷰 템플릿 문자열 감싸기·버튼 추가 등 순수 구조 변경의 [no-test]/SKIP 마찰 해소.
+ *  로직 편집은 태그 없는 할당·호출·선언 행을 거의 항상 동반하므로 `a < b` 비교 오탐이 적다. */
+function isMarkupOnlyChange(file, mode, ref) {
+    const { oldSrc, newSrc } = diffTexts(file, mode, ref);
+    if (oldSrc === null || oldSrc === undefined || newSrc === null || newSrc === undefined) return false;
+    const cnt = new Map(); // 간이 라인 diff — old 라인 멀티셋에서 new 라인을 소진한 잔여가 변경분
+    for (const l of oldSrc.split('\n')) cnt.set(l, (cnt.get(l) || 0) + 1);
+    const changed = [];
+    for (const l of newSrc.split('\n')) {
+        const n = cnt.get(l) || 0;
+        if (n) cnt.set(l, n - 1); else changed.push(l);
+    }
+    for (const [l, n] of cnt) for (let i = 0; i < n; i++) changed.push(l);
+    const nb = changed.map((l) => l.trim()).filter(Boolean);
+    return nb.length > 0 && nb.every((l) => /[<>]/.test(l));
 }
 
 /* =========================================================
@@ -344,23 +367,23 @@ function run(mode, ref) {
         return 0;
     }
 
-    // 주석·공백 전용 diff는 로직 변경으로 보지 않는다 (구버전↔신버전 주석 제거 비교)
-    const effective = triggers.filter((f) => !isCommentOnlyChange(f, mode, ref));
+    // 주석·공백·마크업 전용 diff는 로직 변경으로 보지 않는다 (구버전↔신버전 주석 제거·HTML 전용 편집 비교)
+    const effective = triggers.filter((f) => !isCommentOnlyChange(f, mode, ref) && !isMarkupOnlyChange(f, mode, ref));
     const commentOnly = triggers.length - effective.length;
     if (!effective.length) {
-        console.log(`✅ 테스트 선행 게이트 통과 — 주석·공백 전용 변경 ${commentOnly}개 (실행 로직 diff 없음)`);
+        console.log(`✅ 테스트 선행 게이트 통과 — 주석·공백·마크업 전용 변경 ${commentOnly}개 (실행 로직 diff 없음)`);
         return 0;
     }
     if (tests.length) {
         console.log(`✅ 테스트 선행 게이트 통과 — 로직 변경 ${effective.length}개 + 테스트 변경 ${tests.length}개`
-            + (commentOnly ? ` (주석 전용 ${commentOnly}개 제외)` : ''));
+            + (commentOnly ? ` (주석·마크업 전용 ${commentOnly}개 제외)` : ''));
         return 0;
     }
 
     console.error(`\n❌ 테스트 선행 게이트 실패 — 로직 ${effective.length}개가 변경됐지만 테스트 변경이 없습니다:`);
     for (const f of effective.slice(0, 15)) console.error(`   - ${f}`);
     if (effective.length > 15) console.error(`   … 외 ${effective.length - 15}개`);
-    if (commentOnly) console.error(`   (주석·공백 전용 ${commentOnly}개는 트리거에서 제외됨)`);
+    if (commentOnly) console.error(`   (주석·공백·마크업 전용 ${commentOnly}개는 트리거에서 제외됨)`);
     console.error('\n   Docs-First: 실패 테스트(재현/기대 동작)를 먼저 작성하세요. 후보:');
     for (const h of suggestTests(effective)) console.error(`   - ${h}`);
     console.error(`\n   기존 테스트로 충분하면 커밋 메시지에 ${BYPASS_MARK} 를 넣거나 SKIP_TESTFIRST=1로 우회하세요.`);
@@ -387,4 +410,4 @@ if (isDirectRun) {
     process.exit(main());
 }
 
-module.exports = { TRIGGERS, TESTS, BYPASS_MARK, GENERATED_SRC, isTrigger, isTest, analyze, parseStatusLine, run, main, stripJsComments, stripPyComments, normSource, isCommentOnlyDiff, isCommentOnlyChange, logBypass, BYPASS_LOG };
+module.exports = { TRIGGERS, TESTS, BYPASS_MARK, GENERATED_SRC, isTrigger, isTest, analyze, parseStatusLine, run, main, stripJsComments, stripPyComments, normSource, isCommentOnlyDiff, isCommentOnlyChange, isMarkupOnlyChange, logBypass, BYPASS_LOG };

@@ -59,7 +59,7 @@ function _pushAuditDebounced() {
 export async function pushAuditState() {
     await pushState({
         docType: 'audit', client: '', recordDate: todayKey(),
-        payload: { checks: loadChecks() }, localId: 'audit_state',
+        payload: { checks: loadChecks(), sections: loadCustomSections() || null }, localId: 'audit_state',
     });
 }
 export function auditProgress(sections) {

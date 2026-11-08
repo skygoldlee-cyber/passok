@@ -306,6 +306,11 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         // .csv 업로드 — 헤더 매핑(구분·점검항목·근거) → 2영역 2항목
         const csv = '구분,점검항목,근거\n인권,기관 인권교육 실시,기관 지침\n안전,기관 낙상 점검,기관 매뉴얼';
         selectFile('audit-file', new File([csv], '기관점검표.csv', { type: 'text/csv' }));
+        await waitFor(() => document.getElementById('audit-import-preview')); // 파싱 검토 단계
+        const pv = document.getElementById('audit-import-preview');
+        expect(pv.textContent).toContain('기관 인권교육 실시'); // 적용 전 분할 확인
+        expect(loadCustomSections()).toBeNull(); // 확정 전에는 미적용
+        document.getElementById('audit-import-apply').click(); // 적용 확정
         await waitFor(() => !!loadCustomSections());
         expect(loadCustomSections()?.length).toBe(2);
         expect(document.querySelectorAll('#audit-list [data-audit]').length).toBe(2); // 업로드 2항목으로 교체

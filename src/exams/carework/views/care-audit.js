@@ -2,7 +2,7 @@
 // @spec CO-19 — 시험 전용 실무 뷰 (DA-13)
 import { loadAuditSections, loadCustomSections, saveCustomSections, clearCustomSections, loadChecks, toggleCheck, clearChecks, auditProgress, pushAuditState } from '../care-audit.js';
 import { auditRowsToSections } from '../audit-import.js';
-import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
+import { docHeadHtml, docSignHtml, refreshOrgName, myMembership, listRecords } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast } from '../../../ui-utils.js';
 import { auditCoverage } from '../care-coverage.js';
@@ -98,10 +98,37 @@ export async function careAuditFileLoad() {
     const sections = auditRowsToSections(rows, lines);
     const n = sections.reduce((a, s) => a + s.items.length, 0);
     if (!n) { showToast('점검 항목을 찾지 못했습니다 — 표 또는 줄 단위 항목이 필요합니다.', 'error'); return; }
-    saveCustomSections(sections);
-    _sections = await loadAuditSections();
-    render();
-    showToast(`기관 점검표 ${sections.length}개 영역 ${n}개 항목을 적용했습니다 — 같은 파일 재업로드 시 체크 상태가 유지됩니다.`);
+    // 적용 전 파싱 결과 확인 — 영역/항목 분할이 어긋나면 여기서 취소
+    _showImportPreview(sections, async () => {
+        saveCustomSections(sections);
+        _sections = await loadAuditSections();
+        _removeImportPreview();
+        render();
+        showToast(`기관 점검표 ${sections.length}개 영역 ${n}개 항목을 적용했습니다 — 같은 파일 재업로드 시 체크 상태가 유지됩니다.`);
+    });
+}
+
+function _removeImportPreview() {
+    $('audit-import-preview')?.remove();
+}
+
+/** 업로드 점검표 파싱 결과 검토 블록 — 적용/취소 버튼 (data-click 불가, 직접 바인딩) */
+function _showImportPreview(sections, onApply) {
+    _removeImportPreview();
+    const host = $('audit-list');
+    const box = document.createElement('div');
+    box.id = 'audit-import-preview';
+    const n = sections.reduce((a, s) => a + s.items.length, 0);
+    box.innerHTML = `<h4 class="care-log-hint">불러온 점검표 확인 — ${sections.length}개 영역 ${n}개 항목</h4>` +
+        sections.map(s => `<div class="care-audit-sec"><h5>${esc(s.title)}</h5><ul>` +
+            s.items.map(i => `<li>${esc(i.text)}${i.ref ? ` <small>${esc(i.ref)}</small>` : ''}</li>`).join('') +
+            '</ul></div>').join('') +
+        '<div class="care-calc-actions"><button type="button" class="btn" id="audit-import-apply">적용</button>' +
+        '<button type="button" class="btn btn-secondary" id="audit-import-cancel">취소</button></div>';
+    host?.parentNode?.insertBefore(box, host);
+    box.querySelector('#audit-import-apply')?.addEventListener('click', () => void onApply());
+    box.querySelector('#audit-import-cancel')?.addEventListener('click', _removeImportPreview);
+    box.scrollIntoView?.({ block: 'nearest' });
 }
 
 /** 기본 고시 점검표로 복원 */
@@ -121,6 +148,19 @@ export async function initCareAuditView() {
         fileEl.dataset.bound = '1';
         fileEl.addEventListener('change', () => void careAuditFileLoad());
     }
+    // 기관 공유 점검표 흡수 — 다른 멤버가 올린 커스텀 섹션을 audit_state 스냅샷에서 동기화
+    try {
+        const m = await myMembership();
+        if (m) {
+            const recs = await listRecords(m.facility_id, { docType: 'audit', limit: 20 });
+            const remote = recs.find(r => r.local_id === 'audit_state' && r.payload && 'sections' in r.payload);
+            if (remote) {
+                const rs = remote.payload.sections;
+                if (Array.isArray(rs) && rs.length) saveCustomSections(rs);
+                else if (rs === null && loadCustomSections()) clearCustomSections(); // 원격 복원 동기화
+            }
+        }
+    } catch { /* 미가입·오프라인 — 로컬 유지 */ }
     try {
         _sections = await loadAuditSections();
     } catch (e) {
