@@ -165,9 +165,15 @@ body.exam-open{overflow:hidden;}
 #exam-overlay .exam-resume-x:hover{color:var(--color-text-main);}
 @media print{
   body.exam-open>*:not(#exam-overlay){display:none !important;}
-  #exam-overlay{position:static !important;display:block !important;}
+  /* 다크 테마(밝은 글자색)에서는 백지처럼 보이므로 인쇄용 흰 배경·검정 강제 — manual-overlay와 동일 규약 (@spec CO-20) */
+  #exam-overlay{position:static !important;display:block !important;
+    background:#fff !important;color:#000 !important;}
   #exam-overlay .exam-ov-bar,#exam-overlay .exam-ov-toc,#exam-overlay .exam-resume-chip{display:none !important;}
-  #exam-overlay .exam-ov-scroll{overflow:visible !important;padding:0 !important;}
+  #exam-overlay .exam-ov-scroll{overflow:visible !important;padding:10mm 8mm !important;
+    box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+  /* 테마 색 계열 자식 요소도 검정 강제 — strong/code/th 등 자체 색상이 밝은 색이면 백지처럼 보임 */
+  #exam-overlay #exam-article *{color:#000 !important;-webkit-text-fill-color:#000 !important;
+    background:transparent !important;box-shadow:none !important;text-shadow:none !important;}
 }`;
 
     const _overlay = createDocOverlay({

@@ -1,6 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(reader): exam-overlay 인쇄에 색상 강제 추가 — 다크 테마 백지 대응
+
+- #exam-overlay의 @media print에 background:#fff·color:#000 강제 + 자식 요소 색상·그림자 강제 — manual-overlay에는 있던 규약이 exam-overlay에만 없어 다크 테마 사용자에게 백지로 보이던 결함
+
 ## 2026-11-09 fix(reader): 뷰어 인쇄/PDF를 생성 PDF 새탭 미리보기로 재전환 — window.print() 백지 대응
 
 - 인쇄창 경로가 모바일·인앱 환경에서 9페이지 전부 백지로 나오는 실측 확인 — 스타일드 PDF(JPEG q0.92) 생성 → 새 탭 미리보기(PDF 뷰어 자체 인쇄 가능), 팝업 차단·인앱은 다운로드 폴백, 실패 시에만 window.print(). CO-20 계약 재갱신

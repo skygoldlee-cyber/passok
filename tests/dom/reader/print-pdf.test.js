@@ -42,6 +42,14 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         clickSpy.mockRestore();
     });
 
+    it('exam-overlay 인쇄 CSS — 다크 테마 백지 방지 색상 강제 계약', async () => {
+        const { readFileSync } = await import('node:fs');
+        const src = readFileSync('src/reader/exam-viewer.js', 'utf8');
+        expect(src).toContain('#exam-overlay{position:static !important;display:block !important');
+        expect(src).toContain('background:#fff !important;color:#000 !important'); // 흰 배경·검정 강제
+        expect(src).toContain('#exam-overlay #exam-article *{color:#000'); // 자식 요소 색상 강제
+    });
+
     it('exam data-exam-print → pdfFileFromElStyled 호출 + 폴백 다운로드', async () => {
         const { pdfFileFromElStyled, clickSpy } = stubPdfEnv();
         const m = await import('../../../src/reader/exam-viewer.js');
