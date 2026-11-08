@@ -21,6 +21,7 @@
             <input id="cf-tpl-file" type="file" accept=".pdf,.docx,.xlsx,.xls,.csv,application/pdf" class="is-hidden">
         </div>
         <label>양식 본문 (마크다운) <textarea id="cf-tpl-body" rows="8" placeholder="기입란은 {{항목}} 형태로 표기 — 시스템 키: date·org·author·confirmer·receiver·client·signImage 는 자동 기입"></textarea></label>
+        <p class="care-log-hint">수정하려면 위 입력란을 편집하세요 — 항목 추가는 "항목명: {{항목명}}" 한 줄로, {{항목}}은 기입란이 됩니다. 결과는 아래 미리보기로 확인합니다.</p>
         <div id="cf-tpl-fields"></div>
         <div id="cf-tpl-preview" class="care-calc-result tpl-preview"></div>
         <p class="care-log-hint">미리보기 — 점선 상자는 기입란({{항목}}), 실선 상자는 자동 기입 키입니다.</p>

@@ -6,6 +6,7 @@
 - `.care-log-hint { margin: gap-ctl 0; font-size: 13px; color: text-muted }` 명시 + `.care-log-hint + .care-log-saved { margin-top: 0 }` — 헤더→안내문→목록 전 구간이 gap-ctl 한 묶음 리듬으로 통일
 - 미리보기 기입란 칩이 키 이름만 `<code>`로 표시돼 출력 텍스트처럼 읽힘 → `{{키}}` 문법 그대로 `<span>` 칩에 표시 + 툴팁에 기입/자동 동작 설명
 - 칩 테두리가 다크모드에서 안 보임 — border-strong(15% 흰색)은 다크 배경 대비 부족 → text-muted 토큰으로 교체하고 auto의 opacity 흐림 제거(실선 구분만 유지)
+- 편집기 본문 입력란 아래 편집 안내문 추가 — "수정하려면 위 입력란을 편집하세요" + 항목 추가 문법 안내 (미리보기만 보고 편집 위치를 못 찾는 혼란 방지)
 
 ## 2026-11-08 refactor(carework): 양식 편집기 단일화 — 기관 양식 뷰로 통합 + 버튼 라벨 중앙 정렬
 
