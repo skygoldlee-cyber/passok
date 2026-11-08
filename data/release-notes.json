@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261109-8d0a84e",
+    "date": "2026-11-09",
+    "notes": [
+      "[수정·reader] 뷰어 PDF 새탭 프리뷰 복원 — 차단 시에만 다운로드 폴백",
+      "[정리·release] v20261109-3dd1893 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-3dd1893",
     "date": "2026-11-09",
     "notes": [
@@ -175,20 +183,6 @@
     "notes": [
       "[수정·hooks] pre-commit에 파일명 규약 게이트 추가 — CI 실패 유형을 로컬 선행 차단",
       "[정리·release] v20261108-fc74ca5 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261108-fc74ca5",
-    "date": "2026-11-08",
-    "notes": [
-      "[문서] TRACE_MATRIX 재생성 [no-docs]",
-      "[수정·tools] 테스트 파일명 kebab-case 규약 정정",
-      "[정리] completeness 스냅샷 gitignore 등록 [no-docs]",
-      "[문서] COMMANDS.md 재생성 — report:completeness 반영 [no-docs]",
-      "[문서] TRACE_MATRIX 재생성 [no-docs]",
-      "[기능·tools] 완성도 조감 리포트 — npm run report:completeness",
-      "[기능·carework] 양식·점검표 업로드 보완 4종 — 검토 단계·키 어시스트·기관 공유·게이트 DX",
-      "[정리·release] v20261108-b23fecd 스탬프 확정 [no-docs]"
     ]
   }
 ]
