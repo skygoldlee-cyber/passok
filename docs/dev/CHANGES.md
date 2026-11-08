@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-08 fix(hooks): pre-commit에 파일명 규약 게이트 추가 — CI 전용 검사를 로컬 선행
+
+- check_filenames가 CI(test 잡)에서만 돌아 파일명 위반이 push 후에야 발견되던 갭 — pre-commit 루프에 check:filenames 추가로 커밋 시점 차단 (기준선 기반이라 기존 예외는 영향 없음, 스캔 1초 미만)
+
 ## 2026-11-08 feat(tools): 완성도 조감 리포트 — npm run report:completeness
 
 - 분산 정량 신호를 한 화면으로 합성하는 읽기 전용 리포트 (비차단): SPEC 상태 분포(활성 680개 — 완료 86%·가중 87%) + TRACE_MATRIX 커버리지(소스 89%·테스트 95%) + 시험 티어 + 실측 테스트 규모 + 게이트 우회 텔레메트리
