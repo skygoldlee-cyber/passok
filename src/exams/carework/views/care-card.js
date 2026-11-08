@@ -25,6 +25,7 @@ function renderDetail() {
     const c = cardById(_cards, _open);
     if (!host) return;
     if (!c) { host.innerHTML = ''; return; }
+    const shareText = `${c.title}\n${c.trigger}\n\n${c.steps.map((s, i) => `${i + 1}. ${s.phase}: ${s.text}`).join('\n')}${(c.contacts || []).length ? `\n\n연락·신고: ${c.contacts.map(x => `${x.label} ${x.number}`).join(' · ')}` : ''}`;
     host.innerHTML = `
         <div class="care-card-head">
             <span class="care-card-cat">${esc(c.category)}</span>
@@ -37,7 +38,7 @@ function renderDetail() {
                 <span class="care-card-stepno">${i + 1}</span>
                 <div><strong>${esc(s.phase)}</strong><p>${esc(s.text)}</p></div>
             </div>`).join('')}
-        <pre id="card-share-pre" class="is-hidden">${esc(`${c.title}\n${c.trigger}\n\n${c.steps.map((s, i) => `${i + 1}. ${s.phase}: ${s.text}`).join('\n')}${(c.contacts || []).length ? `\n\n연락·신고: ${c.contacts.map(x => `${x.label} ${x.number}`).join(' · ')}` : ''}`)}</pre>
+        <pre id="card-share-pre" class="is-hidden">${esc(shareText)}</pre>
         <div class="care-calc-actions">
             <button data-click="careCardToIncident" data-arg="${esc(c.id)}" class="btn">📝 사고보고서 작성</button>
             <button data-click="careShare" data-arg="#card-share-pre|대처카드" class="btn btn-secondary">📤 인쇄·공유</button>
