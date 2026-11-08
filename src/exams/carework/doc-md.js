@@ -38,8 +38,8 @@ export const mdToHtml = md => {
     let tbl = null;
     /** @type {string[] | null} */
     let list = null;
-    const flush = () => {
-        if (tbl) {
+    const flush = (listOnly) => {
+        if (tbl && !listOnly) {
             out.push(`<table><thead><tr>${tbl[0].map(c => `<th>${esc(c.trim())}</th>`).join('')}</tr></thead><tbody>` +
                 tbl.slice(1).map(r => `<tr>${r.map(c => `<td>${esc(c.trim())}</td>`).join('')}</tr>`).join('') + '</tbody></table>');
             tbl = null;
@@ -49,7 +49,7 @@ export const mdToHtml = md => {
     for (const line of String(md || '').split('\n')) {
         const t = line.trim();
         if (/^\|[\s:|-]+\|$/.test(t)) continue;
-        if (t.startsWith('|') && t.endsWith('|')) { flush(); (tbl = tbl || []).push(t.slice(1, -1).split('|')); continue; }
+        if (t.startsWith('|') && t.endsWith('|')) { flush(true); (tbl = tbl || []).push(t.slice(1, -1).split('|')); continue; }
         if (t.startsWith('- ')) { (list = list || []).push(t.slice(2)); continue; }
         flush();
         const h = t.match(/^(#{1,3})\s+(.+)/);

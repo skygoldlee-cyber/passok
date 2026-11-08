@@ -15,8 +15,8 @@ import {
     listFormDocs, saveFormDoc, removeFormDoc, syncPendingFormDocs,
     addFormTemplate, updateFormTemplate,
 } from '../form-template-store.js';
-import { TOOL_FORM_SEEDS } from '../form-seeds.js';
-import { initTplEditor, fillTplEditor, readTplEditor } from '../form-template-editor.js';
+import { TOOL_FORM_SEEDS, toolBlockPreview } from '../form-seeds.js';
+import { initTplEditor, fillTplEditor, readTplEditor, setTplBlockState } from '../form-template-editor.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -24,6 +24,7 @@ let _membership = null;
 let _activeTpl = null;   // 기입 대상 양식 {id,title,body,scope}
 let _editTplId = null;   // 편집 중인 로컬 양식 id (null = 신규/기관사본)
 let _lastMd = '';        // 마지막 생성 문서 MD (내보내기 원본)
+let _previewToolKey = null; // 편집기에 연동된 도구 키 (블록 실데이터 미리보기·비동기 응답 가드)
 
 // — 인라인 편집기 (기본 양식 사본·목록 양식 편집이 이 뷰에서 완결 — CO-18) —
 
@@ -33,7 +34,13 @@ function _openEditor(tpl) {
     if (ed) ed.classList.remove('is-hidden');
     const lb = $('cf-tpl-label');
     if (lb) lb.textContent = tpl.title + (tpl.toolKey ? ` (연동: ${TOOL_FORM_SEEDS[tpl.toolKey]?.title})` : '');
+    _previewToolKey = tpl.toolKey || null;
+    const blk = _previewToolKey ? TOOL_FORM_SEEDS[_previewToolKey] : null;
+    setTplBlockState('cf-tpl', { auto: blk ? new Set([blk.block]) : null }); // 이전 양식 블록 데이터 제거
     fillTplEditor('cf-tpl', tpl.title, tpl.body);
+    if (blk) void toolBlockPreview(tpl.toolKey).then(values => { // 블록 키를 실제 출력 내용으로 미리보기
+        if (_previewToolKey === tpl.toolKey) setTplBlockState('cf-tpl', { auto: new Set([blk.block]), values });
+    });
     ed?.scrollIntoView?.({ block: 'nearest' });
 }
 
@@ -51,6 +58,8 @@ export function careFormTplEdit(id) {
 
 export function careFormTplEditClose() {
     _editTplId = null;
+    _previewToolKey = null;
+    setTplBlockState('cf-tpl'); // 도구 블록 미리보기 상태 초기화
     $('cf-editor')?.classList.add('is-hidden');
 }
 

@@ -57,3 +57,35 @@ export function renderToolBody(toolKey, values = {}) {
     const body = toolOverride(toolKey) ?? `{{${def.block}}}`;
     return fillTemplate(body, values, 'md', new Set([def.block]));
 }
+
+/**
+ * 사본 편집기 미리보기용 블록 실데이터 — 도구 출력과 같은 소스로 블록 키를 채운다.
+ * 저장 데이터가 없거나 블록이 개별 기록 생성문(일지·인수인계·사고보고서)이면 null → 칩 유지.
+ * @param {string} toolKey @returns {Promise<Object<string,string>|null>}
+ */
+export async function toolBlockPreview(toolKey) {
+    try {
+        if (toolKey === 'careAudit') {
+            const { loadAuditSections, loadChecks } = await import('./care-audit.js');
+            const { mdTable } = await import('./doc-md.js');
+            const c = loadChecks();
+            const rows = (await loadAuditSections()).flatMap(s => s.items.map(i => [s.title, c[i.id] ? '✔' : '□', i.text, i.ref]));
+            return { 점검표: mdTable(['영역', '점검', '항목', '근거'], rows) };
+        }
+        if (toolKey === 'careVisit') {
+            const { listVisits } = await import('./care-visit-store.js');
+            const { visitsToCsv } = await import('./care-visit.js');
+            const { csvToMdTable } = await import('./doc-md.js');
+            const tbl = csvToMdTable(visitsToCsv(listVisits()));
+            return tbl ? { 기록표: tbl } : null;
+        }
+        if (toolKey === 'careRoster') {
+            const { listRoster } = await import('./roster-store.js');
+            const { rosterToCsv } = await import('./care-roster.js');
+            const { csvToMdTable } = await import('./doc-md.js');
+            const tbl = csvToMdTable(rosterToCsv(listRoster()));
+            return tbl ? { 근무표: tbl } : null;
+        }
+    } catch { /* 미리보기 실패는 칩 폴백 */ }
+    return null;
+}

@@ -38,16 +38,36 @@ export function renderTplFields(prefix) {
         : '<span class="care-log-hint">기입 필드 없음 — 본문에 {{항목}} 플레이스홀더를 넣으면 기입 필드가 됩니다.</span>';
 }
 
-/** 본문 MD → 서식 미리보기 — 입력 즉시 렌더, {{키}}는 기입란 칩으로 표시 (시스템 키는 자동 구분) */
+// — 도구 블록 미리보기 상태 (CO-18) — prefix별 {auto: 블록 키 Set, values: {키: md}} —
+
+const _blockState = {};
+
+/**
+ * 도구 블록 키 미리보기 설정 — auto 키는 "도구 자동 생성" 칩으로, values에 실데이터가
+ * 있으면 칩 대신 실제 표·문단으로 치환 렌더한다 (빈 객체 전달 시 초기화).
+ * @param {string} prefix @param {{auto?: Set<string>|null, values?: Object<string,string>|null}} [state]
+ */
+export function setTplBlockState(prefix, state = {}) {
+    _blockState[prefix] = state.auto || state.values ? { auto: state.auto || null, values: state.values || null } : null;
+    renderTplPreview(prefix);
+}
+
+/** 본문 MD → 서식 미리보기 — 입력 즉시 렌더, {{키}}는 기입란 칩으로 표시 (시스템·도구 블록 키는 자동 구분) */
 export function renderTplPreview(prefix) {
     const el = $(`${prefix}-preview`);
     if (!el) return;
-    const body = readTplEditor(prefix).body;
+    const blk = _blockState[prefix];
+    let body = readTplEditor(prefix).body;
+    if (blk?.values) body = body.replace(FIELD_RE, (m, k0) => blk.values[k0.trim()] ?? m); // 블록 실데이터 치환
     el.innerHTML = body.trim()
         ? mdToHtml(body).replace(FIELD_RE, (m, k0) => {
             const k = k0.trim();
             const auto = SYSTEM_KEYS.has(k);
-            return `<span class="tpl-ph${auto ? ' tpl-ph-auto' : ''}" title="${auto ? '자동 기입 키 — 출력 시 자동으로 채워집니다' : '기입 필드 — 기입 시 이 위치에 값이 들어갑니다'}">{{${esc(k)}}}</span>`;
+            const tool = !auto && !!blk?.auto?.has(k);
+            const tip = auto ? '자동 기입 키 — 출력 시 자동으로 채워집니다'
+                : tool ? '도구 자동 생성 영역 — 출력 시 실제 내용으로 채워집니다'
+                : '기입 필드 — 기입 시 이 위치에 값이 들어갑니다';
+            return `<span class="tpl-ph${auto || tool ? ' tpl-ph-auto' : ''}" title="${tip}">{{${esc(k)}}}</span>`;
         })
         : '<span class="care-log-hint">본문을 입력하면 서식 미리보기가 표시됩니다 — 표·기입란 위치를 확인하세요.</span>';
 }

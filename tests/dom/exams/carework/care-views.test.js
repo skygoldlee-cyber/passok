@@ -753,6 +753,50 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.getElementById('cf-seed-list').innerHTML).toContain('사본 만들기');
     });
 
+    it('customForm — mdToHtml 표는 단일 table로 렌더 (행별 분리 회귀 방지)', async () => {
+        const { mdToHtml } = await import('../../../../src/exams/carework/doc-md.js');
+        const html = mdToHtml('| a | b |\n|---|---|\n| 1 | 2 |\n| 3 | 4 |');
+        expect((html.match(/<table>/g) || []).length).toBe(1); // 행마다 별도 표로 깨지지 않음
+        expect(html).toContain('<thead><tr><th>a</th><th>b</th></tr></thead>');
+        expect((html.match(/<td>/g) || []).length).toBe(4); // 데이터 행은 tbody에
+    });
+
+    it('customForm — 블록 키 미리보기: 데이터 없으면 자동 칩, 실데이터는 표로 치환', async () => {
+        const { fillTplEditor, setTplBlockState } = await import('../../../../src/exams/carework/form-template-editor.js');
+        loadPartial('care-custom-form.html');
+        fillTplEditor('cf-tpl', '평가 체크리스트', '{{점검표}}\n\n비고: {{비고}}');
+        const pv = document.getElementById('cf-tpl-preview');
+        setTplBlockState('cf-tpl', { auto: new Set(['점검표']) });
+        expect(pv.querySelector('.tpl-ph-auto')?.textContent).toBe('{{점검표}}'); // 기입 필드가 아닌 도구 자동 영역
+        expect(pv.querySelector('.tpl-ph-auto')?.getAttribute('title')).toContain('도구 자동 생성');
+        setTplBlockState('cf-tpl', { auto: new Set(['점검표']), values: { 점검표: '| h |\n|---|\n| r |' } });
+        expect(pv.querySelector('table td')?.textContent).toBe('r'); // 블록 키가 실데이터 표로 치환
+        expect(pv.textContent).not.toContain('{{점검표}}');
+        expect(pv.textContent).toContain('{{비고}}'); // 비블록 키는 칩 유지
+        setTplBlockState('cf-tpl'); // 상태 초기화 — 이후 테스트로 잔류 방지
+    });
+
+    it('customForm — 평가 체크리스트 사본 미리보기에 실제 20항목 점검표 표시', async () => {
+        const { initCareCustomFormView, careFormSeedCopy, careFormTplDelete } = await import('../../../../src/exams/carework/views/care-custom-form.js');
+        const { toolBlockPreview } = await import('../../../../src/exams/carework/form-seeds.js');
+        const { listFormTemplates, removeFormTemplate } = await import('../../../../src/exams/carework/form-template-store.js');
+        for (const t of listFormTemplates()) removeFormTemplate(t.id);
+        // jsdom은 상대 경로 fetch 불가 — 실제 체크리스트 JSON을 stub으로 제공
+        const checklist = JSON.parse(readFileSync(join(ROOT, 'content/exams/carework/실무/audit_checklist.json'), 'utf-8'));
+        vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(checklist) })));
+        expect(await toolBlockPreview('careLog')).toBeNull(); // 기록 생성문 블록은 실데이터 없음 — 칩 유지
+        loadPartial('care-custom-form.html');
+        initCareCustomFormView();
+        careFormSeedCopy('careAudit');
+        await waitFor(() => document.querySelector('#cf-tpl-preview table')); // 블록 실데이터 비동기 로드
+        const pv = document.getElementById('cf-tpl-preview');
+        expect(pv.querySelectorAll('tbody tr').length).toBe(20); // 체크리스트 20개 항목 전부 렌더
+        expect(pv.querySelector('thead th')?.textContent).toBe('영역');
+        const tpl = listFormTemplates().find(t => t.toolKey === 'careAudit');
+        await careFormTplDelete(tpl.id);
+        vi.unstubAllGlobals();
+    });
+
     it('customForm — 시드는 실제 필드명 노출 + 오버라이드 시 스칼라 실값 기입', async () => {
         const { renderToolBody, TOOL_FORM_SEEDS } = await import('../../../../src/exams/carework/form-seeds.js');
         const { addFormTemplate, listFormTemplates, removeFormTemplate } =
