@@ -190,11 +190,13 @@ body.manual-open{overflow:hidden;}
                     const { pdfFileFromElStyled } = await import('../content/pdf-utils.js');
                     const file = await pdfFileFromElStyled(el.querySelector('#manual-article'), _currentTitle || '문서');
                     const url = URL.createObjectURL(file);
-                    // blob: 새탭 미리보기는 일부 브라우저·인앱에서 빈 탭이 됨 — 다운로드가 확실한 경로
-                    const a = document.createElement('a');
-                    a.href = url; a.download = file.name;
-                    document.body.appendChild(a); a.click(); a.remove();
-                    showToast('PDF 저장됨 — 파일을 열어 인쇄하세요');
+                    // 새 탭 프리뷰 우선 — 팝업 차단·인앱만 다운로드 폴백
+                    if (!window.open(url, '_blank')) {
+                        const a = document.createElement('a');
+                        a.href = url; a.download = file.name;
+                        document.body.appendChild(a); a.click(); a.remove();
+                        showToast('PDF 저장됨 — 파일을 열어 인쇄하세요');
+                    }
                 } catch (err) { // 생성 실패 시 인쇄창 폴백 — 실패 사실을 토스트로 가시화 (백지 진단용)
                     showToast('PDF 생성 실패 — 인쇄창으로 대체합니다: ' + ((/** @type {any} */ (err))?.message || '').slice(0, 60));
                     window.print();

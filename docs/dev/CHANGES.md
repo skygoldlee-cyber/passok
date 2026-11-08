@@ -1,6 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(reader): 뷰어 PDF 새탭 프리뷰 복원 — 생성 정상화로 빈 탭 원인 해소
+
+- ensurePdf 누락 크래시가 원인이었으므로 생성 정상화 후 새탭 프리뷰 복원 — 팝업 차단·인앱만 다운로드+토스트 폴백
+
 ## 2026-11-09 fix(pdf): pdfFileFromElStyled에 ensurePdf 선행 — 벤더 미로드 즉시 크래시 복구
 
 - 페이지네이션 리라이트가 window.jspdf/html2canvas 직접 사용하며 ensurePdf() 누락 → 클릭 즉시 destructure 크래시 → 인쇄창 폴백(백지 사례)으로 빠짐 — 실무막뉴얼 "아무것도 안 뜸"의 실제 원인
