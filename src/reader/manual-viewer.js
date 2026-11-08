@@ -179,20 +179,9 @@ body.manual-open{overflow:hidden;}
             </div>`,
         wire(el) {
             el.querySelector('[data-manual-close]')?.addEventListener('click', close);
-            // 인쇄·PDF 버튼: 생성 PDF 다운로드 기본, 실패 시 window.print() 폴백 — @spec CO-20 규약
+            // 인쇄·PDF 버튼: 브라우저 인쇄창 — 오버레이 @media print CSS가 흰 배경·여백 출력 보장 (@spec CO-20)
             // @spec CO-20
-            el.querySelector('[data-manual-print]')?.addEventListener('click', async e => {
-                const btn = /** @type {HTMLButtonElement} */ (e.currentTarget);
-                if (btn) btn.disabled = true;
-                try {
-                    const { pdfFileFromElStyled } = await import('../content/pdf-utils.js');
-                    const file = await pdfFileFromElStyled(el.querySelector('#manual-article'), _currentTitle || '문서');
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(file); a.download = file.name;
-                    document.body.appendChild(a); a.click(); a.remove();
-                } catch { window.print(); } // PDF 생성 실패 시 브라우저 인쇄 폴백
-                if (btn) btn.disabled = false;
-            });
+            el.querySelector('[data-manual-print]')?.addEventListener('click', () => window.print());
             // 본문 이미지(SVG 삽화 등) 클릭 → 확대 모달 (데스크탑 전용 — 모바일은 핀치 줌).
             // article 요소는 셸 고정이므로 위임 바인딩은 재렌더와 무관하게 1회면 충분하다.
             attachImageZoomIn(el.querySelector('#manual-article'));

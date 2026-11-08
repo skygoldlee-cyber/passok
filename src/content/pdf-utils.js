@@ -21,15 +21,16 @@ export function ensurePdf() {
 export async function pdfFileFromEl(el, title) {
     await ensurePdf();
     const canvas = await (/** @type {any} */ (window)).html2canvas(el, { scale: 2, logging: false });
-    const img = canvas.toDataURL('image/png');
+    // JPEG 품질 0.92 — PNG 대비 용량 ~1/10 (흰 배경 문서라 알파 불필요). 긴 문서도 동일 이미지 재사용
+    const img = canvas.toDataURL('image/jpeg', 0.92);
     const { jsPDF } = (/** @type {any} */ (window)).jspdf;
     const pdf = new jsPDF('p', 'mm', 'a4');
     const W = 210, H = 297;
     const ih = canvas.height * (W / canvas.width);
-    if (ih <= H) pdf.addImage(img, 'PNG', 0, 0, W, ih);
+    if (ih <= H) pdf.addImage(img, 'JPEG', 0, 0, W, ih);
     else { // 긴 문서는 페이지 분할
         let off = 0;
-        while (off < ih) { pdf.addImage(img, 'PNG', 0, -off, W, ih); off += H; if (off < ih) pdf.addPage(); }
+        while (off < ih) { pdf.addImage(img, 'JPEG', 0, -off, W, ih); off += H; if (off < ih) pdf.addPage(); }
     }
     const blob = pdf.output('blob');
     return new File([blob], `${title}.pdf`, { type: 'application/pdf' });

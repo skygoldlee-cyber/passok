@@ -200,20 +200,9 @@ body.exam-open{overflow:hidden;}
         wire(el) {
             el.querySelector('[data-exam-close]')?.addEventListener('click', () => close());
             el.querySelector('[data-exam-back]')?.addEventListener('click', () => _goBack());
-            // 인쇄·PDF 버튼: 생성 PDF 다운로드 기본, 실패 시 window.print() 폴백 — @spec CO-20 규약
+            // 인쇄·PDF 버튼: 브라우저 인쇄창 — 오버레이 @media print CSS가 흰 배경·여백 출력 보장 (@spec CO-20)
             // @spec CO-20
-            el.querySelector('[data-exam-print]')?.addEventListener('click', async e => {
-                const btn = /** @type {HTMLButtonElement} */ (e.currentTarget);
-                if (btn) btn.disabled = true;
-                try {
-                    const { pdfFileFromElStyled } = await import('../content/pdf-utils.js');
-                    const file = await pdfFileFromElStyled(el.querySelector('#exam-article'), el.querySelector('#exam-ov-title')?.textContent || '문서');
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(file); a.download = file.name;
-                    document.body.appendChild(a); a.click(); a.remove();
-                } catch { window.print(); } // PDF 생성 실패 시 브라우저 인쇄 폴백
-                if (btn) btn.disabled = false;
-            });
+            el.querySelector('[data-exam-print]')?.addEventListener('click', () => window.print());
             el.querySelector('#exam-resume-go')?.addEventListener('click', () => {
                 const chip = el.querySelector('#exam-resume-chip');
                 const scroll = el.querySelector('.exam-ov-scroll');
