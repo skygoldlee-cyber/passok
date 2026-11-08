@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261109-41c28fb",
+    "date": "2026-11-09",
+    "notes": [
+      "[정리] 참조용 PDF 문서 gitignore 추가 — docs/*.pdf 제외",
+      "[수정·reader] exam-article 타이포그래피를 manual-article 기준으로 통일 — 출력 간격 동일화",
+      "[정리·release] v20261109-2a02fb3 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-2a02fb3",
     "date": "2026-11-09",
     "notes": [
@@ -181,14 +190,6 @@
       "[수정·carework] 사본 삭제 시 기본 양식 '사본 만들기' 미복귀",
       "[수정·carework] 양식 편집기 본문 입력란 편집 안내문 추가",
       "[정리·release] v20261108-42359f0 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261108-42359f0",
-    "date": "2026-11-08",
-    "notes": [
-      "[수정·carework] 양식 뷰 안내문 여백 규약 + 미리보기 칩 가독성",
-      "[정리·release] v20261108-55c8006 스탬프 확정 [no-docs]"
     ]
   }
 ]
