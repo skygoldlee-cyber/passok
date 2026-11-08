@@ -364,7 +364,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run scaffold:exam` | `node tools/build/scaffold_exam.js` | 신규 시험 팩 스캐폴더 (Phase B, MULTI_EXAM_DB_DESIGN §7) |
 | `npm run scaffold:chapter` | `node tools/build/scaffold_chapter.js` | 참조자료→교재 챕터 스캐폴더 (CS-11 도출 계약) |
 
-### `report:*` — 7개
+### `report:*` — 8개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -372,6 +372,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run report:funnel` | `node tools/check/funnel_report.js` | usage_events 과업 완주율 리포트 (PROJECT_METRICS §2.6 측정 경로) |
 | `npm run report:feedback` | `node tools/check/feedback_report.js` | 피드백 인박스 조회 리포트 (ADMIN_DESIGN.md §5 Phase 1) |
 | `npm run report:dashboard` | `node tools/check/dashboard_report.js` | 로컬 HTML 운영 대시보드 (ADMIN_DESIGN.md §5 Phase 1.5) |
+| `npm run report:completeness` | `node tools/check/completeness_report.js` | 프로젝트 완성도 조감 리포트 (읽기 전용, 비차단) |
 | `npm run report:user` | `node tools/check/user_report.js` | 사용자 조회 리포트 (ADMIN_DESIGN.md §5 Phase 1) |
 | `npm run report:glossary` | `node tools/build/extract_glossary_candidates.js` | 따옴표 정의 + 항목 기호 정의 + 교재 헤딩 정의 |
 | `npm run report:pro` | `node tools/check/pro_report.js` | Pro 현황 리포트 (AD-09) |
