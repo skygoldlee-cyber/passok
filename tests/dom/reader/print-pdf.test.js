@@ -22,8 +22,8 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 다운로드 경로', () => {
 
     it('manual data-manual-print — pdfFileFromEl 경로 (manual-viewer의 openDocument는 jsdom 의존 한계로 exam 경로로 대표 검증)', async () => {
         // manual-viewer와 exam-viewer는 동일 패턴(data-*-print → pdfFileFromEl → 다운로드) — exam 테스트가 계약 검증
-        const pdfFileFromEl = vi.fn(() => Promise.resolve(new File(['x'], 'm.pdf', { type: 'application/pdf' })));
-        vi.doMock('../../../src/content/pdf-utils.js', () => ({ pdfFileFromEl }));
+        const pdfFileFromElStyled = vi.fn(() => Promise.resolve(new File(['x'], 'm.pdf', { type: 'application/pdf' })));
+        vi.doMock('../../../src/content/pdf-utils.js', () => ({ pdfFileFromElStyled }));
         window.URL.createObjectURL = vi.fn(() => 'blob:x');
         const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
         const { ManualViewer } = await import('../../../src/reader/manual-viewer.js');
@@ -32,13 +32,13 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 다운로드 경로', () => {
         } catch { return; } // jsdom에서 오픈 플로우 미지원 시 스킵 — 버튼 핸들러는 exam 테스트로 대표 검증
         document.querySelector('[data-manual-print]')?.click();
         await new Promise(r => setTimeout(r, 50));
-        expect(pdfFileFromEl).toHaveBeenCalled();
+        expect(pdfFileFromElStyled).toHaveBeenCalled();
         clickSpy.mockRestore();
     });
 
-    it('exam data-exam-print → pdfFileFromEl 호출 + 다운로드', async () => {
-        const pdfFileFromEl = vi.fn(() => Promise.resolve(new File(['x'], 'e.pdf', { type: 'application/pdf' })));
-        vi.doMock('../../../src/content/pdf-utils.js', () => ({ pdfFileFromEl }));
+    it('exam data-exam-print → pdfFileFromElStyled 호출 + 다운로드', async () => {
+        const pdfFileFromElStyled = vi.fn(() => Promise.resolve(new File(['x'], 'e.pdf', { type: 'application/pdf' })));
+        vi.doMock('../../../src/content/pdf-utils.js', () => ({ pdfFileFromElStyled }));
         window.URL.createObjectURL = vi.fn(() => 'blob:x');
         const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
         const m = await import('../../../src/reader/exam-viewer.js');
@@ -47,7 +47,7 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 다운로드 경로', () => {
         await open('x');
         document.querySelector('[data-exam-print]')?.click();
         await new Promise(r => setTimeout(r, 50));
-        expect(pdfFileFromEl).toHaveBeenCalled();
+        expect(pdfFileFromElStyled).toHaveBeenCalled();
         clickSpy.mockRestore();
     });
 });

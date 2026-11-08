@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-08 feat(reader): 매뉴얼·문서 PDF를 평가점검 출력 스타일로 전환 — 여백·흰 배경·검정 강제
+
+- pdfFileFromElStyled 헬퍼 추가 — 클론을 흰 래퍼(패딩 24px·700px)에 담아 색상·배경·그림자·그라디언트 텍스트를 검정/투명으로 강제 후 렌더 — 다크 테마 그대로 캡처되던 컬러·무여백 PDF를 평가점검과 동일한 가독 스타일로 통일
+- manual·exam 뷰어 인쇄/PDF 버튼이 styled 경로 사용, 실패 시 window.print() 폴백 유지
+
 ## 2026-11-08 test(reader): exam 인쇄 버튼 테스트를 PDF 폴백 경로로 갱신
 
 - study-examviewer 인쇄 테스트를 pdfFileFromEl 목 거절 → window.print 폴백 검증으로 갱신 (뷰어 인쇄/PDF 버튼 생성 PDF 전환 후속)

@@ -183,8 +183,8 @@ body.manual-open{overflow:hidden;}
                 const btn = /** @type {HTMLButtonElement} */ (e.currentTarget);
                 if (btn) btn.disabled = true;
                 try {
-                    const { pdfFileFromEl } = await import('../content/pdf-utils.js');
-                    const file = await pdfFileFromEl(el.querySelector('#manual-article'), _currentTitle || '문서');
+                    const { pdfFileFromElStyled } = await import('../content/pdf-utils.js');
+                    const file = await pdfFileFromElStyled(el.querySelector('#manual-article'), _currentTitle || '문서');
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(file); a.download = file.name;
                     document.body.appendChild(a); a.click(); a.remove();

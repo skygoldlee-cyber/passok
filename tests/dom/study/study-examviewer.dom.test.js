@@ -41,7 +41,7 @@ describe('문제집 뷰어 — 열기·TOC·인쇄·캐시', () => {
     });
 
     it('인쇄 버튼 → PDF 생성 경로 (실패 시 window.print 폴백) (H)', async () => {
-        vi.doMock('../../../src/content/pdf-utils.js', () => ({ pdfFileFromEl: vi.fn(() => Promise.reject(new Error('pdf 실패'))) }));
+        vi.doMock('../../../src/content/pdf-utils.js', () => ({ pdfFileFromElStyled: vi.fn(() => Promise.reject(new Error('pdf 실패'))) }));
         await ExamViewer.openExam(EXAM_PATH);
         await flushAsync(30);
 

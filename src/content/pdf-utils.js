@@ -34,3 +34,26 @@ export async function pdfFileFromEl(el, title) {
     const blob = pdf.output('blob');
     return new File([blob], `${title}.pdf`, { type: 'application/pdf' });
 }
+
+/** 인쇄 가독성 래퍼로 PDF — 흰 배경·여백·검정 텍스트 강제 (평가점검 출력과 동일 스타일).
+ *  오버레이 문서(매뉴얼·시험 문서)처럼 다크 테마 요소를 그대로 넘기면 컬러·무여백 PDF가 되므로
+ *  클론을 흰 래퍼에 담아 렌더한다. */
+export async function pdfFileFromElStyled(el, title) {
+    const wrap = document.createElement('div');
+    // html2canvas는 문서 좌표로 렌더 — 화면 밖에 배치해 캡처만 수행
+    wrap.style.cssText = 'position:absolute;left:0;top:100vh;width:700px;padding:24px;background:#fff;color:#000';
+    wrap.appendChild(el.cloneNode(true));
+    wrap.querySelectorAll('*').forEach(e2 => {
+        const el2 = /** @type {HTMLElement} */ (e2);
+        el2.style.color = '#000';
+        el2.style.background = 'transparent';
+        el2.style.borderColor = '#000';
+        el2.style.boxShadow = 'none';
+        el2.style.textShadow = 'none';
+        el2.style.webkitTextFillColor = '#000'; // 그라디언트 텍스트(-webkit-text-fill-color) 대응
+    });
+    document.body.appendChild(wrap);
+    try { return await pdfFileFromEl(wrap, title); }
+    finally { wrap.remove(); }
+}
+
