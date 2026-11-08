@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-08 feat(reader): 인쇄/PDF 버튼을 생성 PDF 다운로드로 전환 — 모바일·인앱 인쇄 불가 대응
+
+- 매뉴얼·시험 문서 오버레이의 "인쇄/PDF" 버튼이 window.print() → pdfFileFromEl(article) 생성 PDF 다운로드로 변경 — 모바일 PWA·인앱 브라우저에서 빈 출력이 나오던 경로를 DOM 캔버스 렌더로 우회, 실패 시 window.print() 폴백
+- DOM 테스트 추가 (exam 오픈 플로우로 pdfFileFromEl 호출·다운로드 계약 검증, manual은 동일 패턴이라 대표 검증)
+
 ## 2026-11-08 fix(carework): 인쇄 빈 출력 수정 — 오버레이 인쇄 규칙 + 빈 콘텐츠 방어
 
 - 매뉴얼·시험 문서 오버레이가 `position:fixed`라 인쇄 시 첫 장 조각/백지가 되던 결함 — @media print에서 오버레이를 정적 플로우로 전환(overflow·height 해제, 바·버튼 숨김, 뒤의 활성 뷰 중복 출력 방지)

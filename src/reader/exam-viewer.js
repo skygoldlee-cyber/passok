@@ -200,7 +200,18 @@ body.exam-open{overflow:hidden;}
         wire(el) {
             el.querySelector('[data-exam-close]')?.addEventListener('click', () => close());
             el.querySelector('[data-exam-back]')?.addEventListener('click', () => _goBack());
-            el.querySelector('[data-exam-print]')?.addEventListener('click', () => window.print());
+            el.querySelector('[data-exam-print]')?.addEventListener('click', async e => {
+                const btn = /** @type {HTMLButtonElement} */ (e.currentTarget);
+                if (btn) btn.disabled = true;
+                try {
+                    const { pdfFileFromEl } = await import('../content/pdf-utils.js');
+                    const file = await pdfFileFromEl(el.querySelector('#exam-article'), el.querySelector('#exam-ov-title')?.textContent || '문서');
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(file); a.download = file.name;
+                    document.body.appendChild(a); a.click(); a.remove();
+                } catch { window.print(); } // PDF 생성 실패 시 브라우저 인쇄 폴백
+                if (btn) btn.disabled = false;
+            });
             el.querySelector('#exam-resume-go')?.addEventListener('click', () => {
                 const chip = el.querySelector('#exam-resume-chip');
                 const scroll = el.querySelector('.exam-ov-scroll');
