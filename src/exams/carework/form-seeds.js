@@ -1,5 +1,6 @@
 // src/exams/carework/form-seeds.js — 내장 실무도구 표준 양식 시드·본문 오버라이드 (CO-18)
 // @spec CO-18 — 시험 전용 도메인 로직 (DA-13)
+// @spec UX-NAV-17 — TOOL_FORM_SEEDS[].title은 manifest uiText.title과 동일 명칭 (표시명 단일성)
 // 각 도구의 문서 본문(docMdHead·docMdSign 사이)을 {{키}} 템플릿으로 공개:
 //   - 기본 양식: 도구가 생성하는 구조 블록({{기록표}} 등) — 고객이 MD로 보고 사본 편집
 //   - 사본: 기관 양식 뷰에서 편집 → 커스텀 기입용으로도 사용 가능 (CO-17 파이프라인)

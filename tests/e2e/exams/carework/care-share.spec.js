@@ -1,5 +1,6 @@
 // tests/e2e/exams/carework/care-share.spec.js — Care OS 공유·내보내기 메뉴 실브라우저 계약
 // @spec CO-13 — 통합 내보내기 메뉴 (Word .docx 포함), 인수인계 기록 우선 자동 저장
+// @spec UX-NAV-17 — 다운로드 파일명·공유 제목이 uiText.title과 동일 명칭 (표시명 단일성)
 // jsdom 스크러드와 별개로 실제 다운로드 이벤트·저장 흐름을 검증한다.
 
 import { test, expect } from '@playwright/test';
