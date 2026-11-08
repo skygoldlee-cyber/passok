@@ -40,9 +40,14 @@
                         <h3><i class="fa-solid fa-list-check" aria-hidden="true"></i> 오늘 할 일</h3>
                         <p class="section-subtitle">복습 대기·주간 배분·오답·취약 진술을 우선순위로 정렬했습니다 — 순서대로 진행하세요</p>
                     </div>
-                    <button class="btn btn-secondary btn-sm analysis-link-btn" data-click="switchView" data-args='["analysis-view", {"scrollTop": true}]'>
-                        학습 진단 보기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                    </button>
+                    <div class="flex-row gap-2">
+                        <button type="button" class="btn btn-secondary btn-sm" data-click="toggleFontSize" aria-pressed="false" title="글자 크기 키우기 — 시니어 읽기 편의">
+                            <i class="fa-solid fa-text-height" aria-hidden="true"></i> <span class="font-scale-label">가 글자 크게</span>
+                        </button>
+                        <button class="btn btn-secondary btn-sm analysis-link-btn" data-click="switchView" data-args='["analysis-view", {"scrollTop": true}]'>
+                            학습 진단 보기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
                 </div>
                 <div id="weak-subject-recommendation" class="recommendation-container mb-6">
                     <!-- 오늘 할 일 큐 (dashboard-queue.js renderTodayQueue에서 렌더링) -->
