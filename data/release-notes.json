@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261108-0acfe49",
+    "date": "2026-11-08",
+    "notes": [
+      "[수정·carework] 기본 양식 버튼 세로 스택 — 사본·파일로 만들기 [no-test]",
+      "[정리·release] v20261108-76474f7 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261108-76474f7",
     "date": "2026-11-08",
     "notes": [
@@ -180,14 +188,6 @@
       "[정리·trace] TRACE_MATRIX 재생성 — UX-NAV-16 반영",
       "[기능·nav] 학습 내비 4그룹 재편 — 상태·실행 분리, 웹툰 명칭 분리, 빈 메뉴 자동 숨김",
       "[정리·release] v20261107-dcaa0bd 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261107-dcaa0bd",
-    "date": "2026-11-07",
-    "notes": [
-      "[수정·ui] .btn-icon 아이콘 좌측 치우침 — justify-content: center (모바일 규칙과 정합)",
-      "[정리·release] v20261107-8e60f1e 스탬프 확정 [no-docs]"
     ]
   }
 ]
