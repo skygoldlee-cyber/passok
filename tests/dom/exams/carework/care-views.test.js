@@ -11,6 +11,7 @@ import { dirname, join } from 'node:path';
 vi.mock('../../../../src/ui-utils.js', () => ({
     showToast: vi.fn(),
     showConfirm: vi.fn(() => Promise.resolve(true)),
+    flashSavedBadge: vi.fn(),
     showGlobalLoading: vi.fn(),
     hideGlobalLoading: vi.fn(),
 }));
@@ -458,7 +459,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(host.innerHTML).not.toContain('fac:v2'); // 완료 건은 결과 기록 버튼 없음
     });
 
-    it('careClients — 대상자 등록 → 수정 불러오기 → 삭제', () => {
+    it('careClients — 대상자 등록 → 수정 불러오기 → 삭제', async () => {
         loadPartial('care-client.html');
         initCareClientView();
         document.getElementById('cli-name').value = '김○○';
@@ -470,7 +471,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const id = list.querySelector('[data-arg]')?.dataset.arg;
         careClientLoad(id);
         expect(document.getElementById('cli-name').value).toBe('김○○');
-        careClientDelete(id);
+        await careClientDelete(id); // 삭제 확인(showConfirm) 비동기 대기
         expect(list.textContent).toContain('등록된 대상자가 없습니다');
     });
 
