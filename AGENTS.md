@@ -271,7 +271,8 @@ src/                    # ES Modules
       care-card.js        # 대처카드 데이터 로더 — care_cards.json fetch·조회
       care-log.js         # 요양일지 생성 로직 — 제공기준 고시 기록 항목 기반 텍스트 조립
       care-log-store.js   # 일지 로컬 저장 — 무료 10건 한도·Pro 안내 (Phase 3, 구독 핵심)
-      care-audit.js       # 기관 평가 체크리스트 — audit_checklist.json + 체크 상태 로컬 저장 (Phase 4)
+      care-audit.js       # 기관 평가 체크리스트 — audit_checklist.json + 체크 상태 로컬 저장 + 기관 업로드 커스텀 점검표 (Phase 4, CO-19)
+      audit-import.js     # 기관 점검표 파일 → 섹션 순수 파서 (헤더 매핑·열 휴리스틱·해시 id, CO-19)
       care-handover.js    # 인수인계서 생성 로직 — 교대근무 표준 포맷 + 일지 병합 (Phase 5)
       handover-store.js   # 인수인계 기록 저장 — 외부화 시 미저장 문서 자동 저장 (기관 기록 준법)
       handover-digest.js  # 인수인계 이력 자동 집계 — 근무일 기준 대상자별 일지·사고·방문 수집 순수 로직 (CO-05)

@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 0ae647fdcf40d6be
-> 생성: 2026-11-08 · 원천: SPEC.md(687개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 0eda0f5dcf4c3bdb
+> 생성: 2026-11-08 · 원천: SPEC.md(688개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 687개 — 문서 연결 464 · 소스 연결 610 · 테스트 연결 651 · 보고서 연결 109
+**커버리지 요약**: 요구사항 688개 — 문서 연결 464 · 소스 연결 611 · 테스트 연결 652 · 보고서 연결 109
 
 ---
 
@@ -623,7 +623,8 @@
 | CO-15 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-16 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | — | — | — | — | — | — |
 | CO-17 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | src/exams/carework/care-form-pdf.js<br>src/exams/carework/form-template-editor.js<br>src/exams/carework/form-template-store.js<br>src/exams/carework/views/care-custom-form.js | tests/dom/exams/carework/care-views.test.js | — | — |
-| CO-18 | 부분 구현 | 테스트 | — | src/exams/carework/form-seeds.js | tests/dom/exams/carework/care-views.test.js | — | — |
+| CO-18 | 부분 구현 | 테스트 | — | src/exams/carework/form-seeds.js<br>src/exams/carework/views/care-custom-form.js | tests/dom/exams/carework/care-views.test.js | — | — |
+| CO-19 | 부분 구현 | 테스트 | — | src/exams/carework/audit-import.js<br>src/exams/carework/care-audit.js<br>src/exams/carework/views/care-audit.js | tests/dom/exams/carework/care-views.test.js<br>tests/unit/exams/carework/audit-import.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
