@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261108-ed629b1",
+    "date": "2026-11-08",
+    "notes": [
+      "[수정·carework] 홈 바로가기 사이드바 그룹 순서로 통일 + 대처카드·평가점검 추가",
+      "[정리·release] v20261108-8fe8cd1 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261108-8fe8cd1",
     "date": "2026-11-08",
     "notes": [
@@ -177,15 +185,6 @@
       "[정리·release] v20261107-3579e0d 스탬프 확정 [no-docs]",
       "[수정·carework] 과목2 명칭 통일 — 요양보호 관련 → 요양보호실기 [no-test]",
       "[정리·release] v20261107-92c0505 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261107-92c0505",
-    "date": "2026-11-07",
-    "notes": [
-      "[기능·carework] 개념 복습 큐 + 오답 컷 — DOC-USR-22 §4 복습 순환 [no-test]",
-      "[기능·search] 검색 성능 계측 — 인덱스 빌드·쿼리 시간 카운터 (__searchPerf) [no-test]",
-      "[정리·release] v20261107-2f48d94 스탬프 확정 [no-docs]"
     ]
   }
 ]
