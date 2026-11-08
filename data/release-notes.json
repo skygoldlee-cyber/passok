@@ -1,5 +1,19 @@
 [
   {
+    "version": "v20261108-fc74ca5",
+    "date": "2026-11-08",
+    "notes": [
+      "[문서] TRACE_MATRIX 재생성 [no-docs]",
+      "[수정·tools] 테스트 파일명 kebab-case 규약 정정",
+      "[정리] completeness 스냅샷 gitignore 등록 [no-docs]",
+      "[문서] COMMANDS.md 재생성 — report:completeness 반영 [no-docs]",
+      "[문서] TRACE_MATRIX 재생성 [no-docs]",
+      "[기능·tools] 완성도 조감 리포트 — npm run report:completeness",
+      "[기능·carework] 양식·점검표 업로드 보완 4종 — 검토 단계·키 어시스트·기관 공유·게이트 DX",
+      "[정리·release] v20261108-b23fecd 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261108-b23fecd",
     "date": "2026-11-08",
     "notes": [
@@ -173,20 +187,6 @@
       "[테스트·e2e] PRO 배지 계측 스펙 — 서사 형식 선택 후 배지 표시 확인으로 갱신",
       "[수정·reader] 표준형 선택 시 story_textbook PRO 배지가 붙던 표시 오류 [no-test]",
       "[정리·release] v20261107-5591cba 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261107-5591cba",
-    "date": "2026-11-07",
-    "notes": [
-      "[수정·carework] escape-sink 규약 — 완료 메시지 보간 esc 누락 [no-test]",
-      "[문서·pro] SUBSCRIPTION_ROADMAP 플랜 키 목록에 ai_gen_quiz 추가",
-      "[수정·pro] AI 약점 미니퀴즈 게이트 불일치 — ai_gen_quiz 전용 플랜 키",
-      "[기능·pro] 무료/Pro 정책 정리 — 코어 학습 무료, 서사 콘텐츠 경로 통일 PRO",
-      "[문서·carework] 학습안내서를 실구현 동작으로 갱신 — 이어하기·진단 자동 집계 반영",
-      "[기능·carework] 개념 학습 → 진단 연동 — quizResults 파이프라인 + 대시보드 이어하기",
-      "[기능·carework] 개념 학습 실제 라우팅 — pre 판정·재도전·flow_attempts 기록",
-      "[정리·release] v20261107-4074a5a 스탬프 확정 [no-docs]"
     ]
   }
 ]
