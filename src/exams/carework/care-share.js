@@ -126,7 +126,8 @@ const _prepare = async ctx => {
     }
 };
 
-/** 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강 */
+/** 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
+ *  @spec CO-20 — 인쇄 가독성 규칙(흰 배경·여백·검정 강제) 인라인 구현 — pdfFileFromElStyled와 동일 규약 */
 const _pdfFile = async ctx => {
     const wrap = document.createElement('div');
     // html2canvas는 문서 좌표로 렌더 — fixed는 뷰포트에 노출(흰 플래시)되므로 문서 하단 absolute로 배치

@@ -36,6 +36,7 @@ export async function pdfFileFromEl(el, title) {
 }
 
 /** 인쇄 가독성 래퍼로 PDF — 흰 배경·여백·검정 텍스트 강제 (평가점검 출력과 동일 스타일).
+ *  @spec CO-20 — 문서 PDF 인쇄 가독성 정본 래퍼
  *  오버레이 문서(매뉴얼·시험 문서)처럼 다크 테마 요소를 그대로 넘기면 컬러·무여백 PDF가 되므로
  *  클론을 흰 래퍼에 담아 렌더한다. */
 export async function pdfFileFromElStyled(el, title) {
