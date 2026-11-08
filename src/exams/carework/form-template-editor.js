@@ -47,7 +47,7 @@ export function renderTplPreview(prefix) {
         ? mdToHtml(body).replace(FIELD_RE, (m, k0) => {
             const k = k0.trim();
             const auto = SYSTEM_KEYS.has(k);
-            return `<code class="tpl-ph${auto ? ' tpl-ph-auto' : ''}" title="${auto ? '자동 기입 키' : '기입 필드'}">${esc(k)}</code>`;
+            return `<span class="tpl-ph${auto ? ' tpl-ph-auto' : ''}" title="${auto ? '자동 기입 키 — 출력 시 자동으로 채워집니다' : '기입 필드 — 기입 시 이 위치에 값이 들어갑니다'}">{{${esc(k)}}}</span>`;
         })
         : '<span class="care-log-hint">본문을 입력하면 서식 미리보기가 표시됩니다 — 표·기입란 위치를 확인하세요.</span>';
 }

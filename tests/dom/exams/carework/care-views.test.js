@@ -679,8 +679,8 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         fillTplEditor('cf-tpl', '동의서', '| 항목 | 내용 |\n|---|---|\n| 성명 | {{client}} |\n| 서명 | {{본인}} |');
         const pv = document.getElementById('cf-tpl-preview');
         expect(pv.querySelector('table')).toBeTruthy(); // MD 표가 실제 표로 렌더
-        expect(pv.querySelector('.tpl-ph-auto')?.textContent).toBe('client'); // 시스템 키는 자동 기입 구분
-        expect([...pv.querySelectorAll('.tpl-ph')].some(c => c.textContent === '본인')).toBe(true); // 커스텀 기입란
+        expect(pv.querySelector('.tpl-ph-auto')?.textContent).toBe('{{client}}'); // 시스템 키는 자동 기입 구분
+        expect([...pv.querySelectorAll('.tpl-ph')].some(c => c.textContent === '{{본인}}')).toBe(true); // 커스텀 기입란
         fillTplEditor('cf-tpl', '동의서', '');
         expect(pv.innerHTML).toContain('미리보기'); // 빈 본문 안내
     });

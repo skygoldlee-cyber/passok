@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-08 fix(carework): 안내문(hint) 여백 규약 정착 — .care-log-hint 스타일 정의 + hint→목록 묶음
+
+- .care-log-hint가 클래스 미정의로 `<p>` 기본 마진(1em)에 의존 — hint→목록 간격이 gap-sec(16px)으로 벌어져 "기본 양식" 섹션만 여백이 넓어 보이던 잔여 불일치 수정
+- `.care-log-hint { margin: gap-ctl 0; font-size: 13px; color: text-muted }` 명시 + `.care-log-hint + .care-log-saved { margin-top: 0 }` — 헤더→안내문→목록 전 구간이 gap-ctl 한 묶음 리듬으로 통일
+- 미리보기 기입란 칩이 키 이름만 `<code>`로 표시돼 출력 텍스트처럼 읽힘 → `{{키}}` 문법 그대로 `<span>` 칩에 표시 + 툴팁에 기입/자동 동작 설명
+- 칩 테두리가 다크모드에서 안 보임 — border-strong(15% 흰색)은 다크 배경 대비 부족 → text-muted 토큰으로 교체하고 auto의 opacity 흐림 제거(실선 구분만 유지)
+
 ## 2026-11-08 refactor(carework): 양식 편집기 단일화 — 기관 양식 뷰로 통합 + 버튼 라벨 중앙 정렬
 
 - 양식 본문 편집기가 홈(등록 카드)·양식 뷰(인라인 편집기) 두 곳에 있어 혼란 — 등록·편집·파일 추출·기관 등록을 기관 양식 뷰로 통합
