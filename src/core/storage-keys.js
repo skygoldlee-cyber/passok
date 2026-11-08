@@ -144,6 +144,8 @@ export const STORAGE_KEYS = {
   ADMIT_CHECKS: 'carework_admit_checks',
   // 기관 업로드 평가 점검표 — [{title, items:[{id,text,ref}]}] 저장되면 기본 고시 점검표 대신 사용
   CARE_AUDIT_CUSTOM: 'carework_audit_custom',
+  // 대처카드 → 사고보고서 초안 — 카드 이벤트 발생 시 사고보고서에 선기입 (소비-일회성, 백업 제외)
+  CARE_INCIDENT_DRAFT: 'carework_incident_draft',
   // 기관 자체 양식 템플릿 (CO-17) — [{id,title,body,fields,scope,createdAt,updatedAt}] 로컬 양식 + 기관 양식 캐시
   CARE_FORM_TEMPLATES: 'carework_form_templates',
   // 기관 양식 기입 문서 로컬 기록 (CO-17) — [{id,tplId,title,client,clientId,date,values,createdAt,_sync}]

@@ -323,6 +323,29 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         vi.unstubAllGlobals();
     });
 
+    it('careCard — 카드 이벤트 발생 → 사고보고서 유형·경위 선기입 초안 전달', async () => {
+        const { initCareCardView, careCardOpen, careCardToIncident } = await import('../../../../src/exams/carework/views/care-card.js');
+        const { initCareIncidentView } = await import('../../../../src/exams/carework/views/care-incident.js');
+        const { getJSON } = await import('../../../../src/core/storage.js');
+        const { STORAGE_KEYS } = await import('../../../../src/core/storage-keys.js');
+        // jsdom은 상대 경로 fetch 불가 — 카드 JSON을 stub으로 제공
+        const cards = { cards: [{ id: 'fall', category: '사고 대응', title: '낙상 발생', trigger: '낙상 발견 시', steps: [{ phase: '확인', text: '상태 확인' }] }] };
+        vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(cards) })));
+        loadPartial('care-card.html');
+        await initCareCardView();
+        careCardOpen('fall');
+        expect(document.querySelector('[data-click="careCardToIncident"]')).toBeTruthy(); // 작성 버튼 노출
+        careCardToIncident('fall');
+        expect(getJSON(STORAGE_KEYS.CARE_INCIDENT_DRAFT)?.type).toBe('fall'); // 낙상 카드 → 낙상 유형
+        // 사고보고서 뷰 진입 — 초안 소비-삭제 + 선기입
+        loadPartial('care-incident.html');
+        initCareIncidentView();
+        expect(getJSON(STORAGE_KEYS.CARE_INCIDENT_DRAFT)).toBeNull();
+        expect(/** @type {HTMLSelectElement} */ (document.getElementById('inc-type')).value).toBe('fall');
+        expect(/** @type {HTMLInputElement} */ (document.getElementById('inc-desc')).value).toContain('낙상 발생');
+        vi.unstubAllGlobals();
+    });
+
     it('careHandover — 기관 인계·인수 확인 핸들러 노출 (DSN-43 6b)', () => {
         expect(typeof careFacilityHandoverSubmit).toBe('function');
         expect(typeof careHandoverAck).toBe('function');

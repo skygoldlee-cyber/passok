@@ -9,6 +9,8 @@ import { myMembership, submitIncident, listIncidents as listFacilityIncidents, d
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docMdHead, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
+import { getJSON, removeItem } from '../../../core/storage.js';
+import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { showToast } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
@@ -150,6 +152,13 @@ export function initCareIncidentView() {
     const s = $('inc-severity');
     if (s && !s.children.length)
         s.innerHTML = SEVERITIES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+    // 대처카드 초안 소비 — 카드에서 "사고보고서 작성"으로 진입 시 유형·경위 선기입 (일회성)
+    const draft = getJSON(STORAGE_KEYS.CARE_INCIDENT_DRAFT);
+    if (draft && typeof draft === 'object') {
+        removeItem(STORAGE_KEYS.CARE_INCIDENT_DRAFT);
+        if (draft.type && t) /** @type {HTMLSelectElement} */ (t).value = draft.type;
+        if (draft.desc) { const de = /** @type {HTMLInputElement|null} */ ($('inc-desc')); if (de) de.value = draft.desc; }
+    }
     renderSaved();
     void renderFacility();
     void refreshOrgName();
