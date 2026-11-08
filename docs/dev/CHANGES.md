@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-08 fix(carework): 홈 바로가기 순서를 사이드바와 통일
+
+- care-home 빠른 기록 nav의 순서가 index.template.html 사이드바 그룹 순서(오늘: 요양일지→방문기록→사고보고 → 교대: 인수인계→근무표 → 대상자)와 달라 불일치 — 동일 순서로 정렬 + 대처카드·평가점검 바로가기 추가 (manifest uiText 키 순서와 사이드바는 별개)
+
 ## 2026-11-08 fix(hooks): pre-commit에 파일명 규약 게이트 추가 — CI 전용 검사를 로컬 선행
 
 - check_filenames가 CI(test 잡)에서만 돌아 파일명 위반이 push 후에야 발견되던 갭 — pre-commit 루프에 check:filenames 추가로 커밋 시점 차단 (기준선 기반이라 기존 예외는 영향 없음, 스캔 1초 미만)
