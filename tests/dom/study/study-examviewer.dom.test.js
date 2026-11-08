@@ -40,12 +40,14 @@ describe('문제집 뷰어 — 열기·TOC·인쇄·캐시', () => {
         expect(toc.querySelectorAll('[data-exam-jump]').length).toBe(2);
     });
 
-    it('인쇄 버튼 → window.print 호출 (H)', async () => {
+    it('인쇄 버튼 → PDF 생성 경로 (실패 시 window.print 폴백) (H)', async () => {
+        vi.doMock('../../../src/content/pdf-utils.js', () => ({ pdfFileFromEl: vi.fn(() => Promise.reject(new Error('pdf 실패'))) }));
         await ExamViewer.openExam(EXAM_PATH);
         await flushAsync(30);
 
         document.querySelector('[data-exam-print]').click();
-        expect(window.print).toHaveBeenCalled();
+        // PDF 생성 실패 → 폴백 window.print
+        await vi.waitFor(() => expect(window.print).toHaveBeenCalled());
     });
 
     it('재오픈 → sessionStorage 캐시 재사용 (P)', async () => {
