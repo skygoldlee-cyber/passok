@@ -217,8 +217,10 @@ function renderSeedList() {
         const linked = allFormTemplates().find(t => t.toolKey === key);
         return `<div class="care-log-saved-item">
             <span>${esc(def.title)} ${linked ? '<em class="care-card-cat">사본 있음</em>' : '<small>표준 양식</small>'}</span>
-            <button data-click="careFormSeedCopy" data-arg="${esc(key)}" class="btn">${linked ? '사본 편집' : '사본 만들기'}</button>
-            <button data-click="careFormSeedFile" data-arg="${esc(key)}" class="btn btn-secondary">📄 파일로 만들기</button>
+            <div class="care-log-saved-actions">
+              <button data-click="careFormSeedCopy" data-arg="${esc(key)}" class="btn">${linked ? '사본 편집' : '사본 만들기'}</button>
+              <button data-click="careFormSeedFile" data-arg="${esc(key)}" class="btn btn-secondary">📄 파일로 만들기</button>
+            </div>
           </div>`;
     }).join('');
 }

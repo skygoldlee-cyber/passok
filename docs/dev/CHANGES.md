@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-08 fix(carework): 기본 양식 버튼 세로 스택 — 사본·파일로 만들기
+
+- 기본 양식 행에 버튼 2개가 가로로 나란히 붙어 좁은 화면에서 잘림 — .care-log-saved-actions(flex column)으로 감싸 세로 정렬
+
 ## 2026-11-08 docs(SPEC): CO-19 기관 점검표 업로드 등록 + CO-18 문구 개정
 
 - CO-19 신규 등록 — 기관 점검표 파일 업로드(콘텐츠 오버라이드): audit-import.js·care-audit.js·views/care-audit.js·테스트 2건에 @spec 연결 (테스트 갭 기준선 증가 없이 통과)

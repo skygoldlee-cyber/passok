@@ -169,6 +169,8 @@
     font-size: 14px; color: var(--color-text-main);
 }
 .care-log-empty { font-size: 13px; color: var(--color-text-muted); }
+/* 항목 내 버튼 묶음 — 세로 스택 (기본 양식의 사본·파일 버튼) */
+.care-log-saved-actions { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
 
 /* ── 평가 체크리스트 ───────────────────────────── */
 .care-audit-progress {
