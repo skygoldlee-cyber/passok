@@ -7,12 +7,9 @@ import { listClients } from '../care-client-store.js';
 import { clientTrends } from '../care-trend.js';
 import { markFunnel, funnelStats } from '../care-funnel.js';
 import { escapeHTML as esc } from '../../../core/sanitize.js';
-import { refreshOrgName, getDocSign, setDocSign, setDocSignImage, signFileToDataUri, myMembership, submitFormTemplate } from '../facility.js';
+import { refreshOrgName, getDocSign, setDocSign, setDocSignImage, signFileToDataUri } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
-import { initTplEditor, fillTplEditor, readTplEditor } from '../form-template-editor.js';
-import { addFormTemplate, updateFormTemplate, consumePendingTplEdit, syncFormTemplates } from '../form-template-store.js';
-import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 
 const $ = (id) => document.getElementById(id);
 const dayOf = (r) => r.date || r.shift_date || '';
@@ -69,55 +66,6 @@ export function initCareHomeView() {
         });
     }
     renderImg();
-    // 기관 양식 등록 편집기 — 커스텀폼 뷰 '편집' 이관분 채움 + manager 기관등록 버튼 표시
-    initTplEditor('home-tpl');
-    const pending = consumePendingTplEdit();
-    if (pending) {
-        fillTplEditor('home-tpl', pending.title, pending.body);
-        _tplEditId = pending.scope === 'fac' ? null : pending.id; // 기관 양식은 사본으로 저장
-        if (pending.scope === 'fac') showToast('기관 양식을 불러왔습니다 — 저장하면 이 기기의 사본이 됩니다.');
-    }
-    void myMembership().then(m => {
-        const btn = $('home-tpl-facsave');
-        if (btn) btn.classList.toggle('is-hidden', !(m && m.role === 'manager'));
-    }).catch(() => {});
-}
-
-let _tplEditId = null;
-
-/** 양식 파일 선택 — 숨긴 file input 트리거 (CO-17) */
-export function careHomeTplPdfPick() {
-    /** @type {HTMLInputElement|null} */ ($('home-tpl-file'))?.click();
-}
-
-/** 양식 저장 — 로컬 템플릿 등록·편집 (기입은 「기관 양식」 뷰에서) */
-export function careHomeTplSave() {
-    const { title, body } = readTplEditor('home-tpl');
-    if (!title || !body.trim()) { showToast('양식명과 본문을 입력하세요.', 'error'); return; }
-    if (_tplEditId) {
-        const r = updateFormTemplate(_tplEditId, { title, body });
-        r.ok ? showToast('양식을 수정했습니다.') : showToast(r.error, 'error');
-        _tplEditId = null;
-    } else {
-        const r = addFormTemplate({ title, body });
-        if (!r.ok) { showToast(r.error, 'error'); return; }
-        showToast('양식을 저장했습니다 — 「기관 양식」 뷰에서 기입·출력하세요.');
-    }
-    fillTplEditor('home-tpl', '', '');
-}
-
-/** 기관 양식으로 등록 — manager 전용, facility_form_templates에 저장 (CO-17) */
-export async function careHomeTplFacSave() {
-    const m = await myMembership().catch(() => null);
-    if (!m || m.role !== 'manager') { showToast('기관 등록은 관리책임자만 가능합니다.', 'error'); return; }
-    const { title, body } = readTplEditor('home-tpl');
-    if (!title || !body.trim()) { showToast('양식명과 본문을 입력하세요.', 'error'); return; }
-    proFeatureNotice('facility_workspace', '기관 양식 등록');
-    const r = await submitFormTemplate({ facilityId: m.facility_id, title, body });
-    if ('error' in r) { showToast('등록 실패: ' + r.error, 'error'); return; }
-    showToast('기관 양식으로 등록했습니다 — 멤버 전체가 사용할 수 있습니다.');
-    fillTplEditor('home-tpl', '', '');
-    void syncFormTemplates();
 }
 
 /** 서명 이미지 선택 — 숨긴 file input 트리거 (버튼 스타일 피커) */

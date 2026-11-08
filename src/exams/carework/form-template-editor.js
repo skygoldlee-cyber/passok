@@ -1,6 +1,6 @@
-// src/exams/carework/form-template-editor.js — 기관 양식 등록 편집기 공용
+// src/exams/carework/form-template-editor.js — 기관 양식 등록·편집기
 // @spec CO-17 — 시험 전용 도메인 로직 (DA-13)
-// 홈·커스텀폼 뷰가 같은 편집기를 id 접두사로 공유 — 파일 추출 파이프라인 단일화.
+// 기관 양식 뷰(cf-tpl 접두사)의 인라인 편집기 — 파일 추출 파이프라인·본문 미리보기 단일화.
 import { parseFields, SYSTEM_KEYS, FIELD_RE } from './form-template-store.js';
 import { mdToHtml } from './doc-md.js';
 import { extractFormPdf, extractFormDocx, extractFormXlsx, textToTemplate, fieldsToTemplate } from './care-form-pdf.js';
@@ -11,7 +11,7 @@ import { proFeatureNotice } from '../../pro/pro-upgrade.js';
 
 const $ = (id) => document.getElementById(id);
 
-/** 편집기 요소 접근 — prefix는 'home-tpl'·'cf-tpl' 등 뷰별 접두사 */
+/** 편집기 요소 접근 — prefix는 'cf-tpl' 등 뷰별 접두사 */
 export function readTplEditor(prefix) {
     return {
         title: /** @type {HTMLInputElement|null} */ ($(`${prefix}-title`))?.value?.trim() || '',

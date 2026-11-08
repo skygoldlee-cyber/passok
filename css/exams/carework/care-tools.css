@@ -155,6 +155,9 @@
 .view-header { margin: var(--gap-sec) 0 var(--gap-ctl); }
 .view-header h3 { margin: 0; }
 .view-header + .care-log-hint { margin-top: 0; }
+/* 헤더 직후 목록도 한 묶음 — .care-log-saved 자체 상단 마진(gap-sec)이 헤더 하단
+   gap-ctl과 상쇄되어 섹션별 여백이 달라지는 것을 정리 (안내문 규칙과 동형) */
+.view-header + .care-log-saved { margin-top: 0; }
 .care-log-saved-item {
     display: flex; justify-content: space-between; align-items: center;
     padding: 10px 14px; background: var(--bg-card); border-radius: 8px; margin-bottom: var(--space-1-5);
@@ -275,6 +278,11 @@
 .obs-chip span { display: inline-flex; align-items: center; justify-content: center; min-width: 52px; min-height: var(--control-h-md); padding: 0 14px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; font-size: 0.95rem; background: var(--color-surface, #fff); }
 .obs-chip input:checked + span { background: var(--color-primary, #4a6fa5); border-color: var(--color-primary, #4a6fa5); color: #fff; font-weight: 600; }
 .obs-chip input:focus-visible + span { outline: 2px solid var(--color-primary, #4a6fa5); outline-offset: 2px; }
+
+/* .btn은 inline-flex 기본 정렬이 좌측 — min-width(5rem)에 걸린 단문 라벨이
+   왼쪽으로 치우쳐 보이므로 carework 뷰 버튼 라벨은 중앙 정렬 */
+[id^="care-"][id$="-view"] .btn,
+[id^="care-"][id$="-view"] a.btn { justify-content: center; }
 
 /* ── 호버·눌림 피드백 — carework 뷰 모든 클릭 요소 ── */
 [id^="care-"][id$="-view"] button,

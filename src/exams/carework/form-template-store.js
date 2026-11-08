@@ -120,15 +120,6 @@ export function removeFormTemplate(id) {
     return { ok: true };
 }
 
-// — 뷰 간 편집 이관 — 목록 '편집' → 홈 등록 편집기로 전달 (양식 등록 입력은 홈 수용)
-let _pendingEdit = null;
-export function setPendingTplEdit(tpl) {
-    _pendingEdit = tpl ? { id: tpl.id, title: tpl.title, body: tpl.body, scope: tpl.scope } : null;
-}
-export function consumePendingTplEdit() {
-    const t = _pendingEdit; _pendingEdit = null; return t;
-}
-
 // — 기관 양식 캐시 (정본은 서버 — 뷰 init 시 syncFormTemplates로 갱신) —
 
 let _facTpls = [];

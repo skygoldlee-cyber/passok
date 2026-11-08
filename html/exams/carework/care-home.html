@@ -23,25 +23,9 @@
         </div>
     </div>
     <div class="care-home-card">
-        <h3 class="care-home-sign-title">기관 양식 등록</h3>
-        <div class="care-calc-form">
-            <label>양식명 <input id="home-tpl-title" type="text" placeholder="예: 급여계획 동의서" autocomplete="off"></label>
-            <div class="care-calc-actions">
-                <button type="button" class="btn btn-secondary" data-click="careHomeTplPdfPick">📄 파일에서 추출 <span class="pro-badge" data-pro-feature="care_form_extract">PRO</span></button>
-                <input id="home-tpl-file" type="file" accept=".pdf,.docx,.xlsx,.xls,.csv,application/pdf" class="is-hidden">
-            </div>
-            <label>양식 본문 (마크다운) <textarea id="home-tpl-body" rows="6" placeholder="기입란은 {{항목}} 형태로 표기 — 예: 성명: {{client}} · 서명: {{signImage}}&#10;시스템 키: date·org·author·confirmer·receiver·client·signImage 는 자동 기입"></textarea></label>
-            <div id="home-tpl-fields"></div>
-            <div id="home-tpl-preview" class="care-calc-result tpl-preview"></div>
-            <p class="care-log-hint">미리보기 — 점선 상자는 기입란({{항목}}), 실선 상자는 자동 기입 키입니다.</p>
-            <div class="care-calc-actions">
-                <button class="btn" data-click="careHomeTplSave">💾 양식 저장</button>
-                <button id="home-tpl-facsave" class="btn btn-secondary is-hidden" data-click="careHomeTplFacSave">🏥 기관 양식으로 등록</button>
-            </div>
-            <p class="care-log-hint">양식 파일을 올리면 텍스트·필드를 추출해 AI가 양식 초안을 만듭니다 — 검토·수정 후 저장하세요.<br>
-                <strong>가능하면 Word(docx)·Excel 파일로 올려주세요</strong> — 항목 추출 정확도가 가장 높습니다. PDF도 가능하지만 스캔(이미지) 파일은 지원하지 않습니다.<br>
-                등록된 양식은 「기관 양식」 뷰에서 기입·출력합니다.</p>
-        </div>
+        <h3 class="care-home-sign-title">기관 양식</h3>
+        <p class="care-log-hint">기관 자체 서식의 등록·기입·출력은 「기관 양식」 뷰에서 관리합니다 — 양식 파일(PDF·DOCX·Excel) AI 추출도 그곳에서 가능합니다.</p>
+        <a href="#/care-custom-form" class="btn btn-secondary">기관 양식 열기</a>
     </div>
     <nav class="care-home-nav" aria-label="빠른 기록">
         <a href="#/care-log" class="btn btn-secondary">요양일지 기록</a>

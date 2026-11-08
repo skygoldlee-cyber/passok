@@ -601,19 +601,26 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         removeFormTemplate(r.id);
     });
 
-    it('customForm — 뷰 마크업: 기입 패널 숨김 + 등록은 홈 뷰 수용', async () => {
-        const { initCareCustomFormView } = await import('../../../../src/exams/carework/views/care-custom-form.js');
+    it('customForm — 뷰 마크업: 기입 패널 숨김 + 등록·편집은 같은 뷰 수용 (홈은 링크)', async () => {
+        const { initCareCustomFormView, careFormTplNew } = await import('../../../../src/exams/carework/views/care-custom-form.js');
         loadPartial('care-custom-form.html');
         initCareCustomFormView();
         expect(document.getElementById('cf-fill')?.classList.contains('is-hidden')).toBe(true); // 양식 미선택 시 기입 패널 숨김
-        expect(document.querySelector('a[href="#/care-home"]')).toBeTruthy(); // 등록은 홈으로 안내
-        // 양식 파일 입력은 홈 뷰가 수용 — 다형식(PDF·DOCX·Excel) accept
-        loadPartial('care-home.html');
-        initCareHomeView();
-        const inp = /** @type {HTMLInputElement} */ (document.getElementById('home-tpl-file'));
+        // 등록·편집은 같은 뷰 — 새 양식 버튼 + 파일 추출 input(다형식 accept) + 저장·기관등록 핸들러
+        expect(document.querySelector('[data-click="careFormTplNew"]')).toBeTruthy();
+        const inp = /** @type {HTMLInputElement} */ (document.getElementById('cf-tpl-file'));
         expect(inp).toBeTruthy();
         expect(inp.accept).toContain('.docx');
-        expect(document.querySelector('[data-click="careHomeTplSave"]')).toBeTruthy();
+        expect(document.querySelector('[data-click="careFormTplSave"]')).toBeTruthy();
+        expect(document.getElementById('cf-tpl-facsave')).toBeTruthy();
+        careFormTplNew(); // 새 양식 — 빈 편집기 오픈
+        expect(document.getElementById('cf-editor').classList.contains('is-hidden')).toBe(false);
+        expect(document.getElementById('cf-tpl-label').textContent).toBe('새 양식');
+        // 홈 카드는 안내+링크로 축소 — 편집기는 양식 뷰에만 존재
+        loadPartial('care-home.html');
+        initCareHomeView();
+        expect(document.getElementById('home-tpl-body')).toBeNull();
+        expect(document.querySelector('a[href="#/care-custom-form"]')).toBeTruthy();
     });
 
     it('customForm — 기입 플로우: 양식 선택→필드 렌더→문서 생성→저장→삭제', async () => {

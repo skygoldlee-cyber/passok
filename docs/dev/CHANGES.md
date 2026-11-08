@@ -1,5 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-08 refactor(carework): 양식 편집기 단일화 — 기관 양식 뷰로 통합 + 버튼 라벨 중앙 정렬
+
+- 양식 본문 편집기가 홈(등록 카드)·양식 뷰(인라인 편집기) 두 곳에 있어 혼란 — 등록·편집·파일 추출·기관 등록을 기관 양식 뷰로 통합
+- 양식 뷰에 "새 양식 직접 작성" 버튼(careFormTplNew)·manager 기관 등록 버튼(cf-tpl-facsave → careFormTplFacSave) 추가 — 홈 카드는 안내+링크로 축소
+- 홈의 tpl 편집기 코드·pending 이관(setPendingTplEdit/consumePendingTplEdit) dead code 제거 — 인라인 편집 전환으로 호출부가 이미 없던 잔재
+- practice-registry 핸들러 목록 갱신 — careHomeTpl* 제거, careFormTplNew/careFormTplFacSave 추가
+- fix: carework 뷰 버튼 라벨 좌측 치우침 — .btn inline-flex 기본 정렬(flex-start)에 min-width(5rem)가 겹쳐 단문 라벨이 비중앙 → care- 뷰 스코프 justify-content: center 추가
+- fix: 섹션 헤더 아래 여백 불일치 — .view-header 직후 .care-log-saved의 상단 마진(gap-sec)이 헤더 규약(gap-ctl)을 덮어 "기본 양식"(8px)·"등록된 양식"(16px) 간 여백 차이 → .view-header + .care-log-saved { margin-top: 0 } (UX-CTL-07 안내문 규칙과 동형)
+
 ## 2026-11-08 feat(carework): 양식 편집기 본문 실시간 미리보기 — MD 표 렌더·{{키}} 기입란 칩
 
 - 마크다운 원문만으로는 출력 서식을 알기 어려워 편집기에 `renderTplPreview` 추가 — `mdToHtml` 렌더 결과에서 {{키}}를 칩으로 표시(커스텀=점선 기입란·시스템 키=실선 자동 구분)

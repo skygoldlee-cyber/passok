@@ -1,13 +1,13 @@
 // src/exams/carework/views/care-custom-form.js — 기관 자체 양식 뷰
 // @spec CO-17 — 시험 전용 실무 뷰 (DA-13)
-// 양식 목록·기입·미리보기·저장·내보내기 — 양식 등록·편집 입력은 Care OS 홈에서 수용
+// 양식 등록·편집·목록·기입·미리보기·저장·내보내기 — 양식 관리는 이 뷰에서 완결 (홈은 링크 허브)
 import { markFunnel } from '../care-funnel.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { escapeHTML as esc } from '../../../core/sanitize.js';
 import { showToast } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 import { docMdHead } from '../doc-md.js';
-import { docHeadHtml, refreshOrgName, myMembership, deleteFacilityFormTemplate } from '../facility.js';
+import { docHeadHtml, refreshOrgName, myMembership, submitFormTemplate, deleteFacilityFormTemplate } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import {
     parseFields, fillTemplate, fillTemplateHtml,
@@ -35,6 +35,11 @@ function _openEditor(tpl) {
     if (lb) lb.textContent = tpl.title + (tpl.toolKey ? ` (연동: ${TOOL_FORM_SEEDS[tpl.toolKey]?.title})` : '');
     fillTplEditor('cf-tpl', tpl.title, tpl.body);
     ed?.scrollIntoView?.({ block: 'nearest' });
+}
+
+/** 새 양식 — 빈 편집기 오픈 (신규 등록 진입점) */
+export function careFormTplNew() {
+    _openEditor({ id: null, title: '새 양식', body: '', scope: 'local' });
 }
 
 /** 목록 편집 → 인라인 편집기 (홈 이관 대신 이 뷰에서 완결) */
@@ -71,6 +76,20 @@ export function careFormTplSave() {
     }
     renderTplList();
     renderSeedList();
+}
+
+/** 기관 양식으로 등록 — manager 전용, facility_form_templates에 저장 (CO-17) */
+export async function careFormTplFacSave() {
+    const m = _membership || await myMembership().catch(() => null);
+    if (!m || m.role !== 'manager') { showToast('기관 등록은 관리책임자만 가능합니다.', 'error'); return; }
+    const { title, body } = readTplEditor('cf-tpl');
+    if (!title || !body.trim()) { showToast('양식명과 본문을 입력하세요.', 'error'); return; }
+    proFeatureNotice('facility_workspace', '기관 양식 등록');
+    const r = await submitFormTemplate({ facilityId: m.facility_id, title, body });
+    if ('error' in r) { showToast('등록 실패: ' + r.error, 'error'); return; }
+    showToast('기관 양식으로 등록했습니다 — 멤버 전체가 사용할 수 있습니다.');
+    await syncFormTemplates();
+    renderTplList();
 }
 
 const _isManager = () => _membership?.role === 'manager';
@@ -231,6 +250,9 @@ export function initCareCustomFormView() {
     renderDocList();
     void refreshOrgName();
     void syncPendingFormDocs();
-    void myMembership().then(m => { _membership = m; }).catch(() => {});
+    void myMembership().then(m => {
+        _membership = m;
+        $('cf-tpl-facsave')?.classList.toggle('is-hidden', !(m && m.role === 'manager'));
+    }).catch(() => {});
     void syncFormTemplates().then(renderTplList);
 }
