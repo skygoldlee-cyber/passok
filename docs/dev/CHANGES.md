@@ -1,6 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(reader): 오버레이 인쇄 컬러 출력 유지 — 검정 강제 롤백
+
+- exam-overlay 인쇄에 background:#fff·여백·h1 채우기색만 보강 (자식 색상 강제 롤백 — 컬러 인쇄가 시인성 양호 확인)
+- manual-overlay도 h1 채우기색만 유지 — 두 오버레이 모두 흰 배경·여백·컬러 출력 패턴으로 통일
+
 ## 2026-11-09 fix(reader): exam-overlay 인쇄에 색상 강제 추가 — 다크 테마 백지 대응
 
 - #exam-overlay의 @media print에 background:#fff·color:#000 강제 + 자식 요소 색상·그림자 강제 — manual-overlay에는 있던 규약이 exam-overlay에만 없어 다크 테마 사용자에게 백지로 보이던 결함

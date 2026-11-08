@@ -171,9 +171,8 @@ body.exam-open{overflow:hidden;}
   #exam-overlay .exam-ov-bar,#exam-overlay .exam-ov-toc,#exam-overlay .exam-resume-chip{display:none !important;}
   #exam-overlay .exam-ov-scroll{overflow:visible !important;padding:10mm 8mm !important;
     box-decoration-break:clone;-webkit-box-decoration-break:clone;}
-  /* 테마 색 계열 자식 요소도 검정 강제 — strong/code/th 등 자체 색상이 밝은 색이면 백지처럼 보임 */
-  #exam-overlay #exam-article *{color:#000 !important;-webkit-text-fill-color:#000 !important;
-    background:transparent !important;box-shadow:none !important;text-shadow:none !important;}
+  /* h1 그라디언트 텍스트는 배경 미출력 시 transparent fill로 보이지 않음 — 인쇄 시 고정색 (manual-overlay와 동일, 컬러 출력 유지) */
+  #exam-overlay #exam-article h1{-webkit-text-fill-color:#000 !important;}
 }`;
 
     const _overlay = createDocOverlay({
