@@ -1,5 +1,18 @@
 [
   {
+    "version": "v20261109-e700425",
+    "date": "2026-11-09",
+    "notes": [
+      "[수정·reader] 오버레이 인쇄 컬러 출력 유지 — exam-overlay에 흰 배경·여백만 보강",
+      "[정리] TRACE_MATRIX 재생성",
+      "[수정·reader] exam-overlay 인쇄에 색상 강제 추가 — 다크 테마 백지 대응",
+      "[정리] TRACE_MATRIX 재생성",
+      "[문서] CHANGES — 뷰어 PDF 재전환 기록",
+      "[수정·reader] 뷰어 인쇄/PDF를 생성 PDF 새탭 미리보기로 재전환 — window.print() 백지 대응",
+      "[정리·release] v20261109-3f25f78 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-3f25f78",
     "date": "2026-11-09",
     "notes": [
@@ -175,18 +188,6 @@
     "notes": [
       "[리팩터링·carework] 양식 편집기 단일화 — 기관 양식 뷰로 통합",
       "[정리·release] v20261108-f3f9ef1 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261108-f3f9ef1",
-    "date": "2026-11-08",
-    "notes": [
-      "[기능·carework] 양식 편집기 본문 실시간 미리보기 — MD 표 렌더·{{키}} 기입란 칩",
-      "[문서·SPEC] UX-CTL-07 연속 섹션 간 수직 여백 규약 등록 (v1.32)",
-      "[문서·SPEC] UX-CTL-07 연속 섹션 간 수직 여백 규약 등록 (v1.32)",
-      "[수정·carework] 기관 양식 뷰 안내문 위 빈줄 제거 — 헤더-안내문 여백 축소",
-      "[수정·carework] 기관 양식 뷰 기본 양식 안내문 제거 — 섹션 간 여백 정리",
-      "[정리·release] v20261108-0bf7a96 스탬프 확정 [no-docs]"
     ]
   }
 ]
