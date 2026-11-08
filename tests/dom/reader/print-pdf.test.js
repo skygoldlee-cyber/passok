@@ -69,6 +69,13 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         }
     });
 
+    it('sw.js 프리캐시에 PDF 벤더 포함 — 오프라인·PWA에서 생성 실패→인쇄창 백지 방지', async () => {
+        const { readFileSync } = await import('node:fs');
+        const sw = readFileSync('sw.js', 'utf8');
+        expect(sw).toContain('vendor/jspdf/jspdf.umd.min.js');
+        expect(sw).toContain('vendor/html2canvas/html2canvas.min.js');
+    });
+
     it('exam data-exam-print → pdfFileFromElStyled 호출 + 폴백 다운로드', async () => {
         const { pdfFileFromElStyled, clickSpy } = stubPdfEnv();
         const m = await import('../../../src/reader/exam-viewer.js');

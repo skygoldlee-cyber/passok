@@ -241,7 +241,11 @@ body.exam-open{overflow:hidden;}
                         a.href = url; a.download = file.name;
                         document.body.appendChild(a); a.click(); a.remove();
                     }
-                } catch { window.print(); } // 생성 실패 시 인쇄창 폴백
+                } catch (err) { // 생성 실패 시 인쇄창 폴백 — 실패 사실을 토스트로 가시화 (백지 진단용)
+                    const { showToast } = await import('../ui-utils.js');
+                    showToast('PDF 생성 실패 — 인쇄창으로 대체합니다: ' + ((/** @type {any} */ (err))?.message || '').slice(0, 60));
+                    window.print();
+                }
                 if (btn) btn.disabled = false;
             });
             el.querySelector('#exam-resume-go')?.addEventListener('click', () => {

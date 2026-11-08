@@ -162,6 +162,9 @@ const SHELL_ASSETS = [
   // FontAwesome 자체 호스팅 (오프라인/모바일에서도 아이콘 확실히 표시)
   './vendor/supabase/supabase.js',
   './vendor/xlsx/xlsx.full.min.js',
+  // PDF 생성 벤더 — 미프리캐시 시 오프라인·PWA에서 로드 실패 → 인쇄창 폴백(백지 사례)
+  './vendor/jspdf/jspdf.umd.min.js',
+  './vendor/html2canvas/html2canvas.min.js',
   './vendor/fontawesome/css/all.min.css',
   './vendor/fontawesome/webfonts/fa-solid-900.woff2',
   './vendor/fontawesome/webfonts/fa-brands-400.woff2',
