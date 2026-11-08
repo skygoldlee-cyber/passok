@@ -59,9 +59,14 @@ export const _lum = c => {
  *  클론을 흰 래퍼에 담고 밝은 색만 검정으로 바꾼다 — 나머지 색상은 그대로 유지. */
 export async function pdfFileFromElStyled(el, title) {
     const wrap = document.createElement('div');
+    // article 스코프 CSS가 '#manual-overlay #manual-article h2' 형태라 오버레이 조상 id가
+    // 없으면 타이포그래피 자체가 미적용 — 원본 오버레이 id를 부여해 선택자 컨텍스트 재현.
+    // 오버레이의 화면 규칙(display:none·position:fixed·inset)은 인라인으로 전부 덮어씀
+    const ovId = el.closest('[id$="-overlay"]')?.id || '';
+    if (ovId) wrap.id = ovId;
     // html2canvas는 문서 좌표로 렌더 — 화면 밖에 배치해 캡처만 수행
     // 폭 960px — article max-width(900px)가 자연 적용돼 화면·인쇄 기준본과 동일한 본문 폭 재현
-    wrap.style.cssText = 'position:absolute;left:0;top:100vh;width:960px;padding:24px;background:#fff;color:#000';
+    wrap.style.cssText = 'position:absolute;left:0;top:100vh;right:auto;bottom:auto;width:960px;display:block;height:auto;max-height:none;overflow:visible;z-index:auto;padding:24px;background:#fff;color:#000';
     wrap.appendChild(el.cloneNode(true));
     document.body.appendChild(wrap); // computed style을 위해 먼저 부착
     wrap.querySelectorAll('*').forEach(e2 => {
@@ -78,7 +83,58 @@ export async function pdfFileFromElStyled(el, title) {
         el2.style.boxShadow = 'none';
         el2.style.textShadow = 'none';
     });
-    try { return await pdfFileFromEl(wrap, title); }
-    finally { wrap.remove(); }
+    // 요소 경계 페이지네이션 — 고정 높이 슬라이스는 표·그림·제목을 중간에 잘라서
+    // 브라우저 인쇄(break-inside 회피)와 다르게 보인다. article의 최상위 요소를 실측
+    // 높이로 페이지에 채워 넣어 요소가 통째로 들어가는 페이지 단위로 나눈다. (@spec CO-20)
+    const clone = /** @type {HTMLElement} */ (wrap.firstElementChild); // article 복제본
+    const W = 210, H = 297, MX = 8, MY = 10;
+    const wrapCssPx = 960; // 래퍼 너비 — 전체가 PDF 내용 영역(W-2*MX)에 매핑
+    const mmPerCssPx = (W - 2 * MX) / wrapCssPx;
+    const availPx = (H - 2 * MY) / mmPerCssPx; // 한 페이지에 들어가는 본문 css px
+    const groups = /** @type {HTMLElement[][]} */ ([]);
+    let cur = /** @type {HTMLElement[]} */ ([]), curH = 0;
+    for (const child of /** @type {HTMLElement[]} */ (Array.from(clone.children))) {
+        const cs = getComputedStyle(child);
+        const h = child.offsetHeight + parseFloat(cs.marginTop || '0') + parseFloat(cs.marginBottom || '0');
+        if (curH + h > availPx && cur.length) { groups.push(cur); cur = []; curH = 0; }
+        cur.push(child); curH += h;
+    }
+    if (cur.length) groups.push(cur);
+    try {
+        const { jsPDF } = (/** @type {any} */ (window)).jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        let first = true;
+        for (const group of groups) {
+            const pg = document.createElement('div');
+            if (ovId) pg.id = ovId; // wrap과 동일한 오버레이 컨텍스트 — article 스코프 CSS 적용
+            pg.style.cssText = wrap.style.cssText;
+            const art = /** @type {HTMLElement} */ (clone.cloneNode(false)); // id·클래스 유지 — article 스코프 CSS 적용
+            for (const c of group) art.appendChild(c);
+            pg.appendChild(art);
+            document.body.appendChild(pg);
+            const canvas = await (/** @type {any} */ (window)).html2canvas(pg, { scale: 2, logging: false });
+            pg.remove(); // 자식은 detach만 — 원본 참조 유지
+            const imgH = (canvas.height / 2) * mmPerCssPx;
+            if (!first) pdf.addPage(); first = false;
+            if (imgH <= H - 2 * MY) {
+                pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', MX, MY, W - 2 * MX, imgH);
+            } else { // 단일 요소가 한 페이지보다 큰 경우(거대 표·이미지) — 해당 요소만 여백 슬라이스로 분할
+                const pxPerMm = canvas.width / (W - 2 * MX);
+                const pagePx = Math.round(H * pxPerMm), mXPx = Math.round(MX * pxPerMm), mYPx = Math.round(MY * pxPerMm);
+                const sliceH = Math.round((H - 2 * MY) * pxPerMm);
+                for (let off = 0; off < canvas.height; off += sliceH) {
+                    const hh = Math.min(sliceH, canvas.height - off);
+                    const pgc = document.createElement('canvas');
+                    pgc.width = canvas.width; pgc.height = pagePx;
+                    const ctx = pgc.getContext('2d'); if (!ctx) break;
+                    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, pgc.width, pgc.height);
+                    ctx.drawImage(canvas, 0, off, canvas.width, hh, mXPx, mYPx, canvas.width - 2 * mXPx, hh);
+                    pdf.addImage(pgc.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, W, H);
+                    if (off + sliceH < canvas.height) pdf.addPage();
+                }
+            }
+        }
+        return new File([pdf.output('blob')], `${title}.pdf`, { type: 'application/pdf' });
+    } finally { wrap.remove(); }
 }
 
