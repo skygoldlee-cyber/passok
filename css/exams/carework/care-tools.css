@@ -87,6 +87,9 @@
 .care-card-cat { font-size: 11px; color: var(--color-primary); font-weight: 700; }
 .care-card-item strong { font-size: 15px; color: var(--color-text-main); }
 .care-card-trig { font-size: 12px; color: var(--color-text-muted); }
+.care-card-contacts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.care-card-contact { font-size: 12px; background: var(--color-surface-alt, #f3f4f6); border-radius: 6px; padding: 3px 8px; }
+.care-card-contact em { font-style: normal; color: var(--color-text-muted); margin-right: 4px; }
 .care-card-detail { margin: var(--gap-group) 0; }
 .care-card-head h3 { margin: 4px 0; color: var(--color-text-main); }
 .care-card-step {

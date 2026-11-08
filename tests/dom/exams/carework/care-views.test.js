@@ -330,7 +330,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const { STORAGE_KEYS } = await import('../../../../src/core/storage-keys.js');
         // jsdom은 상대 경로 fetch 불가 — 카드 JSON을 stub으로 제공
         const cards = { cards: [
-            { id: 'fall', category: '사고 대응', title: '낙상 발생', trigger: '낙상 발견 시', steps: [{ phase: '확인', text: '상태 확인' }] },
+            { id: 'fall', category: '사고 대응', title: '낙상 발생', trigger: '낙상 발견 시', contacts: [{ label: '구급', number: '119' }], steps: [{ phase: '확인', text: '상태 확인' }] },
             { id: 'medication-error', category: '사고 대응', title: '투약 사고', trigger: '오투·누락', steps: [{ phase: '조치', text: '약 보존' }] },
         ] };
         vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(cards) })));
@@ -338,6 +338,8 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         await initCareCardView();
         careCardOpen('fall');
         expect(document.querySelector('[data-click="careCardToIncident"]')).toBeTruthy(); // 작성 버튼 노출
+        expect(document.querySelector('.care-card-contact')?.textContent).toContain('119'); // contacts 슬롯 렌더
+        expect(document.getElementById('card-share-pre')?.textContent).toContain('낙상 발생'); // 공유 본문 생성
         careCardToIncident('fall');
         expect(getJSON(STORAGE_KEYS.CARE_INCIDENT_DRAFT)?.type).toBe('fall'); // 낙상 카드 → 낙상 유형
         careCardToIncident('medication-error'); // 투약 카드 → 약물 관련 유형 (빈 매핑 해소 검증)

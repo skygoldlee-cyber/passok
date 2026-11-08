@@ -30,14 +30,17 @@ function renderDetail() {
             <span class="care-card-cat">${esc(c.category)}</span>
             <h3>${esc(c.title)}</h3>
             <p class="care-card-trig">${esc(c.trigger)}</p>
+            ${(c.contacts || []).length ? `<div class="care-card-contacts">${c.contacts.map(x => `<span class="care-card-contact"><em>${esc(x.label)}</em> ${esc(x.number)}</span>`).join('')}</div>` : ''}
         </div>
         ${c.steps.map((s, i) => `
             <div class="care-card-step">
                 <span class="care-card-stepno">${i + 1}</span>
                 <div><strong>${esc(s.phase)}</strong><p>${esc(s.text)}</p></div>
             </div>`).join('')}
+        <pre id="card-share-pre" class="is-hidden">${esc(`${c.title}\n${c.trigger}\n\n${c.steps.map((s, i) => `${i + 1}. ${s.phase}: ${s.text}`).join('\n')}${(c.contacts || []).length ? `\n\n연락·신고: ${c.contacts.map(x => `${x.label} ${x.number}`).join(' · ')}` : ''}`)}</pre>
         <div class="care-calc-actions">
             <button data-click="careCardToIncident" data-arg="${esc(c.id)}" class="btn">📝 사고보고서 작성</button>
+            <button data-click="careShare" data-arg="#card-share-pre|대처카드" class="btn btn-secondary">📤 인쇄·공유</button>
             <button data-click="careCardClose" class="btn btn-secondary">목록으로</button>
         </div>`;
 }
@@ -58,7 +61,7 @@ const CARD_INCIDENT_TYPE = {
     'medication-error': 'medication',  // 투약 사고 → 약물 관련
     'choking': 'injury',               // 질식·이물 → 외상·부상
     'emergency': 'other', 'infection': 'other', 'abuse-suspect': 'other', 'bpsd-delusion': 'other',
-    'self-harm': 'other',
+    'self-harm': 'other', 'mass-infection': 'other', 'evacuation': 'other',
 };
 
 /** 대처카드 이벤트 발생 → 사고보고서 뷰로 이동 (유형·경위 선기입 초안 전달) */
