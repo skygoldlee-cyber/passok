@@ -136,6 +136,7 @@ export async function careFormTplDelete(id) {
     if (_activeTpl?.id === id) { _activeTpl = null; renderFillForm(); }
     showToast('양식을 삭제했습니다.');
     renderTplList();
+    renderSeedList(); // toolKey 사본 삭제 시 기본 양식 버튼이 '사본 만들기'로 복귀
 }
 
 function renderTplList() {

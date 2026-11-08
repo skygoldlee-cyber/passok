@@ -736,7 +736,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
     });
 
     it('customForm — 기본 양식 사본 생성(연동 배지) + 시드 목록 렌더', async () => {
-        const { initCareCustomFormView, careFormSeedCopy } = await import('../../../../src/exams/carework/views/care-custom-form.js');
+        const { initCareCustomFormView, careFormSeedCopy, careFormTplDelete } = await import('../../../../src/exams/carework/views/care-custom-form.js');
         const { listFormTemplates, removeFormTemplate } = await import('../../../../src/exams/carework/form-template-store.js');
         for (const t of listFormTemplates()) removeFormTemplate(t.id);
         loadPartial('care-custom-form.html');
@@ -747,7 +747,9 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(tpl).toBeTruthy();
         expect(tpl.title).toBe('사고·낙상 보고서');
         expect(document.getElementById('cf-seed-list').innerHTML).toContain('사본 있음');
-        removeFormTemplate(tpl.id);
+        await careFormTplDelete(tpl.id); // 사본 삭제 → 기본 양식이 '사본 만들기'로 복귀
+        expect(document.getElementById('cf-seed-list').innerHTML).not.toContain('사본 있음');
+        expect(document.getElementById('cf-seed-list').innerHTML).toContain('사본 만들기');
     });
 
     it('customForm — 시드는 실제 필드명 노출 + 오버라이드 시 스칼라 실값 기입', async () => {

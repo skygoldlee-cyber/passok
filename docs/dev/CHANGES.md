@@ -1,5 +1,9 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-08 fix(carework): 사본 삭제 시 기본 양식 '사본 만들기' 미복귀
+
+- careFormTplDelete가 renderSeedList를 갱신하지 않아 toolKey 사본 삭제 후에도 기본 양식이 '사본 있음/사본 편집' 상태로 남던 버그 — 삭제 후 시드 목록 재렌더 추가
+
 ## 2026-11-08 fix(carework): 안내문(hint) 여백 규약 정착 — .care-log-hint 스타일 정의 + hint→목록 묶음
 
 - .care-log-hint가 클래스 미정의로 `<p>` 기본 마진(1em)에 의존 — hint→목록 간격이 gap-sec(16px)으로 벌어져 "기본 양식" 섹션만 여백이 넓어 보이던 잔여 불일치 수정
