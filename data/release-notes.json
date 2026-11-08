@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261109-64833e9",
+    "date": "2026-11-09",
+    "notes": [
+      "[수정·reader] 뷰어 PDF를 다운로드+안내 토스트로 — blob: 새탭 빈 화면 대응",
+      "[정리·release] v20261109-ad01a8c 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-ad01a8c",
     "date": "2026-11-09",
     "notes": [
@@ -181,17 +189,6 @@
     "notes": [
       "[수정·carework] 기본 양식 버튼 세로 스택 — 사본·파일로 만들기 [no-test]",
       "[정리·release] v20261108-76474f7 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261108-76474f7",
-    "date": "2026-11-08",
-    "notes": [
-      "[문서] audit-import 트리 등록 + TRACE_MATRIX 재생성 [no-docs]",
-      "[문서·SPEC] CO-19 기관 점검표 업로드 등록 + CO-18 파일 경로 반영",
-      "[기능·carework] 기본 양식 \"파일로 만들기\" — 기관 보고서 양식 파일로 출력 서식 지정",
-      "[기능·carework] 평가 체크리스트 기관 점검표 파일(.docx·.xlsx·.csv) 업로드",
-      "[정리·release] v20261108-d3195c7 스탬프 확정 [no-docs]"
     ]
   }
 ]
