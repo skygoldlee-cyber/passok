@@ -105,6 +105,7 @@ export async function pdfFileFromElStyled(el, title) {
         const { jsPDF } = (/** @type {any} */ (window)).jspdf;
         const pdf = new jsPDF('p', 'mm', 'a4');
         let first = true;
+        let checkedBlank = false;
         for (const group of groups) {
             const pg = document.createElement('div');
             if (ovId) pg.id = ovId; // wrap과 동일한 오버레이 컨텍스트 — article 스코프 CSS 적용
@@ -115,6 +116,21 @@ export async function pdfFileFromElStyled(el, title) {
             document.body.appendChild(pg);
             const canvas = await (/** @type {any} */ (window)).html2canvas(pg, { scale: 2, logging: false });
             pg.remove(); // 자식은 detach만 — 원본 참조 유지
+            if (!checkedBlank) { // 빈 캔버스 감지 — 기기·문서 특정 조합에서 html2canvas가 백지를 만드는 사례 대응
+                checkedBlank = true;
+                const ctx = canvas.getContext('2d');
+                if (ctx && canvas.width > 0 && canvas.height > 0) {
+                    const d = ctx.getImageData(0, 0, canvas.width, Math.min(canvas.height, 400)).data;
+                    let ink = 0;
+                    for (let i = 0; i < d.length; i += 40) { // 샘플링 — 비백 픽셀 존재 여부
+                        if (d[i] < 245 || d[i + 1] < 245 || d[i + 2] < 245) { ink = 1; break; }
+                    }
+                    if (!ink) { // pg 단위 렌더가 빈 환경 — 자식을 article로 되돌려 통짜 단일 렌더로 폴백
+                        for (const g of groups) for (const c of g) clone.appendChild(c);
+                        return pdfFileFromEl(wrap, title);
+                    }
+                }
+            }
             const imgH = (canvas.height / 2) * mmPerCssPx;
             if (!first) pdf.addPage(); first = false;
             if (imgH <= H - 2 * MY) {

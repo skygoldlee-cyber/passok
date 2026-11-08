@@ -30,6 +30,12 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         assert.match(src, /pg\.id = ovId/);                      // 페이지 컨테이너 컨텍스트
     });
 
+    it('빈 캔버스 감지 — 비백 픽셀 없으면 통짜 단일 렌더로 폴백', () => {
+        assert.match(src, /getImageData/);          // 캔버스 픽셀 샘플링
+        assert.match(src, /!ink/);                  // 빈 렌더 판정
+        assert.match(src, /pdfFileFromEl\(wrap/);   // 통짜 폴백 경로
+    });
+
     it('벤더 지연 로드 — ensurePdf() 선행 (미호출 시 즉시 크래시 회귀)', () => {
         assert.match(src, /pdfFileFromElStyled[\s\S]{0,300}await ensurePdf\(\)/); // 함수 선두에 벤더 로드
     });
