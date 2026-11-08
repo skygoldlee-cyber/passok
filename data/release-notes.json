@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261108-c056714",
+    "date": "2026-11-08",
+    "notes": [
+      "[수정·carework] 인쇄 빈 출력 수정 — 오버레이 인쇄 규칙 + 빈 콘텐츠 방어",
+      "[정리·release] v20261108-e1958ef 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261108-e1958ef",
     "date": "2026-11-08",
     "notes": [
@@ -172,17 +180,6 @@
       "[기능·carework] 기관 자체 양식(커스텀 폼) CO-17 — 등록·기입·출력·기록",
       "[기능·carework] 서명 이미지 WebP 정규화 — 서명란 규격 리사이즈",
       "[정리·release] v20261107-c04bec3 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261107-c04bec3",
-    "date": "2026-11-07",
-    "notes": [
-      "[수정·carework] 서명 svg 이동에 따른 sw.js·구조 동기화 [no-test]",
-      "[수정·carework] 학습안내서 서명 참조 제거 — svg만 images/ 정위치 유지 [no-test]",
-      "[수정·carework] 작성자-서명.svg images/ 이동 + 학습안내서 서명 참조 [no-test]",
-      "[수정·carework] 참조자료 상하반전 이미지 27장 교체 [no-test]",
-      "[정리·release] v20261107-36f794c 스탬프 확정 [no-docs]"
     ]
   }
 ]
