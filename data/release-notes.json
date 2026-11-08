@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261108-55c8006",
+    "date": "2026-11-08",
+    "notes": [
+      "[리팩터링·carework] 양식 편집기 단일화 — 기관 양식 뷰로 통합",
+      "[정리·release] v20261108-f3f9ef1 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261108-f3f9ef1",
     "date": "2026-11-08",
     "notes": [
@@ -188,14 +196,6 @@
       "[기능·carework] scenario_items 33문 충원 — 파일럿 개념 재도전 풀 확보",
       "[기능·carework] eval_pool eval 42문 충원 — 파일럿 21개념×2문 평가 전용 풀",
       "[기능·carework] eval_pool pretest 21문 충원 — 파일럿 21개념 공통 사전 평가"
-    ]
-  },
-  {
-    "version": "v20261106-6d4b8de",
-    "date": "2026-11-06",
-    "notes": [
-      "[리팩터링·uitext] 공통 기본값 코어 모듈화 + check:uitext 교차 검증·필드 정규화",
-      "[정리·release] v20261106-95600e6 스탬프 확정 [no-docs]"
     ]
   }
 ]
