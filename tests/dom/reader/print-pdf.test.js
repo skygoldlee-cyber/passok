@@ -69,6 +69,15 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         }
     });
 
+    it('인쇄 버튼 핸들러 — 클릭 즉시 생성중 토스트 + 다운로드·저장 토스트 계약', async () => {
+        const { readFileSync } = await import('node:fs');
+        for (const f of ['src/reader/manual-viewer.js', 'src/reader/exam-viewer.js']) {
+            const src = readFileSync(f, 'utf8');
+            expect(src, `${f} 생성중 토스트`).toContain('PDF 생성 중');
+            expect(src, `${f} 저장 토스트`).toContain('PDF 저장됨');
+        }
+    });
+
     it('sw.js 프리캐시에 PDF 벤더 포함 — 오프라인·PWA에서 생성 실패→인쇄창 백지 방지', async () => {
         const { readFileSync } = await import('node:fs');
         const sw = readFileSync('sw.js', 'utf8');

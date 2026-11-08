@@ -184,6 +184,8 @@ body.manual-open{overflow:hidden;}
             el.querySelector('[data-manual-print]')?.addEventListener('click', async e => {
                 const btn = /** @type {HTMLButtonElement} */ (e.currentTarget);
                 if (btn) btn.disabled = true;
+                const { showToast } = await import('../ui-utils.js');
+                showToast('PDF 생성 중 — 문서가 길면 잠시 걸립니다');
                 try {
                     const { pdfFileFromElStyled } = await import('../content/pdf-utils.js');
                     const file = await pdfFileFromElStyled(el.querySelector('#manual-article'), _currentTitle || '문서');
@@ -192,10 +194,8 @@ body.manual-open{overflow:hidden;}
                     const a = document.createElement('a');
                     a.href = url; a.download = file.name;
                     document.body.appendChild(a); a.click(); a.remove();
-                    const { showToast } = await import('../ui-utils.js');
                     showToast('PDF 저장됨 — 파일을 열어 인쇄하세요');
                 } catch (err) { // 생성 실패 시 인쇄창 폴백 — 실패 사실을 토스트로 가시화 (백지 진단용)
-                    const { showToast } = await import('../ui-utils.js');
                     showToast('PDF 생성 실패 — 인쇄창으로 대체합니다: ' + ((/** @type {any} */ (err))?.message || '').slice(0, 60));
                     window.print();
                 }
