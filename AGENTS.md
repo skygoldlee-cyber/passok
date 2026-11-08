@@ -294,7 +294,7 @@ src/                    # ES Modules
       care-share.js       # 생성 문서 공유 — Web Share API 네이티브 공유 시트, 미지원 시 클립보드 폴백 (CO-13)
       doc-md.js           # 내보내기 문서 마크다운 표준 초안 — docMdHead·mdTable·csvToMdTable·mdToHtml (CO-13)
       form-template-store.js # 기관 자체 양식 템플릿·기입 문서 스토어 — {{키}} 파싱·치환·custom_form write-through (CO-17)
-      form-template-editor.js # 양식 등록 편집기 공용 — 파일 추출 파이프라인 (PDF·DOCX·Excel → AI 초안, CO-17)
+      form-template-editor.js # 양식 등록 편집기 공용 — 본문 실시간 미리보기({{키}} 기입란 칩) + 파일 추출 파이프라인 (PDF·DOCX·Excel → AI 초안, CO-17)
       care-form-pdf.js    # 양식 파일 추출 — pdf.js 텍스트·AcroForm + DOCX zip/OOXML + Excel SheetJS (CO-17)
       form-seeds.js       # 내장 도구 표준 양식 시드·본문 오버라이드 — TOOL_FORM_SEEDS·renderToolBody (CO-18)
       roster-store.js     # 근무 배정 로컬 저장 — 무료 30건 한도 (Phase 6d)

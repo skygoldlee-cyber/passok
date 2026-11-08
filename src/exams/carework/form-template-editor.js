@@ -1,7 +1,8 @@
 // src/exams/carework/form-template-editor.js — 기관 양식 등록 편집기 공용
 // @spec CO-17 — 시험 전용 도메인 로직 (DA-13)
 // 홈·커스텀폼 뷰가 같은 편집기를 id 접두사로 공유 — 파일 추출 파이프라인 단일화.
-import { parseFields } from './form-template-store.js';
+import { parseFields, SYSTEM_KEYS, FIELD_RE } from './form-template-store.js';
+import { mdToHtml } from './doc-md.js';
 import { extractFormPdf, extractFormDocx, extractFormXlsx, textToTemplate, fieldsToTemplate } from './care-form-pdf.js';
 import { requestFormExtract } from '../../ai/ai-client.js';
 import { escapeHTML as esc } from '../../core/sanitize.js';
@@ -24,6 +25,7 @@ export function fillTplEditor(prefix, title, body) {
     if (t) t.value = title;
     if (b) b.value = body;
     renderTplFields(prefix);
+    renderTplPreview(prefix);
 }
 
 /** 본문 {{키}} 미리보기 — 저장 전 기입 필드 확인 */
@@ -34,6 +36,20 @@ export function renderTplFields(prefix) {
     el.innerHTML = fields.length
         ? `<span class="care-log-hint">기입 필드 ${fields.length}개: ${fields.map(f => esc(f.label)).join(', ')}</span>`
         : '<span class="care-log-hint">기입 필드 없음 — 본문에 {{항목}} 플레이스홀더를 넣으면 기입 필드가 됩니다.</span>';
+}
+
+/** 본문 MD → 서식 미리보기 — 입력 즉시 렌더, {{키}}는 기입란 칩으로 표시 (시스템 키는 자동 구분) */
+export function renderTplPreview(prefix) {
+    const el = $(`${prefix}-preview`);
+    if (!el) return;
+    const body = readTplEditor(prefix).body;
+    el.innerHTML = body.trim()
+        ? mdToHtml(body).replace(FIELD_RE, (m, k0) => {
+            const k = k0.trim();
+            const auto = SYSTEM_KEYS.has(k);
+            return `<code class="tpl-ph${auto ? ' tpl-ph-auto' : ''}" title="${auto ? '자동 기입 키' : '기입 필드'}">${esc(k)}</code>`;
+        })
+        : '<span class="care-log-hint">본문을 입력하면 서식 미리보기가 표시됩니다 — 표·기입란 위치를 확인하세요.</span>';
 }
 
 /** 확장자별 추출기 — AcroForm 필드는 PDF만 존재 */
@@ -85,7 +101,8 @@ export function initTplEditor(prefix) {
     const bodyEl = /** @type {HTMLTextAreaElement|null} */ ($(`${prefix}-body`));
     if (bodyEl && !bodyEl.dataset.bound) {
         bodyEl.dataset.bound = '1';
-        bodyEl.addEventListener('input', () => renderTplFields(prefix));
+        bodyEl.addEventListener('input', () => { renderTplFields(prefix); renderTplPreview(prefix); });
     }
     renderTplFields(prefix);
+    renderTplPreview(prefix);
 }

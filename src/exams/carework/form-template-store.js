@@ -19,7 +19,7 @@ export const FREE_DOC_LIMIT = 10;
 
 /** 시스템 자동 기입 키 — 기입 필드 생성에서 제외 */
 export const SYSTEM_KEYS = new Set(['date', 'org', 'author', 'confirmer', 'receiver', 'client', 'signImage']);
-const FIELD_RE = /\{\{\s*([가-힣a-zA-Z0-9_]{1,40})\s*\}\}/g;
+export const FIELD_RE = /\{\{\s*([가-힣a-zA-Z0-9_]{1,40})\s*\}\}/g;
 /** 서명 이미지 자리표시 — mdToHtml이 텍스트를 esc하므로 통과 후 HTML에서 img로 치환 */
 const SIGN_MARK = 'CARE_SIGN_IMAGE_SLOT';
 

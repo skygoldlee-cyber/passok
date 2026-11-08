@@ -32,6 +32,8 @@
             </div>
             <label>양식 본문 (마크다운) <textarea id="home-tpl-body" rows="6" placeholder="기입란은 {{항목}} 형태로 표기 — 예: 성명: {{client}} · 서명: {{signImage}}&#10;시스템 키: date·org·author·confirmer·receiver·client·signImage 는 자동 기입"></textarea></label>
             <div id="home-tpl-fields"></div>
+            <div id="home-tpl-preview" class="care-calc-result tpl-preview"></div>
+            <p class="care-log-hint">미리보기 — 점선 상자는 기입란({{항목}}), 실선 상자는 자동 기입 키입니다.</p>
             <div class="care-calc-actions">
                 <button class="btn" data-click="careHomeTplSave">💾 양식 저장</button>
                 <button id="home-tpl-facsave" class="btn btn-secondary is-hidden" data-click="careHomeTplFacSave">🏥 기관 양식으로 등록</button>

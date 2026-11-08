@@ -129,6 +129,14 @@
 .doc-md ul { margin: 4px 0 4px 20px; }
 .doc-md hr { border: 0; border-top: 1px solid var(--border-subtle, #d1d5db); margin: 8px 0; }
 .care-doc-signimg { height: 42px; max-width: 100%; object-fit: contain; vertical-align: middle; }
+/* 양식 편집기 본문 미리보기 — {{키}} 기입란 칩, 자동 키는 실선·흐림 구분 */
+.tpl-preview { margin-top: var(--gap-ctl); }
+.tpl-ph {
+    display: inline-block; border: 1px dashed var(--border-strong, #9ca3af); border-radius: 4px;
+    padding: 0 5px; font-size: .88em; font-family: inherit;
+    background: var(--bg-muted, rgba(128,128,128,.12));
+}
+.tpl-ph-auto { border-style: solid; opacity: .7; }
 .care-sign-preview { max-height: 64px; max-width: 100%; object-fit: contain; display: block; margin: var(--space-1) 0; }
 
 .care-log-text {
