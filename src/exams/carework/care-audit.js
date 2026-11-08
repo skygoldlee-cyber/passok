@@ -1,13 +1,28 @@
 // src/exams/carework/care-audit.js — 평가 체크리스트 데이터
 // @spec none — 시험 전용 도메인 데이터 (DA-13)
-import { getJSON, setJSON } from '../../core/storage.js';
+import { getJSON, setJSON, removeItem } from '../../core/storage.js';
+import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { todayKey } from '../../core/utils.js';
 import { pushState } from './facility.js';
 
 const KEY = 'carework_audit_checks';
 let _sections = null;
 
+/** 기관 업로드 점검표 — 저장되면 기본 고시 점검표 대신 사용 */
+export function loadCustomSections() {
+    const v = getJSON(STORAGE_KEYS.CARE_AUDIT_CUSTOM);
+    return Array.isArray(v) && v.length ? v : null;
+}
+export function saveCustomSections(sections) {
+    setJSON(STORAGE_KEYS.CARE_AUDIT_CUSTOM, sections);
+}
+export function clearCustomSections() {
+    removeItem(STORAGE_KEYS.CARE_AUDIT_CUSTOM);
+}
+
 export async function loadAuditSections() {
+    const custom = loadCustomSections();
+    if (custom) return custom; // 기관 업로드 점검표 우선
     if (_sections) return _sections;
     const res = await fetch('./content/exams/carework/실무/audit_checklist.json');
     if (!res.ok) throw new Error(`audit_checklist ${res.status}`);

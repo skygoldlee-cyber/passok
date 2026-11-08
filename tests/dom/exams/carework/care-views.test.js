@@ -292,6 +292,31 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.getElementById('audit-list')).toBeTruthy();
     });
 
+    it('careAudit — 기관 점검표 파일(.csv) 업로드 → 커스텀 점검표 적용·기본 복원', async () => {
+        const { initCareAuditView: initAudit, careAuditFileReset } = await import('../../../../src/exams/carework/views/care-audit.js');
+        const { loadCustomSections, clearCustomSections, clearChecks } = await import('../../../../src/exams/carework/care-audit.js');
+        clearCustomSections(); clearChecks();
+        // jsdom은 상대 경로 fetch 불가 — 기본 점검표 JSON을 stub으로 제공
+        const checklist = JSON.parse(readFileSync(join(ROOT, 'content/exams/carework/실무/audit_checklist.json'), 'utf-8'));
+        vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(checklist) })));
+        loadPartial('care-audit.html');
+        await initAudit();
+        expect(document.querySelectorAll('#audit-list [data-audit]').length).toBe(20); // 기본 고시 20항목
+        // .csv 업로드 — 헤더 매핑(구분·점검항목·근거) → 2영역 2항목
+        const csv = '구분,점검항목,근거\n인권,기관 인권교육 실시,기관 지침\n안전,기관 낙상 점검,기관 매뉴얼';
+        selectFile('audit-file', new File([csv], '기관점검표.csv', { type: 'text/csv' }));
+        await waitFor(() => !!loadCustomSections());
+        expect(loadCustomSections()?.length).toBe(2);
+        expect(document.querySelectorAll('#audit-list [data-audit]').length).toBe(2); // 업로드 2항목으로 교체
+        expect(document.getElementById('audit-list').textContent).toContain('기관 인권교육 실시');
+        expect(document.getElementById('audit-custom-note').classList.contains('is-hidden')).toBe(false);
+        await careAuditFileReset(); // 기본 점검표 복원
+        expect(loadCustomSections()).toBeNull();
+        expect(document.querySelectorAll('#audit-list [data-audit]').length).toBe(20);
+        expect(document.getElementById('audit-custom-note').classList.contains('is-hidden')).toBe(true);
+        vi.unstubAllGlobals();
+    });
+
     it('careHandover — 기관 인계·인수 확인 핸들러 노출 (DSN-43 6b)', () => {
         expect(typeof careFacilityHandoverSubmit).toBe('function');
         expect(typeof careHandoverAck).toBe('function');

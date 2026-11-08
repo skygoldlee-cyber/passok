@@ -1,8 +1,10 @@
 // src/exams/carework/views/care-audit.js — 평가 체크리스트 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
-import { loadAuditSections, loadChecks, toggleCheck, clearChecks, auditProgress, pushAuditState } from '../care-audit.js';
+import { loadAuditSections, loadCustomSections, saveCustomSections, clearCustomSections, loadChecks, toggleCheck, clearChecks, auditProgress, pushAuditState } from '../care-audit.js';
+import { auditRowsToSections } from '../audit-import.js';
 import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
+import { showToast } from '../../../ui-utils.js';
 import { auditCoverage } from '../care-coverage.js';
 import { listClients } from '../care-client-store.js';
 import { listCareLogs } from '../care-log-store.js';
@@ -20,6 +22,9 @@ let _sections = [];
 function render() {
     const host = $('audit-list');
     if (!host) return;
+    const custom = !!loadCustomSections(); // 기관 업로드 점검표 사용 표시
+    $('audit-custom-note')?.classList.toggle('is-hidden', !custom);
+    $('audit-custom-reset')?.classList.toggle('is-hidden', !custom);
     const c = loadChecks();
     const cov = auditCoverage({ clients: listClients(), logs: listCareLogs(), visits: listVisits(), handovers: listHandovers(), incidents: listIncidents() });
     host.innerHTML = `<p class="care-trend-warn">📋 ${esc(cov.text)}</p>` + docHeadHtml('평가 체크리스트') + _sections.map(s => `
@@ -59,9 +64,63 @@ export function careAuditReset() {
     render();
 }
 
+/** 기관 점검표 파일 선택 — 숨긴 file input 트리거 */
+export function careAuditFilePick() {
+    /** @type {HTMLInputElement|null} */ ($('audit-file'))?.click();
+}
+
+/** 기관 점검표 파일(.docx·.xlsx·.csv) → 추출 → 커스텀 점검표로 저장·적용 */
+export async function careAuditFileLoad() {
+    const input = /** @type {HTMLInputElement|null} */ ($('audit-file'));
+    const f = input?.files?.[0];
+    if (input) input.value = '';
+    if (!f) return;
+    /** @type {string[][]} */ const rows = [];
+    /** @type {string[]} */ const lines = [];
+    try {
+        if (/\.(xlsx|xls|csv)$/i.test(f.name || '')) {
+            const { extractFormXlsx } = await import('../care-form-pdf.js');
+            const { parseCsv } = await import('../../../content/csv-utils.js');
+            rows.push(...parseCsv((await extractFormXlsx(f)).text));
+        } else {
+            const { extractFormDocx } = await import('../care-form-pdf.js');
+            const { text } = await extractFormDocx(f);
+            for (const l of String(text).split('\n')) {
+                const t = l.trim();
+                if (/^\|.*\|$/.test(t)) rows.push(t.slice(1, -1).split('|').map(c => c.trim()));
+                else if (t) lines.push(t);
+            }
+        }
+    } catch (e) {
+        showToast(e instanceof Error && e.message ? e.message : '파일을 읽지 못했습니다 — 텍스트 기반 Word·Excel 파일인지 확인하세요.', 'error');
+        return;
+    }
+    const sections = auditRowsToSections(rows, lines);
+    const n = sections.reduce((a, s) => a + s.items.length, 0);
+    if (!n) { showToast('점검 항목을 찾지 못했습니다 — 표 또는 줄 단위 항목이 필요합니다.', 'error'); return; }
+    saveCustomSections(sections);
+    _sections = await loadAuditSections();
+    render();
+    showToast(`기관 점검표 ${sections.length}개 영역 ${n}개 항목을 적용했습니다 — 같은 파일 재업로드 시 체크 상태가 유지됩니다.`);
+}
+
+/** 기본 고시 점검표로 복원 */
+export async function careAuditFileReset() {
+    clearCustomSections();
+    _sections = await loadAuditSections().catch(() => _sections); // 기본 로드 실패 시 현행 유지
+    render();
+    showToast('기본 고시 점검표로 복원했습니다.');
+}
+
 export async function initCareAuditView() {
     void pushAuditState();
     void refreshOrgName();
+    // 기관 점검표 파일 input — change는 직접 바인딩 (기본 점검표 로드 실패 시에도 업로드 가능하게)
+    const fileEl = /** @type {HTMLInputElement|null} */ ($('audit-file'));
+    if (fileEl && !fileEl.dataset.bound) {
+        fileEl.dataset.bound = '1';
+        fileEl.addEventListener('change', () => void careAuditFileLoad());
+    }
     try {
         _sections = await loadAuditSections();
     } catch (e) {
