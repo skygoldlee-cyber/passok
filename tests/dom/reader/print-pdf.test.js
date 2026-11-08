@@ -20,8 +20,8 @@ vi.doMock('../../../src/shell/doc-overlay.js', () => ({
 const stubPdfEnv = () => {
     const pdfFileFromElStyled = vi.fn(() => Promise.resolve(new File(['x'], 'd.pdf', { type: 'application/pdf' })));
     vi.doMock('../../../src/content/pdf-utils.js', () => ({ pdfFileFromElStyled }));
+    vi.doMock('../../../src/ui-utils.js', () => ({ showToast: vi.fn() }));
     window.URL.createObjectURL = vi.fn(() => 'blob:x');
-    window.open = vi.fn(() => null); // 팝업 차단 시나리오 → 다운로드 폴백 경로
     const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
     return { pdfFileFromElStyled, clickSpy };
 };
@@ -38,7 +38,7 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         document.querySelector('[data-manual-print]')?.click();
         await new Promise(r => setTimeout(r, 50));
         expect(pdfFileFromElStyled).toHaveBeenCalled();
-        expect(clickSpy).toHaveBeenCalled(); // window.open 차단 → 다운로드 앵커 폴백
+        expect(clickSpy).toHaveBeenCalled(); // 다운로드 앵커 — blob: 새탭 미리보기 대신 확실한 경로
         clickSpy.mockRestore();
     });
 

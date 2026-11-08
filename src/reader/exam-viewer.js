@@ -236,11 +236,12 @@ body.exam-open{overflow:hidden;}
                     const { pdfFileFromElStyled } = await import('../content/pdf-utils.js');
                     const file = await pdfFileFromElStyled(el.querySelector('#exam-article'), el.querySelector('#exam-ov-title')?.textContent || '문서');
                     const url = URL.createObjectURL(file);
-                    if (!window.open(url, '_blank')) { // 팝업 차단·인앱 — 다운로드 폴백
-                        const a = document.createElement('a');
-                        a.href = url; a.download = file.name;
-                        document.body.appendChild(a); a.click(); a.remove();
-                    }
+                    // blob: 새탭 미리보기는 일부 브라우저·인앱에서 빈 탭이 됨 — 다운로드가 확실한 경로
+                    const a = document.createElement('a');
+                    a.href = url; a.download = file.name;
+                    document.body.appendChild(a); a.click(); a.remove();
+                    const { showToast } = await import('../ui-utils.js');
+                    showToast('PDF 저장됨 — 파일을 열어 인쇄하세요');
                 } catch (err) { // 생성 실패 시 인쇄창 폴백 — 실패 사실을 토스트로 가시화 (백지 진단용)
                     const { showToast } = await import('../ui-utils.js');
                     showToast('PDF 생성 실패 — 인쇄창으로 대체합니다: ' + ((/** @type {any} */ (err))?.message || '').slice(0, 60));
