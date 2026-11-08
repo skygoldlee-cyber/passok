@@ -107,36 +107,58 @@ export const ExamViewer = (() => {
   padding:20px clamp(16px,4vw,48px) 80px;}
 #exam-overlay #exam-article{max-width:900px;margin:0 auto;line-height:1.8;
   font-size:1rem;color:inherit;}
-/* ---- 변환된 마크다운 본문 타이포그래피 (style.css 비의존, 다크/라이트 모두 대응) ---- */
-#exam-overlay #exam-article h1{font-size:1.6rem;font-weight:800;margin:0 0 1rem;
+/* ---- 변환된 마크다운 본문 타이포그래피 (style.css 비의존, 다크/라이트 모두 대응)
+   manual-article와 동일 스케일로 통일 — 두 뷰어의 인쇄/PDF 출력 간격을 동일하게 (@spec CO-20) ---- */
+#exam-overlay #exam-article h1{font-size:1.8rem;font-weight:800;margin:0 0 1rem;
   padding-bottom:.6rem;border-bottom:2px solid var(--color-primary);
   background:linear-gradient(135deg,var(--color-primary),var(--color-secondary));
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
-#exam-overlay #exam-article h2{font-size:1.25rem;font-weight:700;margin:1.8rem 0 .8rem;
-  padding-left:.7rem;border-left:4px solid var(--color-primary);}
-#exam-overlay #exam-article h3{font-size:1.08rem;font-weight:600;margin:1.4rem 0 .6rem;
+#exam-overlay #exam-article h2{font-size:1.35rem;font-weight:700;margin:2rem 0 1rem;
+  padding-left:.7rem;border-left:4px solid var(--color-primary);
+  display:flex;align-items:center;gap:.5rem;}
+#exam-overlay #exam-article h3{font-size:1.15rem;font-weight:600;margin:1.6rem 0 .8rem;
   color:var(--color-primary);}
-#exam-overlay #exam-article p{margin:0 0 .9rem;}
-#exam-overlay #exam-article strong{color:var(--color-warning);font-weight:700;}
+#exam-overlay #exam-article p{margin:0 0 1rem;}
+#exam-overlay #exam-article strong{color:var(--color-text-main);font-weight:700;}
 #exam-overlay #exam-article em{font-style:italic;}
 #exam-overlay #exam-article code{font-family:ui-monospace,Consolas,monospace;font-size:.9em;
-  background:rgba(127,127,127,.18);border-radius:4px;padding:.1em .35em;}
+  background:rgba(127,127,127,.18);border-radius:4px;padding:.1em .35em;
+  color:var(--color-secondary);}
 #exam-overlay #exam-article blockquote{margin:1rem 0;padding:.8rem 1rem;
   border-left:4px solid var(--color-secondary);
   background:rgba(139,92,246,.08);border-radius:0 8px 8px 0;}
 #exam-overlay #exam-article blockquote p{margin:0;}
-#exam-overlay #exam-article ul,#exam-overlay #exam-article ol{margin:0 0 1rem;padding-left:1.4rem;}
-#exam-overlay #exam-article li{margin:.25rem 0;}
+#exam-overlay #exam-article ul,#exam-overlay #exam-article ol{margin:0 0 1.25rem;padding-left:1.5rem;}
+#exam-overlay #exam-article li{margin:.35rem 0;}
 #exam-overlay #exam-article hr{border:none;border-top:1px solid var(--border-color);
-  margin:1.6rem 0;}
+  margin:2rem 0;}
 #exam-overlay #exam-article sup{color:var(--color-warning);}
-#exam-overlay #exam-article .reader-table-wrapper{margin:1rem 0;}
+#exam-overlay #exam-article .reader-table-wrapper{margin:1.25rem 0;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;}
+/* width:max-content + min-width:100% — 좁으면 컨테이너 폭, 넓으면 자연 폭으로 늘어나
+   래퍼가 가로 스크롤 (manual-article과 동일 동작). td max-width로 과도한 폭 제한 */
+#exam-overlay #exam-article .reader-table{width:max-content;min-width:100%;border-collapse:collapse;
+  border:1px solid var(--border-color);border-radius:8px;overflow:hidden;}
+#exam-overlay #exam-article .reader-table th,
+#exam-overlay #exam-article .reader-table td{padding:.75rem 1rem;text-align:left;
+  border-bottom:1px solid var(--border-color);vertical-align:top;}
+#exam-overlay #exam-article .reader-table td{min-width:5em;max-width:26em;}
+#exam-overlay #exam-article .reader-table th{white-space:nowrap;
+  background:rgba(6,182,212,.12);color:var(--color-primary);font-weight:700;
+  border-bottom:2px solid var(--color-primary);}
+#exam-overlay #exam-article .reader-table tr:last-child td{border-bottom:none;}
+#exam-overlay #exam-article .reader-table tr:hover td{background:rgba(255,255,255,.02);}
+html.light-theme #exam-overlay #exam-article .reader-table tr:hover td{background:rgba(0,0,0,.02);}
 #exam-overlay #exam-article .reader-img{display:block;max-width:100%;height:auto;
-  margin:1rem auto;border-radius:16px;border:1px solid var(--border-color);}
-#exam-overlay #exam-article pre.reader-code-block{margin:1rem 0;padding:1rem;overflow-x:auto;
-  border-radius:8px;background:rgba(0,0,0,.3);border:1px solid var(--border-color);}
-html.light-theme #exam-overlay #exam-article pre.reader-code-block{background:rgba(0,0,0,.06);}
-#exam-overlay #exam-article pre.reader-code-block code{background:none;padding:0;}
+  margin:1.25rem auto;border-radius:16px;border:1px solid var(--border-color);
+  overflow:hidden;}
+@media (pointer:fine){#exam-overlay #exam-article .reader-img{cursor:zoom-in;}}
+#exam-overlay #exam-article pre.reader-code-block{margin:1.25rem 0;padding:1.25rem;overflow-x:auto;
+  border-radius:8px;background:rgba(0,0,0,.3);border:1px solid var(--border-color);
+  font-family:'Outfit',ui-monospace,Consolas,monospace;font-size:.9rem;line-height:1.5;}
+html.light-theme #exam-overlay #exam-article pre.reader-code-block{
+  background:rgba(0,0,0,.06);color:#334155;}
+#exam-overlay #exam-article pre.reader-code-block code{background:none;padding:0;color:inherit;}
 #exam-overlay .exam-ov-toc{max-width:900px;margin:0 auto 18px;}
 #exam-overlay .exam-ov-toc summary{cursor:pointer;font-weight:600;padding:8px 0;}
 #exam-overlay .exam-ov-toc a{display:block;padding:4px 0;color:var(--color-primary);

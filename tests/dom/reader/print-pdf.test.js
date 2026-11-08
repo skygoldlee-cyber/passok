@@ -51,6 +51,24 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         expect(src).toContain('#exam-overlay #exam-article h1{-webkit-text-fill-color:#000'); // h1 고정색만, 나머지 컬러 유지
     });
 
+    it('exam-article 타이포그래피 — manual-article 기준본과 동일 스케일 (출력 간격 통일)', async () => {
+        const { readFileSync } = await import('node:fs');
+        const exam = readFileSync('src/reader/exam-viewer.js', 'utf8');
+        const manual = readFileSync('src/reader/manual-viewer.js', 'utf8');
+        // 기준본(manual-article)의 타이포 규칙이 exam-article에도 동일하게 존재 — 간격 스케일 통일 계약
+        for (const rule of [
+            'article h2{font-size:1.35rem;font-weight:700;margin:2rem 0 1rem',
+            'article h3{font-size:1.15rem;font-weight:600;margin:1.6rem 0 .8rem',
+            'article p{margin:0 0 1rem;}',
+            'article li{margin:.35rem 0;}',
+            'article .reader-table-wrapper{margin:1.25rem 0',
+            'article .reader-table{width:max-content;min-width:100%', // 표 스타일 동일 적용
+        ]) {
+            expect(manual, `manual 기준 규칙: ${rule}`).toContain(rule.replace('article', '#manual-article'));
+            expect(exam, `exam 통일 규칙: ${rule}`).toContain(rule.replace('article', '#exam-article'));
+        }
+    });
+
     it('exam data-exam-print → pdfFileFromElStyled 호출 + 폴백 다운로드', async () => {
         const { pdfFileFromElStyled, clickSpy } = stubPdfEnv();
         const m = await import('../../../src/reader/exam-viewer.js');

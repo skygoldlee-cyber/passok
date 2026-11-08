@@ -60,7 +60,8 @@ export const _lum = c => {
 export async function pdfFileFromElStyled(el, title) {
     const wrap = document.createElement('div');
     // html2canvas는 문서 좌표로 렌더 — 화면 밖에 배치해 캡처만 수행
-    wrap.style.cssText = 'position:absolute;left:0;top:100vh;width:700px;padding:24px;background:#fff;color:#000';
+    // 폭 960px — article max-width(900px)가 자연 적용돼 화면·인쇄 기준본과 동일한 본문 폭 재현
+    wrap.style.cssText = 'position:absolute;left:0;top:100vh;width:960px;padding:24px;background:#fff;color:#000';
     wrap.appendChild(el.cloneNode(true));
     document.body.appendChild(wrap); // computed style을 위해 먼저 부착
     wrap.querySelectorAll('*').forEach(e2 => {

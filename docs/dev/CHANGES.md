@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(reader): exam-article 타이포그래피를 manual-article 기준으로 통일
+
+- exam-overlay 본문 CSS가 manual-overlay와 다른 간격 스케일(h2 1.25rem/1.8rem vs 1.35rem/2rem 등) + 테이블 스타일 누락 — 실무막뉴얼·문제집 문서의 출력이 학습매뉴얼 기준본과 다르게 나오던 원인
+- h1~h3·p·ul·li·hr·표·이미지·코드블록 규칙을 manual-article 값으로 동일하게 이식 + 표 스타일 추가 (컬러·여백 패턴 동일)
+- pdfFileFromElStyled 래퍼 폭 700px → 960px — article max-width 900px이 자연 적용돼 기준본과 동일 본문 폭
+
 ## 2026-11-09 fix(pdf): 생성 PDF 페이지 여백 조각 + 밝은 글자만 보정 — 인쇄 품질 복원
 
 - pdfFileFromEl: 통짜 이미지 전면 슬라이스(상하 여백 없음·글자 잘림) → 페이지별 여백(좌우 8mm·상하 10mm)이 입혀진 캔버스 조각으로 분할
