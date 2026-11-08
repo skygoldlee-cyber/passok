@@ -70,6 +70,15 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         }
     });
 
+    it('저장 경로 — showSaveFilePicker 우선(윈도우 저장 대화상자), 미지원만 다운로드 폴백', async () => {
+        const { readFileSync } = await import('node:fs');
+        for (const f of ['src/reader/manual-viewer.js', 'src/reader/exam-viewer.js']) {
+            const src = readFileSync(f, 'utf8');
+            expect(src, `${f} 저장 대화상자`).toContain('showSaveFilePicker');
+            expect(src, `${f} 취소 무시`).toContain('AbortError');
+        }
+    });
+
     it('인쇄 버튼 핸들러 — 클릭 즉시 생성중 토스트 + 다운로드·저장 토스트 계약', async () => {
         const { readFileSync } = await import('node:fs');
         for (const f of ['src/reader/manual-viewer.js', 'src/reader/exam-viewer.js']) {

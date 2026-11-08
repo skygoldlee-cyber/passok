@@ -189,9 +189,19 @@ body.manual-open{overflow:hidden;}
                 try {
                     const { pdfFileFromElStyled } = await import('../content/pdf-utils.js');
                     const file = await pdfFileFromElStyled(el.querySelector('#manual-article'), _currentTitle || '문서');
-                    const url = URL.createObjectURL(file);
-                    // 새 탭 프리뷰 우선 — 팝업 차단·인앱만 다운로드 폴백
-                    if (!window.open(url, '_blank')) {
+                    const picker = (/** @type {any} */ (window)).showSaveFilePicker;
+                    if (picker) { // 윈도우 저장 대화상자(다른 이름으로 저장) — 사용자가 위치·파일명 선택
+                        try {
+                            const handle = await picker.call(window, {
+                                suggestedName: file.name,
+                                types: [{ description: 'PDF 문서', accept: { 'application/pdf': ['.pdf'] } }],
+                            });
+                            const w = await handle.createWritable();
+                            await w.write(file); await w.close();
+                            showToast('PDF 저장됨 — 파일을 열어 인쇄하세요');
+                        } catch (e2) { if ((/** @type {any} */ (e2))?.name !== 'AbortError') throw e2; }
+                    } else { // 미지원(모바일·FF) — 다운로드 폴백
+                        const url = URL.createObjectURL(file);
                         const a = document.createElement('a');
                         a.href = url; a.download = file.name;
                         document.body.appendChild(a); a.click(); a.remove();
