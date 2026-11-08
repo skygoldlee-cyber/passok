@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261109-8e5c11d",
+    "date": "2026-11-09",
+    "notes": [
+      "[정리] TRACE_MATRIX 재생성",
+      "[수정·reader] 뷰어 인쇄/PDF를 생성 PDF 새탭 미리보기로 재전환 — 기기 print 스택 백지 대응",
+      "[정리·release] v20261109-c3b09d4 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-c3b09d4",
     "date": "2026-11-09",
     "notes": [
@@ -183,15 +192,6 @@
     "notes": [
       "[수정·carework] 미리보기 표 깨짐 수정 + 사본 편집기에 블록 실데이터 렌더",
       "[정리·release] v20261108-ac2aa63 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261108-ac2aa63",
-    "date": "2026-11-08",
-    "notes": [
-      "[문서·SPEC] UX-NAV-17 기능 표시명 단일성 규약 등록",
-      "[리팩터링·carework] 도구·양식 명칭 통일 — 요양일지·평가 체크리스트",
-      "[정리·release] v20261108-f8c7cd6 스탬프 확정 [no-docs]"
     ]
   }
 ]
