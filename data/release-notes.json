@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261108-966d725",
+    "date": "2026-11-08",
+    "notes": [
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[기능·carework] 대처카드 → 사고보고서 연동 — 이벤트 발생 시 유형·경위 선기입",
+      "[정리·release] v20261108-ed629b1 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261108-ed629b1",
     "date": "2026-11-08",
     "notes": [
@@ -175,16 +184,6 @@
       "[수정·carework] escape-sink — 완료 요약 보간 esc 누락 [no-test]",
       "[기능·carework] 개념 학습 UX 보완 — 글자 크기·추천 카드·피드백·집계",
       "[정리·release] v20261107-dd0f5d3 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261107-dd0f5d3",
-    "date": "2026-11-07",
-    "notes": [
-      "[수정·carework] 과목2 명칭 통일 — 요양보호 실기 (공백 표기) [no-test]",
-      "[정리·release] v20261107-3579e0d 스탬프 확정 [no-docs]",
-      "[수정·carework] 과목2 명칭 통일 — 요양보호 관련 → 요양보호실기 [no-test]",
-      "[정리·release] v20261107-92c0505 스탬프 확정 [no-docs]"
     ]
   }
 ]
