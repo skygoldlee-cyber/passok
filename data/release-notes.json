@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261109-3dd1893",
+    "date": "2026-11-09",
+    "notes": [
+      "[수정·pdf] pdfFileFromElStyled에 ensurePdf 선행 — 벤더 미로드 즉시 크래시 복구",
+      "[정리·release] v20261109-3cb3c9e 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-3cb3c9e",
     "date": "2026-11-09",
     "notes": [
@@ -181,14 +189,6 @@
       "[기능·tools] 완성도 조감 리포트 — npm run report:completeness",
       "[기능·carework] 양식·점검표 업로드 보완 4종 — 검토 단계·키 어시스트·기관 공유·게이트 DX",
       "[정리·release] v20261108-b23fecd 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261108-b23fecd",
-    "date": "2026-11-08",
-    "notes": [
-      "[문서·carework] 양식 커스터마이징 설명 보강 — 뷰 안내문·매뉴얼·설계문서 [no-test]",
-      "[정리·release] v20261108-0acfe49 스탬프 확정 [no-docs]"
     ]
   }
 ]
