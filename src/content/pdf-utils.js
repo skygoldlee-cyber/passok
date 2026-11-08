@@ -84,71 +84,54 @@ export async function pdfFileFromElStyled(el, title) {
         el2.style.boxShadow = 'none';
         el2.style.textShadow = 'none';
     });
-    // 요소 경계 페이지네이션 — 고정 높이 슬라이스는 표·그림·제목을 중간에 잘라서
-    // 브라우저 인쇄(break-inside 회피)와 다르게 보인다. article의 최상위 요소를 실측
-    // 높이로 페이지에 채워 넣어 요소가 통째로 들어가는 페이지 단위로 나눈다. (@spec CO-20)
+    // 요소 경계 페이지네이션 — 캔버스는 wrap을 1회 렌더(견고)하고, 자르는 위치는
+    // article 자식 요소 경계로만 선택 — 표·그림·제목이 페이지 경계에서 잘리지 않는다.
+    // 페이지 캔버스에 좌우 8mm·상하 10mm 여백을 입혀 조각을 옮긴다. (@spec CO-20)
     const clone = /** @type {HTMLElement} */ (wrap.firstElementChild); // article 복제본
     const W = 210, H = 297, MX = 8, MY = 10;
-    const wrapCssPx = 960; // 래퍼 너비 — 전체가 PDF 내용 영역(W-2*MX)에 매핑
-    const mmPerCssPx = (W - 2 * MX) / wrapCssPx;
-    const availPx = (H - 2 * MY) / mmPerCssPx; // 한 페이지에 들어가는 본문 css px
-    const groups = /** @type {HTMLElement[][]} */ ([]);
-    let cur = /** @type {HTMLElement[]} */ ([]), curH = 0;
+    const mmPerCssPx = (W - 2 * MX) / 960; // wrap 너비 전체가 내용 영역에 매핑
+    const availPx = (H - 2 * MY) / mmPerCssPx; // 한 페이지 본문 css px
+    const wrapTop = wrap.getBoundingClientRect().top;
+    const bounds = /** @type {number[]} */ ([]); // wrap 기준 자식 경계(css px, 마진 포함)
     for (const child of /** @type {HTMLElement[]} */ (Array.from(clone.children))) {
         const cs = getComputedStyle(child);
-        const h = child.offsetHeight + parseFloat(cs.marginTop || '0') + parseFloat(cs.marginBottom || '0');
-        if (curH + h > availPx && cur.length) { groups.push(cur); cur = []; curH = 0; }
-        cur.push(child); curH += h;
+        bounds.push(Math.round(child.getBoundingClientRect().top - wrapTop - parseFloat(cs.marginTop || '0')));
     }
-    if (cur.length) groups.push(cur);
+    bounds.push(wrap.offsetHeight); // 문서 끝
+    const cuts = /** @type {number[]} */ ([0]); // 페이지 시작 위치들 — 용량 내 최대 경계
+    for (const b of bounds) {
+        if (b - cuts[cuts.length - 1] > availPx) {
+            const prev = bounds[bounds.indexOf(b) - 1];
+            cuts.push(prev > cuts[cuts.length - 1] ? prev : b); // 초대형 요소면 그 자리서 자름
+        }
+    }
+    if (cuts[cuts.length - 1] < bounds[bounds.length - 1]) cuts.push(bounds[bounds.length - 1]);
     try {
+        const canvas = await (/** @type {any} */ (window)).html2canvas(wrap, { scale: 2, logging: false });
+        const ctx0 = canvas.getContext('2d'); // 빈 캔버스 감지 — 기기·문서 특정 백지 렌더 대응
+        if (ctx0 && canvas.width > 0 && canvas.height > 0) {
+            const d = ctx0.getImageData(0, 0, canvas.width, Math.min(canvas.height, 600)).data;
+            let ink = 0;
+            for (let i = 0; i < d.length; i += 40) { if (d[i] < 245 || d[i + 1] < 245 || d[i + 2] < 245) { ink = 1; break; } }
+            if (!ink) throw new Error('BLANK_CANVAS');
+        }
+        const pxPerMm = canvas.width / (W - 2 * MX);
+        const pagePx = Math.round(H * pxPerMm), mXPx = Math.round(MX * pxPerMm), mYPx = Math.round(MY * pxPerMm);
+        const sliceH = Math.round((H - 2 * MY) * pxPerMm);
         const { jsPDF } = (/** @type {any} */ (window)).jspdf;
         const pdf = new jsPDF('p', 'mm', 'a4');
         let first = true;
-        let checkedBlank = false;
-        for (const group of groups) {
-            const pg = document.createElement('div');
-            if (ovId) pg.id = ovId; // wrap과 동일한 오버레이 컨텍스트 — article 스코프 CSS 적용
-            pg.style.cssText = wrap.style.cssText;
-            const art = /** @type {HTMLElement} */ (clone.cloneNode(false)); // id·클래스 유지 — article 스코프 CSS 적용
-            for (const c of group) art.appendChild(c);
-            pg.appendChild(art);
-            document.body.appendChild(pg);
-            const canvas = await (/** @type {any} */ (window)).html2canvas(pg, { scale: 2, logging: false });
-            pg.remove(); // 자식은 detach만 — 원본 참조 유지
-            if (!checkedBlank) { // 빈 캔버스 감지 — 기기·문서 특정 조합에서 html2canvas가 백지를 만드는 사례 대응
-                checkedBlank = true;
-                const ctx = canvas.getContext('2d');
-                if (ctx && canvas.width > 0 && canvas.height > 0) {
-                    const d = ctx.getImageData(0, 0, canvas.width, Math.min(canvas.height, 400)).data;
-                    let ink = 0;
-                    for (let i = 0; i < d.length; i += 40) { // 샘플링 — 비백 픽셀 존재 여부
-                        if (d[i] < 245 || d[i + 1] < 245 || d[i + 2] < 245) { ink = 1; break; }
-                    }
-                    if (!ink) { // pg 단위 렌더가 빈 환경 — 자식을 article로 되돌려 통짜 단일 렌더로 폴백
-                        for (const g of groups) for (const c of g) clone.appendChild(c);
-                        return pdfFileFromEl(wrap, title);
-                    }
-                }
-            }
-            const imgH = (canvas.height / 2) * mmPerCssPx;
-            if (!first) pdf.addPage(); first = false;
-            if (imgH <= H - 2 * MY) {
-                pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', MX, MY, W - 2 * MX, imgH);
-            } else { // 단일 요소가 한 페이지보다 큰 경우(거대 표·이미지) — 해당 요소만 여백 슬라이스로 분할
-                const pxPerMm = canvas.width / (W - 2 * MX);
-                const pagePx = Math.round(H * pxPerMm), mXPx = Math.round(MX * pxPerMm), mYPx = Math.round(MY * pxPerMm);
-                const sliceH = Math.round((H - 2 * MY) * pxPerMm);
-                for (let off = 0; off < canvas.height; off += sliceH) {
-                    const hh = Math.min(sliceH, canvas.height - off);
-                    const pgc = document.createElement('canvas');
-                    pgc.width = canvas.width; pgc.height = pagePx;
-                    const ctx = pgc.getContext('2d'); if (!ctx) break;
-                    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, pgc.width, pgc.height);
-                    ctx.drawImage(canvas, 0, off, canvas.width, hh, mXPx, mYPx, canvas.width - 2 * mXPx, hh);
-                    pdf.addImage(pgc.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, W, H);
-                    if (off + sliceH < canvas.height) pdf.addPage();
-                }
+        for (let i = 0; i + 1 < cuts.length; i++) {
+            const y0 = cuts[i] * 2, y1 = Math.min(cuts[i + 1] * 2, canvas.height);
+            for (let off = 0; off < y1 - y0; off += sliceH) { // 초대형 요소 조각은 고정 높이 서브슬라이스
+                const sh = Math.min(sliceH, y1 - y0 - off);
+                const pgc = document.createElement('canvas');
+                pgc.width = canvas.width; pgc.height = pagePx;
+                const ctx = pgc.getContext('2d'); if (!ctx) break;
+                ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, pgc.width, pgc.height);
+                ctx.drawImage(canvas, 0, y0 + off, canvas.width, sh, mXPx, mYPx, canvas.width - 2 * mXPx, sh);
+                if (!first) pdf.addPage(); first = false;
+                pdf.addImage(pgc.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, W, H);
             }
         }
         return new File([pdf.output('blob')], `${title}.pdf`, { type: 'application/pdf' });

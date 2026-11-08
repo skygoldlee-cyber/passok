@@ -40,10 +40,10 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         assert.match(src, /pdfFileFromElStyled[\s\S]{0,300}await ensurePdf\(\)/); // 함수 선두에 벤더 로드
     });
 
-    it('요소 실측 높이로 페이지를 채움 — 고정 슬라이스가 아닌 요소 경계', () => {
-        assert.match(src, /clone\.children/);                    // article 자식 요소 순회
-        assert.match(src, /offsetHeight \+ parseFloat/);         // 실측 높이 + 마진
-        assert.match(src, /curH \+ h > availPx/);                // 페이지 용량 채우기
-        assert.match(src, /clone\.cloneNode\(false\)/);          // 페이지별 article 래퍼 복제
+    it('단일 캔버스 렌더 + 요소 경계 절단 — 표·그림 중간 절단 방지', () => {
+        assert.match(src, /clone\.children/);                    // article 자식 요소 경계 측정
+        assert.match(src, /getBoundingClientRect/);              // 실측 위치
+        assert.match(src, /availPx/);                            // 페이지 용량
+        assert.match(src, /html2canvas\(wrap/);                  // 단일 1회 렌더 (견고 경로)
     });
 });
