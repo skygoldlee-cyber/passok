@@ -1,4 +1,5 @@
 // tests/unit/ui/saved-flash.test.js — 저장 확인 배지·삭제 확인 계약 (사용성 개선 회귀)
+// @spec none — UX 계약 검증 (SPEC 미부여 사용성 항목)
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
