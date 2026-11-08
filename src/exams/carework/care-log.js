@@ -21,7 +21,7 @@ export const ACTIVITY_GROUPS = [
 export function buildCareLog(in_) {
     if (!in_ || !in_.date || !in_.client || !in_.service) return null;
     const svc = SERVICE_TYPES.find(s => s.key === in_.service)?.label || in_.service;
-    const lines = ['■ 요양보호 서비스 기록'];
+    const lines = ['■ 요양일지'];
     lines.push(`일시: ${in_.date}${in_.start ? ` ${in_.start}~${in_.end || ''}` : ''}`);
     lines.push(`대상자: ${in_.client} 님`);
     lines.push(`급여 종류: ${svc}`);

@@ -1,4 +1,4 @@
-// src/exams/carework/views/care-audit.js — 기관 평가 체크리스트 뷰
+// src/exams/carework/views/care-audit.js — 평가 체크리스트 뷰
 // @spec none — 시험 전용 실무 뷰 (DA-13)
 import { loadAuditSections, loadChecks, toggleCheck, clearChecks, auditProgress, pushAuditState } from '../care-audit.js';
 import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
@@ -22,7 +22,7 @@ function render() {
     if (!host) return;
     const c = loadChecks();
     const cov = auditCoverage({ clients: listClients(), logs: listCareLogs(), visits: listVisits(), handovers: listHandovers(), incidents: listIncidents() });
-    host.innerHTML = `<p class="care-trend-warn">📋 ${esc(cov.text)}</p>` + docHeadHtml('기관 평가 체크리스트') + _sections.map(s => `
+    host.innerHTML = `<p class="care-trend-warn">📋 ${esc(cov.text)}</p>` + docHeadHtml('평가 체크리스트') + _sections.map(s => `
         <div class="care-audit-sec">
             <h3>${esc(s.title)}</h3>
             ${s.items.map(i => `
@@ -46,7 +46,7 @@ export function careAuditDocMd() {
     if (!_sections.length) return '';
     const c = loadChecks();
     const rows = _sections.flatMap(s => s.items.map(i => [s.title, c[i.id] ? '✔' : '□', i.text, i.ref]));
-    return docMdHead('기관 평가 점검표') + '\n' + renderToolBody('careAudit', { 점검표: mdTable(['영역', '점검', '항목', '근거'], rows) }) + docMdSign([['점검자', 'author'], ['기관장(확인)', 'confirmer']]);
+    return docMdHead('평가 체크리스트') + '\n' + renderToolBody('careAudit', { 점검표: mdTable(['영역', '점검', '항목', '근거'], rows) }) + docMdSign([['점검자', 'author'], ['기관장(확인)', 'confirmer']]);
 }
 
 export function careAuditPrint() {

@@ -20,7 +20,7 @@ test.describe('Care OS — 공유·내보내기 (CO-13)', () => {
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
     };
 
-    test('평가 점검표 — 메뉴 항목 전체 노출 + Word .docx 다운로드 이벤트', async ({ page }) => {
+    test('평가 체크리스트 — 메뉴 항목 전체 노출 + Word .docx 다운로드 이벤트', async ({ page }) => {
         await boot(page, 'care-audit');
         await expect(page.locator('#audit-list .care-audit-item').first()).toBeVisible({ timeout: 10_000 });
         await page.locator('#care-audit-view [data-click="careShare"]').click();
@@ -32,7 +32,7 @@ test.describe('Care OS — 공유·내보내기 (CO-13)', () => {
             page.waitForEvent('download'),
             sheet.locator('button', { hasText: 'Word 파일 다운로드' }).click(),
         ]);
-        expect(download.suggestedFilename()).toMatch(/기관 평가 점검표_\d{4}-\d{2}-\d{2}\.docx$/);
+        expect(download.suggestedFilename()).toMatch(/평가 체크리스트_\d{4}-\d{2}-\d{2}\.docx$/);
         expect(page._errors).toEqual([]);
     });
 

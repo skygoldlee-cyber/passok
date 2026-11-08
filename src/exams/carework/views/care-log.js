@@ -45,14 +45,14 @@ export function careLogGenerate() {
     const out = $('log-preview');
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·대상자·급여 종류를 입력하세요.</p>'; return; }
-    out.innerHTML = docHeadHtml('요양보호 서비스 기록') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]);
+    out.innerHTML = docHeadHtml('요양일지') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]);
 }
 
 /** 일지 MD 초안 — 헤더 + 폼 생성문 (docx 파생 원본) */
 export function careLogDocMd() {
     const f = readForm();
     const t = buildCareLog(f);
-    return t ? docMdHead('요양보호 서비스 기록') + '\n' + renderToolBody('careLog', {
+    return t ? docMdHead('요양일지') + '\n' + renderToolBody('careLog', {
         기록내용: t, client: f.client,
         일시: `${f.date}${f.start ? ` ${f.start}~${f.end || ''}` : ''}`,
         급여종류: SERVICE_TYPES.find(s => s.key === f.service)?.label || f.service,

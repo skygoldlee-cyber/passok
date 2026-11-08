@@ -8,7 +8,7 @@ const base = { date: '2026-11-01', client: '김○○', service: 'visit-care', s
 
 test('정상 생성 — 헤더·서비스·특이사항 구조', () => {
     const t = buildCareLog(base);
-    assert.match(t, /■ 요양보호 서비스 기록/);
+    assert.match(t, /■ 요양일지/);
     assert.match(t, /방문요양/);
     assert.match(t, /식사 보조/);
     assert.match(t, /특이사항 없음/);

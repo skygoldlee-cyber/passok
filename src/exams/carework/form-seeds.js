@@ -13,7 +13,7 @@ import { fillTemplate, listFormTemplates } from './form-template-store.js';
  */
 export const TOOL_FORM_SEEDS = {
     careLog: {
-        title: '요양보호 서비스 기록', block: '기록내용',
+        title: '요양일지', block: '기록내용',
         // 실제 양식의 필드명을 {{키}}로 노출 — 스칼라는 생성기가 주입, 블록은 서비스·특이사항 등 조립 영역
         seed: '일시: {{일시}}\n대상자: {{client}} 님\n급여 종류: {{급여종류}}\n\n{{기록내용}}\n\n비고: {{비고}}',
     },
@@ -31,7 +31,7 @@ export const TOOL_FORM_SEEDS = {
         seed: '발생 일시: {{발생일시}}\n대상자: {{client}}\n발생 장소: {{발생장소}}\n사고 유형: {{사고유형}}\n중증도: {{중증도}}\n발생 경위: {{발생경위}}\n조치 내용: {{조치내용}}\n목격자: {{목격자}}\n가족 통지: {{가족통지}}\n\n비고: {{비고}}',
     },
     careAudit: {
-        title: '기관 평가 점검표', block: '점검표',
+        title: '평가 체크리스트', block: '점검표',
         seed: '{{점검표}}\n\n비고: {{비고}}',
     },
     careRoster: {
