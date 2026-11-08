@@ -1,5 +1,5 @@
 // src/exams/carework/views/care-audit.js — 평가 체크리스트 뷰
-// @spec none — 시험 전용 실무 뷰 (DA-13)
+// @spec CO-19 — 시험 전용 실무 뷰 (DA-13)
 import { loadAuditSections, loadCustomSections, saveCustomSections, clearCustomSections, loadChecks, toggleCheck, clearChecks, auditProgress, pushAuditState } from '../care-audit.js';
 import { auditRowsToSections } from '../audit-import.js';
 import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';

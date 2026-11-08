@@ -1,5 +1,5 @@
 // src/exams/carework/care-audit.js — 평가 체크리스트 데이터
-// @spec none — 시험 전용 도메인 데이터 (DA-13)
+// @spec CO-19 — 시험 전용 도메인 데이터 (DA-13)
 import { getJSON, setJSON, removeItem } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { todayKey } from '../../core/utils.js';

@@ -1,5 +1,5 @@
 // src/exams/carework/audit-import.js — 기관 점검표 파일 → 섹션 파서 (순수 로직, DOM 무의존)
-// @spec none — 시험 전용 도메인 로직 (DA-13)
+// @spec CO-19 — 시험 전용 도메인 로직 (DA-13)
 // 기관 제공 Word/Excel 점검표를 {title, items:[{id,text,ref}]} 구조로 변환한다.
 // 항목 id는 섹션+텍스트 해시 — 같은 파일 재업로드 시 체크 상태가 유지된다.
 import { sha256hex } from '../../core/sha256.js';

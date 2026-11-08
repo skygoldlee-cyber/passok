@@ -1,5 +1,5 @@
 // tests/unit/exams/carework/audit-import.test.js
-// @spec none — 기관 점검표 파일 → 섹션 파서 계약 (순수 로직)
+// @spec CO-19 — 기관 점검표 파일 → 섹션 파서 계약 (순수 로직)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { auditRowsToSections } from '../../../../src/exams/carework/audit-import.js';

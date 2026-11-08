@@ -1,5 +1,5 @@
 // src/exams/carework/views/care-custom-form.js — 기관 자체 양식 뷰
-// @spec CO-17 — 시험 전용 실무 뷰 (DA-13)
+// @spec CO-17,CO-18 — 시험 전용 실무 뷰 (DA-13)
 // 양식 등록·편집·목록·기입·미리보기·저장·내보내기 — 양식 관리는 이 뷰에서 완결 (홈은 링크 허브)
 import { markFunnel } from '../care-funnel.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';

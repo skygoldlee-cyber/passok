@@ -292,6 +292,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.getElementById('audit-list')).toBeTruthy();
     });
 
+    // @spec CO-19 — 기관 점검표 파일 업로드 (콘텐츠 오버라이드)
     it('careAudit — 기관 점검표 파일(.csv) 업로드 → 커스텀 점검표 적용·기본 복원', async () => {
         const { initCareAuditView: initAudit, careAuditFileReset } = await import('../../../../src/exams/carework/views/care-audit.js');
         const { loadCustomSections, clearCustomSections, clearChecks } = await import('../../../../src/exams/carework/care-audit.js');
