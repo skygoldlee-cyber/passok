@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261108-b23fecd",
+    "date": "2026-11-08",
+    "notes": [
+      "[문서·carework] 양식 커스터마이징 설명 보강 — 뷰 안내문·매뉴얼·설계문서 [no-test]",
+      "[정리·release] v20261108-0acfe49 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261108-0acfe49",
     "date": "2026-11-08",
     "notes": [
@@ -179,15 +187,6 @@
       "[기능·carework] 개념 학습 → 진단 연동 — quizResults 파이프라인 + 대시보드 이어하기",
       "[기능·carework] 개념 학습 실제 라우팅 — pre 판정·재도전·flow_attempts 기록",
       "[정리·release] v20261107-4074a5a 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261107-4074a5a",
-    "date": "2026-11-07",
-    "notes": [
-      "[정리·trace] TRACE_MATRIX 재생성 — UX-NAV-16 반영",
-      "[기능·nav] 학습 내비 4그룹 재편 — 상태·실행 분리, 웹툰 명칭 분리, 빈 메뉴 자동 숨김",
-      "[정리·release] v20261107-dcaa0bd 스탬프 확정 [no-docs]"
     ]
   }
 ]
