@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261108-8fe8cd1",
+    "date": "2026-11-08",
+    "notes": [
+      "[수정·hooks] pre-commit에 파일명 규약 게이트 추가 — CI 실패 유형을 로컬 선행 차단",
+      "[정리·release] v20261108-fc74ca5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261108-fc74ca5",
     "date": "2026-11-08",
     "notes": [
@@ -178,15 +186,6 @@
       "[기능·carework] 개념 복습 큐 + 오답 컷 — DOC-USR-22 §4 복습 순환 [no-test]",
       "[기능·search] 검색 성능 계측 — 인덱스 빌드·쿼리 시간 카운터 (__searchPerf) [no-test]",
       "[정리·release] v20261107-2f48d94 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261107-2f48d94",
-    "date": "2026-11-07",
-    "notes": [
-      "[테스트·e2e] PRO 배지 계측 스펙 — 서사 형식 선택 후 배지 표시 확인으로 갱신",
-      "[수정·reader] 표준형 선택 시 story_textbook PRO 배지가 붙던 표시 오류 [no-test]",
-      "[정리·release] v20261107-5591cba 스탬프 확정 [no-docs]"
     ]
   }
 ]
