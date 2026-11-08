@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261108-42359f0",
+    "date": "2026-11-08",
+    "notes": [
+      "[수정·carework] 양식 뷰 안내문 여백 규약 + 미리보기 칩 가독성",
+      "[정리·release] v20261108-55c8006 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261108-55c8006",
     "date": "2026-11-08",
     "notes": [
@@ -180,22 +188,6 @@
       "[수정·sw] docs/ 이미지를 EXAM_MEDIA_ASSETS 프리캐시에 포함 — 생성기 확장",
       "[수정·sw] carework_4step_flow.svg 프리캐시 등록 — 모바일 학습안내서 도식 표시",
       "[정리·release] v20261107-bf8ee0c 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261107-bf8ee0c",
-    "date": "2026-11-07",
-    "notes": [
-      "[문서·carework] 4step_flow.svg를 학습안내서로 이동 (학습자용 도식)",
-      "[수정·carework] carework_4step_flow.svg 참조 연결 + 웹툰 가이드라인 MD_ASSETS 등록",
-      "[문서·carework] 학습안내서에 적응형 4단계 학습 엔진 설명 추가",
-      "[기능·carework] 컷 자산 체계 — cuts[] 30개념 + cutOnWrong 62건 + 웹툰 가이드라인 DOC-USR-26",
-      "[기능·carework] 충원 상태 §12 반영 + 검증기 교재 경로 정정 + answer 스키마 변환",
-      "[기능·carework] scenario_items review 14문 충원 — 파일럿 전 개념 review≥2 달성",
-      "[기능·carework] scenario_items pre 16문 충원 — 파일럿 전 개념 미리풀기 확보",
-      "[기능·carework] scenario_items 33문 충원 — 파일럿 개념 재도전 풀 확보",
-      "[기능·carework] eval_pool eval 42문 충원 — 파일럿 21개념×2문 평가 전용 풀",
-      "[기능·carework] eval_pool pretest 21문 충원 — 파일럿 21개념 공통 사전 평가"
     ]
   }
 ]
