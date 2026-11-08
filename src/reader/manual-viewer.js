@@ -179,7 +179,8 @@ body.manual-open{overflow:hidden;}
             </div>`,
         wire(el) {
             el.querySelector('[data-manual-close]')?.addEventListener('click', close);
-            // @spec CO-20 — 인쇄/PDF 버튼: 생성 PDF 다운로드 기본, 실패 시 window.print() 폴백
+            // 인쇄·PDF 버튼: 생성 PDF 다운로드 기본, 실패 시 window.print() 폴백 — @spec CO-20 규약
+            // @spec CO-20
             el.querySelector('[data-manual-print]')?.addEventListener('click', async e => {
                 const btn = /** @type {HTMLButtonElement} */ (e.currentTarget);
                 if (btn) btn.disabled = true;

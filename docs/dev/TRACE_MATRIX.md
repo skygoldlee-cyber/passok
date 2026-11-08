@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 926a68bc3c08bee1
+> 입력 해시: 225a6786530820ea
 > 생성: 2026-11-08 · 원천: SPEC.md(689개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 689개 — 문서 연결 464 · 소스 연결 612 · 테스트 연결 653 · 보고서 연결 109
+**커버리지 요약**: 요구사항 689개 — 문서 연결 464 · 소스 연결 613 · 테스트 연결 654 · 보고서 연결 109
 
 ---
 
@@ -778,7 +778,7 @@
 | UX-NAV-13 | `html/views/{quiz,exam,trainer,review}.html` 정적 문구 — manifest `uiText` subtitle과 별도 본문 표기라 `check:uitext` 비대상 | 테스트 | DOC-DSN-21<br>DOC-DSN-25 | — | tests/dom/study/study-review.dom.test.js | — | — |
 | UX-NAV-14 | `html/views/trainer.html` 정적 구조 — 카드 DOM·`data-click`·`data-feature`·배지 id 불변, 그룹 이동만. 라벨은 본문 텍스트라 `check:uitext` 비대상 | E2E 테스트 | DOC-DSN-21<br>DOC-DSN-25 | css/trainer.css<br>html/views/trainer.html<br>index.html | tests/dom/study/study-trainer.dom.test.js<br>tests/e2e/app.spec.js | — | — |
 | UX-NAV-15 | 3대역 네비게이션은 같은 표면의 3형태(UX-NAV-01) — 한 대역의 크롬 배치가 빠지면 대역 전환 시 학습된 위치가 소실되고, 모드별 메뉴 스왑(DA-20) 구조에서는 복귀 경로 자체가 끊긴다 (모드 토글 실사례: 모바일·태블릿은 설정이 유일 경로 + 실무 모드에서 더보기도 `nav-study-only`로 소실 → 탭바 우측 `.mobile-tab-mode` sticky 탭·태블릿 상단 바 우측 푸터 토글로 확장, UM-05). 신규 전역·크롬 기능은 3대역 배치를 함께 설계할 것 | E2E 테스트 | — | css/app-responsive.css<br>css/base.css<br>index.html | tests/dom/common/common-uimode.dom.test.js<br>tests/e2e/responsive-flow.spec.js | — | — |
-| UX-NAV-16 | 레지스트리 stats는 build:data 산출 — 카드·퀴즈 0인 시험(carework)은 해당 메뉴가 내비에서 사라지고 뷰는 직접 라우트로만 진입(빈 상태 표시). 탭바 슬롯이 비어도 나머지 탭 순서는 유지 | — | — | — | — | — | — |
+| UX-NAV-16 | 레지스트리 stats는 build:data 산출 — 카드·퀴즈 0인 시험(carework)은 해당 메뉴가 내비에서 사라지고 뷰는 직접 라우트로만 진입(빈 상태 표시). 탭바 슬롯이 비어도 나머지 탭 순서는 유지 | 테스트 | — | src/shell/app-shell.js | tests/dom/exam/exam-switching.dom.test.js | — | — |
 | UX-NAV-17 | UX-NAV-12의 "표시명은 uiText 원본"을 출력물·양식·파일명까지 확장 — 같은 도구가 메뉴·뷰·문서에서 다른 이름을 쓰면 탐색 혼란 (2026-11-08 carework 실사례: 사이드바 '평가 체크리스트'·뷰 '기관 평가 체크리스트'·출력 '기관 평가 점검표' 3-way 불일치 → '평가 체크리스트'로 통일). 신규 도구·양식은 title 정본 하나로 전 표면을 파생하고, 명칭 변경 시 표시명 참조 전수(시드·문서 헤더·공유 제목·테스트)를 함께 갱신한다 | E2E 테스트 | — | src/exams/carework/form-seeds.js | tests/dom/exams/carework/care-views.test.js<br>tests/e2e/exams/carework/care-share.spec.js | — | — |
 | UX-PWA-01 | 모바일 OS(Android/iOS)는 웹의 자체 종료를 차단 — 프로그래밍으로 완전 종료 불가. 데스크톱 설치 PWA는 `close()`가 동작하므로 모바일 안내는 불필요. 차단되면 "최근 앱 목록에서 밀어 닫으세요"(터치)/"창을 닫아주세요"(데스크톱) 안내 화면으로 대체하는 것이 최선 | E2E 테스트 | DOC-DSN-25 | src/shell/app.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-PWA-02 | 브라우저 탭에서 의미 없는 버튼(앱 종료 등)을 숨겨 혼란 방지. iOS는 `navigator.standalone`만 지원하므로 둘 다 확인 필수 | E2E 테스트 | DOC-DSN-25 | src/pwa/pwa-install.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |

@@ -200,7 +200,8 @@ body.exam-open{overflow:hidden;}
         wire(el) {
             el.querySelector('[data-exam-close]')?.addEventListener('click', () => close());
             el.querySelector('[data-exam-back]')?.addEventListener('click', () => _goBack());
-            // @spec CO-20 — 인쇄/PDF 버튼: 생성 PDF 다운로드 기본, 실패 시 window.print() 폴백
+            // 인쇄·PDF 버튼: 생성 PDF 다운로드 기본, 실패 시 window.print() 폴백 — @spec CO-20 규약
+            // @spec CO-20
             el.querySelector('[data-exam-print]')?.addEventListener('click', async e => {
                 const btn = /** @type {HTMLButtonElement} */ (e.currentTarget);
                 if (btn) btn.disabled = true;

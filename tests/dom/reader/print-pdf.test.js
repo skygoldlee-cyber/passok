@@ -1,5 +1,5 @@
 // tests/dom/reader/print-pdf.test.js — 매뉴얼·시험 뷰어 인쇄/PDF 버튼의 생성 PDF 경로 계약
-// @spec CO-20 — 인쇄/PDF 버튼 생성 PDF 다운로드 + 실패 시 인쇄 폴백 (study-examviewer)
+// @spec CO-20
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // doc-overlay·pdf-utils 목 — 뷰어 openDocument 플로우를 DOM 조립까지만 재현
