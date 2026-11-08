@@ -8,7 +8,7 @@ import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docMdHead, csvToMdTable, mdToHtml, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 import { refreshOrgName } from '../facility.js';
-import { showToast } from '../../../ui-utils.js';
+import { showToast, showConfirm } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
 
@@ -35,8 +35,9 @@ export function careRosterAdd() {
     if (r.ok) { showToast('근무 배정을 등록했습니다.'); renderList(); }
 }
 
-export function careRosterDelete(id) {
-    if (id) { removeRoster(id); renderList(); }
+export async function careRosterDelete(id) {
+    if (!id || !await showConfirm('근무표를 삭제할까요?', '삭제 확인')) return;
+    removeRoster(id); renderList();
 }
 
 function renderPreview() {

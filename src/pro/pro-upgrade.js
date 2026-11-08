@@ -152,7 +152,7 @@ export function proFeatureNotice(featureKey, featureName) {
     const { overlay, close } = _showDialog(`
         <div class="app-confirm-dialog dialog-card pro-upgrade-dialog" role="alertdialog" aria-modal="true" aria-labelledby="pro-notice-title">
             <h3 id="pro-notice-title">💎 Pro 기능 안내</h3>
-            <p><strong>${esc(featureName)}</strong>을(를) 포함해 <strong>PRO 배지</strong>가 붙은 기능은 Pro 버전에서 제공될 예정입니다.<br>현재는 무료 체험 기간으로 누구나 이용할 수 있습니다.</p>
+            <p><strong>${esc(featureName)}</strong>을(를) 포함해 <strong>PRO 표시</strong>가 붙은 기능은 유료 버전에서 제공될 예정입니다.<br>현재는 무료 체험 기간으로 누구나 이용할 수 있습니다.</p>
             <div class="pro-upgrade-benefits">
                 <p class="pro-upgrade-sub">Pro 가입 시 로그인 계정의 클라우드 동기화로 <strong>여러 디바이스 간 학습 상태가 공유</strong>됩니다.</p>
             </div>

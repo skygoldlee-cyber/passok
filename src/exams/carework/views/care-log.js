@@ -7,7 +7,7 @@ import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
-import { showToast } from '../../../ui-utils.js';
+import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
 import { shareAudit } from '../care-share.js';
 import { docMdHead, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
@@ -76,7 +76,7 @@ export function careLogSave() {
     const text = document.querySelector('#log-preview pre')?.textContent || '';
     if (!text) { showToast('먼저 일지를 생성하세요.', 'error'); return; }
     const r = saveCareLog({ ...f, text });
-    if (r.ok) { showToast('일지를 저장했습니다.'); renderSaved(); }
+    if (r.ok) { showToast('일지를 저장했습니다.'); renderSaved(); flashSavedBadge($('log-saved')); }
 }
 
 export function careLogPrint() {
@@ -96,8 +96,9 @@ export function careLogCsvExport() {
     return csv;
 }
 
-export function careLogDelete(id) {
-    if (id) { removeCareLog(id); renderSaved(); }
+export async function careLogDelete(id) {
+    if (!id || !await showConfirm('저장된 일지를 삭제할까요?', '삭제 확인')) return;
+    removeCareLog(id); renderSaved();
 }
 
 function renderSaved() {

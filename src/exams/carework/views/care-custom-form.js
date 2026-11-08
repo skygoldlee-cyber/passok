@@ -4,7 +4,7 @@
 import { markFunnel } from '../care-funnel.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { escapeHTML as esc } from '../../../core/sanitize.js';
-import { showToast } from '../../../ui-utils.js';
+import { showToast, showConfirm } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 import { docMdHead } from '../doc-md.js';
 import { docHeadHtml, refreshOrgName, myMembership, submitFormTemplate, deleteFacilityFormTemplate } from '../facility.js';
@@ -186,7 +186,7 @@ export function careFormSeedCopy(toolKey) {
 
 export async function careFormTplDelete(id) {
     const t = _tplById(id);
-    if (!t) return;
+    if (!t || !await showConfirm(`양식「${t.title || ''}」을 삭제할까요?`, '삭제 확인')) return;
     if (t.scope === 'fac') {
         if (!_isManager()) { showToast('기관 양식 삭제는 관리책임자만 가능합니다.', 'error'); return; }
         const r = await deleteFacilityFormTemplate(t.id.slice(4));
@@ -291,8 +291,9 @@ export function careFormDocSave() {
     if (r.ok) { showToast('기입 문서를 저장했습니다.'); renderDocList(); }
 }
 
-export function careFormDocDelete(id) {
-    if (id) { removeFormDoc(id); renderDocList(); }
+export async function careFormDocDelete(id) {
+    if (!id || !await showConfirm('기입한 문서를 삭제할까요?', '삭제 확인')) return;
+    removeFormDoc(id); renderDocList();
 }
 
 function renderDocList() {

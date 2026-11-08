@@ -11,7 +11,7 @@ import { listVisits } from '../care-visit-store.js';
 import { listIncidents } from '../incident-store.js';
 import { myMembership, submitHandover, listHandovers as listFacilityHandovers, ackHandover, docHeadHtml, docSignHtml, getDocSign, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { showToast } from '../../../ui-utils.js';
+import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
 import { careShare } from '../care-share.js';
 import { docMdHead, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
@@ -91,6 +91,7 @@ function ensureSaved() {
     });
     if (r.error) return { error: r.error };
     renderSaved();
+    flashSavedBadge($('ho-saved'));
     return { auto: true };
 }
 
@@ -103,8 +104,8 @@ export function careHandoverSave() {
     showToast('기록에 저장했습니다.');
 }
 
-export function careHandoverDelete(id) {
-    if (!id) return;
+export async function careHandoverDelete(id) {
+    if (!id || !await showConfirm('저장된 인수인계를 삭제할까요?', '삭제 확인')) return;
     deleteHandover(id);
     renderSaved();
 }

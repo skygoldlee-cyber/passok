@@ -11,7 +11,7 @@ import { docMdHead, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 import { getJSON, removeItem } from '../../../core/storage.js';
 import { STORAGE_KEYS } from '../../../core/storage-keys.js';
-import { showToast } from '../../../ui-utils.js';
+import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
 
@@ -67,7 +67,7 @@ export function careIncidentSave() {
     careIncidentGenerate();
     if (!_lastText) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
     const r = saveIncident({ ...readForm(), text: _lastText });
-    if (r.ok) { showToast('보고서를 기록했습니다.'); renderSaved(); }
+    if (r.ok) { showToast('보고서를 기록했습니다.'); renderSaved(); flashSavedBadge($('inc-saved')); }
 }
 
 export function careIncidentPrint() {
@@ -87,8 +87,9 @@ export function careIncidentCsvExport() {
     return csv;
 }
 
-export function careIncidentDelete(id) {
-    if (id) { removeIncident(id); renderSaved(); }
+export async function careIncidentDelete(id) {
+    if (!id || !await showConfirm('저장된 보고서를 삭제할까요?', '삭제 확인')) return;
+    removeIncident(id); renderSaved();
 }
 
 function renderSaved() {

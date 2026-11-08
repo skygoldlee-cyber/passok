@@ -194,6 +194,17 @@ export function showToast(message, type = 'info', duration, iconClass = '') {
 }
 
 // 컨펌 모달 (confirm 대체) — Promise 반환
+/** 저장 확인 배지 — 토스트는 순간이라 "저장됐는지" 불안함. 저장 목록 영역 상단에
+ *  "✓ 기기에 저장됨 · 방금"을 남겨 눈에 보이는 확인을 준다 (다음 렌더에서 자연 교체). */
+export function flashSavedBadge(host) {
+    if (!host) return;
+    host.querySelector('.saved-flash')?.remove();
+    const b = document.createElement('div');
+    b.className = 'saved-flash';
+    b.textContent = '✓ 기기에 저장됨 · 방금';
+    host.prepend(b);
+}
+
 export function showConfirm(message, title = '확인') {
     return new Promise((resolve) => {
         // 기존 모달 제거

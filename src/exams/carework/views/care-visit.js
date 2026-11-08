@@ -7,7 +7,7 @@ import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { showToast } from '../../../ui-utils.js';
+import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 import { docMdHead, docMdSign, csvToMdTable, mdToHtml } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
@@ -39,7 +39,7 @@ export function careVisitAdd() {
     const f = readForm();
     if (!f.date || !f.client || !f.visitor) { showToast('방문일·대상자·방문객을 입력하세요.', 'error'); return; }
     const r = saveVisit(f);
-    if (r.ok) { showToast('방문예약을 등록했습니다.'); renderLists(); }
+    if (r.ok) { showToast('방문예약을 등록했습니다.'); renderLists(); flashSavedBadge($('vis-scheduled')); }
 }
 
 export function careVisitResultOpen(arg) {
@@ -81,6 +81,7 @@ export async function careVisitResultSave() {
     } else {
         updateVisit(t.id, { status: 'done', result });
         showToast('방문결과를 기록했습니다.');
+        flashSavedBadge($('vis-done'));
         renderLists();
     }
     careVisitResultClose();
@@ -99,8 +100,9 @@ export async function careVisitCancel(arg) {
     }
 }
 
-export function careVisitDelete(id) {
-    if (id) { removeVisit(id); renderLists(); }
+export async function careVisitDelete(id) {
+    if (!id || !await showConfirm('방문 기록을 삭제할까요?', '삭제 확인')) return;
+    removeVisit(id); renderLists();
 }
 
 function buildAllText() {

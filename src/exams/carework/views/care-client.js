@@ -8,7 +8,7 @@ import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docMdHead, csvToMdTable, mdToHtml, docMdSign } from '../doc-md.js';
 import { docHeadHtml, getDocSign, refreshOrgName } from '../facility.js';
-import { showToast } from '../../../ui-utils.js';
+import { showToast, showConfirm } from '../../../ui-utils.js';
 import { clientTimeline, timelineSummary } from '../care-timeline.js';
 import { clientTrends } from '../care-trend.js';
 import { weeklyReport } from '../care-report.js';
@@ -79,8 +79,9 @@ export function careClientLoad(id) {
     showToast('수정 모드 — 저장하면 덮어씁니다.');
 }
 
-export function careClientDelete(id) {
-    if (id) { removeClient(id); if (_editId === id) clearForm(); renderList(); }
+export async function careClientDelete(id) {
+    if (!id || !await showConfirm('수급자를 명부에서 삭제할까요?', '삭제 확인')) return;
+    removeClient(id); if (_editId === id) clearForm(); renderList();
 }
 
 function buildListText() {

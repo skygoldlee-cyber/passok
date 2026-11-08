@@ -399,3 +399,4 @@
 .care-os-onboard a { font-weight: 600; }
 .care-new { display: inline-block; margin-left: 4px; padding: 1px 6px; border-radius: 999px; background: var(--color-primary, #4a6fa5); color: #fff; font-size: 0.68rem; font-weight: 700; vertical-align: middle; white-space: nowrap; }
 .wb-scene-title { font-weight: 600; color: var(--color-text-main); }
+.saved-flash { padding: 6px 10px; margin: 0 0 8px; border-radius: 8px; background: var(--color-success-bg, #dcfce7); color: var(--color-success-text, #166534); font-size: 13px; font-weight: 600; }
