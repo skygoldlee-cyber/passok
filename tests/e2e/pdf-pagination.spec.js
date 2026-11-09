@@ -20,6 +20,18 @@ async function _stubVendors(page) {
             return origDraw.call(this, img, sx, sy, sw, sh, ...rest);
         };
         w.html2canvas = async (el) => {
+            // wrap은 이 호출 시점에만 문서에 붙어 있다(finally에서 제거) — 레이아웃은 여기서 캡처
+            const et = el.getBoundingClientRect().top;
+            const im = el.querySelector('img.reader-img');
+            w.__layout = {
+                total: el.offsetHeight,
+                img: im ? { top: im.getBoundingClientRect().top - et, bot: im.getBoundingClientRect().bottom - et } : null,
+                tables: [...el.querySelectorAll('table')].map(t => {
+                    const tb = t.getBoundingClientRect();
+                    return { top: tb.top - et, bot: tb.bottom - et, rows: t.rows.length,
+                             theadH: t.tHead ? t.tHead.getBoundingClientRect().height : 0 };
+                }),
+            };
             const c = document.createElement('canvas');
             c.width = el.offsetWidth * 2; c.height = el.offsetHeight * 2;
             const ctx = c.getContext('2d');
@@ -51,10 +63,9 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
             const w = /** @type {any} */ (window);
             const { pdfFileFromElStyled } = await import('/src/content/pdf-utils.js');
             await pdfFileFromElStyled(document.querySelector('#exam-article'), 't');
-            const el = w.__wrapEl;
-            const im = el.querySelector('img.reader-img');
-            const et = el.getBoundingClientRect().top, ir = im.getBoundingClientRect();
-            const span = { top: (ir.top - et) * 2, bot: (ir.bottom - et) * 2 };
+            // html2canvas 스텁이 attach 상태에서 캡처한 레이아웃 사용 (wrap은 finally에서 제거)
+            const im = w.__layout.img;
+            const span = { top: im.top * 2, bot: im.bot * 2 };
             const bounds = new Set();
             for (const s of w.__slices) { bounds.add(Math.round(s.sy)); bounds.add(Math.round(s.sy + s.sh)); }
             const inside = [...bounds].filter(b => b > span.top + 4 && b < span.bot - 4);
@@ -85,6 +96,35 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
         });
         expect(res.count, '경계를 넘는 표는 분할돼야 함').toBeGreaterThan(1);
         expect(res.allThead, '분할된 표는 모두 thead 보유').toBe(true);
+    });
+
+    test('분할된 표의 thead는 페이지 시작에만 놓인다 — 같은 페이지 중복 헤더 금지', async ({ page }) => {
+        test.setTimeout(60_000);
+        await page.goto('/index.html');
+        await page.waitForFunction(() => window.__APP_INITIALIZED, null, { timeout: 30_000 });
+        await _stubVendors(page);
+        const res = await page.evaluate(async () => {
+            const w = /** @type {any} */ (window);
+            const host = document.createElement('div');
+            // 비균일 행 높이 3페이지+ 표 — 분할 시 thead 복제 높이만큼 뒤쪽 경계가 밀려
+            // 낡은 경계로 연속 분할하면 복제 헤더가 페이지 중간·끝에 찍히던 회귀
+            const hs = [30, 45, 60, 25, 80, 35];
+            host.innerHTML = '<table><thead><tr><th style="height:30px">헤더</th></tr></thead><tbody>' +
+                Array.from({ length: 200 }, (_, i) => `<tr><td style="height:${hs[i % hs.length]}px">행 ${i}</td></tr>`).join('') +
+                '</tbody></table>';
+            document.body.appendChild(host);
+            try {
+                const { pdfFileFromElStyled } = await import('/src/content/pdf-utils.js');
+                await pdfFileFromElStyled(host, 't');
+                return { tables: w.__layout.tables, starts: w.__slices.map(s => Math.round(s.sy)) };
+            } finally { host.remove(); }
+        });
+        // 분할로 생긴 표(원본 제외)의 상단 = 복제 thead 위치 — 페이지 시작 절단선과 일치해야
+        // 스텁 캔버스는 css px의 2배 — 표 상단을 캔버스 좌표로 환산해 비교
+        const stray = res.tables.slice(1)
+            .map(t => Math.round(t.top * 2))
+            .filter(y => !res.starts.some(s => Math.abs(s - y) < 8));
+        expect(stray, `페이지 중간에 찍힌 헤더(캔버스 y) ${JSON.stringify(stray)}`).toEqual([]);
     });
 
     test('접힌 details 내용이 생성 PDF에 포함된다', async ({ page }) => {

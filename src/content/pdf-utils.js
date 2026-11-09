@@ -117,7 +117,9 @@ function _blockCuts(el, availPx) {
  * 페이지 경계를 가로지르는 표 분할 — 경계가 지나는 table을 둘로 쪼개 뒷부분을
  * thead·colgroup 복제 새 표로 옮긴다. 캔버스 슬라이스 PDF는 window.print()와 달리
  * thead 자동 반복이 없어 둘째 장부터 헤더 없이 이어지는 결함의 대응.
- * 분할은 레이아웃을 바꾸므로 경계 재측정을 수렴까지 반복한다.
+ * 분할·스페이서는 레이아웃을 바꿔 뒤쪽 경계를 전부 무효화하므로, 한 번 측정한
+ * 경계 목록으로 연속 분할하면 복제 thead가 페이지 중간에 찍힌다 — 조정은 1건 적용
+ * 후 즉시 경계를 재측정하는 수렴 반복으로만 수행한다.
  * 대상 DOM의 행을 실제 이동시키므로 폐기용 클론·렌더 전용 컨테이너에만 사용한다. (@spec CO-21)
  * @param {HTMLElement} root
  * @param {number} availPx 한 페이지 본문 용량 (css px)
@@ -125,10 +127,11 @@ function _blockCuts(el, availPx) {
  */
 function _cutsWithTableSplit(root, availPx) {
     const top0 = () => root.getBoundingClientRect().top;
-    for (let iter = 0; iter < 8; iter++) { // 수렴 상한 — 분할마다 경계가 뒤로 밀려 반복 필요
+    for (let iter = 0; iter < 64; iter++) { // 수렴 상한 — 조정 1건마다 전체 경계 재측정
         const cuts = _blockCuts(root, availPx);
-        let splitCount = 0;
+        let done = false;
         for (const c of cuts.slice(1, -1)) {
+            if (done) break; // DOM 변경 후 뒤쪽 경계는 무효 — 재측정으로 진행
             for (const table of root.querySelectorAll('table')) {
                 const tb = table.getBoundingClientRect();
                 if (!(tb.top - top0() < c - 1 && c < tb.bottom - top0() - 1)) continue; // 경계가 표 내부를 통과해야 분할
@@ -139,7 +142,19 @@ function _cutsWithTableSplit(root, availPx) {
                     const rr = r.getBoundingClientRect();
                     return rr.top - top0() <= c && c < rr.bottom - top0();
                 });
-                if (!row || (row.parentElement && row.parentElement.tagName === 'THEAD')) continue;
+                if (!row) continue;
+                const rows = [...table.rows];
+                const ri = rows.indexOf(row);
+                if (ri <= thead.rows.length) {
+                    // 경계가 헤더·첫 행을 가름 — 여기서 쪼개면 헤더만 페이지 끝에 고립된다.
+                    // 표 앞에 스페이서를 넣어 표 전체를 다음 페이지로 넘긴다 (고아 헤더 방지)
+                    const sp = document.createElement('div');
+                    sp.style.height = `${Math.ceil(c - (tb.top - top0()))}px`;
+                    if (table.parentElement) table.parentElement.insertBefore(sp, table);
+                    done = true;
+                    break;
+                }
+                if (row.getBoundingClientRect().top - top0() < c - 1) continue; // 경계가 행 중간(페이지보다 큰 행의 고정 절단) — 분할하면 복제 헤더가 페이지 중간에 출력
                 // 새 표 — 속성·colgroup·caption·thead 복제 후 row 이후 행 전부 이동
                 const nt = /** @type {HTMLTableElement} */ (table.cloneNode(false));
                 [...table.children].forEach(ch => {
@@ -147,14 +162,14 @@ function _cutsWithTableSplit(root, availPx) {
                 });
                 nt.appendChild(thead.cloneNode(true));
                 const body = document.createElement('tbody');
-                const rows = [...table.rows];
-                rows.slice(rows.indexOf(row)).forEach(r => body.appendChild(r));
+                rows.slice(ri).forEach(r => body.appendChild(r));
                 nt.appendChild(body);
                 if (table.parentElement) table.parentElement.insertBefore(nt, table.nextSibling);
-                splitCount++;
+                done = true;
+                break;
             }
         }
-        if (!splitCount) return cuts;
+        if (!done) return cuts;
     }
     return _blockCuts(root, availPx);
 }
