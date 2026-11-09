@@ -120,7 +120,7 @@
 | 3.23 | **사용자 의견** | 피드백 폼·건의 수신 | FB-01~FB-08 (8) |
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
-| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇·커뮤니티 공지 | AD-01~AD-12 (12) |
+| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇·커뮤니티 공지·기관 활동 | AD-01~AD-13 (13) |
 | 3.29 | **서비스 소개 (랜딩)** | `/landing.html` 정적 소개 페이지 — 시험 카드·체험 데모(퀴즈·학습계획)·설치 CTA·SEO/OG·프로모션 진입점 | LP-01~LP-10 (10) |
 | 3.30 | **개인 맞춤 고도화** | 개념 단위 약점 진단·개인화 스케줄·합격 예측 — 기존 자산(FSRS·BKT·진술 추적·임베딩)의 조합 계층 `src/study/personalization.js` | PS-01~PS-11 (11) |
 
@@ -620,6 +620,7 @@
 | AD-10 | Discord 운영 알림 push — `tools/lib/discord.js` 공용 헬퍼(`DISCORD_WEBHOOK_URL` env·.env, 미설정 시 조용히 skip)로 배포 성공/실패·스모크 결과를 채널에 푸시 + keepalive 워크플로 실패 시 Discord 통지 (이슈 생성과 병행, 시크릿 미설정 시 skip) — allowed_mentions 비활성화로 멘션 방어 | ✅ |
 | AD-11 | Discord 조회 명령 봇 — `tools/supabase/functions/admin-bot` Edge Function이 Discord Interactions 엔드포인트로 `/status`·`/user <email>`·`/pro`·`/errors [days]`·`/feedback [days]` 읽기 전용 조회 응답. ed25519 서명 검증(`DISCORD_PUBLIC_KEY`) + `ADMIN_DISCORD_ID` 단일 관리자 게이트 + allowed_mentions 비활성화. 쓰기 명령은 의도적 미포함(상태 변경은 기존 CLI 경로). 명령 등록은 `admin:discord`(register_admin_bot.js), 셋업은 DISCORD_ADMIN 런북 | ✅ |
 | AD-12 | Discord 커뮤니티 공지 발송 — 배포 성공·스모크 통과 시 `announceRelease()`가 release-notes.json 해당 버전 노트(내부 릴리스 메타 행 제외)를 공지 채널로 fan-out. webhook env 규약: `DISCORD_ANNOUNCE`(전체-공지)·`DISCORD_ANNOUNCE_<EXAM_ID>`(시험별 — exams.json 미등록 id env는 스킵+경고), 같은 URL 중복 선언은 1회 발송. 미설정 시 조용히 skip, 발송 실패도 배포 무효화하지 않음 (DOC-DSN-36 §4) | ✅ |
+| AD-13 | 기관 활동 패널 — carework `facilities`·`facility_members`·`shift_handovers`·`handover_acks`·`family_visits`·`incident_reports`·`facility_records`·`facility_form_templates`에 `is_admin()` 게이트 admin select 정책 추가(carework 스키마 파일에 선언 — 플랫폼 스키마 오염 방지) + `#/admin` 기관 탭(시설별 멤버 수·인수인계 발신/확인·사고 보고·방문 기록 건수 집계, 행 본문은 기본 비표시) | 미구현 (로드맵) |
 
 ### 3.27 AI 제작 지원 (Author-time)
 

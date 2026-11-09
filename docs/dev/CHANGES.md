@@ -1,6 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 docs(admin): AD-13 기관 활동 패널 SPEC 부여 + 설계문서 갱신
+
+- SPEC §3.26에 AD-13 신설 — carework 시설 8테이블 admin select 정책 + #/admin 기관 탭 (미구현 로드맵)
+- ADMIN_DESIGN.md — 관련 SPEC AD-01~13 갱신, carework 정책 블록·기관 탭 추가, admin_set_plan에 p_days 기간권 연장 파라미터 보정, SPEC 매핑 표 AD-07/10/11/12/13 보완
+
 ## 2026-11-09 test(print): initPrintPrep DOM 테스트 — statements 커버리지 임계값 복구
 
 - tests/dom/reader/print-prep.test.js — beforeprint 스크롤 클립·lazy 해제 + afterprint 복원 실동작 검증
