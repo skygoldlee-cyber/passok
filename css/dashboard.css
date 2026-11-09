@@ -127,7 +127,7 @@
 }
 
 /* 내 맞춤 분석 뷰 — 진단 요약 카드 3종 */
-.btn-sm { padding: 0.4rem 0.9rem; font-size: var(--text-sm); min-height: var(--control-h-md); }
+.btn-sm { padding: 0.4rem 0.9rem; font-size: var(--text-sm); min-height: var(--control-h-md); min-width: 24px; }
 
 .section-title-row {
     display: flex;

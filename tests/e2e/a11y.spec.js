@@ -90,7 +90,7 @@ test.describe('접근성 자동 스캔 (A-01/03/04)', () => {
             .toBeVisible({ timeout: 10_000 });
         await page.waitForFunction(() => {
             const el = document.querySelector('.btn-sm[data-click="toggleFontSize"]');
-            return el && el.getBoundingClientRect().height >= 24;
+            const r = el.getBoundingClientRect(); return r.height >= 24 && r.width >= 24;
         }, null, { timeout: 10_000 });
         const bad = await scan(page, 'settings');
         expect(bad.map(v => v.id)).toEqual([]);
