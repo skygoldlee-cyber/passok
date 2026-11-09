@@ -258,13 +258,16 @@ const SHOTS = {
     },
     // ⑩ 평가점검
     'manual-10-audit': async (page) => {
+        await page.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
+        await page.waitForSelector('#care-home-view', { timeout: 15000 });
         await page.goto(`${BASE}/#/care-audit`, { waitUntil: 'networkidle' });
-        const aud = page.locator('#audit-list [data-audit]').first();
-        await aud.scrollIntoViewIfNeeded(); await aud.click({ force: true });
-        const pr = await shotPng(page, '#audit-progress, .care-audit-progress');
-        const ls = await shotPng(page, '#audit-list').catch(() => null);
-        if (ls) await snapComposite(page, 'manual-10-audit', [pr, ls]);
-        else await snap(page, 'manual-10-audit', '#audit-progress, .care-audit-progress');
+        await page.waitForSelector('#audit-list > *', { timeout: 15000 });
+        await dismissOverlays(page);
+        await page.evaluate(() => document.getElementById('audit-list')?.scrollIntoView());
+        await page.waitForTimeout(400);
+        const png = await page.locator('#audit-list').screenshot({ timeout: 10000 });
+        writeFileSync(join(OUT_DIR, 'manual-10-audit.webp'), await toWebp(page, png));
+        console.log('✓ manual-10-audit.webp');
     },
     // ⑪ 양식 편집기
     'manual-11-template': async (page) => {

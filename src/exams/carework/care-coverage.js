@@ -8,8 +8,8 @@ export function auditCoverage(stores = {}) {
     const items = [
         { key: '명부', ok: clients.length > 0 },
         { key: '일지', ok: logs.length > 0 },
-        { key: '관찰(obs)', ok: logs.some(l => l.obs && (l.obs.meal || l.obs.sleep || l.obs.void)) },
-        { key: '방문·면회', ok: visits.length > 0 },
+        { key: '관찰', ok: logs.some(l => l.obs && (l.obs.meal || l.obs.sleep || l.obs.void)) },
+        { key: '방문기록', ok: visits.length > 0 },
         { key: '인수인계', ok: handovers.length > 0 },
         { key: '사고보고', ok: incidents.length > 0 },
     ];
