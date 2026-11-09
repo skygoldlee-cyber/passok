@@ -84,6 +84,9 @@ test.describe('접근성 자동 스캔 (A-01/03/04)', () => {
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
         await page.locator('#settings-toggle-btn').click();
         await expect(page.locator('#settings-panel')).not.toHaveClass(/is-hidden/);
+        // 패널 전환 애니메이션 완료 대기 — axe target-size가 전이 중 크기로 오측정됨
+        await expect(page.locator('.btn-sm[data-click="toggleFontSize"]').first())
+            .toBeVisible({ timeout: 10_000 });
         const bad = await scan(page, 'settings');
         expect(bad.map(v => v.id)).toEqual([]);
     });
