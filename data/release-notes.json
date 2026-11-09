@@ -1,5 +1,18 @@
 [
   {
+    "version": "v20261109-bac888c",
+    "date": "2026-11-09",
+    "notes": [
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[수정·print] 머메이드 인쇄·PDF 페이지 분할 방지 — 전 출력 경로 일괄",
+      "[정리] TRACE_MATRIX 재생성 [no-docs]",
+      "[문서·design] E2E 자동화 구현 설계 — DOC-DSN-46",
+      "[문서·design] E2E 가이드 원본 PDF 경로 tmp/source-docs로 갱신",
+      "[문서·design] PASSOK E2E 자동화 구축 가이드 PDF→MD 변환 (DOC-DSN-45)",
+      "[정리·release] v20261109-85bd155 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-85bd155",
     "date": "2026-11-09",
     "notes": [
@@ -183,14 +196,6 @@
       "[기능·shell] 글자 크게 보기 토글 — 시니어 읽기 편의 (보통→크게→더 크게)",
       "[기능·reader] 인쇄/PDF 버튼을 생성 PDF 다운로드로 전환 — 모바일·인앱 인쇄 불가 대응",
       "[정리·release] v20261108-c056714 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261108-c056714",
-    "date": "2026-11-08",
-    "notes": [
-      "[수정·carework] 인쇄 빈 출력 수정 — 오버레이 인쇄 규칙 + 빈 콘텐츠 방어",
-      "[정리·release] v20261108-e1958ef 스탬프 확정 [no-docs]"
     ]
   }
 ]
