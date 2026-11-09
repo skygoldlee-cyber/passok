@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261109-af4ebd4",
+    "date": "2026-11-09",
+    "notes": [
+      "[수정·print] mermaid 보정 !important 우선순위 — 실제 다이어그램에서 무력화되던 근본 원인",
+      "[정리·release] v20261109-cb6ceaf 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-cb6ceaf",
     "date": "2026-11-09",
     "notes": [
@@ -183,17 +191,6 @@
       "[정리] TRACE_MATRIX 재생성",
       "[수정·reader] 뷰어 인쇄/PDF를 생성 PDF 새탭 미리보기로 재전환 — 기기 print 스택 백지 대응",
       "[정리·release] v20261109-c3b09d4 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-c3b09d4",
-    "date": "2026-11-09",
-    "notes": [
-      "[정리] TRACE_MATRIX 재생성",
-      "[수정·reader] 뷰어 인쇄/PDF를 브라우저 인쇄창(프리뷰)로 복원",
-      "[정리] TRACE_MATRIX 재생성",
-      "[수정·pdf] 생성 PDF 요소 경계 페이지네이션 + 오버레이 선택자 컨텍스트 재현",
-      "[정리·release] v20261109-41c28fb 스탬프 확정 [no-docs]"
     ]
   }
 ]
