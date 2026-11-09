@@ -820,7 +820,7 @@
 | PF-16 | Mermaid 다이어그램 타입별 초기화 공용화 (`mermaid-utils.js`, 3개 모듈 중복 제거) | ✅ |
 | PF-17 | 이모지 폰트 서브셋 — `noto-color-emoji-400.woff2`를 실사용 119코드포인트 서브셋으로 축소 (5.4MB→0.17MB, −97%). 재생성: `fontTools.subset ... --unicodes` (글자 목록은 저장소 전체 렌더 소스 스캔, VS16·ZWJ·keycap 포함). 단위 테스트가 1MB 예산 강제 | ✅ |
 | PF-18 | **Core Web Vitals 목표·측정 조건**: LCP ≤2.5s · INP ≤200ms · CLS ≤0.1 — 랩 측정 기준(Lighthouse 모바일 프리셋, CPU 4x·Slow 4G), 대상 화면 = 대시보드 초기 로드·교재리더 챕터 오픈 2개, 각 3회 중앙값으로 판정. 필드(RUM) 데이터는 수집 수단 없음 | ✅ (목표 확정) |
-| PF-19 | **서비스 이미지 자산 형식 제한** — 배포 산출물의 이미지는 래스터 `.webp`·벡터 `.svg`만 허용 (용량·유지보수성 — ref-pipeline 산출물이 webp로 이미 수렴, 2026-11 현재 content/ 7,627 webp·23 svg·png 1). 예외 화이트리스트: ①PWA 매니페스트·apple-touch-icon·favicon PNG (iOS 설치·레거시 호환 필수) ②`icons/og-image.png` (카카오톡·트위터 등 외부 크롤러 webp 미지원) ③e2e 스냅샷·docs 이미지 (배포 비대상). 적용: `check_filenames` 계열 게이트 확장 + `filename_baseline` 패턴의 예외 등록 — 규약 상세는 CODE_CONVENTIONS §2.2 | 미구현 (로드맵) |
+| PF-19 | **서비스 이미지 자산 형식 제한** — 배포 산출물의 이미지는 래스터 `.webp`·벡터 `.svg`만 허용 (용량·유지보수성 — ref-pipeline 산출물이 webp로 이미 수렴, 2026-11 현재 content/ 7,627 webp·23 svg·png 1). 예외 화이트리스트: ①PWA 매니페스트·apple-touch-icon·favicon PNG (iOS 설치·레거시 호환 필수) ②`icons/og-image.png` (카카오톡·트위터 등 외부 크롤러 webp 미지원) ③e2e 스냅샷·docs 이미지 (배포 비대상). 적용: `check_filenames` 계열 게이트 확장 + `filename_baseline` 패턴의 예외 등록 — 규약 상세는 CODE_CONVENTIONS §2.2 | ✅ |
 
 ### 4.5 접근성
 

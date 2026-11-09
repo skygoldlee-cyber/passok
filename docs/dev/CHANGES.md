@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 feat(gate): PF-19 이미지 형식 게이트 구현 — check_filenames 확장
+
+- check_filenames.js — content/·icons/ 신규 이미지에 webp·svg 강제 (png/jpg/jpeg/gif/bmp/avif 차단), icons/ PNG는 화이트리스트(apple-touch·favicon·passok·og-image)로 예외 — PWA 설치·외부 크롤러 호환 보존
+- 1과목_삽화.png는 검토 결과 전환 불필요 — git 미추적 마스터 원본(외부 호스팅 파이프라인 입력), 서빙물은 이미 1과목_삽화.webp
+- tests/unit/tools/check-filenames.test.js — 규칙 계약 + 게이트 통과 검증
+
 ## 2026-11-09 docs(spec): PF-19 이미지 자산 형식 제한 SPEC 부여 + 규약 문서화
 
 - SPEC §4.4에 PF-19 신설 — 배포 산출물 이미지는 webp·svg만 허용 (content/ 현재 7,627 webp·23 svg·png 1로 이미 수렴, 신규 유입 회귀 방지)
