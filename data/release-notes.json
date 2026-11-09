@@ -1,5 +1,17 @@
 [
   {
+    "version": "v20261109-9fc19c9",
+    "date": "2026-11-09",
+    "notes": [
+      "[성능·deploy] 배포 파이프라인 속도 개선 — 게이트 자동복구·CI 대기 병행 (DSN-90)",
+      "[테스트·gate] check-filenames @spec 헤더 토큰 정정 + TRACE 재생성",
+      "[기능·gate] PF-19 이미지 형식 게이트 구현 — check_filenames 확장",
+      "[문서·spec] PF-19 이미지 자산 형식 제한 SPEC 부여 + 규약 문서화",
+      "[문서·admin] AD-13 기관 활동 패널 SPEC 부여 + 설계문서 갱신",
+      "[정리·release] v20261109-0c206f6 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-0c206f6",
     "date": "2026-11-09",
     "notes": [
@@ -185,18 +197,6 @@
       "[문서] CHANGES — 뷰어 PDF 재전환 기록",
       "[수정·reader] 뷰어 인쇄/PDF를 생성 PDF 새탭 미리보기로 재전환 — window.print() 백지 대응",
       "[정리·release] v20261109-3f25f78 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-3f25f78",
-    "date": "2026-11-09",
-    "notes": [
-      "[수정·shell] 대시보드 버튼 행 flex-wrap — 모바일 안전 규약 위반 정정",
-      "[수정·shell] 글자 크게 버튼을 홈 화면으로 이동 — PC 대시보드 + 실무 홈 통일",
-      "[정리] TRACE_MATRIX 재생성",
-      "[수정·carework] 실무 홈에 글자 크게 버튼 노출 — 모바일 실무 모드 접근성",
-      "[수정·reader] 뷰어 인쇄/PDF를 인쇄창으로 복원 + 생성 PDF JPEG 전환 (용량 ~1/10)",
-      "[정리·release] v20261109-77bae04 스탬프 확정 [no-docs]"
     ]
   }
 ]
