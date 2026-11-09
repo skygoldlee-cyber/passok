@@ -1,5 +1,5 @@
 // tests/dom/reader/print-pdf.test.js — 매뉴얼·시험 뷰어 인쇄/PDF 버튼 경로 + 인쇄 CSS 계약
-// @spec CO-20
+// @spec CO-20 · CO-21
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // doc-overlay 목 — 뷰어 openDocument 플로우를 DOM 조립까지만 재현
@@ -50,6 +50,14 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         expect(src).toContain('background:#fff !important;color:#000 !important'); // 오버레이 배경·기본색
         expect(src).toContain('padding:10mm 8mm'); // 페이지 여백
         expect(src).toContain('#exam-overlay #exam-article h1{-webkit-text-fill-color:#000'); // h1 고정색만, 나머지 컬러 유지
+    });
+
+    it('인쇄 CSS 요소 절단 방지 — break-inside:avoid (CO-21 폴백 경로 보호)', async () => {
+        const { readFileSync } = await import('node:fs');
+        for (const f of ['src/reader/manual-viewer.js', 'src/reader/exam-viewer.js']) {
+            const src = readFileSync(f, 'utf8');
+            expect(src, `${f} break-inside`).toContain('break-inside:avoid'); // tr·img·pre·blockquote·figure 페이지 중간 절단 금지
+        }
     });
 
     it('exam-article 타이포그래피 — manual-article 기준본과 동일 스케일 (출력 간격 통일)', async () => {

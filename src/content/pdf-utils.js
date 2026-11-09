@@ -17,6 +17,41 @@ export function ensurePdf() {
     return _load;
 }
 
+// 블록 요소 경계 절단 후보 — 페이지 자르는 위치는 요소 경계로만 선택해 표·그림·제목이
+// 페이지 경계에서 잘리지 않는다. 직계 자식뿐 아니라 하위 블록(표 행·그림·단락·목록
+// 항목)도 후보로 수집해 큰 래퍼 하나가 페이지를 넘을 때 내부 경계에서 자른다.
+// 셀 내부 요소는 제외(행 중간 절단 방지 — 표는 tr 경계까지만 쪼갠다). (@spec CO-21)
+const _BLOCK_SEL = 'h1,h2,h3,h4,h5,h6,p,li,tr,table,.reader-table-wrapper,.reader-img,img,pre,blockquote,figure,.mermaid,hr,details';
+
+/** el 기준 페이지 절단 위치(css px) 산출 — 각 구간은 availPx 이하, 끝은 요소 경계 */
+function _blockCuts(el, availPx) {
+    const elTop = el.getBoundingClientRect().top;
+    const boundSet = new Set([0]);
+    for (const e2 of el.querySelectorAll(_BLOCK_SEL)) {
+        if (e2.closest('td,th')) continue;
+        const cs = getComputedStyle(e2);
+        const mt = parseFloat(cs.marginTop || '0');
+        const top = Math.round(e2.getBoundingClientRect().top - elTop - (Number.isFinite(mt) ? mt : 0));
+        if (Number.isFinite(top)) boundSet.add(top);
+    }
+    boundSet.add(el.offsetHeight);
+    const bounds = [...boundSet].sort((a, b) => a - b);
+    const cuts = /** @type {number[]} */ ([0]);
+    while (cuts[cuts.length - 1] < el.offsetHeight) {
+        const last = cuts[cuts.length - 1];
+        const limit = last + availPx;
+        let next = -1;
+        for (const b of bounds) {
+            if (b <= last) continue;
+            if (b > limit) break;
+            next = b; // 용량 내 가장 아래 경계 — 페이지를 최대로 채우되 요소 중간에서 자르지 않음
+        }
+        if (next < 0) next = Math.min(Math.round(limit), el.offsetHeight); // 경계 없음 — 페이지보다 큰 요소는 고정 절단
+        cuts.push(next);
+    }
+    return cuts;
+}
+
 /** 뷰 미리보기 요소 → PDF File (한글은 캔버스 이미지로 렌더) */
 export async function pdfFileFromEl(el, title) {
     await ensurePdf();
@@ -32,16 +67,21 @@ export async function pdfFileFromEl(el, title) {
     const mYPx = Math.round(MY * pxPerMm);
     const mXPx = Math.round(MX * pxPerMm);
     const sliceH = Math.round((H - 2 * MY) * pxPerMm);
-    for (let off = 0; off < canvas.height; off += sliceH) {
-        const h = Math.min(sliceH, canvas.height - off);
-        const pg = document.createElement('canvas');
-        pg.width = canvas.width; pg.height = pagePx;
-        const ctx = pg.getContext('2d');
-        if (!ctx) break;
-        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, pg.width, pg.height);
-        ctx.drawImage(canvas, 0, off, canvas.width, h, mXPx, mYPx, innerPx, h);
-        pdf.addImage(pg.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, W, H);
-        if (off + sliceH < canvas.height) pdf.addPage();
+    const availPx = sliceH / 2; // 캔버스 scale:2 → css px 기준 페이지 용량
+    const cuts = _blockCuts(el, availPx);
+    for (let i = 0; i + 1 < cuts.length; i++) {
+        const y0 = cuts[i] * 2, y1 = Math.min(cuts[i + 1] * 2, canvas.height);
+        for (let off = 0; off < y1 - y0; off += sliceH) { // 초대형 요소 조각은 고정 높이 서브슬라이스
+            const h = Math.min(sliceH, y1 - y0 - off);
+            const pg = document.createElement('canvas');
+            pg.width = canvas.width; pg.height = pagePx;
+            const ctx = pg.getContext('2d');
+            if (!ctx) break;
+            ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, pg.width, pg.height);
+            ctx.drawImage(canvas, 0, y0 + off, canvas.width, h, mXPx, mYPx, innerPx, h);
+            pdf.addImage(pg.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, W, H);
+            if (off + sliceH < y1 - y0 || i + 2 < cuts.length) pdf.addPage();
+        }
     }
     const blob = pdf.output('blob');
     return new File([blob], `${title}.pdf`, { type: 'application/pdf' });
@@ -85,27 +125,12 @@ export async function pdfFileFromElStyled(el, title) {
         el2.style.textShadow = 'none';
     });
     // 요소 경계 페이지네이션 — 캔버스는 wrap을 1회 렌더(견고)하고, 자르는 위치는
-    // article 자식 요소 경계로만 선택 — 표·그림·제목이 페이지 경계에서 잘리지 않는다.
+    // 블록 요소 경계(_blockCuts 공용)로만 선택 — 표·그림·제목이 페이지 경계에서 잘리지 않는다.
     // 페이지 캔버스에 좌우 8mm·상하 10mm 여백을 입혀 조각을 옮긴다. (@spec CO-20)
-    const clone = /** @type {HTMLElement} */ (wrap.firstElementChild); // article 복제본
     const W = 210, H = 297, MX = 8, MY = 10;
     const mmPerCssPx = (W - 2 * MX) / 960; // wrap 너비 전체가 내용 영역에 매핑
     const availPx = (H - 2 * MY) / mmPerCssPx; // 한 페이지 본문 css px
-    const wrapTop = wrap.getBoundingClientRect().top;
-    const bounds = /** @type {number[]} */ ([]); // wrap 기준 자식 경계(css px, 마진 포함)
-    for (const child of /** @type {HTMLElement[]} */ (Array.from(clone.children))) {
-        const cs = getComputedStyle(child);
-        bounds.push(Math.round(child.getBoundingClientRect().top - wrapTop - parseFloat(cs.marginTop || '0')));
-    }
-    bounds.push(wrap.offsetHeight); // 문서 끝
-    const cuts = /** @type {number[]} */ ([0]); // 페이지 시작 위치들 — 용량 내 최대 경계
-    for (const b of bounds) {
-        if (b - cuts[cuts.length - 1] > availPx) {
-            const prev = bounds[bounds.indexOf(b) - 1];
-            cuts.push(prev > cuts[cuts.length - 1] ? prev : b); // 초대형 요소면 그 자리서 자름
-        }
-    }
-    if (cuts[cuts.length - 1] < bounds[bounds.length - 1]) cuts.push(bounds[bounds.length - 1]);
+    const cuts = _blockCuts(wrap, availPx);
     try {
         const canvas = await (/** @type {any} */ (window)).html2canvas(wrap, { scale: 2, logging: false });
         const ctx0 = canvas.getContext('2d'); // 빈 캔버스 감지 — 기기·문서 특정 백지 렌더 대응

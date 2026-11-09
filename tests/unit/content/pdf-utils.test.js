@@ -1,5 +1,5 @@
 // tests/unit/content/pdf-utils.test.js — 생성 PDF 색상 보정 판정 계약
-// @spec CO-20
+// @spec CO-20 · CO-21
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -39,7 +39,8 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
     });
 
     it('단일 캔버스 렌더 + 요소 경계 절단 — 표·그림 중간 절단 방지', () => {
-        assert.match(src, /clone\.children/);                    // article 자식 요소 경계 측정
+        assert.match(src, /querySelectorAll\(_BLOCK_SEL\)/);     // 하위 블록 요소 경계 측정 (직계 자식뿐 아니라 tr·img·p 포함)
+        assert.match(src, /closest\('td,th'\)/);                 // 셀 내부 제외 — 표는 행 경계까지만 절단
         assert.match(src, /getBoundingClientRect/);              // 실측 위치
         assert.match(src, /availPx/);                            // 페이지 용량
         assert.match(src, /html2canvas\(wrap/);                  // 단일 1회 렌더 (견고 경로)

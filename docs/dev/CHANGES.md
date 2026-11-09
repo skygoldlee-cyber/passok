@@ -1,7 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
-## 2026-11-09 fix(reader): 문서 캐시 키 한글 충돌 — 학습안내서↔실무매뉴얼 내용 혼재 수정
+## 2026-11-09 fix(pdf): 페이지 절단 보호 — 하위 블록 경계 페이지네이션 + CO-21 신설
+
+- 생성 PDF가 표·그림·다이어그램을 페이지 경계에서 잘라 출력 — _blockCuts 공용 헬퍼로 절단 후보를 하위 블록(tr·img·mermaid·p·li 등)까지 확장, 표는 행 경계까지만 분할(셀 내부 제외), pdfFileFromEl·pdfFileFromElStyled 공통 적용
+- window.print() 폴백 경로도 @media print break-inside:avoid(tr·img·pre·blockquote·figure)로 동일 보호
+- SPEC CO-21 신설 — 페이지 절단 보호를 독립 요구사항으로 분리, 코드·테스트 @spec 태그 연결
+
+## 2026-11-09 fix(reader): 문서 캐시 키 한글 충돌 — 학습안내서↔실무막뉴얼 내용 혼재 수정
 
 - makeSessionCache keyOf가 [^a-zA-Z0-9]→'_' 정화로 한글 파일명을 전부 소거 — 같은 길이(학습안내서·실무매뉴얼 5자)면 캐시 키 동일 → 먼저 연 문서 HTML이 다른 문서에 반환
 - \p{L}\p{N} 유니코드 보존으로 정화 규칙 변경 — exam-viewer·html-viewer 동일 팩토리라 함께 치유, 회귀 테스트 추가
