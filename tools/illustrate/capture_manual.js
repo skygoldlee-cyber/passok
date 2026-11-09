@@ -140,6 +140,7 @@ const SHOTS = {
     // ① 저장 배지 — 저장 클릭 직후 표시
     'manual-01-badge': async (page) => {
         await page.goto(`${BASE}/#/care-incident`, { waitUntil: 'networkidle' });
+        await page.waitForSelector('#inc-client', { timeout: 15000 });
         await page.fill('#inc-client', '김○○');
         await page.fill('#inc-place', '거실');
         await page.fill('#inc-desc', '침대에서 내려오다 미끄러짐');
@@ -148,7 +149,7 @@ const SHOTS = {
         await page.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
         await page.locator('.care-more-actions-list [data-click="careIncidentSave"]').click({ force: true });
         await page.waitForTimeout(300);
-        await snap(page, 'manual-01-badge', '.saved-flash');
+        await snap(page, 'manual-01-badge', '#inc-saved');
     },
     // ① 공유 메뉴 — 모바일 뷰포트 컨텍스트 (main에서 별도 처리)
     'manual-01-share': async (_page) => { /* MOBILE 플래그로 main에서 별도 처리 */ },
@@ -277,7 +278,7 @@ const SHOTS = {
         await page.fill('#find-q', '행복요양');
         await page.locator('[data-click="careFinderSearch"]').click();
         await page.waitForTimeout(800);
-        await snap(page, 'manual-13-finder', '#find-list');
+        await snap(page, 'manual-13-finder', '#find-list > *');
     },
     // ⑭ 서식모음
     'manual-14-forms': async (page) => {
