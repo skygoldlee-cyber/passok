@@ -51,8 +51,8 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         assert.match(src, /querySelectorAll\('pre\.mermaid svg/);   // mermaid 대상 측정
         assert.match(src, /r\.height > availPx/);                   // 페이지 용량 초과 판정
         assert.match(src, /style\.width = `\$\{Math\.max\(1, Math\.round\(r\.width \* k\)\)\}px`/); // 비례 축소
-        // 축소가 _blockCuts 경계 측정 이전에 실행돼야 경계가 축소 후 위치로 잡힘
-        assert.ok(src.indexOf('r.height > availPx') < src.indexOf('_blockCuts(wrap, availPx)'));
+        // 축소가 경계 측정 이전에 실행돼야 경계가 축소 후 위치로 잡힘
+        assert.ok(src.indexOf('r.height > availPx') < src.indexOf('_cutsWithTableSplit(wrap, availPx)'));
     });
 
     it('화면 전용 컨트롤 클론 제거 — 다이어그램 확대 버튼이 PDF에 찍히지 않음', () => {
@@ -66,12 +66,32 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         assert.match(src, /setTimeout\(r, 10000\)/);                         // 디코딩 상한 — 교착 방지
         // 정착이 경계 측정·스크롤 클립 해제 이전에 실행돼야 측정이 최종 레이아웃 기준
         assert.ok(src.indexOf('await _settleImages(wrap)') < src.indexOf('_expandScrollClips(wrap)'));
-        assert.ok(src.indexOf('await _settleImages(wrap)') < src.indexOf('_blockCuts(wrap, availPx)'));
+        assert.ok(src.indexOf('await _settleImages(wrap)') < src.indexOf('_cutsWithTableSplit(wrap, availPx)'));
     });
 
     it('페이지 번호 스탬프 — 출력물 하단 N/total 표기', () => {
         assert.match(src, /_stampPageNumbers/);
         assert.match(src, /getNumberOfPages\(\)/);                           // 전체 페이지 수
         assert.match(src, /setPage\(p\)/);                                   // 페이지 재방문 스탬프
+    });
+
+    it('표 헤더 반복 — 경계를 넘는 표를 thead 복제로 분할 (CO-21)', () => {
+        assert.match(src, /_cutsWithTableSplit/);                            // 분할+수렴 헬퍼
+        assert.match(src, /thead\.cloneNode\(true\)/);                       // thead 복제
+        assert.match(src, /COLGROUP/);                                       // 열 너비 보존
+        // 양쪽 생성 경로에 적용
+        assert.match(src, /pdfFileFromEl[\s\S]*_cutsWithTableSplit\(el, availPx\)/);
+        assert.match(src, /_cutsWithTableSplit\(wrap, availPx\)/);
+    });
+
+    it('캔버스 높이 상한 대응 — 초장문서 배율 하향 (백지 렌더 방지)', () => {
+        assert.match(src, /_CANVAS_MAX\s*=\s*32000/);                        // Chrome ~32767px 안전선
+        assert.match(src, /_fitCanvasScale/);                                // 배율 산출 헬퍼
+        assert.match(src, /html2canvas\(wrap, \{ scale/);                    // 고정 2 아닌 적응 배율
+    });
+
+    it('details 펼침 — 접힌 내용도 출력물에 포함', () => {
+        assert.match(src, /details:not\(\[open\]\)/);                        // 닫힌 details 수집
+        assert.match(src, /\.open = true/);                                  // 클론·렌더 전 펼침
     });
 });

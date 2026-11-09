@@ -1,6 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 feat(pdf): 생성 PDF 개선 5종 — 표 헤더 반복·캔버스 상한·details·E2E·용량
+
+- _cutsWithTableSplit — 페이지 경계를 넘는 table을 thead·colgroup 복제 새 표로 분할 (수렴 반복), 캔버스 슬라이스 PDF도 둘째 장부터 헤더 반복 (window.print() 수준)
+- _fitCanvasScale — 초장문서는 css 높이×scale이 캔버스 상한(32,000px)을 넘지 않도록 배율 자동 하향, 백지 렌더 방지
+- 접힌 details는 출력물에 포함되도록 펼침 — styled 클론은 직접 open, pdfFileFromEl은 렌더 후 복원
+- tests/e2e/pdf-pagination.spec.js — 실브라우저 슬라이스 좌표 검증(삽화 절단 없음·표 분할·details) 3건으로 파이프라인 회귀 상시화
+- 용량 최적화 — JPEG 품질 0.9 조정 + jsPDF MEDIUM deflate + 배율 하향이 초장문서 용량도 절감
+
 ## 2026-11-09 feat(print): 인쇄 파이프라인 보완 — 전역 전처리 훅·디코딩 상한·페이지 번호
 
 - initPrintPrep(beforeprint/afterprint) — 화면용 스크롤 상자(리더 본문 등)와 lazy 이미지를 인쇄 직전 해제·직후 복원, window.print() 경로 전체의 시험 공통 안전망 (스크롤포트만 출력되거나 lazy 이미지 빈 칸이던 잔여 갭)
