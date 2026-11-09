@@ -1,6 +1,16 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 feat(print): mermaid 출력 WYSIWYG 하이브리드 — 다이어그램 상자 색상을 화면 그대로 출력
+
+- 사용자 요구로 정책 전환: 백지 정규화(밝은 틴트+검정 글자) → 화면 색상 유지 (페이지는 여전히 흰색 — 구성 요소만 색 유지)
+- fixMermaidPrintContrast 재구성: 색 보정 대신 print-color-adjust: exact(인라인 !important) 부여 — 브라우저 인쇄의 CSS 배경 생략 방지. 미렌더 원문 블록만 백지 보정 유지
+- pdfFileFromElStyled 워크가 pre.mermaid 서브트리 스킵 — 라벨·상자 색 무변경
+- css/print.css에 pre.mermaid * {print-color-adjust:exact} 안전망 — beforeprint 미지원 브라우저도 동작
+- 효과: 다크모드는 어두운 상자+흰 라벨, 라이트모드는 파스텔 상자+남색 라벨이 화면 그대로 출력
+- 규약 갱신: AGENTS.md·reader-mermaid.css 헤더 — 대비는 --mermaid-* 토큰이 보장, 토큰 변경 시 화면·출력 함께 변하니 대비 동반 검증
+- e2e·유닛 계약 전면 갱신 — 색 보존 실측 + 미렌더 폴백 + exact 적용 검증
+
 ## 2026-11-09 docs+test: mermaid 출력 보정 규약 정착 — 향후 확장 시 재발 방지
 
 - 유닛 계약 테스트 확장 — 'important' 우선순위 적용·우선순위 보존 원복·color/background 보정·pre/svg 루트 커버를 소스 계약으로 고정

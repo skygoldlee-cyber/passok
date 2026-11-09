@@ -38,6 +38,10 @@ async function _stubVendors(page) {
                     return s ? getComputedStyle(s).color : null; })(),
                 svgBg: (() => { const s = el.querySelector('pre.mermaid svg');
                     return s ? getComputedStyle(s).backgroundColor : null; })(),
+                pca: (() => { const s = el.querySelector('pre.mermaid svg .node rect');
+                    return s ? getComputedStyle(s).printColorAdjust : null; })(),
+                rawCodeColor: (() => { const s = el.querySelector('pre.mermaid code');
+                    return s ? getComputedStyle(s).color : null; })(),
             };
             const c = document.createElement('canvas');
             c.width = el.offsetWidth * 2; c.height = el.offsetHeight * 2;
@@ -134,7 +138,7 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
         expect(stray, `페이지 중간에 찍힌 헤더(캔버스 y) ${JSON.stringify(stray)}`).toEqual([]);
     });
 
-    test('다크 테마 mermaid는 백지 출력용 대비로 보정된다 — 어두운 상자+검정 글자 방지', async ({ page }) => {
+    test('다크 테마 mermaid는 화면 색상 그대로 출력된다 — WYSIWYG 하이브리드 (CO-20)', async ({ page }) => {
         test.setTimeout(60_000);
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED, null, { timeout: 30_000 });
@@ -142,36 +146,32 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
         const res = await page.evaluate(async () => {
             const w = /** @type {any} */ (window);
             const host = document.createElement('div');
-            // 다크 테마 렌더분 흉내 — reader-mermaid.css처럼 !important 규칙을 둬
-            // 우선순위 없는 인라인 보정이 무력화되던 실제 경로를 재현
+            // 다크 테마 렌더분 흉내 — reader-mermaid.css처럼 !important 규칙을 둬 실제 경로를 재현
             host.innerHTML = '<style>pre.mermaid .node rect{fill:#3a3a5c !important;stroke:#b0b0cc !important;}' +
                 'pre.mermaid .nodeLabel{color:#fff !important;fill:#fff !important;}</style>' +
-                '<pre class="mermaid"><svg viewBox="0 0 100 40" style="background:#1a1a2e">' +
+                '<pre class="mermaid"><svg viewBox="0 0 100 40">' +
                 '<g class="node"><rect width="100" height="40"/></g>' +
-                '<text x="10" y="24" style="fill:#ffffff">라벨</text>' +
                 '<foreignObject x="0" y="0" width="100" height="20"><div xmlns="http://www.w3.org/1999/xhtml">' +
-                '<span class="nodeLabel" style="color:#ffffff">노드명</span></div></foreignObject></svg></pre>';
+                '<span class="nodeLabel" style="color:#ffffff">노드명</span></div></foreignObject></svg></pre>' +
+                // 미렌더 블록 흉내 — svg 없이 원문만 → 밝은 글자는 백지 보정 대상
+                '<pre class="mermaid"><code style="color:#f3f4f6">flowchart TD</code></pre>';
             document.body.appendChild(host);
             try {
                 const { pdfFileFromElStyled } = await import('/src/content/pdf-utils.js');
                 await pdfFileFromElStyled(host, 't');
-                return { fills: w.__layout.svgFills, foColor: w.__layout.foColor, svgBg: w.__layout.svgBg };
+                return { fills: w.__layout.svgFills, foColor: w.__layout.foColor,
+                         pca: w.__layout.pca, rawCodeColor: w.__layout.rawCodeColor };
             } finally { host.remove(); }
         });
-        const lum = c => {
-            const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c || '');
-            return m ? (0.299 * +m[1] + 0.587 * +m[2] + 0.114 * +m[3]) / 255 : null;
-        };
         const rect = res.fills.find(e => e.tag === 'rect');
-        const text = res.fills.find(e => e.tag === 'text');
-        expect(lum(rect.fill), `노드 채우기는 밝은 틴트로: ${rect.fill}`).toBeGreaterThan(0.7);
-        expect(lum(rect.stroke), `밝은 선은 어둡게: ${rect.stroke}`).toBeLessThan(0.45);
-        expect(text.fill, '밝은 글자는 검정으로').toBe('rgb(0, 0, 0)');
-        expect(res.foColor, `foreignObject 라벨도 검정으로: ${res.foColor}`).toBe('rgb(0, 0, 0)');
-        expect(res.svgBg, `svg 루트의 다크 배경은 제거: ${res.svgBg}`).toBe('rgba(0, 0, 0, 0)');
+        expect(rect.fill, `노드 채우기는 화면 색상 그대로: ${rect.fill}`).toBe('rgb(58, 58, 92)');
+        expect(rect.stroke, `선도 화면 색상 그대로: ${rect.stroke}`).toBe('rgb(176, 176, 204)');
+        expect(res.foColor, `라벨도 화면 색상 그대로: ${res.foColor}`).toBe('rgb(255, 255, 255)');
+        expect(res.pca, `브라우저 인쇄 배경 유지: ${res.pca}`).toBe('exact');
+        expect(res.rawCodeColor, `미렌더 원문만 검정 보정: ${res.rawCodeColor}`).toBe('rgb(0, 0, 0)');
     });
 
-    test('window.print 경로 — beforeprint 보정·afterprint 원복 (initPrintPrep)', async ({ page }) => {
+    test('window.print 경로 — beforeprint 색상 보존·afterprint 원복 (initPrintPrep)', async ({ page }) => {
         test.setTimeout(60_000);
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED, null, { timeout: 30_000 });
@@ -185,19 +185,18 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
             const rect = host.querySelector('rect');
             const span = host.querySelector('.nodeLabel');
             window.dispatchEvent(new Event('beforeprint'));
-            const during = { fill: getComputedStyle(rect).fill, color: getComputedStyle(span).color };
+            const during = { fill: getComputedStyle(rect).fill, color: getComputedStyle(span).color,
+                             pca: getComputedStyle(rect).printColorAdjust };
             window.dispatchEvent(new Event('afterprint'));
-            const after = { fill: getComputedStyle(rect).fill, color: getComputedStyle(span).color };
+            const after = { fill: getComputedStyle(rect).fill, color: getComputedStyle(span).color,
+                            pca: getComputedStyle(rect).printColorAdjust };
             host.remove();
             return { during, after };
         });
-        const lum = c => {
-            const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c || '');
-            return m ? (0.299 * +m[1] + 0.587 * +m[2] + 0.114 * +m[3]) / 255 : null;
-        };
-        expect(lum(res.during.fill), `인쇄 중 노드 채우기는 밝게: ${res.during.fill}`).toBeGreaterThan(0.7);
-        expect(res.during.color, `인쇄 중 라벨은 검정으로: ${res.during.color}`).toBe('rgb(0, 0, 0)');
-        expect(res.after.fill, `인쇄 후 채우기 원복: ${res.after.fill}`).toBe('rgb(58, 58, 92)');
+        expect(res.during.fill, `인쇄 중에도 채우기는 화면 색상 그대로: ${res.during.fill}`).toBe('rgb(58, 58, 92)');
+        expect(res.during.color, `인쇄 중에도 라벨은 화면 색상 그대로: ${res.during.color}`).toBe('rgb(255, 255, 255)');
+        expect(res.during.pca, `인쇄 중 print-color-adjust: ${res.during.pca}`).toBe('exact');
+        expect(res.after.fill, `인쇄 후 상태 원복: ${res.after.fill}`).toBe('rgb(58, 58, 92)');
         expect(res.after.color, `인쇄 후 라벨 원복: ${res.after.color}`).toBe('rgb(255, 255, 255)');
     });
 

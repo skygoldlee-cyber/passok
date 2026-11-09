@@ -237,12 +237,16 @@ export const _lum = c => { const rgb = _rgb(c); return rgb ? _lumOf(rgb) : null;
 const _lumOf = rgb => (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
 
 /**
- * 인쇄용 mermaid 색 대비 보정 — 다크 테마로 렌더된 SVG는 어두운 채우기 + 밝은 글자라,
- * HTML 색 보정(밝은 color만 검정화)만 거치면 "어두운 상자 위 검정 글자"로 대비가 붕괴한다.
- * 도형·배경 채우기는 색상 계열을 유지한 밝은 틴트로, 밝은 글자·선은 어둡게 바꿔
- * 백지 출력에서도 구조가 읽히게 한다. 라이트 테마 렌더분은 판정상 거의 무변경이라
- * 양쪽 테마 공통 적용. 라이브 DOM에 적용할 때는 반환된 복원 함수로 되돌린다. (@spec CO-20)
- * @param {ParentNode} root — mermaid svg를 포함한 컨테이너 (computed 측정을 위해 문서 attach 상태)
+ * 인쇄용 mermaid 출력 대비 (화면 색상 유지 — WYSIWYG 하이브리드, @spec CO-20)
+ * 다이어그램 색상은 화면 그대로 인쇄한다 — reader-mermaid.css 토큰이 이미
+ * 어두운 상자+밝은 글자 대비를 보장하므로 색 변경 없이 print-color-adjust만
+ * 부여해 브라우저 인쇄가 CSS 배경을 생략하지 않게 한다 (PDF는 캔버스에 색이
+ * 구워져 무관). 다만 미렌더 블록(벤더 로드 실패로 원문 코드가 그대로 보이는
+ * pre.mermaid)은 밝은 글자가 백지에 묻히므로 그 경우만 색을 백지용으로 보정.
+ * 라이브 DOM에 적용할 때는 반환된 복원 함수로 되돌린다.
+ * 주의: reader-mermaid.css의 색상 규칙은 전부 !important라 우선순위 없는
+ * 인라인 스타일은 패배 — 반드시 'important' 우선순위로 적용한다.
+ * @param {ParentNode} root — mermaid 블록을 포함한 컨테이너 (문서 attach 상태)
  * @param {Window} [win] - root가 속한 창 (별도 인쇄 창 문서는 그 창의 getComputedStyle 필요)
  * @returns {Array<(() => void)>} 원복 함수 목록 (live DOM 복원용)
  */
@@ -253,32 +257,25 @@ export function fixMermaidPrintContrast(root, win = window) {
         const st = /** @type {HTMLElement} */ (el).style;
         const prev = st.getPropertyValue(prop);
         const prio = st.getPropertyPriority(prop);
-        // 인라인 !important 부여 — reader-mermaid.css의 .nodeLabel/.node rect 등
-        // !important 규칙이 일반 인라인 스타일을 이겨 보정이 무력화되던 경로 차단
         undo.push(() => { st.setProperty(prop, prev, prio); });
         st.setProperty(prop, val, 'important');
     };
-    const SHAPE = new Set(['rect', 'polygon', 'circle', 'ellipse', 'path']);
-    const TEXT = new Set(['text', 'tspan']);
-    // pre·svg 루트도 포함 — 다크 테마 themeVariables.background가 svg 루트에
-    // 어두운 배경을 그리므로 하위 요소만 보정하면 다이어그램 전체가 검정 배경으로 출력됨
-    root.querySelectorAll('pre.mermaid, pre.mermaid *').forEach(el => {
-        const cs = win.getComputedStyle(el);
-        const tag = el.tagName.toLowerCase();
-        const fill = _rgb(cs.fill);
-        if (fill) {
-            const fl = _lumOf(fill);
-            if (TEXT.has(tag) && fl > 0.6) set(el, 'fill', '#000'); // 밝은 글자 → 검정
-            else if (SHAPE.has(tag) && fl < 0.35) set(el, 'fill', `rgb(${fill.map(v => Math.round(v + (255 - v) * 0.85)).join(',')})`); // 어두운 도형 → 계열 유지 밝은 틴트
+    root.querySelectorAll('pre.mermaid').forEach(pre => {
+        const els = [pre, ...pre.querySelectorAll('*')];
+        // 브라우저 인쇄는 CSS background를 기본 생략 — 다크 상자·엣지 라벨 배경 유지를 위해 exact
+        for (const el of els) {
+            set(el, 'print-color-adjust', 'exact');
+            set(el, '-webkit-print-color-adjust', 'exact');
         }
-        const stroke = _rgb(cs.stroke);
-        if (stroke && _lumOf(stroke) > 0.55) set(el, 'stroke', '#444'); // 밝은 선 → 어둡게
-        // foreignObject 라벨은 HTML color로 그려짐 — fill 보정만으로는 밝은 글자가
-        // 밝게 틴트된 상자 위에 남아 묻힌다 (window.print·인쇄 창 경로는 color 보정이 없음)
-        const color = _rgb(cs.color);
-        if (color && _lumOf(color) > 0.7) set(el, 'color', '#000'); // 밝은 라벨 글자 → 검정
-        const bg = _rgb(cs.backgroundColor);
-        if (bg && _lumOf(bg) < 0.25) set(el, 'background', 'transparent'); // 어두운 라벨 배경 → 제거
+        if (pre.querySelector('svg')) return; // 렌더 완료 — 화면 색상 그대로 출력
+        // 미렌더 블록(원문 코드·실패 노트) — 밝은 글자가 백지에 묻히므로 백지용 보정
+        for (const el of els) {
+            const cs = win.getComputedStyle(el);
+            const color = _rgb(cs.color);
+            if (color && _lumOf(color) > 0.7) set(el, 'color', '#000');
+            const bg = _rgb(cs.backgroundColor);
+            if (bg && _lumOf(bg) < 0.25) set(el, 'background', 'transparent');
+        }
     });
     return undo;
 }
@@ -304,6 +301,7 @@ export async function pdfFileFromElStyled(el, title) {
     wrap.querySelectorAll('.mermaid-expand-btn').forEach(b => b.remove());
     wrap.querySelectorAll('*').forEach(e2 => {
         const el2 = /** @type {HTMLElement} */ (e2);
+        if (el2.closest('pre.mermaid')) return; // mermaid는 화면 색상 유지 — fixMermaidPrintContrast가 전담
         const cs = getComputedStyle(el2);
         const cl = _lum(cs.color);
         const fl = _lum(cs.webkitTextFillColor);

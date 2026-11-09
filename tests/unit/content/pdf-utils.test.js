@@ -90,17 +90,20 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         assert.match(src, /html2canvas\(wrap, \{ scale/);                    // 고정 2 아닌 적응 배율
     });
 
-    it('mermaid 인쇄 대비 보정 — 어두운 채우기 틴트·밝은 글자 검정 (CO-20)', () => {
+    it('mermaid 인쇄 대비 — 화면 색상 유지(WYSIWYG 하이브리드) + 미렌더 보정 (CO-20)', () => {
         assert.match(src, /export function fixMermaidPrintContrast/);          // 공용 보정 헬퍼
-        assert.match(src, /querySelectorAll\('pre\.mermaid, pre\.mermaid \*'\)/); // pre·svg 루트 포함 순회 (다크 svg 배경 보정)
-        assert.match(src, /'fill', '#000'/);                                 // 밝은 글자 → 검정
-        assert.match(src, /'stroke', '#444'/);                               // 밝은 선 → 어둡게
-        assert.match(src, /'color', '#000'/);                                // foreignObject 라벨 color → 검정
+        // WYSIWYG 계약 — 렌더된 다이어그램은 색 변경 없이 print-color-adjust만 부여
+        assert.match(src, /'print-color-adjust', 'exact'/);                  // 브라우저 인쇄 배경 유지
+        assert.match(src, /pre\.querySelector\('svg'\)\) return/);           // 렌더 완료 블록은 화면 그대로
+        // 미렌더 블록(원문 코드)만 백지 보정 — 밝은 글자가 묻히는 결함 방지
+        assert.match(src, /'color', '#000'/);                                // 밝은 원문 글자 → 검정
         assert.match(src, /'background', 'transparent'/);                    // 어두운 배경 제거
         // 보정 계약 — reader-mermaid.css의 전 규칙이 !important라 우선순위 없는
         // 인라인 스타일은 실제 다이어그램에서 패배한다. 반드시 'important'로 적용.
         assert.match(src, /setProperty\(prop, val, 'important'\)/);          // 인라인 !important 적용
         assert.match(src, /getPropertyPriority\(prop\)/);                    // 원복 시 우선순위 보존
+        // styled 워크는 mermaid 서브트리를 건너뛰어 화면 색상을 유지
+        assert.match(src, /el2\.closest\('pre\.mermaid'\)\) return/);        // 워크 스킵 — 화면 색상 유지
         // PDF 생성 양 경로 + 라이브 복원
         assert.match(src, /fixMermaidPrintContrast\(wrap\)/);                // styled 클론
         assert.match(src, /undoMermaid = fixMermaidPrintContrast\(el\)/);    // plain 라이브

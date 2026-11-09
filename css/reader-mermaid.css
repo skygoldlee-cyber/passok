@@ -4,12 +4,12 @@
 
 /* == 출력 보정 규약 (인쇄·PDF) ==
    이 파일의 mermaid 색상 규칙은 전부 !important다 — 테마 전환 시 렌더-베이크된
-   인라인 fill/color를 CSS 변수로 역전하기 위함. 따라서 출력 시 대비 보정
-   (pdf-utils.js fixMermaidPrintContrast)은 반드시 인라인 'important'
-   우선순위로 적용해야 하며, 일반 인라인 스타일은 이 파일 규칙에 패배한다.
-   새 mermaid 색상 규칙 추가 시에도 동일하게 !important를 유지하고,
-   출력 경로에서 가독성이 깨지면 fixMermaidPrintContrast의 판정(밝기
-   임계값·선택자 커버 범위)도 함께 갱신할 것. */
+   인라인 fill/color를 CSS 변수로 역전하기 위함. 출력은 화면 색상을 그대로
+   유지하는 WYSIWYG 하이브리드가 원칙 — pdf-utils.js fixMermaidPrintContrast가
+   print-color-adjust: exact(인라인 !important)만 부여하고 색은 바꾸지 않는다
+   (미렌더 원문 블록만 백지 보정). 토큰의 상자↔글자 대비가 흔들리는 규칙을
+   추가하면 출력물에서도 그대로 깨지므로 대비를 반드시 함께 검증할 것.
+   새 규칙도 !important를 유지해야 화면·출력이 같은 토큰을 공유한다. */
 
 /* === Mermaid & Story Mode Design Tokens === */
 :root {

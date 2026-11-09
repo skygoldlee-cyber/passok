@@ -210,6 +210,14 @@
         break-inside: avoid;
     }
 
+    /* mermaid 다이어그램은 화면 색상 그대로 출력 (WYSIWYG 하이브리드) —
+       브라우저 인쇄의 CSS 배경 생략을 막아 다크 상자·엣지 라벨 배경 유지 */
+    pre.mermaid,
+    pre.mermaid * {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
     /* 화면용 스크롤 클립 해제 — 인쇄 시 스크롤 상자는 분할·클립되어 내용이 유실됨
        (pre.mermaid의 overflow-x:auto도 y축이 auto로 계산되어 스크롤 상자가 됨) */
     pre.mermaid,
