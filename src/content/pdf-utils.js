@@ -257,7 +257,9 @@ export function fixMermaidPrintContrast(root, win = window) {
     };
     const SHAPE = new Set(['rect', 'polygon', 'circle', 'ellipse', 'path']);
     const TEXT = new Set(['text', 'tspan']);
-    root.querySelectorAll('pre.mermaid svg *').forEach(el => {
+    // pre·svg 루트도 포함 — 다크 테마 themeVariables.background가 svg 루트에
+    // 어두운 배경을 그리므로 하위 요소만 보정하면 다이어그램 전체가 검정 배경으로 출력됨
+    root.querySelectorAll('pre.mermaid, pre.mermaid *').forEach(el => {
         const cs = win.getComputedStyle(el);
         const tag = el.tagName.toLowerCase();
         const fill = _rgb(cs.fill);

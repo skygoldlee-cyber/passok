@@ -36,6 +36,8 @@ async function _stubVendors(page) {
                     ({ tag: e.tagName.toLowerCase(), fill: getComputedStyle(e).fill, stroke: getComputedStyle(e).stroke })),
                 foColor: (() => { const s = el.querySelector('pre.mermaid svg foreignObject .nodeLabel');
                     return s ? getComputedStyle(s).color : null; })(),
+                svgBg: (() => { const s = el.querySelector('pre.mermaid svg');
+                    return s ? getComputedStyle(s).backgroundColor : null; })(),
             };
             const c = document.createElement('canvas');
             c.width = el.offsetWidth * 2; c.height = el.offsetHeight * 2;
@@ -141,7 +143,7 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
             const w = /** @type {any} */ (window);
             const host = document.createElement('div');
             // 다크 테마 렌더분 흉내 — 어두운 노드 채우기 + 밝은 글자·선 + foreignObject 라벨
-            host.innerHTML = '<pre class="mermaid"><svg viewBox="0 0 100 40">' +
+            host.innerHTML = '<pre class="mermaid"><svg viewBox="0 0 100 40" style="background:#1a1a2e">' +
                 '<rect width="100" height="40" style="fill:#3a3a5c;stroke:#b0b0cc"/>' +
                 '<text x="10" y="24" style="fill:#ffffff">라벨</text>' +
                 '<foreignObject x="0" y="0" width="100" height="20"><div xmlns="http://www.w3.org/1999/xhtml">' +
@@ -150,7 +152,7 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
             try {
                 const { pdfFileFromElStyled } = await import('/src/content/pdf-utils.js');
                 await pdfFileFromElStyled(host, 't');
-                return { fills: w.__layout.svgFills, foColor: w.__layout.foColor };
+                return { fills: w.__layout.svgFills, foColor: w.__layout.foColor, svgBg: w.__layout.svgBg };
             } finally { host.remove(); }
         });
         const lum = c => {
@@ -163,6 +165,7 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
         expect(lum(rect.stroke), `밝은 선은 어둡게: ${rect.stroke}`).toBeLessThan(0.45);
         expect(text.fill, '밝은 글자는 검정으로').toBe('rgb(0, 0, 0)');
         expect(res.foColor, `foreignObject 라벨도 검정으로: ${res.foColor}`).toBe('rgb(0, 0, 0)');
+        expect(res.svgBg, `svg 루트의 다크 배경은 제거: ${res.svgBg}`).toBe('rgba(0, 0, 0, 0)');
     });
 
     test('window.print 경로 — beforeprint 보정·afterprint 원복 (initPrintPrep)', async ({ page }) => {

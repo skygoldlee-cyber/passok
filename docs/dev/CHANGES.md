@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(print): mermaid svg 루트 다크 배경 보정 — 다이어그램 전체가 검정 배경으로 출력되던 결함
+
+- 다크 테마 themeVariables.background(#1a1a2e)가 svg 루트에 어두운 배경을 그림 — 보정 선택자가 `pre.mermaid svg *`라 루트가 빠져 window.print·인쇄 창 경로에서 다이어그램 전체가 검정 배경+검정 글자로 출력 (styled PDF는 기존 HTML 보정이 덮어 정상이었음)
+- 선택자를 `pre.mermaid, pre.mermaid *`로 확장 — pre·svg 루트의 어두운 배경도 transparent 보정
+- e2e — svg 루트 background가 transparent로 보정되는지 실측 검증 추가
+
 ## 2026-11-09 fix(print): mermaid foreignObject 라벨 color 추가 보정 — window.print 경로 흰 글자 묻힘
 
 - 최신 mermaid는 노드 라벨을 foreignObject HTML(color)로 렌더 — fill/stroke만 다루던 보정이 color를 놓쳐, color 보정이 없는 경로(window.print·참조자료 인쇄 창·plain PDF)에서 밝게 틴트된 상자 위 흰 글자가 묻힘

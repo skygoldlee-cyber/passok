@@ -92,7 +92,7 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
 
     it('mermaid 인쇄 대비 보정 — 어두운 채우기 틴트·밝은 글자 검정 (CO-20)', () => {
         assert.match(src, /export function fixMermaidPrintContrast/);          // 공용 보정 헬퍼
-        assert.match(src, /querySelectorAll\('pre\.mermaid svg \*'\)/);        // 다이어그램 하위 요소 순회
+        assert.match(src, /querySelectorAll\('pre\.mermaid, pre\.mermaid \*'\)/); // pre·svg 루트 포함 순회 (다크 svg 배경 보정)
         assert.match(src, /setProperty\(prop, 'fill', '#000'\)|'fill', '#000'/); // 밝은 글자 → 검정
         assert.match(src, /'stroke', '#444'/);                               // 밝은 선 → 어둡게
         // PDF 생성 양 경로 + 라이브 복원
