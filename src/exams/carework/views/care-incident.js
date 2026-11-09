@@ -14,6 +14,8 @@ import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
+export { careVoiceToggle } from '../care-voice.js';
+import { voiceButtonsInit } from '../care-voice.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -175,6 +177,7 @@ function _renderPhotos() {
 
 export function initCareIncidentView() {
     markFunnel('tool:care-incident');
+    voiceButtonsInit(); // 음성 입력 미지원 브라우저는 🎤 숨김
     attachClientPicker(/** @type {HTMLInputElement|null} */ ($('inc-client')));
     const d = /** @type {HTMLInputElement|null} */ ($('inc-date'));
     if (d && !d.value) d.value = todayKey();

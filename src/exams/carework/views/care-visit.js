@@ -12,6 +12,8 @@ import { todayKey } from '../../../core/utils.js';
 import { docMdHead, docMdSign, csvToMdTable, mdToHtml } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 export { careShare } from '../care-share.js';
+export { careVoiceToggle } from '../care-voice.js';
+import { voiceButtonsInit } from '../care-voice.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -249,6 +251,7 @@ export async function careVisitFacilitySubmit() {
 
 export function initCareVisitView() {
     markFunnel('tool:care-visit');
+    voiceButtonsInit(); // 음성 입력 미지원 브라우저는 🎤 숨김
     attachClientPicker(/** @type {HTMLInputElement|null} */ ($('vis-client')));
     const d = /** @type {HTMLInputElement|null} */ ($('vis-date'));
     if (d && !d.value) d.value = todayKey();

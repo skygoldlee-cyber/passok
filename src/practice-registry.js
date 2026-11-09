@@ -514,7 +514,7 @@ const careVisit = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-visit.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careVisitAdd', 'careVisitResultOpen', 'careVisitResultSave', 'careVisitResultClose', 'careVisitCancel', 'careVisitDelete', 'careVisitPreview', 'careVisitPrint', 'careVisitCsvExport', 'careVisitFacilitySubmit', 'careVisitDocMd', 'careVisitPhotoPick', 'careVisitPhotoRemove']]],
+    handlers: [['main', ['careVisitAdd', 'careVisitResultOpen', 'careVisitResultSave', 'careVisitResultClose', 'careVisitCancel', 'careVisitDelete', 'careVisitPreview', 'careVisitPrint', 'careVisitCsvExport', 'careVisitFacilitySubmit', 'careVisitDocMd', 'careVisitPhotoPick', 'careVisitPhotoRemove', 'careVoiceToggle']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
@@ -580,7 +580,7 @@ const careIncident = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-incident.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careIncidentGenerate', 'careIncidentSave', 'careIncidentPrint', 'careIncidentCsvExport', 'careIncidentDelete', 'careIncidentFacilitySubmit', 'careIncidentDocMd', 'careIncidentPhotoPick', 'careIncidentPhotoRemove']]],
+    handlers: [['main', ['careIncidentGenerate', 'careIncidentSave', 'careIncidentPrint', 'careIncidentCsvExport', 'careIncidentDelete', 'careIncidentFacilitySubmit', 'careIncidentDocMd', 'careIncidentPhotoPick', 'careIncidentPhotoRemove', 'careVoiceToggle']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
