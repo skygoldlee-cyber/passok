@@ -179,3 +179,31 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         clickSpy.mockRestore();
     });
 });
+
+describe('실제 pdf-utils 생성 경로 — 스텁 벤더 smoke (신규 코드 실행 커버리지)', () => {
+    it('pdfFileFromElStyled·pdfFileFromEl이 File을 반환하고 라이브 details를 복원한다', async () => {
+        // 앞 describe의 doMock 잔존 해제 후 실제 모듈 로드 — 신규 경로(분할·배율·details) 실행
+        vi.doUnmock('../../../src/content/pdf-utils.js');
+        vi.resetModules();
+        window.html2canvas = vi.fn(async () => ({ width: 100, height: 100, getContext: () => null }));
+        window.jspdf = { jsPDF: class {
+            addImage() {} addPage() {} setPage() {} setFontSize() {} setTextColor() {} text() {}
+            getNumberOfPages() { return 1; }
+            output() { return new Blob(['x']); }
+        } };
+        const { pdfFileFromElStyled, pdfFileFromEl } = await import('../../../src/content/pdf-utils.js');
+        const host = document.createElement('div');
+        host.innerHTML = '<details><summary>s</summary><p>본문</p></details><table><thead><tr><th>h</th></tr></thead><tbody><tr><td>1</td></tr></tbody></table>';
+        document.body.appendChild(host);
+        const live = document.createElement('div');
+        live.innerHTML = '<details><summary>s</summary><p>본문</p></details>';
+        document.body.appendChild(live);
+        try {
+            const f1 = await pdfFileFromElStyled(host, 'styled');
+            expect(f1.name).toBe('styled.pdf');
+            const f2 = await pdfFileFromEl(live, 'plain');
+            expect(f2.type).toBe('application/pdf');
+            expect(live.querySelector('details').open).toBe(false); // 라이브 details는 렌더 후 복원
+        } finally { host.remove(); live.remove(); }
+    });
+});

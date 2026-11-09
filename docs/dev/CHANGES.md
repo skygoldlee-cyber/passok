@@ -3,7 +3,8 @@
 
 ## 2026-11-09 test(print): initPrintPrep DOM 테스트 — statements 커버리지 임계값 복구
 
-- tests/dom/reader/print-prep.dom.test.js — beforeprint 스크롤 클립·lazy 해제 + afterprint 복원 실동작 검증 (CI 커버리지 statements 66.94 → 67.01 임계 복구)
+- tests/dom/reader/print-prep.test.js — beforeprint 스크롤 클립·lazy 해제 + afterprint 복원 실동작 검증
+- print-pdf.test.js — 실제 pdf-utils 생성 경로 smoke(스텁 벤더·File 반환·라이브 details 복원) — CI 커버리지 statements 66.94 → 67.45 임계 복구
 
 ## 2026-11-09 feat(pdf): 생성 PDF 개선 5종 — 표 헤더 반복·캔버스 상한·details·E2E·용량
 
