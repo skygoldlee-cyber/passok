@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
-// @spec PF-19 — 이미지 자산 형식 제한 (webp·svg만, PNG 예외 화이트리스트)
+// @spec PF-19 — 이미지 자산 형식 제한 (webp·svg만 허용, 예외 화이트리스트)
 const src = readFileSync('tools/check/check_filenames.js', 'utf8');
 
 test('check_filenames 이미지 형식 규칙 — 금지 확장자·대상 디렉터리·화이트리스트 (PF-19)', () => {

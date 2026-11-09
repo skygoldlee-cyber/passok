@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: e1fb3bb92c8ef55d
+> 입력 해시: ad0cfb082ee61d55
 > 생성: 2026-11-09 · 원천: SPEC.md(692개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
