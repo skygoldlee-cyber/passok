@@ -65,7 +65,7 @@ async function dismissOverlays(page) {
     await page.waitForTimeout(400);
     // 토스트·배너·업데이트 알림 제거 — 스냅샷을 깨끗하게
     await page.evaluate(() => {
-        document.querySelectorAll('.app-toast, .toast, .sw-toast, .consent-banner, .app-banner, [id*="toast"], [class*="toast"], [class*="banner"], [class*="update"], dialog[open]:not(#app-confirm-overlay)').forEach(e => e.remove());
+        document.querySelectorAll('.app-toast, .toast, .sw-toast, .consent-banner, .app-banner, [id*="toast"], [class*="toast"], [class*="banner"], [class*="update"], dialog[open]:not(#app-confirm-overlay), [class*="backdrop"], [class*="dim"]').forEach(e => e.remove());
         document.body.style.background = '#f5f5f4';
         document.body.style.backgroundImage = 'none';
     });
@@ -147,9 +147,9 @@ const SHOTS = {
     // ① 더보기 전후 — 합성 2장
     'manual-01-more': async (page) => {
         await page.goto(`${BASE}/#/care-log`, { waitUntil: 'networkidle' });
-        const det = page.locator('details.care-more-actions').first();
+        const det = page.locator('.care-calc-actions').first();
         const before = await det.screenshot().catch(() => null);
-        await det.evaluate(d => { d.open = true; });
+        await page.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
         await page.waitForTimeout(300);
         const after = await det.screenshot();
         await snapComposite(page, 'manual-01-more', [before || after, after]);
@@ -162,7 +162,9 @@ const SHOTS = {
     'manual-02-home': async (page) => {
         await page.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
         await page.waitForSelector('#care-home-view .care-home-card', { timeout: 15000 });
-        await snap(page, 'manual-02-home', '#care-home-view .care-home-card');
+        const h1 = await shotPng(page, '#care-home-view > * >> nth=0');
+        const h2 = await shotPng(page, '#care-home-view > * >> nth=1').catch(() => null);
+        await snapComposite(page, 'manual-02-home', h2 ? [h1, h2] : [h1]);
     },
     // ② 서명 카드
     'manual-02-sign': async (page) => {
@@ -280,7 +282,7 @@ const SHOTS = {
         await page.evaluate(() => { document.getElementById('care-grade').value='1'; document.getElementById('care-type').value='home'; document.getElementById('care-use').value='1200000'; });
         await page.locator('[data-click="careCalcRun"]').click();
         await page.waitForSelector('#care-result .care-doc', { timeout: 8000 });
-        await snap(page, 'manual-12-calc', '#care-result');
+        await snap(page, 'manual-12-calc', '#care-result .care-doc, #care-result');
     },
     // ⑬ 기관찾기 결과
     'manual-13-finder': async (page) => {
@@ -295,7 +297,9 @@ const SHOTS = {
     // ⑭ 서식모음
     'manual-14-forms': async (page) => {
         await page.goto(`${BASE}/#/care-forms`, { waitUntil: 'networkidle' });
-        await snap(page, 'manual-14-forms', '#care-forms-view .care-home-card, #care-forms-view .care-calc-form');
+        const f1 = await shotPng(page, '#care-forms-view > * >> nth=0');
+        const f2 = await shotPng(page, '#care-forms-view > * >> nth=1').catch(() => null);
+        await snapComposite(page, 'manual-14-forms', f2 ? [f1, f2] : [f1]);
     },
 };
 
@@ -330,7 +334,9 @@ async function main() {
                 await bp.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
                 await bp.locator('.care-more-actions-list [data-click="careIncidentSave"]').click({ force: true });
                 await bp.waitForTimeout(1500);
-                await snap(bp, 'manual-01-badge', '#inc-saved');
+                const vb = await shotPng(bp, bp.locator('#inc-desc').locator('..'));
+        const bd = await shotPng(bp, '#inc-saved');
+        await snapComposite(bp, 'manual-01-badge', [vb, bd]);
                 await b.close();
             } else if (n === 'manual-01-share') { // 모바일 뷰포트 — 공유 시트 항목 포함 6개
                 const m = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ko-KR', isMobile: true, hasTouch: true });
