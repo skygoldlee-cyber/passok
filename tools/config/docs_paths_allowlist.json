@@ -387,5 +387,20 @@
     "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
     "ref": "tests/.auth/*.json",
     "reason": "E2E 구축 가이드의 세션 상태 파일 경로 — gitignore 대상 (Phase 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md",
+    "ref": "tests/e2e/db/",
+    "reason": "E2E 구현 설계의 제안 디렉터리 — Supabase 검증 스크립트 (Phase 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md",
+    "ref": "tests/.auth/",
+    "reason": "E2E 구현 설계의 세션 상태 디렉터리 — gitignore 대상 (Phase 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md",
+    "ref": "tests/.auth/*.json",
+    "reason": "E2E 구현 설계의 세션 상태 파일 경로 — gitignore 대상 (Phase 1 미구현)"
   }
 ]
