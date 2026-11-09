@@ -25,6 +25,21 @@
 .light-theme .care-calc-form select option { background-color: var(--bg-input); }
 .care-calc-actions { display: flex; gap: var(--gap-ctl); flex-wrap: wrap; }
 .care-calc-actions button { min-height: var(--control-h-md); padding: 0 18px; border-radius: 8px; font-weight: 600; }
+/* 보조 버튼 접기 — "더보기" (주 사용 패턴 생성·공유만 노출, 시니어 선택 부담 감소) */
+.care-calc-actions .care-more-actions { position: relative; }
+.care-calc-actions .care-more-actions > summary {
+    list-style: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: var(--space-1-5);
+    min-height: var(--control-h-md); padding: 0 18px; border-radius: 8px; font-weight: 600;
+}
+.care-calc-actions .care-more-actions > summary::-webkit-details-marker { display: none; }
+.care-calc-actions .care-more-actions > summary::after { content: ' ▾'; }
+.care-calc-actions .care-more-actions[open] > summary::after { content: ' ▴'; }
+.care-calc-actions .care-more-actions-list {
+    display: flex; gap: var(--gap-ctl); flex-wrap: wrap;
+    margin-top: var(--gap-ctl); padding-top: var(--gap-ctl);
+    border-top: 1px dashed var(--border-color);
+}
 .care-calc-err { color: var(--color-danger, #f87171); font-size: 14px; }
 
 /* 결과 카드 — 영수증형 */

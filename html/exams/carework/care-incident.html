@@ -19,9 +19,14 @@
         <label class="care-log-merge"><input id="inc-family" type="checkbox"> 가족 통지 완료</label>
         <div class="care-calc-actions">
             <button class="btn" data-click="careIncidentGenerate">📝 보고서 생성</button>
-            <button data-click="careIncidentSave" class="btn btn-secondary">💾 기록 저장 <span class="pro-badge" data-pro-feature="care_incident_save">PRO</span></button>
-            <button data-click="careIncidentFacilitySubmit" class="btn btn-secondary">🏥 기관에 공유 <span class="pro-badge" data-pro-feature="care_incident_share">PRO</span></button>
             <button data-click="careShare" data-arg="#inc-preview pre|사고보고서|mask|careIncidentGenerate|careIncidentCsvExport|careIncidentPrint|care_incident_share|careIncidentDocMd" class="btn btn-secondary">📤 공유·내보내기</button>
+            <details class="care-more-actions">
+                <summary class="btn btn-secondary">더보기</summary>
+                <div class="care-more-actions-list">
+                    <button data-click="careIncidentSave" class="btn btn-secondary">💾 기록 저장 <span class="pro-badge" data-pro-feature="care_incident_save">PRO</span></button>
+                    <button data-click="careIncidentFacilitySubmit" class="btn btn-secondary">🏥 기관에 공유 <span class="pro-badge" data-pro-feature="care_incident_share">PRO</span></button>
+                </div>
+            </details>
         </div>
     </div>
     <div id="inc-preview" class="care-calc-result"></div>

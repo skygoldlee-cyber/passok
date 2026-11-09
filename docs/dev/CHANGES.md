@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 feat(carework): 시니어 사용성 — 액션 버튼 더보기 접기 + 반복 입력 자동 기입
+
+- A② 액션 버튼 단순화: 인수인계·사고보고·요양일지의 보조 버튼(AI 초안·저장·기관 공유·제공기록지 등)을 `<details>` "더보기"로 접고 생성·공유·내보내기만 노출 — JS 없는 details/summary 패턴, `.care-more-actions` 공용 스타일
+- A④ 반복 입력 자동 기입: 인수인계(근무조·인계자·인수자)·사고보고(장소·성명·시간대·목격자)를 저장 시 persist, 다음 진입 시 빈 필드에 복원 — CARE_LAST_INCIDENT/CARE_LAST_HANDOVER 키, 서명 기본값 우선
+- 계약 테스트 tests/unit/exams/carework-autofill.test.js 추가
+
 ## 2026-11-09 fix(ui): '가 글자 크게' 잔재 제거 — ui-mode 토글 문자열·템플릿 2곳 정정
 
 - applyFontScale이 토글 때마다 레이블을 '가 글자 크게/더 크게'로 덮어써 HTML만 고치면 되돌아오는 구조였음 — ui-mode.js 문자열 + index.template.html(사이드바·모바일 탭) 정정으로 '글자 크게/글자 더 크게' 통일

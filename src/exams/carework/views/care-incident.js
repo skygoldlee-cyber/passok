@@ -9,7 +9,7 @@ import { myMembership, submitIncident, listIncidents as listFacilityIncidents, d
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docMdHead, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
-import { getJSON, removeItem } from '../../../core/storage.js';
+import { getJSON, setJSON, removeItem } from '../../../core/storage.js';
 import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
@@ -67,7 +67,11 @@ export function careIncidentSave() {
     careIncidentGenerate();
     if (!_lastText) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
     const r = saveIncident({ ...readForm(), text: _lastText });
-    if (r.ok) { showToast('보고서를 기록했습니다.'); renderSaved(); flashSavedBadge($('inc-saved')); }
+    if (r.ok) {
+        // 반복 입력 자동 기입 — 장소·성명·시간대·목격자는 다음 보고서에 기본값으로 (시니어 입력 부담 감소)
+        setJSON(STORAGE_KEYS.CARE_LAST_INCIDENT, { place: _val('inc-place', ''), client: _val('inc-client', ''), time: _val('inc-time', ''), witness: _val('inc-witness', '') });
+        showToast('보고서를 기록했습니다.'); renderSaved(); flashSavedBadge($('inc-saved'));
+    }
 }
 
 export function careIncidentPrint() {
@@ -159,6 +163,14 @@ export function initCareIncidentView() {
         removeItem(STORAGE_KEYS.CARE_INCIDENT_DRAFT);
         if (draft.type && t) /** @type {HTMLSelectElement} */ (t).value = draft.type;
         if (draft.desc) { const de = /** @type {HTMLInputElement|null} */ ($('inc-desc')); if (de) de.value = draft.desc; }
+    }
+    // 마지막 저장값 자동 기입 — 반복 입력(장소·성명·시간대·목격자) 기본값 복원 (빈 필드만)
+    const last = getJSON(STORAGE_KEYS.CARE_LAST_INCIDENT);
+    if (last && typeof last === 'object') {
+        for (const [k, v] of Object.entries(last)) {
+            const el = /** @type {HTMLInputElement|null} */ ($(`inc-${k}`));
+            if (el && !el.value && typeof v === 'string' && v) el.value = v;
+        }
     }
     renderSaved();
     void renderFacility();
