@@ -186,6 +186,44 @@
         border: 1px solid var(--print-fg) !important;
     }
 
+    /* 다이어그램·그림·인용 절단 방지 — 활성 뷰(리더·검색 등) 인쇄 시 페이지 중간에서 쪼개지 않음 */
+    pre.mermaid,
+    .reader-img,
+    figure,
+    blockquote {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    /* 표·이미지 절단 방지 — 시험 팩 공통: 문서형 출력물의 표 행·삽화는
+       페이지 중간에서 쪼개지 않고, 넘어간 페이지에는 헤더 행을 반복한다.
+       tr에만 걸면 무시하는 엔진이 있어 td·th에도 지정 (fp-table 규약과 동일) */
+    tr, td, th {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+    thead {
+        display: table-header-group;
+    }
+    img {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* 화면용 스크롤 클립 해제 — 인쇄 시 스크롤 상자는 분할·클립되어 내용이 유실됨
+       (pre.mermaid의 overflow-x:auto도 y축이 auto로 계산되어 스크롤 상자가 됨) */
+    pre.mermaid,
+    .reader-code-block,
+    .reader-table-wrapper {
+        overflow: visible !important;
+        max-height: none !important;
+    }
+
+    /* 다이어그램 확대 버튼 — 화면 전용 컨트롤이라 인쇄에서 제외 */
+    .mermaid-expand-btn {
+        display: none !important;
+    }
+
     /* ============================================================
        Formula OS 조제 기록지 — body.formula-printing 시 전용 영역만 출력
        ============================================================ */

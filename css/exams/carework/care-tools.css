@@ -246,6 +246,9 @@
     .care-audit-progress { border-color: var(--print-border-strong, #9ca3af); background: #fff; color: #000; }
     .care-doc-sign span { color: #000; border-color: var(--print-border-strong, #9ca3af); }
     .care-doc-disclaimer { color: var(--print-muted, #555); }
+    /* 문서형 표 스크롤 상자 해제 — 화면용 display:block+overflow-x:auto는 인쇄 시
+       클립·분할되어 행이 잘리거나 내용이 유실된다 (행 절단 방지는 print.css 전역 규약) */
+    .doc-md table { display: table !important; overflow: visible !important; }
 }
 
 .care-calc-rates { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: var(--space-1) 0 var(--gap-ctl); }

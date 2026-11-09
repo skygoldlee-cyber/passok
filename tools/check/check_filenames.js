@@ -11,6 +11,7 @@
  *   docs 하위 모든 .md            SCREAMING_SNAKE 시작 또는 한글 포함
  *   *.json                        snake 또는 kebab 단일 패턴 (혼용 금지)
  *   이미지·음성 확장자            kebab-case (content/** 한글 자산 면제)
+ *   content/, icons/ 이미지 형식   webp·svg만 — PNG 예외는 화이트리스트 (PF-19, §2.2)
  *   src/ html/ css/ tests/ .github/workflows/   kebab-case
  *   tools/                        snake_case
  *
@@ -36,6 +37,12 @@ const HANGUL = /[가-힯]/;
 
 const ASSET_EXT = /\.(svg|png|jpe?g|webp|gif|mp3|mp4|wav|ico|woff2?|ttf)$/i;
 
+// PF-19 이미지 형식 — 배포 산출물 이미지는 래스터 webp·벡터 svg만 (CODE_CONVENTIONS §2.2)
+const IMG_FORMAT_DIRS = /^(content|icons)\//;
+const IMG_BANNED = /\.(png|jpe?g|gif|bmp|avif)$/i;
+// PNG 허용 화이트리스트 — PWA 매니페스트·apple-touch·favicon·OG 이미지 (iOS 설치·외부 크롤러 호환)
+const ICON_PNG_ALLOW = /^icons\/(apple-touch|favicon|passok|og-image)[^/]*\.png$/i;
+
 /** 파일 경로 → 위반 사유 (null이면 준수) */
 function check(file) {
     const base = path.basename(file);
@@ -55,6 +62,10 @@ function check(file) {
         if (KEBAB.test(s) || SNAKE.test(s)) return null;
         if (KEBAB_OR_SNAKE.test(s) && !MIXED_SEP.test(s.replace(/[_-]/g, m => m))) return null;
         return `json 파일명은 snake 또는 kebab 단일 패턴 (${stem})`;
+    }
+    // 이미지 형식 규약 — content/icons 신규 이미지는 webp·svg만, 예외는 화이트리스트 (PF-19)
+    if (IMG_BANNED.test(base) && IMG_FORMAT_DIRS.test(file) && !ICON_PNG_ALLOW.test(file)) {
+        return `이미지 형식은 webp·svg만 허용 (${base} — 예외는 CODE_CONVENTIONS §2.2 화이트리스트)`;
     }
     // 자산 확장자 — kebab (content/** 한글 자산 면제)
     if (ASSET_EXT.test(base)) {

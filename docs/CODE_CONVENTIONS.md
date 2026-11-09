@@ -48,6 +48,18 @@
 | 이미지·음성 자산 (`svg\|png\|jpg\|webp\|mp3\|mp4` …) | `kebab-case` — `content/` 한글 자산은 면제 | `discord-invite-qr.svg` |
 | 루트(깊이 0) 파일 | 규약 면제 (관습적 이름) | `serve.js`, `package.json`, `AGENTS.md` |
 
+### 2.2 이미지 자산 형식 규칙 (SPEC PF-19)
+
+배포 산출물의 이미지는 **래스터 `.webp` · 벡터 `.svg`만 허용** — 용량(webp는 png 대비 30~70% 절감)과 유지보수성(단일 변환 파이프라인) 확보. 현행 자산은 이미 수렴(2026-11 기준 `content/` 내 7,627 webp·23 svg·png 1)이라 **신규 파일만 적용**, 기존 일탈은 `filename_baseline` 패턴으로 승계.
+
+- 대상: `content/`·`icons/` 등 배포 스테이징에 실리는 이미지
+- **예외 화이트리스트** (PNG 유지 필수):
+  1. PWA 매니페스트·`apple-touch-icon`·`favicon-*.png` — iOS 설치 아이콘·레거시 브라우저 호환
+  2. `icons/og-image.png` — 카카오톡·트위터 등 외부 크롤러가 webp 미지원
+  3. `tests/e2e/*-snapshots/`·`docs/` 이미지 — 배포 비대상 (앱 서빙 경로 아님)
+- 금지 확장자(신규): `.png`·`.jpg`·`.jpeg`·`.gif`·`.bmp`·`.avif` — 교재·삽화는 webp, 도식·다이어그램은 svg로 유입
+- 게이트 적용: `check_filenames` 계열 확장 (파일명 규약과 동일한 baseline 승계 패턴)
+
 ## 3. 언어·서식
 
 - **ES Modules 전용** (`import`/`export`) — 클래식 스크립트는 §2 한정 예외

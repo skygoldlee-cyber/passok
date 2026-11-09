@@ -27,6 +27,38 @@ export function initViewportHeight() {
 }
 
 
+// --- 인쇄 전 처리 ---
+// 화면용 스크롤 상자(.textbook-reader-content 등)와 loading=lazy 이미지는 인쇄 시
+// 스크롤포트만 출력되거나 빈 칸으로 나온다 — 인쇄 직전에 해제하고 직후 복원한다.
+// 활성 뷰·문서 오버레이 등 window.print() 경로 전체에 걸리는 시험 공통 안전망.
+export function initPrintPrep() {
+    /** @type {HTMLElement[]} 해제한 요소(원래 인라인 스타일 보존) */
+    let _undone = [];
+    const _cssText = new WeakMap();
+    window.addEventListener('beforeprint', () => {
+        _undone = [];
+        // lazy 이미지는 미로드 상태로 인쇄되면 빈 칸 — eager로 전환해 로드를 시작시킴
+        document.querySelectorAll('img[loading="lazy"]').forEach(img => img.removeAttribute('loading'));
+        // 세로 스크롤이 실제 발생한 상자만 해제 — 스크롤포트 출력분을 전체 내용으로 펼침
+        document.querySelectorAll('*').forEach(el => {
+            if (el.scrollHeight - el.clientHeight > 2) {
+                const cs = getComputedStyle(el);
+                if (cs.overflowY !== 'visible' || cs.maxHeight !== 'none') {
+                    const el2 = /** @type {HTMLElement} */ (el);
+                    _cssText.set(el2, el2.style.cssText);
+                    _undone.push(el2);
+                    el2.style.overflow = 'visible';
+                    el2.style.maxHeight = 'none';
+                }
+            }
+        });
+    });
+    window.addEventListener('afterprint', () => {
+        _undone.forEach(el => { el.style.cssText = _cssText.get(el) || ''; });
+        _undone = [];
+    });
+}
+
 // --- 가로/세로 보기 ---
 // 실제 기기 회전 + 반응형 CSS가 가로/세로를 직접 처리하므로
 // 가로/세로 보기 토글 — landscape-mode 클래스를 토글하고 상태를 저장

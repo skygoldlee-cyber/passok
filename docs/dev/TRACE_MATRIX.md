@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 4ee803f6afb87942
-> 생성: 2026-11-08 · 원천: SPEC.md(689개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 3ed9f9f35757dd5a
+> 생성: 2026-11-09 · 원천: SPEC.md(692개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 689개 — 문서 연결 464 · 소스 연결 613 · 테스트 연결 654 · 보고서 연결 109
+**커버리지 요약**: 요구사항 692개 — 문서 연결 469 · 소스 연결 614 · 테스트 연결 656 · 보고서 연결 109
 
 ---
 
@@ -505,12 +505,13 @@
 | AD-04 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
 | AD-05 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
 | AD-06 | ✅ | 테스트 | DOC-DSN-30 | tools/check/feedback_report.js<br>tools/check/grant_pro.js<br>tools/check/user_report.js<br>tools/lib/supabase_ops.js | tests/unit/app/feedback-report.test.js<br>tests/unit/app/grant-pro.test.js<br>tests/unit/app/user-report.test.js | — | — |
-| AD-07 | ✅ | 테스트 | — | tools/check/dashboard_report.js | tests/unit/app/dashboard-report.test.js | — | — |
-| AD-08 | ✅ | 테스트 | — | tools/check/user_report.js | tests/unit/app/user-report.test.js | — | — |
-| AD-09 | ✅ | 테스트 | — | tools/check/pro_report.js | tests/unit/app/pro-report.test.js | — | — |
-| AD-10 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-RBK-17<br>DOC-RBK-18 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
-| AD-11 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-RBK-17 | tools/deploy/register_admin_bot.js<br>tools/supabase/functions/admin-bot/index.ts | tests/unit/gates/admin-bot-contract.test.js | — | — |
-| AD-12 | ✅ | 테스트 | DOC-DSN-37 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
+| AD-07 | ✅ | 테스트 | DOC-DSN-30 | tools/check/dashboard_report.js | tests/unit/app/dashboard-report.test.js | — | — |
+| AD-08 | ✅ | 테스트 | DOC-DSN-30 | tools/check/user_report.js | tests/unit/app/user-report.test.js | — | — |
+| AD-09 | ✅ | 테스트 | DOC-DSN-30 | tools/check/pro_report.js | tests/unit/app/pro-report.test.js | — | — |
+| AD-10 | ✅ | 테스트 | DOC-DSN-30<br>DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-90<br>…외 2개 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
+| AD-11 | ✅ | 테스트 | DOC-DSN-30<br>DOC-DSN-36<br>DOC-DSN-37<br>DOC-RBK-17 | tools/deploy/register_admin_bot.js<br>tools/supabase/functions/admin-bot/index.ts | tests/unit/gates/admin-bot-contract.test.js | — | — |
+| AD-12 | ✅ | 테스트 | DOC-DSN-30<br>DOC-DSN-37 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
+| AD-13 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
 
 ## 3.27 AI 제작 지원
 
@@ -626,6 +627,7 @@
 | CO-18 | 부분 구현 | 테스트 | — | src/exams/carework/form-seeds.js<br>src/exams/carework/views/care-custom-form.js | tests/dom/exams/carework/care-views.test.js | — | — |
 | CO-19 | 부분 구현 | 테스트 | — | src/exams/carework/audit-import.js<br>src/exams/carework/care-audit.js<br>src/exams/carework/views/care-audit.js | tests/dom/exams/carework/care-views.test.js<br>tests/unit/exams/carework/audit-import.test.js | — | — |
 | CO-20 | ✅ | 테스트 | — | src/content/pdf-utils.js<br>src/exams/carework/care-share.js<br>src/reader/exam-viewer.js<br>src/reader/manual-viewer.js | tests/dom/reader/print-pdf.test.js<br>tests/unit/content/pdf-utils.test.js | — | — |
+| CO-21 | ✅ | E2E 테스트 | — | src/content/pdf-utils.js<br>src/reader/exam-viewer.js<br>src/reader/manual-viewer.js | tests/dom/reader/print-pdf.test.js<br>tests/dom/reader/print-prep.test.js<br>tests/e2e/pdf-pagination.spec.js<br>tests/unit/content/pdf-utils.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
@@ -693,7 +695,8 @@
 | PF-15 | ✅ | 테스트 | — | ref-pipeline/convert.py | tests/unit/gates/perf-invariants.test.js | — | — |
 | PF-16 | ✅ | 테스트 | — | src/reader/mermaid-render.js | tests/unit/gates/perf-invariants.test.js | — | — |
 | PF-17 | ✅ | 테스트 | DOC-DSN-20 | — | tests/unit/gates/perf-invariants.test.js | — | — |
-| PF-18 | ✅ (목표 확정) | — | — | — | — | — | — |
+| PF-18 | ✅ (목표 확정) | 문서 검토 | DOC-DSN-90 | — | — | — | — |
+| PF-19 | ✅ | 테스트 | — | — | tests/unit/tools/check-filenames.test.js | — | — |
 
 ## 4.5 접근성
 
@@ -1036,7 +1039,7 @@
 | DOC-DSN-20 | docs/dev/design/VENDOR_MANAGEMENT_DESIGN.md | BP-13, DA-02, PF-17 |
 | DOC-DSN-21 | docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md | AN-02, D-08, DR-01, DR-02, DR-04, DR-05, ROAD-L5, ROAD-P0, ROAD-P5, RV-01, RV-02, RV-03, RV-04, SC-08, SC-09, SC-10, SC-11, SC-12, SC-13, T-01, T-02, T-03, T-04, T-05, UX-GATE-01, UX-GATE-02, UX-GATE-03, UX-MET-01, UX-MET-02, UX-MET-03, UX-MET-04, UX-NAV-07, UX-NAV-08, UX-NAV-12, UX-NAV-13, UX-NAV-14 |
 | DOC-DSN-25 | docs/dev/design/UIUX_DESIGN_GUIDE.md | A-01, A-02, A-03, A-04, A-05, A-06, A-07, ES-02, R-01, R-02, R-03, R-04, R-05, R-06, R-07, R-08, TH-01, TH-02, TH-03, TH-04, TH-05, TH-06, UM-01, UM-02, UM-03, UM-04, UM-05, UX-FB-01, UX-FB-02, UX-FB-03, UX-FB-04, UX-FB-05, UX-FB-06, UX-FORM-01, UX-FORM-02, UX-NAV-01, UX-NAV-02, UX-NAV-03, UX-NAV-04, UX-NAV-05, UX-NAV-06, UX-NAV-07, UX-NAV-08, UX-NAV-09, UX-NAV-10, UX-NAV-11, UX-NAV-12, UX-NAV-13, UX-NAV-14, UX-PWA-01, UX-PWA-02, UX-PWA-03, UX-PWA-04, UX-PWA-05, UX-SCR-01, UX-SCR-02, UX-SET-01, UX-SET-02, UX-SET-03, UX-SET-04, UX-SET-05, UX-VFY-01, UX-VFY-02, UX-VFY-03, UX-VFY-04, UX-VFY-05, UX-VFY-06 |
-| DOC-DSN-30 | docs/dev/design/ADMIN_DESIGN.md | AD-01, AD-02, AD-03, AD-04, AD-05, AD-06, AU-01, AU-02, AU-03, AU-04, AU-05, AU-06, AU-07, AU-08, FB-01, FB-02, FB-03, FB-04, FB-05, FB-06, FB-07, FB-08, ROAD-P0, ROAD-P1 |
+| DOC-DSN-30 | docs/dev/design/ADMIN_DESIGN.md | AD-01, AD-02, AD-03, AD-04, AD-05, AD-06, AD-07, AD-08, AD-09, AD-10, AD-11, AD-12, AD-13, AU-01, AU-02, AU-03, AU-04, AU-05, AU-06, AU-07, AU-08, FB-01, FB-02, FB-03, FB-04, FB-05, FB-06, FB-07, FB-08, ROAD-P0, ROAD-P1 |
 | DOC-DSN-32 | docs/dev/design/LEARNING_ALGORITHM_DESIGN.md | D-15, D-18, D-19, D-20, D-21, D-22, DR-03, F-07, F-08, F-09, F-11, SC-13, SC-14, SQ-03, TQ-01 |
 | DOC-DSN-33 | docs/dev/design/AI_AUTHORING_DESIGN.md | AN-10, CQ-01, CQ-02, CQ-03, CQ-04, CQ-05, CQ-06, DA-02, DA-13, SEM-05 |
 | DOC-DSN-34 | docs/dev/design/BUSINESS_VALIDATION.md | — |
@@ -1050,6 +1053,9 @@
 | DOC-DSN-42 | docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md | CO-13, DA-13, DA-15, PAY-01, PAY-02, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, PAY-08, UM-01, UM-02, UM-03, UM-04 |
 | DOC-DSN-43 | docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md | — |
 | DOC-DSN-44 | docs/exams/carework/design/CARE_OS_DATAHUB_DESIGN.md | CO-01, CO-02, CO-03, CO-04, CO-05, DA-13, DA-18, ROAD-P5 |
+| DOC-DSN-45 | docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md | — |
+| DOC-DSN-46 | docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md | — |
+| DOC-DSN-90 | docs/dev/design/DEPLOY_PIPELINE_DESIGN.md | AD-10, PF-18 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |

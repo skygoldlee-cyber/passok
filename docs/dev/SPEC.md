@@ -120,7 +120,7 @@
 | 3.23 | **사용자 의견** | 피드백 폼·건의 수신 | FB-01~FB-08 (8) |
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
-| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇·커뮤니티 공지 | AD-01~AD-12 (12) |
+| 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇·커뮤니티 공지·기관 활동 | AD-01~AD-13 (13) |
 | 3.29 | **서비스 소개 (랜딩)** | `/landing.html` 정적 소개 페이지 — 시험 카드·체험 데모(퀴즈·학습계획)·설치 CTA·SEO/OG·프로모션 진입점 | LP-01~LP-10 (10) |
 | 3.30 | **개인 맞춤 고도화** | 개념 단위 약점 진단·개인화 스케줄·합격 예측 — 기존 자산(FSRS·BKT·진술 추적·임베딩)의 조합 계층 `src/study/personalization.js` | PS-01~PS-11 (11) |
 
@@ -620,6 +620,7 @@
 | AD-10 | Discord 운영 알림 push — `tools/lib/discord.js` 공용 헬퍼(`DISCORD_WEBHOOK_URL` env·.env, 미설정 시 조용히 skip)로 배포 성공/실패·스모크 결과를 채널에 푸시 + keepalive 워크플로 실패 시 Discord 통지 (이슈 생성과 병행, 시크릿 미설정 시 skip) — allowed_mentions 비활성화로 멘션 방어 | ✅ |
 | AD-11 | Discord 조회 명령 봇 — `tools/supabase/functions/admin-bot` Edge Function이 Discord Interactions 엔드포인트로 `/status`·`/user <email>`·`/pro`·`/errors [days]`·`/feedback [days]` 읽기 전용 조회 응답. ed25519 서명 검증(`DISCORD_PUBLIC_KEY`) + `ADMIN_DISCORD_ID` 단일 관리자 게이트 + allowed_mentions 비활성화. 쓰기 명령은 의도적 미포함(상태 변경은 기존 CLI 경로). 명령 등록은 `admin:discord`(register_admin_bot.js), 셋업은 DISCORD_ADMIN 런북 | ✅ |
 | AD-12 | Discord 커뮤니티 공지 발송 — 배포 성공·스모크 통과 시 `announceRelease()`가 release-notes.json 해당 버전 노트(내부 릴리스 메타 행 제외)를 공지 채널로 fan-out. webhook env 규약: `DISCORD_ANNOUNCE`(전체-공지)·`DISCORD_ANNOUNCE_<EXAM_ID>`(시험별 — exams.json 미등록 id env는 스킵+경고), 같은 URL 중복 선언은 1회 발송. 미설정 시 조용히 skip, 발송 실패도 배포 무효화하지 않음 (DOC-DSN-36 §4) | ✅ |
+| AD-13 | 기관 활동 패널 — carework `facilities`·`facility_members`·`shift_handovers`·`handover_acks`·`family_visits`·`incident_reports`·`facility_records`·`facility_form_templates`에 `is_admin()` 게이트 admin select 정책 추가(carework 스키마 파일에 선언 — 플랫폼 스키마 오염 방지) + `#/admin` 기관 탭(시설별 멤버 수·인수인계 발신/확인·사고 보고·방문 기록 건수 집계, 행 본문은 기본 비표시) | 미구현 (로드맵) |
 
 ### 3.27 AI 제작 지원 (Author-time)
 
@@ -745,7 +746,8 @@
 | CO-17 | **기관 자체 양식(커스텀 폼)** — 실무도구 기본 양식 외에 기관 고유 양식을 MD+`{{키}}` 플레이스홀더로 등록·기입·출력. `facility_form_templates`(CO-11의 facility_templates 저장 수단 구현, member read·manager write)에 manager가 등록하면 멤버가 기입 폼으로 문서 생성 → careShare 파이프라인(인쇄·PDF·Word·공유) 재사용. 시스템 키(`date`·`org`·`author`·`confirmer`·`receiver`·`client`·`signImage`)는 자동 기입, 기타 `{{키}}`는 기입 필드 자동 생성. 등록 경로 2개 — ① MD 직접 붙여넣기 ② 양식 파일 업로드(PDF·DOCX·Excel·CSV) 시 pdf.js 텍스트·AcroForm/OOXML·SheetJS 추출 → 자체 AI(ai-proxy `form_extract` kind, 로그인·쿼터 게이트 — 구독자 고객지원 채널)가 MD 템플릿 초안 생성 → 사용자 검토·편집 후 저장 (스캔 이미지 파일은 텍스트 없어 미지원 명시). 기입 문서는 `facility_records` doc_type `custom_form` 이벤트형 append-only — payload는 `{templateId, fields}` 구조화 맵(CO-06 계승, 서명 이미지는 L0 유지). 기관 미가입 사용자는 로컬 양식으로 동일 기능(오프라인 우선) | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) |
 | CO-18 | **내장 양식 사본 편집·출력 오버라이드** — 실무도구 기본 양식(요양일지·인수인계·사고보고서·면회기록·평가점검표·근무표)을 `{{키}}` MD 골격으로 고객에게 공개, 사본 생성 → CO-17 편집기에서 항목 수정·추가. 원본 불변(법정 기록 규격 보호 — 사본만 편집). `toolKey` 연동 사본이 있으면 해당 도구 출력 본문(docMdHead·docMdSign 사이)이 사본 서식으로 렌더 — 도구의 구조화 데이터(기록표·생성문)는 블록 키로 주입, 사용자 추가 키는 출력 시 공란(수기 기입란). 양식 변형은 사본 편집 외에 기관 파일(.docx·.xlsx·.csv·.pdf) 업로드로도 생성 가능 — 추출 본문이 연동 사본이 되어 동일하게 출력 오버라이드. 사본 편집기 미리보기는 블록 키를 도구 실데이터로 치환(데이터 없는 블록은 자동 생성 영역 칩) | 부분 구현 |
 | CO-19 | **기관 점검표 파일 업로드(콘텐츠 오버라이드)** — 평가 체크리스트의 점검 항목 자체를 기관 제공 파일(.docx·.xlsx·.csv)로 교체. 헤더 키워드(영역·항목·근거) 컬럼 매핑, 무헤더는 열 위치 휴리스틱, 병합 셀은 직전값 계승, 비표 텍스트는 제목행-항목 분리(audit-import.js 순수 파서). 항목 id는 섹션+텍스트 해시 — 같은 파일 재업로드 시 체크 상태 유지. 저장소 `carework_audit_custom`(백업·동기화 대상), `loadAuditSections`가 커스텀 우선이라 미리보기·내보내기·사본 미리보기(toolBlockPreview)에 동일 적용. "기본 점검표 복원"으로 고시 기본 복귀 | 부분 구현 |
-| CO-20 | **문서 인쇄·PDF 출력 품질** — 오버레이 뷰어(매뉴얼·문제집 문서)의 인쇄/PDF 버튼은 생성 PDF가 기본 경로 — `pdfFileFromElStyled`(흰 배경·여백 래퍼 + 오버레이 선택자 컨텍스트 재현 + 밝은 글자만 보정(컬러 유지) + 요소 경계 페이지네이션(표·그림·제목 절단 방지) + JPEG(q0.92) 용량 제어) → 새 탭 미리보기(PDF 뷰어의 자체 인쇄 가능) 우선, 팝업 차단·인앱은 다운로드 폴백, 생성 실패 시에만 `window.print()` (기기 print 스택 백지 대응). 두 뷰어의 본문 타이포그래피는 manual-article 기준 스케일로 통일. 주입된 @media print CSS(오버레이 정적 전환·흰 배경·여백·h1 채우기색·형제 숨김)도 폴백 경로 출력 품질을 보장 | ✅ |
+| CO-20 | **문서 인쇄·PDF 출력 품질** — 오버레이 뷰어(매뉴얼·문제집 문서)의 인쇄/PDF 버튼은 생성 PDF가 기본 경로 — `pdfFileFromElStyled`(흰 배경·여백 래퍼 + 오버레이 선택자 컨텍스트 재현 + 밝은 글자만 보정(컬러 유지) + 요소 경계 페이지네이션(CO-21) + JPEG(q0.92) 용량 제어) → 새 탭 미리보기(PDF 뷰어의 자체 인쇄 가능) 우선, 팝업 차단·인앱은 다운로드 폴백, 생성 실패 시에만 `window.print()` (기기 print 스택 백지 대응). 두 뷰어의 본문 타이포그래피는 manual-article 기준 스케일로 통일. 주입된 @media print CSS(오버레이 정적 전환·흰 배경·여백·h1 채우기색·형제 숨김)도 폴백 경로 출력 품질을 보장 | ✅ |
+| CO-21 | **페이지 절단 보호** — 인쇄·PDF 출력에서 표·그림·다이어그램·인용 블록 등 블록 요소가 페이지 경계에서 잘리지 않는다. 생성 PDF는 `_blockCuts`(pdf-utils.js 공용, `pdfFileFromEl`·`pdfFileFromElStyled` 공통 적용)로 절단 위치를 요소 경계로만 선택한다: 절단 후보는 직계 자식뿐 아니라 하위 블록(표 행 `tr`·그림 `img`·`pre.mermaid`·단락·목록 항목)까지 수집하고, 표는 행 경계까지만 분할한다(셀 내부 요소는 후보 제외 — 행 중간 절단 금지). 페이지 용량을 넘는 단일 요소만 예외적으로 고정 절단한다. `window.print()` 폴백 경로는 @media print `break-inside:avoid`(tr·img·pre·blockquote·figure)로 동일 보호를 적용한다 | ✅ |
 
 ---
 
@@ -818,6 +820,7 @@
 | PF-16 | Mermaid 다이어그램 타입별 초기화 공용화 (`mermaid-utils.js`, 3개 모듈 중복 제거) | ✅ |
 | PF-17 | 이모지 폰트 서브셋 — `noto-color-emoji-400.woff2`를 실사용 119코드포인트 서브셋으로 축소 (5.4MB→0.17MB, −97%). 재생성: `fontTools.subset ... --unicodes` (글자 목록은 저장소 전체 렌더 소스 스캔, VS16·ZWJ·keycap 포함). 단위 테스트가 1MB 예산 강제 | ✅ |
 | PF-18 | **Core Web Vitals 목표·측정 조건**: LCP ≤2.5s · INP ≤200ms · CLS ≤0.1 — 랩 측정 기준(Lighthouse 모바일 프리셋, CPU 4x·Slow 4G), 대상 화면 = 대시보드 초기 로드·교재리더 챕터 오픈 2개, 각 3회 중앙값으로 판정. 필드(RUM) 데이터는 수집 수단 없음 | ✅ (목표 확정) |
+| PF-19 | **서비스 이미지 자산 형식 제한** — 배포 산출물의 이미지는 래스터 `.webp`·벡터 `.svg`만 허용 (용량·유지보수성 — ref-pipeline 산출물이 webp로 이미 수렴, 2026-11 현재 content/ 7,627 webp·23 svg·png 1). 예외 화이트리스트: ①PWA 매니페스트·apple-touch-icon·favicon PNG (iOS 설치·레거시 호환 필수) ②`icons/og-image.png` (카카오톡·트위터 등 외부 크롤러 webp 미지원) ③e2e 스냅샷·docs 이미지 (배포 비대상). 적용: `check_filenames` 계열 게이트 확장 + `filename_baseline` 패턴의 예외 등록 — 규약 상세는 CODE_CONVENTIONS §2.2 | ✅ |
 
 ### 4.5 접근성
 

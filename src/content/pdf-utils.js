@@ -17,34 +17,195 @@ export function ensurePdf() {
     return _load;
 }
 
+// 블록 요소 경계 절단 후보 — 페이지 자르는 위치는 요소 경계로만 선택해 표·그림·제목이
+// 페이지 경계에서 잘리지 않는다. 직계 자식뿐 아니라 하위 블록(표 행·그림·단락·목록
+// 항목)도 후보로 수집해 큰 래퍼 하나가 페이지를 넘을 때 내부 경계에서 자른다.
+// 셀 내부 요소는 제외(행 중간 절단 방지 — 표는 tr 경계까지만 쪼갠다). (@spec CO-21)
+const _BLOCK_SEL = 'h1,h2,h3,h4,h5,h6,p,li,tr,table,.reader-table-wrapper,.reader-img,img,svg,pre,blockquote,figure,.mermaid,hr,details';
+
+/**
+ * 이미지 로드·레이아웃 확정 — loading=lazy 이미지는 미로드 상태에서 높이 0으로
+ * 측정되는데, 렌더 시점엔 실제 크기로 펼쳐져 절단 위치가 통째로 어긋난다
+ * (큰 삽화가 페이지 경계에서 잘리는 원인). lazy 제거로 즉시 로드시키고
+ * decode 대기 후 리플로우를 강제해 경계 측정이 최종 레이아웃 기준이 되게 한다.
+ * 경계 측정·스크롤 클립 해제보다 먼저 호출해야 한다. (@spec CO-21)
+ */
+async function _settleImages(root) {
+    const imgs = [...root.querySelectorAll('img')];
+    if (!imgs.length) return;
+    imgs.forEach(i => i.removeAttribute('loading')); // lazy 해제 — 즉시 로드
+    // 디코딩 대기 — 무한 지연 요청이 있어도 10초 상한 (PDF 생성이 교착되지 않도록)
+    await Promise.race([
+        Promise.all(imgs.map(i => i.decode().catch(() => {}))), // 실패 이미지는 무시
+        new Promise(r => setTimeout(r, 10000)),
+    ]);
+    // 로드 크기 반영 프레임 — 백그라운드 탭에서 rAF가 안 도는 상황 대비 상한 부여
+    await Promise.race([new Promise(r => requestAnimationFrame(r)), new Promise(r => setTimeout(r, 300))]);
+    void root.offsetHeight; // 리플로우 확정 — 이후 rect 측정이 최종 레이아웃 기준
+}
+
+/**
+ * 화면용 스크롤 클립 해제 — .reader-table-wrapper(max-height:480px)처럼 세로로 잘린
+ * 상자는 html2canvas가 스크롤포트만 렌더해 잘린 내용이 PDF에서 통째로 빠지고,
+ * 잘린 행 rect가 절단 후보로 오인돼 경계가 어긋난다. 세로 스크롤이 실제로 발생한
+ * 상자만 max-height/overflow를 해제해 전체 내용이 레이아웃·캔버스에 펼쳐지게 한다.
+ * 경계 측정·렌더 모두 이 전처리 이후에 수행해야 한다. (@spec CO-21)
+ */
+function _expandScrollClips(root) {
+    root.querySelectorAll('*').forEach(e2 => {
+        const el2 = /** @type {HTMLElement} */ (e2);
+        if (el2.scrollHeight - el2.clientHeight > 2) {
+            const cs = getComputedStyle(el2);
+            if (cs.overflowY !== 'visible' || cs.maxHeight !== 'none') {
+                el2.style.maxHeight = 'none';
+                el2.style.overflow = 'visible';
+            }
+        }
+    });
+}
+
+/** 페이지 번호 스탬프 — 출력물 하단 우측에 "N / 전체" (문서 페이징 가시성) */
+function _stampPageNumbers(pdf, W, H) {
+    const total = pdf.getNumberOfPages();
+    for (let p = 1; p <= total; p++) {
+        pdf.setPage(p);
+        pdf.setFontSize(8);
+        pdf.setTextColor(120);
+        pdf.text(`${p} / ${total}`, W - 6, H - 3, { align: 'right' });
+    }
+}
+
+const _JPEG_Q = 0.9;      // 페이지 래스터 JPEG 품질 — 텍스트 가독성·파일 용량 균형
+const _CANVAS_MAX = 32000; // 브라우저 캔버스 높이 상한 안전선 (Chrome ~32767px)
+
+/** 초장문서 배율 하향 — css 높이 × scale이 캔버스 상한을 넘지 않는 최대 배율 (기본 2, 하한 0.5) */
+function _fitCanvasScale(cssH) {
+    return Math.min(2, Math.max(0.5, Math.floor((_CANVAS_MAX / Math.max(1, cssH)) * 100) / 100));
+}
+
+/** el 기준 페이지 절단 위치(css px) 산출 — 각 구간은 availPx 이하, 끝은 요소 경계 */
+function _blockCuts(el, availPx) {
+    const elTop = el.getBoundingClientRect().top;
+    const boundSet = new Set([0]);
+    for (const e2 of el.querySelectorAll(_BLOCK_SEL)) {
+        if (e2.closest('td,th')) continue;
+        if (e2.matches('svg,img,canvas') && e2.closest('pre,figure')) continue; // 컨테이너 경계가 관장 — pre 상단 패딩 잘림 방지 (svg tagName은 소문자라 matches 사용)
+        const cs = getComputedStyle(e2);
+        const mt = parseFloat(cs.marginTop || '0');
+        const top = Math.round(e2.getBoundingClientRect().top - elTop - (Number.isFinite(mt) ? mt : 0));
+        if (Number.isFinite(top)) boundSet.add(top);
+    }
+    boundSet.add(el.offsetHeight);
+    const bounds = [...boundSet].sort((a, b) => a - b);
+    const cuts = /** @type {number[]} */ ([0]);
+    while (cuts[cuts.length - 1] < el.offsetHeight) {
+        const last = cuts[cuts.length - 1];
+        const limit = last + availPx;
+        let next = -1;
+        for (const b of bounds) {
+            if (b <= last) continue;
+            if (b > limit) break;
+            next = b; // 용량 내 가장 아래 경계 — 페이지를 최대로 채우되 요소 중간에서 자르지 않음
+        }
+        if (next < 0) next = Math.min(Math.round(limit), el.offsetHeight); // 경계 없음 — 페이지보다 큰 요소는 고정 절단
+        cuts.push(next);
+    }
+    return cuts;
+}
+
+/**
+ * 페이지 경계를 가로지르는 표 분할 — 경계가 지나는 table을 둘로 쪼개 뒷부분을
+ * thead·colgroup 복제 새 표로 옮긴다. 캔버스 슬라이스 PDF는 window.print()와 달리
+ * thead 자동 반복이 없어 둘째 장부터 헤더 없이 이어지는 결함의 대응.
+ * 분할은 레이아웃을 바꾸므로 경계 재측정을 수렴까지 반복한다.
+ * 대상 DOM의 행을 실제 이동시키므로 폐기용 클론·렌더 전용 컨테이너에만 사용한다. (@spec CO-21)
+ * @param {HTMLElement} root
+ * @param {number} availPx 한 페이지 본문 용량 (css px)
+ * @returns {number[]} 수렴 후 최종 절단 위치 (css px)
+ */
+function _cutsWithTableSplit(root, availPx) {
+    const top0 = () => root.getBoundingClientRect().top;
+    for (let iter = 0; iter < 8; iter++) { // 수렴 상한 — 분할마다 경계가 뒤로 밀려 반복 필요
+        const cuts = _blockCuts(root, availPx);
+        let splitCount = 0;
+        for (const c of cuts.slice(1, -1)) {
+            for (const table of root.querySelectorAll('table')) {
+                const tb = table.getBoundingClientRect();
+                if (!(tb.top - top0() < c - 1 && c < tb.bottom - top0() - 1)) continue; // 경계가 표 내부를 통과해야 분할
+                const thead = table.tHead;
+                if (!thead || !thead.rows.length) continue;
+                // 절단 후보는 tr 상단이라 c는 어떤 행의 상단과 일치한다
+                const row = [...table.rows].find(r => {
+                    const rr = r.getBoundingClientRect();
+                    return rr.top - top0() <= c && c < rr.bottom - top0();
+                });
+                if (!row || (row.parentElement && row.parentElement.tagName === 'THEAD')) continue;
+                // 새 표 — 속성·colgroup·caption·thead 복제 후 row 이후 행 전부 이동
+                const nt = /** @type {HTMLTableElement} */ (table.cloneNode(false));
+                [...table.children].forEach(ch => {
+                    if (ch.tagName === 'COLGROUP' || ch.tagName === 'CAPTION') nt.appendChild(ch.cloneNode(true));
+                });
+                nt.appendChild(thead.cloneNode(true));
+                const body = document.createElement('tbody');
+                const rows = [...table.rows];
+                rows.slice(rows.indexOf(row)).forEach(r => body.appendChild(r));
+                nt.appendChild(body);
+                if (table.parentElement) table.parentElement.insertBefore(nt, table.nextSibling);
+                splitCount++;
+            }
+        }
+        if (!splitCount) return cuts;
+    }
+    return _blockCuts(root, availPx);
+}
+
 /** 뷰 미리보기 요소 → PDF File (한글은 캔버스 이미지로 렌더) */
 export async function pdfFileFromEl(el, title) {
     await ensurePdf();
-    const canvas = await (/** @type {any} */ (window)).html2canvas(el, { scale: 2, logging: false });
-    const { jsPDF } = (/** @type {any} */ (window)).jspdf;
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const W = 210, H = 297;
-    // 페이지 여백 — 통짜 이미지를 전면 출력하면 상하 여백 없이 글자가 잘리므로 페이지별 캔버스에 여백을 입혀 조각냄 (@spec CO-20)
-    const MX = 8, MY = 10;
-    const pxPerMm = canvas.width / W;
-    const pagePx = Math.round(H * pxPerMm);
-    const innerPx = Math.round((W - 2 * MX) * pxPerMm);
-    const mYPx = Math.round(MY * pxPerMm);
-    const mXPx = Math.round(MX * pxPerMm);
-    const sliceH = Math.round((H - 2 * MY) * pxPerMm);
-    for (let off = 0; off < canvas.height; off += sliceH) {
-        const h = Math.min(sliceH, canvas.height - off);
-        const pg = document.createElement('canvas');
-        pg.width = canvas.width; pg.height = pagePx;
-        const ctx = pg.getContext('2d');
-        if (!ctx) break;
-        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, pg.width, pg.height);
-        ctx.drawImage(canvas, 0, off, canvas.width, h, mXPx, mYPx, innerPx, h);
-        pdf.addImage(pg.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, W, H);
-        if (off + sliceH < canvas.height) pdf.addPage();
+    // 접힌 details 내용도 출력물에 포함 — 렌더 동안만 펼치고 완료 후 복원
+    const closedDetails = [...el.querySelectorAll('details:not([open])')];
+    closedDetails.forEach(d => { /** @type {HTMLDetailsElement} */ (d).open = true; });
+    try {
+        await _settleImages(el); // lazy 이미지 로드·레이아웃 확정 — 절단 위치 어긋남 방지 (@spec CO-21)
+        _expandScrollClips(el); // 세로 스크롤 클립 해제 — 잘린 행 누락·경계 오인 방지 (@spec CO-21)
+        const W = 210, H = 297;
+        // 페이지 여백 — 통짜 이미지를 전면 출력하면 상하 여백 없이 글자가 잘리므로 페이지별 캔버스에 여백을 입혀 조각냄 (@spec CO-20)
+        const MX = 8, MY = 10;
+        // 한 페이지 본문 css px — 캔버스 배율과 무관(pxPerMm/scale 상쇄). 렌더 전 계산해야
+        // 표 분할·요소 측정이 최종 레이아웃 기준으로 잡힌다. 캔버스 폭이 요소 폭보다 넓을 때
+        // 종전 sliceH/2는 용량을 과대 측정해 내용이 잘릴 수 있어 요소 폭 기준으로 산출
+        const availPx = (H - 2 * MY) * el.offsetWidth / W;
+        const cuts = _cutsWithTableSplit(el, availPx); // 경계를 넘는 표는 thead 복제 분할 (@spec CO-21)
+        const scale = _fitCanvasScale(el.offsetHeight); // 캔버스 높이 상한 대응 — 초장문서는 배율 하향
+        const canvas = await (/** @type {any} */ (window)).html2canvas(el, { scale, logging: false });
+        const { jsPDF } = (/** @type {any} */ (window)).jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pxPerMm = canvas.width / W;
+        const pagePx = Math.round(H * pxPerMm);
+        const innerPx = Math.round((W - 2 * MX) * pxPerMm);
+        const mYPx = Math.round(MY * pxPerMm);
+        const mXPx = Math.round(MX * pxPerMm);
+        const sliceH = Math.round((H - 2 * MY) * pxPerMm);
+        for (let i = 0; i + 1 < cuts.length; i++) {
+            const y0 = Math.round(cuts[i] * scale), y1 = Math.min(Math.round(cuts[i + 1] * scale), canvas.height);
+            for (let off = 0; off < y1 - y0; off += sliceH) { // 초대형 요소 조각은 고정 높이 서브슬라이스
+                const h = Math.min(sliceH, y1 - y0 - off);
+                const pg = document.createElement('canvas');
+                pg.width = canvas.width; pg.height = pagePx;
+                const ctx = pg.getContext('2d');
+                if (!ctx) break;
+                ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, pg.width, pg.height);
+                ctx.drawImage(canvas, 0, y0 + off, canvas.width, h, mXPx, mYPx, innerPx, h);
+                pdf.addImage(pg.toDataURL('image/jpeg', _JPEG_Q), 'JPEG', 0, 0, W, H, undefined, 'MEDIUM');
+                if (off + sliceH < y1 - y0 || i + 2 < cuts.length) pdf.addPage();
+            }
+        }
+        _stampPageNumbers(pdf, W, H);
+        const blob = pdf.output('blob');
+        return new File([blob], `${title}.pdf`, { type: 'application/pdf' });
+    } finally {
+        closedDetails.forEach(d => { /** @type {HTMLDetailsElement} */ (d).open = false; });
     }
-    const blob = pdf.output('blob');
-    return new File([blob], `${title}.pdf`, { type: 'application/pdf' });
 }
 
 // rgb 파싱 → 밝기(0~1) — 흰 배경에서 안 보이는 밝은 글자 판정용
@@ -70,6 +231,8 @@ export async function pdfFileFromElStyled(el, title) {
     wrap.style.cssText = 'position:absolute;left:0;top:100vh;right:auto;bottom:auto;width:960px;display:block;height:auto;max-height:none;overflow:visible;z-index:auto;padding:24px;background:#fff;color:#000';
     wrap.appendChild(el.cloneNode(true));
     document.body.appendChild(wrap); // computed style을 위해 먼저 부착
+    // 화면 전용 컨트롤 제거 — 다이어그램 확대 버튼이 PDF에 빈 상자로 찍히는 것 방지
+    wrap.querySelectorAll('.mermaid-expand-btn').forEach(b => b.remove());
     wrap.querySelectorAll('*').forEach(e2 => {
         const el2 = /** @type {HTMLElement} */ (e2);
         const cs = getComputedStyle(el2);
@@ -84,30 +247,32 @@ export async function pdfFileFromElStyled(el, title) {
         el2.style.boxShadow = 'none';
         el2.style.textShadow = 'none';
     });
+    // 접힌 details 내용도 출력물에 포함 — 클론이라 화면 상태에 영향 없음
+    wrap.querySelectorAll('details:not([open])').forEach(d => { /** @type {HTMLDetailsElement} */ (d).open = true; });
+    await _settleImages(wrap); // 클론 lazy 이미지 로드·레이아웃 확정 — 미로드 0높이 측정으로 절단선이 이미지 중간을 자르는 결함 수정 (@spec CO-21)
+    _expandScrollClips(wrap); // 세로 스크롤 클립 해제 — 잘린 행 누락·경계 오인 방지 (@spec CO-21)
     // 요소 경계 페이지네이션 — 캔버스는 wrap을 1회 렌더(견고)하고, 자르는 위치는
-    // article 자식 요소 경계로만 선택 — 표·그림·제목이 페이지 경계에서 잘리지 않는다.
+    // 블록 요소 경계(_blockCuts 공용)로만 선택 — 표·그림·제목이 페이지 경계에서 잘리지 않는다.
     // 페이지 캔버스에 좌우 8mm·상하 10mm 여백을 입혀 조각을 옮긴다. (@spec CO-20)
-    const clone = /** @type {HTMLElement} */ (wrap.firstElementChild); // article 복제본
     const W = 210, H = 297, MX = 8, MY = 10;
     const mmPerCssPx = (W - 2 * MX) / 960; // wrap 너비 전체가 내용 영역에 매핑
     const availPx = (H - 2 * MY) / mmPerCssPx; // 한 페이지 본문 css px
-    const wrapTop = wrap.getBoundingClientRect().top;
-    const bounds = /** @type {number[]} */ ([]); // wrap 기준 자식 경계(css px, 마진 포함)
-    for (const child of /** @type {HTMLElement[]} */ (Array.from(clone.children))) {
-        const cs = getComputedStyle(child);
-        bounds.push(Math.round(child.getBoundingClientRect().top - wrapTop - parseFloat(cs.marginTop || '0')));
-    }
-    bounds.push(wrap.offsetHeight); // 문서 끝
-    const cuts = /** @type {number[]} */ ([0]); // 페이지 시작 위치들 — 용량 내 최대 경계
-    for (const b of bounds) {
-        if (b - cuts[cuts.length - 1] > availPx) {
-            const prev = bounds[bounds.indexOf(b) - 1];
-            cuts.push(prev > cuts[cuts.length - 1] ? prev : b); // 초대형 요소면 그 자리서 자름
+    // 페이지 용량 초과 다이어그램·그림 비례 축소 — 한 페이지보다 큰 단일 블록은 경계
+    // 절단으로 지킬 수 없어 고정 슬라이스로 조각나므로 너비를 줄여 한 장에 수용 (@spec CO-21)
+    for (const g of wrap.querySelectorAll('pre.mermaid svg, .reader-img, img')) {
+        const el3 = /** @type {HTMLElement} */ (g);
+        const r = el3.getBoundingClientRect();
+        if (r.height > availPx && r.width > 0) {
+            const k = (availPx * 0.96) / r.height;
+            el3.style.maxWidth = 'none';
+            el3.style.width = `${Math.max(1, Math.round(r.width * k))}px`;
+            el3.style.height = 'auto';
         }
     }
-    if (cuts[cuts.length - 1] < bounds[bounds.length - 1]) cuts.push(bounds[bounds.length - 1]);
+    const cuts = _cutsWithTableSplit(wrap, availPx); // 경계를 넘는 표는 thead 복제 분할 — 둘째 장부터 헤더 반복 (@spec CO-21)
     try {
-        const canvas = await (/** @type {any} */ (window)).html2canvas(wrap, { scale: 2, logging: false });
+        const scale = _fitCanvasScale(wrap.offsetHeight); // 캔버스 높이 상한 대응 — 초장문서는 배율 하향
+        const canvas = await (/** @type {any} */ (window)).html2canvas(wrap, { scale, logging: false });
         const ctx0 = canvas.getContext('2d'); // 빈 캔버스 감지 — 기기·문서 특정 백지 렌더 대응
         if (ctx0 && canvas.width > 0 && canvas.height > 0) {
             const d = ctx0.getImageData(0, 0, canvas.width, Math.min(canvas.height, 600)).data;
@@ -122,7 +287,7 @@ export async function pdfFileFromElStyled(el, title) {
         const pdf = new jsPDF('p', 'mm', 'a4');
         let first = true;
         for (let i = 0; i + 1 < cuts.length; i++) {
-            const y0 = cuts[i] * 2, y1 = Math.min(cuts[i + 1] * 2, canvas.height);
+            const y0 = Math.round(cuts[i] * scale), y1 = Math.min(Math.round(cuts[i + 1] * scale), canvas.height);
             for (let off = 0; off < y1 - y0; off += sliceH) { // 초대형 요소 조각은 고정 높이 서브슬라이스
                 const sh = Math.min(sliceH, y1 - y0 - off);
                 const pgc = document.createElement('canvas');
@@ -131,9 +296,10 @@ export async function pdfFileFromElStyled(el, title) {
                 ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, pgc.width, pgc.height);
                 ctx.drawImage(canvas, 0, y0 + off, canvas.width, sh, mXPx, mYPx, canvas.width - 2 * mXPx, sh);
                 if (!first) pdf.addPage(); first = false;
-                pdf.addImage(pgc.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, W, H);
+                pdf.addImage(pgc.toDataURL('image/jpeg', _JPEG_Q), 'JPEG', 0, 0, W, H, undefined, 'MEDIUM');
             }
         }
+        _stampPageNumbers(pdf, W, H);
         return new File([pdf.output('blob')], `${title}.pdf`, { type: 'application/pdf' });
     } finally { wrap.remove(); }
 }

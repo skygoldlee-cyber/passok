@@ -278,33 +278,8 @@ async function main() {
         }
     }
 
-    // CI 게이트 — 레드 상태의 배포를 차단한다. `--branch main` 최신 run을 보는
-    // 방식은 진행 중 run을 건너뛰어 이전 커밋 녹색으로 통과되는 구멍이 있으므로,
-    // 반드시 배포 대상 커밋 스코프로 조회한다 (HEAD == origin/main은 위에서 보장됨).
-    // 57연속 레드가 푸시·배포를 통과한 사고(2026-10)의 재발 방지 장치.
-    if (process.env.SKIP_CI_GATE === '1') {
-        console.warn('⚠️  SKIP_CI_GATE=1 — CI 검증 없이 배포합니다 (권장하지 않음)');
-    } else {
-        const sha = git('rev-parse HEAD');
-        let run, via;
-        try {
-            ({ run, via } = await queryCiRun(sha));
-        } catch (e) {
-            fail(`CI 상태를 조회할 수 없습니다 — gh 설치·인증(gh auth login) 또는 GH_TOKEN/GITHUB_TOKEN 확인 후 재시도하세요. ` +
-                `조회 불가 상태에서 배포하려면 SKIP_CI_GATE=1 (${e.message.split('\n')[0]})`);
-        }
-        const short = sha.slice(0, 8);
-        if (!run) {
-            fail(`커밋 ${short}에 대한 ci.yml 실행이 없습니다 — push 후 CI 시작 여부를 확인하세요.`);
-        }
-        if (run.status !== 'completed') {
-            fail(`커밋 ${short}의 CI가 ${run.status} 상태입니다 — 완료 후 배포하세요.`);
-        }
-        if (run.conclusion !== 'success') {
-            fail(`커밋 ${short}의 CI가 ${run.conclusion} 입니다 — 레드 상태에서는 배포할 수 없습니다.`);
-        }
-        console.log(`✅ CI 게이트 통과 (${short} — success${via === 'REST' ? ' · REST 폴백' : ''})`);
-    }
+    // CI 게이트는 빌드 단계 직후로 이동 — 로컬 준비(audit·types·build)를 CI 대기와
+    // 병행해 완료 시점엔 업로드만 남긴다 (DEPLOY_PIPELINE_DESIGN §2-B)
 
     // 영향도 경고 — 직전 배포(deploy/* 태그, 구버전은 스탬프 커밋) 이후 변경 파일의
     // 영향 요구사항 표시. 차단은 아니며, 고영향 코어 파일 변경 시 스모크 확인을 권고한다.
@@ -338,27 +313,33 @@ async function main() {
         console.warn(`⚠️  영향 분석 생략 (${e.message})`);
     }
 
-    // 콘텐츠 품질 게이트 — 콤보 감사 오류(무결성·회귀)가 있으면 배포 차단.
-    // 경고는 통과시키되 리포트는 tools/state/combo_audit_report.json에 남는다.
-    const audit = spawnSync('node', ['tools/audit/audit_combo.js'], { encoding: 'utf8' });
-    if (audit.status !== 0) {
-        process.stdout.write(audit.stdout || '');
-        process.stderr.write(audit.stderr || '');
-        fail('audit:combo 품질 게이트 실패 — 오류 해소 후 배포하세요.');
-    }
-    console.log('✅ 콤보 품질 게이트 통과');
-
-    // IDE 오류 게이트 — 타입 진단·린트 에러가 있으면 배포 차단.
-    // check:types는 IDE와 동일 계열(TS 5.x)의 진단이므로 IDE에 오류가 보이는 상태 = 배포 불가.
-    for (const gate of ['check:types', 'lint']) {
-        const r = spawnSync(`npm run ${gate} --silent`, { encoding: 'utf8', shell: true });
-        if (r.status !== 0) {
-            process.stdout.write(r.stdout || '');
-            process.stderr.write(r.stderr || '');
-            fail(`${gate} 실패 — IDE에 오류가 표시되는 상태에서는 배포할 수 없습니다.`);
+    // 로컬 품질·타입 게이트 — CI가 동일 트리를 이미 검증한 배포 재시도는
+    // DEPLOY_TRUST_CI=1로 스킵 가능 (트리가 origin/main과 동기 보장이라 CI와 동일 입력)
+    if (process.env.DEPLOY_TRUST_CI === '1') {
+        console.log('⏩ DEPLOY_TRUST_CI=1 — 로컬 품질·타입 게이트 스킵 (CI 검증 신뢰)');
+    } else {
+        // 콘텐츠 품질 게이트 — 콤보 감사 오류(무결성·회귀)가 있으면 배포 차단.
+        // 경고는 통과시키되 리포트는 tools/state/combo_audit_report.json에 남는다.
+        const audit = spawnSync('node', ['tools/audit/audit_combo.js'], { encoding: 'utf8' });
+        if (audit.status !== 0) {
+            process.stdout.write(audit.stdout || '');
+            process.stderr.write(audit.stderr || '');
+            fail('audit:combo 품질 게이트 실패 — 오류 해소 후 배포하세요.');
         }
+        console.log('✅ 콤보 품질 게이트 통과');
+
+        // IDE 오류 게이트 — 타입 진단·린트 에러가 있으면 배포 차단.
+        // check:types는 IDE와 동일 계열(TS 5.x)의 진단이므로 IDE에 오류가 보이는 상태 = 배포 불가.
+        for (const gate of ['check:types', 'lint']) {
+            const r = spawnSync(`npm run ${gate} --silent`, { encoding: 'utf8', shell: true });
+            if (r.status !== 0) {
+                process.stdout.write(r.stdout || '');
+                process.stderr.write(r.stderr || '');
+                fail(`${gate} 실패 — IDE에 오류가 표시되는 상태에서는 배포할 수 없습니다.`);
+            }
+        }
+        console.log('✅ 타입·린트 게이트 통과 (IDE 오류 없음)');
     }
-    console.log('✅ 타입·린트 게이트 통과 (IDE 오류 없음)');
 
     // 생성물(index.html·data/ 번들)은 git 미추적 — 커밋 상태와 무관하게 배포
     // 직전 현재 트리에서 재생성해 스테이징 누락을 막는다. 빌드가 추적 파일을
@@ -391,6 +372,45 @@ async function main() {
         fail('빌드가 추적 파일을 변경했습니다 — 동기화 누락입니다. 변경을 커밋·푸시(CI 통과) 후 재배포하세요.');
     }
     console.log('✅ 생성물 빌드 완료 (index.html · data/ 번들 · 문서 번들)');
+
+    // CI 게이트 — 레드 상태의 배포를 차단한다. `--branch main` 최신 run을 보는
+    // 방식은 진행 중 run을 건너뛰어 이전 커밋 녹색으로 통과되는 구멍이 있으므로,
+    // 반드시 배포 대상 커밋 스코프로 조회한다 (HEAD == origin/main은 위에서 보장됨).
+    // 57연속 레드가 푸시·배포를 통과한 사고(2026-10)의 재발 방지 장치.
+    // 로컬 준비를 CI 대기와 병행한 시점이라 in_progress/queued는 fail 대신 폴링 —
+    // 완료 시점엔 업로드만 남아 재호출 왕복이 사라진다 (DEPLOY_PIPELINE_DESIGN §2-B).
+    if (process.env.SKIP_CI_GATE === '1') {
+        console.warn('⚠️  SKIP_CI_GATE=1 — CI 검증 없이 배포합니다 (권장하지 않음)');
+    } else {
+        const sha = git('rev-parse HEAD');
+        const short = sha.slice(0, 8);
+        let run, via;
+        try {
+            ({ run, via } = await queryCiRun(sha));
+        } catch (e) {
+            fail(`CI 상태를 조회할 수 없습니다 — gh 설치·인증(gh auth login) 또는 GH_TOKEN/GITHUB_TOKEN 확인 후 재시도하세요. ` +
+                `조회 불가 상태에서 배포하려면 SKIP_CI_GATE=1 (${e.message.split('\n')[0]})`);
+        }
+        if (!run) {
+            fail(`커밋 ${short}에 대한 ci.yml 실행이 없습니다 — push 후 CI 시작 여부를 확인하세요.`);
+        }
+        const wait0 = Date.now();
+        while (run.status !== 'completed') {
+            if (Date.now() - wait0 > 30 * 60_000) {
+                fail(`커밋 ${short}의 CI 대기가 30분을 초과했습니다 — 완료 후 재실행하세요.`);
+            }
+            console.log(`⏳ CI ${run.status} — 로컬 준비 완료, 30초 후 재확인 (${Math.round((Date.now() - wait0) / 1000)}s)`);
+            await new Promise((r) => setTimeout(r, 30_000));
+            try {
+                ({ run } = await queryCiRun(sha));
+            } catch { /* 일시 조회 실패 — 다음 폴링에서 재시도 */ }
+            if (!run) fail('CI run 조회가 중단되었습니다 — Actions 상태를 확인 후 재배포하세요.');
+        }
+        if (run.conclusion !== 'success') {
+            fail(`커밋 ${short}의 CI가 ${run.conclusion} 입니다 — 레드 상태에서는 배포할 수 없습니다.`);
+        }
+        console.log(`✅ CI 게이트 통과 (${short} — success${via === 'REST' ? ' · REST 폴백' : ''})`);
+    }
 
     // sw.js CACHE_VERSION + 앱 버전/릴리스 노트 스탬프 — 커밋하지 않고 작업 트리에만
     // 적용한다. vercel --prod는 로컬 파일을 업로드하므로 프로덕션에는 스탬프된

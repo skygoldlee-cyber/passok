@@ -195,6 +195,18 @@ body.exam-open{overflow:hidden;}
     box-decoration-break:clone;-webkit-box-decoration-break:clone;}
   /* h1 그라디언트 텍스트는 배경 미출력 시 transparent fill로 보이지 않음 — 인쇄 시 고정색 (manual-overlay와 동일, 컬러 출력 유지) */
   #exam-overlay #exam-article h1{-webkit-text-fill-color:#000 !important;}
+  /* 스크롤 클립 해제 — 화면용 480px 세로 스크롤 표는 인쇄 시 전체 높이로 펼침 (@spec CO-21, manual-overlay와 동일) */
+  #exam-overlay #exam-article .reader-table-wrapper{max-height:none !important;overflow:visible !important;}
+  /* 요소 절단 방지 — 표 행·그림·다이어그램·인용 블록은 페이지 중간에서 쪼개지 않음 (@spec CO-21, manual-overlay와 동일) */
+  #exam-overlay #exam-article tr,
+  #exam-overlay #exam-article img,
+  #exam-overlay #exam-article pre,
+  #exam-overlay #exam-article blockquote,
+  #exam-overlay #exam-article figure{break-inside:avoid;page-break-inside:avoid;}
+  /* mermaid — 화면용 가로 스크롤 상자(overflow-x:auto)는 인쇄 시 클립·분할되므로 해제,
+     확대 버튼은 화면 전용 컨트롤이라 출력에서 제외 (manual-overlay와 동일) */
+  #exam-overlay #exam-article pre.mermaid{overflow:visible !important;}
+  #exam-overlay .mermaid-expand-btn{display:none !important;}
 }`;
 
     const _overlay = createDocOverlay({
@@ -227,7 +239,7 @@ body.exam-open{overflow:hidden;}
         wire(el) {
             el.querySelector('[data-exam-close]')?.addEventListener('click', () => close());
             el.querySelector('[data-exam-back]')?.addEventListener('click', () => _goBack());
-            // 인쇄·PDF 버튼: 스타일드 PDF 생성 → 새 탭 미리보기(뷰어 인쇄 가능)·차단 시 다운로드 — 기기의 window.print() 백지 대응 (@spec CO-20)
+            // 인쇄·PDF 버튼: 스타일드 PDF 생성 → 새 탭 미리보기(뷰어 인쇄·저장 가능)·차단 시 저장 대화상자→다운로드 — 기기의 window.print() 백지 대응 (@spec CO-20)
             // @spec CO-20
             el.querySelector('[data-exam-print]')?.addEventListener('click', async e => {
                 const btn = /** @type {HTMLButtonElement} */ (e.currentTarget);
@@ -237,23 +249,27 @@ body.exam-open{overflow:hidden;}
                 try {
                     const { pdfFileFromElStyled } = await import('../content/pdf-utils.js');
                     const file = await pdfFileFromElStyled(el.querySelector('#exam-article'), el.querySelector('#exam-ov-title')?.textContent || '문서');
-                    const picker = (/** @type {any} */ (window)).showSaveFilePicker;
-                    if (picker) { // 윈도우 저장 대화상자(다른 이름으로 저장) — 사용자가 위치·파일명 선택
-                        try {
-                            const handle = await picker.call(window, {
-                                suggestedName: file.name,
-                                types: [{ description: 'PDF 문서', accept: { 'application/pdf': ['.pdf'] } }],
-                            });
-                            const w = await handle.createWritable();
-                            await w.write(file); await w.close();
+                    const url = URL.createObjectURL(file);
+                    if (window.open(url, '_blank')) { // 새 탭 미리보기 — 브라우저 PDF 뷰어에서 확인 후 인쇄·저장
+                        showToast('PDF 미리보기를 열었습니다 — 뷰어에서 인쇄·저장하세요');
+                    } else {
+                        const picker = (/** @type {any} */ (window)).showSaveFilePicker;
+                        if (picker) { // 팝업 차단 — 윈도우 저장 대화상자(다른 이름으로 저장)
+                            try {
+                                const handle = await picker.call(window, {
+                                    suggestedName: file.name,
+                                    types: [{ description: 'PDF 문서', accept: { 'application/pdf': ['.pdf'] } }],
+                                });
+                                const w = await handle.createWritable();
+                                await w.write(file); await w.close();
+                                showToast('PDF 저장됨 — 파일을 열어 인쇄하세요');
+                            } catch (e2) { if ((/** @type {any} */ (e2))?.name !== 'AbortError') throw e2; }
+                        } else { // 미지원(모바일·FF) — 다운로드 폴백
+                            const a = document.createElement('a');
+                            a.href = url; a.download = file.name;
+                            document.body.appendChild(a); a.click(); a.remove();
                             showToast('PDF 저장됨 — 파일을 열어 인쇄하세요');
-                        } catch (e2) { if ((/** @type {any} */ (e2))?.name !== 'AbortError') throw e2; }
-                    } else { // 미지원(모바일·FF) — 다운로드 폴백
-                        const url = URL.createObjectURL(file);
-                        const a = document.createElement('a');
-                        a.href = url; a.download = file.name;
-                        document.body.appendChild(a); a.click(); a.remove();
-                        showToast('PDF 저장됨 — 파일을 열어 인쇄하세요');
+                        }
                     }
                 } catch (err) { // 생성 실패 시 인쇄창 폴백 — 실패 사실을 토스트로 가시화 (백지 진단용)
                     showToast('PDF 생성 실패 — 인쇄창으로 대체합니다: ' + ((/** @type {any} */ (err))?.message || '').slice(0, 60));

@@ -342,5 +342,65 @@
     "file": "docs/dev/reference/TOOLS_MAP.md",
     "ref": "tools/_archive/",
     "reason": "도구 은퇴 규약의 대상 디렉터리 — 수명 끝난 도구 이동 시 생성되는 컨벤션 경로 (현재 미존재 정상)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
+    "ref": "tests/e2e/lib.sh",
+    "reason": "E2E 구축 가이드의 제안 파일 — 공통 라이브러리 (Phase 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
+    "ref": "tests/e2e/auth-setup.sh",
+    "reason": "E2E 구축 가이드의 제안 파일 — 계정별 로그인 상태 저장 스크립트 (Phase 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
+    "ref": "tests/e2e/cbt.test.sh",
+    "reason": "E2E 구축 가이드의 제안 파일 — CBT 시나리오 스크립트 (Phase 2 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
+    "ref": "tests/fixtures/seed.sql",
+    "reason": "E2E 구축 가이드의 제안 파일 — 테스트 계정 시드 데이터 (Phase 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
+    "ref": "tests/fixtures/magic-link.mjs",
+    "reason": "E2E 구축 가이드의 제안 파일 — Magic Link 발급 스크립트 (Phase 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
+    "ref": "tests/db/verify-cbt.mjs",
+    "reason": "E2E 구축 가이드의 제안 파일 — 화면↔DB 점수 검증 스크립트 (Phase 2 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
+    "ref": "tests/db/rls-check.mjs",
+    "reason": "E2E 구축 가이드의 제안 파일 — RLS 데이터 격리 검사 스크립트 (Phase 2 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
+    "ref": "tests/reports/latest-report.md",
+    "reason": "E2E 구축 가이드의 보고서 산출물 경로 — test-e2e.sh 실행 시 생성 (Phase 4 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
+    "ref": "tests/.auth/*.json",
+    "reason": "E2E 구축 가이드의 세션 상태 파일 경로 — gitignore 대상 (Phase 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md",
+    "ref": "tests/e2e/db/",
+    "reason": "E2E 구현 설계의 제안 디렉터리 — Supabase 검증 스크립트 (Phase 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md",
+    "ref": "tests/.auth/",
+    "reason": "E2E 구현 설계의 세션 상태 디렉터리 — gitignore 대상 (Phase 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md",
+    "ref": "tests/.auth/*.json",
+    "reason": "E2E 구현 설계의 세션 상태 파일 경로 — gitignore 대상 (Phase 1 미구현)"
   }
 ]

@@ -28,9 +28,9 @@
 | 구분 | 프레임워크 | 환경 | 파일 위치 | 테스트 수 |
 |------|-----------|------|-----------|-----------|
 | **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1,800+ |
-| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 980+ |
+| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 990+ |
 | **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 120+ |
-| **합계** | | | | **2,900+** |
+| **합계** | | | | **2,950+** |
 
 > 수치는 `check:teststats`(docs 단계)이 `tools/state/test_stats.json` 실측 SSOT와 정합 검증한다 —
 > 스테일 시 `npm run stats:stamp`으로 재측정·재기록 (인용은 `N+` 바닥 표기 유지).
@@ -727,6 +727,13 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
 - 픽셀 기준선은 linux(CI)만 관리 — 로컬 실행·win32 기준선 폐기. CI 시각 실패 시 visual-baseline.yml이 workflow_run으로 자동 재생성·커밋.
   의도적 시각 변경 후 로컬은 `--update-snapshots`, CI용은
   `visual-baseline.yml` 워크플로 수동 트리거 → 아티팩트 커밋으로 갱신.
+
+**pdf-pagination.spec.js — 생성 PDF 페이지네이션 (CO-21, 2026-11-09 추가)**
+
+- 벤더 스텁(html2canvas·jsPDF 교체)으로 슬라이스 좌표만 채취 — 실제 렌더 없이
+  절단 위치를 실브라우저 레이아웃으로 검증 (jsdom은 rect 측정 불가라 e2e 전용).
+- 시나리오: 큰 삽화가 페이지 경계에서 잘리지 않음(학습안내서 SVG),
+  경계를 넘는 표는 thead 복제로 분할, 접힌 details는 출력물에 포함.
 
 실행: `npm run test:e2e` (최초 1회 `npx playwright install chromium` 필요).
 확장 시 시나리오 단위로 `tests/e2e/**/*.spec.js`에 추가 — 인증 경로는 별도 spec 권장.

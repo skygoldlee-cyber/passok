@@ -1,6 +1,86 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 perf(deploy): 배포 파이프라인 속도 개선 — 게이트 자동복구·CI 대기 병행
+
+- DEPLOY_PIPELINE_DESIGN.md (DOC-DSN-90) — 시간 분해·개선안 설계 정본
+- pre-commit — TRACE_MATRIX 상이 시 차단 대신 자동 재생성+스테이징, specrefs 조기 검사 추가 (원격 실패 왕복 제거)
+- deploy.js — CI 게이트를 빌드 직후로 이동해 로컬 준비를 CI 대기와 병행, in_progress는 fail 대신 폴링 대기(30분 상한), DEPLOY_TRUST_CI=1 로컬 중복 검사 스킵 옵트인
+
+## 2026-11-09 feat(gate): PF-19 이미지 형식 게이트 구현 — check_filenames 확장
+
+- check_filenames.js — content/·icons/ 신규 이미지에 webp·svg 강제 (png/jpg/jpeg/gif/bmp/avif 차단), icons/ PNG는 화이트리스트(apple-touch·favicon·passok·og-image)로 예외 — PWA 설치·외부 크롤러 호환 보존
+- 1과목_삽화.png는 검토 결과 전환 불필요 — git 미추적 마스터 원본(외부 호스팅 파이프라인 입력), 서빙물은 이미 1과목_삽화.webp
+- tests/unit/tools/check-filenames.test.js — 규칙 계약 + 게이트 통과 검증 (헤더 PNG 토큰이 specrefs 파서에 ID로 오인돼 문구 정정)
+
+## 2026-11-09 docs(spec): PF-19 이미지 자산 형식 제한 SPEC 부여 + 규약 문서화
+
+- SPEC §4.4에 PF-19 신설 — 배포 산출물 이미지는 webp·svg만 허용 (content/ 현재 7,627 webp·23 svg·png 1로 이미 수렴, 신규 유입 회귀 방지)
+- CODE_CONVENTIONS §2.2 — 형식 규칙 정본: 예외 화이트리스트(PWA/apple-touch/favicon PNG·OG 이미지·e2e/docs 비대상) + 금지 확장자 목록 + check_filenames 확장 적용 방향
+
+## 2026-11-09 docs(admin): AD-13 기관 활동 패널 SPEC 부여 + 설계문서 갱신
+
+- SPEC §3.26에 AD-13 신설 — carework 시설 8테이블 admin select 정책 + #/admin 기관 탭 (미구현 로드맵)
+- ADMIN_DESIGN.md — 관련 SPEC AD-01~13 갱신, carework 정책 블록·기관 탭 추가, admin_set_plan에 p_days 기간권 연장 파라미터 보정, SPEC 매핑 표 AD-07/10/11/12/13 보완
+
+## 2026-11-09 test(print): initPrintPrep DOM 테스트 — statements 커버리지 임계값 복구
+
+- tests/dom/reader/print-prep.test.js — beforeprint 스크롤 클립·lazy 해제 + afterprint 복원 실동작 검증
+- print-pdf.test.js — 실제 pdf-utils 생성 경로 smoke(스텁 벤더·File 반환·라이브 details 복원) — CI 커버리지 statements 66.94 → 67.45 임계 복구
+
+## 2026-11-09 feat(pdf): 생성 PDF 개선 5종 — 표 헤더 반복·캔버스 상한·details·E2E·용량
+
+- _cutsWithTableSplit — 페이지 경계를 넘는 table을 thead·colgroup 복제 새 표로 분할 (수렴 반복), 캔버스 슬라이스 PDF도 둘째 장부터 헤더 반복 (window.print() 수준)
+- _fitCanvasScale — 초장문서는 css 높이×scale이 캔버스 상한(32,000px)을 넘지 않도록 배율 자동 하향, 백지 렌더 방지
+- 접힌 details는 출력물에 포함되도록 펼침 — styled 클론은 직접 open, pdfFileFromEl은 렌더 후 복원
+- tests/e2e/pdf-pagination.spec.js — 실브라우저 슬라이스 좌표 검증(삽화 절단 없음·표 분할·details) 3건으로 파이프라인 회귀 상시화
+- 용량 최적화 — JPEG 품질 0.9 조정 + jsPDF MEDIUM deflate + 배율 하향이 초장문서 용량도 절감
+
+## 2026-11-09 feat(print): 인쇄 파이프라인 보완 — 전역 전처리 훅·디코딩 상한·페이지 번호
+
+- initPrintPrep(beforeprint/afterprint) — 화면용 스크롤 상자(리더 본문 등)와 lazy 이미지를 인쇄 직전 해제·직후 복원, window.print() 경로 전체의 시험 공통 안전망 (스크롤포트만 출력되거나 lazy 이미지 빈 칸이던 잔여 갭)
+- _settleImages 디코딩 대기에 10초 상한 — 무한 지연 이미지 요청이 PDF 생성을 교착시키지 않도록
+- 생성 PDF 하단에 페이지 번호(N/total) 스탬프 — pdfFileFromEl·pdfFileFromElStyled 공통
+
+## 2026-11-09 fix(print): 표 행·이미지 절단 방지를 시험 팩 공통으로 — 전역 @media print 규약
+
+- print.css에 tr·td·th break-inside:avoid + thead 반복 + img 절단 방지 전역 규칙 추가 — 활성 뷰 window.print() 경로에서 문서형 출력물의 표가 행 중간에서 잘리던 갭 해소 (모든 시험 팩 일괄 적용)
+- carework .doc-md 표의 화면용 display:block+overflow-x:auto 스크롤 상자는 인쇄 시 클립·분할 — care-tools.css @media print에 display:table+overflow:visible 해제
+
+## 2026-11-09 fix(pdf): lazy 이미지 정착 대기 — 학습안내서 대형 삽화가 페이지 경계에서 잘리던 근본 원인 수정
+
+- pdfFileFromElStyled 클론의 loading=lazy 이미지는 미로드 상태라 높이 0으로 측정 — _blockCuts 절단 위치가 렌더 시점 실제 레이아웃과 어긋나 삽화 한가운데를 절단 (실측 재현: 측정 2×2px → 렌더 900×1178px, 절단선이 이미지 내부 관통 확인)
+- _settleImages 전처리 추가 — lazy 해제 + decode 대기 + 리플로우 후 측정하도록 pdfFileFromEl·pdfFileFromElStyled 양쪽 적용
+- html-viewer 참조자료 인쇄 창도 document.close() 직후 print() 동기 호출로 미로드 이미지가 빈 채 출력될 수 있어 — 디코딩 대기(3초 상한) 후 인쇄로 변경
+
+## 2026-11-09 fix(print): 머메이드 페이지 분할·클립 보강 — 전 인쇄/PDF 경로 일괄
+
+- print.css 활성 뷰 인쇄에 pre.mermaid·reader-img·figure·blockquote break-inside:avoid 추가 — 기존엔 오버레이·리뷰 카드만 보호돼 리더 뷰 인쇄 시 다이어그램이 페이지 경계에서 쪼개짐
+- pre.mermaid의 overflow-x:auto는 인쇄 시 스크롤 상자가 되어 분할·클립 — print.css·manual/exam-overlay @media print에 overflow:visible 해제, 확대 버튼(화면 전용 컨트롤) 출력 제외
+- html-viewer 참조자료 인쇄 창 스타일에 절단 방지 규칙 추가 — 기존엔 page-break 규칙 자체 부재
+- pdfFileFromElStyled: 페이지 용량 초과 다이어그램·그림 비례 축소 — 초대형 블록이 고정 슬라이스로 조각나던 것 방지, 클론의 확대 버튼 제거
+
+## 2026-11-09 fix(pdf): 스크롤 클립 해제 + 컨테이너 내부 미디어 경계 제외 — 표 행 누락·머메이드 잘림 수정
+
+- .reader-table-wrapper(max-height:480px·overflow:auto)은 html2canvas가 스크롤포트만 렌더해 잘린 행이 PDF에서 누락 + 잘린 행 rect가 절단 후보로 오인(하단선이 다음 표·글자 위에 출력) — 세로 스크롤 발생 상자만 max-height/overflow 해제하는 _expandScrollClips 전처리 추가 (경계 측정·렌더 전)
+- pre/figure 내부 svg·img·canvas는 절단 후보에서 제외 — 컨테이너 경계가 관장 (머메이드 pre 상단 패딩 잘림 수정, svg tagName 소문자라 matches 사용)
+- @media print 폴백에도 .reader-table-wrapper 확장 규칙 추가 — window.print() 경로 동일 잘림 방지
+
+## 2026-11-09 fix(pdf): 페이지 절단 보호 — 하위 블록 경계 페이지네이션 + CO-21 신설
+
+- 생성 PDF가 표·그림·다이어그램을 페이지 경계에서 잘라 출력 — _blockCuts 공용 헬퍼로 절단 후보를 하위 블록(tr·img·mermaid·p·li 등)까지 확장, 표는 행 경계까지만 분할(셀 내부 제외), pdfFileFromEl·pdfFileFromElStyled 공통 적용
+- window.print() 폴백 경로도 @media print break-inside:avoid(tr·img·pre·blockquote·figure)로 동일 보호
+- SPEC CO-21 신설 — 페이지 절단 보호를 독립 요구사항으로 분리, 코드·테스트 @spec 태그 연결
+
+## 2026-11-09 fix(reader): 문서 캐시 키 한글 충돌 — 학습안내서↔실무막뉴얼 내용 혼재 수정
+
+- makeSessionCache keyOf가 [^a-zA-Z0-9]→'_' 정화로 한글 파일명을 전부 소거 — 같은 길이(학습안내서·실무매뉴얼 5자)면 캐시 키 동일 → 먼저 연 문서 HTML이 다른 문서에 반환
+- \p{L}\p{N} 유니코드 보존으로 정화 규칙 변경 — exam-viewer·html-viewer 동일 팩토리라 함께 치유, 회귀 테스트 추가
+
+## 2026-11-09 fix(reader): 인쇄/PDF를 미리보기 우선으로 복원 — 저장 대화상자는 폴백
+
+- showSaveFilePicker 우선 흐름이 미리보기 없이 저장창만 띄움 — 생성 PDF 새 탭 미리보기(브라우저 PDF 뷰어 인쇄·저장) 복원, 팝업 차단 시 저장 대화상자→다운로드 폴백
+
 ## 2026-11-09 feat(ux): 내비 기관양식 표기를 우리 서식으로 — 용어 순화 누락분
 
 ## 2026-11-09 test(care): showConfirm·flashSavedBadge 목 갱신 + 삭제 비동기 대기

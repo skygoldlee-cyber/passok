@@ -1,9 +1,9 @@
 # 관리자 콘솔 설계 — 사용자·피드백·오류 운영 표면
 
 > 상위 문서: `ARCHITECTURE.md` (전체 구조), `SUPABASE_DESIGN.md` (계정·동기화·RLS 기반 — DOC-DSN-08), `USER_FEEDBACK_DESIGN.md` (피드백 스키마 — DOC-DSN-09)
-> **관련 SPEC ID**: `AD-01~06` (SPEC §3.26) · `FB-01~08` (피드백 수집) · `AU-01~08` (인증) · `ROAD-P0`·`ROAD-P1` (Pro entitlement)
+> **관련 SPEC ID**: `AD-01~13` (SPEC §3.26) · `FB-01~08` (피드백 수집) · `AU-01~08` (인증) · `ROAD-P0`·`ROAD-P1` (Pro entitlement)
 > 목적: 사용자 증가에 대비해 운영 표면(사용자 조회·피드백 인박스·오류 대시보드·Pro 권한 부여)을 체계화한다. 정적 PWA·RLS 경계·프라이버시 최소화라는 기존 불변식 위에 얹는다.
-> **구현 상태**: Phase 1(운영 CLI, AD-06)·Phase 1.5(로컬 대시보드, AD-07)·기간권 모니터링(AD-08·AD-09)·Discord 운영 표면(Phase 1.7 — AD-10 알림 push·AD-11 조회 봇) 구현됨 · Phase 2+(인앱 `#/admin`·RLS·RPC·감사) 설계안 — 미구현.
+> **구현 상태**: Phase 1(운영 CLI, AD-06)·Phase 1.5(로컬 대시보드, AD-07)·기간권 모니터링(AD-08·AD-09)·Discord 운영 표면(Phase 1.7 — AD-10 알림 push·AD-11 조회 봇·AD-12 커뮤니티 공지) 구현됨 · Phase 2+(인앱 `#/admin`·RLS·RPC·감사·기관 활동 AD-13) 설계안 — 미구현.
 > 전제: Supabase는 계속 "없어도 되는" 선택 계층 — 관리자 기능은 Supabase 설정 프로젝트에서만 의미를 가지며, 미설정 환경의 로컬 전용 사용자에게는 노출되지 않는다.
 > **문서 ID**: DOC-DSN-30
 > **범위**: platform · 판본: none
@@ -77,6 +77,15 @@ create policy "admin read sync meta" on public.sync_snapshots
 
 `sync_snapshots`는 select 정책을 열지만 **뷰에서 payload를 표시하지 않는 것**을 권장한다 (§7.2 — 행 메타만 조회). payload까지 보려면 명시적 opt-in 열람 경로를 분리한다.
 
+```sql
+-- carework 시설 테이블 (AD-13) — 플랫폼 스키마를 오염시키지 않도록
+-- tools/supabase/exams/carework/schema.sql 에 별도 블록으로 선언한다.
+-- 대상: facilities·facility_members·shift_handovers·handover_acks·
+--       family_visits·incident_reports·facility_records·facility_form_templates
+create policy "admin read" on public.facilities for select to authenticated using (public.is_admin());
+-- …나머지 7테이블도 동일 패턴 (행 본문은 앱이 기본 비표시 — 건수·메타 집계용)
+```
+
 ---
 
 ## 4. 스키마 변경 요약
@@ -106,16 +115,23 @@ alter table public.admin_audit enable row level security;
 create policy "admin read audit" on public.admin_audit for select to authenticated using (public.is_admin());
 -- insert는 RPC 내부에서만 (정책 없음 → 직접 insert 차단)
 
--- (c) admin_set_plan — Pro 부여/회수 (security definer + is_admin 가드)
-create or replace function public.admin_set_plan(p_target uuid, p_plan text)
+-- (c) admin_set_plan — Pro 부여/연장/회수 (security definer + is_admin 가드)
+--   p_days>0: 기간권 연장·재기산 (기존 만료일·now 중 큰 쪽 + p_days)
+--   p_days=null + plan='pro': 무기한 부여 (pro_expires_at=null 유지)
+--   plan='free': 회수 — pro_expires_at도 정리해 재적용 시 잔재 만료일이 남지 않게 함
+create or replace function public.admin_set_plan(p_target uuid, p_plan text, p_days int default null)
 returns boolean ... as $$
 begin
   if not public.is_admin() then return false; end if;
   update public.profiles set plan = p_plan,
-    pro_since = case when p_plan = 'pro' then coalesce(pro_since, now()) else null end
+    pro_since = case when p_plan = 'pro' then coalesce(pro_since, now()) else null end,
+    pro_expires_at = case
+      when p_plan <> 'pro' then null
+      when p_days is not null then greatest(coalesce(pro_expires_at, now()), now()) + make_interval(days => p_days)
+      else pro_expires_at end
     where id = p_target;
   insert into public.admin_audit (actor, action, target, detail)
-    values (auth.uid(), 'set_plan', p_target, jsonb_build_object('plan', p_plan));
+    values (auth.uid(), 'set_plan', p_target, jsonb_build_object('plan', p_plan, 'days', p_days));
   return found;
 end; $$;
 ```
@@ -198,7 +214,8 @@ CLI 진입 장벽(PowerShell·Secret·repo 클론)을 낮추는 경량 표면 �
 | 피드백 | `feedback` (kind·날짜 필터) | 목록 → 상세 → `meta.session_id`로 오류 이력 join 링크 |
 | 오류 | `client_errors` + `usage_events` | 일별 오류율(오류/세션)·상위 메시지 — `report:errors` 로직의 시각화 |
 | 사용자 | `profiles` + `sync_snapshots` 메타 | 이메일 검색·plan 배지·마지막 동기화·기기 수 |
-| 사용자 상세 | 상기 + `feedback.user_id` 필터 | plan 토글(`admin_set_plan`)·해당 사용자의 bug 제보 이력·감사 로그 조회 |
+| 사용자 상세 | 상기 + `feedback.user_id` 필터 | plan 토글·기간권 연장(`admin_set_plan` p_days)·해당 사용자의 bug 제보 이력·감사 로그 조회 |
+| 기관 활동 (AD-13) | carework `facilities` 계열 테이블 | 시설별 멤버 수·인수인계 발신/확인·사고 보고·방문 기록 건수 — 행 본문은 기본 비표시(건수·메타 집계), 개인정보 텍스트는 상세 진입 없이 마스킹 |
 
 ### Phase 3 — 별도 콘솔 분리 (보류)
 
@@ -245,11 +262,16 @@ Supabase 미설정(순수 로컬) 환경에서는 `#/admin` 라우트 자체가 
 | AD-01 | 권한 모델 — `app_metadata.role` + `is_admin()` + 관리자 select 정책 스위트 | 2 |
 | AD-02 | 피드백 인박스 뷰 | 2 |
 | AD-03 | 오류 대시보드 뷰 | 2 |
-| AD-04 | 사용자 관리 — 목록·상세·`admin_set_plan`·`admin_audit` | 2 |
+| AD-04 | 사용자 관리 — 목록·상세·`admin_set_plan`(기간권 연장 포함)·`admin_audit` | 2 |
 | AD-05 | `#/admin` 라우트 — lazy 로드·SW 프리캐시 제외·비관리자 차단 | 2 |
 | AD-06 | 운영 CLI — `report:feedback`·`report:user`·`admin:grant-pro` | 1 |
+| AD-07 | 로컬 HTML 대시보드 — `report:dashboard` 자급적 HTML 덤프 | 1.5 |
 | AD-08 | `report:user` Pro 확장 — 만료일·잔여일·사용 코드 이력 | 1 |
 | AD-09 | `report:pro` — 코드 발급/사용률·만료 버킷·가입 수단 분포 | 1 |
+| AD-10 | Discord 운영 알림 push — 배포·스모크·CI 실패 통지 | 1.7 |
+| AD-11 | Discord 조회 명령 봇 — 읽기 전용 슬래시 명령 | 1.7 |
+| AD-12 | Discord 커뮤니티 공지 — 릴리스 노트 fan-out | 1.7 |
+| AD-13 | 기관 활동 패널 — carework 시설 테이블 admin select + `#/admin` 기관 탭 | 2 |
 
 ---
 
@@ -257,7 +279,8 @@ Supabase 미설정(순수 로컬) 환경에서는 `#/admin` 라우트 자체가 
 
 - **RLS 정책**: 비관리자 계정으로 `feedback`/`client_errors` select → 0행 반환 확인 (수동 SQL or Supabase 테스트)
 - **AD-05**: DOM 테스트 — 비관리자 진입 시 차단 카드, 관리자 클레임 시 탭 렌더
-- **AD-04**: `admin_set_plan` RPC의 is_admin 가드 — 비관리자 호출 false 반환 + 감사 행 미생성
+- **AD-04**: `admin_set_plan` RPC의 is_admin 가드 — 비관리자 호출 false 반환 + 감사 행 미생성 + `p_days` 연장 시 만료일 갱신 검증
+- **AD-13**: 비관리자 계정으로 `facilities` 계열 select → 0행; 관리자는 시설·활동 건수 조회 가능
 - **회귀**: 기존 insert-only 정책 유지 — 익명 제출 경로(FB-02·오류 텔레메트리) 비차단 확인
 
 ---
