@@ -1,5 +1,5 @@
 // tools/illustrate/capture_manual.js — 실무매뉴얼 삽화 자동 캡처
-// @spec none — 문서 삽화 산출 도구 (런타임 미사용)
+// @spec none — 뷰 직접 진입 전 #/care-home 워밍업 필요(초기화 순서) — 문서 삽화 산출 도구 (런타임 미사용)
 // 사용: node tools/illustrate/capture_manual.js [--all|manual-02-home ...]
 // 선행: npm run serve (localhost:3000) 기동 상태에서 실행
 // 산출: content/exams/carework/docs/images/manual-*.webp (자리 표시 줄의 파일명과 동일)
