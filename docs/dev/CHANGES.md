@@ -1,6 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 test(print): initPrintPrep DOM 테스트 — statements 커버리지 임계값 복구
+
+- tests/dom/reader/print-prep.dom.test.js — beforeprint 스크롤 클립·lazy 해제 + afterprint 복원 실동작 검증 (CI 커버리지 statements 66.94 → 67.01 임계 복구)
+
 ## 2026-11-09 feat(pdf): 생성 PDF 개선 5종 — 표 헤더 반복·캔버스 상한·details·E2E·용량
 
 - _cutsWithTableSplit — 페이지 경계를 넘는 table을 thead·colgroup 복제 새 표로 분할 (수렴 반복), 캔버스 슬라이스 PDF도 둘째 장부터 헤더 반복 (window.print() 수준)
