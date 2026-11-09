@@ -118,16 +118,25 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         // styled 워크에도 동일 보정 + 무확산 구분선(box-shadow 라인)은 유지
         assert.match(src, /_fixBorder\(el2, cs/);                            // styled 워크 테두리 보정
         assert.match(src, /_isLineShadow/);                                  // box-shadow 구분선 유지 판정
-        // 헤더 밴드 정규화 — 저알파 컬러 틴트는 백지에서 불필요한 색 밴드
+        // 헤더·셀 정리 — 틴트 회색화·이중선·nowrap·sticky·지브라·넓은 표 축소
         assert.match(src, /_PRINT_BAND = '#f3f4f6'/);                        // --print-bg-subtle 동일 톤
-        assert.match(src, /tagName !== 'TH'/);                               // 헤더 셀만 대상
-        assert.match(src, /_fixHeaderBand\(el2, cs/);                        // 헤더 틴트 → 인쇄 회색
+        assert.match(src, /_PRINT_ZEBRA = '#f9fafb'/);                       // 지브라 복원 톤
+        assert.match(src, /_fixTableExtras\(el2, cs/);                       // 표 셀·헤더 정리 호출
         assert.match(src, /_isLineShadow\(cs\.boxShadow\)\) set\('box-shadow', 'none'\)/); // 이중 헤더선 정리
         assert.match(src, /whiteSpace === 'nowrap'\) set\('white-space', 'normal'\)/); // nowrap 해제
-        // 표 외곽 좌우 테두리 제거 — 내용과 떨어진 수직선
-        assert.match(src, /_fixTableFrame/);                                 // 래퍼 좌우 테두리 제거
+        assert.match(src, /position === 'sticky'\) set\('position', 'static'\)/); // sticky 정적화
+        assert.match(src, /closest\('tr\.group-start'\)/);                   // group-start 구분선 회색화
+        assert.match(src, /pw > 0 && tw > pw/);                              // 넓은 표 font-size 축소
+        // 표 외곽 테두리 제거 — 내용과 떨어진 수직선·하단 이중선
+        assert.match(src, /_fixTableFrame/);                                 // 래퍼 좌우·하단 테두리 제거
         assert.match(src, /'border-left', 'none'/);                          // 좌측 수직선 제거
         assert.match(src, /'border-right', 'none'/);                         // 우측 수직선 제거
+        assert.match(src, /'border-bottom', 'none'/);                        // 하단 이중선 제거
+    });
+
+    it('rowspan 대응 표 분할 — 그룹 중간 절단 시 그룹 시작부터 이동 (CO-21)', () => {
+        assert.match(src, /cell\.rowSpan > 1 && j \+ cell\.rowSpan > ri/);   // rowspan 그룹 판정
+        assert.match(src, /ri = j; break;/);                                 // 그룹 시작 행부터 이동
     });
 
     it('details 펼침 — 접힌 내용도 출력물에 포함', () => {

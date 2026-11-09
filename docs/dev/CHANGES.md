@@ -1,6 +1,16 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 feat(print): 인쇄 표 전면 정리 — rowspan 분할·넓은 표 축소·선/배경 정돈 (CO-20/CO-21)
+
+- rowspan/colspan 대응 분할: 경계가 rowspan 그룹 내부면 확장 셀이 앞 표에 남아 뒤 행이 깨지는 결함 — 그룹 시작 행부터 옮기는 판정 추가 (_cutsWithTableSplit)
+- 넓은 표 우측 절단: 부모 폭을 넘는 table은 font-size 축소(하한 0.65)로 페이지 내 수용
+- 선 정돈: 래퍼 하단 테두리 제거(마지막 행 td 선과 이중선), group-start 청록 구분선→인쇄 회색, th 이중선/nowrap/sticky 정리는 기존 항목 흡수
+- 배경 정돈: TH 저알파 틴트→인쇄 회색, 극저알파 지브라(α<0.15, lum>0.9)→#f9fafb 복원
+- _fixHeaderBand를 _fixTableExtras(TH·TD·TABLE 통합)로 재구성, fixPrintLines·styled 워크 공용 적용
+- print.css에 동일 규약 선언형 추가 — beforeprint 미지원 환경 안전망
+- e2e·유닛 계약 확장 — rowspan 판정·축소·테두리·배경 실측
+
 ## 2026-11-09 fix(print): 표 헤더 이중선 + 외곽 수직선 정리 — 인쇄 표 라인 정돈
 
 - 헤더 이중선: th에 border-bottom:2px(reader-mermaid.css) + box-shadow 0 2px 0(reader.css)이 동시 적용돼 선 두 겹 — border-bottom만 남기고 shadow 제거

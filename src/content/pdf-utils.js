@@ -144,7 +144,14 @@ function _cutsWithTableSplit(root, availPx) {
                 });
                 if (!row) continue;
                 const rows = [...table.rows];
-                const ri = rows.indexOf(row);
+                let ri = rows.indexOf(row);
+                // rowspan 그룹 중간 절단 — 확장 셀이 앞 표에 남고 뒤 행만 넘어가면 레이아웃이
+                // 깨지므로 그룹 시작 행부터 옮긴다 (경계가 rowspan 범위 내부일 때)
+                for (let j = 0; j < ri; j++) {
+                    for (const cell of rows[j].cells) {
+                        if (cell.rowSpan > 1 && j + cell.rowSpan > ri) { ri = j; break; }
+                    }
+                }
                 if (ri <= thead.rows.length) {
                     // 경계가 헤더·첫 행을 가름 — 여기서 쪼개면 헤더만 페이지 끝에 고립된다.
                     // 표 앞에 스페이서를 넣어 표 전체를 다음 페이지로 넘긴다 (고아 헤더 방지)
@@ -240,22 +247,38 @@ const _lumOf = rgb => (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
    백지에서 사라진다. 선폭이 있는 테두리 중 투명/거의 흰 것만 인쇄 회색으로 교체. */
 const _PRINT_LINE = '#e5e7eb'; // --print-border 동일값 (print.css 토큰, @media print 안이라 JS에서 못 읽음)
 const _PRINT_BAND = '#f3f4f6'; // --print-bg-subtle 동일값
-/* 표 헤더 밴드 정규화 — 저알파 컬러 틴트(--primary-tint-12 등)는 백지에서
-   불필요한 색 밴드로 보이므로 인쇄 회색으로 통일. 진한 원색(알파≥0.4)은 유지.
-   border-bottom과 box-shadow 선이 중복되는 th는 shadow만 제거해 선 하나로 정리. */
-const _fixHeaderBand = (el2, cs, set) => {
-    if (el2.tagName !== 'TH') return;
-    const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs.backgroundColor || '');
-    if (m && (m[4] === undefined ? 1 : parseFloat(m[4])) < 0.4) set('background', _PRINT_BAND);
-    if (parseFloat(cs.borderBottomWidth) > 0 && _isLineShadow(cs.boxShadow)) set('box-shadow', 'none'); // 이중 헤더선 — border-bottom만 남김
-    if (cs.whiteSpace === 'nowrap') set('white-space', 'normal'); // nowrap 표가 폭을 넘어 우측에서 잘리는 것 방지
+const _PRINT_ZEBRA = '#f9fafb'; // 지브라 복원 — 헤더 회색보다 한 단계 연하게
+/* 표 셀·헤더 인쇄 정리 —
+   TH: 저알파 틴트(--primary-tint-12 등)는 백지에서 불필요한 색 밴드라 인쇄 회색 통일,
+       border-bottom+box-shadow 이중선은 shadow만 제거, nowrap은 우측 절단 방지로 해제,
+       sticky는 비스크롤 출력물에서 무의미해 static 고정.
+   TD: group-start의 청록 구분선은 인쇄 회색으로, 극저알파 지브라는 희미 회색으로 복원.
+   TABLE: 부모 폭을 넘는 표는 font-size 축소로 우측 절단 방지. */
+const _fixTableExtras = (el2, cs, set) => {
+    const t = el2.tagName;
+    if (t === 'TH') {
+        const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs.backgroundColor || '');
+        if (m && (m[4] === undefined ? 1 : parseFloat(m[4])) < 0.4) set('background', _PRINT_BAND);
+        if (parseFloat(cs.borderBottomWidth) > 0 && _isLineShadow(cs.boxShadow)) set('box-shadow', 'none');
+        if (cs.whiteSpace === 'nowrap') set('white-space', 'normal');
+        if (cs.position === 'sticky') set('position', 'static');
+    } else if (t === 'TD') {
+        if (el2.closest('tr.group-start')) set('border-top-color', _PRINT_LINE); // 청록 구분선 → 인쇄 회색
+        const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs.backgroundColor || '');
+        if (m && (m[4] === undefined ? 1 : parseFloat(m[4])) < 0.15 && _lumOf([+m[1], +m[2], +m[3]]) > 0.9) set('background', _PRINT_ZEBRA);
+    } else if (t === 'TABLE') {
+        const pw = el2.parentElement ? el2.parentElement.clientWidth : 0;
+        const tw = el2.getBoundingClientRect().width;
+        if (pw > 0 && tw > pw) set('font-size', `${(parseFloat(cs.fontSize) || 14) * Math.max(0.65, Math.floor((pw / tw) * 100) / 100)}px`); // 넓은 표 축소
+    }
 };
-/* 표 외곽 좌우 테두리 제거 — 래퍼 border가 표보다 넓어 내용에서 떨어진
-   수직선으로 보인다. 인쇄물은 위아래 수평선만 남긴다. */
+/* 표 외곽 좌우+하단 테두리 제거 — 래퍼 border가 표보다 넓어 내용에서 떨어진
+   수직선으로 보이고, 하단은 마지막 행 td 선과 이중선이 된다. 위쪽 수평선만 남긴다. */
 const _fixTableFrame = (el2, set) => {
     if (!el2.classList.contains('reader-table-wrapper')) return;
     set('border-left', 'none');
     set('border-right', 'none');
+    set('border-bottom', 'none'); // 마지막 행 td border-bottom과 이중선 방지
 };
 const _fixBorder = (el2, cs, set) => {
     for (const s of ['Top', 'Right', 'Bottom', 'Left']) {
@@ -292,7 +315,7 @@ export function fixPrintLines(root, win = window) {
             undo.push(() => { st.setProperty(p, prev, prio); });
             st.setProperty(p, v, 'important');
         });
-        _fixHeaderBand(el2, cs, (p, v) => {
+        _fixTableExtras(el2, cs, (p, v) => {
             const prev = st.getPropertyValue(p), prio = st.getPropertyPriority(p);
             undo.push(() => { st.setProperty(p, prev, prio); });
             st.setProperty(p, v, 'important');
@@ -382,8 +405,8 @@ export async function pdfFileFromElStyled(el, title) {
         const bg = _lum(cs.backgroundColor);
         if (bg !== null && bg < 0.25) el2.style.background = 'transparent'; // 어두운 배경은 제거 — 흰 종이와 대비
         _fixBorder(el2, cs, (p, v) => el2.style.setProperty(p, v, 'important')); // 반투명/흰 테두리는 백지 소실 → 인쇄 회색
-        _fixHeaderBand(el2, cs, (p, v) => el2.style.setProperty(p, v, 'important')); // 헤더 틴트 → 인쇄 회색
-        _fixTableFrame(el2, (p, v) => el2.style.setProperty(p, v, 'important')); // 표 외곽 좌우 테두리 제거
+        _fixTableExtras(el2, cs, (p, v) => el2.style.setProperty(p, v, 'important')); // 표 셀·헤더 정리
+        _fixTableFrame(el2, (p, v) => el2.style.setProperty(p, v, 'important')); // 표 외곽 좌우·하단 테두리 제거
         if (cs.boxShadow !== 'none' && !_isLineShadow(cs.boxShadow)) el2.style.boxShadow = 'none'; // 무확산 구분선은 유지
         el2.style.textShadow = 'none';
     });
