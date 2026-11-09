@@ -179,7 +179,7 @@ body.manual-open{overflow:hidden;}
             </div>`,
         wire(el) {
             el.querySelector('[data-manual-close]')?.addEventListener('click', close);
-            // 인쇄·PDF 버튼: 스타일드 PDF 생성 → 새 탭 미리보기(뷰어 인쇄 가능)·차단 시 다운로드 — 기기의 window.print() 백지 대응 (@spec CO-20)
+            // 인쇄·PDF 버튼: 스타일드 PDF 생성 → 새 탭 미리보기(뷰어 인쇄·저장 가능)·차단 시 저장 대화상자→다운로드 — 기기의 window.print() 백지 대응 (@spec CO-20)
             // @spec CO-20
             el.querySelector('[data-manual-print]')?.addEventListener('click', async e => {
                 const btn = /** @type {HTMLButtonElement} */ (e.currentTarget);
@@ -189,23 +189,27 @@ body.manual-open{overflow:hidden;}
                 try {
                     const { pdfFileFromElStyled } = await import('../content/pdf-utils.js');
                     const file = await pdfFileFromElStyled(el.querySelector('#manual-article'), _currentTitle || '문서');
-                    const picker = (/** @type {any} */ (window)).showSaveFilePicker;
-                    if (picker) { // 윈도우 저장 대화상자(다른 이름으로 저장) — 사용자가 위치·파일명 선택
-                        try {
-                            const handle = await picker.call(window, {
-                                suggestedName: file.name,
-                                types: [{ description: 'PDF 문서', accept: { 'application/pdf': ['.pdf'] } }],
-                            });
-                            const w = await handle.createWritable();
-                            await w.write(file); await w.close();
+                    const url = URL.createObjectURL(file);
+                    if (window.open(url, '_blank')) { // 새 탭 미리보기 — 브라우저 PDF 뷰어에서 확인 후 인쇄·저장
+                        showToast('PDF 미리보기를 열었습니다 — 뷰어에서 인쇄·저장하세요');
+                    } else {
+                        const picker = (/** @type {any} */ (window)).showSaveFilePicker;
+                        if (picker) { // 팝업 차단 — 윈도우 저장 대화상자(다른 이름으로 저장)
+                            try {
+                                const handle = await picker.call(window, {
+                                    suggestedName: file.name,
+                                    types: [{ description: 'PDF 문서', accept: { 'application/pdf': ['.pdf'] } }],
+                                });
+                                const w = await handle.createWritable();
+                                await w.write(file); await w.close();
+                                showToast('PDF 저장됨 — 파일을 열어 인쇄하세요');
+                            } catch (e2) { if ((/** @type {any} */ (e2))?.name !== 'AbortError') throw e2; }
+                        } else { // 미지원(모바일·FF) — 다운로드 폴백
+                            const a = document.createElement('a');
+                            a.href = url; a.download = file.name;
+                            document.body.appendChild(a); a.click(); a.remove();
                             showToast('PDF 저장됨 — 파일을 열어 인쇄하세요');
-                        } catch (e2) { if ((/** @type {any} */ (e2))?.name !== 'AbortError') throw e2; }
-                    } else { // 미지원(모바일·FF) — 다운로드 폴백
-                        const url = URL.createObjectURL(file);
-                        const a = document.createElement('a');
-                        a.href = url; a.download = file.name;
-                        document.body.appendChild(a); a.click(); a.remove();
-                        showToast('PDF 저장됨 — 파일을 열어 인쇄하세요');
+                        }
                     }
                 } catch (err) { // 생성 실패 시 인쇄창 폴백 — 실패 사실을 토스트로 가시화 (백지 진단용)
                     showToast('PDF 생성 실패 — 인쇄창으로 대체합니다: ' + ((/** @type {any} */ (err))?.message || '').slice(0, 60));

@@ -17,14 +17,14 @@ vi.doMock('../../../src/shell/doc-overlay.js', () => ({
     buildTocHtml: () => '', mountToc: () => {}, scrollToHeadingSlug: () => {},
 }));
 
-const stubPdfEnv = () => {
+const stubPdfEnv = (openResult = null) => {
     const pdfFileFromElStyled = vi.fn(() => Promise.resolve(new File(['x'], 'd.pdf', { type: 'application/pdf' })));
     vi.doMock('../../../src/content/pdf-utils.js', () => ({ pdfFileFromElStyled }));
     vi.doMock('../../../src/ui-utils.js', () => ({ showToast: vi.fn() }));
     window.URL.createObjectURL = vi.fn(() => 'blob:x');
-    window.open = vi.fn(() => null); // 팝업 차단 시나리오 → 다운로드 폴백 경로
+    window.open = vi.fn(() => openResult); // null = 팝업 차단 → 저장/다운로드 폴백 경로
     const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
-    return { pdfFileFromElStyled, clickSpy };
+    return { pdfFileFromElStyled, clickSpy, openSpy: window.open };
 };
 
 describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로', () => {
@@ -70,7 +70,21 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         }
     });
 
-    it('저장 경로 — showSaveFilePicker 우선(윈도우 저장 대화상자), 미지원만 다운로드 폴백', async () => {
+    it('manual data-manual-print → 미리보기 우선(window.open 성공 시 다운로드 미호출)', async () => {
+        const { pdfFileFromElStyled, clickSpy, openSpy } = stubPdfEnv({ closed: false }); // 새 탭 미리보기 성공
+        const { ManualViewer } = await import('../../../src/reader/manual-viewer.js');
+        try {
+            await ManualViewer.openManual();
+        } catch { return; } // jsdom에서 오픈 플로우 미지원 시 스킵
+        document.querySelector('[data-manual-print]')?.click();
+        await new Promise(r => setTimeout(r, 50));
+        expect(pdfFileFromElStyled).toHaveBeenCalled();
+        expect(openSpy).toHaveBeenCalledWith('blob:x', '_blank');
+        expect(clickSpy).not.toHaveBeenCalled(); // 미리보기 성공 — 저장 폴백 미사용
+        clickSpy.mockRestore();
+    });
+
+    it('저장 경로 — 미리보기 차단 시 showSaveFilePicker 우선(윈도우 저장 대화상자), 미지원만 다운로드 폴백', async () => {
         const { readFileSync } = await import('node:fs');
         for (const f of ['src/reader/manual-viewer.js', 'src/reader/exam-viewer.js']) {
             const src = readFileSync(f, 'utf8');
