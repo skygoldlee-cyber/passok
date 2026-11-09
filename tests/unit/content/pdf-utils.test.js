@@ -58,4 +58,13 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
     it('화면 전용 컨트롤 클론 제거 — 다이어그램 확대 버튼이 PDF에 찍히지 않음', () => {
         assert.match(src, /querySelectorAll\('\.mermaid-expand-btn'\)/); // 클론 내 확대 버튼 탐색·제거
     });
+
+    it('lazy 이미지 정착 대기 — 미로드 0높이 측정으로 절단선 어긋남 방지 (CO-21)', () => {
+        assert.match(src, /_settleImages/);                                  // 정착 헬퍼
+        assert.match(src, /removeAttribute\('loading'\)/);                   // lazy 해제 → 즉시 로드
+        assert.match(src, /i\.decode\(\)/);                                  // 디코딩 완료 대기
+        // 정착이 경계 측정·스크롤 클립 해제 이전에 실행돼야 측정이 최종 레이아웃 기준
+        assert.ok(src.indexOf('await _settleImages(wrap)') < src.indexOf('_expandScrollClips(wrap)'));
+        assert.ok(src.indexOf('await _settleImages(wrap)') < src.indexOf('_blockCuts(wrap, availPx)'));
+    });
 });

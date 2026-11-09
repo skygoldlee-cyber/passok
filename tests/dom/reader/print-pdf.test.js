@@ -79,6 +79,13 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         expect(src).toContain('pre.mermaid{overflow:visible'); // 스크롤 상자 해제
     });
 
+    it('참조자료 인쇄 창 — 이미지 로드 대기 후 print() (미로드 빈 출력 방지)', async () => {
+        const { readFileSync } = await import('node:fs');
+        const src = readFileSync('src/reader/html-viewer.js', 'utf8');
+        expect(src).toContain('i.decode()'); // 이미지 디코딩 대기
+        expect(src.indexOf('i.decode()') < src.indexOf('printWin.print()')).toBe(true); // 대기 선행
+    });
+
     it('exam-article 타이포그래피 — manual-article 기준본과 동일 스케일 (출력 간격 통일)', async () => {
         const { readFileSync } = await import('node:fs');
         const exam = readFileSync('src/reader/exam-viewer.js', 'utf8');

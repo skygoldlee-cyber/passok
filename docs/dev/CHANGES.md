@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(pdf): lazy 이미지 정착 대기 — 학습안내서 대형 삽화가 페이지 경계에서 잘리던 근본 원인 수정
+
+- pdfFileFromElStyled 클론의 loading=lazy 이미지는 미로드 상태라 높이 0으로 측정 — _blockCuts 절단 위치가 렌더 시점 실제 레이아웃과 어긋나 삽화 한가운데를 절단 (실측 재현: 측정 2×2px → 렌더 900×1178px, 절단선이 이미지 내부 관통 확인)
+- _settleImages 전처리 추가 — lazy 해제 + decode 대기 + 리플로우 후 측정하도록 pdfFileFromEl·pdfFileFromElStyled 양쪽 적용
+- html-viewer 참조자료 인쇄 창도 document.close() 직후 print() 동기 호출로 미로드 이미지가 빈 채 출력될 수 있어 — 디코딩 대기(3초 상한) 후 인쇄로 변경
+
 ## 2026-11-09 fix(print): 머메이드 페이지 분할·클립 보강 — 전 인쇄/PDF 경로 일괄
 
 - print.css 활성 뷰 인쇄에 pre.mermaid·reader-img·figure·blockquote break-inside:avoid 추가 — 기존엔 오버레이·리뷰 카드만 보호돼 리더 뷰 인쇄 시 다이어그램이 페이지 경계에서 쪼개짐

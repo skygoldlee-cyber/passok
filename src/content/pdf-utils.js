@@ -24,6 +24,23 @@ export function ensurePdf() {
 const _BLOCK_SEL = 'h1,h2,h3,h4,h5,h6,p,li,tr,table,.reader-table-wrapper,.reader-img,img,svg,pre,blockquote,figure,.mermaid,hr,details';
 
 /**
+ * 이미지 로드·레이아웃 확정 — loading=lazy 이미지는 미로드 상태에서 높이 0으로
+ * 측정되는데, 렌더 시점엔 실제 크기로 펼쳐져 절단 위치가 통째로 어긋난다
+ * (큰 삽화가 페이지 경계에서 잘리는 원인). lazy 제거로 즉시 로드시키고
+ * decode 대기 후 리플로우를 강제해 경계 측정이 최종 레이아웃 기준이 되게 한다.
+ * 경계 측정·스크롤 클립 해제보다 먼저 호출해야 한다. (@spec CO-21)
+ */
+async function _settleImages(root) {
+    const imgs = [...root.querySelectorAll('img')];
+    if (!imgs.length) return;
+    imgs.forEach(i => i.removeAttribute('loading')); // lazy 해제 — 즉시 로드
+    await Promise.all(imgs.map(i => i.decode().catch(() => {}))); // 실패 이미지는 무시
+    // 로드 크기 반영 프레임 — 백그라운드 탭에서 rAF가 안 도는 상황 대비 상한 부여
+    await Promise.race([new Promise(r => requestAnimationFrame(r)), new Promise(r => setTimeout(r, 300))]);
+    void root.offsetHeight; // 리플로우 확정 — 이후 rect 측정이 최종 레이아웃 기준
+}
+
+/**
  * 화면용 스크롤 클립 해제 — .reader-table-wrapper(max-height:480px)처럼 세로로 잘린
  * 상자는 html2canvas가 스크롤포트만 렌더해 잘린 내용이 PDF에서 통째로 빠지고,
  * 잘린 행 rect가 절단 후보로 오인돼 경계가 어긋난다. 세로 스크롤이 실제로 발생한
@@ -76,6 +93,7 @@ function _blockCuts(el, availPx) {
 /** 뷰 미리보기 요소 → PDF File (한글은 캔버스 이미지로 렌더) */
 export async function pdfFileFromEl(el, title) {
     await ensurePdf();
+    await _settleImages(el); // lazy 이미지 로드·레이아웃 확정 — 절단 위치 어긋남 방지 (@spec CO-21)
     _expandScrollClips(el); // 세로 스크롤 클립 해제 — 잘린 행 누락·경계 오인 방지 (@spec CO-21)
     const canvas = await (/** @type {any} */ (window)).html2canvas(el, { scale: 2, logging: false });
     const { jsPDF } = (/** @type {any} */ (window)).jspdf;
@@ -148,6 +166,7 @@ export async function pdfFileFromElStyled(el, title) {
         el2.style.boxShadow = 'none';
         el2.style.textShadow = 'none';
     });
+    await _settleImages(wrap); // 클론 lazy 이미지 로드·레이아웃 확정 — 미로드 0높이 측정으로 절단선이 이미지 중간을 자르는 결함 수정 (@spec CO-21)
     _expandScrollClips(wrap); // 세로 스크롤 클립 해제 — 잘린 행 누락·경계 오인 방지 (@spec CO-21)
     // 요소 경계 페이지네이션 — 캔버스는 wrap을 1회 렌더(견고)하고, 자르는 위치는
     // 블록 요소 경계(_blockCuts 공용)로만 선택 — 표·그림·제목이 페이지 경계에서 잘리지 않는다.

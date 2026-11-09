@@ -70,7 +70,11 @@ function _ensureOverlay() {
             '<style>@media print{pre.mermaid,svg,img,figure,blockquote,tr{page-break-inside:avoid;break-inside:avoid;}pre.mermaid{overflow:visible;max-height:none;}pre.mermaid svg{max-width:100%;height:auto;}.mermaid-expand-btn{display:none;}}</style>');
             printWin.document.write('</head><body>' + content.innerHTML + '</body></html>');
             printWin.document.close();
-            printWin.print();
+            // 이미지 로드 대기 후 인쇄 — 미로드 상태에서 print()하면 삽화가 빈 채 출력됨.
+            // 3초 상한: 응답 없는 리소스가 있어도 인쇄는 진행
+            const pending = Array.from(printWin.document.images).map(i => i.decode().catch(() => {}));
+            Promise.race([Promise.all(pending), new Promise(r => setTimeout(r, 3000))])
+                .then(() => printWin.print());
         }
     }
     el.querySelector('#hr-print-btn')?.addEventListener('click', () => _printContent('인쇄'));
