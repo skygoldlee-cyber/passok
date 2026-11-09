@@ -14,7 +14,7 @@ import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
-export { careVoiceToggle } from '../care-voice.js';
+export { careIncidentVoiceToggle } from '../care-voice.js';
 import { voiceButtonsInit } from '../care-voice.js';
 
 const $ = (id) => document.getElementById(id);

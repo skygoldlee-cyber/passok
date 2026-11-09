@@ -49,3 +49,7 @@ function _mark(inputId, on) {
     const btn = document.querySelector(`.care-voice-btn[data-arg="${inputId}"]`);
     if (btn) btn.classList.toggle('is-listening', on);
 }
+
+/* 뷰별 핸들러 별칭 — 지연 핸들러 이름은 전체 유니크 계약이라 뷰마다 별도 이름을 둔다 */
+export const careIncidentVoiceToggle = careVoiceToggle;
+export const careVisitVoiceToggle = careVoiceToggle;

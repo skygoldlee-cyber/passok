@@ -1,6 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(carework): 음성 입력 핸들러 뷰별 별칭 — 지연 핸들러 유니크 계약 준수
+
+- careVoiceToggle을 두 뷰 리스트에 등록해 핸들러 전체 유니크 계약 위반 — careIncidentVoiceToggle·careVisitVoiceToggle 별칭으로 분리, 영향 테스트 care-views 53/53 통과
+
 ## 2026-11-09 feat(carework): 음성 입력 — Web Speech API 말로 입력
 
 - 공용 care-voice.js — ko-KR 인식 토글, 미지원 브라우저는 🎤 버튼 숨김(webkitSpeechRecognition 폴백), 인식 결과를 대상 필드에 이어 붙임

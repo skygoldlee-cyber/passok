@@ -12,7 +12,7 @@ import { todayKey } from '../../../core/utils.js';
 import { docMdHead, docMdSign, csvToMdTable, mdToHtml } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 export { careShare } from '../care-share.js';
-export { careVoiceToggle } from '../care-voice.js';
+export { careVisitVoiceToggle } from '../care-voice.js';
 import { voiceButtonsInit } from '../care-voice.js';
 
 const $ = (id) => document.getElementById(id);

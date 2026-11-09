@@ -97,9 +97,12 @@ describe('carework 음성 입력', () => {
         assert.match(voice, /SpeechRecognition|webkitSpeechRecognition/);      // API + 폴백
         assert.match(voice, /lang = 'ko-KR'/);                                 // 한국어
         assert.match(voice, /voiceButtonsInit/);                               // 미지원 숨김
-        assert.match(inc, /export \{ careVoiceToggle \}/);                     // 뷰 re-export
-        assert.match(vis, /export \{ careVoiceToggle \}/);
+        assert.match(inc, /export \{ careIncidentVoiceToggle \}/);             // 뷰별 별칭 re-export
+        assert.match(vis, /export \{ careVisitVoiceToggle \}/);
+        assert.match(voice, /careIncidentVoiceToggle = careVoiceToggle/);      // 별칭 구현
+        assert.match(voice, /careVisitVoiceToggle = careVoiceToggle/);
         assert.match(inc, /voiceButtonsInit\(\)/);                             // init에서 숨김 적용
-        assert.match(reg, /careVoiceToggle/);                                  // 핸들러 등록
+        assert.match(reg, /careIncidentVoiceToggle/);                          // 핸들러 등록
+        assert.match(reg, /careVisitVoiceToggle/);
     });
 });
