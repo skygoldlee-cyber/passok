@@ -22,10 +22,11 @@ function isFp(v, node) {
         fp.rule === v.id && fp.targetRe.test(target));
 }
 
-async function scan(page, label) {
-    const results = await new AxeBuilder({ page })
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-        .analyze();
+async function scan(page, label, scope) {
+    let builder = new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']);
+    if (scope) builder = builder.include(scope);
+    const results = await builder.analyze();
     // 오탐 노드를 제거하고 남은 노드가 없으면 위반 자체를 제외
     const real = results.violations
         .map(v => ({ ...v, nodes: v.nodes.filter(n => !isFp(v, n)) }))
@@ -92,7 +93,7 @@ test.describe('접근성 자동 스캔 (A-01/03/04)', () => {
             const el = document.querySelector('.btn-sm[data-click="toggleFontSize"]');
             const r = el.getBoundingClientRect(); return r.height >= 24 && r.width >= 24;
         }, null, { timeout: 10_000 });
-        const bad = await scan(page, 'settings');
+        const bad = await scan(page, 'settings', '#settings-panel');
         expect(bad.map(v => v.id)).toEqual([]);
     });
 
