@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261109-883363c",
+    "date": "2026-11-09",
+    "notes": [
+      "[기능·print] 인쇄 표 전면 정리 — rowspan 분할·넓은 표 축소·선/배경 정돈",
+      "[정리·release] v20261109-6a413e5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-6a413e5",
     "date": "2026-11-09",
     "notes": [
@@ -184,14 +192,6 @@
     "notes": [
       "[수정·reader] 뷰어 PDF 새탭 프리뷰 복원 — 차단 시에만 다운로드 폴백",
       "[정리·release] v20261109-3dd1893 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-3dd1893",
-    "date": "2026-11-09",
-    "notes": [
-      "[수정·pdf] pdfFileFromElStyled에 ensurePdf 선행 — 벤더 미로드 즉시 크래시 복구",
-      "[정리·release] v20261109-3cb3c9e 스탬프 확정 [no-docs]"
     ]
   }
 ]
