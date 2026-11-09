@@ -1,6 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 feat(carework): AI 초안 유료화 — care_ai_draft 피처 등록
+
+- AI 초안(요양일지·인수인계)을 유료 피처로 전환 — 버튼 "유료" 배지 + proFeatureNotice 호출, feature-plan.json care_ai_draft 등록
+
 ## 2026-11-09 fix(carework): 음성 입력 핸들러 뷰별 별칭 — 지연 핸들러 유니크 계약 준수
 
 - careVoiceToggle을 두 뷰 리스트에 등록해 핸들러 전체 유니크 계약 위반 — careIncidentVoiceToggle·careVisitVoiceToggle 별칭으로 분리, 영향 테스트 care-views 53/53 통과

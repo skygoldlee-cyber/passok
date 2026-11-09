@@ -105,4 +105,10 @@ describe('carework 음성 입력', () => {
         assert.match(reg, /careIncidentVoiceToggle/);                          // 핸들러 등록
         assert.match(reg, /careVisitVoiceToggle/);
     });
+    it('AI 초안 유료 — proFeatureNotice + feature-plan 등록 계약', () => {
+        const ai = readFileSync(new URL('../../../src/exams/carework/care-ai.js', import.meta.url), 'utf8');
+        const plan = JSON.parse(readFileSync(new URL('../../../feature-plan.json', import.meta.url), 'utf8'));
+        assert.match(ai, /proFeatureNotice\('care_ai_draft'/);                 // 호출
+        assert.equal(plan.features.care_ai_draft, 'pro');                      // feature-plan 등록
+    });
 });
