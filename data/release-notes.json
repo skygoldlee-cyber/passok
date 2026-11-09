@@ -1,5 +1,20 @@
 [
   {
+    "version": "v20261109-0c206f6",
+    "date": "2026-11-09",
+    "notes": [
+      "[테스트·pdf] pdf-utils 생성 경로 smoke — 커버리지 여유 확보",
+      "[정리] TRACE_MATRIX 재생성 [no-docs]",
+      "[테스트·print] initPrintPrep DOM 테스트 — 커버리지 임계값 복구",
+      "[정리] TRACE_MATRIX 재생성 [no-docs]",
+      "[테스트·pdf] pdf-pagination 스펙 @spec 태그 + TESTING.md 등록 — 게이트 정합",
+      "[정리] TRACE_MATRIX 재생성 [no-docs]",
+      "[기능·pdf] 생성 PDF 개선 5종 — 표 헤더 반복·캔버스 상한·details·E2E·용량",
+      "[기능·print] 인쇄 파이프라인 보완 — 전역 전처리 훅·디코딩 상한·페이지 번호",
+      "[정리·release] v20261109-db7d85e 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-db7d85e",
     "date": "2026-11-09",
     "notes": [
@@ -182,19 +197,6 @@
       "[수정·carework] 실무 홈에 글자 크게 버튼 노출 — 모바일 실무 모드 접근성",
       "[수정·reader] 뷰어 인쇄/PDF를 인쇄창으로 복원 + 생성 PDF JPEG 전환 (용량 ~1/10)",
       "[정리·release] v20261109-77bae04 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-77bae04",
-    "date": "2026-11-09",
-    "notes": [
-      "[정리] TRACE_MATRIX 재생성",
-      "[수정] UX-NAV-16 미참조 공백 해소 + CO-20 @spec 태그 파싱 정합",
-      "[수정·shell] 모바일 글자 크게 버튼을 자료·도구 그리드에 편입 — UX-NAV-12 라벨 규약 준수",
-      "[spec] CO-20 문서 PDF 인쇄 가독성 — 래퍼 규약 명문화 + @spec 태그",
-      "[수정·shell] 모바일 더보기 시트에 글자 크게 토글 추가 — 사이드바 미노출 보완",
-      "[기능·reader] 매뉴얼·문서 PDF를 평가점검 출력 스타일로 전환 — 여백·흰 배경·검정 강제",
-      "[정리·release] v20261108-79a1b8f 스탬프 확정 [no-docs]"
     ]
   }
 ]
