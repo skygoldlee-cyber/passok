@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261109-3a40ae6",
+    "date": "2026-11-09",
+    "notes": [
+      "[수정·print] mermaid foreignObject 라벨 color 보정 — 출력 경로 흰 글자 묻힘",
+      "[정리·release] v20261109-44818b5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-44818b5",
     "date": "2026-11-09",
     "notes": [
@@ -186,15 +194,6 @@
       "[정리] 참조용 PDF 문서 gitignore 추가 — docs/*.pdf 제외",
       "[수정·reader] exam-article 타이포그래피를 manual-article 기준으로 통일 — 출력 간격 동일화",
       "[정리·release] v20261109-2a02fb3 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-2a02fb3",
-    "date": "2026-11-09",
-    "notes": [
-      "[정리] TRACE_MATRIX 재생성",
-      "[수정·pdf] 생성 PDF 페이지 여백 조각 + 밝은 글자만 보정 — 인쇄 품질 복원",
-      "[정리·release] v20261109-e700425 스탬프 확정 [no-docs]"
     ]
   }
 ]
