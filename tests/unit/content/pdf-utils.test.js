@@ -90,6 +90,17 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         assert.match(src, /html2canvas\(wrap, \{ scale/);                    // 고정 2 아닌 적응 배율
     });
 
+    it('mermaid 인쇄 대비 보정 — 어두운 채우기 틴트·밝은 글자 검정 (CO-20)', () => {
+        assert.match(src, /export function fixMermaidPrintContrast/);          // 공용 보정 헬퍼
+        assert.match(src, /querySelectorAll\('pre\.mermaid svg \*'\)/);        // 다이어그램 하위 요소 순회
+        assert.match(src, /setProperty\(prop, 'fill', '#000'\)|'fill', '#000'/); // 밝은 글자 → 검정
+        assert.match(src, /'stroke', '#444'/);                               // 밝은 선 → 어둡게
+        // PDF 생성 양 경로 + 라이브 복원
+        assert.match(src, /fixMermaidPrintContrast\(wrap\)/);                // styled 클론
+        assert.match(src, /undoMermaid = fixMermaidPrintContrast\(el\)/);    // plain 라이브
+        assert.match(src, /undoMermaid\.forEach\(u => u\(\)\)/);             // 라이브 원복
+    });
+
     it('details 펼침 — 접힌 내용도 출력물에 포함', () => {
         assert.match(src, /details:not\(\[open\]\)/);                        // 닫힌 details 수집
         assert.match(src, /\.open = true/);                                  // 클론·렌더 전 펼침

@@ -1,6 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(print): mermaid 출력 대비 보정 — 다크 테마 SVG가 백지에서 같은 계열로 묻히던 결함
+
+- pdf-utils.js fixMermaidPrintContrast 신설 — 다크 테마로 렌더된 mermaid SVG의 어두운 도형 채우기는 색상 계열을 유지한 밝은 틴트로, 밝은 글자·선은 어둡게 보정. 기존 HTML 색 보정은 color/background만 다뤄 SVG fill/stroke가 빠져 "어두운 상자+검정 글자"로 대비 붕괴
+- 4개 출력 경로 일괄 적용 — pdfFileFromElStyled(클론)·pdfFileFromEl(live 복원)·initPrintPrep beforeprint(window.print 라이브, afterprint 원복)·html-viewer 참조자료 인쇄 창(별도 창 getComputedStyle)
+- 라이트 테마 렌더분은 판정상 거의 무변경 — 양쪽 테마 공통 적용
+- tests/e2e/pdf-pagination.spec.js — 회귀 추가(다크 색상 SVG → 채우기 밝기·선 어둡기·글자 검정 실측 검증), 스텁이 attach 상태에서 svgFills 채취
+- 참고: tsc checkJs에서 JSDoc 선택 매개변수 `[name]` 뒤 em-dash(—)는 TS1127 유발 — 하이픈 사용
+
 ## 2026-11-09 fix(pdf): 같은 페이지 중복 표 헤더 수정 — 분할 수렴 반복을 1건 단위 재측정으로
 
 - _cutsWithTableSplit — 한 번 측정한 경계 목록으로 연속 분할하던 것을 조정 1건 적용 후 즉시 경계 재측정으로 변경. thead 복제(높이만큼 뒤쪽 내용 밀림) 후 낡은 경계로 쪼개면 복제 헤더가 페이지 중간·끝에 출력돼 같은 페이지에 헤더가 2~3회 나오던 결함 (실브라우저 재현: 페이지 끝 고아 thead·연속 고아 thead 확인)

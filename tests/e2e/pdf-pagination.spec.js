@@ -31,6 +31,9 @@ async function _stubVendors(page) {
                     return { top: tb.top - et, bot: tb.bottom - et, rows: t.rows.length,
                              theadH: t.tHead ? t.tHead.getBoundingClientRect().height : 0 };
                 }),
+                // mermaid 인쇄 대비 보정 검증용 — 색 보정은 html2canvas 이전에 완료되므로 여기서 확정값 채취
+                svgFills: [...el.querySelectorAll('pre.mermaid svg *')].map(e =>
+                    ({ tag: e.tagName.toLowerCase(), fill: getComputedStyle(e).fill, stroke: getComputedStyle(e).stroke })),
             };
             const c = document.createElement('canvas');
             c.width = el.offsetWidth * 2; c.height = el.offsetHeight * 2;
@@ -125,6 +128,36 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
             .map(t => Math.round(t.top * 2))
             .filter(y => !res.starts.some(s => Math.abs(s - y) < 8));
         expect(stray, `페이지 중간에 찍힌 헤더(캔버스 y) ${JSON.stringify(stray)}`).toEqual([]);
+    });
+
+    test('다크 테마 mermaid는 백지 출력용 대비로 보정된다 — 어두운 상자+검정 글자 방지', async ({ page }) => {
+        test.setTimeout(60_000);
+        await page.goto('/index.html');
+        await page.waitForFunction(() => window.__APP_INITIALIZED, null, { timeout: 30_000 });
+        await _stubVendors(page);
+        const res = await page.evaluate(async () => {
+            const w = /** @type {any} */ (window);
+            const host = document.createElement('div');
+            // 다크 테마 렌더분 흉내 — 어두운 노드 채우기 + 밝은 글자·선
+            host.innerHTML = '<pre class="mermaid"><svg viewBox="0 0 100 40">' +
+                '<rect width="100" height="40" style="fill:#3a3a5c;stroke:#b0b0cc"/>' +
+                '<text x="10" y="24" style="fill:#ffffff">라벨</text></svg></pre>';
+            document.body.appendChild(host);
+            try {
+                const { pdfFileFromElStyled } = await import('/src/content/pdf-utils.js');
+                await pdfFileFromElStyled(host, 't');
+                return w.__layout.svgFills;
+            } finally { host.remove(); }
+        });
+        const lum = c => {
+            const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c || '');
+            return m ? (0.299 * +m[1] + 0.587 * +m[2] + 0.114 * +m[3]) / 255 : null;
+        };
+        const rect = res.find(e => e.tag === 'rect');
+        const text = res.find(e => e.tag === 'text');
+        expect(lum(rect.fill), `노드 채우기는 밝은 틴트로: ${rect.fill}`).toBeGreaterThan(0.7);
+        expect(lum(rect.stroke), `밝은 선은 어둡게: ${rect.stroke}`).toBeLessThan(0.45);
+        expect(text.fill, '밝은 글자는 검정으로').toBe('rgb(0, 0, 0)');
     });
 
     test('접힌 details 내용이 생성 PDF에 포함된다', async ({ page }) => {

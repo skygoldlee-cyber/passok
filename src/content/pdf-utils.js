@@ -180,9 +180,11 @@ export async function pdfFileFromEl(el, title) {
     // 접힌 details 내용도 출력물에 포함 — 렌더 동안만 펼치고 완료 후 복원
     const closedDetails = [...el.querySelectorAll('details:not([open])')];
     closedDetails.forEach(d => { /** @type {HTMLDetailsElement} */ (d).open = true; });
+    let undoMermaid = /** @type {Array<(() => void)>} */ ([]);
     try {
         await _settleImages(el); // lazy 이미지 로드·레이아웃 확정 — 절단 위치 어긋남 방지 (@spec CO-21)
         _expandScrollClips(el); // 세로 스크롤 클립 해제 — 잘린 행 누락·경계 오인 방지 (@spec CO-21)
+        undoMermaid = fixMermaidPrintContrast(el); // 다크 테마 다이어그램 → 백지 출력용 대비 보정, 렌더 후 복원 (@spec CO-20)
         const W = 210, H = 297;
         // 페이지 여백 — 통짜 이미지를 전면 출력하면 상하 여백 없이 글자가 잘리므로 페이지별 캔버스에 여백을 입혀 조각냄 (@spec CO-20)
         const MX = 8, MY = 10;
@@ -219,15 +221,56 @@ export async function pdfFileFromEl(el, title) {
         const blob = pdf.output('blob');
         return new File([blob], `${title}.pdf`, { type: 'application/pdf' });
     } finally {
+        undoMermaid.forEach(u => u()); // 라이브 SVG 색상 원복
         closedDetails.forEach(d => { /** @type {HTMLDetailsElement} */ (d).open = false; });
     }
 }
 
-// rgb 파싱 → 밝기(0~1) — 흰 배경에서 안 보이는 밝은 글자 판정용
-export const _lum = c => {
+// rgb 문자열 파싱 → [r,g,b] — 색이 아닌 값(none·url·transparent 등)은 null
+const _rgb = c => {
     const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c || '');
-    return m ? (0.299 * +m[1] + 0.587 * +m[2] + 0.114 * +m[3]) / 255 : null;
+    return m ? [+m[1], +m[2], +m[3]] : null;
 };
+
+// rgb 파싱 → 밝기(0~1) — 흰 배경에서 안 보이는 밝은 글자 판정용
+export const _lum = c => { const rgb = _rgb(c); return rgb ? _lumOf(rgb) : null; };
+const _lumOf = rgb => (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
+
+/**
+ * 인쇄용 mermaid 색 대비 보정 — 다크 테마로 렌더된 SVG는 어두운 채우기 + 밝은 글자라,
+ * HTML 색 보정(밝은 color만 검정화)만 거치면 "어두운 상자 위 검정 글자"로 대비가 붕괴한다.
+ * 도형·배경 채우기는 색상 계열을 유지한 밝은 틴트로, 밝은 글자·선은 어둡게 바꿔
+ * 백지 출력에서도 구조가 읽히게 한다. 라이트 테마 렌더분은 판정상 거의 무변경이라
+ * 양쪽 테마 공통 적용. 라이브 DOM에 적용할 때는 반환된 복원 함수로 되돌린다. (@spec CO-20)
+ * @param {ParentNode} root — mermaid svg를 포함한 컨테이너 (computed 측정을 위해 문서 attach 상태)
+ * @param {Window} [win] - root가 속한 창 (별도 인쇄 창 문서는 그 창의 getComputedStyle 필요)
+ * @returns {Array<(() => void)>} 원복 함수 목록 (live DOM 복원용)
+ */
+export function fixMermaidPrintContrast(root, win = window) {
+    /** @type {Array<(() => void)>} */
+    const undo = [];
+    const set = (el, prop, val) => {
+        const st = /** @type {HTMLElement} */ (el).style;
+        const prev = st.getPropertyValue(prop);
+        undo.push(() => { st.setProperty(prop, prev); });
+        st.setProperty(prop, val);
+    };
+    const SHAPE = new Set(['rect', 'polygon', 'circle', 'ellipse', 'path']);
+    const TEXT = new Set(['text', 'tspan']);
+    root.querySelectorAll('pre.mermaid svg *').forEach(el => {
+        const cs = win.getComputedStyle(el);
+        const tag = el.tagName.toLowerCase();
+        const fill = _rgb(cs.fill);
+        if (fill) {
+            const fl = _lumOf(fill);
+            if (TEXT.has(tag) && fl > 0.6) set(el, 'fill', '#000'); // 밝은 글자 → 검정
+            else if (SHAPE.has(tag) && fl < 0.35) set(el, 'fill', `rgb(${fill.map(v => Math.round(v + (255 - v) * 0.85)).join(',')})`); // 어두운 도형 → 계열 유지 밝은 틴트
+        }
+        const stroke = _rgb(cs.stroke);
+        if (stroke && _lumOf(stroke) > 0.55) set(el, 'stroke', '#444'); // 밝은 선 → 어둡게
+    });
+    return undo;
+}
 
 /** 인쇄 가독성 래퍼로 PDF — 흰 배경·여백 확보, 밝은 글자만 검정 보정 (컬러 출력 유지).
  *  @spec CO-20 — 문서 PDF 인쇄 가독성 정본 래퍼
@@ -262,6 +305,9 @@ export async function pdfFileFromElStyled(el, title) {
         el2.style.boxShadow = 'none';
         el2.style.textShadow = 'none';
     });
+    // mermaid SVG는 fill/stroke 계열라 HTML 색 보정이 못 미침 — 어두운 상자+검정 글자
+    // 대비 붕괴 방지용 별도 보정 (클론이라 원복 불필요) (@spec CO-20)
+    fixMermaidPrintContrast(wrap);
     // 접힌 details 내용도 출력물에 포함 — 클론이라 화면 상태에 영향 없음
     wrap.querySelectorAll('details:not([open])').forEach(d => { /** @type {HTMLDetailsElement} */ (d).open = true; });
     await _settleImages(wrap); // 클론 lazy 이미지 로드·레이아웃 확정 — 미로드 0높이 측정으로 절단선이 이미지 중간을 자르는 결함 수정 (@spec CO-21)

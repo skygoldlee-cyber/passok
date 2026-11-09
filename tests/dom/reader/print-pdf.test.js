@@ -104,8 +104,15 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         expect(shell).toContain('afterprint');                           // 인쇄 직후 복원
         expect(shell).toContain('img[loading="lazy"]');                  // lazy 이미지 eager 전환
         expect(shell).toContain('scrollHeight - el.clientHeight');       // 실제 스크롤 발생 상자만 해제
+        expect(shell).toContain('fixMermaidPrintContrast');              // 다크 테마 다이어그램 인쇄 대비 보정 + afterprint 원복
         const app = readFileSync('src/shell/app.js', 'utf8');
         expect(app).toContain('initPrintPrep');                          // 초기화 등록
+    });
+
+    it('참조자료 인쇄 창 — mermaid 인쇄 대비 보정 적용 (어두운 상자+검정 글자 방지)', async () => {
+        const { readFileSync } = await import('node:fs');
+        const src = readFileSync('src/reader/html-viewer.js', 'utf8');
+        expect(src).toContain('fixMermaidPrintContrast(printWin.document');
     });
 
     it('exam-article 타이포그래피 — manual-article 기준본과 동일 스케일 (출력 간격 통일)', async () => {
