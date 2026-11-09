@@ -1,6 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(ui): 대시보드 배지 글자 크기 불일치 — '오늘 미션'과 '이번 주 N/5일' 통일
+
+- .daily-challenge-badge는 .badge 기본 크기(더 큼), .weekly-goal-chip만 --text-sm이라 같은 행의 배지 쌍 글자 크기가 달랐음 — chip과 동일한 --text-sm로 통일
+
 ## 2026-11-09 docs(print): 표 출력 규약 정리 — 인쇄 표 표시 규칙 명문화
 
 - AGENTS.md 코드 규칙에 표 출력 규약 추가: 위아래 수평선만·이중선 금지·반투명 테두리/저알파 틴트 회색 통일·분할은 조정당 재측정+rowspan 통째 이동·넓은 표 축소·th 정리(fixPrintLines/_fixTableExtras/_fixBorder/_fixTableFrame 4경로 공유 + print.css 선언형 안전망 동기화)

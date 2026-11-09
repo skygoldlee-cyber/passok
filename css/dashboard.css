@@ -646,6 +646,7 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
     background: var(--bg-active);
     color: var(--color-text-muted);
     padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm); /* 나란한 weekly-goal-chip과 크기 통일 */
 }
 
 /* A-01: 라이트 warm 배경(--bg-active) 위 muted 텍스트는 4.44:1로 4.5 미달 — 어두운 톤으로 상향 */
