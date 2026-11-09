@@ -32,6 +32,14 @@ describe('makeSessionCache — TTL 세션 캐시', () => {
         expect(sessionStorage.getItem(key)).toBeNull();
     });
 
+    it('한글 id 키 분리 — 같은 길이의 다른 파일명이 충돌하지 않음 (학습안내서↔실무매뉴얼 회귀)', () => {
+        const c = makeSessionCache('t_k_', 1000);
+        c.set('content/exams/carework/docs/학습안내서.md', { html: '<p>학습</p>' });
+        c.set('content/exams/carework/docs/실무매뉴얼.md', { html: '<p>실무</p>' });
+        expect(c.get('content/exams/carework/docs/학습안내서.md').html).toBe('<p>학습</p>');
+        expect(c.get('content/exams/carework/docs/실무매뉴얼.md').html).toBe('<p>실무</p>');
+    });
+
     it('clear는 자기 프리픽스 키만 제거', () => {
         const a = makeSessionCache('t_a_', 1000);
         const b = makeSessionCache('t_b_', 1000);

@@ -16,7 +16,9 @@ import { escapeHTML } from '../core/sanitize.js';
  * @param {{ maxEntries?: number }} [opts]
  */
 export function makeSessionCache(prefix, ttl, { maxEntries = 0 } = {}) {
-    const keyOf = (id) => prefix + String(id).replace(/[^a-zA-Z0-9]/g, '_');
+    // 한글 파일명(학습안내서·실무매뉴얼 등)이 전부 '_'로 소거돼 같은 길이면 키가 충돌하는
+    // 회귀 방지 — 유니코드 문자·숫자는 보존하고 구분자만 '_'로 정화한다.
+    const keyOf = (id) => prefix + String(id).replace(/[^\p{L}\p{N}]/gu, '_');
     const orderKey = prefix + '__lru_order__';
     let _order = null; // LRU 키 순서 (null = sessionStorage 미복원)
 
