@@ -60,6 +60,25 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         }
     });
 
+    it('인쇄 CSS mermaid 보호 — 스크롤 상자 해제 + 확대 버튼 출력 제외 (분할·클립 방지)', async () => {
+        const { readFileSync } = await import('node:fs');
+        for (const f of ['src/reader/manual-viewer.js', 'src/reader/exam-viewer.js']) {
+            const src = readFileSync(f, 'utf8');
+            expect(src, `${f} mermaid 스크롤 해제`).toContain('pre.mermaid{overflow:visible'); // overflow-x:auto 스크롤 상자는 인쇄 시 클립·분할
+            expect(src, `${f} 확대 버튼 숨김`).toContain('.mermaid-expand-btn{display:none'); // 화면 전용 컨트롤 출력 제외
+        }
+        const printCss = readFileSync('css/print.css', 'utf8');
+        expect(printCss, 'print.css mermaid 절단 방지').toMatch(/pre\.mermaid[^}]*break-inside:\s*avoid/s); // 활성 뷰 인쇄 경로
+        expect(printCss, 'print.css mermaid 스크롤 해제').toMatch(/pre\.mermaid[^}]*overflow:\s*visible/s);
+    });
+
+    it('참조자료 인쇄 창 — mermaid 절단 방지 규칙 존재 (html-viewer 폴백 경로)', async () => {
+        const { readFileSync } = await import('node:fs');
+        const src = readFileSync('src/reader/html-viewer.js', 'utf8');
+        expect(src).toContain('pre.mermaid,svg,img,figure,blockquote,tr{page-break-inside:avoid'); // 인쇄 창 절단 방지
+        expect(src).toContain('pre.mermaid{overflow:visible'); // 스크롤 상자 해제
+    });
+
     it('exam-article 타이포그래피 — manual-article 기준본과 동일 스케일 (출력 간격 통일)', async () => {
         const { readFileSync } = await import('node:fs');
         const exam = readFileSync('src/reader/exam-viewer.js', 'utf8');

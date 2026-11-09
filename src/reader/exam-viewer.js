@@ -203,6 +203,10 @@ body.exam-open{overflow:hidden;}
   #exam-overlay #exam-article pre,
   #exam-overlay #exam-article blockquote,
   #exam-overlay #exam-article figure{break-inside:avoid;page-break-inside:avoid;}
+  /* mermaid — 화면용 가로 스크롤 상자(overflow-x:auto)는 인쇄 시 클립·분할되므로 해제,
+     확대 버튼은 화면 전용 컨트롤이라 출력에서 제외 (manual-overlay와 동일) */
+  #exam-overlay #exam-article pre.mermaid{overflow:visible !important;}
+  #exam-overlay .mermaid-expand-btn{display:none !important;}
 }`;
 
     const _overlay = createDocOverlay({

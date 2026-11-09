@@ -46,4 +46,16 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         assert.match(src, /availPx/);                            // 페이지 용량
         assert.match(src, /html2canvas\(wrap/);                  // 단일 1회 렌더 (견고 경로)
     });
+
+    it('페이지 용량 초과 다이어그램 비례 축소 — 초대형 블록 고정 슬라이스 조각 방지', () => {
+        assert.match(src, /querySelectorAll\('pre\.mermaid svg/);   // mermaid 대상 측정
+        assert.match(src, /r\.height > availPx/);                   // 페이지 용량 초과 판정
+        assert.match(src, /style\.width = `\$\{Math\.max\(1, Math\.round\(r\.width \* k\)\)\}px`/); // 비례 축소
+        // 축소가 _blockCuts 경계 측정 이전에 실행돼야 경계가 축소 후 위치로 잡힘
+        assert.ok(src.indexOf('r.height > availPx') < src.indexOf('_blockCuts(wrap, availPx)'));
+    });
+
+    it('화면 전용 컨트롤 클론 제거 — 다이어그램 확대 버튼이 PDF에 찍히지 않음', () => {
+        assert.match(src, /querySelectorAll\('\.mermaid-expand-btn'\)/); // 클론 내 확대 버튼 탐색·제거
+    });
 });

@@ -163,6 +163,10 @@ body.manual-open{overflow:hidden;}
   #manual-overlay #manual-article pre,
   #manual-overlay #manual-article blockquote,
   #manual-overlay #manual-article figure{break-inside:avoid;page-break-inside:avoid;}
+  /* mermaid — 화면용 가로 스크롤 상자(overflow-x:auto)는 인쇄 시 클립·분할되므로 해제,
+     확대 버튼은 화면 전용 컨트롤이라 출력에서 제외 */
+  #manual-overlay #manual-article pre.mermaid{overflow:visible !important;}
+  #manual-overlay .mermaid-expand-btn{display:none !important;}
 }`;
 
     const _overlay = createDocOverlay({

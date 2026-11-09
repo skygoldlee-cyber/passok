@@ -1,6 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(print): 머메이드 페이지 분할·클립 보강 — 전 인쇄/PDF 경로 일괄
+
+- print.css 활성 뷰 인쇄에 pre.mermaid·reader-img·figure·blockquote break-inside:avoid 추가 — 기존엔 오버레이·리뷰 카드만 보호돼 리더 뷰 인쇄 시 다이어그램이 페이지 경계에서 쪼개짐
+- pre.mermaid의 overflow-x:auto는 인쇄 시 스크롤 상자가 되어 분할·클립 — print.css·manual/exam-overlay @media print에 overflow:visible 해제, 확대 버튼(화면 전용 컨트롤) 출력 제외
+- html-viewer 참조자료 인쇄 창 스타일에 절단 방지 규칙 추가 — 기존엔 page-break 규칙 자체 부재
+- pdfFileFromElStyled: 페이지 용량 초과 다이어그램·그림 비례 축소 — 초대형 블록이 고정 슬라이스로 조각나던 것 방지, 클론의 확대 버튼 제거
+
 ## 2026-11-09 fix(pdf): 스크롤 클립 해제 + 컨테이너 내부 미디어 경계 제외 — 표 행 누락·머메이드 잘림 수정
 
 - .reader-table-wrapper(max-height:480px·overflow:auto)은 html2canvas가 스크롤포트만 렌더해 잘린 행이 PDF에서 누락 + 잘린 행 rect가 절단 후보로 오인(하단선이 다음 표·글자 위에 출력) — 세로 스크롤 발생 상자만 max-height/overflow 해제하는 _expandScrollClips 전처리 추가 (경계 측정·렌더 전)

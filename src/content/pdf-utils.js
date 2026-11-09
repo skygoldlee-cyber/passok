@@ -132,6 +132,8 @@ export async function pdfFileFromElStyled(el, title) {
     wrap.style.cssText = 'position:absolute;left:0;top:100vh;right:auto;bottom:auto;width:960px;display:block;height:auto;max-height:none;overflow:visible;z-index:auto;padding:24px;background:#fff;color:#000';
     wrap.appendChild(el.cloneNode(true));
     document.body.appendChild(wrap); // computed style을 위해 먼저 부착
+    // 화면 전용 컨트롤 제거 — 다이어그램 확대 버튼이 PDF에 빈 상자로 찍히는 것 방지
+    wrap.querySelectorAll('.mermaid-expand-btn').forEach(b => b.remove());
     wrap.querySelectorAll('*').forEach(e2 => {
         const el2 = /** @type {HTMLElement} */ (e2);
         const cs = getComputedStyle(el2);
@@ -153,6 +155,18 @@ export async function pdfFileFromElStyled(el, title) {
     const W = 210, H = 297, MX = 8, MY = 10;
     const mmPerCssPx = (W - 2 * MX) / 960; // wrap 너비 전체가 내용 영역에 매핑
     const availPx = (H - 2 * MY) / mmPerCssPx; // 한 페이지 본문 css px
+    // 페이지 용량 초과 다이어그램·그림 비례 축소 — 한 페이지보다 큰 단일 블록은 경계
+    // 절단으로 지킬 수 없어 고정 슬라이스로 조각나므로 너비를 줄여 한 장에 수용 (@spec CO-21)
+    for (const g of wrap.querySelectorAll('pre.mermaid svg, .reader-img, img')) {
+        const el3 = /** @type {HTMLElement} */ (g);
+        const r = el3.getBoundingClientRect();
+        if (r.height > availPx && r.width > 0) {
+            const k = (availPx * 0.96) / r.height;
+            el3.style.maxWidth = 'none';
+            el3.style.width = `${Math.max(1, Math.round(r.width * k))}px`;
+            el3.style.height = 'auto';
+        }
+    }
     const cuts = _blockCuts(wrap, availPx);
     try {
         const canvas = await (/** @type {any} */ (window)).html2canvas(wrap, { scale: 2, logging: false });
