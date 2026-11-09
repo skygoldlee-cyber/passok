@@ -268,6 +268,12 @@ export function fixMermaidPrintContrast(root, win = window) {
         }
         const stroke = _rgb(cs.stroke);
         if (stroke && _lumOf(stroke) > 0.55) set(el, 'stroke', '#444'); // 밝은 선 → 어둡게
+        // foreignObject 라벨은 HTML color로 그려짐 — fill 보정만으로는 밝은 글자가
+        // 밝게 틴트된 상자 위에 남아 묻힌다 (window.print·인쇄 창 경로는 color 보정이 없음)
+        const color = _rgb(cs.color);
+        if (color && _lumOf(color) > 0.7) set(el, 'color', '#000'); // 밝은 라벨 글자 → 검정
+        const bg = _rgb(cs.backgroundColor);
+        if (bg && _lumOf(bg) < 0.25) set(el, 'background', 'transparent'); // 어두운 라벨 배경 → 제거
     });
     return undo;
 }

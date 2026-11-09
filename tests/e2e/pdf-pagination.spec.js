@@ -34,6 +34,8 @@ async function _stubVendors(page) {
                 // mermaid 인쇄 대비 보정 검증용 — 색 보정은 html2canvas 이전에 완료되므로 여기서 확정값 채취
                 svgFills: [...el.querySelectorAll('pre.mermaid svg *')].map(e =>
                     ({ tag: e.tagName.toLowerCase(), fill: getComputedStyle(e).fill, stroke: getComputedStyle(e).stroke })),
+                foColor: (() => { const s = el.querySelector('pre.mermaid svg foreignObject .nodeLabel');
+                    return s ? getComputedStyle(s).color : null; })(),
             };
             const c = document.createElement('canvas');
             c.width = el.offsetWidth * 2; c.height = el.offsetHeight * 2;
@@ -138,26 +140,59 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
         const res = await page.evaluate(async () => {
             const w = /** @type {any} */ (window);
             const host = document.createElement('div');
-            // 다크 테마 렌더분 흉내 — 어두운 노드 채우기 + 밝은 글자·선
+            // 다크 테마 렌더분 흉내 — 어두운 노드 채우기 + 밝은 글자·선 + foreignObject 라벨
             host.innerHTML = '<pre class="mermaid"><svg viewBox="0 0 100 40">' +
                 '<rect width="100" height="40" style="fill:#3a3a5c;stroke:#b0b0cc"/>' +
-                '<text x="10" y="24" style="fill:#ffffff">라벨</text></svg></pre>';
+                '<text x="10" y="24" style="fill:#ffffff">라벨</text>' +
+                '<foreignObject x="0" y="0" width="100" height="20"><div xmlns="http://www.w3.org/1999/xhtml">' +
+                '<span class="nodeLabel" style="color:#ffffff">노드명</span></div></foreignObject></svg></pre>';
             document.body.appendChild(host);
             try {
                 const { pdfFileFromElStyled } = await import('/src/content/pdf-utils.js');
                 await pdfFileFromElStyled(host, 't');
-                return w.__layout.svgFills;
+                return { fills: w.__layout.svgFills, foColor: w.__layout.foColor };
             } finally { host.remove(); }
         });
         const lum = c => {
             const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c || '');
             return m ? (0.299 * +m[1] + 0.587 * +m[2] + 0.114 * +m[3]) / 255 : null;
         };
-        const rect = res.find(e => e.tag === 'rect');
-        const text = res.find(e => e.tag === 'text');
+        const rect = res.fills.find(e => e.tag === 'rect');
+        const text = res.fills.find(e => e.tag === 'text');
         expect(lum(rect.fill), `노드 채우기는 밝은 틴트로: ${rect.fill}`).toBeGreaterThan(0.7);
         expect(lum(rect.stroke), `밝은 선은 어둡게: ${rect.stroke}`).toBeLessThan(0.45);
         expect(text.fill, '밝은 글자는 검정으로').toBe('rgb(0, 0, 0)');
+        expect(res.foColor, `foreignObject 라벨도 검정으로: ${res.foColor}`).toBe('rgb(0, 0, 0)');
+    });
+
+    test('window.print 경로 — beforeprint 보정·afterprint 원복 (initPrintPrep)', async ({ page }) => {
+        test.setTimeout(60_000);
+        await page.goto('/index.html');
+        await page.waitForFunction(() => window.__APP_INITIALIZED, null, { timeout: 30_000 });
+        const res = await page.evaluate(() => {
+            const host = document.createElement('div');
+            host.innerHTML = '<pre class="mermaid"><svg viewBox="0 0 100 40">' +
+                '<rect width="100" height="40" style="fill:#3a3a5c"/>' +
+                '<foreignObject x="0" y="0" width="100" height="20"><div xmlns="http://www.w3.org/1999/xhtml">' +
+                '<span class="nodeLabel" style="color:#ffffff">노드명</span></div></foreignObject></svg></pre>';
+            document.body.appendChild(host);
+            const rect = host.querySelector('rect');
+            const span = host.querySelector('.nodeLabel');
+            window.dispatchEvent(new Event('beforeprint'));
+            const during = { fill: getComputedStyle(rect).fill, color: getComputedStyle(span).color };
+            window.dispatchEvent(new Event('afterprint'));
+            const after = { fill: getComputedStyle(rect).fill, color: getComputedStyle(span).color };
+            host.remove();
+            return { during, after };
+        });
+        const lum = c => {
+            const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c || '');
+            return m ? (0.299 * +m[1] + 0.587 * +m[2] + 0.114 * +m[3]) / 255 : null;
+        };
+        expect(lum(res.during.fill), `인쇄 중 노드 채우기는 밝게: ${res.during.fill}`).toBeGreaterThan(0.7);
+        expect(res.during.color, `인쇄 중 라벨은 검정으로: ${res.during.color}`).toBe('rgb(0, 0, 0)');
+        expect(res.after.fill, `인쇄 후 채우기 원복: ${res.after.fill}`).toBe('rgb(58, 58, 92)');
+        expect(res.after.color, `인쇄 후 라벨 원복: ${res.after.color}`).toBe('rgb(255, 255, 255)');
     });
 
     test('접힌 details 내용이 생성 PDF에 포함된다', async ({ page }) => {

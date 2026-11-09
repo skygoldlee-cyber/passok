@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(print): mermaid foreignObject 라벨 color 추가 보정 — window.print 경로 흰 글자 묻힘
+
+- 최신 mermaid는 노드 라벨을 foreignObject HTML(color)로 렌더 — fill/stroke만 다루던 보정이 color를 놓쳐, color 보정이 없는 경로(window.print·참조자료 인쇄 창·plain PDF)에서 밝게 틴트된 상자 위 흰 글자가 묻힘
+- fixMermaidPrintContrast에 color(밝기>0.7→#000)·backgroundColor(<0.25→transparent) 보정 추가 — 4개 출력 경로 전부 일관 대비
+- e2e — foreignObject 라벨 검정 검증 + initPrintPrep beforeprint 보정/afterprint 원복 실측(라이브 DOM) 추가
+
 ## 2026-11-09 fix(print): mermaid 출력 대비 보정 — 다크 테마 SVG가 백지에서 같은 계열로 묻히던 결함
 
 - pdf-utils.js fixMermaidPrintContrast 신설 — 다크 테마로 렌더된 mermaid SVG의 어두운 도형 채우기는 색상 계열을 유지한 밝은 틴트로, 밝은 글자·선은 어둡게 보정. 기존 HTML 색 보정은 color/background만 다뤄 SVG fill/stroke가 빠져 "어두운 상자+검정 글자"로 대비 붕괴
