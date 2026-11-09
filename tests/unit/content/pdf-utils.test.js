@@ -118,6 +118,10 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         // styled 워크에도 동일 보정 + 무확산 구분선(box-shadow 라인)은 유지
         assert.match(src, /_fixBorder\(el2, cs/);                            // styled 워크 테두리 보정
         assert.match(src, /_isLineShadow/);                                  // box-shadow 구분선 유지 판정
+        // 헤더 밴드 정규화 — 저알파 컬러 틴트는 백지에서 불필요한 색 밴드
+        assert.match(src, /_PRINT_BAND = '#f3f4f6'/);                        // --print-bg-subtle 동일 톤
+        assert.match(src, /tagName !== 'TH'/);                               // 헤더 셀만 대상
+        assert.match(src, /_fixHeaderBand\(el2, cs/);                        // 헤더 틴트 → 인쇄 회색
     });
 
     it('details 펼침 — 접힌 내용도 출력물에 포함', () => {

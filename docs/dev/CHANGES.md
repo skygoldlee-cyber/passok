@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(print): 표 헤더의 컬러 틴트 배경이 출력물에 남던 결함 — 헤더 밴드 인쇄 회색 정규화
+
+- .reader-table th 배경이 --primary-tint-12(rgba(6,182,212,0.12) 청록)라 밝기 판정(lum>0.25)을 통과해 PDF에 컬러 밴드로 출력 (실무매뉴얼 실측). 표마다 bg-deep(→transparent)/틴트가 달라 "일부에만" 컬러로 보이던 편차 원인
+- _fixHeaderBand 추가 — TH의 저알파(α<0.4) 컬러 틴트만 #f3f4f6(--print-bg-subtle)로 정규화, 진한 원색은 유지. fixPrintLines·styled 워크 양쪽 적용
+- e2e — th 배경이 rgb(243,244,246)로 정규화되는지 실측 검증, 유닛 계약 추가
+
 ## 2026-11-09 fix(print): 표·hr 테두리가 출력물에서 사라지던 결함 — 반투명 백색 테두리 인쇄 회색 보정
 
 - 다크 테마 --border-color는 rgba(255,255,255,0.12) 반투명 백색 — styled 워크가 color/background만 보정하고 border는 미처리라 표 위아래 구분선이 백지에서 소실 (실측 wrapBorder=rgba(255,255,255,0.12))

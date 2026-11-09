@@ -239,6 +239,14 @@ const _lumOf = rgb => (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
 /* 인쇄 선 보정 공용 — 다크 테마 border는 반투명 백색(rgba(255,255,255,0.12))이라
    백지에서 사라진다. 선폭이 있는 테두리 중 투명/거의 흰 것만 인쇄 회색으로 교체. */
 const _PRINT_LINE = '#e5e7eb'; // --print-border 동일값 (print.css 토큰, @media print 안이라 JS에서 못 읽음)
+const _PRINT_BAND = '#f3f4f6'; // --print-bg-subtle 동일값
+/* 표 헤더 밴드 정규화 — 저알파 컬러 틴트(--primary-tint-12 등)는 백지에서
+   불필요한 색 밴드로 보이므로 인쇄 회색으로 통일. 진한 원색(알파≥0.4)은 유지. */
+const _fixHeaderBand = (el2, cs, set) => {
+    if (el2.tagName !== 'TH') return;
+    const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs.backgroundColor || '');
+    if (m && (m[4] === undefined ? 1 : parseFloat(m[4])) < 0.4) set('background', _PRINT_BAND);
+};
 const _fixBorder = (el2, cs, set) => {
     for (const s of ['Top', 'Right', 'Bottom', 'Left']) {
         if (!(parseFloat(cs[`border${s}Width`] || '0') > 0)) continue;
@@ -268,7 +276,13 @@ export function fixPrintLines(root, win = window) {
         const el2 = /** @type {HTMLElement} */ (e2);
         if (el2.closest('pre.mermaid')) return;
         const st = el2.style;
-        _fixBorder(el2, win.getComputedStyle(el2), (p, v) => {
+        const cs = win.getComputedStyle(el2);
+        _fixBorder(el2, cs, (p, v) => {
+            const prev = st.getPropertyValue(p), prio = st.getPropertyPriority(p);
+            undo.push(() => { st.setProperty(p, prev, prio); });
+            st.setProperty(p, v, 'important');
+        });
+        _fixHeaderBand(el2, cs, (p, v) => {
             const prev = st.getPropertyValue(p), prio = st.getPropertyPriority(p);
             undo.push(() => { st.setProperty(p, prev, prio); });
             st.setProperty(p, v, 'important');
@@ -353,6 +367,7 @@ export async function pdfFileFromElStyled(el, title) {
         const bg = _lum(cs.backgroundColor);
         if (bg !== null && bg < 0.25) el2.style.background = 'transparent'; // 어두운 배경은 제거 — 흰 종이와 대비
         _fixBorder(el2, cs, (p, v) => el2.style.setProperty(p, v, 'important')); // 반투명/흰 테두리는 백지 소실 → 인쇄 회색
+        _fixHeaderBand(el2, cs, (p, v) => el2.style.setProperty(p, v, 'important')); // 헤더 틴트 → 인쇄 회색
         if (cs.boxShadow !== 'none' && !_isLineShadow(cs.boxShadow)) el2.style.boxShadow = 'none'; // 무확산 구분선은 유지
         el2.style.textShadow = 'none';
     });

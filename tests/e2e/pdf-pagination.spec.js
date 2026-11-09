@@ -46,6 +46,8 @@ async function _stubVendors(page) {
                     return s ? getComputedStyle(s).borderTopColor : null; })(),
                 thShadow: (() => { const s = el.querySelector('.reader-table th');
                     return s ? getComputedStyle(s).boxShadow : null; })(),
+                thBg: (() => { const s = el.querySelector('.reader-table th');
+                    return s ? getComputedStyle(s).backgroundColor : null; })(),
             };
             const c = document.createElement('canvas');
             c.width = el.offsetWidth * 2; c.height = el.offsetHeight * 2;
@@ -169,7 +171,7 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
                 await pdfFileFromElStyled(host, 't');
                 return { fills: w.__layout.svgFills, foColor: w.__layout.foColor,
                          pca: w.__layout.pca, rawCodeColor: w.__layout.rawCodeColor,
-                         tblBorder: w.__layout.tblBorder, thShadow: w.__layout.thShadow };
+                         tblBorder: w.__layout.tblBorder, thShadow: w.__layout.thShadow, thBg: w.__layout.thBg };
             } finally { host.remove(); }
         });
         const rect = res.fills.find(e => e.tag === 'rect');
@@ -180,6 +182,7 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
         expect(res.rawCodeColor, `미렌더 원문만 검정 보정: ${res.rawCodeColor}`).toBe('rgb(0, 0, 0)');
         expect(res.tblBorder, `반투명 테두리는 인쇄 회색으로: ${res.tblBorder}`).toBe('rgb(229, 231, 235)');
         expect(res.thShadow, `무확산 구분선 box-shadow는 유지: ${res.thShadow}`).not.toBe('none');
+        expect(res.thBg, `헤더 틴트는 인쇄 회색으로 정규화: ${res.thBg}`).toBe('rgb(243, 244, 246)');
     });
 
     test('window.print 경로 — beforeprint 색상 보존·afterprint 원복 (initPrintPrep)', async ({ page }) => {
