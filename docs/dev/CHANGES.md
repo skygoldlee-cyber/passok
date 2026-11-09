@@ -1,6 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(print): 표 헤더 이중선 + 외곽 수직선 정리 — 인쇄 표 라인 정돈
+
+- 헤더 이중선: th에 border-bottom:2px(reader-mermaid.css) + box-shadow 0 2px 0(reader.css)이 동시 적용돼 선 두 겹 — border-bottom만 남기고 shadow 제거
+- 우측 수직선: .reader-table-wrapper의 좌우 테두리가 표보다 넓어 내용과 떨어진 수직선으로 출력 — 인쇄물은 위아래 수평선만 남기고 좌우 테두리 제거
+- th white-space:nowrap → normal — 넓은 표가 페이지 폭을 넘어 우측에서 잘리는 것 방지
+- e2e — shadow 'none'·whiteSpace 'normal'·우측 테두리 '0px' 실측, 유닛 계약 추가
+
 ## 2026-11-09 fix(ui): 글자 크게 버튼 레이블 중복 제거 — '가 글자 크게' → '글자 크게'
 
 - dashboard·care-home의 글자 크기 토글 — fa-text-height 아이콘이 이미 있어 '가' 접두는 중복 아이콘 문자라 제거

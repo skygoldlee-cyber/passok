@@ -122,6 +122,12 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         assert.match(src, /_PRINT_BAND = '#f3f4f6'/);                        // --print-bg-subtle 동일 톤
         assert.match(src, /tagName !== 'TH'/);                               // 헤더 셀만 대상
         assert.match(src, /_fixHeaderBand\(el2, cs/);                        // 헤더 틴트 → 인쇄 회색
+        assert.match(src, /_isLineShadow\(cs\.boxShadow\)\) set\('box-shadow', 'none'\)/); // 이중 헤더선 정리
+        assert.match(src, /whiteSpace === 'nowrap'\) set\('white-space', 'normal'\)/); // nowrap 해제
+        // 표 외곽 좌우 테두리 제거 — 내용과 떨어진 수직선
+        assert.match(src, /_fixTableFrame/);                                 // 래퍼 좌우 테두리 제거
+        assert.match(src, /'border-left', 'none'/);                          // 좌측 수직선 제거
+        assert.match(src, /'border-right', 'none'/);                         // 우측 수직선 제거
     });
 
     it('details 펼침 — 접힌 내용도 출력물에 포함', () => {

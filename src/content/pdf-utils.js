@@ -241,11 +241,21 @@ const _lumOf = rgb => (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
 const _PRINT_LINE = '#e5e7eb'; // --print-border 동일값 (print.css 토큰, @media print 안이라 JS에서 못 읽음)
 const _PRINT_BAND = '#f3f4f6'; // --print-bg-subtle 동일값
 /* 표 헤더 밴드 정규화 — 저알파 컬러 틴트(--primary-tint-12 등)는 백지에서
-   불필요한 색 밴드로 보이므로 인쇄 회색으로 통일. 진한 원색(알파≥0.4)은 유지. */
+   불필요한 색 밴드로 보이므로 인쇄 회색으로 통일. 진한 원색(알파≥0.4)은 유지.
+   border-bottom과 box-shadow 선이 중복되는 th는 shadow만 제거해 선 하나로 정리. */
 const _fixHeaderBand = (el2, cs, set) => {
     if (el2.tagName !== 'TH') return;
     const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs.backgroundColor || '');
     if (m && (m[4] === undefined ? 1 : parseFloat(m[4])) < 0.4) set('background', _PRINT_BAND);
+    if (parseFloat(cs.borderBottomWidth) > 0 && _isLineShadow(cs.boxShadow)) set('box-shadow', 'none'); // 이중 헤더선 — border-bottom만 남김
+    if (cs.whiteSpace === 'nowrap') set('white-space', 'normal'); // nowrap 표가 폭을 넘어 우측에서 잘리는 것 방지
+};
+/* 표 외곽 좌우 테두리 제거 — 래퍼 border가 표보다 넓어 내용에서 떨어진
+   수직선으로 보인다. 인쇄물은 위아래 수평선만 남긴다. */
+const _fixTableFrame = (el2, set) => {
+    if (!el2.classList.contains('reader-table-wrapper')) return;
+    set('border-left', 'none');
+    set('border-right', 'none');
 };
 const _fixBorder = (el2, cs, set) => {
     for (const s of ['Top', 'Right', 'Bottom', 'Left']) {
@@ -283,6 +293,11 @@ export function fixPrintLines(root, win = window) {
             st.setProperty(p, v, 'important');
         });
         _fixHeaderBand(el2, cs, (p, v) => {
+            const prev = st.getPropertyValue(p), prio = st.getPropertyPriority(p);
+            undo.push(() => { st.setProperty(p, prev, prio); });
+            st.setProperty(p, v, 'important');
+        });
+        _fixTableFrame(el2, (p, v) => {
             const prev = st.getPropertyValue(p), prio = st.getPropertyPriority(p);
             undo.push(() => { st.setProperty(p, prev, prio); });
             st.setProperty(p, v, 'important');
@@ -368,6 +383,7 @@ export async function pdfFileFromElStyled(el, title) {
         if (bg !== null && bg < 0.25) el2.style.background = 'transparent'; // 어두운 배경은 제거 — 흰 종이와 대비
         _fixBorder(el2, cs, (p, v) => el2.style.setProperty(p, v, 'important')); // 반투명/흰 테두리는 백지 소실 → 인쇄 회색
         _fixHeaderBand(el2, cs, (p, v) => el2.style.setProperty(p, v, 'important')); // 헤더 틴트 → 인쇄 회색
+        _fixTableFrame(el2, (p, v) => el2.style.setProperty(p, v, 'important')); // 표 외곽 좌우 테두리 제거
         if (cs.boxShadow !== 'none' && !_isLineShadow(cs.boxShadow)) el2.style.boxShadow = 'none'; // 무확산 구분선은 유지
         el2.style.textShadow = 'none';
     });
