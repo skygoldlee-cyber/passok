@@ -21,6 +21,7 @@ async function seed(page, { guide = false } = {}) {
         L.setItem('current_exam', 'carework');
         L.setItem('ui_mode', 'practice');
         if (!guide) L.setItem('carework_guide_seen', '1');
+        const st = document.createElement('style'); st.textContent = '*{transition:none!important;animation:none!important}'; document.documentElement.appendChild(st);
         L.setItem('carework:carework_doc_sign', JSON.stringify({ author: '김요양', confirmer: '박시설', receiver: '이인수' }));
         L.setItem('carework:carework_org_name', '○○요양원');
         L.setItem('carework:carework_clients', JSON.stringify([
@@ -114,6 +115,17 @@ async function snapComposite(page, name, pngs, { gap = 16, quality = 0.82 } = {}
     console.log(`✓ ${name}.webp (합성 ${pngs.length}장)`);
 }
 
+/** 원본 크기 캡처 — 리사이즈 없이 (사이드바처럼 좁은 요소) */
+async function snapRaw(page, name, locator) {
+    const el = typeof locator === 'string' ? page.locator(locator).first() : locator;
+    await dismissOverlays(page);
+    await el.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(350);
+    const png = await el.screenshot();
+    writeFileSync(join(OUT_DIR, `${name}.webp`), png); // PNG 그대로 — 폭 유지
+    console.log(`✓ ${name}.webp (원본 폭)`);
+}
+
 /** 요소 PNG 스크린샷 (합성 재료) */
 async function shotPng(page, locator) {
     const el = typeof locator === 'string' ? page.locator(locator).first() : locator;
@@ -127,7 +139,7 @@ const SHOTS = {
     'manual-01-sidebar': async (page) => {
         await page.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
         await page.setViewportSize({ width: 1280, height: 1600 });
-        await snap(page, 'manual-01-sidebar', page.locator('nav, aside, .sidebar').first());
+        await snapRaw(page, 'manual-01-sidebar', page.locator('nav, aside, .sidebar').first());
         await page.setViewportSize({ width: 1280, height: 900 });
     },
     // ① 첫 진입 3단계 안내 — 별도 컨텍스트 필요 (플래그 미설정)
@@ -153,7 +165,7 @@ const SHOTS = {
         await page.locator('[data-click="careIncidentGenerate"]').click();
         await page.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
         await page.locator('.care-more-actions-list [data-click="careIncidentSave"]').click({ force: true });
-        await page.waitForTimeout(300);
+        await page.waitForTimeout(1200);
         await snap(page, 'manual-01-badge', '#inc-saved');
     },
     // ① 공유 메뉴 — 모바일 뷰포트 컨텍스트 (main에서 별도 처리)
@@ -162,7 +174,7 @@ const SHOTS = {
     'manual-02-home': async (page) => {
         await page.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
         await page.waitForSelector('#care-home-view .care-home-card', { timeout: 15000 });
-        await snap(page, 'manual-02-home', '#care-home-view');
+        await snap(page, 'manual-02-home', '#care-home-view .care-home-card');
     },
     // ② 서명 카드
     'manual-02-sign': async (page) => {
@@ -259,7 +271,7 @@ const SHOTS = {
         await page.goto(`${BASE}/#/care-audit`, { waitUntil: 'networkidle' });
         const aud = page.locator('#audit-list [data-audit]').first();
         await aud.scrollIntoViewIfNeeded(); await aud.click({ force: true });
-        await snap(page, 'manual-10-audit', '#care-audit-view .care-calc-form, #audit-banner, #audit-progress');
+        await snap(page, 'manual-10-audit', '#audit-banner, .care-coverage-banner, #audit-progress');
     },
     // ⑪ 양식 편집기
     'manual-11-template': async (page) => {
