@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261109-5723311",
+    "date": "2026-11-09",
+    "notes": [
+      "[기능·print] mermaid 출력 WYSIWYG 하이브리드 — 화면 색상 그대로 출력",
+      "docs+test(print): mermaid 출력 보정 규약 정착 — 향후 확장 시 재발 방지",
+      "[정리·release] v20261109-af4ebd4 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-af4ebd4",
     "date": "2026-11-09",
     "notes": [
@@ -182,15 +191,6 @@
     "notes": [
       "[수정·pdf] jsPDF·html2canvas 프리캐시 추가 + PDF 실패 경로 토스트 가시화",
       "[정리·release] v20261109-8e5c11d 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-8e5c11d",
-    "date": "2026-11-09",
-    "notes": [
-      "[정리] TRACE_MATRIX 재생성",
-      "[수정·reader] 뷰어 인쇄/PDF를 생성 PDF 새탭 미리보기로 재전환 — 기기 print 스택 백지 대응",
-      "[정리·release] v20261109-c3b09d4 스탬프 확정 [no-docs]"
     ]
   }
 ]
