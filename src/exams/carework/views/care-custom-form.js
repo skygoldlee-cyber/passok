@@ -4,7 +4,7 @@
 import { markFunnel } from '../care-funnel.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { escapeHTML as esc } from '../../../core/sanitize.js';
-import { showToast, showConfirm } from '../../../ui-utils.js';
+import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 import { docMdHead } from '../doc-md.js';
 import { docHeadHtml, refreshOrgName, myMembership, submitFormTemplate, deleteFacilityFormTemplate } from '../facility.js';
@@ -82,6 +82,7 @@ export function careFormTplSave() {
         if (!r.ok) { showToast(r.error, 'error'); return; }
         _editTplId = r.id;
         showToast('양식을 저장했습니다 — 연동 도구 출력에도 반영됩니다.');
+        flashSavedBadge($('cf-tpl-list'));
     }
     renderTplList();
     renderSeedList();
@@ -288,7 +289,7 @@ export function careFormDocSave() {
         client, clientId, date: todayKey(),
         values: _readFillValues(), md: _lastMd,
     });
-    if (r.ok) { showToast('기입 문서를 저장했습니다.'); renderDocList(); }
+    if (r.ok) { showToast('기입 문서를 저장했습니다.'); renderDocList(); flashSavedBadge($('cf-doc-list')); }
 }
 
 export async function careFormDocDelete(id) {

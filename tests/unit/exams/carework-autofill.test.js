@@ -26,3 +26,20 @@ describe('carework 반복 입력 자동 기입', () => {
         assert.match(ho, /!el\.value/);
     });
 });
+
+describe('carework 파괴 동작 확인 일관성', () => {
+    it('초기화·복원에도 showConfirm 필수', () => {
+        const audit = readFileSync(new URL('../../../src/exams/carework/views/care-audit.js', import.meta.url), 'utf8');
+        const calc = readFileSync(new URL('../../../src/exams/carework/views/care-calc.js', import.meta.url), 'utf8');
+        for (const [src, fn] of [[audit, 'careAuditReset'], [audit, 'careAuditFileReset'], [calc, 'careCalcReset']]) {
+            const i = src.indexOf(`function ${fn}`);
+            assert.match(src.slice(i, i + 300), /await showConfirm\(/, `${fn} 확인 없음`);
+        }
+    });
+    it('저장 피드백 — flashSavedBadge 호출', () => {
+        for (const f of ['care-client.js', 'care-custom-form.js', 'care-incident.js', 'care-handover.js', 'care-log.js', 'care-visit.js']) {
+            const src = readFileSync(new URL(`../../../src/exams/carework/views/${f}`, import.meta.url), 'utf8');
+            assert.match(src, /flashSavedBadge\(/, `${f} 저장 배지 없음`);
+        }
+    });
+});

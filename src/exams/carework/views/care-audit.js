@@ -4,7 +4,7 @@ import { loadAuditSections, loadCustomSections, saveCustomSections, clearCustomS
 import { auditRowsToSections } from '../audit-import.js';
 import { docHeadHtml, docSignHtml, refreshOrgName, myMembership, listRecords } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { showToast } from '../../../ui-utils.js';
+import { showToast, showConfirm } from '../../../ui-utils.js';
 import { auditCoverage } from '../care-coverage.js';
 import { listClients } from '../care-client-store.js';
 import { listCareLogs } from '../care-log-store.js';
@@ -60,7 +60,8 @@ export function careAuditPrint() {
     window.print();
 }
 
-export function careAuditReset() {
+export async function careAuditReset() {
+    if (!await showConfirm('입력한 점검 결과를 모두 초기화할까요?', '초기화 확인')) return;
     clearChecks();
     render();
 }
@@ -134,6 +135,7 @@ function _showImportPreview(sections, onApply) {
 
 /** 기본 고시 점검표로 복원 */
 export async function careAuditFileReset() {
+    if (!await showConfirm('사용자 점검표를 삭제하고 기본 고시 점검표로 되돌릴까요?', '복원 확인')) return;
     clearCustomSections();
     _sections = await loadAuditSections().catch(() => _sections); // 기본 로드 실패 시 현행 유지
     render();
