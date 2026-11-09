@@ -75,3 +75,15 @@ describe('carework 사고보고 사진 첨부', () => {
         assert.match(reg, /careVisitPhotoRemove/);
     });
 });
+
+describe('carework 첫 진입 3컷 안내', () => {
+    it('미확인 시 노출·확인 시 플래그 저장 계약', () => {
+        const home = readFileSync(new URL('../../../src/exams/carework/views/care-home.js', import.meta.url), 'utf8');
+        const keys = readFileSync(new URL('../../../src/core/storage-keys.js', import.meta.url), 'utf8');
+        const reg = readFileSync(new URL('../../../src/practice-registry.js', import.meta.url), 'utf8');
+        assert.match(keys, /CARE_GUIDE_SEEN:/);                                // 플래그 키
+        assert.match(home, /CARE_GUIDE_SEEN/);                                 // 사용
+        assert.match(home, /home-guide.*is-hidden|is-hidden.*home-guide/);    // 숨김 토글
+        assert.match(reg, /careHomeGuideDismiss/);                             // 핸들러 등록
+    });
+});

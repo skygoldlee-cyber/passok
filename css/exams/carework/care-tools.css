@@ -419,6 +419,16 @@
 .care-photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45mm, 1fr)); gap: var(--gap-ctl); margin-top: var(--gap-group); }
 .care-photo-grid img { width: 100%; border: 1px solid var(--border-color); border-radius: var(--radius-sm); }
 .care-photo-sub { font-weight: 700; margin-top: var(--gap-group); font-size: var(--text-sm-md); }
+/* 첫 진입 3컷 안내 — 실무 모드 진입 시 "기록→생성→인쇄" 흐름 안내 */
+.care-guide { display: grid; gap: var(--gap-group); padding: var(--space-5); margin-bottom: var(--gap-sec); border-radius: var(--radius-lg); background: var(--bg-active); border: 1px solid var(--border-color); }
+.care-guide.is-hidden { display: none; }
+.care-guide-title { margin: 0; font-size: var(--text-lg); font-weight: 800; text-align: center; }
+.care-guide-steps { display: flex; align-items: stretch; justify-content: center; gap: var(--gap-ctl); flex-wrap: wrap; }
+.care-guide-step { flex: 1 1 120px; min-width: 110px; display: grid; gap: var(--space-1); justify-items: center; text-align: center; padding: var(--space-3) var(--space-2); border-radius: var(--radius-md); background: var(--bg-card); border: 1px solid var(--border-color); font-size: var(--text-sm); }
+.care-guide-step strong { font-size: var(--text-base); }
+.care-guide-num { width: 30px; height: 30px; border-radius: 50%; background: var(--color-primary); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; }
+.care-guide-arrow { align-self: center; font-size: var(--text-xl); color: var(--color-primary); font-weight: 800; }
+.care-guide-ok { justify-self: center; min-width: 140px; min-height: var(--control-h-md); font-weight: 700; }
 .care-home-nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--gap-ctl); margin-top: var(--gap-group); }
 .care-home-nav .btn { min-height: var(--control-h-lg); display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
 

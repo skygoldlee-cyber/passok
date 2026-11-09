@@ -8,15 +8,25 @@ import { clientTrends } from '../care-trend.js';
 import { markFunnel, funnelStats } from '../care-funnel.js';
 import { escapeHTML as esc } from '../../../core/sanitize.js';
 import { refreshOrgName, getDocSign, setDocSign, setDocSignImage, signFileToDataUri } from '../facility.js';
+import { getItem, setItem } from '../../../core/storage.js';
+import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { showToast } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 
 const $ = (id) => document.getElementById(id);
 const dayOf = (r) => r.date || r.shift_date || '';
 
+/** 첫 진입 3컷 안내 닫기 — 확인 플래그 저장 후 숨김 */
+export function careHomeGuideDismiss() {
+    setItem(STORAGE_KEYS.CARE_GUIDE_SEEN, '1');
+    $('home-guide')?.classList.add('is-hidden');
+}
+
 export function initCareHomeView() {
     markFunnel('tool:care-home');
     void refreshOrgName();
+    // 첫 진입 3컷 안내 — 미확인 사용자에게만 노출 (기록→생성→인쇄 흐름 안내)
+    if (!getItem(STORAGE_KEYS.CARE_GUIDE_SEEN)) $('home-guide')?.classList.remove('is-hidden');
     const d = todayKey();
     const logs = listCareLogs(), visits = listVisits(), incidents = listIncidents();
     const cnt = (arr) => arr.filter(r => dayOf(r) === d).length;
