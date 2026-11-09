@@ -195,6 +195,21 @@
         break-inside: avoid !important;
     }
 
+    /* 표·이미지 절단 방지 — 시험 팩 공통: 문서형 출력물의 표 행·삽화는
+       페이지 중간에서 쪼개지 않고, 넘어간 페이지에는 헤더 행을 반복한다.
+       tr에만 걸면 무시하는 엔진이 있어 td·th에도 지정 (fp-table 규약과 동일) */
+    tr, td, th {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+    thead {
+        display: table-header-group;
+    }
+    img {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
     /* 화면용 스크롤 클립 해제 — 인쇄 시 스크롤 상자는 분할·클립되어 내용이 유실됨
        (pre.mermaid의 overflow-x:auto도 y축이 auto로 계산되어 스크롤 상자가 됨) */
     pre.mermaid,

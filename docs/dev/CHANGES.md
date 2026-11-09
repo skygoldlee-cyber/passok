@@ -1,6 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(print): 표 행·이미지 절단 방지를 시험 팩 공통으로 — 전역 @media print 규약
+
+- print.css에 tr·td·th break-inside:avoid + thead 반복 + img 절단 방지 전역 규칙 추가 — 활성 뷰 window.print() 경로에서 문서형 출력물의 표가 행 중간에서 잘리던 갭 해소 (모든 시험 팩 일괄 적용)
+- carework .doc-md 표의 화면용 display:block+overflow-x:auto 스크롤 상자는 인쇄 시 클립·분할 — care-tools.css @media print에 display:table+overflow:visible 해제
+
 ## 2026-11-09 fix(pdf): lazy 이미지 정착 대기 — 학습안내서 대형 삽화가 페이지 경계에서 잘리던 근본 원인 수정
 
 - pdfFileFromElStyled 클론의 loading=lazy 이미지는 미로드 상태라 높이 0으로 측정 — _blockCuts 절단 위치가 렌더 시점 실제 레이아웃과 어긋나 삽화 한가운데를 절단 (실측 재현: 측정 2×2px → 렌더 900×1178px, 절단선이 이미지 내부 관통 확인)

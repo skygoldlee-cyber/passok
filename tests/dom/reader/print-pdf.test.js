@@ -72,6 +72,17 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         expect(printCss, 'print.css mermaid 스크롤 해제').toMatch(/pre\.mermaid[^}]*overflow:\s*visible/s);
     });
 
+    it('print.css 전역 표·이미지 절단 방지 — 시험 팩 공통 (활성 뷰 인쇄 경로)', async () => {
+        const { readFileSync } = await import('node:fs');
+        const printCss = readFileSync('css/print.css', 'utf8');
+        expect(printCss, '표 행 절단 방지').toMatch(/tr,\s*td,\s*th\s*\{[^}]*break-inside:\s*avoid/s);
+        expect(printCss, '헤더 행 반복').toMatch(/thead\s*\{[^}]*table-header-group/s);
+        expect(printCss, '이미지 절단 방지').toMatch(/\n\s*img\s*\{[^}]*page-break-inside:\s*avoid/s);
+        // carework 문서형 표 — 화면용 스크롤 상자는 인쇄 시 해제 (시험 전용 클래스는 시험 CSS가 관장)
+        const careCss = readFileSync('css/exams/carework/care-tools.css', 'utf8');
+        expect(careCss, 'doc-md 표 스크롤 해제').toMatch(/\.doc-md table\s*\{[^}]*display:\s*table[^}]*overflow:\s*visible/s);
+    });
+
     it('참조자료 인쇄 창 — mermaid 절단 방지 규칙 존재 (html-viewer 폴백 경로)', async () => {
         const { readFileSync } = await import('node:fs');
         const src = readFileSync('src/reader/html-viewer.js', 'utf8');
