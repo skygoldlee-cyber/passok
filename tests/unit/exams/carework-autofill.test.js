@@ -63,4 +63,15 @@ describe('carework 사고보고 사진 첨부', () => {
         assert.match(reg, /careIncidentPhotoRemove/);
         assert.match(inc, /pf\.onchange/);                                    // 파일 입력 바인딩
     });
+    it('방문기록 사진 — 결과 패널 첨부 + 문서 말미 그리드', () => {
+        const vis = readFileSync(new URL('../../../src/exams/carework/views/care-visit.js', import.meta.url), 'utf8');
+        const reg = readFileSync(new URL('../../../src/practice-registry.js', import.meta.url), 'utf8');
+        assert.match(vis, /PHOTO_MAX = 3/);
+        assert.match(vis, /photos: _vPhotos\.slice\(\)/);                      // result.photos 병합
+        assert.match(vis, /src\.result\.photos/);                              // 기존 사진 복원
+        assert.match(vis, /v\.result\?\.photos\?\.length/);                    // 문서 섹션 필터
+        assert.match(vis, /await showConfirm\('이 사진을 삭제할까요\?'/);
+        assert.match(reg, /careVisitPhotoPick/);
+        assert.match(reg, /careVisitPhotoRemove/);
+    });
 });

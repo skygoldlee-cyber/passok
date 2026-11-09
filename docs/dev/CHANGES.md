@@ -1,6 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 feat(carework): 방문기록 사진 첨부 Phase 2 + IndexedDB 분리 저장소 검토
+
+- 방문 결과 기록에 사진 최대 3장 — result.photos로 병합 저장, 재기록 시 복원, 문서 말미 "📷 첨부 사진" 섹션으로 출력·PDF 포함 (표 구조 문서라 말미 병기)
+- IndexedDB 검토: 사진 dataURI는 장당 ~150-350KB라 FREE_LIMIT 10건×3장 ≈ 6-10MB로 localStorage 쿼터(~5MB) 초과 리스크 확정 — 장기적으로 레코드는 참조(idb 키)만 갖고 바이너리는 IndexedDB 분리가 필요. 단 현재는 signFileToDataUri 리사이즈 + 3장 한도 + 쿼터 실패 토스트로 단기 완화, 백업·동기화 파이프라인 영향(레코드 외 저장소) 검토 후 별도 단계로 이전
+
 ## 2026-11-09 feat(carework): 사고보고 사진 첨부 Phase 1 — 현장·상해 사진 최대 3장
 
 - 폼에 "📷 사진 추가" — 선택 이미지는 signFileToDataUri(canvas 리사이즈→dataURI)로 변환, 썸네일+삭제(확인) — localStorage 쿼터 보호로 최대 3장

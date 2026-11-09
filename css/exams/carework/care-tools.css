@@ -418,6 +418,7 @@
 }
 .care-photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45mm, 1fr)); gap: var(--gap-ctl); margin-top: var(--gap-group); }
 .care-photo-grid img { width: 100%; border: 1px solid var(--border-color); border-radius: var(--radius-sm); }
+.care-photo-sub { font-weight: 700; margin-top: var(--gap-group); font-size: var(--text-sm-md); }
 .care-home-nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--gap-ctl); margin-top: var(--gap-group); }
 .care-home-nav .btn { min-height: var(--control-h-lg); display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
 
