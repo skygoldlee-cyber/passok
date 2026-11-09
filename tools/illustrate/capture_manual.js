@@ -129,6 +129,7 @@ async function snapRaw(page, name, locator) {
 /** 요소 PNG 스크린샷 (합성 재료) */
 async function shotPng(page, locator) {
     const el = typeof locator === 'string' ? page.locator(locator).first() : locator;
+    await dismissOverlays(page);
     await el.scrollIntoViewIfNeeded();
     await page.waitForTimeout(300);
     return el.screenshot();
@@ -147,12 +148,13 @@ const SHOTS = {
     // ① 더보기 전후 — 합성 2장
     'manual-01-more': async (page) => {
         await page.goto(`${BASE}/#/care-log`, { waitUntil: 'networkidle' });
-        const det = page.locator('.care-calc-actions').first();
-        const before = await det.screenshot().catch(() => null);
+        const det = page.locator('details.care-more-actions').first();
+        await dismissOverlays(page);
+        const before = await det.screenshot();
         await page.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
         await page.waitForTimeout(300);
         const after = await det.screenshot();
-        await snapComposite(page, 'manual-01-more', [before || after, after]);
+        await snapComposite(page, 'manual-01-more', [before, after]);
     },
     // ① 저장 배지 — 저장 클릭 직후 표시
     'manual-01-badge': async (_page) => { /* DSF2 플래그로 main에서 별도 처리 */ },
@@ -162,9 +164,7 @@ const SHOTS = {
     'manual-02-home': async (page) => {
         await page.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
         await page.waitForSelector('#care-home-view .care-home-card', { timeout: 15000 });
-        const h1 = await shotPng(page, '#care-home-view > * >> nth=0');
-        const h2 = await shotPng(page, '#care-home-view > * >> nth=1').catch(() => null);
-        await snapComposite(page, 'manual-02-home', h2 ? [h1, h2] : [h1]);
+        await snap(page, 'manual-02-home', '#care-home-view .care-home-card');
     },
     // ② 서명 카드
     'manual-02-sign': async (page) => {
@@ -261,7 +261,10 @@ const SHOTS = {
         await page.goto(`${BASE}/#/care-audit`, { waitUntil: 'networkidle' });
         const aud = page.locator('#audit-list [data-audit]').first();
         await aud.scrollIntoViewIfNeeded(); await aud.click({ force: true });
-        await snap(page, 'manual-10-audit', '#audit-banner, .care-coverage-banner, #audit-progress');
+        const pr = await shotPng(page, '#audit-progress, .care-audit-progress');
+        const ls = await shotPng(page, '#audit-list').catch(() => null);
+        if (ls) await snapComposite(page, 'manual-10-audit', [pr, ls]);
+        else await snap(page, 'manual-10-audit', '#audit-progress, .care-audit-progress');
     },
     // ⑪ 양식 편집기
     'manual-11-template': async (page) => {
@@ -297,9 +300,7 @@ const SHOTS = {
     // ⑭ 서식모음
     'manual-14-forms': async (page) => {
         await page.goto(`${BASE}/#/care-forms`, { waitUntil: 'networkidle' });
-        const f1 = await shotPng(page, '#care-forms-view > * >> nth=0');
-        const f2 = await shotPng(page, '#care-forms-view > * >> nth=1').catch(() => null);
-        await snapComposite(page, 'manual-14-forms', f2 ? [f1, f2] : [f1]);
+        await snap(page, 'manual-14-forms', '#care-forms-view .care-home-card, #care-forms-view .care-calc-form');
     },
 };
 
@@ -334,9 +335,7 @@ async function main() {
                 await bp.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
                 await bp.locator('.care-more-actions-list [data-click="careIncidentSave"]').click({ force: true });
                 await bp.waitForTimeout(1500);
-                const vb = await shotPng(bp, bp.locator('#inc-desc').locator('..'));
-        const bd = await shotPng(bp, '#inc-saved');
-        await snapComposite(bp, 'manual-01-badge', [vb, bd]);
+                await snap(bp, 'manual-01-badge', '#inc-saved');
                 await b.close();
             } else if (n === 'manual-01-share') { // 모바일 뷰포트 — 공유 시트 항목 포함 6개
                 const m = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ko-KR', isMobile: true, hasTouch: true });
