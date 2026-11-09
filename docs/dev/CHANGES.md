@@ -1,6 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(ui): '가 글자 크게' 잔재 제거 — ui-mode 토글 문자열·템플릿 2곳 정정
+
+- applyFontScale이 토글 때마다 레이블을 '가 글자 크게/더 크게'로 덮어써 HTML만 고치면 되돌아오는 구조였음 — ui-mode.js 문자열 + index.template.html(사이드바·모바일 탭) 정정으로 '글자 크게/글자 더 크게' 통일
+
 ## 2026-11-09 fix(ui): 대시보드 배지 글자 크기 불일치 — '오늘 미션'과 '이번 주 N/5일' 통일
 
 - .daily-challenge-badge는 .badge 기본 크기(더 큼), .weekly-goal-chip만 --text-sm이라 같은 행의 배지 쌍 글자 크기가 달랐음 — chip과 동일한 --text-sm로 통일
