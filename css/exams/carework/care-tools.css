@@ -223,6 +223,33 @@
     background: rgba(6, 182, 212, 0.12); border-radius: 6px; padding: 2px 8px;
 }
 
+/* 사진 첨부 — 사고보고·방문기록 (폼 썸네일 + 출력물 그리드) */
+.care-photo { display: grid; gap: var(--gap-ctl); justify-items: start; }
+.care-photo-list { display: flex; gap: var(--gap-ctl); flex-wrap: wrap; }
+.care-photo-thumb { position: relative; display: inline-block; }
+.care-photo-thumb img { width: 72px; height: 72px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
+.care-photo-del {
+    position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--color-danger, #dc2626); color: #fff; border: none; cursor: pointer;
+    font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;
+}
+.care-photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45mm, 1fr)); gap: var(--gap-ctl); margin-top: var(--gap-group); }
+.care-photo-grid img { width: 100%; border: 1px solid var(--border-color); border-radius: var(--radius-sm); }
+.care-photo-sub { font-weight: 700; margin-top: var(--gap-group); font-size: var(--text-sm-md); }
+/* 첫 진입 3컷 안내 — 실무 모드 진입 시 "기록→생성→인쇄" 흐름 안내 */
+.care-guide { display: grid; gap: var(--gap-group); padding: var(--space-5); margin-bottom: var(--gap-sec); border-radius: var(--radius-lg); background: var(--bg-active); border: 1px solid var(--border-color); }
+.care-guide.is-hidden { display: none; }
+.care-guide-title { margin: 0; font-size: var(--text-lg); font-weight: 800; text-align: center; }
+.care-guide-steps { display: flex; align-items: stretch; justify-content: center; gap: var(--gap-ctl); flex-wrap: wrap; }
+.care-guide-step { flex: 1 1 120px; min-width: 110px; display: grid; gap: var(--space-1); justify-items: center; text-align: center; padding: var(--space-3) var(--space-2); border-radius: var(--radius-md); background: var(--bg-card); border: 1px solid var(--border-color); font-size: var(--text-sm); }
+.care-guide-step strong { font-size: var(--text-base); }
+.care-guide-num { width: 30px; height: 30px; border-radius: 50%; background: var(--color-primary); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; }
+.care-guide-arrow { align-self: center; font-size: var(--text-xl); color: var(--color-primary); font-weight: 800; }
+.care-guide-ok { justify-self: center; min-width: 140px; min-height: var(--control-h-md); font-weight: 700; }
+/* 음성 입력 🎤 — 말로 입력 토글 (미지원 브라우저는 hidden) */
+.care-voice-btn { padding: 0 12px; font-size: var(--text-base); }
+.care-voice-btn.is-listening { background: var(--color-danger, #dc2626); color: #fff; }
+
 /* ── 인쇄 — 일지·결과만 문서형으로 ────────────── */
 /* ui-mode-practice 스코프 — 지연 로드된 이 규칙이 학습 모드의 다른 뷰(오답 복습 등)
    인쇄를 가리지 않도록 실무 모드일 때만 전체 숨김을 적용한다. */
@@ -406,32 +433,6 @@
 .care-home-summary { margin-top: var(--space-1-5); font-size: 0.95rem; }
 .care-home-warn { margin-top: var(--gap-ctl); }
 .care-home-next { margin-top: var(--gap-ctl); padding: var(--space-2-5) var(--space-4); border-radius: var(--radius-md); background: var(--bg-active); color: var(--color-text-main); font-size: var(--text-sm-md); font-weight: 600; }
-/* 사진 첨부 — 사고보고 (폼 썸네일 + 출력물 그리드) */
-.care-photo { display: grid; gap: var(--gap-ctl); justify-items: start; }
-.care-photo-list { display: flex; gap: var(--gap-ctl); flex-wrap: wrap; }
-.care-photo-thumb { position: relative; display: inline-block; }
-.care-photo-thumb img { width: 72px; height: 72px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
-.care-photo-del {
-    position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; border-radius: 50%;
-    background: var(--color-danger, #dc2626); color: #fff; border: none; cursor: pointer;
-    font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;
-}
-.care-photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45mm, 1fr)); gap: var(--gap-ctl); margin-top: var(--gap-group); }
-.care-photo-grid img { width: 100%; border: 1px solid var(--border-color); border-radius: var(--radius-sm); }
-.care-photo-sub { font-weight: 700; margin-top: var(--gap-group); font-size: var(--text-sm-md); }
-/* 첫 진입 3컷 안내 — 실무 모드 진입 시 "기록→생성→인쇄" 흐름 안내 */
-.care-guide { display: grid; gap: var(--gap-group); padding: var(--space-5); margin-bottom: var(--gap-sec); border-radius: var(--radius-lg); background: var(--bg-active); border: 1px solid var(--border-color); }
-.care-guide.is-hidden { display: none; }
-.care-guide-title { margin: 0; font-size: var(--text-lg); font-weight: 800; text-align: center; }
-.care-guide-steps { display: flex; align-items: stretch; justify-content: center; gap: var(--gap-ctl); flex-wrap: wrap; }
-.care-guide-step { flex: 1 1 120px; min-width: 110px; display: grid; gap: var(--space-1); justify-items: center; text-align: center; padding: var(--space-3) var(--space-2); border-radius: var(--radius-md); background: var(--bg-card); border: 1px solid var(--border-color); font-size: var(--text-sm); }
-.care-guide-step strong { font-size: var(--text-base); }
-.care-guide-num { width: 30px; height: 30px; border-radius: 50%; background: var(--color-primary); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; }
-.care-guide-arrow { align-self: center; font-size: var(--text-xl); color: var(--color-primary); font-weight: 800; }
-.care-guide-ok { justify-self: center; min-width: 140px; min-height: var(--control-h-md); font-weight: 700; }
-/* 음성 입력 🎤 — 말로 입력 토글 (미지원 브라우저는 hidden) */
-.care-voice-btn { padding: 0 12px; font-size: var(--text-base); }
-.care-voice-btn.is-listening { background: var(--color-danger, #dc2626); color: #fff; }
 .care-home-nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--gap-ctl); margin-top: var(--gap-group); }
 .care-home-nav .btn { min-height: var(--control-h-lg); display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
 
