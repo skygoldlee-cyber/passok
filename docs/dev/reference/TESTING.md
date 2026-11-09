@@ -728,6 +728,13 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
   의도적 시각 변경 후 로컬은 `--update-snapshots`, CI용은
   `visual-baseline.yml` 워크플로 수동 트리거 → 아티팩트 커밋으로 갱신.
 
+**pdf-pagination.spec.js — 생성 PDF 페이지네이션 (CO-21, 2026-11-09 추가)**
+
+- 벤더 스텁(html2canvas·jsPDF 교체)으로 슬라이스 좌표만 채취 — 실제 렌더 없이
+  절단 위치를 실브라우저 레이아웃으로 검증 (jsdom은 rect 측정 불가라 e2e 전용).
+- 시나리오: 큰 삽화가 페이지 경계에서 잘리지 않음(학습안내서 SVG),
+  경계를 넘는 표는 thead 복제로 분할, 접힌 details는 출력물에 포함.
+
 실행: `npm run test:e2e` (최초 1회 `npx playwright install chromium` 필요).
 확장 시 시나리오 단위로 `tests/e2e/**/*.spec.js`에 추가 — 인증 경로는 별도 spec 권장.
 

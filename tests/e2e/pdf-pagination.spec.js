@@ -1,4 +1,5 @@
-// tests/e2e/pdf-pagination.spec.js — 생성 PDF 페이지네이션 회귀 (CO-21)
+// tests/e2e/pdf-pagination.spec.js — 생성 PDF 페이지네이션 회귀
+// @spec CO-21
 // 캔버스 슬라이스가 삽화·표를 경계에서 자르지 않는지 실브라우저 레이아웃으로 검증.
 // jsdom은 getBoundingClientRect 측정 불가라 e2e 전용. 벤더는 스텁해 슬라이스 좌표만 채취.
 import { test, expect } from '@playwright/test';
