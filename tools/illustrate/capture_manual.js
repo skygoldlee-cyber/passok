@@ -21,7 +21,7 @@ async function seed(page, { guide = false } = {}) {
         L.setItem('current_exam', 'carework');
         L.setItem('ui_mode', 'practice');
         if (!guide) L.setItem('carework_guide_seen', '1');
-        const st = document.createElement('style'); st.textContent = '*{transition:none!important;animation:none!important}'; document.documentElement.appendChild(st);
+        const st = document.createElement('style'); st.textContent = '*{transition:none!important;animation:none!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}'; document.documentElement.appendChild(st);
         L.setItem('carework:carework_doc_sign', JSON.stringify({ author: '김요양', confirmer: '박시설', receiver: '이인수' }));
         L.setItem('carework:carework_org_name', '○○요양원');
         L.setItem('carework:carework_clients', JSON.stringify([
@@ -48,7 +48,7 @@ async function toWebp(page, pngBuf, quality = 0.82) {
     const dataUrl = await page.evaluate(async ({ b64, quality }) => {
         const img = new Image();
         await new Promise(r => { img.onload = r; img.src = 'data:image/png;base64,' + b64; });
-        const W = 924, r = W / img.naturalWidth;
+        const W = Math.min(924, img.naturalWidth), r = W / img.naturalWidth;
         const c = document.createElement('canvas');
         c.width = W; c.height = Math.round(img.naturalHeight * r);
         c.getContext('2d').drawImage(img, 0, 0, W, c.height);
@@ -155,19 +155,7 @@ const SHOTS = {
         await snapComposite(page, 'manual-01-more', [before || after, after]);
     },
     // ① 저장 배지 — 저장 클릭 직후 표시
-    'manual-01-badge': async (page) => {
-        await page.goto(`${BASE}/#/care-incident`, { waitUntil: 'networkidle' });
-        await page.waitForSelector('#inc-client', { timeout: 15000 });
-        await page.fill('#inc-client', '김○○');
-        await page.fill('#inc-place', '거실');
-        await page.fill('#inc-desc', '침대에서 내려오다 미끄러짐');
-        await page.fill('#inc-action', '확인 후 안정 조치');
-        await page.locator('[data-click="careIncidentGenerate"]').click();
-        await page.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
-        await page.locator('.care-more-actions-list [data-click="careIncidentSave"]').click({ force: true });
-        await page.waitForTimeout(1200);
-        await snap(page, 'manual-01-badge', '#inc-saved');
-    },
+    'manual-01-badge': async (_page) => { /* DSF2 플래그로 main에서 별도 처리 */ },
     // ① 공유 메뉴 — 모바일 뷰포트 컨텍스트 (main에서 별도 처리)
     'manual-01-share': async (_page) => { /* MOBILE 플래그로 main에서 별도 처리 */ },
     // ② 홈
@@ -327,6 +315,23 @@ async function main() {
                 await gp.waitForSelector('#home-guide:not(.is-hidden)', { timeout: 8000 });
                 await snap(gp, 'manual-01-guide', '#home-guide');
                 await g.close();
+            } else if (n === 'manual-01-badge') { // 고해상도 — 배지 블러 대응
+                const b = await browser.newContext({ viewport: { width: 1280, height: 900 }, locale: 'ko-KR', deviceScaleFactor: 2 });
+                const bp = await b.newPage(); await seed(bp);
+                await bp.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
+                await bp.waitForSelector('#care-home-view', { timeout: 15000 });
+                await bp.goto(`${BASE}/#/care-incident`, { waitUntil: 'networkidle' });
+                await bp.waitForSelector('#inc-client', { timeout: 15000 });
+                await bp.fill('#inc-client', '김○○');
+                await bp.fill('#inc-place', '거실');
+                await bp.fill('#inc-desc', '침대에서 내려오다 미끄러짐');
+                await bp.fill('#inc-action', '확인 후 안정 조치');
+                await bp.locator('[data-click="careIncidentGenerate"]').click();
+                await bp.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
+                await bp.locator('.care-more-actions-list [data-click="careIncidentSave"]').click({ force: true });
+                await bp.waitForTimeout(1500);
+                await snap(bp, 'manual-01-badge', '#inc-saved');
+                await b.close();
             } else if (n === 'manual-01-share') { // 모바일 뷰포트 — 공유 시트 항목 포함 6개
                 const m = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ko-KR', isMobile: true, hasTouch: true });
                 const mp = await m.newPage(); await seed(mp);
