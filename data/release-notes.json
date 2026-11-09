@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261109-cb6ceaf",
+    "date": "2026-11-09",
+    "notes": [
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[수정·print] mermaid svg 루트 다크 배경 보정 — 다이어그램 전체가 검정으로 출력되던 결함",
+      "[정리·release] v20261109-3a40ae6 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261109-3a40ae6",
     "date": "2026-11-09",
     "notes": [
@@ -185,15 +194,6 @@
       "[정리] TRACE_MATRIX 재생성",
       "[수정·pdf] 생성 PDF 요소 경계 페이지네이션 + 오버레이 선택자 컨텍스트 재현",
       "[정리·release] v20261109-41c28fb 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-41c28fb",
-    "date": "2026-11-09",
-    "notes": [
-      "[정리] 참조용 PDF 문서 gitignore 추가 — docs/*.pdf 제외",
-      "[수정·reader] exam-article 타이포그래피를 manual-article 기준으로 통일 — 출력 간격 동일화",
-      "[정리·release] v20261109-2a02fb3 스탬프 확정 [no-docs]"
     ]
   }
 ]
