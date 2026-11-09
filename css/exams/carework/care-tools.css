@@ -406,6 +406,18 @@
 .care-home-summary { margin-top: var(--space-1-5); font-size: 0.95rem; }
 .care-home-warn { margin-top: var(--gap-ctl); }
 .care-home-next { margin-top: var(--gap-ctl); padding: var(--space-2-5) var(--space-4); border-radius: var(--radius-md); background: var(--bg-active); color: var(--color-text-main); font-size: var(--text-sm-md); font-weight: 600; }
+/* 사진 첨부 — 사고보고 (폼 썸네일 + 출력물 그리드) */
+.care-photo { display: grid; gap: var(--gap-ctl); justify-items: start; }
+.care-photo-list { display: flex; gap: var(--gap-ctl); flex-wrap: wrap; }
+.care-photo-thumb { position: relative; display: inline-block; }
+.care-photo-thumb img { width: 72px; height: 72px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
+.care-photo-del {
+    position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--color-danger, #dc2626); color: #fff; border: none; cursor: pointer;
+    font-size: 11px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;
+}
+.care-photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45mm, 1fr)); gap: var(--gap-ctl); margin-top: var(--gap-group); }
+.care-photo-grid img { width: 100%; border: 1px solid var(--border-color); border-radius: var(--radius-sm); }
 .care-home-nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--gap-ctl); margin-top: var(--gap-group); }
 .care-home-nav .btn { min-height: var(--control-h-lg); display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
 

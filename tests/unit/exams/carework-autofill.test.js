@@ -49,3 +49,18 @@ describe('carework 파괴 동작 확인 일관성', () => {
         assert.match(home, /인수인계.*넘기|넘기세요/);      // 마무리 흐름 안내
     });
 });
+
+describe('carework 사고보고 사진 첨부', () => {
+    it('한도·삭제 확인·저장·미리보기 계약', () => {
+        const inc = readFileSync(new URL('../../../src/exams/carework/views/care-incident.js', import.meta.url), 'utf8');
+        const reg = readFileSync(new URL('../../../src/practice-registry.js', import.meta.url), 'utf8');
+        assert.match(inc, /PHOTO_MAX = 3/);                                   // 한도
+        assert.match(inc, /signFileToDataUri/);                               // 리사이즈 변환 재사용
+        assert.match(inc, /photos: _photos\.slice\(\)/);                      // 저장 필드
+        assert.match(inc, /care-photo-grid/);                                 // 출력물 그리드
+        assert.match(inc, /await showConfirm\('이 사진을 삭제할까요\?'/);      // 삭제 확인
+        assert.match(reg, /careIncidentPhotoPick/);                           // 핸들러 등록
+        assert.match(reg, /careIncidentPhotoRemove/);
+        assert.match(inc, /pf\.onchange/);                                    // 파일 입력 바인딩
+    });
+});

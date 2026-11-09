@@ -20,7 +20,7 @@ export function listIncidents() {
 }
 
 /**
- * @param {{date:string,time?:string,client:string,place?:string,type:string,severity?:string,desc?:string,action?:string,witness?:string,familyNotified?:boolean,text:string}} entry
+ * @param {{date:string,time?:string,client:string,place?:string,type:string,severity?:string,desc?:string,action?:string,witness?:string,familyNotified?:boolean,text:string,photos?:string[]}} entry
  * @returns {{ok:boolean, error?:string, id?:string}}
  */
 export function addIncident(entry) {

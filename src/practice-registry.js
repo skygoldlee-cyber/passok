@@ -580,7 +580,7 @@ const careIncident = {
     styles: 'care-tools.css',
     loaders: { main: _domainImport('views/care-incident.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careIncidentGenerate', 'careIncidentSave', 'careIncidentPrint', 'careIncidentCsvExport', 'careIncidentDelete', 'careIncidentFacilitySubmit', 'careIncidentDocMd']]],
+    handlers: [['main', ['careIncidentGenerate', 'careIncidentSave', 'careIncidentPrint', 'careIncidentCsvExport', 'careIncidentDelete', 'careIncidentFacilitySubmit', 'careIncidentDocMd', 'careIncidentPhotoPick', 'careIncidentPhotoRemove']]],
     async enter(gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);

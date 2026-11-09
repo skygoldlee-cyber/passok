@@ -17,6 +17,11 @@
         <label>조치 내용 <input id="inc-action" type="text" placeholder="응급조치·연락·이송 내용"></label>
         <label>목격자 <input id="inc-witness" type="text" placeholder="선택"></label>
         <label class="care-log-merge"><input id="inc-family" type="checkbox"> 가족 통지 완료</label>
+        <div class="care-photo">
+            <button type="button" class="btn btn-secondary" data-click="careIncidentPhotoPick">📷 사진 추가</button>
+            <input id="inc-photo-file" type="file" accept="image/*" multiple class="is-hidden">
+            <div id="inc-photo-list" class="care-photo-list"></div>
+        </div>
         <div class="care-calc-actions">
             <button class="btn" data-click="careIncidentGenerate">📝 보고서 생성</button>
             <button data-click="careShare" data-arg="#inc-preview pre|사고보고서|mask|careIncidentGenerate|careIncidentCsvExport|careIncidentPrint|care_incident_share|careIncidentDocMd" class="btn btn-secondary">📤 공유·내보내기</button>
