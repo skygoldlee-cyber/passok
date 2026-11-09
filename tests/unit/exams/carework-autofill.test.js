@@ -42,4 +42,10 @@ describe('carework 파괴 동작 확인 일관성', () => {
             assert.match(src, /flashSavedBadge\(/, `${f} 저장 배지 없음`);
         }
     });
+    it('홈 다음 행동 안내 — 건수 요약을 행동 안내로', () => {
+        const home = readFileSync(new URL('../../../src/exams/carework/views/care-home.js', import.meta.url), 'utf8');
+        assert.match(home, /\$\('home-next'\)/);          // 안내 요소 렌더
+        assert.match(home, /아직 오늘 기록이 없어요/);      // 기록 0건 안내
+        assert.match(home, /인수인계.*넘기|넘기세요/);      // 마무리 흐름 안내
+    });
 });

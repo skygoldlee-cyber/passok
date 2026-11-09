@@ -28,6 +28,14 @@ export function initCareHomeView() {
         clientTrends(logs, { clientId: c.id, name: c.name }).map(t => `${c.name} — ${t.message}`));
     const wEl = $('home-warn');
     if (wEl) wEl.innerHTML = warns.map(w => `<div class="care-trend-warn">⚠ ${esc(w)}</div>`).join('');
+    // 다음 행동 안내 — 건수 요약을 "오늘 해야 할 일"로 (시니어 사용성 — 근무 흐름 순서 안내)
+    const nxEl = $('home-next');
+    if (nxEl) {
+        const done = cnt(logs) + cnt(visits) + cnt(incidents);
+        nxEl.textContent = done === 0
+            ? '💡 아직 오늘 기록이 없어요 — 아래 「요양일지 기록」부터 시작하세요'
+            : `💡 오늘 기록 ${done}건을 남겼어요 — 근무 마무리는 「인수인계」로 넘기세요`;
+    }
     // 미사용 도구 "처음" 마크 — 퍼널 사용 횟수 0인 도구
     const used = funnelStats()?.tools || {};
     document.querySelectorAll('.care-home-nav a[href^="#/"]').forEach(a => {

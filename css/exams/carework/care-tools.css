@@ -405,6 +405,7 @@
 .care-home-date { font-size: 1.1rem; font-weight: 700; }
 .care-home-summary { margin-top: var(--space-1-5); font-size: 0.95rem; }
 .care-home-warn { margin-top: var(--gap-ctl); }
+.care-home-next { margin-top: var(--gap-ctl); padding: var(--space-2-5) var(--space-4); border-radius: var(--radius-md); background: var(--bg-active); color: var(--color-text-main); font-size: var(--text-sm-md); font-weight: 600; }
 .care-home-nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--gap-ctl); margin-top: var(--gap-group); }
 .care-home-nav .btn { min-height: var(--control-h-lg); display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
 

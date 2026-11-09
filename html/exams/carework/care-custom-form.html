@@ -18,7 +18,7 @@
         <h3>양식 편집 — <span id="cf-tpl-label"></span></h3>
         <label>양식명 <input id="cf-tpl-title" type="text" autocomplete="off"></label>
         <div class="care-calc-actions">
-            <button type="button" class="btn btn-secondary" data-click="careFormTplPdfPick">📄 파일에서 추출 <span class="pro-badge" data-pro-feature="care_form_extract">PRO</span></button>
+            <button type="button" class="btn btn-secondary" data-click="careFormTplPdfPick">📄 파일에서 추출 <span class="pro-badge" data-pro-feature="care_form_extract">유료</span></button>
             <input id="cf-tpl-file" type="file" accept=".pdf,.docx,.xlsx,.xls,.csv,application/pdf" class="is-hidden">
         </div>
         <label>양식 본문 (마크다운) <textarea id="cf-tpl-body" rows="8" placeholder="기입란은 {{항목}} 형태로 표기 — 시스템 키: date·org·author·confirmer·receiver·client·signImage 는 자동 기입"></textarea></label>
@@ -44,7 +44,7 @@
         <div id="cf-fill-fields"></div>
         <div class="care-calc-actions">
             <button class="btn" data-click="careFormDocGenerate">📄 문서 생성</button>
-            <button class="btn btn-secondary" data-click="careFormDocSave">💾 문서 저장 <span class="pro-badge" data-pro-feature="care_form_save">PRO</span></button>
+            <button class="btn btn-secondary" data-click="careFormDocSave">💾 문서 저장 <span class="pro-badge" data-pro-feature="care_form_save">유료</span></button>
             <button data-click="careShare" data-arg="#cf-preview|양식 문서|mask|careFormDocGenerate||careFormDocPrint|care_form_share|careFormDocMd" class="btn btn-secondary">📤 공유·내보내기</button>
         </div>
     </div>
