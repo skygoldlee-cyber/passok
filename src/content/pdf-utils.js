@@ -21,7 +21,27 @@ export function ensurePdf() {
 // 페이지 경계에서 잘리지 않는다. 직계 자식뿐 아니라 하위 블록(표 행·그림·단락·목록
 // 항목)도 후보로 수집해 큰 래퍼 하나가 페이지를 넘을 때 내부 경계에서 자른다.
 // 셀 내부 요소는 제외(행 중간 절단 방지 — 표는 tr 경계까지만 쪼갠다). (@spec CO-21)
-const _BLOCK_SEL = 'h1,h2,h3,h4,h5,h6,p,li,tr,table,.reader-table-wrapper,.reader-img,img,pre,blockquote,figure,.mermaid,hr,details';
+const _BLOCK_SEL = 'h1,h2,h3,h4,h5,h6,p,li,tr,table,.reader-table-wrapper,.reader-img,img,svg,pre,blockquote,figure,.mermaid,hr,details';
+
+/**
+ * 화면용 스크롤 클립 해제 — .reader-table-wrapper(max-height:480px)처럼 세로로 잘린
+ * 상자는 html2canvas가 스크롤포트만 렌더해 잘린 내용이 PDF에서 통째로 빠지고,
+ * 잘린 행 rect가 절단 후보로 오인돼 경계가 어긋난다. 세로 스크롤이 실제로 발생한
+ * 상자만 max-height/overflow를 해제해 전체 내용이 레이아웃·캔버스에 펼쳐지게 한다.
+ * 경계 측정·렌더 모두 이 전처리 이후에 수행해야 한다. (@spec CO-21)
+ */
+function _expandScrollClips(root) {
+    root.querySelectorAll('*').forEach(e2 => {
+        const el2 = /** @type {HTMLElement} */ (e2);
+        if (el2.scrollHeight - el2.clientHeight > 2) {
+            const cs = getComputedStyle(el2);
+            if (cs.overflowY !== 'visible' || cs.maxHeight !== 'none') {
+                el2.style.maxHeight = 'none';
+                el2.style.overflow = 'visible';
+            }
+        }
+    });
+}
 
 /** el 기준 페이지 절단 위치(css px) 산출 — 각 구간은 availPx 이하, 끝은 요소 경계 */
 function _blockCuts(el, availPx) {
@@ -29,6 +49,7 @@ function _blockCuts(el, availPx) {
     const boundSet = new Set([0]);
     for (const e2 of el.querySelectorAll(_BLOCK_SEL)) {
         if (e2.closest('td,th')) continue;
+        if (e2.matches('svg,img,canvas') && e2.closest('pre,figure')) continue; // 컨테이너 경계가 관장 — pre 상단 패딩 잘림 방지 (svg tagName은 소문자라 matches 사용)
         const cs = getComputedStyle(e2);
         const mt = parseFloat(cs.marginTop || '0');
         const top = Math.round(e2.getBoundingClientRect().top - elTop - (Number.isFinite(mt) ? mt : 0));
@@ -55,6 +76,7 @@ function _blockCuts(el, availPx) {
 /** 뷰 미리보기 요소 → PDF File (한글은 캔버스 이미지로 렌더) */
 export async function pdfFileFromEl(el, title) {
     await ensurePdf();
+    _expandScrollClips(el); // 세로 스크롤 클립 해제 — 잘린 행 누락·경계 오인 방지 (@spec CO-21)
     const canvas = await (/** @type {any} */ (window)).html2canvas(el, { scale: 2, logging: false });
     const { jsPDF } = (/** @type {any} */ (window)).jspdf;
     const pdf = new jsPDF('p', 'mm', 'a4');
@@ -124,6 +146,7 @@ export async function pdfFileFromElStyled(el, title) {
         el2.style.boxShadow = 'none';
         el2.style.textShadow = 'none';
     });
+    _expandScrollClips(wrap); // 세로 스크롤 클립 해제 — 잘린 행 누락·경계 오인 방지 (@spec CO-21)
     // 요소 경계 페이지네이션 — 캔버스는 wrap을 1회 렌더(견고)하고, 자르는 위치는
     // 블록 요소 경계(_blockCuts 공용)로만 선택 — 표·그림·제목이 페이지 경계에서 잘리지 않는다.
     // 페이지 캔버스에 좌우 8mm·상하 10mm 여백을 입혀 조각을 옮긴다. (@spec CO-20)

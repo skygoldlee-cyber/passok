@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(pdf): 스크롤 클립 해제 + 컨테이너 내부 미디어 경계 제외 — 표 행 누락·머메이드 잘림 수정
+
+- .reader-table-wrapper(max-height:480px·overflow:auto)은 html2canvas가 스크롤포트만 렌더해 잘린 행이 PDF에서 누락 + 잘린 행 rect가 절단 후보로 오인(하단선이 다음 표·글자 위에 출력) — 세로 스크롤 발생 상자만 max-height/overflow 해제하는 _expandScrollClips 전처리 추가 (경계 측정·렌더 전)
+- pre/figure 내부 svg·img·canvas는 절단 후보에서 제외 — 컨테이너 경계가 관장 (머메이드 pre 상단 패딩 잘림 수정, svg tagName 소문자라 matches 사용)
+- @media print 폴백에도 .reader-table-wrapper 확장 규칙 추가 — window.print() 경로 동일 잘림 방지
+
 ## 2026-11-09 fix(pdf): 페이지 절단 보호 — 하위 블록 경계 페이지네이션 + CO-21 신설
 
 - 생성 PDF가 표·그림·다이어그램을 페이지 경계에서 잘라 출력 — _blockCuts 공용 헬퍼로 절단 후보를 하위 블록(tr·img·mermaid·p·li 등)까지 확장, 표는 행 경계까지만 분할(셀 내부 제외), pdfFileFromEl·pdfFileFromElStyled 공통 적용

@@ -155,6 +155,8 @@ body.manual-open{overflow:hidden;}
     box-decoration-break:clone;-webkit-box-decoration-break:clone;}
   /* h1 그라디언트 텍스트는 배경 미출력 시 transparent fill로 보이지 않음 — 인쇄 시 고정색 */
   #manual-overlay #manual-article h1{-webkit-text-fill-color:#000 !important;}
+  /* 스크롤 클립 해제 — 화면용 480px 세로 스크롤 표는 인쇄 시 전체 높이로 펼침 (@spec CO-21) */
+  #manual-overlay #manual-article .reader-table-wrapper{max-height:none !important;overflow:visible !important;}
   /* 요소 절단 방지 — 표 행·그림·다이어그램·인용 블록은 페이지 중간에서 쪼개지 않음 (@spec CO-21) */
   #manual-overlay #manual-article tr,
   #manual-overlay #manual-article img,
