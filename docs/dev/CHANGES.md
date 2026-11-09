@@ -1,6 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 docs(print): 표 출력 규약 정리 — 인쇄 표 표시 규칙 명문화
+
+- AGENTS.md 코드 규칙에 표 출력 규약 추가: 위아래 수평선만·이중선 금지·반투명 테두리/저알파 틴트 회색 통일·분할은 조정당 재측정+rowspan 통째 이동·넓은 표 축소·th 정리(fixPrintLines/_fixTableExtras/_fixBorder/_fixTableFrame 4경로 공유 + print.css 선언형 안전망 동기화)
+- pdf-utils.js 표 보정부 상단에 동일 규약 블록 주석 — 규칙 변경 시 양쪽 동기화 명시
+
 ## 2026-11-09 feat(print): 인쇄 표 전면 정리 — rowspan 분할·넓은 표 축소·선/배경 정돈 (CO-20/CO-21)
 
 - rowspan/colspan 대응 분할: 경계가 rowspan 그룹 내부면 확장 셀이 앞 표에 남아 뒤 행이 깨지는 결함 — 그룹 시작 행부터 옮기는 판정 추가 (_cutsWithTableSplit)

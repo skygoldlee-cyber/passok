@@ -243,8 +243,14 @@ const _rgb = c => {
 export const _lum = c => { const rgb = _rgb(c); return rgb ? _lumOf(rgb) : null; };
 const _lumOf = rgb => (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
 
-/* 인쇄 선 보정 공용 — 다크 테마 border는 반투명 백색(rgba(255,255,255,0.12))이라
-   백지에서 사라진다. 선폭이 있는 테두리 중 투명/거의 흰 것만 인쇄 회색으로 교체. */
+/* == 표 출력 규약 (인쇄·PDF 공용, @spec CO-20/CO-21) ==
+   - 위아래 수평선만: 래퍼 좌우·하단 테두리 제거, 선은 이중선 없이 하나로
+   - 색 정책: 반투명/흰 테두리·저알파 틴트 헤더는 인쇄 회색 통일, 진한 원색은 유지
+   - 분할 정책: 조정 1건당 재측정(낡은 경계 금지), rowspan 그룹 통째 이동,
+     헤더/첫행 경계는 스페이서, 행 중간은 고정 절단
+   - 이 규약은 fixPrintLines/_fixTableExtras/_fixBorder/_fixTableFrame/
+     _cutsWithTableSplit이 구현하고 print.css에 선언형 안전망이 있다 —
+     규칙 변경 시 양쪽 동기화 (AGENTS.md 코드 규칙 참조). */
 const _PRINT_LINE = '#e5e7eb'; // --print-border 동일값 (print.css 토큰, @media print 안이라 JS에서 못 읽음)
 const _PRINT_BAND = '#f3f4f6'; // --print-bg-subtle 동일값
 const _PRINT_ZEBRA = '#f9fafb'; // 지브라 복원 — 헤더 회색보다 한 단계 연하게

@@ -514,6 +514,7 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 - 디자인 토큰은 `css/base.css` `:root`의 CSS 변수 사용 (`--color-primary`, `--radius-md` 등)
 - `!important` 최소화 (Mermaid 다이어그램 규칙은 예외 — 인라인 스타일 덮어쓰기용)
   - 출력 보정 규약: mermaid 출력은 **화면 색상 그대로(WYSIWYG 하이브리드)** — `fixMermaidPrintContrast`(pdf-utils.js)가 `print-color-adjust: exact`만 부여하고 색은 변경하지 않는다(미렌더 원문 블록만 백지 보정). `css/reader-mermaid.css` 규칙은 전부 `!important`이므로 보정 인라인도 `'important'` 우선순위 필수 — 일반 인라인은 패배한다. 상자↔글자 대비는 토큰(`--mermaid-*`)이 보장 — 토큰 값을 바꾸면 화면·출력이 함께 바뀌니 대비를 함께 검증. 계약 테스트: `tests/unit/content/pdf-utils.test.js`, E2E `pdf-pagination.spec.js`
+  - 표 출력 규약: 인쇄 표는 **위아래 수평선만** — 래퍼 좌우·하단 테두리 제거(수직선·하단 이중선 방지), 테두리는 반투명/흰색이면 `_PRINT_LINE`(#e5e7eb)으로, 헤더 밴드는 저알파 틴트만 `_PRINT_BAND`(#f3f4f6)으로 통일(진한 원색 유지), 지브라는 극저알파만 `#f9fafb` 복원. 선은 하나만 — border+box-shadow 이중선·thead 복제 헤더는 분할 시에만 페이지 시작에 허용. 표 분할은 **조정 1건당 전체 경계 재측정** 수렴 방식(`_cutsWithTableSplit`), rowspan 그룹은 통째 이동, 넓은 표는 font-size 축소, th는 sticky 정적화·nowrap 해제. `fixPrintLines`·`_fixTableExtras`·`_fixBorder`·`_fixTableFrame`이 4개 출력 경로(styled·plain·window.print·인쇄창)에서 공유되고 `print.css`에 선언형 안전망이 있다 — 규칙 추가 시 양쪽 동기화. 계약 테스트: `tests/unit/content/pdf-utils.test.js`, E2E `pdf-pagination.spec.js`
 - 미디어 쿼리 브레이크포인트: 768px / 900px / 1200px (3단계)
 - 마크업 인라인 `style="…"` 속성 전면 금지 → CSS 클래스·유틸리티 사용 (`check:uistyle` 게이트, 면제는 `style-ok` 토큰)
 - 유틸리티 클래스: `.is-hidden`, `.text-muted`, `.mb-4`~`.mb-7`, `.mt-3`~`.mt-7`, `.ml-2` (css/base.css)
