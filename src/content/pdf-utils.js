@@ -252,8 +252,11 @@ export function fixMermaidPrintContrast(root, win = window) {
     const set = (el, prop, val) => {
         const st = /** @type {HTMLElement} */ (el).style;
         const prev = st.getPropertyValue(prop);
-        undo.push(() => { st.setProperty(prop, prev); });
-        st.setProperty(prop, val);
+        const prio = st.getPropertyPriority(prop);
+        // 인라인 !important 부여 — reader-mermaid.css의 .nodeLabel/.node rect 등
+        // !important 규칙이 일반 인라인 스타일을 이겨 보정이 무력화되던 경로 차단
+        undo.push(() => { st.setProperty(prop, prev, prio); });
+        st.setProperty(prop, val, 'important');
     };
     const SHAPE = new Set(['rect', 'polygon', 'circle', 'ellipse', 'path']);
     const TEXT = new Set(['text', 'tspan']);

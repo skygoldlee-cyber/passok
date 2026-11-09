@@ -142,9 +142,12 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
         const res = await page.evaluate(async () => {
             const w = /** @type {any} */ (window);
             const host = document.createElement('div');
-            // 다크 테마 렌더분 흉내 — 어두운 노드 채우기 + 밝은 글자·선 + foreignObject 라벨
-            host.innerHTML = '<pre class="mermaid"><svg viewBox="0 0 100 40" style="background:#1a1a2e">' +
-                '<rect width="100" height="40" style="fill:#3a3a5c;stroke:#b0b0cc"/>' +
+            // 다크 테마 렌더분 흉내 — reader-mermaid.css처럼 !important 규칙을 둬
+            // 우선순위 없는 인라인 보정이 무력화되던 실제 경로를 재현
+            host.innerHTML = '<style>pre.mermaid .node rect{fill:#3a3a5c !important;stroke:#b0b0cc !important;}' +
+                'pre.mermaid .nodeLabel{color:#fff !important;fill:#fff !important;}</style>' +
+                '<pre class="mermaid"><svg viewBox="0 0 100 40" style="background:#1a1a2e">' +
+                '<g class="node"><rect width="100" height="40"/></g>' +
                 '<text x="10" y="24" style="fill:#ffffff">라벨</text>' +
                 '<foreignObject x="0" y="0" width="100" height="20"><div xmlns="http://www.w3.org/1999/xhtml">' +
                 '<span class="nodeLabel" style="color:#ffffff">노드명</span></div></foreignObject></svg></pre>';

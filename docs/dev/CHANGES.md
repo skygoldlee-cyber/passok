@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 fix(print): mermaid 보정 !important 우선순위 — 실제 다이어그램에서 보정이 무력화되던 근본 원인
+
+- reader-mermaid.css의 .nodeLabel/.node rect/.edgeLabel 등 전 규칙이 !important라 우선순위 없는 인라인 보정이 실제 mermaid DOM에서 전부 패배 — 어두운 상자(#33334a)·흰 라벨(#fff)이 출력물에 그대로 남음 (합성 SVG 테스트만 통과하던 사각지대)
+- fixMermaidPrintContrast의 set()이 setProperty(prop, val, 'important')로 적용 + 우선순위까지 보존해 원복
+- e2e 픽스처에 !important 규칙 주입(.node rect/.nodeLabel)해 실제 오버라이드 경로를 재현 검증
+
 ## 2026-11-09 fix(print): mermaid svg 루트 다크 배경 보정 — 다이어그램 전체가 검정 배경으로 출력되던 결함
 
 - 다크 테마 themeVariables.background(#1a1a2e)가 svg 루트에 어두운 배경을 그림 — 보정 선택자가 `pre.mermaid svg *`라 루트가 빠져 window.print·인쇄 창 경로에서 다이어그램 전체가 검정 배경+검정 글자로 출력 (styled PDF는 기존 HTML 보정이 덮어 정상이었음)
