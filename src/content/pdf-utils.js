@@ -184,7 +184,7 @@ export async function pdfFileFromEl(el, title) {
     try {
         await _settleImages(el); // lazy 이미지 로드·레이아웃 확정 — 절단 위치 어긋남 방지 (@spec CO-21)
         _expandScrollClips(el); // 세로 스크롤 클립 해제 — 잘린 행 누락·경계 오인 방지 (@spec CO-21)
-        undoMermaid = fixMermaidPrintContrast(el); // 다크 테마 다이어그램 → 백지 출력용 대비 보정, 렌더 후 복원 (@spec CO-20)
+        undoMermaid = [...fixPrintLines(el), ...fixMermaidPrintContrast(el)]; // 인쇄 선·다이어그램 보정 — 렌더 후 복원 (@spec CO-20)
         const W = 210, H = 297;
         // 페이지 여백 — 통짜 이미지를 전면 출력하면 상하 여백 없이 글자가 잘리므로 페이지별 캔버스에 여백을 입혀 조각냄 (@spec CO-20)
         const MX = 8, MY = 10;
@@ -235,6 +235,47 @@ const _rgb = c => {
 // rgb 파싱 → 밝기(0~1) — 흰 배경에서 안 보이는 밝은 글자 판정용
 export const _lum = c => { const rgb = _rgb(c); return rgb ? _lumOf(rgb) : null; };
 const _lumOf = rgb => (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
+
+/* 인쇄 선 보정 공용 — 다크 테마 border는 반투명 백색(rgba(255,255,255,0.12))이라
+   백지에서 사라진다. 선폭이 있는 테두리 중 투명/거의 흰 것만 인쇄 회색으로 교체. */
+const _PRINT_LINE = '#e5e7eb'; // --print-border 동일값 (print.css 토큰, @media print 안이라 JS에서 못 읽음)
+const _fixBorder = (el2, cs, set) => {
+    for (const s of ['Top', 'Right', 'Bottom', 'Left']) {
+        if (!(parseFloat(cs[`border${s}Width`] || '0') > 0)) continue;
+        const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs[`border${s}Color`] || '');
+        if (!m) continue;
+        const a = m[4] !== undefined ? parseFloat(m[4]) : 1;
+        const l = _lumOf([+m[1], +m[2], +m[3]]);
+        if (a < 0.4 || l > 0.85) set(`border-${s.toLowerCase()}-color`, _PRINT_LINE);
+    }
+};
+/* box-shadow 구분선 판정 — '0 Npx' 오프셋만 있는 무확산 선(표 헤더 밑줄 등)은
+   장식 그림자가 아니라 구분선이라 유지한다. 그 외 그림자는 백지에서 지저분해 제거. */
+const _isLineShadow = bs => bs.split(/,(?![^()]*\))/).every(part =>
+    /\)\s+0(?:\.0+)?px\s+[0-9.]+px(?:\s+0(?:\.0+)?px){0,2}\s*$/.test(part));
+
+/**
+ * 인쇄 선 가시성 보정 — 표 테두리·hr 등 백지에서 사라지는 반투명/흰 테두리를
+ * 인쇄 회색으로 교체한다. 라이브 DOM에 적용할 때는 반환된 복원 함수로 되돌린다. (@spec CO-20)
+ * @param {ParentNode} root — 컨테이너 (문서 attach 상태)
+ * @param {Window} [win] - root가 속한 창 (별도 인쇄 창 문서는 그 창의 getComputedStyle 필요)
+ * @returns {Array<(() => void)>} 원복 함수 목록
+ */
+export function fixPrintLines(root, win = window) {
+    /** @type {Array<(() => void)>} */
+    const undo = [];
+    root.querySelectorAll('*').forEach(e2 => {
+        const el2 = /** @type {HTMLElement} */ (e2);
+        if (el2.closest('pre.mermaid')) return;
+        const st = el2.style;
+        _fixBorder(el2, win.getComputedStyle(el2), (p, v) => {
+            const prev = st.getPropertyValue(p), prio = st.getPropertyPriority(p);
+            undo.push(() => { st.setProperty(p, prev, prio); });
+            st.setProperty(p, v, 'important');
+        });
+    });
+    return undo;
+}
 
 /**
  * 인쇄용 mermaid 출력 대비 (화면 색상 유지 — WYSIWYG 하이브리드, @spec CO-20)
@@ -311,7 +352,8 @@ export async function pdfFileFromElStyled(el, title) {
         }
         const bg = _lum(cs.backgroundColor);
         if (bg !== null && bg < 0.25) el2.style.background = 'transparent'; // 어두운 배경은 제거 — 흰 종이와 대비
-        el2.style.boxShadow = 'none';
+        _fixBorder(el2, cs, (p, v) => el2.style.setProperty(p, v, 'important')); // 반투명/흰 테두리는 백지 소실 → 인쇄 회색
+        if (cs.boxShadow !== 'none' && !_isLineShadow(cs.boxShadow)) el2.style.boxShadow = 'none'; // 무확산 구분선은 유지
         el2.style.textShadow = 'none';
     });
     // mermaid SVG는 fill/stroke 계열라 HTML 색 보정이 못 미침 — 어두운 상자+검정 글자

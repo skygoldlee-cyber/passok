@@ -42,6 +42,10 @@ async function _stubVendors(page) {
                     return s ? getComputedStyle(s).printColorAdjust : null; })(),
                 rawCodeColor: (() => { const s = el.querySelector('pre.mermaid code');
                     return s ? getComputedStyle(s).color : null; })(),
+                tblBorder: (() => { const s = el.querySelector('.reader-table-wrapper');
+                    return s ? getComputedStyle(s).borderTopColor : null; })(),
+                thShadow: (() => { const s = el.querySelector('.reader-table th');
+                    return s ? getComputedStyle(s).boxShadow : null; })(),
             };
             const c = document.createElement('canvas');
             c.width = el.offsetWidth * 2; c.height = el.offsetHeight * 2;
@@ -154,13 +158,18 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
                 '<foreignObject x="0" y="0" width="100" height="20"><div xmlns="http://www.w3.org/1999/xhtml">' +
                 '<span class="nodeLabel" style="color:#ffffff">노드명</span></div></foreignObject></svg></pre>' +
                 // 미렌더 블록 흉내 — svg 없이 원문만 → 밝은 글자는 백지 보정 대상
-                '<pre class="mermaid"><code style="color:#f3f4f6">flowchart TD</code></pre>';
+                '<pre class="mermaid"><code style="color:#f3f4f6">flowchart TD</code></pre>' +
+                // 반투명 백색 테두리 + box-shadow 구분선 흉내 — 백지 소실 방지 검증
+                '<div class="reader-table-wrapper" style="border:1px solid rgba(255,255,255,0.12)">' +
+                '<table class="reader-table"><thead><tr><th style="box-shadow:0 2px 0 rgb(21,101,192)">항목</th></tr></thead>' +
+                '<tbody><tr><td>값</td></tr></tbody></table></div>';
             document.body.appendChild(host);
             try {
                 const { pdfFileFromElStyled } = await import('/src/content/pdf-utils.js');
                 await pdfFileFromElStyled(host, 't');
                 return { fills: w.__layout.svgFills, foColor: w.__layout.foColor,
-                         pca: w.__layout.pca, rawCodeColor: w.__layout.rawCodeColor };
+                         pca: w.__layout.pca, rawCodeColor: w.__layout.rawCodeColor,
+                         tblBorder: w.__layout.tblBorder, thShadow: w.__layout.thShadow };
             } finally { host.remove(); }
         });
         const rect = res.fills.find(e => e.tag === 'rect');
@@ -169,6 +178,8 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
         expect(res.foColor, `라벨도 화면 색상 그대로: ${res.foColor}`).toBe('rgb(255, 255, 255)');
         expect(res.pca, `브라우저 인쇄 배경 유지: ${res.pca}`).toBe('exact');
         expect(res.rawCodeColor, `미렌더 원문만 검정 보정: ${res.rawCodeColor}`).toBe('rgb(0, 0, 0)');
+        expect(res.tblBorder, `반투명 테두리는 인쇄 회색으로: ${res.tblBorder}`).toBe('rgb(229, 231, 235)');
+        expect(res.thShadow, `무확산 구분선 box-shadow는 유지: ${res.thShadow}`).not.toBe('none');
     });
 
     test('window.print 경로 — beforeprint 색상 보존·afterprint 원복 (initPrintPrep)', async ({ page }) => {

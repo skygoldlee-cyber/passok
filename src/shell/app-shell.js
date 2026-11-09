@@ -7,7 +7,7 @@ import { DataLoader } from "../content/data-loader.js";
 import { getActiveExam, getCurrentExamId, getExamList, hasFeature, applyExamTheme } from "../core/exam-context.js";
 import { isPracticeCapable } from "../practice-registry.js";
 import { showToast, showAlert } from "../ui-utils.js";
-import { fixMermaidPrintContrast } from "../content/pdf-utils.js";
+import { fixMermaidPrintContrast, fixPrintLines } from "../content/pdf-utils.js";
 
 // 설치형 PWA 콜드 스타트에서 dvh가 실제 화면보다 크게 측정되는 경우가 있어
 // (스플래시 직후 시스템 바 확정 전) — visualViewport 기준으로 재측정해 자정시킨다.
@@ -41,7 +41,7 @@ export function initPrintPrep() {
     window.addEventListener('beforeprint', () => {
         _undone = [];
         // 다크 테마 mermaid SVG는 어두운 채우기+밝은 글자 — 백지 출력 대비 보정, 인쇄 후 원복
-        _undoMermaid = fixMermaidPrintContrast(document);
+        _undoMermaid = [...fixPrintLines(document), ...fixMermaidPrintContrast(document)]; // 인쇄 선·다이어그램 보정
         // lazy 이미지는 미로드 상태로 인쇄되면 빈 칸 — eager로 전환해 로드를 시작시킴
         document.querySelectorAll('img[loading="lazy"]').forEach(img => img.removeAttribute('loading'));
         // 세로 스크롤이 실제 발생한 상자만 해제 — 스크롤포트 출력분을 전체 내용으로 펼침
