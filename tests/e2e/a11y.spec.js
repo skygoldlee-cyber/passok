@@ -80,6 +80,7 @@ test.describe('접근성 자동 스캔 (A-01/03/04)', () => {
 
     test('설정 패널 오픈 상태: 심각 위반 0건', async ({ page }) => {
         test.setTimeout(60_000);
+        await page.emulateMedia({ reducedMotion: 'reduce' });
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
         await page.locator('#settings-toggle-btn').click();
