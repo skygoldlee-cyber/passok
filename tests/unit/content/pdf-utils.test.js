@@ -93,8 +93,14 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
     it('mermaid 인쇄 대비 보정 — 어두운 채우기 틴트·밝은 글자 검정 (CO-20)', () => {
         assert.match(src, /export function fixMermaidPrintContrast/);          // 공용 보정 헬퍼
         assert.match(src, /querySelectorAll\('pre\.mermaid, pre\.mermaid \*'\)/); // pre·svg 루트 포함 순회 (다크 svg 배경 보정)
-        assert.match(src, /setProperty\(prop, 'fill', '#000'\)|'fill', '#000'/); // 밝은 글자 → 검정
+        assert.match(src, /'fill', '#000'/);                                 // 밝은 글자 → 검정
         assert.match(src, /'stroke', '#444'/);                               // 밝은 선 → 어둡게
+        assert.match(src, /'color', '#000'/);                                // foreignObject 라벨 color → 검정
+        assert.match(src, /'background', 'transparent'/);                    // 어두운 배경 제거
+        // 보정 계약 — reader-mermaid.css의 전 규칙이 !important라 우선순위 없는
+        // 인라인 스타일은 실제 다이어그램에서 패배한다. 반드시 'important'로 적용.
+        assert.match(src, /setProperty\(prop, val, 'important'\)/);          // 인라인 !important 적용
+        assert.match(src, /getPropertyPriority\(prop\)/);                    // 원복 시 우선순위 보존
         // PDF 생성 양 경로 + 라이브 복원
         assert.match(src, /fixMermaidPrintContrast\(wrap\)/);                // styled 클론
         assert.match(src, /undoMermaid = fixMermaidPrintContrast\(el\)/);    // plain 라이브

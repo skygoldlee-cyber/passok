@@ -513,6 +513,7 @@ docs/                   # 문서 (인덱스: docs/README.md · 규약 정본: do
 - `style.css`가 진입점, `@import`로 `css/*.css` 로드
 - 디자인 토큰은 `css/base.css` `:root`의 CSS 변수 사용 (`--color-primary`, `--radius-md` 등)
 - `!important` 최소화 (Mermaid 다이어그램 규칙은 예외 — 인라인 스타일 덮어쓰기용)
+  - 출력 보정 규약: `css/reader-mermaid.css`의 mermaid 색상 규칙은 전부 `!important`이므로, 인쇄·PDF 대비 보정(`pdf-utils.js` `fixMermaidPrintContrast`)은 반드시 `setProperty(prop, val, 'important')`로 적용한다 — 우선순위 없는 인라인 스타일은 실제 다이어그램에서 패배한다. 새 mermaid 색상 규칙 추가 시 `!important` 유지 + 보정 판정(밝기 임계·선택자 커버 — `pre.mermaid`·svg 루트·foreignObject color/background 포함)도 함께 갱신. 계약 테스트: `tests/unit/content/pdf-utils.test.js`
 - 미디어 쿼리 브레이크포인트: 768px / 900px / 1200px (3단계)
 - 마크업 인라인 `style="…"` 속성 전면 금지 → CSS 클래스·유틸리티 사용 (`check:uistyle` 게이트, 면제는 `style-ok` 토큰)
 - 유틸리티 클래스: `.is-hidden`, `.text-muted`, `.mb-4`~`.mb-7`, `.mt-3`~`.mt-7`, `.ml-2` (css/base.css)

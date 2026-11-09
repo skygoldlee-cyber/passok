@@ -2,6 +2,15 @@
 
 /* @spec TR-06,TH-06 */
 
+/* == 출력 보정 규약 (인쇄·PDF) ==
+   이 파일의 mermaid 색상 규칙은 전부 !important다 — 테마 전환 시 렌더-베이크된
+   인라인 fill/color를 CSS 변수로 역전하기 위함. 따라서 출력 시 대비 보정
+   (pdf-utils.js fixMermaidPrintContrast)은 반드시 인라인 'important'
+   우선순위로 적용해야 하며, 일반 인라인 스타일은 이 파일 규칙에 패배한다.
+   새 mermaid 색상 규칙 추가 시에도 동일하게 !important를 유지하고,
+   출력 경로에서 가독성이 깨지면 fixMermaidPrintContrast의 판정(밝기
+   임계값·선택자 커버 범위)도 함께 갱신할 것. */
+
 /* === Mermaid & Story Mode Design Tokens === */
 :root {
     /* Mermaid 다크 테마 */

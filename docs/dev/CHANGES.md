@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 docs+test: mermaid 출력 보정 규약 정착 — 향후 확장 시 재발 방지
+
+- 유닛 계약 테스트 확장 — 'important' 우선순위 적용·우선순위 보존 원복·color/background 보정·pre/svg 루트 커버를 소스 계약으로 고정
+- css/reader-mermaid.css 헤더에 출력 보정 규약 주석 — !important 전 규칙이므로 보정도 'important' 필수, 신규 규칙 시 보정 판정 동반 갱신
+- AGENTS.md 코드 규칙(CSS 절)에 동일 규약 명문화
+
 ## 2026-11-09 fix(print): mermaid 보정 !important 우선순위 — 실제 다이어그램에서 보정이 무력화되던 근본 원인
 
 - reader-mermaid.css의 .nodeLabel/.node rect/.edgeLabel 등 전 규칙이 !important라 우선순위 없는 인라인 보정이 실제 mermaid DOM에서 전부 패배 — 어두운 상자(#33334a)·흰 라벨(#fff)이 출력물에 그대로 남음 (합성 SVG 테스트만 통과하던 사각지대)
