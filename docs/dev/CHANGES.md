@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 feat(print): 인쇄 파이프라인 보완 — 전역 전처리 훅·디코딩 상한·페이지 번호
+
+- initPrintPrep(beforeprint/afterprint) — 화면용 스크롤 상자(리더 본문 등)와 lazy 이미지를 인쇄 직전 해제·직후 복원, window.print() 경로 전체의 시험 공통 안전망 (스크롤포트만 출력되거나 lazy 이미지 빈 칸이던 잔여 갭)
+- _settleImages 디코딩 대기에 10초 상한 — 무한 지연 이미지 요청이 PDF 생성을 교착시키지 않도록
+- 생성 PDF 하단에 페이지 번호(N/total) 스탬프 — pdfFileFromEl·pdfFileFromElStyled 공통
+
 ## 2026-11-09 fix(print): 표 행·이미지 절단 방지를 시험 팩 공통으로 — 전역 @media print 규약
 
 - print.css에 tr·td·th break-inside:avoid + thead 반복 + img 절단 방지 전역 규칙 추가 — 활성 뷰 window.print() 경로에서 문서형 출력물의 표가 행 중간에서 잘리던 갭 해소 (모든 시험 팩 일괄 적용)

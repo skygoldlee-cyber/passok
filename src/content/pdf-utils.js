@@ -34,7 +34,11 @@ async function _settleImages(root) {
     const imgs = [...root.querySelectorAll('img')];
     if (!imgs.length) return;
     imgs.forEach(i => i.removeAttribute('loading')); // lazy 해제 — 즉시 로드
-    await Promise.all(imgs.map(i => i.decode().catch(() => {}))); // 실패 이미지는 무시
+    // 디코딩 대기 — 무한 지연 요청이 있어도 10초 상한 (PDF 생성이 교착되지 않도록)
+    await Promise.race([
+        Promise.all(imgs.map(i => i.decode().catch(() => {}))), // 실패 이미지는 무시
+        new Promise(r => setTimeout(r, 10000)),
+    ]);
     // 로드 크기 반영 프레임 — 백그라운드 탭에서 rAF가 안 도는 상황 대비 상한 부여
     await Promise.race([new Promise(r => requestAnimationFrame(r)), new Promise(r => setTimeout(r, 300))]);
     void root.offsetHeight; // 리플로우 확정 — 이후 rect 측정이 최종 레이아웃 기준
@@ -58,6 +62,17 @@ function _expandScrollClips(root) {
             }
         }
     });
+}
+
+/** 페이지 번호 스탬프 — 출력물 하단 우측에 "N / 전체" (문서 페이징 가시성) */
+function _stampPageNumbers(pdf, W, H) {
+    const total = pdf.getNumberOfPages();
+    for (let p = 1; p <= total; p++) {
+        pdf.setPage(p);
+        pdf.setFontSize(8);
+        pdf.setTextColor(120);
+        pdf.text(`${p} / ${total}`, W - 6, H - 3, { align: 'right' });
+    }
 }
 
 /** el 기준 페이지 절단 위치(css px) 산출 — 각 구간은 availPx 이하, 끝은 요소 경계 */
@@ -123,6 +138,7 @@ export async function pdfFileFromEl(el, title) {
             if (off + sliceH < y1 - y0 || i + 2 < cuts.length) pdf.addPage();
         }
     }
+    _stampPageNumbers(pdf, W, H);
     const blob = pdf.output('blob');
     return new File([blob], `${title}.pdf`, { type: 'application/pdf' });
 }
@@ -215,6 +231,7 @@ export async function pdfFileFromElStyled(el, title) {
                 pdf.addImage(pgc.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, W, H);
             }
         }
+        _stampPageNumbers(pdf, W, H);
         return new File([pdf.output('blob')], `${title}.pdf`, { type: 'application/pdf' });
     } finally { wrap.remove(); }
 }

@@ -97,6 +97,17 @@ describe('뷰어 인쇄 버튼 — 생성 PDF 미리보기·다운로드 경로'
         expect(src.indexOf('i.decode()') < src.indexOf('printWin.print()')).toBe(true); // 대기 선행
     });
 
+    it('인쇄 전 전역 전처리 — 스크롤 상자·lazy 이미지 해제 후 afterprint 복원 (window.print 경로 공통)', async () => {
+        const { readFileSync } = await import('node:fs');
+        const shell = readFileSync('src/shell/app-shell.js', 'utf8');
+        expect(shell).toContain('beforeprint');                          // 인쇄 직전 훅
+        expect(shell).toContain('afterprint');                           // 인쇄 직후 복원
+        expect(shell).toContain('img[loading="lazy"]');                  // lazy 이미지 eager 전환
+        expect(shell).toContain('scrollHeight - el.clientHeight');       // 실제 스크롤 발생 상자만 해제
+        const app = readFileSync('src/shell/app.js', 'utf8');
+        expect(app).toContain('initPrintPrep');                          // 초기화 등록
+    });
+
     it('exam-article 타이포그래피 — manual-article 기준본과 동일 스케일 (출력 간격 통일)', async () => {
         const { readFileSync } = await import('node:fs');
         const exam = readFileSync('src/reader/exam-viewer.js', 'utf8');

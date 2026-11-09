@@ -63,8 +63,15 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         assert.match(src, /_settleImages/);                                  // 정착 헬퍼
         assert.match(src, /removeAttribute\('loading'\)/);                   // lazy 해제 → 즉시 로드
         assert.match(src, /i\.decode\(\)/);                                  // 디코딩 완료 대기
+        assert.match(src, /setTimeout\(r, 10000\)/);                         // 디코딩 상한 — 교착 방지
         // 정착이 경계 측정·스크롤 클립 해제 이전에 실행돼야 측정이 최종 레이아웃 기준
         assert.ok(src.indexOf('await _settleImages(wrap)') < src.indexOf('_expandScrollClips(wrap)'));
         assert.ok(src.indexOf('await _settleImages(wrap)') < src.indexOf('_blockCuts(wrap, availPx)'));
+    });
+
+    it('페이지 번호 스탬프 — 출력물 하단 N/total 표기', () => {
+        assert.match(src, /_stampPageNumbers/);
+        assert.match(src, /getNumberOfPages\(\)/);                           // 전체 페이지 수
+        assert.match(src, /setPage\(p\)/);                                   // 페이지 재방문 스탬프
     });
 });
