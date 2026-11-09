@@ -1,6 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 docs(spec): PF-19 이미지 자산 형식 제한 SPEC 부여 + 규약 문서화
+
+- SPEC §4.4에 PF-19 신설 — 배포 산출물 이미지는 webp·svg만 허용 (content/ 현재 7,627 webp·23 svg·png 1로 이미 수렴, 신규 유입 회귀 방지)
+- CODE_CONVENTIONS §2.2 — 형식 규칙 정본: 예외 화이트리스트(PWA/apple-touch/favicon PNG·OG 이미지·e2e/docs 비대상) + 금지 확장자 목록 + check_filenames 확장 적용 방향
+
 ## 2026-11-09 docs(admin): AD-13 기관 활동 패널 SPEC 부여 + 설계문서 갱신
 
 - SPEC §3.26에 AD-13 신설 — carework 시설 8테이블 admin select 정책 + #/admin 기관 탭 (미구현 로드맵)
