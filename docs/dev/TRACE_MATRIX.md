@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: ad0cfb082ee61d55
+> 입력 해시: 3ed9f9f35757dd5a
 > 생성: 2026-11-09 · 원천: SPEC.md(692개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 692개 — 문서 연결 468 · 소스 연결 614 · 테스트 연결 656 · 보고서 연결 109
+**커버리지 요약**: 요구사항 692개 — 문서 연결 469 · 소스 연결 614 · 테스트 연결 656 · 보고서 연결 109
 
 ---
 
@@ -508,7 +508,7 @@
 | AD-07 | ✅ | 테스트 | DOC-DSN-30 | tools/check/dashboard_report.js | tests/unit/app/dashboard-report.test.js | — | — |
 | AD-08 | ✅ | 테스트 | DOC-DSN-30 | tools/check/user_report.js | tests/unit/app/user-report.test.js | — | — |
 | AD-09 | ✅ | 테스트 | DOC-DSN-30 | tools/check/pro_report.js | tests/unit/app/pro-report.test.js | — | — |
-| AD-10 | ✅ | 테스트 | DOC-DSN-30<br>DOC-DSN-36<br>DOC-DSN-37<br>DOC-RBK-17<br>…외 1개 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
+| AD-10 | ✅ | 테스트 | DOC-DSN-30<br>DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-90<br>…외 2개 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
 | AD-11 | ✅ | 테스트 | DOC-DSN-30<br>DOC-DSN-36<br>DOC-DSN-37<br>DOC-RBK-17 | tools/deploy/register_admin_bot.js<br>tools/supabase/functions/admin-bot/index.ts | tests/unit/gates/admin-bot-contract.test.js | — | — |
 | AD-12 | ✅ | 테스트 | DOC-DSN-30<br>DOC-DSN-37 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
 | AD-13 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
@@ -695,7 +695,7 @@
 | PF-15 | ✅ | 테스트 | — | ref-pipeline/convert.py | tests/unit/gates/perf-invariants.test.js | — | — |
 | PF-16 | ✅ | 테스트 | — | src/reader/mermaid-render.js | tests/unit/gates/perf-invariants.test.js | — | — |
 | PF-17 | ✅ | 테스트 | DOC-DSN-20 | — | tests/unit/gates/perf-invariants.test.js | — | — |
-| PF-18 | ✅ (목표 확정) | — | — | — | — | — | — |
+| PF-18 | ✅ (목표 확정) | 문서 검토 | DOC-DSN-90 | — | — | — | — |
 | PF-19 | ✅ | 테스트 | — | — | tests/unit/tools/check-filenames.test.js | — | — |
 
 ## 4.5 접근성
@@ -1055,6 +1055,7 @@
 | DOC-DSN-44 | docs/exams/carework/design/CARE_OS_DATAHUB_DESIGN.md | CO-01, CO-02, CO-03, CO-04, CO-05, DA-13, DA-18, ROAD-P5 |
 | DOC-DSN-45 | docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md | — |
 | DOC-DSN-46 | docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md | — |
+| DOC-DSN-90 | docs/dev/design/DEPLOY_PIPELINE_DESIGN.md | AD-10, PF-18 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |

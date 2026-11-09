@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 perf(deploy): 배포 파이프라인 속도 개선 — 게이트 자동복구·CI 대기 병행
+
+- DEPLOY_PIPELINE_DESIGN.md (DOC-DSN-90) — 시간 분해·개선안 설계 정본
+- pre-commit — TRACE_MATRIX 상이 시 차단 대신 자동 재생성+스테이징, specrefs 조기 검사 추가 (원격 실패 왕복 제거)
+- deploy.js — CI 게이트를 빌드 직후로 이동해 로컬 준비를 CI 대기와 병행, in_progress는 fail 대신 폴링 대기(30분 상한), DEPLOY_TRUST_CI=1 로컬 중복 검사 스킵 옵트인
+
 ## 2026-11-09 feat(gate): PF-19 이미지 형식 게이트 구현 — check_filenames 확장
 
 - check_filenames.js — content/·icons/ 신규 이미지에 webp·svg 강제 (png/jpg/jpeg/gif/bmp/avif 차단), icons/ PNG는 화이트리스트(apple-touch·favicon·passok·og-image)로 예외 — PWA 설치·외부 크롤러 호환 보존

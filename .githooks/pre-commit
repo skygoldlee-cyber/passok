@@ -48,3 +48,22 @@ node tools/check/check_test_first.js --staged || {
     echo "  우회: git commit --no-verify"
     exit 1
 }
+
+# TRACE_MATRIX 신선도 — 상이면 차단 대신 자동 재생성+스테이징으로 복구
+# (배포 루프에서 가장 빈번하던 원격 실패 원인을 로컬 자동 복구로 전환, DSN-90)
+if ! node tools/build/build_trace_matrix.js --check >/dev/null 2>&1; then
+    echo "  - TRACE_MATRIX 자동 재생성"
+    node tools/build/build_trace_matrix.js >/dev/null 2>&1 || {
+        echo "✗ 커밋 차단: TRACE_MATRIX 재생성 실패"
+        exit 1
+    }
+    git add docs/dev/TRACE_MATRIX.md
+fi
+
+# specrefs — @spec 태그 파싱·스테일 참조를 푸시 전 로컬에서 차단 (~1초)
+echo "  - node tools/check/check_spec_refs.js"
+node tools/check/check_spec_refs.js >/dev/null 2>&1 || {
+    echo "✗ 커밋 차단: SPEC 참조 검증 실패 — @spec 헤더 형식·스테일 참조 확인"
+    node tools/check/check_spec_refs.js
+    exit 1
+}
