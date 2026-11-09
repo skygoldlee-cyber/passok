@@ -130,12 +130,12 @@ const SHOTS = {
     // ① 더보기 전후 — 합성 2장
     'manual-01-more': async (page) => {
         await page.goto(`${BASE}/#/care-log`, { waitUntil: 'networkidle' });
-        const row = 'details.care-more-actions';
-        const before = await shotPng(page, row);
-        await page.locator('details.care-more-actions > summary').first().click();
+        const det = page.locator('details.care-more-actions').first();
+        const before = await det.screenshot().catch(() => null);
+        await det.evaluate(d => { d.open = true; });
         await page.waitForTimeout(300);
-        const after = await shotPng(page, row);
-        await snapComposite(page, 'manual-01-more', [before, after]);
+        const after = await det.screenshot();
+        await snapComposite(page, 'manual-01-more', [before || after, after]);
     },
     // ① 저장 배지 — 저장 클릭 직후 표시
     'manual-01-badge': async (page) => {
@@ -145,9 +145,9 @@ const SHOTS = {
         await page.fill('#inc-desc', '침대에서 내려오다 미끄러짐');
         await page.fill('#inc-action', '확인 후 안정 조치');
         await page.locator('[data-click="careIncidentGenerate"]').click();
-        await page.locator('details.care-more-actions > summary').first().click({force:true});
-        await page.locator('[data-click="careIncidentSave"]').click();
-        await page.waitForSelector('.saved-flash', { timeout: 5000 });
+        await page.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
+        await page.locator('.care-more-actions-list [data-click="careIncidentSave"]').click({ force: true });
+        await page.waitForTimeout(300);
         await snap(page, 'manual-01-badge', '.saved-flash');
     },
     // ① 공유 메뉴 — 모바일 뷰포트 컨텍스트 (main에서 별도 처리)
@@ -184,9 +184,13 @@ const SHOTS = {
     // ④ 방문 결과 패널
     'manual-04-result': async (page) => {
         await page.goto(`${BASE}/#/care-visit`, { waitUntil: 'networkidle' });
-        await page.fill('#vis-client','김○○'); await page.fill('#vis-visitor','김보호');
-        await page.locator('[data-click="careVisitAdd"]').click(); await page.waitForTimeout(600);
-        await page.locator('[data-click="careVisitResultOpen"]').first().click({force:true});
+        await page.fill('#vis-date', '2026-11-09');
+        await page.selectOption('#vis-relation', { index: 1 }).catch(() => {});
+        await page.fill('#vis-time', '14:00');
+        await page.fill('#vis-client', '김○○');
+        await page.fill('#vis-visitor', '김보호');
+        await page.locator('[data-click="careVisitAdd"]').click(); await page.waitForTimeout(800);
+        await page.locator('#vis-scheduled [data-click="careVisitResultOpen"]').first().click({ force: true });
         await page.waitForSelector('#vis-result-panel:not(.is-hidden)', { timeout: 8000 });
         await snap(page, 'manual-04-result', '#vis-result-panel');
     },
@@ -219,10 +223,12 @@ const SHOTS = {
     // ⑦ 근무표 목록
     'manual-07-roster': async (page) => {
         await page.goto(`${BASE}/#/care-roster`, { waitUntil: 'networkidle' });
+        await page.fill('#ros-date', '2026-11-09');
+        await page.selectOption('#ros-shift', { index: 1 }).catch(() => {});
         await page.fill('#ros-worker', '김요양');
         await page.locator('[data-click="careRosterAdd"]').click();
-        await page.waitForTimeout(500);
-        await snap(page, 'manual-07-roster', '#ros-preview, #ros-list');
+        await page.waitForTimeout(800);
+        await snap(page, 'manual-07-roster', '#care-roster-view');
     },
     // ⑧ 명부 카드
     'manual-08-client': async (page) => {
@@ -240,7 +246,8 @@ const SHOTS = {
     // ⑩ 평가점검
     'manual-10-audit': async (page) => {
         await page.goto(`${BASE}/#/care-audit`, { waitUntil: 'networkidle' });
-        await page.locator('#audit-list [data-audit] input').first().check({force:true});
+        const aud = page.locator('#audit-list [data-audit]').first();
+        await aud.scrollIntoViewIfNeeded(); await aud.click({ force: true });
         await snap(page, 'manual-10-audit', '#audit-progress, #audit-list');
     },
     // ⑪ 양식 편집기
@@ -259,9 +266,7 @@ const SHOTS = {
     // ⑫ 본인부담금
     'manual-12-calc': async (page) => {
         await page.goto(`${BASE}/#/care-calc`, { waitUntil: 'networkidle' });
-        await page.selectOption('#care-grade', '1');
-        await page.selectOption('#care-type', 'home');
-        await page.fill('#care-use', '20');
+        await page.evaluate(() => { document.getElementById('care-grade').value='1'; document.getElementById('care-type').value='home'; document.getElementById('care-use').value='20'; });
         await page.locator('[data-click="careCalcRun"]').click();
         await page.waitForSelector('#care-result .care-doc', { timeout: 8000 });
         await snap(page, 'manual-12-calc', '#care-result');
@@ -269,7 +274,7 @@ const SHOTS = {
     // ⑬ 기관찾기 결과
     'manual-13-finder': async (page) => {
         await page.goto(`${BASE}/#/care-finder`, { waitUntil: 'networkidle' });
-        await page.fill('#find-q', '요양');
+        await page.fill('#find-q', '행복요양');
         await page.locator('[data-click="careFinderSearch"]').click();
         await page.waitForTimeout(800);
         await snap(page, 'manual-13-finder', '#find-list');
@@ -301,7 +306,8 @@ async function main() {
                 const m = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ko-KR', isMobile: true, hasTouch: true });
                 const mp = await m.newPage(); await seed(mp);
                 await mp.goto(`${BASE}/#/care-incident`, { waitUntil: 'networkidle' });
-                await mp.locator('[data-click="careShare"]').first().click();
+                await mp.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
+                await mp.getByText('공유·내보내기').first().click({ force: true });
                 await mp.waitForTimeout(800);
                 await snap(mp, 'manual-01-share', '.app-share-sheet, .share-sheet, [class*="share"][class*="menu"], [class*="share"][class*="sheet"]');
                 await m.close();
