@@ -15,11 +15,16 @@ mkdirSync(OUT_DIR, { recursive: true });
 // (더미 사진은 photoBuffer가 페이지 캔버스로 생성 — 실명·실사 금지)
 
 /** 시드 주입 — 활성 시험·실무 모드·더미 기록 (페이지 로드 전) */
-async function seed(page, { guide = false } = {}) {
-    await page.addInitScript(({ guide }) => {
+async function seed(page, { guide = false, study = false } = {}) {
+    await page.addInitScript(({ guide, study }) => {
         const L = localStorage;
         L.setItem('current_exam', 'carework');
-        L.setItem('ui_mode', 'practice');
+        L.setItem('ui_mode', study ? 'study' : 'practice');
+        if (study) { // 학습안내서 삽화 — 시험일·목표만 시드 (기록 없는 신입 사용자 상태)
+            const d = new Date(Date.now() + 60 * 86400000).toISOString().slice(0, 10);
+            L.setItem('exam_date', d);
+            L.setItem('study_goals', JSON.stringify({ dailyCards: 50, dailyQuizzes: 10, weeklyStudyDays: 5 }));
+        }
         L.setItem('appTheme', 'dark'); // 실무 삽화는 앱 기본 테마(다크) 기준 — 라이트는 colorScheme 라이트 별도 컨텍스트로
         L.setItem('pro_notice_seen', JSON.stringify({ _global: '2026-01-01' })); // Pro 최초 안내 모달이 캡처에 겹치는 것 방지
         if (!guide) L.setItem('carework_guide_seen', '1');
@@ -52,7 +57,7 @@ async function seed(page, { guide = false } = {}) {
             };
             if (document.documentElement) inject(); else document.addEventListener('DOMContentLoaded', inject, { once: true });
         } catch (_) { /* 스타일 실패해도 시드는 유지 */ }
-    }, { guide });
+    }, { guide, study });
 }
 
 /** PNG 버퍼 → webp 변환 (페이지 내 canvas 사용 — 외부 이미지 라이브러리 불필요)
@@ -153,7 +158,32 @@ async function shotPng(page, locator) {
     return el.screenshot();
 }
 
+// 학습안내서 삽화 — 학습 모드(study 시드) 전용, STUDY_SHOTS와 이름 쌍
+const STUDY = new Set(['manual-g01-dashboard', 'manual-g02-flow', 'manual-g04-mock', 'manual-g05-calendar']);
+
 const SHOTS = {
+    // ── 학습 모드 삽화 (학습안내서 DOC-USR-25) ─────────────────
+    'manual-g01-dashboard': async (page) => {
+        await page.goto(`${BASE}/#/dashboard`, { waitUntil: 'networkidle' });
+        await page.waitForSelector('#dashboard-view:not(.is-hidden)', { timeout: 20000 });
+        await snap(page, 'manual-g01-dashboard', '#dashboard-view');
+    },
+    'manual-g02-flow': async (page) => {
+        await page.goto(`${BASE}/#/care-flow`, { waitUntil: 'networkidle' });
+        await page.waitForSelector('#care-flow-view:not(.is-hidden)', { timeout: 20000 }).catch(() => {});
+        await snap(page, 'manual-g02-flow', '#care-flow-view');
+    },
+    'manual-g04-mock': async (page) => {
+        await page.goto(`${BASE}/#/exam`, { waitUntil: 'networkidle' });
+        await page.waitForSelector('#exam-view:not(.is-hidden)', { timeout: 20000 }).catch(() => {});
+        await snap(page, 'manual-g04-mock', '#exam-view');
+    },
+    'manual-g05-calendar': async (page) => {
+        await page.goto(`${BASE}/#/calendar`, { waitUntil: 'networkidle' });
+        await page.waitForSelector('#calendar-view:not(.is-hidden)', { timeout: 20000 }).catch(() => {});
+        await snap(page, 'manual-g05-calendar', '#calendar-view');
+    },
+
     // ① 사이드바 — PC 전용 UI (main에서 데스크탑 컨텍스트로 별도 처리)
     'manual-01-sidebar': async (_page) => { /* DESKTOP 플래그로 main에서 별도 처리 */ },
     // ① 모바일 하단 탭 바 — 실무 모드에서는 탭 바 자체가 전체 내비 (더보기 시트는 학습 전용)
@@ -362,6 +392,7 @@ async function main() {
     await page.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
     await page.waitForSelector('#care-home-view:not(.is-hidden)', { timeout: 30000 }).catch(() => {});
     const run = names.length ? names : Object.keys(SHOTS);
+    let studyPage = null;
     for (const n of run) {
         try {
             if (n === 'manual-01-sidebar') { // PC 전용 UI — 데스크탑 컨텍스트 (PC 병기)
@@ -411,6 +442,14 @@ async function main() {
                 await mp.evaluate(() => { const s = document.querySelector('.care-export-sheet'); if (s) s.style.background = '#1f2937'; });
                 await snap(mp, 'manual-01-share', '.care-export-sheet');
                 await m.close();
+            } else if (STUDY.has(n)) { // 학습 모드 — 별도 시드 페이지 (학습안내서 삽화)
+                if (!studyPage) {
+                    studyPage = await ctx.newPage();
+                    await seed(studyPage, { study: true });
+                    await studyPage.goto(`${BASE}/#/dashboard`, { waitUntil: 'networkidle' });
+                    await studyPage.waitForSelector('#dashboard-view:not(.is-hidden)', { timeout: 30000 }).catch(() => {});
+                }
+                await SHOTS[n](studyPage);
             } else if (!SHOTS[n]) { console.warn(`? ${n} — 미구현 캡처`); continue; }
             else await SHOTS[n](page);
         } catch (e) {
