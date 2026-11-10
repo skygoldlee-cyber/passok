@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261110-01bdcdd",
+    "date": "2026-11-10",
+    "notes": [
+      "[문서·carework] 실무매뉴얼 보완 — 체크리스트 전 상황 통일·신규 상황 2건·삽화 정합",
+      "[정리·release] v20261110-82f1dee 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261110-82f1dee",
     "date": "2026-11-10",
     "notes": [
@@ -202,15 +210,6 @@
       "[문서·design] E2E 가이드 원본 PDF 경로 tmp/source-docs로 갱신",
       "[문서·design] PASSOK E2E 자동화 구축 가이드 PDF→MD 변환 (DOC-DSN-45)",
       "[정리·release] v20261109-85bd155 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-85bd155",
-    "date": "2026-11-09",
-    "notes": [
-      "[정리] TRACE_MATRIX 재생성 [no-docs]",
-      "[수정·pdf] 스크롤 클립 해제 + 컨테이너 내부 미디어 경계 제외 — 표 행 누락·머메이드 잘림 수정",
-      "[정리·release] v20261109-a16fe7d 스탬프 확정 [no-docs]"
     ]
   }
 ]
