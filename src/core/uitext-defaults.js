@@ -39,3 +39,16 @@ export function mergeUiText(examUi) {
     for (const [k, v] of Object.entries(examUi || {})) out[k] = { ...(out[k] || {}), ...v };
     return out;
 }
+
+/** 사용자 표시 플랜 용어 정본 — 배지·모달·토스트의 Pro 표기는 여기서만 정의 (전환 시 1곳 수정)
+ *  코드 참조 시 PLAN_TERMS 사용 — 리터럴 '유료' 대신 일관 유지. */
+export const PLAN_TERMS = Object.freeze({
+    badge: '유료',          // pro-badge 표시 문자
+    plan: '유료',
+    free: '무료',
+    period: '유료 기간권',
+    activate: '유료 활성화',
+    compare: '무료 / 유료 비교',
+    exclusive: '유료 전용',
+    feature: '유료 기능',
+});

@@ -67,12 +67,25 @@ async function toWebp(page, pngBuf, quality = 0.82) {
         const img = new Image();
         await new Promise(r => { img.onload = r; img.src = 'data:image/png;base64,' + b64; });
         const W = Math.min(924, img.naturalWidth), r = W / img.naturalWidth;
+        const H = Math.round(img.naturalHeight * r);
         const c = document.createElement('canvas');
-        c.width = W; c.height = Math.round(img.naturalHeight * r);
+        c.width = W; c.height = H;
         const x = c.getContext('2d');
         x.fillStyle = getComputedStyle(document.body).backgroundColor;
-        x.fillRect(0, 0, W, c.height);
-        x.drawImage(img, 0, 0, W, c.height);
+        x.fillRect(0, 0, W, H);
+        x.drawImage(img, 0, 0, W, H);
+        // 하단 데드존 자동 트림 — 배경색만 남은 행을 아래에서 스캔해 제거 (수동 트림 대체)
+        const d = x.getImageData(0, 0, W, H).data;
+        const bg = getComputedStyle(document.body).backgroundColor.match(/\d+/g).map(Number);
+        let last = H - 1;
+        outer: for (let y = H - 1; y >= 0; y--) {
+            for (let px = 0; px < W; px += 4) {
+                const i = (y * W + px) * 4;
+                if (Math.abs(d[i] - bg[0]) + Math.abs(d[i + 1] - bg[1]) + Math.abs(d[i + 2] - bg[2]) > 36) { last = y; break outer; }
+            }
+        }
+        const trimH = Math.min(H, last + 21);
+        if (trimH < H) { const c2 = document.createElement('canvas'); c2.width = W; c2.height = trimH; c2.getContext('2d').drawImage(c, 0, 0); return c2.toDataURL('image/webp', quality); }
         return c.toDataURL('image/webp', quality);
     }, { b64: pngBuf.toString('base64'), quality });
     return Buffer.from(dataUrl.split(',')[1], 'base64');
@@ -99,6 +112,11 @@ async function snap(page, name, locator, { quality = 0.82 } = {}) {
     await dismissOverlays(page);
     await el.scrollIntoViewIfNeeded();
     await page.waitForTimeout(350);
+    const expect = SHOT_EXPECT[name];
+    if (expect) { // 캡처 대상이 의도한 내용인지 텍스트 단언 — 오매칭·모달 겹침 사전 차단
+        const txt = await el.innerText().catch(() => '');
+        if (!txt.includes(expect)) throw new Error(`expect 실패 — '${expect}' 미포함 (실제: ${txt.slice(0, 60)}…)`);
+    }
     const png = await el.screenshot();
     writeFileSync(join(OUT_DIR, `${name}.webp`), await toWebp(page, png, quality));
     console.log(`✓ ${name}.webp`);
@@ -160,6 +178,21 @@ async function shotPng(page, locator) {
 
 // 학습안내서 삽화 — 학습 모드(study 시드) 전용, STUDY_SHOTS와 이름 쌍
 const STUDY = new Set(['manual-g01-dashboard', 'manual-g02-flow', 'manual-g04-mock', 'manual-g05-calendar']);
+
+// 샷별 필수 텍스트 — 캡처 대상이 의도한 화면인지 단언 (없으면 스킵)
+const SHOT_EXPECT = {
+    'manual-01-badge': '기기에 저장됨',
+    'manual-01-share': '내보낼 방식',
+    'manual-02-sign': '출력물 서명',
+    'manual-03-chips': '식사량',
+    'manual-04-result': '방문 결과',
+    'manual-11-template': '사본 만들기',
+    'manual-15-mask': '인명 가림',
+    'manual-g01-dashboard': '오늘 할 일',
+    'manual-g02-flow': '개념 학습',
+    'manual-g04-mock': '모의고사',
+    'manual-g05-calendar': '캘린더',
+};
 
 const SHOTS = {
     // ── 학습 모드 삽화 (학습안내서 DOC-USR-25) ─────────────────
