@@ -1,0 +1,500 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 2740" width="1600" height="2740" font-family="Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" role="img" aria-labelledby="ttl dsc">
+<title id="ttl">Passmula 유튜브 숏츠 시리즈 콘티</title>
+<desc id="dsc">학습안내서·Formula OS 실무막뉴얼 기반 숏츠 시리즈. 공통 6컷 포맷 + 학습 A1~A6·실무 B1~B9 편별 콘티.</desc>
+<defs>
+<linearGradient id="paperBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7f4ec"/><stop offset="1" stop-color="#f0ece1"/></linearGradient>
+<filter id="soft" x="-5%" y="-5%" width="110%" height="120%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#334155" flood-opacity=".14"/></filter>
+<radialGradient id="wSky"><stop offset="0" stop-color="#dbeafe"/><stop offset="1" stop-color="#dbeafe" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1600" height="2740" fill="url(#paperBg)"/>
+<text x="24" y="62" font-size="24" font-weight="800" fill="#1f2937" text-anchor="start">Passmula 유튜브 숏츠 시리즈 콘티</text>
+<text x="24" y="88" font-size="13.5" font-weight="600" fill="#64748b" text-anchor="start">학습안내서·Formula OS 실무막뉴얼 기반 — 편당 15~30초 9:16 시리즈 · 캐릭터 뮬라(상황) + 실제 앱 화면(기능)</text>
+<text x="1576" y="88" font-size="13" font-weight="700" fill="#0f766e" text-anchor="end">학습 A1~A6 + 실무 B1~B9 · 총 15편</text>
+<line x1="24" y1="106" x2="1576" y2="106" stroke="#d6dce8" stroke-width="1.5"/>
+<rect x="24" y="132" width="1552" height="470" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<text x="48" y="166" font-size="17" font-weight="800" fill="#1f2937" text-anchor="start">공통 포맷 — 전 편 6컷 구조</text>
+<text x="48" y="188" font-size="12" font-weight="600" fill="#64748b" text-anchor="start">모든 편이 같은 뼈대 — 컷 내용만 편별로 교체. 30초를 넘으면 C3 컷을 늘리지 말고 단계를 줄인다</text>
+<g transform="translate(48,208)">
+<rect width="200" height="355" rx="18" fill="#2b2d3a"/>
+<clipPath id="ph48x208"><rect x="4" y="4" width="192" height="347" rx="14"/></clipPath>
+<g clip-path="url(#ph48x208)"><rect x="4" y="4" width="192" height="347" fill="#0f1420"/>
+<ellipse cx="100" cy="194.85000000000002" rx="105.60000000000001" ry="173.5" fill="url(#wSky)"/>
+<g transform="translate(100,161.16000000000003) scale(0.75)">
+<ellipse cx="0" cy="0" rx="30" ry="32" fill="#f8dcc8"/>
+<path d="M-31,-4 Q-30,-34 0,-34 Q30,-34 31,-4 Q22,-22 8,-20 Q4,-12 -6,-20 Q-20,-22 -31,-4 Z" fill="#7a4a2b"/>
+<path d="M-31,-4 q-4,20 2,34 M31,-4 q4,20 -2,34" stroke="#7a4a2b" stroke-width="6" fill="none" stroke-linecap="round"/>
+<ellipse cx="-11" cy="3" rx="3.3" ry="4.2" fill="#3b2a20"/><ellipse cx="11" cy="3" rx="3.3" ry="4.2" fill="#3b2a20"/>
+<circle cx="-11" cy="3" r="9" fill="none" stroke="#6b4f3a" stroke-width="1.8"/><circle cx="11" cy="3" r="9" fill="none" stroke="#6b4f3a" stroke-width="1.8"/><path d="M-2,3 h4" stroke="#6b4f3a" stroke-width="1.8"/>
+<ellipse cx="-19" cy="14" rx="5" ry="3" fill="#f4a6a0" opacity=".55"/><ellipse cx="19" cy="14" rx="5" ry="3" fill="#f4a6a0" opacity=".55"/>
+<path d="M-7,15 q7,11 14,0 Z" fill="#b5534a"/>
+<path d="M-50,104 Q-52,52 0,46 Q52,52 50,104 Z" fill="#a99bd6"/>
+<path d="M-26,50 Q0,70 26,50 Q14,44 0,44 Q-14,44 -26,50 Z" fill="#7e6fb8" opacity=".55"/>
+<path d="M-7,58 v20 M7,58 v20" stroke="#f1eefc" stroke-width="2.4" stroke-linecap="round"/>
+<rect x="-8" y="26" width="16" height="20" rx="6" fill="#f8dcc8"/>
+</g>
+<rect x="19.36" y="239.96" width="161.28" height="52" rx="10" fill="#ffffff" opacity="0.92"/>
+<text x="100" y="261.96000000000004" font-size="13" font-weight="800" fill="#1f2937" text-anchor="middle">"○○할 때,</text>
+<text x="100" y="281.96000000000004" font-size="13" font-weight="800" fill="#1f2937" text-anchor="middle">어디부터?"</text>
+</g></g>
+<text x="148" y="585" font-size="14" font-weight="800" fill="#1f2937" text-anchor="middle">C1 후킹</text>
+<text x="148" y="603" font-size="11.5" font-weight="700" fill="#0f766e" text-anchor="middle">0~3초</text>
+<text x="148" y="621" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">상황 질문 한 문장</text>
+<text x="148" y="635" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">큰 자막 + 뮬라 클로즈업</text>
+<g transform="translate(276,208)">
+<rect width="200" height="355" rx="18" fill="#2b2d3a"/>
+<clipPath id="ph276x208"><rect x="4" y="4" width="192" height="347" rx="14"/></clipPath>
+<g clip-path="url(#ph276x208)"><rect x="4" y="4" width="192" height="347" fill="#0f1420"/>
+<ellipse cx="100" cy="194.85000000000002" rx="105.60000000000001" ry="173.5" fill="url(#wSky)"/>
+<g transform="translate(100,161.16000000000003) scale(0.75)">
+<ellipse cx="0" cy="0" rx="30" ry="32" fill="#f8dcc8"/>
+<path d="M-31,-4 Q-30,-34 0,-34 Q30,-34 31,-4 Q22,-22 8,-20 Q4,-12 -6,-20 Q-20,-22 -31,-4 Z" fill="#7a4a2b"/>
+<path d="M-31,-4 q-4,20 2,34 M31,-4 q4,20 -2,34" stroke="#7a4a2b" stroke-width="6" fill="none" stroke-linecap="round"/>
+<ellipse cx="-11" cy="3" rx="3.3" ry="4.2" fill="#3b2a20"/><ellipse cx="11" cy="3" rx="3.3" ry="4.2" fill="#3b2a20"/>
+<circle cx="-11" cy="3" r="9" fill="none" stroke="#6b4f3a" stroke-width="1.8"/><circle cx="11" cy="3" r="9" fill="none" stroke="#6b4f3a" stroke-width="1.8"/><path d="M-2,3 h4" stroke="#6b4f3a" stroke-width="1.8"/>
+<ellipse cx="-19" cy="14" rx="5" ry="3" fill="#f4a6a0" opacity=".55"/><ellipse cx="19" cy="14" rx="5" ry="3" fill="#f4a6a0" opacity=".55"/>
+<path d="M-7,15 q7,11 14,0 Z" fill="#b5534a"/>
+<path d="M-50,104 Q-52,52 0,46 Q52,52 50,104 Z" fill="#a99bd6"/>
+<path d="M-26,50 Q0,70 26,50 Q14,44 0,44 Q-14,44 -26,50 Z" fill="#7e6fb8" opacity=".55"/>
+<path d="M-7,58 v20 M7,58 v20" stroke="#f1eefc" stroke-width="2.4" stroke-linecap="round"/>
+<rect x="-8" y="26" width="16" height="20" rx="6" fill="#f8dcc8"/>
+</g>
+<rect x="19.36" y="239.96" width="161.28" height="52" rx="10" fill="#ffffff" opacity="0.92"/>
+<text x="100" y="261.96000000000004" font-size="13" font-weight="800" fill="#1f2937" text-anchor="middle">불편한 현실</text>
+<text x="100" y="281.96000000000004" font-size="13" font-weight="800" fill="#1f2937" text-anchor="middle">두꺼운 교재·수기 기록</text>
+</g></g>
+<text x="376" y="585" font-size="14" font-weight="800" fill="#1f2937" text-anchor="middle">C2 상황</text>
+<text x="376" y="603" font-size="11.5" font-weight="700" fill="#0f766e" text-anchor="middle">3~6초</text>
+<text x="376" y="621" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">불편한 현실 1컷</text>
+<text x="376" y="635" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">(두꺼운 교재·수기 기록)</text>
+<g transform="translate(504,208)">
+<rect width="200" height="355" rx="18" fill="#2b2d3a"/>
+<clipPath id="ph504x208"><rect x="4" y="4" width="192" height="347" rx="14"/></clipPath>
+<g clip-path="url(#ph504x208)"><rect x="4" y="4" width="192" height="347" fill="#0f1420"/>
+<ellipse cx="100" cy="194.85000000000002" rx="105.60000000000001" ry="173.5" fill="url(#wSky)"/>
+<image href="shots/shot-dashboard.webp" x="14" y="45.64" width="172" height="215.14" preserveAspectRatio="xMidYMid slice"/>
+<rect x="14" y="45.64" width="172" height="215.14" rx="6" fill="none" stroke="#3a4358"/>
+<text x="100" y="288.53999999999996" font-size="12" font-weight="700" fill="#94a3b8" text-anchor="middle">실제 앱 화면</text>
+</g></g>
+<text x="604" y="585" font-size="14" font-weight="800" fill="#1f2937" text-anchor="middle">C3 따라하기</text>
+<text x="604" y="603" font-size="11.5" font-weight="700" fill="#0f766e" text-anchor="middle">6~18초</text>
+<text x="604" y="621" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">실제 앱 화면 2~3컷</text>
+<text x="604" y="635" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">문서 단계 순서 그대로</text>
+<g transform="translate(732,208)">
+<rect width="200" height="355" rx="18" fill="#2b2d3a"/>
+<clipPath id="ph732x208"><rect x="4" y="4" width="192" height="347" rx="14"/></clipPath>
+<g clip-path="url(#ph732x208)"><rect x="4" y="4" width="192" height="347" fill="#0f1420"/>
+<ellipse cx="100" cy="194.85000000000002" rx="105.60000000000001" ry="173.5" fill="url(#wSky)"/>
+<image href="shots/shot-calc.webp" x="14" y="45.64" width="172" height="215.14" preserveAspectRatio="xMidYMid slice"/>
+<rect x="14" y="45.64" width="172" height="215.14" rx="6" fill="none" stroke="#3a4358"/>
+<text x="100" y="288.53999999999996" font-size="12" font-weight="700" fill="#94a3b8" text-anchor="middle">실제 앱 화면</text>
+</g></g>
+<text x="832" y="585" font-size="14" font-weight="800" fill="#1f2937" text-anchor="middle">C4 완료</text>
+<text x="832" y="603" font-size="11.5" font-weight="700" fill="#0f766e" text-anchor="middle">18~24초</text>
+<text x="832" y="621" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">결과물·완료 상태</text>
+<text x="832" y="635" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">검증 ✓ · 출력물 · 진단</text>
+<g transform="translate(960,208)">
+<rect width="200" height="355" rx="18" fill="#2b2d3a"/>
+<clipPath id="ph960x208"><rect x="4" y="4" width="192" height="347" rx="14"/></clipPath>
+<g clip-path="url(#ph960x208)"><rect x="4" y="4" width="192" height="347" fill="#0f1420"/>
+<ellipse cx="100" cy="194.85000000000002" rx="105.60000000000001" ry="173.5" fill="url(#wSky)"/>
+<rect x="23.200000000000003" y="108.1" width="153.60000000000002" height="138.8" rx="12" fill="#ffffff" opacity="0.95"/>
+<text x="100" y="156.68" font-size="14" font-weight="800" fill="#0f766e" text-anchor="middle">이것만 기억</text>
+<text x="100" y="184.44" font-size="15" font-weight="700" fill="#475569" text-anchor="middle">☐ ☐ ☐</text>
+<text x="100" y="219.14" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">체크리스트 요약</text>
+</g></g>
+<text x="1060" y="585" font-size="14" font-weight="800" fill="#1f2937" text-anchor="middle">C5 한 줄 정리</text>
+<text x="1060" y="603" font-size="11.5" font-weight="700" fill="#0f766e" text-anchor="middle">24~28초</text>
+<text x="1060" y="621" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">"이것만 기억" 자막 카드</text>
+<text x="1060" y="635" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">문서 체크박스 요약</text>
+<g transform="translate(1188,208)">
+<rect width="200" height="355" rx="18" fill="#2b2d3a"/>
+<clipPath id="ph1188x208"><rect x="4" y="4" width="192" height="347" rx="14"/></clipPath>
+<g clip-path="url(#ph1188x208)"><rect x="4" y="4" width="192" height="347" fill="#0f1420"/>
+<ellipse cx="100" cy="194.85000000000002" rx="105.60000000000001" ry="173.5" fill="url(#wSky)"/>
+<text x="100" y="149.73999999999998" font-size="24" font-weight="800" fill="#ffffff" text-anchor="middle">Passmula</text>
+<text x="100" y="177.5" font-size="20" font-weight="800" fill="#99f6e4" text-anchor="middle">검색</text>
+<rect x="74" y="212.2" width="52" height="52" rx="8" fill="#ffffff"/>
+<text x="100" y="242.2" font-size="13" font-weight="800" fill="#334155" text-anchor="middle">QR</text>
+</g></g>
+<text x="1288" y="585" font-size="14" font-weight="800" fill="#1f2937" text-anchor="middle">C6 CTA</text>
+<text x="1288" y="603" font-size="11.5" font-weight="700" fill="#0f766e" text-anchor="middle">28~30초</text>
+<text x="1288" y="621" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">"Passmula 검색" 크게</text>
+<text x="1288" y="635" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">QR은 보조</text>
+<rect x="24" y="632" width="1552" height="776" rx="14" fill="#fffdf8" stroke="#d6dce8"/>
+<text x="48" y="668" font-size="17" font-weight="800" fill="#1f2937" text-anchor="start">A 시리즈 — 학습 (학습안내서 §5)</text>
+<text x="48" y="688" font-size="11.5" font-weight="600" fill="#64748b" text-anchor="start">수험생 대상 · 원문 정본: content/exams/cosmetic/docs/학습안내서.md</text>
+<g transform="translate(44,702)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#0f766e"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">A1</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">처음 앱 쓰는 날</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#0f766e" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "조제관리사 시험, 폰 하나로 시작"</text>
+<rect x="394" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh0"><rect x="395" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh0)"><image href="shots/shot-calendar.webp" x="395" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="437" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">시험일 설정</text>
+<rect x="298" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh1"><rect x="299" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh1)"><image href="shots/shot-dashboard.webp" x="299" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="341" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">오늘 할 일</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">캘린더에 시험일 입력 → D-day·주간 목표 생성</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">대시보드 오늘 할 일로 진단 최소 기록 쌓기</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">첫 카드·퀴즈로 학습 시작</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 학습안내서 §5</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(556,702)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#0f766e"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">A2</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">매일 공부할 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#0f766e" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "매일 뭐부터? — 오늘 할 일부터"</text>
+<rect x="394" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh2"><rect x="395" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh2)"><image href="shots/shot-dashboard.webp" x="395" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="437" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">오늘 할 일</text>
+<rect x="298" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh3"><rect x="299" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh3)"><image href="shots/shot-quiz.webp" x="299" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="341" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">퀴즈</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">오늘 할 일 큐 — 복습 대기 먼저 비우기</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">카드·퀴즈 배정분 진행</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">틀린 문제는 복습 큐에 자동 누적</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 학습안내서 §5·§5.5</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(1068,702)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#0f766e"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">A3</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">개념이 안 잡힐 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#0f766e" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "교재 읽어도 이해가 안 되면"</text>
+<rect x="394" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh4"><rect x="395" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh4)"><image href="shots/shot-reader.webp" x="395" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="437" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">교재리더</text>
+<rect x="298" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh5"><rect x="299" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh5)"><image href="shots/shot-dictionary.webp" x="299" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="341" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">성분 사전</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">교재리더 정독 — 틀린 문제 링크로 바로 이동</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">성분 사전으로 원료·용어 조회</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">교재검색으로 키워드 찾기</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 학습안내서 §5.5</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(44,1058)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#0f766e"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">A4</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">매주 점검할 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#0f766e" text-anchor="end">~30초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "공부가 점수로 이어지는지, 주 1회 확인"</text>
+<rect x="394" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh6"><rect x="395" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh6)"><image href="shots/shot-analysis.webp" x="395" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="437" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">학습진단</text>
+<rect x="298" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh7"><rect x="299" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh7)"><image href="shots/shot-exam.webp" x="299" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="341" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">통합 모의고사</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">학습진단 (유료) — 취약 단원·오답 패턴</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">주간 배분으로 과목별 시간 배분</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">통합 모의고사 100문/120분 — 과목 40·평균</text>
+<text x="28" y="215" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">60</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 학습안내서 §5</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(556,1058)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#0f766e"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">A5</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">시험이 임박했을 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#0f766e" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "D-14, 새 것보다 틀린 것이 점수"</text>
+<rect x="394" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh8"><rect x="395" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh8)"><image href="shots/shot-trainer.webp" x="395" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="437" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">훈련소</text>
+<rect x="298" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh9"><rect x="299" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh9)"><image href="shots/shot-exam.webp" x="299" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="341" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">모의고사</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">취약 단원 상위부터 집중 덮기</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">통합 모의고사 2~3일 간격 반복</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">수치 암기 마스터·두음법 마지막 주 반복</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 학습안내서 §5.5</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(1068,1058)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#0f766e"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">A6</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">여러 기기로 쓸 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#0f766e" text-anchor="end">~20초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "폰에서 하던 공부, PC에서 이어하기"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="428" y="152.5" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="middle">로그인·계정 화면</text>
+<text x="428" y="165.5" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="middle">(추가 캡처 필요)</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">설정 → 계정에서 로그인 (같은 수단으로)</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">클라우드 동기화 (유료) — 진도·기록 이어짐</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">미로그인 시 기기별 별도 기록 — 한 기기 권장</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 학습안내서 §5</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<rect x="24" y="1438" width="1552" height="1132" rx="14" fill="#fffdf8" stroke="#d6dce8"/>
+<text x="48" y="1474" font-size="17" font-weight="800" fill="#1f2937" text-anchor="start">B 시리즈 — 실무 Formula OS (formula_manual)</text>
+<text x="48" y="1494" font-size="11.5" font-weight="600" fill="#64748b" text-anchor="start">조제관리사 실무자 대상 · 업무 흐름 순서 · 원문 정본: content/exams/cosmetic/docs/formula_manual.md</text>
+<g transform="translate(44,1508)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B1</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">처음 쓰는 날</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "조제관리사 실무, 폰으로 시작"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh10"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh10)"><image href="shots/shot-formula-menu.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">Formula OS 메뉴</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">학습 → 실무 모드 전환</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">Formula OS 메뉴 — 업무 흐름 순서대로</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">고시 확인·실무 매뉴얼 버튼 확인</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 formula_manual §화면 구성</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(556,1508)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B2</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">고객 상담할 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "고객 피부 타입·알레르기, 카드로 관리"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh11"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh11)"><image href="shots/shot-customer.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">고객 관리</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">고객 카드 등록 — 피부 타입·알레르기</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">상담 이력·메모 기록</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">재방문 시 카드로 즉시 확인</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 formula_manual §1</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(1068,1508)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B3</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">처방 설계할 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~30초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "원료 넣으면 규정 위반을 바로 확인"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh12"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh12)"><image href="shots/shot-calc.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">배합 계산기</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">배합 계산기 — 원료·함량 입력</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">규정 검증 — 금지·한도 초과 즉시 경고</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">추천 베이스·원료 참고해 보완</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 formula_manual §2</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(44,1864)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B4</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">처방 저장할 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "검증 끝난 처방, My 포뮬러로 재사용"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh13"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh13)"><image href="shots/shot-formula-list.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">My 포뮬러</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">My 포뮬러 저장 — 처방 설계 보관</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">목록에서 불러오기·복제·수정</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">같은 처방으로 여러 회차 조제 연결</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 formula_manual §3</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(556,1864)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B5</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">조제할 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~30초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "조제 회차 기록과 출력물까지 한 번에"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh14"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh14)"><image href="shots/shot-batch.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">조제 기록</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">조제 기록(배치) — 처방 스냅샷 자동 보존</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">품질·위생 점검 체크</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">라벨·작업지시서 등 출력물 인쇄</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 formula_manual §4</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(1068,1864)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B6</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">기성품 분석할 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "고객이 쓰는 제품, 전성분으로 비교"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh15"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh15)"><image href="shots/shot-products.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">기성품 분석</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">기성품 전성분 DB에 제품 등록</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">알레르기·금지 성분 자동 분류</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">내 포뮬러와 성분 대조</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 formula_manual §6</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(44,2220)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B7</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">표시사항·광고 점검할 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "라벨·광고 문구, 법규 관점으로 점검"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh16"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh16)"><image href="shots/shot-compliance.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">법규 준수</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">표시사항 검토 — 필수 기재 항목 확인</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">광고 문구 점검 — 금지 표현 탐지</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">법규 준수 체크리스트로 마무리</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 formula_manual §7~8</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(556,2220)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B8</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">원료 입고할 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "원료 재고는 장부로 — 입·출고 기록"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh17"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh17)"><image href="shots/shot-material.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">원료 장부</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">원료 장부에 입고 기록</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">조제 시 사용·출고 기록</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">재고 현황·CSV 내보내기</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 formula_manual §5</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<g transform="translate(1068,2220)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B9</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">이상사례 발생 시</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "부작용 신고, 기록부터 정리"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh18"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh18)"><image href="shots/shot-adverse.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">이상사례 기록</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">소비자 이상사례 기록 — 제품·증상·경과</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">조치 내용 정리</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">보고서 출력·보관</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<text x="18" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 formula_manual §9</text>
+<text x="482" y="318" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="end">뮬라 — 수험생/조제관리사</text>
+</g>
+<rect x="24" y="2600" width="1552" height="104" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<text x="48" y="2630" font-size="13" font-weight="800" fill="#1f2937" text-anchor="start">자산 경로</text>
+<text x="48" y="2652" font-size="11" font-weight="600" fill="#64748b" text-anchor="start">캡처: docs/exams/cosmetic/business/shots/shot-*.webp (390×844, 가상 데이터) · 캐릭터: 뮬라 — DOC-BIZ-04 §4-1 디자인 재사용</text>
+<text x="48" y="2672" font-size="11" font-weight="600" fill="#64748b" text-anchor="start">주의: 교재 본문 판독 불가 처리(빠른 스크롤·흐림) · "기출" 표현 금지 · B3는 금지 원료가 실제 경고되는 데모 처방으로 촬영.</text>
+<text x="48" y="2692" font-size="11" font-weight="600" fill="#64748b" text-anchor="start">최종 컷은 "Passmula 검색" 텍스트를 크게 — QR은 보조 (쇼츠 시청자는 스마트폰으로 시청 중).</text>
+<text x="24" y="2730" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="start">Passmula 숏츠 시리즈 콘티 — 의뢰서: 유튜브-숏츠-시리즈-제작의뢰서.md (DOC-BIZ-09)</text>
+</svg>

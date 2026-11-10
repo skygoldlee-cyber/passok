@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: ec7100689cf637e9
+> 입력 해시: def73adc24febf87
 > 생성: 2026-11-10 · 원천: SPEC.md(693개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -1009,6 +1009,7 @@
 | DOC-BIZ-06 | docs/exams/carework/business/CareOS_경쟁전략.md | DA-13, DA-18, ROAD-P5 |
 | DOC-BIZ-07 | docs/exams/carework/business/종사자_인터뷰_스크립트.md | DA-18, ROAD-P5 |
 | DOC-BIZ-08 | docs/exams/carework/business/유튜브-숏츠-시리즈-제작의뢰서.md | — |
+| DOC-BIZ-09 | docs/exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md | — |
 | DOC-DEV-01 | docs/dev/SPEC.md | — |
 | DOC-DEV-02 | docs/dev/ARCHITECTURE.md | — |
 | DOC-DEV-03 | docs/dev/CHANGES.md | — |
@@ -1135,3 +1136,4 @@
 - docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md
 - docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md
 - docs/exams/carework/business/유튜브-숏츠-시리즈-제작의뢰서.md
+- docs/exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md
