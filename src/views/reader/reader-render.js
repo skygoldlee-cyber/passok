@@ -306,7 +306,7 @@ function injectChapterActions(subjId, chapterIdx, hasAudio) {
     let actionsHtml = '';
     if (hasAudio) {
         actionsHtml += `<button id="reader-audio-toggle-btn" class="reader-tool-btn" data-click="toggleReaderAudio" data-args='["${subjId}", ${chapterIdx}]' title="오디오 듣기">
-            <i class="fa-solid fa-headphones" aria-hidden="true"></i> 오디오 <span class="pro-badge" data-pro-feature="audiobook">PRO</span>
+            <i class="fa-solid fa-headphones" aria-hidden="true"></i> 오디오 <span class="pro-badge" data-pro-feature="audiobook">유료</span>
         </button>`;
     }
     actionsGroup.innerHTML = actionsHtml;

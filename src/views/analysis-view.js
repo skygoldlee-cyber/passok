@@ -119,7 +119,7 @@ function _renderSmartPlanInsight() {
     const plan = computeStudyPlan(Math.max(0, totalCards - state.memorizedCards.size));
     const alloc = plan && plan.tier !== 'done' ? computeSubjectAllocation(plan, subjectsMeta, _allocInputs()) : null;
     if (!alloc) {
-        el.innerHTML = `<h4>🧠 이번 주 주간 배분 <span class="pro-badge" data-pro-feature="study_plan_pro">PRO</span></h4>
+        el.innerHTML = `<h4>🧠 이번 주 주간 배분 <span class="pro-badge" data-pro-feature="study_plan_pro">유료</span></h4>
             <p class="analysis-empty">시험일을 설정하면 출제 비중과 약점 가중으로 과목별 주간 목표를 배분해 보여줍니다.</p>
             <button class="btn btn-primary btn-sm analysis-card-btn" data-click="openGoalSettings"><i class="fa-solid fa-gear" aria-hidden="true"></i> 시험일·목표 설정</button>`;
         return;
@@ -135,7 +135,7 @@ function _renderSmartPlanInsight() {
             + (alloc.hasWeights && a.weightPct > 0 ? ` <span class="alloc-badge">${a.weightPct}%</span>` : '');
         return `<div class="wc-row"><span>${esc(a.name)}${badgesHtml}</span><strong${met ? ' class="alloc-met"' : ''}>${done}/${a.cards}장${quizPart}</strong></div>`;
     }).join('');
-    el.innerHTML = `<h4>🧠 이번 주 주간 배분 <span class="pro-badge" data-pro-feature="study_plan_pro">PRO</span></h4>
+    el.innerHTML = `<h4>🧠 이번 주 주간 배분 <span class="pro-badge" data-pro-feature="study_plan_pro">유료</span></h4>
         ${rowsHtml}
         <p class="analysis-advice">배정 = 잔여량 × 출제 비중 × 약점 가중(밀린 복습 포함) — 칩의 ⓘ 버튼으로 과목별 근거를 볼 수 있습니다.</p>
         <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="calendar-view"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> 캘린더 보기</button>`;

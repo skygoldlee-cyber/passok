@@ -20,8 +20,9 @@ async function seed(page, { guide = false } = {}) {
         const L = localStorage;
         L.setItem('current_exam', 'carework');
         L.setItem('ui_mode', 'practice');
+        L.setItem('appTheme', 'dark'); // 실무 삽화는 앱 기본 테마(다크) 기준 — 라이트는 colorScheme 라이트 별도 컨텍스트로
+        L.setItem('pro_notice_seen', JSON.stringify({ _global: '2026-01-01' })); // Pro 최초 안내 모달이 캡처에 겹치는 것 방지
         if (!guide) L.setItem('carework_guide_seen', '1');
-        const st = document.createElement('style'); st.textContent = '*{transition:none!important;animation:none!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}'; document.documentElement.appendChild(st);
         L.setItem('carework:carework_doc_sign', JSON.stringify({ author: '김요양', confirmer: '박시설', receiver: '이인수' }));
         L.setItem('carework:carework_org_name', '○○요양원');
         L.setItem('carework:carework_clients', JSON.stringify([
@@ -30,20 +31,32 @@ async function seed(page, { guide = false } = {}) {
         ]));
         const today = new Date().toISOString().slice(0, 10);
         const log = (i, meal) => ({ id: 'l' + i, date: today, time: '0' + (8 + i) + ':30', client: '김○○', service: '방문요양', start: '08:30', end: '10:30', acts: ['신체활동', '식사보조'], obs: { meal, sleep: '양호', void: '정상' }, note: '특이사항 없음', text: '', createdAt: today + 'T' + i + ':00:00Z' });
-        L.setItem('carework:carework_care_logs', JSON.stringify([log(1, '적음'), log(2, '적음'), log(3, '적음')]));
+        // 소→반→전 = 최신순 악화 시계열 — 명부 "식사량 확인 권장" 추세 배지 발동 (clientTrends)
+        L.setItem('carework:carework_care_logs', JSON.stringify([log(1, '소'), log(2, '반'), log(3, '전')]));
         L.setItem('carework:carework_visits', JSON.stringify([
             { id: 'v1', date: today, time: '14:00', client: '김○○', visitor: '김보호', phone: '', relation: '자녀', purpose: '면회', status: 'scheduled', createdAt: today + 'T00:00:00Z' },
         ]));
+        const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10); // 저장 건과 날짜 구분용
         L.setItem('carework:carework_incidents', JSON.stringify([
-            { id: 'i1', date: today, time: '09:15', client: '김○○', place: '거실', type: '낙상', severity: '경미', desc: '침대에서 내려오다 미끄러짐', action: '확인 후 안정 조치', witness: '박보호', familyNotified: true, text: '', createdAt: today + 'T00:00:00Z' },
+            { id: 'i1', date: yesterday, time: '09:15', client: '김○○', place: '거실', type: '낙상', severity: '경미', desc: '침대에서 내려오다 미끄러짐', action: '확인 후 안정 조치', witness: '박보호', familyNotified: true, text: '', createdAt: yesterday + 'T00:00:00Z' },
         ]));
         L.setItem('carework:carework_handovers', JSON.stringify([
             { id: 'h1', date: today, shift: '주간', from: '김요양', to: '이인수', status: '김○○ 식사량 감소 추세', tasks: '욕창 체크', caution: '낙상 주의', text: '', createdAt: today + 'T00:00:00Z' },
         ]));
+        // documentElement는 document-start 시점에 없을 수 있음 — 시드 실패 방지용 가드+지연 주입
+        try {
+            const inject = () => {
+                const st = document.createElement('style');
+                st.textContent = '*{transition:none!important;animation:none!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}';
+                (document.documentElement || document.head || document.body).appendChild(st);
+            };
+            if (document.documentElement) inject(); else document.addEventListener('DOMContentLoaded', inject, { once: true });
+        } catch (_) { /* 스타일 실패해도 시드는 유지 */ }
     }, { guide });
 }
 
-/** PNG 버퍼 → webp 변환 (페이지 내 canvas 사용 — 외부 이미지 라이브러리 불필요) */
+/** PNG 버퍼 → webp 변환 (페이지 내 canvas 사용 — 외부 이미지 라이브러리 불필요)
+ *  투명 영역은 body 배경색으로 평탄화 — 다크 테마의 밝은 텍스트가 흰 배경에 묻히는 것 방지 */
 async function toWebp(page, pngBuf, quality = 0.82) {
     const dataUrl = await page.evaluate(async ({ b64, quality }) => {
         const img = new Image();
@@ -51,7 +64,10 @@ async function toWebp(page, pngBuf, quality = 0.82) {
         const W = Math.min(924, img.naturalWidth), r = W / img.naturalWidth;
         const c = document.createElement('canvas');
         c.width = W; c.height = Math.round(img.naturalHeight * r);
-        c.getContext('2d').drawImage(img, 0, 0, W, c.height);
+        const x = c.getContext('2d');
+        x.fillStyle = getComputedStyle(document.body).backgroundColor;
+        x.fillRect(0, 0, W, c.height);
+        x.drawImage(img, 0, 0, W, c.height);
         return c.toDataURL('image/webp', quality);
     }, { b64: pngBuf.toString('base64'), quality });
     return Buffer.from(dataUrl.split(',')[1], 'base64');
@@ -66,8 +82,8 @@ async function dismissOverlays(page) {
     // 토스트·배너·업데이트 알림 제거 — 스냅샷을 깨끗하게
     await page.evaluate(() => {
         document.querySelectorAll('.app-toast, .toast, .sw-toast, .consent-banner, .app-banner, [id*="toast"], [class*="toast"], [class*="banner"], [class*="update"], dialog[open]:not(#app-confirm-overlay), [class*="backdrop"], [class*="dim"]').forEach(e => e.remove());
-        document.body.style.background = '#f5f5f4';
-        document.body.style.backgroundImage = 'none';
+        document.body.style.backgroundImage = 'none'; // 그라디언트만 제거 — 테마 배경색은 유지(다크 캡처 시 흰 배경 방지)
+        document.getElementById('mobile-tab-bar')?.style.setProperty('display', 'none'); // 고정 탭 바가 요소 캡처에 겹치는 것 방지 (tabs 샷은 자체 복원)
     });
     await page.waitForTimeout(250);
 }
@@ -106,7 +122,9 @@ async function snapComposite(page, name, pngs, { gap = 16, quality = 0.82 } = {}
         const w = imgs.reduce((a, i) => a + i.naturalWidth, 0) + gap * (imgs.length - 1);
         const h = Math.max(...imgs.map(i => i.naturalHeight));
         const c = document.createElement('canvas'); c.width = w; c.height = h;
-        const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, w, h);
+        const x = c.getContext('2d');
+        x.fillStyle = getComputedStyle(document.body).backgroundColor;
+        x.fillRect(0, 0, w, h);
         let off = 0;
         for (const i of imgs) { x.drawImage(i, off, 0); off += i.naturalWidth + gap; }
         return c.toDataURL('image/webp', quality);
@@ -136,12 +154,20 @@ async function shotPng(page, locator) {
 }
 
 const SHOTS = {
-    // ① 사이드바 — 그룹 라벨 + 전체 메뉴
-    'manual-01-sidebar': async (page) => {
-        await page.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
-        await page.setViewportSize({ width: 1280, height: 1600 });
-        await snapRaw(page, 'manual-01-sidebar', page.locator('nav, aside, .sidebar').first());
-        await page.setViewportSize({ width: 1280, height: 900 });
+    // ① 사이드바 — PC 전용 UI (main에서 데스크탑 컨텍스트로 별도 처리)
+    'manual-01-sidebar': async (_page) => { /* DESKTOP 플래그로 main에서 별도 처리 */ },
+    // ① 모바일 하단 탭 바 — 실무 모드에서는 탭 바 자체가 전체 내비 (더보기 시트는 학습 전용)
+    'manual-01-tabs': async (page) => {
+        // page.goto는 항상 풀 리로드(=재부트) — same-document 해시 내비로 즉시 전환
+        await page.evaluate(() => { location.hash = '/care-home'; });
+        await page.waitForSelector('#care-home-view:not(.is-hidden)', { timeout: 60000 });
+        await page.waitForSelector('#mobile-tab-bar .mobile-tab-item', { state: 'attached', timeout: 20000 });
+        // 실제 UI는 좌우 스와이프 탭 바 — 첫 화면 그대로 캡처 (dismissOverlays가 숨기므로 복원 후 직접 캡처)
+        await dismissOverlays(page);
+        await page.evaluate(() => { const b = document.getElementById('mobile-tab-bar'); if (b) b.style.display = ''; });
+        const png = await page.locator('#mobile-tab-bar').screenshot();
+        writeFileSync(join(OUT_DIR, 'manual-01-tabs.webp'), await toWebp(page, png));
+        console.log('✓ manual-01-tabs.webp');
     },
     // ① 첫 진입 3단계 안내 — 별도 컨텍스트 필요 (플래그 미설정)
     'manual-01-guide': async (_page) => { /* GUIDE 플래그로 main에서 별도 처리 */ },
@@ -182,9 +208,12 @@ const SHOTS = {
     },
     // ③ 관찰 칩 ↔ 명부 배지 — 합성
     'manual-03-chips': async (page) => {
+        await page.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
         await page.goto(`${BASE}/#/care-log`, { waitUntil: 'networkidle' });
-        await page.locator('.obs-chips input[value="소"]').first().check({force:true});
-        const chips = await shotPng(page, '.obs-chips');
+        // 라디오 input은 display:none — 클릭 불가, 감싸는 라벨 칩을 클릭
+        await page.locator('.obs-chip:has(input[value="소"])').first().click();
+        // 칩 행만 자르면 라벨 잘림·합성 시 빈 공간 — 특이사항+관찰칩이 든 폼 블록째 캡처
+        const chips = await shotPng(page, '.care-calc-form:has(.obs-chips)');
         await page.goto(`${BASE}/#/care-client`, { waitUntil: 'networkidle' });
         const badge = await shotPng(page, '#cli-list');
         await snapComposite(page, 'manual-03-chips', [chips, badge]);
@@ -192,13 +221,15 @@ const SHOTS = {
     // ④ 방문 결과 패널
     'manual-04-result': async (page) => {
         await page.goto(`${BASE}/#/care-visit`, { waitUntil: 'networkidle' });
+        await page.waitForSelector('#care-visit-view:not(.is-hidden)', { timeout: 20000 });
         await page.fill('#vis-date', '2026-11-09');
         await page.selectOption('#vis-relation', { index: 1 }).catch(() => {});
         await page.fill('#vis-time', '14:00');
         await page.fill('#vis-client', '김○○');
         await page.fill('#vis-visitor', '김보호');
         await page.locator('[data-click="careVisitAdd"]').click(); await page.waitForTimeout(800);
-        await page.locator('#vis-scheduled [data-click="careVisitResultOpen"]').first().click({ force: true });
+        // 모바일 하단 탭 바가 목록 하단 버튼을 가릴 수 있어 JS 클릭으로 디스패치
+        await page.evaluate(() => document.querySelector('#vis-scheduled [data-click="careVisitResultOpen"]')?.click());
         await page.waitForSelector('#vis-result-panel:not(.is-hidden)', { timeout: 8000 });
         await snap(page, 'manual-04-result', '#vis-result-panel');
     },
@@ -245,9 +276,17 @@ const SHOTS = {
     },
     // ⑧ 명부 카드
     'manual-08-client': async (page) => {
-        await page.goto(`${BASE}/#/care-client`, { waitUntil: 'networkidle' });
-        await page.waitForSelector('#cli-list', { timeout: 15000 });
-        await snap(page, 'manual-08-client', '#cli-list');
+        // 콜드 랜딩은 시험 스코프 해석 전에 렌더돼 명부가 빌 수 있음 — 해시 내비로 진입
+        await page.evaluate(() => { location.hash = '/care-client'; });
+        await page.waitForSelector('#cli-list .care-log-saved-item', { timeout: 15000 });
+        // 카드가 #cli-list 박스보다 넓어 가장자리가 잘림 — 클립을 넓혀 캡처
+        await dismissOverlays(page);
+        await page.locator('#cli-list').scrollIntoViewIfNeeded();
+        await page.waitForTimeout(300);
+        const box = await page.locator('#cli-list').boundingBox();
+        const png = await page.screenshot({ clip: { x: Math.max(0, box.x - 8), y: Math.max(0, box.y - 4), width: box.width + 16, height: box.height + 8 } });
+        writeFileSync(join(OUT_DIR, 'manual-08-client.webp'), await toWebp(page, png));
+        console.log('✓ manual-08-client.webp');
     },
     // ⑨ 대처카드 상세
     'manual-09-card': async (page) => {
@@ -263,16 +302,21 @@ const SHOTS = {
         await page.goto(`${BASE}/#/care-audit`, { waitUntil: 'networkidle' });
         await page.waitForSelector('#audit-list > *', { timeout: 15000 });
         await dismissOverlays(page);
-        await page.evaluate(() => document.getElementById('audit-list')?.scrollIntoView());
+        await page.locator('#audit-list').scrollIntoViewIfNeeded();
         await page.waitForTimeout(400);
-        const png = await page.locator('#audit-list').screenshot({ timeout: 10000 });
+        // 근거 배지가 박스 우측을 넘어 잘림 — 클립을 넓혀 캡처 (하단 빈 영역은 후처리 트림)
+        const box = await page.locator('#audit-list').boundingBox();
+        const png = await page.screenshot({ clip: { x: Math.max(0, box.x - 8), y: Math.max(0, box.y - 4), width: box.width + 24, height: box.height + 8 } });
         writeFileSync(join(OUT_DIR, 'manual-10-audit.webp'), await toWebp(page, png));
         console.log('✓ manual-10-audit.webp');
     },
-    // ⑪ 양식 편집기
+    // ⑪ 기본 양식 목록 — .care-calc-form 폴백은 홈 서명 카드를 오매칭하므로 제외,
+    // 콜드 랜딩 시 뷰 미활성이므로 care-home 워밍업 후 해시 이동
     'manual-11-template': async (page) => {
+        await page.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
         await page.goto(`${BASE}/#/care-custom-form`, { waitUntil: 'networkidle' });
-        await snap(page, 'manual-11-template', '#cf-tpl-list, #cf-list, .care-calc-form');
+        await page.waitForSelector('#cf-seed-list > *', { timeout: 8000 });
+        await snap(page, 'manual-11-template', '#cf-seed-list');
     },
     // ⑪ 점검표 인식 미리보기
     'manual-11-import': async (page) => {
@@ -310,29 +354,42 @@ const SHOTS = {
 async function main() {
     const names = process.argv.filter(a => a.startsWith('manual-'));
     const browser = await chromium.launch();
-    const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, locale: 'ko-KR' });
+    // 공용 컨텍스트 — 현장 사용이 모바일 중심이므로 폰 뷰포트 기본 (사이드바 등 PC 전용만 별도 컨텍스트)
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ko-KR', isMobile: true, hasTouch: true });
     const page = await ctx.newPage();
     await seed(page);
+    // 첫 내비게이션은 콜드 부트라 뷰 활성화가 느림 — 워밍업으로 흡수
+    await page.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
+    await page.waitForSelector('#care-home-view:not(.is-hidden)', { timeout: 30000 }).catch(() => {});
     const run = names.length ? names : Object.keys(SHOTS);
     for (const n of run) {
         try {
-            if (n === 'manual-01-guide') { // 플래그 미설정 컨텍스트 — 3컷 안내 노출
-                const g = await browser.newContext({ viewport: { width: 1280, height: 900 }, locale: 'ko-KR' });
+            if (n === 'manual-01-sidebar') { // PC 전용 UI — 데스크탑 컨텍스트 (PC 병기)
+                const s = await browser.newContext({ viewport: { width: 1280, height: 1600 }, locale: 'ko-KR' });
+                const sp = await s.newPage(); await seed(sp);
+                await sp.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
+                await sp.waitForSelector('nav, aside, .sidebar', { timeout: 15000 });
+                await snapRaw(sp, 'manual-01-sidebar', sp.locator('nav, aside, .sidebar').first());
+                await s.close();
+            } else if (n === 'manual-01-guide') { // 플래그 미설정 컨텍스트 — 3컷 안내 노출
+                const g = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ko-KR', isMobile: true, hasTouch: true });
                 const gp = await g.newPage(); await seed(gp, { guide: true });
                 await gp.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
                 await gp.waitForSelector('#home-guide:not(.is-hidden)', { timeout: 8000 });
                 await snap(gp, 'manual-01-guide', '#home-guide');
                 await g.close();
             } else if (n === 'manual-01-badge') { // 고해상도 — 배지 블러 대응
-                const b = await browser.newContext({ viewport: { width: 1280, height: 900 }, locale: 'ko-KR', deviceScaleFactor: 2 });
+                const b = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ko-KR', isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
                 const bp = await b.newPage(); await seed(bp);
                 await bp.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
                 await bp.waitForSelector('#care-home-view', { timeout: 15000 });
                 await bp.goto(`${BASE}/#/care-incident`, { waitUntil: 'networkidle' });
                 await bp.waitForSelector('#inc-client', { timeout: 15000 });
-                await bp.fill('#inc-client', '김○○');
-                await bp.fill('#inc-place', '거실');
-                await bp.fill('#inc-desc', '침대에서 내려오다 미끄러짐');
+                // 시드 사고(김○○·낙상)와 구분되도록 다른 대상자·유형으로 저장 — 목록 중복 방지
+                await bp.fill('#inc-client', '이○○');
+                await bp.fill('#inc-place', '식사실');
+                await bp.selectOption('#inc-type', { index: 2 }).catch(() => {});
+                await bp.fill('#inc-desc', '식사 중 목멤 호소');
                 await bp.fill('#inc-action', '확인 후 안정 조치');
                 await bp.locator('[data-click="careIncidentGenerate"]').click();
                 await bp.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
@@ -343,15 +400,26 @@ async function main() {
             } else if (n === 'manual-01-share') { // 모바일 뷰포트 — 공유 시트 항목 포함 6개
                 const m = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ko-KR', isMobile: true, hasTouch: true });
                 const mp = await m.newPage(); await seed(mp);
+                await mp.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
+                await mp.waitForSelector('#care-home-view:not(.is-hidden)', { timeout: 30000 }).catch(() => {});
                 await mp.goto(`${BASE}/#/care-incident`, { waitUntil: 'networkidle' });
+                await mp.waitForSelector('#care-incident-view:not(.is-hidden)', { timeout: 20000 });
                 await mp.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
-                await mp.getByText('공유·내보내기').first().click({ force: true });
-                await mp.waitForTimeout(800);
-                await snap(mp, 'manual-01-share', '.app-share-sheet, .share-sheet, [class*="share"][class*="menu"], [class*="share"][class*="sheet"]');
+                await mp.getByText('공유·내보내기').locator('visible=true').first().click();
+                await mp.waitForSelector('.care-export-sheet', { timeout: 8000 });
+                // 시트 배경이 반투명 --bg-elevated라 뒤 페이지가 비침 — 캡처용 불투명 처리
+                await mp.evaluate(() => { const s = document.querySelector('.care-export-sheet'); if (s) s.style.background = '#1f2937'; });
+                await snap(mp, 'manual-01-share', '.care-export-sheet');
                 await m.close();
             } else if (!SHOTS[n]) { console.warn(`? ${n} — 미구현 캡처`); continue; }
             else await SHOTS[n](page);
-        } catch (e) { console.error(`✗ ${n}: ${e.message.split('\n')[0]}`); }
+        } catch (e) {
+            console.error(`✗ ${n}: ${e.message.split('\n')[0]}`);
+            try { // 실패 시 페이지 상태 덤프 — 뷰 활성화·셀렉터 진단
+                const dbg = await page.evaluate(() => ({ url: location.href, view: [...document.querySelectorAll('.view-section')].find(x => !x.classList.contains('is-hidden') && x.offsetParent !== null)?.id, items: document.querySelectorAll('#mobile-tab-bar .mobile-tab-item').length }));
+                console.error('   dbg', JSON.stringify(dbg));
+            } catch (_) { /* 진단 실패 무시 */ }
+        }
     }
     await browser.close();
     console.log('완료 — 자리 표시 줄을 ![캡션](images/<이름>.webp)로 교체하세요.');

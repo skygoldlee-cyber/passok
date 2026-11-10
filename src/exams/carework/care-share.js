@@ -282,7 +282,7 @@ const _sheet = (ctx, headText, items) => {
         b.disabled = !!it.disabled;
         b.style.cssText = 'display:flex;align-items:center;gap:8px;width:100%;margin-top:6px;padding:12px;border:0;border-radius:10px;background:var(--bg-muted,rgba(255,255,255,.04));color:inherit;font:600 14px sans-serif;text-align:left;cursor:pointer';
         if (it.disabled) b.style.cssText += ';opacity:.45;cursor:default';
-        b.innerHTML = `${esc(it.label)}${it.pro ? ` <span class="pro-badge" data-pro-feature="${esc(it.pro)}" style="margin-left:auto">PRO</span>` : ''}`;
+        b.innerHTML = `${esc(it.label)}${it.pro ? ` <span class="pro-badge" data-pro-feature="${esc(it.pro)}" style="margin-left:auto">유료</span>` : ''}`;
         b.addEventListener('click', async () => { close(); try { await it.run(); } catch { /* 폴백은 호출층이 처리 */ } });
         sheet.appendChild(b);
     }
@@ -322,7 +322,7 @@ const _openMenu = ctx => {
  * 생성된 문서의 내보내기 메뉴를 연다 (공유 시트·인쇄·복사·PDF·Excel).
  * data-arg="CSS선택자|제목[|mask][|생성핸들러[|보조생성기[|인쇄핸들러[|pro키]]]]"
  * — mask 플래그 시 인명·연락처를 가린 본문, 생성핸들러 지정 시 결과가 비어있으면 먼저 생성,
- * 인쇄핸들러 지정 시 뷰 전용 인쇄(자체 검증·PRO 안내 포함)를 호출, pro키는 메뉴 배지·안내에 사용.
+ * 인쇄핸들러 지정 시 뷰 전용 인쇄(자체 검증·유료 안내 포함)를 호출, pro키는 메뉴 배지·안내에 사용.
  * 수급자 정보의 외부 전송 경로이므로 외부화 액션(공유·복사·다운로드)은 감사 로그에 기록된다.
  * @param {string} arg — data-arg 값
  */

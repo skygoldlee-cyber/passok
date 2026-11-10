@@ -210,7 +210,7 @@ function readMaterialForm() {
 export function matNew() {
   const usage = getMaterialUsage();
   if (!usage.canCreate) {
-    showUpgradeNotice('원료 장부', `Free 플랜은 최대 ${usage.limit}종까지 등록할 수 있습니다.`);
+    showUpgradeNotice('원료 장부', `무료 플랜은 최대 ${usage.limit}종까지 등록할 수 있습니다.`);
     return;
   }
   mat.editingId = null;

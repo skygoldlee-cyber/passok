@@ -87,7 +87,7 @@ function writeBatchForm(b) {
 export function batchNew(formulaId) {
   const usage = getBatchUsage();
   if (!usage.canCreate) {
-    showUpgradeNotice('조제 기록', `Free 플랜은 최대 ${usage.limit}건까지 기록할 수 있습니다.`);
+    showUpgradeNotice('조제 기록', `무료 플랜은 최대 ${usage.limit}건까지 기록할 수 있습니다.`);
     return;
   }
   draft.editingId = null;

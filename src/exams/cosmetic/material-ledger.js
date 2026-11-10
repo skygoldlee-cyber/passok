@@ -17,7 +17,7 @@ import {
   loadItems, saveItems, newId, clampStr, numOrNull, clampDate,
 } from './store-utils.js';
 
-// Free 플랜 저장 한도
+// 무료 플랜 저장 한도
 export const MATERIAL_LIMIT_FREE = 30;
 
 // 기한 임박 판정 기준일
@@ -207,7 +207,7 @@ export function deductStock(usage) {
 export function createMaterial(data) {
   const usage = getMaterialUsage();
   if (!usage.canCreate) {
-    return { ok: false, error: `Free 플랜은 최대 ${usage.limit}종까지 등록할 수 있습니다.` };
+    return { ok: false, error: `무료 플랜은 최대 ${usage.limit}종까지 등록할 수 있습니다.` };
   }
   const clean = sanitizeMaterial(data || {});
   if (!clean.name) return { ok: false, error: '원료명을 입력하세요.' };

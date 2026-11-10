@@ -633,7 +633,7 @@ body.exam-open{overflow:hidden;}
         await _openExamInternal(mdPath, lineNum, undefined, query);
     }
 
-    // 복수정답형 문제집 — Pro 제공 예정 기능.
+    // 복수정답형 문제집 — 유료 제공 예정 기능.
     // combo:N 가상 경로로 열어 _loadMd가 드릴 번들을 문서로 직렬화하게 한다.
     async function openCombo(subjectNum) {
         proFeatureNotice('combo_set', 'ㄱㄴㄷ 조합 문제집');

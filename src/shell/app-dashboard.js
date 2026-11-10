@@ -122,7 +122,7 @@ export function populateExamCards() {
                 : `예상 문제집${totalQuestions ? ` (${totalQuestions}제)` : ''}`;
             return `                                    <button data-click="ExamViewer.openExam" data-arg="${contentPath(`문제은행/${exam.file}`)}" class="exam-btn-link"><i class="fa-solid fa-file-pdf"></i> ${pdfLabel}</button>`;
         }).join('\n');
-        const comboBookBtn = `                                    <button data-click="ExamViewer.openCombo" data-arg="${subj.order}" class="exam-btn-link"><i class="fa-solid fa-file-lines"></i> ㄱㄴㄷ 조합 문제집${comboTotal ? ` (${comboTotal}제)` : ''} <span class="pro-badge" data-pro-feature="combo_set">PRO</span></button>`;
+        const comboBookBtn = `                                    <button data-click="ExamViewer.openCombo" data-arg="${subj.order}" class="exam-btn-link"><i class="fa-solid fa-file-lines"></i> ㄱㄴㄷ 조합 문제집${comboTotal ? ` (${comboTotal}제)` : ''} <span class="pro-badge" data-pro-feature="combo_set">유료</span></button>`;
 
         // 모의고사 피커 — 실전(선다형+단답형) / ㄱㄴㄷ 조합 두 그룹의 문항 수 칩
         // 프리셋은 실제 풀보다 작을 때만 표시, "전체"는 실제 문항 수 표기
@@ -147,7 +147,7 @@ ${comboBookBtn}
                                     <small class="exam-btn-caption">선다형+단답형 예상문제 · ㄱㄴㄷ 조합 자동 변환</small>
                                 </div>
                                 <div class="exam-btn-pair">
-                                    <button class="exam-btn-sim btn-cyan" data-click="toggleComboPicker" data-arg="mock-picker-${idx + 1}"><i class="fa-solid fa-circle-play"></i> 모의고사 시작 <span class="pro-badge" data-pro-feature="mock_exam">PRO</span></button>
+                                    <button class="exam-btn-sim btn-cyan" data-click="toggleComboPicker" data-arg="mock-picker-${idx + 1}"><i class="fa-solid fa-circle-play"></i> 모의고사 시작 <span class="pro-badge" data-pro-feature="mock_exam">유료</span></button>
                                     <small class="exam-btn-caption">실전 또는 ㄱㄴㄷ 조합 · 문항 수 선택</small>
                                     <div class="combo-count-row is-hidden" id="mock-picker-${idx + 1}">
                                         <span class="mock-picker-label">실전 · 선다형+단답형</span>
@@ -243,7 +243,7 @@ ${btnsHtml}
         });
     }
 
-    // 플랜이 이미 로드됐다면 새로 그린 배지에도 무료/Pro 표시 반영
+    // 플랜이 이미 로드됐다면 새로 그린 배지에도 무료/유료 표시 반영
     refreshProBadges(container);
 
     // 정적 텍스트 동적 치환 (manifest 기반)

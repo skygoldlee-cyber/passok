@@ -212,7 +212,7 @@ async function _requestAi(spec, input, deps = {}) {
                 _featureEvent('quota', { feature, route: 'server' });
                 return {
                     ok: false, code: 'quota',
-                    error: '오늘 무료 AI 사용 횟수를 모두 사용했습니다 — 내일 다시 시도하거나 Pro를 이용하세요.',
+                    error: '오늘 무료 AI 사용 횟수를 모두 사용했습니다 — 내일 다시 시도하거나 유료를 이용하세요.',
                     remaining: body?.remaining ?? 0,
                 };
             }

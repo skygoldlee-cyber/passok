@@ -150,7 +150,7 @@ export function listFormDocs() {
 export function addFormDoc({ tplId, title, client, clientId, date, values, md }) {
     const items = listFormDocs();
     if (items.length >= FREE_DOC_LIMIT)
-        return { ok: false, error: `Free 플랜 저장 한도(${FREE_DOC_LIMIT}건) 도달 — 삭제 후 재시도하거나 Pro로 확장하세요.` };
+        return { ok: false, error: `무료 플랜 저장 한도(${FREE_DOC_LIMIT}건) 도달 — 삭제 후 재시도하거나 유료로 확장하세요.` };
     const it = { id: `fdoc_${Date.now().toString(36)}`, createdAt: localDateTime(), tplId, title, client, clientId, date, values, md };
     items.unshift(it);
     setJSON(DOC_KEY, items);

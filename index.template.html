@@ -67,7 +67,7 @@
                     <i class="fa-solid fa-chart-pie" aria-hidden="true"></i> <span data-uitext="dashboard">대시보드</span>
                 </button>
                 <button class="nav-item nav-study-only" data-target="analysis-view">
-                    <i class="fa-solid fa-bullseye" aria-hidden="true"></i> <span data-uitext="analysis">학습진단</span> <span class="pro-badge" data-pro-feature="personal_analysis">PRO</span>
+                    <i class="fa-solid fa-bullseye" aria-hidden="true"></i> <span data-uitext="analysis">학습진단</span> <span class="pro-badge" data-pro-feature="personal_analysis">유료</span>
                 </button>
                 <button class="nav-item nav-study-only" data-target="calendar-view">
                     <i class="fa-solid fa-calendar-check" aria-hidden="true"></i> <span data-uitext="calendar">캘린더</span>
@@ -90,7 +90,7 @@
                     <i class="fa-solid fa-star" aria-hidden="true"></i> <span data-uitext="review">오답/중요 복습</span>
                 </button>
                 <button class="nav-item nav-study-only" data-target="exam-view">
-                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i> <span data-uitext="exam">실전 모의고사</span> <span class="pro-badge" data-pro-feature="mock_exam">PRO</span>
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i> <span data-uitext="exam">실전 모의고사</span> <span class="pro-badge" data-pro-feature="mock_exam">유료</span>
                 </button>
                 <div class="nav-group-label nav-study-only">자료 · 도구</div>
                 <button class="nav-item nav-study-only" data-target="textbook-reader-view">
@@ -103,7 +103,7 @@
                     <i class="fa-solid fa-spell-check" aria-hidden="true"></i> <span data-uitext="dictionary:nav">성분사전</span>
                 </button>
                 <button class="nav-item nav-study-only" data-target="care-webtoon-view" data-feature="careWebtoon">
-                    <i class="fa-solid fa-images" aria-hidden="true"></i> <span data-uitext="careWebtoon:nav">이야기 웹툰</span> <span class="pro-badge" data-pro-feature="story_textbook">PRO</span>
+                    <i class="fa-solid fa-images" aria-hidden="true"></i> <span data-uitext="careWebtoon:nav">이야기 웹툰</span> <span class="pro-badge" data-pro-feature="story_textbook">유료</span>
                 </button>
                 <div class="nav-group-label nav-group-label-practice" data-feature="practiceMode">실무</div>
                 <button type="button" data-click="ManualViewer.openFormulaManual" class="manual-nav-link nav-practice-only" data-feature="formula">
@@ -215,8 +215,8 @@
                             <button type="button" class="settings-item" data-click="openAuthModal">
                                 <i class="fa-solid fa-user" aria-hidden="true"></i> <span id="auth-menu-label">계정 / 로그인</span>
                             </button>
-                            <!-- Pro 활성화 코드 입력 — 계정 관련 동작이므로 설정 소속 (플랜 비교 안내는 도움말) -->
-                            <button type="button" class="settings-item" data-click="showRedeemCode" title="구매한 Pro 라이선스 코드를 입력해 활성화 — 로그인 필요">
+                            <!-- 유료 활성화 코드 입력 — 계정 관련 동작이므로 설정 소속 (플랜 비교 안내는 도움말) -->
+                            <button type="button" class="settings-item" data-click="showRedeemCode" title="구매한 유료 라이선스 코드를 입력해 활성화 — 로그인 필요">
                                 <i class="fa-solid fa-key" aria-hidden="true"></i> 라이선스 코드 입력
                             </button>
                             <!-- BYOK — 로그인 없이 AI 코치를 쓰려는 사용자의 본인 API 키 등록 (디바이스 로컬 전용) -->
@@ -272,7 +272,7 @@
                                 <i class="fa-solid fa-house" aria-hidden="true"></i> 서비스 소개
                             </button>
                             <!-- 플랜 비교 안내 (PAY-01) — 도움말·정보 패널 소속 (설정 패널에서 이동) · 모달 내 라이선스 코드 입력 링크 유지 -->
-                            <button type="button" class="settings-item" data-click="showPlanCompare" title="Free와 Pro의 기능 차이·혜택 비교 보기 — 모달에서 라이선스 코드 입력 가능">
+                            <button type="button" class="settings-item" data-click="showPlanCompare" title="무료와 유료의 기능 차이·혜택 비교 보기 — 모달에서 라이선스 코드 입력 가능">
                                 <i class="fa-solid fa-gem" aria-hidden="true"></i> 플랜 안내
                             </button>
                             <button id="shortcut-help-btn" class="settings-item" title="키보드 단축키 목록 보기 (? 키로도 열림)">
@@ -307,7 +307,7 @@
             <!-- Dashboard View -->
             <!-- @include html/views/dashboard.html -->
 
-            <!-- 학습진단 뷰 — 개인화 학습 허브 (Pro 후보: personal_analysis) -->
+            <!-- 학습진단 뷰 — 개인화 학습 허브 (유료 후보: personal_analysis) -->
             <!-- @include html/views/analysis.html -->
 
             <!-- Flashcard View -->
@@ -497,7 +497,7 @@
                         <button class="mobile-tab-item nav-study-only" data-target="analysis-view">
                             <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
                             <span data-uitext="analysis">학습진단</span>
-                            <span class="pro-badge" data-pro-feature="personal_analysis">PRO</span>
+                            <span class="pro-badge" data-pro-feature="personal_analysis">유료</span>
                         </button>
                         <button class="mobile-tab-item nav-study-only" data-target="calendar-view">
                             <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
@@ -513,7 +513,7 @@
                         <button class="mobile-tab-item nav-study-only" data-target="exam-view">
                             <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
                             <span data-uitext="exam">모의고사</span>
-                            <span class="pro-badge" data-pro-feature="mock_exam">PRO</span>
+                            <span class="pro-badge" data-pro-feature="mock_exam">유료</span>
                         </button>
                     </div>
                     <p class="more-sheet-label nav-study-only">자료 · 도구</p>
@@ -532,7 +532,7 @@
                         </button>
                         <button class="mobile-tab-item nav-study-only" data-target="care-webtoon-view" data-feature="careWebtoon">
                             <i class="fa-solid fa-images" aria-hidden="true"></i>
-                            <span data-uitext="careWebtoon:nav">이야기 웹툰</span> <span class="pro-badge" data-pro-feature="story_textbook">PRO</span>
+                            <span data-uitext="careWebtoon:nav">이야기 웹툰</span> <span class="pro-badge" data-pro-feature="story_textbook">유료</span>
                         </button>
                         <!-- 글자 크게 — 시니어 읽기 편의. 설정 항목이지만 신규 그룹 라벨 없이 자료·도구 그리드에 편입 (UX-NAV-12 라벨 규약) -->
                         <button class="mobile-tab-item" data-click="toggleFontSize" type="button" aria-pressed="false" title="글자 크기 키우기 — 시니어 읽기 편의">
@@ -587,14 +587,14 @@
                         <svg class="auth-oauth-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#191919" d="M12 3C6.48 3 2 6.36 2 10.62c0 2.72 1.8 5.1 4.5 6.44-.2.73-.72 2.64-.83 3.05-.13.5.18.5.38.36.15-.1 2.47-1.68 3.48-2.37.77.11 1.61.17 2.47.17 5.52 0 10-3.36 10-7.65S17.52 3 12 3z"/></svg>
                         카카오로 계속
                     </button>
-                    <p class="auth-modal-hint">소셜 계정으로 처음 로그인하면 계정이 자동으로 만들어집니다. <strong>로그인 수단마다 별도 계정</strong>이 생기므로, Pro 코드를 활성화한 계정과 같은 수단으로 로그인해야 합니다.</p>
+                    <p class="auth-modal-hint">소셜 계정으로 처음 로그인하면 계정이 자동으로 만들어집니다. <strong>로그인 수단마다 별도 계정</strong>이 생기므로, 유료 코드를 활성화한 계정과 같은 수단으로 로그인해야 합니다.</p>
                 </div>
-                <p class="auth-modal-hint"><strong>처음이신가요?</strong> 별도 회원가입 없이 <strong>로그인 메일 보내기</strong>를 누르세요 — 메일의 링크(브라우저) 또는 숫자 코드(설치된 앱)로 처음 로그인하면 계정이 자동으로 만들어집니다. 회원가입 버튼은 이메일+비밀번호로 로그인하려는 경우에만 사용합니다. 로그인해도 이 기기의 데이터는 그대로 유지됩니다. 클라우드 동기화(<strong>여러 디바이스 간 상태 공유</strong>)는 Pro 기능입니다.</p>
+                <p class="auth-modal-hint"><strong>처음이신가요?</strong> 별도 회원가입 없이 <strong>로그인 메일 보내기</strong>를 누르세요 — 메일의 링크(브라우저) 또는 숫자 코드(설치된 앱)로 처음 로그인하면 계정이 자동으로 만들어집니다. 회원가입 버튼은 이메일+비밀번호로 로그인하려는 경우에만 사용합니다. 로그인해도 이 기기의 데이터는 그대로 유지됩니다. 클라우드 동기화(<strong>여러 디바이스 간 상태 공유</strong>)는 유료 기능입니다.</p>
             </div>
             <!-- 로그인 상태 -->
             <div id="auth-account-area" class="auth-modal-body is-hidden">
                 <p class="auth-account-line">로그인됨: <strong id="auth-account-email"></strong></p>
-                <p class="auth-account-line">플랜: <span id="auth-account-plan">Free</span> <button type="button" class="btn btn-secondary btn-sm" data-click="showPlanCompare">Free/Pro 차이</button></p>
+                <p class="auth-account-line">플랜: <span id="auth-account-plan">무료</span> <button type="button" class="btn btn-secondary btn-sm" data-click="showPlanCompare">무료/유료 차이</button></p>
                 <p class="auth-account-line">동기화: <span id="auth-sync-status">대기 중</span></p>
                 <div class="auth-modal-actions">
                     <button type="button" class="btn btn-primary" data-click="syncNow">지금 동기화</button>
@@ -607,7 +607,7 @@
                         <button type="button" class="btn btn-secondary" data-click="authSetPassword">설정</button>
                     </div>
                 </div>
-                <p class="auth-modal-hint" data-uitext="authHint">Pro 가입 시 학습 진도와 기록이 클라우드와 동기화되어 여러 디바이스 간 상태가 공유됩니다. 로그아웃해도 이 기기의 데이터는 유지됩니다.</p>
+                <p class="auth-modal-hint" data-uitext="authHint">유료 가입 시 학습 진도와 기록이 클라우드와 동기화되어 여러 디바이스 간 상태가 공유됩니다. 로그아웃해도 이 기기의 데이터는 유지됩니다.</p>
             </div>
         </div>
     </div>

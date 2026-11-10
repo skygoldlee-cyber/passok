@@ -21,7 +21,7 @@ import {
   loadItems, saveItems, newId, clampStr, clampDate,
 } from './store-utils.js';
 
-// Free 플랜 저장 한도
+// 무료 플랜 저장 한도
 const ADVERSE_LIMIT_FREE = 30;
 
 const MAX_NAME_LEN = 30;
@@ -77,7 +77,7 @@ export function getAdverseUsage() {
 export function createAdverse(data) {
   const usage = getAdverseUsage();
   if (!usage.canCreate) {
-    return { ok: false, error: `Free 플랜은 최대 ${usage.limit}건까지 기록할 수 있습니다.` };
+    return { ok: false, error: `무료 플랜은 최대 ${usage.limit}건까지 기록할 수 있습니다.` };
   }
   const clean = sanitizeAdverse(data || {});
   if (!clean.occurredAt) return { ok: false, error: '발생일을 입력하세요.' };

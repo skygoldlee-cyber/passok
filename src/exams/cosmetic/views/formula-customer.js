@@ -198,7 +198,7 @@ function readCustomerForm() {
 export function custNew() {
   const usage = getCustomerUsage();
   if (!usage.canCreate) {
-    showUpgradeNotice('고객 관리', `Free 플랜은 최대 ${usage.limit}명까지 등록할 수 있습니다.`);
+    showUpgradeNotice('고객 관리', `무료 플랜은 최대 ${usage.limit}명까지 등록할 수 있습니다.`);
     return;
   }
   cust.editingId = null;

@@ -59,8 +59,8 @@ export async function refreshAuthUI() {
         if (planEl) {
             const exp = safeGetItem(STORAGE_KEYS.PRO_EXPIRES_AT);
             planEl.textContent = hasProEntitlement()
-                ? (exp ? `Pro (~${String(exp).slice(0, 10)})` : 'Pro')
-                : 'Free';
+                ? (exp ? `유료 (~${String(exp).slice(0, 10)})` : '유료')
+                : '무료';
         }
     } else {
         show(form); hide(account);
@@ -197,7 +197,7 @@ const OAUTH_PROVIDERS = new Set(['google', 'kakao']);
  * 소셜 로그인 (AU-09) — Supabase가 provider 페이지로 리다이렉트하고,
  * 복귀는 redirectTo(origin) + #access_token 해시로 돌아와 기존 매직링크 랜딩 경로가 처리한다.
  * 성공 시 페이지가 떠나므로 이후 코드는 오류 경로에만 도달한다.
- * 주의: 수단마다 별도 auth.users 계정 — Pro는 활성화한 계정에만 귀속된다.
+ * 주의: 수단마다 별도 auth.users 계정 — 유료는 활성화한 계정에만 귀속된다.
  */
 export async function authOAuth(provider) {
     const sb = await getSupabase();

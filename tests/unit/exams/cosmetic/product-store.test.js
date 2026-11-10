@@ -210,7 +210,7 @@ test('한도 — PRODUCT_LIMIT_FREE 초과 등록 거부', () => {
   assert.equal(getProductUsage().count, PRODUCT_LIMIT_FREE);
   const r = createProduct({ name: '초과제품', ingredients: ['정제수'] });
   assert.equal(r.ok, false);
-  assert.match(r.error, /Free 플랜은 최대/);
+  assert.match(r.error, /무료 플랜은 최대/);
 });
 
 /* =======================================================

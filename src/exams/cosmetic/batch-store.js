@@ -34,7 +34,7 @@ import {
 } from './store-utils.js';
 import { todayKey } from '../../core/utils.js';
 
-// Free 플랜 저장 한도 (기록 보존 업무 특성상 포뮬러보다 넉넉하게)
+// 무료 플랜 저장 한도 (기록 보존 업무 특성상 포뮬러보다 넉넉하게)
 // keep-export — pro-upgrade.js가 플랜 비교 모달에서 지연 import로 참조
 export const BATCH_LIMIT_FREE = 50;
 
@@ -210,7 +210,7 @@ function localToday() {
 export function createBatch(data) {
   const usage = getBatchUsage();
   if (!usage.canCreate) {
-    return { ok: false, error: `Free 플랜은 최대 ${usage.limit}건까지 기록할 수 있습니다.` };
+    return { ok: false, error: `무료 플랜은 최대 ${usage.limit}건까지 기록할 수 있습니다.` };
   }
   const clean = sanitizeBatch(data || {});
   if (!clean.formulaName) return { ok: false, error: '처방 이름이 필요합니다.' };

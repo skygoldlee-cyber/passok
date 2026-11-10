@@ -23,7 +23,7 @@ export function listRoster() {
 export function addRoster(entry) {
     const items = listRoster();
     if (items.length >= FREE_LIMIT)
-        return { ok: false, error: `Free 플랜 저장 한도(${FREE_LIMIT}건) 도달 — 삭제 후 재시도하거나 Pro로 확장하세요.` };
+        return { ok: false, error: `무료 플랜 저장 한도(${FREE_LIMIT}건) 도달 — 삭제 후 재시도하거나 유료로 확장하세요.` };
     const it = { id: `ros_${Date.now().toString(36)}`, createdAt: localDateTime(), ...entry };
     items.unshift(it);
     setJSON(KEY, items);

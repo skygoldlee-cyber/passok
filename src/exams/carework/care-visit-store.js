@@ -27,7 +27,7 @@ export function listVisits() {
 export function addVisit(entry) {
     const items = listVisits();
     if (items.length >= FREE_LIMIT)
-        return { ok: false, error: `Free 플랜 저장 한도(${FREE_LIMIT}건) 도달 — 삭제 후 재시도하거나 Pro로 확장하세요.` };
+        return { ok: false, error: `무료 플랜 저장 한도(${FREE_LIMIT}건) 도달 — 삭제 후 재시도하거나 유료로 확장하세요.` };
     const it = { id: `vis_${Date.now().toString(36)}`, createdAt: localDateTime(), status: 'scheduled', result: null, ...entry };
     items.unshift(it);
     setJSON(KEY, items);

@@ -133,7 +133,7 @@ export function renderStudyCalendar() {
         </div>
     `;
 
-    // SC-08 과목별 배분 — Pro 표기 배지·1회 안내 + 매트릭스 사용 계측
+    // SC-08 과목별 배분 — 유료 표기 배지·1회 안내 + 매트릭스 사용 계측
     const allocDetail = /** @type {HTMLDetailsElement|null} */ (container.querySelector('.plan-alloc-detail'));
     if (container.querySelector('.plan-alloc')) {
         refreshProBadges(container);
@@ -302,7 +302,7 @@ function _subjectAllocHtml(plan) {
         <div class="plan-alloc">
             <div class="plan-alloc-head">
                 <span>주간 배분 — 이번 주 과목별 목표</span>
-                <span class="pro-badge" data-pro-feature="study_plan_pro">PRO</span>
+                <span class="pro-badge" data-pro-feature="study_plan_pro">유료</span>
             </div>
             <div class="plan-alloc-chips">${chips}</div>
             <p class="plan-alloc-basis">${alloc.hasWeights ? '배정 근거: 잔여량 × 출제 비중 × 약점 가중(최근 퀴즈 정답률·취약 카드·오답 원인·취약 단원·밀린 복습)' : '배정 근거: 잔여량 × 약점 가중 (출제 비중 미선언 — 균등 배분)'} · 카드 장수와 퀴즈 문항을 함께 배분 · 칩을 누르면 해당 과목 학습으로 이동 · ⓘ 배정 근거를 학습 진단에서 확인</p>

@@ -24,7 +24,7 @@ import {
 import { todayKey } from '../../core/utils.js';
 import { CUSTOMER_OPTIONS } from './formula-store.js';
 
-// Free 플랜 저장 한도
+// 무료 플랜 저장 한도
 export const CUSTOMER_LIMIT_FREE = 20;
 
 // 두피 유형 — CUSTOMER_OPTIONS.skinType과 별도 축 (두피 전용 처방 대비)
@@ -93,7 +93,7 @@ export function getCustomerUsage() {
 export function createCustomer(data) {
   const usage = getCustomerUsage();
   if (!usage.canCreate) {
-    return { ok: false, error: `Free 플랜은 최대 ${usage.limit}명까지 등록할 수 있습니다.` };
+    return { ok: false, error: `무료 플랜은 최대 ${usage.limit}명까지 등록할 수 있습니다.` };
   }
   const clean = sanitizeCustomer(data || {});
   if (!clean.name) return { ok: false, error: '고객 이름을 입력하세요.' };

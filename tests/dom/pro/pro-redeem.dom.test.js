@@ -77,7 +77,7 @@ describe('showRedeemDialog (PAY-01)', () => {
         // PAY-08 — 활성 시험일을 시험일+3일 최소 보장 인자로 전달 (미설정 null)
         expect(mockRpc).toHaveBeenCalledWith('redeem_code', { p_code: 'CAFE-AB12-CD34', p_exam_date: null });
         expect(safeGetItem(STORAGE_KEYS.PRO_ENTITLED)).toBe('1');
-        expect(showToast).toHaveBeenCalledWith(expect.stringContaining('Pro가 활성화'), 'success');
+        expect(showToast).toHaveBeenCalledWith(expect.stringContaining('유료가 활성화'), 'success');
         expect(mockReportEvent).toHaveBeenCalledWith('code_redeem_attempt');
         expect(mockReportEvent).toHaveBeenCalledWith('code_redeem_success');
         await vi.waitFor(() => expect(overlay()).toBeNull());

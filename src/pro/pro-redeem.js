@@ -1,4 +1,4 @@
-// src/pro-redeem.js — 라이선스 코드 입력 → Pro 활성화 (PAY-01)
+// src/pro-redeem.js — 라이선스 코드 입력 → 유료 활성화 (PAY-01)
 // @spec PAY-01, PAY-03, PAY-06, PAY-07, PAY-08
 // ------------------------------------------------------------
 // P2 선실험(PAYMENT_PILOT_DESIGN §3)의 구매자 활성화 경로:
@@ -142,7 +142,7 @@ export async function showRedeemDialog() {
     }
     const session = await getAuthSession();
     if (!session) {
-        showToast('Pro 활성화는 로그인 후 이용할 수 있습니다 — 로그인 후 코드를 입력해주세요', 'info');
+        showToast('유료 활성화는 로그인 후 이용할 수 있습니다 — 로그인 후 코드를 입력해주세요', 'info');
         openAuthModal();
         return;
     }
@@ -153,7 +153,7 @@ export async function showRedeemDialog() {
     overlay.innerHTML = `
         <div class="app-confirm-dialog dialog-card" role="alertdialog" aria-modal="true" aria-labelledby="redeem-title">
             <h3 id="redeem-title">🔑 라이선스 코드 입력</h3>
-            <p>구매 후 발급받은 Pro 활성화 코드를 입력하세요 (예: <code>CAFE-XXXX-XXXX</code>)</p>
+            <p>구매 후 발급받은 유료 활성화 코드를 입력하세요 (예: <code>CAFE-XXXX-XXXX</code>)</p>
             <input type="text" id="redeem-code-input" class="redeem-input" maxlength="32"
                    autocomplete="off" autocapitalize="characters" spellcheck="false"
                    placeholder="코드 입력" aria-label="라이선스 코드" />
@@ -205,7 +205,7 @@ export async function showRedeemDialog() {
                         until = ` (${String(prof.pro_expires_at).slice(0, 10)}까지)`;
                     }
                 }
-                showToast(`🎉 Pro가 활성화되었습니다${until} — 클라우드 동기화로 다른 기기에서도 이어서 학습할 수 있습니다`, 'success');
+                showToast(`🎉 유료가 활성화되었습니다${until} — 클라우드 동기화로 다른 기기에서도 이어서 학습할 수 있습니다`, 'success');
                 return;
             }
             msg.textContent = '코드를 확인해주세요 — 입력값이 맞지 않거나 이미 사용된 코드입니다.';
