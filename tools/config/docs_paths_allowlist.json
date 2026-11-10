@@ -355,8 +355,8 @@
   },
   {
     "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
-    "ref": "tests/e2e/cbt.test.sh",
-    "reason": "E2E 구축 가이드의 제안 파일 — CBT 시나리오 스크립트 (Phase 2 미구현)"
+    "ref": "tests/e2e/mock-exam.test.sh",
+    "reason": "E2E 구축 가이드의 제안 파일 — 모의고사 시나리오 스크립트 (Phase 2 미구현)"
   },
   {
     "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
@@ -370,7 +370,7 @@
   },
   {
     "file": "docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md",
-    "ref": "tests/db/verify-cbt.mjs",
+    "ref": "tests/db/verify-mock.mjs",
     "reason": "E2E 구축 가이드의 제안 파일 — 화면↔DB 점수 검증 스크립트 (Phase 2 미구현)"
   },
   {
