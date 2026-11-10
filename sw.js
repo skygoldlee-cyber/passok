@@ -457,6 +457,7 @@ const EXAM_MEDIA_ASSETS = [
   './content/exams/carework/docs/images/manual-12-calc.webp',
   './content/exams/carework/docs/images/manual-13-finder.webp',
   './content/exams/carework/docs/images/manual-14-forms.webp',
+  './content/exams/carework/docs/images/manual-15-mask.webp',
   './content/exams/carework/docs/images/작성자-서명.svg',
   './content/exams/carework/교재/careprac/images/aed.webp',
   './content/exams/carework/교재/careprac/images/bath-chair.webp',
