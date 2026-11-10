@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 // tools/check/check_terms.js — 사용자 표시 용어 정합 게이트 (Pro/Free 잔재 차단)
 // @spec none — 정책 게이트: PLAN_TERMS(uitext-defaults.js) 외 사용자 문자열에 구 표기 잔류 금지
-const { readFileSync, readdirSync, statSync } = require('node:fs');
+const { readFileSync, readdirSync, statSync, existsSync } = require('node:fs');
 const { join } = require('node:path');
 const ROOT = join(__dirname, '../..');
 const DIRS = ['src', 'html'];
-const FILES = ['index.template.html', 'docs/user/user_manual.md',
-    'content/exams/carework/docs/실무막뉴얼.md'.replace('막뉴','매뉴')];
+const FILES = ['index.template.html', 'docs/user/user_manual.md'];
+// 시험별 문서는 exams 루트를 동적 순회 — 시험 id 하드코딩 금지 (DA-15)
+try { for (const ex of readdirSync(join(ROOT, 'content/exams'))) DIRS.push(`content/exams/${ex}/docs`); } catch {}
 // 사용자 표시 금지 패턴 — Pro/PRO 배지·플랜 표기 + Free 플랜 (식별자·코드 주석은 허용)
 const BAN = [
     [/>PRO</, '배지 리터럴 >PRO<'],
@@ -26,7 +27,7 @@ function* walk(d) {
     }
 }
 let bad = 0;
-for (const t of [...DIRS.map(d => join(ROOT, d)), ...FILES.map(x => join(ROOT, x))]) {
+for (const t of [...DIRS.map(d => join(ROOT, d)), ...FILES.map(x => join(ROOT, x))].filter(existsSync)) {
     const files = statSync(t).isDirectory() ? [...walk(t)] : [t];
     for (const p of files) {
         const rel = p.slice(ROOT.length + 1);
