@@ -1,0 +1,537 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 2740" width="1600" height="2740" font-family="Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" role="img" aria-labelledby="ttl dsc">
+<title id="ttl">PassCare 유튜브 숏츠 시리즈 콘티</title>
+<desc id="dsc">학습안내서·실무막뉴얼 상황별 따라하기 기반 숏츠 시리즈. 공통 6컷 포맷 + 학습 A1~A6·실무 B1~B9 편별 콘티.</desc>
+<defs>
+<linearGradient id="paperBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7f4ec"/><stop offset="1" stop-color="#f0ece1"/></linearGradient>
+<filter id="soft" x="-5%" y="-5%" width="110%" height="120%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#334155" flood-opacity=".14"/></filter>
+<radialGradient id="wSky"><stop offset="0" stop-color="#dbeafe"/><stop offset="1" stop-color="#dbeafe" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1600" height="2740" fill="url(#paperBg)"/>
+<text x="24" y="62" font-size="24" font-weight="800" fill="#1f2937" text-anchor="start">PassCare 유튜브 숏츠 시리즈 콘티</text>
+<text x="24" y="88" font-size="13.5" font-weight="600" fill="#64748b" text-anchor="start">학습안내서·실무막뉴얼 "상황별 따라하기" → 편당 15~30초 9:16 시리즈 · 캐릭터(상황) + 실제 앱 화면(기능)</text>
+<text x="1576" y="88" font-size="13" font-weight="700" fill="#0f766e" text-anchor="end">학습 A1~A6 + 실무 B1~B9 · 총 15편</text>
+<line x1="24" y1="106" x2="1576" y2="106" stroke="#d6dce8" stroke-width="1.5"/>
+<rect x="24" y="132" width="1552" height="470" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<text x="48" y="166" font-size="17" font-weight="800" fill="#1f2937" text-anchor="start">공통 포맷 — 전 편 6컷 구조</text>
+<text x="48" y="188" font-size="12" font-weight="600" fill="#64748b" text-anchor="start">모든 편이 같은 뼈대 — 컷 내용만 편별로 교체. 30초를 넘으면 C3 컷을 늘리지 말고 단계를 줄인다</text>
+<g transform="translate(48,208)">
+<rect width="200" height="355" rx="18" fill="#2b2d3a"/>
+<clipPath id="ph48x208"><rect x="4" y="4" width="192" height="347" rx="14"/></clipPath>
+<g clip-path="url(#ph48x208)"><rect x="4" y="4" width="192" height="347" fill="#0f1420"/>
+<ellipse cx="100" cy="194.85000000000002" rx="105.60000000000001" ry="173.5" fill="url(#wSky)"/>
+<clipPath id="cc0"><circle cx="100" cy="171.16000000000003" r="70"/></clipPath>
+<circle cx="100" cy="171.16000000000003" r="70" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc0)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="30" y="101.16000000000001" width="140" height="140"/></g>
+<rect x="19.36" y="239.96" width="161.28" height="52" rx="10" fill="#ffffff" opacity="0.92"/>
+<text x="100" y="261.96000000000004" font-size="13" font-weight="800" fill="#1f2937" text-anchor="middle">"○○할 때,</text>
+<text x="100" y="281.96000000000004" font-size="13" font-weight="800" fill="#1f2937" text-anchor="middle">어디부터?"</text>
+</g></g>
+<text x="148" y="585" font-size="14" font-weight="800" fill="#1f2937" text-anchor="middle">C1 후킹</text>
+<text x="148" y="603" font-size="11.5" font-weight="700" fill="#0f766e" text-anchor="middle">0~3초</text>
+<text x="148" y="621" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">상황 질문 한 문장</text>
+<text x="148" y="635" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">큰 자막 + 미영 클로즈업</text>
+<g transform="translate(276,208)">
+<rect width="200" height="355" rx="18" fill="#2b2d3a"/>
+<clipPath id="ph276x208"><rect x="4" y="4" width="192" height="347" rx="14"/></clipPath>
+<g clip-path="url(#ph276x208)"><rect x="4" y="4" width="192" height="347" fill="#0f1420"/>
+<ellipse cx="100" cy="194.85000000000002" rx="105.60000000000001" ry="173.5" fill="url(#wSky)"/>
+<clipPath id="cc1"><circle cx="100" cy="171.16000000000003" r="70"/></clipPath>
+<circle cx="100" cy="171.16000000000003" r="70" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc1)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="30" y="101.16000000000001" width="140" height="140"/></g>
+<rect x="19.36" y="239.96" width="161.28" height="52" rx="10" fill="#ffffff" opacity="0.92"/>
+<text x="100" y="261.96000000000004" font-size="13" font-weight="800" fill="#1f2937" text-anchor="middle">불편한 현실</text>
+<text x="100" y="281.96000000000004" font-size="13" font-weight="800" fill="#1f2937" text-anchor="middle">수기·카톡 기록</text>
+</g></g>
+<text x="376" y="585" font-size="14" font-weight="800" fill="#1f2937" text-anchor="middle">C2 상황</text>
+<text x="376" y="603" font-size="11.5" font-weight="700" fill="#0f766e" text-anchor="middle">3~6초</text>
+<text x="376" y="621" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">불편한 현실 1컷</text>
+<text x="376" y="635" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">(수기 일지·까먹은 복습)</text>
+<g transform="translate(504,208)">
+<rect width="200" height="355" rx="18" fill="#2b2d3a"/>
+<clipPath id="ph504x208"><rect x="4" y="4" width="192" height="347" rx="14"/></clipPath>
+<g clip-path="url(#ph504x208)"><rect x="4" y="4" width="192" height="347" fill="#0f1420"/>
+<ellipse cx="100" cy="194.85000000000002" rx="105.60000000000001" ry="173.5" fill="url(#wSky)"/>
+<image href="../../../../content/exams/carework/docs/images/manual-02-home.webp" x="14" y="45.64" width="172" height="215.14" preserveAspectRatio="xMidYMid slice"/>
+<rect x="14" y="45.64" width="172" height="215.14" rx="6" fill="none" stroke="#3a4358"/>
+<text x="100" y="288.53999999999996" font-size="12" font-weight="700" fill="#94a3b8" text-anchor="middle">실제 앱 화면</text>
+</g></g>
+<text x="604" y="585" font-size="14" font-weight="800" fill="#1f2937" text-anchor="middle">C3 따라하기</text>
+<text x="604" y="603" font-size="11.5" font-weight="700" fill="#0f766e" text-anchor="middle">6~18초</text>
+<text x="604" y="621" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">실제 앱 화면 2~3컷</text>
+<text x="604" y="635" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">문서 단계 순서 그대로</text>
+<g transform="translate(732,208)">
+<rect width="200" height="355" rx="18" fill="#2b2d3a"/>
+<clipPath id="ph732x208"><rect x="4" y="4" width="192" height="347" rx="14"/></clipPath>
+<g clip-path="url(#ph732x208)"><rect x="4" y="4" width="192" height="347" fill="#0f1420"/>
+<ellipse cx="100" cy="194.85000000000002" rx="105.60000000000001" ry="173.5" fill="url(#wSky)"/>
+<image href="../../../../content/exams/carework/docs/images/manual-05-preview.webp" x="14" y="45.64" width="172" height="215.14" preserveAspectRatio="xMidYMid slice"/>
+<rect x="14" y="45.64" width="172" height="215.14" rx="6" fill="none" stroke="#3a4358"/>
+<text x="100" y="288.53999999999996" font-size="12" font-weight="700" fill="#94a3b8" text-anchor="middle">실제 앱 화면</text>
+</g></g>
+<text x="832" y="585" font-size="14" font-weight="800" fill="#1f2937" text-anchor="middle">C4 완료</text>
+<text x="832" y="603" font-size="11.5" font-weight="700" fill="#0f766e" text-anchor="middle">18~24초</text>
+<text x="832" y="621" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">결과물·완료 상태</text>
+<text x="832" y="635" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">저장됨 ✓ · PDF · 진단</text>
+<g transform="translate(960,208)">
+<rect width="200" height="355" rx="18" fill="#2b2d3a"/>
+<clipPath id="ph960x208"><rect x="4" y="4" width="192" height="347" rx="14"/></clipPath>
+<g clip-path="url(#ph960x208)"><rect x="4" y="4" width="192" height="347" fill="#0f1420"/>
+<ellipse cx="100" cy="194.85000000000002" rx="105.60000000000001" ry="173.5" fill="url(#wSky)"/>
+<rect x="23.200000000000003" y="108.1" width="153.60000000000002" height="138.8" rx="12" fill="#ffffff" opacity="0.95"/>
+<text x="100" y="156.68" font-size="14" font-weight="800" fill="#0f766e" text-anchor="middle">이것만 기억</text>
+<text x="100" y="184.44" font-size="15" font-weight="700" fill="#475569" text-anchor="middle">☐ ☐ ☐</text>
+<text x="100" y="219.14" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">체크리스트 요약</text>
+</g></g>
+<text x="1060" y="585" font-size="14" font-weight="800" fill="#1f2937" text-anchor="middle">C5 한 줄 정리</text>
+<text x="1060" y="603" font-size="11.5" font-weight="700" fill="#0f766e" text-anchor="middle">24~28초</text>
+<text x="1060" y="621" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">"이것만 기억" 자막 카드</text>
+<text x="1060" y="635" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">문서 체크박스 요약</text>
+<g transform="translate(1188,208)">
+<rect width="200" height="355" rx="18" fill="#2b2d3a"/>
+<clipPath id="ph1188x208"><rect x="4" y="4" width="192" height="347" rx="14"/></clipPath>
+<g clip-path="url(#ph1188x208)"><rect x="4" y="4" width="192" height="347" fill="#0f1420"/>
+<ellipse cx="100" cy="194.85000000000002" rx="105.60000000000001" ry="173.5" fill="url(#wSky)"/>
+<text x="100" y="149.73999999999998" font-size="26" font-weight="800" fill="#ffffff" text-anchor="middle">PassCare</text>
+<text x="100" y="177.5" font-size="20" font-weight="800" fill="#99f6e4" text-anchor="middle">검색</text>
+<rect x="74" y="212.2" width="52" height="52" rx="8" fill="#ffffff"/>
+<text x="100" y="242.2" font-size="13" font-weight="800" fill="#334155" text-anchor="middle">QR</text>
+</g></g>
+<text x="1288" y="585" font-size="14" font-weight="800" fill="#1f2937" text-anchor="middle">C6 CTA</text>
+<text x="1288" y="603" font-size="11.5" font-weight="700" fill="#0f766e" text-anchor="middle">28~30초</text>
+<text x="1288" y="621" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">"PassCare 검색" 크게</text>
+<text x="1288" y="635" font-size="10.5" font-weight="600" fill="#64748b" text-anchor="middle">QR은 보조</text>
+<rect x="24" y="632" width="1552" height="776" rx="14" fill="#fffdf8" stroke="#d6dce8"/>
+<text x="48" y="668" font-size="17" font-weight="800" fill="#1f2937" text-anchor="start">A 시리즈 — 학습 (학습안내서 §2)</text>
+<text x="48" y="688" font-size="11.5" font-weight="600" fill="#64748b" text-anchor="start">수험생 대상 · 원문 정본: content/exams/carework/docs/학습안내서.md</text>
+<g transform="translate(44,702)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#0f766e"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">A1</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">처음 앱 쓰는 날</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#0f766e" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "요양보호사 시험, 폰 하나로 15분 세팅"</text>
+<rect x="394" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh394x66"><rect x="395" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh394x66)"><image href="../../../../content/exams/carework/docs/images/manual-g05-calendar.webp" x="395" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="437" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">시험일 설정</text>
+<rect x="298" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh298x66"><rect x="299" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh298x66)"><image href="../../../../content/exams/carework/docs/images/manual-g02-flow.webp" x="299" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="341" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">4단계 개념 학습</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">캘린더에 시험일 입력 → D-day·주간 목표 생성</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">개념 학습 4단계 1회 (미리풀기→이야기→요약→시나</text>
+<text x="28" y="167" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">리오)</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">문제 10개 기록 → 학습진단 활성</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc2"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc2)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<text x="64" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 학습안내서 §2-01</text>
+</g>
+<g transform="translate(556,702)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#0f766e"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">A2</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">매일 공부할 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#0f766e" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "매일 뭐부터 할지 고민이면 — 오늘 할 일부터"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh376x66"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh376x66)"><image href="../../../../content/exams/carework/docs/images/manual-g01-dashboard.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">오늘 할 일</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">대시보드 「오늘 할 일」 → 이어하기·복습 배정</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">오답 복습 배정분 먼저 (약 10문·5분)</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">개념 학습 1~2단원 → 여유 시 드릴</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc3"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc3)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<text x="64" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 학습안내서 §2-02</text>
+</g>
+<g transform="translate(1068,702)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#0f766e"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">A3</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">개념이 안 잡힐 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#0f766e" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "교재 읽어도 이해가 안 되는 개념, 이렇게"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="428" y="152.5" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="middle">이야기형·웹툰형 교재 뷰</text>
+<text x="428" y="165.5" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="middle">(추가 캡처 필요)</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">교재리더 정독 — 틀린 문제 링크로 바로 이동</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">이야기형·웹툰형 교재 (유료) — 미영·선임 대화로</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">교재검색으로 용어·수치 찾기</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc4"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc4)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<clipPath id="cc5"><circle cx="75" cy="313" r="17"/></clipPath>
+<circle cx="75" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc5)"><image href="../../../../content/exams/carework/assets/characters/park-eunjung.svg" x="58" y="296" width="34" height="34"/></g>
+<text x="108" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 학습안내서 §2-03</text>
+</g>
+<g transform="translate(44,1058)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#0f766e"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">A4</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">매주 점검할 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#0f766e" text-anchor="end">~30초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "공부가 점수로 이어지는지, 주 1회 확인"</text>
+<rect x="394" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh394x66"><rect x="395" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh394x66)"><image href="../../../../content/exams/carework/docs/images/manual-g04-mock.webp" x="395" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="437" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">통합 모의고사</text>
+<rect x="298" y="66" width="86" height="153" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="341" y="136.5" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="middle">학습진단·주간 배분</text>
+<text x="341" y="149.5" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="middle">(추가 캡처 필요)</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">학습진단 (유료) — 취약 단원·오답 패턴</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">주간 배분으로 과목별 시간 배분</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">통합 모의고사 80문/90분 — 필기·실기 각</text>
+<text x="28" y="215" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">60%</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc6"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc6)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<text x="64" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 학습안내서 §2-04</text>
+</g>
+<g transform="translate(556,1058)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#0f766e"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">A5</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">시험이 임박했을 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#0f766e" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "D-14, 새 것보다 틀린 것이 점수"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="428" y="152.5" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="middle">취약 단원·수치 암기표</text>
+<text x="428" y="165.5" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="middle">(추가 캡처 필요)</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">취약 단원 상위부터 개념 학습·교재로 덮기</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">통합 모의고사 2~3일 간격 반복</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">수치·기준 암기표 마지막 주 반복</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc7"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc7)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<text x="64" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 학습안내서 §2-05</text>
+</g>
+<g transform="translate(1068,1058)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#0f766e"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">A6</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">여러 기기로 쓸 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#0f766e" text-anchor="end">~20초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "폰에서 하던 공부, PC에서 이어하기"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="428" y="152.5" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="middle">로그인·계정 화면</text>
+<text x="428" y="165.5" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="middle">(추가 캡처 필요)</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">설정 → 계정에서 로그인 (같은 수단으로)</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">클라우드 동기화 (유료) — 진도·기록 이어짐</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#0f766e" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">미로그인 시 기기별 별도 기록 — 한 기기 권장</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc8"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc8)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<text x="64" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 학습안내서 §2-06</text>
+</g>
+<rect x="24" y="1438" width="1552" height="1132" rx="14" fill="#fffdf8" stroke="#d6dce8"/>
+<text x="48" y="1474" font-size="17" font-weight="800" fill="#1f2937" text-anchor="start">B 시리즈 — 실무 (실무막뉴얼 §2)</text>
+<text x="48" y="1494" font-size="11.5" font-weight="600" fill="#64748b" text-anchor="start">현직 요양보호사 대상 · "앱보다 사람이 먼저" 톤 · 원문 정본: content/exams/carework/docs/실무막뉴얼.md</text>
+<g transform="translate(44,1508)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B1</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">처음 쓰는 날</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "요양원 기록, 폰으로 5분 세팅"</text>
+<rect x="394" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh394x66"><rect x="395" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh394x66)"><image href="../../../../content/exams/carework/docs/images/manual-01-guide.webp" x="395" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="437" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">3단계 안내</text>
+<rect x="298" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh298x66"><rect x="299" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh298x66)"><image href="../../../../content/exams/carework/docs/images/manual-13-finder.webp" x="299" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="341" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">기관 설정</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">홈 화면에 추가 → 3단계 안내 → 실무 모드</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">기관찾기로 기관 설정 → 서명 이름 저장</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">글자 크게·마이크 입력 확인</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc9"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc9)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<text x="64" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 실무막뉴얼 §2-01</text>
+</g>
+<g transform="translate(556,1508)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B2</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">근무 시작할 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~30초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "출근하면 일지부터 — 대상자당 3분"</text>
+<rect x="394" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh394x66"><rect x="395" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh394x66)"><image href="../../../../content/exams/carework/docs/images/manual-02-home.webp" x="395" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="437" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">홈</text>
+<rect x="298" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh298x66"><rect x="299" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh298x66)"><image href="../../../../content/exams/carework/docs/images/manual-03-form.webp" x="299" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="341" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">요양일지 입력</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">홈 — 오늘 날짜·기록 건수·다음 할 일</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">요양일지 작성 — 식사·수면·배변 표시</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">더보기 → 저장 (인수인계에 자동 집계)</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc10"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc10)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<clipPath id="cc11"><circle cx="75" cy="313" r="17"/></clipPath>
+<circle cx="75" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc11)"><image href="../../../../content/exams/carework/assets/characters/choi-boksun.svg" x="58" y="296" width="34" height="34"/></g>
+<text x="108" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 실무막뉴얼 §2-02</text>
+</g>
+<g transform="translate(1068,1508)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B3</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">다음 근무자에게 넘길 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "퇴근 전 인수인계, 카톡 말고 기록으로"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh376x66"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh376x66)"><image href="../../../../content/exams/carework/docs/images/manual-06-handover.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">인수인계서</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">더보기 → 오늘 기록으로 채우기 (일지·사고·방문</text>
+<text x="28" y="119" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">자동)</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">네 칸 검토 — 상태·미완료·주의·인계 확인</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">저장 → 인쇄 or 카톡 (이름·연락처 자동 가림)</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc12"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc12)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<clipPath id="cc13"><circle cx="75" cy="313" r="17"/></clipPath>
+<circle cx="75" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc13)"><image href="../../../../content/exams/carework/assets/characters/park-eunjung.svg" x="58" y="296" width="34" height="34"/></g>
+<text x="108" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 실무막뉴얼 §2-03</text>
+</g>
+<g transform="translate(44,1864)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B4</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">낙상이 났을 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~30초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "낙상 발생 — 순서대로만 하면 끝"</text>
+<rect x="394" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh394x66"><rect x="395" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh394x66)"><image href="../../../../content/exams/carework/docs/images/manual-09-card.webp" x="395" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="437" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">대처카드</text>
+<rect x="298" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh298x66"><rect x="299" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh298x66)"><image href="../../../../content/exams/carework/docs/images/manual-05-preview.webp" x="299" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="341" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">사고보고서</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">앱보다 사람 먼저 — 의식·호흡 확인, 심하면</text>
+<text x="28" y="119" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">119</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">대처카드 → 사고보고서 (유형·경위 자동 기입)</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">저장 → 시설장 보고 → 인수인계 반영</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc14"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc14)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<clipPath id="cc15"><circle cx="75" cy="313" r="17"/></clipPath>
+<circle cx="75" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc15)"><image href="../../../../content/exams/carework/assets/characters/choi-boksun.svg" x="58" y="296" width="34" height="34"/></g>
+<text x="108" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 실무막뉴얼 §2-04</text>
+</g>
+<g transform="translate(556,1864)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B5</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">응급 상황일 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~30초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "의식이 없다면 — 앱보다 119 먼저"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="428" y="152.5" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="middle">응급 대처카드 화면</text>
+<text x="428" y="165.5" font-size="9.5" font-weight="600" fill="#94a3b8" text-anchor="middle">(추가 캡처 or 재사용)</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">119 신고 — 주소·상태 전달, 상담원이 끊을</text>
+<text x="28" y="119" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">때까지</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">큰 소리로 도움 요청 → 상담원 안내대로</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">끝난 뒤: 대처카드 → 사고보고서 → 인수인계</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc16"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc16)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<text x="64" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 실무막뉴얼 §2-05</text>
+</g>
+<g transform="translate(1068,1864)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B6</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">보호자에게 보낼 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "보호자님께 한 장 요약, 5분이면"</text>
+<rect x="394" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh394x66"><rect x="395" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh394x66)"><image href="../../../../content/exams/carework/docs/images/manual-08-client.webp" x="395" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="437" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">수급자 카드</text>
+<rect x="298" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh298x66"><rect x="299" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh298x66)"><image href="../../../../content/exams/carework/docs/images/manual-15-mask.webp" x="299" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="341" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">이름 자동 가림</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">수급자 카드 → 주간리포트 (7일 기록 요약)</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">내용 검토 — 틀리면 원래 기록 수정 후 재생성</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">카톡·PDF 전송 — 이름·연락처 자동 가림</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc17"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc17)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<clipPath id="cc18"><circle cx="75" cy="313" r="17"/></clipPath>
+<circle cx="75" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc18)"><image href="../../../../content/exams/carework/assets/characters/choi-boksun.svg" x="58" y="296" width="34" height="34"/></g>
+<text x="108" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 실무막뉴얼 §2-06</text>
+</g>
+<g transform="translate(44,2220)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B7</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">기록 지키기</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "기록이 사라졌다고요? 폰 안에 있습니다"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh376x66"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh376x66)"><image href="../../../../content/exams/carework/docs/images/manual-01-share.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">공유·내보내기</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">늘 같은 휴대폰·홈 화면 아이콘으로</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">중요 서류는 그날 기관에 인쇄·PDF 제출</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">날을 정해 Excel로 받아 두기 (유료)</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc19"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc19)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<text x="64" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 실무막뉴얼 §2-07</text>
+</g>
+<g transform="translate(556,2220)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B8</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">기관 평가를 앞두고</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "기관 평가 전, 부족한 기록부터 채우기"</text>
+<rect x="376" y="66" width="104" height="185" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh376x66"><rect x="377" y="67" width="102" height="183" rx="5"/></clipPath>
+<g clip-path="url(#sh376x66)"><image href="../../../../content/exams/carework/docs/images/manual-10-audit.webp" x="377" y="67" width="102" height="183" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="428" y="263" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">평가점검</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">평가점검 — 4영역 20항목 체크</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">증적 커버리지 배너 — 부족 항목 확인</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">기관 점검표 불러오기 → 인쇄</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc20"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc20)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<clipPath id="cc21"><circle cx="75" cy="313" r="17"/></clipPath>
+<circle cx="75" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc21)"><image href="../../../../content/exams/carework/assets/characters/park-eunjung.svg" x="58" y="296" width="34" height="34"/></g>
+<text x="108" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 실무막뉴얼 §2-08</text>
+</g>
+<g transform="translate(1068,2220)">
+<rect width="496" height="340" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<path d="M0,14 Q0,0 14,0 H46 V28 H0 Z" fill="#7c3aed"/>
+<text x="23" y="19" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">B9</text>
+<text x="56" y="20" font-size="15" font-weight="800" fill="#1f2937" text-anchor="start">폰을 바꿨을 때</text>
+<text x="482" y="20" font-size="11" font-weight="700" fill="#7c3aed" text-anchor="end">~25초</text>
+<rect x="12" y="30" width="472" height="26" rx="7" fill="#f1f5f9"/>
+<text x="20" y="48" font-size="11.5" font-weight="700" fill="#334155" text-anchor="start">후킹 "폰 바꾸니 기록이 안 보인다면 — 사라진 게 아닙니다"</text>
+<rect x="394" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh394x66"><rect x="395" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh394x66)"><image href="../../../../content/exams/carework/docs/images/manual-11-import.webp" x="395" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="437" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">Excel 가져오기</text>
+<rect x="298" y="66" width="86" height="153" rx="6" fill="#1a2030" stroke="#3a4358" stroke-width="0.8"/>
+<clipPath id="sh298x66"><rect x="299" y="67" width="84" height="151" rx="5"/></clipPath>
+<g clip-path="url(#sh298x66)"><image href="../../../../content/exams/carework/docs/images/manual-11-template.webp" x="299" y="67" width="84" height="151" preserveAspectRatio="xMidYMid slice"/></g>
+<text x="341" y="231" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">명부 양식</text>
+<text x="14" y="82" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">따라하기 (C3)</text>
+<text x="14" y="104" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="104" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">예전 폰: 명부·근무표 Excel 내보내기</text>
+<text x="14" y="152" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="152" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">새 폰: 01번과 같은 첫 설정</text>
+<text x="14" y="200" font-size="11" font-weight="800" fill="#7c3aed" text-anchor="start">▸</text>
+<text x="28" y="200" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">Excel 가져오기로 복원 (일지·사고는 PDF</text>
+<text x="28" y="215" font-size="11.5" font-weight="600" fill="#334155" text-anchor="start">보관)</text>
+<line x1="14" y1="288" x2="482" y2="288" stroke="#eef2f7"/>
+<clipPath id="cc22"><circle cx="31" cy="313" r="17"/></clipPath>
+<circle cx="31" cy="313" r="17" fill="#eef2f7" stroke="#d6dce8"/>
+<g clip-path="url(#cc22)"><image href="../../../../content/exams/carework/assets/characters/miyoung.svg" x="14" y="296" width="34" height="34"/></g>
+<text x="64" y="318" font-size="10" font-weight="600" fill="#94a3b8" text-anchor="start">출처 실무막뉴얼 §2-09</text>
+</g>
+<rect x="24" y="2600" width="1552" height="104" rx="14" fill="#fff" stroke="#d6dce8" filter="url(#soft)"/>
+<text x="48" y="2630" font-size="13" font-weight="800" fill="#1f2937" text-anchor="start">자산 경로</text>
+<text x="48" y="2652" font-size="11" font-weight="600" fill="#64748b" text-anchor="start">캡처: content/exams/carework/docs/images/manual-*.webp (tools/illustrate/capture_manual.js로 추가 생성) · 캐릭터: content/exams/carework/assets/characters/*.svg</text>
+<text x="48" y="2672" font-size="11" font-weight="600" fill="#64748b" text-anchor="start">주의: B5는 앱 장면이 후반만 — 응급 처치(119·도움요청)를 먼저 보여준다. 사진·얼굴 화면 금지, 이름 가림은 자막으로 전달.</text>
+<text x="48" y="2692" font-size="11" font-weight="600" fill="#64748b" text-anchor="start">최종 컷은 "PassCare 검색" 텍스트를 크게 — QR은 보조 (쇼츠 시청자는 스마트폰으로 시청 중).</text>
+<text x="24" y="2730" font-size="11" font-weight="600" fill="#94a3b8" text-anchor="start">PassCare 숏츠 시리즈 콘티 — 의뢰서: 유튜브-숏츠-시리즈-제작의뢰서.md (DOC-BIZ-08)</text>
+</svg>
