@@ -5,15 +5,17 @@ import { markFunnel } from '../care-funnel.js';
 import { listIncidents, saveIncident, removeIncident } from '../incident-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
-import { myMembership, submitIncident, listIncidents as listFacilityIncidents, docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
+import { myMembership, submitIncident, listIncidents as listFacilityIncidents, docHeadHtml, docSignHtml, refreshOrgName, signFileToDataUri } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docMdHead, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
-import { getJSON, removeItem } from '../../../core/storage.js';
+import { getJSON, setJSON, removeItem } from '../../../core/storage.js';
 import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
+export { careIncidentVoiceToggle } from '../care-voice.js';
+import { voiceButtonsInit } from '../care-voice.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -24,9 +26,12 @@ const _val = (id, fb) => {
 let _facility = null;
 let _fiList = [];
 let _lastText = null;
+const PHOTO_MAX = 3; // 첨부 사진 한도 — localStorage 쿼터 보호
+/** @type {string[]} */ const _photos = [];
 
 function readForm() {
     return {
+        photos: _photos.slice(),
         date: _val('inc-date', ''),
         time: _val('inc-time', ''),
         ...clientField('inc-client'),
@@ -46,7 +51,8 @@ export function careIncidentGenerate() {
     if (!out) return;
     if (!t) { out.innerHTML = '<p class="care-calc-err">일시·대상자·사고 유형을 입력하세요.</p>'; return; }
     _lastText = t;
-    out.innerHTML = docHeadHtml('사고·낙상 보고서') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['보고자', 'author'], ['확인(시설장)', 'confirmer']]);
+    out.innerHTML = docHeadHtml('사고·낙상 보고서') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['보고자', 'author'], ['확인(시설장)', 'confirmer']])
+        + (_photos.length ? `<div class="care-photo-grid">${_photos.map(p => `<img src="${p}" alt="첨부 사진">`).join('')}</div>` : '');
 }
 
 /** 보고서 MD 초안 — 헤더 + 폼 생성문 (docx 파생 원본) */
@@ -67,7 +73,11 @@ export function careIncidentSave() {
     careIncidentGenerate();
     if (!_lastText) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
     const r = saveIncident({ ...readForm(), text: _lastText });
-    if (r.ok) { showToast('보고서를 기록했습니다.'); renderSaved(); flashSavedBadge($('inc-saved')); }
+    if (r.ok) {
+        // 반복 입력 자동 기입 — 장소·성명·시간대·목격자는 다음 보고서에 기본값으로 (시니어 입력 부담 감소)
+        setJSON(STORAGE_KEYS.CARE_LAST_INCIDENT, { place: _val('inc-place', ''), client: _val('inc-client', ''), time: _val('inc-time', ''), witness: _val('inc-witness', '') });
+        showToast('보고서를 기록했습니다.'); renderSaved(); flashSavedBadge($('inc-saved'));
+    }
 }
 
 export function careIncidentPrint() {
@@ -98,7 +108,7 @@ function renderSaved() {
     const items = listIncidents();
     host.innerHTML = items.length
         ? items.map(x => `<div class="care-log-saved-item">
-            <span>${esc(x.date)} · ${esc(x.client)} — ${esc(incidentTypeLabel(x.type))}</span>
+            <span>${esc(x.date)} · ${esc(x.client)} — ${esc(incidentTypeLabel(x.type))}${x.photos?.length ? ` 📷${x.photos.length}` : ''}</span>
             <button data-click="careIncidentDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button>
           </div>`).join('')
         : '<p class="care-log-empty">저장된 보고서가 없습니다.</p>';
@@ -142,8 +152,32 @@ export async function careIncidentFacilitySubmit() {
     void renderFacility();
 }
 
+/** 사진 추가 버튼 — 숨긴 file input 트리거 (최대 PHOTO_MAX장) */
+export function careIncidentPhotoPick() {
+    if (_photos.length >= PHOTO_MAX) { showToast(`사진은 최대 ${PHOTO_MAX}장까지 첨부됩니다.`, 'error'); return; }
+    /** @type {HTMLInputElement|null} */ ($('inc-photo-file'))?.click();
+}
+
+export async function careIncidentPhotoRemove(idx) {
+    const i = Number(idx);
+    if (!(i >= 0 && i < _photos.length)) return;
+    if (!await showConfirm('이 사진을 삭제할까요?', '사진 삭제')) return;
+    _photos.splice(i, 1);
+    _renderPhotos();
+    careIncidentGenerate(); // 미리보기 갱신
+}
+
+function _renderPhotos() {
+    const host = $('inc-photo-list');
+    if (!host) return;
+    host.innerHTML = _photos.map((p, i) =>
+        `<span class="care-photo-thumb"><img src="${p}" alt="첨부 사진 ${i + 1}"><button type="button" class="care-photo-del" data-click="careIncidentPhotoRemove" data-arg="${i}" title="사진 삭제">✕</button></span>`
+    ).join('') || '<span class="care-log-hint">현장·상해 부위 등 사진을 첨부하면 출력물에 함께 표시됩니다 (최대 3장)</span>';
+}
+
 export function initCareIncidentView() {
     markFunnel('tool:care-incident');
+    voiceButtonsInit(); // 음성 입력 미지원 브라우저는 🎤 숨김
     attachClientPicker(/** @type {HTMLInputElement|null} */ ($('inc-client')));
     const d = /** @type {HTMLInputElement|null} */ ($('inc-date'));
     if (d && !d.value) d.value = todayKey();
@@ -160,6 +194,25 @@ export function initCareIncidentView() {
         if (draft.type && t) /** @type {HTMLSelectElement} */ (t).value = draft.type;
         if (draft.desc) { const de = /** @type {HTMLInputElement|null} */ ($('inc-desc')); if (de) de.value = draft.desc; }
     }
+    // 마지막 저장값 자동 기입 — 반복 입력(장소·성명·시간대·목격자) 기본값 복원 (빈 필드만)
+    const last = getJSON(STORAGE_KEYS.CARE_LAST_INCIDENT);
+    if (last && typeof last === 'object') {
+        for (const [k, v] of Object.entries(last)) {
+            const el = /** @type {HTMLInputElement|null} */ ($(`inc-${k}`));
+            if (el && !el.value && typeof v === 'string' && v) el.value = v;
+        }
+    }
+    // 사진 첨부 — 파일 선택 시 리사이즈 dataURI로 변환해 썸네일에 추가 (재진입 시 onchange 재할당 → 중복 바인딩 없음)
+    const pf = /** @type {HTMLInputElement|null} */ ($('inc-photo-file'));
+    if (pf) pf.onchange = async () => {
+        for (const file of [...(pf.files || [])].slice(0, PHOTO_MAX - _photos.length)) {
+            try { _photos.push(await signFileToDataUri(file)); }
+            catch { showToast('사진을 읽지 못했습니다.', 'error'); }
+        }
+        pf.value = '';
+        _renderPhotos();
+    };
+    _renderPhotos();
     renderSaved();
     void renderFacility();
     void refreshOrgName();

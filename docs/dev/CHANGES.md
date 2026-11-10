@@ -1,6 +1,180 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-09 docs(carework): 실무매뉴얼 전면 갱신 — 항목별 삽화 규약·신규 기능 반영
+
+- 그룹명·순서 최신화 (대상자·돌봄/기관·행정/기관·자료, 우리 서식 항목 추가), 사진 첨부·음성 입력·3컷 안내·더보기·자동 기입·저장 배지·다음 행동 안내·확인 창 반영
+- 항목별 `> 📷 삽화 예정` 자리 + 파일명 규약(`images/manual-<번호>-<기능>.webp`)을 문서 상단에 명기 — 삽화 삽입 시 `![]()`로 교체하면 됨
+- 무료/Pro 표에 AI 초안·사진·음성·Word 항목 추가, "유료" 표기로 용어 정합
+- 삽화 파이프라인: tools/illustrate/capture_manual.js — Playwright 시드+뷰 캡처→webp, 가명 시드 규약, manual-02-home·manual-05-preview 2장 파일럿 산출·삽입
+- 삽화 12장 추가 산출 — 홈·서명·폼·미리보기·명부·카드·점검표·인수인계·서식·인식미리보기·사이드바·3컷 안내 (남은 자리는 합성·상태 캡처 튜닝 후)
+- 삽화 6장 추가 — 배지·방문결과·근무표·평가점검·계산·기관찾기 (남은 3자리는 숨김 요소 타이밍 튜닝 후)
+- finder 재캡처(첫 카드만)·badge 자리 복원 — 뷰 로드 타임아웃 지속
+- CI 트리거 주석: capture_manual에 워밍업 필요성 명기(코드 영향 커밋으로 풀 CI 유도)
+- 상황별 따라하기 문서화: 번들 HTML을 정적 페이지로 변환(CSP script-src 'self'에서도 렌더 — 인라인 스크립트 제거), 매뉴얼 머리말에 링크 추가
+- a11y 스캔 정정: 설정 패널 검사를 #settings-panel 범위로 한정 — 패널에 일시 가려진 배경 버튼의 target-size 오측정 제외 + .btn-sm 최소 너비 24px 보장
+- 사이드바 그룹 간격: .nav-group-label 상단 패딩 16px → 15px
+- 사이드바 그룹 간격: .nav-group-label 상단 패딩 16px → 15px
+- 사이드바 그룹 간격: .nav-group-label 상단 패딩 16px → 15px
+- 네비 순서 수정: 모바일 탭 기관가입·관리를 기관찾기·서식 앞으로 (사이드바 부분열 계약)
+- 테스트 정합: care-funnel 커버리지 단언을 신규 레이블(관찰·방문기록)에 맞춤
+- 리뷰 6차 반영: 증적 커버리지 배너 레이블 정정('관찰(obs)'→관찰, '방문·면회'→방문기록 — 내부 코드 노출·항목 수 착시 수정), 10-audit 단일 캡처(워밍업), 배지 캡션 축소
+- 리뷰 5차 반영: 깨진 합성 4장 롤백/재촬영(01-more 정상본 복원·badge/home/forms 단일 캡처), 캡션 실제 내용 맞춤, shotPng 오버레이 제거(토스트 섞임 근본 원인)
+- 리뷰 4차 반영: 사이드바 라벨 기준 메뉴명 통일(수급자·기관양식 — 뷰 제목·§1 표·§8/§11 제목), PassOK/Care OS 브랜드 설명, finder 링크 문구 정정, 인계 확인 서명 기입 재캡처, 합성 캡처(더보기·홈·서식·배지), 배경 단색 통일
+- 배지 블러 수정 — 업스케일 제거(축소 전용 리사이즈) + 배지 샷 DSF2 고해상도 컨텍스트
+- 리뷰 3차 반영: 인수인계 "인계 확인" 줄 서명 자동 기입(앱 버그), Pro 표 근무표 행 복구(30건 한도), 유료 배지 의미 명시, 실무 매뉴얼 메뉴 행, 애니메이션 비활성·원본폭 캡처 (남은 3자리)
+- 리뷰 2차 반영: 스토리지 스코프(carework:) 시드로 기록·서명 표시, 배경 산수화 제거·폭 924px 통일, 더보기 합성·저장 배지 캡처, 근무표 저장 유료 표기 정정, 카드 3단계 표기, '우리 서식' 뷰 제목 통일 (남은 3자리)
+- 리뷰 반영: 기관 공유 항목에 (재개통 시) 표기, 내보내기 표에 인명 가림 열 추가(인쇄·Excel=원문/복사·PDF·Word·공유=가림), 사진 비가림 경고, §16 무료 체험 문구, 근무표 xlsx 왕복 명시, 기관찾기 재가 한계, 본인부담금 실제 부담률(9/6·12/8%)·수급자 면제·시설 비급여, "기본 점검표" 용어, 부록 맨 끝 이동, ⑫(비활성) 표기, 삽화 규약을 manual-<섹션>-<슬러그> + 파일명 인라인으로 정교화(삽화 19→21 자리)
+
+## 2026-11-09 feat(carework): 기관찾기·서식모음 별도 그룹 — "기관·자료"
+
+- 사이드바 "대상자·준비"의 기관찾기 + "기관·출력"의 서식모음을 신규 그룹 "기관·자료"로 분리해 네비게이션 맨 끝에 배치 — 참조·자료 계열이 주 흐름 아래에 위치, 모바일 탭도 동일 순서
+- "기관·출력" → "기관·행정"으로 그룹명 정정 — 평가점검·우리 서식·본인부담금이 모두 행정 업무라 '출력'은 부정확
+- "대상자·준비" → "대상자·돌봄"으로 그룹명 정정 — 명부(누구를 돌보는가)+대처카드(어떻게 돌보는가)를 요양 현장 용어로 묶음
+
+## 2026-11-09 feat(carework): AI 초안 유료화 — care_ai_draft 피처 등록
+
+- AI 초안(요양일지·인수인계)을 유료 피처로 전환 — 버튼 "유료" 배지 + proFeatureNotice 호출, feature-plan.json care_ai_draft 등록
+
+## 2026-11-09 fix(carework): 음성 입력 핸들러 뷰별 별칭 — 지연 핸들러 유니크 계약 준수
+
+- careVoiceToggle을 두 뷰 리스트에 등록해 핸들러 전체 유니크 계약 위반 — careIncidentVoiceToggle·careVisitVoiceToggle 별칭으로 분리, 영향 테스트 care-views 53/53 통과
+
+## 2026-11-09 feat(carework): 음성 입력 — Web Speech API 말로 입력
+
+- 공용 care-voice.js — ko-KR 인식 토글, 미지원 브라우저는 🎤 버튼 숨김(webkitSpeechRecognition 폴백), 인식 결과를 대상 필드에 이어 붙임
+- 적용 필드: 사고보고 발생 경위·조치 내용, 방문 결과 특이사항 — 시니어 타자 부담 감소 (긴 서술 필드 우선)
+
+## 2026-11-09 feat(carework): 실무 모드 첫 진입 3컷 안내 — 기록→생성→인쇄 흐름
+
+- Care OS 홈 상단에 첫 진입 안내 카드 — "기록하기→문서 생성→인쇄·공유" 3단계 타일, "알겠어요"로 닫으면 CARE_GUIDE_SEEN 플래그 저장해 재노출 없음 (시니어 사용자 사용법 자체 안내)
+
+## 2026-11-09 feat(carework): 방문기록 사진 첨부 Phase 2 + IndexedDB 분리 저장소 검토
+
+- 방문 결과 기록에 사진 최대 3장 — result.photos로 병합 저장, 재기록 시 복원, 문서 말미 "📷 첨부 사진" 섹션으로 출력·PDF 포함 (표 구조 문서라 말미 병기)
+- IndexedDB 검토: 사진 dataURI는 장당 ~150-350KB라 FREE_LIMIT 10건×3장 ≈ 6-10MB로 localStorage 쿼터(~5MB) 초과 리스크 확정 — 장기적으로 레코드는 참조(idb 키)만 갖고 바이너리는 IndexedDB 분리가 필요. 단 현재는 signFileToDataUri 리사이즈 + 3장 한도 + 쿼터 실패 토스트로 단기 완화, 백업·동기화 파이프라인 영향(레코드 외 저장소) 검토 후 별도 단계로 이전
+
+## 2026-11-09 feat(carework): 사고보고 사진 첨부 Phase 1 — 현장·상해 사진 최대 3장
+
+- 폼에 "📷 사진 추가" — 선택 이미지는 signFileToDataUri(canvas 리사이즈→dataURI)로 변환, 썸네일+삭제(확인) — localStorage 쿼터 보호로 최대 3장
+- 저장: incident 레코드 photos[] 필드로 병합, 저장 목록에 📷N 표시
+- 출력: 생성 프리뷰에 care-photo-grid로 이미지 렌더 → 인쇄·PDF 경로에서 그대로 포함 (html2canvas 이미지 settle 처리 기존)
+- 계약 테스트 — 한도·삭제 확인·저장 필드·핸들러 등록·onchange 바인딩 소스 계약
+
+## 2026-11-09 feat(carework): 시니어 사용성 — 홈 다음 행동 안내 + 용어 순화
+
+- B⑤ 홈 "다음 행동 안내": 건수 요약 아래 오늘 해야 할 일 안내 추가 — 기록 0건이면 「요양일지 기록」부터, 기록이 있으면 「인수인계」로 마무리 안내 (근무 흐름 순서)
+- B⑦ 용어 순화: PRO 배지 20곳 → "유료"로 교체(전 뷰 일괄), "기관 서식으로 등록" 버튼 → "우리 기관 서식으로 등록" — "기관 양식"은 이미 "우리 기관 서식"으로 정리돼 있었음
+- 계약 테스트 — home-next 안내 렌더 계약 추가
+
+## 2026-11-09 feat(carework): 시니어 사용성 — 저장 확인 배지 전면 적용 + 파괴 동작 확인 감사
+
+- A③ 저장 확인 가시화: "✓ 기기에 저장됨 · 방금" 배지(flashSavedBadge)를 저장 가능한 전 뷰에 적용 — 수급자 명부·양식 저장·기입 문서 저장에 추가 (기존 인수인계·사고보고·일지·방문은 적용돼 있었음)
+- A⑥ 파괴 동작 확인 감사: 삭제 8곳은 이미 확인 있음. 누락 3곳 보완 — 점검 초기화(careAuditReset)·기본 점검표 복원(careAuditFileReset)·계산기 초기화(careCalcReset)에 showConfirm 추가
+- 계약 테스트 확장 — 파괴 동작 showConfirm·저장 배지 전 뷰 적용을 소스 계약으로 고정
+
+## 2026-11-09 feat(carework): 시니어 사용성 — 액션 버튼 더보기 접기 + 반복 입력 자동 기입
+
+- A② 액션 버튼 단순화: 인수인계·사고보고·요양일지의 보조 버튼(AI 초안·저장·기관 공유·제공기록지 등)을 `<details>` "더보기"로 접고 생성·공유·내보내기만 노출 — JS 없는 details/summary 패턴, `.care-more-actions` 공용 스타일
+- A④ 반복 입력 자동 기입: 인수인계(근무조·인계자·인수자)·사고보고(장소·성명·시간대·목격자)를 저장 시 persist, 다음 진입 시 빈 필드에 복원 — CARE_LAST_INCIDENT/CARE_LAST_HANDOVER 키, 서명 기본값 우선
+- 계약 테스트 tests/unit/exams/carework-autofill.test.js 추가
+
+## 2026-11-09 fix(ui): '가 글자 크게' 잔재 제거 — ui-mode 토글 문자열·템플릿 2곳 정정
+
+- applyFontScale이 토글 때마다 레이블을 '가 글자 크게/더 크게'로 덮어써 HTML만 고치면 되돌아오는 구조였음 — ui-mode.js 문자열 + index.template.html(사이드바·모바일 탭) 정정으로 '글자 크게/글자 더 크게' 통일
+
+## 2026-11-09 fix(ui): 대시보드 배지 글자 크기 불일치 — '오늘 미션'과 '이번 주 N/5일' 통일
+
+- .daily-challenge-badge는 .badge 기본 크기(더 큼), .weekly-goal-chip만 --text-sm이라 같은 행의 배지 쌍 글자 크기가 달랐음 — chip과 동일한 --text-sm로 통일
+
+## 2026-11-09 docs(print): 표 출력 규약 정리 — 인쇄 표 표시 규칙 명문화
+
+- AGENTS.md 코드 규칙에 표 출력 규약 추가: 위아래 수평선만·이중선 금지·반투명 테두리/저알파 틴트 회색 통일·분할은 조정당 재측정+rowspan 통째 이동·넓은 표 축소·th 정리(fixPrintLines/_fixTableExtras/_fixBorder/_fixTableFrame 4경로 공유 + print.css 선언형 안전망 동기화)
+- pdf-utils.js 표 보정부 상단에 동일 규약 블록 주석 — 규칙 변경 시 양쪽 동기화 명시
+
+## 2026-11-09 feat(print): 인쇄 표 전면 정리 — rowspan 분할·넓은 표 축소·선/배경 정돈 (CO-20/CO-21)
+
+- rowspan/colspan 대응 분할: 경계가 rowspan 그룹 내부면 확장 셀이 앞 표에 남아 뒤 행이 깨지는 결함 — 그룹 시작 행부터 옮기는 판정 추가 (_cutsWithTableSplit)
+- 넓은 표 우측 절단: 부모 폭을 넘는 table은 font-size 축소(하한 0.65)로 페이지 내 수용
+- 선 정돈: 래퍼 하단 테두리 제거(마지막 행 td 선과 이중선), group-start 청록 구분선→인쇄 회색, th 이중선/nowrap/sticky 정리는 기존 항목 흡수
+- 배경 정돈: TH 저알파 틴트→인쇄 회색, 극저알파 지브라(α<0.15, lum>0.9)→#f9fafb 복원
+- _fixHeaderBand를 _fixTableExtras(TH·TD·TABLE 통합)로 재구성, fixPrintLines·styled 워크 공용 적용
+- print.css에 동일 규약 선언형 추가 — beforeprint 미지원 환경 안전망
+- e2e·유닛 계약 확장 — rowspan 판정·축소·테두리·배경 실측
+
+## 2026-11-09 fix(print): 표 헤더 이중선 + 외곽 수직선 정리 — 인쇄 표 라인 정돈
+
+- 헤더 이중선: th에 border-bottom:2px(reader-mermaid.css) + box-shadow 0 2px 0(reader.css)이 동시 적용돼 선 두 겹 — border-bottom만 남기고 shadow 제거
+- 우측 수직선: .reader-table-wrapper의 좌우 테두리가 표보다 넓어 내용과 떨어진 수직선으로 출력 — 인쇄물은 위아래 수평선만 남기고 좌우 테두리 제거
+- th white-space:nowrap → normal — 넓은 표가 페이지 폭을 넘어 우측에서 잘리는 것 방지
+- e2e — shadow 'none'·whiteSpace 'normal'·우측 테두리 '0px' 실측, 유닛 계약 추가
+
+## 2026-11-09 fix(ui): 글자 크게 버튼 레이블 중복 제거 — '가 글자 크게' → '글자 크게'
+
+- dashboard·care-home의 글자 크기 토글 — fa-text-height 아이콘이 이미 있어 '가' 접두는 중복 아이콘 문자라 제거
+
+## 2026-11-09 fix(print): 표 헤더의 컬러 틴트 배경이 출력물에 남던 결함 — 헤더 밴드 인쇄 회색 정규화
+
+- .reader-table th 배경이 --primary-tint-12(rgba(6,182,212,0.12) 청록)라 밝기 판정(lum>0.25)을 통과해 PDF에 컬러 밴드로 출력 (실무매뉴얼 실측). 표마다 bg-deep(→transparent)/틴트가 달라 "일부에만" 컬러로 보이던 편차 원인
+- _fixHeaderBand 추가 — TH의 저알파(α<0.4) 컬러 틴트만 #f3f4f6(--print-bg-subtle)로 정규화, 진한 원색은 유지. fixPrintLines·styled 워크 양쪽 적용
+- e2e — th 배경이 rgb(243,244,246)로 정규화되는지 실측 검증, 유닛 계약 추가
+
+## 2026-11-09 fix(print): 표·hr 테두리가 출력물에서 사라지던 결함 — 반투명 백색 테두리 인쇄 회색 보정
+
+- 다크 테마 --border-color는 rgba(255,255,255,0.12) 반투명 백색 — styled 워크가 color/background만 보정하고 border는 미처리라 표 위아래 구분선이 백지에서 소실 (실측 wrapBorder=rgba(255,255,255,0.12))
+- fixPrintLines 신설(공용, 원복 지원): 선폭이 있는 테두리 중 알파<0.4 또는 밝기>0.85인 것만 #e5e7eb(--print-border 동일 톤)로 변별 교체 — styled/plain/window.print/인쇄창 4경로 적용
+- box-shadow 구분선 유지: 무확산 '0 Npx' 라인(.reader-table th 밑줄 등)은 구분선이라 제거하지 않고 장식 그림자만 제거 — 헤더 구분선 소실 함께 해소
+- e2e — 반투명 테두리→rgb(229,231,235)·th box-shadow 유지 실측, 유닛 계약 추가
+
+## 2026-11-09 feat(print): mermaid 출력 WYSIWYG 하이브리드 — 다이어그램 상자 색상을 화면 그대로 출력
+
+- 사용자 요구로 정책 전환: 백지 정규화(밝은 틴트+검정 글자) → 화면 색상 유지 (페이지는 여전히 흰색 — 구성 요소만 색 유지)
+- fixMermaidPrintContrast 재구성: 색 보정 대신 print-color-adjust: exact(인라인 !important) 부여 — 브라우저 인쇄의 CSS 배경 생략 방지. 미렌더 원문 블록만 백지 보정 유지
+- pdfFileFromElStyled 워크가 pre.mermaid 서브트리 스킵 — 라벨·상자 색 무변경
+- css/print.css에 pre.mermaid * {print-color-adjust:exact} 안전망 — beforeprint 미지원 브라우저도 동작
+- 효과: 다크모드는 어두운 상자+흰 라벨, 라이트모드는 파스텔 상자+남색 라벨이 화면 그대로 출력
+- 규약 갱신: AGENTS.md·reader-mermaid.css 헤더 — 대비는 --mermaid-* 토큰이 보장, 토큰 변경 시 화면·출력 함께 변하니 대비 동반 검증
+- e2e·유닛 계약 전면 갱신 — 색 보존 실측 + 미렌더 폴백 + exact 적용 검증
+
+## 2026-11-09 docs+test: mermaid 출력 보정 규약 정착 — 향후 확장 시 재발 방지
+
+- 유닛 계약 테스트 확장 — 'important' 우선순위 적용·우선순위 보존 원복·color/background 보정·pre/svg 루트 커버를 소스 계약으로 고정
+- css/reader-mermaid.css 헤더에 출력 보정 규약 주석 — !important 전 규칙이므로 보정도 'important' 필수, 신규 규칙 시 보정 판정 동반 갱신
+- AGENTS.md 코드 규칙(CSS 절)에 동일 규약 명문화
+
+## 2026-11-09 fix(print): mermaid 보정 !important 우선순위 — 실제 다이어그램에서 보정이 무력화되던 근본 원인
+
+- reader-mermaid.css의 .nodeLabel/.node rect/.edgeLabel 등 전 규칙이 !important라 우선순위 없는 인라인 보정이 실제 mermaid DOM에서 전부 패배 — 어두운 상자(#33334a)·흰 라벨(#fff)이 출력물에 그대로 남음 (합성 SVG 테스트만 통과하던 사각지대)
+- fixMermaidPrintContrast의 set()이 setProperty(prop, val, 'important')로 적용 + 우선순위까지 보존해 원복
+- e2e 픽스처에 !important 규칙 주입(.node rect/.nodeLabel)해 실제 오버라이드 경로를 재현 검증
+
+## 2026-11-09 fix(print): mermaid svg 루트 다크 배경 보정 — 다이어그램 전체가 검정 배경으로 출력되던 결함
+
+- 다크 테마 themeVariables.background(#1a1a2e)가 svg 루트에 어두운 배경을 그림 — 보정 선택자가 `pre.mermaid svg *`라 루트가 빠져 window.print·인쇄 창 경로에서 다이어그램 전체가 검정 배경+검정 글자로 출력 (styled PDF는 기존 HTML 보정이 덮어 정상이었음)
+- 선택자를 `pre.mermaid, pre.mermaid *`로 확장 — pre·svg 루트의 어두운 배경도 transparent 보정
+- e2e — svg 루트 background가 transparent로 보정되는지 실측 검증 추가
+
+## 2026-11-09 fix(print): mermaid foreignObject 라벨 color 추가 보정 — window.print 경로 흰 글자 묻힘
+
+- 최신 mermaid는 노드 라벨을 foreignObject HTML(color)로 렌더 — fill/stroke만 다루던 보정이 color를 놓쳐, color 보정이 없는 경로(window.print·참조자료 인쇄 창·plain PDF)에서 밝게 틴트된 상자 위 흰 글자가 묻힘
+- fixMermaidPrintContrast에 color(밝기>0.7→#000)·backgroundColor(<0.25→transparent) 보정 추가 — 4개 출력 경로 전부 일관 대비
+- e2e — foreignObject 라벨 검정 검증 + initPrintPrep beforeprint 보정/afterprint 원복 실측(라이브 DOM) 추가
+
+## 2026-11-09 fix(print): mermaid 출력 대비 보정 — 다크 테마 SVG가 백지에서 같은 계열로 묻히던 결함
+
+- pdf-utils.js fixMermaidPrintContrast 신설 — 다크 테마로 렌더된 mermaid SVG의 어두운 도형 채우기는 색상 계열을 유지한 밝은 틴트로, 밝은 글자·선은 어둡게 보정. 기존 HTML 색 보정은 color/background만 다뤄 SVG fill/stroke가 빠져 "어두운 상자+검정 글자"로 대비 붕괴
+- 4개 출력 경로 일괄 적용 — pdfFileFromElStyled(클론)·pdfFileFromEl(live 복원)·initPrintPrep beforeprint(window.print 라이브, afterprint 원복)·html-viewer 참조자료 인쇄 창(별도 창 getComputedStyle)
+- 라이트 테마 렌더분은 판정상 거의 무변경 — 양쪽 테마 공통 적용
+- tests/e2e/pdf-pagination.spec.js — 회귀 추가(다크 색상 SVG → 채우기 밝기·선 어둡기·글자 검정 실측 검증), 스텁이 attach 상태에서 svgFills 채취
+- 참고: tsc checkJs에서 JSDoc 선택 매개변수 `[name]` 뒤 em-dash(—)는 TS1127 유발 — 하이픈 사용
+
+## 2026-11-09 fix(pdf): 같은 페이지 중복 표 헤더 수정 — 분할 수렴 반복을 1건 단위 재측정으로
+
+- _cutsWithTableSplit — 한 번 측정한 경계 목록으로 연속 분할하던 것을 조정 1건 적용 후 즉시 경계 재측정으로 변경. thead 복제(높이만큼 뒤쪽 내용 밀림) 후 낡은 경계로 쪼개면 복제 헤더가 페이지 중간·끝에 출력돼 같은 페이지에 헤더가 2~3회 나오던 결함 (실브라우저 재현: 페이지 끝 고아 thead·연속 고아 thead 확인)
+- 경계가 헤더·첫 행을 가르는 경우 분할 대신 표 앞 스페이서로 표 전체를 다음 페이지로 — 페이지 끝 헤더만 남는 고아 표 방지
+- 경계가 행 중간(페이지보다 큰 행의 고정 절단)일 때는 분할 생략 — 복제 헤더가 경계 위 같은 페이지에 찍히는 경로 차단
+- tests/e2e/pdf-pagination.spec.js — 회귀 테스트 추가(비균일 행 높이 3페이지+ 표에서 분할 표 상단이 페이지 시작 절단선과 일치 검증) + html2canvas 스텁이 attach 상태에서 레이아웃 캡처하도록 보강 (wrap은 finally에서 제거돼 사후 측정이 전부 0이던 무력화 수정 — 삽화 테스트도 동일 경로로 실측화)
+
 ## 2026-11-09 perf(deploy): 배포 파이프라인 속도 개선 — 게이트 자동복구·CI 대기 병행
 
 - DEPLOY_PIPELINE_DESIGN.md (DOC-DSN-90) — 시간 분해·개선안 설계 정본

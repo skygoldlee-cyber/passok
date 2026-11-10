@@ -11,6 +11,8 @@ import { listVisits } from '../care-visit-store.js';
 import { listIncidents } from '../incident-store.js';
 import { myMembership, submitHandover, listHandovers as listFacilityHandovers, ackHandover, docHeadHtml, docSignHtml, getDocSign, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
+import { getJSON, setJSON } from '../../../core/storage.js';
+import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
 import { careShare } from '../care-share.js';
 import { docMdHead, docMdSign } from '../doc-md.js';
@@ -101,6 +103,8 @@ export function careHandoverSave() {
     if (isCurrentSaved()) { showToast('이미 기록에 저장된 인수인계입니다.'); return; }
     const s = ensureSaved();
     if (s.error) { showToast(s.error, 'error'); proFeatureNotice('care_handover_save', '인수인계 저장'); return; }
+    // 반복 입력 자동 기입 — 근무조·인계자·인수자는 다음 인수인계 기본값으로
+    setJSON(STORAGE_KEYS.CARE_LAST_HANDOVER, { shift: _val('ho-shift', ''), from: _val('ho-from', ''), to: _val('ho-to', '') });
     showToast('기록에 저장했습니다.');
 }
 
@@ -205,6 +209,14 @@ export function initCareHandoverView() {
     if (fromEl && !fromEl.value) fromEl.value = sign.author;
     const toEl = /** @type {HTMLInputElement|null} */ ($('ho-to'));
     if (toEl && !toEl.value) toEl.value = sign.receiver;
+    // 마지막 저장값 자동 기입 — 근무조·인계자·인수자 반복 입력 복원 (빈 필드만, 서명 기본값 우선)
+    const last = getJSON(STORAGE_KEYS.CARE_LAST_HANDOVER);
+    if (last && typeof last === 'object') {
+        for (const [k, v] of Object.entries(last)) {
+            const el = /** @type {HTMLInputElement|null} */ ($(`ho-${k}`));
+            if (el && !el.value && typeof v === 'string' && v) el.value = v;
+        }
+    }
     renderSaved();
     void renderFacility();
     void refreshOrgName();

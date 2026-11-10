@@ -8,7 +8,7 @@ import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docMdHead, csvToMdTable, mdToHtml, docMdSign } from '../doc-md.js';
 import { docHeadHtml, getDocSign, refreshOrgName } from '../facility.js';
-import { showToast, showConfirm } from '../../../ui-utils.js';
+import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
 import { clientTimeline, timelineSummary } from '../care-timeline.js';
 import { clientTrends } from '../care-trend.js';
 import { weeklyReport } from '../care-report.js';
@@ -57,7 +57,7 @@ export function careClientSave() {
     const f = readForm();
     if (!f.name) { showToast('수급자 성명을 입력하세요.', 'error'); return; }
     const r = addClient(f, _editId || undefined);
-    if (r.ok) { showToast(_editId ? '수급자 정보를 수정했습니다.' : '수급자를 등록했습니다.'); clearForm(); renderList(); }
+    if (r.ok) { showToast(_editId ? '수급자 정보를 수정했습니다.' : '수급자를 등록했습니다.'); clearForm(); renderList(); flashSavedBadge($('cli-list')); }
 }
 
 export function careClientNew() { clearForm(); }

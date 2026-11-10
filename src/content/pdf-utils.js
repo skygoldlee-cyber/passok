@@ -117,7 +117,9 @@ function _blockCuts(el, availPx) {
  * 페이지 경계를 가로지르는 표 분할 — 경계가 지나는 table을 둘로 쪼개 뒷부분을
  * thead·colgroup 복제 새 표로 옮긴다. 캔버스 슬라이스 PDF는 window.print()와 달리
  * thead 자동 반복이 없어 둘째 장부터 헤더 없이 이어지는 결함의 대응.
- * 분할은 레이아웃을 바꾸므로 경계 재측정을 수렴까지 반복한다.
+ * 분할·스페이서는 레이아웃을 바꿔 뒤쪽 경계를 전부 무효화하므로, 한 번 측정한
+ * 경계 목록으로 연속 분할하면 복제 thead가 페이지 중간에 찍힌다 — 조정은 1건 적용
+ * 후 즉시 경계를 재측정하는 수렴 반복으로만 수행한다.
  * 대상 DOM의 행을 실제 이동시키므로 폐기용 클론·렌더 전용 컨테이너에만 사용한다. (@spec CO-21)
  * @param {HTMLElement} root
  * @param {number} availPx 한 페이지 본문 용량 (css px)
@@ -125,10 +127,11 @@ function _blockCuts(el, availPx) {
  */
 function _cutsWithTableSplit(root, availPx) {
     const top0 = () => root.getBoundingClientRect().top;
-    for (let iter = 0; iter < 8; iter++) { // 수렴 상한 — 분할마다 경계가 뒤로 밀려 반복 필요
+    for (let iter = 0; iter < 64; iter++) { // 수렴 상한 — 조정 1건마다 전체 경계 재측정
         const cuts = _blockCuts(root, availPx);
-        let splitCount = 0;
+        let done = false;
         for (const c of cuts.slice(1, -1)) {
+            if (done) break; // DOM 변경 후 뒤쪽 경계는 무효 — 재측정으로 진행
             for (const table of root.querySelectorAll('table')) {
                 const tb = table.getBoundingClientRect();
                 if (!(tb.top - top0() < c - 1 && c < tb.bottom - top0() - 1)) continue; // 경계가 표 내부를 통과해야 분할
@@ -139,7 +142,26 @@ function _cutsWithTableSplit(root, availPx) {
                     const rr = r.getBoundingClientRect();
                     return rr.top - top0() <= c && c < rr.bottom - top0();
                 });
-                if (!row || (row.parentElement && row.parentElement.tagName === 'THEAD')) continue;
+                if (!row) continue;
+                const rows = [...table.rows];
+                let ri = rows.indexOf(row);
+                // rowspan 그룹 중간 절단 — 확장 셀이 앞 표에 남고 뒤 행만 넘어가면 레이아웃이
+                // 깨지므로 그룹 시작 행부터 옮긴다 (경계가 rowspan 범위 내부일 때)
+                for (let j = 0; j < ri; j++) {
+                    for (const cell of rows[j].cells) {
+                        if (cell.rowSpan > 1 && j + cell.rowSpan > ri) { ri = j; break; }
+                    }
+                }
+                if (ri <= thead.rows.length) {
+                    // 경계가 헤더·첫 행을 가름 — 여기서 쪼개면 헤더만 페이지 끝에 고립된다.
+                    // 표 앞에 스페이서를 넣어 표 전체를 다음 페이지로 넘긴다 (고아 헤더 방지)
+                    const sp = document.createElement('div');
+                    sp.style.height = `${Math.ceil(c - (tb.top - top0()))}px`;
+                    if (table.parentElement) table.parentElement.insertBefore(sp, table);
+                    done = true;
+                    break;
+                }
+                if (row.getBoundingClientRect().top - top0() < c - 1) continue; // 경계가 행 중간(페이지보다 큰 행의 고정 절단) — 분할하면 복제 헤더가 페이지 중간에 출력
                 // 새 표 — 속성·colgroup·caption·thead 복제 후 row 이후 행 전부 이동
                 const nt = /** @type {HTMLTableElement} */ (table.cloneNode(false));
                 [...table.children].forEach(ch => {
@@ -147,14 +169,14 @@ function _cutsWithTableSplit(root, availPx) {
                 });
                 nt.appendChild(thead.cloneNode(true));
                 const body = document.createElement('tbody');
-                const rows = [...table.rows];
-                rows.slice(rows.indexOf(row)).forEach(r => body.appendChild(r));
+                rows.slice(ri).forEach(r => body.appendChild(r));
                 nt.appendChild(body);
                 if (table.parentElement) table.parentElement.insertBefore(nt, table.nextSibling);
-                splitCount++;
+                done = true;
+                break;
             }
         }
-        if (!splitCount) return cuts;
+        if (!done) return cuts;
     }
     return _blockCuts(root, availPx);
 }
@@ -165,9 +187,11 @@ export async function pdfFileFromEl(el, title) {
     // 접힌 details 내용도 출력물에 포함 — 렌더 동안만 펼치고 완료 후 복원
     const closedDetails = [...el.querySelectorAll('details:not([open])')];
     closedDetails.forEach(d => { /** @type {HTMLDetailsElement} */ (d).open = true; });
+    let undoMermaid = /** @type {Array<(() => void)>} */ ([]);
     try {
         await _settleImages(el); // lazy 이미지 로드·레이아웃 확정 — 절단 위치 어긋남 방지 (@spec CO-21)
         _expandScrollClips(el); // 세로 스크롤 클립 해제 — 잘린 행 누락·경계 오인 방지 (@spec CO-21)
+        undoMermaid = [...fixPrintLines(el), ...fixMermaidPrintContrast(el)]; // 인쇄 선·다이어그램 보정 — 렌더 후 복원 (@spec CO-20)
         const W = 210, H = 297;
         // 페이지 여백 — 통짜 이미지를 전면 출력하면 상하 여백 없이 글자가 잘리므로 페이지별 캔버스에 여백을 입혀 조각냄 (@spec CO-20)
         const MX = 8, MY = 10;
@@ -204,15 +228,156 @@ export async function pdfFileFromEl(el, title) {
         const blob = pdf.output('blob');
         return new File([blob], `${title}.pdf`, { type: 'application/pdf' });
     } finally {
+        undoMermaid.forEach(u => u()); // 라이브 SVG 색상 원복
         closedDetails.forEach(d => { /** @type {HTMLDetailsElement} */ (d).open = false; });
     }
 }
 
-// rgb 파싱 → 밝기(0~1) — 흰 배경에서 안 보이는 밝은 글자 판정용
-export const _lum = c => {
+// rgb 문자열 파싱 → [r,g,b] — 색이 아닌 값(none·url·transparent 등)은 null
+const _rgb = c => {
     const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c || '');
-    return m ? (0.299 * +m[1] + 0.587 * +m[2] + 0.114 * +m[3]) / 255 : null;
+    return m ? [+m[1], +m[2], +m[3]] : null;
 };
+
+// rgb 파싱 → 밝기(0~1) — 흰 배경에서 안 보이는 밝은 글자 판정용
+export const _lum = c => { const rgb = _rgb(c); return rgb ? _lumOf(rgb) : null; };
+const _lumOf = rgb => (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
+
+/* == 표 출력 규약 (인쇄·PDF 공용, @spec CO-20/CO-21) ==
+   - 위아래 수평선만: 래퍼 좌우·하단 테두리 제거, 선은 이중선 없이 하나로
+   - 색 정책: 반투명/흰 테두리·저알파 틴트 헤더는 인쇄 회색 통일, 진한 원색은 유지
+   - 분할 정책: 조정 1건당 재측정(낡은 경계 금지), rowspan 그룹 통째 이동,
+     헤더/첫행 경계는 스페이서, 행 중간은 고정 절단
+   - 이 규약은 fixPrintLines/_fixTableExtras/_fixBorder/_fixTableFrame/
+     _cutsWithTableSplit이 구현하고 print.css에 선언형 안전망이 있다 —
+     규칙 변경 시 양쪽 동기화 (AGENTS.md 코드 규칙 참조). */
+const _PRINT_LINE = '#e5e7eb'; // --print-border 동일값 (print.css 토큰, @media print 안이라 JS에서 못 읽음)
+const _PRINT_BAND = '#f3f4f6'; // --print-bg-subtle 동일값
+const _PRINT_ZEBRA = '#f9fafb'; // 지브라 복원 — 헤더 회색보다 한 단계 연하게
+/* 표 셀·헤더 인쇄 정리 —
+   TH: 저알파 틴트(--primary-tint-12 등)는 백지에서 불필요한 색 밴드라 인쇄 회색 통일,
+       border-bottom+box-shadow 이중선은 shadow만 제거, nowrap은 우측 절단 방지로 해제,
+       sticky는 비스크롤 출력물에서 무의미해 static 고정.
+   TD: group-start의 청록 구분선은 인쇄 회색으로, 극저알파 지브라는 희미 회색으로 복원.
+   TABLE: 부모 폭을 넘는 표는 font-size 축소로 우측 절단 방지. */
+const _fixTableExtras = (el2, cs, set) => {
+    const t = el2.tagName;
+    if (t === 'TH') {
+        const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs.backgroundColor || '');
+        if (m && (m[4] === undefined ? 1 : parseFloat(m[4])) < 0.4) set('background', _PRINT_BAND);
+        if (parseFloat(cs.borderBottomWidth) > 0 && _isLineShadow(cs.boxShadow)) set('box-shadow', 'none');
+        if (cs.whiteSpace === 'nowrap') set('white-space', 'normal');
+        if (cs.position === 'sticky') set('position', 'static');
+    } else if (t === 'TD') {
+        if (el2.closest('tr.group-start')) set('border-top-color', _PRINT_LINE); // 청록 구분선 → 인쇄 회색
+        const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs.backgroundColor || '');
+        if (m && (m[4] === undefined ? 1 : parseFloat(m[4])) < 0.15 && _lumOf([+m[1], +m[2], +m[3]]) > 0.9) set('background', _PRINT_ZEBRA);
+    } else if (t === 'TABLE') {
+        const pw = el2.parentElement ? el2.parentElement.clientWidth : 0;
+        const tw = el2.getBoundingClientRect().width;
+        if (pw > 0 && tw > pw) set('font-size', `${(parseFloat(cs.fontSize) || 14) * Math.max(0.65, Math.floor((pw / tw) * 100) / 100)}px`); // 넓은 표 축소
+    }
+};
+/* 표 외곽 좌우+하단 테두리 제거 — 래퍼 border가 표보다 넓어 내용에서 떨어진
+   수직선으로 보이고, 하단은 마지막 행 td 선과 이중선이 된다. 위쪽 수평선만 남긴다. */
+const _fixTableFrame = (el2, set) => {
+    if (!el2.classList.contains('reader-table-wrapper')) return;
+    set('border-left', 'none');
+    set('border-right', 'none');
+    set('border-bottom', 'none'); // 마지막 행 td border-bottom과 이중선 방지
+};
+const _fixBorder = (el2, cs, set) => {
+    for (const s of ['Top', 'Right', 'Bottom', 'Left']) {
+        if (!(parseFloat(cs[`border${s}Width`] || '0') > 0)) continue;
+        const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs[`border${s}Color`] || '');
+        if (!m) continue;
+        const a = m[4] !== undefined ? parseFloat(m[4]) : 1;
+        const l = _lumOf([+m[1], +m[2], +m[3]]);
+        if (a < 0.4 || l > 0.85) set(`border-${s.toLowerCase()}-color`, _PRINT_LINE);
+    }
+};
+/* box-shadow 구분선 판정 — '0 Npx' 오프셋만 있는 무확산 선(표 헤더 밑줄 등)은
+   장식 그림자가 아니라 구분선이라 유지한다. 그 외 그림자는 백지에서 지저분해 제거. */
+const _isLineShadow = bs => bs.split(/,(?![^()]*\))/).every(part =>
+    /\)\s+0(?:\.0+)?px\s+[0-9.]+px(?:\s+0(?:\.0+)?px){0,2}\s*$/.test(part));
+
+/**
+ * 인쇄 선 가시성 보정 — 표 테두리·hr 등 백지에서 사라지는 반투명/흰 테두리를
+ * 인쇄 회색으로 교체한다. 라이브 DOM에 적용할 때는 반환된 복원 함수로 되돌린다. (@spec CO-20)
+ * @param {ParentNode} root — 컨테이너 (문서 attach 상태)
+ * @param {Window} [win] - root가 속한 창 (별도 인쇄 창 문서는 그 창의 getComputedStyle 필요)
+ * @returns {Array<(() => void)>} 원복 함수 목록
+ */
+export function fixPrintLines(root, win = window) {
+    /** @type {Array<(() => void)>} */
+    const undo = [];
+    root.querySelectorAll('*').forEach(e2 => {
+        const el2 = /** @type {HTMLElement} */ (e2);
+        if (el2.closest('pre.mermaid')) return;
+        const st = el2.style;
+        const cs = win.getComputedStyle(el2);
+        _fixBorder(el2, cs, (p, v) => {
+            const prev = st.getPropertyValue(p), prio = st.getPropertyPriority(p);
+            undo.push(() => { st.setProperty(p, prev, prio); });
+            st.setProperty(p, v, 'important');
+        });
+        _fixTableExtras(el2, cs, (p, v) => {
+            const prev = st.getPropertyValue(p), prio = st.getPropertyPriority(p);
+            undo.push(() => { st.setProperty(p, prev, prio); });
+            st.setProperty(p, v, 'important');
+        });
+        _fixTableFrame(el2, (p, v) => {
+            const prev = st.getPropertyValue(p), prio = st.getPropertyPriority(p);
+            undo.push(() => { st.setProperty(p, prev, prio); });
+            st.setProperty(p, v, 'important');
+        });
+    });
+    return undo;
+}
+
+/**
+ * 인쇄용 mermaid 출력 대비 (화면 색상 유지 — WYSIWYG 하이브리드, @spec CO-20)
+ * 다이어그램 색상은 화면 그대로 인쇄한다 — reader-mermaid.css 토큰이 이미
+ * 어두운 상자+밝은 글자 대비를 보장하므로 색 변경 없이 print-color-adjust만
+ * 부여해 브라우저 인쇄가 CSS 배경을 생략하지 않게 한다 (PDF는 캔버스에 색이
+ * 구워져 무관). 다만 미렌더 블록(벤더 로드 실패로 원문 코드가 그대로 보이는
+ * pre.mermaid)은 밝은 글자가 백지에 묻히므로 그 경우만 색을 백지용으로 보정.
+ * 라이브 DOM에 적용할 때는 반환된 복원 함수로 되돌린다.
+ * 주의: reader-mermaid.css의 색상 규칙은 전부 !important라 우선순위 없는
+ * 인라인 스타일은 패배 — 반드시 'important' 우선순위로 적용한다.
+ * @param {ParentNode} root — mermaid 블록을 포함한 컨테이너 (문서 attach 상태)
+ * @param {Window} [win] - root가 속한 창 (별도 인쇄 창 문서는 그 창의 getComputedStyle 필요)
+ * @returns {Array<(() => void)>} 원복 함수 목록 (live DOM 복원용)
+ */
+export function fixMermaidPrintContrast(root, win = window) {
+    /** @type {Array<(() => void)>} */
+    const undo = [];
+    const set = (el, prop, val) => {
+        const st = /** @type {HTMLElement} */ (el).style;
+        const prev = st.getPropertyValue(prop);
+        const prio = st.getPropertyPriority(prop);
+        undo.push(() => { st.setProperty(prop, prev, prio); });
+        st.setProperty(prop, val, 'important');
+    };
+    root.querySelectorAll('pre.mermaid').forEach(pre => {
+        const els = [pre, ...pre.querySelectorAll('*')];
+        // 브라우저 인쇄는 CSS background를 기본 생략 — 다크 상자·엣지 라벨 배경 유지를 위해 exact
+        for (const el of els) {
+            set(el, 'print-color-adjust', 'exact');
+            set(el, '-webkit-print-color-adjust', 'exact');
+        }
+        if (pre.querySelector('svg')) return; // 렌더 완료 — 화면 색상 그대로 출력
+        // 미렌더 블록(원문 코드·실패 노트) — 밝은 글자가 백지에 묻히므로 백지용 보정
+        for (const el of els) {
+            const cs = win.getComputedStyle(el);
+            const color = _rgb(cs.color);
+            if (color && _lumOf(color) > 0.7) set(el, 'color', '#000');
+            const bg = _rgb(cs.backgroundColor);
+            if (bg && _lumOf(bg) < 0.25) set(el, 'background', 'transparent');
+        }
+    });
+    return undo;
+}
 
 /** 인쇄 가독성 래퍼로 PDF — 흰 배경·여백 확보, 밝은 글자만 검정 보정 (컬러 출력 유지).
  *  @spec CO-20 — 문서 PDF 인쇄 가독성 정본 래퍼
@@ -235,6 +400,7 @@ export async function pdfFileFromElStyled(el, title) {
     wrap.querySelectorAll('.mermaid-expand-btn').forEach(b => b.remove());
     wrap.querySelectorAll('*').forEach(e2 => {
         const el2 = /** @type {HTMLElement} */ (e2);
+        if (el2.closest('pre.mermaid')) return; // mermaid는 화면 색상 유지 — fixMermaidPrintContrast가 전담
         const cs = getComputedStyle(el2);
         const cl = _lum(cs.color);
         const fl = _lum(cs.webkitTextFillColor);
@@ -244,9 +410,15 @@ export async function pdfFileFromElStyled(el, title) {
         }
         const bg = _lum(cs.backgroundColor);
         if (bg !== null && bg < 0.25) el2.style.background = 'transparent'; // 어두운 배경은 제거 — 흰 종이와 대비
-        el2.style.boxShadow = 'none';
+        _fixBorder(el2, cs, (p, v) => el2.style.setProperty(p, v, 'important')); // 반투명/흰 테두리는 백지 소실 → 인쇄 회색
+        _fixTableExtras(el2, cs, (p, v) => el2.style.setProperty(p, v, 'important')); // 표 셀·헤더 정리
+        _fixTableFrame(el2, (p, v) => el2.style.setProperty(p, v, 'important')); // 표 외곽 좌우·하단 테두리 제거
+        if (cs.boxShadow !== 'none' && !_isLineShadow(cs.boxShadow)) el2.style.boxShadow = 'none'; // 무확산 구분선은 유지
         el2.style.textShadow = 'none';
     });
+    // mermaid SVG는 fill/stroke 계열라 HTML 색 보정이 못 미침 — 어두운 상자+검정 글자
+    // 대비 붕괴 방지용 별도 보정 (클론이라 원복 불필요) (@spec CO-20)
+    fixMermaidPrintContrast(wrap);
     // 접힌 details 내용도 출력물에 포함 — 클론이라 화면 상태에 영향 없음
     wrap.querySelectorAll('details:not([open])').forEach(d => { /** @type {HTMLDetailsElement} */ (d).open = true; });
     await _settleImages(wrap); // 클론 lazy 이미지 로드·레이아웃 확정 — 미로드 0높이 측정으로 절단선이 이미지 중간을 자르는 결함 수정 (@spec CO-21)

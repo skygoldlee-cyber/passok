@@ -27,8 +27,8 @@
 
 | 구분 | 프레임워크 | 환경 | 파일 위치 | 테스트 수 |
 |------|-----------|------|-----------|-----------|
-| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1,800+ |
-| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 990+ |
+| **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1,850+ |
+| **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 1,000+ |
 | **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 120+ |
 | **합계** | | | | **2,950+** |
 

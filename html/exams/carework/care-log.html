@@ -30,11 +30,15 @@
         </div>
         <div class="care-calc-actions">
             <button class="btn" data-click="careLogGenerate">📝 일지 생성</button>
-            <button data-click="careAiDraft" class="btn btn-secondary">✨ AI 초안</button>
-            <button data-click="careLogSave" class="btn btn-secondary">💾 저장 <span class="pro-badge" data-pro-feature="care_log_save">PRO</span></button>
-
             <button data-click="careShare" data-arg="#log-preview pre|요양일지|mask|careLogGenerate|careLogCsvExport|careLogPrint|care_log_export|careLogDocMd" class="btn btn-secondary">📤 공유·내보내기</button>
-            <button data-click="careLogRecordCopy" class="btn btn-secondary">📋 제공기록지 복사 <span class="pro-badge" data-pro-feature="care_log_export">PRO</span></button>
+            <details class="care-more-actions">
+                <summary class="btn btn-secondary">더보기</summary>
+                <div class="care-more-actions-list">
+                    <button data-click="careAiDraft" class="btn btn-secondary">✨ AI 초안 <span class="pro-badge" data-pro-feature="care_ai_draft">유료</span></button>
+                    <button data-click="careLogSave" class="btn btn-secondary">💾 저장 <span class="pro-badge" data-pro-feature="care_log_save">유료</span></button>
+                    <button data-click="careLogRecordCopy" class="btn btn-secondary">📋 제공기록지 복사 <span class="pro-badge" data-pro-feature="care_log_export">유료</span></button>
+                </div>
+            </details>
         </div>
     </div>
     <div id="log-preview" class="care-calc-result"></div>

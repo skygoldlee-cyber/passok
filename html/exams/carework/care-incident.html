@@ -13,15 +13,25 @@
         <label>중증도 <select id="inc-severity"></select></label>
     </div>
     <div class="care-calc-form">
-        <label>발생 경위 <input id="inc-desc" type="text" placeholder="발견 경위·상황 설명"></label>
-        <label>조치 내용 <input id="inc-action" type="text" placeholder="응급조치·연락·이송 내용"></label>
+        <label>발생 경위 <input id="inc-desc" type="text" placeholder="발견 경위·상황 설명"><button type="button" class="btn btn-secondary care-voice-btn" data-click="careIncidentVoiceToggle" data-arg="inc-desc" title="말로 입력 — 누르고 말하기">🎤</button></label>
+        <label>조치 내용 <input id="inc-action" type="text" placeholder="응급조치·연락·이송 내용"><button type="button" class="btn btn-secondary care-voice-btn" data-click="careIncidentVoiceToggle" data-arg="inc-action" title="말로 입력 — 누르고 말하기">🎤</button></label>
         <label>목격자 <input id="inc-witness" type="text" placeholder="선택"></label>
         <label class="care-log-merge"><input id="inc-family" type="checkbox"> 가족 통지 완료</label>
+        <div class="care-photo">
+            <button type="button" class="btn btn-secondary" data-click="careIncidentPhotoPick">📷 사진 추가</button>
+            <input id="inc-photo-file" type="file" accept="image/*" multiple class="is-hidden">
+            <div id="inc-photo-list" class="care-photo-list"></div>
+        </div>
         <div class="care-calc-actions">
             <button class="btn" data-click="careIncidentGenerate">📝 보고서 생성</button>
-            <button data-click="careIncidentSave" class="btn btn-secondary">💾 기록 저장 <span class="pro-badge" data-pro-feature="care_incident_save">PRO</span></button>
-            <button data-click="careIncidentFacilitySubmit" class="btn btn-secondary">🏥 기관에 공유 <span class="pro-badge" data-pro-feature="care_incident_share">PRO</span></button>
             <button data-click="careShare" data-arg="#inc-preview pre|사고보고서|mask|careIncidentGenerate|careIncidentCsvExport|careIncidentPrint|care_incident_share|careIncidentDocMd" class="btn btn-secondary">📤 공유·내보내기</button>
+            <details class="care-more-actions">
+                <summary class="btn btn-secondary">더보기</summary>
+                <div class="care-more-actions-list">
+                    <button data-click="careIncidentSave" class="btn btn-secondary">💾 기록 저장 <span class="pro-badge" data-pro-feature="care_incident_save">유료</span></button>
+                    <button data-click="careIncidentFacilitySubmit" class="btn btn-secondary">🏥 기관에 공유 <span class="pro-badge" data-pro-feature="care_incident_share">유료</span></button>
+                </div>
+            </details>
         </div>
     </div>
     <div id="inc-preview" class="care-calc-result"></div>

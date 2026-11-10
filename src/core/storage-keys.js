@@ -146,6 +146,9 @@ export const STORAGE_KEYS = {
   CARE_AUDIT_CUSTOM: 'carework_audit_custom',
   // 대처카드 → 사고보고서 초안 — 카드 이벤트 발생 시 사고보고서에 선기입 (소비-일회성, 백업 제외)
   CARE_INCIDENT_DRAFT: 'carework_incident_draft',
+  CARE_LAST_INCIDENT: 'carework_last_incident',    // 사고보고 반복 입력 — 마지막 저장값 자동 기입
+  CARE_LAST_HANDOVER: 'carework_last_handover',    // 인수인계 반복 입력 — 마지막 저장값 자동 기입
+  CARE_GUIDE_SEEN: 'carework_guide_seen',          // 실무 첫 진입 3컷 안내 — 확인 완료 플래그
   // 기관 자체 양식 템플릿 (CO-17) — [{id,title,body,fields,scope,createdAt,updatedAt}] 로컬 양식 + 기관 양식 캐시
   CARE_FORM_TEMPLATES: 'carework_form_templates',
   // 기관 양식 기입 문서 로컬 기록 (CO-17) — [{id,tplId,title,client,clientId,date,values,createdAt,_sync}]

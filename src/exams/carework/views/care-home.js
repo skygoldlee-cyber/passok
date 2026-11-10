@@ -8,15 +8,25 @@ import { clientTrends } from '../care-trend.js';
 import { markFunnel, funnelStats } from '../care-funnel.js';
 import { escapeHTML as esc } from '../../../core/sanitize.js';
 import { refreshOrgName, getDocSign, setDocSign, setDocSignImage, signFileToDataUri } from '../facility.js';
+import { getItem, setItem } from '../../../core/storage.js';
+import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { showToast } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 
 const $ = (id) => document.getElementById(id);
 const dayOf = (r) => r.date || r.shift_date || '';
 
+/** 첫 진입 3컷 안내 닫기 — 확인 플래그 저장 후 숨김 */
+export function careHomeGuideDismiss() {
+    setItem(STORAGE_KEYS.CARE_GUIDE_SEEN, '1');
+    $('home-guide')?.classList.add('is-hidden');
+}
+
 export function initCareHomeView() {
     markFunnel('tool:care-home');
     void refreshOrgName();
+    // 첫 진입 3컷 안내 — 미확인 사용자에게만 노출 (기록→생성→인쇄 흐름 안내)
+    if (!getItem(STORAGE_KEYS.CARE_GUIDE_SEEN)) $('home-guide')?.classList.remove('is-hidden');
     const d = todayKey();
     const logs = listCareLogs(), visits = listVisits(), incidents = listIncidents();
     const cnt = (arr) => arr.filter(r => dayOf(r) === d).length;
@@ -28,6 +38,14 @@ export function initCareHomeView() {
         clientTrends(logs, { clientId: c.id, name: c.name }).map(t => `${c.name} — ${t.message}`));
     const wEl = $('home-warn');
     if (wEl) wEl.innerHTML = warns.map(w => `<div class="care-trend-warn">⚠ ${esc(w)}</div>`).join('');
+    // 다음 행동 안내 — 건수 요약을 "오늘 해야 할 일"로 (시니어 사용성 — 근무 흐름 순서 안내)
+    const nxEl = $('home-next');
+    if (nxEl) {
+        const done = cnt(logs) + cnt(visits) + cnt(incidents);
+        nxEl.textContent = done === 0
+            ? '💡 아직 오늘 기록이 없어요 — 아래 「요양일지 기록」부터 시작하세요'
+            : `💡 오늘 기록 ${done}건을 남겼어요 — 근무 마무리는 「인수인계」로 넘기세요`;
+    }
     // 미사용 도구 "처음" 마크 — 퍼널 사용 횟수 0인 도구
     const used = funnelStats()?.tools || {};
     document.querySelectorAll('.care-home-nav a[href^="#/"]').forEach(a => {

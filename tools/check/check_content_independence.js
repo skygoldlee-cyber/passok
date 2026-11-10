@@ -79,6 +79,14 @@ const ALLOWED = [
         reason: 'carework 도메인 전용 보강 유틸 — 공단 XLSX 입소인원·인력현황을 해당 시험의 facilities.json에 병기하는 단일 목적 도구'
     },
     {
+        file: 'tools/illustrate/capture_manual.js', contains: "'carework'",
+        reason: 'carework 실무매뉴얼 전용 삽화 산출 도구 — 해당 시험의 뷰를 시드하고 docs/images를 산출하는 단일 목적 도구'
+    },
+    {
+        file: 'tools/illustrate/capture_manual.js', contains: 'exams/carework/',
+        reason: '동일 — carework 매뉴얼 docs 디렉터리가 산출 대상인 단일 목적 도구'
+    },
+    {
         file: 'tools/import/enrich_facility_stats.js', contains: '요양보호사',
         reason: '공단 XLSX 인력현황 시트의 컬럼명 자체가 시험 도메인 콘텐츠 — 원천 데이터 스키마 키'
     },

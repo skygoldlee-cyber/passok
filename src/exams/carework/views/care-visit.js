@@ -5,13 +5,15 @@ import { markFunnel } from '../care-funnel.js';
 import { listVisits, saveVisit, updateVisit, removeVisit } from '../care-visit-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
-import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, refreshOrgName } from '../facility.js';
+import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, refreshOrgName, signFileToDataUri } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 import { docMdHead, docMdSign, csvToMdTable, mdToHtml } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 export { careShare } from '../care-share.js';
+export { careVisitVoiceToggle } from '../care-voice.js';
+import { voiceButtonsInit } from '../care-voice.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -22,6 +24,8 @@ const _val = (id, fb) => {
 let _facility = null;
 let _fvList = [];
 let _resultTarget = null; // {scope:'local'|'facility', id}
+const PHOTO_MAX = 3; // 첨부 사진 한도 — localStorage 쿼터 보호
+/** @type {string[]} */ const _vPhotos = [];
 
 function readForm() {
     return {
@@ -55,13 +59,39 @@ export function careVisitResultOpen(arg) {
     if (head && src) head.textContent = `${src.client} ← ${src.visitor_name || src.visitor}`;
     const d = /** @type {HTMLInputElement|null} */ ($('vis-result-date'));
     if (d && !d.value) d.value = todayKey();
+    _vPhotos.length = 0;
+    if (src?.result?.photos) _vPhotos.push(...src.result.photos); // 기존 첨부 사진 복원
+    _renderVPhotos();
     panel.classList.remove('is-hidden');
     panel.scrollIntoView?.({ block: 'nearest' });
 }
 
 export function careVisitResultClose() {
     _resultTarget = null;
+    _vPhotos.length = 0;
     $('vis-result-panel')?.classList.add('is-hidden');
+}
+
+/** 사진 추가 버튼 — 숨긴 file input 트리거 (최대 PHOTO_MAX장) */
+export function careVisitPhotoPick() {
+    if (_vPhotos.length >= PHOTO_MAX) { showToast(`사진은 최대 ${PHOTO_MAX}장까지 첨부됩니다.`, 'error'); return; }
+    /** @type {HTMLInputElement|null} */ ($('vis-photo-file'))?.click();
+}
+
+export async function careVisitPhotoRemove(idx) {
+    const i = Number(idx);
+    if (!(i >= 0 && i < _vPhotos.length)) return;
+    if (!await showConfirm('이 사진을 삭제할까요?', '사진 삭제')) return;
+    _vPhotos.splice(i, 1);
+    _renderVPhotos();
+}
+
+function _renderVPhotos() {
+    const host = $('vis-photo-list');
+    if (!host) return;
+    host.innerHTML = _vPhotos.map((p, i) =>
+        `<span class="care-photo-thumb"><img src="${p}" alt="첨부 사진 ${i + 1}"><button type="button" class="care-photo-del" data-click="careVisitPhotoRemove" data-arg="${i}" title="사진 삭제">✕</button></span>`
+    ).join('') || '<span class="care-log-hint">전달 물품·대상자 상태 등 사진을 첨부하면 문서에 함께 표시됩니다 (최대 3장)</span>';
 }
 
 export async function careVisitResultSave() {
@@ -70,6 +100,7 @@ export async function careVisitResultSave() {
         date: _val('vis-result-date', ''),
         time: _val('vis-result-time', ''),
         summary: _val('vis-result-summary', ''),
+        photos: _vPhotos.slice(), // 첨부 사진은 결과에 병합 저장
     };
     if (!result.date) { showToast('방문일을 입력하세요.', 'error'); return; }
     const t = _resultTarget;
@@ -113,7 +144,12 @@ function buildAllText() {
 
 function renderPreview() {
     const out = $('vis-preview');
-    if (out) out.innerHTML = mdToHtml(careVisitDocMd());
+    if (!out) return;
+    out.innerHTML = mdToHtml(careVisitDocMd());
+    // 첨부 사진 섹션 — 표 구조 문서라 레코드별 그리드를 문서 말미에 병기
+    const withPhotos = listVisits().filter(v => v.result?.photos?.length);
+    if (withPhotos.length) out.innerHTML += '<h3>📷 첨부 사진</h3>' + withPhotos.map(v =>
+        `<div class="care-photo-sub">${esc(v.client)} · ${esc(v.date)}</div><div class="care-photo-grid">${v.result.photos.map(p => `<img src="${p}" alt="첨부 사진">`).join('')}</div>`).join('');
 }
 
 /** 방문 기록 문서 미리보기 — 저장 기록 전체를 문서로 렌더 (내보내기 메뉴 자동 생성기, 복사·인쇄·PDF 공통 원본) */
@@ -215,12 +251,23 @@ export async function careVisitFacilitySubmit() {
 
 export function initCareVisitView() {
     markFunnel('tool:care-visit');
+    voiceButtonsInit(); // 음성 입력 미지원 브라우저는 🎤 숨김
     attachClientPicker(/** @type {HTMLInputElement|null} */ ($('vis-client')));
     const d = /** @type {HTMLInputElement|null} */ ($('vis-date'));
     if (d && !d.value) d.value = todayKey();
     const s = $('vis-relation');
     if (s && !s.children.length)
         s.innerHTML = RELATIONS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+    // 사진 첨부 — 결과 패널 파일 선택 시 리사이즈 dataURI로 변환 (재진입 시 onchange 재할당 → 중복 바인딩 없음)
+    const pf = /** @type {HTMLInputElement|null} */ ($('vis-photo-file'));
+    if (pf) pf.onchange = async () => {
+        for (const file of [...(pf.files || [])].slice(0, PHOTO_MAX - _vPhotos.length)) {
+            try { _vPhotos.push(await signFileToDataUri(file)); }
+            catch { showToast('사진을 읽지 못했습니다.', 'error'); }
+        }
+        pf.value = '';
+        _renderVPhotos();
+    };
     renderLists();
     void renderFacility();
     void refreshOrgName();

@@ -1,6 +1,7 @@
 // src/exams/carework/care-ai.js
 // @spec CO-08 — BYOK AI 보조 작성 (가명처리·전송 미리보기·사용자 검토 필수)
 import { showToast, showConfirm } from '../../ui-utils.js';
+import { proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { getAiKey, getAiProvider, callProviderLLM } from '../../written/written-grading.js';
 
 const NAME_RE = /([가-힣]{2,4})(님|씨|어르신)?/g;
@@ -48,6 +49,7 @@ const _payload = kind => kind === 'ho'
  */
 export async function careAiDraft(btn) {
     const kind = /** @type {HTMLElement|null} */ (btn)?.dataset?.arg === 'ho' ? 'ho' : 'log';
+    proFeatureNotice('care_ai_draft', 'AI 초안');
     const key = getAiKey();
     if (!key) { showToast('설정에서 AI 키를 먼저 등록하세요.', 'error'); return; }
     const { system, prompt } = buildDraftPrompt(_payload(kind), kind);

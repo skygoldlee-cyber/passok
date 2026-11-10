@@ -29,6 +29,6 @@ export function buildHandover(in_) {
     lines.push(`- ${(in_.tasks || '').trim() || '없음'}`);
     lines.push('', '■ 특이 주의사항');
     lines.push(`- ${(in_.caution || '').trim() || '없음'}`);
-    lines.push('', '인계 확인: 인계자 ____ / 인수자 ____');
+    lines.push('', `인계 확인: 인계자 ${in_.from || '____'} / 인수자 ${in_.to || '____'}`);
     return lines.join('\n');
 }

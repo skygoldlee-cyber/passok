@@ -6,6 +6,7 @@ import { esc } from '../core/sanitize.js';
 import { CACHE } from '../config/cache.js';
 import { renderMermaidIn } from './mermaid-render.js';
 import { makeSessionCache } from '../shell/doc-overlay.js';
+import { fixMermaidPrintContrast, fixPrintLines } from '../content/pdf-utils.js';
 
 let _overlayEl = null;
 let _contentEl = null;
@@ -70,6 +71,9 @@ function _ensureOverlay() {
             '<style>@media print{pre.mermaid,svg,img,figure,blockquote,tr{page-break-inside:avoid;break-inside:avoid;}pre.mermaid{overflow:visible;max-height:none;}pre.mermaid svg{max-width:100%;height:auto;}.mermaid-expand-btn{display:none;}}</style>');
             printWin.document.write('</head><body>' + content.innerHTML + '</body></html>');
             printWin.document.close();
+            // 다크 테마 mermaid SVG의 어두운 채우기·밝은 글자 → 백지 출력용 대비 보정 (@spec CO-20)
+            fixPrintLines(printWin.document, printWin); // 인쇄 선 보정 — 반투명 테두리
+            fixMermaidPrintContrast(printWin.document, printWin);
             // 이미지 로드 대기 후 인쇄 — 미로드 상태에서 print()하면 삽화가 빈 채 출력됨.
             // 3초 상한: 응답 없는 리소스가 있어도 인쇄는 진행
             const pending = Array.from(printWin.document.images).map(i => i.decode().catch(() => {}));

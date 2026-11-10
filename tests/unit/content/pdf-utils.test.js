@@ -90,6 +90,55 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
         assert.match(src, /html2canvas\(wrap, \{ scale/);                    // 고정 2 아닌 적응 배율
     });
 
+    it('mermaid 인쇄 대비 — 화면 색상 유지(WYSIWYG 하이브리드) + 미렌더 보정 (CO-20)', () => {
+        assert.match(src, /export function fixMermaidPrintContrast/);          // 공용 보정 헬퍼
+        // WYSIWYG 계약 — 렌더된 다이어그램은 색 변경 없이 print-color-adjust만 부여
+        assert.match(src, /'print-color-adjust', 'exact'/);                  // 브라우저 인쇄 배경 유지
+        assert.match(src, /pre\.querySelector\('svg'\)\) return/);           // 렌더 완료 블록은 화면 그대로
+        // 미렌더 블록(원문 코드)만 백지 보정 — 밝은 글자가 묻히는 결함 방지
+        assert.match(src, /'color', '#000'/);                                // 밝은 원문 글자 → 검정
+        assert.match(src, /'background', 'transparent'/);                    // 어두운 배경 제거
+        // 보정 계약 — reader-mermaid.css의 전 규칙이 !important라 우선순위 없는
+        // 인라인 스타일은 실제 다이어그램에서 패배한다. 반드시 'important'로 적용.
+        assert.match(src, /setProperty\(prop, val, 'important'\)/);          // 인라인 !important 적용
+        assert.match(src, /getPropertyPriority\(prop\)/);                    // 원복 시 우선순위 보존
+        // styled 워크는 mermaid 서브트리를 건너뛰어 화면 색상을 유지
+        assert.match(src, /el2\.closest\('pre\.mermaid'\)\) return/);        // 워크 스킵 — 화면 색상 유지
+        // PDF 생성 양 경로 + 라이브 복원
+        assert.match(src, /fixMermaidPrintContrast\(wrap\)/);                // styled 클론
+        assert.match(src, /undoMermaid = \[\.\.\.fixPrintLines\(el\), \.\.\.fixMermaidPrintContrast\(el\)\]/); // plain 라이브 — 선+다이어그램
+        assert.match(src, /undoMermaid\.forEach\(u => u\(\)\)/);             // 라이브 원복
+    });
+
+    it('인쇄 선 가시성 보정 — 반투명/흰 테두리는 인쇄 회색으로 (CO-20)', () => {
+        assert.match(src, /export function fixPrintLines/);                  // 공용 선 보정 헬퍼
+        assert.match(src, /_PRINT_LINE = '#e5e7eb'/);                        // --print-border 동일 톤
+        assert.match(src, /border\$\{s\}Width/);                             // 선폭 있는 변만 처리
+        assert.match(src, /border-\$\{s\.toLowerCase\(\)\}-color/);          // 변별 border-color 교체
+        // styled 워크에도 동일 보정 + 무확산 구분선(box-shadow 라인)은 유지
+        assert.match(src, /_fixBorder\(el2, cs/);                            // styled 워크 테두리 보정
+        assert.match(src, /_isLineShadow/);                                  // box-shadow 구분선 유지 판정
+        // 헤더·셀 정리 — 틴트 회색화·이중선·nowrap·sticky·지브라·넓은 표 축소
+        assert.match(src, /_PRINT_BAND = '#f3f4f6'/);                        // --print-bg-subtle 동일 톤
+        assert.match(src, /_PRINT_ZEBRA = '#f9fafb'/);                       // 지브라 복원 톤
+        assert.match(src, /_fixTableExtras\(el2, cs/);                       // 표 셀·헤더 정리 호출
+        assert.match(src, /_isLineShadow\(cs\.boxShadow\)\) set\('box-shadow', 'none'\)/); // 이중 헤더선 정리
+        assert.match(src, /whiteSpace === 'nowrap'\) set\('white-space', 'normal'\)/); // nowrap 해제
+        assert.match(src, /position === 'sticky'\) set\('position', 'static'\)/); // sticky 정적화
+        assert.match(src, /closest\('tr\.group-start'\)/);                   // group-start 구분선 회색화
+        assert.match(src, /pw > 0 && tw > pw/);                              // 넓은 표 font-size 축소
+        // 표 외곽 테두리 제거 — 내용과 떨어진 수직선·하단 이중선
+        assert.match(src, /_fixTableFrame/);                                 // 래퍼 좌우·하단 테두리 제거
+        assert.match(src, /'border-left', 'none'/);                          // 좌측 수직선 제거
+        assert.match(src, /'border-right', 'none'/);                         // 우측 수직선 제거
+        assert.match(src, /'border-bottom', 'none'/);                        // 하단 이중선 제거
+    });
+
+    it('rowspan 대응 표 분할 — 그룹 중간 절단 시 그룹 시작부터 이동 (CO-21)', () => {
+        assert.match(src, /cell\.rowSpan > 1 && j \+ cell\.rowSpan > ri/);   // rowspan 그룹 판정
+        assert.match(src, /ri = j; break;/);                                 // 그룹 시작 행부터 이동
+    });
+
     it('details 펼침 — 접힌 내용도 출력물에 포함', () => {
         assert.match(src, /details:not\(\[open\]\)/);                        // 닫힌 details 수집
         assert.match(src, /\.open = true/);                                  // 클론·렌더 전 펼침

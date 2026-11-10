@@ -92,8 +92,9 @@ test('CO-10 증적 커버리지 — 기록 유무 매칭·부족 항목 열거',
     const { auditCoverage } = await import('../../../../src/exams/carework/care-coverage.js');
     const c = auditCoverage({ clients: [{}], logs: [{ obs: { meal: '전' } }], visits: [], incidents: [], handovers: [] });
     assert.equal(c.total, 6);
-    assert.ok(c.missing.includes('방문·면회'));
+    assert.ok(c.missing.includes('방문기록'));
     assert.ok(!c.missing.includes('관찰(obs)'));
+    assert.ok(!c.missing.includes('관찰'));
 });
 
 test('CO-08 인수인계 가명처리 — 대상자 목록·근무자명·인계 작업 마스킹', async () => {

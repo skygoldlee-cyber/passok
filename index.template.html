@@ -134,22 +134,16 @@
                 <button class="nav-item nav-item-practice" data-target="care-roster-view" data-feature="careRoster">
                     <i class="fa-solid fa-calendar-week" aria-hidden="true"></i> <span data-uitext="careRoster:nav">근무표</span>
                 </button>
-                <div class="nav-group-label nav-group-label-practice" data-feature="careClients">대상자·준비</div>
+                <div class="nav-group-label nav-group-label-practice" data-feature="careClients">대상자·돌봄</div>
                 <button class="nav-item nav-item-practice" data-target="care-client-view" data-feature="careClients">
                     <i class="fa-solid fa-users" aria-hidden="true"></i> <span data-uitext="careClients:nav">대상자</span>
-                </button>
-                <button class="nav-item nav-item-practice" data-target="care-finder-view" data-feature="careFinder">
-                    <i class="fa-solid fa-hospital" aria-hidden="true"></i> <span data-uitext="careFinder:nav">기관찾기</span>
                 </button>
                 <button class="nav-item nav-item-practice" data-target="care-card-view" data-feature="careCard">
                     <i class="fa-solid fa-list-check" aria-hidden="true"></i> <span data-uitext="careCard:nav">대처카드</span>
                 </button>
-                <div class="nav-group-label nav-group-label-practice" data-feature="careAudit">기관·출력</div>
+                <div class="nav-group-label nav-group-label-practice" data-feature="careAudit">기관·행정</div>
                 <button class="nav-item nav-item-practice" data-target="care-audit-view" data-feature="careAudit">
                     <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i> <span data-uitext="careAudit:nav">평가점검</span>
-                </button>
-                <button class="nav-item nav-item-practice" data-target="care-forms-view" data-feature="careForms">
-                    <i class="fa-solid fa-file-signature" aria-hidden="true"></i> <span data-uitext="careForms:nav">서식모음</span>
                 </button>
                 <button class="nav-item nav-item-practice" data-target="care-custom-form-view" data-feature="careCustomForm">
                     <i class="fa-solid fa-file-pen" aria-hidden="true"></i> <span data-uitext="careCustomForm:nav">우리 서식</span>
@@ -165,13 +159,20 @@
                 <button class="nav-item nav-item-practice is-hidden" data-target="facility-admin-view" data-feature="careFacilityAdmin">
                     <i class="fa-solid fa-building-user" aria-hidden="true"></i> <span data-uitext="careFacilityAdmin:nav">기관관리</span>
                 </button>
+                <div class="nav-group-label nav-group-label-practice" data-feature="careFinder">기관·자료</div>
+                <button class="nav-item nav-item-practice" data-target="care-finder-view" data-feature="careFinder">
+                    <i class="fa-solid fa-hospital" aria-hidden="true"></i> <span data-uitext="careFinder:nav">기관찾기</span>
+                </button>
+                <button class="nav-item nav-item-practice" data-target="care-forms-view" data-feature="careForms">
+                    <i class="fa-solid fa-file-signature" aria-hidden="true"></i> <span data-uitext="careForms:nav">서식모음</span>
+                </button>
             </nav>
             <div class="sidebar-footer">
                 <button type="button" id="ui-mode-toggle" class="ui-mode-toggle" data-click="toggleUiMode" data-feature="practiceMode" aria-pressed="false" title="학습/실무 모드 전환 — 합격 후 실무 중심 사용자는 실무 모드를 추천합니다">
                     <i class="fa-solid fa-repeat" aria-hidden="true"></i> <span id="ui-mode-label" class="ui-mode-label">학습 모드</span>
                 </button>
                 <button type="button" id="font-size-toggle" class="ui-mode-toggle is-hidden" data-click="toggleFontSize" aria-pressed="false" title="글자 크기 키우기 — 시니어 읽기 편의">
-                    <i class="fa-solid fa-text-height" aria-hidden="true"></i> <span class="font-scale-label">가 글자 크게</span>
+                    <i class="fa-solid fa-text-height" aria-hidden="true"></i> <span class="font-scale-label">글자 크게</span>
                 </button>
                 <div class="sidebar-footer-meta">
                     <p>© PassOK</p>
@@ -436,10 +437,6 @@
                 <i class="fa-solid fa-users" aria-hidden="true"></i>
                 <span data-uitext="careClients:nav">대상자</span>
             </button>
-            <button class="mobile-tab-item mobile-tab-practice nav-practice-only" data-target="care-finder-view" data-feature="careFinder">
-                <i class="fa-solid fa-hospital" aria-hidden="true"></i>
-                <span data-uitext="careFinder:nav">기관찾기</span>
-            </button>
             <button class="mobile-tab-item mobile-tab-practice nav-practice-only" data-target="care-card-view" data-feature="careCard">
                 <i class="fa-solid fa-list-check" aria-hidden="true"></i>
                 <span data-uitext="careCard:nav">대처카드</span>
@@ -447,10 +444,6 @@
             <button class="mobile-tab-item mobile-tab-practice nav-practice-only" data-target="care-audit-view" data-feature="careAudit">
                 <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
                 <span data-uitext="careAudit:nav">평가점검</span>
-            </button>
-            <button class="mobile-tab-item mobile-tab-practice nav-practice-only" data-target="care-forms-view" data-feature="careForms">
-                <i class="fa-solid fa-file-signature" aria-hidden="true"></i>
-                <span data-uitext="careForms:nav">서식</span>
             </button>
             <button class="mobile-tab-item mobile-tab-practice nav-practice-only" data-target="care-custom-form-view" data-feature="careCustomForm">
                 <i class="fa-solid fa-file-pen" aria-hidden="true"></i>
@@ -460,9 +453,6 @@
                 <i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i>
                 <span data-uitext="careCalc:nav">본인부담금</span>
             </button>
-            
-            <span class="tab-group-divider" aria-hidden="true" data-feature="careFacilityJoin"></span>
-
             <button class="mobile-tab-item mobile-tab-practice nav-practice-only" data-target="facility-join-view" data-feature="careFacilityJoin">
                 <i class="fa-solid fa-door-open" aria-hidden="true"></i>
                 <span data-uitext="careFacilityJoin:nav">기관가입</span>
@@ -470,6 +460,14 @@
             <button class="mobile-tab-item mobile-tab-practice nav-practice-only is-hidden" data-target="facility-admin-view" data-feature="careFacilityAdmin">
                 <i class="fa-solid fa-building-user" aria-hidden="true"></i>
                 <span data-uitext="careFacilityAdmin:nav">기관관리</span>
+            </button>
+            <button class="mobile-tab-item mobile-tab-practice nav-practice-only" data-target="care-finder-view" data-feature="careFinder">
+                <i class="fa-solid fa-hospital" aria-hidden="true"></i>
+                <span data-uitext="careFinder:nav">기관찾기</span>
+            </button>
+            <button class="mobile-tab-item mobile-tab-practice nav-practice-only" data-target="care-forms-view" data-feature="careForms">
+                <i class="fa-solid fa-file-signature" aria-hidden="true"></i>
+                <span data-uitext="careForms:nav">서식</span>
             </button>
             </div>
             <button class="mobile-tab-item mobile-tab-more nav-study-only" id="mobile-more-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="mobile-more-sheet" title="전체 매뉴 보기">
@@ -539,7 +537,7 @@
                         <!-- 글자 크게 — 시니어 읽기 편의. 설정 항목이지만 신규 그룹 라벨 없이 자료·도구 그리드에 편입 (UX-NAV-12 라벨 규약) -->
                         <button class="mobile-tab-item" data-click="toggleFontSize" type="button" aria-pressed="false" title="글자 크기 키우기 — 시니어 읽기 편의">
                             <i class="fa-solid fa-text-height" aria-hidden="true"></i>
-                            <span class="font-scale-label">가 글자 크게</span>
+                            <span class="font-scale-label">글자 크게</span>
                         </button>
                     </div>
                     <!-- 기타 — 실무 모드 전용 항목만 (기능 버튼 정본: 테마=헤더, 시험 전환=설정 패널) -->

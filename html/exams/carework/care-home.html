@@ -4,12 +4,24 @@
         <h2>Care OS 홈</h2>
         <p class="view-subtitle">오늘 근무 요약과 바로가기 — 기록은 기기에만 저장됩니다</p>
     </div>
+    <div id="home-guide" class="care-guide is-hidden">
+        <h3 class="care-guide-title">처음 사용 안내 — 3단계로 끝납니다</h3>
+        <div class="care-guide-steps">
+            <div class="care-guide-step"><span class="care-guide-num">1</span><strong>기록하기</strong><span>요양일지·방문기록을 입력</span></div>
+            <div class="care-guide-arrow" aria-hidden="true">→</div>
+            <div class="care-guide-step"><span class="care-guide-num">2</span><strong>문서 생성</strong><span>보고서·인수인계가 자동 완성</span></div>
+            <div class="care-guide-arrow" aria-hidden="true">→</div>
+            <div class="care-guide-step"><span class="care-guide-num">3</span><strong>인쇄·공유</strong><span>출력물로 확인·전달</span></div>
+        </div>
+        <button type="button" class="btn care-guide-ok" data-click="careHomeGuideDismiss">알겠어요</button>
+    </div>
     <div class="care-home-card">
         <div id="home-date" class="care-home-date"></div>
         <div id="home-summary" class="care-home-summary"></div>
         <div id="home-warn" class="care-home-warn"></div>
+        <div id="home-next" class="care-home-next"></div>
         <button type="button" class="btn btn-secondary care-home-font" data-click="toggleFontSize" aria-pressed="false" title="글자 크기 키우기 — 시니어 읽기 편의">
-            <i class="fa-solid fa-text-height" aria-hidden="true"></i> <span class="font-scale-label">가 글자 크게</span>
+            <i class="fa-solid fa-text-height" aria-hidden="true"></i> <span class="font-scale-label">글자 크게</span>
         </button>
     </div>
     <div class="care-home-card">

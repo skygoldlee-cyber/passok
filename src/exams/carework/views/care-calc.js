@@ -4,6 +4,7 @@ import { computeCareCost, formatWon } from '../care-calc.js';
 import { markFunnel } from '../care-funnel.js';
 import { GRADE_LIMITS, REDUCTIONS, EFFECTIVE_YEAR, FACILITY_TYPES } from '../care-calc-data.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
+import { showConfirm } from '../../../ui-utils.js';
 export { careShare } from '../care-share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -108,7 +109,8 @@ export function careCalcRun() {
         + `<p class="care-doc-disclaimer">※ 계산 결과는 참고용 예상액입니다 — 실제 청구액은 공단 심사·기관 계약에 따라 달라질 수 있습니다.</p>`;
 }
 
-export function careCalcReset() {
+export async function careCalcReset() {
+    if (!await showConfirm('입력한 내용을 초기화할까요?', '초기화 확인')) return;
     ['care-use', ...Object.values(NC_FIELDS)].forEach(id => {
         const e = /** @type {HTMLInputElement|null} */ ($(id));
         if (e) e.value = '';

@@ -15,8 +15,8 @@
     <div class="care-calc-form">
         <label>목적·요청사항 <input id="vis-purpose" type="text" placeholder="예: 면회, 물품 전달, 상담"></label>
         <div class="care-calc-actions">
-            <button class="btn" data-click="careVisitAdd">📅 예약 등록 <span class="pro-badge" data-pro-feature="care_visit_save">PRO</span></button>
-            <button data-click="careVisitFacilitySubmit" class="btn btn-secondary">🏥 기관에 공유 <span class="pro-badge" data-pro-feature="care_visit_share">PRO</span></button>
+            <button class="btn" data-click="careVisitAdd">📅 예약 등록 <span class="pro-badge" data-pro-feature="care_visit_save">유료</span></button>
+            <button data-click="careVisitFacilitySubmit" class="btn btn-secondary">🏥 기관에 공유 <span class="pro-badge" data-pro-feature="care_visit_share">유료</span></button>
             <button data-click="careShare" data-arg="#vis-preview|방문 기록|mask|careVisitPreview|careVisitCsvExport|careVisitPrint|care_visit_share|careVisitDocMd" class="btn btn-secondary">📤 공유·내보내기</button>
         </div>
     </div>
@@ -24,7 +24,12 @@
         <h3>방문 결과 기록 — <span id="vis-result-for"></span></h3>
         <label>방문일 <input id="vis-result-date" type="date"></label>
         <label>시간 <input id="vis-result-time" type="time"></label>
-        <label>결과·특이사항 <input id="vis-result-summary" type="text" placeholder="방문 내용·대상자 반응·전달사항"></label>
+        <label>결과·특이사항 <input id="vis-result-summary" type="text" placeholder="방문 내용·대상자 반응·전달사항"><button type="button" class="btn btn-secondary care-voice-btn" data-click="careVisitVoiceToggle" data-arg="vis-result-summary" title="말로 입력 — 누르고 말하기">🎤</button></label>
+        <div class="care-photo">
+            <button type="button" class="btn btn-secondary" data-click="careVisitPhotoPick">📷 사진 추가</button>
+            <input id="vis-photo-file" type="file" accept="image/*" multiple class="is-hidden">
+            <div id="vis-photo-list" class="care-photo-list"></div>
+        </div>
         <div class="care-calc-actions">
             <button class="btn" data-click="careVisitResultSave">💾 결과 저장</button>
             <button data-click="careVisitResultClose" class="btn btn-secondary">✖️ 닫기</button>

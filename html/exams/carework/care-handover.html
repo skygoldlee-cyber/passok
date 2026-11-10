@@ -17,11 +17,16 @@
         <label>특이 주의사항 <input id="ho-caution" type="text" placeholder="낙상 주의·약물·가족 연락"></label>
         <label class="care-log-merge"><input id="ho-merge" type="checkbox" checked> 당일 저장 일지 병합 <span id="ho-logcount"></span></label>
         <div class="care-calc-actions">
-            <button data-click="careHandoverDigest" class="btn btn-secondary">📅 오늘 기록으로 채우기</button>
-            <button data-click="careAiDraft" data-arg="ho" class="btn btn-secondary">✨ AI 초안</button>
             <button class="btn" data-click="careHandoverGenerate">🤝 인수인계 생성</button>
-            <button data-click="careHandoverSave" class="btn btn-secondary">💾 기록 저장 <span class="pro-badge" data-pro-feature="care_handover_save">PRO</span></button>
             <button data-click="careHandoverExport" data-arg="#ho-preview pre|인수인계서|mask|careHandoverGenerate|careHandoverCsvExport|careHandoverPrint|care_handover_share|careHandoverDocMd" class="btn btn-secondary">📤 공유·내보내기</button>
+            <details class="care-more-actions">
+                <summary class="btn btn-secondary">더보기</summary>
+                <div class="care-more-actions-list">
+                    <button data-click="careHandoverDigest" class="btn btn-secondary">📅 오늘 기록으로 채우기</button>
+                    <button data-click="careAiDraft" data-arg="ho" class="btn btn-secondary">✨ AI 초안 <span class="pro-badge" data-pro-feature="care_ai_draft">유료</span></button>
+                    <button data-click="careHandoverSave" class="btn btn-secondary">💾 기록 저장 <span class="pro-badge" data-pro-feature="care_handover_save">유료</span></button>
+                </div>
+            </details>
         </div>
     </div>
     <div id="ho-preview" class="care-calc-result"></div>

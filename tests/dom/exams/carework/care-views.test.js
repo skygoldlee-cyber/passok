@@ -79,17 +79,17 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
             utils: { sheet_to_csv: () => '', aoa_to_sheet: () => ({}), book_new: () => ({}), book_append_sheet() {} } };
     });
 
-    it('careCalc — 계산 후 결과 카드 렌더', () => {
+    it('careCalc — 계산 후 결과 카드 렌더', async () => {
         loadPartial('care-calc.html');
         document.getElementById('care-grade').value = '1';
         document.getElementById('care-type').value = 'home';
         document.getElementById('care-use').value = '20';
         careCalcRun();
         expect(document.querySelector('#care-result')?.textContent).toMatch(/원/);
-        careCalcReset();
+        await careCalcReset(); // 초기화는 showConfirm(mock:true) 통과 후 실행
     });
 
-    it('careCalc — 적용 기준 연도 표기 + 데이터 연도 구버전 시 경고 (고시 연차 갱신)', () => {
+    it('careCalc — 적용 기준 연도 표기 + 데이터 연도 구버전 시 경고 (고시 연차 갱신)', async () => {
         loadPartial('care-calc.html');
         initCareCalcView();
         // 현행 — 적용 연도가 항상 표시되고 경고 없음
@@ -110,7 +110,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         vi.useRealTimers();
     });
 
-    it('careCalc — 비급여 항목별 합산 + 상급침실료 시설 전용 토글', () => {
+    it('careCalc — 비급여 항목별 합산 + 상급침실료 시설 전용 토글', async () => {
         loadPartial('care-calc.html');
         initCareCalcView();
         // 당해연도 한도표 렌더 — 등급 6행 + 연도 헤더
@@ -165,7 +165,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         // 강조는 '실제 월 납부액' 행 — 위치 선택자 회귀 방지
         const totalRow = document.querySelector('#care-result .care-calc-total');
         expect(totalRow?.textContent).toContain('실제 월 납부액');
-        careCalcReset();
+        await careCalcReset();
     });
 
     it('careCard — 목록→상세→복귀', async () => {
@@ -198,7 +198,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
     it('careAudit — 로드 후 점검 초기화 + 문서 헤더', async () => {
         loadPartial('care-audit.html');
         await initCareAuditView();
-        careAuditReset();
+        await careAuditReset(); // 초기화는 showConfirm(mock:true) 통과 후 실행
         expect(document.getElementById('audit-list')).toBeTruthy();
         expect(document.querySelector('#audit-list .care-doc-head strong')?.textContent).toBe('평가 체크리스트');
         expect(document.querySelector('#audit-list .care-doc-sign')?.textContent).toContain('점검자');
@@ -317,7 +317,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.querySelectorAll('#audit-list [data-audit]').length).toBe(2); // 업로드 2항목으로 교체
         expect(document.getElementById('audit-list').textContent).toContain('기관 인권교육 실시');
         expect(document.getElementById('audit-custom-note').classList.contains('is-hidden')).toBe(false);
-        await careAuditFileReset(); // 기본 점검표 복원
+        await careAuditFileReset(); // 기본 점검표 복원 — showConfirm(mock:true) 통과
         expect(loadCustomSections()).toBeNull();
         expect(document.querySelectorAll('#audit-list [data-audit]').length).toBe(20);
         expect(document.getElementById('audit-custom-note').classList.contains('is-hidden')).toBe(true);

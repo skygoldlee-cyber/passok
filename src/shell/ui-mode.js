@@ -59,7 +59,7 @@ export function applyFontScale() {
     document.querySelectorAll('[data-click="toggleFontSize"]').forEach(el => {
         const btn = /** @type {HTMLButtonElement} */ (el);
         const label = btn.querySelector('.font-scale-label') || btn;
-        label.textContent = scale === 'lg' ? '가 글자 크게' : scale === 'xl' ? '가 글자 더 크게' : '가 글자 크게';
+        label.textContent = scale === 'lg' ? '글자 크게' : scale === 'xl' ? '글자 더 크게' : '글자 크게';
         btn.setAttribute('aria-pressed', String(!!scale));
         btn.title = scale === 'xl' ? '글자 크기: 최대 — 눌러 원래 크기로' : scale === 'lg' ? '글자 크기: 크게 — 더 크게 누르기' : '글자 크기 키우기 — 시니어 읽기 편의';
     });

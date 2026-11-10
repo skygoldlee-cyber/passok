@@ -22,10 +22,11 @@ function isFp(v, node) {
         fp.rule === v.id && fp.targetRe.test(target));
 }
 
-async function scan(page, label) {
-    const results = await new AxeBuilder({ page })
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-        .analyze();
+async function scan(page, label, scope) {
+    let builder = new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']);
+    if (scope) builder = builder.include(scope);
+    const results = await builder.analyze();
     // 오탐 노드를 제거하고 남은 노드가 없으면 위반 자체를 제외
     const real = results.violations
         .map(v => ({ ...v, nodes: v.nodes.filter(n => !isFp(v, n)) }))
@@ -80,11 +81,19 @@ test.describe('접근성 자동 스캔 (A-01/03/04)', () => {
 
     test('설정 패널 오픈 상태: 심각 위반 0건', async ({ page }) => {
         test.setTimeout(60_000);
+        await page.emulateMedia({ reducedMotion: 'reduce' });
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
         await page.locator('#settings-toggle-btn').click();
         await expect(page.locator('#settings-panel')).not.toHaveClass(/is-hidden/);
-        const bad = await scan(page, 'settings');
+        // 패널 전환 애니메이션 완료 대기 — axe target-size가 전이 중 크기로 오측정됨
+        await expect(page.locator('.btn-sm[data-click="toggleFontSize"]').first())
+            .toBeVisible({ timeout: 10_000 });
+        await page.waitForFunction(() => {
+            const el = document.querySelector('.btn-sm[data-click="toggleFontSize"]');
+            const r = el.getBoundingClientRect(); return r.height >= 24 && r.width >= 24;
+        }, null, { timeout: 10_000 });
+        const bad = await scan(page, 'settings', '#settings-panel');
         expect(bad.map(v => v.id)).toEqual([]);
     });
 
