@@ -26,7 +26,7 @@ import {
 } from './store-utils.js';
 import { CUSTOMER_OPTIONS, COLORANT_RE } from './formula-store.js';
 
-// Free 플랜 저장 한도
+// 무료 플랜 저장 한도
 export const PRODUCT_LIMIT_FREE = 30;
 
 const MAX_NAME_LEN = 120;
@@ -170,7 +170,7 @@ export function createProduct(data, opts = {}) {
   if (!clean.ingredients.length) return { ok: false, error: '전성분을 1종 이상 입력하세요.' };
   const usage = getProductUsage();
   if (!usage.canCreate) {
-    return { ok: false, error: `Free 플랜은 최대 ${usage.limit}종까지 등록할 수 있습니다.` };
+    return { ok: false, error: `무료 플랜은 최대 ${usage.limit}종까지 등록할 수 있습니다.` };
   }
   const now = Date.now();
   const item = { id: newId('prod'), ...clean, createdAt: now, updatedAt: now };

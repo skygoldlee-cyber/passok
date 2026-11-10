@@ -172,7 +172,12 @@
     "build:icons": "node tools/build/build_icons.js",
     "check:icons": "node tools/build/build_icons.js --check",
     "build:commands": "node tools/build/build_command_reference.js",
-    "check:scenario": "node tools/check/check_scenario_items.js"
+    "check:scenario": "node tools/check/check_scenario_items.js",
+    "fix:all": "npm run build:derived && npm run build:html && node tools/sync/sync_textbook_files.js",
+    "check:terms": "node tools/check/check_terms.js",
+    "audit:specfresh": "node tools/audit/audit_spec_fresh.js",
+    "audit:doclinks": "node tools/audit/audit_doc_links.js",
+    "check:provenance": "node tools/check/check_doc_provenance.js"
   },
   "keywords": [
     "cosmetics",

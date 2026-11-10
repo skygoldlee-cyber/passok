@@ -1,9 +1,9 @@
 // @spec ROAD-P6
 /**
- * Pro 업그레이드 안내 — 무료 플랜 한도 도달 시 표시하는 정보성 모달.
+ * 유료 업그레이드 안내 — 무료 플랜 한도 도달 시 표시하는 정보성 모달.
  *
  * 결제 인프라 도입 전이므로 "준비 중" 안내에 그친다 (SUBSCRIPTION_ROADMAP 지연 원칙).
- * 스토어가 `{ ok:false, error:'Free 플랜은 ...' }`를 반환하는 모든 지점에서
+ * 스토어가 `{ ok:false, error:'무료 플랜은 ...' }`를 반환하는 모든 지점에서
  * isFreeLimitError()로 판별 후 showUpgradeNotice()를 호출한다.
  */
 
@@ -20,7 +20,7 @@ import { localDateTime } from '../core/utils.js';
 
 /** 스토어 오류가 무료 한도 초과인지 판별 */
 function isFreeLimitError(error) {
-    return typeof error === 'string' && error.startsWith('Free 플랜');
+    return typeof error === 'string' && error.startsWith('무료 플랜');
 }
 
 /**
@@ -41,7 +41,7 @@ const PAYMENT_NOTICE = {
     methods: [
         "'결제 문의'를 눌러 오픈채팅으로 연락주시면 결제 방법(계좌이체·카카오페이)을 안내드립니다",
         '결제 확인 후 24~48시간 내 라이선스 코드를 발송해 드립니다',
-        '받은 코드는 로그인 후 ⚙️ 설정 → 플랜 안내 · 라이선스 코드에서 입력하면 즉시 Pro가 활성화됩니다',
+        '받은 코드는 로그인 후 ⚙️ 설정 → 플랜 안내 · 라이선스 코드에서 입력하면 즉시 유료가 활성화됩니다',
     ],
     refundNotice: '환불: 코드 미사용 시 결제일로부터 7일 이내 전액 환불 (전자상거래법 청약철회) · 코드 사용 후에는 환불이 제한될 수 있습니다',
     contactLabel: '오픈채팅에서 결제 문의',
@@ -52,7 +52,7 @@ const PAYMENT_NOTICE = {
 let _featurePlan = null;
 
 /**
- * feature-plan.json을 로드해 메모리에 보관하고 PRO 배지를 갱신한다.
+ * feature-plan.json을 로드해 메모리에 보관하고 유료 배지를 갱신한다.
  * fetch 실패·오프라인 시 기본값(pro 표기)을 유지한다.
  */
 export async function loadFeaturePlan() {
@@ -64,7 +64,7 @@ export async function loadFeaturePlan() {
     refreshProBadges();
 }
 
-/** 기능이 Pro 표기 대상인지 판별 (플랜 미로드·키 누락 시 pro로 간주) */
+/** 기능이 유료 표기 대상인지 판별 (플랜 미로드·키 누락 시 pro로 간주) */
 function isProFeature(featureKey) {
     const v = _featurePlan && _featurePlan.features && _featurePlan.features[featureKey];
     return v !== 'free';
@@ -107,14 +107,14 @@ export function refreshProBadges(root = document) {
             el.setAttribute('data-click', 'showPlanCompare');
             el.setAttribute('role', 'button');
             el.setAttribute('tabindex', '0');
-            el.setAttribute('title', 'Pro 제공 예정 기능 — 눌러서 플랜 비교 보기 (현재 무료로 이용 가능)');
+            el.setAttribute('title', '유료 제공 예정 기능 — 눌러서 플랜 비교 보기 (현재 무료로 이용 가능)');
         }
     });
 }
 
 /**
  * 스토어 저장 결과의 오류를 표시한다.
- * 무료 한도 초과 → Pro 업그레이드 안내 모달, 그 외 → 일반 오류 토스트.
+ * 무료 한도 초과 → 유료 업그레이드 안내 모달, 그 외 → 일반 오류 토스트.
  * @param {{ok:boolean, error?:string}} result - 스토어 반환값
  * @param {string} featureLabel - 한도에 걸린 기능명 (예: 'My 포뮬러')
  * @param {function} showToast - 토스트 함수 (호출측 임포트 전달)
@@ -126,10 +126,10 @@ export function showStoreError(result, featureLabel, showToast, fallback = '저�
 }
 
 /**
- * Pro 기능 안내 — 최초 Pro 기능 진입 시 전역 1회만 표시 (ROAD-P5).
+ * 유료 기능 안내 — 최초 유료 기능 진입 시 전역 1회만 표시 (ROAD-P5).
  * 기능별 seen 플래그는 `_global` 단일 키로 수렴 — 이미 기능별 안내를 본
  * 기존 사용자(seen 맵에 임의 키 보유)는 재노출하지 않는다.
- * 무료 회수 없이 "Pro 제공 예정" 사실만 알린다.
+ * 무료 회수 없이 "유료 제공 예정" 사실만 알린다.
  * feature-plan.json에서 'free'로 표시된 기능은 안내하지 않는다.
  * @param {string} featureKey - 플랜 판정 키 (예: 'mock_exam', 'combo_drill')
  * @param {string} featureName - 표시용 기능명 (첫 진입 기능명으로 문구에 포함)
@@ -151,13 +151,13 @@ export function proFeatureNotice(featureKey, featureName) {
 
     const { overlay, close } = _showDialog(`
         <div class="app-confirm-dialog dialog-card pro-upgrade-dialog" role="alertdialog" aria-modal="true" aria-labelledby="pro-notice-title">
-            <h3 id="pro-notice-title">💎 Pro 기능 안내</h3>
-            <p><strong>${esc(featureName)}</strong>을(를) 포함해 <strong>PRO 표시</strong>가 붙은 기능은 유료 버전에서 제공될 예정입니다.<br>현재는 무료 체험 기간으로 누구나 이용할 수 있습니다.</p>
+            <h3 id="pro-notice-title">💎 유료 기능 안내</h3>
+            <p><strong>${esc(featureName)}</strong>을(를) 포함해 <strong>유료 표시</strong>가 붙은 기능은 유료 버전에서 제공될 예정입니다.<br>현재는 무료 체험 기간으로 누구나 이용할 수 있습니다.</p>
             <div class="pro-upgrade-benefits">
-                <p class="pro-upgrade-sub">Pro 가입 시 로그인 계정의 클라우드 동기화로 <strong>여러 디바이스 간 학습 상태가 공유</strong>됩니다.</p>
+                <p class="pro-upgrade-sub">유료 가입 시 로그인 계정의 클라우드 동기화로 <strong>여러 디바이스 간 학습 상태가 공유</strong>됩니다.</p>
             </div>
             <div class="app-confirm-actions">
-                <button class="app-confirm-cancel app-confirm-compare">Free / Pro 비교</button>
+                <button class="app-confirm-cancel app-confirm-compare">무료 / 유료 비교</button>
                 <button class="app-confirm-ok">확인</button>
             </div>
         </div>
@@ -210,7 +210,7 @@ const PLAN_FEATURES = [
     { key: 'study_plan_pro', label: '주간 배분 (과목별 가중 배분 계획)' },
 ];
 
-/** 플래그·플랜에서 유도한 Pro 전용 혜택 항목 — 두 모달(showPlanCompare/showUpgradeNotice)이 공유 */
+/** 플래그·플랜에서 유도한 유료 전용 혜택 항목 — 두 모달(showPlanCompare/showUpgradeNotice)이 공유 */
 function _proBenefitItems(extraRow = '') {
     const items = [];
     if (isProFeature('personal_analysis')) {
@@ -226,11 +226,11 @@ function _proBenefitItems(extraRow = '') {
         items.push('<li>클라우드 동기화 — 로그인 계정 기준 여러 디바이스 간 학습 상태 공유</li>');
     }
     if (extraRow) items.push(extraRow);
-    items.push('<li>신규 Pro 기능 우선 제공</li>');
+    items.push('<li>신규 유료 기능 우선 제공</li>');
     return items;
 }
 
-/** Free/Pro 기능 비교 안내 모달 — 설정의 '플랜 안내'·계정 모달에서 연다.
+/** Free/유료 기능 비교 안내 모달 — 설정의 '플랜 안내'·계정 모달에서 연다.
  * feature-plan.json의 현재 값을 반영하므로 플랜 전환 시 문구가 어긋나지 않는다. */
 export async function showPlanCompare() {
     trackAction('plan_compare');
@@ -258,21 +258,21 @@ export async function showPlanCompare() {
     }
     const featureRows = PLAN_FEATURES.map(f => {
         const tag = isProFeature(f.key)
-            ? '<span class="pro-badge">PRO</span>'
+            ? '<span class="pro-badge">유료</span>'
             : '<span class="plan-free-tag">무료 제공</span>';
         return `<li>${esc(f.label)} ${tag}</li>`;
     }).join('');
 
-    // Pro 전용 혜택 — 실제 플래그/플랜에서 유도한 구체 기능 목록 (플레이스홀더 아님)
+    // 유료 전용 혜택 — 실제 플래그/플랜에서 유도한 구체 기능 목록 (플레이스홀더 아님)
     const proBenefits = _proBenefitItems(limitsRow);
     const benefitsBlock = `
-                <p class="pro-upgrade-sub"><strong>Pro 전용 혜택</strong> — 결제 도입 시 적용</p>
+                <p class="pro-upgrade-sub"><strong>유료 전용 혜택</strong> — 결제 도입 시 적용</p>
                 <ul>${proBenefits.join('')}</ul>`;
 
     const { overlay, close } = _showDialog(`
         <div class="app-confirm-dialog dialog-card pro-upgrade-dialog" role="alertdialog" aria-modal="true" aria-labelledby="plan-compare-title">
-            <h3 id="plan-compare-title">💎 Free / Pro 안내</h3>
-            <p>현재는 <strong>무료 체험 기간</strong>으로 Pro 표시 기능도 무료로 이용할 수 있습니다.</p>
+            <h3 id="plan-compare-title">💎 무료 / 유료 안내</h3>
+            <p>현재는 <strong>무료 체험 기간</strong>으로 유료 표시 기능도 무료로 이용할 수 있습니다.</p>
             <div class="pro-upgrade-benefits">
                 <p class="pro-upgrade-sub"><strong>기능별 제공 범위</strong> — 현재 플랜 설정 반영</p>
                 <ul>${featureRows}</ul>
@@ -280,7 +280,7 @@ export async function showPlanCompare() {
                 <p class="pro-upgrade-sub"><strong>로그인</strong></p>
                 <ul>
                     <li>무료 플랜 — <strong>로그인 불필요</strong>, 모든 데이터는 이 기기에 저장</li>
-                    <li>Pro 플랜 — <strong>로그인 필요</strong> (클라우드 동기화·구독 관리 계정)</li>
+                    <li>유료 플랜 — <strong>로그인 필요</strong> (클라우드 동기화·구독 관리 계정)</li>
                 </ul>
                 <p class="pro-upgrade-sub">그 외 학습 도구(퀴즈·플래시카드·교재 표준형·검색·사전·캘린더·훈련소·백업)는 <strong>항상 무료</strong>입니다.</p>
             </div>
@@ -349,7 +349,7 @@ export function mountProMoment(container, momentKey) {
     card.className = 'pro-moment-card';
     card.innerHTML = `
         <i class="fa-solid fa-gem" aria-hidden="true"></i>
-        <span class="pro-moment-text"><strong>${esc(def.label)}</strong>은(는) Pro 제공 예정 기능입니다 — 지금은 무료로 이용 중입니다.</span>
+        <span class="pro-moment-text"><strong>${esc(def.label)}</strong>은(는) 유료 제공 예정 기능입니다 — 지금은 무료로 이용 중입니다.</span>
         <div class="pro-moment-actions btn-row">
             <button type="button" class="btn btn-sm btn-secondary" data-pro-moment-dismiss aria-label="닫기">닫기</button>
             <button type="button" class="btn btn-sm btn-primary" data-click="showPlanCompare">플랜 비교</button>
@@ -358,14 +358,14 @@ export function mountProMoment(container, momentKey) {
     container.prepend(card);
 }
 
-/** Pro 업그레이드 안내 모달 — PAYMENT_NOTICE.enabled 시 실결제 안내, 아니면 '준비 중' 표시 (PAY-02) */
+/** 유료 업그레이드 안내 모달 — PAYMENT_NOTICE.enabled 시 실결제 안내, 아니면 '준비 중' 표시 (PAY-02) */
 export function showUpgradeNotice(featureLabel, limitMessage) {
     const benefitItems = [`<li>${esc(featureLabel)} 저장 한도 무제한</li>`, ..._proBenefitItems()];
     const planRows = PAYMENT_NOTICE.plans.map((p) =>
         `<li><strong>${esc(p.name)}</strong> ${esc(p.period)} — <strong>${esc(p.price)}</strong>${p.note ? `<br><span class="pro-plan-note">${esc(p.note)}</span>` : ''}</li>`).join('');
     const pay = PAYMENT_NOTICE.enabled ? `
             <div class="pro-payment-notice">
-                <p class="pro-upgrade-sub"><strong>💳 Pro 결제 안내</strong> — 시험 기간권 (일찍 살수록 월 단가 할인)</p>
+                <p class="pro-upgrade-sub"><strong>💳 유료 결제 안내</strong> — 시험 기간권 (일찍 살수록 월 단가 할인)</p>
                 <ul class="pro-plan-list">${planRows}</ul>
                 <ul>${PAYMENT_NOTICE.methods.map((m) => `<li>${esc(m)}</li>`).join('')}</ul>
                 <p class="pro-payment-refund">${esc(PAYMENT_NOTICE.refundNotice)}</p>
@@ -374,7 +374,7 @@ export function showUpgradeNotice(featureLabel, limitMessage) {
         ? `<button class="app-confirm-cancel pro-payment-contact">${esc(PAYMENT_NOTICE.contactLabel)}</button>` : '';
     const { overlay, close } = _showDialog(`
         <div class="app-confirm-dialog dialog-card pro-upgrade-dialog" role="alertdialog" aria-modal="true" aria-labelledby="pro-upgrade-title">
-            <h3 id="pro-upgrade-title">💎 ${PAYMENT_NOTICE.enabled ? 'Pro로 업그레이드' : '무료 한도 도달'}</h3>
+            <h3 id="pro-upgrade-title">💎 ${PAYMENT_NOTICE.enabled ? '유료로 업그레이드' : '무료 한도 도달'}</h3>
             <p>${esc(limitMessage || `${featureLabel}의 무료 플랜 한도에 도달했습니다.`)}</p>
             <div class="pro-upgrade-benefits">
                 <p class="pro-upgrade-sub"><strong>Pro${PAYMENT_NOTICE.enabled ? '' : ' 플랜(준비 중)'}에서는:</strong></p>
@@ -382,7 +382,7 @@ export function showUpgradeNotice(featureLabel, limitMessage) {
             </div>${pay}
             <div class="app-confirm-actions">
                 ${contactBtn}
-                <button class="app-confirm-cancel app-confirm-compare">Free / Pro 비교</button>
+                <button class="app-confirm-cancel app-confirm-compare">무료 / 유료 비교</button>
                 <button class="app-confirm-ok">확인</button>
             </div>
         </div>

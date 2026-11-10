@@ -1,4 +1,4 @@
-// src/pro-expiry.js — Pro 기간권 만료 안내 (PAY-07)
+// src/pro-expiry.js — 유료 기간권 만료 안내 (PAY-07)
 // @spec PAY-07
 // ------------------------------------------------------------
 // 기간권 만료 임박(D-7 이내)·만료 후 상태를 대시보드 상단 인라인 배너로 안내한다.
@@ -61,11 +61,11 @@ export function refreshProExpiryBanner() {
     const examWarn = st.beforeExam && st.dday !== null && st.dday >= 0
         ? ` 시험일(D-${st.dday})보다 먼저 만료됩니다.` : '';
     const title = st.state === 'expired'
-        ? 'Pro 기간권이 만료되었습니다'
-        : `Pro 기간권 만료까지 D-${st.daysLeft} (만료일 ${st.expiresAt})`;
+        ? '유료 기간권이 만료되었습니다'
+        : `유료 기간권 만료까지 D-${st.daysLeft} (만료일 ${st.expiresAt})`;
     const desc = st.state === 'expired'
         ? `학습 데이터는 그대로 보존됩니다 — 연장하면 학습 진단·주간 배분·클라우드 동기화를 이어서 사용할 수 있습니다.${examWarn}`
-        : `만료 후에도 학습 데이터는 보존되지만 Pro 기능이 잠깁니다 — 미리 연장하면 중단 없이 이어집니다.${examWarn}`;
+        : `만료 후에도 학습 데이터는 보존되지만 유료 기능이 잠깁니다 — 미리 연장하면 중단 없이 이어집니다.${examWarn}`;
     el.innerHTML = `
         <div class="flex-center gap-3">
             <i class="fa-solid fa-hourglass-end draft-banner-icon" aria-hidden="true"></i>
@@ -75,7 +75,7 @@ export function refreshProExpiryBanner() {
             </div>
         </div>
         <div class="flex-row flex-wrap gap-2">
-            <button class="btn btn-primary badge-pill" data-click="openProExtend"><i class="fa-solid fa-gem" aria-hidden="true"></i> Pro 연장하기</button>
+            <button class="btn btn-primary badge-pill" data-click="openProExtend"><i class="fa-solid fa-gem" aria-hidden="true"></i> 유료 연장하기</button>
         </div>`;
     el.classList.remove('is-hidden');
     if (!_noticeEmitted) {
@@ -88,7 +88,7 @@ export function refreshProExpiryBanner() {
 export function openProExtend() {
     const st = proExpiryStatus();
     const msg = st && st.state === 'expired'
-        ? 'Pro 기간권이 만료되었습니다 — 연장하면 학습 진단·주간 배분·클라우드 동기화를 이어서 사용할 수 있습니다.'
-        : 'Pro 기간권을 연장하면 학습 진단·주간 배분·클라우드 동기화가 중단 없이 이어집니다.';
+        ? '유료 기간권이 만료되었습니다 — 연장하면 학습 진단·주간 배분·클라우드 동기화를 이어서 사용할 수 있습니다.'
+        : '유료 기간권을 연장하면 학습 진단·주간 배분·클라우드 동기화가 중단 없이 이어집니다.';
     showUpgradeNotice('클라우드 동기화', msg);
 }

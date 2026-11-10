@@ -164,10 +164,10 @@ describe('Pro 모멘트 넛지 (ROAD-P6)', () => {
 });
 
 describe('showStoreError — 무료 한도 오류 분기', () => {
-    it('Free 플랜 한도 오류는 업그레이드 안내 모달로 라우팅된다', async () => {
+    it('무료 플랜 한도 오류는 업그레이드 안내 모달로 라우팅된다', async () => {
         const toast = vi.fn();
         await stubPlan({ personal_analysis: 'pro' });
-        showStoreError({ error: 'Free 플랜 한도에 도달했습니다' }, '분석', toast);
+        showStoreError({ error: '무료 플랜 한도에 도달했습니다' }, '분석', toast);
         expect(toast).not.toHaveBeenCalled();
         expect(overlay() || document.querySelector('.pro-upgrade-dialog')).toBeTruthy();
         // 일반 오류는 토스트로 위임

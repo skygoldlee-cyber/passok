@@ -188,8 +188,8 @@ export async function pullSync() {
 /** 설정/계정 모달의 "지금 동기화" 버튼 */
 export async function syncNow() {
     if (!canCloudSync()) {
-        updateSyncStatus('Pro 전용');
-        showToast('클라우드 동기화는 Pro 기능입니다. 로컬 데이터는 그대로 유지됩니다.', 'info');
+        updateSyncStatus('유료 전용');
+        showToast('클라우드 동기화는 유료 기능입니다. 로컬 데이터는 그대로 유지됩니다.', 'info');
         return;
     }
     updateSyncStatus('동기화 중...');
@@ -206,7 +206,7 @@ export async function initSync() {
         _signedIn = !!session;
         if (_signedIn) {
             if (canCloudSync()) await pullSync();
-            else updateSyncStatus('Pro 전용 — 이 기기의 데이터는 로컬에 유지됩니다');
+            else updateSyncStatus('유료 전용 — 이 기기의 데이터는 로컬에 유지됩니다');
         }
     } catch (_) { /* 오프라인 등 — 로컬 전용으로 계속 동작 */ }
     try {
@@ -216,7 +216,7 @@ export async function initSync() {
             _signedIn = !!session;
             if (!_signedIn || was) return;
             if (canCloudSync()) pullSync().catch(() => {});
-            else updateSyncStatus('Pro 전용 — 이 기기의 데이터는 로컬에 유지됩니다');
+            else updateSyncStatus('유료 전용 — 이 기기의 데이터는 로컬에 유지됩니다');
         });
     } catch (_) {}
     // 온라인 복귀 시 미동기화 변경 재시도

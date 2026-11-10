@@ -30,7 +30,7 @@ const ACTION_LABELS = {
     analysis_report: '주간 리포트 공유',
     actual_exam_report: '실제 시험 결과 보고',
     command_palette: '통합 검색 (Ctrl+K)',
-    plan_compare: 'Free/Pro 플랜 비교',
+    plan_compare: '무료/유료 플랜 비교',
     // ── Phase 2 표면 진입 계측 (UX-MET-01~02, DOC-DSN-24) — `:` 접미 키는 접두사로 라벨 해석
     tq_run: '오늘 할 일 큐 실행',
     oxdrill_start: 'O/X 드릴 시작',
@@ -38,7 +38,7 @@ const ACTION_LABELS = {
     drill_from_review: '복습 → 드릴 직행',
     review_weak_open: '취약 진술 리뷰 개방',
     trainer_menu: '훈련소 메뉴 진입',
-    pro_badge_click: 'PRO 배지 → 플랜 비교',
+    pro_badge_click: '유료 배지 → 플랜 비교',
     pro_moment: 'Pro 모멘트 카드 표시 (ROAD-P6)', // 'pro_moment:<moment>' 접두사 키
 };
 
@@ -48,7 +48,7 @@ export function actionLabel(key) {
 }
 
 /**
- * 유료가치 판정 대상 (Pro 후보 기능) — PRO_VALUE_THRESHOLD 합산에만 포함.
+ * 유료가치 판정 대상 (유료 후보 기능) — PRO_VALUE_THRESHOLD 합산에만 포함.
  * command_palette·plan_compare 같은 편의/UI 액션은 통계 표시용으로만 남긴다.
  */
 const VALUE_ACTIONS = new Set([
@@ -149,7 +149,7 @@ export function initUsageMetrics(doc = document) {
     }, true);
 }
 
-/** Pro 후보 기능 사용 합계가 유료가치 판정 기준(PRO_VALUE_THRESHOLD)에 도달했는지 */
+/** 유료 후보 기능 사용 합계가 유료가치 판정 기준(PRO_VALUE_THRESHOLD)에 도달했는지 */
 export function isValueThresholdMet() {
     return getValueActionTotal() >= PRO_VALUE_THRESHOLD;
 }
@@ -159,7 +159,7 @@ export function resetUsageStats() {
         JSON.stringify({ v: 1, owner: null, firstUse: null, lastUse: null, days: {}, views: {}, actions: {} }));
 }
 
-/** 유료가치 판정 대상 액션 합계 — Pro 후보 기능(VALUE_ACTIONS) 사용 횟수만 집계 */
+/** 유료가치 판정 대상 액션 합계 — 유료 후보 기능(VALUE_ACTIONS) 사용 횟수만 집계 */
 function getValueActionTotal() {
     const d = _load();
     return Object.entries(d.actions)
@@ -208,7 +208,7 @@ export async function showUsageStats() {
                 <ul>
                     <li>첫 사용: <strong>${_fmtDate(d.firstUse)}</strong> · 최근 사용: <strong>${_fmtDate(d.lastUse)}</strong></li>
                     <li>학습 활동 일수: <strong>${activeDays}일</strong> · 기능 사용 합계: <strong>${totalActions}회</strong></li>
-                    <li>Pro 후보 기능 사용: <strong>${valueTotal}/${PRO_VALUE_THRESHOLD}회</strong>${valueTotal >= PRO_VALUE_THRESHOLD ? raw(' — 유료가치 판정 <strong>충족</strong>') : ''}</li>
+                    <li>유료 후보 기능 사용: <strong>${valueTotal}/${PRO_VALUE_THRESHOLD}회</strong>${valueTotal >= PRO_VALUE_THRESHOLD ? raw(' — 유료가치 판정 <strong>충족</strong>') : ''}</li>
                 </ul>
             </div>
             ${viewRows.length ? html`<h4 class="usage-stats-sub">화면별 사용</h4><table class="usage-stats-table">${viewRows}</table>` : ''}

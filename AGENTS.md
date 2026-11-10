@@ -63,6 +63,11 @@ npm.cmd run check -- --preset <all|ci|content|docs|refs|freshness|audit> [--quic
 npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회 — 출력 [P0|P1|P2]는 우선순위 티어)
 npm.cmd run check:audit               # 감시·감사 묶음 (preset audit — P2 advisory, 실패해도 종료 0·차단 없음)
 npm.cmd run check:onboard             # 시험 팩 온보딩·승격 진단 + 성숙도 티어 게이트 (exams.json tier: draft/pilot/active — 미달 시 차단)
+npm.cmd run fix:all                    # 복구 트리아지 — build:derived + build:html + sync 일괄 (게이트 실패 1차 복구 명령)
+npm.cmd run check:terms                # 사용자 표시 용어 정합 — Pro/Free 잔재 차단 (PLAN_TERMS=uitext-defaults.js 정본)
+npm.cmd run check:provenance           # 문서 원본 선언 경로 존재 검증 — 콘텐츠 출처 추적
+npm.cmd run audit:specfresh            # SPEC 활성 행 중 코드 미참조 후보 나열 (노후 요구사항 advisory)
+npm.cmd run audit:doclinks             # docs/dev 미참조 문서 나열 (노후 문서 advisory)
 npm.cmd run check:content             # 콘텐츠 통합 검증 (교재 교체 등 — --build=build:data 선실행 · --quick · --content-only=CI용)
 
 # 감사·AI·복구 도구 — 개별 명령은 COMMANDS.md 카탈로그 참조

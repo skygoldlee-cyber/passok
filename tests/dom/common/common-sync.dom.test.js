@@ -180,6 +180,6 @@ describe('클라우드 동기화 (Phase 2)', () => {
         localStorage.removeItem('pro_entitled');
         login(); await initSync();
         await syncNow();
-        expect(el('auth-sync-status').textContent).toContain('Pro');
+        expect(el('auth-sync-status').textContent).toContain('유료');
     });
 });

@@ -20,7 +20,7 @@ export function listHandovers() {
 export function saveHandover(text, meta = {}) {
     const items = listHandovers();
     if (items.length >= FREE_LIMIT)
-        return { error: `Free 플랜 저장 한도 ${FREE_LIMIT}건 — 기존 기록을 삭제하세요` };
+        return { error: `무료 플랜 저장 한도 ${FREE_LIMIT}건 — 기존 기록을 삭제하세요` };
     const item = { id: `ho-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, savedAt: localDateTime(), text, ...meta };
     items.unshift(item);
     setJSON(KEY, items);

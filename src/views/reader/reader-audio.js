@@ -287,11 +287,11 @@ export function toggleReaderAutoScroll() {
     showAudioToast(readerAudioState.autoScroll ? '오디오 따라가기 켜짐' : '오디오 따라가기 꺼짐');
 }
 
-/** 오디오 토글 버튼 라벨 갱신 — PRO 배지를 포함시키고 플랜을 즉시 반영 */
+/** 오디오 토글 버튼 라벨 갱신 — 유료 배지를 포함시키고 플랜을 즉시 반영 */
 function setAudioBtnLabel(html) {
     const ui = getAudioUI();
     if (!ui.btn) return;
-    ui.btn.innerHTML = `${raw(html)} <span class="pro-badge" data-pro-feature="audiobook">PRO</span>`;
+    ui.btn.innerHTML = `${raw(html)} <span class="pro-badge" data-pro-feature="audiobook">유료</span>`;
     refreshProBadges(ui.btn);
 }
 

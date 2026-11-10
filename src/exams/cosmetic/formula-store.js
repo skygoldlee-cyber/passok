@@ -28,7 +28,7 @@
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { loadItems, saveItems, newId, clampStr, numOrNull, pickEnum, sanitizeCustomerFields } from './store-utils.js';
 
-// Free 플랜 저장 한도 (결제 연동 없이 정책 상수로만 동작)
+// 무료 플랜 저장 한도 (결제 연동 없이 정책 상수로만 동작)
 export const FORMULA_LIMIT_FREE = 5;
 
 // 고객 필드 선택지 (formula-store sanitize + formula.js UI가 공유)
@@ -197,7 +197,7 @@ export function getFormulaUsage() {
 export function createFormula(data) {
   const usage = getFormulaUsage();
   if (!usage.canCreate) {
-    return { ok: false, error: `Free 플랜은 최대 ${usage.limit}개까지 저장할 수 있습니다.` };
+    return { ok: false, error: `무료 플랜은 최대 ${usage.limit}개까지 저장할 수 있습니다.` };
   }
   const clean = sanitizeFormula(data || {});
   if (!clean.name) return { ok: false, error: '포뮬러 이름을 입력하세요.' };
@@ -260,7 +260,7 @@ export function duplicateFormula(id) {
   if (!src) return { ok: false, error: '포뮬러를 찾을 수 없습니다.' };
   const usage = getFormulaUsage();
   if (!usage.canCreate) {
-    return { ok: false, error: `Free 플랜은 최대 ${usage.limit}개까지 저장할 수 있습니다.` };
+    return { ok: false, error: `무료 플랜은 최대 ${usage.limit}개까지 저장할 수 있습니다.` };
   }
   return createFormula({
     ...src,

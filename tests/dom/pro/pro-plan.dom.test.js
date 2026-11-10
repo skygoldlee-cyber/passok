@@ -56,8 +56,8 @@ describe('플랜 안내 모달 (showPlanCompare)', () => {
         await showPlanCompare();
         const items = [...overlay().querySelectorAll('li')].map(li => li.textContent);
         // 개인화 분석·이야기형은 PRO, 모의고사는 무료 제공
-        expect(items.some(t => t.includes('학습 진단') && t.includes('PRO'))).toBe(true);
-        expect(items.some(t => t.includes('이야기형') && t.includes('PRO'))).toBe(true);
+        expect(items.some(t => t.includes('학습 진단') && t.includes('유료'))).toBe(true);
+        expect(items.some(t => t.includes('이야기형') && t.includes('유료'))).toBe(true);
         expect(items.some(t => t.includes('실전 모의고사') && t.includes('무료 제공'))).toBe(true);
         // Pro 전용 혜택 — 멀티디바이스 동기화·한도 무제한 안내 (formula 시험에서 스토어 상수 유도)
         expect(overlay().textContent).toContain('여러 디바이스 간 학습 상태 공유');
@@ -91,7 +91,7 @@ describe('플랜 안내 모달 (showPlanCompare)', () => {
         await stubPlan({ cloud_sync: 'pro' });
         await showPlanCompare();
         const items = [...overlay().querySelectorAll('li')].map(li => li.textContent);
-        expect(items.some(t => t.includes('클라우드 동기화') && t.includes('PRO'))).toBe(true);
+        expect(items.some(t => t.includes('클라우드 동기화') && t.includes('유료'))).toBe(true);
     });
 
     it('플랜이 free로 전환되면 Pro 전용 혜택 목록에서도 해당 항목이 빠진다', async () => {
@@ -116,7 +116,7 @@ describe('플랜 안내 모달 (showPlanCompare)', () => {
 
     it('한도 초과 모달도 플랜·플래그에서 혜택 목록을 유도한다', async () => {
         await stubPlan({ personal_analysis: 'free', story_textbook: 'free', cloud_sync: 'free', audiobook: 'free' });
-        showUpgradeNotice('My 포뮬러', 'Free 플랜은 My 포뮬러를 5개까지 저장할 수 있습니다.');
+        showUpgradeNotice('My 포뮬러', '무료 플랜은 My 포뮬러를 5개까지 저장할 수 있습니다.');
         const text = overlay().textContent;
         expect(text).toContain('My 포뮬러 저장 한도 무제한');
         expect(text).not.toContain('복합 예상 점수');

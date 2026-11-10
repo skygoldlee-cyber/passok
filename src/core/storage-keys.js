@@ -165,7 +165,7 @@ export const STORAGE_KEYS = {
   LAST_BACKUP_AT: 'last_backup_at',
   /* ── domain:cosmetic 계약 키 끝 ── */
 
-  // Pro 기능 안내 표시 이력 — 기능별 1회 안내 (pro-upgrade.js)
+  // 유료 기능 안내 표시 이력 — 기능별 1회 안내 (pro-upgrade.js)
   PRO_NOTICE_SEEN: 'pro_notice_seen',
 
   // Pro 전환 모멘트 넛지 표시 이력 — {moment: isoDateTime}, 모멘트별 쿨다운 (pro-upgrade.js, ROAD-P6)
@@ -211,7 +211,7 @@ export const STORAGE_KEYS = {
   TELEMETRY_NOTICE_SHOWN: 'telemetry_notice_shown', // 텔레메트리 최초 고지 1회 표시 완료 (GLOBAL_KEYS — UX-MET-06)
   TELEMETRY_QUEUE: 'telemetry_queue',           // 오프라인 이벤트 큐 — 전송 실패분 보관 (GLOBAL_KEYS — UX-MET-08)
   PRO_ENTITLED: 'pro_entitled',    // Pro 이용 권한 플래그 (GLOBAL_KEYS — ROAD-P1 서버 검증 전 임시 시임)
-  PRO_EXPIRES_AT: 'pro_expires_at', // Pro 기간권 만료 시각 ISO (GLOBAL_KEYS — 표시용, 정본은 profiles.pro_expires_at / PAY-06)
+  PRO_EXPIRES_AT: 'pro_expires_at', // 유료 기간권 만료 시각 ISO (GLOBAL_KEYS — 표시용, 정본은 profiles.pro_expires_at / PAY-06)
 
   // 세션 (sessionStorage)
   INAPP_GUIDE_SHOWN: '__inappGuideShown',

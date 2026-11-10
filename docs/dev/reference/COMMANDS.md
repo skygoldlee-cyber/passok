@@ -167,7 +167,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run postbuild:data` | `npm run check:parser` | 체인: check:parser |
 
-### `check:*` — 73개
+### `check:*` — 75개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -244,13 +244,16 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run check:filenames` | `node tools/check/check_filenames.js` | 파일명 대소문자 규약 — 영역별 kebab/snake/SCREAMING 패턴, 신규 위반 차단 (CODE_CONVENTIONS §2.1) |
 | `npm run check:icons` | `node tools/build/build_icons.js --check` | 앱 아이콘 파생 생성·검증 파이프라인 |
 | `npm run check:scenario` | `node tools/check/check_scenario_items.js` | 4단계 선택형 시나리오 문항 검증 |
+| `npm run check:terms` | `node tools/check/check_terms.js` | 사용자 표시 용어 정합 게이트 (Pro/Free 잔재 차단) |
+| `npm run check:provenance` | `node tools/check/check_doc_provenance.js` | 문서 '원본' 선언 경로 존재 검증 (콘텐츠 출처 추적) |
 
-### `fix:*` — 2개
+### `fix:*` — 3개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
 | `npm run fix:quotes` | `node tools/sync/fix_answer_quotes.js` | 부실 인용문 자동 보강 |
 | `npm run fix:citations` | `node tools/sync/fix_citation_targets.js` | 정답 미지지 문항의 인용 위치 자동 교정 |
+| `npm run fix:all` | `npm run build:derived && npm run build:html && node tools/sync/sync_textbook_files.js` | 교재/문제은행 파일 ↔ manifest·sw.js·인용 경로 동기화 |
 
 ### 기타 — 9개
 
@@ -332,7 +335,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run ratchet:coverage` | `node tools/check/coverage_merge.js --ratchet` | 유닛(node:test + c8)과 DOM(vitest) 커버리지 병합 |
 
-### `audit:*` — 6개
+### `audit:*` — 8개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -342,6 +345,8 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run audit:tools` | `node tools/audit/audit_tool_usage.js` | tools/ 도달성·단계 생존 감사 (advisory 전용, 종료 0) |
 | `npm run audit:gates` | `node tools/audit/audit_gate_utility.js` | P2(감시·감사) 단계 효용 감사 (advisory 전용, 종료 0) |
 | `npm run audit:syllabus` | `node tools/audit/audit_syllabus_alignment.js` | 교재 과목·챕터 구조 ↔ 출제기준 문서 정합성 감사 |
+| `npm run audit:specfresh` | `node tools/audit/audit_spec_fresh.js` | SPEC 활성(✅) 행 중 코드 @spec 참조 0건 나열 (노후 요구사항 후보) |
+| `npm run audit:doclinks` | `node tools/audit/audit_doc_links.js` | docs/dev/ 문서 중 어디서도 미참조 파일 나열 (노후 문서 후보) |
 
 ### `ci:*` — 3개
 

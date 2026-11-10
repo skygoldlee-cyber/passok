@@ -22,7 +22,7 @@ import {
   loadItems, saveItems, newId, clampStr,
 } from './store-utils.js';
 
-// Free 플랜 저장 한도
+// 무료 플랜 저장 한도
 export const CUSTOM_INGREDIENT_LIMIT_FREE = 50;
 
 const MAX_NAME_LEN = 120;

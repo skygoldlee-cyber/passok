@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03,LP-07
 
-const CACHE_VERSION = 'v20261110-03283d4';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261110-01bdcdd';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passok) — 시험 무관 공유 캐시.
 // 구 접두사(passory-*·cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -438,9 +438,12 @@ const EXAM_MEDIA_ASSETS = [
   './content/exams/carework/docs/images/manual-01-badge.webp',
   './content/exams/carework/docs/images/manual-01-guide.webp',
   './content/exams/carework/docs/images/manual-01-more.webp',
+  './content/exams/carework/docs/images/manual-01-share.webp',
   './content/exams/carework/docs/images/manual-01-sidebar.webp',
+  './content/exams/carework/docs/images/manual-01-tabs.webp',
   './content/exams/carework/docs/images/manual-02-home.webp',
   './content/exams/carework/docs/images/manual-02-sign.webp',
+  './content/exams/carework/docs/images/manual-03-chips.webp',
   './content/exams/carework/docs/images/manual-03-form.webp',
   './content/exams/carework/docs/images/manual-04-result.webp',
   './content/exams/carework/docs/images/manual-05-preview.webp',
@@ -454,6 +457,11 @@ const EXAM_MEDIA_ASSETS = [
   './content/exams/carework/docs/images/manual-12-calc.webp',
   './content/exams/carework/docs/images/manual-13-finder.webp',
   './content/exams/carework/docs/images/manual-14-forms.webp',
+  './content/exams/carework/docs/images/manual-15-mask.webp',
+  './content/exams/carework/docs/images/manual-g01-dashboard.webp',
+  './content/exams/carework/docs/images/manual-g02-flow.webp',
+  './content/exams/carework/docs/images/manual-g04-mock.webp',
+  './content/exams/carework/docs/images/manual-g05-calendar.webp',
   './content/exams/carework/docs/images/작성자-서명.svg',
   './content/exams/carework/교재/careprac/images/aed.webp',
   './content/exams/carework/교재/careprac/images/bath-chair.webp',
