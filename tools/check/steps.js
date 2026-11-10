@@ -104,6 +104,7 @@ const CONTENT_STEPS = [
   nodeStep('content:metasections', 'tools/check/check_meta_sections.js', '검색규약', '메타 섹션 규약 기준선 — reader 미렌더 패턴 미매칭 메타 의심 헤딩 신규 유입 차단 (TS-17)', { content: true }),
   nodeStep('content:glossarysignal', 'tools/check/check_glossary_signal.js', '용어집', '저신호 일반명사 기준선 — 자동 추출 단일어 키워드의 정의 카드 노출 감시 (BP-14)', { content: true, prio: 'p2' }),
   nodeStep('content:docpaths', 'tools/check/check_docs_paths.js', '문서', 'README·AGENTS·docs/*.md 경로 참조 존재 검증 (스테일 탐지)'),
+  nodeStep('content:manualsync', 'tools/check/check_manual_sync.js', '문서', '사용자 매뉴얼 도움말 표 ↔ index.template.html 도움말 메뉴 구성 대조 (UI-문서 drift 탐지)'),
   nodeStep('content:specrefs', 'tools/check/check_spec_refs.js', '추적', 'SPEC ID ↔ 코드 @spec 태그 양방향 정합성 (스테일 참조 탐지)', { prio: 'p0' }),
   nodeStep('content:trace', 'tools/build/build_trace_matrix.js', '추적', 'TRACE_MATRIX 입력 해시 신선도 (SPEC·@spec·문서 헤더 변경 시 재생성 강제)', { args: ['--check'] }),
   nodeStep('content:unit', '--test', '테스트', '유닛 테스트 (node --test)', { args: ['tests/unit/**/*.test.js'], token: 'node --test', prio: 'p0' }),
