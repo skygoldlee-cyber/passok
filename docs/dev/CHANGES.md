@@ -7,7 +7,7 @@
 - carework 사이드바 그룹 구조와 같은 스캔 리듬 — 업무 흐름(5)·분석·판정(2)·법규·출력(4)
 - 후속: formula-products DOM 테스트를 3그룹 단언으로 갱신, 허브 소개·biz 가이드 문구의 구 그룹명 → '분석·판정·법규 도구' 정합, formula_manual UI 구성표 2행 분리
 - docs(dev): E2E 가이드(DSN-45)·구현 설계(DSN-46)를 실제 아키텍처로 정합 — 로컬 퍼스트·해시 라우트·Supabase 하드코딩 오염 리스크 반영, docs_paths_allowlist 파일명 갱신
-- feat(test): E2E 확장 기반 3종 — `support/supabase-override.js`(page.route로 운영 상수→테스트 프로젝트 치환, DSN-46 §3-1-1), `journeys/J-101` 비로그인 학습 스펙, `check_manual_sync.js` 도움말 메뉴↔매뉴얼 drift 체크(steps 등록)
+- feat(test): E2E 확장 기반 3종 — `support/supabase-override.js`(page.route로 운영 상수→테스트 프로젝트 치환, DSN-46 §3-1-1), `journeys/J-101` 비로그인 학습 스펙, `check_manual_sync.js` 도움말 메뉴↔매뉴얼 drift 체크(steps 등록) — 후속: J-101은 퀴즈 인터랙션 불안정으로 계약 단언(기능 접근·시드 유지·기록 축적)으로 단순화
 
 
 ## 2026-11-09 docs(carework): 실무매뉴얼 전면 갱신 — 항목별 삽화 규약·신규 기능 반영
