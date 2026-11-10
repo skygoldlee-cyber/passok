@@ -83,7 +83,7 @@ test.describe('PDF 페이지네이션 (CO-21)', () => {
         await page.waitForFunction(() => window.__APP_INITIALIZED, null, { timeout: 30_000 });
         await _stubVendors(page);
         await page.evaluate(() => window.ExamViewer.openExam('content/exams/carework/docs/학습안내서.md'));
-        const img = page.locator('#exam-overlay.open #exam-article img.reader-img');
+        const img = page.locator('#exam-overlay.open #exam-article img.reader-img').first(); // 삽화 다수 — 첫 장만 검증
         if (!(await img.count())) { test.skip(true, '학습안내서에 삽화 없음'); return; }
         await img.waitFor({ timeout: 20_000 });
         const res = await page.evaluate(async () => {
