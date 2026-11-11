@@ -10,8 +10,7 @@ export const ROLES = { worker: '요양보호사', manager: '관리책임자' };
 
 /** @returns {Promise<any|null>} */
 async function _session() {
-    const { session } = await getAuthSession().catch(() => ({ session: null }));
-    return session;
+    return getAuthSession().catch(() => null);
 }
 
 /** @returns {Promise<object|null>} 로그인 사용자의 멤버십+시설 (미가입 null) */

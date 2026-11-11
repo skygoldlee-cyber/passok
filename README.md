@@ -76,7 +76,7 @@
 **테스트**
 - Node.js 내장 테스트 러너 (`node --test`) — 1,850+ unit tests (sanitize, state, parser, Formula OS 스토어·검증·CSV, 빌드·콘텐츠·보안·성능 불변식 등)
 - Vitest + jsdom — 1,000+ DOM tests (backup, router, Formula OS·학습·공통·계정/동기화·차트·오디오 시나리오)
-- Playwright — 150+ E2E tests (부트스트랩·SW·PWA 자산·데스크톱/모바일 네비게이션)
+- Playwright — 160+ E2E tests (부트스트랩·SW·PWA 자산·데스크톱/모바일 네비게이션)
 - GitHub Actions CI — push 시 lint·types·imports·specrefs·trace → unit·DOM·E2E + parser parity 자동 실행
 
 **데이터 파이프라인** (빌드 타임)
@@ -187,7 +187,7 @@ passok/
 ├── 📂 tests/                        ← 자동화 테스트
 │   ├── unit/                        ← Node.js 내장 테스트 러너 (1,850+ unit tests)
 │   ├── dom/                         ← Vitest + jsdom DOM 테스트 (1,000+ DOM tests)
-│   └── e2e/                         ← Playwright 실브라우저 E2E (150+ E2E tests)
+│   └── e2e/                         ← Playwright 실브라우저 E2E (160+ E2E tests)
 ├── 📂 .github/workflows/            ← GitHub Actions CI (test + parser parity)
 │
 └── 📂 docs/                         ← 문서 (개발 + 사용자)

@@ -13,7 +13,7 @@ vi.mock('../../../../src/ui-utils.js', () => ({
     showConfirm: vi.fn().mockResolvedValue(true),
 }));
 vi.mock('../../../../src/auth-sync/supabase-client.js', () => ({
-    getAuthSession: vi.fn(() => Promise.resolve({ session: null })),
+    getAuthSession: vi.fn(() => Promise.resolve(null)),
     getSupabase: vi.fn(() => Promise.resolve({})),
     onAuthChange: vi.fn(),
 }));

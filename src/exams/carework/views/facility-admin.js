@@ -12,7 +12,7 @@ let _membership = null;
 async function render() {
     const host = $('facility-admin-body');
     if (!host) return;
-    const { session } = await getAuthSession().catch(() => ({ session: null }));
+    const session = await getAuthSession().catch(() => null);
     if (!session) {
         syncFacilityNav(null);
         host.innerHTML = '<p class="care-calc-err">기관 관리는 로그인이 필요합니다 — 사이드바 로그인 후 이용하세요.</p>';

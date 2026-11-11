@@ -11,7 +11,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>
 async function render() {
     const host = $('facility-join-body');
     if (!host) return;
-    const { session } = await getAuthSession().catch(() => ({ session: null }));
+    const session = await getAuthSession().catch(() => null);
     if (!session) {
         syncFacilityNav(null);
         host.innerHTML = '<p class="care-calc-err">기관 가입은 로그인이 필요합니다 — 사이드바 로그인 후 이용하세요.</p>';

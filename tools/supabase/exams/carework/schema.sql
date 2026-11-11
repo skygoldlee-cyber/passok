@@ -57,9 +57,11 @@ as $$
 declare
   v_id uuid;
 begin
+  -- search_path='' 하에서 extensions 스키마 함수는 반드시 한정자 필요
+  -- (pgcrypto는 Supabase 기본 설치지만 search_path 밖 — 미한정 호출은 42883)
   insert into public.facilities (name, biz_no, invite_code, created_by)
     values (trim(p_name), nullif(trim(coalesce(p_biz_no,'')), ''),
-            upper(substr(encode(gen_random_bytes(4),'hex'),1,8)), auth.uid())
+            upper(substr(encode(extensions.gen_random_bytes(4),'hex'),1,8)), auth.uid())
     returning id into v_id;
   insert into public.facility_members (facility_id, user_id, role)
     values (v_id, auth.uid(), 'manager');
@@ -322,6 +324,13 @@ create policy "form_templates manager delete" on public.facility_form_templates 
 -- CO-17 — 기입 문서 유형 확장: facility_records doc_type 'custom_form' (이벤트형 append-only)
 -- author_id 기본값 부여 — 클라이언트 insert가 author_id를 생략하므로 NOT NULL 위반 방지
 alter table public.facility_records alter column author_id set default auth.uid();
+
+-- author_id·user_id 기본값 — facility_records와 동일 계약 (클라이언트가 id를 생략하는
+-- insert는 auth.uid() 기본값으로 채움). 미보정 시 23502 NOT NULL 위반 — J-52x E2E가 적발
+alter table public.shift_handovers alter column author_id set default auth.uid();
+alter table public.family_visits alter column author_id set default auth.uid();
+alter table public.incident_reports alter column author_id set default auth.uid();
+alter table public.handover_acks alter column user_id set default auth.uid();
 alter table public.facility_records drop constraint if exists facility_records_doc_type_check;
 alter table public.facility_records add constraint facility_records_doc_type_check
   check (doc_type in ('care_log','roster','audit','visit_result','client','report','custom_form'));

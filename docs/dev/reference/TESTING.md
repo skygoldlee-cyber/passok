@@ -29,7 +29,7 @@
 |------|-----------|------|-----------|-----------|
 | **Unit** | `node:test` | Node.js (DOM 없음) | `tests/unit/**/*.test.js` | 1,850+ |
 | **DOM** | Vitest + jsdom | 브라우저 DOM 시뮬레이션 | `tests/dom/**/*.test.js` | 1,000+ |
-| **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 150+ |
+| **E2E** | Playwright | 실브라우저 (Chromium + 모바일 + 태블릿) | `tests/e2e/**/*.spec.js` | 160+ |
 | **합계** | | | | **3,000+** |
 
 > 수치는 `check:teststats`(docs 단계)이 `tools/state/test_stats.json` 실측 SSOT와 정합 검증한다 —
@@ -702,6 +702,11 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
 
 - `carework:` 스코프 localStorage 스토어만 다루는 로컬 경로 — Supabase 불필요, 기관(facility) 경로는 J-52x 소관. 4스펙(J-510 3건·J-511 2건·J-512 3건·J-513 3건): **J-510** 요양일지(작성→생성→저장→재진입 복원→삭제)·면회기록(예약→결과기록 패널→완료 목록 이동)·사고보고서(생성→저장→목록), **J-511** 수급자 명부(등록→일지 기록 시 명부 datalist 해소→통합 이력 `clientTimeline` 연동→수정 경로)·교대 근무표(배정→삭제), **J-512** 비용 계산기(재가급여→본인부담 결과 표)·대처카드(상세→`CARE_INCIDENT_DRAFT` 초안 소비로 사고보고서 선기입 연동)·평가 체크리스트(체크→진행률→재부팅 지속), **J-513** 기관양식(`{{항목}}` 기입란 템플릿→기입→문서 생성·저장)·서식 디렉터리(외부 링크 속성)·기관 찾기(로컬 데이터 검색→기관 설정).
 - 함정: ①더보기 `details`는 **지연 주입된 다른 실무 뷰의 동명 summary와 충돌**하므로 `#<view-id>` 스코프 필수 ②Pro 배지 저장 버튼 첫 클릭 시 `#pro-upgrade-overlay`가 이후 클릭을 차단 — `examSeed()`가 비스코프 `pro_notice_seen`을 미리 기록해 해제(안내 계약은 J-203 소관) ③`obs-*` 칩은 시각 숨김 radio라 `check()` 불가 — `label.obs-chip` 클릭이 실사용자 경로.
+
+**exams/carework/j-520~522 — 기관 워크스페이스 Supabase 다중 사용자 스위트 (J-520~522, 2026-11-12 추가)**
+
+- 테스트 Supabase(`passok-e2e`)의 facility 도메인 — `facility-setup.js` 공용 기반: `e2e-facility-admin`/`e2e-facility-member` 계정, beforeEach가 service role REST로 시드 계정 소유 기관 삭제(FK cascade)해 멱등 초기화, J-521/522는 멤버십을 REST 선시드. 다중 사용자는 `browser.newContext(contextOptions)`로 세션 분리(serviceWorkers:'block' 상속). 3스펙(J-520 2건·J-521 2건·J-522 2건): **J-520** 기관 등록→초대 코드 발급 / 별도 컨텍스트 코드 가입→소속 카드·멤버 반영 + 무효 코드 오류, **J-521** 인수인계 공유→admin 대장→인수 서명 + 작성자 본인 서명 RLS 차단, **J-522** 면회·사고 기관 공유→대장 섹션 + family_visits/incident_reports REST 단언.
+- 스펙 작성으로 **제품 결함 3건 적발·수정**: ①facility 3곳이 `getAuthSession()` 반환값을 `{session}`으로 잘못 재분해 — 로그인해도 워크스페이스 불능 ②`create_facility` RPC의 `gen_random_bytes` 미한정 호출(`extensions` 스키마 한정자로 수정) ③author_id·user_id NOT NULL 무기본값 → 스키마에 `default auth.uid()` 추가. DOM mock도 `{session:null}`→`null` 교정.
 
 **exams/cosmetic/j-530·531 — Formula OS 실무모드 로컬 CRUD 스위트 (J-530~531, 2026-11-12 추가)**
 

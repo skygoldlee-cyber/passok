@@ -82,6 +82,17 @@ const SEED_ACCOUNTS = [
             updated_at: new Date(Date.now() - 86_400_000).toISOString(),
         },
     },
+    {
+        // J-520~522 기관 워크스페이스 — 기관 생성·관리책임자 (UI로 create_facility 호출)
+        // 멤버십은 스펙이 매 실행 service role로 정리·재시드 (재실행 멱등)
+        email: 'e2e-facility-admin@passok.test',
+        snapshot: null,
+    },
+    {
+        // J-520~522 기관 워크스페이스 — 초대 코드로 가입하는 요양보호사
+        email: 'e2e-facility-member@passok.test',
+        snapshot: null,
+    },
 ];
 
 function testUrl() {

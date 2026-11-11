@@ -1,6 +1,18 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(e2e): J-520~522 기관 워크스페이스 Supabase 다중 사용자 스위트 + 제품 결함 3건 수정
+
+- `tests/e2e/exams/carework/`에 스펙 3종 신설 — J-520 기관 등록→초대 코드→별도 컨텍스트 가입(+무효 코드 오류), J-521 인수인계 공유→admin 대장→인수 서명(+본인 서명 RLS 차단), J-522 면회·사고 기관 공유→대장+REST 단언
+- `tests/e2e/support/facility-setup.js` 신설 — 멱등 기반: service role REST로 시드 계정 소유 기관 삭제(FK cascade), J-521/522는 facility+멤버십 선시드, `browser.newContext(contextOptions)` 다중 세션
+- `seed_test_accounts.js`에 `e2e-facility-admin`·`e2e-facility-member` 계정 추가(시드 실행 완료)
+- 스펙 작성으로 적발한 제품 결함 수정:
+  - `getAuthSession()` 반환(session 객체)을 facility 3곳이 `{session}`으로 재분해해 항상 undefined — 기관 워크스페이스가 로그인 상태에서도 불능이던 실버그
+  - `create_facility` RPC가 `search_path=''` 하에서 `gen_random_bytes(4)` 미한정 호출 → `extensions.` 한정자 추가(42883 오류)
+  - shift_handovers·family_visits·incident_reports.author_id, handover_acks.user_id에 `default auth.uid()` 추가(23502 위반 — facility_records 선례와 동일 계약) — **운영 프로젝트에도 동일 스키마 적용 필요**(`apply_schema --prod`)
+- DOM 테스트 `getAuthSession` mock을 `{session:null}`→`null`로 교정 — 로컬 3프로젝트 18/18·DOM 72/72·J-500 carework 회귀 통과
+
+
 ## 2026-11-12 fix(e2e): 모의고사 단답형 1번 문항 시 응답 대기 영구화 — J-500·J-201 문항 유형 무관 응답
 
 - J-500·J-201이 `.sim-option-item` 고정 클릭으로 응답하던 것을 문항 유형 분기로 수정 — 셔플로 단답형이 1번에 오면 `#sim-text-input`만 렌더돼 영구 대기(CI run 43034632988 chromium 샤드2에서 2연속 실패로 실측)

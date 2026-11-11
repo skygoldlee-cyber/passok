@@ -16,7 +16,7 @@ vi.mock('../../../../src/ui-utils.js', () => ({
     hideGlobalLoading: vi.fn(),
 }));
 vi.mock('../../../../src/auth-sync/supabase-client.js', () => ({
-    getAuthSession: vi.fn(() => Promise.resolve({ session: null })),
+    getAuthSession: vi.fn(() => Promise.resolve(null)),
     getSupabase: vi.fn(() => Promise.resolve({})),
     onAuthChange: vi.fn(),
 }));
