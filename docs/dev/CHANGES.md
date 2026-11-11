@@ -1,6 +1,15 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 feat(e2e): J-102 해제 기반 선구현 — 시드 스크립트·프로브 오버라이드·런북
+
+- `tools/supabase/seed_test_accounts.js` 신설 — TEST_SUPABASE_* env로 테스트 계정 3종(e2e-new/active/sync) 멱등 시드, 운영 ref·운영 Secret 감지 시 중단하는 안전장치 내장 (DSN-46 §3-2)
+- `check_supabase_schema.js` — TEST_SUPABASE_URL/ANON_KEY env 설정 시 테스트 프로젝트 프로브 (운영 상수만 읽던 갭 보강)
+- `.env.example` — TEST_SUPABASE_URL/ANON_KEY/SERVICE_ROLE_KEY·TEST_E2E_PASSWORD 키 선언
+- `docs/dev/runbooks/E2E_TEST_SUPABASE.md` — J-102 해제 런북 (프로젝트 생성 → 키 등록 → 스키마·시드 → 스펙 작성)
+- DSN-46 — J-102 상태 갱신(기반 완비·키 대기), 시드 경로·스키마 drift 절차 정정
+
+
 ## 2026-11-11 chore: 테스트 통계 갱신 — J-302/401/402 스펙 추가분 반영
 
 - stats:stamp 재측정: e2e 134→137 시나리오, 432→441 runs, 29→32 spec files — 전체 스위트 1회 완주 결과 416 passed·25 skipped·0 failed

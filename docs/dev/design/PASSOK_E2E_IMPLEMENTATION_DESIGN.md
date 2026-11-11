@@ -45,7 +45,7 @@ tests/e2e/
   db/                          # 신설 — Supabase 검증 스크립트 (가이드 §7-4/7-5 이식)
     verify-attempt.mjs         # 화면 점수 ↔ DB 행 대조
     rls-check.mjs              # 계정 간 데이터 격리 검사
-    seed-test-accounts.mjs     # 테스트 계정 생성·상태 시드
+    # 계정 시드는 tools/supabase/seed_test_accounts.js에 구현됨 (2026-11-11 — tools/supabase 관례)
   fixtures/
     auth.setup.js              # Playwright storageState — 로그인 세션 재사용
   support/
@@ -94,7 +94,7 @@ tests/reports/
 | `e2e-sync@…` | 동기화 충돌 상태 (로컬·클라우드 서로 다른 진도) | 충돌 해결·마지막 쓰기 우선 검증 |
 | `e2e-admin@…` | 관리자 플래그 (해당 시) | 관리자 화면 접근 — 미구현 시 생략 |
 
-시드는 `db/seed-test-accounts.mjs`가 service role key로 수행 — 매 실행 전 idempotent하게 동일 상태 복원.
+시드는 `tools/supabase/seed_test_accounts.js`가 service role key로 수행 — 매 실행 전 idempotent하게 동일 상태 복원 (구현됨 2026-11-11, 절차는 runbooks/E2E_TEST_SUPABASE.md).
 
 ### 3-3. 비밀정보
 
@@ -138,6 +138,7 @@ tests/reports/
 > **J-202 구현 메모** (2026-11-11): `j-202-progress-resume.spec.js`는 careFlow 이어하기 계약을 검증한다 — 중간 단계 중단(story/summary) 후 대시보드 경유·새로고침·개념 재선택 시 `flow_progress`의 저장 단계로 복귀(`result` 저장분은 `scenario`로 매핑), 완주 시 `stage='complete'` 기록, 재접속 후 개념 목록 옵션의 상태 접두(✓ 완료·! 취약·↻ 복습)를 확인한다. **2과목 개념을 쓴다** — 1과목 개념은 pre 문항이 없는 경우가 있어 단계 저장 시점(응답 시 기록)이 어긋난다.
 >
 > **J-102 차단 판정** (2026-11-11): 테스트 Supabase 환경 미확보로 구현 보류 — `.env`에 `TEST_SUPABASE_*` 키 없음(운영 키만 존재), 로컬 `supabase start`도 Docker 미설치로 불가. 해제 조건: ①별도 테스트 프로젝트 생성 + `TEST_SUPABASE_URL/ANON_KEY/SERVICE_ROLE_KEY` 시크릿 등록 또는 ②Docker 설치 후 `supabase start` → 이후 §3-1-1 오버라이드 기작 구현 → J-102 작성. 운영 DB 직접 사용은 절대 금지.
+> **→ 기반 선구현 완료** (2026-11-11): §3-1-1 오버라이드 헬퍼·`tools/supabase/seed_test_accounts.js`(멱등·운영 ref 감지 중단)·스키마 프로브 TEST_* 오버라이드·`.env.example` 키 선언까지 완비. 남은 것은 테스트 프로젝트 생성 + 키 3종 등록뿐 — 절차는 `docs/dev/runbooks/E2E_TEST_SUPABASE.md`.
 
 ## 5. 선택자 규약 — data-testid 점진 도입
 
@@ -165,7 +166,7 @@ env:
   TEST_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
   TEST_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
 steps:
-  - run: node tests/e2e/db/seed-test-accounts.mjs   # 시드 초기화 (Supabase 설정 시만)
+  - run: node tools/supabase/seed_test_accounts.js   # 시드 초기화 (Supabase 설정 시만)
   - run: npm run test:e2e                            # 기존 전체 스펙 + journeys/
   - uses: actions/upload-artifact@v4                 # trace·보고서 (기존 패턴)
 ```
@@ -196,7 +197,7 @@ steps:
 ## 10. 리스크·미해결
 
 - **운영 Supabase 오염 (최상위)**: `supabase-config.js`는 운영 상수 하드코딩 — 오버라이드 기작(§3-1-1) 없이 인증·동기화 스펙을 돌리면 운영 DB에 계정·데이터가 생긴다. Phase 1 선행 필수이며, 오버라이드 미적용 스펙에서 인증 UI 호출을 차단하는 가드(`page.route` 실패 시 test.skip)도 둔다
-- **테스트 프로젝트 스키마 drift**: 운영 스키마 변경이 테스트 프로젝트에 미반영되면 J-102가 거짓 통과 — 스키마 스냅샷을 `db/`에 버전 관리하고 배포 후 갱신 절차를 둔다
+- **테스트 프로젝트 스키마 drift**: 운영 스키마 변경이 테스트 프로젝트에 미반영되면 J-102가 거짓 통과 — 스키마 정본(`tools/supabase/schema.sql`+`exams/<id>/`)을 `SUPABASE_URL=<test>` 지정 `apply_schema.js`로 재적용하는 절차를 둔다 (check_supabase_schema.js가 TEST_* env로 테스트 프로젝트 프로브 가능)
 - **기존 스펙 text 선택자 회귀**: data-testid 전환 중 기존 스펙이 깨질 수 있음 — 전환은 스펙을 건드릴 때만, 대량 일괄 변경 금지
 - **Supabase 선택적 구조**: 테스트 프로젝트 미설정 시 J-102·J-203이 자동 스킵되어야 함 — 스킵 조건을 `isSupabaseConfigured()` 기반으로 명시해 CI에서 "설정 없음 = 스킵"과 "설정 있음 = 실행"을 분리
 - **localStorage 시드**: Playwright의 `addInitScript`로 진도·설정을 사전 주입 — 시드 스키마가 `storage-keys.js`와 drift하지 않도록 키는 모듈에서 import
