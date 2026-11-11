@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 docs(e2e): J-102 차단 판정 — 테스트 Supabase 환경 미확보
+
+- DSN-46 카탈로그 J-102 행 "차단 ⚠" 표기 + 차단 판정 메모 추가 — TEST_SUPABASE_* 키 부재·Docker 미설치로 로컬 supabase start 불가
+- 해제 조건 명시: 별도 테스트 프로젝트 + TEST_SUPABASE_URL/ANON_KEY/SERVICE_ROLE_KEY 시크릿 또는 Docker + supabase start — 운영 DB 직접 사용 금지 원칙 재확인
+
+
 ## 2026-11-11 test(e2e): J-302·J-401·J-402 여정 — 문서 인쇄·반응형·PWA 오프라인
 
 - `j-302-docs-print.spec.js` — 매뉴얼 열람 → 인쇄/PDF → 스타일드 PDF 새 탭 미리보기(popup+토스트) + html2canvas 강제 실패 시 'PDF 생성 실패' 토스트·window.print() 폴백 1회 검증 (CO-20)
