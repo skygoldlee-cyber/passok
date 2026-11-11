@@ -1307,7 +1307,7 @@ body.ui-mode-practice .tab-group-study { display: none; }
 
 /* 실무 탭바 전체 항목 — 수가 많으면 최소폭 유지하며 가로 스크롤 (사이드바 구성과 동기화) */
 .mobile-tab-bar { overflow-x: auto; }
-.mobile-tab-bar .mobile-tab-item { min-width: 60px; } /* 360px 최소폭에서 5탭+더보기+모드 탭(56px) 무스크롤 수용 */
+.mobile-tab-bar .mobile-tab-item { min-width: 60px; } /* 최악 조합(콘텐츠5+더보기+모드=7슬롯 ≈416px)은 360px에서 가로 스크롤 수용 — 모드 탭은 우측 고정 (SPEC §4.10.1) */
 
 /* 모드 분리 원칙 (DA-20) — 학습 모드에서 실무·기관 메뉴 전면 숨김 */
 body:not(.ui-mode-practice) .nav-item-practice,

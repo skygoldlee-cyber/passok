@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 3397013b6645a258
+> 입력 해시: 694799806fbaf1b5
 > 생성: 2026-11-11 · 원천: SPEC.md(693개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -383,7 +383,7 @@
 | FO-66 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-14 | src/exams/cosmetic/views/formula-audit.js | tests/unit/exams/cosmetic/formula-audit.test.js | — | — |
 | FO-67 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-14 | src/exams/cosmetic/views/formula-audit.js | tests/unit/exams/cosmetic/formula-audit.test.js | — | — |
 | FO-68 | 구현 | 테스트 | DOC-BIZ-02<br>DOC-DSN-14 | tools/check/check_adlint_coverage.js | tests/unit/exams/cosmetic/formula-sales.test.js | — | — |
-| FO-69 | — | 테스트 | — | src/exams/cosmetic/biz-profile.js<br>src/exams/cosmetic/views/formula-audit.js<br>src/exams/cosmetic/views/formula-compliance.js<br>src/exams/cosmetic/views/formula-print.js | tests/dom/exams/cosmetic/formula-audit.dom.test.js<br>tests/unit/exams/cosmetic/formula-audit.test.js | — | — |
+| FO-69 | 구현 | 테스트 | — | src/exams/cosmetic/biz-profile.js<br>src/exams/cosmetic/views/formula-audit.js<br>src/exams/cosmetic/views/formula-compliance.js<br>src/exams/cosmetic/views/formula-print.js | tests/dom/exams/cosmetic/formula-audit.dom.test.js<br>tests/unit/exams/cosmetic/formula-audit.test.js | — | — |
 | FO-70 | 구현 | 테스트 | — | src/exams/cosmetic/views/formula-print.js | tests/unit/exams/cosmetic/formula-audit.test.js | — | — |
 
 ## 3.19 계정·클라우드 동기화
