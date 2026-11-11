@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 fix(carework): 대처카드 연락처 라벨 저대비 — 테마 토큰 배경+본문색으로 교정
+
+- 상황별 대처카드 상세의 연락처 칩(`care-card-contact`)이 미정의 `--color-surface-alt` 폴백 `#f3f4f6` 배경에 muted 회색 라벨 — '즉시 조치' 위 2개 라벨이 배경과 같은 계열이라 판독 불가
+- 칩 배경을 `--bg-input`+`--border-subtle`로, 라벨(em)을 `--color-text-main`+600으로 교정 — 다크·라이트 테마 모두 대비 확보
+
+
 ## 2026-11-12 fix(carework): 기관 공유 버튼의 멤버십 레이스 — 핸들러에서 지연 재해석
 
 - `care-visit`/`care-incident`의 '기관에 공유' 버튼은 정적 마크업이라 `renderFacility()`의 비동기 `myMembership()` 해석 전에 클릭 가능 — `_facility`가 아직 null이면 소속 사용자에게도 '소속 기관이 없습니다' 오류 토스트(CI tablet에서 J-522 면회 실패로 적발)
