@@ -116,6 +116,10 @@ tests/reports/
 | J-401 | 반응형 | P2 | 3 뷰포트 × 주요 화면 스크린샷·가로 스크롤 0px 판정 | — | mobile-overflow·responsive-flow |
 | J-402 | PWA·오프라인 | P3 | 오프라인 전환 → 안내·캐시 서빙 → 복구 후 동기화 | 오프라인 중 진도 유실·중복 저장 없음 | 없음 (신규) |
 | J-500 | 팩 적합성 | P2 | exams.json 전 팩 × 부팅·교재·퀴즈·통합 모의고사·선언 실무 뷰 렌더 | registry 기대치 대비 출제 계약 + 타 스코프 localStorage 키 0건 | `j-500-exam-conformance.spec.js` (매트릭스 동적 생성) |
+| J-510 | 실무 기록 | P2 | care-log 작성→생성→저장→재진입 복원·삭제 · care-visit 예약→결과기록→완료 이동 · care-incident 생성→저장→목록 | `carework:` 스코프 localStorage 지속 + 라우팅 재진입 목록 일치 | `j-510-care-records.spec.js` |
+| J-511 | 명부·근무표 | P2 | care-client 등록→일지 기록(명부 datalist 해소)→통합 이력 연동·수정 경로 · care-roster 배정→목록→삭제 | clientTimeline 이름/ID 해소 계약 | `j-511-care-clients-roster.spec.js` |
+| J-512 | 도구·평가 | P2 | care-calc 재가급여→본인부담 결과 표 · care-card 상세→사고보고서 선기입 연동 · care-audit 체크→진행률→재부팅 지속 | CARE_INCIDENT_DRAFT 초안 소비 계약 | `j-512-care-tools.spec.js` |
+| J-513 | 양식·기관찾기 | P2 | care-custom-form 템플릿({{항목}} 기입란) →기입→문서 생성·저장 · care-forms 발급처 링크 디렉터리 · care-finder 검색→기관 설정 | 로컬 시설 데이터 필터 + `care-finder-set` 기관명 연결 | `j-513-care-forms-finder.spec.js` |
 | J-900 | 품질 신호 | P1 | 전 시나리오 공통: JS 예외 0 · 5xx 응답 0 | `evidence.js`의 console/network 수집 첨부 | app.spec 부분 |
 
 **첫 구현 대상**: J-201(모의고사) — 학습·채점·저장이 한 흐름에 있어 공통 헬퍼가 함께 완성. 단 J-101(비로그인)이 선행으로 자연스럽게 붙는다 — 로그인 불필요, 오버라이드 기작 없이 즉시 작성 가능 (가이드 §5 권장과 동일 논리).
@@ -143,6 +147,8 @@ tests/reports/
 > **→ 차단 해제·구현 완료** (2026-11-11): `passok-e2e` 프로젝트 생성·스키마 15테이블·시드 3계정·GitHub Secrets 4종 완비. `j-102-auth-sync.spec.js` 3시나리오 × 3프로젝트 로컬 9/9 통과, ci.yml e2e 잡에 TEST_* env 주입. 구현 중 발견된 함정(SW precache의 route 우회 → `serviceWorkers:'block'` 필수, Pro 게이트·비스코프 payload 키, getSupabase 경합)은 런북 Phase D에 기록.
 >
 > **J-500 구현 메모** (2026-11-12): `j-500-exam-conformance.spec.js`는 `tests/e2e/support/exam-matrix.js`가 exams.json + `data/exams/<id>/registry.js`(빌드 산출물)에서 읽은 기대치로 팩당 1테스트를 동적 생성한다 — 신규 팩은 스펙 수정 없이 자동 편입. **팩별 분기는 registry가 정본**: ①`stats.quizzes>0` 과목이 없는 팩(compapp2 등)은 빈칸퀴즈가 '미저작' 상태이므로 무응답이 아니라 '출제 가능한 퀴즈가 없습니다' 토스트의 정상 열화를 검증 ②통합 모의고사는 **모든 과목**에 문항 뱅크가 매핑돼야 시작된다(`exam-sim-session.js` missingSubjects 가드) — 미커버 과목이 있으면 '데이터 불완전' 토스트, 전 커버면 실제 출제+1문 응답을 요구 ③`integratedExam` 카드 노출 판정은 앱과 동일하게 `questionsPerSubject` 맵 유무 — hairdresser의 구형 `subjects[]` 배열 스키마는 비노출이 정상. 과목 순회는 '비어 있으면 다음 과목을 고르는' 사용자 행동을 그대로 따른다(과목별 콘텐츠 편차가 팩마다 다름).
+>
+> **J-510~513 구현 메모** (2026-11-12): carework 실무모드 로컬 CRUD 스위트 — 스토어는 `carework:` 스코프 localStorage라 Supabase 불필요(기관 경로는 J-52x 소관). 구현 중 확인된 함정 3가지: ①더보기 `details.care-more-actions > summary` 선택자는 **지연 주입된 다른 실무 뷰의 동명 summary까지 매칭**되므로 `#care-log-view`/… 뷰 스코프 필수 ②Pro 배지 버튼(`data-pro-feature` 저장 계열) 첫 클릭 시 `#pro-upgrade-overlay` 안내가 떠서 이후 클릭을 가로막는다 — `examSeed()`가 비스코프 `pro_notice_seen`에 `{"_global":…}`를 미리 기록해 해제(안내 모달 계약 자체는 J-203이 검증) ③`obs-*` 관찰 칩은 시각 숨김 radio + `label.obs-chip` 패턴이라 `check()`가 아니라 **라벨 클릭**이 실사용자 경로. 스토어 간 연동은 J-511의 clientTimeline(일지→명부 이력)과 J-512의 카드→사고보고서 `CARE_INCIDENT_DRAFT` 초안 소비가 핵심 계약이다.
 
 ## 5. 선택자 규약 — data-testid 점진 도입
 

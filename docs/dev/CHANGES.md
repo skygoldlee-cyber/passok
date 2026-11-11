@@ -1,6 +1,18 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(e2e): J-510~513 carework 실무모드 로컬 CRUD 스위트 — 4스펙 11시나리오
+
+- `tests/e2e/exams/carework/`에 스펙 4종 신설 — `carework:` 스코프 localStorage 스토어의 실제 UI CRUD 사이클 검증(작성→생성→저장→라우팅 재진입 목록→삭제)
+  - J-510 기록: 요양일지·면회기록(예약→결과기록→완료 이동)·사고보고서
+  - J-511 명부·근무표: 수급자 등록→일지 기록 시 명부 datalist 해소→`clientTimeline` 통합 이력 연동·수정 경로 + 근무표 배정·삭제
+  - J-512 도구·평가: 비용 계산 결과 표·대처카드→사고보고서 `CARE_INCIDENT_DRAFT` 선기입 연동·평가 체크리스트 진행률·재부팅 지속
+  - J-513 양식·기관찾기: `{{항목}}` 기입란 템플릿→기입→문서 생성·저장 + 서식 링크 디렉터리 + 기관 검색·설정
+- `exam-matrix.js`의 `examSeed()`에 비스코프 `pro_notice_seen` 기록 추가 — Pro 배지 저장 버튼 첫 클릭의 `#pro-upgrade-overlay` 안내가 이후 클릭을 차단하는 것을 해제(안내 계약은 J-203 소관)
+- 스펙 작성 중 확인된 함정(더보기 details 뷰 스코프 필수·obs 칩 라벨 클릭)은 DSN-46 J-510~513 구현 메모에 기록
+- DSN-46 카탈로그 J-510~513 등록·구현 메모, TESTING.md 스펙 항목 추가 — 로컬 3프로젝트 39/39 통과
+
+
 ## 2026-11-12 feat(e2e): J-500 시험 팩 학습 적합성 스위트 — exams.json 매트릭스 동적 생성
 
 - `tests/e2e/support/exam-matrix.js` 신설 — exams.json + `data/exams/<id>/registry.js`에서 팩·features·콘텐츠 기대치(퀴즈 과목 수·문제은행 커버리지·통합 시험 스키마)를 읽는 매트릭스 헬퍼. 신규 팩은 exams.json 추가만으로 스위트에 자동 편입

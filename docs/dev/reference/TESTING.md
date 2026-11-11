@@ -698,6 +698,11 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
 - 커버: 부팅·`current_exam` → 교재 과목 순회로 콘텐츠 있는 과목 발견(없으면 draft만 허용) → 퀴즈(`stats.quizzes>0` 과목이 있으면 1회분 응답→결과 패널, 없으면 '출제 가능한 퀴즈가 없습니다' 토스트의 정상 열화) → 통합 모의고사(전 과목 뱅크 커버면 출제+1문 응답, 미커버면 '데이터 불완전' 토스트, `questionsPerSubject` 미선언 구형 스키마는 카드 비노출이 정상) → features 플래그에 선언된 실무 피처 뷰 딥링크 렌더 → 타 스코프(`<다른팩>:`) localStorage 키 0건 · pageerror 0건.
 - 선행 조건: `npm run build:data`로 번들이 생성돼 있어야 registry 기대치가 읽힌다(serve/CI 경로에서는 이미 충족).
 
+**exams/carework/j-510~513 — carework 실무모드 로컬 CRUD 스위트 (J-510~513, 2026-11-12 추가)**
+
+- `carework:` 스코프 localStorage 스토어만 다루는 로컬 경로 — Supabase 불필요, 기관(facility) 경로는 J-52x 소관. 4스펙 11시나리오: **J-510** 요양일지(작성→생성→저장→재진입 복원→삭제)·면회기록(예약→결과기록 패널→완료 목록 이동)·사고보고서(생성→저장→목록), **J-511** 수급자 명부(등록→일지 기록 시 명부 datalist 해소→통합 이력 `clientTimeline` 연동→수정 경로)·교대 근무표(배정→삭제), **J-512** 비용 계산기(재가급여→본인부담 결과 표)·대처카드(상세→`CARE_INCIDENT_DRAFT` 초안 소비로 사고보고서 선기입 연동)·평가 체크리스트(체크→진행률→재부팅 지속), **J-513** 기관양식(`{{항목}}` 기입란 템플릿→기입→문서 생성·저장)·서식 디렉터리(외부 링크 속성)·기관 찾기(로컬 데이터 검색→기관 설정).
+- 함정: ①더보기 `details`는 **지연 주입된 다른 실무 뷰의 동명 summary와 충돌**하므로 `#<view-id>` 스코프 필수 ②Pro 배지 저장 버튼 첫 클릭 시 `#pro-upgrade-overlay`가 이후 클릭을 차단 — `examSeed()`가 비스코프 `pro_notice_seen`을 미리 기록해 해제(안내 계약은 J-203 소관) ③`obs-*` 칩은 시각 숨김 radio라 `check()` 불가 — `label.obs-chip` 클릭이 실사용자 경로.
+
 **exams/cosmetic/formula-tablet.spec.js — Formula OS 태블릿 현장 작업 (FO-26~31, 2026-10-04 추가)**
 
 - **뷰포트 834×1112**(iPad Air 세로)에서 `#/formula` 딥링크 부팅 → 배합 계산 진입.

@@ -93,5 +93,9 @@ export function examSeed(examId, { uiMode = 'study' } = {}) {
         L.setItem('${examId}:onboarding_seen_v1', '1');
         L.setItem('telemetry_notice_shown', '1');
         L.setItem('ui_mode', '${uiMode}');
+        // Pro 배지 첫 진입 안내(#pro-upgrade-overlay)를 해제된 상태로 —
+        // 비차단 안내지만 오버레이가 이후 클릭을 가로막아 CRUD 스펙이 멈춘다.
+        // 안내 모달 자체의 계약은 J-203이 검증한다.
+        L.setItem('pro_notice_seen', '{"_global":"2026-01-01T00:00:00"}');
     })()`;
 }
