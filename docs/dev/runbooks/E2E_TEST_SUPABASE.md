@@ -18,14 +18,33 @@
 
 ## Phase A — 테스트 프로젝트 생성 (사용자, ~5분)
 
-1. https://supabase.com/dashboard → **New project** (운영과 같은 organization)
-   - 이름: `passok-e2e` 권장 · Region: 운영과 동일 · DB password 생성 후 보관
-2. **Settings → API Keys**에서 3개 값 확보:
+**별도 Supabase 계정 가입은 불필요** — 기존 계정의 같은 organization 안에 새 프로젝트를 만들면 된다. 격리 경계는 계정이 아니라 프로젝트다:
+
+- 프로젝트마다 독립된 DB·Auth 사용자·API 키·RLS — 테스트 프로젝트의 `auth.users`·`sync_snapshots`는 운영 DB와 물리적으로 분리되어 쓰기가 섞일 수 없다
+- 기존 `SUPABASE_ACCESS_TOKEN`(PAT)은 계정 단위라 신규 프로젝트에도 그대로 적용 — `apply_schema.js`가 별도 인증 없이 동작한다
+- 별도 계정은 오히려 PAT 재발급·조직 관리 부담만 늘린다
+
+### 생성 절차
+
+1. https://supabase.com/dashboard 에 로그인 (운영 프로젝트와 **같은 계정**)
+2. 조직 선택 — 운영 프로젝트가 속한 organization (예: 개인 org)을 대시보드 좌상단에서 선택
+3. **New project** 클릭
+   - **Name**: `passok-e2e` 권장
+   - **Database Password**: 생성 후 비밀번호 관리자에 보관 (시드에는 불필요 — Management API·PostgREST만 사용)
+   - **Region**: 운영 프로젝트와 동일 region 권장 (지연 차이로 인한 타이밍 플레이크 방지)
+   - **Pricing Plan**: Free (테스트 목적으로 충분)
+4. **Settings → API Keys**에서 3개 값 확보:
    - `Project URL` → `TEST_SUPABASE_URL`
    - `anon public` → `TEST_SUPABASE_ANON_KEY`
    - `service_role` → `TEST_SUPABASE_SERVICE_ROLE_KEY` (⚠ 시크릿 — 저장소 기록 금지)
-3. **Authentication → Sign In/Providers → Email**: `Confirm email` **OFF**
+5. **Authentication → Sign In/Providers → Email**: `Confirm email` **OFF**
    - 또는 OFF 유지 대신 시드 스크립트가 `email_confirm: true`로 생성하므로 ON이어도 동작함 (OFF 권장 — 로그인 경로 단순화)
+
+### 주의 사항
+
+- **무료 플랜 프로젝트 한도** — Free 플랜은 조직당 활성 프로젝트 수 제한이 있다(현재 2개). 한도에 걸리면 ①플랜 업그레이드 ②아래 대안 경로(로컬 스택) 중 선택
+- **무료 프로젝트 자동 일시정지** — Free 프로젝트는 약 1주 미사용 시 일시정지되어 J-102가 플레이크한다. 실행 전 대시보드에서 재개 확인하거나, Keep-Alive 워크플로를 테스트 프로젝트에도 추가하는 방법이 있다
+- **운영 프로젝트 선택 금지** — 실수로 운영 프로젝트를 고르는 사고는 `seed_test_accounts.js`의 운영 ref 감지가 막지만, 처음부터 `passok-e2e` 같은 명확한 이름으로 구분한다
 
 > **대안 경로**: Docker Desktop 설치 후 `npx supabase start`로 로컬 스택 — 대시보드 불필요하나 Docker 설치가 선행 조건.
 
