@@ -47,7 +47,7 @@ import { careHandoverGenerate, careHandoverSave, careHandoverExport, initCareHan
 import { initFacilityJoinView } from '../../../../src/exams/carework/views/facility-join.js';
 import { initCareHomeView, careDocSignSave, careSignImagePick } from '../../../../src/exams/carework/views/care-home.js';
 import { setDocSign } from '../../../../src/exams/carework/facility.js';
-import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, careVisitPreview, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
+import { careVisitAdd, careVisitResultOpen, careVisitResultSave, careVisitDelete, careVisitPreview, careVisitFacilitySubmit, initCareVisitView } from '../../../../src/exams/carework/views/care-visit.js';
 import { careClientSave, careClientLoad, careClientDelete, initCareClientView } from '../../../../src/exams/carework/views/care-client.js';
 import { listClients } from '../../../../src/exams/carework/care-client-store.js';
 import { careLogCsvExport } from '../../../../src/exams/carework/views/care-log.js';
@@ -59,11 +59,11 @@ import { addIncident, removeIncident } from '../../../../src/exams/carework/inci
 import { careRosterCsvExport, careRosterCsvImport } from '../../../../src/exams/carework/views/care-roster.js';
 import { addRoster, listRoster } from '../../../../src/exams/carework/roster-store.js';
 import { selectFile, waitFor, spyAnchorDownload, lastToast } from '../../helpers.js';
-import { careIncidentGenerate, careIncidentSave, careIncidentDelete, initCareIncidentView } from '../../../../src/exams/carework/views/care-incident.js';
+import { careIncidentGenerate, careIncidentSave, careIncidentDelete, careIncidentFacilitySubmit, initCareIncidentView } from '../../../../src/exams/carework/views/care-incident.js';
 import { careRosterAdd, careRosterDelete, initCareRosterView } from '../../../../src/exams/carework/views/care-roster.js';
 import { careFinderUseOrg } from '../../../../src/exams/carework/views/care-finder.js';
 import { getOrgName } from '../../../../src/exams/carework/facility.js';
-import { syncFacilityNav, myMembership, listHandovers, listVisits as listFacilityVisits } from '../../../../src/exams/carework/facility.js';
+import { syncFacilityNav, myMembership, listHandovers, listVisits as listFacilityVisits, submitVisit, submitIncident } from '../../../../src/exams/carework/facility.js';
 import { ManualViewer } from '../../../../src/reader/manual-viewer.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
@@ -457,6 +457,28 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(host.textContent).toContain('010-1111-2222');
         expect(host.innerHTML).toContain('fac:v1');
         expect(host.innerHTML).not.toContain('fac:v2'); // 완료 건은 결과 기록 버튼 없음
+    });
+
+    it('careVisit/careIncident — 기관 공유 버튼은 멤버십 해석 전 클릭해도 재해석으로 submit 통과 (레이스 방어)', async () => {
+        vi.mocked(myMembership).mockResolvedValue({ facilities: { id: 'f1', name: '행복요양원' } });
+        vi.mocked(submitVisit).mockClear().mockResolvedValue({ id: 'v1' });
+        vi.mocked(submitIncident).mockClear().mockResolvedValue({ id: 'i1' });
+        loadPartial('care-visit.html');
+        initCareVisitView(); // renderFacility() 발사 — 해석 전 클릭 경로도 커버
+        document.getElementById('vis-date').value = '2026-11-05';
+        document.getElementById('vis-client').value = '김○○';
+        document.getElementById('vis-visitor').value = '홍○○';
+        await careVisitFacilitySubmit();
+        expect(submitVisit).toHaveBeenCalledWith(expect.objectContaining({ facilityId: 'f1', client: '김○○' }));
+        expect(lastToast()).toContain('기관 면회 대장에 등록했습니다.');
+        loadPartial('care-incident.html');
+        initCareIncidentView();
+        document.getElementById('inc-date').value = '2026-11-05';
+        document.getElementById('inc-client').value = '이○○';
+        document.getElementById('inc-type').value = 'fall';
+        await careIncidentFacilitySubmit();
+        expect(submitIncident).toHaveBeenCalledWith(expect.objectContaining({ facilityId: 'f1', client: '이○○' }));
+        expect(lastToast()).toContain('기관 사고 대장에 등록했습니다.');
     });
 
     it('careClients — 대상자 등록 → 수정 불러오기 → 삭제', async () => {

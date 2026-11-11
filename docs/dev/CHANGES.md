@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 fix(carework): 기관 공유 버튼의 멤버십 레이스 — 핸들러에서 지연 재해석
+
+- `care-visit`/`care-incident`의 '기관에 공유' 버튼은 정적 마크업이라 `renderFacility()`의 비동기 `myMembership()` 해석 전에 클릭 가능 — `_facility`가 아직 null이면 소속 사용자에게도 '소속 기관이 없습니다' 오류 토스트(CI tablet에서 J-522 면회 실패로 적발)
+- 두 `*FacilitySubmit` 핸들러가 `_facility` null 시 `myMembership()`을 재해석한 뒤 판정하도록 수정 — `care-handover`는 버튼이 동적 섹션 내부 렌더라 구조적으로 안전(변경 불요)
+
+
 ## 2026-11-12 fix(e2e): J-52x CI 병렬 잡 계정 경합 — 테스트별 고유 auth 사용자 생성·폐기로 격리
 
 - CI run `43044070712`에서 J-520(2건)·J-521 p2·J-522 면회 실패 — 로컬 18/18 통과와 상반. 원인: chromium·mobile·tablet 샤드가 **동일 `e2e-facility-admin/member` 계정**으로 동시 실행 — 한 잡의 `resetFacilityState`(기관 삭제)가 다른 잡의 멤버십을 FK cascade로 정리하고, J-521/522의 멤버십 시드가 J-520 member의 '미가입' 전제를 깸(`#fj-code` 미렌더·공유 대상 기관 오선택→`handovers[0]` undefined·토스트 미표시)

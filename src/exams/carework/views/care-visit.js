@@ -231,6 +231,10 @@ async function renderFacility() {
 }
 
 export async function careVisitFacilitySubmit() {
+    // 버튼은 정적 마크업이라 renderFacility()의 멤버십 해석보다 먼저 클릭될 수 있다 — 재해석 후 판정
+    if (!_facility) {
+        try { _facility = (await myMembership())?.facilities || null; } catch (e) { _facility = null; }
+    }
     if (!_facility) { showToast('소속 기관이 없습니다 — 기관 가입 후 이용하세요.', 'error'); return; }
     const f = readForm();
     if (!f.date || !f.client || !f.visitor) { showToast('방문일·대상자·방문객을 입력하세요.', 'error'); return; }
