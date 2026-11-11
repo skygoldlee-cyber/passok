@@ -36,6 +36,7 @@ tests/e2e/
     J-102-auth-sync.spec.js
     j-201-mock-exam.spec.js
     j-202-progress-resume.spec.js
+    j-203-access-control.spec.js
     ...
   db/                          # 신설 — Supabase 검증 스크립트 (가이드 §7-4/7-5 이식)
     verify-attempt.mjs         # 화면 점수 ↔ DB 행 대조
@@ -119,6 +120,8 @@ tests/reports/
 > **carework 학습 경로 주의**: carework는 **careFlow 4단계**(미리풀기→이야기→요약→시나리오, 진도는 `carework:flow_progress`·`flow_attempts`·`quiz_results`의 `*_quiz_flow_*` 항목)가 기본 학습 경로이며, 표준 `quiz-view`·`flashcard-view`는 `data-needs` 게이트가 교재 파생 카드·퀴즈 존재 시에만 노출한다(UX-NAV-16). 2026-11-11 caretheory Ch.02 용어표 파일럿(카드 32·퀴즈 30 + careprac 은행보충 16/15)으로 게이트가 해제되어 J-101이 양쪽 경로를 모두 검증한다. 나머지 챕터 확장 중에는 과목별 데이터 편차를 주의한다.
 
 > **J-201 구현 메모** (2026-11-11): `j-201-mock-exam.spec.js`는 통합 실전 모의고사 계약을 검증한다 — `#/exam` 딥링크 진입(모바일 탭바에 시험 항목 없음) → `#integrated-exam-btn`으로 manifest `questionsPerSubject` 합산(35+45) 응시 → 전 문항 응답·OMR 진행률·`sim_draft_session` 기록 → 제출 확인 모달(`showConfirm`) → `sim-result-*` 점수·과목별 분석·과락/합격 예측 판정 → `sim_results_history`의 `examId:'integrated'` 행과 화면 점수 일치·드래프트 제거를 확인한다. 과락 기준은 carework manifest `subjectFailBelow: 60` — 카탈로그 초기 표기(40)는 정정됨.
+>
+> **J-203 구현 메모** (2026-11-11): `j-203-access-control.spec.js`는 Pro 배지 게이트의 안내형 계약을 검증한다 — feature-plan `free` 표기(mock_exam) 배지 숨김·`pro` 표기(care_log_save) 배지 '유료' 노출 → 요양일지 저장(pro 기능) 최초 진입 시 `💎 유료 기능 안내` 모달 + `pro_notice_seen._global` 기록(GLOBAL_KEYS라 비스코프) → 안내 비차단으로 저장 완료 → 재진입 시 재표시 없음(전역 1회). 결제 미도입으로 "게이트"는 배지+안내이며 실제 이용을 차단하지 않는다 — 카탈로그 "게이트 안내"의 현재 구현 해석.
 >
 > **J-202 구현 메모** (2026-11-11): `j-202-progress-resume.spec.js`는 careFlow 이어하기 계약을 검증한다 — 중간 단계 중단(story/summary) 후 대시보드 경유·새로고침·개념 재선택 시 `flow_progress`의 저장 단계로 복귀(`result` 저장분은 `scenario`로 매핑), 완주 시 `stage='complete'` 기록, 재접속 후 개념 목록 옵션의 상태 접두(✓ 완료·! 취약·↻ 복습)를 확인한다. **2과목 개념을 쓴다** — 1과목 개념은 pre 문항이 없는 경우가 있어 단계 저장 시점(응답 시 기록)이 어긋난다.
 

@@ -1,6 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 test(e2e): J-203 접근 제어 여정 — Pro 배지·최초 안내 1회·비차단 검증
+
+- `j-203-access-control.spec.js` 신설 — feature-plan 매핑(free `mock_exam` 배지 숨김·pro `care_log_save` 배지 '유료' 노출) → 요양일지 저장 최초 진입 시 유료 안내 모달·`pro_notice_seen._global` 기록(GLOBAL_KEYS 비스코프) → 비차단 저장 완료 → 재진입 재표시 없음 검증
+- 구현 발견 사항: pro 기능 버튼은 `.care-more-actions` details 내부(접힘 상태), `ui_mode=practice`에서 exam 뷰 비활성이라 배지는 클래스 검증으로 처리, `#/care-log` 직접 딥링크 진입 필요
+- DSN-46 갱신 — J-203 구현 메모·파일 트리 반영 ("게이트"는 결제 미도입으로 안내형 해석 문서화)
+- 검증: 3프로젝트(chromium·mobile·tablet) 통과
+
+
 ## 2026-11-11 test(e2e): J-201 통합 모의고사 응시 여정 — 점수·과락 판정·이력 기록 검증
 
 - `j-201-mock-exam.spec.js` 신설 — `#/exam` 딥링크(모바일 탭바에 시험 항목 없음) → 통합 모의고사 응시(manifest 35+45문, 동적 총 문항 수) → 전 문항 응답·OMR 진행률·`sim_draft_session` 기록 → `showConfirm` 제출 → 결과 패널 점수/과목별 분석/과락·합격 예측 판정 → `sim_results_history`의 `examId:'integrated'` 행·화면 점수 일치·드래프트 정리 검증
