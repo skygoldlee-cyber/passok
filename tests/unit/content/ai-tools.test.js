@@ -334,6 +334,28 @@ test('AI-05: parseQuestionDraft가 ### Q/정답/근거 라인을 추출하고 �
     } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('AI-05: ai:apply --drafts가 시험 하위폴더 초안을 과목 키로 매칭해 미리보기 편입한다', () => {
+    // ai:draft는 tmp/ai_drafts/<exam>/draft_<subjectKey>.md에 쓴다 — basename 기준 매칭 회귀
+    const dir = join(ROOT, 'tmp', 'ai_drafts', 'carework');
+    mkdirSync(dir, { recursive: true });
+    const fp = join(dir, 'draft_caretheory.md');
+    writeFileSync(fp, [
+        '<!-- ai-draft: model=test date=2026-01-01T00:00:00Z reviewed=no sha=test -->', '',
+        '# 문제 초안 — 테스트', '',
+        '## 섹션 (L14~L14)', '',
+        '### Q1. 테스트 발문으로 옳은 것은?',
+        '① 정답', '② 오답', '',
+        '**Q1답**',
+        '> **정답: ①**',
+        '> **근거 라인: L14**',
+        '> **해설**: 테스트 해설.',
+    ].join('\n'));
+    try {
+        const out = runTool('ai_apply.js', ['--drafts', '--exam', 'carework', '--file', 'caretheory']);
+        assert.match(out, /편입 예정 1건/, '시험 하위폴더 draft_* 초안이 과목 키로 매칭됨');
+    } finally { rmSync(fp, { force: true }); }
+});
+
 test('AI-16: loadStats가 백업 JSON의 statement_stats를 해석하고 순수 맵도 허용한다', () => {
     const { loadStats, isAnomalous } = require('../../../tools/ai/ai_stmt_feedback.js');
     const dir = mkdtempSync(join(tmpdir(), 'stmtstats-'));

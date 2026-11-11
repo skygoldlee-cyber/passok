@@ -1,6 +1,22 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 fix(tools): ai_apply 초안 경로 이중 조인 — 시험 하위폴더 draft_* 편입 불가 수정
+
+- `ai_apply.js` — `listDraftFiles()`가 절대경로를 반환하는데 파일명 규약으로 가공: `f.replace(/^draft_/)`·`f === 'explain_…'`·`path.join(DRAFT_DIR, f)` 전부 실패해 `--drafts`·explain 편입이 시험 하위폴더 초안에서 무음 스킵되던 잠복 버그 → `path.basename` 기준 subjKey·--file 매칭 + 시험 하위폴더 초안의 target.id 귀속 + `batchMeta` 직접 경로
+- `ai_apply.js` — `batchMeta`를 `writeFileSync`보다 먼저 평가: 크래시 시 은행 파일만 쓰인 부분 편입(재실행 시 Q번호 중복) 방지 — 실제 파일럿에서 ENOENT 크래시→Q87~92 중복 삽입으로 재현됨
+- `ai_dupcheck.js` — 동일 이중 조인 버그 (`listDraftFiles` 절대경로 재조인) 수정
+- 회귀 테스트: `ai-tools.test.js`에 시험 하위폴더 `draft_*` 초안의 과목 키 매칭 미리보기 케이스 추가
+
+
+## 2026-11-11 feat(content): carework 실기 문제은행 +6 — ai:draft Ch.14 응급·감염 파일럿
+
+- `과목2_요양보호실기_문제은행.md` Q81~86 — Ch.14(응급상황 대처·감염관리, 기존 인용 L300+ 공백 구간) `ai:draft` 초안 6문 전수 리뷰 채택: CPR 이완·30:2 / 약물중독 구토 고개 옆으로 / 감염 옳지 않은(결핵 일광소독) / 하임리히 위치 / 저혈압 자세·금지행동 / 위기 대처 순서
+- 리뷰 수정 1건 — 청크 간 발문 중복("응급 상황별 대처 방법으로 옳은 것은?" ×2)을 "자세와 금지 행동"으로 구체화; 인용 6건 모두 교재 원문 대조 확인
+- 정본 파이프라인 검증: `ai_apply --drafts --write`가 Q번호 재부여·📖근거 인용 자동 변환·manifest title 86제·exams.json desc 166문 동기·adoption_log 기록까지 처리
+- 부산물: drills 재생성(과목2 86→콤보 101)·.last-stats·sw 스탬프·carework.webmanifest
+
+
 ## 2026-11-11 test(e2e): J-202 careFlow 진도 복원 여정 — 이어하기·완료 마커
 
 - `tests/e2e/journeys/j-202-progress-resume.spec.js` 신설 — 카탈로그 J-202(진도 복원)를 carework careFlow 경로로 구현: ① story/summary 중단 → 대시보드 경유·새로고침 → 개념 재선택 시 `flow_progress` 저장 단계로 복귀 ② 완주 시 `stage='complete'` 기록 ③ 재접속 후 개념 목록 옵션의 상태 접두(✓·!·↻) 확인

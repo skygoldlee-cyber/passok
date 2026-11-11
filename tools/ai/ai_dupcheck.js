@@ -92,7 +92,7 @@ function main() {
 
     let flagged = 0;
     for (const file of drafts) {
-        const cands = parseDraftTexts(path.join(DRAFT_DIR, file));
+        const cands = parseDraftTexts(file); // listDraftFiles는 절대경로를 반환
         if (!cands.length) continue;
         console.log(`\n${file}: 초안 ${cands.length}건 검사 (기존 ${existing.length}문 대비)`);
         for (const c of cands) {
