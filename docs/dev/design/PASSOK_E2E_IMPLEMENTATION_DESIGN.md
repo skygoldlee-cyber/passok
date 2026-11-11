@@ -107,7 +107,7 @@ tests/reports/
 | ID | 영역 | 우선 | 사용자 흐름 · UI 검증 | 데이터 검증 | 기존 커버 |
 |----|------|------|---------------------|------------|-----------|
 | J-101 | 비로그인 학습 | P1 | 시험 선택 → 과목 학습 → 퀴즈 풀이 → 진도 표시 — 로그인 없이 전 과정 | localStorage 진도 기록 (클라우드 미설정 상태에서) | flows.spec 부분 |
-| J-102 | 인증·동기화 | P1 | 로그인 → 학습 → 로그아웃 → 재로그인 → 클라우드 진도 복원 | Supabase 사용자 행·동기화 테이블에 진도 저장 확인 | 없음 (신규) — **차단** ⚠ |
+| J-102 | 인증·동기화 | P1 | 로그인 → 학습 → 로그아웃 → 재로그인 → 클라우드 진도 복원 | Supabase 사용자 행·동기화 테이블에 진도 저장 확인 | `j-102-auth-sync.spec.js` 구현됨 (로컬 9/9) |
 | J-201 | 모의고사 응시 | P1 | `#/exam` 통합 모의고사 → 문제 풀이 → 제출 → 점수·과락(과목 60 미만)·평균60 판정 표시 | 점수 화면 = localStorage 기록 = (로그인 시) Supabase 동기화 행 | exam-risk 부분 |
 | J-202 | 진도 복원 | P1 | 학습 중 이탈 → 새로고침 → 이어서 학습 → 복원 확인 | 진도 키 1건만 갱신 (중복 저장 없음) | reader-flow 부분 |
 | J-203 | 접근 제어 | P1 | 만료/비인가 상태에서 Pro 배지 콘텐츠 접근 → 게이트 안내 | feature-plan pro 항목 노출 상태 검증 | ux-surfaces 부분 |
@@ -139,6 +139,7 @@ tests/reports/
 >
 > **J-102 차단 판정** (2026-11-11): 테스트 Supabase 환경 미확보로 구현 보류 — `.env`에 `TEST_SUPABASE_*` 키 없음(운영 키만 존재), 로컬 `supabase start`도 Docker 미설치로 불가. 해제 조건: ①별도 테스트 프로젝트 생성 + `TEST_SUPABASE_URL/ANON_KEY/SERVICE_ROLE_KEY` 시크릿 등록 또는 ②Docker 설치 후 `supabase start` → 이후 §3-1-1 오버라이드 기작 구현 → J-102 작성. 운영 DB 직접 사용은 절대 금지.
 > **→ 기반 선구현 완료** (2026-11-11): §3-1-1 오버라이드 헬퍼·`tools/supabase/seed_test_accounts.js`(멱등·운영 ref 감지 중단)·스키마 프로브 TEST_* 오버라이드·`.env.example` 키 선언까지 완비. 남은 것은 테스트 프로젝트 생성 + 키 3종 등록뿐 — 절차는 `docs/dev/runbooks/E2E_TEST_SUPABASE.md`.
+> **→ 차단 해제·구현 완료** (2026-11-11): `passok-e2e` 프로젝트 생성·스키마 15테이블·시드 3계정·GitHub Secrets 4종 완비. `j-102-auth-sync.spec.js` 3시나리오 × 3프로젝트 로컬 9/9 통과, ci.yml e2e 잡에 TEST_* env 주입. 구현 중 발견된 함정(SW precache의 route 우회 → `serviceWorkers:'block'` 필수, Pro 게이트·비스코프 payload 키, getSupabase 경합)은 런북 Phase D에 기록.
 
 ## 5. 선택자 규약 — data-testid 점진 도입
 

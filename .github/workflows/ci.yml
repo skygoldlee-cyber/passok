@@ -250,6 +250,13 @@ jobs:
         run: npx playwright install chromium
 
       - name: Run E2E tests (Playwright)
+        env:
+          # J-102 인증·동기화 — 테스트 Supabase(passok-e2e) 오버라이드용.
+          # 미설정 시 해당 스펙은 가드로 skip (운영 쓰기 원천 차단). DSN-46 §7
+          TEST_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          TEST_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+          TEST_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+          TEST_E2E_PASSWORD: ${{ secrets.TEST_E2E_PASSWORD }}
         run: npm run test:e2e -- --project=${{ matrix.project }} --shard=${{ matrix.shard }}/${{ matrix.total }}
 
       - name: Upload Playwright report

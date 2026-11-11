@@ -896,7 +896,7 @@ function detectDiagramType(textContent) {
   - verify:assets · check:vendor · check:parser · check:perf · audit_study_quality --check
   - impact_tests.js --ref origin/main  # PR만 — 영향 요구사항 리포트
   ```
-- **`e2e`** (`needs: build, changes` · `if: code=='true'`) — `mcr.microsoft.com/playwright` 컨테이너(버전은 package-lock의 `@playwright/test`와 동기)로 install-deps·브라우저 캐시 제거. 매트릭스: chromium 3샤드 + mobile·tablet 각 2샤드 = 7레그 병렬, `npm run test:e2e -- --project=<p> --shard=N/T`.
+- **`e2e`** (`needs: build, changes` · `if: code=='true'`) — `mcr.microsoft.com/playwright` 컨테이너(버전은 package-lock의 `@playwright/test`와 동기)로 install-deps·브라우저 캐시 제거. 매트릭스: chromium 3샤드 + mobile·tablet 각 2샤드 = 7레그 병렬, `npm run test:e2e -- --project=<p> --shard=N/T`. 실행 스텝 env에 `TEST_SUPABASE_URL/ANON_KEY/SERVICE_ROLE_KEY`·`TEST_E2E_PASSWORD`(GitHub Secrets)를 주입 — J-102 인증·동기화 스펙이 테스트 프로젝트(`passok-e2e`)로 오버라이드 실행되며, 시크릿 미설정 시 스펙 가드가 skip 처리한다 (런북: `docs/dev/runbooks/E2E_TEST_SUPABASE.md`).
 
 - PR에서는 `impact_tests.js --ref origin/main`이 변경 파일의 영향 요구사항·권장 테스트를 출력한다 — 리뷰어가 회귀 범위를 확인하는 용도.
 - 커버리지 리포트(`coverage/`)는 CI 아티팩트로 14일간, E2E 실패 시 `test-results/`가 7일간 보관된다.

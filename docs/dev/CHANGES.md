@@ -1,6 +1,17 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 feat(ci+e2e): J-102 인증·동기화 전 구간 완비 — 스펙 구현·CI env 연결·운영 가드
+
+- `tests/e2e/journeys/j-102-auth-sync.spec.js` 신설 — 첫 로그인→학습 쓰기→첫 push·재로그인 복원·로컬 우선 충돌 3시나리오 × 3프로젝트 9/9 통과 (DSN-46, 런북 DOC-RBK-23)
+- `supabase-override.js` — 로컬 `.env` 로딩 추가 (Playwright는 .env 미자동 로드)
+- `supabase-client.js` — `_clientPromise` 싱글턴으로 부팅 시 동시 `getSupabase()`의 GoTrueClient 중복 생성·세션 락 경합 방지
+- `seed_test_accounts.js` — payload 키 비스코프화(`applyPayload` 화이트리스트 정합) + `profiles.plan='pro'` 부여(cloud_sync Pro 게이트)
+- `apply_schema.js` — 운영 ref 대상 시 `--prod` 플래그 또는 TTY 'apply-prod' 입력 없이 실행 거부
+- `ci.yml` e2e 잡 — `TEST_SUPABASE_*`·`TEST_E2E_PASSWORD` Secrets env 주입 (J-102 CI 실행 연결, DSN-46 §7)
+- 함정 문서화 — SW precache가 `page.route` 오버라이드를 우회해 운영 config를 서빙하는 race → 인증 스펙은 `serviceWorkers: 'block'` 필수 (런북 Phase D)
+
+
 ## 2026-11-11 fix(gate): seed_test_accounts 'carework' 리터럴 — DA-15 ALLOWED 예외 등록
 
 - J-102 시드 계약의 sync_snapshots.exam_id 고정값을 정당 예외로 명시 — 배포 가드 파생물 재생성 단계에서 발견
