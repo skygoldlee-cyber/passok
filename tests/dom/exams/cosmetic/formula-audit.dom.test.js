@@ -46,7 +46,7 @@ describe('종합 규정 점검 보고서 — 출력·영속 시나리오', () =>
         expect(btn).toBeTruthy();
     });
 
-    it('허브 — 분석·법규 도구에 종합 보고서 카드 존재 (발견성)', () => {
+    it('허브 — 분석·판정·법규 도구에 종합 보고서 카드 존재 (발견성)', () => {
         const card = el('formula-menu-panel').querySelector('.trainer-menu-card[data-click="auditPrintReport"]');
         expect(card).toBeTruthy();
         expect(card.textContent).toContain('종합 보고서');

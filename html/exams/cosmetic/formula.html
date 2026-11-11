@@ -20,7 +20,7 @@
                     <div id="notice-status-view" class="notice-status-view is-hidden"></div>
                     <div class="section-title-area">
                         <h3><i class="fa-solid fa-flask-vial" aria-hidden="true"></i> Formula OS — 실전 배합 작업실</h3>
-                        <p><span id="formula-biz-guide">실제 업무 흐름 순서입니다. ① 상담(고객) → ② 설계(계산기·작업대) → ③ 레시피 확정(My 포뮬러·보관함) → ④ 재료 확인(원료 장부) → ⑤ 조제·기록 순으로 진행하고, 아래 분석·법규 도구에서 기성품 전성분 분석·법규 준수를 상시 점검하고, 종합 보고서 카드에서 점검 결과를 A4 문서로 출력합니다.</span></p>
+                        <p><span id="formula-biz-guide">실제 업무 흐름 순서입니다. ① 상담(고객) → ② 설계(계산기·작업대) → ③ 레시피 확정(My 포뮬러·보관함) → ④ 재료 확인(원료 장부) → ⑤ 조제·기록 순으로 진행하고, 아래 분석·판정·법규 도구에서 기성품 전성분 분석·법규 준수를 상시 점검하고, 종합 보고서 카드에서 점검 결과를 A4 문서로 출력합니다.</span></p>
                         <p class="formula-principle-note">
                             <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
                             <span>원료의 사용 가능 여부는 <a data-law="화장품 안전기준 등에 관한 규정" href="https://www.law.go.kr/행정규칙/화장품안전기준등에관한규정" target="_blank" rel="noopener" class="comp-law-ext" title="안전기준 고시 별표1(사용불가)·별표2(사용제한) — law.go.kr 최신 통합본"><strong>네거티브 리스트</strong></a> 방식이 원칙입니다 — 「화장품 안전기준 등에 관한 규정」 별표1(사용불가)·별표2(사용제한) 등 고시 목록에 없는 원료는 사용 가능합니다.
@@ -76,7 +76,7 @@
                             <span class="trainer-card-btn">기록 열기 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
                         </div>
                     </div>
-                    <h4 class="comp-section-title formula-hub-group-title"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i> 분석·법규 도구</h4>
+                    <h4 class="comp-section-title formula-hub-group-title"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i> 분석·판정</h4>
                     <div class="trainer-menu-grid">
                         <div class="trainer-menu-card" data-click="openProductPanel">
                             <span class="trainer-step-badge is-continuous" aria-hidden="true">분석</span>
@@ -87,6 +87,18 @@
                             <p>시판 제품을 <strong>사진 촬영</strong> 또는 전성분 붙여넣기로 등록하면 성분별 규제 배지·고객 알레르기 교차·내 포뮬러와의 비교가 활성화됩니다.</p>
                             <span class="trainer-card-btn">제품 목록 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
                         </div>
+                        <div class="trainer-menu-card" data-click="openAdversePanel">
+                            <span class="trainer-step-badge is-continuous" aria-hidden="true">사후</span>
+                            <div class="trainer-card-icon icon-red">
+                                <i class="fa-solid fa-notes-medical" aria-hidden="true"></i>
+                            </div>
+                            <h4>이상사례 기록</h4>
+                            <p>소비자의 이상 증상 접수 내용을 기록하고 조치·관계기관 보고 여부를 관리합니다 — 위해사례 대응의 법적 증적입니다.</p>
+                            <span class="trainer-card-btn">기록하기 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <h4 class="comp-section-title formula-hub-group-title"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> 법규·출력</h4>
+                    <div class="trainer-menu-grid">
                         <div class="trainer-menu-card" data-click="openLabelPanel" data-biz="mfg sales">
                             <span class="trainer-step-badge is-continuous" aria-hidden="true">제10조</span>
                             <div class="trainer-card-icon icon-purple">
@@ -104,15 +116,6 @@
                             <h4>광고 문구 점검</h4>
                             <p>제품 설명·광고 문구를 의약품 오인·과대광고 금지 표현과 대조해 위험 표현을 하이라이트합니다.</p>
                             <span class="trainer-card-btn">문구 점검 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
-                        </div>
-                        <div class="trainer-menu-card" data-click="openAdversePanel">
-                            <span class="trainer-step-badge is-continuous" aria-hidden="true">사후</span>
-                            <div class="trainer-card-icon icon-red">
-                                <i class="fa-solid fa-notes-medical" aria-hidden="true"></i>
-                            </div>
-                            <h4>이상사례 기록</h4>
-                            <p>소비자의 이상 증상 접수 내용을 기록하고 조치·관계기관 보고 여부를 관리합니다 — 위해사례 대응의 법적 증적입니다.</p>
-                            <span class="trainer-card-btn">기록하기 <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
                         </div>
                         <div class="trainer-menu-card" data-click="openCompliancePanel">
                             <span class="trainer-step-badge is-continuous" aria-hidden="true">상시</span>

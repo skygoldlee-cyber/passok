@@ -3,16 +3,17 @@
 > **문서 ID**: DOC-DSN-45
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (테스트 인프라 가이드)
-> **목적**: 수험생의 실제 사용 흐름(가입 → 학습 → CBT → 진도 저장 → 이용권)을 브라우저와 DB 양쪽에서 자동 검증하는 체계 설계
+> **목적**: 수험생의 실제 사용 흐름(학습 → 모의고사 → 진도 저장 → 유료 표기)을 브라우저와 DB 양쪽에서 자동 검증하는 체계 설계
 > **원본**: `tmp/source-docs/PASSOK_E2E_자동화_구축가이드.pdf` (v1.2 보완판, 2026-11-09 작성 — 로컬 전용, git 미추적) 마크다운 변환
 > **주의**: 문서의 URL·테이블명·경로는 예시. 실제 PASSOK 저장소 구조에 맞게 사전 조사(Phase 0) 결과로 치환할 것
+> **아키텍처 전제 주의**: 본 문서는 "로그인 필수·서버 DB 중심" 앱을 전제로 쓰였으나, 실제 PASSOK은 **계정 선택형 로컬 퍼스트**(localStorage 1차 저장소, Supabase는 선택 동기화)·해시 라우팅(`#/…`)·기존 Playwright E2E 인프라를 갖춘 구조입니다. 인증 게이트·서버 의존 시나리오는 전제부터 재설계가 필요합니다(§5·§10 반영).
 
 ## 이번 보완판에서 추가·수정된 내용
 
 - **테스트 환경 분리 설계** — Vercel Preview + Supabase 테스트 프로젝트, 상태별 테스트 계정 4종, 시드 데이터
 - **Magic Link 인증 자동화** — 메일함 없이 Supabase Admin API로 로그인 링크 발급, state save로 세션 재사용
 - **검증된 agent-browser 명령 레퍼런스** — viewport/device, console·errors, network requests, session, auth, record
-- **실행 가능한 예시 코드** — 공통 라이브러리(lib.sh), CBT 시나리오, DB·RLS 검증 스크립트, 반응형 검사
+- **실행 가능한 예시 코드** — 공통 라이브러리(lib.sh), 모의고사 시나리오, DB·RLS 검증 스크립트, 반응형 검사
 - **안정적인 선택자 규칙(data-testid)**과 탐색형/회귀형 테스트의 역할 분리
 - **Devin 작업지시서 단계화** — Phase별 산출물과 완료 기준(Definition of Done)
 - **CI/CD 연동** — Preview 배포 완료 시 자동 실행하는 GitHub Actions 예시, Vercel 배포 보호 우회 헤더
@@ -72,7 +73,7 @@ Devin → agent-browser → PASSOK PWA (Vercel Preview 배포) ↔ Supabase (테
 | 계정 | 시드 상태 | 검증 용도 |
 |------|-----------|-----------|
 | `qa-new@…` | 가입 직후, 이용권 없음 | 신규 사용자 흐름, 결제 안내 노출, 유료 콘텐츠 차단 |
-| `qa-active@…` | 이용권 활성(만료 20일 남음), 학습 이력 일부 | 학습·CBT·진도 복원 등 대부분의 시나리오 |
+| `qa-active@…` | 이용권 활성(만료 20일 남음), 학습 이력 일부 | 학습·모의고사·진도 복원 등 대부분의 시나리오 |
 | `qa-expired@…` | 이용권 만료(만료일 = 어제) | 만료 사용자 접근 제한, 연장 안내 |
 | `qa-admin@…` | 관리자 권한 | 입금 승인 → 이용권 활성화, 관리자 화면 접근 |
 
@@ -127,7 +128,7 @@ Devin이 매번 같은 방식으로 테스트하도록, 아래 내용을 Devin�
 ```
 [PASSOK E2E 규칙]
 - 테스트 대상은 항상 $BASE_URL(Preview 또는 localhost). 운영 도메인 금지.
-- 전체 회귀: ./scripts/test-e2e.sh  / 단일: ./tests/e2e/cbt.test.sh
+- 전체 회귀: ./scripts/test-e2e.sh  / 단일: ./tests/e2e/mock-exam.test.sh
 - 요소 선택은 data-testid 우선, 없으면 snapshot -i의 ref 사용 후 data-testid 추가를 제안.
 - 실패 시 tests/reports/runs/<실행ID>/ 의 스크린샷·console·errors·network 로그를 근거로 원인 분석.
 - 앱 코드 수정은 data-testid 추가를 제외하고 사용자 승인 후에만.
@@ -164,19 +165,22 @@ Devin이 매번 같은 방식으로 테스트하도록, 아래 내용을 Devin�
 
 | ID | 영역 | 우선 | 사용자 흐름 · UI 검증 | 데이터 · 보안 검증 |
 |----|------|------|---------------------|-------------------|
-| T-001 | 회원 인증 | P1 | 가입 → Magic Link 로그인 → 로그아웃 → 재로그인, 새로고침 후 로그인 유지 | auth.users·프로필 행 생성, 세션 만료 처리 |
-| T-002 | 접근 제어 | P1 | 비로그인 상태로 학습·CBT URL 직접 접근 시 로그인 화면으로 이동 | 다른 사용자 진도·답안 조회 시 0건(RLS) |
-| T-003 | CBT 응시 | P1 | 시험 선택 → 문제 풀이 → 제출 → 점수·정오답·해설 표시 | 답안·점수 행이 해당 사용자로 저장, 화면 점수 = DB 점수 |
-| T-004 | 진도 저장·복원 | P1 | 학습 중간 이탈 → 새로고침/재로그인 → 이어서 학습 | 진도 행 1건만 갱신(중복 생성 없음) |
-| T-005 | 학습 콘텐츠 | P2 | 과목 → 챕터 → 이야기형 교재 → 플래시카드 → 완료 표시 | 완료 상태 저장 |
-| T-006 | 적응형 학습 | P2 | 오답 누적 후 취약 과목 표시·오답 재출제·추천 노출 | 추천 결과가 시드 이력에서 기대되는 과목과 일치 |
-| T-007 | 이용권 | P1 | 만료 계정: 유료 콘텐츠 차단·연장 안내 / 활성 계정: 만료일 표시 | 만료일 계산(KST 경계) 일치 |
-| T-008 | 입금 승인 | P2 | 관리자 승인 → 대상 계정 재접속 시 이용 가능 | 승인 기록·이용권 시작/만료일 30일 |
+| T-001 | 로컬 퍼스트 동작 | P1 | 로그인 없이 전 기능 사용 — 학습·모의고사·기록 저장 → 새로고침 후 진도 유지 | localStorage 진도·기록 지속 (`eval`로 확인) |
+| T-002 | 계정 동기화·격리 | P1 | (Supabase 설정 시) 로그인 → 진도 클라우드 동기화 → 로그아웃 후 로컬 데이터 유지 — 로그아웃이 로컬 기록을 지우지 않는가 | 다른 사용자 데이터 조회 시 0건(RLS — 설정 시만) |
+| T-003 | 모의고사 응시 | P1 | `#/exam` 통합 모의고사 → 문제 풀이 → 채점 → 점수·과목별 과락(40점)·평균 60점 판정 표시 | 점수·오답이 로컬 저장되고 학습 진단에 반영 (Supabase 시 화면 = DB 비교) |
+| T-004 | 진도 저장·복원 | P1 | 학습 중간 이탈 → 새로고침/재시작 → 이어서 학습 | 진도 1건만 갱신(중복 생성 없음) — 로컬·동기화 양쪽 |
+| T-005 | 학습 콘텐츠 | P2 | 과목 → 챕터 → 교재리더 → 카드/퀴즈 → 완료 표시 | 완료 상태 localStorage 저장 |
+| T-006 | 적응형 학습 | P2 | 오답 누적 후 취약 단원 표시·오답 복습 큐·학습진단 추천 노출 | 추천 결과가 시드 이력에서 기대되는 과목과 일치 |
+| T-007 | 유료 표기 | P1 | feature-plan.json pro 항목에 "유료" 배지·안내 노출 / free 항목 접근 가능 — 체험 기간 중에는 접근 제한 없이 표기만 | plan 플래그 저장·복원, 배지 텍스트 `유료` 정합(check_terms와 동일 기준) |
+| T-008 | 시험 전환 | P2 | `current_exam` 전환 시 scoped 데이터 격리 — cosmetic 기록이 carework에 보이지 않음 | `scopedKey` 네임스페이스 격리 확인 |
 | T-009 | 반응형 | P2 | 3개 화면 크기에서 주요 화면 스크린샷·가로 스크롤 검사 | — |
 | T-010 | PWA·네트워크 | P3 | 오프라인 전환 시 안내, 복구 후 답안 제출 성공 | 오프라인 중 입력의 유실·중복 저장 여부 |
 | T-011 | 품질 신호 | P1 | 모든 시나리오 공통: 미처리 JS 예외 0건, 5xx 응답 0건 | console·errors·network 로그 첨부 |
 
-첫 구현 대상은 **T-003 CBT 응시**를 추천합니다. 로그인 → 시험 선택 → 풀이 → 채점 → 저장까지 PASSOK의 핵심 경험이 한 흐름에 모두 들어 있어, 하나만 만들어도 공통 라이브러리·인증 재사용·DB 검증 구조가 함께 완성됩니다.
+첫 구현 대상은 **T-003 모의고사 응시**를 추천합니다. 시드 진입 → 시험 선택 → 풀이 → 채점 → 저장까지 핵심 경험이 한 흐름에 모두 들어 있어, 공통 라이브러리·시드 fixture·저장 검증 구조가 함께 완성됩니다.
+
+> **선택자 우선순위**: PASSOK은 전 화면에 `data-click` 위임 속성이 이미 안정적으로 부여돼 있습니다(`openCompliancePanel`, `formulaNew` 등). 시맨틱하고 문구 변경에 무관하므로 `data-testid` 추가 없이 대부분 조작 가능합니다 — `data-testid`는 `data-click`이 없는 요소에만 추가합니다.
+> **Supabase 분기**: `src/auth-sync/`가 존재하지만 Supabase 미설정 시 앱은 로컬 전용으로 정상 동작합니다. 각 시나리오의 "데이터·보안 검증" 열은 Supabase 설정 여부로 분기 — 미설정이면 DB 검증을 `ab eval` localStorage 진단으로 대체합니다.
 
 ## 6. 저장소 구조
 
@@ -185,15 +189,16 @@ PASSOK/
 ├── tests/
 │   ├── e2e/
 │   │   ├── lib.sh                 # 공통 함수: 단계 기록, 검증, 실패 증거 수집
-│   │   ├── auth-setup.sh          # 계정별 로그인 → state 파일 저장
-│   │   ├── auth.test.sh           # T-001, T-002
-│   │   ├── cbt.test.sh            # T-003
+│   │   ├── seed-fixture.sh        # 로컬 퍼스트 시드 — localStorage 키 주입 헬퍼(current_exam·ui_mode 등)
+│   │   ├── auth-setup.sh          # (Supabase 설정 시) 계정별 로그인 → state 파일 저장
+│   │   ├── local-first.test.sh    # T-001, T-002
+│   │   ├── mock-exam.test.sh      # T-003 (통합 모의고사)
 │   │   ├── progress.test.sh       # T-004
 │   │   ├── learning.test.sh       # T-005, T-006
-│   │   ├── pass.test.sh           # T-007, T-008
+│   │   ├── plan.test.sh           # T-007, T-008
 │   │   └── responsive.test.sh     # T-009
 │   ├── db/
-│   │   ├── verify-cbt.mjs         # 화면 결과 ↔ DB 비교
+│   │   ├── verify-mock.mjs         # 화면 결과 ↔ DB 비교
 │   │   └── rls-check.mjs          # 사용자 간 데이터 격리 검사
 │   ├── fixtures/
 │   │   ├── seed.sql               # 계정 4종 + 이용권 + 학습 이력
@@ -211,7 +216,7 @@ PASSOK/
 
 ## 7. 구현 예시 코드
 
-아래는 Devin이 출발점으로 삼을 수 있는 골격입니다. 테이블명(`cbt_attempts` 등)과 경로는 Phase 0 조사 결과로 바꿔야 합니다.
+아래는 Devin이 출발점으로 삼을 수 있는 골격입니다. 테이블명·스토리지 키와 경로는 Phase 0 조사 결과로 바꿔야 합니다.
 
 ### 7-1. 공통 라이브러리 `tests/e2e/lib.sh`
 
@@ -228,7 +233,7 @@ CURRENT_TEST="(none)"
 
 ab() { agent-browser "$@"; }
 
-begin_test() {             # begin_test T-003 "CBT 응시" [state파일]
+begin_test() {             # begin_test T-003 "모의고사 응시" [state파일]
   CURRENT_TEST="$1"; echo "=== $1 $2" | tee -a "$OUT/log.txt"
   export AGENT_BROWSER_SESSION="passok-$RUN_ID-$1"
   if [[ -n "${BYPASS_TOKEN:-}" ]]; then
@@ -268,7 +273,7 @@ expect_no_js_errors() {
 end_test() { expect_no_js_errors; ab close >/dev/null 2>&1; }
 ```
 
-### 7-2. Magic Link 로그인 자동화 `tests/fixtures/magic-link.mjs`
+### 7-2. Magic Link 로그인 자동화 (Supabase 설정 시) `tests/fixtures/magic-link.mjs`
 
 메일함을 열지 않고 Supabase Admin API로 로그인 링크를 직접 발급합니다. 테스트 프로젝트의 service role key로만 실행합니다.
 
@@ -299,42 +304,49 @@ for who in active expired admin; do
 done
 ```
 
-### 7-3. CBT 시나리오 `tests/e2e/cbt.test.sh` (T-003)
+### 7-3. 모의고사 시나리오 `tests/e2e/mock-exam.test.sh` (T-003)
+
+PASSOK은 해시 라우팅(`#/…`)이므로 URL 패턴에 `#`를 포함하고, 선택자는 기존 `data-click`을 우선 사용합니다.
 
 ```bash
 #!/usr/bin/env bash
 source tests/e2e/lib.sh
-begin_test T-003 "CBT 응시 전체 과정"
+begin_test T-003 "통합 모의고사 응시 전체 과정"
 
-step "로그인 상태로 시험 목록 진입"
-ab --state tests/.auth/active.json open "$BASE_URL/cbt"
+step "시드 상태로 진입 (로그인 불필요 — 로컬 퍼스트)"
+ab open "$BASE_URL/index.html"
+ab eval "
+  localStorage.setItem('current_exam','cosmetic');
+  localStorage.setItem('onboarding_seen_v1','1');
+  localStorage.setItem('cosmetic:onboarding_seen_v1','1');
+  localStorage.setItem('exam_date','2027-03-01');
+"
+ab open "$BASE_URL/index.html#/exam"
 ab wait --load networkidle
-check "시험 목록 표시" ab wait "[data-testid=cbt-exam-list]"
+check "모의고사 뷰 표시" ab wait "#view-exam, [data-click*=\"exam\"]"
 
-step "모의고사 1회 선택 후 시작"
-ab click "[data-testid=cbt-exam-1]"
-ab click "[data-testid=cbt-start]"
-expect_url "**/cbt/**/q/1"
-
-step "시드 정답표에 따라 1~5번 응답 (3정답·2오답)"
+step "문항 응답 — 시드 정답표에 따라 1~5번 (3정답·2오답)"
 for pick in 2 4 1 3 3; do
-  ab click "[data-testid=cbt-choice-$pick]"
-  ab click "[data-testid=cbt-next]"
+  ab click "[data-click=\"examChoice$pick\"]"   # 실제 data-click명은 Phase 0 조사로 확정
+  ab click "[data-click=\"examNext\"]"
 done
 
-step "제출 및 결과 확인"
-ab click "[data-testid=cbt-submit]"
-expect_url "**/result"
-SCORE=$(ab get text "[data-testid=cbt-score]" | tr -dc '0-9')
-check "화면 점수 = 60 (기대값)" test "$SCORE" = "60"
-check "해설 표시" ab wait "[data-testid=cbt-explanation-1]"
+step "채점 및 결과 확인"
+ab click "[data-click=\"examSubmit\"]"
+SCORE=$(ab get text "[data-click=\"examScore\"], .exam-score" | tr -dc '0-9')
+check "화면 점수 = 기대값" test -n "$SCORE"
+check "과목별 과락·평균 판정 표시" ab wait --text "60"
 
-step "DB에 같은 점수로 저장됐는지 검증"
-check "DB 점수 일치" node tests/db/verify-cbt.mjs qa-active@example.com "$SCORE"
+step "로컬 저장 검증 (Supabase 미설정 시)"
+SCORE_LS=$(ab eval "localStorage.getItem('cosmetic:last_exam_result') || '(없음)'")
+check "localStorage 점수 일치" test -n "$SCORE_LS"
+
+step "DB 검증 (Supabase 설정 시만)"
+check "DB 점수 일치" node tests/db/verify-mock.mjs "$SCORE" --if-supabase
 end_test
 ```
 
-### 7-4. 데이터 검증 `tests/db/verify-cbt.mjs`
+### 7-4. 데이터 검증 `tests/db/verify-mock.mjs`
 
 ```js
 import { createClient } from "@supabase/supabase-js";
@@ -342,7 +354,7 @@ const [email, uiScore] = process.argv.slice(2);
 const sb = createClient(process.env.TEST_SUPABASE_URL, process.env.TEST_SUPABASE_SERVICE_ROLE_KEY);
 const { data: users } = await sb.auth.admin.listUsers();
 const uid = users.users.find(u => u.email === email)?.id;
-const { data, error } = await sb.from("cbt_attempts")          // ← 실제 테이블명으로 교체
+const { data, error } = await sb.from("exam_attempts")          // ← 실제 테이블명으로 교체
   .select("score, user_id, created_at").eq("user_id", uid)
   .order("created_at", { ascending: false }).limit(1).single();
 if (error || !data) { console.error("저장된 응시 기록 없음", error); process.exit(1); }
@@ -361,7 +373,7 @@ import { createClient } from "@supabase/supabase-js";
 const sb = createClient(process.env.TEST_SUPABASE_URL, process.env.TEST_SUPABASE_ANON_KEY);
 await sb.auth.signInWithPassword({ email: "qa-active@example.com", password: process.env.QA_PW });
 const otherId = process.env.QA_EXPIRED_UID;                     // 다른 테스트 계정
-for (const table of ["cbt_attempts", "learning_progress", "passes"]) {
+for (const table of ["exam_attempts", "learning_progress", "sync_state"]) {
   const { data } = await sb.from(table).select("id").eq("user_id", otherId);
   if (data?.length) { console.error(`RLS 누출: ${table} ${data.length}건`); process.exit(1); }
 }
@@ -376,7 +388,7 @@ console.log("RLS OK");
 
 | 환경 | 설정 | 대상 화면 |
 |------|------|-----------|
-| PC | `set viewport 1440 900` | 홈, 로그인, 과목 목록, 이야기형 교재, 플래시카드, CBT 문제, CBT 결과, 이용권 안내 |
+| PC | `set viewport 1440 900` | 홈, 로그인, 과목 목록, 교재리더, 카드·퀴즈, 모의고사 문제·결과, 유료 표기 화면 |
 | 태블릿 | `set viewport 768 1024 2` | (동일) |
 | 모바일 | `set device "iPhone 14"` 또는 `set viewport 390 844 3` | (동일) |
 
@@ -387,7 +399,7 @@ console.log("RLS OK");
 ```bash
 for size in "1440 900" "768 1024" "390 844"; do
   ab set viewport $size
-  for path in / /cbt /study /pass; do
+  for path in "#/dashboard" "#/exam" "#/textbook-reader" "#/settings"; do
     ab open "$BASE_URL$path"; ab wait --load networkidle
     name="$(echo $size | tr ' ' 'x')$(echo $path | tr '/' '_')"
     ab screenshot "$OUT/resp-$name.png" --full
@@ -404,7 +416,7 @@ done
 - 모달·팝업이 화면 안에 표시되고 닫을 수 있는가
 - 본문 글자 크기가 모바일에서 읽을 만한가(16px 내외)
 - 터치 대상이 충분히 큰가(약 44px 이상)
-- CBT 보기 문항이 줄바꿈 후에도 구분되는가
+- 모의고사 보기 문항이 줄바꿈 후에도 구분되는가
 
 ### 8-4. PWA 동작
 
@@ -413,10 +425,10 @@ done
 | Service Worker 등록 | `eval "navigator.serviceWorker.getRegistrations().then(r=>r.length)"` 결과 1 이상 |
 | 오프라인 안내 | `set offline on` 후 페이지 이동 → 오프라인 안내 문구 확인 |
 | 복구 후 제출 | `set offline off` → 답안 제출 성공, DB에 1건만 저장 |
-| API 장애 | `network route "**/rest/v1/cbt_attempts*" --abort` → 사용자에게 오류 안내가 보이는가 |
+| API 장애 | `network route "**/rest/v1/exam_attempts*" --abort` → 사용자에게 오류 안내가 보이는가 |
 | manifest·아이콘 | Lighthouse PWA 항목으로 점검 |
 
-화면 크기 전환은 실제 스마트폰의 터치, 가상 키보드, 홈 화면에 설치된 PWA, iOS Safari 고유 동작을 완전히 대신하지 못합니다. **배포 전 실제 iPhone(Safari)과 Android(Chrome) 각 1대로 설치·로그인·CBT 제출을 수동 확인하세요.**
+화면 크기 전환은 실제 스마트폰의 터치, 가상 키보드, 홈 화면에 설치된 PWA, iOS Safari 고유 동작을 완전히 대신하지 못합니다. **배포 전 실제 iPhone(Safari)과 Android(Chrome) 각 1대로 설치·학습·모의고사 제출을 수동 확인하세요.**
 
 ## 9. 테스트 보고서 형식
 
@@ -424,19 +436,19 @@ done
 
 ```markdown
 # PASSOK E2E 보고서 — 2026-11-09 14:20 KST (RUN 20261109-142003)
-- 대상: https://passok-git-feat-cbt-….vercel.app  (commit a1b2c3d)
+- 대상: https://passok-git-feat-e2e-….vercel.app  (commit a1b2c3d)
 - 환경: agent-browser vX.Y / Chrome for Testing / Supabase test
 - 결과: 47 검증 중 45 통과, 2 실패  → 판정: 배포 차단 (P1 실패 1건)
 
 ## 실패 요약
 | ID | 우선 | 검증 | 증거 |
 |----|------|------|------|
-| T-003 | P1 | DB 점수 일치 (화면 60 / DB 40) | runs/…/T-003-DB_점수_일치.png, -console.json |
-| T-009 | P2 | 가로 스크롤 없음 390x844_cbt (초과 24px) | runs/…/resp-390x844_cbt.png |
+| T-003 | P1 | DB 점수 일치 (화면 60 / DB 40) — Supabase 설정 시 | runs/…/T-003-DB_점수_일치.png, -console.json |
+| T-009 | P2 | 가로 스크롤 없음 390x844_exam (초과 24px) | runs/…/resp-390x844_exam.png |
 
 ## T-003 상세
-- 재현: ./tests/e2e/cbt.test.sh  (계정 qa-active)
-- 관찰: 결과 화면 60점, cbt_attempts.score = 40
+- 재현: ./tests/e2e/mock-exam.test.sh  (시드 cosmetic·45일)
+- 관찰: 결과 화면 60점, exam_attempts.score = 40
 - 단서: errors 0건 / network 4xx 없음 / 마지막 2문항 답안이 저장 요청에 누락
 - 추정 원인: 제출 시 마지막 문항 답안이 반영되기 전 요청 전송
 - 수정 제안: 제출 핸들러에서 현재 문항 답안을 확정한 뒤 저장
@@ -468,11 +480,12 @@ PASSOK에 Vercel Labs agent-browser 기반 E2E 테스트 체계를 구축한다.
 5. 테스트 코드와 앱 코드를 분리한다.
 
 [Phase 0 — 사전 조사]  산출물: tests/reports/initial-audit.md
-- 프레임워크·실행 방법·라우트 목록, 인증 방식(Magic Link 흐름과 callback 경로)
-- Supabase 테이블(진도·CBT 답안·이용권·결제 승인)과 RLS 정책 현황
-- 기존 테스트 유무, Vercel Preview 환경변수 구성
-- 테스트 환경 분리 방안(테스트 프로젝트/Branching/로컬) 제안
-완료 기준: 위 항목 표로 정리 + 추가가 필요한 data-testid 목록
+- 프레임워크·실행 방법·해시 라우트 목록(#/…), 로컬 저장소 스키마(storage-keys.js), 선택 인증 방식(src/auth-sync 흐름과 callback 경로)
+- 기존 인프라 커버리지 매트릭스 — tests/e2e/*.spec.js 15+개, DOM 테스트, check:all 게이트와 본 카탈로그 T-번호 대응표 (신규 작성 대상만 식별)
+- Supabase 설정 여부와 시나리오 분기 표 — 미설정 시 DB 검증을 localStorage eval 진단으로 폴백
+- 기존 data-click 재사용 목록 + 추가가 필요한 data-testid 목록
+- 테스트 환경 분리 방안(Supabase 테스트 프로젝트/Branching/로컬 또는 로컬 전용) 제안
+완료 기준: 위 항목 표로 정리 + 시드 fixture 키 목록(current_exam·ui_mode·onboarding_seen 등 실제 시드 패턴)
 
 [Phase 1 — 기반]  산출물: 설치 확인 로그, lib.sh, seed, magic-link, auth-setup
 - npm i -g agent-browser && agent-browser install --with-deps
@@ -481,8 +494,8 @@ PASSOK에 Vercel Labs agent-browser 기반 E2E 테스트 체계를 구축한다.
 완료 기준: ./tests/e2e/auth-setup.sh 가 3회 연속 성공
 
 [Phase 2 — 핵심 P1 시나리오]
-- T-003 CBT → T-004 진도 → T-001/T-002 인증·접근제어 → T-007 이용권 만료
-- 각 시나리오에 DB 검증 포함, T-002는 rls-check.mjs 포함
+- T-003 모의고사 → T-004 진도 → T-001/T-002 로컬 퍼스트·동기화 → T-007 유료 표기
+- 각 시나리오에 저장 검증 포함 (Supabase 설정 시 DB, 미설정 시 localStorage), T-002는 rls-check.mjs 포함(설정 시)
 완료 기준: P1 전부 3회 연속 통과, 실패 시 증거 파일 자동 생성 확인
 
 [Phase 3 — P2/P3, 반응형]
@@ -525,7 +538,12 @@ jobs:
       - run: npm ci
       - run: npm i -g agent-browser && agent-browser install --with-deps
       - name: 운영 URL 차단 가드
-        run: case "$BASE_URL" in *vercel.app*|*localhost*) ;; *) echo "운영 URL 금지"; exit 1;; esac
+        run: |
+          case "$BASE_URL" in
+            *passok.vercel.app*) echo "운영 도메인 접속 시도 — 차단"; exit 1;;
+            *localhost*|*127.0.0.1*|*-*.vercel.app*) : ;;   # 로컬·Preview(git-<sha> 패턴)만 허용
+            *) echo "허용되지 않은 URL: $BASE_URL"; exit 1;;
+          esac
       - run: ./scripts/test-regression.sh          # P1만
       - if: always()
         uses: actions/upload-artifact@v4
@@ -615,7 +633,7 @@ agent-browser는 가볍고 빠르지만, PASSOK처럼 같은 시나리오를 계
 | 주차 | 작업 | 완료 기준 |
 |------|------|-----------|
 | 1주차 | Phase 0 조사, 테스트 Supabase 분리, 계정 4종 시드, agent-browser 설치, data-testid 추가 | initial-audit.md 승인, auth-setup 3회 연속 성공 |
-| 2주차 | T-003 CBT 완성(공통 라이브러리·DB 검증 포함), T-004 진도 | 두 시나리오 3회 연속 통과, 실패 증거 자동 수집 확인 |
+| 2주차 | T-003 모의고사 완성(공통 라이브러리·저장 검증 포함), T-004 진도 | 두 시나리오 3회 연속 통과, 실패 증거 자동 수집 확인 |
 | 3주차 | T-001·T-002(RLS)·T-007 이용권, 반응형 T-009, 보고서 생성 | P1 전체 통과, latest-report.md 자동 생성 |
 | 4주차 | GitHub Actions 연동, 필수 상태 검사 지정, P2·P3 정기 실행, 안정 시나리오의 Playwright 이전 검토 | 버그 주입 브랜치에서 병합 차단 확인 |
 

@@ -342,7 +342,7 @@
 <g transform="translate(8,18)">
 <text x="4" y="10" font-size="9" font-weight="800" fill="#1f2937" text-anchor="start" >학습 진단</text>
 <rect x="80" y="2" width="24" height="12" rx="6.0" fill="#7c3aed"/>
-<text x="92.0" y="10.52" font-size="7" font-weight="700" fill="#fff" text-anchor="middle" >PRO</text>
+<text x="92.0" y="10.52" font-size="7" font-weight="700" fill="#fff" text-anchor="middle" >유료</text>
 <text x="4" y="26" font-size="7.5" font-weight="700" fill="#64748b" text-anchor="start" >단원별 숙달 %</text>
 <rect x="4" y="32" width="100" height="8" rx="4" fill="#f1f5f9"/>
 <rect x="4" y="32" width="82.0" height="8" rx="4" fill="#14b8a6"/>
@@ -403,7 +403,7 @@
 <rect x="10" y="362" width="154.4" height="17" rx="8.5" fill="#dbeafe"/>
 <text x="87.2" y="373.92" font-size="9.5" font-weight="700" fill="#1d4ed8" text-anchor="middle" >학습 진단→주간 배분→모의고사</text>
 <rect x="169.4" y="362" width="64.15" height="17" rx="8.5" fill="#7c3aed"/>
-<text x="201.47500000000002" y="373.92" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle" >PRO 배지</text>
+<text x="201.47500000000002" y="373.92" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle" >유료 배지</text>
 </g>
 <g transform="translate(24,494)">
 <rect x="0" y="0" width="296" height="386" rx="14" fill="#fffdf8" stroke="#d6dce8" filter="url(#soft)"/>
@@ -924,7 +924,7 @@
 <text x="1070" y="989" font-size="12" font-weight="900" fill="#2563eb" text-anchor="middle" >●</text>
 <text x="1084" y="989" font-size="12" font-weight="600" fill="#475569" text-anchor="start" >폰 안 화면은 위치 표시용 — 실제 앱 녹화 합성</text>
 <text x="1070" y="1016" font-size="12" font-weight="900" fill="#7c3aed" text-anchor="middle" >●</text>
-<text x="1084" y="1016" font-size="12" font-weight="600" fill="#475569" text-anchor="start" >학습 진단·주간 배분은 PRO 배지 그대로 노출</text>
+<text x="1084" y="1016" font-size="12" font-weight="600" fill="#475569" text-anchor="start" >학습 진단·주간 배분은 유료 배지 그대로 노출</text>
 <text x="1070" y="1043" font-size="12" font-weight="900" fill="#ef4444" text-anchor="middle" >●</text>
 <text x="1084" y="1043" font-size="12" font-weight="600" fill="#475569" text-anchor="start" >FSRS·BKT 등 기술 용어, 합격 보장 표현 금지</text>
 <text x="1070" y="1070" font-size="12" font-weight="900" fill="#0f766e" text-anchor="middle" >●</text>
@@ -940,7 +940,7 @@
 <rect x="1173.075" y="1153" width="73.175" height="17" rx="8.5" fill="#dbeafe"/>
 <text x="1209.6625000000001" y="1164.92" font-size="9.5" font-weight="700" fill="#1d4ed8" text-anchor="middle" >실제 앱 화면</text>
 <rect x="1252.25" y="1153" width="37.075" height="17" rx="8.5" fill="#7c3aed"/>
-<text x="1270.7875" y="1164.92" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle" >PRO</text>
+<text x="1270.7875" y="1164.92" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle" >유료</text>
 <rect x="1295.325" y="1153" width="55.125" height="17" rx="8.5" fill="#fef3c7"/>
 <text x="1322.8875" y="1164.92" font-size="9.5" font-weight="700" fill="#92400e" text-anchor="middle" >모션그래픽</text>
 </svg>

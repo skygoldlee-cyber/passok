@@ -8,7 +8,9 @@
 
 ## 1. 배경·문제
 
-DOC-DSN-45는 agent-browser + 셸 스크립트 기반 E2E 구축을 가정한 범용 가이드다. PassOK는 이미 `test:e2e`(Playwright, 21+ 스펙, chromium/mobile/tablet 프로젝트)가 있으므로 가이드를 그대로 적용할 수 없다 — **도구 계층은 유지하고, 가이드의 절차적 요소(환경 분리·데이터 검증·보고서·판정 규칙)를 이식**한다.
+DOC-DSN-45는 agent-browser + 셸 스크립트 기반 E2E 구축을 가정한 범용 가이드다. PassOK는 이미 `test:e2e`(Playwright, 24 스펙, chromium/mobile/tablet 프로젝트)가 있으므로 가이드를 그대로 적용할 수 없다 — **도구 계층은 유지하고, 가이드의 절차적 요소(환경 분리·데이터 검증·보고서·판정 규칙)를 이식**한다.
+
+> **필수 전제 (선행 조건)**: `src/auth-sync/supabase-config.js`는 **운영 프로젝트 URL·publishable key를 하드코딩**하고 serve.js도 env를 앱에 주입하지 않는다 — 즉 배포 앱에서 `isSupabaseConfigured()`는 항상 true다. **테스트 Supabase 오버라이드 기작 없이 인증 관련 스펙(J-102 계열)을 로컬에서 실행하면 운영 DB를 직접 쓴다.** 오버라이드 기작(§3-1-1)을 Phase 1의 선행 작업으로 둔다.
 
 ### 현재 체계 대비 가이드의 갭
 
@@ -32,7 +34,7 @@ tests/e2e/
   journeys/                    # 신설 — P1/P2 사용자 여정 시나리오 (§4)
     J-101-nonlogin-study.spec.js
     J-102-auth-sync.spec.js
-    J-201-cbt-score.spec.js
+    J-201-mock-score.spec.js
     J-202-progress-restore.spec.js
     ...
   db/                          # 신설 — Supabase 검증 스크립트 (가이드 §7-4/7-5 이식)
@@ -62,7 +64,17 @@ tests/reports/
 |------|------|--------|
 | 프론트엔드 | `https://passok.vercel.app` | `http://localhost:3000` 또는 Vercel Preview URL |
 | Supabase | 운영 프로젝트 (`SUPABASE_URL` env) | 별도 테스트 프로젝트 또는 `supabase start` 로컬 |
-| 설정 주입 | `src/auth-sync/supabase-config.js`의 env 키 | `TEST_SUPABASE_URL`/`TEST_SUPABASE_ANON_KEY` → serve.js 주입 또는 `.env.test` |
+| 설정 주입 | `supabase-config.js` **하드코딩 상수** (env 읽지 않음) | §3-1-1 오버라이드 기작 필요 — TEST env로 치환 |
+
+### 3-1-1. Supabase 오버라이드 기작 (필수 선행)
+
+`supabase-config.js`는 env를 읽지 않으므로, 앱 무수정(`data-testid` 원칙 정합)으로 테스트 프로젝트를 가리키게 하는 방법:
+
+- **권장**: Playwright `page.route('**/supabase-config.js')`로 모듈 응답을 가로채 테스트 상수로 치환 — 스펙 공통 헬퍼(`support/supabase-override.js`)로 제공하고 인증 시나리오에서만 적용
+- **대안**: serve.js가 `TEST_SUPABASE_URL` 감지 시 해당 모듈을 재작성 서빙
+- **금지**: 운영 상수를 그대로 두고 인증·동기화 쓰기 테스트 실행 — 운영 DB 오염
+
+스키마 프로비저닝도 선행이다 — 테스트 프로젝트에 운영과 동일 스키마·RLS가 필요하며, 마이그레이션 저장소가 없으면 스키마 스냅샷을 `db/`에 함께 둔다.
 
 `isSupabaseConfigured()` 게이트로 미설정 시 인증 UI가 비활성이므로, **로그인 시나리오만 테스트 프로젝트 설정이 필요** — 비로그인 시나리오(J-101 계열)는 설정 없이도 동작.
 
@@ -91,7 +103,7 @@ tests/reports/
 |----|------|------|---------------------|------------|-----------|
 | J-101 | 비로그인 학습 | P1 | 시험 선택 → 과목 학습 → 퀴즈 풀이 → 진도 표시 — 로그인 없이 전 과정 | localStorage 진도 기록 (클라우드 미설정 상태에서) | flows.spec 부분 |
 | J-102 | 인증·동기화 | P1 | 로그인 → 학습 → 로그아웃 → 재로그인 → 클라우드 진도 복원 | Supabase 사용자 행·동기화 테이블에 진도 저장 확인 | 없음 (신규) |
-| J-201 | CBT 응시 | P1 | 시험 선택 → 문제 풀이 → 제출 → 점수·정오답 표시 | 점수 화면 = localStorage 기록 = (로그인 시) Supabase 동기화 행 | exam-risk 부분 |
+| J-201 | 모의고사 응시 | P1 | `#/exam` 통합 모의고사 → 문제 풀이 → 제출 → 점수·과락(40)·평균60 판정 표시 | 점수 화면 = localStorage 기록 = (로그인 시) Supabase 동기화 행 | exam-risk 부분 |
 | J-202 | 진도 복원 | P1 | 학습 중 이탈 → 새로고침 → 이어서 학습 → 복원 확인 | 진도 키 1건만 갱신 (중복 저장 없음) | reader-flow 부분 |
 | J-203 | 접근 제어 | P1 | 만료/비인가 상태에서 Pro 배지 콘텐츠 접근 → 게이트 안내 | feature-plan pro 항목 노출 상태 검증 | ux-surfaces 부분 |
 | J-301 | 콘텐츠 팩 | P2 | 시험 전환 (cosmetic↔carework) → 각 팩 콘텐츠 로드 | 팩 전환 시 스코프 분리 확인 (DA-13) | exam-switch |
@@ -100,7 +112,7 @@ tests/reports/
 | J-402 | PWA·오프라인 | P3 | 오프라인 전환 → 안내·캐시 서빙 → 복구 후 동기화 | 오프라인 중 진도 유실·중복 저장 없음 | 없음 (신규) |
 | J-900 | 품질 신호 | P1 | 전 시나리오 공통: JS 예외 0 · 5xx 응답 0 | `evidence.js`의 console/network 수집 첨부 | app.spec 부분 |
 
-**첫 구현 대상**: J-201(CBT) — 로그인·학습·채점·저장이 한 흐름에 있어 공통 헬퍼가 함께 완성 (가이드 §5 권장과 동일 논리).
+**첫 구현 대상**: J-201(모의고사) — 학습·채점·저장이 한 흐름에 있어 공통 헬퍼가 함께 완성. 단 J-101(비로그인)이 선행으로 자연스럽게 붙는다 — 로그인 불필요, 오버라이드 기작 없이 즉시 작성 가능 (가이드 §5 권장과 동일 논리).
 
 ## 5. 선택자 규약 — data-testid 점진 도입
 
@@ -111,7 +123,7 @@ tests/reports/
 
 ## 6. 실패 증거·보고서
 
-- Playwright `trace: retain-on-failure`가 스크린샷·DOM·네트워크를 이미 수집 — 추가로 `support/evidence.js`에서 `page.on('console')`/`requestfailed` 리스너로 JS 예외·4xx/5xx 수집해 테스트 메타데이터로 첨부
+- Playwright `trace: retain-on-failure`가 스크린샷·DOM·네트워크를 이미 수집 — 추가로 `support/evidence.js`에서 `page.on('pageerror')`(미처리 JS 예외)·`page.on('console')`(로그)·`requestfailed`(4xx/5xx) 리스너로 수집해 테스트 메타데이터로 첨부. 재실행 통과(flaky)는 `PW_QUARANTINE` 격리 기작과 연계해 통과로 치지 않음
 - 보고서는 `latest-report.md` 형식(가이드 §9)으로 생성 — playwright reporter 커스텀 또는 `test:e2e` 후 집계 스크립트:
   - P1 실패 1건 → 배포 차단 · P2 실패 → 이슈 등록 · 재실행 통과 = flaky 표시 (통과로 치지 않음)
   - 실패마다 재현 명령·계정·trace 경로 기록
@@ -141,7 +153,7 @@ steps:
 | Phase | 범위 | 완료 기준 |
 |-------|------|-----------|
 | 0 — 갭 분석 | 기존 스펙 ↔ 카탈로그 매핑 완료, 미커버 영역 확정, data-testid 우선 목록 | 매핑 표 승인 + 선택자 우선순위 목록 |
-| 1 — 기반 | `support/`·`db/` 골격, 테스트 Supabase 설정, 계정 시드 스크립트, storageState | J-101 비로그인 + 시드 스크립트 3회 연속 성공 |
+| 1 — 기반 | `support/`·`db/` 골격, **Supabase 오버라이드 기작(§3-1-1)**, 테스트 프로젝트 스키마 프로비저닝, 계정 시드 스크립트, storageState | J-101 비로그인 + 오버라이드 검증(테스트 URL로 요청됨 확인) 3회 연속 성공 |
 | 2 — P1 journeys | J-101·J-102·J-201·J-202·J-203·J-900 | P1 전부 3회 연속 통과, 실패 증거 자동 수집 |
 | 3 — P2/P3 | J-301·J-302·J-401·J-402, 반응형 수치 판정 | 3 뷰포트 스크린샷 + 가로 스크롤 판정 |
 | 4 — 보고서·CI | latest-report.md 자동 생성, CI 통합, Preview 트리거 워크플로 | 버그 주입 브랜치에서 P1 실패·차단 확인 |
@@ -158,6 +170,8 @@ steps:
 
 ## 10. 리스크·미해결
 
+- **운영 Supabase 오염 (최상위)**: `supabase-config.js`는 운영 상수 하드코딩 — 오버라이드 기작(§3-1-1) 없이 인증·동기화 스펙을 돌리면 운영 DB에 계정·데이터가 생긴다. Phase 1 선행 필수이며, 오버라이드 미적용 스펙에서 인증 UI 호출을 차단하는 가드(`page.route` 실패 시 test.skip)도 둔다
+- **테스트 프로젝트 스키마 drift**: 운영 스키마 변경이 테스트 프로젝트에 미반영되면 J-102가 거짓 통과 — 스키마 스냅샷을 `db/`에 버전 관리하고 배포 후 갱신 절차를 둔다
 - **기존 스펙 text 선택자 회귀**: data-testid 전환 중 기존 스펙이 깨질 수 있음 — 전환은 스펙을 건드릴 때만, 대량 일괄 변경 금지
 - **Supabase 선택적 구조**: 테스트 프로젝트 미설정 시 J-102·J-203이 자동 스킵되어야 함 — 스킵 조건을 `isSupabaseConfigured()` 기반으로 명시해 CI에서 "설정 없음 = 스킵"과 "설정 있음 = 실행"을 분리
 - **localStorage 시드**: Playwright의 `addInitScript`로 진도·설정을 사전 주입 — 시드 스키마가 `storage-keys.js`와 drift하지 않도록 키는 모듈에서 import

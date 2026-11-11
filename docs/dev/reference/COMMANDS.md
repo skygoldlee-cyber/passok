@@ -19,10 +19,10 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 
 | 프리셋 | 단계 수 | 용도 |
 |---|---|---|
-| `content` | 32 | 콘텐츠 통합 검증 — 교재 교체 등 대규모 콘텐츠 변경 후 (--quick, --content-only, --build 옵션) |
+| `content` | 33 | 콘텐츠 통합 검증 — 교재 교체 등 대규모 콘텐츠 변경 후 (--quick, --content-only, --build 옵션) |
 | `docs` | 20 | 문서 정합 묶음 — 경로 참조·문서 ID·트리·명령 정합 등 |
 | `ci` | 32 | CI 게이트 로컬 재현 — ci.yml과 토큰 1:1 대응 |
-| `all` | 61 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
+| `all` | 62 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
 | `refs` | 6 | 참조자료 검증 묶음 — 레이아웃·귀속·신선도·인용 라인·병합 품질 |
 | `freshness` | 10 | 생성물 신선도 묶음 — 파생물 미재생성 감지 |
 | `audit` | 13 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
@@ -61,6 +61,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `content:metasections` | P1 | 검색규약 | `node tools/check/check_meta_sections.js` | 메타 섹션 규약 기준선 — reader 미렌더 패턴 미매칭 메타 의심 헤딩 신규 유입 차단 (TS-17) |
 | `content:glossarysignal` | P2 | 용어집 | `node tools/check/check_glossary_signal.js` | 저신호 일반명사 기준선 — 자동 추출 단일어 키워드의 정의 카드 노출 감시 (BP-14) |
 | `content:docpaths` | P1 | 문서 | `node tools/check/check_docs_paths.js` | README·AGENTS·docs/*.md 경로 참조 존재 검증 (스테일 탐지) |
+| `content:manualsync` | P1 | 문서 | `node tools/check/check_manual_sync.js` | 사용자 매뉴얼 도움말 표 ↔ index.template.html 도움말 메뉴 구성 대조 (UI-문서 drift 탐지) |
 | `content:specrefs` | P0 | 추적 | `node tools/check/check_spec_refs.js` | SPEC ID ↔ 코드 @spec 태그 양방향 정합성 (스테일 참조 탐지) |
 | `content:trace` | P1 | 추적 | `node tools/build/build_trace_matrix.js --check` | TRACE_MATRIX 입력 해시 신선도 (SPEC·@spec·문서 헤더 변경 시 재생성 강제) |
 | `content:unit` | P0 | 테스트 | `node --test tests/unit/**/*.test.js` | 유닛 테스트 (node --test) |

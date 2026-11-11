@@ -638,7 +638,9 @@ export 함수를 직접 호출하고 DOM 반영을 검증한다. `data-click` �
 
 ### 4.14 E2E (Playwright 실브라우저) — 2026-10-14 추가
 
-`tests/e2e/` 19+개 spec 파일 · **110+ 시나리오** × chromium + Pixel 7 + tablet
+`tests/e2e/` 25+개 spec 파일 · **110+ 시나리오** × chromium + Pixel 7 + tablet
+
+> `journeys/` — DSN-46 사용자 여정 스펙 (J-###). `support/` — 공통 헬퍼 (supabase-override 등)
 프로젝트. jsdom으로 불가한 영역을 커버한다 — `playwright.config.js`가 `serve.js`를
 webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 로컬 1(직렬,
 디버깅·재현성)·CI 2 병렬 — `serve.js`가 무상태 정적 서빙이고 테스트별 브라우저
