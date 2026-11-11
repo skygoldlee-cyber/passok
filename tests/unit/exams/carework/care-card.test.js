@@ -26,3 +26,11 @@ test('cardById — 존재 id 반환, 미존재 null', () => {
     assert.equal(cardById(cards, 'fall').title, '낙상 발생');
     assert.equal(cardById(cards, 'nope'), null);
 });
+test('섬망 카드 — 망상·환각 바로 다음 배치 (BPSD 감별 흐름) + 사고보고서 매핑', async () => {
+    const ids = cards.map(c => c.id);
+    assert.equal(ids.indexOf('delirium'), ids.indexOf('bpsd-delusion') + 1,
+        '섬망 카드는 망상·환각(bpsd-delusion) 바로 다음에 배치 — 급성 의식 변화 감별 흐름');
+    assert.equal(cardById(cards, 'delirium').category, '응급 상황');
+    const { CARD_INCIDENT_TYPE } = await import('../../../../src/exams/carework/views/care-card.js');
+    assert.equal(CARD_INCIDENT_TYPE.delirium, 'other', '신규 카드는 사고보고서 유형 매핑 필수');
+});

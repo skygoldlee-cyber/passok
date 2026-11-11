@@ -54,7 +54,7 @@ export function careCardOpen(id) {
 export function careCardClose() { _open = null; renderDetail(); }
 
 // 카드 → 사고보고서 유형 매핑 — 이벤트 발생 시 사고보고서에 상황을 선기입으로 연결
-const CARD_INCIDENT_TYPE = {
+export const CARD_INCIDENT_TYPE = {
     'fall': 'fall',                    // 낙상 발생 → 낙상
     'pressure-ulcer': 'pressure',      // 욕창 발견 → 욕창
     'bpsd-wander': 'missing',          // 배회·소실 → 배회·실종
@@ -62,7 +62,7 @@ const CARD_INCIDENT_TYPE = {
     'medication-error': 'medication',  // 투약 사고 → 약물 관련
     'choking': 'injury',               // 질식·이물 → 외상·부상
     'emergency': 'other', 'infection': 'other', 'abuse-suspect': 'other', 'bpsd-delusion': 'other',
-    'self-harm': 'other', 'mass-infection': 'other', 'evacuation': 'other',
+    'self-harm': 'other', 'mass-infection': 'other', 'evacuation': 'other', 'delirium': 'other',
 };
 
 /** 대처카드 이벤트 발생 → 사고보고서 뷰로 이동 (유형·경위 선기입 초안 전달) */
