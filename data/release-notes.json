@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261111-d7a8026",
+    "date": "2026-11-11",
+    "notes": [
+      "[수정·gate] seed_test_accounts 'carework' 리터럴 — DA-15 ALLOWED 예외 등록",
+      "[문서·e2e] E2E_TEST_SUPABASE 문서 헤더·색인 등록 — DOC-RBK-23",
+      "[기능·e2e] J-102 해제 기반 — 시드 스크립트·프로브 오버라이드·런북",
+      "[정리] 테스트 통계 갱신 — J-302/401/402 추가분 반영 (e2e 134→137, 432→441 runs)",
+      "[문서·e2e] J-102 차단 판정 — 테스트 Supabase 환경 미확보",
+      "[테스트·e2e] J-302·J-401·J-402 — 문서 인쇄·반응형·PWA 오프라인 여정",
+      "[정리·test] test_stats 재측정 스탬프 — E2E 여정 스펙 +5 반영",
+      "[테스트·e2e] J-301 시험 전환 — carework↔cosmetic 스코프 분리 검증",
+      "[수정·tools] ai_apply 편입 완료 마커 — 잔존 초안 재처리 재편입 차단",
+      "[테스트·e2e] J-203 접근 제어 — Pro 배지·최초 안내 1회·비차단 검증"
+    ]
+  },
+  {
     "version": "v20261110-f23cf2a",
     "date": "2026-11-10",
     "notes": [
@@ -197,45 +213,6 @@
       "[정리] 배포 전 파생물 재생성 [no-test]",
       "[수정·print] mermaid 출력 대비 보정 — 다크 테마 SVG가 백지에서 묻히던 결함",
       "[정리·release] v20261109-6eb5706 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-6eb5706",
-    "date": "2026-11-09",
-    "notes": [
-      "[수정·pdf] 같은 페이지 중복 표 헤더 — 분할 수렴을 1건 단위 재측정으로",
-      "[성능·deploy] 배포 파이프라인 속도 개선 — 게이트 자동복구·CI 대기 병행 (DSN-90)",
-      "[테스트·gate] check-filenames @spec 헤더 토큰 정정 + TRACE 재생성",
-      "[기능·gate] PF-19 이미지 형식 게이트 구현 — check_filenames 확장",
-      "[문서·spec] PF-19 이미지 자산 형식 제한 SPEC 부여 + 규약 문서화",
-      "[문서·admin] AD-13 기관 활동 패널 SPEC 부여 + 설계문서 갱신",
-      "[정리·release] v20261109-0c206f6 스탬프 확정 [no-docs]",
-      "[정리·release] v20261109-183fb94 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-0c206f6",
-    "date": "2026-11-09",
-    "notes": [
-      "[테스트·pdf] pdf-utils 생성 경로 smoke — 커버리지 여유 확보",
-      "[정리] TRACE_MATRIX 재생성 [no-docs]",
-      "[테스트·print] initPrintPrep DOM 테스트 — 커버리지 임계값 복구",
-      "[정리] TRACE_MATRIX 재생성 [no-docs]",
-      "[테스트·pdf] pdf-pagination 스펙 @spec 태그 + TESTING.md 등록 — 게이트 정합",
-      "[정리] TRACE_MATRIX 재생성 [no-docs]",
-      "[기능·pdf] 생성 PDF 개선 5종 — 표 헤더 반복·캔버스 상한·details·E2E·용량",
-      "[기능·print] 인쇄 파이프라인 보완 — 전역 전처리 훅·디코딩 상한·페이지 번호",
-      "[정리·release] v20261109-db7d85e 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-db7d85e",
-    "date": "2026-11-09",
-    "notes": [
-      "[수정·print] 표 행·이미지 절단 방지를 시험 팩 공통으로 — 전역 인쇄 규약",
-      "[정리] TRACE_MATRIX 재생성 [no-docs]",
-      "[수정·pdf] lazy 이미지 정착 대기 — 대형 삽화 PDF 절단 수정",
-      "[정리·release] v20261109-bac888c 스탬프 확정 [no-docs]"
     ]
   }
 ]
