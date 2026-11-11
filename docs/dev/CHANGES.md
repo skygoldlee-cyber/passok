@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 fix(a11y): 리더 과목 셀렉트의 모바일 접근성 이름 소실 — aria-label 상시 부여
+
+- CI mobile 샤드의 A-03 매트릭스에서 `#reader-subject-select`의 `select-name`(critical) 적발 — `reader-mermaid.css`가 모바일에서 `.textbook-reader-controls .filter-group label`을 `display:none` 처리해 for-연결 라벨의 접근성 이름이 소실됨(데스크톱은 라벨 가시라 통과)
+- 실버그이므로 오탐 등록이 아니라 수정 — `html/views/textbook-reader.html`에 `aria-label="과목 선택"` 부여(인접 `#reader-format-select`의 기존 패턴과 동일). 매트릭스 axe 검사가 회귀를 게이트
+
+
 ## 2026-11-12 fix(a11y): A-03 대비 전수조사 — 시험 스킨 토큰의 테마 무시 구조 결함 수정 + 전 뷰×양 테마 매트릭스 게이트
 
 - **전수조사**: `a11y.spec.js`에 뷰×테마 매트릭스 스캔 추가 — 라우팅 가능 전 뷰(cosmetic 13+carework 18)×라이트/다크 axe 검사. 기존 4뷰 스캔이 놓치던 위반 20+건(carework 실무 뷰 전체·trainer·ingredients 등) 적발

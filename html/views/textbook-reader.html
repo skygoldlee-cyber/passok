@@ -22,7 +22,8 @@
                         </button>
                         <div class="filter-group">
                             <label for="reader-subject-select">과목 선택</label>
-                            <select id="reader-subject-select" class="form-select reader-mode-btn">
+                            <!-- A-01 — 모바일에서 시각 label이 display:none이라 for-이름이 소실 → aria-label 상시 부여 -->
+                            <select id="reader-subject-select" class="form-select reader-mode-btn" aria-label="과목 선택">
                                 <option value="">과목을 선택하세요</option>
                             </select>
                         </div>
