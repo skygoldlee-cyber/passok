@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 694799806fbaf1b5
-> 생성: 2026-11-11 · 원천: SPEC.md(693개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 2c7622cb28cbb2aa
+> 생성: 2026-11-11 · 원천: SPEC.md(705개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 693개 — 문서 연결 469 · 소스 연결 614 · 테스트 연결 656 · 보고서 연결 109
+**커버리지 요약**: 요구사항 705개 — 문서 연결 469 · 소스 연결 614 · 테스트 연결 656 · 보고서 연결 109
 
 ---
 
@@ -114,6 +114,7 @@
 | E-06 | ✅ | 테스트 | — | src/views/exam-sim/exam-sim-arena.js<br>src/views/exam-sim/exam-sim-review.js<br>src/views/exam-sim/exam-simulator.js | tests/dom/exam/exam-sim-review.dom.test.js<br>tests/dom/study/study-simulator.dom.test.js<br>tests/unit/engine/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
 | E-07 | ✅ | 테스트 | — | css/exam.css<br>src/views/exam-sim/exam-sim-review.js<br>src/views/exam-sim/exam-sim-session.js<br>src/views/exam-sim/exam-simulator.js | tests/dom/exam/exam-sim-review.dom.test.js<br>tests/dom/study/study-simulator.dom.test.js<br>tests/unit/engine/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | 시험 합격 기준 — 과목별 40점 미만 과락·전 과목 평균 60점 이상 |
 | E-08 | ✅ | 테스트 | — | src/views/exam-sim/exam-sim-arena.js | tests/dom/study/study-simulator.dom.test.js | — | — |
+| E-09 | 미구현 | — | — | — | — | — | — |
 
 ## 3.5 교재 리더
 
@@ -715,6 +716,10 @@
 | A-11 | ✅ | E2E 테스트 | — | — | tests/dom/common/common-a11y.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
 | A-12 | ✅ | E2E 테스트 | — | — | tests/e2e/a11y.spec.js | — | — |
 | A-13 | ✅ | E2E 테스트 | — | — | tests/e2e/responsive-flow.spec.js | — | — |
+| A-14 | 미구현 | — | — | — | — | — | — |
+| A-15 | 미구현 | — | — | — | — | — | — |
+| A-16 | 미구현 | — | — | — | — | — | — |
+| A-17 | 미구현 | — | — | — | — | — | — |
 
 ## 4.6 반응형 & 모바일
 
@@ -763,8 +768,14 @@
 | UX-FB-06 | 자가 등록 모달(`.cing-*`)이 필드 5개로 `90dvh`를 넘겨 등록·취소 버튼이 잘린 실사례. 공용 `.app-confirm-dialog`(컨펌·의견·Pro·온보딩·통계 공유)와 `.auth-modal-card`·`.f-weigh-card`에 적용 — UX-SET-02(설정 패널)의 다이얼로그 일반화. E2E가 세로·가로 뷰포트에서 푸터 버튼 위치를 실측. 신규 카드는 공용 규약 클래스 `.dialog-card`(css/base.css — 90dvh 상한+스크롤) 사용, `check:mobilesafe`가 `role="dialog"` 마크업에 클래스 부재를 정적 검사 | E2E 테스트 | DOC-DSN-25 | — | tests/dom/common/common-a11y.dom.test.js<br>tests/e2e/mobile-overflow.spec.js | — | — |
 | UX-FB-07 | `.skeleton` 유틸은 base.css 공용 — `skeleton-text`/`skeleton-block`·폭 변형(`w-60`/`w-80`). shimmer는 `@media (prefers-reduced-motion)` 전역 무효화에 포함. 전체화면 fetch는 기존 UX-FB-04 오버레이 유지 (혼용 금지 — 부분 본문 교체에만 스켈레톤) | 구현 (테스트 갭) | — | src/views/textbook-reader.js | — | — | — |
 | UX-FB-08 | `_prevQueueLen`(직전 큐 길이)로 전이만 감지. `prefers-reduced-motion`에서는 애니메이션 자동 소거 — 상태 메시지 텍스트 자체가 보조 수단 | 구현 (테스트 갭) | — | src/views/dashboard-queue.js | — | — | — |
+| UX-FB-09 | **미구현** — 부팅 직후 배너 7종(오프라인·용량 R-09·법령 RR-20·개정 P-14·만료 PAY-07·온보딩 CO-12·SW 업데이트)과 모달 6종(OB-01·변경 이력·일일 챌린지·Pro 안내·지식DB 갱신·텔레메트리)이 규칙 없이 경쟁. 정책 기본안: 모달 큐 1개 + 배너 슬롯 상한 — 검토 후 조정 가능 | — | — | — | — | — | — |
+| UX-FB-10 | **미구현** — FO-63의 개별 사례를 공통 규약으로 상승. B-01~04 초기화·각종 삭제·백업 가져오기·플래시카드 오분류(외웠어요 오탭) 대상 | — | — | — | — | — | — |
+| UX-FB-11 | **미구현** — 현재 UX-FB-04(전체화면 로딩)·UX-FB-07(스켈레톤)만 정의, 취소·타임아웃·연타 방지·지연 임계 규약 부재 | — | — | — | — | — | — |
 | UX-FORM-01 | 16px 미만이면 iOS Safari가 포커스 시 자동 확대 | E2E 테스트 | DOC-DSN-25 | css/base.css<br>css/reader.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FORM-02 | 모바일에서 물리적 눌림감 제공 | E2E 테스트 | DOC-DSN-25 | css/base.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
+| UX-FORM-03 | **미구현** — §4.9.5 '제출 시점 토스트' 규약의 보완: 소멸성 토스트는 어느 필드가 왜 틀렸는지 전달하지 못함. 로그인·자가등록·Care OS 폼·온보딩 입력 대상 | — | — | — | — | — | — |
+| UX-FORM-04 | **미구현** — 키보드 오픈 상태의 크롬 처리 규약 부재. iOS는 visualViewport 미지원 구간 대응 필요 | — | — | — | — | — | — |
+| UX-FORM-05 | **미구현** — FO-30의 개별 처리를 공통 규약으로 상승. 의견 보내기·리더 메모(TR-30)·주관식 답안·Care OS 폼 대상 | — | — | — | — | — | — |
 | UX-HELP-01 | 입력 필드·수식키 조합에서는 미동작. `Esc`·`?`·배경 클릭 닫기, 포커스 트랩 적용. 단축키 조합표는 모듈 상수로 분리해 단위 테스트 가능 | E2E 테스트 | — | src/shell/shortcuts-help.js | tests/dom/shell/shortcut-help.dom.test.js<br>tests/e2e/ux-surfaces.spec.js<br>tests/unit/app/shortcuts-help.test.js | — | — |
 | UX-NAV-01 | 한 번에 하나의 네비게이션만 노출 — 중복 방지. 하단 탭 바는 엄지 도달권, 탭 수가 늘어나면 가로 스크롤보다 핵심 5탭 + `role="dialog"` 시트(`#mobile-more-sheet`)가 발견성·터치 안정성에 유리. 활성 탭은 `scrollIntoView({inline:'center'})`로 가시화 + `aria-current="page"`, 시트 소속 뷰 활성 시 더보기 탭에 활성 표시 | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25<br>DOC-REF-09 | css/app-responsive.css<br>src/shell/app.js<br>src/shell/router.js | tests/dom/common/common-navigation.dom.test.js<br>tests/dom/shell/router.dom.test.js<br>tests/dom/shell/ui-structure.dom.test.js<br>tests/e2e/app.spec.js<br>…외 1개 | — | — |
 | UX-NAV-02 | 스크롤 중에도 설정·테마에 접근 가능. 단, 부모가 스크롤 컨테이너(`overflow-y: auto`)일 때만 작동 — `body` 스크롤 구조면 의도대로 동작하는지 확인할 것 | 테스트 | DOC-DSN-01<br>DOC-DSN-25 | — | tests/dom/common/common-navigation.dom.test.js | — | — |
@@ -790,6 +801,7 @@
 | UX-PWA-05 | PWA 콜드 스타트에서 `dvh`가 실제 화면보다 크게 측정되면 `.main-content` 끝이 화면 밖으로 밀려 스크롤 끝 콘텐츠가 탭 바에 가려짐(대시보드 '내 학습 분석·도구' 실제 장애). JS 미실행 시 `100dvh` 폴백 | E2E 테스트 | DOC-DSN-25 | src/shell/app.js | tests/dom/common/app-shell.dom.test.js<br>tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-PWA-06 | 현장(실습·조제실)에서 대시보드 경유 탭을 생략. 시험 도메인 기능이라 플랫폼 공통 `manifest.webmanifest`가 아닌 시험별 매니페스트에만 선언 — exams.json `pwaShortcuts` → `build_exams_list.js` 패스스루 | E2E 테스트 | — | tools/build/build_exams_list.js | tests/e2e/exams/cosmetic/formula-tablet.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
 | UX-PWA-07 | `id`가 다르면 브라우저가 별개 앱으로 인식해 중복 설치되고, `name`이 다르면 아이콘이 설치 시점 시험명으로 고정된다(설치 후 시험 전환해도 갱신 불가 — 설치 시 manifest URL만 재조회). 시험 구분은 document.title·로고·shortcuts 등 앱 내부 브랜딩으로 표현 | E2E 테스트 | — | src/pwa/pwa-manifest.js<br>tools/build/build_exams_list.js | tests/e2e/exam-switch.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
+| UX-PWA-08 | **미구현** — 오프라인 배너는 존재하나 기능별 표시 규약 부재. 정책 기본안: 비활성+사유 안내 원칙(검토 후 조정 가능) | — | — | — | — | — | — |
 | UX-SCR-01 | `@media (pointer: coarse), (max-width: 900px) { * { scrollbar-width: none } ::-webkit-scrollbar { width:0; height:0 } }` — `pointer: coarse`만 믿지 말고 폭 기준을 병기할 것(일부 기기에서 pointer 감지 실패 사례 있음). 모바일 스크롤바는 드래그용이 아니므로 위치 표시도 불필요 | E2E 테스트 | DOC-DSN-25 | css/reader.css<br>src/views/reader/reader-toolbar.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-SCR-02 | `*` 또는 개별 컨테이너에 지정 | E2E 테스트 | DOC-DSN-25 | css/reader.css | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-SCR-03 | 하드코딩 색상은 다크/라이트 한쪽에서 묻힘 (실제로 미정의 변수 폴백으로 라이트 배경에 흰 카드가 되는 사고 있었음 — `.comp-item` 사례) | E2E 테스트 | — | css/reader.css | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
