@@ -1,5 +1,7 @@
 # E2E 테스트 Supabase 프로젝트 런북 (J-102 해제 절차)
 
+> **문서 ID**: DOC-RBK-23
+> **범위**: platform · 판본: none
 > **목적**: J-102(인증·동기화 E2E) 실행용 **별도 테스트 Supabase 프로젝트**를 준비한다.
 > **관련 문서**: DSN-46 `docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md` §3-1·§3-2·§7
 > **최상위 원칙**: 운영 프로젝트에 인증·동기화 쓰기 테스트를 실행하면 안 된다 — `supabase-config.js`는 운영 상수를 하드코딩하므로, 오버라이드 없는 인증 호출은 운영 DB를 직접 오염시킨다.

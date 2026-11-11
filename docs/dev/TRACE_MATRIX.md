@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 51e5dbb9e622a584
+> 입력 해시: 0b14f0b7d61e7fe4
 > 생성: 2026-11-11 · 원천: SPEC.md(693개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -1088,6 +1088,7 @@
 | DOC-RBK-20 | docs/dev/runbooks/GATE_TROUBLESHOOTING.md | DA-15, ID-05, P-07 |
 | DOC-RBK-21 | docs/dev/runbooks/LFS_MIGRATION.md | — |
 | DOC-RBK-22 | docs/dev/runbooks/STORY_TYPE_DESIGN_GUIDE.md | BP-10, BP-11, BP-12, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07 |
+| DOC-RBK-23 | docs/dev/runbooks/E2E_TEST_SUPABASE.md | — |
 | DOC-REF-01 | docs/dev/reference/COMBO_STUDY_STRATEGY.md | DR-02, DR-03, DR-04, DR-05, DR-06, DR-07, Q-01, Q-02, Q-03, Q-04, Q-05, Q-06, Q-07, Q-08, Q-09, Q-10, Q-11, Q-12 |
 | DOC-REF-02 | docs/dev/reference/DEV_ENVIRONMENT.md | — |
 | DOC-REF-03 | docs/dev/reference/FLASHCARD_LOGIC.md | F-01, F-02, F-03, F-04, F-05, F-06, F-07, F-08, F-09, F-10, ID-01, ID-02, ID-03, ID-04, TR-01 |
@@ -1116,7 +1117,6 @@
 | DOC-USR-06 | docs/exams/cosmetic/user/subject4_numbers.md | ND-01 |
 | DOC-USR-07 | docs/user/user_manual.md | MV-01, MV-02, MV-03, MV-04 |
 | DOC-USR-18 | docs/user/PRIVACY_POLICY.md | AI-25, AI-26, AI-27, AI-28, AU-08, AU-09, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08 |
-| docs/dev/runbooks/E2E_TEST_SUPABASE.md | docs/dev/runbooks/E2E_TEST_SUPABASE.md | — |
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 

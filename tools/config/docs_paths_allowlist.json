@@ -402,5 +402,10 @@
     "file": "docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md",
     "ref": "tests/.auth/*.json",
     "reason": "E2E 구현 설계의 세션 상태 파일 경로 — gitignore 대상 (Phase 1 미구현)"
+  },
+  {
+    "file": "docs/dev/runbooks/E2E_TEST_SUPABASE.md",
+    "ref": "tests/.auth/",
+    "reason": "Playwright storageState 저장 경로 — gitignore 대상이라 파일 미존재가 정상 (DSN-46 §3-3)"
   }
 ]
