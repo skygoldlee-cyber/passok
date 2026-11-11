@@ -39,6 +39,10 @@ const GENERATED_HEADER_RE = /자동 생성|직접 수정하지 마시고/;
  */
 const ALLOWED = [
     {
+        file: 'tools/supabase/seed_test_accounts.js', contains: "'carework'",
+        reason: "J-102 시드 계약 — e2e-active/sync 계정의 sync_snapshots.exam_id가 J-102 스펙과 약속된 고정 값 (carework 팩 전용 픽스처, 플랫폼 코드 아님)"
+    },
+    {
         file: 'tools/check/check_scenario_items.js', contains: "'carework'",
         reason: "carework 전용 시나리오 문항 검증 도구 — 플랫폼 코드가 아닌 시험 콘텐츠 검증 스크립트라 시험 식별자 선언이 예외됨"
     },

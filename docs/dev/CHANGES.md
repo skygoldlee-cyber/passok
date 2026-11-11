@@ -1,6 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 fix(gate): seed_test_accounts 'carework' 리터럴 — DA-15 ALLOWED 예외 등록
+
+- J-102 시드 계약의 sync_snapshots.exam_id 고정값을 정당 예외로 명시 — 배포 가드 파생물 재생성 단계에서 발견
+
+
 ## 2026-11-11 feat(e2e): J-102 해제 기반 선구현 — 시드 스크립트·프로브 오버라이드·런북
 
 - `tools/supabase/seed_test_accounts.js` 신설 — TEST_SUPABASE_* env로 테스트 계정 3종(e2e-new/active/sync) 멱등 시드, 운영 ref·운영 Secret 감지 시 중단하는 안전장치 내장 (DSN-46 §3-2)
