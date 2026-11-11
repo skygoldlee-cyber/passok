@@ -686,6 +686,12 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
   정답률 반영 (기록→분석 파이프라인, chromium 전용) ④ AN-09 주간 리포트 —
   `navigator.share` 제거로 클립보드 폴백을 강제하고 복사 본문을 검증한다.
 
+**journeys/j-102-auth-sync.spec.js — 인증·동기화 (J-102, 2026-11-11 추가)**
+
+- 테스트 Supabase 프로젝트(`passok-e2e`)로 `supabase-config.js` 응답을 치환하는 `support/supabase-override.js` 사용 — TEST_* 미설정 시 스펙 가드가 skip (런북 DOC-RBK-23). **SW precache가 page.route를 우회해 운영 config를 서빙하는 race가 있어 `serviceWorkers: 'block'` 필수.**
+- 시나리오: e2e-new(첫 로그인→fc 쓰기→첫 push→재로그인)·e2e-active(재로그인→클라우드 복원 pull/apply/reload)·e2e-sync(로컬 우선 충돌→push+원격 백업 보존). DB 단언은 service key REST로 `sync_snapshots` 조회.
+- 경합 패턴: 로그인 후 pullSync가 지연되면 충돌 모달·자동 적용 리로드가 뷰 진입 뒤에도 올 수 있어(샤드 간 원격 상태 차이), `resolveConflictOverlay` 해소 + 뷰 렌더 재진입 루프로 방어한다.
+
 **exams/cosmetic/formula-tablet.spec.js — Formula OS 태블릿 현장 작업 (FO-26~31, 2026-10-04 추가)**
 
 - **뷰포트 834×1112**(iPad Air 세로)에서 `#/formula` 딥링크 부팅 → 배합 계산 진입.

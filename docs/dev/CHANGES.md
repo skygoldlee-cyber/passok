@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 fix(e2e): J-102 첫 CI 실행 검증 + e2e-new 늦은 pullSync 경합 보강
+
+- 첫 CI 실행(런 43014249933)에서 J-102 전 레그 통과 — TEST_* env 주입 정상 동작 확인
+- mobile 레그 1회 플레이크: 로그인 후 pullSync 지연으로 자동 적용 리로드가 `#/cards` 진입 뒤에 발생 → `#fc-subject-select` 15초 hidden (샤드 간 원격 상태 차이라 로컬 불재현). `resolveConflictOverlay` 헬퍼 + 뷰 재진입 루프로 보강
+
+
 ## 2026-11-11 docs(design): Capacitor 네이티브 패키징 적합성 검토 보고서 — DOC-DSN-47
 
 - `CAPACITOR_PACKAGING_REVIEW.md` 신설 — DSN-39 단계 전략(TWA→Capacitor→Flutter) 중 2단계의 실측 타당성 검토: 호환성 실측(OAuth 딥링크만 수정 필요)·앱 크기 분석(carework 단일 ~17MB)·비용·리스크·Android-first 로드맵

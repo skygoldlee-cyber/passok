@@ -66,6 +66,17 @@ function sessionUserId(page) {
     }, `sb-${REF}-auth-token`);
 }
 
+/** 충돌 오버레이가 뜨면 '원격 적용'으로 해소 — pullSync 지연으로 늦게 뜨는 CI 경합 대응 */
+async function resolveConflictOverlay(page, timeoutMs = 8_000) {
+    const overlay = page.locator('#app-confirm-overlay');
+    if (await overlay.waitFor({ state: 'visible', timeout: timeoutMs }).then(() => true).catch(() => false)) {
+        await overlay.locator('.app-confirm-ok').click();
+        await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 20_000 });
+        return true;
+    }
+    return false;
+}
+
 test.describe('J-102 인증·동기화 (Supabase 테스트 프로젝트)', () => {
     // SW가 supabase-config.js를 precache해 page.route 오버라이드를 우회하는 경합 차단
     // (오프라인 동작은 j-*-pwa 계열 spec이 별도 커버)
@@ -94,12 +105,7 @@ test.describe('J-102 인증·동기화 (Supabase 테스트 프로젝트)', () =>
 
         // 재실행 시 이전 push의 원격 행과 충돌할 수 있다 — 원격 적용으로 진행
         // (같은 계정의 자기 데이터라 무해, 적용 시 자동 리로드)
-        const overlay = page.locator('#app-confirm-overlay');
-        if (await overlay.waitFor({ state: 'visible', timeout: 6_000 }).then(() => true).catch(() => false)) {
-            await overlay.locator('.app-confirm-ok').click();
-            await page.waitForTimeout(1_500);
-            await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 20_000 });
-        }
+        await resolveConflictOverlay(page);
 
         // 계정 화면 — 로그인 계정 표시 + 클라우드 행 없음 안내
         await openAuthModal(page);
@@ -108,8 +114,19 @@ test.describe('J-102 인증·동기화 (Supabase 테스트 프로젝트)', () =>
         // 학습 쓰기 — 플래시카드 평가 1회로 SYNC_STATIC 키 기록 → dirty → 디바운스 push
         const closeBtn = page.locator('#auth-modal .auth-modal-close');
         if (await closeBtn.isVisible().catch(() => false)) await closeBtn.click();
-        // 해시 직행 — data-needs 내비 게이트는 표시 문제일 뿐 뷰 자체는 접근 가능
-        await page.goto('/index.html#/cards');
+        // 해시 직행 — data-needs 내비 게이트는 표시 문제일 뿐 뷰 자체는 접근 가능.
+        // pullSync가 지연되면 충돌 모달·자동 적용 리로드가 뷰 진입 뒤에도 올 수 있다
+        // (CI 샤드 간 원격 상태 차이) — 렌더 확인이 실패하면 오버레이 해소 후 재진입
+        for (let attempt = 0; attempt < 3; attempt++) {
+            await page.goto('/index.html#/cards');
+            const rendered = await page.locator('#fc-subject-select')
+                .waitFor({ state: 'visible', timeout: 15_000 }).then(() => true).catch(() => false);
+            if (rendered) break;
+            if (!await resolveConflictOverlay(page, 5_000)) {
+                // 오버레이 없이 hidden — 자동 적용 리로드가 진행 중일 수 있으니 재초기화를 기다린다
+                await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 10_000 }).catch(() => {});
+            }
+        }
         await expect(page.locator('#fc-subject-select')).toBeVisible({ timeout: 15_000 });
         await page.locator('#fc-subject-select').selectOption('caretheory');
         await expect(page.locator('#card-front-term')).not.toHaveText('개념 용어', { timeout: 15_000 });
