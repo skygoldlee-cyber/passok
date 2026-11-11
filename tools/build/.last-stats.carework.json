@@ -1,12 +1,12 @@
 {
   "subjects": {
     "caretheory": {
-      "cards": 0,
-      "quizzes": 0,
+      "cards": 32,
+      "quizzes": 30,
       "files": {
         "교재/caretheory/1과목_요양보호론.md": {
-          "cards": 0,
-          "quizzes": 0
+          "cards": 32,
+          "quizzes": 31
         }
       }
     },
