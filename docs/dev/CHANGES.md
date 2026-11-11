@@ -1,6 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 test(e2e): J-301 시험 전환 여정 — carework↔cosmetic 스코프 분리 검증
+
+- `j-301-exam-switch.spec.js` 신설 — `#/exams` 카드 선택 → `selectExam` 리로드 → 타이틀(PassCare↔Passmula)·`current_exam` 교체 + `carework:sim_results_history` 스코프 진도 보존 → 복귀 복원 검증
+- 구현 발견 사항: `addInitScript`는 selectExam 리로드마다 재실행 — `current_exam`은 조건부(`if (!getItem)`) 시드 필수, 무조건 덮어쓰면 전환이 되돌아감
+- DSN-46 갱신 — J-301 구현 메모·파일 트리 반영
+- 검증: 3프로젝트(chromium·mobile·tablet) 통과
+
+
 ## 2026-11-11 fix(tools): ai_apply 편입 완료 마커 — 잔존 초안 재처리 재편입 차단
 
 - `ai_common.js` — `markDraftApplied`(meta 주석에 `applied=<ISO>` 부여, draftBodyHash 대상 외라 해시 판정 무영향)·`isDraftApplied` 추가
