@@ -30,6 +30,7 @@ const ROOT = path.join(__dirname, '..', '..');
 const SCHEMA_DIR = path.join(ROOT, 'tools', 'supabase');
 const CONFIG_PATH = path.join(ROOT, 'src', 'auth-sync', 'supabase-config.js');
 const PROBE_TIMEOUT_MS = 10_000;
+const { loadEnv } = require('../lib/env.js');
 
 /** 플랫폼 + 시험별 스키마 파일 수집 — tools/supabase/schema.sql + exams/<id>/schema.sql (DA-13) */
 function schemaFiles() {
@@ -52,12 +53,21 @@ function declaredTables() {
     return [...out];
 }
 
-/** supabase-config.js에서 공개 연결 정보 추출 (정적 파일 — 공개 키라 파싱 안전) */
+/**
+ * 대상 프로젝트 연결 정보 — 기본은 supabase-config.js의 공개 상수(운영),
+ * `TEST_SUPABASE_URL`+`TEST_SUPABASE_ANON_KEY` env가 둘 다 있으면 테스트
+ * 프로젝트를 프로브한다 (J-102 스키마 검증 — DSN-46 §3-1-1).
+ */
 function readConfig() {
+    loadEnv();
     const src = fs.readFileSync(CONFIG_PATH, 'utf8');
-    const url = src.match(/SUPABASE_URL\s*=\s*'([^']+)'/);
-    const key = src.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*'([^']+)'/);
-    return { url: url?.[1] || '', key: key?.[1] || '' };
+    let url = src.match(/SUPABASE_URL\s*=\s*'([^']+)'/)?.[1] || '';
+    let key = src.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*'([^']+)'/)?.[1] || '';
+    if (process.env.TEST_SUPABASE_URL && process.env.TEST_SUPABASE_ANON_KEY) {
+        url = process.env.TEST_SUPABASE_URL;
+        key = process.env.TEST_SUPABASE_ANON_KEY;
+    }
+    return { url, key };
 }
 
 function isConfigured({ url, key }) {

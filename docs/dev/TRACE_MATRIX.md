@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 5e906003f91c6c74
-> 생성: 2026-11-10 · 원천: SPEC.md(693개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 0b14f0b7d61e7fe4
+> 생성: 2026-11-11 · 원천: SPEC.md(693개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -626,7 +626,7 @@
 | CO-17 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | src/exams/carework/care-form-pdf.js<br>src/exams/carework/form-template-editor.js<br>src/exams/carework/form-template-store.js<br>src/exams/carework/views/care-custom-form.js | tests/dom/exams/carework/care-views.test.js | — | — |
 | CO-18 | 부분 구현 | 테스트 | — | src/exams/carework/form-seeds.js<br>src/exams/carework/views/care-custom-form.js | tests/dom/exams/carework/care-views.test.js | — | — |
 | CO-19 | 부분 구현 | 테스트 | — | src/exams/carework/audit-import.js<br>src/exams/carework/care-audit.js<br>src/exams/carework/views/care-audit.js | tests/dom/exams/carework/care-views.test.js<br>tests/unit/exams/carework/audit-import.test.js | — | — |
-| CO-20 | ✅ | 테스트 | — | src/content/pdf-utils.js<br>src/exams/carework/care-share.js<br>src/reader/exam-viewer.js<br>src/reader/html-viewer.js<br>…외 1개 | tests/dom/reader/print-pdf.test.js<br>tests/unit/content/pdf-utils.test.js | — | — |
+| CO-20 | ✅ | E2E 테스트 | — | src/content/pdf-utils.js<br>src/exams/carework/care-share.js<br>src/reader/exam-viewer.js<br>src/reader/html-viewer.js<br>…외 1개 | tests/dom/reader/print-pdf.test.js<br>tests/e2e/journeys/j-302-docs-print.spec.js<br>tests/unit/content/pdf-utils.test.js | — | — |
 | CO-21 | ✅ | E2E 테스트 | — | src/content/pdf-utils.js<br>src/reader/exam-viewer.js<br>src/reader/manual-viewer.js | tests/dom/reader/print-pdf.test.js<br>tests/dom/reader/print-prep.test.js<br>tests/e2e/pdf-pagination.spec.js<br>tests/unit/content/pdf-utils.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
@@ -1088,6 +1088,7 @@
 | DOC-RBK-20 | docs/dev/runbooks/GATE_TROUBLESHOOTING.md | DA-15, ID-05, P-07 |
 | DOC-RBK-21 | docs/dev/runbooks/LFS_MIGRATION.md | — |
 | DOC-RBK-22 | docs/dev/runbooks/STORY_TYPE_DESIGN_GUIDE.md | BP-10, BP-11, BP-12, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07 |
+| DOC-RBK-23 | docs/dev/runbooks/E2E_TEST_SUPABASE.md | — |
 | DOC-REF-01 | docs/dev/reference/COMBO_STUDY_STRATEGY.md | DR-02, DR-03, DR-04, DR-05, DR-06, DR-07, Q-01, Q-02, Q-03, Q-04, Q-05, Q-06, Q-07, Q-08, Q-09, Q-10, Q-11, Q-12 |
 | DOC-REF-02 | docs/dev/reference/DEV_ENVIRONMENT.md | — |
 | DOC-REF-03 | docs/dev/reference/FLASHCARD_LOGIC.md | F-01, F-02, F-03, F-04, F-05, F-06, F-07, F-08, F-09, F-10, ID-01, ID-02, ID-03, ID-04, TR-01 |
@@ -1135,5 +1136,6 @@
 - docs/assets/README.md
 - docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md
 - docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md
+- docs/dev/runbooks/E2E_TEST_SUPABASE.md
 - docs/exams/carework/business/유튜브-숏츠-시리즈-제작의뢰서.md
 - docs/exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md

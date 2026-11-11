@@ -1,6 +1,139 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 fix(gate): seed_test_accounts 'carework' 리터럴 — DA-15 ALLOWED 예외 등록
+
+- J-102 시드 계약의 sync_snapshots.exam_id 고정값을 정당 예외로 명시 — 배포 가드 파생물 재생성 단계에서 발견
+
+
+## 2026-11-11 feat(e2e): J-102 해제 기반 선구현 — 시드 스크립트·프로브 오버라이드·런북
+
+- `tools/supabase/seed_test_accounts.js` 신설 — TEST_SUPABASE_* env로 테스트 계정 3종(e2e-new/active/sync) 멱등 시드, 운영 ref·운영 Secret 감지 시 중단하는 안전장치 내장 (DSN-46 §3-2)
+- `check_supabase_schema.js` — TEST_SUPABASE_URL/ANON_KEY env 설정 시 테스트 프로젝트 프로브 (운영 상수만 읽던 갭 보강)
+- `.env.example` — TEST_SUPABASE_URL/ANON_KEY/SERVICE_ROLE_KEY·TEST_E2E_PASSWORD 키 선언
+- `docs/dev/runbooks/E2E_TEST_SUPABASE.md` — J-102 해제 런북 (프로젝트 생성 → 키 등록 → 스키마·시드 → 스펙 작성)
+- DSN-46 — J-102 상태 갱신(기반 완비·키 대기), 시드 경로·스키마 drift 절차 정정
+
+
+## 2026-11-11 chore: 테스트 통계 갱신 — J-302/401/402 스펙 추가분 반영
+
+- stats:stamp 재측정: e2e 134→137 시나리오, 432→441 runs, 29→32 spec files — 전체 스위트 1회 완주 결과 416 passed·25 skipped·0 failed
+
+
+## 2026-11-11 docs(e2e): J-102 차단 판정 — 테스트 Supabase 환경 미확보
+
+- DSN-46 카탈로그 J-102 행 "차단 ⚠" 표기 + 차단 판정 메모 추가 — TEST_SUPABASE_* 키 부재·Docker 미설치로 로컬 supabase start 불가
+- 해제 조건 명시: 별도 테스트 프로젝트 + TEST_SUPABASE_URL/ANON_KEY/SERVICE_ROLE_KEY 시크릿 또는 Docker + supabase start — 운영 DB 직접 사용 금지 원칙 재확인
+
+
+## 2026-11-11 test(e2e): J-302·J-401·J-402 여정 — 문서 인쇄·반응형·PWA 오프라인
+
+- `j-302-docs-print.spec.js` — 매뉴얼 열람 → 인쇄/PDF → 스타일드 PDF 새 탭 미리보기(popup+토스트) + html2canvas 강제 실패 시 'PDF 생성 실패' 토스트·window.print() 폴백 1회 검증 (CO-20)
+- `j-401-responsive.spec.js` — dashboard·exam·quiz·cards·calendar·analysis 6뷰 가로 오버플로 0 검증, 3프로젝트가 뷰포트 매트릭스 역할
+- `j-402-pwa-offline.spec.js` — SW 컨트롤 확보 → setOffline 캐시 재부팅 → #offline-banner 표시 → 온라인 복구 해제 검증
+- DSN-46 갱신 — J-302/401/402 구현 메모·파일 트리 반영
+- 검증: 각 스펙 3프로젝트(chromium·mobile·tablet) 통과 — E2E 카탈로그 로컬 퍼스트 여정 전원 완료 (J-102는 테스트 Supabase 프로젝트 필요로 차단)
+
+
+## 2026-11-11 test(e2e): J-301 시험 전환 여정 — carework↔cosmetic 스코프 분리 검증
+
+- `j-301-exam-switch.spec.js` 신설 — `#/exams` 카드 선택 → `selectExam` 리로드 → 타이틀(PassCare↔Passmula)·`current_exam` 교체 + `carework:sim_results_history` 스코프 진도 보존 → 복귀 복원 검증
+- 구현 발견 사항: `addInitScript`는 selectExam 리로드마다 재실행 — `current_exam`은 조건부(`if (!getItem)`) 시드 필수, 무조건 덮어쓰면 전환이 되돌아감
+- DSN-46 갱신 — J-301 구현 메모·파일 트리 반영
+- 검증: 3프로젝트(chromium·mobile·tablet) 통과
+
+
+## 2026-11-11 fix(tools): ai_apply 편입 완료 마커 — 잔존 초안 재처리 재편입 차단
+
+- `ai_common.js` — `markDraftApplied`(meta 주석에 `applied=<ISO>` 부여, draftBodyHash 대상 외라 해시 판정 무영향)·`isDraftApplied` 추가
+- `ai_apply.js` — `--drafts`·explain 경로 모두 applied 마킹 초안 스킵 + `--write` 성공 시 초안 자동 마킹. 잔존 초안의 재실행 재편입으로 Q번호가 중복되던 실사고(Q118=Q117) 차단
+- `ai_dupcheck.js` — applied 초안 제외 (편입 후 dupcheck 실행 시 전량 중복 노이즈 방지)
+- 회귀 테스트: `--write` 편입→applied 마커 확인→재실행 스킵·추가 편입 0건 검증 (실제 은행 파일은 스냅샷 복원)
+
+
+## 2026-11-11 test(e2e): J-203 접근 제어 여정 — Pro 배지·최초 안내 1회·비차단 검증
+
+- `j-203-access-control.spec.js` 신설 — feature-plan 매핑(free `mock_exam` 배지 숨김·pro `care_log_save` 배지 '유료' 노출) → 요양일지 저장 최초 진입 시 유료 안내 모달·`pro_notice_seen._global` 기록(GLOBAL_KEYS 비스코프) → 비차단 저장 완료 → 재진입 재표시 없음 검증
+- 구현 발견 사항: pro 기능 버튼은 `.care-more-actions` details 내부(접힘 상태), `ui_mode=practice`에서 exam 뷰 비활성이라 배지는 클래스 검증으로 처리, `#/care-log` 직접 딥링크 진입 필요
+- DSN-46 갱신 — J-203 구현 메모·파일 트리 반영 ("게이트"는 결제 미도입으로 안내형 해석 문서화)
+- 검증: 3프로젝트(chromium·mobile·tablet) 통과
+
+
+## 2026-11-11 test(e2e): J-201 통합 모의고사 응시 여정 — 점수·과락 판정·이력 기록 검증
+
+- `j-201-mock-exam.spec.js` 신설 — `#/exam` 딥링크(모바일 탭바에 시험 항목 없음) → 통합 모의고사 응시(manifest 35+45문, 동적 총 문항 수) → 전 문항 응답·OMR 진행률·`sim_draft_session` 기록 → `showConfirm` 제출 → 결과 패널 점수/과목별 분석/과락·합격 예측 판정 → `sim_results_history`의 `examId:'integrated'` 행·화면 점수 일치·드래프트 정리 검증
+- DSN-46 갱신 — 카탈로그 J-201의 과락 기준 `40` 표기를 실제 carework manifest `subjectFailBelow: 60`으로 정정, 파일 트리 실제 파일명 반영, J-201 구현 메모 추가
+- 검증: 3프로젝트(chromium·mobile·tablet) 통과 — 응시→채점→저장 전 구간 실브라우저 완주
+
+
+## 2026-11-11 feat(content): carework 문제은행 +20 — ai:draft 2차 패스 (인용 공백 라인 대상)
+
+- 인용 라인 갭 분석으로 미커버 구간만 선정해 청크별 생성→원문 대조→중복 폐기→편입. 은행 187→207문 (과목1 80→90·과목2 107→117), `exams.json` desc 동기화
+- 과목2 (+10): 복지용구 대여/구입·160만원·발받침 5cm·손둥발일·건측 배치(Q108~111) / 손위생 20~30초·AED 사용법(Q112~113) / 등급판정위원회 구성(Q114) / 기본계획 5년·실태조사 3년(Q115) / 인정 유효기간 1년(Q116) / 실종노인·벌칙 금액 구분(Q117)
+- 과목1 (+10): MCI 정의·1/2차 돌봄관계·대면하기 2초·자기관리 원칙(Q81~84) / 운동 관리 원칙(Q85) / 일반돌봄군 월 16시간(Q86) / 장애별 대화법·메라비언·비에스텍·여가·외출(Q87~90)
+- 폐기 15건: 기존 문항과 동일 사실(결핵 일광소독·압박 100~120회·CCTV·자격취소·이의신청·의료복지시설·수면위생 등) 또는 색인 조합형 암기 — 법령 청크(L659~940)는 단일 청크라 생성물이 동일 조항으로 수렴해 2차 패스 후반부 채택률 급감(포화 판정)
+- 도구 주의사항: `ai_apply --drafts`는 편입 완료 초안에 표식 없이 재처리 — 타 과목 배치 간 잔존 초안이 재편입되어 Q118=Q117 중복 발생, 수동 제거·잔존 초안 삭제로 정리
+- 부산물: manifest·webmanifest·sw·.last-stats·adoption_log 갱신, 드릴 재생성(과목1 ox 445·combo 133 / 과목2 ox 585·combo 138)
+
+
+## 2026-11-11 feat(content): carework 실기 문제은행 +21 — ai:draft Ch.12·13·16 인용 공백 구간 확충
+
+- `과목2_요양보호실기_문제은행.md` Q87~107 — `ai:draft` 청크별 생성→교재 원문 전수 대조→중복 폐기→`ai_apply --drafts` 편입. 은행 160→187문 (실기 86→107), `exams.json` desc 동기화
+- Ch.12 치매(L260-308): 초안 9문 중 4문이 기존 Q73~76(배회·석양·의심망상·반복질문)과 동일 근거·사실로 폐기, 5문 채택 (Q87~91)
+- Ch.13 임종(L328-350): 초안 6문 중 3문이 기존 Q77·Q80·자체 중복으로 폐기, 3문 채택 (Q92~94 — 죽음 5단계 정의·체인-스토크스·애도 1개월 연계)
+- Ch.15 사례통합 장 제외: 본문이 "12~14장+문제은행 기반 통합 사례"로 신규 개념 없음 — 생성 시 중복만 발생 판단
+- Ch.16 법령·고시(L613-1085) 4회 분할 생성: 급여 제공기준 고시 3문(Q95~97) / 노인장기요양보험법 5문(Q98~102) / 노인복지법 3문(Q103~105) / 등급판정기준 고시 2문(Q106~107). 법령 색인 청크 2문(조항·고시 항목 조합형 암기)은 채택 가치 없어 폐기
+- 인용 품질: 다중 라인 인용(L###, L###)은 표시 인용이 첫 라인만이라 정답 직접 지지 라인으로 정정 3건 (Q2→L775, Q4→L886, Q5→L925)
+- 부산물: manifest·webmanifest·sw 스탬프·.last-stats·adoption_log 갱신 — 파서 등가·인용 동기·드릴 재생성(과목2 combo 127) 확인
+
+
+## 2026-11-11 fix(tools): ai_apply 초안 경로 이중 조인 — 시험 하위폴더 draft_* 편입 불가 수정
+
+- `ai_apply.js` — `listDraftFiles()`가 절대경로를 반환하는데 파일명 규약으로 가공: `f.replace(/^draft_/)`·`f === 'explain_…'`·`path.join(DRAFT_DIR, f)` 전부 실패해 `--drafts`·explain 편입이 시험 하위폴더 초안에서 무음 스킵되던 잠복 버그 → `path.basename` 기준 subjKey·--file 매칭 + 시험 하위폴더 초안의 target.id 귀속 + `batchMeta` 직접 경로
+- `ai_apply.js` — `batchMeta`를 `writeFileSync`보다 먼저 평가: 크래시 시 은행 파일만 쓰인 부분 편입(재실행 시 Q번호 중복) 방지 — 실제 파일럿에서 ENOENT 크래시→Q87~92 중복 삽입으로 재현됨
+- `ai_dupcheck.js` — 동일 이중 조인 버그 (`listDraftFiles` 절대경로 재조인) 수정
+- 회귀 테스트: `ai-tools.test.js`에 시험 하위폴더 `draft_*` 초안의 과목 키 매칭 미리보기 케이스 추가
+
+
+## 2026-11-11 feat(content): carework 실기 문제은행 +6 — ai:draft Ch.14 응급·감염 파일럿
+
+- `과목2_요양보호실기_문제은행.md` Q81~86 — Ch.14(응급상황 대처·감염관리, 기존 인용 L300+ 공백 구간) `ai:draft` 초안 6문 전수 리뷰 채택: CPR 이완·30:2 / 약물중독 구토 고개 옆으로 / 감염 옳지 않은(결핵 일광소독) / 하임리히 위치 / 저혈압 자세·금지행동 / 위기 대처 순서
+- 리뷰 수정 1건 — 청크 간 발문 중복("응급 상황별 대처 방법으로 옳은 것은?" ×2)을 "자세와 금지 행동"으로 구체화; 인용 6건 모두 교재 원문 대조 확인
+- 정본 파이프라인 검증: `ai_apply --drafts --write`가 Q번호 재부여·📖근거 인용 자동 변환·manifest title 86제·exams.json desc 166문 동기·adoption_log 기록까지 처리
+- 첫 --write가 batchMeta 크래시로 부분 편입(재실행 시 Q87~92 중복) — 중복 문항 제거·카운트 정정, 도구 측 재발 방지는 선행 커밋(메타 선평가)
+- 부산물: drills 재생성(과목2 86→콤보 101)·.last-stats·sw 스탬프·carework.webmanifest
+
+
+## 2026-11-11 test(e2e): J-202 careFlow 진도 복원 여정 — 이어하기·완료 마커
+
+- `tests/e2e/journeys/j-202-progress-resume.spec.js` 신설 — 카탈로그 J-202(진도 복원)를 carework careFlow 경로로 구현: ① story/summary 중단 → 대시보드 경유·새로고침 → 개념 재선택 시 `flow_progress` 저장 단계로 복귀 ② 완주 시 `stage='complete'` 기록 ③ 재접속 후 개념 목록 옵션의 상태 접두(✓·!·↻) 확인
+- 2과목 개념 사용 — 1과목 개념은 pre 문항 부재 사례가 있어 단계 저장 시점이 어긋남 (응답 시점에만 `_stage` 기록); `result` 저장분은 `scenario`로 매핑되는 앱 계약 검증
+- 검증: 3프로젝트 × 2회 = 6/6 연속 통과, ESLint 클린
+- DSN-46: 트리 파일명 `j-202-progress-resume.spec.js` 정합 + J-202 구현 메모(과목 선택 근거·복원 계약) 추가
+
+
+## 2026-11-11 docs(carework): 학습안내서 카드·퀴즈 "준비 중" 안내 해소
+
+- `docs/학습안내서.md` 학습·훈련 표 — 전 챕터 용어표 파생(카드 160·퀴즈 109)으로 "문항 준비 중 — 개념 학습·교재로 대체" 문구를 실제 기능 안내로 정정
+- docs_md 번들 재생성 동반
+
+
+## 2026-11-11 feat(carework): 전 챕터 용어표 확장 — 카드 160·퀴즈 109 파생
+
+- caretheory Ch.01·03~08 (7표 67행) + careprac Ch.09~14 (6표 61행) — Ch.02 파일럿 패턴을 학습구조 문서(YW-01~14) 근거로 전 챕터 확장, Ch.15는 사례통합 안내 장이라 제외
+- 추출: caretheory 카드 99·퀴즈 72 / careprac 카드 61·퀴즈 37 — 목표 배분(BP-01)으로 careprac은 은행 보충 19카드·17퀴즈까지 채워져 표시 80카드·54퀴즈 (caretheory는 원본 초과로 표시 상한 80/55)
+- 부산물: 양 과목 이야기형 동기·문제은행 #L 296건 자동 갱신·스냅샷·.last-stats — 데이터신선도 게이트는 생성물 커밋 후 통과 예정
+
+
+## 2026-11-11 feat(carework): 요양보호론 Ch.02 핵심 암기카드 표 — 카드·퀴즈 첫 파생
+
+- `교재/caretheory/1과목_요양보호론.md` Ch.02 끝에 32행 용어 표 추가 — 사회복지 3분야·노인맞춤돌봄 대상군·시설 유형·장기요양(대상/인정조사/등급/유효기간/급여/본인부담/재원)·요양사 업무·자격. `📌중요`/`🔖기출` 마커+정의 볼드로 빈칸형·용어형 퀴즈 파생 — 추출 카드 32·퀴즈 30 (표 1개로 첫 파생)
+- 보충 체계(BP-01) 연쇄 효과: 원본 합계 32/30이 문제은행 비중(80:80)으로 배분되어 careprac에도 은행 보충 카드 16·퀴즈 15 자동 생성 — `data-needs` 게이트(UX-NAV-16) 해제로 표준 카드·퀴즈 뷰 노출
+- 부산물: 이야기형 표 동기 전파·문제은행 #L 인용 라인 +37 자동 갱신·card_terms_snapshot·.last-stats·sw 캐시 스탬프
+- 후속: 나머지 챕터 용어표 확장 시 동일 패턴 적용, J-101에 표준 뷰 게이트 해제·퀴즈 완주 검증 추가
+- 기타: `.gitignore`에 E2E 세션 파일(`tests/.auth/`·`*.storageState.json`) 무시 등록(DSN-46 §3-3), DSN-46 스펙 수치(25)·파일명 casing·carework 경로 주석 정합
+
+
 ## 2026-11-10 feat(cosmetic): Formula OS 허브 메뉴 3그룹 세분화
 
 - `html/exams/cosmetic/formula.html` — '분석·법규 도구'(6카드)를 '분석·판정'(기성품 전성분 분석·이상사례 기록) + '법규·출력'(표시사항·광고·법규 준수·종합 보고서)으로 분리, 이상사례 카드를 분석·판정 그룹으로 이동 (사전 분석·사후 기록 연속성)
