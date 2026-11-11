@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 37f83c39b8417d97
+> 입력 해시: 6b9e778c30904a6b
 > 생성: 2026-11-11 · 원천: SPEC.md(693개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -1058,6 +1058,7 @@
 | DOC-DSN-44 | docs/exams/carework/design/CARE_OS_DATAHUB_DESIGN.md | CO-01, CO-02, CO-03, CO-04, CO-05, DA-13, DA-18, ROAD-P5 |
 | DOC-DSN-45 | docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md | — |
 | DOC-DSN-46 | docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md | — |
+| DOC-DSN-47 | docs/dev/design/CAPACITOR_PACKAGING_REVIEW.md | — |
 | DOC-DSN-90 | docs/dev/design/DEPLOY_PIPELINE_DESIGN.md | AD-10, PF-18 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |

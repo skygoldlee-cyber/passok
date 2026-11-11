@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 docs(design): Capacitor 네이티브 패키징 적합성 검토 보고서 — DOC-DSN-47
+
+- `CAPACITOR_PACKAGING_REVIEW.md` 신설 — DSN-39 단계 전략(TWA→Capacitor→Flutter) 중 2단계의 실측 타당성 검토: 호환성 실측(OAuth 딥링크만 수정 필요)·앱 크기 분석(carework 단일 ~17MB)·비용·리스크·Android-first 로드맵
+- TRACE_MATRIX 문서 등록
+
+
 ## 2026-11-11 feat(ci+e2e): J-102 인증·동기화 전 구간 완비 — 스펙 구현·CI env 연결·운영 가드
 
 - `tests/e2e/journeys/j-102-auth-sync.spec.js` 신설 — 첫 로그인→학습 쓰기→첫 push·재로그인 복원·로컬 우선 충돌 3시나리오 × 3프로젝트 9/9 통과 (DSN-46, 런북 DOC-RBK-23)
