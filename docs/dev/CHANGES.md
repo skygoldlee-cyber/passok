@@ -1,6 +1,15 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 test(e2e): J-302·J-401·J-402 여정 — 문서 인쇄·반응형·PWA 오프라인
+
+- `j-302-docs-print.spec.js` — 매뉴얼 열람 → 인쇄/PDF → 스타일드 PDF 새 탭 미리보기(popup+토스트) + html2canvas 강제 실패 시 'PDF 생성 실패' 토스트·window.print() 폴백 1회 검증 (CO-20)
+- `j-401-responsive.spec.js` — dashboard·exam·quiz·cards·calendar·analysis 6뷰 가로 오버플로 0 검증, 3프로젝트가 뷰포트 매트릭스 역할
+- `j-402-pwa-offline.spec.js` — SW 컨트롤 확보 → setOffline 캐시 재부팅 → #offline-banner 표시 → 온라인 복구 해제 검증
+- DSN-46 갱신 — J-302/401/402 구현 메모·파일 트리 반영
+- 검증: 각 스펙 3프로젝트(chromium·mobile·tablet) 통과 — E2E 카탈로그 로컬 퍼스트 여정 전원 완료 (J-102는 테스트 Supabase 프로젝트 필요로 차단)
+
+
 ## 2026-11-11 test(e2e): J-301 시험 전환 여정 — carework↔cosmetic 스코프 분리 검증
 
 - `j-301-exam-switch.spec.js` 신설 — `#/exams` 카드 선택 → `selectExam` 리로드 → 타이틀(PassCare↔Passmula)·`current_exam` 교체 + `carework:sim_results_history` 스코프 진도 보존 → 복귀 복원 검증
