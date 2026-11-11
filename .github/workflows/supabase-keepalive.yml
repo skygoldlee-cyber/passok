@@ -3,6 +3,8 @@ name: Supabase Keep-Alive
 # 매일 실행 — Supabase Free 티어는 7일간 사용자 DB 활동이 부족하면 프로젝트를
 # 자동 일시정지한다. 실제 테이블에 REST 쿼리 1건을 보내 활동을 유지한다.
 # 시험이 연 2회(5월·9월)라 비시즌 무트래픽 기간 대비용 (SUPABASE_DESIGN.md §12).
+# 운영 프로젝트(supabase-config.js 상수) + 테스트 프로젝트(passok-e2e, TEST_*
+# 시크릿) 둘 다 핑한다 — 테스트 프로젝트가 잠기면 CI의 J-102가 실패한다.
 #
 # URL·publishable key는 이미 공개 설계(src/auth-sync/supabase-config.js — RLS가 보안 담당)라
 # 시크릿 불필요. 소스 파일에서 추출하므로 프로젝트 변경 시 자동 추적한다.
@@ -59,6 +61,36 @@ jobs:
           echo "Auth HTTP $acode"
           if [ "$acode" != "200" ]; then
             echo "Auth ping 실패 — 대시보드에서 프로젝트 상태 확인"
+            exit 1
+          fi
+
+      - name: Test project ping (passok-e2e)
+        env:
+          TEST_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+          TEST_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+          # 시크릿 미설정이면 테스트 프로젝트 없음 — 조용히 skip (J-102도 같이 스킵됨)
+          if [ -z "$TEST_SUPABASE_URL" ] || [ -z "$TEST_SUPABASE_ANON_KEY" ]; then
+            echo "TEST_SUPABASE_* 미설정 — 테스트 프로젝트 ping skip"
+            exit 0
+          fi
+          # Free 프로젝트는 ~7일 무활동 시 일시정지 → J-102 CI 플레이크 원인.
+          # REST + Auth 둘 다 확인 (PostgREST는 살아도 GoTrue가 죽는 케이스 커버)
+          code=$(curl -sS -o /tmp/test_keepalive_body -w '%{http_code}' --max-time 30 --retry 3 \
+            -H "apikey: $TEST_SUPABASE_ANON_KEY" -H "Authorization: Bearer $TEST_SUPABASE_ANON_KEY" \
+            "$TEST_SUPABASE_URL/rest/v1/sync_snapshots?select=user_id&limit=1")
+          echo "Test REST HTTP $code"
+          if [ "$code" != "200" ]; then
+            cat /tmp/test_keepalive_body
+            echo "테스트 프로젝트 ping 실패 — 일시정지 가능. passok-e2e 대시보드에서 Resume 확인"
+            exit 1
+          fi
+          acode=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 --retry 3 \
+            -H "apikey: $TEST_SUPABASE_ANON_KEY" "$TEST_SUPABASE_URL/auth/v1/settings")
+          echo "Test Auth HTTP $acode"
+          if [ "$acode" != "200" ]; then
+            echo "테스트 프로젝트 Auth ping 실패 — passok-e2e 상태 확인"
             exit 1
           fi
 

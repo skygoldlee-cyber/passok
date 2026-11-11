@@ -10,6 +10,7 @@
 - `apply_schema.js` — 운영 ref 대상 시 `--prod` 플래그 또는 TTY 'apply-prod' 입력 없이 실행 거부
 - `ci.yml` e2e 잡 — `TEST_SUPABASE_*`·`TEST_E2E_PASSWORD` Secrets env 주입 (J-102 CI 실행 연결, DSN-46 §7)
 - 함정 문서화 — SW precache가 `page.route` 오버라이드를 우회해 운영 config를 서빙하는 race → 인증 스펙은 `serviceWorkers: 'block'` 필수 (런북 Phase D)
+- `supabase-keepalive.yml` — 테스트 프로젝트(passok-e2e) 핑 추가: 기존은 운영 상수만 핑해 테스트 프로젝트 일시정지 시 CI J-102 플레이크. TEST_* 시크릿 존재 시 REST+Auth 핑, 미설정 시 skip
 
 
 ## 2026-11-11 fix(gate): seed_test_accounts 'carework' 리터럴 — DA-15 ALLOWED 예외 등록
