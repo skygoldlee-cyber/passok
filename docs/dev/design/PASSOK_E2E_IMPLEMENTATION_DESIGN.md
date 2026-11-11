@@ -120,6 +120,8 @@ tests/reports/
 | J-511 | 명부·근무표 | P2 | care-client 등록→일지 기록(명부 datalist 해소)→통합 이력 연동·수정 경로 · care-roster 배정→목록→삭제 | clientTimeline 이름/ID 해소 계약 | `j-511-care-clients-roster.spec.js` |
 | J-512 | 도구·평가 | P2 | care-calc 재가급여→본인부담 결과 표 · care-card 상세→사고보고서 선기입 연동 · care-audit 체크→진행률→재부팅 지속 | CARE_INCIDENT_DRAFT 초안 소비 계약 | `j-512-care-tools.spec.js` |
 | J-513 | 양식·기관찾기 | P2 | care-custom-form 템플릿({{항목}} 기입란) →기입→문서 생성·저장 · care-forms 발급처 링크 디렉터리 · care-finder 검색→기관 설정 | 로컬 시설 데이터 필터 + `care-finder-set` 기관명 연결 | `j-513-care-forms-finder.spec.js` |
+| J-530 | 배합 계산기 | P2 | formulaNew → 원료 행·농도 입력 → 고시 검증 배지(정상·초과·확인) → 저장 → 보관함 카드 → 열기(editingId 복원) → 삭제 | `cosmetic:` 스코프 포뮬러 지속 + 스테퍼·절차·합계 | `j-530-formula-calc.spec.js` |
+| J-531 | Formula 워크스페이스 | P2 | 고객 등록 → 처방 저장(고객 접힘 customerId 연동) → 조제 기록(처방 프리셀렉트·고객 연결) → 고객 상세 역조회 칩 · 원료 장부 · 기성품 전성분 · 사업 유형 카드 게이트 | 고객↔처방↔조제 3스토어 연동 + biz-profile 가시 게이트 | `j-531-formula-workspace.spec.js` |
 | J-900 | 품질 신호 | P1 | 전 시나리오 공통: JS 예외 0 · 5xx 응답 0 | `evidence.js`의 console/network 수집 첨부 | app.spec 부분 |
 
 **첫 구현 대상**: J-201(모의고사) — 학습·채점·저장이 한 흐름에 있어 공통 헬퍼가 함께 완성. 단 J-101(비로그인)이 선행으로 자연스럽게 붙는다 — 로그인 불필요, 오버라이드 기작 없이 즉시 작성 가능 (가이드 §5 권장과 동일 논리).
@@ -149,6 +151,8 @@ tests/reports/
 > **J-500 구현 메모** (2026-11-12): `j-500-exam-conformance.spec.js`는 `tests/e2e/support/exam-matrix.js`가 exams.json + `data/exams/<id>/registry.js`(빌드 산출물)에서 읽은 기대치로 팩당 1테스트를 동적 생성한다 — 신규 팩은 스펙 수정 없이 자동 편입. **팩별 분기는 registry가 정본**: ①`stats.quizzes>0` 과목이 없는 팩(compapp2 등)은 빈칸퀴즈가 '미저작' 상태이므로 무응답이 아니라 '출제 가능한 퀴즈가 없습니다' 토스트의 정상 열화를 검증 ②통합 모의고사는 **모든 과목**에 문항 뱅크가 매핑돼야 시작된다(`exam-sim-session.js` missingSubjects 가드) — 미커버 과목이 있으면 '데이터 불완전' 토스트, 전 커버면 실제 출제+1문 응답을 요구 ③`integratedExam` 카드 노출 판정은 앱과 동일하게 `questionsPerSubject` 맵 유무 — hairdresser의 구형 `subjects[]` 배열 스키마는 비노출이 정상. 과목 순회는 '비어 있으면 다음 과목을 고르는' 사용자 행동을 그대로 따른다(과목별 콘텐츠 편차가 팩마다 다름).
 >
 > **J-510~513 구현 메모** (2026-11-12): carework 실무모드 로컬 CRUD 스위트 — 스토어는 `carework:` 스코프 localStorage라 Supabase 불필요(기관 경로는 J-52x 소관). 구현 중 확인된 함정 3가지: ①더보기 `details.care-more-actions > summary` 선택자는 **지연 주입된 다른 실무 뷰의 동명 summary까지 매칭**되므로 `#care-log-view`/… 뷰 스코프 필수 ②Pro 배지 버튼(`data-pro-feature` 저장 계열) 첫 클릭 시 `#pro-upgrade-overlay` 안내가 떠서 이후 클릭을 가로막는다 — `examSeed()`가 비스코프 `pro_notice_seen`에 `{"_global":…}`를 미리 기록해 해제(안내 모달 계약 자체는 J-203이 검증) ③`obs-*` 관찰 칩은 시각 숨김 radio + `label.obs-chip` 패턴이라 `check()`가 아니라 **라벨 클릭**이 실사용자 경로. 스토어 간 연동은 J-511의 clientTimeline(일지→명부 이력)과 J-512의 카드→사고보고서 `CARE_INCIDENT_DRAFT` 초안 소비가 핵심 계약이다.
+>
+> **J-530~531 구현 메모** (2026-11-12): cosmetic Formula OS 실무모드 — 단일 `#formula` 뷰 안 허브+서브패널(`is-hidden` 토글) 구조라 carework와 달리 해시가 아닌 **패널 전환**을 추적한다. 확인된 함정: ①같은 `data-click`이 허브 카드·툴바·빈상태 버튼·서브내비 칩에 중복 배치돼 strict-mode 위반 다수 — 허브 카드는 `#formula-menu-panel` 스코프, 툴바/상세 버튼은 `.first()`로 해결 ②**처방↔고객 연동은 계산기의 고객 접힘(`#formula-cust-ref` select)에서만 성립** — 조제 기록의 고객 선택은 배치에만 붙고 처방의 customerId는 안 바뀐다. 배치→고객·처방→고객은 별개 경로라 체인 테스트는 두 연동을 모두 밟아야 '연결된 처방'이 차오른다 ③`.formula-chip`(고객 고민·배치 위생 체크)도 obs-chip과 동일한 시각 숨김 input 패턴 — 라벨 클릭. 성분 검증 배지는 실데이터 기준: 글리세린=정상·레티놀(한도 1%)=초과·미등록명=확인+'사전 등록' 버튼.
 
 ## 5. 선택자 규약 — data-testid 점진 도입
 
