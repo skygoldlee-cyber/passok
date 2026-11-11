@@ -1,6 +1,16 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 fix(a11y): A-03 대비 전수조사 — 시험 스킨 토큰의 테마 무시 구조 결함 수정 + 전 뷰×양 테마 매트릭스 게이트
+
+- **전수조사**: `a11y.spec.js`에 뷰×테마 매트릭스 스캔 추가 — 라우팅 가능 전 뷰(cosmetic 13+carework 18)×라이트/다크 axe 검사. 기존 4뷰 스캔이 놓치던 위반 20+건(carework 실무 뷰 전체·trainer·ingredients 등) 적발
+- **근원 결함① — 시험 스킨이 라이트 팔레트를 무력화**: `applyExamTheme`(exam-context.js)과 `pwa-manifest.js`가 exams.json `theme` 토큰을 `<html>` 인라인으로 주입 — `.light-theme` 재정의보다 항상 우선해 다크 전용 네온(#06b6d4·#10b981 등)이 라이트 표면 텍스트로 적용됨(실측 htmlClass=light-theme인데 primary=#06b6d4). `resolveExamThemeTokens(exam,{light})`에 상대 휘도 감쇠(색조 유지 RGB 축소, 목표 휘도 ≤0.09 → 베이지 카드 위 ≥4.9:1)를 추가해 라이트에서 감쇠 변형을 주입하고, `themechange` 시 자동 재적용 + 이전 주입 토큰 제거(시험 전환 잔류 방지). 부팅 경로 pwa-manifest.js에 동일 로직 복제(기존 정규식 복제 관례)
+- **근원 결함② — 흰 글자 on 브랜드 primary(2.42:1, 양 테마 공통)**: `--color-primary-fill`/`--color-secondary-fill` 채움 전용 토큰 신설(시험 스킨은 화이트-안전 파생 ≤0.13 휘도로 자동 주입) — active-filter·highlight-card-badge·필터 버튼·btn-primary·배지/숫자 원·오버레이 primary 버튼 등 텍스트-온-필 사이트 20+곳(CSS 13파일+JS 인라인 6곳)을 fill 토큰으로 교체. 장식용 채움(프로그레스바·텍스트클립 그라디언트·틴트)은 원색 유지
+- **근원 결함③ — `.btn` 배경 미선언 → UA buttonface(#f0f0f0) 노출**: 다크 테마에서도 variant 없는 버튼이 밝은 회색으로 렌더되고 그 위 pro-badge(violet-400)가 대비 실패 — `.btn`에 `--bg-muted`+`--color-text-main` 기본 부여
+- 추가 잠재 위반 정리: `.limits-opt-num`(success/danger 원색 채움+흰 글자)→`-fill` 토큰, `--color-danger-fill` #ef4444→#b91c1c, `--color-banner-warning/error` 흰 배너 대비 보정, `.light-theme .badge-cyan/violet/emerald`→테마 토큰, `.care-card-stepno` 어두운 글자→fill+on-brand, 히트맵 셀 채움 휘도 기준 글자색 선택(dashboard.js — 밝은 히트색 위 흰 글자 실패)
+- 검증: 매트릭스 4테스트(62 view×theme 스캔) 심각 위반 0건 + 유닛(relativeLuminance/darkenToLuminance/light 감쇠/fill 파생)·DOM 1001 통과. SPEC A-03 요구사항 변경 없음(기존 4.5:1 규약) — 커버리지 공백만 해소
+
+
 ## 2026-11-12 feat(carework): 상황별 대처카드 '섬망(급성 의식 변화) 의심' 카드 추가
 
 - `care_cards.json`에 14번째 카드 추가 — 섬망은 BPSD(만성·의식 명료)가 아닌 급성 발현+의식 흐림의 의료 상황이라 '응급 상황' 카테고리로 분류하며, 감별 흐름을 위해 **망상·환각(bpsd-delusion) 카드 바로 다음**에 배치. 트리거·즉시 조치(낙상·배출 감시+안심)→보고(의료진 즉시 상담·악화 시 119·감염/약물/탈수 유발 요인 안내)→기록(BPSD 감별 서술 지침)

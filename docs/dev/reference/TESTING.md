@@ -757,6 +757,20 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
   의도적 시각 변경 후 로컬은 `--update-snapshots`, CI용은
   `visual-baseline.yml` 워크플로 수동 트리거 → 아티팩트 커밋으로 갱신.
 
+**a11y.spec.js — 접근성 자동 스캔·대비 전수 매트릭스 (A-01/03/04, UX-NAV-04, 2026-11-12 매트릭스 확장)**
+
+- **전 뷰×양 테마 대비 매트릭스 (A-03)**: 라우팅 가능 전 뷰를 해시 네비게이션으로
+  순회 — cosmetic 13뷰 + carework 18뷰 × 라이트/다크 = 62 view·theme 조합에
+  axe WCAG 2.2 스캔. 시험 컨텍스트는 `examSeed`로 전환하고 컨트롤의 실제
+  computed style 상태에서 위반을 수집한다 (토큰 정적 계산으로는 못 잡는
+  상속·알파 합성·브랜드 주입 결함을 실측으로 적발 — 시험 스킨 인라인 주입이
+  `.light-theme` 팔레트를 무력화하던 구조 결함이 이 스캔으로 확인됨).
+- **대표 뷰 심층 스캔**: 대시보드·플래시카드(셀렉트 채움)·설정 패널 오픈 ×
+  라이트/다크 — critical+serious 0건 게이트, moderate/minor는 보고만.
+- **네이티브 `<select>` 예외**: axe가 UA 내부 색을 오독하는 `color-contrast`
+  오탐만 선별 제외 — `getComputedStyle` 실측 충족을 전제로 한정.
+- **가로 오버플로 (UX-NAV-04)**: 주요 뷰의 `scrollWidth > innerWidth` 실측.
+
 **pdf-pagination.spec.js — 생성 PDF 페이지네이션 (CO-21, 2026-11-09 추가)**
 
 - 벤더 스텁(html2canvas·jsPDF 교체)으로 슬라이스 좌표만 채취 — 실제 렌더 없이

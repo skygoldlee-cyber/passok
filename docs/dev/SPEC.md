@@ -840,7 +840,7 @@
 | A-12 | WCAG 2.2 신규 성공기준 대응 — Focus Not Obscured(2.4.11: 하단 `scroll-padding-bottom` + UX-NAV-11 히트테스트 E2E로 충족, 상단은 헤더가 sticky라 포커스 요소가 컨테이너 스크롤로 노출)·Consistent Help(3.2.6: 헤더 도움말 고정)·Redundant Entry(3.3.7: 동일 세션 재입력 요구 없음)·Accessible Authentication(3.3.8: 비밀번호 관리자·소셜 로그인 허용, 인지 퍼즐 미사용)·Dragging Movements(2.5.7: 드래그 UI 부재 — 비해당)·Target Size Minimum(2.5.8: A-04의 44px로 상회 충족) | ✅ |
 | A-13 | **텍스트 확대·리플로 (SC 1.4.4·1.4.10)**: 200% 확대(실효 뷰포트 절반) 상태에서도 콘텐츠·기능 손실 없이 사용 가능 — 수평 오버플로 금지(UX-NAV-10)가 확대 상태에서도 유지됨을 e2e 실효 폭 환산으로 검증 | ✅ |
 
-> **검수 범위 확정 (2026-10-03, 2.2 상향 2026-11-02)**: 기준 레벨은 WCAG **2.2** AA (ISO/IEC 40500:2025 상응; axe 태그 `wcag2a/2aa/21a/21aa` + `wcag22aa`), 게이트는 critical+serious 위반 0건 (moderate/minor는 보고만 — 점진 정리). 2.2 신규 성공기준의 정합은 A-12 표 참조. 자동 스캔 대상은 대표 뷰(대시보드·플래시카드 셀렉트 채움 상태·설정 패널 오픈) × 라이트+다크 테마 (`tests/e2e/a11y.spec.js`). 스크린리더 실동작은 자동화 불가 — iOS VoiceOver 핵심 시나리오 수동 검수로 면제 표에 등록 ([런북](runbooks/UIUX_VERIFY_RUNBOOK.md)).
+> **검수 범위 확정 (2026-10-03, 2.2 상향 2026-11-02)**: 기준 레벨은 WCAG **2.2** AA (ISO/IEC 40500:2025 상응; axe 태그 `wcag2a/2aa/21a/21aa` + `wcag22aa`), 게이트는 critical+serious 위반 0건 (moderate/minor는 보고만 — 점진 정리). 2.2 신규 성공기준의 정합은 A-12 표 참조. 자동 스캔 대상은 라우팅 가능한 전 뷰(cosmetic 13 + carework 18) × 라이트+다크 테마 매트릭스 + 대표 뷰 심층 상태(플래시카드 셀렉트 채움·설정 패널 오픈) (`tests/e2e/a11y.spec.js`). 스크린리더 실동작은 자동화 불가 — iOS VoiceOver 핵심 시나리오 수동 검수로 면제 표에 등록 ([런북](runbooks/UIUX_VERIFY_RUNBOOK.md)).
 
 ### 4.6 반응형 & 모바일
 

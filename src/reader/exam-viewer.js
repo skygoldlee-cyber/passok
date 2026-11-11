@@ -98,7 +98,7 @@ export const ExamViewer = (() => {
   display:inline-flex;align-items:center;gap:6px;font-family:inherit;
   transition:all .15s ease;}
 #exam-overlay .exam-ov-btn:hover{border-color:var(--border-color-active);color:var(--color-primary);}
-#exam-overlay .exam-ov-btn.primary{background:linear-gradient(135deg,var(--color-primary),#0891b2);
+#exam-overlay .exam-ov-btn.primary{background:linear-gradient(135deg,var(--color-primary-fill),var(--color-primary-dark));
   border-color:transparent;color:#fff;}
 #exam-overlay .exam-ov-btn.primary:hover{color:#fff;filter:brightness(1.1);
   box-shadow:var(--glow-primary);}

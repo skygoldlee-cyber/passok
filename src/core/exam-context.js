@@ -167,10 +167,13 @@ const THEME_TOKEN_RE = /^--(?:color|bg|border|stroke)-[a-z][a-z0-9-]*$/i;
 /**
  * exams.json `theme` 객체 → {CSS 토큰: 값} 정제 (순수 함수 — DOM 없이 테스트 가능).
  * 화이트리스트 밖 토큰·비문자열 값은 버린다.
+ * `light: true`이면 --color-* 토큰을 라이트 표면 대비 안전 명도로 보정한다 (A-03) —
+ * 시험 스킨은 다크 네온 원색이라 베이지 카드 위 텍스트로는 대비가 무너진다.
  * @param {object|null} exam
+ * @param {{ light?: boolean }} [opts]
  * @returns {Object<string,string>}
  */
-export function resolveExamThemeTokens(exam) {
+export function resolveExamThemeTokens(exam, { light = false } = {}) {
     const theme = (exam && typeof exam.theme === 'object' && exam.theme) || {};
     /** @type {Object<string,string>} */
     const out = {};
@@ -178,22 +181,83 @@ export function resolveExamThemeTokens(exam) {
         if (!THEME_TOKEN_RE.test(token) || typeof value !== 'string' || !value.trim()) continue;
         out[token] = value;
     }
+    if (light) {
+        for (const [token, value] of Object.entries(out)) {
+            if (!token.startsWith('--color-')) continue;
+            const darker = darkenToLuminance(value, LIGHT_TEXT_MAX_LUM);
+            if (darker) out[token] = darker;
+        }
+    }
     return out;
 }
 
+/* ── A-03: 스킨 색 명도 보정 ──
+   시험 스킨 토큰은 documentElement 인라인으로 주입되므로 .light-theme 재정의보다
+   항상 우선한다 — 라이트에서는 스킨 색 자체를 표면 대비 안전 명도로 감쇠해야 한다.
+   상대 휘도 상한: 라이트 텍스트 0.09(베이지 카드·틴트 위 ≥4.9:1),
+   흰 글자 채움 0.13(--color-on-brand 대비 ≥5.4:1).
+   ⚠️ pwa-manifest.js(클래식 스크립트, import 불가)에 동일 로직이 복제돼 있다 — 함께 갱신. */
+const LIGHT_TEXT_MAX_LUM = 0.09;
+const FILL_MAX_LUM = 0.13;
+
+const _lin = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+
+/** #rrggbb → WCAG 상대 휘도 (0~1). 해석 불가 입력은 null. */
+export function relativeLuminance(hex) {
+    const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
+    if (!m) return null;
+    const n = parseInt(m[1], 16);
+    return 0.2126 * _lin(n >> 16 & 255) + 0.7152 * _lin(n >> 8 & 255) + 0.0722 * _lin(n & 255);
+}
+
+/** #rrggbb를 상대 휘도 maxLum 이하가 될 때까지 RGB 균일 축소 — 색조는 유지된다. */
+export function darkenToLuminance(hex, maxLum) {
+    const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
+    if (!m) return null;
+    const n = parseInt(m[1], 16);
+    const r = n >> 16 & 255, g = n >> 8 & 255, b = n & 255;
+    for (let k = 1; k > 0; k -= 0.02) {
+        const rr = Math.round(r * k), gg = Math.round(g * k), bb = Math.round(b * k);
+        if (0.2126 * _lin(rr) + 0.7152 * _lin(gg) + 0.0722 * _lin(bb) <= maxLum) {
+            return '#' + [rr, gg, bb].map(v => v.toString(16).padStart(2, '0')).join('');
+        }
+    }
+    return '#000000';
+}
+
+let _appliedThemeTokens = new Set();
+let _themeWatchBound = false;
+
 /**
  * 활성 시험 스킨 적용 — `<html data-exam>` 속성 부여 + theme 토큰을
- * documentElement 인라인 변수로 주입 (라이트/다크 양쪽 테마 위에 적용).
+ * documentElement 인라인 변수로 주입한다. 라이트 테마에서는 색 토큰을
+ * 감쇠 변형으로 주입하고(A-03), --color-*-fill 파생 토큰은 흰 글자 채움면용
+ * 화이트-안전 변형이다. 테마 토글(themechange) 시 자동 재적용된다.
  * 부팅 초기에는 pwa-manifest.js가 먼저 같은 일을 하므로 여기서는
  * 브랜딩 재적용 경로의 일관성만 보장한다.
  * @param {object|null} [exam]
  */
 export function applyExamTheme(exam) {
     if (typeof document === 'undefined' || !document.documentElement) return;
+    const root = document.documentElement;
     const target = exam !== undefined ? exam : getActiveExam();
-    if (target && target.id) document.documentElement.dataset.exam = target.id;
-    for (const [token, value] of Object.entries(resolveExamThemeTokens(target))) {
-        document.documentElement.style.setProperty(token, value);
+    if (target && target.id) root.dataset.exam = target.id;
+    const light = root.classList.contains('light-theme');
+    const tokens = resolveExamThemeTokens(target, { light });
+    for (const base of ['--color-primary', '--color-secondary']) {
+        if (tokens[base]) tokens[`${base}-fill`] = darkenToLuminance(tokens[base], FILL_MAX_LUM) || tokens[base];
+    }
+    // 이전 주입 토큰 제거 — 시험·테마 전환 시 잔류 방지
+    for (const token of _appliedThemeTokens) {
+        if (!(token in tokens)) root.style.removeProperty(token);
+    }
+    _appliedThemeTokens = new Set(Object.keys(tokens));
+    for (const [token, value] of Object.entries(tokens)) {
+        root.style.setProperty(token, value);
+    }
+    if (!_themeWatchBound) {
+        _themeWatchBound = true;
+        document.addEventListener('themechange', () => applyExamTheme());
     }
 }
 

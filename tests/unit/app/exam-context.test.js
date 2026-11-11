@@ -8,7 +8,7 @@ import {
     getExamList, getActiveExam, getActiveExamId,
     contentPath, dataPath, hasFeature, scopedKey, unscopedKey,
     purgeLegacyStorage, resolveExamThemeTokens, applyExamTheme,
-    getActiveRegistry,
+    getActiveRegistry, relativeLuminance, darkenToLuminance,
 } from '../../../src/core/exam-context.js';
 
 const EXAMS = {
@@ -183,15 +183,88 @@ test('resolveExamThemeTokens: theme 부재·비객체·null 입력은 빈 객체
     assert.deepEqual(resolveExamThemeTokens({ theme: [] }), {});
 });
 
-test('applyExamTheme: data-exam 속성 + 토큰 인라인 주입', () => {
+test('resolveExamThemeTokens: light 옵션은 --color-* 토큰만 대비 안전 명도로 감쇠 (A-03)', () => {
+    const exam = {
+        theme: {
+            '--color-primary': '#06b6d4',   // 네온 — 베이지 표면 텍스트 대비 실패
+            '--color-success': '#064e3b',   // 이미 어두움 — 유지되어야 함
+            '--bg-app': '#101010',          // bg 계열은 감쇠 대상 아님
+            '--color-danger': 'rgba(255,0,0,.5)', // 비hex — 원본 유지
+        }
+    };
+    const light = resolveExamThemeTokens(exam, { light: true });
+    assert.notEqual(light['--color-primary'], '#06b6d4');
+    assert.ok(relativeLuminance(light['--color-primary']) <= 0.09);
+    assert.equal(light['--color-success'], '#064e3b');   // 통과 색은 원본 유지
+    assert.equal(light['--bg-app'], '#101010');
+    assert.equal(light['--color-danger'], 'rgba(255,0,0,.5)');
+    // 기본(다크) 호출은 원본 그대로 — 기존 동작 회귀 없음
+    assert.deepEqual(resolveExamThemeTokens(exam)['--color-primary'], '#06b6d4');
+});
+
+test('relativeLuminance: 기준색 휘도 — 흰색 1, 검정 0, 네온 cyan ≈0.38', () => {
+    assert.equal(relativeLuminance('#ffffff'), 1);
+    assert.equal(relativeLuminance('#000000'), 0);
+    const cyan = relativeLuminance('#06b6d4');
+    assert.ok(cyan > 0.3 && cyan < 0.45, `cyan lum=${cyan}`);
+    // 해석 불가 입력은 null
+    assert.equal(relativeLuminance('rgba(0,0,0,.5)'), null);
+    assert.equal(relativeLuminance('red'), null);
+    assert.equal(relativeLuminance('#abc'), null);
+});
+
+test('darkenToLuminance: 목표 휘도 이하로 축소 — 색조 유지·통과색 무결', () => {
+    const darker = darkenToLuminance('#06b6d4', 0.09);
+    assert.match(darker, /^#[0-9a-f]{6}$/);
+    assert.ok(relativeLuminance(darker) <= 0.09);
+    // 이미 목표 이하면 같은 색 반환 (정규화된 소문자 hex)
+    assert.equal(darkenToLuminance('#064e3b', 0.13), '#064e3b');
+    // 비hex는 null — 호출부가 원본 폴백
+    assert.equal(darkenToLuminance('rgba(6,182,212,1)', 0.13), null);
+});
+
+test('applyExamTheme: data-exam 속성 + 토큰 인라인 주입 + fill 파생', () => {
     const applied = {};
-    const el = { dataset: {}, style: { setProperty: (k, v) => { applied[k] = v; } } };
+    const el = {
+        dataset: {},
+        classList: { contains: () => false },
+        style: { setProperty: (k, v) => { applied[k] = v; }, removeProperty: () => {} },
+    };
     const originalDoc = global.document;
-    Object.defineProperty(global, 'document', { value: { documentElement: el }, writable: true, configurable: true });
+    Object.defineProperty(global, 'document', {
+        value: { documentElement: el, addEventListener: () => {} }, writable: true, configurable: true });
     try {
         applyExamTheme({ id: 'insadj', theme: { '--color-primary': '#f97316', '--evil-x': 'x' } });
         assert.equal(el.dataset.exam, 'insadj');
-        assert.deepEqual(applied, { '--color-primary': '#f97316' });
+        assert.equal(applied['--color-primary'], '#f97316');
+        // A-03 — 흰 글자 채움용 화이트-안전 파생이 함께 주입된다
+        assert.ok(applied['--color-primary-fill']);
+        assert.ok(relativeLuminance(applied['--color-primary-fill']) <= 0.13);
+        assert.equal(applied['--evil-x'], undefined);
+    } finally {
+        if (originalDoc !== undefined) {
+            Object.defineProperty(global, 'document', { value: originalDoc, writable: true, configurable: true });
+        } else {
+            delete global.document;
+        }
+    }
+});
+
+test('applyExamTheme: light-theme 클래스 감지 시 색 토큰 감쇠 주입 (A-03)', () => {
+    const applied = {};
+    const el = {
+        dataset: {},
+        classList: { contains: (c) => c === 'light-theme' },
+        style: { setProperty: (k, v) => { applied[k] = v; }, removeProperty: () => {} },
+    };
+    const originalDoc = global.document;
+    Object.defineProperty(global, 'document', {
+        value: { documentElement: el, addEventListener: () => {} }, writable: true, configurable: true });
+    try {
+        applyExamTheme({ id: 'cosmetic', theme: { '--color-primary': '#06b6d4' } });
+        assert.notEqual(applied['--color-primary'], '#06b6d4');
+        assert.ok(relativeLuminance(applied['--color-primary']) <= 0.09);
+        assert.ok(relativeLuminance(applied['--color-primary-fill']) <= 0.13);
     } finally {
         if (originalDoc !== undefined) {
             Object.defineProperty(global, 'document', { value: originalDoc, writable: true, configurable: true });

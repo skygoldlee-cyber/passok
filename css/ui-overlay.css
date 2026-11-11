@@ -742,8 +742,8 @@
   cursor: pointer;
 }
 .feedback-kind[aria-pressed="true"] {
-  background: var(--color-primary, #06b6d4);
-  border-color: var(--color-primary, #06b6d4);
+  background: var(--color-primary-fill, #0e7490);
+  border-color: var(--color-primary-fill, #0e7490);
   color: #fff;
 }
 .feedback-stars {

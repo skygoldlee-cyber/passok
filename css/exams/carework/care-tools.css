@@ -117,7 +117,7 @@
 .care-card-step:nth-of-type(4) { border-left-color: #8a97a8; } /* 기록 */
 .care-card-stepno {
     flex: none; width: 26px; height: 26px; border-radius: 50%;
-    background: var(--color-primary); color: #06202a;
+    background: var(--color-primary-fill); color: var(--color-on-brand);
     display: grid; place-items: center; font-size: 13px; font-weight: 700;
 }
 .care-card-step p { margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: var(--color-text-muted); }

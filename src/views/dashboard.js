@@ -15,6 +15,7 @@ import { computeMasteryLevels } from '../study/analysis-engine.js';
 import { showToast } from '../ui-utils.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { renderExpectedScore } from './score-estimate.js';
+import { relativeLuminance } from '../core/exam-context.js';
 
 /**
  * @type {boolean}
@@ -271,8 +272,13 @@ function _renderSubjectHeatmap(subjects) {
         else if (rate >= 40) { color = colors.low; label = rate + '%'; }
         else { color = colors.vlow; label = rate + '%'; }
 
+        // A-03 — 밝은 히트 채움 위 흰 글자는 대비 실패 (노랑·초록·회색 계열) →
+        // 채움 휘도 기준으로 글자색 선택 (밝은 채움=어두운 글자, 어두운 채움=흰 글자)
+        const lum = relativeLuminance(color);
+        const fg = (lum !== null && lum > 0.2) ? '#1f2937' : '#ffffff';
+
         html += `
-            <div class="heatmap-cell" title="${esc(subj.name)}: ${rate < 0 ? '미응시' : rate + '% 정답률 (' + sc.quizSolved + '문)'}" style="background:${color};">
+            <div class="heatmap-cell" title="${esc(subj.name)}: ${rate < 0 ? '미응시' : rate + '% 정답률 (' + sc.quizSolved + '문)'}" style="background:${color};color:${fg};">
                 <span class="heatmap-label">${esc(subj.name.substring(0, 6))}</span>
                 <span class="heatmap-value">${label}</span>
             </div>

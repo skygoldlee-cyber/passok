@@ -98,15 +98,15 @@
 }
 
 .light-theme .badge-cyan {
-    color: var(--color-primary-light);
+    color: var(--color-primary);
 }
 
 .light-theme .badge-violet {
-    color: var(--color-secondary-dark);
+    color: var(--color-secondary);
 }
 
 .light-theme .badge-emerald {
-    color: var(--color-success-dark);
+    color: var(--color-success);
 }
 
 .light-theme .badge-amber {
@@ -191,7 +191,7 @@
 }
 
 .exam-card-item:not(.highlight-card) .exam-btn-link:hover {
-    background-color: var(--color-primary);
+    background-color: var(--color-primary-fill);
     color: var(--color-on-brand);
     box-shadow: var(--glow-primary);
 }
@@ -209,7 +209,7 @@
 }
 
 .highlight-card .exam-btn-link:hover {
-    background-color: var(--color-secondary);
+    background-color: var(--color-secondary-fill);
     color: var(--color-on-brand);
     box-shadow: 0 0 15px var(--secondary-tint-40);
 }
@@ -332,7 +332,7 @@
 }
 
 .exam-btn-sim:hover {
-    background-color: var(--color-secondary);
+    background-color: var(--color-secondary-fill);
     color: var(--color-on-brand);
     box-shadow: 0 0 12px var(--secondary-tint-40);
 }
@@ -800,7 +800,7 @@
     overflow: hidden;
 }
 .highlight-card-badge {
-    background: var(--color-primary);
+    background: var(--color-primary-fill);
     color: var(--color-on-brand);
     display: inline-block;
     padding: var(--space-1) 0.6rem;

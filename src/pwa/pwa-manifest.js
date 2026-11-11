@@ -55,16 +55,44 @@
         if (appleTitle) appleTitle.setAttribute('content', 'PassOK');
 
         // 시험별 스킨 (DA-14) — 부팅 최초 프레임부터 활성 시험 팔레트를 적용한다.
-        // html[data-exam]은 CSS 측 규약 오버라이드(cascade)용 속성,
-        // theme 필드 토큰은 인라인 변수라 라이트/다크 양쪽 테마 위에서 유효.
-        // ⚠️ 화이트리스트 정규식은 exam-context.js THEME_TOKEN_RE와 동일 — 함께 갱신.
+        // html[data-exam]은 CSS 측 규약 오버라이드(cascade)용 속성.
+        // theme 토큰은 인라인 변수라 .light-theme 재정의보다 우선한다 — 라이트에서는
+        // --color-* 를 표면 대비 안전 명도로 감쇠해 주입한다 (A-03).
+        // ⚠️ 화이트리스트 정규식·감쇠 로직은 exam-context.js THEME_TOKEN_RE/
+        //    darkenToLuminance와 동일 — 함께 갱신.
         document.documentElement.dataset.exam = exam.id;
+        const savedTheme = localStorage.getItem('appTheme');
+        const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        const isLight = (savedTheme || (prefersLight ? 'light' : 'dark')) === 'light';
+        const lin = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+        const darken = (hex, maxLum) => {
+            const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
+            if (!m) return null;
+            const n = parseInt(m[1], 16);
+            const r = n >> 16 & 255, g = n >> 8 & 255, b = n & 255;
+            for (let k = 1; k > 0; k -= 0.02) {
+                const rr = Math.round(r * k), gg = Math.round(g * k), bb = Math.round(b * k);
+                if (0.2126 * lin(rr) + 0.7152 * lin(gg) + 0.0722 * lin(bb) <= maxLum) {
+                    return '#' + [rr, gg, bb].map(v2 => v2.toString(16).padStart(2, '0')).join('');
+                }
+            }
+            return '#000000';
+        };
         const theme = (exam && typeof exam.theme === 'object' && exam.theme) || {};
+        const applied = {};
         for (const token of Object.keys(theme)) {
             const value = theme[token];
             if (!/^--(?:color|bg|border|stroke)-[a-z][a-z0-9-]*$/i.test(token)
                 || typeof value !== 'string' || !value.trim()) continue;
-            document.documentElement.style.setProperty(token, value);
+            applied[token] = (isLight && token.indexOf('--color-') === 0)
+                ? (darken(value, 0.09) || value) : value;
+        }
+        // 흰 글자 채움면용 화이트-안전 파생 (exam-context.js applyExamTheme과 동일 규약)
+        for (const base of ['--color-primary', '--color-secondary']) {
+            if (applied[base]) applied[base + '-fill'] = darken(applied[base], 0.13) || applied[base];
+        }
+        for (const token of Object.keys(applied)) {
+            document.documentElement.style.setProperty(token, applied[token]);
         }
     } catch (e) { /* 정적 매니페스트 폴백 유지 */ }
 })();

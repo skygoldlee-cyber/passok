@@ -57,7 +57,7 @@ export function populateSubjectSelects() {
     const reviewFilterGroup = document.getElementById('review-filter-group');
     if (reviewFilterGroup) {
         reviewFilterGroup.innerHTML = `
-            <button class="btn btn-secondary filter-btn active" data-filter="all" data-click="setReviewFilter" data-arg="all" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; border-radius: 4px; background: var(--color-primary); border-color: var(--color-primary); color: var(--color-on-brand);">전체</button>
+            <button class="btn btn-secondary filter-btn active" data-filter="all" data-click="setReviewFilter" data-arg="all" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; border-radius: 4px; background: var(--color-primary-fill); border-color: var(--color-primary-fill); color: var(--color-on-brand);">전체</button>
         `;
         subjects.forEach((subj, idx) => {
             const shortName = subj.shortName || subj.name;

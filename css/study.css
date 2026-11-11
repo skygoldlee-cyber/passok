@@ -552,7 +552,7 @@
 }
 
 .wrong-cause-btn.active {
-    background: var(--color-primary);
+    background: var(--color-primary-fill);
     border-color: var(--color-primary);
     color: var(--color-on-brand);
 }
@@ -568,7 +568,7 @@
     padding: 0 0.35rem;
     font-size: 0.68rem;
     border-radius: var(--radius-pill);
-    background: var(--color-primary);
+    background: var(--color-primary-fill);
     color: var(--color-on-brand);
 }
 .cause-suggest-hint {
@@ -647,7 +647,7 @@
     font-size: 0.68rem;
     font-weight: 700;
     border-radius: var(--radius-pill);
-    background: var(--color-primary);
+    background: var(--color-primary-fill);
     color: var(--color-on-brand);
 }
 

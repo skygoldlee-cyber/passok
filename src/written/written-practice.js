@@ -213,7 +213,7 @@ const WP_CSS = `
   background:var(--bg-card);color:inherit;border-radius:10px;padding:8px 14px;font-size:.9rem;
   display:inline-flex;align-items:center;gap:6px;font-family:inherit;transition:all .15s ease;}
 #wp-overlay .wp-btn:hover{border-color:var(--border-color-active);color:var(--color-primary);}
-#wp-overlay .wp-btn.primary{background:linear-gradient(135deg,var(--color-primary),#0891b2);
+#wp-overlay .wp-btn.primary{background:linear-gradient(135deg,var(--color-primary-fill),var(--color-primary-dark));
   border-color:transparent;color:#fff;}
 #wp-overlay .wp-scroll{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;
   padding:20px clamp(16px,4vw,48px) 80px;}

@@ -113,12 +113,14 @@ export function toggleScratchpadEraser() {
         ctx.strokeStyle = _style.getPropertyValue('--bg-canvas').trim();
         ctx.lineWidth = 12;
         eraserBtn.textContent = '연필 모드';
-        eraserBtn.style.background = 'var(--color-primary)';
+        eraserBtn.style.background = 'var(--color-primary-fill)';
+        eraserBtn.style.color = 'var(--color-on-brand)';
     } else {
         const _style2 = getComputedStyle(document.documentElement);
         ctx.strokeStyle = _style2.getPropertyValue('--color-text-main').trim();
         ctx.lineWidth = 3;
         eraserBtn.textContent = '지우개';
         eraserBtn.style.background = 'var(--color-gray)';
+        eraserBtn.style.color = '';
     }
 }

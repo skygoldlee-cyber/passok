@@ -797,7 +797,7 @@
     width: 26px;
     height: 26px;
     border-radius: var(--radius-full);
-    background: var(--color-primary);
+    background: var(--color-primary-fill);
     color: var(--color-on-brand);
     font-size: var(--text-sm-md);
     font-weight: var(--font-weight-bold);

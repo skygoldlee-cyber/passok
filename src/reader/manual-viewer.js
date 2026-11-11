@@ -69,7 +69,7 @@ export const ManualViewer = (() => {
   display:inline-flex;align-items:center;gap:6px;font-family:inherit;
   transition:all .15s ease;}
 #manual-overlay .manual-ov-btn:hover{border-color:var(--border-color-active);color:var(--color-primary);}
-#manual-overlay .manual-ov-btn.primary{background:linear-gradient(135deg,var(--color-primary),#0891b2);
+#manual-overlay .manual-ov-btn.primary{background:linear-gradient(135deg,var(--color-primary-fill),var(--color-primary-dark));
   border-color:transparent;color:#fff;}
 #manual-overlay .manual-ov-btn.primary:hover{color:#fff;filter:brightness(1.1);
   box-shadow:var(--glow-primary);}

@@ -544,7 +544,7 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 .rec-item .tq-num, .tq-num {
     flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
     width: 1.5rem; height: 1.5rem; border-radius: 50%;
-    background: var(--color-primary); color: var(--color-on-brand);
+    background: var(--color-primary-fill); color: var(--color-on-brand);
     font-size: var(--text-sm); font-weight: var(--font-weight-bold);
 }
 

@@ -733,7 +733,7 @@ a.glossary-ref-link i {
     font-size: var(--text-sm-md);
     font-weight: var(--font-weight-semibold);
     color: var(--color-on-brand);
-    background: var(--color-primary);
+    background: var(--color-primary-fill);
     border: none;
     border-radius: 2rem;
     cursor: pointer;

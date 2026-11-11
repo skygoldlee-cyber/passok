@@ -31,17 +31,20 @@
 
     /* Brand Colors */
     --color-primary: #06b6d4;      /* Luminous Cyan */
-    --color-primary-dark: #0891b2;
+    --color-primary-dark: #155e75; /* cyan-800 — primary 채움 그라디언트 끝단 (흰 글자 ≥5.9:1) */
     --color-primary-light: #0e7490;
+    --color-primary-fill: #0e7490; /* A-03 — 흰 글자(--color-on-brand)를 올리는 primary 채움 (≥5.4:1). 시험 스킨은 파생값으로 덮어씀 */
     --color-secondary: #a78bfa;    /* Neon Violet — 다크 배경 가시성을 위해 violet-400로 상향 */
     --color-secondary-dark: #7c3aed;
+    --color-secondary-fill: #6d28d9; /* A-03 — 흰 글자를 올리는 secondary 채움 (≥5.5:1) */
     --color-success: #10b981;      /* Emerald Green */
     --color-success-dark: #047857;
     --color-success-light: #34d399;
     --color-success-lighter: #a7f3d0;
     --color-success-darker: #065f46;
     --color-danger: #f87171;       /* Red-400 — 다크 배경 텍스트 대비 AA (채우기는 --color-danger-fill) */
-    --color-danger-fill: #ef4444;  /* Coral Red — 배너·버튼 채우기 (흰 텍스트 대비) */
+    --color-danger-fill: #b91c1c;  /* red-700 — 배너·버튼 채우기 (A-03: 흰 텍스트 ≥5.8:1) */
+    --color-success-fill: #047857; /* emerald-700 — 흰 텍스트 채움 (≥5.7:1) */
     --color-danger-dark: #dc2626;
     --color-danger-darker: #b91c1c;
     --color-danger-darkest: #991b1b;
@@ -173,8 +176,8 @@
     --reader-light-table-header: #d9dccb;
     --bg-deep: #16233a;
     --logo-text-gradient: linear-gradient(to right, #ffffff, #d1d5db);
-    --color-banner-warning: #e74c3c;
-    --color-banner-error: #c0392b;
+    --color-banner-warning: #b91c1c; /* A-03 — 흰 배너 텍스트 ≥5.8:1 */
+    --color-banner-error: #a93226;   /* A-03 — 흰 배너 텍스트 ≥4.9:1 */
     --white-tint-10: rgba(255, 255, 255, 0.1);
     --tooltip-bg: rgba(15, 23, 42, 0.96);
 
@@ -324,10 +327,13 @@
        --color-caution/--color-orange는 히트맵 채우기 전용이라 원색 유지. */
     --color-primary: #164e63;      /* cyan-900 — 활성 탭·버튼·아이콘 */
     --color-primary-dark: #0c3644; /* cyan-950 계열 — hover */
+    --color-primary-fill: #164e63; /* A-03 — 흰 글자 채움 (≥9:1). 시험 스킨은 감쇠 파생값으로 덮어씀 */
     --color-secondary: #5b21b6;    /* violet-800 */
+    --color-secondary-fill: #5b21b6; /* A-03 — 흰 글자 채움 */
     --color-success: #064e3b;      /* emerald-900 — 정답·완료 */
     --color-danger: #991b1b;       /* red-800 — 오답·위험 */
     --color-danger-fill: #991b1b;  /* 배너·버튼 채우기 (흰 텍스트 대비) */
+    --color-success-fill: #064e3b; /* 흰 텍스트 채움 (≥8:1) */
     --color-warning: #78350f;      /* amber-900 — 경고 텍스트 */
     --bg-canvas: #e5e0cd;
     --color-danger-tint: #991b1b;
@@ -1129,6 +1135,9 @@ body.ui-mode-practice .ui-mode-toggle {
     font-size: var(--text-md-sm);
     font-weight: var(--font-weight-medium);
     border: 1px solid transparent;
+    /* A-03 — 배경 미지정 시 UA buttonface(#f0f0f0) 노출: 다크에서 밝은 회색 버튼이 됨 */
+    background-color: var(--bg-muted);
+    color: var(--color-text-main);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -1137,7 +1146,7 @@ body.ui-mode-practice .ui-mode-toggle {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    background: linear-gradient(135deg, var(--color-primary-fill), var(--color-primary-dark));
     color: var(--color-on-brand);
     box-shadow: 0 4px 10px var(--primary-tint-20);
 }
@@ -1270,8 +1279,8 @@ table {
     margin-left: auto;
     padding: 0 0.35rem;
     border-radius: 999px;
-    /* A-03 — #06b6d4는 흰 텍스트 대비 2.42:1 실패 → #0e7490(≈5.4:1) */
-    background: var(--color-primary-light, #0e7490);
+    /* A-03 — #06b6d4는 흰 텍스트 대비 2.42:1 실패 → 채움 전용 토큰 */
+    background: var(--color-primary-fill, #0e7490);
     color: #fff;
     font-size: 0.65rem;
     font-weight: var(--font-weight-bold, 700);

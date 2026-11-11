@@ -6,6 +6,7 @@
 
 import { test, expect } from '@playwright/test';
 import { AxeBuilder } from '@axe-core/playwright';
+import { examSeed } from './support/exam-matrix.js';
 
 // 알려진 axe 오탐 — 문서화된 예외만 허용 (새 예외 추가 시 근거 필수)
 const KNOWN_FALSE_POSITIVES = [
@@ -145,4 +146,51 @@ test.describe('접근성 자동 스캔 (A-01/03/04)', () => {
             expect(over.sw, `${over.view} 가로 오버플로 ${over.sw}>${over.iw}`).toBeLessThanOrEqual(over.iw + 1);
         }
     });
+});
+
+// ── A-03 전수 매트릭스 ─────────────────────────────────────────────
+// 슬러그 → 뷰 섹션 id (VIEW_HASH_SLUGS 역매핑 — 플랫폼 뷰만 이름이 다름)
+const SLUG_VIEW = {
+    dashboard: 'dashboard-view', analysis: 'analysis-view', cards: 'flashcard-view',
+    quiz: 'quiz-view', review: 'review-view', trainer: 'trainer-view', exam: 'exam-view',
+    textbook: 'textbook-view', reader: 'textbook-reader-view', ingredients: 'dictionary-view',
+    calendar: 'calendar-view', exams: 'exam-select-view',
+};
+const viewId = (slug) => SLUG_VIEW[slug] || `${slug}-view`;
+
+// 라우팅 가능한 전 뷰 — 시험 컨텍스트별 그룹 (notice-status는 라우트 없음)
+const VIEW_MATRIX = [
+    { exam: 'cosmetic', views: [
+        'dashboard', 'analysis', 'cards', 'quiz', 'review', 'trainer', 'exam',
+        'textbook', 'reader', 'ingredients', 'calendar', 'exams', 'formula',
+    ] },
+    { exam: 'carework', views: [
+        'dashboard', 'care-home', 'care-calc', 'care-card', 'care-log', 'care-webtoon',
+        'care-flow', 'care-audit', 'care-handover', 'care-visit', 'care-client',
+        'care-incident', 'care-roster', 'care-finder', 'care-forms', 'care-custom-form',
+        'facility-join', 'facility-admin',
+    ] },
+];
+
+test.describe('A-03 대비 — 전 뷰 × 양 테마 매트릭스', () => {
+    for (const theme of ['dark', 'light']) {
+        for (const grp of VIEW_MATRIX) {
+            test(`${theme}/${grp.exam} — ${grp.views.length}개 뷰 심각 위반 0건`, async ({ page }) => {
+                test.setTimeout(300_000);
+                await page.addInitScript((t) => localStorage.setItem('appTheme', t), theme);
+                await page.addInitScript(examSeed(grp.exam));
+                await page.goto('/index.html#/dashboard');
+                await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
+                const bad = [];
+                for (const slug of grp.views) {
+                    const id = viewId(slug);
+                    await page.evaluate((s) => { location.hash = '/' + s; }, slug);
+                    await expect(page.locator(`#${id}`), `${id} 미표시`).toBeVisible({ timeout: 15_000 });
+                    await page.waitForTimeout(400); // 지연 렌더(목록·데이터 로드) 정착
+                    bad.push(...await scan(page, `${theme}/${slug}`, `#${id}`));
+                }
+                expect(bad.map(v => v.id), `${theme}/${grp.exam} 심각 위반`).toEqual([]);
+            });
+        }
+    }
 });
