@@ -101,4 +101,5 @@ node tools/supabase/seed_test_accounts.js             # 적용
 
 - `installSupabaseOverride`는 `TEST_SUPABASE_URL`+`TEST_SUPABASE_ANON_KEY` 둘 다 있을 때만 `supabase-config.js` 응답을 치환 — 미설정 시 인증 스펙은 무조건 skip
 - `seed_test_accounts.js`는 대상 URL이 운영 ref와 같거나 Secret 키가 운영 키와 같으면 즉시 중단
+- `apply_schema.js`는 대상 ref가 운영과 같으면 `--prod` 플래그 또는 TTY `'apply-prod'` 입력 없이 실행 거부 — 조직 범위 PAT로 운영에도 적용 가능해진 만큼 의도 확인을 강제
 - 운영 `SUPABASE_SECRET_KEY`는 시드에 사용하지 않음 — 테스트 Secret 전용

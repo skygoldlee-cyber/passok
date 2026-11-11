@@ -20,10 +20,16 @@
  *   node tools/supabase/apply_schema.js            # 전체 스키마 적용 + 검증
  *   node tools/supabase/apply_schema.js --dry-run  # 대상·권한만 확인 (실행 안 함)
  *   node tools/supabase/apply_schema.js --file=exams/carework/schema.sql  # 특정 파일만
+ *   node tools/supabase/apply_schema.js --prod     # 운영 대상 적용 시 필요한 명시 승인
+ *
+ * 운영 가드: 대상 ref가 supabase-config.js의 운영 ref와 같으면 --prod 플래그 또는
+ *   TTY에서 'apply-prod' 입력 확인 없이는 실행을 거부한다. 멱등이라도 운영 DDL은
+ *   변경 의도를 먼저 확인하는 절차를 강제한다.
  */
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const readline = require('readline');
 const { spawnSync } = require('child_process');
 const { loadEnv, ROOT } = require('../lib/env.js');
 
@@ -45,6 +51,13 @@ function schemaFiles() {
     return files;
 }
 
+/** supabase-config.js에 하드코딩된 운영 프로젝트 ref */
+function prodRef() {
+    const src = fs.readFileSync(CONFIG_PATH, 'utf8');
+    const url = src.match(/SUPABASE_URL\s*=\s*'([^']+)'/)?.[1] || '';
+    return url.match(/^https:\/\/([a-z0-9]+)\.supabase\.co/)?.[1] || '';
+}
+
 /** 프로젝트 ref — SUPABASE_URL env 우선, 없으면 supabase-config.js에서 추출 */
 function projectRef() {
     const envUrl = process.env.SUPABASE_URL;
@@ -56,6 +69,29 @@ function projectRef() {
     const ref = url.match(/^https:\/\/([a-z0-9]+)\.supabase\.co/)?.[1];
     if (!ref) throw new Error(`프로젝트 ref를 찾지 못했습니다 (url='${url}')`);
     return { ref, url };
+}
+
+/** 운영 대상일 때 명시 승인 강제 — --prod 플래그 또는 TTY 'apply-prod' 입력 */
+async function confirmProdIfNeeded(ref) {
+    if (ref !== prodRef()) return;
+    if (process.argv.includes('--prod')) {
+        console.log('⚠ 운영 프로젝트 대상 — --prod 승인으로 진행합니다');
+        return;
+    }
+    if (!process.stdin.isTTY) {
+        console.error('✗ 대상이 운영 프로젝트입니다 — 비대화형 실행은 --prod 플래그가 필요합니다.');
+        console.error('  변경 의도 확인 후: node tools/supabase/apply_schema.js --prod');
+        process.exit(1);
+    }
+    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+    const answer = await new Promise((resolve) => {
+        rl.question("⚠ 운영 프로젝트에 스키마를 적용합니다. 계속하려면 'apply-prod' 입력: ", resolve);
+    });
+    rl.close();
+    if (answer.trim() !== 'apply-prod') {
+        console.error('✗ 확인 문자열 불일치 — 중단했습니다');
+        process.exit(1);
+    }
 }
 
 function requireToken() {
@@ -108,7 +144,7 @@ async function main() {
         ? files.filter(f => path.relative(ROOT, f).replace(/\\/g, '/').endsWith(onlyFile.slice(7)))
         : files;
 
-    console.log(`▶ 대상: ${url} (ref: ${ref})`);
+    console.log(`▶ 대상: ${url} (ref: ${ref}${ref === prodRef() ? ' · 운영' : ' · 테스트/비운영'})`);
     for (const f of targets) {
         const sql = fs.readFileSync(f, 'utf8');
         const tableCount = (sql.match(/create\s+table\s+if\s+not\s+exists/gi) || []).length;
@@ -120,6 +156,8 @@ async function main() {
         console.log('⊘ --dry-run — 실행하지 않았습니다 (토큰·ref·파일 확인 완료)');
         return;
     }
+
+    await confirmProdIfNeeded(ref);
 
     for (const f of targets) {
         const rel = path.relative(ROOT, f);
