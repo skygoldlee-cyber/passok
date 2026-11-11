@@ -7,7 +7,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
@@ -354,6 +354,43 @@ test('AI-05: ai:apply --drafts가 시험 하위폴더 초안을 과목 키로 �
         const out = runTool('ai_apply.js', ['--drafts', '--exam', 'carework', '--file', 'caretheory']);
         assert.match(out, /편입 예정 1건/, '시험 하위폴더 draft_* 초안이 과목 키로 매칭됨');
     } finally { rmSync(fp, { force: true }); }
+});
+
+test('AI-05: ai:apply --drafts --write가 초안에 applied 마커를 부여해 재실행 재편입을 차단한다', () => {
+    // 회귀: 잔존 초안이 다음 --drafts 실행에서 재편입돼 Q번호 중복 발생했던 실사고 (Q118=Q117)
+    const dir = join(ROOT, 'tmp', 'ai_drafts', 'carework');
+    mkdirSync(dir, { recursive: true });
+    const fp = join(dir, 'draft_caretheory.md');
+    writeFileSync(fp, [
+        '<!-- ai-draft: model=test date=2026-01-01T00:00:00Z reviewed=no sha=test -->', '',
+        '# 문제 초안 — 테스트', '',
+        '## 섹션 (L14~L14)', '',
+        '### Q1. 테스트 발문으로 옳은 것은?',
+        '① 정답', '② 오답', '',
+        '**Q1답**',
+        '> **정답: ①**',
+        '> **근거 라인: L14**',
+        '> **해설**: 테스트 해설.',
+    ].join('\n'));
+    // --write는 실제 은행·manifest·exams.json·채택로그를 갱신 — 스냅샷 후 finally 복원
+    const snapPaths = [
+        'content/exams/carework/문제은행/과목1_요양보호론_문제은행.md',
+        'content/exams/carework/manifest.json',
+        'content/exams.json',
+        'tools/ai/adoption_log.jsonl',
+    ].map(p => join(ROOT, p));
+    const snap = snapPaths.map(p => [p, existsSync(p) ? readFileSync(p, 'utf-8') : null]);
+    try {
+        const out1 = runTool('ai_apply.js', ['--drafts', '--exam', 'carework', '--file', 'caretheory', '--write']);
+        assert.match(out1, /편입 1건/, '초기 --write 편입 성공');
+        assert.match(readFileSync(fp, 'utf-8'), /applied=\d{4}-/, '초안에 applied 마커 부여');
+        const out2 = runTool('ai_apply.js', ['--drafts', '--exam', 'carework', '--file', 'caretheory']);
+        assert.match(out2, /편입 완료\(applied\) — 재처리 스킵/, '마킹 초안 재실행 스킵');
+        assert.doesNotMatch(out2, /편입 예정 [1-9]/, '재실행 시 추가 편입 없음 — Q번호 중복 차단');
+    } finally {
+        for (const [p, s] of snap) { if (s !== null) writeFileSync(p, s, 'utf-8'); }
+        rmSync(fp, { force: true });
+    }
 });
 
 test('AI-16: loadStats가 백업 JSON의 statement_stats를 해석하고 순수 맵도 허용한다', () => {

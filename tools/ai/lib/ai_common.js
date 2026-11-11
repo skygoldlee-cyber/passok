@@ -109,6 +109,23 @@ function listDraftFiles() {
     return out;
 }
 
+/** 초안 편입 완료 마커 — meta 주석에 applied=<ISO> 부여해 --drafts 재처리를 차단한다.
+ * meta 주석은 draftBodyHash 대상이 아니라 reviewed·edited 판정에 영향 없음. */
+function markDraftApplied(filePath) {
+    const text = fs.readFileSync(filePath, 'utf-8');
+    if (/applied=/.test(text)) return; // 이미 마킹됨 — 멱등
+    const stamp = `applied=${new Date().toISOString()}`;
+    const marked = /<!--\s*ai-draft:[^>]*-->/.test(text)
+        ? text.replace(/(<!--\s*ai-draft:[^>]*?)(\s*-->)/, `$1 ${stamp}$2`)
+        : `<!-- ai-draft: model=none date=${new Date().toISOString()} ${stamp} -->\n\n${text}`;
+    fs.writeFileSync(filePath, marked, 'utf-8');
+}
+
+/** 초안이 편입 완료 마킹됐는지 — --drafts·dupcheck의 재처리 스킵 판정 */
+function isDraftApplied(text) {
+    return !!parseDraftMeta(text).applied;
+}
+
 /**
  * 배치 채택 기록 — --write 편입 1건(초안 파일 단위)마다 JSONL append (AI-23, 설계 §3.1 승격 지표)
  * @param {{ts,draft,kind,target,bank,generated,applied,skipped,replace,model,genDate,edited}} rec
@@ -121,4 +138,5 @@ module.exports = {
     ROOT, DRAFT_DIR, ADOPTION_LOG,
     loadEnv, parseArgs, getTargets, listQbanks, draftPath, writeDraft,
     draftBodyHash, parseDraftMeta, logAdoption, listDraftFiles,
+    markDraftApplied, isDraftApplied,
 };

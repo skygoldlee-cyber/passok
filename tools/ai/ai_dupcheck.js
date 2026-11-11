@@ -19,7 +19,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { parseArgs, getTargets, DRAFT_DIR, ROOT, listDraftFiles } = require('./lib/ai_common.js');
+const { parseArgs, getTargets, DRAFT_DIR, ROOT, listDraftFiles, isDraftApplied } = require('./lib/ai_common.js');
 const { parseQuestionBank, questionText } = require('./lib/qbank.js');
 const { listQbanks } = require('./lib/ai_common.js');
 const { loadJsBundle, lexSim } = require('./lib/similarity.js');
@@ -87,7 +87,8 @@ function main() {
 
     // 초안 ↔ 기존: 어휘 유사도 (임베딩 부재 폴백)
     const drafts = fs.existsSync(DRAFT_DIR)
-        ? listDraftFiles().filter(f => !path.basename(f).startsWith('_')) : [];
+        ? listDraftFiles().filter(f => !path.basename(f).startsWith('_')
+            && !isDraftApplied(fs.readFileSync(f, 'utf-8'))) : []; // 편입 완료 초안 제외 — 전량 중복 노이즈 방지
     if (!drafts.length) { console.log(`초안 없음 — ${path.relative(ROOT, DRAFT_DIR)}/ 에 ai:draft 산출물을 두세요`); return; }
 
     let flagged = 0;

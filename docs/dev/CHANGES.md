@@ -1,6 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 fix(tools): ai_apply 편입 완료 마커 — 잔존 초안 재처리 재편입 차단
+
+- `ai_common.js` — `markDraftApplied`(meta 주석에 `applied=<ISO>` 부여, draftBodyHash 대상 외라 해시 판정 무영향)·`isDraftApplied` 추가
+- `ai_apply.js` — `--drafts`·explain 경로 모두 applied 마킹 초안 스킵 + `--write` 성공 시 초안 자동 마킹. 잔존 초안의 재실행 재편입으로 Q번호가 중복되던 실사고(Q118=Q117) 차단
+- `ai_dupcheck.js` — applied 초안 제외 (편입 후 dupcheck 실행 시 전량 중복 노이즈 방지)
+- 회귀 테스트: `--write` 편입→applied 마커 확인→재실행 스킵·추가 편입 0건 검증 (실제 은행 파일은 스냅샷 복원)
+
+
 ## 2026-11-11 test(e2e): J-203 접근 제어 여정 — Pro 배지·최초 안내 1회·비차단 검증
 
 - `j-203-access-control.spec.js` 신설 — feature-plan 매핑(free `mock_exam` 배지 숨김·pro `care_log_save` 배지 '유료' 노출) → 요양일지 저장 최초 진입 시 유료 안내 모달·`pro_notice_seen._global` 기록(GLOBAL_KEYS 비스코프) → 비차단 저장 완료 → 재진입 재표시 없음 검증

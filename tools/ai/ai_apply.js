@@ -29,7 +29,8 @@
 const fs = require('fs');
 const path = require('path');
 const { parseArgs, getTargets, listQbanks, DRAFT_DIR, ROOT, listDraftFiles,
-    draftBodyHash, parseDraftMeta, logAdoption } = require('./lib/ai_common.js');
+    draftBodyHash, parseDraftMeta, logAdoption,
+    markDraftApplied, isDraftApplied } = require('./lib/ai_common.js');
 const { listTextbooks } = require('./lib/textbook.js');
 
 /** 초안 md에서 {qnum → 해설 텍스트} 추출 */
@@ -125,6 +126,9 @@ function applyDrafts(flags, opts) {
     let applied = 0, skipped = 0;
     for (const target of getTargets(opts)) {
         for (const f of drafts) {
+            if (isDraftApplied(fs.readFileSync(f, 'utf-8'))) {
+                console.log(`${f}: 편입 완료(applied) — 재처리 스킵`); continue;
+            }
             const subjKey = path.basename(f).replace(/^draft_/, '').replace(/\.md$/, '');
             // 시험 하위폴더 초안(<exam>/draft_*.md)은 해당 시험에만 적용 — 루트 초안은 공통
             const dir = path.basename(path.dirname(f));
@@ -172,6 +176,7 @@ function applyDrafts(flags, opts) {
                         target: target.id, bank: exam.file, generated: qs.length,
                         applied: aBlocks.length, skipped: bad + (qs.length - aBlocks.length - bad),
                         ...meta });
+                    markDraftApplied(f); // 잔존 초안의 재실행 재편입(Q번호 중복) 차단
                 }
                 applied += aBlocks.length;
             }
@@ -230,6 +235,9 @@ function main() {
         for (const { exam, absPath } of listQbanks(target)) {
             const draft = drafts.find(d => path.basename(d) === `explain_${target.id}_${exam.key}.md`);
             if (!draft) continue;
+            if (isDraftApplied(fs.readFileSync(draft, 'utf-8'))) {
+                console.log(`${draft}: 편입 완료(applied) — 재처리 스킵`); continue;
+            }
             const entries = parseExplainDraft(draft);
             if (!entries.size) { console.log(`${draft}: 편입 가능한 해설 0건`); continue; }
 
@@ -249,6 +257,7 @@ function main() {
                     target: target.id, bank: exam.file, generated: entries.size,
                     applied: appliedNums.length, skipped: fileSkipped, replace,
                     ...batchMeta(draft) });
+                markDraftApplied(draft);
             }
             applied += appliedNums.length;
             console.log(`${target.id}/${exam.file}: ${write ? '편입' : '편입 예정'} ${appliedNums.length}건`
