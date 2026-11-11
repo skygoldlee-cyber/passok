@@ -34,7 +34,7 @@ tests/e2e/
   journeys/                    # 신설 — P1/P2 사용자 여정 시나리오 (§4)
     j-101-nonlogin-study.spec.js
     J-102-auth-sync.spec.js
-    J-201-mock-score.spec.js
+    j-201-mock-exam.spec.js
     j-202-progress-resume.spec.js
     ...
   db/                          # 신설 — Supabase 검증 스크립트 (가이드 §7-4/7-5 이식)
@@ -103,7 +103,7 @@ tests/reports/
 |----|------|------|---------------------|------------|-----------|
 | J-101 | 비로그인 학습 | P1 | 시험 선택 → 과목 학습 → 퀴즈 풀이 → 진도 표시 — 로그인 없이 전 과정 | localStorage 진도 기록 (클라우드 미설정 상태에서) | flows.spec 부분 |
 | J-102 | 인증·동기화 | P1 | 로그인 → 학습 → 로그아웃 → 재로그인 → 클라우드 진도 복원 | Supabase 사용자 행·동기화 테이블에 진도 저장 확인 | 없음 (신규) |
-| J-201 | 모의고사 응시 | P1 | `#/exam` 통합 모의고사 → 문제 풀이 → 제출 → 점수·과락(40)·평균60 판정 표시 | 점수 화면 = localStorage 기록 = (로그인 시) Supabase 동기화 행 | exam-risk 부분 |
+| J-201 | 모의고사 응시 | P1 | `#/exam` 통합 모의고사 → 문제 풀이 → 제출 → 점수·과락(과목 60 미만)·평균60 판정 표시 | 점수 화면 = localStorage 기록 = (로그인 시) Supabase 동기화 행 | exam-risk 부분 |
 | J-202 | 진도 복원 | P1 | 학습 중 이탈 → 새로고침 → 이어서 학습 → 복원 확인 | 진도 키 1건만 갱신 (중복 저장 없음) | reader-flow 부분 |
 | J-203 | 접근 제어 | P1 | 만료/비인가 상태에서 Pro 배지 콘텐츠 접근 → 게이트 안내 | feature-plan pro 항목 노출 상태 검증 | ux-surfaces 부분 |
 | J-301 | 콘텐츠 팩 | P2 | 시험 전환 (cosmetic↔carework) → 각 팩 콘텐츠 로드 | 팩 전환 시 스코프 분리 확인 (DA-13) | exam-switch |
@@ -118,6 +118,8 @@ tests/reports/
 
 > **carework 학습 경로 주의**: carework는 **careFlow 4단계**(미리풀기→이야기→요약→시나리오, 진도는 `carework:flow_progress`·`flow_attempts`·`quiz_results`의 `*_quiz_flow_*` 항목)가 기본 학습 경로이며, 표준 `quiz-view`·`flashcard-view`는 `data-needs` 게이트가 교재 파생 카드·퀴즈 존재 시에만 노출한다(UX-NAV-16). 2026-11-11 caretheory Ch.02 용어표 파일럿(카드 32·퀴즈 30 + careprac 은행보충 16/15)으로 게이트가 해제되어 J-101이 양쪽 경로를 모두 검증한다. 나머지 챕터 확장 중에는 과목별 데이터 편차를 주의한다.
 
+> **J-201 구현 메모** (2026-11-11): `j-201-mock-exam.spec.js`는 통합 실전 모의고사 계약을 검증한다 — `#/exam` 딥링크 진입(모바일 탭바에 시험 항목 없음) → `#integrated-exam-btn`으로 manifest `questionsPerSubject` 합산(35+45) 응시 → 전 문항 응답·OMR 진행률·`sim_draft_session` 기록 → 제출 확인 모달(`showConfirm`) → `sim-result-*` 점수·과목별 분석·과락/합격 예측 판정 → `sim_results_history`의 `examId:'integrated'` 행과 화면 점수 일치·드래프트 제거를 확인한다. 과락 기준은 carework manifest `subjectFailBelow: 60` — 카탈로그 초기 표기(40)는 정정됨.
+>
 > **J-202 구현 메모** (2026-11-11): `j-202-progress-resume.spec.js`는 careFlow 이어하기 계약을 검증한다 — 중간 단계 중단(story/summary) 후 대시보드 경유·새로고침·개념 재선택 시 `flow_progress`의 저장 단계로 복귀(`result` 저장분은 `scenario`로 매핑), 완주 시 `stage='complete'` 기록, 재접속 후 개념 목록 옵션의 상태 접두(✓ 완료·! 취약·↻ 복습)를 확인한다. **2과목 개념을 쓴다** — 1과목 개념은 pre 문항이 없는 경우가 있어 단계 저장 시점(응답 시 기록)이 어긋난다.
 
 ## 5. 선택자 규약 — data-testid 점진 도입

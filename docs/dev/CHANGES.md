@@ -1,6 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 test(e2e): J-201 통합 모의고사 응시 여정 — 점수·과락 판정·이력 기록 검증
+
+- `j-201-mock-exam.spec.js` 신설 — `#/exam` 딥링크(모바일 탭바에 시험 항목 없음) → 통합 모의고사 응시(manifest 35+45문, 동적 총 문항 수) → 전 문항 응답·OMR 진행률·`sim_draft_session` 기록 → `showConfirm` 제출 → 결과 패널 점수/과목별 분석/과락·합격 예측 판정 → `sim_results_history`의 `examId:'integrated'` 행·화면 점수 일치·드래프트 정리 검증
+- DSN-46 갱신 — 카탈로그 J-201의 과락 기준 `40` 표기를 실제 carework manifest `subjectFailBelow: 60`으로 정정, 파일 트리 실제 파일명 반영, J-201 구현 메모 추가
+- 검증: 3프로젝트(chromium·mobile·tablet) 통과 — 응시→채점→저장 전 구간 실브라우저 완주
+
+
 ## 2026-11-11 feat(content): carework 문제은행 +20 — ai:draft 2차 패스 (인용 공백 라인 대상)
 
 - 인용 라인 갭 분석으로 미커버 구간만 선정해 청크별 생성→원문 대조→중복 폐기→편입. 은행 187→207문 (과목1 80→90·과목2 107→117), `exams.json` desc 동기화
