@@ -35,7 +35,7 @@ tests/e2e/
     j-101-nonlogin-study.spec.js
     J-102-auth-sync.spec.js
     J-201-mock-score.spec.js
-    J-202-progress-restore.spec.js
+    j-202-progress-resume.spec.js
     ...
   db/                          # 신설 — Supabase 검증 스크립트 (가이드 §7-4/7-5 이식)
     verify-attempt.mjs         # 화면 점수 ↔ DB 행 대조
@@ -117,6 +117,8 @@ tests/reports/
 **시험팩 우선순위**: 시험팩 의존 시나리오(J-101/201/202 시드·J-301 커버리지)는 **carework 팩 기준으로 먼저 구축**한다 — carework는 `tier: active`이자 가장 빠르게 확장 중인 팩(실무 기능 14종)이며, 나머지 팩 커버리지는 carework 완성 후 동일 패턴으로 복제한다 (2026-11-11 확정).
 
 > **carework 학습 경로 주의**: carework는 **careFlow 4단계**(미리풀기→이야기→요약→시나리오, 진도는 `carework:flow_progress`·`flow_attempts`·`quiz_results`의 `*_quiz_flow_*` 항목)가 기본 학습 경로이며, 표준 `quiz-view`·`flashcard-view`는 `data-needs` 게이트가 교재 파생 카드·퀴즈 존재 시에만 노출한다(UX-NAV-16). 2026-11-11 caretheory Ch.02 용어표 파일럿(카드 32·퀴즈 30 + careprac 은행보충 16/15)으로 게이트가 해제되어 J-101이 양쪽 경로를 모두 검증한다. 나머지 챕터 확장 중에는 과목별 데이터 편차를 주의한다.
+
+> **J-202 구현 메모** (2026-11-11): `j-202-progress-resume.spec.js`는 careFlow 이어하기 계약을 검증한다 — 중간 단계 중단(story/summary) 후 대시보드 경유·새로고침·개념 재선택 시 `flow_progress`의 저장 단계로 복귀(`result` 저장분은 `scenario`로 매핑), 완주 시 `stage='complete'` 기록, 재접속 후 개념 목록 옵션의 상태 접두(✓ 완료·! 취약·↻ 복습)를 확인한다. **2과목 개념을 쓴다** — 1과목 개념은 pre 문항이 없는 경우가 있어 단계 저장 시점(응답 시 기록)이 어긋난다.
 
 ## 5. 선택자 규약 — data-testid 점진 도입
 
