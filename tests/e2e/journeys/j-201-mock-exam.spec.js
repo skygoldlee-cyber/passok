@@ -41,7 +41,15 @@ test.describe('J-201 모의고사 응시 (로컬 퍼스트)', () => {
         // 전 문항 ①번 응답 — OMR 진행률·드래프트 기록 확인
         for (let i = 1; i <= total; i++) {
             await expect(page.locator('#sim-q-num')).toHaveText(`Q ${i} / ${total}`);
-            await page.locator('.sim-option-item').first().click();
+            // 문항 유형 무관 응답 — 객관식·OX·조합은 .sim-option-item, 단답형은 #sim-text-input
+            await page.locator('.sim-option-item, #sim-text-input').first()
+                .waitFor({ state: 'visible', timeout: 15_000 });
+            const simTextInput = page.locator('#sim-text-input');
+            if (await simTextInput.isVisible()) {
+                await simTextInput.fill('5');
+            } else {
+                await page.locator('.sim-option-item').first().click();
+            }
             if (i === 1) {
                 await expect(page.locator('#omr-solved-count')).toHaveText('1');
             }

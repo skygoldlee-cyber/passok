@@ -97,7 +97,15 @@ test.describe('J-500 시험 팩 학습 적합성 (exams.json 매트릭스)', () 
                 if (exam.registry.simCovered) {
                     await expect(page.locator('#sim-arena-panel'),
                         `${exam.id} — 전 과목 뱅크 있는데 모의고사 미시작`).toBeVisible({ timeout: 20_000 });
-                    await page.locator('.sim-option-item').first().click();
+                    // 셔플된 1번 문항 유형 무관 응답 — 객관식·OX·조합은 .sim-option-item, 단답형은 #sim-text-input
+                    await page.locator('.sim-option-item, #sim-text-input').first()
+                        .waitFor({ state: 'visible', timeout: 20_000 });
+                    const simTextInput = page.locator('#sim-text-input');
+                    if (await simTextInput.isVisible()) {
+                        await simTextInput.fill('5');
+                    } else {
+                        await page.locator('.sim-option-item').first().click();
+                    }
                     await expect(page.locator('#omr-solved-count')).toHaveText('1', { timeout: 10_000 });
                 } else {
                     await expect(page.locator('.app-toast-item:has-text("모의고사 데이터가 불완전")'),

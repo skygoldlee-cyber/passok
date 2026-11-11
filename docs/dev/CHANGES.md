@@ -1,6 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 fix(e2e): 모의고사 단답형 1번 문항 시 응답 대기 영구화 — J-500·J-201 문항 유형 무관 응답
+
+- J-500·J-201이 `.sim-option-item` 고정 클릭으로 응답하던 것을 문항 유형 분기로 수정 — 셔플로 단답형이 1번에 오면 `#sim-text-input`만 렌더돼 영구 대기(CI run 43034632988 chromium 샤드2에서 2연속 실패로 실측)
+- 공통 패턴: `.sim-option-item, #sim-text-input` 합성 선택자로 먼저 렌더된 쪽 대기 → 단답형이면 `fill('5')`(`input` 이벤트가 `saveSimAnswer`→`updateOMRProgress` 호출), 그 외는 첫 선택지 클릭
+- 로컬 검증: J-500 cosmetic 10.1s·J-201 carework 11.6s 통과
+
+
 ## 2026-11-12 feat(e2e): J-530~531 cosmetic Formula OS 실무모드 CRUD 스위트 — 2스펙
 
 - `tests/e2e/exams/cosmetic/`에 스펙 2종 신설 — 단일 `#formula` 뷰 허브+서브패널 구조의 `cosmetic:` 스코프 localStorage CRUD 검증
