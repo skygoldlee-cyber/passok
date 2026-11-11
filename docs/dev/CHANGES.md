@@ -1,6 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-11 chore: 테스트 통계 갱신 — J-302/401/402 스펙 추가분 반영
+
+- stats:stamp 재측정: e2e 134→137 시나리오, 432→441 runs, 29→32 spec files — 전체 스위트 1회 완주 결과 416 passed·25 skipped·0 failed
+
+
 ## 2026-11-11 docs(e2e): J-102 차단 판정 — 테스트 Supabase 환경 미확보
 
 - DSN-46 카탈로그 J-102 행 "차단 ⚠" 표기 + 차단 판정 메모 추가 — TEST_SUPABASE_* 키 부재·Docker 미설치로 로컬 supabase start 불가
