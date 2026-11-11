@@ -1,6 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 fix(e2e): J-52x CI 병렬 잡 계정 경합 — 테스트별 고유 auth 사용자 생성·폐기로 격리
+
+- CI run `43044070712`에서 J-520(2건)·J-521 p2·J-522 면회 실패 — 로컬 18/18 통과와 상반. 원인: chromium·mobile·tablet 샤드가 **동일 `e2e-facility-admin/member` 계정**으로 동시 실행 — 한 잡의 `resetFacilityState`(기관 삭제)가 다른 잡의 멤버십을 FK cascade로 정리하고, J-521/522의 멤버십 시드가 J-520 member의 '미가입' 전제를 깸(`#fj-code` 미렌더·공유 대상 기관 오선택→`handovers[0]` undefined·토스트 미표시)
+- `facility-setup.js`: 공유 계정+리셋 방식 폐기 → **`createFacilityUsers()`(service role admin API로 고유 이메일 사용자 2명 생성)/`deleteFacilityUsers()`(기관 선삭제→사용자 삭제)** + `seedFacilityMembership(users)` 인자화. 테스트 간 완전 격리로 임의 병렬 안전
+- `seed_test_accounts.js`의 facility 계정 2건 제거(불필요)
+
+
 ## 2026-11-12 feat(e2e): J-520~522 기관 워크스페이스 Supabase 다중 사용자 스위트 + 제품 결함 3건 수정
 
 - `tests/e2e/exams/carework/`에 스펙 3종 신설 — J-520 기관 등록→초대 코드→별도 컨텍스트 가입(+무효 코드 오류), J-521 인수인계 공유→admin 대장→인수 서명(+본인 서명 RLS 차단), J-522 면회·사고 기관 공유→대장+REST 단언

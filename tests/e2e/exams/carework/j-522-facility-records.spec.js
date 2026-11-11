@@ -2,30 +2,32 @@
 // @spec none
 // 멤버가 면회 기록·사고 보고서의 '기관에 공유'로 family_visits·incident_reports에
 // 기록하면 기관 대장 섹션(vis-facility·inc-facility)과 DB 양쪽에 반영된다.
-// 멱등: beforeEach가 기관을 정리하고 멤버십 2행을 REST 시드해 매 실행 동일 전제.
-// 선행: TEST_SUPABASE_* 4키 + seed_test_accounts.js
+// 격리: 매 테스트 고유 member 사용자 생성 후 멤버십 2행을 REST 시드.
+// 선행: TEST_SUPABASE_* 4키
 import { test, expect } from '@playwright/test';
 import { requireSupabaseOverride } from '../../support/supabase-override.js';
 import {
-    requireFacilitySeed, resetFacilityState, seedFacilityMembership, restSelect,
-    bootAndLogin, enterView, FACILITY_MEMBER_EMAIL,
+    requireFacilityEnv, createFacilityUsers, deleteFacilityUsers,
+    seedFacilityMembership, restSelect, bootAndLogin, enterView,
 } from '../../support/facility-setup.js';
 
 test.describe('J-522 기관 기록 대장 연동 (Supabase)', () => {
     test.use({ serviceWorkers: 'block' });
+    let users;
     test.beforeEach(async () => {
         requireSupabaseOverride(test);
-        requireFacilitySeed(test);
+        requireFacilityEnv(test);
         test.setTimeout(150_000);
-        await resetFacilityState();
+        users = await createFacilityUsers();
     });
+    test.afterEach(async () => { await deleteFacilityUsers(users); });
 
     test('면회 예약 기관 공유 → family_visits 행 + 기관 면회 대장 반영 @p1', async ({ page }) => {
-        const fac = await seedFacilityMembership();
+        const fac = await seedFacilityMembership(users);
         const errors = [];
         page.on('pageerror', (e) => errors.push(String(e)));
 
-        await bootAndLogin(page, FACILITY_MEMBER_EMAIL);
+        await bootAndLogin(page, users.member.email);
         await enterView(page, 'care-visit', page.locator('#vis-client'));
         await page.locator('#vis-client').fill('김면회');
         await page.locator('#vis-visitor').fill('홍가족');
@@ -51,11 +53,11 @@ test.describe('J-522 기관 기록 대장 연동 (Supabase)', () => {
     });
 
     test('사고 보고서 기관 공유 → incident_reports 행 + 기관 사고 대장 반영 @p1', async ({ page }) => {
-        const fac = await seedFacilityMembership();
+        const fac = await seedFacilityMembership(users);
         const errors = [];
         page.on('pageerror', (e) => errors.push(String(e)));
 
-        await bootAndLogin(page, FACILITY_MEMBER_EMAIL);
+        await bootAndLogin(page, users.member.email);
         await enterView(page, 'care-incident', page.locator('#inc-client'));
         await page.locator('#inc-client').fill('이낙상');
         await page.locator('#inc-place').fill('302호 침실');

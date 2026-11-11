@@ -1,7 +1,9 @@
 // tests/e2e/support/facility-setup.js — 기관 워크스페이스 E2E 공용 (DSN-46 §3-2, J-520~522)
 // @spec none
-// 멱등 설계 — 계정이 멤버십을 보유하면 facility 뷰가 폼 대신 소속 카드를 렌더하므로,
-// 스펙은 매 실행 service role REST로 시드 계정 소유 기관을 삭제(FK cascade)해 초기화한다.
+// 격리 설계 — 멤버십은 계정당 유일 의미를 가지므로 공유 계정은 CI 병렬 잡(chromium·mobile·
+// tablet 샤드) 간 경합한다: 한 잡의 기관 삭제가 다른 잡의 멤버십을 cascade 정리하고,
+// 멤버십 시드가 J-520의 '미가입' 전제를 깬다. 각 테스트는 service role admin API로
+// 고유 admin·member 사용자를 생성( beforeEach )·폐기( afterEach )해 완전 격리한다.
 // J-521/522는 멤버십이 전제 조건이므로 facility+멤버 2행을 REST로 시드하고 UI는 도메인
 // 동작만 검증한다. 멀티 사용자는 browser.newContext(contextOptions)로 세션을 분리.
 import { expect } from '@playwright/test';
@@ -12,11 +14,8 @@ const TEST_URL = (process.env.TEST_SUPABASE_URL || '').replace(/\/$/, '');
 const SERVICE_KEY = process.env.TEST_SUPABASE_SERVICE_ROLE_KEY || '';
 const PASSWORD = process.env.TEST_E2E_PASSWORD || '';
 
-export const FACILITY_ADMIN_EMAIL = 'e2e-facility-admin@passok.test';
-export const FACILITY_MEMBER_EMAIL = 'e2e-facility-member@passok.test';
-
-/** 시드 계정 부재·키 미설정 시 스펙 전체 스킵 — seed_test_accounts.js 선행 필요 */
-export function requireFacilitySeed(t) {
+/** 키 미설정 시 스펙 전체 스킵 */
+export function requireFacilityEnv(t) {
     t.skip(!SERVICE_KEY || !PASSWORD,
         'TEST_SUPABASE_SERVICE_ROLE_KEY·TEST_E2E_PASSWORD 미설정 — 기관 스펙 스킵');
 }
@@ -27,18 +26,31 @@ const hdrs = () => ({
     'Content-Type': 'application/json',
 });
 
-let _uidCache;
-/** email → auth user id 해석 (프로세스 내 캐시) @returns {Promise<{admin:string,member:string}>} */
-export async function facilityUserIds() {
-    if (_uidCache) return _uidCache;
-    const res = await fetch(`${TEST_URL}/auth/v1/admin/users?page=1&per_page=200`, { headers: hdrs() });
-    if (!res.ok) throw new Error(`admin users 조회 실패: HTTP ${res.status}`);
-    const users = (await res.json()).users || [];
-    const map = new Map(users.map((u) => [u.email, u.id]));
-    _uidCache = { admin: map.get(FACILITY_ADMIN_EMAIL), member: map.get(FACILITY_MEMBER_EMAIL) };
-    if (!_uidCache.admin || !_uidCache.member)
-        throw new Error('기관 E2E 계정 미시드 — node tools/supabase/seed_test_accounts.js 실행 필요');
-    return _uidCache;
+/** 테스트 전용 고유 admin·member 사용자 생성 — 병렬 잡 간 멤버십 경합 차단 */
+export async function createFacilityUsers() {
+    const stamp = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+    const mk = async (role) => {
+        const email = `e2e-fac-${role}-${stamp}@passok.test`;
+        const res = await fetch(`${TEST_URL}/auth/v1/admin/users`, {
+            method: 'POST',
+            headers: hdrs(),
+            body: JSON.stringify({ email, password: PASSWORD, email_confirm: true }),
+        });
+        if (!res.ok) throw new Error(`사용자 생성(${role}) → HTTP ${res.status}: ${await res.text()}`);
+        return { id: (await res.json()).id, email };
+    };
+    return { admin: await mk('admin'), member: await mk('member') };
+}
+
+/** 테스트 사용자 폐기 — 소유 기관 먼저 삭제(FK cascade로 행 정리) 후 auth 사용자 삭제 (best-effort) */
+export async function deleteFacilityUsers(users) {
+    for (const u of [users?.admin, users?.member]) {
+        if (!u?.id) continue;
+        await fetch(`${TEST_URL}/rest/v1/facilities?created_by=eq.${u.id}`,
+            { method: 'DELETE', headers: hdrs() }).catch(() => {});
+        await fetch(`${TEST_URL}/auth/v1/admin/users/${u.id}`,
+            { method: 'DELETE', headers: hdrs() }).catch(() => {});
+    }
 }
 
 /** service role REST 조회 — 스펙의 DB측 단언 @returns {Promise<Array>} */
@@ -48,24 +60,13 @@ export async function restSelect(pathname) {
     return res.json();
 }
 
-/** 시드 계정 소유 기관 전체 삭제 — facility_id FK on delete cascade로 멤버·인계·면회·사고·기록 정리 */
-export async function resetFacilityState() {
-    const { admin, member } = await facilityUserIds();
-    const res = await fetch(
-        `${TEST_URL}/rest/v1/facilities?created_by=in.(${admin},${member})`,
-        { method: 'DELETE', headers: { ...hdrs(), Prefer: 'return=minimal' } },
-    );
-    if (!res.ok) throw new Error(`기관 정리 → HTTP ${res.status}: ${await res.text()}`);
-}
-
 /** 기관 + admin(manager)·member(worker) 멤버십 시드 — J-521/522 전제. @returns {Promise<{id:string,name:string}>} */
-export async function seedFacilityMembership() {
-    const { admin, member } = await facilityUserIds();
+export async function seedFacilityMembership(users) {
     const stamp = Date.now().toString(36).toUpperCase().slice(-6);
     const res = await fetch(`${TEST_URL}/rest/v1/facilities`, {
         method: 'POST',
         headers: { ...hdrs(), Prefer: 'return=representation' },
-        body: JSON.stringify({ name: `E2E기관 ${stamp}`, invite_code: `E2${stamp}`, created_by: admin }),
+        body: JSON.stringify({ name: `E2E기관 ${stamp}`, invite_code: `E2${stamp}`, created_by: users.admin.id }),
     });
     if (!res.ok) throw new Error(`기관 시드 → HTTP ${res.status}: ${await res.text()}`);
     const [fac] = await res.json();
@@ -73,8 +74,8 @@ export async function seedFacilityMembership() {
         method: 'POST',
         headers: { ...hdrs(), Prefer: 'return=minimal' },
         body: JSON.stringify([
-            { facility_id: fac.id, user_id: admin, role: 'manager' },
-            { facility_id: fac.id, user_id: member, role: 'worker' },
+            { facility_id: fac.id, user_id: users.admin.id, role: 'manager' },
+            { facility_id: fac.id, user_id: users.member.id, role: 'worker' },
         ]),
     });
     if (!mRes.ok) throw new Error(`멤버십 시드 → HTTP ${mRes.status}: ${await mRes.text()}`);

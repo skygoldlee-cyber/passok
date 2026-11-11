@@ -705,7 +705,7 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
 
 **exams/carework/j-520~522 — 기관 워크스페이스 Supabase 다중 사용자 스위트 (J-520~522, 2026-11-12 추가)**
 
-- 테스트 Supabase(`passok-e2e`)의 facility 도메인 — `facility-setup.js` 공용 기반: `e2e-facility-admin`/`e2e-facility-member` 계정, beforeEach가 service role REST로 시드 계정 소유 기관 삭제(FK cascade)해 멱등 초기화, J-521/522는 멤버십을 REST 선시드. 다중 사용자는 `browser.newContext(contextOptions)`로 세션 분리(serviceWorkers:'block' 상속). 3스펙(J-520 2건·J-521 2건·J-522 2건): **J-520** 기관 등록→초대 코드 발급 / 별도 컨텍스트 코드 가입→소속 카드·멤버 반영 + 무효 코드 오류, **J-521** 인수인계 공유→admin 대장→인수 서명 + 작성자 본인 서명 RLS 차단, **J-522** 면회·사고 기관 공유→대장 섹션 + family_visits/incident_reports REST 단언.
+- 테스트 Supabase(`passok-e2e`)의 facility 도메인 — `facility-setup.js` 공용 기반: 매 테스트 **고유 admin·member 사용자를 service role admin API로 생성·폐기**(공유 계정은 CI 병렬 잡 간 멤버십 경합 — 실패 교훈), J-521/522는 멤버십을 REST 선시드. 다중 사용자는 `browser.newContext(contextOptions)`로 세션 분리(serviceWorkers:'block' 상속). 3스펙(J-520 2건·J-521 2건·J-522 2건): **J-520** 기관 등록→초대 코드 발급 / 별도 컨텍스트 코드 가입→소속 카드·멤버 반영 + 무효 코드 오류, **J-521** 인수인계 공유→admin 대장→인수 서명 + 작성자 본인 서명 RLS 차단, **J-522** 면회·사고 기관 공유→대장 섹션 + family_visits/incident_reports REST 단언.
 - 스펙 작성으로 **제품 결함 3건 적발·수정**: ①facility 3곳이 `getAuthSession()` 반환값을 `{session}`으로 잘못 재분해 — 로그인해도 워크스페이스 불능 ②`create_facility` RPC의 `gen_random_bytes` 미한정 호출(`extensions` 스키마 한정자로 수정) ③author_id·user_id NOT NULL 무기본값 → 스키마에 `default auth.uid()` 추가. DOM mock도 `{session:null}`→`null` 교정.
 
 **exams/cosmetic/j-530·531 — Formula OS 실무모드 로컬 CRUD 스위트 (J-530~531, 2026-11-12 추가)**
