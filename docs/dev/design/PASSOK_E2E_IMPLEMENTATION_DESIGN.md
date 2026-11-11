@@ -8,7 +8,7 @@
 
 ## 1. 배경·문제
 
-DOC-DSN-45는 agent-browser + 셸 스크립트 기반 E2E 구축을 가정한 범용 가이드다. PassOK는 이미 `test:e2e`(Playwright, 24 스펙, chromium/mobile/tablet 프로젝트)가 있으므로 가이드를 그대로 적용할 수 없다 — **도구 계층은 유지하고, 가이드의 절차적 요소(환경 분리·데이터 검증·보고서·판정 규칙)를 이식**한다.
+DOC-DSN-45는 agent-browser + 셸 스크립트 기반 E2E 구축을 가정한 범용 가이드다. PassOK는 이미 `test:e2e`(Playwright, 25 스펙, chromium/mobile/tablet 프로젝트)가 있으므로 가이드를 그대로 적용할 수 없다 — **도구 계층은 유지하고, 가이드의 절차적 요소(환경 분리·데이터 검증·보고서·판정 규칙)를 이식**한다.
 
 > **필수 전제 (선행 조건)**: `src/auth-sync/supabase-config.js`는 **운영 프로젝트 URL·publishable key를 하드코딩**하고 serve.js도 env를 앱에 주입하지 않는다 — 즉 배포 앱에서 `isSupabaseConfigured()`는 항상 true다. **테스트 Supabase 오버라이드 기작 없이 인증 관련 스펙(J-102 계열)을 로컬에서 실행하면 운영 DB를 직접 쓴다.** 오버라이드 기작(§3-1-1)을 Phase 1의 선행 작업으로 둔다.
 
@@ -32,7 +32,7 @@ tests/e2e/
   *.spec.js                    # 기존 스펙 (유지 — 점진 data-testid 전환)
   exams/<id>/                  # 기존 시험별 스펙 (유지)
   journeys/                    # 신설 — P1/P2 사용자 여정 시나리오 (§4)
-    J-101-nonlogin-study.spec.js
+    j-101-nonlogin-study.spec.js
     J-102-auth-sync.spec.js
     J-201-mock-score.spec.js
     J-202-progress-restore.spec.js
@@ -53,7 +53,7 @@ tests/reports/
 
 ### 기존 스펙과의 관계
 
-- 기존 21+ 스펙은 **그대로 유지** — journeys/는 신규 시나리오 전용 디렉터리로 분리
+- 기존 24 스펙은 **그대로 유지** — journeys/는 신규 시나리오 전용 디렉터리로 분리
 - 공통 헬퍼는 `support/`에 신설 — 기존 스펙의 inline 선택자는 리팩터 시에만 이관 (대규모 재작성 금지)
 
 ## 3. 테스트 환경 분리
@@ -113,6 +113,10 @@ tests/reports/
 | J-900 | 품질 신호 | P1 | 전 시나리오 공통: JS 예외 0 · 5xx 응답 0 | `evidence.js`의 console/network 수집 첨부 | app.spec 부분 |
 
 **첫 구현 대상**: J-201(모의고사) — 학습·채점·저장이 한 흐름에 있어 공통 헬퍼가 함께 완성. 단 J-101(비로그인)이 선행으로 자연스럽게 붙는다 — 로그인 불필요, 오버라이드 기작 없이 즉시 작성 가능 (가이드 §5 권장과 동일 논리).
+
+**시험팩 우선순위**: 시험팩 의존 시나리오(J-101/201/202 시드·J-301 커버리지)는 **carework 팩 기준으로 먼저 구축**한다 — carework는 `tier: active`이자 가장 빠르게 확장 중인 팩(실무 기능 14종)이며, 나머지 팩 커버리지는 carework 완성 후 동일 패턴으로 복제한다 (2026-11-11 확정).
+
+> **carework 학습 경로 주의**: carework는 **careFlow 4단계**(미리풀기→이야기→요약→시나리오, 진도는 `carework:flow_progress`·`flow_attempts`·`quiz_results`의 `*_quiz_flow_*` 항목)가 기본 학습 경로이며, 표준 `quiz-view`·`flashcard-view`는 `data-needs` 게이트가 교재 파생 카드·퀴즈 존재 시에만 노출한다(UX-NAV-16). 2026-11-11 caretheory Ch.02 용어표 파일럿(카드 32·퀴즈 30 + careprac 은행보충 16/15)으로 게이트가 해제되어 J-101이 양쪽 경로를 모두 검증한다. 나머지 챕터 확장 중에는 과목별 데이터 편차를 주의한다.
 
 ## 5. 선택자 규약 — data-testid 점진 도입
 

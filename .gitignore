@@ -111,6 +111,10 @@ content/**/report/
 /test-results/
 /playwright-report/
 /playwright/.cache/
+# E2E 인증 세션 파일 — 세션 토큰 포함, 커밋 금지 (DOC-DSN-46 §3-3)
+tests/.auth/
+tests/e2e/.auth/
+*.storageState.json
 
 # pytest 임시 디렉터리
 ref-pipeline/tests/.pytest-tmp/
