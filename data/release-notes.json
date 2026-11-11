@@ -1,5 +1,19 @@
 [
   {
+    "version": "v20261111-c33c3a9",
+    "date": "2026-11-11",
+    "notes": [
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[기능·ci] keep-alive에 테스트 Supabase(passok-e2e) 핑 추가",
+      "[기능·ci] e2e 잡에 TEST_SUPABASE_* env 주입 — J-102 CI 실행 연결",
+      "[수정·tools] apply_schema 운영 대상 실행 가드 — --prod 또는 대화형 확인 강제",
+      "[기능·e2e] J-102 인증·동기화 스펙 구현 — 테스트 Supabase 전 구간 검증",
+      "[문서·e2e] E2E_TEST_SUPABASE — 기존 계정 내 신규 프로젝트 생성 절차 상세화",
+      "[정리·release] v20261111-d7a8026 스탬프 확정 [no-docs]",
+      "[정리·release] v20261110-a16ad56 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261111-d7a8026",
     "date": "2026-11-11",
     "notes": [
@@ -209,37 +223,6 @@
       "[CI] CI 재실행 트리거 [no-docs]",
       "[수정·print] mermaid svg 루트 다크 배경 보정 — 다이어그램 전체가 검정으로 출력되던 결함",
       "[정리·release] v20261109-3a40ae6 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-3a40ae6",
-    "date": "2026-11-09",
-    "notes": [
-      "[수정·print] mermaid foreignObject 라벨 color 보정 — 출력 경로 흰 글자 묻힘",
-      "[정리·release] v20261109-44818b5 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-44818b5",
-    "date": "2026-11-09",
-    "notes": [
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[수정·print] mermaid 출력 대비 보정 — 다크 테마 SVG가 백지에서 묻히던 결함",
-      "[정리·release] v20261109-6eb5706 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-6eb5706",
-    "date": "2026-11-09",
-    "notes": [
-      "[수정·pdf] 같은 페이지 중복 표 헤더 — 분할 수렴을 1건 단위 재측정으로",
-      "[성능·deploy] 배포 파이프라인 속도 개선 — 게이트 자동복구·CI 대기 병행 (DSN-90)",
-      "[테스트·gate] check-filenames @spec 헤더 토큰 정정 + TRACE 재생성",
-      "[기능·gate] PF-19 이미지 형식 게이트 구현 — check_filenames 확장",
-      "[문서·spec] PF-19 이미지 자산 형식 제한 SPEC 부여 + 규약 문서화",
-      "[문서·admin] AD-13 기관 활동 패널 SPEC 부여 + 설계문서 갱신",
-      "[정리·release] v20261109-0c206f6 스탬프 확정 [no-docs]",
-      "[정리·release] v20261109-183fb94 스탬프 확정 [no-docs]"
     ]
   }
 ]
