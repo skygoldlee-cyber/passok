@@ -1,6 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(e2e): J-500 시험 팩 학습 적합성 스위트 — exams.json 매트릭스 동적 생성
+
+- `tests/e2e/support/exam-matrix.js` 신설 — exams.json + `data/exams/<id>/registry.js`에서 팩·features·콘텐츠 기대치(퀴즈 과목 수·문제은행 커버리지·통합 시험 스키마)를 읽는 매트릭스 헬퍼. 신규 팩은 exams.json 추가만으로 스위트에 자동 편입
+- `tests/e2e/journeys/j-500-exam-conformance.spec.js` 신설 — 팩당 1테스트 동적 생성(현재 20팩 × 3프로젝트 = 60건 로컬 통과): 부팅·교재·퀴즈·통합 모의고사·선언 실무 뷰 렌더 + 타 스코프 localStorage 키 0건 + pageerror 0건
+- registry 기대치를 정본으로 팩별 분기 — 빈칸퀴즈 미저작 팩은 경고 토스트의 정상 열화, 통합 모의고사는 전 과목 뱅크 커버 시에만 출제 요구(미커버 시 '데이터 불완전' 열화 검증), 구형 `subjects[]` 스키마는 카드 비노출이 정상 계약
+- DSN-46 카탈로그 J-500 등록·구현 메모, TESTING.md 스펙 항목 추가
+
+
 ## 2026-11-11 fix(e2e): J-102 첫 CI 실행 검증 + e2e-new 늦은 pullSync 경합 보강
 
 - 첫 CI 실행(런 43014249933)에서 J-102 전 레그 통과 — TEST_* env 주입 정상 동작 확인

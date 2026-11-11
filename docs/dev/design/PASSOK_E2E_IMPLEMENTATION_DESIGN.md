@@ -115,6 +115,7 @@ tests/reports/
 | J-302 | 문서·인쇄 | P2 | 학습안내서·실무매뉴얼 열기 → 인쇄/PDF 버튼 → 미리보기 탭 | PDF 생성 실패 시 window.print 폴백 | 수동 검증 필요 |
 | J-401 | 반응형 | P2 | 3 뷰포트 × 주요 화면 스크린샷·가로 스크롤 0px 판정 | — | mobile-overflow·responsive-flow |
 | J-402 | PWA·오프라인 | P3 | 오프라인 전환 → 안내·캐시 서빙 → 복구 후 동기화 | 오프라인 중 진도 유실·중복 저장 없음 | 없음 (신규) |
+| J-500 | 팩 적합성 | P2 | exams.json 전 팩 × 부팅·교재·퀴즈·통합 모의고사·선언 실무 뷰 렌더 | registry 기대치 대비 출제 계약 + 타 스코프 localStorage 키 0건 | `j-500-exam-conformance.spec.js` (매트릭스 동적 생성) |
 | J-900 | 품질 신호 | P1 | 전 시나리오 공통: JS 예외 0 · 5xx 응답 0 | `evidence.js`의 console/network 수집 첨부 | app.spec 부분 |
 
 **첫 구현 대상**: J-201(모의고사) — 학습·채점·저장이 한 흐름에 있어 공통 헬퍼가 함께 완성. 단 J-101(비로그인)이 선행으로 자연스럽게 붙는다 — 로그인 불필요, 오버라이드 기작 없이 즉시 작성 가능 (가이드 §5 권장과 동일 논리).
@@ -140,6 +141,8 @@ tests/reports/
 > **J-102 차단 판정** (2026-11-11): 테스트 Supabase 환경 미확보로 구현 보류 — `.env`에 `TEST_SUPABASE_*` 키 없음(운영 키만 존재), 로컬 `supabase start`도 Docker 미설치로 불가. 해제 조건: ①별도 테스트 프로젝트 생성 + `TEST_SUPABASE_URL/ANON_KEY/SERVICE_ROLE_KEY` 시크릿 등록 또는 ②Docker 설치 후 `supabase start` → 이후 §3-1-1 오버라이드 기작 구현 → J-102 작성. 운영 DB 직접 사용은 절대 금지.
 > **→ 기반 선구현 완료** (2026-11-11): §3-1-1 오버라이드 헬퍼·`tools/supabase/seed_test_accounts.js`(멱등·운영 ref 감지 중단)·스키마 프로브 TEST_* 오버라이드·`.env.example` 키 선언까지 완비. 남은 것은 테스트 프로젝트 생성 + 키 3종 등록뿐 — 절차는 `docs/dev/runbooks/E2E_TEST_SUPABASE.md`.
 > **→ 차단 해제·구현 완료** (2026-11-11): `passok-e2e` 프로젝트 생성·스키마 15테이블·시드 3계정·GitHub Secrets 4종 완비. `j-102-auth-sync.spec.js` 3시나리오 × 3프로젝트 로컬 9/9 통과, ci.yml e2e 잡에 TEST_* env 주입. 구현 중 발견된 함정(SW precache의 route 우회 → `serviceWorkers:'block'` 필수, Pro 게이트·비스코프 payload 키, getSupabase 경합)은 런북 Phase D에 기록.
+>
+> **J-500 구현 메모** (2026-11-12): `j-500-exam-conformance.spec.js`는 `tests/e2e/support/exam-matrix.js`가 exams.json + `data/exams/<id>/registry.js`(빌드 산출물)에서 읽은 기대치로 팩당 1테스트를 동적 생성한다 — 신규 팩은 스펙 수정 없이 자동 편입. **팩별 분기는 registry가 정본**: ①`stats.quizzes>0` 과목이 없는 팩(compapp2 등)은 빈칸퀴즈가 '미저작' 상태이므로 무응답이 아니라 '출제 가능한 퀴즈가 없습니다' 토스트의 정상 열화를 검증 ②통합 모의고사는 **모든 과목**에 문항 뱅크가 매핑돼야 시작된다(`exam-sim-session.js` missingSubjects 가드) — 미커버 과목이 있으면 '데이터 불완전' 토스트, 전 커버면 실제 출제+1문 응답을 요구 ③`integratedExam` 카드 노출 판정은 앱과 동일하게 `questionsPerSubject` 맵 유무 — hairdresser의 구형 `subjects[]` 배열 스키마는 비노출이 정상. 과목 순회는 '비어 있으면 다음 과목을 고르는' 사용자 행동을 그대로 따른다(과목별 콘텐츠 편차가 팩마다 다름).
 
 ## 5. 선택자 규약 — data-testid 점진 도입
 

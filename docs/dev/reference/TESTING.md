@@ -692,6 +692,12 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
 - 시나리오: e2e-new(첫 로그인→fc 쓰기→첫 push→재로그인)·e2e-active(재로그인→클라우드 복원 pull/apply/reload)·e2e-sync(로컬 우선 충돌→push+원격 백업 보존). DB 단언은 service key REST로 `sync_snapshots` 조회.
 - 경합 패턴: 로그인 후 pullSync가 지연되면 충돌 모달·자동 적용 리로드가 뷰 진입 뒤에도 올 수 있어(샤드 간 원격 상태 차이), `resolveConflictOverlay` 해소 + 뷰 렌더 재진입 루프로 방어한다.
 
+**journeys/j-500-exam-conformance.spec.js — 시험 팩 학습 적합성 (J-500, 2026-11-12 추가)**
+
+- `support/exam-matrix.js`가 exams.json + `data/exams/<id>/registry.js`(빌드 산출물)를 읽어 팩당 1테스트를 동적 생성 — 신규 팩은 exams.json 추가만으로 자동 편입된다. registry 미빌드 시 tier 기반 폴백.
+- 커버: 부팅·`current_exam` → 교재 과목 순회로 콘텐츠 있는 과목 발견(없으면 draft만 허용) → 퀴즈(`stats.quizzes>0` 과목이 있으면 1회분 응답→결과 패널, 없으면 '출제 가능한 퀴즈가 없습니다' 토스트의 정상 열화) → 통합 모의고사(전 과목 뱅크 커버면 출제+1문 응답, 미커버면 '데이터 불완전' 토스트, `questionsPerSubject` 미선언 구형 스키마는 카드 비노출이 정상) → features 플래그에 선언된 실무 피처 뷰 딥링크 렌더 → 타 스코프(`<다른팩>:`) localStorage 키 0건 · pageerror 0건.
+- 선행 조건: `npm run build:data`로 번들이 생성돼 있어야 registry 기대치가 읽힌다(serve/CI 경로에서는 이미 충족).
+
 **exams/cosmetic/formula-tablet.spec.js — Formula OS 태블릿 현장 작업 (FO-26~31, 2026-10-04 추가)**
 
 - **뷰포트 834×1112**(iPad Air 세로)에서 `#/formula` 딥링크 부팅 → 배합 계산 진입.
