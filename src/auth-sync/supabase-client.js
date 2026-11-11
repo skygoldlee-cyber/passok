@@ -5,6 +5,8 @@
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, isSupabaseConfigured } from './supabase-config.js';
 
 let _client = null;
+/** @type {Promise<*|null>|null} — 생성 중 재호출 시 같은 프로미스 공유 (중복 클라이언트 방지) */
+let _clientPromise = null;
 /** @type {Promise<void>|null} */
 let _vendorPromise = null;
 
@@ -28,17 +30,30 @@ function loadVendor() {
 export async function getSupabase() {
     if (!isSupabaseConfigured()) return null;
     if (_client) return _client;
-    await loadVendor();
-    _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-        auth: {
-            // 기본값과 동일하지만 명시 — vendor 갱신으로 기본값이 바뀌어도 동작이 깨지지 않게 고정
-            flowType: 'implicit',
-            persistSession: true,
-            autoRefreshToken: true,
-            detectSessionInUrl: true,
-        },
-    });
-    return _client;
+    // 경합 방지 — initAuthView/initSync 등이 부팅 시 동시 호출하면 두 클라이언트가
+    // 생성되어 같은 storage key의 세션 락을 경합, getSession이 응답하지 않을 수 있다
+    // (GoTrueClient "Multiple GoTrueClient instances" 경고).
+    if (!_clientPromise) {
+        _clientPromise = (async () => {
+            try {
+                await loadVendor();
+                _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+                    auth: {
+                        // 기본값과 동일하지만 명시 — vendor 갱신으로 기본값이 바뀌어도 동작이 깨지지 않게 고정
+                        flowType: 'implicit',
+                        persistSession: true,
+                        autoRefreshToken: true,
+                        detectSessionInUrl: true,
+                    },
+                });
+                return _client;
+            } catch (e) {
+                _clientPromise = null; // 실패 시 다음 호출에서 재시도 가능하게
+                throw e;
+            }
+        })();
+    }
+    return _clientPromise;
 }
 
 export async function getAuthSession() {

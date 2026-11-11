@@ -28,6 +28,15 @@ const PER_PAGE = 200;
 /**
  * 시드 계약 — J-102 스펙이 이 상수 상태를 전제로 단언한다.
  * 변경 시 j-102 스펙의 기대값을 함께 갱신할 것.
+ *
+ * payload 키는 비스코프 논리 키 — sync.js의 collectSyncPayload가
+ * safeGetItem(논리키)로 수집하므로 payload에는 'carework:' 접두사가 없다.
+ * applyPayload도 SYNC_STATIC 화이트리스트를 비스코프 키로 검사한다 —
+ * 스코프 키를 넣으면 pull 시 무시되어 복원 검증이 불가하다.
+ *
+ * 전 계정 plan='pro' 시드 — cloud_sync는 feature-plan.json상 pro 기능이라
+ * syncPlanFromProfile이 로그인 시 profiles.plan을 정본으로 적용한다.
+ * profiles가 free면 로컬 entitlement가 지워져 push가 조용히 차단된다.
  */
 const SEED_ACCOUNTS = [
     {
@@ -42,8 +51,10 @@ const SEED_ACCOUNTS = [
             exam_id: 'carework',
             device_id: 'e2e-seed',
             payload: {
-                'carework:e2e_seed_marker': 'active',
-                'carework:sim_results_history': JSON.stringify([
+                // e2e_seed_marker는 SYNC_STATIC에 없어 pull 시 적용되지 않는
+                // 행 식별용 메타데이터 — 스펙은 REST로 행을 조회해 단언한다
+                'e2e_seed_marker': 'active',
+                'sim_results_history': JSON.stringify([
                     {
                         examId: 'integrated', score: 52, total: 80, rate: 65,
                         date: '2026-01-01T00:00:00.000Z', seeded: true,
@@ -59,8 +70,8 @@ const SEED_ACCOUNTS = [
             exam_id: 'carework',
             device_id: 'e2e-seed-conflict',
             payload: {
-                'carework:e2e_seed_marker': 'cloud-side',
-                'carework:sim_results_history': JSON.stringify([
+                'e2e_seed_marker': 'cloud-side',
+                'sim_results_history': JSON.stringify([
                     {
                         examId: 'integrated', score: 40, total: 80, rate: 50,
                         date: '2026-01-02T00:00:00.000Z', seeded: true,
@@ -137,6 +148,16 @@ async function upsertUser(base, key, email, password, existing) {
     return { id: created.id || created.user?.id, action: 'created' };
 }
 
+/** profiles.plan='pro' 부여 — pro_expires_at=null은 관리자 무기한 부여 (pro-redeem.js 주석) */
+async function upsertProfile(base, key, userId) {
+    const res = await fetch(`${base}/rest/v1/profiles`, {
+        method: 'POST',
+        headers: { ...headers(key), Prefer: 'resolution=merge-duplicates,return=minimal' },
+        body: JSON.stringify({ id: userId, plan: 'pro', pro_expires_at: null }),
+    });
+    if (!res.ok) throw new Error(`profiles upsert → HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
+}
+
 async function upsertSnapshot(base, key, userId, snap) {
     const row = {
         user_id: userId,
@@ -171,6 +192,7 @@ async function main() {
     for (const a of SEED_ACCOUNTS) {
         const { id, action } = await upsertUser(url, key, a.email, password, existing.get(a.email));
         if (!id) throw new Error(`${a.email} — 사용자 id를 얻지 못했습니다`);
+        await upsertProfile(url, key, id);
         if (a.snapshot) await upsertSnapshot(url, key, id, a.snapshot);
         console.log(`  ✓ ${a.email} — ${action}${a.snapshot ? ` + snapshot(${a.snapshot.exam_id})` : ''}`);
     }

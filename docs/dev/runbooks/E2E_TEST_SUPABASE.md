@@ -88,6 +88,14 @@ node tools/supabase/seed_test_accounts.js             # 적용
 - `requireSupabaseOverride(test)` 가드로 시작 — TEST_* 미설정 환경에서는 skip (운영 오염 차단이 스펙 레벨에서도 이중 보장됨)
 - 로그인 → 학습 → 로그아웃 → 재로그인 → 클라우드 진도 복원 + `sync_snapshots` 행 확인
 - `tests/.auth/` storageState는 `.gitignore` 등록 완료
+- **구현됨**: `tests/e2e/journeys/j-102-auth-sync.spec.js` — 3개 시드 계정으로 첫 push·복원·충돌 시나리오 커버
+
+### 구현 시 발견된 함정 (후속 인증 스펙에도 적용)
+
+- **Service Worker 차단 필수** — `sw.js`가 `supabase-config.js`를 precache하고, SW의 fetch는 `page.route`를 우회하므로 오버라이드 없는 **운영 config가 서빙될 수 있다** (SW 활성화 타이밍에 따라 race — 개별 실행 통과/전체 실행 실패 플레이크의 원인). 인증 스펙은 `test.use({ serviceWorkers: 'block' })` 필수.
+- **시드 계정은 `profiles.plan='pro'`** — `cloud_sync`는 Pro 게이트 기능. 로그인 시 `syncPlanFromProfile`이 profiles를 정본으로 적용하므로, 시드 계정이 free면 `canCloudSync()=false`가 되어 push가 조용히 차단된다 (`seed_test_accounts.js`가 부여).
+- **payload 키는 비스코프 논리 키** — `collectSyncPayload`/`applyPayload`는 `sim_results_history` 같은 비스코프 키를 사용. 시드 payload에 `carework:` 접두사를 넣으면 pull 시 무시된다.
+- **`getSupabase()` 동시 호출** — 부팅 시 `initAuthView`/`initSync`가 동시 호출하면 GoTrueClient가 2개 생성되어 세션 락을 경합. `_clientPromise` 싱글턴으로 해결됨.
 
 ## 안전 장치 요약
 

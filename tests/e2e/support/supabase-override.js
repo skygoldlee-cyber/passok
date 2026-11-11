@@ -3,6 +3,16 @@
 // src/auth-sync/supabase-config.js는 운영 프로젝트 상수를 하드코딩한다 — 인증·동기화
 // 스펙이 오버라이드 없이 실행되면 운영 DB에 쓴다. TEST_* env가 있을 때만 모듈 응답을 치환.
 
+import { createRequire } from 'node:module';
+
+// 로컬 실행은 루트 .env에서 TEST_* 로드 — Playwright는 .env를 자동 로드하지 않는다.
+// CI는 GitHub Secrets env가 이미 주입되며 loadEnv는 기존 env를 덮어쓰지 않는다.
+// (import.meta는 Playwright 로더 미지원 — createRequire에 cwd 기준 경로를 넘긴다)
+try {
+    const req = createRequire(`${process.cwd()}/playwright.config.js`);
+    req('./tools/lib/env.js').loadEnv();
+} catch { /* .env 없음 — CI 또는 미설정 환경, 스킵 가드가 처리 */ }
+
 export const SUPABASE_OVERRIDE_AVAILABLE =
     !!process.env.TEST_SUPABASE_URL && !!process.env.TEST_SUPABASE_ANON_KEY;
 
