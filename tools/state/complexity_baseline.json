@@ -1,11 +1,6 @@
 {
   "threshold": 10,
   "files": {
-    "src/ai/ai-client.js": {
-      "count": 5,
-      "max": 13,
-      "sum": 61
-    },
     "src/ai/gen-gate.js": {
       "count": 1,
       "max": 23,
@@ -165,11 +160,6 @@
       "count": 1,
       "max": 15,
       "sum": 15
-    },
-    "src/exams/carework/views/care-flow.js": {
-      "count": 1,
-      "max": 12,
-      "sum": 12
     },
     "src/exams/carework/views/care-handover.js": {
       "count": 1,

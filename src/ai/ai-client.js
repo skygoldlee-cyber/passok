@@ -52,13 +52,14 @@ const _clipList = (v) => Array.isArray(v)
  * @returns {string|null} 필수 인자 부족 시 null
  */
 export function buildWrongFeedbackPrompt(input) {
-    const question = _clip(input?.question, 3000);
-    const selected = _clip(input?.selected, 600);
-    const correct = _clip(input?.correct, 600);
+    const inp = input || {};
+    const question = _clip(inp.question, 3000);
+    const selected = _clip(inp.selected, 600);
+    const correct = _clip(inp.correct, 600);
     if (!question || !selected || !correct) return null;
-    const options = _clipList(input?.options);
-    const misjudged = _clipList(input?.misjudged);
-    const citation = _clip(input?.citation, 600);
+    const options = _clipList(inp.options);
+    const misjudged = _clipList(inp.misjudged);
+    const citation = _clip(inp.citation, 600);
     return `## 문항
 ${question}
 ${options.length ? `\n## 선지\n${options.map((o, i) => `${i + 1}. ${o}`).join('\n')}\n` : ''}
@@ -77,15 +78,19 @@ ${misjudged.length ? `\n## 수험생이 오판한 진술\n${misjudged.map(s => `
  */
 export function parseFeedbackResponse(text) {
     if (typeof text !== 'string' || !text.trim()) return null;
-    const cleaned = text.replace(/```(?:json)?/g, '').trim();
+    const data = _jsonFromText(text.replace(/```(?:json)?/g, '').trim());
+    if (!data) return null;
+    const explain = String(data.explain ?? '').trim().slice(0, 500);
+    const confused = String(data.confused_concept ?? data.confused ?? '').trim().slice(0, 60);
+    return explain ? { explain, confused } : null;
+}
+
+/** 텍스트에서 첫 { ~ 마지막 } 슬라이스를 JSON 파싱 — 실패 시 null. @param {string} cleaned @returns {*} */
+function _jsonFromText(cleaned) {
     const s = cleaned.indexOf('{');
     const e = cleaned.lastIndexOf('}');
     if (s < 0 || e <= s) return null;
-    let data;
-    try { data = JSON.parse(cleaned.slice(s, e + 1)); } catch { return null; }
-    const explain = String(data?.explain ?? '').trim().slice(0, 500);
-    const confused = String(data?.confused_concept ?? data?.confused ?? '').trim().slice(0, 60);
-    return explain ? { explain, confused } : null;
+    try { return JSON.parse(cleaned.slice(s, e + 1)); } catch { return null; }
 }
 
 /* =========================================================
@@ -473,12 +478,13 @@ const BYOK_QUIZ_SYSTEM = `당신은 자격시험 출제자입니다. 주어진 �
  * @returns {string|null}
  */
 export function buildQuizGenPrompt(input) {
-    const cluster = _clip(input?.cluster, 80);
-    const evidence = _clip(input?.evidence, 1200);
+    const inp = input || {};
+    const cluster = _clip(inp.cluster, 80);
+    const evidence = _clip(inp.evidence, 1200);
     if (!cluster && !evidence) return null;
-    const existing = (Array.isArray(input?.existing) ? input.existing : [])
+    const existing = (Array.isArray(inp.existing) ? inp.existing : [])
         .slice(0, 8).map(q => _clip(q, 300)).filter(Boolean);
-    const n = _diagNum(input?.count, 1, 3) ?? 2;
+    const n = _diagNum(inp.count, 1, 3) ?? 2;
     return `## 출제 대상 개념\n${cluster ?? '약점 복습'}
 ${evidence ? `\n## 교재 근거 (반드시 이 범위에서 출제)\n${evidence}\n` : ''}
 ${existing.length ? `\n## 기존 문항 (중복 금지)\n${existing.map((q, i) => `${i + 1}. ${q}`).join('\n')}\n` : ''}
@@ -557,20 +563,13 @@ export function buildTextbookQaPrompt(input) {
  */
 export function parseQaResponse(rawText) {
     const t = String(rawText || '').trim();
-    if (!t) return null;
-    const start = t.indexOf('{');
-    const end = t.lastIndexOf('}');
-    if (start < 0 || end < start) return null;
-    try {
-        const p = JSON.parse(t.slice(start, end + 1));
-        const answer = String(p?.answer ?? '').trim();
-        if (!answer) return null;
-        const citations = (Array.isArray(p?.citations) ? /** @type {*[]} */ (p.citations) : [])
-            .map(c => String(c).trim()).filter(Boolean).slice(0, 5);
-        return { answer: answer.slice(0, 600), citations };
-    } catch {
-        return null;
-    }
+    const p = t ? _jsonFromText(t) : null;
+    if (!p) return null;
+    const answer = String(p.answer ?? '').trim();
+    if (!answer) return null;
+    const citations = (Array.isArray(p.citations) ? /** @type {*[]} */ (p.citations) : [])
+        .map(c => String(c).trim()).filter(Boolean).slice(0, 5);
+    return { answer: answer.slice(0, 600), citations };
 }
 
 /**
@@ -625,18 +624,11 @@ ${hint ? `\n## 양식명 힌트\n${hint}\n` : ''}
  */
 export function parseFormExtractResponse(rawText) {
     const t = String(rawText || '').trim();
-    if (!t) return null;
-    const start = t.indexOf('{');
-    const end = t.lastIndexOf('}');
-    if (start < 0 || end < start) return null;
-    try {
-        const p = JSON.parse(t.slice(start, end + 1));
-        const title = String(p?.title ?? '').trim().slice(0, 80);
-        const body = String(p?.body ?? '').trim().slice(0, 6000);
-        return title && body ? { title, body } : null;
-    } catch {
-        return null;
-    }
+    const p = t ? _jsonFromText(t) : null;
+    if (!p) return null;
+    const title = String(p.title ?? '').trim().slice(0, 80);
+    const body = String(p.body ?? '').trim().slice(0, 6000);
+    return title && body ? { title, body } : null;
 }
 
 /**

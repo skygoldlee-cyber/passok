@@ -131,6 +131,14 @@ async function _load() {
 async function _bankLoad(subject) {
     if (_bank[subject]) return _bank[subject];
     const md = await DataLoader._getMd(contentPath((/** @type {Object.<string,string>} */ (BANKS))[subject] || ''));
+    const out = _parseBankQuestions(md);
+    _applyBankAnswers(md, out);
+    _bank[subject] = out;
+    return out;
+}
+
+/** 문제은행 md → 문항 맵 { qid: { stem, options, answer:-1 } }. @param {string} md */
+function _parseBankQuestions(md) {
     /** @type {Record<string, { stem: string, options: string[], answer: number }>} */
     const out = {};
     for (const m of md.matchAll(/###\s*Q(\d+)\.\s*([^\n]+)\n([\s\S]*?)(?=\n###\s|\n##\s|$)/g)) {
@@ -138,13 +146,15 @@ async function _bankLoad(subject) {
             .map(l => l.slice(1).trim());
         if (opts.length >= 2) out['Q' + (m[1] || '')] = { stem: (m[2] || '').trim(), options: opts, answer: -1 };
     }
-    // 정답 섹션 — **Q{n}.** 다음의 정답 표기를 매핑
+    return out;
+}
+
+/** 정답 섹션 — **Q{n}.** 다음의 정답 표기를 문항 맵에 매핑. @param {string} md @param {*} out */
+function _applyBankAnswers(md, out) {
     for (const m of md.matchAll(/\*\*Q(\d+)\.\*\*[\s\S]*?정답:\s*([①-⑤])/g)) {
         const qk = 'Q' + (m[1] || '');
         if (out[qk]) /** @type {*} */ (out[qk]).answer = CIRCLED.indexOf(m[2] || '');
     }
-    _bank[subject] = out;
-    return out;
 }
 
 /** 개념에 태깅된 은행 문항 키 목록 (bank_tags → Q{id}) */

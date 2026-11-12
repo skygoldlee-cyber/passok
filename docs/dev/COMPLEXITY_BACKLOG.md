@@ -9,7 +9,7 @@
 
 `node tools/check/check_complexity.js` (eslint complexity 임계 10, Δ 비교는 동일 임계 유지 필수).
 
-- 기준선: **330건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
+- 기준선: **324건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
 - 분해 순서: 복잡도 점수 내림차순 — 상위부터 처리해야 곡선이 꺾인다
 - 분해 완료 시 `--update`로 기준선을 축소하고 `--report`로 이 표를 재생성한다
 - 분해 규약: 렌더 분기는 `if` 체인 → early return·테이블 조회·서브함수 추출로 내리고, 동작 변경 없이 구조만 정리한다. 대형 렌더 함수는 섹션별 private 렌더 함수로 분할
@@ -224,8 +224,6 @@
 | 14 | `_studyPlanHtml` | src/views/study-calendar.js:184 |
 | 14 | `generateCalcQuestion` | src/views/trainer-calc-practice.js:35 |
 | 14 | `renderOxDrillQuestion` | src/views/trainer-drills.js:309 |
-| 13 | `buildWrongFeedbackPrompt` | src/ai/ai-client.js:54 |
-| 13 | `parseFeedbackResponse` | src/ai/ai-client.js:78 |
 | 13 | `renderRadarChart` | src/charts.js:401 |
 | 13 | `ensureRegistry` | src/content/data-loader.js:70 |
 | 13 | `applyExamTheme` | src/core/exam-context.js:249 |
@@ -259,8 +257,6 @@
 | 13 | `renderComboQuestion` | src/views/trainer-drill-combo.js:29 |
 | 13 | `_cardHtml` | src/written/written-practice.js:383 |
 | 13 | `(anonymous)#63` | src/written/written-practice.js:498 |
-| 12 | `buildQuizGenPrompt` | src/ai/ai-client.js:475 |
-| 12 | `parseFormExtractResponse` | src/ai/ai-client.js:626 |
 | 12 | `parseCsv` | src/content/csv-utils.js:57 |
 | 12 | `loadDictionary` | src/content/data-loader.js:539 |
 | 12 | `getKnowledgeItems` | src/content/data-loader.js:560 |
@@ -270,7 +266,6 @@
 | 12 | `buildRecordText` | src/exams/carework/care-log.js:43 |
 | 12 | `(anonymous)#8` | src/exams/carework/care-share.js:245 |
 | 12 | `careFormTplSave` | src/exams/carework/views/care-custom-form.js:108 |
-| 12 | `_bankLoad` | src/exams/carework/views/care-flow.js:131 |
 | 12 | `importCustomRules` | src/exams/cosmetic/formula-rules.js:189 |
 | 12 | `sanitizeCustomer` | src/exams/cosmetic/formula-store.js:106 |
 | 12 | `fileToBase64Jpeg` | src/exams/cosmetic/product-vision.js:110 |
@@ -302,7 +297,6 @@
 | 12 | `(anonymous)#59` | src/views/textbook-search.js:93 |
 | 12 | `(anonymous)#60` | src/views/textbook-search.js:107 |
 | 12 | `formatSectionContent` | src/views/textbook-search.js:436 |
-| 11 | `parseQaResponse` | src/ai/ai-client.js:558 |
 | 11 | `_getMd` | src/content/data-loader.js:243 |
 | 11 | `generateComboOptions` | src/content/questions.js:98 |
 | 11 | `extractFormPdf` | src/exams/carework/care-form-pdf.js:32 |

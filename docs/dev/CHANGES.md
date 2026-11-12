@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-12 refactor(complexity): 5라운드 — ai-client 파싱 클러스터·_bankLoad 분해 (330→324)
+
+- **`parseQaResponse`**·**`parseFormExtractResponse`** (ai-client.js, 11→·12→≤10): JSON 슬라이스 추출을 공용 `_jsonFromText`(4라운드 `parseFeedbackResponse` 추출분) 재사용으로 축약
+- **`buildWrongFeedbackPrompt`**·**`buildQuizGenPrompt`** (13→·12→≤10): `input || {}` 정규화로 옵셔널 체인 제거 — ai-client.js 잔여는 과장 방지용 고유 블록뿐
+- **`_bankLoad`** (care-flow.js, 12→≤10): 문항 파싱(`_parseBankQuestions`)·정답 매핑(`_applyBankAnswers`) 추출 — **파일 경고 0건 소진**
+- **검증**: unit ai-client·care-flow 통과 + DOM care-flow 6건 · check:types 0
+
+
 ## 2026-11-12 refactor(complexity): 4라운드 — formatSectionContentForReader 파이프라인화 (331→330)
 
 - **`formatSectionContentForReader`** (reader-format.js, 18→≤10): ~420행 단일 함수의 15개 순차 HTML 변환 패스를 주석 경계 그대로 13개 private 헬퍼로 추출 — `_resolveImgSrcs`·`_linkifyToc`·`_linkifyExamLinks`·`_linkifyCrossSubject`·`_linkifyRefDocs`·`_linkifyCitations`·`_stripPageRefs`·`_injectRefPanel`·`_linkifyKeywordRefs`·`_linkifyGlossaryMarks`·`_addArticleSearch`·`_linkifyGlossaryTerms`·`_linkifyMindmapTable`. 본체는 `html = _fn(html)` 파이프라인 — **파일 경고 0건 소진**
