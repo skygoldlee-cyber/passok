@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: f5dcf037faf1c341
+> 입력 해시: 86cb28d1a8da54f2
 > 생성: 2026-11-12 · 원천: SPEC.md(706개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -757,7 +757,7 @@
 | UX-CTL-01 | A-04의 44px를 기본값(`md`)으로 둔 역할 계층. `sm`은 아이콘 버튼·밀집 행·가로모드 밀도 예외, `lg`는 주요 CTA·전폭 액션. 비대상: 테이블 셀·본문 링크·아바타·이미지·진행바·데코레이터 배지·그리드 타일형 내비 카드(`.more-sheet-grid .mobile-tab-item` 등)의 타일 높이 | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-CTL-02 | 터치 대역(모바일+태블릿)은 물론 PC도 동일 높이를 쓰는 것이 원칙 — 높이는 대역이 아니라 역할로 결정. `.btn` 기본 규칙에 min-height를 두어 모바일 미디어쿼리 `!important` 보정에 의존하지 않는다 | E2E 테스트 | — | css/base.css<br>css/dashboard.css<br>css/exam.css<br>css/study.css | tests/e2e/mobile-overflow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-CTL-03 | 기존 `.btn-row`는 `var(--gap-group)`. 태블릿·PC 카드 내부는 `gap-group`→`space-4` 팽창 허용, `gap-ctl`은 대역 무관 고정 | 테스트 | — | css/base.css<br>css/dashboard.css<br>css/exams/carework/care-tools.css<br>css/study.css | tests/unit/app/ux-invariants.test.js | — | — |
-| UX-CTL-04 | 가로 라벨 배치(라벨 좌·컨트롤 우)는 설정 행(`.settings-item` 류)·라벨 자체가 토글 타겟인 칩(`.obs-chip`)에만 허용 — 모바일에서 라벨이 컨트롤 폭을 잠식하고 한국어 라벨 길이 변동에 취약. 라벨 요소가 컨트롤을 감싸는 마크업(`<label>텍스트 <input></label>` — `.care-calc-form label` 패턴)은 동일 수직 리듬을 충족하므로 `.ctl-field`와 동형 허용 | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-04 | 가로 라벨 배치(라벨 좌·컨트롤 우)는 설정 행(`.settings-item` 류)·라벨 자체가 토글 타겟인 칩(`.obs-chip`)에만 허용 — 모바일에서 라벨이 컨트롤 폭을 잠식하고 한국어 라벨 길이 변동에 취약. 라벨 요소가 컨트롤을 감싸는 마크업(`<label>텍스트 <input></label>` — `.care-calc-form label` 패턴)은 동일 수직 리듬을 충족하므로 `.ctl-field`와 동형 허용 | 테스트 | — | css/base.css<br>css/exams/carework/care-tools.css | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-CTL-05 | 모바일 하단 고정 제출 액션은 `.btn-row-sticky` +  `position:sticky` + `calc(70px + safe-area)` (UX-NAV-05 일반화). 태블릿·PC는 인플로우 배치만 — 스크롤 없는 화면의 고정바는 무의미 | 테스트 | — | css/app-responsive.css<br>css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-CTL-06 | UX-VFY-06과 동형의 조기 차단 — 토큰 미사용 높이는 커밋 전 탐지. E2E 측 실측은 `touch-targets.json` 기준선(UX-SET-03 확장)이 담당 | 테스트 | — | tools/check/check_mobile_safe.js | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-CTL-07 | 헤더-안내문 이중 마진을 빈줄로 착각해 한쪽을 0으로 만들면 섹션 경계가 사라진다(2026-11-08 기관 양식 뷰 실사례). 시각적으로 "헤더→설명→본문" 한 묶음과 "묶음↔묶음" 구분이 모두 명확해야 함 — `.care-log-saved` 등 목록은 `margin: var(--gap-sec) 0`, 헤더 직후 안내문의 `margin-top`은 0으로 정리 | 구현 (테스트 갭) | — | css/exams/carework/care-tools.css | — | — | — |
