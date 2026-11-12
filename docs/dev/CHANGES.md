@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-12 feat(quality): 순환복잡도 래칫 도입 — check:cplx (기준선 340건·142파일)
+
+- **래칫 신설**: tools/check/check_complexity.js — 타입 래칫 동형(eslint complexity 임계 10 실측 → tools/state/complexity_baseline.json 비교 → 비증가 게이트). 파일별 {count,max,sum} 3중 지표 비증가 — 신규 진입·최악 함수 악화·중간층 우회를 모두 차단. --update·--dir·--report 지원
+- **백로그 생성물화**: COMPLEXITY_BACKLOG.md가 수동 문서라 실측(340)과 드리프트(264 기록)하던 문제 해소 — --report로 기준선 정본에서 정렬 표 재생성, ⚙️ 생성물 표기
+- **등록**: package.json check:cplx + steps.js all 프리셋 (STEP_CPLX, p1)
+- **검증**: 게이트 회귀 시뮬레이션 — 신규 복잡도 함수 유입 시 count 1→2·sum 13→24로 차단 확인
+
+
 ## 2026-11-12 feat(deploy): comingSoon 팩 스테이징 제외 + .vercelignore 규칙 정정 — 페이로드 −63%
 
 - **comingSoon 팩 제외**: deploy 스테이징이 exams.json의 comingSoon 플래그를 읽어 `content/exams/<id>`·`data/exams/<id>` 디렉터리를 스킵 — selectExamAction이 런타임 선택을 차단하므로 콘텐츠는 도달 불가 사중량. 플래그 해제 시 다음 배포부터 자동 포함 (정본 = exams.json)

@@ -3,64 +3,358 @@
 > **문서 ID**: DOC-DEV-14
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (유지보수 백로그 — 측정 규약은 [PROJECT_METRICS.md](reference/PROJECT_METRICS.md) §8 순환 복잡도 행)
+> ⚙️ 생성물 — 정본은 tools/state/complexity_baseline.json + eslint 실측. 재생성: `node tools/check/check_complexity.js --report`
 
 ## 측정 규약
 
-`EVAL_2026-10-30`에서 지적된 상승 추세(207→225→253)의 반전 대상. 측정 명령(임계 10 고정 — Δ 비교는 동일 임계 유지 필수):
+`node tools/check/check_complexity.js` (eslint complexity 임계 10, Δ 비교는 동일 임계 유지 필수).
 
-```powershell
-node node_modules/eslint/bin/eslint.js "src/**/*.js" --no-config-lookup --rule '{"complexity":["warn",10]}'
-```
-
-- 기준선(2026-10-30): **253건 경고 / 임계 10 초과**
-- 재측정(2026-10-31): **264건** — 상위 2건 분해 완료(openFormulaCalc 74·파서 콜백 55 해소)이나 AI·신규 뷰 진입으로 총량 +11, 상승 추세 지속
+- 기준선: **340건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
 - 분해 순서: 복잡도 점수 내림차순 — 상위부터 처리해야 곡선이 꺾인다
-- 분해 완료 시 해당 행을 표에서 제거하고 재측정치를 갱신한다
+- 분해 완료 시 `--update`로 기준선을 축소하고 `--report`로 이 표를 재생성한다
 - 분해 규약: 렌더 분기는 `if` 체인 → early return·테이블 조회·서브함수 추출로 내리고, 동작 변경 없이 구조만 정리한다. 대형 렌더 함수는 섹션별 private 렌더 함수로 분할
 
-## 분해 대상 (상위 30 — 2026-10-31 측정)
+## 상위 함수 목록 (점수 내림차순)
 
-| # | 복잡도 | 위치 | 함수 |
-|---|--------|------|------|
-| 1 | 50 | src/reader/reader-format.js:511 | markStoryNarrative |
-| 2 | 45 | src/exams/cosmetic/formula-stability.js:133 | evaluateStability |
-| 3 | 44 | src/ai/ai-client.js:164 | _requestAi |
-| 4 | 41 | src/pwa/pwa-install.js:76 | openInstallModal |
-| 5 | 38 | src/reader/textbook-core.js:158 | parseMarkdownContent |
-| 6 | 36 | src/reader/textbook-core.js:190 | (익명) |
-| 7 | 36 | src/views/flashcard.js:88 | renderFlashcard |
-| 8 | 34 | src/exams/cosmetic/formula-rules.js:250 | recommendFor |
-| 9 | 34 | src/exams/cosmetic/views/trainer-ingredients.js:40 | generateIngredientsQuestions |
-| 10 | 34 | src/reader/html-viewer.js:127 | openHtmlViewer |
-| 11 | 33 | src/search/search-index.js:306 | runUnifiedSearch |
-| 12 | 33 | src/shell/app-dashboard.js:95 | populateExamCards |
-| 13 | 30 | src/content/questions.js:167 | gradeAnswer |
-| 14 | 30 | src/study/study-tracker-alloc.js:295 | (익명) |
-| 15 | 30 | src/views/analysis-view.js:499 | _renderPassGapInsight |
-| 16 | 30 | src/views/exam-sim/exam-sim-arena.js:298 | submitExam |
-| 17 | 30 | src/views/exam-sim/exam-sim-weak.js:47 | _startWeakExamImpl |
-| 18 | 30 | src/views/reader/reader-toolbar.js:266 | (익명) |
-| 19 | 29 | src/pwa/pwa-manifest.js:11 | (익명) |
-| 20 | 29 | src/shell/command-palette.js:103 | searchAll |
-| 21 | 29 | src/study/analysis-engine.js:637 | buildWeeklyReportText |
-| 22 | 29 | src/views/quiz/quiz.js:156 | renderQuizQuestion |
-| 23 | 28 | src/content/questions.js:117 | validateQuestion |
-| 24 | 28 | src/exams/cosmetic/views/formula-io.js:36 | buildPrintHtml |
-| 25 | 28 | src/views/dashboard-queue.js:48 | buildTodayQueue |
-| 26 | 28 | src/views/trainer-drill-combo.js:162 | submitComboAnswer |
-| 27 | 27 | src/views/exam-sim/exam-sim-session.js:168 | _startIntegratedMockExamImpl |
-| 28 | 27 | src/views/textbook-search.js:155 | performTextbookSearch |
-| 29 | 26 | src/views/reader/reader-toolbar.js:333 | initReaderToolbar |
-| 30 | 25 | src/ai/ai-client.js:297 | buildWeeklyDiagnosisPrompt |
-
-## 분해 완료 기록
-
-- 2026-10-31: `openFormulaCalc`(74) — 초기화 시퀀스를 필드 초기화·드래프트 복원·리스너 바인딩·배너·접이식 헬퍼로 분할 (formula-calc DOM 33건 통과)
-- 2026-10-31: markdown-parser 라인 콜백(55) — 순차 if 체인을 `try*` 매처 디스패치로 분할 (unit 전량·check:parser 파리티 통과)
-
-## 클러스터 관찰
-
-- **Formula OS 집중** (2·8·9·24): cosmetic 전용 모듈에 고복잡도 4건 — 도메인 규칙 평가기 특성상 분기 밀집, 규칙 테이블화 후보부터
-- **파서 계열** (1·5·6): markdown→HTML 변환 경로 — 상태 머신이 본질적으로 분기가 많아 분해 효과가 제한적일 수 있음, 신중 검토 (단, 라인 분류 콜백은 매처 디스패치로 해소 실증)
-- **AI 계열 신규** (3·30): ai-client가 신규 클러스터로 등장 — AI 코치 기능 확장에 따른 분기 팽창, 프롬프트 조립 분리 검토
-- **렌더 함수** (7·10·12·15·22): 섹션별 서브 렌더 추출이 통상 해법
+| 복잡도 | 함수 | 위치 |
+|---:|---|---|
+| 52 | `markStoryNarrative` | src/reader/reader-format.js:534 |
+| 47 | `_render` | src/exams/carework/views/care-flow.js:250 |
+| 47 | `populateExamCards` | src/shell/app-dashboard.js:95 |
+| 46 | `_requestAi` | src/ai/ai-client.js:192 |
+| 45 | `evaluateStability` | src/exams/cosmetic/formula-stability.js:144 |
+| 42 | `parseMarkdownContent` | src/reader/textbook-core.js:164 |
+| 41 | `openInstallModal` | src/pwa/pwa-install.js:76 |
+| 39 | `openHtmlViewer` | src/reader/html-viewer.js:147 |
+| 37 | `(anonymous)#24` | src/pwa/pwa-manifest.js:11 |
+| 37 | `renderFlashcard` | src/views/flashcard.js:88 |
+| 36 | `(anonymous)#28` | src/reader/textbook-core.js:200 |
+| 36 | `runUnifiedSearch` | src/search/search-index.js:375 |
+| 36 | `_startIntegratedMockExamImpl` | src/views/exam-sim/exam-sim-session.js:189 |
+| 34 | `recommendFor` | src/exams/cosmetic/formula-rules.js:259 |
+| 34 | `generateIngredientsQuestions` | src/exams/cosmetic/views/trainer-ingredients.js:41 |
+| 33 | `_renderPassGapInsight` | src/views/analysis-view.js:508 |
+| 33 | `buildTodayQueue` | src/views/dashboard-queue.js:52 |
+| 31 | `submitExam` | src/views/exam-sim/exam-sim-arena.js:336 |
+| 30 | `gradeAnswer` | src/content/questions.js:182 |
+| 30 | `(anonymous)#43` | src/study/study-tracker-alloc.js:306 |
+| 30 | `_startWeakExamImpl` | src/views/exam-sim/exam-sim-weak.js:47 |
+| 30 | `(anonymous)#58` | src/views/reader/reader-toolbar.js:273 |
+| 29 | `searchAll` | src/shell/command-palette.js:109 |
+| 29 | `buildWeeklyReportText` | src/study/analysis-engine.js:645 |
+| 29 | `renderQuizQuestion` | src/views/quiz/quiz.js:162 |
+| 29 | `submitComboAnswer` | src/views/trainer-drill-combo.js:166 |
+| 28 | `validateQuestion` | src/content/questions.js:132 |
+| 28 | `auditRowsToSections` | src/exams/carework/audit-import.js:25 |
+| 28 | `buildPrintHtml` | src/exams/cosmetic/views/formula-io.js:37 |
+| 28 | `_parseBlock` | src/written/written-practice.js:78 |
+| 27 | `performTextbookSearch` | src/views/textbook-search.js:170 |
+| 26 | `renderTodayQueue` | src/views/dashboard-queue.js:262 |
+| 26 | `initReaderToolbar` | src/views/reader/reader-toolbar.js:340 |
+| 25 | `buildWeeklyDiagnosisPrompt` | src/ai/ai-client.js:341 |
+| 25 | `(anonymous)#2` | src/content/pdf-utils.js:300 |
+| 25 | `_matchSnippet` | src/search/search-index.js:111 |
+| 25 | `_listRefDocs` | src/search/search-sources.js:255 |
+| 25 | `createEntityCard` | src/views/dictionary.js:358 |
+| 25 | `(anonymous)#46` | src/views/exam-sim/exam-sim-weak.js:114 |
+| 25 | `(anonymous)#53` | src/views/reader/reader-ref-links.js:148 |
+| 25 | `(anonymous)#56` | src/views/reader/reader-toolbar.js:83 |
+| 24 | `checkIngredient` | src/exams/cosmetic/formula-check.js:77 |
+| 24 | `batchOpen` | src/exams/cosmetic/views/formula-batch.js:329 |
+| 24 | `productVisionRead` | src/exams/cosmetic/views/formula-prod-vision.js:111 |
+| 24 | `(anonymous)#40` | src/study/analysis-engine.js:515 |
+| 24 | `_renderStudyRhythmInsight` | src/views/analysis-view.js:289 |
+| 24 | `updateGlobalStats` | src/views/dashboard.js:35 |
+| 24 | `(anonymous)#49` | src/views/listeners/listeners-flashcard.js:186 |
+| 24 | `(anonymous)#50` | src/views/listeners/listeners-quiz.js:88 |
+| 24 | `(anonymous)#54` | src/views/reader/reader-render.js:372 |
+| 24 | `(anonymous)#62` | src/views/trainer-drills.js:648 |
+| 23 | `validateGeneratedItem` | src/ai/gen-gate.js:69 |
+| 23 | `custOpen` | src/exams/cosmetic/views/formula-customer.js:239 |
+| 23 | `scoreCard` | src/reader/textbook-core.js:69 |
+| 23 | `populateSubjectSelects` | src/shell/app-dashboard.js:11 |
+| 23 | `evalStudyMilestones` | src/study/study-tracker-adherence.js:128 |
+| 23 | `buildErrorPayload` | src/telemetry/error-telemetry.js:47 |
+| 23 | `renderReviewList` | src/views/quiz/quiz-review.js:87 |
+| 23 | `getAudioPathForChapter` | src/views/reader/reader-audio.js:35 |
+| 22 | `resolveDefaultExamId` | src/core/exam-context.js:16 |
+| 22 | `initCareIncidentView` | src/exams/carework/views/care-incident.js:199 |
+| 22 | `productOpen` | src/exams/cosmetic/views/formula-prod-detail.js:42 |
+| 22 | `_scrollToQuery` | src/reader/exam-viewer.js:779 |
+| 22 | `parseMarkdown` | src/reader/markdown-parser.js:108 |
+| 22 | `loadStoryEntries` | src/search/search-sources.js:212 |
+| 22 | `navigateToView` | src/shell/router.js:59 |
+| 22 | `runWithLoading` | src/ui-utils.js:59 |
+| 22 | `_renderWeakStatementInsight` | src/views/analysis-view.js:236 |
+| 21 | `handleAuthLanding` | src/auth-sync/auth-view.js:317 |
+| 21 | `_cutsWithTableSplit` | src/content/pdf-utils.js:149 |
+| 21 | `pdfFileFromElStyled` | src/content/pdf-utils.js:437 |
+| 21 | `buildHandover` | src/exams/carework/care-handover.js:15 |
+| 21 | `flowNext` | src/exams/carework/views/care-flow.js:331 |
+| 21 | `buildBatchRecordHtml` | src/exams/cosmetic/views/formula-print.js:52 |
+| 21 | `applyExamBranding` | src/shell/app-shell.js:195 |
+| 21 | `statusRows` | src/shell/notice-check.js:422 |
+| 21 | `chapterFromCid` | src/study/analysis-engine.js:88 |
+| 21 | `computeRecommendations` | src/study/recommendations.js:34 |
+| 20 | `loadSubject` | src/content/data-loader.js:301 |
+| 20 | `writeBatchForm` | src/exams/cosmetic/views/formula-batch-form.js:64 |
+| 20 | `_extractStoryBlocks` | src/search/search-sources.js:119 |
+| 20 | `_commitStep` | src/shell/onboarding.js:95 |
+| 20 | `_startDailyChallengeImpl` | src/views/daily-challenge.js:134 |
+| 20 | `summarizeExamProgress` | src/views/exam-select.js:20 |
+| 20 | `refitPersonalModels` | src/views/personalization-view.js:89 |
+| 20 | `renderTextbookReader` | src/views/textbook-reader.js:300 |
+| 19 | `refreshAuthUI` | src/auth-sync/auth-view.js:47 |
+| 19 | `(anonymous)#5` | src/exams/carework/care-share.js:64 |
+| 19 | `suspectOcrSubstitutions` | src/exams/cosmetic/formula-check.js:320 |
+| 19 | `extractProductFromImages` | src/exams/cosmetic/product-vision.js:246 |
+| 19 | `batchSave` | src/exams/cosmetic/views/formula-batch.js:256 |
+| 19 | `(anonymous)#20` | src/exams/cosmetic/views/formula-list.js:75 |
+| 19 | `parseStorySlots` | src/reader/webtoon-render.js:44 |
+| 19 | `(anonymous)#34` | src/shell/exam-data-boot.js:13 |
+| 19 | `clusterWeakConcepts` | src/study/personalization.js:20 |
+| 19 | `recordStudyActivity` | src/study/study-tracker-activity.js:47 |
+| 19 | `renderSimQuestion` | src/views/exam-sim/exam-sim-arena.js:176 |
+| 19 | `bindAppListeners` | src/views/listeners/listeners-app.js:17 |
+| 19 | `renderExpectedScore` | src/views/score-estimate.js:46 |
+| 19 | `renderWeakReview` | src/views/trainer-drills.js:557 |
+| 18 | `(anonymous)#7` | src/exams/carework/care-share.js:105 |
+| 18 | `initCareCalcView` | src/exams/carework/views/care-calc.js:133 |
+| 18 | `_onSeedFile` | src/exams/carework/views/care-custom-form.js:181 |
+| 18 | `initCareHandoverView` | src/exams/carework/views/care-handover.js:215 |
+| 18 | `(anonymous)#14` | src/exams/cosmetic/views/formula-batch.js:49 |
+| 18 | `updateCalcComputed` | src/exams/cosmetic/views/formula-calc.js:70 |
+| 18 | `_doSearch` | src/reader/html-viewer.js:363 |
+| 18 | `_getSvgIntrinsicSize` | src/reader/mermaid-render.js:138 |
+| 18 | `formatSectionContentForReader` | src/reader/reader-format.js:76 |
+| 18 | `checkIngredientsUpdate` | src/shell/app-shell.js:288 |
+| 18 | `_unitObservationSeqs` | src/study/analysis-engine.js:218 |
+| 18 | `renderDictionary` | src/views/dictionary.js:239 |
+| 18 | `(anonymous)#55` | src/views/reader/reader-render.js:522 |
+| 18 | `parseGradingResponse` | src/written/written-grading.js:182 |
+| 18 | `parseWrittenBank` | src/written/written-practice.js:164 |
+| 17 | `careAiDraft` | src/exams/carework/care-ai.js:53 |
+| 17 | `rowCheckInfo` | src/exams/cosmetic/views/formula-calc.js:38 |
+| 17 | `populateCustomerFields` | src/exams/cosmetic/views/formula-fields.js:17 |
+| 17 | `_scrollToLine` | src/reader/exam-viewer.js:691 |
+| 17 | `parseTextbookContent` | src/reader/textbook-core.js:521 |
+| 17 | `_getSearchIndex` | src/search/search-index.js:226 |
+| 17 | `isNewerNotice` | src/shell/notice-check.js:88 |
+| 17 | `getViewTitles` | src/shell/router.js:16 |
+| 17 | `computePassGap` | src/study/analysis-engine.js:366 |
+| 17 | `computeStudyPattern` | src/study/analysis-engine.js:585 |
+| 17 | `selectExamRiskSession` | src/study/study-tracker-alloc.js:92 |
+| 17 | `requestAiFeedback` | src/views/quiz/quiz.js:546 |
+| 17 | `_subjectAllocHtml` | src/views/study-calendar.js:248 |
+| 17 | `weakRow` | src/views/trainer-drills.js:472 |
+| 17 | `checkShortAnswer` | src/views/trainer.js:33 |
+| 17 | `callProviderLLM` | src/written/written-grading.js:233 |
+| 16 | `pullSync` | src/auth-sync/sync.js:139 |
+| 16 | `batchToCsvRow` | src/exams/cosmetic/views/formula-batch.js:219 |
+| 16 | `updateFoldSummaries` | src/exams/cosmetic/views/formula-fields.js:268 |
+| 16 | `(anonymous)#18` | src/exams/cosmetic/views/formula-hub.js:38 |
+| 16 | `checkSummaryHtml` | src/exams/cosmetic/views/formula-list.js:18 |
+| 16 | `enter` | src/practice-registry.js:142 |
+| 16 | `executePaletteResult` | src/shell/command-palette.js:376 |
+| 16 | `buildFeedbackPayload` | src/shell/feedback.js:112 |
+| 16 | `buildWeakMock` | src/study/personalization.js:68 |
+| 16 | `estimateCompositeScore` | src/study/recommendations.js:348 |
+| 16 | `computeSubjectAllocation` | src/study/study-tracker-alloc.js:285 |
+| 16 | `maybeReportUsageSnapshot` | src/telemetry/usage-telemetry.js:186 |
+| 16 | `updateStreakAndDailyUI` | src/views/daily-challenge.js:36 |
+| 16 | `dictExportCsv` | src/views/dictionary.js:510 |
+| 16 | `loadFlashcards` | src/views/flashcard.js:22 |
+| 16 | `startWeakGenQuiz` | src/views/quiz/quiz-review.js:249 |
+| 16 | `renderChapterContentInternal` | src/views/reader/reader-render.js:621 |
+| 16 | `_chapterAnchorForTitle` | src/views/textbook-reader.js:81 |
+| 16 | `submitOxDrillAnswer` | src/views/trainer-drills.js:346 |
+| 16 | `generateLimitsOptions` | src/views/trainer.js:181 |
+| 15 | `(anonymous)#1` | src/content/docx-utils.js:145 |
+| 15 | `_blockCuts` | src/content/pdf-utils.js:108 |
+| 15 | `sha256hex` | src/core/sha256.js:25 |
+| 15 | `loadProgress` | src/core/state.js:159 |
+| 15 | `buildCareLog` | src/exams/carework/care-log.js:22 |
+| 15 | `clientTrends` | src/exams/carework/care-trend.js:17 |
+| 15 | `buildVisitText` | src/exams/carework/care-visit.js:26 |
+| 15 | `_openEditor` | src/exams/carework/views/care-custom-form.js:54 |
+| 15 | `initCareFinderView` | src/exams/carework/views/care-finder.js:46 |
+| 15 | `initCareHomeView` | src/exams/carework/views/care-home.js:25 |
+| 15 | `careVisitResultOpen` | src/exams/carework/views/care-visit.js:65 |
+| 15 | `boundedEditDistance` | src/exams/cosmetic/formula-check.js:292 |
+| 15 | `applyFormulaDefaults` | src/exams/cosmetic/views/formula-batch-form.js:184 |
+| 15 | `formulaCalcSave` | src/exams/cosmetic/views/formula-calc.js:628 |
+| 15 | `writeCustomerInputs` | src/exams/cosmetic/views/formula-fields.js:200 |
+| 15 | `renderRecommend` | src/exams/cosmetic/views/formula-recommend.js:24 |
+| 15 | `renderIngQuestion` | src/exams/cosmetic/views/trainer-ingredients.js:162 |
+| 15 | `checkMfdsNotice` | src/shell/notice-check.js:285 |
+| 15 | `fetchLatestFor` | src/shell/notice-check.js:353 |
+| 15 | `buildCalcQuestion` | src/study/trainer-calc.js:12 |
+| 15 | `reportEvent` | src/telemetry/usage-telemetry.js:133 |
+| 15 | `exportAnalysisReport` | src/views/analysis-view.js:687 |
+| 15 | `tickSimTimer` | src/views/exam-sim/exam-sim-arena.js:59 |
+| 15 | `startWeakConceptQuiz` | src/views/quiz/quiz-review.js:222 |
+| 15 | `submitQuizAnswer` | src/views/quiz/quiz.js:263 |
+| 15 | `_citationForQuiz` | src/views/quiz/quiz.js:439 |
+| 15 | `_renderCalendarDays` | src/views/study-calendar.js:321 |
+| 15 | `renderGlossaryCards` | src/views/textbook-search.js:386 |
+| 15 | `submitCalcAnswer` | src/views/trainer-calc-practice.js:76 |
+| 14 | `renderPerformanceChart` | src/charts.js:132 |
+| 14 | `buildComboSubjectMd` | src/content/combo-doc.js:44 |
+| 14 | `resolveExamThemeTokens` | src/core/exam-context.js:182 |
+| 14 | `cleanOrphansForSubject` | src/core/state.js:313 |
+| 14 | `syncFacilityClients` | src/exams/carework/care-client-store.js:61 |
+| 14 | `(anonymous)#4` | src/exams/carework/care-roster.js:55 |
+| 14 | `(anonymous)#6` | src/exams/carework/care-share.js:91 |
+| 14 | `(anonymous)#10` | src/exams/carework/doc-md.js:39 |
+| 14 | `careAuditFileLoad` | src/exams/carework/views/care-audit.js:78 |
+| 14 | `initCareAuditView` | src/exams/carework/views/care-audit.js:149 |
+| 14 | `careCalcRun` | src/exams/carework/views/care-calc.js:63 |
+| 14 | `findIngredient` | src/exams/cosmetic/formula-check.js:261 |
+| 14 | `parseExtractionResponse` | src/exams/cosmetic/product-vision.js:203 |
+| 14 | `renderStability` | src/exams/cosmetic/views/formula-calc.js:222 |
+| 14 | `writeCustomerForm` | src/exams/cosmetic/views/formula-customer.js:148 |
+| 14 | `setupPWAInstall` | src/pwa/pwa-install.js:9 |
+| 14 | `onLinkClick` | src/reader/manual-viewer.js:298 |
+| 14 | `_jwSep` | src/reader/markdown-parser.js:53 |
+| 14 | `tryList` | src/reader/markdown-parser.js:467 |
+| 14 | `detectMermaidType` | src/reader/mermaid-utils.js:12 |
+| 14 | `(anonymous)#32` | src/shell/app-shell.js:54 |
+| 14 | `(anonymous)#41` | src/study/analysis-engine.js:589 |
+| 14 | `recordStatementJudgments` | src/study/statement-tracker.js:26 |
+| 14 | `_ensureIndexes` | src/study/weak-items.js:41 |
+| 14 | `buildEventPayload` | src/telemetry/usage-telemetry.js:58 |
+| 14 | `askTextbookQA` | src/views/analysis-view.js:367 |
+| 14 | `(anonymous)#45` | src/views/exam-select.js:120 |
+| 14 | `(anonymous)#51` | src/views/listeners/listeners-simulator.js:34 |
+| 14 | `(anonymous)#52` | src/views/quiz/quiz-review.js:39 |
+| 14 | `submitQuizChoiceAnswer` | src/views/quiz/quiz.js:341 |
+| 14 | `toggleReaderAudio` | src/views/reader/reader-audio.js:424 |
+| 14 | `_showPreview` | src/views/reader/reader-ref-links.js:51 |
+| 14 | `_studyPlanHtml` | src/views/study-calendar.js:184 |
+| 14 | `generateCalcQuestion` | src/views/trainer-calc-practice.js:35 |
+| 14 | `renderOxDrillQuestion` | src/views/trainer-drills.js:309 |
+| 13 | `buildWrongFeedbackPrompt` | src/ai/ai-client.js:54 |
+| 13 | `parseFeedbackResponse` | src/ai/ai-client.js:78 |
+| 13 | `renderRadarChart` | src/charts.js:401 |
+| 13 | `ensureRegistry` | src/content/data-loader.js:70 |
+| 13 | `applyExamTheme` | src/core/exam-context.js:249 |
+| 13 | `deviceLabel` | src/core/utils.js:93 |
+| 13 | `_resultHtml` | src/exams/carework/views/care-flow.js:230 |
+| 13 | `(anonymous)#12` | src/exams/cosmetic/formula-check.js:363 |
+| 13 | `deductStock` | src/exams/cosmetic/material-ledger.js:188 |
+| 13 | `sectionFreshness` | src/exams/cosmetic/views/formula-audit.js:237 |
+| 13 | `buildCheckSnapshot` | src/exams/cosmetic/views/formula-batch-form.js:423 |
+| 13 | `(anonymous)#15` | src/exams/cosmetic/views/formula-batch.js:158 |
+| 13 | `(anonymous)#16` | src/exams/cosmetic/views/formula-calc.js:85 |
+| 13 | `_restoreCalcDraft` | src/exams/cosmetic/views/formula-calc.js:395 |
+| 13 | `getPracticeViewTitles` | src/practice-registry.js:838 |
+| 13 | `showPlanCompare` | src/pro/pro-upgrade.js:236 |
+| 13 | `detectPlatform` | src/pwa/pwa-install.js:61 |
+| 13 | `(anonymous)#25` | src/reader/exam-viewer.js:248 |
+| 13 | `(anonymous)#30` | src/reader/zoom-gestures.js:90 |
+| 13 | `(anonymous)#33` | src/shell/app-shell.js:167 |
+| 13 | `_enforce` | src/shell/banner-mgr.js:50 |
+| 13 | `(anonymous)#38` | src/shell/shortcuts-help.js:105 |
+| 13 | `migrateSm2Record` | src/study/fsrs.js:149 |
+| 13 | `buildTodayQueue` | src/study/personalization.js:90 |
+| 13 | `fitKT` | src/study/personalization.js:246 |
+| 13 | `updateCardSchedule` | src/study/spaced-repetition.js:97 |
+| 13 | `reportClientError` | src/telemetry/error-telemetry.js:88 |
+| 13 | `showUsageStats` | src/telemetry/usage-stats.js:184 |
+| 13 | `showToast` | src/ui-utils.js:267 |
+| 13 | `_weeklyMetrics` | src/views/analysis-view.js:407 |
+| 13 | `buildProductIndex` | src/views/dictionary.js:125 |
+| 13 | `subjectJudgmentSeqs` | src/views/personalization-view.js:66 |
+| 13 | `renderChapterContent` | src/views/textbook-reader.js:486 |
+| 13 | `renderComboQuestion` | src/views/trainer-drill-combo.js:29 |
+| 13 | `_cardHtml` | src/written/written-practice.js:383 |
+| 13 | `(anonymous)#63` | src/written/written-practice.js:498 |
+| 12 | `buildQuizGenPrompt` | src/ai/ai-client.js:434 |
+| 12 | `parseFormExtractResponse` | src/ai/ai-client.js:585 |
+| 12 | `parseCsv` | src/content/csv-utils.js:57 |
+| 12 | `loadDictionary` | src/content/data-loader.js:539 |
+| 12 | `getKnowledgeItems` | src/content/data-loader.js:560 |
+| 12 | `(anonymous)#3` | src/content/pdf-utils.js:335 |
+| 12 | `saveProgress` | src/core/state.js:249 |
+| 12 | `buildIncidentText` | src/exams/carework/care-incident.js:36 |
+| 12 | `buildRecordText` | src/exams/carework/care-log.js:43 |
+| 12 | `(anonymous)#8` | src/exams/carework/care-share.js:245 |
+| 12 | `careFormTplSave` | src/exams/carework/views/care-custom-form.js:108 |
+| 12 | `_bankLoad` | src/exams/carework/views/care-flow.js:131 |
+| 12 | `importCustomRules` | src/exams/cosmetic/formula-rules.js:189 |
+| 12 | `sanitizeCustomer` | src/exams/cosmetic/formula-store.js:106 |
+| 12 | `fileToBase64Jpeg` | src/exams/cosmetic/product-vision.js:110 |
+| 12 | `validateVisionKey` | src/exams/cosmetic/product-vision.js:291 |
+| 12 | `(anonymous)#13` | src/exams/cosmetic/views/formula-batch-form.js:245 |
+| 12 | `updateStockWarn` | src/exams/cosmetic/views/formula-batch-form.js:283 |
+| 12 | `custImportFile` | src/exams/cosmetic/views/formula-customer.js:453 |
+| 12 | `matImportFile` | src/exams/cosmetic/views/formula-material.js:321 |
+| 12 | `buildAuditReportHtml` | src/exams/cosmetic/views/formula-print.js:311 |
+| 12 | `(anonymous)#23` | src/exams/cosmetic/views/formula-products.js:125 |
+| 12 | `mapSourceToRef` | src/pdf-registry.js:1303 |
+| 12 | `(anonymous)#27` | src/reader/manual-viewer.js:198 |
+| 12 | `termHitQuality` | src/search/search-morpheme.js:77 |
+| 12 | `(anonymous)#31` | src/search/search-sources.js:422 |
+| 12 | `findAnchorKey` | src/search/semantic-index.js:149 |
+| 12 | `decodeVectorBundle` | src/search/semantic-index.js:174 |
+| 12 | `renderBanner` | src/shell/notice-check.js:102 |
+| 12 | `viewMfdsNoticeStatus` | src/shell/notice-check.js:444 |
+| 12 | `dictNoticeRow` | src/shell/notice-check.js:535 |
+| 12 | `maybeShowWhatsNew` | src/shell/whats-new.js:108 |
+| 12 | `setReaderNote` | src/study/reader-notes.js:39 |
+| 12 | `(anonymous)#44` | src/views/backup.js:68 |
+| 12 | `(anonymous)#47` | src/views/listeners/listeners-delegation.js:74 |
+| 12 | `(anonymous)#48` | src/views/listeners/listeners-flashcard.js:51 |
+| 12 | `togglePomodoro` | src/views/pomodoro.js:12 |
+| 12 | `_highlightQueryInCard` | src/views/textbook-reader.js:117 |
+| 12 | `openSubjectSection` | src/views/textbook-reader.js:252 |
+| 12 | `renderTextbookSearch` | src/views/textbook-search.js:55 |
+| 12 | `(anonymous)#59` | src/views/textbook-search.js:93 |
+| 12 | `(anonymous)#60` | src/views/textbook-search.js:107 |
+| 12 | `formatSectionContent` | src/views/textbook-search.js:436 |
+| 11 | `parseQaResponse` | src/ai/ai-client.js:517 |
+| 11 | `_getMd` | src/content/data-loader.js:243 |
+| 11 | `generateComboOptions` | src/content/questions.js:98 |
+| 11 | `extractFormPdf` | src/exams/carework/care-form-pdf.js:32 |
+| 11 | `(anonymous)#9` | src/exams/carework/care-visit.js:47 |
+| 11 | `_onTplFile` | src/exams/carework/form-template-editor.js:91 |
+| 11 | `(anonymous)#11` | src/exams/carework/form-template-store.js:65 |
+| 11 | `parseLimitText` | src/exams/cosmetic/formula-check.js:35 |
+| 11 | `addCustomCandidate` | src/exams/cosmetic/formula-rules.js:129 |
+| 11 | `(anonymous)#17` | src/exams/cosmetic/views/formula-customer.js:66 |
+| 11 | `(anonymous)#19` | src/exams/cosmetic/views/formula-io.js:54 |
+| 11 | `(anonymous)#21` | src/exams/cosmetic/views/formula-material.js:85 |
+| 11 | `buildConsentHtml` | src/exams/cosmetic/views/formula-print.js:422 |
+| 11 | `(anonymous)#22` | src/exams/cosmetic/views/formula-products.js:95 |
+| 11 | `shouldShowProMoment` | src/pro/pro-upgrade.js:317 |
+| 11 | `_titleFromPath` | src/reader/exam-viewer.js:61 |
+| 11 | `(anonymous)#26` | src/reader/exam-viewer.js:442 |
+| 11 | `_loadMd` | src/reader/exam-viewer.js:543 |
+| 11 | `_applyLanding` | src/reader/exam-viewer.js:600 |
+| 11 | `(anonymous)#29` | src/reader/webtoon-render.js:99 |
+| 11 | `_glossRepresentatives` | src/search/search-sources.js:452 |
+| 11 | `matchGlossaryDefs` | src/search/search-sources.js:479 |
+| 11 | `(anonymous)#35` | src/shell/feedback.js:311 |
+| 11 | `(anonymous)#36` | src/shell/notice-check.js:259 |
+| 11 | `checkMfdsNoticeNow` | src/shell/notice-check.js:383 |
+| 11 | `(anonymous)#37` | src/shell/router.js:283 |
+| 11 | `normalizeCidAnchor` | src/study/analysis-engine.js:66 |
+| 11 | `(anonymous)#39` | src/study/analysis-engine.js:172 |
+| 11 | `_rangeStats` | src/study/analysis-engine.js:318 |
+| 11 | `computePaceProjection` | src/study/analysis-engine.js:469 |
+| 11 | `weeklyReport` | src/study/personalization.js:208 |
+| 11 | `computeWrongCauseSummary` | src/study/recommendations.js:215 |
+| 11 | `(anonymous)#42` | src/study/recommendations.js:225 |
+| 11 | `getExamPlanStatus` | src/study/study-tracker-plan.js:101 |
+| 11 | `_renderAnalysisOnboarding` | src/views/analysis-view.js:167 |
+| 11 | `renderDailyStep` | src/views/daily-challenge.js:276 |
+| 11 | `selectExamAction` | src/views/exam-select.js:240 |
+| 11 | `chapterForQuestion` | src/views/exam-sim/exam-sim-review.js:92 |
+| 11 | `bindQuizListeners` | src/views/listeners/listeners-quiz.js:9 |
+| 11 | `renderQuizResult` | src/views/quiz/quiz.js:456 |
+| 11 | `_toggleNoteEditor` | src/views/reader/reader-render.js:435 |
+| 11 | `(anonymous)#57` | src/views/reader/reader-toolbar.js:205 |
+| 11 | `saveGoalSettings` | src/views/study-calendar.js:457 |
+| 11 | `renderSectionResultCard` | src/views/textbook-search.js:330 |
+| 11 | `(anonymous)#61` | src/views/trainer-drills.js:214 |
+| 11 | `initTrainer` | src/views/trainer.js:353 |
