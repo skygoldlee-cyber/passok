@@ -92,7 +92,10 @@ export function whoSays(text, prev) {
  * @param {Record<string, { name: string, side: string, img?: string }>} [chars]
  */
 export function renderSlotHtml(slot, chars = DEFAULT_CHARS) {
-    let prev = null, pending = null;
+    /** @type {string|null} */
+    let prev = null;
+    /** @type {string|null} */
+    let pending = null;
     return slot.beats.map(b => {
         if (b.t === 'title') return `<div class="wb-scene wb-scene-title">${esc(b.text)}</div>`;
         if (b.t === 'speaker') { pending = b.who || whoSays(b.text, prev); return ''; }

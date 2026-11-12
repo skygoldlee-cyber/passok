@@ -6,7 +6,7 @@
 import { stableId } from '../core/sha256.js';
 import { escapeRegExp } from '../core/utils.js';
 
-const cleanText = (text) => {
+const cleanText = (/** @type {string} */ text) => {
     if (!text) return '';
     return text
         .replace(/<br\s*\/?>/gi, '\n')
@@ -34,6 +34,7 @@ const GENERIC_SINGLE = new Set([
     '관능평가',
 ]);
 
+/** @param {string} term */
 function isGenericTerm(term) {
     // 단일 범용어 정확 일치만 탈락 — 접미사 규칙은 '보호 기능'(피부 기능),
     // '개봉 후 사용기간', '자격시험 합격 기준' 등 구체 용어까지 오탐해 폐기.
@@ -42,6 +43,7 @@ function isGenericTerm(term) {
 }
 
 // ── 카드 타입 분류 (8가지 후보 유형) ──
+/** @param {string} term @param {string} definition @param {*} _category */
 function classifyCardType(term, definition, _category) {
     const text = `${term} ${definition}`;
     // 벌칙·행정처분 (최우선)
@@ -63,6 +65,7 @@ function classifyCardType(term, definition, _category) {
 }
 
 // ── 카드 중요도 점수 (0-100) ──
+/** @param {string} term @param {string} definition @param {*} isKey @param {string} category @param {string} cardType */
 function scoreCard(term, definition, isKey, category, cardType) {
     // 시험중요도 (0-100)
     let examImportance = 50;
@@ -116,6 +119,7 @@ function scoreCard(term, definition, isKey, category, cardType) {
 }
 
 // ── 난이도 분류 ──
+/** @param {string} definition @param {string} cardType */
 function determineDifficulty(definition, cardType) {
     if (definition.length > 150 || /^[•·]/.test(definition)) return 'hard';
     if (definition.length <= 50 && cardType === 'definition') return 'easy';
@@ -124,6 +128,7 @@ function determineDifficulty(definition, cardType) {
 }
 
 // ── 퀴즈 품질 검사 ──
+/** @param {string} type @param {string} question @param {string} answer */
 function isValidQuiz(type, question, answer) {
     // 정답이 너무 김 (타이핑 불가)
     if (answer.length > 25) return false;
@@ -140,6 +145,7 @@ function isValidQuiz(type, question, answer) {
     return true;
 }
 
+/** @param {string} filename */
 function basenameNoMd(filename) {
     // path.basename(filename, '.md') 동등: 경로 구분자 제거 후 .md 확장자 제거
     const base = String(filename).split(/[\\/]/).pop() || '';
@@ -152,13 +158,14 @@ function basenameNoMd(filename) {
  * @param {string} subjectId
  * @param {string} filename - '1.cosmetic-overview.md' 형태 (카테고리·ID 네임스페이스)
  * @param {string} chapterKey
- * @returns {{cards:Array, quizzes:Array, warnings:Array<{line:number,text:string}>}}
+ * @returns {{cards:*[], quizzes:*[], warnings:Array<{line:number,text:string}>}}
  *   warnings = 🔖기출 마커가 있으나 퀴즈 미생성된 항목 (조용한 손실 감시)
  */
 export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
     const lines = content.split(/\r?\n/);
 
     const cards = [];
+    /** @type {*[]} */
     const quizzes = [];
     const warnings = [];
 
@@ -167,7 +174,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
     // 그래도 겹치면 순번(#n)을 덧붙인다. answer는 정의 본문보다 안정적이므로
     // 진행상황 보존에도 유리하다.
     const quizIdCounts = new Map();
-    const makeQuizId = (term, answer) => {
+    const makeQuizId = (/** @type {string} */ term, /** @type {string} */ answer) => {
         const base = `${term}|${answer}`;
         const n = (quizIdCounts.get(base) || 0) + 1;
         quizIdCounts.set(base, n);
@@ -178,9 +185,12 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
     let currentSection = basenameNoMd(filename);
     let skipSection = false;
     let inTable = false;
+    /** @type {string[]} */
     let tableHeaders = [];
+    /** @type {{cells?: string[], line?: number}[]} */
     let tableRows = [];
 
+    /** @param {string[]} headers @param {{cells?: string[], line?: number}[]} rows */
     const processTable = (headers, rows) => {
         if (rows.length === 0) return;
 
@@ -506,6 +516,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
  * @param {string} content - 마크다운 텍스트
  * @param {string} filename
  * @param {string} subjectDir - filePath 접두 경로 (콘텐츠 루트 + 과목 dir)
+ * @returns {{chapterTitle:string, fileName:string, filePath:string, sections:*[], chapterKey?:string}}
  */
 export function parseTextbookContent(content, filename, subjectDir) {
     const lines = content.split(/\r?\n/);
@@ -598,9 +609,9 @@ export function parseTextbookContent(content, filename, subjectDir) {
  * @param {object} opts
  * @param {string} opts.subjectDir - 챕터 filePath 접두 경로 (필수)
  * @param {'html'|'md'} [opts.filePathMode] - 원본 링크 확장자 (기본 'md')
- * @param {(file:string, stats:{cards:number, quizzes:number, warnings:Array})=>void} [opts.onFile]
+ * @param {(file:string, stats:{cards:number, quizzes:number, warnings:Array<*>})=>void} [opts.onFile]
  *   파일 단위 통계/경고 수집 훅 (빌드 측 _fileStats·_warnings 수집용)
- * @returns {{name:string, cards:Array, quizzes:Array, chapters:Array}}
+ * @returns {{name:string, cards:*[], quizzes:*[], chapters:*[]}}
  */
 export function buildSubjectData(subjectMeta, mdByFile, opts) {
     const subjectDir = opts.subjectDir;

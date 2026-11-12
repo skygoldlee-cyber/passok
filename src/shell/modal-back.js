@@ -19,9 +19,11 @@ const SELF_MANAGED_MARKERS = ['manualOverlay', 'examOverlay'];
 let _depth = 0;          // 현재 쌓아둔 우리 마커 수 (표시 중인 모달 수와 동기화)
 let _consuming = 0;      // 우리가 스스로 소비한 back()의 popstate 구분 카운터
 let _modalPopAt = 0;     // 모달 마커가 popstate를 소비한 최근 시각 — 종료 가드 오인 방지
+/** @type {MutationObserver|null} */
 let _observer = null;
 let _popstateBound = false;
 
+/** @param {Element|null} el */
 function _isOpen(el) {
     // 자신뿐 아니라 상위 체인까지 검사 — cmdk-panel처럼 role="dialog"를 가진
     // 자식이 is-hidden/display:none 상위에 중첩돼 있으면 화면에 없다.

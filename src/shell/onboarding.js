@@ -24,6 +24,7 @@ const RETURNING_USER_HINTS = ['quiz_results', 'fc_memorized', 'study_streak', 's
 let _wizStep = 0;
 
 /** 위저드 단계별 본문 HTML (순수 — DOM 미접근 부분만 추출해 테스트 용이) */
+/** @param {number} step */
 function _stepBody(step) {
     const goals = getStudyGoals();
     const examDate = getExamDate() || '';
@@ -68,6 +69,7 @@ function _stepBody(step) {
 
 const _WIZ_TITLES = ['시작하기', '학습 목표', '준비 완료'];
 
+/** @param {HTMLElement} overlay */
 function _renderStep(overlay) {
     const dialog = overlay.querySelector('.onboarding-dialog');
     if (!dialog) return;
@@ -89,6 +91,7 @@ function _renderStep(overlay) {
 }
 
 /** 현재 단계의 입력값을 저장 — 검증 실패 시 false 반환해 진행 중단 */
+/** @param {HTMLElement} overlay */
 function _commitStep(overlay) {
     if (_wizStep === 0) {
         const input = /** @type {HTMLInputElement|null} */ (overlay.querySelector('#onboarding-exam-date'));
@@ -170,7 +173,7 @@ export function showOnboardingModal() {
             _renderStep(overlay);
         }
     });
-    const onKey = (e) => {
+    const onKey = (/** @type {KeyboardEvent} */ e) => {
         if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); close(); }
     };
     document.addEventListener('keydown', onKey);

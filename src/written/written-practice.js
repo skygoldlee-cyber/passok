@@ -370,7 +370,7 @@ function _save(qid, patch) {
 }
 function _doneCount() { return _questions.filter(q => _entry(q.id).d).length; }
 function _updateProgress() {
-    const el = _overlay.el().querySelector('.wp-progress');
+    const el = _overlay.el()?.querySelector('.wp-progress');
     if (el) el.textContent = `자기평가 완료 ${_doneCount()} / ${_questions.length}`;
 }
 
@@ -420,7 +420,8 @@ function _cardHtml(q) {
 
 /** @param {WrittenBank} bank */
 function _renderBank(bank) {
-    const wrap = _overlay.el().querySelector('.wp-wrap');
+    const wrap = _overlay.el()?.querySelector('.wp-wrap');
+    if (!wrap) return;
     const secHtml = bank.sections.length
         ? bank.sections.map(s =>
             `<div class="wp-sec">${escapeHTML(s.title)}</div>` + s.questions.map(_cardHtml).join('')).join('')
@@ -433,7 +434,8 @@ function _renderBank(bank) {
 }
 
 function _wireCards() {
-    const wrap = _overlay.el().querySelector('.wp-wrap');
+    const wrap = _overlay.el()?.querySelector('.wp-wrap');
+    if (!wrap) return;
     wrap.querySelectorAll('.wpq').forEach((/** @type {*} */ card) => {
         const qid = card.dataset.wpq;
         const q = _questions.find(x => x.id === qid);
@@ -506,7 +508,7 @@ function _wireCards() {
                 if (!res.ok) {
                     if (gbox) gbox.innerHTML = `<div class="g-head">AI 채점 실패</div><div class="g-summary">${escapeHTML(res.error || '')}</div>`;
                     if (res.code === 'nokey') {
-                        _overlay.el().querySelector('.wp-aicfg')?.classList.add('open');
+                        _overlay.el()?.querySelector('.wp-aicfg')?.classList.add('open');
                     }
                     return;
                 }
@@ -595,8 +597,11 @@ export const WrittenPractice = {
         _mdPath = mdPath;
         _stem = (mdPath.split('/').pop() || '').replace(/\.md$/i, '');
         _overlay.ensure();
-        _overlay.el().querySelector('.wp-title').textContent = '주관식 연습';
-        _overlay.el().querySelector('.wp-wrap').innerHTML =
+        const ovEl = /** @type {HTMLElement} */ (_overlay.el());
+        const wpTitle = /** @type {HTMLElement} */ (ovEl.querySelector('.wp-title'));
+        const wpWrap = /** @type {HTMLElement} */ (ovEl.querySelector('.wp-wrap'));
+        wpTitle.textContent = '주관식 연습';
+        wpWrap.innerHTML =
             '<div class="wp-loading"><div class="spinner"></div><p>문항을 불러오는 중…</p></div>';
         _overlay.open();
         try {
@@ -604,10 +609,10 @@ export const WrittenPractice = {
             const bank = parseWrittenBank(md);
             if (!bank.questions.length) throw new Error('### S 문항이 없습니다 — 파일을 확인하세요.');
             _questions = bank.questions;
-            _overlay.el().querySelector('.wp-title').textContent = bank.title || _stem;
+            wpTitle.textContent = bank.title || _stem;
             _renderBank(bank);
         } catch (e) {
-            _overlay.el().querySelector('.wp-wrap').innerHTML =
+            wpWrap.innerHTML =
                 `<div class="wp-error"><p>문항을 불러올 수 없습니다.</p><p>${escapeHTML(e instanceof Error ? e.message : String(e))}</p></div>`;
         }
     },

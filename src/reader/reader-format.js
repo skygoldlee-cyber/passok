@@ -13,6 +13,12 @@ import { lawUrlFor } from '../law-links.js';
 
 // 참조자료 문서명 → law.go.kr 공식 원문(최신 통합본) 링크 조각 (매칭 없으면 빈 문자열)
 // label/title은 호출부가 문맥에 맞게 지정 (원료 DB는 '근거 고시')
+/**
+ * @param {string} name
+ * @param {string} [anchorCls]
+ * @param {string} [label]
+ * @param {string} [titleSuffix]
+ */
 function lawExtLink(name, anchorCls = 'ref-law-ext', label = '원문', titleSuffix = '공식 최신 통합본') {
     const url = lawUrlFor(name);
     if (!url) return '';
@@ -22,6 +28,7 @@ function lawExtLink(name, anchorCls = 'ref-law-ext', label = '원문', titleSuff
 
 // 파일명 → 읽기용 표시명: 확장자·(발령기관)(제N호)(시행일) 꼬리 제거, 언더스코어→공백
 // 예: '화장품법(법률)(제21525호)(20261008).md' → '화장품법'
+/** @param {*} fileName */
 function prettyRefName(fileName) {
     const pretty = decodeURIComponent(String(fileName || ''))
         .replace(/\.(md|pdf|html?)$/i, '')
@@ -34,6 +41,7 @@ function prettyRefName(fileName) {
 
 // 파일명의 (제N호)(YYYYMMDD) 꼬리 → 내부 스냅샷 버전 배지 (없으면 빈 문자열)
 // law.go.kr 링크는 항상 최신 통합본이므로 버전 차이를 명시한다
+/** @param {*} fileName */
 function refSnapshotBadge(fileName) {
     const m = String(fileName || '').match(/\(제?([\d-]+호)\)\s*\((\d{4})(\d{2})(\d{2})\)/);
     if (!m) return '';
@@ -42,6 +50,7 @@ function refSnapshotBadge(fileName) {
 }
 
 // '📚 참조 자료' 섹션 내 동일 링크 라인 중복 제거 (원본 MD의 중복 항목을 렌더링 단계에서 정리)
+/** @param {*} mdText */
 function dedupeRefListSection(mdText) {
     return String(mdText).replace(/(##[^\n]*참조\s*자료[^\n]*\n[\s\S]*?)(?=\n##|\n---\s*\n+##|$)/g, (section) => {
         const seen = new Set();
@@ -55,6 +64,15 @@ function dedupeRefListSection(mdText) {
     });
 }
 
+/**
+ * @param {*} rawContent
+ * @param {*} filePath
+ * @param {*} refPath
+ * @param {*} refFiles
+ * @param {*} refDir
+ * @param {*} glossaryKeywords
+ * @param {*} sectionTitle
+ */
 export function formatSectionContentForReader(rawContent, filePath, refPath, refFiles, refDir, glossaryKeywords, sectionTitle) {
     rawContent = dedupeRefListSection(rawContent);
     let html = parseMarkdown(rawContent, {
@@ -91,7 +109,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             const fullText = inner.replace(/<[^>]+>/g, '').replace(/&[^;]+;/g, ' ').replace(/^[•·]\s*/, '').trim();
             if (!fullText) return match;
             // span 내부를 링크로 감쌈
-            const linkedInner = inner.replace(/<span>([\s\S]*?)<\/span>/, (m, spanContent) => {
+            const linkedInner = inner.replace(/<span>([\s\S]*?)<\/span>/, (/** @type {string} */ m, /** @type {string} */ spanContent) => {
                 return `<span><a href="#" data-toc-jump="${escapeHTML(fullText)}" class="toc-jump-link" style="color:var(--color-primary,#1f6feb);text-decoration:underline dotted;cursor:pointer;">${spanContent}</a></span>`;
             });
             return `<div class="md-list-item" style="padding-left: 0.5rem;">${linkedInner}</div>`;
@@ -101,6 +119,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
     // 기출문제 링크 → 앱 내 HTML 문제집 뷰어(ExamViewer)로 열기
     // 마크다운 파서가 [text](기출문제/과목N_...)를 <a href="기출문제/과목N_...">text</a>로 변환한 후 처리
     // 실제 파일 경로는 DATA_REGISTRY.exams에서 동적 조회 (하드코딩 제거)
+    /** @type {Object.<string, string>} */
     const _examFileMap = {};
     const _activeRegistry = getActiveRegistry();
     if (_activeRegistry && Array.isArray(_activeRegistry.exams)) {
@@ -110,7 +129,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
     }
     html = html.replace(
         /<a href="기출문제\/과목(\d+)[^"]*">([^<]+)<\/a>/g,
-        (match, subjNum, linkText) => {
+        (/** @type {string} */ match, /** @type {string} */ subjNum, /** @type {string} */ linkText) => {
             const examKey = `subject${subjNum}`;
             const fileName = _examFileMap[examKey] || `과목${subjNum}_문제은행.md`;
             const mdPath = PATHS.EXAM_BANK(fileName);
@@ -152,7 +171,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
     );
 
     // 해시 접미를 data-ref-line(#LNN)/data-ref-anchor(슬러그)로 전달 — 뷰어 라인 스크롤용
-    const refHashAttrs = (hash) => {
+    const refHashAttrs = (/** @type {*} */ hash) => {
         if (!hash || hash.length < 2) return '';
         const lineM = hash.match(/^#L(\d+)$/i);
         return lineM ? ` data-ref-line="${lineM[1]}"` : ` data-ref-anchor="${escapeHTML(hash.slice(1))}"`;
@@ -186,7 +205,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
     // (디렉터리 규약은 시험 소유 — '원료' 등을 코드에 고정하지 않는다)
     const ingDocDirs = [...new Set(((getRefTables().REFERENCE_INGREDIENTS) || [])
         .map(e => e && e.dir).filter(Boolean))];
-    const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const escRe = (/** @type {string} */ s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const ingDirAlt = ingDocDirs.map(escRe).join('|');
     const ingDirExclude = ingDocDirs.map(d => escRe(d) + '\\/').join('|');
 
@@ -269,6 +288,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
 
     // 페이지 참조 제거: 다양한 p.NN 패턴 정리
     // mermaid 블록을 플레이스홀더로 보호 (내부 p.NN 패턴이 손상되는 것 방지)
+    /** @type {string[]} */
     const _mermaidPhs = [];
     html = html.replace(/<pre class="mermaid">[\s\S]*?<\/pre>/g, (m) => {
         const i = _mermaidPhs.length;
@@ -303,7 +323,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
 
     // 과목별 참조자료 파일 목록을 출처 라인 아래에 표시
     if (refFiles && refFiles.length > 0 && refDir) {
-        const refLinks = refFiles.map(f => {
+        const refLinks = refFiles.map((/** @type {{type:string, file:string, name:string}} */ f) => {
             const icon = 'fa-file-lines';
             if (f.type === 'md') {
                 const path = PATHS.REFERENCE_FILE(refDir, f.file);
@@ -330,7 +350,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
                 const path = resolveRefPath(entry.file);
                 if (path) {
                     const search = entry.search || '';
-                    result = result.replace(re, (kw) =>
+                    result = result.replace(re, (/** @type {string} */ kw) =>
                         `<a href="#" data-ref-html="${escapeHTML(path)}" data-ref-search="${escapeHTML(search)}" class="keyword-ref-link" style="color:var(--color-primary,#1f6feb);text-decoration:underline dotted;">${escapeHTML(kw)}</a>`
                     );
                 }
@@ -413,6 +433,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             .sort((a, b) => b.keyword.length - a.keyword.length);
         if (sorted.length > 0) {
             // HTML 태그와 기존 <a> 링크, <pre> 블록 전체를 안전한 플레이스홀더로 보호
+            /** @type {string[]} */
             const phs = [];
             let processed = html.replace(/<pre class="mermaid">[\s\S]*?<\/pre>|<a\s[^>]*>[\s\S]*?<\/a>|<[^>]+>/g, (m) => {
                 const i = phs.length;
@@ -431,7 +452,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
                 const before = offset > 0 ? str[offset - 1] : '';
                 const afterIdx = offset + match.length;
                 const after = afterIdx < str.length ? str[afterIdx] : '';
-                const isKorean = (ch) => /[가-힣]/.test(ch);
+                const isKorean = (/** @type {string} */ ch) => /[가-힣]/.test(ch);
                 if (isKorean(before) && isKorean(after)) return match;
                 return `<a href="#glossary-${escapeHTML(item.idxKey)}" data-glossary="${escapeHTML(item.idxKey)}" class="glossary-term-link">${escapeHTML(match)}</a>`;
             });
@@ -457,7 +478,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             // 대분류가 "Ch"로 시작하지 않으면 링크화하지 않음 (챕터별 매핑 표)
             if (!/^Ch\d/i.test(firstCat)) return match;
             // tbody 내의 각 <tr>에서 2번째 <td>를 링크로 변환
-            const linked = tbody.replace(/<tr([^>]*)>([\s\S]*?)<\/tr>/g, (m, trAttr, trContent) => {
+            const linked = tbody.replace(/<tr([^>]*)>([\s\S]*?)<\/tr>/g, (/** @type {string} */ m, /** @type {string} */ trAttr, /** @type {string} */ trContent) => {
                 // <td>들을 분리
                 const tds = [];
                 const tdRe = /<td([^>]*)>([\s\S]*?)<\/td>/g;
@@ -499,6 +520,7 @@ const _STORY_BOUNDARY_START_RE = /^📖\s*┈+\s*이야기\s*┈+/;
 const _STORY_BOUNDARY_END_RE = /^┈+\s*본문\s*┈+\s*📘\s*$/;
 
 /** 인용구가 대사/서사인지 판별 — 따옴표로 시작하거나 에필로그 본문이면 서사 */
+/** @param {Element} el */
 function _isNarrativeQuote(el) {
     const t = (el.textContent || '').trim();
     return /^["“‘']/.test(t) || _STORY_EPILOGUE_RE.test(t);
@@ -512,10 +534,10 @@ export function markStoryNarrative(contentEl) {
     if (!contentEl || !contentEl.children) return;
     // 경계는 리프 문단만 인정 — 파서 부여 클래스 우선, 없으면 라벨 포함 텍스트 폴백.
     // (.reader-subsection-content 같은 컨테이너 오인 방지로 tagName 제한 유지)
-    const isBoundaryStart = (el) => el.tagName === 'P'
+    const isBoundaryStart = (/** @type {Element} */ el) => el.tagName === 'P'
         && (el.classList.contains('story-boundary-start')
             || _STORY_BOUNDARY_START_RE.test((el.textContent || '').trim()));
-    const isBoundaryEnd = (el) => el.tagName === 'P'
+    const isBoundaryEnd = (/** @type {Element} */ el) => el.tagName === 'P'
         && (el.classList.contains('story-boundary-end')
             || _STORY_BOUNDARY_END_RE.test((el.textContent || '').trim()));
 
@@ -630,6 +652,7 @@ export function markStoryNarrative(contentEl) {
 }
 
 /** 시각 숨김(sr-only) 라벨을 삽입한다 — story-sr-label 클래스로 중복 삽입 방지. */
+/** @param {Element} el @param {InsertPosition} position @param {string} text */
 function _insertStorySrLabel(el, position, text) {
     if (!el || !el.insertAdjacentElement) return;
     const sibling = position === 'beforebegin' ? el.previousElementSibling : el.nextElementSibling;

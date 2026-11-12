@@ -10,11 +10,12 @@ import { PATHS } from '../core/paths.js';
 import { trapFocus } from '../ui-utils.js';
 import { bindZoomGestures } from './zoom-gestures.js';
 
+/** @type {Promise<*>|null} */
 let _mermaidLoadPromise = null;
 
 /**
  * vendor/mermaid.min.js를 지연 로딩해 window.mermaid를 반환한다.
- * @returns {Promise<Object>}
+ * @returns {Promise<*>}
  */
 function ensureMermaid() {
     if (window.mermaid) return Promise.resolve(window.mermaid);
@@ -40,7 +41,11 @@ function ensureMermaid() {
  * @param {HTMLElement|null} container
  * @param {string} logPrefix 로그 접두사 ('[reader]', '[search]' 등)
  */
-/** 실패 안내를 노드 앞에 삽입 — 원본 소스는 지우지 않고 유지 (폴백) */
+/**
+ * 실패 안내를 노드 앞에 삽입 — 원본 소스는 지우지 않고 유지 (폴백)
+ * @param {Element} node
+ * @param {string} msg
+ */
 function _mermaidFailNote(node, msg) {
     if (node.querySelector('.mermaid-fail-note')) return;
     const note = document.createElement('div');
@@ -50,6 +55,11 @@ function _mermaidFailNote(node, msg) {
     node.prepend(note);
 }
 
+/**
+ * 컨테이너 내 pre.mermaid 노드를 순차 렌더링한다.
+ * @param {HTMLElement|null} container
+ * @param {string} [logPrefix] 로그 접두사 ('[reader]', '[search]' 등)
+ */
 export function renderMermaidIn(container, logPrefix = '[mermaid]') {
     const nodes = container ? container.querySelectorAll('pre.mermaid') : [];
     if (nodes.length === 0) return;
@@ -59,6 +69,7 @@ export function renderMermaidIn(container, logPrefix = '[mermaid]') {
                 const isLight = document.documentElement.classList.contains('light-theme');
                 const nodeArr = Array.from(nodes);
                 // 각 노드의 diagram 타입 감지하여 클래스 추가
+                /** @type {string[]} */
                 const nodeTypes = [];
                 nodeArr.forEach(node => {
                     const type = detectMermaidType(node.textContent);
@@ -67,7 +78,7 @@ export function renderMermaidIn(container, logPrefix = '[mermaid]') {
                 });
                 let rendered = 0;
                 let failed = 0;
-                const renderNext = (i) => {
+                const renderNext = (/** @type {number} */ i) => {
                     if (i >= nodeArr.length) {
                         if (failed > 0) console.warn(`${logPrefix} mermaid: ${rendered} rendered, ${failed} failed`);
                         return;
@@ -81,7 +92,7 @@ export function renderMermaidIn(container, logPrefix = '[mermaid]') {
                             attachMermaidZoom(/** @type {HTMLElement} */ (node));
                             renderNext(i + 1);
                         })
-                        .catch((e) => {
+                        .catch((/** @type {*} */ e) => {
                             failed++;
                             console.warn(`${logPrefix} mermaid node ${i} failed:`, e?.message || e);
                             _mermaidFailNote(node, '[다이어그램 렌더링 실패 — 아래 원본 코드 참조]');
@@ -95,7 +106,7 @@ export function renderMermaidIn(container, logPrefix = '[mermaid]') {
         })
         .catch((e) => {
             console.warn(`${logPrefix} mermaid load failed:`, e);
-            nodes.forEach(n => _mermaidFailNote(n, '[다이어그램을 불러올 수 없습니다 — 네트워크 확인 후 새로고침. 아래 원본 코드 참조]'));
+            nodes.forEach((/** @type {Element} */ n) => _mermaidFailNote(n, '[다이어그램을 불러올 수 없습니다 — 네트워크 확인 후 새로고침. 아래 원본 코드 참조]'));
         });
 }
 

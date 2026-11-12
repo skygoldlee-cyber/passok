@@ -7,7 +7,9 @@
 
 /** @type {{priority:number, modalId:string, show:()=>void}[]} */
 const _queue = [];
+/** @type {HTMLElement|null} */
 let _activeModal = null;
+/** @type {MutationObserver|null} */
 let _observer = null;
 let _drainScheduled = false;
 
@@ -34,8 +36,7 @@ function _drain() {
             || (typeof el.checkVisibility === 'function'
                 && !el.checkVisibility({ checkVisibilityCSS: true, visibilityProperty: true }));
         if (!gone) return;
-        _observer.disconnect();
-        _observer = null;
+        if (_observer) { _observer.disconnect(); _observer = null; }
         _activeModal = null;
         setTimeout(_drain, 50);
     });

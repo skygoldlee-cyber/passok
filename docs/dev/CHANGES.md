@@ -1,6 +1,18 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(types): noImplicitAny 소진 5차 — src/shell·reader 전량 소진 (Phase 1 지속)
+
+- **2개 디렉터리 29파일 소진**: shell·reader — JSDoc 주석 + typedef 중심. 대형 클러스터: notice-check(79)·exam-viewer(54+하류)·markdown-parser(53)·command-palette(47)·html-viewer(34)·textbook-core(33)·reader-format(33)
+- **typedef 신설**: `RouterCtx`(router — `navigateToView`/`initViewHashRouting`의 공유 컨텍스트가 `object` 비계약이라 인자 전달마다 불일치 나던 것을 명문화)·`PaletteResult`(command-palette — 검색 결과 형태 명문화)·`SearchToc*` 계열(html-viewer)·표 행 `cells?/line?`(textbook-core)
+- **정직한 좁히기·가드**:
+  - `landing.js`의 `el()` 팩토리를 제네릭으로 정정 — `HTMLElement` 반환 시 `.href`/`.type`/`.disabled` 접근이 전부 차단되던 것을 실제 태그 타입으로 해소
+  - `html-viewer`/`manual-viewer`/`written-practice`의 `querySelector`·`overlay.el()` nullable 경계 — 고정 오버레이 마크업은 캐스트, 외부 조회는 `?.`/가드로 정직하게
+  - `feedback` 페이로드 `exam_id ?? null` 정규화, `doc-overlay`의 `_order` 초기화 좁히기
+  - `command-palette`의 `_terms` 반환 `string[]` 명시 — `*` 추론이 하류 콜백 전체를 무변화시키던 것 해소
+- 결과: 잔여 3,274 → **2,749건 (-525)**, 기준선 179 → **150파일**, `check:types` 0 유지. 유닛 전체(1,866)·관련 DOM 222건 통과
+
+
 ## 2026-11-12 feat(types): noImplicitAny 소진 4차 — src/content·search 268건 → 0 (Phase 1 지속)
 
 - **2개 디렉터리 11파일 소진**: content(149)·search(119) — JSDoc 주석 + typedef 중심

@@ -10,7 +10,7 @@ import { mergeUiText } from '../core/uitext-defaults.js';
 
 /**
  * 레지스트리 기반 뷰 타이틀 맵 생성
- * @param {object} registry - DATA_REGISTRY
+ * @param {*} registry - DATA_REGISTRY (uiText 등 동적 필드 접근)
  * @returns {Record<string, {title: string, subtitle: string}>}
  */
 export function getViewTitles(registry) {
@@ -46,6 +46,7 @@ export function getViewTitles(registry) {
 const _leaveGuards = new Map();
 /** @param {string} viewId @param {(target: string) => boolean|Promise<boolean>} guard */
 export function registerViewLeaveGuard(viewId, guard) { _leaveGuards.set(viewId, guard); }
+/** @param {string} viewId */
 export function clearViewLeaveGuard(viewId) { _leaveGuards.delete(viewId); }
 /** 가드 승인 후의 재진입은 재확인하지 않는다 */
 let _leaveApproved = false;
@@ -53,12 +54,7 @@ let _leaveApproved = false;
 /**
  * 타겟 뷰로 전환하고 해당 뷰를 렌더링한다.
  * @param {string} target - 타겟 뷰 ID
- * @param {object} ctx - 렌더링 컨텍스트 (app.js에서 전달)
- * @param {object} ctx.titlesMap - getViewTitles() 결과
- * @param {object} ctx.handlers - 뷰별 렌더 핸들러 함수들
- * @param {function} [ctx.handlers.onExitReader] - 리더 뷰 벗어날 때 (focus mode 해제 등)
- * @param {function} [ctx.handlers.stopReaderAudio] - 오디오 정지
- * @param {Object.<string, function>} [ctx.handlers.viewRenderers] - 뷰 ID → 렌더 함수 맵
+ * @param {RouterCtx} ctx - 렌더링 컨텍스트 (app.js에서 전달)
  */
 export function navigateToView(target, ctx) {
     // E-09·UX-FORM-05 — 이탈 가드: 승인되면 같은 경로로 재진입, 거절 시 뷰 유지
@@ -187,6 +183,16 @@ export function navigateToView(target, ctx) {
    뷰 해시 라우팅 — 현재 뷰를 #/슬러그로 URL에 반영해
    뒤로가기 복귀·딥링크 공유를 지원한다 (UX-NAV 확장)
    ========================================================= */
+/**
+ * 라우터 렌더링 컨텍스트 — app.js에서 조립해 navigateToView/initViewHashRouting에 전달
+ * @typedef {Object} RouterCtx
+ * @property {Object.<string, {title: string, subtitle: string}>} titlesMap - getViewTitles() 결과
+ * @property {Object} handlers - 뷰별 렌더 핸들러 함수들
+ * @property {function} [handlers.onExitReader] - 리더 뷰 벗어날 때 (focus mode 해제 등)
+ * @property {function} [handlers.stopReaderAudio] - 오디오 정지
+ * @property {Object.<string, function>} [handlers.viewRenderers] - 뷰 ID → 렌더 함수 맵
+ */
+/** @type {Object.<string, string>} */
 export const VIEW_HASH_SLUGS = {
     'dashboard-view': 'dashboard',
     'analysis-view': 'analysis',
@@ -214,6 +220,7 @@ function _viewFromLocation() {
     return HASH_SLUG_VIEWS[slug] || null;
 }
 
+/** @param {string} target */
 function syncViewHash(target) {
     if (_hashNavigating) return;
     const slug = VIEW_HASH_SLUGS[target];
@@ -297,7 +304,7 @@ function _handleExitGuardPopstate() {
 /**
  * 해시 라우팅 초기화 — 초기 딥링크 적용 + 뒤로가기/해시 변경 감지.
  * setupNavigation의 routerCtx를 그대로 받아 navigateToView로 디스패치한다.
- * @param {object} ctx - navigateToView와 동일한 렌더링 컨텍스트
+ * @param {RouterCtx} ctx - navigateToView와 동일한 렌더링 컨텍스트
  */
 export function initViewHashRouting(ctx) {
     // switchView(nav-item 없는 뷰 폴백 포함)가 항상 정식 라우터 경로를

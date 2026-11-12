@@ -43,6 +43,7 @@
    * 캐시 스큐/구 SW를 확실히 제거하는 하드 리셋.
    * 모든 캐시 삭제 + SW 전부 해제 후 콜백(리로드). best-effort, 실패해도 리로드는 수행.
    */
+  /** @param {function(): void} done */
   function hardReset(done) {
     const tasks = [];
     try {

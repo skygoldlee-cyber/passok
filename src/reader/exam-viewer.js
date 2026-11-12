@@ -39,11 +39,13 @@ export const ExamViewer = (() => {
     const _cache = makeSessionCache('exam_md_cache_v7_', CACHE.EXAM_CACHE_TTL_MS); // 24시간
 
     // 네비게이션 히스토리 스택 (인용 링크 이동 후 뒤로가기용)
+    /** @type {{mdPath:string, lineNum:number|null, scrollPos:number}[]} */
     const _navStack = []; // [{ mdPath, lineNum, scrollPos }]
 
     /* =========================================================
        마크다운 → HTML 변환 (기존 로직 그대로 — 정상 동작 확인됨)
        ========================================================= */
+    /** @param {string} mdText @param {string} mdPath */
     function _mdToHtml(mdText, mdPath) {
         // ref_md는 #L#### 인용 라인번호 보존을 위해 시각적 줄 그대로 변환된 산출물이라
         // 문장 중간 절단이 많다 — joinWraps로 연속줄을 병합한다 (라인번호는 유지됨)
@@ -55,6 +57,7 @@ export const ExamViewer = (() => {
     /* =========================================================
        파일 경로 → 제목
        ========================================================= */
+    /** @param {*} mdPath */
     function _titleFromPath(mdPath) {
         // 가상 경로 'combo:N' — 복수정답형 문제집 (런타임 직렬화 문서)
         if (typeof mdPath === 'string' && mdPath.startsWith('combo:')) {
@@ -77,6 +80,7 @@ export const ExamViewer = (() => {
     /* =========================================================
        앱 내부 전체화면 오버레이 (팝업/새창 미사용)
        ========================================================= */
+    /** @type {string|null} */
     let _currentMdPath = null;
 
     // 앱의 실제 테마 토큰(--bg-app / --bg-card / --color-text-main / --color-text-muted)을
@@ -304,6 +308,7 @@ body.exam-open{overflow:hidden;}
 
     /* ---- 이어보기: 문서별 마지막 스크롤 위치 (시험 스코프 진도 키, 세션 간 유지) ---- */
     const POS_MIN = 300; // 상단 근처(300px 미만)는 이어보기 대상이 아님
+    /** @type {ReturnType<typeof setTimeout>|null} */
     let _resumeTimer = null;
 
     function _readPosMap() {
@@ -311,6 +316,7 @@ body.exam-open{overflow:hidden;}
         return (map && typeof map === 'object') ? map : {};
     }
 
+    /** @param {string} mdPath @param {number} pos */
     function _savePos(mdPath, pos) {
         const map = _readPosMap();
         if (pos > POS_MIN) map[mdPath] = pos;
@@ -324,6 +330,7 @@ body.exam-open{overflow:hidden;}
     }
 
     // 저장된 위치가 있으면 우하단 '이어보기' 칩 표시 — 클릭 시 해당 지점으로 스크롤
+    /** @param {string} mdPath */
     function _maybeShowResumeChip(mdPath) {
         const overlayEl = _overlay.el();
         const chip = overlayEl && overlayEl.querySelector('#exam-resume-chip');
@@ -334,13 +341,14 @@ body.exam-open{overflow:hidden;}
         const denom = scroll.scrollHeight - scroll.clientHeight;
         if (pos < POS_MIN || denom <= 0) { _hideResumeChip(); return; }
         const pct = Math.min(99, Math.round((pos / denom) * 100));
-        chip.dataset.pos = String(pos);
+        /** @type {HTMLElement} */ (chip).dataset.pos = String(pos);
         go.innerHTML = `<i class="fa-solid fa-bookmark"></i> 이어보기 · ${escapeHTML(pct)}% 지점`;
         chip.classList.remove('is-hidden');
         _resumeTimer = setTimeout(() => chip.classList.add('is-hidden'), 8000);
     }
 
     // 인용 링크 라벨의 내부 좌표(L####)·파일명을 사용자 표시명으로 정리
+    /** @param {*} label @param {*} fileName */
     function _friendlyLinkLabel(label, fileName) {
         const lbl = String(label || '').trim();
         if (/L\d/.test(lbl)) {
@@ -356,10 +364,13 @@ body.exam-open{overflow:hidden;}
         return lbl;
     }
 
+    /** @param {string} title @param {string} bodyHtml @param {string} [mdPath] */
     function _renderBody(title, bodyHtml, mdPath) {
         const el = _ensureOverlay();
-        el.querySelector('#exam-ov-title').textContent = title;
-        const article = el.querySelector('#exam-article');
+        const titleEl = el.querySelector('#exam-ov-title');
+        if (titleEl) titleEl.textContent = title;
+        const article = /** @type {HTMLElement|null} */ (el.querySelector('#exam-article'));
+        if (!article) return;
         article.innerHTML = bodyHtml;
         article.dataset.examMdpath = mdPath || '';
 
@@ -378,7 +389,8 @@ body.exam-open{overflow:hidden;}
         }
 
         // 목차를 본문 앞에 삽입 (오버레이 스크롤 컨테이너 안쪽 상단)
-        const scroll = el.querySelector('.exam-ov-scroll');
+        const scroll = /** @type {HTMLElement|null} */ (el.querySelector('.exam-ov-scroll'));
+        if (!scroll) return;
         mountToc(scroll, article, buildTocHtml(article, {
             idPrefix: 'exam-h-', jumpAttr: 'exam-jump', tocClass: 'exam-ov-toc'
         }), { tocClass: 'exam-ov-toc', jumpAttr: 'exam-jump' });
@@ -386,7 +398,7 @@ body.exam-open{overflow:hidden;}
         article.querySelectorAll('a[href]').forEach(a => {
             const href = a.getAttribute('href') || '';
             if (!/\.pdf$/i.test(href)) return;
-            const pdfFile = decodeURIComponent(href.split('/').pop());
+            const pdfFile = decodeURIComponent(href.split('/').pop() || '');
             const mdPath = resolveRefPath(pdfFile);
             if (mdPath) {
                 a.setAttribute('href', mdPath);
@@ -442,9 +454,9 @@ body.exam-open{overflow:hidden;}
                 e.preventDefault();
                 // 현재 문제집 경로를 기준으로 상대 경로 해석
                 const basePath = a.closest('[data-exam-mdpath]');
-                const currentPath = basePath
+                const currentPath = basePath instanceof HTMLElement
                     ? basePath.dataset.examMdpath
-                    : (a.dataset.examMdpath || '');
+                    : ((a instanceof HTMLElement && a.dataset.examMdpath) || '');
                 let resolved = href;
                 try {
                     if (currentPath) {
@@ -460,8 +472,8 @@ body.exam-open{overflow:hidden;}
                 // #-슬러그 앵커는 문서 로드 후 대응 헤딩으로 스크롤
                 if (headingSlug) {
                     Promise.resolve(opened).then(() => {
-                        const art = _overlay.el().querySelector('#exam-article');
-                        if (art) scrollToHeadingSlug(art, '#' + headingSlug);
+                        const art = _overlay.el()?.querySelector('#exam-article');
+                        if (art) scrollToHeadingSlug(/** @type {HTMLElement} */ (art), '#' + headingSlug);
                     });
                 }
             });
@@ -470,25 +482,31 @@ body.exam-open{overflow:hidden;}
         scroll.scrollTop = 0;
     }
 
+    /** @param {string} title */
     function _showLoading(title) {
         const el = _ensureOverlay();
-        el.querySelector('#exam-ov-title').textContent = title;
+        const titleEl = el.querySelector('#exam-ov-title');
+        if (titleEl) titleEl.textContent = title;
         const scroll = el.querySelector('.exam-ov-scroll');
-        const oldToc = scroll.querySelector('.exam-ov-toc');
+        const oldToc = scroll ? scroll.querySelector('.exam-ov-toc') : null;
         if (oldToc) oldToc.remove();
-        el.querySelector('#exam-article').innerHTML =
+        const articleEl = el.querySelector('#exam-article');
+        if (articleEl) articleEl.innerHTML =
             '<div class="exam-loading"><div class="spinner"></div><p>문제집을 불러오는 중...</p></div>';
         _open();
     }
 
+    /** @param {string} title @param {string} message */
     function _showError(title, message) {
         const el = _ensureOverlay();
-        el.querySelector('#exam-ov-title').textContent = title;
-        el.querySelector('#exam-article').innerHTML =
+        const titleEl = el.querySelector('#exam-ov-title');
+        if (titleEl) titleEl.textContent = title;
+        const articleEl = el.querySelector('#exam-article');
+        if (articleEl) articleEl.innerHTML =
             `<div class="study-section"><h2>문제집을 불러올 수 없습니다</h2>
              <p>${escapeHTML(message)}</p>
              <p><button type="button" class="exam-ov-btn" data-exam-close>홈으로 돌아가기</button></p></div>`;
-        el.querySelector('#exam-article [data-exam-close]').addEventListener('click', close);
+        el.querySelector('#exam-article [data-exam-close]')?.addEventListener('click', () => close());
         _open();
     }
 
@@ -497,12 +515,14 @@ body.exam-open{overflow:hidden;}
        ========================================================= */
 
     // '{contentRoot}/문제은행/과목1_문제은행.md' → '{dataRoot}/exams_md/과목1_문제은행.js'
+    /** @param {string} mdPath */
     function _bundlePathFor(mdPath) {
-        const stem = mdPath.split('/').pop().replace(/\.md$/i, '');
+        const stem = (mdPath.split('/').pop() || '').replace(/\.md$/i, '');
         return dataPath('exams_md/') + stem + '.js';
     }
 
     // 번들(전역 __EXAM_MD__)에서 마크다운 조회 — 없으면 해당 번들 스크립트를 주입 후 재조회
+    /** @param {string} mdPath */
     async function _loadFromBundle(mdPath) {
         if (window.__EXAM_MD__ && typeof pkDecode(window.__EXAM_MD__[mdPath]) === 'string') {
             return pkDecode(window.__EXAM_MD__[mdPath]);
@@ -519,6 +539,7 @@ body.exam-open{overflow:hidden;}
     }
 
     // 프로토콜에 맞춰 마크다운 원문 확보
+    /** @param {string} mdPath */
     async function _loadMd(mdPath) {
         // 'combo:N' — 복수정답형 드릴 데이터(자동 변환 + 수작업 파일럿)를
         // 문제집 MD로 런타임 직렬화. 별도 .md 산출물은 더 이상 없다.
@@ -562,23 +583,32 @@ body.exam-open{overflow:hidden;}
     function _goBack() {
         if (_navStack.length === 0) return;
         const prev = _navStack.pop();
+        if (!prev) return;
         _currentMdPath = prev.mdPath;
         _openExamInternal(prev.mdPath, prev.lineNum, prev.scrollPos);
     }
 
     // 렌더 완료 후 착지점 적용 — 라인 좌표 > 검색어 매치 > 복원 위치 > 이어보기 칩
     // (lineNum이 1이면 검색 측 '매치 없음' 폴백일 수 있어 query를 먼저 시도)
+    /**
+     * @param {number|null|undefined} lineNum
+     * @param {string|null} mdText
+     * @param {number|undefined} restoreScrollPos
+     * @param {*} query
+     * @param {string} mdPath
+     */
     function _applyLanding(lineNum, mdText, restoreScrollPos, query, mdPath) {
-        if (lineNum > 1 || (lineNum && !query)) {
-            _scrollToLine(lineNum, mdText);
+        const ln = lineNum || 0;
+        if (ln > 1 || (ln && !query)) {
+            _scrollToLine(ln, mdText);
             _hideResumeChip();
         } else if (query && _scrollToQuery(query)) {
             _hideResumeChip();
-        } else if (lineNum) {
-            _scrollToLine(lineNum, mdText);
+        } else if (ln) {
+            _scrollToLine(ln, mdText);
             _hideResumeChip();
         } else if (restoreScrollPos != null) {
-            const scroll = _overlay.el().querySelector('.exam-ov-scroll');
+            const scroll = _overlay.el()?.querySelector('.exam-ov-scroll');
             if (scroll) scroll.scrollTop = restoreScrollPos;
             _hideResumeChip();
         } else {
@@ -586,6 +616,12 @@ body.exam-open{overflow:hidden;}
         }
     }
 
+    /**
+     * @param {string} mdPath
+     * @param {number|null|undefined} lineNum
+     * @param {number|undefined} restoreScrollPos
+     * @param {*} [query]
+     */
     async function _openExamInternal(mdPath, lineNum, restoreScrollPos, query) {
         const title = _titleFromPath(mdPath);
 
@@ -594,7 +630,7 @@ body.exam-open{overflow:hidden;}
             _renderBody(title, cached.html, mdPath);
             _open();
             // 오버레이 표시 후 렌더 — mermaid 측정이 display:none 상태에서 부정확할 수 있음
-            renderMermaidIn(_overlay.el().querySelector('#exam-article'), '[exam]');
+            renderMermaidIn(/** @type {HTMLElement|null} */ (_overlay.el()?.querySelector('#exam-article')), '[exam]');
             _updateBackButton();
             _applyLanding(lineNum, cached.mdText, restoreScrollPos, query, mdPath);
             return;
@@ -607,7 +643,7 @@ body.exam-open{overflow:hidden;}
             const bodyHtml = _mdToHtml(mdText, mdPath);
             _cache.set(mdPath, { html: bodyHtml, mdText: mdText || null });
             _renderBody(title, bodyHtml, mdPath);
-            renderMermaidIn(_overlay.el().querySelector('#exam-article'), '[exam]');
+            renderMermaidIn(/** @type {HTMLElement|null} */ (_overlay.el()?.querySelector('#exam-article')), '[exam]');
             _updateBackButton();
             _applyLanding(lineNum, mdText, restoreScrollPos, query, mdPath);
         } catch (err) {
@@ -616,11 +652,16 @@ body.exam-open{overflow:hidden;}
         }
     }
 
+    /**
+     * @param {string} mdPath
+     * @param {number|null|undefined} [lineNum]
+     * @param {*} [query]
+     */
     async function openExam(mdPath, lineNum, query) {
         // 이미 열려있는 상태에서 다른 파일을 여는 경우 (인용 링크 클릭)
         // 현재 문서를 히스토리에 저장
         if (isOpen() && _currentMdPath && _currentMdPath !== mdPath) {
-            const scroll = _overlay.el().querySelector('.exam-ov-scroll');
+            const scroll = _overlay.el()?.querySelector('.exam-ov-scroll');
             const pos = scroll ? scroll.scrollTop : 0;
             _savePos(_currentMdPath, pos); // 나가는 문서도 이어보기 위치 기록
             _navStack.push({
@@ -635,6 +676,7 @@ body.exam-open{overflow:hidden;}
 
     // 복수정답형 문제집 — 유료 제공 예정 기능.
     // combo:N 가상 경로로 열어 _loadMd가 드릴 번들을 문서로 직렬화하게 한다.
+    /** @param {*} subjectNum */
     async function openCombo(subjectNum) {
         proFeatureNotice('combo_set', 'ㄱㄴㄷ 조합 문제집');
         const num = parseInt(subjectNum, 10);
@@ -645,6 +687,7 @@ body.exam-open{overflow:hidden;}
     /* =========================================================
        라인 스크롤 헬퍼 (LNN 링크용) — data-md-line 기반
        ========================================================= */
+    /** @param {number} lineNum @param {string|null} mdText */
     function _scrollToLine(lineNum, mdText) {
         const el = _overlay.el();
         if (!el) return;
@@ -655,6 +698,7 @@ body.exam-open{overflow:hidden;}
         if (!article) return;
 
         // 하이라이트 헬퍼
+        /** @param {Element} target */
         function highlightElement(target) {
             target.scrollIntoView({ behavior: 'smooth', block: 'center' });
             target.classList.add('exam-line-highlight');
@@ -674,12 +718,13 @@ body.exam-open{overflow:hidden;}
         }
 
         // lineNum에 가장 가까운 요소 찾기 (data-md-line <= lineNum 중 최대)
+        /** @type {Element|null} */
         let bestEl = null;
         let bestDiff = Infinity;
 
         // 정확히 일치하는 요소가 있으면 우선 선택
         for (const e of lineEls) {
-            const elLine = parseInt(e.getAttribute('data-md-line'));
+            const elLine = parseInt(e.getAttribute('data-md-line') || '');
             if (elLine === lineNum) {
                 bestEl = e;
                 break;
@@ -697,7 +742,7 @@ body.exam-open{overflow:hidden;}
                 // 테이블 행들 중에서 가장 가까운 행 찾기
                 const rows = bestEl.querySelectorAll('tbody tr');
                 if (rows.length > 0 && mdText) {
-                    const tableStart = parseInt(bestEl.getAttribute('data-md-line'));
+                    const tableStart = parseInt(bestEl.getAttribute('data-md-line') || '');
                     // 테이블 내에서 목표 라인과 가장 가까운 행 찾기
                     let bestRow = rows[0];
                     let minRowDiff = Infinity;
@@ -730,6 +775,7 @@ body.exam-open{overflow:hidden;}
        검색어 스크롤 헬퍼 — 라인 좌표가 없는 참조 링크의 착지점
        (검색 카드가 data-ref-search로 쿼리를 넘긴 경우 사용)
        ========================================================= */
+    /** @param {*} query */
     function _scrollToQuery(query) {
         const el = _overlay.el();
         const article = el && el.querySelector('#exam-article');
@@ -740,9 +786,11 @@ body.exam-open{overflow:hidden;}
 
         // 1순위: 전체 구(phrase) 첫 매치 — 토큰별 분리 매치는 문맥이 어긋날 수 있다.
         // 2순위: 토큰별 첫 매치 중 문서 순서상 가장 앞선 것.
+        /** @type {Object.<string, Node>} */
         const firstHit = {};
         let phraseNode = null;
         const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT);
+        /** @type {Node|null} */
         let node;
         while ((node = walker.nextNode())) {
             const txt = (node.nodeValue || '').toLowerCase();

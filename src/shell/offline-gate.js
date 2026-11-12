@@ -24,9 +24,10 @@ let _offline = false;
 let _observer = null;
 let _installed = false;
 
+/** @param {*} root - Element 또는 document */
 function _mark(root) {
     const scope = root instanceof Element ? root : document;
-    const markOne = (el) => {
+    const markOne = (/** @type {Element} */ el) => {
         if (_offline) {
             el.setAttribute('aria-disabled', 'true');
             el.classList.add('offline-blocked');

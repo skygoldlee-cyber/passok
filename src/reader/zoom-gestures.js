@@ -32,14 +32,14 @@ export function bindZoomGestures(body, { getScale, setScale, getFitScale }) {
     let lastTapY = 0;
 
     const minScale = () => Math.min(0.25, getFitScale() || 1);
-    const clampScale = (s) => Math.min(PINCH_MAX_SCALE, Math.max(minScale(), s));
+    const clampScale = (/** @type {number} */ s) => Math.min(PINCH_MAX_SCALE, Math.max(minScale(), s));
 
     const twoPts = () => {
         const it = [...pts.values()];
         return it.length >= 2 ? [it[0], it[1]] : null;
     };
-    const midOf = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
-    const distOf = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);
+    const midOf = (/** @type {{x:number, y:number}} */ a, /** @type {{x:number, y:number}} */ b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+    const distOf = (/** @type {{x:number, y:number}} */ a, /** @type {{x:number, y:number}} */ b) => Math.hypot(b.x - a.x, b.y - a.y);
 
     body.addEventListener('pointerdown', (e) => {
         pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -86,7 +86,7 @@ export function bindZoomGestures(body, { getScale, setScale, getFitScale }) {
         }
     });
 
-    const release = (e) => {
+    const release = (/** @type {PointerEvent} */ e) => {
         const hadPan = pan;
         const hadPinch = !!pinch;
         pts.delete(e.pointerId);

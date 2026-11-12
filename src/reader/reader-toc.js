@@ -24,11 +24,19 @@ const _STORY_META_PATTERNS = [
     /^출처:\s/,
 ];
 
+/**
+ * @param {*} title
+ * @returns {boolean}
+ */
 export function isStoryMetaSection(title) {
     const t = (title || '').trim();
     return _STORY_META_PATTERNS.some(p => p.test(t));
 }
 
+/**
+ * @param {{sections?: {title: string}[]}} chapter
+ * @returns {*}
+ */
 export function filterMetaSections(chapter) {
     return {
         ...chapter,
@@ -38,7 +46,11 @@ export function filterMetaSections(chapter) {
 
 // --- TOC 계층 구조 헬퍼 (A: 들여쓰기, F: 하위 헤딩) ---
 
-/** 섹션 제목의 번호 패턴에서 TOC 들여쓰기 레벨 감지 */
+/**
+ * 섹션 제목의 번호 패턴에서 TOC 들여쓰기 레벨 감지
+ * @param {*} title
+ * @returns {number}
+ */
 export function getTocLevel(title) {
     const t = (title || '').trim();
     if (/^\d+\.\d+\.\d+/.test(t)) return 3;   // 1.1.1 (3단계)
@@ -47,7 +59,11 @@ export function getTocLevel(title) {
     return 0;                                  // Chapter, 📖, 📊, ✅, 출처, 제N조 등
 }
 
-/** 참조문서 헤더 (01_화장품법 등) — 앞의 NN_ 접두사 제거 */
+/**
+ * 참조문서 헤더 (01_화장품법 등) — 앞의 NN_ 접두사 제거
+ * @param {*} title
+ * @returns {string}
+ */
 export function cleanRefTitle(title) {
     const t = (title || '').trim();
     return t.replace(/^\d+_/, '');
@@ -62,6 +78,7 @@ export function cleanRefTitle(title) {
  */
 export function buildSectionDisplayTitles(sections) {
     const titles = (sections || []).map(s => cleanRefTitle(s.title || ''));
+    /** @type {Object.<string, number>} */
     const counts = {};
     titles.forEach(t => { counts[t] = (counts[t] || 0) + 1; });
     let currentChapter = '';
@@ -74,7 +91,11 @@ export function buildSectionDisplayTitles(sections) {
     });
 }
 
-/** 섹션 본문에서 ### / #### 하위 헤딩 추출 */
+/**
+ * 섹션 본문에서 ### / #### 하위 헤딩 추출
+ * @param {*} content
+ * @returns {{level: number, title: string}[]}
+ */
 export function extractSubHeadings(content) {
     if (!content) return [];
     const lines = content.split('\n');

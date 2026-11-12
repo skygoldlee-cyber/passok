@@ -101,6 +101,7 @@ export function populateExamCards() {
     const subjects = registry.subjects;
     const exams = registry.exams;
     const simHistory = getSimResultsHistory();
+    /** @type {Object.<string, string>} */
     const badgeColors = {};
     subjects.forEach((sub, idx) => {
         badgeColors[sub.key] = EXAM_BADGE_COLORS[idx % EXAM_BADGE_COLORS.length];
@@ -213,7 +214,7 @@ ${allBtnsHtml}
         const sortedGroups = [...groups.entries()]
             .sort((a, b) => (parseInt(a[0], 10) || 999) - (parseInt(b[0], 10) || 999));
         for (const [round, items] of sortedGroups) {
-            const btnsHtml = items.map(w => {
+            const btnsHtml = items.map((/** @type {*} */ w) => {
                 const label = String(w.title || '')
                     .replace(/제?\d+회/g, '').replace(/\(\d{4}\)/g, '').replace(/\d{4}/g, '')
                     .replace(/기출/g, '').replace(/[_—-]+/g, ' ').replace(/\s+/g, ' ').trim() || '전체';

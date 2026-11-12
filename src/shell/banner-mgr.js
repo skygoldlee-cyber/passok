@@ -6,6 +6,7 @@
 // 배너 표시 여부는 각 배너의 기존 토글(classList·style.display)을 존중 — 본 모듈은
 // "표시하려는 배너" 중 상한 초과분만 지연시키는 얇은 감독자다.
 
+/** @type {Object.<string, number>} */
 const PRIORITY = {
     'offline-banner': 10,
     'storage-warning-banner': 10,
@@ -15,10 +16,12 @@ const PRIORITY = {
     'new-version-banner': 30,
 };
 
+/** @type {MutationObserver|null} */
 let _observer = null;
 /** @type {Set<HTMLElement>} — 초과분으로 강제 숨긴 배너 (우선순위 복귀 대기) */
 const _deferred = new Set();
 
+/** @param {HTMLElement} el */
 function _isShown(el) {
     if (!el.isConnected) return false;
     if (el.classList.contains('is-hidden')) return false; // 감독이 지연시킨 배너
@@ -27,6 +30,7 @@ function _isShown(el) {
     return el.style.display !== '' && el.style.display !== 'none';
 }
 
+/** @param {HTMLElement} el */
 function _defer(el) {
     // 표시 클래스·인라인 display를 지우고 is-hidden으로 지연 표시 (check:uistyle 규약)
     el.dataset.bannerDeferred = el.classList.contains('show') || el.classList.contains('is-visible') ? 'class' : 'style';
@@ -35,6 +39,7 @@ function _defer(el) {
     _deferred.add(el);
 }
 
+/** @param {HTMLElement} el */
 function _restore(el) {
     _deferred.delete(el);
     delete el.dataset.bannerDeferred;
