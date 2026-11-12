@@ -1,6 +1,15 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 fix(a11y): 글자 크게·텍스트 확대 배치 결함 일괄 수정 — A-18 신설 + UX-CTL-03 간격 위반 시정
+
+- **A-18 신설 (앱 내 글자 크기 스케일)**: `ui_font_scale` 토글(font-lg 112.5%·font-xl 125%)이 구현돼 있으나 SPEC 행이 없어 추적성 공백 — SC 1.4.4 보완 경로로 등록. A-13 계약(무손실·무오버플로) 공유, `responsive-flow.spec.js`에 font-xl 실측 e2e 추가 (문서 오버플로·탭 라벨 침범·더보기 도달·설정 넘침 단언)
+- **200% 텍스트 배율 결함 수정 (A-13)**: 요소별 폰트 ×2 스트레스 실측(뷰포트 절반 환산과 별개 경로)으로 발견 — `.rec-actions`/`​.rec-item` wrap 부재로 버튼이 뷰포트 밖으로 밀려 문서 수평 오버플로 37px 발생·`.notice-banner-text` min-content 축소 거부로 닫기 버튼 이탈·`.pomo-controls` 균등 분할 버튼 라벨 넘침 → 모두 `flex-wrap`/`min-width:0`로 리플로우 수용. `.flashcard-face`는 고정 크기(3D 플립)라 `overflow-y:auto`로 면 내부 스크롤 수용
+- **글자 크게(font-xl) 결함 수정**: `.mobile-tab-item` 라벨이 이웃 탭 위로 번짐 → `overflow:hidden` + span `max-width:100%`·ellipsis · `.mobile-tab-mode` sticky 오버레이가 탭 바 절반+(223px)을 삼킴 → `max-width:96px` · `.settings-item`이 패널 `max-height` 도달 시 flex 압축으로 라벨 넘침 → `flex-shrink:0` · `.nav-item` nowrap 라벨이 사이드바 밖으로 최대 +77px → nowrap 해제(줄바꿈 보존) + 모바일 가로 탭 대역만 nowrap 유지
+- **UX-CTL-03 간격 위반 시정**: `.quiz-card-footer` gap 부재(버튼 밀착) → `gap-ctl`+wrap · `quiz.js` 오답 리뷰 미니퀴즈 버튼 무공백 인접 → `.quiz-review-actions` 래퍼 신설(인라인 마진 제거) · `analysis-view.js` `.ai-plan-adjust`·`.ai-qa-wrap` 셀렉트/입력↔버튼 밀착 → inline-flex gap + `.analysis-card-btn` `margin-inline-end:gap-ctl` · `usage-stats.js` 사멸 클래스 `.app-confirm-btns` → `.app-confirm-actions` 정정 · `.wrong-relearn-btn` 인접 `margin-left:gap-ctl` · carework 음성 입력 버튼(inc-desc·inc-action·vis-result-summary) 입력↔버튼 4px → `margin-top` 보정으로 gap-ctl 충족. 전수조사 오탐 정리: `.weak-toolbar`·`.notice-status-links`는 부모 flex+gap 보유로 정상
+- **e2e 추가**: `responsive-flow.spec.js`에 ① font-xl 실측 ② 요소 배율 200%(폰트만 확대 — px 고정 레이아웃 위 텍스트 성장 경로) 컨트롤 겹침·문서 오버플로 단언 — 기존 실효 폭 환산 테스트가 못 잡던 결함군 커버
+
+
 ## 2026-11-12 fix(check): 파일명 게이트 .dom.test.js 이중 접미사 판정 수정
 
 - `check_filenames.js`가 stem에서 `.test`만 벗겨 `.dom`이 남아 KEBAB 판정 실패 — 모든 `*.dom.test.js`가 기준선 승계 상태라 신규 DOM 테스트 추가가 차단되던 실결함

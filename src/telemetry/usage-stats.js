@@ -215,7 +215,7 @@ export async function showUsageStats() {
             ${actionRows.length ? html`<h4 class="usage-stats-sub">기능별 사용</h4><table class="usage-stats-table">${actionRows}</table>` : ''}
             ${!viewRows.length && !actionRows.length ? html`<p>아직 기록된 사용 데이터가 없습니다.</p>` : ''}
             <p class="usage-stats-note">이 데이터는 이 기기에만 저장되며 외부로 전송되지 않습니다.</p>
-            <div class="app-confirm-btns">
+            <div class="app-confirm-actions">
                 <button type="button" class="btn btn-secondary app-confirm-cancel" data-reset-usage>초기화</button>
                 <button type="button" class="btn btn-secondary" data-copy-usage>통계 복사</button>
                 <button type="button" class="btn btn-primary app-confirm-ok">확인</button>
@@ -249,7 +249,7 @@ export async function showUsageStats() {
                 ta.readOnly = true;
                 ta.value = text;
                 ta.style.cssText = 'width:100%;height:8rem;margin-top:0.5rem;font-family:monospace;font-size:0.75rem;';
-                dialog.querySelector('.app-confirm-btns')?.before(ta);
+                dialog.querySelector('.app-confirm-actions')?.before(ta);
             }
             const ta = /** @type {HTMLTextAreaElement|null} */ (dialog.querySelector('.usage-export-fallback'));
             ta?.focus();

@@ -320,7 +320,18 @@
 
 .analysis-card-btn {
     margin-top: var(--space-3);
+    /* @spec UX-CTL-03 — 인라인 흐름 속 버튼↔컨트롤 쌍 수평 간격 (공백 문자 ~4px 대신 토큰) */
+    margin-inline-end: var(--gap-ctl);
     min-height: var(--control-h-md);
+}
+
+/* AI 플랜 조정·교재 질의 인라인 컨트롤 쌍 — 셀렉트/입력↔버튼 간격 (@spec UX-CTL-03) + 확대 줄바꿈 (@spec A-13) */
+.ai-plan-adjust,
+.ai-qa-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-ctl);
+    flex-wrap: wrap;
 }
 
 .subject-card {
@@ -527,13 +538,14 @@
 .rec-list { display: flex; flex-direction: column; gap: var(--space-3); }
 .rec-item {
     display: flex; align-items: center; gap: var(--space-3);
+    flex-wrap: wrap; /* @spec A-13 — 텍스트 확대 시 액션 행이 아래로 리플로우 (수평 오버플로 방지) */
     padding: 0.875rem 1rem; border-radius: var(--radius-sm);
     background: var(--bg-muted); border: 1px solid var(--border-color);
 }
 .rec-item span { flex: 1; font-size: var(--text-md-sm); }
 .rec-item .rec-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .rec-item .rec-reason { font-size: var(--text-sm); color: var(--color-text-muted); }
-.rec-actions { display: flex; gap: var(--gap-ctl); flex-shrink: 0; }
+.rec-actions { display: flex; gap: var(--gap-ctl); flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
 .rec-item .btn-sm { padding: 0.35rem 0.875rem; font-size: var(--text-sm); min-height: var(--control-h-md); min-width: var(--control-h-md); }
 .rec-empty { color: var(--color-text-muted); text-align: center; padding: var(--space-5); font-size: var(--text-md-sm); }
 

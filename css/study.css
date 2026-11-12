@@ -41,6 +41,8 @@
     flex-direction: column;
     padding: var(--space-7);
     justify-content: space-between;
+    /* @spec A-13 — 카드는 고정 크기(3D 플립)라 텍스트 확대 시 넘치는 본문은 면 내부 스크롤로 수용 */
+    overflow-y: auto;
 }
 
 .light-theme .flashcard-face {
@@ -455,6 +457,16 @@
 .quiz-card-footer {
     display: flex;
     justify-content: flex-end;
+    gap: var(--gap-ctl);
+    flex-wrap: wrap; /* @spec A-13 — 텍스트 확대 시 버튼이 다음 줄로 */
+}
+
+/* 오답 리뷰 액션 행 — 인접 버튼 밀착 방지 (@spec UX-CTL-03), 확대 시 줄바꿈 (@spec A-13) */
+.quiz-review-actions {
+    display: flex;
+    gap: var(--gap-ctl);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-3);
 }
 
 /* Quiz Results Card */
@@ -543,6 +555,11 @@
     color: var(--color-text-main);
     cursor: pointer;
     transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+/* 인접 재학습 버튼 수평 간격 (@spec UX-CTL-03) — 텍스트 흐름 내 인라인 배치라 부모 gap 대신 인접 여백 */
+.wrong-relearn-btn + .wrong-relearn-btn {
+    margin-left: var(--gap-ctl);
 }
 
 .wrong-cause-btn:hover,

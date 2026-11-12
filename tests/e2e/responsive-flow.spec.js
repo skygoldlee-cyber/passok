@@ -1,5 +1,5 @@
 // tests/e2e/responsive-flow.spec.js — 반응형·내비·폼·PWA 게이팅 실측
-// @spec R-02,R-04,R-05,R-08,R-11,A-13,UX-NAV-06,UX-NAV-07,UX-NAV-15,UX-SCR-01,UX-FORM-01,UX-FORM-02,UX-PWA-01,UX-PWA-02,UX-PWA-05
+// @spec R-02,R-04,R-05,R-08,R-11,A-13,A-18,UX-NAV-06,UX-NAV-07,UX-NAV-15,UX-SCR-01,UX-FORM-01,UX-FORM-02,UX-PWA-01,UX-PWA-02,UX-PWA-05
 // 스크롤 복원·그리드 종열·회전·커맨드 팔레트·스크롤바 이원화·입력 폰트·
 // 터치 피드백·standalone 게이팅·--app-height 실측 — 모두 레이아웃/입력 의존이라 e2e만 유효.
 
@@ -123,6 +123,89 @@ test.describe('반응형·내비게이션 실측', () => {
         // 크롬이 실효 폭에서도 노출됨 — 헤더 설정 버튼 도달 가능
         await expect(page.locator('#settings-toggle-btn')).toBeVisible();
         await page.setViewportSize(cur);
+    });
+
+    test('앱 내 글자 크게(font-xl)에서도 수평 오버플로·컨트롤 침범 없이 도달 가능하다 (A-18)', async ({ page }) => {
+        await boot(page);
+        await page.evaluate(() => document.documentElement.classList.add('font-xl'));
+        await page.waitForTimeout(200);
+        // 문서 수평 오버플로 금지 (UX-NAV-10 — 확대 상태에서도 유지)
+        const docOF = await page.evaluate(() =>
+            document.documentElement.scrollWidth - window.innerWidth);
+        expect(docOF).toBeLessThanOrEqual(1);
+        const vw = await page.evaluate(() => window.innerWidth);
+        const tabBarVisible = await page.locator('.mobile-tab-bar').isVisible().catch(() => false);
+        if (vw <= 900 && tabBarVisible) {
+            // 탭 라벨이 자기 탭 박스 밖으로 번지지 않음 (ellipsis 억제)
+            const spill = await page.evaluate(() =>
+                [...document.querySelectorAll('.mobile-tab-item > span')]
+                    .filter(s => {
+                        const p = s.parentElement.getBoundingClientRect();
+                        const r = s.getBoundingClientRect();
+                        return s.offsetParent !== null && (r.right > p.right + 1 || r.left < p.left - 1);
+                    }).length);
+            expect(spill).toBe(0);
+            // sticky 모드 토글은 설계된 오버레이(UX-NAV-15) — 더보기는 스크롤로 도달 가능해야 함
+            const more = page.locator('#mobile-more-btn');
+            const bar = page.locator('.mobile-tab-bar');
+            await bar.evaluate(el => { el.scrollLeft = el.scrollWidth; });
+            await page.waitForTimeout(200);
+            await expect(more).toBeVisible();
+            const covered = await page.evaluate(() => {
+                const m = document.querySelector('.mobile-tab-bar .mobile-tab-mode')?.getBoundingClientRect();
+                const b = document.querySelector('#mobile-more-btn')?.getBoundingClientRect();
+                if (!m || !b) return 0;
+                return Math.min(b.right, m.right) - Math.max(b.left, m.left);
+            });
+            // 스크롤 끝에서 더보기가 모드 오버레이에 완전히 묻히지 않아야 함 (탭 영역 절반 이상 노출)
+            expect(covered).toBeLessThanOrEqual(30);
+        }
+        // 설정 패널 — 항목이 flex 압축으로 라벨을 흘리지 않음
+        await page.locator('#settings-toggle-btn').click();
+        await page.waitForTimeout(200);
+        const clipped = await page.evaluate(() =>
+            [...document.querySelectorAll('.settings-item')]
+                .filter(el => el.offsetParent !== null && el.scrollHeight > el.clientHeight + 2).length);
+        expect(clipped).toBe(0);
+        await page.locator('#settings-toggle-btn').click();
+        await page.evaluate(() => document.documentElement.classList.remove('font-xl'));
+    });
+
+    test('텍스트 200% 배율(폰트만 확대)에서도 컨트롤이 겹치거나 문서가 넘치지 않는다 (A-13)', async ({ page }) => {
+        // 뷰포트 절반 환산과 별개 경로 — px 고정 레이아웃 위에서 텍스트만 커지는 실확대 근사
+        await boot(page);
+        await page.evaluate(() => document.querySelectorAll('body *').forEach(el => {
+            const fs = parseFloat(getComputedStyle(el).fontSize);
+            if (fs > 0) el.style.fontSize = (fs * 2) + 'px';
+        }));
+        await page.waitForTimeout(250);
+        const r = await page.evaluate(() => {
+            const vis = el => {
+                const b = el.getBoundingClientRect();
+                return b.width > 0 && b.height > 0 && el.offsetParent !== null;
+            };
+            const ctls = [...document.querySelectorAll('button, .btn, select, input:not([type=hidden]), [data-click], [role=button]')].filter(vis);
+            const overlap = [];
+            const seen = new Set();
+            for (const el of ctls) {
+                const p = el.parentElement;
+                if (!p || seen.has(p)) continue;
+                seen.add(p);
+                const sibs = [...p.children].filter(c => vis(c) &&
+                    c.matches('button, .btn, select, input:not([type=hidden]), [data-click], [role=button]') &&
+                    // .mobile-tab-mode는 UX-NAV-15 설계상 sticky 오버레이 — 스크롤 항목이 그 아래를 지나는 것은 의도 (도달성은 A-18 테스트가 검증)
+                    !c.classList.contains('mobile-tab-mode'));
+                for (let i = 0; i < sibs.length - 1; i++) {
+                    const a = sibs[i].getBoundingClientRect(), b = sibs[i + 1].getBoundingClientRect();
+                    if (Math.min(a.right, b.right) - Math.max(a.left, b.left) > 2 &&
+                        Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 2)
+                        overlap.push(p.getAttribute('class') || p.tagName);
+                }
+            }
+            return { docOF: document.documentElement.scrollWidth - window.innerWidth, overlap: [...new Set(overlap)] };
+        });
+        expect(r.docOF).toBeLessThanOrEqual(1);
+        expect(r.overlap).toEqual([]);
     });
 
     test('통합 검색 팔레트가 Ctrl+K로 열리고 검색·실행된다 (UX-NAV-06)', async ({ page }) => {

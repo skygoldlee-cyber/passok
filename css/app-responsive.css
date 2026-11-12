@@ -44,6 +44,11 @@
         gap: var(--space-1-5);
         padding-bottom: var(--space-1);
     }
+
+    /* @spec A-18 — 가로 스크롤 탭 대역은 라벨 1줄 유지 — 스크롤로 수용 (base .nav-item은 줄바꿈 허용) */
+    .nav-menu .nav-item {
+        white-space: nowrap;
+    }
     .nav-menu::-webkit-scrollbar {
         height: 6px;
     }
@@ -331,6 +336,8 @@
         flex: 1 1 0;
         min-width: 0;
         min-height: var(--control-h-lg);
+        /* @spec A-18 — 글자 크게 상태에서 라벨이 이웃 탭 위로 번지지 않도록 박스 안에 억제 */
+        overflow: hidden;
     }
 
     .mobile-tab-item i {
@@ -357,6 +364,10 @@
         color: var(--color-text-main);
         /* 라벨 2줄 줄바꿈 방지 — '대시보드'·'성분 사전'이 390px에서 '드'/'전'만 넘어감 */
         white-space: nowrap;
+        /* @spec A-18 — 글자 크게 시 라벨이 탭 폭을 넘으면 말줄임 (이웃 탭 침범 방지) */
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .mobile-tab-item:active {

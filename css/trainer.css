@@ -370,6 +370,7 @@
     display: flex;
     gap: var(--space-4-5);
     justify-content: center;
+    flex-wrap: wrap; /* @spec A-13 — 텍스트 확대 시 균등 분할 폭을 넘는 버튼이 다음 줄로 */
 }
 
 /* 모바일: 좁은 폭 — 헤더 세로 스택, 패딩·타이머 축소, 버튼 균등 분할 */

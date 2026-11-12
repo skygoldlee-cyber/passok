@@ -896,7 +896,7 @@ body.ui-mode-practice .ui-mode-toggle {
     text-align: left;
     cursor: pointer;
     transition: var(--transition-base);
-    white-space: nowrap;
+    /* @spec A-18 — 글자 크게 시 라벨은 줄바꿈 (잘림·넘침 대신 내용 보존). 모바일 가로 탭 대역은 app-responsive가 nowrap 유지 */
 }
 
 .nav-item .pro-badge {
@@ -1110,6 +1110,8 @@ body.ui-mode-practice .ui-mode-toggle {
     gap: var(--space-3);
     width: 100%;
     min-height: var(--control-h-md); /* 터치 타겟 최소 크기 (A-04, UX-CTL-02) */
+    /* @spec A-18 — 패널 max-height 도달 시 flex 압축으로 라벨이 박스 밖으로 넘치는 것 방지 (패널이 스크롤) */
+    flex-shrink: 0;
     padding: var(--space-2) var(--space-3);
     background: transparent;
     border: none;
@@ -1353,6 +1355,8 @@ body:not(.ui-mode-practice) .tab-group-practice {
 .mobile-tab-bar .mobile-tab-mode {
     flex: 0 0 auto;
     min-width: 56px;
+    /* @spec A-18 — 글자 크게 시 sticky 오버레이가 탭 바를 삼키지 않도록 상한 (라벨은 .mobile-tab-item > span ellipsis) */
+    max-width: 96px;
     position: sticky;
     right: 0;
     background: var(--bg-sidebar);

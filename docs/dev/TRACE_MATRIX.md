@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: b3b60f12bf768ad1
-> 생성: 2026-11-12 · 원천: SPEC.md(705개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: f5dcf037faf1c341
+> 생성: 2026-11-12 · 원천: SPEC.md(706개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 705개 — 문서 연결 469 · 소스 연결 621 · 테스트 연결 667 · 보고서 연결 109
+**커버리지 요약**: 요구사항 706개 — 문서 연결 469 · 소스 연결 623 · 테스트 연결 668 · 보고서 연결 109
 
 ---
 
@@ -715,11 +715,12 @@
 | A-10 | ✅ | 테스트 | — | src/ui-utils.js | tests/dom/common/common-a11y.dom.test.js | — | — |
 | A-11 | ✅ | E2E 테스트 | — | — | tests/dom/common/common-a11y.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
 | A-12 | ✅ | E2E 테스트 | — | — | tests/e2e/a11y.spec.js | — | — |
-| A-13 | ✅ | E2E 테스트 | — | — | tests/e2e/responsive-flow.spec.js | — | — |
+| A-13 | ✅ | E2E 테스트 | — | css/dashboard.css<br>css/exams/cosmetic/formula.css<br>css/study.css<br>css/trainer.css | tests/e2e/responsive-flow.spec.js | — | — |
 | A-14 | ✅ — `ui-utils.js` `markChoiceState`/`clearChoiceState`로 채점 표시에 ✓/✗ 아이콘+sr-only 병용 (훈련소·퀴즈·데일리·OX 공용) · OMR `.solved` 버블에 ✓ 마커+aria-label '풀이 완료' · 히트맵 수치 텍스트·FO-02 배지 텍스트·합격 진단 배지 텍스트는 기충족 | 테스트 | — | — | tests/dom/common/common-a11y.dom.test.js | — | — |
 | A-15 | ✅ — 라인·레이더 SVG에 `role="img"` + 데이터 요약 `aria-label` · 각 포인트에 `tabindex="0"`·`focusable` + 데이터 라벨 `aria-label` (포커스 개방은 A-16 계약 공유) | 테스트 | — | — | tests/dom/study/charts.dom.test.js | — | — |
 | A-16 | ✅ — 차트 툴팁·RR-05 참조 프리뷰 모두 포커스 개방·Esc 해제·pointer-events 활성+유예 시간으로 hoverable·바깥 터치 해제로 persistent (터치 자동 소멸 폐지) · 링크 `aria-describedby` 연결 · 뷰포트 가정 분기 없음 (`(pointer:coarse)`·`(hover:hover)` 기존 준수) | 테스트 | — | — | tests/dom/reader/reader-ref-links.dom.test.js<br>tests/dom/study/charts.dom.test.js | — | — |
 | A-17 | ✅ — router.js 뷰 전환 시 `document.title` = "뷰명 · 앱명" 갱신 + `.main-content` 포커스 이동 · trapFocus의 applyBackgroundInert로 .app-container inert (DOM 제거 시 자동 정리) + 해제 시 트리거 포커스 복귀 · 설정/도움말 드롭다운 Esc → 트리거 복귀 · mobile-more-sheet를 .app-container 밖으로 이동해 inert 커버 | 테스트 | — | — | tests/dom/common/common-a11y.dom.test.js | — | — |
+| A-18 | ✅ — `ui-mode.js` `toggleFontSize`/`applyFontScale` · 탭 라벨 ellipsis 억제·모드 토글 폭 상한(96px)·설정 항목 `flex-shrink:0`·액션 행 `.rec-actions`/`.pomo-controls`/`.quiz-card-footer` flex-wrap·`.notice-banner-text` min-width:0 · `responsive-flow.spec.js` font-xl 실측 (문서 오버플로·라벨 침범·설정 넘침 단언) | E2E 테스트 | — | css/app-responsive.css<br>css/base.css<br>src/shell/ui-mode.js | tests/e2e/responsive-flow.spec.js | — | — |
 
 ## 4.6 반응형 & 모바일
 
@@ -755,7 +756,7 @@
 | OB-01 | `onboarding.js` — 단계 진행 도트·건너뛰기·이전 지원, 목표 검증 실패 시 진행 차단. 학습 실행은 `data-click` 위임(모듈 import 없이 기존 액션 재사용). UX-FB-05의 1회성·재열람 계약은 불변 | 테스트 | — | src/shell/onboarding.js | tests/dom/shell/onboarding-zoom.dom.test.js | — | — |
 | UX-CTL-01 | A-04의 44px를 기본값(`md`)으로 둔 역할 계층. `sm`은 아이콘 버튼·밀집 행·가로모드 밀도 예외, `lg`는 주요 CTA·전폭 액션. 비대상: 테이블 셀·본문 링크·아바타·이미지·진행바·데코레이터 배지·그리드 타일형 내비 카드(`.more-sheet-grid .mobile-tab-item` 등)의 타일 높이 | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-CTL-02 | 터치 대역(모바일+태블릿)은 물론 PC도 동일 높이를 쓰는 것이 원칙 — 높이는 대역이 아니라 역할로 결정. `.btn` 기본 규칙에 min-height를 두어 모바일 미디어쿼리 `!important` 보정에 의존하지 않는다 | E2E 테스트 | — | css/base.css<br>css/dashboard.css<br>css/exam.css<br>css/study.css | tests/e2e/mobile-overflow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
-| UX-CTL-03 | 기존 `.btn-row`는 `var(--gap-group)`. 태블릿·PC 카드 내부는 `gap-group`→`space-4` 팽창 허용, `gap-ctl`은 대역 무관 고정 | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
+| UX-CTL-03 | 기존 `.btn-row`는 `var(--gap-group)`. 태블릿·PC 카드 내부는 `gap-group`→`space-4` 팽창 허용, `gap-ctl`은 대역 무관 고정 | 테스트 | — | css/base.css<br>css/dashboard.css<br>css/exams/carework/care-tools.css<br>css/study.css | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-CTL-04 | 가로 라벨 배치(라벨 좌·컨트롤 우)는 설정 행(`.settings-item` 류)·라벨 자체가 토글 타겟인 칩(`.obs-chip`)에만 허용 — 모바일에서 라벨이 컨트롤 폭을 잠식하고 한국어 라벨 길이 변동에 취약. 라벨 요소가 컨트롤을 감싸는 마크업(`<label>텍스트 <input></label>` — `.care-calc-form label` 패턴)은 동일 수직 리듬을 충족하므로 `.ctl-field`와 동형 허용 | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-CTL-05 | 모바일 하단 고정 제출 액션은 `.btn-row-sticky` +  `position:sticky` + `calc(70px + safe-area)` (UX-NAV-05 일반화). 태블릿·PC는 인플로우 배치만 — 스크롤 없는 화면의 고정바는 무의미 | 테스트 | — | css/app-responsive.css<br>css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-CTL-06 | UX-VFY-06과 동형의 조기 차단 — 토큰 미사용 높이는 커밋 전 탐지. E2E 측 실측은 `touch-targets.json` 기준선(UX-SET-03 확장)이 담당 | 테스트 | — | tools/check/check_mobile_safe.js | tests/unit/app/ux-invariants.test.js | — | — |
