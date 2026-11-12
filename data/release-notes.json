@@ -1,5 +1,17 @@
 [
   {
+    "version": "v20261113-03813b0",
+    "date": "2026-11-13",
+    "notes": [
+      "[리팩터링·complexity] 5라운드 — ai-client 파싱 클러스터·_bankLoad 분해 (330→324)",
+      "[리팩터링·complexity] 4라운드 — formatSectionContentForReader 파이프라인화 (331→330)",
+      "[리팩터링·complexity] 3라운드 — buildWeeklyDiagnosisPrompt·populateSubjectSelects·flowNext 분해 (334→331)",
+      "[리팩터링·complexity] 2라운드 — _requestAi·evaluateStability 분해 (336→334)",
+      "[리팩터링·complexity] 상위 복잡도 3함수 분해 — markStoryNarrative·populateExamCards·care-flow _render (340→336)",
+      "[정리·release] v20261112-f735eae 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261112-f735eae",
     "date": "2026-11-12",
     "notes": [
@@ -223,22 +235,6 @@
       "[문서·dev] E2E 구현 설계 — 운영 Supabase 오염 리스크 명시 + 스펙 정합",
       "[문서·dev] E2E 자동화 가이드를 실제 PASSOK 아키텍처로 정합",
       "[정리·release] v20261110-f23cf2a 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-5e2d802",
-    "date": "2026-11-09",
-    "notes": [
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[수정·carework] 음성 입력 핸들러 뷰별 별칭 — 지연 핸들러 유니크 계약 준수",
-      "[수정·test] carework 리셋 확인 계약 반영 — CSS 규칙 순서·테스트 await·AGENTS 등록",
-      "[기능·carework] 음성 입력 — Web Speech API 말로 입력",
-      "[기능·carework] 실무 모드 첫 진입 3컷 안내 — 기록→생성→인쇄 흐름",
-      "[기능·carework] 방문기록 사진 첨부 Phase 2 — 결과 기록 사진, 문서 말미 그리드",
-      "[기능·carework] 사고보고 사진 첨부 Phase 1 — 최대 3장, 출력물 포함",
-      "[기능·carework] 홈 다음 행동 안내 + PRO 배지·용어 순화",
-      "[기능·carework] 저장 확인 배지 전면 적용 + 파괴 동작 확인 감사",
-      "[기능·carework] 시니어 사용성 — 액션 버튼 더보기 접기 + 반복 입력 자동 기입"
     ]
   }
 ]
