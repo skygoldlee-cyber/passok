@@ -1232,13 +1232,15 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
         ...Object.keys(refDirs).filter(d => /^과목\d+$/.test(d)).sort((a, b) => parseInt(b.slice(2), 10) - parseInt(a.slice(2), 10)),
         ...Object.keys(refDirs).filter(d => !/^과목\d+$/.test(d))
     ];
+    /** @type {Object.<string, string>} */
     const fileToPath = {};
+    /** @type {Object.<string, string>} */
     const registry = {};
     for (const dir of dirPriority) {
         for (const f of refDirs[dir] || []) {
             if (!fileToPath[f]) {
                 const base = f.replace(/\.pdf$/, '');
-                const sub = (t.REF_MD_SUBJECTS || {})[f];
+                const sub = /** @type {Object.<string, string>} */ (t.REF_MD_SUBJECTS || {})[f];
                 fileToPath[f] = `${root}/참조자료/ref_md/${sub ? sub + '/' : ''}${base}/${base}.md`;
                 registry[f] = dir;
             }

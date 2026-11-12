@@ -230,6 +230,7 @@ const _EXAM_LAW_URLS = {
 // 활성 시험의 매칭 테이블 (미등록 시험은 빈 테이블 — 다른 시험 문서로 폴백하지 않음)
 function activeLawUrls() {
   const id = getActiveExamId();
+  if (!id) return [];
   return _EXAM_LAW_URLS[id] || [];
 }
 

@@ -37,6 +37,7 @@ function npmStep(id, script, layer, desc, opts = {}) {
 // ── 기초 품질 단계 (all·ci 프리셋 공용) ────────────────────────────────
 const STEP_LINT = npmStep('lint', 'lint', '품질', 'ESLint — 에러 0 필수', { prio: 'p0' });
 const STEP_TYPES = npmStep('types', 'check:types', '품질', 'tsc --noEmit (jsconfig checkJs — JSDoc 타입 진단)', { prio: 'p0' });
+const STEP_ANY = npmStep('any', 'check:any', '품질', 'noImplicitAny 잔여 래칫 — 파일별 에러 수 단조 감소 (TS 점진 전환 Phase 1, ADR-0015)', { prio: 'p1' });
 const STEP_HTML = nodeStep('html', 'tools/build/build_html.js', '빌드', 'index.html 조립 신선도 (파셜 편집 시 build:html 필요)', { args: ['--check'] });
 const STEP_LANDING = nodeStep('landing', 'tools/build/build_landing.js', '빌드', 'landing.html 조립 신선도 (템플릿·exams.json 편집 시 build:landing 필요)', { args: ['--check'] });
 const STEP_DOMAINMAP = npmStep('domainmap', 'check:domainmap', '분류', '파일 계층 분류 강제 (domain-map.json)', { prio: 'p0' });
@@ -233,7 +234,7 @@ const PRESETS = {
   content: (opts) => contentSteps(opts),
   docs: () => DOCS_STEPS.slice(),
   ci: () => CI_STEPS.slice(),
-  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_HTML, STEP_LANDING, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_VENDOR, STEP_ENV, STEP_UITEXT, STEP_STUDYQ, ...contentSteps(opts)],
+  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_ANY, STEP_HTML, STEP_LANDING, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_VENDOR, STEP_ENV, STEP_UITEXT, STEP_STUDYQ, ...contentSteps(opts)],
   refs: () => REFS_STEPS.slice(),
   freshness: () => FRESH_STEPS.slice(),
   audit: () => AUDIT_STEPS.slice(),

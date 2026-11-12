@@ -36,7 +36,8 @@ function getDeviceId() {
 
 /** 동기화 대상 키 수집 — 정적 키(고객 제외) + daily_completed_* 동적 키, 논리 키 포맷 */
 export function collectSyncPayload() {
-    const keys = [...SYNC_STATIC, ...listScopedKeys(isDailyCompletedKey).map(unscopedKey)];
+    // listScopedKeys는 현재 시험 소속 키만 반환하므로 unscopedKey는 null을 내지 않는다
+    const keys = [...SYNC_STATIC, .../** @type {string[]} */ (listScopedKeys(isDailyCompletedKey).map(unscopedKey))];
     const payload = {};
     keys.forEach(k => {
         const v = safeGetItem(k);

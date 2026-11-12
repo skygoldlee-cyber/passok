@@ -28,7 +28,7 @@ export function checkTextbookEditionBanner() {
   }
   el.classList.remove('is-hidden');
   document.getElementById('textbook-edition-dismiss')?.addEventListener('click', () => {
-    setItem(STORAGE_KEYS.TEXTBOOK_EDITION_SEEN, edition);
+    setItem(STORAGE_KEYS.TEXTBOOK_EDITION_SEEN, /** @type {string} */ (edition));
     el.classList.add('is-hidden');
   }, { once: true });
 }

@@ -15,5 +15,6 @@ const _EXAM_GLOSSARY_INDEX = {"cosmetic":{"glossary:과목1:시행령":{"keyword
 /** 활성 시험의 용어집 인덱스 (인덱스 미생성 시험은 빈 객체 — 다른 시험 용어로 폴백하지 않음) */
 export function getGlossaryIndex() {
     const id = getActiveExamId();
+    if (!id) return {};
     return _EXAM_GLOSSARY_INDEX[id] || {};
 }

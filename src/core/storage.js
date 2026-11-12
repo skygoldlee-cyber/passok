@@ -25,7 +25,24 @@
 
 import { scopedKey, unscopedKey } from './exam-context.js';
 
-/** 기본 백엔드: 동기 localStorage */
+/**
+ * 저장소 백엔드 계약 — 파일 헤더의 인터페이스 주석과 1:1 대응.
+ * Async 메서드는 선택 — 미구현 시 동기 구현을 Promise로 래핑한다.
+ * @typedef {Object} StorageBackend
+ * @property {string} name
+ * @property {boolean} sync - 동기 API 지원 여부
+ * @property {(k: string) => string|null} getItem
+ * @property {(k: string, v: *) => void} setItem - 값은 저장 시 문자열화된다 (숫자 등 비문자열도 허용)
+ * @property {(k: string) => void} removeItem
+ * @property {() => string[]} keys - 실제(스코프된) 키 전체 열거
+ * @property {(k: string) => Promise<string|null>} [getItemAsync]
+ * @property {(k: string, v: *) => Promise<void>} [setItemAsync]
+ * @property {(k: string) => Promise<void>} [removeItemAsync]
+ * @property {() => Promise<string[]>} [keysAsync]
+ */
+
+/** 기본 백엔드: 동기 localStorage
+ * @returns {StorageBackend} */
 export function createLocalStorageBackend() {
     return {
         name: 'localStorage',
@@ -44,19 +61,24 @@ export function createLocalStorageBackend() {
     };
 }
 
+/** @type {StorageBackend} */
 let _backend = createLocalStorageBackend();
 
-/** 백엔드 교체 (테스트·향후 IndexedDB/SQLite 이행용). 현재 백엔드를 반환 */
+/** 백엔드 교체 (테스트·향후 IndexedDB/SQLite 이행용). 현재 백엔드를 반환
+ * @param {StorageBackend} backend @returns {StorageBackend} */
 export function setStorageBackend(backend) {
     _backend = backend;
     return _backend;
 }
+/** @returns {StorageBackend} */
 export function getStorageBackend() { return _backend; }
 
 // 동기화용 쓰기 훅 — sync.js가 등록 (순환 import 방지용 콜백 패턴)
 /** @type {((logicalKey: string) => void)|null} */
 let _dataWriteHook = null;
+/** @param {((logicalKey: string) => void)|null} fn */
 export function setDataWriteHook(fn) { _dataWriteHook = fn; }
+/** @param {string} logicalKey */
 function _notifyWrite(logicalKey) {
     if (_dataWriteHook) { try { _dataWriteHook(logicalKey); } catch (_) { /* noop */ } }
 }
@@ -64,6 +86,7 @@ function _notifyWrite(logicalKey) {
 // 저장소 오류 훅 — state.js가 state._storageUnavailable 플래그 동기화용으로 등록
 /** @type {(() => void)|null} */
 let _errorHook = null;
+/** @param {(() => void)|null} fn */
 export function setStorageErrorHook(fn) { _errorHook = fn; }
 
 // 저장 실패 경고를 1회만 출력하기 위한 모듈 스코프 플래그 (반복 스팸 방지)
@@ -71,6 +94,7 @@ let _warnEmitted = false;
 let _unavailable = false;
 export function isStorageUnavailable() { return _unavailable; }
 
+/** @param {*} errName — 예외 name 또는 false (호출부가 `e instanceof Error && e.name` 형태로 전달) */
 function _markUnavailable(errName) {
     _unavailable = true;
     if (!_warnEmitted) {
@@ -81,6 +105,7 @@ function _markUnavailable(errName) {
     if (_errorHook) { try { _errorHook(); } catch (_) { /* noop */ } }
 }
 
+/** @param {string} op */
 function _syncUnsupported(op) {
     console.warn(`[Storage] 백엔드(${_backend.name})는 동기 ${op}를 지원하지 않습니다 — ${op}Async를 사용하세요.`);
     return null;
@@ -90,6 +115,7 @@ function _syncUnsupported(op) {
 // 동기 API (scoped 논리 키 → 백엔드 실제 키)
 // ---------------------------------------------------------------------------
 
+/** @param {string} key @returns {string|null} */
 export function getItem(key) {
     if (!_backend.sync) return _syncUnsupported('getItem');
     try {
@@ -99,6 +125,7 @@ export function getItem(key) {
     }
 }
 
+/** @param {string} key @param {*} value - 저장 시 문자열화 (숫자 등 비문자열 허용) @returns {boolean} */
 export function setItem(key, value) {
     if (!_backend.sync) { _syncUnsupported('setItem'); return false; }
     try {
@@ -111,6 +138,7 @@ export function setItem(key, value) {
     }
 }
 
+/** @param {string} key */
 export function removeItem(key) {
     if (!_backend.sync) { _syncUnsupported('removeItem'); return; }
     try {
@@ -118,7 +146,8 @@ export function removeItem(key) {
     } catch (e) { /* noop */ }
 }
 
-/** listKeys()가 반환한 실제(스코프 포함) 키를 삭제 — 재스코프 없이 그대로 백엔드에 전달 */
+/** listKeys()가 반환한 실제(스코프 포함) 키를 삭제 — 재스코프 없이 그대로 백엔드에 전달
+ * @param {string} actualKey */
 export function removeItemRaw(actualKey) {
     if (!_backend.sync) { _syncUnsupported('removeItemRaw'); return; }
     try {
@@ -160,6 +189,7 @@ export function getJSON(key, fallback = null) {
     }
 }
 
+/** @param {string} key @param {*} value @returns {boolean} */
 export function setJSON(key, value) {
     try {
         return setItem(key, JSON.stringify(value));
@@ -180,6 +210,7 @@ export function setJSON(key, value) {
 export function setMany(entries) {
     if (!_backend.sync) { _syncUnsupported('setMany'); return false; }
     const keys = Object.keys(entries);
+    /** @type {Object.<string, string|null>} */
     const prev = {};
     for (const k of keys) prev[k] = getItem(k);
 
@@ -198,7 +229,8 @@ export function setMany(entries) {
     return true;
 }
 
-/** setMany의 JSON 판 — 값은 직렬화 가능한 객체 */
+/** setMany의 JSON 판 — 값은 직렬화 가능한 객체
+ * @param {Object.<string, *>} entries @returns {boolean} */
 export function setJSONMany(entries) {
     /** @type {Object.<string, string>} */
     const serialized = {};
@@ -216,6 +248,7 @@ export function setJSONMany(entries) {
 // 신규 코드는 이 계열 사용 권장.
 // ---------------------------------------------------------------------------
 
+/** @param {string} key @returns {Promise<string|null>} */
 export async function getItemAsync(key) {
     try {
         if (_backend.getItemAsync) return await _backend.getItemAsync(scopedKey(key));
@@ -226,6 +259,7 @@ export async function getItemAsync(key) {
     }
 }
 
+/** @param {string} key @param {*} value @returns {Promise<boolean>} */
 export async function setItemAsync(key, value) {
     try {
         if (_backend.setItemAsync) {
@@ -242,6 +276,7 @@ export async function setItemAsync(key, value) {
     }
 }
 
+/** @param {string} key @returns {Promise<void>} */
 export async function removeItemAsync(key) {
     try {
         if (_backend.removeItemAsync) return await _backend.removeItemAsync(scopedKey(key));
@@ -250,6 +285,11 @@ export async function removeItemAsync(key) {
     } catch (e) { /* noop */ }
 }
 
+/**
+ * listKeys의 비동기 저장소 버전 — keysAsync 미구현 백엔드는 동기 keys()로 폴백.
+ * @param {(key: string) => boolean} matchUnscoped - 비접두사 키명을 받는 매처
+ * @returns {Promise<string[]>}
+ */
 export async function listKeysAsync(matchUnscoped) {
     const out = [];
     try {
@@ -278,6 +318,7 @@ export async function getJSONAsync(key, fallback = null) {
     }
 }
 
+/** @param {string} key @param {*} value @returns {Promise<boolean>} */
 export async function setJSONAsync(key, value) {
     try {
         return await setItemAsync(key, JSON.stringify(value));

@@ -113,7 +113,7 @@ function _cacheSet(key, result) {
         if (keys.length >= CACHE_MAX) {
             const aged = keys.map(k => {
                 let ts = 0;
-                try { ts = JSON.parse(getItem(unscopedKey(k)) || '{}').ts || 0; } catch { ts = 0; }
+                try { ts = JSON.parse(getItem(/** @type {string} */ (unscopedKey(k))) || '{}').ts || 0; } catch { ts = 0; }
                 return { k, ts };
             }).sort((a, b) => a.ts - b.ts);
             aged.slice(0, keys.length - CACHE_MAX + 1).forEach(({ k }) => removeItemRaw(k));

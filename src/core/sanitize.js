@@ -14,6 +14,7 @@
 // HTML 특수문자 → 안전한 엔티티 매핑.
 // 엔티티 리터럴을 소스에 직접 적으면 편집/저장 과정에서 디코딩될 수 있으므로
 // String.fromCharCode로 생성합니다. (결과는 동일: & < > " ')
+/** @type {Object.<string, string>} */
 const HTML_ESCAPE_MAP = {
     '&': '&' + 'amp;',
     '<': '&' + 'lt;',

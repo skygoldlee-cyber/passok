@@ -14,12 +14,14 @@ const K = new Uint32Array([
     0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 ]);
 
+/** @param {string} str */
 function utf8Bytes(str) {
     // TextEncoder는 브라우저/Node 모두 표준. UTF-8 인코딩이 Node crypto의 기본 문자열 인코딩과 동일.
     return new TextEncoder().encode(str);
 }
 
-/** 문자열의 SHA-256을 소문자 16진 문자열로 반환 (Node crypto.createHash('sha256').digest('hex')와 동일) */
+/** 문자열의 SHA-256을 소문자 16진 문자열로 반환 (Node crypto.createHash('sha256').digest('hex')와 동일)
+ * @param {string} str */
 export function sha256hex(str) {
     const msg = utf8Bytes(str);
     const bitLen = msg.length * 8;
@@ -72,17 +74,20 @@ export function sha256hex(str) {
     return [h0, h1, h2, h3, h4, h5, h6, h7].map(toHex8).join('');
 }
 
+/** @param {number} x @param {number} n */
 function rotr(x, n) {
     return ((x >>> n) | (x << (32 - n))) >>> 0;
 }
 
+/** @param {number} x */
 function toHex8(x) {
     return (x >>> 0).toString(16).padStart(8, '0');
 }
 
 const ID_HASH_LEN = 6;
 
-/** 빌드 id_factory.js의 stableId와 동일: `${subjectKey}_${type}_${sha256(subjectKey|chapterKey|term)[:6]}` */
+/** 빌드 id_factory.js의 stableId와 동일: `${subjectKey}_${type}_${sha256(subjectKey|chapterKey|term)[:6]}`
+ * @param {string} subjectKey @param {string} chapterKey @param {string} type @param {string} term */
 export function stableId(subjectKey, chapterKey, type, term) {
     const raw = `${subjectKey}|${chapterKey}|${term}`;
     return `${subjectKey}_${type}_${sha256hex(raw).substring(0, ID_HASH_LEN)}`;

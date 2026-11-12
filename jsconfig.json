@@ -22,7 +22,8 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "useUnknownInCatchVariables": true,
-    // noImplicitAny는 백로그(~2800건)가 커서 보류 — 모듈 단위 소진 후 상향 예정
+    // noImplicitAny는 잔여 백로그 때문에 보류 — check:any 게이트(tools/check/check_noimplicitany.js
+    // + noimplicitany_baseline.json)가 파일별 에러 수 단조 감소를 강제하며 모듈 단위 소진 중 (Phase 1)
     "skipLibCheck": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "types": []

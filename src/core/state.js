@@ -123,6 +123,7 @@ export const state = {
 // localStorage 접근 자체가 예외를 던질 수 있으므로, 앱 흐름이 중단되지 않도록 감싼다.
 // - 읽기 실패: null 반환(값 없음과 동일 취급)
 // - 쓰기 실패: false 반환 + 1회 콘솔 경고(반복 스팸 방지)
+/** @param {string} key @returns {string|null} */
 export function safeGetItem(key) {
     return storageGetItem(key);
 }
@@ -130,10 +131,12 @@ export function safeGetItem(key) {
 // 동기화용 쓰기 훅 — sync.js가 등록 (실제 등록지는 storage.js, 하위호환용 재노출)
 export { setDataWriteHook } from './storage.js';
 
+/** @param {string} key @param {*} value - 저장 시 문자열화 (숫자 등 비문자열 허용) @returns {boolean} */
 export function safeSetItem(key, value) {
     return storageSetItem(key, value);
 }
 
+/** @param {string} key */
 export function safeRemoveItem(key) {
     storageRemoveItem(key);
 }
@@ -160,13 +163,13 @@ export function loadProgress() {
 
     if (memorized) {
         try {
-            JSON.parse(memorized).forEach(id => state.memorizedCards.add(id));
+            /** @type {string[]} */ (JSON.parse(memorized)).forEach(id => state.memorizedCards.add(id));
         } catch (e) { console.error(e); }
     }
 
     if (weak) {
         try {
-            JSON.parse(weak).forEach(id => state.weakCards.add(id));
+            /** @type {string[]} */ (JSON.parse(weak)).forEach(id => state.weakCards.add(id));
         } catch (e) { console.error(e); }
     }
 
@@ -297,12 +300,16 @@ export function saveProgress() {
         updateGlobalStats();
     }
     // 저장 실패 시 사용자 경고 배너 표시 (app.js에서 window.checkStorageWarning으로 노출)
-    if (state._storageUnavailable && typeof window !== 'undefined' && typeof window['checkStorageWarning'] === 'function') {
-        window['checkStorageWarning']();
+    if (state._storageUnavailable && typeof window !== 'undefined' && typeof window.checkStorageWarning === 'function') {
+        window.checkStorageWarning();
     }
 }
 
 // 특정 과목 데이터가 동적 로드되었을 때 해당 과목의 고아 ID를 청소하는 함수 (지연 로딩 대응)
+/**
+ * @param {string} subjKey
+ * @param {{cards?: Array<{id:string}>, quizzes?: Array<{id:string}>}|null|undefined} subjData
+ */
 export function cleanOrphansForSubject(subjKey, subjData) {
     if (!subjData) return;
 
@@ -316,6 +323,7 @@ export function cleanOrphansForSubject(subjKey, subjData) {
     // (data/id_migration.js — build_id_migration.js가 스냅샷 비교로 생성)
     const mig = (typeof window !== 'undefined' && window.ID_MIGRATION_MAP) || {};
     let migrated = 0;
+    /** @param {string} id @param {Set<string>} validSet @param {string} prefix */
     const migrateId = (id, validSet, prefix) => {
         const nid = mig[id];
         return (nid && id.startsWith(prefix) && validSet.has(nid)) ? nid : null;

@@ -62,6 +62,8 @@ declare global {
     /** app.js 가 노출하는 과목 바로가기 (command-palette 등) */
     startSubjectStudy?: (subject: string) => void;
     startSubjectQuiz?: (subject: string) => void;
+    /** app.js 가 노출하는 저장소 불가 경고 배너 표시 (state.js 저장 실패 경로) */
+    checkStorageWarning?: () => void;
     /** exam-history.js 가 노출하는 모의고사 성적 기록 함수 */
     saveExamResultToHistory?: (examId: string, score: number, total: number, subjectRates: any) => void;
     /** 복수정답형 파일럿 번들 (data/drills/combo_pilot.js) */

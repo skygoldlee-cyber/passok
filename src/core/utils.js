@@ -7,6 +7,12 @@
 /** 복수정답형 선지 지시 기호 — 시뮬레이터·드릴·보충번들 공용 (빌드 측도 require(ESM)로 이 값을 사용) */
 export const OPTION_INDICATORS = ['①', '②', '③', '④', '⑤'];
 
+/**
+ * 배열 셔플 (비파괴 — 새 배열 반환)
+ * @template T
+ * @param {T[]} arr
+ * @returns {T[]}
+ */
 export function shuffle(arr) {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {
@@ -20,13 +26,15 @@ export function shuffle(arr) {
  * 로컬 날짜를 'YYYY-MM-DD' 키로 반환 — 저장소 날짜 버킷의 표준 형식.
  * toISOString().slice(0,10)은 UTC라 KST 00~09시에 하루 전으로
  * 버킷되는 오류가 있으므로 로컬 성분으로 조립한다.
+ * @param {Date} d
  */
 export function localDateKey(d) {
-    const pad = n => String(n).padStart(2, '0');
+    const pad = /** @param {number} n */ n => String(n).padStart(2, '0');
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
-/** 오늘 날짜를 'YYYY-MM-DD' 키로 반환 (진도/스트릭/백업 파일명 공용) */
+/** 오늘 날짜를 'YYYY-MM-DD' 키로 반환 (진도/스트릭/백업 파일명 공용)
+ * @param {Date} [date] */
 export function todayKey(date) {
     return localDateKey(date || new Date());
 }
@@ -35,9 +43,10 @@ export function todayKey(date) {
  * Date → 'YYYY-MM-DDTHH:MM' 로컬 시각 문자열 — 프로젝트 시각 저장의 표준 형식.
  * toISOString()은 UTC라 표시 슬라이스 시 시간·날짜가 어긋나므로
  * 사용자에게 보이는 타임스탬프는 모두 이 naive 로컬 형식으로 저장한다.
+ * @param {Date} [d]
  */
 export function localDateTime(d = new Date()) {
-    const pad = n => String(n).padStart(2, '0');
+    const pad = /** @param {number} n */ n => String(n).padStart(2, '0');
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
@@ -50,6 +59,7 @@ export function localDateTimeNow() {
  * 저장 시각 문자열의 표시용 변환 — 'YYYY-MM-DD HH:MM' 로컬 시각.
  * Z/오프셋이 붙은 절대시각(구버전 ISO 저장분)은 로컬로 변환하고,
  * 표준 형식인 naive 로컬은 그대로 잘라 표시한다.
+ * @param {*} v
  */
 export function fmtLocalDateTime(v) {
     if (typeof v !== 'string' || !v) return '—';
@@ -63,6 +73,7 @@ export function fmtLocalDateTime(v) {
 /**
  * FNV-1a 32비트 해시 → 8자리 hex — 내용 무결성 확인용 (보안 해시 아님).
  * 같은 입력은 항상 같은 값 — 출력 증적의 변조 여부 대조용 결정적 해시.
+ * @param {*} str
  */
 export function fnv1aHex(str) {
     let h = 0x811c9dc5;
@@ -77,6 +88,7 @@ export function fnv1aHex(str) {
 /**
  * navigator.userAgent → 'Chrome · Windows' 식의 짧은 환경 라벨.
  * 인쇄 문서의 출력 기록(디바이스 흔적)에 사용 — UA 전문은 개인정보 과다라 요약만 남긴다.
+ * @param {string} [ua]
  */
 export function deviceLabel(ua) {
     const s = typeof ua === 'string' ? ua
@@ -93,15 +105,19 @@ export function deviceLabel(ua) {
     return `${browser} · ${os}`;
 }
 
-/** 정규식 특수문자 이스케이프 — 동적 RegExp 생성 시 필수 */
+/** 정규식 특수문자 이스케이프 — 동적 RegExp 생성 시 필수
+ * @param {*} string */
 export function escapeRegExp(string) {
     return String(string).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-/** 디바운스 — 마지막 호출 후 delay(ms) 경과 시 1회 실행. .cancel()로 대기 취소 */
+/** 디바운스 — 마지막 호출 후 delay(ms) 경과 시 1회 실행. .cancel()로 대기 취소
+ * @param {(...args: any[]) => void} func @param {number} [delay]
+ * @returns {((...args: any[]) => void) & { cancel: () => void }} */
 export function debounce(func, delay = 150) {
+    /** @type {*} */
     let timer;
-    const wrapped = /** @this {any} */ function (...args) {
+    const wrapped = /** @this {any} @param {...*} args */ function (...args) {
         clearTimeout(timer);
         timer = setTimeout(() => func.apply(this, args), delay);
     };
@@ -109,7 +125,8 @@ export function debounce(func, delay = 150) {
     return wrapped;
 }
 
-/** 초 → 'mm:ss' 고정폭 (타이머 표시용 — 분은 항상 2자리, 60분 초과도 누적) */
+/** 초 → 'mm:ss' 고정폭 (타이머 표시용 — 분은 항상 2자리, 60분 초과도 누적)
+ * @param {*} sec */
 export function fmtMMSS(sec) {
     const s = Math.floor(Number(sec));
     if (!isFinite(s) || s < 0) return '00:00';
@@ -118,7 +135,8 @@ export function fmtMMSS(sec) {
     return `${mm}:${ss}`;
 }
 
-/** 초 → 'm:ss' (1시간 이상 'h:mm:ss') — 오디오·재생 위치 표시용 */
+/** 초 → 'm:ss' (1시간 이상 'h:mm:ss') — 오디오·재생 위치 표시용
+ * @param {*} sec */
 export function fmtClock(sec) {
     const s = Math.floor(Number(sec));
     if (!isFinite(s) || s < 0) return '0:00';
@@ -128,6 +146,8 @@ export function fmtClock(sec) {
     return h > 0 ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${m}:${ss}`;
 }
 
+/** 완성형 한글 음절의 초성 추출 — 초성 검색 인덱스용 (비한글 문자는 그대로)
+ * @param {string} str */
 export function getChosung(str) {
     const chosungs = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
     let result = '';

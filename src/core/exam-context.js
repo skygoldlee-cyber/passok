@@ -11,10 +11,11 @@ const CURRENT_EXAM_KEY = 'current_exam';
 // 레지스트리 부재 시 최후 폴백 — EXAMS_LIST 번들 → (Node) content/exams.json 원본
 // 순으로 해석한다. 특정 시험 id를 코드에 박지 않는다 (DA-15).
 // 지연 해석: 번들 미로드 상태의 모듈 평가 시점 순서에 의존하지 않기 위해 첫 호출에서 해석.
+/** @type {string|null|undefined} */
 let _defaultExamId;
 function resolveDefaultExamId() {
     if (_defaultExamId !== undefined) return _defaultExamId;
-    const list = ((globalThis.EXAMS_LIST && globalThis.EXAMS_LIST.exams)
+    const list = ((/** @type {any} */ (globalThis).EXAMS_LIST && /** @type {any} */ (globalThis).EXAMS_LIST.exams)
         || (typeof window !== 'undefined' && window.EXAMS_LIST && window.EXAMS_LIST.exams)) || [];
     const def = (Array.isArray(list) && (list.find(e => e && e.default) || list[0])) || null;
     if (def && def.id) {
@@ -31,7 +32,7 @@ function resolveDefaultExamId() {
                 let file = pathMod.resolve(proc.cwd(), 'content', 'exams.json');
                 try { file = fileURLToPath(new URL('../../content/exams.json', import.meta.url)); } catch { /* cwd 경로 사용 */ }
                 const raw = fs.readFileSync(file, 'utf-8');
-                const exams = JSON.parse(raw).exams || [];
+                const exams = /** @type {Array<{id?:string, default?:boolean}>} */ (JSON.parse(raw).exams || []);
                 const d = exams.find(e => e && e.default) || exams[0];
                 _defaultExamId = (d && d.id) || null;
             } catch (e) {
@@ -44,7 +45,8 @@ function resolveDefaultExamId() {
     return _defaultExamId;
 }
 
-/** 시험 목록 (exams.json → data/exams.js 번들) */
+/** 시험 목록 (exams.json → data/exams.js 번들)
+ * @returns {import('./types.js').ExamDef[]} */
 export function getExamList() {
     const list = (typeof window !== 'undefined' && window.EXAMS_LIST && window.EXAMS_LIST.exams) || [];
     return Array.isArray(list) ? list : [];
@@ -69,6 +71,7 @@ export function clearCurrentExam() {
 /**
  * 활성 시험 엔트리 해석.
  * 우선순위: 선택된 시험 → default 플래그 → 목록 첫 항목 → null(레지스트리 없음).
+ * @returns {import('./types.js').ExamDef|null}
  */
 export function getActiveExam() {
     const exams = getExamList();
@@ -85,12 +88,12 @@ export function getActiveExam() {
  * 비기본 시험 활성 시 엉뚱한 콘텐츠(기본 시험 과목·규칙·문제은행 맵)를 읽는다.
  * 플랫폼 모듈은 이 접근자로만 레지스트리에 접근한다 — 예외는 로딩 경로를
  * 소유하는 data-loader.js뿐이다 (DA-15 R4).
- * @returns {object|null}
+ * @returns {import('./types.js').DataRegistry|null}
  */
 export function getActiveRegistry() {
     if (typeof window === 'undefined') return null;
     const exam = getActiveExam();
-    const g = window[(exam && exam.registryGlobal) || 'DATA_REGISTRY'];
+    const g = /** @type {any} */ (window)[(exam && exam.registryGlobal) || 'DATA_REGISTRY'];
     return g || null;
 }
 
@@ -107,6 +110,7 @@ export function getActiveExamId() {
 /**
  * 시험 선택 — 다른 시험이면 선택 저장 후 리로드(모듈/전역 상태 리셋),
  * 같은 시험이면 false 반환(호출자가 뷰 전환만 처리).
+ * @param {string} id
  * @returns {boolean} 리로드가 발생하면 true
  */
 export function selectExam(id) {
@@ -149,7 +153,8 @@ export function getExamAppName() {
         || 'PassOK';
 }
 
-/** 시험 기능 플래그 (exams.json의 features — 미지정 시 false) */
+/** 시험 기능 플래그 (exams.json의 features — 미지정 시 false)
+ * @param {string} name */
 export function hasFeature(name) {
     const exam = getActiveExam();
     return !!(exam && exam.features && exam.features[name]);
@@ -169,7 +174,7 @@ const THEME_TOKEN_RE = /^--(?:color|bg|border|stroke)-[a-z][a-z0-9-]*$/i;
  * 화이트리스트 밖 토큰·비문자열 값은 버린다.
  * `light: true`이면 --color-* 토큰을 라이트 표면 대비 안전 명도로 보정한다 (A-03) —
  * 시험 스킨은 다크 네온 원색이라 베이지 카드 위 텍스트로는 대비가 무너진다.
- * @param {object|null} exam
+ * @param {import('./types.js').ExamDef|null} exam
  * @param {{ light?: boolean }} [opts]
  * @returns {Object<string,string>}
  */
@@ -200,9 +205,11 @@ export function resolveExamThemeTokens(exam, { light = false } = {}) {
 const LIGHT_TEXT_MAX_LUM = 0.09;
 const FILL_MAX_LUM = 0.13;
 
+/** @param {number} v */
 const _lin = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
 
-/** #rrggbb → WCAG 상대 휘도 (0~1). 해석 불가 입력은 null. */
+/** #rrggbb → WCAG 상대 휘도 (0~1). 해석 불가 입력은 null.
+ * @param {*} hex */
 export function relativeLuminance(hex) {
     const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
     if (!m) return null;
@@ -210,7 +217,8 @@ export function relativeLuminance(hex) {
     return 0.2126 * _lin(n >> 16 & 255) + 0.7152 * _lin(n >> 8 & 255) + 0.0722 * _lin(n & 255);
 }
 
-/** #rrggbb를 상대 휘도 maxLum 이하가 될 때까지 RGB 균일 축소 — 색조는 유지된다. */
+/** #rrggbb를 상대 휘도 maxLum 이하가 될 때까지 RGB 균일 축소 — 색조는 유지된다.
+ * @param {*} hex @param {number} maxLum */
 export function darkenToLuminance(hex, maxLum) {
     const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
     if (!m) return null;
@@ -235,7 +243,7 @@ let _themeWatchBound = false;
  * 화이트-안전 변형이다. 테마 토글(themechange) 시 자동 재적용된다.
  * 부팅 초기에는 pwa-manifest.js가 먼저 같은 일을 하므로 여기서는
  * 브랜딩 재적용 경로의 일관성만 보장한다.
- * @param {object|null} [exam]
+ * @param {import('./types.js').ExamDef|null} [exam]
  */
 export function applyExamTheme(exam) {
     if (typeof document === 'undefined' || !document.documentElement) return;
@@ -261,7 +269,8 @@ export function applyExamTheme(exam) {
     }
 }
 
-/** 시험 콘텐츠 루트 기준 상대 경로 (예: contentPath('교재/law/a.md')) */
+/** 시험 콘텐츠 루트 기준 상대 경로 (예: contentPath('교재/law/a.md'))
+ * @param {string} rel */
 export function contentPath(rel) {
     const exam = getActiveExam();
     const root = (exam && exam.contentRoot)
@@ -270,7 +279,8 @@ export function contentPath(rel) {
     return `${root}/${rel}`;
 }
 
-/** 시험 데이터 루트 기준 상대 경로 (예: dataPath('drills/ox_subject1.js')) */
+/** 시험 데이터 루트 기준 상대 경로 (예: dataPath('drills/ox_subject1.js'))
+ * @param {string} rel */
 export function dataPath(rel) {
     const exam = getActiveExam();
     const root = (exam && exam.dataRoot)
@@ -316,13 +326,15 @@ const GLOBAL_KEYS = new Set([
 ]);
 
 // @spec DA-06~08,ES-03
-/** 시험별 진도 네임스페이스 — 진도 키에 시험 접두사 부여 (`fc_memorized` → `cosmetic:fc_memorized`, GLOBAL_KEYS 제외) */
+/** 시험별 진도 네임스페이스 — 진도 키에 시험 접두사 부여 (`fc_memorized` → `cosmetic:fc_memorized`, GLOBAL_KEYS 제외)
+ * @param {string} key */
 export function scopedKey(key) {
     if (GLOBAL_KEYS.has(key)) return key;
     return `${getActiveExamId()}:${key}`;
 }
 
-/** 네임스페이스된 실제 저장키에서 원래 키를 복원 (현재 시험 소속이 아니면 null) */
+/** 네임스페이스된 실제 저장키에서 원래 키를 복원 (현재 시험 소속이 아니면 null)
+ * @param {string} raw @returns {string|null} */
 export function unscopedKey(raw) {
     const prefix = `${getActiveExamId()}:`;
     return (raw && raw.startsWith(prefix)) ? raw.slice(prefix.length) : null;
@@ -460,6 +472,7 @@ export function resolveLegacySubjectKey(subj) {
 /**
  * 문제집(exam) 키 → 과목 키 매핑.
  * 정확 일치 → 접두 매칭(subject2_p1 ↔ subject2 호환) → 첫 과목 폴백 순.
+ * @param {string} examId
  */
 export function examIdToSubjectId(examId) {
     const registry = getActiveRegistry();

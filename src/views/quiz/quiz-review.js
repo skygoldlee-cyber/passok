@@ -22,6 +22,7 @@ import { _beginQuizRun } from './quiz.js';
  * 헷갈린 카드 목록을 반환
  */
 function getWeakCardsList() {
+    /** @type {Array<Record<string, any>>} */
     const list = [];
 
     // 1. 일반 카드 복구 (인덱스 캐시 — weak-items.js)
@@ -39,7 +40,7 @@ function getWeakCardsList() {
         if (cardId.startsWith(WEAK_QUIZ_PREFIX)) {
             const resolved = resolveWrongQuiz(cardId);
             if (resolved) {
-                const { quiz: q, subjectId } = resolved;
+                const { quiz: q, subjectId } = /** @type {any} */ (resolved);
                 const subjectName = (window.STUDY_DATA || {})[subjectId].name;
                 list.push({
                     id: cardId,
@@ -346,7 +347,7 @@ export function startWeakFocusQuiz() {
         }
     });
 
-    state.quiz.data = shuffle(weakList.filter(Boolean)).slice(0, 10);
+    state.quiz.data = shuffle(/** @type {import('../../core/types.js').Quiz[]} */ (weakList.filter(Boolean))).slice(0, 10);
     state.quiz.diagnostic = false;
     switchView('quiz-view', { scrollTop: true });
     _beginQuizRun();

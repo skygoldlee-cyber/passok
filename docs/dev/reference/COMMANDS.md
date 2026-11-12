@@ -22,7 +22,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `content` | 33 | 콘텐츠 통합 검증 — 교재 교체 등 대규모 콘텐츠 변경 후 (--quick, --content-only, --build 옵션) |
 | `docs` | 20 | 문서 정합 묶음 — 경로 참조·문서 ID·트리·명령 정합 등 |
 | `ci` | 32 | CI 게이트 로컬 재현 — ci.yml과 토큰 1:1 대응 |
-| `all` | 62 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
+| `all` | 63 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
 | `refs` | 6 | 참조자료 검증 묶음 — 레이아웃·귀속·신선도·인용 라인·병합 품질 |
 | `freshness` | 10 | 생성물 신선도 묶음 — 파생물 미재생성 감지 |
 | `audit` | 13 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
@@ -168,7 +168,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run postbuild:data` | `npm run check:parser` | 체인: check:parser |
 
-### `check:*` — 75개
+### `check:*` — 76개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -222,6 +222,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run check:perf` | `node tools/check/check_perf_budget.js` | SHELL_ASSETS 크기 예산 상한 |
 | `npm run check:trace` | `node tools/build/build_trace_matrix.js --check` | TRACE_MATRIX 입력 해시 신선도 |
 | `npm run check:types` | `tsc -p jsconfig.json --noEmit` | tsc --noEmit (jsconfig checkJs — JSDoc 타입 진단) |
+| `npm run check:any` | `node tools/check/check_noimplicitany.js` | noImplicitAny 잔여 래칫 (TS 점진 전환 Phase 1, ADR-0015) |
 | `npm run check:adlint` | `node tools/check/check_adlint_coverage.js` | 광고 점검 사전 커버리지 감사 (FO-68) |
 | `npm run check:binary` | `node tools/check/check_binary.js` | 대형·외부화 대상 바이너리 신규 유입 게이트 |
 | `npm run check:manifest` | `node tools/check/check_manifest.js` | manifest 선언 ↔ 실제 파일/자산 정합성 검증 |

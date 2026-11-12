@@ -15,7 +15,7 @@ export function getBackupKeys() {
     // 정적 키 목록 + 날짜 기반 동적 키(daily_completed_YYYY-MM-DD)를 모두 수집
     // listScopedKeys는 현재 시험의 실제 저장키(<id>:daily_completed_...)를 반환하므로
     // 백업 포맷용 논리 키로 되돌린다.
-    const dynamicKeys = listScopedKeys(isDailyCompletedKey).map(unscopedKey);
+    const dynamicKeys = /** @type {string[]} */ (listScopedKeys(isDailyCompletedKey).map(unscopedKey));
     return [...BACKUP_KEYS, ...dynamicKeys];
 }
 

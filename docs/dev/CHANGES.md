@@ -1,6 +1,16 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(types): noImplicitAny 래칫 게이트 + src/core 전면 소진 — TS 점진 전환 Phase 1 (ADR-0015)
+
+- **`check:any` 게이트 신설** (`tools/check/check_noimplicitany.js`): tsc를 `--noImplicitAny`로 별도 실행해 파일별 에러 수를 `tools/state/noimplicitany_baseline.json`과 대조 — 초과·신규 파일 차단(단조 감소 계약, filename_baseline과 동일 패턴). `--update` 갱신·`--dir <path>` 디렉터리 리포트 지원. `all` 프리셋 P1 편입, jsconfig 잔여 strict 플래그(noImplicitAny — 나머지는 이미 활성)의 소진 경로를 기계화
+- **최초 실측 4,001건** (jsconfig 주석 ~2800에서 증가 확인): noImplicitAny 적용 시 implicit-any 계열 외 파생 에러(TS2339·TS2538 등)가 함께 표면화 — 기준선은 플래그 적용 상태의 전체 에러로 기록
+- **src/core 136건 → 0 소진**: 8파일 JSDoc 주석 — `storage.js`에 `StorageBackend` typedef 신설(선택적 Async 메서드 계약 — 미선언 TS2339 8건 해소)·`getActiveRegistry` 반환을 `DataRegistry`로 정밀화·`getActiveExam`을 `ExamDef`로 정밀화·`types.js` `integratedExam`을 실측 필드(passAverage·subjectFailBelow·questionsPerSubject·examTimeMin + 확장 인덱스)로 좁힘·`globals.d.ts`에 `checkStorageWarning` 선언
+- **정밀화가 노출한 하류 잠재 결함 14건 정직 해소**: `setItem` 계열 value를 `*`로 정정(숫자 저장 실례 다수 — string 선언은 오류)·`unscopedKey` null 가능성 캐스트(ai-client·sync·backup — listScopedKeys 계약상 비null)·`getActiveExamId() ?? undefined`(reader-audio)·dataset.feature 캐스트(app-shell)·edition truthy 캐스트(textbook-edition)·Quiz[] 캐스트(quiz-review)
+- **래칫이 포착한 부수 회귀 4파일 해소**: `getActiveExamId()` null 반환 인덱스 사용 → `if (!id)` 가드(keyword-index·law-links), `{}` 리터럴 인덱스 주석(pdf-registry), 진화 배열·destructure 캐스트(quiz-review)
+- 결과: 잔여 4,001 → **3,797건 (-204)**, 0 도달 8파일·감소 12파일, `check:types` 0 유지. 유닛 153건·DOM 41건 통과
+
+
 ## 2026-11-12 chore(shell): 사이드바 숨겨진 글자 크게 버튼 잔재 제거
 
 - `index.template.html` 사이드바 푸터의 `#font-size-toggle`을 `is-hidden` 영구 비표시로 남겨둔 잔재 삭제 — 7d3caab4d2에서 기능을 홈 화면(PC 대시보드 + carework 실무 홈)으로 옮기며 숨겨둔 사멸 표면. id 참조 CSS·JS·테스트 없음

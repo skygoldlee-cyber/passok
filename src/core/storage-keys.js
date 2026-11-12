@@ -293,11 +293,13 @@ export const RESET_KEYS = [
 ];
 
 // 동적 키 생성 헬퍼: daily_completed_YYYY-MM-DD
+/** @param {string} dateStr */
 export function dailyCompletedKey(dateStr) {
   return `${STORAGE_KEYS.DAILY_COMPLETED_PREFIX}${dateStr}`;
 }
 
 // 동적 키 판별: daily_completed_ 접두사 여부
+/** @param {string} key */
 export function isDailyCompletedKey(key) {
   return key.startsWith(STORAGE_KEYS.DAILY_COMPLETED_PREFIX);
 }

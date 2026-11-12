@@ -269,7 +269,8 @@
  *                                            ※ 지식 세트 메타(registry[registryKey] = {bundle, global, version, stats})는
  *                                              registryKey가 가변이라 typedef에 고정 키로 선언하지 않음
  * @property {ResourcesMeta}   [resources]
- * @property {Object}          [integratedExam] 통합 시험 규칙 (passAverage·subjectFailBelow 등)
+ * @property {{passAverage?:number, subjectFailBelow?:number, questionsPerSubject?:Object.<string,number>, examTimeMin?:number, [key:string]:*}} [integratedExam]
+ *                                            통합 모의고사 규칙 (manifest 패스스루 — 합격 평균선·과목 과락선·과목별 출제수·제한시간분)
  * @property {Object.<string, Object.<string, string>>} [uiText] 뷰별 UI 텍스트 오버라이드 (manifest.uiText 패스스루 —
  *                                            표준 필드 title·subtitle·placeholder 외에 loading·error·dataError·
  *                                            스토어 라벨 등 시험별 확장 필드를 자유롭게 허용. 소비처: data-uitext,

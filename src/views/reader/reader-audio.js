@@ -41,7 +41,7 @@ export function getAudioPathForChapter(subjId, chapter) {
         const idx = chapters.indexOf(chapter);
         // [멀티시험] AUDIO_MANIFEST는 시험 id 키로 분리 — getAudioManifest로 활성 시험분 선택
         const pickManifest = (typeof window !== 'undefined' && window.getAudioManifest) || null;
-        const manifest = pickManifest ? pickManifest(getActiveExamId())
+        const manifest = pickManifest ? pickManifest(getActiveExamId() ?? undefined)
             : ((typeof window !== 'undefined' && window.AUDIO_MANIFEST) || null);
         if (manifest &&
             manifest[subjId] && idx >= 0 && manifest[subjId][idx]) {

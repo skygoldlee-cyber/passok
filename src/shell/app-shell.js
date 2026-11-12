@@ -352,7 +352,7 @@ export function applyFeatureFlags() {
             ? multiExam
             : chosen && (el.dataset.feature === 'practiceMode'
                 ? isPracticeCapable()
-                : hasFeature(el.dataset.feature));
+                : hasFeature(/** @type {string} */ (el.dataset.feature)));
         if (!on) el.classList.add('is-hidden');
     });
     // @spec UX-NAV-16 — 콘텐츠 의존 내비: 레지스트리 stats 합계가 0이면 빈 뷰로 이어지는 메뉴 숨김.
