@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261112-a14877c",
+    "date": "2026-11-12",
+    "notes": [
+      "[수정·build] law-links.js lawUrlFor 가드를 제너레이터 템플릿에 동기화",
+      "[문서·commands] check:uia 카탈로그 동기화",
+      "[기능·types] Phase 2 마무리 — strict 통합 + noImplicitReturns·exactOptionalPropertyTypes 활성화",
+      "[기능·types] 컴파일러 강화 Phase 2 — noUncheckedIndexedAccess 전량 소진·활성화",
+      "[정리·release] v20261112-0fd18e3 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "date": "2026-11-12",
     "notes": [
       "[수정·ux] carework 홈 '글자 크게' 버튼 무여백 밀착 수정 — 간격 리듬 정합",
@@ -230,14 +241,6 @@
       "[수정·print] 표 헤더 이중선 + 외곽 수직선 정리 — 인쇄 표 라인 정돈",
       "[수정·ui] 글자 크게 버튼 레이블 중복 제거 — '가 글자 크게' → '글자 크게'",
       "[정리·release] v20261109-8886440 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-8886440",
-    "date": "2026-11-09",
-    "notes": [
-      "[수정·print] 표 헤더 컬러 틴트 배경이 출력물에 남던 결함 — 헤더 밴드 인쇄 회색 정규화",
-      "[정리·release] v20261109-2648ec1 스탬프 확정 [no-docs]"
     ]
   }
 ]
