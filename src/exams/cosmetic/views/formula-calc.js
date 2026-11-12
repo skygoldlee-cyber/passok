@@ -146,7 +146,7 @@ function updateCalcComputed() {
   if (phaseEl) {
     const parts = PHASE_OPTIONS
       .filter((/** @type {string} */ p) => phaseSums[p] != null)
-      .map((/** @type {string} */ p) => `${p} ${Math.round(phaseSums[p] * 100) / 100}%`);
+      .map((/** @type {string} */ p) => `${p} ${Math.round((phaseSums[p] || 0) * 100) / 100}%`);
     phaseEl.textContent = parts.length ? `단계별: ${parts.join(' · ')}` : '';
   }
   // 진행 단계 표시 (FO-27) — 원료 입력 → 한도 검증 → 저장
@@ -298,25 +298,25 @@ export function renderCalcRows() {
     const phaseEl = /** @type {HTMLSelectElement} */ (row.querySelector('.f-phase'));
     phaseEl.value = item.phase || '';
     nameEl.addEventListener('input', () => {
-      calc.rows[i].name = nameEl.value.trim();
+      (/** @type {*} */ (calc.rows[i])).name = nameEl.value.trim();
       updateCalcComputed();
     });
     concEl.addEventListener('input', () => {
       const v = concEl.value === '' ? null : parseFloat(concEl.value);
-      calc.rows[i].concentration = (v != null && !Number.isNaN(v)) ? v : null;
+      (/** @type {*} */ (calc.rows[i])).concentration = (v != null && !Number.isNaN(v)) ? v : null;
       updateCalcComputed();
     });
     phaseEl.addEventListener('change', () => {
-      calc.rows[i].phase = phaseEl.value;
+      (/** @type {*} */ (calc.rows[i])).phase = phaseEl.value;
       updateCalcComputed();
     });
     // 배합률 스테퍼 (FO-27) — 태블릿·장갑 환경에서 ±0.1 터치 증감
     row.querySelectorAll('.f-step-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const dir = parseFloat(/** @type {HTMLElement} */ (btn).dataset.dir || '0');
-        const cur = calc.rows[i].concentration;
+        const cur = (calc.rows[i] || {}).concentration;
         const next = Math.max(0, Math.round(((cur != null ? cur : 0) + dir * 0.1) * 100) / 100);
-        calc.rows[i].concentration = next;
+        (/** @type {*} */ (calc.rows[i])).concentration = next;
         concEl.value = String(next);
         updateCalcComputed();
       });
@@ -349,7 +349,7 @@ const CALC_FIELD_MAP = [
 function _calcFieldEls() {
   /** @type {Object.<string,*>} */
   const els = {};
-  for (const [id, prop] of CALC_FIELD_MAP) els[prop] = getEl(id);
+  for (const [id, prop] of CALC_FIELD_MAP) els[prop || ''] = getEl(id || '');
   return els;
 }
 
@@ -357,8 +357,8 @@ function _calcFieldEls() {
 /** @param {Object.<string,*>} els @param {*} f */
 function _writeCalcSourceFields(els, f) {
   for (const [, prop] of CALC_FIELD_MAP) {
-    const el = els[prop];
-    if (el) el.value = f[prop] != null ? f[prop] : '';
+    const el = els[prop || ''];
+    if (el) el.value = f[prop || ''] != null ? f[prop || ''] : '';
   }
   if (els.unit && !f.unit) els.unit.value = 'g';
 }
@@ -369,7 +369,7 @@ function _initCalcFields(els) {
   if (els.targetVolume && !els.targetVolume.value) els.targetVolume.value = '100';
   if (els.unit) els.unit.value = 'g';
   for (const prop of ['phTarget', 'phActual', 'name', 'notes']) {
-    if (els[prop]) els[prop].value = '';
+    if (els[prop || '']) els[prop || ''].value = '';
   }
   _restoreCalcDraft(els);
 }
@@ -398,8 +398,8 @@ function _restoreCalcDraft(els) {
   calc.rows = _draftRows(draft);
   calc.steps = Array.isArray(draft.steps) ? draft.steps.slice() : [];
   for (const [, prop] of CALC_FIELD_MAP) {
-    const el = els[prop];
-    if (el && draft[prop] != null && draft[prop] !== '') el.value = String(draft[prop]);
+    const el = els[prop || ''];
+    if (el && draft[prop || ''] != null && draft[prop || ''] !== '') el.value = String(draft[prop || '']);
   }
   showDraftStatus(draft.savedAt, '임시 저장 복원');
 }

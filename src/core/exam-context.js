@@ -79,7 +79,8 @@ export function getActiveExam() {
     const id = getCurrentExamId();
     return exams.find(e => e.id === id)
         || exams.find(e => e.default)
-        || exams[0];
+        || exams[0]
+        || null;
 }
 
 /**
@@ -213,7 +214,7 @@ const _lin = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 
 export function relativeLuminance(hex) {
     const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
     if (!m) return null;
-    const n = parseInt(m[1], 16);
+    const n = parseInt(m[1] || '0', 16);
     return 0.2126 * _lin(n >> 16 & 255) + 0.7152 * _lin(n >> 8 & 255) + 0.0722 * _lin(n & 255);
 }
 
@@ -222,7 +223,7 @@ export function relativeLuminance(hex) {
 export function darkenToLuminance(hex, maxLum) {
     const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
     if (!m) return null;
-    const n = parseInt(m[1], 16);
+    const n = parseInt(m[1] || '0', 16);
     const r = n >> 16 & 255, g = n >> 8 & 255, b = n & 255;
     for (let k = 1; k > 0; k -= 0.02) {
         const rr = Math.round(r * k), gg = Math.round(g * k), bb = Math.round(b * k);
@@ -484,7 +485,7 @@ export function examIdToSubjectId(examId) {
         if (partialExam) return partialExam.subject;
     }
     if (registry && registry.subjects && registry.subjects.length > 0) {
-        return registry.subjects[0].key;
+        return registry.subjects[0]?.key || null;
     }
     return null;
 }

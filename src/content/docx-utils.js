@@ -19,7 +19,7 @@ const _CRC = (() => {
 /** @param {Uint8Array} buf */
 const _crc32 = buf => {
     let c = 0xFFFFFFFF;
-    for (let i = 0; i < buf.length; i++) c = _CRC[(c ^ buf[i]) & 0xFF] ^ (c >>> 8);
+    for (let i = 0; i < buf.length; i++) c = (_CRC[(c ^ (buf[i] || 0)) & 0xFF] || 0) ^ (c >>> 8);
     return (c ^ 0xFFFFFFFF) >>> 0;
 };
 
@@ -153,7 +153,7 @@ const _mdBody = md => {
         if (t.startsWith('|') && t.endsWith('|')) { (tbl = tbl || []).push(t.slice(1, -1).split('|')); continue; }
         flush();
         const h = t.match(/^(#{1,3})\s+(.+)/);
-        if (h) { out.push(_h(h[2], h[1].length === 1 ? 32 : h[1].length === 2 ? 28 : 24)); continue; }
+        if (h) { out.push(_h(h[2] || '', (h[1] || '').length === 1 ? 32 : (h[1] || '').length === 2 ? 28 : 24)); continue; }
         if (t === '---') { out.push(_HR); continue; }
         if (t.startsWith('- ')) { out.push(_P('• ' + t.slice(2), 99, 0)); continue; }
         out.push(_P(t, 99, 0));

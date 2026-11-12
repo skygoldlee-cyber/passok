@@ -175,7 +175,7 @@ export function renderCustomRules() {
     const targets = customRuleTargets();
     Object.keys(RULE_SCOPE_LABEL).forEach((/** @type {string} */ scope) => {
       const group = document.createElement('optgroup');
-      group.label = (/** @type {Object.<string,string>} */ (RULE_SCOPE_LABEL))[scope];
+      group.label = (/** @type {Object.<string,string>} */ (RULE_SCOPE_LABEL))[scope] || scope;
       ((/** @type {Object.<string,string[]>} */ (targets))[scope] || []).forEach((/** @type {string} */ key) => {
         const o = document.createElement('option');
         o.value = `${scope}|${key}`;
@@ -232,7 +232,7 @@ export function formulaRuleAdd() {
 export function formulaRuleRemove(arg) {
   if (typeof arg !== 'string') return;
   const parts = arg.split('|');
-  const scope = parts[0];
+  const scope = parts[0] || '';
   const key = parts[1] || '';
   const name = parts.slice(2).join('|');
   const r = removeCustomCandidate(scope, key, name);

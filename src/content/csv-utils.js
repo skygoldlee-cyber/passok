@@ -100,7 +100,7 @@ export function parseCsv(text) {
  */
 export function csvToObjects(rows, colMap) {
   if (!rows.length) return [];
-  const headers = rows[0].map(h => (colMap[h.trim().toLowerCase().replace(/\s+/g, '')] || null));
+  const headers = (rows[0] || []).map(h => (colMap[h.trim().toLowerCase().replace(/\s+/g, '')] || null));
   if (!headers.some(Boolean)) return [];
   return rows.slice(1).map(r => {
     /** @type {Object.<string, string>} */

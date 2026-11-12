@@ -72,7 +72,7 @@ async function restCount(table: string, query: string): Promise<number | null> {
   });
   if (!res.ok) return null;
   const m = /\/(\d+)/.exec(res.headers.get('content-range') ?? '');
-  return m ? parseInt(m[1], 10) : null;
+  return m ? parseInt(m[1] ?? '0', 10) : null;
 }
 
 async function findUserByEmail(email: string) {

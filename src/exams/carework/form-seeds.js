@@ -56,6 +56,12 @@ export function toolOverride(toolKey) {
 /** @param {string} toolKey @param {Object.<string,*>} [values] */
 export function renderToolBody(toolKey, values = {}) {
     const def = (/** @type {Object.<string,{title:string,block:string,seed:string}>} */ (TOOL_FORM_SEEDS))[toolKey];
+    if (!def) return '';
+    if (!def) return '';
+    if (!def) return '';
+    if (!def) return '';
+    if (!def) return '';
+    if (!def) return '';
     const body = toolOverride(toolKey) ?? `{{${def.block}}}`;
     return fillTemplate(body, values, 'md', new Set([def.block]));
 }

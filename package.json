@@ -81,6 +81,7 @@
     "lint": "eslint src/ tools/ tests/ sw.js serve.js --max-warnings 0 --cache --cache-location node_modules/.cache/eslint",
     "check:types": "tsc -p jsconfig.json --noEmit",
     "check:any": "node tools/check/check_noimplicitany.js",
+    "check:uia": "node tools/check/check_nouncheckedindex.js",
     "hooks:install": "git config core.hooksPath .githooks && git config merge.stamps.driver \"node tools/merge/merge_stamps.js %O %A %B %P\" && git config merge.stamps.name \"PassOK release-stamp merger\" && echo 'pre-commit/pre-push 훅 + merge.stamps 드라이버 활성화됨 (.githooks, .gitattributes)'",
     "convert:refs": "python ref-pipeline/convert.py",
     "fetch:refpdfs": "node tools/sync/fetch_ref_pdfs.js",

@@ -282,7 +282,7 @@ function normCsvDate(v) {
   const s = String(v || '').trim().replace(/[./]/g, '-');
   const m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
   if (!m) return s;
-  return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+  return `${m[1]}-${(m[2] || '').padStart(2, '0')}-${(m[3] || '').padStart(2, '0')}`;
 }
 
 /** CSV 행 객체 → sanitizeMaterial 입력 형태 */

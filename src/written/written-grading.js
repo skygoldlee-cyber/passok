@@ -96,13 +96,13 @@ export function saveAiProvider(p) {
 }
 export function getAiModel() {
     return (getItem(STORAGE_KEYS.WRITTEN_AI_MODEL) || '').trim()
-        || PROVIDERS[getAiProvider()].defaultModel;
+        || PROVIDERS[getAiProvider()]?.defaultModel || '';
 }
 /** @param {*} model @returns {string} */
 export function saveAiModel(model) {
     const m = String(model || '').slice(0, 80).trim()
         .replace(/[^a-zA-Z0-9._-]/g, '');
-    if (!m) { removeItem(STORAGE_KEYS.WRITTEN_AI_MODEL); return PROVIDERS[getAiProvider()].defaultModel; }
+    if (!m) { removeItem(STORAGE_KEYS.WRITTEN_AI_MODEL); return PROVIDERS[getAiProvider()]?.defaultModel || ''; }
     setItem(STORAGE_KEYS.WRITTEN_AI_MODEL, m);
     return m;
 }
@@ -233,7 +233,7 @@ export function applyGrading(rubricItems, grading) {
 export async function callProviderLLM(system, prompt, opts = {}) {
     const key = getAiKey();
     if (!key) return { ok: false, code: 'nokey', error: 'AI API 키가 설정되지 않았습니다.' };
-    const prov = PROVIDERS[getAiProvider()];
+    const prov = /** @type {*} */ (PROVIDERS[getAiProvider()]);
     const model = getAiModel();
     const fetchImpl = opts.fetchImpl || (typeof fetch !== 'undefined' ? fetch : null);
     if (!fetchImpl) return { ok: false, code: 'network', error: '네트워크를 사용할 수 없습니다.' };

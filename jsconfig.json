@@ -25,6 +25,10 @@
     // noImplicitAny — 백로그 전량 소진으로 활성화 (Phase 1 완료, ADR-0015).
     // check:any 래칫(tools/check/check_noimplicitany.js)도 파일별 잔여를 이중 감시한다.
     "noImplicitAny": true,
+    // noUncheckedIndexedAccess — 백로그 전량 소진으로 활성화 (Phase 2 완료).
+    // 인덱스 접근 obj[key]·arr[i] → T|undefined로 바꿔 미등록 키·범위 밖 인덱스의
+    // 조용한 undefined 전파를 차단한다. check:unchecked 래칫이 잔여를 이중 감시한다.
+    "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "types": []

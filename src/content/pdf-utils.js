@@ -119,8 +119,8 @@ function _blockCuts(el, availPx) {
     boundSet.add(el.offsetHeight);
     const bounds = [...boundSet].sort((a, b) => a - b);
     const cuts = /** @type {number[]} */ ([0]);
-    while (cuts[cuts.length - 1] < el.offsetHeight) {
-        const last = cuts[cuts.length - 1];
+    while ((cuts[cuts.length - 1] || 0) < el.offsetHeight) {
+        const last = cuts[cuts.length - 1] || 0;
         const limit = last + availPx;
         let next = -1;
         for (const b of bounds) {
@@ -169,7 +169,7 @@ function _cutsWithTableSplit(root, availPx) {
                 // rowspan 그룹 중간 절단 — 확장 셀이 앞 표에 남고 뒤 행만 넘어가면 레이아웃이
                 // 깨지므로 그룹 시작 행부터 옮긴다 (경계가 rowspan 범위 내부일 때)
                 for (let j = 0; j < ri; j++) {
-                    for (const cell of rows[j].cells) {
+                    for (const cell of rows[j]?.cells || []) {
                         if (cell.rowSpan > 1 && j + cell.rowSpan > ri) { ri = j; break; }
                     }
                 }
@@ -237,7 +237,7 @@ export async function pdfFileFromEl(el, title) {
         const mXPx = Math.round(MX * pxPerMm);
         const sliceH = Math.round((H - 2 * MY) * pxPerMm);
         for (let i = 0; i + 1 < cuts.length; i++) {
-            const y0 = Math.round(cuts[i] * scale), y1 = Math.min(Math.round(cuts[i + 1] * scale), canvas.height);
+            const y0 = Math.round((cuts[i] || 0) * scale), y1 = Math.min(Math.round((cuts[i + 1] || 0) * scale), canvas.height);
             for (let off = 0; off < y1 - y0; off += sliceH) { // 초대형 요소 조각은 고정 높이 서브슬라이스
                 const h = Math.min(sliceH, y1 - y0 - off);
                 const pg = document.createElement('canvas');
@@ -266,14 +266,14 @@ export async function pdfFileFromEl(el, title) {
  */
 const _rgb = c => {
     const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c || '');
-    return m ? [+m[1], +m[2], +m[3]] : null;
+    return m ? [+(m[1] || '0'), +(m[2] || '0'), +(m[3] || '0')] : null;
 };
 
 // rgb 파싱 → 밝기(0~1) — 흰 배경에서 안 보이는 밝은 글자 판정용
 /** @param {string} c @returns {number|null} */
 export const _lum = c => { const rgb = _rgb(c); return rgb ? _lumOf(rgb) : null; };
 /** @param {number[]} rgb @returns {number} */
-const _lumOf = rgb => (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
+const _lumOf = rgb => (0.299 * (rgb[0] || 0) + 0.587 * (rgb[1] || 0) + 0.114 * (rgb[2] || 0)) / 255;
 
 /* == 표 출력 규약 (인쇄·PDF 공용, @spec CO-20/CO-21) ==
    - 위아래 수평선만: 래퍼 좌우·하단 테두리 제거, 선은 이중선 없이 하나로
@@ -308,7 +308,7 @@ const _fixTableExtras = (el2, cs, set) => {
     } else if (t === 'TD') {
         if (el2.closest('tr.group-start')) set('border-top-color', _PRINT_LINE); // 청록 구분선 → 인쇄 회색
         const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs.backgroundColor || '');
-        if (m && (m[4] === undefined ? 1 : parseFloat(m[4])) < 0.15 && _lumOf([+m[1], +m[2], +m[3]]) > 0.9) set('background', _PRINT_ZEBRA);
+        if (m && (m[4] === undefined ? 1 : parseFloat(m[4])) < 0.15 && _lumOf([+(m[1] || '0'), +(m[2] || '0'), +(m[3] || '0')]) > 0.9) set('background', _PRINT_ZEBRA);
     } else if (t === 'TABLE') {
         const pw = el2.parentElement ? el2.parentElement.clientWidth : 0;
         const tw = el2.getBoundingClientRect().width;
@@ -338,7 +338,7 @@ const _fixBorder = (el2, cs, set) => {
         const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs.getPropertyValue(`border-${s.toLowerCase()}-color`) || '');
         if (!m) continue;
         const a = m[4] !== undefined ? parseFloat(m[4]) : 1;
-        const l = _lumOf([+m[1], +m[2], +m[3]]);
+        const l = _lumOf([+(m[1] || '0'), +(m[2] || '0'), +(m[3] || '0')]);
         if (a < 0.4 || l > 0.85) set(`border-${s.toLowerCase()}-color`, _PRINT_LINE);
     }
 };
@@ -510,7 +510,7 @@ export async function pdfFileFromElStyled(el, title) {
         const pdf = new jsPDF('p', 'mm', 'a4');
         let first = true;
         for (let i = 0; i + 1 < cuts.length; i++) {
-            const y0 = Math.round(cuts[i] * scale), y1 = Math.min(Math.round(cuts[i + 1] * scale), canvas.height);
+            const y0 = Math.round((cuts[i] || 0) * scale), y1 = Math.min(Math.round((cuts[i + 1] || 0) * scale), canvas.height);
             for (let off = 0; off < y1 - y0; off += sliceH) { // 초대형 요소 조각은 고정 높이 서브슬라이스
                 const sh = Math.min(sliceH, y1 - y0 - off);
                 const pgc = document.createElement('canvas');

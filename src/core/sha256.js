@@ -48,16 +48,16 @@ export function sha256hex(str) {
             w[i] = dv.getUint32(off + i * 4);
         }
         for (let i = 16; i < 64; i++) {
-            const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);
-            const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
-            w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;
+            const s0 = rotr(w[i - 15] || 0, 7) ^ rotr(w[i - 15] || 0, 18) ^ ((w[i - 15] || 0) >>> 3);
+            const s1 = rotr(w[i - 2] || 0, 17) ^ rotr(w[i - 2] || 0, 19) ^ ((w[i - 2] || 0) >>> 10);
+            w[i] = ((w[i - 16] || 0) + s0 + (w[i - 7] || 0) + s1) >>> 0;
         }
 
         let a = h0, b = h1, c = h2, d = h3, e = h4, f = h5, g = h6, h = h7;
         for (let i = 0; i < 64; i++) {
             const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
             const ch = (e & f) ^ (~e & g);
-            const t1 = (h + S1 + ch + K[i] + w[i]) >>> 0;
+            const t1 = (h + S1 + ch + (K[i] || 0) + (w[i] || 0)) >>> 0;
             const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
             const maj = (a & b) ^ (a & c) ^ (b & c);
             const t2 = (S0 + maj) >>> 0;

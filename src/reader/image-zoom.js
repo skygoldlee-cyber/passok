@@ -85,8 +85,8 @@ function _setImgZoom(scale) {
 /** @param {1|-1} dir */
 function _stepImgZoom(dir) {
     const next = dir > 0
-        ? (ZOOM_STEPS.find(s => s > _imgZoomScale + 0.001) ?? ZOOM_STEPS[ZOOM_STEPS.length - 1])
-        : ([...ZOOM_STEPS].reverse().find(s => s < _imgZoomScale - 0.001) ?? ZOOM_STEPS[0]);
+        ? (ZOOM_STEPS.find(s => s > _imgZoomScale + 0.001) ?? (ZOOM_STEPS[ZOOM_STEPS.length - 1] || 1))
+        : ([...ZOOM_STEPS].reverse().find(s => s < _imgZoomScale - 0.001) ?? (ZOOM_STEPS[0] || 1));
     _setImgZoom(next);
 }
 

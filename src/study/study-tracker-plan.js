@@ -12,7 +12,7 @@ import { getStudyGoals } from './study-tracker-activity.js';
 /** @param {*} dateStr */
 function _isValidDateStr(dateStr) {
     if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return false;
-    const [y, m, d] = dateStr.split('-').map(Number);
+    const [y = 0, m = 1, d = 1] = dateStr.split('-').map(Number);
     const dt = new Date(y, m - 1, d);
     return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
 }
@@ -68,7 +68,7 @@ export function getTextbookReadProgress() {
     // 분모 = 활성 시험 과목 수 (registry.subjects — exam-context 단일 진입점).
     // 레지스트리 미로딩 시 관측 과목 수로 완화 (진척 맵에 있는 과목만큼은 존재한다는 최소 추정).
     const total = getActiveSubjectCount() || Math.max(1, seen.length);
-    const overall = seen.length ? seen.reduce((s, k) => s + bySubject[k], 0) / total : 0;
+    const overall = seen.length ? seen.reduce((s, k) => s + (bySubject[k] || 0), 0) / total : 0;
     return { bySubject, overall, started: seen.length > 0 };
 }
 
@@ -80,7 +80,7 @@ export function getTextbookReadProgress() {
  */
 export function getExamLeadStatus(dateStr, today = new Date()) {
     if (typeof dateStr !== 'string' || !_isValidDateStr(dateStr)) return null;
-    const [y, m, d] = dateStr.split('-').map(Number);
+    const [y = 0, m = 1, d = 1] = dateStr.split('-').map(Number);
     const base = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const dday = Math.round((new Date(y, m - 1, d).getTime() - base.getTime()) / (1000 * 60 * 60 * 24));
     return { dday, leadShort: dday >= 0 && dday < getMinExamLeadDays(), past: dday < 0 };

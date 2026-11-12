@@ -49,17 +49,17 @@ export function rosterToCsv(items) {
 export function csvToRoster(text) {
     const rows = parseCsv(text);
     if (rows.length < 2) return [];
-    const header = rows[0].map((/** @type {string} */ h) => h.trim());
+    const header = (rows[0] || []).map((/** @type {string} */ h) => h.trim());
     const idx = Object.fromEntries(ROSTER_CSV_COLS.map((/** @type {string} */ c) => [c, header.indexOf(c)]));
-    if (idx['날짜'] < 0 || idx['근무자'] < 0) return [];
+    if ((idx['날짜'] ?? -1) < 0 || (idx['근무자'] ?? -1) < 0) return [];
     return rows.slice(1).map(r => {
-        const shiftRaw = idx['근무조'] >= 0 ? r[idx['근무조']] : '';
+        const shiftRaw = (idx['근무조'] ?? -1) >= 0 ? r[idx['근무조'] ?? 0] : '';
         const shift = ROSTER_SHIFTS.find(s => s.key === shiftRaw || s.label === shiftRaw)?.key || 'day';
         return {
-            date: r[idx['날짜']] || '',
+            date: r[idx['날짜'] ?? 0] || '',
             shift,
-            worker: r[idx['근무자']] || '',
-            note: idx['메모'] >= 0 ? (r[idx['메모']] || '') : '',
+            worker: r[idx['근무자'] ?? 0] || '',
+            note: (idx['메모'] ?? -1) >= 0 ? (r[idx['메모'] ?? 0] || '') : '',
         };
     }).filter(x => x.date && x.worker);
 }

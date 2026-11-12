@@ -36,6 +36,10 @@ const _runSearch = debounce((value) => {
  * @property {*[]} [list]
  * @property {*[]} [shown]
  */
+/**
+ * @typedef {ResultTier & {list: *[], shown: *[]}} FilledTier
+ * applyResultTiers가 list·shown을 채운 티어
+ */
 /** @type {ResultTier[]} */
 const RESULT_TIERS = [
     { kinds: ['section', 'story'], limit: 30, capNote: '교재 결과가 많아 상위 {limit}건만 표시합니다 (전체 {total}건). 검색어를 더 구체화하거나 과목 필터를 사용하세요.' },
@@ -246,7 +250,7 @@ function performTextbookSearch() {
     {
         const colors = ['badge-cyan', 'badge-violet', 'badge-emerald', 'badge-amber', 'badge-rose', 'badge-indigo'];
         const subjects = (DataLoader.registry && DataLoader.registry.subjects) || [];
-        subjects.forEach((/** @type {*} */ sub, /** @type {number} */ idx) => { badgeColors[sub.key] = colors[idx % colors.length]; });
+        subjects.forEach((/** @type {*} */ sub, /** @type {number} */ idx) => { badgeColors[sub.key] = colors[idx % colors.length] || 'badge-cyan'; });
     }
     const renderResultCard = (/** @type {*} */ item, /** @type {number} */ idx) =>
         renderSearchResultCard(container, item, idx, allVariantTerms, badgeColors);
@@ -276,7 +280,7 @@ function performTextbookSearch() {
 
 // 티어별 정렬·상한 (테이블 주도 — 티어 추가 시 RESULT_TIERS 한 곳만 수정)
 // kinds '*'는 선언되지 않은 나머지 kind 버킷을 전부 받는 폴백 티어다 (TS-18).
-/** @param {Object.<string,*[]>} buckets @returns {Array<ResultTier & {list: *[], shown: *[]}>} */
+/** @param {Object.<string,*[]>} buckets @returns {[FilledTier, FilledTier, FilledTier, FilledTier, FilledTier]} */
 function applyResultTiers(buckets) {
     const consumedKinds = new Set(['weak']);
     for (const t of RESULT_TIERS) {
@@ -289,7 +293,7 @@ function applyResultTiers(buckets) {
         t.list = list;
         t.shown = list.slice(0, t.limit);
     }
-    return /** @type {Array<ResultTier & {list: *[], shown: *[]}>} */ (RESULT_TIERS);
+    return /** @type {[FilledTier, FilledTier, FilledTier, FilledTier, FilledTier]} */ (RESULT_TIERS);
 }
 
 // 문서 결과 — nav.mdPath를 가진 모든 소스 (참조자료·문제은행·시험 선언 문서 등).
@@ -436,7 +440,7 @@ function formatSectionContent(rawContent, searchTerms = [], item = {}) {
     const subjRefFiles = (_rt.REFERENCE_FILES || {})[item.subjId] || [];
     const subjDirName = (_rt.SUBJECT_DIR_MAP || {})[item.subjId] || '';
     const srcMatch = String(rawContent || '').match(/📌\s*\*\*출처\*\*[:：]\s*(.+?)(?:\||\n)/);
-    const refPath = srcMatch ? mapSourceToRef(srcMatch[1]) : null;
+    const refPath = srcMatch ? mapSourceToRef(srcMatch[1] || '') : null;
     let html = formatSectionContentForReader(rawContent, item.filePath, refPath, subjRefFiles, subjDirName, [], item.title);
 
     // 검색 컨텍스트 전달 — 카드 내 참조 링크가 검색어를 물고 열리면 뷰어가

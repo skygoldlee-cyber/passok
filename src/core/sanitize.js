@@ -34,7 +34,7 @@ const HTML_ESCAPE_MAP = {
 export function escapeHTML(value) {
     if (value === null || value === undefined) return '';
     return String(value).replace(/[&<>"']/g, function (ch) {
-        return HTML_ESCAPE_MAP[ch];
+        return HTML_ESCAPE_MAP[ch] || ch;
     });
 }
 
@@ -127,7 +127,7 @@ function _interpToMarkup(value) {
  * @returns {string} 안전한 마크업 (런타임은 SafeHtml — 중첩 판정용)
  */
 export function html(strings, ...values) {
-    let out = strings[0];
+    let out = strings[0] || '';
     for (let i = 0; i < values.length; i++) {
         out += _interpToMarkup(values[i]) + strings[i + 1];
     }

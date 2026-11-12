@@ -268,7 +268,7 @@ export function saveProgress() {
         /** @type {Object.<string, number>} */
         const bySubj = {};
         Object.keys(memBySubj).forEach(k => {
-            const d = memBySubj[k] - (prevBySubj[k] || 0);
+            const d = (memBySubj[k] || 0) - (prevBySubj[k] || 0);
             if (d > 0) bySubj[k] = d;
         });
         state._prevMemBySubj = memBySubj;
@@ -278,7 +278,7 @@ export function saveProgress() {
         /** @type {Object.<string, number>} */
         const quizBySubj = {};
         Object.keys(quizBySubjAll).forEach(k => {
-            const d = quizBySubjAll[k] - (prevQuizBySubj[k] || 0);
+            const d = (quizBySubjAll[k] || 0) - (prevQuizBySubj[k] || 0);
             if (d > 0) quizBySubj[k] = d;
         });
         state._prevQuizBySubj = quizBySubjAll;
@@ -337,7 +337,7 @@ export function cleanOrphansForSubject(subjKey, subjData) {
     Object.keys(state.quizResults).forEach(id => {
         const nid = migrateId(id, validQuizIds, subjKey + '_quiz_');
         if (nid && !(nid in state.quizResults)) {
-            state.quizResults[nid] = state.quizResults[id];
+            state.quizResults[nid] = /** @type {*} */ (state.quizResults[id]);
             delete state.quizResults[id];
             migrated++;
         }

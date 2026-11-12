@@ -10,7 +10,7 @@ export { careShare } from '../care-share.js';
 /** @param {string} id */
 const $ = (id) => document.getElementById(id);
 /** @param {*} s */
-const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
+const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
 
 /** @param {string} id @param {string} fallback */
 const _val = (id, fallback) => {
@@ -43,7 +43,7 @@ function facilityUse(facTypeKey, gradeKey, days) {
 function readForm() {
     const type = _val('care-type', 'home');
     const ncKeys = type === 'facility' ? Object.keys(NC_FIELDS) : NC_HOME_KEYS;
-    const nonCovered = ncKeys.reduce((/** @type {number} */ s, /** @type {string} */ k) => s + (Number(_val((/** @type {Object.<string,string>} */ (NC_FIELDS))[k], '0')) || 0), 0);
+    const nonCovered = ncKeys.reduce((/** @type {number} */ s, /** @type {string} */ k) => s + (Number(_val((/** @type {Object.<string,string>} */ (NC_FIELDS))[k] || '', '0')) || 0), 0);
     let monthlyUse = Number(_val('care-use', '0')) || 0, basis = null;
     if (type === 'facility') {
         const days = Number(_val('care-fac-days', '0')) || 0;
@@ -74,9 +74,9 @@ export function careCalcRun() {
         ...(in_.type === 'facility'
             ? [['시설 유형', _selLabel('care-fac-type')], ['월 입소 일수', `${_val('care-fac-days', '0')}일`]]
             : [['월 예상 급여 이용액', formatWon(in_.monthlyUse)]]),
-        ...ncKeys.map((/** @type {string} */ k) => /** @type {[string, number]} */ ([k, Number(_val((/** @type {Object.<string,string>} */ (NC_FIELDS))[k], '0')) || 0]))
+        ...ncKeys.map((/** @type {string} */ k) => /** @type {[string, number]} */ ([k, Number(_val((/** @type {Object.<string,string>} */ (NC_FIELDS))[k] || '', '0')) || 0]))
             .filter(([, v]) => v > 0)
-            .map(([k, v]) => [`비급여·${(/** @type {Object.<string,string>} */ (NC_LABELS))[k]}`, formatWon(v)]),
+            .map(([k, v]) => [`비급여·${(/** @type {Object.<string,string>} */ (NC_LABELS))[k] || k}`, formatWon(v)]),
         ['본인부담 감경', _selLabel('care-reduction')],
         ['적용 기준', `${EFFECTIVE_YEAR}년 고시`],
     ];

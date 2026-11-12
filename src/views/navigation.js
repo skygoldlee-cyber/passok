@@ -56,7 +56,7 @@ export function restoreScrollPosition(viewId) {
     const positions = /** @type {Object.<string,number>} */ (scrollPositions);
     if (positions[viewId] !== undefined) {
         requestAnimationFrame(() => {
-            mainContent.scrollTop = positions[viewId];
+            mainContent.scrollTop = positions[viewId] || 0;
         });
     }
 }

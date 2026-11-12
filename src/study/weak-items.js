@@ -102,8 +102,8 @@ export function parseWeakSimId(itemId) {
     if (!itemId || !itemId.startsWith(WEAK_SIM_PREFIX)) return null;
     const parts = itemId.substring(WEAK_SIM_PREFIX.length).split('_q');
     if (parts.length !== 2) return null;
-    const qNum = parseInt(parts[1], 10);
-    return isNaN(qNum) ? null : { examId: parts[0], qNum };
+    const qNum = parseInt(parts[1] || '0', 10);
+    return isNaN(qNum) ? null : { examId: parts[0] || '', qNum };
 }
 
 /**

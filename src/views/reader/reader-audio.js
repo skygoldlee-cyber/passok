@@ -231,7 +231,8 @@ function getCurrentSectionIdx(currentTime) {
     const bounds = readerAudioState.sectionBoundaries;
     if (!bounds.length) return -1;
     for (let i = 0; i < bounds.length; i++) {
-        if (currentTime >= bounds[i].start && currentTime < bounds[i].end) return i;
+        const b = bounds[i];
+        if (b && currentTime >= b.start && currentTime < b.end) return i;
     }
     // 마지막 섹션 끝 이후면 마지막 인덱스 반환
     return bounds.length - 1;
@@ -356,7 +357,7 @@ export function cycleReaderAudioRate() {
     const current = a ? a.playbackRate : getSavedRate();
     let idx = rates.findIndex(r => Math.abs(r - current) < 0.01);
     idx = (idx + 1) % rates.length;
-    const newRate = rates[idx];
+    const newRate = rates[idx] || 1;
     if (a) a.playbackRate = newRate;
     safeSetItem(READER_AUDIO_RATE_KEY, String(newRate));
     const ui = getAudioUI();

@@ -121,7 +121,7 @@ export async function startDiagnosticQuiz() {
         showToast('출제 가능한 문제가 없습니다.', 'warning');
         return;
     }
-    state.quiz.subject = subjects[0].key;
+    state.quiz.subject = (subjects[0] || {}).key || '';
     state.quiz.data = shuffle(data);
     state.quiz.diagnostic = true;
     trackAction('diagnostic_quiz');
@@ -588,7 +588,7 @@ function _renderDiagnosticProfile(reviewListEl) {
     const perSubj = {};
     state.quiz.solvedList.forEach(s => {
         const m = (s.quizId || '').match(/^([a-z]+)_quiz_/);
-        const key = m ? m[1] : 'unknown';
+        const key = m ? (m[1] || 'unknown') : 'unknown';
         perSubj[key] = perSubj[key] || { solved: 0, correct: 0 };
         perSubj[key].solved++;
         if (s.correct) perSubj[key].correct++;

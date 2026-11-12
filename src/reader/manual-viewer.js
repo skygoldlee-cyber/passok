@@ -312,8 +312,8 @@ body.manual-open{overflow:hidden;}
             e.preventDefault();
             // 매뉴얼 간 이동 (doc:키) — 같은 오버레이에서 다른 문서로 전환
             const docMatch = href.match(/^doc:([a-z_]+)$/);
-            if (docMatch && MD_SOURCES[docMatch[1]]) {
-                openDocument(docMatch[1]);
+            if (docMatch && MD_SOURCES[docMatch[1] || '']) {
+                openDocument(docMatch[1] || '');
                 return;
             }
             // 교재 바로가기 (subj:과목#chNN) → 오버레이 닫고 교재 리더 해당 과목·챕터로 이동
@@ -322,7 +322,7 @@ body.manual-open{overflow:hidden;}
                 close();
                 const navItem = document.querySelector('.nav-item[data-target="textbook-reader-view"]');
                 if (navItem) /** @type {HTMLElement} */ (navItem).click();
-                openSubjectChapter(subjMatch[1], subjMatch[2] || '');
+                openSubjectChapter(subjMatch[1] || '', subjMatch[2] || '');
                 return;
             }
             window.open(href, '_blank', 'noopener,noreferrer');

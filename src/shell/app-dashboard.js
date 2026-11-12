@@ -28,8 +28,8 @@ export function populateSubjectSelects() {
             fcSelect.value = prevVal;
             state.flashcards.subject = prevVal;
         } else if (subjects.length > 0) {
-            fcSelect.value = subjects[0].key;
-            state.flashcards.subject = subjects[0].key;
+            fcSelect.value = subjects[0]?.key || '';
+            state.flashcards.subject = subjects[0]?.key || null;
         }
     }
 
@@ -48,8 +48,8 @@ export function populateSubjectSelects() {
             quizSelect.value = prevVal;
             state.quiz.subject = prevVal;
         } else if (subjects.length > 0) {
-            quizSelect.value = subjects[0].key;
-            state.quiz.subject = subjects[0].key;
+            quizSelect.value = subjects[0]?.key || '';
+            state.quiz.subject = subjects[0]?.key || null;
         }
     }
 
@@ -104,7 +104,7 @@ export function populateExamCards() {
     /** @type {Object.<string, string>} */
     const badgeColors = {};
     subjects.forEach((sub, idx) => {
-        badgeColors[sub.key] = EXAM_BADGE_COLORS[idx % EXAM_BADGE_COLORS.length];
+        badgeColors[sub.key] = EXAM_BADGE_COLORS[idx % EXAM_BADGE_COLORS.length] || '';
     });
 
     container.innerHTML = '';
@@ -164,7 +164,7 @@ ${comboBookBtn}
         const examKeys = new Set(subjExams.map(e => e.key));
         const attempts = simHistory.filter(h => examKeys.has(h.examId));
         const progressHtml = attempts.length
-            ? `                            <div class="exam-card-progress"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> 모의고사 ${attempts.length}회 · 최근 ${attempts[attempts.length - 1].rate}% · 최고 ${Math.max(...attempts.map(a => a.rate))}%</div>\n`
+            ? `                            <div class="exam-card-progress"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> 모의고사 ${attempts.length}회 · 최근 ${attempts[attempts.length - 1]?.rate}% · 최고 ${Math.max(...attempts.map(a => a.rate))}%</div>\n`
             : '';
 
         const cardHtml = `                        <div class="exam-card-item">
@@ -282,7 +282,7 @@ ${btnsHtml}
             const parts = [];
             if (attempts.length) {
                 const best = Math.max(...attempts.map(a => a.rate));
-                parts.push(`응시 ${attempts.length}회 · 최근 ${attempts[attempts.length - 1].rate}% · 최고 ${best}%`);
+                parts.push(`응시 ${attempts.length}회 · 최근 ${attempts[attempts.length - 1]?.rate}% · 최고 ${best}%`);
             }
             try {
                 const draft = JSON.parse(safeGetItem(STORAGE_KEYS.SIM_DRAFT_SESSION) || 'null');

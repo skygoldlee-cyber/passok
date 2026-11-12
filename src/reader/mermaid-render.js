@@ -83,8 +83,8 @@ export function renderMermaidIn(container, logPrefix = '[mermaid]') {
                         if (failed > 0) console.warn(`${logPrefix} mermaid: ${rendered} rendered, ${failed} failed`);
                         return;
                     }
-                    const node = nodeArr[i];
-                    const type = nodeTypes[i];
+                    const node = /** @type {Element} */ (nodeArr[i]);
+                    const type = nodeTypes[i] || '';
                     mermaid.initialize(getMermaidInitOptions(type, isLight));
                     mermaid.run({ nodes: [node] })
                         .then(() => {
@@ -137,7 +137,7 @@ let _zoomScale = 1;
  */
 function _getSvgIntrinsicSize(svg) {
     const vb = (svg.getAttribute('viewBox') || '').trim().split(/\s+/).map(Number);
-    if (vb.length === 4 && vb[2] > 0 && vb[3] > 0) return { w: vb[2], h: vb[3] };
+    if (vb.length === 4 && (vb[2] || 0) > 0 && (vb[3] || 0) > 0) return { w: vb[2] || 0, h: vb[3] || 0 };
     const w = parseFloat(svg.getAttribute('width') || '');
     const h = parseFloat(svg.getAttribute('height') || '');
     if (w > 0 && h > 0 && !(svg.getAttribute('width') || '').includes('%')) {
@@ -213,8 +213,8 @@ function _setZoom(scale) {
 /** @param {1|-1} dir */
 function _stepZoom(dir) {
     const next = dir > 0
-        ? (ZOOM_STEPS.find(s => s > _zoomScale + 0.001) ?? ZOOM_STEPS[ZOOM_STEPS.length - 1])
-        : ([...ZOOM_STEPS].reverse().find(s => s < _zoomScale - 0.001) ?? ZOOM_STEPS[0]);
+        ? (ZOOM_STEPS.find(s => s > _zoomScale + 0.001) ?? (ZOOM_STEPS[ZOOM_STEPS.length - 1] || 1))
+        : ([...ZOOM_STEPS].reverse().find(s => s < _zoomScale - 0.001) ?? (ZOOM_STEPS[0] || 1));
     _setZoom(next);
 }
 

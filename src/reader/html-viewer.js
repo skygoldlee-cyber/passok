@@ -406,7 +406,7 @@ async function _doSearch(keyword, skipScroll) {
         const highlightRest = (/** @type {number} */ startIdx) => {
             const endIdx = Math.min(startIdx + 50, remainingNodes.length);
             for (let i = startIdx; i < endIdx; i++) {
-                _highlightInTextNode(remainingNodes[i], lowerKw, kw);
+                _highlightInTextNode(/** @type {Node} */ (remainingNodes[i]), lowerKw, kw);
             }
             if (countEl) countEl.textContent = _searchResults.length > 0 ? `${_searchResults.length}개` : '없음';
             if (endIdx < remainingNodes.length) {

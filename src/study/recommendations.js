@@ -225,14 +225,14 @@ export function computeWrongCauseSummary(wrongCauses, { days = 7, now = Date.now
     Object.entries(wrongCauses || {}).forEach(([id, info]) => {
         if (!info || !info.cause || !(info.cause in counts)) return;
         if (info.ts && info.ts < cutoff) return;
-        counts[info.cause]++;
+        counts[info.cause] = (counts[info.cause] || 0) + 1;
         total++;
         const subj = info.subjectId || (id.match(/^([a-z]+)_/) || [])[1];
         if (subj) bySubj[subj] = (bySubj[subj] || 0) + 1;
     });
 
     const topCause = total > 0
-        ? Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0]
+        ? Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || null
         : null;
     const topSubject = Object.entries(bySubj).sort((a, b) => b[1] - a[1])[0]?.[0] || null;
 

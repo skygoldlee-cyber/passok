@@ -27,7 +27,7 @@ export function clientTrends(logs, { clientId, name, min = 3 } = {}) {
             if (vals.length >= min + 1) break;
         }
         const seq = vals.slice(0, min); // 최신순 — 악화는 배열상 비내림차 + 최신값이 가장 낮음
-        if (seq.length >= min && seq.every((/** @type {number} */ v, /** @type {number} */ i) => i === 0 || v >= seq[i - 1]) && seq[0] < seq[seq.length - 1]) {
+        if (seq.length >= min && seq.every((/** @type {number} */ v, /** @type {number} */ i) => i === 0 || v >= (seq[i - 1] || 0)) && (seq[0] || 0) < (seq[seq.length - 1] || 0)) {
             out.push({ key, label: ord.label, message: `최근 ${min}회 기록에서 ${ord.label} 확인 권장` });
         }
     }

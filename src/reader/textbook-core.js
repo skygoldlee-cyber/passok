@@ -283,7 +283,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
 
                 if (boldMatches.length > 0) {
                     boldMatches.forEach(match => {
-                        const answer = match[1].trim();
+                        const answer = (match[1] || '').trim();
                         if (answer.length > 1) {
                             const quizText = cleanDesc.replace(new RegExp(`\\*\\*${escapeRegExp(answer)}\\*\\*|${escapeRegExp(answer)}`, 'g'), ' [ 빈칸 ] ');
                             if (isValidQuiz('blank', quizText, answer)) {
@@ -347,7 +347,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
     };
 
     for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
+        const line = (lines[i] || '').trim();
 
         if (line.startsWith('## ')) {
             currentSection = line.substring(3).trim();
@@ -371,7 +371,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
                 inTable = true;
                 tableHeaders = line.split('|').map(h => h.trim()).filter(h => h !== '');
                 tableRows = [];
-                if (i + 1 < lines.length && lines[i + 1].trim().includes('---')) {
+                if (i + 1 < lines.length && (lines[i + 1] || '').trim().includes('---')) {
                     i++;
                 }
             } else {
@@ -399,9 +399,9 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
                 const cleanedLine = cleanText(line);
                 const listMatch = line.match(/^[-*]\s+\*\*([^*]+)\*\*(?:\s*(?:🔖기출|🎯\s*기출|📌중요|🎯\s*중요))?\s*[:：-]\s*(.+)$/);
                 if (listMatch) {
-                    const term = cleanText(listMatch[1]).replace(/\s*\(L\d+\)\s*/g, '').replace(/\s*\(([^a-zA-Z()]*?)\)/g, '').trim();
+                    const term = cleanText(listMatch[1] || '').replace(/\s*\(L\d+\)\s*/g, '').replace(/\s*\(([^a-zA-Z()]*?)\)/g, '').trim();
                     if (term.length > 2 && term.length <= 50 && !isGenericTerm(term)) {
-                    const desc = listMatch[2].trim();
+                    const desc = (listMatch[2] || '').trim();
                     const cleanDesc = cleanText(desc).replace(/\s*\(L\d+\)\s*/g, ' ').trim();
                     if (term !== cleanDesc && cleanDesc.length > 10) {
                     const liCardType = classifyCardType(term, cleanDesc, currentSection);
@@ -428,7 +428,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
 
                     if (boldMatches.length > 0) {
                     boldMatches.forEach(m => {
-                        const ans = m[1].trim();
+                        const ans = (m[1] || '').trim();
                         const quizText = cleanDesc.replace(new RegExp(`\\*\\*${escapeRegExp(ans)}\\*\\*|${escapeRegExp(ans)}`, 'g'), ' [ 빈칸 ] ');
                         if (isValidQuiz('blank', quizText, ans)) {
                             quizzes.push({
@@ -462,7 +462,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
 
                 if (boldMatches.length > 0) {
                     boldMatches.forEach(m => {
-                        const ans = m[1].trim();
+                        const ans = (m[1] || '').trim();
                         if (ans.length > 1 && !ans.includes('기출') && !ans.includes('중요')) {
                             const quizText = cleanedLine.replace(new RegExp(`\\*\\*${escapeRegExp(ans)}\\*\\*|${escapeRegExp(ans)}`, 'g'), ' [ 빈칸 ] ');
                             if (isValidQuiz('blank', quizText, ans)) {
@@ -530,7 +530,7 @@ export function parseTextbookContent(content, filename, subjectDir) {
     let currentSubsections = [];
 
     for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
+        const line = lines[i] || '';
         const trimmed = line.trim();
 
         if (trimmed.startsWith('# ')) {
@@ -559,7 +559,7 @@ export function parseTextbookContent(content, filename, subjectDir) {
             const subTitle = trimmed.substring(4).trim();
             const subLines = [];
             for (i++; i < lines.length; i++) {
-                const subTrimmed = lines[i].trim();
+                const subTrimmed = (lines[i] || '').trim();
                 if (subTrimmed.startsWith('# ')) {
                     if (!chapterTitleSet) {
                         chapterTitle = subTrimmed.substring(2).trim();

@@ -188,7 +188,7 @@ function generateLimitsOptions(question) {
         let distractor = '';
         if (correctValue.includes('~')) {
             const dists = ['1.0 ~ 3.0', '2.0 ~ 4.0', '3.0 ~ 5.0', '1.0 ~ 5.0', '3.0 ~ 10.0', '0.5 ~ 2.0'];
-            distractor = dists[Math.floor(Math.random() * dists.length)];
+            distractor = dists[Math.floor(Math.random() * dists.length)] || '';
         } else {
             const valNum = parseFloat(correctValue);
             if (valNum <= 0.1) {

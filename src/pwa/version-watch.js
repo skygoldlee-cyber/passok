@@ -20,7 +20,7 @@ let _promptShown = false;
  */
 export function parseDeployedVersion(text) {
     const m = /window\.APP_VERSION\s*=\s*['"]([^'"]+)['"]/.exec(text || '');
-    return m ? m[1] : null;
+    return m ? (m[1] || null) : null;
 }
 
 /** 배포본 버전 조회 — 캐시 우회 (오프라인·실패 시 null) */

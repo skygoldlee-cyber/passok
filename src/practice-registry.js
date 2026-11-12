@@ -826,7 +826,7 @@ export function getPracticeLanding() {
     const enabled = getEnabledPracticeFeatures();
     if (!enabled.length) return 'dashboard-view';
     return [...enabled]
-        .sort((a, b) => ((/** @type {*} */ (a)).priority ?? 0) - ((/** @type {*} */ (b)).priority ?? 0))[0].viewId;
+        .sort((a, b) => ((/** @type {*} */ (a)).priority ?? 0) - ((/** @type {*} */ (b)).priority ?? 0))[0]?.viewId || 'dashboard-view';
 }
 
 /** router 타이틀 맵용 — 선언된 모든 실무 뷰의 {title, subtitle}.

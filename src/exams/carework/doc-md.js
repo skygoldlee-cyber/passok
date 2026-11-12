@@ -31,13 +31,13 @@ export const docMdSign = items => {
 /** @param {string} csv */
 export const csvToMdTable = csv => {
     const rows = parseCsv(String(csv || '').replace(/^﻿/, ''));
-    return rows.length > 1 ? mdTable(rows[0], rows.slice(1)) : '';
+    return rows.length > 1 ? mdTable(rows[0] || [], rows.slice(1)) : '';
 };
 
 /** MD 서브셋 → HTML — 미리보기·PDF 렌더 원본 (docx-utils의 _mdBody와 동일 서브셋) */
 /** @param {string} md */
 export const mdToHtml = md => {
-    const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }))[c]);
+    const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }))[c] || c);
     const out = [];
     /** @type {string[][] | null} */
     let tbl = null;
@@ -45,7 +45,7 @@ export const mdToHtml = md => {
     let list = null;
     const flush = (/** @type {boolean} */ listOnly) => {
         if (tbl && !listOnly) {
-            out.push(`<table><thead><tr>${tbl[0].map(c => `<th>${esc(c.trim())}</th>`).join('')}</tr></thead><tbody>` +
+            out.push(`<table><thead><tr>${(tbl[0] || []).map(c => `<th>${esc(c.trim())}</th>`).join('')}</tr></thead><tbody>` +
                 tbl.slice(1).map(r => `<tr>${r.map(c => `<td>${esc(c.trim())}</td>`).join('')}</tr>`).join('') + '</tbody></table>');
             tbl = null;
         }
@@ -58,7 +58,7 @@ export const mdToHtml = md => {
         if (t.startsWith('- ')) { (list = list || []).push(t.slice(2)); continue; }
         flush(false);
         const h = t.match(/^(#{1,3})\s+(.+)/);
-        if (h) { out.push(`<h${+h[1].length + 2}>${esc(h[2])}</h${+h[1].length + 2}>`); continue; }
+        if (h) { out.push(`<h${+(h[1] || '').length + 2}>${esc(h[2])}</h${+(h[1] || '').length + 2}>`); continue; }
         if (t === '---') { out.push('<hr>'); continue; }
         if (t) out.push(`<p>${esc(t)}</p>`);
     }

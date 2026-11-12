@@ -87,7 +87,7 @@ export function buildSectionDisplayTitles(sections) {
             currentChapter = t.replace(/^📚\s*/, '');
             return t;
         }
-        return (counts[t] > 1 && currentChapter) ? `${t} — ${currentChapter}` : t;
+        return ((counts[t] || 0) > 1 && currentChapter) ? `${t} — ${currentChapter}` : t;
     });
 }
 

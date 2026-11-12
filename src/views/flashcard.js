@@ -120,6 +120,7 @@ export function renderFlashcard() {
     }
 
     const card = fcConfig.data[fcConfig.currentIndex];
+    if (!card) return;
 
     // 마크업 데이터 주입
     if (termEl) termEl.textContent = card.term;
@@ -179,7 +180,7 @@ export function renderFlashcard() {
         const el = document.getElementById(id);
         if (!el) return;
         const ivEl = document.getElementById(`${id.slice(0, -4)}-interval`);
-        if (ivEl) ivEl.textContent = `${intervals[i]}일`;
+        if (ivEl) ivEl.textContent = `${intervals[i] ?? 0}일`;
         const active = lastRating ? lastRating === i + 1
             : (state.weakCards.has(card.id) ? i === 0
                 : state.memorizedCards.has(card.id) ? i === 3 : false);

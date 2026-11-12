@@ -150,11 +150,11 @@ export function renderSimResultBreakdown({ score, total, subjectScores, chapterS
 
     Object.keys(subjectScores).forEach(subj => {
         const data = subjectScores[subj];
-        if (data.total > 0) {
+        if (data && data.total > 0) {
             const subRate = Math.round((data.score / data.total) * 100);
             const isFail = subRate < rules.subjectFailBelow;
             if (isFail) {
-                failedSubjects.push({ id: subj, name: subjNames[subj], rate: subRate });
+                failedSubjects.push({ id: subj, name: subjNames[subj] || subj, rate: subRate });
             }
 
             const progressColor = isFail ? 'var(--color-danger)' : (subRate >= rules.passAverage ? 'var(--color-success)' : 'var(--color-warning)');
@@ -163,7 +163,7 @@ export function renderSimResultBreakdown({ score, total, subjectScores, chapterS
             breakdownHTML += `
                 <div>
                     <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-bottom: 0.25rem;">
-                        <span style="font-weight: 600; color: var(--color-text-muted);">${esc(subjNames[subj])}</span>
+                        <span style="font-weight: 600; color: var(--color-text-muted);">${esc(subjNames[subj] || subj)}</span>
                         <span style="color: ${progressColor}; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem;">
                             ${data.score} / ${data.total} (${subRate}%)
                             ${isFail ? ' <span style="background:var(--color-danger); color:var(--color-on-brand); font-size:0.7rem; padding:1px 4px; border-radius:3px;">과락</span>' : ''}
@@ -184,9 +184,9 @@ export function renderSimResultBreakdown({ score, total, subjectScores, chapterS
     /** @type {Array<{subj: *, label: string, score: number, total: number, rate: number}>} */
     const chapterRows = [];
     Object.keys(chapterStats).forEach(subj => {
-        Object.keys(chapterStats[subj]).forEach(title => {
-            const c = chapterStats[subj][title];
-            if (c.score >= c.total) return; // 전부 정답인 단원은 생략
+        Object.keys(chapterStats[subj] || {}).forEach(title => {
+            const c = (chapterStats[subj] || {})[title];
+            if (!c || c.score >= c.total) return; // 전부 정답인 단원은 생략
             chapterRows.push({
                 subj,
                 label: `${subjNames[subj] ? subjNames[subj].split(':')[0] : subj} · ${title}`,

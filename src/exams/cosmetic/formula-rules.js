@@ -102,7 +102,7 @@ function sanitizeRulesObject(parsed) {
       const names = [...new Set(list
         .filter((/** @type {*} */ n) => typeof n === 'string' && n.trim())
         .map((/** @type {string} */ n) => n.trim()))].slice(0, MAX_CUSTOM_PER_KEY);
-      if (names.length) rules[scope][key] = names;
+      if (names.length) (rules[scope] || (rules[scope] = {}))[key] = names;
     });
   });
   return rules;
@@ -132,7 +132,8 @@ export function addCustomCandidate(scope, key, name) {
   const n = typeof name === 'string' ? name.trim() : '';
   if (!n) return { ok: false, error: '원료명을 입력하세요.' };
   const rules = loadCustomRules();
-  const list = rules[scope][key] || (rules[scope][key] = []);
+  const scopeRules = rules[scope] || (rules[scope] = {});
+  const list = scopeRules[key] || (scopeRules[key] = []);
   if (list.includes(n)) return { ok: false, error: '이미 등록된 후보입니다.' };
   if (list.length >= MAX_CUSTOM_PER_KEY) return { ok: false, error: `후보는 대상당 최대 ${MAX_CUSTOM_PER_KEY}개입니다.` };
   list.push(n);
@@ -148,8 +149,9 @@ export function removeCustomCandidate(scope, key, name) {
   const list = rules[scope] && rules[scope][key];
   if (!list) return { ok: false, error: '등록된 후보가 없습니다.' };
   const next = list.filter((/** @type {string} */ n) => n !== name);
-  if (next.length) rules[scope][key] = next;
-  else delete rules[scope][key];
+  const scopeRules2 = rules[scope] || {};
+  if (next.length) scopeRules2[key] = next;
+  else delete scopeRules2[key];
   if (!saveCustomRules(rules)) return { ok: false, error: '저장에 실패했습니다.' };
   return { ok: true };
 }
@@ -196,7 +198,7 @@ export function importCustomRules(input, opts) {
   }
 
   const incoming = sanitizeRulesObject(parsed);
-  const hasAny = CUSTOM_SCOPES.some((/** @type {string} */ s) => Object.keys(incoming[s]).length > 0);
+  const hasAny = CUSTOM_SCOPES.some((/** @type {string} */ s) => Object.keys(incoming[s] || {}).length > 0);
   if (!hasAny) {
     return { ok: false, error: '가져올 규칙이 없습니다. base/concern/skin 키를 확인하세요.' };
   }
@@ -206,8 +208,9 @@ export function importCustomRules(input, opts) {
   let added = 0;
   let skipped = 0;
   CUSTOM_SCOPES.forEach((/** @type {string} */ scope) => {
-    Object.entries(incoming[scope]).forEach(([key, names]) => {
-      const list = rules[scope][key] || (rules[scope][key] = []);
+    Object.entries(incoming[scope] || {}).forEach(([key, names]) => {
+      const scopeRules3 = rules[scope] || (rules[scope] = {});
+      const list = scopeRules3[key] || (scopeRules3[key] = []);
       names.forEach((/** @type {string} */ n) => {
         if (list.includes(n) || list.length >= MAX_CUSTOM_PER_KEY) { skipped++; return; }
         list.push(n);

@@ -433,7 +433,7 @@ body.exam-open{overflow:hidden;}
                     import('../views/textbook-reader.js')
                 ]).then(([nav, reader]) => {
                     nav.switchView('textbook-reader-view');
-                    reader.openSubjectChapter(m[1], m[2] || '');
+                    reader.openSubjectChapter(m[1] || '', m[2] || '');
                 });
             });
         });
@@ -444,8 +444,8 @@ body.exam-open{overflow:hidden;}
             const mdHashMatch = href.match(/\.md#(.+)$/i);
             if (!/\.md(#.+)?$/i.test(href)) return;
             // #LNN은 라인 좌표, 그 외 #-슬러그는 섹션 헤딩 앵커
-            const lineMatch = mdHashMatch && mdHashMatch[1].match(/^L(\d+)$/i);
-            const lineNum = lineMatch ? parseInt(lineMatch[1]) : null;
+            const lineMatch = mdHashMatch && (mdHashMatch[1] || '').match(/^L(\d+)$/i);
+            const lineNum = lineMatch ? parseInt(lineMatch[1] || '0') : null;
             const headingSlug = (!lineMatch && mdHashMatch) ? mdHashMatch[1] : '';
             // 좌표·파일명 라벨 정리 — '교재: L237'→'교재 원문', '문서명: L495'→'문서명',
             // 'L228'→'원문 보기', 'xxx(제N호).md'→등록 표시명 (내부 좌표는 사용자 정보 아님)
@@ -755,7 +755,7 @@ body.exam-open{overflow:hidden;}
                             bestRow = row;
                         }
                     });
-                    highlightElement(bestRow);
+                    highlightElement(/** @type {Element} */ (bestRow));
                     return;
                 }
             }

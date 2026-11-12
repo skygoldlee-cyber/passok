@@ -44,7 +44,7 @@ const ACTION_LABELS = {
 
 /** 액션 키 → 표시 라벨 — `:` 접미 키는 접두사(버킷) 라벨로 해석 (UX-MET-04) @param {string} key */
 export function actionLabel(key) {
-    return ACTION_LABELS[key] || ACTION_LABELS[key.split(':')[0]] || key;
+    return ACTION_LABELS[key] || ACTION_LABELS[key.split(':')[0] || ''] || key;
 }
 
 /**

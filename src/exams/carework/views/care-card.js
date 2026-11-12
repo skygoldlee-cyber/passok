@@ -7,7 +7,7 @@ import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 /** @param {string} id */
 const $ = (id) => document.getElementById(id);
 /** @param {*} s */
-const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
+const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
 /** @type {*[]} */
 let _cards = [];
 /** @type {string|null} */

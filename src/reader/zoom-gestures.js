@@ -34,9 +34,10 @@ export function bindZoomGestures(body, { getScale, setScale, getFitScale }) {
     const minScale = () => Math.min(0.25, getFitScale() || 1);
     const clampScale = (/** @type {number} */ s) => Math.min(PINCH_MAX_SCALE, Math.max(minScale(), s));
 
+    /** @returns {[{x:number,y:number},{x:number,y:number}]|null} */
     const twoPts = () => {
         const it = [...pts.values()];
-        return it.length >= 2 ? [it[0], it[1]] : null;
+        return it.length >= 2 ? /** @type {[{x:number,y:number},{x:number,y:number}]} */ ([it[0], it[1]]) : null;
     };
     const midOf = (/** @type {{x:number, y:number}} */ a, /** @type {{x:number, y:number}} */ b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
     const distOf = (/** @type {{x:number, y:number}} */ a, /** @type {{x:number, y:number}} */ b) => Math.hypot(b.x - a.x, b.y - a.y);
@@ -93,7 +94,7 @@ export function bindZoomGestures(body, { getScale, setScale, getFitScale }) {
         if (!twoPts()) {
             pinch = null;
             const rest = [...pts.values()];
-            pan = rest.length === 1 ? { lastX: rest[0].x, lastY: rest[0].y, moved: 0 } : null;
+            pan = rest.length === 1 && rest[0] ? { lastX: rest[0].x, lastY: rest[0].y, moved: 0 } : null;
         }
         // 더블탭 판정 — 핀치 없이 한 손가락을 짧게 두 번 탭
         if (e.type === 'pointerup' && pts.size === 0 && !hadPinch && (!hadPan || hadPan.moved < TAP_MOVE_PX)) {

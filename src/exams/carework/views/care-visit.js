@@ -18,7 +18,7 @@ import { voiceButtonsInit } from '../care-voice.js';
 /** @param {string} id */
 const $ = (id) => document.getElementById(id);
 /** @param {*} s */
-const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
+const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
 /** @param {string} id @param {string} fb */
 const _val = (id, fb) => {
     const el = /** @type {HTMLSelectElement|HTMLInputElement|null} */ ($(id));
@@ -65,7 +65,7 @@ export function careVisitAdd() {
 export function careVisitResultOpen(arg) {
     const [scope, id] = String(arg || '').split(':');
     if (!id) return;
-    _resultTarget = { scope, id };
+    _resultTarget = { scope: scope || '', id };
     const panel = $('vis-result-panel');
     if (!panel) return;
     const head = $('vis-result-for');

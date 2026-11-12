@@ -23,7 +23,7 @@ export function startWeakExam() {
     (state.weakCards || new Set()).forEach(cardId => {
         const m = cardId.match(new RegExp('^' + WEAK_SIM_PREFIX + '([a-z]+)_combo_'));
         if (m) {
-            const order = comboSubjOrder(m[1]);
+            const order = comboSubjOrder(m[1] || '');
             if (order) comboSubsNeeded.add(order);
         }
     });
@@ -48,7 +48,7 @@ function _startWeakExamImpl() {
     const STUDY_DATA = (typeof window !== 'undefined' && window.STUDY_DATA) ? window.STUDY_DATA : {};
     // 헷갈린 카드나 오답 데이터 로딩
     let weakCards = Array.from(state.weakCards);
-    let solvedQuizzes = Object.keys(state.quizResults).filter(id => !state.quizResults[id].correct);
+    let solvedQuizzes = Object.keys(state.quizResults).filter(id => !(state.quizResults[id] || {}).correct);
     
     // 필터링 적용 (신규 Feature 3)
     if (state.reviewFilter && state.reviewFilter !== 'all') {

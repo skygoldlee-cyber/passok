@@ -204,7 +204,7 @@ export function nextBatchNo(dateStr) {
   let max = 0;
   loadAll().forEach(b => {
     const m = re.exec(b.batchNo || '');
-    if (m) max = Math.max(max, parseInt(m[1], 10));
+    if (m) max = Math.max(max, parseInt(m[1] || '0', 10));
   });
   return `${prefix}-${String(max + 1).padStart(2, '0')}`;
 }

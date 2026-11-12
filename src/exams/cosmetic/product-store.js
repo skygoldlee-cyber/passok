@@ -268,7 +268,7 @@ export function classifyProductIngredients(product, index) {
   for (const name of (product && product.ingredients) || []) {
     const r = classifyIngredient(name, index);
     results.push(r);
-    (/** @type {Object.<string,number>} */ (summary))[r.cls] += 1;
+    (/** @type {Object.<string,number>} */ (summary))[r.cls || ''] = ((/** @type {Object.<string,number>} */ (summary))[r.cls || ''] || 0) + 1;
   }
   return { results, summary };
 }

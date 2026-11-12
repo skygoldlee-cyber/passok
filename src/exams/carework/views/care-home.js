@@ -51,7 +51,7 @@ export function initCareHomeView() {
     document.querySelectorAll('.care-home-nav a[href^="#/"]').forEach(a => {
         if (a.querySelector('.care-new')) return;
         const slug = /** @type {HTMLAnchorElement} */ (a).href.split('#/')[1];
-        if (slug && !(used[`tool:${slug}`] > 0)) a.insertAdjacentHTML('beforeend', '<span class="care-new">처음</span>');
+        if (slug && !((used[`tool:${slug}`] || 0) > 0)) a.insertAdjacentHTML('beforeend', '<span class="care-new">처음</span>');
     });
     // 출력물 서명 설정 — 홈 입력값을 저장값으로 채움
     const sign = getDocSign();

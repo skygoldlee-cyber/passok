@@ -68,9 +68,9 @@ import {
 function _metaFromMetaLine(q, seg) {
     const s = seg.trim();
     const pm = s.match(/\*\*배점\*\*\s*[:：]?\s*([\d.]+)\s*점?/);
-    if (pm) { q.points = parseFloat(pm[1]); return; }
+    if (pm) { q.points = parseFloat(pm[1] || '0'); return; }
     const bm = s.match(/\*\*근거\*\*\s*[:：]?\s*(.+)$/);
-    if (bm) { q.basis = bm[1].trim(); return; }
+    if (bm) { q.basis = (bm[1] || '').trim(); return; }
     if (!s.includes('**') && s) q.type = s;
 }
 
@@ -119,12 +119,12 @@ function _parseBlock(num, title, block) {
         }
         if (line.includes('⚖️')) {
             for (const m of line.matchAll(/⚖️\s*\[([^\]]+)\]\(<([^>]+)>\)/g)) {
-                const href = m[2];
+                const href = m[2] || '';
                 const lm = href.match(/#L(\d+)$/i);
                 q.refs.push({
-                    label: m[1],
+                    label: m[1] || '',
                     path: lm ? href.slice(0, -lm[0].length) : href,
-                    line: lm ? parseInt(lm[1], 10) : null
+                    line: lm ? parseInt(lm[1] || '0', 10) : null
                 });
             }
             field = null; continue;
@@ -140,10 +140,11 @@ function _parseBlock(num, title, block) {
     for (const l of buf.rubric) {
         const im = l.match(/^\s*-\s*\[\s*\]\s*(.+)$/);
         if (im) {
-            const pm = im[1].match(/\s*[(（]\s*([\d.]+)\s*점\s*[)）]\s*$/);
+            const body = im[1] || '';
+            const pm = body.match(/\s*[(（]\s*([\d.]+)\s*점\s*[)）]\s*$/);
             q.rubricItems.push({
-                text: pm ? im[1].slice(0, pm.index).trim() : im[1].trim(),
-                points: pm ? parseFloat(pm[1]) : 0
+                text: pm ? body.slice(0, pm.index).trim() : body.trim(),
+                points: pm ? parseFloat(pm[1] || '0') : 0
             });
         }
     }
@@ -171,22 +172,22 @@ export function parseWrittenBank(mdText) {
     let curSec = null;
     let i = 0;
     while (i < lines.length) {
-        const h1 = !title && lines[i].match(/^#\s+(.+)$/);
-        if (h1) { title = h1[1].trim(); i++; continue; }
-        const h2 = lines[i].match(/^##\s+(.+)$/);
-        const h3 = lines[i].match(/^###\s+S(\d+)\.\s*(.+)$/);
+        const h1 = !title && (lines[i] || '').match(/^#\s+(.+)$/);
+        if (h1) { title = (h1[1] || '').trim(); i++; continue; }
+        const h2 = (lines[i] || '').match(/^##\s+(.+)$/);
+        const h3 = (lines[i] || '').match(/^###\s+S(\d+)\.\s*(.+)$/);
         if (h3) {
-            const num = parseInt(h3[1], 10);
+            const num = parseInt(h3[1] || '0', 10);
             // 블록 끝: 다음 ###S·## ·EOF
             let j = i + 1;
-            while (j < lines.length && !/^###?\s+/.test(lines[j])) j++;
-            const q = _parseBlock(num, h3[2].trim(), lines.slice(i + 1, j));
+            while (j < lines.length && !/^###?\s+/.test(lines[j] || '')) j++;
+            const q = _parseBlock(num, (h3[2] || '').trim(), lines.slice(i + 1, j));
             flat.push(q);
             if (curSec) curSec.questions.push(q);
             i = j; continue;
         }
         if (h2) {
-            curSec = { title: h2[1].trim(), questions: [] };
+            curSec = { title: (h2[1] || '').trim(), questions: [] };
             sections.push(curSec);
             i++; continue;
         }

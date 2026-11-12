@@ -152,7 +152,7 @@ async function renderNumberDrillCard(subjId) {
     // 카테고리 분류 (JSON category 필드 우선, 없으면 첫 번째 숫자 단위 기준)
     const allEntries = entries.map(e => ({
         ...e,
-        category: e.category || categorizeEntry(e.numbers[0].unit)
+        category: e.category || categorizeEntry(e.numbers[0]?.unit || '')
     }));
 
     const keyEntries = allEntries.filter(e => e.isKey);
@@ -194,7 +194,7 @@ async function renderNumberDrillCard(subjId) {
         const keyByCat = {};
         keyEntries.forEach((/** @type {*} */ e) => {
             if (!keyByCat[e.category]) keyByCat[e.category] = [];
-            keyByCat[e.category].push(e);
+            keyByCat[e.category]?.push(e);
         });
 
         UNIT_CATEGORIES.forEach(cat => {
@@ -222,7 +222,7 @@ async function renderNumberDrillCard(subjId) {
         const normalByCat = {};
         normalEntries.forEach((/** @type {*} */ e) => {
             if (!normalByCat[e.category]) normalByCat[e.category] = [];
-            normalByCat[e.category].push(e);
+            normalByCat[e.category]?.push(e);
         });
 
         UNIT_CATEGORIES.forEach(cat => {
@@ -280,7 +280,7 @@ export function detectProcedureFlow(chapter) {
             // 번호가 있는 리스트 항목 (1. 2. 3. 또는 ① ② ③)
             const numMatch = trimmed.match(/^(?:\d+[.)]|①|②|③|④|⑤|⑥|⑦|⑧|⑨|⑩)\s*(.+)/);
             if (numMatch) {
-                const label = numMatch[1]
+                const label = (numMatch[1] || '')
                     .replace(/🔖기출/g, '')
                     .replace(/📌중요/g, '')
                     .replace(/\*\*/g, '')

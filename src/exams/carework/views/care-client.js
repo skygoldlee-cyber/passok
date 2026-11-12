@@ -22,7 +22,7 @@ export { careShare } from '../care-share.js';
 /** @param {string} id */
 const $ = (id) => document.getElementById(id);
 /** @param {*} s */
-const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
+const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
 /** @param {string} id @param {string} fb */
 const _val = (id, fb) => {
     const el = /** @type {HTMLInputElement|null} */ ($(id));

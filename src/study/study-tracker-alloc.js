@@ -65,14 +65,14 @@ export function apportionByWeight(keys, weightBySubject, total, minPerKey = 0) {
     }));
     rows.forEach(r => {
         const g = Math.floor(r.share);
-        out[r.key] += g;
+        out[r.key] = (out[r.key] || 0) + g;
         pool -= g;
     });
     // 최대잔여법 — 소수부 큰 순으로 잔여 1씩 (동점은 keys 선언 순서)
     rows.sort((a, b) => (b.share - Math.floor(b.share)) - (a.share - Math.floor(a.share)));
     for (const r of rows) {
         if (pool <= 0) break;
-        out[r.key] += 1;
+        out[r.key] = (out[r.key] || 0) + 1;
         pool -= 1;
     }
     return out;
@@ -210,13 +210,13 @@ export function recentQuizBySubject(quizResults, limit = RECENT_QUIZ_WINDOW) {
     /** @type {Object.<string,*>} */
     const out = {};
     const entries = Object.entries(quizResults || {});
-    for (let i = entries.length - 1; i >= 0; i--) {
-        const k = subjectKeyFromItemId(entries[i][0]);
+    for (const [eid, res] of [...entries].reverse()) {
+        const k = subjectKeyFromItemId(eid);
         if (!k) continue;
         const o = out[k] = out[k] || { solved: 0, correct: 0 };
         if (o.solved >= limit) continue;
         o.solved++;
-        if (entries[i][1] && entries[i][1].correct) o.correct++;
+        if (res && res.correct) o.correct++;
     }
     return out;
 }
@@ -232,7 +232,7 @@ function _allocWeek(rows, remNow, total) {
     let pool = Math.max(0, total);
     for (let iter = 0; iter < rows.length && pool > 0; iter++) {
         const cand = rows.map((r, i) => {
-            const cap = remNow[i] - alloc[i];
+            const cap = (remNow[i] || 0) - (alloc[i] || 0);
             return { i, cap, demand: cap > 0 ? cap * r.weight * r.weakW : 0 };
         }).filter(c => c.cap > 0);
         if (!cand.length) break;
@@ -242,7 +242,7 @@ function _allocWeek(rows, remNow, total) {
         let consumed = 0;
         cand.forEach(c => {
             const give = Math.min(c.cap, Math.floor(pool * c.demand / dsum));
-            alloc[c.i] += give;
+            alloc[c.i] = (alloc[c.i] || 0) + give;
             consumed += give;
         });
         pool -= consumed;
@@ -250,7 +250,7 @@ function _allocWeek(rows, remNow, total) {
             // 모든 몫이 0이면 pool < 후보 수 — 잔량을 순환 배분해 교착 해소
             for (const c of cand) {
                 if (pool <= 0) break;
-                alloc[c.i] += 1;
+                alloc[c.i] = (alloc[c.i] || 0) + 1;
                 pool -= 1;
             }
         }
@@ -340,11 +340,11 @@ export function computeSubjectAllocation(plan, subjects, opts = {}) {
     const quizRemNow = rows.map(r => r.quizRemaining);
     const weeks = plan.weeks.map((/** @type {*} */ w) => {
         const counts = _allocWeek(rows, remNow, w.cards);
-        counts.forEach((c, i) => { remNow[i] -= c; });
+        counts.forEach((c, i) => { remNow[i] = (remNow[i] || 0) - c; });
         // SC-13 퀴즈 배분 — 주차 총량 = 학습일 × 일일 퀴즈 목표, 카드와 동일 수요 가중
         const quizTotal = (w.studyDays || 0) * dailyQuizzes;
         const quizCounts = _allocWeek(rows, quizRemNow, quizTotal);
-        quizCounts.forEach((c, i) => { quizRemNow[i] -= c; });
+        quizCounts.forEach((c, i) => { quizRemNow[i] = (quizRemNow[i] || 0) - c; });
         return {
             week: w.week,
             range: w.range,

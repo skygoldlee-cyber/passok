@@ -50,7 +50,7 @@ export function parseLimitText(limitText) {
   let m;
   PCT_RE.lastIndex = 0;
   while ((m = PCT_RE.exec(text)) !== null) {
-    const v = parseFloat(m[1]);
+    const v = parseFloat(m[1] || '');
     if (!Number.isNaN(v)) values.push(v);
   }
   result.values = values;
@@ -187,7 +187,7 @@ function parenNameParts(name) {
   const innerRe = /[(\[（]([^)\]）]*)[)\]）]/g;
   let m;
   while ((m = innerRe.exec(name)) !== null) {
-    for (const p of m[1].split(/[,·/]/)) {
+    for (const p of (m[1] || '').split(/[,·/]/)) {
       const t = p.trim();
       if (t.length >= 2 && !PAREN_ANNOTATION_RE.test(t)) parts.push(t);
     }
@@ -293,14 +293,14 @@ function boundedEditDistance(a, b, max) {
   if (Math.abs(a.length - b.length) > max) return Infinity;
   const row = Array.from({ length: b.length + 1 }, (_, i) => i);
   for (let i = 1; i <= a.length; i++) {
-    let prev = row[0];
+    let prev = row[0] || 0;
     row[0] = i;
-    let rowMin = row[0];
+    let rowMin = row[0] || 0;
     for (let j = 1; j <= b.length; j++) {
-      const t = row[j];
-      row[j] = Math.min(t + 1, row[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+      const t = row[j] || 0;
+      row[j] = Math.min(t + 1, (row[j - 1] || 0) + 1, prev + ((a[i - 1] || '') === (b[j - 1] || '') ? 0 : 1));
       prev = t;
-      if (row[j] < rowMin) rowMin = row[j];
+      if ((row[j] || 0) < rowMin) rowMin = row[j] || 0;
     }
     if (rowMin > max) return Infinity;
   }
@@ -343,7 +343,7 @@ export function suspectOcrSubstitutions(names, index) {
     for (const [k, label] of known) {
       if (Math.abs(k.length - key.length) > max) continue;
       const d = boundedEditDistance(key, k, max);
-      if (d > 0 && d < bestD) { bestD = d; best = label; }
+      if (typeof d === 'number' && d > 0 && d < bestD) { bestD = d; best = label; }
     }
     if (best) out.push({ input: n, suggestion: best });
   }
@@ -389,7 +389,7 @@ export function checkFormulaItems(items, index) {
     const ingredient = index && typeof item.name === 'string' ? findIngredient(index, item.name) : null;
     const r = checkIngredient(ingredient, item.concentration);
     results.push({ name: item.name, ...r });
-    (/** @type {Object.<string,number>} */ (summary))[r.check] += 1;
+    (/** @type {Object.<string,number>} */ (summary))[r.check || ''] = ((/** @type {Object.<string,number>} */ (summary))[r.check || ''] || 0) + 1;
   }
   return { results, summary };
 }

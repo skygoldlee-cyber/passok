@@ -5,7 +5,7 @@ import { setLocalOrgName, getOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 
 const $ = (/** @type {string} */ id) => document.getElementById(id);
-const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
+const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
 /** @type {*[]} */
 let _items = [];
 

@@ -97,7 +97,7 @@ function _matchScore(text, title, terms) {
     const hay = (text || '').toLowerCase();
     if (!terms.every(t => hay.includes(t))) return -1;
     const t = (title || '').toLowerCase();
-    return t.startsWith(terms[0]) ? 2 : t.includes(terms[0]) ? 1 : 0;
+    return t.startsWith(terms[0] || '') ? 2 : t.includes(terms[0] || '') ? 1 : 0;
 }
 
 /**
@@ -117,7 +117,7 @@ export function searchAll(query, sources) {
     /** @type {Object.<string, PaletteResult[]>} */
     const groups = { view: [], section: [], note: [], ingredient: [], exam: [] };
     /** @param {string} type @param {PaletteResult} item */
-    const push = (type, item) => { if (groups[type].length < MAX_PER_GROUP) groups[type].push(item); };
+    const push = (type, item) => { const g = groups[type]; if (g && g.length < MAX_PER_GROUP) g.push(item); };
 
     // 1) 뷰 바로가기
     views.forEach((/** @type {*} */ v) => {
@@ -184,8 +184,10 @@ export function searchAll(query, sources) {
     /** @type {PaletteResult[]} */
     const flat = [];
     order.forEach(type => {
-        groups[type].sort((a, b) => b.score - a.score);
-        flat.push(...groups[type]);
+        const g = groups[type];
+        if (!g) return;
+        g.sort((a, b) => b.score - a.score);
+        flat.push(...g);
     });
     const results = flat.slice(0, MAX_TOTAL);
 

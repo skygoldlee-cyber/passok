@@ -401,10 +401,11 @@ export function submitExam() {
             subj = examIdToSubjectId(subj);
         }
 
-        if (subj && subjectScores[subj]) {
-            subjectScores[subj].total++;
+        const sBucket = subj ? subjectScores[subj] : null;
+        if (subj && sBucket) {
+            sBucket.total++;
             if (isCorrect) {
-                subjectScores[subj].score++;
+                sBucket.score++;
             }
             // 단원별 집계 — 교재 인용이 없는 문항은 '기타(참조자료)'로 묶음
             const chTitle = chapterForQuestion(q, subj, qc) || '기타 (법령·참조자료)';
@@ -423,8 +424,9 @@ export function submitExam() {
     const subjectRates = {};
     let hasSubjectData = false;
     Object.keys(subjectScores).forEach(subj => {
-        if (subjectScores[subj].total > 0) {
-            subjectRates[subj] = Math.round((subjectScores[subj].score / subjectScores[subj].total) * 100);
+        const ss = subjectScores[subj];
+        if (ss && ss.total > 0) {
+            subjectRates[subj] = Math.round((ss.score / ss.total) * 100);
             hasSubjectData = true;
         } else {
             subjectRates[subj] = null;

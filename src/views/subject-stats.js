@@ -19,23 +19,23 @@ export function getSubjCounts() {
     const counts = {};
     state.memorizedCards.forEach(id => {
         const m = id.match(/^([a-z]+)_card_/);
-        if (m) counts[m[1]] = counts[m[1]] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 };
+        if (m && m[1]) counts[m[1]] = counts[m[1]] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 };
     });
     state.weakCards.forEach(id => {
         const m = id.match(/^([a-z]+)_card_/);
-        if (m) { counts[m[1]] = counts[m[1]] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 }; counts[m[1]].weak++; }
+        if (m && m[1]) { const c = counts[m[1]] = counts[m[1]] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 }; c.weak++; }
     });
     Object.keys(state.quizResults).forEach(id => {
         const m = id.match(/^([a-z]+)_quiz_/);
-        if (m) {
-            counts[m[1]] = counts[m[1]] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 };
-            counts[m[1]].quizSolved++;
-            if (state.quizResults[id].correct) counts[m[1]].quizCorrect++;
+        if (m && m[1]) {
+            const c = counts[m[1]] = counts[m[1]] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 };
+            c.quizSolved++;
+            if ((state.quizResults[id] || {}).correct) c.quizCorrect++;
         }
     });
     state.memorizedCards.forEach(id => {
         const m = id.match(/^([a-z]+)_card_/);
-        if (m) counts[m[1]].mem++;
+        if (m && m[1]) { const c = counts[m[1]]; if (c) c.mem++; }
     });
     _subjCountCache = counts;
     return counts;

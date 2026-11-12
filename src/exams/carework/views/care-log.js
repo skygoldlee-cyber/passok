@@ -14,7 +14,7 @@ import { renderToolBody } from '../form-seeds.js';
 import { todayKey } from '../../../core/utils.js';
 
 const $ = (/** @type {string} */ id) => document.getElementById(id);
-const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
+const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
 const _radio = (/** @type {string} */ name) => /** @type {HTMLInputElement|null} */ (document.querySelector(`input[name="${name}"]:checked`))?.value || '';
 const _val = (/** @type {string} */ id, /** @type {string} */ fb) => {
     const el = /** @type {HTMLSelectElement|HTMLInputElement|null} */ ($(id));

@@ -24,7 +24,7 @@ const ALIAS = {
 export function csvToClientsAny(text) {
     const lines = String(text).replace(/^﻿/, '').split(/\r?\n/);
     if (!lines.length) return [];
-    const head = lines[0].split(',').map((/** @type {string} */ h) => h.trim().replace(/^"|"$/g, ''));
+    const head = (lines[0] || '').split(',').map((/** @type {string} */ h) => h.trim().replace(/^"|"$/g, ''));
     if (!head.some((/** @type {string} */ h) => (/** @type {Object.<string,string>} */ (ALIAS))[h])) return csvToClients(text); // 외부 형식 아님 — 기존 파서 그대로
     lines[0] = head.map((/** @type {string} */ h) => (/** @type {Object.<string,string>} */ (ALIAS))[h] || h).join(',');
     return csvToClients(lines.join('\n'));

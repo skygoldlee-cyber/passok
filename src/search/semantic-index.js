@@ -123,12 +123,13 @@ export const SemanticIndex = {
      * @returns {{key:string, score:number, text:string}[]}
      */
     _hits(key, prefix, k) {
-        if (!_neighbors || !_neighbors.adj[key]) return [];
+        const adj = _neighbors?.adj[key];
+        if (!adj) return [];
         const nb = _neighbors;
-        return nb.adj[key]
+        return adj
             .filter(([k2]) => k2.startsWith(prefix))
             .slice(0, k)
-            .map(([k2, s]) => ({ key: k2, score: s, text: nb.texts[k2] || '' }));
+            .map(([k2, s]) => ({ key: k2, score: s, text: nb?.texts[k2] || '' }));
     },
 
     /** 테스트용 상태 리셋 — 프로덕션 코드에서 호출 금지 */
@@ -179,12 +180,12 @@ export function decodeVectorBundle(bundle) {
         const v = new Float32Array(bundle.dim);
         let norm = 0;
         for (let c = 0; c < bundle.dim; c++) {
-            v[c] = q[r * bundle.dim + c] * bundle.scales[r];
-            norm += v[c] * v[c];
+            v[c] = (q[r * bundle.dim + c] || 0) * (bundle.scales[r] || 0);
+            norm += (v[c] || 0) * (v[c] || 0);
         }
         norm = Math.sqrt(norm) || 1;
-        for (let c = 0; c < bundle.dim; c++) v[c] /= norm;
-        out.set(bundle.ids[r], v);
+        for (let c = 0; c < bundle.dim; c++) v[c] = (v[c] || 0) / norm;
+        out.set(bundle.ids[r] || '', v);
     }
     return out;
 }
@@ -196,7 +197,8 @@ export function decodeVectorBundle(bundle) {
 export function cosineSimilarity(a, b) {
     let dot = 0, na = 0, nb = 0;
     for (let i = 0; i < a.length; i++) {
-        dot += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i];
+        const ai = a[i] || 0, bi = b[i] || 0;
+        dot += ai * bi; na += ai * ai; nb += bi * bi;
     }
     const d = Math.sqrt(na) * Math.sqrt(nb);
     return d === 0 ? 0 : dot / d;

@@ -100,7 +100,7 @@ export function updateGlobalStats() {
     // 2. 퀴즈 통계
     const quizKeys = Object.keys(state.quizResults);
     const solvedCount = quizKeys.length;
-    const correctCount = quizKeys.filter(k => state.quizResults[k].correct).length;
+    const correctCount = quizKeys.filter(k => (state.quizResults[k] || {}).correct).length;
     const successRate = solvedCount > 0 ? Math.round((correctCount / solvedCount) * 100) : 0;
 
     if (solvedQuizzesEl) solvedQuizzesEl.textContent = String(solvedCount);
@@ -133,7 +133,7 @@ function _topWeightSubjectName() {
     (DataLoader.registry.exams || []).forEach(ex => {
         if (ex && ex.subject) weights[ex.subject] = (weights[ex.subject] || 0) + ((ex.stats && ex.stats.questions) || 0);
     });
-    const topKey = Object.keys(weights).sort((a, b) => weights[b] - weights[a])[0];
+    const topKey = Object.keys(weights).sort((a, b) => (weights[b] || 0) - (weights[a] || 0))[0];
     const subj = topKey && DataLoader.getSubjectList().find(s => s.key === topKey);
     return subj ? (subj.shortName || subj.name) : null;
 }

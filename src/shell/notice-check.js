@@ -79,8 +79,8 @@ export function findNoticeNumber(node) {
     }
   }
   if (!cands.length) return null;
-  const key = (/** @type {string} */ s) => { const m = /20(\d{2})-(\d+)/.exec(s); return m ? [+m[1], +m[2]] : [0, 0]; };
-  return cands.sort((a, b) => key(a)[0] - key(b)[0] || key(a)[1] - key(b)[1]).pop();
+  const key = (/** @type {string} */ s) => { const m = /20(\d{2})-(\d+)/.exec(s); return m ? [+(m[1] || '0'), +(m[2] || '0')] : [0, 0]; };
+  return cands.sort((a, b) => (key(a)[0] || 0) - (key(b)[0] || 0) || (key(a)[1] || 0) - (key(b)[1] || 0)).pop();
 }
 
 /** baseline보다 최신 고시인지 판정 (순수 함수 — 테스트용) */
@@ -93,9 +93,9 @@ export function isNewerNotice(status) {
   const be = base.effectiveDate || '';
   if (le && be) return le > be;
   // 날짜가 없으면 고시번호 비교 (제2026-19호 → [2026,19])
-  const num = (/** @type {*} */ s) => { const m = /20(\d{2})\s*-\s*(\d+)/.exec(s || ''); return m ? [+m[1], +m[2]] : null; };
+  const num = (/** @type {*} */ s) => { const m = /20(\d{2})\s*-\s*(\d+)/.exec(s || ''); return m ? [+(m[1] || '0'), +(m[2] || '0')] : null; };
   const ln = num(latest.notice); const bn = num(base.notice);
-  return !!(ln && bn && (ln[0] > bn[0] || (ln[0] === bn[0] && ln[1] > bn[1])));
+  return !!(ln && bn && ((ln[0] || 0) > (bn[0] || 0) || (ln[0] === bn[0] && (ln[1] || 0) > (bn[1] || 0))));
 }
 
 /** @param {*} latest @param {*[]} [extraDocs] */
@@ -332,7 +332,7 @@ function fmtDate(d) {
 /** 참조자료 파일명 → 감시 메타 (공식명·기준 고시·시행일·API 유형 — 순수 함수, 테스트용) */
 /** @param {*} file */
 export function parseRefDoc(file) {
-  const name = String(file).split('(')[0].trim();
+  const name = (String(file).split('(')[0] || '').trim();
   const m = /\(제([\d]+(?:-\d+)?)호\)\s*\((\d{8})\)/.exec(file);
   const target = /\((법률|대통령령|총리령|부령)\)/.test(file) ? 'law' : 'admrul';
   return {
@@ -392,9 +392,9 @@ export async function checkMfdsNoticeNow() {
     const changed = [];
     const failed = [];
     results.forEach((r, i) => {
-      if (r.status !== 'fulfilled') { failed.push(docs[i].name); return; }
+      if (r.status !== 'fulfilled') { failed.push(docs[i]?.name || ''); return; }
       const live = r.value;
-      if (live.effectiveDate && docs[i].baselineDate && live.effectiveDate > docs[i].baselineDate) {
+      if (live.effectiveDate && docs[i]?.baselineDate && live.effectiveDate > docs[i].baselineDate) {
         changed.push({ ...docs[i], latestNotice: live.notice, latestDate: live.effectiveDate, serial: live.serial });
       }
     });
@@ -454,9 +454,10 @@ export async function viewMfdsNoticeStatus() {
   let source = '';
   // Actions가 갱신한 원격 파일 우선, 실패 시 번들 스냅샷
   for (const [url, tag] of [[statusUrl(examId), '원격'], [`content/exams/${examId}/notice_status.json`, '번들']]) {
+    if (!url) continue;
     try {
       const r = await fetch(url, { cache: 'no-store' });
-      if (r.ok) { status = await r.json(); source = tag; break; }
+      if (r.ok) { status = await r.json(); source = tag || ''; break; }
     } catch (_) { /* 다음 후보 */ }
   }
   if (!status) {
@@ -563,8 +564,10 @@ export async function checkDictNoticeNow() {
   try {
     const results = await Promise.allSettled(docs.map(d => fetchLatestFor(d)));
     const today = todayKey();
-    const rows = docs.map((d, i) =>
-      dictNoticeRow(d, results[i].status === 'fulfilled' ? results[i].value : null, today));
+    const rows = docs.map((d, i) => {
+      const res = results[i];
+      return dictNoticeRow(d, res && res.status === 'fulfilled' ? res.value : null, today);
+    });
     const changed = rows.filter(r => r.level === 'newer' || r.level === 'pending').length;
     const failed = rows.filter(r => r.level === 'error').length;
     const head = changed

@@ -87,9 +87,9 @@ function _chapterAnchorForTitle(subjId, title) {
         const displayTitles = buildSectionDisplayTitles(secs);
         let anchor = '';
         for (let i = 0; i < secs.length; i++) {
-            const m = String(secs[i].title || '').match(/Chapter\s*(\d+)/i);
-            if (m) anchor = 'ch' + m[1].padStart(2, '0');
-            if (secs[i].title === title || displayTitles[i] === title) return anchor;
+            const m = String((/** @type {*} */ (secs[i]) || {}).title || '').match(/Chapter\s*(\d+)/i);
+            if (m) anchor = 'ch' + (m[1] || '').padStart(2, '0');
+            if ((/** @type {*} */ (secs[i]) || {}).title === title || displayTitles[i] === title) return anchor;
         }
     }
     return '';

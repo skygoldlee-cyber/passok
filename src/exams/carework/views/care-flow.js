@@ -63,7 +63,7 @@ const _rv = () => { try { return JSON.parse(getItem('flow_review') || '{}') || {
 function _scheduleReview(id) {
     const rv = _rv();
     const step = rv[id] ? Math.min((rv[id].step || 0) + 1, _IVLS.length - 1) : 0;
-    const d = new Date(); d.setDate(d.getDate() + _IVLS[step]);
+    const d = new Date(); d.setDate(d.getDate() + (_IVLS[step] || 0));
     rv[id] = { step, due: todayKey(d) };
     setItem('flow_review', JSON.stringify(rv));
 }
@@ -130,17 +130,18 @@ async function _load() {
 /** @param {string|number} subject */
 async function _bankLoad(subject) {
     if (_bank[subject]) return _bank[subject];
-    const md = await DataLoader._getMd(contentPath((/** @type {Object.<string,string>} */ (BANKS))[subject]));
+    const md = await DataLoader._getMd(contentPath((/** @type {Object.<string,string>} */ (BANKS))[subject] || ''));
     /** @type {Record<string, { stem: string, options: string[], answer: number }>} */
     const out = {};
     for (const m of md.matchAll(/###\s*Q(\d+)\.\s*([^\n]+)\n([\s\S]*?)(?=\n###\s|\n##\s|$)/g)) {
-        const opts = m[3].split('\n').map(l => l.trim()).filter(l => /^[①-⑤]/.test(l))
+        const opts = (m[3] || '').split('\n').map(l => l.trim()).filter(l => /^[①-⑤]/.test(l))
             .map(l => l.slice(1).trim());
-        if (opts.length >= 2) out['Q' + m[1]] = { stem: m[2].trim(), options: opts, answer: -1 };
+        if (opts.length >= 2) out['Q' + (m[1] || '')] = { stem: (m[2] || '').trim(), options: opts, answer: -1 };
     }
     // 정답 섹션 — **Q{n}.** 다음의 정답 표기를 매핑
     for (const m of md.matchAll(/\*\*Q(\d+)\.\*\*[\s\S]*?정답:\s*([①-⑤])/g)) {
-        if (out['Q' + m[1]]) out['Q' + m[1]].answer = CIRCLED.indexOf(m[2]);
+        const qk = 'Q' + (m[1] || '');
+        if (out[qk]) /** @type {*} */ (out[qk]).answer = CIRCLED.indexOf(m[2] || '');
     }
     _bank[subject] = out;
     return out;
@@ -155,7 +156,7 @@ function _bankKeys(conceptId) {
 /** @param {string|number} subject */
 async function _storySlots(subject) {
     if (_book !== subject) { _book = subject; _slots = null; }
-    if (!_slots) _slots = parseStorySlots(await DataLoader._getMd(contentPath((/** @type {Object.<string,string>} */ (BOOKS))[subject])));
+    if (!_slots) _slots = parseStorySlots(await DataLoader._getMd(contentPath((/** @type {Object.<string,string>} */ (BOOKS))[subject] || '')));
     return _slots;
 }
 
@@ -262,10 +263,10 @@ function _render() {
     }
     st.dataset.step = step;
     if (pg) pg.innerHTML = STEPS.map((/** @type {string} */ s) =>
-        `<span class="flow-step${s === step ? ' on' : ''}">${esc((/** @type {Object.<string,string>} */ (STEP_LABELS))[s])}</span>`).join('');
+        `<span class="flow-step${s === step ? ' on' : ''}">${esc((/** @type {Object.<string,string>} */ (STEP_LABELS))[s] || s)}</span>`).join('');
     if (back) back.disabled = _i === 0;
     if (next) {
-        next.textContent = (/** @type {Object.<string,string>} */ (NEXT_LABEL))[step] || '다음 ▶';
+        next.textContent = (/** @type {Object.<string,string>} */ (NEXT_LABEL))[step || ''] || '다음 ▶';
         next.disabled = !c || (step === 'pre' && !!_preItem && !_answered)
             || (step === 'scenario' && !!_scItem && !_answered);
     }

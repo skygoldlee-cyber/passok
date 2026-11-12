@@ -193,7 +193,7 @@ let cachedCards = null; // 카드 목록 캐싱 (단원 전환 시 초기화됨)
         if (!isMobileTocMode() || !e.touches || e.touches.length !== 1) { swTracking = false; return; }
         const tocAside = document.getElementById('reader-toc');
         if (!tocAside || tocAside.classList.contains('is-hidden')) { swTracking = false; return; }
-        const t = e.touches[0];
+        const t = /** @type {Touch} */ (e.touches[0]);
         const isOpen = tocAside.classList.contains('mobile-open');
         if ((!isOpen && t.clientX <= SWIPE_EDGE) || isOpen) {
             swTracking = true; swWasOpen = isOpen;
@@ -207,7 +207,7 @@ let cachedCards = null; // 카드 목록 캐싱 (단원 전환 시 초기화됨)
         const tocAside = document.getElementById('reader-toc');
         const tocBackdrop = document.getElementById('reader-toc-backdrop');
         if (!tocAside) { swTracking = false; return; }
-        const t = e.touches[0];
+        const t = /** @type {Touch} */ (e.touches[0]);
         const dx = t.clientX - swStartX;
         const dy = t.clientY - swStartY;
         if (Math.abs(dy) > Math.abs(dx)) { swTracking = false; return; }

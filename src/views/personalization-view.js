@@ -71,7 +71,7 @@ export function subjectJudgmentSeqs() {
         const simM = qid.match(/^(.+)_q\d+$/);
         const resolved = resolveWrongQuiz(qid);
         const subj = (resolved && resolved.subjectId) || subjectKeyFromItemId(qid)
-            || (simM && examIdToSubjectId(simM[1])) || '';
+            || (simM && examIdToSubjectId(simM[1] || '')) || '';
         if (!subj) continue;
         const arr = seqs.get(subj) || [];
         arr.push(e.ok === 1);

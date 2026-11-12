@@ -378,7 +378,7 @@ function buildSectionsHtml(chapter, ctx) {
         const noteText = (notes && notes[bookmarkKey] && notes[bookmarkKey].note) || '';
         const allContent = [section.content || '', ...((section.subsections || []).map((/** @type {*} */ s) => s.content || ''))].join('\n');
         const secSrcMatch = allContent.match(/📌\s*\*\*출처\*\*[:：]\s*(.+?)(?:\||\n)/);
-        const secRefPath = secSrcMatch ? mapSourceToRef(secSrcMatch[1]) : null;
+        const secRefPath = secSrcMatch ? mapSourceToRef(secSrcMatch[1] || '') : null;
         const refPath = secRefPath || chapterRefPath;
         let sectionHtml = formatSectionContentForReader(section.content, chapter.filePath, refPath, subjRefFiles, subjDirName, glossaryItems, section.title);
         if (section.subsections && section.subsections.length > 0) {

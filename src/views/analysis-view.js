@@ -255,13 +255,13 @@ function _renderWeakStatementInsight() {
     const clusters = computeWeakConceptClusters(getAllStatementStats(), qc.ranges, 2,
         { chapterTitles: qc.chapterTitles, cidSection: qc.cidSection });
     const clusterNoteHtml = clusters.length > 0
-        ? `<p class="analysis-advice">🔗 같은 개념 구간에서 반복 오판: ${esc(clusters[0].chapter || clusters[0].cid)} (${clusters[0].count}개 진술)</p>` : '';
+        ? `<p class="analysis-advice">🔗 같은 개념 구간에서 반복 오판: ${esc((clusters[0] || {}).chapter || (clusters[0] || {}).cid || '')} (${(clusters[0] || {}).count}개 진술)</p>` : '';
 
     // PS-01 — union-find 약점 개념 축 (의미 이웃+cid 결합) → PS-10 클리닉 처방 + PS-05 교재·드릴 딥링크
     const conceptClusters = weakClusters();
     let clinicHtml = '';
     if (conceptClusters.length > 0) {
-        const top = conceptClusters[0];
+        const top = /** @type {*} */ (conceptClusters[0]);
         const rep = top.members[0];
         const subj = rep ? subjectFromSid(rep.sid) || '' : '';
         const anchor = rep ? normalizeCidAnchor(rep.cid, subj, qc.cidSection) : null;
@@ -540,8 +540,8 @@ function _renderPassGapInsight() {
     }) : null;
     const probRowHtml = passEst
         ? `<div class="wc-row"><span>합격 확률 추정</span><strong>${Math.round(passEst.probability * 100)}%</strong></div>` : '';
-    const needRowHtml = (passEst && passEst.weakest && /** @type {Object.<string,number>} */ (passEst.needHours)[passEst.weakest] > 0)
-        ? `<div class="wc-subrow"><span>보강 필요 학습량</span><strong>${esc((subjects.find((/** @type {*} */ s) => s.key === passEst.weakest) || { name: passEst.weakest }).name)} ≈${/** @type {Object.<string,number>} */ (passEst.needHours)[passEst.weakest]}h</strong></div>` : '';
+    const needRowHtml = (passEst && passEst.weakest && (/** @type {Object.<string,number>} */ (passEst.needHours)[passEst.weakest || ''] || 0) > 0)
+        ? `<div class="wc-subrow"><span>보강 필요 학습량</span><strong>${esc((subjects.find((/** @type {*} */ s) => s.key === passEst.weakest) || { name: passEst.weakest }).name)} ≈${/** @type {Object.<string,number>} */ (passEst.needHours)[passEst.weakest || '']}h</strong></div>` : '';
 
     const gapRowHtml = gap.gap !== null
         ? `<div class="wc-row"><span>합격선(평균 ${gap.passLine}점)까지</span><strong>${gap.gap === 0 ? '도달 ✅' : `+${gap.gap}점`}</strong></div>`

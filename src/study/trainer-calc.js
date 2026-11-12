@@ -19,9 +19,9 @@ export function buildCalcQuestion() {
         const rawConcs = [10, 20, 30, 50, 80];
         const targetConcs = [1, 2, 3, 5];
         
-        const W = totalWeights[Math.floor(Math.random() * totalWeights.length)];
-        const C1 = rawConcs[Math.floor(Math.random() * rawConcs.length)];
-        const C2 = targetConcs[Math.floor(Math.random() * targetConcs.length)];
+        const W = totalWeights[Math.floor(Math.random() * totalWeights.length)] || 0;
+        const C1 = rawConcs[Math.floor(Math.random() * rawConcs.length)] || 0;
+        const C2 = targetConcs[Math.floor(Math.random() * targetConcs.length)] || 0;
         
         const answer = (C2 / C1) * W;
         
@@ -40,10 +40,10 @@ export function buildCalcQuestion() {
         const c1List = [1, 2, 3];
         const c2List = [4, 5, 6];
         
-        const W1 = w1List[Math.floor(Math.random() * w1List.length)];
-        const W2 = w2List[Math.floor(Math.random() * w2List.length)];
-        const C1 = c1List[Math.floor(Math.random() * c1List.length)];
-        const C2 = c2List[Math.floor(Math.random() * c2List.length)];
+        const W1 = w1List[Math.floor(Math.random() * w1List.length)] || 0;
+        const W2 = w2List[Math.floor(Math.random() * w2List.length)] || 0;
+        const C1 = c1List[Math.floor(Math.random() * c1List.length)] || 0;
+        const C2 = c2List[Math.floor(Math.random() * c2List.length)] || 0;
         
         const totalW = W1 + W2;
         const totalC = (C1 * W1 + C2 * W2) / totalW;
@@ -63,8 +63,8 @@ export function buildCalcQuestion() {
         const wList = [98, 99, 198, 199, 297, 495];
         const lList = [0.5, 1.0, 2.0];
         
-        const W = wList[Math.floor(Math.random() * wList.length)];
-        const L = lList[Math.floor(Math.random() * lList.length)];
+        const W = wList[Math.floor(Math.random() * wList.length)] || 0;
+        const L = lList[Math.floor(Math.random() * lList.length)] || 0;
         
         const answer = (L * W) / (100 - L);
         
@@ -83,8 +83,8 @@ export function buildCalcQuestion() {
         const w1List = [150, 190, 240, 480];
         const w2List = [5, 10, 20];
         
-        const W1 = w1List[Math.floor(Math.random() * w1List.length)];
-        const W2 = w2List[Math.floor(Math.random() * w2List.length)];
+        const W1 = w1List[Math.floor(Math.random() * w1List.length)] || 0;
+        const W2 = w2List[Math.floor(Math.random() * w2List.length)] || 0;
         
         const totalW = W1 + W2;
         const conc = (W2 / totalW) * 100;

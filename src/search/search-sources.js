@@ -68,7 +68,7 @@ export function collectTextbookSections(studyData) {
     const entries = [];
     Object.keys(STUDY_DATA).forEach(subjId => {
         const subj = STUDY_DATA[subjId];
-        if (!subj.chapters) return;
+        if (!subj || !subj.chapters) return;
         subj.chapters.forEach(chapter => {
             if (!chapter.sections) return;
             // 섹션별 이동 목적지 — 리더 표시 제목(중복 제목은 챕터 병기된 형태) +
@@ -78,7 +78,7 @@ export function collectTextbookSections(studyData) {
             let chAnchor = '';
             chapter.sections.forEach((section, sIdx) => {
                 const chM = String(section.title || '').match(/Chapter\s*(\d+)/i);
-                if (chM) chAnchor = 'ch' + chM[1].padStart(2, '0');
+                if (chM) chAnchor = 'ch' + (chM[1] || '').padStart(2, '0');
                 // 메타 섹션(비교표·확인문제·요약 등)은 리더가 렌더하지 않아
                 // 이동해도 본문에 도달할 수 없다 — 검색 결과에서 제외
                 if (isStoryMetaSection(section.title)) return;
@@ -146,7 +146,7 @@ function _extractStoryBlocks(md) {
                 }
                 // 블록 내부 첫 헤딩을 서사 제목으로 우선 사용 (예: '## 프롤로그 — …')
                 if (!cur.innerTitle) {
-                    cur.innerTitle = heading[2].trim();
+                    cur.innerTitle = (heading[2] || '').trim();
                     cur.innerOrd = t.startsWith('## ') ? h2Ord : -1;
                 }
             }
@@ -158,14 +158,14 @@ function _extractStoryBlocks(md) {
             continue;
         }
         if (heading) {
-            lastHeading = heading[2].trim();
+            lastHeading = (heading[2] || '').trim();
             // 리더 섹션 카드는 ## 헤딩 — ## 소속과 챕터 앵커를 이동 목적지로 추적한다
             // (###/#### 내부 헤딩은 카드 제목이 아니라 매칭 불가)
             if (t.startsWith('## ')) {
                 h2Ord = h2List.length;
                 h2List.push({ title: lastHeading, meta: isStoryMetaSection(lastHeading) });
                 const m = lastHeading.match(/Chapter\s*(\d+)/i);
-                if (m) chAnchor = 'ch' + m[1].padStart(2, '0');
+                if (m) chAnchor = 'ch' + (m[1] || '').padStart(2, '0');
             }
         }
     }
@@ -186,10 +186,10 @@ function _extractStoryBlocks(md) {
             // 이동 목적지: 블록 자체가 ## 섹션이면 그 카드, 아니면 소속 ## 섹션.
             // 개요 구간 블록(첫 ## 이전)은 첫 렌더 섹션으로 연결한다
             const targetOrd = b.innerOrd >= 0 ? b.innerOrd : b.h2Ord;
-            const targetIdx = targetOrd >= 0 ? renderedIdxOf[targetOrd] : (renderedTitles.length ? 0 : -1);
+            const targetIdx = targetOrd >= 0 ? (renderedIdxOf[targetOrd] ?? -1) : (renderedTitles.length ? 0 : -1);
             return {
                 title: b.innerTitle || b.title,
-                gotoTitle: targetIdx >= 0 ? displayTitles[targetIdx] : '',
+                gotoTitle: targetIdx >= 0 ? (displayTitles[targetIdx] || '') : '',
                 reachable: targetIdx >= 0,
                 chAnchor: b.anchor,
                 text: b.lines.join('\n')

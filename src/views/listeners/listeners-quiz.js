@@ -94,7 +94,7 @@ export function bindQuizListeners() {
         // 객관식: 1-5
         const numMatch = /^([1-5])$/.exec(e.key);
         if (numMatch) {
-            const idx = parseInt(numMatch[1], 10) - 1;
+            const idx = parseInt(numMatch[1] || '0', 10) - 1;
             const containers = [
                 document.getElementById('quiz-options-container'),
                 document.getElementById('limits-options-container'),
@@ -114,13 +114,13 @@ export function bindQuizListeners() {
         // OX: o/p
         if (e.key === 'o' || e.key === 'O') {
             const oxBtns = /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('.quiz-ox-btn'));
-            if (oxBtns.length && !oxBtns[0].disabled) {
+            if (oxBtns[0] && !oxBtns[0].disabled) {
                 e.preventDefault();
                 oxBtns[0].click();
             }
         } else if (e.key === 'p' || e.key === 'P') {
             const oxBtns = /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('.quiz-ox-btn'));
-            if (oxBtns.length > 1 && !oxBtns[1].disabled) {
+            if (oxBtns[1] && !oxBtns[1].disabled) {
                 e.preventDefault();
                 oxBtns[1].click();
             }

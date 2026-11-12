@@ -8,7 +8,7 @@ export const CLIENT_STATUSES = ['입소대기', '입소중', '재가이용'];
 export const ADMIT_ITEMS = ADMIT_SECTIONS.flatMap(s => s.items.map(i => ({
     id: i.id,
     label: i.label,
-    short: i.label.split('—')[0].replace(/\(.*?\)|·.*/g, '').trim(),
+    short: (i.label.split('—')[0] || '').replace(/\(.*?\)|·.*/g, '').trim(),
 })));
 const BASE_COLS = ['성명', '상태', '호실', '생년월일', '비상연락처', '알레르기', '주의사항', '메모'];
 const FIELD_OF = { 성명: 'name', 상태: 'status', 호실: 'room', 생년월일: 'birth', 비상연락처: 'phone', 알레르기: 'allergy', 주의사항: 'caution', 메모: 'memo' };
@@ -36,14 +36,14 @@ const q = (/** @type {*} */ s) => /[",\n]/.test(s) ? `"${String(s).replace(/"/g,
 export function csvToClients(text) {
     const lines = String(text).replace(/^﻿/, '').split(/\r?\n/).filter(l => l.trim());
     if (!lines.length) return [];
-    const header = parseLine(lines[0]);
+    const header = parseLine(lines[0] || '');
     const docCols = header.map((/** @type {string} */ h) => ADMIT_ITEMS.find((/** @type {*} */ i) => i.short === h || i.label.startsWith(h)) || null);
     return lines.slice(1).map(line => {
         const cells = parseLine(line);
         /** @type {*} */
         const rec = { docs: {} };
         cells.forEach((/** @type {*} */ v, /** @type {number} */ i) => {
-            const f = (/** @type {Object.<string,string>} */ (FIELD_OF))[header[i]];
+            const f = (/** @type {Object.<string,string>} */ (FIELD_OF))[header[i] || ''];
             if (f) rec[f] = v;
             else if (docCols[i]) rec.docs[docCols[i].id] = YES.has(v);
         });

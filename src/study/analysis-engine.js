@@ -69,7 +69,7 @@ export function normalizeCidAnchor(cid, subjKey, cidSection) {
     if (s.startsWith('§')) return s;
     const m = s.match(/^L(\d+)$/);
     if (m && subjKey && cidSection && cidSection[subjKey]) {
-        const a = cidSection[subjKey][m[1]];
+        const a = cidSection[subjKey][m[1] || ''];
         if (a) return `§${a}`;
     }
     return s; // 해석 불가 라인·비-라인 키 모두 원형 유지 — 맵 부재 시 기존 동작 보존
@@ -89,20 +89,20 @@ export function chapterFromCid(cid, subjKey, chapterRanges, maps) {
     const s = String(cid || '');
     const titles = subjKey && maps && maps.chapterTitles && maps.chapterTitles[subjKey];
     const titleOfAnchor = (/** @type {*} */ anchor) => {
-        const n = String(anchor || '').split('.')[0];
+        const n = String(anchor || '').split('.')[0] || '';
         return (titles && n !== '' && titles[n]) || null;
     };
     if (s.startsWith('§')) return titleOfAnchor(s.slice(1));
     const m = s.match(/^L(\d+)$/);
     if (!m || !subjKey) return null;
     const sec = maps && maps.cidSection && maps.cidSection[subjKey];
-    if (sec && sec[m[1]]) {
-        const t = titleOfAnchor(sec[m[1]]);
+    if (sec && sec[m[1] || '']) {
+        const t = titleOfAnchor(sec[m[1] || '']);
         if (t) return t;
     }
     const ranges = chapterRanges && chapterRanges[subjKey];
     if (!Array.isArray(ranges) || !ranges.length) return null;
-    const line = parseInt(m[1], 10);
+    const line = parseInt(m[1] || '0', 10);
     let cur = null;
     for (const [ln, title] of ranges) {
         if (line >= ln) cur = title; else break;
@@ -385,7 +385,7 @@ export function computePassGap(p) {
         ranking.sort((a, b) => a.rate - b.rate);
         if (ranking.length) {
             result.ranking = ranking;
-            const worst = ranking[0];
+            const worst = /** @type {*} */ (ranking[0]);
             result.weakest = {
                 key: worst.key, name: worst.name, rate: worst.rate,
                 reason: worst.rate < rules.subjectFailBelow
@@ -409,7 +409,7 @@ export function computePassGap(p) {
         })
         .sort((/** @type {*} */ a, /** @type {*} */ b) => a.rate - b.rate);
     if (result.ranking.length) {
-        result.weakest = { ...result.ranking[0], reason: '퀴즈 정답률 최저 과목' };
+        result.weakest = { .../** @type {{key:string, name:string, rate:number}} */ (result.ranking[0]), reason: '퀴즈 정답률 최저 과목' };
     }
     return result;
 }
@@ -511,7 +511,7 @@ export function estimateUntaggedCauses(p) {
     Object.keys(labels).forEach(k => { counts[k] = 0; });
     let estimated = 0;
     const tagged = new Set(Object.keys(p.wrongCauses || {}));
-    const patterns = _autoPatterns(); // 루프 밖에서 1회 컴파일
+    const patterns = _autoPatterns() || []; // 루프 밖에서 1회 컴파일
     Object.entries(p.quizResults || {}).forEach(([id, r]) => {
         if (!r || r.correct) return;
         const weakKey = id.startsWith(WEAK_QUIZ_PREFIX) || id.includes('_card_') ? id : WEAK_QUIZ_PREFIX + id;
@@ -525,11 +525,11 @@ export function estimateUntaggedCauses(p) {
         const numeric = /^\d+(\.\d+)?\s*(%|ml|g|mg|배|회|일|개월|년|도|만원|원)?$/.test(ans);
         // 시험별 확장 분류 — manifest autoPattern 정규식을 선언된 키에만 적용 (미선언 시 내장 규칙으로 귀속)
         const hit = patterns.find((/** @type {*} */ pt) => counts[pt.key] !== undefined && pt.re.test(text));
-        if (hit) counts[hit.key]++;
-        else if (numeric && counts.numeric !== undefined && !/(계산|구하|얼마|몇)/.test(text)) counts.numeric++;
-        else if (numeric) counts.calc++;
-        else if (/(아닌|않는|틀린|잘못된|옳지)\s*(것|항목|설명)?/.test(text)) counts.concept++;
-        else counts.memorize++;
+        if (hit) counts[hit.key] = (counts[hit.key] || 0) + 1;
+        else if (numeric && counts.numeric !== undefined && !/(계산|구하|얼마|몇)/.test(text)) counts.numeric = (counts.numeric || 0) + 1;
+        else if (numeric) counts.calc = (counts.calc || 0) + 1;
+        else if (/(아닌|않는|틀린|잘못된|옳지)\s*(것|항목|설명)?/.test(text)) counts.concept = (counts.concept || 0) + 1;
+        else counts.memorize = (counts.memorize || 0) + 1;
     });
     return { counts, estimated };
 }
@@ -611,11 +611,11 @@ export function computeStudyPattern(calendar) {
     return {
         activeDays,
         events: actEvents,
-        topBand: bandCnt[topBandIdx] > 0
-            ? { key: _HOUR_BANDS[topBandIdx].key, label: _HOUR_BANDS[topBandIdx].label, count: bandCnt[topBandIdx], pct: Math.round((bandCnt[topBandIdx] / hourEvents) * 100) }
+        topBand: (bandCnt[topBandIdx] || 0) > 0
+            ? { key: _HOUR_BANDS[topBandIdx]?.key || '', label: _HOUR_BANDS[topBandIdx]?.label || '', count: bandCnt[topBandIdx] || 0, pct: Math.round(((bandCnt[topBandIdx] || 0) / hourEvents) * 100) }
             : null,
-        topDow: dowCnt[topDowIdx] > 0
-            ? { dow: topDowIdx, label: _DOW_LABELS[topDowIdx] + '요일', count: dowCnt[topDowIdx], pct: Math.round((dowCnt[topDowIdx] / actEvents) * 100) }
+        topDow: (dowCnt[topDowIdx] || 0) > 0
+            ? { dow: topDowIdx, label: (_DOW_LABELS[topDowIdx] || '') + '요일', count: dowCnt[topDowIdx] || 0, pct: Math.round(((dowCnt[topDowIdx] || 0) / actEvents) * 100) }
             : null,
         weekendShare: Math.round((weekendEvents / actEvents) * 100)
     };

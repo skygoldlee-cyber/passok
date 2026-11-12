@@ -34,7 +34,7 @@ export function summarizeExamProgress(probe) {
         const c = JSON.parse(probe.calendarJson || '{}');
         if (c && typeof c === 'object' && !Array.isArray(c)) {
             const days = Object.keys(c).filter(k => /^\d{4}-\d{2}-\d{2}$/.test(k)).sort();
-            if (days.length) lastStudy = days[days.length - 1];
+            if (days.length) lastStudy = days[days.length - 1] || null;
         }
     } catch (e) { /* noop */ }
     if (typeof probe.examDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(probe.examDate)) {

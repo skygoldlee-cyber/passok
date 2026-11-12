@@ -23,7 +23,7 @@ export { careShare };
 /** @param {string} id */
 const $ = (id) => document.getElementById(id);
 /** @param {*} s */
-const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
+const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
 /** @type {string|null} */
 let _lastText = null;
 /** @type {*|null} */

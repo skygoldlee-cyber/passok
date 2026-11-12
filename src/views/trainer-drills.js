@@ -412,7 +412,7 @@ function renderOxDrillResult() {
 function sidSubject(sid) {
     const s = String(sid || '');
     const p = s.match(/^st-0(\d)-/);
-    if (p) return parseInt(p[1], 10);
+    if (p) return parseInt(p[1] || '0', 10);
     // sid 접두사(과목키)를 활성 시험 레지스트리의 subjects[].key로 해석
     const m = s.match(/^([a-z][a-z0-9]*)_/);
     if (m) {
@@ -587,7 +587,7 @@ export function renderWeakReview() {
         masteryEl.innerHTML = `<div class="weak-mastery-grid">` +
             Object.keys(perSub).sort((a, b) => Number(a) - Number(b)).map((/** @type {string} */ n) => {
                 const m = /** @type {Object.<string,{j:number,w:number,g:number}>} */ (perSub)[n];
-                if (!m.j) return '';
+                if (!m || !m.j) return '';
                 return `<div class="weak-mastery-cell"><strong>과목${n}</strong><span>판정 ${m.j} · 취약 ${m.w} · 졸업 ${m.g}</span></div>`;
             }).join('') + `</div>`;
     }

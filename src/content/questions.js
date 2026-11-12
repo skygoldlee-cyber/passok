@@ -83,7 +83,7 @@ function deriveComboAnswer(q) {
   const eq = (/** @type {string[]} */ arr) =>
     arr.length === trueSet.size && arr.every(id => trueSet.has(id));
   const hits = (q.options || []).filter(o => eq(o.members || []));
-  return hits.length === 1 ? hits[0].id : null;
+  return hits.length === 1 && hits[0] ? hits[0].id : null;
 }
 
 /**
@@ -255,7 +255,7 @@ function scoreExam(questions, responses) {
 
   let subjectPass = true;
   for (const s of Object.keys(bySubject)) {
-    const sub = bySubject[s];
+    const sub = /** @type {{earned:number, max:number, pct?:number, pass?:boolean}} */ (bySubject[s]);
     sub.pct = sub.max ? sub.earned / sub.max : 0;
     sub.pass = sub.pct >= PASS_SUBJECT;      // 과목별 40%
     if (!sub.pass) subjectPass = false;      // 하나라도 미달 → 과락

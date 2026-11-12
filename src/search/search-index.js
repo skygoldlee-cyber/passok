@@ -130,11 +130,11 @@ export function _matchSnippet(text, terms, radius = 160) {
     let j = 0;
     for (let i = 0; i < hits.length; i++) {
         if (j < i) j = i;
-        while (j + 1 < hits.length && hits[j + 1].pos - hits[i].pos < winLen) j++;
+        while (j + 1 < hits.length && (hits[j + 1]?.pos || 0) - (hits[i]?.pos || 0) < winLen) j++;
         if (j - i > bestJ - bestI) { bestI = i; bestJ = j; }
     }
-    const spanStart = hits[bestI].pos;
-    const spanEnd = hits[bestJ].pos + hits[bestJ].len;
+    const spanStart = hits[bestI]?.pos || 0;
+    const spanEnd = (hits[bestJ]?.pos || 0) + (hits[bestJ]?.len || 0);
     // 매치 군집을 윈도 중앙에 배치 (군집이 윈도보다 길면 선두 매치부터)
     let start = spanEnd - spanStart >= winLen
         ? spanStart
@@ -406,7 +406,7 @@ export function runUnifiedSearch(query, filter = 'all') {
         }
         // df = 이 그룹의 변형 중 하나라도 포함하는 문서 수
         groupIdf.push(Math.log(1 + index.length / (1 + groupSet.size)));
-        if (groupSet.size === 0) { failedTerms.push(group[0]); continue; }
+        if (groupSet.size === 0) { failedTerms.push(group[0] || ''); continue; }
         candidateIndices = candidateIndices === null
             ? groupSet
             : new Set([...candidateIndices].filter(/** @param {number} i */ (i) => groupSet.has(i)));
@@ -414,7 +414,7 @@ export function runUnifiedSearch(query, filter = 'all') {
 
     // 후보 없는 그룹이 있거나 교집합이 비면 AND 매치 불가 — 전체 스캔 생략
     const searchEntries = (failedTerms.length > 0 || !candidateIndices || candidateIndices.size === 0)
-        ? [] : [...candidateIndices].map(i => index[i]);
+        ? [] : [...candidateIndices].map(i => /** @type {*} */ (index[i]));
 
     for (const entry of searchEntries) {
         if (filter !== 'all' && filter !== entry.subjId) continue;
@@ -426,7 +426,7 @@ export function runUnifiedSearch(query, filter = 'all') {
         const head = String(entry.title || '').toLowerCase();
         let excluded = false;
         for (let gi = 0; gi < termGroups.length; gi++) {
-            const group = termGroups[gi];
+            const group = termGroups[gi] || [];
             let gBest = 0;
             let gTitleBoost = 0;
             let gHits = 0;
@@ -452,7 +452,7 @@ export function runUnifiedSearch(query, filter = 'all') {
         // 엔트리 필드를 그대로 얇게 복사해 _score를 부여 — 버킷은 엔트리 kind로 구분
         // (kind→표시 티어 매핑은 뷰 계층 몫 — 코어는 종류명을 모른다)
         const item = { ...entry, _score: hits + titleBoost + phraseBoost };
-        if (!allStrong) buckets.weak.push(item);
+        if (!allStrong) buckets.weak?.push(item);
         else (buckets[item.kind] = buckets[item.kind] || []).push(item);
     }
 

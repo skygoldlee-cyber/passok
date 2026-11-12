@@ -7,8 +7,8 @@
 // 파라미터·수식 정합 근거: docs/dev/design/LEARNING_ALGORITHM_DESIGN.md (DOC-DSN-27)
 
 // FSRS-6 기본 파라미터 (w0..w20 — fsrs-rs 6.x / ts-fsrs 공개 안정 세트)
-const W = [0.212, 1.2931, 2.3065, 8.2956, 6.4133, 0.8334, 3.0194, 0.001, 1.8722,
-    0.1666, 0.796, 1.4835, 0.0614, 0.2629, 1.6483, 0.6014, 1.8729, 0.5425, 0.0912, 0.0658, 0.1542];
+const W = /** @type {[number,number,number,number,number,number,number,number,number,number,number,number,number,number,number,number,number,number,number,number,number]} */ ([0.212, 1.2931, 2.3065, 8.2956, 6.4133, 0.8334, 3.0194, 0.001, 1.8722,
+    0.1666, 0.796, 1.4835, 0.0614, 0.2629, 1.6483, 0.6014, 1.8729, 0.5425, 0.0912, 0.0658, 0.1542]);
 let DECAY = -W[20];                          // 망각 곡선 지수 — 피팅 가능 (w20)
 let FACTOR = Math.pow(0.9, -1 / W[20]) - 1;  // 곡선 형상 — w20에서 유도, R(s,s)=0.9 불변식 유지
 
@@ -51,7 +51,7 @@ export function initDifficulty(rating) {
 /** 최초 학습 카드 초기 안정도 (레이팅별 상수) */
 /** @param {number} rating */
 export function initStability(rating) {
-    return Math.min(Math.max(S_MIN, W[rating - 1]), MAX_INTERVAL);
+    return Math.min(Math.max(S_MIN, W[rating - 1] || S_MIN), MAX_INTERVAL);
 }
 
 /** 경과 t일 후 기억 확률 — R(t,s) = (1 + FACTOR·t/s)^DECAY */

@@ -1,5 +1,16 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-12 feat(types): 컴파일러 강화 Phase 2 — noUncheckedIndexedAccess 래칫 도입 + 백로그 전량 소진 (587건 → 0)
+
+- **래칫 신설**: tools/check/check_nouncheckedindex.js — noImplicitAny 래칫과 동형 패턴(tsc -p jsconfig.json --noUncheckedIndexedAccess 실행 → 파일별 에러 카운트 → tools/state/nouncheckedindex_baseline.json 기준선 단조 감소 게이트, --update·--dir 지원). package.json check:unchecked 스크립트 + tools/check/steps.js all/CI 프리셋 등록
+- **소진 경과**: 초기 기준선 587건(99파일) → 전 계층 소진
+  - core·pwa·telemetry·content·written·search·shell·study (Phase 2 초반 배치)
+  - src/reader 58건 — 정규식 매치 그룹·split 위치·NodeList 인덱스·TouchList 접근·맵 조회 가드
+  - src/views 139건 — daily-challenge·flashcard·exam-sim·textbook-search 등; applyResultTiers 반환을 5튜플 typedef(FilledTier)로 명문화해 디스트럭처링 소비처 해소
+  - src/exams 117건 — esc() 맵 인덱스 || c 폴백 공통 패턴(14파일)·CSV 파서 헤더 인덱스·rules[scope] 중첩 맵·편집거리 DP 행 인덱스 가드
+  - charts.js 20건·law-links.js·practice-registry.js·tools/supabase admin-bot
+- **jsconfig 활성화**: "noUncheckedIndexedAccess": true — 백로그 전량 소진으로 check:types 자체가 인덱스 안전 게이트가 됨 (check:unchecked 래칫은 기준선 0으로 이중 감시)
+- **검증**: check:types 0 (noImplicitAny + noUncheckedIndexedAccess 동시 활성) · lint 0 · 유닛 1,866 · DOM 1,055 전량 통과
 
 ## 2026-11-12 fix(build): 생성 파일 JSDoc 주석을 제너레이터 템플릿에 동기화
 

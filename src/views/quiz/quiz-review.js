@@ -139,8 +139,8 @@ export function renderReviewList() {
     const causeSummary = computeWrongCauseSummary(state.wrongCauses);
     if (causeSummary.total > 0) {
         const dist = Object.entries(getWrongCauseLabels())
-            .filter(([k]) => /** @type {Object.<string,number>} */ (causeSummary.counts)[k] > 0)
-            .map(([k, label]) => `${label} ${/** @type {Object.<string,number>} */ (causeSummary.counts)[k]}`)
+            .filter(([k]) => ((/** @type {Object.<string,number>} */ (causeSummary.counts))[k] || 0) > 0)
+            .map(([k, label]) => `${label} ${(/** @type {Object.<string,number>} */ (causeSummary.counts))[k] || 0}`)
             .join(' · ');
         container.insertAdjacentHTML('beforeend', `
             <div class="wrong-cause-summary">
@@ -226,7 +226,7 @@ export function startWeakConceptQuiz() {
         if (st && st.w > 0 && st.cid) weakCids.add(st.cid);
     }
     const wrongIds = new Set(
-        Object.keys(state.quizResults || {}).filter(id => !state.quizResults[id].correct));
+        Object.keys(state.quizResults || {}).filter(id => !(state.quizResults[id] || {}).correct));
     // 오답 문항 자체의 conceptId도 약점으로 간주 — 혼동쌍 선정 범위 확장
     for (const d of Object.values(window.STUDY_DATA || {})) {
         for (const q of (d && d.quizzes) || []) {
@@ -253,7 +253,7 @@ export async function startWeakGenQuiz() {
         return;
     }
     const wrongIds = new Set(
-        Object.keys(state.quizResults || {}).filter(id => !state.quizResults[id].correct));
+        Object.keys(state.quizResults || {}).filter(id => !(state.quizResults[id] || {}).correct));
     const poolTexts = [], wrongTexts = [];
     for (const d of Object.values(window.STUDY_DATA || {})) {
         for (const q of (d && d.quizzes) || []) {

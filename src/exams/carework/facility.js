@@ -78,7 +78,7 @@ export function syncFacilityNav(m) {
 
 /** @type {string|undefined} */
 let _orgCache;
-const _esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
+const _esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
 
 /** 출력물 기관명 — 멤버십 기관명 우선, 미가입·미조회 시 로컬 설정값 */
 export function getOrgName() {

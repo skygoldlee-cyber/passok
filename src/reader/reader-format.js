@@ -310,7 +310,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
     // 7. 독립적인 "p.NN" 텍스트 제거 (문맥상 페이지 번호만 남은 경우)
     html = html.replace(/(?<![a-zA-Z])p\.\d+(?:\s*[~-]\s*p?\.\d+)?(?![a-zA])/gi, '');
     // mermaid 블록 복원
-    html = html.replace(/\uE002M(\d+)\uE003/g, (m, i) => _mermaidPhs[parseInt(i)]);
+    html = html.replace(/\uE002M(\d+)\uE003/g, (m, i) => _mermaidPhs[parseInt(i)] || '');
 
     // 출처/참고 라인에 참조자료 하이퍼링크 추가 (앱 내 HTML 뷰어 사용)
     // 단, 이미 참조 링크가 있는 경우 중복 추가하지 않음
@@ -457,7 +457,7 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
                 return `<a href="#glossary-${escapeHTML(item.idxKey)}" data-glossary="${escapeHTML(item.idxKey)}" class="glossary-term-link">${escapeHTML(match)}</a>`;
             });
             // 플레이스홀더 복원
-            html = processed.replace(/\uE000P(\d+)\uE001/g, (m, i) => phs[parseInt(i)]);
+            html = processed.replace(/\uE000P(\d+)\uE001/g, (m, i) => phs[parseInt(i)] || '');
         }
     }
 
@@ -487,11 +487,12 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
                     tds.push({ full: tdMatch[0], attr: tdMatch[1], content: tdMatch[2] });
                 }
                 if (tds.length < 2) return m;
+                const td = /** @type {*} */ (tds[1]);
                 // 2번째 td (중분류)의 텍스트 추출
-                const midText = tds[1].content.replace(/<[^>]+>/g, '').trim();
+                const midText = td.content.replace(/<[^>]+>/g, '').trim();
                 if (!midText) return m;
                 // 링크로 변환
-                tds[1].full = `<td${tds[1].attr}><a href="#" data-toc-jump="${escapeHTML(midText)}" class="mindmap-jump-link" style="color:var(--color-primary,#1f6feb);text-decoration:underline dotted;cursor:pointer;">${tds[1].content}</a></td>`;
+                td.full = `<td${td.attr}><a href="#" data-toc-jump="${escapeHTML(midText)}" class="mindmap-jump-link" style="color:var(--color-primary,#1f6feb);text-decoration:underline dotted;cursor:pointer;">${td.content}</a></td>`;
                 return `<tr${trAttr}>${tds.map(t => t.full).join('')}</tr>`;
             });
             return before + linked + after;
@@ -579,7 +580,7 @@ export function markStoryNarrative(contentEl) {
         for (const g of groups) {
             if (!g.members.length) continue;
             // 중복 호출(바깥 컨테이너 + 서브섹션 개별 호출, 재렌더) 시 칩 중복 방지
-            const anchor = g.start ? g.start.nextElementSibling : g.members[0].previousElementSibling;
+            const anchor = g.start ? g.start.nextElementSibling : (g.members[0] ? g.members[0].previousElementSibling : null);
             if (anchor && anchor.classList && anchor.classList.contains('story-toggle')) continue;
             const toggle = document.createElement('button');
             toggle.type = 'button';
@@ -594,12 +595,12 @@ export function markStoryNarrative(contentEl) {
                 toggle.classList.toggle('is-collapsed', !collapsed);
             });
             if (g.start) g.start.insertAdjacentElement('afterend', toggle);
-            else g.members[0].insertAdjacentElement('beforebegin', toggle);
+            else g.members[0]?.insertAdjacentElement('beforebegin', toggle);
             // 경계 마커는 display:none이라 스크린리더가 읽지 못한다 —
             // 서사 구간 시작/끝을 시각 숨김 라벨로 알린다 (접기 칩이 멤버를
             // 숨겨도 라벨은 멤버 밖에 있어 구조를 전달)
-            _insertStorySrLabel(g.members[0], 'beforebegin', '이야기 구간 시작');
-            _insertStorySrLabel(g.members[g.members.length - 1], 'afterend', '이야기 구간 끝');
+            _insertStorySrLabel(/** @type {Element} */ (g.members[0]), 'beforebegin', '이야기 구간 시작');
+            _insertStorySrLabel(/** @type {Element} */ (g.members[g.members.length - 1]), 'afterend', '이야기 구간 끝');
         }
         return;
     }

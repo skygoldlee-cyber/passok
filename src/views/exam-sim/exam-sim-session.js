@@ -79,7 +79,7 @@ export function startMockExamSim(arg) {
     const want = countStr ? parseInt(countStr, 10) : NaN;
     proFeatureNotice('mock_exam', '실전 모의고사');
     showGlobalLoading('모의고사 데이터를 불러오는 중입니다...');
-    DataLoader.loadExam(examId).then((examData) => {
+    DataLoader.loadExam(examId || '').then((examData) => {
         hideGlobalLoading();
         const total = examData.questions.length;
         if (!isNaN(want) && want > 0 && want < total) {
@@ -136,7 +136,7 @@ export function comboSubjOrder(subjKey) {
  */
 export function startComboMockExam(arg) {
     const [numStr, countStr] = String(arg).split(':');
-    const num = parseInt(numStr, 10);
+    const num = parseInt(numStr || '', 10);
     const orders = DataLoader.getSubjectOrders();
     if (isNaN(num) || !orders.includes(num)) return;
     const want = countStr ? parseInt(countStr, 10) : NaN;
@@ -214,24 +214,25 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     }
 
     Object.keys(EXAM_DATA).forEach(examId => {
-        const questions = EXAM_DATA[examId].questions || [];
+        const questions = (EXAM_DATA[examId] || {}).questions || [];
         // registry 매핑 우선, 없으면 접두사 폴백 (subject1 → law 등)
         let subjKey = examToSubject[examId];
         if (!subjKey) {
             // 폴백: examId 접두사 → registry.subjects 순서 기반 매칭
             const prefixMatch = examId.match(/^(subject\d+)/);
             if (prefixMatch) {
-                const idx = parseInt(prefixMatch[1].replace('subject', '')) - 1;
+                const idx = parseInt((prefixMatch[1] || '').replace('subject', '')) - 1;
                 if (subjects[idx]) subjKey = subjects[idx].key;
             }
         }
-        if (subjKey && subjectQuestions[subjKey]) {
-            subjectQuestions[subjKey].push(...questions);
+        const sq = subjKey ? subjectQuestions[subjKey] : null;
+        if (sq) {
+            sq.push(...questions);
         }
     });
 
     // 모든 과목에 문제가 있는지 확인
-    const missingSubjects = subjects.filter(s => subjectQuestions[s.key].length === 0);
+    const missingSubjects = subjects.filter(s => (subjectQuestions[s.key] || []).length === 0);
     if (missingSubjects.length > 0) {
         showToast("모의고사 데이터가 불완전합니다. 모든 과목의 모의고사가 정상 로드되었는지 확인하세요.", "error");
         return;
@@ -262,15 +263,15 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     let expectedTotal = 0;
     const shortageSubjects = [];
     for (const subj of subjects) {
-        const count = subjectCounts[subj.key];
+        const count = subjectCounts[subj.key] || 0;
         if (count > 0) {
             expectedTotal += count;
-            if (subjectQuestions[subj.key].length < count) {
-                shortageSubjects.push(`${subj.shortName || subj.name || subj.key} ${subjectQuestions[subj.key].length}/${count}`);
+            if ((subjectQuestions[subj.key] || []).length < count) {
+                shortageSubjects.push(`${subj.shortName || subj.name || subj.key} ${(subjectQuestions[subj.key] || []).length}/${count}`);
             }
             const pool = comboPoolBySubject[subj.key] || [];
             const comboCount = Math.min(Math.round(count * 0.2), pool.length);
-            const picked = getRandomSample(subjectQuestions[subj.key], count - comboCount, subj.key);
+            const picked = getRandomSample(subjectQuestions[subj.key] || [], count - comboCount, subj.key);
             if (comboCount > 0) {
                 shuffle(pool).slice(0, comboCount).forEach(q =>
                     picked.push(comboToSimQuestion(q, subj.key)));

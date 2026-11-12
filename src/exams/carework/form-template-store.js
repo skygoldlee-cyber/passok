@@ -31,7 +31,7 @@ export function parseFields(body) {
     const out = [];
     const seen = new Set();
     for (const m of String(body || '').matchAll(FIELD_RE)) {
-        const k = m[1].trim();
+        const k = (m[1] || '').trim();
         if (!k || SYSTEM_KEYS.has(k) || seen.has(k)) continue;
         seen.add(k);
         out.push({ key: k, label: k });

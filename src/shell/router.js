@@ -148,13 +148,14 @@ export function navigateToView(target, ctx) {
     // 헤더 텍스트 변경
     const viewTitle = document.getElementById('view-title');
     const viewSubtitle = document.getElementById('view-subtitle');
-    if (titlesMap[target]) {
-        if (viewTitle) viewTitle.textContent = titlesMap[target].title;
-        if (viewSubtitle) viewSubtitle.textContent = titlesMap[target].subtitle;
+    const tm = titlesMap[target];
+    if (tm) {
+        if (viewTitle) viewTitle.textContent = tm.title;
+        if (viewSubtitle) viewSubtitle.textContent = tm.subtitle;
         // A-17 — SPA 뷰 전환은 페이지 전환: document.title도 갱신해 탭·스크린리더에 위치 반영.
         // 시험 브랜드 타이틀(exam.title = "PassOK — 시험명 (앱명)")은 접미사로 유지 (applyExamBranding 계약)
         const brand = getCurrentExamId() ? (getActiveExam()?.title || 'PassOK') : 'PassOK';
-        document.title = `${titlesMap[target].title} · ${brand}`;
+        document.title = `${tm.title} · ${brand}`;
     }
 
     state.currentView = target;
@@ -216,7 +217,7 @@ const HASH_SLUG_VIEWS = Object.fromEntries(
 let _hashNavigating = false;
 
 function _viewFromLocation() {
-    const slug = String(location.hash || '').replace(/^#\/?/, '').split('/')[0];
+    const slug = String(location.hash || '').replace(/^#\/?/, '').split('/')[0] || '';
     return HASH_SLUG_VIEWS[slug] || null;
 }
 

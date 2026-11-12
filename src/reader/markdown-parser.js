@@ -156,7 +156,7 @@ export function parseMarkdown(mdText, options = {}) {
 
     // 3-1. $$...$$ 수식 블록을 HTML 분수로 변환
     html = html.replace(/\x00MBLOCK(\d+)\x00/g, (m, i) => {
-        const formula = _mathBlocks[parseInt(i)];
+        const formula = _mathBlocks[parseInt(i)] || '';
         return convertMathToHtml(formula);
     });
 
@@ -171,9 +171,9 @@ export function parseMarkdown(mdText, options = {}) {
         const fenceLines = html.split(/\r?\n/);
         let inFence = false;
         for (let i = 0; i < fenceLines.length; i++) {
-            if (/^\x00FENCE\x00/.test(fenceLines[i].trim())) { inFence = !inFence; continue; }
+            if (/^\x00FENCE\x00/.test((fenceLines[i] || '').trim())) { inFence = !inFence; continue; }
             if (inFence) {
-                fenceLines[i] = fenceLines[i]
+                fenceLines[i] = (fenceLines[i] || '')
                     .replace(/\*/g, '\x00STAR\x00')
                     .replace(/`/g, '\x00BTICK\x00')
                     .replace(/\[/g, '\x00SBRO\x00')
@@ -287,14 +287,14 @@ export function parseMarkdown(mdText, options = {}) {
         const lineAttr = addLineNumbers ? ` data-md-line="${tableLineNo}"` : '';
         let tableHTML = '<div class="reader-table-wrapper"' + lineAttr + '><table class="reader-table">';
         // thead: 첫 행을 헤더로 처리
-        const headerCells = splitTableCells(dataRows[0]);
+        const headerCells = splitTableCells(dataRows[0] || '');
         tableHTML += '<thead><tr>' + headerCells.map(c => `<th>${c}</th>`).join('') + '</tr></thead>';
         // tbody: 나머지 행을 본문으로 처리
         tableHTML += '<tbody>';
         for (let idx = 1; idx < dataRows.length; idx++) {
-            const cells = splitTableCells(dataRows[idx]);
+            const cells = splitTableCells(dataRows[idx] || '');
             // 첫 번째 셀에 내용이 있으면 group-start 클래스 부여 (대분류 변경 지점)
-            const isGroupStart = cells[0] && cells[0].trim() !== '';
+            const isGroupStart = !!(cells[0] || '').trim();
             const rowClass = isGroupStart ? ' class="group-start"' : '';
             tableHTML += `<tr${rowClass}>`;
             tableHTML += cells.map(c => {
@@ -370,7 +370,7 @@ export function parseMarkdown(mdText, options = {}) {
     if (joinWraps) {
         const h1 = lines.map(l => l.trim()).find(t => /^#\s/.test(t));
         if (h1) {
-            const t = h1.replace(/^#\s+/, '').split(/[(<]/)[0].trim();
+            const t = (h1.replace(/^#\s+/, '').split(/[(<]/)[0] || '').trim();
             if (t.length >= 4 && t.length <= 45) _jwTitle = t;
         }
     }
@@ -468,8 +468,8 @@ export function parseMarkdown(mdText, options = {}) {
         if (useCustomListDiv) {
             const listMatch = line.match(/^(\s*)[-*]\s+(.*)$/);
             if (!listMatch) return false;
-            const indentLevel = Math.floor(listMatch[1].length / 2);
-            output.push(`<div class="md-list-item" style="padding-left: ${0.5 + indentLevel * 1.25}rem;"><span class="md-bullet">•</span> <span>${listMatch[2]}</span></div>`);
+            const indentLevel = Math.floor((listMatch[1] || '').length / 2);
+            output.push(`<div class="md-list-item" style="padding-left: ${0.5 + indentLevel * 1.25}rem;"><span class="md-bullet">•</span> <span>${listMatch[2] || ''}</span></div>`);
             _jwPrev = null;
             return true;
         }
@@ -477,14 +477,14 @@ export function parseMarkdown(mdText, options = {}) {
         const olMatch = trimmed.match(/^\d+[.)]\s+(.+)$/);
         if (ulMatch) {
             if (listType !== 'ul') { flushList(); listType = 'ul'; _listStartLine = _lineNo; }
-            listItems.push(ulMatch[1]);
-            _jwPrev = ulMatch[1];
+            listItems.push(ulMatch[1] || '');
+            _jwPrev = ulMatch[1] || '';
             return true;
         }
         if (olMatch && !_jwForce) {
             if (listType !== 'ol') { flushList(); listType = 'ol'; _listStartLine = _lineNo; }
-            listItems.push(olMatch[1]);
-            _jwPrev = olMatch[1];
+            listItems.push(olMatch[1] || '');
+            _jwPrev = olMatch[1] || '';
             return true;
         }
         flushList();
