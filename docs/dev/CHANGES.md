@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-12 refactor(complexity): 2라운드 — _requestAi·evaluateStability 분해 (336→334)
+
+- **`_requestAi`** (ai-client.js, 46→≤10): 서버 경로(`_serverRoute` + `_proxyFetch` 전송/타임아웃 정규화) + 응답 평가(`_evalServerResponse` + `_extractServerBody` 추출 + `_serverFailOf` 분류) + BYOK 폴백(`_byokRoute`)으로 분할 — 파일 count 7→6 · max 46→25
+- **`evaluateStability`** (formula-stability.js, 45→≤10): 주석 섹션 경계 그대로 분할 — ① 상 비율(`_checkPhaseBalance` + `_emulRatioWarn`) ② 상호작용(`_checkInteractions`) ③ 배합방법(`_checkMethod` + `_checkCarbomerNeutral` + `_checkPhBands`) — 파일 경고 0건으로 완전 소진
+- **검증**: unit 37건(ai-client·formula-stability) 통과 · check:types 0 · --update 기준선 단조 축소
+
+
 ## 2026-11-12 refactor(complexity): 상위 복잡도 3함수 분해 — 기준선 340→336
 
 - **markStoryNarrative** (reader-format.js, 52→≤10): 마커 스캔(`_markStoryByMarkers`)·토글 칩 삽입(`_insertStoryToggle`)·폴백 서사 탐지(`_markStoryFallback` + `_fallbackSceneStep`/`_fallbackHeadingStep`/`_isStoryEpilogue`)·sr 라벨 패스(`_labelStoryRuns`)로 분할 — 파일 잔여는 formatSectionContentForReader(18)

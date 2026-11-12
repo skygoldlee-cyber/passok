@@ -184,20 +184,24 @@ export function evaluateStability(items, index, ctx) {
     || (EMULSION_FORMULATIONS.has(formulation) && waterRows.length > 0);
 
   /* ── ① 상(Phase) 비율 균형 ── */
+  _checkPhaseBalance(oilRows, waterRows, emulRows, thickenerRows, isEmulsion, push);
+  /* ── ② 원료 간 상호작용 ── */
+  const hasCarbomer = live.some(r => r.name.includes('카보머') || r.name.includes('카복시비닐'));
+  _checkInteractions(cationicRows, anionicRows, nonionicRows, preservativeRows, hasCarbomer, push);
+  /* ── ③ 배합방법 — 투입 단계·절차·pH ── */
+  _checkMethod(live, context, { hasCarbomer, isEmulsion, steps, stepsText, hasHeatStep }, push);
 
+  return { warnings, phaseSums };
+}
+
+/** ① 상 비율 균형 — 유화제 유무/비율·점증제·가용화. @param {*[]} oilRows @param {*[]} waterRows @param {*[]} emulRows @param {*[]} thickenerRows @param {boolean} isEmulsion @param {Function} push */
+function _checkPhaseBalance(oilRows, waterRows, emulRows, thickenerRows, isEmulsion, push) {
   // 유상부 + 수상부 혼합인데 유화제 미감지
   if (oilRows.length > 0 && waterRows.length > 0 && emulRows.length === 0) {
     push(STAB.WARN, '수상부와 유상부가 함께 있지만 유화제가 감지되지 않습니다 — 에멀전 분리 위험. 유화 원료를 추가하세요.');
   }
   // 유화제:유상부 비율 — 모든 관련 행에 농도가 있을 때만 판정
-  if (oilRows.length > 0 && emulRows.length > 0
-    && oilRows.every(r => r.conc != null) && emulRows.every(r => r.conc != null)) {
-    const oilPct = oilRows.reduce((/** @type {number} */ s, /** @type {*} */ r) => s + (r.conc || 0), 0);
-    const emulPct = emulRows.reduce((/** @type {number} */ s, /** @type {*} */ r) => s + (r.conc || 0), 0);
-    if (oilPct > 0 && emulPct > 0 && emulPct / oilPct < 0.1) {
-      push(STAB.WARN, `유화제 비율이 유상부 대비 ${Math.round(emulPct / oilPct * 100)}%로 낮습니다 — 유화 안정성 확인 (일반적 기준 10% 이상).`);
-    }
-  }
+  _emulRatioWarn(oilRows, emulRows, push);
   // 에멀전인데 수상층 점증제 없음
   if (isEmulsion && thickenerRows.length === 0) {
     push(STAB.INFO, '점증제가 없는 에멀전 — 점도가 낮으면 크리밍·침강이 생길 수 있습니다.');
@@ -206,10 +210,21 @@ export function evaluateStability(items, index, ctx) {
   if (emulRows.length > 0 && oilRows.length === 0 && waterRows.length > 0) {
     push(STAB.INFO, '유화제가 있지만 유상부가 없습니다 — 향료·오일 가용화 목적이면 정상입니다.');
   }
+}
 
-  /* ── ② 원료 간 상호작용 ── */
+/** 유화제:유상부 비율 경고 — 유상부 대비 유화제 10% 미만이면 경고. @param {*[]} oilRows @param {*[]} emulRows @param {Function} push */
+function _emulRatioWarn(oilRows, emulRows, push) {
+  if (oilRows.length === 0 || emulRows.length === 0) return;
+  if (!oilRows.every(r => r.conc != null) || !emulRows.every(r => r.conc != null)) return;
+  const oilPct = oilRows.reduce((/** @type {number} */ s, /** @type {*} */ r) => s + (r.conc || 0), 0);
+  const emulPct = emulRows.reduce((/** @type {number} */ s, /** @type {*} */ r) => s + (r.conc || 0), 0);
+  if (oilPct > 0 && emulPct > 0 && emulPct / oilPct < 0.1) {
+    push(STAB.WARN, `유화제 비율이 유상부 대비 ${Math.round(emulPct / oilPct * 100)}%로 낮습니다 — 유화 안정성 확인 (일반적 기준 10% 이상).`);
+  }
+}
 
-  const hasCarbomer = live.some(r => r.name.includes('카보머') || r.name.includes('카복시비닐'));
+/** ② 원료 간 상호작용 — 카보머×양이온·음×양이온·비이온 미셀 흡착. @param {*[]} cationicRows @param {*[]} anionicRows @param {*[]} nonionicRows @param {*[]} preservativeRows @param {boolean} hasCarbomer @param {Function} push */
+function _checkInteractions(cationicRows, anionicRows, nonionicRows, preservativeRows, hasCarbomer, push) {
   if (hasCarbomer && cationicRows.length > 0) {
     push(STAB.WARN, `카보머 × 양이온성 원료(${cationicRows.map(r => r.name).join(', ')}) — 침전·점도 상실 가능. 병용 피하거나 비이온성 점증제로 교체하세요.`);
   }
@@ -223,44 +238,50 @@ export function evaluateStability(items, index, ctx) {
       push(STAB.INFO, `비이온성 계면활성제 ${Math.round(nonionicPct * 100) / 100}% — 보존제가 미셀에 흡착돼 유효농도가 낮아질 수 있습니다.`);
     }
   }
+}
 
-  /* ── ③ 배합방법 — 투입 단계·절차·pH ── */
-
+/** ③ 배합방법 — 열 민감·카보머 중화·유화 단계·pH 적정대. @param {*[]} live @param {*} context @param {*} env @param {Function} push */
+function _checkMethod(live, context, env, push) {
   // 열 민감 원료가 가열 단계에 배치됨
   live.forEach(r => {
     if (!HEATED_PHASES.has(r.phase)) return;
     const note = heatSensitiveNote(r.ing, r.name);
     if (!note) return;
-    if (hasHeatStep) {
+    if (env.hasHeatStep) {
       push(STAB.WARN, `${r.name}: 열 민감 원료가 가열 단계(${r.phase})에 있습니다 — ${note}.`);
     } else {
       push(STAB.INFO, `${r.name}: 열 민감 원료 — ${note}.`);
     }
   });
   // 카보머 중화 단계 누락
-  if (hasCarbomer) {
-    const hasNeutralizer = live.some(r => isNeutralizer(r.ing, r.name));
-    if (!hasNeutralizer && steps.length > 0 && !STEP_NEUTRAL_RE.test(stepsText)) {
-      push(STAB.INFO, '카보머 사용 — 중화(pH 조절) 단계가 절차에 없습니다. 중화 없이는 점도가 형성되지 않습니다.');
-    } else if (!hasNeutralizer && steps.length === 0) {
-      push(STAB.INFO, '카보머 사용 — 중화제(트리에탄올아민·수산화나트륨 등) 투입과 pH 조절이 필요합니다.');
-    }
-  }
+  if (env.hasCarbomer) _checkCarbomerNeutral(live, env.steps, env.stepsText, push);
   // 에멀전인데 유화 단계가 절차에 없음
-  if (isEmulsion && steps.length > 0 && !STEP_EMUL_RE.test(stepsText)) {
+  if (env.isEmulsion && env.steps.length > 0 && !STEP_EMUL_RE.test(env.stepsText)) {
     push(STAB.INFO, '수상부·유상부 혼합(유화·교반) 단계가 절차에 없습니다.');
   }
   // pH 적정대 이탈 (실측 우선, 없으면 목표)
   const ph = context.phActual != null ? context.phActual : context.phTarget;
-  if (typeof ph === 'number' && !Number.isNaN(ph)) {
-    live.forEach(r => {
-      const band = (/** @type {Object.<string,*>} */ (PH_BAND))[r.name];
-      if (!band) return;
-      if (ph < band.min || ph > band.max) {
-        push(STAB.WARN, `${r.name}: ${band.label}이나 현재 pH는 ${ph}입니다.`);
-      }
-    });
-  }
+  if (typeof ph === 'number' && !Number.isNaN(ph)) _checkPhBands(live, ph, push);
+}
 
-  return { warnings, phaseSums };
+/** 카보머 중화 단계 검사 — 중화제 없고 절차에도 중화 단계가 없으면 안내. @param {*[]} live @param {string[]} steps @param {string} stepsText @param {Function} push */
+function _checkCarbomerNeutral(live, steps, stepsText, push) {
+  const hasNeutralizer = live.some(r => isNeutralizer(r.ing, r.name));
+  if (hasNeutralizer) return;
+  if (steps.length > 0 && !STEP_NEUTRAL_RE.test(stepsText)) {
+    push(STAB.INFO, '카보머 사용 — 중화(pH 조절) 단계가 절차에 없습니다. 중화 없이는 점도가 형성되지 않습니다.');
+  } else if (steps.length === 0) {
+    push(STAB.INFO, '카보머 사용 — 중화제(트리에탄올아민·수산화나트륨 등) 투입과 pH 조절이 필요합니다.');
+  }
+}
+
+/** 원료별 pH 적정대 이탈 경고. @param {*[]} live @param {number} ph @param {Function} push */
+function _checkPhBands(live, ph, push) {
+  live.forEach(r => {
+    const band = (/** @type {Object.<string,*>} */ (PH_BAND))[r.name];
+    if (!band) return;
+    if (ph < band.min || ph > band.max) {
+      push(STAB.WARN, `${r.name}: ${band.label}이나 현재 pH는 ${ph}입니다.`);
+    }
+  });
 }

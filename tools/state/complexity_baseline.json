@@ -2,9 +2,9 @@
   "threshold": 10,
   "files": {
     "src/ai/ai-client.js": {
-      "count": 7,
-      "max": 46,
-      "sum": 132
+      "count": 6,
+      "max": 25,
+      "sum": 86
     },
     "src/ai/gen-gate.js": {
       "count": 1,
@@ -200,11 +200,6 @@
       "count": 3,
       "max": 34,
       "sum": 57
-    },
-    "src/exams/cosmetic/formula-stability.js": {
-      "count": 1,
-      "max": 45,
-      "sum": 45
     },
     "src/exams/cosmetic/formula-store.js": {
       "count": 1,

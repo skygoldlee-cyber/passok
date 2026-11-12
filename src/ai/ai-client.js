@@ -190,7 +190,7 @@ function _featureEvent(result, extra = {}) {
  *   code?:string, error?:string}>}
  */
 async function _requestAi(spec, input, deps = {}) {
-    const { kind, feature, buildPrompt, system, featureLabel } = spec;
+    const { kind, feature, buildPrompt, featureLabel } = spec;
     // 필수 인자 검증 — 부족하면 서버·BYOK 어느 경로도 성립하지 않으므로 호출 전에 차단.
     // 조립된 프롬프트는 BYOK 폴백에서 재사용한다 (서버는 인자를 받아 자체 템플릿으로 조립).
     const byokPrompt = buildPrompt(input);
@@ -208,73 +208,13 @@ async function _requestAi(spec, input, deps = {}) {
     // ── 1차: 서버 프록시 (로그인 필요) ──
     const session = 'session' in deps ? deps.session
         : (isSupabaseConfigured() ? await getAuthSession().catch(() => null) : null);
-    let serverFail = null;
-    if (session?.access_token) {
-        const fetchImpl = deps.fetchImpl || (typeof fetch !== 'undefined' ? fetch : null);
-        const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-        const timer = ctrl ? setTimeout(() => ctrl.abort(), PROXY_TIMEOUT_MS) : null;
-        try {
-            const res = await fetchImpl(`${SUPABASE_URL}/functions/v1/ai-proxy`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${session.access_token}`,
-                },
-                body: JSON.stringify({ kind, input }),
-                signal: ctrl?.signal,
-            });
-            let body = null;
-            try { body = await res.json(); } catch { /* 비-JSON */ }
-            const extracted = body?.ok
-                ? (spec.extractBody ? spec.extractBody(body)
-                    : (body.explain ? { explain: String(body.explain), confused: String(body.confused || '') } : null))
-                : null;
-            if (res.ok && extracted) {
-                const result = extracted;
-                _cacheSet(cacheKey, result);
-                _featureEvent('success', { feature, route: 'server' });
-                return { ok: true, ...result, route: 'server', remaining: body.remaining ?? null };
-            }
-            if (res.status === 429 || body?.code === 'quota') {
-                // 서버 일일 쿼터 소진 — 기능적 응답이므로 폴백하지 않는다 (AI-26)
-                _featureEvent('quota', { feature, route: 'server' });
-                return {
-                    ok: false, code: 'quota',
-                    error: '오늘 무료 AI 사용 횟수를 모두 사용했습니다 — 내일 다시 시도하거나 유료를 이용하세요.',
-                    remaining: body?.remaining ?? 0,
-                };
-            }
-            serverFail = body?.code === 'unauthorized' || res.status === 401
-                ? { code: 'unauthorized' }
-                : { code: res.status ? 'http' : 'upstream', status: res.status };
-        } catch (e) {
-            serverFail = { code: e instanceof Error && e.name === 'AbortError' ? 'timeout' : 'network' };
-        } finally {
-            if (timer) clearTimeout(timer);
-        }
-        if (!fetchImpl) serverFail = { code: 'network' };
-    } else {
-        serverFail = { code: 'unauthorized' };
-    }
+    const serverOut = await _serverRoute(spec, input, deps, session, cacheKey);
+    if (serverOut.result) return serverOut.result;
+    const serverFail = serverOut.serverFail;
 
     // ── 2차: BYOK 폴백 — 사용자 본인 키가 있으면 같은 템플릿으로 직접 호출 ──
-    if (getAiKey()) {
-        const res = await callProviderLLM(system, byokPrompt, {
-            fetchImpl: deps.fetchImpl, maxTokens: spec.maxTokens || 400,
-        });
-        if (res.ok) {
-            const parsed = (spec.parseText || parseFeedbackResponse)(res.text ?? '');
-            if (parsed) {
-                _cacheSet(cacheKey, parsed);
-                _featureEvent('success', { feature, route: 'byok' });
-                return { ok: true, ...parsed, route: 'byok' };
-            }
-            _featureEvent('error', { feature, route: 'byok', code: 'unreadable' });
-            return { ok: false, code: 'unreadable', error: `${featureLabel} 결과를 해석하지 못했습니다 — 다시 시도해 보세요.` };
-        }
-        _featureEvent('error', { feature, route: 'byok', code: res.code || 'http' });
-        return { ok: false, code: res.code || 'http', error: res.error || `${featureLabel}을 불러오지 못했습니다.` };
-    }
+    const byokResult = await _byokRoute(spec, byokPrompt, deps, cacheKey);
+    if (byokResult) return byokResult;
 
     // ── 둘 다 불가 → 무표시 계약 (호출부는 기능을 숨긴다) ──
     _featureEvent('error', { feature, route: 'none', code: serverFail.code });
@@ -284,6 +224,95 @@ async function _requestAi(spec, input, deps = {}) {
             ? `${featureLabel}은 로그인 후 이용할 수 있습니다.`
             : `${featureLabel}을 불러오지 못했습니다 — 잠시 후 다시 시도하세요.`,
     };
+}
+
+/** 서버 프록시 경로. @param {*} spec @param {*} input @param {*} deps @param {*} session @param {string} cacheKey @returns {Promise<{result?:*, serverFail?:*}>} */
+async function _serverRoute(spec, input, deps, session, cacheKey) {
+    if (!session?.access_token) return { serverFail: { code: 'unauthorized' } };
+    const fetchImpl = deps.fetchImpl || (typeof fetch !== 'undefined' ? fetch : null);
+    const resp = await _proxyFetch(fetchImpl, session.access_token, spec.kind, input);
+    if (resp.serverFail) return resp;
+    return _evalServerResponse(spec, resp.res, resp.body, cacheKey);
+}
+
+/** ai-proxy 전송 — 타임아웃·예외를 serverFail로 정규화. @param {*} fetchImpl @param {string} accessToken @param {string} kind @param {*} input @returns {Promise<{res?:*, body?:*, serverFail?:*}>} */
+async function _proxyFetch(fetchImpl, accessToken, kind, input) {
+    const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), PROXY_TIMEOUT_MS) : null;
+    try {
+        const res = await fetchImpl(`${SUPABASE_URL}/functions/v1/ai-proxy`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ kind, input }),
+            signal: ctrl?.signal,
+        });
+        let body = null;
+        try { body = await res.json(); } catch { /* 비-JSON */ }
+        return { res, body };
+    } catch (e) {
+        return { serverFail: { code: e instanceof Error && e.name === 'AbortError' ? 'timeout' : 'network' } };
+    } finally {
+        if (timer) clearTimeout(timer);
+    }
+}
+
+/** 서버 응답 평가 — 성공/쿼터는 result, 그 외는 serverFail. @param {*} spec @param {*} res @param {*} body @param {string} cacheKey @returns {{result?:*, serverFail?:*}} */
+function _evalServerResponse(spec, res, body, cacheKey) {
+    const { feature } = spec;
+    const extracted = _extractServerBody(spec, body);
+    if (res.ok && extracted) {
+        _cacheSet(cacheKey, extracted);
+        _featureEvent('success', { feature, route: 'server' });
+        return { result: { ok: true, ...extracted, route: 'server', remaining: body.remaining ?? null } };
+    }
+    if (res.status === 429 || body?.code === 'quota') {
+        // 서버 일일 쿼터 소진 — 기능적 응답이므로 폴백하지 않는다 (AI-26)
+        _featureEvent('quota', { feature, route: 'server' });
+        return { result: {
+            ok: false, code: 'quota',
+            error: '오늘 무료 AI 사용 횟수를 모두 사용했습니다 — 내일 다시 시도하거나 유료를 이용하세요.',
+            remaining: body?.remaining ?? 0,
+        } };
+    }
+    return { serverFail: _serverFailOf(res, body) };
+}
+
+/** 서버 실패 분류 — unauthorized 우선, 아니면 http(상태코드)/upstream. @param {*} res @param {*} body @returns {*} */
+function _serverFailOf(res, body) {
+    if (body?.code === 'unauthorized' || res.status === 401) return { code: 'unauthorized' };
+    return { code: res.status ? 'http' : 'upstream', status: res.status };
+}
+
+/** 서버 본문 → 결과 추출 — spec.extractBody 우선, 기본 explain/confused. @param {*} spec @param {*} body @returns {*} */
+function _extractServerBody(spec, body) {
+    if (!body?.ok) return null;
+    if (spec.extractBody) return spec.extractBody(body);
+    if (!body.explain) return null;
+    return { explain: String(body.explain), confused: String(body.confused || '') };
+}
+
+/** BYOK 경로 — 키가 없으면 null, 있으면 결과 객체. @param {*} spec @param {string} byokPrompt @param {*} deps @param {string} cacheKey @returns {Promise<*>} */
+async function _byokRoute(spec, byokPrompt, deps, cacheKey) {
+    const { feature, system, featureLabel } = spec;
+    if (!getAiKey()) return null;
+    const res = await callProviderLLM(system, byokPrompt, {
+        fetchImpl: deps.fetchImpl, maxTokens: spec.maxTokens || 400,
+    });
+    if (!res.ok) {
+        _featureEvent('error', { feature, route: 'byok', code: res.code || 'http' });
+        return { ok: false, code: res.code || 'http', error: res.error || `${featureLabel}을 불러오지 못했습니다.` };
+    }
+    const parsed = (spec.parseText || parseFeedbackResponse)(res.text ?? '');
+    if (parsed) {
+        _cacheSet(cacheKey, parsed);
+        _featureEvent('success', { feature, route: 'byok' });
+        return { ok: true, ...parsed, route: 'byok' };
+    }
+    _featureEvent('error', { feature, route: 'byok', code: 'unreadable' });
+    return { ok: false, code: 'unreadable', error: `${featureLabel} 결과를 해석하지 못했습니다 — 다시 시도해 보세요.` };
 }
 
 /**
