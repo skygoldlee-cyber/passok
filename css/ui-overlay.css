@@ -387,7 +387,8 @@
 .chart-tooltip {
   position: fixed;
   z-index: var(--z-toast);
-  pointer-events: none;
+  /* A-16 (SC 1.4.13) — hoverable */
+  pointer-events: auto;
   background: var(--tooltip-bg);
   color: var(--color-on-brand);
   border: 1px solid var(--primary-tint-50);

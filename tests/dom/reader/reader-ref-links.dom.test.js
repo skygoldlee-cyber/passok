@@ -1,5 +1,5 @@
 // tests/dom/reader-ref-links.dom.test.js — 참조자료 링크 프리뷰·클릭 위임·원문 배지
-// @spec TR-10,G-03,RR-02~06,RR-17,RR-19
+// @spec TR-10,G-03,RR-02~06,RR-17,RR-19,A-16
 // 검증: data-exam-md/data-ref-md/data-ref-html/data-ref-subject/data-glossary 클릭 위임,
 //       law.go.kr 오프라인 차단, hover 프리뷰(fetch 스니펫·캐시·실패 처리), 배지 갱신 트리거
 
@@ -155,6 +155,72 @@ describe('참조 링크 프리뷰 (TR-10, RR-17)', () => {
         document.body.insertAdjacentHTML('beforeend', '<a>링크</a>');
         bindReferenceLinks();
         expect(document.querySelector('a').getAttribute('data-ref-bound')).toBeNull();
+    });
+
+    it('A-16 — 키보드 포커스로 프리뷰 개방 + Esc로 해제', async () => {
+        document.body.insertAdjacentHTML('beforeend', '<a data-ref-html="docs/r2.html">링크</a>');
+        vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ text: () => Promise.resolve('본문 '.repeat(30)) })));
+        bindReferenceLinks();
+        const a = document.querySelector('a[data-ref-html]');
+
+        a.dispatchEvent(new FocusEvent('focus'));
+        await vi.advanceTimersByTimeAsync(400);
+        await vi.runAllTimersAsync();
+        const tip = document.getElementById('ref-preview-tooltip');
+        expect(tip.classList.contains('is-hidden')).toBe(false);
+        expect(a.getAttribute('aria-describedby')).toBe('ref-preview-tooltip');
+
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+        expect(tip.classList.contains('is-hidden')).toBe(true);
+        expect(a.getAttribute('aria-describedby')).toBeNull();
+    });
+
+    it('A-16 — mouseleave 후 유예 중 유지 + 툴팁 위 hover로 유지(hoverable)', async () => {
+        document.body.insertAdjacentHTML('beforeend', '<a data-ref-html="docs/r3.html">링크</a>');
+        vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ text: () => Promise.resolve('본문 '.repeat(30)) })));
+        bindReferenceLinks();
+        const a = document.querySelector('a[data-ref-html]');
+
+        a.dispatchEvent(new MouseEvent('mouseenter'));
+        await vi.advanceTimersByTimeAsync(400);
+        await vi.runAllTimersAsync();
+        const tip = document.getElementById('ref-preview-tooltip');
+        expect(tip.classList.contains('is-hidden')).toBe(false);
+
+        // 링크를 떠나도 유예(300ms) 안에는 유지 → 툴팁 hover로 숨김 취소
+        a.dispatchEvent(new MouseEvent('mouseleave'));
+        await vi.advanceTimersByTimeAsync(200);
+        expect(tip.classList.contains('is-hidden')).toBe(false);
+        tip.dispatchEvent(new MouseEvent('mouseenter'));
+        await vi.advanceTimersByTimeAsync(500);
+        expect(tip.classList.contains('is-hidden')).toBe(false);
+
+        // 툴팁도 떠나면 유예 후 숨김
+        tip.dispatchEvent(new MouseEvent('mouseleave'));
+        await vi.advanceTimersByTimeAsync(400);
+        expect(tip.classList.contains('is-hidden')).toBe(true);
+    });
+
+    it('A-16 — 롱프레스 개방 후 자동 소멸 없음(persistent), 바깥 터치로 해제', async () => {
+        document.body.insertAdjacentHTML('beforeend', '<a data-ref-html="docs/r4.html">링크</a><div id="outside">밖</div>');
+        vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ text: () => Promise.resolve('본문 '.repeat(30)) })));
+        bindReferenceLinks();
+        const a = document.querySelector('a[data-ref-html]');
+
+        a.dispatchEvent(new TouchEvent('touchstart', { bubbles: true }));
+        await vi.advanceTimersByTimeAsync(600);
+        await vi.runAllTimersAsync();
+        const tip = document.getElementById('ref-preview-tooltip');
+        expect(tip.classList.contains('is-hidden')).toBe(false);
+
+        // touchend 후에도 자동 소멸 없이 유지 (기존 3초 자동 숨김 폐지)
+        a.dispatchEvent(new TouchEvent('touchend', { bubbles: true }));
+        await vi.advanceTimersByTimeAsync(5000);
+        expect(tip.classList.contains('is-hidden')).toBe(false);
+
+        // 바깥 영역 터치로 해제
+        document.getElementById('outside').dispatchEvent(new TouchEvent('touchstart', { bubbles: true }));
+        expect(tip.classList.contains('is-hidden')).toBe(true);
     });
 });
 

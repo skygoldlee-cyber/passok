@@ -183,6 +183,15 @@
     opacity: 0.65;
 }
 
+/* A-14 (SC 1.4.1) — 정오답이 색 단독 전달에 의존하지 않도록 ✓/✗ 아이콘 병용 */
+.choice-status-icon {
+    margin-left: 0.5em;
+    font-size: 0.85em;
+}
+.quiz-ox-btn .choice-status-icon {
+    margin-left: 0.4em;
+}
+
 .limits-opt-num {
     display: inline-flex;
     width: 24px;

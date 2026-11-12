@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 847b35b437019332
+> 입력 해시: bab8ecbc31309a92
 > 생성: 2026-11-12 · 원천: SPEC.md(705개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 705개 — 문서 연결 469 · 소스 연결 614 · 테스트 연결 657 · 보고서 연결 109
+**커버리지 요약**: 요구사항 705개 — 문서 연결 469 · 소스 연결 614 · 테스트 연결 660 · 보고서 연결 109
 
 ---
 
@@ -716,9 +716,9 @@
 | A-11 | ✅ | E2E 테스트 | — | — | tests/dom/common/common-a11y.dom.test.js<br>tests/e2e/a11y.spec.js | — | — |
 | A-12 | ✅ | E2E 테스트 | — | — | tests/e2e/a11y.spec.js | — | — |
 | A-13 | ✅ | E2E 테스트 | — | — | tests/e2e/responsive-flow.spec.js | — | — |
-| A-14 | 미구현 | — | — | — | — | — | — |
-| A-15 | 미구현 | — | — | — | — | — | — |
-| A-16 | 미구현 | — | — | — | — | — | — |
+| A-14 | ✅ — `ui-utils.js` `markChoiceState`/`clearChoiceState`로 채점 표시에 ✓/✗ 아이콘+sr-only 병용 (훈련소·퀴즈·데일리·OX 공용) · OMR `.solved` 버블에 ✓ 마커+aria-label '풀이 완료' · 히트맵 수치 텍스트·FO-02 배지 텍스트·합격 진단 배지 텍스트는 기충족 | 테스트 | — | — | tests/dom/common/common-a11y.dom.test.js | — | — |
+| A-15 | ✅ — 라인·레이더 SVG에 `role="img"` + 데이터 요약 `aria-label` · 각 포인트에 `tabindex="0"`·`focusable` + 데이터 라벨 `aria-label` (포커스 개방은 A-16 계약 공유) | 테스트 | — | — | tests/dom/study/charts.dom.test.js | — | — |
+| A-16 | ✅ — 차트 툴팁·RR-05 참조 프리뷰 모두 포커스 개방·Esc 해제·pointer-events 활성+유예 시간으로 hoverable·바깥 터치 해제로 persistent (터치 자동 소멸 폐지) · 링크 `aria-describedby` 연결 · 뷰포트 가정 분기 없음 (`(pointer:coarse)`·`(hover:hover)` 기존 준수) | 테스트 | — | — | tests/dom/reader/reader-ref-links.dom.test.js<br>tests/dom/study/charts.dom.test.js | — | — |
 | A-17 | ✅ — router.js 뷰 전환 시 `document.title` = "뷰명 · 앱명" 갱신 + `.main-content` 포커스 이동 · trapFocus의 applyBackgroundInert로 .app-container inert (DOM 제거 시 자동 정리) + 해제 시 트리거 포커스 복귀 · 설정/도움말 드롭다운 Esc → 트리거 복귀 · mobile-more-sheet를 .app-container 밖으로 이동해 inert 커버 | 테스트 | — | — | tests/dom/common/common-a11y.dom.test.js | — | — |
 
 ## 4.6 반응형 & 모바일

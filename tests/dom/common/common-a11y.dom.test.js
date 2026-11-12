@@ -1,5 +1,5 @@
 // tests/dom/common-a11y.dom.test.js — 접근성(a11y) 공통 시나리오
-// @spec A-01~07,A-10,A-11,A-17,UX-FB-06,UX-VFY-06
+// @spec A-01~07,A-10,A-11,A-14,A-17,UX-FB-06,UX-VFY-06
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.3 (Phase 5)
 // 검증: 토스트 role=status/aria-live(H) · confirm 모달 포커스 트랩·Escape(X)
 //       · trapFocus Tab 순환(H) · 아이콘 버튼 aria-label 전수(H)
@@ -142,6 +142,30 @@ describe('a11y — 토스트·포커스 트랩·라벨', () => {
         await Promise.resolve(); // MutationObserver 배치 처리 대기
         expect(app.hasAttribute('inert')).toBe(false);
         overlay.remove();
+    });
+
+    it('markChoiceButtons → 정답/오답에 색 외 아이콘+sr-only 병용 (A-14, SC 1.4.1)', async () => {
+        const { markChoiceButtons, clearChoiceState } = await import('../../../src/ui-utils.js');
+        const container = document.createElement('div');
+        const b1 = document.createElement('button');
+        const b2 = document.createElement('button');
+        b1.className = b2.className = 'limits-opt-btn';
+        b1.dataset.value = '5'; b2.dataset.value = '50';
+        container.append(b1, b2);
+        document.body.appendChild(container);
+
+        markChoiceButtons(container, b1, '50');
+        expect(b2.classList.contains('correct')).toBe(true);
+        expect(b2.querySelector('.choice-status-icon.fa-check')).not.toBeNull();
+        expect(b2.querySelector('.choice-status-sr')?.textContent).toContain('정답');
+        expect(b1.classList.contains('incorrect')).toBe(true);
+        expect(b1.querySelector('.choice-status-icon.fa-xmark')).not.toBeNull();
+        expect(b1.querySelector('.choice-status-sr')?.textContent).toContain('오답');
+
+        clearChoiceState(b1);
+        expect(b1.classList.contains('incorrect')).toBe(false);
+        expect(b1.querySelector('.choice-status-icon')).toBeNull();
+        container.remove();
     });
 
     it('아이콘 전용 버튼 → aria-label 또는 title 존재 전수', () => {

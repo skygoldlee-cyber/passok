@@ -42,6 +42,29 @@ export function vibrate(pattern) {
 export const HAPTIC = { correct: 30, wrong: [40, 30, 40], tap: 10 };
 
 /**
+ * A-14 — 채점 상태 표시 공용 (SC 1.4.1): 색 클래스 외에 ✓/✗ 아이콘과
+ * sr-only 텍스트를 병용해 정오답이 색 단독 전달에 의존하지 않게 한다.
+ * @param {HTMLButtonElement|null} btn - 표시 대상 버튼
+ * @param {'correct'|'incorrect'} status - 정답 여부
+ */
+export function markChoiceState(btn, status) {
+    if (!btn) return;
+    const correct = status === 'correct';
+    btn.classList.add(correct ? 'correct' : 'incorrect');
+    if (btn.querySelector('.choice-status-icon')) return;
+    btn.insertAdjacentHTML('beforeend',
+        `<i class="fa-solid ${correct ? 'fa-check' : 'fa-xmark'} choice-status-icon" aria-hidden="true"></i>` +
+        `<span class="sr-only choice-status-sr"> (${correct ? '정답' : '오답'})</span>`);
+}
+
+/** 채점 표시 해제 — 재사용 버튼(OX 토글 등)의 다음 문항 준비 */
+export function clearChoiceState(btn) {
+    if (!btn) return;
+    btn.classList.remove('correct', 'incorrect');
+    btn.querySelectorAll('.choice-status-icon, .choice-status-sr').forEach(n => n.remove());
+}
+
+/**
  * 객관식(.limits-opt-btn) 채점 표시 — 전 버튼 비활성 + 정답 버튼 강조 + 오답 선택 표시.
  * 버튼은 dataset.value에 비교값을 보유해야 한다 — 표시 텍스트 부분일치는
  * '5'가 '50'에도 걸리는 오매칭 버그가 있어 값 비교로 통일한다.
@@ -54,10 +77,10 @@ export function markChoiceButtons(container, selectedBtn, correctValue) {
     container.querySelectorAll('.limits-opt-btn').forEach(node => {
         const btn = /** @type {HTMLButtonElement} */ (node);
         btn.disabled = true;
-        if (btn.dataset.value === correctValue) btn.classList.add('correct');
+        if (btn.dataset.value === correctValue) markChoiceState(btn, 'correct');
     });
     if (selectedBtn && selectedBtn.dataset.value !== correctValue) {
-        selectedBtn.classList.add('incorrect');
+        markChoiceState(selectedBtn, 'incorrect');
     }
 }
 

@@ -1,6 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(a11y): A-14 색 비의존 + A-15 차트 대체 + A-16 호버 콘텐츠 — Phase 3
+
+- **A-14 ✅ — 상태 정보 색 비의존 (SC 1.4.1)**: `ui-utils.js`에 `markChoiceState`/`clearChoiceState` 공용 헬퍼 — 채점 표시가 `.correct`/`.incorrect` 색 클래스만이 아니라 ✓/✗ 아이콘 + `.sr-only` 텍스트를 병용. 적용: `markChoiceButtons`(훈련소·데일리·성분 훈련 공용) + `quiz.js` 객관식·OX 직접 채점 경로 + OX 버튼 재사용 시 `clearChoiceState`로 마커 정리. OMR `.solved` 버블에 `::after` ✓ 마커 + aria-label '풀이 완료' 병용 (exam-sim-arena). 기충족 확인: 히트맵 수치 텍스트·FO-02 배지 라벨·합격 진단 배지 텍스트
+- **A-15 ✅ — 차트 텍스트 대체 (SC 1.1.1)**: 라인·레이더 SVG에 `role="img"` + 데이터 요약 `aria-label`(회차별 성적·과목별 정답률), 각 대화형 포인트에 `tabindex="0"`·`focusable` + 포인트별 데이터 `aria-label` — 스크린리더가 차트 요약과 개별 포인트를 모두 판독 가능
+- **A-16 ✅ — 호버 콘텐츠 접근 경로 (SC 1.4.13)**: ① 키보드 포커스 개방(차트 포인트 focus·참조 링크 focus) ② Esc 해제(document 위임) ③ hoverable — 두 툴팁 `pointer-events:auto` + 300ms 유예(`TIMING.PREVIEW_HIDE_MS`, `CHART_TOOLTIP_HIDE_MS`)로 포인트→툴팁 이동 통로 확보, 툴팁 자체 hover로 숨김 취소 ④ persistent — 터치 개방 후 2~3초 자동 소멸 폐지, 바깥 터치·Esc로만 해제. 참조 프리뷰는 개방 링크에 `aria-describedby` 연결. `(pointer:coarse)`·`(hover:hover)` 기존 미디어 분기 준수 확인 — 뷰포트 폭 hover 가정 없음
+- **테스트**: charts에 A-15 SVG 요약·A-16 포커스/Esc 3건, ref-links에 포커스 개방·hoverable 유예·persistent 3건, common-a11y에 markChoiceButtons 아이콘+sr-only 1건 — DOM 1018건 전체 통과
+
+
 ## 2026-11-12 fix(a11y): inert 누수 2차 — 숨김(display:none) 경로 미감지 수정 (A-17 후속)
 
 - **증상**: Phase 2 CI `mobile,2`·`tablet,2` 샤드에서 `toc-sidebar.spec` 이야기형 테스트 타임아웃 — `<body> intercepts pointer events`

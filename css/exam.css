@@ -630,6 +630,7 @@
 }
 
 .omr-bubble {
+    position: relative;
     aspect-ratio: 1;
     border-radius: var(--radius-full);
     border: 1px solid var(--border-color);
@@ -654,6 +655,22 @@
     background-color: var(--success-tint-15);
     border-color: var(--color-success);
     color: var(--color-success);
+}
+/* A-14 (SC 1.4.1) — solved 상태는 색 외에 ✓ 마커로도 구분 */
+.omr-bubble.solved::after {
+    content: "✓";
+    position: absolute;
+    top: -5px;
+    right: -3px;
+    width: 14px;
+    height: 14px;
+    border-radius: var(--radius-full);
+    background: var(--color-success-fill);
+    color: var(--color-on-brand);
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 14px;
+    text-align: center;
 }
 
 .omr-bubble.active {

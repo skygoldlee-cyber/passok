@@ -35,7 +35,13 @@ function getChartTooltip() {
     if (_chartTooltip) return _chartTooltip;
     _chartTooltip = document.createElement('div');
     _chartTooltip.className = 'chart-tooltip';
+    _chartTooltip.setAttribute('role', 'tooltip');
     document.body.appendChild(_chartTooltip);
+    // A-16 (SC 1.4.13) — hoverable: 포인터가 툴팁 위로 이동해도 유지
+    _chartTooltip.addEventListener('mouseenter', () => {
+        if (_tooltipHideTimer) { clearTimeout(_tooltipHideTimer); _tooltipHideTimer = null; }
+    });
+    _chartTooltip.addEventListener('mouseleave', () => hideChartTooltip());
     return _chartTooltip;
 }
 
@@ -60,20 +66,62 @@ function hideChartTooltip() {
     }, TIMING.CHART_TOOLTIP_HIDE_MS);
 }
 
-/** SVG 요소에 hover + touch 툴팁 이벤트 바인딩 */
-function bindTooltip(el, html) {
+// A-16 ② — Esc로 열린 차트 툴팁 해제 (모듈 1회 등록)
+let _tooltipEscBound = false;
+function _ensureTooltipEsc() {
+    if (_tooltipEscBound) return;
+    _tooltipEscBound = true;
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && _chartTooltip?.classList.contains('is-visible')) {
+            _chartTooltip.classList.remove('is-visible');
+        }
+    });
+    // persistent — 터치 개방 후에는 자동 소멸시키지 않고 바깥 터치로만 닫는다
+    document.addEventListener('touchstart', (e) => {
+        if (!_chartTooltip?.classList.contains('is-visible')) return;
+        const t = /** @type {Element|null} */ (e.target);
+        if (t && !t.closest('.chart-tooltip') && !t.closest('.chart-dot-interactive, .radar-point-interactive')) {
+            _chartTooltip.classList.remove('is-visible');
+        }
+    }, { passive: true });
+}
+
+/**
+ * SVG 요소에 hover + touch + 키보드 포커스 툴팁 바인딩.
+ * A-15 — 대화형 포인트는 tabindex·aria-label을 부여해 포커스 가능·SR 판독 가능하게 한다.
+ * A-16 — 포커스 개방·Esc 해제·hoverable·persistent.
+ * @param {SVGElement} el - 툴팁을 붙일 SVG 요소
+ * @param {string} html - 툴팁 HTML
+ * @param {string} [ariaLabel] - 포인트 데이터의 텍스트 라벨 (SR용)
+ */
+function bindTooltip(el, html, ariaLabel) {
     el.style.cursor = 'pointer';
-    el.addEventListener('mouseenter', (e) => showChartTooltip(html, e.clientX, e.clientY));
+    // 키보드·SR 접근 트리거 (Safari 구형 대비 focusable 속성 병기)
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('focusable', 'true');
+    if (ariaLabel) el.setAttribute('aria-label', ariaLabel);
+    const showAtElement = () => {
+        const r = el.getBoundingClientRect();
+        showChartTooltip(html, r.left + r.width / 2, r.top);
+    };
+    el.addEventListener('mouseenter', (e) => {
+        const me = /** @type {MouseEvent} */ (e);
+        showChartTooltip(html, me.clientX, me.clientY);
+    });
     el.addEventListener('mouseleave', () => hideChartTooltip());
-    el.addEventListener('mousemove', (e) => showChartTooltip(html, e.clientX, e.clientY));
-    // 모바일 터치 지원
+    el.addEventListener('mousemove', (e) => {
+        const me = /** @type {MouseEvent} */ (e);
+        showChartTooltip(html, me.clientX, me.clientY);
+    });
+    // A-16 ① — 키보드 포커스 개방
+    el.addEventListener('focus', showAtElement);
+    el.addEventListener('blur', () => hideChartTooltip());
+    // 모바일 터치 지원 (persistent — 바깥 터치로만 닫힘, _ensureTooltipEsc)
     el.addEventListener('touchstart', (e) => {
-        const t = e.touches[0];
+        const t = /** @type {TouchEvent} */ (e).touches[0];
         if (t) showChartTooltip(html, t.clientX, t.clientY);
     }, { passive: true });
-    el.addEventListener('touchend', () => {
-        setTimeout(() => hideChartTooltip(), TIMING.CHART_TOOLTIP_TOUCH_HIDE_MS);
-    }, { passive: true });
+    _ensureTooltipEsc();
 }
 
 /* =======================================================
@@ -113,7 +161,10 @@ export function renderPerformanceChart() {
     const chartHeight = height - paddingTop - paddingBottom;
     
     const primary = CHART_COLORS.primary();
-    let svgContent = `<svg class="chart-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; height: 100%;">
+    // A-15 (SC 1.1.1) — SVG 차트는 role=img + 데이터 요약 aria-label로 텍스트 대체 제공
+    const lineSummary = `모의고사 성적 추이 — 최근 ${recentData.length}회: ` +
+        recentData.map(d => `${d.date} ${d.rate}%`).join(', ');
+    let svgContent = `<svg class="chart-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; height: 100%;" role="img" aria-label="${esc(lineSummary)}">
         <defs>
             <linearGradient id="chart-gradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="${primary}" stop-opacity="0.3"/>
@@ -192,11 +243,12 @@ export function renderPerformanceChart() {
         const deltaHtml = delta !== null
             ? `<span style="color:${delta >= 0 ? CHART_COLORS.success() : CHART_COLORS.danger()};">${delta >= 0 ? '▲' : '▼'} ${Math.abs(delta)}%</span>`
             : '';
-        bindTooltip(dot,
+        bindTooltip(/** @type {SVGElement} */ (dot),
             `<div>${d.date}</div>` +
             `<div style="font-size:1.1rem;color:${CHART_COLORS.primary()};">${d.rate}%</div>` +
             (deltaHtml ? `<div style="margin-top:2px;">${deltaHtml}</div>` : '') +
-            `<div style="margin-top:2px;color:rgba(255,255,255,0.6);font-size:0.72rem;">최근 평균 ${recentAvg}%</div>`
+            `<div style="margin-top:2px;color:rgba(255,255,255,0.6);font-size:0.72rem;">최근 평균 ${recentAvg}%</div>`,
+            `${idx + 1}회차 ${d.date} — ${d.rate}%`
         );
     });
 }
@@ -393,7 +445,10 @@ export function renderRadarChart() {
         return { x, y };
     };
     
-    let svg = `<svg viewBox="0 0 ${width} ${height}" style="width: 100%; height: 100%; overflow: visible;">`;
+    // A-15 — 레이더 차트 데이터 요약 텍스트 대체
+    const radarSummary = `과목별 평균 정답률 — ` +
+        subjects.map((sub, i) => `${i + 1}과목(${sub.shortName || sub.name}) ${subjectScores[i]}%`).join(', ');
+    let svg = `<svg viewBox="0 0 ${width} ${height}" style="width: 100%; height: 100%; overflow: visible;" role="img" aria-label="${esc(radarSummary)}">`;
     
     // 1. Concentric Grid lines (20%, 40%, 60%, 80%, 100%)
     for (let level = 20; level <= 100; level += 20) {
@@ -458,11 +513,12 @@ export function renderRadarChart() {
         const shortName = sub.shortName || sub.name;
         const status = rate < getExamRules().subjectFailBelow ? '과락 위험' : '안정권';
         const statusColor = rate < getExamRules().subjectFailBelow ? CHART_COLORS.danger() : CHART_COLORS.success();
-        bindTooltip(dot,
+        bindTooltip(/** @type {SVGElement} */ (dot),
             `<div style="font-size:0.85rem;">${idx + 1}과목: ${shortName}</div>` +
             `<div style="font-size:1.1rem;color:${CHART_COLORS.primary()};margin-top:2px;">${rate}%</div>` +
             `<div style="margin-top:2px;color:${statusColor};">${status}</div>` +
-            `<div style="margin-top:2px;color:rgba(255,255,255,0.6);font-size:0.72rem;">응시 ${examCount}회 · 전체 평균 ${overallAvg}%</div>`
+            `<div style="margin-top:2px;color:rgba(255,255,255,0.6);font-size:0.72rem;">응시 ${examCount}회 · 전체 평균 ${overallAvg}%</div>`,
+            `${idx + 1}과목 ${shortName} — 평균 ${rate}% (${status})`
         );
     });
 }

@@ -25,6 +25,8 @@ const _previewCache = {};
 let _previewEl = null;
 let _previewTimer = null;
 let _previewTouchTimer = null;
+let _previewHideTimer = null;
+let _previewOwner = null; // 프리뷰를 연 링크 — aria-describedby 연결용
 
 function _ensurePreviewEl() {
     if (_previewEl) return _previewEl;
@@ -32,6 +34,9 @@ function _ensurePreviewEl() {
     _previewEl.id = 'ref-preview-tooltip';
     _previewEl.setAttribute('role', 'tooltip');
     _previewEl.classList.add('is-hidden');
+    // A-16 (SC 1.4.13) — hoverable: 포인터가 툴팁 위로 이동해도 유지
+    _previewEl.addEventListener('mouseenter', () => clearTimeout(_previewHideTimer));
+    _previewEl.addEventListener('mouseleave', () => _scheduleHidePreview());
     document.body.appendChild(_previewEl);
     return _previewEl;
 }
@@ -42,6 +47,10 @@ async function _showPreview(linkEl) {
     if (!path) return;
 
     const el = _ensurePreviewEl();
+    clearTimeout(_previewHideTimer);
+    _previewOwner?.removeAttribute('aria-describedby');
+    _previewOwner = linkEl;
+    linkEl.setAttribute('aria-describedby', 'ref-preview-tooltip');
     el.innerHTML = '<div style="opacity:0.6;">로딩 중...</div>';
     el.classList.remove('is-hidden');
 
@@ -98,13 +107,36 @@ async function _showPreview(linkEl) {
 }
 
 function _hidePreview() {
+    clearTimeout(_previewHideTimer);
     if (_previewEl) _previewEl.classList.add('is-hidden');
+    _previewOwner?.removeAttribute('aria-describedby');
+    _previewOwner = null;
+}
+
+/** 링크→툴팁 이동 유예 시간을 두고 숨김 예약 (hoverable 통로 확보) */
+function _scheduleHidePreview() {
+    clearTimeout(_previewHideTimer);
+    _previewHideTimer = setTimeout(_hidePreview, TIMING.PREVIEW_HIDE_MS);
 }
 
 let _refLinksDelegationInitialized = false;
 function _initRefLinkDelegation() {
     if (_refLinksDelegationInitialized) return;
     _refLinksDelegationInitialized = true;
+    // A-16 ② — Esc로 프리뷰 해제, 바깥 터치로 persistent 프리뷰 해제
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && _previewEl && !_previewEl.classList.contains('is-hidden')) {
+            clearTimeout(_previewTimer);
+            _hidePreview();
+        }
+    });
+    document.addEventListener('touchstart', (e) => {
+        if (!_previewEl || _previewEl.classList.contains('is-hidden')) return;
+        const t = /** @type {Element|null} */ (e.target);
+        if (t && !t.closest('#ref-preview-tooltip') && !t.closest('[data-ref-html]')) {
+            _hidePreview();
+        }
+    }, { passive: true });
     // click 이벤트 위임: document에서 단일 리스너로 처리
     document.addEventListener('click', (e) => {
         // law.go.kr 원문 링크는 온라인 전용 — 오프라인이면 안내 후 차단
@@ -175,11 +207,21 @@ export function bindReferenceLinks() {
         // 호버 프리뷰 (데스크톱)
         a.addEventListener('mouseenter', () => {
             clearTimeout(_previewTimer);
+            clearTimeout(_previewHideTimer);
             _previewTimer = setTimeout(() => _showPreview(a), TIMING.PREVIEW_HOVER_MS);
         });
         a.addEventListener('mouseleave', () => {
             clearTimeout(_previewTimer);
-            _hidePreview();
+            _scheduleHidePreview();
+        });
+        // A-16 ① — 키보드 포커스로도 프리뷰 개방
+        a.addEventListener('focus', () => {
+            clearTimeout(_previewTimer);
+            _previewTimer = setTimeout(() => _showPreview(a), TIMING.PREVIEW_HOVER_MS);
+        });
+        a.addEventListener('blur', () => {
+            clearTimeout(_previewTimer);
+            _scheduleHidePreview();
         });
         // 롱프레스 프리뷰 (모바일) — 시각적 힌트: 600ms 동안 링크를 활성화 스타일로 표시
         a.addEventListener('touchstart', () => {
@@ -193,12 +235,11 @@ export function bindReferenceLinks() {
         a.addEventListener('touchend', () => {
             clearTimeout(_previewTouchTimer);
             a.classList.remove('ref-longpress-active');
-            setTimeout(_hidePreview, TIMING.PREVIEW_HIDE_MS);
+            // A-16 persistent — 자동 소멸 없음, 바깥 터치·Esc로만 닫힘
         }, { passive: true });
         a.addEventListener('touchmove', () => {
             clearTimeout(_previewTouchTimer);
             a.classList.remove('ref-longpress-active');
-            _hidePreview();
         }, { passive: true });
     });
 }

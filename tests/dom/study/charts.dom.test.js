@@ -1,5 +1,5 @@
 // tests/dom/study/charts.dom.test.js — 분석 차트 시나리오
-// @spec C-01,C-02,C-03,C-04,C-05
+// @spec C-01,C-02,C-03,C-04,C-05,A-15,A-16
 // 성적 추이 라인차트, 합격/과락 진단, 레이더 차트, 과목별 점수행, 툴팁을 고정한다.
 
 import { describe, it, beforeEach, expect, vi } from 'vitest';
@@ -123,5 +123,40 @@ describe('분석 차트 (C-01~05)', () => {
         const svg = document.getElementById('analytics-chart-wrapper').querySelector('svg');
         const tooltipTargets = svg.querySelectorAll('[data-tooltip], circle');
         expect(tooltipTargets.length).toBeGreaterThan(0);
+    });
+
+    it('A-15: 라인차트 SVG가 role=img + 데이터 요약 aria-label을 가진다', () => {
+        seedHistory(PASS_RATES, PASS_SUBJ);
+        renderPerformanceChart();
+        const svg = document.getElementById('analytics-chart-wrapper').querySelector('svg');
+        expect(svg.getAttribute('role')).toBe('img');
+        expect(svg.getAttribute('aria-label')).toContain('모의고사 성적 추이');
+        expect(svg.getAttribute('aria-label')).toContain('75%');
+    });
+
+    it('A-15: 레이더 차트 SVG가 role=img + 과목별 정답률 요약을 가진다', () => {
+        seedHistory(PASS_RATES, PASS_SUBJ);
+        renderRadarChart();
+        const svg = document.getElementById('radar-chart-wrapper').querySelector('svg');
+        expect(svg.getAttribute('role')).toBe('img');
+        expect(svg.getAttribute('aria-label')).toContain('과목별 평균 정답률');
+        expect(svg.getAttribute('aria-label')).toContain('과목A');
+    });
+
+    it('A-16: 차트 포인트는 포커스 가능·aria-label 보유, focus→툴팁 개방·Esc→해제', () => {
+        seedHistory(PASS_RATES, PASS_SUBJ);
+        renderPerformanceChart();
+        const svg = document.getElementById('analytics-chart-wrapper').querySelector('svg');
+        const dot = svg.querySelector('.chart-dot-interactive');
+        expect(dot.getAttribute('tabindex')).toBe('0');
+        expect(dot.getAttribute('aria-label')).toContain('70%');
+
+        dot.dispatchEvent(new FocusEvent('focus'));
+        const tip = document.querySelector('.chart-tooltip');
+        expect(tip).not.toBeNull();
+        expect(tip.classList.contains('is-visible')).toBe(true);
+
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+        expect(tip.classList.contains('is-visible')).toBe(false);
     });
 });

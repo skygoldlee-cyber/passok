@@ -18,7 +18,7 @@ import { reportEvent } from '../../telemetry/usage-telemetry.js';
 import { recordQuizJudgment } from '../../study/spaced-repetition.js';
 import { apportionByWeight, examWeightBySubject } from '../../study/study-tracker.js';
 import { shuffle } from '../../core/utils.js';
-import { showToast, vibrate, HAPTIC } from '../../ui-utils.js';
+import { showToast, vibrate, HAPTIC, markChoiceState, clearChoiceState } from '../../ui-utils.js';
 import { suggestWrongCauseKey, recordDiagnosticP0 } from '../personalization-view.js';
 import { aiFeedbackAvailable, requestWrongFeedback } from '../../ai/ai-client.js';
 
@@ -229,7 +229,7 @@ export function renderQuizQuestion() {
                 const btn = /** @type {HTMLButtonElement & {_oxHandler?: EventListener}} */ (node);
                 if (btn._oxHandler) btn.removeEventListener('click', btn._oxHandler);
                 btn.disabled = false;
-                btn.classList.remove('correct', 'incorrect');
+                clearChoiceState(btn);
                 btn._oxHandler = () => submitQuizChoiceAnswer(btn, btn.dataset.ox, currentQuiz.answer);
                 btn.addEventListener('click', btn._oxHandler);
             });
@@ -341,11 +341,12 @@ function submitQuizChoiceAnswer(selectedBtn, selectedValue, correctValue) {
     const optionsContainer = document.getElementById('quiz-options-container');
     const oxContainer = document.getElementById('quiz-ox-container');
     if (optionsContainer) {
-        optionsContainer.querySelectorAll('button').forEach(btn => {
+        optionsContainer.querySelectorAll('button').forEach(node => {
+            const btn = /** @type {HTMLButtonElement} */ (node);
             btn.disabled = true;
             const numSpan = btn.querySelector('.limits-opt-num');
             if (numSpan && numSpan.textContent === correctValue) {
-                btn.classList.add('correct');
+                markChoiceState(btn, 'correct');
             }
         });
     }
@@ -353,11 +354,11 @@ function submitQuizChoiceAnswer(selectedBtn, selectedValue, correctValue) {
         oxContainer.querySelectorAll('.quiz-ox-btn').forEach(node => {
             const btn = /** @type {HTMLButtonElement} */ (node);
             btn.disabled = true;
-            if (btn.dataset.ox === correctValue) btn.classList.add('correct');
+            if (btn.dataset.ox === correctValue) markChoiceState(btn, 'correct');
         });
     }
     if (!isCorrect) {
-        selectedBtn.classList.add('incorrect');
+        markChoiceState(selectedBtn, 'incorrect');
         markQuizWrong(currentQuiz);
     } else {
         quizState.correctCount++;

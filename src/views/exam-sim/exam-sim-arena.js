@@ -137,12 +137,14 @@ function updateOMRProgress() {
         const bubble = document.getElementById(`omr-b-${i}`);
 
         if (bubble) {
-            // 풀었는지 여부 확인
+            // 풀었는지 여부 확인 (A-14 — solved 상태는 색 외에 ✓ 마커·aria-label 병용)
             if (simState.userAnswers[qId] && String(simState.userAnswers[qId]).trim() !== '') {
                 bubble.classList.add('solved');
+                bubble.setAttribute('aria-label', `문제 ${i + 1}번으로 이동 — 풀이 완료`);
                 solvedCount++;
             } else {
                 bubble.classList.remove('solved');
+                bubble.setAttribute('aria-label', `문제 ${i + 1}번으로 이동`);
             }
 
             // 현재 문제 활성화

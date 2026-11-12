@@ -3,10 +3,10 @@
 // 도메인 규칙(Pomodoro 25/5분, 시험 1분/문항)은 이 파일에서 명명만 부여하고 보존.
 
 export const TIMING = {
-  // 교재 리더 프리뷰/참조
+  // 교재 리더 프리뷰/참조 (A-16 — 링크→툴팁 이동 유예; 자동 소멸은 SC 1.4.13 persistent로 폐지)
   PREVIEW_HOVER_MS: 400,
   PREVIEW_LONG_PRESS_MS: 600,
-  PREVIEW_HIDE_MS: 3000,
+  PREVIEW_HIDE_MS: 300,
   CROSS_REF_SCROLL_DELAY_MS: 800,
   AUDIO_STATUS_CLEAR_MS: 2500,
 
@@ -20,9 +20,8 @@ export const TIMING = {
   POMODORO_WORK_SEC: 25 * 60,
   POMODORO_BREAK_SEC: 5 * 60,
 
-  // 차트 툴팁
-  CHART_TOOLTIP_HIDE_MS: 100,
-  CHART_TOOLTIP_TOUCH_HIDE_MS: 2000,
+  // 차트 툴팁 (A-16 — 포인트→툴팁 이동 유예; 터치 자동 소멸은 persistent로 폐지)
+  CHART_TOOLTIP_HIDE_MS: 300,
 
   // 검색
   SEARCH_DEBOUNCE_MS: 250,

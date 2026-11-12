@@ -901,7 +901,8 @@ a.glossary-ref-link i {
     font-size: 0.85rem;
     line-height: 1.5;
     color: var(--color-text, #e6edf3);
-    pointer-events: none;
+    /* A-16 (SC 1.4.13) — hoverable: 포인터가 툴팁 위로 이동해도 유지되려면 포인터 이벤트 필요 */
+    pointer-events: auto;
 }
 
 /* ── 웹툰 모드 (교재 리더) — 말풍선 컷 ── */
