@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-12 fix(css): Discord 커뮤니티 버튼 라벨·배지 줄바꿈 규약 수정
+
+- **문제**: settings-item이 flex 컨테이너라 라벨 텍스트와 유료 배지가 각각 flex 아이템이 됨 — 한글 '유료' 배지는 min-content가 1글자라 좁은 패널에서 유/료로 세로 분절, 라벨도 단어 중간에서 끊길 수 있음
+- **수정**: 라벨을 span으로 감싸 `word-break: keep-all`(Discord와 커뮤니티 사이 공백에서만 줄바꿈), `.pro-badge`에 `white-space: nowrap` + flex 축소 금지로 배지 가로 유지
+- **검증**: community-invite DOM 6건 통과 · build:html 재조립
+
+
 ## 2026-11-12 feat(pro): Discord 커뮤니티 Pro 표기 — feature-plan discord_community 등록
 
 - **변경**: 같은 시험 응시자 소통 채널인 Discord 커뮤니티를 유료 표기 기능으로 전환 — feature-plan.json `discord_community: pro` 등록, 커뮤니티 버튼에 유료 배지 + 최초 진입 시 '유료 기능 안내' 모달 (무료 체험 방식 — 링크는 계속 열림, 다른 pro 기능과 동일 규약)

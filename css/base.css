@@ -1132,6 +1132,15 @@ body.ui-mode-practice .ui-mode-toggle {
     color: var(--color-text-muted);
 }
 
+/* Discord 커뮤니티 버튼 — 라벨은 'Discord'와 '커뮤니티' 사이 공백에서만 줄바꿈
+   (단어 중간 분절 방지), 유료 배지는 축소·분절 금지로 가로 유지 */
+#community-btn .community-btn-label {
+    word-break: keep-all;
+}
+.settings-item .pro-badge {
+    flex-shrink: 0;
+}
+
 .settings-item-danger {
     color: var(--color-danger-light);
 }

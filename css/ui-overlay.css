@@ -914,6 +914,7 @@
    반복 노출되는 카드 UI에서 주의를 끌지 않도록 더 축소·저채도로 유지한다 ── */
 .pro-badge {
   display: inline-block;
+  white-space: nowrap; /* 배지 라벨이 세로로 쪼개지지 않도록 내부 줄바꿈 금지 */
   padding: 0.06rem 0.32rem;
   border-radius: 999px;
   font-size: 0.55rem;
