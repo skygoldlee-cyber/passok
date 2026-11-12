@@ -167,9 +167,9 @@
       "sum": 15
     },
     "src/exams/carework/views/care-flow.js": {
-      "count": 4,
-      "max": 47,
-      "sum": 93
+      "count": 2,
+      "max": 21,
+      "sum": 33
     },
     "src/exams/carework/views/care-handover.js": {
       "count": 1,
@@ -357,9 +357,9 @@
       "sum": 14
     },
     "src/reader/reader-format.js": {
-      "count": 2,
-      "max": 52,
-      "sum": 70
+      "count": 1,
+      "max": 18,
+      "sum": 18
     },
     "src/reader/textbook-core.js": {
       "count": 4,
@@ -397,9 +397,9 @@
       "sum": 24
     },
     "src/shell/app-dashboard.js": {
-      "count": 2,
-      "max": 47,
-      "sum": 70
+      "count": 1,
+      "max": 23,
+      "sum": 23
     },
     "src/shell/app-shell.js": {
       "count": 4,
@@ -598,8 +598,8 @@
     },
     "src/views/listeners/listeners-app.js": {
       "count": 1,
-      "max": 19,
-      "sum": 19
+      "max": 23,
+      "sum": 23
     },
     "src/views/listeners/listeners-delegation.js": {
       "count": 1,

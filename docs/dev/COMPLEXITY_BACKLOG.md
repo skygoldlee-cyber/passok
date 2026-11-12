@@ -9,7 +9,7 @@
 
 `node tools/check/check_complexity.js` (eslint complexity 임계 10, Δ 비교는 동일 임계 유지 필수).
 
-- 기준선: **340건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
+- 기준선: **336건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
 - 분해 순서: 복잡도 점수 내림차순 — 상위부터 처리해야 곡선이 꺾인다
 - 분해 완료 시 `--update`로 기준선을 축소하고 `--report`로 이 표를 재생성한다
 - 분해 규약: 렌더 분기는 `if` 체인 → early return·테이블 조회·서브함수 추출로 내리고, 동작 변경 없이 구조만 정리한다. 대형 렌더 함수는 섹션별 private 렌더 함수로 분할
@@ -18,9 +18,6 @@
 
 | 복잡도 | 함수 | 위치 |
 |---:|---|---|
-| 52 | `markStoryNarrative` | src/reader/reader-format.js:534 |
-| 47 | `_render` | src/exams/carework/views/care-flow.js:250 |
-| 47 | `populateExamCards` | src/shell/app-dashboard.js:95 |
 | 46 | `_requestAi` | src/ai/ai-client.js:192 |
 | 45 | `evaluateStability` | src/exams/cosmetic/formula-stability.js:144 |
 | 42 | `parseMarkdownContent` | src/reader/textbook-core.js:164 |
@@ -75,6 +72,7 @@
 | 23 | `populateSubjectSelects` | src/shell/app-dashboard.js:11 |
 | 23 | `evalStudyMilestones` | src/study/study-tracker-adherence.js:128 |
 | 23 | `buildErrorPayload` | src/telemetry/error-telemetry.js:47 |
+| 23 | `bindAppListeners` | src/views/listeners/listeners-app.js:18 |
 | 23 | `renderReviewList` | src/views/quiz/quiz-review.js:87 |
 | 23 | `getAudioPathForChapter` | src/views/reader/reader-audio.js:35 |
 | 22 | `resolveDefaultExamId` | src/core/exam-context.js:16 |
@@ -90,7 +88,7 @@
 | 21 | `_cutsWithTableSplit` | src/content/pdf-utils.js:149 |
 | 21 | `pdfFileFromElStyled` | src/content/pdf-utils.js:437 |
 | 21 | `buildHandover` | src/exams/carework/care-handover.js:15 |
-| 21 | `flowNext` | src/exams/carework/views/care-flow.js:331 |
+| 21 | `flowNext` | src/exams/carework/views/care-flow.js:376 |
 | 21 | `buildBatchRecordHtml` | src/exams/cosmetic/views/formula-print.js:52 |
 | 21 | `applyExamBranding` | src/shell/app-shell.js:195 |
 | 21 | `statusRows` | src/shell/notice-check.js:422 |
@@ -115,7 +113,6 @@
 | 19 | `clusterWeakConcepts` | src/study/personalization.js:20 |
 | 19 | `recordStudyActivity` | src/study/study-tracker-activity.js:47 |
 | 19 | `renderSimQuestion` | src/views/exam-sim/exam-sim-arena.js:176 |
-| 19 | `bindAppListeners` | src/views/listeners/listeners-app.js:17 |
 | 19 | `renderExpectedScore` | src/views/score-estimate.js:46 |
 | 19 | `renderWeakReview` | src/views/trainer-drills.js:557 |
 | 18 | `(anonymous)#7` | src/exams/carework/care-share.js:105 |
@@ -239,7 +236,6 @@
 | 13 | `ensureRegistry` | src/content/data-loader.js:70 |
 | 13 | `applyExamTheme` | src/core/exam-context.js:249 |
 | 13 | `deviceLabel` | src/core/utils.js:93 |
-| 13 | `_resultHtml` | src/exams/carework/views/care-flow.js:230 |
 | 13 | `(anonymous)#12` | src/exams/cosmetic/formula-check.js:363 |
 | 13 | `deductStock` | src/exams/cosmetic/material-ledger.js:188 |
 | 13 | `sectionFreshness` | src/exams/cosmetic/views/formula-audit.js:237 |
@@ -248,7 +244,7 @@
 | 13 | `(anonymous)#16` | src/exams/cosmetic/views/formula-calc.js:85 |
 | 13 | `_restoreCalcDraft` | src/exams/cosmetic/views/formula-calc.js:395 |
 | 13 | `getPracticeViewTitles` | src/practice-registry.js:838 |
-| 13 | `showPlanCompare` | src/pro/pro-upgrade.js:236 |
+| 13 | `showPlanCompare` | src/pro/pro-upgrade.js:237 |
 | 13 | `detectPlatform` | src/pwa/pwa-install.js:61 |
 | 13 | `(anonymous)#25` | src/reader/exam-viewer.js:248 |
 | 13 | `(anonymous)#30` | src/reader/zoom-gestures.js:90 |
@@ -326,7 +322,7 @@
 | 11 | `(anonymous)#21` | src/exams/cosmetic/views/formula-material.js:85 |
 | 11 | `buildConsentHtml` | src/exams/cosmetic/views/formula-print.js:422 |
 | 11 | `(anonymous)#22` | src/exams/cosmetic/views/formula-products.js:95 |
-| 11 | `shouldShowProMoment` | src/pro/pro-upgrade.js:317 |
+| 11 | `shouldShowProMoment` | src/pro/pro-upgrade.js:318 |
 | 11 | `_titleFromPath` | src/reader/exam-viewer.js:61 |
 | 11 | `(anonymous)#26` | src/reader/exam-viewer.js:442 |
 | 11 | `_loadMd` | src/reader/exam-viewer.js:543 |

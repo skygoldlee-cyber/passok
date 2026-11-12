@@ -239,12 +239,18 @@ function _resultHtml() {
         return `<p class="wb-scene">${mark} ${esc(o)} — ${esc((q.rationale || [])[oi] || '')}</p>`;
     }).join('');
     const canRetry = !ok && _scWrong < MAX_WRONG && !!_scItemFor(_c);
-    // 오답 보기에 연결된 교정 컷 (items.cutOnWrong — 오개념을 고른 장면으로 바로 교정)
-    const cutId = !ok && q.cutOnWrong ? q.cutOnWrong[_sel] : null;
-    const cutSlot = cutId && _slots ? _slots[parseInt(String(cutId).replace(/\D/g, ''), 10) - 1] : null;
+    const cutSlot = ok ? null : _wrongCutSlot(q);
     return `<div class="flow-verdict ${ok ? 'ok' : 'no'}">${verdict}</div>` + opts
         + (cutSlot ? `<div class="webtoon-reader">${renderSlotHtml(cutSlot, _chars())}</div>` : '')
         + (canRetry ? '<p class="flow-hint">「다음」을 누르면 같은 개념의 다른 문항이 나옵니다.</p>' : '');
+}
+
+/** 오답 보기에 연결된 교정 컷 슬롯 (items.cutOnWrong — 오개념을 고른 장면으로 바로 교정). @param {*} q @returns {*} */
+function _wrongCutSlot(q) {
+    if (!_slots || !q.cutOnWrong) return null;
+    const cutId = q.cutOnWrong[_sel];
+    if (!cutId) return null;
+    return _slots[parseInt(String(cutId).replace(/\D/g, ''), 10) - 1] || null;
 }
 
 function _render() {
@@ -256,76 +262,115 @@ function _render() {
     const step = STEPS[_i];
     const c = _c;
     // 문항은 disabled 계산 전에 확정 — 진입 첫 렌더에서도 미응답 확인이 막히도록
-    if (c && step === 'pre') _preItem = _preItem || _preItemFor(c);
-    if (c && step === 'scenario') {
-        _scItem = _scItem || _scItemFor(c);
-        if (_scItem) _scTried.add(_scItem.id);
-    }
+    _prepStepItem(step, c);
     st.dataset.step = step;
-    if (pg) pg.innerHTML = STEPS.map((/** @type {string} */ s) =>
-        `<span class="flow-step${s === step ? ' on' : ''}">${esc((/** @type {Object.<string,string>} */ (STEP_LABELS))[s] || s)}</span>`).join('');
-    if (back) back.disabled = _i === 0;
-    if (next) {
-        next.textContent = (/** @type {Object.<string,string>} */ (NEXT_LABEL))[step || ''] || '다음 ▶';
-        next.disabled = !c || (step === 'pre' && !!_preItem && !_answered)
-            || (step === 'scenario' && !!_scItem && !_answered);
-    }
+    _renderChrome(pg, back, next, step, c);
     _applyLg(getItem('flow_lg') === '1');
     if (!c) { st.innerHTML = _homeRecHtml(); return; }
     const p = _prog()[c.id] || {};
-
-    if (step === 'home') {
-        const status = p.mastered ? '완료 — 정답으로 마쳤어요'
-            : p.weak ? '취약 표시 — 다음에 먼저 다시 나와요'
-            : p.stage ? `진행 중 — ${(/** @type {Object.<string,string>} */ (STEP_LABELS))[p.stage] || '미시작'}부터 이어합니다`
-            : '아직 시작 전';
-        st.innerHTML = `<div class="wb-scene wb-scene-title">Ch${esc(c.chapter)} · ${esc(c.title)}</div><p class="wb-scene">${esc(status)}</p>`;
-    } else if (step === 'pre') {
-        st.innerHTML = _preItem
-            ? `<div class="wb-scene wb-scene-title">먼저 풀어볼까요 — 모르면 「모르겠어요」를 눌러도 됩니다</div>${_quizHtml(_preItem)}
-               <button class="flow-opt flow-dk" data-click="flowDontKnow">🙋 모르겠어요</button>`
-            : '<p class="wb-scene">선행 문항이 없습니다 — 이야기로 넘어가세요.</p>';
-    } else if (step === 'story') {
-        const slot = _slotFor(c);
-        const dkNote = p.preDk ? '<p class="wb-scene">몰라도 괜찮아요 — 이야기로 쉽게 설명해드릴게요.</p>' : '';
-        st.innerHTML = slot
-            ? dkNote + `<div class="webtoon-reader">${renderSlotHtml(slot, _chars())}</div>`
-            : `<div class="wb-scene wb-scene-title">${esc(c.title)}</div><p class="wb-scene">이 개념에 연결된 이야기 장면이 없습니다.</p>`;
-    } else if (step === 'summary') {
-        const key = _conceptItems(c, 'scenario').concat(_conceptItems(c, 'review'))[0];
-        const good = key ? key.options[_ansIdx(key)] : '';
-        st.innerHTML = `<div class="wb-scene wb-scene-title">핵심 요약</div><div class="wb-scene">${esc(c.title)}</div>` +
-            (key ? `<p class="wb-scene">포인트 — ${esc(key.stem.slice(0, 80))}… → <b>${esc(good)}</b></p>` : '');
-    } else if (step === 'scenario') {
-        // 직전 오답 해설 재확인 — 재도전 문항 위에 접이식으로 노출 (오답 피드백 경로)
-        const lw = p.lastWrong;
-        const again = lw ? `<details class="flow-again"><summary>방금 문제 해설 보기</summary>
-            <p>${esc(lw.stem)}…</p><p class="flow-again-ans">정답 — ${esc(lw.ans)}</p></details>` : '';
-        st.innerHTML = _scItem ? again + _quizHtml(_scItem) : '<p class="wb-scene">시나리오 문항이 없습니다.</p>';
-    } else if (step === 'result') {
-        st.innerHTML = _resultHtml();
-    } else {
-        const rec = _prog()[c.id] || {};
-        const done = _lastCorrect === true;
-        const p2 = _prog();
-        if (done) { rec.mastered = true; rec.weak = false; }
-        else if (_scWrong >= MAX_WRONG) { rec.weak = true; }
-        rec.stage = 'complete'; rec.title = c.title; rec.lastSeen = Date.now();
-        p2[c.id] = rec; _save(p2);
-        _scheduleReview(c.id); // 개념 완료 → 1·3·7일 복습 큐 등록 (DOC-USR-22 §4)
-        const msg = done ? '정답으로 마쳤어요 — 잘하셨습니다.'
-            : _scWrong >= MAX_WRONG ? '이 개념은 다음에 먼저 다시 나와요.'
-            : '이 개념 학습을 마쳤어요.';
-        // 완료 집계 + 다음 복습 예정일 — 효능감(진행 체감) 표시
-        const rv = (_rv() || {})[c.id];
-        const doneN = Object.values(p2).filter((/** @type {*} */ r) => r && r.mastered).length;
-        const leftN = Math.max(0, (_concepts || []).length - doneN);
-        const dueTxt = rv ? ` · ${rv.due.slice(5).replace('-', '/')}에 다시 나와요` : '';
-        st.innerHTML = `<div class="wb-scene wb-scene-title">학습 완료 — ${esc(c.title)}</div><p class="wb-scene">${esc(msg)}</p>
-            <p class="flow-sum">지금까지 ${esc(doneN)}개 완료 · 남은 개념 ${esc(leftN)}개${esc(dueTxt)}</p>
-            <button class="btn btn-primary flow-next-concept" data-click="flowNextConcept">다음 개념으로 ▶</button>`;
-    }
+    const renderer = (/** @type {Object.<string, Function>} */ (_STEP_RENDERERS))[step || ''];
+    if (renderer) { st.innerHTML = /** @type {string} */ (renderer(c, p)); return; }
+    _renderComplete(st, c);
 }
+
+/** 단계별 문항 확정 — pre·scenario 진입 시 미로드 문항을 선택하고 시도 기록. @param {*} step @param {*} c */
+function _prepStepItem(step, c) {
+    if (!c) return;
+    if (step === 'pre') { _preItem = _preItem || _preItemFor(c); return; }
+    if (step !== 'scenario') return;
+    _scItem = _scItem || _scItemFor(c);
+    if (_scItem) _scTried.add(_scItem.id);
+}
+
+/** 단계 진행바 + 뒤로/다음 버튼 상태 갱신. @param {Element|null} pg @param {HTMLButtonElement|null} back @param {HTMLButtonElement|null} next @param {*} step @param {*} c */
+function _renderChrome(pg, back, next, step, c) {
+    if (pg) pg.innerHTML = STEPS.map((/** @type {string} */ s) =>
+        `<span class="flow-step${s === step ? ' on' : ''}">${esc((/** @type {Object.<string,string>} */ (STEP_LABELS))[s] || s)}</span>`).join('');
+    if (back) back.disabled = _i === 0;
+    if (!next) return;
+    next.textContent = (/** @type {Object.<string,string>} */ (NEXT_LABEL))[step || ''] || '다음 ▶';
+    next.disabled = _nextDisabled(step, c);
+}
+
+/** 「다음」 비활성 판정 — 개념 미선택 또는 미응답 문항 대기 중. @param {*} step @param {*} c */
+function _nextDisabled(step, c) {
+    if (!c) return true;
+    if (step === 'pre' && !!_preItem && !_answered) return true;
+    return step === 'scenario' && !!_scItem && !_answered;
+}
+
+/** @param {*} c @param {*} p */
+function _stepHomeHtml(c, p) {
+    const status = p.mastered ? '완료 — 정답으로 마쳤어요'
+        : p.weak ? '취약 표시 — 다음에 먼저 다시 나와요'
+        : p.stage ? `진행 중 — ${(/** @type {Object.<string,string>} */ (STEP_LABELS))[p.stage] || '미시작'}부터 이어합니다`
+        : '아직 시작 전';
+    return `<div class="wb-scene wb-scene-title">Ch${esc(c.chapter)} · ${esc(c.title)}</div><p class="wb-scene">${esc(status)}</p>`;
+}
+
+function _stepPreHtml() {
+    if (!_preItem) return '<p class="wb-scene">선행 문항이 없습니다 — 이야기로 넘어가세요.</p>';
+    return `<div class="wb-scene wb-scene-title">먼저 풀어볼까요 — 모르면 「모르겠어요」를 눌러도 됩니다</div>${_quizHtml(_preItem)}
+        <button class="flow-opt flow-dk" data-click="flowDontKnow">🙋 모르겠어요</button>`;
+}
+
+/** @param {*} c @param {*} p */
+function _stepStoryHtml(c, p) {
+    const slot = _slotFor(c);
+    if (!slot) return `<div class="wb-scene wb-scene-title">${esc(c.title)}</div><p class="wb-scene">이 개념에 연결된 이야기 장면이 없습니다.</p>`;
+    const dkNote = p.preDk ? '<p class="wb-scene">몰라도 괜찮아요 — 이야기로 쉽게 설명해드릴게요.</p>' : '';
+    return dkNote + `<div class="webtoon-reader">${renderSlotHtml(slot, _chars())}</div>`;
+}
+
+/** @param {*} c */
+function _stepSummaryHtml(c) {
+    const key = _conceptItems(c, 'scenario').concat(_conceptItems(c, 'review'))[0];
+    const good = key ? key.options[_ansIdx(key)] : '';
+    return `<div class="wb-scene wb-scene-title">핵심 요약</div><div class="wb-scene">${esc(c.title)}</div>` +
+        (key ? `<p class="wb-scene">포인트 — ${esc(key.stem.slice(0, 80))}… → <b>${esc(good)}</b></p>` : '');
+}
+
+/** @param {*} p */
+function _stepScenarioHtml(p) {
+    // 직전 오답 해설 재확인 — 재도전 문항 위에 접이식으로 노출 (오답 피드백 경로)
+    const lw = p.lastWrong;
+    const again = lw ? `<details class="flow-again"><summary>방금 문제 해설 보기</summary>
+        <p>${esc(lw.stem)}…</p><p class="flow-again-ans">정답 — ${esc(lw.ans)}</p></details>` : '';
+    if (!_scItem) return '<p class="wb-scene">시나리오 문항이 없습니다.</p>';
+    return again + _quizHtml(_scItem);
+}
+
+/** 학습 완료 단계 — 진행 저장·복습 큐 등록 후 완료 화면 렌더. @param {Element} st @param {*} c */
+function _renderComplete(st, c) {
+    const rec = _prog()[c.id] || {};
+    const done = _lastCorrect === true;
+    const p2 = _prog();
+    if (done) { rec.mastered = true; rec.weak = false; }
+    else if (_scWrong >= MAX_WRONG) { rec.weak = true; }
+    rec.stage = 'complete'; rec.title = c.title; rec.lastSeen = Date.now();
+    p2[c.id] = rec; _save(p2);
+    _scheduleReview(c.id); // 개념 완료 → 1·3·7일 복습 큐 등록 (DOC-USR-22 §4)
+    const msg = done ? '정답으로 마쳤어요 — 잘하셨습니다.'
+        : _scWrong >= MAX_WRONG ? '이 개념은 다음에 먼저 다시 나와요.'
+        : '이 개념 학습을 마쳤어요.';
+    // 완료 집계 + 다음 복습 예정일 — 효능감(진행 체감) 표시
+    const rv = (_rv() || {})[c.id];
+    const doneN = Object.values(p2).filter((/** @type {*} */ r) => r && r.mastered).length;
+    const leftN = Math.max(0, (_concepts || []).length - doneN);
+    const dueTxt = rv ? ` · ${rv.due.slice(5).replace('-', '/')}에 다시 나와요` : '';
+    st.innerHTML = `<div class="wb-scene wb-scene-title">학습 완료 — ${esc(c.title)}</div><p class="wb-scene">${esc(msg)}</p>
+        <p class="flow-sum">지금까지 ${esc(doneN)}개 완료 · 남은 개념 ${esc(leftN)}개${esc(dueTxt)}</p>
+        <button class="btn btn-primary flow-next-concept" data-click="flowNextConcept">다음 개념으로 ▶</button>`;
+}
+
+const _STEP_RENDERERS = {
+    home: _stepHomeHtml,
+    pre: _stepPreHtml,
+    story: _stepStoryHtml,
+    summary: _stepSummaryHtml,
+    scenario: _stepScenarioHtml,
+    result: _resultHtml,
+};
 
 export function flowBack() { if (_i > 0) { _i--; _render(); } }
 export function flowNext() {

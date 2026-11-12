@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-12 refactor(complexity): 상위 복잡도 3함수 분해 — 기준선 340→336
+
+- **markStoryNarrative** (reader-format.js, 52→≤10): 마커 스캔(`_markStoryByMarkers`)·토글 칩 삽입(`_insertStoryToggle`)·폴백 서사 탐지(`_markStoryFallback` + `_fallbackSceneStep`/`_fallbackHeadingStep`/`_isStoryEpilogue`)·sr 라벨 패스(`_labelStoryRuns`)로 분할 — 파일 잔여는 formatSectionContentForReader(18)
+- **populateExamCards** (app-dashboard.js, 47→≤10): 과목 카드(`_subjectCardHtml`)·주관식(`_writtenCardHtml`)·기출/보충(`_renderPastExamCards` + `_pastItemBtnHtml`/`_supplementCardHtml`)·텍스트 치환(`_updateExamViewTexts` + `_updateIntegratedExamCard`/`_updateIntegratedLabels`/`_integratedExamTimeMin`/`_updateIntegratedStats`)로 분할 — 파일 잔여는 populateSubjectSelects(23)
+- **care-flow `_render`** (care-flow.js, 47→7): 크롬 갱신(`_renderChrome` + `_nextDisabled`)·문항 준비(`_prepStepItem`)·단계별 렌더를 `_STEP_RENDERERS` 테이블 디스패치로 전환, 완료 단계는 `_renderComplete`, `_resultHtml`은 `_wrongCutSlot` 추출로 13→≤10 — 파일 잔여는 _bankLoad(12)·flowNext(21)
+- **검증**: unit 26건(reader-format·care-flow) + DOM 9건(care-flow·nonexam-pack) 통과 · check:types 0 · check:cplx --update로 기준선 단조 축소 반영
+
+
 ## 2026-11-12 fix(css): Discord 커뮤니티 버튼 라벨·배지 줄바꿈 규약 수정
 
 - **문제**: settings-item이 flex 컨테이너라 라벨 텍스트와 유료 배지가 각각 flex 아이템이 됨 — 한글 '유료' 배지는 min-content가 1글자라 좁은 패널에서 유/료로 세로 분절, 라벨도 단어 중간에서 끊길 수 있음

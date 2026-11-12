@@ -550,101 +550,136 @@ export function markStoryNarrative(contentEl) {
     const hasEnd = leaves.some(isBoundaryEnd);
 
     if (hasStart || hasEnd) {
-        // 끝 마커만 있으면 이전 컨테이너에서 시작된 범위의 연속으로 간주
-        let inScene = !hasStart && hasEnd;
-        /** @type {{start: (Element|null), members: Element[]}|null} */
-        let group = inScene ? { start: null, members: [] } : null;
-        /** @type {{start: (Element|null), members: Element[]}[]} */
-        const groups = group ? [group] : [];
-        for (const el of leaves) {
-            if (isBoundaryStart(el)) {
-                el.classList.add('story-boundary', 'story-boundary-start');
-                inScene = true;
-                group = { start: el, members: [] };
-                groups.push(group);
-                continue;
-            }
-            if (isBoundaryEnd(el)) {
-                el.classList.add('story-boundary', 'story-boundary-end');
-                inScene = false;
-                group = null;
-                continue;
-            }
-            if (inScene) {
-                el.classList.add('story-narrative');
-                if (group) group.members.push(el);
-            }
-        }
-        // 이야기 접기/펼치기 칩 — story-boundary 앵커에 삽입, 멤버 전체를 토글.
-        // aria-expanded로 서사↔본문 전환을 스크린리더에도 전달한다.
-        for (const g of groups) {
-            if (!g.members.length) continue;
-            // 중복 호출(바깥 컨테이너 + 서브섹션 개별 호출, 재렌더) 시 칩 중복 방지
-            const anchor = g.start ? g.start.nextElementSibling : (g.members[0] ? g.members[0].previousElementSibling : null);
-            if (anchor && anchor.classList && anchor.classList.contains('story-toggle')) continue;
-            const toggle = document.createElement('button');
-            toggle.type = 'button';
-            toggle.className = 'story-toggle';
-            toggle.setAttribute('aria-expanded', 'true');
-            toggle.textContent = '📖 이야기 접기';
-            toggle.addEventListener('click', () => {
-                const collapsed = toggle.getAttribute('aria-expanded') === 'false';
-                g.members.forEach(m => { /** @type {HTMLElement} */ (m).hidden = !collapsed; });
-                toggle.setAttribute('aria-expanded', String(collapsed));
-                toggle.textContent = collapsed ? '📖 이야기 접기' : '📖 이야기 펼치기';
-                toggle.classList.toggle('is-collapsed', !collapsed);
-            });
-            if (g.start) g.start.insertAdjacentElement('afterend', toggle);
-            else g.members[0]?.insertAdjacentElement('beforebegin', toggle);
-            // 경계 마커는 display:none이라 스크린리더가 읽지 못한다 —
-            // 서사 구간 시작/끝을 시각 숨김 라벨로 알린다 (접기 칩이 멤버를
-            // 숨겨도 라벨은 멤버 밖에 있어 구조를 전달)
-            _insertStorySrLabel(/** @type {Element} */ (g.members[0]), 'beforebegin', '이야기 구간 시작');
-            _insertStorySrLabel(/** @type {Element} */ (g.members[g.members.length - 1]), 'afterend', '이야기 구간 끝');
-        }
+        _markStoryByMarkers(leaves, hasStart, isBoundaryStart, isBoundaryEnd);
         return;
     }
+    _markStoryFallback(contentEl);
+}
 
-    // 폴백(마커 없는 문서): 📖 헤딩 리프 블록 + 💭 에필로그 + 프롤로그/등장인물 카드
+/**
+ * 명시 마커 경로 — 시작/끝 경계로 서사 그룹을 스캔하고 접기 칩·sr 라벨을 삽입한다.
+ * @param {Element[]} leaves @param {boolean} hasStart @param {Function} isBoundaryStart @param {Function} isBoundaryEnd
+ */
+function _markStoryByMarkers(leaves, hasStart, isBoundaryStart, isBoundaryEnd) {
+    // 끝 마커만 있으면 이전 컨테이너에서 시작된 범위의 연속으로 간주
+    let inScene = !hasStart;
+    /** @type {{start: (Element|null), members: Element[]}|null} */
+    let group = inScene ? { start: null, members: [] } : null;
+    /** @type {{start: (Element|null), members: Element[]}[]} */
+    const groups = group ? [group] : [];
+    for (const el of leaves) {
+        if (isBoundaryStart(el)) {
+            el.classList.add('story-boundary', 'story-boundary-start');
+            inScene = true;
+            group = { start: el, members: [] };
+            groups.push(group);
+            continue;
+        }
+        if (isBoundaryEnd(el)) {
+            el.classList.add('story-boundary', 'story-boundary-end');
+            inScene = false;
+            group = null;
+            continue;
+        }
+        if (inScene) {
+            el.classList.add('story-narrative');
+            if (group) group.members.push(el);
+        }
+    }
+    for (const g of groups) _insertStoryToggle(g);
+}
+
+/**
+ * 이야기 접기/펼치기 칩 — story-boundary 앵커에 삽입, 멤버 전체를 토글.
+ * aria-expanded로 서사↔본문 전환을 스크린리더에도 전달한다.
+ * @param {{start: (Element|null), members: Element[]}} g
+ */
+function _insertStoryToggle(g) {
+    if (!g.members.length) return;
+    // 중복 호출(바깥 컨테이너 + 서브섹션 개별 호출, 재렌더) 시 칩 중복 방지
+    const anchor = g.start ? g.start.nextElementSibling : (g.members[0] ? g.members[0].previousElementSibling : null);
+    if (anchor && anchor.classList && anchor.classList.contains('story-toggle')) return;
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'story-toggle';
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.textContent = '📖 이야기 접기';
+    toggle.addEventListener('click', () => {
+        const collapsed = toggle.getAttribute('aria-expanded') === 'false';
+        g.members.forEach(m => { /** @type {HTMLElement} */ (m).hidden = !collapsed; });
+        toggle.setAttribute('aria-expanded', String(collapsed));
+        toggle.textContent = collapsed ? '📖 이야기 접기' : '📖 이야기 펼치기';
+        toggle.classList.toggle('is-collapsed', !collapsed);
+    });
+    if (g.start) g.start.insertAdjacentElement('afterend', toggle);
+    else g.members[0]?.insertAdjacentElement('beforebegin', toggle);
+    // 경계 마커는 display:none이라 스크린리더가 읽지 못한다 —
+    // 서사 구간 시작/끝을 시각 숨김 라벨로 알린다 (접기 칩이 멤버를
+    // 숨겨도 라벨은 멤버 밖에 있어 구조를 전달)
+    _insertStorySrLabel(/** @type {Element} */ (g.members[0]), 'beforebegin', '이야기 구간 시작');
+    _insertStorySrLabel(/** @type {Element} */ (g.members[g.members.length - 1]), 'afterend', '이야기 구간 끝');
+}
+
+/** 폴백(마커 없는 문서) — 📖 헤딩 리프 블록 + 💭 에필로그 + 프롤로그/등장인물 카드. @param {Element} contentEl */
+function _markStoryFallback(contentEl) {
     const card = contentEl.closest('.reader-section-card');
     const cardTitleEl = card ? card.querySelector('.reader-section-title') : null;
     // 프롤로그/등장인물 카드는 전체가 서사 — 헤딩이 와도 범위가 끊기지 않는다
     const wholeCard = _STORY_CARD_TITLE_RE.test(cardTitleEl ? cardTitleEl.textContent : '');
 
     let inScene = wholeCard;
-
     for (const el of contentEl.children) {
-        const isHeading = el.matches && el.matches(_STORY_HEADING_SEL);
-        const isSubTitle = el.classList && el.classList.contains('reader-subsection-title');
-
-        if (isHeading || isSubTitle) {
-            if (isHeading && (el.textContent || '').includes(_STORY_SCENE_MARK)) {
-                inScene = true;
-                el.classList.add('story-narrative');
-                continue;
-            }
-            // 장면은 리프 블록 — 📖 아닌 헤딩이 오면 무조건 종료 (하위 레벨 헤딩도 본문)
-            if (!wholeCard) inScene = false;
-            if (!inScene) continue;
-        } else if (!inScene && el.classList && el.classList.contains('md-quote')
-            && _STORY_EPILOGUE_RE.test(el.textContent || '')) {
-            // 에필로그 인용구 — 다음 헤딩 전까지 서사
-            inScene = true;
-        }
-
-        if (!inScene) continue;
-        // 서사 범위 안의 콜아웃 인용(🔖 기억 태그, 📋 가이드, 📌 출처 등)은 본문 스타일 유지
-        if (el.classList.contains('md-quote') && !_isNarrativeQuote(el)) continue;
-        el.classList.add('story-narrative');
+        const step = _fallbackSceneStep(el, inScene, wholeCard);
+        inScene = step.inScene;
+        if (step.mark) el.classList.add('story-narrative');
     }
+    _labelStoryRuns(contentEl);
+}
 
-    // 폴백 경로도 동일하게 스크린리더 라벨 부여 — 연속 .story-narrative 런의 양 끝
+/**
+ * 폴백 경로의 요소 1개 판정 — 서사 범위 전이와 표시 여부를 반환한다.
+ * @param {Element} el @param {boolean} inScene @param {boolean} wholeCard
+ * @returns {{inScene: boolean, mark: boolean}}
+ */
+function _fallbackSceneStep(el, inScene, wholeCard) {
+    const isHeading = el.matches && el.matches(_STORY_HEADING_SEL);
+    const isSubTitle = el.classList && el.classList.contains('reader-subsection-title');
+    if (isHeading || isSubTitle) return _fallbackHeadingStep(el, isHeading, inScene, wholeCard);
+    if (!inScene) {
+        // 에필로그 인용구 — 다음 헤딩 전까지 서사
+        const isEpilogue = _isStoryEpilogue(el);
+        return { inScene: isEpilogue, mark: isEpilogue };
+    }
+    // 서사 범위 안의 콜아웃 인용(🔖 기억 태그, 📋 가이드, 📌 출처 등)은 본문 스타일 유지
+    if (el.classList.contains('md-quote') && !_isNarrativeQuote(el)) return { inScene, mark: false };
+    return { inScene, mark: true };
+}
+
+/** 폴백 경로의 에필로그 인용구 판정. @param {Element} el */
+function _isStoryEpilogue(el) {
+    return !!(el.classList && el.classList.contains('md-quote')
+        && _STORY_EPILOGUE_RE.test(el.textContent || ''));
+}
+
+/** 폴백 경로의 헤딩/서브타이틀 판정 — 📖 헤딩은 서사 시작, 그 외는 장면 종료(카드 전체 서사 제외). @param {Element} el @param {boolean} isHeading @param {boolean} inScene @param {boolean} wholeCard @returns {{inScene: boolean, mark: boolean}} */
+function _fallbackHeadingStep(el, isHeading, inScene, wholeCard) {
+    if (isHeading && (el.textContent || '').includes(_STORY_SCENE_MARK)) {
+        return { inScene: true, mark: true };
+    }
+    // 장면은 리프 블록 — 📖 아닌 헤딩이 오면 무조건 종료 (하위 레벨 헤딩도 본문)
+    const next = wholeCard ? inScene : false;
+    return { inScene: next, mark: next };
+}
+
+/** 연속 .story-narrative 런의 양 끝에 스크린리더 라벨을 부여한다. @param {Element} contentEl */
+function _labelStoryRuns(contentEl) {
     let prevNarrative = false;
     for (const el of [...contentEl.children]) {
-        if (el.classList && el.classList.contains('story-sr-label')) continue;
-        const isNarrative = el.classList && el.classList.contains('story-narrative');
-        if (isNarrative && !prevNarrative) _insertStorySrLabel(el, 'beforebegin', '이야기 구간 시작');
-        if (!isNarrative && prevNarrative) _insertStorySrLabel(el, 'beforebegin', '이야기 구간 끝');
+        if (!el.classList || el.classList.contains('story-sr-label')) continue;
+        const isNarrative = el.classList.contains('story-narrative');
+        if (isNarrative !== prevNarrative) {
+            _insertStorySrLabel(el, 'beforebegin', isNarrative ? '이야기 구간 시작' : '이야기 구간 끝');
+        }
         prevNarrative = isNarrative;
     }
     if (prevNarrative && contentEl.lastElementChild) {
