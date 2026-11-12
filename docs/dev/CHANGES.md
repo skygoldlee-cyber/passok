@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-12 feat(deploy): comingSoon 팩 스테이징 제외 + .vercelignore 규칙 정정 — 페이로드 −63%
+
+- **comingSoon 팩 제외**: deploy 스테이징이 exams.json의 comingSoon 플래그를 읽어 `content/exams/<id>`·`data/exams/<id>` 디렉터리를 스킵 — selectExamAction이 런타임 선택을 차단하므로 콘텐츠는 도달 불가 사중량. 플래그 해제 시 다음 배포부터 자동 포함 (정본 = exams.json)
+- **실측**: 9,743파일 332.7MB → **3,146파일 122.0MB** (제외 14팩 — draft 7 + pilot-comingSoon 7)
+- **xlsx 원본 제외**: content/exams/*/실무/*.xlsx — facilities.json 생성 원본, 런타임 fetch 없음
+- **.vercelignore 규칙 정정**: ref_md 이미지 제외 패턴이 실제 구조 `ref_md/과목N/<문서>/images/`와 depth 불일치로 비활성이던 것을 2단계 패턴으로 수정. "텍스트만 서빙" stale 주석 정정 — 실제로는 webp 서빙 중 (markdown-parser `<img>` 렌더링)
+
+
 ## 2026-11-12 fix(build): law-links.js lawUrlFor 가드를 제너레이터에 동기화
 
 - **문제**: noUncheckedIndexedAccess 소진분의 lawUrlFor 가드(`(pat || '').replace` · `return url || null`)가 build_pdf_registry.js 출력 템플릿에 미반영 — deploy 시 build:derived 재생성이 되돌려 신선도 게이트 차단

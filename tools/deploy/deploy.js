@@ -90,6 +90,15 @@ async function notifyCommunity(version, url) {
 // 도 그대로 반영된다.
 async function makeStagingDir() {
     const ig = ignore().add(fs.readFileSync('.vercelignore', 'utf8'));
+    // comingSoon 팩은 selectExamAction이 선택을 차단해 런타임 도달 불가 —
+    // 콘텐츠·번들 디렉터리는 배포 사중량이므로 스테이징에서 제외한다.
+    // 정본은 exams.json — 플래그 해제(출시) 시 다음 배포부터 자동 포함.
+    const registry = JSON.parse(fs.readFileSync(path.join('content', 'exams.json'), 'utf8'));
+    const skipped = new Set(
+        (registry.exams || registry).filter(e => e.comingSoon).map(e => e.id)
+    );
+    const isSkippedPackDir = (rel) =>
+        /^(content|data)\/exams\/[^/]+$/.test(rel) && skipped.has(rel.split('/')[2]);
     const deployFiles = [];
     // .git은 vercelignore 무관하게 항상 제외 — 나머지는 규칙으로 프루닝
     const walk = (dir) => {
@@ -97,7 +106,7 @@ async function makeStagingDir() {
             const abs = path.join(dir, e.name);
             const rel = path.relative('.', abs).split(path.sep).join('/');
             if (e.isDirectory()) {
-                if (e.name !== '.git' && !ig.ignores(rel + '/')) walk(abs);
+                if (e.name !== '.git' && !ig.ignores(rel + '/') && !isSkippedPackDir(rel)) walk(abs);
             } else if (!ig.ignores(rel)) {
                 deployFiles.push(rel);
             }
@@ -121,7 +130,7 @@ async function makeStagingDir() {
         fs.mkdirSync(path.join(dir, '.vercel'), { recursive: true });
         fs.copyFileSync(projectJson, path.join(dir, '.vercel', 'project.json'));
     }
-    return { dir, fileCount: deployFiles.length };
+    return { dir, fileCount: deployFiles.length, skippedPacks: [...skipped] };
 }
 
 /** 배포 직후 프로덕션 스모크 — 응답·버전 스탬프·SW 실서빙 확인 (엣지 전파 대기 포함) */
@@ -451,6 +460,9 @@ async function main() {
     // 아카이브에도 포함되지 않도록 한다.
     const staging = await makeStagingDir();
     console.log(`📦 배포 스테이징 — ${staging.fileCount}파일 → ${staging.dir}`);
+    if (staging.skippedPacks.length) {
+        console.log(`   준비 중(comingSoon) 팩 제외 — ${staging.skippedPacks.join(', ')}`);
+    }
     let result;
     try {
         result = spawnSync(
