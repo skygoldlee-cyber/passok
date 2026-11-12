@@ -3,7 +3,8 @@
 // @spec F-03,F-04
 import { state, saveProgress } from '../../core/state.js';
 import { DataLoader } from '../../content/data-loader.js';
-import { updateCardSchedule } from '../../study/spaced-repetition.js';
+import { updateCardSchedule, snapshotCardSchedule, restoreCardSchedule } from '../../study/spaced-repetition.js';
+import { showActionToast } from '../../ui-utils.js';
 import { Rating } from '../../study/fsrs.js';
 import { TIMING } from '../../config/timing.js';
 import { loadFlashcards, renderFlashcard } from '../flashcard.js';
@@ -136,15 +137,33 @@ export function bindFlashcardListeners() {
         if (fc.data.length === 0) return;
         const currentCard = fc.data[fc.currentIndex];
 
+        // UX-FB-10 — 오탭 되돌리기: 등급 적용 전 상태를 스냅샷
+        const cardId = currentCard.id;
+        const prevMemorized = state.memorizedCards.has(cardId);
+        const prevWeak = state.weakCards.has(cardId);
+        const prevSchedule = snapshotCardSchedule(cardId);
+
         if (rating >= Rating.GOOD) {
-            state.memorizedCards.add(currentCard.id);
-            state.weakCards.delete(currentCard.id);
+            state.memorizedCards.add(cardId);
+            state.weakCards.delete(cardId);
         } else {
-            state.weakCards.add(currentCard.id);
-            state.memorizedCards.delete(currentCard.id);
+            state.weakCards.add(cardId);
+            state.memorizedCards.delete(cardId);
         }
-        updateCardSchedule(currentCard.id, rating); // 2. 간격 반복 (FSRS)
+        updateCardSchedule(cardId, rating); // 2. 간격 반복 (FSRS)
         saveProgress();
+
+        const RATE_LABEL = { [Rating.AGAIN]: '다시', [Rating.HARD]: '어려움', [Rating.GOOD]: '좋음', [Rating.EASY]: '쉬움' };
+        showActionToast(`'${RATE_LABEL[rating] || '평가'}' 평가가 저장되었습니다.`, {
+            label: '되돌리기',
+            duration: 5000,
+            onAction: () => {
+                if (prevMemorized) state.memorizedCards.add(cardId); else state.memorizedCards.delete(cardId);
+                if (prevWeak) state.weakCards.add(cardId); else state.weakCards.delete(cardId);
+                restoreCardSchedule(cardId, prevSchedule);
+                saveProgress();
+            },
+        });
 
         // 시각 효과 피드백 후 다음 카드로
         const btn = /** @type {HTMLElement|null} */ (document.getElementById(btnId));

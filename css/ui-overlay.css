@@ -45,6 +45,23 @@
   font-size: 1.05rem;
   margin: 0;
 }
+/* UX-FB-11 — 장시간 작업 취소 버튼 */
+#global-loading-overlay .global-loading-cancel {
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.75rem;
+  border: 1px solid var(--white-tint-10, rgba(255,255,255,0.2));
+  border-radius: var(--radius-sm, 8px);
+  background: transparent;
+  color: var(--color-on-brand, #fff);
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-semibold, 600);
+  cursor: pointer;
+  font-family: inherit;
+  min-height: var(--control-h-md, 40px);
+}
+#global-loading-overlay .global-loading-cancel:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
 
 /* ── 토스트 알림 (스택 — 연속 알림 유실 방지) ── */
 #app-toast {
@@ -185,6 +202,28 @@
   border: none;
   background: linear-gradient(135deg, var(--color-primary, #06b6d4), var(--color-secondary, #8b5cf6));
   color: var(--color-on-brand);
+}
+/* UX-FB-10 — 파괴적 동작 확인은 danger 스타일로 시각 경고 */
+.app-confirm-ok.danger {
+  background: var(--color-danger-fill, var(--color-danger, #ef4444));
+  color: var(--color-on-brand, #fff);
+}
+
+/* UX-FB-10 — 되돌리기 등 액션 버튼 토스트 */
+.app-toast-action {
+  margin-left: 0.75rem;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--white-tint-10, rgba(255,255,255,0.2));
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-on-brand, #fff);
+  font-size: 0.85rem;
+  font-weight: var(--font-weight-semibold, 600);
+  cursor: pointer;
+  font-family: inherit;
+}
+.app-toast-action:hover {
+  background: rgba(255, 255, 255, 0.22);
 }
 
 /* ── 새 버전 변경 이력 모달 (whats-new.js) ── */

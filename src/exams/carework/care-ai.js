@@ -1,6 +1,6 @@
 // src/exams/carework/care-ai.js
 // @spec CO-08 — BYOK AI 보조 작성 (가명처리·전송 미리보기·사용자 검토 필수)
-import { showToast, showConfirm } from '../../ui-utils.js';
+import { showToast, showConfirm, runWithLoading } from '../../ui-utils.js';
 import { proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { getAiKey, getAiProvider, callProviderLLM } from '../../written/written-grading.js';
 
@@ -55,13 +55,19 @@ export async function careAiDraft(btn) {
     const { system, prompt } = buildDraftPrompt(_payload(kind), kind);
     const ok = await showConfirm(`아래 내용이 AI에 전송됩니다(가명처리됨).\n\n${prompt.slice(0, 400)}\n\n전송할까요?`, 'AI 초안 전송 확인');
     if (!ok) return;
-    showToast('AI 초안 생성 중…');
+    // @spec UX-FB-11 — 장시간 AI 호출: 지연 스피너 + 취소 버튼 + 타임아웃 + 연타 방지
     try {
-        const res = await callProviderLLM(system, prompt, { key, provider: getAiProvider() });
+        const res = await runWithLoading(
+            (signal) => callProviderLLM(system, prompt, { key, provider: getAiProvider(), signal }),
+            { message: 'AI 초안 생성 중…', cancellable: true, timeoutMs: 30000, triggerEl: btn || null }
+        );
         const text = res?.text || '';
-        if (!text) { showToast('응답이 없습니다.', 'error'); return; }
+        if (!text) { showToast(res?.error || '응답이 없습니다.', 'error'); return; }
         const pre = document.querySelector(kind === 'ho' ? '#ho-preview pre' : '#log-preview pre');
         if (pre) pre.textContent = `[AI 초안 — 검토 후 사용]\n\n${text}`;
         showToast('초안 생성 — 검토 후 사용하세요.');
-    } catch { showToast('AI 호출 실패 — 키·네트워크를 확인하세요.', 'error'); }
+    } catch (e) {
+        if (e instanceof Error && e.name === 'AbortError') showToast('AI 초안 생성이 취소되었습니다.', 'warning');
+        else showToast('AI 호출 실패 — 키·네트워크를 확인하세요.', 'error');
+    }
 }

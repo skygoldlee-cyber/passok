@@ -635,6 +635,29 @@
     transform: translateY(0);
 }
 
+/* UX-PWA-08 — 오프라인 비활성 기능 (숨기지 않고 비활성 표시 + 사유 안내) */
+.offline-blocked {
+    opacity: 0.55 !important;
+    cursor: not-allowed !important;
+    position: relative;
+}
+.offline-blocked::after {
+    content: '오프라인';
+    font-size: var(--text-2xs, 0.65rem);
+    margin-left: 0.4rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    background: var(--color-danger-fill);
+    color: white;
+    vertical-align: middle;
+    pointer-events: none;
+}
+.offline-blocked.settings-item::after,
+.offline-blocked.auth-oauth-btn::after {
+    position: static;
+    display: inline-block;
+}
+
 /* 소형 스마트폰 (≤480px) 추가 미세 조정 */
 @media (max-width: 480px) {
     /* PWA 설치 버튼 — 소형 화면에서 텍스트 숨기고 아이콘만 */

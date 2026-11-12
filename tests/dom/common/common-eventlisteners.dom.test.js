@@ -15,6 +15,7 @@ vi.mock('../../../src/ui-utils.js', () => ({
     showConfirm: vi.fn(() => Promise.resolve(true)),
     showGlobalLoading: vi.fn(),
     hideGlobalLoading: vi.fn(),
+    showActionToast: vi.fn(),
     vibrate: vi.fn(),
     HAPTIC: { correct: 30, wrong: [40, 30, 40], tap: 10 },
 }));

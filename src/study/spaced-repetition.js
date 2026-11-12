@@ -59,6 +59,29 @@ function _examDateStr() {
     return typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
 }
 
+// @spec UX-FB-10 — 평가 되돌리기: 레이팅 전 스케줄 스냅샷/복원 (리뷰 로그는 불변 이력으로 유지)
+/**
+ * 카드 스케줄 스냅샷 (얕은 복사 — undo 비교·복원용)
+ * @param {string} cardId
+ * @returns {object|null} 기록 없으면 null
+ */
+export function snapshotCardSchedule(cardId) {
+    const rec = loadSchedules()[cardId];
+    return rec ? { ...rec } : null;
+}
+
+/**
+ * 스케줄 스냅샷 복원 — null이면 해당 카드 레코드 삭제
+ * @param {string} cardId
+ * @param {object|null} snapshot
+ */
+export function restoreCardSchedule(cardId, snapshot) {
+    const schedules = loadSchedules();
+    if (snapshot === null) delete schedules[cardId];
+    else schedules[cardId] = { ...snapshot };
+    saveSchedules(schedules);
+}
+
 // @spec F-07~09,ROAD-L7
 // FSRS 스케줄 갱신 — d/s/due 상태 전이 (레이팅: 외움=Good, 헷갈림=Again / 4버튼은 등급 직접 전달)
 /**

@@ -3,6 +3,11 @@
 
 import { escapeHTML, safeTextWithBreaks } from './core/sanitize.js';
 
+// @spec UX-FB-11 — 스피너 지연 임계(300ms): 짧은 작업은 오버레이를 띄우지 않아 플리커 방지
+const GLOBAL_LOADING_DELAY_MS = 300;
+let _loadingTimer = /** @type {ReturnType<typeof setTimeout>|null} */ (null);
+let _loadingVisible = false;
+
 export function showGlobalLoading(message = '로딩 중...') {
     let overlay = document.getElementById('global-loading-overlay');
     if (!overlay) {
@@ -16,16 +21,91 @@ export function showGlobalLoading(message = '로딩 중...') {
     }
     const msgEl = document.getElementById('global-loading-message');
     if (msgEl) msgEl.textContent = message;
-    overlay.classList.add('is-visible');
+    overlay.classList.remove('is-hidden');
+    if (_loadingVisible) return; // 이미 표시 중 — 메시지만 갱신
+    if (_loadingTimer) return;   // 표시 예약 중 — 메시지만 갱신
+    _loadingTimer = setTimeout(() => {
+        _loadingTimer = null;
+        _loadingVisible = true;
+        overlay.classList.add('is-visible');
+    }, GLOBAL_LOADING_DELAY_MS);
 }
 
 export function hideGlobalLoading() {
+    if (_loadingTimer) {
+        clearTimeout(_loadingTimer); // 300ms 내 완료 — 오버레이 미표시
+        _loadingTimer = null;
+    }
+    _loadingVisible = false;
     const overlay = document.getElementById('global-loading-overlay');
     if (overlay) {
         overlay.classList.remove('is-visible');
         setTimeout(() => {
             overlay.classList.add('is-hidden');
         }, 200);
+    }
+}
+
+/**
+ * UX-FB-11 — 장시간 작업 실행 래퍼.
+ *  - 짧은 작업(< delayMs, 기본 300ms)은 스피너 미표시 (플리커 방지)
+ *  - triggerEl 지정 시 실행 중 disabled+aria-busy로 연타 방지
+ *  - opts.cancellable=true이면 오버레이에 취소 버튼 → AbortController.abort()
+ *  - opts.timeoutMs 초과 시 자동 abort + 'timeout' AbortError reject
+ *  - task는 signal을 첫 인자로 받음 — signal.onabort/throwIfAborted 활용
+ * @param {(signal: AbortSignal) => Promise<any>} task
+ * @param {{message?:string, timeoutMs?:number, triggerEl?:HTMLElement|null, cancellable?:boolean, timeoutMessage?:string}} [opts]
+ */
+export async function runWithLoading(task, opts = {}) {
+    const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const signal = ctrl ? ctrl.signal : /** @type {AbortSignal} */ ({ aborted: false });
+    const trigger = opts.triggerEl || null;
+    let cancelled = false;
+    let cancelBtn = null;
+
+    if (trigger) {
+        trigger.setAttribute('aria-busy', 'true');
+        if ('disabled' in trigger) /** @type {any} */ (trigger).disabled = true;
+    }
+
+    // 스피너는 showGlobalLoading의 내장 지연(300ms)이 담당 — 300ms 내 완료 시 미표시
+    showGlobalLoading(opts.message || '처리 중입니다...');
+    if (opts.cancellable) {
+        const overlay = document.getElementById('global-loading-overlay');
+        if (overlay && !overlay.querySelector('.global-loading-cancel')) {
+            cancelBtn = document.createElement('button');
+            cancelBtn.type = 'button';
+            cancelBtn.className = 'global-loading-cancel';
+            cancelBtn.textContent = '취소';
+            cancelBtn.addEventListener('click', () => { cancelled = true; ctrl?.abort(); });
+            overlay.appendChild(cancelBtn);
+        }
+    }
+
+    try {
+        const timeoutErr = new Error(opts.timeoutMessage || '작업 시간이 초과되었습니다.');
+        timeoutErr.name = 'AbortError';
+        const result = await (opts.timeoutMs
+            ? Promise.race([
+                task(signal),
+                new Promise((_, rej) => setTimeout(() => { ctrl?.abort(); rej(timeoutErr); }, opts.timeoutMs)),
+            ])
+            : task(signal));
+        return result;
+    } catch (e) {
+        if (cancelled || signal.aborted) {
+            const err = e instanceof Error ? e : new Error('cancelled');
+            if (!err.name || err.name === 'Error') err.name = 'AbortError';
+            throw err;
+        }
+        throw e;
+    } finally {
+        if (cancelBtn) cancelBtn.remove();
+        hideGlobalLoading();
+        if (trigger) {
+            trigger.removeAttribute('aria-busy');
+            if ('disabled' in trigger) /** @type {any} */ (trigger).disabled = false;
+        }
     }
 }
 
@@ -216,6 +296,49 @@ export function showToast(message, type = 'info', duration, iconClass = '') {
     }, duration);
 }
 
+/**
+ * UX-FB-10 — 액션 버튼 토스트 ('되돌리기' 등). 지정 시간 내 버튼 클릭 시 onAction 호출.
+ * @param {string} message
+ * @param {{label:string, onAction:()=>void, duration?:number, type?:string}} action
+ */
+export function showActionToast(message, action) {
+    const duration = action.duration ?? 5000;
+    let toast = document.getElementById('app-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'app-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        document.body.appendChild(toast);
+    }
+    while (toast.children.length >= MAX_TOASTS) {
+        toast.firstElementChild?.remove();
+    }
+    const item = document.createElement('div');
+    item.className = 'app-toast-item is-visible';
+    const msg = document.createElement('span');
+    msg.textContent = message;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'app-toast-action';
+    btn.textContent = action.label;
+    item.append(msg, btn);
+    toast.appendChild(item);
+    toast.classList.add('is-visible');
+    let done = false;
+    const dismiss = () => {
+        if (done) return;
+        done = true;
+        item.classList.remove('is-visible');
+        setTimeout(() => {
+            item.remove();
+            if (!toast.children.length) toast.classList.remove('is-visible');
+        }, 250);
+    };
+    btn.addEventListener('click', () => { dismiss(); action.onAction(); });
+    setTimeout(dismiss, duration);
+}
+
 // 컨펌 모달 (confirm 대체) — Promise 반환
 /** 저장 확인 배지 — 토스트는 순간이라 "저장됐는지" 불안함. 저장 목록 영역 상단에
  *  "✓ 기기에 저장됨 · 방금"을 남겨 눈에 보이는 확인을 준다 (다음 렌더에서 자연 교체). */
@@ -228,12 +351,16 @@ export function flashSavedBadge(host) {
     host.prepend(b);
 }
 
-export function showConfirm(message, title = '확인') {
+export function showConfirm(message, title = '확인', opts = {}) {
     return new Promise((resolve) => {
         // 기존 모달 제거
         const existing = document.getElementById('app-confirm-overlay');
         if (existing) existing.remove();
 
+        const okLabel = opts.okLabel || '확인';
+        // UX-FB-10 — 파괴적 동작(삭제·초기화·덮어쓰기·폐기) 확인은 danger 스타일.
+        // 명시 opts.danger 우선, 미지정 시 제목·본문의 파괴 키워드로 자동 판정한다.
+        const danger = opts.danger ?? /삭제|초기화|덮어쓰|되돌릴 수 없|버리기|리셋/.test(`${title} ${message}`);
         const overlay = document.createElement('div');
         overlay.id = 'app-confirm-overlay';
         overlay.innerHTML = `
@@ -242,7 +369,7 @@ export function showConfirm(message, title = '확인') {
                 <p>${escapeHTML(message)}</p>
                 <div class="app-confirm-actions">
                     <button class="app-confirm-cancel">취소</button>
-                    <button class="app-confirm-ok">확인</button>
+                    <button class="app-confirm-ok${danger ? ' danger' : ''}">${escapeHTML(okLabel)}</button>
                 </div>
             </div>
         `;
@@ -273,6 +400,61 @@ export function showConfirm(message, title = '확인') {
         };
         document.addEventListener('keydown', onKey);
         // 포커스 트랩 적용
+        const untrapFocus = trapFocus(dialog);
+    });
+}
+
+/**
+ * UX-FB-10 — 다지선다 확인 모달 (예: 병합/덮어쓰기/취소).
+ * showConfirm과 동일한 오버레이·트랩 계약이나 선택지를 2개 이상 제공한다.
+ * @param {string} message
+ * @param {string} title
+ * @param {{label:string, value:string, danger?:boolean}[]} buttons
+ * @returns {Promise<string|null>} 선택 value, 취소·닫기 시 null
+ */
+export function showChoiceModal(message, title, buttons) {
+    return new Promise((resolve) => {
+        const existing = document.getElementById('app-confirm-overlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'app-confirm-overlay';
+        const btnsHtml = buttons.map(b =>
+            `<button class="app-confirm-ok${b.danger ? ' danger' : ''}" data-choice="${escapeHTML(b.value)}">${escapeHTML(b.label)}</button>`
+        ).join('');
+        overlay.innerHTML = `
+            <div class="app-confirm-dialog dialog-card">
+                <h3>${escapeHTML(title)}</h3>
+                <p>${escapeHTML(message)}</p>
+                <div class="app-confirm-actions">
+                    <button class="app-confirm-cancel">취소</button>
+                    ${btnsHtml}
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        const dialog = /** @type {HTMLElement} */ (overlay.querySelector('.app-confirm-dialog'));
+        requestAnimationFrame(() => {
+            overlay.classList.add('is-visible');
+            dialog.classList.add('is-visible');
+        });
+
+        const close = (value) => {
+            overlay.classList.remove('is-visible');
+            dialog.classList.remove('is-visible');
+            setTimeout(() => { untrapFocus(); overlay.remove(); }, 200);
+            resolve(value);
+        };
+
+        overlay.querySelectorAll('[data-choice]').forEach(b => {
+            b.addEventListener('click', () => close(b.getAttribute('data-choice')));
+        });
+        overlay.querySelector('.app-confirm-cancel')?.addEventListener('click', () => close(null));
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) close(null); });
+        const onKey = (e) => {
+            if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); close(null); }
+        };
+        document.addEventListener('keydown', onKey);
         const untrapFocus = trapFocus(dialog);
     });
 }

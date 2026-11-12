@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: bab8ecbc31309a92
+> 입력 해시: afa832dc789ee962
 > 생성: 2026-11-12 · 원천: SPEC.md(705개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 705개 — 문서 연결 469 · 소스 연결 614 · 테스트 연결 660 · 보고서 연결 109
+**커버리지 요약**: 요구사항 705개 — 문서 연결 469 · 소스 연결 618 · 테스트 연결 664 · 보고서 연결 109
 
 ---
 
@@ -768,9 +768,9 @@
 | UX-FB-06 | 자가 등록 모달(`.cing-*`)이 필드 5개로 `90dvh`를 넘겨 등록·취소 버튼이 잘린 실사례. 공용 `.app-confirm-dialog`(컨펌·의견·Pro·온보딩·통계 공유)와 `.auth-modal-card`·`.f-weigh-card`에 적용 — UX-SET-02(설정 패널)의 다이얼로그 일반화. E2E가 세로·가로 뷰포트에서 푸터 버튼 위치를 실측. 신규 카드는 공용 규약 클래스 `.dialog-card`(css/base.css — 90dvh 상한+스크롤) 사용, `check:mobilesafe`가 `role="dialog"` 마크업에 클래스 부재를 정적 검사 | E2E 테스트 | DOC-DSN-25 | — | tests/dom/common/common-a11y.dom.test.js<br>tests/e2e/mobile-overflow.spec.js | — | — |
 | UX-FB-07 | `.skeleton` 유틸은 base.css 공용 — `skeleton-text`/`skeleton-block`·폭 변형(`w-60`/`w-80`). shimmer는 `@media (prefers-reduced-motion)` 전역 무효화에 포함. 전체화면 fetch는 기존 UX-FB-04 오버레이 유지 (혼용 금지 — 부분 본문 교체에만 스켈레톤) | 구현 (테스트 갭) | — | src/views/textbook-reader.js | — | — | — |
 | UX-FB-08 | `_prevQueueLen`(직전 큐 길이)로 전이만 감지. `prefers-reduced-motion`에서는 애니메이션 자동 소거 — 상태 메시지 텍스트 자체가 보조 수단 | 구현 (테스트 갭) | — | src/views/dashboard-queue.js | — | — | — |
-| UX-FB-09 | **미구현** — 부팅 직후 배너 7종(오프라인·용량 R-09·법령 RR-20·개정 P-14·만료 PAY-07·온보딩 CO-12·SW 업데이트)과 모달 6종(OB-01·변경 이력·일일 챌린지·Pro 안내·지식DB 갱신·텔레메트리)이 규칙 없이 경쟁. 정책 기본안: 모달 큐 1개 + 배너 슬롯 상한 — 검토 후 조정 가능 | — | — | — | — | — | — |
-| UX-FB-10 | **미구현** — FO-63의 개별 사례를 공통 규약으로 상승. B-01~04 초기화·각종 삭제·백업 가져오기·플래시카드 오분류(외웠어요 오탭) 대상 | — | — | — | — | — | — |
-| UX-FB-11 | **미구현** — 현재 UX-FB-04(전체화면 로딩)·UX-FB-07(스켈레톤)만 정의, 취소·타임아웃·연타 방지·지연 임계 규약 부재 | — | — | — | — | — | — |
+| UX-FB-09 | **구현** — `src/shell/boot-modal-queue.js`(enqueueBootModal, 우선순위 드레인·MutationObserver 닫힘 감지) + `src/shell/banner-mgr.js`(initBannerCap, 상한 2·지연·회전 복귀). 부팅 모달은 온보딩(20)→변경 이력(30) 큐 등록, 배너 6종 우선순위 레지스트리 적용. 검증: tests/dom/common/ux-feedback.dom.test.js | E2E 테스트 | — | src/shell/app.js<br>src/shell/banner-mgr.js<br>src/shell/boot-modal-queue.js | tests/dom/common/ux-feedback.dom.test.js<br>tests/e2e/ux-feedback.spec.js | — | — |
+| UX-FB-10 | **구현** — `ui-utils.js`: showConfirm danger 자동 판정(삭제·초기화·덮어쓰기 키워드, opts.danger 명시 가능), showChoiceModal(병합/덮어쓰기/취소), showActionToast(되돌리기). `backup.js` 가져오기 변경 요약+병합/덮어쓰기+결과 요약. `listeners-flashcard.js` 평가 되돌리기(스케줄 스냅샷 — snapshot/restoreCardSchedule, spaced-repetition.js). 검증: ux-feedback·backup DOM 테스트 | E2E 테스트 | — | src/study/spaced-repetition.js | tests/dom/common/backup.dom.test.js<br>tests/dom/common/ux-feedback.dom.test.js<br>tests/e2e/ux-feedback.spec.js | — | — |
+| UX-FB-11 | **구현** — `ui-utils.js`: showGlobalLoading 내장 300ms 지연 임계(전 호출처 플리커 방지), runWithLoading(AbortSignal·취소 버튼·timeoutMs·triggerEl disabled+aria-busy·finally 정리). 적용: care-ai.js AI 초안(취소 가능·30s 타임아웃). 검증: ux-feedback DOM 테스트 | E2E 테스트 | — | src/exams/carework/care-ai.js<br>src/ui-utils.js | tests/dom/common/ux-feedback.dom.test.js<br>tests/e2e/ux-feedback.spec.js | — | — |
 | UX-FORM-01 | 16px 미만이면 iOS Safari가 포커스 시 자동 확대 | E2E 테스트 | DOC-DSN-25 | css/base.css<br>css/reader.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FORM-02 | 모바일에서 물리적 눌림감 제공 | E2E 테스트 | DOC-DSN-25 | css/base.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FORM-03 | 🚧 진행 — 공용 패턴 구현: `setFieldError`/`clearFieldError` (ui-utils.js) + `.field-error` 스타일. 적용: 온보딩 목표 입력·기관 초대 코드 (수정 시 자동 해제). 잔여 대상: 로그인(auth-modal-msg는 비자동소멸이라 부분 충족)·자가등록·Care OS 폼 — 신규 폼은 본 패턴 의무 | — | — | — | — | — | — |
@@ -801,7 +801,7 @@
 | UX-PWA-05 | PWA 콜드 스타트에서 `dvh`가 실제 화면보다 크게 측정되면 `.main-content` 끝이 화면 밖으로 밀려 스크롤 끝 콘텐츠가 탭 바에 가려짐(대시보드 '내 학습 분석·도구' 실제 장애). JS 미실행 시 `100dvh` 폴백 | E2E 테스트 | DOC-DSN-25 | src/shell/app.js | tests/dom/common/app-shell.dom.test.js<br>tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-PWA-06 | 현장(실습·조제실)에서 대시보드 경유 탭을 생략. 시험 도메인 기능이라 플랫폼 공통 `manifest.webmanifest`가 아닌 시험별 매니페스트에만 선언 — exams.json `pwaShortcuts` → `build_exams_list.js` 패스스루 | E2E 테스트 | — | tools/build/build_exams_list.js | tests/e2e/exams/cosmetic/formula-tablet.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
 | UX-PWA-07 | `id`가 다르면 브라우저가 별개 앱으로 인식해 중복 설치되고, `name`이 다르면 아이콘이 설치 시점 시험명으로 고정된다(설치 후 시험 전환해도 갱신 불가 — 설치 시 manifest URL만 재조회). 시험 구분은 document.title·로고·shortcuts 등 앱 내부 브랜딩으로 표현 | E2E 테스트 | — | src/pwa/pwa-manifest.js<br>tools/build/build_exams_list.js | tests/e2e/exam-switch.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
-| UX-PWA-08 | **미구현** — 오프라인 배너는 존재하나 기능별 표시 규약 부재. 정책 기본안: 비활성+사유 안내 원칙(검토 후 조정 가능) | — | — | — | — | — | — |
+| UX-PWA-08 | **구현** — `src/shell/offline-gate.js`(initOfflineGate·setOfflineFeatureMode): 네트워크 의존 셀렉터 레지스트리(인증·동기화·AI 버튼), 오프라인 시 aria-disabled+offline-blocked 배지+클릭 차단·사유 토스트, MutationObserver로 동적 렌더 대응. 오프라인 판정은 offline-detection 프로브 확정 후 'app:offline-change' 이벤트로 전파. 검증: ux-feedback DOM 테스트 | E2E 테스트 | — | src/shell/app.js<br>src/shell/offline-gate.js<br>src/views/offline-detection.js | tests/dom/common/ux-feedback.dom.test.js<br>tests/e2e/ux-feedback.spec.js | — | — |
 | UX-SCR-01 | `@media (pointer: coarse), (max-width: 900px) { * { scrollbar-width: none } ::-webkit-scrollbar { width:0; height:0 } }` — `pointer: coarse`만 믿지 말고 폭 기준을 병기할 것(일부 기기에서 pointer 감지 실패 사례 있음). 모바일 스크롤바는 드래그용이 아니므로 위치 표시도 불필요 | E2E 테스트 | DOC-DSN-25 | css/reader.css<br>src/views/reader/reader-toolbar.js | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-SCR-02 | `*` 또는 개별 컨테이너에 지정 | E2E 테스트 | DOC-DSN-25 | css/reader.css | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-SCR-03 | 하드코딩 색상은 다크/라이트 한쪽에서 묻힘 (실제로 미정의 변수 폴백으로 라이트 배경에 흰 카드가 되는 사고 있었음 — `.comp-item` 사례) | E2E 테스트 | — | css/reader.css | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |

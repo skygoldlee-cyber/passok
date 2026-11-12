@@ -282,8 +282,10 @@ describe('router.js — DOM 테스트', () => {
             expect(writes).toEqual(['quiz']);
         });
 
-        it('뷰 전환 시 잔류 전역 로딩 오버레이를 해제', () => {
+        it('뷰 전환 시 잔류 전역 로딩 오버레이를 해제', async () => {
             showGlobalLoading('이전 뷰 로딩 중');
+            // UX-FB-11 — 스피너 300ms 지연 임계를 지나야 표시됨
+            await new Promise(r => setTimeout(r, 350));
             const overlay = document.getElementById('global-loading-overlay');
             expect(overlay.classList.contains('is-visible')).toBe(true);
             navigateToView('quiz-view', ctx({}));

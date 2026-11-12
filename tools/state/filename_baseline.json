@@ -25,6 +25,7 @@
   "tests/dom/common/telemetry-consent.dom.test.js — tests 코드 파일명은 kebab-case (telemetry-consent.dom.test.js)",
   "tests/dom/common/unpack.dom.test.js — tests 코드 파일명은 kebab-case (unpack.dom.test.js)",
   "tests/dom/common/usage-stats.dom.test.js — tests 코드 파일명은 kebab-case (usage-stats.dom.test.js)",
+  "tests/dom/common/ux-feedback.dom.test.js — tests 코드 파일명은 kebab-case (ux-feedback.dom.test.js)",
   "tests/dom/exam/exam-index-scope.dom.test.js — tests 코드 파일명은 kebab-case (exam-index-scope.dom.test.js)",
   "tests/dom/exam/exam-search.dom.test.js — tests 코드 파일명은 kebab-case (exam-search.dom.test.js)",
   "tests/dom/exam/exam-sim-review.dom.test.js — tests 코드 파일명은 kebab-case (exam-sim-review.dom.test.js)",

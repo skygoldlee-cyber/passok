@@ -1,6 +1,15 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(ux): UX-FB-09~11 알림 큐·파괴 확인·비동기 상태 + UX-PWA-08 오프라인 표시 — Phase 4
+
+- **UX-FB-09 ✅ — 알림 우선순위 큐**: `src/shell/boot-modal-queue.js` — 부팅 모달(온보딩 20→변경 이력 30)을 우선순위 큐로 1개씩 순차 표시, MutationObserver로 닫힘 감지 후 드레인. `src/shell/banner-mgr.js` — 배너 동시 표시 상한 2 (오프라인·스토리지 10 > 법령·개정 20 > 만료·기타 30), 초과분 지연·우선순위 배너 해제 시 회전 복귀
+- **UX-FB-10 ✅ — 파괴 확인·되돌리기**: `showConfirm`에 파괴 키워드 자동 danger 판정(삭제·초기화·덮어쓰기·버리기, `opts.danger` 명시 가능) — 전 호출처 일괄 적용. `showChoiceModal`(병합/덮어쓰기/취소 다지선다) + `showActionToast`(액션 버튼 토스트) 신설. `backup.js` 가져오기: 변경 요약(덮어쓰기 n·신규 n) → 병합/덮어쓰기 선택 → 결과 요약 토스트. 플래시카드 평가 오탭 되돌리기 — `snapshotCardSchedule`/`restoreCardSchedule`(spaced-repetition)로 FSRS 스케줄·외움 분류 복원, 5s '되돌리기' 토스트
+- **UX-FB-11 ✅ — 장시간 작업 상태**: `showGlobalLoading`에 300ms 지연 임계 내장 — 300ms 내 완료 시 오버레이 미표시로 전 호출처 플리커 방지. `runWithLoading` 래퍼 — AbortController 취소(오버레이 취소 버튼)·timeoutMs·triggerEl disabled+aria-busy·finally 정리. 적용: carework AI 초안(취소 가능·30s 타임아웃·연타 방지)
+- **UX-PWA-08 ✅ — 오프라인 기능 표시**: `src/shell/offline-gate.js` — 인증·동기화·AI 버튼 셀렉터 레지스트리. 오프라인 시 숨기지 않고 `aria-disabled`+`offline-blocked` 배지+클릭 차단·사유 토스트, MutationObserver로 동적 렌더 대응, 온라인 복귀 시 복원. `offline-detection` 프로브 확정 후 `app:offline-change` 이벤트로 상태 전파
+- **테스트**: ux-feedback.dom.test.js 신설(큐 순서·배너 상한·회전·danger 판정·선택 모달·액션 토스트·지연 임계·취소·타임아웃·오프라인 차단/복원 16건), backup DOM을 모달 흐름으로 갱신+병합/취소 2건 추가 — DOM 1037건 전체 통과
+
+
 ## 2026-11-12 feat(a11y): A-14 색 비의존 + A-15 차트 대체 + A-16 호버 콘텐츠 — Phase 3
 
 - **A-14 ✅ — 상태 정보 색 비의존 (SC 1.4.1)**: `ui-utils.js`에 `markChoiceState`/`clearChoiceState` 공용 헬퍼 — 채점 표시가 `.correct`/`.incorrect` 색 클래스만이 아니라 ✓/✗ 아이콘 + `.sr-only` 텍스트를 병용. 적용: `markChoiceButtons`(훈련소·데일리·성분 훈련 공용) + `quiz.js` 객관식·OX 직접 채점 경로 + OX 버튼 재사용 시 `clearChoiceState`로 마커 정리. OMR `.solved` 버블에 `::after` ✓ 마커 + aria-label '풀이 완료' 병용 (exam-sim-arena). 기충족 확인: 히트맵 수치 텍스트·FO-02 배지 라벨·합격 진단 배지 텍스트

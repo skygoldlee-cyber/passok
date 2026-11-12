@@ -14,6 +14,9 @@ import { setupPWAInstall } from '../pwa/pwa-install.js';
 import { setupThemeToggle } from './theme-toggle.js';
 import { maybeShowWhatsNew } from './whats-new.js';
 import { maybeShowOnboarding } from './onboarding.js';
+import { enqueueBootModal, BOOT_MODAL_PRIORITY } from './boot-modal-queue.js';
+import { initBannerCap } from './banner-mgr.js';
+import { initOfflineGate } from './offline-gate.js';
 import { appVersion, formatAppVersion } from './app-version.js';
 import { captureEntrySource, flushPendingFeedback, initFeedbackHint } from './feedback.js';
 import { loadFeaturePlan, proFeatureNotice, showPlanCompare } from '../pro/pro-upgrade.js';
@@ -328,11 +331,11 @@ function initApp() {
     // "의견 보내기" 신기능 힌트 — 설정 ⚙️ 점 + NEW 배지 (각 1회)
     step('initFeedbackHint', initFeedbackHint);
 
-    // 새 버전 적용 후 첫 부팅이면 변경 이력 모달 (최초 설치는 기록만)
-    step('maybeShowWhatsNew', maybeShowWhatsNew);
-
-    // 학습 데이터가 없는 최초 방문이면 시작 안내 모달 (1회)
-    step('maybeShowOnboarding', maybeShowOnboarding);
+    // UX-FB-09 — 부팅 모달은 우선순위 큐로 1개씩 순차 표시 (온보딩 > 변경 이력)
+    step('bootModalQueue', () => {
+        enqueueBootModal(BOOT_MODAL_PRIORITY.ONBOARDING, 'onboarding-overlay', maybeShowOnboarding);
+        enqueueBootModal(BOOT_MODAL_PRIORITY.RELEASE_NOTES, 'whats-new-overlay', maybeShowWhatsNew);
+    });
 
     // 오프라인 큐에 쌓인 의견은 온라인 복귀 시 플러시
     window.addEventListener('online', () => { flushPendingFeedback(); });
@@ -530,6 +533,8 @@ const originalInitApp = initApp;
 initApp = function() {
     originalInitApp();
     setupOfflineDetection(state, togglePomodoro);
+    initOfflineGate(); // @spec UX-PWA-08 — 오프라인 시 네트워크 기능 비활성+사유 안내
+    initBannerCap(); // @spec UX-FB-09 — 배너 동시 표시 상한 2 (우선순위 회전)
     setupModalBackHandler();
     // 실무 피처 자산 유휴 예열 — 활성 시험 것만 요청해 SW 캐시에 적재 (practice-registry 주석 참고)
     const scheduleWarm = window.requestIdleCallback || ((fn) => setTimeout(fn, 300));

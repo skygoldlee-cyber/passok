@@ -34,12 +34,18 @@ export function setupOfflineDetection(state, togglePomodoro) {
         if (isOfflineMode) return;
         banner.classList.add('show');
         isOfflineMode = true;
+        // @spec UX-PWA-08 — 오프라인 기능 게이트에 상태 전파
+        window.dispatchEvent(new CustomEvent('app:offline-change', { detail: { offline: true } }));
         resetCheckInterval(5000);
     }
     function hideBanner() {
+        const wasOffline = isOfflineMode;
         banner.classList.remove('show');
         failStreak = 0;
         isOfflineMode = false;
+        if (wasOffline) {
+            window.dispatchEvent(new CustomEvent('app:offline-change', { detail: { offline: false } }));
+        }
         resetCheckInterval(30000);
     }
 

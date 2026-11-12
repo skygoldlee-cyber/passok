@@ -1,7 +1,7 @@
 # 📋 요구사양 명세서 (Software Requirements Specification)
 
 > **프로젝트**: PassOK — 멀티시험 스마트 학습 플랫폼 (첫 콘텐츠 팩: 맞춤형화장품 조제관리사 = 앱명 Passmula)
-> **버전**: 1.34 (2026-11-12 기준 — UI/UX 전수 점검 A항 신규 요구사양 12건 부여: A-14~17·E-09·UX-FB-09~11·UX-PWA-08·UX-FORM-03~05, 전부 미구현 상태)
+> **버전**: 1.34 (2026-11-12 기준 — UI/UX 전수 점검 A항 신규 요구사양 12건 부여: A-14~17·E-09·UX-FB-09~11·UX-PWA-08·UX-FORM-03~05 — 구현 완료, UX-FORM-04 가상키보드 대응은 잔여)
 > **버전 규약**: 본문 요구사항의 추가·변경·제거 시 마이너 버전을 갱신하고 변경 내역은 `CHANGES.md`에 기록한다 — 기준선은 커밋 해시로 확정한다
 > **상태 수명 주기 규약**: 요구사항 표의 마지막 셀(상태)은 아래 값 중 하나를 사용한다. 폐기·통합된 ID는 **영구 소각** — 같은 접두사 시퀀스에서 번호를 재사용하지 않는다 (역사적 참조·git 이력이 ID를 가리키므로).
 >
@@ -934,9 +934,9 @@
 | OB-01 | **첫 방문 셋업 위저드**: 온보딩을 설명 모달에서 실행형 3단계로 — ① 시험일 입력(즉시 `exam_date` 저장) ② 일일 카드·주간 학습일 목표(즉시 `study_goals` 저장) ③ 요약 + "첫 카드 학습 시작"(첫 과목 플래시카드로 착지) | `onboarding.js` — 단계 진행 도트·건너뛰기·이전 지원, 목표 검증 실패 시 진행 차단. 학습 실행은 `data-click` 위임(모듈 import 없이 기존 액션 재사용). UX-FB-05의 1회성·재열람 계약은 불변 |
 | UX-FB-07 | **비동기 본문 로드는 `.skeleton` 자리표시**: 리더가 미로드 과목을 여는 동안 `#textbook-reader-container`에 `.reader-skeleton`(shimmer) 표시 — 빈 화면 대기 방지 | `.skeleton` 유틸은 base.css 공용 — `skeleton-text`/`skeleton-block`·폭 변형(`w-60`/`w-80`). shimmer는 `@media (prefers-reduced-motion)` 전역 무효화에 포함. 전체화면 fetch는 기존 UX-FB-04 오버레이 유지 (혼용 금지 — 부분 본문 교체에만 스켈레톤) |
 | UX-FB-08 | **큐 완료 전이 미세 피드백**: 오늘 할 일 큐가 비어있지 않다가 비워지는 전이에만 `.rec-empty.is-celebrate` 1회 부착 — `tq-done-pop` 펄스 + 성공색. 재렌더마다 재생하지 않음 | `_prevQueueLen`(직전 큐 길이)로 전이만 감지. `prefers-reduced-motion`에서는 애니메이션 자동 소거 — 상태 메시지 텍스트 자체가 보조 수단 |
-| UX-FB-09 | **배너·모달 노출 우선순위 큐**: 동시 다중 알림은 동시 노출하지 않는다 — ① 부팅 모달은 한 번에 1개 큐 순차 표시 (우선순위: 법적·텔레메트리 고지 > 온보딩 OB-01 > 갱신 공지 > 프로모션·안내) ② 배너는 동시 상한 2개, 우선순위 오프라인·스토리지 용량 > 법령·교재 개정 > 만료·기타 안내 — 초과분은 해제 후 순환 | **미구현** — 부팅 직후 배너 7종(오프라인·용량 R-09·법령 RR-20·개정 P-14·만료 PAY-07·온보딩 CO-12·SW 업데이트)과 모달 6종(OB-01·변경 이력·일일 챌린지·Pro 안내·지식DB 갱신·텔레메트리)이 규칙 없이 경쟁. 정책 기본안: 모달 큐 1개 + 배너 슬롯 상한 — 검토 후 조정 가능 |
-| UX-FB-10 | **파괴적 동작 확인·되돌리기 규약**: 데이터 소실 동작(전체 초기화·삭제·가져오기 덮어쓰기)은 danger 스타일 확인 모달 경유, 복구 가능한 삭제는 '되돌리기' 액션 토스트(≥5s) 제공. 백업 가져오기는 적용 전 변경 요약(덮어쓰기/병합 선택)+완료 후 결과 요약 표시 | **미구현** — FO-63의 개별 사례를 공통 규약으로 상승. B-01~04 초기화·각종 삭제·백업 가져오기·플래시카드 오분류(외웠어요 오탭) 대상 |
-| UX-FB-11 | **비동기 장시간 작업 상태 표시**: AI 호출·PDF 생성·비전 처리 등 장시간 작업은 ① 진행 표시(스피너·진행률) ② 취소 경로 ③ 타임아웃 처리 ④ 실행 중 트리거 버튼 비활성(연타 방지) ⑤ ~300ms 미만 단시 작업은 지연 임계로 스피너 깜빡임 방지 | **미구현** — 현재 UX-FB-04(전체화면 로딩)·UX-FB-07(스켈레톤)만 정의, 취소·타임아웃·연타 방지·지연 임계 규약 부재 |
+| UX-FB-09 | **배너·모달 노출 우선순위 큐**: 동시 다중 알림은 동시 노출하지 않는다 — ① 부팅 모달은 한 번에 1개 큐 순차 표시 (우선순위: 법적·텔레메트리 고지 > 온보딩 OB-01 > 갱신 공지 > 프로모션·안내) ② 배너는 동시 상한 2개, 우선순위 오프라인·스토리지 용량 > 법령·교재 개정 > 만료·기타 안내 — 초과분은 해제 후 순환 | **구현** — `src/shell/boot-modal-queue.js`(enqueueBootModal, 우선순위 드레인·MutationObserver 닫힘 감지) + `src/shell/banner-mgr.js`(initBannerCap, 상한 2·지연·회전 복귀). 부팅 모달은 온보딩(20)→변경 이력(30) 큐 등록, 배너 6종 우선순위 레지스트리 적용. 검증: tests/dom/common/ux-feedback.dom.test.js |
+| UX-FB-10 | **파괴적 동작 확인·되돌리기 규약**: 데이터 소실 동작(전체 초기화·삭제·가져오기 덮어쓰기)은 danger 스타일 확인 모달 경유, 복구 가능한 삭제는 '되돌리기' 액션 토스트(≥5s) 제공. 백업 가져오기는 적용 전 변경 요약(덮어쓰기/병합 선택)+완료 후 결과 요약 표시 | **구현** — `ui-utils.js`: showConfirm danger 자동 판정(삭제·초기화·덮어쓰기 키워드, opts.danger 명시 가능), showChoiceModal(병합/덮어쓰기/취소), showActionToast(되돌리기). `backup.js` 가져오기 변경 요약+병합/덮어쓰기+결과 요약. `listeners-flashcard.js` 평가 되돌리기(스케줄 스냅샷 — snapshot/restoreCardSchedule, spaced-repetition.js). 검증: ux-feedback·backup DOM 테스트 |
+| UX-FB-11 | **비동기 장시간 작업 상태 표시**: AI 호출·PDF 생성·비전 처리 등 장시간 작업은 ① 진행 표시(스피너·진행률) ② 취소 경로 ③ 타임아웃 처리 ④ 실행 중 트리거 버튼 비활성(연타 방지) ⑤ ~300ms 미만 단시 작업은 지연 임계로 스피너 깜빡임 방지 | **구현** — `ui-utils.js`: showGlobalLoading 내장 300ms 지연 임계(전 호출처 플리커 방지), runWithLoading(AbortSignal·취소 버튼·timeoutMs·triggerEl disabled+aria-busy·finally 정리). 적용: care-ai.js AI 초안(취소 가능·30s 타임아웃). 검증: ux-feedback DOM 테스트 |
 
 #### 4.8.5 PWA 고유 UX
 
@@ -949,7 +949,7 @@
 | UX-PWA-05 | **앱 셸 높이는 JS 실측 `--app-height` 사용**: `.app-container { height: var(--app-height, 100dvh) }` + `visualViewport.height`/`innerHeight` 측정, resize 계열 이벤트에 자동 갱신 | PWA 콜드 스타트에서 `dvh`가 실제 화면보다 크게 측정되면 `.main-content` 끝이 화면 밖으로 밀려 스크롤 끝 콘텐츠가 탭 바에 가려짐(대시보드 '내 학습 분석·도구' 실제 장애). JS 미실행 시 `100dvh` 폴백 |
 | UX-PWA-06 | **manifest `shortcuts`로 작업 직행 제공**: cosmetic 매니페스트에 '배합 계산기' 딥링크(`./index.html#/formula`) 등록 — 설치형 PWA의 앱 아이콘 길게 눌러 바로 진입 | 현장(실습·조제실)에서 대시보드 경유 탭을 생략. 시험 도메인 기능이라 플랫폼 공통 `manifest.webmanifest`가 아닌 시험별 매니페스트에만 선언 — exams.json `pwaShortcuts` → `build_exams_list.js` 패스스루 |
 | UX-PWA-07 | **단일 플랫폼 앱 정체성**: 모든 `manifests/<id>.webmanifest`의 `id`·`name`·`short_name`은 `'passok'`/`'PassOK'`로 통일 — 시험별 파일은 `description`·`shortcuts`만 다르고 `pwa-manifest.js`가 활성 시험 파일로 링크를 교체한다. iOS 설치명(`apple-mobile-web-app-title`)도 `'PassOK'` 고정 — 어느 시험에서 추가해도 같은 라벨 | `id`가 다르면 브라우저가 별개 앱으로 인식해 중복 설치되고, `name`이 다르면 아이콘이 설치 시점 시험명으로 고정된다(설치 후 시험 전환해도 갱신 불가 — 설치 시 manifest URL만 재조회). 시험 구분은 document.title·로고·shortcuts 등 앱 내부 브랜딩으로 표현 |
-| UX-PWA-08 | **오프라인 기능 표시 규약**: 네트워크 의존 기능(AI 호출·로그인·동기화·고시 확인·CDN 외부 자산)은 오프라인에서 숨기지 않고 비활성 + 사유 안내(배지·툴팁·토스트) — 오프라인 우선 앱에서 기능 실종은 탐색 혼란을 유발. 오프라인에서 완전히 무의미한 기능만 숨김 허용 | **미구현** — 오프라인 배너는 존재하나 기능별 표시 규약 부재. 정책 기본안: 비활성+사유 안내 원칙(검토 후 조정 가능) |
+| UX-PWA-08 | **오프라인 기능 표시 규약**: 네트워크 의존 기능(AI 호출·로그인·동기화·고시 확인·CDN 외부 자산)은 오프라인에서 숨기지 않고 비활성 + 사유 안내(배지·툴팁·토스트) — 오프라인 우선 앱에서 기능 실종은 탐색 혼란을 유발. 오프라인에서 완전히 무의미한 기능만 숨김 허용 | **구현** — `src/shell/offline-gate.js`(initOfflineGate·setOfflineFeatureMode): 네트워크 의존 셀렉터 레지스트리(인증·동기화·AI 버튼), 오프라인 시 aria-disabled+offline-blocked 배지+클릭 차단·사유 토스트, MutationObserver로 동적 렌더 대응. 오프라인 판정은 offline-detection 프로브 확정 후 'app:offline-change' 이벤트로 전파. 검증: ux-feedback DOM 테스트 |
 
 #### 4.8.6 폼·입력
 
