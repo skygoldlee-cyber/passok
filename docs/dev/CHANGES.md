@@ -1,4 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
+
+## 2026-11-12 fix(build): law-links.js lawUrlFor 가드를 제너레이터에 동기화
+
+- **문제**: noUncheckedIndexedAccess 소진분의 lawUrlFor 가드(`(pat || '').replace` · `return url || null`)가 build_pdf_registry.js 출력 템플릿에 미반영 — deploy 시 build:derived 재생성이 되돌려 신선도 게이트 차단
+- **수정**: 템플릿의 lawUrlFor 출력 구간을 커밋된 가드 버전과 동일하게 갱신 — 재생성 diff 0건
+- 결과: check:types 0 · 재생성 결정성 복구
+
 ## 2026-11-12 feat(types): Phase 2 마무리 — strict 통합 + noImplicitReturns·exactOptionalPropertyTypes 활성화
 
 - **strict 통합**: jsconfig `"strict": true` — 개별 strict 플래그가 이미 전량 활성 상태라 추가 에러 0건. 개별 플래그는 검증 이력·명시성을 위해 유지
