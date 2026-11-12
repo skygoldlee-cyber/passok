@@ -68,7 +68,7 @@ describe('UX-FB-09 — 배너 동시 표시 상한 2', () => {
         return d;
     }
 
-    it('3개 동시 표시 시 우선순위 낮은 배너가 숨겨짐', async () => {
+    it('3개 동시 표시 시 우선순위 낮은 배너가 is-hidden으로 지연', async () => {
         mkBanner('offline-banner');       // pri 10
         mkBanner('textbook-edition-banner'); // pri 20
         mkBanner('pro-expiry-banner');    // pri 30 — 초과분
@@ -78,6 +78,9 @@ describe('UX-FB-09 — 배너 동시 표시 상한 2', () => {
         expect(el('offline-banner').classList.contains('show')).toBe(true);
         expect(el('textbook-edition-banner').classList.contains('show')).toBe(true);
         expect(el('pro-expiry-banner').classList.contains('show')).toBe(false);
+        // check:uistyle 규약 — 인라인 display 대신 .is-hidden 클래스 사용
+        expect(el('pro-expiry-banner').classList.contains('is-hidden')).toBe(true);
+        expect(el('pro-expiry-banner').style.display).toBe('');
     });
 
     it('우선순위 배너가 닫히면 숨겨진 배너가 회전 복귀', async () => {

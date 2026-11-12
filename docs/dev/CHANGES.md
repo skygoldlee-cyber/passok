@@ -8,6 +8,7 @@
 - **UX-FB-11 ✅ — 장시간 작업 상태**: `showGlobalLoading`에 300ms 지연 임계 내장 — 300ms 내 완료 시 오버레이 미표시로 전 호출처 플리커 방지. `runWithLoading` 래퍼 — AbortController 취소(오버레이 취소 버튼)·timeoutMs·triggerEl disabled+aria-busy·finally 정리. 적용: carework AI 초안(취소 가능·30s 타임아웃·연타 방지)
 - **UX-PWA-08 ✅ — 오프라인 기능 표시**: `src/shell/offline-gate.js` — 인증·동기화·AI 버튼 셀렉터 레지스트리. 오프라인 시 숨기지 않고 `aria-disabled`+`offline-blocked` 배지+클릭 차단·사유 토스트, MutationObserver로 동적 렌더 대응, 온라인 복귀 시 복원. `offline-detection` 프로브 확정 후 `app:offline-change` 이벤트로 상태 전파
 - **테스트**: ux-feedback.dom.test.js 신설(큐 순서·배너 상한·회전·danger 판정·선택 모달·액션 토스트·지연 임계·취소·타임아웃·오프라인 차단/복원 16건), backup DOM을 모달 흐름으로 갱신+병합/취소 2건 추가 — DOM 1037건 전체 통과
+- **후속 수정**: banner-mgr 지연 표시를 인라인 `style.display` → `.is-hidden` 클래스로 교체 (check:uistyle 규약) — CI `43150774289` test 잡에서 발견·수정
 
 
 ## 2026-11-12 feat(a11y): A-14 색 비의존 + A-15 차트 대체 + A-16 호버 콘텐츠 — Phase 3

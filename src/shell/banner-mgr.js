@@ -21,22 +21,24 @@ const _deferred = new Set();
 
 function _isShown(el) {
     if (!el.isConnected) return false;
+    if (el.classList.contains('is-hidden')) return false; // 감독이 지연시킨 배너
     if (el.classList.contains('show') || el.classList.contains('is-visible')) return true;
     // 인라인 display 스타일로 표시되는 배너 — 미설정('')이면 기본 숨김으로 간주
     return el.style.display !== '' && el.style.display !== 'none';
 }
 
 function _defer(el) {
-    // 기존 표시 방식을 무효화 — 회복 시 같은 방식으로 복원
+    // 표시 클래스·인라인 display를 지우고 is-hidden으로 지연 표시 (check:uistyle 규약)
     el.dataset.bannerDeferred = el.classList.contains('show') || el.classList.contains('is-visible') ? 'class' : 'style';
     el.classList.remove('show', 'is-visible');
-    if (el.dataset.bannerDeferred === 'style') el.style.display = 'none';
+    el.classList.add('is-hidden');
     _deferred.add(el);
 }
 
 function _restore(el) {
     _deferred.delete(el);
     delete el.dataset.bannerDeferred;
+    el.classList.remove('is-hidden');
     el.classList.add('show');
 }
 
