@@ -12,11 +12,12 @@ import { OPTION_INDICATORS } from '../../core/utils.js';
  * 복수정답형 진술 정오표 — 실제 O/X vs 내 선택 선지의 포함 여부로 오판 진술을 표시
  * (선택 선지의 members = 사용자가 "참"이라 판정한 집합으로 해석)
  */
+/** @param {*} q */
 function comboTruthTableHTML(q) {
     if (!Array.isArray(q.statements) || !Array.isArray(q.comboOptions)) return '';
     const idx = OPTION_INDICATORS.indexOf(q.userAnswer);
     const chosen = idx >= 0 ? new Set(q.comboOptions[idx].members || []) : null;
-    const rows = q.statements.map(s => {
+    const rows = q.statements.map((/** @type {*} */ s) => {
         const inChoice = chosen ? chosen.has(s.id) : null;
         const misjudged = inChoice !== null && inChoice !== !!s.truth;
         return `<div class="combo-truth-row${misjudged ? ' is-misjudged' : ''}">
@@ -47,7 +48,7 @@ export function showSimAnswerReview() {
         let optionsHTML = '';
         if (q.options && q.options.length > 0) {
             optionsHTML = `<ul class="review-q-options">
-                ${q.options.map(opt => `<li>${esc(opt)}</li>`).join('')}
+                ${q.options.map((/** @type {*} */ opt) => `<li>${esc(opt)}</li>`).join('')}
             </ul>`;
         }
         if (q.type === 'combo') optionsHTML += comboTruthTableHTML(q);
@@ -87,15 +88,16 @@ export function showSimResultsSummary() {
  * @param {{questions: Object, ranges: Object}} qc question_chapters 인덱스
  * @returns {string|null}
  */
+/** @param {*} q @param {string} subjKey @param {*} qc */
 export function chapterForQuestion(q, subjKey, qc) {
     if (q.type === 'combo') {
-        const src = (q.citation || '').match(/출처:\s*과목(\d+) 문제은행 Q(\d+)/);
+        const src = ((/** @type {*} */ (q)).citation || '').match(/출처:\s*과목(\d+) 문제은행 Q(\d+)/);
         if (src) {
             const srcKey = DataLoader._examKeyForOrder(parseInt(src[1], 10));
-            const title = qc.questions[`${srcKey}_q${src[2]}`];
+            const title = /** @type {Object.<string,*>} */ (qc.questions)[`${srcKey}_q${src[2]}`];
             if (title) return title;
         }
-        const m = (q.citation || '').match(/L(\d+)/);
+        const m = ((/** @type {*} */ (q)).citation || '').match(/L(\d+)/);
         const ranges = qc.ranges[subjKey];
         if (!m || !ranges) return null;
         const line = parseInt(m[1], 10);
@@ -103,7 +105,7 @@ export function chapterForQuestion(q, subjKey, qc) {
         for (const [ln, t] of ranges) { if (line >= ln) cur = t; else break; }
         return cur;
     }
-    return qc.questions[q.id] || null;
+    return /** @type {Object.<string,*>} */ (qc.questions)[(/** @type {*} */ (q)).id] || null;
 }
 
 /**
@@ -113,7 +115,7 @@ export function chapterForQuestion(q, subjKey, qc) {
  * @param {number} opts.total
  * @param {Object<string,{score:number,total:number}>} opts.subjectScores
  * @param {Object<string,Object<string,{score:number,total:number}>>} opts.chapterStats
- * @param {Array} opts.subjects 레지스트리 과목 목록
+ * @param {Array<*>} opts.subjects 레지스트리 과목 목록
  */
 export function renderSimResultBreakdown({ score, total, subjectScores, chapterStats, subjects }) {
     const _arenaPanel = document.getElementById('sim-arena-panel');
@@ -136,11 +138,13 @@ export function renderSimResultBreakdown({ score, total, subjectScores, chapterS
     let breakdownHTML = `<h4 style="margin-top: 0; margin-bottom: 1rem; color: var(--color-on-brand); font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;"><i class="fa-solid fa-chart-pie color-primary" style="color: var(--color-primary);"></i> 과목별 성적 상세 분석</h4>`;
     breakdownHTML += `<div style="display: flex; flex-direction: column; gap: 0.75rem;">`;
 
+    /** @type {Object.<string,string>} */
     const subjNames = {};
-    subjects.forEach((sub, idx) => {
+    subjects.forEach((/** @type {*} */ sub, /** @type {number} */ idx) => {
         subjNames[sub.key] = `${idx + 1}과목: ${sub.name}`;
     });
 
+    /** @type {Array<{id: *, name: *, rate: number}>} */
     const failedSubjects = [];
     const rules = getExamRules();
 
@@ -177,6 +181,7 @@ export function renderSimResultBreakdown({ score, total, subjectScores, chapterS
     breakdownHTML += `</div>`;
 
     // 단원별 취약 분석 — 오답이 있는 단원을 정답률 낮은 순으로 표시
+    /** @type {Array<{subj: *, label: string, score: number, total: number, rate: number}>} */
     const chapterRows = [];
     Object.keys(chapterStats).forEach(subj => {
         Object.keys(chapterStats[subj]).forEach(title => {

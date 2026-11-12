@@ -231,7 +231,7 @@ const _EXAM_LAW_URLS = {
 function activeLawUrls() {
   const id = getActiveExamId();
   if (!id) return [];
-  return _EXAM_LAW_URLS[id] || [];
+  return _EXAM_LAW_URLS[/** @type {keyof _EXAM_LAW_URLS} */ (id)] || [];
 }
 
 // 전 시험 매칭 합집합 (URL 기준 중복 제거 — 같은 문서의 matchKey는 첫 것만 유지, 순서 보존)

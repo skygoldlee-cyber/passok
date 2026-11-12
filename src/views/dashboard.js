@@ -23,8 +23,10 @@ import { relativeLuminance } from '../core/exam-context.js';
 let _dashboardStatsRefreshed = false;
 
 // 분석 뷰 갱신 콜백 — analysis-view.js가 등록 (양방향 import 없이 모듈 순환 회피)
+/** @type {(() => void)|null} */
 let _analysisRefreshHandler = null;
 /** @param {Function} fn */
+/** @param {() => void} fn */
 export function onAnalysisRefresh(fn) { _analysisRefreshHandler = fn; }
 
 /**
@@ -106,8 +108,9 @@ export function updateGlobalStats() {
 }
 
 // D-17·SC-10 D-day 카드 설명 — 미설정: 최우선 설정 안내 / 계획 등급(tight: 병행 권장 / triage: 비중 큰 과목 우선) 분기
+/** @param {*} plan */
 function _examPlanDescHtml(plan) {
-    const openBtn = (label) => `<button type="button" class="dday-set-btn" data-click="openGoalSettings"><i class="fa-solid fa-gear"></i> ${label}</button>`;
+    const openBtn = (/** @type {string} */ label) => `<button type="button" class="dday-set-btn" data-click="openGoalSettings"><i class="fa-solid fa-gear"></i> ${label}</button>`;
     // 미설정 시 설정 액션은 "오늘 할 일" 큐의 시험일 설정 항목이 단독 소유 — 카드는 안내 문구만 표시 (중복 CTA 방지)
     if (!plan) {
         return `<span class="dday-guide">학습 계획의 시작점 — 시험일을 설정하면 역산 계획·주간 목표·주간 배분이 생성됩니다. 위 오늘 할 일에서 설정하세요.</span>`;
@@ -118,13 +121,14 @@ function _examPlanDescHtml(plan) {
     const advice = {
         tight: ` — ${preset}: 통독 가속, 카드·퀴즈 병행 권장`,
         triage: ` — ${preset}: 통독 생략, ${topName ? esc(topName) + ' 등 ' : ''}비중 큰 과목·복습 우선 권장`
-    }[plan.tier] || '';
+    }[/** @type {'tight'|'triage'} */ (plan.tier)] || '';
     return `역산 권장: 학습일당 카드 ${plan.suggested}장${advice} · ${openBtn('설정')}`;
 }
 
 // 출제 문항 수 합계가 가장 큰 과목명 (registry exams 기준 — 없으면 null)
 function _topWeightSubjectName() {
     if (typeof DataLoader === 'undefined' || !DataLoader.registry) return null;
+    /** @type {Object.<string,number>} */
     const weights = {};
     (DataLoader.registry.exams || []).forEach(ex => {
         if (ex && ex.subject) weights[ex.subject] = (weights[ex.subject] || 0) + ((ex.stats && ex.stats.questions) || 0);
@@ -245,6 +249,7 @@ export function renderDashboard() {
 }
 
 // 4. 과목별 정답률 히트맵 렌더링
+/** @param {*[]} subjects */
 function _renderSubjectHeatmap(subjects) {
     const heatmapEl = document.getElementById('subject-heatmap');
     if (!heatmapEl) return;
@@ -252,7 +257,7 @@ function _renderSubjectHeatmap(subjects) {
 
     // 색상 (CSS 변수에서 읽기)
     const _style = getComputedStyle(document.documentElement);
-    const _c = (v) => _style.getPropertyValue(v).trim();
+    const _c = (/** @type {string} */ v) => _style.getPropertyValue(v).trim();
     const colors = {
         none: _c('--color-text-muted'),
         high: _c('--color-success'),
@@ -263,7 +268,7 @@ function _renderSubjectHeatmap(subjects) {
 
     let html = '<div class="heatmap-grid">';
     subjects.forEach(subj => {
-        const sc = subjCounts[subj.key] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 };
+        const sc = /** @type {Object.<string,*>} */ (subjCounts)[subj.key] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 };
         const rate = sc.quizSolved > 0 ? Math.round((sc.quizCorrect / sc.quizSolved) * 100) : -1;
         let color, label;
         if (rate < 0) { color = colors.none; label = '미응시'; }

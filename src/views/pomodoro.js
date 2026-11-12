@@ -151,7 +151,7 @@ function triggerPomodoroBeep() {
         if (!AudioContext) return;
         const ctx = new AudioContext();
 
-        const playBeep = (startTime, frequency, duration) => {
+        const playBeep = (/** @type {number} */ startTime, /** @type {number} */ frequency, /** @type {number} */ duration) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.type = 'sine';

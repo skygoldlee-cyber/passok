@@ -44,6 +44,7 @@ function showReaderAuxUi() {
 
 // ── TOC 생성 (A: 계층 들여쓰기, B: 접기/펼치기, D: 브레드크럼, F: 하위 헤딩) ──
 // 섹션 아이템 + 하위 헤딩 HTML 생성 (하위 헤딩은 기본 접힘)
+/** @param {*} section @param {number} idx @param {number} minLevel @param {string} displayTitle */
 function buildTocSectionItem(section, idx, minLevel, displayTitle) {
     const title = displayTitle || section.title;
     const level = Math.max(minLevel, getTocLevel(section.title));
@@ -68,11 +69,12 @@ function buildTocSectionItem(section, idx, minLevel, displayTitle) {
     return html;
 }
 
+/** @param {*} chapter @param {*} displayTitles */
 function buildTocHtml(chapter, displayTitles) {
     let tocHtml = '';
     let inChapter = false;
     let hasSeenNumbered = false;
-    chapter.sections.forEach((section, idx) => {
+    chapter.sections.forEach((/** @type {*} */ section, /** @type {number} */ idx) => {
         // 참조문서 헤더 (01_화장품법 등) — NN_ 접두사 제거 + 중복 제목 챕터 병기
         const displayTitle = displayTitles[idx];
 
@@ -113,10 +115,11 @@ function buildTocHtml(chapter, displayTitles) {
 }
 
 // TOC 아이템 클릭 — 섹션 스크롤 + 접기 토글 (B)
+/** @param {Element} tocList */
 function bindTocItemClicks(tocList) {
-    tocList.querySelectorAll('.reader-toc-item').forEach(node => {
+    tocList.querySelectorAll('.reader-toc-item').forEach((/** @type {Element} */ node) => {
         const item = /** @type {HTMLElement} */ (node);
-        item.addEventListener('click', (e) => {
+        item.addEventListener('click', (/** @type {MouseEvent} */ e) => {
             const toggleIcon = (/** @type {Element|null} */ (e.target))?.closest('.toc-toggle-icon');
             const idx = parseInt(item.dataset.sectionIdx || '');
             if (toggleIcon) {
@@ -145,8 +148,9 @@ function bindTocItemClicks(tocList) {
 }
 
 // TOC 하위 헤딩 클릭 — 헤딩 스크롤 (F)
+/** @param {Element} tocList */
 function bindTocSubItemClicks(tocList) {
-    tocList.querySelectorAll('.reader-toc-sub-item').forEach(node => {
+    tocList.querySelectorAll('.reader-toc-sub-item').forEach((/** @type {Element} */ node) => {
         const sub = /** @type {HTMLElement} */ (node);
         sub.addEventListener('click', () => {
             const secIdx = parseInt(sub.dataset.sectionIdx || '');
@@ -167,6 +171,7 @@ function bindTocSubItemClicks(tocList) {
 // TOC 툴팁 (JavaScript 기반 — 컨테이너 overflow로 인한 잘림 방지)
 // hover 가능 기기(데스크톱)에서만 의미 있음 — 모바일은 탭 즉시 네비게이션되어
 // 툴팁이 잔류/깜빡임만 유발
+/** @param {Element} tocList */
 function bindTocTooltips(tocList) {
     let tocTooltip = document.getElementById('toc-tooltip');
     if (!tocTooltip) {
@@ -175,7 +180,7 @@ function bindTocTooltips(tocList) {
         tocTooltip.setAttribute('role', 'tooltip');
         document.body.appendChild(tocTooltip);
     }
-    const showTocTooltip = (el) => {
+    const showTocTooltip = (/** @type {HTMLElement} */ el) => {
         const title = el.dataset.tocTitle;
         if (!title) return;
         tocTooltip.textContent = title;
@@ -194,15 +199,17 @@ function bindTocTooltips(tocList) {
     };
     const hoverCapable = window.matchMedia && window.matchMedia('(hover: hover)').matches;
     if (hoverCapable) {
-        tocList.querySelectorAll('.reader-toc-item, .reader-toc-sub-item').forEach(el => {
-            el.addEventListener('mouseenter', () => showTocTooltip(el));
+        tocList.querySelectorAll('.reader-toc-item, .reader-toc-sub-item').forEach((/** @type {Element} */ el) => {
+            const hel = /** @type {HTMLElement} */ (el);
+            el.addEventListener('mouseenter', () => showTocTooltip(hel));
             el.addEventListener('mouseleave', hideTocTooltip);
-            el.addEventListener('focus', () => showTocTooltip(el));
+            el.addEventListener('focus', () => showTocTooltip(hel));
             el.addEventListener('blur', hideTocTooltip);
         });
     }
 }
 
+/** @param {Element} tocList @param {*} chapter @param {*} displayTitles */
 function renderToc(tocList, chapter, displayTitles) {
     tocList.innerHTML = buildTocHtml(chapter, displayTitles);
     bindTocItemClicks(tocList);
@@ -214,11 +221,13 @@ function renderToc(tocList, chapter, displayTitles) {
 // story:start 씬 목록 → Chapter 번호로 그룹핑한 목차. 씬 카드는
 // reader-section-card id/data-section-idx 규약을 재사용해 TOC 클릭
 // 이동·스크롤스파이·크롬 오프셋(scroll-margin-top)을 그대로 얻는다.
+/** @param {*[]} slots */
 function buildWebtoonTocHtml(slots) {
     let html = '';
+    /** @type {*} */
     let curChapter = null;
     let chapterOpen = false;
-    slots.forEach((slot, idx) => {
+    slots.forEach((/** @type {*} */ slot, /** @type {number} */ idx) => {
         if (slot.chapter !== curChapter) {
             if (chapterOpen) html += `</div>`;
             curChapter = slot.chapter;
@@ -245,7 +254,7 @@ function buildWebtoonTocHtml(slots) {
  * renderChapterContentInternal과 동일하게 보조 UI(툴바·TOC·진행바)를 노출해야
  * 웹툰으로 바로 진입한 경우에도 좌측 목차가 표시된다.
  * @param {string} subjId @param {number} chapterIdx
- * @param {Array<{beats: Array, title: string, chapter: number|null}>} slots
+ * @param {Array<{beats: Array<*>, title: string, chapter: number|null}>} slots
  * @param {Record<string, {name:string, side:string, img?:string}>|undefined} chars
  */
 export function renderWebtoonContent(subjId, chapterIdx, slots, chars) {
@@ -290,6 +299,7 @@ export function renderWebtoonContent(subjId, chapterIdx, slots, chars) {
 }
 
 // 챕터 출처 텍스트 → 참조자료 경로 (컨텍스트 사이드바 + L-line PDF 링크용)
+/** @param {*} chapter */
 function resolveChapterRefPath(chapter) {
     let sourceText = '';
     for (const s of chapter.sections) {
@@ -300,6 +310,7 @@ function resolveChapterRefPath(chapter) {
 }
 
 // 챕터 액션을 툴바에 동적 주입 (오디오 — 기출 필터/원본/참조자료 버튼은 2026-10 제거, SA-01·RR-07)
+/** @param {string} subjId @param {number} chapterIdx @param {boolean} hasAudio */
 function injectChapterActions(subjId, chapterIdx, hasAudio) {
     const actionsGroup = document.getElementById('reader-chapter-actions-group');
     if (!actionsGroup) return;
@@ -320,6 +331,7 @@ function injectChapterActions(subjId, chapterIdx, hasAudio) {
 }
 
 // 오디오 플레이어 영역을 툴바 아래에 렌더 (미보유 시험은 숨김)
+/** @param {boolean} hasAudio */
 function renderAudioPlayerArea(hasAudio) {
     const audioPlayerArea = document.getElementById('reader-audio-player-area');
     if (!audioPlayerArea) return;
@@ -352,18 +364,19 @@ function renderAudioPlayerArea(hasAudio) {
 
 // 섹션 카드 HTML 생성 — ctx: {subjId, chapterIdx, displayTitles, bookmarks,
 //   chapterRefPath, subjRefFiles, subjDirName, glossaryItems, notes}
+/** @param {*} chapter @param {*} ctx */
 function buildSectionsHtml(chapter, ctx) {
     const { subjId, chapterIdx, displayTitles, bookmarks,
         chapterRefPath, subjRefFiles, subjDirName, glossaryItems, notes } = ctx;
     let html = '';
-    chapter.sections.forEach((section, idx) => {
+    chapter.sections.forEach((/** @type {*} */ section, /** @type {number} */ idx) => {
         // 북마크 키는 콘텐츠 기반 (TR-27) — 위치 인덱스는 교재 편집 시 오표적
         const bookmarkKey = bookmarkKeyOf(subjId,
             chapter.chapterKey || chapter.chapterTitle || chapterIdx, section.title || idx);
         const isBookmarked = bookmarks.includes(bookmarkKey);
         // 섹션 메모 (TR-30) — 북마크 키를 공유하므로 위치 이동에도 따라붙는다
         const noteText = (notes && notes[bookmarkKey] && notes[bookmarkKey].note) || '';
-        const allContent = [section.content || '', ...((section.subsections || []).map(s => s.content || ''))].join('\n');
+        const allContent = [section.content || '', ...((section.subsections || []).map((/** @type {*} */ s) => s.content || ''))].join('\n');
         const secSrcMatch = allContent.match(/📌\s*\*\*출처\*\*[:：]\s*(.+?)(?:\||\n)/);
         const secRefPath = secSrcMatch ? mapSourceToRef(secSrcMatch[1]) : null;
         const refPath = secRefPath || chapterRefPath;
@@ -407,7 +420,7 @@ function buildSectionsHtml(chapter, ctx) {
 export function bindReaderNotes(container) {
     if (!container) return;
     container.querySelectorAll('.reader-note-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        (/** @type {HTMLElement} */ (btn)).addEventListener('click', (/** @type {MouseEvent} */ e) => {
             e.stopPropagation();
             _toggleNoteEditor(/** @type {HTMLElement} */ (btn));
         });
@@ -418,6 +431,7 @@ export function bindReaderNotes(container) {
  * 섹션 메모 인라인 에디터 토글 (TR-30) — 카드 본문 상단에 textarea를 둔다.
  * 저장/삭제 즉시 카드의 메모 표시·버튼 상태를 갱신한다 (재렌더 없이).
  */
+/** @param {HTMLElement} btn */
 function _toggleNoteEditor(btn) {
     const card = btn.closest('.reader-section-card');
     const body = card && card.querySelector('.reader-section-body');
@@ -465,6 +479,7 @@ function _toggleNoteEditor(btn) {
     // UX-FORM-05 — 입력 자동 임시저장: 닫기·뷰 전환·섹션 재렌더 어떤 경로로 나가도
     // 작성분이 소실되지 않는다 (주관식 자동저장과 동일 규약). 빈 텍스트는 자동 삭제하지
     // 않고 기존 메모를 유지 — 삭제는 '삭제' 버튼 명시 경로만.
+    /** @type {ReturnType<typeof setTimeout>|null} */
     let saveTimer = null;
     input?.addEventListener('input', () => {
         if (saveTimer) clearTimeout(saveTimer);
@@ -501,21 +516,22 @@ function _toggleNoteEditor(btn) {
 }
 
 // 본문 목차 하이퍼링크 → 대응 섹션으로 스크롤 (5단계 매칭 폴백)
+/** @param {Element} container */
 function bindTocJumpLinks(container) {
-    container.querySelectorAll('a[data-toc-jump]').forEach(link => {
-        link.addEventListener('click', (e) => {
+    container.querySelectorAll('a[data-toc-jump]').forEach((/** @type {Element} */ link) => {
+        (/** @type {HTMLElement} */ (link)).addEventListener('click', (/** @type {MouseEvent} */ e) => {
             e.preventDefault();
             e.stopPropagation();
             const jumpText = ((/** @type {HTMLElement} */ (link)).dataset.tocJump || '').trim();
             if (!jumpText) return;
             // 이모지 제거한 정규화 텍스트 (매칭용)
-            const normalize = (s) => s.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}]/gu, '').replace(/\s+/g, ' ').trim();
+            const normalize = (/** @type {string} */ s) => s.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}]/gu, '').replace(/\s+/g, ' ').trim();
             const jumpNorm = normalize(jumpText);
             // 목차 항목 텍스트가 포함된 섹션 찾기
             const sectionCards = container.querySelectorAll('.reader-section-card');
             let found = /** @type {Element|null} */ (null);
             // 1순위: 정확 매칭 (이모지 포함) — 첫 매칭 채택 (마지막 매칭은 뒤쪽 챕터로 오이동)
-            sectionCards.forEach(card => {
+            sectionCards.forEach((/** @type {Element} */ card) => {
                 if (found) return;
                 const titleEl = card.querySelector('.reader-section-title');
                 if (!titleEl) return;
@@ -526,7 +542,7 @@ function bindTocJumpLinks(container) {
             });
             // 2순위: 이모지 무시 매칭
             if (!found && jumpNorm) {
-                sectionCards.forEach(card => {
+                sectionCards.forEach((/** @type {Element} */ card) => {
                     if (found) return;
                     const titleEl = card.querySelector('.reader-section-title');
                     if (!titleEl) return;
@@ -541,7 +557,7 @@ function bindTocJumpLinks(container) {
                 const chMatch = jumpText.match(/Chapter\s+(\d+)/i);
                 if (chMatch) {
                     const chNum = chMatch[1];
-                    sectionCards.forEach(card => {
+                    sectionCards.forEach((/** @type {Element} */ card) => {
                         if (found) return;
                         const titleEl = card.querySelector('.reader-section-title');
                         if (!titleEl) return;
@@ -559,13 +575,13 @@ function bindTocJumpLinks(container) {
                 if (keywords.length > 0) {
                     let bestMatch = null;
                     let bestScore = 0;
-                    sectionCards.forEach(card => {
+                    sectionCards.forEach((/** @type {Element} */ card) => {
                         const titleEl = card.querySelector('.reader-section-title');
                         if (!titleEl) return;
                         const titleNorm = normalize(titleEl.textContent.trim());
                         if (!titleNorm) return;
                         let score = 0;
-                        keywords.forEach(kw => {
+                        keywords.forEach((/** @type {string} */ kw) => {
                             if (titleNorm.includes(kw)) score += kw.length;
                         });
                         if (score > bestScore) {
@@ -581,7 +597,7 @@ function bindTocJumpLinks(container) {
             }
             // 5순위: 섹션 본문 내용에서 텍스트 검색 (마인드맵 매핑 표 링크용)
             if (!found && jumpNorm) {
-                sectionCards.forEach(card => {
+                sectionCards.forEach((/** @type {Element} */ card) => {
                     if (found) return;
                     const body = card.querySelector('.reader-section-body');
                     if (!body) return;
@@ -601,6 +617,7 @@ function bindTocJumpLinks(container) {
     });
 }
 
+/** @param {string} subjId @param {number} chapterIdx @param {*} subj @param {*} chapter @param {boolean} isStoryMode */
 export async function renderChapterContentInternal(subjId, chapterIdx, subj, chapter, isStoryMode) {
     const container = document.getElementById('textbook-reader-container');
     if (!container) return;
@@ -650,7 +667,7 @@ export async function renderChapterContentInternal(subjId, chapterIdx, subj, cha
 
     // D: 브레드크럼 — 제거됨 (TOC 하이라이트 + sticky heading으로 대체)
 
-    const _rt = getRefTables();
+    const _rt = /** @type {Object.<string,*>} */ (getRefTables());
     const subjRefFiles = (_rt.REFERENCE_FILES || {})[subjId] || [];
     const subjDirName = (_rt.SUBJECT_DIR_MAP || {})[subjId] || '';
 
@@ -696,10 +713,10 @@ export async function renderChapterContentInternal(subjId, chapterIdx, subj, cha
     bindTocJumpLinks(container);
 
     // Bookmark buttons
-    container.querySelectorAll('.reader-bookmark-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+    container.querySelectorAll('.reader-bookmark-btn').forEach((/** @type {Element} */ btn) => {
+        (/** @type {HTMLElement} */ (btn)).addEventListener('click', (/** @type {MouseEvent} */ e) => {
             e.stopPropagation();
-            toggleReaderBookmark((/** @type {HTMLElement} */ (btn)).dataset.bookmarkKey, btn);
+            toggleReaderBookmark((/** @type {HTMLElement} */ (btn)).dataset.bookmarkKey ?? '', /** @type {HTMLElement} */ (btn));
         });
     });
 

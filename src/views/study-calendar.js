@@ -187,7 +187,7 @@ function _studyPlanHtml() {
     const plan = computeStudyPlan(_remainingCards());
     const dday = getDDay();
     const ddayLabel = dday === null || dday === 0 ? 'D-Day' : (dday < 0 ? `D+${-dday}` : `D-${dday}`);
-    const header = (badge) => `
+    const header = (/** @type {string} */ badge) => `
         <div class="plan-header">
             <h4><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i> 학습 계획 ${badge || ''}</h4>
             <span class="plan-dday">시험일 ${examDate} · ${ddayLabel}</span>
@@ -244,14 +244,16 @@ function _studyPlanHtml() {
 
 /** SC-08·SC-09 주간 배분 — 이번 주 과목별 목표: 잔여×출제 비중×약점 가중 배분 (study_plan_pro 표기).
  *  칩은 주간 실적(N/배정장) + 약점·비중 근거 배지 + 과목 카드 학습 바로가기 버튼. */
+/** @param {*} plan */
 function _subjectAllocHtml(plan) {
     if (!plan || plan.tier === 'done') return '';
+    /** @type {*[]} */
     let subjects = [];
     if (typeof DataLoader !== 'undefined' && DataLoader.registry) {
         subjects = DataLoader.getSubjectList();
     } else if (typeof window !== 'undefined' && window.STUDY_DATA) {
         const sd = window.STUDY_DATA;
-        subjects = Object.keys(sd).map(k => ({
+        subjects = Object.keys(sd).map((/** @type {string} */ k) => ({
             key: k,
             name: (sd[k] && sd[k].name) || k,
             stats: { cards: (sd[k].cards || []).length }
@@ -281,10 +283,10 @@ function _subjectAllocHtml(plan) {
     if (!alloc) return '';
     const doneBySubj = sumRecentCardsBySubject(getStudyCalendar());
     const quizDoneBySubj = sumRecentQuizzesBySubject(getStudyCalendar());
-    const chips = alloc.thisWeek.alloc.map(a => {
+    const chips = alloc.thisWeek.alloc.map((/** @type {*} */ a) => {
         if (a.remaining === 0) return `<span class="alloc-chip alloc-done">${esc(a.name)} 완료</span>`;
-        const done = doneBySubj[a.key] || 0;
-        const qDone = quizDoneBySubj[a.key] || 0;
+        const done = /** @type {Object.<string,number>} */ (doneBySubj)[a.key] || 0;
+        const qDone = /** @type {Object.<string,number>} */ (quizDoneBySubj)[a.key] || 0;
         const metCls = a.cards > 0 && done >= a.cards ? ' alloc-chip-met' : '';
         // SC-13 퀴즈 배분 병기 — 배정된 퀴즈가 있을 때만 `·실적/배정문`
         const quizPart = a.quizzes > 0 ? `·${qDone}/${a.quizzes}문` : '';
@@ -294,8 +296,8 @@ function _subjectAllocHtml(plan) {
         return `<span class="alloc-chip-wrap"><button type="button" class="alloc-chip${metCls}" data-click="startSubjectStudy" data-arg="${esc(a.key)}" title="${esc(a.name)} 카드 학습으로 이동">${esc(a.name)} ${done}/${a.cards}장${quizPart}${badges}</button>${whyHtml}</span>`;
     }).join('');
     const cols = alloc.thisWeek.alloc.map(a => `<th>${esc(a.name)}</th>`).join('');
-    const mrows = alloc.weeks.slice(0, 12).map(w =>
-        `<tr><td>${w.week}주차</td>${w.alloc.map(a => `<td>${a.cards}장${a.quizzes > 0 ? `·${a.quizzes}문` : ''}</td>`).join('')}</tr>`).join('');
+    const mrows = alloc.weeks.slice(0, 12).map((/** @type {*} */ w) =>
+        `<tr><td>${w.week}주차</td>${w.alloc.map((/** @type {*} */ a) => `<td>${a.cards}장${a.quizzes > 0 ? `·${a.quizzes}문` : ''}</td>`).join('')}</tr>`).join('');
     const more = alloc.weeks.length > 12
         ? `<tr><td colspan="${alloc.thisWeek.alloc.length + 1}" class="plan-more">… 이후 ${alloc.weeks.length - 12}주</td></tr>` : '';
     return `
@@ -428,11 +430,12 @@ export function openGoalSettings() {
 }
 
 /** 시험일 리드타임 권고 문구 — 최소 getMinExamLeadDays()일 전 설정 권장 */
+/** @param {HTMLElement|null} hintEl @param {string} dateStr */
 function _renderExamDateHint(hintEl, dateStr) {
     if (!hintEl) return;
     const st = getExamLeadStatus(dateStr);
     const minDays = getMinExamLeadDays();
-    const set = (text, color) => { hintEl.textContent = text; hintEl.style.color = color; };
+    const set = (/** @type {string} */ text, /** @type {string} */ color) => { hintEl.textContent = text; hintEl.style.color = color; };
     if (!st) {
         set(`효율적인 학습을 위해 시험일은 최소 ${minDays}일 전에 설정하는 것을 권장합니다.`, 'var(--color-text-muted)');
     } else if (st.past) {

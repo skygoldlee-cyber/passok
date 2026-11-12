@@ -102,12 +102,12 @@ export function careFormTplSave() {
     if (!title || !body.trim()) { _requireTplFields(); return; }
     if (_editTplId) {
         const r = updateFormTemplate(_editTplId, { title, body });
-        r.ok ? showToast('양식을 저장했습니다 — 연동 도구 출력에도 반영됩니다.') : showToast(r.error, 'error');
+        r.ok ? showToast('양식을 저장했습니다 — 연동 도구 출력에도 반영됩니다.') : showToast(r.error || '저장 실패', 'error');
     } else {
         const label = $('cf-tpl-label')?.textContent || '';
         const tk = Object.keys(TOOL_FORM_SEEDS).find(k => label.includes(TOOL_FORM_SEEDS[k].title));
         const r = addFormTemplate({ title, body, toolKey: tk || undefined });
-        if (!r.ok) { showToast(r.error, 'error'); return; }
+        if (!r.ok) { showToast(r.error || '저장 실패', 'error'); return; }
         _editTplId = r.id;
         showToast('양식을 저장했습니다 — 연동 도구 출력에도 반영됩니다.');
         flashSavedBadge($('cf-tpl-list'));
@@ -216,7 +216,7 @@ export async function careFormSeedCopy(toolKey) {
     let tpl = allFormTemplates().find(t => t.toolKey === toolKey);
     if (!tpl) {
         const r = addFormTemplate({ title: def.title, body: def.seed, toolKey });
-        if (!r.ok) { showToast(r.error, 'error'); return; }
+        if (!r.ok) { showToast(r.error || '저장 실패', 'error'); return; }
         tpl = allFormTemplates().find(t => t.id === r.id);
         showToast(`'${def.title}' 사본을 만들었습니다 — 수정 후 저장하세요.`);
     }

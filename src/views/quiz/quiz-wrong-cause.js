@@ -19,6 +19,8 @@ import { _beginQuizRun, renderQuizResult } from './quiz.js';
  * 오답 원인 저장 + 원인별 즉시 재학습 사이드 이펙트.
  * memorize는 관련 플래시카드를 weakCards에 추가한다.
  */
+/** @param {string} quizId @param {string} cause */
+/** @param {string} quizId @param {string} cause */
 function _storeCause(quizId, cause) {
     if (!(cause in getWrongCauseLabels())) return;
     const itemId = weakItemKey(quizId);
@@ -34,18 +36,22 @@ function _storeCause(quizId, cause) {
 /**
  * 퀴즈의 [용어: X] 컨텍스트에서 관련 카드를 찾아 weakCards에 추가한다.
  */
+/** @param {string} quizId */
+/** @param {string} quizId */
 function _addRelatedCardToWeak(quizId) {
     const resolved = resolveWrongQuiz(quizId);
     if (!resolved || !window.STUDY_DATA) return;
-    const termMatch = /\[용어:\s*(.+?)\s*\]/.exec(resolved.quiz.context || '');
+    const termMatch = /\[용어:\s*(.+?)\s*\]/.exec((/** @type {*} */ (resolved.quiz)).context || '');
     if (!termMatch) return;
-    const card = (window.STUDY_DATA[resolved.subjectId].cards || []).find(c => c.term === termMatch[1]);
+    const card = (window.STUDY_DATA[resolved.subjectId].cards || []).find((/** @type {*} */ c) => c.term === termMatch[1]);
     if (card) state.weakCards.add(card.id);
 }
 
 /**
  * 원인별 재학습 추천 UI HTML.
  */
+/** @param {string} cause @param {string} quizId */
+/** @param {string} cause @param {string} quizId */
 function _causeRecoHtml(cause, quizId) {
     const itemId = weakItemKey(quizId);
     const subjId = subjectForWeakItem(itemId, state.quiz.subject);
@@ -74,6 +80,8 @@ function _causeRecoHtml(cause, quizId) {
 /**
  * 피드백 패널에서 현재 문제의 오답 원인을 태깅한다. (data-click)
  */
+/** @param {string} cause */
+/** @param {string} cause */
 export function tagWrongCause(cause) {
     const quizState = state.quiz;
     const currentQuiz = quizState.data[quizState.currentIndex];
@@ -96,6 +104,8 @@ export function tagWrongCause(cause) {
 /**
  * 결과 화면 오답 아이템에서 원인을 태깅한다. (data-args: [quizId, cause])
  */
+/** @param {string} quizId @param {string} cause */
+/** @param {string} quizId @param {string} cause */
 export function tagWrongCauseAt(quizId, cause) {
     _storeCause(quizId, cause);
     renderQuizResult();
@@ -104,6 +114,8 @@ export function tagWrongCauseAt(quizId, cause) {
 /**
  * 오답 항목을 복습 노트로 연다. (data-args: [itemId])
  */
+/** @param {string} itemId */
+/** @param {string} itemId */
 export function wrongActionCard(itemId) {
     trackAction('weak_to_card');
     state.weakCards.add(itemId);
@@ -115,6 +127,8 @@ export function wrongActionCard(itemId) {
 /**
  * 오답 항목의 과목 교재로 이동한다. (data-args: [subjectId])
  */
+/** @param {string} subjId */
+/** @param {string} subjId */
 export function wrongActionTextbook(subjId) {
     trackAction('weak_to_textbook');
     startSubjectReader(subjId);
@@ -123,6 +137,8 @@ export function wrongActionTextbook(subjId) {
 /**
  * 오답 문제와 같은 단원의 유사 문제로 퀴즈를 시작한다. (data-args: [quizId])
  */
+/** @param {string} quizId */
+/** @param {string} quizId */
 export function wrongActionSimilar(quizId) {
     trackAction('weak_to_similar');
     const resolved = resolveWrongQuiz(quizId);
@@ -132,7 +148,7 @@ export function wrongActionSimilar(quizId) {
     }
     const { quiz, subjectId } = resolved;
     const pool = ((window.STUDY_DATA || {})[subjectId].quizzes || [])
-        .filter(q => q.category === quiz.category && q.id !== quiz.id);
+        .filter((/** @type {*} */ q) => q.category === (/** @type {*} */ (quiz)).category && q.id !== (/** @type {*} */ (quiz)).id);
     if (pool.length === 0) {
         showToast('같은 단원에 유사 문제가 없습니다.', 'info');
         return;

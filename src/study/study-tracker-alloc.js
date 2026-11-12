@@ -135,8 +135,10 @@ export function selectExamRiskSession(risk, cap, weightBySubject) {
  * @param {Array<*>} [p.weakChapterGroups] computeSubjectWeakChapters 결과 — 과목별 취약 단원 수 (SC-12)
  * @param {Array<*>} [p.dueCardIds] getDueCards() 결과 — FSRS 기한 도래 카드 id 배열 (SC-13)
  * @param {Date|number} [p.now] 기준 시각 (테스트 주입용)
- * @returns {{memBySubject:Object, quizBySubject:Object, recentQuizBySubject:Object,
- *   weakBySubject:Object, weightBySubject:Object, diagBySubject:Object, dueBySubject:Object}}
+ * @returns {{memBySubject:{[x:string]:number}, quizBySubject:{[x:string]:{solved:number,correct:number}},
+ *   recentQuizBySubject:{[x:string]:{solved:number,correct:number}}, weakBySubject:{[x:string]:number},
+ *   weightBySubject:{[x:string]:number}, diagBySubject:{[x:string]:{causes:number,weakChapters:number}},
+ *   dueBySubject:{[x:string]:number}}}
  */
 export function computeSubjectAllocInputs(p = {}) {
     /** @type {{ [x: string]: number }} */
@@ -275,7 +277,7 @@ function _allocWeek(rows, remNow, total) {
  * @param {Object} [opts.weightBySubject] {key: 출제 문항 수} — 미선언 시 균등
  * @param {Object} [opts.diagBySubject] {key: {causes, weakChapters}} — 진단 신호 가산 (SC-12)
  * @param {Object} [opts.dueBySubject] {key: FSRS 기한 도래 카드 수} — 복습 대기 가산 (SC-13)
- * @returns {Object|null}
+ * @returns {{weeks:Array<*>, thisWeek:{alloc:Array<*>, [x:string]:*}, hasWeights:*}|null}
  *   { weeks:[{week, range, total, quizTotal, alloc:[{key, name, cards, quizzes, remaining, quizRemaining,
  *     weakW, diagBoost, dueBoost, weightPct, weakBadge}]}],
  *     thisWeek, hasWeights }

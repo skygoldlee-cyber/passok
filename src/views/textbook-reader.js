@@ -42,10 +42,11 @@ import { escapeRegExp } from '../core/utils.js';
 export { textbookReaderState, startReadingSession, stopReadingSession } from './reader/reader-progress.js';
 
 /** 렌더된 섹션 카드 중 제목 매칭 탐색 — 정확 매칭 우선, 없으면 첫 부분 매칭 */
+/** @param {Element} container @param {string} sectionTitle */
 function _findSectionCardByTitle(container, sectionTitle) {
     let exact = /** @type {Element|null} */ (null);
     let partial = /** @type {Element|null} */ (null);
-    container.querySelectorAll('.reader-section-card').forEach(card => {
+    container.querySelectorAll('.reader-section-card').forEach((/** @type {Element} */ card) => {
         const titleEl = card.querySelector('.reader-section-title');
         const title = (titleEl && titleEl.textContent || '').trim();
         if (!exact && title === sectionTitle) exact = card;
@@ -55,6 +56,7 @@ function _findSectionCardByTitle(container, sectionTitle) {
 }
 
 /** 챕터 앵커('chNN') → "Chapter NN" 헤더 섹션 카드 탐색 */
+/** @param {Element} container @param {string} chapterAnchor */
 function _findSectionCardByChapter(container, chapterAnchor) {
     const chNum = String(chapterAnchor || '').replace(/^ch/i, '');
     const num = parseInt(chNum, 10);
@@ -62,7 +64,7 @@ function _findSectionCardByChapter(container, chapterAnchor) {
     // "Chapter 01"·"Chapter 1" 모두 매칭하되 'Chapter 10' 등의 오매칭은 숫자 경계로 차단
     const re = new RegExp('Chapter\\s+0*' + num + '(?!\\d)', 'i');
     let found = /** @type {Element|null} */ (null);
-    container.querySelectorAll('.reader-section-card').forEach(card => {
+    container.querySelectorAll('.reader-section-card').forEach((/** @type {Element} */ card) => {
         if (found) return;
         const titleEl = card.querySelector('.reader-section-title');
         if (titleEl && re.test(titleEl.textContent || '')) found = card;
@@ -75,6 +77,7 @@ function _findSectionCardByChapter(container, chapterAnchor) {
  * 리더에 렌더되지 않는 메타 섹션(확인문제·학습 아이콘 등)을 찾을 때의 폴백 —
  * 호출자가 앵커를 모르고 제목만 넘겨도 올바른 챕터 헤더로 유도한다.
  */
+/** @param {string} subjId @param {string} title */
 function _chapterAnchorForTitle(subjId, title) {
     const STUDY_DATA = (typeof window !== 'undefined' && window.STUDY_DATA) ? window.STUDY_DATA : {};
     const subj = STUDY_DATA[subjId];
@@ -98,8 +101,9 @@ const _SEARCH_HIT_SEL = 'mark.reader-search-hit';
 const _SEARCH_HIT_MAX = 80;
 
 /** 이전 검색 이동의 하이라이트 해제 (재렌더 시 자연 소거되지만 동일 DOM 재사용 대비) */
+/** @param {Element} container */
 function _clearReaderSearchHighlights(container) {
-    container.querySelectorAll(_SEARCH_HIT_SEL).forEach(m => {
+    container.querySelectorAll(_SEARCH_HIT_SEL).forEach((/** @type {Element} */ m) => {
         m.replaceWith(document.createTextNode(m.textContent || ''));
     });
     container.normalize();
@@ -109,6 +113,7 @@ function _clearReaderSearchHighlights(container) {
  * 카드 본문에서 검색어(공백 분리 토큰, OR)를 mark.reader-search-hit으로 감싼다.
  * @returns {Element|null} 첫 매치 mark — 없으면 null
  */
+/** @param {Element} card @param {string} query */
 function _highlightQueryInCard(card, query) {
     const terms = String(query || '').trim().split(/\s+/).filter(Boolean);
     if (!terms.length) return null;
@@ -122,6 +127,7 @@ function _highlightQueryInCard(card, query) {
     while ((node = /** @type {Text|null} */ (walker.nextNode()))) {
         if (probe.test(node.nodeValue || '')) nodes.push(node);
     }
+    /** @type {Element|null} */
     let first = null;
     let marked = 0;
     for (const textNode of nodes) {
@@ -131,7 +137,7 @@ function _highlightQueryInCard(card, query) {
         const frag = document.createDocumentFragment();
         parts.forEach((part, i) => {
             if (!part) return;
-            if (i % 2 === 1) {
+            if ((/** @type {number} */ (i)) % 2 === 1) {
                 const mark = document.createElement('mark');
                 mark.className = 'reader-search-hit txt-highlight';
                 mark.textContent = part;
@@ -148,6 +154,7 @@ function _highlightQueryInCard(card, query) {
 }
 
 /** 섹션 카드 펼침 + 스크롤 (미발견 시 상단으로) */
+/** @param {Element} container @param {Element|null} card */
 function _scrollToSectionCard(container, card) {
     if (!card) {
         container.scrollTop = 0;
@@ -158,6 +165,7 @@ function _scrollToSectionCard(container, card) {
 }
 
 /** 마지막으로 큐잉된 챕터 렌더의 완료 promise — 검색 이동 등이 렌더 완료를 기다리는 데 사용 */
+/** @type {Promise<*>|null} */
 let _readerRenderPromise = null;
 
 /**
@@ -165,6 +173,7 @@ let _readerRenderPromise = null;
  * 이 함수로 시작된 렌더만 _readerRenderPromise가 바뀌므로,
  * 호출자는 이전 promise와 비교해 새 렌더가 큐잉됐는지 판별할 수 있다.
  */
+/** @param {string} subjId @param {number} chapterIdx */
 function _queueChapterRender(subjId, chapterIdx) {
     // UX-FB-07 — 과목 데이터 미로드 시 스켈레톤 자리표시 (빈 화면 대기 방지)
     const loaded = typeof window !== 'undefined' && window.STUDY_DATA && window.STUDY_DATA[subjId];
@@ -188,6 +197,7 @@ function _queueChapterRender(subjId, chapterIdx) {
 }
 
 /** 새 렌더가 큐잉됐으면 그 완료 promise, 아니면 즉시 해결된 promise */
+/** @param {Promise<*>|null} prevRender */
 function _renderSettled(prevRender) {
     return (_readerRenderPromise && _readerRenderPromise !== prevRender)
         ? _readerRenderPromise
@@ -279,7 +289,7 @@ export function openSubjectSection(subject, sectionTitle, chapterAnchor = '', op
             const hit = _highlightQueryInCard(card, opts.query);
             if (hit) {
                 card.classList.remove('collapsed');
-                hit.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                /** @type {Element} */ (hit).scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
         }
@@ -472,11 +482,12 @@ async function _webtoonChars() {
     return _wtChars || undefined;
 }
 
+/** @param {string} subjId @param {number|string} chapterIdx */
 function renderChapterContent(subjId, chapterIdx) {
     const container = document.getElementById('textbook-reader-container');
     if (!container) return Promise.resolve();
 
-    chapterIdx = parseInt(chapterIdx);
+    chapterIdx = parseInt(String(chapterIdx), 10);
     const STUDY_DATA = (typeof window !== 'undefined' && window.STUDY_DATA) ? window.STUDY_DATA : {};
     const subj = STUDY_DATA[subjId];
     if (!subj || !subj.chapters || isNaN(chapterIdx) || !subj.chapters[chapterIdx]) return Promise.resolve();

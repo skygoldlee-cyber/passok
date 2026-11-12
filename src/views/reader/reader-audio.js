@@ -30,6 +30,8 @@ const READER_AUDIO_RATE_KEY = 'readerAudioRate';
 // 자동 스크롤 설정 저장 키
 const READER_AUDIO_AUTOSCROLL_KEY = 'readerAudioAutoScroll';
 
+/** @param {string} subjId @param {*} chapter */
+/** @param {string} subjId @param {*} chapter */
 export function getAudioPathForChapter(subjId, chapter) {
     /** @type {string|null} */
     let localPath = null;
@@ -68,7 +70,11 @@ export function getAudioPathForChapter(subjId, chapter) {
 }
 
 /** 화면 하단에 잠시 표시되는 토스트 알림 */
+/** @type {ReturnType<typeof setTimeout>|null} */
+/** @type {ReturnType<typeof setTimeout>|null} */
 let _audioToastTimer = null;
+/** @param {string} msg */
+/** @param {string} msg */
 export function showAudioToast(msg) {
     let toast = document.getElementById('reader-audio-toast');
     if (!toast) {
@@ -86,6 +92,8 @@ export function showAudioToast(msg) {
 const formatAudioTime = fmtClock;
 
 /** 이어보기 위치를 localStorage에서 읽기 */
+/** @param {string} src */
+/** @param {string} src */
 function getSavedAudioPos(src) {
     try {
         const v = safeGetItem(READER_AUDIO_POS_PREFIX + src);
@@ -95,6 +103,8 @@ function getSavedAudioPos(src) {
 }
 
 /** 이어보기 위치를 localStorage에 저장 (끝까지 들었으면 삭제) */
+/** @param {string} src @param {number} pos @param {number} duration */
+/** @param {string} src @param {number} pos @param {number} duration */
 function saveAudioPos(src, pos, duration) {
     try {
         if (!src) return;
@@ -120,6 +130,8 @@ function persistCurrentAudioPos() {
    ======================================================= */
 
 /** 현재 재생 중인 단원의 Media Session 메타데이터 및 액션 핸들러 설정 */
+/** @param {HTMLAudioElement} audio @param {string} subjId @param {number} chapterIdx @param {string} chapterTitle */
+/** @param {HTMLAudioElement} audio @param {string} subjId @param {number} chapterIdx @param {string} chapterTitle */
 function setupMediaSession(audio, subjId, chapterIdx, chapterTitle) {
     if (!('mediaSession' in navigator)) return;
 
@@ -195,7 +207,7 @@ function getAudioUI() {
 /**
  * 섹션별 예상 재생 구간을 계산한다.
  * 각 섹션의 텍스트 길이를 기준으로 전체 오디오 길이를 비례 배분한다.
- * @param {Array} sections - 섹션 배열
+ * @param {Array<*>} sections - 섹션 배열
  * @param {number} duration - 오디오 전체 길이(초)
  * @returns {Array<{start:number,end:number}>} 섹션별 구간
  */
@@ -213,6 +225,8 @@ function computeSectionBoundaries(sections, duration) {
 }
 
 /** 현재 재생 시간에 해당하는 섹션 인덱스를 반환한다. */
+/** @param {number} currentTime */
+/** @param {number} currentTime */
 function getCurrentSectionIdx(currentTime) {
     const bounds = readerAudioState.sectionBoundaries;
     if (!bounds.length) return -1;
@@ -224,6 +238,8 @@ function getCurrentSectionIdx(currentTime) {
 }
 
 /** 현재 섹션을 하이라이트하고 필요 시 스크롤한다. */
+/** @param {number} idx */
+/** @param {number} idx */
 function highlightAndScrollToSection(idx) {
     const container = document.getElementById('textbook-reader-container');
     if (!container) return;
@@ -262,6 +278,8 @@ function getSavedAutoScroll() {
         return v === null ? true : v === '1';
     } catch (e) { return true; }
 }
+/** @param {boolean} enabled */
+/** @param {boolean} enabled */
 function saveAutoScroll(enabled) {
     safeSetItem(READER_AUDIO_AUTOSCROLL_KEY, enabled ? '1' : '0');
 }
@@ -288,6 +306,8 @@ export function toggleReaderAutoScroll() {
 }
 
 /** 오디오 토글 버튼 라벨 갱신 — 유료 배지를 포함시키고 플랜을 즉시 반영 */
+/** @param {string} html */
+/** @param {string} html */
 function setAudioBtnLabel(html) {
     const ui = getAudioUI();
     if (!ui.btn) return;
@@ -311,6 +331,8 @@ function updatePlayPauseIcon() {
 }
 
 /** 재생 상태 메시지 표시 (로딩/버퍼링/오류) */
+/** @param {string} msg */
+/** @param {string} msg */
 function setAudioStatus(msg) {
     const ui = getAudioUI();
     if (ui.status) {
@@ -342,10 +364,12 @@ export function cycleReaderAudioRate() {
 }
 
 /** 시크바 입력 → 오디오 위치 이동 */
+/** @param {number|string} value */
+/** @param {number|string} value */
 export function seekReaderAudio(value) {
     const a = readerAudioState.audio;
     if (!a || !isFinite(a.duration) || a.duration <= 0) return;
-    a.currentTime = (parseFloat(value) / 100) * a.duration;
+    a.currentTime = (parseFloat(String(value)) / 100) * a.duration;
 }
 
 /**
@@ -394,6 +418,8 @@ export function toggleReaderPlayPause() {
 /**
  * 오디오 로드 및 재생 시작. 같은 단원이면 정지, 다른 단원이면 새로 로드.
  */
+/** @param {string} subjId @param {number} chapterIdx */
+/** @param {string} subjId @param {number} chapterIdx */
 export function toggleReaderAudio(subjId, chapterIdx) {
     const STUDY_DATA = (typeof window !== 'undefined' && window.STUDY_DATA) ? window.STUDY_DATA : {};
     const subj = STUDY_DATA[subjId];
@@ -507,7 +533,7 @@ export function toggleReaderAudio(subjId, chapterIdx) {
             3: '오디오 디코딩에 실패했습니다.',
             4: '오디오 형식이 지원되지 않거나 파일을 찾을 수 없습니다.',
         };
-        const msg = msgMap[code] || '오디오를 불러올 수 없습니다.';
+        const msg = msgMap[/** @type {keyof msgMap} */ (code)] || '오디오를 불러올 수 없습니다.';
         setAudioStatus(msg);
         showToast(msg + ' (경로: ' + audioPath + ')', 'error', 4000);
         stopReaderAudio();

@@ -15,6 +15,7 @@
 //                    예) <input data-input="seekReaderAudio"> → seekReaderAudio(el.value)
 
 // 전역 범위(window)에서 함수 찾기 (ManualViewer.openManual 등의 점 표기 네임스페이스 허용)
+/** @param {string} name */
 function resolveDelegatedHandler(name) {
     let handler = /** @type {any} */ (window);
     for (const part of name.split('.')) {
@@ -25,6 +26,7 @@ function resolveDelegatedHandler(name) {
 
 // data-args(JSON 배열) 우선, 없으면 data-arg(단일 문자열), 둘 다 없으면 인자 없음.
 // 반환값이 null이면 파싱 실패이므로 호출을 건너뛴다.
+/** @param {Element} el */
 function parseDelegatedArgs(el) {
     const rawArgs = el.getAttribute('data-args');
     if (rawArgs !== null) {
@@ -40,6 +42,7 @@ function parseDelegatedArgs(el) {
     return arg !== null ? [arg] : [];
 }
 
+/** @param {Function} enhanceDataClickAccessibility */
 export function bindDelegation(enhanceDataClickAccessibility) {
     document.body.addEventListener('click', (e) => {
         // 일부 안드로이드 Chrome에서 e.target이 Text 노드가 될 수 있어
@@ -56,7 +59,7 @@ export function bindDelegation(enhanceDataClickAccessibility) {
             e.preventDefault();
         }
 
-        const handler = resolveDelegatedHandler(handlerName);
+        const handler = resolveDelegatedHandler(handlerName || '');
         if (typeof handler !== 'function') {
             console.error(`Handler not found: ${handlerName}`);
             return;
@@ -88,7 +91,7 @@ export function bindDelegation(enhanceDataClickAccessibility) {
         if (!el) return;
 
         const handlerName = el.getAttribute('data-input');
-        const handler = resolveDelegatedHandler(handlerName);
+        const handler = resolveDelegatedHandler(handlerName || '');
         if (typeof handler !== 'function') {
             console.error(`Input handler not found: ${handlerName}`);
             return;

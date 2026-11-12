@@ -11,6 +11,7 @@ import { bindDictListeners } from './listeners/listeners-dictionary.js';
 import { bindDelegation } from './listeners/listeners-delegation.js';
 import { initUsageMetrics } from '../telemetry/usage-stats.js';
 
+/** @param {Function} enhanceDataClickAccessibility */
 export function setupEventListeners(enhanceDataClickAccessibility) {
     bindAppListeners();
     bindFlashcardListeners();

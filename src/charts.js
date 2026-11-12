@@ -10,6 +10,7 @@ import { getExamRules, resolveLegacySubjectKey, getActiveRegistry } from './core
 import { esc } from './core/sanitize.js';
 
 // CSS 변수에서 색상 읽기 (하드코딩 대체)
+/** @param {string} name @param {string} fallback */
 function cssVar(name, fallback) {
     try {
         const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -45,6 +46,7 @@ function getChartTooltip() {
     return _chartTooltip;
 }
 
+/** @param {string} html @param {number} x @param {number} y */
 function showChartTooltip(html, x, y) {
     const tip = getChartTooltip();
     tip.innerHTML = html;
@@ -182,6 +184,7 @@ export function renderPerformanceChart() {
     
     // X 축 눈금 계산
     const pointsCount = recentData.length;
+    /** @type {number[]} */
     const xPositions = [];
     recentData.forEach((d, idx) => {
         const x = paddingLeft + (pointsCount > 1 ? (idx * chartWidth / (pointsCount - 1)) : chartWidth / 2);
@@ -257,14 +260,16 @@ export function renderPerformanceChart() {
    📊 과목별 정답률 집계 (공통 헬퍼)
    - content/manifest.json에서 생성된 DATA_REGISTRY를 사용해 동적으로 과목별 집계
    ======================================================= */
+/** @param {*[]} history */
 function aggregateSubjectRates(history) {
+    /** @type {Object.<string,number[]>} */
     const subjectRates = {};
     const subjects = (getActiveRegistry() || {}).subjects || [];
-    subjects.forEach(sub => {
+    subjects.forEach((/** @type {*} */ sub) => {
         subjectRates[sub.key] = [];
     });
     
-    history.forEach(r => {
+    history.forEach((/** @type {*} */ r) => {
         if (r.subjectRates) {
             Object.keys(r.subjectRates).forEach(subj => {
                 const rate = r.subjectRates[subj];
@@ -316,20 +321,22 @@ export function renderPassFailDiagnosis() {
     const subjects = (getActiveRegistry() || {}).subjects || [];
     
     // 각 과목 최신 성적 추출
-    const getLatestRate = (subjKey) => {
+    const getLatestRate = (/** @type {string} */ subjKey) => {
         const rates = subjectRates[subjKey];
         if (!rates || rates.length === 0) return null;
         return rates[rates.length - 1]; // 가장 최신 데이터
     };
     
+    /** @type {Object.<string,string>} */
     const subjectNames = {};
-    subjects.forEach((sub, idx) => {
+    subjects.forEach((/** @type {*} */ sub, /** @type {number} */ idx) => {
         subjectNames[sub.key] = `${idx + 1}과목: ${sub.name}`;
     });
     
     // 합격/과락 기준은 매니페스트 선언값 사용 (시험별 규칙 차이 대응)
     const rules = getExamRules();
     let isGuarak = false;
+    /** @type {string[]} */
     const guarakSubjects = [];
 
     subjects.forEach(sub => {
@@ -421,7 +428,7 @@ export function renderRadarChart() {
         return;
     }
     
-    const getAvgRate = (subjKey) => {
+    const getAvgRate = (/** @type {string} */ subjKey) => {
         const rates = subjectRates[subjKey];
         if (!rates || rates.length === 0) return 50; // 기본값 50%
         return Math.round(rates.reduce((sum, r) => sum + r, 0) / rates.length);
@@ -437,7 +444,7 @@ export function renderRadarChart() {
     const maxR = Math.min(width, height) / 2 - 35;
     
     // N-축 좌표 매핑 함수 (12시 방향에서 시계방향으로 2*PI/N씩 회전)
-    const getPoint = (idx, value) => {
+    const getPoint = (/** @type {number} */ idx, /** @type {number} */ value) => {
         const scale = value / 100;
         const angle = (2 * Math.PI * idx) / N - (Math.PI / 2); // 12시 방향 시작을 위해 -PI/2
         const x = cx + scale * maxR * Math.cos(angle);
@@ -485,6 +492,7 @@ export function renderRadarChart() {
     });
     
     // 3. Data Polygon
+    /** @type {string[]} */
     const userPoints = [];
     subjects.forEach((sub, i) => {
         const p = getPoint(i, subjectScores[i]);

@@ -33,6 +33,7 @@ export { OPTION_INDICATORS };
 let drillCountSetting = DRILL_COUNT;
 
 /** 출제 수 칩 전환 — data-arg: '10' | '20' | 'all' */
+/** @param {string} v */
 export function setDrillCount(v) {
     drillCountSetting = v === 'all' ? 'all' : (parseInt(v, 10) || DRILL_COUNT);
     document.querySelectorAll('.drill-count-chip').forEach(node => {
@@ -41,6 +42,7 @@ export function setDrillCount(v) {
     });
 }
 
+/** @param {*[]} items */
 function drillCountFor(items) {
     return drillCountSetting === 'all' ? items.length : drillCountSetting;
 }
@@ -76,6 +78,7 @@ export function updateDueBadges() {
    ======================================================= */
 
 /** 과목 버튼 그리드 동적 생성 — registry.subjects 기반 (과목 수/이름은 시험별 manifest가 결정) */
+/** @param {string} gridId @param {string} clickAction */
 function renderDrillSubjectButtons(gridId, clickAction) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
@@ -100,24 +103,24 @@ const DRILL_TYPES = {
         otherPanels: ['trainer-menu-panel', 'trainer-combo-panel'],
         startAction: 'startOxDrill',
         stateOf: () => state.trainer.oxdrill,
-        load: (n) => DataLoader.loadOxDrills(n),
-        sidsOf: (i) => [i.sid],
+        load: (/** @type {number} */ n) => DataLoader.loadOxDrills(n),
+        sidsOf: (/** @type {*} */ i) => [i.sid],
         initState: () => {},
         renderQuestion: () => renderOxDrillQuestion(),
         renderResult: () => renderOxDrillResult(),
         // 특수 모드: 'weak'=취약·복습 진술만(전 과목), 'num'=수치 집중(전 과목),
         // 'concept:<cid>'=혼동쌍 집중, 'sid:<sid>'=단건 재시도
-        isSpecial: (s) => s === 'weak' || s === 'num' || s.startsWith('concept:') || s.startsWith('sid:'),
-        filterSpecial: (items, special) => {
+        isSpecial: (/** @type {string} */ s) => s === 'weak' || s === 'num' || s.startsWith('concept:') || s.startsWith('sid:'),
+        filterSpecial: (/** @type {*[]} */ items, /** @type {string} */ special) => {
             const conceptMatch = special.match(/^concept:(.+)$/);
             const sidMatch = special.match(/^sid:(.+)$/);
             if (special === 'weak') {
                 const weakSids = new Set(getWeakStatements().map(w => w.sid));
                 const dueSids = new Set(getDueStatementSids());
-                return items.filter(i => i.sid && (weakSids.has(i.sid) || dueSids.has(i.sid)));
+                return items.filter((/** @type {*} */ i) => i.sid && (weakSids.has(i.sid) || dueSids.has(i.sid)));
             }
             if (special === 'num') {
-                return items.filter(i => (i.tags || []).some(t => NUM_FOCUS_TAGS.has(t)));
+                return items.filter((/** @type {*} */ i) => (i.tags || []).some((/** @type {*} */ t) => NUM_FOCUS_TAGS.has(t)));
             }
             if (conceptMatch) {
                 // 해당 개념 앵커의 취약(졸업 포함) 진술 sids로 O/X 문항 필터 —
@@ -125,12 +128,12 @@ const DRILL_TYPES = {
                 const cid = conceptMatch[1];
                 const cidSection = (DataLoader._questionChapters && DataLoader._questionChapters.cidSection) || {};
                 const sids = new Set(getWeakStatements(undefined, true)
-                    .filter(w => (normalizeCidAnchor(w.cid, subjectFromSid(w.sid), cidSection) || w.cid) === cid)
-                    .map(w => w.sid));
+                    .filter((/** @type {*} */ w) => (normalizeCidAnchor(w.cid, subjectFromSid(w.sid), cidSection) || w.cid) === cid)
+                    .map((/** @type {*} */ w) => w.sid));
                 return items.filter(i => i.sid && sids.has(i.sid));
             }
             if (sidMatch) {
-                return items.filter(i => i.sid === sidMatch[1]);
+                return items.filter((/** @type {*} */ i) => i.sid === sidMatch[1]);
             }
             return items;
         }
@@ -143,21 +146,21 @@ const DRILL_TYPES = {
         otherPanels: ['trainer-menu-panel', 'trainer-oxdrill-panel'],
         startAction: 'startComboDrill',
         stateOf: () => state.trainer.combo,
-        load: (n) => DataLoader.loadComboDrills(n),
-        sidsOf: (q) => (q.statements || []).map(s => s.sid),
-        initState: (st) => { st.judgments = {}; },
+        load: (/** @type {number} */ n) => DataLoader.loadComboDrills(n),
+        sidsOf: (/** @type {*} */ q) => (q.statements || []).map((/** @type {*} */ s) => s.sid),
+        initState: (/** @type {*} */ st) => { st.judgments = {}; },
         renderQuestion: () => renderComboQuestion(),
         renderResult: () => renderComboResult(),
-        isSpecial: (s) => s === 'weak' || s === 'num',
-        filterSpecial: (items, special) => {
+        isSpecial: (/** @type {string} */ s) => s === 'weak' || s === 'num',
+        filterSpecial: (/** @type {*[]} */ items, /** @type {string} */ special) => {
             if (special === 'weak') {
                 const weakSids = new Set(getWeakStatements().map(w => w.sid));
                 const dueSids = new Set(getDueStatementSids());
-                return items.filter(q => (q.statements || []).some(s =>
+                return items.filter((/** @type {*} */ q) => (q.statements || []).some((/** @type {*} */ s) =>
                     s.sid && (weakSids.has(s.sid) || dueSids.has(s.sid))));
             }
             if (special === 'num') {
-                return items.filter(q => (q.tags || []).some(t => NUM_FOCUS_TAGS.has(t)));
+                return items.filter((/** @type {*} */ q) => (q.tags || []).some((/** @type {*} */ t) => NUM_FOCUS_TAGS.has(t)));
             }
             return items;
         }
@@ -165,8 +168,9 @@ const DRILL_TYPES = {
 };
 
 /** 패널 열기 (과목 선택 화면) — 두 드릴 공통 골격 */
+/** @param {string} type */
 export function openDrillSetup(type) {
-    const cfg = DRILL_TYPES[type];
+    const cfg = DRILL_TYPES[/** @type {keyof DRILL_TYPES} */ (type)];
     state.trainer.activeSubView = cfg.subView;
     renderDrillSubjectButtons(cfg.ids.grid, cfg.startAction);
     const menu = document.getElementById('trainer-menu-panel');
@@ -189,7 +193,7 @@ export function openDrillSetup(type) {
  * @param {string|number} subjectNum 과목 order 번호 또는 특수 모드 문자열
  */
 export function startDrill(type, subjectNum) {
-    const cfg = DRILL_TYPES[type];
+    const cfg = DRILL_TYPES[/** @type {keyof DRILL_TYPES} */ (type)];
     const special = String(subjectNum);
     const isSpecial = cfg.isSpecial(special);
     const num = parseInt(String(subjectNum), 10);
@@ -242,8 +246,9 @@ export function startDrill(type, subjectNum) {
 }
 
 /** 다음 문항으로 진행 — 두 드릴 공통 골격 */
+/** @param {string} type */
 export function nextDrill(type) {
-    const cfg = DRILL_TYPES[type];
+    const cfg = DRILL_TYPES[/** @type {keyof DRILL_TYPES} */ (type)];
     const st = cfg.stateOf();
     st.currentIndex++;
     if (st.currentIndex >= st.data.length) cfg.renderResult();
@@ -258,7 +263,7 @@ export function nextDrill(type) {
  * @param {boolean} hasReviewItems 취약 리뷰 버튼 표시 여부
  */
 export function renderDrillResult(type, statLine, reviewInnerHTML, hasReviewItems) {
-    const cfg = DRILL_TYPES[type];
+    const cfg = DRILL_TYPES[/** @type {keyof DRILL_TYPES} */ (type)];
     const st = cfg.stateOf();
     const arena = document.getElementById(cfg.ids.arena);
     const result = document.getElementById(cfg.ids.result);
@@ -280,13 +285,14 @@ export function renderDrillResult(type, statLine, reviewInnerHTML, hasReviewItem
  * 기한 도래 진술(FSRS) → 오판 진술 순으로 최대 절반까지 우선 편성, 나머지는 무작위.
  * @param {Function} sidsOf 문항 → sid 배열 (ox는 [i.sid], combo는 진술 sids)
  */
+/** @param {*[]} items @param {number} count @param {Function} sidsOf */
 function pickPrioritized(items, count, sidsOf) {
     const dueSids = new Set(getDueStatementSids());
     const weakSids = new Set(getWeakStatements().map(w => w.sid));
-    const hit = (i, set) => sidsOf(i).some(s => s && set.has(s));
-    const due = items.filter(i => hit(i, dueSids));
-    const weak = items.filter(i => !hit(i, dueSids) && hit(i, weakSids));
-    const rest = items.filter(i => !hit(i, dueSids) && !hit(i, weakSids));
+    const hit = (/** @type {*} */ i, /** @type {Set<*>} */ set) => sidsOf(i).some((/** @type {*} */ s) => s && set.has(s));
+    const due = items.filter((/** @type {*} */ i) => hit(i, dueSids));
+    const weak = items.filter((/** @type {*} */ i) => !hit(i, dueSids) && hit(i, weakSids));
+    const rest = items.filter((/** @type {*} */ i) => !hit(i, dueSids) && !hit(i, weakSids));
     const picked = [...shuffle(due), ...shuffle(weak)].slice(0, Math.ceil(count / 2));
     return shuffle([...picked, ...shuffle(rest).slice(0, count - picked.length)]);
 }
@@ -336,6 +342,7 @@ function renderOxDrillQuestion() {
     }
 }
 
+/** @param {HTMLButtonElement} selectedBtn @param {*} val */
 function submitOxDrillAnswer(selectedBtn, val) {
     const st = state.trainer.oxdrill;
     const q = st.data[st.currentIndex];
@@ -401,6 +408,7 @@ function renderOxDrillResult() {
    ======================================================= */
 
 /** sid → 과목 번호 (생성형 과목키 prefix 또는 파일럿 st-0N- 형식) */
+/** @param {string} sid */
 function sidSubject(sid) {
     const s = String(sid || '');
     const p = s.match(/^st-0(\d)-/);
@@ -453,12 +461,14 @@ export function gotoOxDrill(mode) {
 let weakFilter = 'all'; // 'all' | 'due' — 취약 리뷰 필터
 
 /** 취약 리뷰 필터 전환 */
+/** @param {string} filter */
 export function setWeakFilter(filter) {
     weakFilter = filter === 'due' ? 'due' : 'all';
     renderWeakReview();
 }
 
 /** 취약 진술 행 렌더 — O/X 배지·과목·복습 대상·오판 통계·최근 판정 */
+/** @param {*} w @param {Set<*>} due @param {*} anomalies */
 function weakRow(w, due, anomalies) {
     const sub = sidSubject(w.sid);
     const dueBadge = due.has(w.sid) ? '<span class="weak-due-badge">복습 대상</span>' : '';
@@ -495,6 +505,7 @@ function weakRow(w, due, anomalies) {
  * 취약 진술의 의미 유사 진술 토글 — 첫 클릭에 neighbors 번들을 지연 로드한다 (SEM-03).
  * 자산 부재·피처 미선언이면 안내 문구만 표시하고 학습 흐름에는 영향 없음.
  */
+/** @param {string} sid */
 export async function toggleSimilarStmts(sid) {
     const box = document.getElementById(`weak-sim-${sid}`);
     if (!box) return;
@@ -537,6 +548,7 @@ export async function toggleSimilarStmts(sid) {
     box.dataset.loaded = 'true';
 }
 
+/** @param {string} sid @param {boolean} expanded */
 function updateSimBtn(sid, expanded) {
     const btn = document.querySelector(`[data-click="toggleSimilarStmts"][data-arg="${sid}"]`);
     if (btn) btn.setAttribute('aria-expanded', String(expanded));
@@ -564,7 +576,8 @@ export function renderWeakReview() {
         Object.entries(getAllStatementStats()).forEach(([sid, v]) => {
             const sub = sidSubject(sid);
             if (!sub || !v.j) return;
-            const m = perSub[sub] || (perSub[sub] = { j: 0, w: 0, g: 0 });
+            const perSubT = /** @type {Object.<string,{j:number,w:number,g:number}>} */ (perSub);
+            const m = perSubT[sub] || (perSubT[sub] = { j: 0, w: 0, g: 0 });
             m.j++;
             if (v.w > 0) {
                 if ((v.streak || 0) >= WEAK_GRADUATE_STREAK) m.g++;
@@ -572,8 +585,8 @@ export function renderWeakReview() {
             }
         });
         masteryEl.innerHTML = `<div class="weak-mastery-grid">` +
-            Object.keys(perSub).sort((a, b) => Number(a) - Number(b)).map(n => {
-                const m = perSub[n];
+            Object.keys(perSub).sort((a, b) => Number(a) - Number(b)).map((/** @type {string} */ n) => {
+                const m = /** @type {Object.<string,{j:number,w:number,g:number}>} */ (perSub)[n];
                 if (!m.j) return '';
                 return `<div class="weak-mastery-cell"><strong>과목${n}</strong><span>판정 ${m.j} · 취약 ${m.w} · 졸업 ${m.g}</span></div>`;
             }).join('') + `</div>`;
@@ -607,22 +620,22 @@ export function renderWeakReview() {
     }
     // 그룹 정렬: 최대 오판 횟수 내림차순
     const sorted = [...groups.values()].sort(
-        (a, b) => Math.max(...b.items.map(i => i.w)) - Math.max(...a.items.map(i => i.w)));
+        (/** @type {*} */ a, /** @type {*} */ b) => Math.max(...b.items.map((/** @type {*} */ i) => i.w)) - Math.max(...a.items.map((/** @type {*} */ i) => i.w)));
 
-    listEl.innerHTML = sorted.map(g => {
+    listEl.innerHTML = sorted.map((/** @type {*} */ g) => {
         const header = g.cid && g.items.length > 1
             ? `<div class="weak-group-header"><i class="fa-solid fa-link"></i> 개념 ${esc(g.cid)} — 취약 진술 ${g.items.length}개 (혼동쌍 후보)
                 <button class="btn btn-secondary weak-retry-btn" data-click="gotoOxDrill" data-arg="concept:${esc(g.cid)}"><i class="fa-solid fa-bullseye"></i> 이 개념만 드릴</button></div>`
             : '';
         // 혼동쌍 대조: 참·거짓 진술이 섞인 그룹은 2단으로 나란히 배치 (전략 ⑤)
-        const oItems = g.items.filter(i => i.truth === true);
-        const xItems = g.items.filter(i => i.truth !== true);
+        const oItems = g.items.filter((/** @type {*} */ i) => i.truth === true);
+        const xItems = g.items.filter((/** @type {*} */ i) => i.truth !== true);
         const rows = (oItems.length > 0 && xItems.length > 0)
             ? `<div class="weak-pair">
-                <div class="weak-col is-o"><div class="weak-col-head">참 진술</div>${oItems.map(w => weakRow(w, due, anomalies)).join('')}</div>
-                <div class="weak-col is-x"><div class="weak-col-head">거짓(함정) 진술</div>${xItems.map(w => weakRow(w, due, anomalies)).join('')}</div>
+                <div class="weak-col is-o"><div class="weak-col-head">참 진술</div>${oItems.map((/** @type {*} */ w) => weakRow(w, due, anomalies)).join('')}</div>
+                <div class="weak-col is-x"><div class="weak-col-head">거짓(함정) 진술</div>${xItems.map((/** @type {*} */ w) => weakRow(w, due, anomalies)).join('')}</div>
                </div>`
-            : g.items.map(w => weakRow(w, due, anomalies)).join('');
+            : g.items.map((/** @type {*} */ w) => weakRow(w, due, anomalies)).join('');
         return `<div class="weak-group">${header}${rows}</div>`;
     }).join('');
 }

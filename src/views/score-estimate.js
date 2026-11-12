@@ -52,7 +52,7 @@ export function renderExpectedScore() {
 
     let html = '';
     if (est && (est.n >= 2 || est.source !== 'sim')) {
-        const t = TREND_META[est.trend];
+        const t = TREND_META[/** @type {keyof TREND_META} */ (est.trend)];
         const srcNote = est.source === 'sim'
             ? `최근 모의고사 ${est.n}회 기준`
             : est.source === 'blend'

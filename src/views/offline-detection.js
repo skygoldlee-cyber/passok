@@ -26,6 +26,7 @@ export function setupOfflineDetection(state, togglePomodoro) {
     const FAIL_THRESHOLD = isStandalone ? 4 : 3; // 오탐 억제: 임계치 상향
     const PROBE_TIMEOUT = TIMING.PWA_PROBE_TIMEOUT_MS;
     const WAKE_GRACE_MS = TIMING.PWA_WAKE_GRACE_MS;                  // 콜드스타트/절전복귀 유예 확대
+    /** @type {ReturnType<typeof setInterval>|null} */
     let checkIntervalId = null;
     let isOfflineMode = false;
     let lastWakeTime = Date.now();
@@ -95,6 +96,7 @@ export function setupOfflineDetection(state, togglePomodoro) {
         }
     }
 
+    /** @param {number} ms */
     function resetCheckInterval(ms) {
         if (checkIntervalId) clearInterval(checkIntervalId);
         checkIntervalId = setInterval(probeConnectivity, ms);
@@ -112,7 +114,7 @@ export function setupOfflineDetection(state, togglePomodoro) {
             probeConnectivity();
         } else {
             // 페이지가 보이지 않을 때 뽀모도로 타이머 자동 일시정지
-            const pomo = state.trainer.pomodoro;
+            const pomo = /** @type {*} */ (state).trainer.pomodoro;
             if (pomo.isRunning) {
                 togglePomodoro();
             }

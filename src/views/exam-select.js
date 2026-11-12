@@ -45,6 +45,7 @@ export function summarizeExamProgress(probe) {
 }
 
 /** 시험 카드 요약행 — 시험 네임스페이스의 진도 키를 읽기 전용 조회해 한 줄로 표시 (ES-06) */
+/** @param {string} examId */
 function _examSummaryHtml(examId) {
     const s = summarizeExamProgress({
         memorizedJson: peekExamValue(examId, STORAGE_KEYS.FC_MEMORIZED),
@@ -70,6 +71,7 @@ function _examSummaryHtml(examId) {
  * 맵이 완전히 비어 있으면(기능 도입 첫 실행) 현재 스탬프로 시딩해 전원 배지 방지.
  * @returns {Object<string,string>}
  */
+/** @param {*[]} exams */
 function _seenStamps(exams) {
     /** @type {Object.<string, string>} */
     let seen = {};
@@ -82,6 +84,7 @@ function _seenStamps(exams) {
 }
 
 /** 스탬프 맵 갱신 — 시험 방문(활성화) 시 그 시험의 확인 스탬프를 최신으로 */
+/** @param {string} examId @param {*} stamp */
 function _markStampSeen(examId, stamp) {
     if (!stamp) return;
     /** @type {Object.<string, string>} */
@@ -108,13 +111,13 @@ export function renderExamSelect() {
     const seen = _seenStamps(exams);
     // 현재(활성) 시험은 사용 중이므로 확인 스탬프를 즉시 최신화한다
     const currentExam = exams.find(e => e.id === currentId);
-    if (currentExam && currentExam.contentStamp) _markStampSeen(currentId, currentExam.contentStamp);
+    if (currentExam && currentExam.contentStamp) _markStampSeen(currentId || '', currentExam.contentStamp);
 
     // 선택 해제 버튼은 저장된 선택이 있을 때만 표시
     const clearBtn = document.getElementById('exam-select-clear');
     if (clearBtn) clearBtn.classList.toggle('is-hidden', !currentId);
 
-    const cardHtml = e => {
+    const cardHtml = (/** @type {*} */ e) => {
         const isCurrent = e.id === currentId;
         const isSoon = !!e.comingSoon;
         const accent = resolveExamThemeTokens(e)['--color-primary'];
@@ -211,12 +214,14 @@ export async function hardReloadApp() {
 // 다른 시험 선택 시 selectExam이 즉시 리로드하므로 플래그를 localStorage에 남겨
 // 부팅(app-shell)에서 복구 표시한다 — 완료 시 제거.
 const PACK_DL_FLAG = 'pack_dl_pending';
+/** @type {((e: MessageEvent) => void)|null} */
 let _packDlListener = null;
+/** @param {string} examId */
 function _showPackDownloadStatus(examId) {
     showToast('오프라인 학습 자료를 내려받는 중…', 'info');
     try { setItem(PACK_DL_FLAG, examId); } catch { /* 무시 */ }
     if (_packDlListener) navigator.serviceWorker.removeEventListener('message', _packDlListener);
-    _packDlListener = (e) => {
+    _packDlListener = (/** @type {MessageEvent} */ e) => {
         if (e.data?.type === 'passok:packCached' && e.data.examId === examId) {
             if (e.data.failed === 0) {
                 showToast(`시험 팩 다운로드 완료 (${e.data.total}파일) — 오프라인에서도 학습할 수 있습니다`, 'success', 5000);
@@ -224,13 +229,14 @@ function _showPackDownloadStatus(examId) {
                 showToast(`시험 팩 일부 다운로드 실패 (${e.data.total - e.data.failed}/${e.data.total}) — 온라인 재시도 필요`, 'warning', 5000);
             }
             try { setItem(PACK_DL_FLAG, ''); } catch { /* 무시 */ }
-            navigator.serviceWorker.removeEventListener('message', _packDlListener);
+            if (_packDlListener) navigator.serviceWorker.removeEventListener('message', _packDlListener);
             _packDlListener = null;
         }
     };
     navigator.serviceWorker.addEventListener('message', _packDlListener);
 }
 
+/** @param {string} id */
 export function selectExamAction(id) {
     const def = getExamList().find(e => e.id === id);
     if (def && def.comingSoon) {

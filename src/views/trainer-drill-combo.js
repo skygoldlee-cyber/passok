@@ -53,7 +53,7 @@ export function renderComboQuestion() {
     if (nextBtn) nextBtn.classList.add('is-hidden');
 
     if (stmtsEl) {
-        stmtsEl.innerHTML = q.statements.map(s =>
+        stmtsEl.innerHTML = q.statements.map((/** @type {*} */ s) =>
             `<div class="combo-stmt" data-stmt-id="${esc(s.id)}">
                 <span class="combo-stmt-id">${esc(s.id)}</span>
                 <span class="combo-stmt-text">${safeTextWithBreaks(s.text)}</span>
@@ -62,15 +62,15 @@ export function renderComboQuestion() {
                     <button type="button" class="combo-judge-btn" data-v="false" aria-pressed="false" title="이 진술이 틀리다">X</button>
                 </span>
             </div>`).join('');
-        stmtsEl.querySelectorAll('.combo-judge-btn').forEach(btn => {
-            btn.addEventListener('click', () => toggleComboJudgment(btn));
+        stmtsEl.querySelectorAll('.combo-judge-btn').forEach((/** @type {Element} */ btn) => {
+            btn.addEventListener('click', () => toggleComboJudgment(/** @type {HTMLElement} */ (btn)));
         });
         updateComboJudgeHint(q);
     }
 
     if (optsEl) {
         optsEl.innerHTML = '';
-        q.options.forEach((opt, idx) => {
+        q.options.forEach((/** @type {*} */ opt, /** @type {number} */ idx) => {
             const btn = document.createElement('button');
             btn.className = 'limits-opt-btn';
             btn.style.width = '100%';
@@ -83,18 +83,19 @@ export function renderComboQuestion() {
 }
 
 /** 진술 O/X 토글 — 같은 버튼 재클릭 시 해제 */
+/** @param {HTMLElement} btn */
 function toggleComboJudgment(btn) {
     const st = state.trainer.combo;
     const q = st.data[st.currentIndex];
     if (!q) return;
     const row = btn.closest('.combo-stmt');
-    const stmtId = row && row.dataset.stmtId;
+    const stmtId = row && (/** @type {HTMLElement} */ (row)).dataset.stmtId;
     if (!stmtId) return;
     const val = btn.dataset.v === 'true';
     if (st.judgments[stmtId] === val) delete st.judgments[stmtId];
     else st.judgments[stmtId] = val;
-    row.querySelectorAll('.combo-judge-btn').forEach(b => {
-        const on = st.judgments[stmtId] === (b.dataset.v === 'true');
+    row.querySelectorAll('.combo-judge-btn').forEach((/** @type {Element} */ b) => {
+        const on = st.judgments[stmtId] === (/** @type {HTMLElement} */ (b).dataset.v === 'true');
         b.classList.toggle('active', on);
         b.setAttribute('aria-pressed', String(on));
     });
@@ -102,12 +103,14 @@ function toggleComboJudgment(btn) {
 }
 
 /** members 집합과 정확히 일치하는 옵션 탐색 */
+/** @param {*} q @param {Set<*>} idSet */
 function findComboOption(q, idSet) {
-    return (q.options || []).find(o =>
-        (o.members || []).length === idSet.size && o.members.every(m => idSet.has(m)));
+    return (q.options || []).find((/** @type {*} */ o) =>
+        (o.members || []).length === idSet.size && o.members.every((/** @type {*} */ m) => idSet.has(m)));
 }
 
 /** 판정 진행 힌트 + 제출 버튼 활성화 갱신 + 판정과 모순되는 선지 소거 표시 (전략 ⑦) */
+/** @param {*} q */
 function updateComboJudgeHint(q) {
     const st = state.trainer.combo;
     const hint = document.getElementById('combo-judge-hint');
@@ -134,7 +137,7 @@ function updateComboJudgeHint(q) {
         } else if (judged < total) {
             hint.textContent = `진술 판정 중… ${judged}/${total}${eliminated ? ` · 선지 ${eliminated}개 소거` : ''}`;
         } else {
-            const trueSet = new Set(q.statements.filter(s => st.judgments[s.id]).map(s => s.id));
+            const trueSet = new Set(q.statements.filter((/** @type {*} */ s) => st.judgments[s.id]).map((/** @type {*} */ s) => s.id));
             const opt = findComboOption(q, trueSet);
             const label = [...trueSet].join(',') || '(없음)';
             hint.textContent = opt
@@ -150,22 +153,23 @@ export function submitComboJudgments() {
     const st = state.trainer.combo;
     const q = st.data[st.currentIndex];
     if (!q) return;
-    if (q.statements.some(s => !(s.id in st.judgments))) {
+    if (q.statements.some((/** @type {*} */ s) => !(s.id in st.judgments))) {
         showToast('모든 진술을 O/X로 판정해 주세요.', 'warning');
         return;
     }
-    const trueSet = new Set(q.statements.filter(s => st.judgments[s.id]).map(s => s.id));
+    const trueSet = new Set(q.statements.filter((/** @type {*} */ s) => st.judgments[s.id]).map((/** @type {*} */ s) => s.id));
     const opt = findComboOption(q, trueSet);
     submitComboAnswer(null, opt ? opt.id : null, opt ? q.options.indexOf(opt) : -1);
 }
 
+/** @param {HTMLButtonElement|null} selectedBtn @param {string|null} optId @param {number} optIdx */
 function submitComboAnswer(selectedBtn, optId, optIdx) {
     const st = state.trainer.combo;
     const q = st.data[st.currentIndex];
     if (!q) return;
 
     const judgments = Object.keys(st.judgments || {}).length ? st.judgments : undefined;
-    const res = gradeAnswer(q, { optionId: optId, judgments });
+    const res = gradeAnswer(q, { optionId: optId ?? '', judgments });
     const isCorrect = res.correct;
     vibrate(isCorrect ? HAPTIC.correct : HAPTIC.wrong);
 
@@ -174,7 +178,7 @@ function submitComboAnswer(selectedBtn, optId, optIdx) {
     recordStudyActivity({ quizzes: 1, correct: isCorrect ? 1 : 0 });
 
     const optsEl = document.getElementById('combo-options-container');
-    const correctIdx = q.options.findIndex(o => o.id === res.correctAnswer);
+    const correctIdx = q.options.findIndex((/** @type {*} */ o) => o.id === res.correctAnswer);
     if (optsEl) {
         optsEl.querySelectorAll('button').forEach((btn, idx) => {
             btn.disabled = true;
@@ -193,7 +197,7 @@ function submitComboAnswer(selectedBtn, optId, optIdx) {
 
     // 판정 모드(선지 미일치)일 때는 판정 조합 자체를 선택 라벨로 표시
     const judgedSet = judgments
-        ? q.statements.filter(s => judgments[s.id]).map(s => s.id).join(',')
+        ? q.statements.filter((/** @type {*} */ s) => judgments[s.id]).map((/** @type {*} */ s) => s.id).join(',')
         : null;
     const selectedLabel = optIdx >= 0
         ? (OPTION_INDICATORS[optIdx] || optId)
@@ -247,10 +251,11 @@ export function renderComboResult() {
     const weakCount = getWeakStatements().length;
 
     // 세션에서 오판한 진술 모음 (중복 sid 제거)
+    /** @type {*[]} */
     const misjudged = [];
     const seen = new Set();
-    st.solvedList.forEach(s => {
-        (s.perStatement || []).forEach(p => {
+    st.solvedList.forEach((/** @type {*} */ s) => {
+        (s.perStatement || []).forEach((/** @type {*} */ p) => {
             if (p.judgedCorrect === false && p.sid && !seen.has(p.sid)) {
                 seen.add(p.sid);
                 misjudged.push(p);
@@ -261,7 +266,7 @@ export function renderComboResult() {
     const reviewHTML = misjudged.length === 0
         ? '<p style="text-align:center; color:var(--color-success); font-weight:600;"><i class="fa-solid fa-circle-check"></i> 모든 진술을 정확히 판정했습니다!</p>'
         : `<h3 style="margin-bottom:0.75rem; font-size:1.1rem;"><i class="fa-solid fa-triangle-exclamation"></i> 오판 진술 리뷰 (${misjudged.length}개)</h3>` +
-          misjudged.map(p => `
+          misjudged.map((/** @type {*} */ p) => `
             <div style="padding:0.75rem; margin-bottom:0.5rem; border:1px solid var(--border-color); border-radius:8px; background:var(--bg-card);">
                 <p style="font-size:0.85rem; margin-bottom:0.4rem;"><strong>${esc(p.id)}</strong> — 정답 ${p.truth ? 'O' : 'X'}, 내 판정 ${p.userJudged ? 'O' : 'X'}</p>
                 ${p.text ? `<p style="font-size:0.9rem; margin-bottom:0.4rem;">${safeTextWithBreaks(p.text)}</p>` : ''}

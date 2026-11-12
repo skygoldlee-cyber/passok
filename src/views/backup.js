@@ -21,8 +21,8 @@ export function getBackupKeys() {
 
 export function exportData() {
     const keys = getBackupKeys();
+    /** @type {Object.<string,string>} */
     const backupObj = {};
-
     keys.forEach(k => {
         const v = safeGetItem(k);
         if (v !== null) backupObj[k] = v;
@@ -57,8 +57,9 @@ export function setupImportListener() {
     }
 }
 
+/** @param {Event} event */
 export function importData(event) {
-    const file = event.target.files[0];
+    const file = /** @type {HTMLInputElement} */ (event.target).files?.[0];
     if (!file) return;
 
     const ALLOWED_KEYS = BACKUP_KEYS;

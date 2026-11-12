@@ -11,10 +11,16 @@ import { isStoryMetaSection } from '../../reader/reader-toc.js';
 
 // --- 이야기형 MD 캐시: { "subjId:chapterIdx": { chapterTitle, sections, filePath } } ---
 // LRU 캐시: 최대 항목 수를 초과하면 가장 오래된 항목 제거 (메모리 누수 방지)
+/** @type {Object.<string,*>} */
+/** @type {Object.<string,*>} */
 const _storyChapterCache = {};
 const _STORY_CACHE_MAX_ENTRIES = CACHE.STORY_CACHE_MAX_ENTRIES;
+/** @type {string[]} */
+/** @type {string[]} */
 const _storyCacheKeyOrder = [];
 
+/** @param {string} key */
+/** @param {string} key */
 function _touchStoryCacheKey(key) {
     const idx = _storyCacheKeyOrder.indexOf(key);
     if (idx >= 0) _storyCacheKeyOrder.splice(idx, 1);
@@ -24,7 +30,7 @@ function _touchStoryCacheKey(key) {
 function _evictStoryCacheIfNeeded() {
     while (_storyCacheKeyOrder.length > _STORY_CACHE_MAX_ENTRIES) {
         const oldest = _storyCacheKeyOrder.shift();
-        delete _storyChapterCache[oldest];
+        if (oldest) delete _storyChapterCache[oldest];
     }
 }
 
@@ -35,6 +41,8 @@ function _evictStoryCacheIfNeeded() {
  * @param {number} chapterIdx
  * @param {Object} originalChapter 표준형 chapter 객체 (chapterKey·fileName 참조용)
  */
+/** @param {string} subjId @param {number} chapterIdx @param {*} originalChapter */
+/** @param {string} subjId @param {number} chapterIdx @param {*} originalChapter */
 export async function loadStoryChapter(subjId, chapterIdx, originalChapter) {
     const cacheKey = `${subjId}:${chapterIdx}`;
     if (_storyChapterCache[cacheKey]) {
@@ -43,13 +51,13 @@ export async function loadStoryChapter(subjId, chapterIdx, originalChapter) {
     }
 
     const manifest = await DataLoader._getManifest();
-    const subjMeta = manifest.subjects.find(s => s.key === subjId);
+    const subjMeta = manifest.subjects.find((/** @type {*} */ s) => s.key === subjId);
     if (!subjMeta) throw new Error('과목 메타데이터 없음: ' + subjId);
 
-    const chapterMeta = (subjMeta.chapters || []).find(c => c.key === originalChapter.chapterKey);
+    const chapterMeta = (subjMeta.chapters || []).find((/** @type {*} */ c) => c.key === originalChapter.chapterKey);
     const storyFile = (chapterMeta && chapterMeta.storyFile)
         ? chapterMeta.storyFile
-        : originalChapter.fileName.replace(/_표준형\.md$/i, '_이야기형.md').replace(/\.md$/i, '_이야기형.md');
+        : (/** @type {*} */ (originalChapter)).fileName.replace(/_표준형\.md$/i, '_이야기형.md').replace(/\.md$/i, '_이야기형.md');
 
     const relPath = PATHS.TEXTBOOK_FILE(subjMeta.dir, storyFile);
     const md = await DataLoader._getMd(relPath, subjId);
@@ -76,15 +84,17 @@ export async function loadStoryChapter(subjId, chapterIdx, originalChapter) {
  * @param {Object} originalChapter 표준형 chapter 객체 (chapterKey·fileName 참조용)
  * @returns {Promise<string>}
  */
+/** @param {string} subjId @param {*} originalChapter */
+/** @param {string} subjId @param {*} originalChapter */
 export async function loadStoryMd(subjId, originalChapter) {
     const manifest = await DataLoader._getManifest();
-    const subjMeta = manifest.subjects.find(s => s.key === subjId);
+    const subjMeta = manifest.subjects.find((/** @type {*} */ s) => s.key === subjId);
     if (!subjMeta) throw new Error('과목 메타데이터 없음: ' + subjId);
 
-    const chapterMeta = (subjMeta.chapters || []).find(c => c.key === originalChapter.chapterKey);
+    const chapterMeta = (subjMeta.chapters || []).find((/** @type {*} */ c) => c.key === originalChapter.chapterKey);
     const storyFile = (chapterMeta && chapterMeta.storyFile)
         ? chapterMeta.storyFile
-        : originalChapter.fileName.replace(/_표준형\.md$/i, '_이야기형.md').replace(/\.md$/i, '_이야기형.md');
+        : (/** @type {*} */ (originalChapter)).fileName.replace(/_표준형\.md$/i, '_이야기형.md').replace(/\.md$/i, '_이야기형.md');
 
     const relPath = PATHS.TEXTBOOK_FILE(subjMeta.dir, storyFile);
     return DataLoader._getMd(relPath, subjId);

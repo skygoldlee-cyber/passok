@@ -132,7 +132,7 @@ export function bindFlashcardListeners() {
         ['fc-again-btn', Rating.AGAIN], ['fc-hard-btn', Rating.HARD],
         ['fc-good-btn', Rating.GOOD], ['fc-easy-btn', Rating.EASY],
     ];
-    const rateCard = (rating, btnId) => {
+    const rateCard = (/** @type {number} */ rating, /** @type {string} */ btnId) => {
         const fc = state.flashcards;
         if (fc.data.length === 0) return;
         const currentCard = fc.data[fc.currentIndex];

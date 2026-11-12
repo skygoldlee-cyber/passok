@@ -85,13 +85,16 @@ export function bindAppListeners() {
 
     // 헤더 드롭다운 메뉴 공통 바인딩 — 설정(⚙️)·도움말(?) 패널.
     // 항목 선택·외부 클릭·Escape로 닫히고, 한 번에 하나만 열린다.
+    /** @type {Function[]} */
     const menuClosers = [];
+    /** @type {HTMLElement|null} */
     let openMenuBtn = null;
     const closeAllMenus = (restoreFocus = false) => {
         menuClosers.forEach(close => close());
         if (restoreFocus && openMenuBtn) openMenuBtn.focus();
         openMenuBtn = null;
     };
+    /** @param {string} btnId @param {string} panelId @param {Function} [onOpen] */
     const bindDropMenu = (btnId, panelId, onOpen) => {
         const btn = document.getElementById(btnId);
         const panel = document.getElementById(panelId);

@@ -60,7 +60,7 @@ function getWeakCardsList() {
                 const qNum = simId.qNum;
                 if (window.EXAM_DATA && window.EXAM_DATA[examId]) {
                     const exam = window.EXAM_DATA[examId];
-                    const q = exam.questions.find(quest => quest.num === qNum);
+                    const q = /** @type {*} */ (exam.questions.find((/** @type {*} */ quest) => quest.num === qNum));
                     if (q) {
                         const targetSubject = examIdToSubjectId(examId);
                         const subjectName = (window.STUDY_DATA && targetSubject && window.STUDY_DATA[targetSubject]) ? (window.STUDY_DATA || {})[targetSubject].name : '모의고사';
@@ -139,8 +139,8 @@ export function renderReviewList() {
     const causeSummary = computeWrongCauseSummary(state.wrongCauses);
     if (causeSummary.total > 0) {
         const dist = Object.entries(getWrongCauseLabels())
-            .filter(([k]) => causeSummary.counts[k] > 0)
-            .map(([k, label]) => `${label} ${causeSummary.counts[k]}`)
+            .filter(([k]) => /** @type {Object.<string,number>} */ (causeSummary.counts)[k] > 0)
+            .map(([k, label]) => `${label} ${/** @type {Object.<string,number>} */ (causeSummary.counts)[k]}`)
             .join(' · ');
         container.insertAdjacentHTML('beforeend', `
             <div class="wrong-cause-summary">
@@ -238,7 +238,7 @@ export function startWeakConceptQuiz() {
         showToast('약점 개념 문항이 아직 없습니다 — 오답이 쌓이면 생성됩니다.', 'info');
         return;
     }
-    state.quiz.data = shuffle(items);
+    state.quiz.data = /** @type {Array<*>} */ (shuffle(items));
     _beginQuizRun();
 }
 
@@ -285,8 +285,8 @@ export async function startWeakGenQuiz() {
         id: `ai_gen_${Date.now()}_${i}`,
         category: 'AI 생성',
         context: '[AI 생성 — 오류가 있을 수 있습니다 · 인용 근거 확인 권장]',
-        question: g.question, answer: g.answer,
-        options: g.options, type: 'single',
+        question: /** @type {*} */ (g).question, answer: /** @type {*} */ (g).answer,
+        options: /** @type {*} */ (g).options, type: 'single',
     }));
     _beginQuizRun();
 }
@@ -296,7 +296,7 @@ export function startWeakFocusQuiz() {
     if (weakCards.length === 0) return;
 
     if (state.reviewFilter && state.reviewFilter !== 'all') {
-        weakCards = weakCards.filter(c => c.subjectId === state.reviewFilter);
+        weakCards = weakCards.filter((/** @type {*} */ c) => c.subjectId === state.reviewFilter);
     }
 
     if (weakCards.length === 0) return;
@@ -305,7 +305,7 @@ export function startWeakFocusQuiz() {
         if (card.id.startsWith(WEAK_QUIZ_PREFIX)) {
             const resolved = resolveWrongQuiz(card.id);
             if (!resolved) return null;
-            const q = resolved.quiz;
+            const q = /** @type {*} */ (resolved.quiz);
             return {
                 id: card.id,
                 category: q.category,
@@ -323,7 +323,7 @@ export function startWeakFocusQuiz() {
             const qNum = simId.qNum;
             if (!window.EXAM_DATA || !window.EXAM_DATA[examId]) return null;
             const exam = window.EXAM_DATA[examId];
-            const q = exam.questions.find(quest => quest.num === qNum);
+            const q = /** @type {*} */ (exam.questions.find((/** @type {*} */ quest) => quest.num === qNum));
             if (!q) return null;
 
             return {

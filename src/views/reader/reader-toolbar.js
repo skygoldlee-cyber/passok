@@ -15,6 +15,7 @@ let _readerKeyboardBound = false;
  * 섹션이 밀리면 다른 섹션을 조용히 가리키므로 콘텐츠 기반 키로 대체한다.
  * chapterKey는 manifest 선언 키(위치 무관), 섹션제목은 표시 정체성이다.
  */
+/** @param {string} subjId @param {string} chapterKey @param {string} sectionTitle */
 export function bookmarkKeyOf(subjId, chapterKey, sectionTitle) {
     return `${subjId}|${chapterKey || ''}|${sectionTitle || ''}`;
 }
@@ -28,25 +29,26 @@ export function getReaderBookmarks() {
         list = JSON.parse(safeGetItem(STORAGE_KEYS.READER_BOOKMARKS) || '[]') || [];
     } catch { return []; }
     // 구형 위치 키 이관 — 현재 인덱스와의 대응을 보장할 수 없으므로 읽기 시점에 제거 (TR-27)
-    const cleaned = list.filter(k => !LEGACY_BOOKMARK_RE.test(String(k)));
+    const cleaned = list.filter((/** @type {*} */ k) => !LEGACY_BOOKMARK_RE.test(String(k)));
     if (cleaned.length !== list.length) {
         safeSetItem(STORAGE_KEYS.READER_BOOKMARKS, JSON.stringify(cleaned));
     }
     return cleaned;
 }
 
+/** @param {string} key @param {HTMLElement} btn */
 export function toggleReaderBookmark(key, btn) {
     const bookmarks = getReaderBookmarks();
     const idx = bookmarks.indexOf(key);
     if (idx >= 0) {
         bookmarks.splice(idx, 1);
         btn.classList.remove('bookmarked');
-        btn.querySelector('i').className = 'fa-regular fa-bookmark';
+        /** @type {Element} */ (btn.querySelector('i')).className = 'fa-regular fa-bookmark';
         btn.title = '북마크 추가';
     } else {
         bookmarks.push(key);
         btn.classList.add('bookmarked');
-        btn.querySelector('i').className = 'fa-solid fa-bookmark';
+        /** @type {Element} */ (btn.querySelector('i')).className = 'fa-solid fa-bookmark';
         btn.title = '북마크 제거';
     }
     safeSetItem(STORAGE_KEYS.READER_BOOKMARKS, JSON.stringify(bookmarks));
@@ -68,8 +70,12 @@ export function bindReaderScrollEvents() {
 
     // rAF 디바운스: 매 스크롤 프레임마다 querySelectorAll 호출을 방지
     // 연속 스크롤 중에는 1회만 처리하고, 다음 프레임에서 갱신
-    let scrollRafId = null;
-    let cachedCards = null; // 카드 목록 캐싱 (단원 전환 시 초기화됨)
+    /** @type {number|null} */
+/** @type {number|null} */
+let scrollRafId = null;
+    /** @type {*|null} */
+/** @type {*|null} */
+let cachedCards = null; // 카드 목록 캐싱 (단원 전환 시 초기화됨)
     let lastScrollY = 0; // 툴바 자동 숨김용 이전 스크롤 위치
 
     const handleScroll = () => {
@@ -109,10 +115,10 @@ export function bindReaderScrollEvents() {
             // Scroll spy — highlight current section in TOC + breadcrumb (D)
             const containerTop = container.getBoundingClientRect().top;
             let currentIdx = -1;
-            cachedCards.forEach(card => {
+            cachedCards.forEach((/** @type {HTMLElement} */ card) => {
                 const rect = card.getBoundingClientRect();
                 if (rect.top - containerTop < 120) {
-                    currentIdx = parseInt(card.dataset.sectionIdx);
+                    currentIdx = parseInt(card.dataset.sectionIdx || '');
                 }
                 card.classList.toggle('current-section', parseInt((/** @type {HTMLElement} */ (card)).dataset.sectionIdx || '') === currentIdx);
             });
@@ -245,6 +251,7 @@ export function bindReaderScrollEvents() {
 }
 
 /** 활성 TOC 항목이 목차 패널 가시 영역을 벗어났으면 보이는 위치로 스크롤 */
+/** @param {Element|null} tocListEl */
 export function syncActiveTocItem(tocListEl) {
     const active = tocListEl && tocListEl.querySelector('.reader-toc-item.active');
     if (!active) return;
@@ -287,7 +294,7 @@ export function bindReaderKeyboard() {
         const cards = container.querySelectorAll('.reader-section-card');
         if (!cards.length) return;
 
-        const scrollToSection = (idx) => {
+        const scrollToSection = (/** @type {number} */ idx) => {
             const card = /** @type {HTMLElement} */ (cards[idx]);
             if (!card) return;
             if (card.classList.contains('collapsed')) card.classList.remove('collapsed');
@@ -383,9 +390,11 @@ export function initReaderToolbar() {
     const searchClear = document.getElementById('reader-search-clear');
     if (searchInput && !searchInput.dataset.bound) {
         searchInput.dataset.bound = 'true';
-        let searchDebounce = null;
+        /** @type {ReturnType<typeof setTimeout>|null} */
+/** @type {ReturnType<typeof setTimeout>|null} */
+let searchDebounce = null;
         let currentMatchIdx = 0;
-        const scrollToMatch = (idx) => {
+        const scrollToMatch = (/** @type {number} */ idx) => {
             const container = document.getElementById('textbook-reader-view');
             if (!container) return;
             const marks = container.querySelectorAll('.reader-search-highlight');
@@ -454,7 +463,7 @@ export function initReaderToolbar() {
             if (matchCount > 0) scrollToMatch(0);
         };
         searchInput.addEventListener('input', () => {
-            clearTimeout(searchDebounce);
+            if (searchDebounce) clearTimeout(searchDebounce);
             searchDebounce = setTimeout(performSearch, 300);
         });
         searchInput.addEventListener('keydown', (e) => {

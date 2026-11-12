@@ -17,7 +17,7 @@
 // 지연 import()로 참조해, import 시점의 모듈 그래프 팽창·순환을 막는다.
 import { hasFeature, getActiveExamId, getActiveExam } from './core/exam-context.js';
 
-const _lazyImport = (load) => { let p = null; return () => (p ??= load()); };
+const _lazyImport = (/** @type {function(): Promise<*>} */ load) => { let p = null; return () => (p ??= load()); };
 
 // 도메인 경로 규약 — 실무 피처 자산은 활성 시험 id 아래 시험 무관 동일 상대
 // 경로에 둔다: 모듈 src/exams/<시험id>/<rel>, 마크업 html/exams/<시험id>/<rel>.
@@ -32,8 +32,8 @@ const _domainImport = (rel) => Object.assign(
     _lazyImport(() => import(/* @vite-ignore */ `./exams/${getActiveExamId()}/${rel}`)),
     { rel }
 );
-const _domainMarkup = (rel) => `./html/exams/${getActiveExamId()}/${rel}`;
-const _domainCss = (rel) => `./css/exams/${getActiveExamId()}/${rel}`;
+const _domainMarkup = (/** @type {string} */ rel) => `./html/exams/${getActiveExamId()}/${rel}`;
+const _domainCss = (/** @type {string} */ rel) => `./css/exams/${getActiveExamId()}/${rel}`;
 
 const formula = {
     viewId: 'formula-view',
@@ -139,7 +139,7 @@ const formula = {
     // isStaleViewGen으로 판정해 다른 뷰로 전환된 뒤의 늦은 DOM·로딩·토스트
     // 쓰기를 차단한다. 스테일이면 로딩 해제도 건너뛴다 — navigateToView가
     // 전환 시점에 전역 로딩을 이미 내렸고 새 뷰의 스피너를 지우면 안 된다.
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ DataLoader }, { showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([
                 import('./content/data-loader.js'),
@@ -186,6 +186,7 @@ const formula = {
  * 해석해 <link>를 1회 삽입한다. style.css의 정적 @import는 모든 시험에
  * 로드되므로 도메인 CSS는 이 경로만 거친다.
  */
+/** @param {*} feat */
 function ensureDomainStyles(feat) {
     if (!feat.styles || typeof document === 'undefined') return;
     const href = _domainCss(feat.styles);
@@ -196,6 +197,7 @@ function ensureDomainStyles(feat) {
     document.head.appendChild(link);
 }
 
+/** @param {*} feat */
 async function ensureViewMarkup(feat) {
     ensureDomainStyles(feat);
     if (!feat.markup) return;
@@ -244,7 +246,7 @@ const careHome = {
     loaders: { main: _domainImport('views/care-home.js'), ai: _domainImport('care-ai.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careDocSignSave', 'careSignImagePick', 'careHomeGuideDismiss']], ['ai', ['careAiDraft']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -278,7 +280,7 @@ const careCalc = {
     loaders: { main: _domainImport('views/care-calc.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careCalcRun', 'careCalcReset', 'careCalcPrint']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -312,7 +314,7 @@ const careCard = {
     loaders: { main: _domainImport('views/care-card.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careCardOpen', 'careCardClose', 'careCardToIncident']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -346,7 +348,7 @@ const careLog = {
     loaders: { main: _domainImport('views/care-log.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careLogGenerate', 'careLogSave', 'careLogDelete', 'careLogPrint', 'careLogCsvExport', 'careLogRecordCopy', 'careShare', 'careLogDocMd']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -380,7 +382,7 @@ const careWebtoon = {
     loaders: { main: _domainImport('views/care-webtoon.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['webtoonPrev', 'webtoonNext']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -414,7 +416,7 @@ const careFlow = {
     loaders: { main: _domainImport('views/care-flow.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['flowBack', 'flowNext', 'flowOpt', 'flowDontKnow', 'flowNextConcept', 'startConceptFlow', 'flowRec', 'flowLgToggle']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -448,7 +450,7 @@ const careAudit = {
     loaders: { main: _domainImport('views/care-audit.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careAuditReset', 'careAuditPrint', 'careAuditDocMd', 'careAuditFilePick', 'careAuditFileLoad', 'careAuditFileReset']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -482,7 +484,7 @@ const careHandover = {
     loaders: { main: _domainImport('views/care-handover.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careHandoverGenerate', 'careHandoverSave', 'careHandoverDelete', 'careHandoverExport', 'careHandoverPrint', 'careHandoverCsvExport', 'careFacilityHandoverSubmit', 'careHandoverAck', 'careHandoverDigest', 'careHandoverDocMd']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -515,7 +517,7 @@ const careVisit = {
     loaders: { main: _domainImport('views/care-visit.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careVisitAdd', 'careVisitResultOpen', 'careVisitResultSave', 'careVisitResultClose', 'careVisitCancel', 'careVisitDelete', 'careVisitPreview', 'careVisitPrint', 'careVisitCsvExport', 'careVisitFacilitySubmit', 'careVisitDocMd', 'careVisitPhotoPick', 'careVisitPhotoRemove', 'careVisitVoiceToggle']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -548,7 +550,7 @@ const careClients = {
     loaders: { main: _domainImport('views/care-client.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careClientSave', 'careClientNew', 'careClientLoad', 'careClientReport', 'careClientDelete', 'careClientPreview', 'careClientPrint', 'careClientCsvExport', 'careClientCsvImport', 'careClientDocMd']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -581,7 +583,7 @@ const careIncident = {
     loaders: { main: _domainImport('views/care-incident.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careIncidentGenerate', 'careIncidentSave', 'careIncidentPrint', 'careIncidentCsvExport', 'careIncidentDelete', 'careIncidentFacilitySubmit', 'careIncidentDocMd', 'careIncidentPhotoPick', 'careIncidentPhotoRemove', 'careIncidentVoiceToggle']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -614,7 +616,7 @@ const careRoster = {
     loaders: { main: _domainImport('views/care-roster.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careRosterAdd', 'careRosterDelete', 'careRosterPreview', 'careRosterPrint', 'careRosterCsvExport', 'careRosterCsvImport', 'careRosterDocMd']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -647,7 +649,7 @@ const careFinder = {
     loaders: { main: _domainImport('views/care-finder.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careFinderSearch', 'careFinderUseOrg']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -680,7 +682,7 @@ const careForms = {
     loaders: { main: _domainImport('views/care-forms.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', []]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -714,7 +716,7 @@ const careCustomForm = {
     loaders: { main: _domainImport('views/care-custom-form.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careFormTplUse', 'careFormTplNew', 'careFormTplEdit', 'careFormTplDelete', 'careFormSeedCopy', 'careFormSeedFile', 'careFormTplSave', 'careFormTplFacSave', 'careFormTplEditClose', 'careFormTplPdfPick', 'careFormDocGenerate', 'careFormDocSave', 'careFormDocDelete', 'careFormDocMd', 'careFormDocPrint']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -748,7 +750,7 @@ const careFacilityJoin = {
     loaders: { main: _domainImport('views/facility-join.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['facilityJoin', 'facilityOrgNameSave']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -782,7 +784,7 @@ const careFacilityAdmin = {
     loaders: { main: _domainImport('views/facility-admin.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['facilityAdminCreate', 'facilityAdminWebhook']]],
-    async enter(gen) {
+    async enter(/** @type {*} */ gen) {
         const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
         const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
@@ -812,7 +814,7 @@ export function isPracticeCapable() {
 export function getEnabledPracticeFeatures() {
     return Object.keys(PRACTICE_FEATURES)
         .filter(k => hasFeature(k))
-        .map(k => PRACTICE_FEATURES[k]);
+        .map(k => PRACTICE_FEATURES[/** @type {keyof PRACTICE_FEATURES} */ (k)]);
 }
 
 /**
@@ -824,7 +826,7 @@ export function getPracticeLanding() {
     const enabled = getEnabledPracticeFeatures();
     if (!enabled.length) return 'dashboard-view';
     return [...enabled]
-        .sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0))[0].viewId;
+        .sort((a, b) => ((/** @type {*} */ (a)).priority ?? 0) - ((/** @type {*} */ (b)).priority ?? 0))[0].viewId;
 }
 
 /** router 타이틀 맵용 — 선언된 모든 실무 뷰의 {title, subtitle}.
@@ -832,12 +834,14 @@ export function getPracticeLanding() {
  * exams.json의 `practiceName`(실무 브랜드)은 서브타이틀에 자동 병기한다 —
  * 뷰 타이틀이 이미 브랜드명이거나(uiText title='Formula OS'처럼 title 자체가
  * 브랜드) 서브타이틀에 수동 병기된 경우는 중복 없이 스킵한다. */
+/** @param {*} registry */
 export function getPracticeViewTitles(registry) {
     const uiText = (registry && registry.uiText) || {};
     const practiceName = getActiveExam()?.practiceName;
+    /** @type {Object.<string,{title:*,subtitle:*}>} */
     const out = {};
     for (const f of Object.values(PRACTICE_FEATURES)) {
-        const t = (f.uiTextKey && uiText[f.uiTextKey]) || {};
+        const t = /** @type {*} */ ((f.uiTextKey && uiText[f.uiTextKey]) || {});
         const title = t.title || f.title;
         let subtitle = t.subtitle || f.subtitle;
         if (practiceName && subtitle && !title.includes(practiceName) && !subtitle.includes(practiceName)) {
@@ -850,6 +854,7 @@ export function getPracticeViewTitles(registry) {
 
 /** router 해시 슬러그용 — {viewId: slug} */
 export function getPracticeHashSlugs() {
+    /** @type {Object.<string,string>} */
     const out = {};
     for (const f of Object.values(PRACTICE_FEATURES)) {
         out[f.viewId] = f.slug;
@@ -867,7 +872,7 @@ export function getPracticeLazyHandlers() {
     for (const f of Object.values(PRACTICE_FEATURES)) {
         for (const [loaderKey, names] of f.handlers || []) {
             if (!names.length) continue; // 핸들러 없는 정적 뷰 허용 (careForms 등)
-            out.push([f.loaders[loaderKey], names]);
+            out.push([/** @type {Object.<string,*>} */ (f.loaders)[loaderKey], names]);
         }
     }
     return out;
@@ -875,9 +880,10 @@ export function getPracticeLazyHandlers() {
 
 /** app.js viewRenderers용 — {viewId: 렌더 함수} (비동기 enter를 발화만) */
 export function getPracticeViewRenderers() {
+    /** @type {Object.<string,Function>} */
     const out = {};
     for (const f of Object.values(PRACTICE_FEATURES)) {
-        out[f.viewId] = (gen) => { void f.enter(gen); };
+        out[f.viewId] = (/** @type {*} */ gen) => { void f.enter(gen); };
     }
     return out;
 }
@@ -889,6 +895,7 @@ export function getPracticeViewRenderers() {
  * 유닛 테스트가 exams.json에서 해당 feature를 켠 시험마다 파일 실존을 확인한다.
  */
 export function getPracticeDomainSpec() {
+    /** @type {Object.<string,*>} */
     const out = {};
     for (const [key, f] of Object.entries(PRACTICE_FEATURES)) {
         out[key] = {

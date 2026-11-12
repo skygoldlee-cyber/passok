@@ -18,6 +18,7 @@ export const textbookReaderState = {
 
 // 1. 교재 읽기 이어하기 — localStorage 영속화
 const READER_POSITION_KEY = STORAGE_KEYS.READER_LAST_POSITION;
+/** @type {ReturnType<typeof setTimeout>|null} */
 let _scrollSaveTimer = null;
 
 export function saveReaderPosition() {
@@ -33,7 +34,7 @@ export function saveReaderPosition() {
             ts: Date.now()
         };
         safeSetItem(READER_POSITION_KEY, JSON.stringify(pos));
-        _markReadChunk(container, pos.subject); // 스크롤 정착 위치의 청크도 커버리지에 반영
+        if (container) _markReadChunk(container, pos.subject); // 스크롤 정착 위치의 청크도 커버리지에 반영
     } catch (e) { /* noop */ }
 }
 
@@ -42,6 +43,7 @@ export function saveReaderPosition() {
 // 표준형·이야기형은 동일 커버리지로 모드와 무관하게 과목 키 하나에 합산한다.
 const READ_CHUNKS = 100;
 
+/** @param {*} legacyFrac */
 function _seedChunks(legacyFrac) {
     const n = Math.floor((typeof legacyFrac === 'number' ? legacyFrac : 0) * READ_CHUNKS);
     const out = [];
@@ -49,18 +51,20 @@ function _seedChunks(legacyFrac) {
     return out;
 }
 
+/** @param {Element} container @param {string} subject */
 function _markReadChunk(container, subject) {
     if (!subject || !container) return;
     const denom = container.scrollHeight - container.clientHeight;
     if (denom <= 0) return;
     const frac = Math.min(1, Math.max(0, container.scrollTop / denom));
     const idx = Math.min(READ_CHUNKS - 1, Math.floor(frac * READ_CHUNKS));
+    /** @type {Object.<string,*>} */
     let map = {};
     try { map = JSON.parse(safeGetItem(STORAGE_KEYS.READER_PROGRESS) || '{}'); } catch (e) { map = {}; }
-    const rec = (map[subject] && typeof map[subject] === 'object') ? map[subject] : {};
+    const rec = /** @type {*} */ ((map[subject] && typeof map[subject] === 'object') ? map[subject] : {});
     const chunks = Array.isArray(rec.chunks) ? rec.chunks.slice() : _seedChunks(rec.frac);
     if (!chunks.includes(idx)) chunks.push(idx);
-    chunks.sort((a, b) => a - b);
+    chunks.sort((/** @type {number} */ a, /** @type {number} */ b) => a - b);
     // frac 필드는 커버리지 비율 — 기존 스키마(getTextbookReadProgress가 v.frac 소비)와 호환 유지
     map[subject] = { chunks, frac: Math.min(1, chunks.length / READ_CHUNKS), ts: Date.now() };
     safeSetItem(STORAGE_KEYS.READER_PROGRESS, JSON.stringify(map));
@@ -86,6 +90,7 @@ function _checkReadThroughDone() {
 // 뷰 이탈·탭 숨김 동안은 누적되지 않는다(이탈 중 시간이 readMin으로 오계상되지 않음).
 const READ_TICK_MS = 15000;
 let _readAccumMs = 0;
+/** @type {ReturnType<typeof setInterval>|null} */
 let _readTimer = null;
 
 function _readerViewActive() {
@@ -97,8 +102,10 @@ function _readerViewActive() {
 function _readTick() {
     if (!_readerViewActive()) { _readAccumMs = 0; return; }
     _readAccumMs += READ_TICK_MS;
+    const _tickEl = document.getElementById('textbook-reader-container');
+    if (!_tickEl) return;
     _markReadChunk(
-        document.getElementById('textbook-reader-container'),
+        _tickEl,
         textbookReaderState.selectedSubject
     );
     if (_readAccumMs >= 60000) {

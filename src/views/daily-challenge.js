@@ -135,10 +135,12 @@ function _startDailyChallengeImpl() {
     const qPack = [];
 
     // 1. 플래시카드 복습 3개
+    /** @type {*[]} */
+    /** @type {*[]} */
     let allCards = [];
     if (window.STUDY_DATA) {
         Object.keys(window.STUDY_DATA).forEach(subjId => {
-            allCards = allCards.concat((window.STUDY_DATA || {})[subjId].cards.map(c => ({...c, subject: subjId})));
+            allCards = allCards.concat((window.STUDY_DATA || {})[subjId].cards.map((/** @type {*} */ c) => ({...c, subject: subjId})));
         });
     }
     const selectedCards = shuffle(allCards).slice(0, 3);
@@ -152,10 +154,12 @@ function _startDailyChallengeImpl() {
     });
 
     // 2. 퀴즈 풀이 3개
+    /** @type {*[]} */
+    /** @type {*[]} */
     let allQuizzes = [];
     if (window.STUDY_DATA) {
         Object.keys(window.STUDY_DATA).forEach(subjId => {
-            allQuizzes = allQuizzes.concat((window.STUDY_DATA || {})[subjId].quizzes.map(q => ({...q, subject: subjId})));
+            allQuizzes = allQuizzes.concat((window.STUDY_DATA || {})[subjId].quizzes.map((/** @type {*} */ q) => ({...q, subject: subjId})));
         });
     }
     const selectedQuizzes = shuffle(allQuizzes).slice(0, 3);
@@ -184,7 +188,7 @@ function _startDailyChallengeImpl() {
 
     // 4. 지식DB 분류 판별 1개 — registry.knowledge 스키마로 데이터셋 해석
     const db = DataLoader.getKnowledgeItems();
-    const kSchema = (DataLoader.registry && DataLoader.registry.knowledge) || {};
+    const kSchema = /** @type {*} */ ((DataLoader.registry && DataLoader.registry.knowledge) || {});
     const badgeField = (kSchema.badge && kSchema.badge.field) || 'type';
     const badgeLabels = (kSchema.badge && kSchema.badge.labels) || {};
     const unit = kSchema.entityUnit || '항목';
@@ -319,7 +323,7 @@ function renderDailyStep() {
         `;
     } else if (q.type === 'choice') {
         const optionIndicators = ['A', 'B', 'C', 'D'];
-        q.options.forEach((opt, idx) => {
+        q.options.forEach((/** @type {*} */ opt, /** @type {number} */ idx) => {
             const btn = document.createElement('button');
             btn.className = 'limits-opt-btn daily-choice-btn';
             btn.dataset.value = opt;
@@ -339,6 +343,8 @@ function renderDailyStep() {
     }
 }
 
+/** @param {boolean} isMemorized */
+/** @param {boolean} isMemorized */
 export function submitDailyCardAnswer(isMemorized) {
     if (isMemorized) {
         dailyState.correctCount++;
@@ -366,9 +372,11 @@ export function submitDailyCardAnswer(isMemorized) {
     if (nextBtn) nextBtn.classList.remove('is-hidden');
 }
 
+/** @param {Element} selectedBtn @param {*} selectedValue @param {*} correctValue */
+/** @param {HTMLButtonElement} selectedBtn @param {*} selectedValue @param {*} correctValue */
 function submitDailyChoiceAnswer(selectedBtn, selectedValue, correctValue) {
     const isCorrect = (selectedValue === correctValue);
-    markChoiceButtons(document.getElementById('daily-modal-answer-area'), selectedBtn, correctValue);
+    markChoiceButtons(/** @type {Element} */ (document.getElementById('daily-modal-answer-area')), selectedBtn, correctValue);
     if (isCorrect) {
         dailyState.correctCount++;
     }
@@ -399,6 +407,8 @@ export function submitDailyShortAnswer() {
     showDailyFeedback(isCorrect, q.correct);
 }
 
+/** @param {boolean} isCorrect @param {*} correctValue */
+/** @param {boolean} isCorrect @param {*} correctValue */
 function showDailyFeedback(isCorrect, correctValue) {
     const q = dailyState.questions[dailyState.currentIndex];
     showAnswerFeedback({

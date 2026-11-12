@@ -9,7 +9,7 @@ import { getGlossaryByRefFile, getGlossaryBySubject } from '../reader/glossary-q
 /**
  * 챕터의 섹션들을 순회하며 용어집 항목을 수집합니다.
  * 출처 기반 수집 + 과목 ID 기반 수집(glossary JSON 큐레이션 전체)을 병합합니다.
- * @param {Array} sections - 챕터 섹션 배열
+ * @param {Array<*>} sections - 챕터 섹션 배열
  * @param {string|null} chapterRefPath - 챕터 대표 참조문서 경로
  * @param {function} mapSourceToRefFn - 출처 텍스트 → 참조문서 경로 매핑 함수
  * @param {string} [subjectId] - 과목 ID (예: "과목1") — glossary JSON 전체 항목 수집용
@@ -42,7 +42,7 @@ export function collectGlossaryItems(sections, chapterRefPath, mapSourceToRefFn,
 
 /**
  * 용어집 테이블 HTML을 생성합니다.
- * @param {Array} glossaryItems - collectGlossaryItems() 반환값
+ * @param {Array<*>} glossaryItems - collectGlossaryItems() 반환값
  * @returns {string} HTML 문자열
  */
 export function renderGlossaryTable(glossaryItems) {
@@ -88,9 +88,14 @@ export function appendGlossaryTocItem(tocList) {
     tocList.appendChild(glossaryTocItem);
 }
 
+/** @type {HTMLElement|null} */
 let _glossaryBackBtn = null;
+/** @type {number|null} */
 let _glossarySavedScroll = null;
+/** @type {Element|null} */
 let _glossarySavedContainer = null;
+/** @type {Element|null} */
+/** @type {Element|null} */
 let _glossarySavedLink = null;
 
 function _getScrollContainer() {
@@ -119,6 +124,7 @@ function _ensureBackBtn() {
     return btn;
 }
 
+/** @param {string} idxKey @param {Element} sourceLink - 스크롤 복귀 대상 앵커 */
 export function scrollToGlossary(idxKey, sourceLink) {
     if (!idxKey) return;
     const target = document.getElementById(`glossary-${idxKey}`);

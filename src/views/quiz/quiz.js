@@ -47,6 +47,8 @@ function renderWrongCausePicker(suggestedKey) {
  * 퀴즈 오답 시 weakCards에 weak_quiz_ 항목으로 추가 + 원인 태깅 UI 표시.
  * PS-08 — 풀이 시간 등 행동 신호로 원인 후보를 추정해 버튼에 표시한다.
  */
+/** @param {*} currentQuiz */
+/** @param {*} currentQuiz */
 function markQuizWrong(currentQuiz) {
     state.weakCards.add(weakItemKey(currentQuiz.id));
     const ms = state.quiz._qStart ? Date.now() - state.quiz._qStart : null;
@@ -59,6 +61,8 @@ function markQuizWrong(currentQuiz) {
 /**
  * 퀴즈 정답 시 약점 해제 — 카드 ID와 weak_quiz_ 오답 항목 둘 다 제거한다.
  */
+/** @param {*} currentQuiz */
+/** @param {*} currentQuiz */
 function clearQuizWeakness(currentQuiz) {
     state.weakCards.delete(currentQuiz.id);
     state.weakCards.delete(WEAK_QUIZ_PREFIX + currentQuiz.id);
@@ -106,6 +110,8 @@ export async function startDiagnosticQuiz() {
         return qs.length > 0;
     });
     const quotas = apportionByWeight(eligible.map(s => s.key), weightBySubject, DIAG_TOTAL_QUESTIONS, DIAG_MIN_PER_SUBJECT);
+    /** @type {*[]} */
+    /** @type {*[]} */
     const data = [];
     eligible.forEach(s => {
         const qs = (window.STUDY_DATA && window.STUDY_DATA[s.key] && window.STUDY_DATA[s.key].quizzes) || [];
@@ -275,7 +281,7 @@ export function submitQuizAnswer() {
     if (submitBtn) submitBtn.classList.add('is-hidden');
 
     // 정답 체크 (주관식 유사어 매칭 엔진 적용)
-    const isCorrect = checkShortAnswer(userAnswer, currentQuiz.answer);
+    const isCorrect = checkShortAnswer(userAnswer, String(currentQuiz.answer));
     vibrate(isCorrect ? HAPTIC.correct : HAPTIC.wrong);
 
     // 점수 및 상태 누적
@@ -330,6 +336,8 @@ export function submitQuizAnswer() {
 /**
  * 퀴즈 정답 제출 (객관식 / OX)
  */
+/** @param {Element} selectedBtn @param {*} selectedValue @param {*} correctValue */
+/** @param {Element} selectedBtn @param {*} selectedValue @param {*} correctValue */
 function submitQuizChoiceAnswer(selectedBtn, selectedValue, correctValue) {
     const quizState = state.quiz;
     const currentQuiz = quizState.data[quizState.currentIndex];
@@ -358,7 +366,7 @@ function submitQuizChoiceAnswer(selectedBtn, selectedValue, correctValue) {
         });
     }
     if (!isCorrect) {
-        markChoiceState(selectedBtn, 'incorrect');
+        markChoiceState(/** @type {HTMLButtonElement} */ (selectedBtn), 'incorrect');
         markQuizWrong(currentQuiz);
     } else {
         quizState.correctCount++;
@@ -426,8 +434,10 @@ export function nextQuizQuestion() {
  * 📌 출처 근거(법령 조문명 등)를 반환한다. 교체 교재에서도 섹션 제목 매칭으로 동작.
  * @returns {{section:string, source:string|null}|null}
  */
+/** @param {string} quizId */
+/** @param {string} quizId */
 function _citationForQuiz(quizId) {
-    const q = (state.quiz.data || []).find(x => x.id === quizId);
+    const q = (state.quiz.data || []).find((/** @type {*} */ x) => x.id === quizId);
     if (!q || !q.category) return null;
     const subjId = subjectForWeakItem(weakItemKey(quizId), state.quiz.subject);
     const subj = ((typeof window !== 'undefined' && window.STUDY_DATA) || {})[subjId || ''];
@@ -523,7 +533,7 @@ export function renderQuizResult() {
 
     // 진단 평가 모드 — 과목별 약점 프로파일을 오답 리뷰 위에 삽입
     if (quizState.diagnostic) {
-        _renderDiagnosticProfile(reviewListEl);
+        if (reviewListEl) _renderDiagnosticProfile(reviewListEl);
     }
 }
 
@@ -531,15 +541,17 @@ export function renderQuizResult() {
  * 오답 항목 "AI 해설" 요청 (AI-27) — 문항·오답·정답·교재 근거를 구조화 인자로
  * 보내 1~2문장 해설을 인라인 표시한다. 결과는 `AI 생성` 배지를 단다.
  */
+/** @param {string} quizId */
+/** @param {string} quizId */
 export async function requestAiFeedback(quizId) {
-    const solved = (state.quiz.solvedList || []).find(x => x.quizId === quizId);
+    const solved = (state.quiz.solvedList || []).find((/** @type {*} */ x) => x.quizId === quizId);
     const slot = document.querySelector(`#quiz-review-list [data-ai-item="${CSS.escape(quizId)}"] .ai-feedback-slot`);
     if (!solved || !slot) return;
     const itemEl = slot.closest('.quiz-review-item');
     const btn = /** @type {HTMLButtonElement|null} */ (itemEl?.querySelector('.ai-feedback-btn'));
     if (btn) btn.disabled = true;
 
-    const q = (state.quiz.data || []).find(x => x.id === quizId);
+    const q = (state.quiz.data || []).find((/** @type {*} */ x) => x.id === quizId);
     const cite = _citationForQuiz(quizId);
     const input = {
         question: solved.question,
@@ -567,8 +579,12 @@ export async function requestAiFeedback(quizId) {
 /**
  * 진단 평가 결과 — 과목별 정답률 프로파일을 오답 리뷰 위에 삽입한다.
  */
+/** @param {Element} reviewListEl */
+/** @param {Element} reviewListEl */
 function _renderDiagnosticProfile(reviewListEl) {
     if (!reviewListEl) return;
+    /** @type {Object.<string,{solved:number,correct:number}>} */
+    /** @type {Object.<string,{solved:number,correct:number}>} */
     const perSubj = {};
     state.quiz.solvedList.forEach(s => {
         const m = (s.quizId || '').match(/^([a-z]+)_quiz_/);
@@ -581,7 +597,7 @@ function _renderDiagnosticProfile(reviewListEl) {
     const subjects = (typeof DataLoader !== 'undefined' && DataLoader.registry)
         ? DataLoader.getSubjectList()
         : [];
-    const nameOf = (key) => {
+    const nameOf = (/** @type {string} */ key) => {
         const s = subjects.find(x => x.key === key);
         return s ? s.name : key;
     };
@@ -592,6 +608,8 @@ function _renderDiagnosticProfile(reviewListEl) {
 
     // PS-07 — 입문 진단 정답률을 과목별 BKT P0로 영속 (콜드스타트 개인화)
     try {
+        /** @type {Object.<string,number>} */
+        /** @type {Object.<string,number>} */
         const rates = {};
         rows.forEach(r => { rates[r.key] = r.rate / 100; });
         recordDiagnosticP0(rates);

@@ -63,7 +63,7 @@ const DEFAULT_KNOWLEDGE = {
 /**
  * 활성 시험의 지식DB 스키마 — registry.knowledge 선언에 DEFAULT_KNOWLEDGE 기본값 병합.
  * knowledge 미선언 시험은 null 반환 → 사전 뷰가 "데이터셋 미설정" 안내로 처리한다.
- * @returns {Object|null}
+ * @returns {*|null}
  */
 function dictSchema() {
     const reg = /** @type {any} */ (DataLoader.registry) || {};
@@ -75,19 +75,21 @@ function dictSchema() {
  * 자가 등록 항목 — schema.customKey(STORAGE_KEYS 멤버명) 선언 시에만 로드.
  * 공식 동명(정규화) 항목에는 _superseded를 부여한다 — '공식 등록됨' 배지 (DI-08).
  */
+/** @param {*} schema @param {*[]} official */
 function customItems(schema, official) {
     if (!schema || !schema.customKey) return [];
-    const key = STORAGE_KEYS[schema.customKey];
+    const key = STORAGE_KEYS[/** @type {keyof STORAGE_KEYS} */ (schema.customKey)];
     const items = key ? getJSON(key) : [];
     if (!Array.isArray(items) || !items.length) return [];
     const titleField = schema.fields && schema.fields.title || 'name';
-    const officialNorm = new Set(official.map(i => normalizeEntityName(i[titleField])));
+    const officialNorm = new Set(official.map((/** @type {*} */ i) => normalizeEntityName(i[titleField])));
     return items
-        .filter(i => i && i.name)
-        .map(i => ({ ...i, custom: true, _superseded: officialNorm.has(normalizeEntityName(i.name)) }));
+        .filter((/** @type {*} */ i) => i && i.name)
+        .map((/** @type {*} */ i) => ({ ...i, custom: true, _superseded: officialNorm.has(normalizeEntityName(i.name)) }));
 }
 
 /** 엔티티 배열 — 스키마의 global 해석 + 자가 등록 병합 (customKey 선언 시험만). */
+/** @param {*} schema */
 function dictDb(schema) {
     if (!schema) return [];
     const official = DataLoader.getKnowledgeItems();
@@ -96,6 +98,7 @@ function dictDb(schema) {
 }
 
 /** 배지 필드값 → 표시 라벨 */
+/** @param {*} schema @param {*} value */
 function badgeLabel(schema, value) {
     const b = schema.badge || {};
     return (b.labels && b.labels[value]) || b.defaultLabel || String(value || '');
@@ -108,6 +111,7 @@ export const dictState = {
 
 // 가상 스크롤 관련 상태
 let isScrollBound = false;
+/** @type {*[]} */
 let currentFilteredList = [];
 
 // 기성품 함유 역조회 인덱스 (FO-40) — schema.productKey(STORAGE_KEYS 멤버명)
@@ -117,10 +121,11 @@ let currentFilteredList = [];
 let _productIngIndex = null;
 
 /** 성분 정규화명 → 해당 성분을 함유한 제품 배열 */
+/** @param {*} schema */
 function buildProductIndex(schema) {
     _productIngIndex = null;
     if (!schema || !schema.productKey) return;
-    const key = STORAGE_KEYS[schema.productKey];
+    const key = STORAGE_KEYS[/** @type {keyof STORAGE_KEYS} */ (schema.productKey)];
     const items = key ? getJSON(key) : [];
     if (!Array.isArray(items) || !items.length) return;
     _productIngIndex = new Map();
@@ -137,26 +142,28 @@ function buildProductIndex(schema) {
 }
 
 /** 검색어·필터를 적용한 엔티티 목록 — 렌더와 CSV보내기가 공유 */
+/** @param {*[]} db @param {string} query @param {string} filter @param {*} schema */
 function filterItems(db, query, filter, schema) {
     const q = (query || '').toLowerCase().trim();
     const f = schema.fields || {};
     const searchFields = f.search || ['name'];
     const chosungField = f.chosungField || searchFields[0];
     const filterField = schema.filterField;
-    return db.filter(item => {
+    return db.filter((/** @type {*} */ item) => {
         if (filter !== 'all' && filterField && item[filterField] !== filter) return false;
         if (!q) return true;
-        if (searchFields.some(key => String(item[key] || '').toLowerCase().includes(q))) return true;
+        if (searchFields.some((/** @type {string} */ key) => String(item[key] || '').toLowerCase().includes(q))) return true;
         const base = String(item[chosungField] || '').toLowerCase();
         return getChosung(base).includes(getChosung(q));
     });
 }
 
 /** 필터 버튼을 스키마에서 렌더 — dictState.filter에 맞춰 활성 클래스 부여 */
+/** @param {*} schema */
 function renderFilterButtons(schema) {
     const wrap = document.querySelector('.dict-filter-buttons');
     if (!wrap || !Array.isArray(schema.filters) || !schema.filters.length) return;
-    wrap.innerHTML = schema.filters.map(f => {
+    wrap.innerHTML = schema.filters.map((/** @type {*} */ f) => {
         const active = dictState.filter === f.key ? ' active-filter' : '';
         const icon = f.icon
             ? `<i class="fa-solid ${f.icon}"${f.color ? ` style="color:${f.color}"` : ''} aria-hidden="true"></i> `
@@ -166,6 +173,7 @@ function renderFilterButtons(schema) {
 }
 
 /** 자가 등록 진입 버튼 — schema.customKey 선언 시험에만 노출 (DI-06) */
+/** @param {*} schema */
 function renderCustomAddButton(schema) {
     const row = document.querySelector('#dictionary-view .dictionary-control-panel .flex-center');
     if (!row) return;
@@ -204,6 +212,7 @@ function renderDictNoticeButton() {
 }
 
 /** 헤더 텍스트·검색 placeholder를 스키마에서 적용 (없으면 HTML 기본값 유지) */
+/** @param {*} schema */
 function applyDictHeader(schema) {
     const h = schema.header;
     if (!h) return;
@@ -291,7 +300,7 @@ function renderDictionaryVirtual() {
     // 결과 수가 100개 미만이면 일반 렌더링
     if (currentFilteredList.length < 100) {
         container.innerHTML = '';
-        currentFilteredList.forEach(item => {
+        currentFilteredList.forEach((/** @type {*} */ item) => {
             container.appendChild(createEntityCard(item, schema));
         });
         return;
@@ -345,6 +354,7 @@ function renderDictionaryVirtual() {
 /**
  * 개별 엔티티 카드 DOM 요소를 생성합니다 (스키마 드리븐).
  */
+/** @param {*} item @param {*} schema */
 function createEntityCard(item, schema) {
     const card = document.createElement('div');
     card.className = 'dict-card';
@@ -356,7 +366,7 @@ function createEntityCard(item, schema) {
     const badgeText = item._superseded ? '공식 등록됨' : (badgeField ? badgeLabel(schema, badgeVal) : '');
     const badgeCls = item._superseded ? 'superseded' : (badgeVal == null ? '' : String(badgeVal));
 
-    const detailRowsHtml = (schema.details || []).map(d => {
+    const detailRowsHtml = (schema.details || []).map((/** @type {*} */ d) => {
         const val = item[d.key];
         if (d.tip) {
             return val ? `<div class="dict-card-tip"><strong>${esc(d.label || 'TIP')}:</strong> ${esc(val)}</div>` : '';
@@ -436,6 +446,7 @@ function setupDictionaryVirtualScroll() {
 /**
  * 지식DB 사전 검색 필터링
  */
+/** 현재 검색어·필터로 사전 그리드를 재렌더한다. */
 export function filterDictionary() {
     const input = /** @type {HTMLInputElement|null} */ (document.getElementById('dict-search-input'));
     if (input) {
@@ -446,6 +457,7 @@ export function filterDictionary() {
 
 /**
  * 카테고리 필터 변경
+ * @param {string} filterType
  */
 export function setDictFilter(filterType) {
     dictState.filter = filterType;
@@ -494,6 +506,7 @@ export function clearDictSearch() {
  * csv.fields 항목이 {"badgeLabel": "<field>"}이면 배지 라벨로 치환된다.
  * @param {string} [scope] 'all'이면 전체 DB
  */
+/** @param {string} [scope] */
 export function dictExportCsv(scope) {
     const schema = dictSchema();
     if (!schema) { showToast('사전 데이터가 없습니다.', 'warning'); return; }
@@ -506,10 +519,10 @@ export function dictExportCsv(scope) {
     const reg = /** @type {any} */ (DataLoader.registry) || {};
     const meta = reg[schema.registryKey] || reg.ingredients || null;
     const ver = meta && meta.version ? `_v${meta.version}` : '';
-    const csv = schema.csv || {};
+    const csv = /** @type {*} */ (schema.csv || {});
     const fields = csv.fields || [];
     void downloadSheet(
-        toCsv([...(csv.headers || [])], rows, item => fields.map(spec =>
+        toCsv([...(csv.headers || [])], rows, (/** @type {*} */ item) => fields.map((/** @type {*} */ spec) =>
             typeof spec === 'string'
                 ? (item[spec] || '')
                 : (spec && spec.badgeLabel ? badgeLabel(schema, item[spec.badgeLabel]) : ''))),

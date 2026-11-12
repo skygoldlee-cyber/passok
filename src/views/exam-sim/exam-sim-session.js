@@ -35,6 +35,7 @@ function armSimLeaveGuard() {
     registerViewLeaveGuard('exam-view', confirmLeaveSim);
 }
 
+/** @param {*} examData */
 export function startSimSession(examData) {
     // 시뮬레이터 상태 초기화
     simState.examId = examData.id || 'dynamic';
@@ -72,6 +73,7 @@ export function startSimSession(examData) {
  * 과목별 실전 모의고사 시작 — data-arg 'examKey' 또는 'examKey:count' (count = 출제 수, 생략 시 전체)
  * 부분 출제 시 문항을 무작위 추출하고 제한시간도 문항 수 비례로 축소
  */
+/** @param {*} arg */
 export function startMockExamSim(arg) {
     const [examId, countStr] = String(arg).split(':');
     const want = countStr ? parseInt(countStr, 10) : NaN;
@@ -104,22 +106,24 @@ export function startMockExamSim(arg) {
  * (citation·진술 목록을 question 본문에 편입해 아레나·리뷰 양쪽에서 표시,
  *  options.members를 문자열 배열로, 정답을 지시자 기호로 변환)
  */
+/** @param {*} q @param {string} subjKey */
 export function comboToSimQuestion(q, subjKey) {
-    const stmtLines = (q.statements || []).map(s => `${s.id}. ${s.text}`);
-    const ansIdx = (q.options || []).findIndex(o => o.id === q.answer);
+    const stmtLines = (q.statements || []).map((/** @type {*} */ s) => `${s.id}. ${s.text}`);
+    const ansIdx = (q.options || []).findIndex((/** @type {*} */ o) => o.id === q.answer);
     return {
         ...q,
         subject: subjKey,
         type: 'combo',
         question: [q.citation, q.stem, stmtLines.join('\n')].filter(Boolean).join('\n\n'),
         comboOptions: q.options || [], // 원본 members 구조 보존 — 채점 시 진술 판정 도출·리뷰 정오표용
-        options: (q.options || []).map(o => (o.members || []).join(', ')),
+        options: (q.options || []).map((/** @type {*} */ o) => (o.members || []).join(', ')),
         answer: OPTION_INDICATORS[ansIdx] || q.answer,
         explanation: q.explain || ''
     };
 }
 
 // 복수정답형 번들 과목 번호 조회 (combo 오답 복습 시 과목 번들 로드용) — registry.subjects의 order 기반
+/** @param {string} subjKey */
 export function comboSubjOrder(subjKey) {
     const subjects = (getActiveRegistry() || {}).subjects || [];
     const s = subjects.find(x => x.key === subjKey);
@@ -189,7 +193,9 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     const subjects = registry && registry.subjects ? registry.subjects : [];
 
     // 과목별 문제 버킷 (동적 생성)
+    /** @type {Object.<string,Array<*>>} */
     const subjectQuestions = {};
+    /** @type {Object.<string,number>} */
     const subjectCounts = {};
     for (const subj of subjects) {
         subjectQuestions[subj.key] = [];
@@ -199,6 +205,7 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     const EXAM_DATA = (typeof window !== 'undefined' && window.EXAM_DATA) ? window.EXAM_DATA : {};
 
     // registry.exams에서 examId → subject 매핑 구축
+    /** @type {Object.<string,string>} */
     const examToSubject = {};
     if (registry && registry.exams) {
         for (const exam of registry.exams) {
@@ -231,7 +238,7 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     }
 
     // 과목별 무작위 선택 함수
-    const getRandomSample = (arr, count, subjectId) => {
+    const getRandomSample = (/** @type {*[]} */ arr, /** @type {number} */ count, /** @type {string} */ subjectId) => {
         const shuffled = shuffle(arr);
         return shuffled.slice(0, count).map(q => ({
             ...q,
@@ -240,15 +247,17 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     };
 
     // 복수정답형 혼합: 과목별 배정의 약 20%를 combo 문항으로 교체 (선지 다양화, 실전 패턴 훈련)
+    /** @type {Object.<string,*[]>} */
     const comboPoolBySubject = {};
     if (mixCombo) {
         subjects.forEach((subj, idx) => {
-            const bundle = (typeof window !== 'undefined') ? window[`COMBO_DRILLS_subject${idx + 1}`] : null;
+            const bundle = (typeof window !== 'undefined') ? /** @type {*} */ (window)[`COMBO_DRILLS_subject${idx + 1}`] : null;
             if (Array.isArray(bundle)) comboPoolBySubject[subj.key] = bundle;
         });
     }
 
     // 과목별 샘플링 (registry에서 동적 조회)
+    /** @type {Object.<string,*[]>} */
     const selectedBySubject = {};
     let expectedTotal = 0;
     const shortageSubjects = [];

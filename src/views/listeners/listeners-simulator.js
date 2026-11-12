@@ -20,7 +20,7 @@ export function bindSimulatorListeners() {
 
     document.getElementById('sim-submit-exam-btn')?.addEventListener('click', async () => {
         const questions = (simState.data && simState.data.questions) || [];
-        const answered = questions.filter(q => String(simState.userAnswers[q.id] || '').trim() !== '').length;
+        const answered = questions.filter((/** @type {*} */ q) => String(simState.userAnswers[q.id] || '').trim() !== '').length;
         const unanswered = questions.length - answered;
         const msg = unanswered > 0
             ? `아직 풀지 않은 문항이 ${unanswered}개 있습니다. 그래도 답안지를 제출하고 시험을 종료하시겠습니까?`

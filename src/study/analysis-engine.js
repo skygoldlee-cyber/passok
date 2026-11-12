@@ -635,7 +635,7 @@ export function computeStudyPattern(calendar) {
  * @param {Array<*>} [p.weakChapters] computeSubjectWeakChapters 결과
  * @param {*} [p.pattern] computeStudyPattern 결과
  * @param {*} [p.plan] SC-06 계획 준수 요약 {weekActual, weekTarget, percent, statusLabel}
- * @param {Array<*>} [p.planBySubject] SC-11 과목별 준수 행 [{name, done, cards, quizDone, quizzes}] — 주간 배분 대비 실적
+ * @param {Array<*>|null} [p.planBySubject] SC-11 과목별 준수 행 [{name, done, cards, quizDone, quizzes}] — 주간 배분 대비 실적
  * @param {*|null} [p.recEffect] AN-06 evaluateRecommendationEffect 결과 — 지난 추천 대상 과목의 정답률 변화
  * @param {*|null} [p.actual] AN-05 getActualResult 결과 — 실제 시험 자가 보고 {passed, score}
  * @param {number} [p.bias] AN-05 computeCalibrationBias 결과 — 0이면 보정 표기 생략

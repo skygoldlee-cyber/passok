@@ -6,6 +6,7 @@
 
 import { state } from '../core/state.js';
 
+/** @type {Object.<string,{mem:number,weak:number,quizSolved:number,quizCorrect:number}>|null} */
 let _subjCountCache = null;
 let _subjCountCacheKey = '';
 
@@ -14,6 +15,7 @@ export function getSubjCounts() {
     const memKey = state.memorizedCards.size + ':' + state.weakCards.size + ':' + Object.keys(state.quizResults).length;
     if (_subjCountCache && _subjCountCacheKey === memKey) return _subjCountCache;
     _subjCountCacheKey = memKey;
+    /** @type {Object.<string,{mem:number,weak:number,quizSolved:number,quizCorrect:number}>} */
     const counts = {};
     state.memorizedCards.forEach(id => {
         const m = id.match(/^([a-z]+)_card_/);
@@ -40,6 +42,7 @@ export function getSubjCounts() {
 }
 
 /** 문제은행 출제 비중 목표치(targetCards/targetQuizzes)가 있으면 표시 수치를 상한 적용 */
+/** @param {*} subjMeta */
 export function displayCounts(subjMeta) {
     const stats = (subjMeta && subjMeta.stats) || {};
     const cards = (stats.targetCards > 0) ? Math.min(stats.cards || 0, stats.targetCards) : (stats.cards || 0);

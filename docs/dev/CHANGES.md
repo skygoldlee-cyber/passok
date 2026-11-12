@@ -1,6 +1,25 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(types): noImplicitAny 소진 7차 — src/views 전량 소진 완료 (Phase 1 지속)
+
+- **디렉터리 전량 소진**: src/views ~819건 → 0, 30+파일 — JSDoc 주석 + typedef·캐스트 중심. 대형 클러스터: textbook-search(69)·reader-render(59)·trainer-drills(57)·analysis-view·dictionary·trainer·exam-sim 전수·dashboard-queue·textbook-reader
+- **typedef 신설**: `ResultTier`(textbook-search — RESULT_TIERS 테이블에 `applyResultTiers`가 채우는 `list`/`shown` 필드가 유니언 리터럴에 없어 멤버 접근마다 TS2339 나던 비계약 해소 — 반환을 `ResultTier & {list,shown}`으로 좁혀 소비처는 반환값 사용)
+- **계약 명문화**:
+  - `DRILL_TYPES[type]`를 `keyof` 호환 캐스트로 인덱스 — ox/combo 드릴 설정 맵의 동적 조회 해소
+  - `getRefTables()` 반환 `Object.<string,*>` 캐스트 — `REFERENCE_FILES`/`SUBJECT_DIR_MAP` 인덱스 (reader-render·textbook-search 공통)
+  - `badgeColors`·`perSub` 등 뷰 로컬 맵 `Object.<string,string>`·`Object.<string,{j,w,g}>` 인덱스 시그니처
+  - `computeSubjectAllocInputs`/`computeSubjectAllocation` 반환 형태 명문화 — `thisWeek`/`weeks`/`hasWeights` 접근 하류 해소 (study-tracker-alloc)
+  - `dictSchema()` 반환 동적 병합 스키마 — 시험별 필드 접근 해소
+- **정직한 계약 수정**:
+  - `glossary-renderer` `scrollToGlossary`의 `sourceLink`를 `Element`로 정정 — 호출부(reader-ref-links)가 앵커 엘리먼트를 실제 전달하는데 `string` 추정이던 것
+  - `NodeListOf<Element>.forEach` 콜백은 `Element` 유지 + 사용 지점 `HTMLElement` 캐스트 — 콜백 파라미터를 `HTMLElement`로 직접 좁히면 strictFunctionTypes 반공변 위반이라 TS2345 (reader-render 3곳)
+  - `saveTimer` `ReturnType<typeof setTimeout>|null`, `DRILL_TYPES`·`_rt` 동적 인덱스
+  - `care-custom-form` `r.error || '저장 실패'` — showToast 정밀화가 노출한 union 접근 `string|undefined` 폴백
+- **하류 효과**: views 외 잔여 파일(practice-registry·charts·ui-utils·pdf-registry·keyword-index 등) 회귀분도 동일 세션에서 해소
+- 결과: 잔여 2,327 → **1,476건 (-851)**, 기준선 135 → **88파일**, `check:types` 0 유지. 유닛 전체(1,866)·관련 DOM 433건 통과. **잔여는 `src/exams` 클러스터(~1,476건)뿐 — 플랫폼 계층 전량 소진 완료**
+
+
 ## 2026-11-12 feat(types): noImplicitAny 소진 6차-3 — src/study 전량 소진 완료 (Phase 1 지속)
 
 - **5파일 소진**: fsrs(34)·study-tracker-alloc(37)·study-aids(42)·personalization(55)·analysis-engine(97) — `src/study` 디렉터리 전량 0건 달성

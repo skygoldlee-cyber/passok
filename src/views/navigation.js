@@ -13,16 +13,19 @@ const pendingTop = new Set();
 // nav-item이 없는 뷰(exam-select-view 등)도 제목·해시·렌더 디스패치를
 // 동일하게 받을 수 있도록 switchView 폴백을 정식 라우터 경로로 보낸다.
 // 순환 import를 피하기 위해 router → navigation 방향의 등록 패턴을 사용.
+/** @type {function(string): void|null} */
+/** @type {(function(string): void)|null} */
 let _navigateToView = null;
 /** @param {function(string): void} fn - navigateToView를 ctx와 바인딩한 함수 */
 export function registerViewNavigator(fn) {
     _navigateToView = fn;
 }
 
+/** @param {string} viewId */
 export function saveScrollPosition(viewId) {
     const mainContent = document.querySelector('.main-content');
     if (mainContent) {
-        scrollPositions[viewId] = mainContent.scrollTop;
+        /** @type {Object.<string,number>} */ (scrollPositions)[viewId] = mainContent.scrollTop;
     }
 }
 
@@ -41,17 +44,19 @@ export function resetMainScroll() {
 
 // @spec UX-NAV-07
 // pendingTop은 saveScrollPosition 덮어쓰기를 무시하는 1회 플래그
+/** @param {string} viewId */
 export function restoreScrollPosition(viewId) {
     const mainContent = document.querySelector('.main-content');
     if (!mainContent) return;
     if (pendingTop.delete(viewId)) {
-        scrollPositions[viewId] = 0;
+        /** @type {Object.<string,number>} */ (scrollPositions)[viewId] = 0;
         requestAnimationFrame(() => { mainContent.scrollTop = 0; });
         return;
     }
-    if (scrollPositions[viewId] !== undefined) {
+    const positions = /** @type {Object.<string,number>} */ (scrollPositions);
+    if (positions[viewId] !== undefined) {
         requestAnimationFrame(() => {
-            mainContent.scrollTop = scrollPositions[viewId];
+            mainContent.scrollTop = positions[viewId];
         });
     }
 }
@@ -84,6 +89,7 @@ export function isStaleViewGen(gen) {
  */
 // @spec UX-NAV-07
 // opts.scrollTop 딥링크 시 저장된 위치 대신 맨 위 오픈
+/** @param {string} targetView @param {*} [opts] */
 export function switchView(targetView, opts = {}) {
     // 리더 화면을 벗어나면 재생 중인 오디오 정지
     if (targetView !== 'textbook-reader-view' && typeof window.stopReaderAudio === 'function') {
