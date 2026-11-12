@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-12 fix(ux): Discord 커뮤니티 버튼 플랫폼 기본 초대 폴백 — 전 시험 노출
+
+- **문제**: discordInvite가 cosmetic에만 선언돼 다른 시험 활성 시 도움말 메뉴의 'Discord 커뮤니티' 버튼이 숨겨짐 — 사용자에게 커뮤니티 진입 경로 부재
+- **수정**: exams.json 루트에 `discordInvite` 플랫폼 기본 초대 추가 — 시험별 선언 우선, 미선언 시 루트 폴백 (listeners-app.js). DISCORD_COMMUNITY_DESIGN의 단일 서버 + 시험별 채널 초대 구조와 정합 — 시험별 채널 초대 발급 시 해당 시험만 덮어씀
+- **검증**: cosmetic(시험별)·carework/iteng(루트 폴백) 해석 확인 · check:types 0 · DOM 15건
+
+
 ## 2026-11-12 feat(quality): 순환복잡도 래칫 도입 — check:cplx (기준선 340건·142파일)
 
 - **래칫 신설**: tools/check/check_complexity.js — 타입 래칫 동형(eslint complexity 임계 10 실측 → tools/state/complexity_baseline.json 비교 → 비증가 게이트). 파일별 {count,max,sum} 3중 지표 비증가 — 신규 진입·최악 함수 악화·중간층 우회를 모두 차단. --update·--dir·--report 지원
