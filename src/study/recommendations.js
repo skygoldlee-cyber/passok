@@ -30,9 +30,10 @@ const subjectKeyOf = subjectKeyFromItemId;
  * @returns {Array<{icon:string, color:string, title:string, reason:string,
  *   actions:Array<{click:string, arg:string, label:string, icon:string, cls:string}>}>}
  */
+/** @param {*[]} subjects @param {Object.<string,*>} counts */
 export function computeRecommendations(subjects, counts) {
     const recs = [];
-    const subjName = (key) => {
+    const subjName = (/** @type {string} */ key) => {
         const s = subjects.find(x => x.key === key);
         return s ? s.name : key;
     };
@@ -40,6 +41,7 @@ export function computeRecommendations(subjects, counts) {
     // 1순위: 오늘 복습 대기 카드 (FSRS 간격 반복)
     const due = getDueCards();
     if (due.length > 0) {
+        /** @type {Object.<string,number>} */
         const bySubj = {};
         due.forEach(id => {
             const k = subjectKeyOf(id);
@@ -181,7 +183,7 @@ export function getWrongCauseTaxonomy() {
     extra.forEach(e => {
         if (e && typeof e.key === 'string' && typeof e.label === 'string') {
             const base = merged.get(e.key) || { key: e.key, label: e.label, advice: '' };
-            const m = { key: e.key, label: e.label, advice: e.advice || base.advice };
+            const m = /** @type {*} */ ({ key: e.key, label: e.label, advice: e.advice || base.advice });
             if (e.autoPattern) m.autoPattern = e.autoPattern; // 자동 분류 정규식 (AN-07)
             merged.set(e.key, m);
         }
@@ -191,12 +193,14 @@ export function getWrongCauseTaxonomy() {
 
 /** 분류표의 key→label 맵 (태깅 버튼·집계 표 렌더용) */
 export function getWrongCauseLabels() {
+    /** @type {Object.<string,string>} */
     const m = {};
     getWrongCauseTaxonomy().forEach(c => { m[c.key] = c.label; });
     return m;
 }
 
 /** 원인 키의 권장 학습법 (미등록 키면 빈 문자열) */
+/** @param {string} key */
 export function getWrongCauseAdvice(key) {
     const t = getWrongCauseTaxonomy().find(c => c.key === key);
     return t ? t.advice : '';
@@ -211,8 +215,10 @@ export function getWrongCauseAdvice(key) {
 export function computeWrongCauseSummary(wrongCauses, { days = 7, now = Date.now() } = {}) {
     const cutoff = now - days * 86400000;
     const labels = getWrongCauseLabels();
+    /** @type {Object.<string,number>} */
     const counts = {};
     Object.keys(labels).forEach(k => { counts[k] = 0; });
+    /** @type {Object.<string,number>} */
     const bySubj = {};
     let total = 0;
 
@@ -324,6 +330,7 @@ export function clearActualResult() {
  * @param {Object|null} actual getActualResult() 결과
  * @returns {number} 보정치 (없으면 0)
  */
+/** @param {*} actual */
 export function computeCalibrationBias(actual) {
     if (!actual || typeof actual.score !== 'number' || typeof actual.expectedAtReport !== 'number') return 0;
     return Math.max(-15, Math.min(15, Math.round(actual.score - actual.expectedAtReport)));
@@ -401,14 +408,16 @@ function _loadRecSnapshot() {
  * @param {Array<{actions:Array<{arg:string}>}>} recs computeRecommendations 결과
  * @param {Object} counts 과목별 학습 카운트
  */
+/** @param {*[]} recs @param {Object.<string,*>} counts */
 export function snapshotRecommendations(recs, counts) {
     const targets = [...new Set((recs || [])
-        .flatMap(r => r.actions.map(a => a.arg))
+        .flatMap((/** @type {*} */ r) => r.actions.map((/** @type {*} */ a) => a.arg))
         .filter(a => typeof a === 'string' && counts && counts[a]))];
     if (!targets.length) return;
     const prev = _loadRecSnapshot();
     const sameTargets = prev && JSON.stringify([...prev.targets].sort()) === JSON.stringify([...targets].sort());
     if (prev && sameTargets && Date.now() - prev.ts < REC_SNAPSHOT_MIN_AGE) return;
+    /** @type {Object.<string,*>} */
     const baseline = {};
     targets.forEach(k => {
         const c = counts[k];
@@ -426,13 +435,15 @@ export function snapshotRecommendations(recs, counts) {
  * @param {(key:string)=>string} [subjectName] 표시명 해석기
  * @returns {{sinceTs:number, items:Array<{key:string,name:string,fromRate:number,toRate:number,delta:number,added:number}>}|null}
  */
+/** @param {Object.<string,*>} counts @param {function(string):string} [subjectName] */
 export function evaluateRecommendationEffect(counts, subjectName) {
     const snap = _loadRecSnapshot();
     if (!snap || !snap.baseline || snap.examId !== getCurrentExamId()) return null;
     if (Date.now() - snap.ts < REC_EFFECT_MIN_AGE) return null;
-    const name = subjectName || (k => k);
+    const name = subjectName || ((/** @type {string} */ k) => k);
+    /** @type {*[]} */
     const items = [];
-    (snap.targets || []).forEach(k => {
+    (snap.targets || []).forEach((/** @type {string} */ k) => {
         const b = snap.baseline[k];
         const c = counts && counts[k];
         if (!b || !c) return;

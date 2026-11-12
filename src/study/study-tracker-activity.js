@@ -11,6 +11,7 @@ import { localDateKey } from '../core/utils.js';
 /**
  * 로컬 날짜 문자열 반환 (YYYY-MM-DD)
  */
+/** @param {Date} d */
 function _localDateStr(d) {
     return localDateKey(d);
 }
@@ -24,7 +25,7 @@ export function getTodayStr() {
 
 /**
  * 학습 캘린더 전체 데이터 조회
- * @returns {Object} { "2026-09-12": { cards: 5, quizzes: 3, correct: 2, h: {"21": 2} }, ... }
+ * @returns {Object.<string,*>} { "2026-09-12": { cards: 5, quizzes: 3, correct: 2, h: {"21": 2} }, ... }
  *   `h`는 시간대 버킷(시 → 활동 횟수) — 학습 패턴 분석용, 레거시 엔트리는 없을 수 있음
  */
 export function getStudyCalendar() {
@@ -42,6 +43,7 @@ export function getStudyCalendar() {
  *   bySubj: 과목별 카드 증분 {subjKey: n} — SC-09 주간 배분 과목별 주간 실적용,
  *   quizBySubj: 과목별 퀴즈 증분 {subjKey: n} — SC-13 주간 배분 퀴즈 주간 실적용 }
  */
+/** @param {Object.<string,*>} [activity] */
 export function recordStudyActivity(activity = {}) {
     const today = getTodayStr();
     const cal = getStudyCalendar();
@@ -75,6 +77,7 @@ export function recordStudyActivity(activity = {}) {
 /**
  * 이번 달 학습 일수
  */
+/** @param {number} year @param {number} month */
 export function getMonthlyStudyDays(year, month) {
     const cal = getStudyCalendar();
     let count = 0;
@@ -113,6 +116,7 @@ export function getStudyGoals() {
 /**
  * 학습 목표 저장
  */
+/** @param {*} goals */
 export function setStudyGoals(goals) {
     const current = getStudyGoals();
     const merged = { ...current, ...goals };

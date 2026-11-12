@@ -1,6 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(types): noImplicitAny 소진 6차-2 — src/study tracker-activity·recommendations 소진 (Phase 1 지속)
+
+- **2파일 소진**: study-tracker-activity(26)·recommendations(22) — JSDoc 주석 + 계약 좁히기
+- **계약 명문화**: `getStudyCalendar` 반환 `Object.<string,*>` (날짜 인덱스 TS7053·엔트리 멤버 TS2339 다수 해소 — 반환 타입 하나가 근본 원인)·`computeRecommendations`/`snapshotRecommendations`/`evaluateRecommendationEffect`의 counts 맵 `Object.<string,*>`·원인 집계 `counts`/`bySubj` 누적 `Object.<string,number>`
+- **하류 효과**: personalization-view 23→21, quiz.js 18→17, study-calendar 29→28 (typed study API 전파)
+- 결과: 잔여 2,678 → **2,626건 (-52)**, 기준선 142 → **140파일**, `check:types` 0 유지. 잔여 study 파일(fsrs·tracker-alloc·study-aids·personalization·analysis-engine, ~265건)은 6차-3으로 이어감
+
+
 ## 2026-11-12 feat(types): noImplicitAny 소진 6차-1 — src/study 소형 8파일 소진 (Phase 1 지속)
 
 - **8파일 소진**: reader-notes·scratchpad·statement-tracker·knowledge-tracing·spaced-repetition·weak-items·study-tracker-plan·study-tracker-adherence — JSDoc 주석 + 계약 좁히기
