@@ -307,19 +307,33 @@ const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled
 const _inertModals = new Set();
 let _inertObserver = null;
 
+/** 모달이 사라졌는지 판정 — DOM 제거 + 표시 소실(display:none·visibility·조상 숨김) 커버 */
+function _modalGone(m) {
+    if (!m.isConnected) return true;
+    if (typeof m.checkVisibility === 'function') {
+        return !m.checkVisibility({ checkVisibilityCSS: true, visibilityProperty: true });
+    }
+    return false;
+}
+
 /** DOM에서 사라진 모달을 감지해 inert를 자동 해제 — untrap 미호출 경로(el.remove() 등) 커버 */
 function _ensureInertObserver() {
     if (_inertObserver || typeof MutationObserver === 'undefined' || !document.body) return;
     _inertObserver = new MutationObserver(() => {
+        if (_inertModals.size === 0) return;
         let changed = false;
         for (const m of _inertModals) {
-            if (!m.isConnected) { _inertModals.delete(m); changed = true; }
+            if (_modalGone(m)) { _inertModals.delete(m); changed = true; }
         }
         if (changed && _inertModals.size === 0) {
             document.querySelector('.app-container')?.removeAttribute('inert');
         }
     });
-    _inertObserver.observe(document.body, { childList: true, subtree: true });
+    // attributes — untrap 없이 is-visible 제거·display:none으로 숨기는 비정상 닫힘 경로 감지
+    _inertObserver.observe(document.body, {
+        childList: true, subtree: true,
+        attributes: true, attributeFilter: ['class', 'style', 'hidden', 'open'],
+    });
 }
 
 /**
@@ -369,7 +383,7 @@ function applyBackgroundInert(modalEl) {
     const app = document.querySelector('.app-container');
     if (!app || app.contains(modalEl)) return () => {};
     const prune = () => {
-        for (const m of _inertModals) if (!m.isConnected) _inertModals.delete(m);
+        for (const m of _inertModals) if (_modalGone(m)) _inertModals.delete(m);
     };
     prune();
     _inertModals.add(modalEl);

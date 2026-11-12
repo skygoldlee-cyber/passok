@@ -1,6 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 fix(a11y): inert 누수 2차 — 숨김(display:none) 경로 미감지 수정 (A-17 후속)
+
+- **증상**: Phase 2 CI `mobile,2`·`tablet,2` 샤드에서 `toc-sidebar.spec` 이야기형 테스트 타임아웃 — `<body> intercepts pointer events`
+- **원인**: 테스트가 `#pro-upgrade-overlay`를 `is-visible` 제거 + `display:none`으로 숨기는데 요소가 DOM에 잔존 → MutationObserver가 DOM 제거만 감지해 inert 누수 지속
+- **수정**: `ui-utils.js` `_modalGone` 판정 추가 — `isConnected` + `checkVisibility({checkVisibilityCSS, visibilityProperty})`(조상 숨김 포함, jsdom은 폴백=연결만). 옵저버 observe에 `attributes`(class·style·hidden·open 필터) 추가해 비정상 숨김 닫힘도 감지
+- **테스트**: common-a11y에 'untrap 없이 숨겨진 모달 inert 자동 해제' 추가 — DOM 1011건·toc-sidebar mobile/tablet e2e 통과
+
+
 ## 2026-11-12 feat(a11y): E-09 모의고사 시간·이탈 + UX-FORM-05 이탈 유실 방지 — Phase 2 구현 + Phase 1 CI 결함 수정
 
 - **E-09 ✅ — 모의고사 시간 경고·만료·이탈**: `exam.html`에 `#sim-timer-live` sr-only aria-live 리전 추가, `tickSimTimer`에 `_warnedMarks`로 잔여 10분·1분 시점 1회씩 토스트+aria-live 보고(시각 warning/danger 클래스와 병행). 만료 자동제출은 기존 `submitExam` 경로 확인. 이탈은 `exitSimArena`를 async로 바꿔 `showConfirm`(응답 n/전체 표기) 경유 + **뷰 이탈 가드 신설**: router.js에 `registerViewLeaveGuard`/`clearViewLeaveGuard` — 응시 중 뒤로가기·뷰 전환도 동일 확인 경유(승인 시 재진입·거절 시 해시 복귀). 세션 시작 시 등록·submit/exit 시 해제

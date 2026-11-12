@@ -125,6 +125,25 @@ describe('a11y — 토스트·포커스 트랩·라벨', () => {
         m2.remove();
     });
 
+    it('trapFocus → untrap 없이 숨겨진 모달도 inert 자동 해제 (A-17)', async () => {
+        const app = document.querySelector('.app-container');
+        const overlay = document.createElement('div');
+        const modal = document.createElement('div');
+        modal.innerHTML = '<button type="button">확인</button>';
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        trapFocus(modal);
+        expect(app.hasAttribute('inert')).toBe(true);
+
+        // untrap 미호출 비정상 닫힘 — 조상 overlay를 display:none 처리
+        modal.checkVisibility = () => false;
+        overlay.classList.add('is-hidden');
+        await Promise.resolve(); // MutationObserver 배치 처리 대기
+        expect(app.hasAttribute('inert')).toBe(false);
+        overlay.remove();
+    });
+
     it('아이콘 전용 버튼 → aria-label 또는 title 존재 전수', () => {
         // aria-label·title 둘 다 없는 아이콘 전용 버튼 수집
         const offenders = [];
