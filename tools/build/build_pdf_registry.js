@@ -277,7 +277,8 @@ ${entries.join(',\n')}
 // 활성 시험의 매칭 테이블 (미등록 시험은 빈 테이블 — 다른 시험 문서로 폴백하지 않음)
 function activeLawUrls() {
   const id = getActiveExamId();
-  return _EXAM_LAW_URLS[id] || [];
+  if (!id) return [];
+  return _EXAM_LAW_URLS[/** @type {keyof _EXAM_LAW_URLS} */ (id)] || [];
 }
 
 // 전 시험 매칭 합집합 (URL 기준 중복 제거 — 같은 문서의 matchKey는 첫 것만 유지, 순서 보존)
@@ -352,6 +353,7 @@ ${entries.join(',\n')}
 
 // --- 파생 맵 (시험별 자동 계산 — REF_DIRS에서 생성) ---
 // 파일명 → MD 경로 / 폴더명 (우선순위: 과목N 내림차순 > 공통 > 법령고시 > 기타)
+/** @type {Object.<string,*>} */
 const _EXAM_DERIVED = {};
 for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
     const root = t.contentRoot || 'content';
@@ -360,13 +362,15 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
         ...Object.keys(refDirs).filter(d => /^과목\\d+$/.test(d)).sort((a, b) => parseInt(b.slice(2), 10) - parseInt(a.slice(2), 10)),
         ...Object.keys(refDirs).filter(d => !/^과목\\d+$/.test(d))
     ];
+    /** @type {Object.<string,string>} */
     const fileToPath = {};
+    /** @type {Object.<string,string>} */
     const registry = {};
     for (const dir of dirPriority) {
-        for (const f of refDirs[dir] || []) {
+        for (const f of /** @type {Object.<string,string[]>} */ (refDirs)[dir] || []) {
             if (!fileToPath[f]) {
                 const base = f.replace(/\\.pdf$/, '');
-                const sub = (t.REF_MD_SUBJECTS || {})[f];
+                const sub = /** @type {Object.<string,string>} */ (t.REF_MD_SUBJECTS || {})[f];
                 fileToPath[f] = \`\${root}/참조자료/ref_md/\${sub ? sub + '/' : ''}\${base}/\${base}.md\`;
                 registry[f] = dir;
             }
@@ -379,24 +383,27 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
  * 활성 시험의 참조자료 테이블 묶음.
  * 미등록 시험은 빈 테이블 — 다른 시험의 참조자료로 폴백하지 않는다 (교차 오염 방지).
  * @returns {{contentRoot?: string, SUBJECT_DIR_MAP?: Object, REF_DIRS?: Object,
- *   SOURCE_REF_MAP?: Array, KEYWORD_REF_MAP?: Array, REFERENCE_FILES?: Object,
- *   REFERENCE_COMMON?: Array, REFERENCE_INGREDIENTS?: Array, REFERENCE_LAW?: Array,
- *   NOTICE_INGREDIENT_DOCS?: Array,
+ *   SOURCE_REF_MAP?: Array<*>, KEYWORD_REF_MAP?: Array<*>, REFERENCE_FILES?: Object,
+ *   REFERENCE_COMMON?: Array<*>, REFERENCE_INGREDIENTS?: Array<*>, REFERENCE_LAW?: Array<*>,
+ *   NOTICE_INGREDIENT_DOCS?: Array<*>,
  *   REF_FILE_TO_PATH?: Object, REF_REGISTRY?: Object, REF_MD_SUBJECTS?: Object}}
  */
 export function getRefTables() {
     const id = getActiveExamId();
-    return { ...(_EXAM_TABLES[id] || {}), ...(_EXAM_DERIVED[id] || {}) };
+    const tables = id ? /** @type {Object.<string,*>} */ (_EXAM_TABLES)[id] : {};
+    const derived = id ? /** @type {Object.<string,*>} */ (_EXAM_DERIVED)[id] : {};
+    return { ...tables, ...derived };
 }
 
 // --- 헬퍼 함수 ---
 
+/** @param {string} fileName */
 export function resolveRefPath(fileName) {
     if (!fileName) return '';
     const t = getRefTables();
     const root = t.contentRoot || 'content';
     if (fileName.startsWith(\`\${root}/\`)) return fileName;
-    return (t.REF_FILE_TO_PATH || {})[fileName] || '';
+    return /** @type {Object.<string,string>} */ (t.REF_FILE_TO_PATH || {})[fileName] || '';
 }
 
 /**
@@ -405,6 +412,7 @@ export function resolveRefPath(fileName) {
  * name 필드를 탐색한다 (확장자 무시 — '화장품법(법률)(제N호).md' ↔ '...pdf' 매칭).
  * 등록되지 않은 파일명이면 '' 반환.
  */
+/** @param {string} fileName */
 export function refDocDisplayName(fileName) {
     const base = (String(fileName || '').split('/').pop() || '').replace(/\\.(md|pdf|html?)$/i, '');
     if (!base) return '';
@@ -415,11 +423,12 @@ export function refDocDisplayName(fileName) {
         ...(t.REFERENCE_INGREDIENTS || []),
         ...(t.REFERENCE_LAW || [])
     ];
-    const hit = entries.find(e =>
+    const hit = entries.find((/** @type {*} */ e) =>
         String(e.file || '').replace(/\\.(md|pdf|html?)$/i, '') === base);
     return hit ? String(hit.name || '') : '';
 }
 
+/** @param {string} sourceText */
 export function mapSourceToRef(sourceText) {
     if (!sourceText) return '';
     const s = sourceText.trim();
@@ -436,12 +445,13 @@ export function mapSourceToRef(sourceText) {
     if (!refFile) return '';
 
     const base = refFile.replace(/\\.pdf$/, '');
-    const sub = (t.REF_MD_SUBJECTS || {})[refFile];
+    const sub = /** @type {Object.<string,string>} */ (t.REF_MD_SUBJECTS || {})[refFile];
     return \`\${t.contentRoot || 'content'}/참조자료/ref_md/\${sub ? sub + '/' : ''}\${base}/\${base}.md\`;
 }
 
 // --- 본문 키워드 자동 링크 헬퍼 ---
 // KEYWORD_REF_MAP의 패턴을 본문 텍스트에 적용하여 링크 생성 정보 반환
+/** @param {string} text */
 export function resolveKeywordRef(text) {
     if (!text) return null;
     for (const entry of (getRefTables().KEYWORD_REF_MAP || [])) {

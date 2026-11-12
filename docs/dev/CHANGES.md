@@ -1,6 +1,17 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 fix(build): 생성 파일 JSDoc 주석을 제너레이터 템플릿에 동기화
+
+- **문제**: Phase 1 타입 강화로 생성 파일(src/keyword-index.js·src/law-links.js·src/pdf-registry.js)에 부여한 JSDoc·캐스트가 제너레이터 템플릿에 미반영 — deploy 시 build:derived 재생성이 주석을 되돌려 신선도 게이트 차단
+- **수정**: build_keyword_index.js·build_pdf_registry.js 출력 템플릿에 커밋된 주석 버전을 그대로 반영 — 재생성해도 타입 주석 유지 (생성물 정본은 제너레이터)
+  - getGlossaryIndex·activeLawUrls nullable 가드 + keyof/맵 캐스트
+  - _EXAM_DERIVED 파생 맵 fileToPath·registry·REF_MD_SUBJECTS 맵 타입
+  - getRefTables @returns Array → Array<*> 정밀화 + _EXAM_TABLES/_EXAM_DERIVED 인덱스 캐스트
+  - resolveRefPath·refDocDisplayName·mapSourceToRef·resolveKeywordRef @param 주석
+- 결과: check:types 0 (noImplicitAny 활성 유지) · noImplicitAny 래칫 0/0 · 재생성 diff 0건
+
+
 ## 2026-11-12 feat(types): noImplicitAny 소진 9차 — src/exams/cosmetic 전량 소진 + noImplicitAny 활성화 (Phase 1 완료)
 
 - **디렉터리 전량 소진**: src/exams/cosmetic 810건 → 0, 37파일 — 루트 스토어·도메인 로직(store-utils·batch-store·formula-store·material-ledger·formula-check·product-vision·formula-stability·product-store·formula-rules·ad-lint·adverse-store·biz-profile·custom-ingredient-store·customer-store·usage-guide) + 뷰 전수(formula-print 90·batch-form 48·calc 41·audit 36·batch 32·customer 22·compliance 22·material 21·prod-detail 20·fields 17·recommend 15·products 12·prod-vision 11·io 10 등)
