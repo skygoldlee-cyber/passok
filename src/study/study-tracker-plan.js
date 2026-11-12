@@ -9,6 +9,7 @@ import { getStudyGoals } from './study-tracker-activity.js';
    🗓️ 시험일 / D-day (역산 학습 계획)
    ======================================================= */
 
+/** @param {*} dateStr */
 function _isValidDateStr(dateStr) {
     if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return false;
     const [y, m, d] = dateStr.split('-').map(Number);
@@ -27,6 +28,7 @@ export function getExamDate() {
 /**
  * 시험일 저장 (null/빈 문자열/유효하지 않은 날짜면 제거)
  */
+/** @param {*} dateStr */
 export function setExamDate(dateStr) {
     safeSetItem(STORAGE_KEYS.EXAM_DATE, _isValidDateStr(dateStr) ? dateStr : '');
 }
@@ -56,6 +58,7 @@ export function getDDay() {
 export function getTextbookReadProgress() {
     let map = {};
     try { map = JSON.parse(safeGetItem(STORAGE_KEYS.READER_PROGRESS) || '{}'); } catch (e) { map = {}; }
+    /** @type {Object.<string,number>} */
     const bySubject = {};
     Object.entries(map).forEach(([k, v]) => {
         const frac = (v && typeof v === 'object') ? v.frac : null;
@@ -138,7 +141,7 @@ export function tierStudyHint(tier) {
 /**
  * D-day 기간의 주차별 학습일 스켈레톤 — 주간 학습일 상한 + 통독 차감 적용.
  * @param {number} dday 시험까지 남은 달력 일수 (>0)
- * @returns {{weeks:Array, studyDays:number, goals:Object, read:Object, readDaysLeft:number}}
+ * @returns {{weeks:Array<*>, studyDays:number, goals:*, read:*, readDaysLeft:number}}
  */
 function _planSkeleton(dday) {
     const goals = getStudyGoals();
@@ -182,6 +185,7 @@ export function getRemainingStudyDays(dday) {
     return _planSkeleton(dday).studyDays;
 }
 
+/** @param {*} remainingItems */
 export function computeStudyPlan(remainingItems) {
     const dday = getDDay();
     if (dday === null || dday <= 0) return null;

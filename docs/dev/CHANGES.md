@@ -1,6 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(types): noImplicitAny 소진 6차-1 — src/study 소형 8파일 소진 (Phase 1 지속)
+
+- **8파일 소진**: reader-notes·scratchpad·statement-tracker·knowledge-tracing·spaced-repetition·weak-items·study-tracker-plan·study-tracker-adherence — JSDoc 주석 + 계약 좁히기
+- **계약 명문화**: `loadSchedules` 반환 `Object.<string,*>` (cardId 인덱스 TS7053 다수 해소)·`computeUnitMastery` 관측 시퀀스·BKT 파라미터·`sumRecentCards`/`_sumRecentBySubject` 캘린더 맵 `Object.<string,*>`·`_planSkeleton` 반환의 `goals`/`read` `Object`→`*` (멤버 접근 TS2339 해소)
+- **하류 효과**: personalization-view 24→23 (typed study API 전파)
+- 결과: 잔여 2,749 → **2,678건 (-71)**, 기준선 150 → **142파일**, `check:types` 0 유지. 잔여 study 파일(analysis-engine·personalization·study-aids·tracker-alloc·fsrs·tracker-activity·recommendations, ~313건)은 6차-2로 이어감
+
+
 ## 2026-11-12 feat(types): noImplicitAny 소진 5차 — src/shell·reader 전량 소진 (Phase 1 지속)
 
 - **2개 디렉터리 29파일 소진**: shell·reader — JSDoc 주석 + typedef 중심. 대형 클러스터: notice-check(79)·exam-viewer(54+하류)·markdown-parser(53)·command-palette(47)·html-viewer(34)·textbook-core(33)·reader-format(33)

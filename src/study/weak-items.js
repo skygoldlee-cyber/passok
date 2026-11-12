@@ -18,6 +18,7 @@ export const WEAK_SIM_PREFIX = 'weak_sim_';
  * 퀴즈 항목 ID → weakCards/wrongCauses에서 쓰는 약점 항목 키
  * (weak_* 접두사 또는 카드 ID는 그대로, 일반 퀴즈 ID는 weak_quiz_ 접두사)
  */
+/** @param {string} quizId */
 export function weakItemKey(quizId) {
     if (quizId.startsWith('weak_') || quizId.includes('_card_')) return quizId;
     return WEAK_QUIZ_PREFIX + quizId;
@@ -57,8 +58,8 @@ function _ensureIndexes() {
     for (const subjId of Object.keys(data)) {
         if (_subjectRef.get(subjId) === data[subjId]) continue;
         _subjectRef.set(subjId, data[subjId]);
-        (data[subjId].quizzes || []).forEach(q => quizIdx.set(q.id, { quiz: q, subjectId: subjId }));
-        (data[subjId].cards || []).forEach(c => cardIdx.set(c.id, { card: c, subjectId: subjId }));
+        (data[subjId].quizzes || []).forEach((/** @type {*} */ q) => quizIdx.set(q.id, { quiz: q, subjectId: subjId }));
+        (data[subjId].cards || []).forEach((/** @type {*} */ c) => cardIdx.set(c.id, { card: c, subjectId: subjId }));
     }
 }
 
@@ -66,6 +67,7 @@ function _ensureIndexes() {
  * weak_quiz_<origId> 또는 일반 퀴즈 ID로 원본 퀴즈 객체를 찾는다.
  * @returns {{quiz: object, subjectId: string}|null}
  */
+/** @param {string} quizId */
 export function resolveWrongQuiz(quizId) {
     const origId = quizId.startsWith(WEAK_QUIZ_PREFIX)
         ? quizId.substring(WEAK_QUIZ_PREFIX.length)
@@ -78,12 +80,14 @@ export function resolveWrongQuiz(quizId) {
  * 카드 ID → 원본 카드 객체·과목 ID (인덱스 조회)
  * @returns {{card: object, subjectId: string}|null}
  */
+/** @param {string} cardId */
 export function resolveCard(cardId) {
     _ensureIndexes();
     return (_cardIdx && _cardIdx.get(cardId)) || null;
 }
 
 /** 카드 ID → 과목 ID (인덱스 조회, 없으면 null) */
+/** @param {string} cardId */
 export function cardSubjectOf(cardId) {
     const r = resolveCard(cardId);
     return r ? r.subjectId : null;
@@ -93,6 +97,7 @@ export function cardSubjectOf(cardId) {
  * weak_sim_<examId>_q<num> ID 파싱 — 복수정답형(combo) 등 다른 꼬리는 null.
  * @returns {{examId:string, qNum:number}|null}
  */
+/** @param {string} itemId */
 export function parseWeakSimId(itemId) {
     if (!itemId || !itemId.startsWith(WEAK_SIM_PREFIX)) return null;
     const parts = itemId.substring(WEAK_SIM_PREFIX.length).split('_q');
@@ -119,6 +124,7 @@ export function subjectForWeakItem(itemId, fallbackSubj = null) {
  * weak_quiz_/weak_sim_ 접두사를 먼저 벗기고, 과목 키가 숫자·밑줄을 포함해도
  * 동작하도록 '<subj>_(card|quiz)_' 꼬리 패턴 기준으로 분리한다 (콘텐츠 교체에도 유효).
  */
+/** @param {string} id */
 export function subjectKeyFromItemId(id) {
     const clean = id.replace(/^weak_(quiz|sim)_/, '');
     const m = clean.match(/^(.+)_(?:card|quiz)_/);

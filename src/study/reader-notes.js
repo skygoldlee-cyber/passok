@@ -20,6 +20,7 @@ export function getReaderNotes() {
 }
 
 /** 키 → 메모 문자열 (없으면 '') */
+/** @param {string} key */
 export function getReaderNote(key) {
     const n = getReaderNotes()[key];
     return (n && typeof n.note === 'string') ? n.note : '';
@@ -54,6 +55,7 @@ export function setReaderNote(key, note, meta = {}) {
     return true;
 }
 
+/** @param {string} key */
 export function deleteReaderNote(key) {
     return setReaderNote(key, '');
 }

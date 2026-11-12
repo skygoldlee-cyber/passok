@@ -121,6 +121,7 @@ function loadStats() {
     }
 }
 
+/** @param {*} stats */
 function saveStats(stats) {
     safeSetItem(STATS_KEY, JSON.stringify(stats));
 }
