@@ -25,8 +25,8 @@ export const MAX_DIAG_BOOST = 0.5;
 /**
  * 출제 비중 맵 — registry.exams의 과목별 문제은행 문항 수를 집계한다.
  * 주간 배분(SC-08)·최종 인출 층화(D-23)·진단 평가 층화(Q-12)의 단일 출처.
- * @param {Array} [exams] registry.exams — [{subject, stats:{questions}}]
- * @returns {Object} {subjKey: 출제 문항 수}
+ * @param {Array<*>} [exams] registry.exams — [{subject, stats:{questions}}]
+ * @returns {Object.<string,number>} {subjKey: 출제 문항 수}
  */
 export function examWeightBySubject(exams) {
     /** @type {{ [x: string]: number }} */
@@ -43,10 +43,10 @@ export function examWeightBySubject(exams) {
  * 잔여를 비중 비례로 배분한다. 비중 합계가 0(미선언 시험)이면 균등 배분.
  * 총합은 항상 total과 일치하고, min×N > total이면 min을 floor(total/N)으로 축소한다.
  * @param {string[]} keys 대상 과목 키 (수요가 있는 과목만 전달할 것)
- * @param {Object} weightBySubject examWeightBySubject 결과 {subjKey: 문항 수}
+ * @param {Object.<string,number>} weightBySubject examWeightBySubject 결과 {subjKey: 문항 수}
  * @param {number} total 배분 총량 (정수)
  * @param {number} [minPerKey] 키당 최소 보장량 (기본 0)
- * @returns {Object} {key: 배정 수}
+ * @returns {Object.<string,number>} {key: 배정 수}
  */
 export function apportionByWeight(keys, weightBySubject, total, minPerKey = 0) {
     const list = (keys || []).filter(Boolean);
@@ -86,7 +86,7 @@ export function apportionByWeight(keys, weightBySubject, total, minPerKey = 0) {
  * 비중 미선언(합계 0)이면 기존 전역 R 절단. 결과는 R_exam 오름차순 유지.
  * @param {Array<{id:string, rExam:number}>} risk getExamRiskCards 결과 (R 오름차순)
  * @param {number} cap 세션 상한
- * @param {Object} [weightBySubject] examWeightBySubject 결과
+ * @param {Object.<string,number>} [weightBySubject] examWeightBySubject 결과
  * @returns {Array<{id:string, rExam:number}>}
  */
 export function selectExamRiskSession(risk, cap, weightBySubject) {
@@ -97,16 +97,17 @@ export function selectExamRiskSession(risk, cap, weightBySubject) {
     if (wsum <= 0 || !list.length) return list.slice(0, limit);
 
     // 과목 그룹화 — subjectKeyFromItemId 해석 불가 id는 '' 버킷 (비중 0, 최소 1 보장)
+    /** @type {Map<string,*[]>} */
     const groups = new Map();
     for (const r of list) {
         const k = subjectKeyFromItemId(r.id) || '';
         if (!groups.has(k)) groups.set(k, []);
-        groups.get(k).push(r);
+        /** @type {*[]} */ (groups.get(k)).push(r);
     }
-    const quota = apportionByWeight([...groups.keys()], weightBySubject, limit, 1);
+    const quota = apportionByWeight([...groups.keys()], weightBySubject || {}, limit, 1);
     const wanted = new Set();
     for (const [k, items] of groups) {
-        items.slice(0, quota[k] || 0).forEach(r => wanted.add(r));
+        items.slice(0, quota[k] || 0).forEach((/** @type {*} */ r) => wanted.add(r));
     }
     // 수요 소진 잔여 — 전역 R_exam 오름차순으로 재충전
     let need = limit - wanted.size;
@@ -125,14 +126,14 @@ export function selectExamRiskSession(risk, cap, weightBySubject) {
  * 주간 배분 입력 집계 (SC-11·SC-12) — 캘린더 칩·학습 진단 카드·주간 리포트가
  * 동일 입력을 공유하도록 raw state/레지스트리 → computeSubjectAllocation opts 변환을
  * 한 곳에 둔다. 과목 키 해석은 subjectKeyFromItemId (숫자·밑줄 키 안전).
- * @param {Object} p
- * @param {Set|Array} [p.memorizedCards] 암기 카드 id 집합
- * @param {Object} [p.quizResults] {quizId: {correct}}
- * @param {Set|Array} [p.weakCards] 헷갈림 카드 id 집합
- * @param {Array} [p.exams] registry.exams — 출제 비중 (미전달 시 균등 배분)
- * @param {Object} [p.wrongCauses] {itemId: {cause, ts, subjectId}} — 최근 30일 태그만 집계 (SC-12)
- * @param {Array} [p.weakChapterGroups] computeSubjectWeakChapters 결과 — 과목별 취약 단원 수 (SC-12)
- * @param {Array} [p.dueCardIds] getDueCards() 결과 — FSRS 기한 도래 카드 id 배열 (SC-13)
+ * @param {object} p
+ * @param {Set<*>|Array<*>} [p.memorizedCards] 암기 카드 id 집합
+ * @param {Object.<string,*>} [p.quizResults] {quizId: {correct}}
+ * @param {Set<*>|Array<*>} [p.weakCards] 헷갈림 카드 id 집합
+ * @param {Array<*>} [p.exams] registry.exams — 출제 비중 (미전달 시 균등 배분)
+ * @param {Object.<string,*>} [p.wrongCauses] {itemId: {cause, ts, subjectId}} — 최근 30일 태그만 집계 (SC-12)
+ * @param {Array<*>} [p.weakChapterGroups] computeSubjectWeakChapters 결과 — 과목별 취약 단원 수 (SC-12)
+ * @param {Array<*>} [p.dueCardIds] getDueCards() 결과 — FSRS 기한 도래 카드 id 배열 (SC-13)
  * @param {Date|number} [p.now] 기준 시각 (테스트 주입용)
  * @returns {{memBySubject:Object, quizBySubject:Object, recentQuizBySubject:Object,
  *   weakBySubject:Object, weightBySubject:Object, diagBySubject:Object, dueBySubject:Object}}
@@ -150,28 +151,28 @@ export function computeSubjectAllocInputs(p = {}) {
     const due = {};
     /** @type {{ [x: string]: { causes: number, weakChapters: number } }} */
     const diag = {};
-    const _diag = (k) => (diag[k] = diag[k] || { causes: 0, weakChapters: 0 });
-    (p.memorizedCards || []).forEach(id => {
+    const _diag = (/** @type {string} */ k) => (diag[k] = diag[k] || { causes: 0, weakChapters: 0 });
+    (p.memorizedCards || []).forEach((/** @type {*} */ id) => {
         const k = subjectKeyFromItemId(id);
         if (k) mem[k] = (mem[k] || 0) + 1;
     });
-    Object.keys(p.quizResults || {}).forEach(id => {
+    Object.keys(p.quizResults || {}).forEach((/** @type {string} */ id) => {
         const k = subjectKeyFromItemId(id);
         if (k) {
             quiz[k] = quiz[k] || { solved: 0, correct: 0 };
             quiz[k].solved++;
-            const r = p.quizResults[id];
+            const r = (p.quizResults || {})[id];
             if (r && r.correct) quiz[k].correct++;
         }
     });
-    (p.weakCards || []).forEach(id => {
+    (p.weakCards || []).forEach((/** @type {*} */ id) => {
         const clean = id.replace(/^weak_(quiz|sim)_/, '');
         if (!clean.includes('_card_')) return; // 카드 외 항목은 카드 잔여 대비 비율 왜곡 방지
         const k = subjectKeyFromItemId(id);
         if (k) weak[k] = (weak[k] || 0) + 1;
     });
     // SC-13 FSRS 복습 대기 — 기한 도래 카드 id를 과목별로 집계
-    (p.dueCardIds || []).forEach(id => {
+    (p.dueCardIds || []).forEach((/** @type {*} */ id) => {
         const k = subjectKeyFromItemId(id);
         if (k) due[k] = (due[k] || 0) + 1;
     });
@@ -181,7 +182,7 @@ export function computeSubjectAllocInputs(p = {}) {
         if (!c || !c.subjectId || (c.ts || 0) < cutoff) return;
         _diag(c.subjectId).causes++;
     });
-    (p.weakChapterGroups || []).forEach(g => {
+    (p.weakChapterGroups || []).forEach((/** @type {*} */ g) => {
         if (g && g.subjectKey) _diag(g.subjectKey).weakChapters += (g.chapters || []).length;
     });
     return {
@@ -201,9 +202,10 @@ export function computeSubjectAllocInputs(p = {}) {
  * 현재 약점에 가까운 최근 성적을 약점 가중에 반영하기 위한 윈도우.
  * @param {Object} quizResults state.quizResults — {quizId: {solved, correct}}
  * @param {number} [limit] 과목당 표본 상한
- * @returns {Object} {subjKey: {solved, correct}}
+ * @returns {Object.<string,*>} {subjKey: {solved, correct}}
  */
 export function recentQuizBySubject(quizResults, limit = RECENT_QUIZ_WINDOW) {
+    /** @type {Object.<string,*>} */
     const out = {};
     const entries = Object.entries(quizResults || {});
     for (let i = entries.length - 1; i >= 0; i--) {
@@ -219,7 +221,7 @@ export function recentQuizBySubject(quizResults, limit = RECENT_QUIZ_WINDOW) {
 
 /**
  * 한 주 총량을 과목별 수요 비례로 배분 — 워터필링(잔여 상한 + 초과 재배분).
- * @param {Array} rows {remaining, weakW, weight} 과목 행
+ * @param {Array<*>} rows {remaining, weakW, weight} 과목 행
  * @param {Array<number>} remNow 주차 누적 기준 현재 잔여 (in-place 감소)
  * @param {number} total 이번 주 배정 총량
  */
@@ -263,10 +265,10 @@ function _allocWeek(rows, remNow, total) {
  *   SC-13: FSRS 기한초과 복습 비율(기한 도래 ÷ 암기 수)도 최대 +0.5 가산하고,
  *   과목별 퀴즈 잔여를 카드와 동일 수요 공식으로 주차 배분한다(주차 총량 = 학습일×일일 퀴즈 목표).
  * 주차를 순차 배정해 과목 조기 완료가 다음 주 배분에 자동 반영된다.
- * @param {Object|null} plan computeStudyPlan() 결과
- * @param {Array} subjects 과목 메타 — [{key, name, stats:{cards, targetCards?, quizzes?, targetQuizzes?}}]
- * @param {Object} [opts]
- * @param {Object} [opts.memBySubject] {key: 암기 카드 수}
+ * @param {*|null} plan computeStudyPlan() 결과
+ * @param {Array<*>} subjects 과목 메타 — [{key, name, stats:{cards, targetCards?, quizzes?, targetQuizzes?}}]
+ * @param {object} [opts]
+ * @param {Object.<string,number>} [opts.memBySubject] {key: 암기 카드 수}
  * @param {Object} [opts.quizBySubject] {key: {solved, correct}} — 전 기간 누적
  * @param {Object} [opts.recentQuizBySubject] {key: {solved, correct}} — 최근 윈도우 (SC-09)
  * @param {Object} [opts.weakBySubject] {key: 취약 카드 수} — 약점 가산 (SC-09)
@@ -282,13 +284,20 @@ export function computeSubjectAllocation(plan, subjects, opts = {}) {
     if (!plan || !plan.weeks || !plan.weeks.length) return null;
     const list = (subjects || []).filter(s => s && s.key);
     if (!list.length) return null;
-    const mem = opts.memBySubject || {};
+    /** @type {Object.<string,number>} */
+    const mem = /** @type {Object.<string,number>} */ (opts.memBySubject || {});
+    /** @type {Object.<string,*>} */
     const quiz = opts.quizBySubject || {};
+    /** @type {Object.<string,*>} */
     const recent = opts.recentQuizBySubject || {};
-    const weak = opts.weakBySubject || {};
+    /** @type {Object.<string,number>} */
+    const weak = /** @type {Object.<string,number>} */ (opts.weakBySubject || {});
+    /** @type {Object.<string,*>} */
     const diag = opts.diagBySubject || {};
-    const due = opts.dueBySubject || {};
-    const wBySubj = opts.weightBySubject || {};
+    /** @type {Object.<string,number>} */
+    const due = /** @type {Object.<string,number>} */ (/** @type {*} */ (opts).dueBySubject || {});
+    /** @type {Object.<string,number>} */
+    const wBySubj = /** @type {Object.<string,number>} */ (opts.weightBySubject || {});
     const hasWeights = Object.keys(wBySubj).length > 0;
     const weightSum = Object.values(wBySubj).reduce((s, n) => s + (n || 0), 0);
     const dailyQuizzes = (plan.goals && plan.goals.dailyQuizzes) || 0;
@@ -327,7 +336,7 @@ export function computeSubjectAllocation(plan, subjects, opts = {}) {
     });
     const remNow = rows.map(r => r.remaining);
     const quizRemNow = rows.map(r => r.quizRemaining);
-    const weeks = plan.weeks.map(w => {
+    const weeks = plan.weeks.map((/** @type {*} */ w) => {
         const counts = _allocWeek(rows, remNow, w.cards);
         counts.forEach((c, i) => { remNow[i] -= c; });
         // SC-13 퀴즈 배분 — 주차 총량 = 학습일 × 일일 퀴즈 목표, 카드와 동일 수요 가중

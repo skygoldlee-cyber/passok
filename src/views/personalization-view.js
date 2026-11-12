@@ -31,7 +31,7 @@ const KT_FIT_MIN_SEQ = 30;
 
 /**
  * 영속된 개인 피팅 결과 — { w20?, ktT?:{subj:T}, ktP0?:{subj:P0}, fittedAt? }
- * @returns {Object}
+ * @returns {Object.<string,*>}
  */
 export function getPersonalFit() {
     try {

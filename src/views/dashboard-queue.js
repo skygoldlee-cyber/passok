@@ -32,22 +32,22 @@ const MAX_PLAN_ITEMS = 2; // 주간 배정 큐 항목 상한 — 과목 나열�
  * 오늘 할 일 큐 생성 — 모든 추천 소스를 우선순위 병합 (TQ-01·TQ-02).
  * @param {Object} p
  * @param {string[]} [p.dueCardIds] FSRS 기한 도래 카드 id
- * @param {Array} [p.subjects] 과목 메타 [{key, name, stats}]
- * @param {Array} [p.recs] computeRecommendations 결과 (흡수 대상 — TQ-01)
- * @param {Array} [p.allocRemaining] 주간 배정 잔여 [{key,name,cardsLeft,quizzesLeft}]
+ * @param {Array<*>} [p.subjects] 과목 메타 [{key, name, stats}]
+ * @param {Array<*>} [p.recs] computeRecommendations 결과 (흡수 대상 — TQ-01)
+ * @param {Array<*>} [p.allocRemaining] 주간 배정 잔여 [{key,name,cardsLeft,quizzesLeft}]
  * @param {number} [p.reviewCount] 복습 대기(오답+헷갈림) 수
  * @param {number} [p.weakStatementCount] 취약 진술 수
  * @param {boolean} [p.dailyDone] 일일 챌린지 완료 여부
  * @param {number|null} [p.dday] 시험 D-day (미설정 null)
  * @param {string[]} [p.examRiskIds] 시험일 기억률 미달 카드 id — R_exam 오름차순·세션 상한 적용분 (D-19)
  * @param {boolean} [p.hasProgress] 학습 이력 존재 여부
- * @param {Array} [p.behindSubjects] 계획 밀림 과목 [{key,name,daysBehind}] — PS-03 우선순위 입력
+ * @param {Array<*>} [p.behindSubjects] 계획 밀림 과목 [{key,name,daysBehind}] — PS-03 우선순위 입력
  * @param {number} [p.unlearnedCount] 미학습 카드 수 — PS-03 우선순위 입력
  * @param {Object} [p.topCluster] 최다 오개념 클러스터 (weakClusters()[0] — PS-01·PS-10 클리닉 항목)
  * @param {Object} [p.flowResume] 개념 학습 이어하기 대상 {id,title,weak} — careFlow 시험 전용
  * @param {boolean} [p.flowCapable] 활성 시험의 개념 학습 플로우 보유 여부 — 첫 학습 제안 분기용
  * @returns {Array<{icon:string, color:string, title:string, reason:string,
- *   actions:Array<{click:string, arg?:string, args?:Array, label:string, icon:string, cls:string}>}>}
+ *   actions:Array<{click:string, arg?:string, args?:Array<*>, label:string, icon:string, cls:string}>}>}
  */
 export function buildTodayQueue(p = {}) {
     const items = [];

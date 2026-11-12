@@ -1,6 +1,16 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(types): noImplicitAny 소진 6차-3 — src/study 전량 소진 완료 (Phase 1 지속)
+
+- **5파일 소진**: fsrs(34)·study-tracker-alloc(37)·study-aids(42)·personalization(55)·analysis-engine(97) — `src/study` 디렉터리 전량 0건 달성
+- **계약 명문화**: `apportionByWeight`/`recentQuizBySubject` 반환 `Object.<string,number>`/`*`·`selectExamRiskSession` 비중 맵·`fitKT` 시퀀스 `boolean[]`·`fitFsrsParams` 로그·`getTodayGoalProgress` 반환 실제 형태 (cardsPercent 포함 7필드)·`getPersonalFit` `Object.<string,*>`
+- **한정 파라미터 정정**: `@param {object} p` + `p.x` 한정 태그가 동작하려면 부모가 소문자 `object`여야 함 — `*`·`Object` 혼용 부모를 일괄 정정 (computePassGap·computePaceProjection·estimateUntaggedCauses·buildWeeklyReportText)
+- **정직한 좁히기**: `costOf(w)`는 배열이 아닌 FSRS 가중치 `{number}` — 첫 주석 추정 오류를 tsc가 잡아 정정·`steps` 배열 `{label,detail}[]` 실제 형태·`p.quizResults` 선택 필드 `|| {}` 가드·`groups.get(k)` Map 한정 캐스트
+- **하류 효과**: analysis-view 54→45, personalization-view 21→6, study-calendar 28→23, dashboard-queue 37→33, quiz.js 17→16 — typed study API의 전파 감소
+- 결과: 잔여 2,626 → **2,327건 (-299)**, 기준선 140 → **135파일**, `check:types` 0 유지. 유닛 전체(1,866)·관련 DOM 324건 통과
+
+
 ## 2026-11-12 feat(types): noImplicitAny 소진 6차-2 — src/study tracker-activity·recommendations 소진 (Phase 1 지속)
 
 - **2파일 소진**: study-tracker-activity(26)·recommendations(22) — JSDoc 주석 + 계약 좁히기

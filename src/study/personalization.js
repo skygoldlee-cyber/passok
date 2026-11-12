@@ -5,14 +5,14 @@
 // 조합으로 교재/CBT/인강이 구조적으로 제공 불가한 개인화 계층을 구현한다.
 // 모든 함수는 데이터를 주입받아 계산만 한다 — 렌더·저장은 뷰/어댑터 소관.
 
-const clamp = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
+const clamp = (/** @type {number} */ x, /** @type {number} */ lo, /** @type {number} */ hi) => Math.min(hi, Math.max(lo, x));
 
 // ── PS-01 약점 개념 클러스터 ─────────────────────────────────────
 // 취약 진술(오답 누적)을 의미 이웃 그래프로 연결해 "무너진 개념 축"으로 묶는다.
 // 이웃 자산 없으면 cid(개념 그룹) 기준으로 폴백 — 기능이 조용히 저하되지 않는다.
 /**
- * @param {Object} stats - statement_stats {sid:{j,w,lw,t,truth,cid}}
- * @param {Object} [adj] - EMB_NEIGHBORS.adj { "stmt:<sid>": [[key,cos],...] }
+ * @param {*} stats - statement_stats {sid:{j,w,lw,t,truth,cid}}
+ * @param {Object.<string,*>|null} [adj] - EMB_NEIGHBORS.adj { "stmt:<sid>": [[key,cos],...] }
  * @param {number} [minWrong=2] - 취약 판정 최소 오답수
  * @param {number} [minCos=0.72] - 클러스터 결합 최소 코사인
  * @returns {Array<{id:string, label:string, members:Array<{sid:string,text:string,truth:string,wrong:number,right:number,cid:string}>, totalWrong:number, size:number}>}
@@ -22,9 +22,9 @@ export function clusterWeakConcepts(stats, adj = null, minWrong = 2, minCos = 0.
         .filter(([, s]) => (s.w || 0) >= minWrong)
         .map(([sid, s]) => ({ sid, text: s.t || '', truth: s.truth || '', wrong: s.w || 0, right: s.j || 0, cid: s.cid || '' }));
     if (!weak.length) return [];
-    const parent = new Map(weak.map(w => [w.sid, w.sid]));
-    const find = x => { while (parent.get(x) !== x) x = parent.get(x); return x; };
-    const union = (a, b) => { const ra = find(a), rb = find(b); if (ra !== rb) parent.set(ra, rb); };
+    const parent = new Map(weak.map((/** @type {*} */ w) => [/** @type {string} */ (w.sid), /** @type {string} */ (w.sid)]));
+    const find = (/** @type {string} */ x) => { while (parent.get(x) !== x) x = /** @type {string} */ (parent.get(x)); return x; };
+    const union = (/** @type {string} */ a, /** @type {string} */ b) => { const ra = find(a), rb = find(b); if (ra !== rb) parent.set(ra, rb); };
     const sids = new Set(weak.map(w => w.sid));
     if (adj) {
         for (const w of weak) {
@@ -44,15 +44,15 @@ export function clusterWeakConcepts(stats, adj = null, minWrong = 2, minCos = 0.
     const groups = new Map();
     for (const w of weak) { const r = find(w.sid); (groups.get(r) || groups.set(r, []).get(r)).push(w); }
     return [...groups.values()]
-        .map(members => {
-            members.sort((a, b) => b.wrong - a.wrong);
+        .map((/** @type {*[]} */ members) => {
+            members.sort((/** @type {*} */ a, /** @type {*} */ b) => b.wrong - a.wrong);
             const rep = members[0];
             return {
                 id: rep.cid || rep.sid,
                 label: rep.text ? rep.text.slice(0, 40) : (rep.cid || rep.sid),
                 members,
                 size: members.length,
-                totalWrong: members.reduce((a, m) => a + m.wrong, 0),
+                totalWrong: members.reduce((/** @type {number} */ a, /** @type {*} */ m) => a + m.wrong, 0),
             };
         })
         .sort((a, b) => b.totalWrong - a.totalWrong || b.size - a.size);
@@ -61,7 +61,7 @@ export function clusterWeakConcepts(stats, adj = null, minWrong = 2, minCos = 0.
 // ── PS-02 취약 자동편성 모의고사 ─────────────────────────────────
 /**
  * 취약 진술·카드 중심 개인 전용 문항 세트 자동 편성.
- * @param {Object} input { statementStats, weakCards:Set<string>, questionSubjects:{qid:subject} }
+ * @param {*} input { statementStats, weakCards:Set<string>, questionSubjects:{qid:subject} }
  * @param {number} [size=20]
  * @returns {{ items:string[], bySubject:Object, coverage:number }} 취약 커버율 포함
  */
@@ -74,6 +74,7 @@ export function buildWeakMock(input, size = 20) {
     }
     for (const id of weakCards) scored.set(id, (scored.get(id) || 0) + 3);
     const items = [...scored.entries()].sort((a, b) => b[1] - a[1]).slice(0, size).map(([id]) => id);
+    /** @type {Object.<string,number>} */
     const bySubject = {};
     for (const id of items) { const subj = questionSubjects[id] || '기타'; bySubject[subj] = (bySubject[subj] || 0) + 1; }
     const weakTotal = scored.size || 1;
@@ -83,7 +84,7 @@ export function buildWeakMock(input, size = 20) {
 // ── PS-03 통합 학습 큐 ───────────────────────────────────────────
 // FSRS 복습 대기·취약 진술·계획 밀림 과목·미학습을 단일 우선순위 큐로.
 /**
- * @param {Object} input { dueCount, weakCount, behindSubjects:[{key,name,daysBehind}], unlearnedCount, subjectNames }
+ * @param {*} input { dueCount, weakCount, behindSubjects:[{key,name,daysBehind}], unlearnedCount, subjectNames }
  * @returns {Array<{type:string, priority:number, title:string, reason:string, payload:Object}>}
  */
 export function buildTodayQueue(input) {
@@ -104,18 +105,19 @@ export function buildTodayQueue(input) {
 // 과목 숙달도(BKT P(L))·기억률(FSRS)·모의고사 추세의 로지스틱 혼합.
 // 컷오프 대비 마진 → 합격 확률 + 과목별 필요 학습량 역산.
 /**
- * @param {Object} input { subjectMastery:{key:0..1}, dueRatio:0..1, mockRates:number[], cutoff=0.6 }
+ * @param {*} input { subjectMastery:{key:0..1}, dueRatio:0..1, mockRates:number[], cutoff=0.6 }
  * @returns {{ probability:number, passLine:number, weakest:string|null, needHours:Object, margin:number }}
  */
 export function estimatePassProb(input) {
     const { subjectMastery = {}, dueRatio = 0, mockRates = [], cutoff = 0.6 } = input || {};
     const keys = Object.keys(subjectMastery);
     const mastery = keys.length ? keys.reduce((a, k) => a + subjectMastery[k], 0) / keys.length : 0;
-    const mock = mockRates.length ? mockRates.reduce((a, r) => a + r, 0) / mockRates.length : mastery;
+    const mock = mockRates.length ? mockRates.reduce((/** @type {number} */ a, /** @type {number} */ r) => a + r, 0) / mockRates.length : mastery;
     const retention = 1 - clamp(dueRatio, 0, 1);
     const score = 0.5 * mastery + 0.3 * mock + 0.2 * retention;
     const margin = score - cutoff;
     const probability = 1 / (1 + Math.exp(-10 * margin)); // 컷오프 근처 급경사
+    /** @type {Object.<string,number>} */
     const needHours = {};
     let weakest = null, wv = 1;
     for (const k of keys) {
@@ -129,10 +131,11 @@ export function estimatePassProb(input) {
 // ── PS-05 취약→교재 딥링크 ──────────────────────────────────────
 // statement_stats.cid(§앵커/레거시 L####)를 교재 섹션 링크로 해석.
 /**
- * @param {Object} statEntry - { cid, t, w }
+ * @param {*} statEntry - { cid, t, w }
  * @param {function(string):string|null} resolve - cid → 교재 앵커 URL
  * @returns {{ cid:string, url:string|null, text:string }}
  */
+/** @param {*} statEntry @param {function(*):*} resolve */
 export function weakRefLink(statEntry, resolve) {
     const cid = statEntry?.cid || '';
     return { cid, url: cid && resolve ? resolve(cid) : null, text: statEntry?.t || '' };
@@ -147,10 +150,11 @@ export function weakRefLink(statEntry, resolve) {
  * @returns {{ w20:number|null, samples:number, fitted:boolean, cost?:number, baseCost?:number }}
  *   cost: 피팅 w20의 예측 오차, baseCost: 기본 w20(0.1542) 동일 표본 오차 — 효과 계측용
  */
+/** @param {*[]} log @param {number} [minSamples] */
 export function fitFsrsParams(log, minSamples = 300) {
     const samples = (log || []).filter(r => r.days > 0 && r.stability > 0);
     if (samples.length < minSamples) return { w20: null, samples: samples.length, fitted: false };
-    const costOf = (w) => {
+    const costOf = (/** @type {number} */ w) => {
         const decay = -w, factor = Math.pow(0.9, -1 / w) - 1;
         let cost = 0;
         for (const r of samples) {
@@ -171,10 +175,11 @@ export function fitFsrsParams(log, minSamples = 300) {
 // ── PS-07 입문 진단 P0 초기화 ────────────────────────────────────
 /**
  * 배치 퀴즈 정답률 → 과목별 BKT P0 (콜드스타트 개인화).
- * @param {Object} rates {subjectKey: 0..1}
+ * @param {Object.<string,number>} rates {subjectKey: 0..1}
  * @returns {Object} {subjectKey: P0} — 0.15~0.85 클램프
  */
 export function inferP0(rates) {
+    /** @type {Object.<string,number>} */
     const out = {};
     for (const [k, v] of Object.entries(rates || {})) out[k] = +clamp(v, 0.15, 0.85).toFixed(2);
     return out;
@@ -183,7 +188,7 @@ export function inferP0(rates) {
 // ── PS-08 오답 원인 자동 추론 ────────────────────────────────────
 // 행동 신호(풀이시간·선택지 변경·자신감)로 원인 후보 추론 — 수동 태깅 마찰 제거.
 /**
- * @param {Object} obs { ms:number, changed:boolean, confidence:'low'|'high'|null, wasCorrect:boolean }
+ * @param {*} obs { ms:number, changed:boolean, confidence:'low'|'high'|null, wasCorrect:boolean }
  * @returns {string|null} 'careless'|'concept'|'doubt'|'unknown'
  */
 export function inferCause(obs) {
@@ -197,7 +202,7 @@ export function inferCause(obs) {
 
 // ── PS-09 주간 리포트 ───────────────────────────────────────────
 /**
- * @param {Object} input { solvedWeek:number, planWeek:number, wrongWeek:number, topCluster:string|null, weakestSubject:string|null }
+ * @param {*} input { solvedWeek:number, planWeek:number, wrongWeek:number, topCluster:string|null, weakestSubject:string|null }
  * @returns {{ adherence:number, headline:string, suggestion:string, wrongWeek:number }}
  */
 export function weeklyReport(input) {
@@ -215,8 +220,8 @@ export function weeklyReport(input) {
 // ── PS-10 AI 오개념 클리닉 (v1 규칙 기반 — LLM v2 로드맵) ────────
 /**
  * 클러스터 단위 복습 처방 텍스트 — 개념 앵커·유사 진술 수를 이용한 결정론 생성.
- * @param {Object} cluster - clusterWeakConcepts() 결과 원소
- * @param {Object} [opts] { neighborCount:number, refUrl:string|null }
+ * @param {*} cluster - clusterWeakConcepts() 결과 원소
+ * @param {*} [opts] { neighborCount:number, refUrl:string|null }
  * @returns {{ headline:string, steps:string[] }}
  */
 export function generateClinic(cluster, opts = {}) {
@@ -234,7 +239,7 @@ export function generateClinic(cluster, opts = {}) {
 // 정오 시퀀스 로그 우도 최대화로 과목별 T 격자 탐색 (0.02~0.30).
 /**
  * @param {boolean[]} seq - 시간순 정오 관측
- * @param {Object} [params] { P0, G, S } — T만 피팅
+ * @param {*} [params] { P0, G, S } — T만 피팅
  * @returns {{ T:number, logLik:number, baseLogLik?:number }}
  *   baseLogLik: 기본 T(0.08)의 로그우도 — 피팅 효과(우도 개선) 계측용
  */

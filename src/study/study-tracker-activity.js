@@ -126,7 +126,7 @@ export function setStudyGoals(goals) {
 
 /**
  * 오늘 목표 달성률 계산
- * @returns {Object} { cardsDone, cardsGoal, quizzesDone, quizzesGoal, overallPercent }
+ * @returns {{cardsDone:number, cardsGoal:number, quizzesDone:number, quizzesGoal:number, cardsPercent:number, quizzesPercent:number, overallPercent:number}} { cardsDone, cardsGoal, quizzesDone, quizzesGoal, cardsPercent, quizzesPercent, overallPercent }
  */
 export function getTodayGoalProgress() {
     const goals = getStudyGoals();

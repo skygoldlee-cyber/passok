@@ -39,32 +39,37 @@ const MAX_INTERVAL = 36500;         // 100년 상한
 /** 평가 등급 — 현행 2버튼 UI는 Again/Good만 사용 (4단계는 LEARNING_ALGORITHM_DESIGN §8 후속) */
 export const Rating = { AGAIN: 1, HARD: 2, GOOD: 3, EASY: 4 };
 
-const _clampD = (d) => Math.min(10, Math.max(1, d));
-const _round2 = (v) => Math.round(v * 100) / 100;
+const _clampD = (/** @type {number} */ d) => Math.min(10, Math.max(1, d));
+const _round2 = (/** @type {number} */ v) => Math.round(v * 100) / 100;
 
 /** 최초 학습 카드 초기 난이도 — FSRS-6 지수형 D0(G) = w4 − e^{w5·(G−1)} + 1 */
+/** @param {number} rating */
 export function initDifficulty(rating) {
     return _clampD(W[4] - Math.exp(W[5] * (rating - 1)) + 1);
 }
 
 /** 최초 학습 카드 초기 안정도 (레이팅별 상수) */
+/** @param {number} rating */
 export function initStability(rating) {
     return Math.min(Math.max(S_MIN, W[rating - 1]), MAX_INTERVAL);
 }
 
 /** 경과 t일 후 기억 확률 — R(t,s) = (1 + FACTOR·t/s)^DECAY */
+/** @param {number} elapsedDays @param {number} s */
 export function retrievability(elapsedDays, s) {
     if (s <= 0) return 0;
     return Math.pow(1 + (FACTOR * Math.max(0, elapsedDays)) / s, DECAY);
 }
 
 /** 안정도 s에서 목표 기억률이 되는 다음 복습 간격(일) — 정수·하한 1 */
+/** @param {number} s */
 export function nextInterval(s) {
     const ivl = Math.round((s / FACTOR) * (Math.pow(REQUEST_RETENTION, 1 / DECAY) - 1));
     return Math.min(Math.max(ivl, 1), MAX_INTERVAL);
 }
 
 /** 복습 후 난이도 — Δd 선형 감쇠(d→10 포화 둔화) + Easy 초기값 방향 평균 회귀 */
+/** @param {number} d @param {number} rating */
 export function nextDifficulty(d, rating) {
     const delta = -W[6] * (rating - 3);
     const next = d + delta * (10 - d) / 9;
@@ -73,6 +78,7 @@ export function nextDifficulty(d, rating) {
 }
 
 /** 성공 복습 후 안정도 */
+/** @param {number} d @param {number} s @param {number} r @param {number} rating */
 export function recallStability(d, s, r, rating) {
     const hardPenalty = rating === Rating.HARD ? W[15] : 1;
     const easyBonus = rating === Rating.EASY ? W[16] : 1;
@@ -81,6 +87,7 @@ export function recallStability(d, s, r, rating) {
 }
 
 /** 실패(Again) 복습 후 안정도 — 랩스 상한 s·e^{−w17·w18} 적용 (FSRS-6) */
+/** @param {number} d @param {number} s @param {number} r */
 export function forgetStability(d, s, r) {
     const sf = W[11] * Math.pow(d, -W[12])
         * (Math.pow(s + 1, W[13]) - 1) * Math.exp((1 - r) * W[14]);
@@ -88,6 +95,7 @@ export function forgetStability(d, s, r) {
 }
 
 /** 당일(동일일) 복습 후 안정도 — S′ = S·e^{w17·(G−3+w18)}·S^{−w19}, G≥Hard는 감소 없음 (FSRS-6) */
+/** @param {number} s @param {number} rating */
 export function sameDayStability(s, rating) {
     const sinc = Math.pow(s, -W[19]) * Math.exp(W[17] * (rating - 3 + W[18]));
     const masked = rating >= Rating.HARD ? Math.max(sinc, 1) : sinc;
@@ -96,7 +104,7 @@ export function sameDayStability(s, rating) {
 
 /**
  * 카드 상태 갱신 — 순수 계산 (날짜 결정은 호출부).
- * @param {Object|null} cur {d, s, lastReview, reps, lapses} (null=신규)
+ * @param {*|null} cur {d, s, lastReview, reps, lapses} (null=신규)
  * @param {number} rating Rating.AGAIN~EASY
  * @param {number} elapsedDays 마지막 복습 이후 경과일 (신규면 0)
  * @returns {{v:2, d:number, s:number, reps:number, lapses:number, lastInterval:number}}
@@ -137,6 +145,7 @@ export function fsrsReview(cur, rating, elapsedDays) {
  * @param {string} [today] YYYY-MM-DD — lastReview 없을 때 간격 근사 기준
  * @returns {{v:2, d:number, s:number, due:string|null, lastReview:string|null, reps:number, lapses:number}|null}
  */
+/** @param {*} rec @param {string} today */
 export function migrateSm2Record(rec, today) {
     if (!rec || typeof rec !== 'object') return null;
     const repetition = Number.isFinite(rec.repetition) ? rec.repetition : 0;

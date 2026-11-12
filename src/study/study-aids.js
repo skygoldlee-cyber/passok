@@ -13,15 +13,18 @@ import { buildSectionDisplayTitles } from '../reader/reader-toc.js';
  * @param {object} chapter - { sections: [{ title, content }] }
  * @returns {{ sectionTitle: string, sectionIdx: number, items: string[] }[]}
  */
+/** @param {*} chapter */
 export function extractExamHighlights(chapter) {
     const sections = chapter.sections || [];
+    /** @type {*[]} */
     const result = [];
 
-    sections.forEach((sec, secIdx) => {
+    sections.forEach((/** @type {*} */ sec, /** @type {number} */ secIdx) => {
         const lines = (sec.content || '').split('\n');
+        /** @type {string[]} */
         const items = [];
 
-        lines.forEach(line => {
+        lines.forEach((/** @type {string} */ line) => {
             const trimmed = line.trim();
             if (!trimmed || trimmed.startsWith('|') || trimmed.startsWith('---')) return;
 
@@ -56,6 +59,7 @@ export function extractExamHighlights(chapter) {
 /**
  * 기출 핵심 요약 카드 HTML을 생성합니다.
  */
+/** @param {*} chapter */
 function renderExamHighlightCard(chapter) {
     const highlights = extractExamHighlights(chapter);
     if (highlights.length === 0) return '';
@@ -81,7 +85,7 @@ function renderExamHighlightCard(chapter) {
         html += `<div class="exam-highlight-section">`;
         html += `<div class="exam-highlight-section-title">${esc(displayTitles[h.sectionIdx] || h.sectionTitle)}</div>`;
         html += `<ul class="exam-highlight-list">`;
-        h.items.forEach(item => {
+        h.items.forEach((/** @type {string} */ item) => {
             html += `<li>${esc(item)}</li>`;
         });
         html += `</ul>`;
@@ -98,6 +102,7 @@ function renderExamHighlightCard(chapter) {
 
 // --- ③ 중요 숫자 암기표 (JSON 기반) ---
 
+/** @type {Object.<string,*[]>} */
 const NUMBER_DRILL_CACHE = {};
 
 /**
@@ -131,6 +136,7 @@ const UNIT_CATEGORIES = [
     { label: '💰 금액', units: ['원'] },
 ];
 
+/** @param {string} unit */
 function categorizeEntry(unit) {
     for (const cat of UNIT_CATEGORIES) {
         if (cat.units.includes(unit)) return cat.label;
@@ -138,6 +144,7 @@ function categorizeEntry(unit) {
     return '기타';
 }
 
+/** @param {string} subjId */
 async function renderNumberDrillCard(subjId) {
     const entries = await loadNumberDrills(subjId);
     if (entries.length === 0) return '';
@@ -166,10 +173,10 @@ async function renderNumberDrillCard(subjId) {
     `;
 
     // 항목 렌더링 헬퍼: 여러 숫자를 하나의 카드에 표시
-    const renderItem = (e, isKey) => {
+    const renderItem = (/** @type {*} */ e, /** @type {boolean} */ isKey) => {
         let h = `<div class="number-drill-item${isKey ? ' is-key' : ''}" title="${esc(e.context)}">`;
         h += `<div class="number-drill-values">`;
-        e.numbers.forEach(n => {
+        e.numbers.forEach((/** @type {*} */ n) => {
             h += `<span class="number-drill-value">${esc(n.number)}<small>${esc(n.unit)}</small></span>`;
         });
         h += `</div>`;
@@ -183,8 +190,9 @@ async function renderNumberDrillCard(subjId) {
         html += `<div class="number-drill-section number-drill-key-section">`;
         html += `<div class="number-drill-section-title">📌 기출·중요 숫자 (${keyCount}개)</div>`;
 
+        /** @type {Object.<string,*[]>} */
         const keyByCat = {};
-        keyEntries.forEach(e => {
+        keyEntries.forEach((/** @type {*} */ e) => {
             if (!keyByCat[e.category]) keyByCat[e.category] = [];
             keyByCat[e.category].push(e);
         });
@@ -210,8 +218,9 @@ async function renderNumberDrillCard(subjId) {
         html += `</div>`;
         html += `<div class="number-drill-normal-grid is-hidden" id="number-drill-normal-grid">`;
 
+        /** @type {Object.<string,*[]>} */
         const normalByCat = {};
-        normalEntries.forEach(e => {
+        normalEntries.forEach((/** @type {*} */ e) => {
             if (!normalByCat[e.category]) normalByCat[e.category] = [];
             normalByCat[e.category].push(e);
         });
@@ -247,6 +256,7 @@ const PROCEDURE_KEYWORDS = ['신고', '변경신고', '교육', '보수교육', 
  * @param {object} chapter
  * @returns {{ title: string, steps: { label: string, detail: string }[] } | null}
  */
+/** @param {*} chapter */
 export function detectProcedureFlow(chapter) {
     const sections = chapter.sections || [];
 
@@ -259,10 +269,11 @@ export function detectProcedureFlow(chapter) {
 
         if (!titleMatch && contentMatchCount < 2) continue;
 
+        /** @type {{label:string, detail:string}[]} */
         const steps = [];
         const lines = content.split('\n');
 
-        lines.forEach(line => {
+        lines.forEach((/** @type {string} */ line) => {
             const trimmed = line.trim();
             if (!trimmed || trimmed.startsWith('---') || trimmed.startsWith('|---')) return;
 
@@ -299,6 +310,7 @@ export function detectProcedureFlow(chapter) {
  * @param {object} chapter
  * @returns {{ title: string, headers: string[], rows: { label: string, penalties: string[] }[] } | null}
  */
+/** @param {*} chapter */
 export function detectAdminPenalty(chapter) {
     const sections = chapter.sections || [];
 
@@ -308,17 +320,19 @@ export function detectAdminPenalty(chapter) {
 
         const lines = content.split('\n');
         let inTable = false;
+        /** @type {string[]} */
         let headers = [];
+        /** @type {*[]} */
         const rows = [];
 
-        lines.forEach(line => {
+        lines.forEach((/** @type {string} */ line) => {
             const trimmed = line.trim();
             if (trimmed.startsWith('|') && !trimmed.startsWith('|---')) {
-                const cells = trimmed.split('|').filter(c => c.trim()).map(c => c.trim().replace(/\*\*/g, ''));
+                const cells = trimmed.split('|').filter((/** @type {string} */ c) => c.trim()).map((/** @type {string} */ c) => c.trim().replace(/\*\*/g, ''));
 
                 if (!inTable) {
                     // 헤더 행 감지: 1차, 2차 등을 포함
-                    if (cells.some(c => c.includes('차') || c.includes('위반') || c.includes('처분'))) {
+                    if (cells.some((/** @type {string} */ c) => c.includes('차') || c.includes('위반') || c.includes('처분'))) {
                         headers = cells;
                         inTable = true;
                     }
@@ -353,6 +367,7 @@ export function detectAdminPenalty(chapter) {
  * 모든 학습 보조 카드를 통합하여 HTML을 생성합니다.
  * 개념 맵 아래, 섹션 카드 위에 삽입됩니다.
  */
+/** @param {*} chapter @param {string} subjId */
 export async function renderStudyAids(chapter, subjId) {
     let html = '';
 
