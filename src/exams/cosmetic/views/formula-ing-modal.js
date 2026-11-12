@@ -1,10 +1,10 @@
 // src/exams/cosmetic/views/formula-ing-modal.js — 자가 등록 성분 모달·CRUD (formula.js에서 분리)
-// @spec DI-06,DI-07,DI-08,DI-09,FO-32
+// @spec DI-06,DI-07,DI-08,DI-09,FO-32,UX-FORM-03
 //
 // 사전 뷰('성분 추가')·배합 계산 'DB 미등록' 배지('사전 등록') 양쪽에서 진입.
 // 모달은 런타임 DOM 생성 — 플랫폼 마크업을 건드리지 않고 어느 뷰에서도 띄울 수 있다.
 
-import { showToast, showConfirm } from '../../../ui-utils.js';
+import { showToast, showConfirm, setFieldError } from '../../../ui-utils.js';
 import { DataLoader } from '../../../content/data-loader.js';
 import { getActiveExamId } from '../../../core/exam-context.js';
 import { renderDictionary } from '../../../views/dictionary.js';
@@ -120,7 +120,14 @@ export function customIngSave() {
   const r = _cingEditingId
     ? updateCustomIngredient(_cingEditingId, data, { officialIndex })
     : createCustomIngredient(data, { officialIndex });
-  if (!r.ok) { showToast(r.error || '등록에 실패했습니다.', 'error'); return; }
+  if (!r.ok) {
+    const msg = r.error || '등록에 실패했습니다.';
+    // UX-FORM-03 — 원료명 귀속 오류(미입력·공식 DB 동명·중복)는 필드 인라인으로, 그 외는 토스트
+    const nameEl = getEl('cing-name');
+    if (r.field === 'name' && nameEl) { setFieldError(nameEl, msg); nameEl.focus(); }
+    else showToast(msg, 'error');
+    return;
+  }
   const wasEdit = !!_cingEditingId;
   invalidateIngredientIndex();
   refreshAfterCustomChange();

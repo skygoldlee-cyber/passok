@@ -214,7 +214,7 @@ import {
 import {
     initViewportHeight, setupOrientationToggle, enhanceDataClickAccessibility,
     applyExamBranding, checkIngredientsUpdate, showIngredientsChangelog, applyFeatureFlags,
-    initPrintPrep
+    initPrintPrep, initKeyboardGuard
 } from './app-shell.js';
 import {
     initCommandPalette, openCommandPalette, closeCommandPalette,
@@ -262,6 +262,7 @@ function initApp() {
     });
     step('initTelemetryQueueFlush', () => initTelemetryQueueFlush());
     step('initViewportHeight', initViewportHeight);
+    step('initKeyboardGuard', initKeyboardGuard); // UX-FORM-04 — 키보드 오픈 크롬 재배치
     step('initPrintPrep', initPrintPrep); // 인쇄 직전 스크롤 클립·lazy 이미지 해제 — window.print() 경로 공통 안전망
     step('loadProgress', loadProgress);
     // 개인 피팅 파라미터 적용 — 저장된 w20이 있으면 FSRS 망각 곡선에 반영 (PS-06)

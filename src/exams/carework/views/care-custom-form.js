@@ -1,10 +1,10 @@
 // src/exams/carework/views/care-custom-form.js — 기관 자체 양식 뷰
-// @spec CO-17,CO-18 — 시험 전용 실무 뷰 (DA-13)
+// @spec CO-17,CO-18,UX-FORM-03,UX-FORM-05 — 시험 전용 실무 뷰 (DA-13)
 // 양식 등록·편집·목록·기입·미리보기·저장·내보내기 — 양식 관리는 이 뷰에서 완결 (홈은 링크 허브)
 import { markFunnel } from '../care-funnel.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { escapeHTML as esc } from '../../../core/sanitize.js';
-import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
+import { showToast, showConfirm, flashSavedBadge, requireFields } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 import { docMdHead } from '../doc-md.js';
 import { docHeadHtml, refreshOrgName, myMembership, submitFormTemplate, deleteFacilityFormTemplate } from '../facility.js';
@@ -28,7 +28,24 @@ let _previewToolKey = null; // 편집기에 연동된 도구 키 (블록 실데�
 
 // — 인라인 편집기 (기본 양식 사본·목록 양식 편집이 이 뷰에서 완결 — CO-18) —
 
-function _openEditor(tpl) {
+let _editLoaded = null; // UX-FORM-05 — 편집기 로드 원본 (미저장 변경 감지 기준)
+
+/** 편집기에 저장되지 않은 변경이 있는가 — 로드 원본 대비 비교 */
+function _editorDirty() {
+    const ed = $('cf-editor');
+    if (!ed || ed.classList.contains('is-hidden') || !_editLoaded) return false;
+    const cur = readTplEditor('cf-tpl');
+    return cur.title !== _editLoaded.title || cur.body !== _editLoaded.body;
+}
+
+/** UX-FORM-05 — 미저장 편집분이 있으면 덮어쓰기·닫기 전 확인 (false 반환 = 취소) */
+async function _confirmDiscardEdit() {
+    if (!_editorDirty()) return true;
+    return showConfirm('저장하지 않은 양식 편집 내용이 있습니다. 내용을 버리고 계속할까요?', '편집 내용 버리기');
+}
+
+async function _openEditor(tpl) {
+    if (!(await _confirmDiscardEdit())) return; // 다른 양식 편집 전환이 미저장분을 덮지 않게
     _editTplId = tpl.scope === 'fac' ? null : tpl.id; // 기관 양식은 저장 시 로컬 사본이 됨
     const ed = $('cf-editor');
     if (ed) ed.classList.remove('is-hidden');
@@ -38,6 +55,7 @@ function _openEditor(tpl) {
     const blk = _previewToolKey ? TOOL_FORM_SEEDS[_previewToolKey] : null;
     setTplBlockState('cf-tpl', { auto: blk ? new Set([blk.block]) : null }); // 이전 양식 블록 데이터 제거
     fillTplEditor('cf-tpl', tpl.title, tpl.body);
+    _editLoaded = { title: tpl.title || '', body: tpl.body || '' };
     if (blk) void toolBlockPreview(tpl.toolKey).then(values => { // 블록 키를 실제 출력 내용으로 미리보기
         if (_previewToolKey === tpl.toolKey) setTplBlockState('cf-tpl', { auto: new Set([blk.block]), values });
     });
@@ -46,19 +64,21 @@ function _openEditor(tpl) {
 
 /** 새 양식 — 빈 편집기 오픈 (신규 등록 진입점) */
 export function careFormTplNew() {
-    _openEditor({ id: null, title: '새 양식', body: '', scope: 'local' });
+    return _openEditor({ id: null, title: '새 양식', body: '', scope: 'local' });
 }
 
 /** 목록 편집 → 인라인 편집기 (홈 이관 대신 이 뷰에서 완결) */
 export function careFormTplEdit(id) {
     const t = _tplById(id);
-    if (!t) return;
-    _openEditor(t);
+    if (!t) return Promise.resolve();
+    return _openEditor(t);
 }
 
-export function careFormTplEditClose() {
+export async function careFormTplEditClose() {
+    if (!(await _confirmDiscardEdit())) return;
     _editTplId = null;
     _previewToolKey = null;
+    _editLoaded = null;
     setTplBlockState('cf-tpl'); // 도구 블록 미리보기 상태 초기화
     $('cf-editor')?.classList.add('is-hidden');
 }
@@ -69,9 +89,17 @@ export function careFormTplPdfPick() {
 }
 
 /** 양식 저장 — 편집 중이면 갱신, 기관 양식 편집분은 로컬 사본으로 신규 */
+// UX-FORM-03 — 양식 편집기 필수 검증: 인라인 오류 + 첫 오류 필드 포커스
+function _requireTplFields() {
+    return requireFields([
+        [/** @type {HTMLInputElement|null} */ ($('cf-tpl-title')), '양식명을 입력하세요.'],
+        [/** @type {HTMLTextAreaElement|null} */ ($('cf-tpl-body')), '본문을 입력하세요.'],
+    ]);
+}
+
 export function careFormTplSave() {
     const { title, body } = readTplEditor('cf-tpl');
-    if (!title || !body.trim()) { showToast('양식명과 본문을 입력하세요.', 'error'); return; }
+    if (!title || !body.trim()) { _requireTplFields(); return; }
     if (_editTplId) {
         const r = updateFormTemplate(_editTplId, { title, body });
         r.ok ? showToast('양식을 저장했습니다 — 연동 도구 출력에도 반영됩니다.') : showToast(r.error, 'error');
@@ -84,6 +112,7 @@ export function careFormTplSave() {
         showToast('양식을 저장했습니다 — 연동 도구 출력에도 반영됩니다.');
         flashSavedBadge($('cf-tpl-list'));
     }
+    _editLoaded = readTplEditor('cf-tpl'); // 저장 성공 — 현재 내용이 새 '저장됨' 기준선 (dirty 리셋)
     renderTplList();
     renderSeedList();
 }
@@ -93,7 +122,7 @@ export async function careFormTplFacSave() {
     const m = _membership || await myMembership().catch(() => null);
     if (!m || m.role !== 'manager') { showToast('기관 등록은 관리책임자만 가능합니다.', 'error'); return; }
     const { title, body } = readTplEditor('cf-tpl');
-    if (!title || !body.trim()) { showToast('양식명과 본문을 입력하세요.', 'error'); return; }
+    if (!title || !body.trim()) { _requireTplFields(); return; }
     proFeatureNotice('facility_workspace', '기관 양식 등록');
     const r = await submitFormTemplate({ facilityId: m.facility_id, title, body });
     if ('error' in r) { showToast('등록 실패: ' + r.error, 'error'); return; }
@@ -107,12 +136,22 @@ const _tplById = (id) => allFormTemplates().find(t => t.id === id) || null;
 
 // — 양식 목록·선택 —
 
-export function careFormTplUse(id) {
+export async function careFormTplUse(id) {
     const t = _tplById(id);
     if (!t) return;
+    // UX-FORM-05 — 기입 중인 값이 있으면 다른 양식 전환 전 확인 (필드 재렌더로 값이 지워짐)
+    if (_activeTpl && _activeTpl.id !== id && _fillDirty()
+        && !await showConfirm('기입 중인 내용이 있습니다. 다른 양식으로 전환하면 기입 값이 지워집니다. 계속할까요?', '양식 전환')) return;
     _activeTpl = t;
     _lastMd = '';
     renderFillForm();
+}
+
+/** 기입 폼에 입력된 값이 있는가 — 대상자·항목 필드 중 하나라도 채워지면 true */
+function _fillDirty() {
+    const client = /** @type {HTMLInputElement|null} */ ($('cf-client'))?.value?.trim();
+    if (client) return true;
+    return [...document.querySelectorAll('[data-cf-field]')].some(el => /** @type {HTMLInputElement} */ (el).value.trim());
 }
 
 // — 기본 양식을 기관 파일로 생성 — 업로드 파일이 도구 출력 서식(연동 사본)이 됨 —
@@ -155,7 +194,8 @@ async function _onSeedFile(input) {
     if (!body.trim()) { showToast('파일에서 양식 내용을 찾지 못했습니다.', 'error'); return; }
     // 연동 사본이 이미 있으면 갱신 편집으로, 없으면 신규 연동 사본 (저장 시 toolKey 추론)
     const linked = allFormTemplates().find(t => t.toolKey === toolKey);
-    _openEditor(linked || { id: null, title: def.title, body, scope: 'local', toolKey });
+    await _openEditor(linked || { id: null, title: def.title, body, scope: 'local', toolKey });
+    if (_editLoaded === null) return; // 미저장 편집분 보호 확인에서 취소 — 추출 결과는 폐기하지 않고 중단
     if (linked) fillTplEditor('cf-tpl', linked.title, body); // 추출 본문으로 교체
     // 도구 키 어시스트 — 추출 양식의 라벨이 도구 주입 키와 일치하면 {{키}} 표기를 안내
     const found = [...new Set(Array.from(def.seed.matchAll(/\{\{([가-힣a-zA-Z0-9_]{1,40})\}\}/g), m => m[1]))]
@@ -170,7 +210,7 @@ async function _onSeedFile(input) {
 }
 
 /** 기본 양식 사본 생성·편집 (CO-18) — 사본 생성 후 인라인 편집기를 바로 연다 */
-export function careFormSeedCopy(toolKey) {
+export async function careFormSeedCopy(toolKey) {
     const def = TOOL_FORM_SEEDS[toolKey];
     if (!def) return;
     let tpl = allFormTemplates().find(t => t.toolKey === toolKey);
@@ -180,7 +220,7 @@ export function careFormSeedCopy(toolKey) {
         tpl = allFormTemplates().find(t => t.id === r.id);
         showToast(`'${def.title}' 사본을 만들었습니다 — 수정 후 저장하세요.`);
     }
-    if (tpl) _openEditor(tpl); // 생성·기존 사본 모두 편집기로 진입
+    if (tpl) await _openEditor(tpl); // 생성·기존 사본 모두 편집기로 진입
     renderTplList();
     renderSeedList();
 }

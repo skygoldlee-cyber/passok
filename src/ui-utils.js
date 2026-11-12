@@ -1,5 +1,5 @@
 // ui-utils.js - 로딩 오버레이 및 스피너 UI 유틸리티 (공통 모듈)
-// @spec A-07,UX-FB-01~04
+// @spec A-07,UX-FB-01~04,UX-FORM-03
 
 import { escapeHTML, safeTextWithBreaks } from './core/sanitize.js';
 
@@ -544,7 +544,7 @@ function _ensureInertObserver() {
 /**
  * UX-FORM-03 — 필드 인라인 오류 표시. `<p class="field-error" role="alert">`를
  * 입력 바로 뒤에 삽입하고 aria-invalid + aria-describedby를 연결한다.
- * @param {HTMLElement} input
+ * @param {HTMLElement|null} input
  * @param {string} message - 표시할 오류 메시지
  */
 export function setFieldError(input, message) {
@@ -566,7 +566,7 @@ export function setFieldError(input, message) {
 
 /**
  * 필드 인라인 오류 해제 — aria 속성 제거 + 오류 요소 삭제.
- * @param {HTMLElement} input
+ * @param {HTMLElement|null} input
  */
 export function clearFieldError(input) {
     if (!input) return;
@@ -574,6 +574,34 @@ export function clearFieldError(input) {
     const errId = input.getAttribute('aria-describedby');
     input.removeAttribute('aria-describedby');
     if (errId) document.getElementById(errId)?.remove();
+}
+
+/**
+ * UX-FORM-03 — 필수 필드 일괄 검증. 비어 있는 필드에 인라인 오류를 표시하고
+ * 채워진 필드의 기존 오류는 해제한다. 실패 시 첫 오류 필드에 포커스를 옮긴다.
+ * @param {Array<[HTMLElement|null, string]>} pairs - [입력 요소, 오류 메시지] 쌍
+ * @returns {boolean} 모든 필드가 채워졌으면 true
+ */
+export function requireFields(pairs) {
+    let first = null;
+    for (const [input, message] of pairs) {
+        const empty = !input || !String(/** @type {HTMLInputElement} */ (input).value ?? '').trim();
+        if (empty) {
+            if (input) { setFieldError(input, message); if (!first) first = input; }
+        } else clearFieldError(input);
+    }
+    first?.focus();
+    return !first;
+}
+
+// UX-FORM-03 — 오류 필드 수정 시 인라인 오류 자동 해제 (폼 무관 공통 동작).
+// 위임 리스너라 런타임 주입 필드(lazy view·모달)에도 적용된다.
+// document 가드 — Node 단위 테스트 등 DOM 없는 환경에서 모듈 import가 실패하지 않게
+if (typeof document !== 'undefined') {
+    document.addEventListener('input', (e) => {
+        const t = /** @type {HTMLElement|null} */ (e.target);
+        if (t && t.getAttribute('aria-invalid') === 'true') clearFieldError(t);
+    });
 }
 
 /**

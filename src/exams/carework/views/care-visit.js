@@ -1,5 +1,5 @@
 // src/exams/carework/views/care-visit.js — 면회·방문 기록 뷰
-// @spec none — 시험 전용 실무 뷰 (DA-13)
+// @spec UX-FORM-03,UX-FORM-05 — 시험 전용 실무 뷰 (DA-13)
 import { RELATIONS, VISIT_STATUS, relationLabel, buildVisitText, visitsToCsv } from '../care-visit.js';
 import { markFunnel } from '../care-funnel.js';
 import { listVisits, saveVisit, updateVisit, removeVisit } from '../care-visit-store.js';
@@ -7,7 +7,7 @@ import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, refreshOrgName, signFileToDataUri } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
+import { showToast, showConfirm, flashSavedBadge, requireFields } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 import { docMdHead, docMdSign, csvToMdTable, mdToHtml } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
@@ -39,9 +39,18 @@ function readForm() {
     };
 }
 
+// UX-FORM-03 — 공통 필수 검증 (방문예약·기관 등록 공유): 인라인 오류 + 첫 오류 필드 포커스
+function _requireVisitFields() {
+    return requireFields([
+        [/** @type {HTMLInputElement|null} */ ($('vis-date')), '방문일을 입력하세요.'],
+        [/** @type {HTMLInputElement|null} */ ($('vis-client')), '대상자를 입력하세요.'],
+        [/** @type {HTMLInputElement|null} */ ($('vis-visitor')), '방문객을 입력하세요.'],
+    ]);
+}
+
 export function careVisitAdd() {
     const f = readForm();
-    if (!f.date || !f.client || !f.visitor) { showToast('방문일·대상자·방문객을 입력하세요.', 'error'); return; }
+    if (!_requireVisitFields()) return;
     const r = saveVisit(f);
     if (r.ok) { showToast('방문예약을 등록했습니다.'); renderLists(); flashSavedBadge($('vis-scheduled')); }
 }
@@ -66,10 +75,19 @@ export function careVisitResultOpen(arg) {
     panel.scrollIntoView?.({ block: 'nearest' });
 }
 
-export function careVisitResultClose() {
+function _closeResultPanel() {
     _resultTarget = null;
     _vPhotos.length = 0;
+    const sum = /** @type {HTMLTextAreaElement|null} */ ($('vis-result-summary'));
+    if (sum) sum.value = '';
     $('vis-result-panel')?.classList.add('is-hidden');
+}
+
+export async function careVisitResultClose() {
+    // UX-FORM-05 — 작성 중인 요약·첨부 사진이 있으면 닫기 전 확인 (날짜는 자동기입이라 제외)
+    const dirty = _vPhotos.length > 0 || _val('vis-result-summary', '').trim() || _val('vis-result-time', '').trim();
+    if (dirty && !await showConfirm('작성 중인 방문결과가 있습니다. 저장하지 않은 내용은 지워집니다. 닫을까요?', '결과 기록 닫기')) return;
+    _closeResultPanel();
 }
 
 /** 사진 추가 버튼 — 숨긴 file input 트리거 (최대 PHOTO_MAX장) */
@@ -102,7 +120,7 @@ export async function careVisitResultSave() {
         summary: _val('vis-result-summary', ''),
         photos: _vPhotos.slice(), // 첨부 사진은 결과에 병합 저장
     };
-    if (!result.date) { showToast('방문일을 입력하세요.', 'error'); return; }
+    if (!requireFields([[/** @type {HTMLInputElement|null} */ ($('vis-result-date')), '방문일을 입력하세요.']])) return;
     const t = _resultTarget;
     if (t.scope === 'fac') {
         const r = await updateVisitResult(t.id, { status: 'done', result });
@@ -115,7 +133,7 @@ export async function careVisitResultSave() {
         flashSavedBadge($('vis-done'));
         renderLists();
     }
-    careVisitResultClose();
+    _closeResultPanel(); // 저장 성공 경로 — 확인 없이 바로 닫기
 }
 
 export async function careVisitCancel(arg) {
@@ -237,7 +255,7 @@ export async function careVisitFacilitySubmit() {
     }
     if (!_facility) { showToast('소속 기관이 없습니다 — 기관 가입 후 이용하세요.', 'error'); return; }
     const f = readForm();
-    if (!f.date || !f.client || !f.visitor) { showToast('방문일·대상자·방문객을 입력하세요.', 'error'); return; }
+    if (!_requireVisitFields()) return;
     proFeatureNotice('care_visit_share', '기관 방문예약 공유');
     const r = await submitVisit({
         facilityId: _facility.id,

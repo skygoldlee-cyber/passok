@@ -1,5 +1,5 @@
 // tests/unit/ux-invariants.test.js — UI/UX 설계 요구사항 (정적 검증)
-// @spec UX-FB-01~04,UX-FORM-01~02,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,UX-CTL-01~06,LP-06,LP-10,LP-11,LP-12,LP-13,LP-14
+// @spec UX-FB-01~04,UX-FORM-01~05,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,UX-CTL-01~06,LP-06,LP-10,LP-11,LP-12,LP-13,LP-14
 // CSS 규칙·마크업 구조·JS 구현 패턴이 설계 요구사항을 유지하는지 고정한다.
 
 import { test } from 'node:test';
@@ -267,6 +267,66 @@ test('UX-FORM-01: 표준 입력 클래스(.form-input)의 font-size가 16px 이�
 test('UX-FORM-02: 터치 피드백(:active scale)이 인터랙티브 요소에 적용된다', () => {
   const scales = allCss.match(/:active[^}]*transform:\s*scale\(0\.9[2-8]/g) || [];
   assert.ok(scales.length >= 2, `:active scale 규칙 부족 (${scales.length})`);
+});
+
+test('UX-FORM-03: 필수 검증이 requireFields/setFieldError 공용 패턴을 쓴다', () => {
+  assert.ok(/export function requireFields/.test(uiUtils), 'requireFields 헬퍼 export');
+  // 오류 필드 수정 시 인라인 오류 자동 해제 — 위임 input 리스너
+  assert.ok(/addEventListener\('input'/.test(uiUtils) && /aria-invalid/.test(uiUtils),
+    'aria-invalid 자동 해제 리스너');
+  // 대상 폼 — 토스트 전용 검증이 아니라 필드 인라인 오류로 승격됐는지
+  const targets = [
+    ['src/auth-sync/auth-view.js', /requireFields|setFieldError/],
+    ['src/exams/carework/views/care-log.js', /requireFields/],
+    ['src/exams/carework/views/care-visit.js', /requireFields/],
+    ['src/exams/carework/views/care-incident.js', /requireFields/],
+    ['src/exams/carework/views/care-handover.js', /requireFields/],
+    ['src/exams/carework/views/care-roster.js', /requireFields/],
+    ['src/exams/carework/views/care-client.js', /requireFields/],
+    ['src/exams/carework/views/care-custom-form.js', /requireFields/],
+    ['src/exams/carework/views/facility-admin.js', /setFieldError/],
+    ['src/exams/cosmetic/views/formula-ing-modal.js', /setFieldError/],
+  ];
+  for (const [f, re] of targets) assert.ok(re.test(read(f)), `${f}: 필드 인라인 오류 패턴`);
+});
+
+test('UX-FORM-05: 작성 중 이탈 보호가 대상 폼에 적용된다', () => {
+  // 리더 메모 — 입력 자동 임시저장(디바운스) + 닫기 전 미반영분 즉시 저장
+  const render = read('src/views/reader/reader-render.js');
+  assert.ok(/addEventListener\('input'/.test(render) && /setReaderNote/.test(render),
+    '리더 메모 입력 자동저장');
+  // 주관식 — 입력마다 저장 (기존 패턴 회귀 방지)
+  assert.ok(/addEventListener\('input'[\s\S]{0,200}_save/.test(read('src/written/written-practice.js')),
+    '주관식 입력 자동저장');
+  // Care OS 닫기 경로 — 양식 편집기·결과 패널·명부 불러오기의 dirty 확인
+  assert.ok(/_confirmDiscardEdit/.test(read('src/exams/carework/views/care-custom-form.js')),
+    '양식 편집기 미저장 확인');
+  assert.ok(/showConfirm[\s\S]{0,300}_closeResultPanel|_closeResultPanel/.test(read('src/exams/carework/views/care-visit.js')),
+    '방문결과 패널 미저장 확인');
+  assert.ok(/_formDirty[\s\S]{0,400}showConfirm/.test(read('src/exams/carework/views/care-client.js')),
+    '수급자 명부 미저장 확인');
+  // 라우터 이탈 가드 공용 패턴 유지 (모의고사가 사용 중)
+  assert.ok(/registerViewLeaveGuard/.test(read('src/shell/router.js')), '이탈 가드 등록 API');
+});
+
+test('UX-FORM-04: 가상 키보드 오픈 시 하단 고정 크롬이 재배치된다', () => {
+  const resp = read('css/app-responsive.css');
+  // 탭 바 숨김 + sticky 행 오프셋 해제 + 본문 하단 여백 회수
+  assert.ok(/body\.kb-open\s+\.mobile-tab-bar\s*\{[^}]*display:\s*none/.test(resp),
+    'kb-open 시 탭 바 숨김 규칙');
+  assert.ok(/body\.kb-open\s+\.btn-row-sticky\s*\{[^}]*bottom:/.test(resp),
+    'kb-open 시 btn-row-sticky 오프셋 재지정');
+  assert.ok(/body\.kb-open\s+\.main-content\s*\{[^}]*scroll-padding-bottom/.test(resp),
+    'kb-open 시 스크롤 패딩 조정');
+  // FO-10 액션바(.fcb-bottom)도 동일 규약 — 시험 CSS는 별도 파일이라 직접 읽음
+  const formula = read('css/exams/cosmetic/formula.css');
+  assert.ok(/body\.kb-open\s+\.fcb-bottom\s*\{[^}]*bottom:/.test(formula),
+    'kb-open 시 fcb-bottom 오프셋 재지정');
+  // JS: 키보드 감지 가드 — focusin/visualViewport/scrollIntoView 보정
+  assert.ok(/initKeyboardGuard/.test(appJs), 'initKeyboardGuard 배선');
+  assert.ok(/kb-open/.test(appJs), 'kb-open 클래스 토글');
+  assert.ok(/focusin/.test(appJs) && /visualViewport/.test(appJs), '포커스+뷰포트 감지');
+  assert.ok(/scrollIntoView/.test(appJs), '포커스 필드 재정렬 보정');
 });
 
 // ---------- UX-CTL: 컨트롤 배치·간격 규약 ----------

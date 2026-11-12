@@ -1,8 +1,8 @@
 // src/auth-view.js — 계정/로그인 모달 (Phase 1: 인증만, 동기화는 Phase 2)
-// @spec AU-01~04,AU-08,AU-09
+// @spec AU-01~04,AU-08,AU-09,UX-FORM-03
 // 이메일+비밀번호 로그인·회원가입·매직링크·소셜 로그인(Google·Kakao). 세션은 supabase-js가 localStorage에 자동 보관.
 import { getSupabase, onAuthChange } from './supabase-client.js';
-import { showToast, showConfirm, trapFocus } from '../ui-utils.js';
+import { showToast, showConfirm, trapFocus, setFieldError, requireFields } from '../ui-utils.js';
 import { safeGetItem, safeSetItem, safeRemoveItem } from '../core/state.js';
 import { hasProEntitlement } from '../pro/pro-upgrade.js';
 import { reportEvent } from '../telemetry/usage-telemetry.js';
@@ -104,11 +104,20 @@ function readCredentials() {
     };
 }
 
+// UX-FORM-03 — 로그인 폼 필수 검증: 인라인 오류 + 첫 오류 필드 포커스 (setMsg는 요약 보조)
+function _requireCredentials(needPassword = true) {
+    const pairs = /** @type {Array<[HTMLElement|null, string]>} */ ([
+        [el('auth-email'), '이메일을 입력하세요.'],
+    ]);
+    if (needPassword) pairs.push([el('auth-password'), '비밀번호를 입력하세요.']);
+    return requireFields(pairs);
+}
+
 export async function authSignIn() {
     const sb = await getSupabase();
     if (!sb) return;
     const { email, password } = readCredentials();
-    if (!email || !password) { setMsg('이메일과 비밀번호를 입력하세요.', true); return; }
+    if (!email || !password) { _requireCredentials(); setMsg('이메일과 비밀번호를 입력하세요.', true); return; }
     setMsg('로그인 중...');
     const { error } = await sb.auth.signInWithPassword({ email, password });
     if (error) { setMsg(friendlyError(error), true); return; }
@@ -122,7 +131,7 @@ export async function authSignUp() {
     const sb = await getSupabase();
     if (!sb) return;
     const { email, password } = readCredentials();
-    if (!email || !password) { setMsg('이메일과 비밀번호를 입력하세요.', true); return; }
+    if (!email || !password) { _requireCredentials(); setMsg('이메일과 비밀번호를 입력하세요.', true); return; }
     setMsg('가입 처리 중...');
     const { error } = await sb.auth.signUp({ email, password });
     if (error) { setMsg(friendlyError(error), true); return; }
@@ -176,7 +185,7 @@ export async function authEmailLogin() {
     const sb = await getSupabase();
     if (!sb) return;
     const { email } = readCredentials();
-    if (!email) { setMsg('이메일을 입력하세요.', true); return; }
+    if (!email) { _requireCredentials(false); setMsg('이메일을 입력하세요.', true); return; }
     if (_emailLoginCooldown > 0) { setMsg(`재발송은 ${_emailLoginCooldown}초 후에 가능합니다.`, true); return; }
     setMsg('로그인 메일 발송 중...');
     const { error } = await sb.auth.signInWithOtp({
@@ -216,7 +225,7 @@ export async function authForgotPassword() {
     const sb = await getSupabase();
     if (!sb) return;
     const { email } = readCredentials();
-    if (!email) { setMsg('비밀번호를 재설정할 이메일을 입력하세요.', true); return; }
+    if (!email) { _requireCredentials(false); setMsg('비밀번호를 재설정할 이메일을 입력하세요.', true); return; }
     if (_emailLoginCooldown > 0) { setMsg(`재발송은 ${_emailLoginCooldown}초 후에 가능합니다.`, true); return; }
     setMsg('로그인 메일 발송 중...');
     const { error } = await sb.auth.signInWithOtp({
@@ -241,9 +250,14 @@ export async function authVerifyOtp() {
     if (!sb) return;
     const { email } = readCredentials();
     const token = (el('auth-otp-code')?.value || '').replace(/\s/g, '');
-    if (!email) { setMsg('이메일을 입력하세요.', true); return; }
+    if (!email) { _requireCredentials(false); setMsg('이메일을 입력하세요.', true); return; }
     // 자릿수 고정 금지 — Email OTP Length 설정(6~10)에 따라 달라진다
-    if (!/^\d{6,10}$/.test(token)) { setMsg('메일에 표시된 숫자 인증 코드를 입력하세요.', true); return; }
+    if (!/^\d{6,10}$/.test(token)) {
+        const otp = el('auth-otp-code');
+        if (otp) { setFieldError(otp, '메일에 표시된 숫자 인증 코드를 입력하세요.'); otp.focus(); }
+        setMsg('메일에 표시된 숫자 인증 코드를 입력하세요.', true);
+        return;
+    }
     setMsg('코드 확인 중...');
     const { error } = await sb.auth.verifyOtp({ email, token, type: 'email' });
     if (error) { setMsg(friendlyError(error), true); return; }
@@ -259,7 +273,11 @@ export async function authSetPassword() {
     if (!sb) return;
     const input = el('auth-new-password');
     const password = input?.value || '';
-    if (password.length < 6) { setMsg('비밀번호는 6자 이상이어야 합니다.', true); return; }
+    if (password.length < 6) {
+        if (input) { setFieldError(input, '비밀번호는 6자 이상이어야 합니다.'); input.focus(); }
+        setMsg('비밀번호는 6자 이상이어야 합니다.', true);
+        return;
+    }
     setMsg('비밀번호 설정 중...');
     const { error } = await sb.auth.updateUser({ password });
     if (error) { setMsg(friendlyError(error), true); return; }

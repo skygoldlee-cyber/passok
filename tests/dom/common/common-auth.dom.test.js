@@ -12,6 +12,10 @@ vi.mock('../../../src/ui-utils.js', () => ({
     vibrate: vi.fn(),
     trapFocus: vi.fn(() => () => {}),
     HAPTIC: {},
+    // UX-FORM-03 — 실제 구현과 동일한 필수 검증 시맨틱 (빈 값만 실패)
+    requireFields: vi.fn((pairs) => pairs.every(([el]) => el && String(el.value ?? '').trim())),
+    setFieldError: vi.fn(),
+    clearFieldError: vi.fn(),
 }));
 
 // supabase-js 스텁 — session 변수로 로그인 상태를 동적으로 제어.

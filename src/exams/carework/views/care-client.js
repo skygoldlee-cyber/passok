@@ -1,5 +1,5 @@
 // src/exams/carework/views/care-client.js — 수급자 관리 뷰 (서류현황·CSV 왕복)
-// @spec none — 시험 전용 실무 뷰 (DA-13)
+// @spec UX-FORM-03,UX-FORM-05 — 시험 전용 실무 뷰 (DA-13)
 import { listClients, addClient, removeClient, upsertClients, syncFacilityClients } from '../care-client-store.js';
 import { markFunnel } from '../care-funnel.js';
 import { clientsToCsv, ADMIT_ITEMS } from '../care-client-csv.js';
@@ -8,7 +8,7 @@ import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docMdHead, csvToMdTable, mdToHtml, docMdSign } from '../doc-md.js';
 import { docHeadHtml, getDocSign, refreshOrgName } from '../facility.js';
-import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
+import { showToast, showConfirm, flashSavedBadge, requireFields } from '../../../ui-utils.js';
 import { clientTimeline, timelineSummary } from '../care-timeline.js';
 import { clientTrends } from '../care-trend.js';
 import { weeklyReport } from '../care-report.js';
@@ -55,16 +55,26 @@ function clearForm() {
 
 export function careClientSave() {
     const f = readForm();
-    if (!f.name) { showToast('수급자 성명을 입력하세요.', 'error'); return; }
+    if (!requireFields([[/** @type {HTMLInputElement|null} */ ($('cli-name')), '수급자 성명을 입력하세요.']])) return;
     const r = addClient(f, _editId || undefined);
     if (r.ok) { showToast(_editId ? '수급자 정보를 수정했습니다.' : '수급자를 등록했습니다.'); clearForm(); renderList(); flashSavedBadge($('cli-list')); }
 }
 
-export function careClientNew() { clearForm(); }
+// UX-FORM-05 — 입력 중인 필드가 있으면 신규 작성·다른 항목 불러오기 전 확인
+function _formDirty() {
+    return ['cli-name', 'cli-room', 'cli-birth', 'cli-allergy', 'cli-caution', 'cli-phone', 'cli-memo']
+        .some(id => /** @type {HTMLInputElement|null} */ ($(id))?.value?.trim());
+}
 
-export function careClientLoad(id) {
+export async function careClientNew() {
+    if (_formDirty() && !await showConfirm('작성 중인 내용이 있습니다. 초기화하면 지워집니다. 계속할까요?', '신규 작성')) return;
+    clearForm();
+}
+
+export async function careClientLoad(id) {
     const c = listClients().find(x => x.id === id);
     if (!c) return;
+    if (_formDirty() && !await showConfirm('작성 중인 내용이 있습니다. 다른 항목을 불러오면 지워집니다. 계속할까요?', '수급자 불러오기')) return;
     _editId = id;
     const set = (elId, v) => { const el = /** @type {HTMLInputElement|null} */ ($(elId)); if (el) el.value = v || ''; };
     set('cli-name', c.name); set('cli-room', c.room); set('cli-birth', c.birth);

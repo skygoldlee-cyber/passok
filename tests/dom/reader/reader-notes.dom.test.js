@@ -1,9 +1,10 @@
-// tests/dom/reader/reader-notes.dom.test.js — 리더 섹션 메모 (TR-30)
-// @spec TR-30
-// 검증: 저장·삭제·조회 스토어(H) · 에디터 토글·저장 시 카드 표시 갱신(H) · 팔레트 검색 등재(H)
+// tests/dom/reader/reader-notes.dom.test.js — 리더 섹션 메모 (TR-30, UX-FORM-05 자동저장)
+// @spec TR-30,UX-FORM-05
+// 검증: 저장·삭제·조회 스토어(H) · 에디터 토글·저장 시 카드 표시 갱신(H) · 팔레트 검색 등재(H) ·
+//       입력 자동 임시저장 — 닫기·토글 경로 작성분 보존, 빈 텍스트 무언 삭제 없음(H)
 // ID-05: 키는 콘텐츠 기반 bookmarkKey(subj|chapterKey|title) — 위치 인덱스 미사용
 
-import { describe, it, beforeEach, expect } from 'vitest';
+import { describe, it, beforeEach, expect, vi } from 'vitest';
 import {
     getReaderNotes, getReaderNote, setReaderNote, deleteReaderNote, readerNoteCount,
 } from '../../../src/study/reader-notes.js';
@@ -95,5 +96,52 @@ describe('reader-notes — 인라인 에디터 (TR-30)', () => {
         expect(getReaderNote(KEY)).toBe('');
         expect(document.querySelector('.reader-note-view')).toBeNull();
         expect(document.querySelector('.reader-section-card').classList.contains('has-note')).toBe(false);
+    });
+
+    it('입력 디바운스 후 자동 임시저장 (UX-FORM-05)', () => {
+        vi.useFakeTimers();
+        try {
+            document.querySelector('.reader-note-btn').click();
+            const input = document.querySelector('.reader-note-input');
+            input.value = '타이머 자동저장';
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            expect(getReaderNote(KEY)).toBe(''); // 디바운스 중 — 아직 미저장
+            vi.advanceTimersByTime(600);
+            expect(getReaderNote(KEY)).toBe('타이머 자동저장');
+        } finally { vi.useRealTimers(); }
+    });
+
+    it('닫기 시 대기 중인 자동저장을 즉시 반영 — 작성분 유실 없음 (UX-FORM-05)', () => {
+        document.querySelector('.reader-note-btn').click();
+        const input = document.querySelector('.reader-note-input');
+        input.value = '닫기 직전 입력분';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        document.querySelector('[data-note-close]').click(); // 디바운스 만료 전 닫기
+        expect(getReaderNote(KEY)).toBe('닫기 직전 입력분');
+        expect(document.querySelector('.reader-section-card').classList.contains('has-note')).toBe(true);
+    });
+
+    it('토글로 닫아도 디바운스 타이머가 만료되면 작성분이 보존된다 (UX-FORM-05)', () => {
+        vi.useFakeTimers();
+        try {
+            const btn = document.querySelector('.reader-note-btn');
+            btn.click();
+            const input = document.querySelector('.reader-note-input');
+            input.value = '토글 닫기 입력분';
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            btn.click(); // 에디터 제거 — 타이머는 클로저로 생존
+            vi.advanceTimersByTime(600);
+            expect(getReaderNote(KEY)).toBe('토글 닫기 입력분');
+        } finally { vi.useRealTimers(); }
+    });
+
+    it('빈 텍스트는 자동 삭제하지 않고 기존 메모를 유지한다 (UX-FORM-05)', () => {
+        setReaderNote(KEY, '기존 메모', { subject: 'law', title: 't' });
+        document.querySelector('.reader-note-btn').click();
+        const input = document.querySelector('.reader-note-input');
+        input.value = '';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        document.querySelector('[data-note-close]').click();
+        expect(getReaderNote(KEY)).toBe('기존 메모'); // 무언 삭제 없음 — 삭제는 '삭제' 버튼만
     });
 });

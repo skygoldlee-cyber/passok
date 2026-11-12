@@ -14,6 +14,10 @@ vi.mock('../../../../src/ui-utils.js', () => ({
     flashSavedBadge: vi.fn(),
     showGlobalLoading: vi.fn(),
     hideGlobalLoading: vi.fn(),
+    // UX-FORM-03 — 실제 구현과 동일한 필수 검증 시맨틱 (빈 값만 실패)
+    requireFields: vi.fn((pairs) => pairs.every(([el]) => el && String(el.value ?? '').trim())),
+    setFieldError: vi.fn(),
+    clearFieldError: vi.fn(),
 }));
 vi.mock('../../../../src/auth-sync/supabase-client.js', () => ({
     getAuthSession: vi.fn(() => Promise.resolve(null)),
@@ -491,7 +495,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(list.textContent).toContain('김○○');
         expect(list.textContent).toContain('낙상 위험');
         const id = list.querySelector('[data-arg]')?.dataset.arg;
-        careClientLoad(id);
+        await careClientLoad(id);
         expect(document.getElementById('cli-name').value).toBe('김○○');
         await careClientDelete(id); // 삭제 확인(showConfirm) 비동기 대기
         expect(list.textContent).toContain('등록된 대상자가 없습니다');
@@ -714,7 +718,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(inp.accept).toContain('.docx');
         expect(document.querySelector('[data-click="careFormTplSave"]')).toBeTruthy();
         expect(document.getElementById('cf-tpl-facsave')).toBeTruthy();
-        careFormTplNew(); // 새 양식 — 빈 편집기 오픈
+        await careFormTplNew(); // 새 양식 — 빈 편집기 오픈
         expect(document.getElementById('cf-editor').classList.contains('is-hidden')).toBe(false);
         expect(document.getElementById('cf-tpl-label').textContent).toBe('새 양식');
         // 홈 카드는 안내+링크로 축소 — 편집기는 양식 뷰에만 존재
@@ -734,7 +738,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         loadPartial('care-custom-form.html');
         initCareCustomFormView();
         expect(document.querySelector('[data-click="careFormTplUse"]')).toBeTruthy(); // 목록 렌더
-        careFormTplUse(r.id);
+        await careFormTplUse(r.id);
         expect(document.getElementById('cf-fill').classList.contains('is-hidden')).toBe(false);
         expect(document.querySelector('[data-cf-field="비고"]')).toBeTruthy(); // 커스텀 필드 렌더
         document.querySelector('[data-cf-field="비고"]').value = '없음';
@@ -759,7 +763,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         loadPartial('care-custom-form.html');
         initCareCustomFormView();
         const r = addFormTemplate({ title: '서약서', body: '본인: {{본인}}' });
-        careFormTplEdit(r.id); // 인라인 편집기 오픈 — 홈 이동 없음
+        await careFormTplEdit(r.id); // 인라인 편집기 오픈 — 홈 이동 없음
         expect(document.getElementById('cf-editor').classList.contains('is-hidden')).toBe(false);
         expect(readTplEditor('cf-tpl').title).toBe('서약서');
         fillTplEditor('cf-tpl', '서약서2', '본인: {{본인}} 날짜: {{date}}');
@@ -767,7 +771,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careFormTplSave();
         const tpl = listFormTemplates().find(t => t.id === r.id);
         expect(tpl.title).toBe('서약서2'); // 같은 id 갱신
-        careFormTplEditClose();
+        await careFormTplEditClose();
         expect(document.getElementById('cf-editor').classList.contains('is-hidden')).toBe(true);
         removeFormTemplate(r.id);
     });
@@ -843,7 +847,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         loadPartial('care-custom-form.html');
         initCareCustomFormView();
         expect(document.querySelectorAll('#cf-seed-list [data-click="careFormSeedCopy"]').length).toBe(6); // 6개 기본 양식
-        careFormSeedCopy('careIncident');
+        await careFormSeedCopy('careIncident');
         const tpl = listFormTemplates().find(t => t.toolKey === 'careIncident');
         expect(tpl).toBeTruthy();
         expect(tpl.title).toBe('사고·낙상 보고서');

@@ -1,5 +1,5 @@
 // views/reader-render.js — 챕터 본문 렌더 (TOC·섹션 카드·바인딩)
-// @spec TR-01,TR-02,TR-05,TR-15,TR-20,TR-27,SA-02,SA-03
+// @spec TR-01,TR-02,TR-05,TR-15,TR-20,TR-27,SA-02,SA-03,UX-FORM-05
 // textbook-reader.js에서 분리 — _renderChapterContentInternal 이관.
 // 파일 로컬 상태를 쓰지 않는 순수 렌더 경로로, 진입·상태·진척은
 // textbook-reader.js / reader-progress.js가 담당한다.
@@ -462,18 +462,42 @@ function _toggleNoteEditor(btn) {
             view.remove();
         }
     };
+    // UX-FORM-05 — 입력 자동 임시저장: 닫기·뷰 전환·섹션 재렌더 어떤 경로로 나가도
+    // 작성분이 소실되지 않는다 (주관식 자동저장과 동일 규약). 빈 텍스트는 자동 삭제하지
+    // 않고 기존 메모를 유지 — 삭제는 '삭제' 버튼 명시 경로만.
+    let saveTimer = null;
+    input?.addEventListener('input', () => {
+        if (saveTimer) clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+            saveTimer = null;
+            if (!input || !input.value.trim()) return;
+            setReaderNote(key, input.value, { subject: btn.dataset.noteSubj, title: btn.dataset.noteTitle });
+            refresh();
+        }, 500);
+    });
     editor.querySelector('[data-note-save]')?.addEventListener('click', () => {
+        if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
         setReaderNote(key, input ? input.value : '', { subject: btn.dataset.noteSubj, title: btn.dataset.noteTitle });
         refresh();
         editor.remove();
     });
     editor.querySelector('[data-note-delete]')?.addEventListener('click', () => {
+        if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
         setReaderNote(key, '');
         if (input) input.value = '';
         refresh();
         editor.remove();
     });
-    editor.querySelector('[data-note-close]')?.addEventListener('click', () => editor.remove());
+    editor.querySelector('[data-note-close]')?.addEventListener('click', () => {
+        // 닫기 전 대기 중인 자동저장을 즉시 반영 — 닫기 시점까지의 입력을 유실 없이 보존
+        if (saveTimer) {
+            clearTimeout(saveTimer); saveTimer = null;
+            if (input && input.value.trim())
+                setReaderNote(key, input.value, { subject: btn.dataset.noteSubj, title: btn.dataset.noteTitle });
+        }
+        refresh();
+        editor.remove();
+    });
 }
 
 // 본문 목차 하이퍼링크 → 대응 섹션으로 스크롤 (5단계 매칭 폴백)

@@ -1,5 +1,5 @@
 // src/exams/cosmetic/custom-ingredient-store.js — 사용자 등록 성분 사전 (DI-06~08)
-// @spec DI-06,DI-07,DI-08,DI-09
+// @spec DI-06,DI-07,DI-08,DI-09,UX-FORM-03
 //
 // 공식 원료 DB(번들)에 없는 원료를 사용자가 등록해 사전·배합 검증에 반영한다.
 // localStorage `custom_ingredients` (scopedKey → 시험별 네임스페이스 자동).
@@ -113,12 +113,12 @@ function collisionReason(name, officialIndex, excludeId) {
 /**
  * @param {object} data - {name, engName, category, limit, description}
  * @param {{officialIndex?: Map<string,object>}} [opts]
- * @returns {{ok:boolean, item?:object, error?:string}}
+ * @returns {{ok:boolean, item?:object, error?:string, field?:string}}
  */
 export function createCustomIngredient(data, opts = {}) {
   const clean = sanitize(data || {});
   const err = collisionReason(clean.name, opts.officialIndex, null);
-  if (err) return { ok: false, error: err };
+  if (err) return { ok: false, error: err, field: 'name' }; // UX-FORM-03 — 필드 귀속 오류
   const { count, limit } = getCustomIngredientUsage();
   if (count >= limit) return { ok: false, error: `자가 등록은 최대 ${limit}종까지 가능합니다.` };
   const now = Date.now();
@@ -140,7 +140,7 @@ export function updateCustomIngredient(id, data, opts = {}) {
   if (idx < 0) return { ok: false, error: '등록 항목을 찾을 수 없습니다.' };
   const clean = sanitize({ ...items[idx], ...(data || {}) });
   const err = collisionReason(clean.name, opts.officialIndex, id);
-  if (err) return { ok: false, error: err };
+  if (err) return { ok: false, error: err, field: 'name' };
   items[idx] = { ...items[idx], ...clean, updatedAt: Date.now() };
   if (!saveAll(items)) return { ok: false, error: '저장에 실패했습니다.' };
   return { ok: true, item: items[idx] };

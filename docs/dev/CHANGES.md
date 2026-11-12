@@ -1,6 +1,38 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 fix(check): 파일명 게이트 .dom.test.js 이중 접미사 판정 수정
+
+- `check_filenames.js`가 stem에서 `.test`만 벗겨 `.dom`이 남아 KEBAB 판정 실패 — 모든 `*.dom.test.js`가 기준선 승계 상태라 신규 DOM 테스트 추가가 차단되던 실결함
+- 접미사 패턴을 `(dom.test|test|spec|dom)`로 확장 — CODE_CONVENTIONS §2.1의 `tests/dom/*.dom.test.js` 규약과 정합. 기준선 118 → 37건 단조 감소 (해소 81건)
+
+
+## 2026-11-12 docs(spec): SPEC.md 구조 정리 — 목차 2-depth 확장·§3.0 요약표 재집계·§7 구현 이력 명시·상태 범례 보강
+
+- **목차 2-depth**: §1~§7 전 서브섹션 링크 추가 (§3.x 31개·§4.x + 4.8.1~9·§5.x·§6.x·§7.x) — 1600줄 문서의 검색 의존 탐색 해소
+- **§3.0 지원 기능 요약표 재집계**: drift 정정 — 모의고사 E-01~E-09(9)·리더 TR-16a 포함 30·참조 RR-20·3.20 범위 표기 SC-16·RV·ND·DR-07 분리·UM-03 공백 반영·LP-14. 누락 3행 추가 — 3.27 AI 제작 지원(37)·3.28 주관식(8)·3.31 Care OS(21). 수동 집계임을 명시하고 drift 시 §본문 표가 정본임을 주석
+- **§7 개칭 "향후 고도화 로드맵" → "고도화 로드맵·구현 이력"**: 안내 문장이 "미구현 항목의 정규 요구사양"이라고 선언했으나 UX-MET-01~08·ROAD-P6·ROAD-Q8 등 구현 완료 항목이 혼재 — 구현 항목은 Phase 흔적 보존으로 원위치 유지함을 명문화
+- **상태 범례 보강**: `🟡 부분`·`부분 적용`·`진행중` 행 추가 + `(로드맵)`·`— 조건부` 수식은 분류 부가 정보임을 명시 — 기존 본문의 비범례 표기(ROAD-S2 진행중·ROAD-S4 부분 적용·ROAD-L1 🟡 부분·CO-* 조건부)와 정합화
+- 요구사항 본문·ID·§번호·상태 변경 없음 — 순수 문서 구조 정리
+
+
+## 2026-11-12 feat(ux): UX-FORM-03·05 잔여 대상 폼 확대 — 인라인 오류 전면 적용 + 이탈 유실 방지 (A항 12건 구현 완료)
+
+- **UX-FORM-03 ✅ — 필드 인라인 오류 잔여 폼 승격**: `ui-utils.js`에 `requireFields(pairs)` 신설 — [요소, 메시지] 쌍 일괄 검증(빈 필드 인라인 오류 + 채워진 필드 해제 + 첫 오류 포커스). aria-invalid 필드 input 시 오류 자동 해제 위임 리스너를 모듈 레벨에 추가해 런타임 주입 필드(lazy view·모달)까지 커버. 토스트 전용 검증 → 필드 인라인으로 승격: 로그인(auth-email/password/otp/새 비밀번호 — setMsg는 비자동소멸 요약 병기)·자가 성분 등록(스토어 충돌 오류에 `field:'name'` 귀속 표식 추가 → cing-name 인라인)·Care OS 8뷰(일지·인수인계·방문예약/기관공유·방문결과·사고보고·근무표·수급자 명부·양식 편집기 저장/기관등록·기관 생성)
+- **UX-FORM-05 ✅ — 작성 중 이탈 유실 방지 잔여 대상**: 리더 메모(TR-30) 입력 500ms 디바운스 자동 임시저장 + 닫기 시 미반영분 즉시 반영 — 빈 텍스트는 무언 삭제하지 않음(삭제는 '삭제' 버튼만). Care OS 닫기 경로 dirty 확인: 기관 양식 편집기(닫기·다른 양식 전환)·기입 폼 양식 전환·방문결과 패널·수급자 명부 신규/불러오기 — `_editLoaded` 원본 비교 또는 필드 스캔으로 미저장 감지 후 showConfirm. 주관식은 기존 input마다 `_save` 자동저장으로 ② 충족. Care OS 뷰 전환 자체는 지연 주입 DOM이 유지돼 무유실
+- **테스트**: `field-errors.dom.test.js` 신설(requireFields 검증·자동 해제·XSS 안전 9건), reader-notes.dom.test.js에 자동저장 4건(디바운스·닫기 플러시·토글 경로·빈 텍스트 보존), ux-invariants에 FORM-03·05 정적 단언 2건 — DOM 18건·unit 38건 통과
+- **잔여 정리**: 2026-11-12 A항 신규 요구사양 12건 **전부 구현 완료** (UX-FORM-03·05 잔여 폼 확대분 종결)
+
+
+## 2026-11-12 feat(ux): UX-FORM-04 가상 키보드 대응 — 하단 고정 크롬 재배치 (A항 12건 완결)
+
+- **initKeyboardGuard() 신설** (app-shell.js): 텍스트 입력 포커스 + 시각 뷰포트 급감(≥150px — 주소창 토글·safe-area 변동 제외)을 감지해 `body.kb-open` 토글. 판정 3경로 병기 — ① resizes-visual(Chromium 기본): `innerHeight−vv.height−offsetTop` 점유 높이 ② resizes-content·iOS: 비집중 기준 높이(baselineH, kb-open 중 갱신 동결) 대비 급감 ③ visualViewport 부재 구형 iOS: 측정 불가이므로 `(pointer:coarse)` 텍스트 포커스 자체를 키보드로 간주. focusin/focusout·window resize·vv resize/scroll 감시
+- **kb-open CSS 규약** (app-responsive.css): 탭 바 `display:none`(키보드 영역과 중첩·resizes-visual에서는 그 아래 묻힘 — 회수 불가), `.btn-row-sticky` 탭 바 오프셋 해제 → 키보드 바로 위 부착(제출 버튼 접근 유지), `.main-content` 하단 여백·scroll-padding을 sticky 행 높이(56px)로 회수. formula.css `.fcb-bottom`(FO-10 액션바)도 동일하게 오프셋 해제
+- **레이아웃 점프 보정**: `--app-height`는 기존처럼 vv.height를 추적해 키보드 위 영역으로 축소 — 스크롤포트 급감에 매립된 포커스 필드를 키보드 애니메이션(~350ms) 후 `scrollIntoView({block:'center'})`로 재정렬
+- **테스트**: app-shell.dom.test.js에 kb-open 토글 5건(점유·기준급감 2경로·임계 미만·비텍스트 포커스·복원/블러 해제), ux-invariants에 CSS·배선 정적 단언 1건, `ux-keyboard.spec.js` 신설 — addInitScript로 visualViewport를 EventTarget 스텁으로 사전 치환해 키보드 점유 시뮬레이션(탭 바 hidden·`--app-height`/컨테이너 실측 축소·포커스 입력 가시 영역 잔존·비텍스트 오판 없음 — UX-VFY-02 기하 단언)
+- **잔여 정리**: 이 항목으로 2026-11-12 A항 신규 요구사양 12건 전부 착수 완료 (A-14~17·E-09·UX-FB-09~11·UX-PWA-08 ✅ / UX-FORM-03·05 🚧 잔여 대상 폼 확대분만 남음)
+
+
 ## 2026-11-12 feat(ux): UX-FB-09~11 알림 큐·파괴 확인·비동기 상태 + UX-PWA-08 오프라인 표시 — Phase 4
 
 - **UX-FB-09 ✅ — 알림 우선순위 큐**: `src/shell/boot-modal-queue.js` — 부팅 모달(온보딩 20→변경 이력 30)을 우선순위 큐로 1개씩 순차 표시, MutationObserver로 닫힘 감지 후 드레인. `src/shell/banner-mgr.js` — 배너 동시 표시 상한 2 (오프라인·스토리지 10 > 법령·개정 20 > 만료·기타 30), 초과분 지연·우선순위 배너 해제 시 회전 복귀

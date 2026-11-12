@@ -10,9 +10,11 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
 vi.mock('../../../../src/ui-utils.js', () => ({
     showToast: vi.fn(),
     showConfirm: vi.fn(() => Promise.resolve(true)),
+    setFieldError: vi.fn(),
+    clearFieldError: vi.fn(),
 }));
 
-import { showToast, showConfirm } from '../../../../src/ui-utils.js';
+import { showToast, showConfirm, setFieldError } from '../../../../src/ui-utils.js';
 import {
     loadIndexHtml, el, isVisible, selectFile, flushAsync, lastToast, spyAnchorDownload,
 } from '../../helpers.js';
@@ -65,6 +67,7 @@ describe('배합 계산기 — 입력·검증·저장 시나리오', () => {
         vi.mocked(showToast).mockClear();
         vi.mocked(showConfirm).mockClear();
         vi.mocked(showConfirm).mockResolvedValue(true);
+        vi.mocked(setFieldError).mockClear();
     });
 
     it('원료명+배합률 입력 → 투입량 자동 계산·합계 표시·빈 상태 해제', () => {
@@ -406,12 +409,14 @@ describe('배합 계산기 — 자가 등록 성분 (DI-07·09, FO-32)', () => {
         expect(lastToast()[0]).toContain('등록');
     });
 
-    it('공식 DB 동명 등록 시도 → 거부 토스트·저장 안 됨 (DI-08)', () => {
+    it('공식 DB 동명 등록 시도 → 원료명 필드 인라인 거부·저장 안 됨 (DI-08, UX-FORM-03)', () => {
         customIngAdd('살리실산');
         customIngSave();
 
         expect(listCustomIngredients().length).toBe(0);
-        expect(lastToast()[0]).toContain('공식 DB');
+        // 필드 귀속 오류 — 토스트가 아니라 원료명 인라인 오류로 표시
+        expect(setFieldError).toHaveBeenCalledWith(
+            el('cing-name'), expect.stringContaining('공식 DB'));
         expect(el('cing-overlay').classList.contains('is-hidden')).toBe(false); // 모달 유지
         customIngClose();
     });

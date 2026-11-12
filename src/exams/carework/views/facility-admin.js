@@ -1,9 +1,9 @@
 // src/exams/carework/views/facility-admin.js — 기관 어드민 뷰 (DOC-DSN-43 6a, DA-13)
-// @spec DA-18 — 권한 뷰 분리 (어드민·클라이언트 별도 뷰)
+// @spec DA-18,UX-FORM-03 — 권한 뷰 분리 (어드민·클라이언트 별도 뷰)
 import { myMembership, syncFacilityNav, createFacility, listMembers, setDocWebhook, ROLES } from '../facility.js';
 import { getAuthSession } from '../../../auth-sync/supabase-client.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { showToast } from '../../../ui-utils.js';
+import { showToast, setFieldError } from '../../../ui-utils.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -63,7 +63,7 @@ export async function facilityAdminWebhook() {
 export async function facilityAdminCreate() {
     const el = /** @type {HTMLInputElement|null} */ ($('fa-name'));
     const name = el?.value?.trim();
-    if (!name) { showToast('기관명을 입력하세요.', 'error'); return; }
+    if (!name) { setFieldError(el, '기관명을 입력하세요.'); el?.focus(); return; }
     proFeatureNotice('facility_workspace', '기관 워크스페이스');
     const r = await createFacility(name, /** @type {HTMLInputElement|null} */($('fa-biz'))?.value || '');
     if ('error' in r) { showToast(r.error, 'error'); return; }

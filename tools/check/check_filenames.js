@@ -75,7 +75,7 @@ function check(file) {
     }
     // 디렉터리 규칙
     if (/^(src|html|css|tests)\//.test(file) || file.startsWith('.github/workflows/')) {
-        if (KEBAB.test(stem.replace(/\.(test|spec|dom)$/,''))) return null;
+        if (KEBAB.test(stem.replace(/\.(dom\.test|test|spec|dom)$/,''))) return null;
         return `${dir.split('/')[0]} 코드 파일명은 kebab-case (${base})`;
     }
     if (file.startsWith('tools/')) {

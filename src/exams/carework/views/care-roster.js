@@ -1,5 +1,5 @@
 // src/exams/carework/views/care-roster.js — 교대 근무표 뷰
-// @spec none — 시험 전용 실무 뷰 (DA-13)
+// @spec UX-FORM-03 — 시험 전용 실무 뷰 (DA-13)
 import { ROSTER_SHIFTS, shiftLabel, buildRosterText, rosterToCsv, csvToRoster } from '../care-roster.js';
 import { markFunnel } from '../care-funnel.js';
 import { listRoster, saveRoster, removeRoster, upsertRoster, syncPendingRoster } from '../roster-store.js';
@@ -8,7 +8,7 @@ import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docMdHead, csvToMdTable, mdToHtml, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 import { refreshOrgName } from '../facility.js';
-import { showToast, showConfirm } from '../../../ui-utils.js';
+import { showToast, showConfirm, requireFields } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
 
@@ -30,7 +30,10 @@ function readForm() {
 
 export function careRosterAdd() {
     const f = readForm();
-    if (!f.date || !f.worker) { showToast('근무일·근무자를 입력하세요.', 'error'); return; }
+    if (!requireFields([
+        [/** @type {HTMLInputElement|null} */ ($('ros-date')), '근무일을 입력하세요.'],
+        [/** @type {HTMLInputElement|null} */ ($('ros-worker')), '근무자를 입력하세요.'],
+    ])) return;
     const r = saveRoster(f);
     if (r.ok) { showToast('근무 배정을 등록했습니다.'); renderList(); }
 }

@@ -1,5 +1,5 @@
 // src/exams/carework/views/care-handover.js — 인수인계서 뷰
-// @spec none — 시험 전용 실무 뷰 (DA-13)
+// @spec UX-FORM-03 — 시험 전용 실무 뷰 (DA-13)
 import { buildHandover, SHIFTS } from '../care-handover.js';
 import { markFunnel } from '../care-funnel.js';
 import { listCareLogs, FREE_LIMIT } from '../care-log-store.js';
@@ -13,7 +13,7 @@ import { myMembership, submitHandover, listHandovers as listFacilityHandovers, a
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { getJSON, setJSON } from '../../../core/storage.js';
 import { STORAGE_KEYS } from '../../../core/storage-keys.js';
-import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
+import { showToast, showConfirm, flashSavedBadge, requireFields } from '../../../ui-utils.js';
 import { careShare } from '../care-share.js';
 import { docMdHead, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
@@ -64,7 +64,16 @@ export function careHandoverGenerate() {
     const t = buildHandover(_lastIn);
     const out = $('ho-preview');
     if (!out) return;
-    if (!t) { out.innerHTML = '<p class="care-calc-err">일시·인계자·인수자를 입력하세요.</p>'; return; }
+    if (!t) {
+        // UX-FORM-03 — 미리보기 요약과 함께 누락 필드에 인라인 오류 표시
+        requireFields([
+            [/** @type {HTMLInputElement|null} */ ($('ho-date')), '근무 일자를 입력하세요.'],
+            [/** @type {HTMLInputElement|null} */ ($('ho-from')), '인계자를 입력하세요.'],
+            [/** @type {HTMLInputElement|null} */ ($('ho-to')), '인수자를 입력하세요.'],
+        ]);
+        out.innerHTML = '<p class="care-calc-err">일시·인계자·인수자를 입력하세요.</p>';
+        return;
+    }
     _lastText = t;
     out.innerHTML = docHeadHtml('인수인계서') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver'], ['확인일', '']]);
     renderSaved();

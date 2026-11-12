@@ -1,4 +1,4 @@
-/* @spec UX-NAV-01,O-01,P-04a,P-07,R-11
+/* @spec UX-NAV-01,O-01,P-04a,P-07,R-11,UX-FORM-04
  * app-responsive.css — reader.css에서 분리: 태블릿·모바일 앱 레이아웃, 오프라인 배너,
  * PWA 설치 모달, 강제 가로보기, 대시보드 모바일 보정.
  * 캐스케이드 순서 보존을 위해 reader.css 다음에 import된다 (style.css 참조).
@@ -589,6 +589,17 @@
         z-index: var(--z-sticky);
         background: var(--bg-app);
         padding: var(--space-2) 0;
+    }
+
+    /* UX-FORM-04 — 가상 키보드 오픈(body.kb-open, initKeyboardGuard) 중 하단 크롬 재배치.
+       탭 바는 키보드 영역과 중첩되거나 resizes-visual에서는 그 아래 묻히므로 숨기고,
+       sticky 액션 행은 탭 바 오프셋을 해제해 키보드 바로 위로 붙인다.
+       .main-content의 탭 바용 하단 여백도 sticky 행 높이분으로 회수해 화면을 넓힌다. */
+    body.kb-open .mobile-tab-bar { display: none; }
+    body.kb-open .btn-row-sticky { bottom: var(--space-2); }
+    body.kb-open .main-content {
+        padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+        scroll-padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
     }
 
     /* 입력 필드 터치 영역 확대 */

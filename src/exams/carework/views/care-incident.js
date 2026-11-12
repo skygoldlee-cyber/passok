@@ -1,5 +1,5 @@
 // src/exams/carework/views/care-incident.js — 사고·낙상 보고서 뷰
-// @spec none — 시험 전용 실무 뷰 (DA-13)
+// @spec UX-FORM-03 — 시험 전용 실무 뷰 (DA-13)
 import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, severityLabel, buildIncidentText, incidentsToCsv } from '../care-incident.js';
 import { markFunnel } from '../care-funnel.js';
 import { listIncidents, saveIncident, removeIncident } from '../incident-store.js';
@@ -11,7 +11,7 @@ import { docMdHead, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 import { getJSON, setJSON, removeItem } from '../../../core/storage.js';
 import { STORAGE_KEYS } from '../../../core/storage-keys.js';
-import { showToast, showConfirm, flashSavedBadge } from '../../../ui-utils.js';
+import { showToast, showConfirm, flashSavedBadge, requireFields } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
 export { careIncidentVoiceToggle } from '../care-voice.js';
@@ -49,7 +49,16 @@ export function careIncidentGenerate() {
     const t = buildIncidentText(readForm());
     const out = $('inc-preview');
     if (!out) return;
-    if (!t) { out.innerHTML = '<p class="care-calc-err">일시·대상자·사고 유형을 입력하세요.</p>'; return; }
+    if (!t) {
+        // UX-FORM-03 — 미리보기 요약과 함께 누락 필드에 인라인 오류 표시
+        requireFields([
+            [/** @type {HTMLInputElement|null} */ ($('inc-date')), '발생 일자를 입력하세요.'],
+            [/** @type {HTMLInputElement|null} */ ($('inc-client')), '대상자를 입력하세요.'],
+            [/** @type {HTMLSelectElement|null} */ ($('inc-type')), '사고 유형을 선택하세요.'],
+        ]);
+        out.innerHTML = '<p class="care-calc-err">일시·대상자·사고 유형을 입력하세요.</p>';
+        return;
+    }
     _lastText = t;
     out.innerHTML = docHeadHtml('사고·낙상 보고서') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['보고자', 'author'], ['확인(시설장)', 'confirmer']])
         + (_photos.length ? `<div class="care-photo-grid">${_photos.map(p => `<img src="${p}" alt="첨부 사진">`).join('')}</div>` : '');
@@ -139,7 +148,11 @@ export async function careIncidentFacilitySubmit() {
     }
     if (!_facility) { showToast('소속 기관이 없습니다 — 기관 가입 후 이용하세요.', 'error'); return; }
     const f = readForm();
-    if (!f.date || !f.client || !f.type) { showToast('일시·대상자·사고 유형을 입력하세요.', 'error'); return; }
+    if (!requireFields([
+        [/** @type {HTMLInputElement|null} */ ($('inc-date')), '발생 일자를 입력하세요.'],
+        [/** @type {HTMLInputElement|null} */ ($('inc-client')), '대상자를 입력하세요.'],
+        [/** @type {HTMLSelectElement|null} */ ($('inc-type')), '사고 유형을 선택하세요.'],
+    ])) return;
     proFeatureNotice('care_incident_share', '기관 사고 대장 등록');
     const r = await submitIncident({
         facilityId: _facility.id,

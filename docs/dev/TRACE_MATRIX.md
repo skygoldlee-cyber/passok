@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: afa832dc789ee962
+> 입력 해시: b3b60f12bf768ad1
 > 생성: 2026-11-12 · 원천: SPEC.md(705개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 705개 — 문서 연결 469 · 소스 연결 618 · 테스트 연결 664 · 보고서 연결 109
+**커버리지 요약**: 요구사항 705개 — 문서 연결 469 · 소스 연결 621 · 테스트 연결 667 · 보고서 연결 109
 
 ---
 
@@ -773,9 +773,9 @@
 | UX-FB-11 | **구현** — `ui-utils.js`: showGlobalLoading 내장 300ms 지연 임계(전 호출처 플리커 방지), runWithLoading(AbortSignal·취소 버튼·timeoutMs·triggerEl disabled+aria-busy·finally 정리). 적용: care-ai.js AI 초안(취소 가능·30s 타임아웃). 검증: ux-feedback DOM 테스트 | E2E 테스트 | — | src/exams/carework/care-ai.js<br>src/ui-utils.js | tests/dom/common/ux-feedback.dom.test.js<br>tests/e2e/ux-feedback.spec.js | — | — |
 | UX-FORM-01 | 16px 미만이면 iOS Safari가 포커스 시 자동 확대 | E2E 테스트 | DOC-DSN-25 | css/base.css<br>css/reader.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FORM-02 | 모바일에서 물리적 눌림감 제공 | E2E 테스트 | DOC-DSN-25 | css/base.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
-| UX-FORM-03 | 🚧 진행 — 공용 패턴 구현: `setFieldError`/`clearFieldError` (ui-utils.js) + `.field-error` 스타일. 적용: 온보딩 목표 입력·기관 초대 코드 (수정 시 자동 해제). 잔여 대상: 로그인(auth-modal-msg는 비자동소멸이라 부분 충족)·자가등록·Care OS 폼 — 신규 폼은 본 패턴 의무 | — | — | — | — | — | — |
-| UX-FORM-04 | **미구현** — 키보드 오픈 상태의 크롬 처리 규약 부재. iOS는 visualViewport 미지원 구간 대응 필요 | — | — | — | — | — | — |
-| UX-FORM-05 | 🚧 진행 — 공용 기반: `registerViewLeaveGuard`(router.js)로 뷰 이탈 확인 훅. 적용: 모의고사 응시(세션 드래프트+확인)·의견 보내기(작성 중 닫기 확인). 잔여 대상: 리더 메모(TR-30)·주관식 답안·Care OS 폼 | — | — | — | — | — | — |
+| UX-FORM-03 | 구현 — 공용 패턴: `setFieldError`/`clearFieldError`/`requireFields` (ui-utils.js) + `.field-error` 스타일 + aria-invalid 수정 시 자동 해제 위임 리스너. 적용: 온보딩 목표 입력·기관 초대·로그인(auth-email/password/otp·비밀번호 설정 — setMsg는 비자동소멸 요약 병기)·자가 성분 등록(원료명 귀속 오류 field:'name')·Care OS 전 폼(일지·인수인계·방문예약·결과·사고보고·근무표·수급자 명부·기관 양식 편집기·기관 등록) — 신규 폼은 본 패턴 의무 | E2E 테스트 | — | src/auth-sync/auth-view.js<br>src/exams/carework/views/care-client.js<br>src/exams/carework/views/care-custom-form.js<br>src/exams/carework/views/care-handover.js<br>…외 8개 | tests/dom/common/field-errors.dom.test.js<br>tests/e2e/ux-forms.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
+| UX-FORM-04 | **구현** — `initKeyboardGuard`(app-shell.js)가 텍스트 포커스+시각 뷰포트 급감(≥150px)을 `body.kb-open`으로 반영: ① resizes-visual은 `innerHeight−vv.height−offsetTop` 점유로 ② resizes-content·iOS는 비집중 기준 높이 대비 급감으로 ③ visualViewport 부재 구형 iOS는 터치 포커스로 간주(3경로 병기). kb-open 시 탭 바 숨김·`.btn-row-sticky`/`.fcb-bottom` 오프셋 해제(키보드 바로 위 부착)·`.main-content` 여백 회수. `--app-height` 급감 매립은 애니메이션 후 `scrollIntoView`로 보정 | E2E 테스트 | — | css/app-responsive.css<br>css/exams/cosmetic/formula.css<br>src/shell/app-shell.js | tests/dom/common/app-shell.dom.test.js<br>tests/e2e/ux-keyboard.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
+| UX-FORM-05 | 구현 — 공용 기반: `registerViewLeaveGuard`(router.js) 이탈 확인 훅. 적용: 모의고사 응시(드래프트+확인)·의견 보내기(dirty 확인)·리더 메모(TR-30 — 입력 디바운스 자동저장+닫기 시 미반영분 즉시 반영, 빈 텍스트 무언 삭제 없음)·주관식 답안(입력마다 자동저장, 재진입 복원)·Care OS(양식 편집기·기입 폼 전환·방문결과 패널·수급자 명부 dirty 확인 — 뷰 전환은 지연 주입 DOM 유지로 무유실) | E2E 테스트 | — | src/exams/carework/views/care-client.js<br>src/exams/carework/views/care-custom-form.js<br>src/exams/carework/views/care-visit.js<br>src/shell/router.js<br>…외 2개 | tests/dom/reader/reader-notes.dom.test.js<br>tests/e2e/ux-forms.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-HELP-01 | 입력 필드·수식키 조합에서는 미동작. `Esc`·`?`·배경 클릭 닫기, 포커스 트랩 적용. 단축키 조합표는 모듈 상수로 분리해 단위 테스트 가능 | E2E 테스트 | — | src/shell/shortcuts-help.js | tests/dom/shell/shortcut-help.dom.test.js<br>tests/e2e/ux-surfaces.spec.js<br>tests/unit/app/shortcuts-help.test.js | — | — |
 | UX-NAV-01 | 한 번에 하나의 네비게이션만 노출 — 중복 방지. 하단 탭 바는 엄지 도달권, 탭 수가 늘어나면 가로 스크롤보다 핵심 5탭 + `role="dialog"` 시트(`#mobile-more-sheet`)가 발견성·터치 안정성에 유리. 활성 탭은 `scrollIntoView({inline:'center'})`로 가시화 + `aria-current="page"`, 시트 소속 뷰 활성 시 더보기 탭에 활성 표시 | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25<br>DOC-REF-09 | css/app-responsive.css<br>src/shell/app.js<br>src/shell/router.js | tests/dom/common/common-navigation.dom.test.js<br>tests/dom/shell/router.dom.test.js<br>tests/dom/shell/ui-structure.dom.test.js<br>tests/e2e/app.spec.js<br>…외 1개 | — | — |
 | UX-NAV-02 | 스크롤 중에도 설정·테마에 접근 가능. 단, 부모가 스크롤 컨테이너(`overflow-y: auto`)일 때만 작동 — `body` 스크롤 구조면 의도대로 동작하는지 확인할 것 | 테스트 | DOC-DSN-01<br>DOC-DSN-25 | — | tests/dom/common/common-navigation.dom.test.js | — | — |

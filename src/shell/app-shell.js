@@ -1,6 +1,6 @@
 // src/app-shell.js — 앱 셸 크롬: 뷰포트 높이·가로세로 토글·data-click 접근성·
 // 시험 브랜딩·기능 플래그·지식DB 버전 알림 (app.js에서 분리)
-// @spec R-08,P-08,O-04,ES-02,ES-03,ES-05,DA-14
+// @spec R-08,P-08,O-04,ES-02,ES-03,ES-05,DA-14,UX-FORM-04
 import { safeGetItem, safeSetItem, safeRemoveItem } from "../core/state.js";
 import { STORAGE_KEYS } from "../core/storage-keys.js";
 import { DataLoader } from "../content/data-loader.js";
@@ -25,6 +25,57 @@ export function initViewportHeight() {
     window.addEventListener('resize', sync);
     window.addEventListener('orientationchange', sync);
     window.visualViewport?.addEventListener('resize', sync);
+}
+
+// UX-FORM-04 — 가상 키보드 대응: 소프트 키보드로 시각 뷰포트가 크게 줄면
+// body.kb-open을 부여해 하단 고정 크롬을 재배치한다(탭 바 숨김·sticky 행 오프셋 해제).
+// 판정 3경로 병기: ① resizes-visual(Chromium 기본) — 레이아웃 대비 점유
+// (innerHeight−vv.height−offsetTop) ② resizes-content·iOS — 비집중 기준 높이 대비
+// 급감 ③ visualViewport 부재 구형 iOS — 측정 불가이므로 터치 환경의 텍스트 포커스
+// 자체를 키보드로 간주.
+const KB_SHRINK_MIN = 150; // px — 주소창 토글·safe-area 등 소규모 변동은 키보드가 아님
+const KB_TEXT_ENTRY = 'input:not([type=checkbox]):not([type=radio]):not([type=range])'
+    + ':not([type=button]):not([type=submit]):not([type=reset]):not([type=file])'
+    + ':not([type=color]):not([type=hidden]):not([type=image]),'
+    + 'textarea,select,[contenteditable]:not([contenteditable="false"])';
+
+export function initKeyboardGuard() {
+    let baselineH = 0; // 키보드 무관한 정상 높이 — kb-open이 아닐 때만 추적(급감분이 기준을 오염시키지 않도록)
+    let open = false;
+    let alignTimer = 0;
+    // --app-height 급감으로 스크롤포트 하단이 밀리는 동안 포커스 필드가 매립될 수
+    // 있어, 키보드 애니메이션(~300ms) 종료 후 가시 위치로 재정렬 — 레이아웃 점프 보정
+    const align = () => {
+        clearTimeout(alignTimer);
+        alignTimer = setTimeout(() => {
+            document.activeElement?.scrollIntoView?.({ block: 'center', inline: 'nearest' });
+        }, 350);
+    };
+    const update = () => {
+        const vv = window.visualViewport;
+        const h = vv ? vv.height : window.innerHeight;
+        const el = document.activeElement;
+        const focused = !!(el && el.matches && el.matches(KB_TEXT_ENTRY));
+        const occupied = vv ? Math.max(0, window.innerHeight - vv.height - (vv.offsetTop || 0)) : 0;
+        const coarse = !!window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+        const was = open;
+        open = focused && (occupied > KB_SHRINK_MIN || baselineH - h > KB_SHRINK_MIN || (!vv && coarse));
+        if (open) {
+            if (!was) { document.body.classList.add('kb-open'); align(); }
+        } else {
+            if (was) document.body.classList.remove('kb-open');
+            // innerHeight 상한 클램프 — 초기화 시점의 과대 보고(레이아웃 전 측정 등)가
+            // 기준선을 오염시켜 shrank가 영구 양수로 남는 것을 방지
+            baselineH = Math.min(Math.max(baselineH, h), window.innerHeight);
+        }
+    };
+    update();
+    document.addEventListener('focusin', () => { update(); if (open) align(); });
+    // focusout 직후에는 activeElement가 다음 대상으로 넘어가기 전이므로 지연 판정
+    document.addEventListener('focusout', () => setTimeout(update, 0));
+    window.addEventListener('resize', update); // resizes-content·구형 iOS 폴백
+    window.visualViewport?.addEventListener('resize', update);
+    window.visualViewport?.addEventListener('scroll', update); // offsetTop 변동(iOS 밀림)
 }
 
 
