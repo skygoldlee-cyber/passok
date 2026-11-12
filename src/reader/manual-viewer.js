@@ -458,8 +458,8 @@ body.manual-open{overflow:hidden;}
     }
     function openManual() { return openDocument('user_manual'); }
     function openPrivacyPolicy() { return openDocument('privacy_policy'); }
-    function openFormulaManual() { if (_requireExamSelection()) return openDocument('formula_manual'); }
-    function openPracticeManual() { if (_requireExamSelection()) return openDocument('practice_manual'); }
+    function openFormulaManual() { return _requireExamSelection() ? openDocument('formula_manual') : undefined; }
+    function openPracticeManual() { return _requireExamSelection() ? openDocument('practice_manual') : undefined; }
     function openSummary() { return openDocument('study_summary'); }
     function openMnemonicGuide() { return openDocument('mnemonic_guide'); }
 

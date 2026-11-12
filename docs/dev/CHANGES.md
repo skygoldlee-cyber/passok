@@ -1,4 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
+## 2026-11-12 feat(types): Phase 2 마무리 — strict 통합 + noImplicitReturns·exactOptionalPropertyTypes 활성화
+
+- **strict 통합**: jsconfig `"strict": true` — 개별 strict 플래그가 이미 전량 활성 상태라 추가 에러 0건. 개별 플래그는 검증 이력·명시성을 위해 유지
+- **noImplicitReturns**: 2건 해소 후 활성화 — manual-viewer openFormulaManual/openPracticeManual 조건부 반환을 삼항 연산으로 명문화
+- **exactOptionalPropertyTypes**: 8건 해소 후 활성화 — 선택 프로퍼티에 명시적 undefined 대입을 거부
+  - typedef 계약 교정: questions.js gradeAnswer 반환 perStatement·statement-tracker 인자 요소·form-template-store toolKey·reader-notes meta·recommendations aux·written-grading 반환 model — `?: T` → `?: T|undefined` 정밀화 (실제로 undefined를 넘기는 호출부 계약을 타입에 반영)
+- **검증**: check:types 0 (strict+noImplicitAny+noUncheckedIndexedAccess+noImplicitReturns+exactOptionalPropertyTypes 동시 활성) · lint 0 · 유닛 1,866
 
 ## 2026-11-12 feat(types): 컴파일러 강화 Phase 2 — noUncheckedIndexedAccess 래칫 도입 + 백로그 전량 소진 (587건 → 0)
 

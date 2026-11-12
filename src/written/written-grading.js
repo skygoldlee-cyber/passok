@@ -272,7 +272,7 @@ export async function callProviderLLM(system, prompt, opts = {}) {
  * @param {string} answer - 수험생 답안
  * @param {{signal?: AbortSignal, fetchImpl?: *, maxTokens?: number}} [opts] - {signal?, fetchImpl?}
  * @returns {Promise<{ok:boolean, grading?:{items:Array<{i:number,met:boolean,feedback:string}>,summary:string}, met?:boolean[], score?:number,
- *   model?:string, error?:string, code?:string}>}
+ *   model?:string|undefined, error?:string, code?:string}>}
  */
 export async function gradeAnswer(q, answer, opts = {}) {
     if (!getAiKey()) return { ok: false, code: 'nokey', error: 'AI API 키가 설정되지 않았습니다 — 상단 "AI 채점 설정"에서 키를 등록하세요.' };

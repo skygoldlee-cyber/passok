@@ -340,7 +340,7 @@ export function computeCalibrationBias(actual) {
  * 복합 예상 점수 — 모의고사 이력이 주 지표이고, 표본 부족(cold start) 시
  * 마스터리 졸업률·퀴즈 정답률을 가중 병합한다. 이력 3회부터 이력 100%.
  * @param {Array<{rate:number}>} history sim_results_history 레코드
- * @param {{masteryPercent?:number, quizRate?:number, quizSolved?:number}} [aux] 보조 지표
+ * @param {{masteryPercent?:number|undefined, quizRate?:number|undefined, quizSolved?:number|undefined}} [aux] 보조 지표
  * @param {number} [bias] 개인 보정치 (computeCalibrationBias)
  * @returns {{n:number, expected:number, lo:number, hi:number,
  *   trend:string, slope:number, source:'sim'|'blend'|'aux', biasApplied?:number}|null}

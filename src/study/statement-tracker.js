@@ -20,7 +20,7 @@ export const WEAK_GRADUATE_STREAK = 3;
 
 /**
  * gradeAnswer()의 perStatement 결과를 기록한다.
- * @param {Array<{sid?: string, id?: string, judgedCorrect?: boolean|null, userJudged?: boolean|null, text?: string, truth?: boolean, conceptId?: string, explain?: string}>|undefined} perStatement
+ * @param {Array<{sid?: string|undefined, id?: string, judgedCorrect?: boolean|null, userJudged?: boolean|null, text?: string, truth?: boolean, conceptId?: string|undefined, explain?: string|undefined}>|undefined} perStatement
  * @returns {number} 기록된 진술 수
  */
 export function recordStatementJudgments(perStatement) {

@@ -94,7 +94,7 @@ export function listFormTemplates() {
 
 /** 로컬 양식 저장 — id 있으면 갱신, 없으면 신규. fields는 저장 시점 재추출.
  * toolKey 지정 시 해당 도구 본문 오버라이드로 연동 (CO-18)
- * @param {{title:string, body:string, toolKey?:string|null}} o */
+ * @param {{title:string, body:string, toolKey?:string|null|undefined}} o */
 export function addFormTemplate({ title, body, toolKey = null }) {
     const items = listFormTemplates();
     if (items.length >= FREE_TPL_LIMIT)

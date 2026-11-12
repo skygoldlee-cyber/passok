@@ -171,13 +171,13 @@ function validateQuestion(q, subjectMax = SUBJECT_MAX) {
 /**
  * 한 문항 채점.
  * @param {Question} q
- * @param {string|{optionId:string, judgments?:Object<string,boolean>}} response
+ * @param {string|{optionId:string, judgments?:Object<string,boolean>|undefined}} response
  *   single/combo = 옵션 id (또는 2단계 응시용 {optionId, judgments}),
  *   short = 입력 문자열, ox = 'O'|'X'|boolean
  * @returns {{correct:boolean, earned:number, max:number, correctAnswer:string,
- *            perStatement?:{id:string,sid?:string,truth:boolean,
+ *            perStatement?:{id:string,sid?:string|undefined,truth:boolean,
  *                           userJudged:boolean|null,judgedCorrect:boolean|null,
- *                           explain?:string}[]}}
+ *                           conceptId?:string|undefined,text?:string,explain?:string|undefined}[]|undefined}}
  */
 function gradeAnswer(q, response) {
   const max = q.points || 0;
