@@ -2,9 +2,9 @@
   "threshold": 10,
   "files": {
     "src/ai/ai-client.js": {
-      "count": 6,
-      "max": 25,
-      "sum": 86
+      "count": 5,
+      "max": 13,
+      "sum": 61
     },
     "src/ai/gen-gate.js": {
       "count": 1,
@@ -167,9 +167,9 @@
       "sum": 15
     },
     "src/exams/carework/views/care-flow.js": {
-      "count": 2,
-      "max": 21,
-      "sum": 33
+      "count": 1,
+      "max": 12,
+      "sum": 12
     },
     "src/exams/carework/views/care-handover.js": {
       "count": 1,
@@ -390,11 +390,6 @@
       "count": 2,
       "max": 12,
       "sum": 24
-    },
-    "src/shell/app-dashboard.js": {
-      "count": 1,
-      "max": 23,
-      "sum": 23
     },
     "src/shell/app-shell.js": {
       "count": 4,

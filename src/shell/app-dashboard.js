@@ -15,43 +15,11 @@ export function populateSubjectSelects() {
 
     // 1. Flashcard subject select
     const fcSelect = /** @type {HTMLSelectElement|null} */ (document.getElementById('fc-subject-select'));
-    if (fcSelect) {
-        const prevVal = fcSelect.value || state.flashcards.subject;
-        fcSelect.innerHTML = '';
-        subjects.forEach(subj => {
-            const option = document.createElement('option');
-            option.value = subj.key;
-            option.textContent = subj.name;
-            fcSelect.appendChild(option);
-        });
-        if (prevVal && fcSelect.querySelector(`option[value="${prevVal}"]`)) {
-            fcSelect.value = prevVal;
-            state.flashcards.subject = prevVal;
-        } else if (subjects.length > 0) {
-            fcSelect.value = subjects[0]?.key || '';
-            state.flashcards.subject = subjects[0]?.key || null;
-        }
-    }
+    if (fcSelect) _fillSubjectSelect(fcSelect, subjects, state.flashcards);
 
     // 2. Quiz subject select
     const quizSelect = /** @type {HTMLSelectElement|null} */ (document.getElementById('quiz-subject-select'));
-    if (quizSelect) {
-        const prevVal = quizSelect.value || state.quiz.subject;
-        quizSelect.innerHTML = '';
-        subjects.forEach(subj => {
-            const option = document.createElement('option');
-            option.value = subj.key;
-            option.textContent = subj.name;
-            quizSelect.appendChild(option);
-        });
-        if (prevVal && quizSelect.querySelector(`option[value="${prevVal}"]`)) {
-            quizSelect.value = prevVal;
-            state.quiz.subject = prevVal;
-        } else if (subjects.length > 0) {
-            quizSelect.value = subjects[0]?.key || '';
-            state.quiz.subject = subjects[0]?.key || null;
-        }
-    }
+    if (quizSelect) _fillSubjectSelect(quizSelect, subjects, state.quiz);
 
     // 3. Review view filter buttons
     const reviewFilterGroup = document.getElementById('review-filter-group');
@@ -59,16 +27,7 @@ export function populateSubjectSelects() {
         reviewFilterGroup.innerHTML = `
             <button class="btn btn-secondary filter-btn active" data-filter="all" data-click="setReviewFilter" data-arg="all" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; border-radius: 4px; background: var(--color-primary-fill); border-color: var(--color-primary-fill); color: var(--color-on-brand);">전체</button>
         `;
-        subjects.forEach((subj, idx) => {
-            const shortName = subj.shortName || subj.name;
-            const btn = document.createElement('button');
-            btn.className = 'btn btn-secondary filter-btn';
-            btn.setAttribute('data-filter', subj.key);
-            btn.setAttribute('data-click', 'setReviewFilter');
-            btn.setAttribute('data-arg', subj.key);
-            btn.textContent = `${idx + 1}과목 (${shortName})`;
-            reviewFilterGroup.appendChild(btn);
-        });
+        _subjectFilterBtns(reviewFilterGroup, subjects, 'setReviewFilter', 'btn btn-secondary filter-btn');
     }
 
     // 4. Textbook filter buttons
@@ -77,17 +36,41 @@ export function populateSubjectSelects() {
         tbFilterGroup.innerHTML = `
             <button class="btn btn-secondary active-filter" data-filter="all" data-click="setTextbookFilter" data-arg="all">전체 과목</button>
         `;
-        subjects.forEach((subj, idx) => {
-            const shortName = subj.shortName || subj.name;
-            const btn = document.createElement('button');
-            btn.className = 'btn btn-secondary';
-            btn.setAttribute('data-filter', subj.key);
-            btn.setAttribute('data-click', 'setTextbookFilter');
-            btn.setAttribute('data-arg', subj.key);
-            btn.textContent = `${idx + 1}과목 (${shortName})`;
-            tbFilterGroup.appendChild(btn);
-        });
+        _subjectFilterBtns(tbFilterGroup, subjects, 'setTextbookFilter', 'btn btn-secondary');
     }
+}
+
+/** 과목 셀렉트 채우기 — 기존 선택값 유지, 없으면 첫 과목으로 폴백. @param {HTMLSelectElement} select @param {*[]} subjects @param {{subject:string|null}} stateBag */
+function _fillSubjectSelect(select, subjects, stateBag) {
+    const prevVal = select.value || stateBag.subject;
+    select.innerHTML = '';
+    subjects.forEach(subj => {
+        const option = document.createElement('option');
+        option.value = subj.key;
+        option.textContent = subj.name;
+        select.appendChild(option);
+    });
+    if (prevVal && select.querySelector(`option[value="${prevVal}"]`)) {
+        select.value = prevVal;
+        stateBag.subject = prevVal;
+    } else if (subjects.length > 0) {
+        select.value = subjects[0]?.key || '';
+        stateBag.subject = subjects[0]?.key || null;
+    }
+}
+
+/** 과목 필터 버튼 채우기 — 그룹 요소에 과목 버튼을 순서대로 추가. @param {Element} group @param {*[]} subjects @param {string} clickName @param {string} btnClass */
+function _subjectFilterBtns(group, subjects, clickName, btnClass) {
+    subjects.forEach((subj, idx) => {
+        const shortName = subj.shortName || subj.name;
+        const btn = document.createElement('button');
+        btn.className = btnClass;
+        btn.setAttribute('data-filter', subj.key);
+        btn.setAttribute('data-click', clickName);
+        btn.setAttribute('data-arg', subj.key);
+        btn.textContent = `${idx + 1}과목 (${shortName})`;
+        group.appendChild(btn);
+    });
 }
 
 const EXAM_BADGE_COLORS = ['badge-cyan', 'badge-violet', 'badge-emerald', 'badge-amber', 'badge-rose', 'badge-indigo'];

@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-12 refactor(complexity): 3라운드 — buildWeeklyDiagnosisPrompt·populateSubjectSelects·flowNext 분해 (334→331)
+
+- **`buildWeeklyDiagnosisPrompt`** (ai-client.js, 25→≤10): 수치 정규화(`_diagValues`) + 진단 라인을 `_DIAG_LINES` 빌더 테이블로 전환 — 라인별 조건이 독립 콜백으로 분리
+- **`populateSubjectSelects`** (app-dashboard.js, 23→≤10): 셀렉트 채우기(`_fillSubjectSelect`)·필터 버튼 채우기(`_subjectFilterBtns`) 공용 헬퍼 추출 — 4개 반복 블록이 호출부로 축약, **파일 경고 0건 소진**
+- **`flowNext`** (care-flow.js, 21→≤10): 단계별 핸들러 `_nextFromPre`·`_nextFromScenario`·`_nextRetry`로 분할 — 파일 잔여는 _bankLoad(12)만
+- **검증**: unit ai-client·care-flow 통과 + DOM 9건(care-flow·nonexam-pack) · check:types 0
+
+
 ## 2026-11-12 refactor(complexity): 2라운드 — _requestAi·evaluateStability 분해 (336→334)
 
 - **`_requestAi`** (ai-client.js, 46→≤10): 서버 경로(`_serverRoute` + `_proxyFetch` 전송/타임아웃 정규화) + 응답 평가(`_evalServerResponse` + `_extractServerBody` 추출 + `_serverFailOf` 분류) + BYOK 폴백(`_byokRoute`)으로 분할 — 파일 count 7→6 · max 46→25

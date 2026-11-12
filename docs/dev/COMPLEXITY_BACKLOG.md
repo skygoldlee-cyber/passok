@@ -9,7 +9,7 @@
 
 `node tools/check/check_complexity.js` (eslint complexity 임계 10, Δ 비교는 동일 임계 유지 필수).
 
-- 기준선: **334건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
+- 기준선: **331건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
 - 분해 순서: 복잡도 점수 내림차순 — 상위부터 처리해야 곡선이 꺾인다
 - 분해 완료 시 `--update`로 기준선을 축소하고 `--report`로 이 표를 재생성한다
 - 분해 규약: 렌더 분기는 `if` 체인 → early return·테이블 조회·서브함수 추출로 내리고, 동작 변경 없이 구조만 정리한다. 대형 렌더 함수는 섹션별 private 렌더 함수로 분할
@@ -46,7 +46,6 @@
 | 27 | `performTextbookSearch` | src/views/textbook-search.js:170 |
 | 26 | `renderTodayQueue` | src/views/dashboard-queue.js:262 |
 | 26 | `initReaderToolbar` | src/views/reader/reader-toolbar.js:340 |
-| 25 | `buildWeeklyDiagnosisPrompt` | src/ai/ai-client.js:370 |
 | 25 | `(anonymous)#2` | src/content/pdf-utils.js:300 |
 | 25 | `_matchSnippet` | src/search/search-index.js:111 |
 | 25 | `_listRefDocs` | src/search/search-sources.js:255 |
@@ -67,7 +66,6 @@
 | 23 | `validateGeneratedItem` | src/ai/gen-gate.js:69 |
 | 23 | `custOpen` | src/exams/cosmetic/views/formula-customer.js:239 |
 | 23 | `scoreCard` | src/reader/textbook-core.js:69 |
-| 23 | `populateSubjectSelects` | src/shell/app-dashboard.js:11 |
 | 23 | `evalStudyMilestones` | src/study/study-tracker-adherence.js:128 |
 | 23 | `buildErrorPayload` | src/telemetry/error-telemetry.js:47 |
 | 23 | `bindAppListeners` | src/views/listeners/listeners-app.js:18 |
@@ -86,7 +84,6 @@
 | 21 | `_cutsWithTableSplit` | src/content/pdf-utils.js:149 |
 | 21 | `pdfFileFromElStyled` | src/content/pdf-utils.js:437 |
 | 21 | `buildHandover` | src/exams/carework/care-handover.js:15 |
-| 21 | `flowNext` | src/exams/carework/views/care-flow.js:376 |
 | 21 | `buildBatchRecordHtml` | src/exams/cosmetic/views/formula-print.js:52 |
 | 21 | `applyExamBranding` | src/shell/app-shell.js:195 |
 | 21 | `statusRows` | src/shell/notice-check.js:422 |
@@ -263,8 +260,8 @@
 | 13 | `renderComboQuestion` | src/views/trainer-drill-combo.js:29 |
 | 13 | `_cardHtml` | src/written/written-practice.js:383 |
 | 13 | `(anonymous)#63` | src/written/written-practice.js:498 |
-| 12 | `buildQuizGenPrompt` | src/ai/ai-client.js:463 |
-| 12 | `parseFormExtractResponse` | src/ai/ai-client.js:614 |
+| 12 | `buildQuizGenPrompt` | src/ai/ai-client.js:475 |
+| 12 | `parseFormExtractResponse` | src/ai/ai-client.js:626 |
 | 12 | `parseCsv` | src/content/csv-utils.js:57 |
 | 12 | `loadDictionary` | src/content/data-loader.js:539 |
 | 12 | `getKnowledgeItems` | src/content/data-loader.js:560 |
@@ -306,7 +303,7 @@
 | 12 | `(anonymous)#59` | src/views/textbook-search.js:93 |
 | 12 | `(anonymous)#60` | src/views/textbook-search.js:107 |
 | 12 | `formatSectionContent` | src/views/textbook-search.js:436 |
-| 11 | `parseQaResponse` | src/ai/ai-client.js:546 |
+| 11 | `parseQaResponse` | src/ai/ai-client.js:558 |
 | 11 | `_getMd` | src/content/data-loader.js:243 |
 | 11 | `generateComboOptions` | src/content/questions.js:98 |
 | 11 | `extractFormPdf` | src/exams/carework/care-form-pdf.js:32 |

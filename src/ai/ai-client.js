@@ -368,30 +368,42 @@ const _diagNum = (v, lo, hi) => {
  * @returns {string|null} 핵심 수치가 하나도 없으면 null
  */
 export function buildWeeklyDiagnosisPrompt(input) {
-    const lines = [];
-    const solved = _diagNum(input?.solvedWeek, 0, 9999);
-    const plan = _diagNum(input?.planWeek, 0, 9999);
-    const wrong = _diagNum(input?.wrongWeek, 0, 9999);
-    const rate = _diagNum(input?.weekRate, 0, 100);
-    const delta = _diagNum(input?.rateDelta, -100, 100);
-    const dday = _diagNum(input?.dday, -999, 999);
-    const cover = _diagNum(input?.projectedCoverage, 0, 100);
-    const needed = _diagNum(input?.neededPerDay, 0, 999);
-    const cluster = _clip(input?.topCluster, 60);
-    const weakSubj = _clip(input?.weakestSubject, 60);
-    const hasNum = [solved, plan, wrong, rate, dday, cover, needed].some(v => v !== null);
-    if (solved !== null) lines.push(`- 이번 주 풀이: ${solved}문${plan !== null ? ` (계획 ${plan}문)` : ''}`);
-    else if (plan !== null) lines.push(`- 주간 계획: ${plan}문`);
-    if (wrong !== null) lines.push(`- 이번 주 오답: ${wrong}문`);
-    if (rate !== null) lines.push(`- 주간 정답률: ${rate}%${delta !== null ? ` (전주 대비 ${delta > 0 ? '+' : ''}${delta}%p)` : ''}`);
-    if (dday !== null) lines.push(dday >= 0 ? `- 시험까지: D-${dday}` : `- 시험 경과: D+${-dday}`);
-    if (cover !== null) lines.push(`- 현재 페이스 커버 예상: ${cover}%${needed !== null ? ` (필요 페이스 학습일당 ${needed}장)` : ''}`);
-    if (cluster) lines.push(`- 최다 오개념: ${cluster}`);
-    if (weakSubj) lines.push(`- 취약 과목: ${weakSubj}`);
+    const v = _diagValues(input);
+    const hasNum = [v.solved, v.plan, v.wrong, v.rate, v.dday, v.cover, v.needed].some(x => x !== null);
     if (!hasNum) return null;  // 라벨만으로는 진단 불가 — 수치가 최소 1개 필요
+    const lines = _DIAG_LINES.map(f => f(v)).filter(Boolean);
     return `## 이번 주 학습 수치\n${lines.join('\n')}
 응답 형식(JSON만): {"explain":"평가+다음 주 행동 제안 2~3문장","confused_concept":"핵심 키워드 1어절"}`;
 }
+
+/** 입력 수치 정규화 — 범위 클램프·라벨 절단 후 진단 라인 빌더에 전달할 값 묶음. @param {*} input @returns {*} */
+function _diagValues(input) {
+    const inp = input || {};
+    return {
+        solved: _diagNum(inp.solvedWeek, 0, 9999),
+        plan: _diagNum(inp.planWeek, 0, 9999),
+        wrong: _diagNum(inp.wrongWeek, 0, 9999),
+        rate: _diagNum(inp.weekRate, 0, 100),
+        delta: _diagNum(inp.rateDelta, -100, 100),
+        dday: _diagNum(inp.dday, -999, 999),
+        cover: _diagNum(inp.projectedCoverage, 0, 100),
+        needed: _diagNum(inp.neededPerDay, 0, 999),
+        cluster: _clip(inp.topCluster, 60),
+        weakSubj: _clip(inp.weakestSubject, 60),
+    };
+}
+
+/** 수치 → 진단 라인 빌더 테이블 — null 반환분은 프롬프트에서 제외. @type {Array<function(*): (string|null)>} */
+const _DIAG_LINES = [
+    (v) => v.solved !== null ? `- 이번 주 풀이: ${v.solved}문${v.plan !== null ? ` (계획 ${v.plan}문)` : ''}`
+        : (v.plan !== null ? `- 주간 계획: ${v.plan}문` : null),
+    (v) => v.wrong !== null ? `- 이번 주 오답: ${v.wrong}문` : null,
+    (v) => v.rate !== null ? `- 주간 정답률: ${v.rate}%${v.delta !== null ? ` (전주 대비 ${v.delta > 0 ? '+' : ''}${v.delta}%p)` : ''}` : null,
+    (v) => v.dday !== null ? (v.dday >= 0 ? `- 시험까지: D-${v.dday}` : `- 시험 경과: D+${-v.dday}`) : null,
+    (v) => v.cover !== null ? `- 현재 페이스 커버 예상: ${v.cover}%${v.needed !== null ? ` (필요 페이스 학습일당 ${v.needed}장)` : ''}` : null,
+    (v) => v.cluster ? `- 최다 오개념: ${v.cluster}` : null,
+    (v) => v.weakSubj ? `- 취약 과목: ${v.weakSubj}` : null,
+];
 
 /**
  * 자연어 주간 진단 요청 (AI-33) — analysis-engine 집계 수치 → 코칭 문장.

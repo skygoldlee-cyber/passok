@@ -376,46 +376,53 @@ export function flowBack() { if (_i > 0) { _i--; _render(); } }
 export function flowNext() {
     if (_i >= STEPS.length - 1) return;
     const step = STEPS[_i];
-
-    if (step === 'pre' && _preItem) {
-        // 미리풀기 판정 — 정답이면 이야기를 건너뛰고 요약으로 (DOC-USR-22 §4 라우팅)
-        const correct = !_dk && _sel === _ansIdx(_preItem);
-        _rec(_preItem.id || 'pre', _dk ? -1 : _sel, correct, _dk);
-        const p = _prog(); const rec = p[_c.id] || {};
-        rec.preOk = correct; rec.preDk = !!_dk; rec.lastSeen = Date.now();
-        p[_c.id] = rec; _save(p);
-        _stage(correct ? 'summary' : 'story');
-        _i = STEPS.indexOf(correct ? 'summary' : 'story');
-        _resetQ(); _preItem = null;
-        _render(); return;
-    }
-    if (step === 'scenario' && _scItem) {
-        const correct = _sel === _ansIdx(_scItem);
-        _scWrong = correct ? 0 : _scWrong + 1;
-        _lastCorrect = correct;
-        _rec(_scItem.id, _sel, correct, false);
-        const p = _prog(); const rec = p[_c.id] || {};
-        rec.attempts = (rec.attempts || 0) + 1; rec.lastSeen = Date.now();
-        // 직전 오답 요약 — 재도전 시나리오 상단 재확인용
-        rec.lastWrong = correct ? null
-            : { stem: String(_scItem.stem).slice(0, 100), ans: _scItem.options[_ansIdx(_scItem)] || '' };
-        p[_c.id] = rec; _save(p);
-        _stage('result');
-        _i = STEPS.indexOf('result');
-        _render(); return;
-    }
-    if (step === 'result' && _lastCorrect === false && _scWrong < MAX_WRONG) {
-        // 오답 재도전 — 같은 개념의 다른 문항 (문항 소진 시 진행)
-        const nq = _scItemFor(_c);
-        if (nq) {
-            _scItem = nq; _resetQ();
-            _stage('scenario');
-            _i = STEPS.indexOf('scenario');
-            _render(); return;
-        }
-    }
+    if (step === 'pre' && _preItem) { _nextFromPre(); return; }
+    if (step === 'scenario' && _scItem) { _nextFromScenario(); return; }
+    if (step === 'result' && _nextRetry()) return;
     _i++;
     _render();
+}
+
+/** 미리풀기 다음 — 정답이면 이야기를 건너뛰고 요약으로 (DOC-USR-22 §4 라우팅) */
+function _nextFromPre() {
+    const correct = !_dk && _sel === _ansIdx(_preItem);
+    _rec(_preItem.id || 'pre', _dk ? -1 : _sel, correct, _dk);
+    const p = _prog(); const rec = p[_c.id] || {};
+    rec.preOk = correct; rec.preDk = !!_dk; rec.lastSeen = Date.now();
+    p[_c.id] = rec; _save(p);
+    _stage(correct ? 'summary' : 'story');
+    _i = STEPS.indexOf(correct ? 'summary' : 'story');
+    _resetQ(); _preItem = null;
+    _render();
+}
+
+/** 시나리오 다음 — 오답 카운트·직전 오답 요약 저장 후 해설 단계로 */
+function _nextFromScenario() {
+    const correct = _sel === _ansIdx(_scItem);
+    _scWrong = correct ? 0 : _scWrong + 1;
+    _lastCorrect = correct;
+    _rec(_scItem.id, _sel, correct, false);
+    const p = _prog(); const rec = p[_c.id] || {};
+    rec.attempts = (rec.attempts || 0) + 1; rec.lastSeen = Date.now();
+    // 직전 오답 요약 — 재도전 시나리오 상단 재확인용
+    rec.lastWrong = correct ? null
+        : { stem: String(_scItem.stem).slice(0, 100), ans: _scItem.options[_ansIdx(_scItem)] || '' };
+    p[_c.id] = rec; _save(p);
+    _stage('result');
+    _i = STEPS.indexOf('result');
+    _render();
+}
+
+/** 오답 재도전 — 같은 개념의 다른 문항 (문항 소진 시 false → 진행). @returns {boolean} */
+function _nextRetry() {
+    if (_lastCorrect !== false || _scWrong >= MAX_WRONG) return false;
+    const nq = _scItemFor(_c);
+    if (!nq) return false;
+    _scItem = nq; _resetQ();
+    _stage('scenario');
+    _i = STEPS.indexOf('scenario');
+    _render();
+    return true;
 }
 
 /** 시나리오·미리풀기 보기 클릭 — 위임 핸들러 (data-click="flowOpt") */
