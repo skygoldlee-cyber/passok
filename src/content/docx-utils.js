@@ -32,7 +32,11 @@ const _dosNow = () => {
     };
 };
 
-/** zip 무압축(stored) 작성 — local headers → central directory → EOCD. 미설정 필드는 0 (flags·method·extra). */
+/**
+ * zip 무압축(stored) 작성 — local headers → central directory → EOCD. 미설정 필드는 0 (flags·method·extra).
+ * @param {Array.<[string, Uint8Array]>} files
+ * @returns {Blob}
+ */
 const _zipStore = files => {
     const { t, d } = _dosNow();
     const chunks = [], central = [];
@@ -69,7 +73,7 @@ const _zipStore = files => {
     e.setUint16(10, files.length, true);
     e.setUint32(12, central.reduce((n, b) => n + b.length, 0), true);
     e.setUint32(16, off, true);
-    return new Blob([...chunks, ...central, new Uint8Array(e.buffer)]);
+    return new Blob(/** @type {BlobPart[]} */ ([...chunks, ...central, new Uint8Array(e.buffer)]));
 };
 
 const TYPES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -78,10 +82,21 @@ const RELS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
 
 // 단락 — eastAsia 폰트 명시로 한글이 맑은 고딕 계열로 렌더. 빈 줄은 빈 단락. 선두 N줄은 굵게(문서 헤더).
+/**
+ * @param {string} line
+ * @param {number} i
+ * @param {number} boldLines
+ * @returns {string}
+ */
 const _P = (line, i, boldLines) => line
     ? `<w:p><w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/>${i < boldLines ? '<w:b/>' : ''}</w:rPr><w:t xml:space="preserve">${esc(line)}</w:t></w:r></w:p>`
     : '<w:p/>';
 
+/**
+ * @param {string[]} lines
+ * @param {number} boldLines
+ * @returns {string}
+ */
 const _doc = (lines, boldLines) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${lines.map((l, i) => _P(l, i, boldLines)).join('')}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/></w:sectPr></w:body></w:document>`;
 
@@ -104,11 +119,29 @@ export function docxFile(text, filename, boldLines = 0) {
 
 const _BORDERS = ['top', 'left', 'bottom', 'right', 'insideH', 'insideV']
     .map(b => `<w:${b} w:val="single" w:sz="4" w:color="999999"/>`).join('');
+/**
+ * @param {string} c
+ * @param {boolean} head
+ * @returns {string}
+ */
 const _cell = (c, head) => `<w:tc><w:p><w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/>${head ? '<w:b/>' : ''}</w:rPr><w:t xml:space="preserve">${esc(c.trim())}</w:t></w:r></w:p></w:tc>`;
+/**
+ * @param {string[][]} rows
+ * @returns {string}
+ */
 const _tbl = rows => `<w:tbl><w:tblPr><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblW w:w="0" w:type="auto"/></w:tblPr>${rows.map((r, i) => `<w:tr>${r.map(c => _cell(c, i === 0)).join('')}</w:tr>`).join('')}</w:tbl>`;
+/**
+ * @param {string} t
+ * @param {number} sz
+ * @returns {string}
+ */
 const _h = (t, sz) => `<w:p><w:pPr><w:spacing w:before="200" w:after="100"/></w:pPr><w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/><w:b/><w:sz w:val="${sz}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 const _HR = '<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="999999"/></w:pBdr></w:pPr></w:p>';
 
+/**
+ * @param {string} md
+ * @returns {string}
+ */
 const _mdBody = md => {
     const out = [], lines = String(md || '').split('\n');
     /** @type {string[][] | null} */

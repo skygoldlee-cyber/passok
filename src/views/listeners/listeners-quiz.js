@@ -13,7 +13,7 @@ export function bindQuizListeners() {
 
     document.getElementById('start-quiz-btn')?.addEventListener('click', () => {
         showGlobalLoading('퀴즈 데이터를 불러오는 중입니다...');
-        DataLoader.loadSubject(state.quiz.subject).then(() => {
+        DataLoader.loadSubject(/** @type {string} */ (state.quiz.subject)).then(() => {
             hideGlobalLoading();
             startQuiz();
         }).catch(() => {

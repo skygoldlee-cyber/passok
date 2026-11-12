@@ -104,7 +104,7 @@ export function expandSynonyms(term, synMap) {
     if (!t) return [];
     if (!synMap || typeof synMap !== 'object') return [t];
     const out = [t];
-    const add = (v) => {
+    const add = (/** @type {*} */ v) => {
         const s = String(v || '').toLowerCase();
         if (s && !out.includes(s)) out.push(s);
     };

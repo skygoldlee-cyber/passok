@@ -248,7 +248,7 @@ body.exam-open{overflow:hidden;}
                 showToast('PDF 생성 중 — 문서가 길면 잠시 걸립니다');
                 try {
                     const { pdfFileFromElStyled } = await import('../content/pdf-utils.js');
-                    const file = await pdfFileFromElStyled(el.querySelector('#exam-article'), el.querySelector('#exam-ov-title')?.textContent || '문서');
+                    const file = await pdfFileFromElStyled(/** @type {HTMLElement} */ (el.querySelector('#exam-article')), el.querySelector('#exam-ov-title')?.textContent || '문서');
                     const url = URL.createObjectURL(file);
                     if (window.open(url, '_blank')) { // 새 탭 미리보기 — 브라우저 PDF 뷰어에서 확인 후 인쇄·저장
                         showToast('PDF 미리보기를 열었습니다 — 뷰어에서 인쇄·저장하세요');

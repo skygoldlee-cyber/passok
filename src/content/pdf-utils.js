@@ -2,7 +2,12 @@
 // @spec CO-13 — 출력 문서 PDF 파일 공유/다운로드
 import { PATHS } from '../core/paths.js';
 
+/** @type {Promise<*>|null} */
 let _load = null;
+/**
+ * @param {string} src
+ * @returns {Promise<*>}
+ */
 const _script = src => new Promise((resolve, reject) => {
     const s = document.createElement('script');
     s.src = src; s.onload = resolve; s.onerror = () => reject(new Error('PDF 라이브러리 로드 실패'));
@@ -29,6 +34,7 @@ const _BLOCK_SEL = 'h1,h2,h3,h4,h5,h6,p,li,tr,table,.reader-table-wrapper,.reade
  * (큰 삽화가 페이지 경계에서 잘리는 원인). lazy 제거로 즉시 로드시키고
  * decode 대기 후 리플로우를 강제해 경계 측정이 최종 레이아웃 기준이 되게 한다.
  * 경계 측정·스크롤 클립 해제보다 먼저 호출해야 한다. (@spec CO-21)
+ * @param {HTMLElement} root
  */
 async function _settleImages(root) {
     const imgs = [...root.querySelectorAll('img')];
@@ -50,6 +56,7 @@ async function _settleImages(root) {
  * 잘린 행 rect가 절단 후보로 오인돼 경계가 어긋난다. 세로 스크롤이 실제로 발생한
  * 상자만 max-height/overflow를 해제해 전체 내용이 레이아웃·캔버스에 펼쳐지게 한다.
  * 경계 측정·렌더 모두 이 전처리 이후에 수행해야 한다. (@spec CO-21)
+ * @param {HTMLElement} root
  */
 function _expandScrollClips(root) {
     root.querySelectorAll('*').forEach(e2 => {
@@ -64,7 +71,12 @@ function _expandScrollClips(root) {
     });
 }
 
-/** 페이지 번호 스탬프 — 출력물 하단 우측에 "N / 전체" (문서 페이징 가시성) */
+/**
+ * 페이지 번호 스탬프 — 출력물 하단 우측에 "N / 전체" (문서 페이징 가시성)
+ * @param {*} pdf - jsPDF 인스턴스
+ * @param {number} W 페이지 폭 (mm)
+ * @param {number} H 페이지 높이 (mm)
+ */
 function _stampPageNumbers(pdf, W, H) {
     const total = pdf.getNumberOfPages();
     for (let p = 1; p <= total; p++) {
@@ -78,12 +90,21 @@ function _stampPageNumbers(pdf, W, H) {
 const _JPEG_Q = 0.9;      // 페이지 래스터 JPEG 품질 — 텍스트 가독성·파일 용량 균형
 const _CANVAS_MAX = 32000; // 브라우저 캔버스 높이 상한 안전선 (Chrome ~32767px)
 
-/** 초장문서 배율 하향 — css 높이 × scale이 캔버스 상한을 넘지 않는 최대 배율 (기본 2, 하한 0.5) */
+/**
+ * 초장문서 배율 하향 — css 높이 × scale이 캔버스 상한을 넘지 않는 최대 배율 (기본 2, 하한 0.5)
+ * @param {number} cssH
+ * @returns {number}
+ */
 function _fitCanvasScale(cssH) {
     return Math.min(2, Math.max(0.5, Math.floor((_CANVAS_MAX / Math.max(1, cssH)) * 100) / 100));
 }
 
-/** el 기준 페이지 절단 위치(css px) 산출 — 각 구간은 availPx 이하, 끝은 요소 경계 */
+/**
+ * el 기준 페이지 절단 위치(css px) 산출 — 각 구간은 availPx 이하, 끝은 요소 경계
+ * @param {HTMLElement} el
+ * @param {number} availPx
+ * @returns {number[]}
+ */
 function _blockCuts(el, availPx) {
     const elTop = el.getBoundingClientRect().top;
     const boundSet = new Set([0]);
@@ -181,7 +202,12 @@ function _cutsWithTableSplit(root, availPx) {
     return _blockCuts(root, availPx);
 }
 
-/** 뷰 미리보기 요소 → PDF File (한글은 캔버스 이미지로 렌더) */
+/**
+ * 뷰 미리보기 요소 → PDF File (한글은 캔버스 이미지로 렌더)
+ * @param {HTMLElement} el
+ * @param {string} title - 확장자 제외 파일명
+ * @returns {Promise<File>}
+ */
 export async function pdfFileFromEl(el, title) {
     await ensurePdf();
     // 접힌 details 내용도 출력물에 포함 — 렌더 동안만 펼치고 완료 후 복원
@@ -234,13 +260,19 @@ export async function pdfFileFromEl(el, title) {
 }
 
 // rgb 문자열 파싱 → [r,g,b] — 색이 아닌 값(none·url·transparent 등)은 null
+/**
+ * @param {string} c
+ * @returns {number[]|null}
+ */
 const _rgb = c => {
     const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c || '');
     return m ? [+m[1], +m[2], +m[3]] : null;
 };
 
 // rgb 파싱 → 밝기(0~1) — 흰 배경에서 안 보이는 밝은 글자 판정용
+/** @param {string} c @returns {number|null} */
 export const _lum = c => { const rgb = _rgb(c); return rgb ? _lumOf(rgb) : null; };
+/** @param {number[]} rgb @returns {number} */
 const _lumOf = rgb => (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
 
 /* == 표 출력 규약 (인쇄·PDF 공용, @spec CO-20/CO-21) ==
@@ -260,6 +292,11 @@ const _PRINT_ZEBRA = '#f9fafb'; // 지브라 복원 — 헤더 회색보다 한 
        sticky는 비스크롤 출력물에서 무의미해 static 고정.
    TD: group-start의 청록 구분선은 인쇄 회색으로, 극저알파 지브라는 희미 회색으로 복원.
    TABLE: 부모 폭을 넘는 표는 font-size 축소로 우측 절단 방지. */
+/**
+ * @param {HTMLElement} el2
+ * @param {CSSStyleDeclaration} cs
+ * @param {function(string, string): void} set
+ */
 const _fixTableExtras = (el2, cs, set) => {
     const t = el2.tagName;
     if (t === 'TH') {
@@ -280,16 +317,25 @@ const _fixTableExtras = (el2, cs, set) => {
 };
 /* 표 외곽 좌우+하단 테두리 제거 — 래퍼 border가 표보다 넓어 내용에서 떨어진
    수직선으로 보이고, 하단은 마지막 행 td 선과 이중선이 된다. 위쪽 수평선만 남긴다. */
+/**
+ * @param {HTMLElement} el2
+ * @param {function(string, string): void} set
+ */
 const _fixTableFrame = (el2, set) => {
     if (!el2.classList.contains('reader-table-wrapper')) return;
     set('border-left', 'none');
     set('border-right', 'none');
     set('border-bottom', 'none'); // 마지막 행 td border-bottom과 이중선 방지
 };
+/**
+ * @param {HTMLElement} el2
+ * @param {CSSStyleDeclaration} cs
+ * @param {function(string, string): void} set
+ */
 const _fixBorder = (el2, cs, set) => {
     for (const s of ['Top', 'Right', 'Bottom', 'Left']) {
-        if (!(parseFloat(cs[`border${s}Width`] || '0') > 0)) continue;
-        const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs[`border${s}Color`] || '');
+        if (!(parseFloat(cs.getPropertyValue(`border-${s.toLowerCase()}-width`) || '0') > 0)) continue;
+        const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/.exec(cs.getPropertyValue(`border-${s.toLowerCase()}-color`) || '');
         if (!m) continue;
         const a = m[4] !== undefined ? parseFloat(m[4]) : 1;
         const l = _lumOf([+m[1], +m[2], +m[3]]);
@@ -298,6 +344,7 @@ const _fixBorder = (el2, cs, set) => {
 };
 /* box-shadow 구분선 판정 — '0 Npx' 오프셋만 있는 무확산 선(표 헤더 밑줄 등)은
    장식 그림자가 아니라 구분선이라 유지한다. 그 외 그림자는 백지에서 지저분해 제거. */
+/** @param {string} bs @returns {boolean} */
 const _isLineShadow = bs => bs.split(/,(?![^()]*\))/).every(part =>
     /\)\s+0(?:\.0+)?px\s+[0-9.]+px(?:\s+0(?:\.0+)?px){0,2}\s*$/.test(part));
 
@@ -352,7 +399,7 @@ export function fixPrintLines(root, win = window) {
 export function fixMermaidPrintContrast(root, win = window) {
     /** @type {Array<(() => void)>} */
     const undo = [];
-    const set = (el, prop, val) => {
+    const set = (/** @type {Element} */ el, /** @type {string} */ prop, /** @type {string} */ val) => {
         const st = /** @type {HTMLElement} */ (el).style;
         const prev = st.getPropertyValue(prop);
         const prio = st.getPropertyPriority(prop);
@@ -382,7 +429,11 @@ export function fixMermaidPrintContrast(root, win = window) {
 /** 인쇄 가독성 래퍼로 PDF — 흰 배경·여백 확보, 밝은 글자만 검정 보정 (컬러 출력 유지).
  *  @spec CO-20 — 문서 PDF 인쇄 가독성 정본 래퍼
  *  오버레이 문서(매뉴얼·시험 문서)처럼 다크 테마 요소를 그대로 넘기면 밝은 글자가 백지처럼 보이므로
- *  클론을 흰 래퍼에 담고 밝은 색만 검정으로 바꾼다 — 나머지 색상은 그대로 유지. */
+ *  클론을 흰 래퍼에 담고 밝은 색만 검정으로 바꾼다 — 나머지 색상은 그대로 유지.
+ *  @param {HTMLElement} el
+ *  @param {string} title - 확장자 제외 파일명
+ *  @returns {Promise<File>}
+ */
 export async function pdfFileFromElStyled(el, title) {
     await ensurePdf(); // 벤더 지연 로드 — 미호출 시 window.jspdf/html2canvas undefined 즉시 실패
     const wrap = document.createElement('div');

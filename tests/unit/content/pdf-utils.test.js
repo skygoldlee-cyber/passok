@@ -113,7 +113,7 @@ describe('pdfFileFromElStyled — 요소 경계 페이지네이션·오버레이
     it('인쇄 선 가시성 보정 — 반투명/흰 테두리는 인쇄 회색으로 (CO-20)', () => {
         assert.match(src, /export function fixPrintLines/);                  // 공용 선 보정 헬퍼
         assert.match(src, /_PRINT_LINE = '#e5e7eb'/);                        // --print-border 동일 톤
-        assert.match(src, /border\$\{s\}Width/);                             // 선폭 있는 변만 처리
+        assert.match(src, /getPropertyValue\(`border-\$\{s\.toLowerCase\(\)\}-width`/); // 선폭 있는 변만 처리
         assert.match(src, /border-\$\{s\.toLowerCase\(\)\}-color/);          // 변별 border-color 교체
         // styled 워크에도 동일 보정 + 무확산 구분선(box-shadow 라인)은 유지
         assert.match(src, /_fixBorder\(el2, cs/);                            // styled 워크 테두리 보정

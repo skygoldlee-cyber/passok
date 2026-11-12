@@ -369,7 +369,7 @@ function setupNavigation() {
         },
         'flashcard-view': (gen) => {
             showGlobalLoading('플래시카드를 불러오는 중입니다...');
-            DataLoader.loadSubject(state.flashcards.subject).then(() => {
+            DataLoader.loadSubject(/** @type {string} */ (state.flashcards.subject)).then(() => {
                 if (isStaleViewGen(gen)) return;
                 hideGlobalLoading();
                 loadFlashcards();

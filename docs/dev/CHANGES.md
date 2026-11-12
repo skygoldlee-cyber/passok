@@ -1,6 +1,21 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(types): noImplicitAny 소진 4차 — src/content·search 268건 → 0 (Phase 1 지속)
+
+- **2개 디렉터리 11파일 소진**: content(149)·search(119) — JSDoc 주석 + typedef 중심
+- **typedef 신설**: `ComboDoc*`(combo-doc)·`SearchDoc`·어휘 불변량 타입(search-index)·`SearchToc*`(search-sources) — `object`/`Array` 비계약 해소
+- **계약 정정**:
+  - `readCsvFile` File→Blob, `readTableFile` File|Blob — `extractFormXlsx`의 선언 계약과 일치 (Blob은 name 부재로 CSV 경로 판정 — `'name' in file` 좁히기)
+  - `_loadScript`/`_getMd` 등 DataLoader 내부 API 시그니처 명문화 + `_cardTips`·`_cardExcludes`·`_knowledge` 미선언 필드 선언 (TS2551 노출)
+  - `cs[템플릿키]` → `getPropertyValue` (CSSStyleDeclaration 인덱스 비지원 — DOM 정본 API로 동등)
+  - `filter(Boolean)` → `filter(e => e != null)` — TS가 null 제외 좁히기를 추론하는 형태
+- **불변량 로컬 캡처**: `_vocabWords`·`_tokenIndex`·`_neighbors`·`_searchIndex` — 클로저 경계에서 모듈 변수 좁히기가 리셋되므로 가드 후 로컬 캡처 (동작 동등)
+- **문서 위치 교정**: `_ensureSource`의 JSDoc이 `_perf` 위에 분리돼 있던 것을 함수로 이동
+- **테스트 갱신**: pdf-utils 소스 스캔 가드 — `border${s}Width` → `getPropertyValue` 패턴으로 계약 동등 갱신
+- 결과: 잔여 3,542 → **3,274건 (-268)**, 기준선 191 → 179파일, `check:types` 0 유지. 유닛 전체·관련 DOM 52건 통과
+
+
 ## 2026-11-12 feat(types): noImplicitAny 소진 3차 — src/ai·written 151건 → 0 (Phase 1 지속)
 
 - **2개 디렉터리 4파일 소진**: ai(69)·written(82) — JSDoc 주석 + 계약 typedef 중심

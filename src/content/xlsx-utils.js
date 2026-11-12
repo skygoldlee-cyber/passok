@@ -6,6 +6,7 @@
 import { PATHS } from '../core/paths.js';
 import { readCsvFile } from './csv-utils.js';
 
+/** @type {Promise<*>|null} */
 let _load = null;
 /** vendor SheetJS UMD 지연 로드 → window.XLSX */
 export function ensureXlsx() {
@@ -26,9 +27,11 @@ const XLSX_RE = /\.(xlsx|xls)$/i;
 /**
  * 파일 → CSV 텍스트. .xlsx/.xls는 SheetJS 첫 시트를 CSV로 변환하고
  * 나머지는 readCsvFile(UTF-8/CP949 자동) — csvToObjects·csvToClients·csvToRoster 공용.
+ * @param {File|Blob} file - Blob은 name이 없어 CSV 경로로 판정된다
+ * @returns {Promise<string>}
  */
 export async function readTableFile(file) {
-    if (!file || !XLSX_RE.test(file.name || '')) return readCsvFile(file);
+    if (!file || !XLSX_RE.test(('name' in file ? file.name : '') || '')) return readCsvFile(file);
     const XLSX = await ensureXlsx();
     const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
     return XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]]);
@@ -37,6 +40,9 @@ export async function readTableFile(file) {
 /**
  * CSV 텍스트 → .xlsx 다운로드 (downloadCsv의 Excel 네이티브 버전 — 동일 호출 형태).
  * CSV 왕복 도구의 내보내기를 그대로 .xlsx로 전환하는 어댑터.
+ * @param {string} csvText
+ * @param {string} filename
+ * @returns {Promise<File>}
  */
 export async function sheetFile(csvText, filename) {
     const XLSX = await ensureXlsx();
@@ -45,6 +51,10 @@ export async function sheetFile(csvText, filename) {
     return new File([out], filename, { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 }
 
+/**
+ * @param {string} csvText
+ * @param {string} filename
+ */
 export async function downloadSheet(csvText, filename) {
     const XLSX = await ensureXlsx();
     const wb = XLSX.read(String(csvText).replace(/^﻿/, ''), { type: 'string' });

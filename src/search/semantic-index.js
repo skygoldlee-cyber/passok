@@ -19,9 +19,12 @@ import { DataLoader } from '../content/data-loader.js';
 
 /** @typedef {{key:string, score:number, text:string}} SemanticHit */
 
-let _neighbors = null;      /** @type {null|{dim:number, k:number, adj:Object.<string,[string,number][]>, texts:Object.<string,string>, sameText:Object.<string,string[]>}} */
-let _cacheExamId = null;    // 로드된 시험 — 시험 전환 시 캐시 무효화
-let _loadingPromise = null; // 중복 로드 방지
+/** @type {null|{dim:number, k:number, adj:Object.<string,[string,number][]>, texts:Object.<string,string>, sameText:Object.<string,string[]>}} */
+let _neighbors = null;
+/** @type {string|null} 로드된 시험 — 시험 전환 시 캐시 무효화 */
+let _cacheExamId = null;
+/** @type {Promise<void>|null} 중복 로드 방지 */
+let _loadingPromise = null;
 let _unavailable = false;   // 자산 부재 — 재시도 방지
 
 export const SemanticIndex = {
@@ -47,12 +50,12 @@ export const SemanticIndex = {
                     const n = /** @type {any} */ (window).EMB_NEIGHBORS;
                     if (n && n.adj && n.texts) {
                         _neighbors = n;
-                        _cacheExamId = examId;
+                        _cacheExamId = examId ?? null;
                     } else {
                         _unavailable = true;
                     }
                 })
-                .catch(() => { _unavailable = true; _cacheExamId = examId; })
+                .catch(() => { _unavailable = true; _cacheExamId = examId ?? null; })
                 .finally(() => { _loadingPromise = null; });
         }
         await _loadingPromise;
@@ -88,8 +91,9 @@ export const SemanticIndex = {
      */
     sameTextItems(key) {
         if (!_neighbors || !_neighbors.sameText) return [];
-        return (_neighbors.sameText[key] || [])
-            .map(k2 => ({ key: k2, score: 1, text: _neighbors.texts[k2] || '' }));
+        const nb = _neighbors;
+        return (nb.sameText[key] || [])
+            .map(k2 => ({ key: k2, score: 1, text: nb.texts[k2] || '' }));
     },
 
     /**
@@ -102,12 +106,13 @@ export const SemanticIndex = {
      */
     searchByText(query, k = 5) {
         if (!_neighbors) return [];
-        const anchor = findAnchorKey(query, _neighbors.texts);
+        const nb = _neighbors;
+        const anchor = findAnchorKey(query, nb.texts);
         if (!anchor) return [];
-        return (_neighbors.adj[anchor.key] || [])
+        return (nb.adj[anchor.key] || [])
             .filter(([k2]) => k2.startsWith('stmt:') || k2.startsWith('q:'))
             .slice(0, k)
-            .map(([k2, s]) => ({ key: k2, score: s, text: _neighbors.texts[k2] || '', anchorKey: anchor.key, anchorText: _neighbors.texts[anchor.key] || '' }));
+            .map(([k2, s]) => ({ key: k2, score: s, text: nb.texts[k2] || '', anchorKey: anchor.key, anchorText: nb.texts[anchor.key] || '' }));
     },
 
     /**
@@ -119,10 +124,11 @@ export const SemanticIndex = {
      */
     _hits(key, prefix, k) {
         if (!_neighbors || !_neighbors.adj[key]) return [];
-        return _neighbors.adj[key]
+        const nb = _neighbors;
+        return nb.adj[key]
             .filter(([k2]) => k2.startsWith(prefix))
             .slice(0, k)
-            .map(([k2, s]) => ({ key: k2, score: s, text: _neighbors.texts[k2] || '' }));
+            .map(([k2, s]) => ({ key: k2, score: s, text: nb.texts[k2] || '' }));
     },
 
     /** 테스트용 상태 리셋 — 프로덕션 코드에서 호출 금지 */

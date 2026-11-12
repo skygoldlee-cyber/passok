@@ -13,12 +13,32 @@ const STMT_LABELS = ['ㄱ', 'ㄴ', 'ㄷ', 'ㄹ', 'ㅁ', 'ㅂ'];
 const OPT_INDICATORS = ['①', '②', '③', '④', '⑤', '⑥'];
 
 /**
+ * @typedef {Object} ComboDocStatement
+ * @property {string} id
+ * @property {string} text
+ * @property {boolean} truth
+ *
+ * @typedef {Object} ComboDocOption
+ * @property {string} id
+ * @property {string[]} [members]
+ *
+ * @typedef {Object} ComboDocQuestion
+ * @property {string|number} id
+ * @property {string} stem
+ * @property {string} [citation]
+ * @property {ComboDocStatement[]} [statements]
+ * @property {ComboDocOption[]} [options]
+ * @property {string} [answer]
+ * @property {string} [explain]
+ */
+
+/**
  * 과목별 combo 문항을 문제은행 MD 형식으로 직렬화.
  * 문제부: ### Qn. 발문 / citation / ㄱ~ㅁ 진술 / ①~⑤ 조합 선지
  * 정답부: **Qn.** / 정답 조합 / 진술별 O·X 판정표 / 해설(교재 근거)
  * @param {number} subject 과목 번호 (1~4)
  * @param {string|undefined} subjectName 과목명 (manifest subjects[].name)
- * @param {Array} questions combo 문항 배열 (자동 변환 + 파일럿 병합분)
+ * @param {ComboDocQuestion[]} questions combo 문항 배열 (자동 변환 + 파일럿 병합분)
  * @returns {string} 마크다운 문서
  */
 export function buildComboSubjectMd(subject, subjectName, questions) {
@@ -38,6 +58,7 @@ export function buildComboSubjectMd(subject, subjectName, questions) {
         '',
     ];
 
+    /** @type {{num: number, q: ComboDocQuestion}[]} */
     const answers = [];
     questions.forEach((q, i) => {
         const num = i + 1;
@@ -48,7 +69,7 @@ export function buildComboSubjectMd(subject, subjectName, questions) {
         (q.statements || []).forEach(s => lines.push(`${s.id}. ${s.text}`));
         lines.push('');
         // 멤버는 라벨(ㄱㄴㄷ…) 순으로 표기 — 수작업 members도 동일한 관례로 보여주기 위해 재정렬
-        const labelOrder = m => STMT_LABELS.indexOf(m);
+        const labelOrder = (/** @type {string} */ m) => STMT_LABELS.indexOf(m);
         (q.options || []).forEach((o, idx) => lines.push(
             `${OPT_INDICATORS[idx]} ${[...(o.members || [])].sort((a, b) => labelOrder(a) - labelOrder(b)).join(', ')}`));
         lines.push('', '---', '');
@@ -60,7 +81,7 @@ export function buildComboSubjectMd(subject, subjectName, questions) {
         const trueIds = (q.statements || []).filter(s => s.truth).map(s => s.id);
         // 파일럿은 answer 미보유 — truth 집합과 일치하는 옵션으로 도출
         const trueSet = new Set(trueIds);
-        const eq = o => (o.members || []).length === trueSet.size && o.members.every(m => trueSet.has(m));
+        const eq = (/** @type {ComboDocOption} */ o) => (o.members || []).length === trueSet.size && (o.members || []).every(m => trueSet.has(m));
         const ansIdx = (q.options || []).findIndex(o => (q.answer && o.id === q.answer) || (!q.answer && eq(o)));
         const ansLabel = OPT_INDICATORS[ansIdx] || q.answer || '?';
         lines.push(`**Q${num}.**`);
