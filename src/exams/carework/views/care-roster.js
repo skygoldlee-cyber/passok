@@ -12,9 +12,9 @@ import { showToast, showConfirm, requireFields } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
 
-const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const _val = (id, fb) => {
+const $ = (/** @type {string} */ id) => document.getElementById(id);
+const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
+const _val = (/** @type {string} */ id, /** @type {string} */ fb) => {
     const el = /** @type {HTMLSelectElement|HTMLInputElement|null} */ ($(id));
     return el && el.value ? el.value : fb;
 };
@@ -38,6 +38,7 @@ export function careRosterAdd() {
     if (r.ok) { showToast('근무 배정을 등록했습니다.'); renderList(); }
 }
 
+/** @param {string} id */
 export async function careRosterDelete(id) {
     if (!id || !await showConfirm('근무표를 삭제할까요?', '삭제 확인')) return;
     removeRoster(id); renderList();
@@ -86,6 +87,7 @@ export function careRosterCsvImport() {
     if (f) f.click();
 }
 
+/** @param {Event} e */
 function onCsvFile(e) {
     const file = /** @type {HTMLInputElement} */ (e.target).files?.[0];
     if (!file) return;
@@ -96,7 +98,7 @@ function onCsvFile(e) {
         renderList();
         showToast(`가져오기 완료 — 신규 ${r.added}·갱신 ${r.updated}${r.skipped ? ` · 한도 초과 ${r.skipped}건 제외` : ''}`);
     });
-    e.target.value = '';
+    (/** @type {HTMLInputElement} */ (e.target)).value = '';
 }
 
 function renderList() {

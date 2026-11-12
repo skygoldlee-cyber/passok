@@ -5,8 +5,8 @@ import { getAuthSession } from '../../../auth-sync/supabase-client.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast, setFieldError, clearFieldError } from '../../../ui-utils.js';
 
-const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $ = (/** @type {string} */ id) => document.getElementById(id);
+const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
 
 async function render() {
     const host = $('facility-join-body');
@@ -39,11 +39,11 @@ async function render() {
         });
         return;
     }
-    const f = m.facilities || {};
+    const f = /** @type {*} */ (m.facilities) || {};
     host.innerHTML = `
         <div class="care-calc-form">
             <h3>${esc(f.name || '기관')}</h3>
-            <p>소속: <strong>${esc(ROLES[m.role] || m.role)}</strong></p>
+            <p>소속: <strong>${esc((/** @type {Object.<string,string>} */ (ROLES))[m.role] || m.role)}</strong></p>
         </div>`;
 }
 

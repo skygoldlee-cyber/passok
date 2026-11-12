@@ -26,7 +26,7 @@ export const RATE_SETS = {
     },
 };
 export const EFFECTIVE_YEAR = Math.max(...Object.keys(RATE_SETS).map(Number));
-const _cur = RATE_SETS[EFFECTIVE_YEAR];
+const _cur = (/** @type {Object.<number,*>} */ (RATE_SETS))[EFFECTIVE_YEAR];
 export const GRADE_LIMITS = _cur.gradeLimits;
 export const SELF_PAY_RATE = _cur.selfPay;
 export const FACILITY_TYPES = _cur.facilityTypes;

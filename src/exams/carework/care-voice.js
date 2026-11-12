@@ -4,7 +4,9 @@
 import { showToast } from '../../ui-utils.js';
 
 const _RECOG = () => /** @type {any} */ (window).SpeechRecognition || /** @type {any} */ (window).webkitSpeechRecognition || null;
+/** @type {*} */
 let _rec = null;
+/** @type {string|null} */
 let _targetId = null;
 
 export function voiceAvailable() {
@@ -13,7 +15,7 @@ export function voiceAvailable() {
 
 /** 미지원 브라우저는 🎤 버튼을 숨긴다 — 죽은 버튼을 보여주지 않는다 (init에서 호출) */
 export function voiceButtonsInit(root = document) {
-    root.querySelectorAll('.care-voice-btn').forEach(b => { /** @type {HTMLElement} */ (b).hidden = !voiceAvailable(); });
+    root.querySelectorAll('.care-voice-btn').forEach((/** @type {Element} */ b) => { /** @type {HTMLElement} */ (b).hidden = !voiceAvailable(); });
 }
 
 /**
@@ -31,13 +33,13 @@ export function careVoiceToggle(inputId) {
     _rec.lang = 'ko-KR';
     _rec.interimResults = false;
     _rec.continuous = false;
-    _rec.onresult = (e) => {
-        const t = [...e.results].map(r => r[0].transcript).join('').trim();
+    _rec.onresult = (/** @type {*} */ e) => {
+        const t = [...e.results].map((/** @type {*} */ r) => r[0].transcript).join('').trim();
         if (t) el.value = (el.value ? el.value + ' ' : '') + t;
     };
     const done = () => { _rec = null; _targetId = null; _mark(inputId, false); };
     _rec.onend = done;
-    _rec.onerror = (e) => {
+    _rec.onerror = (/** @type {*} */ e) => {
         done();
         if (e.error !== 'aborted' && e.error !== 'no-speech') showToast('음성 인식에 실패했습니다 — 다시 눌러 주세요.', 'error');
     };
@@ -45,6 +47,7 @@ export function careVoiceToggle(inputId) {
     catch { _rec = null; _targetId = null; }
 }
 
+/** @param {string} inputId @param {boolean} on */
 function _mark(inputId, on) {
     const btn = document.querySelector(`.care-voice-btn[data-arg="${inputId}"]`);
     if (btn) btn.classList.toggle('is-listening', on);

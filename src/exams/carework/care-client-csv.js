@@ -14,6 +14,7 @@ const BASE_COLS = ['성명', '상태', '호실', '생년월일', '비상연락�
 const FIELD_OF = { 성명: 'name', 상태: 'status', 호실: 'room', 생년월일: 'birth', 비상연락처: 'phone', 알레르기: 'allergy', 주의사항: 'caution', 메모: 'memo' };
 const YES = new Set(['○', 'o', 'O', '✓', '√', 'x', 'X', '1', '수납', 'Y', 'y', 'yes']);
 
+/** @param {string} line */
 function parseLine(line) {
     const out = []; let cur = '', q = false;
     for (let i = 0; i < line.length; i++) {
@@ -28,19 +29,21 @@ function parseLine(line) {
     out.push(cur);
     return out.map(s => s.trim());
 }
-const q = (s) => /[",\n]/.test(s) ? `"${String(s).replace(/"/g, '""')}"` : (s || '');
+const q = (/** @type {*} */ s) => /[",\n]/.test(s) ? `"${String(s).replace(/"/g, '""')}"` : (s || '');
 
 /** CSV 텍스트 → 수급자 레코드 배열 (헤더 필수, BOM 허용) */
+/** @param {string} text */
 export function csvToClients(text) {
     const lines = String(text).replace(/^﻿/, '').split(/\r?\n/).filter(l => l.trim());
     if (!lines.length) return [];
     const header = parseLine(lines[0]);
-    const docCols = header.map(h => ADMIT_ITEMS.find(i => i.short === h || i.label.startsWith(h)) || null);
+    const docCols = header.map((/** @type {string} */ h) => ADMIT_ITEMS.find((/** @type {*} */ i) => i.short === h || i.label.startsWith(h)) || null);
     return lines.slice(1).map(line => {
         const cells = parseLine(line);
+        /** @type {*} */
         const rec = { docs: {} };
-        cells.forEach((v, i) => {
-            const f = FIELD_OF[header[i]];
+        cells.forEach((/** @type {*} */ v, /** @type {number} */ i) => {
+            const f = (/** @type {Object.<string,string>} */ (FIELD_OF))[header[i]];
             if (f) rec[f] = v;
             else if (docCols[i]) rec.docs[docCols[i].id] = YES.has(v);
         });
@@ -50,6 +53,7 @@ export function csvToClients(text) {
 }
 
 /** 수급자 레코드 → CSV 텍스트 (Excel 한글 호환 BOM 포함) */
+/** @param {*[]} items */
 export function clientsToCsv(items) {
     const docCols = ADMIT_ITEMS;
     const rows = [[...BASE_COLS, ...docCols.map(d => d.short)]];

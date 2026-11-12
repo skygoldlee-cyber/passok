@@ -20,11 +20,17 @@ import { renderToolBody } from '../form-seeds.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare };
 
+/** @param {string} id */
 const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/** @param {*} s */
+const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
+/** @type {string|null} */
 let _lastText = null;
+/** @type {*|null} */
 let _facility = null;
+/** @type {*[]} */
 let _fhList = [];
+/** @param {string} id @param {string} fb */
 const _val = (id, fb) => {
     const el = /** @type {HTMLSelectElement|HTMLInputElement|HTMLTextAreaElement|null} */ ($(id));
     return el && el.value ? el.value : fb;
@@ -32,7 +38,7 @@ const _val = (id, fb) => {
 
 function todayLogs() {
     const today = todayKey();
-    return listCareLogs().filter(x => x.date === today).map(x => `${x.client} — ${x.service}`);
+    return listCareLogs().filter((/** @type {*} */ x) => x.date === today).map((/** @type {*} */ x) => `${x.client} — ${x.service}`);
 }
 
 /** CO-05 오늘 기록으로 채우기 — 근무 일자의 일지·사고·방문을 대상자별로 집계해 폼 초안 반영 (작성자 검토 후 저장) */
@@ -40,13 +46,14 @@ export function careHandoverDigest() {
     const date = _val('ho-date', todayKey());
     const d = buildDigest(date, { logs: listCareLogs(), visits: listVisits(), incidents: listIncidents() });
     if (!d.count) { showToast(`${date} 집계할 기록이 없습니다.`, 'error'); return; }
-    const set = (id, v) => { const el = /** @type {HTMLInputElement|null} */ ($(id)); if (el && v) el.value = v; };
+    const set = (/** @type {string} */ id, /** @type {string|undefined} */ v) => { const el = /** @type {HTMLInputElement|null} */ ($(id)); if (el && v) el.value = v; };
     set('ho-clients', d.clients);
     set('ho-status', d.status);
     set('ho-caution', d.caution);
     showToast(`${d.count}명의 기록을 반영했습니다 — 검토 후 생성하세요.`);
 }
 
+/** @type {*|null} */
 let _lastIn = null; // 마지막 생성 입력 — 오버라이드 스칼라 주입용 (CO-18)
 
 export function careHandoverGenerate() {
@@ -84,13 +91,13 @@ function renderSaved() {
     if (!host) return;
     const items = listHandovers();
     host.innerHTML = items.length
-        ? items.map(x => `<div class="care-log-saved-item"><span>${esc(x.savedAt)} · ${esc(x.from || '')} → ${esc(x.to || '')}</span><button data-click="careHandoverDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button></div>`).join('')
+        ? items.map((/** @type {*} */ x) => `<div class="care-log-saved-item"><span>${esc(x.savedAt)} · ${esc(x.from || '')} → ${esc(x.to || '')}</span><button data-click="careHandoverDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button></div>`).join('')
         : '<p class="care-log-empty">저장된 인수인계 없음 — 공유·내보내기 시 자동 저장됩니다.</p>';
 }
 
 /** 현재 생성문이 기록에 저장됐는가 — 텍스트 동일성 기준이라 재생성·액션 재호출로 오염되지 않는다 */
 function isCurrentSaved() {
-    return !!_lastText && listHandovers().some(x => x.text === _lastText);
+    return !!_lastText && listHandovers().some((/** @type {*} */ x) => x.text === _lastText);
 }
 
 /** 기록 우선 — 미저장 생성문을 기록에 자동 저장. 공유·내보내기·인쇄 경로의 공통 전제 */
@@ -117,6 +124,7 @@ export function careHandoverSave() {
     showToast('기록에 저장했습니다.');
 }
 
+/** @param {string} id */
 export async function careHandoverDelete(id) {
     if (!id || !await showConfirm('저장된 인수인계를 삭제할까요?', '삭제 확인')) return;
     deleteHandover(id);
@@ -143,6 +151,7 @@ export function careHandoverDocMd() {
 }
 
 /** 📤 공유·내보내기 게이트 — 기록 우선: 미저장 생성문은 자동 저장 후 careShare 위임 (저장 실패 시에만 차단) */
+/** @param {string} arg */
 export async function careHandoverExport(arg) {
     careHandoverGenerate();
     if (!_lastText) { showToast('먼저 인수인계서를 생성하세요.', 'error'); return; }
@@ -174,7 +183,7 @@ async function renderFacility() {
         <div class="care-audit-sec">
             <h3>기관 인계 — ${esc(_facility.name)}</h3>
             <button class="btn" data-click="careFacilityHandoverSubmit">🏥 기관에 공유</button>
-            ${_fhList.map(h => `
+            ${_fhList.map((/** @type {*} */ h) => `
                 <div class="care-log-saved-item">
                     <span>${esc(h.shift_date)} · ${esc(h.client)} — ${esc(h.memo || '')}</span>
                     <em>${esc(h.handover_acks?.length || 0)}명 인수</em>
@@ -196,6 +205,7 @@ export async function careFacilityHandoverSubmit() {
     renderFacility();
 }
 
+/** @param {string} handoverId */
 export async function careHandoverAck(handoverId) {
     const r = await ackHandover(handoverId);
     r.error ? showToast('인수 확인 실패: ' + r.error, 'error') : showToast('인수 확인했습니다.');
@@ -204,7 +214,8 @@ export async function careHandoverAck(handoverId) {
 
 export function initCareHandoverView() {
     markFunnel('tool:care-handover');
-    attachClientPicker(/** @type {HTMLInputElement|null} */ ($('ho-clients')));
+    const _picker = /** @type {HTMLInputElement|null} */ ($('ho-clients'));
+    if (_picker) attachClientPicker(_picker);
     const d = /** @type {HTMLInputElement|null} */ ($('ho-date'));
     if (d && !d.value) d.value = todayKey();
     const s = $('ho-shift');

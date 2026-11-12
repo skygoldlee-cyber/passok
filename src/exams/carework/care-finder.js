@@ -2,6 +2,7 @@
 // @spec none — 시험 전용 도메인 데이터 (DA-13)
 // content/exams/carework/실무/facilities.json — 공공데이터 시설 목록
 
+/** @type {{items:*[],regions:string[],source:string}|null} */
 let _data = null;
 export async function loadFacilities() {
     if (_data) return _data;
@@ -12,12 +13,12 @@ export async function loadFacilities() {
 }
 
 /**
- * @param {Array} items
+ * @param {Array<*>} items
  * @param {{q?:string, region?:string}} f
  */
 export function searchFacilities(items, { q = '', region = '' } = {}) {
     const kw = q.trim().toLowerCase();
-    return items.filter(f =>
+    return items.filter((/** @type {*} */ f) =>
         (!region || f.region === region) &&
         (!kw || [f.name, f.address, f.phone].join(' ').toLowerCase().includes(kw)));
 }

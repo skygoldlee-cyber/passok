@@ -33,6 +33,7 @@ export const ADMIT_SECTIONS = [
 
 const KEY = STORAGE_KEYS.ADMIT_CHECKS;
 export function loadChecks() { return getJSON(KEY) || {}; }
+/** @param {string} id */
 export function toggleCheck(id) {
     const c = loadChecks();
     c[id] = !c[id];

@@ -27,6 +27,7 @@ let _cur = 0;
 let _bound = false;
 
 /** carework 인물 설정 — 아바타 경로를 contentPath로 해석해 공용 렌더에 주입 */
+/** @param {*} slot */
 function _render(slot) {
     /** @type {Record<string, { name: string, side: string, img?: string }>} */
     const chars = {};

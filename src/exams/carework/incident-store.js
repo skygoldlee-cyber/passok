@@ -23,6 +23,7 @@ export function listIncidents() {
  * @param {{date:string,time?:string,client:string,place?:string,type:string,severity?:string,desc?:string,action?:string,witness?:string,familyNotified?:boolean,text:string,photos?:string[]}} entry
  * @returns {{ok:boolean, error?:string, id?:string}}
  */
+/** @param {*} entry */
 export function addIncident(entry) {
     const items = listIncidents();
     if (items.length >= FREE_LIMIT)
@@ -33,12 +34,15 @@ export function addIncident(entry) {
     return { ok: true, id: it.id };
 }
 
+/** @param {string} id */
+/** @param {string} id */
 export function removeIncident(id) {
     setJSON(KEY, listIncidents().filter(x => x.id !== id));
     return { ok: true };
 }
 
 /** 저장 + 오류 표시 — 무료 한도 초과 시 업그레이드 안내 */
+/** @param {*} entry */
 export function saveIncident(entry) {
     proFeatureNotice('care_incident_save', '사고보고 저장');
     const r = addIncident(entry);

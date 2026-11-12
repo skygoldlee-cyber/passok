@@ -40,10 +40,10 @@ export function parseFields(body) {
 }
 
 /** 기입값 정제 — MD 표 셀 파이프·개행 파괴 방지 */
-const _safe = v => String(v ?? '').replace(/\|/g, '｜').replace(/[\r\n]+/g, ' ').trim();
+const _safe = (/** @type {*} */ v) => String(v ?? '').replace(/\|/g, '｜').replace(/[\r\n]+/g, ' ').trim();
 
 /** 시스템 키 자동값 — 출력일·기관명·홈 서명 설정·선택 수급자 */
-const _sysValues = (client) => {
+const _sysValues = (/** @type {string} */ client) => {
     const s = getDocSign();
     return {
         date: todayKey(), org: getOrgName(), author: s.author,
@@ -58,16 +58,17 @@ const _sysValues = (client) => {
  * @param {string} body @param {Object<string,string>} values @param {'md'|'html'} [mode]
  * @param {Set<string>|null} [rawKeys] 정제 없이 통과시킬 블록 키 (CO-18 도구 조립 표·문단)
  */
+/** @param {string} body @param {Object.<string,*>} [values] @param {string} [mode] @param {Set<string>|null} [rawKeys] */
 export function fillTemplate(body, values = {}, mode = 'md', rawKeys = null) {
     const sign = getDocSign();
     const sys = _sysValues(values.client);
-    return String(body || '').replace(FIELD_RE, (m, k0) => {
+    return String(body || '').replace(FIELD_RE, (/** @type {string} */ m, /** @type {string} */ k0) => {
         const k = k0.trim();
         if (k === 'signImage') {
             if (mode === 'html' && sign.signImage) return SIGN_MARK;
             return sign.author || '＿＿＿＿＿＿';
         }
-        if (k in sys) return _safe(sys[k]) || '＿＿＿＿＿＿';
+        if (k in sys) return _safe((/** @type {Object.<string,*>} */ (sys))[k]) || '＿＿＿＿＿＿';
         // rawKeys — 도구 조립 블록(표·문단)은 MD 구조 보존을 위해 정제 없이 통과 (CO-18)
         if (rawKeys && rawKeys.has(k)) return String(values[k] ?? '');
         return _safe(values[k]) || '＿＿＿＿＿＿';
@@ -75,6 +76,7 @@ export function fillTemplate(body, values = {}, mode = 'md', rawKeys = null) {
 }
 
 /** 기입 MD → 미리보기 HTML — 서명 이미지 자리표시를 등록 이미지로 치환 */
+/** @param {string} body @param {Object.<string,*>} [values] */
 export function fillTemplateHtml(body, values = {}) {
     const sign = getDocSign();
     const html = mdToHtml(fillTemplate(body, values, 'html'));
@@ -98,15 +100,16 @@ export function addFormTemplate({ title, body, toolKey = null }) {
     if (items.length >= FREE_TPL_LIMIT)
         return { ok: false, error: `무료 양식 등록 한도(${FREE_TPL_LIMIT}건) 도달 — 삭제 후 재시도하세요.` };
     const it = { id: `ftpl_${Date.now().toString(36)}`, title: String(title || '').trim(), body: String(body || ''), scope: 'local', createdAt: localDateTime() };
-    if (toolKey) it.toolKey = toolKey;
+    if (toolKey) (/** @type {*} */ (it)).toolKey = toolKey;
     items.unshift(it);
     setJSON(TPL_KEY, items);
     return { ok: true, id: it.id };
 }
 
+/** @param {string} id @param {{title:string, body:string}} o */
 export function updateFormTemplate(id, { title, body }) {
     const items = listFormTemplates();
-    const it = items.find(x => x.id === id);
+    const it = items.find((/** @type {*} */ x) => x.id === id);
     if (!it) return { ok: false, error: '양식을 찾을 수 없습니다.' };
     it.title = String(title || '').trim() || it.title;
     it.body = String(body || '');
@@ -115,13 +118,15 @@ export function updateFormTemplate(id, { title, body }) {
     return { ok: true };
 }
 
+/** @param {string} id */
 export function removeFormTemplate(id) {
-    setJSON(TPL_KEY, listFormTemplates().filter(x => x.id !== id));
+    setJSON(TPL_KEY, listFormTemplates().filter((/** @type {*} */ x) => x.id !== id));
     return { ok: true };
 }
 
 // — 기관 양식 캐시 (정본은 서버 — 뷰 init 시 syncFormTemplates로 갱신) —
 
+/** @type {*[]} */
 let _facTpls = [];
 
 /** 화면용 전체 양식 — 로컬(scope:'local') + 기관(scope:'fac') 병합 */
@@ -135,7 +140,7 @@ export async function syncFormTemplates() {
     _facTpls = [];
     if (!m) return _facTpls;
     const rows = await listFacilityFormTemplates(m.facility_id).catch(() => []);
-    _facTpls = rows.map(r => ({ id: `fac_${r.id}`, title: r.title, body: r.body, scope: 'fac', updatedAt: r.updated_at }));
+    _facTpls = rows.map((/** @type {*} */ r) => ({ id: `fac_${r.id}`, title: r.title, body: r.body, scope: 'fac', updatedAt: r.updated_at }));
     return _facTpls;
 }
 
@@ -147,6 +152,7 @@ export function listFormDocs() {
 }
 
 /** 기입 문서 저장 — 로컬 즉시 확정 후 서버 비동기 반영 (CO-15 오프라인 우선) */
+/** @param {{tplId:string, title:string, client:string, clientId:string, date:string, values:*, md:string}} o */
 export function addFormDoc({ tplId, title, client, clientId, date, values, md }) {
     const items = listFormDocs();
     if (items.length >= FREE_DOC_LIMIT)
@@ -159,6 +165,7 @@ export function addFormDoc({ tplId, title, client, clientId, date, values, md })
 }
 
 /** 서버 페이로드 — 양식 id·필드값 구조화 맵만 (출력 본문 md는 L0 유지, CO-06 계승) */
+/** @param {*} it */
 async function _pushFormDoc(it) {
     const m = await myMembership().catch(() => null);
     if (!m) return;
@@ -169,7 +176,7 @@ async function _pushFormDoc(it) {
     });
     if ('error' in r) return;
     const items = listFormDocs();
-    const x = items.find(y => y.id === it.id);
+    const x = items.find((/** @type {*} */ y) => y.id === it.id);
     if (x && x._sync !== 'done') { x._sync = 'done'; setJSON(DOC_KEY, items); }
 }
 
@@ -181,12 +188,14 @@ export async function syncPendingFormDocs() {
     }
 }
 
+/** @param {string} id */
 export function removeFormDoc(id) {
-    setJSON(DOC_KEY, listFormDocs().filter(x => x.id !== id));
+    setJSON(DOC_KEY, listFormDocs().filter((/** @type {*} */ x) => x.id !== id));
     return { ok: true };
 }
 
 /** 저장 + 오류 표시 — 무료 한도 초과 시 업그레이드 안내 */
+/** @param {*} entry */
 export function saveFormDoc(entry) {
     proFeatureNotice('care_form_save', '양식 문서 저장');
     const r = addFormDoc(entry);

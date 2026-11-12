@@ -42,6 +42,7 @@ export const TOOL_FORM_SEEDS = {
 };
 
 /** toolKey 연동 사용자 사본 조회 — 로컬 템플릿 중 toolKey가 일치하는 첫 항목 */
+/** @param {string} toolKey */
 export function toolOverride(toolKey) {
     const t = listFormTemplates().find(x => x.toolKey === toolKey);
     return t ? t.body : null;
@@ -52,8 +53,9 @@ export function toolOverride(toolKey) {
  * values에 블록 키(기록표 등) + 선택 시스템 보조값을 넣으면 fillTemplate이 치환한다.
  * @param {string} toolKey @param {Object<string,string>} values
  */
+/** @param {string} toolKey @param {Object.<string,*>} [values] */
 export function renderToolBody(toolKey, values = {}) {
-    const def = TOOL_FORM_SEEDS[toolKey];
+    const def = (/** @type {Object.<string,{title:string,block:string,seed:string}>} */ (TOOL_FORM_SEEDS))[toolKey];
     const body = toolOverride(toolKey) ?? `{{${def.block}}}`;
     return fillTemplate(body, values, 'md', new Set([def.block]));
 }
@@ -63,13 +65,14 @@ export function renderToolBody(toolKey, values = {}) {
  * 저장 데이터가 없거나 블록이 개별 기록 생성문(일지·인수인계·사고보고서)이면 null → 칩 유지.
  * @param {string} toolKey @returns {Promise<Object<string,string>|null>}
  */
+/** @param {string} toolKey */
 export async function toolBlockPreview(toolKey) {
     try {
         if (toolKey === 'careAudit') {
             const { loadAuditSections, loadChecks } = await import('./care-audit.js');
             const { mdTable } = await import('./doc-md.js');
             const c = loadChecks();
-            const rows = (await loadAuditSections()).flatMap(s => s.items.map(i => [s.title, c[i.id] ? '✔' : '□', i.text, i.ref]));
+            const rows = ((await loadAuditSections()) || []).flatMap((/** @type {*} */ s) => (s.items || []).map((/** @type {*} */ i) => [s.title, (/** @type {Object.<string,*>} */ (c))[i.id] ? '✔' : '□', i.text, i.ref]));
             return { 점검표: mdTable(['영역', '점검', '항목', '근거'], rows) };
         }
         if (toolKey === 'careVisit') {

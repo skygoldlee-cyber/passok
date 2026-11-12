@@ -18,9 +18,12 @@ export const SEVERITIES = [
     { key: 'severe', label: '중증 (응급 이송)' },
 ];
 
+/** @param {string} key */
+/** @param {string} key */
 export function incidentTypeLabel(key) {
     return INCIDENT_TYPES.find(t => t.key === key)?.label || key || '';
 }
+/** @param {string} key */
 export function severityLabel(key) {
     return SEVERITIES.find(s => s.key === key)?.label || key || '';
 }
@@ -29,6 +32,7 @@ export function severityLabel(key) {
  * 사고 기록 1건 → 사고보고서 텍스트
  * @param {{date:string,time?:string,client:string,place?:string,type:string,severity?:string,desc?:string,action?:string,witness?:string,familyNotified?:boolean}} v
  */
+/** @param {*} v */
 export function buildIncidentText(v) {
     if (!v || !v.client || !v.date || !v.type) return '';
     const lines = [
@@ -46,8 +50,10 @@ export function buildIncidentText(v) {
 }
 
 /** 사고 기록 목록 → CSV 텍스트 (UTF-8 BOM — Excel 한글 호환) */
+/** @param {*[]} items */
+/** @param {*[]} items */
 export function incidentsToCsv(items) {
-    return toCsv(['발생일', '시각', '장소', '대상자', '유형', '중증도', '경위', '조치', '목격자', '가족통지'], items, v => [
+    return toCsv(['발생일', '시각', '장소', '대상자', '유형', '중증도', '경위', '조치', '목격자', '가족통지'], items, (/** @type {*} */ v) => [
         v.date || '', v.time || '', v.place || '', v.client || '',
         incidentTypeLabel(v.type), v.severity ? severityLabel(v.severity) : '',
         v.desc || '', v.action || '', v.witness || '', v.familyNotified ? '완료' : '미완료',

@@ -19,13 +19,13 @@ const ALIAS = {
  * 외부 CSV/엑셀 텍스트 → 수급자 레코드 배열
  * 첫 행(헤더)의 alias를 정식 헤더로 치환 후 csvToClients 위임 — 매칭 안 되는 열은 서류 열 규칙 그대로
  * @param {string} text
- * @returns {Array}
+ * @returns {Array<*>}
  */
 export function csvToClientsAny(text) {
     const lines = String(text).replace(/^﻿/, '').split(/\r?\n/);
     if (!lines.length) return [];
-    const head = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-    if (!head.some(h => ALIAS[h])) return csvToClients(text); // 외부 형식 아님 — 기존 파서 그대로
-    lines[0] = head.map(h => ALIAS[h] || h).join(',');
+    const head = lines[0].split(',').map((/** @type {string} */ h) => h.trim().replace(/^"|"$/g, ''));
+    if (!head.some((/** @type {string} */ h) => (/** @type {Object.<string,string>} */ (ALIAS))[h])) return csvToClients(text); // 외부 형식 아님 — 기존 파서 그대로
+    lines[0] = head.map((/** @type {string} */ h) => (/** @type {Object.<string,string>} */ (ALIAS))[h] || h).join(',');
     return csvToClients(lines.join('\n'));
 }

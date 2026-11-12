@@ -18,6 +18,7 @@ export const ACTIVITY_GROUPS = [
 ];
 
 /** @param {{date:string, client:string, service:string, start:string, end:string, activities:Object<string,string[]>, note:string}} in_ */
+/** @param {*} in_ */
 export function buildCareLog(in_) {
     if (!in_ || !in_.date || !in_.client || !in_.service) return null;
     const svc = SERVICE_TYPES.find(s => s.key === in_.service)?.label || in_.service;
@@ -38,6 +39,7 @@ export function buildCareLog(in_) {
 }
 
 /** CO-07 공단 급여제공기록지 양식 — ERP·공단 앱에 붙여넣는 텍스트 (이중 입력 해소) */
+/** @param {*} in_ */
 export function buildRecordText(in_) {
     if (!in_ || !in_.date || !in_.client) return null;
     const svc = SERVICE_TYPES.find(s => s.key === in_.service)?.label || in_.service;
@@ -53,12 +55,13 @@ export function buildRecordText(in_) {
 }
 
 /** 저장 일지 목록 → CSV 텍스트 (UTF-8 BOM — Excel 한글 호환). 활동은 '그룹: 항목·항목' 병합 */
+/** @param {*[]} items */
 export function careLogsToCsv(items) {
-    const svcLabel = (k) => SERVICE_TYPES.find(s => s.key === k)?.label || k || '';
-    const actText = (acts) => ACTIVITY_GROUPS
-        .map(g => (acts && acts[g.key] && acts[g.key].length) ? `${g.label}: ${acts[g.key].join('·')}` : '')
+    const svcLabel = (/** @type {string} */ k) => SERVICE_TYPES.find((/** @type {*} */ s) => s.key === k)?.label || k || '';
+    const actText = (/** @type {*} */ acts) => ACTIVITY_GROUPS
+        .map((/** @type {*} */ g) => (acts && acts[g.key] && acts[g.key].length) ? `${g.label}: ${acts[g.key].join('·')}` : '')
         .filter(Boolean).join(' | ');
-    return toCsv(['일자', '대상자', '급여종류', '시작', '종료', '활동', '특이사항'], items, x => [
+    return toCsv(['일자', '대상자', '급여종류', '시작', '종료', '활동', '특이사항'], items, (/** @type {*} */ x) => [
         x.date || '', x.client || '', svcLabel(x.service), x.start || '', x.end || '',
         actText(x.activities), x.note || '',
     ]);

@@ -7,9 +7,12 @@ import { docHeadHtml, refreshOrgName } from '../facility.js';
 import { showConfirm } from '../../../ui-utils.js';
 export { careShare } from '../care-share.js';
 
+/** @param {string} id */
 const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/** @param {*} s */
+const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
 
+/** @param {string} id @param {string} fallback */
 const _val = (id, fallback) => {
     const el = /** @type {HTMLSelectElement|HTMLInputElement|null} */ ($(id));
     return el && el.value ? el.value : fallback;
@@ -19,6 +22,7 @@ const NC_FIELDS = { meal: 'care-nc-meal', snack: 'care-nc-snack', room: 'care-nc
 const NC_LABELS = { meal: '식재료비', snack: '간식비', room: '상급침실료', groom: '이미용비', other: '기타 비급여' };
 const NC_HOME_KEYS = ['meal', 'snack', 'groom', 'other']; // 상급침실료는 시설만
 
+/** @param {string} id */
 const _selLabel = (id) => {
     const el = /** @type {HTMLSelectElement|null} */ ($(id));
     const opt = el && el.options ? el.options[el.selectedIndex] : null;
@@ -29,8 +33,9 @@ const _selLabel = (id) => {
 const rateYearStale = () => new Date().getFullYear() > EFFECTIVE_YEAR;
 
 /** 시설급여 이용액 자동 산정 — 등급별 1일당 수가 × 입소 일수 (고시 정량값) */
+/** @param {string} facTypeKey @param {string} gradeKey @param {number} days */
 function facilityUse(facTypeKey, gradeKey, days) {
-    const f = FACILITY_TYPES.find(x => x.key === facTypeKey);
+    const f = FACILITY_TYPES.find((/** @type {*} */ x) => x.key === facTypeKey);
     const rate = f && f.rates[gradeKey];
     return rate && days > 0 ? { use: rate * days, rate, days } : null;
 }
@@ -38,7 +43,7 @@ function facilityUse(facTypeKey, gradeKey, days) {
 function readForm() {
     const type = _val('care-type', 'home');
     const ncKeys = type === 'facility' ? Object.keys(NC_FIELDS) : NC_HOME_KEYS;
-    const nonCovered = ncKeys.reduce((s, k) => s + (Number(_val(NC_FIELDS[k], '0')) || 0), 0);
+    const nonCovered = ncKeys.reduce((/** @type {number} */ s, /** @type {string} */ k) => s + (Number(_val((/** @type {Object.<string,string>} */ (NC_FIELDS))[k], '0')) || 0), 0);
     let monthlyUse = Number(_val('care-use', '0')) || 0, basis = null;
     if (type === 'facility') {
         const days = Number(_val('care-fac-days', '0')) || 0;
@@ -69,24 +74,24 @@ export function careCalcRun() {
         ...(in_.type === 'facility'
             ? [['시설 유형', _selLabel('care-fac-type')], ['월 입소 일수', `${_val('care-fac-days', '0')}일`]]
             : [['월 예상 급여 이용액', formatWon(in_.monthlyUse)]]),
-        ...ncKeys.map(k => /** @type {[string, number]} */ ([k, Number(_val(NC_FIELDS[k], '0')) || 0]))
+        ...ncKeys.map((/** @type {string} */ k) => /** @type {[string, number]} */ ([k, Number(_val((/** @type {Object.<string,string>} */ (NC_FIELDS))[k], '0')) || 0]))
             .filter(([, v]) => v > 0)
-            .map(([k, v]) => [`비급여·${NC_LABELS[k]}`, formatWon(v)]),
+            .map(([k, v]) => [`비급여·${(/** @type {Object.<string,string>} */ (NC_LABELS))[k]}`, formatWon(v)]),
         ['본인부담 감경', _selLabel('care-reduction')],
         ['적용 기준', `${EFFECTIVE_YEAR}년 고시`],
     ];
     // 공단 책정 기준표 — 선택 급여유형의 등급별 고시 금액 (재가=월 한도액, 시설=1일 수가), 선택 등급 강조
-    const sel = (k) => k === in_.grade ? ' class="care-doc-sel"' : '';
+    const sel = (/** @type {string} */ k) => k === in_.grade ? ' class="care-doc-sel"' : '';
     let basisHtml;
     if (in_.type === 'facility') {
-        const f = FACILITY_TYPES.find(x => x.key === _val('care-fac-type', '')) || FACILITY_TYPES[0];
+        const f = FACILITY_TYPES.find((/** @type {*} */ x) => x.key === _val('care-fac-type', '')) || FACILITY_TYPES[0];
         basisHtml = `<div class="care-doc-sec">공단 책정 기준 — ${esc(f.label)} 1일 수가 (${EFFECTIVE_YEAR}년)</div>`
-            + `<table class="care-doc"><tbody>${GRADE_LIMITS.filter(g => f.rates[g.key])
-                .map(g => `<tr${sel(g.key)}><td>${g.label}</td><td class="care-doc-num">${formatWon(f.rates[g.key])}/일</td></tr>`).join('')}</tbody></table>`;
+            + `<table class="care-doc"><tbody>${GRADE_LIMITS.filter((/** @type {*} */ g) => f.rates[g.key])
+                .map((/** @type {*} */ g) => `<tr${sel(g.key)}><td>${g.label}</td><td class="care-doc-num">${formatWon(f.rates[g.key])}/일</td></tr>`).join('')}</tbody></table>`;
     } else {
         basisHtml = `<div class="care-doc-sec">공단 책정 기준 — 재가 등급별 월 한도액 (${EFFECTIVE_YEAR}년)</div>`
             + `<table class="care-doc"><tbody>${GRADE_LIMITS
-                .map(g => `<tr${sel(g.key)}><td>${g.label}</td><td class="care-doc-num">${formatWon(g.home)}</td></tr>`).join('')}</tbody></table>`;
+                .map((/** @type {*} */ g) => `<tr${sel(g.key)}><td>${g.label}</td><td class="care-doc-num">${formatWon(g.home)}</td></tr>`).join('')}</tbody></table>`;
     }
     const docRow = (/** @type {string[]} */ t) => `<tr${t[2] ? ` class="${t[2]}"` : ''}><td>${t[0]}</td><td class="care-doc-num">${t[1]}</td></tr>`;
     const rows = [
@@ -94,8 +99,8 @@ export function careCalcRun() {
         ['공단 부담', formatWon(r.publicPay)],
         ['급여 본인부담금', formatWon(r.selfCovered)],
         ...(r.overLimit ? [['한도 초과 자부담', formatWon(r.overLimit)]] : []),
-        ...(r.nonCovered ? [['비급여 자부담', formatWon(r.nonCovered)]] : []),
-        ...(r.limit ? [['등급 월 한도', formatWon(r.limit)]] : []),
+        ...(('nonCovered' in r && r.nonCovered) ? [['비급여 자부담', formatWon(/** @type {number} */ (r.nonCovered))]] : []),
+        ...(r.limit ? [['등급 월 한도', formatWon(/** @type {number} */ (r.limit))]] : []),
         ['실제 월 납부액', formatWon(r.selfPay), 'care-calc-total'],
         ...(in_._basis ? [[`급여비용 산정 — ${formatWon(in_._basis.rate)}/일 × ${in_._basis.days}일`, '']] : []),
     ];
@@ -141,27 +146,27 @@ export function initCareCalcView() {
     // 등급별 재가 월 한도표 — 당해연도(EFFECTIVE_YEAR) 기준만 표시
     const lt = $('care-limit-table');
     if (lt && !lt.children.length) {
-        const won = (n) => n.toLocaleString('ko-KR');
+        const won = (/** @type {number} */ n) => n.toLocaleString('ko-KR');
         lt.innerHTML = '<thead><tr><th>등급</th><th>월 한도액 (' + EFFECTIVE_YEAR + '년)</th></tr></thead>'
-            + `<tbody>${GRADE_LIMITS.map(g => `<tr><td>${g.label}</td><td>${won(g.home)}원</td></tr>`).join('')}</tbody>`;
+            + `<tbody>${GRADE_LIMITS.map((/** @type {*} */ g) => `<tr><td>${g.label}</td><td>${won(g.home)}원</td></tr>`).join('')}</tbody>`;
     }
     const g = $('care-grade');
     if (g && !g.children.length)
-        g.innerHTML = GRADE_LIMITS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+        g.innerHTML = GRADE_LIMITS.map((/** @type {*} */ x) => `<option value="${x.key}">${x.label}</option>`).join('');
     const r = $('care-reduction');
     if (r && !r.children.length)
-        r.innerHTML = REDUCTIONS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+        r.innerHTML = REDUCTIONS.map((/** @type {*} */ x) => `<option value="${x.key}">${x.label}</option>`).join('');
     const ft = /** @type {HTMLSelectElement|null} */ ($('care-fac-type'));
     if (ft && !ft.children.length)
-        ft.innerHTML = FACILITY_TYPES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+        ft.innerHTML = FACILITY_TYPES.map((/** @type {*} */ x) => `<option value="${x.key}">${x.label}</option>`).join('');
     // 시설 일당 수가표 — 시설 유형 선택에 따라 해당 수가 렌더 (1일 수가·20% 본인부담 병기)
     const rt = $('care-fac-rate-table');
     if (ft && rt) {
-        const won = (n) => n.toLocaleString('ko-KR');
+        const won = (/** @type {number} */ n) => n.toLocaleString('ko-KR');
         const renderRates = () => {
-            const f = FACILITY_TYPES.find(x => x.key === ft.value) || FACILITY_TYPES[0];
+            const f = FACILITY_TYPES.find((/** @type {*} */ x) => x.key === ft.value) || FACILITY_TYPES[0];
             rt.innerHTML = '<thead><tr><th>등급</th><th>1일 수가</th><th>본인부담 20%</th></tr></thead>'
-                + `<tbody>${GRADE_LIMITS.filter(g => f.rates[g.key]).map(g => `<tr><td>${g.label}</td><td>${won(f.rates[g.key])}원</td><td>${won(Math.round(f.rates[g.key] * 0.2))}원</td></tr>`).join('')}</tbody>`;
+                + `<tbody>${GRADE_LIMITS.filter((/** @type {*} */ g) => f.rates[g.key]).map((/** @type {*} */ g) => `<tr><td>${g.label}</td><td>${won(f.rates[g.key])}원</td><td>${won(Math.round(f.rates[g.key] * 0.2))}원</td></tr>`).join('')}</tbody>`;
         };
         ft.addEventListener('change', renderRates);
         renderRates();

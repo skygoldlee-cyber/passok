@@ -4,9 +4,13 @@ import { loadCareCards, cardById } from '../care-card.js';
 import { setJSON } from '../../../core/storage.js';
 import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 
+/** @param {string} id */
 const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/** @param {*} s */
+const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c]);
+/** @type {*[]} */
 let _cards = [];
+/** @type {string|null} */
 let _open = null;
 
 function renderList() {
@@ -22,18 +26,18 @@ function renderList() {
 
 function renderDetail() {
     const host = $('care-card-detail');
-    const c = cardById(_cards, _open);
+    const c = cardById(_cards, _open || '');
     if (!host) return;
     if (!c) { host.innerHTML = ''; return; }
-    const shareText = `${c.title}\n${c.trigger}\n\n${c.steps.map((s, i) => `${i + 1}. ${s.phase}: ${s.text}`).join('\n')}${(c.contacts || []).length ? `\n\n연락·신고: ${c.contacts.map(x => `${x.label} ${x.number}`).join(' · ')}` : ''}`;
+    const shareText = `${c.title}\n${c.trigger}\n\n${c.steps.map((/** @type {*} */ s, /** @type {number} */ i) => `${i + 1}. ${s.phase}: ${s.text}`).join('\n')}${(c.contacts || []).length ? `\n\n연락·신고: ${c.contacts.map((/** @type {*} */ x) => `${x.label} ${x.number}`).join(' · ')}` : ''}`;
     host.innerHTML = `
         <div class="care-card-head">
             <span class="care-card-cat">${esc(c.category)}</span>
             <h3>${esc(c.title)}</h3>
             <p class="care-card-trig">${esc(c.trigger)}</p>
-            ${(c.contacts || []).length ? `<div class="care-card-contacts">${c.contacts.map(x => `<span class="care-card-contact"><em>${esc(x.label)}</em> ${esc(x.number)}</span>`).join('')}</div>` : ''}
+            ${(c.contacts || []).length ? `<div class="care-card-contacts">${c.contacts.map((/** @type {*} */ x) => `<span class="care-card-contact"><em>${esc(x.label)}</em> ${esc(x.number)}</span>`).join('')}</div>` : ''}
         </div>
-        ${c.steps.map((s, i) => `
+        ${c.steps.map((/** @type {*} */ s, /** @type {number} */ i) => `
             <div class="care-card-step">
                 <span class="care-card-stepno">${i + 1}</span>
                 <div><strong>${esc(s.phase)}</strong><p>${esc(s.text)}</p></div>
@@ -46,6 +50,7 @@ function renderDetail() {
         </div>`;
 }
 
+/** @param {string} id */
 export function careCardOpen(id) {
     _open = id || _open;
     renderDetail();
@@ -66,17 +71,18 @@ export const CARD_INCIDENT_TYPE = {
 };
 
 /** 대처카드 이벤트 발생 → 사고보고서 뷰로 이동 (유형·경위 선기입 초안 전달) */
+/** @param {string} id */
 export function careCardToIncident(id) {
-    const c = cardById(_cards, id || _open);
+    const c = cardById(_cards, id || _open || '');
     if (!c) return;
-    const draft = { type: CARD_INCIDENT_TYPE[c.id] || 'other', desc: `대처카드 '${c.title}' 상황 발생 — 경위를 기록하세요.` };
+    const draft = { type: (/** @type {Object.<string,string>} */ (CARD_INCIDENT_TYPE))[c.id] || 'other', desc: `대처카드 '${c.title}' 상황 발생 — 경위를 기록하세요.` };
     setJSON(STORAGE_KEYS.CARE_INCIDENT_DRAFT, draft); // 뷰 전환 후 init이 소비-삭제
     location.hash = '#/care-incident';
 }
 
 export async function initCareCardView() {
     try {
-        _cards = await loadCareCards();
+        _cards = (await loadCareCards()) || [];
     } catch (e) {
         const host = $('care-card-list');
         if (host) host.innerHTML = '<p class="care-calc-err">카드 데이터를 불러오지 못했습니다.</p>';

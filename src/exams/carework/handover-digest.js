@@ -5,15 +5,15 @@
 
 /**
  * @param {string} shiftDate YYYY-MM-DD
- * @param {{logs?:Array,visits?:Array,incidents?:Array}} stores
+ * @param {{logs?:Array<*>,visits?:Array<*>,incidents?:Array<*>}} stores
  * @returns {{clients:string, status:string, caution:string, count:number}} 폼 채움값
  */
 export function buildDigest(shiftDate, stores = {}) {
-    const on = (r) => (r.date || r.shift_date || r.visit_date || r.occurred_at?.slice(0, 10)) === shiftDate;
+    const on = (/** @type {*} */ r) => (r.date || r.shift_date || r.visit_date || r.occurred_at?.slice(0, 10)) === shiftDate;
     const logs = (stores.logs || []).filter(on);
     const incidents = (stores.incidents || []).filter(on);
     const visits = (stores.visits || []).filter(on);
-    const names = [...new Set([...logs, ...incidents, ...visits].map(r => r.client).filter(Boolean))];
+    const names = [...new Set([...logs, ...incidents, ...visits].map((/** @type {*} */ r) => r.client).filter(Boolean))];
     if (!names.length) return { clients: '', status: '', caution: '', count: 0 };
 
     const status = names.map(name => {

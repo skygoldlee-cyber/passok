@@ -1,6 +1,26 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(types): noImplicitAny 소진 8차 — src/exams/carework 전량 소진 완료 (Phase 1 지속)
+
+- **디렉터리 전량 소진**: src/exams/carework ~666건 → 0, 51파일 — 뷰 파셜(care-flow·care-custom-form·care-handover·care-calc·care-visit·care-card·care-client·care-audit) + 도메인 스토어·시드·템플릿 전수
+- **계약 명문화**:
+  - `loadFacilities()` 반환을 `{items, regions, source}` 객체로 정정 — 배열 추정이던 것을 실제 형태로 (care-finder `_items`·`_facTpls` 파생 해소)
+  - `pushState()` JSDoc 병합 — 분리된 문서 블록이 `{skipped,error,id}` 유니언 반환을 무시하던 것을 통합, `in` 좁히기로 `r.error`·`r.skipped` 접근 해소
+  - `_sysValues(client)` 동적 키 맵 `Object.<string,*>` 캐스트 — `{{키}}` 템플릿 치환 루프의 임의 키 인덱스
+  - `TOOL_FORM_SEEDS[key]`·`CARD_INCIDENT_TYPE[id]`·`VISIT_STATUS[status]`·`NC_FIELDS[k]`·`NC_LABELS[k]`·`STEP_LABELS`·`NEXT_LABEL`·`SUBJ_KEY`·`BANKS`·`BOOKS` — 리터럴 맵의 동적 인덱스를 `Object.<string,*>` 캐스트로 일괄 해소
+  - `myMembership()` 반환 정밀화 — `.facilities`·`.role`·`.facility_id` 접근 하류 해소 (carework 뷰 공통)
+- **정직한 계약 수정**:
+  - `toCsv` rowMapper 콜백 `object` → `*` 캐스트 — 배열 행 접근 허용 (care-handover·care-visit·care-incident 등 CSV 내보내기 공통)
+  - `attachClientPicker(input)` 호출부 `HTMLInputElement|null` 가드 — `null` 비허용 시그니처에 명시 캐스트 대신 가드 분기 (care-visit·care-handover·care-custom-form·care-incident·care-log·care-roster)
+  - `doc-md.js` `flush` 파라미터 — 비구조화 `([listOnly])` → boolean 정정 (callers가 boolean 전달, 오버로드·반복 불가 에러 해소)
+  - `computeCareCost` `nonCovered` 유니언 접근 `'nonCovered' in r` 가드 — 시설급여 전용 필드의 재가급여 경로 부재 명문화
+  - `care-flow` 모듈 상태 `*[]|null`·`Object.<string,*>`·`Set<*>` 명문화 — 클로저 경계에서 모듈 변수 좁히기 리셋 → `(_concepts || [])`·`(await _load()) || []` 로컬 정규화
+  - `addFormDoc`·`saveFormDoc`·`_pushFormDoc` 등 기입 문서 파이프라인 파라미터 명문화 (form-template-store)
+- 결과: 잔여 1,476 → **810건 (-666)**, 기준선 88 → **37파일**, `check:types` 0 유지. 유닛 전체(1,866)·carework DOM 89건 통과. **잔여는 `src/exams/cosmetic` 클러스터(810건)뿐 — carework 시험 전용 모듈 전량 소진 완료**
+
+
+
 ## 2026-11-12 feat(types): noImplicitAny 소진 7차 — src/views 전량 소진 완료 (Phase 1 지속)
 
 - **디렉터리 전량 소진**: src/views ~819건 → 0, 30+파일 — JSDoc 주석 + typedef·캐스트 중심. 대형 클러스터: textbook-search(69)·reader-render(59)·trainer-drills(57)·analysis-view·dictionary·trainer·exam-sim 전수·dashboard-queue·textbook-reader
