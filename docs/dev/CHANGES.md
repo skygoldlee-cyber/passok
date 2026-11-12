@@ -1,6 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 chore(shell): 사이드바 숨겨진 글자 크게 버튼 잔재 제거
+
+- `index.template.html` 사이드바 푸터의 `#font-size-toggle`을 `is-hidden` 영구 비표시로 남겨둔 잔재 삭제 — 7d3caab4d2에서 기능을 홈 화면(PC 대시보드 + carework 실무 홈)으로 옮기며 숨겨둔 사멸 표면. id 참조 CSS·JS·테스트 없음
+- 기능 자체는 변경 없음 — 노출 표면 3곳(`html/views/dashboard.html`·`html/exams/carework/care-home.html`·모바일 탭바)과 `ui-mode.js` `toggleFontSize`/`applyFontScale` 유지 (A-18)
+
+
 ## 2026-11-12 fix(a11y): 글자 크게·텍스트 확대 배치 결함 일괄 수정 — A-18 신설 + UX-CTL-03 간격 위반 시정
 
 - **A-18 신설 (앱 내 글자 크기 스케일)**: `ui_font_scale` 토글(font-lg 112.5%·font-xl 125%)이 구현돼 있으나 SPEC 행이 없어 추적성 공백 — SC 1.4.4 보완 경로로 등록. A-13 계약(무손실·무오버플로) 공유, `responsive-flow.spec.js`에 font-xl 실측 e2e 추가 (문서 오버플로·탭 라벨 침범·더보기 도달·설정 넘침 단언)
