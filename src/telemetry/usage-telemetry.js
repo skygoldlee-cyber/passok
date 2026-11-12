@@ -67,7 +67,9 @@ export function buildEventPayload(event, meta = {}, sessionId = getTelemetrySess
     };
 }
 
-/** 기본 전송 — Supabase usage_events 테이블 (익명 insert 정책, schema.sql §6) */
+/** 기본 전송 — Supabase usage_events 테이블 (익명 insert 정책, schema.sql §6)
+ * @param {Object[]} rows
+ */
 async function defaultInsert(rows) {
     const sb = await getSupabase();
     if (!sb) return { disabled: true };
@@ -83,12 +85,13 @@ function _loadQueue() {
     } catch { return []; }
 }
 
+/** @param {*[]} q */
 function _saveQueue(q) {
     try { safeSetItem(STORAGE_KEYS.TELEMETRY_QUEUE, JSON.stringify(q)); }
     catch { /* 저장 실패 시 유실 — 전송 실패 자체가 이미 처리된 상태 */ }
 }
 
-/** 전송 실패·오프라인 이벤트를 로컬 큐에 보관 — 상한 200, 초과 시 최신 유지 */
+/** 전송 실패·오프라인 이벤트를 로컬 큐에 보관 — 상한 200, 초과 시 최신 유지 @param {*} row */
 function _enqueue(row) {
     try {
         const q = _loadQueue();
@@ -100,6 +103,7 @@ function _enqueue(row) {
 /**
  * 큐잉된 이벤트 재전송 — online 이벤트·다음 reportEvent 시 호출.
  * 전부 재시도하고 실패분은 다시 큐잉한다 (부분 성공 허용).
+ * @param {import('../core/types.js').TelemetryDeps} [deps]
  */
 export async function flushTelemetryQueue(deps = {}) {
     const q = _loadQueue();
@@ -123,7 +127,7 @@ export async function flushTelemetryQueue(deps = {}) {
  * 절대 throw하지 않는다. 오프라인이면 큐에 보관하고 'queued' 반환.
  * @param {string} event 이벤트명
  * @param {Object} [meta] 집계용 부가 수치
- * @param {Object} [deps] 테스트 주입용 { insert, online, automated }
+ * @param {import('../core/types.js').TelemetryDeps} [deps] 테스트 주입용 { insert, online, automated }
  * @returns {Promise<'sent'|'skipped'|'consent_denied'|'automated'|'queued'|'capped'|'disabled'|'failed'>}
  */
 export async function reportEvent(event, meta = {}, deps = {}) {
@@ -151,6 +155,7 @@ export async function reportEvent(event, meta = {}, deps = {}) {
 /**
  * 방문 분모 이벤트 (UX-MET-06/07) — 페이지 로드당 1회 'session_start' 전송.
  * 세션당 상한·동의·화이트리스트는 reportEvent가 처리한다. 절대 throw하지 않음.
+ * @param {import('../core/types.js').TelemetryDeps} [deps]
  */
 export function reportSessionStart(deps = {}) {
     // entry_src: 유입 채널 추적 (PAY-04 전환 퍼널) — ?src= 캡처값, 미설정 시 생략
@@ -175,7 +180,7 @@ export function initTelemetryQueueFlush() {
  * install_id는 buildEventPayload가 자동 첨부한다 (UX-MET-07 — owner와 동일
  * DEVICE_ID 값을 install_id 키로 싣는다).
  * Supabase 미설정 환경은 조용히 no-op. 절대 throw하지 않는다.
- * @param {Object} [deps] 테스트 주입용 { insert, load, today }
+ * @param {import('../core/types.js').TelemetryDeps} [deps] 테스트 주입용 { insert, load, today }
  * @returns {Promise<'sent'|'skipped'|'consent_denied'|'automated'|'queued'|'capped'|'disabled'|'failed'>}
  */
 export async function maybeReportUsageSnapshot(deps = {}) {

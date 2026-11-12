@@ -22,6 +22,7 @@ const META_KEYS = new Set([STORAGE_KEYS.SYNC_DIRTY, STORAGE_KEYS.SYNC_LAST_TS]);
 const PUSH_DEBOUNCE_MS = 2500;
 
 let _signedIn = false;
+/** @type {ReturnType<typeof setTimeout>|null} */
 let _pushTimer = null;
 let _applyingRemote = false; // 원격 페이로드 적용 중 — 그 쓰기는 dirty로 세지 않음
 
@@ -38,6 +39,7 @@ function getDeviceId() {
 export function collectSyncPayload() {
     // listScopedKeys는 현재 시험 소속 키만 반환하므로 unscopedKey는 null을 내지 않는다
     const keys = [...SYNC_STATIC, .../** @type {string[]} */ (listScopedKeys(isDailyCompletedKey).map(unscopedKey))];
+    /** @type {Object.<string, string>} */
     const payload = {};
     keys.forEach(k => {
         const v = safeGetItem(k);
@@ -46,16 +48,19 @@ export function collectSyncPayload() {
     return payload;
 }
 
+/** @param {string} text */
 function updateSyncStatus(text) {
     const el = document.getElementById('auth-sync-status');
     if (el) el.textContent = text;
 }
 
+/** @param {string} iso */
 function fmtTs(iso) {
     try { return new Date(iso).toLocaleString('ko-KR'); } catch (_) { return iso; }
 }
 
 // ── 쓰기 훅 → dirty 표시 + 로그인 시 디바운스 push ──────────────
+/** @param {string} logicalKey */
 function onLocalWrite(logicalKey) {
     if (META_KEYS.has(logicalKey)) return;
     if (!SYNC_STATIC.has(logicalKey) && !isDailyCompletedKey(logicalKey)) return;
@@ -66,7 +71,7 @@ function onLocalWrite(logicalKey) {
 export function markDirty() {
     safeSetItem(STORAGE_KEYS.SYNC_DIRTY, '1');
     if (!_signedIn || !canCloudSync()) return;
-    clearTimeout(_pushTimer);
+    if (_pushTimer !== null) clearTimeout(_pushTimer);
     _pushTimer = setTimeout(() => { pushSync().catch(() => {}); }, PUSH_DEBOUNCE_MS);
 }
 
@@ -96,6 +101,7 @@ export async function pushSync() {
 }
 
 // ── 원격 페이로드 적용 — 화이트리스트 키만, 현재 시험 네임스페이스에 기록 ──
+/** @param {*} payload */
 function applyPayload(payload) {
     if (!payload || typeof payload !== 'object') return 0;
     _applyingRemote = true;
@@ -117,6 +123,7 @@ function applyPayload(payload) {
 // 배열로 최근 3건까지 보관 (연속 충돌 시 이전 백업이 덮어쓰이지 않게)
 const CONFLICT_BACKUP_MAX = 3;
 
+/** @param {*} payload @param {string} source */
 function preserveLoserSnapshot(payload, source) {
     if (!payload || typeof payload !== 'object') return;
     let list = [];
@@ -212,7 +219,7 @@ export async function initSync() {
     } catch (_) { /* 오프라인 등 — 로컬 전용으로 계속 동작 */ }
     try {
         const sb = await getSupabase();
-        sb?.auth.onAuthStateChange((_event, session) => {
+        sb?.auth.onAuthStateChange((/** @type {string} */ _event, /** @type {any} */ session) => {
             const was = _signedIn;
             _signedIn = !!session;
             if (!_signedIn || was) return;

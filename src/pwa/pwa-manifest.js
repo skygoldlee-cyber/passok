@@ -64,7 +64,9 @@
         const savedTheme = localStorage.getItem('appTheme');
         const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
         const isLight = (savedTheme || (prefersLight ? 'light' : 'dark')) === 'light';
+        /** @param {number} v */
         const lin = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+        /** @param {string} hex @param {number} maxLum */
         const darken = (hex, maxLum) => {
             const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
             if (!m) return null;
@@ -79,6 +81,7 @@
             return '#000000';
         };
         const theme = (exam && typeof exam.theme === 'object' && exam.theme) || {};
+        /** @type {Object.<string, string>} */
         const applied = {};
         for (const token of Object.keys(theme)) {
             const value = theme[token];

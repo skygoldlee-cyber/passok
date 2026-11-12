@@ -4,6 +4,7 @@
 // 앱 시작 비용을 늘리지 않고, 미설정 환경(isSupabaseConfigured()=false)에서는 조용히 비활성.
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, isSupabaseConfigured } from './supabase-config.js';
 
+/** @type {any} — vendor supabase-js 클라이언트 (타입 정의 없음) */
 let _client = null;
 /** @type {Promise<*|null>|null} — 생성 중 재호출 시 같은 프로미스 공유 (중복 클라이언트 방지) */
 let _clientPromise = null;
@@ -63,9 +64,11 @@ export async function getAuthSession() {
     return data?.session ?? null;
 }
 
-/** 로그인 상태 변화 구독 — session=null이면 로그아웃 상태. 두 번째 인자로 이벤트명 전달 */
+/** 로그인 상태 변화 구독 — session=null이면 로그아웃 상태. 두 번째 인자로 이벤트명 전달
+ * @param {(session: any, event: string) => void} cb
+ */
 export async function onAuthChange(cb) {
     const sb = await getSupabase();
     if (!sb) return;
-    sb.auth.onAuthStateChange((event, session) => cb(session, event));
+    sb.auth.onAuthStateChange((/** @type {string} */ event, /** @type {any} */ session) => cb(session, event));
 }

@@ -341,5 +341,20 @@
  * @property {Array<{key:string, title:string, file:string, storyFile?:string}>} chapters
  */
 
+/* =======================================================
+   📡 텔레메트리 의존성 주입 타입
+   ======================================================= */
+
+/**
+ * 텔레메트리 전송 경로의 테스트 주입 deps — usage-telemetry·error-telemetry 공용.
+ * 실 전송 함수를 대체해 네트워크 없이 전송·큐잉 경로를 검증한다.
+ * @typedef {Object} TelemetryDeps
+ * @property {(rows: Object[]) => Promise<{error?: *, disabled?: boolean}>} [insert] 기본 Supabase insert 대체
+ * @property {boolean} [automated] 자동화·로컬 런타임 판정 강제 지정
+ * @property {boolean} [online] 오프라인 큐 경로 강제 지정 (usage-telemetry)
+ * @property {string} [today] 날짜 키 강제 지정 (usage-telemetry 스냅샷)
+ * @property {() => Promise<string>} [load] 사용 통계 페이로드 로더 대체 (usage-telemetry 스냅샷)
+ */
+
 // 런타임 export는 없습니다. (타입 전용 모듈)
 export {};

@@ -1,6 +1,16 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(types): noImplicitAny 소진 2차 — src/pwa·pro·auth-sync·telemetry 104건 → 0 (Phase 1 지속)
+
+- **4개 디렉터리 13파일 소진**: pwa(20)·pro(21)·auth-sync(28)·telemetry(35) — JSDoc 주석 추가가 대부분이며, 인덱스·nullable 경계만 정직하게 좁힘
+- **`TelemetryDeps` typedef 신설 (types.js)**: usage-telemetry·error-telemetry 공용 테스트 주입 계약(insert·automated·online·today·load) — 기존 `@param {Object}` 선언은 `deps.insert` 등 접근 시 TS2339를 유발하던 비계약이었음
+- **`ErrorMeta` typedef (error-telemetry)**: `meta.view|filename|lineno|extra` 접근이 `Object` 타입에서 TS2339 나던 것을 실제 필드로 선언
+- **하류 정직 해소 2건**: `clearTimeout(_pushTimer)`에 `null` 가드(sync — 타이머 id는 nullable 선언이 정직), `dataset.proFeature ?? ''`(pro-upgrade — data 속성 무값 접근은 `string|undefined`)
+- **정확한 계약 정정 사례**: `onAuthChange` 콜백 시그니처 선언으로 auth-view·pro-redeem의 콜백 인자가 맥락 타입을 획득 — vendor supabase-js는 타입 정의 부재라 클라이언트를 `any`로 명시(정직한 경계)
+- 결과: 잔여 3,797 → **3,693건 (-104)**, 기준선 208 → 195파일, `check:types` 0 유지. 유닛 전체·관련 DOM 7파일 110건 통과
+
+
 ## 2026-11-12 feat(types): noImplicitAny 래칫 게이트 + src/core 전면 소진 — TS 점진 전환 Phase 1 (ADR-0015)
 
 - **`check:any` 게이트 신설** (`tools/check/check_noimplicitany.js`): tsc를 `--noImplicitAny`로 별도 실행해 파일별 에러 수를 `tools/state/noimplicitany_baseline.json`과 대조 — 초과·신규 파일 차단(단조 감소 계약, filename_baseline과 동일 패턴). `--update` 갱신·`--dir <path>` 디렉터리 리포트 지원. `all` 프리셋 P1 편입, jsconfig 잔여 strict 플래그(noImplicitAny — 나머지는 이미 활성)의 소진 경로를 기계화

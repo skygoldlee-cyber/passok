@@ -8,8 +8,11 @@ import { hasProEntitlement } from '../pro/pro-upgrade.js';
 import { reportEvent } from '../telemetry/usage-telemetry.js';
 import { STORAGE_KEYS } from '../core/storage-keys.js';
 
+/** @param {string} id */
 const el = id => /** @type {HTMLInputElement|null} */ (document.getElementById(id));
+/** @param {Element|null} n */
 const show = n => n && n.classList.remove('is-hidden');
+/** @param {Element|null} n */
 const hide = n => n && n.classList.add('is-hidden');
 
 // Supabase 영문 오류 → 한글 안내
@@ -23,12 +26,14 @@ const ERR_MAP = [
     [/rate limit|too many requests/i, '요청이 너무 많습니다. 잠시 후 다시 시도하세요.'],
     [/token has expired|invalid.*token|otp.*expired|otp.*invalid/i, '인증 코드가 만료되었거나 올바르지 않습니다.'],
 ];
+/** @param {*} err @returns {string} */
 function friendlyError(err) {
     const msg = err?.message || String(err);
     for (const [re, ko] of ERR_MAP) if (re.test(msg)) return ko;
     return msg;
 }
 
+/** @param {string} [text] @param {boolean} [isError] */
 function setMsg(text, isError = false) {
     const box = el('auth-modal-msg');
     if (!box) return;
@@ -150,11 +155,13 @@ function _loadCooldownUntil() {
     const v = parseInt(safeGetItem(COOLDOWN_KEY) || '0', 10);
     return Number.isNaN(v) ? 0 : v;
 }
+/** @param {number} ts */
 function _saveCooldownUntil(ts) {
     if (ts > 0) safeSetItem(COOLDOWN_KEY, String(ts));
     else safeRemoveItem(COOLDOWN_KEY);
 }
 
+/** @param {HTMLButtonElement|null} btn @param {number} [remainingSec] */
 function startEmailLoginCooldown(btn, remainingSec = COOLDOWN_SEC) {
     _emailLoginCooldown = remainingSec;
     _saveCooldownUntil(Date.now() + remainingSec * 1000);
@@ -196,7 +203,7 @@ export async function authEmailLogin() {
     if (error) { setMsg(friendlyError(error), true); return; }
     show(el('auth-otp-area'));
     setMsg('로그인 링크와 인증 코드를 이메일로 보냈습니다. 메일의 링크를 누르거나, 메일의 인증 코드를 아래에 입력하세요.');
-    startEmailLoginCooldown(document.querySelector('[data-click="authEmailLogin"]'));
+    startEmailLoginCooldown(/** @type {HTMLButtonElement|null} */ (document.querySelector('[data-click="authEmailLogin"]')));
 }
 
 // 소셜 로그인 허용 프로바이더 — data-arg 위임이라 임의 문자열이 들어올 수 있어 화이트리스트 검증
@@ -208,7 +215,7 @@ const OAUTH_PROVIDERS = new Set(['google', 'kakao']);
  * 성공 시 페이지가 떠나므로 이후 코드는 오류 경로에만 도달한다.
  * 주의: 수단마다 별도 auth.users 계정 — 유료는 활성화한 계정에만 귀속된다.
  */
-export async function authOAuth(provider) {
+export async function authOAuth(/** @type {string} */ provider) {
     const sb = await getSupabase();
     if (!sb || !OAUTH_PROVIDERS.has(provider)) return;
     setMsg('로그인 페이지로 이동 중…');
@@ -235,7 +242,7 @@ export async function authForgotPassword() {
     if (error) { setMsg(friendlyError(error), true); return; }
     show(el('auth-otp-area'));
     setMsg('로그인 메일을 보냈습니다. 메일의 코드로 로그인한 뒤 계정 화면의 "비밀번호 설정"에서 새 비밀번호를 지정하세요. (메일 로그인만 사용하는 경우 그대로 로그인하면 됩니다)');
-    startEmailLoginCooldown(document.querySelector('[data-click="authEmailLogin"]'));
+    startEmailLoginCooldown(/** @type {HTMLButtonElement|null} */ (document.querySelector('[data-click="authEmailLogin"]')));
 }
 
 /** @deprecated authEmailLogin으로 통합 — 기존 핸들러 호환용 별칭 */
@@ -350,6 +357,7 @@ async function handleAuthLanding() {
 export async function initAuthView() {
     if (!el('auth-modal')) return;
     // Enter 키 제출 — 버튼 클릭 없이 폼 완료
+    /** @param {string} id @param {() => void} fn */
     const enter = (id, fn) => {
         const node = el(id);
         if (node) node.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); fn(); } });
@@ -360,7 +368,7 @@ export async function initAuthView() {
     enter('auth-new-password', authSetPassword);
     // 새로고침 전 발송의 남은 쿨다운 복원
     const remaining = Math.ceil((_loadCooldownUntil() - Date.now()) / 1000);
-    if (remaining > 0) startEmailLoginCooldown(document.querySelector('[data-click="authEmailLogin"]'), remaining);
+    if (remaining > 0) startEmailLoginCooldown(/** @type {HTMLButtonElement|null} */ (document.querySelector('[data-click="authEmailLogin"]')), remaining);
     try { handleAuthLanding().catch(() => {}); } catch (_) {}
     try { await refreshAuthUI(); } catch (_) { /* 오프라인 등 — 로그인 UI는 비로그인 상태로 둠 */ }
     try {
