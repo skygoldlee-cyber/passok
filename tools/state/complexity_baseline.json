@@ -351,11 +351,6 @@
       "max": 14,
       "sum": 14
     },
-    "src/reader/reader-format.js": {
-      "count": 1,
-      "max": 18,
-      "sum": 18
-    },
     "src/reader/textbook-core.js": {
       "count": 4,
       "max": 42,

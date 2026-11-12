@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-12 refactor(complexity): 4라운드 — formatSectionContentForReader 파이프라인화 (331→330)
+
+- **`formatSectionContentForReader`** (reader-format.js, 18→≤10): ~420행 단일 함수의 15개 순차 HTML 변환 패스를 주석 경계 그대로 13개 private 헬퍼로 추출 — `_resolveImgSrcs`·`_linkifyToc`·`_linkifyExamLinks`·`_linkifyCrossSubject`·`_linkifyRefDocs`·`_linkifyCitations`·`_stripPageRefs`·`_injectRefPanel`·`_linkifyKeywordRefs`·`_linkifyGlossaryMarks`·`_addArticleSearch`·`_linkifyGlossaryTerms`·`_linkifyMindmapTable`. 본체는 `html = _fn(html)` 파이프라인 — **파일 경고 0건 소진**
+- **검증**: unit reader-format·mermaid 통과 + DOM 53건(study-reader·reader-ref-links) · check:types 0
+
+
 ## 2026-11-12 refactor(complexity): 3라운드 — buildWeeklyDiagnosisPrompt·populateSubjectSelects·flowNext 분해 (334→331)
 
 - **`buildWeeklyDiagnosisPrompt`** (ai-client.js, 25→≤10): 수치 정규화(`_diagValues`) + 진단 라인을 `_DIAG_LINES` 빌더 테이블로 전환 — 라인별 조건이 독립 콜백으로 분리

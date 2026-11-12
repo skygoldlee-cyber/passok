@@ -9,7 +9,7 @@
 
 `node tools/check/check_complexity.js` (eslint complexity 임계 10, Δ 비교는 동일 임계 유지 필수).
 
-- 기준선: **331건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
+- 기준선: **330건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
 - 분해 순서: 복잡도 점수 내림차순 — 상위부터 처리해야 곡선이 꺾인다
 - 분해 완료 시 `--update`로 기준선을 축소하고 `--report`로 이 표를 재생성한다
 - 분해 규약: 렌더 분기는 `if` 체인 → early return·테이블 조회·서브함수 추출로 내리고, 동작 변경 없이 구조만 정리한다. 대형 렌더 함수는 섹션별 private 렌더 함수로 분할
@@ -118,7 +118,6 @@
 | 18 | `updateCalcComputed` | src/exams/cosmetic/views/formula-calc.js:70 |
 | 18 | `_doSearch` | src/reader/html-viewer.js:363 |
 | 18 | `_getSvgIntrinsicSize` | src/reader/mermaid-render.js:138 |
-| 18 | `formatSectionContentForReader` | src/reader/reader-format.js:76 |
 | 18 | `checkIngredientsUpdate` | src/shell/app-shell.js:288 |
 | 18 | `_unitObservationSeqs` | src/study/analysis-engine.js:218 |
 | 18 | `renderDictionary` | src/views/dictionary.js:239 |

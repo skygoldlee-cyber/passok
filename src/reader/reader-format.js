@@ -84,6 +84,23 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
         allowMermaid: true
     });
 
+    html = _resolveImgSrcs(html, filePath);
+    html = _linkifyToc(html, sectionTitle);
+    html = _linkifyExamLinks(html);
+    html = _linkifyCrossSubject(html);
+    html = _linkifyRefDocs(html);
+    html = _linkifyCitations(html);
+    html = _stripPageRefs(html);
+    html = _injectRefPanel(html, refPath, refFiles, refDir);
+    html = _linkifyKeywordRefs(html);
+    html = _linkifyGlossaryMarks(html, refPath);
+    html = _addArticleSearch(html);
+    html = _linkifyGlossaryTerms(html, glossaryKeywords);
+    html = _linkifyMindmapTable(html);
+    return html;
+}
+/** 이미지 src 해석 — 상대 경로는 md 디렉터리 기준, /content/교재/ 는 시험 루트 기준. @param {string} html @param {*} filePath @returns {string} */
+function _resolveImgSrcs(html, filePath) {
     // 이미지 src 해석 — 상대 경로(images/x.png)는 교재 md 디렉터리 기준으로,
     // 구형 '/content/교재/...' 절대 경로는 활성 시험 루트 기준으로 보정한다.
     // (md 원문의 상대 경로는 GitHub 등 일반 뷰어에서도 그대로 보인다)
@@ -99,7 +116,11 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             return resolved === src ? m : m.replace(`src="${src}"`, `src="${resolved}"`);
         });
     }
+    return html;
+}
 
+/** 본문 목차 리스트 항목 → data-toc-jump 하이퍼링크. @param {string} html @param {*} sectionTitle @returns {string} */
+function _linkifyToc(html, sectionTitle) {
     // 본문 목차(## 📋 목차) 섹션의 리스트 항목 → 대응 섹션으로 스크롤되는 하이퍼링크 변환
     // 마크다운 파서가 - **Chapter 01.** xxx를 <div class="md-list-item">...<span>...</span></div>로 변환
     // 사이드바 TOC와 동일하게 data-toc-jump 속성을 부여하여 textbook-reader.js에서 위임 처리
@@ -115,7 +136,11 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             return `<div class="md-list-item" style="padding-left: 0.5rem;">${linkedInner}</div>`;
         });
     }
+    return html;
+}
 
+/** 기출문제·과목 교차참조 링크 → 앱 내 뷰어/과목 이동 링크. @param {string} html @returns {string} */
+function _linkifyExamLinks(html) {
     // 기출문제 링크 → 앱 내 HTML 문제집 뷰어(ExamViewer)로 열기
     // 마크다운 파서가 [text](기출문제/과목N_...)를 <a href="기출문제/과목N_...">text</a>로 변환한 후 처리
     // 실제 파일 경로는 DATA_REGISTRY.exams에서 동적 조회 (하드코딩 제거)
@@ -153,7 +178,11 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             return `<a href="#" data-ref-subject="${escapeHTML(subjKey)}" class="cross-subject-link" style="color:var(--color-primary,#1f6feb);text-decoration:underline dotted;font-weight:600;">${escapeHTML(linkText)}</a>`;
         }
     );
+    return html;
+}
 
+/** 참조자료 PDF 링크 → HTML 뷰어 링크 (레거시 fallback). @param {string} html @returns {string} */
+function _linkifyCrossSubject(html) {
     // 참조자료 PDF 링크 → 앱 내 HTML 뷰어로 열기 (레거시 fallback)
     // 2026-09 교재 전수조사 이후 모든 PDF 링크가 ref_md MD 링크로 변환됨.
     // 마크다운 파서가 [file.pdf](../참조자료/...)를 <a href="../참조자료/...">file.pdf</a>로 변환한 후 처리
@@ -169,7 +198,11 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             return match;
         }
     );
+    return html;
+}
 
+/** ref_md·과목별·지식 문서 MD 링크 → data-ref-md/data-ref-html 뷰어 링크. @param {string} html @returns {string} */
+function _linkifyRefDocs(html) {
     // 해시 접미를 data-ref-line(#LNN)/data-ref-anchor(슬러그)로 전달 — 뷰어 라인 스크롤용
     const refHashAttrs = (/** @type {*} */ hash) => {
         if (!hash || hash.length < 2) return '';
@@ -236,7 +269,11 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             return `<a href="#" data-ref-html="${escapeHTML(absPath)}"${refHashAttrs(hash)} class="source-link"><i class="fa-solid fa-file-lines"></i> ${escapeHTML(displayName)}</a>${lawExtLink(fileName, 'ref-law-ext', '근거 고시', '근거 고시 원문')}`;
         }
     );
+    return html;
+}
 
+/** 출처 경로(md/pdf)·참조 PDF → 뷰어 링크. @param {string} html @returns {string} */
+function _linkifyCitations(html) {
     // 출처 파일 경로를 하이퍼링크로 변환
     // 패턴1: "출처: `../참조자료/...md`" (기본모드)
     // 패턴2: "출처: `1과목_참조자료/...md`" (이야기모드 — ../ 없음)
@@ -281,7 +318,11 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             return match;
         }
     );
+    return html;
+}
 
+/** QA 스탬프·본문 페이지 참조(p.NN) 제거 — mermaid 블록 보호. @param {string} html @returns {string} */
+function _stripPageRefs(html) {
     // 유지보수 QA 스탬프 '최종 확인: ...' — 개발 검수 정보이므로 사용자 렌더에서 제거
     // (소스 md에는 유지 — 법령 대조 추적용). 📌출처 라인 말미의 '| 최종 확인: ...' 제거
     html = stripQaStamps(html);
@@ -311,7 +352,11 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
     html = html.replace(/(?<![a-zA-Z])p\.\d+(?:\s*[~-]\s*p?\.\d+)?(?![a-zA])/gi, '');
     // mermaid 블록 복원
     html = html.replace(/\uE002M(\d+)\uE003/g, (m, i) => _mermaidPhs[parseInt(i)] || '');
+    return html;
+}
 
+/** 출처 라인 참조 링크 + 과목별 참조자료 패널 삽입. @param {string} html @param {*} refPath @param {*} refFiles @param {*} refDir @returns {string} */
+function _injectRefPanel(html, refPath, refFiles, refDir) {
     // 출처/참고 라인에 참조자료 하이퍼링크 추가 (앱 내 HTML 뷰어 사용)
     // 단, 이미 참조 링크가 있는 경우 중복 추가하지 않음
     if (refPath) {
@@ -339,7 +384,11 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             html = html.replace(/(<\/blockquote>)/, `$1${refBlock}`);
         }
     }
+    return html;
+}
 
+/** 본문 키워드 → KEYWORD_REF_MAP 참조 링크. @param {string} html @returns {string} */
+function _linkifyKeywordRefs(html) {
     // 본문 키워드 자동 하이퍼링크: 법령명/별표명을 클릭 가능한 링크로 변환
     // <p>와 <li> 내 텍스트 노드만 처리 (기존 <a> 태그, <td>, 출처 라인 제외)
     html = html.replace(/<(p|li)>([^<]*)<\/\1>/g, (match, tag, text) => {
@@ -358,7 +407,11 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
         }
         return `<${tag}>${result}</${tag}>`;
     });
+    return html;
+}
 
+/** (LNN)/(LNN|file.pdf) 마인드맵 표기 → 용어집 앵커 링크. @param {string} html @param {*} refPath @returns {string} */
+function _linkifyGlossaryMarks(html, refPath) {
     // 마인드맵 노드 상세 매핑: (LNN) → 같은 페이지 하단 용어집 테이블로 스크롤
     // 같은 td 셀 내의 텍스트를 키워드로 추출하여 용어집 앵커로 사용
     // 지원 형식: (L42) 동일 참조자료, (L42|file.pdf) 타 참조자료, (L?) 미발견
@@ -404,7 +457,11 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             return `(<a href="#glossary-${escapeHTML(idxKey)}" data-glossary="${escapeHTML(idxKey)}" class="glossary-link">L${lineNum}</a>)`;
         });
     }
+    return html;
+}
 
+/** 출처 라인 제N조 → data-ref-search/anchor 딥링크. @param {string} html @returns {string} */
+function _addArticleSearch(html) {
     // 출처 라인의 제N조를 추출하여 참조 링크에 data-ref-search + data-ref-anchor 자동 추가
     // 클릭 시 HTML 뷰어에서 해당 조문을 자동 검색 및 앵커 스크롤 (Deep Linking)
     html = html.split('\n').map(line => {
@@ -423,7 +480,11 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             `$1 data-ref-search="${escapeHTML(search)}" data-ref-anchor="${escapeHTML(search)}"`
         );
     }).join('\n');
+    return html;
+}
 
+/** 본문 용어집 키워드 → 용어집 앵커 링크 (한글 경계 판정). @param {string} html @param {*} glossaryKeywords @returns {string} */
+function _linkifyGlossaryTerms(html, glossaryKeywords) {
     // --- 본문 중 용어집 키워드 자동 링크 ---
     // 용어집에 등록된 키워드가 본문에 나오면 해당 용어집 앵커로 링크
     if (glossaryKeywords && glossaryKeywords.length > 0) {
@@ -460,7 +521,11 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             html = processed.replace(/\uE000P(\d+)\uE001/g, (m, i) => phs[parseInt(i)] || '');
         }
     }
+    return html;
+}
 
+/** 마인드맵 노드 상세 매핑 표 중분류 셀 → 섹션 점프 링크. @param {string} html @returns {string} */
+function _linkifyMindmapTable(html) {
     // --- 마인드맵 노드 상세 매핑 표: 중분류 셀을 섹션 점프 링크로 자동 변환 ---
     // "🗺️ 마인드맵 노드 상세 매핑" 다음에 오는 표의 2번째 열(중분류)을
     // data-toc-jump 링크로 변환하여 해당 섹션으로 바로 이동 가능하게 함.
@@ -498,9 +563,9 @@ export function formatSectionContentForReader(rawContent, filePath, refPath, ref
             return before + linked + after;
         }
     );
-
     return html;
 }
+
 
 /* =======================================================
    이야기형 서사 범위 태깅 (markStoryNarrative)
