@@ -304,6 +304,67 @@ export function showAlert(message, title = '알림') {
 
 const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+const _inertModals = new Set();
+
+/**
+ * UX-FORM-03 — 필드 인라인 오류 표시. `<p class="field-error" role="alert">`를
+ * 입력 바로 뒤에 삽입하고 aria-invalid + aria-describedby를 연결한다.
+ * @param {HTMLElement} input
+ * @param {string} message - 표시할 오류 메시지
+ */
+export function setFieldError(input, message) {
+    if (!input || !input.parentNode) return;
+    const errId = `${input.id || 'field'}-error`;
+    input.setAttribute('aria-invalid', 'true');
+    input.setAttribute('aria-describedby', errId);
+    let err = document.getElementById(errId);
+    if (!err) {
+        err = document.createElement('p');
+        err.className = 'field-error';
+        err.id = errId;
+        err.setAttribute('role', 'alert');
+        input.insertAdjacentElement('afterend', err);
+    }
+    err.innerHTML = `<i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> `;
+    err.appendChild(document.createTextNode(message));
+}
+
+/**
+ * 필드 인라인 오류 해제 — aria 속성 제거 + 오류 요소 삭제.
+ * @param {HTMLElement} input
+ */
+export function clearFieldError(input) {
+    if (!input) return;
+    input.removeAttribute('aria-invalid');
+    const errId = input.getAttribute('aria-describedby');
+    input.removeAttribute('aria-describedby');
+    if (errId) document.getElementById(errId)?.remove();
+}
+
+/**
+ * A-17 — 오버레이 하의 배경을 inert 처리 (키보드·스크린리더 가상 커서 격리).
+ * 모달이 .app-container 내부에 있으면 스킵 — 자신을 포함한 컨테이너를 inert하면 모달도 무력화된다.
+ * 추적 대상은 DOM에서 제거된 모달을 자동 정리 — untrap 미호출 경로(요소 제거·뷰 전환)에서도
+ * inert가 영구 누수되지 않는다.
+ * @param {HTMLElement} modalEl - 표시되는 모달
+ * @returns {() => void} inert 해제 함수
+ */
+function applyBackgroundInert(modalEl) {
+    const app = document.querySelector('.app-container');
+    if (!app || app.contains(modalEl)) return () => {};
+    const prune = () => {
+        for (const m of _inertModals) if (!m.isConnected) _inertModals.delete(m);
+    };
+    prune();
+    _inertModals.add(modalEl);
+    app.setAttribute('inert', '');
+    return () => {
+        _inertModals.delete(modalEl);
+        prune();
+        if (_inertModals.size === 0) app.removeAttribute('inert');
+    };
+}
+
 /**
  * 모달 내 포커스를 트랩하고, 닫힐 때 초점을 반환.
  * @param {HTMLElement} modalEl - 포커스를 트랩할 모달 컨테이너
@@ -315,6 +376,9 @@ export function trapFocus(modalEl, triggerEl) {
 
     /** @type {HTMLElement|null} */
     const previouslyFocused = triggerEl || /** @type {HTMLElement|null} */ (document.activeElement);
+
+    // A-17 — 오버레이 하의 배경은 inert (해제는 포커스 복귀보다 먼저 — inert 요소는 focus 불가)
+    const releaseInert = applyBackgroundInert(modalEl);
 
     // 첫 포커스 가능 요소로 초점 이동
     const focusables = modalEl.querySelectorAll(FOCUSABLE_SELECTOR);
@@ -353,6 +417,7 @@ export function trapFocus(modalEl, triggerEl) {
     // 해제 함수: 이벤트 리스너 제거 + 초점 반환
     return () => {
         modalEl.removeEventListener('keydown', onKeydown);
+        releaseInert();
         if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
             previouslyFocused.focus();
         }

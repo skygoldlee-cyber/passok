@@ -11,7 +11,7 @@
 //   ③ 요약 + 첫 카드 학습 버튼 (data-click 위임 — startSubjectStudy)
 // ------------------------------------------------------------
 import { safeGetItem, safeSetItem } from '../core/state.js';
-import { trapFocus, showToast } from '../ui-utils.js';
+import { trapFocus, setFieldError, clearFieldError } from '../ui-utils.js';
 import { getExamAppName, getMinExamLeadDays } from '../core/exam-context.js';
 import { esc } from '../core/sanitize.js';
 import { getStudyGoals, setStudyGoals, getExamDate, setExamDate, getExamLeadStatus } from '../study/study-tracker.js';
@@ -97,10 +97,28 @@ function _commitStep(overlay) {
         return true;
     }
     if (_wizStep === 1) {
-        const cards = parseInt(/** @type {HTMLInputElement|null} */ (overlay.querySelector('#onboarding-daily-cards'))?.value || '', 10);
-        const days = parseInt(/** @type {HTMLInputElement|null} */ (overlay.querySelector('#onboarding-weekly-days'))?.value || '', 10);
-        if (!Number.isFinite(cards) || cards < 1 || !Number.isFinite(days) || days < 1 || days > 7) {
-            showToast('목표를 확인해 주세요 — 카드 1장 이상, 주 1~7일', 'error');
+        const cardsInput = /** @type {HTMLInputElement|null} */ (overlay.querySelector('#onboarding-daily-cards'));
+        const daysInput = /** @type {HTMLInputElement|null} */ (overlay.querySelector('#onboarding-weekly-days'));
+        const cards = parseInt(cardsInput?.value || '', 10);
+        const days = parseInt(daysInput?.value || '', 10);
+        // UX-FORM-03 — 필드별 인라인 오류 + 첫 오류 필드로 포커스 이동
+        let firstErr = null;
+        if (cardsInput) {
+            clearFieldError(cardsInput);
+            if (!Number.isFinite(cards) || cards < 1 || cards > 500) {
+                setFieldError(cardsInput, '일일 카드 목표는 1~500장 사이로 입력해 주세요.');
+                firstErr = firstErr || cardsInput;
+            }
+        }
+        if (daysInput) {
+            clearFieldError(daysInput);
+            if (!Number.isFinite(days) || days < 1 || days > 7) {
+                setFieldError(daysInput, '주간 학습 일수는 1~7일 사이로 입력해 주세요.');
+                firstErr = firstErr || daysInput;
+            }
+        }
+        if (firstErr) {
+            firstErr.focus();
             return false;
         }
         const g = getStudyGoals();
@@ -128,6 +146,11 @@ export function showOnboardingModal() {
     });
 
     const untrapFocus = trapFocus(dialog);
+    // UX-FORM-03 — 수정 시 인라인 오류 해제
+    overlay.addEventListener('input', (e) => {
+        const t = /** @type {Element} */ (e.target);
+        if (t instanceof HTMLElement && t.getAttribute('aria-invalid') === 'true') clearFieldError(t);
+    });
     const close = () => {
         overlay.classList.remove('is-visible');
         dialog.classList.remove('is-visible');

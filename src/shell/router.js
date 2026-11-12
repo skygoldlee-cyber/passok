@@ -122,6 +122,9 @@ export function navigateToView(target, ctx) {
     if (titlesMap[target]) {
         if (viewTitle) viewTitle.textContent = titlesMap[target].title;
         if (viewSubtitle) viewSubtitle.textContent = titlesMap[target].subtitle;
+        // A-17 — SPA 뷰 전환은 페이지 전환: document.title도 갱신해 탭·스크린리더에 위치 반영
+        const appName = getCurrentExamId() ? (getExamAppName() || 'PassOK') : 'PassOK';
+        document.title = `${titlesMap[target].title} · ${appName}`;
     }
 
     state.currentView = target;

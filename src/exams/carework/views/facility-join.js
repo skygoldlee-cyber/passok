@@ -3,7 +3,7 @@
 import { myMembership, syncFacilityNav, joinFacility, ROLES, getOrgName, setLocalOrgName, refreshOrgName } from '../facility.js';
 import { getAuthSession } from '../../../auth-sync/supabase-client.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { showToast } from '../../../ui-utils.js';
+import { showToast, setFieldError, clearFieldError } from '../../../ui-utils.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -32,6 +32,11 @@ async function render() {
                 <p class="care-log-hint">모든 출력물 헤더에 기관명이 표기됩니다. 기관 가입 후에는 기관 등록명이 자동 표기됩니다.</p>
                 <div class="care-calc-actions"><button data-click="facilityOrgNameSave" class="btn btn-secondary">기관명 저장</button></div>
             </div>`;
+        // UX-FORM-03 — 수정 시 인라인 오류 해제
+        $('fj-code')?.addEventListener('input', (e) => {
+            const t = /** @type {HTMLElement} */ (e.target);
+            if (t.getAttribute('aria-invalid') === 'true') clearFieldError(t);
+        });
         return;
     }
     const f = m.facilities || {};
@@ -45,10 +50,20 @@ async function render() {
 export async function facilityJoin() {
     const el = /** @type {HTMLInputElement|null} */ ($('fj-code'));
     const code = el?.value?.trim();
-    if (!code) { showToast('초대 코드를 입력하세요.', 'error'); return; }
+    if (!code) {
+        // UX-FORM-03 — 필수 필드 미입력은 인라인 오류 + 포커스
+        if (el) { setFieldError(el, '초대 코드를 입력하세요.'); el.focus(); }
+        return;
+    }
+    if (el) clearFieldError(el);
     proFeatureNotice('facility_workspace', '기관 워크스페이스');
     const r = await joinFacility(code);
-    if ('error' in r) { showToast(r.error, 'error'); return; }
+    if ('error' in r) {
+        // 서버 거부(코드 불일치·만료)도 해당 필드 오류로 표시
+        if (el) { setFieldError(el, r.error); el.focus(); }
+        else showToast(r.error, 'error');
+        return;
+    }
     showToast('기관에 가입했습니다.');
     await refreshOrgName();
     render();

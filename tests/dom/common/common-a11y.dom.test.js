@@ -1,5 +1,5 @@
 // tests/dom/common-a11y.dom.test.js — 접근성(a11y) 공통 시나리오
-// @spec A-01~07,A-10,A-11,UX-FB-06,UX-VFY-06
+// @spec A-01~07,A-10,A-11,A-17,UX-FB-06,UX-VFY-06
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.3 (Phase 5)
 // 검증: 토스트 role=status/aria-live(H) · confirm 모달 포커스 트랩·Escape(X)
 //       · trapFocus Tab 순환(H) · 아이콘 버튼 aria-label 전수(H)
@@ -74,6 +74,55 @@ describe('a11y — 토스트·포커스 트랩·라벨', () => {
 
         untrap();
         modal.remove();
+    });
+
+    it('trapFocus → .app-container가 inert 되고 해제 시 복귀 (A-17)', () => {
+        const app = document.querySelector('.app-container');
+        const trigger = document.createElement('button');
+        const modal = document.createElement('div');
+        modal.innerHTML = '<button type="button">확인</button>';
+        document.body.appendChild(trigger);
+        document.body.appendChild(modal);
+        trigger.focus();
+
+        const untrap = trapFocus(modal, trigger);
+        // 모달은 body 레벨 — .app-container가 inert 처리됨
+        expect(app.hasAttribute('inert')).toBe(true);
+
+        untrap();
+        expect(app.hasAttribute('inert')).toBe(false);
+        expect(document.activeElement).toBe(trigger);
+        modal.remove();
+        trigger.remove();
+    });
+
+    it('trapFocus → app-container 내부 모달은 inert 스킵 (자기 무력화 방지)', () => {
+        const app = document.querySelector('.app-container');
+        const modal = document.createElement('div');
+        modal.innerHTML = '<button type="button">확인</button>';
+        app.appendChild(modal);
+
+        const untrap = trapFocus(modal);
+        expect(app.hasAttribute('inert')).toBe(false);
+        untrap();
+        modal.remove();
+    });
+
+    it('trapFocus 중첩 — 바깥 모달 해제까지 inert 유지', () => {
+        const app = document.querySelector('.app-container');
+        const m1 = document.createElement('div');
+        const m2 = document.createElement('div');
+        m1.innerHTML = m2.innerHTML = '<button type="button">x</button>';
+        document.body.append(m1, m2);
+
+        const u1 = trapFocus(m1);
+        const u2 = trapFocus(m2);
+        u1();
+        expect(app.hasAttribute('inert')).toBe(true); // m2 잔존
+        u2();
+        expect(app.hasAttribute('inert')).toBe(false);
+        m1.remove();
+        m2.remove();
     });
 
     it('아이콘 전용 버튼 → aria-label 또는 title 존재 전수', () => {

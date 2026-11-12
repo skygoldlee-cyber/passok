@@ -5,10 +5,14 @@
 
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 
-vi.mock('../../../src/ui-utils.js', () => ({
-    trapFocus: vi.fn(() => () => {}),
-    showToast: vi.fn(),
-}));
+vi.mock('../../../src/ui-utils.js', async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+        ...actual,
+        trapFocus: vi.fn(() => () => {}),
+        showToast: vi.fn(),
+    };
+});
 
 vi.mock('../../../src/core/exam-context.js', () => ({
     getExamAppName: () => 'Passmula',
@@ -85,6 +89,29 @@ describe('UX-FB-05 첫 방문 시작 안내', () => {
         expect(document.getElementById('onboarding-weekly-days')).toBeTruthy(); // 진행 안 됨
         overlay.querySelector('[data-onboarding="prev"]').click();
         expect(document.getElementById('onboarding-exam-date')).toBeTruthy();
+    });
+
+    it('위저드: 범위 초과 목표는 필드 인라인 오류 + aria-invalid + 첫 오류 포커스 (UX-FORM-03)', () => {
+        showOnboardingModal();
+        const overlay = document.getElementById('onboarding-overlay');
+        overlay.querySelector('[data-onboarding="next"]').click(); // → 목표 단계
+
+        const daysInput = document.getElementById('onboarding-weekly-days');
+        daysInput.value = '9';
+        overlay.querySelector('[data-onboarding="next"]').click();
+
+        expect(daysInput.getAttribute('aria-invalid')).toBe('true');
+        const err = document.getElementById('onboarding-weekly-days-error');
+        expect(err).toBeTruthy();
+        expect(err.getAttribute('role')).toBe('alert');
+        expect(daysInput.getAttribute('aria-describedby')).toBe('onboarding-weekly-days-error');
+        expect(document.activeElement).toBe(daysInput); // 첫 오류 필드로 포커스 이동
+
+        // 수정 시 오류 해제
+        daysInput.value = '5';
+        daysInput.dispatchEvent(new Event('input', { bubbles: true }));
+        expect(daysInput.getAttribute('aria-invalid')).toBeNull();
+        expect(document.getElementById('onboarding-weekly-days-error')).toBeNull();
     });
 
     it('기존 사용자(학습 키 존재)는 플래그만 기록하고 모달을 띄우지 않는다', () => {

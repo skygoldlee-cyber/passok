@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 2c7622cb28cbb2aa
-> 생성: 2026-11-11 · 원천: SPEC.md(705개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 23dea5b906d33a36
+> 생성: 2026-11-12 · 원천: SPEC.md(705개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 705개 — 문서 연결 469 · 소스 연결 614 · 테스트 연결 656 · 보고서 연결 109
+**커버리지 요약**: 요구사항 705개 — 문서 연결 469 · 소스 연결 614 · 테스트 연결 657 · 보고서 연결 109
 
 ---
 
@@ -719,7 +719,7 @@
 | A-14 | 미구현 | — | — | — | — | — | — |
 | A-15 | 미구현 | — | — | — | — | — | — |
 | A-16 | 미구현 | — | — | — | — | — | — |
-| A-17 | 미구현 | — | — | — | — | — | — |
+| A-17 | ✅ — router.js 뷰 전환 시 `document.title` = "뷰명 · 앱명" 갱신 + `.main-content` 포커스 이동 · trapFocus의 applyBackgroundInert로 .app-container inert (DOM 제거 시 자동 정리) + 해제 시 트리거 포커스 복귀 · 설정/도움말 드롭다운 Esc → 트리거 복귀 · mobile-more-sheet를 .app-container 밖으로 이동해 inert 커버 | 테스트 | — | — | tests/dom/common/common-a11y.dom.test.js | — | — |
 
 ## 4.6 반응형 & 모바일
 
@@ -773,7 +773,7 @@
 | UX-FB-11 | **미구현** — 현재 UX-FB-04(전체화면 로딩)·UX-FB-07(스켈레톤)만 정의, 취소·타임아웃·연타 방지·지연 임계 규약 부재 | — | — | — | — | — | — |
 | UX-FORM-01 | 16px 미만이면 iOS Safari가 포커스 시 자동 확대 | E2E 테스트 | DOC-DSN-25 | css/base.css<br>css/reader.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FORM-02 | 모바일에서 물리적 눌림감 제공 | E2E 테스트 | DOC-DSN-25 | css/base.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
-| UX-FORM-03 | **미구현** — §4.9.5 '제출 시점 토스트' 규약의 보완: 소멸성 토스트는 어느 필드가 왜 틀렸는지 전달하지 못함. 로그인·자가등록·Care OS 폼·온보딩 입력 대상 | — | — | — | — | — | — |
+| UX-FORM-03 | 🚧 진행 — 공용 패턴 구현: `setFieldError`/`clearFieldError` (ui-utils.js) + `.field-error` 스타일. 적용: 온보딩 목표 입력·기관 초대 코드 (수정 시 자동 해제). 잔여 대상: 로그인(auth-modal-msg는 비자동소멸이라 부분 충족)·자가등록·Care OS 폼 — 신규 폼은 본 패턴 의무 | — | — | — | — | — | — |
 | UX-FORM-04 | **미구현** — 키보드 오픈 상태의 크롬 처리 규약 부재. iOS는 visualViewport 미지원 구간 대응 필요 | — | — | — | — | — | — |
 | UX-FORM-05 | **미구현** — FO-30의 개별 처리를 공통 규약으로 상승. 의견 보내기·리더 메모(TR-30)·주관식 답안·Care OS 폼 대상 | — | — | — | — | — | — |
 | UX-HELP-01 | 입력 필드·수식키 조합에서는 미동작. `Esc`·`?`·배경 클릭 닫기, 포커스 트랩 적용. 단축키 조합표는 모듈 상수로 분리해 단위 테스트 가능 | E2E 테스트 | — | src/shell/shortcuts-help.js | tests/dom/shell/shortcut-help.dom.test.js<br>tests/e2e/ux-surfaces.spec.js<br>tests/unit/app/shortcuts-help.test.js | — | — |

@@ -139,6 +139,18 @@ describe('router.js — DOM 테스트', () => {
             expect(document.getElementById('view-subtitle').textContent).toBe('빈칸 채우기형 퀴즈로 실전 완벽 대비');
         });
 
+        it('뷰 전환 시 document.title이 뷰명으로 갱신된다 (A-17)', () => {
+            const ctx = {
+                titlesMap: getViewTitles(null),
+                handlers: { viewRenderers: {}, stopReaderAudio: vi.fn() }
+            };
+            navigateToView('flashcard-view', ctx);
+            expect(document.title).toContain('플래시카드');
+            navigateToView('quiz-view', ctx);
+            expect(document.title).toContain('퀴즈');
+            expect(document.title).not.toContain('플래시카드');
+        });
+
         it('nav-item 활성화 클래스 동기화', () => {
             const ctx = {
                 titlesMap: getViewTitles(null),

@@ -480,9 +480,10 @@
                 <span class="ui-mode-label">학습 모드</span>
             </button>
         </nav>
+    </div>
 
-        <!-- 더보기 시트 — 탭 바에 들어가지 않는 전체 매뉴 (모바일 전용) -->
-        <div id="mobile-more-sheet" class="more-sheet is-hidden" role="dialog" aria-modal="true" aria-label="전체 매뉴">
+    <!-- 더보기 시트 — 탭 바에 들어가지 않는 전체 매뉴 (모바일 전용). A-17 — app-container 밖 배치: 모달 오픈 시 inert 배경이 본 시트를 무력화하지 않도록 -->
+    <div id="mobile-more-sheet" class="more-sheet is-hidden" role="dialog" aria-modal="true" aria-label="전체 매뉴">
             <div class="more-sheet-backdrop" id="more-sheet-backdrop"></div>
             <div class="more-sheet-panel">
                 <div class="more-sheet-head">
@@ -543,7 +544,6 @@
                     <!-- 기타 — 실무 모드 전용 항목만 (기능 버튼 정본: 테마=헤더, 시험 전환=설정 패널) -->
                 </div>
             </div>
-        </div>
     </div>
 
     <!-- 계정/로그인 모달 (Supabase Auth — Phase 1: 인증만, 동기화는 Phase 2) -->

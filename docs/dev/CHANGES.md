@@ -1,6 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(a11y): A-17 SPA 포커스 관리 + UX-FORM-03 폼 인라인 오류 공용 패턴 — Phase 1 구현
+
+- **A-17 ✅ — SPA 포커스 관리**: ① `router.js` 뷰 전환 시 `document.title = "뷰명 · 앱명"` 갱신 (시험 컨텍스트는 getExamAppName, 없으면 PassOK) + 기존 `.main-content` 포커스 이동 유지 ② `ui-utils.js` `trapFocus`에 배경 inert 추가 — `applyBackgroundInert`가 `.app-container`를 `inert` 처리하고 모달 추적 Set이 DOM에서 제거된 모달을 자동 정리(untrap 미호출·뷰 전환 시 inert 누수 방지), 모달이 `.app-container` 내부면 스킵(자기 무력화 방지), 해제 시 inert 해제 → 트리거 포커스 복귀 순서 ③ `listeners-app.js` 설정/도움말 드롭다운 Esc·외부클릭 닫기 시 트리거 버튼 포커스 복귀 (`openMenuBtn` 추적) ④ `index.template.html`의 `mobile-more-sheet`를 `.app-container` 밖으로 이동 — body 레벨 시트가 inert 배경에 포함되지 않게
+- **UX-FORM-03 🚧 — 폼 인라인 오류 공용 패턴**: `ui-utils.js`에 `setFieldError`/`clearFieldError` 공용 헬퍼 추가 — `<p class="field-error" role="alert">`를 입력 바로 뒤에 삽입하고 `aria-invalid` + `aria-describedby` 연결, 수정 시 자동 해제. `css/base.css`에 `.field-error` + `[aria-invalid]` 스타일 추가
+- **적용**: 온보딩 위저드 목표 입력(카드 수·주간 일수 — 필드별 인라인 오류 + 첫 오류 필드 포커스), 기관 가입 초대 코드(필수 미입력 + 서버 거부 시 해당 필드 오류 — 수정 시 자동 해제). 로그인은 `auth-modal-msg`가 이미 비자동소멸 영역이라 부분 충족 — 자가등록·Care OS 폼은 신규 패턴 의무 대상
+- **테스트**: `common-a11y.dom.test.js`에 inert 계약 3건(적용·내부 스킵·중첩 유지) + `router.dom.test.js`에 document.title 갱신 + `onboarding-zoom.dom.test.js`에 인라인 오류·aria-invalid·첫 포커스·자동 해제 — DOM 테스트 1006건 전체 통과
+
+
 ## 2026-11-12 docs(spec): UI/UX 전수 점검 A항 — 신규 요구사양 ID 12건 부여 (v1.34, 전부 미구현)
 
 - 접근성 신규: **A-14** 상태 정보의 색 비의존(SC 1.4.1 — 히트맵·검증·정오답·차트 대상) / **A-15** 차트 텍스트 대체(SC 1.1.1 — SVG 대안·키보드 툴팁) / **A-16** 호버 콘텐츠 접근 경로(SC 1.4.13 — 포커스 개방·Esc·hoverable·persistent + `hover`/`pointer` 미디어 기반 분기) / **A-17** SPA 포커스 관리(뷰 전환 title·h2 포커스·오버레이 복귀·배경 inert)

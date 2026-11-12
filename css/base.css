@@ -433,6 +433,32 @@
 .is-hidden {
     display: none !important;
 }
+
+/* UX-FORM-03 — 필드 인라인 오류 (setFieldError) */
+.field-error {
+    margin: 6px 0 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--color-danger);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+}
+.field-error i {
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+.form-input[aria-invalid="true"],
+.form-select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    border-color: var(--color-danger) !important;
+}
+.form-input[aria-invalid="true"]:focus,
+.form-select[aria-invalid="true"]:focus,
+textarea[aria-invalid="true"]:focus {
+    outline: 2px solid var(--color-danger);
+    outline-offset: 1px;
+}
 body.no-scroll {
     overflow: hidden;
 }
