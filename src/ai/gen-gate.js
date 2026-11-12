@@ -59,7 +59,7 @@ export function maxPoolOverlap(text, poolTexts) {
 
 /**
  * 생성 문항 1건 검증 — 통과 시 {ok:true}, 폐기 시 {ok:false, reasons:[...]}.
- * @param {object} gen {question, options?, answer, citation, explain?}
+ * @param {{question?: *, options?: *[], answer?: *, citation?: *}} gen {question, options?, answer, citation, explain?}
  * @param {object} opts
  * @param {string[]} [opts.poolTexts] - 기존 문항 발문 (dupcheck 대상 풀)
  * @param {(citation:string)=>boolean} [opts.citeCheck] - 인용 실존 검증 (기본: 비어있지 않으면 통과)
@@ -103,10 +103,13 @@ export function validateGeneratedItem(gen, opts = {}) {
  * @returns {{passed:object[], rejected:Array<{item:object, reasons:string[]}>}}
  */
 export function filterGeneratedItems(items, opts = {}) {
-    const passed = [], rejected = [];
+    /** @type {object[]} */
+    const passed = [];
+    /** @type {Array<{item: object, reasons: string[]}>} */
+    const rejected = [];
     for (const item of items || []) {
         const r = validateGeneratedItem(item, opts);
-        (r.ok ? passed : rejected).push(r.ok ? item : { item, reasons: r.reasons });
+        if (r.ok) passed.push(item); else rejected.push({ item, reasons: r.reasons });
     }
     return { passed, rejected };
 }

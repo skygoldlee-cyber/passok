@@ -2,7 +2,7 @@
 // @spec CO-08 — BYOK AI 보조 작성 (가명처리·전송 미리보기·사용자 검토 필수)
 import { showToast, showConfirm, runWithLoading } from '../../ui-utils.js';
 import { proFeatureNotice } from '../../pro/pro-upgrade.js';
-import { getAiKey, getAiProvider, callProviderLLM } from '../../written/written-grading.js';
+import { getAiKey, callProviderLLM } from '../../written/written-grading.js';
 
 const NAME_RE = /([가-힣]{2,4})(님|씨|어르신)?/g;
 const PHONE_RE = /0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}/g;
@@ -58,7 +58,7 @@ export async function careAiDraft(btn) {
     // @spec UX-FB-11 — 장시간 AI 호출: 지연 스피너 + 취소 버튼 + 타임아웃 + 연타 방지
     try {
         const res = await runWithLoading(
-            (signal) => callProviderLLM(system, prompt, { key, provider: getAiProvider(), signal }),
+            (signal) => callProviderLLM(system, prompt, { signal }),
             { message: 'AI 초안 생성 중…', cancellable: true, timeoutMs: 30000, triggerEl: btn || null }
         );
         const text = res?.text || '';

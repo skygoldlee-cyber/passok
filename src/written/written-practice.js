@@ -315,6 +315,7 @@ let _mdPath = '';
 let _questions = [];
 
 /* ---------- AI 채점 설정 패널 (WP-07) ---------- */
+/** @param {HTMLElement} el */
 function _wireAiConfig(el) {
     const cfg = el.querySelector('.wp-aicfg');
     const sel = /** @type {HTMLSelectElement|null} */ (el.querySelector('[data-wp-aiprovider]'));
@@ -349,8 +350,18 @@ function _wireAiConfig(el) {
 }
 
 /* ---------- 저장 상태 ---------- */
+/**
+ * 문항별 저장 진행 — WRITTEN_PRACTICE[_stem][qid]
+ * @typedef {Object} WrittenEntry
+ * @property {string} a  답안 텍스트
+ * @property {number[]} c 체크된 rubric 인덱스
+ * @property {number|null} d 자기평가 완료 시각 (미완료 null)
+ * @property {{v:boolean[], f:string[], s:number, sum:string, m:string, t:number}} [g] AI 채점 제안 저장본
+ */
 function _all() { return getJSON(STORAGE_KEYS.WRITTEN_PRACTICE) || {}; }
-function _entry(qid) { return ((_all()[_stem] || {})[qid]) || { a: '', c: [], d: null }; }
+/** @param {string} qid @returns {WrittenEntry} */
+function _entry(qid) { return /** @type {WrittenEntry} */ (((_all()[_stem] || {})[qid]) || { a: '', c: [], d: null }); }
+/** @param {string} qid @param {Object.<string, *>} patch */
 function _save(qid, patch) {
     const all = _all();
     if (!all[_stem]) all[_stem] = {};
@@ -364,8 +375,10 @@ function _updateProgress() {
 }
 
 /* ---------- 렌더링 ---------- */
+/** @param {string} md */
 function _mdHtml(md) { return md ? parseMarkdown(md) : ''; }
 
+/** @param {WrittenQuestion} q */
 function _cardHtml(q) {
     const st = _entry(q.id);
     const chips = [
@@ -405,6 +418,7 @@ function _cardHtml(q) {
     </div>`;
 }
 
+/** @param {WrittenBank} bank */
 function _renderBank(bank) {
     const wrap = _overlay.el().querySelector('.wp-wrap');
     const secHtml = bank.sections.length
@@ -420,7 +434,7 @@ function _renderBank(bank) {
 
 function _wireCards() {
     const wrap = _overlay.el().querySelector('.wp-wrap');
-    wrap.querySelectorAll('.wpq').forEach(card => {
+    wrap.querySelectorAll('.wpq').forEach((/** @type {*} */ card) => {
         const qid = card.dataset.wpq;
         const q = _questions.find(x => x.id === qid);
         if (!q) return;
@@ -433,14 +447,14 @@ function _wireCards() {
                 ? `자기채점 <strong>${sum}</strong> / ${escapeHTML(String(q.points ?? '—'))}점`
                 : (st.a.trim() ? '답안 작성됨' : '');
         };
-        card.querySelector('[data-wp-answer]').addEventListener('input', (e) => {
+        card.querySelector('[data-wp-answer]').addEventListener('input', (/** @type {*} */ e) => {
             _save(qid, { a: e.target.value });
             updateScore();
         });
         card.querySelector('[data-wp-toggle]').addEventListener('click', () => {
             card.querySelector('[data-wp-reveal]').classList.toggle('open');
         });
-        card.querySelectorAll('[data-wp-check]').forEach(cb => {
+        card.querySelectorAll('[data-wp-check]').forEach((/** @type {*} */ cb) => {
             cb.addEventListener('change', () => {
                 const st = _entry(qid);
                 const idx = parseInt(cb.dataset.wpCheck, 10);
@@ -467,7 +481,7 @@ function _wireCards() {
             }
             _updateProgress();
         });
-        card.querySelectorAll('[data-wp-ref]').forEach(a => {
+        card.querySelectorAll('[data-wp-ref]').forEach((/** @type {*} */ a) => {
             a.addEventListener('click', () => {
                 const ref = q.refs[parseInt(a.dataset.wpRef, 10)];
                 if (!ref) return;
@@ -498,14 +512,14 @@ function _wireCards() {
                 }
                 // 제안 판정을 체크박스에 반영 (사용자 수정 가능)
                 const met = res.met || [];
-                const grading = res.grading || { items: [], summary: '' };
+                const grading = res.grading || /** @type {{items:Array<{i:number,met:boolean,feedback:string}>,summary:string}} */ ({ items: [], summary: '' });
                 const fb = new Array(q.rubricItems.length).fill('');
                 for (const it of grading.items) { if (it.i >= 0 && it.i < fb.length) fb[it.i] = it.feedback; }
                 _save(qid, {
                     c: met.map((m, i) => m ? i : -1).filter(i => i >= 0),
                     g: { v: met, f: fb, s: res.score, sum: grading.summary, m: res.model, t: Date.now() }
                 });
-                card.querySelectorAll('[data-wp-check]').forEach(cb => {
+                card.querySelectorAll('[data-wp-check]').forEach((/** @type {*} */ cb) => {
                     cb.checked = !!met[parseInt(cb.dataset.wpCheck, 10)];
                 });
                 _renderGrading(card, q, _entry(qid).g);
@@ -517,6 +531,7 @@ function _wireCards() {
 }
 
 /* ---------- AI 채점 결과 렌더 (WP-08) ---------- */
+/** @param {*} card @param {WrittenQuestion} q @param {*} g */
 function _renderGrading(card, q, g) {
     const gbox = card.querySelector('[data-wp-grading]');
     if (!gbox || !g || !Array.isArray(g.v)) return;
@@ -535,6 +550,7 @@ function _renderGrading(card, q, g) {
 }
 
 /* ---------- 참조 링크 → ExamViewer ---------- */
+/** @param {WrittenRef} ref */
 async function _openRef(ref) {
     // '../참조자료/ref_md/…' 상대 경로를 현재 mdPath 기준으로 해석 후 문제집 뷰어로 연다.
     const baseDir = _mdPath.substring(0, _mdPath.lastIndexOf('/') + 1);
@@ -549,9 +565,10 @@ async function _openRef(ref) {
 }
 
 /* ---------- 로드 ---------- */
+/** @param {string} mdPath */
 async function _loadMd(mdPath) {
     if (location.protocol === 'file:') {
-        const stem = mdPath.split('/').pop().replace(/\.md$/i, '');
+        const stem = (mdPath.split('/').pop() || '').replace(/\.md$/i, '');
         await injectBundleScript(dataPath('exams_md/') + stem + '.js', 'data-exam-bundle');
         if (window.__EXAM_MD__ && typeof pkDecode(window.__EXAM_MD__[mdPath]) === 'string') {
             return pkDecode(window.__EXAM_MD__[mdPath]);
@@ -561,7 +578,7 @@ async function _loadMd(mdPath) {
     try {
         return await fetchMd(mdPath);
     } catch (err) {
-        const stem = mdPath.split('/').pop().replace(/\.md$/i, '');
+        const stem = (mdPath.split('/').pop() || '').replace(/\.md$/i, '');
         try {
             await injectBundleScript(dataPath('exams_md/') + stem + '.js', 'data-exam-bundle');
             if (window.__EXAM_MD__ && typeof pkDecode(window.__EXAM_MD__[mdPath]) === 'string') {
@@ -573,10 +590,10 @@ async function _loadMd(mdPath) {
 }
 
 export const WrittenPractice = {
-    /** manifest.written[] 항목의 문제은행 MD를 자기채점 오버레이로 연다. */
+    /** manifest.written[] 항목의 문제은행 MD를 자기채점 오버레이로 연다. @param {string} mdPath */
     async openWritten(mdPath) {
         _mdPath = mdPath;
-        _stem = mdPath.split('/').pop().replace(/\.md$/i, '');
+        _stem = (mdPath.split('/').pop() || '').replace(/\.md$/i, '');
         _overlay.ensure();
         _overlay.el().querySelector('.wp-title').textContent = '주관식 연습';
         _overlay.el().querySelector('.wp-wrap').innerHTML =
@@ -594,7 +611,7 @@ export const WrittenPractice = {
                 `<div class="wp-error"><p>문항을 불러올 수 없습니다.</p><p>${escapeHTML(e instanceof Error ? e.message : String(e))}</p></div>`;
         }
     },
-    /** 완료 문항 수 요약 — 카드 라벨용 */
+    /** 완료 문항 수 요약 — 카드 라벨용 @param {string} fileStem */
     getProgress(fileStem) {
         const data = (_all()[fileStem]) || {};
         return { done: Object.values(data).filter(e => e && e.d).length };

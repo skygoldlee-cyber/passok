@@ -14,6 +14,19 @@ import { STORAGE_KEYS } from '../core/storage-keys.js';
    공급자 계약 (tools/ai/llm_client.js PROVIDERS 미러 — 브라우저용)
    ========================================================= */
 
+/**
+ * 공급자 정의 — BYOK 직접 호출 계약
+ * @typedef {Object} AiProviderDef
+ * @property {string} label 표시명
+ * @property {string} defaultModel
+ * @property {string} url 엔드포인트 (buildUrl이 있으면 우선)
+ * @property {(model: string, system: string, prompt: string, maxTokens: number) => Object} buildBody
+ * @property {(key: string) => Object.<string, string>} headers
+ * @property {(json: *) => string} extract 응답 JSON → 텍스트
+ * @property {(model: string) => string} [buildUrl] 모델 경로 가변 공급자 (gemini)
+ */
+
+/** @type {Object.<string, AiProviderDef>} */
 const PROVIDERS = {
     openai: {
         label: 'OpenAI',
@@ -44,7 +57,7 @@ const PROVIDERS = {
             'anthropic-version': '2023-06-01',
             'anthropic-dangerous-direct-browser-access': 'true',
         }),
-        extract: j => (j.content || []).map(b => b.text || '').join(''),
+        extract: j => (/** @type {Array<{text?: string}>} */ (j.content || [])).map(b => b.text || '').join(''),
     },
     gemini: {
         label: 'Gemini',
@@ -57,7 +70,7 @@ const PROVIDERS = {
         headers: key => ({ 'x-goog-api-key': key }),
         extract: j => {
             const c = j.candidates && j.candidates[0];
-            return ((c && c.content && c.content.parts) || []).map(p => p.text || '').join('');
+            return (/** @type {Array<{text?: string}>} */ ((c && c.content && c.content.parts) || [])).map(p => p.text || '').join('');
         },
         buildUrl: (model) =>
             `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
@@ -74,6 +87,7 @@ export function getAiProvider() {
     const p = (getItem(STORAGE_KEYS.WRITTEN_AI_PROVIDER) || 'gemini').toLowerCase();
     return PROVIDERS[p] ? p : 'gemini';
 }
+/** @param {*} p @returns {string} */
 export function saveAiProvider(p) {
     const v = String(p || '').toLowerCase();
     if (!PROVIDERS[v]) return getAiProvider();
@@ -84,6 +98,7 @@ export function getAiModel() {
     return (getItem(STORAGE_KEYS.WRITTEN_AI_MODEL) || '').trim()
         || PROVIDERS[getAiProvider()].defaultModel;
 }
+/** @param {*} model @returns {string} */
 export function saveAiModel(model) {
     const m = String(model || '').slice(0, 80).trim()
         .replace(/[^a-zA-Z0-9._-]/g, '');
@@ -94,6 +109,7 @@ export function saveAiModel(model) {
 export function getAiKey() {
     return getItem(STORAGE_KEYS.WRITTEN_AI_KEY) || '';
 }
+/** @param {*} key @returns {boolean} */
 export function saveAiKey(key) {
     const k = String(key || '').slice(0, 200).trim();
     if (!k) return false;
@@ -101,7 +117,7 @@ export function saveAiKey(key) {
     return true;
 }
 export function clearAiKey() { removeItem(STORAGE_KEYS.WRITTEN_AI_KEY); }
-/** 표시용 마스킹 — 앞 4자리만 노출 */
+/** 표시용 마스킹 — 앞 4자리만 노출 @param {*} key @returns {string} */
 export function maskAiKey(key) {
     const k = typeof key === 'string' ? key.trim() : '';
     if (!k) return '';
@@ -120,8 +136,21 @@ const SYSTEM_PROMPT = `당신은 자격시험 주관식(서술·계산형) 채�
 - summary에는 전체 평가와 보완점을 1~2문장으로.`;
 
 /**
+ * AI 채점이 사용하는 문항 필드 (parseWrittenBank의 WrittenQuestion 부분집합)
+ * @typedef {Object} GradingQuestion
+ * @property {string} [id]
+ * @property {string} [type]
+ * @property {number|null} [points]
+ * @property {string} [problem]
+ * @property {string} [modelAnswer]
+ * @property {string} [finalAnswer]
+ * @property {string} [rubricText]
+ * @property {Array<{text?: string, points?: number}>} [rubricItems]
+ */
+
+/**
  * 채점 프롬프트 생성 — 문제·모범답안·rubric·수험생 답안을 구조화해 전달.
- * @param {object} q - WrittenQuestion (parseWrittenBank 출력)
+ * @param {GradingQuestion} q - WrittenQuestion (parseWrittenBank 출력)
  * @param {string} answer - 수험생 답안
  * @returns {string}
  */
@@ -175,7 +204,10 @@ export function parseGradingResponse(text, rubricCount) {
     return { items, summary: String(data.summary || '').slice(0, 500) };
 }
 
-/** 채점 결과 → 항목별 충족 맵 + 합산 점수 (LLM 산출 불신 — 점수는 클라이언트 산정) */
+/** 채점 결과 → 항목별 충족 맵 + 합산 점수 (LLM 산출 불신 — 점수는 클라이언트 산정)
+ * @param {Array<{points?: number}>} rubricItems
+ * @param {{items: Array<{i: number, met: boolean}>}} grading
+ */
 export function applyGrading(rubricItems, grading) {
     const met = new Array(rubricItems.length).fill(false);
     for (const it of grading.items) {
@@ -195,7 +227,7 @@ export function applyGrading(rubricItems, grading) {
  * 같은 공급자 계약으로 직접 호출한다 (AI-29). 응답 텍스트 해석은 호출부 몫.
  * @param {string} system - 시스템 프롬프트
  * @param {string} prompt - 사용자 프롬프트
- * @param {object} [opts] - {signal?, fetchImpl?, maxTokens?}
+ * @param {{signal?: AbortSignal, fetchImpl?: *, maxTokens?: number}} [opts] - {signal?, fetchImpl?, maxTokens?}
  * @returns {Promise<{ok:boolean, text?:string, model?:string, error?:string, code?:string}>}
  */
 export async function callProviderLLM(system, prompt, opts = {}) {
@@ -236,10 +268,10 @@ export async function callProviderLLM(system, prompt, opts = {}) {
 
 /**
  * 답안 AI 채점 — 네트워크·키·파싱 오류를 code로 분기 (product-vision 패턴).
- * @param {object} q - WrittenQuestion
+ * @param {GradingQuestion} q - WrittenQuestion
  * @param {string} answer - 수험생 답안
- * @param {object} [opts] - {signal?, fetchImpl?}
- * @returns {Promise<{ok:boolean, grading?:object, met?:boolean[], score?:number,
+ * @param {{signal?: AbortSignal, fetchImpl?: *, maxTokens?: number}} [opts] - {signal?, fetchImpl?}
+ * @returns {Promise<{ok:boolean, grading?:{items:Array<{i:number,met:boolean,feedback:string}>,summary:string}, met?:boolean[], score?:number,
  *   model?:string, error?:string, code?:string}>}
  */
 export async function gradeAnswer(q, answer, opts = {}) {

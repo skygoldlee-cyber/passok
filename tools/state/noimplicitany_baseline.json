@@ -1,6 +1,4 @@
 {
-  "src/ai/ai-client.js": 55,
-  "src/ai/gen-gate.js": 14,
   "src/charts.js": 30,
   "src/content/combo-doc.js": 13,
   "src/content/csv-utils.js": 6,
@@ -191,7 +189,5 @@
   "src/views/trainer-calc-practice.js": 7,
   "src/views/trainer-drill-combo.js": 24,
   "src/views/trainer-drills.js": 57,
-  "src/views/trainer.js": 20,
-  "src/written/written-grading.js": 52,
-  "src/written/written-practice.js": 30
+  "src/views/trainer.js": 20
 }

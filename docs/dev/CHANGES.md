@@ -1,6 +1,15 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(types): noImplicitAny 소진 3차 — src/ai·written 151건 → 0 (Phase 1 지속)
+
+- **2개 디렉터리 4파일 소진**: ai(69)·written(82) — JSDoc 주석 + 계약 typedef 중심
+- **typedef 신설**: `AiSpec`/`AiDeps`/`WeeklyDiagInput`(ai-client — spec·deps·집계 입력이 `object` 선언이라 필드 접근마다 TS2339 나던 비계약 해소)·`AiProviderDef`/`GradingQuestion`(written-grading — PROVIDERS 인덱스 TS7053·문항 필드 TS2339 해소)·`WrittenEntry`(written-practice — 저장 진행 형태 명문화)
+- **사멸 옵션 실수정 (care-ai)**: `callProviderLLM(system, prompt, {key, provider, signal})`의 `key`·`provider`는 callee가 읽지 않는 인자였음(내부에서 getAiKey()/getAiProvider() 직접 조회) — 계약에 없는 초과 프로퍼티로 TS2353 표면화 → `{signal}`만 전달로 정정 + 사멸 import 제거. 동작 동등
+- **정직한 좁히기**: `_cacheKey`의 `input[k]` 인덱스를 `Object.<string,*>` 지역 좁히기로 해소·`res.text ?? ''`·filterGeneratedItems의 union push를 if/else 분기로 정정·`String.prototype.split().pop() || ''`(mdPath 3곳)
+- 결과: 잔여 3,693 → **3,542건 (-151)**, 기준선 195 → 191파일, `check:types` 0 유지. 유닛 전체·관련 DOM 4파일 19건 통과
+
+
 ## 2026-11-12 feat(types): noImplicitAny 소진 2차 — src/pwa·pro·auth-sync·telemetry 104건 → 0 (Phase 1 지속)
 
 - **4개 디렉터리 13파일 소진**: pwa(20)·pro(21)·auth-sync(28)·telemetry(35) — JSDoc 주석 추가가 대부분이며, 인덱스·nullable 경계만 정직하게 좁힘

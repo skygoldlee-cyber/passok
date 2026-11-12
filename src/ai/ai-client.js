@@ -36,10 +36,12 @@ const BYOK_SYSTEM = `당신은 자격시험 학습 코치입니다. 수험생이
 - 교재 근거가 주어지면 그 범위 안에서만 설명하고, 근거에 없는 사실은 단정하지 않습니다.
 - JSON만 응답합니다.`;
 
+/** @param {*} v @param {number} max */
 const _clip = (v, max) => {
     const s = typeof v === 'string' ? v.trim() : '';
     return s ? s.slice(0, max) : '';
 };
+/** @param {*} v */
 const _clipList = (v) => Array.isArray(v)
     ? v.slice(0, 8).map(x => _clip(x, 300)).filter(Boolean) : [];
 
@@ -69,7 +71,10 @@ ${misjudged.length ? `\n## 수험생이 오판한 진술\n${misjudged.map(s => `
 응답 형식(JSON만): {"explain":"오답 원인 해설 1~2문장","confused_concept":"혼동 개념 1어절"}`;
 }
 
-/** LLM 텍스트 → {explain, confused} — 코드펜스·잡음 텍스트 허용 */
+/** LLM 텍스트 → {explain, confused} — 코드펜스·잡음 텍스트 허용
+ * @param {*} text
+ * @returns {{explain:string, confused:string}|null}
+ */
 export function parseFeedbackResponse(text) {
     if (typeof text !== 'string' || !text.trim()) return null;
     const cleaned = text.replace(/```(?:json)?/g, '').trim();
@@ -87,16 +92,19 @@ export function parseFeedbackResponse(text) {
    응답 캐시 — 콘텐츠 해시 키 (동일 오답 재요청 무료)
    ========================================================= */
 
+/** @param {string} kind @param {*} input */
 function _cacheKey(kind, input) {
     // kind별 입력 전 필드를 정규화 — 문자열은 서버 상한으로 잘라 결정적 키 생성
-    const canon = JSON.stringify([kind, input && typeof input === 'object'
-        ? Object.keys(input).sort().map(k => [k,
-            typeof input[k] === 'string' ? input[k].slice(0, 3000)
-                : Array.isArray(input[k]) ? input[k].slice(0, 8) : input[k]])
+    const obj = input && typeof input === 'object' ? /** @type {Object.<string, *>} */ (input) : null;
+    const canon = JSON.stringify([kind, obj
+        ? Object.keys(obj).sort().map(k => [k,
+            typeof obj[k] === 'string' ? obj[k].slice(0, 3000)
+                : Array.isArray(obj[k]) ? obj[k].slice(0, 8) : obj[k]])
         : input]);
     return STORAGE_KEYS.AI_CACHE_PREFIX + sha256hex(canon);
 }
 
+/** @param {string} key */
 function _cacheGet(key) {
     try {
         const v = JSON.parse(getItem(key) || 'null');
@@ -106,6 +114,7 @@ function _cacheGet(key) {
     } catch { return null; }
 }
 
+/** @param {string} key @param {Object.<string, *>} result */
 function _cacheSet(key, result) {
     // 키 상한 — 초과 시 ts가 가장 오래된 항목부터 정리
     try {
@@ -129,7 +138,7 @@ function _cacheSet(key, result) {
 /**
  * AI 기능 사용 가능 여부 — 로그인 세션(서버 경로) 또는 BYOK 키(폴백 경로).
  * UI는 이 결과가 false일 때 기능을 표시하지 않는다 (AI-29 무표시 계약).
- * @param {object} [deps] 테스트 주입용 { session }
+ * @param {{session?: *}} [deps] 테스트 주입용 { session }
  */
 export async function aiFeedbackAvailable(deps = {}) {
     if (getAiKey()) return true;
@@ -138,6 +147,7 @@ export async function aiFeedbackAvailable(deps = {}) {
     return !!session;
 }
 
+/** @param {string} result @param {Object.<string, *>} [extra] */
 function _featureEvent(result, extra = {}) {
     const { feature = 'wrong_feedback', ...rest } = extra;
     void reportEvent('ai_feature', { feature, result, ...rest })
@@ -145,8 +155,26 @@ function _featureEvent(result, extra = {}) {
 }
 
 /**
+ * _requestAi 호출 스펙 — kind별 프롬프트 계약
+ * @typedef {Object} AiSpec
+ * @property {string} kind ai-proxy kind (서버 템플릿 라우팅 키)
+ * @property {string} feature ai_feature 계측용 기능명
+ * @property {(input: *) => string|null} buildPrompt BYOK 미러 템플릿
+ * @property {string} system BYOK 폴백용 시스템 프롬프트
+ * @property {string} featureLabel 사용자 오류 문구용 기능명
+ * @property {(body: *) => (Object.<string, *>|null)} [extractBody] 서버 JSON → 결과 객체
+ * @property {(text: string) => (Object.<string, *>|null)} [parseText] BYOK 원문 → 결과 객체
+ * @property {number} [maxTokens]
+ */
+/**
+ * _requestAi·가용성 함수의 테스트 주입
+ * @typedef {Object} AiDeps
+ * @property {*} [fetchImpl] fetch 대체
+ * @property {*} [session] 세션 대체 ({access_token?})
+ */
+/**
  * 런타임 AI 공용 호출 — 서버 프록시 우선, BYOK 순차 폴백 (AI-29).
- * @param {object} spec {kind, feature, buildPrompt, system, featureLabel}
+ * @param {AiSpec} spec {kind, feature, buildPrompt, system, featureLabel}
  *   - kind: ai-proxy kind (서버 템플릿 라우팅 키)
  *   - feature: ai_feature 계측용 기능명
  *   - buildPrompt: BYOK 미러 템플릿 (서버 정본과 동형 유지)
@@ -154,8 +182,8 @@ function _featureEvent(result, extra = {}) {
  *   - featureLabel: 사용자 오류 문구용 기능명
  *   - extractBody?: 서버 JSON 응답 → 결과 객체|null (기본 explain/confused 추출)
  *   - parseText?: BYOK 원문 → 결과 객체|null (기본 parseFeedbackResponse)
- * @param {object} input - 구조화 인자 (AI-30 — 자유 입력 없음)
- * @param {object} [deps] 테스트 주입용 { fetchImpl, session }
+ * @param {*} input - 구조화 인자 (AI-30 — 자유 입력 없음)
+ * @param {AiDeps} [deps] 테스트 주입용 { fetchImpl, session }
  * @returns {Promise<{ok:boolean, explain?:string, confused?:string, items?:object[],
  *   answer?:string, citations?:string[],
  *   remaining?:number|null, route?:'server'|'byok'|'cache', cached?:boolean,
@@ -235,7 +263,7 @@ async function _requestAi(spec, input, deps = {}) {
             fetchImpl: deps.fetchImpl, maxTokens: spec.maxTokens || 400,
         });
         if (res.ok) {
-            const parsed = (spec.parseText || parseFeedbackResponse)(res.text);
+            const parsed = (spec.parseText || parseFeedbackResponse)(res.text ?? '');
             if (parsed) {
                 _cacheSet(cacheKey, parsed);
                 _featureEvent('success', { feature, route: 'byok' });
@@ -283,14 +311,30 @@ const BYOK_DIAG_SYSTEM = `당신은 자격시험 학습 코치입니다. 수험�
 - 수치에 없는 사실은 단정하지 않고, 과목·개념 라벨이 주어지면 그 이름으로만 언급합니다.
 - JSON만 응답합니다.`;
 
+/** @param {*} v @param {number} lo @param {number} hi @returns {number|null} */
 const _diagNum = (v, lo, hi) => {
     const n = Number(v);
     return Number.isFinite(n) ? Math.min(Math.max(lo, Math.round(n)), hi) : null;
 };
 
 /**
+ * weekly_diagnosis·plan_adjust 구조화 입력 — 집계 수치·라벨만 (AI-30)
+ * @typedef {Object} WeeklyDiagInput
+ * @property {number} [solvedWeek]
+ * @property {number} [planWeek]
+ * @property {number} [wrongWeek]
+ * @property {number} [weekRate]
+ * @property {number} [rateDelta]
+ * @property {number} [dday]
+ * @property {number} [projectedCoverage]
+ * @property {number} [neededPerDay]
+ * @property {string} [topCluster]
+ * @property {string} [weakestSubject]
+ * @property {string} [bandwidth] plan_adjust 여유 선택지 ('부족'|'보통'|'넉넉')
+ */
+/**
  * weekly_diagnosis 프롬프트 조립 (서버 미러) — 집계 수치+라벨 → 고정 템플릿.
- * @param {object} input {solvedWeek?, planWeek?, wrongWeek?, weekRate?, rateDelta?,
+ * @param {WeeklyDiagInput} input {solvedWeek?, planWeek?, wrongWeek?, weekRate?, rateDelta?,
  *   dday?, projectedCoverage?, neededPerDay?, topCluster?, weakestSubject?}
  * @returns {string|null} 핵심 수치가 하나도 없으면 null
  */
@@ -322,8 +366,8 @@ export function buildWeeklyDiagnosisPrompt(input) {
 
 /**
  * 자연어 주간 진단 요청 (AI-33) — analysis-engine 집계 수치 → 코칭 문장.
- * @param {object} input - buildWeeklyDiagnosisPrompt 인자 계약
- * @param {object} [deps] 테스트 주입용 { fetchImpl, session }
+ * @param {WeeklyDiagInput} input - buildWeeklyDiagnosisPrompt 인자 계약
+ * @param {AiDeps} [deps] 테스트 주입용 { fetchImpl, session }
  */
 export function requestWeeklyDiagnosis(input, deps = {}) {
     return _requestAi({
@@ -342,11 +386,12 @@ const BYOK_PLAN_SYSTEM = `당신은 자격시험 학습 코치입니다. 수험�
 - 수치에 없는 사실은 단정하지 않고, 과목·개념 라벨은 주어진 이름으로만 언급합니다.
 - JSON만 응답합니다.`;
 
+/** @type {Object.<string, string>} */
 const PLAN_BANDWIDTH_LABEL = { 부족: '시간 부족(줄여야 함)', 보통: '보통(현행 유지)', 넉넉: '넉넉(늘릴 수 있음)' };
 
 /**
  * plan_adjust 프롬프트 조립 (서버 미러) — 주간 수치 + 여유 선택지 → 조정 조언.
- * @param {object} input - buildWeeklyDiagnosisPrompt 인자 + {bandwidth: '부족'|'보통'|'넉넉'}
+ * @param {WeeklyDiagInput} input - buildWeeklyDiagnosisPrompt 인자 + {bandwidth: '부족'|'보통'|'넉넉'}
  * @returns {string|null}
  */
 export function buildPlanAdjustPrompt(input) {
@@ -360,8 +405,8 @@ export function buildPlanAdjustPrompt(input) {
 
 /**
  * 주간 계획 조정 요청 (AI-35) — 구조화 입력 전용, 실제 배분 변경 없음(조언만).
- * @param {object} input - buildPlanAdjustPrompt 인자 계약
- * @param {object} [deps]
+ * @param {WeeklyDiagInput} input - buildPlanAdjustPrompt 인자 계약
+ * @param {AiDeps} [deps]
  */
 export function requestPlanAdjust(input, deps = {}) {
     return _requestAi({
@@ -383,7 +428,7 @@ const BYOK_QUIZ_SYSTEM = `당신은 자격시험 출제자입니다. 주어진 �
 
 /**
  * quiz_gen 프롬프트 조립 (서버 미러) — 취약 개념+교재 근거 → 문항 생성.
- * @param {object} input {cluster?, evidence?, existing?[], count?}
+ * @param {{cluster?: string, evidence?: string, existing?: string[], count?: number}} input {cluster?, evidence?, existing?[], count?}
  * @returns {string|null}
  */
 export function buildQuizGenPrompt(input) {
@@ -424,8 +469,8 @@ export function parseItemsResponse(rawText) {
 
 /**
  * 약점 생성형 미니퀴즈 요청 (AI-38) — 결과는 반드시 gen-gate로 걸러 출제.
- * @param {object} input - buildQuizGenPrompt 인자 계약
- * @param {object} [deps]
+ * @param {{cluster?: string, evidence?: string, existing?: string[], count?: number}} input - buildQuizGenPrompt 인자 계약
+ * @param {AiDeps} [deps]
  */
 export function requestWeakQuizGen(input, deps = {}) {
     return _requestAi({
@@ -449,7 +494,7 @@ const BYOK_QA_SYSTEM = `당신은 자격시험 학습 도우미입니다. 근거
 
 /**
  * textbook_qa 프롬프트 조립 (서버 미러) — 질문 경계 마커 + 근거 스니펫.
- * @param {object} input {question: string(≤200자), evidence: string[](≤5)}
+ * @param {{question?: string, evidence?: string[]}} input {question: string(≤200자), evidence: string[](≤5)}
  * @returns {string|null}
  */
 export function buildTextbookQaPrompt(input) {
@@ -479,7 +524,7 @@ export function parseQaResponse(rawText) {
         const p = JSON.parse(t.slice(start, end + 1));
         const answer = String(p?.answer ?? '').trim();
         if (!answer) return null;
-        const citations = (Array.isArray(p?.citations) ? p.citations : [])
+        const citations = (Array.isArray(p?.citations) ? /** @type {*[]} */ (p.citations) : [])
             .map(c => String(c).trim()).filter(Boolean).slice(0, 5);
         return { answer: answer.slice(0, 600), citations };
     } catch {
@@ -489,8 +534,8 @@ export function parseQaResponse(rawText) {
 
 /**
  * 교재 질의응답 요청 (AI-36) — 질문+근거 스니펫 → 답변+인용.
- * @param {object} input - buildTextbookQaPrompt 인자 계약
- * @param {object} [deps]
+ * @param {{question?: string, evidence?: string[]}} input - buildTextbookQaPrompt 인자 계약
+ * @param {AiDeps} [deps]
  */
 export function requestTextbookQA(input, deps = {}) {
     return _requestAi({
@@ -555,8 +600,8 @@ export function parseFormExtractResponse(rawText) {
 
 /**
  * 기관 양식 추출 텍스트 → MD 템플릿 초안 (CO-17) — 서버 프록시 우선, BYOK 폴백.
- * @param {object} input - buildFormExtractPrompt 인자 계약
- * @param {object} [deps]
+ * @param {{text?: string, hint?: string}} input - buildFormExtractPrompt 인자 계약
+ * @param {AiDeps} [deps]
  * @returns {Promise<{ok:boolean, title?:string, body?:string, route?:string,
  *   remaining?:number|null, code?:string, error?:string}>}
  */
