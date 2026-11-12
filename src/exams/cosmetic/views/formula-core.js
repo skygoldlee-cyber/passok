@@ -40,15 +40,17 @@ export const calc = {
 };
 
 /** id로 폼 요소 조회 — formula 뷰의 입력류(input/select/textarea) 전용 */
+/** @param {string} id */
 export const getEl = id => /** @type {HTMLInputElement} */ (document.getElementById(id));
 
+/** @type {*|null} */
 let ingredientIndex = null;
 
 export function getIndex() {
   if (!ingredientIndex) {
     ingredientIndex = buildIngredientIndex(DataLoader.getKnowledgeItems());
     // 자가 등록 성분 병합 (DI-08) — 공식 동명(정규화) 커스텀은 _superseded로 건너뜀
-    for (const c of annotateCustomItems(ingredientIndex)) {
+    for (const c of /** @type {*[]} */ (annotateCustomItems(ingredientIndex))) {
       if (c.name && !c._superseded) ingredientIndex.set(c.name, c);
     }
   }
@@ -64,6 +66,7 @@ export function invalidateIngredientIndex() {
   }
 }
 
+/** @param {string} id */
 export function showPanel(id) {
   PANELS.forEach(p => {
     const el = getEl(p);
@@ -97,7 +100,7 @@ export function formulaSubNav(active) {
   const items = SUBNAV_ITEMS.filter(item => bizVisible(item.id, biz));
   return `<div class="formula-subnav" role="navigation" aria-label="Formula OS 섹션 이동">${items.map(item => {
     const cls = item.id === active ? 'formula-subnav-chip is-active' : 'formula-subnav-chip';
-    return `<button type="button" class="${cls}" data-click="${item.click}">${esc((item.labels && item.labels[biz]) || item.label)}</button>`;
+    return `<button type="button" class="${cls}" data-click="${item.click}">${esc((item.labels && (/** @type {Object.<string,string>} */ (item.labels))[biz]) || item.label)}</button>`;
   }).join('')}</div>`;
 }
 
@@ -106,7 +109,7 @@ export function readCalcInputs() {
   const unitEl = getEl('formula-unit');
   const phTEl = getEl('formula-ph-target');
   const phAEl = getEl('formula-ph-actual');
-  const num = el => (el && el.value !== '' ? parseFloat(el.value) : null);
+  const num = (/** @type {HTMLInputElement|null} */ el) => (el && el.value !== '' ? parseFloat(el.value) : null);
   return {
     targetVolume: num(volEl),
     unit: unitEl ? unitEl.value : 'g',

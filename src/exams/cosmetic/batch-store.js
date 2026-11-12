@@ -73,27 +73,33 @@ function loadAll() {
   return loadItems(STORAGE_KEYS.BATCH_ITEMS);
 }
 
+/** @param {*[]} batches */
 function saveAll(batches) {
   return saveItems(STORAGE_KEYS.BATCH_ITEMS, batches);
 }
 
+/** @param {*} qc */
 function sanitizeQc(qc) {
+  /** @type {Object.<string,string>} */
   const out = {};
   const src = qc && typeof qc === 'object' ? qc : {};
-  QC_FIELDS.forEach(f => { out[f.key] = pickEnum(src[f.key], QC_VALUES); });
+  QC_FIELDS.forEach((/** @type {*} */ f) => { out[f.key] = pickEnum((/** @type {Object.<string,*>} */ (src))[f.key], QC_VALUES); });
   return out;
 }
 
+/** @param {*} h */
 function sanitizeHygiene(h) {
+  /** @type {Object.<string,boolean>} */
   const out = {};
   const src = h && typeof h === 'object' ? h : {};
-  HYGIENE_FIELDS.forEach(f => { out[f.key] = src[f.key] === true; });
+  HYGIENE_FIELDS.forEach((/** @type {*} */ f) => { out[f.key] = (/** @type {Object.<string,*>} */ (src))[f.key] === true; });
   return out;
 }
 
+/** @param {*} snap */
 function sanitizeCheckSnapshot(snap) {
   if (!snap || typeof snap !== 'object') return null;
-  const intOr0 = v => {
+  const intOr0 = (/** @type {*} */ v) => {
     const n = numOrNull(v);
     return n != null && n >= 0 ? Math.floor(n) : 0;
   };
@@ -103,13 +109,14 @@ function sanitizeCheckSnapshot(snap) {
     // 검증에 쓰인 원료 DB 버전 — 고시 개정 후에도 "당시 기준"을 특정할 수 있게 보존
     dbVersion: clampStr(snap.dbVersion || '', 20).trim(),
   };
-  return Object.values(s).some(v => typeof v === 'number' && v > 0) || s.dbVersion ? s : null;
+  return Object.values(s).some((/** @type {*} */ v) => typeof v === 'number' && v > 0) || s.dbVersion ? s : null;
 }
 
+/** @param {*} lots */
 function sanitizeLots(lots) {
   if (!Array.isArray(lots)) return [];
   return lots
-    .map(l => {
+    .map((/** @type {*} */ l) => {
       if (!l || typeof l !== 'object') return null;
       const name = clampStr(l.name || '', MAX_NAME_LEN).trim();
       const materialId = clampStr(l.materialId || '', 40).trim();
@@ -120,6 +127,7 @@ function sanitizeLots(lots) {
     .slice(0, MAX_LOTS);
 }
 
+/** @param {*} data */
 function sanitizeBatch(data) {
   return {
     formulaId: clampStr(data.formulaId || '', 40).trim(),
@@ -142,7 +150,7 @@ function sanitizeBatch(data) {
     // 라벨·안내문용 스냅샷 — 처방 수정·삭제와 무관하게 이 회차의 정보를 보존
     formulation: clampStr(data.formulation || '', 30).trim(),
     fullIngredients: Array.isArray(data.fullIngredients)
-      ? data.fullIngredients.map(n => clampStr(n, 120).trim()).filter(Boolean).slice(0, MAX_INCI)
+      ? data.fullIngredients.map((/** @type {*} */ n) => clampStr(n, 120).trim()).filter(Boolean).slice(0, MAX_INCI)
       : [],
     checkSnapshot: sanitizeCheckSnapshot(data.checkSnapshot),
     notes: clampStr(data.notes || '', MAX_NOTE_LEN).trim(),
@@ -154,11 +162,13 @@ export function listBatches() {
   return loadAll().slice().sort((a, b) => String(b.madeAt || '').localeCompare(String(a.madeAt || '')));
 }
 
+/** @param {string} id */
 export function getBatch(id) {
   return loadAll().find(b => b.id === id) || null;
 }
 
 /** 처방별 배치 이력 — madeAt 내림차순 */
+/** @param {string} formulaId */
 export function listBatchesByFormula(formulaId) {
   return listBatches().filter(b => b.formulaId === formulaId);
 }
@@ -173,7 +183,7 @@ export function listBatchesByFormula(formulaId) {
  */
 export function findBatchesByMaterial(materialId, name) {
   const target = typeof name === 'string' ? name.trim() : '';
-  return listBatches().filter(b => (b.materialLots || []).some(l =>
+  return listBatches().filter((/** @type {*} */ b) => (b.materialLots || []).some((/** @type {*} */ l) =>
     (materialId && l.materialId === materialId) || (target && l.name === target)));
 }
 
@@ -207,6 +217,7 @@ function localToday() {
  * 새 배치 생성 — batchNo는 madeAt 일자 기준 자동 채번.
  * @returns {{ok:boolean, batch?:object, error?:string}}
  */
+/** @param {*} data */
 export function createBatch(data) {
   const usage = getBatchUsage();
   if (!usage.canCreate) {
@@ -233,6 +244,7 @@ export function createBatch(data) {
  * batchNo·처방·조제일시·스냅샷은 기록 무결성을 위해 불변.
  * @returns {{ok:boolean, batch?:object, error?:string}}
  */
+/** @param {string} id @param {*} patch */
 export function updateBatch(id, patch) {
   const all = loadAll();
   const idx = all.findIndex(b => b.id === id);
@@ -260,6 +272,7 @@ export function updateBatch(id, patch) {
 }
 
 /** @returns {{ok:boolean, error?:string}} */
+/** @param {string} id */
 export function deleteBatch(id) {
   const all = loadAll();
   const idx = all.findIndex(b => b.id === id);

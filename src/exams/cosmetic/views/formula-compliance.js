@@ -81,6 +81,7 @@ const LAW_DOCS = {
 };
 
 /** 문서의 실제 MD 경로 — file 선언은 레지스트리 해석, path는 그대로 (contentRoot 상대) */
+/** @param {*} doc */
 function docPath(doc) {
   if (doc.path) return doc.path;
   const abs = resolveRefPath(doc.file); // 'content/exams/<id>/참조자료/ref_md/...' 절대형
@@ -280,7 +281,7 @@ const CHECKLIST_SETS = {
 
 /** 활성 세트 — 사업 유형 프로파일에서 유도 (FO-33·34), 폴백은 맞춤형 */
 function activeSet() {
-  return CHECKLIST_SETS[bizChecklistSet(getBizType())] || CHECKLIST_SETS.custom;
+  return (/** @type {Object.<string,*>} */ (CHECKLIST_SETS))[bizChecklistSet(getBizType())] || CHECKLIST_SETS.custom;
 }
 
 /* =======================================================
@@ -290,6 +291,7 @@ function activeSet() {
    ======================================================= */
 
 /** 체크 상태 로드 — 종합 보고서 수집기(FO-56)도 이 함수로 같은 파싱을 공유한다 */
+/** @param {*} [set] */
 export function loadChecks(set) {
   const s = set || activeSet();
   try {
@@ -302,6 +304,7 @@ export function loadChecks(set) {
   }
 }
 
+/** @param {*} checked @param {*} [set] */
 function saveChecks(checked, set) {
   const s = set || activeSet();
   return safeSetItem(s.key, JSON.stringify({ checked, updatedAt: localDateTime() }));
@@ -311,10 +314,11 @@ function saveChecks(checked, set) {
    렌더링
    ======================================================= */
 
+/** @param {string[]|undefined} refs */
 function refLinks(refs) {
   if (!refs || !refs.length) return '';
-  return `<span class="comp-refs">${refs.map(key => {
-    const doc = LAW_DOCS[key];
+  return `<span class="comp-refs">${refs.map((/** @type {string} */ key) => {
+    const doc = (/** @type {Object.<string,*>} */ (LAW_DOCS))[key];
     if (!doc) return '';
     const lawUrl = lawUrlFor(doc.file || doc.path) || lawUrlFor(doc.label);
     const ext = lawUrl ? `<a href="${lawUrl}" target="_blank" rel="noopener" class="comp-law-ext comp-law-ext-inline" title="${esc(doc.label)} — law.go.kr 공식 원문" aria-label="${esc(doc.label)} — law.go.kr 원문"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>` : '';
@@ -323,8 +327,8 @@ function refLinks(refs) {
 }
 
 function renderDocList() {
-  return Object.keys(LAW_DOCS).map(key => {
-    const doc = LAW_DOCS[key];
+  return Object.keys(LAW_DOCS).map((/** @type {string} */ key) => {
+    const doc = /** @type {*} */ ((/** @type {Object.<string,*>} */ (LAW_DOCS))[key]);
     const lawUrl = lawUrlFor(doc.file || doc.path) || lawUrlFor(doc.label);
     const ext = lawUrl ? `<a href="${lawUrl}" target="_blank" rel="noopener" class="comp-law-ext" title="law.go.kr 공식 원문 (최신 통합본)" aria-label="${esc(doc.label)} — law.go.kr 원문"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>원문</a>` : '';
     return `<span class="comp-doc-row"><a href="#" class="comp-doc-link" data-click="compOpenLaw" data-arg="${esc(key)}">
@@ -335,10 +339,11 @@ function renderDocList() {
   }).join('');
 }
 
+/** @param {*[]} sections @param {*} checked */
 function renderSections(sections, checked) {
-  return sections.map(sec => {
-    const done = sec.items.filter(it => checked[it.id]).length;
-    const items = sec.items.map(it => {
+  return sections.map((/** @type {*} */ sec) => {
+    const done = sec.items.filter((/** @type {*} */ it) => checked[it.id]).length;
+    const items = sec.items.map((/** @type {*} */ it) => {
       const isDone = !!checked[it.id];
       const appLink = it.app ? `<a href="#" class="comp-ref-link comp-app-link" data-click="${esc(it.app.click)}"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i> ${esc(it.app.label)}</a>` : '';
       return `<li class="comp-item${isDone ? ' is-done' : ''}">
@@ -373,7 +378,7 @@ function renderAuditLog() {
   box.innerHTML = log.length
     ? log.slice(0, 5).map(e => {
       const fresh = e.fresh && typeof e.fresh === 'object'
-        ? Object.keys(FRESH_LABEL).filter(k => e.fresh[k]).map(k => `${FRESH_LABEL[k]} ${e.fresh[k].slice(5)}`).join('·')
+        ? Object.keys(FRESH_LABEL).filter((/** @type {string} */ k) => e.fresh[k]).map((/** @type {string} */ k) => `${(/** @type {Object.<string,string>} */ (FRESH_LABEL))[k]} ${e.fresh[k].slice(5)}`).join('·')
         : '';
       return `<div class="comp-doc-row">
         <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
@@ -391,7 +396,7 @@ function render() {
   if (list) list.innerHTML = renderSections(set.sections, checked);
   const docs = document.getElementById('comp-docs');
   if (docs) docs.innerHTML = renderDocList();
-  const total = set.sections.reduce((n, s) => n + s.items.length, 0);
+  const total = set.sections.reduce((/** @type {number} */ n, /** @type {*} */ s) => n + s.items.length, 0);
   const done = Object.keys(checked).filter(id => checked[id]).length;
   const badge = document.getElementById('comp-progress-badge');
   if (badge) badge.textContent = `점검 ${done}/${total}`;
@@ -424,9 +429,10 @@ export function openCompliancePanel() {
   }
 }
 
+/** @param {string} itemId */
 export function compToggle(itemId) {
   if (typeof itemId !== 'string' || !itemId) return;
-  const known = activeSet().sections.some(s => s.items.some(it => it.id === itemId));
+  const known = activeSet().sections.some((/** @type {*} */ s) => s.items.some((/** @type {*} */ it) => it.id === itemId));
   if (!known) return;
   const checked = loadChecks();
   if (checked[itemId]) {
@@ -464,8 +470,9 @@ export function compAuditLogClear() {
   }).catch(() => {});
 }
 
+/** @param {string} key */
 export function compOpenLaw(key) {
-  const doc = LAW_DOCS[key];
+  const doc = (/** @type {Object.<string,*>} */ (LAW_DOCS))[key];
   if (!doc) return;
   if (window.ExamViewer && window.ExamViewer.openExam) {
     window.ExamViewer.openExam(contentPath(docPath(doc)));

@@ -86,6 +86,7 @@ export function summarizeLabelDraft(d) {
 }
 
 /** 필수 기재 체크 — 제10조 요건별 적합/보완 표시 HTML */
+/** @param {*} d */
 function labelChecklistHtml(d) {
   const { checks, missing } = summarizeLabelDraft(d);
   const li = checks.map(c => {
@@ -196,8 +197,8 @@ export function adlintRun() {
   }
   const sum = summarizeLint(hits);
   const sumHtml = Object.keys(sum).map(c => {
-    const cat = AD_CATEGORIES[c];
-    return `<span class="adlint-sum adlint-${esc(c)}">${esc(cat.label)} ${sum[c]}건</span>`;
+    const cat = (/** @type {Object.<string,*>} */ (AD_CATEGORIES))[c];
+    return `<span class="adlint-sum adlint-${esc(c)}">${esc(cat.label)} ${(/** @type {Object.<string,number>} */ (sum))[c]}건</span>`;
   }).join('');
   const listHtml = hits.map(h => {
     const ctx = text.slice(Math.max(0, h.index - 8), h.index + h.length + 8).trim();

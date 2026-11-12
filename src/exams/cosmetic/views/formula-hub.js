@@ -76,7 +76,7 @@ function applyBizProfile() {
     if (badge) badge.textContent = String(step++);
   });
   const guide = document.getElementById('formula-biz-guide');
-  if (guide) guide.textContent = BIZ_GUIDE[biz] || BIZ_GUIDE.custom;
+  if (guide) guide.textContent = (/** @type {Object.<string,string>} */ (BIZ_GUIDE))[biz] || BIZ_GUIDE.custom;
 }
 
 /* =======================================================
@@ -95,6 +95,7 @@ const EVIDENCE_KEYS = [
   STORAGE_KEYS.MATERIAL_ITEMS, STORAGE_KEYS.ADVERSE_ITEMS, STORAGE_KEYS.FORMULA_AUDIT_LOG,
 ];
 
+/** @param {string} biz */
 function complianceSetKey(biz) {
   return {
     custom: STORAGE_KEYS.COMPLIANCE_CHECKS,
@@ -151,9 +152,10 @@ function renderBackupReminder() {
 }
 
 /** 사업 유형 변경 — 허브 재렌더 + 서브패널이면 메뉴로 복귀 (FO-33) */
+/** @param {string} type */
 export function formulaSetBizType(type) {
   if (!setBizType(type)) return;
-  const t = BIZ_TYPES[getBizType()] || BIZ_TYPES.custom;
+  const t = (/** @type {Object.<string,*>} */ (BIZ_TYPES))[getBizType()] || BIZ_TYPES.custom;
   showToast(`사업 유형을 "${t.label}"(으)로 변경했습니다. 체크리스트·메뉴가 유형별 기준으로 바뀝니다.`, 'success');
   initFormulaView();
 }

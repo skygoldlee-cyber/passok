@@ -1,6 +1,25 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(types): noImplicitAny 소진 9차 — src/exams/cosmetic 전량 소진 + noImplicitAny 활성화 (Phase 1 완료)
+
+- **디렉터리 전량 소진**: src/exams/cosmetic 810건 → 0, 37파일 — 루트 스토어·도메인 로직(store-utils·batch-store·formula-store·material-ledger·formula-check·product-vision·formula-stability·product-store·formula-rules·ad-lint·adverse-store·biz-profile·custom-ingredient-store·customer-store·usage-guide) + 뷰 전수(formula-print 90·batch-form 48·calc 41·audit 36·batch 32·customer 22·compliance 22·material 21·prod-detail 20·fields 17·recommend 15·products 12·prod-vision 11·io 10 등)
+- **noImplicitAny 활성화**: jsconfig.json `"noImplicitAny": true` — 백로그 전량 소진으로 보류 조건 해소, `check:types` 자체가 implicit any 차단 게이트가 됨 (ADR-0015 Phase 1 완료). check:any 래칫은 기준선 0으로 이중 감시 유지
+- **계약 명문화**:
+  - `store-utils.js` 공유 스토어 헬퍼 전량 — `loadItems`·`saveItems`·`newId`·`clampStr`·`numOrNull`·`pickEnum`·`sanitizeStringList`·`sanitizeCustomerFields`·`clampDate(Time)` — formula·batch·customer·material·product 스토어의 공통 진입점
+  - `emptyCustomRules()` 반환 `Object.<string,Object.<string,string[]>>` — scope 동적 인덱스(`rules[scope][key]`)의 근본 원인을 반환 타입 하나로 해소 (formula-rules 70건 중 다수)
+  - `BASE_TEMPLATES`·`CONCERN_INGREDIENTS`·`SKIN_INGREDIENTS`·`ROLE_PHASE`·`CHECK_BADGE`·`CLASS_BADGE`·`LAW_DOCS`·`CHECKLIST_SETS`·`BIZ_TYPES`·`RULE_SCOPE_LABEL`·`QC_BADGE`·`FRESH_LABEL` — 리터럴 맵 동적 인덱스 `Object.<string,*>` 캐스트 일괄
+  - `vision` 사진 슬롯 상태 객체 — `front|back|abort` 리터럴 키를 `Object.<string,*>` 캐스트로 슬롯 인덱스 해소 (prod-vision)
+  - `batchQcSummary`·`buildBatchRecordHtml`·`buildLabelHtml`·`buildGuideHtml`·`buildWorkOrderHtml`·`buildRecallListHtml`·`buildSalesRecordHtml`·`buildConsentHtml` — 인쇄 산출물 빌더의 배치·포뮬러 인자를 `*`로 명문화 (저장 레코드는 런타임 스키마)
+- **정직한 계약 수정**:
+  - `fileToBase64Jpeg`·`importFormula`·`importProduct`·`importCustomRules` FileReader 경계 — `event.target` `HTMLInputElement` 캐스트 + null 가드, `e.target.result` `FileReader` 캐스트 (io·products·recommend·material·customer 공통 패턴)
+  - `audit` `entry.saved` — 리터럴에 없던 후속 할당 필드를 초기값 `false`로 선언 (TS2339 — 실제 할당 전 존재 명문화)
+  - `visionStatus(text)` nullable 파라미터 — `r.error`(string|undefined) 3곳 호출부가 시그니처 강화로 표면화, 본체가 `text || ''` 정규화하므로 파라미터 nullable 정정
+  - `formula-fields` `r.customer` — `createCustomer` `{ok, customer?}` 반환의 ok 가드 이후 `*` 캐스트 정규화
+  - `fill` options `readonly string[]` — `Object.freeze` 옵션 상수의 readonly 배열 호환
+- 결과: 잔여 810 → **0건**, 기준선 37 → **0파일** — **전 저장소 noImplicitAny 백로그 소진 완료 (4,001건 → 0)**. `check:types` 0 · lint 0 · 유닛 1,866 · cosmetic DOM 166건 통과
+
+
 ## 2026-11-12 feat(types): noImplicitAny 소진 8차 — src/exams/carework 전량 소진 완료 (Phase 1 지속)
 
 - **디렉터리 전량 소진**: src/exams/carework ~666건 → 0, 51파일 — 뷰 파셜(care-flow·care-custom-form·care-handover·care-calc·care-visit·care-card·care-client·care-audit) + 도메인 스토어·시드·템플릿 전수

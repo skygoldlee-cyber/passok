@@ -16,6 +16,7 @@ import {
 import { getEl, invalidateIngredientIndex } from './formula-core.js';
 import { renderCalcRows } from './formula-calc.js';
 
+/** @type {string|null} */
 let _cingEditingId = null;
 
 /** 도메인 CSS 미주입 환경(사전 뷰에서 바로 등록) 대비 — 모달 표시 전 스타일 보장 */
@@ -67,6 +68,7 @@ function cingOverlay() {
   return ov;
 }
 
+/** @param {*} item */
 function cingFill(item) {
   getEl('cing-name').value = item.name || '';
   getEl('cing-eng').value = item.engName || '';
@@ -76,6 +78,7 @@ function cingFill(item) {
 }
 
 /** 신규 등록 모달 — name이 있으면 원료명 프리필 (계산기 'DB 미등록' 경로) */
+/** @param {string} name */
 export function customIngAdd(name) {
   ensureFormulaStyles();
   const ov = cingOverlay();
@@ -91,6 +94,7 @@ export function customIngAdd(name) {
 }
 
 /** 수정 모달 — 사전 카드의 '수정' 액션 */
+/** @param {string} id */
 export function customIngEdit(id) {
   const item = getCustomIngredient(id);
   if (!item) { showToast('등록 항목을 찾을 수 없습니다.', 'error'); return; }

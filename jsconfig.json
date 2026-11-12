@@ -22,8 +22,9 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "useUnknownInCatchVariables": true,
-    // noImplicitAny는 잔여 백로그 때문에 보류 — check:any 게이트(tools/check/check_noimplicitany.js
-    // + noimplicitany_baseline.json)가 파일별 에러 수 단조 감소를 강제하며 모듈 단위 소진 중 (Phase 1)
+    // noImplicitAny — 백로그 전량 소진으로 활성화 (Phase 1 완료, ADR-0015).
+    // check:any 래칫(tools/check/check_noimplicitany.js)도 파일별 잔여를 이중 감시한다.
+    "noImplicitAny": true,
     "skipLibCheck": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "types": []

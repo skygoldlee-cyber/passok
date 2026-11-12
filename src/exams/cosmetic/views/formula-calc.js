@@ -34,11 +34,12 @@ import { initFormulaView } from './formula-hub.js';
    배합 계산기
    ======================================================= */
 
+/** @param {*} item */
 function rowCheckInfo(item) {
   const index = getIndex();
   const ing = item.name ? index.get(item.name) : null;
-  const r = checkFormulaItems([{ name: item.name, concentration: item.concentration }], index).results[0];
-  const info = CHECK_BADGE[r.check] || CHECK_BADGE[CHECK.UNKNOWN];
+  const r = /** @type {*} */ (checkFormulaItems([{ name: item.name, concentration: item.concentration }], index).results[0]);
+  const info = (/** @type {Object.<string,{cls:string,label:string}>} */ (CHECK_BADGE))[r.check] || CHECK_BADGE[CHECK.UNKNOWN];
   // 자가 등록 원료 (DI-07) — 법정 판정 라벨 대신 '자가' 표기로 책임 경계를 드러낸다
   const isCustom = !!(ing && (ing.custom || ing.type === 'custom'));
   let label = !item.name ? '원료명 입력' : (ing ? info.label : 'DB 미등록');
@@ -77,7 +78,9 @@ function updateCalcComputed() {
 
   let sumConc = 0;
   let sumAmount = 0;
+  /** @type {Object.<string,number>} */
   const phaseSums = {}; // 단계별 배합률 소계
+  /** @type {Object.<string,number>} */
   const checkCounts = { ok: 0, warn: 0, banned: 0, unknown: 0 }; // 검증 요약 카운트
   container.querySelectorAll('.f-row').forEach((rowEl, i) => {
     const item = calc.rows[i];
@@ -142,8 +145,8 @@ function updateCalcComputed() {
   const phaseEl = getEl('formula-phase-sums');
   if (phaseEl) {
     const parts = PHASE_OPTIONS
-      .filter(p => phaseSums[p] != null)
-      .map(p => `${p} ${Math.round(phaseSums[p] * 100) / 100}%`);
+      .filter((/** @type {string} */ p) => phaseSums[p] != null)
+      .map((/** @type {string} */ p) => `${p} ${Math.round(phaseSums[p] * 100) / 100}%`);
     phaseEl.textContent = parts.length ? `단계별: ${parts.join(' · ')}` : '';
   }
   // 진행 단계 표시 (FO-27) — 원료 입력 → 한도 검증 → 저장
@@ -153,6 +156,7 @@ function updateCalcComputed() {
 }
 
 /** 진행 단계 스트립 — 서서 작업하는 현장에서 현재 위치를 상시 표시 */
+/** @param {*} checkCounts */
 function renderCalcProgress(checkCounts) {
   const el = getEl('formula-progress');
   if (!el) return;
@@ -173,6 +177,7 @@ function renderCalcProgress(checkCounts) {
    작업 드래프트 자동 저장·복원 (FO-30) — 현장 중단 대응
    신규 작성(editingId 없음)만 대상 — 저장본 편집은 드래프트를 쓰지 않는다.
    ======================================================= */
+/** @type {*} */
 let _draftTimer = null;
 
 function readCalcDraft() {
@@ -194,7 +199,7 @@ function scheduleDraftSave() {
   clearTimeout(_draftTimer);
   _draftTimer = setTimeout(() => {
     const d = readCalcDraft();
-    if (!d.rows.some(r => r.name) && !d.name && !d.steps.length) return; // 빈 작업은 저장 안 함
+    if (!d.rows.some((/** @type {*} */ r) => r.name) && !d.name && !d.steps.length) return; // 빈 작업은 저장 안 함
     if (setJSON(STORAGE_KEYS.FORMULA_CALC_DRAFT, d)) showDraftStatus(d.savedAt);
   }, 600);
 }
@@ -204,6 +209,7 @@ function clearCalcDraft() {
   setJSON(STORAGE_KEYS.FORMULA_CALC_DRAFT, null);
 }
 
+/** @param {*} savedAt @param {string} [prefix] */
 function showDraftStatus(savedAt, prefix = '자동 저장') {
   const el = getEl('formula-draft-status');
   if (!el) return;
@@ -244,7 +250,7 @@ export function renderStability() {
     const ic = stab.result === '양호' ? 'fa-circle-check' : (stab.result === '이상 발견' ? 'fa-triangle-exclamation' : 'fa-flask');
     confirmHtml = `<div class="formula-stab-confirm ${cls}"><i class="fa-solid ${ic}" aria-hidden="true"></i> 실험 확인 기록: ${esc(parts.join(' · '))}</div>`;
   }
-  const icon = l => l === STAB.WARN
+  const icon = (/** @type {string} */ l) => l === STAB.WARN
     ? '<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>'
     : '<i class="fa-solid fa-circle-info" aria-hidden="true"></i>';
   panel.innerHTML = `
@@ -322,8 +328,8 @@ export function renderCalcRows() {
 
 /** 행을 제조 단계(PHASE_OPTIONS) 순서로 정렬 — 지정 안 한 행은 맨 뒤 */
 export function formulaSortPhase() {
-  const order = p => {
-    const i = PHASE_OPTIONS.indexOf(p);
+  const order = (/** @type {string|undefined} */ p) => {
+    const i = PHASE_OPTIONS.indexOf(/** @type {string} */ (p));
     return i < 0 ? PHASE_OPTIONS.length : i;
   };
   calc.rows.sort((a, b) => order(a.phase) - order(b.phase));
@@ -341,12 +347,14 @@ const CALC_FIELD_MAP = [
 ];
 
 function _calcFieldEls() {
+  /** @type {Object.<string,*>} */
   const els = {};
   for (const [id, prop] of CALC_FIELD_MAP) els[prop] = getEl(id);
   return els;
 }
 
 /** 기존 포뮬러 수정 진입 — 소스 객체 값으로 필드 채우기 */
+/** @param {Object.<string,*>} els @param {*} f */
 function _writeCalcSourceFields(els, f) {
   for (const [, prop] of CALC_FIELD_MAP) {
     const el = els[prop];
@@ -356,6 +364,7 @@ function _writeCalcSourceFields(els, f) {
 }
 
 /** 신규 진입 — 기본값 리셋 후 자동 저장 드래프트 복원 (FO-30) */
+/** @param {Object.<string,*>} els */
 function _initCalcFields(els) {
   if (els.targetVolume && !els.targetVolume.value) els.targetVolume.value = '100';
   if (els.unit) els.unit.value = 'g';
@@ -365,8 +374,9 @@ function _initCalcFields(els) {
   _restoreCalcDraft(els);
 }
 
+/** @param {*} draft */
 function _draftRows(draft) {
-  const rows = draft.rows.map(r => ({
+  const rows = draft.rows.map((/** @type {*} */ r) => ({
     name: (r && r.name) || '',
     concentration: r && r.concentration != null ? r.concentration : null,
     phase: (r && r.phase) || '',
@@ -374,12 +384,14 @@ function _draftRows(draft) {
   return rows.length ? rows : [{ name: '', concentration: null, phase: '' }];
 }
 
+/** @param {*} draft */
 function _hasDraftContent(draft) {
-  return draft.rows.some(r => r && r.name)
+  return draft.rows.some((/** @type {*} */ r) => r && r.name)
     || draft.name || (draft.steps || []).length;
 }
 
 /** 작업 드래프트 복원 — 현장 중단 후 재진입 시 자동 저장분 이어쓰기 */
+/** @param {Object.<string,*>} els */
 function _restoreCalcDraft(els) {
   const draft = getJSON(STORAGE_KEYS.FORMULA_CALC_DRAFT);
   if (!draft || !Array.isArray(draft.rows) || !_hasDraftContent(draft)) return;
@@ -393,8 +405,9 @@ function _restoreCalcDraft(els) {
 }
 
 /** 총량/단위·pH·메모·안정성 필드 변경 리스너 1회 바인딩 */
+/** @param {Object.<string,*>} els */
 function _bindCalcFieldListeners(els) {
-  const bindOnce = (el, flag, ev, fn) => {
+  const bindOnce = (/** @type {HTMLElement|null} */ el, /** @type {string} */ flag, /** @type {string} */ ev, /** @type {(e:Event)=>void} */ fn) => {
     if (el && !el.dataset[flag]) {
       el.dataset[flag] = '1';
       el.addEventListener(ev, fn);
@@ -412,6 +425,7 @@ function _bindCalcFieldListeners(els) {
 }
 
 /** 고시 개정 감지 — 저장된 스냅샷 기준과 현재 DB가 다른 원료가 있으면 배너 표시 */
+/** @param {*} sourceFormula */
 function _updateStdWarnBanner(sourceFormula) {
   const stdWarnEl = getEl('formula-std-warn');
   if (!stdWarnEl) return;
@@ -427,23 +441,27 @@ function _updateStdWarnBanner(sourceFormula) {
     + `저장 후 고시 기준이 변경된 원료가 ${changed}종 있습니다 — 한도를 재검증하고 다시 저장하면 스냅샷이 갱신됩니다.</div>`;
 }
 
+/** @param {*} f */
 function _hasCustomerInfo(f) {
   const c = f.customer || {};
   return c.name || c.skinType || c.formulation || c.products || c.age != null
     || _hasCustomerConcerns(c);
 }
 
+/** @param {*} c */
 function _hasCustomerConcerns(c) {
   return (c.concerns && c.concerns.length) || c.pregnancy
     || (c.allergies && c.allergies.length);
 }
 
+/** @param {*} f */
 function _hasProcessInfo(f) {
   return f.phTarget != null || f.phActual != null
     || (f.steps && f.steps.length) || f.notes || f.stability;
 }
 
 /** 내용이 있는 접이식 섹션은 자동 펼침 (기존 포뮬러 수정 진입 시) */
+/** @param {*} sourceFormula */
 function _autoOpenFolds(sourceFormula) {
   const custFold = /** @type {HTMLDetailsElement} */ (document.getElementById('formula-fold-customer'));
   const procFold = /** @type {HTMLDetailsElement} */ (document.getElementById('formula-fold-process'));
@@ -453,6 +471,7 @@ function _autoOpenFolds(sourceFormula) {
   if (procFold) procFold.open = !!hasProc;
 }
 
+/** @param {*} [sourceFormula] */
 export function openFormulaCalc(sourceFormula) {
   showPanel('formula-calc-panel');
   const subnav = getEl('formula-calc-subnav');
@@ -489,6 +508,7 @@ export function formulaCalcAddRow() {
   if (last) /** @type {HTMLElement} */ (last).focus();
 }
 
+/** @param {*} idx */
 export function formulaCalcRemoveRow(idx) {
   const i = parseInt(idx, 10);
   if (Number.isNaN(i) || i < 0 || i >= calc.rows.length) return;
@@ -554,6 +574,7 @@ export function formulaStepAdd() {
   if (last) /** @type {HTMLElement} */ (last).focus();
 }
 
+/** @param {*} idx */
 export function formulaStepRemove(idx) {
   const i = parseInt(idx, 10);
   if (Number.isNaN(i) || i < 0 || i >= calc.steps.length) return;

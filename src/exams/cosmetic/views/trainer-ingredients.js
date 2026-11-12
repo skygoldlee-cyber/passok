@@ -37,6 +37,7 @@ export async function startIngredientsChallenge() {
     renderIngQuestion();
 }
 
+/** @param {*} db */
 function generateIngredientsQuestions(db) {
     const list = [];
     if (!Array.isArray(db) || db.length === 0) return [];
@@ -191,7 +192,7 @@ function renderIngQuestion() {
         if (inputContainer) inputContainer.classList.add('is-hidden');
 
         const optionIndicators = ['A', 'B', 'C', 'D'];
-        currentQ.options.forEach((optValue, idx) => {
+        currentQ.options.forEach((/** @type {string} */ optValue, /** @type {number} */ idx) => {
             const btn = document.createElement('button');
             btn.className = 'limits-opt-btn';
             btn.dataset.value = optValue;
@@ -212,6 +213,8 @@ function renderIngQuestion() {
     if (nextBtn) nextBtn.classList.add('is-hidden');
 }
 
+/** @param {HTMLElement} selectedBtn @param {string} selectedValue @param {string} correctValue */
+/** @param {HTMLButtonElement} selectedBtn @param {string} selectedValue @param {string} correctValue */
 function submitIngChoiceAnswer(selectedBtn, selectedValue, correctValue) {
     const isCorrect = (selectedValue === correctValue);
     vibrate(isCorrect ? HAPTIC.correct : HAPTIC.wrong);
@@ -262,6 +265,7 @@ export function submitIngAnswer() {
     showIngFeedback(isCorrect, currentQ.correct);
 }
 
+/** @param {boolean} isCorrect @param {string} correctValue */
 function showIngFeedback(isCorrect, correctValue) {
     const ingState = state.trainer.ingredients;
     const currentQ = ingState.shuffledQuestions[ingState.currentIndex];

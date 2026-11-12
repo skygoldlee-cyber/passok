@@ -65,24 +65,28 @@ function loadAll() {
   return loadItems(STORAGE_KEYS.FORMULA_ITEMS);
 }
 
+/** @param {*[]} formulas */
 function saveAll(formulas) {
   return saveItems(STORAGE_KEYS.FORMULA_ITEMS, formulas);
 }
 
+/** @param {*} v */
 function phOrNull(v) {
   const n = numOrNull(v);
   return n != null && n >= 0 && n <= MAX_PH ? n : null;
 }
 
+/** @param {*} steps */
 function sanitizeSteps(steps) {
   if (!Array.isArray(steps)) return [];
   return steps
-    .map(s => (typeof s === 'string' ? s.trim() : ''))
+    .map((/** @type {*} */ s) => (typeof s === 'string' ? s.trim() : ''))
     .filter(Boolean)
     .slice(0, MAX_STEPS)
-    .map(s => s.slice(0, MAX_STEP_LEN));
+    .map((/** @type {string} */ s) => s.slice(0, MAX_STEP_LEN));
 }
 
+/** @param {*} item */
 function sanitizeIngredient(item) {
   if (!item || typeof item.name !== 'string' || !item.name.trim()) return null;
   return {
@@ -98,6 +102,7 @@ function sanitizeIngredient(item) {
   };
 }
 
+/** @param {*} customer */
 function sanitizeCustomer(customer) {
   if (!customer || typeof customer !== 'object') return null;
   const c = {
@@ -111,6 +116,7 @@ function sanitizeCustomer(customer) {
   return empty ? null : c;
 }
 
+/** @param {*} stab */
 function sanitizeStability(stab) {
   if (!stab || typeof stab !== 'object') return null;
   const s = {
@@ -139,17 +145,19 @@ export const COLORANT_RE = /색\s*\d+호|레이크|(?:C\.?I\.?)\s*\d{4,6}|카민
  * @param {Array<{name:string, concentration:number|null}>} ingredients
  * @returns {string[]} 전성분 순서의 원료명 배열
  */
+/** @param {*[]} ingredients */
 function buildFullIngredients(ingredients) {
-  const isColorant = i => COLORANT_RE.test(i.name);
-  const byConc = (a, b) => (b.concentration != null ? b.concentration : 0)
+  const isColorant = (/** @type {*} */ i) => COLORANT_RE.test(i.name);
+  const byConc = (/** @type {*} */ a, /** @type {*} */ b) => (b.concentration != null ? b.concentration : 0)
     - (a.concentration != null ? a.concentration : 0);
-  const normal = ingredients.filter(i => !isColorant(i));
-  const above = normal.filter(i => i.concentration != null && i.concentration > 1).sort(byConc);
-  const below = normal.filter(i => i.concentration == null || i.concentration <= 1).sort(byConc);
+  const normal = ingredients.filter((/** @type {*} */ i) => !isColorant(i));
+  const above = normal.filter((/** @type {*} */ i) => i.concentration != null && i.concentration > 1).sort(byConc);
+  const below = normal.filter((/** @type {*} */ i) => i.concentration == null || i.concentration <= 1).sort(byConc);
   const colorants = ingredients.filter(isColorant).sort(byConc);
   return [...above, ...below, ...colorants].map(i => i.name);
 }
 
+/** @param {*} data */
 function sanitizeFormula(data) {
   const ingredients = Array.isArray(data.ingredients)
     ? data.ingredients.map(sanitizeIngredient).filter(Boolean)
@@ -177,9 +185,10 @@ function sanitizeFormula(data) {
 
 /** 저장된 포뮬러 목록 — updatedAt 내림차순 */
 export function listFormulas() {
-  return loadAll().slice().sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  return loadAll().slice().sort((/** @type {*} */ a, /** @type {*} */ b) => (b.updatedAt || 0) - (a.updatedAt || 0));
 }
 
+/** @param {string} id */
 export function getFormula(id) {
   return loadAll().find(f => f.id === id) || null;
 }
@@ -194,6 +203,7 @@ export function getFormulaUsage() {
  * 새 포뮬러 생성.
  * @returns {{ok:boolean, formula?:object, error?:string}}
  */
+/** @param {*} data */
 export function createFormula(data) {
   const usage = getFormulaUsage();
   if (!usage.canCreate) {
@@ -214,6 +224,7 @@ export function createFormula(data) {
  * 포뮬러 갱신 (id·createdAt은 보존).
  * @returns {{ok:boolean, formula?:object, error?:string}}
  */
+/** @param {string} id @param {*} data */
 export function updateFormula(id, data) {
   const all = loadAll();
   const idx = all.findIndex(f => f.id === id);
@@ -233,6 +244,7 @@ export function updateFormula(id, data) {
  * customerId만 비운다 (기록 보존 원칙).
  * @returns {number} 참조가 해제된 포뮬러 수
  */
+/** @param {string} customerId */
 export function unlinkCustomerFromFormulas(customerId) {
   if (!customerId) return 0;
   const all = loadAll();
@@ -245,6 +257,7 @@ export function unlinkCustomerFromFormulas(customerId) {
 }
 
 /** @returns {{ok:boolean, error?:string}} */
+/** @param {string} id */
 export function deleteFormula(id) {
   const all = loadAll();
   const idx = all.findIndex(f => f.id === id);
@@ -255,6 +268,7 @@ export function deleteFormula(id) {
 }
 
 /** 복제 — 새 ID + " (복사본)" 접미사, 한도 적용 */
+/** @param {string} id */
 export function duplicateFormula(id) {
   const src = getFormula(id);
   if (!src) return { ok: false, error: '포뮬러를 찾을 수 없습니다.' };
@@ -271,6 +285,7 @@ export function duplicateFormula(id) {
 /**
  * 포뮬러 단건 JSON 직렬화 — 외부 공유용. id·타임스탬프는 제외(가져오기 시 새로 부여).
  */
+/** @param {*} formula */
 export function serializeFormula(formula) {
   const clean = sanitizeFormula(formula || {});
   return JSON.stringify({ type: 'formula-os', version: 1, formula: clean }, null, 2);
@@ -281,6 +296,7 @@ export function serializeFormula(formula) {
  * type 래퍼가 있으면 풀고, 날것의 포뮬러 객체도 허용한다.
  * @returns {{ok:boolean, formula?:object, error?:string}}
  */
+/** @param {*} input */
 export function importFormula(input) {
   let parsed;
   try { parsed = typeof input === 'string' ? JSON.parse(input) : input; }
@@ -298,10 +314,11 @@ export function importFormula(input) {
  * @returns {Array<{name:string, concentration:number|null, amount:number|null}>}
  *   amount = targetVolume × concentration / 100. 계산 불가 시 null.
  */
+/** @param {*} formula */
 export function calcAmounts(formula) {
   if (!formula || !Array.isArray(formula.ingredients)) return [];
   const total = numOrNull(formula.targetVolume);
-  return formula.ingredients.map(item => ({
+  return formula.ingredients.map((/** @type {*} */ item) => ({
     name: item.name,
     concentration: item.concentration,
     amount: total != null && item.concentration != null

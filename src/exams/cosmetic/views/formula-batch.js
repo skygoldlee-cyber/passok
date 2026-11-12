@@ -44,8 +44,9 @@ export {
 const listFilter = { formula: '', customer: '', qc: '', delivered: '' };
 
 /** 필터 조건에 맞는 배치만 반환 — CSV보내기도 이 결과를 사용 */
+/** @param {*[]} batches */
 function applyListFilter(batches) {
-  return batches.filter(b => {
+  return batches.filter((/** @type {*} */ b) => {
     if (listFilter.formula && b.formulaName !== listFilter.formula) return false;
     if (listFilter.customer
       && !(b.customerName || '').toLowerCase().includes(listFilter.customer.toLowerCase())) {
@@ -66,11 +67,12 @@ function applyListFilter(batches) {
 }
 
 /** 필터 바 렌더 — 처방 옵션은 실제 배치에 있는 처방명으로 구성 */
+/** @param {*[]} batches */
 function renderFilterBar(batches) {
   const bar = getEl('batch-filter-bar');
   if (!bar) return;
-  const names = [...new Set(batches.map(b => b.formulaName).filter(Boolean))].sort();
-  const opt = (v, cur) => `<option value="${esc(v)}"${v === cur ? ' selected' : ''}>${esc(v || '전체')}</option>`;
+  const names = [...new Set(batches.map((/** @type {*} */ b) => b.formulaName).filter(Boolean))].sort();
+  const opt = (/** @type {string} */ v, /** @type {string} */ cur) => `<option value="${esc(v)}"${v === cur ? ' selected' : ''}>${esc(v || '전체')}</option>`;
   const optionsHtml = names.map(n => opt(n, listFilter.formula)).join('');
   bar.innerHTML = `
     <select id="batch-filter-formula" class="form-select batch-filter-sel" aria-label="처방 필터">
@@ -96,9 +98,9 @@ function renderFilterBar(batches) {
     <button class="btn btn-secondary btn-sm" data-click="batchPrintSales" title="인도 완료 건을 판매내역서로 인쇄 (FO-58)">
       <i class="fa-solid fa-receipt" aria-hidden="true"></i> 판매내역서
     </button>`;
-  const bind = (id, key, evt) => {
-    const el = getEl(id);
-    if (el) el.addEventListener(evt, () => { listFilter[key] = el.value.trim(); openBatchPanel(); });
+  const bind = (/** @type {string} */ id, /** @type {string} */ key, /** @type {string} */ evt) => {
+    const el = /** @type {HTMLInputElement|HTMLSelectElement|null} */ (getEl(id));
+    if (el) el.addEventListener(evt, () => { (/** @type {Object.<string,string>} */ (listFilter))[key] = el.value.trim(); openBatchPanel(); });
   };
   bind('batch-filter-formula', 'formula', 'change');
   bind('batch-filter-qc', 'qc', 'change');
@@ -117,6 +119,7 @@ export function openBatchPanel() {
 }
 
 /** 목록 본문만 다시 그림 — 필터 입력 중 필터 바 재생성(포커스 손실)을 피하기 위함 */
+/** @param {*[]|null} [batches] */
 function renderBatchList(batches) {
   const list = getEl('batch-list');
   if (!list) return;
@@ -152,7 +155,7 @@ function renderBatchList(batches) {
     return;
   }
 
-  list.innerHTML = filtered.map(b => {
+  list.innerHTML = filtered.map((/** @type {*} */ b) => {
     const s = batchQcSummary(b);
     const qcHtml = s.bad.length
       ? `<span class="f-check f-check-banned">QC 이상: ${esc(s.bad.join('·'))}</span>`
@@ -187,6 +190,7 @@ function renderBatchList(batches) {
   }).join('');
 }
 
+/** @param {*} expiryAt */
 function expiryBadge(expiryAt) {
   const days = daysUntilExpiry({ expiryAt });
   if (days == null) return '';
@@ -211,6 +215,7 @@ const BATCH_CSV_HEADERS = [
   '사용LOT', '원료DB버전', '메모',
 ];
 
+/** @param {*} b */
 function batchToCsvRow(b) {
   const s = batchQcSummary(b);
   return [
@@ -228,7 +233,7 @@ function batchToCsvRow(b) {
     b.expiryAt || '',
     b.deliveredAt || '',
     b.disposition || '',
-    (b.materialLots || []).map(l => `${l.name}:${l.lot || '-'}`.trim()).join('; '),
+    (b.materialLots || []).map((/** @type {*} */ l) => `${l.name}:${l.lot || '-'}`.trim()).join('; '),
     (b.checkSnapshot && b.checkSnapshot.dbVersion) || '',
     b.notes || '',
   ];
@@ -295,7 +300,7 @@ export async function batchSave() {
   if (lots.length && data.targetVolume != null && !Number.isNaN(data.targetVolume)) {
     const vol = data.targetVolume;
     const usage = lots.map(lot => {
-      const ing = (formula.ingredients || []).find(i => (i && i.name || '').trim() === lot.name);
+      const ing = (formula.ingredients || []).find((/** @type {*} */ i) => (i && i.name || '').trim() === lot.name);
       return {
         materialId: lot.materialId, name: lot.name,
         amount: ing && ing.concentration != null
@@ -305,20 +310,22 @@ export async function batchSave() {
     const res = deductStock(usage);
     if (!res.ok) showToast('재고 차감 저장에 실패했습니다 — 원료 장부를 확인하세요.', 'error');
     if (res.shortages.length) {
-      showToast(`재고 부족: ${res.shortages.map(s => `${s.name} 잔량 ${s.had}`).join(' · ')} — 발주가 필요합니다.`, 'error');
+      showToast(`재고 부족: ${res.shortages.map((/** @type {*} */ s) => `${s.name} 잔량 ${s.had}`).join(' · ')} — 발주가 필요합니다.`, 'error');
     } else if (res.deducted.length) {
-      showToast(`재고 차감: ${res.deducted.map(d => `${d.name} −${d.amount} (잔량 ${d.remain})`).join(' · ')}`, 'info');
+      showToast(`재고 차감: ${res.deducted.map((/** @type {*} */ d) => `${d.name} −${d.amount} (잔량 ${d.remain})`).join(' · ')}`, 'info');
     }
   }
 
-  showToast(`${r.batch.batchNo} 조제 기록이 저장되었습니다.`, 'success');
-  batchOpen(r.batch.id);
+  const saved = /** @type {*} */ (r.batch);
+  showToast(`${saved.batchNo} 조제 기록이 저장되었습니다.`, 'success');
+  batchOpen(saved.id);
 }
 
 /* =======================================================
    배치 상세 · 삭제 · 인쇄
    ======================================================= */
 
+/** @param {string} id */
 export function batchOpen(id) {
   const b = getBatch(id);
   if (!b) { showToast('조제 기록을 찾을 수 없습니다.', 'error'); return; }
@@ -352,7 +359,7 @@ export function batchOpen(id) {
       <div class="batch-qc-grid">${qcRowsHtml}</div>
       ${b.phMeasured != null ? `<div class="formula-card-meta">실측 pH: ${esc(String(b.phMeasured))}</div>` : ''}
       ${b.disposition ? `<div class="formula-card-meta">QC 이상 조치: ${esc(b.disposition)}</div>` : ''}
-      ${b.materialLots && b.materialLots.length ? `<div class="formula-card-meta">사용 LOT: ${esc(b.materialLots.map(l => (l.name + ' ' + (l.lot || '')).trim()).join(' · '))}</div>` : ''}
+      ${b.materialLots && b.materialLots.length ? `<div class="formula-card-meta">사용 LOT: ${esc(b.materialLots.map((/** @type {*} */ l) => (l.name + ' ' + (l.lot || '')).trim()).join(' · '))}</div>` : ''}
       <div class="formula-card-checks">${hygHtml}</div>
       ${b.fullIngredients && b.fullIngredients.length ? `<div class="formula-card-inci"><i class="fa-solid fa-list-ol" aria-hidden="true"></i> ${esc(b.fullIngredients.join(', '))}</div>` : ''}
       ${snapHtml}
@@ -367,6 +374,7 @@ export function batchOpen(id) {
     </div>`;
 }
 
+/** @param {string} id */
 export async function batchDelete(id) {
   const b = getBatch(id);
   if (!b) return;
@@ -378,14 +386,18 @@ export async function batchDelete(id) {
   openBatchPanel();
 }
 
+/** @param {string} id @param {(b:*)=>string} builder @param {string} [_emptyMsg] */
 function printBatch(id, builder, _emptyMsg) {
   const b = getBatch(id);
   if (!b) { showToast('조제 기록을 찾을 수 없습니다.', 'error'); return; }
   printHtml(builder(b));
 }
 
+/** @param {string} id */
 export function batchPrintRecord(id) { printBatch(id, buildBatchRecordHtml); }
+/** @param {string} id */
 export function batchPrintLabel(id) { printBatch(id, buildLabelHtml); }
+/** @param {string} id */
 export function batchPrintGuide(id) { printBatch(id, buildGuideHtml); }
 
 /**

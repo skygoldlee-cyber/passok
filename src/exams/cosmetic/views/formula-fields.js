@@ -105,17 +105,18 @@ export function formulaCustSaveAs() {
   const data = readCustomerInputs();
   const r = createCustomer(data);
   if (!r.ok) { showStoreError(r, '고객 관리', showToast, '고객 등록에 실패했습니다.'); return; }
+  const cust = /** @type {*} */ (r.customer);
   const idEl = getEl('formula-cust-id');
-  if (idEl) idEl.value = r.customer.id;
+  if (idEl) idEl.value = cust.id;
   const refEl = getEl('formula-cust-ref');
   if (refEl) {
     const opt = document.createElement('option');
-    opt.value = r.customer.id;
-    opt.textContent = r.customer.name;
+    opt.value = cust.id;
+    opt.textContent = cust.name;
     refEl.appendChild(opt);
-    refEl.value = r.customer.id;
+    refEl.value = cust.id;
   }
-  showToast(`"${r.customer.name}" 고객 카드를 만들고 연결했습니다.`, 'success');
+  showToast(`"${cust.name}" 고객 카드를 만들고 연결했습니다.`, 'success');
 }
 
 /** 안정성 실험 확인 셀렉트를 STABILITY_* 상수에서 채운다 — 1회만 */
@@ -142,7 +143,7 @@ export function populateStabilityFields() {
 
 /** 안정성 확인 필드 현재 값 읽기 → store 스키마 */
 export function readStabilityInputs() {
-  const val = id => {
+  const val = (/** @type {string} */ id) => {
     const el = getEl(id);
     return el ? el.value : '';
   };
@@ -154,9 +155,10 @@ export function readStabilityInputs() {
 }
 
 /** 안정성 확인 필드에 값 복원 (sourceFormula.stability) */
+/** @param {*} stab */
 export function writeStabilityInputs(stab) {
   const s = stab || {};
-  const set = (id, v) => {
+  const set = (/** @type {string} */ id, /** @type {string} */ v) => {
     const el = getEl(id);
     if (el) el.value = v || '';
   };
@@ -167,7 +169,7 @@ export function writeStabilityInputs(stab) {
 
 /** 고객 필드 현재 값 읽기 → store 스키마 */
 export function readCustomerInputs() {
-  const val = id => {
+  const val = (/** @type {string} */ id) => {
     const el = getEl(id);
     return el ? el.value : '';
   };
@@ -194,9 +196,10 @@ export function readCustomerInputs() {
 }
 
 /** 고객 필드에 값 복원 (sourceFormula.customer) + 고객 카드 참조 복원 */
+/** @param {*} customer @param {string} [customerId] */
 export function writeCustomerInputs(customer, customerId) {
   const c = customer || {};
-  const set = (id, v) => {
+  const set = (/** @type {string} */ id, /** @type {string} */ v) => {
     const el = getEl(id);
     if (el) el.value = v == null ? '' : v;
   };
@@ -222,11 +225,12 @@ export function writeCustomerInputs(customer, customerId) {
 }
 
 /** 알레르기 원료 칩 렌더 */
+/** @param {*[]} allergies */
 function renderAllergyChips(allergies) {
   const box = getEl('formula-cust-allergies');
   if (!box) return;
   box.innerHTML = allergies.length
-    ? allergies.map(n => `<span class="formula-rule-chip formula-allergy-chip" data-name="${esc(n)}">${esc(n)}`
+    ? allergies.map((/** @type {string} */ n) => `<span class="formula-rule-chip formula-allergy-chip" data-name="${esc(n)}">${esc(n)}`
         + `<button type="button" class="formula-rule-chip-x" data-click="formulaAllergyRemove" data-arg="${esc(n)}" aria-label="${esc(n)} 알레르기 이력 삭제"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>`).join('')
     : '';
 }
@@ -253,9 +257,10 @@ export function formulaAllergyAdd() {
 }
 
 /** 알레르기 원료 칩 삭제 */
+/** @param {*} name */
 export function formulaAllergyRemove(name) {
   if (typeof name !== 'string') return;
-  renderAllergyChips(readCustomerInputs().allergies.filter(n => n !== name));
+  renderAllergyChips(readCustomerInputs().allergies.filter((/** @type {string} */ n) => n !== name));
   renderRecommend();
 }
 

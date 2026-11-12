@@ -23,6 +23,7 @@ export function getBizType() {
   return BIZ_IDS.includes(t) ? t : DEFAULT_BIZ;
 }
 
+/** @param {string} type */
 export function setBizType(type) {
   if (!BIZ_IDS.includes(type)) return false;
   setJSON(STORAGE_KEYS.FORMULA_BIZ_TYPE, type);
@@ -39,6 +40,7 @@ export function getInspectorName() {
 }
 
 /** @returns {boolean} 저장 성공 여부 — 비우기(키 제거)도 성공으로 간주 */
+/** @param {string} name */
 export function setInspectorName(name) {
   const v = typeof name === 'string' ? name.trim() : '';
   if (!v) { removeItem(STORAGE_KEYS.FORMULA_INSPECTOR_NAME); return true; }
@@ -59,8 +61,9 @@ export const BIZ_PANELS = {
 };
 
 /** 서브내비·카드가 현재 유형에 보이는가 — 미선언 항목은 true (모든 유형 공용) */
+/** @param {string} panelId @param {string} bizType */
 export function bizVisible(panelId, bizType) {
-  const allow = BIZ_PANELS[panelId];
+  const allow = (/** @type {Object.<string,string[]>} */ (BIZ_PANELS))[panelId];
   return !allow || allow.includes(bizType || getBizType());
 }
 
@@ -69,8 +72,9 @@ export function bizVisible(panelId, bizType) {
    ======================================================= */
 export const BIZ_CHECKLIST_SET = { custom: 'custom', mfg: 'mfg', sales: 'sales' };
 
+/** @param {string} bizType */
 export function bizChecklistSet(bizType) {
-  return BIZ_CHECKLIST_SET[bizType || getBizType()] || 'custom';
+  return (/** @type {Object.<string,string>} */ (BIZ_CHECKLIST_SET))[bizType || getBizType()] || 'custom';
 }
 
 /* =======================================================

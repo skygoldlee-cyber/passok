@@ -32,6 +32,7 @@ const STATUS_LABEL = {
 };
 
 /** 기한 배지 HTML — 목록 카드·계산기 경고 공용 */
+/** @param {*} m */
 function materialBadgeHtml(m) {
   const s = materialStatus(m);
   const days = daysUntilExpiry(m);
@@ -112,8 +113,10 @@ export function openMaterialPanel() {
    LOT 역추적 (FO-57) — 원료 → 배치 → 인도 고객
    ======================================================= */
 
+/** @type {{material:*, batches:*[]}|null} */
 let lastTrace = null; // {material, batches} — 인쇄용 최근 조회 결과
 
+/** @param {string} materialId */
 export function matTrace(materialId) {
   const m = getMaterial(materialId);
   if (!m) { showToast('원료 항목을 찾을 수 없습니다.', 'error'); return; }
@@ -122,7 +125,7 @@ export function matTrace(materialId) {
   const box = document.getElementById('material-trace-result');
   if (!box) return;
   box.classList.remove('is-hidden');
-  const rows = batches.map(b => `
+  const rows = batches.map((/** @type {*} */ b) => `
     <div class="formula-card">
       <div class="formula-card-head">
         <h4 class="formula-card-name">${esc(b.batchNo)} — ${esc(b.formulaName || '—')}</h4>
@@ -165,16 +168,18 @@ export function matTracePrint() {
    원료 폼 (등록 · 수정)
    ======================================================= */
 
+/** @param {string} [value] */
 function fillStorageSelect(value) {
   const sel = /** @type {HTMLSelectElement|null} */ (document.getElementById('mat-storage'));
   if (!sel) return;
   sel.innerHTML = '<option value="">보관 조건 선택…</option>'
-    + STORAGE_OPTIONS.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+    + STORAGE_OPTIONS.map((/** @type {string} */ v) => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
   sel.value = value || '';
 }
 
+/** @param {*} m */
 function writeMaterialForm(m) {
-  const set = (id, v) => {
+  const set = (/** @type {string} */ id, /** @type {*} */ v) => {
     const el = /** @type {HTMLInputElement|null} */ (document.getElementById(id));
     if (el) el.value = v == null ? '' : v;
   };
@@ -190,7 +195,7 @@ function writeMaterialForm(m) {
 }
 
 function readMaterialForm() {
-  const val = id => {
+  const val = (/** @type {string} */ id) => {
     const el = /** @type {HTMLInputElement|null} */ (document.getElementById(id));
     return el ? el.value : '';
   };
@@ -220,6 +225,7 @@ export function matNew() {
   if (title) title.textContent = '원료 등록';
 }
 
+/** @param {string} id */
 export function matEdit(id) {
   const m = getMaterial(id);
   if (!m) { showToast('원료 항목을 찾을 수 없습니다.', 'error'); return; }
@@ -238,6 +244,7 @@ export function matSave() {
   openMaterialPanel();
 }
 
+/** @param {string} id */
 export async function matDelete(id) {
   const m = getMaterial(id);
   if (!m) return;
@@ -270,6 +277,7 @@ export const MAT_CSV_HEADERS = Object.freeze(
   ['원료명', 'LOT', '입고일', '사용기한', '보관조건', '잔량', '단위', '메모']);
 
 /** 날짜 표기 정규화 — '2025.3.1'·'2025/3/1' → '2025-03-01' (clampDate 입력용) */
+/** @param {*} v */
 function normCsvDate(v) {
   const s = String(v || '').trim().replace(/[./]/g, '-');
   const m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
@@ -278,6 +286,7 @@ function normCsvDate(v) {
 }
 
 /** CSV 행 객체 → sanitizeMaterial 입력 형태 */
+/** @param {*} o */
 export function csvRowToMaterial(o) {
   return {
     name: o.name,
@@ -291,6 +300,7 @@ export function csvRowToMaterial(o) {
   };
 }
 
+/** @param {*} m */
 function matToCsvRow(m) {
   return [m.name, m.lot, m.receivedAt, m.expiryAt, m.storage,
     m.qty != null ? m.qty : '', m.unit, m.notes];
@@ -307,10 +317,11 @@ export function matImportCsv() {
   input.click();
 }
 
+/** @param {Event} event */
 async function matImportFile(event) {
-  const input = event.target;
+  const input = /** @type {HTMLInputElement|null} */ (event.target);
   const file = input && input.files && input.files[0];
-  input.value = '';
+  if (input) input.value = '';
   if (!file) return;
 
   let text;

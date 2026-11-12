@@ -70,7 +70,7 @@ export function parseLimitText(limitText) {
 
 /**
  * 단일 원료의 배합 농도를 검증한다.
- * @param {object|null} ingredient - INGREDIENTS_DATA 항목 {name,type,limit,...}
+ * @param {*|null} ingredient - INGREDIENTS_DATA 항목 {name,type,limit,...}
  * @param {number|string} concentration - 배합 농도 (%)
  * @returns {{check:string, primaryLimit:number|null, conditional:boolean, note:string, raw:string}}
  */
@@ -86,7 +86,7 @@ export function checkIngredient(ingredient, concentration) {
   // 자가 등록 원료 (DI-07) — 법정 유형 선언 금지. 자가 선언 한도는 경고에 반영하되
   // 결과에 custom 플래그를 붙여 '법정 판정 통과'와 시각·문구를 구분한다.
   const isCustom = ingredient.custom === true || ingredient.type === 'custom';
-  const mark = r => (isCustom ? { ...r, custom: true } : r);
+  const mark = (/** @type {*} */ r) => (isCustom ? { ...r, custom: true } : r);
 
   // 사용 금지 원료 — 수치 검증 이전에 차단
   if (!isCustom && (ingredient.type === 'banned' || BAN_TEXT_RE.test(ingredient.limit || ''))) {
@@ -142,7 +142,7 @@ export function checkIngredient(ingredient, concentration) {
 
 /**
  * 원료 이름 → 항목 인덱스를 생성한다.
- * @param {Array<object>} ingredients - INGREDIENTS_DATA
+ * @param {*[]} ingredients - INGREDIENTS_DATA
  * @returns {Map<string, object>}
  */
 export function buildIngredientIndex(ingredients) {
@@ -229,12 +229,13 @@ export const INGREDIENT_ALIASES = Object.freeze({
 // WeakMap으로 묶어 캐시한다 (공백·대소문자·하이픈 차이만 있는 입력의 미스매치 방지)
 const _normIndexCache = new WeakMap();
 
+/** @param {*} index */
 function normalizedIndex(index) {
   let m = _normIndexCache.get(index);
   if (!m) {
     m = new Map();
     if (index && typeof index.forEach === 'function') {
-      index.forEach((v, k) => {
+      index.forEach((/** @type {*} */ v, /** @type {string} */ k) => {
         const nk = ingredientMatchKey(k);
         if (nk && !m.has(nk)) m.set(nk, v);
         // 괄호 병기 부분 키 — '토코페롤(비타민E)' → '토코페롤'·'비타민e' (FO-50)
@@ -253,9 +254,9 @@ function normalizedIndex(index) {
  * 원료 조회 — 정확 일치 우선, 실패 시 matchKey(공백·대소문자·하이픈 무시) 폴백
  * → 입력 자체의 괄호 부분 → 명시 동의어 순으로 해석한다 (FO-50).
  * 전성분 붙여넣기·OCR·속칭 입력이 '미등록'으로 오분류되는 것을 막는다.
- * @param {Map<string,object>} index - buildIngredientIndex() 결과 (자가 병합 포함)
+ * @param {Map<string,*>} index - buildIngredientIndex() 결과 (자가 병합 포함)
  * @param {string} name
- * @returns {object|null}
+ * @returns {*|null}
  */
 export function findIngredient(index, name) {
   if (!index || typeof index.get !== 'function' || typeof name !== 'string') return null;
@@ -272,7 +273,7 @@ export function findIngredient(index, name) {
     if (hit) return hit;
   }
   // 명시 동의어 — 속칭·영문 → 표준명 (1회 전이, 순환 없음)
-  const alias = norm && INGREDIENT_ALIASES[norm];
+  const alias = norm && (/** @type {Object.<string,string>} */ (INGREDIENT_ALIASES))[norm];
   if (alias) {
     return index.get(alias) || idx.get(ingredientMatchKey(alias)) || null;
   }
@@ -287,6 +288,7 @@ export function findIngredient(index, name) {
  * 경계 편집거리 — max 초과 시 Infinity로 조기 종료.
  * 사진 인식의 1~2자 오인(메칠↔메틸, 이탄올↔에탄올)을 잡기 위한 상한 계산.
  */
+/** @param {string} a @param {string} b @param {number} max */
 function boundedEditDistance(a, b, max) {
   if (Math.abs(a.length - b.length) > max) return Infinity;
   const row = Array.from({ length: b.length + 1 }, (_, i) => i);
@@ -312,14 +314,14 @@ function boundedEditDistance(a, b, max) {
  * 4자 미만이거나 3자 이상 다른 이름도 걸러 노이즈를 제한한다.
  * 판정이 아닌 검토 유도 — 사용자가 원본 사진과 최종 대조한다.
  * @param {string[]} names
- * @param {Map<string,object>} index - buildIngredientIndex() 결과 (자가 병합 포함)
+ * @param {Map<string,*>} index - buildIngredientIndex() 결과 (자가 병합 포함)
  * @returns {Array<{input:string, suggestion:string}>}
  */
 export function suspectOcrSubstitutions(names, index) {
   if (!index || typeof index.forEach !== 'function') return [];
   // 후보 키 — 사전 표준명 + 동의어 속칭 (표시는 라벨에 가까운 속칭 우선)
   const known = new Map();
-  index.forEach(v => {
+  index.forEach((/** @type {*} */ v) => {
     if (v && typeof v.name === 'string') {
       const k = ingredientMatchKey(v.name);
       if (k && !known.has(k)) known.set(k, v.name);
@@ -352,13 +354,13 @@ export function suspectOcrSubstitutions(names, index) {
  * 저장 시점 스냅샷(ingredients[].snapshot)과 현재 원료 DB를 비교해
  * 고시 개정으로 기준(type/limit)이 바뀐 원료 수를 반환한다.
  * My 포뮬러 카드 배지와 종합 점검 보고서(FO-56)가 공용한다.
- * @param {object} formula - {ingredients: [{name, snapshot?}]}
- * @param {Map<string,object>} index - buildIngredientIndex() 결과
+ * @param {*} formula - {ingredients: [{name, snapshot?}]}
+ * @param {Map<string,*>} index - buildIngredientIndex() 결과
  * @returns {number}
  */
 export function countChangedStandards(formula, index) {
   let changed = 0;
-  ((formula && formula.ingredients) || []).forEach(item => {
+  ((formula && formula.ingredients) || []).forEach((/** @type {*} */ item) => {
     if (!item || !item.snapshot || !item.name) return;
     const cur = index && typeof index.get === 'function' ? index.get(item.name) : null;
     if (!cur) return; // 현재 DB 미등록은 unknown 판정이 이미 커버
@@ -373,10 +375,11 @@ export function countChangedStandards(formula, index) {
 /**
  * 포뮬러의 원료 배열 전체를 검증한다.
  * @param {Array<{name:string, concentration:number|string}>} items
- * @param {Map<string, object>} index - buildIngredientIndex() 결과
+ * @param {Map<string, *>} index - buildIngredientIndex() 결과
  * @returns {{results: Array<object>, summary: {ok:number, warn:number, banned:number, unknown:number}}}
  */
 export function checkFormulaItems(items, index) {
+  /** @type {*[]} */
   const results = [];
   const summary = { ok: 0, warn: 0, banned: 0, unknown: 0 };
   if (!Array.isArray(items)) return { results, summary };
@@ -386,7 +389,7 @@ export function checkFormulaItems(items, index) {
     const ingredient = index && typeof item.name === 'string' ? findIngredient(index, item.name) : null;
     const r = checkIngredient(ingredient, item.concentration);
     results.push({ name: item.name, ...r });
-    summary[r.check] += 1;
+    (/** @type {Object.<string,number>} */ (summary))[r.check] += 1;
   }
   return { results, summary };
 }

@@ -83,6 +83,7 @@ export function renderRecommend() {
 }
 
 /** 추천 행 추가 공통 — name + 제조 단계(phase) 태깅 */
+/** @param {string} name @param {string} phase */
 function addRecRow(name, phase) {
   const trimmed = name.trim();
   if (calc.rows.some(r => r.name === trimmed)) {
@@ -101,19 +102,21 @@ function addRecRow(name, phase) {
 }
 
 /** 추천 원료 칩 클릭 → 기능성 단계로 행 추가 */
+/** @param {*} name */
 export function formulaRecAdd(name) {
   if (typeof name !== 'string' || !name.trim()) return;
   addRecRow(name, '기능성');
 }
 
 /** 베이스 역할 칩 클릭 — data-arg: "role|name", 역할에 맞는 phase 자동 태깅 */
+/** @param {*} arg */
 export function formulaRecAddBase(arg) {
   if (typeof arg !== 'string') return;
   const sep = arg.indexOf('|');
   const role = sep > 0 ? arg.slice(0, sep) : '';
   const name = sep > 0 ? arg.slice(sep + 1) : arg;
   if (!name.trim()) return;
-  addRecRow(name, ROLE_PHASE[role] || '');
+  addRecRow(name, (/** @type {Object.<string,string>} */ (ROLE_PHASE))[role] || '');
 }
 
 /** 베이스 불러오기 — required 역할의 첫 후보를 phase 태깅과 함께 행으로 채움 */
@@ -126,7 +129,7 @@ export function formulaLoadBase() {
     return;
   }
   let added = 0;
-  rows.forEach(r => {
+  rows.forEach((/** @type {*} */ r) => {
     if (calc.rows.some(row => row.name === r.name)) return;
     const empty = calc.rows.find(row => !row.name);
     if (empty) {
@@ -144,6 +147,7 @@ export function formulaLoadBase() {
 }
 
 /** JSON 파일 다운로드 공용 헬퍼 */
+/** @param {string} json @param {string} filename */
 export function downloadJson(json, filename) {
   const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(json);
   const a = document.createElement('a');
@@ -169,10 +173,10 @@ export function renderCustomRules() {
   if (targetEl && !targetEl.dataset.bound) {
     targetEl.dataset.bound = '1';
     const targets = customRuleTargets();
-    Object.keys(RULE_SCOPE_LABEL).forEach(scope => {
+    Object.keys(RULE_SCOPE_LABEL).forEach((/** @type {string} */ scope) => {
       const group = document.createElement('optgroup');
-      group.label = RULE_SCOPE_LABEL[scope];
-      (targets[scope] || []).forEach(key => {
+      group.label = (/** @type {Object.<string,string>} */ (RULE_SCOPE_LABEL))[scope];
+      ((/** @type {Object.<string,string[]>} */ (targets))[scope] || []).forEach((/** @type {string} */ key) => {
         const o = document.createElement('option');
         o.value = `${scope}|${key}`;
         o.textContent = key;
@@ -185,10 +189,10 @@ export function renderCustomRules() {
   // 현재 맞춤 후보 목록
   const rules = loadCustomRules();
   let html = '';
-  Object.keys(RULE_SCOPE_LABEL).forEach(scope => {
+  Object.keys(RULE_SCOPE_LABEL).forEach((/** @type {string} */ scope) => {
     Object.entries(rules[scope] || {}).forEach(([key, names]) => {
-      names.forEach(name => {
-        html += `<span class="formula-rule-chip"><span class="formula-rule-chip-key">${esc(RULE_SCOPE_LABEL[scope])} · ${esc(key)}</span> ${esc(name)}`
+      names.forEach((/** @type {string} */ name) => {
+        html += `<span class="formula-rule-chip"><span class="formula-rule-chip-key">${esc((/** @type {Object.<string,string>} */ (RULE_SCOPE_LABEL))[scope])} · ${esc(key)}</span> ${esc(name)}`
           + `<button type="button" class="formula-rule-chip-x" data-click="formulaRuleRemove" data-arg="${esc(`${scope}|${key}|${name}`)}" aria-label="${esc(name)} 맞춤 후보 삭제"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>`;
       });
     });
@@ -224,6 +228,7 @@ export function formulaRuleAdd() {
 }
 
 /** 맞춤 후보 삭제 — data-arg: "scope|key|name" */
+/** @param {*} arg */
 export function formulaRuleRemove(arg) {
   if (typeof arg !== 'string') return;
   const parts = arg.split('|');
@@ -268,13 +273,14 @@ export function formulaRuleImport() {
 }
 
 /** 규칙 JSON 파일 읽기 → importCustomRules 병합 */
+/** @param {Event} event */
 function formulaRuleImportFile(event) {
-  const input = event.target;
+  const input = /** @type {HTMLInputElement|null} */ (event.target);
   const file = input && input.files && input.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    const r = importCustomRules(e.target && e.target.result);
+    const r = importCustomRules(/** @type {*} */ (e.target ? /** @type {FileReader} */ (e.target).result : null));
     if (!r.ok) {
       showToast(r.error || '가져오기에 실패했습니다.', 'error');
     } else {
@@ -283,9 +289,9 @@ function formulaRuleImportFile(event) {
       renderCustomRules();
       renderRecommend();
     }
-    input.value = ''; // 같은 파일 재선택 허용
+    if (input) input.value = ''; // 같은 파일 재선택 허용
   };
-  reader.onerror = () => { showToast('파일을 읽지 못했습니다.', 'error'); input.value = ''; };
+  reader.onerror = () => { showToast('파일을 읽지 못했습니다.', 'error'); if (input) input.value = ''; };
   reader.readAsText(file);
 }
 

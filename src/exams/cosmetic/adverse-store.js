@@ -38,10 +38,12 @@ function loadAll() {
   return loadItems(STORAGE_KEYS.ADVERSE_ITEMS);
 }
 
+/** @param {*[]} items */
 function saveAll(items) {
   return saveItems(STORAGE_KEYS.ADVERSE_ITEMS, items);
 }
 
+/** @param {*} data */
 function sanitizeAdverse(data) {
   return {
     occurredAt: clampDate(data.occurredAt),
@@ -60,6 +62,7 @@ export function listAdverse() {
   return loadAll().slice().sort((a, b) => String(b.occurredAt || '').localeCompare(String(a.occurredAt || '')));
 }
 
+/** @param {string} id */
 export function getAdverse(id) {
   return loadAll().find(a => a.id === id) || null;
 }
@@ -74,6 +77,7 @@ export function getAdverseUsage() {
  * 새 이상사례 등록.
  * @returns {{ok:boolean, adverse?:object, error?:string}}
  */
+/** @param {*} data */
 export function createAdverse(data) {
   const usage = getAdverseUsage();
   if (!usage.canCreate) {
@@ -92,6 +96,7 @@ export function createAdverse(data) {
 }
 
 /** 이상사례 보정 — 필드 전체 재정제. @returns {{ok:boolean, adverse?:object, error?:string}} */
+/** @param {string} id @param {*} data */
 export function updateAdverse(id, data) {
   const all = loadAll();
   const idx = all.findIndex(a => a.id === id);
@@ -106,6 +111,7 @@ export function updateAdverse(id, data) {
 }
 
 /** @returns {{ok:boolean, error?:string}} */
+/** @param {string} id */
 export function deleteAdverse(id) {
   const all = loadAll();
   const idx = all.findIndex(a => a.id === id);

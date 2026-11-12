@@ -20,8 +20,9 @@ import {
 const vision = /** @type {{front: {data:string, mimeType:string}|null, back: {data:string, mimeType:string}|null, abort: AbortController|null}} */ ({ front: null, back: null, abort: null });
 
 /** 슬롯 썸네일·버튼 상태 갱신 */
+/** @param {string} slot */
 function renderPhotoSlot(slot) {
-  const img = vision[slot];
+  const img = /** @type {{data:string, mimeType:string}|null} */ ((/** @type {Object.<string,*>} */ (vision))[slot]);
   const thumb = getEl(`prod-photo-${slot}-thumb`);
   if (thumb) {
     thumb.innerHTML = img
@@ -34,6 +35,7 @@ function renderPhotoSlot(slot) {
   if (readBtn) readBtn.disabled = !vision.back;
 }
 
+/** @param {string|undefined|null} text @param {boolean} [isError] */
 function visionStatus(text, isError) {
   const s = getEl('prod-vision-status');
   if (!s) return;
@@ -75,6 +77,7 @@ export function productVisionHiRes() {
 }
 
 /** 슬롯별 file input 론치 — change는 1회 바인딩 */
+/** @param {string} slot */
 export function productPhotoPick(slot) {
   if (slot !== 'front' && slot !== 'back') return;
   const input = getEl(`prod-photo-${slot}`);
@@ -87,7 +90,7 @@ export function productPhotoPick(slot) {
       visionStatus('사진을 준비하고 있습니다…');
       const r = await fileToBase64Jpeg(file);
       if (!r.ok) { visionStatus(r.error, true); return; }
-      vision[slot] = r;
+      (/** @type {Object.<string,*>} */ (vision))[slot] = r;
       visionStatus('');
       renderPhotoSlot(slot);
     });
@@ -95,9 +98,10 @@ export function productPhotoPick(slot) {
   input.click();
 }
 
+/** @param {string} slot */
 export function productPhotoRemove(slot) {
   if (slot !== 'front' && slot !== 'back') return;
-  vision[slot] = null;
+  (/** @type {Object.<string,*>} */ (vision))[slot] = null;
   const input = getEl(`prod-photo-${slot}`);
   if (input) input.value = '';
   renderPhotoSlot(slot);
@@ -159,8 +163,8 @@ export async function productVisionRead() {
   const ref = getEl('prod-photo-ref');
   if (ref) {
     ref.innerHTML = ['back', 'front']
-      .filter(s => vision[s])
-      .map(s => `<img src="data:${vision[s].mimeType};base64,${vision[s].data}" alt="참조용 원본 사진 — ${s === 'back' ? '후면 전성분' : '정면'}">`)
+      .filter((/** @type {string} */ s) => (/** @type {Object.<string,*>} */ (vision))[s])
+      .map((/** @type {string} */ s) => `<img src="data:${/** @type {*} */ ((/** @type {Object.<string,*>} */ (vision))[s]).mimeType};base64,${/** @type {*} */ ((/** @type {Object.<string,*>} */ (vision))[s]).data}" alt="참조용 원본 사진 — ${s === 'back' ? '후면 전성분' : '정면'}">`)
       .join('');
   }
   // OCR 치환 의심 (FO-55) — 미등록 칩 중 사전 표준명·속칭과 1~2자 차이는 대조 제안 표시
