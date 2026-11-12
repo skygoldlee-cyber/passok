@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261112-ba43ba9",
+    "date": "2026-11-12",
+    "notes": [
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[기능·ux] UX-FORM-03·05 잔여 폼 확대 + UX-FORM-04 가상 키보드 대응 — A항 12건 구현 완료",
+      "[수정·ux] banner-mgr 지연 표시를 .is-hidden 클래스로 — check:uistyle 인라인 display 금지 규약",
+      "[문서] AGENTS.md 디렉토리 구조에 Phase 4 신규 모듈 3종 등록",
+      "[기능·ux] UX-FB-09~11 알림 큐·파괴 확인·비동기 상태 + UX-PWA-08 오프라인 표시 — Phase 4",
+      "[기능·a11y] A-14 색 비의존 + A-15 차트 대체 + A-16 호버 콘텐츠 — Phase 3",
+      "[수정·a11y] inert 누수 2차 — 숨김(display:none) 경로 미감지 수정",
+      "[기능·a11y] E-09 모의고사 시간·이탈 + UX-FORM-05 이탈 유실 방지 — Phase 2 + Phase 1 결함 수정",
+      "[기능·a11y] A-17 SPA 포커스 관리 + UX-FORM-03 폼 인라인 오류 공용 패턴 — Phase 1",
+      "[문서·spec] UI/UX 전수 점검 A항 — 신규 요구사양 ID 12건 부여 (v1.34)"
+    ]
+  },
+  {
     "version": "v20261112-9ef9853",
     "date": "2026-11-12",
     "notes": [
@@ -222,14 +238,6 @@
       "[기능·print] mermaid 출력 WYSIWYG 하이브리드 — 화면 색상 그대로 출력",
       "docs+test(print): mermaid 출력 보정 규약 정착 — 향후 확장 시 재발 방지",
       "[정리·release] v20261109-af4ebd4 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261109-af4ebd4",
-    "date": "2026-11-09",
-    "notes": [
-      "[수정·print] mermaid 보정 !important 우선순위 — 실제 다이어그램에서 무력화되던 근본 원인",
-      "[정리·release] v20261109-cb6ceaf 스탬프 확정 [no-docs]"
     ]
   }
 ]
