@@ -13,6 +13,7 @@ import { showOnboardingModal } from '../../shell/onboarding.js';
 import { openShortcutHelp } from '../../shell/shortcuts-help.js';
 import { showFeedbackModal, dismissFeedbackHint, dismissFeedbackDot } from '../../shell/feedback.js';
 import { getActiveExam } from '../../core/exam-context.js';
+import { proFeatureNotice } from '../../pro/pro-upgrade.js';
 
 export function bindAppListeners() {
     // 진도 초기화 버튼
@@ -82,6 +83,7 @@ export function bindAppListeners() {
     if (communityBtn && communityInvite) {
         communityBtn.classList.remove('is-hidden');
         communityBtn.addEventListener('click', () => {
+            proFeatureNotice('discord_community', 'Discord 커뮤니티');
             window.open(communityInvite, '_blank', 'noopener');
         });
     }

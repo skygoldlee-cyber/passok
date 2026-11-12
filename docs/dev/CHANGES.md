@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-12 feat(pro): Discord 커뮤니티 Pro 표기 — feature-plan discord_community 등록
+
+- **변경**: 같은 시험 응시자 소통 채널인 Discord 커뮤니티를 유료 표기 기능으로 전환 — feature-plan.json `discord_community: pro` 등록, 커뮤니티 버튼에 유료 배지 + 최초 진입 시 '유료 기능 안내' 모달 (무료 체험 방식 — 링크는 계속 열림, 다른 pro 기능과 동일 규약)
+- **플랜 비교 목록**: PLAN_FEATURES에 'Discord 커뮤니티 (같은 시험 응시자 소통 채널)' 추가 — 플랜 비교·업그레이드 안내 혜택 항목 노출
+- **결제 전환 경로**: feature-plan 키가 이미 등록돼 있어 결제 도입 시 hasProEntitlement 체크만 추가하면 차단으로 전환 가능
+- **검증**: community-invite DOM 6건 통과 (배지 존재 검증 추가) · check:types 0
+
+
 ## 2026-11-12 fix(ux): Discord 커뮤니티 버튼 플랫폼 기본 초대 폴백 — 전 시험 노출
 
 - **문제**: discordInvite가 cosmetic에만 선언돼 다른 시험 활성 시 도움말 메뉴의 'Discord 커뮤니티' 버튼이 숨겨짐 — 사용자에게 커뮤니티 진입 경로 부재

@@ -209,6 +209,7 @@ const PLAN_FEATURES = [
     { key: 'combo_drill', label: 'ㄱㄴㄷ 조합 훈련' },
     { key: 'cloud_sync', label: '클라우드 동기화 (여러 디바이스 상태 공유)' },
     { key: 'study_plan_pro', label: '주간 배분 (과목별 가중 배분 계획)' },
+    { key: 'discord_community', label: 'Discord 커뮤니티 (같은 시험 응시자 소통 채널)' },
 ];
 
 /** 플래그·플랜에서 유도한 유료 전용 혜택 항목 — 두 모달(showPlanCompare/showUpgradeNotice)이 공유 */

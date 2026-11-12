@@ -40,6 +40,8 @@ describe('Discord 커뮤니티 초대 버튼 (ES-08)', () => {
 
         const btn = el('community-btn');
         expect(btn.classList.contains('is-hidden')).toBe(false);
+        // Pro 표기 — 유료 배지가 버튼 안에 존재 (feature-plan.json discord_community: pro)
+        expect(btn.querySelector('.pro-badge[data-pro-feature="discord_community"]')).not.toBeNull();
 
         const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
         btn.click();
