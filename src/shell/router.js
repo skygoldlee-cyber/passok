@@ -5,7 +5,7 @@ import { saveScrollPosition, restoreScrollPosition, registerViewNavigator, bumpV
 import { showToast, hideGlobalLoading } from '../ui-utils.js';
 import { isAnyModalOpen, consumedModalPop } from './modal-back.js';
 import { getPracticeViewTitles, getPracticeHashSlugs } from '../practice-registry.js';
-import { getCurrentExamId, getExamAppName } from '../core/exam-context.js';
+import { getCurrentExamId, getExamAppName, getActiveExam } from '../core/exam-context.js';
 import { mergeUiText } from '../core/uitext-defaults.js';
 
 /**
@@ -38,6 +38,18 @@ export function getViewTitles(registry) {
     };
 }
 
+/* =========================================================
+   뷰 이탈 가드 (E-09, UX-FORM-05) — 응시·작성 중 뷰 이탈은
+   등록된 가드의 확인을 경유한다. 가드는 Promise<boolean>을
+   반환하며, 거절 시 해시를 현재 뷰로 복귀시켜 뒤로가기를 되돌린다.
+   ========================================================= */
+const _leaveGuards = new Map();
+/** @param {string} viewId @param {(target: string) => boolean|Promise<boolean>} guard */
+export function registerViewLeaveGuard(viewId, guard) { _leaveGuards.set(viewId, guard); }
+export function clearViewLeaveGuard(viewId) { _leaveGuards.delete(viewId); }
+/** 가드 승인 후의 재진입은 재확인하지 않는다 */
+let _leaveApproved = false;
+
 /**
  * 타겟 뷰로 전환하고 해당 뷰를 렌더링한다.
  * @param {string} target - 타겟 뷰 ID
@@ -49,6 +61,27 @@ export function getViewTitles(registry) {
  * @param {Object.<string, function>} [ctx.handlers.viewRenderers] - 뷰 ID → 렌더 함수 맵
  */
 export function navigateToView(target, ctx) {
+    // E-09·UX-FORM-05 — 이탈 가드: 승인되면 같은 경로로 재진입, 거절 시 뷰 유지
+    const guard = _leaveApproved ? null : _leaveGuards.get(state.currentView);
+    if (guard && target !== state.currentView) {
+        const prev = state.currentView;
+        Promise.resolve(guard(target)).then(ok => {
+            if (ok) {
+                _leaveApproved = true;
+                navigateToView(target, ctx);
+                _leaveApproved = false;
+            } else {
+                // 뒤로가기·딥링크로 해시가 이미 바뀐 경우 현재 뷰 해시로 복귀
+                const slug = VIEW_HASH_SLUGS[prev];
+                if (slug && location.hash !== '#/' + slug) {
+                    try { history.pushState({ view: prev }, '', '#/' + slug); }
+                    catch (_) { location.hash = '/' + slug; }
+                }
+            }
+        });
+        return;
+    }
+
     const { titlesMap, handlers } = ctx;
     // 시험 미선택: 피커 외 모든 뷰 진입 차단 — 피커로 리다이렉트 (ES-09)
     // (nav-item·탭바·더보기·딥링크 모두 이 경로를 통과)
@@ -122,9 +155,10 @@ export function navigateToView(target, ctx) {
     if (titlesMap[target]) {
         if (viewTitle) viewTitle.textContent = titlesMap[target].title;
         if (viewSubtitle) viewSubtitle.textContent = titlesMap[target].subtitle;
-        // A-17 — SPA 뷰 전환은 페이지 전환: document.title도 갱신해 탭·스크린리더에 위치 반영
-        const appName = getCurrentExamId() ? (getExamAppName() || 'PassOK') : 'PassOK';
-        document.title = `${titlesMap[target].title} · ${appName}`;
+        // A-17 — SPA 뷰 전환은 페이지 전환: document.title도 갱신해 탭·스크린리더에 위치 반영.
+        // 시험 브랜드 타이틀(exam.title = "PassOK — 시험명 (앱명)")은 접미사로 유지 (applyExamBranding 계약)
+        const brand = getCurrentExamId() ? (getActiveExam()?.title || 'PassOK') : 'PassOK';
+        document.title = `${titlesMap[target].title} · ${brand}`;
     }
 
     state.currentView = target;

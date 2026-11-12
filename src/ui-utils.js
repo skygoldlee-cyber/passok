@@ -305,6 +305,22 @@ export function showAlert(message, title = '알림') {
 const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 const _inertModals = new Set();
+let _inertObserver = null;
+
+/** DOM에서 사라진 모달을 감지해 inert를 자동 해제 — untrap 미호출 경로(el.remove() 등) 커버 */
+function _ensureInertObserver() {
+    if (_inertObserver || typeof MutationObserver === 'undefined' || !document.body) return;
+    _inertObserver = new MutationObserver(() => {
+        let changed = false;
+        for (const m of _inertModals) {
+            if (!m.isConnected) { _inertModals.delete(m); changed = true; }
+        }
+        if (changed && _inertModals.size === 0) {
+            document.querySelector('.app-container')?.removeAttribute('inert');
+        }
+    });
+    _inertObserver.observe(document.body, { childList: true, subtree: true });
+}
 
 /**
  * UX-FORM-03 — 필드 인라인 오류 표시. `<p class="field-error" role="alert">`를
@@ -357,6 +373,7 @@ function applyBackgroundInert(modalEl) {
     };
     prune();
     _inertModals.add(modalEl);
+    _ensureInertObserver();
     app.setAttribute('inert', '');
     return () => {
         _inertModals.delete(modalEl);

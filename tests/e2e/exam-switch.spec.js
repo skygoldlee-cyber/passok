@@ -24,7 +24,8 @@ test.describe('비기본 시험(lossadj) 부팅 — 도메인 격리', () => {
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
         // applyExamBranding: title·로고 텍스트가 exams.json lossadj 엔트리로 치환
         // 로고 아이콘은 브랜드 PNG 고정 (시험 icon 치환 제거 — 시험 무관 독립 정체성)
-        await expect(page).toHaveTitle('PassOK — 농어업재해보험 손해평가사 (Passess)');
+        // A-17 — 타이틀은 '뷰명 · 브랜드' 형식, 브랜드 부분이 접미사로 유지되는지 검증
+        await expect(page).toHaveTitle(/PassOK — 농어업재해보험 손해평가사 \(Passess\)/);
         await expect(page.locator('.logo-text h1')).toHaveText('PassOK');
         await expect(page.locator('.logo-text span')).toHaveText('손해평가사 · Passess');
         await expect(page.locator('.logo-icon')).toHaveAttribute('src', /icons\/passok-icon-192\.png/);
@@ -110,7 +111,7 @@ test.describe('시험 전환 실경로 — selectExam → 리로드 → 부팅',
             })),
         ]);
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
-        await expect(page).toHaveTitle('PassOK — 농어업재해보험 손해평가사 (Passess)');
+        await expect(page).toHaveTitle(/PassOK — 농어업재해보험 손해평가사 \(Passess\)/);
         await expect(page.locator('.logo-text span')).toHaveText('손해평가사 · Passess');
         const stored = await page.evaluate(() => localStorage.getItem('current_exam'));
         expect(stored).toBe('lossadj');

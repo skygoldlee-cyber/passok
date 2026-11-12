@@ -59,9 +59,9 @@ export async function facilityJoin() {
     proFeatureNotice('facility_workspace', '기관 워크스페이스');
     const r = await joinFacility(code);
     if ('error' in r) {
-        // 서버 거부(코드 불일치·만료)도 해당 필드 오류로 표시
+        // UX-FORM-03 — 필드 오류가 위치·내용을 전달하고 토스트는 보조 알림
         if (el) { setFieldError(el, r.error); el.focus(); }
-        else showToast(r.error, 'error');
+        showToast(r.error, 'error');
         return;
     }
     showToast('기관에 가입했습니다.');

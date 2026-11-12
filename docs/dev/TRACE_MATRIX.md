@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 23dea5b906d33a36
+> 입력 해시: 847b35b437019332
 > 생성: 2026-11-12 · 원천: SPEC.md(705개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -114,7 +114,7 @@
 | E-06 | ✅ | 테스트 | — | src/views/exam-sim/exam-sim-arena.js<br>src/views/exam-sim/exam-sim-review.js<br>src/views/exam-sim/exam-simulator.js | tests/dom/exam/exam-sim-review.dom.test.js<br>tests/dom/study/study-simulator.dom.test.js<br>tests/unit/engine/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
 | E-07 | ✅ | 테스트 | — | css/exam.css<br>src/views/exam-sim/exam-sim-review.js<br>src/views/exam-sim/exam-sim-session.js<br>src/views/exam-sim/exam-simulator.js | tests/dom/exam/exam-sim-review.dom.test.js<br>tests/dom/study/study-simulator.dom.test.js<br>tests/unit/engine/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | 시험 합격 기준 — 과목별 40점 미만 과락·전 과목 평균 60점 이상 |
 | E-08 | ✅ | 테스트 | — | src/views/exam-sim/exam-sim-arena.js | tests/dom/study/study-simulator.dom.test.js | — | — |
-| E-09 | 미구현 | — | — | — | — | — | — |
+| E-09 | ✅ — `#sim-timer-live` sr-only 리전 + `_warnedMarks`로 10분·1분 1회씩 보고 · 만료 자동제출(기존) · `registerViewLeaveGuard`로 뷰 이탈 가드 + `exitSimArena` 확인 모달(응답 수 표기) — submit/exit 시 가드 해제 | — | — | — | — | — | — |
 
 ## 3.5 교재 리더
 
@@ -775,7 +775,7 @@
 | UX-FORM-02 | 모바일에서 물리적 눌림감 제공 | E2E 테스트 | DOC-DSN-25 | css/base.css | tests/e2e/responsive-flow.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-FORM-03 | 🚧 진행 — 공용 패턴 구현: `setFieldError`/`clearFieldError` (ui-utils.js) + `.field-error` 스타일. 적용: 온보딩 목표 입력·기관 초대 코드 (수정 시 자동 해제). 잔여 대상: 로그인(auth-modal-msg는 비자동소멸이라 부분 충족)·자가등록·Care OS 폼 — 신규 폼은 본 패턴 의무 | — | — | — | — | — | — |
 | UX-FORM-04 | **미구현** — 키보드 오픈 상태의 크롬 처리 규약 부재. iOS는 visualViewport 미지원 구간 대응 필요 | — | — | — | — | — | — |
-| UX-FORM-05 | **미구현** — FO-30의 개별 처리를 공통 규약으로 상승. 의견 보내기·리더 메모(TR-30)·주관식 답안·Care OS 폼 대상 | — | — | — | — | — | — |
+| UX-FORM-05 | 🚧 진행 — 공용 기반: `registerViewLeaveGuard`(router.js)로 뷰 이탈 확인 훅. 적용: 모의고사 응시(세션 드래프트+확인)·의견 보내기(작성 중 닫기 확인). 잔여 대상: 리더 메모(TR-30)·주관식 답안·Care OS 폼 | — | — | — | — | — | — |
 | UX-HELP-01 | 입력 필드·수식키 조합에서는 미동작. `Esc`·`?`·배경 클릭 닫기, 포커스 트랩 적용. 단축키 조합표는 모듈 상수로 분리해 단위 테스트 가능 | E2E 테스트 | — | src/shell/shortcuts-help.js | tests/dom/shell/shortcut-help.dom.test.js<br>tests/e2e/ux-surfaces.spec.js<br>tests/unit/app/shortcuts-help.test.js | — | — |
 | UX-NAV-01 | 한 번에 하나의 네비게이션만 노출 — 중복 방지. 하단 탭 바는 엄지 도달권, 탭 수가 늘어나면 가로 스크롤보다 핵심 5탭 + `role="dialog"` 시트(`#mobile-more-sheet`)가 발견성·터치 안정성에 유리. 활성 탭은 `scrollIntoView({inline:'center'})`로 가시화 + `aria-current="page"`, 시트 소속 뷰 활성 시 더보기 탭에 활성 표시 | E2E 테스트 | DOC-DSN-01<br>DOC-DSN-25<br>DOC-REF-09 | css/app-responsive.css<br>src/shell/app.js<br>src/shell/router.js | tests/dom/common/common-navigation.dom.test.js<br>tests/dom/shell/router.dom.test.js<br>tests/dom/shell/ui-structure.dom.test.js<br>tests/e2e/app.spec.js<br>…외 1개 | — | — |
 | UX-NAV-02 | 스크롤 중에도 설정·테마에 접근 가능. 단, 부모가 스크롤 컨테이너(`overflow-y: auto`)일 때만 작동 — `body` 스크롤 구조면 의도대로 동작하는지 확인할 것 | 테스트 | DOC-DSN-01<br>DOC-DSN-25 | — | tests/dom/common/common-navigation.dom.test.js | — | — |

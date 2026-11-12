@@ -154,4 +154,30 @@ describe('feedback.js — 의견 보내기 모달', () => {
         expect(ctx.innerHTML).not.toContain('<img');
         expect(ctx.textContent).toContain('<img');
     });
+
+    it('작성 중 닫기는 확인 경유 — 거절 시 유지, 승인 시 닫힘 (UX-FORM-05)', async () => {
+        const { showConfirm } = await import('../../../src/ui-utils.js');
+        const overlay = openModal();
+        await flushAsync(); // rAF로 is-visible 부여 대기
+
+        // 본문 없으면 확인 없이 바로 닫힘
+        overlay.querySelector('.app-confirm-cancel').click();
+        await flushAsync();
+        expect(showConfirm).not.toHaveBeenCalled();
+        expect(overlay.classList.contains('is-visible')).toBe(false);
+
+        // 본문 있으면 확인 모달 경유
+        const overlay2 = openModal();
+        await flushAsync();
+        overlay2.querySelector('.feedback-text').value = '작성 중인 의견';
+        showConfirm.mockResolvedValueOnce(false);
+        overlay2.querySelector('.app-confirm-cancel').click();
+        await flushAsync();
+        expect(overlay2.classList.contains('is-visible')).toBe(true); // 유지
+
+        showConfirm.mockResolvedValueOnce(true);
+        overlay2.querySelector('.app-confirm-cancel').click();
+        await flushAsync();
+        expect(overlay2.classList.contains('is-visible')).toBe(false); // 닫힘
+    });
 });

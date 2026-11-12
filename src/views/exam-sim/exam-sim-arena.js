@@ -20,6 +20,7 @@ import { examIdToSubjectId, getActiveRegistry } from '../../core/exam-context.js
 import { resetMainScroll } from '../navigation.js';
 import { WEAK_SIM_PREFIX } from '../../study/weak-items.js';
 import { saveSimDraft, clearSimDraft } from './exam-sim-draft.js';
+import { clearViewLeaveGuard } from '../../shell/router.js';
 
 /* =======================================================
     ⏱️ 시험 타이머 (백그라운드 탭 스로틀링 방지)
@@ -41,9 +42,13 @@ document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible' && simState.timerInterval) acquireWakeLock();
 });
 
+// E-09 — 시간 경고 시점(초): 잔여 10분·1분에 토스트+aria-live 보고
+const _warnedMarks = new Set();
+
 export function startSimTimer() {
     if (simState.timerInterval) clearInterval(simState.timerInterval);
     acquireWakeLock();
+    _warnedMarks.clear();
     // 현재 남은 시간을 기준으로 종료 시각을 고정
     simState.endTime = Date.now() + (simState.timeLeft * 1000);
     simState.timerInterval = setInterval(tickSimTimer, TIMING.EXAM_TIMER_TICK_MS); // 500ms 간격 갱신
@@ -72,6 +77,18 @@ function tickSimTimer() {
     if (timerBox) {
         timerBox.classList.toggle('sim-time-warning', remaining <= 600 && remaining > 300);
         timerBox.classList.toggle('sim-time-danger', remaining <= 300);
+    }
+
+    // E-09 — 스크린리더 보고: 잔여 10분·1분 시점에 1회씩 토스트+aria-live 알림
+    for (const mark of [600, 60]) {
+        if (remaining <= mark && remaining > 0 && !_warnedMarks.has(mark)) {
+            _warnedMarks.add(mark);
+            const mins = mark === 600 ? '10분' : '1분';
+            const msg = `남은 시간 ${mins}입니다.`;
+            showToast(msg, 'warning', 3000);
+            const live = document.getElementById('sim-timer-live');
+            if (live) live.textContent = msg;
+        }
     }
 
     // 매 5초마다 타이머 임시 저장
@@ -312,6 +329,8 @@ function deriveComboJudgments(q, userAns) {
  */
 export function submitExam() {
     if (simState.timerInterval) clearInterval(simState.timerInterval);
+    simState.timerInterval = undefined;
+    clearViewLeaveGuard('exam-view'); // E-09 — 제출 완료, 이탈 가드 해제
     releaseWakeLock();
 
     // 점수 채점 및 틀린 문항 수집

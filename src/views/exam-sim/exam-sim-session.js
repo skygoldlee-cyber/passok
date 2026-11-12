@@ -9,7 +9,7 @@
 import { state, safeGetItem } from '../../core/state.js';
 import { DataLoader } from '../../content/data-loader.js';
 import { getActiveRegistry } from '../../core/exam-context.js';
-import { showGlobalLoading, hideGlobalLoading, showToast } from '../../ui-utils.js';
+import { showGlobalLoading, hideGlobalLoading, showToast, showConfirm } from '../../ui-utils.js';
 import { shuffle, OPTION_INDICATORS } from '../../core/utils.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { TIMING } from '../../config/timing.js';
@@ -18,6 +18,22 @@ import { proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { resetMainScroll } from '../navigation.js';
 import { startSimTimer, renderOMRSheet, renderSimQuestion } from './exam-sim-arena.js';
 import { checkExamDraft } from './exam-sim-draft.js';
+import { registerViewLeaveGuard, clearViewLeaveGuard } from '../../shell/router.js';
+
+// E-09 — 응시 중 이탈 확인(나가기 버튼·뷰 전환·뒤로가기 공용)
+async function confirmLeaveSim() {
+    if (!simState.timerInterval || !simState.data?.questions?.length) return true;
+    const answered = Object.keys(simState.userAnswers || {}).length;
+    const total = simState.data.questions.length;
+    return showConfirm(
+        `응시가 진행 중입니다 (${answered}/${total} 응답). 나가면 진행 상태가 저장되며 나중에 이어서 응시할 수 있습니다. 나가시겠습니까?`,
+        '나가기'
+    );
+}
+/** 응시 시작 시점에 뷰 이탈 가드 등록 — submit/exit에서 해제 */
+function armSimLeaveGuard() {
+    registerViewLeaveGuard('exam-view', confirmLeaveSim);
+}
 
 export function startSimSession(examData) {
     // 시뮬레이터 상태 초기화
@@ -49,6 +65,7 @@ export function startSimSession(examData) {
 
     // 기존 타이머 중지 후 신규 시작
     startSimTimer();
+    armSimLeaveGuard();
 }
 
 /**
@@ -360,8 +377,12 @@ export function resumeSimDraft() {
     }
 }
 
-export function exitSimArena() {
+export async function exitSimArena() {
+    // E-09 — 응시 중 이탈은 확인 경유: 진행 상태는 자동 저장되지만 명시 확인을 받는다
+    if (!(await confirmLeaveSim())) return;
+    clearViewLeaveGuard('exam-view');
     if (simState.timerInterval) clearInterval(simState.timerInterval);
+    simState.timerInterval = undefined;
 
     // UI 전환
     const _arena = document.getElementById('sim-arena-panel');

@@ -1,6 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
 
+## 2026-11-12 feat(a11y): E-09 모의고사 시간·이탈 + UX-FORM-05 이탈 유실 방지 — Phase 2 구현 + Phase 1 CI 결함 수정
+
+- **E-09 ✅ — 모의고사 시간 경고·만료·이탈**: `exam.html`에 `#sim-timer-live` sr-only aria-live 리전 추가, `tickSimTimer`에 `_warnedMarks`로 잔여 10분·1분 시점 1회씩 토스트+aria-live 보고(시각 warning/danger 클래스와 병행). 만료 자동제출은 기존 `submitExam` 경로 확인. 이탈은 `exitSimArena`를 async로 바꿔 `showConfirm`(응답 n/전체 표기) 경유 + **뷰 이탈 가드 신설**: router.js에 `registerViewLeaveGuard`/`clearViewLeaveGuard` — 응시 중 뒤로가기·뷰 전환도 동일 확인 경유(승인 시 재진입·거절 시 해시 복귀). 세션 시작 시 등록·submit/exit 시 해제
+- **UX-FORM-05 🚧 — 작성 중 이탈 유실 방지**: 의견 보내기 모달에 dirty 가드 — 본문 입력 후 취소·배경 클릭·Esc는 '버리기' 확인 경유(확인 모달 위 Esc 이중 닫기 방지 포함)
+- **Phase 1 CI 결함 3건 수정**: ① `document.title`이 시험 브랜드 타이틀(`PassOK — 시험명 (앱명)`)을 덮어씀 → 뷰명 접두 + 브랜드 접미 유지로 교체(applyExamBranding 계약), exam-switch.spec 어서션 접미사 정규식으로 갱신 ② `el.remove()`로 모달 DOM이 직접 제거되면 untrap 미호출 → **inert 영구 누수**(설정 버튼 클릭 차단으로 CI 전 샤드 실패) → MutationObserver로 DOM 제거 감지·자동 해제 ③ 기관 가입 서버 거부 시 토스트 제거로 e2e 실패 → 인라인 오류 유지 + 토스트 병행(UX-FORM-03 '토스트는 보조' 규약 충족)
+- **테스트**: router 이탈 가드(거절 시 유지·승인 시 전환)·시뮬레이터 10분/1분 보고·응시 중 나가기 확인·피드백 dirty 가드 — DOM 86건 통과
+
+
 ## 2026-11-12 feat(a11y): A-17 SPA 포커스 관리 + UX-FORM-03 폼 인라인 오류 공용 패턴 — Phase 1 구현
 
 - **A-17 ✅ — SPA 포커스 관리**: ① `router.js` 뷰 전환 시 `document.title = "뷰명 · 앱명"` 갱신 (시험 컨텍스트는 getExamAppName, 없으면 PassOK) + 기존 `.main-content` 포커스 이동 유지 ② `ui-utils.js` `trapFocus`에 배경 inert 추가 — `applyBackgroundInert`가 `.app-container`를 `inert` 처리하고 모달 추적 Set이 DOM에서 제거된 모달을 자동 정리(untrap 미호출·뷰 전환 시 inert 누수 방지), 모달이 `.app-container` 내부면 스킵(자기 무력화 방지), 해제 시 inert 해제 → 트리거 포커스 복귀 순서 ③ `listeners-app.js` 설정/도움말 드롭다운 Esc·외부클릭 닫기 시 트리거 버튼 포커스 복귀 (`openMenuBtn` 추적) ④ `index.template.html`의 `mobile-more-sheet`를 `.app-container` 밖으로 이동 — body 레벨 시트가 inert 배경에 포함되지 않게

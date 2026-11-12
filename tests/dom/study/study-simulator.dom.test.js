@@ -147,11 +147,11 @@ describe('모의고사 시뮬레이터 — 세션·답안·제출·이어하기'
         expect(list.textContent).toContain('해설1');
     });
 
-    it('답안 입력 → 임시 세션 저장, 배너→이어하기로 복원', () => {
+    it('답안 입력 → 임시 세션 저장, 배너→이어하기로 복원', async () => {
         startSimSession(EXAM);
         jumpToSimQuestion(1);            // 드래프트는 답안 저장 시점의 인덱스를 기록
         saveSimAnswer('simt1_q2', 'O', false);
-        exitSimArena();
+        await exitSimArena();
 
         // 임시 세션이 저장되어 배너 표시
         expect(storedJson(STORAGE_KEYS.SIM_DRAFT_SESSION)).not.toBeNull();
@@ -189,8 +189,43 @@ describe('모의고사 시뮬레이터 — 세션·답안·제출·이어하기'
         }
     });
 
+    it('잔여 10분·1분 시점에 토스트 + aria-live 보고 (E-09)', async () => {
+        const { startSimTimer } = await import('../../../src/views/exam-sim/exam-sim-arena.js');
+        startSimSession(EXAM);
+
+        // 잔여 10분 이하로 진입 → 1회 보고
+        simState.timeLeft = 590;
+        startSimTimer();
+        expect(showToast).toHaveBeenCalledWith('남은 시간 10분입니다.', 'warning', 3000);
+        expect(el('sim-timer-live').textContent).toBe('남은 시간 10분입니다.');
+
+        // 잔여 1분 이하로 진입 → 1회 보고
+        simState.timeLeft = 55;
+        startSimTimer();
+        expect(showToast).toHaveBeenCalledWith('남은 시간 1분입니다.', 'warning', 3000);
+        expect(el('sim-timer-live').textContent).toBe('남은 시간 1분입니다.');
+    });
+
+    it('응시 중 나가기는 확인 경유 — 거절 시 아레나 유지 (E-09)', async () => {
+        const { showConfirm } = await import('../../../src/ui-utils.js');
+        startSimSession(EXAM);
+        saveSimAnswer('simt1_q1', '②', false);
+
+        // 확인 거절 → 아레나 유지·타이머 계속
+        showConfirm.mockResolvedValueOnce(false);
+        await exitSimArena();
+        expect(isVisible('sim-arena-panel')).toBe(true);
+        expect(simState.timerInterval).not.toBeNull();
+
+        // 확인 승인 → 목록 복귀
+        showConfirm.mockResolvedValueOnce(true);
+        await exitSimArena();
+        expect(isVisible('sim-arena-panel')).toBe(false);
+        expect(simState.timerInterval).toBeUndefined();
+    });
+
     // UX-NAV-07 — 인트라뷰 패널/문항 전이 시 .main-content 스크롤 리셋
-    it('스크롤 잔류 상태에서 list→arena→문항이동→result→review 전이 리셋', () => {
+    it('스크롤 잔류 상태에서 list→arena→문항이동→result→review 전이 리셋', async () => {
         const mc = document.querySelector('.main-content');
 
         mc.scrollTop = 400;
@@ -215,7 +250,7 @@ describe('모의고사 시뮬레이터 — 세션·답안·제출·이어하기'
 
         // → list
         mc.scrollTop = 300;
-        exitSimArena();
+        await exitSimArena();
         expect(mc.scrollTop).toBe(0);
     });
 });

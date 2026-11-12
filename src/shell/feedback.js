@@ -11,7 +11,7 @@ import { getActiveExamId } from '../core/exam-context.js';
 import { getSupabase, getAuthSession } from '../auth-sync/supabase-client.js';
 import { getTelemetrySessionId } from '../telemetry/telemetry-session.js';
 import { esc } from '../core/sanitize.js';
-import { trapFocus, showToast } from '../ui-utils.js';
+import { trapFocus, showToast, showConfirm } from '../ui-utils.js';
 
 const ENTRY_SRC_KEY = 'entry_source';
 const QUEUE_KEY = 'pending_feedback';
@@ -244,7 +244,10 @@ export function showFeedbackModal(currentView) {
     document.body.appendChild(overlay);
     const dialog = /** @type {HTMLElement|null} */ (overlay.querySelector('.app-confirm-dialog'));
     if (!dialog) return;
+    // rAF보다 먼저 닫기가 호출되면 is-visible이 되살아나지 않도록 가드
+    let closed = false;
     requestAnimationFrame(() => {
+        if (closed) return;
         overlay.classList.add('is-visible');
         dialog.classList.add('is-visible');
     });
@@ -269,18 +272,30 @@ export function showFeedbackModal(currentView) {
         });
     });
 
+    const onKey = (ev) => {
+        const e = /** @type {KeyboardEvent} */ (ev);
+        // 확인 모달이 위에 열려 있으면 그쪽 Esc가 먼저 처리 — 이중 닫기 방지
+        if (e.key === 'Escape' && !document.getElementById('app-confirm-overlay')) requestClose();
+    };
     const untrapFocus = trapFocus(dialog);
     const close = () => {
+        closed = true;
+        document.removeEventListener('keydown', onKey);
         overlay.classList.remove('is-visible');
         dialog.classList.remove('is-visible');
         setTimeout(() => { untrapFocus(); overlay.remove(); }, 200);
     };
-    overlay.querySelector('.app-confirm-cancel')?.addEventListener('click', close);
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
-    const onKey = (ev) => {
-        const e = /** @type {KeyboardEvent} */ (ev);
-        if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); close(); }
+    // UX-FORM-05 — 작성 중 닫기는 확인 경유 (내용 유실 방지)
+    const isDirty = () => !!(/** @type {HTMLTextAreaElement|null} */ (overlay.querySelector('.feedback-text'))?.value?.trim());
+    const requestClose = async () => {
+        if (isDirty()) {
+            const ok = await showConfirm('작성 중인 의견이 있습니다. 내용을 버리고 닫을까요?', '버리기');
+            if (!ok) return;
+        }
+        close();
     };
+    overlay.querySelector('.app-confirm-cancel')?.addEventListener('click', requestClose);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) requestClose(); });
     document.addEventListener('keydown', onKey);
 
     overlay.querySelector('.feedback-submit')?.addEventListener('click', async () => {

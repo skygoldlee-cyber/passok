@@ -1,6 +1,6 @@
 // @spec UX-NAV-01,UX-NAV-08,UM-04,ES-09
 import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
-import { getViewTitles, navigateToView, initViewHashRouting, resetExitGuardState } from '../../../src/shell/router.js';
+import { getViewTitles, navigateToView, initViewHashRouting, resetExitGuardState, registerViewLeaveGuard, clearViewLeaveGuard } from '../../../src/shell/router.js';
 import { isStaleViewGen } from '../../../src/views/navigation.js';
 import { showGlobalLoading } from '../../../src/ui-utils.js';
 import { state } from '../../../src/core/state.js';
@@ -149,6 +149,28 @@ describe('router.js — DOM 테스트', () => {
             navigateToView('quiz-view', ctx);
             expect(document.title).toContain('퀴즈');
             expect(document.title).not.toContain('플래시카드');
+        });
+
+        it('이탈 가드: 거절 시 뷰 유지 + 해시 복귀, 승인 시 전환 (E-09·UX-FORM-05)', async () => {
+            const ctx = {
+                titlesMap: getViewTitles(null),
+                handlers: { viewRenderers: {}, stopReaderAudio: vi.fn() }
+            };
+            state.currentView = 'exam-view';
+            registerViewLeaveGuard('exam-view', async () => false);
+            navigateToView('quiz-view', ctx);
+            await new Promise(r => setTimeout(r, 0));
+            // 가드 거절 → 뷰 전환 차단
+            expect(state.currentView).toBe('exam-view');
+            expect(document.getElementById('quiz-view').classList.contains('active')).toBe(false);
+
+            clearViewLeaveGuard('exam-view');
+            registerViewLeaveGuard('exam-view', async () => true);
+            navigateToView('quiz-view', ctx);
+            await new Promise(r => setTimeout(r, 0));
+            expect(state.currentView).toBe('quiz-view');
+            expect(document.getElementById('quiz-view').classList.contains('active')).toBe(true);
+            clearViewLeaveGuard('exam-view');
         });
 
         it('nav-item 활성화 클래스 동기화', () => {
