@@ -32,10 +32,48 @@ export function buildCareLog(in_) {
         const sel = (acts[g.key] || []).filter(Boolean);
         if (sel.length) lines.push(`[${g.label}] ${sel.join(' · ')}`);
     }
+    const obs = obsText(in_.obs);
+    if (obs) lines.push(`[상태 관찰] ${obs}`);
     lines.push('', '■ 특이사항');
     lines.push(`- ${(in_.note || '').trim() || '특이사항 없음'}`);
     lines.push('', '제공자: 요양보호사 ____________');
     return lines.join('\n');
+}
+
+const _OBS_LABELS = /** @type {[string, string][]} */ ([['meal', '식사량'], ['sleep', '수면'], ['voided', '배변']]);
+/** 관찰 칩 입력 → '식사량: 전 · 수면: 양호 · 배변: 정상' (미선택 항목 생략) */
+/** @param {*} obs */
+const obsText = obs => _OBS_LABELS
+    .map(([k, label]) => obs && obs[k] ? `${label}: ${obs[k]}` : '')
+    .filter(Boolean).join(' · ');
+
+/**
+ * 요양일지 격식표 MD — 기본정보·제공서비스·관찰·특이사항을 표로 구성 (내보내기 표준 초안).
+ * buildCareLog(평문 미리보기·복사)와 쌍 — docx·기관 양식 블록({{기록내용}})에 삽입된다.
+ * @param {*} in_
+ */
+export function buildCareLogMd(in_) {
+    if (!in_ || !in_.date || !in_.client || !in_.service) return null;
+    const svc = SERVICE_TYPES.find(s => s.key === in_.service)?.label || in_.service;
+    const tbl = (/** @type {string[]} */ head, /** @type {string[][]} */ rows) =>
+        ['| ' + head.join(' | ') + ' |', '|' + head.map(() => '---').join('|') + '|',
+            ...rows.map(r => '| ' + r.join(' | ') + ' |')].join('\n');
+    const out = [tbl(['항목', '내용'], [
+        ['일시', `${in_.date}${in_.start ? ` ${in_.start}~${in_.end || ''}` : ''}`],
+        ['대상자', `${in_.client} 님`],
+        ['급여 종류', svc],
+    ])];
+    const rows = [];
+    const acts = in_.activities || {};
+    for (const g of ACTIVITY_GROUPS) {
+        const sel = (acts[g.key] || []).filter(Boolean);
+        if (sel.length) rows.push([g.label, sel.join(' · ')]);
+    }
+    const obs = obsText(in_.obs);
+    if (obs) rows.push(['상태 관찰', obs]);
+    if (rows.length) out.push(tbl(['구분', '제공 서비스 내용'], rows));
+    out.push(tbl(['특이사항'], [[(in_.note || '').trim() || '특이사항 없음']]));
+    return out.join('\n\n');
 }
 
 /** CO-07 공단 급여제공기록지 양식 — ERP·공단 앱에 붙여넣는 텍스트 (이중 입력 해소) */

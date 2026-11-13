@@ -1,6 +1,6 @@
 // src/exams/carework/views/care-log.js — 요양일지 생성기 뷰
 // @spec UX-FORM-03 — 시험 전용 실무 뷰 (DA-13)
-import { buildCareLog, buildRecordText, SERVICE_TYPES, ACTIVITY_GROUPS, careLogsToCsv } from '../care-log.js';
+import { buildCareLog, buildCareLogMd, buildRecordText, SERVICE_TYPES, ACTIVITY_GROUPS, careLogsToCsv } from '../care-log.js';
 import { markFunnel } from '../care-funnel.js';
 import { saveCareLog, listCareLogs, removeCareLog, syncPendingCareLogs } from '../care-log-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
@@ -61,15 +61,15 @@ export function careLogGenerate() {
     out.innerHTML = docHeadHtml('요양일지') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]);
 }
 
-/** 일지 MD 초안 — 헤더 + 폼 생성문 (docx 파생 원본) */
+/** 일지 MD 초안 — 헤더 + 격식표 생성문 (docx 파생 원본 — 평문이 아닌 표로 출력) */
 export function careLogDocMd() {
     const f = readForm();
-    const t = buildCareLog(f);
+    const t = buildCareLogMd(f);
     return t ? docMdHead('요양일지') + '\n' + renderToolBody('careLog', {
         기록내용: t, client: f.client,
         일시: `${f.date}${f.start ? ` ${f.start}~${f.end || ''}` : ''}`,
         급여종류: SERVICE_TYPES.find(s => s.key === f.service)?.label || f.service,
-        특이사항: f.note,
+        특이사항: f.note, 비고: f.note,
     }) + docMdSign([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]) : '';
 }
 

@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 fix(carework): 요양일지 docx 격식표 출력 + 관찰 칩 본문 반영
+
+- `buildCareLogMd` 신규 (care-log.js) — 기본정보(일시·대상자·급여 종류)·제공 서비스·특이사항을 MD 표로 구성. `careLogDocMd`의 `{{기록내용}}` 블록이 평문 생성문 → 표 MD로 교체돼 Word·한글 출력이 테두리 표로 렌더 (docxFileMd 경로 그대로, 기관 양식 사본에도 동일 블록 주입)
+- `obsText` — 식사량·수면·배변 관찰 칩이 평문·표 양쪽 본문에 반영 (입력은 수집되나 출력에 누락되던 항목 복구, 미선택 시 행 생략)
+- 기관 사본 호환 — seed의 `{{비고}}` 키에도 note 값 주입 (특이사항만 넘기던 누락 보완)
+- `form-seeds.js` — 중복 `if (!def)` 5줄 제거
+- 유닛 테스트 — 표 구조·관찰 행·미선택 생략 검증 (node --test 7건)
+
 ## 2026-11-13 feat(carework): HWPX(아래한글) 양식 추출 + 출력 라벨 한글 호환 표기
 
 - `extractFormHwpx` 신규 (care-form-pdf.js) — KS X 6101 ZIP+OWPML: `_zipDir` 리팩터(중앙 디렉터리 나열 공용화)로 Contents/sectionN.xml 전수 순회, hp:p 단락·hp:tbl 표를 텍스트·MD 행 복원. 표 내부 hp:t는 본문 중복 방지 분리. deflate는 기존 DecompressionStream 경로 재사용 — 의존성 추가 없음. 구형 .hwp(OLE/CFB)는 3개 진입점 모두 "docx로 저장" 명시 안내로 거부
