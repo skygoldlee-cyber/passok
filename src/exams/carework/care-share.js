@@ -296,7 +296,7 @@ const _sheet = (/** @type {*} */ ctx, /** @type {string} */ headText, /** @type 
 const _pickShareKind = (/** @type {*} */ ctx) => {
     const items = [
         { label: '📄 PDF로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'pdf') },
-        { label: '📝 Word로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'docx') },
+        { label: '📝 Word·한글로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'docx') },
     ];
     if (ctx.csvGen) items.push({ label: '📊 Excel로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'xlsx') });
     items.push({ label: '📎 전체 파일로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'all') });
@@ -313,7 +313,7 @@ const _openMenu = (/** @type {*} */ ctx) => {
     items.push({ label: '🖨️ 인쇄·PDF 저장', pro: ctx.proKey, run: () => _actPrint(ctx) });
     items.push({ label: `📋 본문 복사${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => { if (ctx.proKey) proFeatureNotice(ctx.proKey, `${ctx.title} 복사`); _copyRaw(ctx); _audit(ctx.title, ctx.flag, ['clipboard']); } });
     items.push({ label: `📄 PDF 파일 다운로드${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => _actPdf(ctx) });
-    items.push({ label: `📝 Word 파일 다운로드${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => _actDocx(ctx) });
+    items.push({ label: `📝 Word·한글 파일 다운로드${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => _actDocx(ctx) });
     if (ctx.csvGen) items.push({ label: '📊 Excel 내보내기', pro: ctx.proKey, run: () => _actXlsx(ctx) });
     _sheet(ctx, `${ctx.title} — 내보낼 방식을 선택하세요`, items);
 };

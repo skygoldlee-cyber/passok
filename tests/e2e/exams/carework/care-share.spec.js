@@ -27,11 +27,11 @@ test.describe('Care OS — 공유·내보내기 (CO-13)', () => {
         await page.locator('#care-audit-view [data-click="careShare"]').click();
         const sheet = page.locator('.care-export-sheet');
         await expect(sheet).toBeVisible();
-        for (const label of ['인쇄·PDF 저장', '본문 복사', 'PDF 파일 다운로드', 'Word 파일 다운로드'])
+        for (const label of ['인쇄·PDF 저장', '본문 복사', 'PDF 파일 다운로드', 'Word·한글 파일 다운로드'])
             await expect(sheet.locator('button', { hasText: label })).toBeVisible();
         const [download] = await Promise.all([
             page.waitForEvent('download'),
-            sheet.locator('button', { hasText: 'Word 파일 다운로드' }).click(),
+            sheet.locator('button', { hasText: 'Word·한글 파일 다운로드' }).click(),
         ]);
         expect(download.suggestedFilename()).toMatch(/평가 체크리스트_\d{4}-\d{2}-\d{2}\.docx$/);
         expect(page._errors).toEqual([]);

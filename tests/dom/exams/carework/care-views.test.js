@@ -811,6 +811,55 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(ex.text).toContain('| 성명 | 값 |'); // 표는 MD 행 복원
     });
 
+    // 다중 엔트리 stored zip 조립 — hwpx 테스트용 미니 컨테이너
+    const _zstore = (entries) => {
+        const enc = new TextEncoder();
+        const chunks = [], central = [];
+        let off = 0;
+        for (const [name, data] of entries) {
+            const nb = enc.encode(name);
+            const lh = new DataView(new ArrayBuffer(30));
+            lh.setUint32(0, 0x04034b50, true); lh.setUint16(18, data.length, true); lh.setUint16(22, data.length, true); lh.setUint16(26, nb.length, true);
+            const ch = new DataView(new ArrayBuffer(46));
+            ch.setUint32(0, 0x02014b50, true); ch.setUint16(20, data.length, true); ch.setUint16(24, data.length, true);
+            ch.setUint16(28, nb.length, true); ch.setUint32(42, off, true);
+            chunks.push(new Uint8Array(lh.buffer), nb, data);
+            central.push(new Uint8Array(ch.buffer), nb);
+            off += 30 + nb.length + data.length;
+        }
+        const eo = new DataView(new ArrayBuffer(22));
+        eo.setUint32(0, 0x06054b50, true); eo.setUint16(8, entries.length, true); eo.setUint16(10, entries.length, true);
+        eo.setUint32(12, central.reduce((n, b) => n + b.length, 0), true); eo.setUint32(16, off, true);
+        const all = [...chunks, ...central, new Uint8Array(eo.buffer)];
+        const buf = new Uint8Array(all.reduce((n, b) => n + b.length, 0));
+        let o = 0; for (const b of all) { buf.set(b, o); o += b.length; }
+        return buf.buffer;
+    };
+
+    it('customForm — extractFormHwpx: hwpx zip의 section XML 단락·표 추출 + 구형 hwp 거부', async () => {
+        const { extractFormHwpx } = await import('../../../../src/exams/carework/care-form-pdf.js');
+        const enc = new TextEncoder();
+        const xml = '<?xml version="1.0"?>'
+            + '<hs:sec xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph">'
+            + '<hp:p><hp:run><hp:t>동의서</hp:t></hp:run></hp:p>'
+            + '<hp:p><hp:run><hp:tbl><hp:tr>'
+            + '<hp:tc><hp:p><hp:run><hp:t>성명</hp:t></hp:run></hp:p></hp:tc>'
+            + '<hp:tc><hp:p><hp:run><hp:t>값</hp:t></hp:run></hp:p></hp:tc>'
+            + '</hp:tr></hp:tbl></hp:run></hp:p></hs:sec>';
+        const buf = _zstore([
+            ['mimetype', enc.encode('application/hwp+zip')],
+            ['Contents/section0.xml', enc.encode(xml)],
+        ]);
+        const f = { arrayBuffer: () => Promise.resolve(buf) };
+        const ex = await extractFormHwpx(f);
+        expect(ex.text).toContain('동의서');
+        expect(ex.text).toContain('| 성명 | 값 |'); // 표는 MD 행 복원
+        expect(ex.text).not.toContain('동의서\n성명'); // 표 내부 hp:t는 본문 텍스트와 중복되지 않음
+        // 구형 .hwp(OLE/CFB — zip 아님)는 명시적 안내로 거부
+        const bad = { arrayBuffer: () => Promise.resolve(new Uint8Array([0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]).buffer) };
+        await expect(extractFormHwpx(bad)).rejects.toThrow(/docx/);
+    });
+
     it('customForm — AI 추출 프롬프트·응답 파싱 계약 (buildFormExtractPrompt/parseFormExtractResponse)', async () => {
         const { buildFormExtractPrompt, parseFormExtractResponse } = await import('../../../../src/ai/ai-client.js');
         const p = buildFormExtractPrompt({ text: '급여계획서 본문', hint: '계획서' });

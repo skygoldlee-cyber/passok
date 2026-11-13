@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 feat(carework): HWPX(아래한글) 양식 추출 + 출력 라벨 한글 호환 표기
+
+- `extractFormHwpx` 신규 (care-form-pdf.js) — KS X 6101 ZIP+OWPML: `_zipDir` 리팩터(중앙 디렉터리 나열 공용화)로 Contents/sectionN.xml 전수 순회, hp:p 단락·hp:tbl 표를 텍스트·MD 행 복원. 표 내부 hp:t는 본문 중복 방지 분리. deflate는 기존 DecompressionStream 경로 재사용 — 의존성 추가 없음. 구형 .hwp(OLE/CFB)는 3개 진입점 모두 "docx로 저장" 명시 안내로 거부
+- 입력 연결 3곳 — `form-template-editor._extract`·`care-custom-form._onSeedFile`·`careAuditFileLoad`에 .hwpx 분기 + accept 속성·힌트 갱신 (기관 서식·관공서 양식이 hwp로 배포되는 실제 경로 커버)
+- 출력 라벨 — "Word로 보내기"·"Word 파일 다운로드" → "Word·한글" 표기 (생성 docx가 아래한글에서 그대로 열리는 사실을 사용자가 인지하도록)
+- DOM 테스트 — extractFormHwpx: stored zip section XML의 단락·표 복원 + OLE 매직 바이트 거부 검증
+- 테스트 라벨 동기 — care-share DOM·E2E 스펙의 시트 항목 단언을 "Word·한글" 표기로 갱신
+
 ## 2026-11-13 docs(carework): 전문가 검토 의뢰서 (DOC-BIZ-12) — 법무 0b 검토 패키지
 
 - `전문가검토_의뢰서.md` 신규 — 전문가 전달 패키지. §2 서비스·사실관계 브리프(데이터 흐름·L0/L1 저장 범위·안전조치 현황·운영 규모) + §3 첨부 문서 목록(계약서·방침·런북·스키마·재수탁자 DPA) + §4 검토 질문 8건(전자동의 성립·손배 캡 유효성·보증 조항·재수탁 동의·접속기록 충족·문서 형태·보호자 필드·수탁자 자격) + §5 확정 결정 표. 회신 반영 → 기능 플래그 재개통이 0b 완료 조건

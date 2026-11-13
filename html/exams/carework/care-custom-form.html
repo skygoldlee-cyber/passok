@@ -6,9 +6,9 @@
     </div>
 
     <div class="view-header"><h3>기본 양식</h3></div>
-    <p class="care-log-hint"><strong>사본 만들기</strong> — 기본 양식을 복사해 항목을 수정·추가하는 편집기가 열립니다. <strong>파일로 만들기</strong> — 기관이 쓰는 양식 파일(.docx·.xlsx·.csv·.pdf)을 올리면 그 내용으로 사본이 만들어집니다. 저장된 사본은 해당 도구 출력 서식에도 반영되고, 원본 기본 양식은 그대로입니다.</p>
+    <p class="care-log-hint"><strong>사본 만들기</strong> — 기본 양식을 복사해 항목을 수정·추가하는 편집기가 열립니다. <strong>파일로 만들기</strong> — 기관이 쓰는 양식 파일(.docx·.hwpx·.xlsx·.csv·.pdf)을 올리면 그 내용으로 사본이 만들어집니다. 저장된 사본은 해당 도구 출력 서식에도 반영되고, 원본 기본 양식은 그대로입니다.</p>
     <div id="cf-seed-list" class="care-log-saved"></div>
-    <input id="cf-seed-file" type="file" accept=".docx,.xlsx,.xls,.csv,.pdf" class="is-hidden">
+    <input id="cf-seed-file" type="file" accept=".docx,.hwpx,.xlsx,.xls,.csv,.pdf" class="is-hidden">
 
     <div class="care-calc-actions">
         <button class="btn" data-click="careFormTplNew">✏️ 새 양식 직접 작성</button>
@@ -19,7 +19,7 @@
         <label>양식명 <input id="cf-tpl-title" type="text" autocomplete="off"></label>
         <div class="care-calc-actions">
             <button type="button" class="btn btn-secondary" data-click="careFormTplPdfPick">📄 파일에서 추출 <span class="pro-badge" data-pro-feature="care_form_extract">유료</span></button>
-            <input id="cf-tpl-file" type="file" accept=".pdf,.docx,.xlsx,.xls,.csv,application/pdf" class="is-hidden">
+            <input id="cf-tpl-file" type="file" accept=".pdf,.docx,.hwpx,.xlsx,.xls,.csv,application/pdf" class="is-hidden">
         </div>
         <label>양식 본문 (마크다운) <textarea id="cf-tpl-body" rows="8" placeholder="기입란은 {{항목}} 형태로 표기 — 시스템 키: date·org·author·confirmer·receiver·client·signImage 는 자동 기입"></textarea></label>
         <p class="care-log-hint">수정하려면 위 입력란을 편집하세요 — 항목 추가는 "항목명: {{항목명}}" 한 줄로, {{항목}}은 기입란이 됩니다. 결과는 아래 미리보기로 확인합니다.</p>
@@ -32,7 +32,7 @@
             <button id="cf-tpl-facsave" class="btn btn-secondary is-hidden" data-click="careFormTplFacSave">🏥 기관 서식으로 등록</button>
             <button class="btn btn-secondary" data-click="careFormTplEditClose">닫기</button>
         </div>
-        <p class="care-log-hint">양식 파일을 올리면 텍스트·필드를 추출해 AI가 양식 초안을 만듭니다 — 검토·수정 후 저장하세요. <strong>Word(docx)·Excel 파일이 항목 추출 정확도가 가장 높습니다</strong> (PDF 가능, 스캔 이미지 불가).</p>
+        <p class="care-log-hint">양식 파일을 올리면 텍스트·필드를 추출해 AI가 양식 초안을 만듭니다 — 검토·수정 후 저장하세요. <strong>Word(docx)·한글(hwpx)·Excel 파일이 항목 추출 정확도가 가장 높습니다</strong> (PDF 가능, 스캔 이미지·구형 .hwp 불가 — 구형은 docx로 저장해 올려주세요).</p>
     </div>
 
     <div class="view-header"><h3>등록된 양식</h3></div>
