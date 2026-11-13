@@ -41,6 +41,10 @@ export const csvToMdTable = csv => {
 export const mdToHtml = md => {
     const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }))[c] || c);
     const out = [];
+    // 서명 문서는 공문서 결재란 선두 부여 (docx _APPROVE와 동일 구조)
+    if (/^:::sign\s*$/m.test(md)) {
+        out.push('<div class="doc-approve-wrap"><table class="doc-approve"><tr><td rowspan="2">결 재</td><td>담당</td><td>팀장</td><td>시설장</td></tr><tr><td></td><td></td><td></td></tr></table></div>');
+    }
     /** @type {string[][] | null} */
     let tbl = null;
     /** @type {string[] | null} */
@@ -50,7 +54,8 @@ export const mdToHtml = md => {
     let meta = false; // # 제목(h3) 직후 첫 단락 → 기관명·출력일 메타줄
     const flush = (/** @type {boolean} */ listOnly) => {
         if (tbl && !listOnly) {
-            out.push(`<table><thead><tr>${(tbl[0] || []).map(c => `<th>${esc(c.trim())}</th>`).join('')}</tr></thead><tbody>` +
+            const kv = (tbl[0] || []).length === 2 ? ' class="doc-kv"' : ''; // 2열 표 — 첫 열 레이블 음영
+            out.push(`<table${kv}><thead><tr>${(tbl[0] || []).map(c => `<th>${esc(c.trim())}</th>`).join('')}</tr></thead><tbody>` +
                 tbl.slice(1).map(r => `<tr>${r.map(c => `<td>${esc(c.trim())}</td>`).join('')}</tr>`).join('') + '</tbody></table>');
             tbl = null;
         }
@@ -60,7 +65,12 @@ export const mdToHtml = md => {
         const t = line.trim();
         if (t === ':::sign') { flush(false); sign = []; meta = false; continue; }
         if (t === ':::end') {
-            if (sign) { out.push(`<div class="doc-sign">${sign.map(l => `<div>${esc(l)}</div>`).join('')}</div>`); sign = null; }
+            if (sign) {
+                const d = new Date();
+                const date = `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
+                out.push(`<div class="doc-sign"><div class="doc-sign-date">${date}</div>${sign.map(l => `<div>${esc(l)}${/\(인\)\s*$/.test(l) ? '' : ' (인)'}</div>`).join('')}</div>`);
+                sign = null;
+            }
             continue;
         }
         if (sign) { if (t) sign.push(t); continue; }
@@ -77,5 +87,6 @@ export const mdToHtml = md => {
         if (t) out.push(`<p>${esc(t)}</p>`);
     }
     flush(false);
+    out.push('<p class="doc-end">끝.</p>'); // 공문서 종결 표기
     return `<div class="doc-md">${out.join('')}</div>`;
 };

@@ -77,14 +77,17 @@ const _zipStore = files => {
 };
 
 const TYPES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/></Types>`;
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/></Types>`;
 const RELS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
 const DOCRELS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/></Relationships>`;
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/></Relationships>`;
 // 보기 설정 — 인쇄 레이아웃 + 100% 고정. 생략 시 뷰어가 웹 레이아웃(전체폭·페이지 경계 없음)으로 열 수 있다
 const SETTINGS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:view w:val="print"/><w:zoom w:percent="100"/><w:defaultTabStop w:val="708"/></w:settings>`;
+// 바닥글 — 공문서 쪽 번호(중앙·회색·소자). fldSimple PAGE 필드로 자동 매김
+const FOOTER = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">— </w:t></w:r><w:fldSimple w:instr=" PAGE "><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t>1</w:t></w:r></w:fldSimple><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve"> —</w:t></w:r></w:p></w:ftr>`;
 
 /**
  * @param {string} docXml - word/document.xml 내용
@@ -96,6 +99,7 @@ const _parts = docXml => [
     ['word/_rels/document.xml.rels', _enc.encode(DOCRELS)],
     ['word/document.xml', _enc.encode(docXml)],
     ['word/settings.xml', _enc.encode(SETTINGS)],
+    ['word/footer1.xml', _enc.encode(FOOTER)],
 ];
 
 // 서체 — 라틴·한글 모두 맑은 고딕으로 통일 (미지정 시 라틴은 Calibri로 바뀌어 두서 없음)
@@ -108,14 +112,14 @@ const _RF = '<w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsi
  * @returns {string}
  */
 const _P = (line, i, boldLines) => line
-    ? `<w:p><w:pPr><w:spacing w:after="60"/></w:pPr><w:r><w:rPr>${_RF}${i < boldLines ? '<w:b/>' : ''}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(line, _TEXT_W - 300))}</w:r></w:p>`
+    ? `<w:p><w:pPr><w:spacing w:after="60" w:line="276" w:lineRule="auto"/></w:pPr><w:r><w:rPr>${_RF}${i < boldLines ? '<w:b/>' : ''}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(line, _TEXT_W - 300))}</w:r></w:p>`
     : '<w:p/>';
 // 메타줄 — 제목 바로 아래 기관명·출력일. 중앙·회색·소자로 공문서 머리 격식
 /** @param {string} t */
 const _meta = t => `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:after="240"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 
-// 페이지 설정 — A4 세로(orient 명시 — 일부 임포터가 생략 시 가로로 해석) + 1인치 여백 + 1단·문서 그리드 (Word 정본과 동일한 sectPr 형태)
-const _SECT = '<w:sectPr><w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/><w:cols w:space="708"/><w:docGrid w:linePitch="360"/></w:sectPr>';
+// 페이지 설정 — A4 세로(orient 명시 — 일부 임포터가 생략 시 가로로 해석) + 좌우 25mm 여백 + 1단·문서 그리드 (Word 정본과 동일한 sectPr 형태)
+const _SECT = '<w:sectPr><w:footerReference w:type="default" r:id="rId2"/><w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/><w:pgMar w:top="1440" w:right="1417" w:bottom="1440" w:left="1417"/><w:cols w:space="708"/><w:docGrid w:linePitch="360"/></w:sectPr>';
 
 /**
  * @param {string[]} lines
@@ -123,7 +127,7 @@ const _SECT = '<w:sectPr><w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/><w
  * @returns {string}
  */
 const _doc = (lines, boldLines) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${lines.map((l, i) => _P(l, i, boldLines)).join('')}${_SECT}</w:body></w:document>`;
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><w:body>${lines.map((l, i) => _P(l, i, boldLines)).join('')}${_SECT}</w:body></w:document>`;
 
 /**
  * 텍스트 → .docx File (줄 단위 단락) — 공유·다운로드 공용, 지연 로드 불필요.
@@ -138,19 +142,19 @@ export function docxFile(text, filename, boldLines = 0) {
 
 // — MD 서브셋 → WordprocessingML (문서 표준 초안: 헤딩·표·목록·구분선·단락) —
 
-// 표 테두리 — 외곽선 1pt(sz=8)·내부선 0.5pt(sz=4). 격식 문서 관행(외곽 강조) +
-// 0.5pt는 화면 배율에서 서브픽셀로 사라지므로 PDF 변환 시 외곽선이 안 보이는 문제 방지
-const _BORDERS = ['top', 'left', 'bottom', 'right'].map(b => `<w:${b} w:val="single" w:sz="8" w:color="404040"/>`).join('')
+// 표 테두리 — 외곽선 이중(가는선+굵은선 thinThickSmallGap)·내부선 0.5pt. 공문서 격식의 외곽 강조 +
+// 이중선은 화면 배율·PDF 변환에서도 외곽이 명확히 보임
+const _BORDERS = ['top', 'left', 'bottom', 'right'].map(b => `<w:${b} w:val="thinThickSmallGap" w:sz="18" w:color="404040"/>`).join('')
     + ['insideH', 'insideV'].map(b => `<w:${b} w:val="single" w:sz="4" w:color="BFBFBF"/>`).join('');
-// 표 레이아웃 — 본문 폭 고정 dxa (A4 11906 − 여백 1440×2 = 9026) + 균등 열 그리드 + 셀 내부 여백.
+// 표 레이아웃 — 본문 폭 고정 dxa (A4 11906 − 좌우 여백 1417×2 = 9072) + 균등 열 그리드 + 셀 내부 여백.
 // pct(상대폭)는 한글 등 일부 임포터가 미지원해 표가 본문 폭 밖으로 렌더될 수 있어 dxa 고정 사용.
-const _TEXT_W = 9026;
+const _TEXT_W = 9072;
 const _CELL_MAR = '<w:tblCellMar><w:top w:w="90" w:type="dxa"/><w:left w:w="100" w:type="dxa"/><w:bottom w:w="90" w:type="dxa"/><w:right w:w="100" w:type="dxa"/></w:tblCellMar>';
 // 셀 단락 — kinsoku(동아시아 금칙 규칙) + wordWrap=off(라틴 단어 중간 분할 금지).
 // 주의: Word는 한글을 음절 단위로 끊으며 어절 단위 강제 OOXML 스위치가 없다(COM 실측 —
 // kinsoku·wordWrap·lang=ko-KR·noLineBreaksAfter·useFELayout 모두 중간 분리 유지).
 // 그래서 어절 줄넘김은 생성 측에서 폭 추정 후 <w:br/>를 직접 삽입해 구현한다.
-const _CELL_PPR = '<w:pPr><w:kinsoku/><w:wordWrap w:val="off"/></w:pPr>';
+const _CELL_PPR = '<w:pPr><w:kinsoku/><w:wordWrap w:val="off"/><w:spacing w:line="276" w:lineRule="auto"/></w:pPr>';
 // 글자 폭 — 맑은고딕 10pt(w:sz 20 명시): 한글·전각 200tw(1em 정확), ASCII·반각 110tw(보수 추정).
 // 폰트 크기를 명시하지 않으면 뷰어 기본값에 따라 달라져 어절 분리가 깨지므로 sz를 고정한다.
 const _cw = (/** @type {string} */ c) => ((c.codePointAt(0) || 0) < 128 ? 110 : 200);
@@ -222,40 +226,72 @@ const _colWs = rows => {
  * @param {string} c
  * @param {boolean} head
  * @param {number} [w] - 셀 너비 (dxa)
+ * @param {string} [shd] - 배경색 (헤더 DEEAF6·레이블 F2F2F2·줄무늬 F7F9FC)
+ * @param {boolean} [center] - 본문 셀 중앙 정렬 (레이블 열)
  * @returns {string}
  */
-const _cell = (c, head, w) => `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dxa"/>` : ''}<w:vAlign w:val="center"/>${head ? '<w:shd w:val="clear" w:color="auto" w:fill="DEEAF6"/>' : ''}</w:tcPr><w:p>${head ? _CELL_PPR.replace('</w:pPr>', '<w:jc w:val="center"/></w:pPr>') : _CELL_PPR}<w:r><w:rPr>${_RF}${head ? '<w:b/>' : ''}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(c.trim(), Math.max(400, (w || _TEXT_W) - _CPAD)))}</w:r></w:p></w:tc>`;
+const _cell = (c, head, w, shd, center) => {
+    const ppr = _CELL_PPR.replace('</w:pPr>', `${head || center ? '<w:jc w:val="center"/>' : ''}</w:pPr>`);
+    return `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dxa"/>` : ''}${shd ? `<w:shd w:val="clear" w:color="auto" w:fill="${shd}"/>` : ''}<w:vAlign w:val="center"/></w:tcPr><w:p>${ppr}<w:r><w:rPr>${_RF}${head ? '<w:b/>' : ''}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(c.trim(), Math.max(400, (w || _TEXT_W) - _CPAD)))}</w:r></w:p></w:tc>`;
+};
 /**
  * @param {string[][]} rows
  * @returns {string}
  */
 const _tbl = rows => {
     const ws = _colWs(rows);
+    const n = ws.length;
     const grid = ws.map(w => `<w:gridCol w:w="${w}"/>`).join('');
     const wAt = (/** @type {number} */ i) => ws[i];
-    // 첫 행 tblHeader — 페이지 넘김 시 표머리 반복
+    // 첫 행 tblHeader(페이지 넘김 시 표머리 반복) + cantSplit(행이 페이지 경계에서 쪼개지지 않음) + 최소 행 높이 24pt
     return `<w:tbl><w:tblPr><w:tblW w:w="${_TEXT_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${grid}</w:tblGrid>`
-        + rows.map((r, i) => `<w:tr>${i === 0 ? '<w:trPr><w:tblHeader/></w:trPr>' : ''}${r.map((c, ci) => _cell(c, i === 0, wAt(ci))).join('')}</w:tr>`).join('') + '</w:tbl>';
+        + rows.map((r, i) => `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="480" w:hRule="atLeast"/>${i === 0 ? '<w:tblHeader/>' : ''}</w:trPr>${r.map((c, ci) => {
+            const shd = i === 0 ? 'DEEAF6' : (n === 2 && ci === 0 ? 'F2F2F2' : (i % 2 === 0 ? 'F7F9FC' : ''));
+            return _cell(c, i === 0, wAt(ci), shd, n === 2 && ci === 0);
+        }).join('')}</w:tr>`).join('') + '</w:tbl>';
 };
-// 헤딩 — # 는 문서 제목(중앙·대자), ## 는 절 제목(하단 가는 선), ### 는 소제목
+// 제목 서체 — 공문서 관행에 따라 문서 제목만 명조계(바탕)로 전환. 본문은 맑은 고딕 유지
+const _RF_T = '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:eastAsia="바탕"/>';
+// 헤딩 — # 는 문서 제목(중앙·대자·명조), ## 는 절 제목(하단 가는 선), ### 는 소제목
 /**
  * @param {string} t
  * @param {number} lv - 헤딩 깊이 1~3
  * @returns {string}
  */
 const _h = (t, lv) => lv === 1
-    ? `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="80" w:after="120"/></w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="36"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`
+    ? `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="80" w:after="120"/></w:pPr><w:r><w:rPr>${_RF_T}<w:b/><w:sz w:val="36"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`
     : `<w:p><w:pPr><w:spacing w:before="240" w:after="100"/>${lv === 2 ? '<w:pBdr><w:bottom w:val="single" w:sz="4" w:color="BFBFBF"/></w:pBdr>' : ''}</w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="${lv === 2 ? 28 : 24}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 const _HR = '<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="999999"/></w:pBdr></w:pPr></w:p>';
 
+// 결재란 — 공문서 상단 우측 승인 표 ('결 재' 세로병합 + 담당·팀장·시설장 빈 서명칸).
+// 서명 문서(:::sign 포함)에만 부여
+const _AW = 640; // 결재란 열 폭
+const _APPR_W = _AW * 4;
+// 인라인 jc=right도 셀 여백+테두리만큼 우측 가이드선을 넘어감(PDF 실측) — 부동 표+tblpX 보정은 서명란과 동일
+const _APPR_X = _TEXT_W - _APPR_W + 140;
+const _cellPprC = _CELL_PPR.replace('</w:pPr>', '<w:jc w:val="center"/></w:pPr>');
+const _apprCell = (/** @type {string} */ t, /** @type {boolean} */ merge, /** @type {boolean} */ cont) => `<w:tc><w:tcPr><w:tcW w:w="${_AW}" w:type="dxa"/>${merge ? `<w:vMerge${cont ? '' : ' w:val="restart"'}/>` : ''}${t && !cont ? '<w:shd w:val="clear" w:color="auto" w:fill="DEEAF6"/>' : ''}<w:vAlign w:val="center"/></w:tcPr>${t ? `<w:p>${_cellPprC}<w:r><w:rPr>${_RF}<w:b/><w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${t}</w:t></w:r></w:p>` : '<w:p/>'}</w:tc>`;
+const _APPROVE = `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_APPR_X}" w:tblpYSpec="top" w:leftFromText="180" w:rightFromText="180" w:topFromText="60" w:bottomFromText="120"/><w:tblW w:w="${_APPR_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${`<w:gridCol w:w="${_AW}"/>`.repeat(4)}</w:tblGrid>`
+    + `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="400" w:hRule="atLeast"/></w:trPr>`
+    + _apprCell('결 재', true, false)
+    + ['담당', '팀장', '시설장'].map(t => _apprCell(t, false, false)).join('')
+    + `</w:tr><w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="720" w:hRule="atLeast"/></w:trPr>`
+    + _apprCell('', true, true)
+    + _apprCell('', false, false) + _apprCell('', false, false) + _apprCell('', false, false)
+    + '</w:tr></w:tbl>';
+// 문서 종결 — 공문서 관행의 '끝.' 표기 (중앙)
+const _END = `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="200"/></w:pPr><w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t>끝.</w:t></w:r></w:p>`;
+
 // 서명란 — 본문 여백 영역 하단 우측에 부동 표(tblpPr — Word 텍스트 상자와 동일한 앵커 방식).
-// 문서 끝에 배치하면 마지막 페이지 하단 오른쪽에 고정된다
+// 문서 끝에 배치하면 마지막 페이지 하단 오른쪽에 고정된다. 첫 행은 발신일(중앙), 서명행은 (인) 표기
 const _SIG_W = 4200;
-// tblpX는 좌측 셀 여백(130)+테두리 반폭(10)만큼 좌측으로 치우쳐 렌더됨(COM 실측) — 140tw 보정
+// tblpX는 좌측 셀 여백(100)+테두리 반폭(10)만큼 좌측으로 치우쳐 렌더됨(COM 실측) — 140tw 보정
 const _SIG_X = _TEXT_W - _SIG_W + 140;
+const _docDate = () => { const d = new Date(); return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`; };
 /** @param {string[]} lines */
 const _sigTbl = lines => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_SIG_X}" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${_SIG_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid><w:gridCol w:w="${_SIG_W}"/></w:tblGrid>`
-    + lines.map(l => `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_CELL_PPR}<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(l.trim(), _SIG_W - 300))}</w:r></w:p></w:tc></w:tr>`).join('') + '</w:tbl>';
+    + `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_cellPprC}<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${_docDate()}</w:t></w:r></w:p></w:tc></w:tr>`
+    + lines.map(l => `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_CELL_PPR}<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(l.trim() + (/\(인\)\s*$/.test(l) ? '' : ' (인)'), _SIG_W - 300))}</w:r></w:p></w:tc></w:tr>`).join('') + '</w:tbl>';
 
 /**
  * @param {string} md
@@ -263,6 +299,7 @@ const _sigTbl = lines => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vert
  */
 const _mdBody = md => {
     const out = [], lines = String(md || '').split('\n');
+    if (/^:::sign\s*$/m.test(md)) out.push(_APPROVE); // 서명 문서는 결재란 선두 부여
     /** @type {string[][] | null} */
     let tbl = null;
     /** @type {string[] | null} */
@@ -287,7 +324,7 @@ const _mdBody = md => {
         out.push(_P(t, 99, 0));
     }
     flush();
-    return out.join('');
+    return out.join('') + _END; // 공문서 종결 표기
 };
 
 /**
@@ -296,7 +333,7 @@ const _mdBody = md => {
  * @param {string} filename - 확장자 제외 파일명
  */
 export function docxFileMd(md, filename) {
-    const body = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${_mdBody(md)}${_SECT}</w:body></w:document>`;
+    const body = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><w:body>${_mdBody(md)}${_SECT}</w:body></w:document>`;
     const blob = _zipStore(_parts(body));
     return new File([blob], `${filename}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 }

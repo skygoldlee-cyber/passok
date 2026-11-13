@@ -196,7 +196,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.querySelector('#log-preview .doc-md')?.textContent).toMatch(/김○○/);
         expect(document.querySelector('#log-preview .doc-md h3')?.textContent).toBe('요양일지');
         expect(document.querySelector('#log-preview .doc-md')?.textContent).toMatch(/\d{4}-\d{2}-\d{2}/);
-        expect(document.querySelector('#log-preview .doc-md table')?.textContent).toContain('김○○');
+        expect(document.querySelector('#log-preview .doc-md table:not(.doc-approve)')?.textContent).toContain('김○○');
         // 문서형 서명란 — cosmetic fp-sign-row 대응 (작성자·확인자)
         expect(document.querySelector('#log-preview .doc-md')?.textContent).toContain('작성자(요양보호사)');
         careLogRecordCopy(); // 제공기록지 양식 복사 — 메뉴와 별개 문서라 별도 버튼 유지
@@ -914,7 +914,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
     it('customForm — mdToHtml 표는 단일 table로 렌더 (행별 분리 회귀 방지)', async () => {
         const { mdToHtml } = await import('../../../../src/exams/carework/doc-md.js');
         const html = mdToHtml('| a | b |\n|---|---|\n| 1 | 2 |\n| 3 | 4 |');
-        expect((html.match(/<table>/g) || []).length).toBe(1); // 행마다 별도 표로 깨지지 않음
+        expect((html.match(/<table[\s>]/g) || []).length).toBe(1); // 행마다 별도 표로 깨지지 않음 (2열 표는 doc-kv 클래스 부가)
         expect(html).toContain('<thead><tr><th>a</th><th>b</th></tr></thead>');
         expect((html.match(/<td>/g) || []).length).toBe(4); // 데이터 행은 tbody에
     });

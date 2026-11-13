@@ -31,12 +31,16 @@ test('파일명·타입 + 필수 엔트리 + EOCD', async () => {
     assert.ok(f.type.includes('wordprocessingml.document'));
     const { entries, eocd } = await unzip(f);
     assert.deepEqual(Object.keys(entries), [
-        '[Content_Types].xml', '_rels/.rels', 'word/_rels/document.xml.rels', 'word/document.xml', 'word/settings.xml',
+        '[Content_Types].xml', '_rels/.rels', 'word/_rels/document.xml.rels', 'word/document.xml', 'word/settings.xml', 'word/footer1.xml',
     ]);
     assert.ok(eocd, 'EOCD 레코드 없음');
     const settings = entries['word/settings.xml'];
     assert.ok(settings.includes('<w:view w:val="print"/>'), '인쇄 레이아웃 보기 강제 누락 — 페이지 경계 미표시 위험');
     assert.ok(settings.includes('<w:zoom w:percent="100"/>'), '확대율 100% 고정 누락');
+    // 바닥글 쪽 번호 — 공문서 격식 (PAGE 필드 자동 매김)
+    const footer = entries['word/footer1.xml'];
+    assert.ok(footer.includes('fldSimple') && footer.includes('PAGE'), '쪽 번호 필드 누락');
+    assert.ok(entries['word/document.xml'].includes('w:footerReference'), '바닥글 참조 누락');
 });
 
 test('단락 변환 — 줄 단위 w:p, 빈 줄은 빈 단락, 공백 보존', async () => {
@@ -86,7 +90,7 @@ test('docxFileMd — 열 너비 내용 기반 배분: 레이블 열이 내용 �
     const ws = [...doc.matchAll(/<w:gridCol w:w="(\d+)"/g)].map(m => +m[1]);
     assert.strictEqual(ws.length, 2);
     assert.ok(ws[0] < ws[1] * 0.5, `레이블 열(${ws[0]})이 내용 열(${ws[1]}) 대비 과도 — 균등 배분 잔재`);
-    assert.strictEqual(ws[0] + ws[1], 9026, '열 너비 합계가 본문 폭과 불일치');
+    assert.strictEqual(ws[0] + ws[1], 9072, '열 너비 합계가 본문 폭과 불일치');
 });
 
 test('docxFileMd — 다열 표(min 합계 초과)는 최소폭 비율 축소 배분', async () => {
@@ -100,7 +104,7 @@ test('docxFileMd — 다열 표(min 합계 초과)는 최소폭 비율 축소 �
     const mn = Math.min(...ws), mx = Math.max(...ws);
     assert.ok(mx > mn * 1.3, `다열 표가 균등 배분으로 fallback됨 (min ${mn}, max ${mx})`);
     assert.ok(ws[4] >= 1500, `연락처 열(${ws[4]})이 토큰 폭(~1750)에 미달`);
-    assert.strictEqual(ws.reduce((a, b) => a + b, 0), 9026, '열 너비 합계 불일치');
+    assert.strictEqual(ws.reduce((a, b) => a + b, 0), 9072, '열 너비 합계 불일치');
     // 헤더 항목명은 줄넘김 금지 — 각 헤더가 단일 w:t로 존재(중간 <w:br/> 없음)
     for (const h of ['방문일', '대상자', '방문객', '연락처']) {
         assert.ok(doc.includes(`<w:t xml:space="preserve">${h}</w:t>`), `헤더 "${h}" 줄넘김 발생`);
@@ -108,7 +112,7 @@ test('docxFileMd — 다열 표(min 합계 초과)는 최소폭 비율 축소 �
 });
 
 test('docxFileMd — 공문서 격식: 제목 중앙·메타줄·표머리 연청·머리 반복', async () => {
-    const md = '# 인수인계서\n\n○○요양원 · 2026-11-13 출력\n\n| A | B |\n|---|---|\n| 1 | 2 |';
+    const md = '# 인수인계서\n\n○○요양원 · 2026-11-13 출력\n\n| A | B |\n|---|---|\n| 1 | 2 |\n| 3 | 4 |';
     const { entries } = await unzip(docxFileMd(md, 'doc'));
     const doc = entries['word/document.xml'];
     // 제목(#) — 중앙 정렬·대자, 제목 직후 단락은 메타줄(중앙·회색·소자)
@@ -122,8 +126,42 @@ test('docxFileMd — 공문서 격식: 제목 중앙·메타줄·표머리 연�
     assert.ok(doc.includes('<w:tblHeader/>'), '표머리 반복(tblHeader) 누락');
     assert.ok(doc.includes('<w:vAlign w:val="center"/>'), '셀 수직 가운데 누락');
     assert.ok(doc.includes('w:color="BFBFBF"'), '내부선 연회색 누락');
+    assert.ok(doc.includes('w:val="thinThickSmallGap"'), '외곽 이중선(가는선+굵은선) 누락');
     assert.ok(doc.includes('w:color="404040"'), '외곽선 색 누락');
     assert.ok(doc.includes('w:ascii="Malgun Gothic"'), '라틴·숫자 서체 통일 누락');
+    // 행 속성 — 페이지 경계 행 분할 금지 + 최소 행 높이(여유 있는 행간)
+    assert.ok(doc.includes('<w:cantSplit/>'), '행 분할 방지 누락');
+    assert.ok(doc.includes('<w:trHeight'), '최소 행 높이 누락');
+    // 2열 표 레이블 열 음영 + 짝수 행 줄무늬
+    assert.ok(doc.includes('w:fill="F2F2F2"'), '레이블 열 음영 누락');
+    assert.ok(doc.includes('w:fill="F7F9FC"'), '짝수 행 줄무늬 음영 누락');
+    // 타이포 — 제목 명조계·본문 1.15배 줄간격·'끝.' 종결 표기
+    assert.ok(doc.includes('w:eastAsia="바탕"'), '제목 명조 서체 누락');
+    assert.ok(doc.includes('w:line="276"'), '줄간격 1.15배 누락');
+    assert.ok(doc.includes('끝.'), '문서 종결 표기 누락');
+});
+
+test('docxFileMd — 서명 문서 공문서 격식: 결재란·발신일·(인) 표기', async () => {
+    const md = '# 인수인계서\n\n메타\n\n:::sign\n인계자(서명): 김요양\n:::end';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    // 결재란 — 문서 선두 우측 정렬 표, '결 재' 세로병합 + 담당·팀장·시설장
+    const approveIdx = doc.indexOf('결 재');
+    const titleIdx = doc.indexOf('인수인계서');
+    assert.ok(approveIdx >= 0 && approveIdx < titleIdx, '결재란 선두 배치 누락');
+    assert.ok(doc.includes('w:tblpX="6652"'), '결재란 우측 상단 부동 앵커 누락');
+    assert.ok(doc.includes('<w:vMerge'), '결재란 세로병합 누락');
+    for (const r of ['담당', '팀장', '시설장']) assert.ok(doc.includes(r), `결재란 "${r}" 누락`);
+    // 서명란 — 발신일(중앙) + (인) 표기
+    assert.ok(/년 \d+월 \d+일/.test(doc), '서명란 발신일 누락');
+    assert.ok(doc.includes('김요양 (인)'), '서명 (인) 표기 누락');
+});
+
+test('docxFileMd — 비서명 문서는 결재란 미부여, 종결 표기는 유지', async () => {
+    const { entries } = await unzip(docxFileMd('# 명부\n\n| A | B |\n|---|---|\n| 1 | 2 |', 'doc'));
+    const doc = entries['word/document.xml'];
+    assert.ok(!doc.includes('결 재'), '비서명 문서에 결재란 부여됨');
+    assert.ok(doc.includes('끝.'), '종결 표기 누락');
 });
 
 test('docxFileMd — :::sign 서명란은 하단 우측 부동 표, 셀 어절 줄바꿈', async () => {
@@ -133,7 +171,7 @@ test('docxFileMd — :::sign 서명란은 하단 우측 부동 표, 셀 어절 �
     assert.ok(doc.includes('w:tblpPr'), '서명란 부동 표(tblpPr) 누락');
     assert.ok(doc.includes('w:tblpYSpec="bottom"'), '서명란 하단 앵커 누락 — A4 하단 배치 아님');
     // 명시적 tblpX — XSpec="right"는 우측 초과, 보정 없는 좌표는 ~140tw 안쪽으로 치우침(COM 실측)
-    assert.ok(doc.includes('w:tblpX="4966"'), '서명란 우측 앵커(본문폭−서명폭+140 보정) 누락');
+    assert.ok(doc.includes('w:tblpX="5012"'), '서명란 우측 앵커(본문폭−서명폭+140 보정) 누락');
     assert.ok(doc.includes('인계자(서명): 김요양'), '서명 내용 누락');
     assert.ok(!doc.includes(':::sign'), '마커가 본문에 노출됨');
     assert.ok(doc.includes('<w:kinsoku/>'), '금칙 규칙(어절 줄바꿈) 누락');
