@@ -1,6 +1,6 @@
 // src/content/doc-wm.js — 문서 워터마크 공용 (문구 규약 + DOM 오버레이)
 // @spec CO-13,DA-24 — "기관명 · 출력일" 문구를 모든 출력 경로에 동일하게 적용한다:
-//   docx: docxFile/docxFileMd의 wm 인자 (본문 앵커 회전 텍스트 상자, 중앙 1회)
+//   docx: docxFile/docxFileMd의 wm 인자 (1쪽 본문 앵커 + 2쪽~ 헤더 반복 회전 텍스트 상자)
 //   미리보기·인쇄: 문서 루트에 docWmHtml(wm) 삽입 (css/doc-export.css — 루트는 position:relative 필요)
 //   PDF: pdfFileFromEl의 wm 인자 (페이지 캔버스 대각선 스탬프 — DOM 워터마크는 클론에서 제거해 중복 방지)
 import { todayKey } from '../core/utils.js';

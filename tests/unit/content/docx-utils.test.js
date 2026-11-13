@@ -206,6 +206,17 @@ test('워터마크 — 문구 지정 시 본문 선두 VML 셰이프 삽입, 미
     assert.ok(doc.includes('<wp:positionV relativeFrom="margin"><wp:align>center</wp:align>'), '수직 중앙 앵커 누락');
     assert.ok(doc.includes('behindDoc="0"'), '텍스트 앞 배치 누락 — 뒤쪽이면 음영 셀에 가려짐');
     assert.ok(doc.includes('w14:srgbClr w14:val="C0C0C0"'), '밝은 회색 누락 — alpha 미지원 렌더러에서도 연하게');
+    // 2쪽 이상 — titlePg로 첫 페이지는 본문 앵커만, 이후 장은 기본 헤더 워터마크(본문 뒤·매 장 반복)
+    assert.ok(doc.includes('<w:titlePg/>'), '첫 페이지 다른 머리글 누락 — 없으면 1쪽에 헤더 워터마크가 중복');
+    assert.ok(doc.includes('w:headerReference w:type="default"'), '기본 헤더 참조 누락');
+    assert.ok(doc.includes('w:headerReference w:type="first"'), '첫 페이지 헤더 참조 누락');
+    const hdr = entries['word/header1.xml'];
+    assert.ok(hdr && hdr.includes('테스트요양원'), '기본 헤더 워터마크 누락 — 2쪽 이상 미표시 회귀');
+    assert.ok(hdr.includes('behindDoc="1"'), '헤더 워터마크는 텍스트 뒤(네이티브 워터마크 레이어)여야 함');
+    assert.ok(entries['word/header2.xml'] && !entries['word/header2.xml'].includes('w:drawing'), '첫 페이지 헤더는 비워야 함 — 본문 앵커와 중복');
+    assert.ok(entries['word/footer2.xml'], '첫 페이지 바닥글 누락 — titlePg 시 첫 쪽 번호 소실');
     const { entries: plain } = await unzip(docxFileMd('# t\n\n본문', 'doc'));
     assert.ok(!plain['word/document.xml'].includes('w:drawing'), '워터마크 미지정 시 드로잉 없어야 함');
+    assert.ok(!plain['word/document.xml'].includes('<w:titlePg/>'), '워터마크 없으면 titlePg 불필요');
+    assert.ok(!('word/header1.xml' in plain), '워터마크 미지정 시 헤더 파트 없어야 함');
 });

@@ -17,6 +17,12 @@
 - 최종: docx 워터마크는 첫 단락 본문 앵커 DrawingML(wps) 텍스트 상자 + a:xfrm rot -45° + behindDoc=0 — 본문 앵커라 콘텐츠 전면 렌더(음영 포함 전 영역). textpath(t136)는 경로 기반 글리프라 글자 좌우 반전·폭주 재발(flip·v-text-reverse 무력), VML t202는 rotation이 txbx 콘텐츠에 적용 안 돼 수평 렌더 — 모두 폐기하고 최신 DrawingML로 확정. font-size는 문구 길이 비례 계산(_wmFont), margin 앵커 center/center (Word COM PDF 출력으로 각도·방향·위치 실측)
 - 전면(behindDoc=0) + w14:textFill alpha 40% 투명 텍스트 + 기울임 — 음영 포함 전 영역 표시되면서 본문 가독 유지. alpha 미지원 렌더러 대비 srgbClr 자체를 C0C0C0으로 (미지원 시 연회색·지원 시 더 은은). 글자 확대(박스 640pt·폰트 상한 64pt, 굵게+기울임 폭 보정 ×1.15) + horzOverflow=overflow — 문구 끝(날짜) 잘림 방지. PDF 캔버스 스탬프·미리보기도 italic·동일 배율 통일
 
+## 2026-11-14 fix(carework): docx 워터마크 2쪽 이상 미표시 수정 — 헤더 반복
+
+- 본문 앵커는 앵커 단락이 있는 1쪽에만 렌더 — 2쪽 이상은 기본 헤더에 동일 DrawingML 상자(behindDoc=1, 네이티브 워터마크 레이어)를 두어 매 장 반복
+- titlePg 도입 — 1쪽은 빈 첫 헤더(본문 앵커 전면 유지, 중복 방지) + 첫 페이지 바닥글 footer2.xml로 쪽 번호 유지
+- Word COM PDF 실측: 2쪽 문서 양쪽 페이지 모두 대각선 워터마크 + — N — 번호 확인
+
 ## 2026-11-14 refactor(content): 문서 워터마크 플랫폼 공용화 — 시험팩 재사용
 
 - src/content/doc-wm.js 신규 — docWmText(기관명 · 출력일 규약) + docWmHtml(.doc-wm 오버레이). docxFile/docxFileMd·pdfFileFromEl의 wm 인자와 세트로 4경로(docx 회전 상자·미리보기·인쇄·PDF 캔버스) 동일 문구 보장
