@@ -101,10 +101,7 @@ export const docWmHtml = () => {
     const org = getOrgName();
     if (!org) return '';
     const t = `${org} · ${todayKey()}`.replace(/[&<>"]/g, c => /** @type {Object.<string,string>} */ ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] || c);
-    let spans = '';
-    for (let r = 0; r < 7; r++) for (let c = 0; c < 2; c++)
-        spans += `<span style="top:${r * 15 + 2}%;${c ? 'right' : 'left'}:3%">${t}</span>`;
-    return `<div class="doc-wm" aria-hidden="true">${spans}</div>`;
+    return `<div class="doc-wm" aria-hidden="true"><span style="left:50%;top:50%;transform:translate(-50%,-50%) rotate(-45deg);font-size:1.8em">${t}</span></div>`;
 };
 
 /**
