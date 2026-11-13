@@ -9,6 +9,11 @@
 - 농도 수정: 초기 #d9d9d9·opacity .5는 사실상 무색(93% 흰색) — gray·opacity .5(#BFBFBF, 25% 회색)로 진하게 (PDF 글리프 커브 렌더 확인)
 - 단일 중앙 배치로 변경: 타일 반복은 1장 문서에서 가장자리 잘림 — 미리보기도 translate(-50%,-50%) 단일 중앙으로 통일
 - docx 헤더 셰이프를 Word AddTextEffect 생성물과 동일 구조로 재작성 (page 앵커·margin-left/top 명시·양수 z-index 텍스트 앞·w10:wrap·xmlns:w10) — margin 앵커+음수 z-index 조합은 일부 환경에서 편집 화면에 렌더되지 않음
+- docx 워터마크를 Word 갤러리 워터마크 canonical 구조로 교체 — 기존 shapetype의 path·formulas(`sum 0 0 @3`→`sum 21600 0 @3`)·connectlocs(2개→4개)가 Word 정본과 달라 textpath 경로가 깨져 편집 화면 미렌더·글리프 폭주 발생. 정본 추출값 적용 + margin 앵커 center/center·rotation 315·음수 z-index·font-size:1pt+fitshape 자동 맞춤 (Word COM PDF 출력으로 실측 확인)
+- 미리보기 .doc-wm 중앙 정렬을 translate(-50%,-50%)에서 flex(align/justify center)로 교체 — html2canvas가 퍼센트 변환을 오계산해 앱 PDF에서 간헐 잘림 발생하던 것 해소
+- 앱 PDF 워터마크를 DOM 렌더 의존에서 페이지 캔버스 fillText 직접 스탬프로 교체 (pdfFileFromEl wm 인자·_stampWatermark) — 클론 CSS 변환·overflow 잘림과 무관하게 확정 렌더, 클론의 .doc-wm은 제거해 중복 방지
+- 인쇄 워터마크는 cosmetic .fp-watermark 정본 방식(position:fixed — 페이지 박스 기준 매 장 중앙 반복) 채택
+- 참고: Word에서 머리글 앵커 오브젝트는 본문 아래 레이어 고정 — 표 음영(shd) 위에는 어떤 z-index로도 올라오지 않음 (정본 워터마크 동일 동작, 셀 음영 없는 영역에서만 보이는 것이 정상)
 
 ## 2026-11-14 fix(carework): 결재란·서명란 우측선 본문 표와 정합
 

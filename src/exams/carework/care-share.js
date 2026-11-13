@@ -136,6 +136,7 @@ const _pdfFile = async (/** @type {*} */ ctx) => {
     const outEl = ctx.sel.trim() && document.querySelector(ctx.sel.trim());
     if (outEl && outEl.textContent?.trim()) {
         const clone = /** @type {HTMLElement} */ (outEl.cloneNode(true));
+        clone.querySelector('.doc-wm')?.remove(); // DOM 워터마크는 제거 — 캔버스 스탬프와 중복 방지
         if (ctx.flag === 'mask') { // 텍스트 노드만 가림 — 표 구조는 유지
             const walker = document.createTreeWalker(clone, NodeFilter.SHOW_TEXT);
             for (let n = walker.nextNode(); n; n = walker.nextNode()) n.nodeValue = _mask(n.nodeValue || '');
@@ -159,7 +160,7 @@ const _pdfFile = async (/** @type {*} */ ctx) => {
     });
     pinDocSignBottom(wrap); // 서명란 페이지 하단 우측 고정 — docx 부동 표와 동일 위치
     document.body.appendChild(wrap);
-    try { return await pdfFileFromEl(wrap, ctx.fname('pdf').replace(/\.pdf$/, '')); }
+    try { return await pdfFileFromEl(wrap, ctx.fname('pdf').replace(/\.pdf$/, ''), _wmText()); }
     finally { wrap.remove(); }
 };
 

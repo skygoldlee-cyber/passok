@@ -101,7 +101,7 @@ export const docWmHtml = () => {
     const org = getOrgName();
     if (!org) return '';
     const t = `${org} · ${todayKey()}`.replace(/[&<>"]/g, c => /** @type {Object.<string,string>} */ ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] || c);
-    return `<div class="doc-wm" aria-hidden="true"><span style="left:50%;top:50%;transform:translate(-50%,-50%) rotate(-45deg);font-size:1.8em">${t}</span></div>`;
+    return `<div class="doc-wm" aria-hidden="true"><span style="font-size:1.8em">${t}</span></div>`;
 };
 
 /**

@@ -193,13 +193,17 @@ test('docxFileMd — 좁은 셀 긴 텍스트는 어절 경계 <w:br/> 사전 �
     assert.ok(doc.includes('서비스제공내역을'), '어절 중간 분리(서비스제공내역을)');
 });
 
-test('워터마크 — 문구 지정 시 헤더 VML 파트·참조 포함, 미지정 시 생략', async () => {
+test('워터마크 — 문구 지정 시 본문 선두 VML 셰이프 삽입, 미지정 시 생략', async () => {
     const { entries } = await unzip(docxFileMd('# t\n\n본문', 'doc', '테스트요양원 · 2026-11-14'));
-    assert.ok(entries['word/header1.xml'], '워터마크 헤더 파트 누락');
-    assert.ok(entries['word/header1.xml'].includes('테스트요양원'), '워터마크 문구 누락');
-    assert.ok(/rotation:(-45|315)/.test(entries['word/header1.xml']), '대각선 회전 누락');
-    assert.ok(entries['word/document.xml'].includes('<w:headerReference'), 'sectPr 헤더 참조 누락');
+    const doc = entries['word/document.xml'];
+    assert.ok(doc.includes('v:shape'), '본문 앵커 워터마크 셰이프 누락');
+    assert.ok(doc.includes('테스트요양원'), '워터마크 문구 누락');
+    assert.ok(/rotation:(-45|315)/.test(doc), '대각선 회전 누락');
+    // 머리글 앵커는 본문 아래 레이어 고정이라 표 음영에 가려짐 — 본문 앵커+텍스트 앞 z-order 필수
+    assert.ok(doc.includes('mso-position-horizontal:center'), '수평 중앙 앵커 누락');
+    assert.ok(doc.includes('mso-position-vertical:center'), '수직 중앙 앵커 누락');
+    assert.ok(doc.includes('z-index:251658240'), '텍스트 앞 z-order 누락 — 음수면 음영 셀 배경에 가려짐');
+    assert.ok(doc.includes('o:connectlocs="@9,0;@10,10800;@11,21600;@12,10800"'), 'shapetype 정본 connectlocs 상이 — textpath 경로 파손 위험');
     const { entries: plain } = await unzip(docxFileMd('# t\n\n본문', 'doc'));
-    assert.ok(!plain['word/header1.xml'], '워터마크 미지정 시 헤더 파트는 생략되어야 함');
-    assert.ok(!plain['word/document.xml'].includes('<w:headerReference'), '미지정 시 헤더 참조 없어야 함');
+    assert.ok(!plain['word/document.xml'].includes('v:shape'), '워터마크 미지정 시 셰이프 없어야 함');
 });

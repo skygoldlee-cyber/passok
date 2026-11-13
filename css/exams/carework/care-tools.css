@@ -139,8 +139,8 @@
 .care-log-group input[type="checkbox"] { accent-color: var(--color-primary); }
 /* doc-md 미리보기 — md 초안을 표·헤딩 구조로 렌더 (공문서 격식 — docx 출력과 동일 톤) */
 .doc-md { position: relative; overflow-wrap: anywhere; line-height: 1.45; }
-.doc-md .doc-wm { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-.doc-md .doc-wm span { position: absolute; transform: rotate(-45deg); transform-origin: center; white-space: nowrap; font-weight: 700; font-size: 1.3em; letter-spacing: .06em; color: rgba(0,0,0,.2); }
+.doc-md .doc-wm { position: absolute; inset: 0; overflow: hidden; pointer-events: none; display: flex; align-items: center; justify-content: center; }
+.doc-md .doc-wm span { transform: rotate(-45deg); transform-origin: center; white-space: nowrap; font-weight: 700; font-size: 1.3em; letter-spacing: .06em; color: rgba(0,0,0,.2); }
 .doc-md h3 { margin: 4px 0 2px; text-align: center; font-size: 1.35em; font-family: Batang, '바탕', 'NanumMyeongjo', serif; }
 .doc-md .doc-meta { text-align: center; color: var(--color-text-dim, #666); font-size: .82em; margin-bottom: 14px; }
 .doc-md h4 { margin: 14px 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--border-subtle, #d1d5db); font-size: 1.08em; }
@@ -315,7 +315,9 @@
     .doc-md { display: flex; flex-direction: column; box-sizing: border-box; padding: 10mm 17mm; min-height: 266mm; }
     .doc-md .doc-end { order: 1; margin-top: auto; }
     .doc-md .doc-sign { order: 2; }
-    /* 워터마크 옅은 회색이 인쇄에서 소실되지 않게 강제 */
+    /* 워터마크 — fixed는 인쇄 매체에서 페이지 박스 기준 매 장 반복 (cosmetic .fp-watermark 검증 방식).
+       옅은 회색이 인쇄에서 소실되지 않게 강제 */
+    .doc-md .doc-wm { position: fixed; }
     .doc-md .doc-wm span { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 }
 

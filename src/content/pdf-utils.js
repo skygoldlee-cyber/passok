@@ -87,6 +87,26 @@ function _stampPageNumbers(pdf, W, H) {
     }
 }
 
+/**
+ * 워터마크 스탬프 — 페이지 캔버스 중앙에 대각선 텍스트를 직접 그림 (캔버스라 한글 확정 렌더·클론 CSS 불의존)
+ * @param {HTMLCanvasElement} canvas - 페이지 캔버스 (본문 drawImage 후 호출)
+ * @param {string} text - 워터마크 문구
+ */
+function _stampWatermark(canvas, text) {
+    if (!text) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(-Math.PI / 4);
+    ctx.font = `700 ${Math.round(canvas.width / 12)}px 'Malgun Gothic','Apple SD Gothic Neo',sans-serif`;
+    ctx.fillStyle = 'rgba(0,0,0,.16)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, 0, 0);
+    ctx.restore();
+}
+
 const _JPEG_Q = 0.9;      // 페이지 래스터 JPEG 품질 — 텍스트 가독성·파일 용량 균형
 const _CANVAS_MAX = 32000; // 브라우저 캔버스 높이 상한 안전선 (Chrome ~32767px)
 
@@ -206,9 +226,10 @@ function _cutsWithTableSplit(root, availPx) {
  * 뷰 미리보기 요소 → PDF File (한글은 캔버스 이미지로 렌더)
  * @param {HTMLElement} el
  * @param {string} title - 확장자 제외 파일명
+ * @param {string} [wm] - 워터마크 문구 (비우면 미스탬프)
  * @returns {Promise<File>}
  */
-export async function pdfFileFromEl(el, title) {
+export async function pdfFileFromEl(el, title, wm = '') {
     await ensurePdf();
     // 접힌 details 내용도 출력물에 포함 — 렌더 동안만 펼치고 완료 후 복원
     const closedDetails = [...el.querySelectorAll('details:not([open])')];
@@ -246,6 +267,7 @@ export async function pdfFileFromEl(el, title) {
                 if (!ctx) break;
                 ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, pg.width, pg.height);
                 ctx.drawImage(canvas, 0, y0 + off, canvas.width, h, mXPx, mYPx, innerPx, h);
+                _stampWatermark(pg, wm); // 페이지 중앙 대각선 — html2canvas/CSS 불의존 확정 스탬프
                 pdf.addImage(pg.toDataURL('image/jpeg', _JPEG_Q), 'JPEG', 0, 0, W, H, undefined, 'MEDIUM');
                 if (off + sliceH < y1 - y0 || i + 2 < cuts.length) pdf.addPage();
             }
