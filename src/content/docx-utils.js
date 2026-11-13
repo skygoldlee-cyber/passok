@@ -347,14 +347,14 @@ const _docDate = () => { const d = new Date(); return `${d.getFullYear()}년 ${d
 /** @param {{rid:string, cx:number, cy:number, id:number}} img */
 const _imgRun = img => `<w:r><w:drawing><wp:inline xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${img.cx}" cy="${img.cy}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:docPr id="${img.id}" name="서명"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="0" name="sign.png" descr="서명"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${img.rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${img.cx}" cy="${img.cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r>`;
 
-// 서명 셀 내용 — `{{img:key}}` 토큰이 있고 이미지가 지정되면 라벨+서명 이미지+(인), 아니면 텍스트+(인)
+// 서명 셀 내용 — `{{img:key}}` 토큰이 있고 이미지가 지정되면 라벨+서명 이미지((인)은 이미지에 합성), 아니면 텍스트+(인)
 /** @param {string} line @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} imgMap */
 const _sigRuns = (line, imgMap) => {
     const m = line.match(/\{\{img:([\w-]+)\}\}/);
     const im = m ? imgMap[m[1] || ''] : undefined;
     if (m && im) {
         const label = line.replace(m[0], '').trim();
-        return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${esc(label + ' ')}</w:t></w:r>${_imgRun(im)}<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve"> (인)</w:t></w:r>`;
+        return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${esc(label + ' ')}</w:t></w:r>${_imgRun(im)}`;
     }
     const t = (m ? line.replace(m[0], '＿＿＿＿＿＿＿＿') : line).trim();
     return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(t + (/\(인\)\s*$/.test(t) ? '' : ' (인)'), _SIG_W - 300))}</w:r>`;

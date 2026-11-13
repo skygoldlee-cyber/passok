@@ -231,11 +231,10 @@ test('서명 이미지 — 서명란 {{img:key}} 토큰을 인라인 이미지�
     const md = '# t\n\n:::sign\n작성자: {{img:author}}\n확인자: 박 시설\n:::end';
     const { entries } = await unzip(docxFileMd(md, 'doc', '', { images: { author: { data: png, w: 90, h: 61 } } }));
     const doc = entries['word/document.xml'];
-    assert.ok(doc.includes('wp:inline'), '인라인 이미지 누락');
+    assert.ok(doc.includes('wp:inline'), '인라인 이미지 누락 — (인)은 이미지에 합성되므로 인라인이 안정');
     assert.ok(doc.includes('r:embed="rId6"'), '이미지 관계 참조 누락 — 본문 이미지는 rId6~ 연번');
     assert.ok(doc.includes('descr="서명"'), '대체 텍스트 누락');
     assert.ok(!doc.includes('{{img'), '토큰 잔존 — 치환 실패');
-    assert.ok(doc.includes(' (인)'), '서명 (인) 표기 누락');
     assert.ok(entries['word/media/img_0.png'], '미디어 파트 누락');
     assert.ok(entries['word/_rels/document.xml.rels'].includes('media/img_0.png'), '이미지 관계 선언 누락');
     assert.ok(entries['[Content_Types].xml'].includes('Extension="png"'), 'png 콘텐츠 타입 누락');
