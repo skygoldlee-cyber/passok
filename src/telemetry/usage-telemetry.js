@@ -45,6 +45,8 @@ export const ALLOWED_EVENTS = new Set([
     'pro_expire_notice',
     // 로그인 수단 분포 (AU-09) — 소셜 OAuth 시작 (provider 메타만, 계정 식별자 없음)
     'oauth_login_start',
+    // 계정 연결 퍼널 (AU-10) — linkIdentity 시작/성공/충돌 (provider 메타만, 수단 분리 실측 지표)
+    'account_link_start', 'account_link_success', 'account_link_conflict',
     // 런타임 AI 기능 사용 계측 (AI-28) — 기능 종류·성공/실패·캐시 히트·경로만, 내용 미수집
     'ai_feature',
 ]);

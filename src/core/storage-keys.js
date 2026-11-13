@@ -212,6 +212,8 @@ export const STORAGE_KEYS = {
   TELEMETRY_QUEUE: 'telemetry_queue',           // 오프라인 이벤트 큐 — 전송 실패분 보관 (GLOBAL_KEYS — UX-MET-08)
   PRO_ENTITLED: 'pro_entitled',    // Pro 이용 권한 플래그 (GLOBAL_KEYS — ROAD-P1 서버 검증 전 임시 시임)
   PRO_EXPIRES_AT: 'pro_expires_at', // 유료 기간권 만료 시각 ISO (GLOBAL_KEYS — 표시용, 정본은 profiles.pro_expires_at / PAY-06)
+  LAST_LOGIN_METHOD: 'last_login_method', // 최근 성공 로그인 수단 (GLOBAL_KEYS — AU-10 '지난번 로그인' 힌트·수단 분리 방지)
+  PENDING_LINK_PROVIDER: 'pending_link_provider', // linkIdentity 리다이렉트 왕복 감지 (GLOBAL_KEYS — AU-10 연결 성공 토스트)
 
   // 세션 (sessionStorage)
   INAPP_GUIDE_SHOWN: '__inappGuideShown',

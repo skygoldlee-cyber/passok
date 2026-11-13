@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 21adddc902407f93
-> 생성: 2026-11-13 · 원천: SPEC.md(708개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: ca9a864a5568eb60
+> 생성: 2026-11-13 · 원천: SPEC.md(709개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 708개 — 문서 연결 469 · 소스 연결 626 · 테스트 연결 669 · 보고서 연결 109
+**커버리지 요약**: 요구사항 709개 — 문서 연결 470 · 소스 연결 627 · 테스트 연결 670 · 보고서 연결 109
 
 ---
 
@@ -400,6 +400,7 @@
 | AU-07 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 2개 | src/auth-sync/sync.js | tests/dom/common/common-sync.dom.test.js<br>tests/unit/gates/storage-key-sync.test.js | — | 개인정보보호법 — 타인(고객) PII의 서버 저장 제한 원칙 |
 | AU-08 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-08<br>DOC-DSN-09<br>DOC-DSN-11<br>…외 4개 | src/auth-sync/auth-view.js<br>src/auth-sync/supabase-client.js<br>src/auth-sync/supabase-config.js<br>src/auth-sync/sync.js | tests/dom/common/common-auth.dom.test.js<br>tests/dom/common/common-sync.dom.test.js<br>tests/unit/app/supabase-client.test.js | — | — |
 | AU-09 | ✅ | 테스트 | DOC-DSN-37<br>DOC-DSN-50<br>DOC-USR-18 | index.html<br>src/auth-sync/auth-view.js | tests/dom/common/common-auth.dom.test.js | — | — |
+| AU-10 | ✅ | 테스트 | DOC-DSN-50 | index.html<br>src/auth-sync/auth-view.js | tests/unit/app/account-linking.test.js | — | — |
 
 ## 3.20 학습 캘린더·복습·드릴
 
@@ -1076,7 +1077,7 @@
 | DOC-DSN-47 | docs/dev/design/CAPACITOR_PACKAGING_REVIEW.md | — |
 | DOC-DSN-48 | docs/dev/design/ASSET_STORAGE_REVIEW.md | CS-03, DA-02, P-02 |
 | DOC-DSN-49 | docs/dev/design/DEPLOY_PIPELINE_DESIGN.md | AD-10, PF-18 |
-| DOC-DSN-50 | docs/dev/design/ACCOUNT_LINKING_DESIGN.md | AU-09, PAY-01 |
+| DOC-DSN-50 | docs/dev/design/ACCOUNT_LINKING_DESIGN.md | AU-09, AU-10, PAY-01 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |

@@ -574,6 +574,41 @@
 }
 .auth-oauth-btn + .auth-oauth-btn { margin-top: var(--space-2); }
 .auth-oauth-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* 로그인 수단 연결 (AU-10) — 계정 영역의 수단 목록·연결 버튼 */
+.auth-link-area {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-muted, rgba(255,255,255,.04));
+}
+.auth-identity-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-2) 0;
+}
+.auth-identity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+.auth-identity-item .auth-identity-name { font-weight: 600; }
+.auth-link-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.auth-link-actions .btn { font-size: var(--text-sm); }
+#auth-last-method {
+  padding: var(--space-2) var(--space-3);
+  border-left: 3px solid var(--color-accent, #3b82f6);
+  background: var(--bg-muted, rgba(255,255,255,.04));
+  border-radius: 0 6px 6px 0;
+}
 .auth-oauth-google {
   background: #fff;
   color: #1f1f1f;

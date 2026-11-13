@@ -199,7 +199,7 @@ import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage, get
 import { renderExamSelect, showExamSelect, selectExamAction, resetExamSelection, hardReloadApp } from '../views/exam-select.js';
 import { startVersionWatch } from '../pwa/version-watch.js';
 import { initUiMode, toggleUiMode, toggleFontSize } from './ui-mode.js';
-import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword, authOAuth } from '../auth-sync/auth-view.js';
+import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword, authOAuth, authLinkIdentity, authUnlinkIdentity } from '../auth-sync/auth-view.js';
 import { showRedeemDialog, initPlanSync } from '../pro/pro-redeem.js';
 import { initSync, syncNow } from '../auth-sync/sync.js';
 import { initErrorTelemetry } from '../telemetry/error-telemetry.js';
@@ -665,7 +665,7 @@ const DELEGATED_HANDLERS = {
         });
     },
     // 계정/로그인 (Supabase Auth)
-    openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword, authOAuth,
+    openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword, authOAuth, authLinkIdentity, authUnlinkIdentity,
     showRedeemCode: showRedeemDialog,
     showPlanCompare,
     openProExtend,   // PAY-07 — 기간권 만료 배너의 연장 CTA

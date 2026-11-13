@@ -215,9 +215,14 @@ export async function showRedeemDialog() {
                     }
                 }
                 showToast(`🎉 유료가 활성화되었습니다${until} — 클라우드 동기화로 다른 기기에서도 이어서 학습할 수 있습니다`, 'success');
+                // AU-10 — 로그인 수단이 1개뿐이면 분리 위험이 크므로 연결을 유도한다
+                const identities = session.user.identities;
+                if (!Array.isArray(identities) || identities.length <= 1) {
+                    setTimeout(() => showToast('다른 로그인 방법도 계정 메뉴의 "로그인 수단"에서 연결해 두세요 — 어느 방법으로 로그인해도 유료가 유지됩니다.', 'info'), 2500);
+                }
                 return;
             }
-            msg.textContent = '코드를 확인해주세요 — 입력값이 맞지 않거나 이미 사용된 코드입니다.';
+            msg.textContent = '코드를 확인해주세요 — 입력값이 맞지 않거나 이미 사용된 코드입니다. 이미 활성화하셨다면 처음 사용한 로그인 방법으로 로그인해 보세요.';
         } catch {
             msg.textContent = '네트워크 오류 — 잠시 후 다시 시도해주세요.';
         } finally {

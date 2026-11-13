@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 feat(auth): AU-10 로그인 수단 연결 구현 — linkIdentity·분리 방지·동일인 재활성
+
+- 계정 모달 "로그인 수단" 섹션: 연결된 identities 목록·해제 버튼(검증 수단 2개 이상 `canUnlink` 가드)·미연결 OAuth 수단 연결 버튼. `PENDING_LINK_PROVIDER`로 리다이렉트 복귀 성공/실패 판정
+- 충돌(다른 계정 귀속) 시 자동 병합 금지 — 비열거 문구로 이전 계정 로그인 유도. `LAST_LOGIN_METHOD` 힌트("지난번에는 ○○로 로그인하셨습니다")로 수단 분리 사전 방지, Pro 활성화 후 수단 연결 안내
+- `redeem_code` 동일인 재활성: 사용 계정↔현재 계정 이메일 일치 시 현재 계정에도 plan 부여 (`tools/supabase/schema.sql` — 배포 시 SQL Editor 수동 적용 필요)
+- 계측 `account_link_start/success/conflict` 추가. 순수 로직(`linkedProviders`·`canUnlink`) 유닛 테스트 4건. 설계 DOC-DSN-50 확정판 갱신
+
 ## 2026-11-13 fix(test): review-drills DOM 단언 갱신 — 빈출·중요 숫자 라벨 정합
 
 - 🔖기출→🔖빈출 라벨 정정에 누락된 DOM 테스트 1건(`review-drills-formula.dom.test.js`의 '기출·중요 숫자' 단언) — CI test 잡 failure 원인 수정

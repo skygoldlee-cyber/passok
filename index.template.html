@@ -585,6 +585,7 @@
                         카카오로 계속
                     </button>
                     <p class="auth-modal-hint">소셜 계정으로 처음 로그인하면 계정이 자동으로 만들어집니다. <strong>로그인 수단마다 별도 계정</strong>이 생기므로, 유료 코드를 활성화한 계정과 같은 수단으로 로그인해야 합니다.</p>
+                    <p class="auth-modal-hint is-hidden" id="auth-last-method" role="note"></p>
                 </div>
                 <p class="auth-modal-hint"><strong>처음이신가요?</strong> 별도 회원가입 없이 <strong>로그인 메일 보내기</strong>를 누르세요 — 메일의 링크(브라우저) 또는 숫자 코드(설치된 앱)로 처음 로그인하면 계정이 자동으로 만들어집니다. 회원가입 버튼은 이메일+비밀번호로 로그인하려는 경우에만 사용합니다. 로그인해도 이 기기의 데이터는 그대로 유지됩니다. 클라우드 동기화(<strong>여러 디바이스 간 상태 공유</strong>)는 유료 기능입니다.</p>
             </div>
@@ -593,6 +594,13 @@
                 <p class="auth-account-line">로그인됨: <strong id="auth-account-email"></strong></p>
                 <p class="auth-account-line">플랜: <span id="auth-account-plan">무료</span> <button type="button" class="btn btn-secondary btn-sm" data-click="showPlanCompare">무료/유료 차이</button></p>
                 <p class="auth-account-line">동기화: <span id="auth-sync-status">대기 중</span></p>
+                <!-- @spec AU-10 — 로그인 수단 연결: 같은 계정에 OAuth 수단을 묶어 유료·동기화 권한 유지 -->
+                <div class="auth-link-area" id="auth-link-area">
+                    <label class="auth-field-label">로그인 수단</label>
+                    <div id="auth-identity-list" class="auth-identity-list"></div>
+                    <div class="auth-link-actions" id="auth-link-actions"></div>
+                    <p class="auth-modal-hint">연결하면 어느 방법으로 로그인해도 같은 계정이 됩니다 — 유료와 학습 기록이 공유됩니다.</p>
+                </div>
                 <div class="auth-modal-actions">
                     <button type="button" class="btn btn-primary" data-click="syncNow">지금 동기화</button>
                     <button type="button" class="btn btn-secondary" data-click="authSignOut">로그아웃</button>

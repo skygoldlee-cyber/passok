@@ -1,5 +1,5 @@
 // src/auth-view.js — 계정/로그인 모달 (Phase 1: 인증만, 동기화는 Phase 2)
-// @spec AU-01~04,AU-08,AU-09,UX-FORM-03
+// @spec AU-01~04,AU-08,AU-09,AU-10,UX-FORM-03
 // 이메일+비밀번호 로그인·회원가입·매직링크·소셜 로그인(Google·Kakao). 세션은 supabase-js가 localStorage에 자동 보관.
 import { getSupabase, onAuthChange } from './supabase-client.js';
 import { showToast, showConfirm, trapFocus, setFieldError, requireFields } from '../ui-utils.js';
@@ -14,6 +14,26 @@ const el = id => /** @type {HTMLInputElement|null} */ (document.getElementById(i
 const show = n => n && n.classList.remove('is-hidden');
 /** @param {Element|null} n */
 const hide = n => n && n.classList.add('is-hidden');
+
+// AU-10 — 로그인 수단 표시명 (identities provider → 한글 라벨)
+const PROVIDER_LABEL = /** @type {Record<string, string>} */ ({ google: 'Google', kakao: '카카오', email: '이메일' });
+
+/** 연결된 로그인 수단 목록 — user.identities의 provider 추출 (이메일 비밀번호 계정은 'email' 포함) */
+/** @param {{identities?: {provider?: string}[]}|null|undefined} user */
+export function linkedProviders(user) {
+    const ids = user?.identities;
+    if (!Array.isArray(ids)) return [];
+    return [...new Set(ids.map(i => i?.provider).filter(Boolean))];
+}
+
+/** 해제 가능 여부 — 검증된 로그인 수단이 2개 이상일 때만 (마지막 수단 해제로 계정 잠김 방지) */
+/** @param {{identities?: {provider?: string}[]}|null|undefined} user */
+export function canUnlink(user) {
+    return linkedProviders(user).length >= 2;
+}
+
+/** @param {string} provider */
+function _providerName(provider) { return PROVIDER_LABEL[provider] || provider; }
 
 // Supabase 영문 오류 → 한글 안내
 /** @type {Array<[RegExp, string]>} */
@@ -67,8 +87,11 @@ export async function refreshAuthUI() {
                 ? (exp ? `유료 (~${String(exp).slice(0, 10)})` : '유료')
                 : '무료';
         }
+        _renderIdentityArea(user);
+        _resolvePendingLink(user);
     } else {
         show(form); hide(account);
+        _renderLastMethodHint();
     }
     // AU-09 — 설치형 PWA는 소셜 로그인 버튼을 숨긴다: 외부 OAuth 리다이렉트 세션이
     // PWA 저장소로 돌아오지 못한다 (이메일 코드 경로가 대체 수단).
@@ -79,6 +102,66 @@ export async function refreshAuthUI() {
         oauthArea.classList.toggle('is-hidden', standalone);
     }
     return user;
+}
+
+/** 로그인 수단 섹션 렌더 — 연결된 수단 목록 + 미연결 수단 연결 버튼 (AU-10) */
+/** @param {{identities?: {id?: string, provider?: string}[]}} user */
+function _renderIdentityArea(user) {
+    const list = el('auth-identity-list');
+    const actions = el('auth-link-actions');
+    const area = el('auth-link-area');
+    if (!list || !actions || !area) return;
+    const linked = linkedProviders(user);
+    // 설치형 PWA는 OAuth 리다이렉트 복귀 불가(AU-09) — 연결 UI도 숨기고 이메일 경로를 안내
+    const standalone = window.matchMedia?.('(display-mode: standalone)')?.matches === true
+        || window.navigator.standalone === true;
+    if (standalone) { hide(area); return; }
+    show(area);
+    list.innerHTML = '';
+    for (const id of (user.identities || [])) {
+        const row = document.createElement('div');
+        row.className = 'auth-identity-item';
+        const name = document.createElement('span');
+        name.className = 'auth-identity-name';
+        name.textContent = _providerName(id.provider || '');
+        row.appendChild(name);
+        if (canUnlink(user)) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn btn-secondary btn-sm';
+            btn.dataset.click = 'authUnlinkIdentity';
+            btn.dataset.arg = id.id;
+            btn.textContent = '해제';
+            row.appendChild(btn);
+        }
+        list.appendChild(row);
+    }
+    actions.innerHTML = '';
+    for (const p of OAUTH_PROVIDERS) {
+        if (linked.includes(p)) continue;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn btn-secondary btn-sm';
+        btn.dataset.click = 'authLinkIdentity';
+        btn.dataset.arg = p;
+        btn.textContent = `${_providerName(p)} 연결`;
+        actions.appendChild(btn);
+    }
+}
+
+/** 지난 로그인 수단 힌트 — 수단 분리(별도 계정 생성) 사전 방지 (AU-10) */
+function _renderLastMethodHint() {
+    const hint = el('auth-last-method');
+    if (!hint) return;
+    const last = safeGetItem(STORAGE_KEYS.LAST_LOGIN_METHOD);
+    if (!last) { hide(hint); return; }
+    hint.textContent = `지난번에는 ${_providerName(last)}으로 로그인하셨습니다 — 같은 방법을 쓰시면 계정이 유지됩니다.`;
+    show(hint);
+}
+
+/** @param {string} method — email|google|kakao */
+function _recordLoginMethod(method) {
+    safeSetItem(STORAGE_KEYS.LAST_LOGIN_METHOD, method);
 }
 
 export async function openAuthModal() {
@@ -129,6 +212,7 @@ export async function authSignIn() {
     setMsg('');
     closeAuthModal();
     showToast('로그인했습니다.', 'success');
+    _recordLoginMethod('email');
     await refreshAuthUI();
 }
 
@@ -220,11 +304,61 @@ export async function authOAuth(/** @type {string} */ provider) {
     if (!sb || !OAUTH_PROVIDERS.has(provider)) return;
     setMsg('로그인 페이지로 이동 중…');
     void reportEvent('oauth_login_start', { provider }).catch(() => {});
+    _recordLoginMethod(provider); // 성공 시 그대로 유지 — 힌트는 권고성이라 실패해도 큰 해 없음
     const { error } = await sb.auth.signInWithOAuth({
         provider,
         options: { redirectTo: window.location.origin },
     });
     if (error) setMsg(friendlyError(error), true);
+}
+
+/**
+ * 로그인 수단 연결 (AU-10) — linkIdentity로 현재 계정에 OAuth 수단을 묶는다.
+ * 연결된 identities는 같은 auth.users에 귀속돼 profiles.plan이 자동 공유된다.
+ * 충돌(상대 수단이 다른 계정에 귀속) 시 자동 병합은 금지 — 이전 계정 로그인을 유도한다.
+ */
+export async function authLinkIdentity(/** @type {string} */ provider) {
+    const sb = await getSupabase();
+    if (!sb || !OAUTH_PROVIDERS.has(provider)) return;
+    setMsg(`${_providerName(provider)} 연결 페이지로 이동 중…`);
+    safeSetItem(STORAGE_KEYS.PENDING_LINK_PROVIDER, provider);
+    void reportEvent('account_link_start', { provider }).catch(() => {});
+    const { error } = await sb.auth.linkIdentity({
+        provider,
+        options: { redirectTo: window.location.origin },
+    });
+    if (error) {
+        safeRemoveItem(STORAGE_KEYS.PENDING_LINK_PROVIDER);
+        if (/manual linking|not enabled/i.test(error.message || '')) {
+            setMsg('로그인 수단 연결이 아직 활성화되지 않았습니다 — 관리자에게 문의하세요.', true);
+        } else {
+            setMsg(friendlyError(error), true);
+        }
+    }
+}
+
+/** 연결 해제 (AU-10) — 검증된 로그인 수단이 2개 이상일 때만 허용 */
+export async function authUnlinkIdentity(/** @type {string} */ identityId) {
+    const sb = await getSupabase();
+    if (!sb || !identityId) return;
+    const { data } = await sb.auth.getUser();
+    const user = data?.user;
+    if (!user) return;
+    const identity = (/** @type {{id?: string, provider?: string}[]} */ (user.identities || [])).find(i => i.id === identityId);
+    if (!identity) { setMsg('연결 정보를 찾지 못했습니다.', true); return; }
+    if (!canUnlink(user)) {
+        setMsg('마지막 로그인 수단은 해제할 수 없습니다 — 먼저 다른 수단을 연결하거나 비밀번호를 설정하세요.', true);
+        return;
+    }
+    const ok = await showConfirm(
+        `${_providerName(identity.provider || '')} 연결을 해제하면 이 방법으로는 더 이상 이 계정에 로그인할 수 없고, 이 방법으로 로그인하면 새 계정이 만들어집니다. 해제할까요?`,
+        '로그인 수단 해제'
+    );
+    if (!ok) return;
+    const { error } = await sb.auth.unlinkIdentity(identity);
+    if (error) { setMsg(friendlyError(error), true); return; }
+    showToast(`${_providerName(identity.provider || '')} 연결을 해제했습니다.`, 'info');
+    await refreshAuthUI();
 }
 
 /** 비밀번호 분실 — 로그인 메일(OTP)로 로그인한 뒤 계정 화면에서 새 비밀번호 설정 */
@@ -271,6 +405,7 @@ export async function authVerifyOtp() {
     setMsg('');
     closeAuthModal();
     showToast('로그인했습니다.', 'success');
+    _recordLoginMethod('email');
     await refreshAuthUI();
 }
 
@@ -333,7 +468,7 @@ async function handleAuthLanding() {
         const type = query.get('type') || 'email';
         const { error } = await sb.auth.verifyOtp({ token_hash: tokenHash, type });
         if (error) showToast(friendlyError(error), 'error');
-        else showToast('로그인했습니다.', 'success');
+        else { showToast('로그인했습니다.', 'success'); _recordLoginMethod('email'); }
         return;
     }
 
@@ -343,6 +478,14 @@ async function handleAuthLanding() {
     const errDesc = params.get('error_description') || '';
     const errCode = params.get('error_code') || params.get('error') || '';
     if (errDesc || errCode) {
+        const pending = safeGetItem(STORAGE_KEYS.PENDING_LINK_PROVIDER);
+        safeRemoveItem(STORAGE_KEYS.PENDING_LINK_PROVIDER);
+        if (pending) {
+            // 수단 연결 리다이렉트 복귀 실패 — 충돌(다른 계정 귀속)이면 회복 유도, 그 외는 일반 오류
+            _handleLinkFailure(errCode + errDesc, pending).catch(() => {});
+            try { history.replaceState(null, '', location.pathname + location.search); } catch (_) {}
+            return;
+        }
         const msg = /expired/i.test(errCode + errDesc)
             ? '로그인 링크가 만료되었습니다. 계정 메뉴에서 다시 요청하세요.'
             : '로그인 링크를 처리하지 못했습니다. 다시 시도하세요.';
@@ -351,6 +494,40 @@ async function handleAuthLanding() {
         return;
     }
     if (params.has('access_token')) _magicLinkLanding = true;
+}
+
+/**
+ * 연결 리다이렉트 실패 처리 (AU-10) — 상대 수단이 다른 계정에 귀속된 충돌이면
+ * 자동 병합 없이 이전 계정 로그인을 유도한다. 어떤 수단이 실존하는지
+ * 노출하지 않는 비열거 문구를 유지한다.
+ */
+/** @param {string} errText @param {string} provider */
+async function _handleLinkFailure(errText, provider) {
+    const conflict = /already|exist|linked|associated|conflict/i.test(errText || '');
+    void reportEvent('account_link_conflict', { provider, conflict }).catch(() => {});
+    if (conflict) {
+        const ok = await showConfirm(
+            `${_providerName(provider)}은(는) 다른 계정에 연결되어 있습니다. 연결하던 계정 대신 그 계정으로 로그인하시겠습니까? (로그아웃 후 ${provider === 'kakao' ? '카카오' : 'Google'}로 로그인)`,
+            '다른 계정에서 사용 중'
+        );
+        if (ok) await authSignOut();
+        return;
+    }
+    showToast('로그인 수단 연결에 실패했습니다. 잠시 후 다시 시도하세요.', 'error');
+}
+
+/**
+ * 연결 리다이렉트 복귀 감지 (AU-10) — 대기 수단이 user.identities에
+ * 나타나면 성공으로 확정한다. refreshAuthUI에서 세션 확정 후 호출.
+ */
+/** @param {{identities?: {provider?: string}[]}|null|undefined} user */
+function _resolvePendingLink(user) {
+    const pending = safeGetItem(STORAGE_KEYS.PENDING_LINK_PROVIDER);
+    if (!pending || !user) return;
+    if (!linkedProviders(user).includes(pending)) return;
+    safeRemoveItem(STORAGE_KEYS.PENDING_LINK_PROVIDER);
+    showToast(`${_providerName(pending)} 연결 완료 — 이제 어느 방법으로 로그인해도 같은 계정입니다.`, 'success');
+    void reportEvent('account_link_success', { provider: pending }).catch(() => {});
 }
 
 /** 앱 초기화 시 1회 — 매직링크 랜딩 처리 + 세션 복원 반영 + 상태 변화 구독 */
@@ -376,6 +553,7 @@ export async function initAuthView() {
             if (event === 'SIGNED_IN' && _magicLinkLanding) {
                 _magicLinkLanding = false;
                 showToast('로그인했습니다.', 'success');
+                _recordLoginMethod('email');
             }
             refreshAuthUI().catch(() => {});
         });

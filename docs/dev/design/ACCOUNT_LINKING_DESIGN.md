@@ -2,62 +2,86 @@
 
 > **문서 ID**: DOC-DSN-50
 > **범위**: platform · 판본: none
-> **관련 SPEC ID**: AU-09 (소셜 로그인), PAY-01 (라이선스 활성화)
+> **관련 SPEC ID**: AU-09 (소셜 로그인), AU-10 (계정 연결 — 본 설계로 신설), PAY-01 (라이선스 활성화)
 > **유래**: `docs/exams/carework/business/이용자_관점_평가_2026-11-13.md`(DOC-BIZ-10) §7 — "로그인 수단마다 별도 계정, 유료 코드는 같은 계정에서만 사용" → 중장년 사용자 혼란 지적
 
 ## 1. 문제
 
-Supabase는 로그인 수단(email OTP·google·kakao)마다 별도 `auth.users` 레코드를 만든다. 현재 `profiles.plan`은 user 단위라 **코드를 활성화한 계정으로만** Pro가 유지된다 (`src/auth-sync/auth-view.js` 주석 명시). 요양보호사 주 사용자층(중장년)은 카카오로 가입 후 이메일로 재로그인해 "Pro가 사라졌다"고 인식하는 시나리오가 현실적이다.
+Supabase는 로그인 수단(email OTP·google·kakao)마다 별도 `auth.users` 레코드를 만든다. `profiles.plan`과 `redeem_code`로 활성화한 라이선스는 그 `auth.users` 단위에 귀속되므로, 수단을 바꿔 로그인하면 유료 권한·동기화가 끊긴다. 요양보호사 주 사용자층(중장년)이 "결제했는데 사라졌다"고 인식하는 실전 시나리오다.
 
 ## 2. 목표·비목표
 
-- **목표**: 한 사용자가 로그인 수단을 추가해도 Pro 권한·진행 동기화가 끊기지 않게 한다.
-- **비목표**: 서로 다른 사람의 계정 병합, 유료 권한의 무인증 이전, 기존 계정 데이터 자동 합치기(진행 데이터 충돌 병합은 별도 과제).
+- **목표**: 한 사용자가 로그인 수단을 추가해도 Pro 권한·진행 동기화가 끊기지 않게 한다. 이미 분리된 계정에는 안전한 회복 경로를 제공한다.
+- **비목표**: 서로 다른 사람의 계정 병합, 유료 권한의 무인증 이전, 진행 데이터 자동 병합(로컬↔클라우드 충돌 정책은 별도 과제).
 
-## 3. 설계 — Supabase `linkIdentity` 경로
+## 3. 해결책 — 4단계
 
-Supabase Auth는 `linkIdentity(provider)`로 **현재 로그인 사용자**에 OAuth 아이덴티티를 추가 연결한다. 연결된 아이덴티티는 모두 같은 `auth.users`에 귀속 → `profiles.plan` 자동 공유 (추가 스키마 불필요).
+### ① linkIdentity 연결 UI (선제 차단)
 
-```text
-로그인 상태 A(예: 카카오) → 설정 "다른 로그인 수단 연결" → linkIdentity('google')
-  → provider 리다이렉트 → 복귀 시 identities[] 에 google 추가 → 이후 google 로그인 = 같은 user
+Supabase `auth.linkIdentity({provider})`로 현재 로그인 사용자에 OAuth 아이덴티티를 추가 — 연결된 아이덴티티는 같은 `auth.users`에 귀속돼 `profiles.plan`이 자동 공유된다 (스키마 추가 불필요).
+
+- **선행 조건 (Supabase 콘솔, 운영 작업)**: Auth 설정의 **Manual Linking 활성화** + google/kakao Redirect URL에 앱 도메인 등록. 미설정 시 `linkIdentity`는 오류 — UI는 실패 메시지를 친화적으로 표시해 무설정 상태에서도 안전하게 동작한다.
+- **UI**: 계정 모달(`#auth-account-area`)에 "로그인 수단" 섹션 — `user.identities`로 연결된 수단 표시 + 미연결 수단(Google·카카오) 연결 버튼 + 해제 버튼.
+- **해제 가드**: `auth.unlinkIdentity(identity)`는 검증된 로그인 수단이 **2개 이상**일 때만 허용 — 마지막 수단 해제로 계정 접근 불가가 되는 것 차단.
+- **리다이렉트 왕복**: OAuth 링크는 페이지를 떠났다 돌아오므로 `PENDING_LINK_PROVIDER` 로컬 키로 대기 표시 → 복귀 후 `user.identities`에 수단이 들어왔으면 성공 토스트 + `account_link_success` 계측.
+- **계측**: `account_link_start` / `account_link_success` / `account_link_conflict` — 충돌 비율이 실제 계정 분리 규모의 실측 지표.
+
+### ② 수단 분리 사전 방지 (전환율 보호)
+
+- **`LAST_LOGIN_METHOD` 기록**: 로그인 성공 경로마다 수단 저장(`email`/`google`/`kakao`). OAuth는 리다이렉트 전에 임시 키로 예약해 복귀 후 확정한다.
+- **이전 수단 힌트**: 로그인 폼에 "지난번에는 카카오로 로그인하셨습니다" — 다른 수단 클릭 전 같은 수단으로 유도하는 최저비용 방어.
+- **Pro 활성화 후 안내**: 코드 활성화 성공 시 identities가 1개뿐이면 "다른 로그인 방법도 계정 메뉴에서 연결해 두세요" 토스트 — 전환 직후가 연결 동기 최고점.
+
+### ③ 충돌 경로 (이미 분리된 계정)
+
+`linkIdentity` 실패 = 상대 수단이 **다른 `auth.users`에 귀속**된 경우. 자동 병합은 계정 탈취 경로라 금지하고:
+
+1. **안내**: "해당 로그인 방법은 이미 다른 계정으로 사용 중입니다" → `account_link_conflict` 계층
+2. **유도**: "유료가 활성화된 계정으로 로그인하시겠습니까?" 확인 → 로그아웃 → 해당 수단 재로그인
+3. **코드 재입력 시**: `redeem_code`가 false(미사용 아님 = 무효 또는 사용됨, 구분은 오라클 축소로 의도적 비노출)여도 안내에 "처음 활성화한 로그인 방법으로 로그인해 보세요"를 병기 — 수단을 특정해 노출하지 않아 계정 존재 열거를 막는다
+
+### ④ 동일인 재활성 (서버 정책)
+
+`redeem_code` RPC 확장 — 코드가 이미 사용됐을 때, **사용 계정과 현재 계정의 이메일이 일치하면** 현재 계정에도 Pro를 부여하고 true 반환:
+
+```sql
+-- redeem_code 내부, 미사용 소비 실패 시:
+select * into v_code from public.pro_codes where code = p_code and redeemed_by is not null;
+if found and exists (
+    select 1 from auth.users a join auth.users b
+      on b.id = auth.uid() and a.id = v_code.redeemed_by
+     and a.email = b.email and a.email <> ''
+) then
+    -- plan 부여 (기존 update/insert 경로 재사용) → return true
+end if;
 ```
 
-- **이메일 OTP는 linkIdentity 대상이 아님** — 대신 "같은 이메일"은 Supabase가 이메일 인증 완료 시 동일 주소 계정에 자동 귀속시키는 경로가 있다(verify 파라메터). 명시 연결 UI는 OAuth 수단 중심으로 한정하고, 이메일 계정 병합은 §5 수동 경로로 처리.
-- **충돌**: 연결하려는 identity가 **다른 auth.users에 이미 귀속**돼 있으면 linkIdentity는 실패한다 — 이 경우가 실제 혼란 시나리오(두 계정이 이미 존재). §5 참조.
+- **효과**: 카카오 가입(카카오 이메일) + 이메일 OTP 가입(같은 주소)처럼 동일인 중복 계정이면 코드가 자동 재활성 — 지원 없이 자기 회복.
+- **한계**: 다른 이메일이면 false 유지 → 지원 채널 수동 처리 (저빈도, 자동화 비용 > 운영 비용).
+- **보안**: 이메일 일치는 양쪽 계정 소유의 강한 증거 — 타인 이메일로는 성립 불가. `redeemed_by`는 원 계정에 유지(권한 이전이 아닌 동일인 중복 부여).
 
-## 4. UI 진입점
+## 4. 구현 위치
 
-- **설정/계정 화면**에 "로그인 수단 관리" 섹션 — 연결된 수단 목록(`user.identities`) + 미연결 수단 버튼 (kakao/google).
-- **안내 문구**: "연결하면 어느 방법으로 로그인해도 같은 계정이 됩니다 — Pro와 학습 기록이 공유됩니다."
-- Pro 안내 시점 보강: 비로그인 상태에서 코드 활성화 시도 시 "활성화할 계정으로 로그인" 안내는 기존 흐름 유지.
-
-## 5. 충돌(기존 별도 계정) 처리 — 수동 복구 경로
-
-linkIdentity 실패 = 상대 수단이 다른 계정 존재. 자동 병합은 위험(진행 데이터·유료 권한 충돌)하므로:
-
-1. **결정적 안내**: "해당 수단은 이미 다른 계정에 연결돼 있습니다. 유지할 계정을 선택하세요."
-2. **복구 옵션**:
-   - a) 이전 계정으로 로그인 유도 (권장 — 사용자가 Pro 계정을 선택)
-   - b) 라이선스 코드 재입력 — `redeem_code` RPC가 새 계정에서 재활성화되는지 서버 정책 확인 필요 (코드 1회성이면 재발급 경로 or RPC에 "같은 이메일 계정 재활성" 분기 추가)
-   - c) 지원 채널(디스코드/이메일) 수동 병합 요청 — 운영 런북에 절차 정의
-3. **자동 이메일 매칭 금지**: 같은 이메일이라도 묵시적 병합 금지 — 계정 탈취 경로가 되므로 반드시 양쪽 계정 인증 필요.
-
-## 6. 계측·검증
-
-- 이벤트: `account_link_start`(provider) / `account_link_success` / `account_link_conflict` — 충돌 비율이 실제 혼란 규모의 실측 지표.
-- 검증: 단위 테스트는 identities 목록 렌더·버튼 상태까지, OAuth 리다이렉트 왕복은 수동 시나리오(로컬 Supabase redirect URL 등록 필요).
-
-## 7. 단계
-
-| 단계 | 내용 |
+| 항목 | 파일 |
 |---|---|
-| 1 | 설정에 연결된 수단 표시 + linkIdentity 연결 버튼 (OAuth 2종) |
-| 2 | 충돌 안내 + 이전 계정 로그인 유도 |
-| 3 | 코드 재활성 정책 서버 확인 → 필요 시 redeem_code 분기 또는 재발급 런북 |
+| 연결 UI·핸들러 | `index.template.html` (`#auth-link-area`) · `src/auth-sync/auth-view.js` (`authLinkIdentity`·`authUnlinkIdentity`·`renderIdentityArea`) · `css/ui-overlay.css` |
+| 핸들러 등록 | `src/shell/app.js` 위임 테이블 · `src/shell/offline-gate.js` 오프라인 셀렉터 |
+| 이전 수단 힌트 | `auth-view.js` 로그인 성공 경로(4개) + `#auth-last-method` |
+| Pro 후 안내 | `src/pro/pro-redeem.js` 성공 분기 |
+| 스토리지 키 | `src/core/storage-keys.js` (`LAST_LOGIN_METHOD`·`PENDING_LINK_PROVIDER`, GLOBAL_KEYS) |
+| 계측 | `src/telemetry/usage-telemetry.js` ALLOWED_EVENTS |
+| RPC | `tools/supabase/schema.sql` §3 `redeem_code` — 배포는 Supabase SQL Editor 수동 실행 |
 
-## 8. 리스크
+## 5. 검증·수용 기준
 
-- **linkIdentity는 같은 provider당 하나만** — 두 개의 다른 카카오 계정 연결 불가 (정책상 정상).
-- OAuth 리다이렉트 왕복이라 세션 상태 복귀 처리 필요 — 기존 매직링크 랜딩 경로(auth-view) 재사용.
-- 보호 대상: 연결 전 현재 계정의 로그인 세션 유효성 확인 필수 (만료 세션에서 링크 시도 → 재로그인 유도).
+- **단위**: `linkedProviders(identities)` 수단 목록 추출 · `canUnlink(identities)` 마지막 수단 가드 — 순수 로직 유닛 테스트
+- **DOM**: 계정 영역 identities 렌더 (연결됨 표시·해제 버튼 상태)
+- **수동 시나리오**: manual linking 활성화된 프로젝트에서 ① 카카오 로그인 → Google 연결 → Google로 로그인 시 같은 user.id·Pro 유지 ② 이미 분리된 계정으로 연결 시도 → 충돌 안내 ③ 동일 이메일 두 계정에서 코드 재입력 → ④ 재활성 성공
+- **로컬 Supabase 없이도** 비로그인 경로가 무너지지 않음 (선택적 Supabase 원칙)
+
+## 6. 리스크
+
+- **manual linking 미활성화 시 UI 무용** — 콘솔 설정을 배포 체크리스트에 포함, 미설정 감지 시 연결 버튼 비활성+안내
+- **이메일 불일치 동일인**: 카카오 이메일 ≠ 가입 이메일이면 ④ 미작동 — 지원 런북이 뒷받침
+- **unlink 후 OAuth 재로그인**: 해제한 수단으로 로그인하면 Supabase가 새 계정 생성 가능 — 해제 전 경고 문구 필수
+- **PWA OAuth 제한**: 설치형 PWA는 OAuth 리다이렉트 복귀 불가(AU-09) — 연결 버튼도 standalone에서는 숨김, 이메일 경로 안내
