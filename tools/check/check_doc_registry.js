@@ -45,6 +45,7 @@ function cellPath(cell) {
 
 // 트리 카운트 주석 ↔ 실물 대조 — 문서 순서상 첫 매칭 행을 사용 (dev/ 버킷이
 // exams/<id>/ 하위 버킷보다 먼저 나온다는 트리 순서에 의존)
+// exams/<id>/는 docs/exams/ 하위 디렉터리에서 동적 수집 (DA-15 — 시험 식별자 하드코딩 금지)
 const COUNT_MARKERS = [
   { marker: 'dev/', dir: 'docs/dev', recursive: true },
   { marker: '수위 문서', dir: 'docs/dev', recursive: false },
@@ -54,8 +55,9 @@ const COUNT_MARKERS = [
   { marker: 'reference/', dir: 'docs/dev/reference', recursive: true },
   { marker: 'evals/', dir: 'docs/dev/evals', recursive: true },
   { marker: 'user/', dir: 'docs/user', recursive: true },
-  { marker: 'docs/exams/cosmetic/', dir: 'docs/exams/cosmetic', recursive: true },
-  { marker: 'docs/exams/carework/', dir: 'docs/exams/carework', recursive: true },
+  ...fs.readdirSync(path.join(ROOT, 'docs/exams'), { withFileTypes: true })
+    .filter(e => e.isDirectory() && !e.name.startsWith('.'))
+    .map(e => ({ marker: `docs/exams/${e.name}/`, dir: `docs/exams/${e.name}`, recursive: true })),
 ];
 
 function* walk(dir) {

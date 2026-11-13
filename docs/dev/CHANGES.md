@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 tools(check): docs:registry DA-15 정합 — 시험 디렉터리 동적 수집
+
+- `check_doc_registry.js`: 트리 카운트 대조의 시험 버킷을 `exams/cosmetic`·`carework` 리터럴 → `docs/exams/*` readdir 동적 수집으로 교체 — 신규 시험 자동 지원 + DA-15 콘텐츠 독립성 스캔 통과
+- **검증**: `da15-content-independence` 전수 스캔 위반 0건
+
+
 ## 2026-11-13 tools(ai): .env → ai-proxy secrets 동기화 도구
 
 - **`tools/supabase/sync_ai_proxy_secrets.js` + `ai:proxy:secrets`**: 루트 `.env`의 `GEMINI_API_KEY`(또는 `AI_PROXY_GOOGLE_API_KEY`)·`GEMINI_MODEL`·`AI_FREE_DAILY`를 Management API로 `GOOGLE_API_KEY`·`GEMINI_MODEL`·`AI_FREE_DAILY` 시크릿에 동기화 — `--dry-run` 기본 계획 확인, `--apply`, 운영 ref는 `--prod` 승인 필요, 값 미출력
