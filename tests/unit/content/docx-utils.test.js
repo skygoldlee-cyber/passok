@@ -225,3 +225,22 @@ test('워터마크 — 문구 지정 시 본문 선두 VML 셰이프 삽입, 미
     const front = (long['word/document.xml'].match(/behindDoc="0"/g) || []).length;
     assert.equal(front, 2, '긴 문서는 첫쪽+끝쪽 2개의 전면 워터마크 앵커여야 함');
 });
+
+test('서명 이미지 — 서명란 {{img:key}} 토큰을 인라인 이미지로 치환', async () => {
+    const png = new Uint8Array([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A]);
+    const md = '# t\n\n:::sign\n작성자: {{img:author}}\n확인자: 박 시설\n:::end';
+    const { entries } = await unzip(docxFileMd(md, 'doc', '', { images: { author: { data: png, w: 90, h: 61 } } }));
+    const doc = entries['word/document.xml'];
+    assert.ok(doc.includes('wp:inline'), '인라인 이미지 누락');
+    assert.ok(doc.includes('r:embed="rId6"'), '이미지 관계 참조 누락 — 본문 이미지는 rId6~ 연번');
+    assert.ok(doc.includes('descr="서명"'), '대체 텍스트 누락');
+    assert.ok(!doc.includes('{{img'), '토큰 잔존 — 치환 실패');
+    assert.ok(doc.includes(' (인)'), '서명 (인) 표기 누락');
+    assert.ok(entries['word/media/img_0.png'], '미디어 파트 누락');
+    assert.ok(entries['word/_rels/document.xml.rels'].includes('media/img_0.png'), '이미지 관계 선언 누락');
+    assert.ok(entries['[Content_Types].xml'].includes('Extension="png"'), 'png 콘텐츠 타입 누락');
+    // 이미지 미지정 시 토큰은 빈 서명 자리로 치환 (토큰 잔존 금지)
+    const { entries: plain } = await unzip(docxFileMd(md, 'doc'));
+    assert.ok(!plain['word/document.xml'].includes('{{img'), '미지정 시에도 토큰 잔존 금지');
+    assert.ok(plain['word/document.xml'].includes('＿＿＿＿'), '빈 서명 자리 표기 누락');
+});

@@ -76,14 +76,14 @@ const _zipStore = files => {
     return new Blob(/** @type {BlobPart[]} */ ([...chunks, ...central, new Uint8Array(e.buffer)]));
 };
 
-/** @param {string} wm - 워터마크 문구 (있으면 헤더 파트 추가) */
-const _types = wm => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>${wm ? '<Override PartName="/word/footer2.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/><Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/><Override PartName="/word/header2.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/>' : ''}</Types>`;
+/** @param {string} wm - 워터마크 문구 (있으면 헤더 파트 추가) @param {boolean} [hasImg] - 미디어 파트 포함 여부 */
+const _types = (wm, hasImg) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>${hasImg ? '<Default Extension="png" ContentType="image/png"/>' : ''}<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>${wm ? '<Override PartName="/word/footer2.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/><Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/><Override PartName="/word/header2.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/>' : ''}</Types>`;
 const RELS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
-/** @param {string} wm - 워터마크 문구 */
-const _docrels = wm => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>${wm ? '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/><Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header2.xml"/><Relationship Id="rId5" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer2.xml"/>' : ''}</Relationships>`;
+/** @param {string} wm - 워터마크 문구 @param {number} [nImg] - 본문 이미지 수 (rId6~ 연번) */
+const _docrels = (wm, nImg = 0) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>${wm ? '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/><Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header2.xml"/><Relationship Id="rId5" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer2.xml"/>' : ''}${[...Array(nImg)].map((_, i) => `<Relationship Id="rId${6 + i}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/img_${i}.png"/>`).join('')}</Relationships>`;
 // 보기 설정 — 인쇄 레이아웃 + 100% 고정. 생략 시 뷰어가 웹 레이아웃(전체폭·페이지 경계 없음)으로 열 수 있다
 const SETTINGS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:view w:val="print"/><w:zoom w:percent="100"/><w:defaultTabStop w:val="708"/></w:settings>`;
@@ -121,12 +121,13 @@ const HEADER_EMPTY = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 /**
  * @param {string} docXml - word/document.xml 내용 @param {string} wm - 워터마크 문구
+ * @param {Array.<{data: Uint8Array}>} [imgs] - 본문 이미지 (word/media/img_N.png 순번)
  * @returns {Array.<[string, Uint8Array]>}
  */
-const _parts = (docXml, wm) => [
-    ['[Content_Types].xml', _enc.encode(_types(wm))],
+const _parts = (docXml, wm, imgs = []) => [
+    ['[Content_Types].xml', _enc.encode(_types(wm, imgs.length > 0))],
     ['_rels/.rels', _enc.encode(RELS)],
-    ['word/_rels/document.xml.rels', _enc.encode(_docrels(wm))],
+    ['word/_rels/document.xml.rels', _enc.encode(_docrels(wm, imgs.length))],
     ['word/document.xml', _enc.encode(docXml)],
     ['word/settings.xml', _enc.encode(SETTINGS)],
     ['word/footer1.xml', _enc.encode(FOOTER)],
@@ -135,6 +136,7 @@ const _parts = (docXml, wm) => [
         ['word/header1.xml', _enc.encode(_headerWm(wm))],
         ['word/header2.xml', _enc.encode(HEADER_EMPTY)],
     ]) : []),
+    ...imgs.map((img, i) => /** @type {[string, Uint8Array]} */([`word/media/img_${i}.png`, img.data])),
 ];
 
 // 서체 — 라틴·한글 모두 맑은 고딕으로 통일 (미지정 시 라틴은 Calibri로 바뀌어 두서 없음)
@@ -340,16 +342,34 @@ const _SIG_W = 4200;
 // tblpX는 좌측 셀 여백(100)+테두리 반폭만큼 좌측으로 치우쳐 렌더되고 이중 외곽선은 ~38tw 더 바깥에 그려짐(PDF 실측) — 102tw 보정으로 본문 표 우측선과 정합
 const _SIG_X = _TEXT_W - _SIG_W + 102;
 const _docDate = () => { const d = new Date(); return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`; };
-/** @param {string[]} lines */
-const _sigTbl = lines => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_SIG_X}" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${_SIG_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid><w:gridCol w:w="${_SIG_W}"/></w:tblGrid>`
+
+// 인라인 이미지 런 — 서명란 `{{img:key}}` 토큰 치환용. rIdN 관계의 word/media/img_N.png 참조
+/** @param {{rid:string, cx:number, cy:number, id:number}} img */
+const _imgRun = img => `<w:r><w:drawing><wp:inline xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${img.cx}" cy="${img.cy}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:docPr id="${img.id}" name="서명"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="0" name="sign.png" descr="서명"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${img.rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${img.cx}" cy="${img.cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r>`;
+
+// 서명 셀 내용 — `{{img:key}}` 토큰이 있고 이미지가 지정되면 라벨+서명 이미지+(인), 아니면 텍스트+(인)
+/** @param {string} line @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} imgMap */
+const _sigRuns = (line, imgMap) => {
+    const m = line.match(/\{\{img:([\w-]+)\}\}/);
+    const im = m ? imgMap[m[1] || ''] : undefined;
+    if (m && im) {
+        const label = line.replace(m[0], '').trim();
+        return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${esc(label + ' ')}</w:t></w:r>${_imgRun(im)}<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve"> (인)</w:t></w:r>`;
+    }
+    const t = (m ? line.replace(m[0], '＿＿＿＿＿＿＿＿') : line).trim();
+    return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(t + (/\(인\)\s*$/.test(t) ? '' : ' (인)'), _SIG_W - 300))}</w:r>`;
+};
+/** @param {string[]} lines @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} [imgMap] */
+const _sigTbl = (lines, imgMap = {}) => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_SIG_X}" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${_SIG_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid><w:gridCol w:w="${_SIG_W}"/></w:tblGrid>`
     + `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_cellPprC}<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${_docDate()}</w:t></w:r></w:p></w:tc></w:tr>`
-    + lines.map(l => `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_CELL_PPR}<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(l.trim() + (/\(인\)\s*$/.test(l) ? '' : ' (인)'), _SIG_W - 300))}</w:r></w:p></w:tc></w:tr>`).join('') + '</w:tbl>';
+    + lines.map(l => `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_CELL_PPR}${_sigRuns(l, imgMap)}</w:p></w:tc></w:tr>`).join('') + '</w:tbl>';
 
 /**
  * @param {string} md
+ * @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} [imgMap]
  * @returns {string}
  */
-const _mdBody = md => {
+const _mdBody = (md, imgMap = {}) => {
     const out = [], lines = String(md || '').split('\n');
     if (/^:::sign\s*$/m.test(md)) out.push(_APPROVE); // 서명 문서는 결재란 선두 부여
     /** @type {string[][] | null} */
@@ -361,7 +381,7 @@ const _mdBody = md => {
     for (const line of lines) {
         const t = line.trim();
         if (t === ':::sign') { flush(); sign = []; meta = false; continue; }
-        if (t === ':::end') { if (sign) { out.push(_sigTbl(sign)); sign = null; } continue; }
+        if (t === ':::end') { if (sign) { out.push(_sigTbl(sign, imgMap)); sign = null; } continue; }
         if (sign) { if (t) sign.push(t); continue; }
         if (/^\|[\s:|-]+\|$/.test(t)) continue; // 표 구분행
         if (t.startsWith('|') && t.endsWith('|')) { meta = false; (tbl = tbl || []).push(t.slice(1, -1).split('|')); continue; }
@@ -384,11 +404,14 @@ const _mdBody = md => {
  * @param {string} md - 문서 마크다운
  * @param {string} filename - 확장자 제외 파일명
  * @param {string} [wm] - 워터마크 문구 (첫·끝쪽 본문 앵커 전면 + 2쪽~ 기본 헤더 반복)
+ * @param {{images?: Object<string,{data:Uint8Array,w:number,h:number}>}} [opts] - images: `{{img:key}}` 토큰(서명란) 치환용 PNG 바이트 + 표시 크기(px)
  */
-export function docxFileMd(md, filename, wm = '') {
-    const mdBody = _mdBody(md);
+export function docxFileMd(md, filename, wm = '', opts = {}) {
+    const imgs = Object.entries(opts.images || {}).map(([key, im], i) => ({ key, data: im.data, cx: (im.w || 90) * 9525, cy: (im.h || 60) * 9525, rid: `rId${6 + i}`, id: 300 + i }));
+    const imgMap = Object.fromEntries(imgs.map(x => [x.key, x]));
+    const mdBody = _mdBody(md, imgMap);
     const tail = wm && _isLong(mdBody) ? _wmPara(wm, false, 101) : '';
     const body = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"><w:body>${wm ? _wmPara(wm) : ''}${mdBody}${tail}${_sect(wm)}</w:body></w:document>`;
-    const blob = _zipStore(_parts(body, wm));
+    const blob = _zipStore(_parts(body, wm, imgs));
     return new File([blob], `${filename}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 }

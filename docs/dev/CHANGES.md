@@ -1,3 +1,11 @@
+## 2026-11-14 feat(content): docx 서명 이미지 삽입 — `{{img:key}}` 토큰
+
+- `docxFileMd(md, name, wm, { images })` — images: `{key: {data:Uint8Array, w, h(px)}}`
+- 서명란(`:::sign`) 줄의 `{{img:key}}` 토큰 → `wp:inline` 드로잉으로 치환 (라벨 + 이미지 + (인))
+- 미지정 키는 `＿＿＿＿＿＿＿＿` 빈 자리로 치환 — 토큰 잔존 금지
+- 파트: `word/media/img_N.png` + document.xml.rels rId6~ + [Content_Types] png Default (이미지 지정 시만)
+- docPr id 300~ 대역 사용 — 워터마크(100/101/200)와 충돌 없음
+
 ## 2026-11-14 feat(carework): 기관명 대각선 워터마크 (인쇄·PDF·Word 공통)
 
 - 홈 → 출력물 서명에 '기관명 워터마크' 토글 — setDocSignWm, getDocSign().wm (CARE_DOC_SIGN에 wm 필드)
