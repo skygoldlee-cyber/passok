@@ -348,8 +348,8 @@ const _SIG_X = _TEXT_W - _SIG_W + 102;
 const _docDate = () => { const d = new Date(); return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`; };
 
 // 인라인 이미지 런 — 서명란 `{{img:key}}` 토큰 치환용. rIdN 관계의 word/media/img_N.png 참조
-/** @param {{rid:string, cx:number, cy:number, id:number}} img */
-const _imgRun = img => `<w:r><w:drawing><wp:inline xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${img.cx}" cy="${img.cy}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:docPr id="${img.id}" name="서명"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="0" name="sign.png" descr="서명"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${img.rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${img.cx}" cy="${img.cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r>`;
+/** @param {{rid:string, cx:number, cy:number, id:number}} img @param {number} [posY] - 수직 오프셋 (half-points, 음수=아래) */
+const _imgRun = (img, posY = 0) => `<w:r>${posY ? `<w:rPr><w:position w:val="${posY}"/></w:rPr>` : ''}<w:drawing><wp:inline xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${img.cx}" cy="${img.cy}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:docPr id="${img.id}" name="서명"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="0" name="sign.png" descr="서명"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${img.rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${img.cx}" cy="${img.cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r>`;
 
 // 서명 셀 내용 — `{{img:key}}` 토큰이 있고 이미지가 지정되면 라벨+서명 이미지((인)은 이미지에 합성), 아니면 텍스트+(인)
 /** @param {string} line @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} imgMap */
@@ -358,7 +358,7 @@ const _sigRuns = (line, imgMap) => {
     const im = m ? imgMap[m[1] || ''] : undefined;
     if (m && im) {
         const label = line.replace(m[0], '').trim();
-        return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${esc(label)}</w:t></w:r><w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:tab/></w:r>${_imgRun(im)}`;
+        return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${esc(label)}</w:t></w:r><w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:tab/></w:r>${_imgRun(im, -8)}`;
     }
     const t = (m ? line.replace(m[0], '＿＿＿＿＿＿＿＿') : line).trim();
     return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(t + (/\(인\)\s*$/.test(t) ? '' : ' (인)'), _SIG_W - 300))}</w:r>`;
