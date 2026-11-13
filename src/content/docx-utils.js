@@ -145,7 +145,7 @@ const _BORDERS = ['top', 'left', 'bottom', 'right'].map(b => `<w:${b} w:val="sin
 // 표 레이아웃 — 본문 폭 고정 dxa (A4 11906 − 여백 1440×2 = 9026) + 균등 열 그리드 + 셀 내부 여백.
 // pct(상대폭)는 한글 등 일부 임포터가 미지원해 표가 본문 폭 밖으로 렌더될 수 있어 dxa 고정 사용.
 const _TEXT_W = 9026;
-const _CELL_MAR = '<w:tblCellMar><w:top w:w="90" w:type="dxa"/><w:left w:w="130" w:type="dxa"/><w:bottom w:w="90" w:type="dxa"/><w:right w:w="130" w:type="dxa"/></w:tblCellMar>';
+const _CELL_MAR = '<w:tblCellMar><w:top w:w="90" w:type="dxa"/><w:left w:w="100" w:type="dxa"/><w:bottom w:w="90" w:type="dxa"/><w:right w:w="100" w:type="dxa"/></w:tblCellMar>';
 // 셀 단락 — kinsoku(동아시아 금칙 규칙) + wordWrap=off(라틴 단어 중간 분할 금지).
 // 주의: Word는 한글을 음절 단위로 끊으며 어절 단위 강제 OOXML 스위치가 없다(COM 실측 —
 // kinsoku·wordWrap·lang=ko-KR·noLineBreaksAfter·useFELayout 모두 중간 분리 유지).
@@ -177,7 +177,7 @@ const _wrap = (t, usable) => {
 /** @param {string[]} lines */
 const _runs = lines => lines.map(l => `<w:t xml:space="preserve">${esc(l)}</w:t>`).join('<w:br/>');
 const _estW = (/** @type {string} */ t) => [...String(t)].reduce((n, c) => n + _cw(c), 0);
-const _CPAD = 320; // 셀 좌우 여백+테두리 여유
+const _CPAD = 280; // 셀 좌우 여백(100×2)+테두리 여유
 /**
  * 열 너비 배분 — 내용 폭 추정 기반 (HTML auto-layout 유사). min=최장 어절 수용 폭, pref=한 줄 수용 폭.
  * pref 합계가 본문 폭 이하면 잉여를 pref 비율로, 넘으면 min 확보 후 잉여를 (pref−min) 비율로 배분한다.
@@ -206,7 +206,16 @@ const _colWs = rows => {
         ws = min.map(m => Math.max(400, Math.floor(m * k)));
         fixIdx = ws.indexOf(Math.max(...ws)); // 잔여 보정은 가장 넓은 열에
     } else ws = Array(n).fill(Math.floor(_TEXT_W / n));
-    ws[fixIdx] += _TEXT_W - ws.reduce((a, b) => a + b, 0); // 반올림 잔여 보정
+    // 헤더 어절 폭은 하한 — 항목명(대상자·방문객 등) 줄넘김 금지. 초과분은 여유 열에서 회수
+    const hw = (rows[0] || []).map(c => _estW(String(c).trim().split(/ +/).sort((a, b) => _estW(b) - _estW(a))[0] || '') + _CPAD);
+    ws = ws.map((w, i) => Math.max(w, hw[i] || 0));
+    const over = ws.reduce((a, b) => a + b, 0) - _TEXT_W;
+    if (over > 0) {
+        const room = ws.map((w, i) => Math.max(0, w - (hw[i] || 0)));
+        const sr = room.reduce((a, b) => a + b, 0);
+        if (sr > 0) ws = ws.map((w, i) => w - Math.min(room[i] || 0, Math.ceil(over * (room[i] || 0) / sr)));
+    }
+    ws[fixIdx] = (ws[fixIdx] || 0) + _TEXT_W - ws.reduce((a, b) => a + b, 0); // 반올림 잔여 보정
     return ws;
 };
 /**
@@ -215,7 +224,7 @@ const _colWs = rows => {
  * @param {number} [w] - 셀 너비 (dxa)
  * @returns {string}
  */
-const _cell = (c, head, w) => `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dxa"/>` : ''}<w:vAlign w:val="center"/>${head ? '<w:shd w:val="clear" w:color="auto" w:fill="DEEAF6"/>' : ''}</w:tcPr><w:p>${head ? _CELL_PPR.replace('</w:pPr>', '<w:jc w:val="center"/></w:pPr>') : _CELL_PPR}<w:r><w:rPr>${_RF}${head ? '<w:b/>' : ''}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(c.trim(), Math.max(400, (w || _TEXT_W) - 300)))}</w:r></w:p></w:tc>`;
+const _cell = (c, head, w) => `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dxa"/>` : ''}<w:vAlign w:val="center"/>${head ? '<w:shd w:val="clear" w:color="auto" w:fill="DEEAF6"/>' : ''}</w:tcPr><w:p>${head ? _CELL_PPR.replace('</w:pPr>', '<w:jc w:val="center"/></w:pPr>') : _CELL_PPR}<w:r><w:rPr>${_RF}${head ? '<w:b/>' : ''}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(c.trim(), Math.max(400, (w || _TEXT_W) - _CPAD)))}</w:r></w:p></w:tc>`;
 /**
  * @param {string[][]} rows
  * @returns {string}

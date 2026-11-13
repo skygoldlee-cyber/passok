@@ -101,6 +101,10 @@ test('docxFileMd — 다열 표(min 합계 초과)는 최소폭 비율 축소 �
     assert.ok(mx > mn * 1.3, `다열 표가 균등 배분으로 fallback됨 (min ${mn}, max ${mx})`);
     assert.ok(ws[4] >= 1500, `연락처 열(${ws[4]})이 토큰 폭(~1750)에 미달`);
     assert.strictEqual(ws.reduce((a, b) => a + b, 0), 9026, '열 너비 합계 불일치');
+    // 헤더 항목명은 줄넘김 금지 — 각 헤더가 단일 w:t로 존재(중간 <w:br/> 없음)
+    for (const h of ['방문일', '대상자', '방문객', '연락처']) {
+        assert.ok(doc.includes(`<w:t xml:space="preserve">${h}</w:t>`), `헤더 "${h}" 줄넘김 발생`);
+    }
 });
 
 test('docxFileMd — 공문서 격식: 제목 중앙·메타줄·표머리 연청·머리 반복', async () => {
