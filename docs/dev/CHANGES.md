@@ -3,6 +3,7 @@
 - `docxFileMd(md, name, wm, { images })` — images: `{key: {data:Uint8Array, w, h(px)}}`
 - 서명란(`:::sign`) 줄의 `{{img:key}}` 토큰 → `wp:inline` 드로잉으로 치환 (라벨 + 이미지)
 - (인) 표기는 이미지 생성 시 서명 위에 합성 — docx 부동 앵커 posOffset은 렌더러별 불안정
+- 라벨↔이미지 사이 전각 공백으로 서명 우측 보정 — 이미지 내 (인)이 다른 서명행의 (인) 열과 정렬
 - 미지정 키는 `＿＿＿＿＿＿＿＿` 빈 자리로 치환 — 토큰 잔존 금지
 - 파트: `word/media/img_N.png` + document.xml.rels rId6~ + [Content_Types] png Default (이미지 지정 시만)
 - docPr id 300~ 대역 사용 — 워터마크(100/101/200)와 충돌 없음
