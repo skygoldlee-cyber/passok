@@ -268,7 +268,7 @@ const _HR = '<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="9999
 const _AW = 840; // 결재란 열 폭 — '시설장'(600tw)+셀 여백(200tw) 수용 하한
 const _APPR_W = _AW * 4;
 // 인라인 jc=right도 셀 여백+테두리만큼 우측 가이드선을 넘어감(PDF 실측) — 부동 표+tblpX 보정은 서명란과 동일
-const _APPR_X = _TEXT_W - _APPR_W + 140;
+const _APPR_X = _TEXT_W - _APPR_W + 102;
 const _cellPprC = _CELL_PPR.replace('</w:pPr>', '<w:jc w:val="center"/></w:pPr>');
 const _apprCell = (/** @type {string} */ t, /** @type {boolean} */ merge, /** @type {boolean} */ cont) => `<w:tc><w:tcPr><w:tcW w:w="${_AW}" w:type="dxa"/>${merge ? `<w:vMerge${cont ? '' : ' w:val="restart"'}/>` : ''}${t && !cont ? '<w:shd w:val="clear" w:color="auto" w:fill="DEEAF6"/>' : ''}<w:vAlign w:val="center"/></w:tcPr>${t ? `<w:p>${_cellPprC}<w:r><w:rPr>${_RF}<w:b/><w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${t}</w:t></w:r></w:p>` : '<w:p/>'}</w:tc>`;
 const _APPROVE = `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_APPR_X}" w:tblpYSpec="top" w:leftFromText="180" w:rightFromText="180" w:topFromText="60" w:bottomFromText="120"/><w:tblW w:w="${_APPR_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${`<w:gridCol w:w="${_AW}"/>`.repeat(4)}</w:tblGrid>`
@@ -285,8 +285,8 @@ const _END = `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="80"/></w:pP
 // 서명란 — 본문 여백 영역 하단 우측에 부동 표(tblpPr — Word 텍스트 상자와 동일한 앵커 방식).
 // 문서 끝에 배치하면 마지막 페이지 하단 오른쪽에 고정된다. 첫 행은 발신일(중앙), 서명행은 (인) 표기
 const _SIG_W = 4200;
-// tblpX는 좌측 셀 여백(100)+테두리 반폭(10)만큼 좌측으로 치우쳐 렌더됨(COM 실측) — 140tw 보정
-const _SIG_X = _TEXT_W - _SIG_W + 140;
+// tblpX는 좌측 셀 여백(100)+테두리 반폭만큼 좌측으로 치우쳐 렌더되고 이중 외곽선은 ~38tw 더 바깥에 그려짐(PDF 실측) — 102tw 보정으로 본문 표 우측선과 정합
+const _SIG_X = _TEXT_W - _SIG_W + 102;
 const _docDate = () => { const d = new Date(); return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`; };
 /** @param {string[]} lines */
 const _sigTbl = lines => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_SIG_X}" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${_SIG_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid><w:gridCol w:w="${_SIG_W}"/></w:tblGrid>`

@@ -149,7 +149,7 @@ test('docxFileMd — 서명 문서 공문서 격식: 결재란·발신일·(인)
     const approveIdx = doc.indexOf('결 재');
     const titleIdx = doc.indexOf('인수인계서');
     assert.ok(approveIdx >= 0 && approveIdx < titleIdx, '결재란 선두 배치 누락');
-    assert.ok(doc.includes('w:tblpX="5852"'), '결재란 우측 상단 부동 앵커 누락');
+    assert.ok(doc.includes('w:tblpX="5814"'), '결재란 우측 상단 부동 앵커 누락');
     assert.ok(doc.includes('w:gridCol w:w="840"'), '결재란 열 폭 부족 — 시설장 줄넘김 방지 하한');
     assert.ok(doc.includes('<w:vMerge'), '결재란 세로병합 누락');
     for (const r of ['담당', '팀장', '시설장']) assert.ok(doc.includes(r), `결재란 "${r}" 누락`);
@@ -171,8 +171,8 @@ test('docxFileMd — :::sign 서명란은 하단 우측 부동 표, 셀 어절 �
     const doc = entries['word/document.xml'];
     assert.ok(doc.includes('w:tblpPr'), '서명란 부동 표(tblpPr) 누락');
     assert.ok(doc.includes('w:tblpYSpec="bottom"'), '서명란 하단 앵커 누락 — A4 하단 배치 아님');
-    // 명시적 tblpX — XSpec="right"는 우측 초과, 보정 없는 좌표는 ~140tw 안쪽으로 치우침(COM 실측)
-    assert.ok(doc.includes('w:tblpX="5012"'), '서명란 우측 앵커(본문폭−서명폭+140 보정) 누락');
+    // 명시적 tblpX — XSpec="right"는 우측 초과, 이중 외곽선 포함 우측끝을 본문 표와 정합(+102 보정)
+    assert.ok(doc.includes('w:tblpX="4974"'), '서명란 우측 앵커(본문폭−서명폭+102 보정) 누락');
     assert.ok(doc.includes('인계자(서명): 김요양'), '서명 내용 누락');
     assert.ok(!doc.includes(':::sign'), '마커가 본문에 노출됨');
     assert.ok(doc.includes('<w:kinsoku/>'), '금칙 규칙(어절 줄바꿈) 누락');
