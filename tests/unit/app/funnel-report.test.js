@@ -90,3 +90,15 @@ test('summarize: install_id 없는 행은 설치 기준에서 제외 — 세션 
     assert.equal(s.activation.installs, 0);
     assert.equal(s.activation.installRate, null);
 });
+
+test('summarize: meta.duration_ms 실측 소요를 타임스탬프 차보다 우선', () => {
+    const s = summarize([
+        ev('s1', 'quiz_start', '2026-10-14T01:00:00Z'),
+        ev('s1', 'quiz_start', '2026-10-14T02:00:00Z'),      // 같은 세션 재시작 — 타임스탬프 차는 부정확
+        ev('s1', 'quiz_complete', '2026-10-14T02:05:00Z', { duration_ms: 120_000 }),
+        ev('s2', 'quiz_start', '2026-10-14T03:00:00Z'),
+        ev('s2', 'quiz_complete', '2026-10-14T03:04:00Z'),   // 구버전 — 타임스탬프 차 폴백
+    ]);
+    const f = s.funnels.quiz;
+    assert.equal(f.avgDurationMs, (120_000 + 4 * 60_000) / 2);  // (2min + 4min)/2
+});

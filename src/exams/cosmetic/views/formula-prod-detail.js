@@ -28,8 +28,9 @@ const CLASS_BADGE = {
   [PRODUCT_ING_CLASS.UNKNOWN]: { cls: 'f-check-unknown', label: 'DB 미등록' },
 };
 
+/** @param {string} cls @param {*} note */
 function classBadgeHtml(cls, note) {
-  const b = CLASS_BADGE[cls] || CLASS_BADGE[PRODUCT_ING_CLASS.UNKNOWN];
+  const b = (/** @type {Object.<string,{cls:string,label:string}>} */ (CLASS_BADGE))[cls] || CLASS_BADGE[PRODUCT_ING_CLASS.UNKNOWN];
   return `<span class="f-check ${b.cls}" title="${esc(note || '')}">${b.label}</span>`;
 }
 
@@ -37,6 +38,7 @@ function classBadgeHtml(cls, note) {
    상세 — 전성분 분석 + 교차 (FO-39·FO-40)
    ======================================================= */
 
+/** @param {string} id */
 export function productOpen(id) {
   const p = getProduct(id);
   if (!p) { showToast('등록된 제품을 찾을 수 없습니다.', 'error'); return; }
@@ -98,7 +100,7 @@ export function productOpen(id) {
   const ranked = rankFormulasByOverlap(p, formulas);
   const rankHtml = ranked.length
     ? `<div class="prod-rank-chips"><span class="prod-compare-label">유사 포뮬러</span>${ranked.map(r =>
-        `<button type="button" class="formula-rec-chip" data-click="productRankPick" data-arg="${esc(r.formula.id)}" title="공통 성분 ${r.common}종 · 유사도 ${Math.round(r.ratio * 100)}%">${esc(r.formula.name)} <span class="fold-hint">${Math.round(r.ratio * 100)}%</span></button>`).join('')}</div>`
+        `<button type="button" class="formula-rec-chip" data-click="productRankPick" data-arg="${esc((/** @type {*} */ (r.formula)).id)}" title="공통 성분 ${r.common}종 · 유사도 ${Math.round(r.ratio * 100)}%">${esc((/** @type {*} */ (r.formula)).name)} <span class="fold-hint">${Math.round(r.ratio * 100)}%</span></button>`).join('')}</div>`
     : '';
   const compareHtml = formulas.length
     ? `${rankHtml}<select id="prod-compare-select" class="form-select" aria-label="비교할 내 포뮬러">
@@ -168,6 +170,7 @@ export function productOpen(id) {
 }
 
 /** 유사 포뮬러 랭킹 칩 선택 — 셀렉트에 즉시 적용 (FO-45) */
+/** @param {string} formulaId */
 export function productRankPick(formulaId) {
   const panel = getEl('formula-product-detail-panel');
   const pid = panel && panel.dataset.currentProductId;
@@ -179,6 +182,7 @@ export function productRankPick(formulaId) {
 }
 
 /** 기성품 ↔ 기성품 비교 결과 렌더 (FO-45) */
+/** @param {*} product @param {string} otherId */
 function renderProductCompare(product, otherId) {
   const box = getEl('prod-p2p-result');
   if (!box) return;
@@ -187,10 +191,10 @@ function renderProductCompare(product, otherId) {
   const cmp = other && compareWithProduct(product, other);
   if (!cmp) { box.innerHTML = '<div class="formula-rec-note">비교할 수 없습니다.</div>'; return; }
   const otherTitle = other.brand ? `${other.brand} ${other.name}` : other.name;
-  const col = (label, items, cls) => `
+  const col = (/** @type {string} */ label, /** @type {string[]} */ items, /** @type {string} */ cls) => `
     <div class="prod-compare-col">
       <div class="prod-compare-label">${label} <span class="fold-hint">${items.length}종</span></div>
-      ${items.length ? items.map(n => `<span class="prod-ing-chip ${cls}">${esc(n)}</span>`).join('') : '<span class="formula-rec-note">없음</span>'}
+      ${items.length ? items.map((/** @type {string} */ n) => `<span class="prod-ing-chip ${cls}">${esc(n)}</span>`).join('') : '<span class="formula-rec-note">없음</span>'}
     </div>`;
   box.innerHTML = `<div class="prod-compare-grid">
     ${raw(col('공통 성분', cmp.common, ''))}
@@ -200,6 +204,7 @@ function renderProductCompare(product, otherId) {
 }
 
 /** 포뮬러 비교 결과 렌더 — 공통/제품에만/내 포뮬러에만 3분할 */
+/** @param {*} product @param {string} formulaId */
 function renderCompareResult(product, formulaId) {
   const box = getEl('prod-compare-result');
   if (!box) return;
@@ -207,10 +212,10 @@ function renderCompareResult(product, formulaId) {
   const f = getFormulaForCompare(formulaId);
   const cmp = f && compareWithFormula(product, f);
   if (!cmp) { box.innerHTML = '<div class="formula-rec-note">비교할 수 없습니다.</div>'; return; }
-  const col = (label, items, cls) => `
+  const col = (/** @type {string} */ label, /** @type {string[]} */ items, /** @type {string} */ cls) => `
     <div class="prod-compare-col">
       <div class="prod-compare-label">${label} <span class="fold-hint">${items.length}종</span></div>
-      ${items.length ? items.map(n => `<span class="prod-ing-chip ${cls}">${esc(n)}</span>`).join('') : '<span class="formula-rec-note">없음</span>'}
+      ${items.length ? items.map((/** @type {string} */ n) => `<span class="prod-ing-chip ${cls}">${esc(n)}</span>`).join('') : '<span class="formula-rec-note">없음</span>'}
     </div>`;
   box.innerHTML = `<div class="prod-compare-grid">
     ${raw(col('공통 성분', cmp.common, ''))}
@@ -219,6 +224,7 @@ function renderCompareResult(product, formulaId) {
   </div>`;
 }
 
+/** @param {string} id */
 function getFormulaForCompare(id) {
   return listFormulas().find(f => f.id === id) || null;
 }

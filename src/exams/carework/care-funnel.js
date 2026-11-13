@@ -8,6 +8,7 @@ import { localDateTime } from '../../core/utils.js';
 const KEY = STORAGE_KEYS.CARE_FUNNEL;
 
 /** 도구 사용 계측 — 최초 사용 시점(first_use)과 도구별 횟수를 누적 */
+/** @param {string} step */
 export function markFunnel(step) {
     const f = (getJSON(KEY) && typeof getJSON(KEY) === 'object') ? getJSON(KEY) : { first_use: null, tools: {} };
     if (!f.first_use) f.first_use = localDateTime();

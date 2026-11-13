@@ -370,6 +370,12 @@ pre.mermaid svg {
     color: var(--color-primary);
     border-color: var(--color-primary);
 }
+.mermaid-zoom-pan {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-inline-start: auto; /* 확대·맞춤과 분리 — 우측 정렬 */
+}
 .mermaid-zoom-level {
     min-width: 3.2rem;
     text-align: center;

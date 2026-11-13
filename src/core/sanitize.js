@@ -14,6 +14,7 @@
 // HTML 특수문자 → 안전한 엔티티 매핑.
 // 엔티티 리터럴을 소스에 직접 적으면 편집/저장 과정에서 디코딩될 수 있으므로
 // String.fromCharCode로 생성합니다. (결과는 동일: & < > " ')
+/** @type {Object.<string, string>} */
 const HTML_ESCAPE_MAP = {
     '&': '&' + 'amp;',
     '<': '&' + 'lt;',
@@ -33,7 +34,7 @@ const HTML_ESCAPE_MAP = {
 export function escapeHTML(value) {
     if (value === null || value === undefined) return '';
     return String(value).replace(/[&<>"']/g, function (ch) {
-        return HTML_ESCAPE_MAP[ch];
+        return HTML_ESCAPE_MAP[ch] || ch;
     });
 }
 
@@ -126,7 +127,7 @@ function _interpToMarkup(value) {
  * @returns {string} 안전한 마크업 (런타임은 SafeHtml — 중첩 판정용)
  */
 export function html(strings, ...values) {
-    let out = strings[0];
+    let out = strings[0] || '';
     for (let i = 0; i < values.length; i++) {
         out += _interpToMarkup(values[i]) + strings[i + 1];
     }

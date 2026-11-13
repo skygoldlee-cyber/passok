@@ -28,6 +28,7 @@ export const ManualViewer = (() => {
     // '실무 매뉴얼 (X OS)' 형식으로 통일한다 (시험별 별개 기본 제목 금지).
     const PRACTICE_MANUAL_TITLE = '실무 매뉴얼';
     // 지원하는 마크다운 소스 정의
+    /** @type {Object.<string, {path:string, title:string, practiceBrand?:boolean}>} */
     const MD_SOURCES = {
         'user_manual': { path: PATHS.USER_MANUAL, title: '사용자 매뉴얼' },
         'privacy_policy': { path: PATHS.PRIVACY_POLICY, title: '개인정보 처리방침' },
@@ -44,6 +45,7 @@ export const ManualViewer = (() => {
     /* =========================================================
        마크다운 → HTML 변환 (exam-viewer.js와 동일한 로직)
        ========================================================= */
+    /** @param {string} mdText */
     function _mdToHtml(mdText) {
         // 유지보수 QA 스탬프(최종 확인: …)는 소스에만 두고 표시층에서 제거
         return stripQaStamps(parseMarkdown(mdText, { allowMermaid: true }));
@@ -190,7 +192,7 @@ body.manual-open{overflow:hidden;}
                 <article id="manual-article" class="study-section"></article>
             </div>`,
         wire(el) {
-            el.querySelector('[data-manual-close]')?.addEventListener('click', close);
+            el.querySelector('[data-manual-close]')?.addEventListener('click', () => close());
             // 인쇄·PDF 버튼: 스타일드 PDF 생성 → 새 탭 미리보기(뷰어 인쇄·저장 가능)·차단 시 저장 대화상자→다운로드 — 기기의 window.print() 백지 대응 (@spec CO-20)
             // @spec CO-20
             el.querySelector('[data-manual-print]')?.addEventListener('click', async e => {
@@ -200,7 +202,7 @@ body.manual-open{overflow:hidden;}
                 showToast('PDF 생성 중 — 문서가 길면 잠시 걸립니다');
                 try {
                     const { pdfFileFromElStyled } = await import('../content/pdf-utils.js');
-                    const file = await pdfFileFromElStyled(el.querySelector('#manual-article'), _currentTitle || '문서');
+                    const file = await pdfFileFromElStyled(/** @type {HTMLElement} */ (el.querySelector('#manual-article')), _currentTitle || '문서');
                     const url = URL.createObjectURL(file);
                     if (window.open(url, '_blank')) { // 새 탭 미리보기 — 브라우저 PDF 뷰어에서 확인 후 인쇄·저장
                         showToast('PDF 미리보기를 열었습니다 — 뷰어에서 인쇄·저장하세요');
@@ -253,6 +255,7 @@ body.manual-open{overflow:hidden;}
     // 상대 이미지 경로를 문서 위치 기준으로 해석 — docs/*.md의 로컬 이미지를
     // 문서 디렉터리 기준 절대 URL로 변환 (exam-viewer._renderBody와 동일 패턴)
     let _currentMdPath = '';
+    /** @param {HTMLElement} article */
     function _resolveArticleImages(article) {
         if (!_currentMdPath) return;
         const baseUrl = new URL(
@@ -266,26 +269,34 @@ body.manual-open{overflow:hidden;}
         });
     }
 
+    /**
+     * @param {string} title
+     * @param {string} bodyHtml
+     * @param {string} [mdPath]
+     */
     function _renderBody(title, bodyHtml, mdPath) {
         _currentTitle = title;
         _currentBodyHtml = bodyHtml;
         _currentMdPath = mdPath || '';
         const el = _ensureOverlay();
-        el.querySelector('#manual-ov-title').textContent = title;
-        const article = el.querySelector('#manual-article');
+        const titleEl = el.querySelector('#manual-ov-title');
+        if (titleEl) titleEl.textContent = title;
+        const article = /** @type {HTMLElement|null} */ (el.querySelector('#manual-article'));
+        if (!article) return;
         article.innerHTML = bodyHtml;
         _resolveArticleImages(article);
 
         // 목차를 본문 앞에 삽입 (오버레이 스크롤 컨테이너 안쪽 상단)
-        const scroll = el.querySelector('.manual-ov-scroll');
+        const scroll = /** @type {HTMLElement|null} */ (el.querySelector('.manual-ov-scroll'));
+        if (!scroll) return;
         mountToc(scroll, article, buildTocHtml(article, {
             idPrefix: 'manual-h-', jumpAttr: 'manual-jump', tocClass: 'manual-ov-toc'
         }), { tocClass: 'manual-ov-toc', jumpAttr: 'manual-jump' });
         scroll.scrollTop = 0;
 
         // 외부 링크(http, /docs 등) 클릭 시 새 창으로 열기
-        article.addEventListener('click', function onLinkClick(e) {
-            const a = e.target.closest('a');
+        article.addEventListener('click', function onLinkClick(/** @type {MouseEvent} */ e) {
+            const a = e.target instanceof Element ? e.target.closest('a') : null;
             if (!a) return;
             const href = a.getAttribute('href');
             if (!href) return;
@@ -301,8 +312,8 @@ body.manual-open{overflow:hidden;}
             e.preventDefault();
             // 매뉴얼 간 이동 (doc:키) — 같은 오버레이에서 다른 문서로 전환
             const docMatch = href.match(/^doc:([a-z_]+)$/);
-            if (docMatch && MD_SOURCES[docMatch[1]]) {
-                openDocument(docMatch[1]);
+            if (docMatch && MD_SOURCES[docMatch[1] || '']) {
+                openDocument(docMatch[1] || '');
                 return;
             }
             // 교재 바로가기 (subj:과목#chNN) → 오버레이 닫고 교재 리더 해당 과목·챕터로 이동
@@ -311,7 +322,7 @@ body.manual-open{overflow:hidden;}
                 close();
                 const navItem = document.querySelector('.nav-item[data-target="textbook-reader-view"]');
                 if (navItem) /** @type {HTMLElement} */ (navItem).click();
-                openSubjectChapter(subjMatch[1], subjMatch[2] || '');
+                openSubjectChapter(subjMatch[1] || '', subjMatch[2] || '');
                 return;
             }
             window.open(href, '_blank', 'noopener,noreferrer');
@@ -321,25 +332,31 @@ body.manual-open{overflow:hidden;}
         _renderMermaid();
     }
 
+    /** @param {string} title */
     function _showLoading(title) {
         const el = _ensureOverlay();
-        el.querySelector('#manual-ov-title').textContent = title || '문서';
+        const titleEl = el.querySelector('#manual-ov-title');
+        if (titleEl) titleEl.textContent = title || '문서';
         const scroll = el.querySelector('.manual-ov-scroll');
-        const oldToc = scroll.querySelector('.manual-ov-toc');
+        const oldToc = scroll ? scroll.querySelector('.manual-ov-toc') : null;
         if (oldToc) oldToc.remove();
-        el.querySelector('#manual-article').innerHTML =
+        const articleEl = el.querySelector('#manual-article');
+        if (articleEl) articleEl.innerHTML =
             '<div class="manual-loading"><div class="spinner"></div><p>문서를 불러오는 중...</p></div>';
         _open();
     }
 
+    /** @param {string} title @param {string} message */
     function _showError(title, message) {
         const el = _ensureOverlay();
-        el.querySelector('#manual-ov-title').textContent = title;
-        el.querySelector('#manual-article').innerHTML =
+        const titleEl = el.querySelector('#manual-ov-title');
+        if (titleEl) titleEl.textContent = title;
+        const articleEl = el.querySelector('#manual-article');
+        if (articleEl) articleEl.innerHTML =
             `<div class="study-section"><h2>매뉴얼을 불러올 수 없습니다</h2>
              <p>${escapeHTML(message)}</p>
              <p><button type="button" class="manual-ov-btn" data-manual-close>홈으로 돌아가기</button></p></div>`;
-        el.querySelector('#manual-article [data-manual-close]').addEventListener('click', close);
+        el.querySelector('#manual-article [data-manual-close]')?.addEventListener('click', () => close());
         _open();
     }
 
@@ -354,15 +371,17 @@ body.manual-open{overflow:hidden;}
 
     // 'content/exams/<id>/docs/학습안내서.md' → '{dataRoot}/docs_md/학습안내서.js' (시험별 문서)
     // 'docs/<stem>.md' → 'data/docs_md/<stem>.js' (앱 공용 문서 — 사용자 매뉴얼은 docs/user/)
+    /** @param {string} sourceKey */
     function _bundlePathFor(sourceKey) {
         const src = MD_SOURCES[sourceKey];
         if (!src) return null;
-        const stem = src.path.split('/').pop().replace(/\.md$/i, '');
+        const stem = (src.path.split('/').pop() || '').replace(/\.md$/i, '');
         const base = src.path.startsWith('docs/') ? 'data' : null;
         return (base ? `${base}/docs_md/` : dataPath('docs_md/')) + stem + '.js';
     }
 
     // 번들(전역 __DOC_MD__)에서 마크다운 조회 — 없으면 해당 번들 스크립트를 주입 후 재조회
+    /** @param {string} sourceKey */
     async function _loadFromBundle(sourceKey) {
         const src = MD_SOURCES[sourceKey];
         if (!src) throw new Error('알 수 없는 문서 소스: ' + sourceKey);
@@ -381,6 +400,7 @@ body.manual-open{overflow:hidden;}
     }
 
     // 프로토콜에 맞춰 마크다운 원문 확보
+    /** @param {string} sourceKey */
     async function _loadMd(sourceKey) {
         const src = MD_SOURCES[sourceKey];
         if (!src) throw new Error('알 수 없는 문서 소스: ' + sourceKey);
@@ -403,6 +423,7 @@ body.manual-open{overflow:hidden;}
     /* =========================================================
        메인 엔트리
        ========================================================= */
+    /** @param {string} sourceKey */
     async function openDocument(sourceKey) {
         const src = MD_SOURCES[sourceKey];
         if (!src) {
@@ -437,8 +458,8 @@ body.manual-open{overflow:hidden;}
     }
     function openManual() { return openDocument('user_manual'); }
     function openPrivacyPolicy() { return openDocument('privacy_policy'); }
-    function openFormulaManual() { if (_requireExamSelection()) return openDocument('formula_manual'); }
-    function openPracticeManual() { if (_requireExamSelection()) return openDocument('practice_manual'); }
+    function openFormulaManual() { return _requireExamSelection() ? openDocument('formula_manual') : undefined; }
+    function openPracticeManual() { return _requireExamSelection() ? openDocument('practice_manual') : undefined; }
     function openSummary() { return openDocument('study_summary'); }
     function openMnemonicGuide() { return openDocument('mnemonic_guide'); }
 
@@ -446,7 +467,8 @@ body.manual-open{overflow:hidden;}
     document.addEventListener('themechange', () => {
         if (isOpen() && _currentBodyHtml) {
             const el = _ensureOverlay();
-            const article = el.querySelector('#manual-article');
+            const article = /** @type {HTMLElement|null} */ (el.querySelector('#manual-article'));
+            if (!article) return;
             article.innerHTML = _currentBodyHtml;
             _resolveArticleImages(article);
             _renderMermaid();

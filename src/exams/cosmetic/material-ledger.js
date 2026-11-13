@@ -40,10 +40,12 @@ function loadAll() {
   return loadItems(STORAGE_KEYS.MATERIAL_ITEMS);
 }
 
+/** @param {*[]} items */
 function saveAll(items) {
   return saveItems(STORAGE_KEYS.MATERIAL_ITEMS, items);
 }
 
+/** @param {*} data */
 function sanitizeMaterial(data) {
   return {
     name: clampStr(data.name || '', MAX_NAME_LEN).trim(),
@@ -67,11 +69,13 @@ export function listMaterials() {
   });
 }
 
+/** @param {string} id */
 export function getMaterial(id) {
   return loadAll().find(m => m.id === id) || null;
 }
 
 /** 이름 정확 매칭 — 계산기 원료 행과 장부 연결용 (부분 매칭은 오탐 위험) */
+/** @param {string} name */
 export function findMaterialByName(name) {
   if (typeof name !== 'string' || !name.trim()) return null;
   const target = name.trim();
@@ -111,7 +115,7 @@ export function getMaterialUsage() {
  */
 export function importMaterials(rows) {
   const existing = loadAll();
-  const keyOf = m => `${m.name}|${m.lot || ''}`;
+  const keyOf = (/** @type {*} */ m) => `${m.name}|${m.lot || ''}`;
   const seen = new Set(existing.map(keyOf));
   const stats = { added: 0, skipped: 0, duplicate: 0, overLimit: 0 };
   const incoming = [];
@@ -143,6 +147,7 @@ export function materialStatus(m, now) {
 }
 
 /** 기한까지 남은 일수 — 자정 기준 날짜 차이 (기한 없음/파싱 실패 시 null) */
+/** @param {*} m @param {Date} [now] */
 export function daysUntilExpiry(m, now) {
   if (!m || !m.expiryAt) return null;
   const exp = new Date(`${m.expiryAt}T00:00:00`);
@@ -154,8 +159,9 @@ export function daysUntilExpiry(m, now) {
 }
 
 /** 기한 임박·경과 항목 — 배지·경고 패널용 */
+/** @param {Date} [now] */
 export function expiringMaterials(now) {
-  return listMaterials().filter(m => {
+  return listMaterials().filter((/** @type {*} */ m) => {
     const s = materialStatus(m, now);
     return s === 'soon' || s === 'expired';
   });
@@ -165,6 +171,7 @@ export function expiringMaterials(now) {
  * 재고 상태 (FO-61) — 'none'(잔량 미기재) | 'out'(소진) | 'ok'
  * 잔량이 0 이하이면 조제 LOT 선택에서 제외·소진 배지 대상.
  */
+/** @param {*} m */
 export function stockStatus(m) {
   if (!m || m.qty == null) return 'none';
   return m.qty <= 0 ? 'out' : 'ok';
@@ -204,6 +211,7 @@ export function deductStock(usage) {
  * 새 원료 항목 등록.
  * @returns {{ok:boolean, material?:object, error?:string}}
  */
+/** @param {*} data */
 export function createMaterial(data) {
   const usage = getMaterialUsage();
   if (!usage.canCreate) {
@@ -221,6 +229,7 @@ export function createMaterial(data) {
 }
 
 /** @returns {{ok:boolean, material?:object, error?:string}} */
+/** @param {string} id @param {*} data */
 export function updateMaterial(id, data) {
   const all = loadAll();
   const idx = all.findIndex(m => m.id === id);
@@ -236,6 +245,7 @@ export function updateMaterial(id, data) {
 }
 
 /** @returns {{ok:boolean, error?:string}} */
+/** @param {string} id */
 export function deleteMaterial(id) {
   const all = loadAll();
   const idx = all.findIndex(m => m.id === id);

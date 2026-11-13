@@ -8,15 +8,25 @@ import { DataLoader } from '../content/data-loader.js';
 import { getActiveExamId } from '../core/exam-context.js';
 import { termHitQuality, expandSynonyms } from './search-morpheme.js';
 
+/** @typedef {{kind:string, subjId?:string, title?:string, _searchText:string}} SearchDoc */
+/** @type {SearchDoc[]|null} */
 let _searchIndex = null;
+/** @type {string|null|undefined} */
 let _searchIndexKeys = null;
-let _tokenIndex = null;    // 어절 → Set<entryIndex> (TS-13 경계 매칭의 후보 축소)
-let _morphVocab = null;    // TS-13 형태소 경계 어휘 (어절-두어 빈도 마이닝)
-let _indexExamId = null;   // 인덱스를 구축한 시험 — 시험 전환 시 지연 병합분도 함께 폐기
-let _candidateCache = new Map(); // 변형 → 후보 항목 Set (인덱스 변형 시 무효화)
-let _vocabWords = null;    // 형태소 어휘 증분 상태 — 독립 어절
-let _vocabPrefixUse = null; // 접두 → 재사용 어절 수
-let _vocabPrefixes = null; // 2회+ 재사용 접두 (형태소 후보)
+/** @type {Map.<string, Set.<number>>|null} 어절 → Set<entryIndex> (TS-13 경계 매칭의 후보 축소) */
+let _tokenIndex = null;
+/** @type {{words:Set.<string>, prefixes:Set.<string>, cover:Map.<string, boolean>}|null} TS-13 형태소 경계 어휘 (어절-두어 빈도 마이닝) */
+let _morphVocab = null;
+/** @type {string|null|undefined} 인덱스를 구축한 시험 — 시험 전환 시 지연 병합분도 함께 폐기 */
+let _indexExamId = null;
+/** @type {Map.<string, Set.<number>>} 변형 → 후보 항목 Set (인덱스 변형 시 무효화) */
+let _candidateCache = new Map();
+/** @type {Set.<string>|null} 형태소 어휘 증분 상태 — 독립 어절 */
+let _vocabWords = null;
+/** @type {Map.<string, number>|null} 접두 → 재사용 어절 수 */
+let _vocabPrefixUse = null;
+/** @type {Set.<string>|null} 2회+ 재사용 접두 (형태소 후보) */
+let _vocabPrefixes = null;
 
 /** @type {Array<() => Iterable<string>>} 형태소 어휘 공급자 — 콘텐츠 계층이 등록 (TS-16) */
 const _VOCAB_CONTRIBUTORS = [];
@@ -39,7 +49,7 @@ export function _getMorphVocab() { return _morphVocab; }
 // load()는 엔트리 배열(eager·동기) 또는 Promise<엔트리[]>(lazy·비동기)를 반환한다.
 // lazy 소스의 지연 상태(기동 promise·병합 entries·시험 전환 폐기·실패 재시도 억제)는
 // 코어가 소스별로 일원 관리한다.
-/** @typedef {{id:string, kind:string, lazy:boolean, load:()=>any, rev:(()=>string)|undefined, promise:Promise<number>|null, entries:Array<object>|null}} SearchSource */
+/** @typedef {{id:string, kind:string, lazy:boolean, load:()=>any, rev:(()=>string)|undefined, promise:Promise<number>|null, entries:SearchDoc[]|null}} SearchSource */
 /** @type {Map<string, SearchSource>} */
 const _SOURCES = new Map();
 
@@ -63,6 +73,8 @@ export function registerSearchSource(desc) {
  * 검색 대상 텍스트 정제 — 코드블록·머메이드·이미지·링크 URL 같은 마크다운
  * 구문은 내용이 아니라 오매칭 노이즈라 _searchText에서 제외한다.
  * 화면 표시용 원문(text)에는 적용하지 않는다. 소스 프로바이더가 엔트리 생성에 사용.
+ * @param {*} text
+ * @returns {string}
  */
 export function _toSearchable(text) {
     return String(text || '')
@@ -72,7 +84,10 @@ export function _toSearchable(text) {
         .replace(/`([^`]*)`/g, '$1');                    // 인라인 코드 — 내용 유지
 }
 
-/** 지연 병합분이 준비되면 구축된 인덱스에 뒤에 붙이고 역색인을 증분 갱신한다 */
+/**
+ * 지연 병합분이 준비되면 구축된 인덱스에 뒤에 붙이고 역색인을 증분 갱신한다
+ * @param {SearchDoc[]} entries
+ */
 function _mergeLazyEntries(entries) {
     if (!_searchIndex || !entries.length) return;
     const start = _searchIndex.length;
@@ -81,18 +96,22 @@ function _mergeLazyEntries(entries) {
     // 증분 역색인 — 새 항목의 토큰만 추가한다 (지연 소스 완료마다 전체 재구축하지 않음)
     entries.forEach((e, i) => _indexEntryTokens(e, start + i));
     // 어휘가 성장했으므로 DP 커버 캐시·후보 캐시는 폐기
-    _morphVocab = { words: _vocabWords, prefixes: _vocabPrefixes, cover: new Map() };
+    _morphVocab = { words: /** @type {Set.<string>} */ (_vocabWords), prefixes: /** @type {Set.<string>} */ (_vocabPrefixes), cover: new Map() };
     _candidateCache.clear();
 }
 
 /**
  * 문서 본문에서 검색어가 가장 밀집한 구간의 스니펫 + 라인 번호 계산 (참조자료 결과용).
  * 다용어 쿼리에서는 윈도(2×radius) 안에 매치가 최대한 많이 드는 위치를 고른다.
+ * @param {string} text
+ * @param {string[]} terms
+ * @param {number} [radius]
  * @returns {{snippet: string, lineNum: number}} lineNum은 윈도 첫 매치의 1-based 라인 (ExamViewer.openExam 인자)
  */
 export function _matchSnippet(text, terms, radius = 160) {
     const lower = text.toLowerCase();
     // 모든 용어의 매치 위치 수집 (용어당 상한으로 비용 제한)
+    /** @type {{pos: number, len: number}[]} */
     const hits = [];
     for (const t of terms) {
         if (!t) continue;
@@ -111,11 +130,11 @@ export function _matchSnippet(text, terms, radius = 160) {
     let j = 0;
     for (let i = 0; i < hits.length; i++) {
         if (j < i) j = i;
-        while (j + 1 < hits.length && hits[j + 1].pos - hits[i].pos < winLen) j++;
+        while (j + 1 < hits.length && (hits[j + 1]?.pos || 0) - (hits[i]?.pos || 0) < winLen) j++;
         if (j - i > bestJ - bestI) { bestI = i; bestJ = j; }
     }
-    const spanStart = hits[bestI].pos;
-    const spanEnd = hits[bestJ].pos + hits[bestJ].len;
+    const spanStart = hits[bestI]?.pos || 0;
+    const spanEnd = (hits[bestJ]?.pos || 0) + (hits[bestJ]?.len || 0);
     // 매치 군집을 윈도 중앙에 배치 (군집이 윈도보다 길면 선두 매치부터)
     let start = spanEnd - spanStart >= winLen
         ? spanStart
@@ -127,6 +146,29 @@ export function _matchSnippet(text, terms, radius = 160) {
     return { snippet, lineNum };
 }
 
+// 성능 계측 — 인덱스 빌드·쿼리 시간 누적 (getSearchPerf로 스냅샷 조회, 병목 실측용)
+const _perf = {
+    build: { n: 0, total: 0, max: 0, last: 0, lastEntries: 0, lastTokens: 0 },
+    query: { n: 0, total: 0, max: 0, last: 0, lastResults: 0 },
+};
+/**
+ * @param {'build'|'query'} bucket
+ * @param {number} ms
+ */
+const _mark = (bucket, ms) => {
+    const b = _perf[bucket];
+    b.n++; b.total += ms; b.last = ms;
+    if (ms > b.max) b.max = ms;
+};
+/** 인덱스 빌드·쿼리 시간 스냅샷 — {build:{n,avg,max,last,lastEntries,lastTokens}, query:{n,avg,max,last,lastResults}} */
+export function getSearchPerf() {
+    const r = (/** @type {{n:number, total:number, max:number, last:number, lastEntries?:number, lastTokens?:number, lastResults?:number}} */ b) => ({ n: b.n, avg: b.n ? +(b.total / b.n).toFixed(1) : 0, max: +b.max.toFixed(1), last: +b.last.toFixed(1),
+        lastEntries: b.lastEntries, lastTokens: b.lastTokens, lastResults: b.lastResults });
+    return { build: r(_perf.build), query: r(_perf.query) };
+}
+// devtools 수동 조회 — console에서 __searchPerf() 로 빌드·쿼리 시간 확인
+if (typeof window !== 'undefined') /** @type {any} */ (window).__searchPerf = getSearchPerf;
+
 /**
  * 지연(lazy) 소스 로드 기동 — 소스 범용 상태머신 (TS-18).
  * 시작 시 활성 시험을 캡처하고 완료 시 다르면 병합을 폐기한다(시험 전환 오염 방어).
@@ -135,25 +177,6 @@ export function _matchSnippet(text, terms, radius = 160) {
  * @param {SearchSource} src
  * @returns {Promise<number>} 추가된 인덱스 항목 수
  */
-// 성능 계측 — 인덱스 빌드·쿼리 시간 누적 (getSearchPerf로 스냅샷 조회, 병목 실측용)
-const _perf = {
-    build: { n: 0, total: 0, max: 0, last: 0, lastEntries: 0, lastTokens: 0 },
-    query: { n: 0, total: 0, max: 0, last: 0, lastResults: 0 },
-};
-const _mark = (bucket, ms) => {
-    const b = _perf[bucket];
-    b.n++; b.total += ms; b.last = ms;
-    if (ms > b.max) b.max = ms;
-};
-/** 인덱스 빌드·쿼리 시간 스냅샷 — {build:{n,avg,max,last,lastEntries,lastTokens}, query:{n,avg,max,last,lastResults}} */
-export function getSearchPerf() {
-    const r = (b) => ({ n: b.n, avg: b.n ? +(b.total / b.n).toFixed(1) : 0, max: +b.max.toFixed(1), last: +b.last.toFixed(1),
-        lastEntries: b.lastEntries, lastTokens: b.lastTokens, lastResults: b.lastResults });
-    return { build: r(_perf.build), query: r(_perf.query) };
-}
-// devtools 수동 조회 — console에서 __searchPerf() 로 빌드·쿼리 시간 확인
-if (typeof window !== 'undefined') /** @type {any} */ (window).__searchPerf = getSearchPerf;
-
 function _ensureSource(src) {
     if (src.promise) return src.promise;
     const examId = getActiveExamId();
@@ -216,14 +239,15 @@ function _getSearchIndex() {
     _indexExamId = examId;
     _searchIndexKeys = keys;
     _searchIndex = [];
+    const built = _searchIndex;
     // 즉시 수집 소스 — 콘텐츠 파싱·이동 목적지 해석은 각 프로바이더의 몫
     for (const src of _SOURCES.values()) {
         if (src.lazy) continue;
-        (src.load() || []).forEach(e => _searchIndex.push(e));
+        (src.load() || []).forEach((/** @type {SearchDoc} */ e) => built.push(e));
     }
     // 이미 로드된 지연 소스 병합분은 재구축에도 유지 (지연 로드 시 재수집 없음)
     for (const src of _SOURCES.values()) {
-        if (src.lazy && src.entries && src.entries.length) _searchIndex.push(...src.entries);
+        if (src.lazy && src.entries && src.entries.length) built.push(...src.entries);
     }
     const _bt = performance.now();
     _buildInvertedIndex();
@@ -236,26 +260,38 @@ function _getSearchIndex() {
 // 역색인 — 어절 토큰은 _tokenIndex로, 형태소 경계 어휘는 어절에서 증분 마이닝한다.
 // buildBoundaryVocab(일괄 마이닝)과 동일한 규칙을 토큰 단위 공급 함수로 나눠
 // 전체 구축(_buildInvertedIndex)과 지연 병합(_mergeLazyEntries)이 공유한다.
-/** 어절 1개를 형태소 어휘 상태에 반영 — 독립 어절 등록 + 접두 재사용 횟수 누적 */
+/**
+ * 어절 1개를 형태소 어휘 상태에 반영 — 독립 어절 등록 + 접두 재사용 횟수 누적
+ * @param {string} tok
+ */
 function _feedVocabToken(tok) {
     if (!tok || tok.length < 2) return;
-    _vocabWords.add(tok);
+    // 어휘 상태는 _buildInvertedIndex가 항상 먼저 초기화한다 (호출 경로 불변량)
+    const words = /** @type {Set.<string>} */ (_vocabWords);
+    const prefixUse = /** @type {Map.<string, number>} */ (_vocabPrefixUse);
+    const prefixes = /** @type {Set.<string>} */ (_vocabPrefixes);
+    words.add(tok);
     const seen = new Set();
     for (let i = 2; i < tok.length; i++) seen.add(tok.substring(0, i));
     for (const p of seen) {
-        const n = (_vocabPrefixUse.get(p) || 0) + 1;
-        _vocabPrefixUse.set(p, n);
-        if (n === 2) _vocabPrefixes.add(p); // 2회+ 재사용 접두가 형태소 후보
+        const n = (prefixUse.get(p) || 0) + 1;
+        prefixUse.set(p, n);
+        if (n === 2) prefixes.add(p); // 2회+ 재사용 접두가 형태소 후보
     }
 }
 
-/** 엔트리의 검색 텍스트 어절을 토큰 역색인과 형태소 어휘에 반영한다 */
+/**
+ * 엔트리의 검색 텍스트 어절을 토큰 역색인과 형태소 어휘에 반영한다
+ * @param {SearchDoc} entry
+ * @param {number} idx
+ */
 function _indexEntryTokens(entry, idx) {
+    const tokenIndex = /** @type {Map.<string, Set.<number>>} */ (_tokenIndex);
     for (const token of entry._searchText.split(/\s+/)) {
         if (token.length < 2) continue;
         // 어절 인덱스 (후보 축소 + 형태소 경계 판정의 토큰 컨텍스트)
-        if (!_tokenIndex.has(token)) _tokenIndex.set(token, new Set());
-        _tokenIndex.get(token).add(idx);
+        if (!tokenIndex.has(token)) tokenIndex.set(token, new Set());
+        /** @type {Set.<number>} */ (tokenIndex.get(token)).add(idx);
         _feedVocabToken(token);
     }
 }
@@ -265,7 +301,7 @@ function _buildInvertedIndex() {
     _vocabWords = new Set();
     _vocabPrefixUse = new Map();
     _vocabPrefixes = new Set();
-    _searchIndex.forEach((entry, idx) => _indexEntryTokens(entry, idx));
+    /** @type {SearchDoc[]} */ (_searchIndex).forEach((entry, idx) => _indexEntryTokens(entry, idx));
     // TS-16 — 도메인 어휘 주입: 코퍼스 빈도가 낮아 접두 마이닝(2회+)에 잡히지 않는
     // 어절도 DP 커버의 분해 단위가 된다. 공급자는 콘텐츠 계층이 등록한다 (용어집 등).
     for (const contrib of _VOCAB_CONTRIBUTORS) {
@@ -281,7 +317,12 @@ function _buildInvertedIndex() {
 const CANDIDATE_CACHE_MAX = 200; // 변형→후보 캐시 상한 (초과 시 전체 클리어)
 const PHRASE_BOOST = 60;         // 쿼리 전체가 인접 구문으로 매치될 때의 가산점 (제목 가산 50 위)
 
-/** 변형(용어) → 후보 항목 인덱스 Set — 캐시되며 인덱스 변형 시 무효화된다 */
+/**
+ * 변형(용어) → 후보 항목 인덱스 Set — 캐시되며 인덱스 변형 시 무효화된다
+ * @param {string} variant
+ * @param {SearchDoc[]} index
+ * @returns {Set.<number>}
+ */
 function _candidatesForVariant(variant, index) {
     let set = _candidateCache.get(variant);
     if (set) return set;
@@ -303,7 +344,12 @@ function _candidatesForVariant(variant, index) {
     return set;
 }
 
-/** 부분문자열 등장 횟수 — split() 배열 할당 대신 indexOf 루프 */
+/**
+ * 부분문자열 등장 횟수 — split() 배열 할당 대신 indexOf 루프
+ * @param {string} text
+ * @param {string} needle
+ * @returns {number}
+ */
 function _countOccurrences(text, needle) {
     let n = 0;
     let p = text.indexOf(needle);
@@ -329,6 +375,8 @@ function _countOccurrences(text, needle) {
 export function runUnifiedSearch(query, filter = 'all') {
     const _qt = performance.now();
     const index = _getSearchIndex();
+    // 인덱스 구축(_buildInvertedIndex)이 어휘를 항상 함께 초기화한다
+    const morph = /** @type {{words:Set.<string>, prefixes:Set.<string>, cover:Map.<string, boolean>}} */ (_morphVocab);
     const terms = query.split(/\s+/).filter(t => t.length > 0);
     /** @type {Record<string, object[]>} kind별 버킷 + weak (부분 일치 공통 티어) */
     const buckets = { weak: [] };
@@ -358,7 +406,7 @@ export function runUnifiedSearch(query, filter = 'all') {
         }
         // df = 이 그룹의 변형 중 하나라도 포함하는 문서 수
         groupIdf.push(Math.log(1 + index.length / (1 + groupSet.size)));
-        if (groupSet.size === 0) { failedTerms.push(group[0]); continue; }
+        if (groupSet.size === 0) { failedTerms.push(group[0] || ''); continue; }
         candidateIndices = candidateIndices === null
             ? groupSet
             : new Set([...candidateIndices].filter(/** @param {number} i */ (i) => groupSet.has(i)));
@@ -366,7 +414,7 @@ export function runUnifiedSearch(query, filter = 'all') {
 
     // 후보 없는 그룹이 있거나 교집합이 비면 AND 매치 불가 — 전체 스캔 생략
     const searchEntries = (failedTerms.length > 0 || !candidateIndices || candidateIndices.size === 0)
-        ? [] : [...candidateIndices].map(i => index[i]);
+        ? [] : [...candidateIndices].map(i => /** @type {*} */ (index[i]));
 
     for (const entry of searchEntries) {
         if (filter !== 'all' && filter !== entry.subjId) continue;
@@ -378,19 +426,19 @@ export function runUnifiedSearch(query, filter = 'all') {
         const head = String(entry.title || '').toLowerCase();
         let excluded = false;
         for (let gi = 0; gi < termGroups.length; gi++) {
-            const group = termGroups[gi];
+            const group = termGroups[gi] || [];
             let gBest = 0;
             let gTitleBoost = 0;
             let gHits = 0;
             for (const variant of group) {
-                const q = termHitQuality(entry._searchText, variant, _morphVocab);
+                const q = termHitQuality(entry._searchText, variant, morph);
                 if (q > gBest) gBest = q;
                 if (q > 0) {
                     const cnt = _countOccurrences(entry._searchText, variant);
                     gHits += (variant === group[0]) ? cnt : cnt * 0.5;
                 }
                 // 제목 가산은 경계 정렬 매치에만 — '석유화학'식 어절-중간 겹침은 가산 제외
-                if (termHitQuality(head, variant, _morphVocab) === 2) {
+                if (termHitQuality(head, variant, morph) === 2) {
                     gTitleBoost = Math.max(gTitleBoost, variant === group[0] ? 50 : 25);
                 }
             }
@@ -404,7 +452,7 @@ export function runUnifiedSearch(query, filter = 'all') {
         // 엔트리 필드를 그대로 얇게 복사해 _score를 부여 — 버킷은 엔트리 kind로 구분
         // (kind→표시 티어 매핑은 뷰 계층 몫 — 코어는 종류명을 모른다)
         const item = { ...entry, _score: hits + titleBoost + phraseBoost };
-        if (!allStrong) buckets.weak.push(item);
+        if (!allStrong) buckets.weak?.push(item);
         else (buckets[item.kind] = buckets[item.kind] || []).push(item);
     }
 

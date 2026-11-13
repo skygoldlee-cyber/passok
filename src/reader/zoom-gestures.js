@@ -21,6 +21,9 @@ const TAP_GROUP_PX = 30;
 export function bindZoomGestures(body, { getScale, setScale, getFitScale }) {
     if (!body || body.dataset.zoomGesturesBound) return;
     body.dataset.zoomGesturesBound = '1';
+    // 드래그 패닝의 키보드 대체 — 스크롤 가능 컨테이너에 포커스를 주면
+    // 화살표/PageUp·Down 키로 패닝이 네이티브 동작한다 (WCAG 2.5.7 대체의 일부).
+    if (body.tabIndex < 0) body.tabIndex = 0;
     /** @type {Map<number, {x:number, y:number}>} */
     const pts = new Map();
     /** @type {{startDist:number, startScale:number, startScrollL:number, startScrollT:number, startMidX:number, startMidY:number}|null} */
@@ -32,14 +35,15 @@ export function bindZoomGestures(body, { getScale, setScale, getFitScale }) {
     let lastTapY = 0;
 
     const minScale = () => Math.min(0.25, getFitScale() || 1);
-    const clampScale = (s) => Math.min(PINCH_MAX_SCALE, Math.max(minScale(), s));
+    const clampScale = (/** @type {number} */ s) => Math.min(PINCH_MAX_SCALE, Math.max(minScale(), s));
 
+    /** @returns {[{x:number,y:number},{x:number,y:number}]|null} */
     const twoPts = () => {
         const it = [...pts.values()];
-        return it.length >= 2 ? [it[0], it[1]] : null;
+        return it.length >= 2 ? /** @type {[{x:number,y:number},{x:number,y:number}]} */ ([it[0], it[1]]) : null;
     };
-    const midOf = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
-    const distOf = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);
+    const midOf = (/** @type {{x:number, y:number}} */ a, /** @type {{x:number, y:number}} */ b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+    const distOf = (/** @type {{x:number, y:number}} */ a, /** @type {{x:number, y:number}} */ b) => Math.hypot(b.x - a.x, b.y - a.y);
 
     body.addEventListener('pointerdown', (e) => {
         pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -86,14 +90,14 @@ export function bindZoomGestures(body, { getScale, setScale, getFitScale }) {
         }
     });
 
-    const release = (e) => {
+    const release = (/** @type {PointerEvent} */ e) => {
         const hadPan = pan;
         const hadPinch = !!pinch;
         pts.delete(e.pointerId);
         if (!twoPts()) {
             pinch = null;
             const rest = [...pts.values()];
-            pan = rest.length === 1 ? { lastX: rest[0].x, lastY: rest[0].y, moved: 0 } : null;
+            pan = rest.length === 1 && rest[0] ? { lastX: rest[0].x, lastY: rest[0].y, moved: 0 } : null;
         }
         // 더블탭 판정 — 핀치 없이 한 손가락을 짧게 두 번 탭
         if (e.type === 'pointerup' && pts.size === 0 && !hadPinch && (!hadPan || hadPan.moved < TAP_MOVE_PX)) {
@@ -111,4 +115,27 @@ export function bindZoomGestures(body, { getScale, setScale, getFitScale }) {
     };
     body.addEventListener('pointerup', release);
     body.addEventListener('pointercancel', release);
+}
+
+/**
+ * 드래그 패닝의 단일 포인터 대체 — 툴바의 `data-pan` 방향 버튼을 탭하면
+ * 본문을 뷰포트 비율만큼 스크롤한다. 드래그 동작 없이 한 번의 탭으로
+ * 이동할 수 있어 WCAG 2.2 2.5.7 (Dragging Movements)을 충족한다.
+ * @param {HTMLElement} body - bindZoomGestures가 바인딩된 스크롤 컨테이너
+ * @param {ParentNode|null} toolbar - `data-pan="up|down|left|right"` 버튼을 포함한 컨테이너
+ */
+export function bindZoomPanControls(body, toolbar) {
+    if (!body || !toolbar) return;
+    const STEP = 0.45;   // 뷰포트 대비 스크롤 비율
+    /** @type {Record<string, () => void>} */
+    const dirs = {
+        up: () => { body.scrollTop -= body.clientHeight * STEP; },
+        down: () => { body.scrollTop += body.clientHeight * STEP; },
+        left: () => { body.scrollLeft -= body.clientWidth * STEP; },
+        right: () => { body.scrollLeft += body.clientWidth * STEP; },
+    };
+    toolbar.querySelectorAll('[data-pan]').forEach((btn) => {
+        const fn = dirs[btn.getAttribute('data-pan') || ''];
+        if (fn) btn.addEventListener('click', fn);
+    });
 }

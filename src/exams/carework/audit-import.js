@@ -10,7 +10,7 @@ const _ITEM_RE = /항목|내용|지표|사항|질문|점검/;
 const _REF_RE = /근거|기준|비고|참고|출처|관련/;
 
 // 비표 텍스트의 섹션 제목 판정 — '■ 제목'·'【제목】'·'1. 제목'·'○○ 영역' 류
-const _plainSec = l => /^[■◆▶●]/.test(l) || /^【.+】$/.test(l) || /^\d+[.)、]\s*.{1,30}$/.test(l)
+const _plainSec = (/** @type {string} */ l) => /^[■◆▶●]/.test(l) || /^【.+】$/.test(l) || /^\d+[.)、]\s*.{1,30}$/.test(l)
     || (/(영역|분야)/.test(l) && l.length <= 15);
 
 /**
@@ -21,37 +21,40 @@ const _plainSec = l => /^[■◆▶●]/.test(l) || /^【.+】$/.test(l) || /^\d
  * @param {string[][]} [rows] 표 행
  * @param {string[]} [plainLines] 표 밖 텍스트 줄 (제목행은 섹션, 나머지는 항목)
  */
+/** @param {*[]} [rows] @param {*[]} [plainLines] */
 export function auditRowsToSections(rows = [], plainLines = []) {
+    /** @type {*[]} */
+    /** @type {*[]} */
     const secs = [];
     const dup = new Map();
-    const add = (title, text, ref = '') => {
+    const add = (/** @type {string|null} */ title, /** @type {string} */ text, /** @type {string|null} */ ref = '') => {
         const t = String(title || '').trim() || '기관 점검표';
         const v = String(text || '').trim();
         if (!v) return;
-        let s = secs.find(x => x.title === t);
+        let s = secs.find((/** @type {*} */ x) => x.title === t);
         if (!s) { s = { title: t, items: [] }; secs.push(s); }
         const k = `${t}|${v}`, n = dup.get(k) || 0;
         dup.set(k, n + 1);
         s.items.push({ id: `u_${sha256hex(`${k}|${n}`).slice(0, 8)}`, text: v, ref: String(ref || '').trim() });
     };
 
-    const rs = rows.map(r => r.map(c => String(c ?? '').trim()));
+    const rs = rows.map((/** @type {*} */ r) => r.map((/** @type {*} */ c) => String(c ?? '').trim()));
     if (rs.length) {
         const h = rs[0];
-        const si = h.findIndex(c => _SEC_RE.test(c));
-        const ii = h.findIndex(c => _ITEM_RE.test(c));
-        const ri = h.findIndex(c => _REF_RE.test(c));
+        const si = h.findIndex((/** @type {string} */ c) => _SEC_RE.test(c));
+        const ii = h.findIndex((/** @type {string} */ c) => _ITEM_RE.test(c));
+        const ri = h.findIndex((/** @type {string} */ c) => _REF_RE.test(c));
         const hasHeader = ii >= 0 || si >= 0;
-        const col0Vals = rs.map(r => r[0]).filter(Boolean);
+        const col0Vals = rs.map((/** @type {*[]} */ r) => r[0]).filter(Boolean);
         const col0Repeats = new Set(col0Vals).size < col0Vals.length; // 2열 무헤더: col0 반복 → 영역 열
-        const numbered = rs.every(r => !r[0] || /^[0-9]+$/.test(r[0])); // 3열+ 무헤더: col0 전부 번호 → 번호열
+        const numbered = rs.every((/** @type {*[]} */ r) => !r[0] || /^[0-9]+$/.test(r[0])); // 3열+ 무헤더: col0 전부 번호 → 번호열
         let lastSec = '기관 점검표';
         for (const [idx, r] of rs.entries()) {
             if (idx === 0 && hasHeader) continue;
-            if (r.every(c => !c)) continue;
+            if (r.every((/** @type {*} */ c) => !c)) continue;
             if (hasHeader) {
                 if (si >= 0 && r[si]) lastSec = r[si]; // 병합 셀 계승
-                const item = ii >= 0 ? r[ii] : r.filter((c, j) => j !== si && j !== ri).join(' ');
+                const item = ii >= 0 ? r[ii] : r.filter((/** @type {*} */ c, /** @type {number} */ j) => j !== si && j !== ri).join(' ');
                 add(lastSec, item, ri >= 0 ? r[ri] : '');
             } else if (r.length === 1) {
                 add(null, r[0]);

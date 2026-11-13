@@ -29,6 +29,7 @@ import { clearViewLeaveGuard } from '../../shell/router.js';
     * 정확히 반영되도록 합니다. (뽀모도로 타이머와 동일한 방식)
     ======================================================= */
 // @spec E-08 — 응시 중 화면 꺼짐 방지 (미지원·거부 시 무시)
+/** @type {*} */
 let _wakeLock = null;
 async function acquireWakeLock() {
     try { _wakeLock = await navigator.wakeLock?.request('screen') ?? null; } catch { _wakeLock = null; }
@@ -166,6 +167,7 @@ function updateOMRProgress() {
     }
 }
 
+/** @param {number} index */
 export function jumpToSimQuestion(index) {
     simState.currentIndex = index;
     renderSimQuestion();
@@ -200,7 +202,7 @@ export function renderSimQuestion() {
 
     if (q.type === 'choice' || q.type === 'combo') {
         const optionIndicators = ['①', '②', '③', '④', '⑤'];
-        q.options.forEach((optText, idx) => {
+        q.options.forEach((/** @type {*} */ optText, /** @type {number} */ idx) => {
             const ind = optionIndicators[idx] || String(idx + 1);
             const isSelected = (savedAns === ind);
 
@@ -222,7 +224,7 @@ export function renderSimQuestion() {
             container.appendChild(btn);
         });
     } else if (q.type === 'ox') {
-        q.options.forEach(optVal => {
+        q.options.forEach((/** @type {*} */ optVal) => {
             const isSelected = (savedAns === optVal);
             const btn = document.createElement('div');
             btn.className = `sim-option-item ${isSelected ? 'active' : ''}`;
@@ -291,6 +293,7 @@ export function renderSimQuestion() {
     updateOMRProgress();
 }
 
+/** @param {string} qId @param {*} value @param {boolean} [triggerRender] */
 export function saveSimAnswer(qId, value, triggerRender = true) {
     // PS-08 — 선택지 변경 추적: 기존 응답과 다르면 '망설임' 신호로 기록
     const prev = simState.userAnswers[qId];
@@ -308,15 +311,16 @@ export function saveSimAnswer(qId, value, triggerRender = true) {
 
 /**
  * 시뮬 복수정답형 응답 → 진술별 판정 도출 (선택 선지의 members = "참으로 판정한 집합")
- * @returns {Array<{sid, judgedCorrect, text, truth, conceptId}>|null}
+ * @returns {Array<{sid: *, judgedCorrect: boolean, text: *, truth: *, conceptId: *}>|null}
  */
+/** @param {*} q @param {*} userAns */
 function deriveComboJudgments(q, userAns) {
     if (!userAns || !Array.isArray(q.statements) || !Array.isArray(q.comboOptions)) return null;
     const idx = OPTION_INDICATORS.indexOf(userAns);
     const opt = idx >= 0 ? q.comboOptions[idx] : null;
     if (!opt) return null;
     const chosen = new Set(opt.members || []);
-    return q.statements.map(s => ({
+    return q.statements.map((/** @type {*} */ s) => ({
         sid: s.sid,
         judgedCorrect: chosen.has(s.id) === !!s.truth,
         text: s.text,
@@ -342,6 +346,7 @@ export function submitExam() {
 
     // 과목별 정답 및 총 문제수 집계용 (레지스트리 기반 동적 초기화)
     /** @type {Object<string,{score:number,total:number}>} */
+    /** @type {Object.<string,{score:number,total:number}>} */
     const subjectScores = {};
     const subjects = (getActiveRegistry() || {}).subjects || [];
     subjects.forEach(sub => {
@@ -396,10 +401,11 @@ export function submitExam() {
             subj = examIdToSubjectId(subj);
         }
 
-        if (subj && subjectScores[subj]) {
-            subjectScores[subj].total++;
+        const sBucket = subj ? subjectScores[subj] : null;
+        if (subj && sBucket) {
+            sBucket.total++;
             if (isCorrect) {
-                subjectScores[subj].score++;
+                sBucket.score++;
             }
             // 단원별 집계 — 교재 인용이 없는 문항은 '기타(참조자료)'로 묶음
             const chTitle = chapterForQuestion(q, subj, qc) || '기타 (법령·참조자료)';
@@ -414,11 +420,13 @@ export function submitExam() {
     clearSimDraft(); // 제출 시 임시 세션 제거
 
     // 과목별 정답률 계산
+    /** @type {Object.<string,number|null>} */
     const subjectRates = {};
     let hasSubjectData = false;
     Object.keys(subjectScores).forEach(subj => {
-        if (subjectScores[subj].total > 0) {
-            subjectRates[subj] = Math.round((subjectScores[subj].score / subjectScores[subj].total) * 100);
+        const ss = subjectScores[subj];
+        if (ss && ss.total > 0) {
+            subjectRates[subj] = Math.round((ss.score / ss.total) * 100);
             hasSubjectData = true;
         } else {
             subjectRates[subj] = null;

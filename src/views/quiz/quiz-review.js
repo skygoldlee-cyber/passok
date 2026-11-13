@@ -22,6 +22,7 @@ import { _beginQuizRun } from './quiz.js';
  * 헷갈린 카드 목록을 반환
  */
 function getWeakCardsList() {
+    /** @type {Array<Record<string, any>>} */
     const list = [];
 
     // 1. 일반 카드 복구 (인덱스 캐시 — weak-items.js)
@@ -39,7 +40,7 @@ function getWeakCardsList() {
         if (cardId.startsWith(WEAK_QUIZ_PREFIX)) {
             const resolved = resolveWrongQuiz(cardId);
             if (resolved) {
-                const { quiz: q, subjectId } = resolved;
+                const { quiz: q, subjectId } = /** @type {any} */ (resolved);
                 const subjectName = (window.STUDY_DATA || {})[subjectId].name;
                 list.push({
                     id: cardId,
@@ -59,7 +60,7 @@ function getWeakCardsList() {
                 const qNum = simId.qNum;
                 if (window.EXAM_DATA && window.EXAM_DATA[examId]) {
                     const exam = window.EXAM_DATA[examId];
-                    const q = exam.questions.find(quest => quest.num === qNum);
+                    const q = /** @type {*} */ (exam.questions.find((/** @type {*} */ quest) => quest.num === qNum));
                     if (q) {
                         const targetSubject = examIdToSubjectId(examId);
                         const subjectName = (window.STUDY_DATA && targetSubject && window.STUDY_DATA[targetSubject]) ? (window.STUDY_DATA || {})[targetSubject].name : '모의고사';
@@ -138,8 +139,8 @@ export function renderReviewList() {
     const causeSummary = computeWrongCauseSummary(state.wrongCauses);
     if (causeSummary.total > 0) {
         const dist = Object.entries(getWrongCauseLabels())
-            .filter(([k]) => causeSummary.counts[k] > 0)
-            .map(([k, label]) => `${label} ${causeSummary.counts[k]}`)
+            .filter(([k]) => ((/** @type {Object.<string,number>} */ (causeSummary.counts))[k] || 0) > 0)
+            .map(([k, label]) => `${label} ${(/** @type {Object.<string,number>} */ (causeSummary.counts))[k] || 0}`)
             .join(' · ');
         container.insertAdjacentHTML('beforeend', `
             <div class="wrong-cause-summary">
@@ -225,7 +226,7 @@ export function startWeakConceptQuiz() {
         if (st && st.w > 0 && st.cid) weakCids.add(st.cid);
     }
     const wrongIds = new Set(
-        Object.keys(state.quizResults || {}).filter(id => !state.quizResults[id].correct));
+        Object.keys(state.quizResults || {}).filter(id => !(state.quizResults[id] || {}).correct));
     // 오답 문항 자체의 conceptId도 약점으로 간주 — 혼동쌍 선정 범위 확장
     for (const d of Object.values(window.STUDY_DATA || {})) {
         for (const q of (d && d.quizzes) || []) {
@@ -237,7 +238,7 @@ export function startWeakConceptQuiz() {
         showToast('약점 개념 문항이 아직 없습니다 — 오답이 쌓이면 생성됩니다.', 'info');
         return;
     }
-    state.quiz.data = shuffle(items);
+    state.quiz.data = /** @type {Array<*>} */ (shuffle(items));
     _beginQuizRun();
 }
 
@@ -252,7 +253,7 @@ export async function startWeakGenQuiz() {
         return;
     }
     const wrongIds = new Set(
-        Object.keys(state.quizResults || {}).filter(id => !state.quizResults[id].correct));
+        Object.keys(state.quizResults || {}).filter(id => !(state.quizResults[id] || {}).correct));
     const poolTexts = [], wrongTexts = [];
     for (const d of Object.values(window.STUDY_DATA || {})) {
         for (const q of (d && d.quizzes) || []) {
@@ -284,8 +285,8 @@ export async function startWeakGenQuiz() {
         id: `ai_gen_${Date.now()}_${i}`,
         category: 'AI 생성',
         context: '[AI 생성 — 오류가 있을 수 있습니다 · 인용 근거 확인 권장]',
-        question: g.question, answer: g.answer,
-        options: g.options, type: 'single',
+        question: /** @type {*} */ (g).question, answer: /** @type {*} */ (g).answer,
+        options: /** @type {*} */ (g).options, type: 'single',
     }));
     _beginQuizRun();
 }
@@ -295,7 +296,7 @@ export function startWeakFocusQuiz() {
     if (weakCards.length === 0) return;
 
     if (state.reviewFilter && state.reviewFilter !== 'all') {
-        weakCards = weakCards.filter(c => c.subjectId === state.reviewFilter);
+        weakCards = weakCards.filter((/** @type {*} */ c) => c.subjectId === state.reviewFilter);
     }
 
     if (weakCards.length === 0) return;
@@ -304,7 +305,7 @@ export function startWeakFocusQuiz() {
         if (card.id.startsWith(WEAK_QUIZ_PREFIX)) {
             const resolved = resolveWrongQuiz(card.id);
             if (!resolved) return null;
-            const q = resolved.quiz;
+            const q = /** @type {*} */ (resolved.quiz);
             return {
                 id: card.id,
                 category: q.category,
@@ -322,7 +323,7 @@ export function startWeakFocusQuiz() {
             const qNum = simId.qNum;
             if (!window.EXAM_DATA || !window.EXAM_DATA[examId]) return null;
             const exam = window.EXAM_DATA[examId];
-            const q = exam.questions.find(quest => quest.num === qNum);
+            const q = /** @type {*} */ (exam.questions.find((/** @type {*} */ quest) => quest.num === qNum));
             if (!q) return null;
 
             return {
@@ -346,7 +347,7 @@ export function startWeakFocusQuiz() {
         }
     });
 
-    state.quiz.data = shuffle(weakList.filter(Boolean)).slice(0, 10);
+    state.quiz.data = shuffle(/** @type {import('../../core/types.js').Quiz[]} */ (weakList.filter(Boolean))).slice(0, 10);
     state.quiz.diagnostic = false;
     switchView('quiz-view', { scrollTop: true });
     _beginQuizRun();

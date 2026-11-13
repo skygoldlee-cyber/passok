@@ -15,8 +15,11 @@ import { docMdHead, mdTable, mdToHtml, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 export { careShare } from '../care-share.js';
 
+/** @param {string} id */
 const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/** @param {*} s */
+const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
+/** @type {*[]} */
 let _sections = [];
 
 function render() {
@@ -27,10 +30,10 @@ function render() {
     $('audit-custom-reset')?.classList.toggle('is-hidden', !custom);
     const c = loadChecks();
     const cov = auditCoverage({ clients: listClients(), logs: listCareLogs(), visits: listVisits(), handovers: listHandovers(), incidents: listIncidents() });
-    host.innerHTML = `<p class="care-trend-warn">📋 ${esc(cov.text)}</p>` + docHeadHtml('평가 체크리스트') + _sections.map(s => `
+    host.innerHTML = `<p class="care-trend-warn">📋 ${esc(cov.text)}</p>` + docHeadHtml('평가 체크리스트') + _sections.map((/** @type {*} */ s) => `
         <div class="care-audit-sec">
             <h3>${esc(s.title)}</h3>
-            ${s.items.map(i => `
+            ${s.items.map((/** @type {*} */ i) => `
                 <label class="care-audit-item">
                     <input type="checkbox" data-audit="${esc(i.id)}" ${c[i.id] ? 'checked' : ''}>
                     <span>${esc(i.text)}</span>
@@ -50,7 +53,7 @@ function render() {
 export function careAuditDocMd() {
     if (!_sections.length) return '';
     const c = loadChecks();
-    const rows = _sections.flatMap(s => s.items.map(i => [s.title, c[i.id] ? '✔' : '□', i.text, i.ref]));
+    const rows = _sections.flatMap((/** @type {*} */ s) => s.items.map((/** @type {*} */ i) => [s.title, c[i.id] ? '✔' : '□', i.text, i.ref]));
     return docMdHead('평가 체크리스트') + '\n' + renderToolBody('careAudit', { 점검표: mdTable(['영역', '점검', '항목', '근거'], rows) }) + docMdSign([['점검자', 'author'], ['기관장(확인)', 'confirmer']]);
 }
 
@@ -98,12 +101,12 @@ export async function careAuditFileLoad() {
         return;
     }
     const sections = auditRowsToSections(rows, lines);
-    const n = sections.reduce((a, s) => a + s.items.length, 0);
+    const n = sections.reduce((/** @type {number} */ a, /** @type {*} */ s) => a + s.items.length, 0);
     if (!n) { showToast('점검 항목을 찾지 못했습니다 — 표 또는 줄 단위 항목이 필요합니다.', 'error'); return; }
     // 적용 전 파싱 결과 확인 — 영역/항목 분할이 어긋나면 여기서 취소
     _showImportPreview(sections, async () => {
         saveCustomSections(sections);
-        _sections = await loadAuditSections();
+        _sections = (await loadAuditSections()) || [];
         _removeImportPreview();
         render();
         showToast(`기관 점검표 ${sections.length}개 영역 ${n}개 항목을 적용했습니다 — 같은 파일 재업로드 시 체크 상태가 유지됩니다.`);
@@ -115,6 +118,7 @@ function _removeImportPreview() {
 }
 
 /** 업로드 점검표 파싱 결과 검토 블록 — 적용/취소 버튼 (data-click 불가, 직접 바인딩) */
+/** @param {*[]} sections @param {() => void} onApply */
 function _showImportPreview(sections, onApply) {
     _removeImportPreview();
     const host = $('audit-list');
@@ -122,8 +126,8 @@ function _showImportPreview(sections, onApply) {
     box.id = 'audit-import-preview';
     const n = sections.reduce((a, s) => a + s.items.length, 0);
     box.innerHTML = `<h4 class="care-log-hint">불러온 점검표 확인 — ${sections.length}개 영역 ${n}개 항목</h4>` +
-        sections.map(s => `<div class="care-audit-sec"><h5>${esc(s.title)}</h5><ul>` +
-            s.items.map(i => `<li>${esc(i.text)}${i.ref ? ` <small>${esc(i.ref)}</small>` : ''}</li>`).join('') +
+        sections.map((/** @type {*} */ s) => `<div class="care-audit-sec"><h5>${esc(s.title)}</h5><ul>` +
+            s.items.map((/** @type {*} */ i) => `<li>${esc(i.text)}${i.ref ? ` <small>${esc(i.ref)}</small>` : ''}</li>`).join('') +
             '</ul></div>').join('') +
         '<div class="care-calc-actions"><button type="button" class="btn" id="audit-import-apply">적용</button>' +
         '<button type="button" class="btn btn-secondary" id="audit-import-cancel">취소</button></div>';
@@ -137,7 +141,7 @@ function _showImportPreview(sections, onApply) {
 export async function careAuditFileReset() {
     if (!await showConfirm('사용자 점검표를 삭제하고 기본 고시 점검표로 되돌릴까요?', '복원 확인')) return;
     clearCustomSections();
-    _sections = await loadAuditSections().catch(() => _sections); // 기본 로드 실패 시 현행 유지
+    _sections = (await loadAuditSections().catch(() => _sections)) || []; // 기본 로드 실패 시 현행 유지
     render();
     showToast('기본 고시 점검표로 복원했습니다.');
 }
@@ -165,7 +169,7 @@ export async function initCareAuditView() {
         }
     } catch { /* 미가입·오프라인 — 로컬 유지 */ }
     try {
-        _sections = await loadAuditSections();
+        _sections = (await loadAuditSections()) || [];
     } catch (e) {
         const host = $('audit-list');
         if (host) host.innerHTML = '<p class="care-calc-err">체크리스트를 불러오지 못했습니다.</p>';

@@ -10,7 +10,12 @@ import { getItem, setItem } from '../core/storage.js';
 import { getActiveRegistry } from '../core/exam-context.js';
 import { STORAGE_KEYS } from '../core/storage-keys.js';
 
-/** 판본 라벨이 새로운지 판정 — 미선언·동일 판본·기록 없는 환경은 false (순수 함수 — 테스트용) */
+/**
+ * 판본 라벨이 새로운지 판정 — 미선언·동일 판본·기록 없는 환경은 false (순수 함수 — 테스트용)
+ * @param {*} edition
+ * @param {*} seenEdition
+ * @returns {boolean}
+ */
 export function isTextbookEditionNew(edition, seenEdition) {
   return !!edition && edition !== seenEdition;
 }
@@ -28,7 +33,7 @@ export function checkTextbookEditionBanner() {
   }
   el.classList.remove('is-hidden');
   document.getElementById('textbook-edition-dismiss')?.addEventListener('click', () => {
-    setItem(STORAGE_KEYS.TEXTBOOK_EDITION_SEEN, edition);
+    setItem(STORAGE_KEYS.TEXTBOOK_EDITION_SEEN, /** @type {string} */ (edition));
     el.classList.add('is-hidden');
   }, { once: true });
 }

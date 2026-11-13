@@ -12,7 +12,7 @@
 | 디렉터리 | 내용 | 판본 의존 |
 |------|------|------|
 | `user/` | 학습자 문서 — `exam_strategy.md`(시험 공략), `subject1~4_numbers.md`(과목별 숫자 암기) | numbers 시리즈: textbook |
-| `business/` | 사업 기획·시장 조사·마케팅 — 사업기획서 v3.5(현행 기준서)·경쟁전략·판매업소 조사·홍보 의뢰 | none |
+| `business/` | 사업 기획·시장 조사·마케팅 — 사업기획서 v3.5(현행 기준서)·경쟁전략·판매업소 조사·홍보 영상·숏츠 시리즈 의뢰 | none |
 | `design/` | 시험 종속 설계 — FORMULA_OS_WORKFLOW·PRODUCT_DB·PRODUCT_VISION·AUDIT_REPORT·PRACTICAL_TOOLS | none |
 | `reference/` | 교재 종속 참조 — `NUMBERING_SYSTEM.md`·`TEXTBOOK_REFERENCE_MAPPING.md` | textbook |
 | `report_archive/` | 시점 스냅샷 보고서 + 대체된 전략·설계 원전 (앱 런타임·콘텐츠 미참조 — 소스 주석의 출처 인용은 허용) | `법령최신확인결과.md`만 refmat |

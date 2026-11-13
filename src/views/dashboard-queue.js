@@ -32,31 +32,32 @@ const MAX_PLAN_ITEMS = 2; // 주간 배정 큐 항목 상한 — 과목 나열�
  * 오늘 할 일 큐 생성 — 모든 추천 소스를 우선순위 병합 (TQ-01·TQ-02).
  * @param {Object} p
  * @param {string[]} [p.dueCardIds] FSRS 기한 도래 카드 id
- * @param {Array} [p.subjects] 과목 메타 [{key, name, stats}]
- * @param {Array} [p.recs] computeRecommendations 결과 (흡수 대상 — TQ-01)
- * @param {Array} [p.allocRemaining] 주간 배정 잔여 [{key,name,cardsLeft,quizzesLeft}]
+ * @param {Array<*>} [p.subjects] 과목 메타 [{key, name, stats}]
+ * @param {Array<*>} [p.recs] computeRecommendations 결과 (흡수 대상 — TQ-01)
+ * @param {Array<*>} [p.allocRemaining] 주간 배정 잔여 [{key,name,cardsLeft,quizzesLeft}]
  * @param {number} [p.reviewCount] 복습 대기(오답+헷갈림) 수
  * @param {number} [p.weakStatementCount] 취약 진술 수
  * @param {boolean} [p.dailyDone] 일일 챌린지 완료 여부
  * @param {number|null} [p.dday] 시험 D-day (미설정 null)
  * @param {string[]} [p.examRiskIds] 시험일 기억률 미달 카드 id — R_exam 오름차순·세션 상한 적용분 (D-19)
  * @param {boolean} [p.hasProgress] 학습 이력 존재 여부
- * @param {Array} [p.behindSubjects] 계획 밀림 과목 [{key,name,daysBehind}] — PS-03 우선순위 입력
+ * @param {Array<*>} [p.behindSubjects] 계획 밀림 과목 [{key,name,daysBehind}] — PS-03 우선순위 입력
  * @param {number} [p.unlearnedCount] 미학습 카드 수 — PS-03 우선순위 입력
- * @param {Object} [p.topCluster] 최다 오개념 클러스터 (weakClusters()[0] — PS-01·PS-10 클리닉 항목)
- * @param {Object} [p.flowResume] 개념 학습 이어하기 대상 {id,title,weak} — careFlow 시험 전용
+ * @param {*} [p.topCluster] 최다 오개념 클러스터 (weakClusters()[0] — PS-01·PS-10 클리닉 항목)
+ * @param {*} [p.flowResume] 개념 학습 이어하기 대상 {id,title,weak} — careFlow 시험 전용
  * @param {boolean} [p.flowCapable] 활성 시험의 개념 학습 플로우 보유 여부 — 첫 학습 제안 분기용
  * @returns {Array<{icon:string, color:string, title:string, reason:string,
- *   actions:Array<{click:string, arg?:string, args?:Array, label:string, icon:string, cls:string}>}>}
+ *   actions:Array<{click:string, arg?:string, args?:Array<*>, label:string, icon:string, cls:string}>}>}
  */
 export function buildTodayQueue(p = {}) {
+    /** @type {*[]} */
     const items = [];
     const used = new Set(); // `click:arg` 중복 방지 — 같은 실행을 두 번 권하지 않음
-    const subjName = (key) => {
+    const subjName = (/** @type {string} */ key) => {
         const s = (p.subjects || []).find(x => x.key === key);
         return s ? s.name : key;
     };
-    const push = (item) => {
+    const push = (/** @type {*} */ item) => {
         const key = item.actions[0] ? `${item.actions[0].click}:${item.actions[0].arg || ''}` : item.title;
         if (used.has(key)) return;
         used.add(key);
@@ -78,6 +79,7 @@ export function buildTodayQueue(p = {}) {
     // ① FSRS 기한 도래 — 시간 민감, 최우선
     const due = p.dueCardIds || [];
     if (due.length) {
+        /** @type {Object.<string,number>} */
         const bySubj = {};
         due.forEach(id => {
             const k = subjectKeyFromItemId(id);
@@ -99,11 +101,11 @@ export function buildTodayQueue(p = {}) {
         push({
             kind: 'flow',
             icon: 'fa-book-open-reader', color: 'var(--color-success)',
-            title: r.due ? `개념 학습 복습` : `개념 학습 이어하기`,
-            reason: r.due ? `${r.title} — 복습할 시간이 됐습니다`
-                : r.weak ? `${r.title} — 취약 표시된 개념입니다`
-                : `${r.title} — 진행 중인 단계부터 이어집니다`,
-            actions: [{ click: 'startConceptFlow', arg: r.id, label: '이어하기', icon: 'fa-play', cls: 'btn-primary' }]
+            title: (/** @type {*} */ (r)).due ? `개념 학습 복습` : `개념 학습 이어하기`,
+            reason: r.due ? `${(/** @type {*} */ (r)).title} — 복습할 시간이 됐습니다`
+                : (/** @type {*} */ (r)).weak ? `${(/** @type {*} */ (r)).title} — 취약 표시된 개념입니다`
+                : `${(/** @type {*} */ (r)).title} — 진행 중인 단계부터 이어집니다`,
+            actions: [{ click: 'startConceptFlow', arg: (/** @type {*} */ (r)).id, label: '이어하기', icon: 'fa-play', cls: 'btn-primary' }]
         });
     }
 
@@ -158,8 +160,8 @@ export function buildTodayQueue(p = {}) {
         push({
             kind: 'clinic',
             icon: 'fa-flask-vial', color: 'var(--color-warning)',
-            title: `오개념 클리닉: ${p.topCluster.label}`,
-            reason: `같은 개념 축 ${p.topCluster.size}개 진술에서 ${p.topCluster.totalWrong}회 오판 — 개념 단위 복습 권장`,
+            title: `오개념 클리닉: ${(/** @type {*} */ (p.topCluster)).label}`,
+            reason: `같은 개념 축 ${(/** @type {*} */ (p.topCluster)).size}개 진술에서 ${(/** @type {*} */ (p.topCluster)).totalWrong}회 오판 — 개념 단위 복습 권장`,
             actions: [{ click: 'switchView', args: ['analysis-view', { scrollTop: true }], label: '진단 보기', icon: 'fa-stethoscope', cls: 'btn-primary' }]
         });
     }
@@ -227,7 +229,7 @@ export function buildTodayQueue(p = {}) {
     });
     const behindPrio = new Map();
     let srsPrio = 0, weakPrio = 0;
-    personal.forEach(i => {
+    personal.forEach((/** @type {*} */ i) => {
         if (i.type === 'behind') behindPrio.set(i.payload.key, i.priority);
         else if (i.type === 'srs') srsPrio = i.priority;
         else if (i.type === 'weak') weakPrio = i.priority;
@@ -242,7 +244,7 @@ export function buildTodayQueue(p = {}) {
         prioMap.set(it, it.kind === 'alloc' ? (behindPrio.get(it.actions[0] && it.actions[0].arg) ?? 78)
             : it.kind === 'due' ? (srsPrio || 80)
             : it.kind === 'weak' ? (weakPrio || 60)
-            : (FIXED_PRIO[it.kind] ?? 40));
+            : (FIXED_PRIO[/** @type {keyof FIXED_PRIO} */ (it.kind)] ?? 40));
     });
     items.sort((a, b) => (prioMap.get(b) || 0) - (prioMap.get(a) || 0));
 
@@ -250,11 +252,12 @@ export function buildTodayQueue(p = {}) {
 }
 
 /** 직전 렌더의 큐 길이 — 완료 전이(>0→0) 시에만 축하 펄스를 1회 부착 (UX-FB-08) */
+/** @type {number|null} */
 let _prevQueueLen = null;
 
 /**
  * 입력 수집 + 큐 렌더 — 기존 weak-subject-recommendation 컨테이너 재사용 (TQ-03).
- * @param {Array} subjects 과목 메타 목록
+ * @param {Array<*>} subjects 과목 메타 목록
  */
 export function renderTodayQueue(subjects) {
     const recEl = document.getElementById('weak-subject-recommendation');
@@ -265,6 +268,7 @@ export function renderTodayQueue(subjects) {
     const dueCardIds = getDueCards();
 
     // 주간 배정 잔여 — 시험일 설정 시에만 계획 존재 (computeStudyPlan은 D-day 없으면 null)
+    /** @type {*[]} */
     let allocRemaining = [];
     const totalCards = subjects.reduce((s, x) => s + displayCounts(x).cards, 0);
     const plan = computeStudyPlan(totalCards - state.memorizedCards.size);
@@ -282,10 +286,10 @@ export function renderTodayQueue(subjects) {
             const cal = getStudyCalendar();
             const doneC = sumRecentCardsBySubject(cal);
             const doneQ = sumRecentQuizzesBySubject(cal);
-            allocRemaining = alloc.thisWeek.alloc.map(a => ({
+            allocRemaining = alloc.thisWeek.alloc.map((/** @type {*} */ a) => ({
                 key: a.key, name: a.name,
-                cardsLeft: Math.max(0, a.cards - (doneC[a.key] || 0)),
-                quizzesLeft: Math.max(0, (a.quizzes || 0) - (doneQ[a.key] || 0))
+                cardsLeft: Math.max(0, a.cards - (/** @type {Object.<string,number>} */ (doneC)[a.key] || 0)),
+                quizzesLeft: Math.max(0, (a.quizzes || 0) - (/** @type {Object.<string,number>} */ (doneQ)[a.key] || 0))
             })).filter(a => a.cardsLeft > 0 || a.quizzesLeft > 0);
         }
     }
@@ -306,7 +310,7 @@ export function renderTodayQueue(subjects) {
     // 1일치 미만 잔여는 주 초반 정상 배정 잔여이므로 밀림으로 취급하지 않는다
     // (≥2일치 = 실질 계획 지연이 있을 때만 최우선 승격 — 정상 잔여는 기존 순위 유지)
     const dailyCards = Math.max(1, getStudyGoals().dailyCards || 1);
-    const behindSubjects = allocRemaining.map(a => ({
+    const behindSubjects = allocRemaining.map((/** @type {*} */ a) => ({
         key: a.key, name: a.name,
         daysBehind: Math.ceil((a.cardsLeft + (a.quizzesLeft || 0)) / dailyCards)
     })).filter(s => s.daysBehind >= 2);
@@ -359,7 +363,7 @@ export function renderTodayQueue(subjects) {
     }
 
     // 추천 효과 추적 (AN-06) — 기존 엔진 출력 기준선 유지
-    const nameOf = (k) => { const s = subjects.find(x => x.key === k); return s ? s.name : k; };
+    const nameOf = (/** @type {string} */ k) => { const s = subjects.find((/** @type {*} */ x) => x.key === k); return s ? s.name : k; };
     const effect = evaluateRecommendationEffect(counts, nameOf);
     snapshotRecommendations(recs, counts);
 

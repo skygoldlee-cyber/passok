@@ -5,8 +5,9 @@ import { getAuthSession } from '../../../auth-sync/supabase-client.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast, setFieldError } from '../../../ui-utils.js';
 
-const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $ = (/** @type {string} */ id) => document.getElementById(id);
+const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
+/** @type {import("../facility.js").FacilityMembership|null} */
 let _membership = null;
 
 async function render() {
@@ -34,7 +35,7 @@ async function render() {
         host.innerHTML = '<p class="care-calc-err">관리책임자 전용입니다 — 멤버는 "기관가입" 뷰를 이용하세요.</p>';
         return;
     }
-    const f = m.facilities || {};
+    const f = /** @type {*} */ (m.facilities) || {};
     const members = await listMembers(m.facility_id).catch(() => []);
     host.innerHTML = `
         <div class="care-calc-form">
@@ -43,7 +44,7 @@ async function render() {
             ${f.invite_code ? `<p>초대 코드: <strong class="care-card-cat">${esc(f.invite_code)}</strong> — 요양보호사에게 전달</p>` : ''}
         </div>
         <div class="care-audit-item"><h3>멤버 ${members.length}명</h3>
-            ${members.map(x => `<p>${esc(x.user_id.slice(0,8))}… · ${esc(ROLES[x.role] || x.role)}</p>`).join('')}
+            ${members.map((/** @type {*} */ x) => `<p>${esc(x.user_id.slice(0,8))}… · ${esc((/** @type {Object.<string,string>} */ (ROLES))[x.role] || x.role)}</p>`).join('')}
         </div>
         <div class="care-calc-form">
             <h3>외부 수출 webhook (선택)</h3>

@@ -22,12 +22,13 @@ export function listClients() {
  * @param {string} [id] - 있으면 해당 항목 갱신 (수정 플로우)
  * @returns {{ok:boolean, error?:string, id?:string}}
  */
+/** @param {*} entry @param {string|undefined} [id] */
 export function saveClient(entry, id) {
     const items = listClients();
     if (id) {
-        const next = items.map(x => (x.id === id ? { ...x, ...entry } : x));
+        const next = items.map((/** @type {*} */ x) => (x.id === id ? { ...x, ...entry } : x));
         setJSON(KEY, next);
-        const it = next.find(x => x.id === id);
+        const it = next.find((/** @type {*} */ x) => x.id === id);
         if (it) void _pushClient(it).catch(() => {});
         return { ok: true, id };
     }
@@ -42,6 +43,7 @@ export function saveClient(entry, id) {
 
 // — CO-11/14/15: 기관 명부 공유 — 서버에는 name+room만 (나머지 필드는 멤버 로컬) —
 
+/** @param {*} item */
 async function _pushClient(item) {
     const r = await pushState({
         docType: 'client', client: item.name || '', recordDate: todayKey(),
@@ -78,12 +80,14 @@ export async function syncFacilityClients() {
     }
 }
 
+/** @param {string} id */
 export function removeClient(id) {
-    setJSON(KEY, listClients().filter(x => x.id !== id));
+    setJSON(KEY, listClients().filter((/** @type {*} */ x) => x.id !== id));
     return { ok: true };
 }
 
 /** 저장 + 오류 표시 — 무료 한도 초과 시 업그레이드 안내 */
+/** @param {*} entry @param {string|undefined} [id] */
 export function addClient(entry, id) {
     proFeatureNotice('care_client_save', '대상자 등록');
     const r = saveClient(entry, id);
@@ -93,6 +97,7 @@ export function addClient(entry, id) {
 
 /** CSV 병합 — 성명 일치 시 갱신(서류·필드 병합), 없으면 신규 등록.
  * @returns {{ok:boolean, added:number, updated:number, skipped:number}} */
+/** @param {*[]} records */
 export function upsertClients(records) {
     const items = listClients();
     let added = 0, updated = 0, skipped = 0;

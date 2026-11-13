@@ -59,10 +59,10 @@ export function loadFlashcards() {
     // 카드 필터링
     let cards = subjData.cards;
     if (fcConfig.keyOnly) {
-        cards = cards.filter(c => c.isKey);
+        cards = cards.filter((/** @type {*} */ c) => c.isKey);
     }
     if (fcConfig.difficultyFilter && fcConfig.difficultyFilter !== 'all') {
-        cards = cards.filter(c => c.difficulty === fcConfig.difficultyFilter);
+        cards = cards.filter((/** @type {*} */ c) => c.difficulty === fcConfig.difficultyFilter);
     }
 
     // 중요도 내림차순 정렬 (기본) 또는 랜덤 셔플
@@ -120,6 +120,7 @@ export function renderFlashcard() {
     }
 
     const card = fcConfig.data[fcConfig.currentIndex];
+    if (!card) return;
 
     // 마크업 데이터 주입
     if (termEl) termEl.textContent = card.term;
@@ -133,7 +134,7 @@ export function renderFlashcard() {
     if (backCatEl) backCatEl.textContent = card.category || '';
 
     // 카드 타입 배지 표시
-    const typeLabel = card.cardType ? (CARD_TYPE_LABELS[card.cardType] || card.cardType) : '';
+    const typeLabel = card.cardType ? (CARD_TYPE_LABELS[/** @type {keyof CARD_TYPE_LABELS} */ (card.cardType)] || card.cardType) : '';
     if (frontTypeEl) {
         frontTypeEl.textContent = typeLabel;
         frontTypeEl.setAttribute('data-type', card.cardType || 'definition');
@@ -179,7 +180,7 @@ export function renderFlashcard() {
         const el = document.getElementById(id);
         if (!el) return;
         const ivEl = document.getElementById(`${id.slice(0, -4)}-interval`);
-        if (ivEl) ivEl.textContent = `${intervals[i]}일`;
+        if (ivEl) ivEl.textContent = `${intervals[i] ?? 0}일`;
         const active = lastRating ? lastRating === i + 1
             : (state.weakCards.has(card.id) ? i === 0
                 : state.memorizedCards.has(card.id) ? i === 3 : false);

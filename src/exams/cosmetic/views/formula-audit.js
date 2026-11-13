@@ -36,11 +36,12 @@ const AUDIT_LOG_MAX = 20;      // 보고서 출력 이력 상한 (FO-63)
    ======================================================= */
 
 /** ① 법규 준수 체크리스트 — 활성 세트 전 항목 + 점검일 + 근거 문서 라벨 */
+/** @param {*} set @param {*} checked */
 function collectChecklist(set, checked) {
   let done = 0; let total = 0;
-  const groups = set.sections.map(sec => ({
+  const groups = set.sections.map((/** @type {*} */ sec) => ({
     title: sec.title,
-    items: sec.items.map(it => {
+    items: sec.items.map((/** @type {*} */ it) => {
       total++;
       const at = checked[it.id];
       if (at) done++;
@@ -49,7 +50,7 @@ function collectChecklist(set, checked) {
         note: it.note || '',
         done: !!at,
         doneAt: at ? fmtLocalDateTime(at).slice(0, 10) : null,
-        refs: (it.refs || []).map(k => (LAW_DOCS[k] ? LAW_DOCS[k].label : k)).filter(Boolean),
+        refs: (it.refs || []).map((/** @type {string} */ k) => ((/** @type {Object.<string,*>} */ (LAW_DOCS))[k] ? (/** @type {Object.<string,*>} */ (LAW_DOCS))[k].label : k)).filter(Boolean),
       };
     }),
   }));
@@ -91,7 +92,7 @@ function collectAdlint() {
     at: s.at || '',
     text: text.slice(0, ADLINT_TEXT_MAX),
     truncated: text.length > ADLINT_TEXT_MAX,
-    hits: s.hits.map(h => ({
+    hits: s.hits.map((/** @type {*} */ h) => ({
       term: h.term || '', category: h.category || '',
       label: h.label || '', suggestion: h.suggestion || '',
     })),
@@ -105,9 +106,9 @@ function collectFormulas() {
     return { id: 'formulas', title: '포뮬러 규정 검증', summary: '기록 없음 — 저장된 포뮬러 없음', empty: true };
   }
   const index = getIndex();
-  const items = formulas.map(f => {
+  const items = formulas.map((/** @type {*} */ f) => {
     const { summary } = checkFormulaItems(
-      (f.ingredients || []).map(i => ({ name: i.name, concentration: i.concentration })), index);
+      (f.ingredients || []).map((/** @type {*} */ i) => ({ name: i.name, concentration: i.concentration })), index);
     const changed = countChangedStandards(f, index);
     const stab = evaluateStability(f.ingredients || [], index, {
       formulation: f.customer && f.customer.formulation,
@@ -191,7 +192,7 @@ function collectCustomers() {
       logCount: logs.length,
       lastDate: logs.length && logs[logs.length - 1].date ? logs[logs.length - 1].date : '',
       recent: logs.slice(-CONSULT_RECENT_MAX).reverse()
-        .map(l => ({ date: l.date || '', text: l.text || '' })),
+        .map((/** @type {*} */ l) => ({ date: l.date || '', text: l.text || '' })),
     };
   });
   return {
@@ -232,22 +233,23 @@ export function listAuditLog() {
 }
 
 /** 섹션별 데이터 기준일 추출 — 이력에 "언제 기준 데이터인지" 스냅샷 병기 (개선 ③) */
+/** @param {*} d */
 function sectionFreshness(d) {
   const fresh = {};
-  const latest = arr => arr.filter(Boolean).sort().pop() || '';
-  for (const s of d.sections) {
+  const latest = (/** @type {*[]} */ arr) => arr.filter(Boolean).sort().pop() || '';
+  for (const s of /** @type {*[]} */ (d.sections)) {
     if (s.empty) continue;
     if (s.id === 'checklist') {
-      const ats = (s.groups || []).flatMap(g => (g.items || []).map(it => it.doneAt));
+      const ats = (s.groups || []).flatMap((/** @type {*} */ g) => (g.items || []).map((/** @type {*} */ it) => it.doneAt));
       fresh.checklist = latest(ats);
     } else if (s.id === 'adlint' && s.at) {
       fresh.adlint = fmtLocalDateTime(s.at).slice(0, 10);
     } else if (s.id === 'batches' && s.latestAt) {
       fresh.batches = fmtLocalDateTime(s.latestAt).slice(0, 10);
     } else if (s.id === 'adverse') {
-      fresh.adverse = latest((s.recent || []).map(a => a.reportedAt || a.occurredAt)).slice(0, 10);
+      fresh.adverse = latest((s.recent || []).map((/** @type {*} */ a) => a.reportedAt || a.occurredAt)).slice(0, 10);
     } else if (s.id === 'customers') {
-      fresh.customers = latest((s.rows || []).map(r => r.lastDate)).slice(0, 10);
+      fresh.customers = latest((s.rows || []).map((/** @type {*} */ r) => r.lastDate)).slice(0, 10);
     }
   }
   return fresh;
@@ -255,10 +257,10 @@ function sectionFreshness(d) {
 
 /**
  * 출력 이력 1건 기록 — auditPrintReport가 수집 직후 호출.
- * @param {object} d - collectAuditReportData() 반환값
+ * @param {*} d - collectAuditReportData() 반환값
  */
 export function recordAuditLog(d) {
-  const checklist = d.sections.find(s => s.id === 'checklist');
+  const checklist = d.sections.find((/** @type {*} */ s) => s.id === 'checklist');
   const entry = {
     at: d.generatedAt,
     id: d.id || '',            // FO-66 — 출력물↔이력 대조용 문서 식별자
@@ -269,6 +271,7 @@ export function recordAuditLog(d) {
     total: checklist ? checklist.total : 0,
     sections: d.sections.length,
     fresh: sectionFreshness(d),
+    saved: false,
   };
   const log = [entry, ...listAuditLog()].slice(0, AUDIT_LOG_MAX);
   entry.saved = setJSON(STORAGE_KEYS.FORMULA_AUDIT_LOG, log);
@@ -286,15 +289,15 @@ export function recordAuditLog(d) {
  * @param {Date} [now] - 기준 시각 (테스트 주입용)
  */
 export function collectAuditReportData(now) {
-  const biz = BIZ_TYPES[getBizType()] || BIZ_TYPES.custom;
-  const set = CHECKLIST_SETS[bizChecklistSet(biz.id)] || CHECKLIST_SETS.custom;
+  const biz = (/** @type {Object.<string,*>} */ (BIZ_TYPES))[getBizType()] || BIZ_TYPES.custom;
+  const set = (/** @type {Object.<string,*>} */ (CHECKLIST_SETS))[bizChecklistSet(biz.id)] || CHECKLIST_SETS.custom;
   const checked = loadChecks(set);
 
   /** @type {Array<object>} */
   const sections = [];
   // 섹션 게이트 — 패널 가시(bizVisible)면 미실시도 '기록 없음'으로 표기,
   // 패널이 숨겨져도 잔존 데이터가 있으면 감사 증적이므로 비대상 표기로 포함한다.
-  const pushIf = (panel, s) => {
+  const pushIf = (/** @type {string} */ panel, /** @type {*} */ s) => {
     if (bizVisible(panel, biz.id)) { sections.push(s); return; }
     if (!s.empty) { s.summary += ' — 현재 사업 유형 비대상 잔존 데이터'; sections.push(s); }
   };
@@ -313,7 +316,7 @@ export function collectAuditReportData(now) {
   const generatedAt = localDateTime(now instanceof Date ? now : new Date());
   const fingerprintSource = JSON.stringify({
     biz: biz.id, set: set.key || set.label,
-    sections: sections.map(s => ({ id: s.id, summary: s.summary, empty: s.empty })),
+    sections: sections.map((/** @type {*} */ s) => ({ id: s.id, summary: s.summary, empty: s.empty })),
   });
   const hash = fnv1aHex(fingerprintSource);
   const seq = String(listAuditLog().length + 1).padStart(3, '0');

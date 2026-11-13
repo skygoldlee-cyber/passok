@@ -19,7 +19,7 @@ const DAYS_KEEP = 90; // days 맵 상한 — 저장량 제한
 /** 유료가치 판정 기준 — 기능 액션 합계가 이 횟수에 도달하면 유료가치 인정 (ROAD-P1 착수 근거) */
 export const PRO_VALUE_THRESHOLD = 20;
 
-/** 액션 키 → 표시 라벨 (유료가치 후보 기능과 SUBSCRIPTION_ROADMAP 표 대응) */
+/** 액션 키 → 표시 라벨 (유료가치 후보 기능과 SUBSCRIPTION_ROADMAP 표 대응) @type {Object.<string, string>} */
 const ACTION_LABELS = {
     weak_to_textbook: '오답 → 교재 근거 보기',
     weak_to_card: '오답 → 복습 노트',
@@ -42,9 +42,9 @@ const ACTION_LABELS = {
     pro_moment: 'Pro 모멘트 카드 표시 (ROAD-P6)', // 'pro_moment:<moment>' 접두사 키
 };
 
-/** 액션 키 → 표시 라벨 — `:` 접미 키는 접두사(버킷) 라벨로 해석 (UX-MET-04) */
+/** 액션 키 → 표시 라벨 — `:` 접미 키는 접두사(버킷) 라벨로 해석 (UX-MET-04) @param {string} key */
 export function actionLabel(key) {
-    return ACTION_LABELS[key] || ACTION_LABELS[key.split(':')[0]] || key;
+    return ACTION_LABELS[key] || ACTION_LABELS[key.split(':')[0] || ''] || key;
 }
 
 /**
@@ -77,6 +77,7 @@ function _ownerId() {
     return id;
 }
 
+/** @param {string} bucket 'views'|'actions' @param {string} key */
 function _bump(bucket, key) {
     if (!key) return;
     const d = _load();
@@ -95,10 +96,10 @@ function _bump(bucket, key) {
     safeSetItem(STORAGE_KEYS.USAGE_STATS, JSON.stringify(d));
 }
 
-/** 뷰 진입 카운트 — navigation.js의 switchView에서 호출 */
+/** 뷰 진입 카운트 — navigation.js의 switchView에서 호출 @param {string} viewId */
 export function trackView(viewId) { _bump('views', viewId); }
 
-/** 기능 액션 카운트 — 유료가치 후보 기능의 호출부에서 호출 */
+/** 기능 액션 카운트 — 유료가치 후보 기능의 호출부에서 호출 @param {string} key */
 export function trackAction(key) {
     _bump('actions', key);
     // 핵심 학습 행동 이벤트 (UX-MET-06) — VALUE_ACTIONS 액션 발생 시 KPI 퍼널용
@@ -167,6 +168,7 @@ function getValueActionTotal() {
         .reduce((s, [, n]) => s + n, 0);
 }
 
+/** @param {string|null|undefined} iso */
 function _fmtDate(iso) {
     // 저장값은 ISO(UTC) 타임스탬프 — slice(0,10)은 UTC 날짜라 KST 00~09시에
     // 하루 전으로 표시되므로 로컬 날짜로 변환한다
@@ -181,10 +183,11 @@ function _fmtDate(iso) {
  */
 export async function showUsageStats() {
     const d = _load();
+    /** @type {Record<string, {title?: string}>} */
     let titles = {};
     try {
         const { getViewTitles } = await import('../shell/router.js');
-        titles = getViewTitles(getActiveRegistry()) || {};
+        titles = getViewTitles(getActiveRegistry() || {}) || {};
     } catch (e) { titles = {}; }
 
     const viewRows = Object.entries(d.views).sort((a, b) => b[1] - a[1])
@@ -258,7 +261,7 @@ export async function showUsageStats() {
         }
     });
     overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
-    const onKey = (e) => {
+    const onKey = (/** @type {KeyboardEvent} */ e) => {
         if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); close(); }
     };
     document.addEventListener('keydown', onKey);

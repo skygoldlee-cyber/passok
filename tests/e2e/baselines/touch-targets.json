@@ -1,10 +1,5 @@
 [
   "dashboard-view|button.dday-set-btn",
-  "exam-view|button#integrated-exam-btn.exam-btn-sim",
-  "exam-view|button.exam-btn-sim",
-  "exam-view|button.exam-btn-sim",
-  "exam-view|button.exam-btn-sim",
-  "exam-view|button.exam-btn-sim",
   "textbook-reader-view|button#reader-toolbar-toggle.reader-toolbar-toggle",
   "textbook-reader-view|button#reader-toc-mobile-btn.reader-tool-btn",
   "exam-select-view|button.exam-btn-link",

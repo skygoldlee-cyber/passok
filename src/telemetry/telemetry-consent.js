@@ -34,7 +34,7 @@ export function isAutomatedRuntime() {
     return false;
 }
 
-/** 텔레메트리 동의 토글 — 거부 시 '1' 저장, 허용 시 제거 */
+/** 텔레메트리 동의 토글 — 거부 시 '1' 저장, 허용 시 제거 @param {boolean} allowed */
 export function setTelemetryAllowed(allowed) {
     try {
         if (allowed) safeSetItem(STORAGE_KEYS.TELEMETRY_OPT_OUT, '0');

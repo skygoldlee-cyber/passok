@@ -122,7 +122,7 @@ export function setupPWAInstall() {
                     const resp = await fetch(manifestHref, { cache: 'no-cache' });
                     manifestStatus = resp.status + ' ' + resp.statusText;
                     if (resp.ok) {
-                        const json = await resp.json();
+                        const json = /** @type {{icons?: Array<{purpose?: string}>}} */ (await resp.json());
                         anyIcon = (json.icons || []).some(ic => !ic.purpose || /(^|\s)any(\s|$)/.test(ic.purpose));
                     }
                 } catch (e) { manifestStatus = '실패: ' + (e instanceof Error ? e.message : String(e)); }

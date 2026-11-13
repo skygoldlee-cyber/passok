@@ -100,7 +100,7 @@ export function submitCalcAnswer() {
         calcState.correctCount++;
     }
 
-    addCalcHistoryItem(currentQ.question, currentQ.type, userVal, currentQ.answer, isCorrect, currentQ.unit);
+    addCalcHistoryItem(currentQ.question ?? '', currentQ.type ?? '', userVal, currentQ.answer, isCorrect, currentQ.unit ?? '');
 
     const solutionBody = document.getElementById('calc-solution-body');
     const solutionPanel = document.getElementById('calc-solution-panel');
@@ -153,7 +153,7 @@ function renderCalcHistory() {
     }
 
     listContainer.innerHTML = '';
-    history.forEach(item => {
+    history.forEach((/** @type {*} */ item) => {
         const badgeColor = item.isCorrect ? 'var(--color-success)' : 'var(--color-danger)';
         const badgeBg = item.isCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
         const dateStr = fmtLocalDateTime(item.date).slice(5);
@@ -177,6 +177,7 @@ function renderCalcHistory() {
     });
 }
 
+/** @param {string} questionText @param {string} type @param {*} userVal @param {*} correctAns @param {boolean} isCorrect @param {string} unit */
 function addCalcHistoryItem(questionText, type, userVal, correctAns, isCorrect, unit) {
     const historyJSON = safeGetItem(STORAGE_KEYS.CALC_HISTORY);
     let history = [];

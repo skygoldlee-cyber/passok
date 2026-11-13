@@ -18,13 +18,14 @@ export const KT_DEFAULTS = Object.freeze({
 /** 숙달 졸업 기준 — 전통적 BKT 관례 P(L) ≥ 0.9 (설계 §3.2) */
 export const KT_GRADUATE_PL = 0.9;
 
+/** @param {*} v @param {number} dflt @param {number} min @param {number} max */
 function _num(v, dflt, min, max) {
     return (typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max) ? v : dflt;
 }
 
 /**
  * manifest study.kt 오버라이드를 기본값과 병합 — 범위 밖·누락 값은 기본값 유지.
- * @param {Object|undefined} ov manifest study.kt 블록
+ * @param {*|undefined} ov manifest study.kt 블록
  * @returns {{P0:number, T:number, G:{mcq:number, ox:number}, S:number}}
  */
 export function resolveKtParams(ov) {
@@ -65,6 +66,7 @@ export function bktUpdate(pL, correct, p) {
  *   사전으로 승계할 때 사용 (설계 §3.2 — v1 증거 집계 계층 위의 정밀화)
  * @returns {number} 단원 숙달 확률 P(L)
  */
+/** @param {*[]} observations @param {*} params @param {number} [p0] */
 export function computeUnitMastery(observations, params, p0) {
     const prm = params || KT_DEFAULTS;
     let p = (typeof p0 === 'number' && p0 >= 0 && p0 <= 1) ? p0 : prm.P0;

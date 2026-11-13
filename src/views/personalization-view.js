@@ -31,7 +31,7 @@ const KT_FIT_MIN_SEQ = 30;
 
 /**
  * 영속된 개인 피팅 결과 — { w20?, ktT?:{subj:T}, ktP0?:{subj:P0}, fittedAt? }
- * @returns {Object}
+ * @returns {Object.<string,*>}
  */
 export function getPersonalFit() {
     try {
@@ -43,6 +43,7 @@ export function getPersonalFit() {
     }
 }
 
+/** @param {*} fit */
 function _saveFit(fit) {
     safeSetItem(STORAGE_KEYS.PERSONAL_FIT, JSON.stringify(fit));
 }
@@ -70,7 +71,7 @@ export function subjectJudgmentSeqs() {
         const simM = qid.match(/^(.+)_q\d+$/);
         const resolved = resolveWrongQuiz(qid);
         const subj = (resolved && resolved.subjectId) || subjectKeyFromItemId(qid)
-            || (simM && examIdToSubjectId(simM[1])) || '';
+            || (simM && examIdToSubjectId(simM[1] || '')) || '';
         if (!subj) continue;
         const arr = seqs.get(subj) || [];
         arr.push(e.ok === 1);
@@ -106,7 +107,10 @@ export function refitPersonalModels(force = false) {
     }
 
     // PS-11 — 과목별 정오 시퀀스가 충분하면 T 격자 탐색 (+ 기본 T 대비 우도 개선 기록)
-    const ktT = {}, ktGain = {};
+    /** @type {Object.<string,*>} */
+    const ktT = {};
+    /** @type {Object.<string,number>} */
+    const ktGain = {};
     for (const [subj, seq] of subjectJudgmentSeqs()) {
         if (seq.length >= KT_FIT_MIN_SEQ) {
             const k = fitKT(seq);
@@ -128,6 +132,7 @@ export function refitPersonalModels(force = false) {
  * 입문 진단(배치 퀴즈) 정답률 → 과목별 BKT P0 영속 (PS-07).
  * @param {Object} rates {subjKey: 0..1}
  */
+/** @param {Object.<string,number>} rates */
 export function recordDiagnosticP0(rates) {
     const fit = getPersonalFit();
     fit.ktP0 = { ...(fit.ktP0 || {}), ...inferP0(rates) };
@@ -145,6 +150,7 @@ export function personalKtParams() {
     const kt = DataLoader.registry && DataLoader.registry.study && DataLoader.registry.study.kt;
     const base = resolveKtParams(kt);
     const fit = getPersonalFit();
+    /** @type {Object.<string,*>} */
     const bySubject = {};
     for (const subj of new Set([...Object.keys(fit.ktP0 || {}), ...Object.keys(fit.ktT || {})])) {
         bySubject[subj] = {
@@ -197,6 +203,6 @@ export function suggestWrongCauseKey(obs) {
     if (!tag || tag === 'unknown') return null;
     const labels = getWrongCauseLabels();
     if (labels[tag]) return tag;
-    const mapped = _INFER_TO_CAUSE[tag];
+    const mapped = _INFER_TO_CAUSE[/** @type {keyof _INFER_TO_CAUSE} */ (tag)];
     return (mapped && labels[mapped]) ? mapped : null;
 }

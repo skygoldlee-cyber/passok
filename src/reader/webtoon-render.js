@@ -65,10 +65,10 @@ export function parseStorySlots(md) {
             const sp = !/^["“]/.test(l0) ? _speakerOf(l) : null;
             if (sp) { beats.push({ t: 'speaker', text: l, who: sp }); continue; }
             const q = l.match(/^["“](.+)["”]$/);
-            beats.push(q ? { t: 'line', text: q[1] } : { t: 'scene', text: l });
+            beats.push(q ? { t: 'line', text: q[1] || '' } : { t: 'scene', text: l });
         }
         const titleBeat = beats.find(b => b.t === 'title') || beats[0];
-        if (beats.length) out.push({ beats, title: titleBeat.text.slice(0, 20), chapter });
+        if (beats.length) out.push({ beats, title: (titleBeat?.text || '').slice(0, 20), chapter });
         re.lastIndex = end;
     }
     return out;
@@ -92,7 +92,10 @@ export function whoSays(text, prev) {
  * @param {Record<string, { name: string, side: string, img?: string }>} [chars]
  */
 export function renderSlotHtml(slot, chars = DEFAULT_CHARS) {
-    let prev = null, pending = null;
+    /** @type {string|null} */
+    let prev = null;
+    /** @type {string|null} */
+    let pending = null;
     return slot.beats.map(b => {
         if (b.t === 'title') return `<div class="wb-scene wb-scene-title">${esc(b.text)}</div>`;
         if (b.t === 'speaker') { pending = b.who || whoSays(b.text, prev); return ''; }
@@ -104,7 +107,7 @@ export function renderSlotHtml(slot, chars = DEFAULT_CHARS) {
         const who = pending || whoSays(b.text, prev);
         prev = who;
         pending = null;
-        const c = chars[who] || chars.mentor || DEFAULT_CHARS.mentor;
+        const c = /** @type {*} */ (chars[who] || chars.mentor || DEFAULT_CHARS.mentor);
         const av = c.img
             ? `<img class="wb-avatar" src="${esc(c.img)}" alt="${esc(c.name)}">`
             : `<span class="wb-avatar wb-avatar-initial">${esc(c.name.slice(0, 1))}</span>`;

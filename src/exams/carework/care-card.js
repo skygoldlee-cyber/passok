@@ -1,6 +1,7 @@
 // src/exams/carework/care-card.js — 상황별 대처 카드 데이터
 // @spec none — 시험 전용 도메인 데이터 (DA-13)
 // 카드 본문은 content/exams/carework/실무/care_cards.json — 정적 데이터 번들
+/** @type {*[]|null} */
 let _cards = null;
 
 export async function loadCareCards() {
@@ -11,6 +12,7 @@ export async function loadCareCards() {
     return _cards;
 }
 
+/** @param {*[]} cards @param {string} id */
 export function cardById(cards, id) {
-    return (cards || []).find(c => c.id === id) || null;
+    return (cards || []).find((/** @type {*} */ c) => c.id === id) || null;
 }

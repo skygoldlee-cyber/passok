@@ -15,43 +15,11 @@ export function populateSubjectSelects() {
 
     // 1. Flashcard subject select
     const fcSelect = /** @type {HTMLSelectElement|null} */ (document.getElementById('fc-subject-select'));
-    if (fcSelect) {
-        const prevVal = fcSelect.value || state.flashcards.subject;
-        fcSelect.innerHTML = '';
-        subjects.forEach(subj => {
-            const option = document.createElement('option');
-            option.value = subj.key;
-            option.textContent = subj.name;
-            fcSelect.appendChild(option);
-        });
-        if (prevVal && fcSelect.querySelector(`option[value="${prevVal}"]`)) {
-            fcSelect.value = prevVal;
-            state.flashcards.subject = prevVal;
-        } else if (subjects.length > 0) {
-            fcSelect.value = subjects[0].key;
-            state.flashcards.subject = subjects[0].key;
-        }
-    }
+    if (fcSelect) _fillSubjectSelect(fcSelect, subjects, state.flashcards);
 
     // 2. Quiz subject select
     const quizSelect = /** @type {HTMLSelectElement|null} */ (document.getElementById('quiz-subject-select'));
-    if (quizSelect) {
-        const prevVal = quizSelect.value || state.quiz.subject;
-        quizSelect.innerHTML = '';
-        subjects.forEach(subj => {
-            const option = document.createElement('option');
-            option.value = subj.key;
-            option.textContent = subj.name;
-            quizSelect.appendChild(option);
-        });
-        if (prevVal && quizSelect.querySelector(`option[value="${prevVal}"]`)) {
-            quizSelect.value = prevVal;
-            state.quiz.subject = prevVal;
-        } else if (subjects.length > 0) {
-            quizSelect.value = subjects[0].key;
-            state.quiz.subject = subjects[0].key;
-        }
-    }
+    if (quizSelect) _fillSubjectSelect(quizSelect, subjects, state.quiz);
 
     // 3. Review view filter buttons
     const reviewFilterGroup = document.getElementById('review-filter-group');
@@ -59,16 +27,7 @@ export function populateSubjectSelects() {
         reviewFilterGroup.innerHTML = `
             <button class="btn btn-secondary filter-btn active" data-filter="all" data-click="setReviewFilter" data-arg="all" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; border-radius: 4px; background: var(--color-primary-fill); border-color: var(--color-primary-fill); color: var(--color-on-brand);">전체</button>
         `;
-        subjects.forEach((subj, idx) => {
-            const shortName = subj.shortName || subj.name;
-            const btn = document.createElement('button');
-            btn.className = 'btn btn-secondary filter-btn';
-            btn.setAttribute('data-filter', subj.key);
-            btn.setAttribute('data-click', 'setReviewFilter');
-            btn.setAttribute('data-arg', subj.key);
-            btn.textContent = `${idx + 1}과목 (${shortName})`;
-            reviewFilterGroup.appendChild(btn);
-        });
+        _subjectFilterBtns(reviewFilterGroup, subjects, 'setReviewFilter', 'btn btn-secondary filter-btn');
     }
 
     // 4. Textbook filter buttons
@@ -77,17 +36,41 @@ export function populateSubjectSelects() {
         tbFilterGroup.innerHTML = `
             <button class="btn btn-secondary active-filter" data-filter="all" data-click="setTextbookFilter" data-arg="all">전체 과목</button>
         `;
-        subjects.forEach((subj, idx) => {
-            const shortName = subj.shortName || subj.name;
-            const btn = document.createElement('button');
-            btn.className = 'btn btn-secondary';
-            btn.setAttribute('data-filter', subj.key);
-            btn.setAttribute('data-click', 'setTextbookFilter');
-            btn.setAttribute('data-arg', subj.key);
-            btn.textContent = `${idx + 1}과목 (${shortName})`;
-            tbFilterGroup.appendChild(btn);
-        });
+        _subjectFilterBtns(tbFilterGroup, subjects, 'setTextbookFilter', 'btn btn-secondary');
     }
+}
+
+/** 과목 셀렉트 채우기 — 기존 선택값 유지, 없으면 첫 과목으로 폴백. @param {HTMLSelectElement} select @param {*[]} subjects @param {{subject:string|null}} stateBag */
+function _fillSubjectSelect(select, subjects, stateBag) {
+    const prevVal = select.value || stateBag.subject;
+    select.innerHTML = '';
+    subjects.forEach(subj => {
+        const option = document.createElement('option');
+        option.value = subj.key;
+        option.textContent = subj.name;
+        select.appendChild(option);
+    });
+    if (prevVal && select.querySelector(`option[value="${prevVal}"]`)) {
+        select.value = prevVal;
+        stateBag.subject = prevVal;
+    } else if (subjects.length > 0) {
+        select.value = subjects[0]?.key || '';
+        stateBag.subject = subjects[0]?.key || null;
+    }
+}
+
+/** 과목 필터 버튼 채우기 — 그룹 요소에 과목 버튼을 순서대로 추가. @param {Element} group @param {*[]} subjects @param {string} clickName @param {string} btnClass */
+function _subjectFilterBtns(group, subjects, clickName, btnClass) {
+    subjects.forEach((subj, idx) => {
+        const shortName = subj.shortName || subj.name;
+        const btn = document.createElement('button');
+        btn.className = btnClass;
+        btn.setAttribute('data-filter', subj.key);
+        btn.setAttribute('data-click', clickName);
+        btn.setAttribute('data-arg', subj.key);
+        btn.textContent = `${idx + 1}과목 (${shortName})`;
+        group.appendChild(btn);
+    });
 }
 
 const EXAM_BADGE_COLORS = ['badge-cyan', 'badge-violet', 'badge-emerald', 'badge-amber', 'badge-rose', 'badge-indigo'];
@@ -101,47 +84,71 @@ export function populateExamCards() {
     const subjects = registry.subjects;
     const exams = registry.exams;
     const simHistory = getSimResultsHistory();
+    /** @type {Object.<string, string>} */
     const badgeColors = {};
     subjects.forEach((sub, idx) => {
-        badgeColors[sub.key] = EXAM_BADGE_COLORS[idx % EXAM_BADGE_COLORS.length];
+        badgeColors[sub.key] = EXAM_BADGE_COLORS[idx % EXAM_BADGE_COLORS.length] || '';
     });
 
     container.innerHTML = '';
     subjects.forEach((subj, idx) => {
-        const subjExams = exams.filter(e => e.subject === subj.key);
-        if (subjExams.length === 0) return;
+        const cardHtml = _subjectCardHtml(registry, subj, idx, badgeColors[subj.key] || 'badge-gray', simHistory);
+        if (cardHtml) container.insertAdjacentHTML('beforeend', cardHtml);
+    });
 
-        const totalQuestions = subjExams.reduce((sum, e) => sum + (e.stats && e.stats.questions || 0), 0);
-        const badgeColor = badgeColors[subj.key] || 'badge-gray';
+    // 주관식 연습 카드 — manifest.written[] 선언 + writtenPractice 기능 플래그 (WP-01~06)
+    if (hasFeature('writtenPractice')) {
+        (registry.written || []).forEach(w => {
+            container.insertAdjacentHTML('beforeend', _writtenCardHtml(w));
+        });
+    }
 
-        // 문제집 버튼: 예상 문제집(선다형+단답형 원본) + ㄱㄴㄷ 조합 문제집(드릴 번들 런타임 렌더링)
-        const comboTotal = DataLoader.getComboCount(subj.order);
-        const bookBtnsHtml = subjExams.map((exam, partIdx) => {
-            const pdfLabel = subjExams.length > 1
-                ? `${partIdx + 1}부 PDF`
-                : `예상 문제집${totalQuestions ? ` (${totalQuestions}제)` : ''}`;
-            return `                                    <button data-click="ExamViewer.openExam" data-arg="${contentPath(`문제은행/${exam.file}`)}" class="exam-btn-link"><i class="fa-solid fa-file-pdf"></i> ${pdfLabel}</button>`;
-        }).join('\n');
-        const comboBookBtn = `                                    <button data-click="ExamViewer.openCombo" data-arg="${subj.order}" class="exam-btn-link"><i class="fa-solid fa-file-lines"></i> ㄱㄴㄷ 조합 문제집${comboTotal ? ` (${comboTotal}제)` : ''} <span class="pro-badge" data-pro-feature="combo_set">유료</span></button>`;
+    // 기출·보충 문제집 카드 — manifest.pastExams[] 선언 (객관식 ### Q → ExamViewer)
+    _renderPastExamCards(container, registry.pastExams || []);
 
-        // 모의고사 피커 — 실전(선다형+단답형) / ㄱㄴㄷ 조합 두 그룹의 문항 수 칩
-        // 프리셋은 실제 풀보다 작을 때만 표시, "전체"는 실제 문항 수 표기
-        const realChipsHtml = subjExams.map((exam, partIdx) => {
-            const label = subjExams.length > 1 ? `${partIdx + 1}부 ` : '';
-            const count = (exam.stats && exam.stats.questions) || 0;
-            return [20, 40]
-                .filter(n => n < count)
-                .map(n => `<button class="exam-btn-sim combo-count-chip" data-click="startMockExamSim" data-arg="${exam.key}:${n}">${label}${n}문</button>`)
-                .concat(`<button class="exam-btn-sim combo-count-chip" data-click="startMockExamSim" data-arg="${exam.key}">${label}전체 ${count}문</button>`)
-                .join('');
-        }).join('');
-        const comboChips = [20, 40, 60]
-            .filter(n => !comboTotal || n < comboTotal)
-            .map(n => `<button class="exam-btn-sim combo-count-chip" data-click="startComboMockExam" data-arg="${idx + 1}:${n}">${n}문</button>`)
-            .concat(`<button class="exam-btn-sim combo-count-chip" data-click="startComboMockExam" data-arg="${idx + 1}">${comboTotal ? `전체 ${comboTotal}문` : '전체'}</button>`)
+    // 플랜이 이미 로드됐다면 새로 그린 배지에도 무료/유료 표시 반영
+    refreshProBadges(container);
+    _updateExamViewTexts(registry, subjects, exams, simHistory);
+}
+
+/**
+ * 과목 카드 HTML 1장 — 문제집 쌍 + 모의고사 피커 + 응시 요약. 표시할 시험이 없으면 null.
+ * @param {*} registry @param {*} subj @param {number} idx @param {string} badgeColor @param {*[]} simHistory
+ * @returns {string|null}
+ */
+function _subjectCardHtml(registry, subj, idx, badgeColor, simHistory) {
+    const subjExams = /** @type {*[]} */ (registry.exams || []).filter((e) => e.subject === subj.key);
+    if (subjExams.length === 0) return null;
+    const totalQuestions = subjExams.reduce((sum, e) => sum + (e.stats && e.stats.questions || 0), 0);
+
+    // 문제집 버튼: 예상 문제집(선다형+단답형 원본) + ㄱㄴㄷ 조합 문제집(드릴 번들 런타임 렌더링)
+    const comboTotal = DataLoader.getComboCount(subj.order);
+    const bookBtnsHtml = subjExams.map((exam, partIdx) => {
+        const pdfLabel = subjExams.length > 1
+            ? `${partIdx + 1}부 PDF`
+            : `예상 문제집${totalQuestions ? ` (${totalQuestions}제)` : ''}`;
+        return `                                    <button data-click="ExamViewer.openExam" data-arg="${contentPath(`문제은행/${exam.file}`)}" class="exam-btn-link"><i class="fa-solid fa-file-pdf"></i> ${pdfLabel}</button>`;
+    }).join('\n');
+    const comboBookBtn = `                                    <button data-click="ExamViewer.openCombo" data-arg="${subj.order}" class="exam-btn-link"><i class="fa-solid fa-file-lines"></i> ㄱㄴㄷ 조합 문제집${comboTotal ? ` (${comboTotal}제)` : ''} <span class="pro-badge" data-pro-feature="combo_set">유료</span></button>`;
+
+    // 모의고사 피커 — 실전(선다형+단답형) / ㄱㄴㄷ 조합 두 그룹의 문항 수 칩
+    // 프리셋은 실제 풀보다 작을 때만 표시, "전체"는 실제 문항 수 표기
+    const realChipsHtml = subjExams.map((exam, partIdx) => {
+        const label = subjExams.length > 1 ? `${partIdx + 1}부 ` : '';
+        const count = (exam.stats && exam.stats.questions) || 0;
+        return [20, 40]
+            .filter(n => n < count)
+            .map(n => `<button class="exam-btn-sim combo-count-chip" data-click="startMockExamSim" data-arg="${exam.key}:${n}">${label}${n}문</button>`)
+            .concat(`<button class="exam-btn-sim combo-count-chip" data-click="startMockExamSim" data-arg="${exam.key}">${label}전체 ${count}문</button>`)
             .join('');
+    }).join('');
+    const comboChips = [20, 40, 60]
+        .filter(n => !comboTotal || n < comboTotal)
+        .map(n => `<button class="exam-btn-sim combo-count-chip" data-click="startComboMockExam" data-arg="${idx + 1}:${n}">${n}문</button>`)
+        .concat(`<button class="exam-btn-sim combo-count-chip" data-click="startComboMockExam" data-arg="${idx + 1}">${comboTotal ? `전체 ${comboTotal}문` : '전체'}</button>`)
+        .join('');
 
-        const allBtnsHtml = `                                <div class="exam-btn-pair">
+    const allBtnsHtml = `                                <div class="exam-btn-pair">
 ${bookBtnsHtml}
 ${comboBookBtn}
                                     <small class="exam-btn-caption">선다형+단답형 예상문제 · ㄱㄴㄷ 조합 자동 변환</small>
@@ -157,16 +164,16 @@ ${comboBookBtn}
                                     </div>
                                 </div>`;
 
-        const btnsClass = 'grid-btns-2'; // 문제집 쌍 + 모의고사 피커 쌍 — 항상 2열
+    const btnsClass = 'grid-btns-2'; // 문제집 쌍 + 모의고사 피커 쌍 — 항상 2열
 
-        // 과목별 모의고사 응시 요약 — 실전 시험(subjectN)만 집계 (통합·조합 응시 제외)
-        const examKeys = new Set(subjExams.map(e => e.key));
-        const attempts = simHistory.filter(h => examKeys.has(h.examId));
-        const progressHtml = attempts.length
-            ? `                            <div class="exam-card-progress"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> 모의고사 ${attempts.length}회 · 최근 ${attempts[attempts.length - 1].rate}% · 최고 ${Math.max(...attempts.map(a => a.rate))}%</div>\n`
-            : '';
+    // 과목별 모의고사 응시 요약 — 실전 시험(subjectN)만 집계 (통합·조합 응시 제외)
+    const examKeys = new Set(subjExams.map(e => e.key));
+    const attempts = simHistory.filter(h => examKeys.has(h.examId));
+    const progressHtml = attempts.length
+        ? `                            <div class="exam-card-progress"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> 모의고사 ${attempts.length}회 · 최근 ${attempts[attempts.length - 1]?.rate}% · 최고 ${Math.max(...attempts.map(a => a.rate))}%</div>\n`
+        : '';
 
-        const cardHtml = `                        <div class="exam-card-item">
+    return `                        <div class="exam-card-item">
                             <div class="exam-card-badge ${badgeColor}">${idx + 1}과목</div>
                             <h4 class="exam-card-title">${subj.name}</h4>
 ${progressHtml}
@@ -174,15 +181,12 @@ ${progressHtml}
 ${allBtnsHtml}
                             </div>
                         </div>`;
+}
 
-        container.insertAdjacentHTML('beforeend', cardHtml);
-    });
-
-    // 주관식 연습 카드 — manifest.written[] 선언 + writtenPractice 기능 플래그 (WP-01~06)
-    if (hasFeature('writtenPractice')) {
-        (registry.written || []).forEach(w => {
-            const count = (w.stats && w.stats.questions) || 0;
-            const cardHtml = `                        <div class="exam-card-item">
+/** 주관식 연습 카드 HTML 1장. @param {*} w @returns {string} */
+function _writtenCardHtml(w) {
+    const count = (w.stats && w.stats.questions) || 0;
+    return `                        <div class="exam-card-item">
                             <div class="exam-card-badge badge-indigo">주관식</div>
                             <h4 class="exam-card-title">${esc(w.title)}</h4>
                             <p class="exam-card-desc">${esc(w.desc || '서술·계산형 문항 — 모범답안·채점기준 대조 자기채점')}</p>
@@ -193,45 +197,50 @@ ${allBtnsHtml}
                                 </div>
                             </div>
                         </div>`;
-            container.insertAdjacentHTML('beforeend', cardHtml);
-        });
-    }
+}
 
-    // 기출·보충 문제집 카드 — manifest.pastExams[] 선언 (객관식 ### Q → ExamViewer)
-    //   kind=past 는 회차별 그룹 카드, kind=supplement 는 개별 보충 카드
-    const pastExams = registry.pastExams || [];
-    if (pastExams.length) {
-        const groups = new Map();
-        const supplements = [];
-        for (const w of pastExams) {
-            if (w.kind === 'supplement') { supplements.push(w); continue; }
-            const gm = (w.file || '').match(/_(\d+)회_/) || (w.title || '').match(/제?(\d+)회/);
-            const g = gm ? gm[1] : '기타';
-            if (!groups.has(g)) groups.set(g, []);
-            groups.get(g).push(w);
-        }
-        const sortedGroups = [...groups.entries()]
-            .sort((a, b) => (parseInt(a[0], 10) || 999) - (parseInt(b[0], 10) || 999));
-        for (const [round, items] of sortedGroups) {
-            const btnsHtml = items.map(w => {
-                const label = String(w.title || '')
-                    .replace(/제?\d+회/g, '').replace(/\(\d{4}\)/g, '').replace(/\d{4}/g, '')
-                    .replace(/기출/g, '').replace(/[_—-]+/g, ' ').replace(/\s+/g, ' ').trim() || '전체';
-                const count = (w.stats && w.stats.questions) || 0;
-                return `                                    <button data-click="ExamViewer.openExam" data-arg="${contentPath(`문제은행/${w.file}`)}" class="exam-btn-link"><i class="fa-solid fa-file-lines"></i> ${esc(label)}${count ? ` (${count}제)` : ''}</button>`;
-            }).join('\n');
-            const cardHtml = `                        <div class="exam-card-item">
+/** 기출·보충 문제집 카드 렌더 — kind=past 는 회차별 그룹 카드, kind=supplement 는 개별 보충 카드. @param {Element} container @param {*[]} pastExams */
+function _renderPastExamCards(container, pastExams) {
+    if (!pastExams.length) return;
+    const groups = new Map();
+    const supplements = [];
+    for (const w of pastExams) {
+        if (w.kind === 'supplement') { supplements.push(w); continue; }
+        const gm = (w.file || '').match(/_(\d+)회_/) || (w.title || '').match(/제?(\d+)회/);
+        const g = gm ? gm[1] : '기타';
+        if (!groups.has(g)) groups.set(g, []);
+        groups.get(g).push(w);
+    }
+    const sortedGroups = [...groups.entries()]
+        .sort((a, b) => (parseInt(a[0], 10) || 999) - (parseInt(b[0], 10) || 999));
+    for (const [round, items] of sortedGroups) {
+        const btnsHtml = items.map(_pastItemBtnHtml).join('\n');
+        container.insertAdjacentHTML('beforeend', `                        <div class="exam-card-item">
                             <div class="exam-card-badge badge-amber">기출</div>
                             <h4 class="exam-card-title">제${esc(round)}회 기출</h4>
                             <div class="exam-card-btns grid-btns-2">
 ${btnsHtml}
                             </div>
-                        </div>`;
-            container.insertAdjacentHTML('beforeend', cardHtml);
-        }
-        supplements.forEach(w => {
-            const count = (w.stats && w.stats.questions) || 0;
-            const cardHtml = `                        <div class="exam-card-item">
+                        </div>`);
+    }
+    supplements.forEach(w => {
+        container.insertAdjacentHTML('beforeend', _supplementCardHtml(w));
+    });
+}
+
+/** 회차 그룹 안 기출 문제집 버튼 1개. @param {*} w @returns {string} */
+function _pastItemBtnHtml(w) {
+    const label = String(w.title || '')
+        .replace(/제?\d+회/g, '').replace(/\(\d{4}\)/g, '').replace(/\d{4}/g, '')
+        .replace(/기출/g, '').replace(/[_—-]+/g, ' ').replace(/\s+/g, ' ').trim() || '전체';
+    const count = (w.stats && w.stats.questions) || 0;
+    return `                                    <button data-click="ExamViewer.openExam" data-arg="${contentPath(`문제은행/${w.file}`)}" class="exam-btn-link"><i class="fa-solid fa-file-lines"></i> ${esc(label)}${count ? ` (${count}제)` : ''}</button>`;
+}
+
+/** 보충 문제집 카드 HTML 1장. @param {*} w @returns {string} */
+function _supplementCardHtml(w) {
+    const count = (w.stats && w.stats.questions) || 0;
+    return `                        <div class="exam-card-item">
                             <div class="exam-card-badge badge-gray">보충</div>
                             <h4 class="exam-card-title">${esc(w.title)}</h4>
                             <p class="exam-card-desc">${esc(w.desc || '자체 제작 보충 문항')}</p>
@@ -239,19 +248,14 @@ ${btnsHtml}
                                 <button data-click="ExamViewer.openExam" data-arg="${contentPath(`문제은행/${w.file}`)}" class="exam-btn-link"><i class="fa-solid fa-file-lines"></i> 문제집 보기${count ? ` (${count}제)` : ''}</button>
                             </div>
                         </div>`;
-            container.insertAdjacentHTML('beforeend', cardHtml);
-        });
-    }
+}
 
-    // 플랜이 이미 로드됐다면 새로 그린 배지에도 무료/유료 표시 반영
-    refreshProBadges(container);
-
-    // 정적 텍스트 동적 치환 (manifest 기반)
+/** 정적 텍스트 동적 치환 (manifest 기반) — 서브타이틀 + 통합 모의고사 카드. @param {*} registry @param {*[]} subjects @param {*[]} exams @param {*[]} simHistory */
+function _updateExamViewTexts(registry, subjects, exams, simHistory) {
     const totalAllQuestions = exams.reduce((sum, e) => sum + (e.stats && e.stats.questions || 0), 0);
     const subjCounts = subjects.map((s) => {
         const subjExams = exams.filter(e => e.subject === s.key);
-        const count = subjExams.reduce((sum, e) => sum + (e.stats && e.stats.questions || 0), 0);
-        return count;
+        return subjExams.reduce((sum, e) => sum + (e.stats && e.stats.questions || 0), 0);
     });
     const subtitleEl = document.getElementById('exam-view-subtitle');
     const purposeOverride = (registry.uiText && registry.uiText.exam && registry.uiText.exam.purpose) || null;
@@ -259,38 +263,53 @@ ${btnsHtml}
         const countStr = subjCounts.join('·');
         subtitleEl.textContent = purposeOverride || `교재 인용 기반 ${totalAllQuestions}제 문제은행(과목별 ${countStr}제)으로 과목별 모의고사를 보고, 학습안내서로 핵심을 요약할 수 있습니다.`;
     }
+    _updateIntegratedExamCard(registry, simHistory);
+}
 
-    // 통합 모의고사 제목/버튼 동적 치환 — 비시험 팩(integratedExam 미선언)은 카드 자체를 숨긴다
+/** 통합 모의고사 제목/버튼/응시 요약 치환 — 비시험 팩(integratedExam 미선언)은 카드 자체를 숨긴다. @param {*} registry @param {*[]} simHistory */
+function _updateIntegratedExamCard(registry, simHistory) {
     const integratedConfig = registry.integratedExam ? registry.integratedExam.questionsPerSubject : null;
     const integratedCard = document.getElementById('integrated-exam-card');
     if (integratedCard) integratedCard.classList.toggle('is-hidden', !integratedConfig);
-    if (integratedConfig) {
-        const integratedTotal = Object.values(integratedConfig).reduce((a, b) => a + b, 0);
-        const examTimeMin = (registry.integratedExam && registry.integratedExam.examTimeMin) || integratedTotal;
-        const intUi = (registry.uiText && registry.uiText.integrated) || {};
-        const titleEl = document.getElementById('integrated-exam-title');
-        if (titleEl) titleEl.innerHTML = `${esc(intUi.title || `통합 실전 모의고사`)} (${esc(integratedTotal)}제)`;
-        const descEl = integratedCard && integratedCard.querySelector('.highlight-card-desc');
-        if (descEl && intUi.desc) descEl.textContent = intUi.desc;
-        const btnEl = document.getElementById('integrated-exam-btn');
-        if (btnEl) btnEl.innerHTML = `<i class="fa-solid fa-clock" aria-hidden="true"></i> ${esc(intUi.btn || '통합 모의고사 시작')} (${esc(examTimeMin)}분)`;
-        // 응시 요약 — 최근/최고 정답률 + 이어풀기 가능 여부 표시
-        const statsEl = document.getElementById('integrated-exam-stats');
-        if (statsEl) {
-            const attempts = simHistory.filter(h => h.examId === 'integrated');
-            const parts = [];
-            if (attempts.length) {
-                const best = Math.max(...attempts.map(a => a.rate));
-                parts.push(`응시 ${attempts.length}회 · 최근 ${attempts[attempts.length - 1].rate}% · 최고 ${best}%`);
-            }
-            try {
-                const draft = JSON.parse(safeGetItem(STORAGE_KEYS.SIM_DRAFT_SESSION) || 'null');
-                if (draft && draft.examId === 'integrated') parts.push('진행 중인 응시 있음 — 대시보드에서 이어풀기');
-            } catch (e) { /* draft 파싱 실패는 무시 */ }
-            statsEl.textContent = parts.join(' · ');
-            statsEl.classList.toggle('is-hidden', parts.length === 0);
-        }
+    if (!integratedConfig) return;
+    const integratedTotal = Object.values(integratedConfig).reduce((a, b) => a + b, 0);
+    _updateIntegratedLabels(registry, integratedCard, integratedTotal);
+    // 응시 요약 — 최근/최고 정답률 + 이어풀기 가능 여부 표시
+    const statsEl = document.getElementById('integrated-exam-stats');
+    if (statsEl) _updateIntegratedStats(statsEl, simHistory);
+}
+
+/** 통합 모의고사 제한시간(분) 해석 — 미선언 시 문항 수를 그대로 사용. @param {*} registry @param {number} integratedTotal */
+function _integratedExamTimeMin(registry, integratedTotal) {
+    return (registry.integratedExam && registry.integratedExam.examTimeMin) || integratedTotal;
+}
+
+/** 통합 모의고사 카드의 제목·설명·버튼 라벨 치환. @param {*} registry @param {Element|null} integratedCard @param {number} integratedTotal */
+function _updateIntegratedLabels(registry, integratedCard, integratedTotal) {
+    const examTimeMin = _integratedExamTimeMin(registry, integratedTotal);
+    const intUi = (registry.uiText && registry.uiText.integrated) || {};
+    const titleEl = document.getElementById('integrated-exam-title');
+    if (titleEl) titleEl.innerHTML = `${esc(intUi.title || `통합 실전 모의고사`)} (${esc(integratedTotal)}제)`;
+    const descEl = integratedCard && integratedCard.querySelector('.highlight-card-desc');
+    if (descEl && intUi.desc) descEl.textContent = intUi.desc;
+    const btnEl = document.getElementById('integrated-exam-btn');
+    if (btnEl) btnEl.innerHTML = `<i class="fa-solid fa-clock" aria-hidden="true"></i> ${esc(intUi.btn || '통합 모의고사 시작')} (${esc(examTimeMin)}분)`;
+}
+
+/** 통합 모의고사 응시 요약 텍스트 — 응시 횟수·정답률·이어풀기 여부. @param {Element} statsEl @param {*[]} simHistory */
+function _updateIntegratedStats(statsEl, simHistory) {
+    const attempts = simHistory.filter(h => h.examId === 'integrated');
+    const parts = [];
+    if (attempts.length) {
+        const best = Math.max(...attempts.map(a => a.rate));
+        parts.push(`응시 ${attempts.length}회 · 최근 ${attempts[attempts.length - 1]?.rate}% · 최고 ${best}%`);
     }
+    try {
+        const draft = JSON.parse(safeGetItem(STORAGE_KEYS.SIM_DRAFT_SESSION) || 'null');
+        if (draft && draft.examId === 'integrated') parts.push('진행 중인 응시 있음 — 대시보드에서 이어풀기');
+    } catch (e) { /* draft 파싱 실패는 무시 */ }
+    statsEl.textContent = parts.join(' · ');
+    statsEl.classList.toggle('is-hidden', parts.length === 0);
 }
 
 export function populateResourceCards() {

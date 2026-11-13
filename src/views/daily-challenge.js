@@ -135,10 +135,12 @@ function _startDailyChallengeImpl() {
     const qPack = [];
 
     // 1. 플래시카드 복습 3개
+    /** @type {*[]} */
+    /** @type {*[]} */
     let allCards = [];
     if (window.STUDY_DATA) {
         Object.keys(window.STUDY_DATA).forEach(subjId => {
-            allCards = allCards.concat((window.STUDY_DATA || {})[subjId].cards.map(c => ({...c, subject: subjId})));
+            allCards = allCards.concat((window.STUDY_DATA || {})[subjId].cards.map((/** @type {*} */ c) => ({...c, subject: subjId})));
         });
     }
     const selectedCards = shuffle(allCards).slice(0, 3);
@@ -152,10 +154,12 @@ function _startDailyChallengeImpl() {
     });
 
     // 2. 퀴즈 풀이 3개
+    /** @type {*[]} */
+    /** @type {*[]} */
     let allQuizzes = [];
     if (window.STUDY_DATA) {
         Object.keys(window.STUDY_DATA).forEach(subjId => {
-            allQuizzes = allQuizzes.concat((window.STUDY_DATA || {})[subjId].quizzes.map(q => ({...q, subject: subjId})));
+            allQuizzes = allQuizzes.concat((window.STUDY_DATA || {})[subjId].quizzes.map((/** @type {*} */ q) => ({...q, subject: subjId})));
         });
     }
     const selectedQuizzes = shuffle(allQuizzes).slice(0, 3);
@@ -171,8 +175,8 @@ function _startDailyChallengeImpl() {
 
     // 3. 농도 계산 문제 1개 — calcPractice 기능 시험만 (도메인 시나리오 문구)
     if (hasFeature('calcPractice')) {
-        const w = [100, 200, 300][Math.floor(Math.random() * 3)];
-        const cVal = [1, 2, 3, 5][Math.floor(Math.random() * 4)];
+        const w = [100, 200, 300][Math.floor(Math.random() * 3)] || 0;
+        const cVal = [1, 2, 3, 5][Math.floor(Math.random() * 4)] || 0;
         const formulaWeight = (w * cVal) / 100;
         qPack.push({
             type: 'short',
@@ -184,7 +188,7 @@ function _startDailyChallengeImpl() {
 
     // 4. 지식DB 분류 판별 1개 — registry.knowledge 스키마로 데이터셋 해석
     const db = DataLoader.getKnowledgeItems();
-    const kSchema = (DataLoader.registry && DataLoader.registry.knowledge) || {};
+    const kSchema = /** @type {*} */ ((DataLoader.registry && DataLoader.registry.knowledge) || {});
     const badgeField = (kSchema.badge && kSchema.badge.field) || 'type';
     const badgeLabels = (kSchema.badge && kSchema.badge.labels) || {};
     const unit = kSchema.entityUnit || '항목';
@@ -273,7 +277,7 @@ function renderDailyStep() {
     // 단계 전환 — .dialog-card는 자체 스크롤 컨테이너라 이전 스크롤이 잔류하면 다음 문항 상단이 잘림
     const card = document.querySelector('#daily-challenge-modal .dialog-card');
     if (card) card.scrollTop = 0;
-    const q = dailyState.questions[dailyState.currentIndex];
+    const q = /** @type {*} */ (dailyState.questions[dailyState.currentIndex]);
 
     const progEl = document.getElementById('daily-modal-progress');
     if (progEl) progEl.textContent = `진행: ${dailyState.currentIndex + 1} / ${dailyState.questions.length}`;
@@ -319,11 +323,11 @@ function renderDailyStep() {
         `;
     } else if (q.type === 'choice') {
         const optionIndicators = ['A', 'B', 'C', 'D'];
-        q.options.forEach((opt, idx) => {
+        q.options.forEach((/** @type {*} */ opt, /** @type {number} */ idx) => {
             const btn = document.createElement('button');
             btn.className = 'limits-opt-btn daily-choice-btn';
             btn.dataset.value = opt;
-            btn.innerHTML = `<span class="limits-opt-num">${esc(optionIndicators[idx])}</span> <span class="limits-opt-text">${esc(opt)}</span>`;
+            btn.innerHTML = `<span class="limits-opt-num">${esc(optionIndicators[idx] || '')}</span> <span class="limits-opt-text">${esc(opt)}</span>`;
             btn.addEventListener('click', () => {
                 submitDailyChoiceAnswer(btn, opt, q.correct);
             });
@@ -339,6 +343,8 @@ function renderDailyStep() {
     }
 }
 
+/** @param {boolean} isMemorized */
+/** @param {boolean} isMemorized */
 export function submitDailyCardAnswer(isMemorized) {
     if (isMemorized) {
         dailyState.correctCount++;
@@ -351,9 +357,9 @@ export function submitDailyCardAnswer(isMemorized) {
     if (feedback) feedback.classList.remove('is-hidden');
     if (feedback) feedback.classList.remove('incorrect');
     if (title) title.textContent = isMemorized ? '완벽히 외운 카드로 분류했습니다.' : '헷갈린 복습 카드로 분류했습니다.';
-    if (desc) desc.textContent = `용어: ${dailyState.questions[dailyState.currentIndex].correct}`;
+    if (desc) desc.textContent = `용어: ${(dailyState.questions[dailyState.currentIndex] || {}).correct}`;
 
-    const q = dailyState.questions[dailyState.currentIndex];
+    const q = /** @type {*} */ (dailyState.questions[dailyState.currentIndex]);
     if (isMemorized) {
         state.memorizedCards.add(q.cardObj.id);
         state.weakCards.delete(q.cardObj.id);
@@ -366,9 +372,11 @@ export function submitDailyCardAnswer(isMemorized) {
     if (nextBtn) nextBtn.classList.remove('is-hidden');
 }
 
+/** @param {Element} selectedBtn @param {*} selectedValue @param {*} correctValue */
+/** @param {HTMLButtonElement} selectedBtn @param {*} selectedValue @param {*} correctValue */
 function submitDailyChoiceAnswer(selectedBtn, selectedValue, correctValue) {
     const isCorrect = (selectedValue === correctValue);
-    markChoiceButtons(document.getElementById('daily-modal-answer-area'), selectedBtn, correctValue);
+    markChoiceButtons(/** @type {Element} */ (document.getElementById('daily-modal-answer-area')), selectedBtn, correctValue);
     if (isCorrect) {
         dailyState.correctCount++;
     }
@@ -385,7 +393,7 @@ export function submitDailyShortAnswer() {
         return;
     }
 
-    const q = dailyState.questions[dailyState.currentIndex];
+    const q = /** @type {*} */ (dailyState.questions[dailyState.currentIndex]);
     const isCorrect = checkShortAnswer(userInput, q.correct);
 
     if (isCorrect) {
@@ -399,8 +407,10 @@ export function submitDailyShortAnswer() {
     showDailyFeedback(isCorrect, q.correct);
 }
 
+/** @param {boolean} isCorrect @param {*} correctValue */
+/** @param {boolean} isCorrect @param {*} correctValue */
 function showDailyFeedback(isCorrect, correctValue) {
-    const q = dailyState.questions[dailyState.currentIndex];
+    const q = /** @type {*} */ (dailyState.questions[dailyState.currentIndex]);
     showAnswerFeedback({
         panelId: 'daily-modal-feedback', titleId: 'daily-modal-feedback-title',
         descId: 'daily-modal-feedback-desc', nextBtnId: 'daily-modal-next-btn',

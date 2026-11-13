@@ -21,11 +21,17 @@ export function refreshRefLinkNotices(root = document) {
 }
 
 // --- 참조자료 인라인 프리뷰 (툴팁) ---
+/** @type {Object.<string,string>} */
 const _previewCache = {};
+/** @type {HTMLElement|null} */
 let _previewEl = null;
-let _previewTimer = null;
-let _previewTouchTimer = null;
-let _previewHideTimer = null;
+/** @type {number|undefined} */
+let _previewTimer = undefined;
+/** @type {number|undefined} */
+let _previewTouchTimer = undefined;
+/** @type {number|undefined} */
+let _previewHideTimer = undefined;
+/** @type {HTMLElement|null} */
 let _previewOwner = null; // 프리뷰를 연 링크 — aria-describedby 연결용
 
 function _ensurePreviewEl() {
@@ -41,6 +47,7 @@ function _ensurePreviewEl() {
     return _previewEl;
 }
 
+/** @param {HTMLElement} linkEl */
 async function _showPreview(linkEl) {
     const path = linkEl.dataset.refHtml;
     const search = linkEl.dataset.refSearch || '';
@@ -85,7 +92,7 @@ async function _showPreview(linkEl) {
             snippet = fullText.slice(0, 200) + '...';
         }
 
-        const fileName = decodeURIComponent(path.split('/').pop().replace(/\.(html|md)$/, ''));
+        const fileName = decodeURIComponent((path.split('/').pop() || '').replace(/\.(html|md)$/, ''));
         el.innerHTML = `<div style="font-weight:600;margin-bottom:4px;color:var(--color-primary,#1f6feb);"><i class="fa-solid fa-file-lines"></i> ${esc(fileName)}</div><div style="white-space:pre-wrap;word-break:break-word;">${esc(snippet)}</div>`;
     } catch (err) {
         el.innerHTML = '<div style="opacity:0.6;">미리보기를 불러올 수 없습니다.</div>';
@@ -189,7 +196,7 @@ function _initRefLinkDelegation() {
         }
         if (a.hasAttribute('data-glossary')) {
             e.preventDefault();
-            scrollToGlossary(a.dataset.glossary, a);
+            if (a.dataset.glossary) scrollToGlossary(a.dataset.glossary, a);
             return;
         }
     });
@@ -208,7 +215,7 @@ export function bindReferenceLinks() {
         a.addEventListener('mouseenter', () => {
             clearTimeout(_previewTimer);
             clearTimeout(_previewHideTimer);
-            _previewTimer = setTimeout(() => _showPreview(a), TIMING.PREVIEW_HOVER_MS);
+            _previewTimer = setTimeout(() => _showPreview(/** @type {HTMLElement} */ (a)), TIMING.PREVIEW_HOVER_MS);
         });
         a.addEventListener('mouseleave', () => {
             clearTimeout(_previewTimer);
@@ -217,7 +224,7 @@ export function bindReferenceLinks() {
         // A-16 ① — 키보드 포커스로도 프리뷰 개방
         a.addEventListener('focus', () => {
             clearTimeout(_previewTimer);
-            _previewTimer = setTimeout(() => _showPreview(a), TIMING.PREVIEW_HOVER_MS);
+            _previewTimer = setTimeout(() => _showPreview(/** @type {HTMLElement} */ (a)), TIMING.PREVIEW_HOVER_MS);
         });
         a.addEventListener('blur', () => {
             clearTimeout(_previewTimer);
@@ -229,7 +236,7 @@ export function bindReferenceLinks() {
             a.classList.add('ref-longpress-active');
             _previewTouchTimer = setTimeout(() => {
                 a.classList.remove('ref-longpress-active');
-                _showPreview(a);
+                _showPreview(/** @type {HTMLElement} */ (a));
             }, TIMING.PREVIEW_LONG_PRESS_MS);
         }, { passive: true });
         a.addEventListener('touchend', () => {

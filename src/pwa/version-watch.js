@@ -9,13 +9,18 @@ import { appVersion } from '../shell/app-version.js';
 import { esc } from '../core/sanitize.js';
 
 const POLL_INTERVAL_MS = 5 * 60 * 1000; // 5분
+/** @type {ReturnType<typeof setInterval>|null} */
 let _timer = null;
 let _promptShown = false;
 
-/** data/version.js 응답 텍스트에서 APP_VERSION 추출 — 순수 함수 (테스트용 export) */
+/**
+ * data/version.js 응답 텍스트에서 APP_VERSION 추출 — 순수 함수 (테스트용 export)
+ * @param {string} text
+ * @returns {string|null}
+ */
 export function parseDeployedVersion(text) {
     const m = /window\.APP_VERSION\s*=\s*['"]([^'"]+)['"]/.exec(text || '');
-    return m ? m[1] : null;
+    return m ? (m[1] || null) : null;
 }
 
 /** 배포본 버전 조회 — 캐시 우회 (오프라인·실패 시 null) */
@@ -44,7 +49,7 @@ export async function hardReload() {
     location.reload();
 }
 
-/** 새 버전 프롬프트 배너 표시 — "새로고침" 버튼으로 사용자 확인 후 적용 */
+/** 새 버전 프롬프트 배너 표시 — "새로고침" 버튼으로 사용자 확인 후 적용 @param {string} deployed */
 function showNewVersionPrompt(deployed) {
     if (_promptShown || typeof document === 'undefined' || !document.body) return;
     _promptShown = true;

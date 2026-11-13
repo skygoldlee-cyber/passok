@@ -19,15 +19,21 @@ import { TOOL_FORM_SEEDS, toolBlockPreview } from '../form-seeds.js';
 import { initTplEditor, fillTplEditor, readTplEditor, setTplBlockState } from '../form-template-editor.js';
 export { careShare } from '../care-share.js';
 
+/** @param {string} id */
 const $ = (id) => document.getElementById(id);
+/** @type {*|null} */
 let _membership = null;
+/** @type {*|null} */
 let _activeTpl = null;   // 기입 대상 양식 {id,title,body,scope}
+/** @type {string|null} */
 let _editTplId = null;   // 편집 중인 로컬 양식 id (null = 신규/기관사본)
 let _lastMd = '';        // 마지막 생성 문서 MD (내보내기 원본)
+/** @type {string|null} */
 let _previewToolKey = null; // 편집기에 연동된 도구 키 (블록 실데이터 미리보기·비동기 응답 가드)
 
 // — 인라인 편집기 (기본 양식 사본·목록 양식 편집이 이 뷰에서 완결 — CO-18) —
 
+/** @type {{title:string, body:string}|null} */
 let _editLoaded = null; // UX-FORM-05 — 편집기 로드 원본 (미저장 변경 감지 기준)
 
 /** 편집기에 저장되지 않은 변경이 있는가 — 로드 원본 대비 비교 */
@@ -44,15 +50,16 @@ async function _confirmDiscardEdit() {
     return showConfirm('저장하지 않은 양식 편집 내용이 있습니다. 내용을 버리고 계속할까요?', '편집 내용 버리기');
 }
 
+/** @param {*} tpl */
 async function _openEditor(tpl) {
     if (!(await _confirmDiscardEdit())) return; // 다른 양식 편집 전환이 미저장분을 덮지 않게
     _editTplId = tpl.scope === 'fac' ? null : tpl.id; // 기관 양식은 저장 시 로컬 사본이 됨
     const ed = $('cf-editor');
     if (ed) ed.classList.remove('is-hidden');
     const lb = $('cf-tpl-label');
-    if (lb) lb.textContent = tpl.title + (tpl.toolKey ? ` (연동: ${TOOL_FORM_SEEDS[tpl.toolKey]?.title})` : '');
+    if (lb) lb.textContent = tpl.title + (tpl.toolKey ? ` (연동: ${(/** @type {Object.<string,*>} */ (TOOL_FORM_SEEDS))[tpl.toolKey]?.title})` : '');
     _previewToolKey = tpl.toolKey || null;
-    const blk = _previewToolKey ? TOOL_FORM_SEEDS[_previewToolKey] : null;
+    const blk = _previewToolKey ? (/** @type {Object.<string,*>} */ (TOOL_FORM_SEEDS))[_previewToolKey] : null;
     setTplBlockState('cf-tpl', { auto: blk ? new Set([blk.block]) : null }); // 이전 양식 블록 데이터 제거
     fillTplEditor('cf-tpl', tpl.title, tpl.body);
     _editLoaded = { title: tpl.title || '', body: tpl.body || '' };
@@ -68,6 +75,7 @@ export function careFormTplNew() {
 }
 
 /** 목록 편집 → 인라인 편집기 (홈 이관 대신 이 뷰에서 완결) */
+/** @param {string} id */
 export function careFormTplEdit(id) {
     const t = _tplById(id);
     if (!t) return Promise.resolve();
@@ -102,13 +110,13 @@ export function careFormTplSave() {
     if (!title || !body.trim()) { _requireTplFields(); return; }
     if (_editTplId) {
         const r = updateFormTemplate(_editTplId, { title, body });
-        r.ok ? showToast('양식을 저장했습니다 — 연동 도구 출력에도 반영됩니다.') : showToast(r.error, 'error');
+        r.ok ? showToast('양식을 저장했습니다 — 연동 도구 출력에도 반영됩니다.') : showToast(r.error || '저장 실패', 'error');
     } else {
         const label = $('cf-tpl-label')?.textContent || '';
-        const tk = Object.keys(TOOL_FORM_SEEDS).find(k => label.includes(TOOL_FORM_SEEDS[k].title));
+        const tk = Object.keys(TOOL_FORM_SEEDS).find((/** @type {string} */ k) => label.includes((/** @type {Object.<string,*>} */ (TOOL_FORM_SEEDS))[k].title));
         const r = addFormTemplate({ title, body, toolKey: tk || undefined });
-        if (!r.ok) { showToast(r.error, 'error'); return; }
-        _editTplId = r.id;
+        if (!r.ok) { showToast(r.error || '저장 실패', 'error'); return; }
+        _editTplId = r.id || null;
         showToast('양식을 저장했습니다 — 연동 도구 출력에도 반영됩니다.');
         flashSavedBadge($('cf-tpl-list'));
     }
@@ -132,10 +140,12 @@ export async function careFormTplFacSave() {
 }
 
 const _isManager = () => _membership?.role === 'manager';
-const _tplById = (id) => allFormTemplates().find(t => t.id === id) || null;
+/** @param {string} id */
+const _tplById = (id) => allFormTemplates().find((/** @type {*} */ t) => t.id === id) || null;
 
 // — 양식 목록·선택 —
 
+/** @param {string} id */
 export async function careFormTplUse(id) {
     const t = _tplById(id);
     if (!t) return;
@@ -156,21 +166,24 @@ function _fillDirty() {
 
 // — 기본 양식을 기관 파일로 생성 — 업로드 파일이 도구 출력 서식(연동 사본)이 됨 —
 
+/** @type {string|null} */
 let _seedFileTool = null; // 파일 대상 도구 키 (change 핸들러 전달용)
 
 /** 기본 양식 "파일로 만들기" — 숨긴 file input 트리거 */
+/** @param {string} toolKey */
 export function careFormSeedFile(toolKey) {
     _seedFileTool = toolKey;
     /** @type {HTMLInputElement|null} */ ($('cf-seed-file'))?.click();
 }
 
 /** 기관 양식 파일(.docx·.xlsx·.csv·.pdf) → 본문 추출 → 연동 사본 편집기에 로드 */
+/** @param {HTMLInputElement} input */
 async function _onSeedFile(input) {
     const f = input.files?.[0];
     input.value = '';
     const toolKey = _seedFileTool;
     _seedFileTool = null;
-    const def = toolKey && TOOL_FORM_SEEDS[toolKey];
+    const def = toolKey && (/** @type {Object.<string,*>} */ (TOOL_FORM_SEEDS))[toolKey];
     if (!f || !def) return;
     proFeatureNotice('care_form_extract', '기관 양식 파일 추출');
     showToast('양식 파일을 분석하는 중입니다…');
@@ -193,7 +206,7 @@ async function _onSeedFile(input) {
     }
     if (!body.trim()) { showToast('파일에서 양식 내용을 찾지 못했습니다.', 'error'); return; }
     // 연동 사본이 이미 있으면 갱신 편집으로, 없으면 신규 연동 사본 (저장 시 toolKey 추론)
-    const linked = allFormTemplates().find(t => t.toolKey === toolKey);
+    const linked = allFormTemplates().find((/** @type {*} */ t) => t.toolKey === toolKey);
     await _openEditor(linked || { id: null, title: def.title, body, scope: 'local', toolKey });
     if (_editLoaded === null) return; // 미저장 편집분 보호 확인에서 취소 — 추출 결과는 폐기하지 않고 중단
     if (linked) fillTplEditor('cf-tpl', linked.title, body); // 추출 본문으로 교체
@@ -210,14 +223,15 @@ async function _onSeedFile(input) {
 }
 
 /** 기본 양식 사본 생성·편집 (CO-18) — 사본 생성 후 인라인 편집기를 바로 연다 */
+/** @param {string} toolKey */
 export async function careFormSeedCopy(toolKey) {
-    const def = TOOL_FORM_SEEDS[toolKey];
+    const def = (/** @type {Object.<string,*>} */ (TOOL_FORM_SEEDS))[toolKey];
     if (!def) return;
-    let tpl = allFormTemplates().find(t => t.toolKey === toolKey);
+    let tpl = allFormTemplates().find((/** @type {*} */ t) => t.toolKey === toolKey);
     if (!tpl) {
         const r = addFormTemplate({ title: def.title, body: def.seed, toolKey });
-        if (!r.ok) { showToast(r.error, 'error'); return; }
-        tpl = allFormTemplates().find(t => t.id === r.id);
+        if (!r.ok) { showToast(r.error || '저장 실패', 'error'); return; }
+        tpl = allFormTemplates().find((/** @type {*} */ t) => t.id === r.id);
         showToast(`'${def.title}' 사본을 만들었습니다 — 수정 후 저장하세요.`);
     }
     if (tpl) await _openEditor(tpl); // 생성·기존 사본 모두 편집기로 진입
@@ -225,6 +239,7 @@ export async function careFormSeedCopy(toolKey) {
     renderSeedList();
 }
 
+/** @param {string} id */
 export async function careFormTplDelete(id) {
     const t = _tplById(id);
     if (!t || !await showConfirm(`양식「${t.title || ''}」을 삭제할까요?`, '삭제 확인')) return;
@@ -248,8 +263,8 @@ function renderTplList() {
     if (!host) return;
     const items = allFormTemplates();
     host.innerHTML = items.length
-        ? items.map(t => `<div class="care-log-saved-item">
-            <span>${t.scope === 'fac' ? '<em class="care-card-cat">기관</em> ' : ''}${t.toolKey ? `<em class="care-card-cat">${esc(TOOL_FORM_SEEDS[t.toolKey]?.title || '연동')}</em> ` : ''}${esc(t.title)} <small>${parseFields(t.body).length}개 항목</small></span>
+        ? items.map((/** @type {*} */ t) => `<div class="care-log-saved-item">
+            <span>${t.scope === 'fac' ? '<em class="care-card-cat">기관</em> ' : ''}${t.toolKey ? `<em class="care-card-cat">${esc((/** @type {Object.<string,*>} */ (TOOL_FORM_SEEDS))[t.toolKey]?.title || '연동')}</em> ` : ''}${esc(t.title)} <small>${parseFields(t.body).length}개 항목</small></span>
             <button data-click="careFormTplUse" data-arg="${esc(t.id)}" class="btn">기입</button>
             <button data-click="careFormTplEdit" data-arg="${esc(t.id)}" class="btn btn-secondary">편집</button>
             <button data-click="careFormTplDelete" data-arg="${esc(t.id)}" class="btn btn-secondary">삭제</button>
@@ -283,14 +298,16 @@ function renderFillForm() {
     if (titleEl) titleEl.textContent = _activeTpl.title;
     const fields = parseFields(_activeTpl.body);
     fieldsHost.innerHTML = fields.length
-        ? fields.map(f => `<label>${esc(f.label)} <input type="text" data-cf-field="${esc(f.key)}" autocomplete="off"></label>`).join('')
+        ? fields.map((/** @type {*} */ f) => `<label>${esc(f.label)} <input type="text" data-cf-field="${esc(f.key)}" autocomplete="off"></label>`).join('')
         : '<p class="care-log-hint">기입 항목 없음 — 바로 생성하면 됩니다.</p>';
 }
 
 function _readFillValues() {
+    /** @type {Object.<string,string>} */
     const values = { client: /** @type {HTMLInputElement|null} */ ($('cf-client'))?.value?.trim() || '' };
     document.querySelectorAll('[data-cf-field]').forEach(el => {
-        values[/** @type {HTMLElement} */ (el).dataset.cfField] = /** @type {HTMLInputElement} */ (el).value;
+        const k = /** @type {HTMLElement} */ (el).dataset.cfField;
+        if (k) values[k] = /** @type {HTMLInputElement} */ (el).value;
     });
     return values;
 }
@@ -332,6 +349,7 @@ export function careFormDocSave() {
     if (r.ok) { showToast('기입 문서를 저장했습니다.'); renderDocList(); flashSavedBadge($('cf-doc-list')); }
 }
 
+/** @param {string} id */
 export async function careFormDocDelete(id) {
     if (!id || !await showConfirm('기입한 문서를 삭제할까요?', '삭제 확인')) return;
     removeFormDoc(id); renderDocList();
@@ -342,7 +360,7 @@ function renderDocList() {
     if (!host) return;
     const items = listFormDocs();
     host.innerHTML = items.length
-        ? items.map(d => `<div class="care-log-saved-item">
+        ? items.map((/** @type {*} */ d) => `<div class="care-log-saved-item">
             <span>${esc(d.date || '')} · ${esc(d.title)}${d.client ? ' — ' + esc(d.client) : ''}</span>
             <button data-click="careFormDocDelete" data-arg="${esc(d.id)}" class="btn btn-secondary">삭제</button>
           </div>`).join('')
@@ -351,7 +369,8 @@ function renderDocList() {
 
 export function initCareCustomFormView() {
     markFunnel('tool:care-custom-form');
-    attachClientPicker(/** @type {HTMLInputElement|null} */ ($('cf-client')));
+    const _picker = /** @type {HTMLInputElement|null} */ ($('cf-client'));
+    if (_picker) attachClientPicker(_picker);
     initTplEditor('cf-tpl'); // 인라인 편집기 — 파일 추출·필드 미리보기 바인딩
     // 기본 양식 파일 input — change는 직접 바인딩 (data-click은 클릭만)
     const seedFile = /** @type {HTMLInputElement|null} */ ($('cf-seed-file'));

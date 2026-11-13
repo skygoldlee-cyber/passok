@@ -40,6 +40,7 @@ const _JW_LEADSPACE = /^[이가]\s/;
 const _JW_ENDSYL = /[은는을를이가의에로과와도만한된할있없같않힌고게요여]$/;
 
 // 끝 태그/공백을 걷어낸 마지막 문자 (엔티티 1개 복원)
+/** @param {string} t */
 function _jwLastChar(t) {
     const s = t.replace(/(?:<\/[a-zA-Z]+>|<br\s*\/?>|&nbsp;|\s)+$/g, '')
         .replace(/&gt;$/, '>').replace(/&quot;$/, '"')
@@ -48,6 +49,7 @@ function _jwLastChar(t) {
 }
 
 // 결합 구분자 — 경계 공백 추정 (위 휴리스틱 주석 참조)
+/** @param {string} prev @param {string} cur */
 function _jwSep(prev, cur) {
     if (_JW_CONT.test(cur)) return '';
     if (_JW_LEADSPACE.test(cur)) return ' ';
@@ -72,6 +74,7 @@ function _jwSep(prev, cur) {
 
 // output 마지막 요소가 <p>…</p> 또는 …</li></ol|ul>이면 연속줄을 병합한다.
 // 연속줄은 <span data-md-line>으로 감싸 L#### 인용이 원줄 위치에 도착하게 한다.
+/** @param {string[]} output @param {string} line @param {string} sep @param {number} lineNo */
 function _jwMerge(output, line, sep, lineNo) {
     const frag = sep + `<span data-md-line="${lineNo}">` + line + '</span>';
     const last = output[output.length - 1];
@@ -134,6 +137,7 @@ export function parseMarkdown(mdText, options = {}) {
     html = html.replace(/&nbsp;/gi, '\x00NBSP\x00');
 
     // 1-1. $$...$$ 수식 블록을 플레이스홀더로 보호 (HTML 이스케이프 전)
+    /** @type {string[]} */
     const _mathBlocks = [];
     html = html.replace(/\$\$([\s\S]*?)\$\$/g, (m, formula) => {
         const i = _mathBlocks.length;
@@ -152,7 +156,7 @@ export function parseMarkdown(mdText, options = {}) {
 
     // 3-1. $$...$$ 수식 블록을 HTML 분수로 변환
     html = html.replace(/\x00MBLOCK(\d+)\x00/g, (m, i) => {
-        const formula = _mathBlocks[parseInt(i)];
+        const formula = _mathBlocks[parseInt(i)] || '';
         return convertMathToHtml(formula);
     });
 
@@ -167,9 +171,9 @@ export function parseMarkdown(mdText, options = {}) {
         const fenceLines = html.split(/\r?\n/);
         let inFence = false;
         for (let i = 0; i < fenceLines.length; i++) {
-            if (/^\x00FENCE\x00/.test(fenceLines[i].trim())) { inFence = !inFence; continue; }
+            if (/^\x00FENCE\x00/.test((fenceLines[i] || '').trim())) { inFence = !inFence; continue; }
             if (inFence) {
-                fenceLines[i] = fenceLines[i]
+                fenceLines[i] = (fenceLines[i] || '')
                     .replace(/\*/g, '\x00STAR\x00')
                     .replace(/`/g, '\x00BTICK\x00')
                     .replace(/\[/g, '\x00SBRO\x00')
@@ -240,13 +244,18 @@ export function parseMarkdown(mdText, options = {}) {
 
     // 6. 줄 단위 블록 파싱
     const lines = html.split(/\r?\n/);
+    /** @type {string[]} */
     const output = [];
 
+    /** @type {string[]} */
     let tableRows = [];
+    /** @type {string[]} */
     let quoteLines = [];
+    /** @type {string[]} */
     let codeLines = [];
     let inCodeBlock = false;
     let codeLang = '';
+    /** @type {string[]} */
     let listItems = [];
     /** @type {'ul'|'ol'|null} */
     /** @type {string|null} */
@@ -255,7 +264,7 @@ export function parseMarkdown(mdText, options = {}) {
     // 마크다운 표 셀 분리: 양끝 파이프 1개씩만 제거하고 내부 빈 셀은 보존한다.
     // (기존 .filter(c => c !== '')는 빈 셀까지 제거해 열이 밀리는 버그가 있었음)
     // 이스케이프된 파이프(\|)는 임시 토큰으로 보호 후 리터럴로 복원한다.
-    const splitTableCells = (row) => {
+    const splitTableCells = (/** @type {string} */ row) => {
         let s = row.trim();
         if (s.startsWith('|')) s = s.slice(1);
         if (s.endsWith('|')) s = s.slice(0, -1);
@@ -278,14 +287,14 @@ export function parseMarkdown(mdText, options = {}) {
         const lineAttr = addLineNumbers ? ` data-md-line="${tableLineNo}"` : '';
         let tableHTML = '<div class="reader-table-wrapper"' + lineAttr + '><table class="reader-table">';
         // thead: 첫 행을 헤더로 처리
-        const headerCells = splitTableCells(dataRows[0]);
+        const headerCells = splitTableCells(dataRows[0] || '');
         tableHTML += '<thead><tr>' + headerCells.map(c => `<th>${c}</th>`).join('') + '</tr></thead>';
         // tbody: 나머지 행을 본문으로 처리
         tableHTML += '<tbody>';
         for (let idx = 1; idx < dataRows.length; idx++) {
-            const cells = splitTableCells(dataRows[idx]);
+            const cells = splitTableCells(dataRows[idx] || '');
             // 첫 번째 셀에 내용이 있으면 group-start 클래스 부여 (대분류 변경 지점)
-            const isGroupStart = cells[0] && cells[0].trim() !== '';
+            const isGroupStart = !!(cells[0] || '').trim();
             const rowClass = isGroupStart ? ' class="group-start"' : '';
             tableHTML += `<tr${rowClass}>`;
             tableHTML += cells.map(c => {
@@ -341,6 +350,7 @@ export function parseMarkdown(mdText, options = {}) {
     };
 
     let _lineNo = 0;
+    /** @param {string} html @param {number} lineNo */
     function _wrapWithLine(html, lineNo) {
         if (!addLineNumbers) return html;
         return html.replace(/^(<\w+)/, `$1 data-md-line="${lineNo}"`);
@@ -360,7 +370,7 @@ export function parseMarkdown(mdText, options = {}) {
     if (joinWraps) {
         const h1 = lines.map(l => l.trim()).find(t => /^#\s/.test(t));
         if (h1) {
-            const t = h1.replace(/^#\s+/, '').split(/[(<]/)[0].trim();
+            const t = (h1.replace(/^#\s+/, '').split(/[(<]/)[0] || '').trim();
             if (t.length >= 4 && t.length <= 45) _jwTitle = t;
         }
     }
@@ -376,6 +386,7 @@ export function parseMarkdown(mdText, options = {}) {
     //  - 화학식 꼬리: "113)", "1000)" (Freon 113, 1→1000 희석배수 절단)
     //  - 연속부호 종료 prev + 3자리 이상 숫자 시작
     //  - 미닫힘 꺾쇠 prev: "…<개정" (&lt;개정)
+    /** @param {string} t */
     function _jwForceTail(t) {
         if (_jwPrev == null) return false; // 호출부에서 보장 — 타입 추론용 가드
         return /^\d{4}\.\s*\d{1,2}\./.test(t)
@@ -386,7 +397,7 @@ export function parseMarkdown(mdText, options = {}) {
     }
 
     // 6-1. 코드블록 시작/끝 감지 + 코드블록 내부 라인 소비
-    function tryCodeBlock(line, trimmed) {
+    function tryCodeBlock(/** @type {string} */ line, /** @type {string} */ trimmed) {
         if (!trimmed.startsWith('```')) {
             if (!inCodeBlock) return false;
             if (codeLines.length === 0) _codeStartLine = _lineNo;
@@ -409,7 +420,7 @@ export function parseMarkdown(mdText, options = {}) {
     // HTML 주석 라인 (<!-- story:start --> 같은 구조 마커) — 이스케이프되어
     // 텍스트로 노출되므로 렌더하지 않는다. 코드블록 내부는 tryCodeBlock에서
     // 이미 소비됨. 빈 줄과 동일하게 진행 중 블록(표·인용·목록)은 플러시한다.
-    function tryHtmlComment(line, trimmed) {
+    function tryHtmlComment(/** @type {string} */ line, /** @type {string} */ trimmed) {
         if (!/^&lt;!--[\s\S]*?--&gt;$/.test(trimmed)) return false;
         flushTable(); flushQuote(); flushList();
         _jwPrev = null;
@@ -418,7 +429,7 @@ export function parseMarkdown(mdText, options = {}) {
 
     // joinWraps: 러닝헤더 스킵 — 문서 제목과 동일한 반복 단독줄.
     // 첫 등장(문서 표제)은 유지하고 이후 반복만 투명하게 건너뛴다.
-    function tryRunningHeader(line, trimmed) {
+    function tryRunningHeader(/** @type {string} */ line, /** @type {string} */ trimmed) {
         if (!_jwTitle || trimmed !== _jwTitle) return false;
         if (_jwTitleSeen) return true;
         _jwTitleSeen = true;
@@ -426,7 +437,7 @@ export function parseMarkdown(mdText, options = {}) {
     }
 
     // 6-2. 테이블 파싱
-    function tryTable(line, trimmed) {
+    function tryTable(/** @type {string} */ line, /** @type {string} */ trimmed) {
         if (!trimmed.startsWith('|')) {
             flushTable();
             return false;
@@ -439,7 +450,7 @@ export function parseMarkdown(mdText, options = {}) {
     }
 
     // 6-3. 인용문 파싱
-    function tryQuote(line, trimmed) {
+    function tryQuote(/** @type {string} */ line, /** @type {string} */ trimmed) {
         if (!trimmed.startsWith(GT_ENTITY) && !trimmed.startsWith('>')) {
             flushQuote();
             return false;
@@ -453,12 +464,12 @@ export function parseMarkdown(mdText, options = {}) {
     }
 
     // 6-4. 목록 파싱 (ul / ol)
-    function tryList(line, trimmed) {
+    function tryList(/** @type {string} */ line, /** @type {string} */ trimmed) {
         if (useCustomListDiv) {
             const listMatch = line.match(/^(\s*)[-*]\s+(.*)$/);
             if (!listMatch) return false;
-            const indentLevel = Math.floor(listMatch[1].length / 2);
-            output.push(`<div class="md-list-item" style="padding-left: ${0.5 + indentLevel * 1.25}rem;"><span class="md-bullet">•</span> <span>${listMatch[2]}</span></div>`);
+            const indentLevel = Math.floor((listMatch[1] || '').length / 2);
+            output.push(`<div class="md-list-item" style="padding-left: ${0.5 + indentLevel * 1.25}rem;"><span class="md-bullet">•</span> <span>${listMatch[2] || ''}</span></div>`);
             _jwPrev = null;
             return true;
         }
@@ -466,14 +477,14 @@ export function parseMarkdown(mdText, options = {}) {
         const olMatch = trimmed.match(/^\d+[.)]\s+(.+)$/);
         if (ulMatch) {
             if (listType !== 'ul') { flushList(); listType = 'ul'; _listStartLine = _lineNo; }
-            listItems.push(ulMatch[1]);
-            _jwPrev = ulMatch[1];
+            listItems.push(ulMatch[1] || '');
+            _jwPrev = ulMatch[1] || '';
             return true;
         }
         if (olMatch && !_jwForce) {
             if (listType !== 'ol') { flushList(); listType = 'ol'; _listStartLine = _lineNo; }
-            listItems.push(olMatch[1]);
-            _jwPrev = olMatch[1];
+            listItems.push(olMatch[1] || '');
+            _jwPrev = olMatch[1] || '';
             return true;
         }
         flushList();
@@ -481,7 +492,7 @@ export function parseMarkdown(mdText, options = {}) {
     }
 
     // 6-5. 헤더 파싱
-    function tryHeader(line, trimmed) {
+    function tryHeader(/** @type {string} */ line, /** @type {string} */ trimmed) {
         if (useReaderStyles) {
             if (trimmed.startsWith('##### ')) {
                 output.push(_wrapWithLine(`<h5 class="md-h5">${line.replace(/^#####\s+/, '')}</h5>`, _lineNo));
@@ -504,7 +515,7 @@ export function parseMarkdown(mdText, options = {}) {
     }
 
     // 6-6. 구분선 파싱
-    function tryHr(line, trimmed) {
+    function tryHr(/** @type {string} */ line, /** @type {string} */ trimmed) {
         if (useReaderStyles) {
             if (trimmed !== '---') return false;
             output.push('<hr class="reader-hr">');
@@ -517,7 +528,7 @@ export function parseMarkdown(mdText, options = {}) {
     }
 
     // 6-7. 빈 줄 파싱
-    function tryBlank(line, trimmed) {
+    function tryBlank(/** @type {string} */ line, /** @type {string} */ trimmed) {
         if (trimmed !== '') return false;
         if (customSpacing) {
             output.push('<div style="height: 0.5rem;"></div>');
@@ -529,7 +540,7 @@ export function parseMarkdown(mdText, options = {}) {
     // 6-7-2. 이야기 경계 마커 — '📖 ┈ **이야기** ┈' / '┈ **본문** ┈ 📘'
     // story-boundary 클래스를 파서가 직접 부여해 모든 렌더 경로(리더·검색 등)에서
     // 동일하게 숨김되고, markStoryNarrative는 이 클래스를 서사 범위 앵커로 쓴다.
-    function tryStoryBoundary(line, trimmed) {
+    function tryStoryBoundary(/** @type {string} */ line, /** @type {string} */ trimmed) {
         const cls = /^📖\s*┈+\s*<strong>이야기<\/strong>\s*┈+$/.test(trimmed)
             ? 'story-boundary story-boundary-start'
             : /^┈+\s*<strong>본문<\/strong>\s*┈+\s*📘$/.test(trimmed)
@@ -542,6 +553,7 @@ export function parseMarkdown(mdText, options = {}) {
 
     // 6-8. 일반 문단 파싱
     // joinWraps: 이전 평문/항목이 미종결 + 현재 줄이 구조 마커가 아니면 병합
+    /** @param {string} line @param {string} trimmed */
     function pushParagraph(line, trimmed) {
         if (joinWraps && _jwPrev != null
             && !_JW_CLOSED.test(_jwPrev)

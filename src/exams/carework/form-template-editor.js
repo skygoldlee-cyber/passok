@@ -9,9 +9,10 @@ import { escapeHTML as esc } from '../../core/sanitize.js';
 import { showToast } from '../../ui-utils.js';
 import { proFeatureNotice } from '../../pro/pro-upgrade.js';
 
-const $ = (id) => document.getElementById(id);
+const $ = (/** @type {string} */ id) => document.getElementById(id);
 
 /** 편집기 요소 접근 — prefix는 'cf-tpl' 등 뷰별 접두사 */
+/** @param {string} prefix */
 export function readTplEditor(prefix) {
     return {
         title: /** @type {HTMLInputElement|null} */ ($(`${prefix}-title`))?.value?.trim() || '',
@@ -19,6 +20,7 @@ export function readTplEditor(prefix) {
     };
 }
 
+/** @param {string} prefix @param {string} title @param {string} body */
 export function fillTplEditor(prefix, title, body) {
     const t = /** @type {HTMLInputElement|null} */ ($(`${prefix}-title`));
     const b = /** @type {HTMLTextAreaElement|null} */ ($(`${prefix}-body`));
@@ -29,6 +31,7 @@ export function fillTplEditor(prefix, title, body) {
 }
 
 /** 본문 {{키}} 미리보기 — 저장 전 기입 필드 확인 */
+/** @param {string} prefix */
 export function renderTplFields(prefix) {
     const el = $(`${prefix}-fields`);
     if (!el) return;
@@ -40,6 +43,7 @@ export function renderTplFields(prefix) {
 
 // — 도구 블록 미리보기 상태 (CO-18) — prefix별 {auto: 블록 키 Set, values: {키: md}} —
 
+/** @type {Object.<string,*>} */
 const _blockState = {};
 
 /**
@@ -47,12 +51,14 @@ const _blockState = {};
  * 있으면 칩 대신 실제 표·문단으로 치환 렌더한다 (빈 객체 전달 시 초기화).
  * @param {string} prefix @param {{auto?: Set<string>|null, values?: Object<string,string>|null}} [state]
  */
+/** @param {string} prefix @param {*} [state] */
 export function setTplBlockState(prefix, state = {}) {
     _blockState[prefix] = state.auto || state.values ? { auto: state.auto || null, values: state.values || null } : null;
     renderTplPreview(prefix);
 }
 
 /** 본문 MD → 서식 미리보기 — 입력 즉시 렌더, {{키}}는 기입란 칩으로 표시 (시스템·도구 블록 키는 자동 구분) */
+/** @param {string} prefix */
 export function renderTplPreview(prefix) {
     const el = $(`${prefix}-preview`);
     if (!el) return;
@@ -73,7 +79,7 @@ export function renderTplPreview(prefix) {
 }
 
 /** 확장자별 추출기 — AcroForm 필드는 PDF만 존재 */
-const _extract = f => {
+const _extract = (/** @type {*} */ f) => {
     const n = (f.name || '').toLowerCase();
     if (n.endsWith('.docx')) return extractFormDocx(f);
     if (/\.(xlsx|xls|csv)$/.test(n)) return extractFormXlsx(f);
@@ -81,6 +87,7 @@ const _extract = f => {
 };
 
 /** 양식 파일(PDF·DOCX·Excel) → 추출 → 자체 AI 템플릿 초안 → 편집기 채움 (실패 시 휴리스틱 폴백) */
+/** @param {HTMLInputElement} input @param {string} prefix */
 async function _onTplFile(input, prefix) {
     const f = input.files?.[0];
     input.value = '';
@@ -100,7 +107,7 @@ async function _onTplFile(input, prefix) {
     if (!ex.text.trim()) { showToast('텍스트가 없는 스캔 파일입니다 — 직접 입력하거나 텍스트 기반 파일을 사용하세요.', 'error'); return; }
     const r = await requestFormExtract({ text: ex.text, hint });
     if (r.ok) {
-        fillTplEditor(prefix, r.title, r.body);
+        fillTplEditor(prefix, /** @type {*} */ (r).title, /** @type {*} */ (r).body);
         showToast('AI가 양식 초안을 만들었습니다 — 검토·수정 후 저장하세요.');
         return;
     }
@@ -112,6 +119,7 @@ async function _onTplFile(input, prefix) {
 }
 
 /** 편집기 바인딩 — file input change + 본문 input → 필드 미리보기 (뷰 init에서 호출) */
+/** @param {string} prefix */
 export function initTplEditor(prefix) {
     const fileEl = /** @type {HTMLInputElement|null} */ ($(`${prefix}-file`));
     if (fileEl && !fileEl.dataset.bound) {

@@ -24,6 +24,7 @@ export function listVisits() {
  * @param {{date:string,time?:string,client:string,visitor:string,phone?:string,relation?:string,purpose?:string}} entry
  * @returns {{ok:boolean, error?:string, id?:string}}
  */
+/** @param {*} entry */
 export function addVisit(entry) {
     const items = listVisits();
     if (items.length >= FREE_LIMIT)
@@ -35,17 +36,22 @@ export function addVisit(entry) {
 }
 
 /** 상태 전이·결과 기록 — {status:'done'|'canceled', result} 패치 */
+/** @param {string} id @param {*} patch */
+/** @param {string} id @param {*} patch */
 export function updateVisit(id, patch) {
     setJSON(KEY, listVisits().map(x => (x.id === id ? { ...x, ...patch } : x)));
     return { ok: true };
 }
 
+/** @param {string} id */
+/** @param {string} id */
 export function removeVisit(id) {
     setJSON(KEY, listVisits().filter(x => x.id !== id));
     return { ok: true };
 }
 
 /** 저장 + 오류 표시 — 무료 한도 초과 시 업그레이드 안내 (ROAD-P5) */
+/** @param {*} entry */
 export function saveVisit(entry) {
     proFeatureNotice('care_visit_save', '방문예약 저장');
     const r = addVisit(entry);

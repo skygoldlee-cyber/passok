@@ -14,16 +14,7 @@
         if (!exams.length) return;
         let id = null;
         try { id = localStorage.getItem('current_exam'); } catch (e) { /* noop */ }
-        let exam = null;
-        for (let i = 0; i < exams.length; i++) {
-            if (exams[i].id === id) { exam = exams[i]; break; }
-        }
-        if (!exam) {
-            for (let j = 0; j < exams.length; j++) {
-                if (exams[j].default) { exam = exams[j]; break; }
-            }
-        }
-        if (!exam) exam = exams[0];
+        const exam = exams.find(e => e.id === id) || exams.find(e => e.default) || exams[0] || null;
         if (!exam) return;
 
         const link = /** @type {HTMLLinkElement|null} */ (document.querySelector('link[rel="manifest"]'));
@@ -64,11 +55,13 @@
         const savedTheme = localStorage.getItem('appTheme');
         const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
         const isLight = (savedTheme || (prefersLight ? 'light' : 'dark')) === 'light';
+        /** @param {number} v */
         const lin = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+        /** @param {string} hex @param {number} maxLum */
         const darken = (hex, maxLum) => {
             const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
             if (!m) return null;
-            const n = parseInt(m[1], 16);
+            const n = parseInt(m[1] || '0', 16);
             const r = n >> 16 & 255, g = n >> 8 & 255, b = n & 255;
             for (let k = 1; k > 0; k -= 0.02) {
                 const rr = Math.round(r * k), gg = Math.round(g * k), bb = Math.round(b * k);
@@ -79,6 +72,7 @@
             return '#000000';
         };
         const theme = (exam && typeof exam.theme === 'object' && exam.theme) || {};
+        /** @type {Object.<string, string>} */
         const applied = {};
         for (const token of Object.keys(theme)) {
             const value = theme[token];
@@ -92,7 +86,7 @@
             if (applied[base]) applied[base + '-fill'] = darken(applied[base], 0.13) || applied[base];
         }
         for (const token of Object.keys(applied)) {
-            document.documentElement.style.setProperty(token, applied[token]);
+            document.documentElement.style.setProperty(token, applied[token] || '');
         }
     } catch (e) { /* 정적 매니페스트 폴백 유지 */ }
 })();

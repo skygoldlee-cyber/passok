@@ -21,6 +21,9 @@ const { restGetAll } = require('../lib/supabase_ops.js');
 
 // ── 순수 집계 (테스트 대상) ──────────────────────────────────
 
+/** 자동화 UA 패턴 — 리포트 집계에서 제외 (E2E·스크레이퍼 오염 방지) */
+const BOT_UA_RE = /playwright|headlesschrome|headless|phantomjs|puppeteer|selenium/i;
+
 /**
  * usage_events 행 배열 → 퍼널 리포트 구조 (순수 함수 — 네트워크 무관)
  * `_start`/`_complete` 접미 쌍을 자동 인식한다.
@@ -33,6 +36,7 @@ function summarize(rows) {
     const coreSessions = new Set();    // core_learning_action 발생 세션
     const installs = new Set();        // meta.install_id — 고유 설치 추정
     const coreInstalls = new Set();    // 핵심 행동 도달 설치
+    const completeMetas = {};          // 'session|event' → meta.duration_ms (실측 소요)
     for (const r of rows) {
         const ev = String(r.event || 'unknown');
         eventCounts[ev] = (eventCounts[ev] || 0) + 1;
@@ -48,6 +52,9 @@ function summarize(rows) {
         if (!r.session_id) continue;
         const s = sessions[r.session_id] || (sessions[r.session_id] = {});
         (s[ev] || (s[ev] = [])).push(String(r.created_at || ''));
+        // complete 이벤트의 마지막 meta.duration_ms — 세션|이벤트 키로 보관
+        const dm = r.meta && r.meta.duration_ms;
+        if (Number.isFinite(dm)) completeMetas[`${r.session_id}|${ev}`] = dm;
     }
 
     // 활성화 퍼널 — DOC-DSN-34 §4 "방문→핵심 학습 행동" (UX-MET-06/07)
@@ -72,14 +79,18 @@ function summarize(rows) {
         // 세션 쌍 집계 — start가 있는 세션 중 complete 도달 비율 + 소요 시간·점수
         let sStarts = 0, sDone = 0;
         const durations = [], scores = [];
-        for (const evs of Object.values(sessions)) {
+        for (const [sid, evs] of Object.entries(sessions)) {
             const st = evs[ev];
             if (!st) continue;
             sStarts++;
             const cp = evs[completeEv];
             if (cp && cp.length) {
                 sDone++;
-                const ms = Date.parse(cp[cp.length - 1]) - Date.parse(st[0]);
+                // duration_ms 페이로드 우선 (런 단위 실측) — 미전송 구버전 행은
+                // 세션 타임스탬프 차로 폴백 (다중 런 세션은 부정확)
+                const dm = completeMetas[`${sid}|${completeEv}`];
+                const ms = (Number.isFinite(dm) && dm >= 0) ? dm
+                    : Date.parse(cp[cp.length - 1]) - Date.parse(st[0]);
                 if (Number.isFinite(ms) && ms >= 0) durations.push(ms);
             }
         }
@@ -148,12 +159,17 @@ async function main() {
     }
 
     const since = new Date(Date.now() - days * 864e5).toISOString();
-    const rows = await restGetAll(secret, 'usage_events',
-        `select=created_at,session_id,event,meta`
+    const raw = await restGetAll(secret, 'usage_events',
+        `select=created_at,session_id,event,meta,user_agent`
         + `&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc`);
+    // 자동화 트래픽 제외 — EVAL_2026-10-30: quiz 점수 0%·소요 6s 오염의 원인.
+    // 신규 이벤트는 isAutomatedRuntime이 발화 단계에서 차단하나 과거 행은 잔존.
+    const rows = raw.filter(r => !BOT_UA_RE.test(String(r.user_agent || '')));
+    const bots = raw.length - rows.length;
     const s = summarize(rows);
 
-    console.log(`usage_events 완주율 리포트 — 최근 ${days}일 (조회 ${rows.length}행)`);
+    console.log(`usage_events 완주율 리포트 — 최근 ${days}일 (조회 ${rows.length}행`
+        + (bots ? ` · 자동화 UA ${bots}행 제외` : '') + ')');
     const evs = Object.entries(s.eventCounts).sort((a, b) => b[1] - a[1]);
     if (evs.length) {
         console.log('\n── 이벤트 건수 ──');

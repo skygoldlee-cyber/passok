@@ -40,7 +40,7 @@ test.describe('리더 마커·다이어그램 파이프라인', () => {
     test('기출·중요 마커가 하이라이트 카드로 추출·강조된다 (TR-05)', async ({ page }) => {
         test.setTimeout(60_000);
         await openReader(page, 1); // 1과목(law) — 🔖기출/📌중요 마커 + number-drills isKey 항목 존재
-        // ① 소스 마커 추출 카드 — 🔖기출/📌중요 라인이 '기출 핵심' 카드로 집계
+        // ① 소스 마커 추출 카드 — 🔖기출/📌중요 라인이 '빈출 핵심' 카드로 집계
         const hl = page.locator('#exam-highlight-card');
         await expect(hl).toBeVisible({ timeout: 15_000 });
         const hm = await page.evaluate(() => ({
@@ -62,7 +62,7 @@ test.describe('리더 마커·다이어그램 파이프라인', () => {
         }));
         expect(m.keySection).toBeGreaterThan(0);
         expect(m.keyItems).toBeGreaterThan(0);
-        expect(m.title).toContain('기출');
+        expect(m.title).toContain('빈출');
     });
 
     test('Mermaid가 유형별 클래스를 받아 svg로 렌더된다 (TR-07)', async ({ page }) => {

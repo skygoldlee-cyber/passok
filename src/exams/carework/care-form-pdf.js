@@ -4,8 +4,9 @@
 // 스캔(이미지) PDF는 텍스트가 없어 추출 불가 — 호출부에서 안내한다.
 import { PATHS } from '../../core/paths.js';
 
+/** @type {*} */
 let _pdfjs = null;
-const _script = src => new Promise((resolve, reject) => {
+const _script = (/** @type {string} */ src) => new Promise((resolve, reject) => {
     const s = document.createElement('script');
     s.src = src; s.onload = resolve; s.onerror = () => reject(new Error('PDF 읽기 라이브러리 로드 실패'));
     document.head.appendChild(s);
@@ -40,9 +41,9 @@ export async function extractFormPdf(file) {
         for (let p = 1; p <= numPages; p++) {
             const page = await doc.getPage(p);
             const tc = await page.getTextContent();
-            const items = tc.items.filter(i => i.str && i.str.trim());
+            const items = tc.items.filter((/** @type {*} */ i) => i.str && i.str.trim());
             // y 내림차순(위→아래)·x 오름차순 정렬 후 y 변화로 개행 복원
-            items.sort((a, b) => (b.transform[5] - a.transform[5]) || (a.transform[4] - b.transform[4]));
+            items.sort((/** @type {*} */ a, /** @type {*} */ b) => (b.transform[5] - a.transform[5]) || (a.transform[4] - b.transform[4]));
             let lastY = null;
             const parts = [];
             for (const it of items) {
@@ -138,11 +139,12 @@ async function _zipEntry(buf, name) {
 const _W_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
 
 /** word/document.xml → 텍스트 — 단락은 개행, 표는 MD 표 행으로 복원 (AI 추출 입력용) */
+/** @param {string} xml */
 function _docxXmlToText(xml) {
     const doc = new DOMParser().parseFromString(xml, 'application/xml');
     const body = doc.getElementsByTagNameNS(_W_NS, 'body')[0];
     if (!body) return '';
-    const pText = p => [...p.getElementsByTagNameNS(_W_NS, 't')].map(n => n.textContent).join('').trim();
+    const pText = (/** @type {Element} */ p) => [...p.getElementsByTagNameNS(_W_NS, 't')].map(n => n.textContent).join('').trim();
     const out = [];
     for (const el of body.children) {
         if (el.localName === 'p') {

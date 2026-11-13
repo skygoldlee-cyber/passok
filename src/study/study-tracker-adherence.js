@@ -13,6 +13,7 @@ import { computeStudyPlan, getDDay } from './study-tracker-plan.js';
 /**
  * 로컬 날짜 문자열 반환 (YYYY-MM-DD)
  */
+/** @param {Date} d */
 function _localDateStr(d) {
     return localDateKey(d);
 }
@@ -23,6 +24,7 @@ function _localDateStr(d) {
  * @param {number} [days] 집계 일수
  * @param {Date} [today] 기준일 (테스트 주입용)
  */
+/** @param {Object.<string,*>} calendar @param {number} [days] @param {Date} [today] */
 export function sumRecentCards(calendar, days = 7, today = new Date()) {
     let total = 0;
     for (let i = 0; i < days; i++) {
@@ -42,7 +44,9 @@ export function sumRecentCards(calendar, days = 7, today = new Date()) {
  * @param {Date} today 기준일
  * @returns {Object} {subjKey: 수}
  */
+/** @param {Object.<string,*>} calendar @param {string} field @param {number} days @param {Date} today */
 function _sumRecentBySubject(calendar, field, days, today) {
+    /** @type {Object.<string,number>} */
     const out = {};
     for (let i = 0; i < days; i++) {
         const d = new Date(today);
@@ -90,6 +94,7 @@ export function sumRecentQuizzesBySubject(calendar, days = 7, today = new Date()
  * @returns {{weekTarget:number, weekActual:number, percent:number, status:string}|null}
  *   status: 'met' ≥100% · 'ontrack' ≥50% · 'behind' <50% · 'done' 잔여 0
  */
+/** @param {*} plan @param {Object.<string,*>} [calendar] @param {Date} [today] */
 export function computePlanAdherence(plan, calendar, today = new Date()) {
     if (!plan) return null;
     if (plan.remaining === 0) return { weekTarget: 0, weekActual: 0, percent: 100, status: 'done' };
@@ -119,9 +124,10 @@ function _weekStartStr(today = new Date()) {
  * @param {Array<string>} [seen] 이미 안내한 마일스톤 id
  * @returns {Array<{id:string, msg:string, tone:string}>}
  */
+/** @param {*} p @param {string[]} [seen] */
 export function evalStudyMilestones(p, seen = []) {
     const out = [];
-    const has = (id) => seen.includes(id);
+    const has = (/** @type {string} */ id) => seen.includes(id);
     const d = p.dday;
     if (typeof d === 'number' && d >= 0) {
         if (d === 0 && !has('d0')) out.push({ id: 'd0', msg: '시험 당일입니다 — 그동안의 학습을 믿고 임하세요.', tone: 'success' });

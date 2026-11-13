@@ -15,6 +15,7 @@ const REASON = '오프라인에서는 사용할 수 없습니다.';
 const OFFLINE_SELECTORS = [
     '[data-click="authSignIn"]', '[data-click="authSignUp"]', '[data-click="authEmailLogin"]',
     '[data-click="authForgotPassword"]', '[data-click="authVerifyOtp"]', '[data-click="authOAuth"]',
+    '[data-click="authLinkIdentity"]', '[data-click="authUnlinkIdentity"]',
     '[data-click="syncNow"]', '[data-click="showRedeemCode"]',
     '[data-click="careAiDraft"]',
     '.ai-coach-btn', '.ai-plan-btn', '.ai-qa-btn',
@@ -24,9 +25,10 @@ let _offline = false;
 let _observer = null;
 let _installed = false;
 
+/** @param {*} root - Element 또는 document */
 function _mark(root) {
     const scope = root instanceof Element ? root : document;
-    const markOne = (el) => {
+    const markOne = (/** @type {Element} */ el) => {
         if (_offline) {
             el.setAttribute('aria-disabled', 'true');
             el.classList.add('offline-blocked');

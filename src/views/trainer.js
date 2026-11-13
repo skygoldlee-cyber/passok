@@ -19,7 +19,7 @@ function _getSynonyms() {
     return (reg && reg.synonyms && typeof reg.synonyms === 'object') ? reg.synonyms : {};
 }
 
-const cleanForCompare = (str) => {
+const cleanForCompare = (/** @type {string} */ str) => {
     if (!str) return '';
     const stripped = str
         .replace(/\([a-zA-Z0-9]\)/g, '')
@@ -29,6 +29,7 @@ const cleanForCompare = (str) => {
     return stripped.replace(/\s+/g, '').replace(/[\*`'"\[\]\(\)]/g, '').toLowerCase();
 };
 
+/** @param {string} userInput @param {string} correctAnswer */
 export function checkShortAnswer(userInput, correctAnswer) {
     if (!userInput || !correctAnswer) return false;
 
@@ -38,7 +39,7 @@ export function checkShortAnswer(userInput, correctAnswer) {
     if (cleanUser === cleanCorrect) return true;
 
     // 한글 조사 제거 헬퍼 함수
-    const removeJosa = (str) => {
+    const removeJosa = (/** @type {string} */ str) => {
         if (str.length > 2) {
             const lastChar = str.slice(-1);
             if (['이', '가', '을', '를', '은', '는'].includes(lastChar)) {
@@ -57,11 +58,12 @@ export function checkShortAnswer(userInput, correctAnswer) {
         (correctAnswer.includes('①') && correctAnswer.includes('②'))
     );
 
+    /** @type {string[]} */
     let splitCorrects = [];
     if (!hasMultipleParts) {
-        splitCorrects = correctAnswer.split(/[,/]/).map(val => cleanForCompare(val));
-        if (splitCorrects.some(val => val === cleanUser)) return true;
-        if (splitCorrects.some(val => removeJosa(cleanUser) === removeJosa(val))) return true;
+        splitCorrects = correctAnswer.split(/[,/]/).map((/** @type {string} */ val) => cleanForCompare(val));
+        if (splitCorrects.some((/** @type {string} */ val) => val === cleanUser)) return true;
+        if (splitCorrects.some((/** @type {string} */ val) => removeJosa(cleanUser) === removeJosa(val))) return true;
     }
 
     // 유사어 사전 대조 (registry.synonyms — 시험별 manifest 선언)
@@ -81,6 +83,7 @@ export function checkShortAnswer(userInput, correctAnswer) {
    ⚖️ 핵심 수치 훈련소 (Limits Trainer)
    데이터: {contentRoot}/limits-trainer.json — 시험별 콘텐츠, features.limitsTrainer 플래그로 게이트
    ======================================================= */
+/** @type {*|null} */
 let _limitsDbCache = null;
 
 /**
@@ -174,6 +177,7 @@ function renderLimitsQuestion() {
     if (nextBtn) nextBtn.classList.add('is-hidden');
 }
 
+/** @param {*} question */
 function generateLimitsOptions(question) {
     const correctValue = question.value;
     const optionsSet = new Set([correctValue]);
@@ -184,7 +188,7 @@ function generateLimitsOptions(question) {
         let distractor = '';
         if (correctValue.includes('~')) {
             const dists = ['1.0 ~ 3.0', '2.0 ~ 4.0', '3.0 ~ 5.0', '1.0 ~ 5.0', '3.0 ~ 10.0', '0.5 ~ 2.0'];
-            distractor = dists[Math.floor(Math.random() * dists.length)];
+            distractor = dists[Math.floor(Math.random() * dists.length)] || '';
         } else {
             const valNum = parseFloat(correctValue);
             if (valNum <= 0.1) {
@@ -220,6 +224,7 @@ function generateLimitsOptions(question) {
     return shuffle([...optionsSet]);
 }
 
+/** @param {HTMLButtonElement} selectedBtn @param {*} selectedValue @param {*} correctValue */
 function submitLimitsAnswer(selectedBtn, selectedValue, correctValue) {
     const isCorrect = (selectedValue === correctValue);
     vibrate(isCorrect ? HAPTIC.correct : HAPTIC.wrong);
@@ -294,8 +299,11 @@ const TRAINER_SUB_SLUGS = {
     'trainer-ingredients-panel': 'ingredients',
 };
 let _subnavReady = false;
+/** @type {HTMLElement|null} */
 let _observedView = null;
+/** @type {MutationObserver|null} */
 let _subObserver = null;
+/** @type {string|null} */
 let _openSubPanel = null;
 
 function _currentOpenSubPanel() {
@@ -322,7 +330,7 @@ function initTrainerSubnav() {
             _openSubPanel = open;
             if (open && state.currentView === 'trainer-view' && location.hash === '#/trainer') {
                 try {
-                    history.pushState({ view: 'trainer-view' }, '', '#/trainer/' + TRAINER_SUB_SLUGS[open]);
+                    history.pushState({ view: 'trainer-view' }, '', '#/trainer/' + TRAINER_SUB_SLUGS[/** @type {keyof TRAINER_SUB_SLUGS} */ (open)]);
                 } catch (_) { /* 제한 환경 무시 */ }
             }
         });

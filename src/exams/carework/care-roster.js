@@ -8,8 +8,9 @@ export const ROSTER_SHIFTS = [
     { key: 'night', label: '야간(나이트)' },
 ];
 
+/** @param {string} key */
 export function shiftLabel(key) {
-    return ROSTER_SHIFTS.find(s => s.key === key)?.label || key || '';
+    return ROSTER_SHIFTS.find((/** @type {*} */ s) => s.key === key)?.label || key || '';
 }
 
 /**
@@ -33,8 +34,9 @@ export function buildRosterText(items) {
 const ROSTER_CSV_COLS = ['날짜', '근무조', '근무자', '메모'];
 
 /** 근무 배정 목록 → CSV 텍스트 (UTF-8 BOM — Excel 한글 호환) */
+/** @param {*[]} items */
 export function rosterToCsv(items) {
-    return toCsv(ROSTER_CSV_COLS, items, x => [
+    return toCsv(ROSTER_CSV_COLS, items, (/** @type {*} */ x) => [
         x.date || '', shiftLabel(x.shift), x.worker || '', x.note || '',
     ]);
 }
@@ -43,20 +45,21 @@ export function rosterToCsv(items) {
  * CSV 텍스트 → 근무 배정 레코드 배열 (헤더 필수, 날짜·근무자 열 없으면 빈 배열).
  * 근무조는 키(day) 또는 라벨(주간(데이)) 모두 허용 — 알 수 없는 값은 'day'.
  */
+/** @param {string} text */
 export function csvToRoster(text) {
     const rows = parseCsv(text);
     if (rows.length < 2) return [];
-    const header = rows[0].map(h => h.trim());
-    const idx = Object.fromEntries(ROSTER_CSV_COLS.map(c => [c, header.indexOf(c)]));
-    if (idx['날짜'] < 0 || idx['근무자'] < 0) return [];
+    const header = (rows[0] || []).map((/** @type {string} */ h) => h.trim());
+    const idx = Object.fromEntries(ROSTER_CSV_COLS.map((/** @type {string} */ c) => [c, header.indexOf(c)]));
+    if ((idx['날짜'] ?? -1) < 0 || (idx['근무자'] ?? -1) < 0) return [];
     return rows.slice(1).map(r => {
-        const shiftRaw = idx['근무조'] >= 0 ? r[idx['근무조']] : '';
+        const shiftRaw = (idx['근무조'] ?? -1) >= 0 ? r[idx['근무조'] ?? 0] : '';
         const shift = ROSTER_SHIFTS.find(s => s.key === shiftRaw || s.label === shiftRaw)?.key || 'day';
         return {
-            date: r[idx['날짜']] || '',
+            date: r[idx['날짜'] ?? 0] || '',
             shift,
-            worker: r[idx['근무자']] || '',
-            note: idx['메모'] >= 0 ? (r[idx['메모']] || '') : '',
+            worker: r[idx['근무자'] ?? 0] || '',
+            note: (idx['메모'] ?? -1) >= 0 ? (r[idx['메모'] ?? 0] || '') : '',
         };
     }).filter(x => x.date && x.worker);
 }

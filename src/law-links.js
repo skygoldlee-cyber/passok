@@ -230,7 +230,8 @@ const _EXAM_LAW_URLS = {
 // 활성 시험의 매칭 테이블 (미등록 시험은 빈 테이블 — 다른 시험 문서로 폴백하지 않음)
 function activeLawUrls() {
   const id = getActiveExamId();
-  return _EXAM_LAW_URLS[id] || [];
+  if (!id) return [];
+  return _EXAM_LAW_URLS[/** @type {keyof _EXAM_LAW_URLS} */ (id)] || [];
 }
 
 // 전 시험 매칭 합집합 (URL 기준 중복 제거 — 같은 문서의 matchKey는 첫 것만 유지, 순서 보존)
@@ -249,7 +250,7 @@ export function lawUrlFor(name) {
   // 표시명('시행규칙 별표7 …')과 파일명('시행규칙_별표7_….pdf') 모두 대응 — 공백·괄호·언더스코어 제거
   const key = String(name).replace(/[\s()_]/g, '').replace(/\.(pdf|md|html?)$/i, '');
   for (const [pat, url] of activeLawUrls()) {
-    if (key.includes(pat.replace(/[\s()_]/g, ''))) return url;
+    if (key.includes((pat || '').replace(/[\s()_]/g, ''))) return url || null;
   }
   return null;
 }

@@ -6,6 +6,7 @@ import { todayKey } from '../../core/utils.js';
 import { pushState } from './facility.js';
 
 const KEY = 'carework_audit_checks';
+/** @type {*[]|null} */
 let _sections = null;
 
 /** 기관 업로드 점검표 — 저장되면 기본 고시 점검표 대신 사용 */
@@ -13,6 +14,7 @@ export function loadCustomSections() {
     const v = getJSON(STORAGE_KEYS.CARE_AUDIT_CUSTOM);
     return Array.isArray(v) && v.length ? v : null;
 }
+/** @param {*[]} sections */
 export function saveCustomSections(sections) {
     setJSON(STORAGE_KEYS.CARE_AUDIT_CUSTOM, sections);
 }
@@ -34,6 +36,7 @@ export function loadChecks() {
     const p = getJSON(KEY);
     return p && typeof p === 'object' && !Array.isArray(p) ? p : {};
 }
+/** @param {string} id */
 export function toggleCheck(id) {
     const c = loadChecks();
     c[id] = !c[id];
@@ -49,6 +52,7 @@ export function clearChecks() {
 
 // — CO-14/15: 점검 상태 서버 공유 (상태형 — 'audit_state' 단일 슬롯 upsert, 디바운스) —
 
+/** @type {ReturnType<typeof setTimeout>|null} */
 let _auditTimer = null;
 function _pushAuditDebounced() {
     if (_auditTimer) clearTimeout(_auditTimer);
@@ -62,9 +66,10 @@ export async function pushAuditState() {
         payload: { checks: loadChecks(), sections: loadCustomSections() || null }, localId: 'audit_state',
     });
 }
+/** @param {*[]} sections */
 export function auditProgress(sections) {
     const c = loadChecks();
-    const ids = (sections || []).flatMap(s => s.items.map(i => i.id));
-    const done = ids.filter(id => c[id]).length;
+    const ids = (sections || []).flatMap((/** @type {*} */ s) => s.items.map((/** @type {*} */ i) => i.id));
+    const done = ids.filter((/** @type {string} */ id) => c[id]).length;
     return { done, total: ids.length };
 }

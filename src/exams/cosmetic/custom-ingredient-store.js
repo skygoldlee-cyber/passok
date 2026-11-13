@@ -39,10 +39,12 @@ function loadAll() {
   return loadItems(STORAGE_KEYS.CUSTOM_INGREDIENTS);
 }
 
+/** @param {*[]} items */
 function saveAll(items) {
   return saveItems(STORAGE_KEYS.CUSTOM_INGREDIENTS, items);
 }
 
+/** @param {*} data */
 function sanitize(data) {
   return {
     name: clampStr(data.name || '', MAX_NAME_LEN).trim(),
@@ -60,6 +62,7 @@ export function listCustomIngredients() {
   return loadAll().slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 }
 
+/** @param {string} id */
 export function getCustomIngredient(id) {
   return loadAll().find(i => i.id === id) || null;
 }
@@ -97,6 +100,7 @@ function collisionReason(name, officialIndex, excludeId) {
   const norm = normalizeEntityName(name);
   if (!norm) return '원료명을 입력하세요.';
   if (officialIndex && typeof officialIndex.forEach === 'function') {
+    /** @type {*} */
     let hit = null;
     officialIndex.forEach((v, k) => {
       if (!hit && normalizeEntityName(k) === norm) hit = k;
@@ -146,6 +150,7 @@ export function updateCustomIngredient(id, data, opts = {}) {
   return { ok: true, item: items[idx] };
 }
 
+/** @param {string} id */
 export function deleteCustomIngredient(id) {
   const items = loadAll();
   const next = items.filter(i => i.id !== id);

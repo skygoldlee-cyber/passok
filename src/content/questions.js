@@ -60,7 +60,11 @@ const SUBJECT_MAX = { 1: 100, 2: 250, 3: 250, 4: 400 };
 const PASS_TOTAL = 0.60;  // 총점 60%
 const PASS_SUBJECT = 0.40; // 과목별 40% (미만이면 과락)
 
-/** 문자열 정규화(단답형 비교용): 공백 축약·대소문자·괄호주석 제거 */
+/**
+ * 문자열 정규화(단답형 비교용): 공백 축약·대소문자·괄호주석 제거
+ * @param {*} s
+ * @returns {string}
+ */
 function normalizeText(s) {
   return String(s)
     .trim()
@@ -69,27 +73,35 @@ function normalizeText(s) {
     .replace(/[()[\]{}]/g, ''); // 괄호류 제거
 }
 
-/** combo: 진술 truth로부터 정답 옵션 id를 도출. 정확히 하나면 그 id, 아니면 null */
+/**
+ * combo: 진술 truth로부터 정답 옵션 id를 도출. 정확히 하나면 그 id, 아니면 null
+ * @param {Question} q
+ * @returns {string|null}
+ */
 function deriveComboAnswer(q) {
-  const trueSet = new Set(q.statements.filter(s => s.truth).map(s => s.id));
-  const eq = (arr) =>
+  const trueSet = new Set((q.statements || []).filter(s => s.truth).map(s => s.id));
+  const eq = (/** @type {string[]} */ arr) =>
     arr.length === trueSet.size && arr.every(id => trueSet.has(id));
-  const hits = q.options.filter(o => eq(o.members || []));
-  return hits.length === 1 ? hits[0].id : null;
+  const hits = (q.options || []).filter(o => eq(o.members || []));
+  return hits.length === 1 && hits[0] ? hits[0].id : null;
 }
 
 /**
  * combo 오답 조합 자동 생성: truthIds 집합과 다른 무작위 부분집합으로 count개 옵션 구성.
  * 반환값을 q.options에 넣기 전 validateQuestion으로 정답 유일성을 재확인할 것.
  * (진술이 적어 조합이 부족하면 count 미만으로 반환될 수 있음)
+ * @param {string[]} allIds - 전체 진술 id
+ * @param {string[]} truthIds - 옳은 진술 id
+ * @param {{count?: number, rng?: function(): number, banFull?: boolean}} [opts]
+ * @returns {{id: string, members: string[]}[]}
  */
 function generateComboOptions(allIds, truthIds, { count = 5, rng = Math.random, banFull = false } = {}) {
   const truthSet = new Set(truthIds);
-  const eq = (arr) => arr.length === truthSet.size && arr.every(id => truthSet.has(id));
+  const eq = (/** @type {string[]} */ arr) => arr.length === truthSet.size && arr.every(id => truthSet.has(id));
   const seen = new Set([[...truthIds].sort().join(',')]);
   // 진술 라벨(ㄱㄴㄷㄹ…)은 유니코드 연속 코드포인트 — 오름차순 정렬이 곧 가나다순.
   // 실제 시험 관례상 옵션 멤버는 항상 라벨 순서로 표기한다.
-  const byLabel = (a, b) => allIds.indexOf(a) - allIds.indexOf(b);
+  const byLabel = (/** @type {string} */ a, /** @type {string} */ b) => allIds.indexOf(a) - allIds.indexOf(b);
   const options = [{ id: '1', members: [...truthIds].sort(byLabel) }];
 
   let guard = 0;
@@ -113,6 +125,9 @@ function generateComboOptions(allIds, truthIds, { count = 5, rng = Math.random, 
 /**
  * 문항 데이터 무결성 검사. 문제 없으면 [], 있으면 사유 문자열 배열 반환.
  * 출제/임포트 시점에 돌려서 정답 오타·조합 불일치를 잡는 용도.
+ * @param {Question} q
+ * @param {Object.<number, number>} [subjectMax] 과목별 만점 맵 (기본 4과목 시험)
+ * @returns {string[]} 문제 없으면 빈 배열
  */
 function validateQuestion(q, subjectMax = SUBJECT_MAX) {
   const errs = [];
@@ -156,13 +171,13 @@ function validateQuestion(q, subjectMax = SUBJECT_MAX) {
 /**
  * 한 문항 채점.
  * @param {Question} q
- * @param {string|{optionId:string, judgments?:Object<string,boolean>}} response
+ * @param {string|{optionId:string, judgments?:Object<string,boolean>|undefined}} response
  *   single/combo = 옵션 id (또는 2단계 응시용 {optionId, judgments}),
  *   short = 입력 문자열, ox = 'O'|'X'|boolean
  * @returns {{correct:boolean, earned:number, max:number, correctAnswer:string,
- *            perStatement?:{id:string,sid?:string,truth:boolean,
+ *            perStatement?:{id:string,sid?:string|undefined,truth:boolean,
  *                           userJudged:boolean|null,judgedCorrect:boolean|null,
- *                           explain?:string}[]}}
+ *                           conceptId?:string|undefined,text?:string,explain?:string|undefined}[]|undefined}}
  */
 function gradeAnswer(q, response) {
   const max = q.points || 0;
@@ -220,9 +235,10 @@ function gradeAnswer(q, response) {
 /**
  * 모의고사 채점: 과목별 집계 + 합격 판정.
  * @param {Question[]} questions
- * @param {Record<string,string|Object>} responses  { [questionId]: response }
+ * @param {Object.<string, *>} responses  { [questionId]: response }
  */
 function scoreExam(questions, responses) {
+  /** @type {Object.<string, {earned: number, max: number, pct?: number, pass?: boolean}>} */
   const bySubject = {};
   let totalEarned = 0, totalMax = 0;
   const details = [];
@@ -239,7 +255,7 @@ function scoreExam(questions, responses) {
 
   let subjectPass = true;
   for (const s of Object.keys(bySubject)) {
-    const sub = bySubject[s];
+    const sub = /** @type {{earned:number, max:number, pct?:number, pass?:boolean}} */ (bySubject[s]);
     sub.pct = sub.max ? sub.earned / sub.max : 0;
     sub.pass = sub.pct >= PASS_SUBJECT;      // 과목별 40%
     if (!sub.pass) subjectPass = false;      // 하나라도 미달 → 과락

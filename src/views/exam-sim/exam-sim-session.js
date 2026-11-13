@@ -35,6 +35,7 @@ function armSimLeaveGuard() {
     registerViewLeaveGuard('exam-view', confirmLeaveSim);
 }
 
+/** @param {*} examData */
 export function startSimSession(examData) {
     // 시뮬레이터 상태 초기화
     simState.examId = examData.id || 'dynamic';
@@ -42,7 +43,7 @@ export function startSimSession(examData) {
     simState.currentIndex = 0;
     simState.userAnswers = {};
     simState.answerChanges = {}; // PS-08 — 세션 시작 시 변경 추적 리셋
-    // 문항당 1분 기산, 실전 형식(통합 모의고사)은 명시된 제한시간 우선 (실제 시험: 100문/120분)
+    // 문항당 1분 기산, 실전 형식(통합 모의고사)은 명시된 제한시간 우선 (실제 시험 시간은 manifest integratedExam.examTimeMin — 시험별 상이)
     simState.timeLeft = examData.timeLimitSec || examData.questions.length * TIMING.EXAM_TIME_PER_QUESTION_SEC;
     simState.wrongQuestions = [];
 
@@ -72,12 +73,13 @@ export function startSimSession(examData) {
  * 과목별 실전 모의고사 시작 — data-arg 'examKey' 또는 'examKey:count' (count = 출제 수, 생략 시 전체)
  * 부분 출제 시 문항을 무작위 추출하고 제한시간도 문항 수 비례로 축소
  */
+/** @param {*} arg */
 export function startMockExamSim(arg) {
     const [examId, countStr] = String(arg).split(':');
     const want = countStr ? parseInt(countStr, 10) : NaN;
     proFeatureNotice('mock_exam', '실전 모의고사');
     showGlobalLoading('모의고사 데이터를 불러오는 중입니다...');
-    DataLoader.loadExam(examId).then((examData) => {
+    DataLoader.loadExam(examId || '').then((examData) => {
         hideGlobalLoading();
         const total = examData.questions.length;
         if (!isNaN(want) && want > 0 && want < total) {
@@ -104,22 +106,24 @@ export function startMockExamSim(arg) {
  * (citation·진술 목록을 question 본문에 편입해 아레나·리뷰 양쪽에서 표시,
  *  options.members를 문자열 배열로, 정답을 지시자 기호로 변환)
  */
+/** @param {*} q @param {string} subjKey */
 export function comboToSimQuestion(q, subjKey) {
-    const stmtLines = (q.statements || []).map(s => `${s.id}. ${s.text}`);
-    const ansIdx = (q.options || []).findIndex(o => o.id === q.answer);
+    const stmtLines = (q.statements || []).map((/** @type {*} */ s) => `${s.id}. ${s.text}`);
+    const ansIdx = (q.options || []).findIndex((/** @type {*} */ o) => o.id === q.answer);
     return {
         ...q,
         subject: subjKey,
         type: 'combo',
         question: [q.citation, q.stem, stmtLines.join('\n')].filter(Boolean).join('\n\n'),
         comboOptions: q.options || [], // 원본 members 구조 보존 — 채점 시 진술 판정 도출·리뷰 정오표용
-        options: (q.options || []).map(o => (o.members || []).join(', ')),
+        options: (q.options || []).map((/** @type {*} */ o) => (o.members || []).join(', ')),
         answer: OPTION_INDICATORS[ansIdx] || q.answer,
         explanation: q.explain || ''
     };
 }
 
 // 복수정답형 번들 과목 번호 조회 (combo 오답 복습 시 과목 번들 로드용) — registry.subjects의 order 기반
+/** @param {string} subjKey */
 export function comboSubjOrder(subjKey) {
     const subjects = (getActiveRegistry() || {}).subjects || [];
     const s = subjects.find(x => x.key === subjKey);
@@ -132,7 +136,7 @@ export function comboSubjOrder(subjKey) {
  */
 export function startComboMockExam(arg) {
     const [numStr, countStr] = String(arg).split(':');
-    const num = parseInt(numStr, 10);
+    const num = parseInt(numStr || '', 10);
     const orders = DataLoader.getSubjectOrders();
     if (isNaN(num) || !orders.includes(num)) return;
     const want = countStr ? parseInt(countStr, 10) : NaN;
@@ -189,7 +193,9 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     const subjects = registry && registry.subjects ? registry.subjects : [];
 
     // 과목별 문제 버킷 (동적 생성)
+    /** @type {Object.<string,Array<*>>} */
     const subjectQuestions = {};
+    /** @type {Object.<string,number>} */
     const subjectCounts = {};
     for (const subj of subjects) {
         subjectQuestions[subj.key] = [];
@@ -199,6 +205,7 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     const EXAM_DATA = (typeof window !== 'undefined' && window.EXAM_DATA) ? window.EXAM_DATA : {};
 
     // registry.exams에서 examId → subject 매핑 구축
+    /** @type {Object.<string,string>} */
     const examToSubject = {};
     if (registry && registry.exams) {
         for (const exam of registry.exams) {
@@ -207,31 +214,32 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     }
 
     Object.keys(EXAM_DATA).forEach(examId => {
-        const questions = EXAM_DATA[examId].questions || [];
+        const questions = (EXAM_DATA[examId] || {}).questions || [];
         // registry 매핑 우선, 없으면 접두사 폴백 (subject1 → law 등)
         let subjKey = examToSubject[examId];
         if (!subjKey) {
             // 폴백: examId 접두사 → registry.subjects 순서 기반 매칭
             const prefixMatch = examId.match(/^(subject\d+)/);
             if (prefixMatch) {
-                const idx = parseInt(prefixMatch[1].replace('subject', '')) - 1;
+                const idx = parseInt((prefixMatch[1] || '').replace('subject', '')) - 1;
                 if (subjects[idx]) subjKey = subjects[idx].key;
             }
         }
-        if (subjKey && subjectQuestions[subjKey]) {
-            subjectQuestions[subjKey].push(...questions);
+        const sq = subjKey ? subjectQuestions[subjKey] : null;
+        if (sq) {
+            sq.push(...questions);
         }
     });
 
     // 모든 과목에 문제가 있는지 확인
-    const missingSubjects = subjects.filter(s => subjectQuestions[s.key].length === 0);
+    const missingSubjects = subjects.filter(s => (subjectQuestions[s.key] || []).length === 0);
     if (missingSubjects.length > 0) {
         showToast("모의고사 데이터가 불완전합니다. 모든 과목의 모의고사가 정상 로드되었는지 확인하세요.", "error");
         return;
     }
 
     // 과목별 무작위 선택 함수
-    const getRandomSample = (arr, count, subjectId) => {
+    const getRandomSample = (/** @type {*[]} */ arr, /** @type {number} */ count, /** @type {string} */ subjectId) => {
         const shuffled = shuffle(arr);
         return shuffled.slice(0, count).map(q => ({
             ...q,
@@ -240,28 +248,30 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     };
 
     // 복수정답형 혼합: 과목별 배정의 약 20%를 combo 문항으로 교체 (선지 다양화, 실전 패턴 훈련)
+    /** @type {Object.<string,*[]>} */
     const comboPoolBySubject = {};
     if (mixCombo) {
         subjects.forEach((subj, idx) => {
-            const bundle = (typeof window !== 'undefined') ? window[`COMBO_DRILLS_subject${idx + 1}`] : null;
+            const bundle = (typeof window !== 'undefined') ? /** @type {*} */ (window)[`COMBO_DRILLS_subject${idx + 1}`] : null;
             if (Array.isArray(bundle)) comboPoolBySubject[subj.key] = bundle;
         });
     }
 
     // 과목별 샘플링 (registry에서 동적 조회)
+    /** @type {Object.<string,*[]>} */
     const selectedBySubject = {};
     let expectedTotal = 0;
     const shortageSubjects = [];
     for (const subj of subjects) {
-        const count = subjectCounts[subj.key];
+        const count = subjectCounts[subj.key] || 0;
         if (count > 0) {
             expectedTotal += count;
-            if (subjectQuestions[subj.key].length < count) {
-                shortageSubjects.push(`${subj.shortName || subj.name || subj.key} ${subjectQuestions[subj.key].length}/${count}`);
+            if ((subjectQuestions[subj.key] || []).length < count) {
+                shortageSubjects.push(`${subj.shortName || subj.name || subj.key} ${(subjectQuestions[subj.key] || []).length}/${count}`);
             }
             const pool = comboPoolBySubject[subj.key] || [];
             const comboCount = Math.min(Math.round(count * 0.2), pool.length);
-            const picked = getRandomSample(subjectQuestions[subj.key], count - comboCount, subj.key);
+            const picked = getRandomSample(subjectQuestions[subj.key] || [], count - comboCount, subj.key);
             if (comboCount > 0) {
                 shuffle(pool).slice(0, comboCount).forEach(q =>
                     picked.push(comboToSimQuestion(q, subj.key)));
@@ -297,7 +307,7 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
             ? `1~${subjectCount}과목 통합 실전 모의고사 (${totalQuestions}제)`
             : `통합 실전 모의고사 (${totalQuestions}제)`,
         questions: combinedQuestions,
-        // 실제 시험 시간: manifest integratedExam.examTimeMin (100문/120분)
+        // 실제 시험 시간: manifest integratedExam.examTimeMin (시험별 상이 — cosmetic 120분·carework 90분)
         timeLimitSec
     };
 

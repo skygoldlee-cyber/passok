@@ -27,6 +27,12 @@ const STATUS_REPO = 'skygoldlee-cyber/passok';
  * 현행본 직결 URL — 일련번호가 있으면 한글주소보다 정확한 시리얼 페이지로 연다.
  * target: 'law' → lsInfoP.do / 'admrul' → admRulInfoP.do
  */
+/**
+ * @param {*} serial
+ * @param {*} target - 'law' → lsInfoP.do / 'admrul' → admRulInfoP.do
+ * @param {*} effectiveDate
+ * @param {*} fallback
+ */
 function ruleInfoUrl(serial, target, effectiveDate, fallback) {
   if (serial) {
     if (target === 'law') {
@@ -38,20 +44,24 @@ function ruleInfoUrl(serial, target, effectiveDate, fallback) {
   return fallback || LAW_BASE;
 }
 
+/** @param {*} examId */
 function statusUrl(examId) {
   return `https://raw.githubusercontent.com/${STATUS_REPO}/main/content/exams/${examId}/notice_status.json`;
 }
 
 /** '제2026-19호' / '2026-19' 등 → '제2026-19호' 정규화 (순수 함수 — 테스트용) */
+/** @param {*} s */
 export function normalizeNotice(s) {
   const m = /^제?\s*(20\d{2})\s*-?\s*(\d+)\s*호?$/.exec(String(s ?? '').trim());
   return m ? `제${m[1]}-${m[2]}호` : null;
 }
 
 /** 상세 응답 객체에서 최신 고시번호 추출 (순수 함수 — 테스트용) */
+/** @param {*} node */
 export function findNoticeNumber(node) {
+  /** @type {string[]} */
   const cands = [];
-  (function walk(o) {
+  (function walk(/** @type {*} */ o) {
     if (Array.isArray(o)) { o.forEach(walk); return; }
     if (!o || typeof o !== 'object') return;
     for (const [k, v] of Object.entries(o)) {
@@ -69,11 +79,12 @@ export function findNoticeNumber(node) {
     }
   }
   if (!cands.length) return null;
-  const key = (s) => { const m = /20(\d{2})-(\d+)/.exec(s); return m ? [+m[1], +m[2]] : [0, 0]; };
-  return cands.sort((a, b) => key(a)[0] - key(b)[0] || key(a)[1] - key(b)[1]).pop();
+  const key = (/** @type {string} */ s) => { const m = /20(\d{2})-(\d+)/.exec(s); return m ? [+(m[1] || '0'), +(m[2] || '0')] : [0, 0]; };
+  return cands.sort((a, b) => (key(a)[0] || 0) - (key(b)[0] || 0) || (key(a)[1] || 0) - (key(b)[1] || 0)).pop();
 }
 
 /** baseline보다 최신 고시인지 판정 (순수 함수 — 테스트용) */
+/** @param {*} status */
 export function isNewerNotice(status) {
   const latest = status?.latest;
   const base = status?.baseline;
@@ -82,11 +93,12 @@ export function isNewerNotice(status) {
   const be = base.effectiveDate || '';
   if (le && be) return le > be;
   // 날짜가 없으면 고시번호 비교 (제2026-19호 → [2026,19])
-  const num = (s) => { const m = /20(\d{2})\s*-\s*(\d+)/.exec(s || ''); return m ? [+m[1], +m[2]] : null; };
+  const num = (/** @type {*} */ s) => { const m = /20(\d{2})\s*-\s*(\d+)/.exec(s || ''); return m ? [+(m[1] || '0'), +(m[2] || '0')] : null; };
   const ln = num(latest.notice); const bn = num(base.notice);
-  return !!(ln && bn && (ln[0] > bn[0] || (ln[0] === bn[0] && ln[1] > bn[1])));
+  return !!(ln && bn && ((ln[0] || 0) > (bn[0] || 0) || (ln[0] === bn[0] && (ln[1] || 0) > (bn[1] || 0))));
 }
 
+/** @param {*} latest @param {*[]} [extraDocs] */
 function renderBanner(latest, extraDocs) {
   const el = document.getElementById('formula-notice-banner');
   if (!el) return;
@@ -112,9 +124,13 @@ function renderBanner(latest, extraDocs) {
 }
 
 // ——— 상태 파일 캐시 (다문서 docs[] — 참조 링크 '갱신 필요' 배지에 사용) ———
+/** @type {*|null} */
 let _lastStatus = null;
+/** @type {Promise<*>|null} */
 let _statusPromise = null;
+/** @type {*|null} */
 let _lastDiff = null;
+/** @type {Promise<*>|null} */
 let _diffPromise = null;
 
 /**
@@ -156,6 +172,7 @@ export function ensureNoticeStatus() {
 
 // ——— 개정 조문 diff (notice_diff.json — build:noticediff가 ref_md↔_archive 비교로 생성) ———
 
+/** @param {*} examId */
 function diffUrl(examId) {
   return `https://raw.githubusercontent.com/${STATUS_REPO}/main/data/exams/${examId}/notice_diff.json`;
 }
@@ -182,11 +199,13 @@ function diffSeenMap() {
 }
 
 /** 아직 사용자에게 고지하지 않은 개정 항목만 필터 (순수 함수 — 테스트용) */
+/** @param {*[]} docs @param {Object.<string,*>} seen */
 export function unseenRevisions(docs, seen) {
   return (docs || []).filter(d => d?.to?.doc && seen?.[d.key] !== d.to.doc);
 }
 
 /** 개정 1건 요약 문구 — '신설 제2조의4·제2조의5 · 개정 제3조의3' (순수 함수 — 테스트용) */
+/** @param {*} d */
 export function diffSummary(d) {
   const parts = [];
   if (d.added?.length) parts.push(`신설 ${d.added.join('·')}`);
@@ -196,6 +215,7 @@ export function diffSummary(d) {
 }
 
 /** 개정 감지 배너(신판 공포 알림)와 별개 — 앱에 새 판본이 반영됐을 때 1회 알림 */
+/** @param {*[]} docs */
 function renderRevisionBanner(docs) {
   const el = document.getElementById('formula-notice-banner');
   if (!el || !el.classList.contains('is-hidden')) return; // 개정 감지 배너 우선
@@ -234,11 +254,11 @@ export function dismissRefRevision() {
  *  한글주소는 시행 예정 개정본으로도 연결되므로(currentUrl=현행본 일련번호 URL) href를 갱신한다. */
 export function markStaleRefLinks(root = document) {
   const docs = _lastStatus?.docs || [];
-  const byUrl = new Map(docs.filter(d => d.url).map(d => [d.url, d]));
+  const byUrl = new Map(docs.filter((/** @type {*} */ d) => d.url).map((/** @type {*} */ d) => [d.url, d]));
   if (!byUrl.size) return;
-  root.querySelectorAll('[data-law-url]').forEach(el => {
+  root.querySelectorAll('[data-law-url]').forEach((/** @type {Element} */ el) => {
     const el2 = /** @type {HTMLElement} */ (el);
-    const doc = byUrl.get(el2.dataset.lawUrl);
+    const doc = byUrl.get(el2.dataset.lawUrl || '');
     if (!doc) return;
     // 원문 링크를 현행본 시리얼 URL로 보정 (시행 예정본 방지)
     const ext = /** @type {HTMLAnchorElement|null} */ (
@@ -274,18 +294,18 @@ export async function checkMfdsNotice() {
     _lastStatus = status;
     // 기준 문서는 상태 파일이 지정 (references.json.noticeCore → latest.ruleName)
     const coreName = status.latest?.ruleName;
-    const coreDoc = (status.docs || []).find(d => d.name === coreName) || {};
+    const coreDoc = (status.docs || []).find((/** @type {*} */ d) => d.name === coreName) || {};
     if (isNewerNotice(status)) {
-      const extra = (status.docs || []).filter(d => d.newer && d.name !== coreName).map(d => d.name);
+      const extra = (status.docs || []).filter((/** @type {*} */ d) => d.newer && d.name !== coreName).map((/** @type {*} */ d) => d.name);
       renderBanner({ ...status.latest, target: coreDoc.target, url: coreDoc.url }, extra);
-    } else if (status.docs?.some(d => d.newer)) {
+    } else if (status.docs?.some((/** @type {*} */ d) => d.newer)) {
       // 기준 문서 외 문서만 개정된 경우 — 참조 문서 갱신 안내 배너
-      const changed = status.docs.filter(d => d.newer);
+      const changed = status.docs.filter((/** @type {*} */ d) => d.newer);
       renderBanner(
         { notice: changed[0].latestNotice || '개정 확인', effectiveDate: changed[0].latestDate,
           serialNo: changed[0].currentSerial || '', ruleName: changed[0].name,
           target: changed[0].target, url: changed[0].currentUrl || changed[0].url },
-        changed.slice(1).map(d => d.name),
+        changed.slice(1).map((/** @type {*} */ d) => d.name),
       );
     } else {
       checkRevisionNotice(); // 신규 고시가 없을 때만 판본 반영 알림 (개정 감지 배너 우선)
@@ -295,6 +315,7 @@ export async function checkMfdsNotice() {
 
 // ——— 수동 실시간 확인 (law.go.kr 직접 조회 — 참조 법령·고시 전체) ———
 
+/** @param {string} path @param {Object.<string,*>} params @param {string} [target] */
 async function lawApi(path, params, target = 'admrul') {
   const q = new URLSearchParams({ OC: LAW_OC, target, type: 'JSON', ...params });
   const res = await fetch(`${LAW_API}/${path}?${q}`, { cache: 'no-store' });
@@ -302,14 +323,16 @@ async function lawApi(path, params, target = 'admrul') {
   return res.json();
 }
 
+/** @param {*} d */
 function fmtDate(d) {
   d = String(d || '').trim();
   return /^\d{8}$/.test(d) ? `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}` : d;
 }
 
 /** 참조자료 파일명 → 감시 메타 (공식명·기준 고시·시행일·API 유형 — 순수 함수, 테스트용) */
+/** @param {*} file */
 export function parseRefDoc(file) {
-  const name = String(file).split('(')[0].trim();
+  const name = (String(file).split('(')[0] || '').trim();
   const m = /\(제([\d]+(?:-\d+)?)호\)\s*\((\d{8})\)/.exec(file);
   const target = /\((법률|대통령령|총리령|부령)\)/.test(file) ? 'law' : 'admrul';
   return {
@@ -326,14 +349,15 @@ function watchDocs() {
 }
 
 /** 문서 1종의 law.go.kr 최신본 조회 → {notice, effectiveDate, serial} */
+/** @param {*} doc */
 async function fetchLatestFor(doc) {
   if (doc.target === 'law') {
     const res = await lawApi('lawSearch.do', { query: doc.name, display: 50, sort: 'efdes' }, 'law');
     let items = res?.LawSearch?.law ?? [];
     if (!Array.isArray(items)) items = [items];
-    const exact = items.filter((i) => String(i['법령명한글'] || '').trim() === doc.name);
+    const exact = items.filter((/** @type {*} */ i) => String(i['법령명한글'] || '').trim() === doc.name);
     if (!exact.length) throw new Error('법령 검색 결과 없음');
-    exact.sort((a, b) => String(b['시행일자'] || '').localeCompare(String(a['시행일자'] || '')));
+    exact.sort((/** @type {*} */ a, /** @type {*} */ b) => String(b['시행일자'] || '').localeCompare(String(a['시행일자'] || '')));
     return {
       notice: exact[0]['공포번호'] ? `제${exact[0]['공포번호']}호` : null,
       effectiveDate: fmtDate(exact[0]['시행일자']),
@@ -343,9 +367,9 @@ async function fetchLatestFor(doc) {
   const res = await lawApi('lawSearch.do', { query: doc.name, display: 50, sort: 'efdes' });
   let items = res?.AdmRulSearch?.admrul ?? [];
   if (!Array.isArray(items)) items = [items];
-  const exact = items.filter((i) => String(i['행정규칙명'] || '').trim() === doc.name);
+  const exact = items.filter((/** @type {*} */ i) => String(i['행정규칙명'] || '').trim() === doc.name);
   if (!exact.length) throw new Error('규정 검색 결과 없음');
-  exact.sort((a, b) => String(b['시행일자'] || '').localeCompare(String(a['시행일자'] || '')));
+  exact.sort((/** @type {*} */ a, /** @type {*} */ b) => String(b['시행일자'] || '').localeCompare(String(a['시행일자'] || '')));
   const serial = String(exact[0]['행정규칙일련번호'] || '');
   const detail = await lawApi('lawService.do', { ID: serial });
   return {
@@ -364,12 +388,13 @@ export async function checkMfdsNoticeNow() {
   try {
     const docs = watchDocs();
     const results = await Promise.allSettled(docs.map(d => fetchLatestFor(d)));
+    /** @type {*[]} */
     const changed = [];
     const failed = [];
     results.forEach((r, i) => {
-      if (r.status !== 'fulfilled') { failed.push(docs[i].name); return; }
+      if (r.status !== 'fulfilled') { failed.push(docs[i]?.name || ''); return; }
       const live = r.value;
-      if (live.effectiveDate && docs[i].baselineDate && live.effectiveDate > docs[i].baselineDate) {
+      if (live.effectiveDate && docs[i]?.baselineDate && live.effectiveDate > docs[i].baselineDate) {
         changed.push({ ...docs[i], latestNotice: live.notice, latestDate: live.effectiveDate, serial: live.serial });
       }
     });
@@ -379,7 +404,7 @@ export async function checkMfdsNoticeNow() {
       renderBanner({ notice: first.latestNotice, effectiveDate: first.latestDate,
                      serialNo: first.serial, ruleName: first.name,
                      target: first.target, url: first.url },
-                   changed.slice(1).map(d => d.name));
+                   changed.slice(1).map((/** @type {*} */ d) => d.name));
       const names = changed.map(d => `${d.name} ${d.latestNotice || ''}`).join(' · ');
       if (out) out.textContent = `⚠ 개정 감지 ${changed.length}종 — ${names}. 참조 문서 스냅샷 갱신 필요${failed.length ? ` (${failed.length}종 조회 실패)` : ''}`;
     } else if (out) {
@@ -393,6 +418,7 @@ export async function checkMfdsNoticeNow() {
 }
 
 /** 상태 파일 → 표시용 행 목록 (순수 함수 — 테스트용) */
+/** @param {*} status */
 export function statusRows(status) {
   if (!status) return [];
   const b = status.baseline || {};
@@ -423,13 +449,15 @@ export async function viewMfdsNoticeStatus() {
   panel.classList.remove('is-hidden');
 
   const examId = getActiveExamId();
+  /** @type {*} */
   let status = null;
   let source = '';
   // Actions가 갱신한 원격 파일 우선, 실패 시 번들 스냅샷
   for (const [url, tag] of [[statusUrl(examId), '원격'], [`content/exams/${examId}/notice_status.json`, '번들']]) {
+    if (!url) continue;
     try {
       const r = await fetch(url, { cache: 'no-store' });
-      if (r.ok) { status = await r.json(); source = tag; break; }
+      if (r.ok) { status = await r.json(); source = tag || ''; break; }
     } catch (_) { /* 다음 후보 */ }
   }
   if (!status) {
@@ -438,7 +466,7 @@ export async function viewMfdsNoticeStatus() {
   }
   const rows = statusRows(status).map(([k, v]) =>
     html`<div class="notice-status-row"><span class="notice-status-key">${k}</span><span>${v}</span></div>`);
-  const coreDoc = (status.docs || []).find(d => d.name === status.latest?.ruleName) || {};
+  const coreDoc = (status.docs || []).find((/** @type {*} */ d) => d.name === status.latest?.ruleName) || {};
   const lawLink = ruleInfoUrl(status.latest?.serialNo, coreDoc.target, null, coreDoc.url);
   panel.innerHTML = html`
     ${rows}
@@ -452,13 +480,14 @@ export async function viewMfdsNoticeStatus() {
 }
 
 /** 개정 내역 섹션 — notice_diff.json의 문서별 신설·개정·삭제 조문을 패널에 렌더 */
+/** @param {Element|null} el */
 async function renderDiffList(el) {
   if (!el) return;
   const diff = await ensureNoticeDiff();
   if (!diff.docs?.length) return;
-  const blocks = diff.docs.map(d => {
+  const blocks = diff.docs.map((/** @type {*} */ d) => {
     const seen = diffSeenMap()[d.key] === d.to?.doc;
-    const artItem = (a) => {
+    const artItem = (/** @type {string} */ a) => {
       const det = d.details?.[a];
       if (det?.kind === 'changed' && (det.old || det.new)) {
         return html`<div class="notice-diff-art"><strong>${a}</strong>
@@ -467,7 +496,7 @@ async function renderDiffList(el) {
       }
       return html`<div class="notice-diff-art"><strong>${a}</strong>${det?.text ? html` — <span class="notice-diff-text">${det.text}</span>` : ''}</div>`;
     };
-    const line = (label, list) => list?.length
+    const line = (/** @type {string} */ label, /** @type {string[]|undefined} */ list) => list?.length
       ? html`<div class="notice-diff-line"><div class="notice-diff-label">${label}</div>${list.map(artItem)}</div>` : '';
     return html`
       <div class="notice-diff-entry">
@@ -483,7 +512,7 @@ async function renderDiffList(el) {
 
 /**
  * 감시 문서 subset 필터 (순수 함수 — 테스트용)
- * @param {Array} docs parseRefDoc 결과 목록
+ * @param {Array<*>} docs parseRefDoc 결과 목록
  * @param {Array<string>|undefined} names 허용 문서명 (references.json.noticeIngredientDocs — 미선언 시 빈 subset)
  */
 export function filterIngredientDocs(docs, names) {
@@ -498,8 +527,8 @@ export function dictNoticeDocs() {
 
 /**
  * 문서 1종의 기준↔최신 비교 행 (순수 함수 — 테스트용)
- * @param {Object} doc parseRefDoc 결과
- * @param {Object|null} live fetchLatestFor 결과 (실패 시 null)
+ * @param {*} doc parseRefDoc 결과
+ * @param {*|null} live fetchLatestFor 결과 (실패 시 null)
  * @param {string} today 'YYYY-MM-DD' — 시행 예정 개정본 판정 기준
  * @returns {{name:string, text:string, mark:string, level:string, url:string}}
  */
@@ -535,8 +564,10 @@ export async function checkDictNoticeNow() {
   try {
     const results = await Promise.allSettled(docs.map(d => fetchLatestFor(d)));
     const today = todayKey();
-    const rows = docs.map((d, i) =>
-      dictNoticeRow(d, results[i].status === 'fulfilled' ? results[i].value : null, today));
+    const rows = docs.map((d, i) => {
+      const res = results[i];
+      return dictNoticeRow(d, res && res.status === 'fulfilled' ? res.value : null, today);
+    });
     const changed = rows.filter(r => r.level === 'newer' || r.level === 'pending').length;
     const failed = rows.filter(r => r.level === 'error').length;
     const head = changed
@@ -553,6 +584,7 @@ export async function checkDictNoticeNow() {
 }
 
 /** 배너 닫기 (data-click 위임) — 같은 시행일의 고시는 다시 표시하지 않음 */
+/** @param {*} effectiveDate */
 export function dismissMfdsNotice(effectiveDate) {
   if (effectiveDate) setItem(STORAGE_KEYS.NOTICE_DISMISSED_DATE, effectiveDate);
   const el = document.getElementById('formula-notice-banner');

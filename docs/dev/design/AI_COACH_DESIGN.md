@@ -116,4 +116,4 @@ v1의 `kind`는 `wrong_feedback` 하나. 서버가 조립하는 입력:
 - ~~**Pro 자격 조회 경로**~~ → 확정: `profiles.plan`+`pro_expires_at`을 service-role로 조회 (redeem_code RPC가 갱신하는 정본 — SPEC AI-26)
 - **비용 누적 상한**: 일일 총 호출 상한(전 사용자 합) — 운영 측 예산 알림 외에 Function 내 글로벌 일일 상한을 둘지 (초기엔 모니터링만 — 출력 토큰 상한 MAX_OUTPUT_TOKENS=400과 사용자별 쿼터만 적용됨)
 - ~~**폴백 UX**~~ → 확정: 은닉 — 버튼은 로그인 세션 또는 BYOK 키가 있을 때만 노출(`aiFeedbackAvailable`), 로그인 유도 UI 없음
-- ~~**모델 버전**~~ → 확정: `GEMINI_MODEL` Function env로 관리 (기본 `gemini-3.8-flash`) — 앱 재배포 없이 시크릿 교체로 모델 변경
+- ~~**모델 버전**~~ → 확정: `GEMINI_MODEL` Function env로 관리 (기본 `gemini-3.8-flash`) — 앱 재배포 없이 시크릿 교체로 모델 변경. 루트 `.env` 값으로 맞출 때는 `npm run ai:proxy:secrets -- --dry-run` 확인 후 `--apply` 사용 (`GOOGLE_API_KEY`·`AI_FREE_DAILY` 동기 — Management API PAT, `tools/supabase/sync_ai_proxy_secrets.js`)

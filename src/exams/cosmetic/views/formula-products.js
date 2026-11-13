@@ -92,13 +92,13 @@ function renderProductList() {
   // 성분 필터 — matchKey+동의어+부분일치 확장 (FO-51) — '파라벤류' 필터가
   // '메칠파라벤' 함유 제품까지 포착
   const ingKeys = prodFilter.ingredient ? ingredientMatchKeys(prodFilter.ingredient) : null;
-  const products = listProducts().filter(p => {
+  const products = listProducts().filter((/** @type {*} */ p) => {
     if (ingKeys && ingKeys.size && !(p.ingredients || [])
-      .some(n => ingredientKeyHit(n, ingKeys))) return false;
+      .some((/** @type {*} */ n) => ingredientKeyHit(n, ingKeys))) return false;
     if (!q) return true;
     return (p.name || '').toLowerCase().includes(q)
       || (p.brand || '').toLowerCase().includes(q)
-      || (p.ingredients || []).some(n => n.toLowerCase().includes(q));
+      || (p.ingredients || []).some((/** @type {string} */ n) => n.toLowerCase().includes(q));
   });
 
   if (!listProducts().length) {
@@ -152,6 +152,7 @@ function renderProductList() {
 }
 
 /** 사전 '함유 기성품' 진입 — 해당 성분을 함유한 제품만 필터링해 목록 표시 */
+/** @param {*} name */
 export function productOpenByIngredient(name) {
   if (typeof name !== 'string' || !name.trim()) return;
   prodFilter.ingredient = name.trim();
@@ -177,6 +178,7 @@ export function productNew() {
   openProductForm('기성품 등록');
 }
 
+/** @param {string} id */
 export function productEdit(id) {
   const p = getProduct(id);
   if (!p) { showToast('등록된 제품을 찾을 수 없습니다.', 'error'); return; }
@@ -196,6 +198,7 @@ export function productEdit(id) {
   renderInciChips();
 }
 
+/** @param {string} title */
 function openProductForm(title) {
   resetVisionState();
   showPanel('formula-product-form-panel');
@@ -232,6 +235,7 @@ function openProductForm(title) {
   renderInciChips();
 }
 
+/** @param {string} arg */
 export function productChipRemove(arg) {
   const i = parseInt(arg, 10);
   if (Number.isNaN(i) || i < 0 || i >= prodForm.ingredients.length) return;
@@ -242,6 +246,7 @@ export function productChipRemove(arg) {
 }
 
 /** 미등록 성분 칩 → 자가 사전 등록 단축 경로 (FO-32 재사용) */
+/** @param {*} name */
 export function productIngRegister(name) {
   customIngAdd(typeof name === 'string' ? name : '');
 }
@@ -295,6 +300,7 @@ export async function productSave() {
   productOpen(r.item.id);
 }
 
+/** @param {string} id */
 export async function productDelete(id) {
   const p = getProduct(id);
   if (!p) return;
@@ -310,6 +316,7 @@ export async function productDelete(id) {
    JSON보내기·가져오기 (FO-40)
    ======================================================= */
 
+/** @param {string} id */
 export function productCardExport(id) {
   const p = getProduct(id);
   if (!p) { showToast('등록된 제품을 찾을 수 없습니다.', 'error'); return; }
@@ -319,6 +326,7 @@ export function productCardExport(id) {
 }
 
 /** 분석 결과 JSON 내보내기 (FO-45) — 조회 시점 라이브 판정의 스냅샷 */
+/** @param {string} id */
 export function productAnalysisExport(id) {
   const p = getProduct(id);
   if (!p) { showToast('등록된 제품을 찾을 수 없습니다.', 'error'); return; }
@@ -337,22 +345,23 @@ export function productImportJson() {
   input.click();
 }
 
+/** @param {Event} event */
 function productImportFile(event) {
-  const input = event.target;
+  const input = /** @type {HTMLInputElement|null} */ (event.target);
   const file = input && input.files && input.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    const r = importProduct(e.target && e.target.result);
+    const r = importProduct(e.target ? /** @type {FileReader} */ (e.target).result : null);
     if (!r.ok) {
       showStoreError(r, '기성품 DB', showToast, '가져오기에 실패했습니다.');
     } else {
-      showToast(`"${r.item.name}" 제품을 가져왔습니다.`, 'success');
+      showToast(`"${(/** @type {*} */ (r.item)).name}" 제품을 가져왔습니다.`, 'success');
       openProductPanel();
     }
-    input.value = '';
+    if (input) input.value = '';
   };
-  reader.onerror = () => { showToast('파일을 읽지 못했습니다.', 'error'); input.value = ''; };
+  reader.onerror = () => { showToast('파일을 읽지 못했습니다.', 'error'); if (input) input.value = ''; };
   reader.readAsText(file);
 }
 

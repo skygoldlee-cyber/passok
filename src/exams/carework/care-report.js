@@ -6,13 +6,14 @@ import { localDateKey } from '../../core/utils.js';
  * @param {{logs?: any[], visits?: any[], incidents?: any[]}} stores
  * @param {number} [sinceDays]
  */
+/** @param {string} name @param {{logs?:*[], visits?:*[], incidents?:*[]}} [o] @param {number} [sinceDays] */
 export function weeklyReport(name, { logs = [], visits = [], incidents = [] } = {}, sinceDays = 7) {
     const since = localDateKey(new Date(Date.now() - sinceDays * 864e5));
-    const match = r => (r.date || '') >= since && (r.clientId === name || r.client === name);
+    const match = (/** @type {*} */ r) => (r.date || '') >= since && (r.clientId === name || r.client === name);
     const L = logs.filter(match), V = visits.filter(match), I = incidents.filter(match);
-    const meals = L.map(l => l.obs?.meal).filter(Boolean);
+    const meals = L.map((/** @type {*} */ l) => l.obs?.meal).filter(Boolean);
     const trend = meals.length >= 2 ? `식사량 ${meals.join(' → ')}` : '';
-    const notes = [...L.map(l => l.note), ...V.map(v => v.summary || v.result)].filter(Boolean).slice(-5);
+    const notes = [...L.map((/** @type {*} */ l) => l.note), ...V.map((/** @type {*} */ v) => v.summary || v.result)].filter(Boolean).slice(-5);
     const lines = [
         `[보호자 주간 리포트] ${name} · ${since} ~ 오늘`,
         `일지 ${L.length}건 · 방문 ${V.length}건 · 사고 ${I.length}건`,

@@ -10,6 +10,7 @@ export function setupThemeToggle() {
     const root = document.documentElement;
     const meta = document.querySelector('meta[name="theme-color"]');
     function isLight() { return root.classList.contains('light-theme'); }
+    /** @param {boolean} light */
     function apply(light) {
         root.classList.toggle('light-theme', light);
         if (meta) meta.setAttribute('content', light ? '#dde3ec' : '#0b0f19');
@@ -35,7 +36,7 @@ export function setupThemeToggle() {
     // 사용자가 수동 선택하지 않았을 때만 시스템 테마 변경을 따라감
     if (window.matchMedia) {
         const mq = window.matchMedia('(prefers-color-scheme: light)');
-        const onChange = function (e) {
+        const onChange = function (/** @type {MediaQueryListEvent} */ e) {
             if (safeGetItem(STORAGE_KEYS.APP_THEME)) return;
             apply(e.matches);
         };

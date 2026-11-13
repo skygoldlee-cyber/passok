@@ -94,16 +94,16 @@ export function buildUsageGuide(input) {
   const src = input && typeof input === 'object' ? input : {};
   const formulation = typeof src.formulation === 'string' ? src.formulation : '';
   const names = Array.isArray(src.ingredientNames) ? src.ingredientNames : [];
-  const customer = src.customer && typeof src.customer === 'object' ? src.customer : {};
+  const customer = /** @type {*} */ (src.customer && typeof src.customer === 'object' ? src.customer : {});
 
-  const guide = FORMULATION_GUIDES[formulation] || {
+  const guide = (/** @type {Object.<string,*>} */ (FORMULATION_GUIDES))[formulation] || {
     directions: '적량을 피부에 골고루 펴 바르고 흡수시킵니다.',
     storage: '직사광선과 고온·저온을 피해 실온의 서늘한 곳에 보관하세요.',
   };
 
   const cautions = [];
   INGREDIENT_CAUTIONS.forEach(rule => {
-    const hit = names.find(n => typeof n === 'string' && rule.re.test(n));
+    const hit = names.find((/** @type {*} */ n) => typeof n === 'string' && rule.re.test(n));
     if (hit) cautions.push(`${hit}: ${rule.msg}`);
   });
 
@@ -111,8 +111,8 @@ export function buildUsageGuide(input) {
     cautions.push('임신·수유 중 고객 — 사용 전 전문가(의사) 상담을 권장합니다.');
   }
   const allergies = Array.isArray(customer.allergies) ? customer.allergies : [];
-  const hits = allergies.filter(a => names.some(n => n === a || (typeof n === 'string' && n.includes(a))));
-  hits.forEach(a => {
+  const hits = allergies.filter((/** @type {string} */ a) => names.some((/** @type {*} */ n) => n === a || (typeof n === 'string' && n.includes(a))));
+  hits.forEach((/** @type {string} */ a) => {
     cautions.push(`알레르기 이력 원료 "${a}" 포함 — 사용 금지 또는 전문가 상담이 필요합니다.`);
   });
   cautions.push(GUIDE_DISCLAIMER);
@@ -121,16 +121,18 @@ export function buildUsageGuide(input) {
 }
 
 /** 포뮬러 객체에서 바로 안내문 생성 — formulation은 customer.formulation, 원료는 ingredients[].name */
+/** @param {*} formula */
 export function buildUsageGuideFromFormula(formula) {
   const f = formula && typeof formula === 'object' ? formula : {};
   return buildUsageGuide({
     formulation: f.customer && f.customer.formulation,
-    ingredientNames: Array.isArray(f.ingredients) ? f.ingredients.map(i => i.name) : [],
+    ingredientNames: Array.isArray(f.ingredients) ? f.ingredients.map((/** @type {*} */ i) => i.name) : [],
     customer: f.customer,
   });
 }
 
 /** 배치에서 안내문 생성 — 저장 시점 스냅샷(formulation·fullIngredients) 사용 */
+/** @param {*} batch */
 export function buildUsageGuideFromBatch(batch) {
   const b = batch && typeof batch === 'object' ? batch : {};
   return buildUsageGuide({

@@ -18,10 +18,11 @@ import {
   createAdverse, updateAdverse, deleteAdverse,
 } from '../adverse-store.js';
 
+/** @type {{editingId: string|null}} */
 const adv = { editingId: null };
 
 function readForm() {
-  const val = id => { const el = getEl(id); return el ? el.value : ''; };
+  const val = (/** @type {string} */ id) => { const el = getEl(id); return el ? el.value : ''; };
   const custId = val('adv-customer');
   const c = custId ? listCustomers().find(x => x.id === custId) : null;
   return {
@@ -105,11 +106,12 @@ export function advSave() {
   renderList();
 }
 
+/** @param {string} id */
 export function advEdit(id) {
   const a = getAdverse(id);
   if (!a) { showToast('이상사례 기록을 찾을 수 없습니다.', 'error'); return; }
   adv.editingId = id;
-  const set = (elId, v) => { const el = getEl(elId); if (el) el.value = v || ''; };
+  const set = (/** @type {string} */ elId, /** @type {string|undefined} */ v) => { const el = getEl(elId); if (el) el.value = v || ''; };
   set('adv-occurred', a.occurredAt);
   set('adv-customer', a.customerId);
   set('adv-customer-name', a.customerName);
@@ -128,6 +130,7 @@ export function advEdit(id) {
 
 export function advCancel() { resetForm(); }
 
+/** @param {string} id */
 export async function advDelete(id) {
   const a = getAdverse(id);
   if (!a) return;

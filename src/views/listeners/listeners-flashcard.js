@@ -40,7 +40,7 @@ export function bindFlashcardListeners() {
         const SWIPE_TIME_MAX = TIMING.SWIPE_TIME_MAX_MS; // ms — 이 시간 내에 끝나야 스와이프
         cardEl.addEventListener('touchstart', (e) => {
             if (e.touches.length !== 1) return;
-            const t = e.touches[0];
+            const t = /** @type {Touch} */ (e.touches[0]);
             _swipeStartX = t.clientX;
             _swipeStartY = t.clientY;
             _swipeStartT = Date.now();
@@ -50,7 +50,7 @@ export function bindFlashcardListeners() {
         cardEl.addEventListener('touchmove', () => { _swipeMoved = true; }, { passive: true });
         cardEl.addEventListener('touchend', (e) => {
             if (e.changedTouches.length !== 1) return;
-            const t = e.changedTouches[0];
+            const t = /** @type {Touch} */ (e.changedTouches[0]);
             const dx = t.clientX - _swipeStartX;
             const dy = t.clientY - _swipeStartY;
             const dt = Date.now() - _swipeStartT;
@@ -132,10 +132,11 @@ export function bindFlashcardListeners() {
         ['fc-again-btn', Rating.AGAIN], ['fc-hard-btn', Rating.HARD],
         ['fc-good-btn', Rating.GOOD], ['fc-easy-btn', Rating.EASY],
     ];
-    const rateCard = (rating, btnId) => {
+    const rateCard = (/** @type {number} */ rating, /** @type {string} */ btnId) => {
         const fc = state.flashcards;
         if (fc.data.length === 0) return;
         const currentCard = fc.data[fc.currentIndex];
+        if (!currentCard) return;
 
         // UX-FB-10 — 오탭 되돌리기: 등급 적용 전 상태를 스냅샷
         const cardId = currentCard.id;

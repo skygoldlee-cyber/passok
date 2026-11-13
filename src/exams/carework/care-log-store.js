@@ -25,6 +25,7 @@ export function listCareLogs() {
  * @param {{client:string, service:string, date:string, start:string, end:string, activities:Object, note:string, text:string}} entry
  * @returns {{ok:boolean, error?:string, id?:string}}
  */
+/** @param {*} entry */
 export function addCareLog(entry) {
     const items = listCareLogs();
     if (items.length >= FREE_LIMIT)
@@ -39,11 +40,13 @@ export function addCareLog(entry) {
 // — CO-14/15: 기관 서버 write-through (오프라인 우선 — 멤버십 없으면 로컬 전용 유지) —
 
 /** 서버 페이로드 — 코드화·구조화 필드만 (자유서술 note·text는 L0 유지, CO-06 원칙) */
+/** @param {*} it */
 function _recordPayload(it) {
     return { service: it.service, start: it.start, end: it.end, activities: it.activities, obs: it.obs, clientId: it.clientId || '' };
 }
 
 /** 단건 서버 반영 — 멤버십 없으면 조용히 스킵. 성공 시 항목에 _sync='done' 표기 */
+/** @param {*} item */
 async function _pushCareLog(item) {
     const m = await myMembership().catch(() => null);
     if (!m) return;
@@ -66,12 +69,14 @@ export async function syncPendingCareLogs() {
     }
 }
 
+/** @param {string} id */
 export function removeCareLog(id) {
     setJSON(KEY, listCareLogs().filter(x => x.id !== id));
     return { ok: true };
 }
 
 /** 저장 + 오류 표시 — 무료 한도 초과 시 업그레이드 안내 (ROAD-P5) */
+/** @param {*} entry */
 export function saveCareLog(entry) {
     proFeatureNotice('care_log_save', '요양일지 저장');
     const r = addCareLog(entry);

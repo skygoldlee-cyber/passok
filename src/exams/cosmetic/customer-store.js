@@ -44,10 +44,12 @@ function loadAll() {
   return loadItems(STORAGE_KEYS.CUSTOMER_ITEMS);
 }
 
+/** @param {*[]} customers */
 function saveAll(customers) {
   return saveItems(STORAGE_KEYS.CUSTOMER_ITEMS, customers);
 }
 
+/** @param {*} log */
 function sanitizeConsultLog(log) {
   if (!Array.isArray(log)) return [];
   return log
@@ -61,6 +63,7 @@ function sanitizeConsultLog(log) {
     .slice(-MAX_LOGS); // 오래된 것부터 잘라 최신 MAX_LOGS건만 유지
 }
 
+/** @param {*} data */
 function sanitizeCustomer(data) {
   return {
     ...sanitizeCustomerFields(data, CUSTOMER_OPTIONS),
@@ -76,6 +79,7 @@ export function listCustomers() {
   return loadAll().slice().sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
 }
 
+/** @param {string} id */
 export function getCustomer(id) {
   return loadAll().find(c => c.id === id) || null;
 }
@@ -90,6 +94,7 @@ export function getCustomerUsage() {
  * 새 고객 생성.
  * @returns {{ok:boolean, customer?:object, error?:string}}
  */
+/** @param {*} data */
 export function createCustomer(data) {
   const usage = getCustomerUsage();
   if (!usage.canCreate) {
@@ -110,6 +115,7 @@ export function createCustomer(data) {
  * 고객 갱신 (id·createdAt·consultLog 보존 — 이력은 addConsultLog로만 추가).
  * @returns {{ok:boolean, customer?:object, error?:string}}
  */
+/** @param {string} id @param {*} data */
 export function updateCustomer(id, data) {
   const all = loadAll();
   const idx = all.findIndex(c => c.id === id);
@@ -178,6 +184,7 @@ export function addConsultLog(id, text, date) {
  * 배치는 customerName 스냅샷이 보존되므로 별도 처리 없음.
  * @returns {{ok:boolean, error?:string}}
  */
+/** @param {string} id */
 export function deleteCustomer(id) {
   const all = loadAll();
   const idx = all.findIndex(c => c.id === id);

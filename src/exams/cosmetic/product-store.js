@@ -39,6 +39,7 @@ function loadAll() {
   return loadItems(STORAGE_KEYS.PRODUCT_ITEMS);
 }
 
+/** @param {*[]} items */
 function saveAll(items) {
   return saveItems(STORAGE_KEYS.PRODUCT_ITEMS, items);
 }
@@ -101,14 +102,16 @@ export function parseFullIngredients(text) {
    정제·CRUD
    ======================================================= */
 
+/** @param {*} ingredients */
 function sanitizeIngredients(ingredients) {
   if (!Array.isArray(ingredients)) return [];
   return ingredients
-    .map(v => clampStr(typeof v === 'string' ? v : '', MAX_ING_NAME_LEN).trim())
+    .map((/** @type {*} */ v) => clampStr(typeof v === 'string' ? v : '', MAX_ING_NAME_LEN).trim())
     .filter(Boolean)
     .slice(0, MAX_ING_COUNT);
 }
 
+/** @param {*} data */
 function sanitize(data) {
   return {
     name: clampStr(data.name || '', MAX_NAME_LEN).trim(),
@@ -121,9 +124,10 @@ function sanitize(data) {
 
 /** 등록 목록 — 최신 수정 순 */
 export function listProducts() {
-  return loadAll().slice().sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  return loadAll().slice().sort((/** @type {*} */ a, /** @type {*} */ b) => (b.updatedAt || 0) - (a.updatedAt || 0));
 }
 
+/** @param {string} id */
 export function getProduct(id) {
   return loadAll().find(p => p.id === id) || null;
 }
@@ -140,7 +144,7 @@ export function getProductUsage() {
  * @param {string} brand
  * @param {string} name
  * @param {string|null} [excludeId] - 수정 시 자기 자신 제외
- * @returns {object|null} 충돌 항목 또는 null
+ * @returns {*|null} 충돌 항목 또는 null
  */
 function collision(brand, name, excludeId) {
   const key = `${normalizeEntityName(brand)}|${normalizeEntityName(name)}`;
@@ -150,6 +154,7 @@ function collision(brand, name, excludeId) {
 }
 
 /** 충돌 항목의 표시 라벨 — '브랜드 제품명' 또는 제품명 */
+/** @param {*} p */
 function dupLabel(p) {
   return p.brand ? `${p.brand} ${p.name}` : p.name;
 }
@@ -159,6 +164,7 @@ function dupLabel(p) {
  * @param {object} [opts] - {allowVariant: 동명 제품을 리뉴얼·개정 별도 항목으로 허용 (FO-52)}
  * @returns {{ok:boolean, item?:object, error?:string, code?:string, existingId?:string}}
  */
+/** @param {*} data @param {{allowVariant?:boolean}} [opts] */
 export function createProduct(data, opts = {}) {
   const clean = sanitize(data || {});
   if (!normalizeEntityName(clean.name)) return { ok: false, error: '제품명을 입력하세요.' };
@@ -180,6 +186,7 @@ export function createProduct(data, opts = {}) {
   return { ok: true, item };
 }
 
+/** @param {string} id @param {*} data */
 export function updateProduct(id, data) {
   const items = loadAll();
   const idx = items.findIndex(p => p.id === id);
@@ -195,6 +202,7 @@ export function updateProduct(id, data) {
   return { ok: true, item: items[idx] };
 }
 
+/** @param {string} id */
 export function deleteProduct(id) {
   const items = loadAll();
   const next = items.filter(p => p.id !== id);
@@ -252,13 +260,15 @@ export function classifyIngredient(name, index) {
  * @param {Map<string,object>} index
  * @returns {{results: Array<{name:string,cls:string,note:string}>, summary: object}}
  */
+/** @param {*} product @param {*} index */
 export function classifyProductIngredients(product, index) {
+  /** @type {*[]} */
   const results = [];
   const summary = { official: 0, restricted: 0, banned: 0, custom: 0, unknown: 0 };
   for (const name of (product && product.ingredients) || []) {
     const r = classifyIngredient(name, index);
     results.push(r);
-    summary[r.cls] += 1;
+    (/** @type {Object.<string,number>} */ (summary))[r.cls || ''] = ((/** @type {Object.<string,number>} */ (summary))[r.cls || ''] || 0) + 1;
   }
   return { results, summary };
 }
@@ -308,22 +318,24 @@ export function ingredientKeyHit(name, keys) {
   return false;
 }
 
+/** @param {string} name */
 export function findProductsByIngredient(name) {
   const keys = ingredientMatchKeys(name);
   if (!keys.size) return [];
   return listProducts().filter(p =>
-    (p.ingredients || []).some(n => ingredientKeyHit(n, keys)));
+    (p.ingredients || []).some((/** @type {*} */ n) => ingredientKeyHit(n, keys)));
 }
 
 /**
  * 고객 알레르기 ↔ 제품 전성분 교차 — 부분일치 ('파라벤류' ↔ '메칠파라벤').
- * @param {object} product
+ * @param {*} product
  * @param {string[]} allergies
  * @returns {string[]} 매칭된 성분명 목록 (전성분 원문)
  */
 export function findAllergyHits(product, allergies) {
-  const list = Array.isArray(allergies) ? allergies.filter(a => typeof a === 'string' && a.trim()) : [];
+  const list = Array.isArray(allergies) ? allergies.filter((/** @type {*} */ a) => typeof a === 'string' && a.trim()) : [];
   if (!list.length || !product || !Array.isArray(product.ingredients)) return [];
+  /** @type {string[]} */
   const hits = [];
   for (const ing of product.ingredients) {
     const n = ingredientMatchKey(ing);
@@ -348,11 +360,14 @@ function compareIngredientLists(aList, bList) {
   const a = Array.isArray(aList) ? aList : [];
   const b = Array.isArray(bList) ? bList : [];
   if (!a.length || !b.length) return null;
-  const aNorm = new Map(a.map(n => [ingredientMatchKey(n), n]));
-  const bNorm = new Map(b.map(n => [ingredientMatchKey(n), n]));
+  const aNorm = new Map(a.map((/** @type {string} */ n) => [ingredientMatchKey(n), n]));
+  const bNorm = new Map(b.map((/** @type {string} */ n) => [ingredientMatchKey(n), n]));
+  /** @type {string[]} */
   const common = [];
+  /** @type {string[]} */
   const aOnly = [];
   aNorm.forEach((orig, norm) => (bNorm.has(norm) ? common : aOnly).push(orig));
+  /** @type {string[]} */
   const bOnly = [];
   bNorm.forEach((orig, norm) => { if (!aNorm.has(norm)) bOnly.push(orig); });
   return { common, aOnly, bOnly };
@@ -360,8 +375,8 @@ function compareIngredientLists(aList, bList) {
 
 /**
  * 기성품 전성분 ↔ My 포뮬러 전성분 3분할 비교 (정규화 이름 기준).
- * @param {object} product
- * @param {object} formula - fullIngredients 보유 포뮬러
+ * @param {*} product
+ * @param {*} formula - fullIngredients 보유 포뮬러
  * @returns {{common:string[], productOnly:string[], formulaOnly:string[]}|null}
  */
 export function compareWithFormula(product, formula) {
@@ -373,8 +388,8 @@ export function compareWithFormula(product, formula) {
 
 /**
  * 기성품 ↔ 기성품 3분할 비교 — 두 시판 제품의 성분 구성 대조 (FO-45).
- * @param {object} a
- * @param {object} b
+ * @param {*} a
+ * @param {*} b
  * @returns {{common:string[], aOnly:string[], bOnly:string[]}|null}
  */
 export function compareWithProduct(a, b) {
@@ -385,8 +400,8 @@ export function compareWithProduct(a, b) {
 
 /**
  * 전성분 중첩도 기준 유사 포뮬러 랭킹 — Jaccard 유사도 내림차순 (FO-45).
- * @param {object} product
- * @param {object[]} formulas - 후보 포뮬러 (fullIngredients 없는 항목은 제외)
+ * @param {*} product
+ * @param {*[]} formulas - 후보 포뮬러 (fullIngredients 없는 항목은 제외)
  * @param {number} [limit] - 상위 개수
  * @returns {Array<{formula:object, common:number, union:number, ratio:number}>}
  */
@@ -394,8 +409,8 @@ export function rankFormulasByOverlap(product, formulas, limit = 3) {
   const pList = (product && product.ingredients) || [];
   if (!pList.length || !Array.isArray(formulas)) return [];
   return formulas
-    .filter(f => f && Array.isArray(f.fullIngredients) && f.fullIngredients.length)
-    .map(f => {
+    .filter((/** @type {*} */ f) => f && Array.isArray(f.fullIngredients) && f.fullIngredients.length)
+    .map((/** @type {*} */ f) => {
       const cmp = compareIngredientLists(pList, f.fullIngredients)
         || { common: [], aOnly: [], bOnly: [] };
       const union = cmp.common.length + cmp.aOnly.length + cmp.bOnly.length;
@@ -419,15 +434,16 @@ export function rankFormulasByOverlap(product, formulas, limit = 3) {
  * 색소 계열 성분 뒤에 비색소 성분이 표기되면 법정 표시 규칙(색소는 함량 무관
  * 최하단 — buildFullIngredients와 동일 규칙)과 어긋나므로 힌트를 돌려준다.
  * 판정이 아니라 라벨 원문·입력 오류 검토 유도다.
- * @param {object} product
+ * @param {*} product
  * @returns {{misplaced:string[]}|null} - 순서가 어긋난 색소명 목록 또는 null
  */
 export function detectOrderHint(product) {
   const list = (product && product.ingredients) || [];
+  /** @type {string[]} */
   const misplaced = [];
   for (let i = 0; i < list.length; i++) {
     if (!COLORANT_RE.test(list[i])) continue;
-    if (list.slice(i + 1).some(n => !COLORANT_RE.test(n))) misplaced.push(list[i]);
+    if (list.slice(i + 1).some((/** @type {*} */ n) => !COLORANT_RE.test(n))) misplaced.push(list[i]);
   }
   return misplaced.length ? { misplaced } : null;
 }
@@ -439,6 +455,7 @@ export function detectOrderHint(product) {
 /**
  * 제품 단건 JSON 직렬화 — 외부 공유용. id·타임스탬프는 제외(가져오기 시 재부여).
  */
+/** @param {*} product */
 export function serializeProduct(product) {
   const clean = sanitize(product || {});
   return JSON.stringify({ type: 'formula-os-product', version: 1, product: clean }, null, 2);
@@ -447,8 +464,8 @@ export function serializeProduct(product) {
 /**
  * 분석 결과 JSON 직렬화 — 조회 시점 라이브 판정을 스냅샷으로 내보낸다 (FO-45).
  * 판정은 내보내기 시점의 원료 DB 기준 — 고시 개정 후엔 재분석이 필요하다.
- * @param {object} product
- * @param {Map<string,object>} index - 공식+자가 병합 인덱스
+ * @param {*} product
+ * @param {Map<string,*>} index - 공식+자가 병합 인덱스
  * @returns {string}
  */
 export function serializeProductAnalysis(product, index) {
@@ -462,7 +479,7 @@ export function serializeProductAnalysis(product, index) {
     product: { name: clean.name, brand: clean.brand, category: clean.category, note: clean.note },
     summary,
     orderHint: hint ? hint.misplaced : [],
-    ingredients: results.map((r, i) => ({ order: i + 1, name: r.name, cls: r.cls, note: r.note })),
+    ingredients: results.map((/** @type {*} */ r, /** @type {number} */ i) => ({ order: i + 1, name: r.name, cls: r.cls, note: r.note })),
   }, null, 2);
 }
 
@@ -471,6 +488,7 @@ export function serializeProductAnalysis(product, index) {
  * type 래퍼가 있으면 풀고, 날것의 제품 객체도 허용한다.
  * @returns {{ok:boolean, item?:object, error?:string}}
  */
+/** @param {*} input */
 export function importProduct(input) {
   let parsed;
   try { parsed = typeof input === 'string' ? JSON.parse(input) : input; }

@@ -18,7 +18,7 @@ import { reportEvent } from '../telemetry/usage-telemetry.js';
 import { hasFeature, getActiveExamId } from '../core/exam-context.js';
 import { localDateTime } from '../core/utils.js';
 
-/** 스토어 오류가 무료 한도 초과인지 판별 */
+/** 스토어 오류가 무료 한도 초과인지 판별 @param {*} error */
 function isFreeLimitError(error) {
     return typeof error === 'string' && error.startsWith('무료 플랜');
 }
@@ -49,6 +49,7 @@ const PAYMENT_NOTICE = {
 };
 
 // --- 기능 플랜 (feature-plan.json — 기능별 무료/Pro 전환) ---
+/** @type {{features?: Object.<string, string>}|null} */
 let _featurePlan = null;
 
 /**
@@ -64,7 +65,7 @@ export async function loadFeaturePlan() {
     refreshProBadges();
 }
 
-/** 기능이 유료 표기 대상인지 판별 (플랜 미로드·키 누락 시 pro로 간주) */
+/** 기능이 유료 표기 대상인지 판별 (플랜 미로드·키 누락 시 pro로 간주) @param {string} featureKey */
 function isProFeature(featureKey) {
     const v = _featurePlan && _featurePlan.features && _featurePlan.features[featureKey];
     return v !== 'free';
@@ -98,7 +99,7 @@ export function canCloudSync() {
 export function refreshProBadges(root = document) {
     if (!_featurePlan) return;
     root.querySelectorAll('[data-pro-feature]').forEach(el => {
-        el.classList.toggle('is-hidden', !isProFeature(/** @type {HTMLElement} */ (el).dataset.proFeature));
+        el.classList.toggle('is-hidden', !isProFeature(/** @type {HTMLElement} */ (el).dataset.proFeature ?? ''));
         // 네이티브 인터랙티브 조상(button·a·role=button/link) 안의 배지는 장식으로 둔다 —
         // role/tabindex 승격은 nested-interactive 위반 + 44px 미만 포커스 대상을 만든다.
         // 클릭은 조상으로 버블링되고, Pro 안내는 기능 진입 시 proFeatureNotice가 담당한다.
@@ -191,7 +192,7 @@ function _showDialog(innerHtml) {
     };
     overlay.querySelector('.app-confirm-ok')?.addEventListener('click', close);
     overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
-    const onKey = (e) => {
+    const onKey = (/** @type {KeyboardEvent} */ e) => {
         if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); close(); }
     };
     document.addEventListener('keydown', onKey);
@@ -208,6 +209,7 @@ const PLAN_FEATURES = [
     { key: 'combo_drill', label: 'ㄱㄴㄷ 조합 훈련' },
     { key: 'cloud_sync', label: '클라우드 동기화 (여러 디바이스 상태 공유)' },
     { key: 'study_plan_pro', label: '주간 배분 (과목별 가중 배분 계획)' },
+    { key: 'discord_community', label: 'Discord 커뮤니티 (같은 시험 응시자 소통 채널)' },
 ];
 
 /** 플래그·플랜에서 유도한 유료 전용 혜택 항목 — 두 모달(showPlanCompare/showUpgradeNotice)이 공유 */
@@ -298,7 +300,7 @@ export async function showPlanCompare() {
 // 고가치 순간(모의고사 분석 완료 등)에 결과 패널 상단의 인라인 카드로
 // 플랜 비교를 제안한다. 모달 대신 비차단 카드 — 학습 흐름을 끊지 않는다.
 
-/** 모멘트 → 플랜 키·표시 문구 매핑 */
+/** 모멘트 → 플랜 키·표시 문구 매핑 @type {Object.<string, {feature: string, label: string}>} */
 const PRO_MOMENTS = {
     sim_result: { feature: 'mock_exam', label: '실전 모의고사' },
     analysis_report: { feature: 'personal_analysis', label: '학습 진단 리포트' },
@@ -358,7 +360,10 @@ export function mountProMoment(container, momentKey) {
     container.prepend(card);
 }
 
-/** 유료 업그레이드 안내 모달 — PAYMENT_NOTICE.enabled 시 실결제 안내, 아니면 '준비 중' 표시 (PAY-02) */
+/** 유료 업그레이드 안내 모달 — PAYMENT_NOTICE.enabled 시 실결제 안내, 아니면 '준비 중' 표시 (PAY-02)
+ * @param {string} featureLabel 한도에 걸린 기능명
+ * @param {string} [limitMessage] 스토어 한도 메시지
+ */
 export function showUpgradeNotice(featureLabel, limitMessage) {
     const benefitItems = [`<li>${esc(featureLabel)} 저장 한도 무제한</li>`, ..._proBenefitItems()];
     const planRows = PAYMENT_NOTICE.plans.map((p) =>

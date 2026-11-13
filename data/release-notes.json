@@ -1,11 +1,114 @@
 [
   {
-    "version": "v20261112-fb182cb",
+    "version": "v20261113-6c631e2",
+    "date": "2026-11-13",
+    "notes": [
+      "[문서·design] AU-10 운영 적용 절차 §7 추가 — 콘솔 접근 경로 명시",
+      "[기능·auth] AU-10 로그인 수단 연결 구현 — linkIdentity·분리 방지·동일인 재활성",
+      "[정리·release] v20261113-e4f4ae9 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-e4f4ae9",
+    "date": "2026-11-13",
+    "notes": [
+      "[수정·test+capture] DOM 단언 라벨 정합 + 사이드바 뷰포트 1450 압축",
+      "[기능·tools] DA-26 파이프라인 반영 — snap/shotPng 둘레 여백 자동화 + 전 삽화 재캡처",
+      "[문서] DA-26 신설 — 삽화 캡처 둘레 여백 규약 명문화",
+      "[기능·tools] manual-15-mask 캡처 자동화 — 수동 산출물을 SHOTS에 등록",
+      "[수정·content] 실무매뉴얼 삽화 전면 재캡처 — UX-TXT-01 반영 22장",
+      "[수정·content] manual-14-forms 삽화 재캡처 — UX-TXT-01 중간 분절 해소",
+      "[기능·carework] DOC-BIZ-10 후속 3건 — 🔖빈출 표기 정정·계정 연결 설계·exam-sim 검증",
+      "[문서·carework] DOC-BIZ-10 이용자 관점 평가 등재 — 외부 유료 전환 평가 + 코드 대조",
+      "[문서·carework] DOC-BIZ-07 인터뷰 스크립트 v3 — 판정 로직·질문 설계 정합",
+      "[정리·release] v20261113-9bda05c 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-9bda05c",
+    "date": "2026-11-13",
+    "notes": [
+      "[문서·carework] DOC-BIZ-07 인터뷰 스크립트 v2 — 전략 v5 정합",
+      "spec+css: UX-TXT-01 신설 — 단어 단위 줄바꿈 전면 상속",
+      "[ux] 컨트롤 간 여백 규약 정합 — 모바일 nowrap 액션 행 정리",
+      "[정리·release] v20261113-437ccbe 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-437ccbe",
+    "date": "2026-11-13",
+    "notes": [
+      "a11y: 터치 타깃 축소 + 줌 패닝 단일 포인터 대체 (WCAG 2.2 2.5.7)",
+      "[telemetry] 퍼널 페이로드·판정 계측 정비 (EVAL_2026-10-30 권고 #2)",
+      "[정리·release] v20261113-6d0053e 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-6d0053e",
+    "date": "2026-11-13",
+    "notes": [
+      "[수정·docs:registry] DA-15 — 시험 디렉터리 동적 수집으로 시험 ID 리터럴 제거",
+      "[tools·ai] 공급자별 모델 env + .env→ai-proxy secrets 동기화 도구",
+      "[문서] 문서 정합 정리 — 인덱스·레지스트리 동기화, carework design 격리, docs:registry 게이트",
+      "[정리·release] v20261113-03813b0 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-03813b0",
+    "date": "2026-11-13",
+    "notes": [
+      "[리팩터링·complexity] 5라운드 — ai-client 파싱 클러스터·_bankLoad 분해 (330→324)",
+      "[리팩터링·complexity] 4라운드 — formatSectionContentForReader 파이프라인화 (331→330)",
+      "[리팩터링·complexity] 3라운드 — buildWeeklyDiagnosisPrompt·populateSubjectSelects·flowNext 분해 (334→331)",
+      "[리팩터링·complexity] 2라운드 — _requestAi·evaluateStability 분해 (336→334)",
+      "[리팩터링·complexity] 상위 복잡도 3함수 분해 — markStoryNarrative·populateExamCards·care-flow _render (340→336)",
+      "[정리·release] v20261112-f735eae 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261112-f735eae",
     "date": "2026-11-12",
     "notes": [
-      "[수정·ux] carework 홈 글자 크게 버튼 무여백 밀착 수정 — gap-sec 리듬 적용",
-      "[정리·release] v20261112-faa4e3e 스탬프 확정 [no-docs]"
+      "[수정·css] 커뮤니티 버튼 라벨·배지 줄바꿈 규약 + 로드맵 키 등록",
+      "[기능·pro] Discord 커뮤니티 Pro 표기 — feature-plan discord_community 등록",
+      "[정리·release] v20261112-2c98b87 스탬프 확정 [no-docs]"
     ]
+  },
+  {
+    "version": "v20261112-2c98b87",
+    "date": "2026-11-12",
+    "notes": [
+      "[수정·ux] Discord 커뮤니티 버튼 플랫폼 기본 초대 폴백 — 전 시험 노출",
+      "[정리·release] v20261112-033eb8a 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261112-033eb8a",
+    "date": "2026-11-12",
+    "notes": [
+      "[기능·quality] 순환복잡도 래칫 도입 — check:cplx (기준선 340건)",
+      "[기능·deploy] comingSoon 팩 스테이징 제외 — 배포 페이로드 −63%",
+      "[정리·release] v20261112-a14877c 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261112-a14877c",
+    "date": "2026-11-12",
+    "notes": [
+      "[수정·build] law-links.js lawUrlFor 가드를 제너레이터 템플릿에 동기화",
+      "[문서·commands] check:uia 카탈로그 동기화",
+      "[기능·types] Phase 2 마무리 — strict 통합 + noImplicitReturns·exactOptionalPropertyTypes 활성화",
+      "[기능·types] 컴파일러 강화 Phase 2 — noUncheckedIndexedAccess 전량 소진·활성화",
+      "[정리·release] v20261112-0fd18e3 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "date": "2026-11-12",
+    "notes": [
+      "[수정·ux] carework 홈 '글자 크게' 버튼 무여백 밀착 수정 — 간격 리듬 정합",
+      "[정리·shell] 사이드바에 숨겨져 있던 '글자 크게' 버튼 잔재 제거 — 기능은 대시보드·실무 홈·모바일 탭에서 그대로 사용 가능"
+    ],
+    "version": "v20261112-0fd18e3"
   },
   {
     "version": "v20261112-faa4e3e",
@@ -46,6 +149,14 @@
       "[기능·e2e] J-500 시험 팩 학습 적합성 스위트 — exams.json 매트릭스 동적 생성",
       "[수정·e2e] J-102 e2e-new 늦은 pullSync 경합 보강 — 카드 뷰 재진입 루프",
       "[문서·design] Capacitor 네이티브 패키징 적합성 검토 보고서 — DOC-DSN-47"
+    ]
+  },
+  {
+    "version": "v20261112-fb182cb",
+    "date": "2026-11-12",
+    "notes": [
+      "[수정·ux] carework 홈 글자 크게 버튼 무여백 밀착 수정 — gap-sec 리듬 적용",
+      "[정리·release] v20261112-faa4e3e 스탬프 확정 [no-docs]"
     ]
   },
   {

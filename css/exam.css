@@ -319,6 +319,7 @@
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
+    min-height: var(--control-h-md); /* 터치 타겟 44px (A-04, UX-CTL-02) */
     padding: 0.65rem 0.85rem;
     border-radius: var(--radius-sm);
     white-space: nowrap;
@@ -703,7 +704,8 @@
 .sim-review-header {
     display: flex;
     align-items: center;
-    gap: var(--space-5);
+    gap: var(--gap-ctl);
+    flex-wrap: wrap;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: var(--space-4);
     margin-bottom: var(--space-5);

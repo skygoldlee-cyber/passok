@@ -44,6 +44,7 @@ function _autoPatterns() {
  * @param {string} sid
  * @returns {string|null}
  */
+/** @param {*} sid */
 export function subjectFromSid(sid) {
     const m = String(sid || '').match(/^(.+?)_st_[0-9a-f]+$/);
     return m ? m[1] : null;
@@ -61,13 +62,14 @@ export function subjectFromSid(sid) {
  * @param {Object<string,Object<string,string>>} [cidSection] 과목→{"라인":"N.M"}
  * @returns {string|null}
  */
+/** @param {*} cid @param {*} subjKey @param {*} cidSection */
 export function normalizeCidAnchor(cid, subjKey, cidSection) {
     const s = String(cid || '');
     if (!s || s.startsWith('q:')) return null;
     if (s.startsWith('§')) return s;
     const m = s.match(/^L(\d+)$/);
     if (m && subjKey && cidSection && cidSection[subjKey]) {
-        const a = cidSection[subjKey][m[1]];
+        const a = cidSection[subjKey][m[1] || ''];
         if (a) return `§${a}`;
     }
     return s; // 해석 불가 라인·비-라인 키 모두 원형 유지 — 맵 부재 시 기존 동작 보존
@@ -82,24 +84,25 @@ export function normalizeCidAnchor(cid, subjKey, cidSection) {
  * @param {{chapterTitles?:Object<string,Object<string,string>>, cidSection?:Object<string,Object<string,string>>}} [maps]
  * @returns {string|null}
  */
+/** @param {*} cid @param {*} subjKey @param {*} chapterRanges @param {*} maps */
 export function chapterFromCid(cid, subjKey, chapterRanges, maps) {
     const s = String(cid || '');
     const titles = subjKey && maps && maps.chapterTitles && maps.chapterTitles[subjKey];
-    const titleOfAnchor = (anchor) => {
-        const n = String(anchor || '').split('.')[0];
+    const titleOfAnchor = (/** @type {*} */ anchor) => {
+        const n = String(anchor || '').split('.')[0] || '';
         return (titles && n !== '' && titles[n]) || null;
     };
     if (s.startsWith('§')) return titleOfAnchor(s.slice(1));
     const m = s.match(/^L(\d+)$/);
     if (!m || !subjKey) return null;
     const sec = maps && maps.cidSection && maps.cidSection[subjKey];
-    if (sec && sec[m[1]]) {
-        const t = titleOfAnchor(sec[m[1]]);
+    if (sec && sec[m[1] || '']) {
+        const t = titleOfAnchor(sec[m[1] || '']);
         if (t) return t;
     }
     const ranges = chapterRanges && chapterRanges[subjKey];
     if (!Array.isArray(ranges) || !ranges.length) return null;
-    const line = parseInt(m[1], 10);
+    const line = parseInt(m[1] || '0', 10);
     let cur = null;
     for (const [ln, title] of ranges) {
         if (line >= ln) cur = title; else break;
@@ -121,6 +124,7 @@ const KT_PRIOR_A = 4, KT_PRIOR_B = 3;
  * @param {number} wrongs 오답·오판 수
  * @returns {number} 0~1 숙달 추정치
  */
+/** @param {number} corrects @param {number} wrongs */
 export function betaPosteriorMean(corrects, wrongs) {
     return (KT_PRIOR_A + corrects) / (KT_PRIOR_A + KT_PRIOR_B + corrects + wrongs);
 }
@@ -133,9 +137,10 @@ export function betaPosteriorMean(corrects, wrongs) {
  *   - 진술 sid → cid(§앵커·레거시 L####는 CID_SECTION 환산) → 단원명
  * 졸업 진술(streak≥3)은 회복된 숙달 증거 — 누적 w가 아닌 연속 정답 streak만 정답으로 반영.
  */
+/** @param {*} p */
 function _aggregateChapterEvidence(p) {
     const buckets = new Map(); // `${subj}|${chapter}` → {subject, chapter, attempts, corrects, wrongs}
-    const bump = (subj, chapter, correct) => {
+    const bump = (/** @type {*} */ subj, /** @type {*} */ chapter, /** @type {*} */ correct) => {
         if (!chapter) return;
         const key = `${subj || ''}|${chapter}`;
         const cur = buckets.get(key) || { subject: subj || '', chapter, attempts: 0, corrects: 0, wrongs: 0 };
@@ -187,18 +192,18 @@ function _aggregateChapterEvidence(p) {
 }
 
 /** 공통 파라미터 — computeChapterWeakness/computeSubjectWeakChapters 공용
- * @param {Object} p
- * @param {Object} p.quizResults state.quizResults (정오 전건 집계 — D-21)
+ * @param {*} p
+ * @param {*} p.quizResults state.quizResults (정오 전건 집계 — D-21)
  * @param {Set<string>} p.weakCards state.weakCards
- * @param {Object} p.statementStats getAllStatementStats() 결과
- * @param {Object} p.questionChapters QUESTION_CHAPTERS 맵
- * @param {Object} p.chapterRanges CHAPTER_RANGES 맵
- * @param {Object} [p.chapterTitles] CHAPTER_TITLES 맵 — §앵커 챕터 표시명 (AN-10)
- * @param {Object} [p.cidSection] CID_SECTION 맵 — 레거시 L#### cid → §앵커 환산 (AN-10)
- * @param {(id:string)=>{quiz:object,subjectId:string}|null} p.resolveQuiz weak-items.resolveWrongQuiz
+ * @param {*} p.statementStats getAllStatementStats() 결과
+ * @param {*} p.questionChapters QUESTION_CHAPTERS 맵
+ * @param {*} p.chapterRanges CHAPTER_RANGES 맵
+ * @param {*} [p.chapterTitles] CHAPTER_TITLES 맵 — §앵커 챕터 표시명 (AN-10)
+ * @param {*} [p.cidSection] CID_SECTION 맵 — 레거시 L#### cid → §앵커 환산 (AN-10)
+ * @param {(id:string)=>{quiz:*,subjectId:string}|null} p.resolveQuiz weak-items.resolveWrongQuiz
  * @param {(key:string)=>string} [p.subjectName] 과목키→표시명 (없으면 키 그대로)
- * @param {Array} [p.reviewLog] D-18 리뷰 로그 — 있으면 BKT 관측 시퀀스 구성 (D-22)
- * @param {Object} [p.ktParams] resolveKtParams 결과 — 생략 시 기본값
+ * @param {Array<*>} [p.reviewLog] D-18 리뷰 로그 — 있으면 BKT 관측 시퀀스 구성 (D-22)
+ * @param {*} [p.ktParams] resolveKtParams 결과 — 생략 시 기본값
  */
 
 // @spec D-22
@@ -207,12 +212,12 @@ function _aggregateChapterEvidence(p) {
  *   - {k:'q'} 퀴즈 판정 → 문항id→단원 (resolveQuiz·questionChapters), kind 'mcq'
  *   - {r} 스케줄 이벤트 중 진술 sid → 단원(cid→§앵커 환산), kind 'ox', r===3 정판
  *   - 카드 자기평가는 제외 — 채점 증거만 사용 (설계 §2.1)
- * @param {Object} p 공통 파라미터 + p.reviewLog (getReviewLog 결과)
+ * @param {*} p 공통 파라미터 + p.reviewLog (getReviewLog 결과)
  * @returns {Map<string, Array<{correct:boolean, kind:string}>>} `${subj}|${chapter}` → 시간순 관측
  */
 function _unitObservationSeqs(p) {
     const seqs = new Map();
-    const push = (subj, chapter, correct, kind) => {
+    const push = (/** @type {*} */ subj, /** @type {*} */ chapter, /** @type {*} */ correct, /** @type {*} */ kind) => {
         if (!chapter) return;
         const key = `${subj || ''}|${chapter}`;
         const cur = seqs.get(key) || [];
@@ -247,6 +252,7 @@ function _unitObservationSeqs(p) {
  * 단원 숙달 추정 — 시퀀스가 있으면 BKT P(L), 없으면 Beta 사후평균 폴백 (D-22).
  * 카운트 증거는 BKT 초기 P(L) 사전으로 승계 — v1 증거를 버리지 않는다 (설계 §3.2).
  */
+/** @param {*} bucket @param {*} seqs @param {*} ktParams */
 function _unitMastery(bucket, seqs, ktParams) {
     const seq = seqs.get(`${bucket.subject}|${bucket.chapter}`);
     // @spec PS-07,PS-11 — 과목별 개인 피팅 파라미터(ktParams.bySubject)가 있으면
@@ -259,17 +265,17 @@ function _unitMastery(bucket, seqs, ktParams) {
 
 /**
  * 취약 단원 단일 랭킹 (전 과목 혼합) — 오답 증거가 있는 단원을 숙달률 오름차순으로.
- * @param {Object} p 공통 파라미터 + p.limit + p.reviewLog·p.ktParams (D-22, 생략 시 Beta 폴백)
+ * @param {*} p 공통 파라미터 + p.limit + p.reviewLog·p.ktParams (D-22, 생략 시 Beta 폴백)
  * @returns {Array<{subject:string, chapter:string, wrongs:number, mastery:number}>}
  *   mastery는 BKT P(L) (시퀀스 없으면 Beta 사후평균, D-21·D-22) — 오답 빈도가 아닌 추정 숙달 정도로 정렬
  */
 export function computeChapterWeakness(p) {
-    const name = p.subjectName || ((k) => k);
+    const name = p.subjectName || ((/** @type {string} */ k) => k);
     const seqs = p.reviewLog ? _unitObservationSeqs(p) : new Map();
     const out = [..._aggregateChapterEvidence(p).values()]
         .filter(b => b.wrongs > 0)
         .map(b => ({ ...b, mastery: _unitMastery(b, seqs, p.ktParams) }))
-        .sort((a, b) => (a.mastery - b.mastery) || (b.wrongs - a.wrongs));
+        .sort((/** @type {*} */ a, /** @type {*} */ b) => (a.mastery - b.mastery) || (b.wrongs - a.wrongs));
     out.forEach(b => { b.subject = name(b.subject); });
     return typeof p.limit === 'number' ? out.slice(0, p.limit) : out;
 }
@@ -277,13 +283,13 @@ export function computeChapterWeakness(p) {
 /**
  * 취약 단원을 **과목별로 그룹화**해 반환 — 과락 평가가 과목 단위이므로
  * 각 과목의 최약 단원을 과목별로 보여준다 (어떤 과목이든 같은 구조).
- * @param {Object} p 공통 파라미터 + p.chaptersPerSubject(기본 2)
+ * @param {*} p 공통 파라미터 + p.chaptersPerSubject(기본 2)
  * @returns {Array<{subject:string, subjectKey:string, totalWrongs:number, minMastery:number,
  *   chapters:Array<{chapter:string, wrongs:number, mastery:number}>}>}
  *   과목 정렬은 최약 단원 숙달률 오름차순 (D-21), totalWrongs는 표시용 합계
  */
 export function computeSubjectWeakChapters(p) {
-    const name = p.subjectName || ((k) => k);
+    const name = p.subjectName || ((/** @type {string} */ k) => k);
     const perSubj = p.chaptersPerSubject || 2;
     const bySubj = new Map(); // subjKey → {subject, subjectKey, totalWrongs, minMastery, chapters}
     const seqs = p.reviewLog ? _unitObservationSeqs(p) : new Map();
@@ -297,8 +303,8 @@ export function computeSubjectWeakChapters(p) {
         bySubj.set(b.subject, cur);
     }
     const out = [...bySubj.values()];
-    out.forEach(g => {
-        g.chapters.sort((a, b) => (a.mastery - b.mastery) || (b.wrongs - a.wrongs));
+    out.forEach((/** @type {*} */ g) => {
+        g.chapters.sort((/** @type {*} */ a, /** @type {*} */ b) => (a.mastery - b.mastery) || (b.wrongs - a.wrongs));
         g.chapters.length = Math.min(g.chapters.length, perSubj);
     });
     return out.sort((a, b) => a.minMastery - b.minMastery);
@@ -308,6 +314,7 @@ export function computeSubjectWeakChapters(p) {
    2) 주간 성장 지표
    ======================================================= */
 
+/** @param {Object.<string,*>} calendar @param {number} fromOffset @param {number} toOffset */
 function _rangeStats(calendar, fromOffset, toOffset) {
     let quizzes = 0, correct = 0, cards = 0, days = 0;
     for (let i = fromOffset; i <= toOffset; i++) {
@@ -326,7 +333,7 @@ function _rangeStats(calendar, fromOffset, toOffset) {
 
 /**
  * 최근 7일 vs 그 이전 7일 학습량·정답률 비교.
- * @param {Object} calendar getStudyCalendar() 결과
+ * @param {Object.<string,*>} calendar getStudyCalendar() 결과
  * @returns {{thisWeek:object, lastWeek:object, rateDelta:number|null, cardDelta:number}}
  *   rateDelta는 양쪽 모두 표본 있을 때만 (없으면 null)
  */
@@ -348,11 +355,11 @@ export function computeWeeklyGrowth(calendar) {
 /**
  * 예상 점수 → 합격선까지의 갭 + 최우선 보강 과목.
  * 우선순위: 최근 모의고사 subjectRates (과락선 미만 → 최저순) → 퀴즈 정답률 최저 과목.
- * @param {Object} p
+ * @param {object} p
  * @param {{expected:number}|null} p.estimate estimateExpectedScore 결과 (없으면 갭 계산 생략)
- * @param {Array} p.simHistory 모의고사 이력 (subjectRates 보유)
+ * @param {Array<*>} p.simHistory 모의고사 이력 (subjectRates 보유)
  * @param {Array<{key:string,name:string}>} p.subjects 과목 메타
- * @param {Object} p.counts 과목별 학습 카운트 (getSubjCounts 결과)
+ * @param {*} p.counts 과목별 학습 카운트 (getSubjCounts 결과)
  * @param {{passAverage:number,subjectFailBelow:number}} p.rules getExamRules()
  * @returns {{gap:number|null, passLine:number, weakest:{key:string,name:string,rate:number,reason:string}|null, ranking:Array<{key:string,name:string,rate:number}>}|null}
  */
@@ -378,7 +385,7 @@ export function computePassGap(p) {
         ranking.sort((a, b) => a.rate - b.rate);
         if (ranking.length) {
             result.ranking = ranking;
-            const worst = ranking[0];
+            const worst = /** @type {*} */ (ranking[0]);
             result.weakest = {
                 key: worst.key, name: worst.name, rate: worst.rate,
                 reason: worst.rate < rules.subjectFailBelow
@@ -392,17 +399,17 @@ export function computePassGap(p) {
 
     // 모의고사 없음 → 퀴즈 정답률 순위 (3문 이상 푼 과목만)
     result.ranking = (p.subjects || [])
-        .filter(s => {
+        .filter((/** @type {*} */ s) => {
             const sc = (p.counts || {})[s.key];
             return sc && sc.quizSolved >= 3;
         })
-        .map(s => {
+        .map((/** @type {*} */ s) => {
             const sc = p.counts[s.key];
             return { key: s.key, name: s.name, rate: Math.round((sc.quizCorrect / sc.quizSolved) * 100) };
         })
-        .sort((a, b) => a.rate - b.rate);
+        .sort((/** @type {*} */ a, /** @type {*} */ b) => a.rate - b.rate);
     if (result.ranking.length) {
-        result.weakest = { ...result.ranking[0], reason: '퀴즈 정답률 최저 과목' };
+        result.weakest = { .../** @type {{key:string, name:string, rate:number}} */ (result.ranking[0]), reason: '퀴즈 정답률 최저 과목' };
     }
     return result;
 }
@@ -415,8 +422,8 @@ export function computePassGap(p) {
  * 취약 진술을 개념 앵커(§챕터.절)로 묶어 "같은 개념 구간" 오판 집중을 찾는다.
  * 저장 cid는 normalizeCidAnchor로 정규화 — 레거시 L####와 신형 §N.M이
  * 같은 절이면 동일 클러스터로 병합된다 (AN-10).
- * @param {Object} statementStats getAllStatementStats() 결과
- * @param {Object} chapterRanges CHAPTER_RANGES 맵 (단원명 표시용)
+ * @param {Object.<string,*>} statementStats getAllStatementStats() 결과
+ * @param {Object.<string,*>} chapterRanges CHAPTER_RANGES 맵 (단원명 표시용)
  * @param {number} [minSize] 클러스터로 볼 최소 오판 진술 수 (기본 2)
  * @param {{chapterTitles?:Object, cidSection?:Object}} [maps] 섹션 앵커 해석 맵
  * @returns {Array<{cid:string, subj:string, chapter:string|null, count:number, wrongs:number, sample:string}>}
@@ -439,7 +446,7 @@ export function computeWeakConceptClusters(statementStats, chapterRanges, minSiz
     return [...groups.values()]
         .filter(g => g.count >= minSize)
         .map(g => ({ ...g, chapter: chapterFromCid(g.cid, g.subj, chapterRanges, maps) }))
-        .sort((a, b) => (b.wrongs - a.wrongs) || (b.count - a.count));
+        .sort((/** @type {*} */ a, /** @type {*} */ b) => (b.wrongs - a.wrongs) || (b.count - a.count));
 }
 
 /* =======================================================
@@ -450,8 +457,8 @@ export function computeWeakConceptClusters(statementStats, chapterRanges, minSiz
  * 최근 학습 페이스로 시험일까지 예상 커버율을 계산한다.
  * 모든 기간 환산은 학습일 기준 — 페이스는 "최근 구간의 학습일당 카드"로 측정하고
  * 잔여 기간은 getRemainingStudyDays(주간 학습일·통독 차감)로 환산한다.
- * @param {Object} p
- * @param {Object} p.calendar getStudyCalendar() 결과
+ * @param {object} p
+ * @param {*} p.calendar getStudyCalendar() 결과
  * @param {number} p.totalCards 전체 카드 수
  * @param {number} p.memorized 암기 완료 카드 수
  * @param {number|null} p.dday 시험까지 남은 일수
@@ -491,19 +498,20 @@ export function computePaceProjection(p) {
  *   - 정답이 숫자/단위 → 'calc' (수치 문제)
  *   - 문항이 '아닌/않는/잘못된' 부정형 → 'concept' (개념 구별 요구)
  *   - 그 외 → 'memorize' (단순 기억)
- * @param {Object} p
- * @param {Object} p.quizResults state.quizResults
- * @param {Object} p.wrongCauses state.wrongCauses (태깅된 항목 제외용)
- * @param {(id:string)=>{quiz:object,subjectId:string}|null} p.resolveQuiz
+ * @param {object} p
+ * @param {*} p.quizResults state.quizResults
+ * @param {*} p.wrongCauses state.wrongCauses (태깅된 항목 제외용)
+ * @param {(id:string)=>{quiz:*,subjectId:string}|null} p.resolveQuiz
  * @returns {{counts:Object, estimated:number}} 추정 건수 (활성 분류표 키 기준)
  */
 export function estimateUntaggedCauses(p) {
     const labels = getWrongCauseLabels();
+    /** @type {Object.<string,number>} */
     const counts = {};
     Object.keys(labels).forEach(k => { counts[k] = 0; });
     let estimated = 0;
     const tagged = new Set(Object.keys(p.wrongCauses || {}));
-    const patterns = _autoPatterns(); // 루프 밖에서 1회 컴파일
+    const patterns = _autoPatterns() || []; // 루프 밖에서 1회 컴파일
     Object.entries(p.quizResults || {}).forEach(([id, r]) => {
         if (!r || r.correct) return;
         const weakKey = id.startsWith(WEAK_QUIZ_PREFIX) || id.includes('_card_') ? id : WEAK_QUIZ_PREFIX + id;
@@ -516,12 +524,12 @@ export function estimateUntaggedCauses(p) {
         const text = String(q.question || '') + String(q.context || '');
         const numeric = /^\d+(\.\d+)?\s*(%|ml|g|mg|배|회|일|개월|년|도|만원|원)?$/.test(ans);
         // 시험별 확장 분류 — manifest autoPattern 정규식을 선언된 키에만 적용 (미선언 시 내장 규칙으로 귀속)
-        const hit = patterns.find(pt => counts[pt.key] !== undefined && pt.re.test(text));
-        if (hit) counts[hit.key]++;
-        else if (numeric && counts.numeric !== undefined && !/(계산|구하|얼마|몇)/.test(text)) counts.numeric++;
-        else if (numeric) counts.calc++;
-        else if (/(아닌|않는|틀린|잘못된|옳지)\s*(것|항목|설명)?/.test(text)) counts.concept++;
-        else counts.memorize++;
+        const hit = patterns.find((/** @type {*} */ pt) => counts[pt.key] !== undefined && pt.re.test(text));
+        if (hit) counts[hit.key] = (counts[hit.key] || 0) + 1;
+        else if (numeric && counts.numeric !== undefined && !/(계산|구하|얼마|몇)/.test(text)) counts.numeric = (counts.numeric || 0) + 1;
+        else if (numeric) counts.calc = (counts.calc || 0) + 1;
+        else if (/(아닌|않는|틀린|잘못된|옳지)\s*(것|항목|설명)?/.test(text)) counts.concept = (counts.concept || 0) + 1;
+        else counts.memorize = (counts.memorize || 0) + 1;
     });
     return { counts, estimated };
 }
@@ -530,7 +538,7 @@ export function estimateUntaggedCauses(p) {
  * 과목별 마스터리 레벨 (D-16) — 판정된 진술 중 졸업(연속 정답
  * WEAK_GRADUATE_STREAK회) 비율을 과목별로 집계해 Lv.1~5(20% 단위)로 환산한다.
  * "본 적 있는 진술 중 얼마나 확실히 정답을 유지하는가"의 지표.
- * @param {Object} statementStats getAllStatementStats() 결과
+ * @param {Object.<string,*>} statementStats getAllStatementStats() 결과
  * @returns {Object<string, {total: number, graduated: number, percent: number, level: number}>} 과목키 → 마스터리
  */
 export function computeMasteryLevels(statementStats) {
@@ -559,16 +567,16 @@ export function computeMasteryLevels(statementStats) {
 
 const _DOW_LABELS = ['일', '월', '화', '수', '목', '금', '토'];
 const _HOUR_BANDS = [
-    { key: 'dawn', label: '새벽 (0~4시)', test: (h) => h >= 0 && h < 5 },
-    { key: 'morning', label: '오전 (5~11시)', test: (h) => h >= 5 && h < 12 },
-    { key: 'afternoon', label: '오후 (12~17시)', test: (h) => h >= 12 && h < 18 },
-    { key: 'evening', label: '저녁 (18~22시)', test: (h) => h >= 18 && h < 23 },
-    { key: 'night', label: '밤 (23시~)', test: (h) => h >= 23 }
+    { key: 'dawn', label: '새벽 (0~4시)', test: (/** @type {number} */ h) => h >= 0 && h < 5 },
+    { key: 'morning', label: '오전 (5~11시)', test: (/** @type {number} */ h) => h >= 5 && h < 12 },
+    { key: 'afternoon', label: '오후 (12~17시)', test: (/** @type {number} */ h) => h >= 12 && h < 18 },
+    { key: 'evening', label: '저녁 (18~22시)', test: (/** @type {number} */ h) => h >= 18 && h < 23 },
+    { key: 'night', label: '밤 (23시~)', test: (/** @type {number} */ h) => h >= 23 }
 ];
 
 /**
  * 학습 패턴 인사이트 — 최다 활동 시간대·요일·주말 비중.
- * @param {Object} calendar getStudyCalendar() 결과
+ * @param {Object.<string,*>} calendar getStudyCalendar() 결과
  * @returns {{activeDays:number, events:number,
  *   topBand:{key:string,label:string,count:number,pct:number}|null,
  *   topDow:{dow:number,label:string,count:number,pct:number}|null,
@@ -603,11 +611,11 @@ export function computeStudyPattern(calendar) {
     return {
         activeDays,
         events: actEvents,
-        topBand: bandCnt[topBandIdx] > 0
-            ? { key: _HOUR_BANDS[topBandIdx].key, label: _HOUR_BANDS[topBandIdx].label, count: bandCnt[topBandIdx], pct: Math.round((bandCnt[topBandIdx] / hourEvents) * 100) }
+        topBand: (bandCnt[topBandIdx] || 0) > 0
+            ? { key: _HOUR_BANDS[topBandIdx]?.key || '', label: _HOUR_BANDS[topBandIdx]?.label || '', count: bandCnt[topBandIdx] || 0, pct: Math.round(((bandCnt[topBandIdx] || 0) / hourEvents) * 100) }
             : null,
-        topDow: dowCnt[topDowIdx] > 0
-            ? { dow: topDowIdx, label: _DOW_LABELS[topDowIdx] + '요일', count: dowCnt[topDowIdx], pct: Math.round((dowCnt[topDowIdx] / actEvents) * 100) }
+        topDow: (dowCnt[topDowIdx] || 0) > 0
+            ? { dow: topDowIdx, label: (_DOW_LABELS[topDowIdx] || '') + '요일', count: dowCnt[topDowIdx] || 0, pct: Math.round(((dowCnt[topDowIdx] || 0) / actEvents) * 100) }
             : null,
         weekendShare: Math.round((weekendEvents / actEvents) * 100)
     };
@@ -619,17 +627,17 @@ export function computeStudyPattern(calendar) {
 
 /**
  * 주간 학습 리포트 텍스트 생성 (공유/클립보드용 — 마크다운 없는 평문).
- * @param {Object} p
+ * @param {object} p
  * @param {string} [p.appName] 앱명 (getExamAppName())
- * @param {Object} [p.growth] computeWeeklyGrowth 결과
- * @param {Object} [p.estimate] estimateCompositeScore 결과
- * @param {Object} [p.gap] computePassGap 결과
- * @param {Array} [p.weakChapters] computeSubjectWeakChapters 결과
- * @param {Object} [p.pattern] computeStudyPattern 결과
- * @param {Object} [p.plan] SC-06 계획 준수 요약 {weekActual, weekTarget, percent, statusLabel}
- * @param {Array} [p.planBySubject] SC-11 과목별 준수 행 [{name, done, cards, quizDone, quizzes}] — 주간 배분 대비 실적
- * @param {Object|null} [p.recEffect] AN-06 evaluateRecommendationEffect 결과 — 지난 추천 대상 과목의 정답률 변화
- * @param {Object|null} [p.actual] AN-05 getActualResult 결과 — 실제 시험 자가 보고 {passed, score}
+ * @param {*} [p.growth] computeWeeklyGrowth 결과
+ * @param {*} [p.estimate] estimateCompositeScore 결과
+ * @param {*} [p.gap] computePassGap 결과
+ * @param {Array<*>} [p.weakChapters] computeSubjectWeakChapters 결과
+ * @param {*} [p.pattern] computeStudyPattern 결과
+ * @param {*} [p.plan] SC-06 계획 준수 요약 {weekActual, weekTarget, percent, statusLabel}
+ * @param {Array<*>|null} [p.planBySubject] SC-11 과목별 준수 행 [{name, done, cards, quizDone, quizzes}] — 주간 배분 대비 실적
+ * @param {*|null} [p.recEffect] AN-06 evaluateRecommendationEffect 결과 — 지난 추천 대상 과목의 정답률 변화
+ * @param {*|null} [p.actual] AN-05 getActualResult 결과 — 실제 시험 자가 보고 {passed, score}
  * @param {number} [p.bias] AN-05 computeCalibrationBias 결과 — 0이면 보정 표기 생략
  * @param {string|null} [p.ddayLabel] D-day 표기
  * @returns {string}
@@ -637,7 +645,7 @@ export function computeStudyPattern(calendar) {
 export function buildWeeklyReportText(p) {
     const now = new Date();
     const weekAgo = new Date(now); weekAgo.setDate(now.getDate() - 6);
-    const fmt = (d) => `${d.getMonth() + 1}/${d.getDate()}`;
+    const fmt = (/** @type {Date} */ d) => `${d.getMonth() + 1}/${d.getDate()}`;
     const lines = [`📋 ${p.appName || 'PassOK'} 주간 학습 리포트 (${fmt(weekAgo)}~${fmt(now)})`, ''];
 
     const g = p.growth;
@@ -670,11 +678,11 @@ export function buildWeeklyReportText(p) {
     if (p.plan) {
         lines.push(`■ 주간 계획 대비: 카드 ${p.plan.weekActual}/${p.plan.weekTarget}장 (${p.plan.percent}%) — ${p.plan.statusLabel}`);
     }
-    (p.planBySubject || []).forEach(s => {
+    (p.planBySubject || []).forEach((/** @type {*} */ s) => {
         lines.push(`  - ${s.name}: ${s.done}/${s.cards}장${s.quizzes > 0 ? ` · 퀴즈 ${s.quizDone || 0}/${s.quizzes}문` : ''}`);
     });
     if (p.recEffect && p.recEffect.items && p.recEffect.items.length) {
-        const parts = p.recEffect.items.map(i =>
+        const parts = p.recEffect.items.map((/** @type {*} */ i) =>
             `${i.name} ${i.fromRate}%→${i.toRate}% (${i.delta >= 0 ? '▲' : '▼'}${Math.abs(i.delta)}%p)`);
         lines.push(`■ 추천 효과: ${parts.join(' · ')}`);
     }

@@ -23,7 +23,7 @@ export function startWeakExam() {
     (state.weakCards || new Set()).forEach(cardId => {
         const m = cardId.match(new RegExp('^' + WEAK_SIM_PREFIX + '([a-z]+)_combo_'));
         if (m) {
-            const order = comboSubjOrder(m[1]);
+            const order = comboSubjOrder(m[1] || '');
             if (order) comboSubsNeeded.add(order);
         }
     });
@@ -48,7 +48,7 @@ function _startWeakExamImpl() {
     const STUDY_DATA = (typeof window !== 'undefined' && window.STUDY_DATA) ? window.STUDY_DATA : {};
     // 헷갈린 카드나 오답 데이터 로딩
     let weakCards = Array.from(state.weakCards);
-    let solvedQuizzes = Object.keys(state.quizResults).filter(id => !state.quizResults[id].correct);
+    let solvedQuizzes = Object.keys(state.quizResults).filter(id => !(state.quizResults[id] || {}).correct);
     
     // 필터링 적용 (신규 Feature 3)
     if (state.reviewFilter && state.reviewFilter !== 'all') {
@@ -65,7 +65,7 @@ function _startWeakExamImpl() {
         
         solvedQuizzes = solvedQuizzes.filter(quizId => {
             for (const subjId of Object.keys(STUDY_DATA)) {
-                if (STUDY_DATA[subjId].quizzes.some(q => q.id === quizId)) {
+                if (STUDY_DATA[subjId].quizzes.some((/** @type {*} */ q) => q.id === quizId)) {
                     return subjId === state.reviewFilter;
                 }
             }
@@ -75,11 +75,12 @@ function _startWeakExamImpl() {
     
     // PS-02 — 취약 진술(sid)→모체 combo 문항 환원 인덱스 (로드된 번들 스캔)
     const stmtStats = getAllStatementStats();
+    /** @type {Map<string,{q:*,subjKey:*}>} */
     const sidIndex = new Map(); // sid → { q, subjKey }
     {
         const subjects = (getActiveRegistry() || {}).subjects || [];
         for (const s of subjects) {
-            const bundle = (typeof window !== 'undefined') ? window[`COMBO_DRILLS_subject${s.order}`] : null;
+            const bundle = (typeof window !== 'undefined') ? /** @type {*} */ (window)[`COMBO_DRILLS_subject${s.order}`] : null;
             if (!Array.isArray(bundle)) continue;
             for (const q of bundle) {
                 for (const st of (q.statements || [])) {
@@ -88,13 +89,14 @@ function _startWeakExamImpl() {
             }
         }
     }
-    const weakSids = Object.keys(stmtStats)
-        .filter(sid => (stmtStats[sid].w || 0) > 0 && sidIndex.has(sid));
+    const weakSids = Object.keys(/** @type {Object.<string,*>} */ (stmtStats))
+        .filter(sid => ((/** @type {Object.<string,*>} */ (stmtStats))[sid].w || 0) > 0 && sidIndex.has(sid));
 
     if (weakCards.length === 0 && solvedQuizzes.length === 0 && weakSids.length === 0) {
+        /** @type {Object.<string,string>} */
         const filterNames = {};
         const subjects = (getActiveRegistry() || {}).subjects || [];
-        subjects.forEach((sub, idx) => {
+        subjects.forEach((/** @type {*} */ sub, /** @type {number} */ idx) => {
             const shortName = sub.shortName || sub.name;
             filterNames[sub.key] = `${idx + 1}과목 (${shortName})`;
         });
@@ -105,13 +107,14 @@ function _startWeakExamImpl() {
 
     // 모의고사 구조로 질문 조립 — poolId → 문항 맵으로 구성해 가중 편성 id 공간을 만든다
     const pool = new Map();
+    /** @type {Object.<string,string>} */
     const qsubj = {};   // poolId → 과목키 (과목 분포 산출용)
 
     // 1. 헷갈린 카드로부터 질문 생성
     weakCards.forEach(cardId => {
         // 1-a) 일반 플래시카드: 인덱스 캐시로 검색 (weak-items.js)
         const rc = resolveCard(cardId);
-        const cardObj = rc && rc.card;
+        const cardObj = /** @type {*} */ (rc && rc.card);
         const subject = rc ? rc.subjectId : '';
 
         if (cardObj) {
@@ -137,7 +140,7 @@ function _startWeakExamImpl() {
             let foundSubj = '';
             for (const examId of Object.keys(EXAM_DATA)) {
                 const qs = EXAM_DATA[examId].questions || [];
-                const q = qs.find(qq => qq.id === origQId);
+                const q = qs.find((/** @type {*} */ qq) => qq.id === origQId);
                 if (q) {
                     foundQ = q;
                     foundSubj = examIdToSubjectId(examId);
@@ -149,7 +152,7 @@ function _startWeakExamImpl() {
                 const subjects = (getActiveRegistry() || {}).subjects || [];
                 for (const s of subjects) {
                     if (foundQ) break;
-                    const bundle = (typeof window !== 'undefined') ? window[`COMBO_DRILLS_subject${s.order}`] : null;
+                    const bundle = (typeof window !== 'undefined') ? /** @type {*} */ (window)[`COMBO_DRILLS_subject${s.order}`] : null;
                     if (!Array.isArray(bundle)) continue;
                     const q = bundle.find(qq => qq.id === origQId);
                     if (q) {
@@ -171,7 +174,7 @@ function _startWeakExamImpl() {
                     statements: foundQ.statements || null,
                     explanation: foundQ.explanation || '모의고사 오답 복습 문제입니다.'
                 });
-                qsubj[cardId] = foundSubj;
+                qsubj[cardId] = foundSubj ?? '';
             }
         }
     });
@@ -181,7 +184,7 @@ function _startWeakExamImpl() {
         let quizObj = null;
         let subject = '';
         for (const subjId of Object.keys(STUDY_DATA)) {
-            const found = STUDY_DATA[subjId].quizzes.find(q => q.id === quizId);
+            const found = STUDY_DATA[subjId].quizzes.find((/** @type {*} */ q) => q.id === quizId);
             if (found) {
                 quizObj = found;
                 subject = subjId;
@@ -219,9 +222,10 @@ function _startWeakExamImpl() {
         weakCards: new Set(weakCards),
         questionSubjects: qsubj
     }, 20);
+    /** @type {*[]} */
     const picked = [];
     const usedQ = new Set();
-    const take = (poolId) => {
+    const take = (/** @type {string} */ poolId) => {
         const q = pool.get(poolId);
         // weak_card_/weak_exam_/weak_quiz_ 접두사 정규화 — sid 경유·카드 경유 중복 문항 차단
         const key = q && q.id.replace(/^weak_(card|exam|quiz)_/, '');
@@ -255,7 +259,7 @@ function _startWeakExamImpl() {
     // PS-02 — 가중 편성 근거 안내 (상위 취약 편성 수·과목 분포)
     if (ranked.items.length) {
         const subs = (getActiveRegistry() || {}).subjects || [];
-        const nameOf = k => { const s = subs.find(x => x.key === k); return s ? (s.shortName || s.name) : k; };
+        const nameOf = (/** @type {string} */ k) => { const s = subs.find((/** @type {*} */ x) => x.key === k); return s ? (s.shortName || s.name) : k; };
         const dist = Object.entries(ranked.bySubject).map(([k, n]) => `${nameOf(k)} ${n}문`).join(' · ');
         showToast(`취약 우선 편성 — 상위 ${shuffled.length}문${dist ? ` (${dist})` : ''}`, 'info', 3500);
     }

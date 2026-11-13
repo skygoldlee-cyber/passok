@@ -1,5 +1,395 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 feat(auth): AU-10 로그인 수단 연결 구현 — linkIdentity·분리 방지·동일인 재활성
+
+- 계정 모달 "로그인 수단" 섹션: 연결된 identities 목록·해제 버튼(검증 수단 2개 이상 `canUnlink` 가드)·미연결 OAuth 수단 연결 버튼. `PENDING_LINK_PROVIDER`로 리다이렉트 복귀 성공/실패 판정
+- 충돌(다른 계정 귀속) 시 자동 병합 금지 — 비열거 문구로 이전 계정 로그인 유도. `LAST_LOGIN_METHOD` 힌트("지난번에는 ○○로 로그인하셨습니다")로 수단 분리 사전 방지, Pro 활성화 후 수단 연결 안내
+- `redeem_code` 동일인 재활성: 사용 계정↔현재 계정 이메일 일치 시 현재 계정에도 plan 부여 (`tools/supabase/schema.sql` — 배포 시 SQL Editor 수동 적용 필요)
+- 계측 `account_link_start/success/conflict` 추가. 순수 로직(`linkedProviders`·`canUnlink`) 유닛 테스트 4건. 설계 DOC-DSN-50 확정판 갱신
+
+## 2026-11-13 fix(test): review-drills DOM 단언 갱신 — 빈출·중요 숫자 라벨 정합
+
+- 🔖기출→🔖빈출 라벨 정정에 누락된 DOM 테스트 1건(`review-drills-formula.dom.test.js`의 '기출·중요 숫자' 단언) — CI test 잡 failure 원인 수정
+
+
+## 2026-11-13 feat(tools): DA-26 파이프라인 반영 — snap/shotPng 둘레 여백 자동화 + 전 삽화 재캡처
+
+- `capture_manual.js`에 `shotWithMargin` 헬퍼 추가 — 요소가 뷰포트에 온전히 들어오면 boundingBox ±8/6px 확장 클립, 더 크면 요소 스크린샷 폴백. `snap`·`shotPng`·탭바·more 합성 경로 일괄 적용
+- 부팅 초기화가 care-incident 직접 진입을 care-home으로 되돌리는 레이스 발견 — `manual-01-share`를 시트 등장까지 재시도하는 루프 + `force` 클릭으로 견고화
+- 실무막뉴얼 23장 + 학습안내서 4장 전량 재캡처 (27장)
+
+
+## 2026-11-13 docs: DA-26 신설 — 삽화 캡처 둘레 여백 규약 명문화
+
+- 기존 클립 관례(manual-08 ±8px·manual-10 ±24px·manual-15 ±4~6px)를 SPEC 요구사양으로 격상 — 타이트 클립의 그림자·테두리 잘림 방지 근거 명문화. `capture_manual.js` 헤더에 `@spec DA-25,DA-26` 부착
+
+
+## 2026-11-13 feat(tools): manual-15-mask 캡처 자동화 — 수동 산출물을 SHOTS에 등록
+
+- `capture_manual.js`에 `SHOTS['manual-15-mask']` 추가 — 사고보고 공유 시트에서 "(인명 가림)" 버튼 행(본문 복사·PDF·Word)만 클립 캡처. 인쇄·Excel 등 미가림 경로 제외, SW 토스트 오버레이 정리 포함. 이로써 실무매뉴얼 참조 23장 전량이 자동 재생성 가능
+
+
+## 2026-11-13 fix(content): 실무매뉴얼 삽화 전면 재캡처 — UX-TXT-01 반영 22장
+
+- 실무매뉴얼 참조 삽화 23장 중 캡처 로직 있는 22장 전량 재생성 (`capture_manual.js`) — `word-break: keep-all` 전면 상속 이후 단어 중간 분절 해소. `manual-15-mask`는 캡처 로직 없는 수동 산출물이라 제외
+
+
+## 2026-11-13 fix(content): manual-14-forms 삽화 재캡처 — UX-TXT-01 적용으로 표 셀 중간 분절 해소
+
+- 서식모음 "제출 주기 요약" 표의 "국민건강보**험공단** (전**산**)" 등 단어 중간 분절 → `word-break: keep-all` 전면 상속 이후 `capture_manual.js manual-14-forms` 재캡처. 단어 경계 분리 확인
+
+
+## 2026-11-13 fix+docs: DOC-BIZ-10 후속 3건 — 🔖빈출 정정·계정 연결 설계·exam-sim 오표시 검증
+
+- **① 🔖기출 → 🔖빈출 정정 (carework)**: carework는 기출 비공개 시험이므로 콘텐츠 표기 정정 — 교재 4파일·문제은행 1파일(63건). 마커는 파서가 소비하는 기능 토큰이므로 소비처가 **`🔖기출`·`🔖빈출` 둘 다 인식**하게 확장: `textbook-core.js`(isKey·빈칸 퀴즈·정리) · `study-aids.js`(추출·라벨 "빈출 핵심"/"빈출·중요 숫자") · `doc-overlay.js` · `check_manifest.js` MARKER_RE · `build_id_migration.js` · `report.js`. cosmetic 등 기존 `🔖기출`은 호환 유지. 학습안내서·적응형 엔진 설계 문서 표기도 정합. parser 테스트에 `🔖빈출` 동등성 케이스 추가(44/44 통과)·`build:data` 재생성 정합
+- **② 계정 연결 설계 (DOC-DSN-50)**: 로그인 수단(email OTP·kakao·google)마다 별도 `auth.users` → `profiles.plan` 권한 분리 문제. Supabase `linkIdentity` 경로 설계 — 설정 화면 "로그인 수단 관리" + 충돌(상대 수단이 다른 계정 귀속) 시 수동 복구 경로(이전 계정 로그인 유도·코드 재활성 정책·지원 채널), 자동 이메일 매칭 병합 금지 명시
+- **③ exam-sim `||120` 폴백 오표시 검증**: carework manifest `integratedExam`(35+45=80문항·90분·60%)이 카드(`app-dashboard`)·세션(`exam-sim-session`) 양쪽에 정확히 반영됨 — **오표시 없음**. 평가자가 본 100문/120분은 cosmetic 실제 설정. 잔여 정정은 `exam-sim-session.js`의 cosmetic 전용 수치가 "실제 시험"으로 범용 표기된 주석 2건 — manifest 참조로 정정
+
+
+## 2026-11-13 docs: DOC-BIZ-10 이용자 관점 평가 등재 — 외부 유료 전환 평가 + 코드 대조 검증
+
+- **신규 문서**: `docs/exams/carework/business/이용자_관점_평가_2026-11-13.md` — 외부 평가 원문 보존 + §A 코드 대조 부록
+- **대조 결과**: 모의고사 100/120 우려 → carework manifest 이미 35+45문항·90분·60% 정확(폴백 `||120`만 잔여) · 무료/유료 경계 권고 → feature-plan과 대체로 정합 · **실제 갭 2건**: `🔖기출` 표기(기출 비공개 시험의 출처 미표기)·로그인 수단 간 계정 연결 미구현 · **신규 가설**: 기간제 이용권·교육원 제휴 → §7-2 검토 입력
+- **전략 문서 연계**: CareOS_경쟁전략 §7-3에 외부 평가 입력 행 추가 — DOC-BIZ-07 인터뷰 지불 의사 결과와 함께 판정하도록 명시
+
+
+## 2026-11-13 docs: DOC-BIZ-07 인터뷰 스크립트 v3 — 판정 로직·질문 설계 정합 (리뷰 18건 반영)
+
+- **🔴 판정 로직**: §0 표에 "판정 근거" 열 신설 — 기준↔질문 매핑 명시. 진행 기준 ① 근거 질문(Q5b 복사·붙여넣기) 신설 · 관리자급 표본 2~3명 할당(진행 ②의 응답자 공백 해소) · 회색지대 처리 규칙(그룹당 추가 3~5명 → 재판정 → 재검토) · 중단 ① 합산 6/10 **또는** 한 그룹 4/5 병기(극단 차 오판 방지) · 중단 ②에 "업무 외 기록 없음" 조건 추가(퇴근 후 채널 생존) · 방문요양 진행 조건 신설(Q11 3/5 또는 Q13 2/5) · 코딩 규칙 행(이중 입력·폰 금지 판정 사례 기준, 미응답 분모 제외)
+- **🟠 질문 설계**: Q4 예/아니오 → **최근 근무 되짚기**(인터뷰어가 판정) · Q3·Q7에 보여주기 요청(성함 가림·촬영 안 함) · Q6 유도성 제거 → 과거 행동 질문 · Q11·Q12 가상 질문 표기 · Q12c 과거 지출(지불 행동 실적) · Q13 개인용 행동 신호(출시 알림 연락처) 분리, 기관 파일럿은 Q13b · Q3a 공단 앱 미사용 이유 · Q7b ERP 기존 인수인계·출력 기능 확인 · Q10d→Q7 병합 · Q10c/Q10e 관리자급·시설 한정
+- **🟡 운영·윤리**: 시작 멘트에 기관명 미기록·수급자 정보 불요·촬영 안 함·익명 처리 고지 · 현직 3개월 선별 · 모집 경로당 4명 상한 · 사례비 동일 기준 확정 란 · 시간 재배분(§2 10→8분·§3 방문요양 4분·§4 종사자 4분/관리자급 +2분) · 15분 버전에 Q5b·Q12b·Q13b 포함(판정 불가 방지)
+- **⚪ 서식**: Q10d/e 표 깨짐 복원 · §6 표 2열→3열 · Q3b/Q8b → **B1·B2** 접두어 · 말미 "전략 §0" 참조 → **이 문서 §0** 오류 수정 · 집계 시트에 ID·일자·버전·원문 발언·방어적 징후·가상 응답 표시 추가
+
+
+## 2026-11-13 docs: DOC-BIZ-07 종사자 인터뷰 스크립트 v2 — 전략 v5 정합
+
+- **DOC-BIZ-06 v5 반영**: 작성 당시 가상 도구 질문이었으나 §6 1~7단계 lite 배포(2026-11-04) — §5에 시연 옵션 병기(`care-log`→`care-handover`→`care-forms` 30초씩, **모든 질문 완료 후에만** — 먼저 보여주면 수요 응답 오염)
+- **facility 서버 기능 비활성화 반영**: `careFacilityJoin`·`careFacilityAdmin` 소급 조치(0행) — 기관 제안은 5a 로컬 시연으로 한정, 서버 기능 약속 금지 주의 추가
+- **파일럿 5a/5b 구분**: Q13·집계 시트에 방문 시연(5a) vs 도입 적용(5b, 0b 법무 후) 단계 구분
+- **기관 Pro 앵커 정합**: 월 5만원 → §7-2 가설 범위(5~10만원) 하한임을 명시 — 상한 탐색 가능
+- **§3b 참조 오류** 수정 (존재하지 않는 절 → 같은 표의 b 문항) + 집계 시트에 시연 반응 행 추가
+
+
+## 2026-11-13 spec+css: UX-TXT-01 신설 — 단어 단위 줄바꿈 전면 상속
+
+- **`body { word-break: keep-all }`**: 인시던트 지점에만 붙어 있던 keep-all(13곳)을 루트 상속으로 일반화 — 한국어 음절 중간 분절 전면 금지
+- **`body * { overflow-wrap: break-word }`**: 깨지지 않는 긴 런(URL·이음 나열·장문)의 최후 수단 — keep-all 단독 시 컨테이너 넘침(UX-NAV-10 위반) 방지, 넘칠 때만 발동이라 정상 단어 분절 없음
+- **SPEC §4.8.10 신설**: `UX-TXT-01` — 예외는 명시 선언 우선 (`.source-link` break-all=URL 의도, `.doc-md`·`.care-doc-sign` anywhere=이음 런 연속)
+- **검증**: `check:mobilesafe`·`check:types`·`lint` 통과
+
+
+## 2026-11-13 ux: 컨트롤 간 여백 규약 정합 — 모바일 nowrap 액션 행 정리 (UX-CTL-03/05)
+
+- **nowrap 액션 행 flex-wrap 부여** (모바일 눌림·넘침 방지): `.result-actions`(퀴즈 완료) · `.reader-empty-actions` · `.subj-actions` · `.demo-actions` · `.calc-scratchpad-actions` · `.daily-choice-row` · `.daily-short-row` · `.quiz-input-group` · `.calc-input-row` · `.ing-input-row` · `.actual-form-row` · `.review-header` · `.sim-review-header`
+- **간격 토큰 정정**: 같은 행 컨트롤↔컨트롤에 섹션 티어 값(`--space-4`/`--gap-sec`)을 쓰던 행 → `--gap-ctl` — `.result-actions`·`.reader-empty-actions`·`.daily-choice-row`·`.daily-short-row`·`.quiz-input-group`·`.calc-input-row`·`.ing-input-row`·`.sim-review-header`·`.webtoon-nav`; 원시 토큰(`--space-2/3`) alias → `--gap-ctl` — `.header-actions`·`.clinic-actions`·`.subj-actions`·`.calc-scratchpad-actions`·`.actual-form-row`·`.review-header`
+- **`ui-utils.js`**: `.result-actions` 인라인 스타일 제거 — 클래스 단일 정본 (두 렌더 경로 간격 불일치 해소)
+- **check:mobilesafe ②b 신설**: `-actions` 명명의 flex 컨트롤 행에 `flex-wrap` 없으면 차단 — ②의 `flex-row|flex-center` 클래스 명명 스캔이 놓치던 CSS 측 공백 보완, 18행 검사·예외 4건(모바일 전용 규칙·단일 버튼 등) 사유 명시
+- **검증**: `check:mobilesafe` 통과 + 음성 테스트로 위반 검출 확인
+
+
+## 2026-11-13 a11y·ux: 터치 타깃 축소 + 줌 패닝 대체 수단 (WCAG 2.5.7)
+
+- **exam-btn-sim**: `min-height: var(--control-h-md)`(44px, A-04/UX-CTL-02) — 모의고사 뷰 소형 타깃 5건 기준선 제거 (잔여 10건: 리더 툴바·캘린더·formula 등)
+- **줌 모달 패닝 대체**: `bindZoomPanControls` — 툴바 `data-pan` 방향 버튼(탭=뷰포트 45% 이동) + 줌 본문 `tabindex=0`으로 화살표 네이티브 스크롤 — mermaid·이미지 줌 두 모달 적용, A-12 Dragging Movements 부분→충족
+- **검증**: zoom-gestures DOM 테스트 10건 통과 (패닝 버튼·tabindex 케이스 추가)
+
+
+## 2026-11-13 telemetry: 퍼널 페이로드·판정 계측 정비 (EVAL_2026-10-30 권고 #2)
+
+- **quiz_complete 페이로드**: `duration_ms` 실측 소요 추가 — 세션 타임스탬프 차 폴백의 다중 런 부정확 해소 (`state.quiz.startedAt`)
+- **funnel_report**: 자동화 UA(Playwright·Headless 계열) 행 제외 — 과거 오염 행 정화 (신규는 isAutomatedRuntime이 발화 차단) + `duration_ms` 페이로드 우선 집계
+- **조사 결과**: quiz 퍼널 데이터 전량이 자동화 트래픽(10-30 폭주·correct 0·6s) — 실사용 기준선 부재 확인, 오류 캡처 경로는 세션 핑 도달로 개통 검증 (오류 0/206세션)
+- **aggregate_usage --snapshot**: usage_snapshot 서버 스냅샷에서 UX-GATE-01~03 판정 입력 산출 — 기기별 누적 카운터 차분, 창 개시 기록을 DOC-DSN-24 §5에 명기 (판정 가능 2026-12-11~)
+- **검증**: funnel-report 유닛 8건 통과 (duration_ms 우선 케이스 추가) · `error_report --days 7` 세션 206건 도달 확인 · `--snapshot --days 14` 실데이터 판정 입력 출력 확인
+
+
+## 2026-11-13 tools(check): docs:registry DA-15 정합 — 시험 디렉터리 동적 수집
+
+- `check_doc_registry.js`: 트리 카운트 대조의 시험 버킷을 `exams/cosmetic`·`carework` 리터럴 → `docs/exams/*` readdir 동적 수집으로 교체 — 신규 시험 자동 지원 + DA-15 콘텐츠 독립성 스캔 통과
+- **검증**: `da15-content-independence` 전수 스캔 위반 0건
+
+
+## 2026-11-13 tools(ai): .env → ai-proxy secrets 동기화 도구
+
+- **`tools/supabase/sync_ai_proxy_secrets.js` + `ai:proxy:secrets`**: 루트 `.env`의 `GEMINI_API_KEY`(또는 `AI_PROXY_GOOGLE_API_KEY`)·`GEMINI_MODEL`·`AI_FREE_DAILY`를 Management API로 `GOOGLE_API_KEY`·`GEMINI_MODEL`·`AI_FREE_DAILY` 시크릿에 동기화 — `--dry-run` 기본 계획 확인, `--apply`, 운영 ref는 `--prod` 승인 필요, 값 미출력
+- `.env.example`: `AI_PROXY_GOOGLE_API_KEY`·`AI_FREE_DAILY` 선언 추가
+- **검증**: `--dry-run` 매핑·마스킹·운영 ref 감지 확인 — 실제 secrets 적용은 사용자 승인 시 `--apply --prod`로 실행
+
+
+## 2026-11-13 tools(ai): 공급자별 LLM 모델 환경변수 주입
+
+- `tools/ai/llm_client.js`: `OPENAI_MODEL`·`ANTHROPIC_MODEL`·`GEMINI_MODEL` 추가 — `AI_MODEL`(전역 오버라이드) → 공급자별 모델 env → `defaultModel` 순 해석. `GEMINI_MODEL`은 ai-proxy Edge Function의 기존 시크릿 규약과 동일
+- `.env.example`: 선택 모델 키 3종 선언 — `check:env` 스키마 정합 유지
+- **검증**: gemini 기본값·`GEMINI_MODEL`·`AI_MODEL` 우선순위·`OPENAI_MODEL` 해석 실측 통과
+
+
+## 2026-11-13 docs: 문서 인덱스·레지스트리 드리프트 정리 + docs:registry 신규 게이트
+
+- **배치 정리(DA-13)**: `CAREWORK_PRACTICE_TOOL_DESIGN`·`CAREWORK_FACILITY_WORKSPACE`를 `docs/dev/design/` → `docs/exams/carework/design/`로 이동 + 범위 헤더 `exam:carework` 정정 — 참조 전수 갱신(carework README·CareOS_경쟁전략·CARE_OS_DATAHUB·인덱스)
+- **ID 정정**: `ASSET_STORAGE_REVIEW` 회수된 DOC-DSN-19 재사용 → **DOC-DSN-48** 재채번 (DSN-19는 SEMANTIC 통합 회수 유지), `DEPLOY_PIPELINE_DESIGN` 대역 점프 DOC-DSN-90 → **DOC-DSN-49**
+- **인덱스·레지스트리 동기화**: docs/README.md 트리 카운트 실측 정정(dev 73→99 등)·미등재 문서 12건 행 추가·레지스트리 누락 25건 등록 (DSN-40/45~49·RBK-19/21/22·DEV-13/14·ADR-19·BIZ-08/09·USR-14~26 — carework·skincare·hairdresser 앱 내 문서 포함)
+- **규약**: DOC_CONVENTIONS §5 명칭 표에 `*_REVIEW`(시점 검토 보고서→design)·`*_BACKLOG`(측정 백로그→수위) 접미사 추가
+- **신규 게이트 `docs:registry`** (`tools/check/check_doc_registry.js`): 선언 ID ↔ 레지스트리 행 ↔ 경로 양방향 대조 + 트리 `(NN개)` 카운트 ↔ 실물 .md 수 정합 — 기존 게이트가 못 잡던 인덱스 드리프트 차단
+- **검증**: `check:docs` 21단계 전부 통과 (신규 단계 포함) · build:trace·build:commands 재생성
+
+
+## 2026-11-12 refactor(complexity): 5라운드 — ai-client 파싱 클러스터·_bankLoad 분해 (330→324)
+
+- **`parseQaResponse`**·**`parseFormExtractResponse`** (ai-client.js, 11→·12→≤10): JSON 슬라이스 추출을 공용 `_jsonFromText`(4라운드 `parseFeedbackResponse` 추출분) 재사용으로 축약
+- **`buildWrongFeedbackPrompt`**·**`buildQuizGenPrompt`** (13→·12→≤10): `input || {}` 정규화로 옵셔널 체인 제거 — ai-client.js 잔여는 과장 방지용 고유 블록뿐
+- **`_bankLoad`** (care-flow.js, 12→≤10): 문항 파싱(`_parseBankQuestions`)·정답 매핑(`_applyBankAnswers`) 추출 — **파일 경고 0건 소진**
+- **검증**: unit ai-client·care-flow 통과 + DOM care-flow 6건 · check:types 0
+
+
+## 2026-11-12 refactor(complexity): 4라운드 — formatSectionContentForReader 파이프라인화 (331→330)
+
+- **`formatSectionContentForReader`** (reader-format.js, 18→≤10): ~420행 단일 함수의 15개 순차 HTML 변환 패스를 주석 경계 그대로 13개 private 헬퍼로 추출 — `_resolveImgSrcs`·`_linkifyToc`·`_linkifyExamLinks`·`_linkifyCrossSubject`·`_linkifyRefDocs`·`_linkifyCitations`·`_stripPageRefs`·`_injectRefPanel`·`_linkifyKeywordRefs`·`_linkifyGlossaryMarks`·`_addArticleSearch`·`_linkifyGlossaryTerms`·`_linkifyMindmapTable`. 본체는 `html = _fn(html)` 파이프라인 — **파일 경고 0건 소진**
+- **검증**: unit reader-format·mermaid 통과 + DOM 53건(study-reader·reader-ref-links) · check:types 0
+
+
+## 2026-11-12 refactor(complexity): 3라운드 — buildWeeklyDiagnosisPrompt·populateSubjectSelects·flowNext 분해 (334→331)
+
+- **`buildWeeklyDiagnosisPrompt`** (ai-client.js, 25→≤10): 수치 정규화(`_diagValues`) + 진단 라인을 `_DIAG_LINES` 빌더 테이블로 전환 — 라인별 조건이 독립 콜백으로 분리
+- **`populateSubjectSelects`** (app-dashboard.js, 23→≤10): 셀렉트 채우기(`_fillSubjectSelect`)·필터 버튼 채우기(`_subjectFilterBtns`) 공용 헬퍼 추출 — 4개 반복 블록이 호출부로 축약, **파일 경고 0건 소진**
+- **`flowNext`** (care-flow.js, 21→≤10): 단계별 핸들러 `_nextFromPre`·`_nextFromScenario`·`_nextRetry`로 분할 — 파일 잔여는 _bankLoad(12)만
+- **검증**: unit ai-client·care-flow 통과 + DOM 9건(care-flow·nonexam-pack) · check:types 0
+
+
+## 2026-11-12 refactor(complexity): 2라운드 — _requestAi·evaluateStability 분해 (336→334)
+
+- **`_requestAi`** (ai-client.js, 46→≤10): 서버 경로(`_serverRoute` + `_proxyFetch` 전송/타임아웃 정규화) + 응답 평가(`_evalServerResponse` + `_extractServerBody` 추출 + `_serverFailOf` 분류) + BYOK 폴백(`_byokRoute`)으로 분할 — 파일 count 7→6 · max 46→25
+- **`evaluateStability`** (formula-stability.js, 45→≤10): 주석 섹션 경계 그대로 분할 — ① 상 비율(`_checkPhaseBalance` + `_emulRatioWarn`) ② 상호작용(`_checkInteractions`) ③ 배합방법(`_checkMethod` + `_checkCarbomerNeutral` + `_checkPhBands`) — 파일 경고 0건으로 완전 소진
+- **검증**: unit 37건(ai-client·formula-stability) 통과 · check:types 0 · --update 기준선 단조 축소
+
+
+## 2026-11-12 refactor(complexity): 상위 복잡도 3함수 분해 — 기준선 340→336
+
+- **markStoryNarrative** (reader-format.js, 52→≤10): 마커 스캔(`_markStoryByMarkers`)·토글 칩 삽입(`_insertStoryToggle`)·폴백 서사 탐지(`_markStoryFallback` + `_fallbackSceneStep`/`_fallbackHeadingStep`/`_isStoryEpilogue`)·sr 라벨 패스(`_labelStoryRuns`)로 분할 — 파일 잔여는 formatSectionContentForReader(18)
+- **populateExamCards** (app-dashboard.js, 47→≤10): 과목 카드(`_subjectCardHtml`)·주관식(`_writtenCardHtml`)·기출/보충(`_renderPastExamCards` + `_pastItemBtnHtml`/`_supplementCardHtml`)·텍스트 치환(`_updateExamViewTexts` + `_updateIntegratedExamCard`/`_updateIntegratedLabels`/`_integratedExamTimeMin`/`_updateIntegratedStats`)로 분할 — 파일 잔여는 populateSubjectSelects(23)
+- **care-flow `_render`** (care-flow.js, 47→7): 크롬 갱신(`_renderChrome` + `_nextDisabled`)·문항 준비(`_prepStepItem`)·단계별 렌더를 `_STEP_RENDERERS` 테이블 디스패치로 전환, 완료 단계는 `_renderComplete`, `_resultHtml`은 `_wrongCutSlot` 추출로 13→≤10 — 파일 잔여는 _bankLoad(12)·flowNext(21)
+- **검증**: unit 26건(reader-format·care-flow) + DOM 9건(care-flow·nonexam-pack) 통과 · check:types 0 · check:cplx --update로 기준선 단조 축소 반영
+
+
+## 2026-11-12 fix(css): Discord 커뮤니티 버튼 라벨·배지 줄바꿈 규약 수정
+
+- **문제**: settings-item이 flex 컨테이너라 라벨 텍스트와 유료 배지가 각각 flex 아이템이 됨 — 한글 '유료' 배지는 min-content가 1글자라 좁은 패널에서 유/료로 세로 분절, 라벨도 단어 중간에서 끊길 수 있음
+- **수정**: 라벨을 span으로 감싸 `word-break: keep-all`(Discord와 커뮤니티 사이 공백에서만 줄바꿈), `.pro-badge`에 `white-space: nowrap` + flex 축소 금지로 배지 가로 유지
+- **검증**: community-invite DOM 6건 통과 · build:html 재조립
+
+
+## 2026-11-12 feat(pro): Discord 커뮤니티 Pro 표기 — feature-plan discord_community 등록
+
+- **변경**: 같은 시험 응시자 소통 채널인 Discord 커뮤니티를 유료 표기 기능으로 전환 — feature-plan.json `discord_community: pro` 등록, 커뮤니티 버튼에 유료 배지 + 최초 진입 시 '유료 기능 안내' 모달 (무료 체험 방식 — 링크는 계속 열림, 다른 pro 기능과 동일 규약)
+- **플랜 비교 목록**: PLAN_FEATURES에 'Discord 커뮤니티 (같은 시험 응시자 소통 채널)' 추가 — 플랜 비교·업그레이드 안내 혜택 항목 노출
+- **결제 전환 경로**: feature-plan 키가 이미 등록돼 있어 결제 도입 시 hasProEntitlement 체크만 추가하면 차단으로 전환 가능
+- **검증**: community-invite DOM 6건 통과 (배지 존재 검증 추가) · check:types 0
+
+
+## 2026-11-12 fix(ux): Discord 커뮤니티 버튼 플랫폼 기본 초대 폴백 — 전 시험 노출
+
+- **문제**: discordInvite가 cosmetic에만 선언돼 다른 시험 활성 시 도움말 메뉴의 'Discord 커뮤니티' 버튼이 숨겨짐 — 사용자에게 커뮤니티 진입 경로 부재
+- **수정**: exams.json 루트에 `discordInvite` 플랫폼 기본 초대 추가 — 시험별 선언 우선, 미선언 시 루트 폴백 (listeners-app.js). DISCORD_COMMUNITY_DESIGN의 단일 서버 + 시험별 채널 초대 구조와 정합 — 시험별 채널 초대 발급 시 해당 시험만 덮어씀
+- **검증**: cosmetic(시험별)·carework/iteng(루트 폴백) 해석 확인 · check:types 0 · DOM 15건
+
+
+## 2026-11-12 feat(quality): 순환복잡도 래칫 도입 — check:cplx (기준선 340건·142파일)
+
+- **래칫 신설**: tools/check/check_complexity.js — 타입 래칫 동형(eslint complexity 임계 10 실측 → tools/state/complexity_baseline.json 비교 → 비증가 게이트). 파일별 {count,max,sum} 3중 지표 비증가 — 신규 진입·최악 함수 악화·중간층 우회를 모두 차단. --update·--dir·--report 지원
+- **백로그 생성물화**: COMPLEXITY_BACKLOG.md가 수동 문서라 실측(340)과 드리프트(264 기록)하던 문제 해소 — --report로 기준선 정본에서 정렬 표 재생성, ⚙️ 생성물 표기
+- **등록**: package.json check:cplx + steps.js all 프리셋 (STEP_CPLX, p1)
+- **검증**: 게이트 회귀 시뮬레이션 — 신규 복잡도 함수 유입 시 count 1→2·sum 13→24로 차단 확인
+
+
+## 2026-11-12 feat(deploy): comingSoon 팩 스테이징 제외 + .vercelignore 규칙 정정 — 페이로드 −63%
+
+- **comingSoon 팩 제외**: deploy 스테이징이 exams.json의 comingSoon 플래그를 읽어 `content/exams/<id>`·`data/exams/<id>` 디렉터리를 스킵 — selectExamAction이 런타임 선택을 차단하므로 콘텐츠는 도달 불가 사중량. 플래그 해제 시 다음 배포부터 자동 포함 (정본 = exams.json)
+- **실측**: 9,743파일 332.7MB → **3,146파일 122.0MB** (제외 14팩 — draft 7 + pilot-comingSoon 7)
+- **xlsx 원본 제외**: content/exams/*/실무/*.xlsx — facilities.json 생성 원본, 런타임 fetch 없음
+- **.vercelignore 규칙 정정**: ref_md 이미지 제외 패턴이 실제 구조 `ref_md/과목N/<문서>/images/`와 depth 불일치로 비활성이던 것을 2단계 패턴으로 수정. "텍스트만 서빙" stale 주석 정정 — 실제로는 webp 서빙 중 (markdown-parser `<img>` 렌더링)
+
+
+## 2026-11-12 fix(build): law-links.js lawUrlFor 가드를 제너레이터에 동기화
+
+- **문제**: noUncheckedIndexedAccess 소진분의 lawUrlFor 가드(`(pat || '').replace` · `return url || null`)가 build_pdf_registry.js 출력 템플릿에 미반영 — deploy 시 build:derived 재생성이 되돌려 신선도 게이트 차단
+- **수정**: 템플릿의 lawUrlFor 출력 구간을 커밋된 가드 버전과 동일하게 갱신 — 재생성 diff 0건
+- 결과: check:types 0 · 재생성 결정성 복구
+
+## 2026-11-12 feat(types): Phase 2 마무리 — strict 통합 + noImplicitReturns·exactOptionalPropertyTypes 활성화
+
+- **strict 통합**: jsconfig `"strict": true` — 개별 strict 플래그가 이미 전량 활성 상태라 추가 에러 0건. 개별 플래그는 검증 이력·명시성을 위해 유지
+- **noImplicitReturns**: 2건 해소 후 활성화 — manual-viewer openFormulaManual/openPracticeManual 조건부 반환을 삼항 연산으로 명문화
+- **exactOptionalPropertyTypes**: 8건 해소 후 활성화 — 선택 프로퍼티에 명시적 undefined 대입을 거부
+  - typedef 계약 교정: questions.js gradeAnswer 반환 perStatement·statement-tracker 인자 요소·form-template-store toolKey·reader-notes meta·recommendations aux·written-grading 반환 model — `?: T` → `?: T|undefined` 정밀화 (실제로 undefined를 넘기는 호출부 계약을 타입에 반영)
+- **검증**: check:types 0 (strict+noImplicitAny+noUncheckedIndexedAccess+noImplicitReturns+exactOptionalPropertyTypes 동시 활성) · lint 0 · 유닛 1,866
+
+## 2026-11-12 feat(types): 컴파일러 강화 Phase 2 — noUncheckedIndexedAccess 래칫 도입 + 백로그 전량 소진 (587건 → 0)
+
+- **래칫 신설**: tools/check/check_nouncheckedindex.js — noImplicitAny 래칫과 동형 패턴(tsc -p jsconfig.json --noUncheckedIndexedAccess 실행 → 파일별 에러 카운트 → tools/state/nouncheckedindex_baseline.json 기준선 단조 감소 게이트, --update·--dir 지원). package.json check:unchecked 스크립트 + tools/check/steps.js all/CI 프리셋 등록
+- **소진 경과**: 초기 기준선 587건(99파일) → 전 계층 소진
+  - core·pwa·telemetry·content·written·search·shell·study (Phase 2 초반 배치)
+  - src/reader 58건 — 정규식 매치 그룹·split 위치·NodeList 인덱스·TouchList 접근·맵 조회 가드
+  - src/views 139건 — daily-challenge·flashcard·exam-sim·textbook-search 등; applyResultTiers 반환을 5튜플 typedef(FilledTier)로 명문화해 디스트럭처링 소비처 해소
+  - src/exams 117건 — esc() 맵 인덱스 || c 폴백 공통 패턴(14파일)·CSV 파서 헤더 인덱스·rules[scope] 중첩 맵·편집거리 DP 행 인덱스 가드
+  - charts.js 20건·law-links.js·practice-registry.js·tools/supabase admin-bot
+- **jsconfig 활성화**: "noUncheckedIndexedAccess": true — 백로그 전량 소진으로 check:types 자체가 인덱스 안전 게이트가 됨 (check:unchecked 래칫은 기준선 0으로 이중 감시)
+- **검증**: check:types 0 (noImplicitAny + noUncheckedIndexedAccess 동시 활성) · lint 0 · 유닛 1,866 · DOM 1,055 전량 통과
+
+## 2026-11-12 fix(build): 생성 파일 JSDoc 주석을 제너레이터 템플릿에 동기화
+
+- **문제**: Phase 1 타입 강화로 생성 파일(src/keyword-index.js·src/law-links.js·src/pdf-registry.js)에 부여한 JSDoc·캐스트가 제너레이터 템플릿에 미반영 — deploy 시 build:derived 재생성이 주석을 되돌려 신선도 게이트 차단
+- **수정**: build_keyword_index.js·build_pdf_registry.js 출력 템플릿에 커밋된 주석 버전을 그대로 반영 — 재생성해도 타입 주석 유지 (생성물 정본은 제너레이터)
+  - getGlossaryIndex·activeLawUrls nullable 가드 + keyof/맵 캐스트
+  - _EXAM_DERIVED 파생 맵 fileToPath·registry·REF_MD_SUBJECTS 맵 타입
+  - getRefTables @returns Array → Array<*> 정밀화 + _EXAM_TABLES/_EXAM_DERIVED 인덱스 캐스트
+  - resolveRefPath·refDocDisplayName·mapSourceToRef·resolveKeywordRef @param 주석
+- 결과: check:types 0 (noImplicitAny 활성 유지) · noImplicitAny 래칫 0/0 · 재생성 diff 0건
+
+
+## 2026-11-12 feat(types): noImplicitAny 소진 9차 — src/exams/cosmetic 전량 소진 + noImplicitAny 활성화 (Phase 1 완료)
+
+- **디렉터리 전량 소진**: src/exams/cosmetic 810건 → 0, 37파일 — 루트 스토어·도메인 로직(store-utils·batch-store·formula-store·material-ledger·formula-check·product-vision·formula-stability·product-store·formula-rules·ad-lint·adverse-store·biz-profile·custom-ingredient-store·customer-store·usage-guide) + 뷰 전수(formula-print 90·batch-form 48·calc 41·audit 36·batch 32·customer 22·compliance 22·material 21·prod-detail 20·fields 17·recommend 15·products 12·prod-vision 11·io 10 등)
+- **noImplicitAny 활성화**: jsconfig.json `"noImplicitAny": true` — 백로그 전량 소진으로 보류 조건 해소, `check:types` 자체가 implicit any 차단 게이트가 됨 (ADR-0015 Phase 1 완료). check:any 래칫은 기준선 0으로 이중 감시 유지
+- **계약 명문화**:
+  - `store-utils.js` 공유 스토어 헬퍼 전량 — `loadItems`·`saveItems`·`newId`·`clampStr`·`numOrNull`·`pickEnum`·`sanitizeStringList`·`sanitizeCustomerFields`·`clampDate(Time)` — formula·batch·customer·material·product 스토어의 공통 진입점
+  - `emptyCustomRules()` 반환 `Object.<string,Object.<string,string[]>>` — scope 동적 인덱스(`rules[scope][key]`)의 근본 원인을 반환 타입 하나로 해소 (formula-rules 70건 중 다수)
+  - `BASE_TEMPLATES`·`CONCERN_INGREDIENTS`·`SKIN_INGREDIENTS`·`ROLE_PHASE`·`CHECK_BADGE`·`CLASS_BADGE`·`LAW_DOCS`·`CHECKLIST_SETS`·`BIZ_TYPES`·`RULE_SCOPE_LABEL`·`QC_BADGE`·`FRESH_LABEL` — 리터럴 맵 동적 인덱스 `Object.<string,*>` 캐스트 일괄
+  - `vision` 사진 슬롯 상태 객체 — `front|back|abort` 리터럴 키를 `Object.<string,*>` 캐스트로 슬롯 인덱스 해소 (prod-vision)
+  - `batchQcSummary`·`buildBatchRecordHtml`·`buildLabelHtml`·`buildGuideHtml`·`buildWorkOrderHtml`·`buildRecallListHtml`·`buildSalesRecordHtml`·`buildConsentHtml` — 인쇄 산출물 빌더의 배치·포뮬러 인자를 `*`로 명문화 (저장 레코드는 런타임 스키마)
+- **정직한 계약 수정**:
+  - `fileToBase64Jpeg`·`importFormula`·`importProduct`·`importCustomRules` FileReader 경계 — `event.target` `HTMLInputElement` 캐스트 + null 가드, `e.target.result` `FileReader` 캐스트 (io·products·recommend·material·customer 공통 패턴)
+  - `audit` `entry.saved` — 리터럴에 없던 후속 할당 필드를 초기값 `false`로 선언 (TS2339 — 실제 할당 전 존재 명문화)
+  - `visionStatus(text)` nullable 파라미터 — `r.error`(string|undefined) 3곳 호출부가 시그니처 강화로 표면화, 본체가 `text || ''` 정규화하므로 파라미터 nullable 정정
+  - `formula-fields` `r.customer` — `createCustomer` `{ok, customer?}` 반환의 ok 가드 이후 `*` 캐스트 정규화
+  - `fill` options `readonly string[]` — `Object.freeze` 옵션 상수의 readonly 배열 호환
+- 결과: 잔여 810 → **0건**, 기준선 37 → **0파일** — **전 저장소 noImplicitAny 백로그 소진 완료 (4,001건 → 0)**. `check:types` 0 · lint 0 · 유닛 1,866 · cosmetic DOM 166건 통과
+
+
+## 2026-11-12 feat(types): noImplicitAny 소진 8차 — src/exams/carework 전량 소진 완료 (Phase 1 지속)
+
+- **디렉터리 전량 소진**: src/exams/carework ~666건 → 0, 51파일 — 뷰 파셜(care-flow·care-custom-form·care-handover·care-calc·care-visit·care-card·care-client·care-audit) + 도메인 스토어·시드·템플릿 전수
+- **계약 명문화**:
+  - `loadFacilities()` 반환을 `{items, regions, source}` 객체로 정정 — 배열 추정이던 것을 실제 형태로 (care-finder `_items`·`_facTpls` 파생 해소)
+  - `pushState()` JSDoc 병합 — 분리된 문서 블록이 `{skipped,error,id}` 유니언 반환을 무시하던 것을 통합, `in` 좁히기로 `r.error`·`r.skipped` 접근 해소
+  - `_sysValues(client)` 동적 키 맵 `Object.<string,*>` 캐스트 — `{{키}}` 템플릿 치환 루프의 임의 키 인덱스
+  - `TOOL_FORM_SEEDS[key]`·`CARD_INCIDENT_TYPE[id]`·`VISIT_STATUS[status]`·`NC_FIELDS[k]`·`NC_LABELS[k]`·`STEP_LABELS`·`NEXT_LABEL`·`SUBJ_KEY`·`BANKS`·`BOOKS` — 리터럴 맵의 동적 인덱스를 `Object.<string,*>` 캐스트로 일괄 해소
+  - `myMembership()` 반환 정밀화 — `.facilities`·`.role`·`.facility_id` 접근 하류 해소 (carework 뷰 공통)
+- **정직한 계약 수정**:
+  - `toCsv` rowMapper 콜백 `object` → `*` 캐스트 — 배열 행 접근 허용 (care-handover·care-visit·care-incident 등 CSV 내보내기 공통)
+  - `attachClientPicker(input)` 호출부 `HTMLInputElement|null` 가드 — `null` 비허용 시그니처에 명시 캐스트 대신 가드 분기 (care-visit·care-handover·care-custom-form·care-incident·care-log·care-roster)
+  - `doc-md.js` `flush` 파라미터 — 비구조화 `([listOnly])` → boolean 정정 (callers가 boolean 전달, 오버로드·반복 불가 에러 해소)
+  - `computeCareCost` `nonCovered` 유니언 접근 `'nonCovered' in r` 가드 — 시설급여 전용 필드의 재가급여 경로 부재 명문화
+  - `care-flow` 모듈 상태 `*[]|null`·`Object.<string,*>`·`Set<*>` 명문화 — 클로저 경계에서 모듈 변수 좁히기 리셋 → `(_concepts || [])`·`(await _load()) || []` 로컬 정규화
+  - `addFormDoc`·`saveFormDoc`·`_pushFormDoc` 등 기입 문서 파이프라인 파라미터 명문화 (form-template-store)
+- 결과: 잔여 1,476 → **810건 (-666)**, 기준선 88 → **37파일**, `check:types` 0 유지. 유닛 전체(1,866)·carework DOM 89건 통과. **잔여는 `src/exams/cosmetic` 클러스터(810건)뿐 — carework 시험 전용 모듈 전량 소진 완료**
+
+
+
+## 2026-11-12 feat(types): noImplicitAny 소진 7차 — src/views 전량 소진 완료 (Phase 1 지속)
+
+- **디렉터리 전량 소진**: src/views ~819건 → 0, 30+파일 — JSDoc 주석 + typedef·캐스트 중심. 대형 클러스터: textbook-search(69)·reader-render(59)·trainer-drills(57)·analysis-view·dictionary·trainer·exam-sim 전수·dashboard-queue·textbook-reader
+- **typedef 신설**: `ResultTier`(textbook-search — RESULT_TIERS 테이블에 `applyResultTiers`가 채우는 `list`/`shown` 필드가 유니언 리터럴에 없어 멤버 접근마다 TS2339 나던 비계약 해소 — 반환을 `ResultTier & {list,shown}`으로 좁혀 소비처는 반환값 사용)
+- **계약 명문화**:
+  - `DRILL_TYPES[type]`를 `keyof` 호환 캐스트로 인덱스 — ox/combo 드릴 설정 맵의 동적 조회 해소
+  - `getRefTables()` 반환 `Object.<string,*>` 캐스트 — `REFERENCE_FILES`/`SUBJECT_DIR_MAP` 인덱스 (reader-render·textbook-search 공통)
+  - `badgeColors`·`perSub` 등 뷰 로컬 맵 `Object.<string,string>`·`Object.<string,{j,w,g}>` 인덱스 시그니처
+  - `computeSubjectAllocInputs`/`computeSubjectAllocation` 반환 형태 명문화 — `thisWeek`/`weeks`/`hasWeights` 접근 하류 해소 (study-tracker-alloc)
+  - `dictSchema()` 반환 동적 병합 스키마 — 시험별 필드 접근 해소
+- **정직한 계약 수정**:
+  - `glossary-renderer` `scrollToGlossary`의 `sourceLink`를 `Element`로 정정 — 호출부(reader-ref-links)가 앵커 엘리먼트를 실제 전달하는데 `string` 추정이던 것
+  - `NodeListOf<Element>.forEach` 콜백은 `Element` 유지 + 사용 지점 `HTMLElement` 캐스트 — 콜백 파라미터를 `HTMLElement`로 직접 좁히면 strictFunctionTypes 반공변 위반이라 TS2345 (reader-render 3곳)
+  - `saveTimer` `ReturnType<typeof setTimeout>|null`, `DRILL_TYPES`·`_rt` 동적 인덱스
+  - `care-custom-form` `r.error || '저장 실패'` — showToast 정밀화가 노출한 union 접근 `string|undefined` 폴백
+- **하류 효과**: views 외 잔여 파일(practice-registry·charts·ui-utils·pdf-registry·keyword-index 등) 회귀분도 동일 세션에서 해소
+- 결과: 잔여 2,327 → **1,476건 (-851)**, 기준선 135 → **88파일**, `check:types` 0 유지. 유닛 전체(1,866)·관련 DOM 433건 통과. **잔여는 `src/exams` 클러스터(~1,476건)뿐 — 플랫폼 계층 전량 소진 완료**
+
+
+## 2026-11-12 feat(types): noImplicitAny 소진 6차-3 — src/study 전량 소진 완료 (Phase 1 지속)
+
+- **5파일 소진**: fsrs(34)·study-tracker-alloc(37)·study-aids(42)·personalization(55)·analysis-engine(97) — `src/study` 디렉터리 전량 0건 달성
+- **계약 명문화**: `apportionByWeight`/`recentQuizBySubject` 반환 `Object.<string,number>`/`*`·`selectExamRiskSession` 비중 맵·`fitKT` 시퀀스 `boolean[]`·`fitFsrsParams` 로그·`getTodayGoalProgress` 반환 실제 형태 (cardsPercent 포함 7필드)·`getPersonalFit` `Object.<string,*>`
+- **한정 파라미터 정정**: `@param {object} p` + `p.x` 한정 태그가 동작하려면 부모가 소문자 `object`여야 함 — `*`·`Object` 혼용 부모를 일괄 정정 (computePassGap·computePaceProjection·estimateUntaggedCauses·buildWeeklyReportText)
+- **정직한 좁히기**: `costOf(w)`는 배열이 아닌 FSRS 가중치 `{number}` — 첫 주석 추정 오류를 tsc가 잡아 정정·`steps` 배열 `{label,detail}[]` 실제 형태·`p.quizResults` 선택 필드 `|| {}` 가드·`groups.get(k)` Map 한정 캐스트
+- **하류 효과**: analysis-view 54→45, personalization-view 21→6, study-calendar 28→23, dashboard-queue 37→33, quiz.js 17→16 — typed study API의 전파 감소
+- 결과: 잔여 2,626 → **2,327건 (-299)**, 기준선 140 → **135파일**, `check:types` 0 유지. 유닛 전체(1,866)·관련 DOM 324건 통과
+
+
+## 2026-11-12 feat(types): noImplicitAny 소진 6차-2 — src/study tracker-activity·recommendations 소진 (Phase 1 지속)
+
+- **2파일 소진**: study-tracker-activity(26)·recommendations(22) — JSDoc 주석 + 계약 좁히기
+- **계약 명문화**: `getStudyCalendar` 반환 `Object.<string,*>` (날짜 인덱스 TS7053·엔트리 멤버 TS2339 다수 해소 — 반환 타입 하나가 근본 원인)·`computeRecommendations`/`snapshotRecommendations`/`evaluateRecommendationEffect`의 counts 맵 `Object.<string,*>`·원인 집계 `counts`/`bySubj` 누적 `Object.<string,number>`
+- **하류 효과**: personalization-view 23→21, quiz.js 18→17, study-calendar 29→28 (typed study API 전파)
+- 결과: 잔여 2,678 → **2,626건 (-52)**, 기준선 142 → **140파일**, `check:types` 0 유지. 잔여 study 파일(fsrs·tracker-alloc·study-aids·personalization·analysis-engine, ~265건)은 6차-3으로 이어감
+
+
+## 2026-11-12 feat(types): noImplicitAny 소진 6차-1 — src/study 소형 8파일 소진 (Phase 1 지속)
+
+- **8파일 소진**: reader-notes·scratchpad·statement-tracker·knowledge-tracing·spaced-repetition·weak-items·study-tracker-plan·study-tracker-adherence — JSDoc 주석 + 계약 좁히기
+- **계약 명문화**: `loadSchedules` 반환 `Object.<string,*>` (cardId 인덱스 TS7053 다수 해소)·`computeUnitMastery` 관측 시퀀스·BKT 파라미터·`sumRecentCards`/`_sumRecentBySubject` 캘린더 맵 `Object.<string,*>`·`_planSkeleton` 반환의 `goals`/`read` `Object`→`*` (멤버 접근 TS2339 해소)
+- **하류 효과**: personalization-view 24→23 (typed study API 전파)
+- 결과: 잔여 2,749 → **2,678건 (-71)**, 기준선 150 → **142파일**, `check:types` 0 유지. 잔여 study 파일(analysis-engine·personalization·study-aids·tracker-alloc·fsrs·tracker-activity·recommendations, ~313건)은 6차-2로 이어감
+
+
+## 2026-11-12 feat(types): noImplicitAny 소진 5차 — src/shell·reader 전량 소진 (Phase 1 지속)
+
+- **2개 디렉터리 29파일 소진**: shell·reader — JSDoc 주석 + typedef 중심. 대형 클러스터: notice-check(79)·exam-viewer(54+하류)·markdown-parser(53)·command-palette(47)·html-viewer(34)·textbook-core(33)·reader-format(33)
+- **typedef 신설**: `RouterCtx`(router — `navigateToView`/`initViewHashRouting`의 공유 컨텍스트가 `object` 비계약이라 인자 전달마다 불일치 나던 것을 명문화)·`PaletteResult`(command-palette — 검색 결과 형태 명문화)·`SearchToc*` 계열(html-viewer)·표 행 `cells?/line?`(textbook-core)
+- **정직한 좁히기·가드**:
+  - `landing.js`의 `el()` 팩토리를 제네릭으로 정정 — `HTMLElement` 반환 시 `.href`/`.type`/`.disabled` 접근이 전부 차단되던 것을 실제 태그 타입으로 해소
+  - `html-viewer`/`manual-viewer`/`written-practice`의 `querySelector`·`overlay.el()` nullable 경계 — 고정 오버레이 마크업은 캐스트, 외부 조회는 `?.`/가드로 정직하게
+  - `feedback` 페이로드 `exam_id ?? null` 정규화, `doc-overlay`의 `_order` 초기화 좁히기
+  - `command-palette`의 `_terms` 반환 `string[]` 명시 — `*` 추론이 하류 콜백 전체를 무변화시키던 것 해소
+- 결과: 잔여 3,274 → **2,749건 (-525)**, 기준선 179 → **150파일**, `check:types` 0 유지. 유닛 전체(1,866)·관련 DOM 222건 통과
+
+
+## 2026-11-12 feat(types): noImplicitAny 소진 4차 — src/content·search 268건 → 0 (Phase 1 지속)
+
+- **2개 디렉터리 11파일 소진**: content(149)·search(119) — JSDoc 주석 + typedef 중심
+- **typedef 신설**: `ComboDoc*`(combo-doc)·`SearchDoc`·어휘 불변량 타입(search-index)·`SearchToc*`(search-sources) — `object`/`Array` 비계약 해소
+- **계약 정정**:
+  - `readCsvFile` File→Blob, `readTableFile` File|Blob — `extractFormXlsx`의 선언 계약과 일치 (Blob은 name 부재로 CSV 경로 판정 — `'name' in file` 좁히기)
+  - `_loadScript`/`_getMd` 등 DataLoader 내부 API 시그니처 명문화 + `_cardTips`·`_cardExcludes`·`_knowledge` 미선언 필드 선언 (TS2551 노출)
+  - `cs[템플릿키]` → `getPropertyValue` (CSSStyleDeclaration 인덱스 비지원 — DOM 정본 API로 동등)
+  - `filter(Boolean)` → `filter(e => e != null)` — TS가 null 제외 좁히기를 추론하는 형태
+- **불변량 로컬 캡처**: `_vocabWords`·`_tokenIndex`·`_neighbors`·`_searchIndex` — 클로저 경계에서 모듈 변수 좁히기가 리셋되므로 가드 후 로컬 캡처 (동작 동등)
+- **문서 위치 교정**: `_ensureSource`의 JSDoc이 `_perf` 위에 분리돼 있던 것을 함수로 이동
+- **테스트 갱신**: pdf-utils 소스 스캔 가드 — `border${s}Width` → `getPropertyValue` 패턴으로 계약 동등 갱신
+- 결과: 잔여 3,542 → **3,274건 (-268)**, 기준선 191 → 179파일, `check:types` 0 유지. 유닛 전체·관련 DOM 52건 통과
+
+
+## 2026-11-12 feat(types): noImplicitAny 소진 3차 — src/ai·written 151건 → 0 (Phase 1 지속)
+
+- **2개 디렉터리 4파일 소진**: ai(69)·written(82) — JSDoc 주석 + 계약 typedef 중심
+- **typedef 신설**: `AiSpec`/`AiDeps`/`WeeklyDiagInput`(ai-client — spec·deps·집계 입력이 `object` 선언이라 필드 접근마다 TS2339 나던 비계약 해소)·`AiProviderDef`/`GradingQuestion`(written-grading — PROVIDERS 인덱스 TS7053·문항 필드 TS2339 해소)·`WrittenEntry`(written-practice — 저장 진행 형태 명문화)
+- **사멸 옵션 실수정 (care-ai)**: `callProviderLLM(system, prompt, {key, provider, signal})`의 `key`·`provider`는 callee가 읽지 않는 인자였음(내부에서 getAiKey()/getAiProvider() 직접 조회) — 계약에 없는 초과 프로퍼티로 TS2353 표면화 → `{signal}`만 전달로 정정 + 사멸 import 제거. 동작 동등
+- **정직한 좁히기**: `_cacheKey`의 `input[k]` 인덱스를 `Object.<string,*>` 지역 좁히기로 해소·`res.text ?? ''`·filterGeneratedItems의 union push를 if/else 분기로 정정·`String.prototype.split().pop() || ''`(mdPath 3곳)
+- 결과: 잔여 3,693 → **3,542건 (-151)**, 기준선 195 → 191파일, `check:types` 0 유지. 유닛 전체·관련 DOM 4파일 19건 통과
+
+
+## 2026-11-12 feat(types): noImplicitAny 소진 2차 — src/pwa·pro·auth-sync·telemetry 104건 → 0 (Phase 1 지속)
+
+- **4개 디렉터리 13파일 소진**: pwa(20)·pro(21)·auth-sync(28)·telemetry(35) — JSDoc 주석 추가가 대부분이며, 인덱스·nullable 경계만 정직하게 좁힘
+- **`TelemetryDeps` typedef 신설 (types.js)**: usage-telemetry·error-telemetry 공용 테스트 주입 계약(insert·automated·online·today·load) — 기존 `@param {Object}` 선언은 `deps.insert` 등 접근 시 TS2339를 유발하던 비계약이었음
+- **`ErrorMeta` typedef (error-telemetry)**: `meta.view|filename|lineno|extra` 접근이 `Object` 타입에서 TS2339 나던 것을 실제 필드로 선언
+- **하류 정직 해소 2건**: `clearTimeout(_pushTimer)`에 `null` 가드(sync — 타이머 id는 nullable 선언이 정직), `dataset.proFeature ?? ''`(pro-upgrade — data 속성 무값 접근은 `string|undefined`)
+- **정확한 계약 정정 사례**: `onAuthChange` 콜백 시그니처 선언으로 auth-view·pro-redeem의 콜백 인자가 맥락 타입을 획득 — vendor supabase-js는 타입 정의 부재라 클라이언트를 `any`로 명시(정직한 경계)
+- 결과: 잔여 3,797 → **3,693건 (-104)**, 기준선 208 → 195파일, `check:types` 0 유지. 유닛 전체·관련 DOM 7파일 110건 통과
+
+
+## 2026-11-12 feat(types): noImplicitAny 래칫 게이트 + src/core 전면 소진 — TS 점진 전환 Phase 1 (ADR-0015)
+
+- **`check:any` 게이트 신설** (`tools/check/check_noimplicitany.js`): tsc를 `--noImplicitAny`로 별도 실행해 파일별 에러 수를 `tools/state/noimplicitany_baseline.json`과 대조 — 초과·신규 파일 차단(단조 감소 계약, filename_baseline과 동일 패턴). `--update` 갱신·`--dir <path>` 디렉터리 리포트 지원. `all` 프리셋 P1 편입, jsconfig 잔여 strict 플래그(noImplicitAny — 나머지는 이미 활성)의 소진 경로를 기계화
+- **최초 실측 4,001건** (jsconfig 주석 ~2800에서 증가 확인): noImplicitAny 적용 시 implicit-any 계열 외 파생 에러(TS2339·TS2538 등)가 함께 표면화 — 기준선은 플래그 적용 상태의 전체 에러로 기록
+- **src/core 136건 → 0 소진**: 8파일 JSDoc 주석 — `storage.js`에 `StorageBackend` typedef 신설(선택적 Async 메서드 계약 — 미선언 TS2339 8건 해소)·`getActiveRegistry` 반환을 `DataRegistry`로 정밀화·`getActiveExam`을 `ExamDef`로 정밀화·`types.js` `integratedExam`을 실측 필드(passAverage·subjectFailBelow·questionsPerSubject·examTimeMin + 확장 인덱스)로 좁힘·`globals.d.ts`에 `checkStorageWarning` 선언
+- **정밀화가 노출한 하류 잠재 결함 14건 정직 해소**: `setItem` 계열 value를 `*`로 정정(숫자 저장 실례 다수 — string 선언은 오류)·`unscopedKey` null 가능성 캐스트(ai-client·sync·backup — listScopedKeys 계약상 비null)·`getActiveExamId() ?? undefined`(reader-audio)·dataset.feature 캐스트(app-shell)·edition truthy 캐스트(textbook-edition)·Quiz[] 캐스트(quiz-review)
+- **래칫이 포착한 부수 회귀 4파일 해소**: `getActiveExamId()` null 반환 인덱스 사용 → `if (!id)` 가드(keyword-index·law-links), `{}` 리터럴 인덱스 주석(pdf-registry), 진화 배열·destructure 캐스트(quiz-review)
+- 결과: 잔여 4,001 → **3,797건 (-204)**, 0 도달 8파일·감소 12파일, `check:types` 0 유지. 유닛 153건·DOM 41건 통과
+
+
+## 2026-11-12 chore(shell): 사이드바 숨겨진 글자 크게 버튼 잔재 제거
+
+- `index.template.html` 사이드바 푸터의 `#font-size-toggle`을 `is-hidden` 영구 비표시로 남겨둔 잔재 삭제 — 7d3caab4d2에서 기능을 홈 화면(PC 대시보드 + carework 실무 홈)으로 옮기며 숨겨둔 사멸 표면. id 참조 CSS·JS·테스트 없음
+- 기능 자체는 변경 없음 — 노출 표면 3곳(`html/views/dashboard.html`·`html/exams/carework/care-home.html`·모바일 탭바)과 `ui-mode.js` `toggleFontSize`/`applyFontScale` 유지 (A-18)
+
 
 ## 2026-11-12 fix(a11y): 글자 크게·텍스트 확대 배치 결함 일괄 수정 — A-18 신설 + UX-CTL-03 간격 위반 시정
 
@@ -532,7 +922,7 @@
 
 ## 2026-11-09 perf(deploy): 배포 파이프라인 속도 개선 — 게이트 자동복구·CI 대기 병행
 
-- DEPLOY_PIPELINE_DESIGN.md (DOC-DSN-90) — 시간 분해·개선안 설계 정본
+- DEPLOY_PIPELINE_DESIGN.md (DOC-DSN-49) — 시간 분해·개선안 설계 정본
 - pre-commit — TRACE_MATRIX 상이 시 차단 대신 자동 재생성+스테이징, specrefs 조기 검사 추가 (원격 실패 왕복 제거)
 - deploy.js — CI 게이트를 빌드 직후로 이동해 로컬 준비를 CI 대기와 병행, in_progress는 fail 대신 폴링 대기(30분 상한), DEPLOY_TRUST_CI=1 로컬 중복 검사 스킵 옵트인
 
@@ -2701,7 +3091,7 @@
 
 ## 2026-11-01 docs(design): 기관 워크스페이스 설계 (DOC-DSN-43)
 
-- `docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md` — PassOK가 기관 기록 서버가 되는 구독 확장 설계: facility·membership(role worker/manager)·handover_records·reads·carelog_records 스키마, RLS 접근 제어, 기관 플랜 과금 계층, 6a~6d 단계
+- `docs/exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md` — PassOK가 기관 기록 서버가 되는 구독 확장 설계: facility·membership(role worker/manager)·handover_records·reads·carelog_records 스키마, RLS 접근 제어, 기관 플랜 과금 계층, 6a~6d 단계
 
 ## 2026-11-01 feat(carework): 인수인계 기록 우선 — 저장 후 공유 게이트 + 보관함
 

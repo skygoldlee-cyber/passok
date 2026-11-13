@@ -51,7 +51,7 @@ function writeLabelForm(d) {
   if (!d || typeof d !== 'object') return;
   for (const f of LABEL_FIELDS) {
     const el = /** @type {HTMLInputElement|null} */(document.getElementById(f.id));
-    if (el && typeof d[f.id] === 'string') el.value = d[f.id];
+    if (el && typeof d[f.id] === 'string') el.value = d[f.id] || '';
   }
   const fn = /** @type {HTMLInputElement|null} */(document.getElementById('label-functional'));
   if (fn) fn.checked = d['label-functional'] === '1';
@@ -73,7 +73,7 @@ export function summarizeLabelDraft(d) {
   const imported = d['label-country'] && d['label-country'].trim();
   /** @type {Array<{label:string, ok:boolean, need:boolean, optional:boolean, manual?:boolean}>} */
   const checks = LABEL_FIELDS.map(f => {
-    const filled = !!(d[f.id] && d[f.id].trim());
+    const filled = !!((d[f.id] || '').trim());
     const need = f.required || (f.id === 'label-country' && !!imported);
     return { label: f.label, ok: filled, need, optional: !f.required };
   });
@@ -86,6 +86,7 @@ export function summarizeLabelDraft(d) {
 }
 
 /** 필수 기재 체크 — 제10조 요건별 적합/보완 표시 HTML */
+/** @param {*} d */
 function labelChecklistHtml(d) {
   const { checks, missing } = summarizeLabelDraft(d);
   const li = checks.map(c => {
@@ -145,8 +146,8 @@ export function labelFormulaImport() {
 export function labelPrintSheet() {
   const d = readLabelForm();
   const rows = LABEL_FIELDS
-    .filter(f => d[f.id] && d[f.id].trim())
-    .map(f => `<tr><th>${esc(f.label)}</th><td>${esc(d[f.id]).replace(/\n/g, '<br>')}</td></tr>`)
+    .filter(f => (d[f.id] || '').trim())
+    .map(f => `<tr><th>${esc(f.label)}</th><td>${esc(d[f.id] || '').replace(/\n/g, '<br>')}</td></tr>`)
     .join('');
   if (!rows) { showToast('인쇄할 표시사항이 없습니다.', 'error'); return; }
   const lawUrl = lawUrlFor('화장품법');
@@ -196,8 +197,8 @@ export function adlintRun() {
   }
   const sum = summarizeLint(hits);
   const sumHtml = Object.keys(sum).map(c => {
-    const cat = AD_CATEGORIES[c];
-    return `<span class="adlint-sum adlint-${esc(c)}">${esc(cat.label)} ${sum[c]}건</span>`;
+    const cat = (/** @type {Object.<string,*>} */ (AD_CATEGORIES))[c];
+    return `<span class="adlint-sum adlint-${esc(c)}">${esc(cat.label)} ${(/** @type {Object.<string,number>} */ (sum))[c]}건</span>`;
   }).join('');
   const listHtml = hits.map(h => {
     const ctx = text.slice(Math.max(0, h.index - 8), h.index + h.length + 8).trim();

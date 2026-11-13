@@ -1,5 +1,5 @@
 // tests/unit/ux-invariants.test.js — UI/UX 설계 요구사항 (정적 검증)
-// @spec UX-FB-01~04,UX-FORM-01~05,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,UX-CTL-01~06,LP-06,LP-10,LP-11,LP-12,LP-13,LP-14
+// @spec UX-FB-01~04,UX-FORM-01~05,UX-PWA-01~05,UX-SCR-01~03,UX-SET-01~05,UX-CTL-01~06,UX-TXT-01,LP-06,LP-10,LP-11,LP-12,LP-13,LP-14
 // CSS 규칙·마크업 구조·JS 구현 패턴이 설계 요구사항을 유지하는지 고정한다.
 
 import { test } from 'node:test';
@@ -386,4 +386,24 @@ test('UX-CTL-06: 컨트롤 높이 정적 체커가 44px 미만 px 리터럴을 �
   assert.ok(checker.includes('HEIGHT_LITERAL_RE'), '높이 리터럴 정규식 존재');
   assert.ok(checker.includes('CTL_HEIGHT_EXEMPT'), '면제 셀렉터 목록 존재');
   assert.ok(checker.includes('UX-CTL-06'), '@spec 태그');
+});
+
+// ---------- UX-TXT: 텍스트·줄바꿈 규약 ----------
+
+test('UX-TXT-01: body에 keep-all 상속 + 전 요소 overflow-wrap 최후 수단이 선언된다', () => {
+  const bodyRules = baseCss.match(/\bbody\s*\{[^}]+\}/g) || [];
+  assert.ok(bodyRules.some(r => /word-break:\s*keep-all/.test(r)),
+    'body에 word-break: keep-all 필요 — 음절 중간 분절 금지 상속');
+  assert.ok(/body\s*\*\s*\{[^}]*overflow-wrap:\s*break-word/.test(baseCss),
+    'body *의 overflow-wrap: break-word 필요 — 깨지지 않는 긴 런 최후 수단');
+});
+
+test('UX-TXT-01: word-break: break-all은 monospace·URL 등 의도적 케이스로 한정된다', () => {
+  // 의도적 break-all은 font-family: monospace 선언과 같은 규칙 블록에 있어야 함
+  for (const m of allCss.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const sel = m[1].trim(), body = m[2];
+    if (!/word-break:\s*break-all/.test(body)) continue;
+    assert.ok(/monospace/.test(body) || /code|pre|samp|url|link|source/i.test(sel),
+      `${sel.slice(0, 60)} — break-all은 monospace/URL 표기 의도 케이스만 허용`);
+  }
 });

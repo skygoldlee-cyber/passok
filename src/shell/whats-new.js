@@ -33,6 +33,11 @@ export function releaseNotes() {
  * lastSeen 이후에 배포된 항목만 추린다 (순수 함수 — 테스트 용이).
  * lastSeen이 목록에 없으면(여러 버전 건너뜀) 최근 MAX_VERSIONS개를 반환.
  */
+/**
+ * @param {Array.<{version?:string, date?:string, notes?:string[]}>} notes
+ * @param {string|null} lastSeen
+ * @returns {Array.<{version?:string, date?:string, notes:string[]}>}
+ */
 export function collectNewEntries(notes, lastSeen) {
     const released = (notes || []).filter(e => e && e.version);
     if (!released.length) return [];
@@ -44,7 +49,11 @@ export function collectNewEntries(notes, lastSeen) {
     }));
 }
 
-/** 변경 이력 모달 — 부팅 자동 표시와 도움말 메뉴 재열람 공용 */
+/**
+ * 변경 이력 모달 — 부팅 자동 표시와 도움말 메뉴 재열람 공용
+ * @param {Array.<{version?:string, date?:string, notes:string[]}>} entries
+ * @param {string} [title]
+ */
 export function showReleaseNotesModal(entries, title = '새로운 소식') {
     if (!entries.length) return;
     // 전용 오버레이 ID — showConfirm/showAlert(app-confirm-overlay)와 독립.
@@ -85,7 +94,7 @@ export function showReleaseNotesModal(entries, title = '새로운 소식') {
     };
     overlay.querySelector('.app-confirm-ok')?.addEventListener('click', close);
     overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
-    const onKey = (e) => {
+    const onKey = (/** @type {KeyboardEvent} */ e) => {
         if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); close(); }
     };
     document.addEventListener('keydown', onKey);

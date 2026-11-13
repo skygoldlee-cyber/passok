@@ -105,9 +105,13 @@ export function dismissFeedbackHint() {
 // 제출 페이로드 (순수 함수 — 테스트 용이)
 // ---------------------------------------------------------------------------
 
+/**
+ * @param {{kind?:string, rating?:number|null, body?:*, view?:string|null, honeypot?:*, userId?:string|null}} input
+ * @returns {{kind:string, rating:number|null, body:string, view:string|null, app_version:string|null, entry_src:*, exam_id:string|null, user_agent:string|null, user_id:string|null, meta:Object}}
+ */
 export function buildFeedbackPayload({ kind, rating, body, view, honeypot, userId }) {
-    const k = FEEDBACK_KINDS.some(f => f.id === kind) ? kind : 'improve';
-    const r = Number.isInteger(rating) && rating >= 1 && rating <= 5 ? rating : null;
+    const k = (kind != null && FEEDBACK_KINDS.some(f => f.id === kind)) ? kind : 'improve';
+    const r = (typeof rating === 'number' && Number.isInteger(rating) && rating >= 1 && rating <= 5) ? rating : null;
     return {
         kind: k,
         rating: r,
@@ -115,7 +119,7 @@ export function buildFeedbackPayload({ kind, rating, body, view, honeypot, userI
         view: view || null,
         app_version: (typeof window !== 'undefined' && window.APP_VERSION) || null,
         entry_src: getEntrySource(),
-        exam_id: getActiveExamId(),
+        exam_id: getActiveExamId() ?? null,
         user_agent: (typeof navigator !== 'undefined' && navigator.userAgent) || null,
         user_id: userId || null,
         meta: {
@@ -131,6 +135,7 @@ export function buildFeedbackPayload({ kind, rating, body, view, honeypot, userI
 
 // @spec FB-06
 // 허니팟·길이·PII 검증 — 서버 없이 클라이언트 선차단
+/** @param {{body?:string, meta?:{honeypot?:*}}} payload */
 export function validateFeedback(payload) {
     if (payload.meta?.honeypot) return 'spam';
     if (!payload.body || payload.body.length < BODY_MIN) return 'short';
@@ -150,6 +155,7 @@ export function cooldownRemaining(now = Date.now(), lastTs = null) {
 // 큐 + 전송
 // ---------------------------------------------------------------------------
 
+/** @param {*} item */
 function enqueue(item) {
     const q = getJSON(QUEUE_KEY, []);
     q.push(item);
@@ -158,6 +164,7 @@ function enqueue(item) {
     return q.length;
 }
 
+/** @param {Array.<*>} items */
 async function insertRemote(items) {
     const sb = await getSupabase();
     if (!sb) return { ok: false };
@@ -183,6 +190,7 @@ export async function flushPendingFeedback() {
  * 의견 제출 — 성공/큐잉/거부를 구분해 반환.
  * @returns {Promise<{status:'sent'|'queued'|'cooldown'|'invalid'|'spam'|'pii'|'short'|'long', queuedCount?:number}>}
  */
+/** @param {*} input */
 export async function submitFeedback(input) {
     if (cooldownRemaining() > 0) return { status: 'cooldown' };
     const payload = buildFeedbackPayload(input);
@@ -208,6 +216,7 @@ export async function submitFeedback(input) {
 // ---------------------------------------------------------------------------
 
 /** 의견 보내기 모달 — 전용 overlay id로 showConfirm/showAlert와 독립 */
+/** @param {*} currentView */
 export function showFeedbackModal(currentView) {
     const existing = document.getElementById('feedback-overlay');
     if (existing) existing.remove();
@@ -253,6 +262,7 @@ export function showFeedbackModal(currentView) {
     });
 
     let kind = 'improve';
+    /** @type {number|null} */
     let rating = null;
     overlay.querySelectorAll('.feedback-kind').forEach(node => {
         const btn = /** @type {HTMLElement} */ (node);
@@ -272,8 +282,8 @@ export function showFeedbackModal(currentView) {
         });
     });
 
-    const onKey = (ev) => {
-        const e = /** @type {KeyboardEvent} */ (ev);
+    const onKey = (/** @type {KeyboardEvent} */ ev) => {
+        const e = ev;
         // 확인 모달이 위에 열려 있으면 그쪽 Esc가 먼저 처리 — 이중 닫기 방지
         if (e.key === 'Escape' && !document.getElementById('app-confirm-overlay')) requestClose();
     };

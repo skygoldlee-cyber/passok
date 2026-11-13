@@ -17,14 +17,16 @@ export { careShare } from '../care-share.js';
 export { careIncidentVoiceToggle } from '../care-voice.js';
 import { voiceButtonsInit } from '../care-voice.js';
 
-const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const _val = (id, fb) => {
+const $ = (/** @type {string} */ id) => document.getElementById(id);
+const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
+const _val = (/** @type {string} */ id, /** @type {string} */ fb) => {
     const el = /** @type {HTMLSelectElement|HTMLInputElement|null} */ ($(id));
     return el && el.value ? el.value : fb;
 };
+/** @type {*} */
 let _facility = null;
 let _fiList = [];
+/** @type {string|null} */
 let _lastText = null;
 const PHOTO_MAX = 3; // 첨부 사진 한도 — localStorage 쿼터 보호
 /** @type {string[]} */ const _photos = [];
@@ -106,6 +108,7 @@ export function careIncidentCsvExport() {
     return csv;
 }
 
+/** @param {string} id */
 export async function careIncidentDelete(id) {
     if (!id || !await showConfirm('저장된 보고서를 삭제할까요?', '삭제 확인')) return;
     removeIncident(id); renderSaved();
@@ -116,7 +119,7 @@ function renderSaved() {
     if (!host) return;
     const items = listIncidents();
     host.innerHTML = items.length
-        ? items.map(x => `<div class="care-log-saved-item">
+        ? items.map((/** @type {*} */ x) => `<div class="care-log-saved-item">
             <span>${esc(x.date)} · ${esc(x.client)} — ${esc(incidentTypeLabel(x.type))}${x.photos?.length ? ` 📷${x.photos.length}` : ''}</span>
             <button data-click="careIncidentDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button>
           </div>`).join('')
@@ -134,7 +137,7 @@ async function renderFacility() {
     host.innerHTML = `
         <div class="care-audit-sec">
             <h3>기관 사고 대장 — ${esc(_facility.name)}</h3>
-            ${_fiList.map(v => `
+            ${_fiList.map((/** @type {*} */ v) => `
                 <div class="care-log-saved-item">
                     <span>${esc(v.occurred_at)} · ${esc(v.client)} — ${esc(v.type)}${v.severity ? esc(' · ' + v.severity) : ''}${v.family_notified ? ' · 가족통지' : ''}</span>
                 </div>`).join('')}
@@ -175,6 +178,7 @@ export function careIncidentPhotoPick() {
     /** @type {HTMLInputElement|null} */ ($('inc-photo-file'))?.click();
 }
 
+/** @param {number} idx */
 export async function careIncidentPhotoRemove(idx) {
     const i = Number(idx);
     if (!(i >= 0 && i < _photos.length)) return;
@@ -187,7 +191,7 @@ export async function careIncidentPhotoRemove(idx) {
 function _renderPhotos() {
     const host = $('inc-photo-list');
     if (!host) return;
-    host.innerHTML = _photos.map((p, i) =>
+    host.innerHTML = _photos.map((/** @type {string} */ p, /** @type {number} */ i) =>
         `<span class="care-photo-thumb"><img src="${p}" alt="첨부 사진 ${i + 1}"><button type="button" class="care-photo-del" data-click="careIncidentPhotoRemove" data-arg="${i}" title="사진 삭제">✕</button></span>`
     ).join('') || '<span class="care-log-hint">현장·상해 부위 등 사진을 첨부하면 출력물에 함께 표시됩니다 (최대 3장)</span>';
 }
@@ -195,7 +199,8 @@ function _renderPhotos() {
 export function initCareIncidentView() {
     markFunnel('tool:care-incident');
     voiceButtonsInit(); // 음성 입력 미지원 브라우저는 🎤 숨김
-    attachClientPicker(/** @type {HTMLInputElement|null} */ ($('inc-client')));
+    const _incClientEl = $('inc-client');
+    if (_incClientEl) attachClientPicker(/** @type {HTMLInputElement} */ (_incClientEl));
     const d = /** @type {HTMLInputElement|null} */ ($('inc-date'));
     if (d && !d.value) d.value = todayKey();
     const t = $('inc-type');

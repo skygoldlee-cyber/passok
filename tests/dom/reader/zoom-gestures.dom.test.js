@@ -1,7 +1,7 @@
 // @spec TR-26
 // zoom-gestures.js — 줌 모달 공용 핀치·패닝·더블탭 제스처 (모바일 핀치줌 대체 경로)
 import { describe, it, beforeEach, expect, vi } from 'vitest';
-import { bindZoomGestures } from '../../../src/reader/zoom-gestures.js';
+import { bindZoomGestures, bindZoomPanControls } from '../../../src/reader/zoom-gestures.js';
 
 /** jsdom은 PointerEvent 미지원 — MouseEvent로 시뮬레이션하고 pointerId를 주입한다 */
 function ptr(type, id, x, y) {
@@ -104,5 +104,35 @@ describe('줌 제스처 (TR-26)', () => {
         body.dispatchEvent(ptr('pointerdown', 2, 100, 0));
         body.dispatchEvent(ptr('pointermove', 2, 200, 0));
         expect(listener).not.toHaveBeenCalled(); // 첫 바인딩의 setScale만 동작
+    });
+});
+
+describe('패닝 대체 수단 (WCAG 2.5.7)', () => {
+    it('data-pan 버튼 탭으로 본문을 스크롤한다 — 드래그 없는 단일 포인터 대체', () => {
+        document.body.innerHTML = `
+            <div id="tb">
+                <button data-pan="up">↑</button><button data-pan="down">↓</button>
+                <button data-pan="left">←</button><button data-pan="right">→</button>
+            </div>
+            <div id="zoom-body" style="overflow:auto"></div>`;
+        const body = document.getElementById('zoom-body');
+        // jsdom은 레이아웃 계산 불가 — clientWidth/Height를 스텁한다
+        Object.defineProperty(body, 'clientWidth', { value: 200, configurable: true });
+        Object.defineProperty(body, 'clientHeight', { value: 100, configurable: true });
+        bindZoomPanControls(body, document.getElementById('tb'));
+
+        document.querySelector('[data-pan="down"]').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        expect(body.scrollTop).toBe(45);   // 100 * 0.45
+        document.querySelector('[data-pan="right"]').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        expect(body.scrollLeft).toBe(90);  // 200 * 0.45
+        document.querySelector('[data-pan="up"]').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        expect(body.scrollTop).toBe(0);
+        document.querySelector('[data-pan="left"]').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        expect(body.scrollLeft).toBe(0);
+    });
+
+    it('바인딩된 본문은 키보드 포커스 가능(tabindex=0) — 화살표 네이티브 스크롤 대체', () => {
+        const { body } = setup();
+        expect(body.tabIndex).toBe(0);
     });
 });

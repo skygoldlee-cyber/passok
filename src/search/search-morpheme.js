@@ -84,7 +84,7 @@ export function termHitQuality(text, term, vocab) {
     while (pos >= 0 && best < 2) {
         // 매치 직전의 단어-문자 런이 형태소 접두 — 비단어 문자·문서 시작이면 어절 경계
         let r = pos;
-        while (r > 0 && WORD_CHAR_RE.test(s[r - 1])) r--;
+        while (r > 0 && WORD_CHAR_RE.test(s[r - 1] || '')) r--;
         best = (r === pos || isCoverable(s.substring(r, pos), vocab)) ? 2 : 1;
         pos = s.indexOf(t, pos + 1);
     }
@@ -104,7 +104,7 @@ export function expandSynonyms(term, synMap) {
     if (!t) return [];
     if (!synMap || typeof synMap !== 'object') return [t];
     const out = [t];
-    const add = (v) => {
+    const add = (/** @type {*} */ v) => {
         const s = String(v || '').toLowerCase();
         if (s && !out.includes(s)) out.push(s);
     };

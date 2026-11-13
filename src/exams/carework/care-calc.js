@@ -3,8 +3,9 @@
 import { GRADE_LIMITS, SELF_PAY_RATE, REDUCTIONS } from './care-calc-data.js';
 
 /** 월 한도 초과분을 전액 자부담으로 처리하는 재가급여 계산 */
+/** @param {string} gradeKey @param {number} monthlyUse @param {number} reductionRate */
 function calcHome(gradeKey, monthlyUse, reductionRate) {
-    const g = GRADE_LIMITS.find(x => x.key === gradeKey);
+    const g = GRADE_LIMITS.find((/** @type {*} */ x) => x.key === gradeKey);
     if (!g || monthlyUse < 0) return null;
     const covered = Math.min(monthlyUse, g.home);
     const overLimit = Math.max(0, monthlyUse - g.home);
@@ -14,6 +15,7 @@ function calcHome(gradeKey, monthlyUse, reductionRate) {
 }
 
 /** 시설급여 — 한도 없이 급여비용의 20% 본인부담 + 비급여(식재료비·상급침실료 등) 전액 자부담 */
+/** @param {number} monthlyUse @param {number} reductionRate @param {number} nonCovered */
 function calcFacility(monthlyUse, reductionRate, nonCovered) {
     if (monthlyUse < 0 || nonCovered < 0) return null;
     const selfCovered = Math.round(monthlyUse * SELF_PAY_RATE.facility * (1 - reductionRate));
@@ -33,6 +35,7 @@ export function computeCareCost({ type, grade, monthlyUse, reduction, nonCovered
     return null;
 }
 
+/** @param {number|null} n */
 export function formatWon(n) {
     return n == null ? '' : n.toLocaleString('ko-KR') + '원';
 }

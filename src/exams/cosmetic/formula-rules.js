@@ -85,22 +85,24 @@ const IRRITANT_INGREDIENTS = ['레티놀', '살리실산', '살리실릭애씨�
 const CUSTOM_SCOPES = ['base', 'concern', 'skin'];
 const MAX_CUSTOM_PER_KEY = 30;
 
+/** @returns {Object.<string, Object.<string,string[]>>} */
 function emptyCustomRules() {
   return { base: {}, concern: {}, skin: {} };
 }
 
 /** 파싱된 객체 → 정제된 규칙 구조 (스키마 외 값·중복·초과분 제거) */
+/** @param {*} parsed @returns {Object.<string, Object.<string,string[]>>} */
 function sanitizeRulesObject(parsed) {
   const rules = emptyCustomRules();
-  CUSTOM_SCOPES.forEach(scope => {
+  CUSTOM_SCOPES.forEach((/** @type {string} */ scope) => {
     const bucket = parsed && parsed[scope];
     if (!bucket || typeof bucket !== 'object' || Array.isArray(bucket)) return;
-    Object.entries(bucket).forEach(([key, list]) => {
+    Object.entries(bucket).forEach(([key, /** @type {*} */ list]) => {
       if (!Array.isArray(list)) return;
       const names = [...new Set(list
-        .filter(n => typeof n === 'string' && n.trim())
-        .map(n => n.trim()))].slice(0, MAX_CUSTOM_PER_KEY);
-      if (names.length) rules[scope][key] = names;
+        .filter((/** @type {*} */ n) => typeof n === 'string' && n.trim())
+        .map((/** @type {string} */ n) => n.trim()))].slice(0, MAX_CUSTOM_PER_KEY);
+      if (names.length) (rules[scope] || (rules[scope] = {}))[key] = names;
     });
   });
   return rules;
@@ -117,18 +119,21 @@ export function loadCustomRules() {
   }
 }
 
+/** @param {*} rules */
 function saveCustomRules(rules) {
   return safeSetItem(STORAGE_KEYS.FORMULA_RULES, JSON.stringify(rules));
 }
 
 /** 맞춤 후보 추가. @returns {{ok:boolean, error?:string}} */
+/** @param {string} scope @param {string} key @param {string} name */
 export function addCustomCandidate(scope, key, name) {
   if (!CUSTOM_SCOPES.includes(scope)) return { ok: false, error: '대상 구분이 올바르지 않습니다.' };
   if (typeof key !== 'string' || !key.trim()) return { ok: false, error: '대상을 선택하세요.' };
   const n = typeof name === 'string' ? name.trim() : '';
   if (!n) return { ok: false, error: '원료명을 입력하세요.' };
   const rules = loadCustomRules();
-  const list = rules[scope][key] || (rules[scope][key] = []);
+  const scopeRules = rules[scope] || (rules[scope] = {});
+  const list = scopeRules[key] || (scopeRules[key] = []);
   if (list.includes(n)) return { ok: false, error: '이미 등록된 후보입니다.' };
   if (list.length >= MAX_CUSTOM_PER_KEY) return { ok: false, error: `후보는 대상당 최대 ${MAX_CUSTOM_PER_KEY}개입니다.` };
   list.push(n);
@@ -137,14 +142,16 @@ export function addCustomCandidate(scope, key, name) {
 }
 
 /** 맞춤 후보 제거. @returns {{ok:boolean, error?:string}} */
+/** @param {string} scope @param {string} key @param {string} name */
 export function removeCustomCandidate(scope, key, name) {
   if (!CUSTOM_SCOPES.includes(scope)) return { ok: false, error: '대상 구분이 올바르지 않습니다.' };
   const rules = loadCustomRules();
   const list = rules[scope] && rules[scope][key];
   if (!list) return { ok: false, error: '등록된 후보가 없습니다.' };
-  const next = list.filter(n => n !== name);
-  if (next.length) rules[scope][key] = next;
-  else delete rules[scope][key];
+  const next = list.filter((/** @type {string} */ n) => n !== name);
+  const scopeRules2 = rules[scope] || {};
+  if (next.length) scopeRules2[key] = next;
+  else delete scopeRules2[key];
   if (!saveCustomRules(rules)) return { ok: false, error: '저장에 실패했습니다.' };
   return { ok: true };
 }
@@ -191,7 +198,7 @@ export function importCustomRules(input, opts) {
   }
 
   const incoming = sanitizeRulesObject(parsed);
-  const hasAny = CUSTOM_SCOPES.some(s => Object.keys(incoming[s]).length > 0);
+  const hasAny = CUSTOM_SCOPES.some((/** @type {string} */ s) => Object.keys(incoming[s] || {}).length > 0);
   if (!hasAny) {
     return { ok: false, error: '가져올 규칙이 없습니다. base/concern/skin 키를 확인하세요.' };
   }
@@ -200,10 +207,11 @@ export function importCustomRules(input, opts) {
   const rules = replace ? emptyCustomRules() : loadCustomRules();
   let added = 0;
   let skipped = 0;
-  CUSTOM_SCOPES.forEach(scope => {
-    Object.entries(incoming[scope]).forEach(([key, names]) => {
-      const list = rules[scope][key] || (rules[scope][key] = []);
-      names.forEach(n => {
+  CUSTOM_SCOPES.forEach((/** @type {string} */ scope) => {
+    Object.entries(incoming[scope] || {}).forEach(([key, names]) => {
+      const scopeRules3 = rules[scope] || (rules[scope] = {});
+      const list = scopeRules3[key] || (scopeRules3[key] = []);
+      names.forEach((/** @type {string} */ n) => {
         if (list.includes(n) || list.length >= MAX_CUSTOM_PER_KEY) { skipped++; return; }
         list.push(n);
         added++;
@@ -227,9 +235,10 @@ export function customRuleTargets() {
 }
 
 /** 후보 이름을 DB 기준으로 정제 — 미등록·banned 제거 + dedupe (index 없으면 dedupe만) */
+/** @param {*} names @param {*} index */
 function filterCandidateNames(names, index) {
   const seen = new Set();
-  return (Array.isArray(names) ? names : []).filter(n => {
+  return (Array.isArray(names) ? names : []).filter((/** @type {*} */ n) => {
     if (typeof n !== 'string' || seen.has(n)) return false;
     if (index) {
       const ing = index.get(n);
@@ -242,10 +251,10 @@ function filterCandidateNames(names, index) {
 
 /**
  * 고객 조건으로 추천을 생성한다.
- * @param {object} customer - {gender, age, skinType, concerns[], formulation}
- * @param {Map<string,object>} index - buildIngredientIndex() 결과
- * @param {object} [custom] - loadCustomRules() 결과 (사용자 맞춤 후보)
- * @returns {{bases:Array, ingredients:Array<{name,reasons,type,limit,irritant}>, cautions:string[]}}
+ * @param {*} customer - {gender, age, skinType, concerns[], formulation}
+ * @param {Map<string,*>} index - buildIngredientIndex() 결과
+ * @param {*} [custom] - loadCustomRules() 결과 (사용자 맞춤 후보)
+ * @returns {{bases:Array<{role:string,required:boolean,candidates:string[]}>, ingredients:Array<{name:string,reasons:string[],type:string,limit:string,irritant:boolean}>, cautions:string[]}}
  */
 export function recommendFor(customer, index, custom) {
   /** @type {{bases: Array<{role:string, required:boolean, candidates:string[]}>, ingredients: Array<{name:string, reasons:string[], type:string, limit:string, irritant:boolean}>, cautions: string[]}} */
@@ -256,19 +265,19 @@ export function recommendFor(customer, index, custom) {
   // 알레르기·부작용 이력 원료 — 모든 추천(기본·맞춤 후보 포함)에서 제외
   const allergies = new Set(
     (Array.isArray(customer.allergies) ? customer.allergies : [])
-      .map(a => (typeof a === 'string' ? a.trim() : ''))
+      .map((/** @type {*} */ a) => (typeof a === 'string' ? a.trim() : ''))
       .filter(Boolean)
   );
   const excludedByAllergy = new Set();
-  const notAllergen = n => {
+  const notAllergen = (/** @type {string} */ n) => {
     if (allergies.has(n)) { excludedByAllergy.add(n); return false; }
     return true;
   };
 
   // ① 제형 → 베이스 템플릿 (+ 맞춤 후보 병합, 알레르기 제외)
-  const template = BASE_TEMPLATES[customer.formulation];
+  const template = (/** @type {Object.<string,*>} */ (BASE_TEMPLATES))[customer.formulation];
   if (template) {
-    result.bases = template.map(r => ({
+    result.bases = template.map((/** @type {*} */ r) => ({
       role: r.role,
       required: !!r.required,
       candidates: filterCandidateNames(
@@ -278,17 +287,18 @@ export function recommendFor(customer, index, custom) {
   }
 
   // ② 고민 + 피부유형 → 원료 추천 (이름 dedupe, 이유 수집)
+  /** @type {Map<string,{reasons:Set<string>}>} */
   const seen = new Map(); // name → {reasons:Set}
-  const add = (name, reason) => {
+  const add = (/** @type {string} */ name, /** @type {string} */ reason) => {
     if (!seen.has(name)) seen.set(name, { reasons: new Set([reason]) });
-    else seen.get(name).reasons.add(reason);
+    else /** @type {{reasons:Set<string>}} */ (seen.get(name)).reasons.add(reason);
   };
-  (Array.isArray(customer.concerns) ? customer.concerns : []).forEach(c => {
-    (CONCERN_INGREDIENTS[c] || []).forEach(name => add(name, c));
-    ((cu.concern && cu.concern[c]) || []).forEach(name => add(name, c));
+  (Array.isArray(customer.concerns) ? customer.concerns : []).forEach((/** @type {string} */ c) => {
+    ((/** @type {Object.<string,string[]>} */ (CONCERN_INGREDIENTS))[c] || []).forEach((/** @type {string} */ name) => add(name, c));
+    ((cu.concern && cu.concern[c]) || []).forEach((/** @type {string} */ name) => add(name, c));
   });
-  (SKIN_INGREDIENTS[customer.skinType] || []).forEach(name => add(name, '피부유형'));
-  ((cu.skin && cu.skin[customer.skinType]) || []).forEach(name => add(name, '피부유형'));
+  ((/** @type {Object.<string,string[]>} */ (SKIN_INGREDIENTS))[customer.skinType] || []).forEach((/** @type {string} */ name) => add(name, '피부유형'));
+  ((cu.skin && cu.skin[customer.skinType]) || []).forEach((/** @type {string} */ name) => add(name, '피부유형'));
 
   const age = typeof customer.age === 'number' ? customer.age : null;
   const youngOrOld = age != null && (age < 20 || age > 65);
@@ -358,20 +368,21 @@ export const ROLE_PHASE = Object.freeze({
 });
 
 /** '베이스 불러오기' 대상: required 역할의 첫 후보 → {name, role, phase} */
+/** @param {string} formulation */
 export function baseDefaultCandidates(formulation) {
-  const template = BASE_TEMPLATES[formulation];
+  const template = (/** @type {Object.<string,*>} */ (BASE_TEMPLATES))[formulation];
   if (!template) return [];
   return template
-    .filter(r => r.required && r.candidates.length)
-    .map(r => ({ name: r.candidates[0], role: r.role, phase: ROLE_PHASE[r.role] || '' }));
+    .filter((/** @type {*} */ r) => r.required && r.candidates.length)
+    .map((/** @type {*} */ r) => ({ name: r.candidates[0], role: r.role, phase: (/** @type {Object.<string,string>} */ (ROLE_PHASE))[r.role] || '' }));
 }
 
 // 매핑 무결성 점검용 — 테스트에서 참조하는 전체 추천 이름 수집
 export function allRuleIngredientNames() {
   const names = new Set();
-  Object.values(BASE_TEMPLATES).flat().forEach(r => r.candidates.forEach(n => names.add(n)));
-  Object.values(CONCERN_INGREDIENTS).flat().forEach(n => names.add(n));
-  Object.values(SKIN_INGREDIENTS).flat().forEach(n => names.add(n));
+  Object.values(BASE_TEMPLATES).flat().forEach((/** @type {*} */ r) => r.candidates.forEach((/** @type {string} */ n) => names.add(n)));
+  Object.values(CONCERN_INGREDIENTS).flat().forEach((/** @type {string} */ n) => names.add(n));
+  Object.values(SKIN_INGREDIENTS).flat().forEach((/** @type {string} */ n) => names.add(n));
   return names;
 }
 

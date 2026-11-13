@@ -16,7 +16,7 @@ export function initWebVitals() {
         new PerformanceObserver((entryList) => {
             const entries = entryList.getEntries();
             if (entries.length > 0) {
-                _lcpValue = entries[entries.length - 1].startTime;
+                _lcpValue = entries[entries.length - 1]?.startTime ?? _lcpValue;
             }
         }).observe({ type: 'largest-contentful-paint', buffered: true });
     } catch (e) { /* LCP 미지원 브라우저 */ }

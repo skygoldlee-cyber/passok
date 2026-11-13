@@ -155,7 +155,7 @@ export function lintAdCopy(text) {
       if (idx < 0) break;
       hits.push({
         index: idx, length: rule.term.length, term: rule.term,
-        category: rule.category, label: AD_CATEGORIES[rule.category].label,
+        category: rule.category, label: (/** @type {Object.<string,*>} */ (AD_CATEGORIES))[rule.category].label,
         suggestion: rule.suggestion,
       });
       from = idx + rule.term.length;
@@ -174,7 +174,9 @@ export function lintAdCopy(text) {
 }
 
 /** 카테고리별 건수 집계 — {categoryId: count} */
+/** @param {*[]} hits */
 export function summarizeLint(hits) {
+  /** @type {Object.<string,number>} */
   const out = {};
   for (const h of hits) out[h.category] = (out[h.category] || 0) + 1;
   return out;

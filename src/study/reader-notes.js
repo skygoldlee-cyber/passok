@@ -20,6 +20,7 @@ export function getReaderNotes() {
 }
 
 /** 키 → 메모 문자열 (없으면 '') */
+/** @param {string} key */
 export function getReaderNote(key) {
     const n = getReaderNotes()[key];
     return (n && typeof n.note === 'string') ? n.note : '';
@@ -33,7 +34,7 @@ export function readerNoteCount() {
  * 메모 저장 — 빈 문자열은 삭제로 해석한다.
  * @param {string} key bookmarkKeyOf() 형태 콘텐츠 키
  * @param {string} note 메모 본문
- * @param {{subject?:string, title?:string}} [meta] 팔레트 검색·이동용 맥락
+ * @param {{subject?:string|undefined, title?:string|undefined}} [meta] 팔레트 검색·이동용 맥락
  */
 export function setReaderNote(key, note, meta = {}) {
     if (!key) return false;
@@ -54,6 +55,7 @@ export function setReaderNote(key, note, meta = {}) {
     return true;
 }
 
+/** @param {string} key */
 export function deleteReaderNote(key) {
     return setReaderNote(key, '');
 }

@@ -29,6 +29,7 @@ export const EXAM_R_SESSION_CAP = 60;   // 1회 세션 상한 — 크램 벽 방
 // 콜드스타트 난이도 시딩 (휴면 훅) — window.DIFFICULTY_SEED[cardId]=1~10 시드 맵이 있으면
 // 신규 카드의 초기 난이도 D0를 시드값으로 대체한다. 시드 번들은 오프라인
 // `ai:seedcheck` valid 판정 후에만 제공되므로, 미제공 시 기존 D0(rating) 경로와 동일 (무영향).
+/** @param {string} cardId */
 function _seedD0(cardId) {
     const m = typeof window !== 'undefined' ? window.DIFFICULTY_SEED : null;
     const v = m ? Number(m[cardId]) : NaN;
@@ -36,17 +37,20 @@ function _seedD0(cardId) {
 }
 
 /** 구 SM-2 레코드를 FSRS v2로 지연 변환 (이미 v2면 그대로) */
+/** @param {*} rec @param {string} todayStr */
 function _ensureV2(rec, todayStr) {
     if (!rec) return null;
     return rec.v === 2 ? rec : migrateSm2Record(rec, todayStr);
 }
 
 /** 날짜 문자열 차이 (일) — a - b */
+/** @param {string} a @param {string} b */
 function _daysBetween(a, b) {
     return Math.round((Date.parse(a + 'T00:00:00') - Date.parse(b + 'T00:00:00')) / 86400000);
 }
 
 /** 'YYYY-MM-DD'를 offset일 이동 */
+/** @param {string} dateStr @param {number} offset */
 function _shiftDateStr(dateStr, offset) {
     const d = new Date(dateStr + 'T00:00:00');
     d.setDate(d.getDate() + offset);
@@ -223,6 +227,7 @@ export function getExamRiskCards(dday) {
     const examDate = new Date();
     examDate.setDate(examDate.getDate() + dday);
     const examStr = todayKey(examDate);
+    /** @type {{id:string, rExam:number}[]} */
     const risk = [];
     Object.keys(schedules).forEach(id => {
         const rec = _ensureV2(schedules[id], todayStr);
@@ -238,7 +243,7 @@ export function getExamRiskCards(dday) {
 
 /**
  * 복습 스케줄 전체 로드 — 구 SM-2 레코드 포함 (raw 읽기)
- * @returns {Object} { cardId: { ... } }
+ * @returns {Object.<string,*>} { cardId: { ... } }
  */
 function loadSchedules() {
     try {
@@ -251,7 +256,7 @@ function loadSchedules() {
 
 /**
  * 복습 스케줄 전체 저장
- * @param {Object} schedules
+ * @param {Object.<string,*>} schedules
  */
 function saveSchedules(schedules) {
     safeSetItem(SR_KEY, JSON.stringify(schedules));

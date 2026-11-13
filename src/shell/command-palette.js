@@ -32,10 +32,14 @@ function _scopeLabel() {
     return parts.join('·');
 }
 
+/** @typedef {{type:string, icon:string, title:string, sub:string, action:*, score:number}} PaletteResult */
+
 let _open = false;
 let _activeIdx = 0;
+/** @type {PaletteResult[]} */
 let _results = [];
 /** 과목 데이터 백그라운드 로드 진행 중 중복 방지 */
+/** @type {Promise<*>|null} */
 let _studyWarmPromise = null;
 
 /**
@@ -82,22 +86,24 @@ function _subjects() {
 }
 
 /** 검색어를 소문자 토큰 배열로 정규화 */
+/** @param {*} query @returns {string[]} */
 function _terms(query) {
     return (query || '').toLowerCase().split(/\s+/).filter(Boolean);
 }
 
 /** 모든 토큰이 대상 텍스트에 포함되면 점수 반환 (제목 접두 매칭 가산점) */
+/** @param {string} text @param {string} title @param {string[]} terms */
 function _matchScore(text, title, terms) {
     const hay = (text || '').toLowerCase();
     if (!terms.every(t => hay.includes(t))) return -1;
     const t = (title || '').toLowerCase();
-    return t.startsWith(terms[0]) ? 2 : t.includes(terms[0]) ? 1 : 0;
+    return t.startsWith(terms[0] || '') ? 2 : t.includes(terms[0] || '') ? 1 : 0;
 }
 
 /**
  * 통합 검색 — 유형별 그룹 결과를 반환한다 (순수 함수, 테스트 가능).
  * @param {string} query
- * @param {Object} [sources] - 테스트 주입용 {views, studyData, ingredients, exams}
+ * @param {*} [sources] - 테스트 주입용 {views, studyData, ingredients, exams}
  * @returns {Array<{type:string,icon:string,title:string,sub:string,action:Object,score:number}>}
  */
 export function searchAll(query, sources) {
@@ -108,11 +114,13 @@ export function searchAll(query, sources) {
     const ingredients = src.ingredients || DataLoader.getKnowledgeItems();
     const registry = src.registry || DataLoader.registry || {};
     const views = src.views || (typeof document !== 'undefined' ? getViewItems() : []);
+    /** @type {Object.<string, PaletteResult[]>} */
     const groups = { view: [], section: [], note: [], ingredient: [], exam: [] };
-    const push = (type, item) => { if (groups[type].length < MAX_PER_GROUP) groups[type].push(item); };
+    /** @param {string} type @param {PaletteResult} item */
+    const push = (type, item) => { const g = groups[type]; if (g && g.length < MAX_PER_GROUP) g.push(item); };
 
     // 1) 뷰 바로가기
-    views.forEach(v => {
+    views.forEach((/** @type {*} */ v) => {
         const s = _matchScore(v.label, v.label, terms);
         if (s >= 0) push('view', {
             type: 'view', icon: 'fa-arrow-right', title: v.label, sub: '화면 이동',
@@ -122,7 +130,7 @@ export function searchAll(query, sources) {
 
     // 2) 과목 콘텐츠 — 교재 섹션 (카드·퀴즈는 매치 항목으로 착지 불가 → 범위 제외)
     // 수집·리더 이동 목적지 해석은 검색 소스 프로바이더(search-sources.js)가 담당 (TS-18)
-    for (const e of collectTextbookSections(studyData)) {
+    for (const e of /** @type {Iterable<*>} */ (collectTextbookSections(studyData))) {
         const s = _matchScore(`${e.title} ${e.crumb || ''}`, e.title, terms);
         if (s >= 0) {
             const [subject, gotoTitle, chAnchor] = e.nav.goto;
@@ -137,7 +145,7 @@ export function searchAll(query, sources) {
 
     // 3) 지식DB 사전 (초성 검색 지원 — 자모 쿼리는 getChosung 통과 후 substring 매칭)
     const dictLabel = (registry.uiText && registry.uiText.dictionary && registry.uiText.dictionary.title) || '사전';
-    ingredients.forEach(ing => {
+    ingredients.forEach((/** @type {*} */ ing) => {
         const name = (ing.name || '').toLowerCase();
         const eng = (ing.engName || '').toLowerCase();
         const chosung = getChosung(ing.name || '');
@@ -150,7 +158,7 @@ export function searchAll(query, sources) {
     });
 
     // 4) 문제집/기출 파일
-    (registry.exams || []).forEach(exam => {
+    (registry.exams || []).forEach((/** @type {*} */ exam) => {
         const s = _matchScore(`${exam.title} ${exam.file}`, exam.title, terms);
         if (s >= 0) push('exam', {
             type: 'exam', icon: 'fa-file-lines', title: exam.title,
@@ -173,10 +181,13 @@ export function searchAll(query, sources) {
 
     // 그룹 내 점수 정렬 후 플랫화 — 뷰·섹션·성분·문제집 순
     const order = ['view', 'section', 'note', 'ingredient', 'exam'];
+    /** @type {PaletteResult[]} */
     const flat = [];
     order.forEach(type => {
-        groups[type].sort((a, b) => b.score - a.score);
-        flat.push(...groups[type]);
+        const g = groups[type];
+        if (!g) return;
+        g.sort((a, b) => b.score - a.score);
+        flat.push(...g);
     });
     const results = flat.slice(0, MAX_TOTAL);
 
@@ -193,12 +204,14 @@ export function searchAll(query, sources) {
 
 /* ---------- 팔레트 UI ---------- */
 
+/** @type {Object.<string, string>} */
 const TYPE_LABELS = {
     view: '화면', section: '교재', note: '메모', ingredient: '사전', exam: '문제집',
     stmt: '의미 유사 진술', fulltext: '본문 검색'
 };
 
 /** 그룹 라벨 — ingredient는 활성 시험의 사전명(uiText.dictionary.title)으로 해석 */
+/** @param {string} type */
 function _typeLabel(type) {
     if (type === 'ingredient') {
         const reg = /** @type {any} */ ((typeof DataLoader !== 'undefined' && DataLoader.registry) || {});
@@ -244,6 +257,7 @@ function _buildDom() {
     });
 }
 
+/** @param {*} query */
 function _renderResults(query) {
     const box = document.getElementById('cmdk-results');
     if (!box) return;
@@ -251,7 +265,7 @@ function _renderResults(query) {
     box.scrollTop = 0; // 결과 재구성 시 이전 스크롤 잔류로 목록 상단이 잘리는 것 방지
 
     // 콜드스타트: 과목 데이터가 미로드면 백그라운드 로드 후 같은 쿼리로 갱신
-    _warmStudyData().then(added => {
+    _warmStudyData().then((/** @type {*} */ added) => {
         const inputEl = /** @type {HTMLInputElement|null} */ (document.getElementById('cmdk-input'));
         if (added && _open && inputEl && inputEl.value === query) _renderResults(query);
     });
@@ -272,6 +286,7 @@ function _renderResults(query) {
 }
 
 /** 결과 행 렌더 — 동기 결과와 비동기 의미 그룹 추가 시 재사용 */
+/** @param {HTMLElement} box */
 function _renderRows(box) {
     let lastType = '';
     box.innerHTML = _results.map((r, i) => {
@@ -298,6 +313,7 @@ let _semToken = 0;
  * neighbors 번들을 지연 로드해 쿼리 앵커의 의미 이웃을 'stmt' 그룹으로 뒤에 붙인다.
  * 비동기 도착이므로 도착 시점에 같은 쿼리인지 검증 후 _results에 삽입·재렌더.
  */
+/** @param {*} query */
 function _maybeAppendSemantic(query) {
     if (!SemanticIndex.isEnabled() || (query || '').trim().length < 2) return;
     const token = ++_semToken;
@@ -307,8 +323,8 @@ function _maybeAppendSemantic(query) {
         if (!input || input.value !== query) return;
         const existing = new Set(_results.filter(r => r.type === 'stmt').map(r => r.action.sid));
         const fresh = SemanticIndex.searchByText(query, 4)
-            .filter(h => h.key.startsWith('stmt:') && !existing.has(h.key.slice(5)))
-            .map(h => ({
+            .filter((/** @type {*} */ h) => h.key.startsWith('stmt:') && !existing.has(h.key.slice(5)))
+            .map((/** @type {*} */ h) => ({
                 type: 'stmt', icon: 'fa-wand-magic-sparkles', title: h.text,
                 sub: `유사도 ${Math.round(h.score * 100)}%${h.anchorText ? ` · 앵커: ${h.anchorText.slice(0, 40)}` : ''}`,
                 action: { kind: 'stmt', sid: h.key.slice(5) }, score: 0
@@ -321,6 +337,7 @@ function _maybeAppendSemantic(query) {
     }).catch(() => { /* noop — 의미 그룹 실패는 어휘 결과에 영향 없음 */ });
 }
 
+/** @param {number} delta */
 function _moveActive(delta) {
     if (!_results.length) return;
     _activeIdx = (_activeIdx + delta + _results.length) % _results.length;
@@ -355,12 +372,13 @@ function toggleCommandPalette() {
 }
 
 /** 검색 결과 실행 — 유형별로 기존 앱 진입 경로를 재사용한다 */
+/** @param {number} idx */
 export function executePaletteResult(idx) {
     const r = _results[idx];
     if (!r) return;
     closeCommandPalette();
     const a = r.action;
-    const clickNav = target => {
+    const clickNav = (/** @type {*} */ target) => {
         const btn = document.querySelector(`.nav-item[data-target="${target}"]`)
             || document.querySelector(`.mobile-tab-item[data-target="${target}"]`);
         if (btn) /** @type {HTMLElement} */ (btn).click();

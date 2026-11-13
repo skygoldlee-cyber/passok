@@ -5,6 +5,9 @@
  *
  * AI_PROVIDER=openai|anthropic|gemini (기본 openai), 키는 AI_API_KEY 또는
  * 공급자별 키(OPENAI_API_KEY·ANTHROPIC_API_KEY·GEMINI_API_KEY).
+ * 모델은 AI_MODEL → 공급자별 모델 env(OPENAI_MODEL·ANTHROPIC_MODEL·GEMINI_MODEL)
+ * → defaultModel 순으로 해석 — GEMINI_MODEL은 ai-proxy Edge Function의
+ * 시크릿명과 같은 규약 (외부 주입으로 코드 수정 없이 모델 교체).
  * 키는 .env/환경변수 로컬 전용 — 저장소·번들 포함 금지 (설계 §2-4).
  *
  * --dry-run / 키 부재 시 complete()가 {dryRun:true} 를 반환하고 호출하지 않는다 —
@@ -20,6 +23,7 @@ const { DRAFT_DIR } = require('./lib/ai_common.js');
 const PROVIDERS = {
     openai: {
         env: 'OPENAI_API_KEY',
+        modelEnv: 'OPENAI_MODEL',
         defaultModel: 'gpt-4o-mini',
         url: 'https://api.openai.com/v1/chat/completions',
         buildBody: (model, system, prompt, maxTokens) => ({
@@ -34,6 +38,7 @@ const PROVIDERS = {
     },
     anthropic: {
         env: 'ANTHROPIC_API_KEY',
+        modelEnv: 'ANTHROPIC_MODEL',
         defaultModel: 'claude-haiku-4-5-20251001',
         url: 'https://api.anthropic.com/v1/messages',
         buildBody: (model, system, prompt, maxTokens) => ({
@@ -49,6 +54,7 @@ const PROVIDERS = {
     },
     gemini: {
         env: 'GEMINI_API_KEY',
+        modelEnv: 'GEMINI_MODEL',
         defaultModel: 'gemini-3.8-flash',
         // key는 쿼리 파라미터 — buildUrl에서 처리
         buildBody: (model, system, prompt) => ({
@@ -74,7 +80,7 @@ function apiKey() {
 }
 function modelName() {
     const p = PROVIDERS[providerName()];
-    return process.env.AI_MODEL || (p ? p.defaultModel : undefined);
+    return process.env.AI_MODEL || (p && process.env[p.modelEnv]) || (p ? p.defaultModel : undefined);
 }
 function isAvailable() {
     return !!PROVIDERS[providerName()] && !!apiKey();

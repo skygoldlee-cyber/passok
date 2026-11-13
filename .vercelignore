@@ -69,6 +69,11 @@ tools/
 requirements.txt
 .generation_progress.json
 
+# ---------- 📊 오피스 원본 아티팩트 (배포 제외 — 변환 산출물만 서빙) ----------
+# 실무 데이터 xlsx 등은 facilities.json 등 변환 산출물의 생성 원본 — 런타임 fetch 없음
+content/exams/*/실무/*.xlsx
+content/exams/*/실무/**/*.xlsx
+
 # ---------- 임시 작업 디렉터리 (배포 제외 — 미커밋 작업·seed 자료) ----------
 # .tmp_*/(.tmp/도)는 로컬 임시 분석·seed 원본(PDF 등 저작권 자료 포함) 보관소.
 # .gitignore 대상이지만 .vercelignore와는 별개 — 명시 제외 없으면 정적 서빙된다.
@@ -153,10 +158,11 @@ combo_baseline.json
 .nvmrc
 .editorconfig
 
-# ---------- 🖼️ 참조자료 원문 삽화 (배포 제외 — 텍스트만 서빙) ----------
-# ref_md 원문 보기의 이미지는 배포 대상에서 제외한다 (iteng 23.6만개·97%가 <3KB
-# 추출 조각). 프로덕션 원문 보기는 텍스트 기준으로 동작하고 이미지 링크는 404.
-content/exams/*/참조자료/ref_md/*/images/
+# ---------- 🖼️ 참조자료 원문 삽화 ----------
+# ref_md 원문 보기는 이미지를 webp로 렌더링한다 — markdown-parser가
+# ![이미지](images/x.webp)를 <img>로 변환해 실제 서빙이 필요하므로
+# webp는 배포에 포함하고, 아래에서 재인코딩 원본 마스터만 제외한다.
+# (실제 디렉토리 깊이는 ref_md/과목N/<문서>/images/ 2단계 — 규칙도 2단계로 명시)
 
 # ---------- 🖼️ 브랜드 로고 원본 마스터 (배포 제외 — icon-*.png만 서빙) ----------
 # icons/passok-logo.png(1254px)는 icon-192/512·maskable 생성용 마스터 — 배포 미포함
@@ -164,9 +170,10 @@ icons/passok-logo.png
 
 # ---------- 🖼️ ref_md 원본 마스터 (배포 제외 — .webp만 서빙) ----------
 # ref_md 이미지는 webp 재인코딩본만 배포 — jpeg/png는 참조 링크 원본 마스터로 저장소 보존
-content/exams/*/참조자료/ref_md/*/images/*.jpeg
-content/exams/*/참조자료/ref_md/*/images/*.jpg
-content/exams/*/참조자료/ref_md/*/images/*.png
+# 실제 경로는 ref_md/과목N/<문서>/images/ 2단계 — 1단계 패턴은 매칭되지 않으므로 2단계로 명시
+content/exams/*/참조자료/ref_md/*/*/images/*.jpeg
+content/exams/*/참조자료/ref_md/*/*/images/*.jpg
+content/exams/*/참조자료/ref_md/*/*/images/*.png
 
 # ---------- DA-16 컨텐츠 비평문화 ----------
 # 교재·문제은행·docs 평문 MD는 배포 제외 — 프로덕션은 pk1 인코딩 번들(data/)만 서빙

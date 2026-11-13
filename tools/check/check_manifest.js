@@ -24,7 +24,7 @@ const ROOT = path.resolve(__dirname, '..', '..');
 // 교재 챕터 경계 헤딩 — build_question_chapters.js와 동일 규칙
 const CHAPTER_HEADING_RE = /^##\s+(?:📚\s*)?((?:Chapter\s+)?\d+\..+?)\s*$/m;
 // 카드/퀴즈 생성 마커 — textbook.plugin.js와 동일 규칙
-const MARKER_RE = /🔖기출|📌중요|🎯\s*기출|🎯\s*중요|★\s*필수/;
+const MARKER_RE = /🔖기출|🔖빈출|📌중요|🎯\s*기출|🎯\s*빈출|🎯\s*중요|★\s*필수/;
 
 const errors = [];
 const warns = [];
@@ -160,7 +160,7 @@ function checkSubject(target, subject) {
           err(scope, `챕터 헤딩("## N." 또는 "## 📚 Chapter N.") 없음 — 문항→챕터 매핑 불가: ${rel}`);
         }
         if (!MARKER_RE.test(md)) {
-          warn(scope, `기출/중요 마커(🔖기출·📌중요 등) 0건 — 퀴즈가 생성되지 않을 수 있음: ${rel}`);
+          warn(scope, `빈출/기출/중요 마커(🔖빈출·🔖기출·📌중요 등) 0건 — 퀴즈가 생성되지 않을 수 있음: ${rel}`);
         }
       }
     }

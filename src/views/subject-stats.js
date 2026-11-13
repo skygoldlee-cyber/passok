@@ -6,6 +6,7 @@
 
 import { state } from '../core/state.js';
 
+/** @type {Object.<string,{mem:number,weak:number,quizSolved:number,quizCorrect:number}>|null} */
 let _subjCountCache = null;
 let _subjCountCacheKey = '';
 
@@ -14,32 +15,34 @@ export function getSubjCounts() {
     const memKey = state.memorizedCards.size + ':' + state.weakCards.size + ':' + Object.keys(state.quizResults).length;
     if (_subjCountCache && _subjCountCacheKey === memKey) return _subjCountCache;
     _subjCountCacheKey = memKey;
+    /** @type {Object.<string,{mem:number,weak:number,quizSolved:number,quizCorrect:number}>} */
     const counts = {};
     state.memorizedCards.forEach(id => {
         const m = id.match(/^([a-z]+)_card_/);
-        if (m) counts[m[1]] = counts[m[1]] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 };
+        if (m && m[1]) counts[m[1]] = counts[m[1]] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 };
     });
     state.weakCards.forEach(id => {
         const m = id.match(/^([a-z]+)_card_/);
-        if (m) { counts[m[1]] = counts[m[1]] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 }; counts[m[1]].weak++; }
+        if (m && m[1]) { const c = counts[m[1]] = counts[m[1]] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 }; c.weak++; }
     });
     Object.keys(state.quizResults).forEach(id => {
         const m = id.match(/^([a-z]+)_quiz_/);
-        if (m) {
-            counts[m[1]] = counts[m[1]] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 };
-            counts[m[1]].quizSolved++;
-            if (state.quizResults[id].correct) counts[m[1]].quizCorrect++;
+        if (m && m[1]) {
+            const c = counts[m[1]] = counts[m[1]] || { mem: 0, weak: 0, quizSolved: 0, quizCorrect: 0 };
+            c.quizSolved++;
+            if ((state.quizResults[id] || {}).correct) c.quizCorrect++;
         }
     });
     state.memorizedCards.forEach(id => {
         const m = id.match(/^([a-z]+)_card_/);
-        if (m) counts[m[1]].mem++;
+        if (m && m[1]) { const c = counts[m[1]]; if (c) c.mem++; }
     });
     _subjCountCache = counts;
     return counts;
 }
 
 /** 문제은행 출제 비중 목표치(targetCards/targetQuizzes)가 있으면 표시 수치를 상한 적용 */
+/** @param {*} subjMeta */
 export function displayCounts(subjMeta) {
     const stats = (subjMeta && subjMeta.stats) || {};
     const cards = (stats.targetCards > 0) ? Math.min(stats.cards || 0, stats.targetCards) : (stats.cards || 0);

@@ -9,6 +9,12 @@ import { parseMarkdownContent, parseTextbookContent, buildSubjectData as buildSu
 
 // parseMarkdownFile(content, subjectId, filename, chapterKey)
 // → 카드/퀴즈/경고. 경고 항목은 {line, text} 객체 (빌드 측 감시와 동일 형식).
+/**
+ * @param {string} content - 마크다운 텍스트
+ * @param {string} subjectId
+ * @param {string} filename - '1.cosmetic-law.md' 형태 (카테고리·ID 네임스페이스)
+ * @param {string} chapterKey
+ */
 export function parseMarkdownFile(content, subjectId, filename, chapterKey) {
     return parseMarkdownContent(content, subjectId, filename, chapterKey);
 }
@@ -20,7 +26,7 @@ export { parseTextbookContent };
  * @param {import('../core/types.js').ManifestSubject} subjectMeta - manifest.json subjects[] 항목
  * @param {Record<string,string>} mdByFile - { '1.cosmetic-law.md': '<md text>', ... }
  * @param {{filePathMode?: 'html'|'md'}} [opts] - 원본 링크 경로 확장자 (기본 'md')
- * @returns {{name:string, cards:Array, quizzes:Array, chapters:Array}}
+ * @returns {{name:string, cards:*[], quizzes:*[], chapters:*[]}}
  */
 export function buildSubjectData(subjectMeta, mdByFile, opts = {}) {
     return buildSubjectDataCore(subjectMeta, mdByFile, {

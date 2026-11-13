@@ -28,6 +28,7 @@
         // ⚠️ 중요: 브라우저는 페이지 탐색 시 자동으로 SW 업데이트를 확인한다.
         // 이 스크립트(<head>) 실행 전에 이미 updatefound가 발생했을 수 있으므로,
         // register() 완료 후 reg.waiting / reg.installing을 즉시 확인해야 한다.
+        /** @param {ServiceWorker} worker */
         function trackWorkerState(worker) {
           worker.addEventListener('statechange', function () {
             if (worker.state === 'installed') {
@@ -115,7 +116,9 @@
   // 주의: 이 스크립트는 <head>에서 실행되므로 document.body가 아직 없을 수 있음.
   // updatefound는 보통 다음 방문 시 발생하지만, 빠른 연속 배포 시 body 생성 전에
   // 발생할 수 있으므로 body 대기를 포함한다.
+  /** @type {ReturnType<typeof setTimeout>|null} */
   let swToastTimer = null;
+  /** @param {string} message @param {boolean} [isFinal] */
   function showSWUpdateToast(message, isFinal) {
     function renderToast() {
       let toast = document.getElementById('sw-update-toast');

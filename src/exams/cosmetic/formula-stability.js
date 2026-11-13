@@ -23,8 +23,10 @@ const OIL_PHASES = new Set(['유상부', '실리콘부']);
 
 /* ---------- 원료 분류 패턴 (DB category 우선, 이름은 폴백) ---------- */
 
+/** @param {*} ing @param {RegExp} re */
 const hasCat = (ing, re) => !!(ing && typeof ing.category === 'string' && re.test(ing.category));
-const nameHas = (name, pats) => pats.some(p => name.includes(p));
+/** @param {string} name @param {string[]} pats */
+const nameHas = (name, pats) => pats.some((/** @type {string} */ p) => name.includes(p));
 
 // 유화 가능 원료 — 유화제·계면활성제 카테고리 또는 대표 유화 성분명
 const EMULSIFIER_PAT = [
@@ -32,6 +34,7 @@ const EMULSIFIER_PAT = [
   '레시틴', '세테아릴글루코사이드', '폴리글리세릴', '스테아레스', '라우레스',
   '올레스', '스테아릭애씨드', '세트리모늄', '벤제토늄', '피이지', 'PEG',
 ];
+/** @param {*} ing @param {string} name */
 const isEmulsifier = (ing, name) =>
   hasCat(ing, /유화제|계면활성제/) || nameHas(name, EMULSIFIER_PAT);
 
@@ -40,6 +43,7 @@ const THICKENER_PAT = [
   '카보머', '잔탄검', '셀룰로오스', '알기네이트', '카라기난', '젤란검',
   '구아검', '아크릴레이트', '폴리아크릴', '카복시비닐',
 ];
+/** @param {*} ing @param {string} name */
 const isThickener = (ing, name) =>
   hasCat(ing, /점증제/) || nameHas(name, THICKENER_PAT);
 
@@ -48,6 +52,7 @@ const CATIONIC_PAT = [
   '세트리모늄', '스테아트리모늄', '벤잘코늄', '벤제토늄', '쿼터늄',
   '라우라모늄', '트리모늄', '트리메칠암모늄',
 ];
+/** @param {*} ing @param {string} name */
 const isCationic = (ing, name) =>
   hasCat(ing, /양이온성/) || nameHas(name, CATIONIC_PAT);
 
@@ -56,11 +61,13 @@ const ANIONIC_PAT = [
   '라우릴설페이트', '라우레스설페이트', '사코시네이트', '이세치오네이트',
   '코코일글루타메이트', '라우로일', '코코일',
 ];
+/** @param {*} ing @param {string} name */
 const isAnionic = (ing, name) =>
   hasCat(ing, /음이온성/) || nameHas(name, ANIONIC_PAT);
 
 // 비이온성 계면활성제 — 고농도 시 보존제 미셀 흡착
 const NONIONIC_PAT = ['폴리소르베이트', '글루코사이드', '솔비탄', '라우레스', '세테아레스'];
+/** @param {*} ing @param {string} name */
 const isNonionicSurf = (ing, name) =>
   hasCat(ing, /비이온성/) || (!isCationic(ing, name) && !isAnionic(ing, name) && nameHas(name, NONIONIC_PAT));
 
@@ -70,6 +77,7 @@ const PRESERVATIVE_PAT = [
   '이소치아졸리논', '이미다졸리디닐', '디아졸리디닐', '벤질알코올', '클로페네신',
   '디엠디엠', '디하이드로아세틱', '메칠클로로이소치아졸리논',
 ];
+/** @param {*} ing @param {string} name */
 export const isPreservative = (ing, name) =>
   hasCat(ing, /방부제|보존제/) || nameHas(name, PRESERVATIVE_PAT);
 
@@ -79,6 +87,7 @@ const NEUTRALIZER_PAT = [
   '아미노메틸프로판', '아미노메틸프로판디올', '암모니아', '아르기닌',
   '소듐시트레이트', '시트레이트', '수산화', '테트라하이드록시프로필',
 ];
+/** @param {*} ing @param {string} name */
 const isNeutralizer = (ing, name) =>
   hasCat(ing, /pH 조절제/) || nameHas(name, NEUTRALIZER_PAT);
 
@@ -96,9 +105,10 @@ const HEAT_SENSITIVE = [
   { pat: ['효소', '엔자임'], note: '단백질 변성 — 후첨가 권장' },
   { pat: ['향료', '프래그런스', '에센셜오일'], note: '휘발성 — 냉각 후 후첨가 권장' },
 ];
+/** @param {*} ing @param {string} name */
 const heatSensitiveNote = (ing, name) => {
   if (hasCat(ing, /향료|산화 정유/)) return '휘발성 — 냉각 후 후첨가 권장';
-  const hit = HEAT_SENSITIVE.find(h => nameHas(name, h.pat));
+  const hit = HEAT_SENSITIVE.find((/** @type {*} */ h) => nameHas(name, h.pat));
   return hit ? hit.note : null;
 };
 
@@ -130,20 +140,24 @@ const EMULSION_FORMULATIONS = new Set(['로션·에멀전', '크림·밤', '선�
  * @param {{formulation?:string, phTarget?:number|null, phActual?:number|null, steps?:string[]}} [ctx]
  * @returns {{warnings:Array<{level:string, msg:string}>, phaseSums:object}}
  */
+/** @param {*[]} items @param {*} index @param {{formulation?:string, phTarget?:number|null, phActual?:number|null, steps?:string[]}} [ctx] */
 export function evaluateStability(items, index, ctx) {
+  /** @type {{level:string, msg:string}[]} */
   const warnings = [];
-  const push = (level, msg) => warnings.push({ level, msg });
+  const push = (/** @type {string} */ level, /** @type {string} */ msg) => warnings.push({ level, msg });
   const context = ctx && typeof ctx === 'object' ? ctx : {};
 
-  const rows = (Array.isArray(items) ? items : []).filter(r => r && typeof r.name === 'string' && r.name.trim());
+  const rows = (Array.isArray(items) ? items : []).filter((/** @type {*} */ r) => r && typeof r.name === 'string' && r.name.trim());
   if (!rows.length) return { warnings, phaseSums: {} };
 
-  const getIng = name => (index && typeof index.get === 'function' ? index.get(name) : null);
+  const getIng = (/** @type {string} */ name) => (index && typeof index.get === 'function' ? index.get(name) : null);
 
   // 단계별 소계 + 분류 탐지 (금지 원료는 규정 검증이 이미 차단 — 안정성 평가 제외)
+  /** @type {Object.<string,number>} */
   const phaseSums = {};
+  /** @type {{name:string, conc:number|null, phase:string, ing:*}[]} */
   const live = []; // {row, ing}
-  rows.forEach(row => {
+  rows.forEach((/** @type {*} */ row) => {
     const name = row.name.trim();
     const ing = getIng(name);
     if (ing && ing.type === 'banned') return;
@@ -170,20 +184,24 @@ export function evaluateStability(items, index, ctx) {
     || (EMULSION_FORMULATIONS.has(formulation) && waterRows.length > 0);
 
   /* ── ① 상(Phase) 비율 균형 ── */
+  _checkPhaseBalance(oilRows, waterRows, emulRows, thickenerRows, isEmulsion, push);
+  /* ── ② 원료 간 상호작용 ── */
+  const hasCarbomer = live.some(r => r.name.includes('카보머') || r.name.includes('카복시비닐'));
+  _checkInteractions(cationicRows, anionicRows, nonionicRows, preservativeRows, hasCarbomer, push);
+  /* ── ③ 배합방법 — 투입 단계·절차·pH ── */
+  _checkMethod(live, context, { hasCarbomer, isEmulsion, steps, stepsText, hasHeatStep }, push);
 
+  return { warnings, phaseSums };
+}
+
+/** ① 상 비율 균형 — 유화제 유무/비율·점증제·가용화. @param {*[]} oilRows @param {*[]} waterRows @param {*[]} emulRows @param {*[]} thickenerRows @param {boolean} isEmulsion @param {Function} push */
+function _checkPhaseBalance(oilRows, waterRows, emulRows, thickenerRows, isEmulsion, push) {
   // 유상부 + 수상부 혼합인데 유화제 미감지
   if (oilRows.length > 0 && waterRows.length > 0 && emulRows.length === 0) {
     push(STAB.WARN, '수상부와 유상부가 함께 있지만 유화제가 감지되지 않습니다 — 에멀전 분리 위험. 유화 원료를 추가하세요.');
   }
   // 유화제:유상부 비율 — 모든 관련 행에 농도가 있을 때만 판정
-  if (oilRows.length > 0 && emulRows.length > 0
-    && oilRows.every(r => r.conc != null) && emulRows.every(r => r.conc != null)) {
-    const oilPct = oilRows.reduce((s, r) => s + r.conc, 0);
-    const emulPct = emulRows.reduce((s, r) => s + r.conc, 0);
-    if (oilPct > 0 && emulPct > 0 && emulPct / oilPct < 0.1) {
-      push(STAB.WARN, `유화제 비율이 유상부 대비 ${Math.round(emulPct / oilPct * 100)}%로 낮습니다 — 유화 안정성 확인 (일반적 기준 10% 이상).`);
-    }
-  }
+  _emulRatioWarn(oilRows, emulRows, push);
   // 에멀전인데 수상층 점증제 없음
   if (isEmulsion && thickenerRows.length === 0) {
     push(STAB.INFO, '점증제가 없는 에멀전 — 점도가 낮으면 크리밍·침강이 생길 수 있습니다.');
@@ -192,10 +210,21 @@ export function evaluateStability(items, index, ctx) {
   if (emulRows.length > 0 && oilRows.length === 0 && waterRows.length > 0) {
     push(STAB.INFO, '유화제가 있지만 유상부가 없습니다 — 향료·오일 가용화 목적이면 정상입니다.');
   }
+}
 
-  /* ── ② 원료 간 상호작용 ── */
+/** 유화제:유상부 비율 경고 — 유상부 대비 유화제 10% 미만이면 경고. @param {*[]} oilRows @param {*[]} emulRows @param {Function} push */
+function _emulRatioWarn(oilRows, emulRows, push) {
+  if (oilRows.length === 0 || emulRows.length === 0) return;
+  if (!oilRows.every(r => r.conc != null) || !emulRows.every(r => r.conc != null)) return;
+  const oilPct = oilRows.reduce((/** @type {number} */ s, /** @type {*} */ r) => s + (r.conc || 0), 0);
+  const emulPct = emulRows.reduce((/** @type {number} */ s, /** @type {*} */ r) => s + (r.conc || 0), 0);
+  if (oilPct > 0 && emulPct > 0 && emulPct / oilPct < 0.1) {
+    push(STAB.WARN, `유화제 비율이 유상부 대비 ${Math.round(emulPct / oilPct * 100)}%로 낮습니다 — 유화 안정성 확인 (일반적 기준 10% 이상).`);
+  }
+}
 
-  const hasCarbomer = live.some(r => r.name.includes('카보머') || r.name.includes('카복시비닐'));
+/** ② 원료 간 상호작용 — 카보머×양이온·음×양이온·비이온 미셀 흡착. @param {*[]} cationicRows @param {*[]} anionicRows @param {*[]} nonionicRows @param {*[]} preservativeRows @param {boolean} hasCarbomer @param {Function} push */
+function _checkInteractions(cationicRows, anionicRows, nonionicRows, preservativeRows, hasCarbomer, push) {
   if (hasCarbomer && cationicRows.length > 0) {
     push(STAB.WARN, `카보머 × 양이온성 원료(${cationicRows.map(r => r.name).join(', ')}) — 침전·점도 상실 가능. 병용 피하거나 비이온성 점증제로 교체하세요.`);
   }
@@ -204,49 +233,55 @@ export function evaluateStability(items, index, ctx) {
   }
   // 비이온성 계면활성제 고농도 — 보존제 미셀 흡착
   if (preservativeRows.length > 0 && nonionicRows.length > 0 && nonionicRows.every(r => r.conc != null)) {
-    const nonionicPct = nonionicRows.reduce((s, r) => s + r.conc, 0);
+    const nonionicPct = nonionicRows.reduce((/** @type {number} */ s, /** @type {*} */ r) => s + (r.conc || 0), 0);
     if (nonionicPct > 5) {
       push(STAB.INFO, `비이온성 계면활성제 ${Math.round(nonionicPct * 100) / 100}% — 보존제가 미셀에 흡착돼 유효농도가 낮아질 수 있습니다.`);
     }
   }
+}
 
-  /* ── ③ 배합방법 — 투입 단계·절차·pH ── */
-
+/** ③ 배합방법 — 열 민감·카보머 중화·유화 단계·pH 적정대. @param {*[]} live @param {*} context @param {*} env @param {Function} push */
+function _checkMethod(live, context, env, push) {
   // 열 민감 원료가 가열 단계에 배치됨
   live.forEach(r => {
     if (!HEATED_PHASES.has(r.phase)) return;
     const note = heatSensitiveNote(r.ing, r.name);
     if (!note) return;
-    if (hasHeatStep) {
+    if (env.hasHeatStep) {
       push(STAB.WARN, `${r.name}: 열 민감 원료가 가열 단계(${r.phase})에 있습니다 — ${note}.`);
     } else {
       push(STAB.INFO, `${r.name}: 열 민감 원료 — ${note}.`);
     }
   });
   // 카보머 중화 단계 누락
-  if (hasCarbomer) {
-    const hasNeutralizer = live.some(r => isNeutralizer(r.ing, r.name));
-    if (!hasNeutralizer && steps.length > 0 && !STEP_NEUTRAL_RE.test(stepsText)) {
-      push(STAB.INFO, '카보머 사용 — 중화(pH 조절) 단계가 절차에 없습니다. 중화 없이는 점도가 형성되지 않습니다.');
-    } else if (!hasNeutralizer && steps.length === 0) {
-      push(STAB.INFO, '카보머 사용 — 중화제(트리에탄올아민·수산화나트륨 등) 투입과 pH 조절이 필요합니다.');
-    }
-  }
+  if (env.hasCarbomer) _checkCarbomerNeutral(live, env.steps, env.stepsText, push);
   // 에멀전인데 유화 단계가 절차에 없음
-  if (isEmulsion && steps.length > 0 && !STEP_EMUL_RE.test(stepsText)) {
+  if (env.isEmulsion && env.steps.length > 0 && !STEP_EMUL_RE.test(env.stepsText)) {
     push(STAB.INFO, '수상부·유상부 혼합(유화·교반) 단계가 절차에 없습니다.');
   }
   // pH 적정대 이탈 (실측 우선, 없으면 목표)
   const ph = context.phActual != null ? context.phActual : context.phTarget;
-  if (typeof ph === 'number' && !Number.isNaN(ph)) {
-    live.forEach(r => {
-      const band = PH_BAND[r.name];
-      if (!band) return;
-      if (ph < band.min || ph > band.max) {
-        push(STAB.WARN, `${r.name}: ${band.label}이나 현재 pH는 ${ph}입니다.`);
-      }
-    });
-  }
+  if (typeof ph === 'number' && !Number.isNaN(ph)) _checkPhBands(live, ph, push);
+}
 
-  return { warnings, phaseSums };
+/** 카보머 중화 단계 검사 — 중화제 없고 절차에도 중화 단계가 없으면 안내. @param {*[]} live @param {string[]} steps @param {string} stepsText @param {Function} push */
+function _checkCarbomerNeutral(live, steps, stepsText, push) {
+  const hasNeutralizer = live.some(r => isNeutralizer(r.ing, r.name));
+  if (hasNeutralizer) return;
+  if (steps.length > 0 && !STEP_NEUTRAL_RE.test(stepsText)) {
+    push(STAB.INFO, '카보머 사용 — 중화(pH 조절) 단계가 절차에 없습니다. 중화 없이는 점도가 형성되지 않습니다.');
+  } else if (steps.length === 0) {
+    push(STAB.INFO, '카보머 사용 — 중화제(트리에탄올아민·수산화나트륨 등) 투입과 pH 조절이 필요합니다.');
+  }
+}
+
+/** 원료별 pH 적정대 이탈 경고. @param {*[]} live @param {number} ph @param {Function} push */
+function _checkPhBands(live, ph, push) {
+  live.forEach(r => {
+    const band = (/** @type {Object.<string,*>} */ (PH_BAND))[r.name];
+    if (!band) return;
+    if (ph < band.min || ph > band.max) {
+      push(STAB.WARN, `${r.name}: ${band.label}이나 현재 pH는 ${ph}입니다.`);
+    }
+  });
 }

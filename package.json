@@ -1,6 +1,6 @@
 {
   "name": "passok",
-  "version": "2026.11.12",
+  "version": "2026.11.13",
   "description": "PassOK — 멀티시험 자격시험 스마트 학습 플랫폼",
   "engines": {
     "node": ">=24"
@@ -80,6 +80,9 @@
     "check:trace": "node tools/build/build_trace_matrix.js --check",
     "lint": "eslint src/ tools/ tests/ sw.js serve.js --max-warnings 0 --cache --cache-location node_modules/.cache/eslint",
     "check:types": "tsc -p jsconfig.json --noEmit",
+    "check:any": "node tools/check/check_noimplicitany.js",
+    "check:uia": "node tools/check/check_nouncheckedindex.js",
+    "check:cplx": "node tools/check/check_complexity.js",
     "hooks:install": "git config core.hooksPath .githooks && git config merge.stamps.driver \"node tools/merge/merge_stamps.js %O %A %B %P\" && git config merge.stamps.name \"PassOK release-stamp merger\" && echo 'pre-commit/pre-push 훅 + merge.stamps 드라이버 활성화됨 (.githooks, .gitattributes)'",
     "convert:refs": "python ref-pipeline/convert.py",
     "fetch:refpdfs": "node tools/sync/fetch_ref_pdfs.js",
@@ -165,6 +168,7 @@
     "ai:glossary": "node tools/ai/ai_glossary.js",
     "ai:adphrases": "node tools/ai/ai_adphrases.js",
     "ai:adoption": "node tools/ai/ai_adoption.js",
+    "ai:proxy:secrets": "node tools/supabase/sync_ai_proxy_secrets.js",
     "mutate": "stryker run",
     "report:pro": "node tools/check/pro_report.js",
     "check:filenames": "node tools/check/check_filenames.js",

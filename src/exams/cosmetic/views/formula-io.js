@@ -33,6 +33,7 @@ export function formulaPrintWorkOrder() {
 }
 
 /** 인쇄용 조제 기록지 HTML 생성 */
+/** @param {*} f */
 function buildPrintHtml(f) {
   const vol = f.targetVolume != null ? `${f.targetVolume}${f.unit || 'g'}` : '—';
   const cust = f.customer || {};
@@ -46,15 +47,15 @@ function buildPrintHtml(f) {
 
   const amounts = calcAmounts(f);
   const checks = checkFormulaItems(
-    f.ingredients.map(i => ({ name: i.name, concentration: i.concentration })),
+    f.ingredients.map((/** @type {*} */ i) => ({ name: i.name, concentration: i.concentration })),
     getIndex()
   );
   let sumConc = 0;
-  const rowsHtml = f.ingredients.map((item, i) => {
+  const rowsHtml = f.ingredients.map((/** @type {*} */ item, /** @type {number} */ i) => {
     const conc = item.concentration;
     if (conc != null) sumConc += conc;
     const amount = amounts[i] && amounts[i].amount != null ? `${amounts[i].amount.toFixed(2)}${f.unit || 'g'}` : '—';
-    const badge = CHECK_BADGE[checks.results[i] ? checks.results[i].check : CHECK.UNKNOWN] || CHECK_BADGE[CHECK.UNKNOWN];
+    const badge = (/** @type {Object.<string,*>} */ (CHECK_BADGE))[(/** @type {*} */ (checks.results[i])).check] || CHECK_BADGE[CHECK.UNKNOWN];
     const limit = item.snapshot && item.snapshot.limit ? ` (한도 ${item.snapshot.limit})` : '';
     return `<tr>
       <td>${i + 1}</td>
@@ -68,7 +69,7 @@ function buildPrintHtml(f) {
   const rounded = Math.round(sumConc * 100) / 100;
 
   const stepsHtml = (f.steps && f.steps.length)
-    ? `<h3>제조 절차</h3><ol class="fp-steps">${f.steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol>`
+    ? `<h3>제조 절차</h3><ol class="fp-steps">${f.steps.map((/** @type {string} */ s) => `<li>${esc(s)}</li>`).join('')}</ol>`
     : '';
   const stab = evaluateStability(f.ingredients, getIndex(), {
     formulation: cust.formulation, phTarget: f.phTarget, phActual: f.phActual, steps: f.steps,
@@ -137,6 +138,7 @@ export function formulaExportJson() {
 }
 
 /** 목록 카드에서 저장된 포뮬러를 JSON으로 보내기 */
+/** @param {string} id */
 export function formulaCardExport(id) {
   const f = getFormula(id);
   if (!f) { showToast('포뮬러를 찾을 수 없습니다.', 'error'); return; }
@@ -156,21 +158,22 @@ export function formulaImportJson() {
   input.click();
 }
 
+/** @param {Event} event */
 function formulaImportFile(event) {
-  const input = event.target;
+  const input = /** @type {HTMLInputElement|null} */ (event.target);
   const file = input && input.files && input.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    const r = importFormula(e.target && e.target.result);
+    const r = importFormula(e.target ? /** @type {FileReader} */ (e.target).result : null);
     if (!r.ok) {
       showStoreError(r, 'My 포뮬러', showToast, '가져오기에 실패했습니다.');
     } else {
-      showToast(`"${r.formula.name}" 포뮬러를 가져왔습니다.`, 'success');
+      showToast(`"${(/** @type {*} */ (r.formula)).name}" 포뮬러를 가져왔습니다.`, 'success');
       openFormulaList();
     }
-    input.value = '';
+    if (input) input.value = '';
   };
-  reader.onerror = () => { showToast('파일을 읽지 못했습니다.', 'error'); input.value = ''; };
+  reader.onerror = () => { showToast('파일을 읽지 못했습니다.', 'error'); if (input) input.value = ''; };
   reader.readAsText(file);
 }

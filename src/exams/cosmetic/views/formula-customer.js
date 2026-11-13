@@ -96,11 +96,11 @@ export function openCustomerPanel() {
    ======================================================= */
 
 function fillCustomerSelects() {
-  const fill = (id, options, placeholder) => {
+  const fill = (/** @type {string} */ id, /** @type {readonly string[]} */ options, /** @type {string} */ placeholder) => {
     const el = /** @type {HTMLSelectElement|null} */ (document.getElementById(id));
     if (!el) return;
     el.innerHTML = `<option value="">${esc(placeholder)}</option>`
-      + options.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+      + options.map((/** @type {string} */ v) => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
   };
   fill('cust-gender', CUSTOMER_OPTIONS.gender, '미선택');
   fill('cust-skintype', CUSTOMER_OPTIONS.skinType, '미선택');
@@ -109,7 +109,7 @@ function fillCustomerSelects() {
   const chipBox = document.getElementById('cust-concerns');
   if (chipBox && !chipBox.dataset.bound) {
     chipBox.dataset.bound = '1';
-    chipBox.innerHTML = CUSTOMER_OPTIONS.concerns.map(v =>
+    chipBox.innerHTML = CUSTOMER_OPTIONS.concerns.map((/** @type {string} */ v) =>
       `<label class="formula-chip"><input type="checkbox" value="${esc(v)}"><span>${esc(v)}</span></label>`
     ).join('');
   }
@@ -118,7 +118,7 @@ function fillCustomerSelects() {
 function renderCustAllergyChips() {
   const box = document.getElementById('cust-allergies');
   if (!box) return;
-  box.innerHTML = cust.allergies.map(n =>
+  box.innerHTML = cust.allergies.map((/** @type {string} */ n) =>
     `<span class="formula-rule-chip formula-allergy-chip" data-name="${esc(n)}">${esc(n)}`
     + `<button type="button" class="formula-rule-chip-x" data-click="custAllergyRemove" data-arg="${esc(n)}" aria-label="${esc(n)} 삭제"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>`
   ).join('');
@@ -137,14 +137,16 @@ export function custAllergyAdd() {
   if (input) input.value = '';
 }
 
+/** @param {*} name */
 export function custAllergyRemove(name) {
   if (typeof name !== 'string') return;
-  cust.allergies = cust.allergies.filter(n => n !== name);
+  cust.allergies = cust.allergies.filter((/** @type {string} */ n) => n !== name);
   renderCustAllergyChips();
 }
 
+/** @param {*} c */
 function writeCustomerForm(c) {
-  const set = (id, v) => {
+  const set = (/** @type {string} */ id, /** @type {*} */ v) => {
     const el = /** @type {HTMLInputElement|null} */ (document.getElementById(id));
     if (el) el.value = v == null ? '' : v;
   };
@@ -171,7 +173,7 @@ function writeCustomerForm(c) {
 }
 
 function readCustomerForm() {
-  const val = id => {
+  const val = (/** @type {string} */ id) => {
     const el = /** @type {HTMLInputElement|null} */ (document.getElementById(id));
     return el ? el.value : '';
   };
@@ -209,6 +211,7 @@ export function custNew() {
   if (title) title.textContent = '고객 등록';
 }
 
+/** @param {string} id */
 export function custEdit(id) {
   const c = getCustomer(id);
   if (!c) { showToast('고객을 찾을 수 없습니다.', 'error'); return; }
@@ -232,6 +235,7 @@ export function custSave() {
    고객 상세 — 상담 이력 + 참조 역조회
    ======================================================= */
 
+/** @param {string} id */
 export function custOpen(id) {
   const c = getCustomer(id);
   if (!c) { showToast('고객을 찾을 수 없습니다.', 'error'); return; }
@@ -251,9 +255,9 @@ export function custOpen(id) {
     c.products ? `사용 중: ${c.products}` : '',
   ].filter(Boolean).join(' · ');
 
-  const logs = (c.consultLog || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const logs = (c.consultLog || []).slice().sort((/** @type {*} */ a, /** @type {*} */ b) => String(b.date).localeCompare(String(a.date)));
   const logHtml = logs.length
-    ? logs.map(l => `<div class="cust-log-row"><span class="cust-log-date">${esc(l.date)}</span><span>${esc(l.text)}</span></div>`).join('')
+    ? logs.map((/** @type {*} */ l) => `<div class="cust-log-row"><span class="cust-log-date">${esc(l.date)}</span><span>${esc(l.text)}</span></div>`).join('')
     : '<div class="formula-rec-note">상담 이력이 없습니다.</div>';
 
   const formulas = listFormulas().filter(f => f.customerId === c.id);
@@ -323,6 +327,7 @@ export function custOpen(id) {
  * 고객 안내·동의서 인쇄 (FO-60) — 알레르기 이력과 최근 인도 제품을 담은
  * 서명용 고지 문서. 대상 제품은 해당 고객의 최신 배치를 사용한다.
  */
+/** @param {string} id */
 export function custPrintConsent(id) {
   const c = getCustomer(id);
   if (!c) { showToast('고객 카드를 찾을 수 없습니다.', 'error'); return; }
@@ -334,6 +339,7 @@ export function custPrintConsent(id) {
 }
 
 /** 상담 이력 추가 — 오늘 날짜로 append */
+/** @param {string} id */
 export function custLogAdd(id) {
   const input = /** @type {HTMLInputElement|null} */ (document.getElementById('cust-log-input'));
   const text = input ? input.value.trim() : '';
@@ -343,6 +349,7 @@ export function custLogAdd(id) {
   custOpen(id);
 }
 
+/** @param {string} id */
 export async function custDelete(id) {
   const c = getCustomer(id);
   if (!c) return;
@@ -390,11 +397,13 @@ export const CUST_CSV_HEADERS = Object.freeze(
   ['이름', '나이', '성별', '피부타입', '두피타입', '고민', '알레르기', '임신수유', '사용제품', '목적', '메모']);
 
 /** 목록형 셀 분리 — `;` `|` `/` 구분 */
+/** @param {*} v */
 function splitCsvList(v) {
-  return String(v || '').split(/[;|/]/).map(s => s.trim()).filter(Boolean);
+  return String(v || '').split(/[;|/]/).map((/** @type {string} */ s) => s.trim()).filter(Boolean);
 }
 
 /** 임신·수유 표기 정규화 — 옵션 외 값은 sanitize의 pickEnum이 제거 */
+/** @param {*} v */
 function normPregnancy(v) {
   const s = String(v || '').trim();
   if (s.includes('임신')) return '임신 중';
@@ -403,6 +412,7 @@ function normPregnancy(v) {
 }
 
 /** CSV 행 객체 → sanitizeCustomer 입력 형태 */
+/** @param {*} o */
 export function csvRowToCustomer(o) {
   return {
     name: o.name,
@@ -419,6 +429,7 @@ export function csvRowToCustomer(o) {
   };
 }
 
+/** @param {*} c */
 function custToCsvRow(c) {
   return [
     c.name, c.age != null ? c.age : '', c.gender, c.skinType, c.scalpType,
@@ -438,6 +449,7 @@ export function custImportCsv() {
   input.click();
 }
 
+/** @param {Event} event */
 async function custImportFile(event) {
   const input = /** @type {HTMLInputElement|null} */ (event.target);
   const file = input && input.files && input.files[0];

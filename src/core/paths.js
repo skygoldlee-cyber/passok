@@ -13,23 +13,31 @@ export const PATHS = {
   get CONTENT_BASE_REL() { return `./${PATHS.CONTENT_BASE}`; },
 
   // 교재
+  /** @param {string} subjDir */
   TEXTBOOK_DIR: (subjDir) => contentPath(subjDir),
+  /** @param {string} subjDir @param {string} file */
   TEXTBOOK_FILE: (subjDir, file) => contentPath(`${subjDir}/${file}`),
+  /** @param {string} subjDir @param {string} file */
   TEXTBOOK_FILE_REL: (subjDir, file) => `./${contentPath(`${subjDir}/${file}`)}`,
 
   // 문제은행
+  /** @param {string} fileName */
   EXAM_BANK: (fileName) => contentPath(`문제은행/${fileName}`),
 
   // 참조자료
   get REFERENCE_BASE() { return contentPath('참조자료'); },
+  /** @param {string} dirName @param {string} file */
   REFERENCE_FILE: (dirName, file) => contentPath(`참조자료/${dirName}/${file}`),
+  /** @param {string} base @param {string} ext @param {string|number} [subj] */
   REFERENCE_MD: (base, ext, subj) => contentPath(`참조자료/ref_md/${subj ? `과목${subj}/` : ''}${base}/${base}${ext}`),
 
   // 오디오북
+  /** @param {string} subjId @param {string|number} chNo @param {string|number} num @param {string} title */
   AUDIOBOOK_MP3: (subjId, chNo, num, title) =>
     contentPath(`audiobook/mp3/${subjId}/ch${chNo}_${num}_${title}.mp3`),
 
   // 숫자 연습
+  /** @param {string} subjId */
   NUMBER_DRILLS: (subjId) => contentPath(`number-drills/${subjId}.json`),
 
   // 수치 암기 훈련 (핵심 수치 마스터 — features.limitsTrainer)
@@ -46,6 +54,7 @@ export const PATHS = {
 
   // file:// 폴백 번들
   get STUDY_MD_MANIFEST_BUNDLE() { return `./${dataPath('study_md/manifest.js')}`; },
+  /** @param {string} key */
   STUDY_MD_SUBJECT_BUNDLE: (key) => `./${dataPath(`study_md/${key}.js`)}`,
 
   // 벤더 (앱 공용)
@@ -64,6 +73,7 @@ export const PATHS = {
 };
 
 // 참조자료 경로 상대 경로를 절대 경로로 정규화
+/** @param {string} rawPath */
 export function normalizeRefPath(rawPath) {
   return decodeURIComponent(
     rawPath.replace(/^\.\.\/참조자료\//, `${contentPath('참조자료')}/`)

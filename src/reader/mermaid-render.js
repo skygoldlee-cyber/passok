@@ -8,13 +8,14 @@
 import { detectMermaidType, getMermaidClassName, getMermaidInitOptions } from './mermaid-utils.js';
 import { PATHS } from '../core/paths.js';
 import { trapFocus } from '../ui-utils.js';
-import { bindZoomGestures } from './zoom-gestures.js';
+import { bindZoomGestures, bindZoomPanControls } from './zoom-gestures.js';
 
+/** @type {Promise<*>|null} */
 let _mermaidLoadPromise = null;
 
 /**
  * vendor/mermaid.min.js를 지연 로딩해 window.mermaid를 반환한다.
- * @returns {Promise<Object>}
+ * @returns {Promise<*>}
  */
 function ensureMermaid() {
     if (window.mermaid) return Promise.resolve(window.mermaid);
@@ -40,7 +41,11 @@ function ensureMermaid() {
  * @param {HTMLElement|null} container
  * @param {string} logPrefix 로그 접두사 ('[reader]', '[search]' 등)
  */
-/** 실패 안내를 노드 앞에 삽입 — 원본 소스는 지우지 않고 유지 (폴백) */
+/**
+ * 실패 안내를 노드 앞에 삽입 — 원본 소스는 지우지 않고 유지 (폴백)
+ * @param {Element} node
+ * @param {string} msg
+ */
 function _mermaidFailNote(node, msg) {
     if (node.querySelector('.mermaid-fail-note')) return;
     const note = document.createElement('div');
@@ -50,6 +55,11 @@ function _mermaidFailNote(node, msg) {
     node.prepend(note);
 }
 
+/**
+ * 컨테이너 내 pre.mermaid 노드를 순차 렌더링한다.
+ * @param {HTMLElement|null} container
+ * @param {string} [logPrefix] 로그 접두사 ('[reader]', '[search]' 등)
+ */
 export function renderMermaidIn(container, logPrefix = '[mermaid]') {
     const nodes = container ? container.querySelectorAll('pre.mermaid') : [];
     if (nodes.length === 0) return;
@@ -59,6 +69,7 @@ export function renderMermaidIn(container, logPrefix = '[mermaid]') {
                 const isLight = document.documentElement.classList.contains('light-theme');
                 const nodeArr = Array.from(nodes);
                 // 각 노드의 diagram 타입 감지하여 클래스 추가
+                /** @type {string[]} */
                 const nodeTypes = [];
                 nodeArr.forEach(node => {
                     const type = detectMermaidType(node.textContent);
@@ -67,13 +78,13 @@ export function renderMermaidIn(container, logPrefix = '[mermaid]') {
                 });
                 let rendered = 0;
                 let failed = 0;
-                const renderNext = (i) => {
+                const renderNext = (/** @type {number} */ i) => {
                     if (i >= nodeArr.length) {
                         if (failed > 0) console.warn(`${logPrefix} mermaid: ${rendered} rendered, ${failed} failed`);
                         return;
                     }
-                    const node = nodeArr[i];
-                    const type = nodeTypes[i];
+                    const node = /** @type {Element} */ (nodeArr[i]);
+                    const type = nodeTypes[i] || '';
                     mermaid.initialize(getMermaidInitOptions(type, isLight));
                     mermaid.run({ nodes: [node] })
                         .then(() => {
@@ -81,7 +92,7 @@ export function renderMermaidIn(container, logPrefix = '[mermaid]') {
                             attachMermaidZoom(/** @type {HTMLElement} */ (node));
                             renderNext(i + 1);
                         })
-                        .catch((e) => {
+                        .catch((/** @type {*} */ e) => {
                             failed++;
                             console.warn(`${logPrefix} mermaid node ${i} failed:`, e?.message || e);
                             _mermaidFailNote(node, '[다이어그램 렌더링 실패 — 아래 원본 코드 참조]');
@@ -95,7 +106,7 @@ export function renderMermaidIn(container, logPrefix = '[mermaid]') {
         })
         .catch((e) => {
             console.warn(`${logPrefix} mermaid load failed:`, e);
-            nodes.forEach(n => _mermaidFailNote(n, '[다이어그램을 불러올 수 없습니다 — 네트워크 확인 후 새로고침. 아래 원본 코드 참조]'));
+            nodes.forEach((/** @type {Element} */ n) => _mermaidFailNote(n, '[다이어그램을 불러올 수 없습니다 — 네트워크 확인 후 새로고침. 아래 원본 코드 참조]'));
         });
 }
 
@@ -126,7 +137,7 @@ let _zoomScale = 1;
  */
 function _getSvgIntrinsicSize(svg) {
     const vb = (svg.getAttribute('viewBox') || '').trim().split(/\s+/).map(Number);
-    if (vb.length === 4 && vb[2] > 0 && vb[3] > 0) return { w: vb[2], h: vb[3] };
+    if (vb.length === 4 && (vb[2] || 0) > 0 && (vb[3] || 0) > 0) return { w: vb[2] || 0, h: vb[3] || 0 };
     const w = parseFloat(svg.getAttribute('width') || '');
     const h = parseFloat(svg.getAttribute('height') || '');
     if (w > 0 && h > 0 && !(svg.getAttribute('width') || '').includes('%')) {
@@ -154,6 +165,12 @@ function _ensureZoomModal() {
                 <span id="mermaid-zoom-level" class="mermaid-zoom-level">100%</span>
                 <button type="button" id="mermaid-zoom-in" class="mermaid-zoom-btn" title="확대" aria-label="확대"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
                 <button type="button" id="mermaid-zoom-fit" class="mermaid-zoom-btn" title="화면에 맞추기"><i class="fa-solid fa-expand" aria-hidden="true"></i> 맞춤</button>
+                <span class="mermaid-zoom-pan" role="group" aria-label="확대 영역 이동">
+                    <button type="button" class="mermaid-zoom-btn" data-pan="up" aria-label="위로 이동"><i class="fa-solid fa-angle-up" aria-hidden="true"></i></button>
+                    <button type="button" class="mermaid-zoom-btn" data-pan="down" aria-label="아래로 이동"><i class="fa-solid fa-angle-down" aria-hidden="true"></i></button>
+                    <button type="button" class="mermaid-zoom-btn" data-pan="left" aria-label="왼쪽으로 이동"><i class="fa-solid fa-angle-left" aria-hidden="true"></i></button>
+                    <button type="button" class="mermaid-zoom-btn" data-pan="right" aria-label="오른쪽으로 이동"><i class="fa-solid fa-angle-right" aria-hidden="true"></i></button>
+                </span>
             </div>
             <button type="button" class="reader-table-modal-close" id="mermaid-zoom-close" aria-label="다이어그램 확대 닫기"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             <div id="mermaid-zoom-body" class="mermaid-zoom-body"></div>
@@ -174,6 +191,7 @@ function _ensureZoomModal() {
             setScale: _setZoom,
             getFitScale: _fitScale,
         });
+        bindZoomPanControls(body, modal.querySelector('.mermaid-zoom-toolbar'));
     }
     _zoomModal = modal;
     return modal;
@@ -202,8 +220,8 @@ function _setZoom(scale) {
 /** @param {1|-1} dir */
 function _stepZoom(dir) {
     const next = dir > 0
-        ? (ZOOM_STEPS.find(s => s > _zoomScale + 0.001) ?? ZOOM_STEPS[ZOOM_STEPS.length - 1])
-        : ([...ZOOM_STEPS].reverse().find(s => s < _zoomScale - 0.001) ?? ZOOM_STEPS[0]);
+        ? (ZOOM_STEPS.find(s => s > _zoomScale + 0.001) ?? (ZOOM_STEPS[ZOOM_STEPS.length - 1] || 1))
+        : ([...ZOOM_STEPS].reverse().find(s => s < _zoomScale - 0.001) ?? (ZOOM_STEPS[0] || 1));
     _setZoom(next);
 }
 

@@ -27,6 +27,7 @@ import { localDateKey } from '../../../core/utils.js';
 // 폼 상태 — editingId가 있으면 보정 모드(identity 필드 읽기 전용)
 export const draft = { editingId: null };
 
+/** @type {*} */
 let ingredientIndex = null;
 function getIndex() {
   if (!ingredientIndex) {
@@ -39,26 +40,29 @@ function getIndex() {
    배치 폼 (신규 · 보정)
    ======================================================= */
 
+/** @param {string} selectedId */
 function fillFormulaSelect(selectedId) {
   const sel = getEl('batch-formula');
   if (!sel) return;
   const formulas = listFormulas();
   sel.innerHTML = '<option value="">처방 선택…</option>'
-    + formulas.map(f => `<option value="${esc(f.id)}">${esc(f.name)}</option>`).join('');
+    + formulas.map((/** @type {*} */ f) => `<option value="${esc(f.id)}">${esc(f.name)}</option>`).join('');
   if (selectedId) sel.value = selectedId;
 }
 
 /** 고객 카드 셀렉트 — 등록 고객이 변하므로 매번 다시 채운다 */
+/** @param {string} selectedId */
 function fillCustomerSelect(selectedId) {
   const sel = getEl('batch-customer-select');
   if (!sel) return;
   sel.innerHTML = '<option value="">고객 카드에서 선택…</option>'
-    + listCustomers().map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
+    + listCustomers().map((/** @type {*} */ c) => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
   sel.value = selectedId || '';
 }
 
+/** @param {*} b */
 function writeBatchForm(b) {
-  const set = (id, v) => {
+  const set = (/** @type {string} */ id, /** @type {*} */ v) => {
     const el = getEl(id);
     if (el) el.value = v == null ? '' : v;
   };
@@ -84,6 +88,7 @@ function writeBatchForm(b) {
 }
 
 /** 신규 배치 폼 — data-arg로 formulaId를 받으면 해당 처방으로 바인딩 */
+/** @param {*} formulaId */
 export function batchNew(formulaId) {
   const usage = getBatchUsage();
   if (!usage.canCreate) {
@@ -107,6 +112,7 @@ export function batchNew(formulaId) {
 }
 
 /** 보정 모드 — identity 필드(처방·조제일시·배치번호)는 읽기 전용 표시 */
+/** @param {string} id */
 export function batchEdit(id) {
   const b = getBatch(id);
   if (!b) { showToast('조제 기록을 찾을 수 없습니다.', 'error'); return; }
@@ -142,21 +148,23 @@ function updateBatchFormMode() {
  * - 보존제 없음 + 무수 제형 → 90일
  * @returns {number|null} 제안 일수 (원료 없으면 null)
  */
+/** @param {*} formula */
 export function suggestExpiryDays(formula) {
   const items = (formula && formula.ingredients) || [];
   if (!items.length) return null;
   const index = getIndex();
   const hasPreservative = items.some(
-    i => i && i.name && isPreservative(index.get(i.name), i.name)
+    (/** @type {*} */ i) => i && i.name && isPreservative(index.get(i.name), i.name)
   );
   if (hasPreservative) return 180;
   const hasWater = items.some(
-    i => i && (i.phase === '수상부' || (i.name || '').includes('정제수'))
+    (/** @type {*} */ i) => i && (i.phase === '수상부' || (i.name || '').includes('정제수'))
   );
   return hasWater ? 14 : 90;
 }
 
 /** 처방 선택 시 사용기한이 비어 있으면 제안값으로 채우고 근거 힌트를 표시한다 */
+/** @param {*} formula */
 function updateExpiryHint(formula) {
   const expEl = getEl('batch-expiry');
   const hintEl = getEl('batch-expiry-hint');
@@ -172,6 +180,7 @@ function updateExpiryHint(formula) {
 }
 
 /** 처방 선택 시 총량·단위·고객 기본값 채우기 (입력된 값은 덮어쓰지 않음) */
+/** @param {*} f */
 function applyFormulaDefaults(f) {
   const volEl = getEl('batch-target-volume');
   const unitEl = getEl('batch-unit');
@@ -220,19 +229,20 @@ export function batchFormulaChanged() {
  * 처방 원료 ↔ 원료 장부 이름 매칭으로 LOT 선택 UI를 렌더한다.
  * 복수 LOT이면 select, 단일이면 고정 표기. 기존 배치(b)의 materialLots를 복원.
  */
+/** @param {*} formula @param {*} b */
 function renderLotFields(formula, b) {
   const box = getEl('batch-lots');
   if (!box) return;
   const saved = new Map(
-    (b && Array.isArray(b.materialLots) ? b.materialLots : []).map(l => [l.name, l.materialId])
+    (b && Array.isArray(b.materialLots) ? b.materialLots : []).map((/** @type {*} */ l) => [l.name, l.materialId])
   );
   const rows = (formula && Array.isArray(formula.ingredients) ? formula.ingredients : [])
-    .map(i => {
+    .map((/** @type {*} */ i) => {
       const name = (i && i.name || '').trim();
       if (!name) return '';
       const mats = findMaterialsByName(name);
       if (!mats.length) return '';
-      const opts = mats.map(m => {
+      const opts = mats.map((/** @type {*} */ m) => {
         const days = daysUntilExpiry(m);
         const exp = m.expiryAt ? ` · 기한 ${m.expiryAt}${days != null && days < 0 ? ' (경과)' : days != null && days <= 30 ? ` (D-${days})` : ''}` : '';
         // 소진 LOT는 신규 선택 불가 — 다만 기존 배치가 이미 선택한 LOT면 복원을 위해 유지 (FO-61)
@@ -260,7 +270,7 @@ function readLotSelections() {
   return Array.from(document.querySelectorAll('#batch-lots .batch-lot-select'))
     .map(node => {
       const sel = /** @type {HTMLSelectElement} */ (node);
-      const m = findMaterialsByName(sel.dataset.name || '').find(x => x.id === sel.value);
+      const m = /** @type {*} */ (findMaterialsByName(sel.dataset.name || '').find((/** @type {*} */ x) => x.id === sel.value));
       return m ? { name: sel.dataset.name, materialId: m.id, lot: m.lot || '' } : null;
     })
     .filter(Boolean);
@@ -279,15 +289,16 @@ function updateStockWarn() {
   const unitEl = getEl('batch-unit');
   const vol = volEl && volEl.value !== '' ? parseFloat(volEl.value) : null;
   const unit = unitEl ? unitEl.value : 'g';
+  /** @type {string[]} */
   const shortages = [];
   if (formula && vol != null && !Number.isNaN(vol)) {
-    (formula.ingredients || []).forEach(i => {
+    (formula.ingredients || []).forEach((/** @type {*} */ i) => {
       const name = (i && i.name || '').trim();
       if (!name || i.concentration == null) return;
       const need = vol * i.concentration / 100;
       const stock = findMaterialsByName(name)
-        .filter(m => m.qty != null && (!m.unit || m.unit === unit))
-        .reduce((s, m) => s + m.qty, 0);
+        .filter((/** @type {*} */ m) => m.qty != null && (!m.unit || m.unit === unit))
+        .reduce((/** @type {number} */ s, /** @type {*} */ m) => s + m.qty, 0);
       const mats = findMaterialsByName(name);
       if (mats.length && stock < need) {
         shortages.push(`${name} — 필요 ${Math.round(need * 100) / 100}${unit}, 잔량 ${stock}${unit}`);
@@ -370,18 +381,20 @@ function bindFormOnce() {
 }
 
 export function readBatchForm() {
-  const val = id => {
+  const val = (/** @type {string} */ id) => {
     const el = getEl(id);
     return el ? el.value : '';
   };
+  /** @type {Object.<string,*>} */
   const qc = {};
-  QC_FIELDS.forEach(f => {
+  QC_FIELDS.forEach((/** @type {*} */ f) => {
     const r = /** @type {HTMLInputElement|null} */ (document.querySelector(`input[name="batch-qc-${f.key}"]:checked`));
     qc[f.key] = r ? r.value : '';
   });
+  /** @type {Object.<string,boolean>} */
   const hygiene = {};
-  HYGIENE_FIELDS.forEach(f => {
-    const el = getEl(`batch-hyg-${f.key}`);
+  HYGIENE_FIELDS.forEach((/** @type {*} */ f) => {
+    const el = /** @type {HTMLInputElement|null} */ (getEl(`batch-hyg-${f.key}`));
     hygiene[f.key] = !!(el && el.checked);
   });
   const sel = getEl('batch-formula');
@@ -406,18 +419,19 @@ export function readBatchForm() {
  * 처방의 검증 결과를 스냅샷 요약으로 계산 — 배치 생성 시점의 근거 보존.
  * 원본 결과 대신 건수 요약만 저장한다 (용량·의미 모두 요약이 충분).
  */
+/** @param {*} formula */
 export function buildCheckSnapshot(formula) {
   if (!formula || !Array.isArray(formula.ingredients) || !formula.ingredients.length) return null;
   const index = getIndex();
   const { summary } = checkFormulaItems(
-    formula.ingredients.map(i => ({ name: i.name, concentration: i.concentration })),
+    formula.ingredients.map((/** @type {*} */ i) => ({ name: i.name, concentration: i.concentration })),
     index
   );
   const stab = evaluateStability(formula.ingredients, index, {
     formulation: formula.customer && formula.customer.formulation,
     phTarget: formula.phTarget, phActual: formula.phActual, steps: formula.steps,
   });
-  const stabWarn = stab.warnings.filter(w => w.level === STAB.WARN).length;
+  const stabWarn = stab.warnings.filter((/** @type {*} */ w) => w.level === STAB.WARN).length;
   const meta = (DataLoader.registry && DataLoader.registry.ingredients) || null;
   return {
     ok: summary.ok || 0, warn: summary.warn || 0, banned: summary.banned || 0,
@@ -432,12 +446,13 @@ export function buildCheckSnapshot(formula) {
  * ("파라벤" 이력 ↔ "메칠파라벤" 원료처럼 상위/하위 표기 차이를 커버).
  * @returns {string[]} 충돌 원료명 배열
  */
+/** @param {*} customer @param {*} formula */
 function findAllergyConflicts(customer, formula) {
   if (!customer || !formula || !Array.isArray(formula.ingredients)) return [];
   const allergies = (Array.isArray(customer.allergies) ? customer.allergies : [])
-    .map(a => (typeof a === 'string' ? a.trim() : '')).filter(Boolean);
+    .map((/** @type {*} */ a) => (typeof a === 'string' ? a.trim() : '')).filter(Boolean);
   if (!allergies.length) return [];
   return formula.ingredients
-    .map(i => i.name)
-    .filter(n => typeof n === 'string' && allergies.some(a => n.includes(a) || a.includes(n)));
+    .map((/** @type {*} */ i) => i.name)
+    .filter((/** @type {string} */ n) => typeof n === 'string' && allergies.some((/** @type {string} */ a) => n.includes(a) || a.includes(n)));
 }

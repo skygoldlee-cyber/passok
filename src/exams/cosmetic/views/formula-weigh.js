@@ -7,6 +7,7 @@
 import { showToast } from '../../../ui-utils.js';
 import { getEl, calc, readCalcInputs } from './formula-core.js';
 
+/** @type {*[]} */
 let _weighList = [];
 let _weighIdx = 0;
 

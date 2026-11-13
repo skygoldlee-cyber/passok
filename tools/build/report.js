@@ -63,7 +63,7 @@ function checkStatsAnomaly(statsFile, currentStats, logger) {
 
 /**
  * #3 마커 감시 리포트 (MODULAR_DESIGN 5-3).
- * 🔖기출 마커가 있으나 퀴즈가 생성되지 않은 항목을 빌드 로그에 경고로 출력한다.
+ * 🔖기출·🔖빈출 마커가 있으나 퀴즈가 생성되지 않은 항목을 빌드 로그에 경고로 출력한다.
  * (빌드를 실패시키지는 않음 — 조용한 손실을 "보이게" 만드는 것이 목적)
  *
  * @param {Array<{subject:string, files:Array<{file:string,count:number,samples:string[]}>}>} warnings
@@ -73,11 +73,11 @@ function printMarkerWarnings(warnings, logger) {
 
   let total = 0;
   warnings.forEach(w => w.files.forEach(f => { total += f.count; }));
-  logger.warn(`\n[마커 감시] 🔖기출 표시가 있으나 퀴즈 미생성 — 총 ${total}건`);
+  logger.warn(`\n[마커 감시] 🔖기출·🔖빈출 표시가 있으나 퀴즈 미생성 — 총 ${total}건`);
 
   warnings.forEach(w => {
     w.files.forEach(f => {
-      logger.warn(`[WARN] ${f.file}: 🔖기출 마커가 있으나 퀴즈 미생성 — ${f.count}건`);
+      logger.warn(`[WARN] ${f.file}: 🔖기출·🔖빈출 마커가 있으나 퀴즈 미생성 — ${f.count}건`);
       const samples = f.samples || [];
       samples.slice(0, 10).forEach(s => {
         const text = typeof s === 'object' ? s.text : s;

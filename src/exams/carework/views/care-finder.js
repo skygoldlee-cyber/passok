@@ -4,8 +4,9 @@ import { loadFacilities, searchFacilities } from '../care-finder.js';
 import { setLocalOrgName, getOrgName } from '../facility.js';
 import { showToast } from '../../../ui-utils.js';
 
-const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $ = (/** @type {string} */ id) => document.getElementById(id);
+const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
+/** @type {*[]} */
 let _items = [];
 
 function render() {
@@ -34,6 +35,7 @@ function render() {
 
 export function careFinderSearch() { render(); }
 
+/** @param {string} name */
 export function careFinderUseOrg(name) {
     if (!name) return;
     setLocalOrgName(name);
@@ -45,10 +47,11 @@ export async function initCareFinderView() {
     const host = $('find-list');
     try {
         const d = await loadFacilities();
+        if (!d) return;
         _items = d.items || [];
         const sel = /** @type {HTMLSelectElement|null} */ ($('find-region'));
         if (sel && sel.children.length <= 1)
-            sel.innerHTML = '<option value="">전체 지역</option>' + (d.regions || []).map(r => `<option value="${r}">${r}</option>`).join('');
+            sel.innerHTML = '<option value="">전체 지역</option>' + (d.regions || []).map((/** @type {string} */ r) => `<option value="${r}">${r}</option>`).join('');
         render();
         const src = $('find-source');
         if (src && d.source) {

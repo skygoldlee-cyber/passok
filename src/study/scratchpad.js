@@ -39,6 +39,7 @@ function initScratchpadCanvas() {
     const _style = getComputedStyle(document.documentElement);
     ctx.strokeStyle = _style.getPropertyValue('--color-text-main').trim();
     
+    /** @param {*} e - MouseEvent|TouchEvent */
     function getCoords(e) {
         const rect = canvas.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -53,6 +54,7 @@ function initScratchpadCanvas() {
         };
     }
     
+    /** @param {*} e */
     function startDraw(e) {
         isDrawing = true;
         const coords = getCoords(e);
@@ -61,6 +63,7 @@ function initScratchpadCanvas() {
         e.preventDefault();
     }
     
+    /** @param {*} e */
     function draw(e) {
         if (!isDrawing || !ctx) return;
         const coords = getCoords(e);

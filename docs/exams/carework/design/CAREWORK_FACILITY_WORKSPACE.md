@@ -1,7 +1,7 @@
 # 기관 워크스페이스 설계 — PassOK가 요양원 기록 서버가 되는 구독 확장
 
 > **문서 ID**: DOC-DSN-43
-> **범위**: platform · 판본: none
+> **범위**: exam:carework · 판본: none
 > **작성일**: 2026-11-01
 > **전제**: DOC-DSN-42 실무도구 + Phase 5 인수인계(기록 우선 플로우) 반영 이후
 > **관련 SPEC**: DA-13(도메인 격리) · DA-18(권한 뷰 분리) · ROAD-P5(Pro 게이팅) · SUBSCRIPTION_ROADMAP

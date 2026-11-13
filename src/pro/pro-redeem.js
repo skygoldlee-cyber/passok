@@ -35,6 +35,8 @@ export function isEntitledToPro(plan, expiresAt, now = Date.now()) {
  * profiles 행 조회 — plan + pro_expires_at.
  * 스키마 미배포 환경(pro_expires_at 컬럼 부재)에서는 plan만 재조회하는 폴백을 둔다
  * (PAY-06 배포 순서 차익 — 컬럼 추가 전까지 기간권 만료 없이 기존 동작 유지).
+ * @param {*} sb Supabase 클라이언트
+ * @param {string} uid auth user id
  */
 async function _fetchProfile(sb, uid) {
     let res = await sb.from('profiles').select('plan,pro_expires_at').eq('id', uid).single();
@@ -102,7 +104,10 @@ export async function initPlanSync() {
     } catch (_) {}
 }
 
-/** 코드 입력값 정규화 — 공백 제거·대문자 변환 (형식: CHANNEL-XXXX-XXXX) */
+/** 코드 입력값 정규화 — 공백 제거·대문자 변환 (형식: CHANNEL-XXXX-XXXX)
+ * @param {*} raw
+ * @returns {string}
+ */
 export function normalizeCode(raw) {
     return String(raw || '').trim().toUpperCase().replace(/\s+/g, '');
 }
@@ -113,6 +118,8 @@ export function normalizeCode(raw) {
  * 시험일 미설정이면 null — 서버는 기존 규칙(기준일+valid_days)만 적용.
  * 구 서명 스키마(p_code만 받는 버전) 미배포 환경에서는 인자 없이 재시도하는 폴백을 둔다
  * (배포 순서 차익 — PAY-06의 _fetchProfile 폴백과 같은 패턴).
+ * @param {*} sb Supabase 클라이언트
+ * @param {string} code 정규화된 라이선스 코드
  */
 export async function callRedeemRpc(sb, code) {
     const examDate = getExamDate();
@@ -123,7 +130,9 @@ export async function callRedeemRpc(sb, code) {
     return res;
 }
 
+/** @type {(() => void)|null} */
 let _onClose = null;
+/** @param {HTMLElement|null} overlay */
 function _closeDialog(overlay) {
     if (!overlay) return;
     const dialog = overlay.querySelector('.app-confirm-dialog');
@@ -206,9 +215,14 @@ export async function showRedeemDialog() {
                     }
                 }
                 showToast(`🎉 유료가 활성화되었습니다${until} — 클라우드 동기화로 다른 기기에서도 이어서 학습할 수 있습니다`, 'success');
+                // AU-10 — 로그인 수단이 1개뿐이면 분리 위험이 크므로 연결을 유도한다
+                const identities = session.user.identities;
+                if (!Array.isArray(identities) || identities.length <= 1) {
+                    setTimeout(() => showToast('다른 로그인 방법도 계정 메뉴의 "로그인 수단"에서 연결해 두세요 — 어느 방법으로 로그인해도 유료가 유지됩니다.', 'info'), 2500);
+                }
                 return;
             }
-            msg.textContent = '코드를 확인해주세요 — 입력값이 맞지 않거나 이미 사용된 코드입니다.';
+            msg.textContent = '코드를 확인해주세요 — 입력값이 맞지 않거나 이미 사용된 코드입니다. 이미 활성화하셨다면 처음 사용한 로그인 방법으로 로그인해 보세요.';
         } catch {
             msg.textContent = '네트워크 오류 — 잠시 후 다시 시도해주세요.';
         } finally {

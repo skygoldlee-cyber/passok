@@ -27,6 +27,7 @@ export function getVisionModel() {
 }
 
 /** 모델명 저장 — 비우면 기본값으로 되돌린다 */
+/** @param {string} model */
 export function saveVisionModel(model) {
   const m = clampStr(model || '', 80).trim();
   if (!m) { removeItem(STORAGE_KEYS.FORMULA_GEMINI_MODEL); return GEMINI_MODEL; }
@@ -42,6 +43,7 @@ export function getVisionHiRes() {
   return getItem(STORAGE_KEYS.FORMULA_VISION_HIRES) === '1';
 }
 
+/** @param {boolean} on */
 export function saveVisionHiRes(on) {
   if (on) setItem(STORAGE_KEYS.FORMULA_VISION_HIRES, '1');
   else removeItem(STORAGE_KEYS.FORMULA_VISION_HIRES);
@@ -72,6 +74,7 @@ export function getVisionKey() {
   return getItem(STORAGE_KEYS.FORMULA_GEMINI_KEY) || '';
 }
 
+/** @param {string} key */
 export function saveVisionKey(key) {
   const k = clampStr(key || '', 200).trim();
   if (!k) return false;
@@ -84,6 +87,7 @@ export function clearVisionKey() {
 }
 
 /** 표시용 마스킹 — 앞 4자리만 노출 */
+/** @param {string} key */
 export function maskVisionKey(key) {
   const k = typeof key === 'string' ? key.trim() : '';
   if (!k) return '';
@@ -102,6 +106,7 @@ export function maskVisionKey(key) {
  * @param {object} [opts] - {maxSide?: number}
  * @returns {Promise<{ok:boolean, data?:string, mimeType?:string, width?:number, height?:number, error?:string}>}
  */
+/** @param {File|Blob} file @param {{maxSide?:number}} [opts] */
 export async function fileToBase64Jpeg(file, opts = {}) {
   try {
     if (!file) return { ok: false, error: '이미지가 없습니다.' };
@@ -117,7 +122,7 @@ export async function fileToBase64Jpeg(file, opts = {}) {
         img.src = URL.createObjectURL(file);
       });
     }
-    const maxSide = Number.isFinite(opts.maxSide) && opts.maxSide > 0 ? opts.maxSide : visionMaxSide();
+    const maxSide = typeof opts.maxSide === 'number' && Number.isFinite(opts.maxSide) && opts.maxSide > 0 ? opts.maxSide : visionMaxSide();
     const scale = Math.min(1, maxSide / Math.max(bmp.width, bmp.height));
     const w = Math.max(1, Math.round(bmp.width * scale));
     const h = Math.max(1, Math.round(bmp.height * scale));
@@ -192,7 +197,7 @@ export function buildRequestBody(images) {
 /**
  * Gemini 응답 → {name, brand, category, ingredients[]} 정제 결과.
  * 추출 성분도 스토어와 같은 클램프 규칙을 적용한다.
- * @param {object} json - API 응답 원문
+ * @param {*} json - API 응답 원문
  * @returns {{ok:boolean, name?:string, brand?:string, category?:string, ingredients?:string[], error?:string, code?:string}}
  */
 export function parseExtractionResponse(json) {
@@ -207,8 +212,8 @@ export function parseExtractionResponse(json) {
     // 성분 수·분석 요약을 오염시킨다 (정규화 이름 기준, 첫 등장 순서 유지)
     const seen = new Set();
     const ingredients = (Array.isArray(parsed.ingredients) ? parsed.ingredients : [])
-      .map(s => clampStr(typeof s === 'string' ? s : '', MAX_ING_LEN).trim())
-      .filter(s => {
+      .map((/** @type {*} */ s) => clampStr(typeof s === 'string' ? s : '', MAX_ING_LEN).trim())
+      .filter((/** @type {string} */ s) => {
         if (!s) return false;
         const n = normalizeEntityName(s);
         if (seen.has(n)) return false;
@@ -237,6 +242,7 @@ export function parseExtractionResponse(json) {
  * @param {object} [opts] - {signal?: AbortSignal, fetchImpl?: typeof fetch}
  * @returns {Promise<{ok:boolean, name?:string, brand?:string, category?:string, ingredients?:string[], error?:string, code?:string}>}
  */
+/** @param {*[]} images @param {{fetchImpl?:*, signal?:AbortSignal}} [opts] */
 export async function extractProductFromImages(images, opts = {}) {
   const key = getVisionKey();
   if (!key) return { ok: false, code: 'nokey', error: 'Gemini API 키가 설정되지 않았습니다.' };
@@ -281,6 +287,7 @@ export async function extractProductFromImages(images, opts = {}) {
  * @param {object} [opts] - {signal?: AbortSignal, fetchImpl?: typeof fetch}
  * @returns {Promise<{ok:boolean, model?:string, error?:string, code?:string}>}
  */
+/** @param {{fetchImpl?:*, signal?:AbortSignal}} [opts] */
 export async function validateVisionKey(opts = {}) {
   const key = getVisionKey();
   if (!key) return { ok: false, code: 'nokey', error: 'Gemini API 키가 설정되지 않았습니다.' };

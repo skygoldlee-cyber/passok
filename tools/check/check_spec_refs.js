@@ -41,16 +41,17 @@ const ROOT = T.ROOT;
 // 테스트 갭 기준선 — 소스 참조는 있으나 tests/ @spec이 없는 요구사항의 허용 상한.
 // 기존 백로그(정책형·문서형 포함)를 승계하되, 신규 요구사항이 갭을 늘리면 실패한다.
 // 테스트 @spec을 추가해 갭을 줄였다면 이 수치를 함께 낮춘다.
-const TEST_GAP_BASELINE = 6; // UX-FB-07(리더 스켈레톤)·UX-FB-08(큐 완료 펄스) — 소스 참조 선행, 테스트 후행 허용분 + UX-CTL-07(섹션 여백 규약형 — CSS 토큰 규약, 정적 검증 대상)
+const TEST_GAP_BASELINE = 8; // UX-FB-07(리더 스켈레톤)·UX-FB-08(큐 완료 펄스) — 소스 참조 선행, 테스트 후행 허용분 + UX-CTL-07(섹션 여백 규약형 — CSS 토큰 규약, 정적 검증 대상)
 //   UX-VFY-07/08 (정적 체커 규약형 — 게이트 자체가 검증 수단, UX-VFY-06과 동형)
 //   CS-12 (교재 번호체계 — check_numbering 게이트가 검증 수단)
+//   DA-25/DA-26 (문서 삽화 규약형 — capture_manual.js 산출 도구 규약, 런타임 동작 없음)
 
 // UI/UX E2E 갭 기준선 (UX-VFY-03) — 기하 계열 요구사항은 브라우저 실측만이 유효 검증.
 // 소스 참조는 있으나 tests/e2e/ @spec이 없는 UI/UX 계열 ID의 허용 상한.
 // 기존 백로그(규약·리뷰형 다수)를 승계하되, 신규 UI/UX 요구사항이 갭을 늘리면 실패한다.
 // e2e @spec을 추가해 갭을 줄였다면 이 수치를 함께 낮춘다.
 const UIUX_PREFIX_RE = /^(?:UX-|TR-|R-|TH-|A-)/;
-const UIUX_E2E_GAP_BASELINE = 17; // UX-VFY-06/07/08 (정적 체커 규약형 — e2e 실측 대상 아님) + UX-MET-05/07/08 (텔레메트리 배선 — Supabase 미설정 시 no-op이라 e2e 실측 불가, 순수 로직은 유닛 커버) + UX-FB-07/08 (미세 전이 피드백 — 스켈레톤/큐완료 펄스, 클래스 부착 로직만 유닛 커버) + A-09/10 (WCAG 정합 선언형 — 오디오 대체수단·타이밍 예외 명문화, e2e 기하 실측 대상 아님) + UX-CTL-01/03/04/05/06/07 (토큰·배치·섹션 여백 규약형 — 유닛 불변식+정적 체커 검증, 기하 실측은 UX-CTL-02가 mobile-overflow 터치타깃 스윕으로 커버) + UX-NAV-16 (stats 게이팅 로직 — applyFeatureFlags 숨김 동작은 exam-switching DOM 테스트가 커버, e2e는 동일 로직 중복)
+const UIUX_E2E_GAP_BASELINE = 18; // UX-VFY-06/07/08 (정적 체커 규약형 — e2e 실측 대상 아님) + UX-MET-05/07/08 (텔레메트리 배선 — Supabase 미설정 시 no-op이라 e2e 실측 불가, 순수 로직은 유닛 커버) + UX-FB-07/08 (미세 전이 피드백 — 스켈레톤/큐완료 펄스, 클래스 부착 로직만 유닛 커버) + A-09/10 (WCAG 정합 선언형 — 오디오 대체수단·타이밍 예외 명문화, e2e 기하 실측 대상 아님) + UX-CTL-01/03/04/05/06/07 (토큰·배치·섹션 여백 규약형 — 유닛 불변식+정적 체커 검증, 기하 실측은 UX-CTL-02가 mobile-overflow 터치타깃 스윕으로 커버) + UX-NAV-16 (stats 게이팅 로직 — applyFeatureFlags 숨김 동작은 exam-switching DOM 테스트가 커버, e2e는 동일 로직 중복) + UX-TXT-01 (word-break CSS 선언 규약형 — ux-invariants 유닛이 선언 존재+예외 한정을 검증, 기하 실측 대상 아님)
 //   UX-MET-05/07/08 (텔레메트리 인프라 — 기하 UI 요소 없음, unit/dom 커버 + ADR-0019 설계 정본)
 
 // 폐기·통합 ID의 코드 @spec 잔존 참조 기준선 — 폐기된 요구사항을 참조하는 허용

@@ -13,8 +13,8 @@ import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { showToast } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 
-const $ = (id) => document.getElementById(id);
-const dayOf = (r) => r.date || r.shift_date || '';
+const $ = (/** @type {string} */ id) => document.getElementById(id);
+const dayOf = (/** @type {*} */ r) => r.date || r.shift_date || '';
 
 /** 첫 진입 3컷 안내 닫기 — 확인 플래그 저장 후 숨김 */
 export function careHomeGuideDismiss() {
@@ -29,7 +29,7 @@ export function initCareHomeView() {
     if (!getItem(STORAGE_KEYS.CARE_GUIDE_SEEN)) $('home-guide')?.classList.remove('is-hidden');
     const d = todayKey();
     const logs = listCareLogs(), visits = listVisits(), incidents = listIncidents();
-    const cnt = (arr) => arr.filter(r => dayOf(r) === d).length;
+    const cnt = (/** @type {*[]} */ arr) => arr.filter((/** @type {*} */ r) => dayOf(r) === d).length;
     const dateEl = $('home-date');
     if (dateEl) dateEl.textContent = `${d} (${'일월화수목금토'[new Date().getDay()]})`;
     const sumEl = $('home-summary');
@@ -51,7 +51,7 @@ export function initCareHomeView() {
     document.querySelectorAll('.care-home-nav a[href^="#/"]').forEach(a => {
         if (a.querySelector('.care-new')) return;
         const slug = /** @type {HTMLAnchorElement} */ (a).href.split('#/')[1];
-        if (slug && !(used[`tool:${slug}`] > 0)) a.insertAdjacentHTML('beforeend', '<span class="care-new">처음</span>');
+        if (slug && !((used[`tool:${slug}`] || 0) > 0)) a.insertAdjacentHTML('beforeend', '<span class="care-new">처음</span>');
     });
     // 출력물 서명 설정 — 홈 입력값을 저장값으로 채움
     const sign = getDocSign();
@@ -95,8 +95,8 @@ export function careSignImagePick() {
 /** 출력물 서명 저장 — 작성자·확인자·인수자 성명이 모든 문서 서명란에 기입된다 */
 export function careDocSignSave() {
     setDocSign(
-        /** @type {HTMLInputElement|null} */ ($('home-sign-author'))?.value,
-        /** @type {HTMLInputElement|null} */ ($('home-sign-confirmer'))?.value,
-        /** @type {HTMLInputElement|null} */ ($('home-sign-receiver'))?.value);
+        /** @type {HTMLInputElement|null} */ ($('home-sign-author'))?.value ?? '',
+        /** @type {HTMLInputElement|null} */ ($('home-sign-confirmer'))?.value ?? '',
+        /** @type {HTMLInputElement|null} */ ($('home-sign-receiver'))?.value ?? '');
     showToast('서명을 저장했습니다 — 모든 출력물 서명란에 기입됩니다.');
 }

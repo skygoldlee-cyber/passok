@@ -28,6 +28,7 @@ import { STORAGE_KEYS } from '../../core/storage-keys.js';
  * 차트(성적 추이/레이더/합격 진단)와 추천 엔진의 과락 감지가 이 데이터를 소비한다.
  * 최근 50건만 유지한다.
  */
+/** @param {string} examId @param {number} score @param {number} total @param {*} subjectRates */
 export function saveExamResultToHistory(examId, score, total, subjectRates) {
     let history = [];
     try {

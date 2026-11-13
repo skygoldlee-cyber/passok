@@ -18,9 +18,10 @@ import { escapeHTML } from '../core/sanitize.js';
 export function makeSessionCache(prefix, ttl, { maxEntries = 0 } = {}) {
     // 한글 파일명(학습안내서·실무매뉴얼 등)이 전부 '_'로 소거돼 같은 길이면 키가 충돌하는
     // 회귀 방지 — 유니코드 문자·숫자는 보존하고 구분자만 '_'로 정화한다.
-    const keyOf = (id) => prefix + String(id).replace(/[^\p{L}\p{N}]/gu, '_');
+    const keyOf = (/** @type {*} */ id) => prefix + String(id).replace(/[^\p{L}\p{N}]/gu, '_');
     const orderKey = prefix + '__lru_order__';
-    let _order = null; // LRU 키 순서 (null = sessionStorage 미복원)
+    /** @type {string[]|null} — LRU 키 순서 (null = sessionStorage 미복원) */
+    let _order = null;
 
     function _loadOrder() {
         if (_order !== null) return;
@@ -33,19 +34,23 @@ export function makeSessionCache(prefix, ttl, { maxEntries = 0 } = {}) {
     function _saveOrder() {
         try { sessionStorage.setItem(orderKey, JSON.stringify(_order)); } catch (e) { /* noop */ }
     }
+    /** @param {string} k */
     function _touch(k) {
+        if (!_order) return;
         const i = _order.indexOf(k);
         if (i >= 0) _order.splice(i, 1);
         _order.push(k);
     }
     function _evict() {
-        while (_order.length > maxEntries) {
+        while (_order && _order.length > maxEntries) {
             const oldest = _order.shift();
+            if (oldest == null) break;
             try { sessionStorage.removeItem(oldest); } catch (e) { /* noop */ }
         }
     }
 
     return {
+        /** @param {*} id */
         get(id) {
             const k = keyOf(id);
             try {
@@ -62,6 +67,7 @@ export function makeSessionCache(prefix, ttl, { maxEntries = 0 } = {}) {
                 return null;
             }
         },
+        /** @param {*} id @param {*} payload */
         set(id, payload) {
             const k = keyOf(id);
             try {
@@ -136,7 +142,7 @@ export function buildTocHtml(article, { idPrefix, jumpAttr, tocClass }) {
     headings.forEach((h, idx) => {
         if (!h.id) h.id = idPrefix + idx;
         const depth = h.tagName === 'H3' ? 'depth-3' : 'depth-2';
-        const label = h.textContent.replace(/🔖기출|📌중요/g, '').trim();
+        const label = h.textContent.replace(/🔖(?:기출|빈출)|📌중요/g, '').trim();
         items += `<a href="#${h.id}" class="${depth}" data-${jumpAttr}="${h.id}">${escapeHTML(label)}</a>`;
     });
     return `<details class="${tocClass}"><summary><i class="fa-solid fa-list"></i> 목차</summary>${items}</details>`;
@@ -217,6 +223,7 @@ export function scrollToHeadingSlug(article, href) {
  * }} cfg
  */
 export function createDocOverlay({ id, styleId, css, innerHTML, ariaLabel, bodyClass, historyMarker, popstateGuardMs = 0, wire, onClose }) {
+    /** @type {HTMLElement|null} */
     let _overlayEl = null;
     let _historyPushed = false;
     let _openTimestamp = 0;
@@ -244,6 +251,7 @@ export function createDocOverlay({ id, styleId, css, innerHTML, ariaLabel, bodyC
         return el;
     }
 
+    /** @param {KeyboardEvent} e */
     function _onKeydown(e) { if (e.key === 'Escape') close(); }
     function _onPopstate() {
         if (!isOpen()) return;
@@ -270,6 +278,7 @@ export function createDocOverlay({ id, styleId, css, innerHTML, ariaLabel, bodyC
         return !!(_overlayEl && _overlayEl.classList.contains('open'));
     }
 
+    /** @param {boolean} [fromPopstate] */
     function close(fromPopstate) {
         if (!_overlayEl) return;
         if (onClose) onClose(_overlayEl);

@@ -10,6 +10,7 @@ import { getExamRules, resolveLegacySubjectKey, getActiveRegistry } from './core
 import { esc } from './core/sanitize.js';
 
 // CSS 변수에서 색상 읽기 (하드코딩 대체)
+/** @param {string} name @param {string} fallback */
 function cssVar(name, fallback) {
     try {
         const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -45,6 +46,7 @@ function getChartTooltip() {
     return _chartTooltip;
 }
 
+/** @param {string} html @param {number} x @param {number} y */
 function showChartTooltip(html, x, y) {
     const tip = getChartTooltip();
     tip.innerHTML = html;
@@ -182,6 +184,7 @@ export function renderPerformanceChart() {
     
     // X 축 눈금 계산
     const pointsCount = recentData.length;
+    /** @type {number[]} */
     const xPositions = [];
     recentData.forEach((d, idx) => {
         const x = paddingLeft + (pointsCount > 1 ? (idx * chartWidth / (pointsCount - 1)) : chartWidth / 2);
@@ -211,11 +214,11 @@ export function renderPerformanceChart() {
     
     // 라인이 1개인 경우 처리 방안
     if (pointsCount === 1) {
-        const x = xPositions[0];
-        const y = paddingTop + chartHeight - (recentData[0].rate * chartHeight / 100);
+        const x = xPositions[0] || 0;
+        const y = paddingTop + chartHeight - (((recentData[0] || {}).rate || 0) * chartHeight / 100);
         svgContent += `<circle class="chart-dot" cx="${x}" cy="${y}" r="6" data-idx="0"/>`;
-        svgContent += `<text class="chart-value-label" x="${x}" y="${y - 12}">${recentData[0].rate}%</text>`;
-        svgContent += `<text class="chart-label" x="${x}" y="${height - 15}">${recentData[0].date}</text>`;
+        svgContent += `<text class="chart-value-label" x="${x}" y="${y - 12}">${(recentData[0] || {}).rate}%</text>`;
+        svgContent += `<text class="chart-label" x="${x}" y="${height - 15}">${(recentData[0] || {}).date}</text>`;
     } else {
         // 채워진 영역 및 실선 추가
         svgContent += `<path class="chart-area" d="${areaPath}"/>`;
@@ -239,7 +242,8 @@ export function renderPerformanceChart() {
     wrapper.querySelectorAll('.chart-dot-interactive').forEach(dot => {
         const idx = parseInt(/** @type {SVGElement} */ (dot).dataset.idx || '0', 10);
         const d = recentData[idx];
-        const delta = idx > 0 ? d.rate - recentData[idx - 1].rate : null;
+        if (!d) return;
+        const delta = idx > 0 ? d.rate - ((recentData[idx - 1] || {}).rate || 0) : null;
         const deltaHtml = delta !== null
             ? `<span style="color:${delta >= 0 ? CHART_COLORS.success() : CHART_COLORS.danger()};">${delta >= 0 ? '▲' : '▼'} ${Math.abs(delta)}%</span>`
             : '';
@@ -257,14 +261,16 @@ export function renderPerformanceChart() {
    📊 과목별 정답률 집계 (공통 헬퍼)
    - content/manifest.json에서 생성된 DATA_REGISTRY를 사용해 동적으로 과목별 집계
    ======================================================= */
+/** @param {*[]} history */
 function aggregateSubjectRates(history) {
+    /** @type {Object.<string,number[]>} */
     const subjectRates = {};
     const subjects = (getActiveRegistry() || {}).subjects || [];
-    subjects.forEach(sub => {
+    subjects.forEach((/** @type {*} */ sub) => {
         subjectRates[sub.key] = [];
     });
     
-    history.forEach(r => {
+    history.forEach((/** @type {*} */ r) => {
         if (r.subjectRates) {
             Object.keys(r.subjectRates).forEach(subj => {
                 const rate = r.subjectRates[subj];
@@ -281,7 +287,7 @@ function aggregateSubjectRates(history) {
             const exams = (getActiveRegistry() || {}).exams || [];
             const exam = exams.find(e => e.key === r.examId || (r.examId && r.examId.startsWith(e.key)));
             if (exam && subjectRates[exam.subject]) {
-                subjectRates[exam.subject].push(r.rate);
+                (subjectRates[exam.subject] || []).push(r.rate);
             }
         }
     });
@@ -316,25 +322,27 @@ export function renderPassFailDiagnosis() {
     const subjects = (getActiveRegistry() || {}).subjects || [];
     
     // 각 과목 최신 성적 추출
-    const getLatestRate = (subjKey) => {
+    const getLatestRate = (/** @type {string} */ subjKey) => {
         const rates = subjectRates[subjKey];
         if (!rates || rates.length === 0) return null;
         return rates[rates.length - 1]; // 가장 최신 데이터
     };
     
+    /** @type {Object.<string,string>} */
     const subjectNames = {};
-    subjects.forEach((sub, idx) => {
+    subjects.forEach((/** @type {*} */ sub, /** @type {number} */ idx) => {
         subjectNames[sub.key] = `${idx + 1}과목: ${sub.name}`;
     });
     
     // 합격/과락 기준은 매니페스트 선언값 사용 (시험별 규칙 차이 대응)
     const rules = getExamRules();
     let isGuarak = false;
+    /** @type {string[]} */
     const guarakSubjects = [];
 
     subjects.forEach(sub => {
         const rate = getLatestRate(sub.key);
-        if (rate !== null && rate < rules.subjectFailBelow) {
+        if (rate != null && rate < rules.subjectFailBelow) {
             isGuarak = true;
             guarakSubjects.push(sub.name);
         }
@@ -360,7 +368,7 @@ export function renderPassFailDiagnosis() {
     let subjectsHTML = '<div class="pred-subject-scores">';
     subjects.forEach((sub, idx) => {
         const rate = getLatestRate(sub.key);
-        if (rate !== null) {
+        if (rate != null) {
             const shortName = sub.shortName || sub.name;
             subjectsHTML += `
                 <div class="pred-subject-row ${rate < rules.subjectFailBelow ? 'danger' : ''}">
@@ -421,7 +429,7 @@ export function renderRadarChart() {
         return;
     }
     
-    const getAvgRate = (subjKey) => {
+    const getAvgRate = (/** @type {string} */ subjKey) => {
         const rates = subjectRates[subjKey];
         if (!rates || rates.length === 0) return 50; // 기본값 50%
         return Math.round(rates.reduce((sum, r) => sum + r, 0) / rates.length);
@@ -437,7 +445,7 @@ export function renderRadarChart() {
     const maxR = Math.min(width, height) / 2 - 35;
     
     // N-축 좌표 매핑 함수 (12시 방향에서 시계방향으로 2*PI/N씩 회전)
-    const getPoint = (idx, value) => {
+    const getPoint = (/** @type {number} */ idx, /** @type {number} */ value) => {
         const scale = value / 100;
         const angle = (2 * Math.PI * idx) / N - (Math.PI / 2); // 12시 방향 시작을 위해 -PI/2
         const x = cx + scale * maxR * Math.cos(angle);
@@ -447,7 +455,7 @@ export function renderRadarChart() {
     
     // A-15 — 레이더 차트 데이터 요약 텍스트 대체
     const radarSummary = `과목별 평균 정답률 — ` +
-        subjects.map((sub, i) => `${i + 1}과목(${sub.shortName || sub.name}) ${subjectScores[i]}%`).join(', ');
+        subjects.map((sub, i) => `${i + 1}과목(${sub.shortName || sub.name}) ${subjectScores[i] || 0}%`).join(', ');
     let svg = `<svg viewBox="0 0 ${width} ${height}" style="width: 100%; height: 100%; overflow: visible;" role="img" aria-label="${esc(radarSummary)}">`;
     
     // 1. Concentric Grid lines (20%, 40%, 60%, 80%, 100%)
@@ -485,18 +493,19 @@ export function renderRadarChart() {
     });
     
     // 3. Data Polygon
+    /** @type {string[]} */
     const userPoints = [];
     subjects.forEach((sub, i) => {
-        const p = getPoint(i, subjectScores[i]);
+        const p = getPoint(i, subjectScores[i] || 0);
         userPoints.push(`${p.x},${p.y}`);
     });
     svg += `<polygon class="radar-polygon" points="${userPoints.join(' ')}" />`;
     
     // 4. Data dots and labels
     subjects.forEach((sub, i) => {
-        const p = getPoint(i, subjectScores[i]);
+        const p = getPoint(i, subjectScores[i] || 0);
         svg += `<circle class="radar-point radar-point-interactive" cx="${p.x}" cy="${p.y}" data-idx="${i}" />`;
-        svg += `<text x="${p.x}" y="${p.y - 8}" fill="${CHART_COLORS.white}" font-size="10" font-weight="700" text-anchor="middle">${subjectScores[i]}%</text>`;
+        svg += `<text x="${p.x}" y="${p.y - 8}" fill="${CHART_COLORS.white}" font-size="10" font-weight="700" text-anchor="middle">${subjectScores[i] || 0}%</text>`;
     });
     
     svg += `</svg>`;
@@ -507,7 +516,8 @@ export function renderRadarChart() {
     wrapper.querySelectorAll('.radar-point-interactive').forEach(dot => {
         const idx = parseInt(/** @type {SVGElement} */ (dot).dataset.idx || '0', 10);
         const sub = subjects[idx];
-        const rate = subjectScores[idx];
+        if (!sub) return;
+        const rate = subjectScores[idx] || 0;
         const rates = subjectRates[sub.key] || [];
         const examCount = rates.length;
         const shortName = sub.shortName || sub.name;

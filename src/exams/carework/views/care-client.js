@@ -19,12 +19,16 @@ import { listIncidents } from '../incident-store.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
 
+/** @param {string} id */
 const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/** @param {*} s */
+const esc = (s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
+/** @param {string} id @param {string} fb */
 const _val = (id, fb) => {
     const el = /** @type {HTMLInputElement|null} */ ($(id));
     return el && el.value ? el.value : fb;
 };
+/** @type {string|null} */
 let _editId = null;
 
 function readForm() {
@@ -63,7 +67,7 @@ export function careClientSave() {
 // UX-FORM-05 — 입력 중인 필드가 있으면 신규 작성·다른 항목 불러오기 전 확인
 function _formDirty() {
     return ['cli-name', 'cli-room', 'cli-birth', 'cli-allergy', 'cli-caution', 'cli-phone', 'cli-memo']
-        .some(id => /** @type {HTMLInputElement|null} */ ($(id))?.value?.trim());
+        .some((/** @type {string} */ id) => /** @type {HTMLInputElement|null} */ ($(id))?.value?.trim());
 }
 
 export async function careClientNew() {
@@ -71,12 +75,13 @@ export async function careClientNew() {
     clearForm();
 }
 
+/** @param {string} id */
 export async function careClientLoad(id) {
     const c = listClients().find(x => x.id === id);
     if (!c) return;
     if (_formDirty() && !await showConfirm('작성 중인 내용이 있습니다. 다른 항목을 불러오면 지워집니다. 계속할까요?', '수급자 불러오기')) return;
     _editId = id;
-    const set = (elId, v) => { const el = /** @type {HTMLInputElement|null} */ ($(elId)); if (el) el.value = v || ''; };
+    const set = (/** @type {string} */ elId, /** @type {string|undefined} */ v) => { const el = /** @type {HTMLInputElement|null} */ ($(elId)); if (el) el.value = v || ''; };
     set('cli-name', c.name); set('cli-room', c.room); set('cli-birth', c.birth);
     set('cli-allergy', c.allergy); set('cli-caution', c.caution); set('cli-phone', c.phone); set('cli-memo', c.memo);
     const st = /** @type {HTMLSelectElement|null} */ ($('cli-status'));
@@ -89,6 +94,7 @@ export async function careClientLoad(id) {
     showToast('수정 모드 — 저장하면 덮어씁니다.');
 }
 
+/** @param {string} id */
 export async function careClientDelete(id) {
     if (!id || !await showConfirm('수급자를 명부에서 삭제할까요?', '삭제 확인')) return;
     removeClient(id); if (_editId === id) clearForm(); renderList();
@@ -151,6 +157,7 @@ function renderList() {
 }
 
 /** CO-02 대상자 360° 카드 — 통합 이력 배지 + 펼침 타임라인 */
+/** @param {*} c @param {*} stores */
 function _timelineHtml(c, stores) {
     const tl = clientTimeline(c.id, c.name, stores);
     if (!tl.length) return '';
@@ -164,6 +171,7 @@ function _timelineHtml(c, stores) {
 }
 
 function _docValues() {
+    /** @type {Object.<string,boolean>} */
     const docs = {};
     document.querySelectorAll('#cli-docs input[type=checkbox]').forEach(cb => {
         const el = /** @type {HTMLInputElement} */ (cb);
@@ -171,22 +179,23 @@ function _docValues() {
     });
     return docs;
 }
+/** @param {*} c */
 function _docSummary(c) {
     const n = ADMIT_ITEMS.length;
-    const done = ADMIT_ITEMS.filter(d => c.docs && c.docs[/** @type {string} */ (d.id)]).length;
+    const done = ADMIT_ITEMS.filter((/** @type {*} */ d) => c.docs && c.docs[/** @type {string} */ (d.id)]).length;
     return done ? esc(` · 서류 ${done}/${n}`) : '';
 }
 function renderDocs() {
     const host = $('cli-docs');
     if (!host) return;
-    host.innerHTML = ADMIT_ITEMS.map(d =>
+    host.innerHTML = ADMIT_ITEMS.map((/** @type {*} */ d) =>
         `<label class="care-audit-item"><input type="checkbox" data-doc="${esc(d.id)}"><span title="${esc(d.label)}">${esc(d.short)}</span></label>`).join('');
     host.addEventListener('change', renderDocCount);
     renderDocCount();
 }
 function renderDocCount() {
     const el = $('cli-docs-count');
-    if (el) el.textContent = `${ADMIT_ITEMS.filter(d => _docValues()[d.id]).length}/${ADMIT_ITEMS.length}`;
+    if (el) el.textContent = `${ADMIT_ITEMS.filter((/** @type {*} */ d) => _docValues()[d.id]).length}/${ADMIT_ITEMS.length}`;
 }
 
 export function careClientCsvExport() {
@@ -205,6 +214,7 @@ export function careClientCsvImport() {
     if (f) f.click();
 }
 
+/** @param {Event} e */
 function onCsvFile(e) {
     const file = /** @type {HTMLInputElement} */ (e.target).files?.[0];
     if (!file) return;
@@ -215,10 +225,11 @@ function onCsvFile(e) {
         renderList();
         showToast(`가져오기 완료 — 신규 ${r.added}·갱신 ${r.updated}${r.skipped ? ` · 한도 초과 ${r.skipped}건 제외` : ''}`);
     });
-    e.target.value = '';
+    if (e.target) /** @type {HTMLInputElement} */ (e.target).value = '';
 }
 
 /** CO-09 보호자 주간 리포트 — 대상자 최근 7일 기록 요약을 결과창에 생성 */
+/** @param {HTMLElement} btn */
 export function careClientReport(btn) {
     const id = /** @type {HTMLElement|null} */ (btn)?.dataset?.arg;
     const c = listClients().find(x => String(x.id) === String(id));

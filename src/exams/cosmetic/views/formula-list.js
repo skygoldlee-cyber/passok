@@ -14,10 +14,11 @@ import {
 } from './formula-core.js';
 import { openFormulaCalc } from './formula-calc.js';
 
+/** @param {*} formula */
 function checkSummaryHtml(formula) {
   const index = getIndex();
   const { summary } = checkFormulaItems(
-    (formula.ingredients || []).map(i => ({ name: i.name, concentration: i.concentration })),
+    (formula.ingredients || []).map((/** @type {*} */ i) => ({ name: i.name, concentration: i.concentration })),
     index
   );
   const parts = [];
@@ -114,10 +115,11 @@ export function formulaNew() {
   openFormulaCalc();
 }
 
+/** @param {string} id */
 export function formulaOpen(id) {
   const f = getFormula(id);
   if (!f) { showToast('포뮬러를 찾을 수 없습니다.', 'error'); return; }
-  calc.rows = (f.ingredients || []).map(i => ({ name: i.name, concentration: i.concentration, phase: i.phase || '' }));
+  calc.rows = (f.ingredients || []).map((/** @type {*} */ i) => ({ name: i.name, concentration: i.concentration, phase: i.phase || '' }));
   if (!calc.rows.length) calc.rows = [{ name: '', concentration: null, phase: '' }];
   calc.steps = Array.isArray(f.steps) ? f.steps.slice() : [];
   calc.editingId = f.id;
@@ -125,13 +127,15 @@ export function formulaOpen(id) {
   openFormulaCalc(f);
 }
 
+/** @param {string} id */
 export function formulaDuplicate(id) {
   const r = duplicateFormula(id);
   if (!r.ok) { showStoreError(r, 'My 포뮬러', showToast, '복제에 실패했습니다.'); return; }
-  showToast(`"${r.formula.name}"이 생성되었습니다.`, 'success');
+  showToast(`"${/** @type {*} */ (r.formula).name}"이 생성되었습니다.`, 'success');
   openFormulaList();
 }
 
+/** @param {string} id */
 export async function formulaDelete(id) {
   const f = getFormula(id);
   if (!f) return;

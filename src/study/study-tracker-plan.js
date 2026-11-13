@@ -9,9 +9,10 @@ import { getStudyGoals } from './study-tracker-activity.js';
    🗓️ 시험일 / D-day (역산 학습 계획)
    ======================================================= */
 
+/** @param {*} dateStr */
 function _isValidDateStr(dateStr) {
     if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return false;
-    const [y, m, d] = dateStr.split('-').map(Number);
+    const [y = 0, m = 1, d = 1] = dateStr.split('-').map(Number);
     const dt = new Date(y, m - 1, d);
     return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
 }
@@ -27,6 +28,7 @@ export function getExamDate() {
 /**
  * 시험일 저장 (null/빈 문자열/유효하지 않은 날짜면 제거)
  */
+/** @param {*} dateStr */
 export function setExamDate(dateStr) {
     safeSetItem(STORAGE_KEYS.EXAM_DATE, _isValidDateStr(dateStr) ? dateStr : '');
 }
@@ -56,6 +58,7 @@ export function getDDay() {
 export function getTextbookReadProgress() {
     let map = {};
     try { map = JSON.parse(safeGetItem(STORAGE_KEYS.READER_PROGRESS) || '{}'); } catch (e) { map = {}; }
+    /** @type {Object.<string,number>} */
     const bySubject = {};
     Object.entries(map).forEach(([k, v]) => {
         const frac = (v && typeof v === 'object') ? v.frac : null;
@@ -65,7 +68,7 @@ export function getTextbookReadProgress() {
     // 분모 = 활성 시험 과목 수 (registry.subjects — exam-context 단일 진입점).
     // 레지스트리 미로딩 시 관측 과목 수로 완화 (진척 맵에 있는 과목만큼은 존재한다는 최소 추정).
     const total = getActiveSubjectCount() || Math.max(1, seen.length);
-    const overall = seen.length ? seen.reduce((s, k) => s + bySubject[k], 0) / total : 0;
+    const overall = seen.length ? seen.reduce((s, k) => s + (bySubject[k] || 0), 0) / total : 0;
     return { bySubject, overall, started: seen.length > 0 };
 }
 
@@ -77,7 +80,7 @@ export function getTextbookReadProgress() {
  */
 export function getExamLeadStatus(dateStr, today = new Date()) {
     if (typeof dateStr !== 'string' || !_isValidDateStr(dateStr)) return null;
-    const [y, m, d] = dateStr.split('-').map(Number);
+    const [y = 0, m = 1, d = 1] = dateStr.split('-').map(Number);
     const base = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const dday = Math.round((new Date(y, m - 1, d).getTime() - base.getTime()) / (1000 * 60 * 60 * 24));
     return { dday, leadShort: dday >= 0 && dday < getMinExamLeadDays(), past: dday < 0 };
@@ -138,7 +141,7 @@ export function tierStudyHint(tier) {
 /**
  * D-day 기간의 주차별 학습일 스켈레톤 — 주간 학습일 상한 + 통독 차감 적용.
  * @param {number} dday 시험까지 남은 달력 일수 (>0)
- * @returns {{weeks:Array, studyDays:number, goals:Object, read:Object, readDaysLeft:number}}
+ * @returns {{weeks:Array<*>, studyDays:number, goals:*, read:*, readDaysLeft:number}}
  */
 function _planSkeleton(dday) {
     const goals = getStudyGoals();
@@ -182,6 +185,7 @@ export function getRemainingStudyDays(dday) {
     return _planSkeleton(dday).studyDays;
 }
 
+/** @param {*} remainingItems */
 export function computeStudyPlan(remainingItems) {
     const dday = getDDay();
     if (dday === null || dday <= 0) return null;

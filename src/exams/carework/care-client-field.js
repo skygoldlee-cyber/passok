@@ -10,6 +10,7 @@ import { showToast } from '../../ui-utils.js';
  * 입력 요소에 명부 datalist + 미등록 등록 버튼 부착
  * @param {HTMLInputElement|null} input
  */
+/** @param {HTMLInputElement} input */
 export function attachClientPicker(input) {
     if (!input || input.dataset.clientPicker) return;
     input.dataset.clientPicker = '1';
@@ -42,9 +43,11 @@ export function attachClientPicker(input) {
  * 저장용 대상자 필드 판독 — 명부 단일 매칭 시 clientId 첨부
  * @returns {{client:string, clientId?:string}}
  */
+/** @param {string} inputId */
 export function clientField(inputId) {
     const el = /** @type {HTMLInputElement|null} */ (document.getElementById(inputId));
     const client = (el ? el.value : '').trim();
+    /** @type {{client:string, clientId?:string}} */
     const out = { client };
     const { id } = resolveClientId(client, listClients());
     if (id) out.clientId = id;

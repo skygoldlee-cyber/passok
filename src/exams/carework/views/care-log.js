@@ -13,10 +13,10 @@ import { docMdHead, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 import { todayKey } from '../../../core/utils.js';
 
-const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const _radio = (name) => /** @type {HTMLInputElement|null} */ (document.querySelector(`input[name="${name}"]:checked`))?.value || '';
-const _val = (id, fb) => {
+const $ = (/** @type {string} */ id) => document.getElementById(id);
+const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);
+const _radio = (/** @type {string} */ name) => /** @type {HTMLInputElement|null} */ (document.querySelector(`input[name="${name}"]:checked`))?.value || '';
+const _val = (/** @type {string} */ id, /** @type {string} */ fb) => {
     const el = /** @type {HTMLSelectElement|HTMLInputElement|null} */ ($(id));
     return el && el.value ? el.value : fb;
 };
@@ -109,6 +109,7 @@ export function careLogCsvExport() {
     return csv;
 }
 
+/** @param {string} id */
 export async function careLogDelete(id) {
     if (!id || !await showConfirm('저장된 일지를 삭제할까요?', '삭제 확인')) return;
     removeCareLog(id); renderSaved();
@@ -129,7 +130,8 @@ function renderSaved() {
 
 export function initCareLogView() {
     markFunnel('tool:care-log');
-    attachClientPicker(/** @type {HTMLInputElement|null} */ ($('log-client')));
+    const _logClientEl = $('log-client');
+    if (_logClientEl) attachClientPicker(/** @type {HTMLInputElement} */ (_logClientEl));
     const d = /** @type {HTMLInputElement|null} */ ($('log-date'));
     if (d && !d.value) d.value = todayKey();
     const s = $('log-service');

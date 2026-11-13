@@ -114,6 +114,7 @@ export async function runWithLoading(task, opts = {}) {
 /* =========================================================
    햅틱 피드백 (모바일 정답/오답 진동)
    ========================================================= */
+/** @param {number|number[]} pattern */
 export function vibrate(pattern) {
     if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
         try { navigator.vibrate(pattern); } catch (_) { /* no-op */ }
@@ -138,10 +139,11 @@ export function markChoiceState(btn, status) {
 }
 
 /** 채점 표시 해제 — 재사용 버튼(OX 토글 등)의 다음 문항 준비 */
+/** @param {HTMLElement|null} btn */
 export function clearChoiceState(btn) {
     if (!btn) return;
     btn.classList.remove('correct', 'incorrect');
-    btn.querySelectorAll('.choice-status-icon, .choice-status-sr').forEach(n => n.remove());
+    btn.querySelectorAll('.choice-status-icon, .choice-status-sr').forEach((/** @type {Element} */ n) => n.remove());
 }
 
 /**
@@ -171,11 +173,12 @@ export function markChoiceButtons(container, selectedBtn, correctValue) {
  * @param {(item:object, idx:number)=>string} [renderItem] 문항별 카드 HTML 커스텀 렌더러
  * @returns {string}
  */
+/** @param {Array<*>} wrongAnswers @param {Function} [renderItem] */
 export function wrongReviewHtml(wrongAnswers, renderItem) {
     if (!wrongAnswers.length) {
         return '<p style="text-align:center; color:var(--color-success); font-weight:600;"><i class="fa-solid fa-circle-check"></i> 모든 문제를 맞혔습니다!</p>';
     }
-    const item = renderItem || ((s, idx) => `
+    const item = renderItem || ((/** @type {*} */ s, /** @type {number} */ idx) => `
         <div style="padding:0.75rem; margin-bottom:0.5rem; border:1px solid var(--border-color); border-radius:8px; background:var(--bg-card);">
             <div style="font-size:0.85rem; color:var(--color-text-muted); margin-bottom:0.3rem;">Q${idx + 1}</div>
             <p style="font-size:0.9rem; margin-bottom:0.4rem;">${safeTextWithBreaks(s.question)}</p>
@@ -220,7 +223,7 @@ export function trainerResultHtml({ headerTitle, badge, doneTitle, correct, tota
             <p class="result-score-summary">정답수: <strong>${correct}</strong> / ${total} (${rate}%)</p>
             ${statLine ? `<p style="color:var(--color-text-muted); font-size:0.85rem;">${statLine}</p>` : ''}
             <div style="text-align:left; margin:1.5rem 0; max-width:600px; margin-left:auto; margin-right:auto;">${reviewHTML}</div>
-            <div class="result-actions" style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+            <div class="result-actions">
                 <button class="btn btn-primary" data-click="${retryClick}"${retryArg ? ` data-arg="${retryArg}"` : ''}><i class="fa-solid fa-rotate-left"></i> ${retryLabel}</button>
                 ${extraActions}
                 <button class="btn btn-secondary" data-click="exitTrainerSubView"><i class="fa-solid fa-house"></i> 메뉴로</button>
@@ -260,6 +263,7 @@ export function showAnswerFeedback({ panelId, titleId, descId, nextBtnId, isCorr
 // 토스트 알림 (alert 대체) — #app-toast 스택에 최대 3개까지 쌓아 연속 알림 유실 방지
 const MAX_TOASTS = 3;
 // @spec A-10 — 비본질 자동 소멸(2–3s)은 확인용 정보만, aria-live 보고 + 중요 알림은 배너·모달 사용 (WCAG 2.2.1)
+/** @param {string} message @param {string} [type] @param {number} [duration] @param {string} [iconClass] */
 export function showToast(message, type = 'info', duration, iconClass = '') {
     // 성공 토스트는 화면 변화와 확인이 중복되므로 기본 노출을 짧게 — 알림 피로 완화
     if (duration === undefined) duration = type === 'success' ? 2000 : (type === 'error' || type === 'warning' ? 4000 : 3000);
@@ -278,8 +282,8 @@ export function showToast(message, type = 'info', duration, iconClass = '') {
     // 타입별 아이콘/색상 (CSS 변수에서 읽기)
     const icons = { info: 'fa-circle-info', success: 'fa-circle-check', warning: 'fa-triangle-exclamation', error: 'fa-circle-xmark' };
     const cssVars = { info: '--color-primary', success: '--color-success', warning: '--color-warning', error: '--color-danger' };
-    const icon = iconClass || icons[type] || icons.info;
-    const colorVar = cssVars[type] || cssVars.info;
+    const icon = iconClass || icons[/** @type {keyof icons} */ (type)] || icons.info;
+    const colorVar = cssVars[/** @type {keyof cssVars} */ (type)] || cssVars.info;
     const style = getComputedStyle(document.documentElement);
     const color = style.getPropertyValue(colorVar).trim();
     const item = document.createElement('div');
@@ -342,6 +346,7 @@ export function showActionToast(message, action) {
 // 컨펌 모달 (confirm 대체) — Promise 반환
 /** 저장 확인 배지 — 토스트는 순간이라 "저장됐는지" 불안함. 저장 목록 영역 상단에
  *  "✓ 기기에 저장됨 · 방금"을 남겨 눈에 보이는 확인을 준다 (다음 렌더에서 자연 교체). */
+/** @param {Element|null} host */
 export function flashSavedBadge(host) {
     if (!host) return;
     host.querySelector('.saved-flash')?.remove();
@@ -351,6 +356,7 @@ export function flashSavedBadge(host) {
     host.prepend(b);
 }
 
+/** @param {string} message @param {string} [title] @param {*} [opts] */
 export function showConfirm(message, title = '확인', opts = {}) {
     return new Promise((resolve) => {
         // 기존 모달 제거
@@ -381,7 +387,7 @@ export function showConfirm(message, title = '확인', opts = {}) {
             dialog.classList.add('is-visible');
         });
 
-        const close = (result) => {
+        const close = (/** @type {*} */ result) => {
             overlay.classList.remove('is-visible');
             dialog.classList.remove('is-visible');
             setTimeout(() => {
@@ -393,9 +399,9 @@ export function showConfirm(message, title = '확인', opts = {}) {
 
         overlay.querySelector('.app-confirm-ok')?.addEventListener('click', () => close(true));
         overlay.querySelector('.app-confirm-cancel')?.addEventListener('click', () => close(false));
-        overlay.addEventListener('click', (e) => { if (e.target === overlay) close(false); });
+        overlay.addEventListener('click', (/** @type {MouseEvent} */ e) => { if (e.target === overlay) close(false); });
         // Escape 키로 취소
-        const onKey = (e) => {
+        const onKey = (/** @type {KeyboardEvent} */ e) => {
             if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); close(false); }
         };
         document.addEventListener('keydown', onKey);
@@ -439,19 +445,19 @@ export function showChoiceModal(message, title, buttons) {
             dialog.classList.add('is-visible');
         });
 
-        const close = (value) => {
+        const close = (/** @type {*} */ value) => {
             overlay.classList.remove('is-visible');
             dialog.classList.remove('is-visible');
             setTimeout(() => { untrapFocus(); overlay.remove(); }, 200);
             resolve(value);
         };
 
-        overlay.querySelectorAll('[data-choice]').forEach(b => {
+        overlay.querySelectorAll('[data-choice]').forEach((/** @type {Element} */ b) => {
             b.addEventListener('click', () => close(b.getAttribute('data-choice')));
         });
         overlay.querySelector('.app-confirm-cancel')?.addEventListener('click', () => close(null));
-        overlay.addEventListener('click', (e) => { if (e.target === overlay) close(null); });
-        const onKey = (e) => {
+        overlay.addEventListener('click', (/** @type {MouseEvent} */ e) => { if (e.target === overlay) close(null); });
+        const onKey = (/** @type {KeyboardEvent} */ e) => {
             if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); close(null); }
         };
         document.addEventListener('keydown', onKey);
@@ -460,6 +466,7 @@ export function showChoiceModal(message, title, buttons) {
 }
 
 // 알림 모달 (alert 대체) — 확인 버튼만 있는 단일 공지용, Promise 반환
+/** @param {string} message @param {string} [title] */
 export function showAlert(message, title = '알림') {
     return new Promise((resolve) => {
         const existing = document.getElementById('app-confirm-overlay');
@@ -495,8 +502,8 @@ export function showAlert(message, title = '알림') {
         };
 
         overlay.querySelector('.app-confirm-ok')?.addEventListener('click', close);
-        overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
-        const onKey = (e) => {
+        overlay.addEventListener('click', (/** @type {MouseEvent} */ e) => { if (e.target === overlay) close(); });
+        const onKey = (/** @type {KeyboardEvent} */ e) => {
             if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); close(); }
         };
         document.addEventListener('keydown', onKey);
@@ -510,9 +517,11 @@ export function showAlert(message, title = '알림') {
 const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 const _inertModals = new Set();
+/** @type {MutationObserver|null} */
 let _inertObserver = null;
 
 /** 모달이 사라졌는지 판정 — DOM 제거 + 표시 소실(display:none·visibility·조상 숨김) 커버 */
+/** @param {HTMLElement} m */
 function _modalGone(m) {
     if (!m.isConnected) return true;
     if (typeof m.checkVisibility === 'function') {
@@ -653,7 +662,7 @@ export function trapFocus(modalEl, triggerEl) {
         modalEl.focus();
     }
 
-    const onKeydown = (e) => {
+    const onKeydown = (/** @type {KeyboardEvent} */ e) => {
         if (e.key !== 'Tab') return;
         const currentFocusables = modalEl.querySelectorAll(FOCUSABLE_SELECTOR);
         if (currentFocusables.length === 0) {

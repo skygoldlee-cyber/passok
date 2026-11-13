@@ -6,6 +6,11 @@
 const PK_KEY = 'passok-pk1-5f3a';
 const PREFIX = 'pk1:';
 
+/**
+ * pk1 인코딩 값 디코드 — 평문은 그대로 통과.
+ * @param {*} v
+ * @returns {*}
+ */
 export function pkDecode(v) {
     if (typeof v !== 'string' || !v.startsWith(PREFIX)) return v;
     const bin = atob(v.slice(PREFIX.length));
@@ -14,7 +19,13 @@ export function pkDecode(v) {
     return new TextDecoder().decode(bytes);
 }
 
+/**
+ * 파일 맵의 모든 값을 pkDecode한다.
+ * @param {Object.<string, *>} files
+ * @returns {Object.<string, *>}
+ */
 export function pkDecodeFiles(files) {
+    /** @type {Object.<string, *>} */
     const out = {};
     for (const k of Object.keys(files)) out[k] = pkDecode(files[k]);
     return out;

@@ -37,6 +37,9 @@ function npmStep(id, script, layer, desc, opts = {}) {
 // ── 기초 품질 단계 (all·ci 프리셋 공용) ────────────────────────────────
 const STEP_LINT = npmStep('lint', 'lint', '품질', 'ESLint — 에러 0 필수', { prio: 'p0' });
 const STEP_TYPES = npmStep('types', 'check:types', '품질', 'tsc --noEmit (jsconfig checkJs — JSDoc 타입 진단)', { prio: 'p0' });
+const STEP_ANY = npmStep('any', 'check:any', '품질', 'noImplicitAny 잔여 래칫 — 파일별 에러 수 단조 감소 (TS 점진 전환 Phase 1, ADR-0015)', { prio: 'p1' });
+const STEP_UIA = npmStep('uia', 'check:uia', '품질', 'noUncheckedIndexedAccess 잔여 래칫 — 파일별 에러 수 단조 감소 (TS 점진 전환 Phase 2, ADR-0015)', { prio: 'p1' });
+const STEP_CPLX = npmStep('cplx', 'check:cplx', '품질', '순환복잡도 래칫 — 파일별 {count,max,sum} 비증가 (COMPLEXITY_BACKLOG.md 정본: tools/state/complexity_baseline.json)', { prio: 'p1' });
 const STEP_HTML = nodeStep('html', 'tools/build/build_html.js', '빌드', 'index.html 조립 신선도 (파셜 편집 시 build:html 필요)', { args: ['--check'] });
 const STEP_LANDING = nodeStep('landing', 'tools/build/build_landing.js', '빌드', 'landing.html 조립 신선도 (템플릿·exams.json 편집 시 build:landing 필요)', { args: ['--check'] });
 const STEP_DOMAINMAP = npmStep('domainmap', 'check:domainmap', '분류', '파일 계층 분류 강제 (domain-map.json)', { prio: 'p0' });
@@ -51,6 +54,7 @@ const STEP_RLS = npmStep('rls', 'check:rls', '보안', 'RLS 익명 침투 검증
 const DOCS_STEPS = [
   nodeStep('docs:paths', 'tools/check/check_docs_paths.js', '문서', 'README·AGENTS·docs/*.md 경로 참조 존재 검증', { diffScoped: true }),
   nodeStep('docs:ids', 'tools/check/check_doc_ids.js', '문서', '문서 ID 누락·중복·범위·판본 헤더 검증'),
+  nodeStep('docs:registry', 'tools/check/check_doc_registry.js', '문서', '문서 ID 레지스트리·인덱스 카운트 ↔ 실물 양방향 정합'),
   nodeStep('docs:textbook', 'tools/check/check_textbook_docs.js', '문서', '교재 갱신 ↔ 판본:textbook 문서 신선도'),
   nodeStep('docs:inventory', 'tools/check/check_inventory.js', '문서', '디렉토리 구조 정합 (AGENTS·ARCHITECTURE 트리 ↔ 실물)'),
   nodeStep('docs:commands', 'tools/check/check_npm_commands.js', '문서', 'npm 명령 정합 (스크립트 ↔ 문서 인용 양방향)'),
@@ -215,6 +219,7 @@ const REMEDIES = {
   'content:textbookdocs': '교재 종속 문서(판본: textbook)를 최신 교재에 맞춰 갱신',
   'docs:textbook': '교재 종속 문서(판본: textbook)를 최신 교재에 맞춰 갱신',
   'docs:teststats': 'npm.cmd run stats:stamp — 테스트 수치 실측 스탬프 갱신',
+  'docs:registry': 'docs/README.md 레지스트리·문서 구조 트리 카운트를 실물에 맞게 갱신 (신규 문서는 레지스트리 행 추가)',
   'content:id-migration': 'npm.cmd run build:data — ID 이관 맵 미재생성',
   'content:refformat': 'node tools/sync/fix_refmd_glyphs.js (PUA·잔재 치환) · node tools/sync/reflow_flat_lines.js (평탄화 분할)',
   'refs:format': 'node tools/sync/fix_refmd_glyphs.js (PUA·잔재 치환) · node tools/sync/reflow_flat_lines.js (평탄화 분할)',
@@ -233,7 +238,7 @@ const PRESETS = {
   content: (opts) => contentSteps(opts),
   docs: () => DOCS_STEPS.slice(),
   ci: () => CI_STEPS.slice(),
-  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_HTML, STEP_LANDING, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_VENDOR, STEP_ENV, STEP_UITEXT, STEP_STUDYQ, ...contentSteps(opts)],
+  all: (opts) => [STEP_LINT, STEP_TYPES, STEP_ANY, STEP_UIA, STEP_CPLX, STEP_HTML, STEP_LANDING, ...DOCS_STEPS, STEP_DOMAINMAP, STEP_VENDOR, STEP_ENV, STEP_UITEXT, STEP_STUDYQ, ...contentSteps(opts)],
   refs: () => REFS_STEPS.slice(),
   freshness: () => FRESH_STEPS.slice(),
   audit: () => AUDIT_STEPS.slice(),

@@ -148,6 +148,7 @@ export function setupOrientationToggle() {
 }
 
 // 방향 전환 알림 표시 — 공용 토스트 스택 사용 (커스텀 아이콘 지정)
+/** @param {boolean} isLandscape */
 function showOrientationToast(isLandscape) {
     const icon = isLandscape ? 'fa-solid fa-mobile-screen' : 'fa-solid fa-mobile-screen-button';
     showToast(isLandscape ? '가로 보기 모드' : '세로 보기 모드', 'info', 2000, icon);
@@ -222,7 +223,7 @@ export function applyExamBranding() {
         if (pendingPack && navigator.serviceWorker) {
             safeRemoveItem('pack_dl_pending'); // 1회성 소비 — 재부팅마다 재표시 차단
             showToast('오프라인 학습 자료를 내려받는 중…', 'info');
-            const onPackMsg = (e) => {
+            const onPackMsg = (/** @type {MessageEvent} */ e) => {
                 if (e.data?.type === 'passok:packCached' && e.data.examId === pendingPack) {
                     showToast(e.data.failed === 0
                         ? `시험 팩 다운로드 완료 (${e.data.total}파일) — 오프라인에서도 학습할 수 있습니다`
@@ -265,8 +266,8 @@ export function applyUiTextLabels() {
 function _knowledgeMeta() {
     const reg = DataLoader.registry;
     if (!reg) return { meta: null, unit: '데이터', dictTitle: '사전' };
-    const k = (reg.knowledge && typeof reg.knowledge === 'object') ? reg.knowledge : {};
-    const meta = reg[k.registryKey || 'ingredients'] || null;
+    const k = /** @type {{registryKey?:string, entityUnit?:string}} */ ((reg.knowledge && typeof reg.knowledge === 'object') ? reg.knowledge : {});
+    const meta = (/** @type {Object.<string, *>} */ (reg))[k.registryKey || 'ingredients'] || null;
     const unit = k.entityUnit || '항목';
     const dictTitle = (reg.uiText && reg.uiText.dictionary && reg.uiText.dictionary.title) || '사전';
     return { meta, unit, dictTitle };
@@ -304,7 +305,7 @@ export function checkIngredientsUpdate() {
             const count = meta.stats && meta.stats.count ? `\n수록 ${unit} ${meta.stats.count}종 · ${dictTitle}${formulaNote}이(가) 최신 기준으로 적용됩니다.` : '';
             const history = Array.isArray(meta.history) ? meta.history : [];
             const prevNote = history.length
-                ? `\n\n이전 개정:\n${history.slice(0, 3).map(h => `· v${h.version} (${h.updatedAt || '—'}) ${h.notice || ''}`).join('\n')}`
+                ? `\n\n이전 개정:\n${history.slice(0, 3).map((/** @type {{version:string, updatedAt?:string, notice?:string}} */ h) => `· v${h.version} (${h.updatedAt || '—'}) ${h.notice || ''}`).join('\n')}`
                 : '';
             // 확인 플래그는 사용자가 모달을 실제로 닫은 뒤에만 기록한다.
             // (SW 업데이트 리로드 등으로 모달이 조기 소실되면 다음 방문에 다시 고지)
@@ -332,7 +333,7 @@ export function showIngredientsChangelog() {
     const history = Array.isArray(meta.history) ? meta.history : [];
     if (history.length) {
         lines.push('', '이전 개정:');
-        history.forEach(h => lines.push(`· v${h.version} (${h.updatedAt || '—'}) ${h.notice || ''}`));
+        history.forEach((/** @type {{version:string, updatedAt?:string, notice?:string}} */ h) => lines.push(`· v${h.version} (${h.updatedAt || '—'}) ${h.notice || ''}`));
     }
     if (meta.stats && meta.stats.count) lines.push('', `수록 ${unit} ${meta.stats.count}종`);
     showAlert(lines.join('\n'), `${unit} DB 버전 이력`);
@@ -352,17 +353,17 @@ export function applyFeatureFlags() {
             ? multiExam
             : chosen && (el.dataset.feature === 'practiceMode'
                 ? isPracticeCapable()
-                : hasFeature(el.dataset.feature));
+                : hasFeature(/** @type {string} */ (el.dataset.feature)));
         if (!on) el.classList.add('is-hidden');
     });
     // @spec UX-NAV-16 — 콘텐츠 의존 내비: 레지스트리 stats 합계가 0이면 빈 뷰로 이어지는 메뉴 숨김.
     // 시험 팩 선언 없이 데이터가 판정 — 문항이 채워지면 자동 재표시. stats 부재 시 미터치(보수적).
     const subjects = (DataLoader.registry && DataLoader.registry.subjects) || [];
     if (subjects.some(s => s.stats)) {
-        const statTotal = (key) => subjects.reduce((n, s) => n + ((s.stats && s.stats[key]) || 0), 0);
+        const statTotal = (/** @type {string} */ key) => subjects.reduce((n, s) => n + ((s.stats && /** @type {Object.<string, number>} */ (s.stats)[key]) || 0), 0);
         document.querySelectorAll('[data-needs]').forEach(node => {
             const el = /** @type {HTMLElement} */ (node);
-            if (statTotal(el.dataset.needs) === 0) el.classList.add('is-hidden');
+            if (statTotal(el.dataset.needs || '') === 0) el.classList.add('is-hidden');
         });
     }
 }

@@ -90,7 +90,24 @@ begin
     where code = p_code and redeemed_by is null
     returning * into v_code;
   if not found then
-    return false;
+    -- AU-10 — 동일인 복구: 코드가 이미 사용됐고, 사용 계정의 이메일과
+    -- 현재 계정의 이메일이 일치하면 현재 계정에도 유료를 부여한다.
+    -- 로그인 수단 분리로 생긴 동일인 중복 계정의 자기 회복 경로이며,
+    -- redeemed_by는 원 계정에 유지한다 (이전이 아닌 중복 부여).
+    -- 이메일 일치는 양쪽 계정 소유의 강한 증거 — 이메일 불일치는 false.
+    select * into v_code from public.pro_codes
+      where code = p_code and redeemed_by is not null;
+    if not found then
+      return false;
+    end if;
+    if not exists (
+      select 1 from auth.users a join auth.users b
+        on b.id = auth.uid() and a.id = v_code.redeemed_by
+       and a.email = b.email and a.email <> ''
+    ) then
+      return false;
+    end if;
+    -- v_code(valid_days) 채워짐 — 아래 plan 부여 경로 공유
   end if;
   update public.profiles
     set plan = 'pro',

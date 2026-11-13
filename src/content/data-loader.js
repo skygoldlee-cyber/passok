@@ -43,6 +43,12 @@ export const DataLoader = {
     _fallbackManifestInjected: false,
     /** @type {Object.<string, boolean>} */
     _fallbackSubjectInjected: {},
+    /** @type {*|undefined} 카드팁 오버레이 캐시 — undefined=미로드 */
+    _cardTips: undefined,
+    /** @type {*|undefined} 카드 제외 맵 캐시 — undefined=미로드 */
+    _cardExcludes: undefined,
+    /** @type {Object.<string, *>|undefined} 지식DB 키별 캐시 */
+    _knowledge: undefined,
 
     /**
      * Initialize from the global registry (index.html의 module 태그가 채운 window 전역).
@@ -128,10 +134,15 @@ export const DataLoader = {
         return this._loadScript(url, retries);
     },
 
+    /**
+     * @param {string} url
+     * @param {number} [retries]
+     * @returns {Promise<void>}
+     */
     _loadScript(url, retries = 2) {
         return new Promise((resolve, reject) => {
             const done = () => setTimeout(() => resolve(undefined), 0);
-            const attemptLoad = (remaining) => {
+            const attemptLoad = (/** @type {number} */ remaining) => {
                 const existing = /** @type {HTMLScriptElement|null} */ (document.querySelector(`script[src="${url}"]`));
                 if (existing) {
                     if (existing.dataset.loaded === 'true') {
@@ -141,7 +152,7 @@ export const DataLoader = {
                         if (remaining > 0) setTimeout(() => attemptLoad(remaining - 1), TIMING.SCRIPT_RETRY_DELAY_MS);
                         else reject(new Error(`Script load failed after retries: ${url}`));
                     } else {
-                        const onError = (e) => {
+                        const onError = (/** @type {*} */ e) => {
                             existing.dataset.loaded = 'error';
                             if (remaining > 0) { existing.remove(); setTimeout(() => attemptLoad(remaining - 1), TIMING.SCRIPT_RETRY_DELAY_MS); }
                             else reject(e);
@@ -184,7 +195,11 @@ export const DataLoader = {
     },
 
     
-    /** file:// 폴백 과목별 MD 파일 번들을 온디맨드 주입 */
+    /**
+     * file:// 폴백 과목별 MD 파일 번들을 온디맨드 주입
+     * @param {string} subjectKey
+     * @returns {Promise<Object.<string, string>>}
+     */
     async _ensureFallbackSubjectFiles(subjectKey) {
         if (this._fallbackSubjectInjected[subjectKey]) {
             const files = window.__STUDY_MD_FILES__ && window.__STUDY_MD_FILES__[subjectKey];
@@ -219,7 +234,12 @@ export const DataLoader = {
         return this._manifest;
     },
 
-    /** 단일 MD 원문 확보 (http: fetch, 실패/file://: 폴백 과목별 번들) */
+    /**
+     * 단일 MD 원문 확보 (http: fetch, 실패/file://: 폴백 과목별 번들)
+     * @param {string} relPath
+     * @param {string|null} [subjectKey] - 미지정 시 relPath에서 역추출
+     * @returns {Promise<string>}
+     */
     async _getMd(relPath, subjectKey) {
         // './' 접두사 정규화 — 번들 키('content/...')와의 일치를 보장
         relPath = relPath.replace(/^\.\//, '');
@@ -237,7 +257,7 @@ export const DataLoader = {
             let rel = relPath.replace(/^\.\//, '');
             if (rel.startsWith(rootPrefix)) rel = rel.slice(rootPrefix.length);
             const manifestSubjects = (manifest && Array.isArray(manifest.subjects)) ? manifest.subjects : [];
-            const subj = manifestSubjects.find(s => rel === s.dir || rel.startsWith(s.dir + '/'));
+            const subj = manifestSubjects.find((/** @type {*} */ s) => rel === s.dir || rel.startsWith(s.dir + '/'));
             subjectKey = subj ? subj.key : null;
         }
         if (!subjectKey) throw new Error(`과목을 식별할 수 없습니다: ${relPath}`);
@@ -273,13 +293,17 @@ export const DataLoader = {
         return this._cardExcludes;
     },
 
-    /** 과목 학습 데이터를 content/*.md 에서 런타임 파싱하여 로드 */
+    /**
+     * 과목 학습 데이터를 content/*.md 에서 런타임 파싱하여 로드
+     * @param {string} key - 과목 키
+     * @returns {Promise<*>}
+     */
     async loadSubject(key) {
         if (this._loaded[key]) return this._loaded[key];
 
         const manifest = await this._getManifest();
         const manifestSubjects = (manifest && Array.isArray(manifest.subjects)) ? manifest.subjects : [];
-        const subjMeta = manifestSubjects.find(s => s.key === key);
+        const subjMeta = manifestSubjects.find((/** @type {*} */ s) => s.key === key);
         if (!subjMeta) throw new Error(`Subject metadata not found for key: ${key}`);
 
         /** @type {Object.<string, string>} */
@@ -331,7 +355,11 @@ export const DataLoader = {
         return data;
     },
 
-    /** 로드된 실제 개수로 레지스트리 stats를 갱신 (대시보드/전역 통계가 정적 stats 대신 실제값 사용) */
+    /**
+     * 로드된 실제 개수로 레지스트리 stats를 갱신 (대시보드/전역 통계가 정적 stats 대신 실제값 사용)
+     * @param {string} key
+     * @param {{cards: *[], quizzes: *[], chapters: *[]}} data
+     */
     _updateRegistryStats(key, data) {
         if (!this.registry || !Array.isArray(this.registry.subjects)) return;
         const meta = this.registry.subjects.find(s => s.key === key);
@@ -351,7 +379,11 @@ export const DataLoader = {
         return (this.registry && this.registry.subjects) || [];
     },
 
-    /** Load an exam's bundle on demand (기존 유지) */
+    /**
+     * Load an exam's bundle on demand (기존 유지)
+     * @param {string} key
+     * @returns {Promise<*>}
+     */
     async loadExam(key) {
         if (this._loadedExams[key]) return this._loadedExams[key];
         if (!this.registry || !this.registry.exams) throw new Error('Registry not loaded');
@@ -387,7 +419,7 @@ export const DataLoader = {
     /**
      * 과목별 O/X 드릴 번들 로드 ({dataRoot}/drills/ox_<examKey>.js → window.OX_DRILLS_<examKey>)
      * @param {number|string} subjectNum 과목 order (1~N)
-     * @returns {Promise<Array>} ox 문항 배열
+     * @returns {Promise<*[]>} ox 문항 배열
      */
     async loadOxDrills(subjectNum) {
         const key = this._examKeyForOrder(subjectNum);
@@ -404,7 +436,7 @@ export const DataLoader = {
      * ({dataRoot}/drills/combo_subjectN.js → window.COMBO_DRILLS_subjectN,
      *  {dataRoot}/drills/combo_pilot.js → window.COMBO_PILOT 중 해당 과목분)
      * @param {number|string} subjectNum 과목 order (1~N)
-     * @returns {Promise<Array>} combo 문항 배열
+     * @returns {Promise<*[]>} combo 문항 배열
      */
     async loadComboDrills(subjectNum) {
         const num = parseInt(String(subjectNum), 10);
@@ -424,7 +456,7 @@ export const DataLoader = {
             }
             this._loadedDrills.comboPilot = (window.COMBO_PILOT && window.COMBO_PILOT.questions) || [];
         }
-        const pilot = this._loadedDrills.comboPilot.filter(q => q.subject === num);
+        const pilot = this._loadedDrills.comboPilot.filter((/** @type {*} */ q) => q.subject === num);
 
         const questions = [...pilot, ...auto];
         if (!questions.length) throw new Error(`ㄱㄴㄷ 조합 드릴 데이터를 찾을 수 없습니다: ${key}`);
@@ -495,14 +527,14 @@ export const DataLoader = {
             throw new Error(`Ingredients data is empty or invalid: ${meta.global}`);
         }
         this._ingredients = data;
-        window[meta.global || 'INGREDIENTS_DATA'] = data;
+        (/** @type {any} */ (window))[meta.global || 'INGREDIENTS_DATA'] = data;
         return data;
     },
 
     /**
      * 지식DB 사전 데이터를 로드한다 — registry.knowledge 스키마의 registryKey/global 사용.
      * 기본(스키마 부재 또는 'ingredients')은 기존 원료 번들 경로와 동일하다.
-     * @returns {Promise<Array>}
+     * @returns {Promise<*[]>}
      */
     async loadDictionary() {
         const reg = /** @type {any} */ (this.registry) || {};
@@ -514,7 +546,7 @@ export const DataLoader = {
         const meta = reg[key];
         if (!meta || !meta.bundle) throw new Error(`Knowledge metadata not found: ${key}`);
         await this._loadScript(meta.bundle);
-        const data = /** @type {Array|undefined} */ (/** @type {any} */ (window)[meta.global]);
+        const data = /** @type {*[]|undefined} */ (/** @type {any} */ (window)[meta.global]);
         if (!data || !data.length) throw new Error(`Knowledge data is empty or invalid: ${meta.global}`);
         this._knowledge[key] = data;
         return data;
@@ -523,7 +555,7 @@ export const DataLoader = {
     /**
      * 이미 로드된 지식DB 엔티티 배열 (동기 조회) — registry.knowledge 스키마의
      * registryKey/global 해석 + 캐시 → window[global] 순. 미로드 시 빈 배열.
-     * @returns {Array}
+     * @returns {*[]}
      */
     getKnowledgeItems() {
         const reg = /** @type {any} */ (this.registry) || {};

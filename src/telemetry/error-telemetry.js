@@ -16,7 +16,18 @@ import { getActiveExamId } from '../core/exam-context.js';
 import { getTelemetrySessionId } from './telemetry-session.js';
 import { isTelemetryAllowed, isAutomatedRuntime } from './telemetry-consent.js';
 
-/** 자동화·로컬 런타임 판정 — deps.automated 주입 우선, 미지정 시 환경 감지 */
+/**
+ * 오류 메타 — buildErrorPayload의 세 번째 인자
+ * @typedef {Object} ErrorMeta
+ * @property {string} [view]
+ * @property {string} [filename]
+ * @property {number} [lineno]
+ * @property {Object.<string, *>} [extra]
+ */
+
+/** 자동화·로컬 런타임 판정 — deps.automated 주입 우선, 미지정 시 환경 감지
+ * @param {import('../core/types.js').TelemetryDeps} deps
+ */
 function _isAutomated(deps) {
     return deps.automated !== undefined ? deps.automated : isAutomatedRuntime();
 }
@@ -31,7 +42,7 @@ let _installed = false;
  * 오류 이벤트 → DB 행 페이로드 (순수 함수 — 테스트 용이)
  * @param {string} kind 'error'|'unhandledrejection'
  * @param {unknown} err Error 객체 또는 임의 값
- * @param {Object} [meta] { view, filename, lineno }
+ * @param {ErrorMeta} [meta] { view, filename, lineno }
  */
 export function buildErrorPayload(kind, err, meta = {}) {
     const e = err instanceof Error ? err : null;
@@ -55,7 +66,9 @@ export function buildErrorPayload(kind, err, meta = {}) {
     };
 }
 
-/** 기본 전송 — Supabase client_errors 테이블 (익명 insert 정책, schema.sql §5) */
+/** 기본 전송 — Supabase client_errors 테이블 (익명 insert 정책, schema.sql §5)
+ * @param {Object[]} rows
+ */
 async function defaultInsert(rows) {
     const sb = await getSupabase();
     if (!sb) return { disabled: true };
@@ -66,7 +79,10 @@ async function defaultInsert(rows) {
 /**
  * 오류 전송 — 중복·상한·미설정 환경을 내부에서 처리. 절대 throw하지 않는다.
  * opt-out·자동화 런타임은 전송하지 않는다 (usage-telemetry와 동일 동의·환경 규약).
- * @param {Object} [deps] 테스트 주입용 { insert, automated }
+ * @param {string} kind
+ * @param {*} err
+ * @param {ErrorMeta} [meta]
+ * @param {import('../core/types.js').TelemetryDeps} [deps] 테스트 주입용 { insert, automated }
  * @returns {Promise<'sent'|'dup'|'capped'|'consent_denied'|'automated'|'disabled'|'failed'>}
  */
 export async function reportClientError(kind, err, meta = {}, deps = {}) {
@@ -92,7 +108,7 @@ export async function reportClientError(kind, err, meta = {}, deps = {}) {
 /**
  * 세션 핑 — 페이지 로드당 1건, 오류율의 분모. 중복 억제·상한 카운터와 분리
  * (세션 자체는 항상 유효 — 억제 대상이 아니다). 절대 throw하지 않는다.
- * @param {Object} [deps] 테스트 주입용 { insert, automated }
+ * @param {import('../core/types.js').TelemetryDeps} [deps] 테스트 주입용 { insert, automated }
  */
 export async function reportSessionPing(deps = {}) {
     try {
@@ -111,7 +127,7 @@ export async function reportSessionPing(deps = {}) {
 /**
  * window 오류 리스너 설치 — initApp 초기에 1회 호출. 중복 호출은 무시.
  * @param {Window|null} [win] 테스트 주입용
- * @param {Object} [deps] 테스트 주입용 { insert } — 세션 핑 전송 경로
+ * @param {import('../core/types.js').TelemetryDeps} [deps] 테스트 주입용 { insert } — 세션 핑 전송 경로
  */
 export function initErrorTelemetry(win = (typeof window !== 'undefined' ? window : null), deps = {}) {
     if (_installed || !win || typeof win.addEventListener !== 'function') return;

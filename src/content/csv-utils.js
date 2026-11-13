@@ -24,7 +24,11 @@ export function decodeCsvBuffer(buf) {
   }
 }
 
-/** File → 텍스트 (인코딩 자동 판별) */
+/**
+ * File → 텍스트 (인코딩 자동 판별)
+ * @param {Blob} file - File 포함 (Blob.arrayBuffer 공용)
+ * @returns {Promise<string>}
+ */
 export function readCsvFile(file) {
   return file.arrayBuffer().then(decodeCsvBuffer);
 }
@@ -33,6 +37,10 @@ export function readCsvFile(file) {
    파싱 — 따옴표 필드·"" 이스케이프·CRLF·구분자 자동 감지
    ======================================================= */
 
+/**
+ * @param {string} firstLine
+ * @returns {string}
+ */
 function detectDelimiter(firstLine) {
   for (const d of ['\t', ';', ',']) {
     if (firstLine.includes(d)) return d;
@@ -87,14 +95,15 @@ export function parseCsv(text) {
  * 행 배열 → 객체 배열. 첫 행을 헤더로 사용하고 colMap(정규화 헤더→필드명)으로 매핑한다.
  * 헤더 정규화: trim + 소문자 + 공백 제거 — '피부 타입'과 '피부타입' 모두 매칭.
  * @param {string[][]} rows
- * @param {Object<string,string>} colMap - 정규화된 헤더 → 필드명
+ * @param {Object.<string,string>} colMap - 정규화된 헤더 → 필드명
  * @returns {object[]}
  */
 export function csvToObjects(rows, colMap) {
   if (!rows.length) return [];
-  const headers = rows[0].map(h => (colMap[h.trim().toLowerCase().replace(/\s+/g, '')] || null));
+  const headers = (rows[0] || []).map(h => (colMap[h.trim().toLowerCase().replace(/\s+/g, '')] || null));
   if (!headers.some(Boolean)) return [];
   return rows.slice(1).map(r => {
+    /** @type {Object.<string, string>} */
     const obj = {};
     r.forEach((cell, i) => {
       if (i < headers.length && headers[i]) obj[headers[i]] = cell.trim();
@@ -107,6 +116,10 @@ export function csvToObjects(rows, colMap) {
    직렬화·다운로드
    ======================================================= */
 
+/**
+ * @param {*} v
+ * @returns {string}
+ */
 function escapeCsvCell(v) {
   const s = v == null ? '' : String(v);
   return /[",\n\r;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
@@ -124,7 +137,11 @@ export function toCsv(headers, rows, toRow) {
   return '\uFEFF' + lines.join('\r\n') + '\r\n'; // BOM
 }
 
-/** CSV 텍스트를 파일로 다운로드 (formula.js downloadJson과 동일한 data URI 패턴) */
+/**
+ * CSV 텍스트를 파일로 다운로드 (formula.js downloadJson과 동일한 data URI 패턴)
+ * @param {string} csv
+ * @param {string} filename
+ */
 export function downloadCsv(csv, filename) {
   const a = document.createElement('a');
   a.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));

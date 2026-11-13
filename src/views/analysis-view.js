@@ -78,7 +78,7 @@ function _weakChapterGroups(chaptersPerSubject = 2) {
     const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {} };
     const subjectsMeta = (typeof DataLoader !== 'undefined' && DataLoader.registry)
         ? DataLoader.getSubjectList() : [];
-    const nameOf = (key) => { const s = subjectsMeta.find(x => x.key === key); return s ? s.name : key; };
+    const nameOf = (/** @type {string} */ key) => { const s = subjectsMeta.find((/** @type {*} */ x) => x.key === key); return s ? s.name : key; };
     return computeSubjectWeakChapters({
         quizResults: state.quizResults, weakCards: state.weakCards,
         statementStats: getAllStatementStats(),
@@ -127,8 +127,8 @@ function _renderSmartPlanInsight() {
     const doneBySubj = sumRecentCardsBySubject(getStudyCalendar());
     const quizDoneBySubj = sumRecentQuizzesBySubject(getStudyCalendar());
     const rowsHtml = alloc.thisWeek.alloc.filter(a => a.remaining > 0).map(a => {
-        const done = doneBySubj[a.key] || 0;
-        const qDone = quizDoneBySubj[a.key] || 0;
+        const done = /** @type {Object.<string,number>} */ (doneBySubj)[a.key] || 0;
+        const qDone = /** @type {Object.<string,number>} */ (quizDoneBySubj)[a.key] || 0;
         const met = a.cards > 0 && done >= a.cards;
         const quizPart = a.quizzes > 0 ? ` · 퀴즈 ${qDone}/${a.quizzes}문` : '';
         const badgesHtml = (a.weakBadge ? ' <span class="alloc-badge alloc-badge-weak">약점</span>' : '')
@@ -145,6 +145,7 @@ function _renderSmartPlanInsight() {
  * 주간 배분 배정 근거 딥링크 (SC-11) — 학습 진단 뷰로 전환 후
  * 해당 과목 카드로 스크롤·일시 강조한다.
  */
+/** @param {string} subjKey */
 export function gotoSubjectAnalysis(subjKey) {
     switchView('analysis-view', { scrollTop: true });
     setTimeout(() => {
@@ -181,7 +182,7 @@ function _renderAnalysisOnboarding() {
     const flowOnly = hasFeature('careFlow') && totalQuizzes === 0;
     const quizPct = Math.min(100, Math.round((quizSolved / ANALYSIS_MIN_QUIZ) * 100));
     const simPct = Math.min(100, Math.round((simDone / ANALYSIS_MIN_SIM) * 100));
-    const meter = (label, cur, min, pct) =>
+    const meter = (/** @type {string} */ label, /** @type {number} */ cur, /** @type {number} */ min, /** @type {number} */ pct) =>
         `<div class="wc-subrow"><span>${label}</span><strong>${cur}/${min}</strong></div>
          <div class="analysis-meter"><div class="analysis-meter-fill" style="width:${pct}%"></div></div>`;
     const quizBtn = flowOnly
@@ -214,7 +215,7 @@ function _renderWrongCauseInsight() {
         return;
     }
     const rowsHtml = Object.entries(getWrongCauseLabels())
-        .map(([k, label]) => `<div class="wc-row"><span>${esc(label)}</span><strong>${sum.counts[k] || 0}건</strong></div>`).join('');
+        .map(([k, label]) => `<div class="wc-row"><span>${esc(label)}</span><strong>${/** @type {Object.<string,number>} */ (sum.counts)[k] || 0}건</strong></div>`).join('');
 
     // 미태깅 오답 자동 추정 (태깅 데이터가 희소할 때 보완)
     const est = estimateUntaggedCauses({
@@ -223,7 +224,7 @@ function _renderWrongCauseInsight() {
         resolveQuiz: resolveWrongQuiz
     });
     const estRowsHtml = est.estimated > 0
-        ? `<p class="analysis-advice">추정 (미태깅 오답 ${est.estimated}건): 암기 부족 ${est.counts.memorize} · 개념 오해 ${est.counts.concept} · 계산 ${est.counts.calc}</p>`
+        ? `<p class="analysis-advice">추정 (미태깅 오답 ${est.estimated}건): 암기 부족 ${(/** @type {*} */ (est.counts)).memorize} · 개념 오해 ${(/** @type {*} */ (est.counts)).concept} · 계산 ${(/** @type {*} */ (est.counts)).calc}</p>`
         : '';
 
     el.innerHTML = `<h4>🧩 오답 패턴 분석 <span class="analysis-meta">최근 7일 · ${esc(sum.total)}건</span></h4>
@@ -254,13 +255,13 @@ function _renderWeakStatementInsight() {
     const clusters = computeWeakConceptClusters(getAllStatementStats(), qc.ranges, 2,
         { chapterTitles: qc.chapterTitles, cidSection: qc.cidSection });
     const clusterNoteHtml = clusters.length > 0
-        ? `<p class="analysis-advice">🔗 같은 개념 구간에서 반복 오판: ${esc(clusters[0].chapter || clusters[0].cid)} (${clusters[0].count}개 진술)</p>` : '';
+        ? `<p class="analysis-advice">🔗 같은 개념 구간에서 반복 오판: ${esc((clusters[0] || {}).chapter || (clusters[0] || {}).cid || '')} (${(clusters[0] || {}).count}개 진술)</p>` : '';
 
     // PS-01 — union-find 약점 개념 축 (의미 이웃+cid 결합) → PS-10 클리닉 처방 + PS-05 교재·드릴 딥링크
     const conceptClusters = weakClusters();
     let clinicHtml = '';
     if (conceptClusters.length > 0) {
-        const top = conceptClusters[0];
+        const top = /** @type {*} */ (conceptClusters[0]);
         const rep = top.members[0];
         const subj = rep ? subjectFromSid(rep.sid) || '' : '';
         const anchor = rep ? normalizeCidAnchor(rep.cid, subj, qc.cidSection) : null;
@@ -295,8 +296,8 @@ function _renderStudyRhythmInsight() {
 
     // 주간 성장 — 최근 7일 vs 이전 7일
     const growth = computeWeeklyGrowth(getStudyCalendar());
-    const growthRowHtml = growth.thisWeek.rate !== null
-        ? `<div class="wc-row"><span>주간 정답률</span><strong>${growth.thisWeek.rate}%${growth.rateDelta !== null ? ` <span class="growth-delta ${growth.rateDelta >= 0 ? 'growth-up' : 'growth-down'}">${growth.rateDelta >= 0 ? '▲' : '▼'}${Math.abs(growth.rateDelta)}%p</span>` : ''}</strong></div>`
+    const growthRowHtml = (/** @type {*} */ (growth.thisWeek)).rate !== null
+        ? `<div class="wc-row"><span>주간 정답률</span><strong>${(/** @type {*} */ (growth.thisWeek)).rate}%${growth.rateDelta !== null ? ` <span class="growth-delta ${growth.rateDelta >= 0 ? 'growth-up' : 'growth-down'}">${growth.rateDelta >= 0 ? '▲' : '▼'}${Math.abs(growth.rateDelta)}%p</span>` : ''}</strong></div>`
         : '';
 
     // 학습 패턴 — 최다 활동 시간대·요일 (캘린더 시간대 버킷 집계, 표본 부족 시 미표시)
@@ -421,10 +422,10 @@ function _weeklyMetrics() {
         counts: getSubjCounts(), rules: getExamRules()
     });
     return {
-        solvedWeek: growth.thisWeek.quizzes,
-        planWeek: weekAlloc ? weekAlloc.thisWeek.alloc.reduce((s, a) => s + (a.quizzes || 0), 0) : null,
-        wrongWeek: Math.max(0, growth.thisWeek.quizzes - growth.thisWeek.correct),
-        weekRate: growth.thisWeek.rate,
+        solvedWeek: (/** @type {*} */ (growth.thisWeek)).quizzes,
+        planWeek: weekAlloc ? weekAlloc.thisWeek.alloc.reduce((/** @type {number} */ s, /** @type {*} */ a) => s + (a.quizzes || 0), 0) : null,
+        wrongWeek: Math.max(0, (/** @type {*} */ (growth.thisWeek)).quizzes - (/** @type {*} */ (growth.thisWeek)).correct),
+        weekRate: (/** @type {*} */ (growth.thisWeek)).rate,
         rateDelta: growth.rateDelta,
         dday,
         projectedCoverage: pace ? pace.projectedCoverage : null,
@@ -525,9 +526,10 @@ function _renderPassGapInsight() {
     }
     // PS-04 — 합격 확률 추정: 과목 숙달(0.5)+모의고사 추세(0.3)+기억률(0.2) 로지스틱 혼합
     const masteryLevels = computeMasteryLevels(getAllStatementStats());
+    /** @type {Object.<string,number>} */
     const subjectMastery = {};
     Object.entries(masteryLevels).forEach(([k, m]) => { subjectMastery[k] = m.percent / 100; });
-    const mockRates = getSimHistory().slice(-5).map(h => (h.rate || 0) / 100);
+    const mockRates = getSimHistory().slice(-5).map((/** @type {*} */ h) => (h.rate || 0) / 100);
     const totalCardsEst = subjects.reduce((s, m) => s + displayCounts(m).cards, 0);
     const hasEstData = Object.keys(subjectMastery).length > 0 || mockRates.length > 0;
     const passEst = hasEstData ? estimatePassProb({
@@ -538,8 +540,8 @@ function _renderPassGapInsight() {
     }) : null;
     const probRowHtml = passEst
         ? `<div class="wc-row"><span>합격 확률 추정</span><strong>${Math.round(passEst.probability * 100)}%</strong></div>` : '';
-    const needRowHtml = (passEst && passEst.weakest && passEst.needHours[passEst.weakest] > 0)
-        ? `<div class="wc-subrow"><span>보강 필요 학습량</span><strong>${esc((subjects.find(s => s.key === passEst.weakest) || { name: passEst.weakest }).name)} ≈${passEst.needHours[passEst.weakest]}h</strong></div>` : '';
+    const needRowHtml = (passEst && passEst.weakest && (/** @type {Object.<string,number>} */ (passEst.needHours)[passEst.weakest || ''] || 0) > 0)
+        ? `<div class="wc-subrow"><span>보강 필요 학습량</span><strong>${esc((subjects.find((/** @type {*} */ s) => s.key === passEst.weakest) || { name: passEst.weakest }).name)} ≈${/** @type {Object.<string,number>} */ (passEst.needHours)[passEst.weakest || '']}h</strong></div>` : '';
 
     const gapRowHtml = gap.gap !== null
         ? `<div class="wc-row"><span>합격선(평균 ${gap.passLine}점)까지</span><strong>${gap.gap === 0 ? '도달 ✅' : `+${gap.gap}점`}</strong></div>`
@@ -667,9 +669,10 @@ export function startSubjectReader(subjId) {
 }
 
 // SC-06 주간 리포트용 계획 준수 요약 — {weekActual, weekTarget, percent, statusLabel} | null
+/** @param {*[]} subjects */
 function _planAdherenceSummary(subjects) {
     let total = 0;
-    (subjects || []).forEach(s => { total += displayCounts(s).cards; });
+    (subjects || []).forEach((/** @type {*} */ s) => { total += displayCounts(s).cards; });
     const plan = computeStudyPlan(Math.max(0, total - state.memorizedCards.size));
     const adh = computePlanAdherence(plan);
     if (!adh || adh.status === 'done') return null;
@@ -685,7 +688,7 @@ export function exportAnalysisReport() {
     trackAction('analysis_report');
     const subjects = (typeof DataLoader !== 'undefined' && DataLoader.registry)
         ? DataLoader.getSubjectList() : [];
-    const nameOf = (k) => { const s = subjects.find(x => x.key === k); return s ? s.name : k; };
+    const nameOf = (/** @type {string} */ k) => { const s = subjects.find((/** @type {*} */ x) => x.key === k); return s ? s.name : k; };
     const dday = getDDay();
     const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {} };
     const est = compositeEstimate();
@@ -698,8 +701,8 @@ export function exportAnalysisReport() {
     const quizDoneBySubj = weekAlloc ? sumRecentQuizzesBySubject(getStudyCalendar()) : {};
     const planBySubject = weekAlloc
         ? weekAlloc.thisWeek.alloc
-            .filter(a => a.remaining > 0 && a.cards > 0)
-            .map(a => ({ name: a.name, done: doneBySubj[a.key] || 0, cards: a.cards, quizDone: quizDoneBySubj[a.key] || 0, quizzes: a.quizzes || 0 }))
+            .filter((/** @type {*} */ a) => a.remaining > 0 && a.cards > 0)
+            .map((/** @type {*} */ a) => ({ name: a.name, done: /** @type {Object.<string,number>} */ (doneBySubj)[a.key] || 0, cards: a.cards, quizDone: /** @type {Object.<string,number>} */ (quizDoneBySubj)[a.key] || 0, quizzes: a.quizzes || 0 }))
         : null;
     const growth = computeWeeklyGrowth(getStudyCalendar());
     const gapForReport = computePassGap({
@@ -729,9 +732,9 @@ export function exportAnalysisReport() {
     }) + (() => {
         // PS-09 — 주간 리포트: 계획 순응도 헤드라인 + 최다 오개념·취약 과목 제안
         const wr = weeklyReport({
-            solvedWeek: growth.thisWeek.quizzes,
-            planWeek: weekAlloc ? weekAlloc.thisWeek.alloc.reduce((s, a) => s + (a.quizzes || 0), 0) : 0,
-            wrongWeek: Math.max(0, growth.thisWeek.quizzes - growth.thisWeek.correct),
+            solvedWeek: (/** @type {*} */ (growth.thisWeek)).quizzes,
+            planWeek: weekAlloc ? weekAlloc.thisWeek.alloc.reduce((/** @type {number} */ s, /** @type {*} */ a) => s + (a.quizzes || 0), 0) : 0,
+            wrongWeek: Math.max(0, (/** @type {*} */ (growth.thisWeek)).quizzes - (/** @type {*} */ (growth.thisWeek)).correct),
             topCluster: (weakClusters()[0] || {}).label || null,
             weakestSubject: (gapForReport && gapForReport.weakest && gapForReport.weakest.name) || null
         });

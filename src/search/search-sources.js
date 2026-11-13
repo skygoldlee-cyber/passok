@@ -24,7 +24,28 @@ import { registerSearchSource, registerVocabContributor, _toSearchable, _getMorp
 import { termHitQuality } from './search-morpheme.js';
 import { getAllGlossaryKeywords, getGlossaryEntry, glossarySubjectKey } from '../reader/glossary-query.js';
 
-/** SearchDoc 생성 — _searchText는 제목+본문의 소문자·공백 정규화본 */
+/**
+ * @typedef {Object} SearchTocSection
+ * @property {string} title
+ * @property {string} [content]
+ * @property {SearchTocSection[]} [subsections]
+ *
+ * @typedef {Object} SearchTocChapter
+ * @property {string} [chapterTitle]
+ * @property {string} [chapterKey]
+ * @property {string} [filePath]
+ * @property {SearchTocSection[]} [sections]
+ *
+ * @typedef {Object} SearchTocSubject
+ * @property {string} [name]
+ * @property {SearchTocChapter[]} [chapters]
+ */
+
+/**
+ * SearchDoc 생성 — _searchText는 제목+본문의 소문자·공백 정규화본
+ * @param {Object.<string, *>} fields
+ * @returns {Object.<string, *>}
+ */
 function _doc(fields) {
     return {
         ...fields,
@@ -37,16 +58,17 @@ function _doc(fields) {
  * 교재 번들(STUDY_DATA)의 섹션들을 검색 엔트리로 수집한다.
  * 이동 목적지는 리더 표시 제목(중복 제목은 챕터 병기) + 소속 챕터 앵커 —
  * 리더의 카드 렌더 규약(메타 섹션 미렌더·## 섹션 단위)을 여기서 해석한다.
- * @param {Object} [studyData] - 테스트 주입용. 생략 시 window.STUDY_DATA
+ * @param {Object.<string, SearchTocSubject>} [studyData] - 테스트 주입용. 생략 시 window.STUDY_DATA
  * @returns {Array<object>} kind='section' 엔트리 목록
  */
 export function collectTextbookSections(studyData) {
-    const STUDY_DATA = studyData
-        || ((typeof window !== 'undefined' && window.STUDY_DATA) ? window.STUDY_DATA : {});
+    const STUDY_DATA = /** @type {Object.<string, SearchTocSubject>} */ (studyData
+        || ((typeof window !== 'undefined' && window.STUDY_DATA) ? window.STUDY_DATA : {}));
+    /** @type {object[]} */
     const entries = [];
     Object.keys(STUDY_DATA).forEach(subjId => {
         const subj = STUDY_DATA[subjId];
-        if (!subj.chapters) return;
+        if (!subj || !subj.chapters) return;
         subj.chapters.forEach(chapter => {
             if (!chapter.sections) return;
             // 섹션별 이동 목적지 — 리더 표시 제목(중복 제목은 챕터 병기된 형태) +
@@ -56,7 +78,7 @@ export function collectTextbookSections(studyData) {
             let chAnchor = '';
             chapter.sections.forEach((section, sIdx) => {
                 const chM = String(section.title || '').match(/Chapter\s*(\d+)/i);
-                if (chM) chAnchor = 'ch' + chM[1].padStart(2, '0');
+                if (chM) chAnchor = 'ch' + (chM[1] || '').padStart(2, '0');
                 // 메타 섹션(비교표·확인문제·요약 등)은 리더가 렌더하지 않아
                 // 이동해도 본문에 도달할 수 없다 — 검색 결과에서 제외
                 if (isStoryMetaSection(section.title)) return;
@@ -89,7 +111,11 @@ export function collectTextbookSections(studyData) {
     return entries;
 }
 
-/** 이야기형 MD에서 story:start/end 블록을 {title, gotoTitle, chAnchor, text} 목록으로 추출 */
+/**
+ * 이야기형 MD에서 story:start/end 블록을 {title, gotoTitle, chAnchor, text} 목록으로 추출
+ * @param {string} md
+ * @returns {{title:string, gotoTitle:string, reachable:boolean, chAnchor:string, text:string}[]}
+ */
 function _extractStoryBlocks(md) {
     const lines = md.split(/\r?\n/);
     /** @type {Array<{title:string, innerTitle:string, h2Ord:number, innerOrd:number, anchor:string, lines:string[]}>} */
@@ -120,7 +146,7 @@ function _extractStoryBlocks(md) {
                 }
                 // 블록 내부 첫 헤딩을 서사 제목으로 우선 사용 (예: '## 프롤로그 — …')
                 if (!cur.innerTitle) {
-                    cur.innerTitle = heading[2].trim();
+                    cur.innerTitle = (heading[2] || '').trim();
                     cur.innerOrd = t.startsWith('## ') ? h2Ord : -1;
                 }
             }
@@ -132,14 +158,14 @@ function _extractStoryBlocks(md) {
             continue;
         }
         if (heading) {
-            lastHeading = heading[2].trim();
+            lastHeading = (heading[2] || '').trim();
             // 리더 섹션 카드는 ## 헤딩 — ## 소속과 챕터 앵커를 이동 목적지로 추적한다
             // (###/#### 내부 헤딩은 카드 제목이 아니라 매칭 불가)
             if (t.startsWith('## ')) {
                 h2Ord = h2List.length;
                 h2List.push({ title: lastHeading, meta: isStoryMetaSection(lastHeading) });
                 const m = lastHeading.match(/Chapter\s*(\d+)/i);
-                if (m) chAnchor = 'ch' + m[1].padStart(2, '0');
+                if (m) chAnchor = 'ch' + (m[1] || '').padStart(2, '0');
             }
         }
     }
@@ -149,6 +175,7 @@ function _extractStoryBlocks(md) {
         .concat(h2List.filter(h => !h.meta).map(h => h.title));
     const displayTitles = buildSectionDisplayTitles(renderedTitles.map(title => ({ title })));
     // 원시 ## 서序 → 렌더 목록 인덱스 (메타 섹션은 -1 — 리더에 없어 이동 불가)
+    /** @type {number[]} */
     const renderedIdxOf = [];
     {
         let ri = sawPreH2Content ? 1 : 0;
@@ -159,10 +186,10 @@ function _extractStoryBlocks(md) {
             // 이동 목적지: 블록 자체가 ## 섹션이면 그 카드, 아니면 소속 ## 섹션.
             // 개요 구간 블록(첫 ## 이전)은 첫 렌더 섹션으로 연결한다
             const targetOrd = b.innerOrd >= 0 ? b.innerOrd : b.h2Ord;
-            const targetIdx = targetOrd >= 0 ? renderedIdxOf[targetOrd] : (renderedTitles.length ? 0 : -1);
+            const targetIdx = targetOrd >= 0 ? (renderedIdxOf[targetOrd] ?? -1) : (renderedTitles.length ? 0 : -1);
             return {
                 title: b.innerTitle || b.title,
-                gotoTitle: targetIdx >= 0 ? displayTitles[targetIdx] : '',
+                gotoTitle: targetIdx >= 0 ? (displayTitles[targetIdx] || '') : '',
                 reachable: targetIdx >= 0,
                 chAnchor: b.anchor,
                 text: b.lines.join('\n')
@@ -194,7 +221,7 @@ async function loadStoryEntries() {
             if (!chMeta.storyFile) continue;
             try {
                 const md = await DataLoader._getMd(PATHS.TEXTBOOK_FILE(subjMeta.dir, chMeta.storyFile), subjMeta.key);
-                const chapter = (subj && subj.chapters || []).find(c => c.chapterKey === chMeta.key);
+                const chapter = (subj && subj.chapters || []).find((/** @type {*} */ c) => c.chapterKey === chMeta.key);
                 const chapterTitle = (chapter && chapter.chapterTitle) || chMeta.title || '';
                 for (const block of _extractStoryBlocks(md)) {
                     entries.push(_doc({
@@ -222,18 +249,21 @@ async function loadStoryEntries() {
  * 과목 귀속: REF_MD_SUBJECTS의 ref_md/과목N → SUBJECT_DIR_MAP으로 subject key 역해석.
  * 원료 목록 등 ref_md 밖 문서(REFERENCE_INGREDIENTS)는 항목의 subject/dir 필드로 귀속한다
  * (references.json 선언 — 코어에 시험 도메인 귀속을 하드코딩하지 않는다).
- * @param {object} t getRefTables() 결과
+ * @param {*} t getRefTables() 결과
  * @returns {Array<{subjId:string, file:string, path:string, docName:string}>}
  */
 export function _listRefDocs(t) {
+    /** @type {Object.<string, string>} */
     const dirToSubj = {};
     for (const [key, dir] of Object.entries(t.SUBJECT_DIR_MAP || {})) dirToSubj[dir] = key;
     // 친화적 표시명 맵 — REFERENCE_* 테이블의 name 우선
+    /** @type {Object.<string, string>} */
     const nameOf = {};
     for (const coll of [t.REFERENCE_FILES, t.REFERENCE_COMMON, t.REFERENCE_INGREDIENTS, t.REFERENCE_LAW]) {
         const list = Array.isArray(coll) ? coll : Object.values(coll || {}).flat();
         for (const e of list) if (e && e.file && e.name) nameOf[e.file] = e.name;
     }
+    /** @type {Array<{subjId:string, file:string, path:string, docName:string}>} */
     const docs = [];
     for (const [file, dir] of Object.entries(t.REF_MD_SUBJECTS || {})) {
         const subjId = dirToSubj[dir];
@@ -266,6 +296,7 @@ export function _listRefDocs(t) {
  */
 async function loadRefEntries() {
     const manifest = await DataLoader._getManifest();
+    /** @type {Object.<string, string>} */
     const subjNameOf = {};
     for (const s of manifest.subjects || []) subjNameOf[s.key] = s.name;
     const docs = _listRefDocs(getRefTables());
@@ -286,7 +317,7 @@ async function loadRefEntries() {
         } catch (e) {
             return null; // 오프라인·미캐시 — 해당 문서만 건너뜀
         }
-    }))).filter(Boolean);
+    }))).filter(e => e != null);
 }
 
 /**
@@ -300,9 +331,11 @@ async function loadRefEntries() {
  * @returns {Promise<string|null>}
  */
 async function _loadMdText(mdPath, globalKey, bundleDir, bundleAttr) {
-    const bundled = () => (
-        typeof window !== 'undefined' && window[globalKey] && typeof window[globalKey][mdPath] === 'string'
-    ) ? pkDecode(window[globalKey][mdPath]) : null;
+    const bundled = () => {
+        const w = /** @type {any} */ (typeof window !== 'undefined' ? window : {});
+        return (w[globalKey] && typeof w[globalKey][mdPath] === 'string')
+            ? pkDecode(w[globalKey][mdPath]) : null;
+    };
     const cached = bundled();
     if (cached !== null) return cached;
     if (typeof location === 'undefined' || location.protocol !== 'file:') {
@@ -317,13 +350,20 @@ async function _loadMdText(mdPath, globalKey, bundleDir, bundleAttr) {
     }
 }
 
-/** 문제은행 MD — __EXAM_MD__ 번들/exams_md 경로 규약 */
+/**
+ * 문제은행 MD — __EXAM_MD__ 번들/exams_md 경로 규약
+ * @param {string} mdPath
+ * @returns {Promise<string|null>}
+ */
 export async function _loadExamMdText(mdPath) {
     return _loadMdText(mdPath, '__EXAM_MD__', dataPath('exams_md/'), 'data-exam-bundle');
 }
 
 /** 시험 문서(docs/) MD — __DOC_MD__ 번들/docs_md 경로 규약 (manual-viewer와 동일).
- *  앱 공용 문서(docs/user/ 등 'docs/' 접두)는 data/docs_md/, 시험별 문서는 {dataRoot}/docs_md/. */
+ *  앱 공용 문서(docs/user/ 등 'docs/' 접두)는 data/docs_md/, 시험별 문서는 {dataRoot}/docs_md/.
+ *  @param {string} mdPath
+ *  @returns {Promise<string|null>}
+ */
 async function _loadDocMdText(mdPath) {
     const dir = mdPath.startsWith('docs/') ? 'data/docs_md/' : dataPath('docs_md/');
     return _loadMdText(mdPath, '__DOC_MD__', dir, 'data-doc-bundle');
@@ -336,6 +376,7 @@ async function _loadDocMdText(mdPath) {
  */
 async function loadExamEntries() {
     const registry = /** @type {{subjects?: any[], exams?: any[]}} */ (DataLoader.registry || {});
+    /** @type {Object.<string, string>} */
     const subjNameOf = {};
     for (const s of registry.subjects || []) subjNameOf[s.key] = s.name;
     return (await Promise.all((registry.exams || []).map(async (ex) => {
@@ -353,7 +394,7 @@ async function loadExamEntries() {
             text,
             nav: { mdPath },
         });
-    }))).filter(Boolean);
+    }))).filter(e => e != null);
 }
 
 /**
@@ -375,6 +416,7 @@ const COMMON_DOCS = [
 export async function _loadExamDocEntries() {
     const manifest = await DataLoader._getManifest();
     const docs = [...COMMON_DOCS, ...(manifest.searchDocs || [])];
+    /** @type {Object.<string, string>} */
     const subjNameOf = {};
     for (const s of manifest.subjects || []) subjNameOf[s.key] = s.name;
     return (await Promise.all(docs.map(async (d) => {
@@ -392,7 +434,7 @@ export async function _loadExamDocEntries() {
             text,
             nav: { mdPath },
         });
-    }))).filter(Boolean);
+    }))).filter(e => e != null);
 }
 
 // --- 용어 정의 카드 (TS-15) ---
@@ -400,12 +442,17 @@ export async function _loadExamDocEntries() {
 // 쿼리 변형과 경계 매치하는 항목을 고르고, 코어는 형태소 어휘(_getMorphVocab)만 빌려준다.
 // 용어집 인덱스는 시험 내 불변이므로 시험 id 키로 캐시한다.
 
-let _glossReps = null; // {examId, map} — 키워드별 대표 용어집 항목 캐시
+/** @type {{examId: string|null|undefined, map: Map.<string, *>}|null} 키워드별 대표 용어집 항목 캐시 */
+let _glossReps = null;
 
-/** 키워드 → 대표 용어집 항목 맵 (큐레이션 우선) */
+/**
+ * 키워드 → 대표 용어집 항목 맵 (큐레이션 우선)
+ * @returns {Map.<string, *>}
+ */
 function _glossRepresentatives() {
     const examId = getActiveExamId();
     if (_glossReps && _glossReps.examId === examId) return _glossReps.map;
+    /** @type {Map.<string, *>} */
     const repByKw = new Map();
     for (const { keyword, idxKey } of getAllGlossaryKeywords()) {
         const kwLower = String(keyword || '').trim().toLowerCase();
@@ -433,6 +480,7 @@ export function matchGlossaryDefs(variants, filter) {
     const vocab = _getMorphVocab();
     if (!variants.length || !vocab) return [];
     const repByKw = _glossRepresentatives();
+    /** @type {{entry: *, score: number}[]} */
     const hits = [];
     for (const entry of repByKw.values()) {
         const kwLower = String(entry.keyword || '').trim().toLowerCase();

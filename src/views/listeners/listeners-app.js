@@ -13,6 +13,7 @@ import { showOnboardingModal } from '../../shell/onboarding.js';
 import { openShortcutHelp } from '../../shell/shortcuts-help.js';
 import { showFeedbackModal, dismissFeedbackHint, dismissFeedbackDot } from '../../shell/feedback.js';
 import { getActiveExam } from '../../core/exam-context.js';
+import { proFeatureNotice } from '../../pro/pro-upgrade.js';
 
 export function bindAppListeners() {
     // 진도 초기화 버튼
@@ -72,26 +73,33 @@ export function bindAppListeners() {
         window.open('landing.html', '_blank', 'noopener');
     });
 
-    // Discord 커뮤니티 초대 — 활성 시험이 exams.json에 discordInvite를 선언한 경우에만 노출.
+    // Discord 커뮤니티 초대 — 활성 시험의 exams.json.discordInvite 우선,
+    // 미선언 시 레지스트리 루트 discordInvite(플랫폼 기본 서버)로 폴백.
     // 시험 전환은 reload 기반이라 초기화 시점 1회 판정으로 충분하다.
-    const communityInvite = getActiveExam()?.discordInvite;
+    const communityInvite = getActiveExam()?.discordInvite
+        || (typeof window !== 'undefined' && /** @type {any} */ (window).EXAMS_LIST?.discordInvite)
+        || null;
     const communityBtn = document.getElementById('community-btn');
     if (communityBtn && communityInvite) {
         communityBtn.classList.remove('is-hidden');
         communityBtn.addEventListener('click', () => {
+            proFeatureNotice('discord_community', 'Discord 커뮤니티');
             window.open(communityInvite, '_blank', 'noopener');
         });
     }
 
     // 헤더 드롭다운 메뉴 공통 바인딩 — 설정(⚙️)·도움말(?) 패널.
     // 항목 선택·외부 클릭·Escape로 닫히고, 한 번에 하나만 열린다.
+    /** @type {Function[]} */
     const menuClosers = [];
+    /** @type {HTMLElement|null} */
     let openMenuBtn = null;
     const closeAllMenus = (restoreFocus = false) => {
         menuClosers.forEach(close => close());
         if (restoreFocus && openMenuBtn) openMenuBtn.focus();
         openMenuBtn = null;
     };
+    /** @param {string} btnId @param {string} panelId @param {Function} [onOpen] */
     const bindDropMenu = (btnId, panelId, onOpen) => {
         const btn = document.getElementById(btnId);
         const panel = document.getElementById(panelId);

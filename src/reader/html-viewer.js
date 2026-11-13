@@ -8,8 +8,11 @@ import { renderMermaidIn } from './mermaid-render.js';
 import { makeSessionCache } from '../shell/doc-overlay.js';
 import { fixMermaidPrintContrast, fixPrintLines } from '../content/pdf-utils.js';
 
+/** @type {HTMLElement|null} */
 let _overlayEl = null;
+/** @type {HTMLElement|null} */
 let _contentEl = null;
+/** @type {HTMLElement[]} */
 let _searchResults = [];
 let _searchIdx = -1;
 // 24시간 TTL + LRU 상한 (sessionStorage 용량 초과 방지) — doc-overlay 공용 캐시
@@ -17,6 +20,7 @@ const _cache = makeSessionCache('ref_doc_v4_', CACHE.FETCH_CACHE_TTL_MS, {
     maxEntries: CACHE.FETCH_CACHE_MAX_ENTRIES,
 });
 
+/** @param {*} s */
 function escHtml(s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
@@ -59,6 +63,7 @@ function _ensureOverlay() {
     _overlayEl = el;
 
     el.querySelector('#hr-close-btn')?.addEventListener('click', close);
+    /** @param {*} _label */
     function _printContent(_label) {
         const content = el.querySelector('.hr-ov-content');
         if (!content) return;
@@ -133,13 +138,20 @@ function close() {
     _contentEl = null;
 }
 
+/**
+ * @param {string} htmlPath
+ * @param {*} [searchKeyword]
+ * @param {*} [anchorId]
+ * @param {*} [lineNum]
+ */
 async function openHtmlViewer(htmlPath, searchKeyword, anchorId, lineNum) {
     const el = _ensureOverlay();
     const titleEl = el.querySelector('#hr-title');
     const scroll = el.querySelector('#hr-scroll');
+    if (!scroll) return;
 
-    const fileName = decodeURIComponent(htmlPath.split('/').pop().replace(/\.(html|md)$/, ''));
-    titleEl.textContent = fileName;
+    const fileName = decodeURIComponent((htmlPath.split('/').pop() || '').replace(/\.(html|md)$/, ''));
+    if (titleEl) titleEl.textContent = fileName;
 
     // 기존 콘텐츠 제거
     const oldContent = scroll.querySelector('.hr-ov-content');
@@ -160,8 +172,10 @@ async function openHtmlViewer(htmlPath, searchKeyword, anchorId, lineNum) {
 
     _searchResults = [];
     _searchIdx = -1;
-    el.querySelector('#hr-search-input').value = searchKeyword || '';
-    el.querySelector('#hr-search-count').textContent = '';
+    const searchInput = /** @type {HTMLInputElement|null} */ (el.querySelector('#hr-search-input'));
+    if (searchInput) searchInput.value = searchKeyword || '';
+    const countInitEl = el.querySelector('#hr-search-count');
+    if (countInitEl) countInitEl.textContent = '';
 
     _open();
 
@@ -300,10 +314,11 @@ async function openHtmlViewer(htmlPath, searchKeyword, anchorId, lineNum) {
 
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                target.style.transition = 'background 0.5s ease';
-                const origBg = target.style.background;
-                target.style.background = 'var(--highlight-yellow-strong)';
-                setTimeout(() => { target.style.background = origBg; }, 1500);
+                const targetEl = /** @type {HTMLElement} */ (target);
+                targetEl.style.transition = 'background 0.5s ease';
+                const origBg = targetEl.style.background;
+                targetEl.style.background = 'var(--highlight-yellow-strong)';
+                setTimeout(() => { targetEl.style.background = origBg; }, 1500);
             }
         }
     } catch (err) {
@@ -313,20 +328,24 @@ async function openHtmlViewer(htmlPath, searchKeyword, anchorId, lineNum) {
     }
 }
 
+/** @param {HTMLElement|null} container */
 function _clearHighlights(container) {
     if (!container) return;
     const marks = container.querySelectorAll('mark.hr-highlight');
     marks.forEach(m => {
         const parent = m.parentNode;
-        parent.replaceChild(document.createTextNode(m.textContent), m);
+        if (!parent) return;
+        parent.replaceChild(document.createTextNode(m.textContent || ''), m);
         parent.normalize();
     });
 }
 
+/** @param {Node} textNode @param {string} lowerKw @param {string} kw */
 function _highlightInTextNode(textNode, lowerKw, kw) {
+    /** @type {Node|null} */
     let current = textNode;
     while (current && current.nodeType === Node.TEXT_NODE) {
-        const lt = current.textContent.toLowerCase();
+        const lt = (current.textContent || '').toLowerCase();
         const pos = lt.indexOf(lowerKw);
         if (pos < 0) break;
         const range = document.createRange();
@@ -336,19 +355,21 @@ function _highlightInTextNode(textNode, lowerKw, kw) {
         mark.className = 'hr-highlight';
         range.surroundContents(mark);
         _searchResults.push(mark);
-        current = mark.nextSibling;
+        current = /** @type {Node|null} */ (mark.nextSibling);
     }
 }
 
+/** @param {*} [keyword] @param {*} [skipScroll] */
 async function _doSearch(keyword, skipScroll) {
-    const input = _overlayEl.querySelector('#hr-search-input');
+    const input = /** @type {HTMLInputElement|null} */ (_overlayEl?.querySelector('#hr-search-input'));
+    if (!input) return;
     const kw = keyword || input.value.trim();
     if (!kw || kw.length < 2) return;
     if (!_contentEl) return;
 
     input.value = kw;
-    const countEl = _overlayEl.querySelector('#hr-search-count');
-    countEl.textContent = '검색 중...';
+    const countEl = _overlayEl?.querySelector('#hr-search-count');
+    if (countEl) countEl.textContent = '검색 중...';
 
     _clearHighlights(_contentEl);
     _searchResults = [];
@@ -365,7 +386,9 @@ async function _doSearch(keyword, skipScroll) {
 
     // 1단계: 첫 매치를 빠르게 찾아 스크롤 (나머지는 idle에서 처리)
     let firstMatch = null;
+    /** @type {Node[]} */
     const remainingNodes = [];
+    /** @type {Node|null} */
     let node;
     while ((node = walker.nextNode()) !== null) {
         if (firstMatch === null) {
@@ -380,12 +403,12 @@ async function _doSearch(keyword, skipScroll) {
 
     // 2단계: 나머지 하이라이트는 requestIdleCallback으로 지연 처리
     if (remainingNodes.length > 0) {
-        const highlightRest = (startIdx) => {
+        const highlightRest = (/** @type {number} */ startIdx) => {
             const endIdx = Math.min(startIdx + 50, remainingNodes.length);
             for (let i = startIdx; i < endIdx; i++) {
-                _highlightInTextNode(remainingNodes[i], lowerKw, kw);
+                _highlightInTextNode(/** @type {Node} */ (remainingNodes[i]), lowerKw, kw);
             }
-            countEl.textContent = _searchResults.length > 0 ? `${_searchResults.length}개` : '없음';
+            if (countEl) countEl.textContent = _searchResults.length > 0 ? `${_searchResults.length}개` : '없음';
             if (endIdx < remainingNodes.length) {
                 (window.requestIdleCallback || window.setTimeout)(() => highlightRest(endIdx));
             }
@@ -393,7 +416,7 @@ async function _doSearch(keyword, skipScroll) {
         (window.requestIdleCallback || window.setTimeout)(() => highlightRest(0));
     }
 
-    countEl.textContent = _searchResults.length > 0 ? `${_searchResults.length}개` : '없음';
+    if (countEl) countEl.textContent = _searchResults.length > 0 ? `${_searchResults.length}개` : '없음';
 
     if (_searchResults.length > 0) {
         _searchIdx = 0;
@@ -401,6 +424,7 @@ async function _doSearch(keyword, skipScroll) {
     }
 }
 
+/** @param {number} idx */
 function _scrollToResult(idx) {
     if (!_searchResults[idx]) return;
     _searchResults.forEach(m => m.classList.remove('current'));
@@ -408,12 +432,13 @@ function _scrollToResult(idx) {
     _searchResults[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
+/** @param {number} dir */
 function _navigateSearch(dir) {
     if (_searchResults.length === 0) return;
     _searchIdx = (_searchIdx + dir + _searchResults.length) % _searchResults.length;
     _scrollToResult(_searchIdx);
-    const countEl = _overlayEl.querySelector('#hr-search-count');
-    countEl.textContent = `${_searchIdx + 1}/${_searchResults.length}`;
+    const countEl = _overlayEl?.querySelector('#hr-search-count');
+    if (countEl) countEl.textContent = `${_searchIdx + 1}/${_searchResults.length}`;
 }
 
 // Public API

@@ -121,13 +121,13 @@ import { getPracticeLazyHandlers, getPracticeViewRenderers, warmPracticeFeatures
    (해당 features 키 미보유 시험은 이 번들을 다운로드하지 않는다).
    첫 핸들러 호출 시에만 import() 되며 캐시된다. data-click 디스패치는 window를 조회하므로
    아래 LAZY_MODULE_HANDLERS가 DELEGATED_HANDLERS에 이름을 등록해 브리지한다. */
-const _lazyImport = (load) => { let p = null; return () => (p ??= load()); };
+const _lazyImport = (/** @type {function(): Promise<*>} */ load) => { /** @type {Promise<*>|null} */ let p = null; return () => (p ??= load()); };
 const loadCalcPracticeModule = _lazyImport(() => import('../views/trainer-calc-practice.js'));
 // 도메인 훈련 모듈 — src/exams/<활성시험>/views/ 규약 경로를 활성 시험으로 해석
 const loadIngredientsChallengeModule = _lazyImport(() => import(`../exams/${getActiveExamId()}/views/trainer-ingredients.js`));
 
 /** 지연 모듈의 네임드 export를 data-click 핸들러로 변환 */
-const _lazyFn = (load, name) => async (...args) => {
+const _lazyFn = (/** @type {function(): Promise<*>} */ load, /** @type {string} */ name) => async (/** @type {*[]} */ ...args) => {
     const m = /** @type {any} */ (await load());
     return m[name](...args);
 };
@@ -199,7 +199,7 @@ import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage, get
 import { renderExamSelect, showExamSelect, selectExamAction, resetExamSelection, hardReloadApp } from '../views/exam-select.js';
 import { startVersionWatch } from '../pwa/version-watch.js';
 import { initUiMode, toggleUiMode, toggleFontSize } from './ui-mode.js';
-import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword, authOAuth } from '../auth-sync/auth-view.js';
+import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword, authOAuth, authLinkIdentity, authUnlinkIdentity } from '../auth-sync/auth-view.js';
 import { showRedeemDialog, initPlanSync } from '../pro/pro-redeem.js';
 import { initSync, syncNow } from '../auth-sync/sync.js';
 import { initErrorTelemetry } from '../telemetry/error-telemetry.js';
@@ -241,7 +241,7 @@ window.addEventListener('unhandledrejection', function (event) {
 function initApp() {
     // 한 단계가 실패해도 나머지 버튼 연결/렌더가 죽지 않도록 각 단계를 격리한다.
     // (배포 간 캐시 스큐로 특정 요소/바인딩이 어긋나도 앱이 통째로 벽돌이 되는 것 방지)
-    const step = (label, fn) => { try { fn(); console.debug('[init] ' + label + ' OK'); return true; } catch (e) { console.error('[init] ' + label + ' 실패:', e); return false; } };
+    const step = (/** @type {string} */ label, /** @type {function(): *} */ fn) => { try { fn(); console.debug('[init] ' + label + ' OK'); return true; } catch (e) { console.error('[init] ' + label + ' 실패:', e); return false; } };
     // 런타임 오류 텔레메트리 — 가장 먼저 설치해 이후 초기화 실패도 수집 (미설정 시 no-op)
     step('initErrorTelemetry', () => initErrorTelemetry());
     // 사용 스냅샷 텔레메트리 — UX-GATE 표본 회수, 하루 1회·익명·미설정 시 no-op (UX-MET-05)
@@ -345,6 +345,7 @@ function initApp() {
 // --- 네비게이션 제어 (SPA) ---
 // 라우터 로직은 ./router.js로 분리, app.js는 이벤트 바인딩만 담당
 // setupNavigation이 만든 렌더 컨텍스트 — initViewHashRouting이 재사용
+/** @type {import('./router.js').RouterCtx|null} */
 let _routerCtx = null;
 function setupNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
@@ -367,9 +368,9 @@ function setupNavigation() {
             renderAnalysisView();
             refreshDashboardStatsInBackground();
         },
-        'flashcard-view': (gen) => {
+        'flashcard-view': (/** @type {number} */ gen) => {
             showGlobalLoading('플래시카드를 불러오는 중입니다...');
-            DataLoader.loadSubject(state.flashcards.subject).then(() => {
+            DataLoader.loadSubject(/** @type {string} */ (state.flashcards.subject)).then(() => {
                 if (isStaleViewGen(gen)) return;
                 hideGlobalLoading();
                 loadFlashcards();
@@ -380,7 +381,7 @@ function setupNavigation() {
                 loadFlashcards();
             });
         },
-        'review-view': (gen) => {
+        'review-view': (/** @type {number} */ gen) => {
             showGlobalLoading('오답 및 중요 카드를 불러오는 중입니다...');
             const loaderPromises = DataLoader.getSubjectList().map(s => DataLoader.loadSubject(s.key));
             Promise.all(loaderPromises).then(() => {
@@ -399,7 +400,7 @@ function setupNavigation() {
         'trainer-view': () => {
             initTrainer();
         },
-        'textbook-view': (gen) => {
+        'textbook-view': (/** @type {number} */ gen) => {
             showGlobalLoading('교재 검색용 데이터를 불러오는 중입니다...');
             const loaderPromises = DataLoader.getSubjectList().map(s => DataLoader.loadSubject(s.key));
             Promise.all(loaderPromises).then(() => {
@@ -413,7 +414,7 @@ function setupNavigation() {
                 renderTextbookSearch();
             });
         },
-        'textbook-reader-view': (gen) => {
+        'textbook-reader-view': (/** @type {number} */ gen) => {
             if (textbookReaderState.selectedSubject) {
                 showGlobalLoading('교재 본문을 불러오는 중입니다...');
                 DataLoader.loadSubject(textbookReaderState.selectedSubject).then(() => {
@@ -430,7 +431,7 @@ function setupNavigation() {
                 renderTextbookReader();
             }
         },
-        'dictionary-view': (gen) => {
+        'dictionary-view': (/** @type {number} */ gen) => {
             showGlobalLoading('사전 데이터를 불러오는 중입니다...');
             DataLoader.loadDictionary().then(() => {
                 if (isStaleViewGen(gen)) return;
@@ -485,6 +486,7 @@ function setupNavigation() {
 // ============================================================
 // 모바일 '더보기' 시트 — 탭 바에 들어가지 않는 전체 메뉴
 // ============================================================
+/** @type {(() => void)|null} */
 let _untrapMoreSheet = null;
 function closeMoreSheet() {
     const sheet = document.getElementById('mobile-more-sheet');
@@ -546,6 +548,7 @@ initApp = function() {
 /* =======================================================
    🖨️ 오답노트 인쇄 (Print Handler)
    ======================================================= */
+/** @param {string} subKey */
 function startFocusSubjectStudy(subKey) {
     DataLoader.loadSubject(subKey).then(() => {
         if (typeof window.STUDY_DATA !== 'undefined' && window.STUDY_DATA[subKey]) {
@@ -662,7 +665,7 @@ const DELEGATED_HANDLERS = {
         });
     },
     // 계정/로그인 (Supabase Auth)
-    openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword, authOAuth,
+    openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword, authOAuth, authLinkIdentity, authUnlinkIdentity,
     showRedeemCode: showRedeemDialog,
     showPlanCompare,
     openProExtend,   // PAY-07 — 기간권 만료 배너의 연장 CTA
@@ -677,6 +680,7 @@ const DELEGATED_HANDLERS = {
     },
     syncNow,
     /** 모의고사 문항 수 선택 행 토글 — 다른 과목의 열린 행은 닫는다 */
+    /** @param {string} rowId */
     toggleComboPicker(rowId) {
         const row = document.getElementById(rowId);
         if (!row) return;

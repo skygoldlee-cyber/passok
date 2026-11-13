@@ -17,7 +17,12 @@ export function parseDemoData(doc = (typeof document !== 'undefined' ? document 
     } catch (_) { return null; }
 }
 
-/** 오늘 → 시험일 잔여 일수 (자정 기준, 과거/당일이면 0 이하 반환) */
+/**
+ * 오늘 → 시험일 잔여 일수 (자정 기준, 과거/당일이면 0 이하 반환)
+ * @param {string} examDate - 'YYYY-MM-DD'
+ * @param {Date} [now]
+ * @returns {number}
+ */
 export function daysUntil(examDate, now = new Date()) {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const target = new Date(examDate + 'T00:00:00');
@@ -30,6 +35,8 @@ export function daysUntil(examDate, now = new Date()) {
  * @returns {{days:number, weeks:number, compressed:boolean,
  *            phases:Array<{name:string, weeks:number}>} | null}
  *   weeks<1이면 null (표시 불가)
+ * @param {number} daysLeft
+ * @param {number} [minLeadDays]
  */
 export function computePlanPreview(daysLeft, minLeadDays = 90) {
     if (!Number.isFinite(daysLeft) || daysLeft < 1) return null;
@@ -55,7 +62,11 @@ export function computePlanPreview(daysLeft, minLeadDays = 90) {
     };
 }
 
-/** 과목별 문항 수 → 비중 (%) 배열. 전부 0/누락이면 균등 */
+/**
+ * 과목별 문항 수 → 비중 (%) 배열. 전부 0/누락이면 균등
+ * @param {Array.<{name?:string, count?:*}>} subjects
+ * @returns {Array.<{name:*, count:number, pct:number}>}
+ */
 export function subjectShares(subjects) {
     if (!Array.isArray(subjects) || !subjects.length) return [];
     const total = subjects.reduce((s, x) => s + (Number(x.count) || 0), 0);
@@ -69,6 +80,13 @@ export function subjectShares(subjects) {
 
 /* ===================== DOM 렌더 (브라우저 전용) ===================== */
 
+/**
+ * @template {keyof HTMLElementTagNameMap} T
+ * @param {T} tag
+ * @param {string|null} [cls]
+ * @param {string|null} [text]
+ * @returns {HTMLElementTagNameMap[T]}
+ */
 function el(tag, cls, text) {
     const node = document.createElement(tag);
     if (cls) node.className = cls;
@@ -76,13 +94,18 @@ function el(tag, cls, text) {
     return node;
 }
 
+/** @param {string} label */
 function appCta(label) {
     const a = el('a', 'btn btn-primary', label);
     a.href = './index.html?app=1';
     return a;
 }
 
-/** 미니 퀴즈 위젯 — 선지 선택 → 정오답·해설·인용 → 다음 문항 → 결과 CTA (LP-04) */
+/**
+ * 미니 퀴즈 위젯 — 선지 선택 → 정오답·해설·인용 → 다음 문항 → 결과 CTA (LP-04)
+ * @param {HTMLElement} host
+ * @param {*} examData - landing JSON 번들 (동적 경계)
+ */
 function renderQuiz(host, examData) {
     const items = examData.quiz && examData.quiz.items;
     if (!Array.isArray(items) || !items.length) return;
@@ -98,12 +121,12 @@ function renderQuiz(host, examData) {
         body.append(el('p', 'demo-progress', `${idx + 1} / ${items.length}`));
         body.append(el('p', 'demo-question', item.question));
         const list = el('div', 'demo-choices');
-        item.choices.forEach((choice, ci) => {
+        item.choices.forEach((/** @type {string} */ choice, /** @type {number} */ ci) => {
             const btn = el('button', 'demo-choice', `${CIRCLED[ci] || ci + 1} ${choice}`);
             btn.type = 'button';
             btn.addEventListener('click', () => {
                 [...list.children].forEach((b, bi) => {
-                    b.disabled = true;
+                    /** @type {HTMLButtonElement} */ (b).disabled = true;
                     if (bi === item.answer) b.classList.add('correct');
                 });
                 if (ci === item.answer) score += 1;
@@ -136,7 +159,11 @@ function renderQuiz(host, examData) {
     renderItem();
 }
 
-/** 학습계획 미리보기 — 시험일 입력 → 잔여 주수·단계·과목 비중 (LP-09) */
+/**
+ * 학습계획 미리보기 — 시험일 입력 → 잔여 주수·단계·과목 비중 (LP-09)
+ * @param {HTMLElement} host
+ * @param {*} examData - landing JSON 번들 (동적 경계)
+ */
 function renderPlan(host, examData) {
     const plan = examData.plan;
     if (!plan || !Array.isArray(plan.subjects) || !plan.subjects.length) return;
@@ -221,8 +248,8 @@ function init() {
     const section = document.getElementById('landing-demo-section');
     if (data && section) {
         for (const exam of data.exams) {
-            renderQuiz(document.getElementById('landing-quiz-slot'), exam);
-            renderPlan(document.getElementById('landing-plan-slot'), exam);
+            renderQuiz(/** @type {HTMLElement} */ (document.getElementById('landing-quiz-slot')), exam);
+            renderPlan(/** @type {HTMLElement} */ (document.getElementById('landing-plan-slot')), exam);
         }
         if (document.querySelector('#landing-quiz-slot .demo-head, #landing-plan-slot .demo-head')) {
             section.classList.remove('is-hidden');

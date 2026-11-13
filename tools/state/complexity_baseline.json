@@ -1,0 +1,690 @@
+{
+  "threshold": 10,
+  "files": {
+    "src/ai/gen-gate.js": {
+      "count": 1,
+      "max": 23,
+      "sum": 23
+    },
+    "src/auth-sync/auth-view.js": {
+      "count": 2,
+      "max": 21,
+      "sum": 40
+    },
+    "src/auth-sync/sync.js": {
+      "count": 1,
+      "max": 16,
+      "sum": 16
+    },
+    "src/charts.js": {
+      "count": 2,
+      "max": 14,
+      "sum": 27
+    },
+    "src/content/combo-doc.js": {
+      "count": 1,
+      "max": 14,
+      "sum": 14
+    },
+    "src/content/csv-utils.js": {
+      "count": 1,
+      "max": 12,
+      "sum": 12
+    },
+    "src/content/data-loader.js": {
+      "count": 5,
+      "max": 20,
+      "sum": 68
+    },
+    "src/content/docx-utils.js": {
+      "count": 1,
+      "max": 15,
+      "sum": 15
+    },
+    "src/content/pdf-utils.js": {
+      "count": 5,
+      "max": 25,
+      "sum": 94
+    },
+    "src/content/questions.js": {
+      "count": 3,
+      "max": 30,
+      "sum": 69
+    },
+    "src/core/exam-context.js": {
+      "count": 3,
+      "max": 22,
+      "sum": 49
+    },
+    "src/core/sha256.js": {
+      "count": 1,
+      "max": 15,
+      "sum": 15
+    },
+    "src/core/state.js": {
+      "count": 3,
+      "max": 15,
+      "sum": 41
+    },
+    "src/core/utils.js": {
+      "count": 1,
+      "max": 13,
+      "sum": 13
+    },
+    "src/exams/carework/audit-import.js": {
+      "count": 1,
+      "max": 28,
+      "sum": 28
+    },
+    "src/exams/carework/care-ai.js": {
+      "count": 1,
+      "max": 17,
+      "sum": 17
+    },
+    "src/exams/carework/care-client-store.js": {
+      "count": 1,
+      "max": 14,
+      "sum": 14
+    },
+    "src/exams/carework/care-form-pdf.js": {
+      "count": 1,
+      "max": 11,
+      "sum": 11
+    },
+    "src/exams/carework/care-handover.js": {
+      "count": 1,
+      "max": 21,
+      "sum": 21
+    },
+    "src/exams/carework/care-incident.js": {
+      "count": 1,
+      "max": 12,
+      "sum": 12
+    },
+    "src/exams/carework/care-log.js": {
+      "count": 2,
+      "max": 15,
+      "sum": 27
+    },
+    "src/exams/carework/care-roster.js": {
+      "count": 1,
+      "max": 14,
+      "sum": 14
+    },
+    "src/exams/carework/care-share.js": {
+      "count": 4,
+      "max": 19,
+      "sum": 63
+    },
+    "src/exams/carework/care-trend.js": {
+      "count": 1,
+      "max": 15,
+      "sum": 15
+    },
+    "src/exams/carework/care-visit.js": {
+      "count": 2,
+      "max": 15,
+      "sum": 26
+    },
+    "src/exams/carework/doc-md.js": {
+      "count": 1,
+      "max": 14,
+      "sum": 14
+    },
+    "src/exams/carework/form-template-editor.js": {
+      "count": 1,
+      "max": 11,
+      "sum": 11
+    },
+    "src/exams/carework/form-template-store.js": {
+      "count": 1,
+      "max": 11,
+      "sum": 11
+    },
+    "src/exams/carework/views/care-audit.js": {
+      "count": 2,
+      "max": 14,
+      "sum": 28
+    },
+    "src/exams/carework/views/care-calc.js": {
+      "count": 2,
+      "max": 18,
+      "sum": 32
+    },
+    "src/exams/carework/views/care-custom-form.js": {
+      "count": 3,
+      "max": 18,
+      "sum": 45
+    },
+    "src/exams/carework/views/care-finder.js": {
+      "count": 1,
+      "max": 15,
+      "sum": 15
+    },
+    "src/exams/carework/views/care-handover.js": {
+      "count": 1,
+      "max": 18,
+      "sum": 18
+    },
+    "src/exams/carework/views/care-home.js": {
+      "count": 1,
+      "max": 15,
+      "sum": 15
+    },
+    "src/exams/carework/views/care-incident.js": {
+      "count": 1,
+      "max": 22,
+      "sum": 22
+    },
+    "src/exams/carework/views/care-visit.js": {
+      "count": 1,
+      "max": 15,
+      "sum": 15
+    },
+    "src/exams/cosmetic/formula-check.js": {
+      "count": 6,
+      "max": 24,
+      "sum": 96
+    },
+    "src/exams/cosmetic/formula-rules.js": {
+      "count": 3,
+      "max": 34,
+      "sum": 57
+    },
+    "src/exams/cosmetic/formula-store.js": {
+      "count": 1,
+      "max": 12,
+      "sum": 12
+    },
+    "src/exams/cosmetic/material-ledger.js": {
+      "count": 1,
+      "max": 13,
+      "sum": 13
+    },
+    "src/exams/cosmetic/product-vision.js": {
+      "count": 4,
+      "max": 19,
+      "sum": 57
+    },
+    "src/exams/cosmetic/views/formula-audit.js": {
+      "count": 1,
+      "max": 13,
+      "sum": 13
+    },
+    "src/exams/cosmetic/views/formula-batch-form.js": {
+      "count": 5,
+      "max": 20,
+      "sum": 72
+    },
+    "src/exams/cosmetic/views/formula-batch.js": {
+      "count": 5,
+      "max": 24,
+      "sum": 90
+    },
+    "src/exams/cosmetic/views/formula-calc.js": {
+      "count": 6,
+      "max": 18,
+      "sum": 90
+    },
+    "src/exams/cosmetic/views/formula-customer.js": {
+      "count": 4,
+      "max": 23,
+      "sum": 60
+    },
+    "src/exams/cosmetic/views/formula-fields.js": {
+      "count": 3,
+      "max": 17,
+      "sum": 48
+    },
+    "src/exams/cosmetic/views/formula-hub.js": {
+      "count": 1,
+      "max": 16,
+      "sum": 16
+    },
+    "src/exams/cosmetic/views/formula-io.js": {
+      "count": 2,
+      "max": 28,
+      "sum": 39
+    },
+    "src/exams/cosmetic/views/formula-list.js": {
+      "count": 2,
+      "max": 19,
+      "sum": 35
+    },
+    "src/exams/cosmetic/views/formula-material.js": {
+      "count": 2,
+      "max": 12,
+      "sum": 23
+    },
+    "src/exams/cosmetic/views/formula-print.js": {
+      "count": 3,
+      "max": 21,
+      "sum": 44
+    },
+    "src/exams/cosmetic/views/formula-prod-detail.js": {
+      "count": 1,
+      "max": 22,
+      "sum": 22
+    },
+    "src/exams/cosmetic/views/formula-prod-vision.js": {
+      "count": 1,
+      "max": 24,
+      "sum": 24
+    },
+    "src/exams/cosmetic/views/formula-products.js": {
+      "count": 2,
+      "max": 12,
+      "sum": 23
+    },
+    "src/exams/cosmetic/views/formula-recommend.js": {
+      "count": 1,
+      "max": 15,
+      "sum": 15
+    },
+    "src/exams/cosmetic/views/trainer-ingredients.js": {
+      "count": 2,
+      "max": 34,
+      "sum": 49
+    },
+    "src/pdf-registry.js": {
+      "count": 1,
+      "max": 12,
+      "sum": 12
+    },
+    "src/practice-registry.js": {
+      "count": 2,
+      "max": 16,
+      "sum": 29
+    },
+    "src/pro/pro-upgrade.js": {
+      "count": 2,
+      "max": 13,
+      "sum": 24
+    },
+    "src/pwa/pwa-install.js": {
+      "count": 3,
+      "max": 41,
+      "sum": 68
+    },
+    "src/pwa/pwa-manifest.js": {
+      "count": 1,
+      "max": 37,
+      "sum": 37
+    },
+    "src/reader/exam-viewer.js": {
+      "count": 7,
+      "max": 22,
+      "sum": 96
+    },
+    "src/reader/html-viewer.js": {
+      "count": 2,
+      "max": 39,
+      "sum": 57
+    },
+    "src/reader/manual-viewer.js": {
+      "count": 2,
+      "max": 14,
+      "sum": 26
+    },
+    "src/reader/markdown-parser.js": {
+      "count": 3,
+      "max": 22,
+      "sum": 50
+    },
+    "src/reader/mermaid-render.js": {
+      "count": 1,
+      "max": 18,
+      "sum": 18
+    },
+    "src/reader/mermaid-utils.js": {
+      "count": 1,
+      "max": 14,
+      "sum": 14
+    },
+    "src/reader/textbook-core.js": {
+      "count": 4,
+      "max": 42,
+      "sum": 118
+    },
+    "src/reader/webtoon-render.js": {
+      "count": 2,
+      "max": 19,
+      "sum": 30
+    },
+    "src/reader/zoom-gestures.js": {
+      "count": 1,
+      "max": 13,
+      "sum": 13
+    },
+    "src/search/search-index.js": {
+      "count": 3,
+      "max": 36,
+      "sum": 78
+    },
+    "src/search/search-morpheme.js": {
+      "count": 1,
+      "max": 12,
+      "sum": 12
+    },
+    "src/search/search-sources.js": {
+      "count": 6,
+      "max": 25,
+      "sum": 101
+    },
+    "src/search/semantic-index.js": {
+      "count": 2,
+      "max": 12,
+      "sum": 24
+    },
+    "src/shell/app-shell.js": {
+      "count": 4,
+      "max": 21,
+      "sum": 66
+    },
+    "src/shell/banner-mgr.js": {
+      "count": 1,
+      "max": 13,
+      "sum": 13
+    },
+    "src/shell/command-palette.js": {
+      "count": 2,
+      "max": 29,
+      "sum": 45
+    },
+    "src/shell/exam-data-boot.js": {
+      "count": 1,
+      "max": 19,
+      "sum": 19
+    },
+    "src/shell/feedback.js": {
+      "count": 2,
+      "max": 16,
+      "sum": 27
+    },
+    "src/shell/notice-check.js": {
+      "count": 9,
+      "max": 21,
+      "sum": 126
+    },
+    "src/shell/onboarding.js": {
+      "count": 1,
+      "max": 20,
+      "sum": 20
+    },
+    "src/shell/router.js": {
+      "count": 3,
+      "max": 22,
+      "sum": 50
+    },
+    "src/shell/shortcuts-help.js": {
+      "count": 1,
+      "max": 13,
+      "sum": 13
+    },
+    "src/shell/whats-new.js": {
+      "count": 1,
+      "max": 12,
+      "sum": 12
+    },
+    "src/study/analysis-engine.js": {
+      "count": 11,
+      "max": 29,
+      "sum": 184
+    },
+    "src/study/fsrs.js": {
+      "count": 1,
+      "max": 13,
+      "sum": 13
+    },
+    "src/study/personalization.js": {
+      "count": 5,
+      "max": 19,
+      "sum": 72
+    },
+    "src/study/reader-notes.js": {
+      "count": 1,
+      "max": 12,
+      "sum": 12
+    },
+    "src/study/recommendations.js": {
+      "count": 4,
+      "max": 21,
+      "sum": 59
+    },
+    "src/study/spaced-repetition.js": {
+      "count": 1,
+      "max": 13,
+      "sum": 13
+    },
+    "src/study/statement-tracker.js": {
+      "count": 1,
+      "max": 14,
+      "sum": 14
+    },
+    "src/study/study-tracker-activity.js": {
+      "count": 1,
+      "max": 19,
+      "sum": 19
+    },
+    "src/study/study-tracker-adherence.js": {
+      "count": 1,
+      "max": 23,
+      "sum": 23
+    },
+    "src/study/study-tracker-alloc.js": {
+      "count": 3,
+      "max": 30,
+      "sum": 63
+    },
+    "src/study/study-tracker-plan.js": {
+      "count": 1,
+      "max": 11,
+      "sum": 11
+    },
+    "src/study/trainer-calc.js": {
+      "count": 1,
+      "max": 15,
+      "sum": 15
+    },
+    "src/study/weak-items.js": {
+      "count": 1,
+      "max": 14,
+      "sum": 14
+    },
+    "src/telemetry/error-telemetry.js": {
+      "count": 2,
+      "max": 23,
+      "sum": 36
+    },
+    "src/telemetry/usage-stats.js": {
+      "count": 1,
+      "max": 13,
+      "sum": 13
+    },
+    "src/telemetry/usage-telemetry.js": {
+      "count": 3,
+      "max": 16,
+      "sum": 45
+    },
+    "src/ui-utils.js": {
+      "count": 2,
+      "max": 22,
+      "sum": 35
+    },
+    "src/views/analysis-view.js": {
+      "count": 7,
+      "max": 33,
+      "sum": 132
+    },
+    "src/views/backup.js": {
+      "count": 1,
+      "max": 12,
+      "sum": 12
+    },
+    "src/views/daily-challenge.js": {
+      "count": 3,
+      "max": 20,
+      "sum": 47
+    },
+    "src/views/dashboard-queue.js": {
+      "count": 2,
+      "max": 33,
+      "sum": 59
+    },
+    "src/views/dashboard.js": {
+      "count": 1,
+      "max": 24,
+      "sum": 24
+    },
+    "src/views/dictionary.js": {
+      "count": 4,
+      "max": 25,
+      "sum": 72
+    },
+    "src/views/exam-select.js": {
+      "count": 3,
+      "max": 20,
+      "sum": 45
+    },
+    "src/views/exam-sim/exam-sim-arena.js": {
+      "count": 3,
+      "max": 31,
+      "sum": 65
+    },
+    "src/views/exam-sim/exam-sim-review.js": {
+      "count": 1,
+      "max": 11,
+      "sum": 11
+    },
+    "src/views/exam-sim/exam-sim-session.js": {
+      "count": 1,
+      "max": 36,
+      "sum": 36
+    },
+    "src/views/exam-sim/exam-sim-weak.js": {
+      "count": 2,
+      "max": 30,
+      "sum": 55
+    },
+    "src/views/flashcard.js": {
+      "count": 2,
+      "max": 37,
+      "sum": 53
+    },
+    "src/views/listeners/listeners-app.js": {
+      "count": 1,
+      "max": 23,
+      "sum": 23
+    },
+    "src/views/listeners/listeners-delegation.js": {
+      "count": 1,
+      "max": 12,
+      "sum": 12
+    },
+    "src/views/listeners/listeners-flashcard.js": {
+      "count": 2,
+      "max": 24,
+      "sum": 36
+    },
+    "src/views/listeners/listeners-quiz.js": {
+      "count": 2,
+      "max": 24,
+      "sum": 35
+    },
+    "src/views/listeners/listeners-simulator.js": {
+      "count": 1,
+      "max": 14,
+      "sum": 14
+    },
+    "src/views/personalization-view.js": {
+      "count": 2,
+      "max": 20,
+      "sum": 33
+    },
+    "src/views/pomodoro.js": {
+      "count": 1,
+      "max": 12,
+      "sum": 12
+    },
+    "src/views/quiz/quiz-review.js": {
+      "count": 4,
+      "max": 23,
+      "sum": 68
+    },
+    "src/views/quiz/quiz.js": {
+      "count": 6,
+      "max": 29,
+      "sum": 101
+    },
+    "src/views/reader/reader-audio.js": {
+      "count": 2,
+      "max": 23,
+      "sum": 37
+    },
+    "src/views/reader/reader-ref-links.js": {
+      "count": 2,
+      "max": 25,
+      "sum": 39
+    },
+    "src/views/reader/reader-render.js": {
+      "count": 4,
+      "max": 24,
+      "sum": 69
+    },
+    "src/views/reader/reader-toolbar.js": {
+      "count": 4,
+      "max": 30,
+      "sum": 92
+    },
+    "src/views/score-estimate.js": {
+      "count": 1,
+      "max": 19,
+      "sum": 19
+    },
+    "src/views/study-calendar.js": {
+      "count": 4,
+      "max": 17,
+      "sum": 57
+    },
+    "src/views/textbook-reader.js": {
+      "count": 5,
+      "max": 20,
+      "sum": 73
+    },
+    "src/views/textbook-search.js": {
+      "count": 7,
+      "max": 27,
+      "sum": 101
+    },
+    "src/views/trainer-calc-practice.js": {
+      "count": 2,
+      "max": 15,
+      "sum": 29
+    },
+    "src/views/trainer-drill-combo.js": {
+      "count": 2,
+      "max": 29,
+      "sum": 42
+    },
+    "src/views/trainer-drills.js": {
+      "count": 6,
+      "max": 24,
+      "sum": 101
+    },
+    "src/views/trainer.js": {
+      "count": 3,
+      "max": 17,
+      "sum": 44
+    },
+    "src/written/written-grading.js": {
+      "count": 2,
+      "max": 18,
+      "sum": 35
+    },
+    "src/written/written-practice.js": {
+      "count": 4,
+      "max": 28,
+      "sum": 72
+    }
+  }
+}

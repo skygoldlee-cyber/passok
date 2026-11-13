@@ -28,6 +28,19 @@ const _runSearch = debounce((value) => {
 // kinds는 엔트리 kind → 표시 티어 매핑 (TS-18 — 코어는 kind 버킷만 반환, 표시 그룹핑은 뷰 몫)
 // '*' 티어는 앞 티어가 소비하지 않은 모든 kind를 받는다 — 시험 팩이 새 kind 소스를
 // 등록해도 뷰 수정 없이 결과가 표시된다.
+/**
+ * @typedef {Object} ResultTier
+ * @property {string[]|string} kinds
+ * @property {number} limit
+ * @property {string} [capNote]
+ * @property {*[]} [list]
+ * @property {*[]} [shown]
+ */
+/**
+ * @typedef {ResultTier & {list: *[], shown: *[]}} FilledTier
+ * applyResultTiers가 list·shown을 채운 티어
+ */
+/** @type {ResultTier[]} */
 const RESULT_TIERS = [
     { kinds: ['section', 'story'], limit: 30, capNote: '교재 결과가 많아 상위 {limit}건만 표시합니다 (전체 {total}건). 검색어를 더 구체화하거나 과목 필터를 사용하세요.' },
     { kinds: ['ref'], limit: 15, capNote: '참조자료 결과가 많아 상위 {limit}건만 표시합니다 (전체 {total}건).' },
@@ -73,7 +86,7 @@ export function renderTextbookSearch() {
     if (resultsContainer && !resultsContainer.dataset.gotoBound) {
         resultsContainer.dataset.gotoBound = 'true';
 
-        const gotoAction = (goto, subjLink) => {
+        const gotoAction = (/** @type {Element|null} */ goto, /** @type {Element|null} */ subjLink) => {
             Promise.all([
                 import('./navigation.js'),
                 import('./textbook-reader.js')
@@ -119,12 +132,13 @@ export function renderTextbookSearch() {
     performTextbookSearch();
 }
 
+/** @param {string} filterVal */
 export function setTextbookFilter(filterVal) {
     textbookState.filter = filterVal;
 
     // Update active filter class
     const buttons = document.querySelectorAll('.textbook-filter-buttons .btn');
-    buttons.forEach(btn => {
+    buttons.forEach((/** @type {Element} */ btn) => {
         if (btn.getAttribute('data-filter') === filterVal) {
             btn.classList.add('active-filter');
         } else {
@@ -136,6 +150,7 @@ export function setTextbookFilter(filterVal) {
 }
 
 /** 외부(통합 검색 팔레트)에서 검색어 주입 — 뷰 진입 전 호출해도 상태가 유지되어 로드 후 렌더에 반영된다 */
+/** @param {string} query */
 export function setTextbookSearchQuery(query) {
     textbookState.searchQuery = (query || '').trim();
     const searchInput = /** @type {HTMLInputElement} */ (document.getElementById('textbook-search-input'));
@@ -187,7 +202,8 @@ function performTextbookSearch() {
     // TS-15 — 용어 정의 카드는 콘텐츠 계층(search-sources)이 인덱스 산출 어휘로 선별한다
     const glossDefs = matchGlossaryDefs(allVariantTerms, textbookState.filter);
 
-    const [sections, refs, exams, others, weak] = applyResultTiers(buckets);
+    const tiers = applyResultTiers(buckets);
+    const [sections, refs, exams, others, weak] = tiers;
     const allResults = sections.shown.concat(refs.shown, exams.shown, others.shown);
 
     // Update summary text
@@ -229,13 +245,14 @@ function performTextbookSearch() {
         container.insertAdjacentHTML('beforeend',
             `<div class="search-failed-terms">${raw(failedHtml)}</div>`);
     }
+    /** @type {Object.<string,string>} */
     const badgeColors = {};
     {
         const colors = ['badge-cyan', 'badge-violet', 'badge-emerald', 'badge-amber', 'badge-rose', 'badge-indigo'];
         const subjects = (DataLoader.registry && DataLoader.registry.subjects) || [];
-        subjects.forEach((sub, idx) => { badgeColors[sub.key] = colors[idx % colors.length]; });
+        subjects.forEach((/** @type {*} */ sub, /** @type {number} */ idx) => { badgeColors[sub.key] = colors[idx % colors.length] || 'badge-cyan'; });
     }
-    const renderResultCard = (item, idx) =>
+    const renderResultCard = (/** @type {*} */ item, /** @type {number} */ idx) =>
         renderSearchResultCard(container, item, idx, allVariantTerms, badgeColors);
 
     renderGlossaryCards(container, glossDefs, allVariantTerms, badgeColors);
@@ -246,10 +263,10 @@ function performTextbookSearch() {
     if (weak.shown.length) {
         container.insertAdjacentHTML('beforeend',
             `<div class="search-weak-divider">부분 일치 — 어절 중간에 음절만 겹치는 결과 ${esc(String(weak.list.length))}건</div>`);
-        weak.shown.forEach((item, idx) => renderResultCard(item, allResults.length + idx));
+        weak.shown.forEach((/** @type {*} */ item, /** @type {number} */ idx) => renderResultCard(item, allResults.length + idx));
     }
 
-    for (const t of RESULT_TIERS) {
+    for (const t of tiers) {
         if (t.capNote && t.list.length > t.limit) {
             container.insertAdjacentHTML('beforeend',
                 `<div class="search-cap-note">${esc(t.capNote.replace('{limit}', String(t.limit)).replace('{total}', String(t.list.length)))}</div>`);
@@ -263,26 +280,29 @@ function performTextbookSearch() {
 
 // 티어별 정렬·상한 (테이블 주도 — 티어 추가 시 RESULT_TIERS 한 곳만 수정)
 // kinds '*'는 선언되지 않은 나머지 kind 버킷을 전부 받는 폴백 티어다 (TS-18).
+/** @param {Object.<string,*[]>} buckets @returns {[FilledTier, FilledTier, FilledTier, FilledTier, FilledTier]} */
 function applyResultTiers(buckets) {
     const consumedKinds = new Set(['weak']);
     for (const t of RESULT_TIERS) {
         const ks = Array.isArray(t.kinds)
             ? t.kinds
-            : Object.keys(buckets).filter(k => !consumedKinds.has(k));
-        ks.forEach(k => consumedKinds.add(k));
-        t.list = ks.flatMap(k => buckets[k] || []);
-        t.list.sort((a, b) => b._score - a._score);
-        t.shown = t.list.slice(0, t.limit);
+            : Object.keys(buckets).filter((/** @type {string} */ k) => !consumedKinds.has(k));
+        ks.forEach((/** @type {string} */ k) => consumedKinds.add(k));
+        const list = ks.flatMap((/** @type {string} */ k) => buckets[k] || []);
+        list.sort((/** @type {*} */ a, /** @type {*} */ b) => b._score - a._score);
+        t.list = list;
+        t.shown = list.slice(0, t.limit);
     }
-    return RESULT_TIERS;
+    return /** @type {[FilledTier, FilledTier, FilledTier, FilledTier, FilledTier]} */ (RESULT_TIERS);
 }
 
 // 문서 결과 — nav.mdPath를 가진 모든 소스 (참조자료·문제은행·시험 선언 문서 등).
 // 문서 단위 + 매치 스니펫 + ExamViewer 라인 딥링크 (TS-11/TS-12/TS-18)
+/** @param {Element} container @param {*} item @param {string[]} allVariantTerms @param {string} badgeColor */
 function renderDocResultCard(container, item, allVariantTerms, badgeColor) {
     const { snippet, lineNum } = _matchSnippet(item.text, allVariantTerms);
     const argsJson = esc(JSON.stringify([item.nav.mdPath, lineNum, allVariantTerms.join(' ')]));
-    const kindLabel = esc(KIND_LABELS[item.kind] || item.kind);
+    const kindLabel = esc((/** @type {Object.<string,string>} */ (KIND_LABELS))[item.kind] || item.kind);
     const subjBadgeHtml = item.subjName ? `<span class="badge ${badgeColor}">${esc(item.subjName)}</span>` : '';
     // 카드 전체가 원문 딥링크 — 섹션 카드의 is-clickable 규약과 동일 (data-click 위임)
     const refCardHTML = `
@@ -306,6 +326,7 @@ function renderDocResultCard(container, item, allVariantTerms, badgeColor) {
 }
 
 // 섹션 결과 카드 — 포맷 본문 + '전체 단원 보기' 이동 링크 (nav.goto가 있는 소스만)
+/** @param {Element} container @param {*} item @param {number} idx @param {string[]} allVariantTerms @param {string} badgeColor */
 function renderSectionResultCard(container, item, idx, allVariantTerms, badgeColor) {
     const isLong = item.text.length > 300;
     const bodyClass = isLong ? 'textbook-card-body collapsed' : 'textbook-card-body';
@@ -349,6 +370,7 @@ function renderSectionResultCard(container, item, idx, allVariantTerms, badgeCol
     container.insertAdjacentHTML('beforeend', cardHTML);
 }
 
+/** @param {Element} container @param {*} item @param {number} idx @param {string[]} allVariantTerms @param {Object.<string,string>} badgeColors */
 function renderSearchResultCard(container, item, idx, allVariantTerms, badgeColors) {
     const badgeColor = badgeColors[item.subjId] || 'badge-gray';
     if (item.nav && item.nav.mdPath) {
@@ -360,6 +382,7 @@ function renderSearchResultCard(container, item, idx, allVariantTerms, badgeColo
 
 // TS-15 — 용어 정의 카드를 본문 결과(교재→참조자료→문제은행→부분 일치)보다
 // 앞에 별도 그룹으로 배치한다. 출처 링크는 data-ref-html 문서 위임이 처리.
+/** @param {Element} container @param {*[]} glossDefs @param {string[]} allVariantTerms @param {Object.<string,string>} badgeColors */
 function renderGlossaryCards(container, glossDefs, allVariantTerms, badgeColors) {
     if (!glossDefs.length) return;
     container.insertAdjacentHTML('beforeend',
@@ -391,6 +414,7 @@ function renderGlossaryCards(container, glossDefs, allVariantTerms, badgeColors)
     }
 }
 
+/** @param {string} cardId */
 export function toggleTextbookCard(cardId) {
     const body = document.getElementById(`${cardId}-body`);
     const btn = document.getElementById(`${cardId}-toggle-btn`);
@@ -408,14 +432,15 @@ export function toggleTextbookCard(cardId) {
     }
 }
 
+/** @param {string} rawContent @param {string[]} [searchTerms] @param {*} [item] */
 function formatSectionContent(rawContent, searchTerms = [], item = {}) {
     // 리더와 동일한 후처리를 적용 — 출처 스탬프(최종 확인) 숨김,
     // 참조자료/과목간/기출문제 링크를 data-ref-* 액션으로 변환 (원시 경로·죽은 링크 노출 차단)
-    const _rt = getRefTables();
+    const _rt = /** @type {Object.<string,*>} */ (getRefTables());
     const subjRefFiles = (_rt.REFERENCE_FILES || {})[item.subjId] || [];
     const subjDirName = (_rt.SUBJECT_DIR_MAP || {})[item.subjId] || '';
     const srcMatch = String(rawContent || '').match(/📌\s*\*\*출처\*\*[:：]\s*(.+?)(?:\||\n)/);
-    const refPath = srcMatch ? mapSourceToRef(srcMatch[1]) : null;
+    const refPath = srcMatch ? mapSourceToRef(srcMatch[1] || '') : null;
     let html = formatSectionContentForReader(rawContent, item.filePath, refPath, subjRefFiles, subjDirName, [], item.title);
 
     // 검색 컨텍스트 전달 — 카드 내 참조 링크가 검색어를 물고 열리면 뷰어가
@@ -428,7 +453,7 @@ function formatSectionContent(rawContent, searchTerms = [], item = {}) {
 
     // 검색어 하이라이트 (마크다운 파싱 후 적용)
     if (searchTerms.length > 0) {
-        searchTerms.forEach(term => {
+        searchTerms.forEach((/** @type {string} */ term) => {
             if (term.length > 0) {
                 html = highlightTextOutsideTags(html, term);
             }
@@ -438,10 +463,11 @@ function formatSectionContent(rawContent, searchTerms = [], item = {}) {
     return html;
 }
 
+/** @param {string} text @param {string[]} [searchTerms] */
 function highlightTextInString(text, searchTerms = []) {
     let html = escapeHTML(text);
     if (searchTerms.length > 0) {
-        searchTerms.forEach(term => {
+        searchTerms.forEach((/** @type {string} */ term) => {
             if (term.length > 0) {
                 const escapedTerm = escapeRegExp(term);
                 const termRegex = new RegExp(`(${escapedTerm})`, 'gi');
@@ -452,12 +478,13 @@ function highlightTextInString(text, searchTerms = []) {
     return html;
 }
 
+/** @param {string} html @param {string} term */
 function highlightTextOutsideTags(html, term) {
     const regex = new RegExp(`([^<]*)(<[^>]+>)?`, 'g');
     const escapedTerm = escapeRegExp(term);
     const termRegex = new RegExp(`(${escapedTerm})`, 'gi');
 
-    return html.replace(regex, (match, text, tag) => {
+    return html.replace(regex, (/** @type {string} */ match, /** @type {string} */ text, /** @type {string} */ tag) => {
         const highlightedText = text.replace(termRegex, '<mark class="txt-highlight">$1</mark>');
         return highlightedText + (tag || '');
     });

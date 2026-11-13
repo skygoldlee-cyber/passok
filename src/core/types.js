@@ -39,6 +39,7 @@
  * @property {number}   correctCount 맞힌 개수
  * @property {Array<{quizId: string, question?: string, selected: (number|string), correctAnswer?: (number|string), correct: boolean}>} solvedList 이번 세션 제출 기록
  * @property {boolean} [diagnostic]    진단 평가 모드 (전 과목 샘플링)
+ * @property {number}   [startedAt]   런 시작 시각 unix ms — quiz_complete의 duration_ms 산출용
  * @property {number}   [_qStart]     현재 문항 풀이 시작 시각 unix ms (PS-08 오답 원인 추정 ms 신호)
  */
 
@@ -269,7 +270,8 @@
  *                                            ※ 지식 세트 메타(registry[registryKey] = {bundle, global, version, stats})는
  *                                              registryKey가 가변이라 typedef에 고정 키로 선언하지 않음
  * @property {ResourcesMeta}   [resources]
- * @property {Object}          [integratedExam] 통합 시험 규칙 (passAverage·subjectFailBelow 등)
+ * @property {{passAverage?:number, subjectFailBelow?:number, questionsPerSubject?:Object.<string,number>, examTimeMin?:number, [key:string]:*}} [integratedExam]
+ *                                            통합 모의고사 규칙 (manifest 패스스루 — 합격 평균선·과목 과락선·과목별 출제수·제한시간분)
  * @property {Object.<string, Object.<string, string>>} [uiText] 뷰별 UI 텍스트 오버라이드 (manifest.uiText 패스스루 —
  *                                            표준 필드 title·subtitle·placeholder 외에 loading·error·dataError·
  *                                            스토어 라벨 등 시험별 확장 필드를 자유롭게 허용. 소비처: data-uitext,
@@ -317,7 +319,7 @@
  * @property {string}   [group]        시험 그룹 라벨 — 시험 선택 뷰에서 유사 시험을 섹션으로 묶는다
  * @property {Object.<string, string>}  [theme]          시험별 스킨 토큰 오버라이드 (DA-14) — '--color-*'/'--bg-*'/'--border-*'/'--stroke-*' 키만 적용
  * @property {Object.<string, boolean>} [features]
- * @property {string}   [discordInvite] 시험별 Discord 커뮤니티 초대 URL — 선언 시 도움말 메뉴에 'Discord 커뮤니티' 버튼 노출 (DOC-DSN-36)
+ * @property {string}   [discordInvite] 시험별 Discord 커뮤니티 초대 URL — 선언 시 도움말 메뉴에 'Discord 커뮤니티' 버튼 노출 (DOC-DSN-36). 미선언 시 레지스트리 루트 discordInvite(플랫폼 기본 서버)로 폴백
  */
 
 /* =======================================================
@@ -338,6 +340,21 @@
  * @property {string}   name     표시 이름
  * @property {string}   dir      contentRoot 상대 디렉터리 (예: '교재/law')
  * @property {Array<{key:string, title:string, file:string, storyFile?:string}>} chapters
+ */
+
+/* =======================================================
+   📡 텔레메트리 의존성 주입 타입
+   ======================================================= */
+
+/**
+ * 텔레메트리 전송 경로의 테스트 주입 deps — usage-telemetry·error-telemetry 공용.
+ * 실 전송 함수를 대체해 네트워크 없이 전송·큐잉 경로를 검증한다.
+ * @typedef {Object} TelemetryDeps
+ * @property {(rows: Object[]) => Promise<{error?: *, disabled?: boolean}>} [insert] 기본 Supabase insert 대체
+ * @property {boolean} [automated] 자동화·로컬 런타임 판정 강제 지정
+ * @property {boolean} [online] 오프라인 큐 경로 강제 지정 (usage-telemetry)
+ * @property {string} [today] 날짜 키 강제 지정 (usage-telemetry 스냅샷)
+ * @property {() => Promise<string>} [load] 사용 통계 페이로드 로더 대체 (usage-telemetry 스냅샷)
  */
 
 // 런타임 export는 없습니다. (타입 전용 모듈)
