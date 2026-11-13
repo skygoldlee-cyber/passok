@@ -98,7 +98,9 @@ const _parts = docXml => [
     ['word/settings.xml', _enc.encode(SETTINGS)],
 ];
 
-// 단락 — eastAsia 폰트 명시로 한글이 맑은 고딕 계열로 렌더. 빈 줄은 빈 단락. 선두 N줄은 굵게(문서 헤더).
+// 서체 — 라틴·한글 모두 맑은 고딕으로 통일 (미지정 시 라틴은 Calibri로 바뀌어 두서 없음)
+const _RF = '<w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/>';
+// 단락 — 빈 줄은 빈 단락. 선두 N줄은 굵게(문서 헤더). after 간격으로 줄 호흡 확보
 /**
  * @param {string} line
  * @param {number} i
@@ -106,8 +108,11 @@ const _parts = docXml => [
  * @returns {string}
  */
 const _P = (line, i, boldLines) => line
-    ? `<w:p><w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/>${i < boldLines ? '<w:b/>' : ''}</w:rPr><w:t xml:space="preserve">${esc(line)}</w:t></w:r></w:p>`
+    ? `<w:p><w:pPr><w:spacing w:after="60"/></w:pPr><w:r><w:rPr>${_RF}${i < boldLines ? '<w:b/>' : ''}</w:rPr><w:t xml:space="preserve">${esc(line)}</w:t></w:r></w:p>`
     : '<w:p/>';
+// 메타줄 — 제목 바로 아래 기관명·출력일. 중앙·회색·소자로 공문서 머리 격식
+/** @param {string} t */
+const _meta = t => `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:after="240"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 
 // 페이지 설정 — A4 세로(orient 명시 — 일부 임포터가 생략 시 가로로 해석) + 1인치 여백 + 1단·문서 그리드 (Word 정본과 동일한 sectPr 형태)
 const _SECT = '<w:sectPr><w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/><w:cols w:space="708"/><w:docGrid w:linePitch="360"/></w:sectPr>';
@@ -135,12 +140,12 @@ export function docxFile(text, filename, boldLines = 0) {
 
 // 표 테두리 — 외곽선 1pt(sz=8)·내부선 0.5pt(sz=4). 격식 문서 관행(외곽 강조) +
 // 0.5pt는 화면 배율에서 서브픽셀로 사라지므로 PDF 변환 시 외곽선이 안 보이는 문제 방지
-const _BORDERS = ['top', 'left', 'bottom', 'right'].map(b => `<w:${b} w:val="single" w:sz="8" w:color="666666"/>`).join('')
-    + ['insideH', 'insideV'].map(b => `<w:${b} w:val="single" w:sz="4" w:color="999999"/>`).join('');
+const _BORDERS = ['top', 'left', 'bottom', 'right'].map(b => `<w:${b} w:val="single" w:sz="8" w:color="404040"/>`).join('')
+    + ['insideH', 'insideV'].map(b => `<w:${b} w:val="single" w:sz="4" w:color="BFBFBF"/>`).join('');
 // 표 레이아웃 — 본문 폭 고정 dxa (A4 11906 − 여백 1440×2 = 9026) + 균등 열 그리드 + 셀 내부 여백.
 // pct(상대폭)는 한글 등 일부 임포터가 미지원해 표가 본문 폭 밖으로 렌더될 수 있어 dxa 고정 사용.
 const _TEXT_W = 9026;
-const _CELL_MAR = '<w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="60" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar>';
+const _CELL_MAR = '<w:tblCellMar><w:top w:w="90" w:type="dxa"/><w:left w:w="130" w:type="dxa"/><w:bottom w:w="90" w:type="dxa"/><w:right w:w="130" w:type="dxa"/></w:tblCellMar>';
 // 셀 단락 — kinsoku(동아시아 금칙 규칙) + wordWrap=off(단어 중간 분할 금지) → 어절 단위 줄넘김
 const _CELL_PPR = '<w:pPr><w:kinsoku/><w:wordWrap w:val="off"/></w:pPr>';
 /**
@@ -149,7 +154,7 @@ const _CELL_PPR = '<w:pPr><w:kinsoku/><w:wordWrap w:val="off"/></w:pPr>';
  * @param {number} [w] - 셀 너비 (dxa)
  * @returns {string}
  */
-const _cell = (c, head, w) => `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dxa"/>` : ''}${head ? '<w:shd w:val="clear" w:color="auto" w:fill="E8E8E8"/>' : ''}</w:tcPr><w:p>${_CELL_PPR}<w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/>${head ? '<w:b/>' : ''}</w:rPr><w:t xml:space="preserve">${esc(c.trim())}</w:t></w:r></w:p></w:tc>`;
+const _cell = (c, head, w) => `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dxa"/>` : ''}<w:vAlign w:val="center"/>${head ? '<w:shd w:val="clear" w:color="auto" w:fill="DEEAF6"/>' : ''}</w:tcPr><w:p>${head ? _CELL_PPR.replace('</w:pPr>', '<w:jc w:val="center"/></w:pPr>') : _CELL_PPR}<w:r><w:rPr>${_RF}${head ? '<w:b/>' : ''}</w:rPr><w:t xml:space="preserve">${esc(c.trim())}</w:t></w:r></w:p></w:tc>`;
 /**
  * @param {string[][]} rows
  * @returns {string}
@@ -159,15 +164,19 @@ const _tbl = rows => {
     const base = Math.floor(_TEXT_W / n), last = _TEXT_W - base * (n - 1);
     const grid = Array.from({ length: n }, (/** @type {*} */ _, i) => `<w:gridCol w:w="${i === n - 1 ? last : base}"/>`).join('');
     const wAt = (/** @type {number} */ i) => i === n - 1 ? last : base;
+    // 첫 행 tblHeader — 페이지 넘김 시 표머리 반복
     return `<w:tbl><w:tblPr><w:tblW w:w="${_TEXT_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders>${_CELL_MAR}</w:tblPr><w:tblGrid>${grid}</w:tblGrid>`
-        + rows.map((r, i) => `<w:tr>${r.map((c, ci) => _cell(c, i === 0, wAt(ci))).join('')}</w:tr>`).join('') + '</w:tbl>';
+        + rows.map((r, i) => `<w:tr>${i === 0 ? '<w:trPr><w:tblHeader/></w:trPr>' : ''}${r.map((c, ci) => _cell(c, i === 0, wAt(ci))).join('')}</w:tr>`).join('') + '</w:tbl>';
 };
+// 헤딩 — # 는 문서 제목(중앙·대자), ## 는 절 제목(하단 가는 선), ### 는 소제목
 /**
  * @param {string} t
- * @param {number} sz
+ * @param {number} lv - 헤딩 깊이 1~3
  * @returns {string}
  */
-const _h = (t, sz) => `<w:p><w:pPr><w:spacing w:before="200" w:after="100"/></w:pPr><w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/><w:b/><w:sz w:val="${sz}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
+const _h = (t, lv) => lv === 1
+    ? `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="80" w:after="120"/></w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="36"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`
+    : `<w:p><w:pPr><w:spacing w:before="240" w:after="100"/>${lv === 2 ? '<w:pBdr><w:bottom w:val="single" w:sz="4" w:color="BFBFBF"/></w:pBdr>' : ''}</w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="${lv === 2 ? 28 : 24}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 const _HR = '<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="999999"/></w:pBdr></w:pPr></w:p>';
 
 // 서명란 — 본문 여백 영역 하단 우측에 부동 표(tblpPr — Word 텍스트 상자와 동일한 앵커 방식).
@@ -175,7 +184,7 @@ const _HR = '<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="9999
 const _SIG_W = 4200;
 /** @param {string[]} lines */
 const _sigTbl = lines => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpXSpec="right" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${_SIG_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid><w:gridCol w:w="${_SIG_W}"/></w:tblGrid>`
-    + lines.map(l => `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/></w:tcPr><w:p>${_CELL_PPR}<w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/></w:rPr><w:t xml:space="preserve">${esc(l.trim())}</w:t></w:r></w:p></w:tc></w:tr>`).join('') + '</w:tbl>';
+    + lines.map(l => `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_CELL_PPR}<w:r><w:rPr>${_RF}</w:rPr><w:t xml:space="preserve">${esc(l.trim())}</w:t></w:r></w:p></w:tc></w:tr>`).join('') + '</w:tbl>';
 
 /**
  * @param {string} md
@@ -187,17 +196,21 @@ const _mdBody = md => {
     let tbl = null;
     /** @type {string[] | null} */
     let sign = null;
+    let meta = false; // # 제목 직후 첫 단락 → 기관명·출력일 메타줄
     const flush = () => { if (tbl) { out.push(_tbl(tbl)); tbl = null; } };
     for (const line of lines) {
         const t = line.trim();
-        if (t === ':::sign') { flush(); sign = []; continue; }
+        if (t === ':::sign') { flush(); sign = []; meta = false; continue; }
         if (t === ':::end') { if (sign) { out.push(_sigTbl(sign)); sign = null; } continue; }
         if (sign) { if (t) sign.push(t); continue; }
         if (/^\|[\s:|-]+\|$/.test(t)) continue; // 표 구분행
-        if (t.startsWith('|') && t.endsWith('|')) { (tbl = tbl || []).push(t.slice(1, -1).split('|')); continue; }
+        if (t.startsWith('|') && t.endsWith('|')) { meta = false; (tbl = tbl || []).push(t.slice(1, -1).split('|')); continue; }
         flush();
         const h = t.match(/^(#{1,3})\s+(.+)/);
-        if (h) { out.push(_h(h[2] || '', (h[1] || '').length === 1 ? 32 : (h[1] || '').length === 2 ? 28 : 24)); continue; }
+        if (h) { out.push(_h(h[2] || '', (h[1] || '').length)); meta = (h[1] || '').length === 1; continue; }
+        if (meta && t) { meta = false; out.push(_meta(t)); continue; }
+        if (!t) { out.push(_P('', 99, 0)); continue; } // 빈 줄 — meta 플래그 유지
+        meta = false;
         if (t === '---') { out.push(_HR); continue; }
         if (t.startsWith('- ')) { out.push(_P('• ' + t.slice(2), 99, 0)); continue; }
         out.push(_P(t, 99, 0));

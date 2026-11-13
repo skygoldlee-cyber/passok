@@ -78,6 +78,25 @@ test('docxFileMd — 헤딩·표·목록이 구조로 변환된다', async () =>
     assert.ok(doc.includes('w:orient="portrait"'), 'A4 세로 방향 명시 누락');
 });
 
+test('docxFileMd — 공문서 격식: 제목 중앙·메타줄·표머리 연청·머리 반복', async () => {
+    const md = '# 인수인계서\n\n○○요양원 · 2026-11-13 출력\n\n| A | B |\n|---|---|\n| 1 | 2 |';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    // 제목(#) — 중앙 정렬·대자, 제목 직후 단락은 메타줄(중앙·회색·소자)
+    const titleIdx = doc.indexOf('인수인계서');
+    assert.ok(doc.slice(0, titleIdx).includes('jc w:val="center"'), '제목 중앙 정렬 누락');
+    assert.ok(doc.includes('<w:sz w:val="36"/>'), '제목 대자(18pt) 누락');
+    const metaIdx = doc.indexOf('○○요양원 · 2026-11-13 출력');
+    assert.ok(metaIdx > titleIdx && doc.slice(titleIdx, metaIdx).includes('w:color w:val="595959"'), '메타줄 회색 소자 처리 누락');
+    // 표 — 머리 연청 음영·중앙 정렬·수직 가운데·페이지 넘김 시 머리 반복·내부선 연회색
+    assert.ok(doc.includes('w:fill="DEEAF6"'), '표머리 연청 음영 누락');
+    assert.ok(doc.includes('<w:tblHeader/>'), '표머리 반복(tblHeader) 누락');
+    assert.ok(doc.includes('<w:vAlign w:val="center"/>'), '셀 수직 가운데 누락');
+    assert.ok(doc.includes('w:color="BFBFBF"'), '내부선 연회색 누락');
+    assert.ok(doc.includes('w:color="404040"'), '외곽선 색 누락');
+    assert.ok(doc.includes('w:ascii="Malgun Gothic"'), '라틴·숫자 서체 통일 누락');
+});
+
 test('docxFileMd — :::sign 서명란은 하단 우측 부동 표, 셀 어절 줄바꿈', async () => {
     const md = '# 제목\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\n:::sign\n인계자(서명): 김요양\n인수자(서명): 박인수\n:::end';
     const { entries } = await unzip(docxFileMd(md, 'doc'));

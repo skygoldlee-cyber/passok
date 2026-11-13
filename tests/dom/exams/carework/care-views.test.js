@@ -919,6 +919,13 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect((html.match(/<td>/g) || []).length).toBe(4); // 데이터 행은 tbody에
     });
 
+    it('mdToHtml — # 제목 직후 첫 단락은 doc-meta 메타줄로 렌더', async () => {
+        const { mdToHtml } = await import('../../../../src/exams/carework/doc-md.js');
+        const html = mdToHtml('# 요양일지\n\n○○요양원 · 2026-11-13 출력\n\n본문 단락');
+        expect(html).toContain('<p class="doc-meta">○○요양원 · 2026-11-13 출력</p>');
+        expect(html).toContain('<p>본문 단락</p>'); // 메타 다음 단락은 일반 단락
+    });
+
     it('customForm — 블록 키 미리보기: 데이터 없으면 자동 칩, 실데이터는 표로 치환', async () => {
         const { fillTplEditor, setTplBlockState } = await import('../../../../src/exams/carework/form-template-editor.js');
         loadPartial('care-custom-form.html');

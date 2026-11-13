@@ -47,6 +47,7 @@ export const mdToHtml = md => {
     let list = null;
     /** @type {string[] | null} */
     let sign = null;
+    let meta = false; // # 제목(h3) 직후 첫 단락 → 기관명·출력일 메타줄
     const flush = (/** @type {boolean} */ listOnly) => {
         if (tbl && !listOnly) {
             out.push(`<table><thead><tr>${(tbl[0] || []).map(c => `<th>${esc(c.trim())}</th>`).join('')}</tr></thead><tbody>` +
@@ -57,18 +58,21 @@ export const mdToHtml = md => {
     };
     for (const line of String(md || '').split('\n')) {
         const t = line.trim();
-        if (t === ':::sign') { flush(false); sign = []; continue; }
+        if (t === ':::sign') { flush(false); sign = []; meta = false; continue; }
         if (t === ':::end') {
             if (sign) { out.push(`<div class="doc-sign">${sign.map(l => `<div>${esc(l)}</div>`).join('')}</div>`); sign = null; }
             continue;
         }
         if (sign) { if (t) sign.push(t); continue; }
         if (/^\|[\s:|-]+\|$/.test(t)) continue;
-        if (t.startsWith('|') && t.endsWith('|')) { flush(true); (tbl = tbl || []).push(t.slice(1, -1).split('|')); continue; }
-        if (t.startsWith('- ')) { (list = list || []).push(t.slice(2)); continue; }
+        if (t.startsWith('|') && t.endsWith('|')) { flush(true); meta = false; (tbl = tbl || []).push(t.slice(1, -1).split('|')); continue; }
+        if (t.startsWith('- ')) { meta = false; (list = list || []).push(t.slice(2)); continue; }
         flush(false);
         const h = t.match(/^(#{1,3})\s+(.+)/);
-        if (h) { out.push(`<h${+(h[1] || '').length + 2}>${esc(h[2])}</h${+(h[1] || '').length + 2}>`); continue; }
+        if (h) { out.push(`<h${+(h[1] || '').length + 2}>${esc(h[2])}</h${+(h[1] || '').length + 2}>`); meta = (h[1] || '').length === 1; continue; }
+        if (meta && t) { meta = false; out.push(`<p class="doc-meta">${esc(t)}</p>`); continue; }
+        if (!t) continue; // 빈 줄 — meta 플래그 유지
+        meta = false;
         if (t === '---') { out.push('<hr>'); continue; }
         if (t) out.push(`<p>${esc(t)}</p>`);
     }
