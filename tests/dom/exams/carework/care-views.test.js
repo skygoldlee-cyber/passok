@@ -468,7 +468,10 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         setLocalOrgName('');
         expect(document.getElementById('vis-scheduled').textContent).toContain('등록된 방문예약이 없습니다');
         // 출력 CSV는 '상태' 열 없이 결과로 표현 — 완료는 요약, 취소는 결과 칸에 '취소' 표기
-        const { visitsToCsv } = await import('../../../../src/exams/carework/care-visit.js');
+        const { visitsToCsv, visitKvMd } = await import('../../../../src/exams/carework/care-visit.js');
+        const kv = visitKvMd({ date: '2026-11-05', time: '14:00', client: '김○○', visitor: '홍○○', status: 'done', result: { date: '2026-11-05', time: '14:30', summary: '면회 30분' } });
+        expect(kv).toContain('방문일 | 2026-11-05 14:30'); // 방문 일시는 방문일 행에 병기 — 별도 시간·일시 행 없음
+        expect(kv).not.toContain('방문 일시');
         const csv = visitsToCsv([
             { date: '2026-11-05', client: '김○○', visitor: '홍○○', status: 'done', result: { summary: '면회 30분' } },
             { date: '2026-11-06', client: '이○○', visitor: '박○○', status: 'canceled' },

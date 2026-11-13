@@ -46,17 +46,14 @@ export function buildVisitText(v) {
 /** @param {*} v */
 export const visitKvMd = (v) => {
     const rel = relationLabel(v.relation);
+    const r = v.status === 'done' ? v.result : null; // 완료 시 실제 방문 일시·결과 사용
     const rows = [
-        ['방문일', v.date || ''], ['시간', v.time || ''], ['대상자', v.client || ''],
+        ['방문일', `${r?.date || v.date || ''}${(r?.time || v.time) ? ' ' + (r?.time || v.time) : ''}`], ['대상자', v.client || ''],
         ['방문객', `${v.visitor || ''}${rel ? ` (${rel})` : ''}`], ['연락처', v.phone || ''],
         ['목적', v.purpose || ''],
     ];
-    if (v.status === 'done' && v.result) {
-        rows.push(['방문 일시', `${v.result.date || v.date}${v.result.time ? ' ' + v.result.time : ''}`]);
-        if (v.result.summary) rows.push(['결과·특이사항', v.result.summary]);
-    } else if (v.status === 'canceled') {
-        rows.push(['결과', '취소']); // 상태는 결과로 표현
-    }
+    if (r?.summary) rows.push(['결과·특이사항', r.summary]);
+    else if (v.status === 'canceled') rows.push(['결과', '취소']); // 상태는 결과로 표현
     return mdTable(['항목', '내용'], rows);
 };
 
