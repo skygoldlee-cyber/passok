@@ -46,8 +46,8 @@ test('파일명·타입 + 필수 엔트리 + EOCD', async () => {
 test('단락 변환 — 줄 단위 w:p, 빈 줄은 빈 단락, 공백 보존', async () => {
     const { entries } = await unzip(docxFile('가  나\n\n다', 'doc'));
     const doc = entries['word/document.xml'];
-    assert.equal((doc.match(/<w:p>/g) || []).length, 2);
-    assert.ok(doc.includes('<w:p/>'));
+    assert.equal((doc.match(/<w:p>/g) || []).length, 3);
+    assert.ok(doc.includes('<w:spacing w:line="140" w:lineRule="exact"/>'), '빈 단락 소형 줄높이 누락');
     assert.ok(doc.includes('xml:space="preserve">가  나<'));
     assert.ok(doc.includes('w:document'), 'document 루트 누락');
     assert.ok(doc.includes('w:eastAsia="Malgun Gothic"'), '한글 폰트 지정 누락');
@@ -149,7 +149,8 @@ test('docxFileMd — 서명 문서 공문서 격식: 결재란·발신일·(인)
     const approveIdx = doc.indexOf('결 재');
     const titleIdx = doc.indexOf('인수인계서');
     assert.ok(approveIdx >= 0 && approveIdx < titleIdx, '결재란 선두 배치 누락');
-    assert.ok(doc.includes('w:tblpX="6652"'), '결재란 우측 상단 부동 앵커 누락');
+    assert.ok(doc.includes('w:tblpX="5852"'), '결재란 우측 상단 부동 앵커 누락');
+    assert.ok(doc.includes('w:gridCol w:w="840"'), '결재란 열 폭 부족 — 시설장 줄넘김 방지 하한');
     assert.ok(doc.includes('<w:vMerge'), '결재란 세로병합 누락');
     for (const r of ['담당', '팀장', '시설장']) assert.ok(doc.includes(r), `결재란 "${r}" 누락`);
     // 서명란 — 발신일(중앙) + (인) 표기

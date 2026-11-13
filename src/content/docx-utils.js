@@ -112,14 +112,14 @@ const _RF = '<w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsi
  * @returns {string}
  */
 const _P = (line, i, boldLines) => line
-    ? `<w:p><w:pPr><w:spacing w:after="60" w:line="276" w:lineRule="auto"/></w:pPr><w:r><w:rPr>${_RF}${i < boldLines ? '<w:b/>' : ''}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(line, _TEXT_W - 300))}</w:r></w:p>`
-    : '<w:p/>';
+    ? `<w:p><w:pPr><w:spacing w:after="40" w:line="276" w:lineRule="auto"/></w:pPr><w:r><w:rPr>${_RF}${i < boldLines ? '<w:b/>' : ''}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(line, _TEXT_W - 300))}</w:r></w:p>`
+    : '<w:p><w:pPr><w:spacing w:line="140" w:lineRule="exact"/></w:pPr></w:p>';
 // 메타줄 — 제목 바로 아래 기관명·출력일. 중앙·회색·소자로 공문서 머리 격식
 /** @param {string} t */
-const _meta = t => `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:after="240"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
+const _meta = t => `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:after="140"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 
 // 페이지 설정 — A4 세로(orient 명시 — 일부 임포터가 생략 시 가로로 해석) + 좌우 25mm 여백 + 1단·문서 그리드 (Word 정본과 동일한 sectPr 형태)
-const _SECT = '<w:sectPr><w:footerReference w:type="default" r:id="rId2"/><w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/><w:pgMar w:top="1440" w:right="1417" w:bottom="1440" w:left="1417"/><w:cols w:space="708"/><w:docGrid w:linePitch="360"/></w:sectPr>';
+const _SECT = '<w:sectPr><w:footerReference w:type="default" r:id="rId2"/><w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/><w:pgMar w:top="1134" w:right="1417" w:bottom="1134" w:left="1417"/><w:cols w:space="708"/><w:docGrid w:linePitch="360"/></w:sectPr>';
 
 /**
  * @param {string[]} lines
@@ -245,7 +245,7 @@ const _tbl = rows => {
     const wAt = (/** @type {number} */ i) => ws[i];
     // 첫 행 tblHeader(페이지 넘김 시 표머리 반복) + cantSplit(행이 페이지 경계에서 쪼개지지 않음) + 최소 행 높이 24pt
     return `<w:tbl><w:tblPr><w:tblW w:w="${_TEXT_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${grid}</w:tblGrid>`
-        + rows.map((r, i) => `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="480" w:hRule="atLeast"/>${i === 0 ? '<w:tblHeader/>' : ''}</w:trPr>${r.map((c, ci) => {
+        + rows.map((r, i) => `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="400" w:hRule="atLeast"/>${i === 0 ? '<w:tblHeader/>' : ''}</w:trPr>${r.map((c, ci) => {
             const shd = i === 0 ? 'DEEAF6' : (n === 2 && ci === 0 ? 'F2F2F2' : (i % 2 === 0 ? 'F7F9FC' : ''));
             return _cell(c, i === 0, wAt(ci), shd, n === 2 && ci === 0);
         }).join('')}</w:tr>`).join('') + '</w:tbl>';
@@ -259,13 +259,13 @@ const _RF_T = '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:e
  * @returns {string}
  */
 const _h = (t, lv) => lv === 1
-    ? `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="80" w:after="120"/></w:pPr><w:r><w:rPr>${_RF_T}<w:b/><w:sz w:val="36"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`
-    : `<w:p><w:pPr><w:spacing w:before="240" w:after="100"/>${lv === 2 ? '<w:pBdr><w:bottom w:val="single" w:sz="4" w:color="BFBFBF"/></w:pBdr>' : ''}</w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="${lv === 2 ? 28 : 24}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
+    ? `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="80" w:after="80"/></w:pPr><w:r><w:rPr>${_RF_T}<w:b/><w:sz w:val="36"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`
+    : `<w:p><w:pPr><w:spacing w:before="160" w:after="80"/>${lv === 2 ? '<w:pBdr><w:bottom w:val="single" w:sz="4" w:color="BFBFBF"/></w:pBdr>' : ''}</w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="${lv === 2 ? 28 : 24}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 const _HR = '<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="999999"/></w:pBdr></w:pPr></w:p>';
 
 // 결재란 — 공문서 상단 우측 승인 표 ('결 재' 세로병합 + 담당·팀장·시설장 빈 서명칸).
 // 서명 문서(:::sign 포함)에만 부여
-const _AW = 640; // 결재란 열 폭
+const _AW = 840; // 결재란 열 폭 — '시설장'(600tw)+셀 여백(200tw) 수용 하한
 const _APPR_W = _AW * 4;
 // 인라인 jc=right도 셀 여백+테두리만큼 우측 가이드선을 넘어감(PDF 실측) — 부동 표+tblpX 보정은 서명란과 동일
 const _APPR_X = _TEXT_W - _APPR_W + 140;
@@ -275,12 +275,12 @@ const _APPROVE = `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="
     + `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="400" w:hRule="atLeast"/></w:trPr>`
     + _apprCell('결 재', true, false)
     + ['담당', '팀장', '시설장'].map(t => _apprCell(t, false, false)).join('')
-    + `</w:tr><w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="720" w:hRule="atLeast"/></w:trPr>`
+    + `</w:tr><w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="640" w:hRule="atLeast"/></w:trPr>`
     + _apprCell('', true, true)
     + _apprCell('', false, false) + _apprCell('', false, false) + _apprCell('', false, false)
     + '</w:tr></w:tbl>';
 // 문서 종결 — 공문서 관행의 '끝.' 표기 (중앙)
-const _END = `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="200"/></w:pPr><w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t>끝.</w:t></w:r></w:p>`;
+const _END = `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="80"/></w:pPr><w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t>끝.</w:t></w:r></w:p>`;
 
 // 서명란 — 본문 여백 영역 하단 우측에 부동 표(tblpPr — Word 텍스트 상자와 동일한 앵커 방식).
 // 문서 끝에 배치하면 마지막 페이지 하단 오른쪽에 고정된다. 첫 행은 발신일(중앙), 서명행은 (인) 표기
