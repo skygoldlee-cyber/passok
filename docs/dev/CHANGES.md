@@ -1,8 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 feat(tools): manual-15-mask 캡처 자동화 — 수동 산출물을 SHOTS에 등록
+
+- `capture_manual.js`에 `SHOTS['manual-15-mask']` 추가 — 사고보고 공유 시트에서 "(인명 가림)" 버튼 행(본문 복사·PDF·Word)만 클립 캡처. 인쇄·Excel 등 미가림 경로 제외, SW 토스트 오버레이 정리 포함. 이로써 실무매뉴얼 참조 23장 전량이 자동 재생성 가능
+
+
 ## 2026-11-13 fix(content): 실무매뉴얼 삽화 전면 재캡처 — UX-TXT-01 반영 22장
 
-- 실무막뉴얼 참조 삽화 23장 중 캡처 로직 있는 22장 전량 재생성 (`capture_manual.js`) — `word-break: keep-all` 전면 상속 이후 단어 중간 분절 해소. `manual-15-mask`는 캡처 로직 없는 수동 산출물이라 제외
+- 실무매뉴얼 참조 삽화 23장 중 캡처 로직 있는 22장 전량 재생성 (`capture_manual.js`) — `word-break: keep-all` 전면 상속 이후 단어 중간 분절 해소. `manual-15-mask`는 캡처 로직 없는 수동 산출물이라 제외
 
 
 ## 2026-11-13 fix(content): manual-14-forms 삽화 재캡처 — UX-TXT-01 적용으로 표 셀 중간 분절 해소

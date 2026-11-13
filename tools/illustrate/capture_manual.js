@@ -412,6 +412,27 @@ const SHOTS = {
         await page.goto(`${BASE}/#/care-forms`, { waitUntil: 'networkidle' });
         await snap(page, 'manual-14-forms', '#care-forms-view .care-home-card, #care-forms-view .care-calc-form');
     },
+    // ⑮ 인명 가림 경로 — 공유 시트의 "(인명 가림)" 버튼 행만 클립 (인쇄·Excel 등 미가림 경로 제외)
+    'manual-15-mask': async (page) => {
+        await page.goto(`${BASE}/#/care-incident`, { waitUntil: 'networkidle' });
+        await page.waitForSelector('#care-incident-view:not(.is-hidden)', { timeout: 20000 });
+        await page.waitForSelector('#care-incident-view [data-click="careShare"]', { state: 'visible', timeout: 15000 });
+        await page.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
+        await page.locator('#care-incident-view [data-click="careShare"]').click();
+        await page.waitForSelector('.care-export-sheet', { timeout: 8000 });
+        // 시트 배경이 반투명 --bg-elevated라 뒤 페이지가 비침 — 캡처용 불투명 처리
+        await page.evaluate(() => { const s = document.querySelector('.care-export-sheet'); if (s) s.style.background = '#1f2937'; });
+        // SW 업데이트 토스트 등이 시트를 가릴 수 있어 캡처 직전에 오버레이 정리 (시트·스크림은 셀렉터에 미해당)
+        await dismissOverlays(page);
+        await page.waitForSelector('.care-export-sheet button:has-text("인명 가림")', { timeout: 5000 });
+        const boxes = await page.locator('.care-export-sheet button:has-text("인명 가림")').evaluateAll(
+            els => els.map(e => { const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, w: r.width, h: r.height }; }));
+        const x0 = Math.min(...boxes.map(b => b.x)) - 6, y0 = Math.min(...boxes.map(b => b.y)) - 4;
+        const x1 = Math.max(...boxes.map(b => b.x + b.w)) + 6, y1 = Math.max(...boxes.map(b => b.y + b.h)) + 4;
+        const png = await page.screenshot({ clip: { x: x0, y: y0, width: x1 - x0, height: y1 - y0 } });
+        writeFileSync(join(OUT_DIR, 'manual-15-mask.webp'), await toWebp(page, png));
+        console.log('✓ manual-15-mask.webp');
+    },
 };
 
 async function main() {
