@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 fix(content): 실무매뉴얼 삽화 전면 재캡처 — UX-TXT-01 반영 22장
+
+- 실무막뉴얼 참조 삽화 23장 중 캡처 로직 있는 22장 전량 재생성 (`capture_manual.js`) — `word-break: keep-all` 전면 상속 이후 단어 중간 분절 해소. `manual-15-mask`는 캡처 로직 없는 수동 산출물이라 제외
+
+
 ## 2026-11-13 fix(content): manual-14-forms 삽화 재캡처 — UX-TXT-01 적용으로 표 셀 중간 분절 해소
 
 - 서식모음 "제출 주기 요약" 표의 "국민건강보**험공단** (전**산**)" 등 단어 중간 분절 → `word-break: keep-all` 전면 상속 이후 `capture_manual.js manual-14-forms` 재캡처. 단어 경계 분리 확인
