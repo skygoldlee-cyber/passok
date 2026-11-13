@@ -60,7 +60,8 @@ export const state = {
         currentIndex: 0,
         correctCount: 0,
         solvedList: [],  // 이번 세션에 제출한 답 기록
-        diagnostic: false // 진단 평가 모드 (전 과목 샘플링)
+        diagnostic: false, // 진단 평가 모드 (전 과목 샘플링)
+        startedAt: 0     // 런 시작 타임스탬프 — quiz_complete의 duration_ms 산출용
     },
 
     // 훈련소 세션 상태

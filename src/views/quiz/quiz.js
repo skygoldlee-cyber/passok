@@ -136,6 +136,7 @@ export function _beginQuizRun() {
     state.quiz.currentIndex = 0;
     state.quiz.correctCount = 0;
     state.quiz.solvedList = [];
+    state.quiz.startedAt = Date.now();
 
     // 과업 퍼널 계측 — quiz_start ↔ renderQuizResult의 quiz_complete 쌍
     void reportEvent('quiz_start', {
@@ -460,6 +461,7 @@ export function renderQuizResult() {
     void reportEvent('quiz_complete', {
         correct: quizState.correctCount, total: quizState.data.length,
         diagnostic: !!quizState.diagnostic,
+        duration_ms: quizState.startedAt ? Math.max(0, Date.now() - quizState.startedAt) : null,
     });
 
     // UI 전환
