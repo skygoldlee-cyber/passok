@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 293473abc921f249
+> 입력 해시: 8a37a7da5ca69175
 > 생성: 2026-11-13 · 원천: SPEC.md(709개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -1027,6 +1027,7 @@
 | DOC-BIZ-08 | docs/exams/carework/business/유튜브-숏츠-시리즈-제작의뢰서.md | — |
 | DOC-BIZ-09 | docs/exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md | — |
 | DOC-BIZ-10 | docs/exams/carework/business/이용자_관점_평가_2026-11-13.md | ROAD-P5 |
+| DOC-BIZ-11 | docs/exams/carework/business/개인정보처리_위탁계약서_초안.md | — |
 | DOC-DEV-01 | docs/dev/SPEC.md | — |
 | DOC-DEV-02 | docs/dev/ARCHITECTURE.md | — |
 | DOC-DEV-03 | docs/dev/CHANGES.md | — |
@@ -1158,6 +1159,7 @@
 - docs/assets/README.md
 - docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md
 - docs/dev/runbooks/E2E_TEST_SUPABASE.md
+- docs/exams/carework/business/개인정보처리_위탁계약서_초안.md
 - docs/exams/carework/business/유튜브-숏츠-시리즈-제작의뢰서.md
 - docs/exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md
 - docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md
