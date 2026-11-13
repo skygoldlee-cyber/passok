@@ -103,7 +103,8 @@ test('docxFileMd — :::sign 서명란은 하단 우측 부동 표, 셀 어절 �
     const doc = entries['word/document.xml'];
     assert.ok(doc.includes('w:tblpPr'), '서명란 부동 표(tblpPr) 누락');
     assert.ok(doc.includes('w:tblpYSpec="bottom"'), '서명란 하단 앵커 누락 — A4 하단 배치 아님');
-    assert.ok(doc.includes('w:tblpXSpec="right"'), '서명란 우측 앵커 누락');
+    // 명시적 tblpX — XSpec="right"는 셀 여백만큼 우측 가이드선을 넘어가는 것이 COM 실측으로 확인됨
+    assert.ok(doc.includes('w:tblpX="4826"'), '서명란 우측 앵커(본문폭−서명폭) 누락');
     assert.ok(doc.includes('인계자(서명): 김요양'), '서명 내용 누락');
     assert.ok(!doc.includes(':::sign'), '마커가 본문에 노출됨');
     assert.ok(doc.includes('<w:kinsoku/>'), '금칙 규칙(어절 줄바꿈) 누락');
