@@ -2,9 +2,10 @@
 // @spec none — 시험 전용 도메인 스토어 (DA-13)
 // localStorage `carework_care_logs` (safeGetItem/safeSetItem → 시험 네임스페이스)
 // 무료 한도: FREE_LIMIT건 — 초과 시 free-limit 오류 → 상위에서 업그레이드 안내
-import { getJSON, setJSON } from '../../core/storage.js';
+import { setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
-import { localDateTime, todayKey } from '../../core/utils.js';
+import { todayKey } from '../../core/utils.js';
+import { createEntityStore } from '../../core/entity-store.js';
 import { showStoreError, proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { showToast } from '../../ui-utils.js';
 import { listClients } from './care-client-store.js';
@@ -14,28 +15,20 @@ import { myMembership, submitRecord } from './facility.js';
 const KEY = STORAGE_KEYS.CARE_LOG_ITEMS;
 export const FREE_LIMIT = 10;
 
-export function listCareLogs() {
-    const parsed = getJSON(KEY);
-    const items = Array.isArray(parsed) ? parsed : [];
-    if (backfillClientIds(items, listClients())) setJSON(KEY, items); // CO-01 지연 백필 — 배치 1회 쓰기
-    return items;
-}
+const _store = createEntityStore({
+    key: KEY,
+    idPrefix: 'log',
+    freeLimit: FREE_LIMIT,
+    onList: (items) => backfillClientIds(items, listClients()), // CO-01 지연 백필 — 배치 1회 쓰기
+    afterAdd: _pushCareLog, // CO-15 write-through — 로컬 저장은 즉시 확정, 서버는 비동기
+    beforeSave: () => proFeatureNotice('care_log_save', '요양일지 저장'),
+    onError: (r) => showStoreError(r, '요양일지', showToast),
+});
 
-/**
- * @param {{client:string, service:string, date:string, start:string, end:string, activities:Object, note:string, text:string}} entry
- * @returns {{ok:boolean, error?:string, id?:string}}
- */
-/** @param {*} entry */
-export function addCareLog(entry) {
-    const items = listCareLogs();
-    if (items.length >= FREE_LIMIT)
-        return { ok: false, error: `무료 플랜 저장 한도(${FREE_LIMIT}건) 도달 — 삭제 후 재시도하거나 유료로 확장하세요.` };
-    const it = { id: `log_${Date.now().toString(36)}`, createdAt: localDateTime(), ...entry };
-    items.unshift(it);
-    setJSON(KEY, items);
-    void _pushCareLog(it).catch(() => {}); // CO-15 write-through — 로컬 저장은 즉시 확정, 서버는 비동기
-    return { ok: true, id: it.id };
-}
+export const listCareLogs = _store.list;
+export const addCareLog = _store.add;
+export const removeCareLog = _store.remove;
+export const saveCareLog = _store.save;
 
 // — CO-14/15: 기관 서버 write-through (오프라인 우선 — 멤버십 없으면 로컬 전용 유지) —
 
@@ -67,19 +60,4 @@ export async function syncPendingCareLogs() {
         if (it._sync === 'done') continue;
         try { await _pushCareLog(it); } catch { /* 오프라인·미설정 — 로컬 동작 불변 */ }
     }
-}
-
-/** @param {string} id */
-export function removeCareLog(id) {
-    setJSON(KEY, listCareLogs().filter(x => x.id !== id));
-    return { ok: true };
-}
-
-/** 저장 + 오류 표시 — 무료 한도 초과 시 업그레이드 안내 (ROAD-P5) */
-/** @param {*} entry */
-export function saveCareLog(entry) {
-    proFeatureNotice('care_log_save', '요양일지 저장');
-    const r = addCareLog(entry);
-    if (!r.ok) showStoreError(r, '요양일지', showToast);
-    return r;
 }

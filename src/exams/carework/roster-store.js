@@ -1,9 +1,10 @@
 // src/exams/carework/roster-store.js — 교대 근무표 로컬 저장소
 // @spec none — 시험 전용 도메인 스토어 (DA-13)
 // localStorage `carework_roster` — 근무 배정 {id,date,shift,worker,note}
-import { getJSON, setJSON } from '../../core/storage.js';
+import { setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { localDateTime, todayKey } from '../../core/utils.js';
+import { createEntityStore } from '../../core/entity-store.js';
 import { showStoreError, proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { showToast } from '../../ui-utils.js';
 import { pushState } from './facility.js';
@@ -11,26 +12,19 @@ import { pushState } from './facility.js';
 const KEY = STORAGE_KEYS.ROSTER_ITEMS;
 export const FREE_LIMIT = 30;
 
-export function listRoster() {
-    const parsed = getJSON(KEY);
-    return Array.isArray(parsed) ? parsed : [];
-}
+const _store = createEntityStore({
+    key: KEY,
+    idPrefix: 'ros',
+    freeLimit: FREE_LIMIT,
+    afterAdd: _pushRoster, // CO-15 write-through
+    beforeSave: () => proFeatureNotice('care_roster_save', '근무 배정 저장'),
+    onError: (r) => showStoreError(r, '근무표', showToast),
+});
 
-/**
- * @param {{date:string,shift:string,worker:string,note?:string}} entry
- * @returns {{ok:boolean, error?:string, id?:string}}
- */
-/** @param {*} entry */
-export function addRoster(entry) {
-    const items = listRoster();
-    if (items.length >= FREE_LIMIT)
-        return { ok: false, error: `무료 플랜 저장 한도(${FREE_LIMIT}건) 도달 — 삭제 후 재시도하거나 유료로 확장하세요.` };
-    const it = { id: `ros_${Date.now().toString(36)}`, createdAt: localDateTime(), ...entry };
-    items.unshift(it);
-    setJSON(KEY, items);
-    void _pushRoster(it).catch(() => {}); // CO-15 write-through
-    return { ok: true, id: it.id };
-}
+export const listRoster = _store.list;
+export const addRoster = _store.add;
+export const removeRoster = _store.remove;
+export const saveRoster = _store.save;
 
 // — CO-14/15: 기관 서버 write-through (상태형 — local_id upsert로 최신 배정 공유) —
 
@@ -55,13 +49,6 @@ export async function syncPendingRoster() {
     }
 }
 
-/** @param {string} id */
-/** @param {string} id */
-export function removeRoster(id) {
-    setJSON(KEY, listRoster().filter(x => x.id !== id));
-    return { ok: true };
-}
-
 /** CSV 병합 — 날짜+근무조+근무자 일치 시 메모 갱신, 없으면 신규 등록. 한도 초과분 제외
  * @returns {{ok:boolean, added:number, updated:number, skipped:number}} */
 /** @param {*[]} records */
@@ -83,13 +70,4 @@ export function upsertRoster(records) {
     }
     setJSON(KEY, items);
     return { ok: true, added, updated, skipped };
-}
-
-/** 저장 + 오류 표시 — 무료 한도 초과 시 업그레이드 안내 */
-/** @param {*} entry */
-export function saveRoster(entry) {
-    proFeatureNotice('care_roster_save', '근무 배정 저장');
-    const r = addRoster(entry);
-    if (!r.ok) showStoreError(r, '근무표', showToast);
-    return r;
 }

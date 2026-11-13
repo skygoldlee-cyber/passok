@@ -3,10 +3,11 @@
 // 양식 본문은 MD+{{키}} 플레이스홀더. 시스템 키는 자동 기입, 기타 키는 기입 필드 자동 생성.
 // 로컬 우선 — 기관 양식은 서버 캐시 병합(facility_form_templates, manager 등록),
 // 기입 문서는 facility_records doc_type 'custom_form' 이벤트형 write-through (CO-15 패턴).
-import { getJSON, setJSON } from '../../core/storage.js';
+import { setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { localDateTime, todayKey } from '../../core/utils.js';
 import { escapeHTML } from '../../core/sanitize.js';
+import { createEntityStore } from '../../core/entity-store.js';
 import { showStoreError, proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { showToast } from '../../ui-utils.js';
 import { getOrgName, getDocSign, myMembership, submitRecord, listFacilityFormTemplates } from './facility.js';
@@ -87,23 +88,24 @@ export function fillTemplateHtml(body, values = {}) {
 
 // — 로컬 양식 스토어 —
 
-export function listFormTemplates() {
-    const v = getJSON(TPL_KEY);
-    return Array.isArray(v) ? v : [];
-}
+const _tpl = createEntityStore({
+    key: TPL_KEY,
+    idPrefix: 'ftpl',
+    freeLimit: FREE_TPL_LIMIT,
+    limitText: `무료 양식 등록 한도(${FREE_TPL_LIMIT}건) 도달 — 삭제 후 재시도하세요.`,
+});
+
+export const listFormTemplates = _tpl.list;
 
 /** 로컬 양식 저장 — id 있으면 갱신, 없으면 신규. fields는 저장 시점 재추출.
  * toolKey 지정 시 해당 도구 본문 오버라이드로 연동 (CO-18)
  * @param {{title:string, body:string, toolKey?:string|null|undefined}} o */
 export function addFormTemplate({ title, body, toolKey = null }) {
-    const items = listFormTemplates();
-    if (items.length >= FREE_TPL_LIMIT)
-        return { ok: false, error: `무료 양식 등록 한도(${FREE_TPL_LIMIT}건) 도달 — 삭제 후 재시도하세요.` };
-    const it = { id: `ftpl_${Date.now().toString(36)}`, title: String(title || '').trim(), body: String(body || ''), scope: 'local', createdAt: localDateTime() };
-    if (toolKey) (/** @type {*} */ (it)).toolKey = toolKey;
-    items.unshift(it);
-    setJSON(TPL_KEY, items);
-    return { ok: true, id: it.id };
+    const entry = {
+        title: String(title || '').trim(), body: String(body || ''),
+        scope: 'local', ...(toolKey ? { toolKey } : {}),
+    };
+    return _tpl.add(entry);
 }
 
 /** @param {string} id @param {{title:string, body:string}} o */
@@ -118,11 +120,7 @@ export function updateFormTemplate(id, { title, body }) {
     return { ok: true };
 }
 
-/** @param {string} id */
-export function removeFormTemplate(id) {
-    setJSON(TPL_KEY, listFormTemplates().filter((/** @type {*} */ x) => x.id !== id));
-    return { ok: true };
-}
+export const removeFormTemplate = _tpl.remove;
 
 // — 기관 양식 캐시 (정본은 서버 — 뷰 init 시 syncFormTemplates로 갱신) —
 
@@ -146,23 +144,24 @@ export async function syncFormTemplates() {
 
 // — 기입 문서 로컬 스토어 + custom_form write-through —
 
-export function listFormDocs() {
-    const v = getJSON(DOC_KEY);
-    return Array.isArray(v) ? v : [];
-}
+const _doc = createEntityStore({
+    key: DOC_KEY,
+    idPrefix: 'fdoc',
+    freeLimit: FREE_DOC_LIMIT,
+    afterAdd: _pushFormDoc, // CO-15 write-through — 로컬 저장은 즉시 확정, 서버는 비동기
+    beforeSave: () => proFeatureNotice('care_form_save', '양식 문서 저장'),
+    onError: (r) => showStoreError(r, '양식 문서', showToast),
+});
+
+export const listFormDocs = _doc.list;
 
 /** 기입 문서 저장 — 로컬 즉시 확정 후 서버 비동기 반영 (CO-15 오프라인 우선) */
 /** @param {{tplId:string, title:string, client:string, clientId:string, date:string, values:*, md:string}} o */
 export function addFormDoc({ tplId, title, client, clientId, date, values, md }) {
-    const items = listFormDocs();
-    if (items.length >= FREE_DOC_LIMIT)
-        return { ok: false, error: `무료 플랜 저장 한도(${FREE_DOC_LIMIT}건) 도달 — 삭제 후 재시도하거나 유료로 확장하세요.` };
-    const it = { id: `fdoc_${Date.now().toString(36)}`, createdAt: localDateTime(), tplId, title, client, clientId, date, values, md };
-    items.unshift(it);
-    setJSON(DOC_KEY, items);
-    void _pushFormDoc(it).catch(() => {});
-    return { ok: true, id: it.id };
+    return _doc.add({ tplId, title, client, clientId, date, values, md });
 }
+
+export const removeFormDoc = _doc.remove;
 
 /** 서버 페이로드 — 양식 id·필드값 구조화 맵만 (출력 본문 md는 L0 유지, CO-06 계승) */
 /** @param {*} it */
@@ -188,17 +187,5 @@ export async function syncPendingFormDocs() {
     }
 }
 
-/** @param {string} id */
-export function removeFormDoc(id) {
-    setJSON(DOC_KEY, listFormDocs().filter((/** @type {*} */ x) => x.id !== id));
-    return { ok: true };
-}
-
 /** 저장 + 오류 표시 — 무료 한도 초과 시 업그레이드 안내 */
-/** @param {*} entry */
-export function saveFormDoc(entry) {
-    proFeatureNotice('care_form_save', '양식 문서 저장');
-    const r = addFormDoc(entry);
-    if (!r.ok) showStoreError(r, '양식 문서', showToast);
-    return r;
-}
+export const saveFormDoc = _doc.save;
