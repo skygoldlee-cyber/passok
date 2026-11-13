@@ -194,14 +194,19 @@ const _colWs = rows => {
     const cap = Math.floor(_TEXT_W * 0.6);
     const pf = pref.map(p => Math.min(p, cap));
     const sp = pf.reduce((a, b) => a + b, 0), sm = min.reduce((a, b) => a + b, 0);
-    let ws;
+    let ws, fixIdx = n - 1;
     // 잉여 배분 가중 — 줄바꿈으로 늘어날 수 있는 열(pref>min)만 잉여를 받는다. 고정 폭 레이블 열은 제외
     const grow = pf.map((p, i) => Math.max(0, p - min[i]));
     const sg = grow.reduce((a, b) => a + b, 0);
     if (sp <= _TEXT_W) ws = pf.map((p, i) => Math.floor(p + (_TEXT_W - sp) * (sg ? (grow[i] || 0) / sg : 1 / n)));
     else if (sm < _TEXT_W) ws = pf.map((p, i) => Math.floor((min[i] || 0) + (_TEXT_W - sm) * (((p) - (min[i] || 0)) / Math.max(1, sp - sm))));
-    else { const b = Math.floor(_TEXT_W / n); ws = Array(n).fill(b); }
-    ws[n - 1] += _TEXT_W - ws.reduce((a, b) => a + b, 0); // 반올림 잔여는 마지막 열
+    else if (400 * n < _TEXT_W) {
+        // min 합계조차 초과(다열 표) — min 비율 축소 배분. 어절 분리는 불가피하나 균등 절삭보다 낫다
+        const k = _TEXT_W / sm;
+        ws = min.map(m => Math.max(400, Math.floor(m * k)));
+        fixIdx = ws.indexOf(Math.max(...ws)); // 잔여 보정은 가장 넓은 열에
+    } else ws = Array(n).fill(Math.floor(_TEXT_W / n));
+    ws[fixIdx] += _TEXT_W - ws.reduce((a, b) => a + b, 0); // 반올림 잔여 보정
     return ws;
 };
 /**

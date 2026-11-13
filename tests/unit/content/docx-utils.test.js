@@ -89,6 +89,20 @@ test('docxFileMd — 열 너비 내용 기반 배분: 레이블 열이 내용 �
     assert.strictEqual(ws[0] + ws[1], 9026, '열 너비 합계가 본문 폭과 불일치');
 });
 
+test('docxFileMd — 다열 표(min 합계 초과)는 최소폭 비율 축소 배분', async () => {
+    // 9열 — 균등 fallback이면 어느 열도 어절을 못 담는다. 긴 토큰 열이 더 넓어야 함
+    const md = '| 방문일 | 시간 | 대상자 | 방문객 | 연락처 | 관계 | 목적 | 상태 | 결과 |\n|---|---|---|---|---|---|---|---|---|\n'
+        + '| 2026-11-10 | 14:00 | 김○○ | 김민수 | 010-1234-5678 | 아들 | 면회 | 정상 | 면회 30분 — 특이사항 없음 |';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    const ws = [...doc.matchAll(/<w:gridCol w:w="(\d+)"/g)].map(m => +m[1]).slice(0, 9);
+    assert.strictEqual(ws.length, 9);
+    const mn = Math.min(...ws), mx = Math.max(...ws);
+    assert.ok(mx > mn * 1.3, `다열 표가 균등 배분으로 fallback됨 (min ${mn}, max ${mx})`);
+    assert.ok(ws[4] >= 1500, `연락처 열(${ws[4]})이 토큰 폭(~1750)에 미달`);
+    assert.strictEqual(ws.reduce((a, b) => a + b, 0), 9026, '열 너비 합계 불일치');
+});
+
 test('docxFileMd — 공문서 격식: 제목 중앙·메타줄·표머리 연청·머리 반복', async () => {
     const md = '# 인수인계서\n\n○○요양원 · 2026-11-13 출력\n\n| A | B |\n|---|---|\n| 1 | 2 |';
     const { entries } = await unzip(docxFileMd(md, 'doc'));
