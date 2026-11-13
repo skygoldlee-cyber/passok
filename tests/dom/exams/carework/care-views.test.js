@@ -234,7 +234,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const sign = document.querySelector('#log-preview .doc-md')?.textContent || '';
         expect(sign).toContain('작성자(요양보호사): 김 요양');
         expect(sign).toContain('확인자: 박 시설');
-        // 인수인계 — 인계자·인수자 기입, 확인일은 수기 공란 유지
+        // 인수인계 — 인계자·인수자 기입 (확인일 슬롯은 제거됨)
         loadPartial('care-handover.html');
         /** @type {HTMLInputElement} */ (document.getElementById('ho-date')).value = '2026-11-05';
         /** @type {HTMLInputElement} */ (document.getElementById('ho-from')).value = '김인계';
@@ -243,7 +243,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const hoSign = document.querySelector('#ho-preview .doc-md')?.textContent || '';
         expect(hoSign).toContain('인계자(서명): 김 요양');
         expect(hoSign).toContain('인수자(서명): 이 인수');
-        expect(hoSign).toMatch(/확인일: ＿+/); // 미설정 슬롯은 수기 서명용 전각 공란
+        expect(hoSign).not.toContain('확인일'); // 서명란은 인계자·인수자 2칸
         setDocSign('', '', ''); // 정리 — 다른 테스트의 빈 서명란 검증에 영향 없도록
     });
 

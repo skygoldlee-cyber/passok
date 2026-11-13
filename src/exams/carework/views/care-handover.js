@@ -148,7 +148,7 @@ export function careHandoverDocMd() {
         인계내용: t,
         일시: `${_lastIn?.date || ''}${_lastIn?.shift ? ` (${_lastIn.shift} 근무조)` : ''}`,
         인계자: _lastIn?.from, 인수자: _lastIn?.to, 대상자: _lastIn?.clients,
-    }) + docMdSign([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver'], ['확인일', '']]) : '';
+    }) + docMdSign([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver']]) : '';
 }
 
 /** 📤 공유·내보내기 게이트 — 기록 우선: 미저장 생성문은 자동 저장 후 careShare 위임 (저장 실패 시에만 차단) */
