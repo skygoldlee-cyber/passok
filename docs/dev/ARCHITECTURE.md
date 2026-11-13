@@ -259,6 +259,7 @@ passok/
 │   ├── pwa/pwa-install-capture.js  #   beforeinstallprompt 조기 캡처 + SW 등록
 │   ├── shell/theme-init.js           #   FOUC 방지 (페인트 전 테마 적용)
 │   ├── core/                   #   플랫폼 코어 — 의존성 리프·기반 계층 (전 모듈이 참조)
+│   │   ├── entity-store.js     #     localStorage 엔티티 스토어 팩토리 — *-store 공통 CRUD·한도·훅 계약
 │   │   ├── exam-context.js     #     활성 시험 해석/전환, scopedKey 네임스페이스, hasFeature (리프 모듈)
 │   │   ├── paths.js            #     파일 경로 상수 중앙 관리
 │   │   ├── sanitize.js         #     XSS 방어
@@ -701,6 +702,7 @@ app.js (초기화·이벤트 위임)          state.js (전역 상태·영속성
 router.js (SPA 라우터)               storage.js (저장소 추상화·백엔드 교체)
 storage-keys.js (키 중앙 관리)       weak-items.js (약점 ID 문법·인덱스 캐시)
 paths.js (경로 상수)                 exam-context.js (시험 해석·scopedKey·hasFeature)
+entity-store.js (스토어 팩토리)
 ui-utils.js (토스트·모달·로딩)        sanitize.js (XSS 방어)
 utils.js (헬퍼·shuffle)              types.js (JSDoc 타입)
 data-loader.js (온디맨드 MD 로더)     markdown-parser.js (공통 MD 파서)

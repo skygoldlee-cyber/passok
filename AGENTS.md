@@ -125,6 +125,7 @@ src/                    # ES Modules
   shell/offline-gate.js       # 오프라인 네트워크 기능 비활성+사유 안내·클릭 차단 (UX-PWA-08)
   shell/router.js           # 뷰 라우터 (navigateToView, getViewTitles, initViewHashRouting — #/슬러그 딥링크·뒤로가기)
   core/                # 플랫폼 코어 — 의존성 리프·기반 계층 (전 모듈이 참조)
+    entity-store.js      # localStorage 엔티티 스토어 팩토리 — 시험 도메인 *-store의 공통 CRUD·한도·훅 계약 (list/add/update/remove/save)
     exam-context.js      # 활성 시험 해석/전환, scopedKey 네임스페이스, hasFeature, getExamAppName(시험별 앱 이름 — exams.json appName)
     paths.js             # 파일 경로 상수 중앙 관리 (시험 루트 인지형)
     sanitize.js          # XSS 방어 (escapeHTML, safeTextWithBreaks, esc, stripTags)
