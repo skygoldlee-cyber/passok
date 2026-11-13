@@ -9,7 +9,7 @@
 
 `node tools/check/check_complexity.js` (eslint complexity 임계 10, Δ 비교는 동일 임계 유지 필수).
 
-- 기준선: **324건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
+- 기준선: **323건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
 - 분해 순서: 복잡도 점수 내림차순 — 상위부터 처리해야 곡선이 꺾인다
 - 분해 완료 시 `--update`로 기준선을 축소하고 `--report`로 이 표를 재생성한다
 - 분해 규약: 렌더 분기는 `if` 체인 → early return·테이블 조회·서브함수 추출로 내리고, 동작 변경 없이 구조만 정리한다. 대형 렌더 함수는 섹션별 private 렌더 함수로 분할
@@ -37,7 +37,7 @@
 | 30 | `(anonymous)#58` | src/views/reader/reader-toolbar.js:273 |
 | 29 | `searchAll` | src/shell/command-palette.js:109 |
 | 29 | `buildWeeklyReportText` | src/study/analysis-engine.js:645 |
-| 29 | `renderQuizQuestion` | src/views/quiz/quiz.js:162 |
+| 29 | `renderQuizQuestion` | src/views/quiz/quiz.js:163 |
 | 29 | `submitComboAnswer` | src/views/trainer-drill-combo.js:166 |
 | 28 | `validateQuestion` | src/content/questions.js:132 |
 | 28 | `auditRowsToSections` | src/exams/carework/audit-import.js:25 |
@@ -80,7 +80,6 @@
 | 22 | `navigateToView` | src/shell/router.js:59 |
 | 22 | `runWithLoading` | src/ui-utils.js:59 |
 | 22 | `_renderWeakStatementInsight` | src/views/analysis-view.js:236 |
-| 21 | `handleAuthLanding` | src/auth-sync/auth-view.js:317 |
 | 21 | `_cutsWithTableSplit` | src/content/pdf-utils.js:149 |
 | 21 | `pdfFileFromElStyled` | src/content/pdf-utils.js:437 |
 | 21 | `buildHandover` | src/exams/carework/care-handover.js:15 |
@@ -97,7 +96,6 @@
 | 20 | `summarizeExamProgress` | src/views/exam-select.js:20 |
 | 20 | `refitPersonalModels` | src/views/personalization-view.js:89 |
 | 20 | `renderTextbookReader` | src/views/textbook-reader.js:300 |
-| 19 | `refreshAuthUI` | src/auth-sync/auth-view.js:47 |
 | 19 | `(anonymous)#5` | src/exams/carework/care-share.js:64 |
 | 19 | `suspectOcrSubstitutions` | src/exams/cosmetic/formula-check.js:320 |
 | 19 | `extractProductFromImages` | src/exams/cosmetic/product-vision.js:246 |
@@ -135,11 +133,12 @@
 | 17 | `computePassGap` | src/study/analysis-engine.js:366 |
 | 17 | `computeStudyPattern` | src/study/analysis-engine.js:585 |
 | 17 | `selectExamRiskSession` | src/study/study-tracker-alloc.js:92 |
-| 17 | `requestAiFeedback` | src/views/quiz/quiz.js:546 |
+| 17 | `requestAiFeedback` | src/views/quiz/quiz.js:553 |
 | 17 | `_subjectAllocHtml` | src/views/study-calendar.js:248 |
 | 17 | `weakRow` | src/views/trainer-drills.js:472 |
 | 17 | `checkShortAnswer` | src/views/trainer.js:33 |
 | 17 | `callProviderLLM` | src/written/written-grading.js:233 |
+| 16 | `refreshAuthUI` | src/auth-sync/auth-view.js:73 |
 | 16 | `pullSync` | src/auth-sync/sync.js:139 |
 | 16 | `batchToCsvRow` | src/exams/cosmetic/views/formula-batch.js:219 |
 | 16 | `updateFoldSummaries` | src/exams/cosmetic/views/formula-fields.js:268 |
@@ -151,7 +150,7 @@
 | 16 | `buildWeakMock` | src/study/personalization.js:68 |
 | 16 | `estimateCompositeScore` | src/study/recommendations.js:348 |
 | 16 | `computeSubjectAllocation` | src/study/study-tracker-alloc.js:285 |
-| 16 | `maybeReportUsageSnapshot` | src/telemetry/usage-telemetry.js:186 |
+| 16 | `maybeReportUsageSnapshot` | src/telemetry/usage-telemetry.js:188 |
 | 16 | `updateStreakAndDailyUI` | src/views/daily-challenge.js:36 |
 | 16 | `dictExportCsv` | src/views/dictionary.js:510 |
 | 16 | `loadFlashcards` | src/views/flashcard.js:22 |
@@ -163,7 +162,7 @@
 | 15 | `(anonymous)#1` | src/content/docx-utils.js:145 |
 | 15 | `_blockCuts` | src/content/pdf-utils.js:108 |
 | 15 | `sha256hex` | src/core/sha256.js:25 |
-| 15 | `loadProgress` | src/core/state.js:159 |
+| 15 | `loadProgress` | src/core/state.js:160 |
 | 15 | `buildCareLog` | src/exams/carework/care-log.js:22 |
 | 15 | `clientTrends` | src/exams/carework/care-trend.js:17 |
 | 15 | `buildVisitText` | src/exams/carework/care-visit.js:26 |
@@ -180,19 +179,19 @@
 | 15 | `checkMfdsNotice` | src/shell/notice-check.js:285 |
 | 15 | `fetchLatestFor` | src/shell/notice-check.js:353 |
 | 15 | `buildCalcQuestion` | src/study/trainer-calc.js:12 |
-| 15 | `reportEvent` | src/telemetry/usage-telemetry.js:133 |
+| 15 | `reportEvent` | src/telemetry/usage-telemetry.js:135 |
 | 15 | `exportAnalysisReport` | src/views/analysis-view.js:687 |
 | 15 | `tickSimTimer` | src/views/exam-sim/exam-sim-arena.js:59 |
 | 15 | `startWeakConceptQuiz` | src/views/quiz/quiz-review.js:222 |
-| 15 | `submitQuizAnswer` | src/views/quiz/quiz.js:263 |
-| 15 | `_citationForQuiz` | src/views/quiz/quiz.js:439 |
+| 15 | `submitQuizAnswer` | src/views/quiz/quiz.js:264 |
+| 15 | `_citationForQuiz` | src/views/quiz/quiz.js:440 |
 | 15 | `_renderCalendarDays` | src/views/study-calendar.js:321 |
 | 15 | `renderGlossaryCards` | src/views/textbook-search.js:386 |
 | 15 | `submitCalcAnswer` | src/views/trainer-calc-practice.js:76 |
 | 14 | `renderPerformanceChart` | src/charts.js:132 |
 | 14 | `buildComboSubjectMd` | src/content/combo-doc.js:44 |
 | 14 | `resolveExamThemeTokens` | src/core/exam-context.js:182 |
-| 14 | `cleanOrphansForSubject` | src/core/state.js:313 |
+| 14 | `cleanOrphansForSubject` | src/core/state.js:314 |
 | 14 | `syncFacilityClients` | src/exams/carework/care-client-store.js:61 |
 | 14 | `(anonymous)#4` | src/exams/carework/care-roster.js:55 |
 | 14 | `(anonymous)#6` | src/exams/carework/care-share.js:91 |
@@ -213,12 +212,12 @@
 | 14 | `(anonymous)#41` | src/study/analysis-engine.js:589 |
 | 14 | `recordStatementJudgments` | src/study/statement-tracker.js:26 |
 | 14 | `_ensureIndexes` | src/study/weak-items.js:41 |
-| 14 | `buildEventPayload` | src/telemetry/usage-telemetry.js:58 |
+| 14 | `buildEventPayload` | src/telemetry/usage-telemetry.js:60 |
 | 14 | `askTextbookQA` | src/views/analysis-view.js:367 |
 | 14 | `(anonymous)#45` | src/views/exam-select.js:120 |
 | 14 | `(anonymous)#51` | src/views/listeners/listeners-simulator.js:34 |
 | 14 | `(anonymous)#52` | src/views/quiz/quiz-review.js:39 |
-| 14 | `submitQuizChoiceAnswer` | src/views/quiz/quiz.js:341 |
+| 14 | `submitQuizChoiceAnswer` | src/views/quiz/quiz.js:342 |
 | 14 | `toggleReaderAudio` | src/views/reader/reader-audio.js:424 |
 | 14 | `_showPreview` | src/views/reader/reader-ref-links.js:51 |
 | 14 | `_studyPlanHtml` | src/views/study-calendar.js:184 |
@@ -239,7 +238,7 @@
 | 13 | `showPlanCompare` | src/pro/pro-upgrade.js:237 |
 | 13 | `detectPlatform` | src/pwa/pwa-install.js:61 |
 | 13 | `(anonymous)#25` | src/reader/exam-viewer.js:248 |
-| 13 | `(anonymous)#30` | src/reader/zoom-gestures.js:90 |
+| 13 | `(anonymous)#30` | src/reader/zoom-gestures.js:93 |
 | 13 | `(anonymous)#33` | src/shell/app-shell.js:167 |
 | 13 | `_enforce` | src/shell/banner-mgr.js:50 |
 | 13 | `(anonymous)#38` | src/shell/shortcuts-help.js:105 |
@@ -261,7 +260,7 @@
 | 12 | `loadDictionary` | src/content/data-loader.js:539 |
 | 12 | `getKnowledgeItems` | src/content/data-loader.js:560 |
 | 12 | `(anonymous)#3` | src/content/pdf-utils.js:335 |
-| 12 | `saveProgress` | src/core/state.js:249 |
+| 12 | `saveProgress` | src/core/state.js:250 |
 | 12 | `buildIncidentText` | src/exams/carework/care-incident.js:36 |
 | 12 | `buildRecordText` | src/exams/carework/care-log.js:43 |
 | 12 | `(anonymous)#8` | src/exams/carework/care-share.js:245 |
@@ -335,7 +334,7 @@
 | 11 | `selectExamAction` | src/views/exam-select.js:240 |
 | 11 | `chapterForQuestion` | src/views/exam-sim/exam-sim-review.js:92 |
 | 11 | `bindQuizListeners` | src/views/listeners/listeners-quiz.js:9 |
-| 11 | `renderQuizResult` | src/views/quiz/quiz.js:456 |
+| 11 | `renderQuizResult` | src/views/quiz/quiz.js:462 |
 | 11 | `_toggleNoteEditor` | src/views/reader/reader-render.js:435 |
 | 11 | `(anonymous)#57` | src/views/reader/reader-toolbar.js:205 |
 | 11 | `saveGoalSettings` | src/views/study-calendar.js:457 |

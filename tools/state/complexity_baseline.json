@@ -7,9 +7,9 @@
       "sum": 23
     },
     "src/auth-sync/auth-view.js": {
-      "count": 2,
-      "max": 21,
-      "sum": 40
+      "count": 1,
+      "max": 16,
+      "sum": 16
     },
     "src/auth-sync/sync.js": {
       "count": 1,

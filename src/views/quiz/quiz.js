@@ -454,6 +454,12 @@ function _citationForQuiz(quizId) {
     return null;
 }
 
+/** 세션 소요 시간(ms) — startedAt 미기록 구버전 상태는 null (퍼널 계측용) */
+/** @param {{startedAt?: number}} quizState */
+function _quizDurationMs(quizState) {
+    return quizState.startedAt ? Math.max(0, Date.now() - quizState.startedAt) : null;
+}
+
 export function renderQuizResult() {
     const quizState = state.quiz;
 
@@ -461,7 +467,7 @@ export function renderQuizResult() {
     void reportEvent('quiz_complete', {
         correct: quizState.correctCount, total: quizState.data.length,
         diagnostic: !!quizState.diagnostic,
-        duration_ms: quizState.startedAt ? Math.max(0, Date.now() - quizState.startedAt) : null,
+        duration_ms: _quizDurationMs(quizState),
     });
 
     // UI 전환

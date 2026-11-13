@@ -35,6 +35,12 @@ export function canUnlink(user) {
 /** @param {string} provider */
 function _providerName(provider) { return PROVIDER_LABEL[provider] || provider; }
 
+/** 설치형 PWA 여부 — OAuth 리다이렉트 복귀 불가 환경 감지 (AU-09) */
+function _isStandalonePwa() {
+    return window.matchMedia?.('(display-mode: standalone)')?.matches === true
+        || window.navigator.standalone === true;
+}
+
 // Supabase 영문 오류 → 한글 안내
 /** @type {Array<[RegExp, string]>} */
 const ERR_MAP = [
@@ -96,11 +102,7 @@ export async function refreshAuthUI() {
     // AU-09 — 설치형 PWA는 소셜 로그인 버튼을 숨긴다: 외부 OAuth 리다이렉트 세션이
     // PWA 저장소로 돌아오지 못한다 (이메일 코드 경로가 대체 수단).
     const oauthArea = el('auth-oauth-area');
-    if (oauthArea) {
-        const standalone = window.matchMedia?.('(display-mode: standalone)')?.matches === true
-            || window.navigator.standalone === true;
-        oauthArea.classList.toggle('is-hidden', standalone);
-    }
+    if (oauthArea) oauthArea.classList.toggle('is-hidden', _isStandalonePwa());
     return user;
 }
 
@@ -113,40 +115,47 @@ function _renderIdentityArea(user) {
     if (!list || !actions || !area) return;
     const linked = linkedProviders(user);
     // 설치형 PWA는 OAuth 리다이렉트 복귀 불가(AU-09) — 연결 UI도 숨기고 이메일 경로를 안내
-    const standalone = window.matchMedia?.('(display-mode: standalone)')?.matches === true
-        || window.navigator.standalone === true;
-    if (standalone) { hide(area); return; }
+    if (_isStandalonePwa()) { hide(area); return; }
     show(area);
     list.innerHTML = '';
-    for (const id of (user.identities || [])) {
-        const row = document.createElement('div');
-        row.className = 'auth-identity-item';
-        const name = document.createElement('span');
-        name.className = 'auth-identity-name';
-        name.textContent = _providerName(id.provider || '');
-        row.appendChild(name);
-        if (canUnlink(user)) {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'btn btn-secondary btn-sm';
-            btn.dataset.click = 'authUnlinkIdentity';
-            btn.dataset.arg = id.id;
-            btn.textContent = '해제';
-            row.appendChild(btn);
-        }
-        list.appendChild(row);
-    }
+    for (const id of (user.identities || [])) list.appendChild(_identityRow(user, id));
     actions.innerHTML = '';
     for (const p of OAUTH_PROVIDERS) {
-        if (linked.includes(p)) continue;
+        if (!linked.includes(p)) actions.appendChild(_linkButton(p));
+    }
+}
+
+/** 연결된 수단 1행 — 수단명 + 해제 가능 시 해제 버튼 (AU-10) */
+/** @param {{identities?: {id?: string, provider?: string}[]}} user @param {{id?: string, provider?: string}} id */
+function _identityRow(user, id) {
+    const row = document.createElement('div');
+    row.className = 'auth-identity-item';
+    const name = document.createElement('span');
+    name.className = 'auth-identity-name';
+    name.textContent = _providerName(id.provider || '');
+    row.appendChild(name);
+    if (canUnlink(user)) {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'btn btn-secondary btn-sm';
-        btn.dataset.click = 'authLinkIdentity';
-        btn.dataset.arg = p;
-        btn.textContent = `${_providerName(p)} 연결`;
-        actions.appendChild(btn);
+        btn.dataset.click = 'authUnlinkIdentity';
+        btn.dataset.arg = id.id;
+        btn.textContent = '해제';
+        row.appendChild(btn);
     }
+    return row;
+}
+
+/** 미연결 수단 연결 버튼 (AU-10) */
+/** @param {string} provider */
+function _linkButton(provider) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn-secondary btn-sm';
+    btn.dataset.click = 'authLinkIdentity';
+    btn.dataset.arg = provider;
+    btn.textContent = `${_providerName(provider)} 연결`;
+    return btn;
 }
 
 /** 지난 로그인 수단 힌트 — 수단 분리(별도 계정 생성) 사전 방지 (AU-10) */
@@ -350,14 +359,21 @@ export async function authUnlinkIdentity(/** @type {string} */ identityId) {
         setMsg('마지막 로그인 수단은 해제할 수 없습니다 — 먼저 다른 수단을 연결하거나 비밀번호를 설정하세요.', true);
         return;
     }
+    await _confirmAndUnlink(sb, identity);
+}
+
+/** 해제 확인 → unlinkIdentity 실행 (AU-10) — authUnlinkIdentity의 사전 검증 통과 후 호출 */
+/** @param {*} sb @param {{id?: string, provider?: string}} identity */
+async function _confirmAndUnlink(sb, identity) {
+    const provider = _providerName(identity.provider || '');
     const ok = await showConfirm(
-        `${_providerName(identity.provider || '')} 연결을 해제하면 이 방법으로는 더 이상 이 계정에 로그인할 수 없고, 이 방법으로 로그인하면 새 계정이 만들어집니다. 해제할까요?`,
+        `${provider} 연결을 해제하면 이 방법으로는 더 이상 이 계정에 로그인할 수 없고, 이 방법으로 로그인하면 새 계정이 만들어집니다. 해제할까요?`,
         '로그인 수단 해제'
     );
     if (!ok) return;
     const { error } = await sb.auth.unlinkIdentity(identity);
     if (error) { setMsg(friendlyError(error), true); return; }
-    showToast(`${_providerName(identity.provider || '')} 연결을 해제했습니다.`, 'info');
+    showToast(`${provider} 연결을 해제했습니다.`, 'info');
     await refreshAuthUI();
 }
 
@@ -452,48 +468,58 @@ let _magicLinkLanding = false;
 async function handleAuthLanding() {
     const query = new URLSearchParams(window.location?.search || '');
     const tokenHash = query.get('token_hash');
-    if (tokenHash) {
-        try { history.replaceState(null, '', location.pathname); } catch (_) {}
-        const ok = await showConfirm(
-            '이 브라우저에서 로그인할까요? 설치된 앱(PWA)에서 로그인 중이라면 취소하고 메일의 인증 코드를 앱에 입력하세요.',
-            '로그인 링크'
-        );
-        if (!ok) {
-            showToast('링크 로그인을 취소했습니다. 토큰은 유지됩니다 — 같은 메일의 인증 코드로 계속 로그인할 수 있습니다.', 'info');
-            return;
-        }
-        const sb = await getSupabase();
-        if (!sb) return;
-        // 템플릿이 지정한 토큰 종류를 그대로 전달 — Confirm signup 메일은 type=signup
-        const type = query.get('type') || 'email';
-        const { error } = await sb.auth.verifyOtp({ token_hash: tokenHash, type });
-        if (error) showToast(friendlyError(error), 'error');
-        else { showToast('로그인했습니다.', 'success'); _recordLoginMethod('email'); }
-        return;
-    }
+    if (tokenHash) { await _handleTokenHashLanding(query, tokenHash); return; }
 
     const hash = (typeof window !== 'undefined' && window.location?.hash) || '';
     if (hash.length < 2) return;
-    const params = new URLSearchParams(hash.slice(1));
-    const errDesc = params.get('error_description') || '';
-    const errCode = params.get('error_code') || params.get('error') || '';
-    if (errDesc || errCode) {
-        const pending = safeGetItem(STORAGE_KEYS.PENDING_LINK_PROVIDER);
-        safeRemoveItem(STORAGE_KEYS.PENDING_LINK_PROVIDER);
-        if (pending) {
-            // 수단 연결 리다이렉트 복귀 실패 — 충돌(다른 계정 귀속)이면 회복 유도, 그 외는 일반 오류
-            _handleLinkFailure(errCode + errDesc, pending).catch(() => {});
-            try { history.replaceState(null, '', location.pathname + location.search); } catch (_) {}
-            return;
-        }
-        const msg = /expired/i.test(errCode + errDesc)
-            ? '로그인 링크가 만료되었습니다. 계정 메뉴에서 다시 요청하세요.'
-            : '로그인 링크를 처리하지 못했습니다. 다시 시도하세요.';
-        showToast(msg, 'error');
-        try { history.replaceState(null, '', location.pathname + location.search); } catch (_) {}
+    _handleHashLanding(new URLSearchParams(hash.slice(1)));
+}
+
+/** ① ?token_hash= 랜딩 — 확인 클릭 시에만 verifyOtp로 토큰 소비 */
+/** @param {URLSearchParams} query @param {string} tokenHash */
+async function _handleTokenHashLanding(query, tokenHash) {
+    try { history.replaceState(null, '', location.pathname); } catch (_) {}
+    const ok = await showConfirm(
+        '이 브라우저에서 로그인할까요? 설치된 앱(PWA)에서 로그인 중이라면 취소하고 메일의 인증 코드를 앱에 입력하세요.',
+        '로그인 링크'
+    );
+    if (!ok) {
+        showToast('링크 로그인을 취소했습니다. 토큰은 유지됩니다 — 같은 메일의 인증 코드로 계속 로그인할 수 있습니다.', 'info');
         return;
     }
+    const sb = await getSupabase();
+    if (!sb) return;
+    // 템플릿이 지정한 토큰 종류를 그대로 전달 — Confirm signup 메일은 type=signup
+    const type = query.get('type') || 'email';
+    const { error } = await sb.auth.verifyOtp({ token_hash: tokenHash, type });
+    if (error) showToast(friendlyError(error), 'error');
+    else { showToast('로그인했습니다.', 'success'); _recordLoginMethod('email'); }
+}
+
+/** ② #access_token/#error 해시 랜딩 — 기본 ConfirmationURL 경로 (하위 호환) */
+/** @param {URLSearchParams} params */
+function _handleHashLanding(params) {
+    const errDesc = params.get('error_description') || '';
+    const errCode = params.get('error_code') || params.get('error') || '';
+    if (errDesc || errCode) { _handleHashError(errCode, errDesc); return; }
     if (params.has('access_token')) _magicLinkLanding = true;
+}
+
+/** 해시 오류 처리 — 수단 연결 복귀 실패는 회복 유도, 그 외는 만료/일반 오류 토스트 */
+/** @param {string} errCode @param {string} errDesc */
+function _handleHashError(errCode, errDesc) {
+    const pending = safeGetItem(STORAGE_KEYS.PENDING_LINK_PROVIDER);
+    safeRemoveItem(STORAGE_KEYS.PENDING_LINK_PROVIDER);
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (_) {}
+    if (pending) {
+        // 수단 연결 리다이렉트 복귀 실패 — 충돌(다른 계정 귀속)이면 회복 유도, 그 외는 일반 오류
+        _handleLinkFailure(errCode + errDesc, pending).catch(() => {});
+        return;
+    }
+    const msg = /expired/i.test(errCode + errDesc)
+        ? '로그인 링크가 만료되었습니다. 계정 메뉴에서 다시 요청하세요.'
+        : '로그인 링크를 처리하지 못했습니다. 다시 시도하세요.';
+    showToast(msg, 'error');
 }
 
 /**
