@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 fix(content): manual-14-forms 삽화 재캡처 — UX-TXT-01 적용으로 표 셀 중간 분절 해소
+
+- 서식모음 "제출 주기 요약" 표의 "국민건강보**험공단** (전**산**)" 등 단어 중간 분절 → `word-break: keep-all` 전면 상속 이후 `capture_manual.js manual-14-forms` 재캡처. 단어 경계 분리 확인
+
+
 ## 2026-11-13 fix+docs: DOC-BIZ-10 후속 3건 — 🔖빈출 정정·계정 연결 설계·exam-sim 오표시 검증
 
 - **① 🔖기출 → 🔖빈출 정정 (carework)**: carework는 기출 비공개 시험이므로 콘텐츠 표기 정정 — 교재 4파일·문제은행 1파일(63건). 마커는 파서가 소비하는 기능 토큰이므로 소비처가 **`🔖기출`·`🔖빈출` 둘 다 인식**하게 확장: `textbook-core.js`(isKey·빈칸 퀴즈·정리) · `study-aids.js`(추출·라벨 "빈출 핵심"/"빈출·중요 숫자") · `doc-overlay.js` · `check_manifest.js` MARKER_RE · `build_id_migration.js` · `report.js`. cosmetic 등 기존 `🔖기출`은 호환 유지. 학습안내서·적응형 엔진 설계 문서 표기도 정합. parser 테스트에 `🔖빈출` 동등성 케이스 추가(44/44 통과)·`build:data` 재생성 정합
