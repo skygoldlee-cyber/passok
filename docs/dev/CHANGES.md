@@ -6,6 +6,7 @@
 - PDF: pdfFileFromEl 클론에 포함 — 색상 강제 루프에서 .doc-wm 제외
 - Word: 헤더 파트(header1.xml)에 VML textpath 셰이프 4개 — Word 기본 워터마크와 동일 메커니즘, 전 페이지 자동 반복
 - docxFile/docxFileMd에 wm 선택 인자 — 미지정 시 헤더 파트 생략 (기존 출력 동일)
+- 농도 수정: 초기 #d9d9d9·opacity .5는 사실상 무색(93% 흰색) — VML 셰이프를 Word 정본 형식(center 앵커·o:spid·w10 wrap 계열)으로 맞추고 gray·opacity .5(#BFBFBF, 25% 회색)로 진하게 (PDF 글리프 커브 811개 렌더 확인)
 
 ## 2026-11-14 fix(carework): 결재란·서명란 우측선 본문 표와 정합
 
