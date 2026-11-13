@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 1d6557b0367742f2
-> 생성: 2026-11-13 · 원천: SPEC.md(707개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 21adddc902407f93
+> 생성: 2026-11-13 · 원천: SPEC.md(708개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 707개 — 문서 연결 469 · 소스 연결 624 · 테스트 연결 669 · 보고서 연결 109
+**커버리지 요약**: 요구사항 708개 — 문서 연결 469 · 소스 연결 626 · 테스트 연결 669 · 보고서 연결 109
 
 ---
 
@@ -850,7 +850,8 @@
 | DA-22 | ✅ | 테스트 | — | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | — | — |
 | DA-23 | ✅ | 테스트 | — | src/core/utils.js | tests/unit/app/utils.test.js | — | — |
 | DA-24 | ✅ | 테스트 | — | src/content/docx-utils.js<br>src/exams/carework/doc-md.js | tests/unit/content/docx-utils.test.js | — | — |
-| DA-25 | ✅ | — | — | — | — | — | — |
+| DA-25 | ✅ | 도구 검증 | — | tools/illustrate/capture_manual.js | — | — | — |
+| DA-26 | ✅ | 도구 검증 | — | tools/illustrate/capture_manual.js | — | — | — |
 
 ## 5.2 안정적 ID 체계
 
@@ -1137,11 +1138,13 @@
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
-소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 6개 — 테스트 백로그 후보.
+소스에 @spec이 있지만 tests/에서 참조가 없는 요구사항 8개 — 테스트 백로그 후보.
 
 | ID | 절 | 구현 소스 |
 |----|-----|-----------|
 | CS-12 | 5.4 콘텐츠 구조 | tools/check/check_numbering.js |
+| DA-25 | 5.1 데이터 아키텍처 | tools/illustrate/capture_manual.js |
+| DA-26 | 5.1 데이터 아키텍처 | tools/illustrate/capture_manual.js |
 | UX-CTL-07 | 4.8 UI/UX 설계 요구사양 | css/exams/carework/care-tools.css |
 | UX-FB-07 | 4.8 UI/UX 설계 요구사양 | src/views/textbook-reader.js |
 | UX-FB-08 | 4.8 UI/UX 설계 요구사양 | src/views/dashboard-queue.js |

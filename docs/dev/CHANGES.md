@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 docs: DA-26 신설 — 삽화 캡처 둘레 여백 규약 명문화
+
+- 기존 클립 관례(manual-08 ±8px·manual-10 ±24px·manual-15 ±4~6px)를 SPEC 요구사양으로 격상 — 타이트 클립의 그림자·테두리 잘림 방지 근거 명문화. `capture_manual.js` 헤더에 `@spec DA-25,DA-26` 부착
+
+
 ## 2026-11-13 feat(tools): manual-15-mask 캡처 자동화 — 수동 산출물을 SHOTS에 등록
 
 - `capture_manual.js`에 `SHOTS['manual-15-mask']` 추가 — 사고보고 공유 시트에서 "(인명 가림)" 버튼 행(본문 복사·PDF·Word)만 클립 캡처. 인쇄·Excel 등 미가림 경로 제외, SW 토스트 오버레이 정리 포함. 이로써 실무매뉴얼 참조 23장 전량이 자동 재생성 가능
