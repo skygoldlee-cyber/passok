@@ -238,6 +238,8 @@ test('서명 이미지 — 서명란 {{img:key}} 토큰을 인라인 이미지�
     assert.ok(entries['word/media/img_0.png'], '미디어 파트 누락');
     assert.ok(entries['word/_rels/document.xml.rels'].includes('media/img_0.png'), '이미지 관계 선언 누락');
     assert.ok(entries['[Content_Types].xml'].includes('Extension="png"'), 'png 콘텐츠 타입 누락');
+    // 결재란 담당 칸에도 서명 이미지 — 같은 rId 재참조(축소 extent), 서명란 포함 2개 드로잉
+    assert.equal((doc.match(/r:embed="rId6"/g) || []).length, 2, '서명란+결재란 담당 칸 2곳 참조');
     // 이미지 미지정 시 토큰은 빈 서명 자리로 치환 (토큰 잔존 금지)
     const { entries: plain } = await unzip(docxFileMd(md, 'doc'));
     assert.ok(!plain['word/document.xml'].includes('{{img'), '미지정 시에도 토큰 잔존 금지');

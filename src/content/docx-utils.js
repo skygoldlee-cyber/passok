@@ -325,13 +325,17 @@ const _APPR_W = _AW * 4;
 const _APPR_X = _TEXT_W - _APPR_W + 102;
 const _cellPprC = _CELL_PPR.replace('</w:pPr>', '<w:jc w:val="center"/></w:pPr>');
 const _apprCell = (/** @type {string} */ t, /** @type {boolean} */ merge, /** @type {boolean} */ cont) => `<w:tc><w:tcPr><w:tcW w:w="${_AW}" w:type="dxa"/>${merge ? `<w:vMerge${cont ? '' : ' w:val="restart"'}/>` : ''}${t && !cont ? '<w:shd w:val="clear" w:color="auto" w:fill="DEEAF6"/>' : ''}<w:vAlign w:val="center"/></w:tcPr>${t ? `<w:p>${_cellPprC}<w:r><w:rPr>${_RF}<w:b/><w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${t}</w:t></w:r></w:p>` : '<w:p/>'}</w:tc>`;
-const _APPROVE = `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_APPR_X}" w:tblpYSpec="top" w:leftFromText="180" w:rightFromText="180" w:topFromText="60" w:bottomFromText="120"/><w:tblW w:w="${_APPR_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${`<w:gridCol w:w="${_AW}"/>`.repeat(4)}</w:tblGrid>`
+// 담당 칸 서명 — 셀(42pt)에 맞게 축소 인라인. 같은 rId의 a:blip을 extent만 줄여 참조 (미디어 파트 중복 없음)
+const _apprImgCell = (/** @type {{rid:string,cx:number,cy:number,id:number}} */ im) => `<w:tc><w:tcPr><w:tcW w:w="${_AW}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_cellPprC}${_imgRun({ rid: im.rid, cx: Math.round(im.cx * 0.42), cy: Math.round(im.cy * 0.42), id: im.id + 50 })}</w:p></w:tc>`;
+/** @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} [imgMap] */
+const _approve = (imgMap = {}) => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_APPR_X}" w:tblpYSpec="top" w:leftFromText="180" w:rightFromText="180" w:topFromText="60" w:bottomFromText="120"/><w:tblW w:w="${_APPR_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${`<w:gridCol w:w="${_AW}"/>`.repeat(4)}</w:tblGrid>`
     + `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="400" w:hRule="atLeast"/></w:trPr>`
     + _apprCell('결 재', true, false)
     + ['담당', '팀장', '시설장'].map(t => _apprCell(t, false, false)).join('')
     + `</w:tr><w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="640" w:hRule="atLeast"/></w:trPr>`
     + _apprCell('', true, true)
-    + _apprCell('', false, false) + _apprCell('', false, false) + _apprCell('', false, false)
+    + (imgMap.author ? _apprImgCell(imgMap.author) : _apprCell('', false, false))
+    + _apprCell('', false, false) + _apprCell('', false, false)
     + '</w:tr></w:tbl>';
 // 문서 종결 — 공문서 관행의 '끝.' 표기 (중앙)
 const _END = `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="80"/></w:pPr><w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t>끝.</w:t></w:r></w:p>`;
@@ -371,7 +375,7 @@ const _sigTbl = (lines, imgMap = {}) => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor=
  */
 const _mdBody = (md, imgMap = {}) => {
     const out = [], lines = String(md || '').split('\n');
-    if (/^:::sign\s*$/m.test(md)) out.push(_APPROVE); // 서명 문서는 결재란 선두 부여
+    if (/^:::sign\s*$/m.test(md)) out.push(_approve(imgMap)); // 서명 문서는 결재란 선두 부여 (images.author 있으면 담당 칸 서명)
     /** @type {string[][] | null} */
     let tbl = null;
     /** @type {string[] | null} */
