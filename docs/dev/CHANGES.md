@@ -1,4 +1,6 @@
-## 2026-11-14 fix(carework): 홈 워터마크 체크박스 비가시 — 폼 입력 스타일 오염 리셋
+## 2026-11-14 fix(carework): 홈 워터마크 체크박스 비가시 — 폼 입력 스타일 오염 리셋 + 서명 권장 크기 안내
+
+- 서명 이미지 선택 아래 권장 규격 안내 추가 — 가로형·가로 480px 내외·투명 배경 PNG (자동 축소 안내 포함)
 
 - 원인: `.care-calc-form input` 규칙이 `input[type=checkbox]`에도 min-height 44px·padding·border를 강제 → 체크박스가 빈 텍스트 필드처럼 렌더되어 사라져 보임 (label의 column flex로 체크 박스가 문구 아래 빈 박스로)
 - `.care-doc-wm-opt` 전용 규칙 추가 — label을 row flex로 되돌리고 checkbox는 필드 스타일 리셋(18px·accent-color)
