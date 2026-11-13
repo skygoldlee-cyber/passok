@@ -168,6 +168,7 @@
     "ai:glossary": "node tools/ai/ai_glossary.js",
     "ai:adphrases": "node tools/ai/ai_adphrases.js",
     "ai:adoption": "node tools/ai/ai_adoption.js",
+    "ai:proxy:secrets": "node tools/supabase/sync_ai_proxy_secrets.js",
     "mutate": "stryker run",
     "report:pro": "node tools/check/pro_report.js",
     "check:filenames": "node tools/check/check_filenames.js",

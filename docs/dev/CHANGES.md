@@ -1,5 +1,29 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 tools(ai): .env → ai-proxy secrets 동기화 도구
+
+- **`tools/supabase/sync_ai_proxy_secrets.js` + `ai:proxy:secrets`**: 루트 `.env`의 `GEMINI_API_KEY`(또는 `AI_PROXY_GOOGLE_API_KEY`)·`GEMINI_MODEL`·`AI_FREE_DAILY`를 Management API로 `GOOGLE_API_KEY`·`GEMINI_MODEL`·`AI_FREE_DAILY` 시크릿에 동기화 — `--dry-run` 기본 계획 확인, `--apply`, 운영 ref는 `--prod` 승인 필요, 값 미출력
+- `.env.example`: `AI_PROXY_GOOGLE_API_KEY`·`AI_FREE_DAILY` 선언 추가
+- **검증**: `--dry-run` 매핑·마스킹·운영 ref 감지 확인 — 실제 secrets 적용은 사용자 승인 시 `--apply --prod`로 실행
+
+
+## 2026-11-13 tools(ai): 공급자별 LLM 모델 환경변수 주입
+
+- `tools/ai/llm_client.js`: `OPENAI_MODEL`·`ANTHROPIC_MODEL`·`GEMINI_MODEL` 추가 — `AI_MODEL`(전역 오버라이드) → 공급자별 모델 env → `defaultModel` 순 해석. `GEMINI_MODEL`은 ai-proxy Edge Function의 기존 시크릿 규약과 동일
+- `.env.example`: 선택 모델 키 3종 선언 — `check:env` 스키마 정합 유지
+- **검증**: gemini 기본값·`GEMINI_MODEL`·`AI_MODEL` 우선순위·`OPENAI_MODEL` 해석 실측 통과
+
+
+## 2026-11-13 docs: 문서 인덱스·레지스트리 드리프트 정리 + docs:registry 신규 게이트
+
+- **배치 정리(DA-13)**: `CAREWORK_PRACTICE_TOOL_DESIGN`·`CAREWORK_FACILITY_WORKSPACE`를 `docs/dev/design/` → `docs/exams/carework/design/`로 이동 + 범위 헤더 `exam:carework` 정정 — 참조 전수 갱신(carework README·CareOS_경쟁전략·CARE_OS_DATAHUB·인덱스)
+- **ID 정정**: `ASSET_STORAGE_REVIEW` 회수된 DOC-DSN-19 재사용 → **DOC-DSN-48** 재채번 (DSN-19는 SEMANTIC 통합 회수 유지), `DEPLOY_PIPELINE_DESIGN` 대역 점프 DOC-DSN-90 → **DOC-DSN-49**
+- **인덱스·레지스트리 동기화**: docs/README.md 트리 카운트 실측 정정(dev 73→99 등)·미등재 문서 12건 행 추가·레지스트리 누락 25건 등록 (DSN-40/45~49·RBK-19/21/22·DEV-13/14·ADR-19·BIZ-08/09·USR-14~26 — carework·skincare·hairdresser 앱 내 문서 포함)
+- **규약**: DOC_CONVENTIONS §5 명칭 표에 `*_REVIEW`(시점 검토 보고서→design)·`*_BACKLOG`(측정 백로그→수위) 접미사 추가
+- **신규 게이트 `docs:registry`** (`tools/check/check_doc_registry.js`): 선언 ID ↔ 레지스트리 행 ↔ 경로 양방향 대조 + 트리 `(NN개)` 카운트 ↔ 실물 .md 수 정합 — 기존 게이트가 못 잡던 인덱스 드리프트 차단
+- **검증**: `check:docs` 21단계 전부 통과 (신규 단계 포함) · build:trace·build:commands 재생성
+
+
 ## 2026-11-12 refactor(complexity): 5라운드 — ai-client 파싱 클러스터·_bankLoad 분해 (330→324)
 
 - **`parseQaResponse`**·**`parseFormExtractResponse`** (ai-client.js, 11→·12→≤10): JSON 슬라이스 추출을 공용 `_jsonFromText`(4라운드 `parseFeedbackResponse` 추출분) 재사용으로 축약
@@ -789,7 +813,7 @@
 
 ## 2026-11-09 perf(deploy): 배포 파이프라인 속도 개선 — 게이트 자동복구·CI 대기 병행
 
-- DEPLOY_PIPELINE_DESIGN.md (DOC-DSN-90) — 시간 분해·개선안 설계 정본
+- DEPLOY_PIPELINE_DESIGN.md (DOC-DSN-49) — 시간 분해·개선안 설계 정본
 - pre-commit — TRACE_MATRIX 상이 시 차단 대신 자동 재생성+스테이징, specrefs 조기 검사 추가 (원격 실패 왕복 제거)
 - deploy.js — CI 게이트를 빌드 직후로 이동해 로컬 준비를 CI 대기와 병행, in_progress는 fail 대신 폴링 대기(30분 상한), DEPLOY_TRUST_CI=1 로컬 중복 검사 스킵 옵트인
 
@@ -2958,7 +2982,7 @@
 
 ## 2026-11-01 docs(design): 기관 워크스페이스 설계 (DOC-DSN-43)
 
-- `docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md` — PassOK가 기관 기록 서버가 되는 구독 확장 설계: facility·membership(role worker/manager)·handover_records·reads·carelog_records 스키마, RLS 접근 제어, 기관 플랜 과금 계층, 6a~6d 단계
+- `docs/exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md` — PassOK가 기관 기록 서버가 되는 구독 확장 설계: facility·membership(role worker/manager)·handover_records·reads·carelog_records 스키마, RLS 접근 제어, 기관 플랜 과금 계층, 6a~6d 단계
 
 ## 2026-11-01 feat(carework): 인수인계 기록 우선 — 저장 후 공유 게이트 + 보관함
 

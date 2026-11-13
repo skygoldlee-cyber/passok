@@ -20,9 +20,9 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | 프리셋 | 단계 수 | 용도 |
 |---|---|---|
 | `content` | 33 | 콘텐츠 통합 검증 — 교재 교체 등 대규모 콘텐츠 변경 후 (--quick, --content-only, --build 옵션) |
-| `docs` | 20 | 문서 정합 묶음 — 경로 참조·문서 ID·트리·명령 정합 등 |
+| `docs` | 21 | 문서 정합 묶음 — 경로 참조·문서 ID·트리·명령 정합 등 |
 | `ci` | 32 | CI 게이트 로컬 재현 — ci.yml과 토큰 1:1 대응 |
-| `all` | 65 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
+| `all` | 66 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
 | `refs` | 6 | 참조자료 검증 묶음 — 레이아웃·귀속·신선도·인용 라인·병합 품질 |
 | `freshness` | 10 | 생성물 신선도 묶음 — 파생물 미재생성 감지 |
 | `audit` | 13 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
@@ -69,6 +69,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `content:build` | P0 | 빌드 | `npm.cmd run build:data` | build:data — data/ 번들 전체 재생성 (+인용 라인 동기화) |
 | `docs:paths` | P1 | 문서 | `node tools/check/check_docs_paths.js` | README·AGENTS·docs/*.md 경로 참조 존재 검증 |
 | `docs:ids` | P1 | 문서 | `node tools/check/check_doc_ids.js` | 문서 ID 누락·중복·범위·판본 헤더 검증 |
+| `docs:registry` | P1 | 문서 | `node tools/check/check_doc_registry.js` | 문서 ID 레지스트리·인덱스 카운트 ↔ 실물 양방향 정합 |
 | `docs:textbook` | P1 | 문서 | `node tools/check/check_textbook_docs.js` | 교재 갱신 ↔ 판본:textbook 문서 신선도 |
 | `docs:inventory` | P1 | 문서 | `node tools/check/check_inventory.js` | 디렉토리 구조 정합 (AGENTS·ARCHITECTURE 트리 ↔ 실물) |
 | `docs:commands` | P1 | 문서 | `node tools/check/check_npm_commands.js` | npm 명령 정합 (스크립트 ↔ 문서 인용 양방향) |
@@ -394,7 +395,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run admin:issue-code` | `node tools/check/issue_pro_code.js` | 라이선스 코드 발급 CLI (PAYMENT_PILOT_DESIGN §3, P-OPS-1) |
 | `npm run admin:discord` | `node tools/deploy/register_admin_bot.js` | Discord 슬래시 명령 일괄 등록 (AD-11) |
 
-### `ai:*` — 18개
+### `ai:*` — 19개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -416,6 +417,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run ai:glossary` | `node tools/ai/ai_glossary.js` | 용어집 부실 정의 보강 초안 생성 → glossary/subjectN.json 병합 |
 | `npm run ai:adphrases` | `node tools/ai/ai_adphrases.js` | 광고문구 사전 확장 후보 초안 생성 (cosmetic 전용 — ad-lint.js 사전) |
 | `npm run ai:adoption` | `node tools/ai/ai_adoption.js` | AI 배치 채택률 리포트 |
+| `npm run ai:proxy:secrets` | `node tools/supabase/sync_ai_proxy_secrets.js` | .env의 AI 프록시 설정을 Supabase secrets로 동기화 |
 
 ---
 
